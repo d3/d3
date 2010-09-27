@@ -1,0 +1,35 @@
+body {
+  font: 14px Helvetica Neue;
+  text-rendering: optimizeLegibility;
+  margin-top: 1em;
+}
+
+a {
+  color: steelblue;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.body, .foot {
+  width: 960px;
+  margin: auto;
+}
+
+h1 {
+  font-size: 36px;
+  font-weight: 300;
+}
+
+h2 {
+  color: #666;
+  font-weight: normal;
+}
+
+.foot {
+  display: block;
+  font-weight: 300;
+  margin-top: 3em;
+}
