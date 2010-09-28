@@ -21,48 +21,4 @@ browsers.
 
 * [Documentation](/docs/)
 * [Examples](/ex/)
-
-<style type="text/css">
-.bar {
-  text-align: right;
-  font: 10px sans-serif;
-  padding: 4px;
-  margin: 1px;
-  color: white;
-  background: -webkit-gradient(linear, right top, left top, from(transparent), to(steelblue));
-  background: -moz-linear-gradient(right, transparent, steelblue);
-}
-</style>
-
-<div id="chart-2">
-</div>
-
-<script type="text/javascript">
-var data = [4, 8, 15, 16, 23, 42];
-
-var create = d3.select("#chart-2")
-  .selectAll("div.bar")
-    .data(data)
-  .enter.add("div")
-    .attr("class", "bar")
-    .style("width", 0)
-    .style("background-color", "steelblue")
-  .apply();
-
-var update = d3.select("#chart-2")
-  .selectAll("div.bar")
-    .data(data)
-    .text(function(d) { return d; })
-  .transition()
-    .duration(500)
-    .delay(function() { return this.index * 50; })
-    .tweenStyle("width", function(d) { return d * 10 + "px"; })
-    .tweenStyle("background-color", function(d) { return "rgb(" + ~~(d * 6) + ",50,100)"; })
-  .apply();
-
-setInterval(function() {
-  data.forEach(function(d, i) { data[i] = ~~(Math.random() * 50); });
-  update.apply();
-}, 1000);
-
-</script>
+* Download
