@@ -128,7 +128,8 @@ t.selectAll("rect")
     .tweenAttr("width", x({x: .9 / n}))
   .end.transition()
     .duration(500)
-    .tweenAttr("y", function(d) { return h - y0(d) + y1(d); });
+    .tweenAttr("y", function(d) { return h - y0(d) + y1(d); })
+    .tweenAttr("height", function(d) { return y0(d) - y1(d); }); // just in case
 
     </script><br>
     <button onclick="t.apply()">
