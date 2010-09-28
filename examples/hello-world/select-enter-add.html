@@ -1,0 +1,20 @@
+<html>
+  <head>
+    <title>Test - select > enter > add</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+  </head>
+  <body>
+    <span></span>
+    <span></span>
+    <script type="text/javascript">
+
+d3.selectAll("span")
+  .select("span")
+    .data(["Test", "passed."])
+  .enter.add("span")
+    .text(function(d) { return d; })
+  .apply();
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <title>Area Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+.rule line {
+  stroke: #eee;
+  shape-rendering: crispEdges;
+}
+
+.rule line.axis {
+  stroke: #000;
+}
+
+.area {
+  fill: lightsteelblue;
+}
+
+.line, circle.area {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+circle.area {
+  fill: #fff;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var data = range(20).map(function(i) {
+  return {x: i / 19, y: (Math.sin(i / 3) + 1) / 2};
+});
+
+var w = 450,
+    h = 275,
+    p = 20;
+
+var vis = d3.select("body")
+  .add("svg:svg")
+    .attr("width", w + p * 2)
+    .attr("height", h + p * 2)
+  .add("svg:g")
+    .attr("transform", "translate(" + p + "," + p + ")");
+
+var rules = vis.selectAll("g.rule")
+    .data(range(11))
+  .enter.add("svg:g")
+    .attr("class", "rule");
+
+rules.add("svg:line")
+    .attr("x1", function(d) { return d / 10 * w; })
+    .attr("x2", function(d) { return d / 10 * w; })
+    .attr("y1", 0)
+    .attr("y2", h - 1);
+
+rules.add("svg:line")
+    .attr("class", function(d) { return d ? null : "axis"; })
+    .attr("y1", function(d) { return (1 - d / 10) * h; })
+    .attr("y2", function(d) { return (1 - d / 10) * h; })
+    .attr("x1", 0)
+    .attr("x2", w + 1);
+
+rules.add("svg:text")
+    .attr("x", function(d) { return d / 10 * w; })
+    .attr("y", h + 3)
+    .attr("dy", ".71em")
+    .attr("text-anchor", "middle")
+    .text(function(d) { return (d / 10).toFixed(1); });
+
+rules.add("svg:text")
+    .attr("y", function(d) { return (1 - d / 10) * h; })
+    .attr("x", -3)
+    .attr("dy", ".35em")
+    .attr("text-anchor", "end")
+    .text(function(d) { return (d / 10).toFixed(1); });
+
+vis.add("svg:path")
+    .attr("class", "area")
+    .attr("d", area(data));
+
+vis.add("svg:path")
+    .attr("class", "line")
+    .attr("d", line(data));
+
+vis.selectAll("circle.area")
+    .data(data)
+  .enter.add("svg:circle")
+    .attr("class", "area")
+    .attr("cx", function(d) { return d.x * w; })
+    .attr("cy", function(d) { return (1 - d.y) * h; })
+    .attr("r", 3.5);
+
+vis.apply();
+
+function range(n) {
+  var array = [];
+  for (var i = 0; i < n; i++) array.push(i);
+  return array;
+}
+
+function line(points) {
+  var d = [],
+      i = 1,
+      p = points[0];
+  d.push("M", p.x * w, ",", (1 - p.y) * h);
+  while (p = points[i++]) d.push("L", p.x * w, ",", (1 - p.y) * h);
+  return d.join("");
+}
+
+function area(points) {
+  var d = [],
+      i = 1,
+      p = points[0];
+  d.push("M", p.x * w, "," + (h - 1) + "V", (1 - p.y) * h);
+  while (p = points[i++]) d.push("L", p.x * w, ",", (1 - p.y) * h);
+  d.push("V" + (h - 1) + "Z");
+  return d.join("");
+}
+
+    </script>
+  </body>
+</html>

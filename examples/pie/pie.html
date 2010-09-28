@@ -1,0 +1,100 @@
+<html>
+  <head>
+    <title>Pie Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var data = normalize(range(10).map(Math.random).sort(descending)),
+    w = 400,
+    h = 400,
+    r = Math.min(w, h) / 2;
+
+var colors = [
+  "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
+  "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
+  "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
+  "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"
+];
+
+var vis = d3.select("body")
+  .add("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var arcs = vis.selectAll("g.arc")
+    .data(data)
+  .enter.add("svg:g")
+    .attr("class", "arc")
+    .attr("transform", "translate(" + r + "," + r + ")");
+
+arcs.add("svg:path")
+    .attr("fill", index(colors))
+    .attr("d", arc(r));
+
+arcs.filter(function(d) { return d.value > .15; })
+  .add("svg:text")
+    .attr("x", function(d) { return Math.cos(d.midAngle) * r * .8; })
+    .attr("y", function(d) { return Math.sin(d.midAngle) * r * .8; })
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .text(function(d) { return d.value.toFixed(2); });
+
+vis.apply();
+
+function range(n) {
+  var array = [];
+  for (var i = 0; i < n; i++) array.push(i);
+  return array;
+}
+
+function normalize(array) {
+  var k = (2 * Math.PI) / array.reduce(function(p, d) { return p + d; }, 0),
+      a = -Math.PI / 2;
+  return array.map(function(d, i) {
+    return {
+      startAngle: a,
+      midAngle: a + d * k / 2,
+      endAngle: a += d * k,
+      index: i,
+      value: d
+    };
+  });
+}
+
+function arc(r) {
+  return function(d) {
+    var a0 = d.startAngle,
+        a1 = d.endAngle;
+    return "M" + r * Math.cos(a0) + "," + r * Math.sin(a0)
+        + "A" + r + "," + r + " 0 "
+        + ((a1 - a0 < Math.PI) ? "0" : "1") + ",1 "
+        + r * Math.cos(a1) + "," + r * Math.sin(a1) + "L0,0Z";
+  };
+}
+
+function index(colors) {
+  return function(d) {
+    return colors[d.index % colors.length];
+  };
+}
+
+function ascending(a, b) {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
+function descending(a, b) {
+  return a < b ? 1 : a > b ? -1 : 0;
+}
+
+    </script>
+  </body>
+</html>

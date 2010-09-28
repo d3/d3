@@ -1,0 +1,140 @@
+<html>
+  <head>
+    <title>Donut Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 400,
+    h = 400,
+    r = Math.min(w, h) / 2,
+    n = 10,
+    data = normalize(range(n).map(Math.random));
+
+var colors = [
+  "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
+  "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
+  "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
+  "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"
+];
+
+var vis = d3.select("body")
+  .add("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var arcs = vis.selectAll("g.arc")
+    .data(data)
+  .enter.add("svg:g")
+    .attr("class", "arc")
+    .attr("transform", "translate(" + r + "," + r + ")");
+
+arcs.add("svg:path")
+    .attr("fill", index(colors))
+    .attr("d", arc);
+
+vis.apply();
+
+var update = d3.selectAll("g.arc > path")
+    .data(function() {
+      var prev = data,
+          next = data = normalize(range(n).map(Math.random)),
+          i = 0;
+      for (; i < n; ++i) prev[i].next = next[i];
+      return prev;
+    })
+  .transition() // 1. Wedges split into two rings.
+    .tweenData(function(d) {
+      return {
+        innerRadius: this.index & 1 ? r * .6 : r * .8,
+        outerRadius: this.index & 1 ? r * .8 : r
+      };
+    })
+    .attr("d", arc)
+  .end
+  .transition() // 2. Wedges translate to be center on their final position.
+    .tweenData(function(d) {
+      var a0;
+      return {
+        startAngle: a0 = (d.next.startAngle + d.next.endAngle - d.endAngle + d.startAngle) / 2,
+        endAngle: a0 + d.endAngle - d.startAngle
+      };
+    })
+    .attr("d", arc)
+  .end
+  .transition() // 3. Wedges then update their values, changing size.
+    .tweenData(function(d) {
+      return {
+        startAngle: d.next.startAngle,
+        endAngle: d.next.endAngle
+      };
+    })
+    .attr("d", arc)
+  .end
+  .transition() // 4. Wedges reunite into a single ring.
+    .tweenData(function(d) {
+      return {
+        innerRadius: d.next.innerRadius,
+        outerRadius: d.next.outerRadius
+      };
+    })
+    .attr("d", arc);
+
+window.addEventListener("keypress", update.apply, false);
+
+function range(n) {
+  var array = [];
+  for (var i = 0; i < n; i++) array.push(i);
+  return array;
+}
+
+function normalize(array) {
+  var k = (2 * Math.PI) / array.reduce(function(p, d) { return p + d; }, 0),
+      a = 0;
+  return array.map(function(d, i) {
+    return {
+      innerRadius: r * .6,
+      outerRadius: r,
+      startAngle: a,
+      endAngle: a += d * k
+    };
+  });
+}
+
+function arc(d) {
+  var r0 = d.innerRadius,
+      r1 = d.outerRadius,
+      a0 = d.startAngle - Math.PI / 2,
+      a1 = d.endAngle - Math.PI / 2,
+      da = a1 - a0,
+      c0 = Math.cos(a0),
+      s0 = Math.sin(a0),
+      c1 = Math.cos(a1),
+      s1 = Math.sin(a1);
+  return "M" + r1 * c0 + "," + r1 * s0
+      + "A" + r1 + "," + r1 + " 0 "
+      + ((da < Math.PI) ? "0" : "1") + ",1 "
+      + r1 * c1 + "," + r1 * s1
+      + "L" + r0 * c1 + "," + r0 * s1
+      + "A" + r0 + "," + r0 + " 0 "
+      + ((da < Math.PI) ? "0" : "1") + ",0 "
+      + r0 * c0 + "," + r0 * s0 + "Z";
+}
+
+function index(colors) {
+  return function(d) {
+    return colors[this.index % colors.length];
+  };
+}
+
+    </script>
+  </body>
+</html>

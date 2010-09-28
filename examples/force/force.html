@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Force-Directed Layout</title>
+    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="miserables.js"></script>
+    <script type="text/javascript" src="force.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+circle.node {
+  fill: lightsteelblue;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+line.link {
+  stroke: #333;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500;
+
+var force = layout_force()
+    .nodes(miserables.nodes)
+    .links(miserables.links)
+    .size({x: w, y: h})
+    .start();
+
+var vis = d3.select("body")
+  .add("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+vis.selectAll("line.link")
+    .data(miserables.links)
+  .enter.add("svg:line")
+    .attr("class", "link")
+    .attr("x1", function(d) { return d.source.x; })
+    .attr("y1", function(d) { return d.source.y; })
+    .attr("x2", function(d) { return d.target.x; })
+    .attr("y2", function(d) { return d.target.y; });
+
+vis.selectAll("circle.node")
+    .data(miserables.nodes)
+  .enter.add("svg:circle")
+    .attr("class", "node")
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .attr("r", 4.5);
+
+vis.apply();
+
+var update = d3.select("svg");
+
+update.selectAll("line.link")
+    .data(miserables.links)
+    .attr("x1", function(d) { return d.source.x; })
+    .attr("y1", function(d) { return d.source.y; })
+    .attr("x2", function(d) { return d.target.x; })
+    .attr("y2", function(d) { return d.target.y; });
+
+update.selectAll("circle.node")
+    .data(miserables.nodes)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; });
+
+force.on("tick", update.apply);
+
+    </script>
+  </body>
+</html>

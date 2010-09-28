@@ -1,0 +1,107 @@
+<html>
+  <head>
+    <title>Dot Plot</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+circle.dot {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+rect {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.rule line {
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var data = range(100).map(function(i) {
+  return {x: i / 99, y: Math.random()};
+});
+
+var w = 450,
+    h = 450,
+    p = 20;
+
+var vis = d3.select("body")
+  .add("svg:svg")
+    .attr("width", w + p * 2)
+    .attr("height", h + p * 2)
+  .add("svg:g")
+    .attr("transform", "translate(" + p + "," + p + ")");
+
+var rules = vis.selectAll("g.rule")
+    .data(range(11))
+  .enter.add("svg:g")
+    .attr("class", "rule");
+
+rules.add("svg:line")
+    .attr("x1", function(d) { return d / 10 * w; })
+    .attr("x2", function(d) { return d / 10 * w; })
+    .attr("y1", 0)
+    .attr("y2", h);
+
+rules.add("svg:line")
+    .attr("y1", function(d) { return (1 - d / 10) * h; })
+    .attr("y2", function(d) { return (1 - d / 10) * h; })
+    .attr("x1", 0)
+    .attr("x2", w);
+
+rules.add("svg:text")
+    .attr("x", function(d) { return d / 10 * w; })
+    .attr("y", h + 3)
+    .attr("dy", ".71em")
+    .attr("text-anchor", "middle")
+    .text(function(d) { return (d / 10).toFixed(1); });
+
+rules.add("svg:text")
+    .attr("y", function(d) { return (1 - d / 10) * h; })
+    .attr("x", -3)
+    .attr("dy", ".35em")
+    .attr("text-anchor", "end")
+    .text(function(d) { return (d / 10).toFixed(1); });
+
+vis.add("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
+var dots = vis.selectAll("circle.dot")
+    .data(data)
+  .enter.add("svg:circle")
+    .attr("class", "dot")
+    .attr("cx", function(d) { return d.x * w; })
+    .attr("cy", function(d) { return d.y * h; })
+    .attr("r", 27)
+    .attr("stroke-opacity", 1e-6)
+  .transition()
+    .delay(function() { return this.index * 3; })
+    .duration(750)
+    .tweenAttr("stroke-opacity", 1)
+    .tweenAttr("r", 4.5);
+
+vis.apply();
+
+function range(n) {
+  var array = [];
+  for (var i = 0; i < n; i++) array.push(i);
+  return array;
+}
+
+    </script>
+  </body>
+</html>

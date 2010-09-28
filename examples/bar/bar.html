@@ -1,0 +1,97 @@
+<html>
+  <head>
+    <title>Bar Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+svg {
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var data = range(10).map(function(i) {
+  return {index: i, value: Math.random()};
+});
+
+var vis = d3.select("body")
+  .add("svg:svg")
+    .attr("width", 450)
+    .attr("height", 275)
+  .add("svg:g")
+    .attr("transform", "translate(20,0)");
+
+var bars = vis.selectAll("g.bar")
+    .data(data)
+  .enter.add("svg:g")
+    .attr("class", "bar")
+    .attr("transform", function(d) { return "translate(0," + d.index * 23 + ")"; });
+
+bars.add("svg:rect")
+    .attr("fill", "steelblue")
+    .attr("width", function(d) { return d.value * 430; })
+    .attr("height", 20);
+
+bars.add("svg:text")
+    .attr("x", function(d) { return d.value * 430; })
+    .attr("y", 10)
+    .attr("dx", -6)
+    .attr("dy", ".35em")
+    .attr("fill", "white")
+    .attr("text-anchor", "end")
+    .text(function(d) { return d.value.toFixed(2); });
+
+bars.add("svg:text")
+    .attr("x", 0)
+    .attr("y", 10)
+    .attr("dx", -6)
+    .attr("dy", ".35em")
+    .attr("text-anchor", "end")
+    .text(function(d) { return String.fromCharCode(65 + d.index); });
+
+var rules = vis.selectAll("g.rule")
+    .data(range(10))
+  .enter.add("svg:g")
+    .attr("class", "rule")
+    .attr("transform", function(d) { return "translate(" + (d / 10) * 430 + ",0)"; });
+
+rules.add("svg:line")
+    .attr("y1", 230)
+    .attr("y2", 236)
+    .attr("stroke", "black");
+
+rules.add("svg:line")
+    .attr("y1", 0)
+    .attr("y2", 230)
+    .attr("stroke", "white")
+    .attr("stroke-opacity", .3);
+
+rules.add("svg:text")
+    .attr("y", 239)
+    .attr("dy", ".71em")
+    .attr("text-anchor", "middle")
+    .text(function(d) { return (d / 10).toFixed(1); });
+
+vis.add("svg:line")
+    .attr("y1", 0)
+    .attr("y2", 230)
+    .attr("stroke", "black");
+
+vis.apply();
+
+function range(n) {
+  var array = [];
+  for (var i = 0; i < n; i++) array.push(i);
+  return array;
+}
+
+    </script>
+  </body>
+</html>

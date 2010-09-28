@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>Hello, world!</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+  </head>
+  <body>
+    Your lucky numbers are:<br>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <script type="text/javascript">
+
+d3.selectAll("span")
+  .add("svg:svg")
+    .attr("width", 100)
+    .attr("height", 100)
+  .add("svg:text")
+    .attr("x", "50%")
+    .attr("y", "50%")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .attr("fill", "white")
+    .attr("stroke", "black")
+    .attr("stroke-width", 1.5)
+    .style("font", "36pt Comic Sans MS")
+    .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
+    .text(function() { return ~~(Math.random() * 100); })
+  .apply();
+
+window.addEventListener("keypress", d3.selectAll("text")
+    .text(function() { return ~~(Math.random() * 100); })
+    .apply, false);
+
+    </script>
+  </body>
+</html>

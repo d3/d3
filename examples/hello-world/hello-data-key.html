@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>Hello, data!</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+  </head>
+  <body>
+    Your lucky numbers are:<br>
+    <script type="text/javascript">
+
+var i = 0, data = [
+  {id: i++, value: 4},
+  {id: i++, value: 8},
+  {id: i++, value: 15},
+  {id: i++, value: 16},
+  {id: i++, value: 23},
+  {id: i++, value: 42}
+];
+
+var t = d3.selectAll("span")
+    .data(data)
+    .key("id", function(d) { return "span-" + d.id; });
+
+t.enter.select("body")
+  .add("span")
+    .attr("id", function(d) { return "span-" + d.id; })
+  .add("svg:svg")
+    .attr("width", 100)
+    .attr("height", 100)
+  .add("svg:text")
+    .attr("x", "50%")
+    .attr("y", "50%")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .attr("fill", "white")
+    .attr("stroke", "black")
+    .attr("stroke-width", 1.5)
+    .style("font", "36pt Comic Sans MS")
+    .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
+    .text(function(d) { return d.value; });
+
+t.select("text")
+    .text(function(d) { return d.value; });
+
+t.exit.remove();
+
+t.apply();
+
+function refresh() {
+  data.shift();
+  data.push({id: i++ % 7, value: ~~(Math.random() * 100)});
+  t.apply();
+}
+
+window.addEventListener("keypress", refresh, false);
+
+    </script>
+  </body>
+</html>

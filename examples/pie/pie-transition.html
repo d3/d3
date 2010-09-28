@@ -1,0 +1,139 @@
+<html>
+  <head>
+    <title>Pie Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var data = normalize(range(10).map(Math.random).sort(descending)),
+    w = 400,
+    h = 400,
+    r = Math.min(w, h) / 2;
+
+var colors = [
+  "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
+  "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
+  "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
+  "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"
+];
+
+var vis = d3.select("body")
+  .add("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var arcs = vis.selectAll("g.arc")
+    .data(data)
+  .enter.add("svg:g")
+    .attr("class", "arc")
+    .attr("transform", "translate(" + r + "," + r + ")");
+
+arcs.add("svg:path")
+    .attr("fill", index(colors));
+
+arcs.add("svg:text")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .attr("display", "none")
+    .text(function(d) { return d.value.toFixed(2); });
+
+var tx = arcs.transition()
+    .ease("bounce")
+    .duration(2000);
+
+tx.select("path")
+    .attr("d", function(d) {
+      var a0 = d3.time * d.startAngle - Math.PI / 2,
+          a1 = d3.time * d.endAngle - Math.PI / 2;
+      return arc(0, r, a0, a1);
+    });
+
+tx.select("text")
+    .attr("display", null)
+    .attr("transform", function(d) {
+      var a = d3.time * d.midAngle - Math.PI / 2,
+          t = "rotate(" + a * 180 / Math.PI + ")translate(" + r * .8 + ",0)";
+      return upright(a) ? t : t + "rotate(180)";
+    });
+
+tx.end.select("path")
+  .transition()
+    .ease("elastic")
+    .delay(function() { return this.index * 50; })
+    .duration(750)
+    .attr("d", function(d) {
+      var r0 = d3.time * r * .6,
+          r1 = r,
+          a0 = d.startAngle - Math.PI / 2,
+          a1 = d.endAngle - Math.PI / 2;
+      return arc(r0, r1, a0, a1);
+    });
+
+vis.apply();
+
+function range(n) {
+  var array = [];
+  for (var i = 0; i < n; i++) array.push(i);
+  return array;
+}
+
+function normalize(array) {
+  var k = (2 * Math.PI) / array.reduce(function(p, d) { return p + d; }, 0),
+      a = 0;
+  return array.map(function(d, i) {
+    return {
+      startAngle: a,
+      midAngle: a + d * k / 2,
+      endAngle: a += d * k,
+      value: d
+    };
+  });
+}
+
+function arc(r0, r1, a0, a1) {
+  var a = a1 - a0,
+      c0 = Math.cos(a0),
+      s0 = Math.sin(a0),
+      c1 = Math.cos(a1),
+      s1 = Math.sin(a1);
+  return "M" + r1 * c0 + "," + r1 * s0
+      + "A" + r1 + "," + r1 + " 0 "
+      + ((a < Math.PI) ? "0" : "1") + ",1 "
+      + r1 * c1 + "," + r1 * s1
+      + "L" + r0 * c1 + "," + r0 * s1
+      + "A" + r0 + "," + r0 + " 0 "
+      + ((a < Math.PI) ? "0" : "1") + ",0 "
+      + r0 * c0 + "," + r0 * s0 + "Z";
+}
+
+function index(colors) {
+  return function(d) {
+    return colors[this.index % colors.length];
+  };
+}
+
+function upright(a) {
+  a = a % (2 * Math.PI);
+  a = a < 0 ? 2 * Math.PI + a : a;
+  return a < Math.PI / 2 || a >= 3 * Math.PI / 2;
+}
+
+function ascending(a, b) {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
+function descending(a, b) {
+  return a < b ? 1 : a > b ? -1 : 0;
+}
+
+    </script>
+  </body>
+</html>

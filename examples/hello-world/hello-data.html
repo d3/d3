@@ -1,0 +1,47 @@
+<html>
+  <head>
+    <title>Hello, data!</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+  </head>
+  <body>
+    Your lucky numbers are:<br>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <span></span>
+    <script type="text/javascript">
+
+var data = [4, 8, 15, 16, 23, 42];
+
+d3.selectAll("span")
+    .data(data)
+  .add("svg:svg")
+    .attr("width", 100)
+    .attr("height", 100)
+  .add("svg:text")
+    .attr("x", "50%")
+    .attr("y", "50%")
+    .attr("dy", ".35em")
+    .attr("text-anchor", "middle")
+    .attr("fill", "white")
+    .attr("stroke", "black")
+    .attr("stroke-width", 1.5)
+    .style("font", "36pt Comic Sans MS")
+    .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
+    .text(function(d) { return d; })
+  .apply();
+
+function refresh() {
+  for (var i = 0; i < data.length; i++) data[i] = (data[i] + 1) % 100;
+  d3.selectAll("text")
+      .data(data)
+      .text(function(d) { return d; })
+    .apply();
+}
+
+window.addEventListener("keypress", refresh, false);
+
+    </script>
+  </body>
+</html>
