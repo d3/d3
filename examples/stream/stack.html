@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stacked Bar Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="stream.js"></script>
+    <script type="text/javascript" src="stack.js"></script>
+    <style type="text/css">
+
+svg {
+  font: 10px sans-serif;
+}
+
+rect {
+  shape-rendering: crispEdges;
+}
+
+line {
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+button {
+  font: 14px Helvetica Neue;
+  background: #222 url(http://bost.ocks.org/button-overlay.png) repeat-x;
+  color: #fff;
+  text-rendering: optimizeLegibility;
+  text-shadow: 0 -1px 1px #222;
+  padding: 6px 10px 6px 10px;
+  border: 0;
+  border-bottom: 1px solid #222;
+  -moz-border-radius: 5px;
+  -moz-box-shadow: 0 1px 3px #999;
+  -webkit-border-radius: 5px;
+  -webkit-box-shadow: 0 1px 3px #999;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var n = 4, // number of layers
+    m = 64, // number of samples per layer
+    data = stack(stream_layers(n, m, .1)),
+    color = d3.interpolateRgb("#aad", "#556");
+
+var p = 20,
+    w = 960,
+    h = 500 - p,
+    mx = m,
+    my = max(data, function(d) { return max(d, function(d) { return d.y0 + d.y; }); }),
+    x = function(d) { return d.x * w / mx; },
+    y0 = function(d) { return h - d.y0 * h / my; },
+    y1 = function(d) { return h - (d.y + d.y0) * h / my; };
+
+var vis = d3.select("body")
+  .add("svg:svg")
+    .attr("width", w)
+    .attr("height", h + p);
+
+var layers = vis.selectAll("g.layer")
+    .data(data)
+  .enter.add("svg:g")
+    .attr("fill", function(d) { return color(this.index / (n - 1)); })
+    .attr("class", "layer");
+
+var bars = layers.selectAll("g.bar")
+    .data(function(d) { return d; })
+  .enter.add("svg:g")
+    .attr("class", "bar")
+    .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
+
+bars.add("svg:rect")
+    .attr("width", x({x: .9}))
+    .attr("y", h)
+    .attr("height", 0)
+  .transition()
+    .delay(function() { return this.index * 10; })
+    .tweenAttr("y", y1)
+    .tweenAttr("height", function(d) { return y0(d) - y1(d); });
+
+// bars.filter(function(d) { return y0(d) - y1(d) > 12; })
+//   .add("svg:text")
+//     .attr("x", x({x: .45}))
+//     .attr("y", function(d) { return y1(d) + 6; })
+//     .attr("dx", 0)
+//     .attr("dy", ".71em")
+//     .attr("fill", "white")
+//     .attr("text-anchor", "middle")
+//     .text(function(d) { return d.y.toFixed(2); });
+
+var labels = vis.selectAll("text.label")
+    .data(data[0])
+  .enter.add("svg:text")
+    .attr("class", "label")
+    .attr("x", x)
+    .attr("y", h + 6)
+    .attr("dx", x({x: .45}))
+    .attr("dy", ".71em")
+    .attr("text-anchor", "middle")
+    .text(function() { return this.index; });
+
+vis.add("svg:line")
+    .attr("x1", 0)
+    .attr("x2", w - x({x: .1}))
+    .attr("y1", h)
+    .attr("y2", h);
+
+vis.apply();
+
+var t = d3.selectAll("g.layer")
+    .data(data)
+    .attr("transform", "translate(0,0)");
+
+t.transition()
+    .duration(500)
+    .tweenAttr("transform", function(d) { return "translate(" + x({x: .9 * this.index / n}) + ",0)"; });
+
+t.selectAll("rect")
+    .data(function(d) { return d; })
+  .transition()
+    .duration(500)
+    .tweenAttr("width", x({x: .9 / n}))
+  .end.transition()
+    .duration(500)
+    .tweenAttr("y", function(d) { return h - y0(d) + y1(d); });
+
+    </script><br>
+    <button onclick="t.apply()">
+      Group
+    </button>
+  </body>
+</html>

@@ -1,5 +1,6 @@
 /* Inspired by Lee Byron's test data generator. */
-function stream_layers(n, m) {
+function stream_layers(n, m, o) {
+  if (arguments.length < 3) o = 0;
   function bump(a) {
     var x = 1 / (.1 + Math.random()),
         y = 2 * Math.random() - .5,
@@ -11,7 +12,7 @@ function stream_layers(n, m) {
   }
   return range(n).map(function() {
       var a = [], i;
-      for (i = 0; i < m; i++) a[i] = 0;
+      for (i = 0; i < m; i++) a[i] = o + o * Math.random();
       for (i = 0; i < 5; i++) bump(a);
       return a.map(stream_index);
     });
@@ -35,4 +36,20 @@ function range(n) {
   var array = [];
   for (var i = 0; i < n; i++) array.push(i);
   return array;
+}
+
+function max(array, f) {
+  var i = 1,
+      n = array.length,
+      j = 0,
+      v = f(array[0]),
+      k;
+  for (; i < n; ++i) {
+    k = f(array[i]);
+    if (k > v) {
+      j = i;
+      v = k;
+    }
+  }
+  return v;
 }
