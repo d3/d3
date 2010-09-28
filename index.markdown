@@ -2,6 +2,11 @@
 layout: default
 ---
 
+<a href="http://github.com/mbostock/d3"><img
+    style="position:absolute;top:0;right:0;border:0;"
+    width="149" height="149" src="forkme.png" alt="Fork me on GitHub"
+    /></a>
+
 # d3.js
 
 ## Data-Driven Documents
@@ -14,9 +19,20 @@ pages. Unlike other systems, D3 doesn&rsquo;t tie you to a proprietary
 representation, so you are free to exercise the full capabilities of modern
 browsers.
 
-* [Introduction](/intro/)
 * [Documentation](/docs/)
 * [Examples](/ex/)
+
+<style type="text/css">
+.bar {
+  text-align: right;
+  font: 10px sans-serif;
+  padding: 4px;
+  margin: 1px;
+  color: white;
+  background: -webkit-gradient(linear, right top, left top, from(transparent), to(steelblue));
+  background: -moz-linear-gradient(right, transparent, steelblue);
+}
+</style>
 
 <div id="chart-2">
 </div>
@@ -24,26 +40,29 @@ browsers.
 <script type="text/javascript">
 var data = [4, 8, 15, 16, 23, 42];
 
-d3.select("#chart-2")
+var create = d3.select("#chart-2")
   .selectAll("div.bar")
     .data(data)
   .enter.add("div")
     .attr("class", "bar")
-    .style("width", function(d) { return d * 10 + "px"; })
-    .style("background-color", function(d) { return "rgb(" + ~~(d * 6) + ",50,100)"; })
-    .text(function(d) { return d; })
+    .style("width", 0)
+    .style("background-color", "steelblue")
   .apply();
 
 var update = d3.select("#chart-2")
   .selectAll("div.bar")
-    .data(function() { return data.map(function() { return ~~(Math.random() * 50); }); })
+    .data(data)
     .text(function(d) { return d; })
   .transition()
     .duration(500)
     .delay(function() { return this.index * 50; })
     .tweenStyle("width", function(d) { return d * 10 + "px"; })
-    .tweenStyle("background-color", function(d) { return "rgb(" + ~~(d * 6) + ",50,100)"; });
+    .tweenStyle("background-color", function(d) { return "rgb(" + ~~(d * 6) + ",50,100)"; })
+  .apply();
 
-window.addEventListener("keypress", update.apply, false);
+setInterval(function() {
+  data.forEach(function(d, i) { data[i] = ~~(Math.random() * 50); });
+  update.apply();
+}, 1000);
 
 </script>

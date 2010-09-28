@@ -1,5 +1,5 @@
-.highlight  { background: #eee; position: relative; margin-left: 2em; border-left: solid 1px #aaa; }
-.highlight .lineno { position: absolute; left: -2em; color: #ccc; }
+.highlight  { background: #eee; position: relative; margin-left: 3em; border-left: solid 1px #aaa; }
+.highlight .lineno { position: absolute; text-align: right; width: 2em; left: -3em; color: #ccc; }
 .highlight .c { color: #999988; font-style: italic } /* Comment */
 .highlight .err { color: #a61717; background-color: #e3d2d2 } /* Error */
 .highlight .k { font-weight: bold } /* Keyword */

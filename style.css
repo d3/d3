@@ -33,3 +33,21 @@ h2 {
   font-weight: 300;
   margin-top: 3em;
 }
+
+.side {
+  float: left;
+  width: 110px;
+  padding-right: 40px;
+  margin-right: 10px;
+}
+
+.side ul {
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.center {
+  float: left;
+  width: 790px;
+  margin-right: 0px;
+}
