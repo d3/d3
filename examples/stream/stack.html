@@ -29,19 +29,40 @@ button {
   padding: 6px 10px 6px 10px;
   border: 0;
   border-bottom: 1px solid #222;
+  margin: 0 0 0 2px;
   -moz-border-radius: 5px;
   -moz-box-shadow: 0 1px 3px #999;
   -webkit-border-radius: 5px;
   -webkit-box-shadow: 0 1px 3px #999;
 }
 
+button.first {
+  -webkit-border-top-right-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+}
+
+button.last {
+  -webkit-border-top-left-radius: 0;
+  -webkit-border-bottom-left-radius: 0;
+}
+
+button.active {
+  background-color: rgb(65,102,133);
+}
+
 button:hover {
-  background-color: #555;
+  background-color: steelblue;
 }
 
     </style>
   </head>
   <body>
+    <button id="group" class="first" onclick="group.apply()">
+      Group
+    </button
+    ><button id="stack" class="active last" onclick="stack.apply()">
+      Stack
+    </button><br>
     <script type="text/javascript">
 
 var n = 4, // number of layers
@@ -67,7 +88,8 @@ var layers = vis.selectAll("g.layer")
     .data(data)
   .enter.add("svg:g")
     .attr("fill", function(d) { return color(this.index / (n - 1)); })
-    .attr("class", "layer");
+    .attr("class", "layer")
+    .attr("transform", "translate(0,0)"); // for animation
 
 var bars = layers.selectAll("g.bar")
     .data(function(d) { return d; })
@@ -83,16 +105,6 @@ bars.add("svg:rect")
     .delay(function() { return this.index * 10; })
     .tweenAttr("y", y1)
     .tweenAttr("height", function(d) { return y0(d) - y1(d); });
-
-// bars.filter(function(d) { return y0(d) - y1(d) > 12; })
-//   .add("svg:text")
-//     .attr("x", x({x: .45}))
-//     .attr("y", function(d) { return y1(d) + 6; })
-//     .attr("dx", 0)
-//     .attr("dy", ".71em")
-//     .attr("fill", "white")
-//     .attr("text-anchor", "middle")
-//     .text(function(d) { return d.y.toFixed(2); });
 
 var labels = vis.selectAll("text.label")
     .data(data[0])
@@ -113,15 +125,23 @@ vis.add("svg:line")
 
 vis.apply();
 
-var t = d3.selectAll("g.layer")
-    .data(data)
-    .attr("transform", "translate(0,0)");
+var group = d3.selectAll("body");
 
-t.transition()
+group.select("#group")
+    .attr("class", "first active");
+
+group.select("#stack")
+    .attr("class", "last");
+
+group.selectAll("g.layer")
+    .data(data)
+  .transition()
     .duration(500)
     .tweenAttr("transform", function(d) { return "translate(" + x({x: .9 * this.index / n}) + ",0)"; });
 
-t.selectAll("rect")
+group.selectAll("g.layer")
+    .data(data)
+  .selectAll("rect")
     .data(function(d) { return d; })
   .transition()
     .duration(500)
@@ -131,9 +151,32 @@ t.selectAll("rect")
     .tweenAttr("y", function(d) { return h - y0(d) + y1(d); })
     .tweenAttr("height", function(d) { return y0(d) - y1(d); }); // just in case
 
-    </script><br>
-    <button onclick="t.apply()">
-      Group
-    </button>
+var stack = d3.select("body");
+
+stack.select("#group")
+    .attr("class", "first");
+
+stack.select("#stack")
+    .attr("class", "last active");
+
+stack.selectAll("g.layer")
+  .transition()
+    .delay(500) // XXX on end?
+    .duration(500)
+    .tweenAttr("transform", "translate(0,0)");
+
+stack.selectAll("g.layer")
+    .data(data)
+  .selectAll("rect")
+    .data(function(d) { return d; })
+  .transition()
+    .duration(500)
+    .tweenAttr("y", y1)
+    .tweenAttr("height", function(d) { return y0(d) - y1(d); })
+  .end.transition()
+    .duration(500)
+    .tweenAttr("width", x({x: .9}));
+
+    </script>
   </body>
 </html>
