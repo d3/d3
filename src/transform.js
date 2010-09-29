@@ -45,6 +45,7 @@ function d3_transform() {
     scope.data = function(v) {
       var subscope, action = {
         impl: d3_transform_data,
+        bind: d3_transform_data_bind,
         value: v,
         actions: [],
         enterActions: [],
@@ -61,33 +62,12 @@ function d3_transform() {
       return subscope;
     };
 
-    scope.tweenData = function(v, t) {
-      actions.push({
-        impl: d3_transform_data_tween,
-        bind: d3_transform_data_tween_bind,
-        value: v,
-        tween: arguments.length < 2 ? d3.tween : t
-      });
-      return scope;
-    };
-
     scope.attr = function(n, v) {
       actions.push({
         impl: d3_transform_attr,
+        bind: d3_transform_attr_bind,
         name: ns.qualify(n),
         value: v
-      });
-      return scope;
-    };
-
-    scope.tweenAttr = function(n, v, t) {
-      actions.push({
-        impl: d3_transform_attr_tween,
-        bind: d3_transform_attr_tween_bind,
-        name: ns.qualify(n),
-        key: "attr." + n,
-        value: v,
-        tween: arguments.length < 3 ? d3_tweenByName(n) : t
       });
       return scope;
     };
@@ -95,22 +75,10 @@ function d3_transform() {
     scope.style = function(n, v, p) {
       actions.push({
         impl: d3_transform_style,
+        bind: d3_transform_style_bind,
         name: n,
         value: v,
         priority: arguments.length < 3 ? null : p
-      });
-      return scope;
-    };
-
-    scope.tweenStyle = function(n, v, p, t) {
-      actions.push({
-        impl: d3_transform_style_tween,
-        bind: d3_transform_style_tween_bind,
-        name: n,
-        key: "style." + n,
-        value: v,
-        priority: arguments.length < 3 ? null : p,
-        tween: arguments.length < 4 ? d3_tweenByName(n) : t
       });
       return scope;
     };
@@ -155,6 +123,7 @@ function d3_transform() {
     scope.filter = function(f) {
       var action = {
         impl: d3_transform_filter,
+        bind: d3_transform_filter, // TODO is this right?
         filter: f,
         actions: []
       };
@@ -165,6 +134,7 @@ function d3_transform() {
     scope.select = function(s) {
       var action = {
         impl: d3_transform_select,
+        bind: d3_transform_select_bind,
         selector: s,
         actions: []
       };
@@ -175,6 +145,7 @@ function d3_transform() {
     scope.selectAll = function(s) {
       var action = {
         impl: d3_transform_select_all,
+        bind: d3_transform_select_all_bind,
         selector: s,
         actions: []
       };

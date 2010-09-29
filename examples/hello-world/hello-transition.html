@@ -31,8 +31,8 @@ var t = d3.select("div")
   .transition()
     .ease("bounce")
     .duration(2000)
-    .tweenStyle("width", "100%")
-    .tweenStyle("background-color", "brown")
+    .style("width", d3.tween("100%"))
+    .style("background-color", d3.tween("brown"))
     .text(function() { return ~~(d3.time * 100) + "\u00a0"; })
   .apply();
 

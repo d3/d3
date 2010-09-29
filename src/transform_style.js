@@ -26,34 +26,25 @@ function d3_transform_style(nodes) {
   }
 }
 
-function d3_transform_style_tween(nodes) {
+function d3_transform_style_bind(nodes) {
   var m = nodes.length,
       n = this.name,
-      k = this.key,
-      p = this.priority,
+      v = this.bound || (this.bound = this.value),
+      b = "style." + n,
       i, // current index
-      o; // current node
-  for (i = 0; i < m; ++i) {
-    (o = nodes[i]).node.style.setProperty(n, o.tween[k](), p);
-  }
-}
-
-function d3_transform_style_tween_bind(nodes) {
-  var m = nodes.length,
-      n = this.name,
-      k = this.key,
-      v = this.value,
-      T = this.tween,
-      i, // current index
-      o; // current node
-  if (typeof v === "function") {
+      o, // current node
+      x; // current value (for value functions)
+  if (v && v.bind) {
     for (i = 0; i < m; ++i) {
-      d3_transform_stack[0] = (o = nodes[i]).data;
-      o.tween[k] = T(o.node.style.getPropertyValue(n), v.apply(o, d3_transform_stack));
+      (o = nodes[i]).value = o.node.style.getPropertyValue(n);
+      o.name = n;
+      d3_transform_stack[0] = o.data;
+      o[b] = v.bind.apply(o, d3_transform_stack);
+      delete o.value;
+      delete o.name;
     }
-  } else {
-    for (i = 0; i < m; ++i) {
-      (o = nodes[i]).tween[k] = T(o.node.style.getPropertyValue(n), v);
-    }
+    this.value = function() {
+      return this[b].apply(this, arguments);
+    };
   }
 }

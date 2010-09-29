@@ -52,7 +52,7 @@ window.addEventListener("keypress", d3.selectAll("path.area")
     })
   .transition()
     .duration(2500)
-    .tweenAttr("d", area)
+    .attr("d", d3.tween(area))
   .apply, false);
 
 function area(layer) {

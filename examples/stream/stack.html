@@ -103,8 +103,8 @@ bars.add("svg:rect")
     .attr("height", 0)
   .transition()
     .delay(function() { return this.index * 10; })
-    .tweenAttr("y", y1)
-    .tweenAttr("height", function(d) { return y0(d) - y1(d); });
+    .attr("y", d3.tween(y1))
+    .attr("height", d3.tween(function(d) { return y0(d) - y1(d); }));
 
 var labels = vis.selectAll("text.label")
     .data(data[0])
@@ -134,22 +134,18 @@ group.select("#stack")
     .attr("class", "last");
 
 group.selectAll("g.layer")
-    .data(data)
+  .data(data)
   .transition()
     .duration(500)
-    .tweenAttr("transform", function(d) { return "translate(" + x({x: .9 * this.index / n}) + ",0)"; });
-
-group.selectAll("g.layer")
-    .data(data)
+    .attr("transform", d3.tween(function(d) { return "translate(" + x({x: .9 * this.index / n}) + ",0)"; }))
   .selectAll("rect")
-    .data(function(d) { return d; })
+    .attr("width", d3.tween(x({x: .9 / n})))
+  .pop.end.selectAll("rect")
+  .data(function(d) { return d; })
   .transition()
     .duration(500)
-    .tweenAttr("width", x({x: .9 / n}))
-  .end.transition()
-    .duration(500)
-    .tweenAttr("y", function(d) { return h - y0(d) + y1(d); })
-    .tweenAttr("height", function(d) { return y0(d) - y1(d); }); // just in case
+    .attr("y", d3.tween(function(d) { return h - y0(d) + y1(d); }))
+    .attr("height", d3.tween(function(d) { return y0(d) - y1(d); })); // just in case
 
 var stack = d3.select("body");
 
@@ -160,22 +156,18 @@ stack.select("#stack")
     .attr("class", "last active");
 
 stack.selectAll("g.layer")
+  .data(data)
   .transition()
-    .delay(500) // XXX on end?
     .duration(500)
-    .tweenAttr("transform", "translate(0,0)");
-
-stack.selectAll("g.layer")
-    .data(data)
   .selectAll("rect")
-    .data(function(d) { return d; })
-  .transition()
+  .data(function(d) { return d; })
+    .attr("y", d3.tween(y1))
+    .attr("height", d3.tween(function(d) { return y0(d) - y1(d); }))
+  .pop.pop.end.transition()
     .duration(500)
-    .tweenAttr("y", y1)
-    .tweenAttr("height", function(d) { return y0(d) - y1(d); })
-  .end.transition()
-    .duration(500)
-    .tweenAttr("width", x({x: .9}));
+    .attr("transform", d3.tween("translate(0,0)"))
+  .selectAll("rect")
+    .attr("width", d3.tween(x({x: .9})));
 
     </script>
   </body>

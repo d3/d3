@@ -4,7 +4,6 @@ function d3_transform_transition(nodes) {
       start = Date.now(),
       delay = this.delay,
       minDelay = Infinity,
-      maxDelay = -Infinity,
       duration = this.duration,
       ease = this.ease,
       interval,
@@ -23,7 +22,6 @@ function d3_transform_transition(nodes) {
       d3_transform_stack[0] = (o = nodes[i]).data;
       x = o.delay = delay.apply(o, d3_transform_stack);
       if (x < minDelay) minDelay = x;
-      if (x > maxDelay) maxDelay = x;
     }
     setTimeout(function() {
       bind(interval = setInterval(tickOne, 24));
@@ -108,12 +106,8 @@ function d3_transform_transition_bind(actions, nodes) {
       m = nodes.length,
       a, // current action
       i; // current index
-  for (i = 0; i < m; ++i) {
-    nodes[i].tween = {};
-  }
   for (i = 0; i < n; ++i) {
     a = actions[i];
-    if (a.bind) a.bind(nodes);
-    a.impl(nodes, d3_transform_transition_bind);
+    if (a.bind) a.bind(nodes, d3_transform_transition_bind);
   }
 }

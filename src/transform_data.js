@@ -74,7 +74,7 @@ function d3_transform_data(nodes, pass) {
         });
       } else {
         enterNodes.push({
-          node: nodes.parentNode,
+          node: nodes.parent.node,
           data: d,
           key: k,
           index: i
@@ -97,7 +97,7 @@ function d3_transform_data(nodes, pass) {
       if (o.node) {
         updateNodes.push(o);
       } else {
-        o.node = o.parentNode;
+        o.node = o.parent.node;
         enterNodes.push(o);
       }
     }
@@ -105,7 +105,7 @@ function d3_transform_data(nodes, pass) {
     // compute entering nodes
     for (j = i; j < n; ++j) {
       enterNodes.push({
-        node: nodes.parentNode,
+        node: nodes.parent.node,
         data: data[j],
         index: j
       });
@@ -122,28 +122,32 @@ function d3_transform_data(nodes, pass) {
   pass(this.exitActions, exitNodes);
 }
 
-function d3_transform_data_tween(nodes) {
+function d3_transform_data_bind(nodes, pass) {
   var m = nodes.length,
+      n = this.name,
+      v = this.bound || (this.bound = this.value),
+      d, // bound data
       i, // current index
-      o; // current node
-  for (i = 0; i < m; ++i) {
-    (o = nodes[i]).data = o.tween.data();
-  }
-}
-
-function d3_transform_data_tween_bind(nodes) {
-  var m = nodes.length,
-      v = this.value,
-      T = this.tween,
-      i, // current index
-      o; // current node
-  if (typeof v === "function") {
+      o, // current node
+      x; // current value (for value functions)
+  if (v && v.bind) {
+    d = [];
     for (i = 0; i < m; ++i) {
-      (o = nodes[i]).tween.data = T(d3_transform_stack[0] = o.data, v.apply(o, d3_transform_stack));
+      d3_transform_stack[0] = (o = nodes[i]).data;
+      o.value = o.data;
+      o.data_ = v.bind.apply(o, d3_transform_stack);
+      delete o.value;
     }
+    this.value = function() {
+      d3_transform_stack.unshift(null);
+      for (i = 0; i < m; ++i) {
+        d3_transform_stack[0] = (o = nodes[i]).data;
+        d[i] = o.data_.apply(o, d3_transform_stack);
+      }
+      d3_transform_stack.shift();
+      return d;
+    };
   } else {
-    for (i = 0; i < m; ++i) {
-      (o = nodes[i]).tween.data = T(o.data, v);
-    }
+    d3_transform_data.call(this, nodes, pass);
   }
 }

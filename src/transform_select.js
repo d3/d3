@@ -14,8 +14,18 @@ function d3_transform_select(nodes, pass) {
   for (i = 0; i < m; ++i) {
     e = (p = (o = nodes[i]).node).querySelector(s);
     selectedNodes.push(c = Object.create(o));
-    c.parentNode = p;
+    c.parent = o;
     c.node = e;
   }
   pass(this.actions, selectedNodes);
+}
+
+function d3_transform_select_bind(nodes, pass) {
+  var action = this;
+  d3_transform_select.call(this, nodes, function(actions, selectedNodes) {
+    pass(actions, selectedNodes);
+    action.impl = function(nodes, pass) {
+      pass(actions, selectedNodes);
+    };
+  });
 }

@@ -42,50 +42,36 @@ function d3_transform_attr(nodes) {
   }
 }
 
-function d3_transform_attr_tween(nodes) {
+function d3_transform_attr_bind(nodes) {
   var m = nodes.length,
       n = this.name,
-      k = this.key,
+      v = this.bound || (this.bound = this.value),
+      b = "attr." + (n.local ? n.space + ":" + n.local : n),
       i, // current index
-      o; // current node
-  if (n.local) {
-    for (i = 0; i < m; ++i) {
-      (o = nodes[i]).node.setAttributeNS(n.space, n.local, o.tween[k]());
-    }
-  } else {
-    for (i = 0; i < m; ++i) {
-      (o = nodes[i]).node.setAttribute(n, o.tween[k]());
-    }
-  }
-}
-
-function d3_transform_attr_tween_bind(nodes) {
-  var m = nodes.length,
-      n = this.name,
-      k = this.key,
-      v = this.value,
-      T = this.tween,
-      i, // current index
-      o; // current node
-  if (n.local) {
-    if (typeof v === "function") {
+      o, // current node
+      x; // current value (for value functions)
+  if (v && v.bind) {
+    if (n.local) {
       for (i = 0; i < m; ++i) {
-        d3_transform_stack[0] = (o = nodes[i]).data;
-        o.tween[k] = T(o.node.getAttributeNS(n.local, n.space), v.apply(o, d3_transform_stack));
+        (o = nodes[i]).value = o.node.getAttributeNS(n.space, n.local);
+        o.name = n.space + ":" + n.local;
+        d3_transform_stack[0] = o.data;
+        o[b] = v.bind.apply(o, d3_transform_stack);
+        delete o.value;
+        delete o.name;
       }
     } else {
       for (i = 0; i < m; ++i) {
-        (o = nodes[i]).tween[k] = T(o.node.getAttributeNS(n.local, n.space), v);
+        (o = nodes[i]).value = o.node.getAttribute(n);
+        o.name = n;
+        d3_transform_stack[0] = o.data;
+        o[b] = v.bind.apply(o, d3_transform_stack);
+        delete o.value;
+        delete o.name;
       }
     }
-  } else if (typeof v === "function") {
-    for (i = 0; i < m; ++i) {
-      d3_transform_stack[0] = (o = nodes[i]).data;
-      o.tween[k] = T(o.node.getAttribute(n), v.apply(o, d3_transform_stack));
-    }
-  } else {
-    for (i = 0; i < m; ++i) {
-      (o = nodes[i]).tween[k] = T(o.node.getAttribute(n), v);
-    }
+    this.value = function() {
+      return this[b].apply(this, arguments);
+    };
   }
 }
