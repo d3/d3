@@ -19,6 +19,6 @@ pages. Unlike other systems, D3 doesn&rsquo;t tie you to a proprietary
 representation, so you are free to exercise the full capabilities of modern
 browsers.
 
-* [Documentation](/docs/)
-* [Examples](/ex/)
-* Download
+* [Documentation](docs/)
+* Examples (WIP)
+* Download (WIP)
