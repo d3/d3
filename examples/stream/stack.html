@@ -75,9 +75,11 @@ var p = 20,
     h = 500 - p,
     mx = m,
     my = max(data, function(d) { return max(d, function(d) { return d.y0 + d.y; }); }),
+    mz = max(data, function(d) { return max(d, function(d) { return d.y; }); }),
     x = function(d) { return d.x * w / mx; },
     y0 = function(d) { return h - d.y0 * h / my; },
-    y1 = function(d) { return h - (d.y + d.y0) * h / my; };
+    y1 = function(d) { return h - (d.y + d.y0) * h / my; },
+    y2 = function(d) { return d.y * h / mz; }; // or `my` to not rescale
 
 var vis = d3.select("body")
   .add("svg:svg")
@@ -144,8 +146,8 @@ group.selectAll("g.layer")
   .data(function(d) { return d; })
   .transition()
     .duration(500)
-    .attr("y", d3.tween(function(d) { return h - y0(d) + y1(d); }))
-    .attr("height", d3.tween(function(d) { return y0(d) - y1(d); })); // just in case
+    .attr("y", d3.tween(function(d) { return h - y2(d); }))
+    .attr("height", d3.tween(y2));
 
 var stack = d3.select("body");
 
