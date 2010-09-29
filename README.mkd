@@ -1,4 +1,4 @@
-## Data-Driven Documents
+# d3.js / Data-Driven Documents
 
 **D3.js** is a small, free JavaScript library for manipulating HTML documents
 based on data. D3 can help you quickly visualize your data as HTML or SVG,
