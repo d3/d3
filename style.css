@@ -21,6 +21,7 @@ a:hover {
 h1 {
   font-size: 36px;
   font-weight: 300;
+  margin-bottom: .3em;
 }
 
 h2 {
