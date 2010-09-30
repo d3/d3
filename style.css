@@ -52,3 +52,23 @@ h2 {
   width: 790px;
   margin-right: 0px;
 }
+
+button {
+  background: #222 url(button-overlay.png) repeat-x;
+  font: 12px Helvetica Neue;
+  text-rendering: optimizeLegibility;
+  color: #fff;
+  text-shadow: 0 -1px 1px #222;
+  padding: 6px 10px 6px 10px;
+  border: 0;
+  border-bottom: 1px solid #222;
+  min-width: 80px;
+  -moz-border-radius: 5px;
+  -moz-box-shadow: 0 1px 3px #999;
+  -webkit-border-radius: 5px;
+  -webkit-box-shadow: 0 1px 3px #999;
+}
+
+button:hover {
+  background-color: #555;
+}
