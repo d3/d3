@@ -381,12 +381,12 @@ elements:
 
 <div class="highlight ex">
   <textarea id="candidates">[
-  {"name": "Locke", "value": 4},
-  {"name": "Hugo", "value": 8},
-  {"name": "Sawyer", "value": 15},
-  {"name": "Sayid", "value": 16},
-  {"name": "Jack", "value": 23},
-  {"name": "Kwon", "value": 42}
+  {"name": "Locke", "value": 42},
+  {"name": "Hugo", "value": 23},
+  {"name": "Sawyer", "value": 16},
+  {"name": "Sayid", "value": 15},
+  {"name": "Jack", "value": 8},
+  {"name": "Kwon", "value": 4}
 ]</textarea><br>
   <button onclick="candidates=JSON.parse(document.getElementById('candidates').value);t4.apply()">
     Apply
