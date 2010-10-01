@@ -56,10 +56,16 @@ d3.selectAll("#ex1 tr")
 {% endhighlight %}
 
 <div class="highlight ex">
-  <button onclick="d3.selectAll('#ex1 tr').selectAll('td').attr('class', function() { return 'q' + this.index; }).apply()">
+  <button onclick="d3.selectAll('#ex1 tr')
+      .selectAll('td')
+        .attr('class', function() { return 'q' + this.index; })
+        .apply()">
     Apply
   </button>
-  <button onclick="d3.selectAll('#ex1 tr').selectAll('td').attr('class', null).apply()">
+  <button onclick="d3.selectAll('#ex1 tr')
+      .selectAll('td')
+        .attr('class', null)
+        .apply()">
     Reset
   </button>
 </div>
@@ -106,10 +112,14 @@ d3.selectAll("#ex2 td")
 {% endhighlight %}
 
 <div class="highlight ex">
-  <button onclick="d3.selectAll('#ex2 td').attr('class', function() { return 'q' + this.index; }).apply()">
+  <button onclick="d3.selectAll('#ex2 td')
+        .attr('class', function() { return 'q' + this.index; })
+        .apply()">
     Apply
   </button>
-  <button onclick="d3.selectAll('#ex2 td').attr('class', null).apply()">
+  <button onclick="d3.selectAll('#ex2 td')
+        .attr('class', null)
+        .apply()">
     Reset
   </button>
 </div>

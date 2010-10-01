@@ -41,10 +41,16 @@ d3.selectAll("tr")
 {% endhighlight %}
 
 <div class="highlight ex">
-  <button onclick="d3.selectAll('tr').select('td').style('background-color', 'yellow').apply()">
+  <button onclick="d3.selectAll('tr')
+      .select('td')
+        .style('background-color', 'yellow')
+        .apply()">
     Apply
   </button>
-  <button onclick="d3.selectAll('tr').select('td').style('background-color', null).apply()">
+  <button onclick="d3.selectAll('tr')
+      .select('td')
+        .style('background-color', null)
+        .apply()">
     Reset
   </button>
 </div>
@@ -86,10 +92,14 @@ d3.select("#hello")
 {% endhighlight %}
 
 <div class="highlight ex">
-  <button onclick="d3.select('#hello').text('Hello, world!').apply()">
+  <button onclick="d3.select('#hello')
+        .text('Hello, world!')
+        .apply()">
     Apply
   </button>
-  <button onclick="d3.select('#hello').text('...').apply()">
+  <button onclick="d3.select('#hello')
+        .text('...')
+        .apply()">
     Reset
   </button>
 </div>
