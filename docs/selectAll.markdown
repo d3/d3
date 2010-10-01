@@ -17,7 +17,7 @@ node.
 For example, given the following HTML:
 
 {% highlight html linenos %}
-<table class="cat">
+<table id="ex1">
   <tr><td>1.</td><td>One</td></tr>
   <tr><td>2.</td><td>Two</td></tr>
   <tr><td>3.</td><td>Three</td></tr>
@@ -38,50 +38,36 @@ For example, given the following HTML:
 </style>
 
 <div class="highlight ex">
-  <table class="cat">
+  <table id="ex1">
     <tr><td>1.</td><td>One</td></tr>
     <tr><td>2.</td><td>Two</td></tr>
     <tr><td>3.</td><td>Three</td></tr>
   </table>
 </div>
 
-To select all `tr` elements, then sub-select all descendant `td` elements, say:
+To select all rows within the table &ldquo;ex1&rdquo;, then sub-select all
+descendant cells, say:
 
 {% highlight js linenos %}
-d3.selectAll("tr")
+d3.selectAll("#ex1 tr")
   .selectAll("td")
     .attr("class", function() { return "q" + this.index; })
     .apply();
 {% endhighlight %}
 
 <div class="highlight ex">
-  <button onclick="d3.selectAll('tr').selectAll('td').attr('class', function() { return 'q' + this.index; }).apply()">
+  <button onclick="d3.selectAll('#ex1 tr').selectAll('td').attr('class', function() { return 'q' + this.index; }).apply()">
     Apply
   </button>
-  <button onclick="d3.selectAll('tr').selectAll('td').attr('class', null).apply()">
+  <button onclick="d3.selectAll('#ex1 tr').selectAll('td').attr('class', null).apply()">
     Reset
   </button>
 </div>
 
 The classes &ldquo;q0&rdquo;, &ldquo;q1&rdquo; *etc.* are used here to style the
-selected elements. The same elements can be selected using the single selector
-&ldquo;tr td&rdquo;, but the behavior is different because the matched elements
-are processed as a single set:
-
-{% highlight js linenos %}
-d3.selectAll("tr td")
-    .attr("class", function() { return "q" + this.index; })
-    .apply();
-{% endhighlight %}
-
-<div class="highlight ex">
-  <button onclick="d3.selectAll('tr td').attr('class', function() { return 'q' + this.index; }).apply()">
-    Apply
-  </button>
-  <button onclick="d3.selectAll('tr td').attr('class', null).apply()">
-    Reset
-  </button>
-</div>
+selected elements. The same elements can be selected using a single selector,
+&ldquo;#ex1 tr td&rdquo;, but the behavior is different because the matched
+elements are processed as a single set. See below for details.
 
 ## <tt>d3.selectAll(<i>s</i>)</tt>
 
@@ -92,3 +78,38 @@ Selects all descendants of the current document that match the
 are returned in *document order*: depth-first pre-order traversal of the DOM
 tree or subtree in question. The descendants do not need to be immediate
 children of the document element.
+
+For example, given the following HTML:
+
+{% highlight html linenos %}
+<table id="ex2">
+  <tr><td>1.</td><td>One</td></tr>
+  <tr><td>2.</td><td>Two</td></tr>
+  <tr><td>3.</td><td>Three</td></tr>
+</table>
+{% endhighlight %}
+
+<div class="highlight ex">
+  <table id="ex2">
+    <tr><td>1.</td><td>One</td></tr>
+    <tr><td>2.</td><td>Two</td></tr>
+    <tr><td>3.</td><td>Three</td></tr>
+  </table>
+</div>
+
+To select all cells within the table &ldquo;ex2&rdquo;, say:
+
+{% highlight js linenos %}
+d3.selectAll("#ex2 td")
+    .attr("class", function() { return "q" + this.index; })
+    .apply();
+{% endhighlight %}
+
+<div class="highlight ex">
+  <button onclick="d3.selectAll('#ex2 td').attr('class', function() { return 'q' + this.index; }).apply()">
+    Apply
+  </button>
+  <button onclick="d3.selectAll('#ex2 td').attr('class', null).apply()">
+    Reset
+  </button>
+</div>
