@@ -8,10 +8,10 @@ title: 'selectAll'
 ![selectAll](selectAll.png)
 
 For each node in the current selection, selects all descendants of the given
-node that match the [selector](http://www.w3.org/TR/css3-selectors/) *s*. Each
-sub-selection is processed independently, with selected nodes returned in
-*document order*: depth-first pre-order traversal of the DOM tree or subtree in
-question. The descendants do not need to be immediate children of the context
+node that match the [selector](http://www.w3.org/TR/css3-selectors/) string
+*s*. Each sub-selection is processed independently, with selected nodes returned
+in *document order*: depth-first pre-order traversal of the DOM tree or subtree
+in question. The descendants do not need to be immediate children of the context
 node.
 
 For example, given the following HTML:
@@ -63,10 +63,10 @@ d3.selectAll("tr")
   </button>
 </div>
 
-The classes &ldquo;q0&rdquo;, &ldquo;q1&rdquo; *etc.* can then be used to style
-the selected elements. The same elements can be selected using the single
-selector &ldquo;tr td&rdquo;, but the behavior is different because the matched
-elements are processed as a single set:
+The classes &ldquo;q0&rdquo;, &ldquo;q1&rdquo; *etc.* are used here to style the
+selected elements. The same elements can be selected using the single selector
+&ldquo;tr td&rdquo;, but the behavior is different because the matched elements
+are processed as a single set:
 
 {% highlight js linenos %}
 d3.selectAll("tr td")
@@ -88,7 +88,7 @@ d3.selectAll("tr td")
 ![selectAll](selectAll-init.png)
 
 Selects all descendants of the current document that match the
-[selector](http://www.w3.org/TR/css3-selectors/) *s*. The selected nodes are
-returned in *document order*: depth-first pre-order traversal of the DOM tree or
-subtree in question. The descendants do not need to be immediate children of the
-document element.
+[selector](http://www.w3.org/TR/css3-selectors/) string *s*. The selected nodes
+are returned in *document order*: depth-first pre-order traversal of the DOM
+tree or subtree in question. The descendants do not need to be immediate
+children of the document element.

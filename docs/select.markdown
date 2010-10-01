@@ -8,10 +8,10 @@ title: 'select'
 ![select](select.png)
 
 Selects the first descendant of each node in the current selection that matches
-the [selector](http://www.w3.org/TR/css3-selectors/) *s*. The first descendant
-is determined using *document order*: depth-first pre-order traversal of the DOM
-tree or subtree in question. The descendant does not need to be an immediate
-child of the context node.
+the [selector](http://www.w3.org/TR/css3-selectors/) string *s*. The first
+descendant is determined using *document order*: depth-first pre-order traversal
+of the DOM tree or subtree in question. The descendant does not need to be an
+immediate child of the context node.
 
 For example, given the following HTML:
 
@@ -58,10 +58,10 @@ psuedo-class.
 ![select](select-init.png)
 
 Selects the first descendent of the current document that matches the
-[selector](http://www.w3.org/TR/css3-selectors/) *s*. The first descendant is
-determined using *document order*: depth-first pre-order traversal of the DOM
-tree or subtree in question. The descendant does not need to be an immediate
-child of the root element.
+[selector](http://www.w3.org/TR/css3-selectors/) string *s*. The first
+descendant is determined using *document order*: depth-first pre-order traversal
+of the DOM tree or subtree in question. The descendant does not need to be an
+immediate child of the root element.
 
 For example, given the following HTML:
 
