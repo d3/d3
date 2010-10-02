@@ -144,8 +144,8 @@ function d3_transform() {
 
     scope.selectAll = function(s) {
       var action = {
-        impl: d3_transform_select_all,
-        bind: d3_transform_select_all_bind,
+        impl: d3_transform_selectAll,
+        bind: d3_transform_selectAll_bind,
         selector: s,
         actions: []
       };
@@ -195,7 +195,7 @@ function d3_transform() {
 
   transform.selectAll = function(s) {
     var action = {
-      impl: d3_transform_select_all,
+      impl: d3_transform_selectAll,
       selector: s,
       actions: []
     };

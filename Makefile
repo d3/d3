@@ -22,7 +22,7 @@ SRC_FILES = \
 	src/transform_on.js \
 	src/transform_filter.js \
 	src/transform_select.js \
-	src/transform_select_all.js \
+	src/transform_selectAll.js \
 	src/transform_style.js \
 	src/transform_text.js \
 	src/transform_transition.js \

@@ -751,8 +751,8 @@ function d3_transform() {
 
     scope.selectAll = function(s) {
       var action = {
-        impl: d3_transform_select_all,
-        bind: d3_transform_select_all_bind,
+        impl: d3_transform_selectAll,
+        bind: d3_transform_selectAll_bind,
         selector: s,
         actions: []
       };
@@ -802,7 +802,7 @@ function d3_transform() {
 
   transform.selectAll = function(s) {
     var action = {
-      impl: d3_transform_select_all,
+      impl: d3_transform_selectAll,
       selector: s,
       actions: []
     };
@@ -1179,7 +1179,7 @@ d3.selectAll = function(s) {
   return d3_transform().selectAll(s);
 };
 
-function d3_transform_select_all(nodes, pass) {
+function d3_transform_selectAll(nodes, pass) {
   var m = nodes.length,
       s = this.selector,
       i, // the node index
@@ -1192,11 +1192,11 @@ function d3_transform_select_all(nodes, pass) {
   d3_transform_stack.shift();
 }
 
-function d3_transform_select_all_bind(nodes, pass) {
+function d3_transform_selectAll_bind(nodes, pass) {
   var m = nodes.length,
       i, // the node index
       o; // the current node
-  d3_transform_select_all.call(this, nodes, function(actions, nodes) {
+  d3_transform_selectAll.call(this, nodes, function(actions, nodes) {
     pass(actions, nodes.parent.selectAll = nodes);
   });
   this.impl = function(nodes, pass) {
