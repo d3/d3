@@ -315,7 +315,7 @@ var candidates = [
 To match the `name` field to the node&rsquo;s ID, say:
 
 {% highlight js linenos %}
-var t4 = d3.select("#chart-4")
+var bar = d3.select("#chart-4")
   .selectAll("div")
     .data(candidates)
     .key("id", function(d) { return d.name; });
@@ -324,13 +324,13 @@ var t4 = d3.select("#chart-4")
 To update the width of the bar when the value changes, say:
 
 {% highlight js linenos %}
-t4.style("width", function(d) { return d.value * 10 + "px"; });
+bar.style("width", function(d) { return d.value * 10 + "px"; });
 {% endhighlight %}
 
 Similarly, to define new values on enter:
 
 {% highlight js linenos %}
-t4.enter.add("div")
+bar.enter.add("div")
     .attr("class", "bar")
     .attr("id", function(d) { return d.name; })
     .style("width", function(d) { return d.value * 10 + "px"; })
@@ -340,10 +340,14 @@ t4.enter.add("div")
 And to remove bars on exit:
 
 {% highlight js linenos %}
-t4.exit.remove();
+bar.exit.remove();
 {% endhighlight %}
 
 Putting it all together:
+
+{% highlight js linenos %}
+bar.apply();
+{% endhighlight %}
 
 <div id="chart-4">
 </div>
