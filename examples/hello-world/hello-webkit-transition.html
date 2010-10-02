@@ -44,7 +44,7 @@ var n = 10;
 d3.select("#cells")
   .selectAll("div")
     .data(range(n))
-  .enter.add("div")
+  .enter.append("div")
     .attr("class", "cell")
     .style("left", function(i) { return i * 30; })
   .apply();

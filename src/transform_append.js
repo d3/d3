@@ -1,4 +1,4 @@
-function d3_transform_add(nodes, pass) {
+function d3_transform_append(nodes, pass) {
   var m = nodes.length,
       n = this.name,
       childNodes = [],

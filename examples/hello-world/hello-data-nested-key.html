@@ -42,10 +42,10 @@ var t = d3.select("#table")
   .selectAll("tr")
     .data(data);
 
-t.enter.add("tr")
+t.enter.append("tr")
   .selectAll("td")
     .data(function(d) { return d; })
-  .enter.add("td")
+  .enter.append("td")
     .style("background-color", function(d) { return "hsl(" + d + ",100%,50%)"; })
     .text(function(d) { return d; });
 

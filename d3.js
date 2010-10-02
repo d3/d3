@@ -690,9 +690,9 @@ function d3_transform() {
       return scope;
     };
 
-    scope.add = function(n, v) {
+    scope.append = function(n, v) {
       var action = {
-        impl: d3_transform_add,
+        impl: d3_transform_append,
         name: ns.qualify(n),
         value: v,
         actions: []
@@ -825,7 +825,7 @@ function d3_transform_impl(actions, nodes) {
       i; // current index
   for (i = 0; i < n; ++i) actions[i].impl(nodes, d3_transform_impl);
 }
-function d3_transform_add(nodes, pass) {
+function d3_transform_append(nodes, pass) {
   var m = nodes.length,
       n = this.name,
       childNodes = [],

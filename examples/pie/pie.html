@@ -26,22 +26,22 @@ var colors = [
 ];
 
 var vis = d3.select("body")
-  .add("svg:svg")
+  .append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
 var arcs = vis.selectAll("g.arc")
     .data(data)
-  .enter.add("svg:g")
+  .enter.append("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-arcs.add("svg:path")
+arcs.append("svg:path")
     .attr("fill", index(colors))
     .attr("d", arc(r));
 
 arcs.filter(function(d) { return d.value > .15; })
-  .add("svg:text")
+  .append("svg:text")
     .attr("x", function(d) { return Math.cos(d.midAngle) * r * .8; })
     .attr("y", function(d) { return Math.sin(d.midAngle) * r * .8; })
     .attr("dy", ".35em")

@@ -82,24 +82,24 @@ var p = 20,
     y2 = function(d) { return d.y * h / mz; }; // or `my` to not rescale
 
 var vis = d3.select("body")
-  .add("svg:svg")
+  .append("svg:svg")
     .attr("width", w)
     .attr("height", h + p);
 
 var layers = vis.selectAll("g.layer")
     .data(data)
-  .enter.add("svg:g")
+  .enter.append("svg:g")
     .attr("fill", function(d) { return color(this.index / (n - 1)); })
     .attr("class", "layer")
     .attr("transform", "translate(0,0)"); // for animation
 
 var bars = layers.selectAll("g.bar")
     .data(function(d) { return d; })
-  .enter.add("svg:g")
+  .enter.append("svg:g")
     .attr("class", "bar")
     .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 
-bars.add("svg:rect")
+bars.append("svg:rect")
     .attr("width", x({x: .9}))
     .attr("y", h)
     .attr("height", 0)
@@ -110,7 +110,7 @@ bars.add("svg:rect")
 
 var labels = vis.selectAll("text.label")
     .data(data[0])
-  .enter.add("svg:text")
+  .enter.append("svg:text")
     .attr("class", "label")
     .attr("x", x)
     .attr("y", h + 6)
@@ -119,7 +119,7 @@ var labels = vis.selectAll("text.label")
     .attr("text-anchor", "middle")
     .text(function() { return this.index; });
 
-vis.add("svg:line")
+vis.append("svg:line")
     .attr("x1", 0)
     .attr("x2", w - x({x: .1}))
     .attr("y1", h)

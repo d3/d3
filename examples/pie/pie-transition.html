@@ -26,20 +26,20 @@ var colors = [
 ];
 
 var vis = d3.select("body")
-  .add("svg:svg")
+  .append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
 var arcs = vis.selectAll("g.arc")
     .data(data)
-  .enter.add("svg:g")
+  .enter.append("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-arcs.add("svg:path")
+arcs.append("svg:path")
     .attr("fill", index(colors));
 
-arcs.add("svg:text")
+arcs.append("svg:text")
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")
     .attr("display", "none")

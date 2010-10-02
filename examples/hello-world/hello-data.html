@@ -16,10 +16,10 @@ var data = [4, 8, 15, 16, 23, 42];
 
 d3.selectAll("span")
     .data(data)
-  .add("svg:svg")
+  .append("svg:svg")
     .attr("width", 100)
     .attr("height", 100)
-  .add("svg:text")
+  .append("svg:text")
     .attr("x", "50%")
     .attr("y", "50%")
     .attr("dy", ".35em")

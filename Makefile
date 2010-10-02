@@ -15,7 +15,7 @@ SRC_FILES = \
 	src/tween.js \
 	src/rgb.js \
 	src/transform.js \
-	src/transform_add.js \
+	src/transform_append.js \
 	src/transform_attr.js \
 	src/transform_data.js \
 	src/transform_remove.js \

@@ -83,9 +83,9 @@ function d3_transform() {
       return scope;
     };
 
-    scope.add = function(n, v) {
+    scope.append = function(n, v) {
       var action = {
-        impl: d3_transform_add,
+        impl: d3_transform_append,
         name: ns.qualify(n),
         value: v,
         actions: []
