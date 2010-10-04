@@ -1,0 +1,131 @@
+<html>
+  <head>
+    <title>Calendar</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+.day {
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var color = d3.interpolateRgb("#Feffc3", "#D80223");
+
+var w = 960,
+    h = 150,
+    p = 10,
+    z = ~~Math.min((h - p * 2) / 7, (w - p * 2) / 53);
+
+var vis = d3.select("body")
+  .selectAll("svg")
+    .data(range(1987, 2000))
+  .enter.append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+  .append("svg:g")
+    .attr("transform", "translate(" + p + "," + p + ")");
+
+vis.selectAll("rect.day")
+    .data(dates)
+  .enter.append("svg:rect")
+    .attr("x", function(d) { return d.week * z; })
+    .attr("y", function(d) { return d.day * z; })
+    .attr("class", function(d) { return "day q" + d.month; })
+    .attr("fill", function(d) { return color(Math.random()); })
+    .attr("width", z)
+    .attr("height", z);
+
+vis.selectAll("path.month")
+    .data(months)
+  .enter.append("svg:path")
+    .attr("class", "month")
+    .attr("d", function(d) {
+      return "M" + (d.firstWeek + 1) * z + "," + d.firstDay * z
+          + "H" + d.firstWeek * z
+          + "V" + 7 * z
+          + "H" + d.lastWeek * z
+          + "V" + (d.lastDay + 1) * z
+          + "H" + (d.lastWeek + 1) * z
+          + "V" + 0
+          + "H" + (d.firstWeek + 1) * z
+          + "Z";
+    });
+
+vis.apply();
+
+function range(start, end, step) {
+  if (arguments.length < 3) {
+    step = 1;
+    if (arguments.length < 2) {
+      end = start;
+      start = 0;
+    }
+  }
+  var range = [start];
+  while ((start += step) < end) range.push(start);
+  return range;
+}
+
+function dates(year) {
+  var dates = [],
+      date = new Date(year, 0, 1),
+      week = 0,
+      day;
+  do {
+    dates.push({
+      day: day = date.getDay(),
+      week: week,
+      month: date.getMonth()
+    });
+    date.setDate(date.getDate() + 1);
+    if (day == 6) week++;
+  } while (date.getFullYear() == year);
+  return dates;
+}
+
+function months(year) {
+  var months = [],
+      date = new Date(year, 0, 1),
+      month,
+      firstDay,
+      firstWeek,
+      day,
+      week = 0;
+  do {
+    firstDay = date.getDay();
+    firstWeek = week;
+    month = date.getMonth();
+    do {
+      day = date.getDay();
+      if (day == 6) week++;
+      date.setDate(date.getDate() + 1);
+    } while (date.getMonth() == month);
+    months.push({
+      firstDay: firstDay,
+      firstWeek: firstWeek,
+      lastDay: day,
+      lastWeek: day == 6 ? week - 1 : week
+    });
+  } while (date.getFullYear() == year);
+  return months;
+}
+
+    </script>
+  </body>
+</html>
