@@ -8,7 +8,7 @@ function quantile(array, n) {
   while (++i < n) thresholds[i] = array[~~(i * k)];
 
   function quantile(value) {
-    if (isNaN(value)) return NaN;
+    if (isNaN(value = +value)) return NaN;
     var low = 0, high = n - 1;
     while (low <= high) {
       var mid = (low + high) >> 1, midValue = thresholds[mid];

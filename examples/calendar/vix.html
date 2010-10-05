@@ -1,0 +1,159 @@
+<html>
+  <head>
+    <title>VIX</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="csv.js"></script>
+    <script type="text/javascript" src="nest.js"></script>
+    <script type="text/javascript" src="quantile.js"></script>
+    <style type="text/css">
+
+@import url("../../lib/colorbrewer/colorbrewer.css");
+
+body {
+  font: 10px sans-serif;
+}
+
+.day {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var dow = nest(csv("vix.csv"))
+    .key(function(d) { return d.Date; })
+    .rollup(function(d) { return d[0].Open; });
+
+var color = quantile(values(dow), 9);
+
+var w = 960,
+    pw = 14,
+    z = ~~((w - pw * 2) / 53),
+    ph = z >> 1,
+    h = z * 7 + ph * 2;
+
+var vis = d3.select("body")
+  .selectAll("svg")
+    .data(range(1993, 2011))
+  .enter.append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+    .attr("class", "RdYlGn")
+  .append("svg:g")
+    .attr("transform", "translate(" + pw + "," + ph + ")");
+
+vis.append("svg:text")
+    .attr("transform", "translate(-6," + h / 2 + ")rotate(-90)")
+    .text(function(d) { return d; });
+
+vis.selectAll("rect.day")
+    .data(dates)
+  .enter.append("svg:rect")
+    .attr("x", function(d) { return d.week * z; })
+    .attr("y", function(d) { return d.day * z; })
+    .attr("class", function(d) { return "day q" + (8-color(dow[d.Date])) + "-9"; })
+    .attr("width", z)
+    .attr("height", z)
+  .append("svg:title")
+    .text(function(d) { return d.Date + ": " + dow[d.Date]; });
+
+vis.selectAll("path.month")
+    .data(months)
+  .enter.append("svg:path")
+    .attr("class", "month")
+    .attr("d", function(d) {
+      return "M" + (d.firstWeek + 1) * z + "," + d.firstDay * z
+          + "H" + d.firstWeek * z
+          + "V" + 7 * z
+          + "H" + d.lastWeek * z
+          + "V" + (d.lastDay + 1) * z
+          + "H" + (d.lastWeek + 1) * z
+          + "V" + 0
+          + "H" + (d.firstWeek + 1) * z
+          + "Z";
+    });
+
+vis.apply();
+
+function range(start, end, step) {
+  if (arguments.length < 3) {
+    step = 1;
+    if (arguments.length < 2) {
+      end = start;
+      start = 0;
+    }
+  }
+  var range = [start];
+  while ((start += step) < end) range.push(start);
+  return range;
+}
+
+function pad(n) {
+  return n < 10 ? "0" + n : n;
+}
+
+function format(d) {
+  var month = d.getMonth() + 1,
+      date = d.getDate();
+  return d.getFullYear() + "-" + pad(month) + "-" + pad(date);
+}
+
+function dates(year) {
+  var dates = [],
+      date = new Date(year, 0, 1),
+      week = 0,
+      day;
+  do {
+    dates.push({
+      day: day = date.getDay(),
+      week: week,
+      month: date.getMonth(),
+      Date: format(date)
+    });
+    date.setDate(date.getDate() + 1);
+    if (day == 6) week++;
+  } while (date.getFullYear() == year);
+  return dates;
+}
+
+function months(year) {
+  var months = [],
+      date = new Date(year, 0, 1),
+      month,
+      firstDay,
+      firstWeek,
+      day,
+      week = 0;
+  do {
+    firstDay = date.getDay();
+    firstWeek = week;
+    month = date.getMonth();
+    do {
+      day = date.getDay();
+      if (day == 6) week++;
+      date.setDate(date.getDate() + 1);
+    } while (date.getMonth() == month);
+    months.push({
+      firstDay: firstDay,
+      firstWeek: firstWeek,
+      lastDay: day,
+      lastWeek: day == 6 ? week - 1 : week
+    });
+  } while (date.getFullYear() == year);
+  return months;
+}
+
+    </script>
+  </body>
+</html>
