@@ -4,13 +4,17 @@
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="csv.js"></script>
     <script type="text/javascript" src="nest.js"></script>
+    <script type="text/javascript" src="quantile.js"></script>
     <style type="text/css">
+
+@import url("../../lib/colorbrewer/colorbrewer.css");
 
 body {
   font: 10px sans-serif;
 }
 
 .day {
+  fill: none;
   stroke: #ccc;
   shape-rendering: crispEdges;
 }
@@ -27,23 +31,17 @@ body {
   <body>
     <script type="text/javascript">
 
-var c0 = d3.interpolateRgb("#Feffc3", "#D80223"),
-    c1 = d3.interpolateRgb("#Feffc3", "#B5E28B");
-
-function color(d) {
-  if (isNaN(d)) return "none";
-  d *= 40; // TODO quantile scale
-  return d > 0 ? c1(d) : c0(-d);
-}
-
 var dow = nest(csv("dow.csv"))
     .key(function(d) { return d.Date; })
     .rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; });
 
+var color = quantile(values(dow), 9);
+
 var w = 960,
-    h = 150,
-    p = 14,
-    z = ~~Math.min((h - p * 2) / 7, (w - p * 2) / 53);
+    pw = 14,
+    z = ~~((w - pw * 2) / 53),
+    ph = z >> 1,
+    h = z * 7 + ph * 2;
 
 var vis = d3.select("body")
   .selectAll("svg")
@@ -51,11 +49,12 @@ var vis = d3.select("body")
   .enter.append("svg:svg")
     .attr("width", w)
     .attr("height", h)
+    .attr("class", "RdYlGn")
   .append("svg:g")
-    .attr("transform", "translate(" + p + "," + p + ")");
+    .attr("transform", "translate(" + pw + "," + ph + ")");
 
 vis.append("svg:text")
-    .attr("transform", "translate(-6," + h/2 + ")rotate(-90)")
+    .attr("transform", "translate(-6," + h / 2 + ")rotate(-90)")
     .text(function(d) { return d; });
 
 vis.selectAll("rect.day")
@@ -63,8 +62,7 @@ vis.selectAll("rect.day")
   .enter.append("svg:rect")
     .attr("x", function(d) { return d.week * z; })
     .attr("y", function(d) { return d.day * z; })
-    .attr("class", function(d) { return "day q" + d.month; })
-    .attr("fill", function(d) { return color(dow[d.Date]); })
+    .attr("class", function(d) { return "day q" + color(dow[d.Date]) + "-9"; })
     .attr("width", z)
     .attr("height", z)
   .append("svg:title")
