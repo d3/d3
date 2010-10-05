@@ -2,6 +2,8 @@
   <head>
     <title>Calendar</title>
     <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="csv.js"></script>
+    <script type="text/javascript" src="nest.js"></script>
     <style type="text/css">
 
 body {
@@ -25,21 +27,36 @@ body {
   <body>
     <script type="text/javascript">
 
-var color = d3.interpolateRgb("#Feffc3", "#D80223");
+var c0 = d3.interpolateRgb("#Feffc3", "#D80223"),
+    c1 = d3.interpolateRgb("#Feffc3", "#B5E28B");
+
+function color(d) {
+  if (isNaN(d)) return "none";
+  d *= 40; // TODO quantile scale
+  return d > 0 ? c1(d) : c0(-d);
+}
+
+var dow = nest(csv("dow.csv"))
+    .key(function(d) { return d.Date; })
+    .rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; });
 
 var w = 960,
     h = 150,
-    p = 10,
+    p = 14,
     z = ~~Math.min((h - p * 2) / 7, (w - p * 2) / 53);
 
 var vis = d3.select("body")
   .selectAll("svg")
-    .data(range(1987, 2000))
+    .data(range(1990, 2011))
   .enter.append("svg:svg")
     .attr("width", w)
     .attr("height", h)
   .append("svg:g")
     .attr("transform", "translate(" + p + "," + p + ")");
+
+vis.append("svg:text")
+    .attr("transform", "translate(-6," + h/2 + ")rotate(-90)")
+    .text(function(d) { return d; });
 
 vis.selectAll("rect.day")
     .data(dates)
@@ -47,9 +64,11 @@ vis.selectAll("rect.day")
     .attr("x", function(d) { return d.week * z; })
     .attr("y", function(d) { return d.day * z; })
     .attr("class", function(d) { return "day q" + d.month; })
-    .attr("fill", function(d) { return color(Math.random()); })
+    .attr("fill", function(d) { return color(dow[d.Date]); })
     .attr("width", z)
-    .attr("height", z);
+    .attr("height", z)
+  .append("svg:title")
+    .text(function(d) { return d.Date + ": " + (dow[d.Date] * 100).toFixed(1) + "%"; });
 
 vis.selectAll("path.month")
     .data(months)
@@ -82,6 +101,16 @@ function range(start, end, step) {
   return range;
 }
 
+function pad(n) {
+  return n < 10 ? "0" + n : n;
+}
+
+function format(d) {
+  var month = d.getMonth() + 1,
+      date = d.getDate();
+  return d.getFullYear() + "-" + pad(month) + "-" + pad(date);
+}
+
 function dates(year) {
   var dates = [],
       date = new Date(year, 0, 1),
@@ -91,7 +120,8 @@ function dates(year) {
     dates.push({
       day: day = date.getDay(),
       week: week,
-      month: date.getMonth()
+      month: date.getMonth(),
+      Date: format(date)
     });
     date.setDate(date.getDate() + 1);
     if (day == 6) week++;
