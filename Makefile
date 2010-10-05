@@ -8,6 +8,9 @@ SRC_FILES = \
 	src/date.js \
 	src/object.js \
 	src/start.js \
+	src/entries.js \
+	src/keys.js \
+	src/values.js \
 	src/ns.js \
 	src/dispatch.js \
 	src/ease.js \

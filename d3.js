@@ -9,6 +9,21 @@ if (!Object.create) Object.create = function(o) {
 (function(_) {
   var d3 = _.d3 = {};
   d3.version = "0.0.0"; // semver
+d3.entries = function(map) {
+  var array = [], key;
+  for (key in map) array.push({key: key, value: map[key]});
+  return array;
+};
+d3.keys = function(map) {
+  var array = [], key;
+  for (key in map) array.push(key);
+  return array;
+};
+d3.values = function(map) {
+  var array = [], key;
+  for (key in map) array.push(map[key]);
+  return array;
+};
 var ns = {
 
   prefix: {
