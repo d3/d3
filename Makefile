@@ -17,6 +17,7 @@ SRC_FILES = \
 	src/interpolate.js \
 	src/tween.js \
 	src/rgb.js \
+	src/hsl.js \
 	src/transform.js \
 	src/transform_append.js \
 	src/transform_attr.js \

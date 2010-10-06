@@ -620,6 +620,10 @@ var d3_rgb_names = {
 };
 
 for (var x in d3_rgb_names) d3_rgb_names[x] = d3_rgb(d3_rgb_names[x]);
+d3.hsl = function(h, s, l) {
+  var c = d3_rgb_hsl(h, s, l);
+  return "rgb(" + c.r + "," + c.g + "," + c.b +  ")";
+};
 var d3_transform_stack = [];
 
 function d3_transform() {
