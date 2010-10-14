@@ -3,6 +3,7 @@
     <title>VIX</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="csv.js"></script>
+    <script type="text/javascript" src="values.js"></script>
     <script type="text/javascript" src="nest.js"></script>
     <script type="text/javascript" src="quantile.js"></script>
     <style type="text/css">
@@ -35,7 +36,7 @@ var data = nest(csv("vix.csv"))
     .key(function(d) { return d.Date; })
     .rollup(function(d) { return d[0].Open; });
 
-var color = quantile(d3.values(data), 9);
+var color = quantile(values(data), 9);
 
 var w = 960,
     pw = 14,
