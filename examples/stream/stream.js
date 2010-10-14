@@ -31,25 +31,3 @@ function stream_waves(n, m) {
 function stream_index(d, i) {
   return {x: i, y: Math.max(0, d)};
 }
-
-function range(n) {
-  var array = [];
-  for (var i = 0; i < n; i++) array.push(i);
-  return array;
-}
-
-function max(array, f) {
-  var i = 1,
-      n = array.length,
-      j = 0,
-      v = f(array[0]),
-      k;
-  for (; i < n; ++i) {
-    k = f(array[i]);
-    if (k > v) {
-      j = i;
-      v = k;
-    }
-  }
-  return v;
-}
