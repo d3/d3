@@ -184,11 +184,11 @@ Local Modifications: None.
 
 -----
 Code in:
-lib/google_common_deploy.jar
+lib/guava-r06.jar
 
 Guava Libraries
 URL: http://code.google.com/p/guava-libraries/
-Version:  Trunk
+Version:  R6
 License: Apache License 2.0
 
 Description: Google's core Java libraries.
@@ -217,6 +217,21 @@ The original jars contained both source code and compiled classes.
 hamcrest-core-1.1.jar just contains the compiled classes.
 
 
+
+-----
+Code in:
+lib/jsr305.jar
+
+Annotations for software defect detection
+URL: http://code.google.com/p/jsr-305/
+Version: svn revision 47
+License: BSD License
+
+Description: Annotations for software defect detection.
+
+Local Modifications: None.
+
+
 ----
 Code in:
 lib/junit.jar
@@ -233,11 +248,11 @@ Local Modifications: None.
 
 ---
 Code in:
-lib/protobuf_deploy.jar
+lib/protobuf-java-2.3.0.jar
 
 Protocol Buffers
 URL: http://code.google.com/p/protobuf/
-Version: 2.2.0a
+Version: 2.3.0
 License: New BSD License
 
 Description: Supporting libraries for protocol buffers,
@@ -259,3 +274,16 @@ Description:
 
 Local Modifications:
   Modified apache-ant-1.6.5/bin/ant to look in the ant.runfiles directory
+
+
+---
+Code in:
+lib/json.jar
+URL: http://json.org/java/index.html
+Version: JSON version 2
+License: MIT license
+Description:
+JSON is a set of java files for use in transmitting data in JSON format.
+
+Local Modifications: None
+

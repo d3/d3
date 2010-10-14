@@ -1,5 +1,5 @@
 JS_COMPILER = \
-	java -jar lib/google-compiler/compiler-20100616.jar \
+	java -jar lib/google-compiler/compiler.jar \
 	--externs=src/externs.js \
 	--warning_level=VERBOSE \
 	--charset=UTF-8
