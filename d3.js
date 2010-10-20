@@ -9,6 +9,22 @@ if (!Object.create) Object.create = function(o) {
 (function(_) {
   var d3 = _.d3 = {};
   d3.version = "0.0.0"; // semver
+/**
+ * @param {number} start
+ * @param {number=} stop
+ * @param {number=} step
+ */
+d3.range = function(start, stop, step) {
+  if (arguments.length == 1) { stop = start; start = 0; }
+  if (step == null) step = 1;
+  if ((stop - start) / step == Infinity) throw new Error("infinite range");
+  var range = [],
+       i = -1,
+       j;
+  if (step < 0) while ((j = start + step * ++i) > stop) range.push(j);
+  else while ((j = start + step * ++i) < stop) range.push(j);
+  return range;
+};
 var ns = {
 
   prefix: {
@@ -719,6 +735,62 @@ d3.pow = function() {
 };
 d3.sqrt = function() {
   return d3.pow().exponent(.5);
+};
+d3.ordinal = function() {
+  var domain = [],
+      index = {},
+      range = [],
+      rangeBand = 0;
+
+  function scale(x) {
+    var i = x in index ? index[x] : (index[x] = domain.push(x) - 1);
+    return range[i % range.length];
+  }
+
+  scale.domain = function(x) {
+    if (!arguments.length) return domain;
+    domain = x;
+    index = {};
+    var i = -1, j = -1, n = domain.length; while (++i < n) {
+      x = domain[i];
+      if (!(x in index)) index[x] = ++j;
+    }
+    return scale;
+  };
+
+  scale.range = function(x) {
+    if (!arguments.length) return range;
+    range = x;
+    return scale;
+  };
+
+  scale.rangePoints = function(x, padding) {
+    if (arguments.length < 2) padding = 0;
+    var start = x[0],
+        stop = x[1],
+        step = (stop - start) / (domain.length - 1 + padding);
+    range = domain.length == 1
+        ? [(start + stop) / 2]
+        : d3.range(start + step * padding / 2, stop + step / 2, step);
+    rangeBand = 0;
+    return scale;
+  };
+
+  scale.rangeBands = function(x, padding) {
+    if (arguments.length < 2) padding = 0;
+    var start = x[0],
+        stop = x[1],
+        step = (stop - start) / (domain.length + padding);
+    range = d3.range(start + step * padding, stop, step);
+    rangeBand = step * (1 - padding);
+    return scale;
+  };
+
+  scale.rangeBand = function() {
+    return rangeBand;
+  };
+
+  return scale;
 };
 var d3_transform_stack = [];
 

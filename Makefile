@@ -8,6 +8,7 @@ SRC_FILES = \
 	src/date.js \
 	src/object.js \
 	src/start.js \
+	src/range.js \
 	src/ns.js \
 	src/dispatch.js \
 	src/ease.js \
@@ -19,6 +20,7 @@ SRC_FILES = \
 	src/log.js \
 	src/pow.js \
 	src/sqrt.js \
+	src/ordinal.js \
 	src/transform.js \
 	src/transform_append.js \
 	src/transform_attr.js \
