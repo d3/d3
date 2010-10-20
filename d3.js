@@ -193,7 +193,11 @@ function bounce(t) {
 }
 d3.interpolate = function(a, b) {
   if (typeof b == "number") return d3.interpolateNumber(+a, b);
-  if (typeof b == "string") return d3.interpolateString(String(a), b);
+  if (typeof b == "string") {
+    return (b in d3_rgb_names) || /^(#|rgb\(|hsl\()/.test(b)
+        ? d3.interpolateRgb(String(a), b)
+        : d3.interpolateString(String(a), b);
+  }
   if (b instanceof Array) return d3.interpolateArray(a, b);
   return d3.interpolateObject(a, b);
 };
@@ -608,6 +612,113 @@ for (var x in d3_rgb_names) d3_rgb_names[x] = d3_rgb(d3_rgb_names[x]);
 d3.hsl = function(h, s, l) {
   var c = d3_rgb_hsl(h, s, l);
   return "rgb(" + c.r + "," + c.g + "," + c.b +  ")";
+};
+d3.linear = function() {
+  var x0 = 0,
+      x1 = 1,
+      y0 = 0,
+      y1 = 1,
+      k = 1 / (x1 - x0),
+      i = d3.interpolate(y0, y1);
+
+  function scale(x) {
+    return i((x - x0) * k);
+  }
+
+  scale.invert = function(x) {
+    return (x - y0) / k + x0; // TODO assumes number?
+  };
+
+  /** @param {*=} x */
+  scale.domain = function(x) {
+    if (!arguments.length) return [x0, x1];
+    x0 = x[0];
+    x1 = x[1];
+    k = 1 / (x1 - x0);
+    return scale;
+  };
+
+  /** @param {*=} x */
+  scale.range = function(x) {
+    if (!arguments.length) return [y0, y1];
+    y0 = x[0];
+    y1 = x[1];
+    i = d3.interpolate(y0, y1); // TODO allow override?
+    return scale;
+  };
+
+  return scale;
+};
+d3.log = function() {
+  var linear = d3.linear();
+
+  function scale(x) {
+    return linear(Math.log(x));
+  }
+
+  scale.invert = function(x) {
+    return Math.exp(linear.invert(x));
+  };
+
+  /** @param {*=} x */
+  scale.domain = function(x) {
+    if (!arguments.length) return linear.domain().map(Math.exp);
+    linear.domain(x.map(Math.log));
+    return scale;
+  };
+
+  scale.range = function() {
+    var x = linear.range.apply(linear, arguments);
+    return arguments.length ? scale : x;
+  };
+
+  return scale;
+};
+d3.pow = function() {
+  var linear = d3.linear(),
+      p = 1,
+      b = 1 / p;
+
+  function powp(x) {
+    return Math.pow(x, p);
+  }
+
+  function powb(x) {
+    return Math.pow(x, b);
+  }
+
+  function scale(x) {
+    return linear(powp(x));
+  }
+
+  scale.invert = function(x) {
+    return powb(linear.invert(x));
+  };
+
+  /** @param {*=} x */
+  scale.domain = function(x) {
+    if (!arguments.length) return linear.domain().map(powb);
+    linear.domain(x.map(powp));
+    return scale;
+  };
+
+  scale.range = function() {
+    var x = linear.range.apply(linear, arguments);
+    return arguments.length ? scale : x;
+  };
+
+  scale.exponent = function(x) {
+    if (!arguments.length) return p;
+    var domain = scale.domain();
+    p = x;
+    b = 1 / x;
+    return scale.domain(domain);
+  };
+
+  return scale;
+};
+d3.sqrt = function() {
+  return d3.pow().exponent(.5);
 };
 var d3_transform_stack = [];
 

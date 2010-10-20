@@ -15,6 +15,10 @@ SRC_FILES = \
 	src/tween.js \
 	src/rgb.js \
 	src/hsl.js \
+	src/linear.js \
+	src/log.js \
+	src/pow.js \
+	src/sqrt.js \
 	src/transform.js \
 	src/transform_append.js \
 	src/transform_attr.js \

@@ -1,6 +1,10 @@
 d3.interpolate = function(a, b) {
   if (typeof b == "number") return d3.interpolateNumber(+a, b);
-  if (typeof b == "string") return d3.interpolateString(String(a), b);
+  if (typeof b == "string") {
+    return (b in d3_rgb_names) || /^(#|rgb\(|hsl\()/.test(b)
+        ? d3.interpolateRgb(String(a), b)
+        : d3.interpolateString(String(a), b);
+  }
   if (b instanceof Array) return d3.interpolateArray(a, b);
   return d3.interpolateObject(a, b);
 };

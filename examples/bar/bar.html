@@ -21,6 +21,10 @@ var data = range(10).map(function(i) {
   return {index: i, value: Math.random()};
 });
 
+var x = d3.linear()
+    .domain([0, 1])
+    .range([0, 430]);
+
 var vis = d3.select("body")
   .append("svg:svg")
     .attr("width", 450)
@@ -36,11 +40,11 @@ var bars = vis.selectAll("g.bar")
 
 bars.append("svg:rect")
     .attr("fill", "steelblue")
-    .attr("width", function(d) { return d.value * 430; })
+    .attr("width", function(d) { return x(d.value); })
     .attr("height", 20);
 
 bars.append("svg:text")
-    .attr("x", function(d) { return d.value * 430; })
+    .attr("x", function(d) { return x(d.value); })
     .attr("y", 10)
     .attr("dx", -6)
     .attr("dy", ".35em")
@@ -60,7 +64,7 @@ var rules = vis.selectAll("g.rule")
     .data(range(10))
   .enter.append("svg:g")
     .attr("class", "rule")
-    .attr("transform", function(d) { return "translate(" + (d / 10) * 430 + ",0)"; });
+    .attr("transform", function(d) { return "translate(" + x(d / 10) + ",0)"; });
 
 rules.append("svg:line")
     .attr("y1", 230)
