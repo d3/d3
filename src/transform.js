@@ -120,6 +120,15 @@ function d3_transform() {
       return transform_scope(scope, action.actions);
     };
 
+    scope.bind = function(t, f) {
+      actions.push({
+        impl: d3_transform_bind,
+        type: t,
+        listener: f
+      });
+      return scope;
+    };
+
     scope.filter = function(f) {
       var action = {
         impl: d3_transform_filter,

@@ -1,18 +1,17 @@
-function d3_transform_on(nodes) {
-  var actions = this.actions,
-      n = actions.length,
-      m = nodes.length,
+function d3_transform_bind(nodes) {
+  var m = nodes.length,
       t = "on" + this.type,
-      i = 0, // current index
+      l = this.listener,
+      i = 0, // current node index
       o, // curent node
       stack = d3_transform_stack.slice(); // stack snapshot
 
-  // TODO this overwrites any actions registered with .bind!
+  // TODO this overwrites any actions registered with .on!
   // TODO using namespaced event handlers could fix this ^ issue.
-  if (n) {
+  if (l) {
     for (; i < m; ++i) {
       o = nodes[i];
-      o.node[t] = bind([o]);
+      o.node[t] = bind(o, o.data);
     }
   } else {
     for (; i < m; ++i) {
@@ -20,13 +19,13 @@ function d3_transform_on(nodes) {
     }
   }
 
-  function bind(o) {
+  function bind(o, d) {
     return function(e) {
       var s = d3_transform_stack;
       try {
-        d3_transform_stack = stack;
         d3.event = e;
-        for (i = 0; i < n; ++i) actions[i].impl(o, d3_transform_impl);
+        stack[0] = d;
+        l.apply(o, d3_transform_stack = stack);
       } finally {
         delete d3.event;
         d3_transform_stack = s;

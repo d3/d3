@@ -24,6 +24,7 @@ SRC_FILES = \
 	src/transform.js \
 	src/transform_append.js \
 	src/transform_attr.js \
+	src/transform_bind.js \
 	src/transform_data.js \
 	src/transform_remove.js \
 	src/transform_on.js \
