@@ -1420,6 +1420,7 @@ function d3_transform_selectAll(nodes, pass) {
   d3_transform_stack.unshift(null);
   for (i = 0; i < m; ++i) {
     d3_transform_stack[1] = (o = nodes[i]).data;
+    if (!o.node) continue; // TODO better error handling when `select` fails.
     pass(this.actions, d3_transform_nodes(o.node.querySelectorAll(s), o));
   }
   d3_transform_stack.shift();
