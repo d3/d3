@@ -664,13 +664,12 @@ d3.linear = function() {
   };
 
   // TODO Dates? Ugh.
-  function ticks(m) {
+  function tickRange(m) {
     var start = Math.min(x0, x1),
         stop = Math.max(x0, x1),
         span = stop - start,
         step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
-        err = m / (span / step),
-        digits;
+        err = m / (span / step);
 
     // Filter ticks to get closer to the desired count.
     if (err <= .15) step *= 10;
@@ -678,24 +677,21 @@ d3.linear = function() {
     else if (err <= .75) step *= 2;
 
     // Round start and stop values to step interval.
-    start = Math.ceil(start / step) * step;
-    stop = Math.floor(stop / step) * step + step * .5; // inclusive
-
-    // Determine the precision for tick labels.
-    digits = Math.max(0, -Math.floor(Math.log(step) / Math.LN10 + .01));
-
     return {
-      range: function() { return d3.range(start, stop, step); },
-      format: function(d) { return d.toFixed(digits); }
+      start: Math.ceil(start / step) * step,
+      stop: Math.floor(stop / step) * step + step * .5, // inclusive
+      step: step
     };
   }
 
   scale.ticks = function(m) {
-    return ticks(m).range();
+    var range = tickRange(m);
+    return d3.range(range.start, range.stop, range.step);
   };
 
   scale.tickFormat = function(m) {
-    return ticks(m).format;
+    var n = Math.max(0, -Math.floor(Math.log(tickRange(m).step) / Math.LN10 + .01));
+    return function(d) { return d.toFixed(n); };
   };
 
   return scale;
@@ -934,6 +930,7 @@ function d3_transform() {
     scope.text = function(v) {
       actions.push({
         impl: d3_transform_text,
+        // TODO d3_transform_text_bind
         value: v
       });
       return scope;

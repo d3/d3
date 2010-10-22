@@ -105,6 +105,7 @@ function d3_transform() {
     scope.text = function(v) {
       actions.push({
         impl: d3_transform_text,
+        // TODO d3_transform_text_bind
         value: v
       });
       return scope;
