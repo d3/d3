@@ -34,18 +34,17 @@ function d3_transform_transition(nodes) {
 
   // Bind the active transition to the node.
   function bind(interval) {
-    var s = d3_transform_stack;
     for (i = 0; i < m; ++i) {
       (o = nodes[i]).node.interval = interval;
     }
-    try {
-      d3.time = 0;
-      d3_transform_stack = stack;
-      d3_transform_transition_bind(actions, nodes);
-    } finally {
-      delete d3.time;
-      d3_transform_stack = s;
-    }
+  }
+
+  // Compute the tween values.
+  try {
+    d3.time = 0;
+    d3_transform_transition_bind(actions, nodes);
+  } finally {
+    delete d3.time;
   }
 
   function tickOne() {
