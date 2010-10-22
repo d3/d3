@@ -26,7 +26,7 @@ var w = 430,
 
 var vis = d3.select("body")
   .append("svg:svg")
-    .attr("width", w + 20)
+    .attr("width", w + 40)
     .attr("height", h + 20)
   .append("svg:g")
     .attr("transform", "translate(20,0)");
@@ -60,10 +60,10 @@ bars.append("svg:text")
     .text(function(d) { return String.fromCharCode(65 + this.index); });
 
 var rules = vis.selectAll("g.rule")
-    .data(d3.range(10))
+    .data(x.ticks(10))
   .enter.append("svg:g")
     .attr("class", "rule")
-    .attr("transform", function(d) { return "translate(" + x(d / 10) + ",0)"; });
+    .attr("transform", function(d) { return "translate(" + x(d.value) + ",0)"; });
 
 rules.append("svg:line")
     .attr("y1", h)
@@ -80,7 +80,7 @@ rules.append("svg:text")
     .attr("y", h + 9)
     .attr("dy", ".71em")
     .attr("text-anchor", "middle")
-    .text(function(d) { return (d / 10).toFixed(1); });
+    .text(function(d) { return d.label; });
 
 vis.append("svg:line")
     .attr("y1", 0)
