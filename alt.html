@@ -19,14 +19,14 @@ d3.select("table")
     .data([0, 1])
   .selectAll("td")
     .data([2, 3])
-    .text(function(d, i, j) { return j + "," + i; });
+    .text(function(d, i) { return d + "," + i; });
 
 d3.transition()
   .select("table")
     .delay(500)
     .duration(1000)
     .attr("width", 1000)
-  .select("td")
+  .selectAll("td")
     .attr("height", 100);
 
 d3.select("body")

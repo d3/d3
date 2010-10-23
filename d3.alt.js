@@ -111,11 +111,11 @@
     // TODO mask forEach? or rename for eachData?
     // TODO offer the same semantics for map, reduce, etc.?
     nodes.each = function(callback) {
-      for (var i = 0, k = 0, n = groups.length; i < n; i++) {
-        var group = groups[i];
-        for (var j = 0, m = group.length; j < m; j++) {
-          var node = group[j];
-          callback.call(node, node.__data__, j, k++);
+      for (var j = 0, m = groups.length; j < m; j++) {
+        var group = groups[j];
+        for (var i = 0, n = group.length; i < n; i++) {
+          var node = group[i];
+          callback.call(node, node.__data__, i);
         }
       }
       return nodes;
@@ -295,10 +295,11 @@
 
     function step() {
       var elapsed = Date.now() - then,
-          clear = true;
-      nodes.each(function(d, i, j) {
-        var t = (elapsed - delay[j]) / duration[j]; // TODO easing
-        if (t >= 1) { t = 1; delay[j] = Infinity; }
+          clear = true,
+          k = -1;
+      nodes.each(function(d, i) {
+        var t = (elapsed - delay[++k]) / duration[k]; // TODO easing
+        if (t >= 1) { t = 1; delay[k] = Infinity; }
         else { clear = false; if (t < 0) return; }
         for (var key in tweens) tweens[key].call(this, t);
       });
@@ -306,16 +307,17 @@
     }
 
     transition.delay = function(value) {
-      var delayMin = Infinity;
+      var delayMin = Infinity,
+          k = -1;
       if (typeof value == "function") {
-        nodes.each(function(d, i, j) {
-          var x = delay[j] = +value.apply(this, arguments);
+        nodes.each(function(d, i) {
+          var x = delay[++k] = +value.apply(this, arguments);
           if (x < delayMin) delayMin = x;
         });
       } else {
         delayMin = +value;
-        nodes.each(function(d, i, j) {
-          delay[j] = delayMin;
+        nodes.each(function(d, i) {
+          delay[++k] = delayMin;
         });
       }
       clearTimeout(timeout);
@@ -324,16 +326,17 @@
     };
 
     transition.duration = function(value) {
+      var k = -1;
       if (typeof value == "function") {
         durationMax = 0;
-        nodes.each(function(d, i, j) {
-          var x = duration[j] = +value.apply(this, arguments);
+        nodes.each(function(d, i) {
+          var x = duration[++k] = +value.apply(this, arguments);
           if (x > durationMax) durationMax = x;
         });
       } else {
         durationMax = +value;
-        nodes.each(function(d, i, j) {
-          duration[j] = durationMax;
+        nodes.each(function(d, i) {
+          duration[++k] = durationMax;
         });
       }
       return transition;
@@ -346,28 +349,29 @@
     // };
 
     transition.attr = function(name, value) {
-      var key = "attr." + name + ".";
+      var key = "attr." + name + ".",
+          k = -1;
 
-      function attrConstant(d, i, j) {
-        tweens[key + j] = attrTween(
+      function attrConstant(d, i) {
+        tweens[key + ++k] = attrTween(
             this.getAttribute(name),
             value);
       }
 
-      function attrConstantNS(d, i, j) {
-        tweens[key + j] = attrTweenNS(
+      function attrConstantNS(d, i) {
+        tweens[key + ++k] = attrTweenNS(
             this.getAttributeNS(name.space, name.local),
             value);
       }
 
-      function attrFunction(d, i, j) {
-        tweens[key + j] = attrTween(
+      function attrFunction(d, i) {
+        tweens[key + ++k] = attrTween(
             this.getAttribute(name),
             value.apply(this, arguments));
       }
 
-      function attrFunctionNS(d, i, j) {
-        tweens[key + j] = attrTweenNS(
+      function attrFunctionNS(d, i) {
+        tweens[key + ++k] = attrTweenNS(
             this.getAttributeNS(name.space, name.local),
             value.apply(this, arguments));
       }
@@ -394,20 +398,21 @@
       return transition;
     };
 
+    // TODO inherit easing
     transition.select = function(query) {
-      return d3_transition(nodes.select(query))
-          .delay(function(d, i, j) { return delay[j]; })
-          .duration(function(d, i, j) { return duration[j]; });
-          // TODO .easing(easing)
+      var k, t = d3_transition(nodes.select(query));
+      k = -1; t.delay(function(d, i) { return delay[++k]; });
+      k = -1; t.duration(function(d, i) { return duration[++k]; });
+      return t;
     };
 
-    // TODO selectAll needs the group index, not the global index. grr.
-    // transition.selectAll = function(query) {
-    //   return d3_transition(nodes.selectAll(query))
-    //       .delay(function(d, i, j) { return delay[i]; })
-    //       .duration(function(d, i, j) { return duration[i]; });
-    //       // TODO .easing(easing)
-    // };
+    // TODO inherit easing
+    transition.selectAll = function(query) {
+      var k, t = d3_transition(nodes.selectAll(query));
+      k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
+      k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
+      return t;
+    };
 
     return transition.delay(0).duration(250);
   }
