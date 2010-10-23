@@ -1,9 +1,10 @@
 (function(_) {
 
-  var d3_root = [[document]],
-      d3 = _.d3 = d3_selection(d3_root);
+  var d3 = _.d3 = {},
+      d3_document = [document],
+      d3_root = d3_selection([d3_document]);
 
-  d3_root[0].data = [];
+  d3_document.data = [];
 
   d3.ns = {
     prefix: {
@@ -29,6 +30,18 @@
   function d3_blend(arrays) {
     return Array.prototype.concat.apply([], arrays);
   }
+
+  d3.select = function(query) {
+    return typeof query == "string"
+        ? d3_root.select(query)
+        : d3_selection([[query]], d3_root); // assume node
+  };
+
+  d3.selectAll = function(query) {
+    return typeof query == "string"
+        ? d3_root.selectAll(query)
+        : d3_selection([d3_array(query)], d3_root); // assume node[]
+  };
 
   function d3_selection(groups, deselect) {
     var nodes = d3_blend(groups);
@@ -57,7 +70,6 @@
       }
     }
 
-    // TODO select(node)?
     // TODO select(function)?
     nodes.select = function(query) {
       return d3_selection(groups.map(function(group) {
@@ -69,7 +81,6 @@
       }), nodes);
     };
 
-    // TODO selectAll(node[])?
     // TODO selectAll(function)?
     nodes.selectAll = function(query) {
       return d3_selection(d3_blend(groups.map(function(group) {
