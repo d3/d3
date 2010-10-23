@@ -10,22 +10,29 @@
       <tr><td>0,0</td><td>0,1</td></tr>
       <tr><td>1,0</td><td>1,1</td></tr>
     </table>
-    <a href="2">2</a>
-    <a href="1">1</a>
+    <a href="2">link 2</a>
+    <a href="1">link 1</a>
     <script type="text/javascript">
 
 d3.select("table")
   .selectAll("tr")
-    .data(function() { return [0, 2]; })
+    .data([0, 1])
   .selectAll("td")
-    .data(function(d) { return [0 + d, 1 + d]; })
-    .text(function(d) { return d; });
+    .data([2, 3])
+    .text(function(d, i, j) { return j + "," + i; });
 
 d3.select("table")
   .transition()
     .delay(500)
     .duration(1000)
     .attr("width", 1000);
+
+d3.select("body")
+    .append("span")
+    .text("Wait for it...");
+
+d3.selectAll(document.links)
+    .style("display", "none");
 
     </script>
   </body>

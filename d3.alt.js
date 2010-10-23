@@ -49,7 +49,7 @@
     return d3_root.transition();
   };
 
-  function d3_selection(groups, deselect, transition) {
+  function d3_selection(groups, deselect) {
     var nodes = d3_blend(groups);
 
     /**
@@ -60,14 +60,11 @@
     function visit(value, callback) {
       if (typeof value == "function") {
         for (var i = 0, k = 0, n = groups.length; i < n; i++) {
-          var group = groups[i], data = group.data;
-          data.unshift(null);
+          var group = groups[i];
           for (var j = 0, m = group.length; j < m; j++) {
             var node = group[j];
-            data[0] = node.__data__;
-            callback(node, value.apply(node, data), k++);
+            callback(node, value.call(node, node.__data__, j, i), k++);
           }
-          data.shift();
         }
       } else {
         for (var i = 0, n = nodes.length; i < n; i++) {
@@ -84,7 +81,7 @@
         });
         subgroup.data = group.data;
         return subgroup;
-      }), nodes, transition);
+      }), nodes);
     };
 
     // TODO selectAll(function)?
@@ -92,23 +89,15 @@
       return d3_selection(d3_blend(groups.map(function(group) {
         return group.map(function(node) {
           var subgroup = d3_array(node.querySelectorAll(query));
-          subgroup.data = [node.__data__].concat(group.data);
+          subgroup.data = node.__data__;
           return subgroup;
         });
-      })), nodes, transition);
+      })), nodes);
     };
 
     nodes.deselect = function() {
       return deselect;
     };
-
-    // I think rather than having a data stack, it might make more sense to
-    // pass the datum and an index (or a local index / group index) to each
-    // value function. If you want to use the data stack, you can use a data
-    // function that derives child data from the parent data. (The additional
-    // arguments in Protovis were often a source of confusion.) Passing the
-    // index as an additional argument makes the behavior consistent with the
-    // built-in map and forEach methods.
 
     // TODO key
     // TODO enter
@@ -124,7 +113,7 @@
       if (typeof data == "function") {
         for (var i = 0, n = groups.length; i < n; i++) {
           var group = groups[i],
-              groupData = data.apply(group, group.data);
+              groupData = data.call(group, group.data, i);
           for (var j = 0, m = group.length; j < m; j++) {
             group[j].__data__ = groupData[j];
           }
@@ -227,7 +216,7 @@
           return e.appendChild(document.createElement(name));
         });
       }
-      return d3_selection(children, nodes, transition);
+      return d3_selection(children, nodes);
     };
 
     // TODO remove(node)?
