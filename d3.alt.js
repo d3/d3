@@ -33,6 +33,30 @@
   function d3_selection(groups, deselect) {
     var nodes = d3_blend(groups);
 
+    /**
+     * Visits each of the nodes in the current selection, evaluating the
+     * specified value (if it is a function), and then invoking the specified
+     * callback function.
+     */
+    function visit(value, callback) {
+      if (typeof value == "function") {
+        for (var i = 0, n = groups.length; i < n; i++) {
+          var group = groups[i], data = group.data;
+          data.unshift(null);
+          for (var j = 0, m = group.length; j < m; j++) {
+            var node = group[j];
+            data[0] = node.__data__;
+            callback(node, value.apply(node, data));
+          }
+          data.shift();
+        }
+      } else {
+        for (var i = 0, n = nodes.length; i < n; i++) {
+          callback(nodes[i], value);
+        }
+      }
+    }
+
     // TODO select(node)?
     // TODO select(function)?
     nodes.select = function(query) {
@@ -61,11 +85,11 @@
       return deselect;
     };
 
-    // TODO data(function)
-    // TODO data(null)
     // TODO key
     // TODO enter
     // TODO exit
+    // TODO data(function)
+    // TODO data(null)
     nodes.data = function(data) {
       if (arguments.length < 1) {
         return nodes.map(function(node) {
@@ -75,7 +99,7 @@
       if (typeof data == "function") {
         for (var i = 0, n = groups.length; i < n; i++) {
           var group = groups[i],
-              groupData = data.apply(nodes, group.data);
+              groupData = data.apply(group, group.data);
           for (var j = 0, m = group.length; j < m; j++) {
             group[j].__data__ = groupData[j];
           }
@@ -91,7 +115,6 @@
       return nodes;
     };
 
-    // TODO attr(name, function)
     nodes.attr = function(name, value) {
       name = d3.ns.qualify(name);
       if (arguments.length < 2) {
@@ -99,31 +122,23 @@
             ? function(e) { return e.getAttributeNS(name.space, name.local); }
             : function(e) { return e.getAttribute(name); });
       }
-      if (name.local) {
-        if (value == null) {
-          for (var i = 0, n = nodes.length; i < n; i++) {
-            nodes[i].removeAttributeNS(name.space, name.local);
-          }
-        } else {
-          for (var i = 0, n = nodes.length; i < n; i++) {
-            nodes[i].setAttributeNS(name.space, name.local, value);
-          }
-        }
-      } else {
-        if (value == null) {
-          for (var i = 0, n = nodes.length; i < n; i++) {
-            nodes[i].removeAttribute(name);
-          }
-        } else {
-          for (var i = 0, n = nodes.length; i < n; i++) {
-            nodes[i].setAttribute(name, value);
-          }
-        }
+
+      function attrNS(node, value) {
+        value == null
+            ? node.removeAttributeNS(name.space, name.local)
+            : node.setAttributeNS(name.space, name.local, value);
       }
+
+      function attr(node, value) {
+        value == null
+            ? node.removeAttribute(name)
+            : node.setAttribute(name, value);
+      }
+
+      visit(value, name.local ? attrNS : attr);
       return nodes;
     };
 
-    // TODO style(name, function, priority)
     nodes.style = function(name, value, priority) {
       if (arguments.length < 2) {
         return nodes.map(function(e) {
@@ -131,9 +146,12 @@
         });
       }
       if (arguments.length < 3) priority = null;
-      for (var i = 0, n = nodes.length; i < n; i++) {
-        nodes[i].style.setProperty(name, value, priority);
+
+      function style(node, value) {
+        node.style.setProperty(name, value, priority);
       }
+
+      visit(value, style);
       return nodes;
     };
 
@@ -144,26 +162,13 @@
           return e.textContent;
         });
       }
-      if (typeof value == "function") {
-        for (var i = 0, n = groups.length; i < n; i++) {
-          var group = groups[i],
-              data = group.data;
-          data.unshift(null);
-          for (var j = 0, m = group.length; j < m; j++) {
-            var node = group[j];
-            data[0] = node.__data__;
-            while (node.lastChild) node.removeChild(node.lastChild);
-            node.appendChild(document.createTextNode(value.apply(nodes, data)));
-          }
-          data.shift();
-        }
-      } else {
-        for (var i = 0, n = nodes.length; i < n; i++) {
-          var node = nodes[i];
-          while (node.lastChild) node.removeChild(node.lastChild);
-          node.appendChild(document.createTextNode(value));
-        }
+
+      function text(node, value) {
+        while (node.lastChild) node.removeChild(node.lastChild);
+        node.appendChild(document.createTextNode(value));
       }
+
+      visit(value, text);
       return nodes;
     };
 
@@ -174,13 +179,16 @@
           return e.innerHTML;
         });
       }
-      for (var i = 0, n = nodes.length; i < n; i++) {
-        nodes[i].innerHTML = value;
+
+      function html(node, value) {
+        node.innerHTML = value;
       }
+
+      visit(value, text);
       return nodes;
     };
 
-    // TODO append(node)
+    // TODO append(node)?
     // TODO append(function)?
     nodes.append = function(name) {
       var children;
