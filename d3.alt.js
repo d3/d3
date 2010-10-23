@@ -52,27 +52,6 @@
   function d3_selection(groups, deselect) {
     var nodes = d3_blend(groups);
 
-    /**
-     * Visits each of the nodes in the current selection, evaluating the
-     * specified value (if it is a function), and then invoking the specified
-     * callback function.
-     */
-    function visit(value, callback) {
-      if (typeof value == "function") {
-        for (var i = 0, k = 0, n = groups.length; i < n; i++) {
-          var group = groups[i];
-          for (var j = 0, m = group.length; j < m; j++) {
-            var node = group[j];
-            callback(node, value.call(node, node.__data__, j, i), k++);
-          }
-        }
-      } else {
-        for (var i = 0, n = nodes.length; i < n; i++) {
-          callback(nodes[i], value, i);
-        }
-      }
-    }
-
     // TODO select(function)?
     nodes.select = function(query) {
       return d3_selection(groups.map(function(group) {
@@ -129,28 +108,60 @@
       return nodes;
     };
 
+    // TODO mask forEach? or rename for eachData?
+    // TODO offer the same semantics for map, reduce, etc.?
+    nodes.each = function(callback) {
+      for (var i = 0, k = 0, n = groups.length; i < n; i++) {
+        var group = groups[i];
+        for (var j = 0, m = group.length; j < m; j++) {
+          var node = group[j];
+          callback.call(node, node.__data__, j, k++);
+        }
+      }
+      return nodes;
+    };
+
     nodes.attr = function(name, value) {
       name = d3.ns.qualify(name);
+
       if (arguments.length < 2) {
         return nodes.map(name.local
             ? function(e) { return e.getAttributeNS(name.space, name.local); }
             : function(e) { return e.getAttribute(name); });
       }
 
-      function attrNS(node, value) {
-        value == null
-            ? node.removeAttributeNS(name.space, name.local)
-            : node.setAttributeNS(name.space, name.local, value);
+      function attrNull() {
+        this.removeAttribute(name);
       }
 
-      function attr(node, value) {
-        value == null
-            ? node.removeAttribute(name)
-            : node.setAttribute(name, value);
+      function attrNullNS() {
+        this.removeAttributeNS(name.space, name.local);
       }
 
-      visit(value, name.local ? attrNS : attr);
-      return nodes;
+      function attrConstant() {
+        this.setAttribute(name, value);
+      }
+
+      function attrConstantNS() {
+        this.setAttributeNS(name.space, name.local, value);
+      }
+
+      function attrFunction() {
+        var x = value.apply(this, arguments);
+        if (x == null) this.removeAttribute(name);
+        else this.setAttribute(name, x);
+      }
+
+      function attrFunctionNS() {
+        var x = value.apply(this, arguments);
+        if (x == null) this.removeAttributeNS(name.space, name.local);
+        else this.setAttributeNS(name.space, name.local, x);
+      }
+
+      return nodes.each(value == null
+          ? (name.local ? attrNullNS : attrNull) : (typeof value == "function"
+          ? (name.local ? attrFunctionNS : attrFunction)
+          : (name.local ? attrConstantNS : attrConstant)));
     };
 
     nodes.style = function(name, value, priority) {
@@ -159,14 +170,26 @@
           return window.getComputedStyle(e, null).getPropertyValue(name);
         });
       }
+
       if (arguments.length < 3) priority = null;
 
-      function style(node, value) {
-        node.style.setProperty(name, value, priority);
+      function styleNull() {
+        this.style.removeProperty(name);
       }
 
-      visit(value, style);
-      return nodes;
+      function styleConstant() {
+        this.style.setProperty(name, value, priority);
+      }
+
+      function styleFunction() {
+        var x = value.apply(this, arguments);
+        if (x == null) this.style.removeProperty(name);
+        else this.style.setProperty(name, x, priority);
+      }
+
+      return nodes.each(value == null
+          ? styleNull : (typeof value == "function"
+          ? styleFunction : styleConstant));
     };
 
     // TODO text(function)
@@ -177,13 +200,24 @@
         });
       }
 
-      function text(node, value) {
-        while (node.lastChild) node.removeChild(node.lastChild);
-        node.appendChild(document.createTextNode(value));
+      function textNull() {
+        while (this.lastChild) this.removeChild(this.lastChild);
       }
 
-      visit(value, text);
-      return nodes;
+      function textConstant() {
+        this.appendChild(document.createTextNode(value));
+      }
+
+      function textFunction() {
+        var x = value.apply(this, arguments);
+        if (x != null) this.appendChild(document.createTextNode(x));
+      }
+
+      nodes.each(textNull);
+
+      return value == null ? nodes
+          : nodes.each(typeof value == "function"
+          ? textFunction : textConstant);
     };
 
     // TODO html(function)
@@ -194,12 +228,16 @@
         });
       }
 
-      function html(node, value) {
-        node.innerHTML = value;
+      function htmlConstant() {
+        this.innerHTML = value;
       }
 
-      visit(value, text);
-      return nodes;
+      function htmlFunction() {
+        this.innerHTML = value.apply(this, arguments);
+      }
+
+      return nodes.each(typeof value == "function"
+          ? htmlFunction : htmlConstant);
     };
 
     // TODO append(node)?
@@ -235,72 +273,125 @@
     // TODO filter, slice?
 
     nodes.transition = function() {
-      return d3_transition(nodes, visit);
+      return d3_transition(nodes);
     };
 
     return nodes;
   }
 
-  function d3_transition(nodes, visit) {
+  function d3_transition(nodes) {
     var transition = {},
-        tweenAttrs = {},
+        tweens = {},
         timeout = setTimeout(start, 1),
         interval,
-        then,
+        then = Date.now(),
         delay = [],
         duration = [],
-        durationMax = 0,
-        easing = []; // TODO
+        durationMax;
 
     function start() {
-      then = Date.now();
-      interval = setInterval(tick, 24);
+      interval = setInterval(step, 24);
     }
 
-    function tick() {
-      var elapsed = Date.now() - then;
-      if (elapsed > durationMax) clearInterval(interval);
-      visit(null, function(node, _, i) {
-        var t = (elapsed - delay[i]) / duration[i]; // TODO easing
-        if (t < 0) return;
-        if (t >= 1) { t = 1; delay[i] = Infinity; }
-        for (var name in tweenAttrs) {
-          node.setAttribute(name, tweenAttrs[name][i](t));
-        }
+    function step() {
+      var elapsed = Date.now() - then,
+          clear = true;
+      nodes.each(function(d, i, j) {
+        var t = (elapsed - delay[j]) / duration[j]; // TODO easing
+        if (t >= 1) { t = 1; delay[j] = Infinity; }
+        else { clear = false; if (t < 0) return; }
+        for (var key in tweens) tweens[key].call(this, t);
       });
+      if (clear) clearInterval(interval);
     }
 
     transition.delay = function(value) {
       var delayMin = Infinity;
-      visit(value, function(node, value, i) {
-        delay[i] = value;
-        if (value < delayMin) delayMin = value;
-      });
+      if (typeof value == "function") {
+        nodes.each(function(d, i, j) {
+          var x = delay[j] = +value.apply(this, arguments);
+          if (x < delayMin) delayMin = x;
+        });
+      } else {
+        delayMin = +value;
+        nodes.each(function(d, i, j) {
+          delay[j] = delayMin;
+        });
+      }
       clearTimeout(timeout);
       timeout = setTimeout(start, delayMin);
       return transition;
     };
 
     transition.duration = function(value) {
-      durationMax = 0;
-      visit(value, function(node, value, i) {
-        duration[i] = value;
-        if (value > durationMax) durationMax = value;
-      });
+      if (typeof value == "function") {
+        durationMax = 0;
+        nodes.each(function(d, i, j) {
+          var x = duration[j] = +value.apply(this, arguments);
+          if (x > durationMax) durationMax = x;
+        });
+      } else {
+        durationMax = +value;
+        nodes.each(function(d, i, j) {
+          duration[j] = durationMax;
+        });
+      }
       return transition;
     };
 
-    // TODO custom easing function?
+    // TODO register custom easing functions?
     // transition.easing = function(value) {
-    //   visit(value, function(node, value, i) { easing[i] = value; });
+    //   easing = value;
     //   return transition;
     // };
 
     transition.attr = function(name, value) {
-      var tweens = tweenAttrs[name] = [];
-      visit(value, function(node, value, i) {
-        tweens[i] = d3_tween(node.getAttribute(name), value);
-      });
+      var key = "attr." + name + ".";
+
+      function attrConstant(d, i, j) {
+        tweens[key + j] = attrTween(
+            this.getAttribute(name),
+            value);
+      }
+
+      function attrConstantNS(d, i, j) {
+        tweens[key + j] = attrTweenNS(
+            this.getAttributeNS(name.space, name.local),
+            value);
+      }
+
+      function attrFunction(d, i, j) {
+        tweens[key + j] = attrTween(
+            this.getAttribute(name),
+            value.apply(this, arguments));
+      }
+
+      function attrFunctionNS(d, i, j) {
+        tweens[key + j] = attrTweenNS(
+            this.getAttributeNS(name.space, name.local),
+            value.apply(this, arguments));
+      }
+
+      function attrTween(a, b) {
+        var interpolate = d3_interpolate(a, b);
+        return function(t) {
+          this.setAttribute(name, interpolate(t));
+        };
+      }
+
+      function attrTweenNS(a, b) {
+        var interpolate = d3_interpolate(a, b);
+        return function(t) {
+          this.setAttributeNS(name.space, name.local, interpolate(t));
+        };
+      }
+
+      name = d3.ns.qualify(name);
+      nodes.each(typeof value == "function"
+          ? (name.local ? attrFunctionNS : attrFunction)
+          : (name.local ? attrConstantNS : attrConstant));
+
+      return transition;
     };
 
     // transition.select = function(query) {
@@ -313,7 +404,7 @@
     return transition.delay(0).duration(250);
   }
 
-  function d3_tween(a, b) {
+  function d3_interpolate(a, b) {
     return function(t) {
       return a * (1 - t) + b * t;
     };
