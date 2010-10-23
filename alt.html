@@ -34,7 +34,8 @@ d3.select("body")
     .text("Wait for it...");
 
 d3.selectAll(document.links)
-    .style("display", "none");
+    .data([{href:3}, {href:2}], "href")
+    .text(function(d) { return d.href; });
 
     </script>
   </body>

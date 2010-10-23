@@ -78,44 +78,54 @@
       return deselect;
     };
 
-    // TODO key
     // TODO enter
     // TODO exit
-    nodes.data = function(data) {
+    nodes.data = function(data, key) {
       if (arguments.length < 1) {
         return nodes.map(function(node) {
           return node.__data__;
         });
       }
-      if (typeof data == "function") {
-        for (var i = 0, n = groups.length; i < n; i++) {
-          var group = groups[i],
-              groupData = data.call(group, group.data, i);
-          if (groupData == null) {
-            for (var j = 0, m = group.length; j < m; j++) {
-              delete group[j].__data__;
-            }
-          } else {
-            for (var j = 0, m = group.length; j < m; j++) {
-              group[j].__data__ = groupData[j];
-            }
-          }
-        }
-      } else if (data == null) {
-        for (var i = 0, n = groups.length; i < n; i++) {
-          var group = groups[i];
-          for (var j = 0, m = group.length; j < m; j++) {
-            delete group[j].__data__;
-          }
-        }
-      } else {
-        for (var i = 0, n = groups.length; i < n; i++) {
-          var group = groups[i];
-          for (var j = 0, m = group.length; j < m; j++) {
-            group[j].__data__ = data[j];
-          }
+
+      // TODO support getAttributeNS, custom node key functions
+      function nodeKey(node) {
+        return node.getAttribute(key);
+      }
+
+      // TODO support custom data key functions
+      function dataKey(data) {
+        return data[key];
+      }
+
+      function bind(group, groupData) {
+        var i = -1, n = group.length;
+        if (groupData == null) {
+          while (++i < n) delete group[i].__data__;
+        } else if (key == null) {
+          while (++i < n) group[i].__data__ = groupData[i];
+        } else {
+          var j = -1,
+              m = groupData.length,
+              dataByKey = {},
+              node,
+              data;
+          while (++j < m) dataByKey[dataKey(data = groupData[j])] = data;
+          while (++i < n) (node = group[i]).__data__ = dataByKey[nodeKey(node)];
         }
       }
+
+      var i = -1, n = groups.length;
+      if (typeof data == "function") {
+        while (++i < n) {
+          var group = groups[i];
+          bind(group, data.call(group, group.data, i));
+        }
+      } else {
+        while (++i < n) {
+          bind(groups[i], data);
+        }
+      }
+
       return nodes;
     };
 
@@ -290,6 +300,8 @@
     return nodes;
   }
 
+  // TODO namespace transitions; cancel collisions
+  // TODO easing
   function d3_transition(nodes) {
     var transition = {},
         tweens = {},
