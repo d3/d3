@@ -54,12 +54,15 @@
 
     function select(select) {
       return d3_selection(groups.map(function(group) {
-        var subgroup = group.map(select);
+        var subgroup = group.map(function(node) {
+          var subnode = select(node); // TODO pass index?
+          if (subnode) subnode.__data__ = node.__data__;
+          return subnode;
+        });
         subgroup.parent = group.parent;
         subgroup.data = group.data;
         return subgroup;
       }), nodes);
-
     }
 
     function selectAll(selectAll) {
@@ -89,80 +92,51 @@
       return deselect;
     };
 
-    // TODO enter
-    // TODO exit
-    nodes.data = function(data, key) {
+    // TODO key
+    nodes.data = function(data) {
       if (arguments.length < 1) {
         return nodes.map(function(node) {
           return node.__data__;
         });
       }
 
-      // TODO support getAttributeNS, custom node key functions
-      function nodeKey(node) {
-        return node.getAttribute(key);
-      }
-
-      // TODO support custom data key functions
-      function dataKey(data) {
-        return data[key];
-      }
-
       function bind(group, groupData) {
-        var i = -1,
+        var i = 0,
             n = group.length,
             m = groupData.length,
+            n0 = Math.min(n, m),
+            n1 = Math.max(n, m),
+            updateNodes = [],
             enterNodes = [],
-            exitNodes = [];
+            exitNodes = [],
+            node;
         if (groupData == null) {
+          // TODO what does enter, exit, update mean when data is removed?
           while (++i < n) delete group[i].__data__;
-        } else if (key == null) {
-          while (++i < n) group[i].__data__ = groupData[i];
-          while (i++ < m) {
-            // TODO set __data__?
-            // TODO index isn't correct
-            enterNodes.push(group.parent);
-          }
         } else {
-        //   var j = -1,
-        //       m = groupData.length,
-        //       dataByKey = {},
-        //       nodeByKey = {},
-        //       enterNodes = [],
-        //       exitNodes = [],
-        //       updateNodes = [],
-        //       node,
-        //       data,
-        //       k;
-        //   while (++j < m) dataByKey[dataKey(data = groupData[j])] = data;
-        //   while (++i < n) nodeByKey[nodeKey(node = group[i])] = node;
-        //
-        //   for (k in dataByKey) {
-        //     data = dataByKey[k];
-        //     node = nodeByKey[k];
-        //     if (node) {
-        //       node.__data__ = data;
-        //       updateNodes.push(node);
-        //     } else {
-        //       console.log(deselect);
-        //       node = {__data__: data};
-        //       enterNodes.push(node);
-        //     }
-        //   }
-        //
-        //   for (k in nodeByKey) {
-        //     exitNodes.push(nodeByKey[k]); // XXX how do we clear exiting node data?
-        //   }
-        //
+          for (; i < n0; i++) {
+            node = updateNodes[i] = group[i];
+            node.__data__ = groupData[i];
+          }
+          for (; i < m; i++) {
+            node = enterNodes[i] = group.parent;
+            node.__data__ = groupData[i]; // XXX overwrites parent data
+          }
+          for (; i < n1; i++) {
+            node = exitNodes[i] = group[i];
+          }
         }
         enter.push(enterNodes);
+        update.push(updateNodes);
         exit.push(exitNodes);
       }
 
       var i = -1,
           n = groups.length,
           enter = [],
+          update = [],
           exit = [];
+
       if (typeof data == "function") {
         while (++i < n) {
           var group = groups[i];
@@ -174,11 +148,10 @@
         }
       }
 
-      // console.log(enter[0]);
-
-      nodes.enter = function() { return d3_selection(enter, nodes); };
-      nodes.exit = function() { return d3_selection(exit, nodes); };
-      return nodes;
+      var update = d3_selection(update, nodes);
+      update.enter = function() { return d3_selection(enter, nodes); };
+      update.exit = function() { return d3_selection(exit, nodes); };
+      return update;
     };
 
     // TODO mask forEach? or rename for eachData?
@@ -188,7 +161,7 @@
         var group = groups[j];
         for (var i = 0, n = group.length; i < n; i++) {
           var node = group[i];
-          callback.call(node, node.__data__, i);
+          if (node) callback.call(node, node.__data__, i);
         }
       }
       return nodes;

@@ -39,15 +39,15 @@
 //     .text(function(d) { return "<" + (d && d.href); });
 
 
-d3.selectAll("tr") // [tr, tr]
+var s = d3.selectAll("tr") // [tr, tr]
   .selectAll("td") // [[td, td], [td, td]]
   .select("span") // [[span, span], [span, span]]
-    .data([1, 2, 3])
-  .enter()
+    .data([1, 2, 3]);
+
+s.enter()
     .append("td")
     .append("span")
-    .each(function(d, i) { console.log(this, d, i); })
-    .text(function(d, i) { return i; });
+    .text(function(d, i) { return d; });
 
 // s.enter().append("a")
 //     .attr("href", function(d) { return d.href; })
