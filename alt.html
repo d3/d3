@@ -21,6 +21,12 @@ d3.select("table")
     .data(function(d) { return [0 + d, 1 + d]; })
     .text(function(d) { return d; });
 
+d3.select("table")
+  .transition()
+    .delay(500)
+    .duration(1000)
+    .attr("width", 1000);
+
     </script>
   </body>
 </html>
