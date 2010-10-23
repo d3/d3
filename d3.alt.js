@@ -81,8 +81,6 @@
     // TODO key
     // TODO enter
     // TODO exit
-    // TODO data(function)
-    // TODO data(null)
     nodes.data = function(data) {
       if (arguments.length < 1) {
         return nodes.map(function(node) {
@@ -93,8 +91,21 @@
         for (var i = 0, n = groups.length; i < n; i++) {
           var group = groups[i],
               groupData = data.call(group, group.data, i);
+          if (groupData == null) {
+            for (var j = 0, m = group.length; j < m; j++) {
+              delete group[j].__data__;
+            }
+          } else {
+            for (var j = 0, m = group.length; j < m; j++) {
+              group[j].__data__ = groupData[j];
+            }
+          }
+        }
+      } else if (data == null) {
+        for (var i = 0, n = groups.length; i < n; i++) {
+          var group = groups[i];
           for (var j = 0, m = group.length; j < m; j++) {
-            group[j].__data__ = groupData[j];
+            delete group[j].__data__;
           }
         }
       } else {
