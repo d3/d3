@@ -6,13 +6,18 @@
     <script type="text/javascript" src="d3.alt.js"></script>
   </head>
   <body>
-    <div>1</div>
-    <div>2</div>
+    <table>
+      <tr><td>0,0</td><td>0,1</td></tr>
+      <tr><td>1,0</td><td>1,1</td></tr>
+    </table>
     <script type="text/javascript">
 
-d3.select("body")
-  .selectAll("div")
-  .attr("style", "color:red;");
+d3.select("table")
+  .selectAll("tr")
+    .data(function() { return [0, 2]; })
+  .selectAll("td")
+    .data(function(d) { return [0 + d, 1 + d]; })
+    .text(function(d) { return d; });
 
     </script>
   </body>
