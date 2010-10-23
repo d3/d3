@@ -49,12 +49,13 @@
     return d3_root.transition();
   };
 
-  function d3_selection(groups, deselect) {
+  function d3_selection(groups) {
     var nodes = d3_blend(groups);
 
     function select(select) {
       return d3_selection(groups.map(function(group) {
         var subgroup = group.map(function(node) {
+          if (!node) return null;
           var subnode = select(node); // TODO pass index?
           if (subnode) subnode.__data__ = node.__data__;
           return subnode;
@@ -67,6 +68,7 @@
 
     function selectAll(selectAll) {
       return d3_selection(nodes.map(function(node) {
+        if (!node) return null;
         var subgroup = selectAll(node); // TODO pass index?
         subgroup.parent = node;
         subgroup.data = node.__data__;
@@ -88,10 +90,6 @@
       });
     };
 
-    nodes.deselect = function() {
-      return deselect;
-    };
-
     // TODO key
     nodes.data = function(data) {
       if (arguments.length < 1) {
@@ -110,6 +108,11 @@
             enterNodes = [],
             exitNodes = [],
             node;
+
+        function append(e) {
+          return group.parent.appendChild(e);
+        }
+
         if (groupData == null) {
           // TODO what does enter, exit, update mean when data is removed?
           while (++i < n) delete group[i].__data__;
@@ -117,15 +120,18 @@
           for (; i < n0; i++) {
             node = updateNodes[i] = group[i];
             node.__data__ = groupData[i];
+            enterNodes[i] = exitNodes[i] = null;
           }
           for (; i < m; i++) {
-            node = enterNodes[i] = group.parent;
-            node.__data__ = groupData[i]; // XXX overwrites parent data
+            enterNodes[i] = {appendChild: append, __data__: groupData[i]};
+            updateNodes[i] = exitNodes[i] = null;
           }
           for (; i < n1; i++) {
-            node = exitNodes[i] = group[i];
+            exitNodes[i] = group[i];
+            enterNodes[i] = updateNodes[i] = null;
           }
         }
+
         enter.push(enterNodes);
         update.push(updateNodes);
         exit.push(exitNodes);
@@ -148,10 +154,19 @@
         }
       }
 
-      var update = d3_selection(update, nodes);
-      update.enter = function() { return d3_selection(enter, nodes); };
-      update.exit = function() { return d3_selection(exit, nodes); };
-      return update;
+      nodes.enter = function(name) {
+        return d3_selection(enter, nodes).append(name);
+      };
+
+      nodes.update = function() {
+        return d3_selection(update, nodes);
+      };
+
+      nodes.exit = function() {
+        return d3_selection(exit, nodes);
+      };
+
+      return nodes;
     };
 
     // TODO mask forEach? or rename for eachData?
@@ -289,8 +304,7 @@
     // TODO append(node)?
     // TODO append(function)?
     nodes.append = function(name) {
-      var children,
-          apply;
+      name = d3.ns.qualify(name);
 
       function append(node) {
         return node.appendChild(document.createElement(name));
@@ -300,7 +314,6 @@
         return node.appendChild(document.createElementNS(name.space, name.local));
       }
 
-      name = d3.ns.qualify(name);
       return select(name.local ? appendNS : append);
     };
 
@@ -308,11 +321,11 @@
     // TODO remove(node)?
     // TODO remove(function)?
     nodes.remove = function() {
-      for (var i = 0, n = nodes.length; i < n; i++) {
-        var node = nodes[i];
-        node.parentNode.removeChild(node);
-      }
-      return nodes.deselect();
+      return select(function(node) {
+        var parent = node.parentNode;
+        parent.removeChild(node);
+        return parent;
+      });
     };
 
     // TODO event

@@ -14,44 +14,18 @@
     <a href="1">link 1</a>
     <script type="text/javascript">
 
-// d3.select("table")
-//   .selectAll("tr")
-//     .data([0, 1])
-//   .selectAll("td")
-//     .data([2, 3])
-//     .text(function(d, i) { return d + "," + i; });
-//
-// d3.transition()
-//   .select("table")
-//     .delay(500)
-//     .duration(1000)
-//     .attr("width", 1000)
-//   .selectAll("td")
-//     .attr("height", 100);
-//
-// d3.select("body")
-//     .append("span")
-//     .text("Wait for it...");
-//
-// var s = d3.select("body")
-//   .selectAll("a:link")
-//     .data([{href:3}, {href:2}], "href")
-//     .text(function(d) { return "<" + (d && d.href); });
-
-
-var s = d3.selectAll("tr") // [tr, tr]
+var span = d3.selectAll("tr") // [tr, tr]
   .selectAll("td") // [[td, td], [td, td]]
   .select("span") // [[span, span], [span, span]]
-    .data([1, 2, 3]);
+  .data([1, 2, 3]);
 
-s.enter()
-    .append("td")
-    .append("span")
+span.enter("td")
+  .append("span")
     .text(function(d, i) { return d; });
 
-// s.enter().append("a")
-//     .attr("href", function(d) { return d.href; })
-//     .text("new");
+console.log(span
+  .remove()
+    .text(function(d, i) { return Math.random(); }));
 
     </script>
   </body>
