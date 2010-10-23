@@ -52,26 +52,37 @@
   function d3_selection(groups, deselect) {
     var nodes = d3_blend(groups);
 
-    // TODO select(function)?
-    nodes.select = function(query) {
+    function select(select) {
       return d3_selection(groups.map(function(group) {
-        var subgroup = group.map(function(node) {
-          return node.querySelector(query);
-        });
+        var subgroup = group.map(select);
+        subgroup.parent = group.parent;
         subgroup.data = group.data;
         return subgroup;
       }), nodes);
+
+    }
+
+    function selectAll(selectAll) {
+      return d3_selection(nodes.map(function(node) {
+        var subgroup = selectAll(node); // TODO pass index?
+        subgroup.parent = node;
+        subgroup.data = node.__data__;
+        return subgroup;
+      }), nodes);
+    }
+
+    // TODO select(function)?
+    nodes.select = function(query) {
+      return select(function(node) {
+        return node.querySelector(query);
+      });
     };
 
     // TODO selectAll(function)?
     nodes.selectAll = function(query) {
-      return d3_selection(d3_blend(groups.map(function(group) {
-        return group.map(function(node) {
-          var subgroup = d3_array(node.querySelectorAll(query));
-          subgroup.data = node.__data__;
-          return subgroup;
-        });
-      })), nodes);
+      return selectAll(function(node) {
+        return d3_array(node.querySelectorAll(query));
+      });
     };
 
     nodes.deselect = function() {
@@ -98,23 +109,60 @@
       }
 
       function bind(group, groupData) {
-        var i = -1, n = group.length;
+        var i = -1,
+            n = group.length,
+            m = groupData.length,
+            enterNodes = [],
+            exitNodes = [];
         if (groupData == null) {
           while (++i < n) delete group[i].__data__;
         } else if (key == null) {
           while (++i < n) group[i].__data__ = groupData[i];
+          while (i++ < m) {
+            // TODO set __data__?
+            // TODO index isn't correct
+            enterNodes.push(group.parent);
+          }
         } else {
-          var j = -1,
-              m = groupData.length,
-              dataByKey = {},
-              node,
-              data;
-          while (++j < m) dataByKey[dataKey(data = groupData[j])] = data;
-          while (++i < n) (node = group[i]).__data__ = dataByKey[nodeKey(node)];
+        //   var j = -1,
+        //       m = groupData.length,
+        //       dataByKey = {},
+        //       nodeByKey = {},
+        //       enterNodes = [],
+        //       exitNodes = [],
+        //       updateNodes = [],
+        //       node,
+        //       data,
+        //       k;
+        //   while (++j < m) dataByKey[dataKey(data = groupData[j])] = data;
+        //   while (++i < n) nodeByKey[nodeKey(node = group[i])] = node;
+        //
+        //   for (k in dataByKey) {
+        //     data = dataByKey[k];
+        //     node = nodeByKey[k];
+        //     if (node) {
+        //       node.__data__ = data;
+        //       updateNodes.push(node);
+        //     } else {
+        //       console.log(deselect);
+        //       node = {__data__: data};
+        //       enterNodes.push(node);
+        //     }
+        //   }
+        //
+        //   for (k in nodeByKey) {
+        //     exitNodes.push(nodeByKey[k]); // XXX how do we clear exiting node data?
+        //   }
+        //
         }
+        enter.push(enterNodes);
+        exit.push(exitNodes);
       }
 
-      var i = -1, n = groups.length;
+      var i = -1,
+          n = groups.length,
+          enter = [],
+          exit = [];
       if (typeof data == "function") {
         while (++i < n) {
           var group = groups[i];
@@ -126,6 +174,10 @@
         }
       }
 
+      // console.log(enter[0]);
+
+      nodes.enter = function() { return d3_selection(enter, nodes); };
+      nodes.exit = function() { return d3_selection(exit, nodes); };
       return nodes;
     };
 
@@ -264,20 +316,22 @@
     // TODO append(node)?
     // TODO append(function)?
     nodes.append = function(name) {
-      var children;
-      name = d3.ns.qualify(name);
-      if (name.local) {
-        children = nodes.map(function(e) {
-          return e.appendChild(document.createElementNS(name.space, name.local));
-        });
-      } else {
-        children = nodes.map(function(e) {
-          return e.appendChild(document.createElement(name));
-        });
+      var children,
+          apply;
+
+      function append(node) {
+        return node.appendChild(document.createElement(name));
       }
-      return d3_selection(children, nodes);
+
+      function appendNS(node) {
+        return node.appendChild(document.createElementNS(name.space, name.local));
+      }
+
+      name = d3.ns.qualify(name);
+      return select(name.local ? appendNS : append);
     };
 
+    // TODO remove(query)?
     // TODO remove(node)?
     // TODO remove(function)?
     nodes.remove = function() {
