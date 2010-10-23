@@ -21,11 +21,13 @@ d3.select("table")
     .data([2, 3])
     .text(function(d, i, j) { return j + "," + i; });
 
-d3.select("table")
-  .transition()
+d3.transition()
+  .select("table")
     .delay(500)
     .duration(1000)
-    .attr("width", 1000);
+    .attr("width", 1000)
+  .select("td")
+    .attr("height", 100);
 
 d3.select("body")
     .append("span")

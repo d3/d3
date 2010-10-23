@@ -394,11 +394,19 @@
       return transition;
     };
 
-    // transition.select = function(query) {
-    //   var select = d3_transition(nodes.select(query)), i;
-    //   i = 0; select.delay(function() { return delay[i++]; }); // TODO index
-    //   i = 0; select.duration(function() { return duration[i++]; });
-    //   return select;
+    transition.select = function(query) {
+      return d3_transition(nodes.select(query))
+          .delay(function(d, i, j) { return delay[j]; })
+          .duration(function(d, i, j) { return duration[j]; });
+          // TODO .easing(easing)
+    };
+
+    // TODO selectAll needs the group index, not the global index. grr.
+    // transition.selectAll = function(query) {
+    //   return d3_transition(nodes.selectAll(query))
+    //       .delay(function(d, i, j) { return delay[i]; })
+    //       .duration(function(d, i, j) { return duration[i]; });
+    //       // TODO .easing(easing)
     // };
 
     return transition.delay(0).duration(250);
