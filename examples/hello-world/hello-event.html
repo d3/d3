@@ -13,7 +13,7 @@ var data = [4, 8, 15, 16, 23, 42];
 d3.select("span")
   .selectAll("svg")
     .data(data)
-  .enter.append("svg:svg")
+  .enter("svg:svg")
     .attr("width", 100)
     .attr("height", 100)
   .append("svg:text")
@@ -28,14 +28,24 @@ d3.select("span")
     .style("font", "36pt Comic Sans MS")
     .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
     .text(function(d) { return d; })
-    .bind("click", function(d) { console.log("click", this.index, d); })
-  .on("mouseover")
-    .attr("fill", "brown")
-    .attr("stroke", "grey")
-    .pop
-  .on("mouseout")
-    .attr("fill", "orange")
-  .apply();
+    .on("click", click)
+    .on("mouseover", mouseover)
+    .on("mouseout", mouseout);
+
+function click(d, i) {
+  console.log("click", d, i);
+}
+
+function mouseover(d, i) {
+  d3.select(this)
+      .attr("fill", "brown")
+      .attr("stroke", "grey");
+}
+
+function mouseout(d, i) {
+  d3.select(this)
+      .attr("fill", "orange");
+}
 
     </script>
   </body>

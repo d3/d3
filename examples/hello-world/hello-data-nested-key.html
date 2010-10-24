@@ -38,23 +38,25 @@ for (var i = 0; i < 10; i++) {
   data.push(a);
 }
 
-var t = d3.select("#table")
-  .selectAll("tr")
-    .data(data);
+transform();
 
-t.enter.append("tr")
-  .selectAll("td")
-    .data(function(d) { return d; })
-  .enter.append("td")
-    .style("background-color", function(d) { return "hsl(" + d + ",100%,50%)"; })
-    .text(function(d) { return d; });
+function transform() {
+  var t = d3.select("#table")
+    .selectAll("tr")
+      .data(data);
 
-t.selectAll("td")
-    .data(function(d) { return d; })
-    .style("background-color", function(d) { return "hsl(" + d + ",100%,50%)"; })
-    .text(function(d) { return d; });
+  t.enter("tr")
+    .selectAll("td")
+      .data(function(d) { return d; })
+    .enter("td")
+      .style("background-color", function(d) { return "hsl(" + d + ",100%,50%)"; })
+      .text(function(d) { return d; });
 
-t.apply();
+  t.selectAll("td")
+      .data(function(d) { return d; })
+      .style("background-color", function(d) { return "hsl(" + d + ",100%,50%)"; })
+      .text(function(d) { return d; });
+}
 
 function refresh() {
   for (var i = 0; i < 10; i++) {
@@ -62,7 +64,7 @@ function refresh() {
       data[i][j] = (data[i][j] + 1) % 360;
     }
   }
-  t.apply();
+  transform();
 }
 
 window.addEventListener("keypress", refresh, false);

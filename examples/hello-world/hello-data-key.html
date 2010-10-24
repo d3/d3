@@ -16,39 +16,43 @@ var i = 0, data = [
   {id: i++, value: 42}
 ];
 
-var t = d3.selectAll("span")
-    .data(data)
-    .key("id", function(d) { return "span-" + d.id; });
+transform();
 
-t.enter.select("body")
-  .append("span")
-    .attr("id", function(d) { return "span-" + d.id; })
-  .append("svg:svg")
-    .attr("width", 100)
-    .attr("height", 100)
-  .append("svg:text")
-    .attr("x", "50%")
-    .attr("y", "50%")
-    .attr("dy", ".35em")
-    .attr("text-anchor", "middle")
-    .attr("fill", "white")
-    .attr("stroke", "black")
-    .attr("stroke-width", 1.5)
-    .style("font", "36pt Comic Sans MS")
-    .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
-    .text(function(d) { return d.value; });
+function transform() {
+  var t = d3.select("body")
+    .selectAll("span")
+      .data(data, {
+        nodeKey: function(n) { return n.getAttribute("id"); },
+        dataKey: function(d) { return "span-" + d.id; }
+      });
 
-t.select("text")
-    .text(function(d) { return d.value; });
+  t.enter("span")
+      .attr("id", function(d) { return "span-" + d.id; })
+    .append("svg:svg")
+      .attr("width", 100)
+      .attr("height", 100)
+    .append("svg:text")
+      .attr("x", "50%")
+      .attr("y", "50%")
+      .attr("dy", ".35em")
+      .attr("text-anchor", "middle")
+      .attr("fill", "white")
+      .attr("stroke", "black")
+      .attr("stroke-width", 1.5)
+      .style("font", "36pt Comic Sans MS")
+      .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
+      .text(function(d) { return d.value; });
 
-t.exit.remove();
+  t.select("text")
+      .text(function(d) { return d.value; });
 
-t.apply();
+  t.exit().remove();
+}
 
 function refresh() {
   data.shift();
   data.push({id: i++ % 7, value: ~~(Math.random() * 100)});
-  t.apply();
+  transform();
 }
 
 window.addEventListener("keypress", refresh, false);

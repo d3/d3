@@ -216,6 +216,7 @@ function bounce(t) {
       : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + .9375
       : 7.5625 * (t -= 2.625 / 2.75) * t + .984375;
 }
+d3.event = null;
 d3.interpolate = function(a, b) {
   if (typeof b == "number") return d3.interpolateNumber(+a, b);
   if (typeof b == "string") {
@@ -371,14 +372,11 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
+// TODO support namespaces for key?
 function d3_join(key) {
   return {
-    node: function(node) {
-      return node.getAttribute(key);
-    },
-    data: function(data) {
-      return data[key];
-    }
+    nodeKey: function(node) { return node.getAttribute(key); },
+    dataKey: function(data) { return data[key]; }
   };
 }
 function d3_rgb(format) {
@@ -921,12 +919,12 @@ function d3_selection(groups) {
             key;
 
         for (i = 0; i < n; i++) {
-          nodeByKey[key = join.node(node = group[i])] = node;
+          nodeByKey[key = join.nodeKey(node = group[i])] = node;
           keys.push(key);
         }
 
         for (i = 0; i < m; i++) {
-          node = nodeByKey[key = join.data(nodeData = groupData[i])];
+          node = nodeByKey[key = join.dataKey(nodeData = groupData[i])];
           if (node) {
             node.__data__ = nodeData;
             updateNodes[i] = node;
@@ -1118,8 +1116,20 @@ function d3_selection(groups) {
     });
   };
 
-  // TODO event
-  // TODO on?
+  // TODO namespaced event listeners to allow multiples
+  groups.on = function(type, listener) {
+    type = "on" + type;
+    return groups.each(function(d, i) {
+      this[type] = function(e) {
+        d3.event = e;
+        try {
+          listener.call(this, d, i);
+        } finally {
+          d3.event = null;
+        }
+      };
+    });
+  };
 
   // TODO filter, slice?
 

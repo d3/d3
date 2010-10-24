@@ -90,12 +90,12 @@ function d3_selection(groups) {
             key;
 
         for (i = 0; i < n; i++) {
-          nodeByKey[key = join.node(node = group[i])] = node;
+          nodeByKey[key = join.nodeKey(node = group[i])] = node;
           keys.push(key);
         }
 
         for (i = 0; i < m; i++) {
-          node = nodeByKey[key = join.data(nodeData = groupData[i])];
+          node = nodeByKey[key = join.dataKey(nodeData = groupData[i])];
           if (node) {
             node.__data__ = nodeData;
             updateNodes[i] = node;
@@ -287,8 +287,20 @@ function d3_selection(groups) {
     });
   };
 
-  // TODO event
-  // TODO on?
+  // TODO namespaced event listeners to allow multiples
+  groups.on = function(type, listener) {
+    type = "on" + type;
+    return groups.each(function(d, i) {
+      this[type] = function(e) {
+        d3.event = e;
+        try {
+          listener.call(this, d, i);
+        } finally {
+          d3.event = null;
+        }
+      };
+    });
+  };
 
   // TODO filter, slice?
 
