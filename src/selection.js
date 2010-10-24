@@ -137,6 +137,16 @@ function d3_selection(groups) {
         }
       }
 
+      enterNodes.parentNode
+          = updateNodes.parentNode
+          = exitNodes.parentNode
+          = group.parentNode;
+
+      enterNodes.parentData
+          = updateNodes.parentData
+          = exitNodes.parentData
+          = group.parentData;
+
       enter.push(enterNodes);
       update.push(updateNodes);
       exit.push(exitNodes);

@@ -818,6 +818,7 @@ d3.ordinal = function() {
   return scale;
 };
 var d3_root = d3_selection([[document]]);
+d3_root[0].parentNode = document.documentElement;
 // TODO fast singleton implementation!
 d3.select = function(query) {
   return typeof query == "string"
@@ -967,6 +968,16 @@ function d3_selection(groups) {
           enterNodes[i] = updateNodes[i] = null;
         }
       }
+
+      enterNodes.parentNode
+          = updateNodes.parentNode
+          = exitNodes.parentNode
+          = group.parentNode;
+
+      enterNodes.parentData
+          = updateNodes.parentData
+          = exitNodes.parentData
+          = group.parentData;
 
       enter.push(enterNodes);
       update.push(updateNodes);

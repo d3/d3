@@ -4,15 +4,23 @@
     <script type="text/javascript" src="../../d3.js"></script>
   </head>
   <body>
-    <b></b>
-    <b></b>
+    <span></span>
+    <span></span>
     <script type="text/javascript">
 
-d3.select("body")
-  .selectAll("b")
-  .select("i")
-    .data(["Bold", "italic."])
-  .enter("i")
+var s = d3.select("body")
+  .selectAll("span")
+    .data("The test passed, hooray!".split(/\b/));
+
+// Add missing <span>s.
+s.enter("span")
+  .append("b")
+    .text(function(d) { return d; });
+
+// Add missing <b>s.
+s.selectAll("b")
+    .data(function(d) { return [d]; })
+  .enter("b")
     .text(function(d) { return d; });
 
     </script>
