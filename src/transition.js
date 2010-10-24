@@ -14,7 +14,8 @@ function d3_transition(groups) {
       stage = [],
       delay = [],
       duration = [],
-      durationMax;
+      durationMax,
+      ease = d3.ease("cubic-in-out");
 
   function start() {
     interval = setInterval(step, 24);
@@ -26,7 +27,7 @@ function d3_transition(groups) {
         k = -1;
     groups.each(function(d, i) {
       if (stage[++k] == 2) return; // ended
-      var t = (elapsed - delay[k]) / duration[k]; // TODO easing
+      var t = (elapsed - delay[k]) / duration[k];
       if (t >= 1) {
         t = 1;
       } else {
@@ -37,7 +38,8 @@ function d3_transition(groups) {
           event.start.dispatch.apply(this, arguments);
         }
       }
-      for (var key in tweens) tweens[key].call(this, t);
+      var te = ease(t);
+      for (var key in tweens) tweens[key].call(this, te, k);
       if (t == 1) {
         stage[k] = 2;
         event.end.dispatch.apply(this, arguments);
@@ -83,99 +85,89 @@ function d3_transition(groups) {
   };
 
   // TODO register custom easing functions?
-  // transition.easing = function(value) {
-  //   easing = value;
-  //   return transition;
-  // };
+  transition.ease = function(value) {
+    ease = d3.ease(value);
+    return transition;
+  };
 
   transition.attr = function(name, value) {
-    var key = "attr." + name + ".",
+    var interpolators = [],
         k = -1;
 
-    function attrConstant(d, i) {
-      tweens[key + ++k] = attrTween(
+    function attrConstant() {
+      interpolators[++k] = d3.interpolate(
           this.getAttribute(name),
           value);
     }
 
-    function attrConstantNS(d, i) {
-      tweens[key + ++k] = attrTweenNS(
+    function attrConstantNS() {
+      interpolators[++k] = d3.interpolate(
           this.getAttributeNS(name.space, name.local),
           value);
     }
 
-    function attrFunction(d, i) {
-      tweens[key + ++k] = attrTween(
+    function attrFunction() {
+      interpolators[++k] = d3.interpolate(
           this.getAttribute(name),
           value.apply(this, arguments));
     }
 
-    function attrFunctionNS(d, i) {
-      tweens[key + ++k] = attrTweenNS(
+    function attrFunctionNS() {
+      interpolators[++k] = d3.interpolate(
           this.getAttributeNS(name.space, name.local),
           value.apply(this, arguments));
     }
 
-    function attrTween(a, b) {
-      var interpolate = d3.interpolate(a, b);
-      return function(t) {
-        this.setAttribute(name, interpolate(t));
-      };
+    function attrTween(t, k) {
+      this.setAttribute(name, interpolators[k](t));
     }
 
-    function attrTweenNS(a, b) {
-      var interpolate = d3.interpolate(a, b);
-      return function(t) {
-        this.setAttributeNS(name.space, name.local, interpolate(t));
-      };
+    function attrTweenNS(t, k) {
+      this.setAttributeNS(name.space, name.local, interpolators[k](t));
     }
 
     name = d3.ns.qualify(name);
     groups.each(typeof value == "function"
         ? (name.local ? attrFunctionNS : attrFunction)
         : (name.local ? attrConstantNS : attrConstant));
-
+    tweens["attr." + name] = name.local ? attrTweenNS : attrTween;
     return transition;
   };
 
   transition.style = function(name, value, priority) {
-    var key = "style." + name + ".",
+    var interpolators = [],
         k = -1;
 
     function styleConstant(d, i) {
-      tweens[key + ++k] = styleTween(
+      interpolators[++k] = styleTween(
           window.getComputedStyle(this, null).getPropertyValue(name),
           value);
     }
 
     function styleFunction(d, i) {
-      tweens[key + ++k] = styleTween(
+      interpolators[++k] = styleTween(
           window.getComputedStyle(this, null).getPropertyValue(name),
           value.apply(this, arguments));
     }
 
-    function styleTween(a, b) {
-      var interpolate = d3.interpolate(a, b);
-      return function(t) {
-        this.style.setProperty(name, interpolate(t), priority);
-      };
+    function styleTween(t, k) {
+      this.style.setProperty(name, interpolators[k](t), priority);
     }
 
     groups.each(typeof value == "function" ? styleFunction : styleConstant);
+    tweens["style." + name] = styleTween;
     return transition;
   };
 
-  // TODO inherit easing
   transition.select = function(query) {
-    var k, t = d3_transition(groups.select(query));
+    var k, t = d3_transition(groups.select(query)).ease(ease);
     k = -1; t.delay(function(d, i) { return delay[++k]; });
     k = -1; t.duration(function(d, i) { return duration[++k]; });
     return t;
   };
 
-  // TODO inherit easing
   transition.selectAll = function(query) {
-    var k, t = d3_transition(groups.selectAll(query));
+    var k, t = d3_transition(groups.selectAll(query)).ease(ease);
     k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
     k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
     return t;
