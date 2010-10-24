@@ -30,6 +30,51 @@
     return Array.prototype.concat.apply([], arrays);
   }
 
+  function d3_dispatchers() {
+    var dispatchers = {},
+        type;
+    for (var i = 0, n = arguments.length; i < n; i++) {
+      type = arguments[i];
+      dispatchers[type] = d3_dispatcher(type);
+    }
+    return dispatchers;
+  }
+
+  function d3_dispatcher(type) {
+    var dispatcher = {},
+        listeners = [];
+
+    dispatcher.add = function(listener) {
+      for (var i = 0; i < listeners.length; i++) {
+        if (listeners[i].listener == listener) return dispatcher; // already registered
+      }
+      listeners.push({listener: listener, on: true});
+      return dispatcher;
+    };
+
+    dispatcher.remove = function(listener) {
+      for (var i = 0; i < listeners.length; i++) {
+        var l = listeners[i];
+        if (l.listener == listener) {
+          l.on = false;
+          listeners = listeners.slice(0, i).concat(listeners.slice(i + 1));
+          break;
+        }
+      }
+      return dispatcher;
+    };
+
+    dispatcher.dispatch = function() {
+      var ls = listeners; // defensive reference
+      for (var i = 0, n = ls.length; i < n; i++) {
+        var l = ls[i];
+        if (l.on) l.listener.apply(this, arguments);
+      }
+    };
+
+    return dispatcher;
+  };
+
   d3.select = function(query) {
     return typeof query == "string"
         ? d3_root.select(query)
@@ -40,10 +85,6 @@
     return typeof query == "string"
         ? d3_root.selectAll(query)
         : d3_selection([d3_array(query)]); // assume node[]
-  };
-
-  d3.transition = function() {
-    return d3_root.transition();
   };
 
   function d3_selection(groups) {
@@ -273,7 +314,6 @@
           ? styleFunction : styleConstant));
     };
 
-    // TODO text(function)
     groups.text = function(value) {
 
       function textNull() {
@@ -295,7 +335,6 @@
           ? textFunction : textConstant);
     };
 
-    // TODO html(function)
     groups.html = function(value) {
 
       function htmlConstant() {
@@ -349,6 +388,10 @@
     return groups;
   }
 
+  d3.transition = function() {
+    return d3_root.transition();
+  };
+
   // TODO namespace transitions; cancel collisions
   // TODO easing
   function d3_transition(groups) {
@@ -357,6 +400,8 @@
         timeout = setTimeout(start, 1),
         interval,
         then = Date.now(),
+        event = d3_dispatchers("start", "end"),
+        stage = [],
         delay = [],
         duration = [],
         durationMax;
@@ -370,10 +415,23 @@
           clear = true,
           k = -1;
       groups.each(function(d, i) {
-        var t = (elapsed - delay[++k]) / duration[k]; // TODO easing
-        if (t >= 1) { t = 1; delay[k] = Infinity; }
-        else { clear = false; if (t < 0) return; }
+        if (stage[++k] == 2) return; // ended
+        var t = (elapsed - delay[k]) / duration[k]; // TODO easing
+        if (t >= 1) {
+          t = 1;
+        } else {
+          clear = false;
+          if (t < 0) return;
+          if (!stage[k]) {
+            stage[k] = 1;
+            event.start.dispatch.apply(this, arguments);
+          }
+        }
         for (var key in tweens) tweens[key].call(this, t);
+        if (t == 1) {
+          stage[k] = 2;
+          event.end.dispatch.apply(this, arguments);
+        }
       });
       if (clear) clearInterval(interval);
     }
@@ -511,6 +569,11 @@
       k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
       k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
       return t;
+    };
+
+    transition.on = function(type, listener) {
+      event[type].add(listener);
+      return transition;
     };
 
     return transition.delay(0).duration(250);

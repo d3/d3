@@ -10,8 +10,12 @@
       <tr><td><span>0</span></td><td><span>1</span></td></tr>
       <tr><td><span>2</span></td><td><span>3</span></td></tr>
     </table>
-    <a href="2">link 2</a>
-    <a href="1">link 1</a>
+    <a href="1">blink 1</a>
+    <a href="2">blink 2</a>
+    <a href="3">blink 3</a>
+    <a href="4">blink 4</a>
+    <a href="5">blink 5</a>
+    <a href="6">blink 6</a>
     <script type="text/javascript">
 
 var span = d3.selectAll("tr") // [tr, tr]
@@ -39,8 +43,24 @@ links.enter("a")
 
 links.exit()
   .transition()
-    .duration(3000)
-    .style("opacity", 0);
+    .delay(function(d, i) { return i * 50; })
+    .on("end", fadein);
+
+function fadein(d, i) {
+  d3.select(this)
+    .transition()
+      .duration(500)
+      .style("opacity", 1)
+      .on("end", fadeout);
+}
+
+function fadeout(d, i) {
+  d3.select(this)
+    .transition()
+      .duration(500)
+      .style("opacity", 0)
+      .on("end", fadein);
+}
 
     </script>
   </body>
