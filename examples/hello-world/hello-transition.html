@@ -25,18 +25,21 @@ div {
     <div></div>
     <script type="text/javascript">
 
-var t = d3.select("div")
-    .style("width", "0%")
-    .style("background-color", "steelblue")
-  .transition()
-    .ease("bounce")
-    .duration(2000)
-    .style("width", d3.tween("100%"))
-    .style("background-color", d3.tween("brown"))
-    .text(function() { return ~~(d3.time * 100) + "\u00a0"; })
-  .apply();
+transform();
 
-window.addEventListener("keypress", t.apply, false);
+function transform() {
+  d3.select("div")
+      .style("width", "0%")
+      .style("background-color", "steelblue")
+      .text("hello\u00a0")
+    .transition()
+      .ease("bounce")
+      .duration(2000)
+      .style("width", "100%")
+      .style("background-color", "brown");
+}
+
+window.addEventListener("keypress", transform, false);
 
     </script>
   </body>

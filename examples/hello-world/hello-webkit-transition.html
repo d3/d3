@@ -43,24 +43,20 @@ var n = 10;
 
 d3.select("#cells")
   .selectAll("div")
-    .data(range(n))
-  .enter.append("div")
+    .data(d3.range(n))
+  .enter("div")
     .attr("class", "cell")
-    .style("left", function(i) { return i * 30; })
-  .apply();
+    .style("left", function(i) { return i * 30; });
 
-window.addEventListener("keypress", d3.selectAll(".cell")
-    .data(function() { return range(n).map(Math.random); })
-    .style("top", function(d) { return (1 - d) * 300; })
-    .style("background-color", function(d) { return "rgb(" + ~~(d * 255) + ",50,100)"; })
-    .text(function(d) { return ~~(d * 100); })
-  .apply, false);
-
-function range(n) {
-  var array = [];
-  for (var i = 0; i < n; i++) array.push(i);
-  return array;
+function transform() {
+  d3.selectAll(".cell")
+      .data(d3.range(n).map(Math.random))
+      .style("top", function(d) { return (1 - d) * 300; })
+      .style("background-color", function(d) { return "rgb(" + ~~(d * 255) + ",50,100)"; })
+      .text(function(d) { return ~~(d * 100); });
 }
+
+window.addEventListener("keypress", transform, false);
 
     </script>
   </body>

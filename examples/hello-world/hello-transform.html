@@ -26,12 +26,14 @@ d3.selectAll("span")
     .attr("stroke-width", 1.5)
     .style("font", "36pt Comic Sans MS")
     .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
-    .text(function() { return ~~(Math.random() * 100); })
-  .apply();
+    .text(function() { return ~~(Math.random() * 100); });
 
-window.addEventListener("keypress", d3.selectAll("text")
-    .text(function() { return ~~(Math.random() * 100); })
-    .apply, false);
+function transform() {
+  d3.selectAll("text")
+      .text(function() { return ~~(Math.random() * 100); });
+}
+
+window.addEventListener("keypress", transform, false);
 
     </script>
   </body>

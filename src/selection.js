@@ -12,12 +12,14 @@ function d3_selection(groups) {
     for (var j = 0, m = groups.length; j < m; j++) {
       group = groups[j];
       subgroups.push(subgroup = []);
-      subgroup.parentNode = group.parentNode;
+      subgroup.parentNodes = group;
       subgroup.parentData = group.parentData;
       for (var i = 0, n = group.length; i < n; i++) {
         if (node = group[i]) {
           subgroup.push(subnode = select(node));
           if (subnode) subnode.__data__ = node.__data__;
+        } else {
+          subgroup.push(null);
         }
       }
     }
@@ -79,18 +81,24 @@ function d3_selection(groups) {
           node,
           nodeData;
 
-      function append(e) {
-        return group.parentNode.appendChild(e);
+      function enterNode(d, i) {
+        var p = group.parentNode || group.parentNodes[i];
+        return {
+          appendChild: function(e) { return p.appendChild(e); },
+          __data__: d
+        };
       }
 
       if (join) {
         var nodeByKey = {},
+            indexByKey = {},
             exitData = [],
             keys = [],
             key;
 
         for (i = 0; i < n; i++) {
           nodeByKey[key = join.nodeKey(node = group[i])] = node;
+          indexByKey[key] = i;
           keys.push(key);
         }
 
@@ -101,7 +109,7 @@ function d3_selection(groups) {
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
           } else {
-            enterNodes[i] = {appendChild: append, __data__: nodeData};
+            enterNodes[i] = enterNode(nodeData, indexByKey[key]);
             updateNodes[i] = exitNodes[i] = null;
           }
           delete nodeByKey[key];
@@ -114,12 +122,19 @@ function d3_selection(groups) {
         }
       } else {
         for (; i < n0; i++) {
-          node = updateNodes[i] = group[i];
-          node.__data__ = groupData[i];
-          enterNodes[i] = exitNodes[i] = null;
+          node = group[i];
+          nodeData = groupData[i];
+          if (node) {
+            node.__data__ = nodeData;
+            updateNodes[i] = node;
+            enterNodes[i] = exitNodes[i] = null;
+          } else {
+            enterNodes[i] = enterNode(nodeData, i);
+            updateNodes[i] = exitNodes[i] = null;
+          }
         }
         for (; i < m; i++) {
-          enterNodes[i] = {appendChild: append, __data__: groupData[i]};
+          enterNodes[i] = enterNode(groupData[i], i);
           updateNodes[i] = exitNodes[i] = null;
         }
         for (; i < n1; i++) {
@@ -135,7 +150,7 @@ function d3_selection(groups) {
 
     if (typeof data == "function") {
       while (++i < n) {
-        bind(group = groups[i], data.call(group.parentNode, group.parentData, i));
+        bind(group = groups[i], data.call(group, group.parentData, i));
       }
     } else {
       while (++i < n) {

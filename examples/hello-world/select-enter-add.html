@@ -4,16 +4,16 @@
     <script type="text/javascript" src="../../d3.js"></script>
   </head>
   <body>
-    <span></span>
-    <span></span>
+    <b></b>
+    <b></b>
     <script type="text/javascript">
 
-d3.selectAll("span")
-  .select("span")
-    .data(["Test", "passed."])
-  .enter.append("span")
-    .text(function(d) { return d; })
-  .apply();
+d3.select("body")
+  .selectAll("b")
+  .select("i")
+    .data(["Bold", "italic."])
+  .enter("i")
+    .text(function(d) { return d; });
 
     </script>
   </body>
