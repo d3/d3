@@ -1270,13 +1270,13 @@ function d3_transition(groups) {
         k = -1;
 
     function styleConstant(d, i) {
-      interpolators[++k] = styleTween(
+      interpolators[++k] = d3.interpolate(
           window.getComputedStyle(this, null).getPropertyValue(name),
           value);
     }
 
     function styleFunction(d, i) {
-      interpolators[++k] = styleTween(
+      interpolators[++k] = d3.interpolate(
           window.getComputedStyle(this, null).getPropertyValue(name),
           value.apply(this, arguments));
     }
