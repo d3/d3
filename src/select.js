@@ -1,3 +1,4 @@
+// TODO fast singleton implementation!
 d3.select = function(query) {
   return typeof query == "string"
       ? d3_root.select(query)

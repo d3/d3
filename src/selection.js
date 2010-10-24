@@ -166,8 +166,26 @@ function d3_selection(groups) {
     return groups;
   };
 
+  function first(callback) {
+    for (var j = 0, m = groups.length; j < m; j++) {
+      var group = groups[j];
+      for (var i = 0, n = group.length; i < n; i++) {
+        var node = group[i];
+        if (node) return callback.call(node, node.__data__, i);
+      }
+    }
+    return null;
+  }
+
   groups.attr = function(name, value) {
     name = d3.ns.qualify(name);
+
+    // If no value is specified, return the first value.
+    if (arguments.length < 2) {
+      return first(name.local
+          ? function() { return this.getAttributeNS(name.space, name.local); }
+          : function() { return this.getAttribute(name); });
+    }
 
     function attrNull() {
       this.removeAttribute(name);
@@ -206,6 +224,13 @@ function d3_selection(groups) {
   groups.style = function(name, value, priority) {
     if (arguments.length < 3) priority = null;
 
+    // If no value is specified, return the first value.
+    if (arguments.length < 2) {
+      return first(function() {
+        return window.getComputedStyle(this, null).getPropertyValue(name);
+      });
+    }
+
     function styleNull() {
       this.style.removeProperty(name);
     }
@@ -227,6 +252,13 @@ function d3_selection(groups) {
 
   groups.text = function(value) {
 
+    // If no value is specified, return the first value.
+    if (arguments.length < 1) {
+      return first(function() {
+        return this.textContent;
+      });
+    }
+
     function textNull() {
       while (this.lastChild) this.removeChild(this.lastChild);
     }
@@ -247,6 +279,13 @@ function d3_selection(groups) {
   };
 
   groups.html = function(value) {
+
+    // If no value is specified, return the first value.
+    if (arguments.length < 1) {
+      return first(function() {
+        return this.innerHTML;
+      });
+    }
 
     function htmlConstant() {
       this.innerHTML = value;
