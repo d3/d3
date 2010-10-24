@@ -1221,32 +1221,18 @@ function d3_transition(groups) {
     return transition;
   };
 
-  transition.attr = function(name, value) {
+  transition.attrTween = function(name, tween) {
     var interpolators = [],
         k = -1;
 
-    function attrConstant() {
-      interpolators[++k] = d3.interpolate(
-          this.getAttribute(name),
-          value);
+    function attrInterpolator(d, i) {
+      interpolators[++k] = tween.call(this, d, i,
+          this.getAttribute(name));
     }
 
-    function attrConstantNS() {
-      interpolators[++k] = d3.interpolate(
-          this.getAttributeNS(name.space, name.local),
-          value);
-    }
-
-    function attrFunction() {
-      interpolators[++k] = d3.interpolate(
-          this.getAttribute(name),
-          value.apply(this, arguments));
-    }
-
-    function attrFunctionNS() {
-      interpolators[++k] = d3.interpolate(
-          this.getAttributeNS(name.space, name.local),
-          value.apply(this, arguments));
+    function attrInterpolatorNS(d, i) {
+      interpolators[++k] = tween.call(this, d, i,
+          this.getAttributeNS(name.space, name.local));
     }
 
     function attrTween(t, k) {
@@ -1258,36 +1244,35 @@ function d3_transition(groups) {
     }
 
     name = d3.ns.qualify(name);
-    groups.each(typeof value == "function"
-        ? (name.local ? attrFunctionNS : attrFunction)
-        : (name.local ? attrConstantNS : attrConstant));
+    groups.each(name.local ? attrInterpolatorNS : attrInterpolator);
     tweens["attr." + name] = name.local ? attrTweenNS : attrTween;
     return transition;
   };
 
-  transition.style = function(name, value, priority) {
+  transition.attr = function(name, value) {
+    return transition.attrTween(name, d3_tween(value));
+  };
+
+  transition.styleTween = function(name, tween, priority) {
     var interpolators = [],
         k = -1;
 
-    function styleConstant(d, i) {
-      interpolators[++k] = d3.interpolate(
-          window.getComputedStyle(this, null).getPropertyValue(name),
-          value);
-    }
-
-    function styleFunction(d, i) {
-      interpolators[++k] = d3.interpolate(
-          window.getComputedStyle(this, null).getPropertyValue(name),
-          value.apply(this, arguments));
+    function styleInterpolator(d, i) {
+      interpolators[++k] = tween.call(this, d, i,
+          window.getComputedStyle(this, null).getPropertyValue(name));
     }
 
     function styleTween(t, k) {
       this.style.setProperty(name, interpolators[k](t), priority);
     }
 
-    groups.each(typeof value == "function" ? styleFunction : styleConstant);
+    groups.each(styleInterpolator);
     tweens["style." + name] = styleTween;
     return transition;
+  };
+
+  transition.style = function(name, value, priority) {
+    return transition.styleTween(name, d3_tween(value), priority);
   };
 
   transition.select = function(query) {
@@ -1310,5 +1295,10 @@ function d3_transition(groups) {
   };
 
   return transition.delay(0).duration(250);
+}
+function d3_tween(b) {
+  return typeof b == "function"
+    ? function(d, i, a) { return d3.interpolate(a, b.call(this, d, i)); }
+    : function(d, i, a) { return d3.interpolate(a, b); };
 }
 })(this);

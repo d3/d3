@@ -16,8 +16,8 @@ body {
 var w = 400,
     h = 400,
     r = Math.min(w, h) / 2,
-    n = 10,
-    data = normalize(range(n).map(Math.random));
+    n = 100,
+    data = normalize(d3.range(n).map(Math.random));
 
 var colors = [
   "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
@@ -33,7 +33,7 @@ var vis = d3.select("body")
 
 var arcs = vis.selectAll("g.arc")
     .data(data)
-  .enter.append("svg:g")
+  .enter("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 
@@ -41,56 +41,71 @@ arcs.append("svg:path")
     .attr("fill", index(colors))
     .attr("d", arc);
 
-vis.apply();
+window.addEventListener("keypress", update, false);
 
-var update = d3.selectAll("g.arc > path")
-  .data(function() {
-      var prev = data,
-          next = data = normalize(range(n).map(Math.random)),
-          i = 0;
-      for (; i < n; ++i) prev[i].next = next[i];
-      return prev;
-    })
-  .transition() // 1. Wedges split into two rings.
-  .data(d3.tween(function(d) {
-      return {
-        innerRadius: this.index & 1 ? r * .6 : r * .8,
-        outerRadius: this.index & 1 ? r * .8 : r
-      };
-    }))
-    .attr("d", arc)
-  .pop.end.transition() // 2. Wedges translate to be centered on their final position.
-  .data(d3.tween(function(d) {
-      var a0;
-      return {
-        startAngle: a0 = (d.next.startAngle + d.next.endAngle - d.endAngle + d.startAngle) / 2,
-        endAngle: a0 + d.endAngle - d.startAngle
-      };
-    }))
-    .attr("d", arc)
-  .pop.end.transition() // 3. Wedges then update their values, changing size.
-  .data(d3.tween(function(d) {
-      return {
+function update() {
+  var prev = data,
+      next = data = normalize(d3.range(n).map(Math.random)),
+      i = 0;
+  for (; i < n; ++i) prev[i].next = next[i];
+  d3.selectAll("g.arc > path")
+      .data(prev)
+      .each(transitionSplit);
+}
+
+// 1. Wedges split into two rings.
+function transitionSplit(d, i) {
+  d3.select(this)
+    .transition()
+      .attrTween("d", arcTween({
+        innerRadius: i & 1 ? r * .6 : r * .8,
+        outerRadius: i & 1 ? r * .8 : r
+      }))
+      .on("end", transitionRotate);
+}
+
+// 2. Wedges translate to be centered on their final position.
+function transitionRotate(d, i) {
+  var a0 = d.next.startAngle + d.next.endAngle,
+      a1 = d.startAngle - d.endAngle;
+  d3.select(this)
+    .transition()
+      .attrTween("d", arcTween({
+        startAngle: (a0 + a1) / 2,
+        endAngle: (a0 - a1) / 2
+      }))
+      .on("end", transitionResize);
+}
+
+// 3. Wedges then update their values, changing size.
+function transitionResize(d, i) {
+  d3.select(this)
+    .transition()
+      .attrTween("d", arcTween({
         startAngle: d.next.startAngle,
         endAngle: d.next.endAngle
-      };
-    }))
-    .attr("d", arc)
-  .pop.end.transition() // 4. Wedges reunite into a single ring.
-  .data(d3.tween(function(d) {
-      return {
+      }))
+      .on("end", transitionUnite);
+}
+
+// 4. Wedges reunite into a single ring.
+function transitionUnite(d, i) {
+  d3.select(this)
+    .transition()
+      .attrTween("d", arcTween({
         innerRadius: d.next.innerRadius,
         outerRadius: d.next.outerRadius
-      };
-    }))
-    .attr("d", arc);
+      }));
+}
 
-window.addEventListener("keypress", update.apply, false);
-
-function range(n) {
-  var array = [];
-  for (var i = 0; i < n; i++) array.push(i);
-  return array;
+function arcTween(b) {
+  return function(a) {
+    var i = d3.interpolateObject(a, b);
+    for (var key in b) a[key] = b[key]; // update data
+    return function(t) {
+      return arc(i(t));
+    };
+  };
 }
 
 function normalize(array) {
@@ -127,8 +142,8 @@ function arc(d) {
 }
 
 function index(colors) {
-  return function(d) {
-    return colors[this.index % colors.length];
+  return function(d, i) {
+    return colors[i % colors.length];
   };
 }
 

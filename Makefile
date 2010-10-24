@@ -29,6 +29,7 @@ SRC_FILES = \
 	src/selectAll.js \
 	src/selection.js \
 	src/transition.js \
+	src/tween.js \
 	src/end.js
 
 all: d3.js d3.min.js
