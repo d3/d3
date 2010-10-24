@@ -23,9 +23,10 @@ span.enter("td")
   .append("span")
     .text(function(d, i) { return d; });
 
-console.log(span
-  .remove()
-    .text(function(d, i) { return Math.random(); }));
+span.remove() // removes spans and selects parent td
+    .text(function(d, i) { return Math.random(); })
+  .transition()
+    .attr("height", 200);
 
     </script>
   </body>
