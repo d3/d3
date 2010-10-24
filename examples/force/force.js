@@ -1,5 +1,6 @@
 function layout_force() {
-  var force = d3.dispatch({}),
+  var force = {},
+      event = d3.dispatch("tick"),
       size = {x: 1, y: 1},
       alpha = .1,
       nodeDistance = 60,
@@ -61,8 +62,13 @@ function layout_force() {
       t.y -= y;
     }
 
-    force.dispatch({type: "tick"});
+    event.tick.dispatch({type: "tick"});
   }
+
+  force.on = function(type, listener) {
+    event[type].add(listener);
+    return force;
+  };
 
   force.nodes = function(x) {
     if (!arguments.length) return nodes;

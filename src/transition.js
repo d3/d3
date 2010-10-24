@@ -10,7 +10,7 @@ function d3_transition(groups) {
       timeout = setTimeout(start, 1),
       interval,
       then = Date.now(),
-      event = d3_dispatchers("start", "end"),
+      event = d3.dispatch("start", "end"),
       stage = [],
       delay = [],
       duration = [],
@@ -84,9 +84,8 @@ function d3_transition(groups) {
     return transition;
   };
 
-  // TODO register custom easing functions?
   transition.ease = function(value) {
-    ease = d3.ease(value);
+    ease = typeof value == "string" ? d3.ease(value) : value;
     return transition;
   };
 

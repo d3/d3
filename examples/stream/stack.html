@@ -3,7 +3,6 @@
   <head>
     <title>Stacked Bar Chart</title>
     <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="range.js"></script>
     <script type="text/javascript" src="max.js"></script>
     <script type="text/javascript" src="stream.js"></script>
     <script type="text/javascript" src="stack.js"></script>
@@ -59,10 +58,10 @@ button:hover {
     </style>
   </head>
   <body>
-    <button id="group" class="first" onclick="group.apply()">
+    <button id="group" class="first" onclick="transitionGroup()">
       Group
     </button
-    ><button id="stack" class="active last" onclick="stack.apply()">
+    ><button id="stack" class="active last" onclick="transitionStack()">
       Stack
     </button><br>
     <script type="text/javascript">
@@ -90,14 +89,14 @@ var vis = d3.select("body")
 
 var layers = vis.selectAll("g.layer")
     .data(data)
-  .enter.append("svg:g")
-    .attr("fill", function(d) { return color(this.index / (n - 1)); })
+  .enter("svg:g")
+    .attr("fill", function(d, i) { return color(i / (n - 1)); })
     .attr("class", "layer")
     .attr("transform", "translate(0,0)"); // for animation
 
 var bars = layers.selectAll("g.bar")
     .data(function(d) { return d; })
-  .enter.append("svg:g")
+  .enter("svg:g")
     .attr("class", "bar")
     .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 
@@ -106,20 +105,20 @@ bars.append("svg:rect")
     .attr("y", h)
     .attr("height", 0)
   .transition()
-    .delay(function() { return this.index * 10; })
-    .attr("y", d3.tween(y1))
-    .attr("height", d3.tween(function(d) { return y0(d) - y1(d); }));
+    .delay(function(d, i) { return i * 10; })
+    .attr("y", y1)
+    .attr("height", function(d) { return y0(d) - y1(d); });
 
 var labels = vis.selectAll("text.label")
     .data(data[0])
-  .enter.append("svg:text")
+  .enter("svg:text")
     .attr("class", "label")
     .attr("x", x)
     .attr("y", h + 6)
     .attr("dx", x({x: .45}))
     .attr("dy", ".71em")
     .attr("text-anchor", "middle")
-    .text(function() { return this.index; });
+    .text(function(d, i) { return i; });
 
 vis.append("svg:line")
     .attr("x1", 0)
@@ -127,51 +126,53 @@ vis.append("svg:line")
     .attr("y1", h)
     .attr("y2", h);
 
-vis.apply();
+function transitionGroup() {
+  var group = d3.selectAll("body");
 
-var group = d3.selectAll("body");
+  group.select("#group")
+      .attr("class", "first active");
 
-group.select("#group")
-    .attr("class", "first active");
+  group.select("#stack")
+      .attr("class", "last");
 
-group.select("#stack")
-    .attr("class", "last");
+  group.selectAll("g.layer")
+    .transition()
+      .duration(500)
+      .attr("transform", function(d, i) { return "translate(" + x({x: .9 * i / n}) + ",0)"; })
+    .selectAll("rect")
+      .attr("width", x({x: .9 / n}));
 
-group.selectAll("g.layer")
-  .data(data)
-  .transition()
-    .duration(500)
-    .attr("transform", d3.tween(function(d) { return "translate(" + x({x: .9 * this.index / n}) + ",0)"; }))
-  .selectAll("rect")
-    .attr("width", d3.tween(x({x: .9 / n})))
-  .pop.end.selectAll("rect")
-  .data(function(d) { return d; })
-  .transition()
-    .duration(500)
-    .attr("y", d3.tween(function(d) { return h - y2(d); }))
-    .attr("height", d3.tween(y2));
+  group.selectAll("g.layer rect")
+    .transition()
+      .delay(500)
+      .duration(500)
+      .attr("y", function(d) { return h - y2(d); })
+      .attr("height", y2);
+}
 
-var stack = d3.select("body");
+function transitionStack() {
+  var stack = d3.select("body");
 
-stack.select("#group")
-    .attr("class", "first");
+  stack.select("#group")
+      .attr("class", "first");
 
-stack.select("#stack")
-    .attr("class", "last active");
+  stack.select("#stack")
+      .attr("class", "last active");
 
-stack.selectAll("g.layer")
-  .data(data)
-  .transition()
-    .duration(500)
-  .selectAll("rect")
-  .data(function(d) { return d; })
-    .attr("y", d3.tween(y1))
-    .attr("height", d3.tween(function(d) { return y0(d) - y1(d); }))
-  .pop.pop.end.transition()
-    .duration(500)
-    .attr("transform", d3.tween("translate(0,0)"))
-  .selectAll("rect")
-    .attr("width", d3.tween(x({x: .9})));
+  stack.selectAll("g.layer rect")
+    .transition()
+      .duration(500)
+      .attr("y", y1)
+      .attr("height", function(d) { return y0(d) - y1(d); });
+
+  stack.selectAll("g.layer")
+    .transition()
+      .delay(500)
+      .duration(500)
+      .attr("transform", "translate(0,0)")
+    .selectAll("rect")
+      .attr("width", x({x: .9}));
+}
 
     </script>
   </body>

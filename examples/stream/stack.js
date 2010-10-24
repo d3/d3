@@ -10,8 +10,8 @@ function stack(data, order, offset) { // two-dimensional array of x,y; we popula
   var index;
   switch (order) {
     case "inside-out": index = stack_inside_out(data); break;
-    case "reverse": index = range(n).reverse(); break;
-    default: index = range(n); break;
+    case "reverse": index = d3.range(n).reverse(); break;
+    default: index = d3.range(n); break;
   }
 
   /* offset */
@@ -37,7 +37,7 @@ function stack_inside_out(data) {
       j,
       max = data.map(stack_max_index),
       sums = data.map(function(d) { return d.reduce(stack_sum, 0); }),
-      index = range(n).sort(function(a, b) {  max[a] - max[b]; }),
+      index = d3.range(n).sort(function(a, b) {  max[a] - max[b]; }),
       top = 0,
       bottom = 0,
       tops = [],

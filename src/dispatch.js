@@ -1,16 +1,27 @@
-function d3_dispatcher(type) {
-  var dispatcher = {},
+/** @param {...string} types */
+d3.dispatch = function(types) {
+  var dispatch = {},
+      type;
+  for (var i = 0, n = arguments.length; i < n; i++) {
+    type = arguments[i];
+    dispatch[type] = d3_dispatch(type);
+  }
+  return dispatch;
+};
+
+function d3_dispatch(type) {
+  var dispatch = {},
       listeners = [];
 
-  dispatcher.add = function(listener) {
+  dispatch.add = function(listener) {
     for (var i = 0; i < listeners.length; i++) {
-      if (listeners[i].listener == listener) return dispatcher; // already registered
+      if (listeners[i].listener == listener) return dispatch; // already registered
     }
     listeners.push({listener: listener, on: true});
-    return dispatcher;
+    return dispatch;
   };
 
-  dispatcher.remove = function(listener) {
+  dispatch.remove = function(listener) {
     for (var i = 0; i < listeners.length; i++) {
       var l = listeners[i];
       if (l.listener == listener) {
@@ -19,10 +30,10 @@ function d3_dispatcher(type) {
         break;
       }
     }
-    return dispatcher;
+    return dispatch;
   };
 
-  dispatcher.dispatch = function() {
+  dispatch.dispatch = function() {
     var ls = listeners; // defensive reference
     for (var i = 0, n = ls.length; i < n; i++) {
       var l = ls[i];
@@ -30,5 +41,5 @@ function d3_dispatcher(type) {
     }
   };
 
-  return dispatcher;
+  return dispatch;
 };

@@ -12,8 +12,7 @@ SRC_FILES = \
 	src/blend.js \
 	src/range.js \
 	src/ns.js \
-	src/dispatcher.js \
-	src/dispatchers.js \
+	src/dispatch.js \
 	src/ease.js \
 	src/event.js \
 	src/interpolate.js \
