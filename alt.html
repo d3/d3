@@ -21,7 +21,7 @@
 var span = d3.selectAll("tr") // [tr, tr]
   .selectAll("td") // [[td, td], [td, td]]
   .select("span") // [[span, span], [span, span]]
-  .data([1, 2, 3]);
+    .data([1, 2, 3]);
 
 span.enter("td")
   .append("span")
@@ -44,14 +44,14 @@ links.enter("a")
 links.exit()
   .transition()
     .delay(function(d, i) { return i * 50; })
-    .on("end", fadein);
+    .each("end", fadein);
 
 function fadein(d, i) {
   d3.select(this)
     .transition()
       .duration(500)
       .style("opacity", 1)
-      .on("end", fadeout);
+      .each("end", fadeout);
 }
 
 function fadeout(d, i) {
@@ -59,7 +59,7 @@ function fadeout(d, i) {
     .transition()
       .duration(500)
       .style("opacity", 0)
-      .on("end", fadein);
+      .each("end", fadein);
 }
 
     </script>

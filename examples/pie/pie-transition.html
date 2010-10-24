@@ -13,10 +13,10 @@ body {
   <body>
     <script type="text/javascript">
 
-var data = normalize(range(10).map(Math.random).sort(descending)),
-    w = 400,
+var w = 400,
     h = 400,
-    r = Math.min(w, h) / 2;
+    r = Math.min(w, h) / 2,
+    data = normalize(d3.range(10).map(Math.random).sort(descending));
 
 var colors = [
   "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
@@ -32,57 +32,38 @@ var vis = d3.select("body")
 
 var arcs = vis.selectAll("g.arc")
     .data(data)
-  .enter.append("svg:g")
+  .enter("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-arcs.append("svg:path")
+var paths = arcs.append("svg:path")
     .attr("fill", index(colors));
 
-arcs.append("svg:text")
-    .attr("dy", ".35em")
-    .attr("text-anchor", "middle")
-    .attr("display", "none")
-    .text(function(d) { return d.value.toFixed(2); });
-
-var tx = arcs.transition()
+paths.transition()
     .ease("bounce")
-    .duration(2000);
+    .duration(2000)
+    .attrTween("d", tweenPie);
 
-tx.select("path")
-    .attr("d", function(d) {
-      var a0 = d3.time * d.startAngle - Math.PI / 2,
-          a1 = d3.time * d.endAngle - Math.PI / 2;
-      return arc(0, r, a0, a1);
-    });
-
-tx.select("text")
-    .attr("display", null)
-    .attr("transform", function(d) {
-      var a = d3.time * d.midAngle - Math.PI / 2,
-          t = "rotate(" + a * 180 / Math.PI + ")translate(" + r * .8 + ",0)";
-      return upright(a) ? t : t + "rotate(180)";
-    });
-
-tx.end.select("path")
-  .transition()
+paths.transition()
     .ease("elastic")
-    .delay(function() { return this.index * 50; })
+    .delay(function(d, i) { return 2000 + i * 50; })
     .duration(750)
-    .attr("d", function(d) {
-      var r0 = d3.time * r * .6,
-          r1 = r,
-          a0 = d.startAngle - Math.PI / 2,
-          a1 = d.endAngle - Math.PI / 2;
-      return arc(r0, r1, a0, a1);
-    });
+    .attrTween("d", tweenDonut);
 
-vis.apply();
+function tweenPie(b) {
+  b.innerRadius = 0;
+  var i = d3.interpolate({startAngle: 0, endAngle: 0}, b);
+  return function(t) {
+    return arc(i(t));
+  };
+}
 
-function range(n) {
-  var array = [];
-  for (var i = 0; i < n; i++) array.push(i);
-  return array;
+function tweenDonut(b) {
+  b.innerRadius = r * .6;
+  var i = d3.interpolate({innerRadius: 0}, b);
+  return function(t) {
+    return arc(i(t));
+  };
 }
 
 function normalize(array) {
@@ -90,33 +71,39 @@ function normalize(array) {
       a = 0;
   return array.map(function(d, i) {
     return {
+      value: d,
+      innerRadius: r * .6,
+      outerRadius: r,
       startAngle: a,
-      midAngle: a + d * k / 2,
-      endAngle: a += d * k,
-      value: d
+      midAngle: a + d * k / 2 - Math.PI / 2,
+      endAngle: a += d * k
     };
   });
 }
 
-function arc(r0, r1, a0, a1) {
-  var a = a1 - a0,
+function arc(d) {
+  var r0 = d.innerRadius,
+      r1 = d.outerRadius,
+      a0 = d.startAngle - Math.PI / 2,
+      a1 = d.endAngle - Math.PI / 2,
+      da = a1 - a0,
       c0 = Math.cos(a0),
       s0 = Math.sin(a0),
       c1 = Math.cos(a1),
       s1 = Math.sin(a1);
   return "M" + r1 * c0 + "," + r1 * s0
       + "A" + r1 + "," + r1 + " 0 "
-      + ((a < Math.PI) ? "0" : "1") + ",1 "
+      + ((da < Math.PI) ? "0" : "1") + ",1 "
       + r1 * c1 + "," + r1 * s1
       + "L" + r0 * c1 + "," + r0 * s1
       + "A" + r0 + "," + r0 + " 0 "
-      + ((a < Math.PI) ? "0" : "1") + ",0 "
+      + ((da < Math.PI) ? "0" : "1") + ",0 "
       + r0 * c0 + "," + r0 * s0 + "Z";
 }
 
 function index(colors) {
-  return function(d) {
-    return colors[this.index % colors.length];
+  return function(d, i) {
+    return colors[i % colors.length];
   };
 }
 

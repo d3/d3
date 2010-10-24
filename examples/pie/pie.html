@@ -13,10 +13,10 @@ body {
   <body>
     <script type="text/javascript">
 
-var data = normalize(range(10).map(Math.random).sort(descending)),
-    w = 400,
+var w = 400,
     h = 400,
-    r = Math.min(w, h) / 2;
+    r = Math.min(w, h) / 2,
+    data = normalize(d3.range(10).map(Math.random).sort(descending));
 
 var colors = [
   "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
@@ -32,58 +32,60 @@ var vis = d3.select("body")
 
 var arcs = vis.selectAll("g.arc")
     .data(data)
-  .enter.append("svg:g")
+  .enter("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 
 arcs.append("svg:path")
     .attr("fill", index(colors))
-    .attr("d", arc(r));
+    .attr("d", arc);
 
-arcs.filter(function(d) { return d.value > .15; })
-  .append("svg:text")
+arcs.append("svg:text")
     .attr("x", function(d) { return Math.cos(d.midAngle) * r * .8; })
     .attr("y", function(d) { return Math.sin(d.midAngle) * r * .8; })
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")
-    .text(function(d) { return d.value.toFixed(2); });
-
-vis.apply();
-
-function range(n) {
-  var array = [];
-  for (var i = 0; i < n; i++) array.push(i);
-  return array;
-}
+    .attr("display", function(d) { return d.value > .15 ? null : "none"; })
+    .text(function(d, i) { return d.value.toFixed(2); });
 
 function normalize(array) {
   var k = (2 * Math.PI) / array.reduce(function(p, d) { return p + d; }, 0),
-      a = -Math.PI / 2;
+      a = 0;
   return array.map(function(d, i) {
     return {
+      value: d,
+      innerRadius: r * .6,
+      outerRadius: r,
       startAngle: a,
-      midAngle: a + d * k / 2,
-      endAngle: a += d * k,
-      index: i,
-      value: d
+      midAngle: a + d * k / 2 - Math.PI / 2,
+      endAngle: a += d * k
     };
   });
 }
 
-function arc(r) {
-  return function(d) {
-    var a0 = d.startAngle,
-        a1 = d.endAngle;
-    return "M" + r * Math.cos(a0) + "," + r * Math.sin(a0)
-        + "A" + r + "," + r + " 0 "
-        + ((a1 - a0 < Math.PI) ? "0" : "1") + ",1 "
-        + r * Math.cos(a1) + "," + r * Math.sin(a1) + "L0,0Z";
-  };
+function arc(d) {
+  var r0 = d.innerRadius,
+      r1 = d.outerRadius,
+      a0 = d.startAngle - Math.PI / 2,
+      a1 = d.endAngle - Math.PI / 2,
+      da = a1 - a0,
+      c0 = Math.cos(a0),
+      s0 = Math.sin(a0),
+      c1 = Math.cos(a1),
+      s1 = Math.sin(a1);
+  return "M" + r1 * c0 + "," + r1 * s0
+      + "A" + r1 + "," + r1 + " 0 "
+      + ((da < Math.PI) ? "0" : "1") + ",1 "
+      + r1 * c1 + "," + r1 * s1
+      + "L" + r0 * c1 + "," + r0 * s1
+      + "A" + r0 + "," + r0 + " 0 "
+      + ((da < Math.PI) ? "0" : "1") + ",0 "
+      + r0 * c0 + "," + r0 * s0 + "Z";
 }
 
 function index(colors) {
-  return function(d) {
-    return colors[d.index % colors.length];
+  return function(d, i) {
+    return colors[i % colors.length];
   };
 }
 

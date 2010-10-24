@@ -32,7 +32,7 @@ circle.line {
   <body>
     <script type="text/javascript">
 
-var data = range(20).map(function(i) {
+var data = d3.range(20).map(function(i) {
   return {x: i / 19, y: (Math.sin(i / 3) + 1) / 2};
 });
 
@@ -48,8 +48,8 @@ var vis = d3.select("body")
     .attr("transform", "translate(" + p + "," + p + ")");
 
 var rules = vis.selectAll("g.rule")
-    .data(range(11))
-  .enter.append("svg:g")
+    .data(d3.range(11))
+  .enter("svg:g")
     .attr("class", "rule");
 
 rules.append("svg:line")
@@ -85,19 +85,11 @@ vis.append("svg:path")
 
 vis.selectAll("circle.line")
     .data(data)
-  .enter.append("svg:circle")
+  .enter("svg:circle")
     .attr("class", "line")
     .attr("cx", function(d) { return d.x * w; })
     .attr("cy", function(d) { return (1 - d.y) * h; })
     .attr("r", 3.5);
-
-vis.apply();
-
-function range(n) {
-  var array = [];
-  for (var i = 0; i < n; i++) array.push(i);
-  return array;
-}
 
 function line(points) {
   var d = [],

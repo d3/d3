@@ -57,11 +57,11 @@ function update() {
 function transitionSplit(d, i) {
   d3.select(this)
     .transition()
-      .attrTween("d", arcTween({
+      .attrTween("d", tweenArc({
         innerRadius: i & 1 ? r * .6 : r * .8,
         outerRadius: i & 1 ? r * .8 : r
       }))
-      .on("end", transitionRotate);
+      .each("end", transitionRotate);
 }
 
 // 2. Wedges translate to be centered on their final position.
@@ -70,37 +70,37 @@ function transitionRotate(d, i) {
       a1 = d.startAngle - d.endAngle;
   d3.select(this)
     .transition()
-      .attrTween("d", arcTween({
+      .attrTween("d", tweenArc({
         startAngle: (a0 + a1) / 2,
         endAngle: (a0 - a1) / 2
       }))
-      .on("end", transitionResize);
+      .each("end", transitionResize);
 }
 
 // 3. Wedges then update their values, changing size.
 function transitionResize(d, i) {
   d3.select(this)
     .transition()
-      .attrTween("d", arcTween({
+      .attrTween("d", tweenArc({
         startAngle: d.next.startAngle,
         endAngle: d.next.endAngle
       }))
-      .on("end", transitionUnite);
+      .each("end", transitionUnite);
 }
 
 // 4. Wedges reunite into a single ring.
 function transitionUnite(d, i) {
   d3.select(this)
     .transition()
-      .attrTween("d", arcTween({
+      .attrTween("d", tweenArc({
         innerRadius: d.next.innerRadius,
         outerRadius: d.next.outerRadius
       }));
 }
 
-function arcTween(b) {
+function tweenArc(b) {
   return function(a) {
-    var i = d3.interpolateObject(a, b);
+    var i = d3.interpolate(a, b);
     for (var key in b) a[key] = b[key]; // update data
     return function(t) {
       return arc(i(t));

@@ -842,7 +842,7 @@ function d3_selection(groups) {
     for (var j = 0, m = groups.length; j < m; j++) {
       group = groups[j];
       subgroups.push(subgroup = []);
-      subgroup.parentNodes = group;
+      subgroup.parentNode = group.parentNode;
       subgroup.parentData = group.parentData;
       for (var i = 0, n = group.length; i < n; i++) {
         if (node = group[i]) {
@@ -911,24 +911,18 @@ function d3_selection(groups) {
           node,
           nodeData;
 
-      function enterNode(d, i) {
-        var p = group.parentNode || group.parentNodes[i];
-        return {
-          appendChild: function(e) { return p.appendChild(e); },
-          __data__: d
-        };
+      function enterAppend(e) {
+        return group.parentNode.appendChild(e);
       }
 
       if (join) {
         var nodeByKey = {},
-            indexByKey = {},
             exitData = [],
             keys = [],
             key;
 
         for (i = 0; i < n; i++) {
           nodeByKey[key = join.nodeKey(node = group[i])] = node;
-          indexByKey[key] = i;
           keys.push(key);
         }
 
@@ -939,7 +933,7 @@ function d3_selection(groups) {
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
           } else {
-            enterNodes[i] = enterNode(nodeData, indexByKey[key]);
+            enterNodes[i] = {appendChild: enterAppend, __data__: nodeData},
             updateNodes[i] = exitNodes[i] = null;
           }
           delete nodeByKey[key];
@@ -959,12 +953,12 @@ function d3_selection(groups) {
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
           } else {
-            enterNodes[i] = enterNode(nodeData, i);
+            enterNodes[i] = {appendChild: enterAppend, __data__: nodeData};
             updateNodes[i] = exitNodes[i] = null;
           }
         }
         for (; i < m; i++) {
-          enterNodes[i] = enterNode(groupData[i], i);
+          enterNodes[i] = {appendChild: enterAppend, __data__: groupData[i]};
           updateNodes[i] = exitNodes[i] = null;
         }
         for (; i < n1; i++) {
@@ -1354,7 +1348,7 @@ function d3_transition(groups) {
     return t;
   };
 
-  transition.on = function(type, listener) {
+  transition.each = function(type, listener) {
     event[type].add(listener);
     return transition;
   };

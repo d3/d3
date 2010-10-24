@@ -158,7 +158,7 @@ function d3_transition(groups) {
     return t;
   };
 
-  transition.on = function(type, listener) {
+  transition.each = function(type, listener) {
     event[type].add(listener);
     return transition;
   };
