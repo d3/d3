@@ -1194,18 +1194,16 @@ function d3_selection(groups) {
 
   // TODO filter, slice?
 
-  groups.transition = function() {
-    return d3_transition(groups);
+  groups.transition = function(name) {
+    return d3_transition(groups, name);
   };
 
   return groups;
 }
-d3.transition = function() {
-  return d3_root.transition();
-};
+d3.transition = d3_root.transition;
 
 // TODO namespace transitions; cancel collisions
-function d3_transition(groups) {
+function d3_transition(groups, name) {
   var transition = {},
       tweens = {},
       event = d3.dispatch("start", "end"),
@@ -1336,14 +1334,14 @@ function d3_transition(groups) {
   };
 
   transition.select = function(query) {
-    var k, t = d3_transition(groups.select(query)).ease(ease);
+    var k, t = d3_transition(groups.select(query), name).ease(ease);
     k = -1; t.delay(function(d, i) { return delay[++k]; });
     k = -1; t.duration(function(d, i) { return duration[++k]; });
     return t;
   };
 
   transition.selectAll = function(query) {
-    var k, t = d3_transition(groups.selectAll(query)).ease(ease);
+    var k, t = d3_transition(groups.selectAll(query), name).ease(ease);
     k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
     k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
     return t;
@@ -1407,12 +1405,20 @@ function d3_timer_step() {
       t1 = d3_timer_queue;
   while (t1) {
     elapsed = now - t1.then;
-    if ((elapsed > t1.delay) && t1.callback(elapsed)) {
-      if (t0) t0.next = t1.next;
-      else d3_timer_queue = t1.next;
-    }
-    t0 = t1;
-    t1 = t1.next;
+    if (elapsed > t1.delay) t1.flush = t1.callback(elapsed);
+    t1 = (t0 = t1).next;
+  }
+  d3_timer_flush();
+}
+
+// Flush after callbacks, to avoid concurrent queue modification.
+function d3_timer_flush() {
+  var t0 = null,
+      t1 = d3_timer_queue;
+  while (t1) {
+    t1 = t1.flush
+        ? (t0 ? t0.next = t1.next : d3_timer_queue = t1.next)
+        : (t0 = t1).next;
   }
   if (!t0) d3_timer_interval = clearInterval(d3_timer_interval);
 }

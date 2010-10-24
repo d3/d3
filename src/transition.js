@@ -1,9 +1,7 @@
-d3.transition = function() {
-  return d3_root.transition();
-};
+d3.transition = d3_root.transition;
 
 // TODO namespace transitions; cancel collisions
-function d3_transition(groups) {
+function d3_transition(groups, name) {
   var transition = {},
       tweens = {},
       event = d3.dispatch("start", "end"),
@@ -134,14 +132,14 @@ function d3_transition(groups) {
   };
 
   transition.select = function(query) {
-    var k, t = d3_transition(groups.select(query)).ease(ease);
+    var k, t = d3_transition(groups.select(query), name).ease(ease);
     k = -1; t.delay(function(d, i) { return delay[++k]; });
     k = -1; t.duration(function(d, i) { return duration[++k]; });
     return t;
   };
 
   transition.selectAll = function(query) {
-    var k, t = d3_transition(groups.selectAll(query)).ease(ease);
+    var k, t = d3_transition(groups.selectAll(query), name).ease(ease);
     k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
     k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
     return t;

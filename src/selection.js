@@ -362,8 +362,8 @@ function d3_selection(groups) {
 
   // TODO filter, slice?
 
-  groups.transition = function() {
-    return d3_transition(groups);
+  groups.transition = function(name) {
+    return d3_transition(groups, name);
   };
 
   return groups;
