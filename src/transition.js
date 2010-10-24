@@ -3,13 +3,9 @@ d3.transition = function() {
 };
 
 // TODO namespace transitions; cancel collisions
-// TODO easing
 function d3_transition(groups) {
   var transition = {},
       tweens = {},
-      timeout = setTimeout(start, 1),
-      interval,
-      then = Date.now(),
       event = d3.dispatch("start", "end"),
       stage = [],
       delay = [],
@@ -17,13 +13,8 @@ function d3_transition(groups) {
       durationMax,
       ease = d3.ease("cubic-in-out");
 
-  function start() {
-    interval = setInterval(step, 24);
-  }
-
-  function step() {
-    var elapsed = Date.now() - then,
-        clear = true,
+  function step(elapsed) {
+    var clear = true,
         k = -1;
     groups.each(function(d, i) {
       if (stage[++k] == 2) return; // ended
@@ -45,7 +36,7 @@ function d3_transition(groups) {
         event.end.dispatch.apply(this, arguments);
       }
     });
-    if (clear) clearInterval(interval);
+    return clear;
   }
 
   transition.delay = function(value) {
@@ -62,8 +53,7 @@ function d3_transition(groups) {
         delay[++k] = delayMin;
       });
     }
-    clearTimeout(timeout);
-    timeout = setTimeout(start, delayMin);
+    d3_timer(step, delayMin);
     return transition;
   };
 

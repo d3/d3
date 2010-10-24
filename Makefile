@@ -29,6 +29,7 @@ SRC_FILES = \
 	src/selectAll.js \
 	src/selection.js \
 	src/transition.js \
+	src/timer.js \
 	src/tween.js \
 	src/end.js
 
