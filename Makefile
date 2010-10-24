@@ -24,6 +24,7 @@ SRC_FILES = \
 	src/pow.js \
 	src/sqrt.js \
 	src/ordinal.js \
+	src/category.js \
 	src/root.js \
 	src/select.js \
 	src/selectAll.js \

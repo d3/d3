@@ -16,15 +16,9 @@ body {
 var w = 400,
     h = 400,
     r = Math.min(w, h) / 2,
-    n = 20,
-    data = normalize(d3.range(n).map(Math.random));
-
-var colors = [
-  "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
-  "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
-  "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
-  "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"
-];
+    n = 10,
+    data = normalize(d3.range(n).map(Math.random)),
+    color = d3.category20();
 
 var vis = d3.select("body")
   .append("svg:svg")
@@ -38,7 +32,7 @@ var arcs = vis.selectAll("g.arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 
 arcs.append("svg:path")
-    .attr("fill", index(colors))
+    .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
 
 window.addEventListener("keypress", update, false);
@@ -139,12 +133,6 @@ function arc(d) {
       + "A" + r0 + "," + r0 + " 0 "
       + ((da < Math.PI) ? "0" : "1") + ",0 "
       + r0 * c0 + "," + r0 * s0 + "Z";
-}
-
-function index(colors) {
-  return function(d, i) {
-    return colors[i % colors.length];
-  };
 }
 
     </script>
