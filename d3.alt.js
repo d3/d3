@@ -51,12 +51,10 @@
         n = groups.length,
         group;
 
-    // Initialize the data, if needed.
-    while (++i < n) if (!(group = groups[i]).data) group.data = [];
-
     function select(select) {
       var subgroups = [],
           subgroup,
+          subnode,
           group,
           node;
       for (var j = 0, m = groups.length; j < m; j++) {
@@ -64,9 +62,11 @@
         subgroups.push(subgroup = []);
         subgroup.parentNode = group.parentNode;
         subgroup.parentData = group.parentData;
-        subgroup.data = group.data;
         for (var i = 0, n = group.length; i < n; i++) {
-          if (node = group[i]) subgroup.push(select(node));
+          if (node = group[i]) {
+            subgroup.push(subnode = select(node));
+            if (subnode) subnode.__data__ = node.__data__;
+          }
         }
       }
       return d3_selection(subgroups);
@@ -83,8 +83,7 @@
           if (node = group[i]) {
             subgroups.push(subgroup = selectAll(node));
             subgroup.parentNode = node;
-            subgroup.parentData = group.data[i];
-            subgroup.data = [];
+            subgroup.parentData = node.__data__;
           }
         }
       }
@@ -105,8 +104,8 @@
       });
     };
 
-    // TODO key
-    groups.data = function(data) {
+    // TODO data(null) for clearing data?
+    groups.data = function(data, join) {
       var i = -1,
           n = groups.length,
           group,
@@ -114,35 +113,69 @@
           update = [],
           exit = [];
 
-      function bind(group) {
+      if (typeof join == "string") join = d3_join(join);
+
+      function bind(group, groupData) {
         var i = 0,
             n = group.length,
-            m = group.data.length,
+            m = groupData.length,
             n0 = Math.min(n, m),
             n1 = Math.max(n, m),
             updateNodes = [],
             enterNodes = [],
             exitNodes = [],
-            node;
+            node,
+            nodeData;
 
         function append(e) {
           return group.parentNode.appendChild(e);
         }
 
-        for (; i < n0; i++) {
-          node = updateNodes[i] = group[i];
-          enterNodes[i] = exitNodes[i] = null;
-        }
-        for (; i < m; i++) {
-          enterNodes[i] = {appendChild: append};
-          updateNodes[i] = exitNodes[i] = null;
-        }
-        for (; i < n1; i++) {
-          exitNodes[i] = group[i];
-          enterNodes[i] = updateNodes[i] = null;
+        if (join) {
+          var nodeByKey = {},
+              exitData = [],
+              keys = [],
+              key;
+
+          for (i = 0; i < n; i++) {
+            nodeByKey[key = join.node(node = group[i])] = node;
+            keys.push(key);
+          }
+
+          for (i = 0; i < m; i++) {
+            node = nodeByKey[key = join.data(nodeData = groupData[i])];
+            if (node) {
+              node.__data__ = nodeData;
+              updateNodes[i] = node;
+              enterNodes[i] = exitNodes[i] = null;
+            } else {
+              enterNodes[i] = {appendChild: append, __data__: nodeData};
+              updateNodes[i] = exitNodes[i] = null;
+            }
+            delete nodeByKey[key];
+          }
+
+          for (i = 0; i < n; i++) {
+            if (keys[i] in nodeByKey) {
+              exitNodes[i] = group[i];
+            }
+          }
+        } else {
+          for (; i < n0; i++) {
+            node = updateNodes[i] = group[i];
+            node.__data__ = groupData[i];
+            enterNodes[i] = exitNodes[i] = null;
+          }
+          for (; i < m; i++) {
+            enterNodes[i] = {appendChild: append, __data__: groupData[i]};
+            updateNodes[i] = exitNodes[i] = null;
+          }
+          for (; i < n1; i++) {
+            exitNodes[i] = group[i];
+            enterNodes[i] = updateNodes[i] = null;
+          }
         }
 
-        updateNodes.data = enterNodes.data = exitNodes.data = group.data;
         enter.push(enterNodes);
         update.push(updateNodes);
         exit.push(exitNodes);
@@ -150,15 +183,11 @@
 
       if (typeof data == "function") {
         while (++i < n) {
-          group = groups[i];
-          group.data = data.call(group.parentNode, group.parentData, i);
-          bind(group);
+          bind(group = groups[i], data.call(group.parentNode, group.parentData, i));
         }
       } else {
         while (++i < n) {
-          group = groups[i];
-          group.data = data;
-          bind(group);
+          bind(group = groups[i], data);
         }
       }
 
@@ -179,7 +208,7 @@
         var group = groups[j];
         for (var i = 0, n = group.length; i < n; i++) {
           var node = group[i];
-          if (node) callback.call(node, group.data[i], i);
+          if (node) callback.call(node, node.__data__, i);
         }
       }
       return groups;
@@ -441,6 +470,33 @@
       return transition;
     };
 
+    transition.style = function(name, value, priority) {
+      var key = "style." + name + ".",
+          k = -1;
+
+      function styleConstant(d, i) {
+        tweens[key + ++k] = styleTween(
+            window.getComputedStyle(this, null).getPropertyValue(name),
+            value);
+      }
+
+      function styleFunction(d, i) {
+        tweens[key + ++k] = styleTween(
+            window.getComputedStyle(this, null).getPropertyValue(name),
+            value.apply(this, arguments));
+      }
+
+      function styleTween(a, b) {
+        var interpolate = d3_interpolate(a, b);
+        return function(t) {
+          this.style.setProperty(name, interpolate(t), priority);
+        };
+      }
+
+      groups.each(typeof value == "function" ? styleFunction : styleConstant);
+      return transition;
+    };
+
     // TODO inherit easing
     transition.select = function(query) {
       var k, t = d3_transition(groups.select(query));
@@ -463,6 +519,17 @@
   function d3_interpolate(a, b) {
     return function(t) {
       return a * (1 - t) + b * t;
+    };
+  }
+
+  function d3_join(key) {
+    return {
+      node: function(node) {
+        return node.getAttribute(key);
+      },
+      data: function(data) {
+        return data[key];
+      }
     };
   }
 

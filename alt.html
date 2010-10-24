@@ -26,7 +26,21 @@ span.enter("td")
 span.remove() // removes spans and selects parent td
     .text(function(d, i) { return Math.random(); })
   .transition()
-    .attr("height", 200);
+    .attr("height", 100);
+
+var links = d3.select("body")
+  .selectAll("a:link")
+    .data([{href:3}, {href:2}], "href")
+    .text(function(d) { return d.href; });
+
+links.enter("a")
+    .attr("href", function(d) { return d.href; })
+    .text(function(d) { return d.href; });
+
+links.exit()
+  .transition()
+    .duration(3000)
+    .style("opacity", 0);
 
     </script>
   </body>
