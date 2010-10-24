@@ -30,7 +30,7 @@ rect {
   <body>
     <script type="text/javascript">
 
-var data = range(100).map(function(i) {
+var data = d3.range(100).map(function(i) {
   return {x: i / 99, y: Math.random()};
 });
 
@@ -46,8 +46,8 @@ var vis = d3.select("body")
     .attr("transform", "translate(" + p + "," + p + ")");
 
 var rules = vis.selectAll("g.rule")
-    .data(range(11))
-  .enter.append("svg:g")
+    .data(d3.range(11))
+  .enter("svg:g")
     .attr("class", "rule");
 
 rules.append("svg:line")
@@ -82,25 +82,17 @@ vis.append("svg:rect")
 
 var dots = vis.selectAll("circle.dot")
     .data(data)
-  .enter.append("svg:circle")
+  .enter("svg:circle")
     .attr("class", "dot")
     .attr("cx", function(d) { return d.x * w; })
     .attr("cy", function(d) { return d.y * h; })
     .attr("r", 27)
     .attr("stroke-opacity", 1e-6)
   .transition()
-    .delay(function() { return this.index * 3; })
+    .delay(function(d, i) { return 1000 + i * 3; })
     .duration(750)
-    .attr("stroke-opacity", d3.tween(1))
-    .attr("r", d3.tween(4.5));
-
-vis.apply();
-
-function range(n) {
-  var array = [];
-  for (var i = 0; i < n; i++) array.push(i);
-  return array;
-}
+    .attr("stroke-opacity", 1)
+    .attr("r", 4.5);
 
     </script>
   </body>

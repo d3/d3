@@ -8,7 +8,13 @@ if (!Object.create) Object.create = function(o) {
 };
 (function(_) {
   var d3 = _.d3 = {};
-  d3.version = "0.0.0"; // semver
+  d3.version = "0.1.0"; // semver
+function d3_array(psuedoarray) {
+  return Array.prototype.slice.call(psuedoarray);
+}
+function d3_blend(arrays) {
+  return Array.prototype.concat.apply([], arrays);
+}
 /**
  * @param {number} start
  * @param {number=} stop
@@ -25,7 +31,7 @@ d3.range = function(start, stop, step) {
   else while ((j = start + step * ++i) < stop) range.push(j);
   return range;
 };
-var ns = {
+d3.ns = {
 
   prefix: {
     svg: "http://www.w3.org/2000/svg",
@@ -35,56 +41,59 @@ var ns = {
     xmlns: "http://www.w3.org/2000/xmlns/"
   },
 
-  resolve: function(prefix) {
-    return ns.prefix[prefix] || null;
-  },
-
   qualify: function(name) {
     var i = name.indexOf(":");
     return i < 0 ? name : {
-      space: ns.prefix[name.substring(0, i)],
+      space: d3.ns.prefix[name.substring(0, i)],
       local: name.substring(i + 1)
     };
   }
 
 };
-d3.dispatch = function(that) {
-  var types = {};
+function d3_dispatcher(type) {
+  var dispatcher = {},
+      listeners = [];
 
-  that.on = function(type, handler) {
-    var listeners = types[type] || (types[type] = []);
+  dispatcher.add = function(listener) {
     for (var i = 0; i < listeners.length; i++) {
-      if (listeners[i].handler == handler) return that; // already registered
+      if (listeners[i].listener == listener) return dispatcher; // already registered
     }
-    listeners.push({handler: handler, on: true});
-    return that;
+    listeners.push({listener: listener, on: true});
+    return dispatcher;
   };
 
-  that.off = function(type, handler) {
-    var listeners = types[type];
-    if (listeners) for (var i = 0; i < listeners.length; i++) {
+  dispatcher.remove = function(listener) {
+    for (var i = 0; i < listeners.length; i++) {
       var l = listeners[i];
-      if (l.handler == handler) {
+      if (l.listener == listener) {
         l.on = false;
-        listeners.splice(i, 1);
+        listeners = listeners.slice(0, i).concat(listeners.slice(i + 1));
         break;
       }
     }
-    return that;
+    return dispatcher;
   };
 
-  that.dispatch = function(event) {
-    var listeners = types[event.type];
-    if (!listeners) return;
-    listeners = listeners.slice(); // defensive copy
-    for (var i = 0; i < listeners.length; i++) {
-      var l = listeners[i];
-      if (l.on) l.handler.call(that, event);
+  dispatcher.dispatch = function() {
+    var ls = listeners; // defensive reference
+    for (var i = 0, n = ls.length; i < n; i++) {
+      var l = ls[i];
+      if (l.on) l.listener.apply(this, arguments);
     }
   };
 
-  return that;
+  return dispatcher;
 };
+/** @param {...string} types */
+function d3_dispatchers(types) {
+  var dispatchers = {},
+      type;
+  for (var i = 0, n = arguments.length; i < n; i++) {
+    type = arguments[i];
+    dispatchers[type] = d3_dispatcher(type);
+  }
+  return dispatchers;
+}
 /*
  * TERMS OF USE - EASING EQUATIONS
  *
@@ -362,30 +371,16 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
-d3.tween = function(v) {
+function d3_join(key) {
   return {
-    bind: typeof v == "function" ? function() {
-        var a = this.value,
-            n = this.name,
-            b = v.apply(this, arguments),
-            i = (n in d3_interpolate_rgb || /\bcolor\b/.test(n)
-                 ? d3.interpolateRgb
-                 : d3.interpolate)(a, b);
-        return function() {
-          return i(d3.time);
-        };
-      } : function() {
-        var a = this.value,
-            n = this.name,
-            i = (n in d3_interpolate_rgb || /\bcolor\b/.test(n)
-                 ? d3.interpolateRgb
-                 : d3.interpolate)(a, v);
-        return function() {
-          return i(d3.time);
-        };
-      }
+    node: function(node) {
+      return node.getAttribute(key);
+    },
+    data: function(data) {
+      return data[key];
+    }
   };
-};
+}
 function d3_rgb(format) {
   var r, // red channel; int in [0, 255]
       g, // green channel; int in [0, 255]
@@ -823,849 +818,505 @@ d3.ordinal = function() {
 
   return scale;
 };
-var d3_transform_stack = [];
+var d3_root = d3_selection([[document]]);
+d3.select = function(query) {
+  return typeof query == "string"
+      ? d3_root.select(query)
+      : d3_selection([[query]]); // assume node
+};
+d3.selectAll = function(query) {
+  return typeof query == "string"
+      ? d3_root.selectAll(query)
+      : d3_selection([d3_array(query)]); // assume node[]
+};
+function d3_selection(groups) {
+  var i = -1,
+      n = groups.length,
+      group;
 
-function d3_transform() {
-  var transform = {},
-      actions = [];
-
-  // TODO reorder elements
-  // convenience method for replacing elements?
-  // how to insert new element at a given location?
-  // how to move elements around, sort, reverse or reorder?
-
-  // TODO value transforms
-  // how to inspect current attr/style/text value from transform?
-  // perhaps push/pop values for temporary change (e.g., :hover)?
-  // this.value retrieves current attr / style / text? or this.value()?
-
-  // TODO extensibility
-  // register hooks for transform extensibility outside the library?
-  // how to encapsulate higher level logic (e.g., bars, wedges, charts)?
-  // virtual nodes? map to canvas?
-
-  // TODO composition
-  // transform.apply(nodes) to transform specific nodes? (set root context)
-  // transform.transform(transform) to chain transforms?
-
-  // TODO selectors
-  // allow select / selectAll argument to be function
-  // allow select / selectAll argument to be node / nodes
-  // allow select / selectAll argument to be xpath
-  // allow selectParent?
-  // allow selectFirstChild, selectLastChild, selectChildren?
-  // allow selectNext, selectPrevious?
-
-  // TODO performance
-  // dispatch to different impl based on ns.qualify, typeof v === "function", etc.
-
-  // TODO transitions
-  // how to do staggered transition on line control points? (virtual nodes?)
-
-  function transform_scope(parent, actions) {
-    var scope = Object.create(transform);
-
-    scope.pop = parent;
-
-    scope.data = function(v) {
-      var subscope, action = {
-        impl: d3_transform_data,
-        bind: d3_transform_data_bind,
-        value: v,
-        actions: [],
-        enterActions: [],
-        exitActions: []
-      };
-      actions.push(action);
-      subscope = transform_scope(scope, action.actions);
-      subscope.enter = transform_scope(scope, action.enterActions);
-      subscope.exit = transform_scope(scope, action.exitActions);
-      subscope.key = function(n, v) {
-        action.key = {name: ns.qualify(n), value: v};
-        return subscope;
-      };
-      return subscope;
-    };
-
-    scope.attr = function(n, v) {
-      actions.push({
-        impl: d3_transform_attr,
-        bind: d3_transform_attr_bind,
-        name: ns.qualify(n),
-        value: v
-      });
-      return scope;
-    };
-
-    scope.style = function(n, v, p) {
-      actions.push({
-        impl: d3_transform_style,
-        bind: d3_transform_style_bind,
-        name: n,
-        value: v,
-        priority: arguments.length < 3 ? null : p
-      });
-      return scope;
-    };
-
-    scope.append = function(n, v) {
-      var action = {
-        impl: d3_transform_append,
-        name: ns.qualify(n),
-        value: v,
-        actions: []
-      };
-      actions.push(action);
-      return transform_scope(scope, action.actions);
-    };
-
-    scope.remove = function(s) {
-      actions.push({
-        impl: d3_transform_remove,
-        selector: s
-      });
-      return scope;
-    };
-
-    scope.text = function(v) {
-      actions.push({
-        impl: d3_transform_text,
-        // TODO d3_transform_text_bind
-        value: v
-      });
-      return scope;
-    };
-
-    scope.on = function(t) {
-      var action = {
-        impl: d3_transform_on,
-        type: t,
-        actions: []
-      };
-      actions.push(action);
-      return transform_scope(scope, action.actions);
-    };
-
-    scope.bind = function(t, f) {
-      actions.push({
-        impl: d3_transform_bind,
-        type: t,
-        listener: f
-      });
-      return scope;
-    };
-
-    scope.filter = function(f) {
-      var action = {
-        impl: d3_transform_filter,
-        bind: d3_transform_filter, // TODO is this right?
-        filter: f,
-        actions: []
-      };
-      actions.push(action);
-      return transform_scope(scope, action.actions);
-    };
-
-    scope.select = function(s) {
-      var action = {
-        impl: d3_transform_select,
-        bind: d3_transform_select_bind,
-        selector: s,
-        actions: []
-      };
-      actions.push(action);
-      return transform_scope(scope, action.actions);
-    };
-
-    scope.selectAll = function(s) {
-      var action = {
-        impl: d3_transform_selectAll,
-        bind: d3_transform_selectAll_bind,
-        selector: s,
-        actions: []
-      };
-      actions.push(action);
-      return transform_scope(scope, action.actions);
-    };
-
-    scope.transition = function() {
-      var subscope, action = {
-        impl: d3_transform_transition,
-        actions: [],
-        endActions: [],
-        ease: d3.ease("cubic-in-out"),
-        delay: 0,
-        duration: 250
-      };
-      actions.push(action);
-      subscope = transform_scope(scope, action.actions);
-      subscope.end = transform_scope(scope, action.endActions);
-      subscope.ease = function(x) {
-        action.ease = typeof x == "string" ? d3.ease(x) : x;
-        return subscope;
-      };
-      subscope.delay = function(x) {
-        action.delay = x;
-        return subscope;
-      };
-      subscope.duration = function(x) {
-        action.duration = x;
-        return subscope;
-      };
-      return subscope;
-    };
-
-    return scope;
-  }
-
-  transform.select = function(s) {
-    var action = {
-      impl: d3_transform_select,
-      selector: s,
-      actions: []
-    };
-    actions.push(action);
-    return transform_scope(transform, action.actions);
-  };
-
-  transform.selectAll = function(s) {
-    var action = {
-      impl: d3_transform_selectAll,
-      selector: s,
-      actions: []
-    };
-    actions.push(action);
-    return transform_scope(transform, action.actions);
-  };
-
-  transform.apply = function() {
-    d3_transform_stack.unshift(null);
-    d3_transform_impl(actions, [{node: document, index: 0}]);
-    d3_transform_stack.shift();
-    return transform;
-  };
-
-  return transform;
-}
-
-function d3_transform_impl(actions, nodes) {
-  var n = actions.length,
-      i; // current index
-  for (i = 0; i < n; ++i) actions[i].impl(nodes, d3_transform_impl);
-}
-function d3_transform_append(nodes, pass) {
-  var m = nodes.length,
-      n = this.name,
-      childNodes = [],
-      i, // current index
-      o, // current node
-      c; // current child
-  if (n.local) {
-    for (i = 0; i < m; ++i) {
-      childNodes.push(c = Object.create(o = nodes[i]));
-      c.node = (c.parent = o).node.appendChild(document.createElementNS(n.space, n.local));
-    }
-  } else {
-    for (i = 0; i < m; ++i) {
-      childNodes.push(c = Object.create(o = nodes[i]));
-      c.node = (c.parent = o).node.appendChild(document.createElement(n));
-    }
-  }
-  pass(this.actions, childNodes);
-}
-function d3_transform_attr(nodes) {
-  var m = nodes.length,
-      n = this.name,
-      v = this.value,
-      i, // current index
-      o, // current node
-      x; // current value (for value functions)
-  if (n.local) {
-    if (v == null) {
-      for (i = 0; i < m; ++i) {
-        nodes[i].node.removeAttributeNS(n.space, n.local);
-      }
-    } else if (typeof v == "function") {
-      for (i = 0; i < m; ++i) {
-        d3_transform_stack[0] = (o = nodes[i]).data;
-        x = v.apply(o, d3_transform_stack);
-        x == null
-            ? o.node.removeAttributeNS(n.space, n.local)
-            : o.node.setAttributeNS(n.space, n.local, x);
-      }
-    } else {
-      for (i = 0; i < m; ++i) {
-        nodes[i].node.setAttributeNS(n.space, n.local, v);
-      }
-    }
-  } else if (v == null) {
-    for (i = 0; i < m; ++i) {
-      nodes[i].node.removeAttribute(n);
-    }
-  } else if (typeof v == "function") {
-    for (i = 0; i < m; ++i) {
-      d3_transform_stack[0] = (o = nodes[i]).data;
-      x = v.apply(o, d3_transform_stack);
-      x == null
-          ? o.node.removeAttribute(n)
-          : o.node.setAttribute(n, x);
-    }
-  } else {
-    for (i = 0; i < m; ++i) {
-      nodes[i].node.setAttribute(n, v);
-    }
-  }
-}
-
-function d3_transform_attr_bind(nodes) {
-  var m = nodes.length,
-      n = this.name,
-      v = this.bound || (this.bound = this.value),
-      b = "attr." + (n.local ? n.space + ":" + n.local : n),
-      i, // current index
-      o, // current node
-      x; // current value (for value functions)
-  if (v && v.bind) {
-    if (n.local) {
-      for (i = 0; i < m; ++i) {
-        (o = nodes[i]).value = o.node.getAttributeNS(n.space, n.local);
-        o.name = n.space + ":" + n.local;
-        d3_transform_stack[0] = o.data;
-        o[b] = v.bind.apply(o, d3_transform_stack);
-        delete o.value;
-        delete o.name;
-      }
-    } else {
-      for (i = 0; i < m; ++i) {
-        (o = nodes[i]).value = o.node.getAttribute(n);
-        o.name = n;
-        d3_transform_stack[0] = o.data;
-        o[b] = v.bind.apply(o, d3_transform_stack);
-        delete o.value;
-        delete o.name;
-      }
-    }
-    this.value = function() {
-      return this[b].apply(this, arguments);
-    };
-  }
-}
-function d3_transform_bind(nodes) {
-  var m = nodes.length,
-      t = "on" + this.type,
-      l = this.listener,
-      i = 0, // current node index
-      o, // curent node
-      stack = d3_transform_stack.slice(); // stack snapshot
-
-  // TODO this overwrites any actions registered with .on!
-  // TODO using namespaced event handlers could fix this ^ issue.
-  if (l) {
-    for (; i < m; ++i) {
-      o = nodes[i];
-      o.node[t] = bind(o, o.data);
-    }
-  } else {
-    for (; i < m; ++i) {
-      nodes[i].node[t] = null; // clear any previously-registered actions
-    }
-  }
-
-  function bind(o, d) {
-    return function(e) {
-      var s = d3_transform_stack;
-      try {
-        d3.event = e;
-        stack[0] = d;
-        l.apply(o, d3_transform_stack = stack);
-      } finally {
-        delete d3.event;
-        d3_transform_stack = s;
-      }
-    };
-  }
-}
-function d3_transform_data(nodes, pass) {
-  var data = this.value,
-      m = nodes.length,
-      n, // data length
-      key = this.key,
-      kn, // key name
-      kv, // key value
-      k, // current key
-      i, // current index
-      j, // current index
-      d, // current datum
-      o, // current node
-      enterNodes = [],
-      updateNodes = [],
-      exitNodes = [],
-      nodesByKey, // map key -> node
-      dataByKey, // map key -> data
-      indexesByKey; // map key -> index
-
-  if (typeof data == "function") {
-    d = d3_transform_stack.shift();
-    data = data.apply(null, d3_transform_stack);
-    d3_transform_stack.unshift(d);
-  }
-
-  n = data.length;
-
-  if (key) {
-    kn = key.name;
-    kv = key.value;
-    nodesByKey = {};
-    dataByKey = {};
-    indexesByKey = {};
-
-    // compute map from key -> node
-    if (kn.local) {
-      for (i = 0; i < m; ++i) {
-        o = nodes[i].node;
-        if (o) {
-          k = o.getAttributeNS(kn.space, kn.local);
-          if (k != null) nodesByKey[k] = o;
-        }
-      }
-    } else {
-      for (i = 0; i < m; ++i) {
-        o = nodes[i].node;
-        if (o) {
-          k = o.getAttribute(kn);
-          if (k != null) nodesByKey[k] = o;
+  function select(select) {
+    var subgroups = [],
+        subgroup,
+        subnode,
+        group,
+        node;
+    for (var j = 0, m = groups.length; j < m; j++) {
+      group = groups[j];
+      subgroups.push(subgroup = []);
+      subgroup.parentNode = group.parentNode;
+      subgroup.parentData = group.parentData;
+      for (var i = 0, n = group.length; i < n; i++) {
+        if (node = group[i]) {
+          subgroup.push(subnode = select(node));
+          if (subnode) subnode.__data__ = node.__data__;
         }
       }
     }
+    return d3_selection(subgroups);
+  }
 
-    // compute map from key -> data
-    for (i = 0; i < n; ++i) {
-      d3_transform_stack[0] = d = data[i];
-      k = kv.apply(null, d3_transform_stack);
-      if (k != null) {
-        dataByKey[k] = d;
-        indexesByKey[k] = i;
+  function selectAll(selectAll) {
+    var subgroups = [],
+        subgroup,
+        group,
+        node;
+    for (var j = 0, m = groups.length; j < m; j++) {
+      group = groups[j];
+      for (var i = 0, n = group.length; i < n; i++) {
+        if (node = group[i]) {
+          subgroups.push(subgroup = selectAll(node));
+          subgroup.parentNode = node;
+          subgroup.parentData = node.__data__;
+        }
       }
     }
-
-    // compute entering and updating nodes
-    for (k in dataByKey) {
-      d = dataByKey[k];
-      i = indexesByKey[k];
-      if (o = nodesByKey[k]) {
-        updateNodes.push({
-          node: o,
-          data: d,
-          key: k,
-          index: i
-        });
-      } else {
-        enterNodes.push({
-          node: nodes.parent.node,
-          data: d,
-          key: k,
-          index: i
-        });
-      }
-    }
-
-    // compute exiting nodes
-    for (k in nodesByKey) {
-      if (!(k in dataByKey)) {
-        exitNodes.push({node: nodesByKey[k]});
-      }
-    }
-  } else {
-    k = n < m ? n : m;
-
-    // compute updating nodes
-    for (i = 0; i < k; ++i) {
-      (o = nodes[i]).data = data[i];
-      if (o.node) {
-        updateNodes.push(o);
-      } else {
-        o.node = o.parent.node;
-        enterNodes.push(o);
-      }
-    }
-
-    // compute entering nodes
-    for (j = i; j < n; ++j) {
-      enterNodes.push({
-        node: nodes.parent.node,
-        data: data[j],
-        index: j
-      });
-    }
-
-    // compute exiting nodes
-    for (j = i; j < m; ++j) {
-      exitNodes.push(nodes[j]);
-    }
+    return d3_selection(subgroups);
   }
 
-  pass(this.enterActions, enterNodes);
-  pass(this.actions, updateNodes);
-  pass(this.exitActions, exitNodes);
-}
-
-function d3_transform_data_bind(nodes, pass) {
-  var m = nodes.length,
-      n = this.name,
-      v = this.bound || (this.bound = this.value),
-      d, // bound data
-      i, // current index
-      o, // current node
-      x; // current value (for value functions)
-  if (v && v.bind) {
-    d = [];
-    for (i = 0; i < m; ++i) {
-      d3_transform_stack[0] = (o = nodes[i]).data;
-      o.value = o.data;
-      o.data_ = v.bind.apply(o, d3_transform_stack);
-      delete o.value;
-    }
-    this.value = function() {
-      d3_transform_stack.unshift(null);
-      for (i = 0; i < m; ++i) {
-        d3_transform_stack[0] = (o = nodes[i]).data;
-        d[i] = o.data_.apply(o, d3_transform_stack);
-      }
-      d3_transform_stack.shift();
-      return d;
-    };
-  } else {
-    d3_transform_data.call(this, nodes, pass);
-  }
-}
-function d3_transform_remove(nodes) {
-  var m = nodes.length,
-      s = this.selector,
-      r, // the selected nodes (for selectors)
-      i, // current node index
-      j, // current selector index
-      k, // current selector length
-      o; // current node to remove
-  if (s == null) {
-    for (i = 0; i < m; ++i) {
-      o = nodes[i].node;
-      o.parentNode.removeChild(o);
-    }
-  } else {
-    for (i = 0; i < m; ++i) {
-      r = nodes[i].node.querySelectorAll(s);
-      for (j = 0, k = r.length; j < k; j++) {
-        o = r[j];
-        o.parentNode.removeChild(o);
-      }
-    }
-  }
-}
-function d3_transform_on(nodes) {
-  var actions = this.actions,
-      n = actions.length,
-      m = nodes.length,
-      t = "on" + this.type,
-      i = 0, // current index
-      o, // curent node
-      stack = d3_transform_stack.slice(); // stack snapshot
-
-  // TODO this overwrites any actions registered with .bind!
-  // TODO using namespaced event handlers could fix this ^ issue.
-  if (n) {
-    for (; i < m; ++i) {
-      o = nodes[i];
-      o.node[t] = bind([o]);
-    }
-  } else {
-    for (; i < m; ++i) {
-      nodes[i].node[t] = null; // clear any previously-registered actions
-    }
-  }
-
-  function bind(o) {
-    return function(e) {
-      var s = d3_transform_stack;
-      try {
-        d3_transform_stack = stack;
-        d3.event = e;
-        for (i = 0; i < n; ++i) actions[i].impl(o, d3_transform_impl);
-      } finally {
-        delete d3.event;
-        d3_transform_stack = s;
-      }
-    };
-  }
-}
-function d3_transform_filter(nodes, pass) {
-  var filteredNodes = [],
-      m = nodes.length,
-      f = this.filter,
-      i, // the node index
-      o; // current item
-  for (i = 0; i < m; ++i) {
-    d3_transform_stack[0] = (o = nodes[i]).data;
-    if (f.apply(o, d3_transform_stack)) filteredNodes.push(o);
-  }
-  pass(this.actions, filteredNodes);
-}
-d3.select = function(s) {
-  return d3_transform().select(s);
-};
-
-function d3_transform_select(nodes, pass) {
-  var selectedNodes = [],
-      m = nodes.length,
-      s = this.selector,
-      i, // the node index
-      o, // current item
-      p, // current node
-      c, // current selected item
-      e; // current selected node
-  for (i = 0; i < m; ++i) {
-    e = (p = (o = nodes[i]).node).querySelector(s);
-    selectedNodes.push(c = Object.create(o));
-    c.parent = o;
-    c.node = e;
-  }
-  pass(this.actions, selectedNodes);
-}
-
-function d3_transform_select_bind(nodes, pass) {
-  var action = this;
-  d3_transform_select.call(this, nodes, function(actions, selectedNodes) {
-    pass(actions, selectedNodes);
-    action.impl = function(nodes, pass) {
-      pass(actions, selectedNodes);
-    };
-  });
-}
-d3.selectAll = function(s) {
-  return d3_transform().selectAll(s);
-};
-
-function d3_transform_selectAll(nodes, pass) {
-  var m = nodes.length,
-      s = this.selector,
-      i, // the node index
-      o; // the current node
-  d3_transform_stack.unshift(null);
-  for (i = 0; i < m; ++i) {
-    d3_transform_stack[1] = (o = nodes[i]).data;
-    if (!o.node) continue; // TODO better error handling when `select` fails.
-    pass(this.actions, d3_transform_nodes(o.node.querySelectorAll(s), o));
-  }
-  d3_transform_stack.shift();
-}
-
-function d3_transform_selectAll_bind(nodes, pass) {
-  var m = nodes.length,
-      i, // the node index
-      o; // the current node
-  d3_transform_selectAll.call(this, nodes, function(actions, nodes) {
-    pass(actions, nodes.parent.selectAll = nodes);
-  });
-  this.impl = function(nodes, pass) {
-    d3_transform_stack.unshift(null);
-    for (i = 0, m = nodes.length; i < m; ++i) {
-      d3_transform_stack[1] = (o = nodes[i]).data;
-      pass(this.actions, o.selectAll);
-    }
-    d3_transform_stack.shift();
+  // TODO select(function)?
+  groups.select = function(query) {
+    return select(function(node) {
+      return node.querySelector(query);
+    });
   };
-}
 
-function d3_transform_nodes(x, o) {
-  var nodes = [],
-      i = 0,
-      n = x.length;
-  nodes.parent = o;
-  for (; i < n; i++) nodes.push({node: x[i], index: i});
-  return nodes;
-}
-function d3_transform_style(nodes) {
-  var m = nodes.length,
-      n = this.name,
-      v = this.value,
-      p = this.priority,
-      i, // current index
-      o, // current node
-      x; // current value (for value functions)
-  if (v == null) {
-    for (i = 0; i < m; ++i) {
-      nodes[i].node.style.removeProperty(n);
-    }
-  } else if (typeof v == "function") {
-    for (i = 0; i < m; ++i) {
-      o = nodes[i];
-      d3_transform_stack[0] = o.data;
-      x = v.apply(o, d3_transform_stack);
-      x == null
-          ? o.node.style.removeProperty(n)
-          : o.node.style.setProperty(n, x, p);
-    }
-  } else {
-    for (i = 0; i < m; ++i) {
-      nodes[i].node.style.setProperty(n, v, p);
-    }
-  }
-}
+  // TODO selectAll(function)?
+  groups.selectAll = function(query) {
+    return selectAll(function(node) {
+      return d3_array(node.querySelectorAll(query));
+    });
+  };
 
-function d3_transform_style_bind(nodes) {
-  var m = nodes.length,
-      n = this.name,
-      v = this.bound || (this.bound = this.value),
-      b = "style." + n,
-      i, // current index
-      o, // current node
-      x; // current value (for value functions)
-  if (v && v.bind) {
-    for (i = 0; i < m; ++i) {
-      (o = nodes[i]).value = o.node.style.getPropertyValue(n);
-      o.name = n;
-      d3_transform_stack[0] = o.data;
-      o[b] = v.bind.apply(o, d3_transform_stack);
-      delete o.value;
-      delete o.name;
+  // TODO data(null) for clearing data?
+  groups.data = function(data, join) {
+    var i = -1,
+        n = groups.length,
+        group,
+        enter = [],
+        update = [],
+        exit = [];
+
+    if (typeof join == "string") join = d3_join(join);
+
+    function bind(group, groupData) {
+      var i = 0,
+          n = group.length,
+          m = groupData.length,
+          n0 = Math.min(n, m),
+          n1 = Math.max(n, m),
+          updateNodes = [],
+          enterNodes = [],
+          exitNodes = [],
+          node,
+          nodeData;
+
+      function append(e) {
+        return group.parentNode.appendChild(e);
+      }
+
+      if (join) {
+        var nodeByKey = {},
+            exitData = [],
+            keys = [],
+            key;
+
+        for (i = 0; i < n; i++) {
+          nodeByKey[key = join.node(node = group[i])] = node;
+          keys.push(key);
+        }
+
+        for (i = 0; i < m; i++) {
+          node = nodeByKey[key = join.data(nodeData = groupData[i])];
+          if (node) {
+            node.__data__ = nodeData;
+            updateNodes[i] = node;
+            enterNodes[i] = exitNodes[i] = null;
+          } else {
+            enterNodes[i] = {appendChild: append, __data__: nodeData};
+            updateNodes[i] = exitNodes[i] = null;
+          }
+          delete nodeByKey[key];
+        }
+
+        for (i = 0; i < n; i++) {
+          if (keys[i] in nodeByKey) {
+            exitNodes[i] = group[i];
+          }
+        }
+      } else {
+        for (; i < n0; i++) {
+          node = updateNodes[i] = group[i];
+          node.__data__ = groupData[i];
+          enterNodes[i] = exitNodes[i] = null;
+        }
+        for (; i < m; i++) {
+          enterNodes[i] = {appendChild: append, __data__: groupData[i]};
+          updateNodes[i] = exitNodes[i] = null;
+        }
+        for (; i < n1; i++) {
+          exitNodes[i] = group[i];
+          enterNodes[i] = updateNodes[i] = null;
+        }
+      }
+
+      enter.push(enterNodes);
+      update.push(updateNodes);
+      exit.push(exitNodes);
     }
-    this.value = function() {
-      return this[b].apply(this, arguments);
+
+    if (typeof data == "function") {
+      while (++i < n) {
+        bind(group = groups[i], data.call(group.parentNode, group.parentData, i));
+      }
+    } else {
+      while (++i < n) {
+        bind(group = groups[i], data);
+      }
+    }
+
+    var selection = d3_selection(update);
+    selection.enter = function(name) {
+      return d3_selection(enter).append(name);
     };
-  }
-}
-function d3_transform_text(nodes) {
-  var m = nodes.length,
-      v = this.value,
-      i, // current node index
-      o, // current node
-      x; // current value (for value functions)
-  if (typeof v == "function") {
-    for (i = 0; i < m; ++i) {
-      o = nodes[i];
-      d3_transform_stack[0] = o.data;
-      x = v.apply(o, d3_transform_stack);
-      o = o.node;
-      while (o.lastChild) o.removeChild(o.lastChild);
-      o.appendChild(document.createTextNode(x));
+    selection.exit = function() {
+      return d3_selection(exit);
+    };
+    return selection;
+  };
+
+  // TODO mask forEach? or rename for eachData?
+  // TODO offer the same semantics for map, reduce, etc.?
+  groups.each = function(callback) {
+    for (var j = 0, m = groups.length; j < m; j++) {
+      var group = groups[j];
+      for (var i = 0, n = group.length; i < n; i++) {
+        var node = group[i];
+        if (node) callback.call(node, node.__data__, i);
+      }
     }
-  } else {
-    for (i = 0; i < m; ++i) {
-      o = nodes[i].node;
-      while (o.lastChild) o.removeChild(o.lastChild);
-      o.appendChild(document.createTextNode(v));
+    return groups;
+  };
+
+  groups.attr = function(name, value) {
+    name = d3.ns.qualify(name);
+
+    function attrNull() {
+      this.removeAttribute(name);
     }
-  }
+
+    function attrNullNS() {
+      this.removeAttributeNS(name.space, name.local);
+    }
+
+    function attrConstant() {
+      this.setAttribute(name, value);
+    }
+
+    function attrConstantNS() {
+      this.setAttributeNS(name.space, name.local, value);
+    }
+
+    function attrFunction() {
+      var x = value.apply(this, arguments);
+      if (x == null) this.removeAttribute(name);
+      else this.setAttribute(name, x);
+    }
+
+    function attrFunctionNS() {
+      var x = value.apply(this, arguments);
+      if (x == null) this.removeAttributeNS(name.space, name.local);
+      else this.setAttributeNS(name.space, name.local, x);
+    }
+
+    return groups.each(value == null
+        ? (name.local ? attrNullNS : attrNull) : (typeof value == "function"
+        ? (name.local ? attrFunctionNS : attrFunction)
+        : (name.local ? attrConstantNS : attrConstant)));
+  };
+
+  groups.style = function(name, value, priority) {
+    if (arguments.length < 3) priority = null;
+
+    function styleNull() {
+      this.style.removeProperty(name);
+    }
+
+    function styleConstant() {
+      this.style.setProperty(name, value, priority);
+    }
+
+    function styleFunction() {
+      var x = value.apply(this, arguments);
+      if (x == null) this.style.removeProperty(name);
+      else this.style.setProperty(name, x, priority);
+    }
+
+    return groups.each(value == null
+        ? styleNull : (typeof value == "function"
+        ? styleFunction : styleConstant));
+  };
+
+  groups.text = function(value) {
+
+    function textNull() {
+      while (this.lastChild) this.removeChild(this.lastChild);
+    }
+
+    function textConstant() {
+      this.appendChild(document.createTextNode(value));
+    }
+
+    function textFunction() {
+      var x = value.apply(this, arguments);
+      if (x != null) this.appendChild(document.createTextNode(x));
+    }
+
+    groups.each(textNull);
+    return value == null ? groups
+        : groups.each(typeof value == "function"
+        ? textFunction : textConstant);
+  };
+
+  groups.html = function(value) {
+
+    function htmlConstant() {
+      this.innerHTML = value;
+    }
+
+    function htmlFunction() {
+      this.innerHTML = value.apply(this, arguments);
+    }
+
+    return groups.each(typeof value == "function"
+        ? htmlFunction : htmlConstant);
+  };
+
+  // TODO append(node)?
+  // TODO append(function)?
+  groups.append = function(name) {
+    name = d3.ns.qualify(name);
+
+    function append(node) {
+      return node.appendChild(document.createElement(name));
+    }
+
+    function appendNS(node) {
+      return node.appendChild(document.createElementNS(name.space, name.local));
+    }
+
+    return select(name.local ? appendNS : append);
+  };
+
+  // TODO remove(query)?
+  // TODO remove(node)?
+  // TODO remove(function)?
+  groups.remove = function() {
+    return select(function(node) {
+      var parent = node.parentNode;
+      parent.removeChild(node);
+      return parent;
+    });
+  };
+
+  // TODO event
+  // TODO on?
+
+  // TODO filter, slice?
+
+  groups.transition = function() {
+    return d3_transition(groups);
+  };
+
+  return groups;
 }
-function d3_transform_transition(nodes) {
-  var actions = this.actions,
-      endActions = this.endActions,
-      start = Date.now(),
-      delay = this.delay,
-      minDelay = Infinity,
-      duration = this.duration,
-      ease = this.ease,
+d3.transition = function() {
+  return d3_root.transition();
+};
+
+// TODO namespace transitions; cancel collisions
+// TODO easing
+function d3_transition(groups) {
+  var transition = {},
+      tweens = {},
+      timeout = setTimeout(start, 1),
       interval,
-      n = actions.length,
-      k = endActions.length,
-      m = nodes.length,
-      i, // current index
-      j, // current index
-      o, // curent node
-      x, // current value
-      stack = d3_transform_stack.slice(); // stack snapshot
+      then = Date.now(),
+      event = d3_dispatchers("start", "end"),
+      stage = [],
+      delay = [],
+      duration = [],
+      durationMax;
 
-  // If delay is a function, transition each node separately.
-  if (typeof delay == "function") {
-    for (i = 0; i < m; ++i) {
-      d3_transform_stack[0] = (o = nodes[i]).data;
-      x = o.delay = delay.apply(o, d3_transform_stack);
-      if (x < minDelay) minDelay = x;
-    }
-    setTimeout(function() {
-      bind(interval = setInterval(tickOne, 24));
-    }, minDelay);
-  } else {
-    setTimeout(function() {
-      bind(interval = setInterval(tickAll, 24));
-    }, delay);
+  function start() {
+    interval = setInterval(step, 24);
   }
 
-  // Bind the active transition to the node.
-  function bind(interval) {
-    for (i = 0; i < m; ++i) {
-      (o = nodes[i]).node.interval = interval;
-    }
-  }
-
-  // Compute the tween values.
-  try {
-    d3.time = 0;
-    d3_transform_transition_bind(actions, nodes);
-  } finally {
-    delete d3.time;
-  }
-
-  function tickOne() {
-    var s = d3_transform_stack,
-        a = nodes.filter(function(o) { return o.node.interval == interval; }),
-        m = a.length,
-        q = Date.now(),
-        t,
-        d = true;
-    try {
-      d3_transform_stack = stack;
-      for (i = 0; i < m; ++i) {
-        o = a[i];
-        t = (q - start - o.delay) / duration;
-        if (t < 0) continue;
-        if (t > 1) t = 1;
-        else d = false;
-        d3.time = ease(t);
-        for (j = 0; j < n; ++j) actions[j].impl([o], d3_transform_impl);
-        if (t == 1) {
-          for (j = 0; j < k; ++j) endActions[j].impl([o], d3_transform_impl);
-          o.delay = Infinity; // stop transitioning this node
+  function step() {
+    var elapsed = Date.now() - then,
+        clear = true,
+        k = -1;
+    groups.each(function(d, i) {
+      if (stage[++k] == 2) return; // ended
+      var t = (elapsed - delay[k]) / duration[k]; // TODO easing
+      if (t >= 1) {
+        t = 1;
+      } else {
+        clear = false;
+        if (t < 0) return;
+        if (!stage[k]) {
+          stage[k] = 1;
+          event.start.dispatch.apply(this, arguments);
         }
       }
-    } finally {
-      delete d3.time;
-      d3_transform_stack = s;
-    }
-    if (d) clearInterval(interval);
-  }
-
-  function tickAll() {
-    var s = d3_transform_stack,
-        t = (Date.now() - start - delay) / duration,
-        a = nodes.filter(function(o) { return o.node.interval == interval; });
-    try {
-      d3_transform_stack = stack;
-      d3.time = ease(t < 0 ? 0 : t > 1 ? 1 : t);
-      for (i = 0; i < n; ++i) actions[i].impl(a, d3_transform_impl);
-    } finally {
-      delete d3.time;
-      d3_transform_stack = s;
-    }
-    if (t >= 1) {
-      clearInterval(interval);
-      try {
-        d3_transform_stack = stack;
-        for (i = 0; i < k; ++i) endActions[i].impl(a, d3_transform_impl);
-      } finally {
-        d3_transform_stack = s;
+      for (var key in tweens) tweens[key].call(this, t);
+      if (t == 1) {
+        stage[k] = 2;
+        event.end.dispatch.apply(this, arguments);
       }
-    }
+    });
+    if (clear) clearInterval(interval);
   }
-}
 
-function d3_transform_transition_bind(actions, nodes) {
-  var n = actions.length,
-      m = nodes.length,
-      a, // current action
-      i; // current index
-  for (i = 0; i < n; ++i) {
-    a = actions[i];
-    if (a.bind) a.bind(nodes, d3_transform_transition_bind);
-  }
+  transition.delay = function(value) {
+    var delayMin = Infinity,
+        k = -1;
+    if (typeof value == "function") {
+      groups.each(function(d, i) {
+        var x = delay[++k] = +value.apply(this, arguments);
+        if (x < delayMin) delayMin = x;
+      });
+    } else {
+      delayMin = +value;
+      groups.each(function(d, i) {
+        delay[++k] = delayMin;
+      });
+    }
+    clearTimeout(timeout);
+    timeout = setTimeout(start, delayMin);
+    return transition;
+  };
+
+  transition.duration = function(value) {
+    var k = -1;
+    if (typeof value == "function") {
+      durationMax = 0;
+      groups.each(function(d, i) {
+        var x = duration[++k] = +value.apply(this, arguments);
+        if (x > durationMax) durationMax = x;
+      });
+    } else {
+      durationMax = +value;
+      groups.each(function(d, i) {
+        duration[++k] = durationMax;
+      });
+    }
+    return transition;
+  };
+
+  // TODO register custom easing functions?
+  // transition.easing = function(value) {
+  //   easing = value;
+  //   return transition;
+  // };
+
+  transition.attr = function(name, value) {
+    var key = "attr." + name + ".",
+        k = -1;
+
+    function attrConstant(d, i) {
+      tweens[key + ++k] = attrTween(
+          this.getAttribute(name),
+          value);
+    }
+
+    function attrConstantNS(d, i) {
+      tweens[key + ++k] = attrTweenNS(
+          this.getAttributeNS(name.space, name.local),
+          value);
+    }
+
+    function attrFunction(d, i) {
+      tweens[key + ++k] = attrTween(
+          this.getAttribute(name),
+          value.apply(this, arguments));
+    }
+
+    function attrFunctionNS(d, i) {
+      tweens[key + ++k] = attrTweenNS(
+          this.getAttributeNS(name.space, name.local),
+          value.apply(this, arguments));
+    }
+
+    function attrTween(a, b) {
+      var interpolate = d3.interpolate(a, b);
+      return function(t) {
+        this.setAttribute(name, interpolate(t));
+      };
+    }
+
+    function attrTweenNS(a, b) {
+      var interpolate = d3.interpolate(a, b);
+      return function(t) {
+        this.setAttributeNS(name.space, name.local, interpolate(t));
+      };
+    }
+
+    name = d3.ns.qualify(name);
+    groups.each(typeof value == "function"
+        ? (name.local ? attrFunctionNS : attrFunction)
+        : (name.local ? attrConstantNS : attrConstant));
+
+    return transition;
+  };
+
+  transition.style = function(name, value, priority) {
+    var key = "style." + name + ".",
+        k = -1;
+
+    function styleConstant(d, i) {
+      tweens[key + ++k] = styleTween(
+          window.getComputedStyle(this, null).getPropertyValue(name),
+          value);
+    }
+
+    function styleFunction(d, i) {
+      tweens[key + ++k] = styleTween(
+          window.getComputedStyle(this, null).getPropertyValue(name),
+          value.apply(this, arguments));
+    }
+
+    function styleTween(a, b) {
+      var interpolate = d3.interpolate(a, b);
+      return function(t) {
+        this.style.setProperty(name, interpolate(t), priority);
+      };
+    }
+
+    groups.each(typeof value == "function" ? styleFunction : styleConstant);
+    return transition;
+  };
+
+  // TODO inherit easing
+  transition.select = function(query) {
+    var k, t = d3_transition(groups.select(query));
+    k = -1; t.delay(function(d, i) { return delay[++k]; });
+    k = -1; t.duration(function(d, i) { return duration[++k]; });
+    return t;
+  };
+
+  // TODO inherit easing
+  transition.selectAll = function(query) {
+    var k, t = d3_transition(groups.selectAll(query));
+    k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
+    k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
+    return t;
+  };
+
+  transition.on = function(type, listener) {
+    event[type].add(listener);
+    return transition;
+  };
+
+  return transition.delay(0).duration(250);
 }
 })(this);

@@ -8,12 +8,15 @@ SRC_FILES = \
 	src/date.js \
 	src/object.js \
 	src/start.js \
+	src/array.js \
+	src/blend.js \
 	src/range.js \
 	src/ns.js \
-	src/dispatch.js \
+	src/dispatcher.js \
+	src/dispatchers.js \
 	src/ease.js \
 	src/interpolate.js \
-	src/tween.js \
+	src/join.js \
 	src/rgb.js \
 	src/hsl.js \
 	src/linear.js \
@@ -21,19 +24,11 @@ SRC_FILES = \
 	src/pow.js \
 	src/sqrt.js \
 	src/ordinal.js \
-	src/transform.js \
-	src/transform_append.js \
-	src/transform_attr.js \
-	src/transform_bind.js \
-	src/transform_data.js \
-	src/transform_remove.js \
-	src/transform_on.js \
-	src/transform_filter.js \
-	src/transform_select.js \
-	src/transform_selectAll.js \
-	src/transform_style.js \
-	src/transform_text.js \
-	src/transform_transition.js \
+	src/root.js \
+	src/select.js \
+	src/selectAll.js \
+	src/selection.js \
+	src/transition.js \
 	src/end.js
 
 all: d3.js d3.min.js

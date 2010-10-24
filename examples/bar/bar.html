@@ -33,9 +33,9 @@ var vis = d3.select("body")
 
 var bars = vis.selectAll("g.bar")
     .data(data)
-  .enter.append("svg:g")
+  .enter("svg:g")
     .attr("class", "bar")
-    .attr("transform", function(d) { return "translate(0," + y(this.index) + ")"; });
+    .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
 
 bars.append("svg:rect")
     .attr("fill", "steelblue")
@@ -57,11 +57,11 @@ bars.append("svg:text")
     .attr("dx", -6)
     .attr("dy", ".35em")
     .attr("text-anchor", "end")
-    .text(function(d) { return String.fromCharCode(65 + this.index); });
+    .text(function(d, i) { return String.fromCharCode(65 + i); });
 
 var rules = vis.selectAll("g.rule")
     .data(x.ticks(10))
-  .enter.append("svg:g")
+  .enter("svg:g")
     .attr("class", "rule")
     .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 
@@ -86,8 +86,6 @@ vis.append("svg:line")
     .attr("y1", 0)
     .attr("y2", h)
     .attr("stroke", "black");
-
-vis.apply();
 
     </script>
   </body>

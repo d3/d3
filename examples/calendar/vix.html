@@ -47,7 +47,7 @@ var w = 960,
 var vis = d3.select("body")
   .selectAll("svg")
     .data(range(1993, 2011))
-  .enter.append("svg:svg")
+  .enter("svg:svg")
     .attr("width", w)
     .attr("height", h)
     .attr("class", "RdYlGn")
@@ -60,7 +60,7 @@ vis.append("svg:text")
 
 vis.selectAll("rect.day")
     .data(dates)
-  .enter.append("svg:rect")
+  .enter("svg:rect")
     .attr("x", function(d) { return d.week * z; })
     .attr("y", function(d) { return d.day * z; })
     .attr("class", function(d) { return "day q" + (8-color(data[d.Date])) + "-9"; })
@@ -71,7 +71,7 @@ vis.selectAll("rect.day")
 
 vis.selectAll("path.month")
     .data(months)
-  .enter.append("svg:path")
+  .enter("svg:path")
     .attr("class", "month")
     .attr("d", function(d) {
       return "M" + (d.firstWeek + 1) * z + "," + d.firstDay * z
@@ -84,8 +84,6 @@ vis.selectAll("path.month")
           + "H" + (d.firstWeek + 1) * z
           + "Z";
     });
-
-vis.apply();
 
 function range(start, end, step) {
   if (arguments.length < 3) {

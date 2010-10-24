@@ -1,4 +1,4 @@
-var ns = {
+d3.ns = {
 
   prefix: {
     svg: "http://www.w3.org/2000/svg",
@@ -8,14 +8,10 @@ var ns = {
     xmlns: "http://www.w3.org/2000/xmlns/"
   },
 
-  resolve: function(prefix) {
-    return ns.prefix[prefix] || null;
-  },
-
   qualify: function(name) {
     var i = name.indexOf(":");
     return i < 0 ? name : {
-      space: ns.prefix[name.substring(0, i)],
+      space: d3.ns.prefix[name.substring(0, i)],
       local: name.substring(i + 1)
     };
   }
