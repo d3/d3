@@ -48,13 +48,14 @@ var w = 450,
 
 var vis = d3.select("body")
   .append("svg:svg")
+    .data([data])
     .attr("width", w + p * 2)
     .attr("height", h + p * 2)
   .append("svg:g")
     .attr("transform", "translate(" + p + "," + p + ")");
 
 var rules = vis.selectAll("g.rule")
-    .data(d3.range(0, 1.05, .1))
+    .data(x.ticks(10))
   .enter("svg:g")
     .attr("class", "rule");
 
@@ -76,22 +77,27 @@ rules.append("svg:text")
     .attr("y", h + 3)
     .attr("dy", ".71em")
     .attr("text-anchor", "middle")
-    .text(function(d) { return d.toFixed(1); });
+    .text(x.tickFormat(10));
 
 rules.append("svg:text")
     .attr("y", y)
     .attr("x", -3)
     .attr("dy", ".35em")
     .attr("text-anchor", "end")
-    .text(function(d) { return d.toFixed(1); });
+    .text(y.tickFormat(10));
 
 vis.append("svg:path")
     .attr("class", "area")
-    .attr("d", area(data));
+    .attr("d", d3.area()
+    .x(function(d) { return x(d.x); })
+    .y0(h - 1)
+    .y1(function(d) { return y(d.y); }));
 
 vis.append("svg:path")
     .attr("class", "line")
-    .attr("d", line(data));
+    .attr("d", d3.line()
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); }));
 
 vis.selectAll("circle.area")
     .data(data)
@@ -100,25 +106,6 @@ vis.selectAll("circle.area")
     .attr("cx", function(d) { return x(d.x); })
     .attr("cy", function(d) { return y(d.y); })
     .attr("r", 3.5);
-
-function line(points) {
-  var d = [],
-      i = 1,
-      p = points[0];
-  d.push("M", x(p.x), ",", y(p.y));
-  while (p = points[i++]) d.push("L", x(p.x), ",", y(p.y));
-  return d.join("");
-}
-
-function area(points) {
-  var d = [],
-      i = 1,
-      p = points[0];
-  d.push("M", x(p.x), "," + (h - 1) + "V", y(p.y));
-  while (p = points[i++]) d.push("L", x(p.x), ",", y(p.y));
-  d.push("V" + (h - 1) + "Z");
-  return d.join("");
-}
 
     </script>
   </body>

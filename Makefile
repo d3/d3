@@ -32,6 +32,9 @@ SRC_FILES = \
 	src/transition.js \
 	src/timer.js \
 	src/tween.js \
+	src/arc.js \
+	src/line.js \
+	src/area.js \
 	src/end.js
 
 all: d3.js d3.min.js

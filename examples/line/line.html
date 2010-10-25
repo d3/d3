@@ -38,9 +38,12 @@ var data = d3.range(20).map(function(i) {
 
 var w = 450,
     h = 275,
-    p = 20;
+    p = 20,
+    x = d3.linear().domain([0, 1]).range([0, w]),
+    y = d3.linear().domain([0, 1]).range([h, 0]);
 
 var vis = d3.select("body")
+    .data([data])
   .append("svg:svg")
     .attr("width", w + p * 2)
     .attr("height", h + p * 2)
@@ -48,57 +51,50 @@ var vis = d3.select("body")
     .attr("transform", "translate(" + p + "," + p + ")");
 
 var rules = vis.selectAll("g.rule")
-    .data(d3.range(11))
+    .data(x.ticks(10))
   .enter("svg:g")
     .attr("class", "rule");
 
 rules.append("svg:line")
-    .attr("x1", function(d) { return d / 10 * w; })
-    .attr("x2", function(d) { return d / 10 * w; })
+    .attr("x1", x)
+    .attr("x2", x)
     .attr("y1", 0)
     .attr("y2", h - 1);
 
 rules.append("svg:line")
     .attr("class", function(d) { return d ? null : "axis"; })
-    .attr("y1", function(d) { return (1 - d / 10) * h; })
-    .attr("y2", function(d) { return (1 - d / 10) * h; })
+    .attr("y1", y)
+    .attr("y2", y)
     .attr("x1", 0)
     .attr("x2", w + 1);
 
 rules.append("svg:text")
-    .attr("x", function(d) { return d / 10 * w; })
+    .attr("x", x)
     .attr("y", h + 3)
     .attr("dy", ".71em")
     .attr("text-anchor", "middle")
-    .text(function(d) { return (d / 10).toFixed(1); });
+    .text(x.tickFormat(10));
 
 rules.append("svg:text")
-    .attr("y", function(d) { return (1 - d / 10) * h; })
+    .attr("y", y)
     .attr("x", -3)
     .attr("dy", ".35em")
     .attr("text-anchor", "end")
-    .text(function(d) { return (d / 10).toFixed(1); });
+    .text(y.tickFormat(10));
 
 vis.append("svg:path")
     .attr("class", "line")
-    .attr("d", line(data));
+    .attr("d", d3.line()
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); }));
 
 vis.selectAll("circle.line")
     .data(data)
   .enter("svg:circle")
     .attr("class", "line")
-    .attr("cx", function(d) { return d.x * w; })
-    .attr("cy", function(d) { return (1 - d.y) * h; })
+    .attr("cx", function(d) { return x(d.x); })
+    .attr("cy", function(d) { return y(d.y); })
     .attr("r", 3.5);
-
-function line(points) {
-  var d = [],
-      i = 1,
-      p = points[0];
-  d.push("M", p.x * w, ",", (1 - p.y) * h);
-  while (p = points[i++]) d.push("L", p.x * w, ",", (1 - p.y) * h);
-  return d.join("");
-}
 
     </script>
   </body>

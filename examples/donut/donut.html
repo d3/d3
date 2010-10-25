@@ -15,23 +15,24 @@ body {
 
 var w = 400,
     h = 400,
-    r = Math.min(w, h) / 2,
+    r1 = Math.min(w, h) / 2,
+    r0 = r1 * .6,
     n = 10,
-    data = normalize(d3.range(n).map(Math.random)),
-    color = d3.category20();
+    data = arcs(d3.range(n).map(Math.random)),
+    color = d3.category20(),
+    arc = d3.arc();
 
 var vis = d3.select("body")
   .append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
-var arcs = vis.selectAll("g.arc")
+vis.selectAll("g.arc")
     .data(data)
   .enter("svg:g")
     .attr("class", "arc")
-    .attr("transform", "translate(" + r + "," + r + ")");
-
-arcs.append("svg:path")
+    .attr("transform", "translate(" + r1 + "," + r1 + ")")
+  .append("svg:path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
 
@@ -39,7 +40,7 @@ window.addEventListener("keypress", update, false);
 
 function update() {
   var prev = data,
-      next = data = normalize(d3.range(n).map(Math.random)),
+      next = data = arcs(d3.range(n).map(Math.random)),
       i = 0;
   for (; i < n; ++i) prev[i].next = next[i];
   d3.selectAll("g.arc > path")
@@ -52,8 +53,8 @@ function transitionSplit(d, i) {
   d3.select(this)
     .transition()
       .attrTween("d", tweenArc({
-        innerRadius: i & 1 ? r * .6 : r * .8,
-        outerRadius: i & 1 ? r * .8 : r
+        innerRadius: i & 1 ? r0 : (r0 + r1) / 2,
+        outerRadius: i & 1 ? (r0 + r1) / 2 : r1
       }))
       .each("end", transitionRotate);
 }
@@ -102,37 +103,17 @@ function tweenArc(b) {
   };
 }
 
-function normalize(array) {
-  var k = (2 * Math.PI) / array.reduce(function(p, d) { return p + d; }, 0),
+function arcs(values) {
+  var k = (2 * Math.PI) / values.reduce(function(p, d) { return p + d; }, 0),
       a = 0;
-  return array.map(function(d, i) {
+  return values.map(function(d, i) {
     return {
-      innerRadius: r * .6,
-      outerRadius: r,
       startAngle: a,
-      endAngle: a += d * k
+      endAngle: a += d * k,
+      innerRadius: r0,
+      outerRadius: r1
     };
   });
-}
-
-function arc(d) {
-  var r0 = d.innerRadius,
-      r1 = d.outerRadius,
-      a0 = d.startAngle - Math.PI / 2,
-      a1 = d.endAngle - Math.PI / 2,
-      da = a1 - a0,
-      c0 = Math.cos(a0),
-      s0 = Math.sin(a0),
-      c1 = Math.cos(a1),
-      s1 = Math.sin(a1);
-  return "M" + r1 * c0 + "," + r1 * s0
-      + "A" + r1 + "," + r1 + " 0 "
-      + ((da < Math.PI) ? "0" : "1") + ",1 "
-      + r1 * c1 + "," + r1 * s1
-      + "L" + r0 * c1 + "," + r0 * s1
-      + "A" + r0 + "," + r0 + " 0 "
-      + ((da < Math.PI) ? "0" : "1") + ",0 "
-      + r0 * c0 + "," + r0 * s0 + "Z";
 }
 
     </script>

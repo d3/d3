@@ -1457,4 +1457,121 @@ function d3_tween(b) {
     ? function(d, i, a) { return d3.interpolate(a, b.call(this, d, i)); }
     : function(d, i, a) { return d3.interpolate(a, b); };
 }
+d3.arc = function() {
+  var innerRadius = function(d) { return d.innerRadius; },
+      outerRadius = function(d) { return d.outerRadius; },
+      startAngle = function(d) { return d.startAngle; },
+      endAngle = function(d) { return d.endAngle; };
+
+  function arc(d) {
+    var r0 = innerRadius(d),
+        r1 = outerRadius(d),
+        a0 = startAngle(d) - Math.PI / 2,
+        a1 = endAngle(d) - Math.PI / 2,
+        da = a1 - a0,
+        c0 = Math.cos(a0),
+        s0 = Math.sin(a0),
+        c1 = Math.cos(a1),
+        s1 = Math.sin(a1);
+    return "M" + r1 * c0 + "," + r1 * s0
+        + "A" + r1 + "," + r1 + " 0 "
+        + ((da < Math.PI) ? "0" : "1") + ",1 "
+        + r1 * c1 + "," + r1 * s1
+        + "L" + r0 * c1 + "," + r0 * s1
+        + "A" + r0 + "," + r0 + " 0 "
+        + ((da < Math.PI) ? "0" : "1") + ",0 "
+        + r0 * c0 + "," + r0 * s0 + "Z";
+  }
+
+  arc.innerRadius = function(value) {
+    innerRadius = typeof value == "function"
+        ? value
+        : function() { return value; };
+    return arc;
+  };
+
+  arc.outerRadius = function(value) {
+    outerRadius = typeof value == "function"
+        ? value
+        : function() { return value; };
+    return arc;
+  };
+
+  arc.startAngle = function(value) {
+    startAngle = typeof value == "function"
+        ? value
+        : function() { return value; };
+    return arc;
+  };
+
+  arc.endAngle = function(value) {
+    endAngle = typeof value == "function"
+        ? value
+        : function() { return value; };
+    return arc;
+  };
+
+  return arc;
+};
+d3.line = function() {
+  var x = function(d, i) { return d.x; },
+      y = function(d, i) { return d.y; };
+
+  function line(d) {
+    var a = [],
+        i = 0,
+        p = d[0];
+    a.push("M", x.call(this, p, i), ",", y.call(this, p, i));
+    while (p = d[++i]) a.push("L", x.call(this, p, i), ",", y.call(this, p, i));
+    return a.join("");
+  }
+
+  line.x = function(value) {
+    x = value;
+    return line;
+  };
+
+  line.y = function(value) {
+    y = value;
+    return line;
+  };
+
+  return line;
+};
+d3.area = function() {
+  var x = function(d, i) { return d.x; },
+      y0 = 0,
+      y1 = function(d, i) { return d.y1; };
+
+  // TODO interpolators
+  // TODO variable y0
+  // TODO horizontal / vertical orientation
+
+  function area(d) {
+    var a = [],
+        i = 0,
+        p = d[0];
+    a.push("M", x.call(this, p, i), "," + y0 + "V", y1.call(this, p, i));
+    while (p = d[++i]) a.push("L", x.call(this, p, i), ",", y1.call(this, p, i));
+    a.push("V" + y0 + "Z");
+    return a.join("");
+  }
+
+  area.x = function(value) {
+    x = value;
+    return area;
+  };
+
+  area.y0 = function(value) {
+    y0 = value;
+    return area;
+  };
+
+  area.y1 = function(value) {
+    y1 = value;
+    return area;
+  };
+
+  return area;
+};
 })(this);
