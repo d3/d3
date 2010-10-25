@@ -102,11 +102,15 @@ d3.format = function(specifier) {
       zfill = match[5],
       width = +match[6],
       comma = match[7],
-      precision = match[8];
+      precision = match[8],
+      type = match[9];
   if (precision) precision = precision.substring(1);
   if (zfill) fill = "0"; // TODO align = "=";
+  if (type == "d") precision = "0";
   return function(value) {
-    if (precision) value = (+value).toFixed(precision); else value += "";
+    if ((type == "d") && (value % 1)) return "";
+    if (precision) value = (+value).toFixed(precision);
+    else value += "";
     if (comma) {
       var i = value.lastIndexOf("."),
           f = i >= 0 ? value.substring(i) : (i = value.length, ""),
