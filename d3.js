@@ -95,6 +95,33 @@ function d3_dispatch(type) {
 
   return dispatch;
 };
+// TODO align, sign, type
+d3.format = function(specifier) {
+  var match = d3_format_re.exec(specifier),
+      fill = match[1] || " ",
+      zfill = match[5],
+      width = +match[6],
+      comma = match[7],
+      precision = match[8];
+  if (precision) precision = precision.substring(1);
+  if (zfill) fill = "0"; // TODO align = "=";
+  return function(value) {
+    if (precision) value = (+value).toFixed(precision); else value += "";
+    if (comma) {
+      var i = value.lastIndexOf("."),
+          f = i >= 0 ? value.substring(i) : (i = value.length, ""),
+          t = [];
+      while (i > 0) t.push(value.substring(i -= 3, i + 3));
+      value = t.reverse().join(",") + f;
+    }
+    var n = value.length;
+    if (n < width) value = new Array(width - n + 1).join(fill) + value;
+    return value;
+  };
+};
+
+// [[fill]align][sign][#][0][width][,][.precision][type]
+var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
 /*
  * TERMS OF USE - EASING EQUATIONS
  *
@@ -678,7 +705,7 @@ d3.linear = function() {
 
   scale.tickFormat = function(m) {
     var n = Math.max(0, -Math.floor(Math.log(tickRange(m).step) / Math.LN10 + .01));
-    return function(d) { return d.toFixed(n); };
+    return d3.format(",." + n + "f");
   };
 
   return scale;

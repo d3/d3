@@ -13,6 +13,7 @@ SRC_FILES = \
 	src/range.js \
 	src/ns.js \
 	src/dispatch.js \
+	src/format.js \
 	src/ease.js \
 	src/event.js \
 	src/interpolate.js \

@@ -60,7 +60,7 @@ d3.linear = function() {
 
   scale.tickFormat = function(m) {
     var n = Math.max(0, -Math.floor(Math.log(tickRange(m).step) / Math.LN10 + .01));
-    return function(d) { return d.toFixed(n); };
+    return d3.format(",." + n + "f");
   };
 
   return scale;
