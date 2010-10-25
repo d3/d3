@@ -16,7 +16,6 @@ SRC_FILES = \
 	src/ease.js \
 	src/event.js \
 	src/interpolate.js \
-	src/join.js \
 	src/rgb.js \
 	src/hsl.js \
 	src/linear.js \

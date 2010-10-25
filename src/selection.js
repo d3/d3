@@ -67,7 +67,7 @@ function d3_selection(groups) {
         update = [],
         exit = [];
 
-    if (typeof join == "string") join = d3_join(join);
+    if (typeof join == "string") join = d3_selection_join(join);
 
     function bind(group, groupData) {
       var i = 0,
@@ -367,4 +367,12 @@ function d3_selection(groups) {
   };
 
   return groups;
+}
+
+// TODO support namespaces for key?
+function d3_selection_join(key) {
+  return {
+    nodeKey: function(node) { return node.getAttribute(key); },
+    dataKey: function(data) { return data[key]; }
+  };
 }

@@ -373,13 +373,6 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
-// TODO support namespaces for key?
-function d3_join(key) {
-  return {
-    nodeKey: function(node) { return node.getAttribute(key); },
-    dataKey: function(data) { return data[key]; }
-  };
-}
 function d3_rgb(format) {
   var r, // red channel; int in [0, 255]
       g, // green channel; int in [0, 255]
@@ -929,7 +922,7 @@ function d3_selection(groups) {
         update = [],
         exit = [];
 
-    if (typeof join == "string") join = d3_join(join);
+    if (typeof join == "string") join = d3_selection_join(join);
 
     function bind(group, groupData) {
       var i = 0,
@@ -1229,6 +1222,14 @@ function d3_selection(groups) {
   };
 
   return groups;
+}
+
+// TODO support namespaces for key?
+function d3_selection_join(key) {
+  return {
+    nodeKey: function(node) { return node.getAttribute(key); },
+    dataKey: function(data) { return data[key]; }
+  };
 }
 d3.transition = d3_root.transition;
 
