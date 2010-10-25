@@ -40,7 +40,7 @@ var vis = d3.select("body")
     .attr("width", w)
     .attr("height", h);
 
-vis.selectAll("line.link")
+var link = vis.selectAll("line.link")
     .data(miserables.links)
   .enter("svg:line")
     .attr("class", "link")
@@ -49,7 +49,7 @@ vis.selectAll("line.link")
     .attr("x2", function(d) { return d.target.x; })
     .attr("y2", function(d) { return d.target.y; });
 
-vis.selectAll("circle.node")
+var node = vis.selectAll("circle.node")
     .data(miserables.nodes)
   .enter("svg:circle")
     .attr("class", "node")
@@ -57,19 +57,18 @@ vis.selectAll("circle.node")
     .attr("cy", function(d) { return d.y; })
     .attr("r", 4.5);
 
-force.on("tick", function() {
-  var update = d3.select("svg");
+vis.attr("opacity", 0)
+  .transition()
+    .duration(1000)
+    .attr("opacity", 1);
 
-  update.selectAll("line.link")
-      .data(miserables.links)
-      .attr("x1", function(d) { return d.source.x; })
+force.on("tick", function() {
+  link.attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
 
-  update.selectAll("circle.node")
-      .data(miserables.nodes)
-      .attr("cx", function(d) { return d.x; })
+  node.attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
 });
 
