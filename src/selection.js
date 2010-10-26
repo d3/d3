@@ -269,6 +269,35 @@ function d3_selection(groups) {
         ? styleFunction : styleConstant));
   };
 
+  groups.property = function(name, value) {
+    name = d3.ns.qualify(name);
+
+    // If no value is specified, return the first value.
+    if (arguments.length < 2) {
+      return first(function() {
+        return this[name];
+      });
+    }
+
+    function propertyNull() {
+      delete this[name];
+    }
+
+    function propertyConstant() {
+      this[name] = value;
+    }
+
+    function propertyFunction() {
+      var x = value.apply(this, arguments);
+      if (x == null) delete this[name];
+      else this[name] = x;
+    }
+
+    return groups.each(value == null
+        ? propertyNull : (typeof value == "function"
+        ? propertyFunction : propertyConstant));
+  };
+
   groups.text = function(value) {
 
     // If no value is specified, return the first value.
@@ -365,6 +394,8 @@ function d3_selection(groups) {
   groups.transition = function(name) {
     return d3_transition(groups, name);
   };
+
+  groups.call = d3_call;
 
   return groups;
 }

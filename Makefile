@@ -10,6 +10,7 @@ SRC_FILES = \
 	src/start.js \
 	src/array.js \
 	src/blend.js \
+	src/call.js \
 	src/range.js \
 	src/ns.js \
 	src/dispatch.js \

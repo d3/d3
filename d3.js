@@ -8,12 +8,18 @@ if (!Object.create) Object.create = function(o) {
 };
 (function(_) {
   var d3 = _.d3 = {};
-  d3.version = "0.1.0"; // semver
+  d3.version = "0.1.1"; // semver
 function d3_array(psuedoarray) {
   return Array.prototype.slice.call(psuedoarray);
 }
 function d3_blend(arrays) {
   return Array.prototype.concat.apply([], arrays);
+}
+function d3_call(callback, var_args) {
+  var_args = d3_array(arguments);
+  var_args[0] = this;
+  callback.apply(this, var_args);
+  return this;
 }
 /**
  * @param {number} start
@@ -1155,6 +1161,35 @@ function d3_selection(groups) {
         ? styleFunction : styleConstant));
   };
 
+  groups.property = function(name, value) {
+    name = d3.ns.qualify(name);
+
+    // If no value is specified, return the first value.
+    if (arguments.length < 2) {
+      return first(function() {
+        return this[name];
+      });
+    }
+
+    function propertyNull() {
+      delete this[name];
+    }
+
+    function propertyConstant() {
+      this[name] = value;
+    }
+
+    function propertyFunction() {
+      var x = value.apply(this, arguments);
+      if (x == null) delete this[name];
+      else this[name] = x;
+    }
+
+    return groups.each(value == null
+        ? propertyNull : (typeof value == "function"
+        ? propertyFunction : propertyConstant));
+  };
+
   groups.text = function(value) {
 
     // If no value is specified, return the first value.
@@ -1251,6 +1286,8 @@ function d3_selection(groups) {
   groups.transition = function(name) {
     return d3_transition(groups, name);
   };
+
+  groups.call = d3_call;
 
   return groups;
 }
@@ -1413,6 +1450,8 @@ function d3_transition(groups, name) {
     event[type].add(listener);
     return transition;
   };
+
+  transition.call = d3_call;
 
   return transition.delay(0).duration(250);
 }

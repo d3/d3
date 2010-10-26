@@ -150,5 +150,7 @@ function d3_transition(groups, name) {
     return transition;
   };
 
+  transition.call = d3_call;
+
   return transition.delay(0).duration(250);
 }
