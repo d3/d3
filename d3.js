@@ -8,7 +8,7 @@ if (!Object.create) Object.create = function(o) {
 };
 (function(_) {
   var d3 = _.d3 = {};
-  d3.version = "0.1.1"; // semver
+  d3.version = "0.1.2"; // semver
 function d3_array(psuedoarray) {
   return Array.prototype.slice.call(psuedoarray);
 }
@@ -981,11 +981,17 @@ function d3_selection(groups) {
         var nodeByKey = {},
             exitData = [],
             keys = [],
-            key;
+            key,
+            j = groupData.length;
 
         for (i = 0; i < n; i++) {
-          nodeByKey[key = join.nodeKey(node = group[i])] = node;
-          keys.push(key);
+          key = join.nodeKey(node = group[i]);
+          if (key in nodeByKey) {
+            exitNodes[j++] = group[i];
+          } else {
+            nodeByKey[key] = node;
+            keys.push(key);
+          }
         }
 
         for (i = 0; i < m; i++) {
