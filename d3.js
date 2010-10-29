@@ -8,7 +8,7 @@ if (!Object.create) Object.create = function(o) {
 };
 (function(_) {
   var d3 = _.d3 = {};
-  d3.version = "0.1.2"; // semver
+  d3.version = "0.1.3"; // semver
 function d3_array(psuedoarray) {
   return Array.prototype.slice.call(psuedoarray);
 }
@@ -1472,6 +1472,8 @@ function d3_timer(callback, delay) {
       t0,
       t1 = d3_timer_queue;
 
+  if (!isFinite(delay)) return;
+
   // Scan the queue for earliest callback.
   while (t1) {
     if (t1.callback == callback) {
@@ -1496,7 +1498,7 @@ function d3_timer(callback, delay) {
 
   if (!d3_timer_interval) {
     clearTimeout(d3_timer_timeout);
-    d3_timer_timeout = setTimeout(d3_timer_start, Math.min(24, start - now));
+    d3_timer_timeout = setTimeout(d3_timer_start, Math.max(24, start - now));
   }
 }
 
