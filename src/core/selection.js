@@ -1,3 +1,19 @@
+var d3_root = d3_selection([[document]]);
+d3_root[0].parentNode = document.documentElement;
+
+// TODO fast singleton implementation!
+d3.select = function(query) {
+  return typeof query == "string"
+      ? d3_root.select(query)
+      : d3_selection([[query]]); // assume node
+};
+
+d3.selectAll = function(query) {
+  return typeof query == "string"
+      ? d3_root.selectAll(query)
+      : d3_selection([d3_array(query)]); // assume node[]
+};
+
 function d3_selection(groups) {
   var i = -1,
       n = groups.length,
@@ -212,28 +228,34 @@ function d3_selection(groups) {
           : function() { return this.getAttribute(name); });
     }
 
+    /** @this {Element} */
     function attrNull() {
       this.removeAttribute(name);
     }
 
+    /** @this {Element} */
     function attrNullNS() {
       this.removeAttributeNS(name.space, name.local);
     }
 
+    /** @this {Element} */
     function attrConstant() {
       this.setAttribute(name, value);
     }
 
+    /** @this {Element} */
     function attrConstantNS() {
       this.setAttributeNS(name.space, name.local, value);
     }
 
+    /** @this {Element} */
     function attrFunction() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttribute(name);
       else this.setAttribute(name, x);
     }
 
+    /** @this {Element} */
     function attrFunctionNS() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttributeNS(name.space, name.local);
@@ -256,14 +278,17 @@ function d3_selection(groups) {
       });
     }
 
+    /** @this {Element} */
     function styleNull() {
       this.style.removeProperty(name);
     }
 
+    /** @this {Element} */
     function styleConstant() {
       this.style.setProperty(name, value, priority);
     }
 
+    /** @this {Element} */
     function styleFunction() {
       var x = value.apply(this, arguments);
       if (x == null) this.style.removeProperty(name);
@@ -285,14 +310,17 @@ function d3_selection(groups) {
       });
     }
 
+    /** @this {Element} */
     function propertyNull() {
       delete this[name];
     }
 
+    /** @this {Element} */
     function propertyConstant() {
       this[name] = value;
     }
 
+    /** @this {Element} */
     function propertyFunction() {
       var x = value.apply(this, arguments);
       if (x == null) delete this[name];
@@ -313,14 +341,17 @@ function d3_selection(groups) {
       });
     }
 
+    /** @this {Element} */
     function textNull() {
       while (this.lastChild) this.removeChild(this.lastChild);
     }
 
+    /** @this {Element} */
     function textConstant() {
       this.appendChild(document.createTextNode(value));
     }
 
+    /** @this {Element} */
     function textFunction() {
       var x = value.apply(this, arguments);
       if (x != null) this.appendChild(document.createTextNode(x));
@@ -341,10 +372,12 @@ function d3_selection(groups) {
       });
     }
 
+    /** @this {Element} */
     function htmlConstant() {
       this.innerHTML = value;
     }
 
+    /** @this {Element} */
     function htmlFunction() {
       this.innerHTML = value.apply(this, arguments);
     }

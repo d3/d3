@@ -1,5 +1,5 @@
-d3.log = function() {
-  var linear = d3.linear();
+d3.scale.log = function() {
+  var linear = d3.scale.linear();
 
   function log(x) {
     return Math.log(x) / Math.LN10;

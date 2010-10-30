@@ -1,4 +1,4 @@
-d3.line = function() {
+d3.svg.line = function() {
   var x = function(d, i) { return d.x; },
       y = function(d, i) { return d.y; };
 

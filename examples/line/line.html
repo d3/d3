@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Line Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.min.js"></script>
     <style type="text/css">
 
 body {
@@ -39,8 +39,8 @@ var data = d3.range(20).map(function(i) {
 var w = 450,
     h = 275,
     p = 20,
-    x = d3.linear().domain([0, 1]).range([0, w]),
-    y = d3.linear().domain([0, 1]).range([h, 0]);
+    x = d3.scale.linear().domain([0, 1]).range([0, w]),
+    y = d3.scale.linear().domain([0, 1]).range([h, 0]);
 
 var vis = d3.select("body")
     .data([data])
@@ -84,7 +84,7 @@ rules.append("svg:text")
 
 vis.append("svg:path")
     .attr("class", "line")
-    .attr("d", d3.line()
+    .attr("d", d3.svg.line()
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.y); }));
 

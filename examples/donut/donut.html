@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Donut Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.min.js"></script>
     <style type="text/css">
 
 body {
@@ -19,8 +19,8 @@ var w = 400,
     r0 = r1 * .6,
     n = 10,
     data = arcs(d3.range(n).map(Math.random)),
-    color = d3.category20(),
-    arc = d3.arc();
+    color = d3.scale.category20(),
+    arc = d3.svg.arc();
 
 var vis = d3.select("body")
   .append("svg:svg")

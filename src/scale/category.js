@@ -1,13 +1,13 @@
-d3.category10 = function() {
-  return d3.ordinal().range(d3_category10);
+d3.scale.category10 = function() {
+  return d3.scale.ordinal().range(d3_category10);
 };
 
-d3.category19 = function() {
-  return d3.ordinal().range(d3_category19);
+d3.scale.category19 = function() {
+  return d3.scale.ordinal().range(d3_category19);
 };
 
-d3.category20 = function() {
-  return d3.ordinal().range(d3_category20);
+d3.scale.category20 = function() {
+  return d3.scale.ordinal().range(d3_category20);
 };
 
 var d3_category10 = [

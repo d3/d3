@@ -1,4 +1,4 @@
-d3.ordinal = function() {
+d3.scale.ordinal = function() {
   var domain = [],
       index = {},
       range = [],

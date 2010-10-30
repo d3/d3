@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Bar Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.min.js"></script>
     <style type="text/css">
 
 body {
@@ -21,8 +21,8 @@ var data = d3.range(10).map(Math.random);
 
 var w = 430,
     h = 230,
-    x = d3.linear().domain([0, 1]).range([0, w]),
-    y = d3.ordinal().domain(d3.range(data.length)).rangeBands([0, h], .2);
+    x = d3.scale.linear().domain([0, 1]).range([0, w]),
+    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([0, h], .2);
 
 var vis = d3.select("body")
   .append("svg:svg")

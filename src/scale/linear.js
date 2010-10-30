@@ -1,4 +1,4 @@
-d3.linear = function() {
+d3.scale.linear = function() {
   var x0 = 0,
       x1 = 1,
       y0 = 0,

@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Pie Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.min.js"></script>
     <style type="text/css">
 
 body {
@@ -17,7 +17,7 @@ var w = 400,
     h = 400,
     r = Math.min(w, h) / 2,
     data = normalize(d3.range(10).map(Math.random).sort(descending)),
-    color = d3.category20();
+    color = d3.scale.category20();
 
 var vis = d3.select("body")
   .append("svg:svg")

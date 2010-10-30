@@ -81,20 +81,24 @@ function d3_transition(groups, name) {
     var interpolators = [],
         k = -1;
 
+    /** @this {Element} */
     function attrInterpolator(d, i) {
       interpolators[++k] = tween.call(this, d, i,
           this.getAttribute(name));
     }
 
+    /** @this {Element} */
     function attrInterpolatorNS(d, i) {
       interpolators[++k] = tween.call(this, d, i,
           this.getAttributeNS(name.space, name.local));
     }
 
+    /** @this {Element} */
     function attrTween(t, k) {
       this.setAttribute(name, interpolators[k](t));
     }
 
+    /** @this {Element} */
     function attrTweenNS(t, k) {
       this.setAttributeNS(name.space, name.local, interpolators[k](t));
     }
@@ -113,11 +117,13 @@ function d3_transition(groups, name) {
     var interpolators = [],
         k = -1;
 
+    /** @this {Element} */
     function styleInterpolator(d, i) {
       interpolators[++k] = tween.call(this, d, i,
           window.getComputedStyle(this, null).getPropertyValue(name));
     }
 
+    /** @this {Element} */
     function styleTween(t, k) {
       this.style.setProperty(name, interpolators[k](t), priority);
     }

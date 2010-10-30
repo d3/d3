@@ -1,3 +1,4 @@
+d3 = {version: "0.2.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -6,9 +7,6 @@ if (!Object.create) Object.create = function(o) {
   f.prototype = o;
   return new f();
 };
-(function(_) {
-  var d3 = _.d3 = {};
-  d3.version = "0.1.4"; // semver
 function d3_array(psuedoarray) {
   return Array.prototype.slice.call(psuedoarray);
 }
@@ -499,153 +497,153 @@ function d3_rgb_parse(c) { // either integer or percentage
 }
 
 var d3_rgb_names = {
-  aliceblue: "#f0f8ff",
-  antiquewhite: "#faebd7",
-  aqua: "#00ffff",
-  aquamarine: "#7fffd4",
-  azure: "#f0ffff",
-  beige: "#f5f5dc",
-  bisque: "#ffe4c4",
-  black: "#000000",
-  blanchedalmond: "#ffebcd",
-  blue: "#0000ff",
-  blueviolet: "#8a2be2",
-  brown: "#a52a2a",
-  burlywood: "#deb887",
-  cadetblue: "#5f9ea0",
-  chartreuse: "#7fff00",
-  chocolate: "#d2691e",
-  coral: "#ff7f50",
-  cornflowerblue: "#6495ed",
-  cornsilk: "#fff8dc",
-  crimson: "#dc143c",
-  cyan: "#00ffff",
-  darkblue: "#00008b",
-  darkcyan: "#008b8b",
-  darkgoldenrod: "#b8860b",
-  darkgray: "#a9a9a9",
-  darkgreen: "#006400",
-  darkgrey: "#a9a9a9",
-  darkkhaki: "#bdb76b",
-  darkmagenta: "#8b008b",
-  darkolivegreen: "#556b2f",
-  darkorange: "#ff8c00",
-  darkorchid: "#9932cc",
-  darkred: "#8b0000",
-  darksalmon: "#e9967a",
-  darkseagreen: "#8fbc8f",
-  darkslateblue: "#483d8b",
-  darkslategray: "#2f4f4f",
-  darkslategrey: "#2f4f4f",
-  darkturquoise: "#00ced1",
-  darkviolet: "#9400d3",
-  deeppink: "#ff1493",
-  deepskyblue: "#00bfff",
-  dimgray: "#696969",
-  dimgrey: "#696969",
-  dodgerblue: "#1e90ff",
-  firebrick: "#b22222",
-  floralwhite: "#fffaf0",
-  forestgreen: "#228b22",
-  fuchsia: "#ff00ff",
-  gainsboro: "#dcdcdc",
-  ghostwhite: "#f8f8ff",
-  gold: "#ffd700",
-  goldenrod: "#daa520",
-  gray: "#808080",
-  green: "#008000",
-  greenyellow: "#adff2f",
-  grey: "#808080",
-  honeydew: "#f0fff0",
-  hotpink: "#ff69b4",
-  indianred: "#cd5c5c",
-  indigo: "#4b0082",
-  ivory: "#fffff0",
-  khaki: "#f0e68c",
-  lavender: "#e6e6fa",
-  lavenderblush: "#fff0f5",
-  lawngreen: "#7cfc00",
-  lemonchiffon: "#fffacd",
-  lightblue: "#add8e6",
-  lightcoral: "#f08080",
-  lightcyan: "#e0ffff",
-  lightgoldenrodyellow: "#fafad2",
-  lightgray: "#d3d3d3",
-  lightgreen: "#90ee90",
-  lightgrey: "#d3d3d3",
-  lightpink: "#ffb6c1",
-  lightsalmon: "#ffa07a",
-  lightseagreen: "#20b2aa",
-  lightskyblue: "#87cefa",
-  lightslategray: "#778899",
-  lightslategrey: "#778899",
-  lightsteelblue: "#b0c4de",
-  lightyellow: "#ffffe0",
-  lime: "#00ff00",
-  limegreen: "#32cd32",
-  linen: "#faf0e6",
-  magenta: "#ff00ff",
-  maroon: "#800000",
-  mediumaquamarine: "#66cdaa",
-  mediumblue: "#0000cd",
-  mediumorchid: "#ba55d3",
-  mediumpurple: "#9370db",
-  mediumseagreen: "#3cb371",
-  mediumslateblue: "#7b68ee",
-  mediumspringgreen: "#00fa9a",
-  mediumturquoise: "#48d1cc",
-  mediumvioletred: "#c71585",
-  midnightblue: "#191970",
-  mintcream: "#f5fffa",
-  mistyrose: "#ffe4e1",
-  moccasin: "#ffe4b5",
-  navajowhite: "#ffdead",
-  navy: "#000080",
-  oldlace: "#fdf5e6",
-  olive: "#808000",
-  olivedrab: "#6b8e23",
-  orange: "#ffa500",
-  orangered: "#ff4500",
-  orchid: "#da70d6",
-  palegoldenrod: "#eee8aa",
-  palegreen: "#98fb98",
-  paleturquoise: "#afeeee",
-  palevioletred: "#db7093",
-  papayawhip: "#ffefd5",
-  peachpuff: "#ffdab9",
-  peru: "#cd853f",
-  pink: "#ffc0cb",
-  plum: "#dda0dd",
-  powderblue: "#b0e0e6",
-  purple: "#800080",
-  red: "#ff0000",
-  rosybrown: "#bc8f8f",
-  royalblue: "#4169e1",
-  saddlebrown: "#8b4513",
-  salmon: "#fa8072",
-  sandybrown: "#f4a460",
-  seagreen: "#2e8b57",
-  seashell: "#fff5ee",
-  sienna: "#a0522d",
-  silver: "#c0c0c0",
-  skyblue: "#87ceeb",
-  slateblue: "#6a5acd",
-  slategray: "#708090",
-  slategrey: "#708090",
-  snow: "#fffafa",
-  springgreen: "#00ff7f",
-  steelblue: "#4682b4",
-  tan: "#d2b48c",
-  teal: "#008080",
-  thistle: "#d8bfd8",
-  tomato: "#ff6347",
-  turquoise: "#40e0d0",
-  violet: "#ee82ee",
-  wheat: "#f5deb3",
-  white: "#ffffff",
-  whitesmoke: "#f5f5f5",
-  yellow: "#ffff00",
-  yellowgreen: "#9acd32"
+  "aliceblue": "#f0f8ff",
+  "antiquewhite": "#faebd7",
+  "aqua": "#00ffff",
+  "aquamarine": "#7fffd4",
+  "azure": "#f0ffff",
+  "beige": "#f5f5dc",
+  "bisque": "#ffe4c4",
+  "black": "#000000",
+  "blanchedalmond": "#ffebcd",
+  "blue": "#0000ff",
+  "blueviolet": "#8a2be2",
+  "brown": "#a52a2a",
+  "burlywood": "#deb887",
+  "cadetblue": "#5f9ea0",
+  "chartreuse": "#7fff00",
+  "chocolate": "#d2691e",
+  "coral": "#ff7f50",
+  "cornflowerblue": "#6495ed",
+  "cornsilk": "#fff8dc",
+  "crimson": "#dc143c",
+  "cyan": "#00ffff",
+  "darkblue": "#00008b",
+  "darkcyan": "#008b8b",
+  "darkgoldenrod": "#b8860b",
+  "darkgray": "#a9a9a9",
+  "darkgreen": "#006400",
+  "darkgrey": "#a9a9a9",
+  "darkkhaki": "#bdb76b",
+  "darkmagenta": "#8b008b",
+  "darkolivegreen": "#556b2f",
+  "darkorange": "#ff8c00",
+  "darkorchid": "#9932cc",
+  "darkred": "#8b0000",
+  "darksalmon": "#e9967a",
+  "darkseagreen": "#8fbc8f",
+  "darkslateblue": "#483d8b",
+  "darkslategray": "#2f4f4f",
+  "darkslategrey": "#2f4f4f",
+  "darkturquoise": "#00ced1",
+  "darkviolet": "#9400d3",
+  "deeppink": "#ff1493",
+  "deepskyblue": "#00bfff",
+  "dimgray": "#696969",
+  "dimgrey": "#696969",
+  "dodgerblue": "#1e90ff",
+  "firebrick": "#b22222",
+  "floralwhite": "#fffaf0",
+  "forestgreen": "#228b22",
+  "fuchsia": "#ff00ff",
+  "gainsboro": "#dcdcdc",
+  "ghostwhite": "#f8f8ff",
+  "gold": "#ffd700",
+  "goldenrod": "#daa520",
+  "gray": "#808080",
+  "green": "#008000",
+  "greenyellow": "#adff2f",
+  "grey": "#808080",
+  "honeydew": "#f0fff0",
+  "hotpink": "#ff69b4",
+  "indianred": "#cd5c5c",
+  "indigo": "#4b0082",
+  "ivory": "#fffff0",
+  "khaki": "#f0e68c",
+  "lavender": "#e6e6fa",
+  "lavenderblush": "#fff0f5",
+  "lawngreen": "#7cfc00",
+  "lemonchiffon": "#fffacd",
+  "lightblue": "#add8e6",
+  "lightcoral": "#f08080",
+  "lightcyan": "#e0ffff",
+  "lightgoldenrodyellow": "#fafad2",
+  "lightgray": "#d3d3d3",
+  "lightgreen": "#90ee90",
+  "lightgrey": "#d3d3d3",
+  "lightpink": "#ffb6c1",
+  "lightsalmon": "#ffa07a",
+  "lightseagreen": "#20b2aa",
+  "lightskyblue": "#87cefa",
+  "lightslategray": "#778899",
+  "lightslategrey": "#778899",
+  "lightsteelblue": "#b0c4de",
+  "lightyellow": "#ffffe0",
+  "lime": "#00ff00",
+  "limegreen": "#32cd32",
+  "linen": "#faf0e6",
+  "magenta": "#ff00ff",
+  "maroon": "#800000",
+  "mediumaquamarine": "#66cdaa",
+  "mediumblue": "#0000cd",
+  "mediumorchid": "#ba55d3",
+  "mediumpurple": "#9370db",
+  "mediumseagreen": "#3cb371",
+  "mediumslateblue": "#7b68ee",
+  "mediumspringgreen": "#00fa9a",
+  "mediumturquoise": "#48d1cc",
+  "mediumvioletred": "#c71585",
+  "midnightblue": "#191970",
+  "mintcream": "#f5fffa",
+  "mistyrose": "#ffe4e1",
+  "moccasin": "#ffe4b5",
+  "navajowhite": "#ffdead",
+  "navy": "#000080",
+  "oldlace": "#fdf5e6",
+  "olive": "#808000",
+  "olivedrab": "#6b8e23",
+  "orange": "#ffa500",
+  "orangered": "#ff4500",
+  "orchid": "#da70d6",
+  "palegoldenrod": "#eee8aa",
+  "palegreen": "#98fb98",
+  "paleturquoise": "#afeeee",
+  "palevioletred": "#db7093",
+  "papayawhip": "#ffefd5",
+  "peachpuff": "#ffdab9",
+  "peru": "#cd853f",
+  "pink": "#ffc0cb",
+  "plum": "#dda0dd",
+  "powderblue": "#b0e0e6",
+  "purple": "#800080",
+  "red": "#ff0000",
+  "rosybrown": "#bc8f8f",
+  "royalblue": "#4169e1",
+  "saddlebrown": "#8b4513",
+  "salmon": "#fa8072",
+  "sandybrown": "#f4a460",
+  "seagreen": "#2e8b57",
+  "seashell": "#fff5ee",
+  "sienna": "#a0522d",
+  "silver": "#c0c0c0",
+  "skyblue": "#87ceeb",
+  "slateblue": "#6a5acd",
+  "slategray": "#708090",
+  "slategrey": "#708090",
+  "snow": "#fffafa",
+  "springgreen": "#00ff7f",
+  "steelblue": "#4682b4",
+  "tan": "#d2b48c",
+  "teal": "#008080",
+  "thistle": "#d8bfd8",
+  "tomato": "#ff6347",
+  "turquoise": "#40e0d0",
+  "violet": "#ee82ee",
+  "wheat": "#f5deb3",
+  "white": "#ffffff",
+  "whitesmoke": "#f5f5f5",
+  "yellow": "#ffff00",
+  "yellowgreen": "#9acd32"
 };
 
 for (var x in d3_rgb_names) d3_rgb_names[x] = d3_rgb(d3_rgb_names[x]);
@@ -653,267 +651,22 @@ d3.hsl = function(h, s, l) {
   var c = d3_rgb_hsl(h, s, l);
   return "rgb(" + c.r + "," + c.g + "," + c.b +  ")";
 };
-d3.linear = function() {
-  var x0 = 0,
-      x1 = 1,
-      y0 = 0,
-      y1 = 1,
-      k = 1 / (x1 - x0),
-      i = d3.interpolate(y0, y1);
-
-  function scale(x) {
-    return i((x - x0) * k);
-  }
-
-  scale.invert = function(x) {
-    return (x - y0) / k + x0; // TODO assumes number?
-  };
-
-  /** @param {*=} x */
-  scale.domain = function(x) {
-    if (!arguments.length) return [x0, x1];
-    x0 = x[0];
-    x1 = x[1];
-    k = 1 / (x1 - x0);
-    return scale;
-  };
-
-  /** @param {*=} x */
-  scale.range = function(x) {
-    if (!arguments.length) return [y0, y1];
-    y0 = x[0];
-    y1 = x[1];
-    i = d3.interpolate(y0, y1); // TODO allow override?
-    return scale;
-  };
-
-  // TODO Dates? Ugh.
-  function tickRange(m) {
-    var start = Math.min(x0, x1),
-        stop = Math.max(x0, x1),
-        span = stop - start,
-        step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
-        err = m / (span / step);
-
-    // Filter ticks to get closer to the desired count.
-    if (err <= .15) step *= 10;
-    else if (err <= .35) step *= 5;
-    else if (err <= .75) step *= 2;
-
-    // Round start and stop values to step interval.
-    return {
-      start: Math.ceil(start / step) * step,
-      stop: Math.floor(stop / step) * step + step * .5, // inclusive
-      step: step
-    };
-  }
-
-  scale.ticks = function(m) {
-    var range = tickRange(m);
-    return d3.range(range.start, range.stop, range.step);
-  };
-
-  scale.tickFormat = function(m) {
-    var n = Math.max(0, -Math.floor(Math.log(tickRange(m).step) / Math.LN10 + .01));
-    return d3.format(",." + n + "f");
-  };
-
-  return scale;
-};
-d3.log = function() {
-  var linear = d3.linear();
-
-  function log(x) {
-    return Math.log(x) / Math.LN10;
-  }
-
-  function pow(y) {
-    return Math.pow(10, y);
-  }
-
-  function scale(x) {
-    return linear(log(x));
-  }
-
-  scale.invert = function(x) {
-    return pow(linear.invert(x));
-  };
-
-  /** @param {*=} x */
-  scale.domain = function(x) {
-    if (!arguments.length) return linear.domain().map(pow);
-    linear.domain(x.map(log));
-    return scale;
-  };
-
-  scale.range = function() {
-    var x = linear.range.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
-
-  scale.ticks = function() {
-    var d = linear.domain(),
-        i = Math.floor(d[0]),
-        j = Math.ceil(d[1]),
-        ticks = [];
-    if (d.every(isFinite)) {
-      while (++i <= j) for (var k = 1; k < 10; k++) ticks.push(pow(i) * k);
-      ticks.push(pow(i));
-    }
-    return ticks;
-  };
-
-  scale.tickFormat = function() {
-    return function(d) { return d.toPrecision(1); };
-  };
-
-  return scale;
-};
-d3.pow = function() {
-  var linear = d3.linear(),
-      p = 1,
-      b = 1 / p;
-
-  function powp(x) {
-    return Math.pow(x, p);
-  }
-
-  function powb(x) {
-    return Math.pow(x, b);
-  }
-
-  function scale(x) {
-    return linear(powp(x));
-  }
-
-  scale.invert = function(x) {
-    return powb(linear.invert(x));
-  };
-
-  /** @param {*=} x */
-  scale.domain = function(x) {
-    if (!arguments.length) return linear.domain().map(powb);
-    linear.domain(x.map(powp));
-    return scale;
-  };
-
-  scale.range = function() {
-    var x = linear.range.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
-
-  scale.exponent = function(x) {
-    if (!arguments.length) return p;
-    var domain = scale.domain();
-    p = x;
-    b = 1 / x;
-    return scale.domain(domain);
-  };
-
-  return scale;
-};
-d3.sqrt = function() {
-  return d3.pow().exponent(.5);
-};
-d3.ordinal = function() {
-  var domain = [],
-      index = {},
-      range = [],
-      rangeBand = 0;
-
-  function scale(x) {
-    var i = x in index ? index[x] : (index[x] = domain.push(x) - 1);
-    return range[i % range.length];
-  }
-
-  scale.domain = function(x) {
-    if (!arguments.length) return domain;
-    domain = x;
-    index = {};
-    var i = -1, j = -1, n = domain.length; while (++i < n) {
-      x = domain[i];
-      if (!(x in index)) index[x] = ++j;
-    }
-    return scale;
-  };
-
-  scale.range = function(x) {
-    if (!arguments.length) return range;
-    range = x;
-    return scale;
-  };
-
-  scale.rangePoints = function(x, padding) {
-    if (arguments.length < 2) padding = 0;
-    var start = x[0],
-        stop = x[1],
-        step = (stop - start) / (domain.length - 1 + padding);
-    range = domain.length == 1
-        ? [(start + stop) / 2]
-        : d3.range(start + step * padding / 2, stop + step / 2, step);
-    rangeBand = 0;
-    return scale;
-  };
-
-  scale.rangeBands = function(x, padding) {
-    if (arguments.length < 2) padding = 0;
-    var start = x[0],
-        stop = x[1],
-        step = (stop - start) / (domain.length + padding);
-    range = d3.range(start + step * padding, stop, step);
-    rangeBand = step * (1 - padding);
-    return scale;
-  };
-
-  scale.rangeBand = function() {
-    return rangeBand;
-  };
-
-  return scale;
-};
-d3.category10 = function() {
-  return d3.ordinal().range(d3_category10);
-};
-
-d3.category19 = function() {
-  return d3.ordinal().range(d3_category19);
-};
-
-d3.category20 = function() {
-  return d3.ordinal().range(d3_category20);
-};
-
-var d3_category10 = [
-  "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
-  "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
-];
-
-var d3_category19 = [
-  "#9c9ede", "#7375b5", "#4a5584", "#cedb9c", "#b5cf6b",
-  "#8ca252", "#637939", "#e7cb94", "#e7ba52", "#bd9e39",
-  "#8c6d31", "#e7969c", "#d6616b", "#ad494a", "#843c39",
-  "#de9ed6", "#ce6dbd", "#a55194", "#7b4173"
-];
-
-var d3_category20 = [
-  "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
-  "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
-  "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
-  "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"
-];
 var d3_root = d3_selection([[document]]);
 d3_root[0].parentNode = document.documentElement;
+
 // TODO fast singleton implementation!
 d3.select = function(query) {
   return typeof query == "string"
       ? d3_root.select(query)
       : d3_selection([[query]]); // assume node
 };
+
 d3.selectAll = function(query) {
   return typeof query == "string"
       ? d3_root.selectAll(query)
       : d3_selection([d3_array(query)]); // assume node[]
 };
+
 function d3_selection(groups) {
   var i = -1,
       n = groups.length,
@@ -1128,28 +881,34 @@ function d3_selection(groups) {
           : function() { return this.getAttribute(name); });
     }
 
+    /** @this {Element} */
     function attrNull() {
       this.removeAttribute(name);
     }
 
+    /** @this {Element} */
     function attrNullNS() {
       this.removeAttributeNS(name.space, name.local);
     }
 
+    /** @this {Element} */
     function attrConstant() {
       this.setAttribute(name, value);
     }
 
+    /** @this {Element} */
     function attrConstantNS() {
       this.setAttributeNS(name.space, name.local, value);
     }
 
+    /** @this {Element} */
     function attrFunction() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttribute(name);
       else this.setAttribute(name, x);
     }
 
+    /** @this {Element} */
     function attrFunctionNS() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttributeNS(name.space, name.local);
@@ -1172,14 +931,17 @@ function d3_selection(groups) {
       });
     }
 
+    /** @this {Element} */
     function styleNull() {
       this.style.removeProperty(name);
     }
 
+    /** @this {Element} */
     function styleConstant() {
       this.style.setProperty(name, value, priority);
     }
 
+    /** @this {Element} */
     function styleFunction() {
       var x = value.apply(this, arguments);
       if (x == null) this.style.removeProperty(name);
@@ -1201,14 +963,17 @@ function d3_selection(groups) {
       });
     }
 
+    /** @this {Element} */
     function propertyNull() {
       delete this[name];
     }
 
+    /** @this {Element} */
     function propertyConstant() {
       this[name] = value;
     }
 
+    /** @this {Element} */
     function propertyFunction() {
       var x = value.apply(this, arguments);
       if (x == null) delete this[name];
@@ -1229,14 +994,17 @@ function d3_selection(groups) {
       });
     }
 
+    /** @this {Element} */
     function textNull() {
       while (this.lastChild) this.removeChild(this.lastChild);
     }
 
+    /** @this {Element} */
     function textConstant() {
       this.appendChild(document.createTextNode(value));
     }
 
+    /** @this {Element} */
     function textFunction() {
       var x = value.apply(this, arguments);
       if (x != null) this.appendChild(document.createTextNode(x));
@@ -1257,10 +1025,12 @@ function d3_selection(groups) {
       });
     }
 
+    /** @this {Element} */
     function htmlConstant() {
       this.innerHTML = value;
     }
 
+    /** @this {Element} */
     function htmlFunction() {
       this.innerHTML = value.apply(this, arguments);
     }
@@ -1412,20 +1182,24 @@ function d3_transition(groups, name) {
     var interpolators = [],
         k = -1;
 
+    /** @this {Element} */
     function attrInterpolator(d, i) {
       interpolators[++k] = tween.call(this, d, i,
           this.getAttribute(name));
     }
 
+    /** @this {Element} */
     function attrInterpolatorNS(d, i) {
       interpolators[++k] = tween.call(this, d, i,
           this.getAttributeNS(name.space, name.local));
     }
 
+    /** @this {Element} */
     function attrTween(t, k) {
       this.setAttribute(name, interpolators[k](t));
     }
 
+    /** @this {Element} */
     function attrTweenNS(t, k) {
       this.setAttributeNS(name.space, name.local, interpolators[k](t));
     }
@@ -1444,11 +1218,13 @@ function d3_transition(groups, name) {
     var interpolators = [],
         k = -1;
 
+    /** @this {Element} */
     function styleInterpolator(d, i) {
       interpolators[++k] = tween.call(this, d, i,
           window.getComputedStyle(this, null).getPropertyValue(name));
     }
 
+    /** @this {Element} */
     function styleTween(t, k) {
       this.style.setProperty(name, interpolators[k](t), priority);
     }
@@ -1560,7 +1336,257 @@ function d3_tween(b) {
     ? function(d, i, a) { return d3.interpolate(a, b.call(this, d, i)); }
     : function(d, i, a) { return d3.interpolate(a, b); };
 }
-d3.arc = function() {
+d3.scale = {};
+d3.scale.linear = function() {
+  var x0 = 0,
+      x1 = 1,
+      y0 = 0,
+      y1 = 1,
+      k = 1 / (x1 - x0),
+      i = d3.interpolate(y0, y1);
+
+  function scale(x) {
+    return i((x - x0) * k);
+  }
+
+  scale.invert = function(x) {
+    return (x - y0) / k + x0; // TODO assumes number?
+  };
+
+  /** @param {*=} x */
+  scale.domain = function(x) {
+    if (!arguments.length) return [x0, x1];
+    x0 = x[0];
+    x1 = x[1];
+    k = 1 / (x1 - x0);
+    return scale;
+  };
+
+  /** @param {*=} x */
+  scale.range = function(x) {
+    if (!arguments.length) return [y0, y1];
+    y0 = x[0];
+    y1 = x[1];
+    i = d3.interpolate(y0, y1); // TODO allow override?
+    return scale;
+  };
+
+  // TODO Dates? Ugh.
+  function tickRange(m) {
+    var start = Math.min(x0, x1),
+        stop = Math.max(x0, x1),
+        span = stop - start,
+        step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
+        err = m / (span / step);
+
+    // Filter ticks to get closer to the desired count.
+    if (err <= .15) step *= 10;
+    else if (err <= .35) step *= 5;
+    else if (err <= .75) step *= 2;
+
+    // Round start and stop values to step interval.
+    return {
+      start: Math.ceil(start / step) * step,
+      stop: Math.floor(stop / step) * step + step * .5, // inclusive
+      step: step
+    };
+  }
+
+  scale.ticks = function(m) {
+    var range = tickRange(m);
+    return d3.range(range.start, range.stop, range.step);
+  };
+
+  scale.tickFormat = function(m) {
+    var n = Math.max(0, -Math.floor(Math.log(tickRange(m).step) / Math.LN10 + .01));
+    return d3.format(",." + n + "f");
+  };
+
+  return scale;
+};
+d3.scale.log = function() {
+  var linear = d3.scale.linear();
+
+  function log(x) {
+    return Math.log(x) / Math.LN10;
+  }
+
+  function pow(y) {
+    return Math.pow(10, y);
+  }
+
+  function scale(x) {
+    return linear(log(x));
+  }
+
+  scale.invert = function(x) {
+    return pow(linear.invert(x));
+  };
+
+  /** @param {*=} x */
+  scale.domain = function(x) {
+    if (!arguments.length) return linear.domain().map(pow);
+    linear.domain(x.map(log));
+    return scale;
+  };
+
+  scale.range = function() {
+    var x = linear.range.apply(linear, arguments);
+    return arguments.length ? scale : x;
+  };
+
+  scale.ticks = function() {
+    var d = linear.domain(),
+        i = Math.floor(d[0]),
+        j = Math.ceil(d[1]),
+        ticks = [];
+    if (d.every(isFinite)) {
+      while (++i <= j) for (var k = 1; k < 10; k++) ticks.push(pow(i) * k);
+      ticks.push(pow(i));
+    }
+    return ticks;
+  };
+
+  scale.tickFormat = function() {
+    return function(d) { return d.toPrecision(1); };
+  };
+
+  return scale;
+};
+d3.scale.pow = function() {
+  var linear = d3.scale.linear(),
+      p = 1,
+      b = 1 / p;
+
+  function powp(x) {
+    return Math.pow(x, p);
+  }
+
+  function powb(x) {
+    return Math.pow(x, b);
+  }
+
+  function scale(x) {
+    return linear(powp(x));
+  }
+
+  scale.invert = function(x) {
+    return powb(linear.invert(x));
+  };
+
+  /** @param {*=} x */
+  scale.domain = function(x) {
+    if (!arguments.length) return linear.domain().map(powb);
+    linear.domain(x.map(powp));
+    return scale;
+  };
+
+  scale.range = function() {
+    var x = linear.range.apply(linear, arguments);
+    return arguments.length ? scale : x;
+  };
+
+  scale.exponent = function(x) {
+    if (!arguments.length) return p;
+    var domain = scale.domain();
+    p = x;
+    b = 1 / x;
+    return scale.domain(domain);
+  };
+
+  return scale;
+};
+d3.scale.sqrt = function() {
+  return d3.scale.pow().exponent(.5);
+};
+d3.scale.ordinal = function() {
+  var domain = [],
+      index = {},
+      range = [],
+      rangeBand = 0;
+
+  function scale(x) {
+    var i = x in index ? index[x] : (index[x] = domain.push(x) - 1);
+    return range[i % range.length];
+  }
+
+  scale.domain = function(x) {
+    if (!arguments.length) return domain;
+    domain = x;
+    index = {};
+    var i = -1, j = -1, n = domain.length; while (++i < n) {
+      x = domain[i];
+      if (!(x in index)) index[x] = ++j;
+    }
+    return scale;
+  };
+
+  scale.range = function(x) {
+    if (!arguments.length) return range;
+    range = x;
+    return scale;
+  };
+
+  scale.rangePoints = function(x, padding) {
+    if (arguments.length < 2) padding = 0;
+    var start = x[0],
+        stop = x[1],
+        step = (stop - start) / (domain.length - 1 + padding);
+    range = domain.length == 1
+        ? [(start + stop) / 2]
+        : d3.range(start + step * padding / 2, stop + step / 2, step);
+    rangeBand = 0;
+    return scale;
+  };
+
+  scale.rangeBands = function(x, padding) {
+    if (arguments.length < 2) padding = 0;
+    var start = x[0],
+        stop = x[1],
+        step = (stop - start) / (domain.length + padding);
+    range = d3.range(start + step * padding, stop, step);
+    rangeBand = step * (1 - padding);
+    return scale;
+  };
+
+  scale.rangeBand = function() {
+    return rangeBand;
+  };
+
+  return scale;
+};
+d3.scale.category10 = function() {
+  return d3.scale.ordinal().range(d3_category10);
+};
+
+d3.scale.category19 = function() {
+  return d3.scale.ordinal().range(d3_category19);
+};
+
+d3.scale.category20 = function() {
+  return d3.scale.ordinal().range(d3_category20);
+};
+
+var d3_category10 = [
+  "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd",
+  "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
+];
+
+var d3_category19 = [
+  "#9c9ede", "#7375b5", "#4a5584", "#cedb9c", "#b5cf6b",
+  "#8ca252", "#637939", "#e7cb94", "#e7ba52", "#bd9e39",
+  "#8c6d31", "#e7969c", "#d6616b", "#ad494a", "#843c39",
+  "#de9ed6", "#ce6dbd", "#a55194", "#7b4173"
+];
+
+var d3_category20 = [
+  "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
+  "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
+  "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
+  "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"
+];
+d3.svg = {};
+d3.svg.arc = function() {
   var innerRadius = function(d) { return d.innerRadius; },
       outerRadius = function(d) { return d.outerRadius; },
       startAngle = function(d) { return d.startAngle; },
@@ -1616,7 +1642,7 @@ d3.arc = function() {
 
   return arc;
 };
-d3.line = function() {
+d3.svg.line = function() {
   var x = function(d, i) { return d.x; },
       y = function(d, i) { return d.y; };
 
@@ -1641,7 +1667,7 @@ d3.line = function() {
 
   return line;
 };
-d3.area = function() {
+d3.svg.area = function() {
   var x = function(d, i) { return d.x; },
       y0 = 0,
       y1 = function(d, i) { return d.y1; };
@@ -1677,4 +1703,3 @@ d3.area = function() {
 
   return area;
 };
-})(this);

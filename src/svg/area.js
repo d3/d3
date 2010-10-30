@@ -1,4 +1,4 @@
-d3.area = function() {
+d3.svg.area = function() {
   var x = function(d, i) { return d.x; },
       y0 = 0,
       y1 = function(d, i) { return d.y1; };

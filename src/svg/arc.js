@@ -1,4 +1,4 @@
-d3.arc = function() {
+d3.svg.arc = function() {
   var innerRadius = function(d) { return d.innerRadius; },
       outerRadius = function(d) { return d.outerRadius; },
       startAngle = function(d) { return d.startAngle; },

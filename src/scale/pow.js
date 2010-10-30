@@ -1,5 +1,5 @@
-d3.pow = function() {
-  var linear = d3.linear(),
+d3.scale.pow = function() {
+  var linear = d3.scale.linear(),
       p = 1,
       b = 1 / p;
 
