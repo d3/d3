@@ -8,7 +8,7 @@ if (!Object.create) Object.create = function(o) {
 };
 (function(_) {
   var d3 = _.d3 = {};
-  d3.version = "0.1.3"; // semver
+  d3.version = "0.1.4"; // semver
 function d3_array(psuedoarray) {
   return Array.prototype.slice.call(psuedoarray);
 }
@@ -723,24 +723,48 @@ d3.linear = function() {
 d3.log = function() {
   var linear = d3.linear();
 
+  function log(x) {
+    return Math.log(x) / Math.LN10;
+  }
+
+  function pow(y) {
+    return Math.pow(10, y);
+  }
+
   function scale(x) {
-    return linear(Math.log(x));
+    return linear(log(x));
   }
 
   scale.invert = function(x) {
-    return Math.exp(linear.invert(x));
+    return pow(linear.invert(x));
   };
 
   /** @param {*=} x */
   scale.domain = function(x) {
-    if (!arguments.length) return linear.domain().map(Math.exp);
-    linear.domain(x.map(Math.log));
+    if (!arguments.length) return linear.domain().map(pow);
+    linear.domain(x.map(log));
     return scale;
   };
 
   scale.range = function() {
     var x = linear.range.apply(linear, arguments);
     return arguments.length ? scale : x;
+  };
+
+  scale.ticks = function() {
+    var d = linear.domain(),
+        i = Math.floor(d[0]),
+        j = Math.ceil(d[1]),
+        ticks = [];
+    if (d.every(isFinite)) {
+      while (++i <= j) for (var k = 1; k < 10; k++) ticks.push(pow(i) * k);
+      ticks.push(pow(i));
+    }
+    return ticks;
+  };
+
+  scale.tickFormat = function() {
+    return function(d) { return d.toPrecision(1); };
   };
 
   return scale;
