@@ -1,4 +1,4 @@
-d3 = {version: "0.2.0"}; // semver
+d3 = {version: "0.3.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1066,6 +1066,22 @@ function d3_selection(groups) {
     });
   };
 
+  groups.sort = function(comparator) {
+    comparator = d3_comparator.apply(this, arguments);
+    for (var j = 0, m = groups.length; j < m; j++) {
+      var group = groups[j];
+      group.sort(comparator);
+      for (var i = 1, n = group.length, prev = group[0]; i < n; i++) {
+        var node = group[i];
+        if (node) {
+          if (prev) prev.parentNode.insertBefore(node, prev.nextSibling);
+          prev = node;
+        }
+      }
+    }
+    return groups;
+  };
+
   // TODO namespaced event listeners to allow multiples
   groups.on = function(type, listener) {
     type = "on" + type;
@@ -1098,6 +1114,21 @@ function d3_selection_join(key) {
     nodeKey: function(node) { return node.getAttribute(key); },
     dataKey: function(data) { return data[key]; }
   };
+}
+
+function d3_comparator(comparator) {
+  if (!arguments.length) comparator = d3_ascending;
+  return function(a, b) {
+    return comparator(a && a.__data__, b && b.__data__);
+  };
+}
+
+function d3_ascending(a, b) {
+  return a < b ? -1 : a > b ? 1 : 0;
+}
+
+function d3_descending(a, b) {
+  return a < b ? 1 : a > b ? -1 : 0;
 }
 d3.transition = d3_root.transition;
 
