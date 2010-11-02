@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Choropleth</title>
+    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="unemployment.js"></script>
+    <style type="text/css">
+
+@import url("../../lib/colorbrewer/colorbrewer.css");
+
+path {
+  stroke: #fff;
+  stroke-width: .5px;
+  -webkit-transition: fill 500ms linear;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var svg = d3.select("body")
+  .append("svg:svg")
+    .attr("width", 960)
+    .attr("height", 500)
+    .attr("class", "Blues")
+    .style("border", "solid 1px #ccc");
+
+var scale = d3.scale.linear()
+    .domain([0, 20])
+    .range([0, 9]);
+
+d3.json("../../data/us-counties.json", function(counties) {
+  self.counties = counties;
+
+  var path = svg.selectAll("path")
+      .data(counties.features, {
+        nodeKey: function(n) { return n.getAttribute("id"); },
+        dataKey: function(d) { return "fips:" + d.id; }
+      });
+
+  path.enter("svg:path")
+      .attr("id", function(d) { return "fips:" + d.id; })
+      .attr("class", function(d) { return "q" + Math.min(8, ~~scale(unemployment[d.id])) + "-9"; })
+      .attr("d", d3.geo.geoJson());
+
+  path.exit()
+      .remove();
+});
+
+    </script>
+  </body>
+</html>

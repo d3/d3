@@ -20,6 +20,7 @@ var d3 = {
   interpolateObject: 1,
   interpolateString: 1,
   interpolateRgb: 1,
+  json: 1,
   ns: {
     prefix: {
       svg: 1,
@@ -104,5 +105,33 @@ d3.svg = {
   line: {
     x: 1,
     y: 1
+  }
+};
+
+// d3.geo
+d3.geo = {
+  albers: {
+    origin: 1,
+    parallels: 1,
+    range: 1
+  },
+  geoJson: {
+    coordinates: 1,
+    features: 1,
+    Feature: 1,
+    FeatureCollection: 1,
+    geometry: 1,
+    geometries: 1,
+    GeometryCollection: 1,
+    id: 1,
+    LineString: 1,
+    MultiLineString: 1,
+    MultiPoint: 1,
+    MultiPolygon: 1,
+    Point: 1,
+    pointRadius: 1,
+    Polygon: 1,
+    projection: 1,
+    type: 1
   }
 };

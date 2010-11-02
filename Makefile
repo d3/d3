@@ -11,7 +11,8 @@ all: d3.js d3.min.js
 .INTERMEDIATE d3.js: \
 	d3.core.js \
 	d3.scale.js \
-	d3.svg.js
+	d3.svg.js \
+	d3.geo.js
 
 d3.core.js: \
 	src/core/core.js \
@@ -21,6 +22,7 @@ d3.core.js: \
 	src/core/blend.js \
 	src/core/call.js \
 	src/core/range.js \
+	src/core/json.js \
 	src/core/ns.js \
 	src/core/dispatch.js \
 	src/core/format.js \
@@ -48,6 +50,11 @@ d3.svg.js: \
 	src/svg/arc.js \
 	src/svg/line.js \
 	src/svg/area.js
+
+d3.geo.js: \
+  src/geo/geo.js \
+  src/geo/geoJson.js \
+  src/geo/albers.js
 
 d3.min.js: d3.js Makefile src/externs.js
 	rm -f $@
