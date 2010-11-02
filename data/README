@@ -1,0 +1,5 @@
+These are derived from the cartographic boundary files from the 2000 U.S. Census:
+
+http://www.census.gov/geo/www/cob/bdy_files.html
+
+Then, MapShaper was used to simplify the geometry, and ogr2ogr to convert the shapefiles to GeoJSON. Some additional work was done to preserve the FIPS codes, which are dropped from the shapefiles by MapShaper.

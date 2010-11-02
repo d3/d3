@@ -113,7 +113,8 @@ d3.geo = {
   albers: {
     origin: 1,
     parallels: 1,
-    range: 1
+    scale: 1,
+    translate: 1
   },
   geoJson: {
     coordinates: 1,

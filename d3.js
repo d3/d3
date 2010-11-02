@@ -1,4 +1,4 @@
-d3 = {version: "0.4.0"}; // semver
+d3 = {version: "0.5.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1925,7 +1925,8 @@ function d3_geoJson_circle(radius) {
 d3.geo.albers = function() {
   var origin = [-96, 23],
       parallels = [29.5, 45.5],
-      scale = d3.scale.linear().domain([-1, 1]).range([-500, 1550]),
+      scale = 1000,
+      translate = [500, 510],
       lng0, // d3_radians * origin[0]
       n,
       C,
@@ -1934,7 +1935,10 @@ d3.geo.albers = function() {
   function albers(coordinates) {
     var t = n * (d3_radians * coordinates[0] - lng0),
         p = Math.sqrt(C - 2 * n * Math.sin(d3_radians * coordinates[1])) / n;
-    return [p * Math.sin(t), p * Math.cos(t) - p0].map(scale);
+    return [
+      scale * p * Math.sin(t) + translate[0],
+      scale * (p * Math.cos(t) - p0) + translate[1]
+    ];
   }
 
   function reload() {
@@ -1950,18 +1954,23 @@ d3.geo.albers = function() {
     return albers;
   }
 
-  albers.origin = function(x) {
-    origin = x;
+  albers.origin = function(x, y) {
+    origin = [+x, +y];
     return reload();
   };
 
-  albers.parallels = function(x) {
-    parallels = x;
+  albers.parallels = function(x, y) {
+    parallels = [+x, +y];
     return reload();
   };
 
-  albers.range = function(x) {
-    scale.range(x);
+  albers.scale = function(x) {
+    scale = +x;
+    return albers;
+  };
+
+  albers.translate = function(x, y) {
+    translate = [+x, +y];
     return albers;
   };
 

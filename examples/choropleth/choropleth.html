@@ -2,17 +2,29 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Choropleth</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <title>U.S. Unemployment by County</title>
+    <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="unemployment.js"></script>
     <style type="text/css">
 
 @import url("../../lib/colorbrewer/colorbrewer.css");
 
-path {
+svg {
+  background: #eee;
+  border: solid 1px #ccc;
+  width: 960px;
+  height: 500px;
+}
+
+#counties path {
   stroke: #fff;
   stroke-width: .5px;
-  -webkit-transition: fill 500ms linear;
+}
+
+#states path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
 }
 
     </style>
@@ -21,33 +33,68 @@ path {
     <script type="text/javascript">
 
 var svg = d3.select("body")
-  .append("svg:svg")
-    .attr("width", 960)
-    .attr("height", 500)
-    .attr("class", "Blues")
-    .style("border", "solid 1px #ccc");
+  .append("svg:svg");
 
-var scale = d3.scale.linear()
+var color = d3.scale.linear()
     .domain([0, 20])
     .range([0, 9]);
 
-d3.json("../../data/us-counties.json", function(counties) {
-  self.counties = counties;
+d3.json("../../data/us-counties.json", render(svg
+  .append("svg:g")
+    .attr("id", "counties")
+    .attr("class", "Blues")));
 
-  var path = svg.selectAll("path")
-      .data(counties.features, {
-        nodeKey: function(n) { return n.getAttribute("id"); },
-        dataKey: function(d) { return "fips:" + d.id; }
-      });
+d3.json("../../data/us-states.json", render(svg
+  .append("svg:g")
+    .attr("id", "states")));
 
-  path.enter("svg:path")
-      .attr("id", function(d) { return "fips:" + d.id; })
-      .attr("class", function(d) { return "q" + Math.min(8, ~~scale(unemployment[d.id])) + "-9"; })
-      .attr("d", d3.geo.geoJson());
+function render(container) {
+  return function(collection) {
 
-  path.exit()
-      .remove();
-});
+    function project(re, projection) {
+      var path = container.selectAll("path")
+          .data(collection.features.filter(id(re)), {
+            nodeKey: function(n) { return n.getAttribute("id"); },
+            dataKey: function(d) { return "fips:" + d.id; }
+          });
+
+      path.enter("svg:path")
+          .attr("id", function(d) { return "fips:" + d.id; })
+          .attr("class", function(d) { return "q" + Math.min(8, ~~color(unemployment[d.id])) + "-9"; })
+          .attr("d", d3.geo.geoJson()
+          .projection(projection));
+    }
+
+    // Lower Forty-Eight
+    project(/^(?!02|15|72)/, d3.geo.albers());
+
+    // Alaska 02
+    project(/^02/, d3.geo.albers()
+        .origin(-160, 60)
+        .parallels(55, 65)
+        .scale(500)
+        .translate(70, 430));
+
+    // Hawaii 15
+    project(/^15/, d3.geo.albers()
+        .origin(-160, 20)
+        .parallels(10, 30)
+        .translate(270, 460));
+
+    // Puerto Rico 72
+    project(/^72/, d3.geo.albers()
+        .origin(-60, 10)
+        .parallels(0, 20)
+        .scale(2000)
+        .translate(1100, 750));
+  };
+}
+
+function id(re) {
+  return function(f) {
+    return re.test(f.id);
+  };
+}
 
     </script>
   </body>
