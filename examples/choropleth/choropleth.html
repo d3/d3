@@ -18,7 +18,7 @@ svg {
 
 #counties path {
   stroke: #fff;
-  stroke-width: .5px;
+  stroke-width: .25px;
 }
 
 #states path {
@@ -36,7 +36,7 @@ var svg = d3.select("body")
   .append("svg:svg");
 
 var color = d3.scale.linear()
-    .domain([0, 20])
+    .domain([0, 12])
     .range([0, 9]);
 
 d3.json("../../data/us-counties.json", render(svg
