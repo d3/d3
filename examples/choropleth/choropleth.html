@@ -50,49 +50,11 @@ d3.json("../../data/us-states.json", render(svg
 
 function render(container) {
   return function(collection) {
-
-    function project(re, projection) {
-      var path = container.selectAll("path")
-          .data(collection.features.filter(id(re)), {
-            nodeKey: function(n) { return n.getAttribute("id"); },
-            dataKey: function(d) { return "fips:" + d.id; }
-          });
-
-      path.enter("svg:path")
-          .attr("id", function(d) { return "fips:" + d.id; })
-          .attr("class", function(d) { return "q" + Math.min(8, ~~color(unemployment[d.id])) + "-9"; })
-          .attr("d", d3.geo.geoJson()
-          .projection(projection));
-    }
-
-    // Lower Forty-Eight
-    project(/^(?!02|15|72)/, d3.geo.albers());
-
-    // Alaska 02
-    project(/^02/, d3.geo.albers()
-        .origin(-160, 60)
-        .parallels(55, 65)
-        .scale(500)
-        .translate(70, 430));
-
-    // Hawaii 15
-    project(/^15/, d3.geo.albers()
-        .origin(-160, 20)
-        .parallels(10, 30)
-        .translate(270, 460));
-
-    // Puerto Rico 72
-    project(/^72/, d3.geo.albers()
-        .origin(-60, 10)
-        .parallels(0, 20)
-        .scale(2000)
-        .translate(1100, 750));
-  };
-}
-
-function id(re) {
-  return function(f) {
-    return re.test(f.id);
+    container.selectAll("path")
+        .data(collection.features)
+      .enter("svg:path")
+        .attr("class", function(d) { return "q" + Math.min(8, ~~color(unemployment[d.id])) + "-9"; })
+        .attr("d", d3.geo.path());
   };
 }
 

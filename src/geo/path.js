@@ -5,14 +5,14 @@
  * can be specified either as a constant or a function that is evaluated per
  * feature.
  */
-d3.geo.geoJson = function() {
+d3.geo.path = function() {
   var pointRadius = 4.5,
-      pointCircle = d3_geoJson_circle(pointRadius),
-      projection = d3.geo.albers();
+      pointCircle = d3_path_circle(pointRadius),
+      projection = d3.geo.albersUsa();
 
-  function geoJson(d, i) {
+  function path(d, i) {
     if (typeof pointRadius == "function") {
-      pointCircle = d3_geoJson_circle(pointRadius.apply(this, arguments));
+      pointCircle = d3_path_circle(pointRadius.apply(this, arguments));
     }
     return type(featureTypes, d);
   }
@@ -145,24 +145,24 @@ d3.geo.geoJson = function() {
 
   };
 
-  geoJson.projection = function(x) {
+  path.projection = function(x) {
     projection = x;
-    return geoJson;
+    return path;
   };
 
-  geoJson.pointRadius = function(x) {
+  path.pointRadius = function(x) {
     if (typeof x == "function") pointRadius = x;
     else {
       pointRadius = +x;
-      pointCircle = d3_geoJson_circle(pointRadius);
+      pointCircle = d3_path_circle(pointRadius);
     }
-    return geoJson;
+    return path;
   };
 
-  return geoJson;
+  return path;
 };
 
-function d3_geoJson_circle(radius) {
+function d3_path_circle(radius) {
   return "m0," + radius
       + "a" + radius + "," + radius + " 0 1,1 0," + (-2 * radius)
       + "a" + radius + "," + radius + " 0 1,1 0," + (+2 * radius)

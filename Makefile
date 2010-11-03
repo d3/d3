@@ -53,8 +53,9 @@ d3.svg.js: \
 
 d3.geo.js: \
   src/geo/geo.js \
-  src/geo/geoJson.js \
-  src/geo/albers.js
+  src/geo/albers.js \
+  src/geo/circle.js \
+  src/geo/path.js
 
 d3.min.js: d3.js Makefile src/externs.js
 	rm -f $@

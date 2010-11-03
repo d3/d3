@@ -111,12 +111,14 @@ d3.svg = {
 // d3.geo
 d3.geo = {
   albers: {
+    albersUsa: 1,
     origin: 1,
     parallels: 1,
     scale: 1,
     translate: 1
   },
-  geoJson: {
+  circle: 1,
+  path: {
     coordinates: 1,
     features: 1,
     Feature: 1,

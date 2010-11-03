@@ -6,7 +6,7 @@ d3.geo.albers = function() {
   var origin = [-96, 23],
       parallels = [29.5, 45.5],
       scale = 1000,
-      translate = [500, 510],
+      translate = [520, 510],
       lng0, // d3_radians * origin[0]
       n,
       C,
@@ -55,6 +55,37 @@ d3.geo.albers = function() {
   };
 
   return reload();
+};
+
+// A composite projection for the United States, 960x500.
+// TODO allow the composite projection to be rescaled?
+d3.geo.albersUsa = function() {
+  var lower48 = d3.geo.albers();
+
+  var alaska = d3.geo.albers()
+      .origin(-160, 60)
+      .parallels(55, 65)
+      .scale(600)
+      .translate(80, 420);
+
+  var hawaii = d3.geo.albers()
+      .origin(-160, 20)
+      .parallels(10, 30)
+      .translate(290, 450);
+
+  var puertoRico = d3.geo.albers()
+      .origin(-60, 10)
+      .parallels(0, 20)
+      .scale(1500)
+      .translate(1060, 680);
+
+  return function(coordinates) {
+    var lon = coordinates[0],
+        lat = coordinates[1];
+    return (lat < 25
+        ? (lon < -100 ? hawaii : puertoRico)
+        : (lat > 50 ? alaska : lower48))(coordinates);
+  };
 };
 
 var d3_radians = Math.PI / 180;

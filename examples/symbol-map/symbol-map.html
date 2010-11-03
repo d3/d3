@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>U.S. States</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+svg {
+  width: 960px;
+  height: 500px;
+}
+
+#states path, #state-centroids circle {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+#state-centroids circle {
+  fill: steelblue;
+  fill-opacity: .8;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+// The radius scale for the centroids.
+var r = d3.scale.sqrt()
+    .domain([0, 1e6])
+    .range([0, 10]);
+
+var svg = d3.select("body").append("svg:svg");
+svg.append("svg:g").attr("id", "states");
+svg.append("svg:g").attr("id", "state-centroids");
+
+d3.json("../../data/us-states.json", renderPaths);
+d3.json("../../data/us-state-centroids.json", renderPoints);
+
+function renderPaths(collection) {
+  svg.select("#states")
+    .selectAll("path")
+      .data(collection.features)
+    .enter("svg:path")
+      .attr("d", d3.geo.path());
+}
+
+function renderPoints(collection) {
+  svg.select("#state-centroids")
+    .selectAll("circle")
+      .data(collection.features
+      .sort(function(a, b) { return b.properties.population - a.properties.population; }))
+    .enter("svg:circle")
+      .attr("r", 0)
+      .each(d3.geo.circle())
+    .transition()
+      .duration(1000)
+      .delay(function(d, i) { return i * 50; })
+      .attr("r", function(d) { return r(d.properties.population); });
+}
+
+    </script>
+  </body>
+</html>
