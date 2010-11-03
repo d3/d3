@@ -32,34 +32,34 @@ var r = d3.scale.sqrt()
     .domain([0, 1e6])
     .range([0, 10]);
 
+// Our projection.
+var xy = d3.geo.albersUsa();
+
 var svg = d3.select("body").append("svg:svg");
 svg.append("svg:g").attr("id", "states");
 svg.append("svg:g").attr("id", "state-centroids");
 
-d3.json("../../data/us-states.json", renderPaths);
-d3.json("../../data/us-state-centroids.json", renderPoints);
-
-function renderPaths(collection) {
+d3.json("../../data/us-states.json", function(collection) {
   svg.select("#states")
     .selectAll("path")
       .data(collection.features)
     .enter("svg:path")
-      .attr("d", d3.geo.path());
-}
+      .attr("d", d3.geo.path().projection(xy));
+});
 
-function renderPoints(collection) {
+d3.json("../../data/us-state-centroids.json", function(collection) {
   svg.select("#state-centroids")
     .selectAll("circle")
       .data(collection.features
       .sort(function(a, b) { return b.properties.population - a.properties.population; }))
     .enter("svg:circle")
+      .attr("transform", function(d) { return "translate(" + xy(d.geometry.coordinates) + ")"; })
       .attr("r", 0)
-      .each(d3.geo.circle())
     .transition()
       .duration(1000)
       .delay(function(d, i) { return i * 50; })
       .attr("r", function(d) { return r(d.properties.population); });
-}
+});
 
     </script>
   </body>
