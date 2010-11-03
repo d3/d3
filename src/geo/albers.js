@@ -3,10 +3,10 @@
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
 
 d3.geo.albers = function() {
-  var origin = [-96, 23],
+  var origin = [-98, 38],
       parallels = [29.5, 45.5],
       scale = 1000,
-      translate = [520, 510],
+      translate = [480, 250],
       lng0, // d3_radians * origin[0]
       n,
       C,
@@ -34,23 +34,27 @@ d3.geo.albers = function() {
     return albers;
   }
 
-  albers.origin = function(x, y) {
-    origin = [+x, +y];
+  albers.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = [+x[0], +x[1]];
     return reload();
   };
 
-  albers.parallels = function(x, y) {
-    parallels = [+x, +y];
+  albers.parallels = function(x) {
+    if (!arguments.length) return parallels;
+    parallels = [+x[0], +x[1]];
     return reload();
   };
 
   albers.scale = function(x) {
+    if (!arguments.length) return scale;
     scale = +x;
     return albers;
   };
 
-  albers.translate = function(x, y) {
-    translate = [+x, +y];
+  albers.translate = function(x) {
+    if (!arguments.length) return translate;
+    translate = [+x[0], +x[1]];
     return albers;
   };
 
@@ -63,21 +67,21 @@ d3.geo.albersUsa = function() {
   var lower48 = d3.geo.albers();
 
   var alaska = d3.geo.albers()
-      .origin(-160, 60)
-      .parallels(55, 65)
-      .scale(600)
-      .translate(80, 420);
+      .origin([-160, 60])
+      .parallels([55, 65])
+      .scale([600])
+      .translate([80, 420]);
 
   var hawaii = d3.geo.albers()
-      .origin(-160, 20)
-      .parallels(10, 30)
-      .translate(290, 450);
+      .origin([-160, 20])
+      .parallels([10, 30])
+      .translate([290, 450]);
 
   var puertoRico = d3.geo.albers()
-      .origin(-60, 10)
-      .parallels(0, 20)
-      .scale(1500)
-      .translate(1060, 680);
+      .origin([-60, 10])
+      .parallels([0, 20])
+      .scale([1500])
+      .translate([1060, 680]);
 
   return function(coordinates) {
     var lon = coordinates[0],
