@@ -1,4 +1,4 @@
-d3 = {version: "0.8.0"}; // semver
+d3 = {version: "0.8.1"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1811,7 +1811,9 @@ d3.geo.albers = function() {
   return reload();
 };
 
-// A composite projection for the United States, 960x500.
+// A composite projection for the United States, 960x500. The set of standard
+// parallels for each region comes from USGS, which is published here:
+// http://egsc.usgs.gov/isb/pubs/MapProjections/projections.html#albers
 // TODO allow the composite projection to be rescaled?
 d3.geo.albersUsa = function() {
   var lower48 = d3.geo.albers();
@@ -1824,12 +1826,12 @@ d3.geo.albersUsa = function() {
 
   var hawaii = d3.geo.albers()
       .origin([-160, 20])
-      .parallels([10, 30])
+      .parallels([8, 18])
       .translate([290, 450]);
 
   var puertoRico = d3.geo.albers()
       .origin([-60, 10])
-      .parallels([0, 20])
+      .parallels([8, 18])
       .scale([1500])
       .translate([1060, 680]);
 
