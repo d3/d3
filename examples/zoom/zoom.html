@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Zoom</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.csv.js"></script>
+    <script type="text/javascript" src="values.js"></script>
+    <script type="text/javascript" src="nest.js"></script>
+    <style type="text/css">
+
+path {
+  fill: steelblue;
+}
+
+line {
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 960,
+    h1 = 400,
+    h2 = 40,
+    p = 20,
+    x = d3.scale.linear().range([0, w]),
+    y1 = d3.scale.linear().range([h1 - p, 0]),
+    y2 = d3.scale.linear().range([h2, 0]);
+
+var svg = d3.select("body")
+  .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h1 + h2);
+
+d3.csv("dji.csv", function(csv) {
+  var minX = Infinity,
+      maxX = -Infinity,
+      maxY = -Infinity;
+
+  // Compute x- and y-extent.
+  for (var i = 0, n = csv.length, o; i < n; i++) {
+    o = csv[i];
+    o = csv[i] = {x: parseDate(o.Date), y: +o.Close};
+    if (o.x < minX) minX = o.x;
+    if (o.x > maxX) maxX = o.x;
+    if (o.y > maxY) maxY = o.y;
+  }
+
+  // Update x- and y-scales. TODO y1 domain is filtered.
+  x.domain([minX, maxX]);
+  y1.domain([0, maxY]);
+  y2.domain([0, maxY]);
+
+  // Focus view.
+  var focus = svg.append("svg:g");
+
+  focus.append("svg:path")
+      .data([csv])
+      .attr("d", d3.svg.area()
+      .x(function(d) { return x(d.x); })
+      .y0(y1(0))
+      .y1(function(d) { return y1(d.y); }));
+
+  focus.append("svg:line")
+      .attr("x1", 0)
+      .attr("x2", w)
+      .attr("y1", y1(0))
+      .attr("y2", y1(0));
+
+  // Context view.
+  var context = svg.append("svg:g")
+      .attr("transform", "translate(0," + h1 + ")");
+
+  context.append("svg:path")
+      .data([csv])
+      .attr("d", d3.svg.area()
+      .x(function(d) { return x(d.x); })
+      .y0(y2(0))
+      .y1(function(d) { return y2(d.y); }));
+
+  context.append("svg:line")
+      .attr("x1", 0)
+      .attr("x2", w)
+      .attr("y1", y2(0))
+      .attr("y2", y2(0));
+});
+
+function parseDate(d) {
+  return Date.UTC.apply(Date, d.split("-"));
+}
+
+    </script>
+  </body>
+</html>
