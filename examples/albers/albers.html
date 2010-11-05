@@ -92,8 +92,8 @@ function refresh() {
 
 $("#parallels").slider({
   range: true,
-  min: -180,
-  max: 180,
+  min: -90,
+  max: 90,
   step: 1e-1,
   values: [29.5, 45.5],
   slide: function(event, ui) {
@@ -116,8 +116,8 @@ $("#lon").slider({
 });
 
 $("#lat").slider({
-  min: -180,
-  max: 180,
+  min: -90,
+  max: 90,
   step: 1e-1,
   value: 38,
   slide: function(event, ui) {
