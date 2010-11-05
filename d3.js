@@ -1,4 +1,4 @@
-d3 = {version: "0.10.0"}; // semver
+d3 = {version: "0.11.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -705,7 +705,7 @@ function d3_selection(groups) {
       for (var i = 0, n = group.length; i < n; i++) {
         if (node = group[i]) {
           subgroup.push(subnode = select(node));
-          if (subnode) subnode.__data__ = node.__data__;
+          if (subnode && !subnode.__data__) subnode.__data__ = node.__data__;
         } else {
           subgroup.push(null);
         }
@@ -1392,15 +1392,16 @@ d3.scale.linear = function() {
       x1 = 1,
       y0 = 0,
       y1 = 1,
-      k = 1 / (x1 - x0),
+      kx = 1 / (x1 - x0),
+      ky = (x1 - x0) / (y1 - y0),
       i = d3.interpolate(y0, y1);
 
   function scale(x) {
-    return i((x - x0) * k);
+    return i((x - x0) * kx);
   }
 
-  scale.invert = function(x) {
-    return (x - y0) / k + x0; // TODO assumes number?
+  scale.invert = function(y) {
+    return (y - y0) * ky + x0; // TODO assumes number?
   };
 
   /** @param {*=} x */
@@ -1408,7 +1409,8 @@ d3.scale.linear = function() {
     if (!arguments.length) return [x0, x1];
     x0 = x[0];
     x1 = x[1];
-    k = 1 / (x1 - x0);
+    kx = 1 / (x1 - x0);
+    ky = (x1 - x0) / (y1 - y0);
     return scale;
   };
 
@@ -1417,6 +1419,7 @@ d3.scale.linear = function() {
     if (!arguments.length) return [y0, y1];
     y0 = x[0];
     y1 = x[1];
+    ky = (x1 - x0) / (y1 - y0);
     i = d3.interpolate(y0, y1); // TODO allow override?
     return scale;
   };
@@ -1753,6 +1756,30 @@ d3.svg.area = function() {
 
   return area;
 };
+d3.svg.mouse = function(container) {
+  var point = (container.ownerSVGElement || container).createSVGPoint();
+  if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
+    var svg = d3.select(document.body)
+      .append("svg:svg")
+        .style("position", "absolute")
+        .style("top", 0)
+        .style("left", 0);
+    var ctm = svg[0][0].getScreenCTM();
+    d3_mouse_bug44083 = !(ctm.f || ctm.e);
+    svg.remove();
+  }
+  if (d3_mouse_bug44083) {
+    point.x = d3.event.pageX;
+    point.y = d3.event.pageY;
+  } else {
+    point.x = d3.event.clientX;
+    point.y = d3.event.clientY;
+  }
+  return point.matrixTransform(container.getScreenCTM().inverse());
+};
+
+// https://bugs.webkit.org/show_bug.cgi?id=44083
+var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
 d3.geo = {};
 // Derived from Tom Carden's Albers implementation for Protovis.
 // http://gist.github.com/476238

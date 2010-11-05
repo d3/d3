@@ -27,6 +27,9 @@ var w = 960,
     h1 = 400,
     h2 = 40,
     p = 20,
+    x0, // start of focus region
+    x1, // end of focus region
+    xx, // drag state
     x = d3.scale.linear().range([0, w]),
     y1 = d3.scale.linear().range([h1 - p, 0]),
     y2 = d3.scale.linear().range([h2, 0]);
@@ -35,6 +38,13 @@ var svg = d3.select("body")
   .append("svg:svg")
     .attr("width", w)
     .attr("height", h1 + h2);
+
+// Focus view.
+var focus = svg.append("svg:g");
+
+// Context view.
+var context = svg.append("svg:g")
+    .attr("transform", "translate(0," + h1 + ")");
 
 d3.csv("dji.csv", function(csv) {
   var minX = Infinity,
@@ -50,14 +60,12 @@ d3.csv("dji.csv", function(csv) {
     if (o.y > maxY) maxY = o.y;
   }
 
-  // Update x- and y-scales. TODO y1 domain is filtered.
+  // Update x- and y-scales.
   x.domain([minX, maxX]);
   y1.domain([0, maxY]);
   y2.domain([0, maxY]);
 
   // Focus view.
-  var focus = svg.append("svg:g");
-
   focus.append("svg:path")
       .data([csv])
       .attr("d", d3.svg.area()
@@ -72,11 +80,17 @@ d3.csv("dji.csv", function(csv) {
       .attr("y2", y1(0));
 
   // Context view.
-  var context = svg.append("svg:g")
-      .attr("transform", "translate(0," + h1 + ")");
+  context.append("svg:rect")
+      .attr("width", w)
+      .attr("height", h2)
+      .attr("fill", "none")
+      .attr("pointer-events", "all")
+      .attr("cursor", "crosshair")
+      .on("mousedown", mousedown);
 
   context.append("svg:path")
       .data([csv])
+      .attr("pointer-events", "none")
       .attr("d", d3.svg.area()
       .x(function(d) { return x(d.x); })
       .y0(y2(0))
@@ -87,7 +101,60 @@ d3.csv("dji.csv", function(csv) {
       .attr("x2", w)
       .attr("y1", y2(0))
       .attr("y2", y2(0));
+
+  // Active focus region.
+  active = context.append("svg:rect")
+      .attr("pointer-events", "none")
+      .attr("id", "active")
+      .attr("x", x(x0 = minX))
+      .attr("y", 0)
+      .attr("height", h2)
+      .attr("width", x(x1 = (minX + 1e11)) - x(x0))
+      .attr("fill", "lightcoral")
+      .attr("fill-opacity", .5);
 });
+
+d3.select(window)
+    .on("mousemove", mousemove)
+    .on("mouseup", mouseup);
+
+function mousedown() {
+  xx = x.invert(d3.svg.mouse(this).x);
+}
+
+function mousemove() {
+  if (xx != null) {
+
+    // Compute the new focus region.
+    var xy = x.invert(d3.svg.mouse(active[0][0]).x);
+    if (xx < xy) { x0 = xx; x1 = xy; }
+    else if (xx > xy) { x0 = xy; x1 = xx; }
+    else return;
+
+    // Clamp the focus region.
+    x0 = Math.max(x.domain()[0], x0);
+    x1 = Math.min(x.domain()[1], x1);
+
+    // Update the display. TODO Recycle this scale?
+    var tx = d3.scale.linear()
+        .domain([x0, x1])
+        .range([0, w]);
+
+    focus.select("path")
+        .attr("d", d3.svg.area()
+        .x(function(d) { return tx(d.x); })
+        .y0(y1(0))
+        .y1(function(d) { return y1(d.y); }));
+
+    active
+        .attr("x", x(x0))
+        .attr("width", x(x1) - x(x0));
+  }
+}
+
+function mouseup() {
+  xx = null;
+}
 
 function parseDate(d) {
   return Date.UTC.apply(Date, d.split("-"));

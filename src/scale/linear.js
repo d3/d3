@@ -3,15 +3,16 @@ d3.scale.linear = function() {
       x1 = 1,
       y0 = 0,
       y1 = 1,
-      k = 1 / (x1 - x0),
+      kx = 1 / (x1 - x0),
+      ky = (x1 - x0) / (y1 - y0),
       i = d3.interpolate(y0, y1);
 
   function scale(x) {
-    return i((x - x0) * k);
+    return i((x - x0) * kx);
   }
 
-  scale.invert = function(x) {
-    return (x - y0) / k + x0; // TODO assumes number?
+  scale.invert = function(y) {
+    return (y - y0) * ky + x0; // TODO assumes number?
   };
 
   /** @param {*=} x */
@@ -19,7 +20,8 @@ d3.scale.linear = function() {
     if (!arguments.length) return [x0, x1];
     x0 = x[0];
     x1 = x[1];
-    k = 1 / (x1 - x0);
+    kx = 1 / (x1 - x0);
+    ky = (x1 - x0) / (y1 - y0);
     return scale;
   };
 
@@ -28,6 +30,7 @@ d3.scale.linear = function() {
     if (!arguments.length) return [y0, y1];
     y0 = x[0];
     y1 = x[1];
+    ky = (x1 - x0) / (y1 - y0);
     i = d3.interpolate(y0, y1); // TODO allow override?
     return scale;
   };

@@ -106,6 +106,15 @@ d3.svg = {
   line: {
     x: 1,
     y: 1
+  },
+  mouse: {
+    ownerSVGElement: 1,
+    createSVGPoint: 1,
+    getScreenCTM: 1,
+    e: 1,
+    f: 1,
+    inverse: 1,
+    matrixTransform: 1
   }
 };
 
