@@ -236,4 +236,6 @@ var d3_rgb_names = {
   "yellowgreen": "#9acd32"
 };
 
-for (var x in d3_rgb_names) d3_rgb_names[x] = d3_rgb(d3_rgb_names[x]);
+for (var d3_rgb_name in d3_rgb_names) {
+  d3_rgb_names[d3_rgb_name] = d3_rgb(d3_rgb_names[d3_rgb_name]);
+}

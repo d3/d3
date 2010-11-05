@@ -1,4 +1,4 @@
-d3 = {version: "0.11.0"}; // semver
+d3 = {version: "0.12.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -184,71 +184,71 @@ var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-var quad = poly(2),
-    cubic = poly(3);
+var d3_ease_quad = d3_ease_poly(2),
+    d3_ease_cubic = d3_ease_poly(3);
 
-var ease = {
-  "linear": function() { return linear; },
-  "poly": poly,
-  "quad": function() { return quad; },
-  "cubic": function() { return cubic; },
-  "sin": function() { return sin; },
-  "exp": function() { return exp; },
-  "circle": function() { return circle; },
-  "elastic": elastic,
-  "back": back,
-  "bounce": function() { return bounce; }
+var d3_ease = {
+  "linear": function() { return d3_ease_linear; },
+  "poly": d3_ease_poly,
+  "quad": function() { return d3_ease_quad; },
+  "cubic": function() { return d3_ease_cubic; },
+  "sin": function() { return d3_ease_sin; },
+  "exp": function() { return d3_ease_exp; },
+  "circle": function() { return d3_ease_circle; },
+  "elastic": d3_ease_elastic,
+  "back": d3_ease_back,
+  "bounce": function() { return d3_ease_bounce; }
 };
 
-var mode = {
+var d3_ease_mode = {
   "in": function(f) { return f; },
-  "out": reverse,
-  "in-out": reflect,
-  "out-int": function(f) { return reflect(reverse(f)); }
+  "out": d3_ease_reverse,
+  "in-out": d3_ease_reflect,
+  "out-int": function(f) { return d3_ease_reflect(d3_ease_reverse(f)); }
 };
 
 d3.ease = function(name) {
   var i = name.indexOf("-"),
       t = i >= 0 ? name.substring(0, i) : name,
       m = i >= 0 ? name.substring(i + 1) : "in";
-  return mode[m](ease[t].apply(null, Array.prototype.slice.call(arguments, 1)));
+  return d3_ease_mode[m](d3_ease[t].apply(null, Array.prototype.slice.call(arguments, 1)));
 };
 
-function reverse(f) {
+function d3_ease_reverse(f) {
   return function(t) {
     return 1 - f(1 - t);
   };
 }
 
-function reflect(f) {
+function d3_ease_reflect(f) {
   return function(t) {
     return .5 * (t < .5 ? f(2 * t) : (2 - f(2 - 2 * t)));
   };
 }
 
-function linear(t) {
+function d3_ease_linear(t) {
   return t;
 }
 
-function poly(e) {
+function d3_ease_poly(e) {
   return function(t) {
     return Math.pow(t, e);
   }
 }
 
-function sin(t) {
+function d3_ease_sin(t) {
   return 1 - Math.cos(t * Math.PI / 2);
 }
 
-function exp(t) {
+function d3_ease_exp(t) {
   return t ? Math.pow(2, 10 * (t - 1)) - 1e-3 : 0;
 }
 
-function circle(t) {
+function d3_ease_circle(t) {
   return 1 - Math.sqrt(1 - t * t);
 }
 
-function elastic(a, p) {
+function d3_ease_elastic(a, p) {
   var s;
   if (arguments.length < 2) p = 0.45;
   if (arguments.length < 1) { a = 1; s = p / 4; }
@@ -258,14 +258,14 @@ function elastic(a, p) {
   };
 }
 
-function back(s) {
+function d3_ease_back(s) {
   if (!s) s = 1.70158;
   return function(t) {
     return t * t * ((s + 1) * t - s);
   };
 }
 
-function bounce(t) {
+function d3_ease_bounce(t) {
   return t < 1 / 2.75 ? 7.5625 * t * t
       : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + .75
       : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + .9375
@@ -665,7 +665,9 @@ var d3_rgb_names = {
   "yellowgreen": "#9acd32"
 };
 
-for (var x in d3_rgb_names) d3_rgb_names[x] = d3_rgb(d3_rgb_names[x]);
+for (var d3_rgb_name in d3_rgb_names) {
+  d3_rgb_names[d3_rgb_name] = d3_rgb(d3_rgb_names[d3_rgb_name]);
+}
 d3.hsl = function(h, s, l) {
   var c = d3_rgb_hsl(h, s, l);
   return "rgb(" + c.r + "," + c.g + "," + c.b +  ")";
