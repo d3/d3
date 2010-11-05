@@ -47,18 +47,19 @@ var context = svg.append("svg:g")
     .attr("transform", "translate(0," + h1 + ")");
 
 d3.csv("dji.csv", function(csv) {
-  var minX = Infinity,
-      maxX = -Infinity,
+  var minX,
+      maxX,
       maxY = -Infinity;
 
   // Compute x- and y-extent.
+  csv.reverse();
   for (var i = 0, n = csv.length, o; i < n; i++) {
     o = csv[i];
     o = csv[i] = {x: parseDate(o.Date), y: +o.Close};
-    if (o.x < minX) minX = o.x;
-    if (o.x > maxX) maxX = o.x;
     if (o.y > maxY) maxY = o.y;
   }
+  minX = csv[0].x;
+  maxX = csv[n - 1].x;
 
   // Update x- and y-scales.
   x.domain([minX, maxX]);
@@ -125,27 +126,27 @@ function mousedown() {
 function mousemove() {
   if (xx != null) {
 
-    // Compute the new focus region.
+    // Compute the new (clamped) focus region.
     var xy = x.invert(d3.svg.mouse(active[0][0]).x);
     if (xx < xy) { x0 = xx; x1 = xy; }
     else if (xx > xy) { x0 = xy; x1 = xx; }
     else return;
-
-    // Clamp the focus region.
     x0 = Math.max(x.domain()[0], x0);
     x1 = Math.min(x.domain()[1], x1);
 
-    // Update the display. TODO Recycle this scale?
+    // Update the x-scale. TODO Recycle this scale?
     var tx = d3.scale.linear()
         .domain([x0, x1])
         .range([0, w]);
 
+    // Recompute the focus path.
     focus.select("path")
         .attr("d", d3.svg.area()
         .x(function(d) { return tx(d.x); })
         .y0(y1(0))
         .y1(function(d) { return y1(d.y); }));
 
+    // Reposition the active region rect.
     active
         .attr("x", x(x0))
         .attr("width", x(x1) - x(x0));
@@ -157,7 +158,8 @@ function mouseup() {
 }
 
 function parseDate(d) {
-  return Date.UTC.apply(Date, d.split("-"));
+  d = d.split("-");
+  return Date.UTC(d[0], d[1] - 1, d[2]);
 }
 
     </script>
