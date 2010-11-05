@@ -7,16 +7,17 @@ JS_COMPILER = \
 	--output_wrapper='(function(){%output%})()'
 
 all: \
-  d3.js \
-  d3.min.js \
-  d3.csv.js \
-  d3.csv.min.js
+	d3.js \
+	d3.min.js \
+	d3.geo.js \
+	d3.geo.min.js \
+	d3.csv.js \
+	d3.csv.min.js
 
 .INTERMEDIATE d3.js: \
 	d3.core.js \
 	d3.scale.js \
-	d3.svg.js \
-	d3.geo.js
+	d3.svg.js
 
 d3.core.js: \
 	src/core/core.js \
@@ -58,14 +59,14 @@ d3.svg.js: \
 	src/svg/mouse.js
 
 d3.geo.js: \
-  src/geo/geo.js \
-  src/geo/albers.js \
-  src/geo/path.js
+	src/geo/geo.js \
+	src/geo/albers.js \
+	src/geo/path.js
 
 d3.csv.js: \
-  src/csv/csv.js \
-  src/csv/parse.js \
-  src/csv/format.js
+	src/csv/csv.js \
+	src/csv/parse.js \
+	src/csv/format.js
 
 %.min.js: %.js Makefile src/externs.js
 	@rm -f $@
