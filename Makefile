@@ -12,7 +12,9 @@ all: \
 	d3.geo.js \
 	d3.geo.min.js \
 	d3.csv.js \
-	d3.csv.min.js
+	d3.csv.min.js \
+	d3.time.js \
+	d3.time.min.js
 
 .INTERMEDIATE d3.js: \
 	d3.core.js \
@@ -67,6 +69,10 @@ d3.csv.js: \
 	src/csv/csv.js \
 	src/csv/parse.js \
 	src/csv/format.js
+
+d3.time.js: \
+	src/time/time.js \
+	src/time/format.js
 
 %.min.js: %.js Makefile src/externs.js
 	@rm -f $@

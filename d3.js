@@ -1,4 +1,4 @@
-d3 = {version: "0.12.1"}; // semver
+d3 = {version: "0.13.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -204,7 +204,7 @@ var d3_ease_mode = {
   "in": function(f) { return f; },
   "out": d3_ease_reverse,
   "in-out": d3_ease_reflect,
-  "out-int": function(f) { return d3_ease_reflect(d3_ease_reverse(f)); }
+  "out-in": function(f) { return d3_ease_reflect(d3_ease_reverse(f)); }
 };
 
 d3.ease = function(name) {

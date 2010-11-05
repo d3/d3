@@ -154,3 +154,9 @@ d3.csv = {
   parseRows: 1,
   format: 1
 };
+
+// d3.time
+d3.time = {
+  format: 1,
+  parse: 1
+};

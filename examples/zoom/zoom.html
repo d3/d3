@@ -5,6 +5,7 @@
     <title>Zoom</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.csv.js"></script>
+    <script type="text/javascript" src="../../d3.time.js"></script>
     <script type="text/javascript" src="values.js"></script>
     <script type="text/javascript" src="nest.js"></script>
     <style type="text/css">
@@ -30,6 +31,7 @@ var w = 960,
     x0, // start of focus region
     x1, // end of focus region
     xx, // drag state
+    time = d3.time.format("%Y-%m-%d"),
     x = d3.scale.linear().range([0, w]),
     y1 = d3.scale.linear().range([h1 - p, 0]),
     y2 = d3.scale.linear().range([h2, 0]);
@@ -55,7 +57,7 @@ d3.csv("dji.csv", function(csv) {
   csv.reverse();
   for (var i = 0, n = csv.length, o; i < n; i++) {
     o = csv[i];
-    o = csv[i] = {x: parseDate(o.Date), y: +o.Close};
+    o = csv[i] = {x: +time.parse(o.Date), y: +o.Close};
     if (o.y > maxY) maxY = o.y;
   }
   minX = csv[0].x;
@@ -155,11 +157,6 @@ function mousemove() {
 
 function mouseup() {
   xx = null;
-}
-
-function parseDate(d) {
-  d = d.split("-");
-  return Date.UTC(d[0], d[1] - 1, d[2]);
 }
 
     </script>

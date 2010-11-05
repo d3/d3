@@ -1,3 +1,4 @@
+d3.time = {};
 d3.time.format = function(template) {
   var n = template.length;
 
