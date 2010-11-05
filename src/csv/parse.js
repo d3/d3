@@ -28,20 +28,15 @@ d3.csv.parseRows = function(text, f) {
 
     // special case: quotes
     var j = re.lastIndex;
-    if (text.charAt(j) == "\"") {
+    if (text.charCodeAt(j) == 34) {
       var i = j;
-      out: while (i++ < text.length) {
-        switch (text.charAt(i)) {
-          case "\"": {
-            if (text.charAt(i + 1) == "\"") {
-              i++;
-              break;
-            }
-            break out;
-          }
+      while (i++ < text.length) {
+        if (text.charCodeAt(i) == 34) {
+          if (text.charCodeAt(i + 1) != 34) break;
+          i++;
         }
       }
-      if (text.charAt(i + 1) == "\n") eol = true;
+      if (text.charCodeAt(i + 1) == 10) eol = true;
       re.lastIndex = i + 2;
       return text.substring(j + 1, i).replace(/""/g, "\"");
     }
