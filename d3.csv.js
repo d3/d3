@@ -1,4 +1,8 @@
-d3.csv = {};
+d3.csv = function(url, callback) {
+  d3.text(url, "text/csv", function(text) {
+    callback(text && d3.csv.parse(text));
+  });
+};
 d3.csv.parse = function(text) {
   var header;
   return d3.csv.parseRows(text, function(row, i) {

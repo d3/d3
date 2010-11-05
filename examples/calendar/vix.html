@@ -2,7 +2,7 @@
   <head>
     <title>VIX</title>
     <script type="text/javascript" src="../../d3.min.js"></script>
-    <script type="text/javascript" src="csv.js"></script>
+    <script type="text/javascript" src="../../d3.csv.min.js"></script>
     <script type="text/javascript" src="values.js"></script>
     <script type="text/javascript" src="nest.js"></script>
     <script type="text/javascript" src="quantile.js"></script>
@@ -32,71 +32,60 @@ body {
   <body>
     <script type="text/javascript">
 
-var data = nest(csv("vix.csv"))
-    .key(function(d) { return d.Date; })
-    .rollup(function(d) { return d[0].Open; });
+d3.csv("vix.csv", function(csv) {
+  var data = nest(csv)
+      .key(function(d) { return d.Date; })
+      .rollup(function(d) { return d[0].Open; });
 
-var color = quantile(values(data), 9);
+  var color = quantile(values(data), 9);
 
-var w = 960,
-    pw = 14,
-    z = ~~((w - pw * 2) / 53),
-    ph = z >> 1,
-    h = z * 7 + ph * 2;
+  var w = 960,
+      pw = 14,
+      z = ~~((w - pw * 2) / 53),
+      ph = z >> 1,
+      h = z * 7 + ph * 2;
 
-var vis = d3.select("body")
-  .selectAll("svg")
-    .data(range(1993, 2011))
-  .enter("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
-    .attr("class", "RdYlGn")
-  .append("svg:g")
-    .attr("transform", "translate(" + pw + "," + ph + ")");
+  var vis = d3.select("body")
+    .selectAll("svg")
+      .data(d3.range(1993, 2011))
+    .enter("svg:svg")
+      .attr("width", w)
+      .attr("height", h)
+      .attr("class", "RdYlGn")
+    .append("svg:g")
+      .attr("transform", "translate(" + pw + "," + ph + ")");
 
-vis.append("svg:text")
-    .attr("transform", "translate(-6," + h / 2 + ")rotate(-90)")
-    .text(function(d) { return d; });
+  vis.append("svg:text")
+      .attr("transform", "translate(-6," + h / 2 + ")rotate(-90)")
+      .text(function(d) { return d; });
 
-vis.selectAll("rect.day")
-    .data(dates)
-  .enter("svg:rect")
-    .attr("x", function(d) { return d.week * z; })
-    .attr("y", function(d) { return d.day * z; })
-    .attr("class", function(d) { return "day q" + (8-color(data[d.Date])) + "-9"; })
-    .attr("width", z)
-    .attr("height", z)
-  .append("svg:title")
-    .text(function(d) { return d.Date + ": " + data[d.Date]; });
+  vis.selectAll("rect.day")
+      .data(dates)
+    .enter("svg:rect")
+      .attr("x", function(d) { return d.week * z; })
+      .attr("y", function(d) { return d.day * z; })
+      .attr("class", function(d) { return "day q" + (8-color(data[d.Date])) + "-9"; })
+      .attr("width", z)
+      .attr("height", z)
+    .append("svg:title")
+      .text(function(d) { return d.Date + ": " + data[d.Date]; });
 
-vis.selectAll("path.month")
-    .data(months)
-  .enter("svg:path")
-    .attr("class", "month")
-    .attr("d", function(d) {
-      return "M" + (d.firstWeek + 1) * z + "," + d.firstDay * z
-          + "H" + d.firstWeek * z
-          + "V" + 7 * z
-          + "H" + d.lastWeek * z
-          + "V" + (d.lastDay + 1) * z
-          + "H" + (d.lastWeek + 1) * z
-          + "V" + 0
-          + "H" + (d.firstWeek + 1) * z
-          + "Z";
-    });
-
-function range(start, end, step) {
-  if (arguments.length < 3) {
-    step = 1;
-    if (arguments.length < 2) {
-      end = start;
-      start = 0;
-    }
-  }
-  var range = [start];
-  while ((start += step) < end) range.push(start);
-  return range;
-}
+  vis.selectAll("path.month")
+      .data(months)
+    .enter("svg:path")
+      .attr("class", "month")
+      .attr("d", function(d) {
+        return "M" + (d.firstWeek + 1) * z + "," + d.firstDay * z
+            + "H" + d.firstWeek * z
+            + "V" + 7 * z
+            + "H" + d.lastWeek * z
+            + "V" + (d.lastDay + 1) * z
+            + "H" + (d.lastWeek + 1) * z
+            + "V" + 0
+            + "H" + (d.firstWeek + 1) * z
+            + "Z";
+      });
+});
 
 function pad(n) {
   return n < 10 ? "0" + n : n;
