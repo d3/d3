@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Horizon Graph</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+@import url("../../lib/colorbrewer/colorbrewer.css");
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 40,
+    n = 9, // number of layers
+    x = d3.scale.linear().range([0, w]),
+    y = d3.scale.linear().range([0, h * n]);
+
+var svg = d3.select("body")
+  .append("svg:svg")
+    .attr("class", "Blues")
+    .attr("width", w)
+    .attr("height", h);
+
+d3.json("unemployment.json", function(data) {
+  var minDate = Infinity,
+      maxDate = -Infinity,
+      maxRate = -Infinity;
+
+  // Transpose column values to rows. Compute extents.
+  data = data.rate.map(function(rate, i) {
+    var date = +new Date(data.year[i], data.month[i] - 1);
+    if (date < minDate) minDate = date;
+    if (date > maxDate) maxDate = date;
+    if (rate > maxRate) maxRate = rate;
+    return {date: date, rate: rate};
+  });
+
+  // Update scale domains.
+  x.domain([minDate, maxDate]);
+  y.domain([0, maxRate]);
+
+  // Render the path as a referenceable definition.
+  svg.append("svg:defs")
+    .append("svg:path")
+      .attr("id", "area")
+      .attr("d", d3.svg.area()
+      .x(function(d, i) { return x(d.date); })
+      .y0(h * n)
+      .y1(function(d, i) { return h * n - y(d.rate); })
+      (data));
+
+  // Instantiate `n` copies of the path with different offsets.
+  svg.selectAll("use")
+      .data(d3.range(n))
+    .enter("svg:use")
+      .attr("class", function(d, i) { return "q" + i + "-" + n; })
+      .attr("y", function(d, i) { return -(n - i - 1) * h; })
+      .attr("xlink:href", "#area");
+});
+
+    </script>
+  </body>
+</html>
