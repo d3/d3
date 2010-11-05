@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Scatterplot Matrix</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="max.js"></script>
+    <script type="text/javascript" src="min.js"></script>
+    <script type="text/javascript" src="cross.js"></script>
+    <style type="text/css">
+
+line {
+  stroke: #eee;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+d3.json("flowers.json", function(flower) {
+
+  // Size parameters.
+  var size = 150,
+      padding = 20;
+
+  // Color scale.
+  var color = d3.scale.ordinal().range([
+    "rgb(50%, 0%, 0%)",
+    "rgb(0%, 50%, 0%)",
+    "rgb(0%, 0%, 50%)"
+  ]);
+
+  // Position scales.
+  var position = {};
+  flower.traits.forEach(function(trait) {
+    function value(d) { return d[trait]; }
+    position[trait] = d3.scale.linear()
+        .domain([min(flower.values, value), max(flower.values, value)])
+        .range([padding / 2, size - padding / 2]);
+  });
+
+  // Root panel.
+  var svg = d3.select("body")
+    .append("svg:svg")
+      .attr("width", size * flower.traits.length)
+      .attr("height", size * flower.traits.length);
+
+  // One column per trait.
+  var column = svg.selectAll("g")
+      .data(flower.traits)
+    .enter("svg:g")
+      .attr("transform", function(d, i) { return "translate(" + i * size + ",0)"; });
+
+  // One row per trait.
+  var row = column.selectAll("g")
+      .data(cross(flower.traits))
+    .enter("svg:g")
+      .attr("transform", function(d, i) { return "translate(0," + i * size + ")"; });
+
+  // X-ticks. TODO Cross the trait into the tick data?
+  row.selectAll("line.x")
+      .data(function(d) { return position[d.x].ticks(5).map(position[d.x]); })
+    .enter("svg:line")
+      .attr("class", "x")
+      .attr("x1", function(d) { return d; })
+      .attr("x2", function(d) { return d; })
+      .attr("y1", padding / 2)
+      .attr("y2", size - padding / 2);
+
+  // Y-ticks. TODO Cross the trait into the tick data?
+  row.selectAll("line.y")
+      .data(function(d) { return position[d.y].ticks(5).map(position[d.y]); })
+    .enter("svg:line")
+      .attr("class", "y")
+      .attr("x1", padding / 2)
+      .attr("x2", size - padding / 2)
+      .attr("y1", function(d) { return d; })
+      .attr("y2", function(d) { return d; });
+
+  // Dot plot.
+  var dot = row.selectAll("circle")
+      .data(cross(flower.values))
+    .enter("svg:circle")
+      .attr("cx", function(d) { return position[d.x.x](d.y[d.x.x]); })
+      .attr("cy", function(d) { return size - position[d.x.y](d.y[d.x.y]); })
+      .attr("r", 3)
+      .attr("fill", function(d) { return color(d.y.species); })
+      .attr("fill-opacity", .5);
+
+  // Frame.
+  row.append("svg:rect")
+      .attr("x", padding / 2)
+      .attr("y", padding / 2)
+      .attr("width", size - padding)
+      .attr("height", size - padding)
+      .attr("fill", "none")
+      .attr("stroke", "#aaa")
+      .attr("stroke-width", 1.5);
+});
+
+
+    </script>
+  </body>
+</html>
