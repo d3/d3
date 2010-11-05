@@ -6,7 +6,11 @@ JS_COMPILER = \
 	--charset=UTF-8 \
 	--output_wrapper='(function(){%output%})()'
 
-all: d3.js d3.min.js
+all: \
+  d3.js \
+  d3.min.js \
+  d3.csv.js \
+  d3.csv.min.js
 
 .INTERMEDIATE d3.js: \
 	d3.core.js \
@@ -22,6 +26,7 @@ d3.core.js: \
 	src/core/blend.js \
 	src/core/call.js \
 	src/core/range.js \
+	src/core/text.js \
 	src/core/json.js \
 	src/core/ns.js \
 	src/core/dispatch.js \
@@ -56,14 +61,19 @@ d3.geo.js: \
   src/geo/albers.js \
   src/geo/path.js
 
-d3.min.js: d3.js Makefile src/externs.js
-	rm -f $@
+d3.csv.js: \
+  src/csv/csv.js \
+  src/csv/parse.js \
+  src/csv/format.js
+
+%.min.js: %.js Makefile src/externs.js
+	@rm -f $@
 	$(JS_COMPILER) --js $< --js_output_file $@
 
 d3.js d3%.js: Makefile
-	rm -f $@
-	cat $(filter %.js,$^) >> $@
-	chmod a-w $@
+	@rm -f $@
+	cat $(filter %.js,$^) > $@
+	@chmod a-w $@
 
 clean:
 	rm -f d3*.js

@@ -1,4 +1,4 @@
-d3 = {version: "0.8.1"}; // semver
+d3 = {version: "0.9.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -35,18 +35,24 @@ d3.range = function(start, stop, step) {
   else while ((j = start + step * ++i) < stop) range.push(j);
   return range;
 };
-d3.json = function(url, callback) {
+d3.text = function(url, mime, callback) {
   var req = new XMLHttpRequest();
-  req.overrideMimeType("application/json");
+  if (arguments.length == 3) req.overrideMimeType(mime);
+  else callback = mime;
   req.open("GET", url, true);
   req.onreadystatechange = function() {
     if (req.readyState == 4) {
       callback(req.status < 300 && req.responseText
-          ? JSON.parse(req.responseText)
+          ? req.responseText
           : null);
     }
   };
   req.send(null);
+};
+d3.json = function(url, callback) {
+  return d3.text(url, "application/json", function(text) {
+    callback(text && JSON.parse(text));
+  });
 };
 d3.ns = {
 

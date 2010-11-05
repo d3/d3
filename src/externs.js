@@ -21,6 +21,7 @@ var d3 = {
   interpolateString: 1,
   interpolateRgb: 1,
   json: 1,
+  text: 1,
   ns: {
     prefix: {
       svg: 1,
@@ -136,4 +137,11 @@ d3.geo = {
     projection: 1,
     type: 1
   }
+};
+
+// d3.csv
+d3.csv = {
+  parse: 1,
+  parseRows: 1,
+  format: 1
 };
