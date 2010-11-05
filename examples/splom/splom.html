@@ -84,9 +84,14 @@ d3.json("flowers.json", function(flower) {
       .data(cross(flower.values))
     .enter("svg:circle")
       .attr("cx", function(d) { return position[d.x.x](d.y[d.x.x]); })
-      .attr("cy", function(d) { return size - position[d.x.y](d.y[d.x.y]); })
+      .attr("cy", 0)
       .attr("r", 3)
       .attr("fill", function(d) { return color(d.y.species); })
+      .attr("fill-opacity", 1e-6)
+    .transition()
+      .duration(750)
+      .delay(function(d, i) { return i * 30; })
+      .attr("cy", function(d) { return size - position[d.x.y](d.y[d.x.y]); })
       .attr("fill-opacity", .5);
 
   // Frame.
