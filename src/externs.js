@@ -148,6 +148,14 @@ d3.geo = {
   }
 };
 
+// d3.geom
+d3.geom = {
+  polygon: {
+    area: 1,
+    intersection: 1
+  }
+};
+
 // d3.csv
 d3.csv = {
   parse: 1,
