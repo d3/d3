@@ -10,7 +10,7 @@ d3.geom.polygon = function(coordinates) {
       a += coordinates[i - 1][0] * coordinates[i][1];
       b += coordinates[i - 1][1] * coordinates[i][0];
     }
-    return (a - b) * .5;
+    return (b - a) * .5;
   };
 
   // The Sutherland-Hodgman clipping algorithm.
