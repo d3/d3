@@ -3,7 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Voronoi Tesselation</title>
-    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.min.js"></script>
     <script type="text/javascript" src="../../lib/jit/voronoi.js"></script>
     <style type="text/css">
 
@@ -14,17 +14,15 @@ svg {
 }
 
 path {
+  fill: yellow;
   stroke: #000;
   stroke-width: .5px;
-}
-
-path:hover {
-  fill: yellow !important;
 }
 
 circle {
   fill: #ccc;
   stroke: #000;
+  pointer-events: none;
 }
 
     </style>
@@ -35,7 +33,7 @@ circle {
 var w = 960,
     h = 500;
 
-var vertices = d3.range(500).map(function(d) {
+var vertices = d3.range(100).map(function(d) {
   return [Math.random() * w, Math.random() * h];
 });
 
@@ -43,19 +41,27 @@ var svg = d3.select("body")
   .append("svg:svg")
     .attr("width", w)
     .attr("height", h)
-    .attr("class", "PiYG");
+    .attr("class", "PiYG")
+    .on("mousemove", update);
 
 svg.selectAll("path")
     .data(voronoi(vertices))
   .enter("svg:path")
-    .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
+    .attr("class", function(d, i) { return i ? "q" + (i % 9) + "-9" : null; })
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
 svg.selectAll("circle")
-    .data(vertices)
+    .data(vertices.slice(1))
   .enter("svg:circle")
     .attr("transform", function(d) { return "translate(" + d + ")"; })
     .attr("r", 2);
+
+function update() {
+  vertices[0] = d3.svg.mouse(this);
+  svg.selectAll("path")
+      .data(voronoi(vertices))
+      .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+}
 
     </script>
   </body>

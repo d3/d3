@@ -17,7 +17,8 @@ d3.svg.mouse = function(container) {
     point.x = d3.event.clientX;
     point.y = d3.event.clientY;
   }
-  return point.matrixTransform(container.getScreenCTM().inverse());
+  point = point.matrixTransform(container.getScreenCTM().inverse());
+  return [point.x, point.y];
 };
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083

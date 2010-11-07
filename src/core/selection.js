@@ -252,14 +252,18 @@ function d3_selection(groups) {
     function attrFunction() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttribute(name);
-      else this.setAttribute(name, x);
+      else if (this.getAttribute(name) != x) {
+        this.setAttribute(name, x);
+      }
     }
 
     /** @this {Element} */
     function attrFunctionNS() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttributeNS(name.space, name.local);
-      else this.setAttributeNS(name.space, name.local, x);
+      else if (this.getAttributeNS(name.space, name.local) != x) {
+        this.setAttributeNS(name.space, name.local, x);
+      }
     }
 
     return groups.each(value == null

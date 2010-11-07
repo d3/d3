@@ -1,4 +1,4 @@
-d3 = {version: "0.13.0"}; // semver
+d3 = {version: "0.14.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -926,14 +926,18 @@ function d3_selection(groups) {
     function attrFunction() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttribute(name);
-      else this.setAttribute(name, x);
+      else if (this.getAttribute(name) != x) {
+        this.setAttribute(name, x);
+      }
     }
 
     /** @this {Element} */
     function attrFunctionNS() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttributeNS(name.space, name.local);
-      else this.setAttributeNS(name.space, name.local, x);
+      else if (this.getAttributeNS(name.space, name.local) != x) {
+        this.setAttributeNS(name.space, name.local, x);
+      }
     }
 
     return groups.each(value == null
@@ -1777,7 +1781,8 @@ d3.svg.mouse = function(container) {
     point.x = d3.event.clientX;
     point.y = d3.event.clientY;
   }
-  return point.matrixTransform(container.getScreenCTM().inverse());
+  point = point.matrixTransform(container.getScreenCTM().inverse());
+  return [point.x, point.y];
 };
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083
