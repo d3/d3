@@ -7,14 +7,24 @@
     <script type="text/javascript" src="../../lib/jit/voronoi.js"></script>
     <style type="text/css">
 
+@import url("../../lib/colorbrewer/colorbrewer.css");
+
+svg {
+  border: solid 1px #666;
+}
+
 path {
-  fill: none;
   stroke: #000;
+  stroke-width: .5px;
+}
+
+path:hover {
+  fill: yellow !important;
 }
 
 circle {
-  fill: lightsteelblue;
-  stroke: steelblue;
+  fill: #ccc;
+  stroke: #000;
 }
 
     </style>
@@ -32,18 +42,20 @@ var vertices = d3.range(500).map(function(d) {
 var svg = d3.select("body")
   .append("svg:svg")
     .attr("width", w)
-    .attr("height", h);
+    .attr("height", h)
+    .attr("class", "PiYG");
+
+svg.selectAll("path")
+    .data(voronoi(vertices))
+  .enter("svg:path")
+    .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
+    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
 svg.selectAll("circle")
     .data(vertices)
   .enter("svg:circle")
     .attr("transform", function(d) { return "translate(" + d + ")"; })
     .attr("r", 2);
-
-svg.selectAll("path")
-    .data(voronoi(vertices, [w, h]))
-  .enter("svg:path")
-    .attr("d", function(d) { return "M" + d[0] + "L" + d[1]; });
 
     </script>
   </body>
