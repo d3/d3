@@ -43,8 +43,8 @@ function delaunay(vertices) {
     for (var i in edges) {
       var edge = edges[i],
           triangle = [edge[0], edge[1], vertex];
-      triangles.push(triangle);
       circumcircles.push(delaunay_circumcircle(triangle));
+      triangles.push(triangle);
     }
   });
 

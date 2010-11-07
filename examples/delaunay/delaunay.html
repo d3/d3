@@ -9,13 +9,9 @@
 
 @import url("../../lib/colorbrewer/colorbrewer.css");
 
-svg {
-  background: #eee;
-  border: solid 1px #aaa;
-}
-
 path {
-  stroke: #fff;
+  stroke: #000;
+  stroke-width: .5;
 }
 
     </style>
@@ -26,7 +22,7 @@ path {
 var w = 960,
     h = 500;
 
-var vertices = d3.range(100).map(function() {
+var vertices = d3.range(500).map(function() {
   return [~~(w * Math.random()), ~~(h * Math.random())];
 });
 
@@ -36,36 +32,11 @@ var svg = d3.select("body")
     .attr("height", h)
     .attr("class", "PiYG");
 
-triangulate();
-
-svg.on("mousemove", function() {
-  var mouse = d3.svg.mouse(this),
-      dx = vertices[vertices.length - 1][0] - mouse.x,
-      dy = vertices[vertices.length - 1][1] - mouse.y;
-  if (dx * dx + dy * dy <= 100) return;
-  vertices.push([mouse.x, mouse.y]);
-  triangulate();
-  if (vertices.length >= 100) vertices.shift();
-});
-
-function triangulate() {
-  var triangles = svg.selectAll("path")
-      .data(delaunay(vertices), {
-        nodeKey: function(n) { return n.getAttribute("d"); },
-        dataKey: trianglePath
-      });
-
-  triangles.enter("svg:path")
-      .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
-      .attr("d", trianglePath);
-
-  triangles.exit()
-      .remove();
-}
-
-function trianglePath(d) {
-  return "M" + d[0] + "L" + d[1] + "L" + d[2] + "Z";
-}
+svg.selectAll("path")
+    .data(delaunay(vertices))
+  .enter("svg:path")
+    .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
+    .attr("d", function(d) { return "M" + d[0] + "L" + d[1] + "L" + d[2] + "Z"; });
 
     </script>
   </body>
