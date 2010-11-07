@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Voronoi Tesselation</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../lib/jit/voronoi.js"></script>
+    <style type="text/css">
+
+path {
+  fill: none;
+  stroke: #000;
+}
+
+circle {
+  fill: lightsteelblue;
+  stroke: steelblue;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500;
+
+var vertices = d3.range(500).map(function(d) {
+  return [Math.random() * w, Math.random() * h];
+});
+
+var svg = d3.select("body")
+  .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+svg.selectAll("circle")
+    .data(vertices)
+  .enter("svg:circle")
+    .attr("transform", function(d) { return "translate(" + d + ")"; })
+    .attr("r", 2);
+
+svg.selectAll("path")
+    .data(voronoi(vertices, [w, h]))
+  .enter("svg:path")
+    .attr("d", function(d) { return "M" + d[0] + "L" + d[1]; });
+
+    </script>
+  </body>
+</html>
