@@ -1,4 +1,4 @@
-d3 = {version: "0.14.0"}; // semver
+d3 = {version: "0.15.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -748,6 +748,26 @@ function d3_selection(groups) {
     });
   };
 
+  // TODO preserve null elements to maintain index?
+  groups.filter = function(filter) {
+    var subgroups = [],
+        subgroup,
+        group,
+        node;
+    for (var j = 0, m = groups.length; j < m; j++) {
+      group = groups[j];
+      subgroups.push(subgroup = []);
+      subgroup.parentNode = group.parentNode;
+      subgroup.parentData = group.parentData;
+      for (var i = 0, n = group.length; i < n; i++) {
+        if ((node = group[i]) && filter.call(node, node.__data__, i)) {
+          subgroup.push(node);
+        }
+      }
+    }
+    return d3_selection(subgroups);
+  };
+
   // TODO data(null) for clearing data?
   groups.data = function(data, join) {
     var i = -1,
@@ -926,18 +946,14 @@ function d3_selection(groups) {
     function attrFunction() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttribute(name);
-      else if (this.getAttribute(name) != x) {
-        this.setAttribute(name, x);
-      }
+      else this.setAttribute(name, x);
     }
 
     /** @this {Element} */
     function attrFunctionNS() {
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttributeNS(name.space, name.local);
-      else if (this.getAttributeNS(name.space, name.local) != x) {
-        this.setAttributeNS(name.space, name.local, x);
-      }
+      else this.setAttributeNS(name.space, name.local, x);
     }
 
     return groups.each(value == null

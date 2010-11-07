@@ -59,8 +59,10 @@ svg.selectAll("circle")
 function update() {
   vertices[0] = d3.svg.mouse(this);
   svg.selectAll("path")
-      .data(voronoi(vertices))
-      .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+      .data(voronoi(vertices)
+      .map(function(d) { return "M" + d.join("L") + "Z"; }))
+      .filter(function(d) { return this.getAttribute("d") != d; })
+      .attr("d", function(d) { return d; });
 }
 
     </script>
