@@ -1,9 +1,9 @@
-// Note: requires coordinates to be clockwise and convex!
+// Note: requires coordinates to be counterclockwise and convex!
 d3.geom.polygon = function(coordinates) {
-  var n = coordinates.length;
 
   coordinates.area = function() {
     var i = 0,
+        n = coordinates.length,
         a = coordinates[n - 1][0] * coordinates[0][1],
         b = coordinates[n - 1][1] * coordinates[0][0];
     while (++i < n) {
@@ -14,10 +14,10 @@ d3.geom.polygon = function(coordinates) {
   };
 
   // The Sutherland-Hodgman clipping algorithm.
-  coordinates.intersection = function(subject) {
-    var output = subject,
-        input,
+  coordinates.clip = function(subject) {
+    var input,
         i = -1,
+        n = coordinates.length,
         j,
         m,
         a = coordinates[n - 1],
@@ -25,8 +25,8 @@ d3.geom.polygon = function(coordinates) {
         c,
         d;
     while (++i < n) {
-      input = output.slice();
-      output = [];
+      input = subject.slice();
+      subject.length = 0;
       b = coordinates[i];
       c = input[(m = input.length) - 1];
       j = -1;
@@ -34,24 +34,24 @@ d3.geom.polygon = function(coordinates) {
         d = input[j];
         if (d3_geom_polygonInside(d, a, b)) {
           if (!d3_geom_polygonInside(c, a, b)) {
-            output.push(d3_geom_polygonIntersect(c, d, a, b));
+            subject.push(d3_geom_polygonIntersect(c, d, a, b));
           }
-          output.push(d);
+          subject.push(d);
         } else if (d3_geom_polygonInside(c, a, b)) {
-          output.push(d3_geom_polygonIntersect(c, d, a, b));
+          subject.push(d3_geom_polygonIntersect(c, d, a, b));
         }
         c = d;
       }
       a = b;
     }
-    return output;
+    return subject;
   };
 
   return coordinates;
 };
 
 function d3_geom_polygonInside(p, a, b) {
-  return (b[0] - a[0]) * (p[1] - a[1]) >= (b[1] - a[1]) * (p[0] - a[0]);
+  return (b[0] - a[0]) * (p[1] - a[1]) < (b[1] - a[1]) * (p[0] - a[0]);
 }
 
 // Intersect two infinite lines cd and ab.
