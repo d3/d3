@@ -153,7 +153,9 @@ d3.geom = {
   polygon: {
     area: 1,
     intersection: 1
-  }
+  },
+  voronoi: 1,
+  delaunay: 1
 };
 
 // d3.csv
@@ -168,7 +170,3 @@ d3.time = {
   format: 1,
   parse: 1
 };
-
-// jit
-var voronoi,
-    delaunay;

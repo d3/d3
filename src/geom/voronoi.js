@@ -1,16 +1,17 @@
 // Adapted from Nicolas Garcia Belmonte's JIT implementation:
 // http://blog.thejit.org/2010/02/12/voronoi-tessellation/
 // http://blog.thejit.org/assets/voronoijs/voronoi.js
+// See lib/jit/LICENSE for details.
 
 /**
  * @param vertices [[x1, y1], [x2, y2], …]
  * @returns polygons [[[x1, y1], [x2, y2], …], …]
  */
-voronoi = function(vertices) {
+d3.geom.voronoi = function(vertices) {
   var polygons = vertices.map(function() { return []; });
 
   // Note: we expect the caller to clip the polygons, if needed.
-  voronoi_tessellate(vertices, function(e) {
+  d3_voronoi_tessellate(vertices, function(e) {
     var s1,
         s2,
         x1,
@@ -56,41 +57,9 @@ voronoi = function(vertices) {
   });
 };
 
-/**
-* @param vertices [[x1, y1], [x2, y2], …]
-* @returns triangles [[[x1, y1], [x2, y2], [x3, y3]], …]
- */
-delaunay = function(vertices) {
-  var edges = vertices.map(function() { return []; }),
-      triangles = [];
+var d3_voronoi_opposite = {"l": "r", "r": "l"};
 
-  // Use the Voronoi tessellation to determine Delaunay edges.
-  voronoi_tessellate(vertices, function(e) {
-    edges[e.region["l"].index].push(vertices[e.region["r"].index]);
-  });
-
-  // Reconnect the edges into counterclockwise triangles.
-  edges.forEach(function(edge, i) {
-    var v = vertices[i],
-        cx = v[0],
-        cy = v[1];
-    edge.forEach(function(v) {
-      v.angle = Math.atan2(v[0] - cx, v[1] - cy);
-    });
-    edge.sort(function(a, b) {
-      return a.angle - b.angle;
-    });
-    for (var j = 0, m = edge.length - 1; j < m; j++) {
-      triangles.push([v, edge[j], edge[j + 1]]);
-    }
-  });
-
-  return triangles;
-};
-
-var voronoi_opposite = {"l": "r", "r": "l"};
-
-function voronoi_tessellate(vertices, callback) {
+function d3_voronoi_tessellate(vertices, callback) {
 
   var Sites = {
     list: vertices
@@ -173,7 +142,7 @@ function voronoi_tessellate(vertices, callback) {
     rightRegion: function(he) {
       return he.edge == null
           ? Sites.bottomSite
-          : he.edge.region[voronoi_opposite[he.side]];
+          : he.edge.region[d3_voronoi_opposite[he.side]];
     }
   };
 
@@ -292,7 +261,7 @@ function voronoi_tessellate(vertices, callback) {
 
     endPoint: function(edge, side, site) {
       edge.ep[side] = site;
-      if (!edge.ep[voronoi_opposite[side]]) return;
+      if (!edge.ep[d3_voronoi_opposite[side]]) return;
       callback(edge);
     },
 
@@ -407,7 +376,7 @@ function voronoi_tessellate(vertices, callback) {
       e = Geom.bisect(bot, top);
       bisector = EdgeList.createHalfEdge(e, pm);
       EdgeList.insert(llbnd, bisector);
-      Geom.endPoint(e, voronoi_opposite[pm], v);
+      Geom.endPoint(e, d3_voronoi_opposite[pm], v);
       p = Geom.intersect(llbnd, bisector);
       if (p) {
         EventQueue.del(llbnd);
