@@ -4,7 +4,7 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Delaunay Triangulation</title>
     <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="delaunay.js"></script>
+    <script type="text/javascript" src="../../lib/jit/voronoi.min.js"></script>
     <style type="text/css">
 
 @import url("../../lib/colorbrewer/colorbrewer.css");
@@ -22,8 +22,8 @@ path {
 var w = 960,
     h = 500;
 
-var vertices = d3.range(500).map(function() {
-  return [~~(w * Math.random()), ~~(h * Math.random())];
+var vertices = d3.range(500).map(function(d) {
+  return [Math.random() * w, Math.random() * h];
 });
 
 var svg = d3.select("body")
@@ -32,11 +32,12 @@ var svg = d3.select("body")
     .attr("height", h)
     .attr("class", "PiYG");
 
-svg.selectAll("path")
+svg.append("svg:g")
+  .selectAll("path")
     .data(delaunay(vertices))
   .enter("svg:path")
     .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
-    .attr("d", function(d) { return "M" + d[0] + "L" + d[1] + "L" + d[2] + "Z"; });
+    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
     </script>
   </body>

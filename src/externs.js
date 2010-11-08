@@ -168,3 +168,7 @@ d3.time = {
   format: 1,
   parse: 1
 };
+
+// jit
+var voronoi,
+    delaunay;
