@@ -1,19 +1,30 @@
-# d3.js / Data-Driven Documents
+# D3
 
-**D3.js** is a small, free JavaScript library for manipulating HTML documents
+**D3** is a small, free JavaScript library for manipulating HTML documents
 based on data. D3 can help you quickly visualize your data as HTML or SVG,
-handle interactivity, and incorporate rich animations into your pages. You can
-use D3 as a visualization framework, or you can just use it to build dynamic
-pages. Unlike other systems, D3 doesn&rsquo;t tie you to a proprietary
+handle interactivity, and incorporate smooth transitions and staged animations
+into your pages.
+
+You can use D3 as a visualization framework, or you can just use it to build
+dynamic pages. Unlike other systems, D3 doesn&rsquo;t tie you to a proprietary
 representation, so you are free to exercise the full capabilities of modern
 browsers.
 
-See <http://mbostock.github.com/d3/> to learn more!
+## Browser Support
 
-These examples should run in any browser which supports SVG; D3 is officially
-supported on Firefox, Chrome (Chromium), Safari (WebKit), Opera and IE9.
+D3 should work on any browser, with minimal requirements such as JavaScript
+and the [W3C DOM](http://www.w3.org/DOM/) API. We also require the [Selectors
+API](http://www.w3.org/TR/selectors-api/) Level 1, but this requirement could
+be relaxed in the future using [Sizzle](http://sizzlejs.com/).
 
-## NOTICE FOR CHROME USERS
+The included D3 examples use additional browser features, such as
+[SVG](http://www.w3.org/TR/SVG/) and [CSS3
+Transitions](http://www.w3.org/TR/css3-transitions/). These features are not
+required to use D3, but are useful for visualization. D3 is not a
+compatibility layer. The examples should work on Firefox, Chrome (Chromium),
+Safari (WebKit), Opera and IE9.
+
+### NOTICE FOR CHROME USERS
 
 Chrome has strict permissions for reading files out of the local file system.
 To view some of the examples locally, you will need to start a local web
