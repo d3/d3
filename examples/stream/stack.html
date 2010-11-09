@@ -91,8 +91,7 @@ var layers = vis.selectAll("g.layer")
     .data(data)
   .enter("svg:g")
     .attr("fill", function(d, i) { return color(i / (n - 1)); })
-    .attr("class", "layer")
-    .attr("transform", "translate(0,0)"); // for animation
+    .attr("class", "layer");
 
 var bars = layers.selectAll("g.bar")
     .data(function(d) { return d; })
@@ -102,6 +101,7 @@ var bars = layers.selectAll("g.bar")
 
 bars.append("svg:rect")
     .attr("width", x({x: .9}))
+    .attr("x", 0)
     .attr("y", h)
     .attr("height", 0)
   .transition()
@@ -135,19 +135,21 @@ function transitionGroup() {
   group.select("#stack")
       .attr("class", "last");
 
-  group.selectAll("g.layer")
-    .transition()
-      .duration(500)
-      .attr("transform", function(d, i) { return "translate(" + x({x: .9 * i / n}) + ",0)"; })
-    .selectAll("rect")
-      .attr("width", x({x: .9 / n}));
-
   group.selectAll("g.layer rect")
     .transition()
-      .delay(500)
       .duration(500)
-      .attr("y", function(d) { return h - y2(d); })
-      .attr("height", y2);
+      .delay(function(d, i) { return (i % m) * 20; })
+      .attr("x", function(d, i) { return x({x: .9 * ~~(i / m) / n}); })
+      .attr("width", x({x: .9 / n}))
+      .each("end", transitionEnd);
+
+  function transitionEnd() {
+    d3.select(this)
+      .transition()
+        .duration(500)
+        .attr("y", function(d) { return h - y2(d); })
+        .attr("height", y2);
+  }
 }
 
 function transitionStack() {
@@ -162,16 +164,18 @@ function transitionStack() {
   stack.selectAll("g.layer rect")
     .transition()
       .duration(500)
+      .delay(function(d, i) { return (i % m) * 20; })
       .attr("y", y1)
-      .attr("height", function(d) { return y0(d) - y1(d); });
+      .attr("height", function(d) { return y0(d) - y1(d); })
+      .each("end", transitionEnd);
 
-  stack.selectAll("g.layer")
-    .transition()
-      .delay(500)
-      .duration(500)
-      .attr("transform", "translate(0,0)")
-    .selectAll("rect")
-      .attr("width", x({x: .9}));
+  function transitionEnd() {
+    d3.select(this)
+      .transition()
+        .duration(500)
+        .attr("x", 0)
+        .attr("width", x({x: .9}));
+  }
 }
 
     </script>

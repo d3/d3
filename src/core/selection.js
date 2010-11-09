@@ -464,10 +464,10 @@ function d3_selection(groups) {
     });
   };
 
-  // TODO filter, slice?
+  // TODO slice?
 
-  groups.transition = function(name) {
-    return d3_transition(groups, name);
+  groups.transition = function() {
+    return d3_transition(groups);
   };
 
   groups.call = d3_call;

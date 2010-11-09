@@ -1,4 +1,4 @@
-d3 = {version: "0.15.1"}; // semver
+d3 = {version: "0.15.2"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1138,10 +1138,10 @@ function d3_selection(groups) {
     });
   };
 
-  // TODO filter, slice?
+  // TODO slice?
 
-  groups.transition = function(name) {
-    return d3_transition(groups, name);
+  groups.transition = function() {
+    return d3_transition(groups);
   };
 
   groups.call = d3_call;
@@ -1173,8 +1173,8 @@ function d3_descending(a, b) {
 }
 d3.transition = d3_root.transition;
 
-// TODO namespace transitions; cancel collisions
-function d3_transition(groups, name) {
+// TODO namespace transitions
+function d3_transition(groups) {
   var transition = {},
       tweens = {},
       interpolators = [],
@@ -1197,18 +1197,27 @@ function d3_transition(groups, name) {
       if (t < 1) {
         clear = false;
         if (t < 0) return;
-        if (!stage[k]) {
+        if (stage[k]) {
+          if (this.__transition__ != transition) {
+            stage[k] = 2;
+            return;
+          }
+        } else {
           stage[k] = 1;
           event.start.dispatch.apply(this, arguments);
           ik = interpolators[k] = {};
+          this.__transition__ = transition;
           for (tk in tweens) ik[tk] = tweens[tk].apply(this, arguments);
         }
         te = ease(t);
         for (tk in tweens) ik[tk].call(this, te);
       } else {
-        for (tk in tweens) ik[tk].call(this, 1);
         stage[k] = 2;
-        event.end.dispatch.apply(this, arguments);
+        if (this.__transition__ == transition) {
+          for (tk in tweens) ik[tk].call(this, 1);
+          delete this.__transition__;
+          event.end.dispatch.apply(this, arguments);
+        }
       }
     });
     return clear;
@@ -1299,14 +1308,14 @@ function d3_transition(groups, name) {
   };
 
   transition.select = function(query) {
-    var k, t = d3_transition(groups.select(query), name).ease(ease);
+    var k, t = d3_transition(groups.select(query)).ease(ease);
     k = -1; t.delay(function(d, i) { return delay[++k]; });
     k = -1; t.duration(function(d, i) { return duration[++k]; });
     return t;
   };
 
   transition.selectAll = function(query) {
-    var k, t = d3_transition(groups.selectAll(query), name).ease(ease);
+    var k, t = d3_transition(groups.selectAll(query)).ease(ease);
     k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
     k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
     return t;
