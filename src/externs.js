@@ -127,6 +127,10 @@ d3.geo = {
     scale: 1,
     translate: 1
   },
+  mercator: {
+    scale: 1,
+    translate: 1
+  },
   path: {
     coordinates: 1,
     features: 1,

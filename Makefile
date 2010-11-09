@@ -65,6 +65,7 @@ d3.svg.js: \
 d3.geo.js: \
 	src/geo/geo.js \
 	src/geo/albers.js \
+	src/geo/mercator.js \
 	src/geo/path.js
 
 d3.csv.js: \
