@@ -1,4 +1,4 @@
-d3 = {version: "0.16.2"}; // semver
+d3 = {version: "0.17.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1173,13 +1173,15 @@ function d3_descending(a, b) {
 }
 d3.transition = d3_root.transition;
 
-var d3_transitionId = 0;
+var d3_transitionId = 0,
+    d3_transitionInheritId = 0;
 
 function d3_transition(groups) {
   var transition = {},
-      transitionId = ++d3_transitionId,
+      transitionId = d3_transitionInheritId || ++d3_transitionId,
       tweens = {},
       interpolators = [],
+      remove = false,
       event = d3.dispatch("start", "end"),
       stage = [],
       delay = [],
@@ -1247,11 +1249,16 @@ function d3_transition(groups) {
       } else {
         stage[k] = 2;
         if (tx.active == transitionId) {
+          var owner = tx.owner;
           for (tk in tweens) ik[tk].call(this, 1);
-          if (tx.owner == transitionId) {
+          if (owner == transitionId) {
             delete this.__transition__;
-            event.end.dispatch.apply(this, arguments);
+            if (remove) this.parentNode.removeChild(this);
           }
+          d3_transitionInheritId = transitionId;
+          event.end.dispatch.apply(this, arguments);
+          d3_transitionInheritId = 0;
+          tx.owner = owner;
         }
       }
     });
@@ -1354,6 +1361,11 @@ function d3_transition(groups) {
     k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
     k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
     return t;
+  };
+
+  transition.remove = function() {
+    remove = true;
+    return transition;
   };
 
   transition.each = function(type, listener) {
