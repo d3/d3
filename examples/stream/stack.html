@@ -138,7 +138,7 @@ function transitionGroup() {
   group.selectAll("g.layer rect")
     .transition()
       .duration(500)
-      .delay(function(d, i) { return (i % m) * 20; })
+      .delay(function(d, i) { return (i % m) * 10; })
       .attr("x", function(d, i) { return x({x: .9 * ~~(i / m) / n}); })
       .attr("width", x({x: .9 / n}))
       .each("end", transitionEnd);

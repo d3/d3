@@ -59,6 +59,7 @@ var d3 = {
     call: 1
   },
   transition: {
+    __transition__: 1,
     delay: 1,
     duration: 1,
     ease: 1,

@@ -1,4 +1,4 @@
-d3 = {version: "0.16.1"}; // semver
+d3 = {version: "0.16.2"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1173,8 +1173,11 @@ function d3_descending(a, b) {
 }
 d3.transition = d3_root.transition;
 
+var d3_transitionId = 0;
+
 function d3_transition(groups) {
   var transition = {},
+      transitionId = ++d3_transitionId,
       tweens = {},
       interpolators = [],
       event = d3.dispatch("start", "end"),
@@ -1208,7 +1211,7 @@ function d3_transition(groups) {
   //
 
   groups.each(function() {
-    (this.__transition__ || (this.__transition__ = {})).owner = transition;
+    (this.__transition__ || (this.__transition__ = {})).owner = transitionId;
   });
 
   function step(elapsed) {
@@ -1225,24 +1228,27 @@ function d3_transition(groups) {
         clear = false;
         if (t < 0) return;
         if (stage[k]) {
-          if (tx.active != transition) {
+          if (tx.active != transitionId) {
             stage[k] = 2;
             return;
           }
+        } else if (!tx || tx.active > transitionId) {
+          stage[k] = 2;
+          return;
         } else {
           stage[k] = 1;
           event.start.dispatch.apply(this, arguments);
           ik = interpolators[k] = {};
-          tx.active = transition;
+          tx.active = transitionId;
           for (tk in tweens) ik[tk] = tweens[tk].apply(this, arguments);
         }
         te = ease(t);
         for (tk in tweens) ik[tk].call(this, te);
       } else {
         stage[k] = 2;
-        if (tx.active == transition) {
+        if (tx.active == transitionId) {
           for (tk in tweens) ik[tk].call(this, 1);
-          if (tx.owner == transition) {
+          if (tx.owner == transitionId) {
             delete this.__transition__;
             event.end.dispatch.apply(this, arguments);
           }
