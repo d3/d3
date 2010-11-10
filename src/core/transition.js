@@ -1,6 +1,5 @@
 d3.transition = d3_root.transition;
 
-// TODO namespace transitions
 function d3_transition(groups) {
   var transition = {},
       tweens = {},
@@ -12,12 +11,40 @@ function d3_transition(groups) {
       durationMax,
       ease = d3.ease("cubic-in-out");
 
+  //
+  // Be careful with concurrent transitions!
+  //
+  // Say transition A causes an exit. Before A finishes, a transition B is
+  // created, and believes it only needs to do an update, because the elements
+  // haven't been removed yet (which happens at the very end of the exit
+  // transition).
+  //
+  // Even worse, what if either transition A or B has a staggered delay? Then,
+  // some elements may be removed, while others remain. Transition B does not
+  // know to enter the elements because they were still present at the time
+  // the transition B was created (but not yet started).
+  //
+  // To prevent such confusion, we only trigger end events for transitions if
+  // the transition ending is the only one scheduled for the given element.
+  // Similarly, we only allow one transition to be active for any given
+  // element, so that concurrent transitions do not overwrite each other's
+  // properties.
+  //
+  // TODO Support transition namespaces, so that transitions can proceed
+  // concurrently on the same element if needed. Hopefully, this is rare!
+  //
+
+  groups.each(function() {
+    (this.__transition__ || (this.__transition__ = {})).owner = transition;
+  });
+
   function step(elapsed) {
     var clear = true,
         k = -1;
     groups.each(function() {
       if (stage[++k] == 2) return; // ended
       var t = (elapsed - delay[k]) / duration[k],
+          tx = this.__transition__,
           te, // ease(t)
           tk, // tween key
           ik = interpolators[k];
@@ -25,7 +52,7 @@ function d3_transition(groups) {
         clear = false;
         if (t < 0) return;
         if (stage[k]) {
-          if (this.__transition__ != transition) {
+          if (tx.active != transition) {
             stage[k] = 2;
             return;
           }
@@ -33,17 +60,19 @@ function d3_transition(groups) {
           stage[k] = 1;
           event.start.dispatch.apply(this, arguments);
           ik = interpolators[k] = {};
-          this.__transition__ = transition;
+          tx.active = transition;
           for (tk in tweens) ik[tk] = tweens[tk].apply(this, arguments);
         }
         te = ease(t);
         for (tk in tweens) ik[tk].call(this, te);
       } else {
         stage[k] = 2;
-        if (this.__transition__ == transition) {
+        if (tx.active == transition) {
           for (tk in tweens) ik[tk].call(this, 1);
-          delete this.__transition__;
-          event.end.dispatch.apply(this, arguments);
+          if (tx.owner == transition) {
+            delete this.__transition__;
+            event.end.dispatch.apply(this, arguments);
+          }
         }
       }
     });

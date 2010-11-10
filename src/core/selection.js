@@ -33,7 +33,7 @@ function d3_selection(groups) {
       for (var i = 0, n = group.length; i < n; i++) {
         if (node = group[i]) {
           subgroup.push(subnode = select(node));
-          if (subnode && !subnode.__data__) subnode.__data__ = node.__data__;
+          if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
         } else {
           subgroup.push(null);
         }
