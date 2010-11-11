@@ -164,7 +164,7 @@ function transitionStack() {
   stack.selectAll("g.layer rect")
     .transition()
       .duration(500)
-      .delay(function(d, i) { return (i % m) * 20; })
+      .delay(function(d, i) { return (i % m) * 10; })
       .attr("y", y1)
       .attr("height", function(d) { return y0(d) - y1(d); })
       .each("end", transitionEnd);
