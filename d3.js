@@ -1,4 +1,4 @@
-d3 = {version: "0.17.0"}; // semver
+d3 = {version: "0.18.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -911,6 +911,10 @@ function d3_selection(groups) {
     }
     return null;
   }
+
+  groups.node = function() {
+    return first(function() { return this; });
+  };
 
   groups.attr = function(name, value) {
     name = d3.ns.qualify(name);

@@ -238,6 +238,10 @@ function d3_selection(groups) {
     return null;
   }
 
+  groups.node = function() {
+    return first(function() { return this; });
+  };
+
   groups.attr = function(name, value) {
     name = d3.ns.qualify(name);
 

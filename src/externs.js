@@ -47,6 +47,7 @@ var d3 = {
       parentData: 1
     },
     each: 1,
+    node: 1,
     attr: 1,
     style: 1,
     property: 1,
