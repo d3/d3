@@ -13,7 +13,16 @@ var d3 = {
   ease: 1,
   event: 1,
   format: 1,
-  hsl: 1,
+  rgb: {
+    r: 1,
+    g: 1,
+    b: 1
+  },
+  hsl: {
+    h: 1,
+    s: 1,
+    l: 1
+  },
   interpolate: 1,
   interpolateNumber: 1,
   interpolateArray: 1,

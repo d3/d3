@@ -1,4 +1,4 @@
-d3 = {version: "0.18.0"}; // semver
+d3 = {version: "0.19.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -364,8 +364,8 @@ d3.interpolateString = function(a, b) {
 };
 
 d3.interpolateRgb = function(a, b) {
-  a = d3_rgb(a);
-  b = d3_rgb(b);
+  a = d3.rgb(a);
+  b = d3.rgb(b);
   var ar = a.r,
       ag = a.g,
       ab = a.b,
@@ -427,7 +427,30 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
-function d3_rgb(format) {
+/**
+ * @param {number=} g
+ * @param {number=} b
+ */
+d3.rgb = function(r, g, b) {
+  return arguments.length == 1
+      ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
+      : d3_rgb(~~r, ~~g, ~~b);
+};
+
+function d3_rgb(r, g, b) {
+  return {r: r, g: g, b: b, toString: d3_rgb_format};
+}
+
+/** @this d3_rgb */
+function d3_rgb_format() {
+  return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
+}
+
+function d3_rgb_hex(v) {
+  return v < 0x10 ? "0" + v.toString(16) : v.toString(16);
+}
+
+function d3_rgb_parse(format, rgb, hsl) {
   var r, // red channel; int in [0, 255]
       g, // green channel; int in [0, 255]
       b, // blue channel; int in [0, 255]
@@ -441,26 +464,27 @@ function d3_rgb(format) {
     m2 = m1[2].split(",");
     switch (m1[1]) {
       case "hsl": {
-        return d3_rgb_hsl(
+        return hsl(
           parseFloat(m2[0]), // degrees
           parseFloat(m2[1]) / 100, // percentage
-          parseFloat(m2[2]) / 100); // percentage
+          parseFloat(m2[2]) / 100 // percentage
+        );
       }
       case "rgb": {
-        return {
-          r: d3_rgb_parse(m2[0]),
-          g: d3_rgb_parse(m2[1]),
-          b: d3_rgb_parse(m2[2])
-        };
+        return rgb(
+          d3_rgb_parseNumber(m2[0]),
+          d3_rgb_parseNumber(m2[1]),
+          d3_rgb_parseNumber(m2[2])
+        );
       }
     }
   }
 
   /* Named colors. */
-  if (name = d3_rgb_names[format]) return name;
+  if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
 
   /* Null or undefined. */
-  if (format == null) return d3_rgb_names.black;
+  if (format == null) return rgb(0, 0, 0);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
   if (format.charAt(0) == "#") {
@@ -478,39 +502,29 @@ function d3_rgb(format) {
     b = parseInt(b, 16);
   }
 
-  return {r: r, g: g, b: b};
-};
-
-function d3_rgb_hsl(h, s, l) {
-  var m1,
-      m2;
-
-  /* Some simple corrections for h, s and l. */
-  h = h % 360; if (h < 0) h += 360;
-  s = s < 0 ? 0 : s > 1 ? 1 : s;
-  l = l < 0 ? 0 : l > 1 ? 1 : l;
-
-  /* From FvD 13.37, CSS Color Module Level 3 */
-  m2 = l <= .5 ? l * (1 + s) : l + s - l * s;
-  m1 = 2 * l - m2;
-
-  function v(h) {
-    if (h > 360) h -= 360;
-    else if (h < 0) h += 360;
-    if (h < 60) return m1 + (m2 - m1) * h / 60;
-    if (h < 180) return m2;
-    if (h < 240) return m1 + (m2 - m1) * (240 - h) / 60;
-    return m1;
-  }
-
-  function vv(h) {
-    return Math.round(v(h) * 255);
-  }
-
-  return {r: vv(h + 120), g: vv(h), b: vv(h - 120)};
+  return rgb(r, g, b);
 }
 
-function d3_rgb_parse(c) { // either integer or percentage
+function d3_rgb_hsl(r, g, b) {
+  var min = Math.min(r /= 255, g /= 255, b /= 255),
+      max = Math.max(r, g, b),
+      d = max - min,
+      h,
+      s,
+      l = (max + min) / 2;
+  if (d) {
+    s = l < .5 ? d / (max + min) : d / (2 - max - min);
+    if (r == max) h = (g - b) / d + (g < b ? 6 : 0);
+    else if (g == max) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60;
+  } else {
+    s = h = 0;
+  }
+  return d3_hsl(h, s, l);
+}
+
+function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);
   return c.charAt(c.length - 1) == "%" ? Math.round(f * 2.55) : f;
 }
@@ -666,12 +680,58 @@ var d3_rgb_names = {
 };
 
 for (var d3_rgb_name in d3_rgb_names) {
-  d3_rgb_names[d3_rgb_name] = d3_rgb(d3_rgb_names[d3_rgb_name]);
+  d3_rgb_names[d3_rgb_name] = d3_rgb_parse(
+      d3_rgb_names[d3_rgb_name],
+      d3_rgb,
+      d3_hsl_rgb);
 }
+/**
+ * @param {number=} s
+ * @param {number=} l
+ */
 d3.hsl = function(h, s, l) {
-  var c = d3_rgb_hsl(h, s, l);
-  return "rgb(" + c.r + "," + c.g + "," + c.b +  ")";
+  return arguments.length == 1
+      ? d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl)
+      : d3_hsl(+h, +s, +l);
 };
+
+function d3_hsl(h, s, l) {
+  return {h: h, s: s, l: l, toString: d3_hsl_format};
+}
+
+/** @this d3_hsl */
+function d3_hsl_format() {
+  return "hsl(" + this.h + "," + this.s * 100 + "%," + this.l * 100 + "%)";
+}
+
+function d3_hsl_rgb(h, s, l) {
+  var m1,
+      m2;
+
+  /* Some simple corrections for h, s and l. */
+  h = h % 360; if (h < 0) h += 360;
+  s = s < 0 ? 0 : s > 1 ? 1 : s;
+  l = l < 0 ? 0 : l > 1 ? 1 : l;
+
+  /* From FvD 13.37, CSS Color Module Level 3 */
+  m2 = l <= .5 ? l * (1 + s) : l + s - l * s;
+  m1 = 2 * l - m2;
+
+  function v(h) {
+    if (h > 360) h -= 360;
+    else if (h < 0) h += 360;
+    if (h < 60) return m1 + (m2 - m1) * h / 60;
+    if (h < 180) return m2;
+    if (h < 240) return m1 + (m2 - m1) * (240 - h) / 60;
+    return m1;
+  }
+
+  function vv(h) {
+    return Math.round(v(h) * 255);
+  }
+
+  return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
+}
 var d3_root = d3_selection([[document]]);
 d3_root[0].parentNode = document.documentElement;
 
@@ -1678,16 +1738,25 @@ d3.scale.ordinal = function() {
 
   return scale;
 };
+/*
+ * This product includes color specifications and designs developed by Cynthia
+ * Brewer (http://colorbrewer.org/). See lib/colorbrewer for more information.
+ */
+
 d3.scale.category10 = function() {
   return d3.scale.ordinal().range(d3_category10);
 };
 
-d3.scale.category19 = function() {
-  return d3.scale.ordinal().range(d3_category19);
-};
-
 d3.scale.category20 = function() {
   return d3.scale.ordinal().range(d3_category20);
+};
+
+d3.scale.category20b = function() {
+  return d3.scale.ordinal().range(d3_category20b);
+};
+
+d3.scale.category20c = function() {
+  return d3.scale.ordinal().range(d3_category20c);
 };
 
 var d3_category10 = [
@@ -1695,18 +1764,33 @@ var d3_category10 = [
   "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"
 ];
 
-var d3_category19 = [
-  "#9c9ede", "#7375b5", "#4a5584", "#cedb9c", "#b5cf6b",
-  "#8ca252", "#637939", "#e7cb94", "#e7ba52", "#bd9e39",
-  "#8c6d31", "#e7969c", "#d6616b", "#ad494a", "#843c39",
-  "#de9ed6", "#ce6dbd", "#a55194", "#7b4173"
+var d3_category20 = [
+  "#1f77b4", "#aec7e8",
+  "#ff7f0e", "#ffbb78",
+  "#2ca02c", "#98df8a",
+  "#d62728", "#ff9896",
+  "#9467bd", "#c5b0d5",
+  "#8c564b", "#c49c94",
+  "#e377c2", "#f7b6d2",
+  "#7f7f7f", "#c7c7c7",
+  "#bcbd22", "#dbdb8d",
+  "#17becf", "#9edae5"
 ];
 
-var d3_category20 = [
-  "#1f77b4", "#aec7e8", "#ff7f0e", "#ffbb78", "#2ca02c",
-  "#98df8a", "#d62728", "#ff9896", "#9467bd", "#c5b0d5",
-  "#8c564b", "#c49c94", "#e377c2", "#f7b6d2", "#7f7f7f",
-  "#c7c7c7", "#bcbd22", "#dbdb8d", "#17becf", "#9edae5"
+var d3_category20b = [
+  "#393b79", "#5254a3", "#6b6ecf", "#9c9ede",
+  "#637939", "#8ca252", "#b5cf6b", "#cedb9c",
+  "#8c6d31", "#bd9e39", "#e7ba52", "#e7cb94",
+  "#843c39", "#ad494a", "#d6616b", "#e7969c",
+  "#7b4173", "#a55194", "#ce6dbd", "#de9ed6"
+];
+
+var d3_category20c = [
+  "#3182bd", "#6baed6", "#9ecae1", "#c6dbef",
+  "#e6550d", "#fd8d3c", "#fdae6b", "#fdd0a2",
+  "#31a354", "#74c476", "#a1d99b", "#c7e9c0",
+  "#756bb1", "#9e9ac8", "#bcbddc", "#dadaeb",
+  "#636363", "#969696", "#bdbdbd", "#d9d9d9"
 ];
 d3.svg = {};
 d3.svg.arc = function() {

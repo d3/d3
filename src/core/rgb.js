@@ -1,4 +1,27 @@
-function d3_rgb(format) {
+/**
+ * @param {number=} g
+ * @param {number=} b
+ */
+d3.rgb = function(r, g, b) {
+  return arguments.length == 1
+      ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
+      : d3_rgb(~~r, ~~g, ~~b);
+};
+
+function d3_rgb(r, g, b) {
+  return {r: r, g: g, b: b, toString: d3_rgb_format};
+}
+
+/** @this d3_rgb */
+function d3_rgb_format() {
+  return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
+}
+
+function d3_rgb_hex(v) {
+  return v < 0x10 ? "0" + v.toString(16) : v.toString(16);
+}
+
+function d3_rgb_parse(format, rgb, hsl) {
   var r, // red channel; int in [0, 255]
       g, // green channel; int in [0, 255]
       b, // blue channel; int in [0, 255]
@@ -12,26 +35,27 @@ function d3_rgb(format) {
     m2 = m1[2].split(",");
     switch (m1[1]) {
       case "hsl": {
-        return d3_rgb_hsl(
+        return hsl(
           parseFloat(m2[0]), // degrees
           parseFloat(m2[1]) / 100, // percentage
-          parseFloat(m2[2]) / 100); // percentage
+          parseFloat(m2[2]) / 100 // percentage
+        );
       }
       case "rgb": {
-        return {
-          r: d3_rgb_parse(m2[0]),
-          g: d3_rgb_parse(m2[1]),
-          b: d3_rgb_parse(m2[2])
-        };
+        return rgb(
+          d3_rgb_parseNumber(m2[0]),
+          d3_rgb_parseNumber(m2[1]),
+          d3_rgb_parseNumber(m2[2])
+        );
       }
     }
   }
 
   /* Named colors. */
-  if (name = d3_rgb_names[format]) return name;
+  if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
 
   /* Null or undefined. */
-  if (format == null) return d3_rgb_names.black;
+  if (format == null) return rgb(0, 0, 0);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
   if (format.charAt(0) == "#") {
@@ -49,39 +73,29 @@ function d3_rgb(format) {
     b = parseInt(b, 16);
   }
 
-  return {r: r, g: g, b: b};
-};
-
-function d3_rgb_hsl(h, s, l) {
-  var m1,
-      m2;
-
-  /* Some simple corrections for h, s and l. */
-  h = h % 360; if (h < 0) h += 360;
-  s = s < 0 ? 0 : s > 1 ? 1 : s;
-  l = l < 0 ? 0 : l > 1 ? 1 : l;
-
-  /* From FvD 13.37, CSS Color Module Level 3 */
-  m2 = l <= .5 ? l * (1 + s) : l + s - l * s;
-  m1 = 2 * l - m2;
-
-  function v(h) {
-    if (h > 360) h -= 360;
-    else if (h < 0) h += 360;
-    if (h < 60) return m1 + (m2 - m1) * h / 60;
-    if (h < 180) return m2;
-    if (h < 240) return m1 + (m2 - m1) * (240 - h) / 60;
-    return m1;
-  }
-
-  function vv(h) {
-    return Math.round(v(h) * 255);
-  }
-
-  return {r: vv(h + 120), g: vv(h), b: vv(h - 120)};
+  return rgb(r, g, b);
 }
 
-function d3_rgb_parse(c) { // either integer or percentage
+function d3_rgb_hsl(r, g, b) {
+  var min = Math.min(r /= 255, g /= 255, b /= 255),
+      max = Math.max(r, g, b),
+      d = max - min,
+      h,
+      s,
+      l = (max + min) / 2;
+  if (d) {
+    s = l < .5 ? d / (max + min) : d / (2 - max - min);
+    if (r == max) h = (g - b) / d + (g < b ? 6 : 0);
+    else if (g == max) h = (b - r) / d + 2;
+    else h = (r - g) / d + 4;
+    h *= 60;
+  } else {
+    s = h = 0;
+  }
+  return d3_hsl(h, s, l);
+}
+
+function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);
   return c.charAt(c.length - 1) == "%" ? Math.round(f * 2.55) : f;
 }
@@ -237,5 +251,8 @@ var d3_rgb_names = {
 };
 
 for (var d3_rgb_name in d3_rgb_names) {
-  d3_rgb_names[d3_rgb_name] = d3_rgb(d3_rgb_names[d3_rgb_name]);
+  d3_rgb_names[d3_rgb_name] = d3_rgb_parse(
+      d3_rgb_names[d3_rgb_name],
+      d3_rgb,
+      d3_hsl_rgb);
 }
