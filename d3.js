@@ -1,4 +1,4 @@
-d3 = {version: "0.19.0"}; // semver
+d3 = {version: "0.19.1"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1192,11 +1192,12 @@ function d3_selection(groups) {
     type = "on" + type;
     return groups.each(function(d, i) {
       this[type] = function(e) {
+        var o = d3.event; // Events can be reentrant (e.g., focus).
         d3.event = e;
         try {
           listener.call(this, d, i);
         } finally {
-          d3.event = null;
+          d3.event = o;
         }
       };
     });

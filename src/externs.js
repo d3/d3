@@ -81,8 +81,9 @@ var d3 = {
 // d3.scale
 d3.scale = {
   category10: 1,
-  category19: 1,
   category20: 1,
+  category20b: 1,
+  category20c: 1,
   domain: 1,
   invert: 1,
   linear: 1,
