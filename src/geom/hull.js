@@ -1,29 +1,13 @@
 /**
- * Computes the 2D convex hull of a set of points using Graham's
- * scanning algorithm. The algorithm has been implemented as described
- * in Cormen, Leiserson, and Rivest's Introduction to Algorithms.
- * 
- * The running time of this algorithm is O(n log n), where n is
- * the number of input points.
+ * Computes the 2D convex hull of a set of points using Graham's scanning
+ * algorithm. The algorithm has been implemented as described in Cormen,
+ * Leiserson, and Rivest's Introduction to Algorithms. The running time of
+ * this algorithm is O(n log n), where n is the number of input points.
  *
  * @param vertices [[x1, y1], [x2, y2], …]
  * @returns polygon [[x1, y1], [x2, y2], …],
  */
 d3.geom.hull = function(vertices) {
-
-  // helper method to detect a non-left turn about 3 points
-  var isNonLeft = function(i0, i1, i2, i3, v) {
-    var x, y, l1, l2, l4, l5, l6, a1, a2;
-    y = v[i2][1]-v[i1][1]; x = v[i2][0]-v[i1][0]; l1 = x*x + y*y;
-    y = v[i3][1]-v[i2][1]; x = v[i3][0]-v[i2][0]; l2 = x*x + y*y;
-    y = v[i3][1]-v[i0][1]; x = v[i3][0]-v[i0][0]; l4 = x*x + y*y;
-    y = v[i1][1]-v[i0][1]; x = v[i1][0]-v[i0][0]; l5 = x*x + y*y;
-    y = v[i2][1]-v[i0][1]; x = v[i2][0]-v[i0][0]; l6 = x*x + y*y;
-    a1 = Math.acos((l2+l6-l4) / (2*Math.sqrt(l2*l6)));
-    a2 = Math.acos((l6+l1-l5) / (2*Math.sqrt(l6*l1)));
-	return ((Math.PI-a1) - a2) <= 0.0;
-  }
-
   if (vertices.length < 3) return [];
 
   var len = vertices.length,
@@ -37,7 +21,7 @@ d3.geom.hull = function(vertices) {
     if (vertices[i][1] < vertices[h][1]) {
       h = i;
     } else if (vertices[i][1] == vertices[h][1]) {
-	  h = (vertices[i][0] < vertices[h][0] ? i : h);
+      h = (vertices[i][0] < vertices[h][0] ? i : h);
     }
   }
 
@@ -46,9 +30,9 @@ d3.geom.hull = function(vertices) {
     if (i == h) continue;
     y1 = vertices[i][1] - vertices[h][1];
     x1 = vertices[i][0] - vertices[h][0];
-    points.push({angle:Math.atan2(y1,x1), index:i});
+    points.push({angle: Math.atan2(y1, x1), index: i});
   }
-  points.sort(function(a,b) { return a.angle-b.angle; });
+  points.sort(function(a, b) { return a.angle - b.angle; });
 
   // toss out duplicate angles
   a = points[0].angle;
@@ -86,11 +70,11 @@ d3.geom.hull = function(vertices) {
     }
   }
   sp = stack.length;
-  
+
   // do graham's scan
   for (; j<plen; ++j) {
     if (points[j].index == -1) continue; // skip tossed out points
-    while (isNonLeft(h, stack[sp-2], stack[sp-1], points[j].index, vertices)) {
+    while (d3_geom_hullIsNonLeft(h, stack[sp-2], stack[sp-1], points[j].index, vertices)) {
       --sp;
     }
     stack[sp++] = points[j].index;
@@ -102,4 +86,17 @@ d3.geom.hull = function(vertices) {
     poly.push(vertices[stack[i]]);
   }
   return poly;
+}
+
+// helper method to detect a non-left turn about 3 points
+function d3_geom_hullIsNonLeft(i0, i1, i2, i3, v) {
+  var x, y, l1, l2, l4, l5, l6, a1, a2;
+  y = v[i2][1] - v[i1][1]; x = v[i2][0] - v[i1][0]; l1 = x * x + y * y;
+  y = v[i3][1] - v[i2][1]; x = v[i3][0] - v[i2][0]; l2 = x * x + y * y;
+  y = v[i3][1] - v[i0][1]; x = v[i3][0] - v[i0][0]; l4 = x * x + y * y;
+  y = v[i1][1] - v[i0][1]; x = v[i1][0] - v[i0][0]; l5 = x * x + y * y;
+  y = v[i2][1] - v[i0][1]; x = v[i2][0] - v[i0][0]; l6 = x * x + y * y;
+  a1 = Math.acos((l2 + l6 - l4) / (2 * Math.sqrt(l2 * l6)));
+  a2 = Math.acos((l6 + l1 - l5) / (2 * Math.sqrt(l6 * l1)));
+  return (Math.PI - a1 - a2) < 0;
 }

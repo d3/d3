@@ -7,22 +7,19 @@
     <script type="text/javascript" src="../../d3.geom.min.js"></script>
     <style type="text/css">
 
-@import url("../../lib/colorbrewer/colorbrewer.css");
-
 svg {
-  border: solid 1px #666;
+  border: solid 1px #aaa;
+  background: #eee;
 }
 
 path {
-  fill: yellow;
+  fill: lightsteelblue;
   stroke: #000;
-  stroke-width: .5px;
 }
 
 circle {
-  fill: #ccc;
+  fill: #fff;
   stroke: #000;
-  pointer-events: none;
 }
 
     </style>
@@ -34,35 +31,29 @@ var w = 960,
     h = 500;
 
 var vertices = d3.range(15).map(function(d) {
-  return [w/4 + Math.random() * w/2,
-          h/4 + Math.random() * h/2];
+  return [
+    w / 4 + Math.random() * w / 2,
+    h / 4 + Math.random() * h / 2
+  ];
 });
-vertices[0] = [w/2,h/2];
 
 var svg = d3.select("body")
   .append("svg:svg")
     .attr("width", w)
     .attr("height", h)
-    .attr("class", "PiYG")
+    .attr("pointer-events", "all")
     .on("mousemove", move)
     .on("click", click);
 
-// background rect to catch events
-svg.append("svg:rect")
-    .attr("width", w)
-    .attr("height", h)
-    .attr("fill", "white");
-  
 update();
 
 function update() {
   svg.selectAll("path")
       .data([d3.geom.hull(vertices)])
       .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-	.enter("svg:path")
-	  .attr("class", "q3-9")
-	  .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
-	
+	  .enter("svg:path")
+	    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+
   svg.selectAll("circle")
       .data(vertices.slice(1))
     .enter("svg:circle")
