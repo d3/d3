@@ -166,6 +166,7 @@ d3.geo = {
 
 // d3.geom
 d3.geom = {
+  hull: 1,
   polygon: {
     area: 1,
     intersection: 1
