@@ -1,20 +1,22 @@
 d3["svg"]["chord"] = function() {
-  var sourceRadius = d3_svg_chordSourceRadius,
-      sourceStartAngle = d3_svg_chordSourceStartAngle,
-      sourceEndAngle = d3_svg_chordSourceEndAngle,
-      targetRadius = d3_svg_chordTargetRadius,
-      targetStartAngle = d3_svg_chordTargetStartAngle,
-      targetEndAngle = d3_svg_chordTargetEndAngle;
+  var source = d3_svg_chordSource,
+      target = d3_svg_chordTarget,
+      radius = d3_svg_chordRadius,
+      startAngle = d3_svg_arcStartAngle,
+      endAngle = d3_svg_arcEndAngle;
 
   // TODO Allow control point to be customized.
+  // TODO Support chords linking back to themselves.
 
-  function chord(d) {
-    var a00 = sourceStartAngle(d) + d3_svg_arcOffset,
-        a01 = sourceEndAngle(d) + d3_svg_arcOffset,
-        a10 = targetStartAngle(d) + d3_svg_arcOffset,
-        a11 = targetEndAngle(d) + d3_svg_arcOffset,
-        r0 = sourceRadius(d),
-        r1 = targetRadius(d),
+  function chord(d, i) {
+    var s = source.call(this, d, i),
+        t = target.call(this, d, i),
+        r0 = radius.call(this, s, i),
+        a00 = startAngle.call(this, s, i) + d3_svg_arcOffset,
+        a01 = endAngle.call(this, s, i) + d3_svg_arcOffset,
+        r1 = radius.call(this, t, i),
+        a10 = startAngle.call(this, t, i) + d3_svg_arcOffset,
+        a11 = endAngle.call(this, t, i) + d3_svg_arcOffset,
         x00 = r0 * Math.cos(a00),
         y00 = r0 * Math.sin(a00),
         x01 = r0 * Math.cos(a01),
@@ -31,74 +33,55 @@ d3["svg"]["chord"] = function() {
         + "Z";
   }
 
-  chord.radius = function(v) {
-    sourceRadius = targetRadius = d3_svg_chordValue(v);
+  chord["radius"] = function(v) {
+    if (!arguments.length) return radius;
+    radius = d3_functor(v);
     return chord;
   };
 
-  chord.sourceRadius = function(v) {
-    if (!arguments.length) return sourceRadius;
-    sourceRadius = d3_svg_chordValue(v);
+  chord["source"] = function(v) {
+    if (!arguments.length) return source;
+    source = d3_functor(v);
     return chord;
   };
 
-  chord.sourceStartAngle = function(v) {
-    if (!arguments.length) return sourceStartAngle;
-    sourceStartAngle = d3_svg_chordValue(v);
+  chord["target"] = function(v) {
+    if (!arguments.length) return target;
+    target = d3_functor(v);
     return chord;
   };
 
-  chord.sourceEndAngle = function(v) {
-    if (!arguments.length) return sourceEndAngle;
-    sourceEndAngle = d3_svg_chordValue(v);
+  chord["startAngle"] = function(v) {
+    if (!arguments.length) return startAngle;
+    startAngle = d3_functor(v);
     return chord;
   };
 
-  chord.targetRadius = function(v) {
-    if (!arguments.length) return targetRadius;
-    targetRadius = d3_svg_chordValue(v);
-    return chord;
-  };
-
-  chord.targetStartAngle = function(v) {
-    if (!arguments.length) return targetStartAngle;
-    targetStartAngle = d3_svg_chordValue(v);
-    return chord;
-  };
-
-  chord.targetEndAngle = function(v) {
-    if (!arguments.length) return targetEndAngle;
-    targetEndAngle = d3_svg_chordValue(v);
+  chord["endAngle"] = function(v) {
+    if (!arguments.length) return endAngle;
+    endAngle = d3_functor(v);
     return chord;
   };
 
   return chord;
 };
 
-function d3_svg_chordSourceRadius(d) {
-  return d["source"]["radius"];
+function d3_svg_chordSource(d) {
+  return d["source"];
 }
 
-function d3_svg_chordSourceStartAngle(d) {
-  return d["source"]["startAngle"];
+function d3_svg_chordTarget(d) {
+  return d["target"];
 }
 
-function d3_svg_chordSourceEndAngle(d) {
-  return d["source"]["endAngle"];
+function d3_svg_chordRadius(d) {
+  return d["radius"];
 }
 
-function d3_svg_chordTargetRadius(d) {
-  return d["target"]["radius"];
+function d3_svg_chordStartAngle(d) {
+  return d["startAngle"];
 }
 
-function d3_svg_chordTargetStartAngle(d) {
-  return d["target"]["startAngle"];
-}
-
-function d3_svg_chordTargetEndAngle(d) {
-  return d["target"]["endAngle"];
-}
-
-function d3_svg_chordValue(v) {
-  return typeof v == "function" ? v : function() { return v; };
+function d3_svg_chordEndAngle(d) {
+  return d["endAngle"];
 }

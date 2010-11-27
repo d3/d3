@@ -104,12 +104,6 @@ d3.scale = {
 
 // d3.svg
 d3.svg = {
-  arc: {
-    innerRadius: 1,
-    outerRadius: 1,
-    startAngle: 1,
-    endAngle: 1
-  },
   mouse: {
     ownerSVGElement: 1,
     createSVGPoint: 1,

@@ -28,6 +28,7 @@ d3.core.js: \
 	src/core/date.js \
 	src/core/object.js \
 	src/core/array.js \
+	src/core/functor.js \
 	src/core/merge.js \
 	src/core/split.js \
 	src/core/call.js \
