@@ -26,10 +26,12 @@ var n = 20, // number of layers
 var w = 960,
     h = 500,
     mx = m - 1,
-    my = max(data0.concat(data1), function(d) { return max(d, function(d) { return d.y0 + d.y; }); }),
-    x = function(d) { return d.x * w / mx; },
-    y0 = function(d) { return h - d.y0 * h / my; },
-    y1 = function(d) { return h - (d.y + d.y0) * h / my; };
+    my = max(data0.concat(data1), function(d) { return max(d, function(d) { return d.y0 + d.y; }); });
+
+var area = d3.svg.area()
+    .x(function(d) { return d.x * w / mx; })
+    .y0(function(d) { return h - d.y0 * h / my; })
+    .y1(function(d) { return h - (d.y + d.y0) * h / my; });
 
 var vis = d3.select("body")
   .append("svg:svg")
@@ -56,19 +58,6 @@ function transition() {
       .delay(500)
       .duration(2500)
       .attr("d", area);
-}
-
-function area(layer) {
-  var p = [],
-      i = 0,
-      d = layer[0],
-      n = layer.length;
-  p.push("M", x(d), "," + y0(d) + "V", y1(d));
-  while (i++ < n, d = layer[i]) p.push("L", x(d), ",", y1(d));
-  p.push("V" + y0(layer[n - 1]));
-  while (--i, d = layer[i]) p.push("L", x(d), ",", y0(d));
-  p.push("Z");
-  return p.join("");
 }
 
     </script>
