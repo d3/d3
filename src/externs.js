@@ -110,15 +110,6 @@ d3.svg = {
     startAngle: 1,
     endAngle: 1
   },
-  area: {
-    x: 1,
-    y0: 1,
-    y1: 1
-  },
-  line: {
-    x: 1,
-    y: 1
-  },
   mouse: {
     ownerSVGElement: 1,
     createSVGPoint: 1,
