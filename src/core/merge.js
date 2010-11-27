@@ -1,3 +1,3 @@
-function d3_blend(arrays) {
+d3["merge"] = function(arrays) {
   return Array.prototype.concat.apply([], arrays);
-}
+};

@@ -1,4 +1,4 @@
-d3 = {version: "0.22.0"}; // semver
+d3 = {version: "0.23.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -10,8 +10,30 @@ if (!Object.create) Object.create = function(o) {
 function d3_array(psuedoarray) {
   return Array.prototype.slice.call(psuedoarray);
 }
-function d3_blend(arrays) {
+d3["merge"] = function(arrays) {
   return Array.prototype.concat.apply([], arrays);
+};
+d3["split"] = function(array, f) {
+  var arrays = [],
+      values = [],
+      value,
+      i = -1,
+      n = array.length;
+  if (arguments.length < 2) f = d3_splitter;
+  while (++i < n) {
+    if (f.call(values, value = array[i], i)) {
+      arrays.push(values);
+      values = [];
+    } else {
+      values.push(value);
+    }
+  }
+  arrays.push(values);
+  return arrays;
+};
+
+function d3_splitter(d) {
+  return d == null;
 }
 function d3_call(callback, var_args) {
   var_args = d3_array(arguments);
@@ -1859,7 +1881,8 @@ d3["svg"]["line"] = function() {
       interpolator = d3_svg_lineInterpolators[interpolate];
 
   function line(d) {
-    return "M" + interpolator(d3_svg_linePoints(this, d, x, y));
+    return d.length < 1 ? null
+        : "M" + interpolator(d3_svg_linePoints(this, d, x, y));
   }
 
   line["x"] = function(v) {

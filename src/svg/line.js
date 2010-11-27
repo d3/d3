@@ -5,7 +5,8 @@ d3["svg"]["line"] = function() {
       interpolator = d3_svg_lineInterpolators[interpolate];
 
   function line(d) {
-    return "M" + interpolator(d3_svg_linePoints(this, d, x, y));
+    return d.length < 1 ? null
+        : "M" + interpolator(d3_svg_linePoints(this, d, x, y));
   }
 
   line["x"] = function(v) {
