@@ -7,8 +7,8 @@ d3.svg.arc = function() {
   function arc(d) {
     var r0 = innerRadius(d),
         r1 = outerRadius(d),
-        a0 = startAngle(d) - Math.PI / 2,
-        a1 = endAngle(d) - Math.PI / 2,
+        a0 = startAngle(d) + d3_svg_arcOffset,
+        a1 = endAngle(d) + d3_svg_arcOffset,
         da = a1 - a0,
         c0 = Math.cos(a0),
         s0 = Math.sin(a0),
@@ -54,3 +54,5 @@ d3.svg.arc = function() {
 
   return arc;
 };
+
+var d3_svg_arcOffset = -Math.PI / 2;

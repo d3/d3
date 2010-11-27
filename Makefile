@@ -60,6 +60,7 @@ d3.svg.js: \
 	src/svg/arc.js \
 	src/svg/line.js \
 	src/svg/area.js \
+	src/svg/chord.js \
 	src/svg/mouse.js
 
 d3.geo.js: \
