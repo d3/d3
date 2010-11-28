@@ -1,4 +1,4 @@
-d3 = {version: "0.25.1"}; // semver
+d3 = {version: "0.26.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -13,6 +13,12 @@ function d3_array(psuedoarray) {
 function d3_functor(v) {
   return typeof v == "function" ? v : function() { return v; };
 }
+d3["ascending"] = function(a, b) {
+  return a < b ? -1 : a > b ? 1 : 0;
+};
+d3["descending"] = function(a, b) {
+  return b < a ? -1 : b > a ? 1 : 0;
+};
 d3["merge"] = function(arrays) {
   return Array.prototype.concat.apply([], arrays);
 };

@@ -9,6 +9,8 @@ JS_COMPILER = \
 all: \
 	d3.js \
 	d3.min.js \
+	d3.layout.js \
+	d3.layout.min.js \
 	d3.csv.js \
 	d3.csv.min.js \
 	d3.geo.js \
@@ -29,6 +31,8 @@ d3.core.js: \
 	src/core/object.js \
 	src/core/array.js \
 	src/core/functor.js \
+	src/core/ascending.js \
+	src/core/descending.js \
 	src/core/merge.js \
 	src/core/split.js \
 	src/core/call.js \
@@ -64,6 +68,10 @@ d3.svg.js: \
 	src/svg/area.js \
 	src/svg/chord.js \
 	src/svg/mouse.js
+
+d3.layout.js: \
+  src/layout/layout.js \
+  src/layout/chord.js
 
 d3.geo.js: \
 	src/geo/geo.js \
