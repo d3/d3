@@ -52,7 +52,9 @@ svg.append("svg:g")
   .enter("svg:path")
     .attr("fill", function(d, i) { return fill(i); })
     .attr("stroke", function(d, i) { return fill(i); })
-    .attr("d", d3.svg.arc().innerRadius(r0).outerRadius(r1));
+    .attr("d", d3.svg.arc().innerRadius(r0).outerRadius(r1))
+    .on("mouseover", fade(.1))
+    .on("mouseout", fade(1));
 
 var ticks = svg.append("svg:g")
   .selectAll("g")
@@ -90,7 +92,8 @@ svg.append("svg:g")
     .data(chords)
   .enter("svg:path")
     .attr("fill", function(d, i) { return fill(d.target.i); })
-    .attr("d", d3.svg.chord().radius(r0));
+    .attr("d", d3.svg.chord().radius(r0))
+    .attr("opacity", 1);
 
 /** Returns an array of tick angles and labels, given a group. */
 function groupTicks(d) {
@@ -101,6 +104,16 @@ function groupTicks(d) {
       label: i % 5 ? null : v / 1000 + "k"
     };
   });
+}
+
+/** Returns an event handler for fading a given chord group. */
+function fade(opacity) {
+  return function(g, i) {
+    svg.selectAll("g.chord path")
+        .filter(function(d) { return d.source.i != i && d.target.i != i; })
+      .transition()
+        .attr("opacity", opacity);
+  };
 }
 
     </script>
