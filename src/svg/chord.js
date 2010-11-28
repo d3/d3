@@ -8,45 +8,41 @@ d3["svg"]["chord"] = function() {
   // TODO Allow control point to be customized.
 
   function chord(d, i) {
-    var s = source.call(this, d, i),
-        t = target.call(this, d, i),
-        r0 = radius.call(this, s, i),
-        a00 = startAngle.call(this, s, i) + d3_svg_arcOffset,
-        a01 = endAngle.call(this, s, i) + d3_svg_arcOffset,
-        r1 = radius.call(this, t, i),
-        a10 = startAngle.call(this, t, i) + d3_svg_arcOffset,
-        a11 = endAngle.call(this, t, i) + d3_svg_arcOffset;
-    return (a00 == a10) && (a01 == a11) && (r0 == r1)
-      ? chord1(r0, a00, a01)
-      : chord2(r0, a00, a01, r1, a10, a11);
+    var s = subgroup(this, source, d, i),
+        t = subgroup(this, target, d, i);
+    return "M" + s.p0
+      + arc(s.r, s.p1) + (equals(s, t)
+      ? curve(s.r, s.p1, s.r, s.p0)
+      : curve(s.r, s.p1, t.r, t.p0)
+      + arc(t.r, t.p1)
+      + curve(t.r, t.p1, s.r, s.p0))
+      + "Z";
   }
 
-  function chord1(r0, a00, a01) {
-    var x00 = r0 * Math.cos(a00),
-        y00 = r0 * Math.sin(a00),
-        x01 = r0 * Math.cos(a01),
-        y01 = r0 * Math.sin(a01);
-    return "M" + x00 + "," + y00
-        + "A" + r0 + "," + r0 + " 0  0,1 " + x01 + "," + y01
-        + "Q 0,0 " + x00 + "," + y00
-        + "Z";
+  function subgroup(self, f, d, i) {
+    var subgroup = f.call(self, d, i),
+        r = radius.call(self, subgroup, i),
+        a0 = startAngle.call(self, subgroup, i) + d3_svg_arcOffset,
+        a1 = endAngle.call(self, subgroup, i) + d3_svg_arcOffset;
+    return {
+      r: r,
+      a0: a0,
+      a1: a1,
+      p0: [r * Math.cos(a0), r * Math.sin(a0)],
+      p1: [r * Math.cos(a1), r * Math.sin(a1)]
+    };
   }
 
-  function chord2(r0, a00, a01, r1, a10, a11) {
-    var x00 = r0 * Math.cos(a00),
-        y00 = r0 * Math.sin(a00),
-        x01 = r0 * Math.cos(a01),
-        y01 = r0 * Math.sin(a01),
-        x10 = r1 * Math.cos(a10),
-        y10 = r1 * Math.sin(a10),
-        x11 = r1 * Math.cos(a11),
-        y11 = r1 * Math.sin(a11);
-    return "M" + x00 + "," + y00
-        + "A" + r0 + "," + r0 + " 0  0,1 " + x01 + "," + y01
-        + "Q 0,0 " + x10 + "," + y10
-        + "A" + r1 + "," + r1 + " 0  0,1 " + x11 + "," + y11
-        + "Q 0,0 " + x00 + "," + y00
-        + "Z";
+  function equals(a, b) {
+    return a.a0 == b.a0 && a.a1 == b.a1;
+  }
+
+  function arc(r, p) {
+    return "A" + r + "," + r + " 0 0,1 " + p;
+  }
+
+  function curve(r0, p0, r1, p1) {
+    return "Q 0,0 " + p1;
   }
 
   chord["radius"] = function(v) {
