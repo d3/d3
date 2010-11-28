@@ -1,4 +1,4 @@
-d3 = {version: "0.24.0"}; // semver
+d3 = {version: "0.25.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -2099,7 +2099,6 @@ d3["svg"]["chord"] = function() {
       endAngle = d3_svg_arcEndAngle;
 
   // TODO Allow control point to be customized.
-  // TODO Support chords linking back to themselves.
 
   function chord(d, i) {
     var s = source.call(this, d, i),
@@ -2109,8 +2108,25 @@ d3["svg"]["chord"] = function() {
         a01 = endAngle.call(this, s, i) + d3_svg_arcOffset,
         r1 = radius.call(this, t, i),
         a10 = startAngle.call(this, t, i) + d3_svg_arcOffset,
-        a11 = endAngle.call(this, t, i) + d3_svg_arcOffset,
-        x00 = r0 * Math.cos(a00),
+        a11 = endAngle.call(this, t, i) + d3_svg_arcOffset;
+    return (a00 == a10) && (a01 == a11) && (r0 == r1)
+      ? chord1(r0, a00, a01)
+      : chord2(r0, a00, a01, r1, a10, a11);
+  }
+
+  function chord1(r0, a00, a01) {
+    var x00 = r0 * Math.cos(a00),
+        y00 = r0 * Math.sin(a00),
+        x01 = r0 * Math.cos(a01),
+        y01 = r0 * Math.sin(a01);
+    return "M" + x00 + "," + y00
+        + "A" + r0 + "," + r0 + " 0  0,1 " + x01 + "," + y01
+        + "Q 0,0 " + x00 + "," + y00
+        + "Z";
+  }
+
+  function chord2(r0, a00, a01, r1, a10, a11) {
+    var x00 = r0 * Math.cos(a00),
         y00 = r0 * Math.sin(a00),
         x01 = r0 * Math.cos(a01),
         y01 = r0 * Math.sin(a01),

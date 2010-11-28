@@ -4,21 +4,17 @@
     <meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Chords</title>
     <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="chord.js"></script>
     <style type="text/css">
 
-circle {
-  fill: none;
-  stroke: #000;
-  stroke-dasharray: 3,5;
+svg {
+  font: 10px sans-serif;
 }
 
 .chord path {
-  fill-opacity: .7;
-}
-
-.chord path:hover {
-  fill: yellow;
+  fill-opacity: .67;
   stroke: #000;
+  stroke-width: .5px;
 }
 
     </style>
@@ -26,42 +22,86 @@ circle {
   <body>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500,
-    r = Math.min(w, h) * .45,
-    color = d3.scale.category20b();
+// From http://mkweb.bcgsc.ca/circos/guide/tables/
+var chords = chord([
+  [11975,  5871, 8916, 2868],
+  [ 1951, 10048, 2060, 6171],
+  [ 8010, 16145, 8090, 8045],
+  [ 1013,   990,  940, 6907]
+], .05);
 
-/* TODO Put some real data in here… */
-var chords = d3.range(20).map(function(i) {
-  var a00 = i / 30 * Math.PI,
-      a01 = a00 + Math.PI / 35,
-      a10 = Math.PI + Math.random() * Math.PI / 2,
-      a11 = Math.min(2 * Math.PI, a10 + Math.random() * .25);
-  return {
-    source: {startAngle: a00, endAngle: a01},
-    target: {startAngle: a10, endAngle: a11}
-  };
-});
+var w = 960,
+    h = 600,
+    r0 = Math.min(w, h) * .41,
+    r1 = r0 * 1.1;
+
+var fill = d3.scale.ordinal()
+    .domain(d3.range(4))
+    .range(["#000000", "#FFDD89", "#957244", "#F26223"]);
 
 var svg = d3.select("body")
   .append("svg:svg")
     .attr("width", w)
-    .attr("height", h);
+    .attr("height", h)
+  .append("svg:g")
+    .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+
+svg.append("svg:g")
+  .selectAll("path")
+    .data(chords.groups)
+  .enter("svg:path")
+    .attr("fill", function(d, i) { return fill(i); })
+    .attr("stroke", function(d, i) { return fill(i); })
+    .attr("d", d3.svg.arc().innerRadius(r0).outerRadius(r1));
+
+var ticks = svg.append("svg:g")
+  .selectAll("g")
+    .data(chords.groups)
+  .enter("svg:g")
+  .selectAll("g")
+    .data(groupTicks)
+  .enter("svg:g")
+    .attr("transform", function(d) {
+      return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
+          + "translate(" + r1 + ",0)";
+    });
+
+ticks.append("svg:line")
+    .attr("x1", 1)
+    .attr("y1", 0)
+    .attr("x2", 5)
+    .attr("y2", 0)
+    .attr("stroke", "#000");
+
+ticks.append("svg:text")
+    .attr("x", 8)
+    .attr("dy", ".35em")
+    .attr("text-anchor", function(d) {
+      return d.angle > Math.PI ? "end" : null;
+    })
+    .attr("transform", function(d) {
+      return d.angle > Math.PI ? "rotate(180)translate(-16)" : null;
+    })
+    .text(function(d) { return d.label; });
 
 svg.append("svg:g")
     .attr("class", "chord")
   .selectAll("path")
     .data(chords)
   .enter("svg:path")
-    .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")")
-    .attr("fill", function(d, i) { return color(i); })
-    .attr("d", d3.svg.chord()
-    .radius(r));
+    .attr("fill", function(d, i) { return fill(d.target.i); })
+    .attr("d", d3.svg.chord().radius(r0));
 
-svg.append("svg:circle")
-    .attr("cx", w / 2)
-    .attr("cy", h / 2)
-    .attr("r", r);
+/** Returns an array of tick angles and labels, given a group. */
+function groupTicks(d) {
+  var k = (d.endAngle - d.startAngle) / d.sum;
+  return d3.range(0, d.sum, 1000).map(function(v, i) {
+    return {
+      angle: v * k + d.startAngle,
+      label: i % 5 ? null : v / 1000 + "k"
+    };
+  });
+}
 
     </script>
   </body>
