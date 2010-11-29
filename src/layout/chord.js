@@ -77,13 +77,17 @@ d3["layout"]["chord"] = function() {
       x += padding;
     }
 
-    // Generate chords for each subgroup-subgroup link.
+    // Generate chords for each (non-empty) subgroup-subgroup link.
     i = -1; while (++i < n) {
       j = i - 1; while (++j < n) {
-        chords.push({
-          "source": subgroups[i + "-" + j],
-          "target": subgroups[j + "-" + i]
-        })
+        var source = subgroups[i + "-" + j],
+            target = subgroups[j + "-" + i];
+        if (source["value"] || target["value"]) {
+          chords.push({
+            "source": source,
+            "target": target
+          })
+        }
       }
     }
 

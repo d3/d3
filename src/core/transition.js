@@ -53,31 +53,44 @@ function d3_transition(groups) {
           te, // ease(t)
           tk, // tween key
           ik = interpolators[k];
+
+      // Check if the (un-eased) time is outside the range [0,1].
       if (t < 1) {
         clear = false;
         if (t < 0) return;
-        if (stage[k]) {
-          if (tx.active != transitionId) {
-            stage[k] = 2;
-            return;
-          }
-        } else if (!tx || tx.active > transitionId) {
+      } else {
+        t = 1;
+      }
+
+      // Determine the stage of this transition.
+      // 0 - Not yet started.
+      // 1 - In progress.
+      // 2 - Ended.
+      if (stage[k]) {
+        if (tx.active != transitionId) {
           stage[k] = 2;
           return;
-        } else {
-          stage[k] = 1;
-          event.start.dispatch.apply(this, arguments);
-          ik = interpolators[k] = {};
-          tx.active = transitionId;
-          for (tk in tweens) ik[tk] = tweens[tk].apply(this, arguments);
         }
-        te = ease(t);
-        for (tk in tweens) ik[tk].call(this, te);
+      } else if (!tx || tx.active > transitionId) {
+        stage[k] = 2;
+        return;
       } else {
+        stage[k] = 1;
+        event.start.dispatch.apply(this, arguments);
+        ik = interpolators[k] = {};
+        tx.active = transitionId;
+        for (tk in tweens) ik[tk] = tweens[tk].apply(this, arguments);
+      }
+
+      // Apply the interpolators!
+      te = ease(t);
+      for (tk in tweens) ik[tk].call(this, te);
+
+      // Handle ending transitions.
+      if (t == 1) {
         stage[k] = 2;
         if (tx.active == transitionId) {
           var owner = tx.owner;
-          for (tk in tweens) ik[tk].call(this, 1);
           if (owner == transitionId) {
             delete this.__transition__;
             if (remove) this.parentNode.removeChild(this);
