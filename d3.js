@@ -1,4 +1,4 @@
-d3 = {version: "0.26.1"}; // semver
+d3 = {version: "0.27.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -44,6 +44,9 @@ d3["split"] = function(array, f) {
 function d3_splitter(d) {
   return d == null;
 }
+function d3_collapse(s) {
+  return s.replace(/(^\s+)|(\s+$)/g, "").replace(/\s+/g, " ");
+}
 function d3_call(callback, var_args) {
   var_args = d3_array(arguments);
   var_args[0] = this;
@@ -66,6 +69,11 @@ d3.range = function(start, stop, step) {
   else while ((j = start + step * ++i) < stop) range.push(j);
   return range;
 };
+d3["requote"] = function(s) {
+  return s.replace(d3_requote_re, "\\$&");
+};
+
+var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
 d3.text = function(url, mime, callback) {
   var req = new XMLHttpRequest();
   if (arguments.length == 3) req.overrideMimeType(mime);
@@ -1057,6 +1065,43 @@ function d3_selection(groups) {
         : (name.local ? attrConstantNS : attrConstant)));
   };
 
+  groups["classed"] = function(name, value) {
+    var re = new RegExp("(^|\\s+)" + d3["requote"](name) + "(\\s+|$)", "g");
+
+    // If no value is specified, return the first value.
+    if (arguments.length < 2) {
+      return first(function() {
+        return re.test(this.className);
+      });
+    }
+
+    /** @this {Element} */
+    function classedAdd() {
+      var classes = this.className;
+      if (!re.test(classes)) {
+        this.className = d3_collapse(classes + " " + name);
+      }
+    }
+
+    /** @this {Element} */
+    function classedRemove() {
+      var classes = d3_collapse(this.className.replace(re, " "));
+      this.className = classes.length ? classes : null;
+    }
+
+    /** @this {Element} */
+    function classedFunction() {
+      (value.apply(this, arguments)
+          ? classedAdd
+          : classedRemove).call(this);
+    }
+
+    return groups.each(typeof value == "function"
+        ? classedFunction : value
+        ? classedAdd
+        : classedRemove);
+  };
+
   groups.style = function(name, value, priority) {
     if (arguments.length < 3) priority = null;
 
@@ -1203,7 +1248,7 @@ function d3_selection(groups) {
   };
 
   groups.sort = function(comparator) {
-    comparator = d3_comparator.apply(this, arguments);
+    comparator = d3_selection_comparator.apply(this, arguments);
     for (var j = 0, m = groups.length; j < m; j++) {
       var group = groups[j];
       group.sort(comparator);
@@ -1253,19 +1298,11 @@ function d3_selection_join(key) {
   };
 }
 
-function d3_comparator(comparator) {
-  if (!arguments.length) comparator = d3_ascending;
+function d3_selection_comparator(comparator) {
+  if (!arguments.length) comparator = d3.ascending;
   return function(a, b) {
     return comparator(a && a.__data__, b && b.__data__);
   };
-}
-
-function d3_ascending(a, b) {
-  return a < b ? -1 : a > b ? 1 : 0;
-}
-
-function d3_descending(a, b) {
-  return a < b ? 1 : a > b ? -1 : 0;
 }
 d3.transition = d3_root.transition;
 
