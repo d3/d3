@@ -75,7 +75,7 @@ d3.geom.hull = function(vertices) {
   // do graham's scan
   for (; j<plen; ++j) {
     if (points[j].index == -1) continue; // skip tossed out points
-    while (d3_geom_hullIsNonLeft(h, stack[sp-2], stack[sp-1], points[j].index, vertices)) {
+    while (!d3_geom_hullCCW(stack[sp-2], stack[sp-1], points[j].index, vertices)) {
       --sp;
     }
     stack[sp++] = points[j].index;
@@ -89,19 +89,14 @@ d3.geom.hull = function(vertices) {
   return poly;
 }
 
-// helper method to detect a non-left turn about 3 points
-function d3_geom_hullIsNonLeft(i0, i1, i2, i3, v) {
-  var x, y, l1, l2, l4, l5, l6, a1, a2;
-  y = v[i2][1] - v[i1][1]; x = v[i2][0] - v[i1][0]; l1 = x * x + y * y;
-  y = v[i3][1] - v[i2][1]; x = v[i3][0] - v[i2][0]; l2 = x * x + y * y;
-  y = v[i3][1] - v[i0][1]; x = v[i3][0] - v[i0][0]; l4 = x * x + y * y;
-  y = v[i1][1] - v[i0][1]; x = v[i1][0] - v[i0][0]; l5 = x * x + y * y;
-  y = v[i2][1] - v[i0][1]; x = v[i2][0] - v[i0][0]; l6 = x * x + y * y;
-  a1 = Math.acos((l2 + l6 - l4) / (2 * Math.sqrt(l2 * l6)));
-  a2 = Math.acos((l6 + l1 - l5) / (2 * Math.sqrt(l6 * l1)));
-  return (Math.PI - a1 - a2) < 0;
-}
-// Note: requires coordinates to be counterclockwise and convex!
+// are three points in counter-clockwise order?
+function d3_geom_hullCCW(i1, i2, i3, v) {
+  var t, a, b, c, d, e, f;
+  t = v[i1]; a = t[0]; b = t[1];
+  t = v[i2]; c = t[0]; d = t[1];
+  t = v[i3]; e = t[0]; f = t[1];
+  return ((f-b)*(c-a) - (d-b)*(e-a)) > 0;
+}// Note: requires coordinates to be counterclockwise and convex!
 d3.geom.polygon = function(coordinates) {
 
   coordinates.area = function() {
