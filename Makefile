@@ -92,6 +92,7 @@ d3.time.js: \
 
 d3.geom.js: \
 	src/geom/geom.js \
+	src/geom/contour.js \
 	src/geom/hull.js \
 	src/geom/polygon.js \
 	src/geom/voronoi.js \
