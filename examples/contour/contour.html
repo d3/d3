@@ -6,18 +6,14 @@
     <script type="text/javascript" src="../../d3.min.js"></script>
     <script type="text/javascript" src="../../d3.geom.min.js"></script>
     <style type="text/css">
-
 svg {
   border: solid 1px #aaa;
-  background: #fff;
 }
-
 path {
   stroke: red;
   stroke-width: 2px;
   fill: none;
 }
-
 rect {
   fill: lightsteelblue;
   stroke: #eee;
@@ -29,7 +25,6 @@ rect.d1 {
 rect.d2 {
   fill: darkblue;
 }
-
     </style>
   </head>
   <body>
@@ -37,15 +32,15 @@ rect.d2 {
 
 function grid0(x,y) {
   if (x < 0 || y < 0 || x >= dw || y >= dh) return 0;
-  return data[y][x] ? 1 : 0;
+  return data[y][x];
 }
 function grid1(x,y) {
   if (x < 0 || y < 0 || x >= dw || y >= dh) return 0;
-  return data[y][x] ? (data[y][x] == 1 ? 1 : 0) : 0;
+  return data[y][x]==1;
 }
 function grid2(x,y) {
   if (x < 0 || y < 0 || x >= dw || y >= dh) return 0;
-  return data[y][x] ? (data[y][x] == 2 ? 1 : 0) : 0;
+  return data[y][x]==2;
 }
 	
 var data = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -69,23 +64,23 @@ function translateX(d, i) { return "translate("+(i*sz)+",0)"; }
 function scale(p) { return [p[0]*sz, p[1]*sz]; }
 
 var svg = d3.select("body")
-  .append("svg:svg")
-    .attr("width", dw*sz)
-    .attr("height", dh*sz);
+ .append("svg:svg")
+  .attr("width", dw*sz)
+  .attr("height", dh*sz);
 
 var g = svg.selectAll("g")
   .data(data)
-  .enter("svg:g")
-    .attr("transform", translateY);
+ .enter("svg:g")
+  .attr("transform", translateY);
 
 g.selectAll("rect")
   .data(function(d) { return d; })
-  .enter("svg:rect")
-    .attr("transform", translateX)
-    .attr("width", sz)
-    .attr("height", sz)
-    .attr("class", function(d) { return "d"+d; })
-    .on("mouseover", mouseover);
+ .enter("svg:rect")
+  .attr("transform", translateX)
+  .attr("width", sz)
+  .attr("height", sz)
+  .attr("class", function(d) { return "d"+d; })
+  .on("mouseover", mouseover);
 
 contour(grid);
 
@@ -93,8 +88,8 @@ function contour(grid, start) {
   svg.selectAll("path")
     .data([d3.geom.contour(grid, start).map(scale)])
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-    .enter("svg:path")
-      .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
+   .enter("svg:path")
+    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 }
 
 function mouseover(d,i) {
