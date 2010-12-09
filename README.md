@@ -26,7 +26,9 @@ server. One easy way to do that is to install Tornado:
 
     cd ..
     git clone https://github.com/facebook/tornado.git
+    cd tornado
     sudo python setup.py install
+    cd ../d3
 
 We have provided a Tornado script for serving static files:
 
