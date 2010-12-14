@@ -15,6 +15,10 @@ d3.scale.pow = function() {
     return linear(powp(x));
   }
 
+  function tick() {
+    return d3.scale.linear().domain(scale.domain());
+  }
+
   scale.invert = function(x) {
     return powb(linear.invert(x));
   };
@@ -29,6 +33,15 @@ d3.scale.pow = function() {
   scale.range = function() {
     var x = linear.range.apply(linear, arguments);
     return arguments.length ? scale : x;
+  };
+
+  // TODO better tick formatting...
+  scale.ticks = function(m) {
+    return tick().ticks(m);
+  };
+
+  scale.tickFormat = function(m) {
+    return tick().tickFormat(m);
   };
 
   scale.exponent = function(x) {
