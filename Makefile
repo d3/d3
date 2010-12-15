@@ -72,6 +72,7 @@ d3.svg.js: \
 	src/svg/line.js \
 	src/svg/area.js \
 	src/svg/chord.js \
+	src/svg/curve.js \
 	src/svg/mouse.js
 
 d3.layout.js: \
