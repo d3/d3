@@ -1,4 +1,4 @@
-d3 = {version: "0.27.1"}; // semver
+d3 = {version: "0.28.2"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -74,24 +74,50 @@ d3["requote"] = function(s) {
 };
 
 var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
-d3.text = function(url, mime, callback) {
+d3.xhr = function(url, mime, callback) {
   var req = new XMLHttpRequest();
-  if (arguments.length == 3) req.overrideMimeType(mime);
-  else callback = mime;
+  if (arguments.length < 3) callback = mime;
+  else if (mime) req.overrideMimeType(mime);
   req.open("GET", url, true);
   req.onreadystatechange = function() {
-    if (req.readyState == 4) {
-      callback(req.status < 300 && req.responseText
-          ? req.responseText
-          : null);
-    }
+    if (req.readyState == 4) callback(req.status < 300 ? req : null);
   };
   req.send(null);
 };
+d3.text = function(url, mime, callback) {
+  function ready(req) {
+    callback(req && req.responseText);
+  }
+  if (arguments.length < 3) {
+    callback = mime;
+    mime = null;
+  }
+  d3.xhr(url, mime, ready);
+};
 d3.json = function(url, callback) {
-  return d3.text(url, "application/json", function(text) {
-    callback(text && JSON.parse(text));
+  d3.text(url, "application/json", function(text) {
+    callback(text ? JSON.parse(text) : null);
   });
+};
+d3.html = function(url, callback) {
+  d3.text(url, "text/html", function(text) {
+    if (text != null) { // Treat empty string as valid HTML.
+      var range = document.createRange();
+      range.selectNode(document.body);
+      text = range.createContextualFragment(text);
+    }
+    callback(text);
+  });
+};
+d3.xml = function(url, mime, callback) {
+  function ready(req) {
+    callback(req && req.responseXML);
+  }
+  if (arguments.length < 3) {
+    callback = mime;
+    mime = null;
+  }
+  d3.xhr(url, mime, ready);
 };
 d3.ns = {
 
@@ -1071,6 +1097,7 @@ function d3_selection(groups) {
     // If no value is specified, return the first value.
     if (arguments.length < 2) {
       return first(function() {
+        re.lastIndex = 0;
         return re.test(this.className);
       });
     }
@@ -1078,6 +1105,7 @@ function d3_selection(groups) {
     /** @this {Element} */
     function classedAdd() {
       var classes = this.className;
+      re.lastIndex = 0;
       if (!re.test(classes)) {
         this.className = d3_collapse(classes + " " + name);
       }
@@ -1735,6 +1763,10 @@ d3.scale.pow = function() {
     return linear(powp(x));
   }
 
+  function tick() {
+    return d3.scale.linear().domain(scale.domain());
+  }
+
   scale.invert = function(x) {
     return powb(linear.invert(x));
   };
@@ -1749,6 +1781,15 @@ d3.scale.pow = function() {
   scale.range = function() {
     var x = linear.range.apply(linear, arguments);
     return arguments.length ? scale : x;
+  };
+
+  // TODO better tick formatting...
+  scale.ticks = function(m) {
+    return tick().ticks(m);
+  };
+
+  scale.tickFormat = function(m) {
+    return tick().tickFormat(m);
   };
 
   scale.exponent = function(x) {

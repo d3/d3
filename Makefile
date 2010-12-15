@@ -39,8 +39,11 @@ d3.core.js: \
 	src/core/call.js \
 	src/core/range.js \
 	src/core/requote.js \
+	src/core/xhr.js \
 	src/core/text.js \
 	src/core/json.js \
+	src/core/html.js \
+	src/core/xml.js \
 	src/core/ns.js \
 	src/core/dispatch.js \
 	src/core/format.js \

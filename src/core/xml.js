@@ -1,6 +1,6 @@
-d3.text = function(url, mime, callback) {
+d3.xml = function(url, mime, callback) {
   function ready(req) {
-    callback(req && req.responseText);
+    callback(req && req.responseXML);
   }
   if (arguments.length < 3) {
     callback = mime;

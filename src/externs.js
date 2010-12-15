@@ -29,8 +29,11 @@ var d3 = {
   interpolateObject: 1,
   interpolateString: 1,
   interpolateRgb: 1,
+  html: 1,
   json: 1,
   text: 1,
+  xhr: 1,
+  xml: 1,
   ns: {
     prefix: {
       svg: 1,

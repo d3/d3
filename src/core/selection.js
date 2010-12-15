@@ -298,6 +298,7 @@ function d3_selection(groups) {
     // If no value is specified, return the first value.
     if (arguments.length < 2) {
       return first(function() {
+        re.lastIndex = 0;
         return re.test(this.className);
       });
     }
@@ -305,6 +306,7 @@ function d3_selection(groups) {
     /** @this {Element} */
     function classedAdd() {
       var classes = this.className;
+      re.lastIndex = 0;
       if (!re.test(classes)) {
         this.className = d3_collapse(classes + " " + name);
       }
