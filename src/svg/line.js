@@ -1,12 +1,14 @@
 d3["svg"]["line"] = function() {
-  var x = d3_svg_lineX,
-      y = d3_svg_lineY,
+  var x = null,
+      y = null,
       interpolate = "linear",
-      interpolator = d3_svg_lineInterpolators[interpolate];
+      interpolator = d3_svg_lineInterpolators[interpolate],
+      interpargs = [null];
 
   function line(d) {
-    return d.length < 1 ? null
-        : "M" + interpolator(d3_svg_linePoints(this, d, x, y));
+	if (d.length < 1) return null;
+	interpargs[0] = x==null ? d : d3_svg_linePoints(this, d, x, y);
+    return "M" + interpolator.apply(null, interpargs);
   }
 
   line["x"] = function(v) {
@@ -24,6 +26,7 @@ d3["svg"]["line"] = function() {
   line["interpolate"] = function(v) {
     if (!arguments.length) return interpolate;
     interpolator = d3_svg_lineInterpolators[interpolate = v];
+    interpargs = arguments.length > 1 ? arguments : [null];
     return line;
   };
 
@@ -59,19 +62,17 @@ function d3_svg_linePoints(self, d, x, y) {
 }
 
 /**
- * @private The default `x` property, which references the `x` attribute of
- * the given datum.
+ * @private The default `x` property, which references d[0]
  */
 function d3_svg_lineX(d) {
-  return d["x"];
+  return d[0];
 }
 
 /**
- * @private The default `y` property, which references the `y` attribute of
- * the given datum.
+ * @private The default `y` property, which references d[1]
  */
 function d3_svg_lineY(d) {
-  return d["y"];
+  return d[1];
 }
 
 /**
@@ -79,7 +80,8 @@ function d3_svg_lineY(d) {
  */
 var d3_svg_lineInterpolators = {
   "linear": d3_svg_lineLinear,
-  "basis": d3_svg_lineBasis
+  "basis": d3_svg_lineBasis,
+  "cardinal" : d3_svg_lineCardinal
 };
 
 /**
@@ -94,6 +96,92 @@ function d3_svg_lineLinear(points) {
   path.push(p[0], ",", p[1]);
   while (++i < n) path.push("L", (p = points[i])[0], ",", p[1]);
   return path.join("");
+}
+
+/**
+ * @private Cardinal spline interpolation; generates "C" commands.
+ */
+function d3_svg_lineCardinal(points, tension, closed) {
+  if (points.length <= 2) return null;
+  if (tension == undefined) tension = 0.8;
+  return points[0] + d3_svg_lineHermite(points,
+    d3_svg_lineCardinalTangents(points, tension, closed));
+}
+
+/**
+ * @private Hermite spline construction
+ */
+function d3_svg_lineHermite(points, tangents) {
+  if (tangents.length < 1
+      || (points.length != tangents.length
+      && points.length != tangents.length + 2)) return "";
+  var quad = points.length != tangents.length,
+      path = "",
+      p0 = points[0],
+      p = points[1],
+      t0 = tangents[0],
+      t = t0,
+      pi = 1;
+
+  if (quad) {
+    path += "Q" + (p[0] - t0[0] * 2 / 3) + ","  + (p[1] - t0[1] * 2 / 3)
+        + "," + p[0] + "," + p[1];
+    p0 = points[1];
+    pi = 2;
+  }
+
+  if (tangents.length > 1) {
+    t = tangents[1];
+    p = points[pi];
+    pi++;
+    path += "C" + (p0[0] + t0[0]) + "," + (p0[1] + t0[1])
+        + "," + (p[0] - t[0]) + "," + (p[1] - t[1])
+        + "," + p[0] + "," + p[1];
+    for (var i = 2; i < tangents.length; i++, pi++) {
+      p = points[pi];
+      t = tangents[i];
+      path += "S" + (p[0] - t[0]) + "," + (p[1] - t[1])
+          + "," + p[0] + "," + p[1];
+    }
+  }
+
+  if (quad) {
+    var lp = points[pi];
+    path += "Q" + (p[0] + t[0] * 2 / 3) + ","  + (p[1] + t[1] * 2 / 3) + ","
+        + lp[0] + "," + lp[1];
+  }
+
+  return path;
+}
+
+/**
+ * @private Generates tangents for a cardinal spline
+ */
+function d3_svg_lineCardinalTangents(points, tension, closed) {
+  var pts = points,
+      N = pts.length-1;
+
+  // if closed shape, adjust endpoints to get all tangents
+  if (closed) {
+    pts = [points[N-1]].concat(points);
+    pts.push(points[1]);
+  }
+
+  var tangents = [],
+      a = (1 - tension) / 2,
+      p0 = pts[0],
+      p1 = pts[1],
+      p2 = pts[2];
+
+  for (var i = 3; i < pts.length; i++) {
+    tangents.push([a * (p2[0] - p0[0]), a * (p2[1] - p0[1])]);
+    p0 = p1;
+    p1 = p2;
+    p2 = pts[i];
+  }
+
+  tangents.push([a * (p2[0] - p0[0]), a * (p2[1] - p0[1])]);
+  return tangents;
 }
 
 /**

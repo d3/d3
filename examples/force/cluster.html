@@ -36,7 +36,8 @@ var w = 960,     // svg width
     dr = 4,      // default point radius
     off = 15,    // cluster hull offset
     expand = {}, // expanded clusters
-    data, net, force, hullg, hull, linkg, link, nodeg, node;
+    data, net, force, hullg, hull, linkg, link, nodeg, node,
+    curve = d3.svg.line().interpolate("cardinal", 0.85, true);
 
 function noop() { return false; }
 
@@ -163,7 +164,7 @@ function convexHulls(nodes, index, offset) {
 }
 
 function drawCluster(d) {
-  return d3.svg.cardinal(d.path, 0.8);
+  return curve(d.path); // 0.8
 }
 
 function drag(n) {
