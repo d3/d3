@@ -10,18 +10,34 @@ d3["svg"]["arc"] = function() {
         a0 = startAngle.call(this, d, i) + d3_svg_arcOffset,
         a1 = endAngle.call(this, d, i) + d3_svg_arcOffset,
         da = a1 - a0,
+        df = da < Math.PI ? "0" : "1",
         c0 = Math.cos(a0),
         s0 = Math.sin(a0),
         c1 = Math.cos(a1),
         s1 = Math.sin(a1);
-    return "M" + r1 * c0 + "," + r1 * s0
-        + "A" + r1 + "," + r1 + " 0 "
-        + ((da < Math.PI) ? "0" : "1") + ",1 "
-        + r1 * c1 + "," + r1 * s1
-        + "L" + r0 * c1 + "," + r0 * s1
-        + "A" + r0 + "," + r0 + " 0 "
-        + ((da < Math.PI) ? "0" : "1") + ",0 "
-        + r0 * c0 + "," + r0 * s0 + "Z";
+    return da >= 2 * Math.PI
+      ? (r0
+      ? "M0," + r1
+      + "A" + r1 + "," + r1 + " 0 1,1 0," + (-r1)
+      + "A" + r1 + "," + r1 + " 0 1,1 0," + r1
+      + "M0," + r0
+      + "A" + r0 + "," + r0 + " 0 1,1 0," + (-r0)
+      + "A" + r0 + "," + r0 + " 0 1,1 0," + r0
+      + "Z"
+      : "M0," + r1
+      + "A" + r1 + "," + r1 + " 0 1,1 0," + (-r1)
+      + "A" + r1 + "," + r1 + " 0 1,1 0," + r1
+      + "Z")
+      : (r0
+      ? "M" + r1 * c0 + "," + r1 * s0
+      + "A" + r1 + "," + r1 + " 0 " + df + ",1 " + r1 * c1 + "," + r1 * s1
+      + "L" + r0 * c1 + "," + r0 * s1
+      + "A" + r0 + "," + r0 + " 0 " + df + ",0 " + r0 * c0 + "," + r0 * s0
+      + "Z"
+      : "M" + r1 * c0 + "," + r1 * s0
+      + "A" + r1 + "," + r1 + " 0 " + df + ",1 " + r1 * c1 + "," + r1 * s1
+      + "L0,0"
+      + "Z");
   }
 
   arc["innerRadius"] = function(v) {
