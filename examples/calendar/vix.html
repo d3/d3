@@ -5,7 +5,6 @@
     <script type="text/javascript" src="../../d3.csv.min.js"></script>
     <script type="text/javascript" src="values.js"></script>
     <script type="text/javascript" src="nest.js"></script>
-    <script type="text/javascript" src="quantile.js"></script>
     <style type="text/css">
 
 @import url("../../lib/colorbrewer/colorbrewer.css");
@@ -37,7 +36,9 @@ d3.csv("vix.csv", function(csv) {
       .key(function(d) { return d.Date; })
       .rollup(function(d) { return d[0].Open; });
 
-  var color = quantile(values(data), 9);
+  var color = d3.scale.quantile()
+      .domain(values(data))
+      .range(d3.range(9).reverse());
 
   var w = 960,
       pw = 14,
@@ -64,7 +65,7 @@ d3.csv("vix.csv", function(csv) {
     .enter("svg:rect")
       .attr("x", function(d) { return d.week * z; })
       .attr("y", function(d) { return d.day * z; })
-      .attr("class", function(d) { return "day q" + (8-color(data[d.Date])) + "-9"; })
+      .attr("class", function(d) { return "day q" + color(data[d.Date]) + "-9"; })
       .attr("width", z)
       .attr("height", z)
     .append("svg:title")

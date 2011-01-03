@@ -1,4 +1,4 @@
-d3 = {version: "0.28.3"}; // semver
+d3 = {version: "0.28.4"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1915,6 +1915,50 @@ var d3_category20c = [
   "#756bb1", "#9e9ac8", "#bcbddc", "#dadaeb",
   "#636363", "#969696", "#bdbdbd", "#d9d9d9"
 ];
+d3.scale.quantile = function() {
+  var domain = [],
+      range = [],
+      thresholds = [];
+
+  function rescale() {
+    var i = -1,
+        n = thresholds.length = range.length,
+        k = domain.length / n;
+    while (++i < n) thresholds[i] = domain[~~(i * k)];
+  }
+
+  function quantile(value) {
+    if (isNaN(value = +value)) return NaN;
+    var low = 0, high = thresholds.length - 1;
+    while (low <= high) {
+      var mid = (low + high) >> 1, midValue = thresholds[mid];
+      if (midValue < value) low = mid + 1;
+      else if (midValue > value) high = mid - 1;
+      else return mid;
+    }
+    return high < 0 ? 0 : high;
+  }
+
+  function scale(x) {
+    return range[quantile(x)];
+  }
+
+  scale.domain = function(x) {
+    if (!arguments.length) return domain;
+    domain = x.slice().sort(d3.ascending);
+    rescale();
+    return scale;
+  };
+
+  scale.range = function(x) {
+    if (!arguments.length) return range;
+    range = x;
+    rescale();
+    return scale;
+  };
+
+  return scale;
+};
 d3.svg = {};
 d3["svg"]["arc"] = function() {
   var innerRadius = d3_svg_arcInnerRadius,

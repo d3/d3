@@ -64,7 +64,8 @@ d3.scale.js: \
 	src/scale/pow.js \
 	src/scale/sqrt.js \
 	src/scale/ordinal.js \
-	src/scale/category.js
+	src/scale/category.js \
+	src/scale/quantile.js
 
 d3.svg.js: \
 	src/svg/svg.js \

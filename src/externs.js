@@ -13,6 +13,8 @@ var d3 = {
   ease: 1,
   event: 1,
   format: 1,
+  ascending: 1,
+  descending: 1,
   rgb: {
     r: 1,
     g: 1,
@@ -99,6 +101,7 @@ d3.scale = {
   pow: {
     exponent: 1
   },
+  quantile: 1,
   range: 1,
   sqrt: 1,
   ticks: 1,
