@@ -1,4 +1,4 @@
-d3 = {version: "0.28.5"}; // semver
+d3 = {version: "0.28.6"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1945,7 +1945,7 @@ d3.scale.quantile = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return domain;
-    domain = x.slice().sort(d3.ascending);
+    domain = x.filter(function(d) { return !isNaN(d); }).sort(d3.ascending);
     rescale();
     return scale;
   };
@@ -1955,6 +1955,10 @@ d3.scale.quantile = function() {
     range = x;
     rescale();
     return scale;
+  };
+
+  scale.quantiles = function() {
+    return thresholds;
   };
 
   return scale;
