@@ -1,4 +1,4 @@
-d3.geom = {};
+(function(){d3.geom = {};
 /**
  * Computes the 2D convex hull of a set of points using Graham's scanning
  * algorithm. The algorithm has been implemented as described in Cormen,
@@ -186,11 +186,11 @@ d3.geom.voronoi = function(vertices) {
         y1,
         y2;
     if (e.a == 1 && e.b >= 0) {
-      s1 = e.ep["r"];
-      s2 = e.ep["l"];
+      s1 = e.ep.r;
+      s2 = e.ep.l;
     } else {
-      s1 = e.ep["l"];
-      s2 = e.ep["r"];
+      s1 = e.ep.l;
+      s2 = e.ep.r;
     }
     if (e.a == 1) {
       y1 = s1 ? s1.y : -1e6;
@@ -205,8 +205,8 @@ d3.geom.voronoi = function(vertices) {
     }
     var v1 = [x1, y1],
         v2 = [x2, y2];
-    polygons[e.region["l"].index].push(v1, v2);
-    polygons[e.region["r"].index].push(v1, v2);
+    polygons[e.region.l.index].push(v1, v2);
+    polygons[e.region.r.index].push(v1, v2);
   });
 
   // Reconnect the polygon segments into counterclockwise loops.
@@ -255,8 +255,8 @@ function d3_voronoi_tessellate(vertices, callback) {
     init: function() {
       EdgeList.leftEnd = EdgeList.createHalfEdge(null, "l");
       EdgeList.rightEnd = EdgeList.createHalfEdge(null, "l");
-      EdgeList.leftEnd["r"] = EdgeList.rightEnd;
-      EdgeList.rightEnd["l"] = EdgeList.leftEnd;
+      EdgeList.leftEnd.r = EdgeList.rightEnd;
+      EdgeList.rightEnd.l = EdgeList.leftEnd;
       EdgeList.list.unshift(EdgeList.leftEnd, EdgeList.rightEnd);
     },
 
@@ -271,33 +271,33 @@ function d3_voronoi_tessellate(vertices, callback) {
     },
 
     insert: function(lb, he) {
-      he["l"] = lb;
-      he["r"] = lb["r"];
-      lb["r"]["l"] = he;
-      lb["r"] = he;
+      he.l = lb;
+      he.r = lb.r;
+      lb.r.l = he;
+      lb.r = he;
     },
 
     leftBound: function(p) {
       var he = EdgeList.leftEnd;
       do {
-        he = he["r"];
+        he = he.r;
       } while (he != EdgeList.rightEnd && Geom.rightOf(he, p));
-      he = he["l"];
+      he = he.l;
       return he;
     },
 
     del: function(he) {
-      he["l"]["r"] = he["r"];
-      he["r"]["l"] = he["l"];
+      he.l.r = he.r;
+      he.r.l = he.l;
       he.edge = null;
     },
 
     right: function(he) {
-      return he["r"];
+      return he.r;
     },
 
     left: function(he) {
-      return he["l"];
+      return he.l;
     },
 
     leftRegion: function(he) {
@@ -345,7 +345,7 @@ function d3_voronoi_tessellate(vertices, callback) {
     intersect: function(el1, el2) {
       var e1 = el1.edge,
           e2 = el2.edge;
-      if (!e1 || !e2 || (e1.region["r"] == e2.region["r"])) {
+      if (!e1 || !e2 || (e1.region.r == e2.region.r)) {
         return null;
       }
       var d = (e1.a * e2.b) - (e1.b * e2.a);
@@ -354,8 +354,8 @@ function d3_voronoi_tessellate(vertices, callback) {
       }
       var xint = (e1.c * e2.b - e2.c * e1.b) / d,
           yint = (e2.c * e1.a - e1.c * e2.a) / d,
-          e1r = e1.region["r"],
-          e2r = e2.region["r"],
+          e1r = e1.region.r,
+          e2r = e2.region.r,
           el,
           e;
       if ((e1r.y < e2r.y) ||
@@ -366,7 +366,7 @@ function d3_voronoi_tessellate(vertices, callback) {
         el = el2;
         e = e2;
       }
-      var rightOfSite = (xint >= e.region["r"].x);
+      var rightOfSite = (xint >= e.region.r.x);
       if ((rightOfSite && (el.side == "l")) ||
         (!rightOfSite && (el.side == "r"))) {
         return null;
@@ -379,7 +379,7 @@ function d3_voronoi_tessellate(vertices, callback) {
 
     rightOf: function(he, p) {
       var e = he.edge,
-          topsite = e.region["r"],
+          topsite = e.region.r,
           rightOfSite = (p.x > topsite.x);
 
       if (rightOfSite && (he.side == "l")) {
@@ -407,7 +407,7 @@ function d3_voronoi_tessellate(vertices, callback) {
           }
         }
         if (!fast) {
-          var dxs = topsite.x - e.region["l"].x;
+          var dxs = topsite.x - e.region.l.x;
           above = (e.b * (dxp * dxp - dyp * dyp)) <
             (dxs * dyp * (1 + 2 * dxp / dxs + e.b * e.b));
 
@@ -574,7 +574,7 @@ d3.geom.delaunay = function(vertices) {
 
   // Use the Voronoi tessellation to determine Delaunay edges.
   d3_voronoi_tessellate(vertices, function(e) {
-    edges[e.region["l"].index].push(vertices[e.region["r"].index]);
+    edges[e.region.l.index].push(vertices[e.region.r.index]);
   });
 
   // Reconnect the edges into counterclockwise triangles.
@@ -595,3 +595,4 @@ d3.geom.delaunay = function(vertices) {
 
   return triangles;
 };
+})()

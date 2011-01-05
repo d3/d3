@@ -2,9 +2,7 @@ JS_COMPILER = \
 	java -jar lib/google-compiler/compiler.jar \
 	--externs=src/externs.js \
 	--warning_level=VERBOSE \
-	--compilation_level=ADVANCED_OPTIMIZATIONS \
-	--charset=UTF-8 \
-	--output_wrapper='(function(){%output%})()'
+	--charset=UTF-8
 
 all: \
 	d3.js \
@@ -21,9 +19,11 @@ all: \
 	d3.time.min.js
 
 .INTERMEDIATE d3.js: \
+  src/start.js \
 	d3.core.js \
 	d3.scale.js \
-	d3.svg.js
+	d3.svg.js \
+	src/end.js
 
 d3.core.js: \
 	src/core/core.js \
@@ -76,32 +76,42 @@ d3.svg.js: \
 	src/svg/mouse.js
 
 d3.layout.js: \
+  src/start.js \
   src/layout/layout.js \
-  src/layout/chord.js
+  src/layout/chord.js \
+  src/end.js
 
 d3.geo.js: \
+  src/start.js \
 	src/geo/geo.js \
 	src/geo/albers.js \
 	src/geo/mercator.js \
-	src/geo/path.js
+	src/geo/path.js \
+  src/end.js
 
 d3.csv.js: \
+  src/start.js \
 	src/csv/csv.js \
 	src/csv/parse.js \
-	src/csv/format.js
+	src/csv/format.js \
+  src/end.js
 
 d3.time.js: \
+  src/start.js \
 	src/time/time.js \
-	src/time/format.js
+	src/time/format.js \
+  src/end.js
 
 d3.geom.js: \
+  src/start.js \
 	src/geom/geom.js \
 	src/geom/hull.js \
 	src/geom/polygon.js \
 	src/geom/voronoi.js \
-	src/geom/delaunay.js
+	src/geom/delaunay.js \
+  src/end.js
 
-%.min.js: %.js Makefile src/externs.js
+%.min.js: %.js Makefile
 	@rm -f $@
 	$(JS_COMPILER) --js $< --js_output_file $@
 

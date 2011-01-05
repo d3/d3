@@ -1,4 +1,4 @@
-d3["split"] = function(array, f) {
+d3.split = function(array, f) {
   var arrays = [],
       values = [],
       value,

@@ -1,4 +1,4 @@
-d3["layout"]["chord"] = function() {
+d3.layout.chord = function() {
   var chord = {},
       chords,
       groups,
@@ -82,7 +82,7 @@ d3["layout"]["chord"] = function() {
       j = i - 1; while (++j < n) {
         var source = subgroups[i + "-" + j],
             target = subgroups[j + "-" + i];
-        if (source["value"] || target["value"]) {
+        if (source.value || target.value) {
           chords.push({
             "source": source,
             "target": target
@@ -96,53 +96,53 @@ d3["layout"]["chord"] = function() {
 
   function resort() {
     chords.sort(function(a, b) {
-      a = Math.min(a["source"]["value"], a["target"]["value"]);
-      b = Math.min(b["source"]["value"], b["target"]["value"]);
+      a = Math.min(a.source.value, a.target.value);
+      b = Math.min(b.source.value, b.target.value);
       return sortChords(a, b);
     });
   }
 
-  chord["matrix"] = function(x) {
+  chord.matrix = function(x) {
     if (!arguments.length) return matrix;
     n = (matrix = x) && matrix.length;
     chords = groups = null;
     return chord;
   };
 
-  chord["padding"] = function(x) {
+  chord.padding = function(x) {
     if (!arguments.length) return padding;
     padding = x;
     chords = groups = null;
     return chord;
   };
 
-  chord["sortGroups"] = function(x) {
+  chord.sortGroups = function(x) {
     if (!arguments.length) return sortGroups;
     sortGroups = x;
     chords = groups = null;
     return chord;
   };
 
-  chord["sortSubgroups"] = function(x) {
+  chord.sortSubgroups = function(x) {
     if (!arguments.length) return sortSubgroups;
     sortSubgroups = x;
     chords = null;
     return chord;
   };
 
-  chord["sortChords"] = function(x) {
+  chord.sortChords = function(x) {
     if (!arguments.length) return sortChords;
     sortChords = x;
     if (chords) resort();
     return chord;
   };
 
-  chord["chords"] = function() {
+  chord.chords = function() {
     if (!chords) relayout();
     return chords;
   };
 
-  chord["groups"] = function() {
+  chord.groups = function() {
     if (!groups) relayout();
     return groups;
   };

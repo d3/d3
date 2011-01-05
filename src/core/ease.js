@@ -37,16 +37,16 @@ var d3_ease_quad = d3_ease_poly(2),
     d3_ease_cubic = d3_ease_poly(3);
 
 var d3_ease = {
-  "linear": function() { return d3_ease_linear; },
-  "poly": d3_ease_poly,
-  "quad": function() { return d3_ease_quad; },
-  "cubic": function() { return d3_ease_cubic; },
-  "sin": function() { return d3_ease_sin; },
-  "exp": function() { return d3_ease_exp; },
-  "circle": function() { return d3_ease_circle; },
-  "elastic": d3_ease_elastic,
-  "back": d3_ease_back,
-  "bounce": function() { return d3_ease_bounce; }
+  linear: function() { return d3_ease_linear; },
+  poly: d3_ease_poly,
+  quad: function() { return d3_ease_quad; },
+  cubic: function() { return d3_ease_cubic; },
+  sin: function() { return d3_ease_sin; },
+  exp: function() { return d3_ease_exp; },
+  circle: function() { return d3_ease_circle; },
+  elastic: d3_ease_elastic,
+  back: d3_ease_back,
+  bounce: function() { return d3_ease_bounce; }
 };
 
 var d3_ease_mode = {

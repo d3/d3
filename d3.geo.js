@@ -1,4 +1,4 @@
-d3.geo = {};
+(function(){d3.geo = {};
 // Derived from Tom Carden's Albers implementation for Protovis.
 // http://gist.github.com/476238
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
@@ -361,3 +361,4 @@ function d3_path_circle(radius) {
 function d3_geo_pathZero() {
   return 0;
 }
+})()

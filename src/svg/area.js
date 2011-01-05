@@ -1,4 +1,4 @@
-d3["svg"]["area"] = function() {
+d3.svg.area = function() {
   var x = d3_svg_lineX,
       y0 = d3_svg_areaY0,
       y1 = d3_svg_lineY,
@@ -14,25 +14,25 @@ d3["svg"]["area"] = function() {
         + "Z";
   }
 
-  area["x"] = function(v) {
+  area.x = function(v) {
     if (!arguments.length) return x;
     x = v;
     return area;
   };
 
-  area["y0"] = function(v) {
+  area.y0 = function(v) {
     if (!arguments.length) return y0;
     y0 = v;
     return area;
   };
 
-  area["y1"] = function(v) {
+  area.y1 = function(v) {
     if (!arguments.length) return y1;
     y1 = v;
     return area;
   };
 
-  area["interpolate"] = function(v) {
+  area.interpolate = function(v) {
     if (!arguments.length) return interpolate;
     interpolator = d3_svg_lineInterpolators[interpolate = v];
     return area;

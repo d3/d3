@@ -1,1 +1,1 @@
-d3 = {version: "0.28.6"}; // semver
+d3 = {version: "0.28.7"}; // semver

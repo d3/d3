@@ -1,4 +1,4 @@
-d3["svg"]["arc"] = function() {
+d3.svg.arc = function() {
   var innerRadius = d3_svg_arcInnerRadius,
       outerRadius = d3_svg_arcOuterRadius,
       startAngle = d3_svg_arcStartAngle,
@@ -40,25 +40,25 @@ d3["svg"]["arc"] = function() {
       + "Z");
   }
 
-  arc["innerRadius"] = function(v) {
+  arc.innerRadius = function(v) {
     if (!arguments.length) return innerRadius;
     innerRadius = d3_functor(v);
     return arc;
   };
 
-  arc["outerRadius"] = function(v) {
+  arc.outerRadius = function(v) {
     if (!arguments.length) return outerRadius;
     outerRadius = d3_functor(v);
     return arc;
   };
 
-  arc["startAngle"] = function(v) {
+  arc.startAngle = function(v) {
     if (!arguments.length) return startAngle;
     startAngle = d3_functor(v);
     return arc;
   };
 
-  arc["endAngle"] = function(v) {
+  arc.endAngle = function(v) {
     if (!arguments.length) return endAngle;
     endAngle = d3_functor(v);
     return arc;
@@ -70,17 +70,17 @@ d3["svg"]["arc"] = function() {
 var d3_svg_arcOffset = -Math.PI / 2;
 
 function d3_svg_arcInnerRadius(d) {
-  return d["innerRadius"];
+  return d.innerRadius;
 }
 
 function d3_svg_arcOuterRadius(d) {
-  return d["outerRadius"];
+  return d.outerRadius;
 }
 
 function d3_svg_arcStartAngle(d) {
-  return d["startAngle"];
+  return d.startAngle;
 }
 
 function d3_svg_arcEndAngle(d) {
-  return d["endAngle"];
+  return d.endAngle;
 }

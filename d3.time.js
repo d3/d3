@@ -1,4 +1,4 @@
-d3.time = {};
+(function(){d3.time = {};
 d3.time.format = function(template) {
   var n = template.length;
 
@@ -66,55 +66,55 @@ var d3_time_zfill2 = d3.format("02d"),
     d3_time_sfill2 = d3.format(" 2d");
 
 var d3_time_formats = {
-  "a": function(d) { return d3_time_weekdays[d.getDay()].substring(0, 3); },
-  "A": function(d) { return d3_time_weekdays[d.getDay()]; },
-  "b": function(d) { return d3_time_months[d.getMonth()].substring(0, 3); },
-  "B": function(d) { return d3_time_months[d.getMonth()]; },
-  "c": d3.time.format("%a %b %e %H:%M:%S %Y"),
-  "d": function(d) { return d3_time_zfill2(d.getDate()); },
-  "e": function(d) { return d3_time_sfill2(d.getDate()); },
-  "H": function(d) { return d3_time_zfill2(d.getHours()); },
-  "I": function(d) { return d3_time_zfill2(d.getHours() % 12 || 12); },
-  "j": d3_time_dayOfYear,
-  "m": function(d) { return d3_time_zfill2(d.getMonth() + 1); },
-  "M": function(d) { return d3_time_zfill2(d.getMinutes()); },
-  "p": function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
-  "S": function(d) { return d3_time_zfill2(d.getSeconds()); },
-  "U": d3_time_weekNumberSunday,
-  "w": function(d) { return d.getDay(); },
-  "W": d3_time_weekNumberMonday,
-  "x": d3.time.format("%m/%d/%y"),
-  "X": d3.time.format("%H:%M:%S"),
-  "y": function(d) { return d3_time_zfill2(d.getYear() % 100); },
-  "Y": function(d) { return d3_time_zfill4(d.getFullYear() % 10000); },
-  "Z": d3_time_zone,
+  a: function(d) { return d3_time_weekdays[d.getDay()].substring(0, 3); },
+  A: function(d) { return d3_time_weekdays[d.getDay()]; },
+  b: function(d) { return d3_time_months[d.getMonth()].substring(0, 3); },
+  B: function(d) { return d3_time_months[d.getMonth()]; },
+  c: d3.time.format("%a %b %e %H:%M:%S %Y"),
+  d: function(d) { return d3_time_zfill2(d.getDate()); },
+  e: function(d) { return d3_time_sfill2(d.getDate()); },
+  H: function(d) { return d3_time_zfill2(d.getHours()); },
+  I: function(d) { return d3_time_zfill2(d.getHours() % 12 || 12); },
+  j: d3_time_dayOfYear,
+  m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
+  M: function(d) { return d3_time_zfill2(d.getMinutes()); },
+  p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
+  S: function(d) { return d3_time_zfill2(d.getSeconds()); },
+  U: d3_time_weekNumberSunday,
+  w: function(d) { return d.getDay(); },
+  W: d3_time_weekNumberMonday,
+  x: d3.time.format("%m/%d/%y"),
+  X: d3.time.format("%H:%M:%S"),
+  y: function(d) { return d3_time_zfill2(d.getYear() % 100); },
+  Y: function(d) { return d3_time_zfill4(d.getFullYear() % 10000); },
+  Z: d3_time_zone,
   "%": function(d) { return "%"; }
 };
 
 var d3_time_parsers = {
-  "a": d3_time_parseWeekdayAbbrev,
-  "A": d3_time_parseWeekday,
-  "b": d3_time_parseMonthAbbrev,
-  "B": d3_time_parseMonth,
-  "c": d3_time_parseLocaleFull,
-  "d": d3_time_parseDay,
-  "e": d3_time_parseDay,
-  "H": d3_time_parseHour24,
-  "I": d3_time_parseHour12,
-  // "j": function(d, s, i) { /*TODO day of year [001,366] */ return i; },
-  "m": d3_time_parseMonthNumber,
-  "M": d3_time_parseMinutes,
-  "p": d3_time_parseAmPm,
-  "S": d3_time_parseSeconds,
-  // "U": function(d, s, i) { /*TODO week number (sunday) [00,53] */ return i; },
-  // "w": function(d, s, i) { /*TODO weekday [0,6] */ return i; },
-  // "W": function(d, s, i) { /*TODO week number (monday) [00,53] */ return i; },
-  "x": d3_time_parseLocaleDate,
-  "X": d3_time_parseLocaleTime,
-  "y": d3_time_parseYear,
-  "Y": d3_time_parseFullYear
+  a: d3_time_parseWeekdayAbbrev,
+  A: d3_time_parseWeekday,
+  b: d3_time_parseMonthAbbrev,
+  B: d3_time_parseMonth,
+  c: d3_time_parseLocaleFull,
+  d: d3_time_parseDay,
+  e: d3_time_parseDay,
+  H: d3_time_parseHour24,
+  I: d3_time_parseHour12,
+  // j: function(d, s, i) { /*TODO day of year [001,366] */ return i; },
+  m: d3_time_parseMonthNumber,
+  M: d3_time_parseMinutes,
+  p: d3_time_parseAmPm,
+  S: d3_time_parseSeconds,
+  // U: function(d, s, i) { /*TODO week number (sunday) [00,53] */ return i; },
+  // w: function(d, s, i) { /*TODO weekday [0,6] */ return i; },
+  // W: function(d, s, i) { /*TODO week number (monday) [00,53] */ return i; },
+  x: d3_time_parseLocaleDate,
+  X: d3_time_parseLocaleTime,
+  y: d3_time_parseYear,
+  Y: d3_time_parseFullYear
   // ,
-  // "Z": function(d, s, i) { /*TODO time zone */ return i; },
+  // Z: function(d, s, i) { /*TODO time zone */ return i; },
   // "%": function(d, s, i) { /*TODO literal % */ return i; }
 };
 
@@ -124,13 +124,13 @@ function d3_time_parseWeekdayAbbrev(date, string, i) {
 }
 
 var d3_time_weekdayAbbrevLookup = {
-  "sun": 3,
-  "mon": 3,
-  "tue": 3,
-  "wed": 3,
-  "thu": 3,
-  "fri": 3,
-  "sat": 3
+  sun: 3,
+  mon: 3,
+  tue: 3,
+  wed: 3,
+  thu: 3,
+  fri: 3,
+  sat: 3
 };
 
 // Note: weekday is validated, but does not set the date.
@@ -158,18 +158,18 @@ function d3_time_parseMonthAbbrev(date, string, i) {
 }
 
 var d3_time_monthAbbrevLookup = {
-  "jan": 0,
-  "feb": 1,
-  "mar": 2,
-  "apr": 3,
-  "may": 4,
-  "jun": 5,
-  "jul": 6,
-  "aug": 7,
-  "sep": 8,
-  "oct": 9,
-  "nov": 10,
-  "dec": 11
+  jan: 0,
+  feb: 1,
+  mar: 2,
+  apr: 3,
+  may: 4,
+  jun: 5,
+  jul: 6,
+  aug: 7,
+  sep: 8,
+  oct: 9,
+  nov: 10,
+  dec: 11
 };
 
 function d3_time_parseMonth(date, string, i) {
@@ -181,18 +181,18 @@ function d3_time_parseMonth(date, string, i) {
 var d3_time_monthRe = /^(?:January|February|March|April|May|June|July|August|September|October|November|December)/ig;
 
 var d3_time_monthLookup = {
-  "january": 0,
-  "february": 1,
-  "march": 2,
-  "april": 3,
-  "may": 4,
-  "june": 5,
-  "july": 6,
-  "august": 7,
-  "september": 8,
-  "october": 9,
-  "november": 10,
-  "december": 11
+  january: 0,
+  february: 1,
+  march: 2,
+  april: 3,
+  may: 4,
+  june: 5,
+  july: 6,
+  august: 7,
+  september: 8,
+  october: 9,
+  november: 10,
+  december: 11
 };
 
 var d3_time_months = [
@@ -285,8 +285,8 @@ function d3_time_parseAmPm(date, string, i) {
 }
 
 var d3_time_amPmLookup = {
-  "am": 0,
-  "pm": 1
+  am: 0,
+  pm: 1
 };
 
 function d3_time_dayOfYear(d) {
@@ -311,3 +311,4 @@ function d3_time_zone(d) {
       zm = Math.abs(z) % 60;
   return zs + d3_time_zfill2(zh) + d3_time_zfill2(zm);
 }
+})()

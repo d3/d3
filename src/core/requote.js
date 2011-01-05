@@ -1,4 +1,4 @@
-d3["requote"] = function(s) {
+d3.requote = function(s) {
   return s.replace(d3_requote_re, "\\$&");
 };
 

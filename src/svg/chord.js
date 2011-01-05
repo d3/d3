@@ -1,4 +1,4 @@
-d3["svg"]["chord"] = function() {
+d3.svg.chord = function() {
   var source = d3_svg_chordSource,
       target = d3_svg_chordTarget,
       radius = d3_svg_chordRadius,
@@ -45,31 +45,31 @@ d3["svg"]["chord"] = function() {
     return "Q 0,0 " + p1;
   }
 
-  chord["radius"] = function(v) {
+  chord.radius = function(v) {
     if (!arguments.length) return radius;
     radius = d3_functor(v);
     return chord;
   };
 
-  chord["source"] = function(v) {
+  chord.source = function(v) {
     if (!arguments.length) return source;
     source = d3_functor(v);
     return chord;
   };
 
-  chord["target"] = function(v) {
+  chord.target = function(v) {
     if (!arguments.length) return target;
     target = d3_functor(v);
     return chord;
   };
 
-  chord["startAngle"] = function(v) {
+  chord.startAngle = function(v) {
     if (!arguments.length) return startAngle;
     startAngle = d3_functor(v);
     return chord;
   };
 
-  chord["endAngle"] = function(v) {
+  chord.endAngle = function(v) {
     if (!arguments.length) return endAngle;
     endAngle = d3_functor(v);
     return chord;
@@ -79,21 +79,21 @@ d3["svg"]["chord"] = function() {
 };
 
 function d3_svg_chordSource(d) {
-  return d["source"];
+  return d.source;
 }
 
 function d3_svg_chordTarget(d) {
-  return d["target"];
+  return d.target;
 }
 
 function d3_svg_chordRadius(d) {
-  return d["radius"];
+  return d.radius;
 }
 
 function d3_svg_chordStartAngle(d) {
-  return d["startAngle"];
+  return d.startAngle;
 }
 
 function d3_svg_chordEndAngle(d) {
-  return d["endAngle"];
+  return d.endAngle;
 }

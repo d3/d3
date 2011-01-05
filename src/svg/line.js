@@ -1,4 +1,4 @@
-d3["svg"]["line"] = function() {
+d3.svg.line = function() {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
       interpolate = "linear",
@@ -9,19 +9,19 @@ d3["svg"]["line"] = function() {
         : "M" + interpolator(d3_svg_linePoints(this, d, x, y));
   }
 
-  line["x"] = function(v) {
+  line.x = function(v) {
     if (!arguments.length) return x;
     x = v;
     return line;
   };
 
-  line["y"] = function(v) {
+  line.y = function(v) {
     if (!arguments.length) return y;
     y = v;
     return line;
   };
 
-  line["interpolate"] = function(v) {
+  line.interpolate = function(v) {
     if (!arguments.length) return interpolate;
     interpolator = d3_svg_lineInterpolators[interpolate = v];
     return line;
@@ -63,7 +63,7 @@ function d3_svg_linePoints(self, d, x, y) {
  * the given datum.
  */
 function d3_svg_lineX(d) {
-  return d["x"];
+  return d.x;
 }
 
 /**
@@ -71,7 +71,7 @@ function d3_svg_lineX(d) {
  * the given datum.
  */
 function d3_svg_lineY(d) {
-  return d["y"];
+  return d.y;
 }
 
 /**

@@ -1,4 +1,4 @@
-d3 = {version: "0.28.6"}; // semver
+(function(){d3 = {version: "0.28.7"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -13,16 +13,16 @@ function d3_array(psuedoarray) {
 function d3_functor(v) {
   return typeof v == "function" ? v : function() { return v; };
 }
-d3["ascending"] = function(a, b) {
+d3.ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
 };
-d3["descending"] = function(a, b) {
+d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : 0;
 };
 d3["merge"] = function(arrays) {
   return Array.prototype.concat.apply([], arrays);
 };
-d3["split"] = function(array, f) {
+d3.split = function(array, f) {
   var arrays = [],
       values = [],
       value,
@@ -69,7 +69,7 @@ d3.range = function(start, stop, step) {
   else while ((j = start + step * ++i) < stop) range.push(j);
   return range;
 };
-d3["requote"] = function(s) {
+d3.requote = function(s) {
   return s.replace(d3_requote_re, "\\$&");
 };
 
@@ -253,16 +253,16 @@ var d3_ease_quad = d3_ease_poly(2),
     d3_ease_cubic = d3_ease_poly(3);
 
 var d3_ease = {
-  "linear": function() { return d3_ease_linear; },
-  "poly": d3_ease_poly,
-  "quad": function() { return d3_ease_quad; },
-  "cubic": function() { return d3_ease_cubic; },
-  "sin": function() { return d3_ease_sin; },
-  "exp": function() { return d3_ease_exp; },
-  "circle": function() { return d3_ease_circle; },
-  "elastic": d3_ease_elastic,
-  "back": d3_ease_back,
-  "bounce": function() { return d3_ease_bounce; }
+  linear: function() { return d3_ease_linear; },
+  poly: d3_ease_poly,
+  quad: function() { return d3_ease_quad; },
+  cubic: function() { return d3_ease_cubic; },
+  sin: function() { return d3_ease_sin; },
+  exp: function() { return d3_ease_exp; },
+  circle: function() { return d3_ease_circle; },
+  elastic: d3_ease_elastic,
+  back: d3_ease_back,
+  bounce: function() { return d3_ease_bounce; }
 };
 
 var d3_ease_mode = {
@@ -595,153 +595,153 @@ function d3_rgb_parseNumber(c) { // either integer or percentage
 }
 
 var d3_rgb_names = {
-  "aliceblue": "#f0f8ff",
-  "antiquewhite": "#faebd7",
-  "aqua": "#00ffff",
-  "aquamarine": "#7fffd4",
-  "azure": "#f0ffff",
-  "beige": "#f5f5dc",
-  "bisque": "#ffe4c4",
-  "black": "#000000",
-  "blanchedalmond": "#ffebcd",
-  "blue": "#0000ff",
-  "blueviolet": "#8a2be2",
-  "brown": "#a52a2a",
-  "burlywood": "#deb887",
-  "cadetblue": "#5f9ea0",
-  "chartreuse": "#7fff00",
-  "chocolate": "#d2691e",
-  "coral": "#ff7f50",
-  "cornflowerblue": "#6495ed",
-  "cornsilk": "#fff8dc",
-  "crimson": "#dc143c",
-  "cyan": "#00ffff",
-  "darkblue": "#00008b",
-  "darkcyan": "#008b8b",
-  "darkgoldenrod": "#b8860b",
-  "darkgray": "#a9a9a9",
-  "darkgreen": "#006400",
-  "darkgrey": "#a9a9a9",
-  "darkkhaki": "#bdb76b",
-  "darkmagenta": "#8b008b",
-  "darkolivegreen": "#556b2f",
-  "darkorange": "#ff8c00",
-  "darkorchid": "#9932cc",
-  "darkred": "#8b0000",
-  "darksalmon": "#e9967a",
-  "darkseagreen": "#8fbc8f",
-  "darkslateblue": "#483d8b",
-  "darkslategray": "#2f4f4f",
-  "darkslategrey": "#2f4f4f",
-  "darkturquoise": "#00ced1",
-  "darkviolet": "#9400d3",
-  "deeppink": "#ff1493",
-  "deepskyblue": "#00bfff",
-  "dimgray": "#696969",
-  "dimgrey": "#696969",
-  "dodgerblue": "#1e90ff",
-  "firebrick": "#b22222",
-  "floralwhite": "#fffaf0",
-  "forestgreen": "#228b22",
-  "fuchsia": "#ff00ff",
-  "gainsboro": "#dcdcdc",
-  "ghostwhite": "#f8f8ff",
-  "gold": "#ffd700",
-  "goldenrod": "#daa520",
-  "gray": "#808080",
-  "green": "#008000",
-  "greenyellow": "#adff2f",
-  "grey": "#808080",
-  "honeydew": "#f0fff0",
-  "hotpink": "#ff69b4",
-  "indianred": "#cd5c5c",
-  "indigo": "#4b0082",
-  "ivory": "#fffff0",
-  "khaki": "#f0e68c",
-  "lavender": "#e6e6fa",
-  "lavenderblush": "#fff0f5",
-  "lawngreen": "#7cfc00",
-  "lemonchiffon": "#fffacd",
-  "lightblue": "#add8e6",
-  "lightcoral": "#f08080",
-  "lightcyan": "#e0ffff",
-  "lightgoldenrodyellow": "#fafad2",
-  "lightgray": "#d3d3d3",
-  "lightgreen": "#90ee90",
-  "lightgrey": "#d3d3d3",
-  "lightpink": "#ffb6c1",
-  "lightsalmon": "#ffa07a",
-  "lightseagreen": "#20b2aa",
-  "lightskyblue": "#87cefa",
-  "lightslategray": "#778899",
-  "lightslategrey": "#778899",
-  "lightsteelblue": "#b0c4de",
-  "lightyellow": "#ffffe0",
-  "lime": "#00ff00",
-  "limegreen": "#32cd32",
-  "linen": "#faf0e6",
-  "magenta": "#ff00ff",
-  "maroon": "#800000",
-  "mediumaquamarine": "#66cdaa",
-  "mediumblue": "#0000cd",
-  "mediumorchid": "#ba55d3",
-  "mediumpurple": "#9370db",
-  "mediumseagreen": "#3cb371",
-  "mediumslateblue": "#7b68ee",
-  "mediumspringgreen": "#00fa9a",
-  "mediumturquoise": "#48d1cc",
-  "mediumvioletred": "#c71585",
-  "midnightblue": "#191970",
-  "mintcream": "#f5fffa",
-  "mistyrose": "#ffe4e1",
-  "moccasin": "#ffe4b5",
-  "navajowhite": "#ffdead",
-  "navy": "#000080",
-  "oldlace": "#fdf5e6",
-  "olive": "#808000",
-  "olivedrab": "#6b8e23",
-  "orange": "#ffa500",
-  "orangered": "#ff4500",
-  "orchid": "#da70d6",
-  "palegoldenrod": "#eee8aa",
-  "palegreen": "#98fb98",
-  "paleturquoise": "#afeeee",
-  "palevioletred": "#db7093",
-  "papayawhip": "#ffefd5",
-  "peachpuff": "#ffdab9",
-  "peru": "#cd853f",
-  "pink": "#ffc0cb",
-  "plum": "#dda0dd",
-  "powderblue": "#b0e0e6",
-  "purple": "#800080",
-  "red": "#ff0000",
-  "rosybrown": "#bc8f8f",
-  "royalblue": "#4169e1",
-  "saddlebrown": "#8b4513",
-  "salmon": "#fa8072",
-  "sandybrown": "#f4a460",
-  "seagreen": "#2e8b57",
-  "seashell": "#fff5ee",
-  "sienna": "#a0522d",
-  "silver": "#c0c0c0",
-  "skyblue": "#87ceeb",
-  "slateblue": "#6a5acd",
-  "slategray": "#708090",
-  "slategrey": "#708090",
-  "snow": "#fffafa",
-  "springgreen": "#00ff7f",
-  "steelblue": "#4682b4",
-  "tan": "#d2b48c",
-  "teal": "#008080",
-  "thistle": "#d8bfd8",
-  "tomato": "#ff6347",
-  "turquoise": "#40e0d0",
-  "violet": "#ee82ee",
-  "wheat": "#f5deb3",
-  "white": "#ffffff",
-  "whitesmoke": "#f5f5f5",
-  "yellow": "#ffff00",
-  "yellowgreen": "#9acd32"
+  aliceblue: "#f0f8ff",
+  antiquewhite: "#faebd7",
+  aqua: "#00ffff",
+  aquamarine: "#7fffd4",
+  azure: "#f0ffff",
+  beige: "#f5f5dc",
+  bisque: "#ffe4c4",
+  black: "#000000",
+  blanchedalmond: "#ffebcd",
+  blue: "#0000ff",
+  blueviolet: "#8a2be2",
+  brown: "#a52a2a",
+  burlywood: "#deb887",
+  cadetblue: "#5f9ea0",
+  chartreuse: "#7fff00",
+  chocolate: "#d2691e",
+  coral: "#ff7f50",
+  cornflowerblue: "#6495ed",
+  cornsilk: "#fff8dc",
+  crimson: "#dc143c",
+  cyan: "#00ffff",
+  darkblue: "#00008b",
+  darkcyan: "#008b8b",
+  darkgoldenrod: "#b8860b",
+  darkgray: "#a9a9a9",
+  darkgreen: "#006400",
+  darkgrey: "#a9a9a9",
+  darkkhaki: "#bdb76b",
+  darkmagenta: "#8b008b",
+  darkolivegreen: "#556b2f",
+  darkorange: "#ff8c00",
+  darkorchid: "#9932cc",
+  darkred: "#8b0000",
+  darksalmon: "#e9967a",
+  darkseagreen: "#8fbc8f",
+  darkslateblue: "#483d8b",
+  darkslategray: "#2f4f4f",
+  darkslategrey: "#2f4f4f",
+  darkturquoise: "#00ced1",
+  darkviolet: "#9400d3",
+  deeppink: "#ff1493",
+  deepskyblue: "#00bfff",
+  dimgray: "#696969",
+  dimgrey: "#696969",
+  dodgerblue: "#1e90ff",
+  firebrick: "#b22222",
+  floralwhite: "#fffaf0",
+  forestgreen: "#228b22",
+  fuchsia: "#ff00ff",
+  gainsboro: "#dcdcdc",
+  ghostwhite: "#f8f8ff",
+  gold: "#ffd700",
+  goldenrod: "#daa520",
+  gray: "#808080",
+  green: "#008000",
+  greenyellow: "#adff2f",
+  grey: "#808080",
+  honeydew: "#f0fff0",
+  hotpink: "#ff69b4",
+  indianred: "#cd5c5c",
+  indigo: "#4b0082",
+  ivory: "#fffff0",
+  khaki: "#f0e68c",
+  lavender: "#e6e6fa",
+  lavenderblush: "#fff0f5",
+  lawngreen: "#7cfc00",
+  lemonchiffon: "#fffacd",
+  lightblue: "#add8e6",
+  lightcoral: "#f08080",
+  lightcyan: "#e0ffff",
+  lightgoldenrodyellow: "#fafad2",
+  lightgray: "#d3d3d3",
+  lightgreen: "#90ee90",
+  lightgrey: "#d3d3d3",
+  lightpink: "#ffb6c1",
+  lightsalmon: "#ffa07a",
+  lightseagreen: "#20b2aa",
+  lightskyblue: "#87cefa",
+  lightslategray: "#778899",
+  lightslategrey: "#778899",
+  lightsteelblue: "#b0c4de",
+  lightyellow: "#ffffe0",
+  lime: "#00ff00",
+  limegreen: "#32cd32",
+  linen: "#faf0e6",
+  magenta: "#ff00ff",
+  maroon: "#800000",
+  mediumaquamarine: "#66cdaa",
+  mediumblue: "#0000cd",
+  mediumorchid: "#ba55d3",
+  mediumpurple: "#9370db",
+  mediumseagreen: "#3cb371",
+  mediumslateblue: "#7b68ee",
+  mediumspringgreen: "#00fa9a",
+  mediumturquoise: "#48d1cc",
+  mediumvioletred: "#c71585",
+  midnightblue: "#191970",
+  mintcream: "#f5fffa",
+  mistyrose: "#ffe4e1",
+  moccasin: "#ffe4b5",
+  navajowhite: "#ffdead",
+  navy: "#000080",
+  oldlace: "#fdf5e6",
+  olive: "#808000",
+  olivedrab: "#6b8e23",
+  orange: "#ffa500",
+  orangered: "#ff4500",
+  orchid: "#da70d6",
+  palegoldenrod: "#eee8aa",
+  palegreen: "#98fb98",
+  paleturquoise: "#afeeee",
+  palevioletred: "#db7093",
+  papayawhip: "#ffefd5",
+  peachpuff: "#ffdab9",
+  peru: "#cd853f",
+  pink: "#ffc0cb",
+  plum: "#dda0dd",
+  powderblue: "#b0e0e6",
+  purple: "#800080",
+  red: "#ff0000",
+  rosybrown: "#bc8f8f",
+  royalblue: "#4169e1",
+  saddlebrown: "#8b4513",
+  salmon: "#fa8072",
+  sandybrown: "#f4a460",
+  seagreen: "#2e8b57",
+  seashell: "#fff5ee",
+  sienna: "#a0522d",
+  silver: "#c0c0c0",
+  skyblue: "#87ceeb",
+  slateblue: "#6a5acd",
+  slategray: "#708090",
+  slategrey: "#708090",
+  snow: "#fffafa",
+  springgreen: "#00ff7f",
+  steelblue: "#4682b4",
+  tan: "#d2b48c",
+  teal: "#008080",
+  thistle: "#d8bfd8",
+  tomato: "#ff6347",
+  turquoise: "#40e0d0",
+  violet: "#ee82ee",
+  wheat: "#f5deb3",
+  white: "#ffffff",
+  whitesmoke: "#f5f5f5",
+  yellow: "#ffff00",
+  yellowgreen: "#9acd32"
 };
 
 for (var d3_rgb_name in d3_rgb_names) {
@@ -1964,7 +1964,7 @@ d3.scale.quantile = function() {
   return scale;
 };
 d3.svg = {};
-d3["svg"]["arc"] = function() {
+d3.svg.arc = function() {
   var innerRadius = d3_svg_arcInnerRadius,
       outerRadius = d3_svg_arcOuterRadius,
       startAngle = d3_svg_arcStartAngle,
@@ -2006,25 +2006,25 @@ d3["svg"]["arc"] = function() {
       + "Z");
   }
 
-  arc["innerRadius"] = function(v) {
+  arc.innerRadius = function(v) {
     if (!arguments.length) return innerRadius;
     innerRadius = d3_functor(v);
     return arc;
   };
 
-  arc["outerRadius"] = function(v) {
+  arc.outerRadius = function(v) {
     if (!arguments.length) return outerRadius;
     outerRadius = d3_functor(v);
     return arc;
   };
 
-  arc["startAngle"] = function(v) {
+  arc.startAngle = function(v) {
     if (!arguments.length) return startAngle;
     startAngle = d3_functor(v);
     return arc;
   };
 
-  arc["endAngle"] = function(v) {
+  arc.endAngle = function(v) {
     if (!arguments.length) return endAngle;
     endAngle = d3_functor(v);
     return arc;
@@ -2036,21 +2036,21 @@ d3["svg"]["arc"] = function() {
 var d3_svg_arcOffset = -Math.PI / 2;
 
 function d3_svg_arcInnerRadius(d) {
-  return d["innerRadius"];
+  return d.innerRadius;
 }
 
 function d3_svg_arcOuterRadius(d) {
-  return d["outerRadius"];
+  return d.outerRadius;
 }
 
 function d3_svg_arcStartAngle(d) {
-  return d["startAngle"];
+  return d.startAngle;
 }
 
 function d3_svg_arcEndAngle(d) {
-  return d["endAngle"];
+  return d.endAngle;
 }
-d3["svg"]["line"] = function() {
+d3.svg.line = function() {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
       interpolate = "linear",
@@ -2061,19 +2061,19 @@ d3["svg"]["line"] = function() {
         : "M" + interpolator(d3_svg_linePoints(this, d, x, y));
   }
 
-  line["x"] = function(v) {
+  line.x = function(v) {
     if (!arguments.length) return x;
     x = v;
     return line;
   };
 
-  line["y"] = function(v) {
+  line.y = function(v) {
     if (!arguments.length) return y;
     y = v;
     return line;
   };
 
-  line["interpolate"] = function(v) {
+  line.interpolate = function(v) {
     if (!arguments.length) return interpolate;
     interpolator = d3_svg_lineInterpolators[interpolate = v];
     return line;
@@ -2115,7 +2115,7 @@ function d3_svg_linePoints(self, d, x, y) {
  * the given datum.
  */
 function d3_svg_lineX(d) {
-  return d["x"];
+  return d.x;
 }
 
 /**
@@ -2123,7 +2123,7 @@ function d3_svg_lineX(d) {
  * the given datum.
  */
 function d3_svg_lineY(d) {
-  return d["y"];
+  return d.y;
 }
 
 /**
@@ -2206,7 +2206,7 @@ function d3_svg_lineBasisBezier(path, x, y) {
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, x),
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, y));
 }
-d3["svg"]["area"] = function() {
+d3.svg.area = function() {
   var x = d3_svg_lineX,
       y0 = d3_svg_areaY0,
       y1 = d3_svg_lineY,
@@ -2222,25 +2222,25 @@ d3["svg"]["area"] = function() {
         + "Z";
   }
 
-  area["x"] = function(v) {
+  area.x = function(v) {
     if (!arguments.length) return x;
     x = v;
     return area;
   };
 
-  area["y0"] = function(v) {
+  area.y0 = function(v) {
     if (!arguments.length) return y0;
     y0 = v;
     return area;
   };
 
-  area["y1"] = function(v) {
+  area.y1 = function(v) {
     if (!arguments.length) return y1;
     y1 = v;
     return area;
   };
 
-  area["interpolate"] = function(v) {
+  area.interpolate = function(v) {
     if (!arguments.length) return interpolate;
     interpolator = d3_svg_lineInterpolators[interpolate = v];
     return area;
@@ -2252,7 +2252,7 @@ d3["svg"]["area"] = function() {
 function d3_svg_areaY0() {
   return 0;
 }
-d3["svg"]["chord"] = function() {
+d3.svg.chord = function() {
   var source = d3_svg_chordSource,
       target = d3_svg_chordTarget,
       radius = d3_svg_chordRadius,
@@ -2299,31 +2299,31 @@ d3["svg"]["chord"] = function() {
     return "Q 0,0 " + p1;
   }
 
-  chord["radius"] = function(v) {
+  chord.radius = function(v) {
     if (!arguments.length) return radius;
     radius = d3_functor(v);
     return chord;
   };
 
-  chord["source"] = function(v) {
+  chord.source = function(v) {
     if (!arguments.length) return source;
     source = d3_functor(v);
     return chord;
   };
 
-  chord["target"] = function(v) {
+  chord.target = function(v) {
     if (!arguments.length) return target;
     target = d3_functor(v);
     return chord;
   };
 
-  chord["startAngle"] = function(v) {
+  chord.startAngle = function(v) {
     if (!arguments.length) return startAngle;
     startAngle = d3_functor(v);
     return chord;
   };
 
-  chord["endAngle"] = function(v) {
+  chord.endAngle = function(v) {
     if (!arguments.length) return endAngle;
     endAngle = d3_functor(v);
     return chord;
@@ -2333,23 +2333,23 @@ d3["svg"]["chord"] = function() {
 };
 
 function d3_svg_chordSource(d) {
-  return d["source"];
+  return d.source;
 }
 
 function d3_svg_chordTarget(d) {
-  return d["target"];
+  return d.target;
 }
 
 function d3_svg_chordRadius(d) {
-  return d["radius"];
+  return d.radius;
 }
 
 function d3_svg_chordStartAngle(d) {
-  return d["startAngle"];
+  return d.startAngle;
 }
 
 function d3_svg_chordEndAngle(d) {
-  return d["endAngle"];
+  return d.endAngle;
 }
 d3.svg.mouse = function(container) {
   var point = (container.ownerSVGElement || container).createSVGPoint();
@@ -2376,3 +2376,4 @@ d3.svg.mouse = function(container) {
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083
 var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+})()
