@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.28.7"}; // semver
+(function(){d3 = {version: "0.28.8"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1981,7 +1981,7 @@ d3.svg.arc = function() {
         s0 = Math.sin(a0),
         c1 = Math.cos(a1),
         s1 = Math.sin(a1);
-    return da >= 2 * Math.PI
+    return da >= d3_svg_arcMax
       ? (r0
       ? "M0," + r1
       + "A" + r1 + "," + r1 + " 0 1,1 0," + (-r1)
@@ -2033,7 +2033,8 @@ d3.svg.arc = function() {
   return arc;
 };
 
-var d3_svg_arcOffset = -Math.PI / 2;
+var d3_svg_arcOffset = -Math.PI / 2,
+    d3_svg_arcMax = 2 * Math.PI - 1e-6;
 
 function d3_svg_arcInnerRadius(d) {
   return d.innerRadius;
