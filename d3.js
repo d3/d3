@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.28.8"}; // semver
+(function(){d3 = {version: "0.28.9"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -19,7 +19,90 @@ d3.ascending = function(a, b) {
 d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : 0;
 };
-d3["merge"] = function(arrays) {
+d3.nest = function() {
+  var nest = {},
+      keys = [],
+      sortKeys = [],
+      sortValues,
+      rollup;
+
+  function recurse(j, array) {
+    if (j >= keys.length) return rollup
+        ? rollup.call(nest, array) : (sortValues
+        ? array.sort(sortValues)
+        : array);
+
+    var i = -1,
+        n = array.length,
+        key = keys[j],
+        keyValue,
+        keyValues = [],
+        sortKey = sortKeys[j],
+        object,
+        map = {};
+
+    while (++i < n) {
+      if ((keyValue = key(object = array[i])) in map) {
+        map[keyValue].push(object);
+      } else {
+        map[keyValue] = [object];
+        keyValues.push(keyValue);
+      }
+    }
+
+    j++;
+    i = -1;
+    n = keyValues.length;
+    while (++i < n) {
+      object = map[keyValue = keyValues[i]];
+      map[keyValue] = recurse(j, object);
+    }
+
+    return map;
+  }
+
+  nest.map = function(array) {
+    return recurse(0, array);
+  };
+
+  nest.key = function(d) {
+    keys.push(d);
+    return nest;
+  };
+
+  nest.sortKeys = function(order) {
+    sortKeys[keys.length - 1] = order;
+    return nest;
+  };
+
+  nest.sortValues = function(order) {
+    sortValues = order;
+    return nest;
+  };
+
+  nest.rollup = function(f) {
+    rollup = f;
+    return nest;
+  };
+
+  return nest;
+};
+d3.keys = function(map) {
+  var keys = [];
+  for (var key in map) keys.push(key);
+  return keys;
+};
+d3.values = function(map) {
+  var values = [];
+  for (var key in map) values.push(map[key]);
+  return values;
+};
+d3.entries = function(map) {
+  var entries = [];
+  for (var key in map) entries.push({key: key, value: map[key]});
+  return entries;
+};
+d3.merge = function(arrays) {
   return Array.prototype.concat.apply([], arrays);
 };
 d3.split = function(array, f) {
@@ -904,6 +987,15 @@ function d3_selection(groups) {
 
     if (typeof join == "string") join = d3_selection_join(join);
 
+    // TODO support join as a function, based on previously-bound data?
+    // else if (typeof join == "function") {
+    //   var dataKey = join;
+    //   join = {
+    //     nodeKey: function(n) { return n.__data__ && dataKey(n.__data__); },
+    //     dataKey: dataKey
+    //   };
+    // }
+
     function bind(group, groupData) {
       var i = 0,
           n = group.length,
@@ -1091,8 +1183,8 @@ function d3_selection(groups) {
         : (name.local ? attrConstantNS : attrConstant)));
   };
 
-  groups["classed"] = function(name, value) {
-    var re = new RegExp("(^|\\s+)" + d3["requote"](name) + "(\\s+|$)", "g");
+  groups.classed = function(name, value) {
+    var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
 
     // If no value is specified, return the first value.
     if (arguments.length < 2) {

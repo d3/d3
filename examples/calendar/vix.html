@@ -32,12 +32,13 @@ body {
     <script type="text/javascript">
 
 d3.csv("vix.csv", function(csv) {
-  var data = nest(csv)
+  var data = d3.nest()
       .key(function(d) { return d.Date; })
-      .rollup(function(d) { return d[0].Open; });
+      .rollup(function(d) { return d[0].Open; })
+      .map(csv);
 
   var color = d3.scale.quantile()
-      .domain(values(data))
+      .domain(d3.values(data))
       .range(d3.range(9).reverse());
 
   var w = 960,

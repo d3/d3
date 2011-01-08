@@ -3,8 +3,6 @@
     <title>DJI</title>
     <script type="text/javascript" src="../../d3.min.js"></script>
     <script type="text/javascript" src="../../d3.csv.min.js"></script>
-    <script type="text/javascript" src="values.js"></script>
-    <script type="text/javascript" src="nest.js"></script>
     <style type="text/css">
 
 @import url("../../lib/colorbrewer/colorbrewer.css");
@@ -32,12 +30,13 @@ body {
     <script type="text/javascript">
 
 d3.csv("dji.csv", function(csv) {
-  var data = nest(csv)
+  var data = d3.nest()
       .key(function(d) { return d.Date; })
-      .rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; });
+      .rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; })
+      .map(csv);
 
   var color = d3.scale.quantile()
-      .domain(values(data))
+      .domain(d3.values(data))
       .range(d3.range(9));
 
   var w = 960,

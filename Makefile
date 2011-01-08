@@ -33,6 +33,10 @@ d3.core.js: \
 	src/core/functor.js \
 	src/core/ascending.js \
 	src/core/descending.js \
+	src/core/nest.js \
+	src/core/keys.js \
+	src/core/values.js \
+	src/core/entries.js \
 	src/core/merge.js \
 	src/core/split.js \
 	src/core/collapse.js \

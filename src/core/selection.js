@@ -105,6 +105,15 @@ function d3_selection(groups) {
 
     if (typeof join == "string") join = d3_selection_join(join);
 
+    // TODO support join as a function, based on previously-bound data?
+    // else if (typeof join == "function") {
+    //   var dataKey = join;
+    //   join = {
+    //     nodeKey: function(n) { return n.__data__ && dataKey(n.__data__); },
+    //     dataKey: dataKey
+    //   };
+    // }
+
     function bind(group, groupData) {
       var i = 0,
           n = group.length,
@@ -292,8 +301,8 @@ function d3_selection(groups) {
         : (name.local ? attrConstantNS : attrConstant)));
   };
 
-  groups["classed"] = function(name, value) {
-    var re = new RegExp("(^|\\s+)" + d3["requote"](name) + "(\\s+|$)", "g");
+  groups.classed = function(name, value) {
+    var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
 
     // If no value is specified, return the first value.
     if (arguments.length < 2) {
