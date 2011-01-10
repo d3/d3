@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.28.9"}; // semver
+(function(){d3 = {version: "0.28.10"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1493,7 +1493,7 @@ function d3_transition(groups) {
       // 1 - In progress.
       // 2 - Ended.
       if (stage[k]) {
-        if (tx.active != transitionId) {
+        if (!tx || tx.active != transitionId) {
           stage[k] = 2;
           return;
         }
