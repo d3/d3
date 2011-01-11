@@ -70,28 +70,46 @@ d3.geo.albersUsa = function() {
 
   var alaska = d3.geo.albers()
       .origin([-160, 60])
-      .parallels([55, 65])
-      .scale([600])
-      .translate([80, 420]);
+      .parallels([55, 65]);
 
   var hawaii = d3.geo.albers()
       .origin([-160, 20])
-      .parallels([8, 18])
-      .translate([290, 450]);
+      .parallels([8, 18]);
 
   var puertoRico = d3.geo.albers()
       .origin([-60, 10])
-      .parallels([8, 18])
-      .scale([1500])
-      .translate([1060, 680]);
+      .parallels([8, 18]);
 
-  return function(coordinates) {
+  function albersUsa(coordinates) {
     var lon = coordinates[0],
         lat = coordinates[1];
     return (lat < 25
         ? (lon < -100 ? hawaii : puertoRico)
         : (lat > 50 ? alaska : lower48))(coordinates);
+  }
+
+  albersUsa.scale = function(x) {
+    if (!arguments.length) return lower48.scale();
+    lower48.scale(x);
+    alaska.scale(x * .6);
+    hawaii.scale(x);
+    puertoRico.scale(x * 1.5);
+    return albersUsa.translate(lower48.translate());
   };
+
+  albersUsa.translate = function(x) {
+    if (!arguments.length) return lower48.translate();
+    var dz = lower48.scale() / 1000,
+        dx = x[0],
+        dy = x[1];
+    lower48.translate(x);
+    alaska.translate([dx - 400 * dz, dy + 170 * dz]);
+    hawaii.translate([dx - 190 * dz, dy + 200 * dz]);
+    puertoRico.translate([dx + 580 * dz, dy + 430 * dz]);
+    return albersUsa;
+  };
+
+  return albersUsa.scale(lower48.scale());
 };
 
 var d3_radians = Math.PI / 180;
