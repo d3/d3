@@ -5,7 +5,7 @@
  * this algorithm is O(n log n), where n is the number of input points.
  *
  * @param vertices [[x1, y1], [x2, y2], …]
- * @returns polygon [[x1, y1], [x2, y2], …],
+ * @returns polygon [[x1, y1], [x2, y2], …]
  */
 d3.geom.hull = function(vertices) {
   if (vertices.length < 3) return [];

@@ -3,14 +3,15 @@ d3.svg.area = function() {
       y0 = d3_svg_areaY0,
       y1 = d3_svg_lineY,
       interpolate = "linear",
-      interpolator = d3_svg_lineInterpolators[interpolate];
+      interpolator = d3_svg_lineInterpolators[interpolate],
+      tension = .7;
 
   // TODO horizontal / vertical / radial orientation
 
   function area(d) {
     return d.length < 1 ? null
-        : "M" + interpolator(d3_svg_linePoints(this, d, x, y1))
-        + "L" + interpolator(d3_svg_linePoints(this, d, x, y0).reverse())
+        : "M" + interpolator(d3_svg_linePoints(this, d, x, y1), tension)
+        + "L" + interpolator(d3_svg_linePoints(this, d, x, y0).reverse(), tension)
         + "Z";
   }
 
@@ -35,6 +36,12 @@ d3.svg.area = function() {
   area.interpolate = function(v) {
     if (!arguments.length) return interpolate;
     interpolator = d3_svg_lineInterpolators[interpolate = v];
+    return area;
+  };
+
+  area.tension = function(v) {
+    if (!arguments.length) return tension;
+    tension = v;
     return area;
   };
 

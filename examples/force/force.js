@@ -37,10 +37,19 @@ function layout_force() {
           l = alpha * (l - nodeDistance) / l;
           x *= l;
           y *= l;
-          s.x += x;
-          s.y += y;
-          t.x -= x;
-          t.y -= y;
+          if (s.fixed) {
+	        if (t.fixed) continue;
+			t.x -= x;
+            t.y -= y;
+          } else if (t.fixed) {
+            s.x += x;
+            s.y += y;
+          } else {
+            s.x += x;
+            s.y += y;
+            t.x -= x;
+            t.y -= y;
+          }
         }
       }
     }
@@ -53,13 +62,23 @@ function layout_force() {
       x = t.x - s.x;
       y = t.y - s.y;
       l = Math.sqrt(x * x + y * y);
+      if (l <= 0) l = 0.01;
       l = alpha * (l - linkDistance) / l;
       x *= l;
       y *= l;
-      s.x += x;
-      s.y += y;
-      t.x -= x;
-      t.y -= y;
+      if (s.fixed) {
+        if (t.fixed) continue;
+        t.x -= x;
+        t.y -= y;
+      } else if (t.fixed) {
+        s.x += x;
+        s.y += y;
+      } else {
+        s.x += x;
+        s.y += y;
+        t.x -= x;
+        t.y -= y;
+      }
     }
 
     event.tick.dispatch({type: "tick"});
@@ -88,6 +107,18 @@ function layout_force() {
     return force;
   };
 
+  force.nodeDistance = function(d) {
+    if (!arguments.length) return nodeDistance;
+    nodeDistance = d;
+    return force;
+  };
+
+  force.linkDistance = function(d) {
+    if (!arguments.length) return linkDistance;
+    linkDistance = d;
+    return force;
+  };
+
   force.start = function() {
     var i,
         n = nodes.length,
@@ -97,14 +128,21 @@ function layout_force() {
         o;
     for (i = 0; i < n; ++i) {
       o = nodes[i];
-      o.x = Math.random() * w;
-      o.y = Math.random() * h;
+      o.x = o.x || Math.random() * w;
+      o.y = o.y || Math.random() * h;
+      o.fixed = 0;
     }
     for (i = 0; i < m; ++i) {
       o = links[i];
       o.source = nodes[o.source];
       o.target = nodes[o.target];
     }
+    if (interval) clearInterval(interval);
+    interval = setInterval(tick, 24);
+    return force;
+  };
+
+  force.resume = function() {
     if (interval) clearInterval(interval);
     interval = setInterval(tick, 24);
     return force;
