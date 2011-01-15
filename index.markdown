@@ -56,7 +56,7 @@ d3.selectAll("p")
     .style("color", "white");
 {% endhighlight %}
 
-Of course, a selection may instead consist of only a single node, as necessary:
+Of course, a selection may instead consist of only a single node:
 
 {% highlight js linenos %}
 d3.select("body")
@@ -116,7 +116,7 @@ d3.selectAll("div")
     .attr("src", function(d) { return d.url; });
 {% endhighlight %}
 
-Thus, the `data` property can also be defined as a function, taking as an
+Thus, the `data` property can *also* be defined as a function, taking as an
 argument the data associated with the parent node. This allows hierarchical data
 to be recursively dereferenced; it also results in the implicit grouping of
 nodes within a selection. In the above example, the index (`i`) for the image
@@ -147,19 +147,15 @@ API](http://www.w3.org/TR/selectors-api/). Elements may be selected using a
 variety of predicates, including containment, attribute values, and associated
 class or ID.
 
-<!--
-examples of nesting data?
--->
-
 ### Transformation, not Representation
 
 D3 does not provide a new graphical representation—unlike
 [Processing](http://processing.org/), [Raphaël](http://raphaeljs.com/), or
 [Protovis](http://vis.stanford.edu/protovis/), there is no new vocabulary of
-marks to learn. Instead, you build directly on  standards such as
-CSS3, HTML5 and SVG. D3 does not (literally) reinvent the wheel; to render a
-circle in SVG centered at ⟨50,40⟩ with radius 10, append an `svg:circle`
-element:
+marks to learn. Instead, you build directly on standards such as CSS3, HTML5 and
+SVG. There is no intermediate representation to update; the scene graph is the
+document itself. D3 does not (literally) reinvent the wheel; to render a circle
+in SVG centered at ⟨50,40⟩ with radius 10, append an `svg:circle` element:
 
 {% highlight js linenos %}
 svg.append("svg:circle")
@@ -193,8 +189,10 @@ d3.select("body").transition()
     .style("background-color", "black");
 {% endhighlight %}
 
-Similarly, to recompute the radius of various circles in a symbol map, you might
-say:
+Of course, if you want to use CSS3 transitions, you can use those too! D3 does
+not replace the browser's toolbox, but instead exposes it in a way that is
+easier to use. For example, a more complex resizing of circles in a symbol map
+can still be expressed succinctly:
 
 {% highlight js linenos %}
 d3.select("circle").transition()
@@ -203,18 +201,18 @@ d3.select("circle").transition()
     .attr("r", function(d) { return Math.sqrt(d * scale); });
 {% endhighlight %}
 
-The transition's duration and delay parameters can be customized. As with other
-properties, the duration and delay can be specified as functions of data; this
-is particularly useful for computing a staggered delay based on the index (`i`),
-which allows the viewer to follow the transition of individual elements more
-easily. By only manipulating the attributes that actually change during the
-transition, D3 eliminates any overhead, allowing greater graphical complexity
-and being limited only by the browser's rendering engine.
+The transition's duration and delay parameters can be customized, and as with
+other properties, specified as functions of data. This is particularly
+convenient for running a staggered delay by index (`i`), allowing the viewer to
+follow individual elements across the transition more easily.
 
-As with selections, transitions can also be nested; a subselection implicitly
-creates a subtransition. And, just as event handlers can be registered on
-selections to receive user interface events, transitions dispatch an event on
-end that allows sequencing of complex multi-stage transitions.
+By only manipulating the attributes that actually change during the transition,
+D3 eliminates any overhead, allowing greater graphical complexity and being
+limited only by the browser's rendering engine. As with selections, transitions
+can also be nested; a subselection implicitly creates a subtransition. And, just
+as event handlers can be registered on selections to receive user interface
+events, transitions dispatch an event on end that allows sequencing of complex
+multi-stage transitions.
 
 ### Data Binding
 

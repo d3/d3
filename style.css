@@ -13,9 +13,26 @@ a:hover {
   text-decoration: underline;
 }
 
-.body, .foot {
-  width: 710px;
+.body {
+  width: 960px;
   margin: auto;
+}
+
+.sidebar {
+  width: 150px;
+  margin-top: 128px;
+  margin-right: 10px;
+  float: left;
+}
+
+.sidebar a {
+  display: block;
+  margin-bottom: 1em;
+}
+
+.content {
+  width: 710px;
+  float: left;
 }
 
 h1 {
@@ -30,9 +47,11 @@ h2 {
 }
 
 .foot {
-  display: block;
   font-weight: 300;
-  margin-top: 3em;
+  margin-left: 160px;
+  padding-top: 3em;
+  width: 800px;
+  clear: both;
 }
 
 .side {
