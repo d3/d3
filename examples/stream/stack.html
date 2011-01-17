@@ -2,10 +2,9 @@
 <html>
   <head>
     <title>Stacked Bar Chart</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
-    <script type="text/javascript" src="max.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
     <script type="text/javascript" src="stream.js"></script>
-    <script type="text/javascript" src="stack.js"></script>
     <style type="text/css">
 
 svg {
@@ -68,15 +67,15 @@ button:hover {
 
 var n = 4, // number of layers
     m = 64, // number of samples per layer
-    data = stack(stream_layers(n, m, .1)),
+    data = d3.layout.stack()(stream_layers(n, m, .1)),
     color = d3.interpolateRgb("#aad", "#556");
 
 var p = 20,
     w = 960,
     h = 500 - p,
     mx = m,
-    my = max(data, function(d) { return max(d, function(d) { return d.y0 + d.y; }); }),
-    mz = max(data, function(d) { return max(d, function(d) { return d.y; }); }),
+    my = d3.max(data, function(d) { return d3.max(d, function(d) { return d.y0 + d.y; }); }),
+    mz = d3.max(data, function(d) { return d3.max(d, function(d) { return d.y; }); }),
     x = function(d) { return d.x * w / mx; },
     y0 = function(d) { return h - d.y0 * h / my; },
     y1 = function(d) { return h - (d.y + d.y0) * h / my; },

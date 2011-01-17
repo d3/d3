@@ -33,6 +33,8 @@ d3.core.js: \
 	src/core/functor.js \
 	src/core/ascending.js \
 	src/core/descending.js \
+	src/core/min.js \
+	src/core/max.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
@@ -83,6 +85,7 @@ d3.layout.js: \
 	src/start.js \
 	src/layout/layout.js \
 	src/layout/chord.js \
+	src/layout/stack.js \
 	src/end.js
 
 d3.geo.js: \

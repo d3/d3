@@ -2,10 +2,9 @@
 <html>
   <head>
     <title>Streamgraph</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
-    <script type="text/javascript" src="max.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
     <script type="text/javascript" src="stream.js"></script>
-    <script type="text/javascript" src="stack.js"></script>
     <style type="text/css">
 
 body {
@@ -19,14 +18,14 @@ body {
 
 var n = 20, // number of layers
     m = 200, // number of samples per layer
-    data0 = stack(stream_layers(n, m), null, "wiggle"),
-    data1 = stack(stream_layers(n, m), null, "wiggle"),
+    data0 = d3.layout.stack().offset("wiggle")(stream_layers(n, m)),
+    data1 = d3.layout.stack().offset("wiggle")(stream_layers(n, m)),
     color = d3.interpolateRgb("#aad", "#556");
 
 var w = 960,
     h = 500,
     mx = m - 1,
-    my = max(data0.concat(data1), function(d) { return max(d, function(d) { return d.y0 + d.y; }); });
+    my = d3.max(data0.concat(data1), function(d) { return d3.max(d, function(d) { return d.y0 + d.y; }); });
 
 var area = d3.svg.area()
     .x(function(d) { return d.x * w / mx; })

@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.29.1"}; // semver
+(function(){d3 = {version: "0.29.2"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -18,6 +18,32 @@ d3.ascending = function(a, b) {
 };
 d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : 0;
+};
+d3.min = function(array, f) {
+  var i = 0,
+      n = array.length,
+      a = array[0],
+      b;
+  if (arguments.length == 1) {
+    while (++i < n) if (a > (b = array[i])) a = b;
+  } else {
+    a = f(array[0]);
+    while (++i < n) if (a > (b = f(array[i]))) a = b;
+  }
+  return a;
+};
+d3.max = function(array, f) {
+  var i = 0,
+      n = array.length,
+      a = array[0],
+      b;
+  if (arguments.length == 1) {
+    while (++i < n) if (a < (b = array[i])) a = b;
+  } else {
+    a = f(a);
+    while (++i < n) if (a < (b = f(array[i]))) a = b;
+  }
+  return a;
 };
 d3.nest = function() {
   var nest = {},
