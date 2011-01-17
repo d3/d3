@@ -4,7 +4,7 @@ layout: default
 
 <a href="http://github.com/mbostock/d3"><img
     style="position:absolute;top:0;right:0;border:0;"
-    width="149" height="149" src="/forkme.png" alt="Fork me on GitHub"
+    width="149" height="149" src="forkme.png" alt="Fork me on GitHub"
     /></a>
 
 # d3.js
