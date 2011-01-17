@@ -216,7 +216,7 @@ d3.json("miserables.json", function(json) {
 
   init();
 
-  vis.attr("opacity", 0)
+  vis.attr("opacity", 1e-6)
     .transition()
       .duration(1000)
       .attr("opacity", 1);
