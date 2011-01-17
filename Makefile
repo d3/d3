@@ -13,4 +13,6 @@ all: \
 	d3.time.min.js
 
 %.js: Makefile
+	@rm -f $@
 	git cat-file blob master:$@ > $@
+	@chmod a-w $@
