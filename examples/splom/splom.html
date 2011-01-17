@@ -4,8 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Scatterplot Matrix</title>
     <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="max.js"></script>
-    <script type="text/javascript" src="min.js"></script>
     <script type="text/javascript" src="cross.js"></script>
     <style type="text/css">
 
@@ -37,7 +35,7 @@ d3.json("flowers.json", function(flower) {
   flower.traits.forEach(function(trait) {
     function value(d) { return d[trait]; }
     position[trait] = d3.scale.linear()
-        .domain([min(flower.values, value), max(flower.values, value)])
+        .domain([d3.min(flower.values, value), d3.max(flower.values, value)])
         .range([padding / 2, size - padding / 2]);
   });
 
