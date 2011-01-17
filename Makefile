@@ -117,6 +117,7 @@ d3.geom.js: \
 	src/geom/polygon.js \
 	src/geom/voronoi.js \
 	src/geom/delaunay.js \
+	src/geom/quadtree.js \
 	src/end.js
 
 %.min.js: %.js Makefile
