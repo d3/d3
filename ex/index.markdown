@@ -1,5 +1,5 @@
 ---
-layout: default
+layout: ex
 title: Examples
 ---
 
