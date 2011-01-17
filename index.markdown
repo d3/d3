@@ -4,7 +4,7 @@ layout: default
 
 <a href="http://github.com/mbostock/d3"><img
     style="position:absolute;top:0;right:0;border:0;"
-    width="149" height="149" src="forkme.png" alt="Fork me on GitHub"
+    width="149" height="149" src="/forkme.png" alt="Fork me on GitHub"
     /></a>
 
 # d3.js
@@ -69,7 +69,8 @@ text content. This suffices for the vast majority of needs. However, if the
 underlying DOM API is strictly needed, the nodes in a selection can be trivially
 accessed, as each D3 selection is simply an array of nodes.
 
-Readers familiar with [jQuery](http://jquery.com/) should immediately recognize
+Readers familiar with [jQuery](http://jquery.com/) or
+[Prototype](http://www.prototypejs.org/) should immediately recognize
 similarities with D3. However, styles, attributes, and other properties can be
 specified as *functions of data* in D3, not just simple constants. For example,
 to alternate paragraph colors, define the style with a function that returns
@@ -118,13 +119,28 @@ d3.selectAll("div")
 
 Thus, the `data` property can *also* be defined as a function, taking as an
 argument the data associated with the parent node. This allows hierarchical data
-to be recursively dereferenced; it also results in the implicit grouping of
-nodes within a selection. In the above example, the index (`i`) for the image
-elements is of the array of photos, whereas the corresponding index for the
-parent div elements is of the array of albums.
+to be recursively dereferenced.
 
-Initially, the set of the nodes matching this selector are empty, as the nodes
-have not yet been created! By binding this empty selection to the data, you can
+Subselections are obtained by calling `select` or `selectAll` on an existing
+selection. (Conceptually, the `d3` global is a singleton selection of the root
+`document`.) When `select` is used, the specified selector is queried on each of
+the nodes in the existing selection. The returned selection has the same number
+of nodes as the original selection. For example, to select the first bold (`b`)
+element within all paragraph (`p`) elements:
+
+{% highlight js linenos %}
+d3.selectAll("p")
+  .select("b");
+{% endhighlight %}
+
+With `selectAll`, the returned selection contains *all* matching nodes, for
+*each* node in the original selection, so grouped. Thus, in the photo-sharing
+example above, the index (`i`) for the image elements is of the array of photos,
+whereas the corresponding index for the parent div elements is of the array of
+albums.
+
+Often, the set of the nodes matching the selector are empty, as the nodes have
+not yet been created! By binding this empty selection to the data, you can
 create a *virtual* selection, with null nodes for each element in the dataset
 that does not yet exist in the document. The `enter` operator then creates the
 nodes, appending them to the document and materializing the selection. (Enter,
@@ -153,9 +169,8 @@ D3 does not provide a new graphical representation—unlike
 [Processing](http://processing.org/), [Raphaël](http://raphaeljs.com/), or
 [Protovis](http://vis.stanford.edu/protovis/), there is no new vocabulary of
 marks to learn. Instead, you build directly on standards such as CSS3, HTML5 and
-SVG. There is no intermediate representation to update; the scene graph is the
-document itself. D3 does not (literally) reinvent the wheel; to render a circle
-in SVG centered at ⟨50,40⟩ with radius 10, append an `svg:circle` element:
+SVG. D3 does not (literally) reinvent the wheel; to render a circle in SVG
+centered at ⟨50,40⟩ with radius 10, append an `svg:circle` element:
 
 {% highlight js linenos %}
 svg.append("svg:circle")
@@ -177,22 +192,38 @@ body.append("div")
     .style("background-color", "#000");
 {% endhighlight %}
 
-Given D3's focus on manipulating documents—not just a one-time mapping of data
-to a static representation—it naturally includes support for smooth transitions.
-These are automatic interpolation of styles or attributes over time. Various
-easing functions are provided to vary tweening, such as "elastic",
-"cubic-in-out" and "linear". Transitions are trivially created from selections
-via the `transition` operator. To fade the background of the page to black, say:
+There are numerous reasons D3 focuses on manipulation existing representations,
+rather than introducing a new one. You have full access to the underlying
+browser's functionality; for example, you can create elements using D3, and then
+style them with external stylesheets. D3 is also easier to debug using the
+browser's built-in inspector: operations are applied immediately (such as within
+the scope of a call to the `style` operator), and the selection object is an
+array of nodes. If browser makers introduce new features to CSS tomorrow, you'll
+be able to use them in D3 immediately rather than waiting for a toolkit update.
+
+### Transitions
+
+Given D3's focus on manipulation—not just a one-time mapping of data to a static
+representation—it naturally includes support for smooth transitions. These are
+gradual interpolation of styles or attributes over time. Various easing
+functions are provided to vary tweening, such as "elastic", "cubic-in-out" and
+"linear". D3 knows how to interpolate basic types, such as numbers and numbers
+embedded within strings (font sizes, path data, *etc.*). You can provide your
+own interpolator to extend transitions to more complex properties, such as a
+backing data structure.
+
+Transitions are trivially created from selections via the `transition` operator.
+To fade the background of the page to black, say:
 
 {% highlight js linenos %}
 d3.select("body").transition()
     .style("background-color", "black");
 {% endhighlight %}
 
-Of course, if you want to use CSS3 transitions, you can use those too! D3 does
+(Of course, if you want to use CSS3 transitions, you can use those too! D3 does
 not replace the browser's toolbox, but instead exposes it in a way that is
-easier to use. For example, a more complex resizing of circles in a symbol map
-can still be expressed succinctly:
+easier to use.) A more complex resizing of circles in a symbol map can still be
+expressed succinctly:
 
 {% highlight js linenos %}
 d3.select("circle").transition()
@@ -206,19 +237,18 @@ other properties, specified as functions of data. This is particularly
 convenient for running a staggered delay by index (`i`), allowing the viewer to
 follow individual elements across the transition more easily.
 
-By only manipulating the attributes that actually change during the transition,
-D3 eliminates any overhead, allowing greater graphical complexity and being
-limited only by the browser's rendering engine. As with selections, transitions
-can also be nested; a subselection implicitly creates a subtransition. And, just
-as event handlers can be registered on selections to receive user interface
-events, transitions dispatch an event on end that allows sequencing of complex
-multi-stage transitions.
+By dirtying only the attributes that actually change during the transition, D3
+eliminates any overhead, allowing greater graphical complexity and higher frame
+rates. As with selections, transitions can be nested; a subselection implicitly
+creates a subtransition. And, just as event handlers can be registered on
+selections to receive user interface events, transitions dispatch an event on
+end that allows sequencing of complex multi-stage transitions.
 
 ### Data Binding
 
 To reiterate, D3 lets you transform *existing* documents (node hierarchies)
 based on data. This is a generalization of the simpler case of creating a new
-document from data, where the existing document is the empty node. Thus, in
+document from data, where the starting selection is the empty node. Thus, in
 addition to creating documents from scratch, D3 allows you to change an existing
 document in response to user interaction, animation over time, or even
 asynchronous notification from a third-party. A hybrid approach is even
@@ -226,10 +256,11 @@ possible, where the document is initially rendered on the server, and then
 updated on the client via D3.
 
 Binding and rebinding data to the document is controlled using a *join*
-specification. This consists of two functions: a function that maps data to a
-unique string key, and a function that maps nodes to the same. When the key for
-a datum and a node are equal, the node and the datum are joined. For example, to
-join the data attribute `key` with the node attribute of the same name:
+specification. This consists of two key functions: a function that maps data to
+a unique string key, and a function that maps nodes to the same. When the key
+for a datum and a node are equal, the node and the datum are joined. For
+example, to join the data attribute `key` with the node attribute of the same
+name:
 
 {% highlight js linenos %}
 d3.selectAll("div")
@@ -273,18 +304,20 @@ practice for chart transitions is to initialize entering nodes using the old
 layout, and to transition exiting nodes to the new layout. This allows entering
 and exiting nodes to transition consistently with the updating nodes.
 
-<!--
-
 ### Modules
 
-move this to an API reference section… just give an overview
+D3 is highly extensible, with optional modules available as needed, without
+bloating the core componentry. The only required feature of D3 is the selection
+implementation, along with transitions. For convenience, the default `d3.js`
+file also includes standard SVG shape generators andexex utilities, such as scales
+and data transformations.
 
-`core`, `svg`, `scale`, `time`
-
-`geo`, `geom`, `layout`, `csv`
-
-* [Documentation](docs/)
-* Examples (WIP)
-* Download (WIP)
-
--->
+Several additional modules are available that are not included in the default
+build. The `geo` module adds support for geographic data, such as translating
+GeoJSON into SVG path data. The Albers equal-area projection is included in this
+module, as it is well-suited to choropleth maps. The `geom` module includes
+several computational geometry utilies, such as algorithms for Voronoi diagrams
+and convex hulls. The `csv` module supports reading and writing comma-separated
+values, a common alternative to [JSON](http://www.json.org/). Lastly, the
+`layout` module includes various resuable visualization layouts, such as
+force-directed graphs, treemaps, and chord diagrams.
