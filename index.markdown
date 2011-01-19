@@ -291,7 +291,7 @@ but instead exposes it in a way that is easier to use. A more complex resizing
 of circles in a symbol map can still be expressed succinctly:
 
 {% highlight js linenos %}
-d3.select("circle").transition()
+d3.selectAll("circle").transition()
     .duration(750)
     .delay(function(d, i) { return i * 10; })
     .attr("r", function(d) { return Math.sqrt(d * scale); });
@@ -425,17 +425,17 @@ such as a data join defined only by the previously-bound data.
 ### Modules
 
 D3 is highly extensible, with optional modules available as needed, without
-bloating the core componentry. The only required feature of D3 is the selection
+bloating the core library. The only required feature of D3 is the selection
 implementation, along with transitions. For convenience, the default `d3.js`
-file also includes standard SVG shape generators andexex utilities, such as
-scales and data transformations.
+file also includes standard SVG shape generators and utilities, such as scales
+and data transformations.
 
 Several additional modules are available that are not included in the default
 build. The `geo` module adds support for geographic data, such as translating
 GeoJSON into SVG path data. The Albers equal-area projection is included in this
 module, as it is well-suited to choropleth maps. The `geom` module includes
-several computational geometry utilies, such as algorithms for Voronoi diagrams
-and convex hulls. The `csv` module supports reading and writing comma-separated
-values, a common alternative to [JSON](http://www.json.org/). Lastly, the
-`layout` module includes various resuable visualization layouts, such as
-force-directed graphs, treemaps, and chord diagrams.
+several computational geometry utilities, such as algorithms for Voronoi
+diagrams and convex hulls. The `csv` module supports reading and writing
+comma-separated values, a common alternative to [JSON](http://www.json.org/).
+Lastly, the `layout` module includes various reusable visualization layouts,
+such as force-directed graphs, treemaps, and chord diagrams.
