@@ -72,10 +72,10 @@ And in the future, D3 could be extended to support additional selector formats,
 such as [XPath](http://www.w3.org/TR/xpath/).
 
 D3 provides standard facilities for mutating nodes: setting attributes or
-styles; adding, removing or sorting nodes; and changing HTML or text content.
-These suffice for the vast majority of needs. However, if the underlying DOM API
-is strictly needed, the nodes in a selection can be accessed directly, as each
-D3 selection is simply an array of nodes.
+styles; registering event listeners; adding, removing or sorting nodes; and
+changing HTML or text content. These suffice for the vast majority of needs.
+However, if the underlying DOM API is strictly needed, the nodes in a selection
+can be accessed directly, as each D3 selection is simply an array of nodes.
 
 ### Dynamic Properties
 
