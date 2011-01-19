@@ -36,6 +36,11 @@ a:hover {
   float: left;
 }
 
+.content img {
+  display: block;
+  margin: auto;
+}
+
 h1 {
   font-size: 36px;
   font-weight: 300;
@@ -92,3 +97,4 @@ button {
 button:hover {
   background-color: #555;
 }
+
