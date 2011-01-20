@@ -3,13 +3,14 @@ layout: vis
 title: Visualization
 ---
 
-# d3.js
+# d3.js ~ Visualization
 
-## Data-Driven Visualization
+## Data-Driven Documents
 
 <style type="text/css">
 
 .chart {
+  margin-left: 42px;
   font: 10px sans-serif;
   shape-rendering: crispEdges;
 }
@@ -159,11 +160,10 @@ var chart = d3.select("body")
     .attr("height", 20 * data.length);
 {% endhighlight %}
 
-An immediate difference you will notice with SVG is that units are implicitly in
-pixels, and thus do not need the "px" suffix. Even though the units are pixels,
-you can rescale the SVG without losing image quality, and you can use
-percentages, too. So you must tweak the definition of the *x*-scale to use a
-numeric range:
+An immediate difference you will notice with SVG is that the units are
+implicitly pixels, and thus do not need the "px" suffix. Even with pixels, you
+can rescale the SVG without losing image quality. You can use percentages for
+relative positioning, too. To use a numeric range for the *x*-scale:
 
 {% highlight js linenos %}
 var x = d3.scale.linear()
@@ -177,9 +177,10 @@ var x = d3.scale.linear()
     .range([0, 420]);
 </script>
 
-Another difference is that, unlike with HTML, SVG does not provide automatic
-flow layout. By default, the bars would be drawn on top of each other. To fix
-this, set the *y*-position and height explicitly:
+Unlike HTML, SVG does not provide automatic flow layout. Shapes are positioned
+relative to the top-left corner, called the origin. Thus, by default, the bars
+would be drawn on top of each other. To fix this, set the *y*-coordinate and
+height explicitly:
 
 {% highlight js linenos %}
 chart.selectAll("rect")
@@ -210,8 +211,8 @@ d3.select(".content")
 Astute readers will notice that a magic number crept back into the chart
 description: the bar height of 20 pixels. Arguably, this number isn't
 magic—twenty is a reasonable height for the bars, just as fourteen is a
-reasonable point size for text. Alternatively, you can set a height for the
-entire chart, and use a second scale for the *y*-axis:
+reasonable point size for text. However, if you prefer to set a height for the
+entire chart, use a second scale for the *y*-axis:
 
 {% highlight js linenos %}
 var y = d3.scale.ordinal()
@@ -225,13 +226,12 @@ var y = d3.scale.ordinal()
     .rangeBands([0, 120]);
 </script>
 
-Now `y` is a function, much like the earlier `x`. It takes as input values from
-the data array, and for each value returns the corresponding *y*-position. For
+As with `x` previously, `y` is now a function. It takes as input values from the
+data array, and for each value returns the corresponding *y*-coordinate. For
 example, an input value of 4 returns 0, and an input value of 16 returns 60.
 This approach requires that the values in our dataset are unique; ordinal scales
-are often used to position non-quantitative data, such as country names. With
-univariate data, you can use the array indices as the ordinal domain: \[0, 1,
-2…\].
+are often used to encode non-quantitative data, such as country names.
+Alternatively, you can use array indices as the ordinal domain: \[0, 1, 2…\].
 
 The new scale plugs into the bar specification, replacing the "y" attribute:
 
@@ -245,8 +245,8 @@ chart.selectAll("rect")
 {% endhighlight %}
 
 The new scales can also be applied to render labels, showing the associated
-value. The labels are centered vertically within each bar, with the text
-right-aligned:
+value. This code centers labels vertically within each bar, and right-aligns
+text:
 
 {% highlight js linenos %}
 chart.selectAll("text")
@@ -261,11 +261,11 @@ chart.selectAll("text")
     .text(String);
 {% endhighlight %}
 
-The [SVG Text](http://www.w3.org/TR/SVG/text.html) specification describes in
-detail the meaning of the "dx", "dy", "dominant-baseline" and "text-anchor"
-attributes. The full specification is dense, as it offers a level of control
-required only by the most ambitious typographers; that said, it's not too hard
-to remember standard settings for alignment and padding.
+The formal [SVG Text](http://www.w3.org/TR/SVG/text.html) specification
+describes in detail the meaning of the "dx", "dy", "dominant-baseline" and
+"text-anchor" attributes. The full spec is dense, as SVG offers a level of
+control required by only the most ambitious typographers; that said, hopefully
+it's not too hard to remember standard settings for alignment and padding!
 
 The SVG chart now looks identical to the earlier HTML version:
 
@@ -296,7 +296,8 @@ chart.selectAll("text")
     .text(String);
 </script>
 
-Add some padding…
+With the basic chart is in place, you can place additional marks to improve
+readability. As a first step, pad the SVG container to make space for labels:
 
 {% highlight js linenos %}
 var chart = d3.select(".content")
@@ -308,7 +309,18 @@ var chart = d3.select(".content")
     .attr("transform", "translate(10,15)");
 {% endhighlight %}
 
-Add some reference lines…
+The `svg:g` element is a [container
+element](http://www.w3.org/TR/SVG/struct.html), much like the `div` element in
+HTML. Setting a
+[transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on a
+container affects how its children are positioned. For padding, you need only to
+translate; however, for advanced graphical effects, you can use any affine
+transformation, such as scale, rotate and shear!
+
+The linear scale, `x`, provides a `ticks` routine that generates values in the
+domain at sensible intervals. For a chart this size, about ten ticks is
+appropriate; for smaller or larger charts, you can vary the number of ticks to
+generate. These tick values serve as data for reference lines:
 
 {% highlight js linenos %}
 chart.selectAll("line")
@@ -321,12 +333,13 @@ chart.selectAll("line")
     .attr("stroke", "#ccc");
 {% endhighlight %}
 
-Add some labels for the reference lines…
+Positioning text above the reference lines reveals their value:
 
 {% highlight js linenos %}
 chart.selectAll("text.rule")
     .data(x.ticks(10))
   .enter("svg:text")
+    .attr("class", "rule")
     .attr("x", x)
     .attr("y", 0)
     .attr("dy", -3)
@@ -334,7 +347,10 @@ chart.selectAll("text.rule")
     .text(String);
 {% endhighlight %}
 
-Add a *y*-axis…
+Note that the rule labels are assigned the class "rule"; this avoids a collision
+with the value labels on each bar. Another way to avoid collision is to put
+reference labels in a separate `g` container. Lastly, add a single black line
+for the *y*-axis:
 
 {% highlight js linenos %}
 chart.append("svg:line")
@@ -351,6 +367,7 @@ var chart = d3.select(".content")
     .attr("class", "chart")
     .attr("width", 440)
     .attr("height", 140)
+    .style("margin-left", "32px") // Tweak alignment…
   .append("svg:g")
     .attr("transform", "translate(10,15)");
 
@@ -397,13 +414,6 @@ chart.append("svg:line")
     .attr("stroke", "#000");
 </script>
 
-<!--
-var rule = chart.selectAll("g.rule")
-    .data(x.ticks(10))
-  .enter("svg:g")
-    .attr("class", "rule");
-
-rule.append("svg:line")
-
-rule.append("svg:text")
- -->
+This tutorial covered many of the core concepts in D3, including selections,
+dynamic properties, and scales. However, this only scratches the surface!
+Explore the examples gallery to learn more advanced techniques with D3.
