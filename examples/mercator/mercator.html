@@ -62,7 +62,9 @@ d3.json("../../data/world-countries.json", function(collection) {
     .selectAll("path")
       .data(collection.features)
     .enter("svg:path")
-      .attr("d", path);
+      .attr("d", path)
+    .append("svg:title")
+      .text(function(d) { return d.properties.name; });
 
   equator
       .attr("y1", xy([0, 0])[1])
