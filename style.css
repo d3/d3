@@ -41,6 +41,19 @@ a:hover {
   margin: auto;
 }
 
+.gallery {
+  width: 644px;
+  margin: auto;
+}
+
+.content .gallery img {
+  display: inline-block;
+  width: 200px;
+  height: 180px;
+  border: solid 2px #ccc;
+  margin: 4px;
+}
+
 h1 {
   font-size: 36px;
   font-weight: 300;

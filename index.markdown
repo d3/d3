@@ -9,11 +9,22 @@ layout: default
 **D3.js** is a small, [free](https://github.com/mbostock/d3/raw/master/LICENSE)
 JavaScript library for manipulating documents based on data.
 
-At its core, D3 allows you to bind arbitrary data to a Document Object Model
-(DOM), and then apply data-driven transformations to the document. As a trivial
-example, you can use D3 to generate a basic HTML table from an array of numbers.
-Or, use the same data to create an interactive SVG bar chart with smooth
-transitions and interaction.
+<div class="gallery">
+  <img src="calendar.png">
+  <img src="chord.png">
+  <img src="choropleth.png">
+  <img src="force.png">
+  <img src="splom.png">
+  <img src="stack.png">
+  <img src="stream.png">
+  <img src="voronoi.png">
+</div>
+
+D3 allows you to bind arbitrary data to a Document Object Model (DOM), and then
+apply data-driven transformations to the document. As a trivial example, you can
+use D3 to generate a basic HTML table from an array of numbers. Or, use the same
+data to create an interactive SVG bar chart with smooth transitions and
+interaction.
 
 D3 is not a traditional visualization framework. Rather than provide a
 monolithic system with all the features anyone may ever need, D3 solves only the
