@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.29.2"}; // semver
+(function(){d3 = {version: "0.29.3"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };

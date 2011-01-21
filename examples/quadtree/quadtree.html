@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Quadtree</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.geom.js"></script>
+    <style type="text/css">
+
+circle {
+  fill: lightsteelblue;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+rect {
+  fill: none;
+  stroke: #000;
+  stroke-opacity: .3;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 500,
+    h = 500;
+
+// Generate random points.
+var data = d3.range(500).map(function() {
+  return [
+    5 + Math.random() * (w - 10),
+    5 + Math.random() * (h - 10)
+  ];
+});
+
+var vis = d3.select("body")
+  .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+vis.selectAll("circle")
+    .data(data)
+  .enter("svg:circle")
+    .attr("cx", function(d) { return d[0]; })
+    .attr("cy", function(d) { return d[1]; })
+    .attr("r", 4.5);
+
+vis.selectAll("rect")
+    .data(quadtree(data))
+  .enter("svg:rect")
+    .attr("x", function(d) { return d.x; })
+    .attr("y", function(d) { return d.y; })
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; });
+
+// Collapse the quadtree into an array of rectangles.
+function quadtree(data) {
+  var nodes = [];
+  d3.geom.quadtree(data).visit(function(node, x1, y1, x2, y2) {
+    nodes.push({
+      x: x1,
+      y: y1,
+      width: x2 - x1,
+      height: y2 - y1
+    });
+  });
+  return nodes;
+}
+
+    </script>
+  </body>
+</html>
