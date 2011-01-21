@@ -190,12 +190,12 @@ you will automatically select only the elements for which there exists
 corresponding data.
 
 To reiterate, D3 lets you transform *existing* documents (node hierarchies)
-based on data. This is a generalization of the simpler case of creating a new
-document from data, where the starting selection is the empty node. D3 allows
-you to change an existing document in response to user interaction, animation
-over time, or even asynchronous notification from a third-party. A hybrid
-approach is even possible, where the document is initially rendered on the
-server, and then updated on the client via D3.
+based on data. This generalization includes creating new documents, where the
+starting selection is the empty node. D3 allows you to change an existing
+document in response to user interaction, animation over time, or even
+asynchronous notification from a third-party. A hybrid approach is even
+possible, where the document is initially rendered on the server, and
+updated on the client via D3.
 
 <!--
 By breaking the selection into three pieces—enter, update and exit—the user can
