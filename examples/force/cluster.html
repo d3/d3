@@ -172,7 +172,7 @@ function drag(n) {
   n.on("mouseover", function(d) { if (d != active) d.fixed = true; })
    .on("mouseout", function(d) { if (d != active) d.fixed = false; })
    .on("mousedown", function(d) {
-    if (typeof event !== 'undefined' && event.preventDefault) { event.preventDefault(); }
+    if (d3.event.preventDefault) { d3.event.preventDefault(); }
     active = d;
 
     // unregister drag listeners
