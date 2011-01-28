@@ -161,7 +161,6 @@ function redraw2() {
       .duration(1000)
       .attr("x", function(d, i) { return x(i) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
-      .attr("width", w)
       .attr("height", function(d) { return y(d.value); });
 
   rect.exit().transition()
