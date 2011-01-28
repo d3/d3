@@ -28,16 +28,35 @@ title: A Bar Chart, Part 2
 <script type="text/javascript">
 
 var n = 33,
-    w = 20,
-    h = 80,
     data = d3.range(n).map(next);
 
+function next() {
+  var i = next.time || 0,
+      v = next.value || 50;
+  return {
+    time: next.time = i + 1,
+    value: next.value = Math.max(10, Math.min(90, v + 10 * (Math.random() - .5)))
+  };
+}
+
+</script>
+
+<script type="text/javascript">
+
+var w = 20,
+    h = 80;
+
 var x = d3.scale.linear()
+    .domain([0, 1])
     .range([0, w]);
 
 var y = d3.scale.linear()
     .domain([0, 100])
     .rangeRound([0, h]);
+
+</script>
+
+<script type="text/javascript">
 
 var chart = d3.select(".content")
   .append("svg:svg")
@@ -59,15 +78,6 @@ chart.append("svg:line")
     .attr("y1", h - .5)
     .attr("y2", h - .5)
     .attr("stroke", "#000");
-
-function next() {
-  var i = next.time || 0,
-      v = next.value || 50;
-  return {
-    time: next.time = i + 1,
-    value: next.value = Math.max(10, Math.min(90, v + 10 * (Math.random() - .5)))
-  };
-}
 
 </script>
 
