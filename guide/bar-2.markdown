@@ -96,24 +96,17 @@ function redraw1() {
       .data(data);
 
   rect.enter("svg:rect")
-      .attr("opacity", 1e-6)
       .attr("x", function(d, i) { return x(i) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
       .attr("width", w)
-      .attr("height", function(d) { return y(d.value); })
-    .transition()
-      .duration(1000)
-      .attr("opacity", 1);
+      .attr("height", function(d) { return y(d.value); });
 
   rect.transition()
       .duration(1000)
-      .attr("opacity", 1)
       .attr("y", function(d) { return h - y(d.value) - .5; })
       .attr("height", function(d) { return y(d.value); });
 
-  rect.exit().transition()
-      .duration(1000)
-      .attr("opacity", 1e-6)
+  rect.exit()
       .remove();
 
 }
