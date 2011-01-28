@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.29.4"}; // semver
+(function(){d3 = {version: "0.29.5"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -12,6 +12,13 @@ function d3_array(psuedoarray) {
 }
 function d3_functor(v) {
   return typeof v == "function" ? v : function() { return v; };
+}
+// A getter-setter method that preserves the appropriate `this` context.
+function d3_rebind(object, method) {
+  return function() {
+    var x = method.apply(object, arguments);
+    return arguments.length ? object : x;
+  };
 }
 d3.ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
@@ -460,6 +467,11 @@ d3.interpolate = function(a, b) {
 d3.interpolateNumber = function(a, b) {
   b -= a;
   return function(t) { return a + b * t; };
+};
+
+d3.interpolateRound = function(a, b) {
+  b -= a;
+  return function(t) { return Math.round(a + b * t); };
 };
 
 d3.interpolateString = function(a, b) {
@@ -1752,7 +1764,8 @@ d3.scale.linear = function() {
       y1 = 1,
       kx = 1 / (x1 - x0),
       ky = (x1 - x0) / (y1 - y0),
-      i = d3.interpolate(y0, y1);
+      interpolate = d3.interpolate,
+      i = interpolate(y0, y1);
 
   function scale(x) {
     return i((x - x0) * kx);
@@ -1762,7 +1775,6 @@ d3.scale.linear = function() {
     return (y - y0) * ky + x0; // TODO assumes number?
   };
 
-  /** @param {*=} x */
   scale.domain = function(x) {
     if (!arguments.length) return [x0, x1];
     x0 = x[0];
@@ -1772,13 +1784,22 @@ d3.scale.linear = function() {
     return scale;
   };
 
-  /** @param {*=} x */
   scale.range = function(x) {
     if (!arguments.length) return [y0, y1];
     y0 = x[0];
     y1 = x[1];
     ky = (x1 - x0) / (y1 - y0);
-    i = d3.interpolate(y0, y1); // TODO allow override?
+    i = interpolate(y0, y1);
+    return scale;
+  };
+
+  scale.rangeRound = function(x) {
+    return scale.range(x).interpolate(d3.interpolateRound);
+  };
+
+  scale.interpolate = function(x) {
+    if (!arguments.length) return interpolate;
+    i = (interpolate = x)(y0, y1);
     return scale;
   };
 
@@ -1834,17 +1855,15 @@ d3.scale.log = function() {
     return pow(linear.invert(x));
   };
 
-  /** @param {*=} x */
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(pow);
     linear.domain(x.map(log));
     return scale;
   };
 
-  scale.range = function() {
-    var x = linear.range.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
+  scale.range = d3_rebind(scale, linear.range);
+  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
+  scale.interpolate = d3_rebind(scale, linear.interpolate);
 
   scale.ticks = function() {
     var d = linear.domain(),
@@ -1866,6 +1885,7 @@ d3.scale.log = function() {
 };
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),
+      tick = d3.scale.linear(), // TODO better tick formatting...
       p = 1,
       b = 1 / p;
 
@@ -1881,34 +1901,22 @@ d3.scale.pow = function() {
     return linear(powp(x));
   }
 
-  function tick() {
-    return d3.scale.linear().domain(scale.domain());
-  }
-
   scale.invert = function(x) {
     return powb(linear.invert(x));
   };
 
-  /** @param {*=} x */
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(powb);
     linear.domain(x.map(powp));
+    tick.domain(x);
     return scale;
   };
 
-  scale.range = function() {
-    var x = linear.range.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
-
-  // TODO better tick formatting...
-  scale.ticks = function(m) {
-    return tick().ticks(m);
-  };
-
-  scale.tickFormat = function(m) {
-    return tick().tickFormat(m);
-  };
+  scale.range = d3_rebind(scale, linear.range);
+  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
+  scale.inteprolate = d3_rebind(scale, linear.interpolate);
+  scale.ticks = tick.ticks;
+  scale.tickFormat = tick.tickFormat;
 
   scale.exponent = function(x) {
     if (!arguments.length) return p;
@@ -1970,6 +1978,18 @@ d3.scale.ordinal = function() {
         step = (stop - start) / (domain.length + padding);
     range = d3.range(start + step * padding, stop, step);
     rangeBand = step * (1 - padding);
+    return scale;
+  };
+
+  scale.rangeRoundBands = function(x, padding) {
+    if (arguments.length < 2) padding = 0;
+    var start = x[0],
+        stop = x[1],
+        diff = stop - start,
+        step = Math.floor(diff / (domain.length + padding)),
+        err = diff - (domain.length - padding) * step;
+    range = d3.range(start + Math.round(err / 2), stop, step);
+    rangeBand = Math.round(step * (1 - padding));
     return scale;
   };
 

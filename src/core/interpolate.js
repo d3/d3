@@ -14,6 +14,11 @@ d3.interpolateNumber = function(a, b) {
   return function(t) { return a + b * t; };
 };
 
+d3.interpolateRound = function(a, b) {
+  b -= a;
+  return function(t) { return Math.round(a + b * t); };
+};
+
 d3.interpolateString = function(a, b) {
   var m, // current match
       i, // current index

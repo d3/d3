@@ -17,17 +17,15 @@ d3.scale.log = function() {
     return pow(linear.invert(x));
   };
 
-  /** @param {*=} x */
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(pow);
     linear.domain(x.map(log));
     return scale;
   };
 
-  scale.range = function() {
-    var x = linear.range.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
+  scale.range = d3_rebind(scale, linear.range);
+  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
+  scale.interpolate = d3_rebind(scale, linear.interpolate);
 
   scale.ticks = function() {
     var d = linear.domain(),

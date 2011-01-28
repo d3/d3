@@ -1,7 +1,6 @@
 JS_COMPILER = \
 	java -jar lib/google-compiler/compiler.jar \
 	--externs=src/externs.js \
-	--warning_level=VERBOSE \
 	--charset=UTF-8
 
 all: \
@@ -31,6 +30,7 @@ d3.core.js: \
 	src/core/object.js \
 	src/core/array.js \
 	src/core/functor.js \
+	src/core/rebind.js \
 	src/core/ascending.js \
 	src/core/descending.js \
 	src/core/min.js \

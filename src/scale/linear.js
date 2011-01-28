@@ -5,7 +5,8 @@ d3.scale.linear = function() {
       y1 = 1,
       kx = 1 / (x1 - x0),
       ky = (x1 - x0) / (y1 - y0),
-      i = d3.interpolate(y0, y1);
+      interpolate = d3.interpolate,
+      i = interpolate(y0, y1);
 
   function scale(x) {
     return i((x - x0) * kx);
@@ -15,7 +16,6 @@ d3.scale.linear = function() {
     return (y - y0) * ky + x0; // TODO assumes number?
   };
 
-  /** @param {*=} x */
   scale.domain = function(x) {
     if (!arguments.length) return [x0, x1];
     x0 = x[0];
@@ -25,13 +25,22 @@ d3.scale.linear = function() {
     return scale;
   };
 
-  /** @param {*=} x */
   scale.range = function(x) {
     if (!arguments.length) return [y0, y1];
     y0 = x[0];
     y1 = x[1];
     ky = (x1 - x0) / (y1 - y0);
-    i = d3.interpolate(y0, y1); // TODO allow override?
+    i = interpolate(y0, y1);
+    return scale;
+  };
+
+  scale.rangeRound = function(x) {
+    return scale.range(x).interpolate(d3.interpolateRound);
+  };
+
+  scale.interpolate = function(x) {
+    if (!arguments.length) return interpolate;
+    i = (interpolate = x)(y0, y1);
     return scale;
   };
 

@@ -48,6 +48,18 @@ d3.scale.ordinal = function() {
     return scale;
   };
 
+  scale.rangeRoundBands = function(x, padding) {
+    if (arguments.length < 2) padding = 0;
+    var start = x[0],
+        stop = x[1],
+        diff = stop - start,
+        step = Math.floor(diff / (domain.length + padding)),
+        err = diff - (domain.length - padding) * step;
+    range = d3.range(start + Math.round(err / 2), stop, step);
+    rangeBand = Math.round(step * (1 - padding));
+    return scale;
+  };
+
   scale.rangeBand = function() {
     return rangeBand;
   };

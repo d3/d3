@@ -1,5 +1,6 @@
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),
+      tick = d3.scale.linear(), // TODO better tick formatting...
       p = 1,
       b = 1 / p;
 
@@ -15,34 +16,22 @@ d3.scale.pow = function() {
     return linear(powp(x));
   }
 
-  function tick() {
-    return d3.scale.linear().domain(scale.domain());
-  }
-
   scale.invert = function(x) {
     return powb(linear.invert(x));
   };
 
-  /** @param {*=} x */
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(powb);
     linear.domain(x.map(powp));
+    tick.domain(x);
     return scale;
   };
 
-  scale.range = function() {
-    var x = linear.range.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
-
-  // TODO better tick formatting...
-  scale.ticks = function(m) {
-    return tick().ticks(m);
-  };
-
-  scale.tickFormat = function(m) {
-    return tick().tickFormat(m);
-  };
+  scale.range = d3_rebind(scale, linear.range);
+  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
+  scale.inteprolate = d3_rebind(scale, linear.interpolate);
+  scale.ticks = tick.ticks;
+  scale.tickFormat = tick.tickFormat;
 
   scale.exponent = function(x) {
     if (!arguments.length) return p;
