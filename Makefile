@@ -15,4 +15,4 @@ all: \
 %.js: Makefile
 	@rm -f $@
 	git cat-file blob master:$@ > $@
-	@chmod a-w $@
+	@chmod u+w $@

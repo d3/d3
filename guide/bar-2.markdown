@@ -28,23 +28,21 @@ title: A Bar Chart, Part 2
 <script type="text/javascript">
 
 var n = 33,
-    w = 660,
+    w = 20,
     h = 80,
     data = d3.range(n).map(next);
 
-var x = d3.scale.ordinal()
-    .domain(d3.range(n))
-    .rangeRoundBands([0, w]);
+var x = d3.scale.linear()
+    .range([0, w]);
 
 var y = d3.scale.linear()
     .domain([0, 100])
-    .range([0, h])
-    .interpolate(d3.interpolateRound);
+    .rangeRound([0, h]);
 
 var chart = d3.select(".content")
   .append("svg:svg")
     .attr("class", "chart")
-    .attr("width", w)
+    .attr("width", w * n - 1)
     .attr("height", h);
 
 chart.selectAll("rect")
@@ -52,12 +50,12 @@ chart.selectAll("rect")
   .enter("svg:rect")
     .attr("x", function(d, i) { return x(i) - .5; })
     .attr("y", function(d) { return h - y(d.value) - .5; })
-    .attr("width", x.rangeBand())
+    .attr("width", w)
     .attr("height", function(d) { return y(d.value); });
 
 chart.append("svg:line")
     .attr("x1", 0)
-    .attr("x2", w - 1)
+    .attr("x2", w * n)
     .attr("y1", h - .5)
     .attr("y2", h - .5)
     .attr("stroke", "#000");
@@ -75,32 +73,128 @@ function next() {
 
 <script type="text/javascript">
 
-var chart = d3.select(".content")
+var chart1 = d3.select(".content")
   .append("svg:svg")
     .attr("class", "chart")
-    .attr("width", w)
+    .attr("width", w * n - 1)
     .attr("height", h);
 
-var g = chart.append("svg:g");
+var g1 = chart1.append("svg:g");
 
-chart.append("svg:line")
+chart1.append("svg:line")
     .attr("x1", 0)
-    .attr("x2", w - 1)
+    .attr("x2", w * n)
     .attr("y1", h - .5)
     .attr("y2", h - .5)
     .attr("stroke", "#000");
 
-redraw();
+redraw1();
 
-setInterval(function() {
-  data.shift();
-  data.push(next());
-  redraw();
-}, 1500);
+function redraw1() {
 
-function redraw() {
+  var rect = g1.selectAll("rect")
+      .data(data);
 
-  var rect = g.selectAll("rect")
+  rect.enter("svg:rect")
+      .attr("opacity", 1e-6)
+      .attr("x", function(d, i) { return x(i) - .5; })
+      .attr("y", function(d) { return h - y(d.value) - .5; })
+      .attr("width", w)
+      .attr("height", function(d) { return y(d.value); })
+    .transition()
+      .duration(1000)
+      .attr("opacity", 1);
+
+  rect.transition()
+      .duration(1000)
+      .attr("opacity", 1)
+      .attr("y", function(d) { return h - y(d.value) - .5; })
+      .attr("height", function(d) { return y(d.value); });
+
+  rect.exit().transition()
+      .duration(1000)
+      .attr("opacity", 1e-6)
+      .remove();
+
+}
+
+</script>
+
+<script type="text/javascript">
+
+var chart2 = d3.select(".content")
+  .append("svg:svg")
+    .attr("class", "chart")
+    .attr("width", w * n - 1)
+    .attr("height", h);
+
+var g2 = chart2.append("svg:g");
+
+chart2.append("svg:line")
+    .attr("x1", 0)
+    .attr("x2", w * n)
+    .attr("y1", h - .5)
+    .attr("y2", h - .5)
+    .attr("stroke", "#000");
+
+redraw2();
+
+function redraw2() {
+
+  var rect = g2.selectAll("rect")
+      .data(data, {
+        nodeKey: function(n) { return n.getAttribute("key"); },
+        dataKey: function(d) { return d.time; }
+      });
+
+  rect.enter("svg:rect")
+      .attr("key", function(d) { return d.time; })
+      .attr("x", function(d, i) { return x(i + 1) - .5; })
+      .attr("y", function(d) { return h - y(d.value) - .5; })
+      .attr("width", w)
+      .attr("height", function(d) { return y(d.value); })
+    .transition()
+      .duration(1000)
+      .attr("x", function(d, i) { return x(i) - .5; });
+
+  rect.transition()
+      .duration(1000)
+      .attr("x", function(d, i) { return x(i) - .5; })
+      .attr("y", function(d) { return h - y(d.value) - .5; })
+      .attr("width", w)
+      .attr("height", function(d) { return y(d.value); });
+
+  rect.exit().transition()
+      .duration(1000)
+      .attr("x", function(d, i) { return x(i - 1) - .5; })
+      .remove();
+
+}
+
+</script>
+
+<script type="text/javascript">
+
+var chart3 = d3.select(".content")
+  .append("svg:svg")
+    .attr("class", "chart")
+    .attr("width", w * n - 1)
+    .attr("height", h);
+
+var g3 = chart3.append("svg:g");
+
+chart3.append("svg:line")
+    .attr("x1", 0)
+    .attr("x2", w * n)
+    .attr("y1", h - .5)
+    .attr("y2", h - .5)
+    .attr("stroke", "#000");
+
+redraw3();
+
+function redraw3() {
+
+  var rect = g3.selectAll("rect")
       .data(data, {
         nodeKey: function(n) { return n.getAttribute("key"); },
         dataKey: function(d) { return d.time; }
@@ -111,33 +205,49 @@ function redraw() {
       .attr("key", function(d) { return d.time; })
       .attr("x", function(d, i) { return x(i) - 5.5; })
       .attr("y", function(d) { return h - y(d.value) - 5.5; })
-      .attr("width", x.rangeBand() + 10)
+      .attr("width", w + 10)
       .attr("height", function(d) { return y(d.value) + 10; })
+      .style("fill", "green")
     .transition()
       .duration(1000)
       .attr("opacity", 1)
       .attr("x", function(d, i) { return x(i) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
-      .attr("width", x.rangeBand())
+      .attr("width", w)
       .attr("height", function(d) { return y(d.value); })
+      .style("fill", "steelblue");
 
   rect.transition()
       .duration(1000)
       .attr("opacity", 1)
       .attr("x", function(d, i) { return x(i) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
-      .attr("width", x.rangeBand())
-      .attr("height", function(d) { return y(d.value); });
+      .attr("width", w)
+      .attr("height", function(d) { return y(d.value); })
+      .style("fill", "steelblue");
 
   rect.exit().transition()
       .duration(1000)
       .attr("opacity", 1e-6)
       .attr("x", function(d, i) { return x(i) - 5.5; })
       .attr("y", function(d) { return h - y(d.value) - 5.5; })
-      .attr("width", x.rangeBand() + 10)
+      .attr("width", w + 10)
       .attr("height", function(d) { return y(d.value) + 10; })
+      .style("fill", "brown")
       .remove();
 
 }
+
+</script>
+
+<script type="text/javascript">
+
+setInterval(function() {
+  data.shift();
+  data.push(next());
+  redraw1();
+  redraw2();
+  redraw3();
+}, 1500);
 
 </script>

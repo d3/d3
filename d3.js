@@ -13,6 +13,13 @@ function d3_array(psuedoarray) {
 function d3_functor(v) {
   return typeof v == "function" ? v : function() { return v; };
 }
+// A getter-setter method that preserves the appropriate `this` context.
+function d3_rebind(object, method) {
+  return function() {
+    var x = method.apply(object, arguments);
+    return arguments.length ? object : x;
+  };
+}
 d3.ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
 };
@@ -1786,6 +1793,10 @@ d3.scale.linear = function() {
     return scale;
   };
 
+  scale.rangeRound = function(x) {
+    return scale.range(x).interpolate(d3.interpolateRound);
+  };
+
   scale.interpolate = function(x) {
     if (!arguments.length) return interpolate;
     i = (interpolate = x)(y0, y1);
@@ -1850,15 +1861,9 @@ d3.scale.log = function() {
     return scale;
   };
 
-  scale.range = function() {
-    var x = linear.range.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
-
-  scale.interpolate = function() {
-    var x = linear.interpolate.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
+  scale.range = d3_rebind(scale, linear.range);
+  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
+  scale.interpolate = d3_rebind(scale, linear.interpolate);
 
   scale.ticks = function() {
     var d = linear.domain(),
@@ -1880,6 +1885,7 @@ d3.scale.log = function() {
 };
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),
+      tick = d3.scale.linear(), // TODO better tick formatting...
       p = 1,
       b = 1 / p;
 
@@ -1895,10 +1901,6 @@ d3.scale.pow = function() {
     return linear(powp(x));
   }
 
-  function tick() {
-    return d3.scale.linear().domain(scale.domain());
-  }
-
   scale.invert = function(x) {
     return powb(linear.invert(x));
   };
@@ -1906,27 +1908,15 @@ d3.scale.pow = function() {
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(powb);
     linear.domain(x.map(powp));
+    tick.domain(x);
     return scale;
   };
 
-  scale.range = function() {
-    var x = linear.range.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
-
-  scale.interpolate = function() {
-    var x = linear.interpolate.apply(linear, arguments);
-    return arguments.length ? scale : x;
-  };
-
-  // TODO better tick formatting...
-  scale.ticks = function(m) {
-    return tick().ticks(m);
-  };
-
-  scale.tickFormat = function(m) {
-    return tick().tickFormat(m);
-  };
+  scale.range = d3_rebind(scale, linear.range);
+  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
+  scale.inteprolate = d3_rebind(scale, linear.interpolate);
+  scale.ticks = tick.ticks;
+  scale.tickFormat = tick.tickFormat;
 
   scale.exponent = function(x) {
     if (!arguments.length) return p;
