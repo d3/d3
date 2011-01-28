@@ -34,11 +34,12 @@ var n = 33,
 
 var x = d3.scale.ordinal()
     .domain(d3.range(n))
-    .rangeBands([0, w]);
+    .rangeRoundBands([0, w]);
 
 var y = d3.scale.linear()
     .domain([0, 100])
-    .range([0, h]);
+    .range([0, h])
+    .interpolate(d3.interpolateRound);
 
 var chart = d3.select(".content")
   .append("svg:svg")
@@ -49,10 +50,10 @@ var chart = d3.select(".content")
 chart.selectAll("rect")
     .data(data)
   .enter("svg:rect")
-    .attr("x", function(d, i) { return ~~x(i) - .5; })
-    .attr("y", function(d) { return h - ~~y(d.value) - .5; })
-    .attr("width", ~~x.rangeBand() - 1)
-    .attr("height", function(d) { return ~~y(d.value); });
+    .attr("x", function(d, i) { return x(i) - .5; })
+    .attr("y", function(d) { return h - y(d.value) - .5; })
+    .attr("width", x.rangeBand())
+    .attr("height", function(d) { return y(d.value); });
 
 chart.append("svg:line")
     .attr("x1", 0)
@@ -108,33 +109,33 @@ function redraw() {
   rect.enter("svg:rect")
       .attr("opacity", 1e-6)
       .attr("key", function(d) { return d.time; })
-      .attr("x", function(d, i) { return ~~x(i) - 5.5; })
-      .attr("y", function(d) { return h - ~~y(d.value) - 5.5; })
-      .attr("width", ~~x.rangeBand() + 9)
-      .attr("height", function(d) { return ~~y(d.value) + 10; })
+      .attr("x", function(d, i) { return x(i) - 5.5; })
+      .attr("y", function(d) { return h - y(d.value) - 5.5; })
+      .attr("width", x.rangeBand() + 10)
+      .attr("height", function(d) { return y(d.value) + 10; })
     .transition()
       .duration(1000)
       .attr("opacity", 1)
-      .attr("x", function(d, i) { return ~~x(i) - .5; })
-      .attr("y", function(d) { return h - ~~y(d.value) - .5; })
-      .attr("width", ~~x.rangeBand() - 1)
-      .attr("height", function(d) { return ~~y(d.value); })
+      .attr("x", function(d, i) { return x(i) - .5; })
+      .attr("y", function(d) { return h - y(d.value) - .5; })
+      .attr("width", x.rangeBand())
+      .attr("height", function(d) { return y(d.value); })
 
   rect.transition()
       .duration(1000)
       .attr("opacity", 1)
-      .attr("x", function(d, i) { return ~~x(i) - .5; })
-      .attr("y", function(d) { return h - ~~y(d.value) - .5; })
-      .attr("width", ~~x.rangeBand() - 1)
-      .attr("height", function(d) { return ~~y(d.value); });
+      .attr("x", function(d, i) { return x(i) - .5; })
+      .attr("y", function(d) { return h - y(d.value) - .5; })
+      .attr("width", x.rangeBand())
+      .attr("height", function(d) { return y(d.value); });
 
   rect.exit().transition()
       .duration(1000)
       .attr("opacity", 1e-6)
-      .attr("x", function(d, i) { return ~~x(i) - 5.5; })
-      .attr("y", function(d) { return h - ~~y(d.value) - 5.5; })
-      .attr("width", ~~x.rangeBand() + 9)
-      .attr("height", function(d) { return ~~y(d.value) + 10; })
+      .attr("x", function(d, i) { return x(i) - 5.5; })
+      .attr("y", function(d) { return h - y(d.value) - 5.5; })
+      .attr("width", x.rangeBand() + 10)
+      .attr("height", function(d) { return y(d.value) + 10; })
       .remove();
 
 }
