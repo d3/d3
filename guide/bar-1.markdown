@@ -1,9 +1,9 @@
 ---
-layout: vis
-title: Visualization
+layout: guide
+title: A Bar Chart, Part 1
 ---
 
-# d3.js ~ Visualization
+# d3.js ~ A Bar Chart, Part 1
 
 ## Data-Driven Documents
 
