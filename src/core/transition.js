@@ -172,6 +172,7 @@ function d3_transition(groups) {
   };
 
   transition.styleTween = function(name, tween, priority) {
+    if (arguments.length < 3) priority = null;
 
     /** @this {Element} */
     function styleTween(d, i) {
@@ -186,6 +187,7 @@ function d3_transition(groups) {
   };
 
   transition.style = function(name, value, priority) {
+    if (arguments.length < 3) priority = null;
     return transition.styleTween(name, d3_tween(value), priority);
   };
 
