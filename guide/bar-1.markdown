@@ -44,9 +44,9 @@ var data = [4, 8, 15, 16, 23, 42];
 var data = [4, 8, 15, 16, 23, 42];
 </script>
 
-One of the ways you might visualize this univariate data is a bar chart. Let's
-examine how to create bar charts using D3, first with basic HTML, and then a
-more advanced example with SVG.
+One of the ways you might visualize this univariate data is a bar chart. This
+guide will examine how to create a simple bar chart using D3, first with basic
+HTML, and then a more advanced example with SVG.
 
 ### HTML
 
@@ -58,12 +58,34 @@ var chart = d3.select("body")
     .attr("class", "chart");
 {% endhighlight %}
 
-This code selects the document body, which will be the parent node of the new
-`div` element that serves as the chart container. The chart container is then
-appended to the end of the body, becoming the body's last child. By setting the
-"class" attribute, you can easily define associated styles, such as the
-background color and font size. The `attr` operator returns the current
-selection, thus the `chart` variable refers to the chart container element.
+This code selects the document body, which will be the parent of the new chart.
+Every visible node needs a parent, with the exception of the document's root
+node. The chart container, a `div` element, is then created and appended to the
+body. The `append` operator adds the new node as the last child: the chart will
+appear at the end of the body.
+
+The `attr` operator sets the "class" attribute on the chart container, allowing
+stylesheets to be applied to the chart elements. This is convenient for static
+styles, such as the background color and font size. CSS code lives in a `style`
+element or an external stylesheet referenced by a `link` element, rather than
+the `script` element used for JavaScript:
+
+{% highlight css linenos %}
+.chart div {
+  font: 10px sans-serif;
+  background-color: steelblue;
+  text-align: right;
+  padding: 3px;
+  margin: 1px;
+  color: white;
+}
+{% endhighlight %}
+
+D3 uses the [method chaining](http://en.wikipedia.org/wiki/Method_chaining)
+design pattern. Above, setting the attribute returns the current selection, and
+the `chart` variable thus refers to the chart container element. This approach
+minimizes the amount of code needed to apply many selections and transformations
+in sequence.
 
 Next, add some `div` elements to the container, setting the width by scaling the
 data:
@@ -76,11 +98,11 @@ chart.selectAll("div")
     .text(function(d) { return d; });
 {% endhighlight %}
 
-As above, you can use the `text` operator to set the text content of the bars.
-The identity function, `function(d) { return d; }`, causes each data value to be
-formatted using JavaScript's default string conversion, equivalent to the
-built-in `String` function. This may be ugly for some numbers (*e.g.*,
-0.12000000000000001). The `d3.format` class, modeled after Python's [string
+The `text` operator sets the text content of the bars. The identity function,
+`function(d) { return d; }`, causes each data value to be formatted using
+JavaScript's default string conversion, equivalent to the built-in `String`
+function. This may be ugly for some numbers (*e.g.*, 0.12000000000000001). The
+`d3.format` class, modeled after Python's [string
 formatting](http://docs.python.org/library/stdtypes.html#string-formatting), is
 available for more control over how the number is formatted, supporting
 comma-grouping of thousands and fixed precision.
@@ -98,11 +120,13 @@ d3.select(".content")
     .text(function(d) { return d; });
 </script>
 
-One weakness of the code so far is the magic number 10, which scales the data
-value to the appropriate bar width. This number depends on the *domain* of the
-data (the maximum value, 42), and the width of the chart (420). To avoid
+One weakness of the code so far is the [magic number][1] 10, which scales the
+data value to the appropriate bar width. This number depends on the *domain* of
+the data (the maximum value, 42), and the width of the chart (420). To avoid
 hard-coding the *x*-scale of 10, you can use D3's linear scale class, and
 compute the maximum value from the data:
+
+[1]: http://en.wikipedia.org/wiki/Magic_number_(programming)#Unnamed_numerical_constants
 
 {% highlight js linenos %}
 var x = d3.scale.linear()
@@ -189,6 +213,17 @@ chart.selectAll("rect")
     .attr("y", function(d, i) { return i * 20; })
     .attr("width", x)
     .attr("height", 20);
+{% endhighlight %}
+
+Also, the CSS changes slightly when using SVG. Rather than the background, the
+fill determines the bar color. You can also apply a white border to each bar by
+setting the stroke style:
+
+{% highlight css linenos %}
+.chart rect {
+  stroke: white;
+  fill: steelblue;
+}
 {% endhighlight %}
 
 The SVG-based chart is now almost identical to our original. The chart is
