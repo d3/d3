@@ -46,12 +46,35 @@ a:hover {
   margin: auto;
 }
 
-.content .gallery img {
-  display: inline-block;
+.content .gallery img, .content .list img {
+  display: inline;
   width: 200px;
   height: 180px;
   border: solid 2px #ccc;
   margin: 4px;
+}
+
+.content .gallery a:hover img, .content .list a:hover img {
+  border-color: steelblue;
+}
+
+.content .list {
+  clear: both;
+}
+
+.content .list div {
+  margin-right: 12px;
+  float: left;
+}
+
+.content .list .desc {
+  width: 486px;
+  margin-right: 0;
+}
+
+.content .list h4 {
+  font-weight: normal;
+  margin: 0;
 }
 
 h1 {

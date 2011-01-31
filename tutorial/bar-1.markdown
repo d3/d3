@@ -1,5 +1,5 @@
 ---
-layout: guide
+layout: tutorial
 title: A Bar Chart, Part 1
 ---
 
@@ -288,19 +288,18 @@ chart.selectAll("text")
     .data(data)
   .enter("svg:text")
     .attr("x", x)
-    .attr("y", y)
+    .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })
     .attr("dx", -3) // padding-right
-    .attr("dy", y.rangeBand() / 2) // vertical-align: middle
-    .attr("dominant-baseline", "central") // vertical-align: middle
+    .attr("dy", ".35em") // vertical-align: middle
     .attr("text-anchor", "end") // text-align: right
     .text(String);
 {% endhighlight %}
 
 The formal [SVG Text](http://www.w3.org/TR/SVG/text.html) specification
-describes in detail the meaning of the "dx", "dy", "dominant-baseline" and
-"text-anchor" attributes. The full spec is dense, as SVG offers a level of
-control required by only the most ambitious typographers; that said, hopefully
-it's not too hard to remember standard settings for alignment and padding!
+describes in detail the meaning of the "dx", "dy" and "text-anchor" attributes.
+The full spec is dense, as SVG offers a level of control required by only the
+most ambitious typographers; that said, hopefully it's not too hard to remember
+standard settings for alignment and padding!
 
 The SVG chart now looks identical to the earlier HTML version:
 
@@ -323,10 +322,9 @@ chart.selectAll("text")
   .enter("svg:text")
     .attr("class", "bar")
     .attr("x", x)
-    .attr("y", y)
+    .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })
     .attr("dx", -3)
-    .attr("dy", y.rangeBand() / 2)
-    .attr("dominant-baseline", "central")
+    .attr("dy", ".35em")
     .attr("text-anchor", "end")
     .text(String);
 </script>
@@ -436,10 +434,9 @@ chart.selectAll("text.bar")
   .enter("svg:text")
     .attr("class", "bar")
     .attr("x", x)
-    .attr("y", y)
+    .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })
     .attr("dx", -3)
-    .attr("dy", y.rangeBand() / 2)
-    .attr("dominant-baseline", "central")
+    .attr("dy", ".35em")
     .attr("text-anchor", "end")
     .text(String);
 

@@ -10,14 +10,14 @@ layout: default
 JavaScript library for manipulating documents based on data.
 
 <div class="gallery">
-  <img src="calendar.png">
-  <img src="chord.png">
-  <img src="choropleth.png">
-  <img src="force.png">
-  <img src="splom.png">
-  <img src="stack.png">
-  <img src="stream.png">
-  <img src="voronoi.png">
+  <a title="Calendar View" href="ex/calendar.html"><img src="calendar.png"></a>
+  <a title="Chord Diagram" href="ex/chord.html"><img src="chord.png"></a>
+  <a title="Choropleth Map" href="ex/choropleth.html"><img src="choropleth.png"></a>
+  <a title="Force-Directed Graph" href="ex/force.html"><img src="force.png"></a>
+  <a title="Scatterplot Matrix" href="ex/splom.html"><img src="splom.png"></a>
+  <a title="Stacked Bars" href="ex/stack.html"><img src="stack.png"></a>
+  <a title="Streamgraph" href="ex/stream.html"><img src="stream.png"></a>
+  <a title="Voronoi Diagram" href="ex/voronoi.html"><img src="voronoi.png"></a>
 </div>
 
 D3 allows you to bind arbitrary data to a Document Object Model (DOM), and then
@@ -385,12 +385,23 @@ albums.
 
 ### Data Joins
 
-With simple documents, it may suffice to map data elements to nodes by index.
-However, more complicated manipulations require a *join* specification. A data
-join consists of two functions: a function that maps data to a unique string
-key, and a function that maps nodes to the corresponding key. When the key for a
-datum and a node are equal, the node and the datum are joined. For example, to
-join the data attribute `key` with the node attribute of the same name:
+With simple documents, it often suffices to map data elements to nodes by index.
+For more control, you can provide an optional *join* as the second argument to
+the `data` operator; the join specifies how nodes are bound to data, by matching
+string keys.
+
+The join implicitly affects the enter and exit selections: the data for which
+there is no corresponding key in the nodes become the enter selection, and the
+nodes for which there is no corresponding key in the data become the exit
+selection. The remaining nodes and data that share keys become the default
+update selection. Thus, the join also controls which nodes enter and exit when
+rebinding data!
+
+A data join consists of two functions: a function that maps data to a unique
+string key, and a function that maps nodes to the corresponding key. When the
+key for a datum and a node are equal, the node and the datum are joined. For
+example, to join the data attribute `id` with the node attribute of the same
+name:
 
 {% highlight js linenos %}
 d3.selectAll("ul")
@@ -399,12 +410,6 @@ d3.selectAll("ul")
       dataKey: function(d) { return d.id; }
     });
 {% endhighlight %}
-
-If no join is specified, then the default join is by index. The data for which
-there is no corresponding key in the nodes become the enter selection, and the
-nodes for which there is no corresponding key in the data become the exit
-selection; the remaining nodes and data that share keys become the default
-update selection.
 
 To continue the previous example of a multiple-choice test, here is the skeleton
 code to update the state of the document to match the array of questions:

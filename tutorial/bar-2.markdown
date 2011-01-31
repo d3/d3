@@ -1,5 +1,5 @@
 ---
-layout: guide
+layout: tutorial
 title: A Bar Chart, Part 2
 ---
 
