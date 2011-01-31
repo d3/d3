@@ -1,0 +1,16 @@
+#chart {
+  font: 10px sans-serif;
+}
+
+.day {
+  fill: none;
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+  shape-rendering: crispEdges;
+}
