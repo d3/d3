@@ -25,19 +25,25 @@ INCLUDE_FILES = \
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
 $(SRC_FILES):
+	@rm -rf $@
 	git cat-file blob master:$(subst ../,,$@) > $@
 
 ../ex/calendar.js:
+	@rm -rf $@
 	git cat-file blob master:examples/calendar/calendar.js > $@
 
 ../ex/calendar.css:
+	@rm -rf $@
 	git cat-file blob master:examples/calendar/calendar.css > $@
 
 ../ex/dji.js dji.js:
+	@rm -rf $@
 	git cat-file blob master:examples/calendar/dji.js > $@
 
 ../ex/dji.csv:
+	@rm -rf $@
 	git cat-file blob master:examples/calendar/dji.csv > $@
 
 ../ex/colorbrewer.css:
+	@rm -rf $@
 	git cat-file blob master:lib/colorbrewer/colorbrewer.css > $@

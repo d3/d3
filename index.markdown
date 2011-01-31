@@ -149,10 +149,9 @@ instantiate using the `enter` operator. This operator takes the name of the node
 to append to the document, such as "p" for paragraph elements:
 
 {% highlight js linenos %}
-d3.select("body")
-  .selectAll("p")
+d3.select("body").selectAll("p")
     .data([4, 8, 15, 16, 23, 42])
-  .enter("p")
+  .enter().append("p")
     .text(function(d) { return "I'm number " + d + "!"; });
 {% endhighlight %}
 
@@ -162,18 +161,16 @@ remove.
 
 {% highlight js linenos %}
 // Update…
-var p = d3.select("body")
-  .selectAll("p")
+var p = d3.select("body").selectAll("p")
     .data([4, 8, 15, 16, 23, 42])
     .text(String);
 
 // Enter…
-p.enter("p")
+p.enter().append("p")
     .text(String);
 
 // Exit…
-p.exit()
-  .remove();
+p.exit().remove();
 {% endhighlight %}
 
 By handling these three cases separately, you can perform only the necessary
@@ -383,33 +380,22 @@ whereas the corresponding index for the parent div elements is of the array of
 albums.
 -->
 
-### Data Joins
+### Data Keys
 
-With simple documents, it often suffices to map data elements to nodes by index.
-For more control, you can provide an optional *join* as the second argument to
-the `data` operator; the join specifies how nodes are bound to data, by matching
-string keys.
-
-The join implicitly affects the enter and exit selections: the data for which
-there is no corresponding key in the nodes become the enter selection, and the
-nodes for which there is no corresponding key in the data become the exit
-selection. The remaining nodes and data that share keys become the default
-update selection. Thus, the join also controls which nodes enter and exit when
-rebinding data!
-
-A data join consists of two functions: a function that maps data to a unique
-string key, and a function that maps nodes to the corresponding key. When the
-key for a datum and a node are equal, the node and the datum are joined. For
-example, to join the data attribute `id` with the node attribute of the same
-name:
+With static documents, it often suffices to map data elements to nodes by index.
+However, if your data changes you may need to rebind new data to existing nodes.
+In this case you provide a key function to the `data` operator; data is rebound
+to nodes by matching string keys on the old and new data. For example:
 
 {% highlight js linenos %}
 d3.selectAll("ul")
-    .data(data, {
-      nodeKey: function(n) { return n.getAttribute("id"); },
-      dataKey: function(d) { return d.id; }
-    });
+    .data(data, function(d) { return d.id; });
 {% endhighlight %}
+
+The key function also determines the enter and exit selections: the new data for
+which there is no corresponding key in the old data become the enter selection,
+and the old data for which there is no corresponding key in the new data become
+the exit selection. The remaining data become the default update selection.
 
 To continue the previous example of a multiple-choice test, here is the skeleton
 code to update the state of the document to match the array of questions:
@@ -417,21 +403,17 @@ code to update the state of the document to match the array of questions:
 {% highlight js linenos %}
 // Update…
 var ul = d3.selectAll("ul")
-    .data(questions, "id");
+    .data(data, function(d) { return d.id; });
 
 // Enter…
-ul.enter("ul")
-    .attr("id", function(d) { return d.id; });
+ul.enter().append("ul");
 
 // Exit…
-ul.exit()
-    .remove();
+ul.exit().remove();
 {% endhighlight %}
 
-The above example uses the shorthand syntax for the data join, in the case where
-the node attribute and data attribute have the same name. More concise
-specifications of the data join are under consideration for a future release,
-such as a data join defined only by the previously-bound data.
+For more on data keys, see [part 2](tutorial/bar-2.html) of the bar chart
+tutorial.
 
 ### Modules
 

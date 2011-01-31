@@ -93,7 +93,7 @@ data:
 {% highlight js linenos %}
 chart.selectAll("div")
     .data(data)
-  .enter("div")
+  .enter().append("div")
     .style("width", function(d) { return d * 10 + "px"; })
     .text(function(d) { return d; });
 {% endhighlight %}
@@ -115,7 +115,7 @@ d3.select(".content")
     .attr("class", "chart")
   .selectAll("div")
     .data(data)
-  .enter("div")
+  .enter().append("div")
     .style("width", function(d) { return d * 10 + "px"; })
     .text(function(d) { return d; });
 </script>
@@ -159,7 +159,7 @@ Using the new scale, you can simplify the width style definition:
 {% highlight js linenos %}
 chart.selectAll("div")
     .data(data)
-  .enter("div")
+  .enter().append("div")
     .style("width", x)
     .text(String);
 {% endhighlight %}
@@ -209,7 +209,7 @@ height explicitly:
 {% highlight js linenos %}
 chart.selectAll("rect")
     .data(data)
-  .enter("svg:rect")
+  .enter().append("svg:rect")
     .attr("y", function(d, i) { return i * 20; })
     .attr("width", x)
     .attr("height", 20);
@@ -237,7 +237,7 @@ d3.select(".content")
     .attr("height", 20 * data.length)
   .selectAll("rect")
     .data(data)
-  .enter("svg:rect")
+  .enter().append("svg:rect")
     .attr("y", function(d, i) { return i * 20; })
     .attr("width", x)
     .attr("height", 20);
@@ -273,7 +273,7 @@ The new scale plugs into the bar specification, replacing the "y" attribute:
 {% highlight js linenos %}
 chart.selectAll("rect")
     .data(data)
-  .enter("svg:rect")
+  .enter().append("svg:rect")
     .attr("y", y)
     .attr("width", x)
     .attr("height", y.rangeBand());
@@ -286,7 +286,7 @@ text:
 {% highlight js linenos %}
 chart.selectAll("text")
     .data(data)
-  .enter("svg:text")
+  .enter().append("svg:text")
     .attr("x", x)
     .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })
     .attr("dx", -3) // padding-right
@@ -312,14 +312,14 @@ var chart = d3.select(".content")
 
 chart.selectAll("rect")
     .data(data)
-  .enter("svg:rect")
+  .enter().append("svg:rect")
     .attr("y", y)
     .attr("width", x)
     .attr("height", y.rangeBand());
 
 chart.selectAll("text")
     .data(data)
-  .enter("svg:text")
+  .enter().append("svg:text")
     .attr("class", "bar")
     .attr("x", x)
     .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })
@@ -358,7 +358,7 @@ generate. These tick values serve as data for reference lines:
 {% highlight js linenos %}
 chart.selectAll("line")
     .data(x.ticks(10))
-  .enter("svg:line")
+  .enter().append("svg:line")
     .attr("x1", x)
     .attr("x2", x)
     .attr("y1", 0)
@@ -371,7 +371,7 @@ Positioning text above the reference lines reveals their value:
 {% highlight js linenos %}
 chart.selectAll("text.rule")
     .data(x.ticks(10))
-  .enter("svg:text")
+  .enter().append("svg:text")
     .attr("class", "rule")
     .attr("x", x)
     .attr("y", 0)
@@ -406,7 +406,7 @@ var chart = d3.select(".content")
 
 chart.selectAll("line")
     .data(x.ticks(10))
-  .enter("svg:line")
+  .enter().append("svg:line")
     .attr("x1", x)
     .attr("x2", x)
     .attr("y1", 0)
@@ -415,7 +415,7 @@ chart.selectAll("line")
 
 chart.selectAll("text.rule")
     .data(x.ticks(10))
-  .enter("svg:text")
+  .enter().append("svg:text")
     .attr("x", x)
     .attr("y", 0)
     .attr("dy", -3)
@@ -424,14 +424,14 @@ chart.selectAll("text.rule")
 
 chart.selectAll("rect")
     .data(data)
-  .enter("svg:rect")
+  .enter().append("svg:rect")
     .attr("y", y)
     .attr("width", x)
     .attr("height", y.rangeBand());
 
 chart.selectAll("text.bar")
     .data(data)
-  .enter("svg:text")
+  .enter().append("svg:text")
     .attr("class", "bar")
     .attr("x", x)
     .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })

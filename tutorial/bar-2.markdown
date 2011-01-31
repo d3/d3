@@ -66,7 +66,7 @@ var chart = d3.select(".content")
 
 chart.selectAll("rect")
     .data(data)
-  .enter("svg:rect")
+  .enter().append("svg:rect")
     .attr("x", function(d, i) { return x(i) - .5; })
     .attr("y", function(d) { return h - y(d.value) - .5; })
     .attr("width", w)
@@ -105,7 +105,7 @@ function redraw1() {
   var rect = g1.selectAll("rect")
       .data(data);
 
-  rect.enter("svg:rect")
+  rect.enter().append("svg:rect")
       .attr("x", function(d, i) { return x(i) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
       .attr("width", w)
@@ -145,13 +145,9 @@ redraw2();
 function redraw2() {
 
   var rect = g2.selectAll("rect")
-      .data(data, {
-        nodeKey: function(n) { return n.getAttribute("key"); },
-        dataKey: function(d) { return d.time; }
-      });
+      .data(data, function(d) { return d.time; });
 
-  rect.enter("svg:rect")
-      .attr("key", function(d) { return d.time; })
+  rect.enter().append("svg:rect")
       .attr("x", function(d, i) { return x(i + 1) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
       .attr("width", w)
@@ -197,14 +193,10 @@ redraw3();
 function redraw3() {
 
   var rect = g3.selectAll("rect")
-      .data(data, {
-        nodeKey: function(n) { return n.getAttribute("key"); },
-        dataKey: function(d) { return d.time; }
-      });
+      .data(data, function(d) { return d.time; });
 
-  rect.enter("svg:rect")
+  rect.enter().append("svg:rect")
       .attr("opacity", 1e-6)
-      .attr("key", function(d) { return d.time; })
       .attr("x", function(d, i) { return x(i) - 5.5; })
       .attr("y", function(d) { return h - y(d.value) - 5.5; })
       .attr("width", w + 10)
