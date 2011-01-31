@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Test - selectAll > enter > append</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
   </head>
   <body>
     <span></span>
@@ -11,7 +11,7 @@ d3.select("body")
   .selectAll("span")
     .data(["Test", "passed."])
     .text(function(d) { return d; })
-  .enter("span")
+  .enter().append("span")
     .text(function(d) { return d; });
 
     </script>

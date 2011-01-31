@@ -15,9 +15,6 @@ d3.selectAll = function(query) {
 };
 
 function d3_selection(groups) {
-  var i = -1,
-      n = groups.length,
-      group;
 
   function select(select) {
     var subgroups = [],
@@ -96,23 +93,9 @@ function d3_selection(groups) {
 
   // TODO data(null) for clearing data?
   groups.data = function(data, join) {
-    var i = -1,
-        n = groups.length,
-        group,
-        enter = [],
+    var enter = [],
         update = [],
         exit = [];
-
-    if (typeof join == "string") join = d3_selection_join(join);
-
-    // TODO support join as a function, based on previously-bound data?
-    // else if (typeof join == "function") {
-    //   var dataKey = join;
-    //   join = {
-    //     nodeKey: function(n) { return n.__data__ && dataKey(n.__data__); },
-    //     dataKey: dataKey
-    //   };
-    // }
 
     function bind(group, groupData) {
       var i = 0,
@@ -126,8 +109,19 @@ function d3_selection(groups) {
           node,
           nodeData;
 
-      function enterAppend(e) {
-        return group.parentNode.appendChild(e);
+      function enterNode(data) {
+        return {
+          __data__: data,
+          appendChild: function(a) {
+            return group.parentNode.appendChild(a);
+          },
+          insertBefore: function(a, b) {
+            return group.parentNode.insertBefore(a, b);
+          },
+          querySelector: function(a) {
+            return group.parentNode.querySelector(a);
+          }
+        };
       }
 
       if (join) {
@@ -138,7 +132,7 @@ function d3_selection(groups) {
             j = groupData.length;
 
         for (i = 0; i < n; i++) {
-          key = join.nodeKey(node = group[i]);
+          key = join.call(node = group[i], node.__data__, i);
           if (key in nodeByKey) {
             exitNodes[j++] = group[i];
           } else {
@@ -148,13 +142,13 @@ function d3_selection(groups) {
         }
 
         for (i = 0; i < m; i++) {
-          node = nodeByKey[key = join.dataKey(nodeData = groupData[i])];
+          node = nodeByKey[key = join.call(null, nodeData = groupData[i], i)];
           if (node) {
             node.__data__ = nodeData;
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
           } else {
-            enterNodes[i] = {appendChild: enterAppend, __data__: nodeData},
+            enterNodes[i] = enterNode(nodeData),
             updateNodes[i] = exitNodes[i] = null;
           }
           delete nodeByKey[key];
@@ -174,12 +168,12 @@ function d3_selection(groups) {
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
           } else {
-            enterNodes[i] = {appendChild: enterAppend, __data__: nodeData};
+            enterNodes[i] = enterNode(nodeData);
             updateNodes[i] = exitNodes[i] = null;
           }
         }
         for (; i < m; i++) {
-          enterNodes[i] = {appendChild: enterAppend, __data__: groupData[i]};
+          enterNodes[i] = enterNode(groupData[i]);
           updateNodes[i] = exitNodes[i] = null;
         }
         for (; i < n1; i++) {
@@ -203,6 +197,9 @@ function d3_selection(groups) {
       exit.push(exitNodes);
     }
 
+    var i = -1,
+        n = groups.length,
+        group;
     if (typeof data == "function") {
       while (++i < n) {
         bind(group = groups[i], data.call(group, group.parentData, i));
@@ -214,8 +211,8 @@ function d3_selection(groups) {
     }
 
     var selection = d3_selection(update);
-    selection.enter = function(name) {
-      return d3_selection(enter).append(name);
+    selection.enter = function() {
+      return d3_selection(enter);
     };
     selection.exit = function() {
       return d3_selection(exit);
@@ -246,6 +243,10 @@ function d3_selection(groups) {
     }
     return null;
   }
+
+  groups.empty = function() {
+    return !first(function() { return true; });
+  };
 
   groups.node = function() {
     return first(function() { return this; });
@@ -474,6 +475,27 @@ function d3_selection(groups) {
     return select(name.local ? appendNS : append);
   };
 
+  // TODO insert(node, function)?
+  // TODO insert(function, string)?
+  // TODO insert(function, function)?
+  groups.insert = function(name, before) {
+    name = d3.ns.qualify(name);
+
+    function insert(node) {
+      return node.insertBefore(
+          document.createElement(name),
+          node.querySelector(before));
+    }
+
+    function insertNS(node) {
+      return node.insertBefore(
+          document.createElementNS(name.space, name.local),
+          node.querySelector(before));
+    }
+
+    return select(name.local ? insertNS : insert);
+  };
+
   // TODO remove(query)?
   // TODO remove(node)?
   // TODO remove(function)?
@@ -526,14 +548,6 @@ function d3_selection(groups) {
   groups.call = d3_call;
 
   return groups;
-}
-
-// TODO support namespaces for key?
-function d3_selection_join(key) {
-  return {
-    nodeKey: function(node) { return node.getAttribute(key); },
-    dataKey: function(data) { return data[key]; }
-  };
 }
 
 function d3_selection_comparator(comparator) {

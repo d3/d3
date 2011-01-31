@@ -48,7 +48,7 @@ function transform() {
     .selectAll("circle")
       .data(d3.range(400).map(Math.random));
 
-  circle.enter("svg:circle")
+  circle.enter().append("svg:circle")
       .attr("cx", function() { return 100 + Math.random() * 800; })
       .attr("cy", function() { return 100 + Math.random() * 800; })
       .attr("r", function(d) { return 50 * d; });

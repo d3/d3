@@ -3,7 +3,7 @@
   <head>
     <title>Clustered Network</title>
     <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.geom.min.js"></script>
+    <script type="text/javascript" src="../../d3.geom.js"></script>
     <script type="text/javascript" src="force.js"></script>
     <style type="text/css">
 svg {
@@ -49,16 +49,6 @@ function linkid(l) {
   var u = nodeid(l.source),
       v = nodeid(l.target);
   return u<v ? u+"|"+v : v+"|"+u;
-}
-
-var nodeKeys = {
-  nodeKey: function(n) { return n.getAttribute("id"); },
-  dataKey: nodeid
-}
-
-var linkKeys = {
-  nodeKey: function(n) { return n.getAttribute("id"); },
-  dataKey: linkid
 }
 
 function getGroup(n) { return n.group; }
@@ -238,27 +228,25 @@ function init() {
   hullg.selectAll("path.hull").remove();
   hull = hullg.selectAll("path.hull")
      .data(convexHulls(net.nodes, getGroup, off))
-    .enter("svg:path")
+    .enter().append("svg:path")
      .attr("class", "hull")
      .attr("d", drawCluster)
      .on("dblclick", function(d) { expand[d.group] = false; init(); });
 
-  link = linkg.selectAll("line.link").data(net.links, linkKeys);
+  link = linkg.selectAll("line.link").data(net.links, linkid);
   link.exit().remove();
-  link.enter("svg:line")
-      .attr("id", linkid)
+  link.enter().append("svg:line")
       .attr("class", "link")
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; })
       .style("stroke-width", function(d) { return d.size || 1; });
-  link = linkg.selectAll("line.link").data(net.links, linkKeys);
+  link = linkg.selectAll("line.link");
 
-  node = nodeg.selectAll("circle.node").data(net.nodes, nodeKeys);
+  node = nodeg.selectAll("circle.node").data(net.nodes, nodeid);
   node.exit().remove();
-  node.enter("svg:circle")
-      .attr("id", nodeid)
+  node.enter().append("svg:circle")
       .attr("class", function(d) { return "node" + (d.size?"":" leaf"); })
       .attr("r", function(d) { return d.size ? d.size + dr : dr+1; })
       .attr("cx", function(d) { return d.x; })
@@ -267,13 +255,14 @@ function init() {
       .on("dblclick", function(d) {
         if (d.size) { expand[d.group] = true; init(); }
       });
-  node = nodeg.selectAll("circle.node").data(net.nodes, nodeKeys);
+  node = nodeg.selectAll("circle.node");
 
   force.on("tick", function() {
-    if (hull) {
+    if (!hull.empty()) {
       hull.data(convexHulls(net.nodes, getGroup, off))
           .attr("d", drawCluster);
-}
+    }
+
     link.attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })

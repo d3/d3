@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Hello, data!</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
     <style type="text/css">
 
 body, td {
@@ -45,10 +45,10 @@ function transform() {
     .selectAll("tr")
       .data(data);
 
-  t.enter("tr")
+  t.enter().append("tr")
     .selectAll("td")
       .data(function(d) { return d; })
-    .enter("td")
+    .enter().append("td")
       .style("background-color", function(d) { return "hsl(" + d + ",100%,50%)"; })
       .text(function(d) { return d; });
 

@@ -44,7 +44,7 @@ d3.json("../../data/us-states.json", function(collection) {
   svg.select("#states")
     .selectAll("path")
       .data(collection.features)
-    .enter("svg:path")
+    .enter().append("svg:path")
       .attr("d", d3.geo.path().projection(xy));
 });
 
@@ -53,7 +53,7 @@ d3.json("../../data/us-state-centroids.json", function(collection) {
     .selectAll("circle")
       .data(collection.features
       .sort(function(a, b) { return b.properties.population - a.properties.population; }))
-    .enter("svg:circle")
+    .enter().append("svg:circle")
       .attr("transform", function(d) { return "translate(" + xy(d.geometry.coordinates) + ")"; })
       .attr("r", 0)
     .transition()

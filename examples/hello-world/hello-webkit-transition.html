@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Hello, data!</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
     <style type="text/css">
 
 body {
@@ -44,7 +44,7 @@ var n = 10;
 d3.select("#cells")
   .selectAll("div")
     .data(d3.range(n))
-  .enter("div")
+  .enter().append("div")
     .attr("class", "cell")
     .style("left", function(i) { return i * 30; });
 

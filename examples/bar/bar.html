@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Bar Chart</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
     <style type="text/css">
 
 body {
@@ -33,7 +33,7 @@ var vis = d3.select("body")
 
 var bars = vis.selectAll("g.bar")
     .data(data)
-  .enter("svg:g")
+  .enter().append("svg:g")
     .attr("class", "bar")
     .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
 
@@ -61,7 +61,7 @@ bars.append("svg:text")
 
 var rules = vis.selectAll("g.rule")
     .data(x.ticks(10))
-  .enter("svg:g")
+  .enter().append("svg:g")
     .attr("class", "rule")
     .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 

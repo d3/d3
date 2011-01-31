@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Line Chart</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
     <style type="text/css">
 
 body {
@@ -52,7 +52,7 @@ var vis = d3.select("body")
 
 var rules = vis.selectAll("g.rule")
     .data(x.ticks(10))
-  .enter("svg:g")
+  .enter().append("svg:g")
     .attr("class", "rule");
 
 rules.append("svg:line")
@@ -90,7 +90,7 @@ vis.append("svg:path")
 
 vis.selectAll("circle.line")
     .data(data)
-  .enter("svg:circle")
+  .enter().append("svg:circle")
     .attr("class", "line")
     .attr("cx", function(d) { return x(d.x); })
     .attr("cy", function(d) { return y(d.y); })

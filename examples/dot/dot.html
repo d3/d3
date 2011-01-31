@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Dot Plot</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
     <style type="text/css">
 
 body {
@@ -47,7 +47,7 @@ var vis = d3.select("body")
 
 var rules = vis.selectAll("g.rule")
     .data(d3.range(11))
-  .enter("svg:g")
+  .enter().append("svg:g")
     .attr("class", "rule");
 
 rules.append("svg:line")
@@ -82,7 +82,7 @@ vis.append("svg:rect")
 
 var dots = vis.selectAll("circle.dot")
     .data(data)
-  .enter("svg:circle")
+  .enter().append("svg:circle")
     .attr("class", "dot")
     .attr("cx", function(d) { return d.x * w; })
     .attr("cy", function(d) { return d.y * h; })

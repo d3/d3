@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Test - select > enter > append</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
   </head>
   <body>
     <span></span>
@@ -13,14 +13,14 @@ var s = d3.select("body")
     .data("The test passed, hooray!".split(/\b/));
 
 // Add missing <span>s.
-s.enter("span")
+s.enter().append("span")
   .append("b")
     .text(function(d) { return d; });
 
 // Add missing <b>s.
 s.selectAll("b")
     .data(function(d) { return [d]; })
-  .enter("b")
+  .enter().append("b")
     .text(function(d) { return d; });
 
     </script>

@@ -88,13 +88,13 @@ var vis = d3.select("body")
 
 var layers = vis.selectAll("g.layer")
     .data(data)
-  .enter("svg:g")
+  .enter().append("svg:g")
     .attr("fill", function(d, i) { return color(i / (n - 1)); })
     .attr("class", "layer");
 
 var bars = layers.selectAll("g.bar")
     .data(function(d) { return d; })
-  .enter("svg:g")
+  .enter().append("svg:g")
     .attr("class", "bar")
     .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 
@@ -110,7 +110,7 @@ bars.append("svg:rect")
 
 var labels = vis.selectAll("text.label")
     .data(data[0])
-  .enter("svg:text")
+  .enter().append("svg:text")
     .attr("class", "label")
     .attr("x", x)
     .attr("y", h + 6)

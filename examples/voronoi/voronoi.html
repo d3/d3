@@ -3,8 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Voronoi Tesselation</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
-    <script type="text/javascript" src="../../d3.geom.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.geom.js"></script>
     <style type="text/css">
 
 @import url("../../lib/colorbrewer/colorbrewer.css");
@@ -46,13 +46,13 @@ var svg = d3.select("body")
 
 svg.selectAll("path")
     .data(d3.geom.voronoi(vertices))
-  .enter("svg:path")
+  .enter().append("svg:path")
     .attr("class", function(d, i) { return i ? "q" + (i % 9) + "-9" : null; })
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
 svg.selectAll("circle")
     .data(vertices.slice(1))
-  .enter("svg:circle")
+  .enter().append("svg:circle")
     .attr("transform", function(d) { return "translate(" + d + ")"; })
     .attr("r", 2);
 

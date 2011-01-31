@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Hello, data!</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
   </head>
   <body>
     Your lucky numbers are:<br>
@@ -21,12 +21,9 @@ transform();
 function transform() {
   var t = d3.select("body")
     .selectAll("span")
-      .data(data, {
-        nodeKey: function(n) { return n.getAttribute("id"); },
-        dataKey: function(d) { return "span-" + d.id; }
-      });
+      .data(data, function(d) { return d.id; });
 
-  t.enter("span")
+  t.enter().append("span")
       .attr("id", function(d) { return "span-" + d.id; })
     .append("svg:svg")
       .attr("width", 100)

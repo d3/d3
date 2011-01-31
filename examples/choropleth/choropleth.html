@@ -46,7 +46,7 @@ var states = svg.append("svg:g")
 d3.json("../../data/us-counties.json", function(json) {
   counties.selectAll("path")
       .data(json.features)
-    .enter("svg:path")
+    .enter().append("svg:path")
       .attr("class", data ? quantize : null)
       .attr("d", d3.geo.path());
 });
@@ -54,7 +54,7 @@ d3.json("../../data/us-counties.json", function(json) {
 d3.json("../../data/us-states.json", function(json) {
   states.selectAll("path")
       .data(json.features)
-    .enter("svg:path")
+    .enter().append("svg:path")
       .attr("d", d3.geo.path());
 });
 

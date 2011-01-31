@@ -42,14 +42,14 @@ var vis = d3.select("body")
 
 vis.selectAll("circle")
     .data(data)
-  .enter("svg:circle")
+  .enter().append("svg:circle")
     .attr("cx", function(d) { return d[0]; })
     .attr("cy", function(d) { return d[1]; })
     .attr("r", 4.5);
 
 vis.selectAll("rect")
     .data(quadtree(data))
-  .enter("svg:rect")
+  .enter().append("svg:rect")
     .attr("x", function(d) { return d.x; })
     .attr("y", function(d) { return d.y; })
     .attr("width", function(d) { return d.width; })

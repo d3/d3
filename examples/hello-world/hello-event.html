@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Hello, world!</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
   </head>
   <body>
     Your lucky numbers are:<br>
@@ -13,7 +13,7 @@ var data = [4, 8, 15, 16, 23, 42];
 d3.select("span")
   .selectAll("svg")
     .data(data)
-  .enter("svg:svg")
+  .enter().append("svg:svg")
     .attr("width", 100)
     .attr("height", 100)
   .append("svg:text")

@@ -1,7 +1,7 @@
 <html>
   <head>
     <title>Pie Chart</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
     <style type="text/css">
 
 body {
@@ -26,7 +26,7 @@ var vis = d3.select("body")
 
 var arcs = vis.selectAll("g.arc")
     .data(data)
-  .enter("svg:g")
+  .enter().append("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 

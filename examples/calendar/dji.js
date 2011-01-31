@@ -17,7 +17,7 @@ d3.csv("dji.csv", function(csv) {
   var vis = d3.select("#chart")
     .selectAll("svg")
       .data(d3.range(1990, 2011))
-    .enter("svg:svg")
+    .enter().append("svg:svg")
       .attr("width", w)
       .attr("height", h)
       .attr("class", "RdGy")
@@ -30,7 +30,7 @@ d3.csv("dji.csv", function(csv) {
 
   vis.selectAll("rect.day")
       .data(calendar.dates)
-    .enter("svg:rect")
+    .enter().append("svg:rect")
       .attr("x", function(d) { return d.week * z; })
       .attr("y", function(d) { return d.day * z; })
       .attr("class", function(d) { return "day q" + color(data[d.Date]) + "-9"; })
@@ -41,7 +41,7 @@ d3.csv("dji.csv", function(csv) {
 
   vis.selectAll("path.month")
       .data(calendar.months)
-    .enter("svg:path")
+    .enter().append("svg:path")
       .attr("class", "month")
       .attr("d", function(d) {
         return "M" + (d.firstWeek + 1) * z + "," + d.firstDay * z

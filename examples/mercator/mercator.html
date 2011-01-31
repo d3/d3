@@ -3,8 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Mercator Projection</title>
-    <script type="text/javascript" src="../../d3.min.js"></script>
-    <script type="text/javascript" src="../../d3.geo.min.js"></script>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.geo.js"></script>
     <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
     <style type="text/css">
@@ -61,7 +61,7 @@ d3.json("../../data/world-countries.json", function(collection) {
   states
     .selectAll("path")
       .data(collection.features)
-    .enter("svg:path")
+    .enter().append("svg:path")
       .attr("d", path)
     .append("svg:title")
       .text(function(d) { return d.properties.name; });

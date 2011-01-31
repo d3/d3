@@ -56,7 +56,7 @@ d3.json("unemployment.json", function(data) {
   // Instantiate `n` copies of the path with different offsets.
   svg.selectAll("use")
       .data(d3.range(n))
-    .enter("svg:use")
+    .enter().append("svg:use")
       .attr("class", function(d, i) { return "q" + i + "-" + n; })
       .attr("y", function(d, i) { return -(n - i - 1) * h; })
       .attr("xlink:href", "#area");
