@@ -15,11 +15,14 @@ SRC_FILES = \
 EX_FILES = \
 	../ex/calendar.js \
 	../ex/calendar.css \
+	../ex/chord.css \
+	../ex/chord.js \
+	../ex/colorbrewer.css \
 	../ex/dji.csv \
-	../ex/dji.js \
-	../ex/colorbrewer.css
+	../ex/dji.js
 
 INCLUDE_FILES = \
+	chord.js \
 	dji.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
@@ -36,6 +39,18 @@ $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/calendar.css > $@
 
+../ex/chord.css:
+	@rm -rf $@
+	git cat-file blob master:examples/chord/chord.css > $@
+
+../ex/chord.js chord.js:
+	@rm -rf $@
+	git cat-file blob master:examples/chord/chord.js > $@
+
+../ex/colorbrewer.css:
+	@rm -rf $@
+	git cat-file blob master:lib/colorbrewer/colorbrewer.css > $@
+
 ../ex/dji.js dji.js:
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/dji.js > $@
@@ -43,7 +58,3 @@ $(SRC_FILES):
 ../ex/dji.csv:
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/dji.csv > $@
-
-../ex/colorbrewer.css:
-	@rm -rf $@
-	git cat-file blob master:lib/colorbrewer/colorbrewer.css > $@
