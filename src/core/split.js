@@ -7,13 +7,12 @@ d3.split = function(array, f) {
   if (arguments.length < 2) f = d3_splitter;
   while (++i < n) {
     if (f.call(values, value = array[i], i)) {
-      arrays.push(values);
       values = [];
     } else {
+      if (!values.length) arrays.push(values);
       values.push(value);
     }
   }
-  arrays.push(values);
   return arrays;
 };
 
