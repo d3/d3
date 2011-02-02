@@ -142,7 +142,7 @@ function d3_selection(groups) {
         }
 
         for (i = 0; i < m; i++) {
-          node = nodeByKey[key = join.call(null, nodeData = groupData[i], i)];
+          node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
           if (node) {
             node.__data__ = nodeData;
             updateNodes[i] = node;
