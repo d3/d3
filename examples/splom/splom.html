@@ -77,21 +77,6 @@ d3.json("flowers.json", function(flower) {
       .attr("y1", function(d) { return d; })
       .attr("y2", function(d) { return d; });
 
-  // Dot plot.
-  var dot = row.selectAll("circle")
-      .data(cross(flower.values))
-    .enter().append("svg:circle")
-      .attr("cx", function(d) { return position[d.x.x](d.y[d.x.x]); })
-      .attr("cy", 0)
-      .attr("r", 3)
-      .attr("fill", function(d) { return color(d.y.species); })
-      .attr("fill-opacity", 1e-6)
-    .transition()
-      .duration(750)
-      .delay(function(d, i) { return i * 30; })
-      .attr("cy", function(d) { return size - position[d.x.y](d.y[d.x.y]); })
-      .attr("fill-opacity", .5);
-
   // Frame.
   row.append("svg:rect")
       .attr("x", padding / 2)
@@ -100,7 +85,89 @@ d3.json("flowers.json", function(flower) {
       .attr("height", size - padding)
       .attr("fill", "none")
       .attr("stroke", "#aaa")
-      .attr("stroke-width", 1.5);
+      .attr("stroke-width", 1.5)
+      .attr("pointer-events", "all")
+      .on("mousedown", mousedown);
+
+  // Dot plot.
+  var dot = row.selectAll("circle")
+      .data(cross(flower.values))
+    .enter().append("svg:circle")
+      .attr("cx", function(d) { return position[d.x.x](d.y[d.x.x]); })
+      .attr("cy", function(d) { return size - position[d.x.y](d.y[d.x.y]); })
+      .attr("r", 3)
+      .attr("fill", function(d) { return color(d.y.species); })
+      .attr("fill-opacity", .5)
+      .attr("pointer-events", "none");
+
+  d3.select(window)
+      .on("mousemove", mousemove)
+      .on("mouseup", mouseup);
+
+  var rect, x0, x1, count;
+
+  function mousedown() {
+    x0 = d3.svg.mouse(this);
+    count = 0;
+
+    rect = d3.select(this.parentNode)
+      .append("svg:rect")
+        .attr("fill", "#999")
+        .attr("fill-opacity", .5);
+  }
+
+  function mousemove() {
+    if (!rect) return;
+    x1 = d3.svg.mouse(rect.node());
+
+    x1[0] = Math.max(padding / 2, Math.min(size - padding / 2, x1[0]));
+    x1[1] = Math.max(padding / 2, Math.min(size - padding / 2, x1[1]));
+
+    var minx = Math.min(x0[0], x1[0]),
+        maxx = Math.max(x0[0], x1[0]),
+        miny = Math.min(x0[1], x1[1]),
+        maxy = Math.max(x0[1], x1[1]);
+
+    rect
+        .attr("x", minx - .5)
+        .attr("y", miny - .5)
+        .attr("width", maxx - minx + 1)
+        .attr("height", maxy - miny + 1);
+
+    var d = rect.node().__data__,
+        x = position[d.x],
+        y = position[d.y],
+        mins = x.invert(minx),
+        maxs = x.invert(maxx),
+        mint = y.invert(size - maxy),
+        maxt = y.invert(size - miny);
+
+    count = 0;
+    flower.values.forEach(function(v) {
+      count += v.on
+           = mins <= v[d.x]
+          && maxs >= v[d.x]
+          && mint <= v[d.y]
+          && maxt >= v[d.y];
+    });
+
+    svg.selectAll("circle")
+        .attr("fill", function(d) {
+          return d.y.on ? color(d.y.species) : "#ccc";
+        });
+  }
+
+  function mouseup() {
+    if (!rect) return;
+    rect.remove();
+    rect = null;
+
+    if (!count) svg.selectAll("circle")
+        .attr("fill", function(d) {
+          return color(d.y.species);
+        });
+  }
+
 });
 
 
