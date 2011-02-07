@@ -64,6 +64,12 @@ node. The chart container, a `div` element, is then created and appended to the
 body. The `append` operator adds the new node as the last child: the chart will
 appear at the end of the body.
 
+D3 uses the [method chaining](http://en.wikipedia.org/wiki/Method_chaining)
+design pattern. Above, setting the attribute returns the current selection, and
+the `chart` variable thus refers to the chart container element. This approach
+minimizes the amount of code needed to apply many selections and transformations
+in sequence.
+
 The `attr` operator sets the "class" attribute on the chart container, allowing
 stylesheets to be applied to the chart elements. This is convenient for static
 styles, such as the background color and font size. CSS code lives in a `style`
@@ -81,12 +87,6 @@ the `script` element used for JavaScript:
 }
 {% endhighlight %}
 
-D3 uses the [method chaining](http://en.wikipedia.org/wiki/Method_chaining)
-design pattern. Above, setting the attribute returns the current selection, and
-the `chart` variable thus refers to the chart container element. This approach
-minimizes the amount of code needed to apply many selections and transformations
-in sequence.
-
 Next, add some `div` elements to the container, setting the width by scaling the
 data:
 
@@ -98,11 +98,17 @@ chart.selectAll("div")
     .text(function(d) { return d; });
 {% endhighlight %}
 
+This code selects the child `div` elements of the chart container. This
+selection is empty because the container was just added. However, by binding
+this selection to the array of numbers via the `data` operator, you can obtain
+the *entering* selection—a set of placeholder nodes, one per data element, to
+which you can append the desired child nodes for each bar.
+
 The `text` operator sets the text content of the bars. The identity function,
-`function(d) { return d; }`, causes each data value to be formatted using
-JavaScript's default string conversion, equivalent to the built-in `String`
-function. This may be ugly for some numbers (*e.g.*, 0.12000000000000001). The
-`d3.format` class, modeled after Python's [string
+`function(d) { return d; }`, causes each data value (number) to be formatted
+using JavaScript's default string conversion, equivalent to the built-in
+`String` function. This may be ugly for some numbers (*e.g.*,
+0.12000000000000001). The `d3.format` class, modeled after Python's [string
 formatting](http://docs.python.org/library/stdtypes.html#string-formatting), is
 available for more control over how the number is formatted, supporting
 comma-grouping of thousands and fixed precision.
@@ -148,11 +154,10 @@ appropriate `px` units for CSS. D3's automatic interpolators detect the numbers
 within the strings, while retaining the constant remainder.
 
 The new scale arguably still has a magic number: 420px, the width of the chart.
-If you want to make the chart truly resizable, you can inspect the width of the
-chart container, `chart.style("width")`. Or, use percentages rather than pixels.
-In any case, the reusable scale makes the chart specification easier to
-modify—for example, you can easily replace the linear scale with a log or root
-scale.
+If you want to make the chart resizable, you can inspect the width of the chart
+container, `chart.style("width")`. Or, use percentages rather than pixels. In
+any case, the reusable scale makes the chart specification easier to modify—for
+example, you can easily replace the linear scale with a log or root scale.
 
 Using the new scale, you can simplify the width style definition:
 
@@ -298,8 +303,8 @@ chart.selectAll("text")
 The formal [SVG Text](http://www.w3.org/TR/SVG/text.html) specification
 describes in detail the meaning of the "dx", "dy" and "text-anchor" attributes.
 The full spec is dense, as SVG offers a level of control required by only the
-most ambitious typographers; that said, hopefully it's not too hard to remember
-standard settings for alignment and padding!
+most ambitious typographers; fortunately, it's not too hard to remember standard
+settings for alignment and padding!
 
 The SVG chart now looks identical to the earlier HTML version:
 
@@ -380,10 +385,10 @@ chart.selectAll("text.rule")
     .text(String);
 {% endhighlight %}
 
-Note that the rule labels are assigned the class "rule"; this avoids a collision
-with the value labels on each bar. Another way to avoid collision is to put
-reference labels in a separate `g` container. Lastly, add a single black line
-for the *y*-axis:
+Note that the rule labels are assigned the class "rule"; this avoids a selector
+collision with the value labels on each bar. (Another way to disambiguate is to
+put reference labels in a separate `g` container.) Lastly, add a single black
+line for the *y*-axis:
 
 {% highlight js linenos %}
 chart.append("svg:line")
@@ -448,4 +453,6 @@ chart.append("svg:line")
 
 This tutorial covered many of the core concepts in D3, including selections,
 dynamic properties, and scales. However, this only scratches the surface!
-Explore the examples gallery to learn more advanced techniques with D3.
+Continue reading [part 2](bar-2.html) to learn about transitions in dynamic
+visualizations. Or, explore the [examples gallery](../ex/) to see more advanced
+techniques with D3.
