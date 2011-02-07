@@ -17,6 +17,8 @@ at regular time intervals. For example, say you run a website, and want to track
 how many visitors find your ideas intriguing? A bar chart could show the number
 of visitors that subscribe to your newsletter in realtime!
 
+### Dynamic Data
+
 Now typically, the subscription data would be downloaded to the client via an
 HTTP request. You can poll the server to refresh the latest data every minute,
 or use [web sockets](http://www.w3.org/TR/websockets/) to stream data
@@ -73,12 +75,14 @@ The `shift` operation removes the first (oldest) element in the array, while the
 `push` appends after the last (newest) element. If you have a lot of data, a
 [circular buffer](http://en.wikipedia.org/wiki/Circular_buffer) will improve
 performance; with smaller data, the inefficiency of the `shift` operation is
-negligible and can be ignored.
+negligible and can be ignored. The `redraw` method is a function that you will
+define; we'll get to that shortly.
 
-The `redraw` method is a function that you will define; we'll get to that
-shortly. For now, the next step is to construct two scales, based on our
-knowledge of the dataset and the desired chart size. To fix the maximum bar size
-to 80×20, construct two linear scales:
+### Dynamic Bars
+
+For now, the next step is to construct two scales, based on our knowledge of the
+dataset and the desired chart size. To fix the maximum bar size to 80×20,
+construct two linear scales:
 
 {% highlight js linenos %}
 var w = 20,
@@ -292,16 +296,18 @@ function redraw1() {
 
 The redraw function is fairly trivial—reselect the `rect` elements, bind them to
 the new data, and then start a transition that updates the "y" and "height"
-attributes. Note that no enter and exit selection is needed! Without a data
-join, the data are joined to nodes by index. As the length of the data array is
-fixed at 33, the number of nodes never changes, and thus the enter and exit
-selections are always empty.
+attributes. No enter and exit selection is needed! Without a data join, the data
+are joined to nodes by index. As the length of the data array is fixed, the
+number of nodes never changes, and thus the enter and exit selections are always
+empty.
 
-Yet, the above animation is lacks object constancy through the transition: it
-does not convey the change in data accurately. Rather than updating values
-in-place, the bars should slide to the left, so that each bar corresponds to the
-same point in time across each transition. Do this using a data join, binding
-nodes to data by timestamp rather than index:
+### Object Constancy
+
+Yet, the above animation is poor because it lacks object constancy through the
+transition: it does not convey the changing data accurately. Rather than
+updating values in-place, the bars should slide to the left, so that each bar
+corresponds to the same point in time across the transition. Do this using a
+*data join*, to bind nodes to data by timestamp rather than index:
 
 {% highlight js linenos %}
 function redraw() {
@@ -330,11 +336,11 @@ function redraw() {
 
 With the new data join, we can no longer assume that the enter and exit
 selections are empty; instead, each contains exactly one bar upon redraw, as a
-new data point arrives and an old data point leaves. (If the data is irregular,
-multiple bars could enter and exit with each redraw.) So, the update is split to
-handle enter and exit separately. However, the update transition is actually
-simplified: we only transition the "x" attribute, as the "y" and "height"
-attributes are unchanged with object constancy!
+new data point arrives and an old data point leaves. (If using real data, don't
+assume regularity; multiple bars could enter and exit with each redraw.) So, the
+update is split to handle enter and exit separately. However, the update
+transition is actually simplified: we only transition the "x" attribute, as the
+"y" and "height" attributes do not change!
 
 Note that operations on the entering or exiting selection do *not* affect the
 updating selection. Thus, the transition defined on `rect` on L14 above includes
@@ -384,7 +390,8 @@ function redraw2() {
 The above implementation enters new bars immediately, while old bars are removed
 immediately. A common alternative is to fade, but in this case the most
 intuitive transition is for new bars to enter from the right, and old bars to
-exit to the left. Enter and exit can have transitions, too:
+exit to the left. Enter and exit can have transitions, too, which you can use to
+offset the index `i` to the *x*-scale:
 
 {% highlight js linenos %}
 function redraw() {
