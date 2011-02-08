@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.30.2"}; // semver
+(function(){d3 = {version: "0.30.3"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -636,9 +636,9 @@ function d3_rgb_hex(v) {
 }
 
 function d3_rgb_parse(format, rgb, hsl) {
-  var r, // red channel; int in [0, 255]
-      g, // green channel; int in [0, 255]
-      b, // blue channel; int in [0, 255]
+  var r = 0, // red channel; int in [0, 255]
+      g = 0, // green channel; int in [0, 255]
+      b = 0, // blue channel; int in [0, 255]
       m1, // CSS color specification match
       m2, // CSS color specification type (e.g., rgb)
       name;
@@ -668,11 +668,8 @@ function d3_rgb_parse(format, rgb, hsl) {
   /* Named colors. */
   if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
 
-  /* Null or undefined. */
-  if (format == null) return rgb(0, 0, 0);
-
   /* Hexadecimal colors: #rgb and #rrggbb. */
-  if (format.charAt(0) == "#") {
+  if (format != null && format.charAt(0) == "#") {
     if (format.length == 4) {
       r = format.charAt(1); r += r;
       g = format.charAt(2); g += g;
@@ -1645,7 +1642,7 @@ function d3_transition(groups) {
   };
 
   transition.attr = function(name, value) {
-    return transition.attrTween(name, d3_tween(value));
+    return transition.attrTween(name, d3_transitionTween(value));
   };
 
   transition.styleTween = function(name, tween, priority) {
@@ -1665,7 +1662,7 @@ function d3_transition(groups) {
 
   transition.style = function(name, value, priority) {
     if (arguments.length < 3) priority = null;
-    return transition.styleTween(name, d3_tween(value), priority);
+    return transition.styleTween(name, d3_transitionTween(value), priority);
   };
 
   transition.select = function(query) {
@@ -1695,6 +1692,12 @@ function d3_transition(groups) {
   transition.call = d3_call;
 
   return transition.delay(0).duration(250);
+}
+
+function d3_transitionTween(b) {
+  return typeof b == "function"
+      ? function(d, i, a) { return d3.interpolate(a, String(b.call(this, d, i))); }
+      : (b = String(b), function(d, i, a) { return d3.interpolate(a, b); });
 }
 var d3_timer_queue = null,
     d3_timer_timeout = 0,
@@ -1765,11 +1768,6 @@ function d3_timer_flush() {
         : (t0 = t1).next;
   }
   if (!t0) d3_timer_interval = clearInterval(d3_timer_interval);
-}
-function d3_tween(b) {
-  return typeof b == "function"
-    ? function(d, i, a) { return d3.interpolate(a, b.call(this, d, i)); }
-    : function(d, i, a) { return d3.interpolate(a, b); };
 }
 d3.scale = {};
 d3.scale.linear = function() {

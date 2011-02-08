@@ -168,7 +168,7 @@ function d3_transition(groups) {
   };
 
   transition.attr = function(name, value) {
-    return transition.attrTween(name, d3_tween(value));
+    return transition.attrTween(name, d3_transitionTween(value));
   };
 
   transition.styleTween = function(name, tween, priority) {
@@ -188,7 +188,7 @@ function d3_transition(groups) {
 
   transition.style = function(name, value, priority) {
     if (arguments.length < 3) priority = null;
-    return transition.styleTween(name, d3_tween(value), priority);
+    return transition.styleTween(name, d3_transitionTween(value), priority);
   };
 
   transition.select = function(query) {
@@ -218,4 +218,10 @@ function d3_transition(groups) {
   transition.call = d3_call;
 
   return transition.delay(0).duration(250);
+}
+
+function d3_transitionTween(b) {
+  return typeof b == "function"
+      ? function(d, i, a) { return d3.interpolate(a, String(b.call(this, d, i))); }
+      : (b = String(b), function(d, i, a) { return d3.interpolate(a, b); });
 }

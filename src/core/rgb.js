@@ -22,9 +22,9 @@ function d3_rgb_hex(v) {
 }
 
 function d3_rgb_parse(format, rgb, hsl) {
-  var r, // red channel; int in [0, 255]
-      g, // green channel; int in [0, 255]
-      b, // blue channel; int in [0, 255]
+  var r = 0, // red channel; int in [0, 255]
+      g = 0, // green channel; int in [0, 255]
+      b = 0, // blue channel; int in [0, 255]
       m1, // CSS color specification match
       m2, // CSS color specification type (e.g., rgb)
       name;
@@ -54,11 +54,8 @@ function d3_rgb_parse(format, rgb, hsl) {
   /* Named colors. */
   if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
 
-  /* Null or undefined. */
-  if (format == null) return rgb(0, 0, 0);
-
   /* Hexadecimal colors: #rgb and #rrggbb. */
-  if (format.charAt(0) == "#") {
+  if (format != null && format.charAt(0) == "#") {
     if (format.length == 4) {
       r = format.charAt(1); r += r;
       g = format.charAt(2); g += g;

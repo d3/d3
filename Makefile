@@ -60,8 +60,7 @@ d3.core.js: \
 	src/core/hsl.js \
 	src/core/selection.js \
 	src/core/transition.js \
-	src/core/timer.js \
-	src/core/tween.js
+	src/core/timer.js
 
 d3.scale.js: \
 	src/scale/scale.js \

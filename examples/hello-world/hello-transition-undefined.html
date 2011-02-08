@@ -1,0 +1,42 @@
+<html>
+  <head>
+    <title>Hello, transition undefined!</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 14px Helvetica Neue;
+  text-rendering: optimizeLegibility;
+  margin: 1em;
+}
+
+div {
+  font-size: 42px;
+  margin-top: .5em;
+  text-align: right;
+}
+
+    </style>
+  </head>
+  <body>
+    Your lucky number is:<br>
+    <div>hello</div>
+    <script type="text/javascript">
+
+transform();
+
+function transform() {
+  d3.select("div")
+      .style("width", "0%")
+    .transition()
+      .ease("bounce")
+      .duration(2000)
+      .style("width", "100%")
+      .style("background-color", function() { return d3.hsl(180, Math.random(), .5); });
+}
+
+window.addEventListener("keypress", transform, false);
+
+    </script>
+  </body>
+</html>
