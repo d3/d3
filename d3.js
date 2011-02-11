@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.30.3"}; // semver
+(function(){d3 = {version: "0.30.4"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -298,10 +298,11 @@ function d3_dispatch(type) {
 
   return dispatch;
 };
-// TODO align, sign, type
+// TODO align, type
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),
       fill = match[1] || " ",
+      sign = d3_format_signs[match[3]] || d3_format_signs["-"],
       zfill = match[5],
       width = +match[6],
       comma = match[7],
@@ -311,9 +312,11 @@ d3.format = function(specifier) {
   if (zfill) fill = "0"; // TODO align = "=";
   if (type == "d") precision = "0";
   return function(value) {
-    if ((type == "d") && (value % 1)) return "";
-    if (precision) value = (+value).toFixed(precision);
-    else value += "";
+    var number = +value,
+        negative = (number < 0) && (number = -number);
+    if ((type == "d") && (number % 1)) return "";
+    if (precision) value = number.toFixed(precision);
+    else value = "" + number;
     if (comma) {
       var i = value.lastIndexOf("."),
           f = i >= 0 ? value.substring(i) : (i = value.length, ""),
@@ -321,14 +324,20 @@ d3.format = function(specifier) {
       while (i > 0) t.push(value.substring(i -= 3, i + 3));
       value = t.reverse().join(",") + f;
     }
-    var n = value.length;
-    if (n < width) value = new Array(width - n + 1).join(fill) + value;
+    var length = (value = sign(negative, value)).length;
+    if (length < width) value = new Array(width - length + 1).join(fill) + value;
     return value;
   };
 };
 
 // [[fill]align][sign][#][0][width][,][.precision][type]
 var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
+
+var d3_format_signs = {
+  "+": function(negative, value) { return (negative ? "\u2212" : "+") + value; },
+  " ": function(negative, value) { return (negative ? "\u2212" : " ") + value; },
+  "-": function(negative, value) { return negative ? "\u2212" + value : value; }
+};
 /*
  * TERMS OF USE - EASING EQUATIONS
  *
@@ -1903,11 +1912,11 @@ d3.scale.pow = function() {
       b = 1 / p;
 
   function powp(x) {
-    return Math.pow(x, p);
+    return x < 0 ? -Math.pow(-x, p) : Math.pow(x, p);
   }
 
   function powb(x) {
-    return Math.pow(x, b);
+    return x < 0 ? -Math.pow(-x, b) : Math.pow(x, b);
   }
 
   function scale(x) {

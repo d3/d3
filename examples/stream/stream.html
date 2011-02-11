@@ -37,17 +37,16 @@ var vis = d3.select("body")
     .attr("width", w)
     .attr("height", h);
 
-vis.selectAll("path.area")
+vis.selectAll("path")
     .data(data0)
   .enter().append("svg:path")
-    .attr("class", "area")
     .attr("fill", function() { return color(Math.random()); })
     .attr("d", area);
 
 window.addEventListener("keypress", transition, false);
 
 function transition() {
-  d3.selectAll("path.area")
+  d3.selectAll("path")
       .data(function() {
         var d = data1;
         data1 = data0;

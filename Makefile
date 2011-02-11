@@ -6,6 +6,8 @@ JS_COMPILER = \
 all: \
 	d3.js \
 	d3.min.js \
+	d3.behavior.js \
+	d3.behavior.min.js \
 	d3.layout.js \
 	d3.layout.min.js \
 	d3.csv.js \
@@ -80,6 +82,12 @@ d3.svg.js: \
 	src/svg/area.js \
 	src/svg/chord.js \
 	src/svg/mouse.js
+
+d3.behavior.js: \
+	src/start.js \
+	src/behavior/behavior.js \
+	src/behavior/zoom.js \
+	src/end.js
 
 d3.layout.js: \
 	src/start.js \

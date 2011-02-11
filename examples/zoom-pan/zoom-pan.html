@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Zoom + Pan</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.behavior.js"></script>
+    <style type="text/css">
+
+svg {
+  font: 10px sans-serif;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var size = [710, 500], // width height
+    padding = [4, 4, 20, 40], // top right bottom left
+    tx = function(d) { return "translate(" + x(d) + ",0)"; },
+    ty = function(d) { return "translate(0," + y(d) + ")"; },
+    stroke = function(d) { return d ? "#ccc" : "#666"; };
+
+// x-scale (1.42 = 710/500)
+var x = d3.scale.linear()
+    .domain([-1.42, +1.42])
+    .range([0, size[0]]);
+
+// y-scale (inverted domain)
+var y = d3.scale.linear()
+    .domain([+1.00, -1.00])
+    .range([0, size[1]]);
+
+var svg = d3.select("body")
+  .append("svg:svg")
+    .attr("width", size[0] + padding[3] + padding[1])
+    .attr("height", size[1] + padding[0] + padding[2])
+    .attr("pointer-events", "all")
+    .call(d3.behavior.zoom()
+    .on("zoom", redraw))
+  .append("svg:g")
+    .attr("transform", "translate(" + padding[3] + "," + padding[0] + ")");
+
+svg.append("svg:rect")
+    .attr("width", size[0])
+    .attr("height", size[1])
+    .attr("stroke", stroke)
+    .attr("fill", "none");
+
+redraw();
+
+function redraw() {
+  if (d3.event) d3.event.transform(x, y);
+
+  var fx = x.tickFormat(10),
+      fy = y.tickFormat(10);
+
+  // Regenerate x-ticks…
+  var gx = svg.selectAll("g.x")
+      .data(x.ticks(10), String)
+      .attr("transform", tx);
+
+  gx.select("text")
+      .text(fx);
+
+  var gxe = gx.enter().insert("svg:g", "rect")
+      .attr("class", "x")
+      .attr("transform", tx);
+
+  gxe.append("svg:line")
+      .attr("stroke", stroke)
+      .attr("y1", 0)
+      .attr("y2", size[1]);
+
+  gxe.append("svg:text")
+      .attr("y", size[1])
+      .attr("dy", "1em")
+      .attr("text-anchor", "middle")
+      .text(fx);
+
+  gx.exit().remove();
+
+  // Regenerate y-ticks…
+  var gy = svg.selectAll("g.y")
+      .data(y.ticks(10), String)
+      .attr("transform", ty);
+
+  gy.select("text")
+      .text(fy);
+
+  var gye = gy.enter().insert("svg:g", "rect")
+      .attr("class", "y")
+      .attr("transform", ty);
+
+  gye.append("svg:line")
+      .attr("stroke", stroke)
+      .attr("x1", 0)
+      .attr("x2", size[0]);
+
+  gye.append("svg:text")
+      .attr("x", -3)
+      .attr("dy", ".35em")
+      .attr("text-anchor", "end")
+      .text(fy);
+
+  gy.exit().remove();
+
+}
+
+    </script>
+  </body>
+</html>

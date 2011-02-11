@@ -5,11 +5,11 @@ d3.scale.pow = function() {
       b = 1 / p;
 
   function powp(x) {
-    return Math.pow(x, p);
+    return x < 0 ? -Math.pow(-x, p) : Math.pow(x, p);
   }
 
   function powb(x) {
-    return Math.pow(x, b);
+    return x < 0 ? -Math.pow(-x, b) : Math.pow(x, b);
   }
 
   function scale(x) {

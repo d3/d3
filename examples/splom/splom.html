@@ -114,6 +114,8 @@ d3.json("flowers.json", function(flower) {
       .append("svg:rect")
         .attr("fill", "#999")
         .attr("fill-opacity", .5);
+
+    d3.event.preventDefault();
   }
 
   function mousemove() {
@@ -134,26 +136,21 @@ d3.json("flowers.json", function(flower) {
         .attr("width", maxx - minx + 1)
         .attr("height", maxy - miny + 1);
 
-    var d = rect.node().__data__,
-        x = position[d.x],
-        y = position[d.y],
+    var v = rect.node().__data__,
+        x = position[v.x],
+        y = position[v.y],
         mins = x.invert(minx),
         maxs = x.invert(maxx),
         mint = y.invert(size - maxy),
         maxt = y.invert(size - miny);
 
     count = 0;
-    flower.values.forEach(function(v) {
-      count += v.on
-           = mins <= v[d.x]
-          && maxs >= v[d.x]
-          && mint <= v[d.y]
-          && maxt >= v[d.y];
-    });
-
     svg.selectAll("circle")
         .attr("fill", function(d) {
-          return d.y.on ? color(d.y.species) : "#ccc";
+          return mins <= d.y[v.x] && maxs >= d.y[v.x]
+              && mint <= d.y[v.y] && maxt >= d.y[v.y]
+              ? (count++, color(d.y.species))
+              : "#ccc";
         });
   }
 
