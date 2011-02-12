@@ -1,9 +1,9 @@
 /**
- * Returns a function that, given a GeoJSON feature, returns the corresponding
- * SVG path. The function can be customized by overriding the projection. Point
- * features are mapped to circles with a default radius of 4.5px; the radius
- * can be specified either as a constant or a function that is evaluated per
- * feature.
+ * Returns a function that, given a GeoJSON object (e.g., a feature), returns
+ * the corresponding SVG path. The function can be customized by overriding the
+ * projection. Point features are mapped to circles with a default radius of
+ * 4.5px; the radius can be specified either as a constant or a function that
+ * is evaluated per object.
  */
 d3.geo.path = function() {
   var pointRadius = 4.5,
@@ -14,37 +14,27 @@ d3.geo.path = function() {
     if (typeof pointRadius == "function") {
       pointCircle = d3_path_circle(pointRadius.apply(this, arguments));
     }
-    return type(featurePaths, d);
+    return d3_geo_pathType(pathTypes, d);
   }
 
   function project(coordinates) {
     return projection(coordinates).join(",");
   }
 
-  function type(types, o) {
-    return o && o.type in types
-        ? types[o.type](o)
-        : "";
-  }
-
-  var featurePaths = {
+  var pathTypes = {
 
     FeatureCollection: function(f) {
       var path = [],
           features = f.features,
           i = -1, // features.index
           n = features.length;
-      while (++i < n) path.push(type(featurePaths, features[i]));
+      while (++i < n) path.push(d3_geo_pathType(pathTypes, features[i].geometry));
       return path.join("");
     },
 
     Feature: function(f) {
-      return type(geometryPaths, f.geometry);
-    }
-
-  };
-
-  var geometryPaths = {
+      return d3_geo_pathType(pathTypes, f.geometry);
+    },
 
     Point: function(o) {
       return "M" + project(o.coordinates) + pointCircle;
@@ -139,30 +129,26 @@ d3.geo.path = function() {
           geometries = o.geometries,
           i = -1, // geometries index
           n = geometries.length;
-      while (++i < n) path.push(type(geometryPaths, geometries[i]));
+      while (++i < n) path.push(d3_geo_pathType(pathTypes, geometries[i]));
       return path.join("");
     }
 
   };
 
-  var featureAreas = {
+  var areaTypes = {
 
     FeatureCollection: function(f) {
       var area = 0,
           features = f.features,
           i = -1, // features.index
           n = features.length;
-      while (++i < n) area += type(featureAreas, features[i]);
+      while (++i < n) area += d3_geo_pathType(areaTypes, features[i]);
       return area;
     },
 
     Feature: function(f) {
-      return type(geometryAreas, f.geometry);
-    }
-
-  };
-
-  var geometryAreas = {
+      return d3_geo_pathType(areaTypes, f.geometry);
+    },
 
     Point: d3_geo_pathZero,
     MultiPoint: d3_geo_pathZero,
@@ -187,7 +173,7 @@ d3.geo.path = function() {
           geometries = o.geometries,
           i = -1, // geometries index
           n = geometries.length;
-      while (++i < n) sum += type(geometryAreas, geometries[i]);
+      while (++i < n) sum += d3_geo_pathType(areaTypes, geometries[i]);
       return sum;
     }
 
@@ -211,7 +197,7 @@ d3.geo.path = function() {
   };
 
   path.area = function(d) {
-    return type(featureAreas, d);
+    return d3_geo_pathType(areaTypes, d);
   };
 
   path.pointRadius = function(x) {
@@ -235,4 +221,8 @@ function d3_path_circle(radius) {
 
 function d3_geo_pathZero() {
   return 0;
+}
+
+function d3_geo_pathType(types, o) {
+  return o && o.type in types ? types[o.type](o) : "";
 }

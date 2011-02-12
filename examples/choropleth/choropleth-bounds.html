@@ -4,8 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.geo.js"></script>
-    <script type="text/javascript" src="../../d3.geom.js"></script>
-    <script type="text/javascript" src="../../d3.behavior.js"></script>
     <style type="text/css">
 
 svg {
@@ -14,37 +12,34 @@ svg {
   height: 500px;
 }
 
+#counties path {
+  stroke: steelblue;
+}
+
     </style>
   </head>
   <body>
     <script type="text/javascript">
 
 var svg = d3.select("body")
-  .append("svg:svg")
-    .call(d3.behavior.zoom()
-    .on("zoom", redraw))
-  .append("svg:g");
+  .append("svg:svg");
 
 var counties = svg.append("svg:g")
     .attr("id", "counties");
 
 var path = d3.geo.path();
 
-var fill = d3.scale.log()
-    .domain([10, 500])
-    .range(["brown", "steelblue"]);
-
 d3.json("../../data/us-counties.json", function(json) {
   counties.selectAll("path")
       .data(json.features)
     .enter().append("svg:path")
-      .attr("d", path)
-      .attr("fill", function(d) { return fill(path.area(d)); });
+      .attr("d", function(d) {
+        return path({
+          type: "LineString",
+          coordinates: d3.geo.bounds(d)
+        });
+      });
 });
-
-function redraw() {
-  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
-}
 
     </script>
   </body>
