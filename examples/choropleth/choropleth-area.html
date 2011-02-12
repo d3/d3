@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.geo.js"></script>
+    <script type="text/javascript" src="../../d3.geom.js"></script>
+    <script type="text/javascript" src="../../d3.behavior.js"></script>
+    <style type="text/css">
+
+svg {
+  background: #eee;
+  width: 960px;
+  height: 500px;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var svg = d3.select("body")
+  .append("svg:svg")
+    .call(d3.behavior.zoom()
+    .on("zoom", redraw))
+  .append("svg:g");
+
+var counties = svg.append("svg:g")
+    .attr("id", "counties")
+    .attr("class", "Blues");
+
+var states = svg.append("svg:g")
+    .attr("id", "states");
+
+var path = d3.geo.path();
+
+var fill = d3.scale.log()
+    .domain([10, 500])
+    .range(["brown", "steelblue"]);
+
+d3.json("../../data/us-counties.json", function(json) {
+  counties.selectAll("path")
+      .data(json.features)
+    .enter().append("svg:path")
+      .attr("d", path)
+      .attr("fill", function(d) { return fill(path.area(d)); });
+});
+
+function redraw() {
+  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+}
+
+    </script>
+  </body>
+</html>
