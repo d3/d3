@@ -81,7 +81,8 @@ d3.svg.js: \
 	src/svg/line.js \
 	src/svg/area.js \
 	src/svg/chord.js \
-	src/svg/mouse.js
+	src/svg/mouse.js \
+	src/svg/symbol.js
 
 d3.behavior.js: \
 	src/start.js \

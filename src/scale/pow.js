@@ -2,14 +2,15 @@ d3.scale.pow = function() {
   var linear = d3.scale.linear(),
       tick = d3.scale.linear(), // TODO better tick formatting...
       p = 1,
-      b = 1 / p;
+      b = 1 / p,
+      n = false;
 
   function powp(x) {
-    return x < 0 ? -Math.pow(-x, p) : Math.pow(x, p);
+    return n ? -Math.pow(-x, p) : Math.pow(x, p);
   }
 
   function powb(x) {
-    return x < 0 ? -Math.pow(-x, b) : Math.pow(x, b);
+    return n ? -Math.pow(-x, b) : Math.pow(x, b);
   }
 
   function scale(x) {
@@ -22,6 +23,7 @@ d3.scale.pow = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(powb);
+    n = (x[0] || x[1]) < 0;
     linear.domain(x.map(powp));
     tick.domain(x);
     return scale;
