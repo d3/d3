@@ -1450,9 +1450,8 @@ function d3_selection(groups) {
 
   // TODO namespaced event listeners to allow multiples
   groups.on = function(type, listener) {
-    type = "on" + type;
     return groups.each(function(d, i) {
-      this[type] = function(e) {
+      var l = function(e) {
         var o = d3.event; // Events can be reentrant (e.g., focus).
         d3.event = e;
         try {
@@ -1461,6 +1460,10 @@ function d3_selection(groups) {
           d3.event = o;
         }
       };
+      if (this.addEventListener)
+        this.addEventListener(type, l, false);
+      else
+        this["on" + type] = l;
     });
   };
 
