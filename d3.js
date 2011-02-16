@@ -1,4 +1,4 @@
-(function(){d3 = {version: "0.30.6"}; // semver
+(function(){d3 = {version: "0.30.8"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1448,10 +1448,22 @@ function d3_selection(groups) {
     return groups;
   };
 
-  // TODO namespaced event listeners to allow multiples
+  // type can be namespaced, e.g., "click.foo"
+  // listener can be null for removal
   groups.on = function(type, listener) {
+
+    // parse the type specifier
+    var i = type.indexOf("."),
+        typo = i == -1 ? type : type.substring(0, i),
+        name = "__on" + type;
+
+    // remove the old event listener, and add the new event listener
     return groups.each(function(d, i) {
-      var l = function(e) {
+      if (this[name]) this.removeEventListener(typo, this[name], false);
+      if (listener) this.addEventListener(typo, this[name] = l, false);
+
+      // wrapped event listener that preserves d, i
+      function l(e) {
         var o = d3.event; // Events can be reentrant (e.g., focus).
         d3.event = e;
         try {
@@ -1459,11 +1471,7 @@ function d3_selection(groups) {
         } finally {
           d3.event = o;
         }
-      };
-      if (this.addEventListener)
-        this.addEventListener(type, l, false);
-      else
-        this["on" + type] = l;
+      }
     });
   };
 
