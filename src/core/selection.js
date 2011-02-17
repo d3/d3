@@ -1,17 +1,26 @@
+var d3_select = function(s, n) { return n.querySelector(s); },
+    d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
+
+// Use Sizzle, if available.
+if (typeof Sizzle == "function") {
+  d3_select = function(s, n) { return Sizzle(s, n)[0]; };
+  d3_selectAll = Sizzle;
+}
+
 var d3_root = d3_selection([[document]]);
 d3_root[0].parentNode = document.documentElement;
 
 // TODO fast singleton implementation!
-d3.select = function(query) {
-  return typeof query == "string"
-      ? d3_root.select(query)
-      : d3_selection([[query]]); // assume node
+d3.select = function(selector) {
+  return typeof selector == "string"
+      ? d3_root.select(selector)
+      : d3_selection([[selector]]); // assume node
 };
 
-d3.selectAll = function(query) {
-  return typeof query == "string"
-      ? d3_root.selectAll(query)
-      : d3_selection([d3_array(query)]); // assume node[]
+d3.selectAll = function(selector) {
+  return typeof selector == "string"
+      ? d3_root.selectAll(selector)
+      : d3_selection([d3_array(selector)]); // assume node[]
 };
 
 function d3_selection(groups) {
@@ -58,16 +67,16 @@ function d3_selection(groups) {
   }
 
   // TODO select(function)?
-  groups.select = function(query) {
+  groups.select = function(selector) {
     return select(function(node) {
-      return node.querySelector(query);
+      return d3_select(selector, node);
     });
   };
 
   // TODO selectAll(function)?
-  groups.selectAll = function(query) {
+  groups.selectAll = function(selector) {
     return selectAll(function(node) {
-      return d3_array(node.querySelectorAll(query));
+      return d3_selectAll(selector, node);
     });
   };
 
@@ -110,18 +119,7 @@ function d3_selection(groups) {
           nodeData;
 
       function enterNode(data) {
-        return {
-          __data__: data,
-          appendChild: function(a) {
-            return group.parentNode.appendChild(a);
-          },
-          insertBefore: function(a, b) {
-            return group.parentNode.insertBefore(a, b);
-          },
-          querySelector: function(a) {
-            return group.parentNode.querySelector(a);
-          }
-        };
+        return {__data__: data};
       }
 
       if (join) {
@@ -212,7 +210,7 @@ function d3_selection(groups) {
 
     var selection = d3_selection(update);
     selection.enter = function() {
-      return d3_selection(enter);
+      return d3_selectionEnter(enter);
     };
     selection.exit = function() {
       return d3_selection(exit);
@@ -484,19 +482,19 @@ function d3_selection(groups) {
     function insert(node) {
       return node.insertBefore(
           document.createElement(name),
-          node.querySelector(before));
+          d3_select(before, node));
     }
 
     function insertNS(node) {
       return node.insertBefore(
           document.createElementNS(name.space, name.local),
-          node.querySelector(before));
+          d3_select(before, node));
     }
 
     return select(name.local ? insertNS : insert);
   };
 
-  // TODO remove(query)?
+  // TODO remove(selector)?
   // TODO remove(node)?
   // TODO remove(function)?
   groups.remove = function() {
@@ -557,6 +555,71 @@ function d3_selection(groups) {
   };
 
   groups.call = d3_call;
+
+  return groups;
+}
+
+function d3_selectionEnter(groups) {
+
+  function select(select) {
+    var subgroups = [],
+        subgroup,
+        subnode,
+        group,
+        node;
+    for (var j = 0, m = groups.length; j < m; j++) {
+      group = groups[j];
+      subgroups.push(subgroup = []);
+      subgroup.parentNode = group.parentNode;
+      subgroup.parentData = group.parentData;
+      for (var i = 0, n = group.length; i < n; i++) {
+        if (node = group[i]) {
+          subgroup.push(subnode = select(group.parentNode));
+          subnode.__data__ = node.__data__;
+        } else {
+          subgroup.push(null);
+        }
+      }
+    }
+    return d3_selection(subgroups);
+  }
+
+  // TODO append(node)?
+  // TODO append(function)?
+  groups.append = function(name) {
+    name = d3.ns.qualify(name);
+
+    function append(node) {
+      return node.appendChild(document.createElement(name));
+    }
+
+    function appendNS(node) {
+      return node.appendChild(document.createElementNS(name.space, name.local));
+    }
+
+    return select(name.local ? appendNS : append);
+  };
+
+  // TODO insert(node, function)?
+  // TODO insert(function, string)?
+  // TODO insert(function, function)?
+  groups.insert = function(name, before) {
+    name = d3.ns.qualify(name);
+
+    function insert(node) {
+      return node.insertBefore(
+          document.createElement(name),
+          d3_select(before, node));
+    }
+
+    function insertNS(node) {
+      return node.insertBefore(
+          document.createElementNS(name.space, name.local),
+          d3_select(before, node));
+    }
+
+    return select(name.local ? insertNS : insert);
+  };
 
   return groups;
 }
