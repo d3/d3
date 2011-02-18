@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.0.0"}; // semver
+(function(){d3 = {version: "1.0.1"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -162,10 +162,10 @@ function d3_splitter(d) {
 function d3_collapse(s) {
   return s.replace(/(^\s+)|(\s+$)/g, "").replace(/\s+/g, " ");
 }
-function d3_call(callback, var_args) {
-  var_args = d3_array(arguments);
-  var_args[0] = this;
-  callback.apply(this, var_args);
+function d3_call(callback) {
+  var f = callback;
+  arguments[0] = this;
+  f.apply(this, arguments);
   return this;
 }
 /**
