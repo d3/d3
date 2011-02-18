@@ -1,5 +1,5 @@
 var d3_select = function(s, n) { return n.querySelector(s); },
-    d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
+    d3_selectAll = function(s, n) { return d3_arrayNodes(n.querySelectorAll(s)); };
 
 // Use Sizzle, if available.
 if (typeof Sizzle == "function") {
@@ -20,7 +20,7 @@ d3.select = function(selector) {
 d3.selectAll = function(selector) {
   return typeof selector == "string"
       ? d3_root.selectAll(selector)
-      : d3_selection([d3_array(selector)]); // assume node[]
+      : d3_selection([d3_arrayNodes(selector)]); // assume node[]
 };
 
 function d3_selection(groups) {

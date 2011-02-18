@@ -1,34 +1,18 @@
-function d3_array(psuedoarray) {
+var d3_arrayArguments = d3_arraySlice, // conversion for arguments
+    d3_arrayNodes = d3_arraySlice; // conversion for NodeLists
+
+function d3_arraySlow(psuedoarray) {
+  var i = -1, n = psuedoarray.length, array = [];
+  while (++i < n) array.push(psuedoarray[i]);
+  return array;
+}
+
+function d3_arraySlice(psuedoarray) {
   return Array.prototype.slice.call(psuedoarray);
 }
 
-// Adapted from Sizzle.js:
-//
-// Perform a simple check to determine if the browser is capable of
-// converting a NodeList to an array using builtin methods.
-// Also verifies that the returned array holds DOM nodes
-// (which is not the case in the Blackberry browser)
 try {
-  Array.prototype.slice.call(document.documentElement.childNodes, 0)[0].nodeType;
-// Provide a fallback method if it does not work
+  d3_arrayNodes(document.documentElement.childNodes)[0].nodeType;
 } catch(e) {
-  d3_array = function(array) {
-    var i = 0,
-      ret = [];
-
-    if (toString.call(array) === "[object Array]") {
-      Array.prototype.push.apply(ret, array);
-    } else {
-      if (typeof array.length === "number") {
-        for (var l = array.length; i < l; i++) {
-          ret.push(array[i]);
-        }
-      } else {
-        for (; array[i]; i++) {
-          ret.push(array[i]);
-        }
-      }
-    }
-    return ret;
-  };
+  d3_arrayNodes = d3_arraySlow;
 }
