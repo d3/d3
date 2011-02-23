@@ -180,12 +180,69 @@ d3.geo.path = function() {
   };
 
   function polygonArea(coordinates) {
-    var sum = area(coordinates[0]),
+    var sum = area(coordinates[0]), // exterior ring
         i = 0, // coordinates.index
         n = coordinates.length;
-    while (++i < n) sum -= area(coordinates[i]);
+    while (++i < n) sum -= area(coordinates[i]); // holes
     return sum;
   }
+
+  function polygonCentroid(coordinates) {
+    var polygon = d3.geom.polygon(coordinates[0].map(projection)), // exterior ring
+        centroid = polygon.centroid(1),
+        x = centroid[0],
+        y = centroid[1],
+        z = Math.abs(polygon.area()),
+        i = 0, // coordinates index
+        n = coordinates.length;
+    while (++i < n) {
+      polygon = d3.geom.polygon(coordinates[i].map(projection)); // holes
+      centroid = polygon.centroid(1);
+      x -= centroid[0];
+      y -= centroid[1];
+      z -= Math.abs(polygon.area());
+    }
+    return [x, y, 6 * z]; // weighted centroid
+  }
+
+  var centroidTypes = {
+
+    // TODO FeatureCollection
+    // TODO Point
+    // TODO MultiPoint
+    // TODO LineString
+    // TODO MultiLineString
+    // TODO GeometryCollection
+
+    Feature: function(f) {
+      return d3_geo_pathType(centroidTypes, f.geometry);
+    },
+
+    Polygon: function(o) {
+      var centroid = polygonCentroid(o.coordinates);
+      return [centroid[0] / centroid[2], centroid[1] / centroid[2]];
+    },
+
+    MultiPolygon: function(o) {
+      var area = 0,
+          coordinates = o.coordinates,
+          centroid,
+          x = 0,
+          y = 0,
+          z = 0,
+          i = -1, // coordinates index
+          n = coordinates.length;
+      while (++i < n) {
+        centroid = polygonCentroid(coordinates[i]);
+        x += centroid[0];
+        y += centroid[1];
+        z += centroid[2];
+      }
+      return [x / z, y / z];
+    }
+
+  };
+
 
   function area(coordinates) {
     return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
@@ -198,6 +255,10 @@ d3.geo.path = function() {
 
   path.area = function(d) {
     return d3_geo_pathType(areaTypes, d);
+  };
+
+  path.centroid = function(d) {
+    return d3_geo_pathType(centroidTypes, d);
   };
 
   path.pointRadius = function(x) {

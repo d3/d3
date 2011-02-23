@@ -13,6 +13,25 @@ d3.geom.polygon = function(coordinates) {
     return (b - a) * .5;
   };
 
+  coordinates.centroid = function(k) {
+    var i = -1,
+        n = coordinates.length - 1,
+        x = 0,
+        y = 0,
+        a,
+        b,
+        c;
+    if (!arguments.length) k = 1 / (6 * coordinates.area());
+    while (++i < n) {
+      a = coordinates[i];
+      b = coordinates[i + 1];
+      c = a[0] * b[1] - b[0] * a[1];
+      x += (a[0] + b[0]) * c;
+      y += (a[1] + b[1]) * c;
+    }
+    return [x * k, y * k];
+  };
+
   // The Sutherland-Hodgman clipping algorithm.
   coordinates.clip = function(subject) {
     var input,
