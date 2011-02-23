@@ -42,8 +42,9 @@ d3.json("../../data/us-states.json", function(json) {
   var path = d3.geo.path();
 
   // Synthesize a random data variable to visualize…
+  // Note: This has a baked-in sqrt transform!
   json.features.forEach(function(f) {
-    f.properties.value = .2 + .8 * Math.random();
+    f.properties.value = Math.sqrt(.2 + .8 * Math.random());
   });
 
   // A thick black stroke for the exterior.
