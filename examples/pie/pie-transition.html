@@ -20,15 +20,16 @@ var w = 400,
     data = d3.range(10).map(Math.random),
     color = d3.scale.category20(),
     arc = d3.svg.arc().outerRadius(r),
-    donut = d3.layout.pie().sort(d3.descending);
+    donut = d3.layout.pie();
 
 var vis = d3.select("body")
   .append("svg:svg")
+    .data([data.sort(d3.descending)])
     .attr("width", w)
     .attr("height", h);
 
 var arcs = vis.selectAll("g.arc")
-    .data(donut(data))
+    .data(donut)
   .enter().append("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");

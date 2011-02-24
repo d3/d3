@@ -16,8 +16,11 @@ d3.layout.pie = function() {
         ? endAngle.apply(this, arguments)
         : endAngle) - startAngle;
 
-    // Optionally sort (a copy of) the data.
-    if (sort != null) data = data.slice().sort(sort);
+    // Optionally sort the data.
+    var index = d3.range(data.length);
+    if (sort != null) index.sort(function(i, j) {
+      return sort(data[i], data[j]);
+    });
 
     // Compute the numeric values for each data element.
     var values = data.map(value);
@@ -26,12 +29,17 @@ d3.layout.pie = function() {
     k /= values.reduce(function(p, d) { return p + d; }, 0);
 
     // Compute the arcs!
-    return values.map(function(d, i) {
+    var arcs = index.map(function(i) {
       return {
-        value: d,
+        value: d = values[i],
         startAngle: a,
         endAngle: a += d * k
       };
+    });
+
+    // Return the arcs in the original data's order.
+    return data.map(function(d, i) {
+      return arcs[index[i]];
     });
   }
 

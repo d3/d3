@@ -24,11 +24,12 @@ var w = 400,
 
 var vis = d3.select("body")
   .append("svg:svg")
+    .data([data])
     .attr("width", w)
     .attr("height", h);
 
 var arcs = vis.selectAll("g.arc")
-    .data(donut(data))
+    .data(donut)
   .enter().append("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
