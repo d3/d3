@@ -94,6 +94,7 @@ d3.layout.js: \
 	src/start.js \
 	src/layout/layout.js \
 	src/layout/chord.js \
+	src/layout/pie.js \
 	src/layout/stack.js \
 	src/end.js
 

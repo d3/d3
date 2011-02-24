@@ -2,6 +2,7 @@
   <head>
     <title>Pie Chart</title>
     <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
     <style type="text/css">
 
 body {
@@ -16,8 +17,10 @@ body {
 var w = 400,
     h = 400,
     r = Math.min(w, h) / 2,
-    data = normalize(d3.range(10).map(Math.random).sort(descending)),
-    color = d3.scale.category20();
+    data = d3.range(10).map(Math.random),
+    color = d3.scale.category20(),
+    donut = d3.layout.pie().sort(d3.descending),
+    arc = d3.svg.arc().innerRadius(r * .6).outerRadius(r);
 
 var vis = d3.select("body")
   .append("svg:svg")
@@ -25,7 +28,7 @@ var vis = d3.select("body")
     .attr("height", h);
 
 var arcs = vis.selectAll("g.arc")
-    .data(data)
+    .data(donut(data))
   .enter().append("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
@@ -35,55 +38,11 @@ arcs.append("svg:path")
     .attr("d", arc);
 
 arcs.append("svg:text")
-    .attr("x", function(d) { return Math.cos(d.midAngle) * r * .8; })
-    .attr("y", function(d) { return Math.sin(d.midAngle) * r * .8; })
+    .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")
     .attr("display", function(d) { return d.value > .15 ? null : "none"; })
     .text(function(d, i) { return d.value.toFixed(2); });
-
-function normalize(array) {
-  var k = (2 * Math.PI) / array.reduce(function(p, d) { return p + d; }, 0),
-      a = 0;
-  return array.map(function(d, i) {
-    return {
-      value: d,
-      innerRadius: r * .6,
-      outerRadius: r,
-      startAngle: a,
-      midAngle: a + d * k / 2 - Math.PI / 2,
-      endAngle: a += d * k
-    };
-  });
-}
-
-function arc(d) {
-  var r0 = d.innerRadius,
-      r1 = d.outerRadius,
-      a0 = d.startAngle - Math.PI / 2,
-      a1 = d.endAngle - Math.PI / 2,
-      da = a1 - a0,
-      c0 = Math.cos(a0),
-      s0 = Math.sin(a0),
-      c1 = Math.cos(a1),
-      s1 = Math.sin(a1);
-  return "M" + r1 * c0 + "," + r1 * s0
-      + "A" + r1 + "," + r1 + " 0 "
-      + ((da < Math.PI) ? "0" : "1") + ",1 "
-      + r1 * c1 + "," + r1 * s1
-      + "L" + r0 * c1 + "," + r0 * s1
-      + "A" + r0 + "," + r0 + " 0 "
-      + ((da < Math.PI) ? "0" : "1") + ",0 "
-      + r0 * c0 + "," + r0 * s0 + "Z";
-}
-
-function ascending(a, b) {
-  return a < b ? -1 : a > b ? 1 : 0;
-}
-
-function descending(a, b) {
-  return a < b ? 1 : a > b ? -1 : 0;
-}
 
     </script>
   </body>

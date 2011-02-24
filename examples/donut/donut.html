@@ -2,6 +2,7 @@
   <head>
     <title>Donut Chart</title>
     <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
     <style type="text/css">
 
 body {
@@ -18,9 +19,13 @@ var w = 400,
     r1 = Math.min(w, h) / 2,
     r0 = r1 * .6,
     n = 10,
-    data = arcs(d3.range(n).map(Math.random)),
+    q = 0,
+    data0 = d3.range(n).map(Math.random),
+    data1 = d3.range(n).map(Math.random),
+    data,
     color = d3.scale.category20(),
-    arc = d3.svg.arc();
+    arc = d3.svg.arc(),
+    donut = d3.layout.pie();
 
 var vis = d3.select("body")
   .append("svg:svg")
@@ -28,7 +33,7 @@ var vis = d3.select("body")
     .attr("height", h);
 
 vis.selectAll("g.arc")
-    .data(data)
+    .data(arcs(data0, data1))
   .enter().append("svg:g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r1 + "," + r1 + ")")
@@ -36,22 +41,32 @@ vis.selectAll("g.arc")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
 
-window.addEventListener("keypress", update, false);
+window.addEventListener("keypress", swap, false);
 
-function update() {
-  var prev = data,
-      next = data = arcs(d3.range(n).map(Math.random)),
-      i = 0;
-  for (; i < n; ++i) prev[i].next = next[i];
+function arcs(data0, data1) {
+  var arcs0 = donut(data0),
+      arcs1 = donut(data1),
+      i = -1,
+      arc;
+  while (++i < n) {
+    arc = arcs0[i];
+    arc.innerRadius = r0;
+    arc.outerRadius = r1;
+    arc.next = arcs1[i];
+  }
+  return arcs0;
+}
+
+function swap() {
   d3.selectAll("g.arc > path")
-      .data(prev)
+      .data(++q & 1 ? arcs(data0, data1) : arcs(data1, data0))
       .each(transitionSplit);
 }
 
 // 1. Wedges split into two rings.
 function transitionSplit(d, i) {
   d3.select(this)
-    .transition()
+    .transition().duration(1000)
       .attrTween("d", tweenArc({
         innerRadius: i & 1 ? r0 : (r0 + r1) / 2,
         outerRadius: i & 1 ? (r0 + r1) / 2 : r1
@@ -64,7 +79,7 @@ function transitionRotate(d, i) {
   var a0 = d.next.startAngle + d.next.endAngle,
       a1 = d.startAngle - d.endAngle;
   d3.select(this)
-    .transition()
+    .transition().duration(1000)
       .attrTween("d", tweenArc({
         startAngle: (a0 + a1) / 2,
         endAngle: (a0 - a1) / 2
@@ -75,7 +90,7 @@ function transitionRotate(d, i) {
 // 3. Wedges then update their values, changing size.
 function transitionResize(d, i) {
   d3.select(this)
-    .transition()
+    .transition().duration(1000)
       .attrTween("d", tweenArc({
         startAngle: d.next.startAngle,
         endAngle: d.next.endAngle
@@ -86,10 +101,10 @@ function transitionResize(d, i) {
 // 4. Wedges reunite into a single ring.
 function transitionUnite(d, i) {
   d3.select(this)
-    .transition()
+    .transition().duration(1000)
       .attrTween("d", tweenArc({
-        innerRadius: d.next.innerRadius,
-        outerRadius: d.next.outerRadius
+        innerRadius: r0,
+        outerRadius: r1
       }));
 }
 
@@ -101,19 +116,6 @@ function tweenArc(b) {
       return arc(i(t));
     };
   };
-}
-
-function arcs(values) {
-  var k = (2 * Math.PI) / values.reduce(function(p, d) { return p + d; }, 0),
-      a = 0;
-  return values.map(function(d, i) {
-    return {
-      startAngle: a,
-      endAngle: a += d * k,
-      innerRadius: r0,
-      outerRadius: r1
-    };
-  });
 }
 
     </script>

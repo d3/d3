@@ -61,18 +61,18 @@ d3.layout.chord = function() {
             dj = subgroupIndex[i][j],
             v = matrix[di][dj];
         subgroups[di + "-" + dj] = {
-          "index": di,
-          "subindex": dj,
-          "startAngle": x,
-          "endAngle": x += v * k,
-          "value": v
+          index: di,
+          subindex: dj,
+          startAngle: x,
+          endAngle: x += v * k,
+          value: v
         };
       }
       groups.push({
-        "index": di,
-        "startAngle": x0,
-        "endAngle": x,
-        "value": (x - x0) / k
+        index: di,
+        startAngle: x0,
+        endAngle: x,
+        value: (x - x0) / k
       });
       x += padding;
     }
@@ -84,8 +84,8 @@ d3.layout.chord = function() {
             target = subgroups[j + "-" + i];
         if (source.value || target.value) {
           chords.push({
-            "source": source,
-            "target": target
+            source: source,
+            target: target
           })
         }
       }

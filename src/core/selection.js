@@ -100,6 +100,18 @@ function d3_selection(groups) {
     return d3_selection(subgroups);
   };
 
+  groups.map = function(map) {
+    var group,
+        node;
+    for (var j = 0, m = groups.length; j < m; j++) {
+      group = groups[j];
+      for (var i = 0, n = group.length; i < n; i++) {
+        if (node = group[i]) node.__data__ = map.call(node, node.__data__, i);
+      }
+    }
+    return groups;
+  };
+
   // TODO data(null) for clearing data?
   groups.data = function(data, join) {
     var enter = [],

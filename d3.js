@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.1.0"}; // semver
+(function(){d3 = {version: "1.2.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1037,6 +1037,18 @@ function d3_selection(groups) {
       }
     }
     return d3_selection(subgroups);
+  };
+
+  groups.map = function(map) {
+    var group,
+        node;
+    for (var j = 0, m = groups.length; j < m; j++) {
+      group = groups[j];
+      for (var i = 0, n = group.length; i < n; i++) {
+        if (node = group[i]) node.__data__ = map.call(node, node.__data__, i);
+      }
+    }
+    return groups;
   };
 
   // TODO data(null) for clearing data?
@@ -2261,11 +2273,11 @@ d3.svg.arc = function() {
       startAngle = d3_svg_arcStartAngle,
       endAngle = d3_svg_arcEndAngle;
 
-  function arc(d, i) {
-    var r0 = innerRadius.call(this, d, i),
-        r1 = outerRadius.call(this, d, i),
-        a0 = startAngle.call(this, d, i) + d3_svg_arcOffset,
-        a1 = endAngle.call(this, d, i) + d3_svg_arcOffset,
+  function arc() {
+    var r0 = innerRadius.apply(this, arguments),
+        r1 = outerRadius.apply(this, arguments),
+        a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset,
+        a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset,
         da = a1 - a0,
         df = da < Math.PI ? "0" : "1",
         c0 = Math.cos(a0),
@@ -2319,6 +2331,14 @@ d3.svg.arc = function() {
     if (!arguments.length) return endAngle;
     endAngle = d3_functor(v);
     return arc;
+  };
+
+  arc.centroid = function() {
+    var r = (innerRadius.apply(this, arguments)
+        + outerRadius.apply(this, arguments)) / 2,
+        a = (startAngle.apply(this, arguments)
+        + endAngle.apply(this, arguments)) / 2 + d3_svg_arcOffset;
+    return [Math.cos(a) * r, Math.sin(a) * r];
   };
 
   return arc;
