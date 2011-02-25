@@ -9,19 +9,18 @@ or you can use it to build dynamic pages (like jQuery).
 ### Browser Support
 
 D3 should work on any browser, with minimal requirements such as JavaScript
-and the [W3C DOM](http://www.w3.org/DOM/) API. We also require the [Selectors
-API](http://www.w3.org/TR/selectors-api/) Level 1, but this requirement could
-be relaxed in the future using [Sizzle](http://sizzlejs.com/).
-
-The included D3 examples use additional browser features, such as
+and the [W3C DOM](http://www.w3.org/DOM/) API. By default D3 requires the
+[Selectors API](http://www.w3.org/TR/selectors-api/) Level 1, but you can
+preload [Sizzle](http://sizzlejs.com/) for compatibility with older browsers.
+Some of the included D3 examples use additional browser features, such as
 [SVG](http://www.w3.org/TR/SVG/) and [CSS3
 Transitions](http://www.w3.org/TR/css3-transitions/). These features are not
-required to use D3, but are useful for visualization. D3 is not a
+required to use D3, but are useful for visualization! D3 is not a
 compatibility layer. The examples should work on Firefox, Chrome (Chromium),
 Safari (WebKit), Opera and IE9.
 
-Chrome has strict permissions for reading files out of the local file system.
-To view some of the examples locally, you will need to start a local web
+Note: Chrome has strict permissions for reading files out of the local file
+system. To view some of the examples locally, you will need to start a local web
 server. One easy way to do that is to install Tornado:
 
     cd ..
