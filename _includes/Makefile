@@ -17,12 +17,18 @@ EX_FILES = \
 	../ex/calendar.css \
 	../ex/chord.css \
 	../ex/chord.js \
+	../ex/choropleth.css \
+	../ex/choropleth.js \
 	../ex/colorbrewer.css \
 	../ex/dji.csv \
-	../ex/dji.js
+	../ex/dji.js \
+	../ex/unemployment.json \
+	../ex/us-counties.json \
+	../ex/us-states.json
 
 INCLUDE_FILES = \
 	chord.js \
+	choropleth.js \
 	dji.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
@@ -47,6 +53,14 @@ $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:examples/chord/chord.js > $@
 
+../ex/choropleth.css:
+	@rm -rf $@
+	git cat-file blob master:examples/choropleth/choropleth.css > $@
+
+../ex/choropleth.js choropleth.js:
+	@rm -rf $@
+	git cat-file blob master:examples/choropleth/choropleth.js > $@
+
 ../ex/colorbrewer.css:
 	@rm -rf $@
 	git cat-file blob master:lib/colorbrewer/colorbrewer.css > $@
@@ -58,3 +72,15 @@ $(SRC_FILES):
 ../ex/dji.csv:
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/dji.csv > $@
+
+../ex/us-counties.json:
+	@rm -rf $@
+	git cat-file blob master:data/us-counties.json > $@
+
+../ex/us-states.json:
+	@rm -rf $@
+	git cat-file blob master:data/us-states.json > $@
+
+../ex/unemployment.json:
+	@rm -rf $@
+	git cat-file blob master:examples/choropleth/unemployment.json > $@

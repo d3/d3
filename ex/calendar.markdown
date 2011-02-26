@@ -16,6 +16,8 @@ title: Calendar View
 <script type="text/javascript" src="calendar.js"> </script>
 <script type="text/javascript" src="dji.js"> </script>
 
+Colors by [Cynthia Brewer](http://colorbrewer.org/).
+
 ### Source Code
 
 {% highlight js linenos %}
