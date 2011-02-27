@@ -3,9 +3,7 @@ layout: tutorial
 title: A Bar Chart, Part 2
 ---
 
-# d3.js ~ A Bar Chart, Part 2
-
-## Data-Driven Documents
+# A Bar Chart, Part 2
 
 The [previous part](bar-1.html) of this tutorial covered the construction of a
 no-frills, static bar chart. This part will showcase some of the dynamic
@@ -17,7 +15,7 @@ at regular time intervals. For example, say you run a website, and want to track
 how many visitors find your ideas intriguing? A bar chart could show the number
 of visitors that subscribe to your newsletter in realtime!
 
-### Dynamic Data
+## Dynamic Data
 
 Now typically, the subscription data would be downloaded to the client via an
 HTTP request. You can poll the server to refresh the latest data every minute,
@@ -78,7 +76,7 @@ performance; with smaller data, the inefficiency of the `shift` operation is
 negligible and can be ignored. The `redraw` method is a function that you will
 define; we'll get to that shortly.
 
-### Dynamic Bars
+## Dynamic Bars
 
 For now, the next step is to construct two scales, based on our knowledge of the
 dataset and the desired chart size. To fix the maximum bar size to 80×20,
@@ -301,7 +299,7 @@ are joined to nodes by index. As the length of the data array is fixed, the
 number of nodes never changes, and thus the enter and exit selections are always
 empty.
 
-### Object Constancy
+## Object Constancy
 
 Yet, the above animation is poor because it lacks object constancy through the
 transition: it does not convey the changing data accurately. Rather than

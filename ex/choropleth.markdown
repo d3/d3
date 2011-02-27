@@ -3,11 +3,9 @@ layout: ex
 title: Choropleth
 ---
 
-# d3.js ~ Choropleth
+# Choropleth
 
-## Data-Driven Documents
-
-<div id="chart"> </div>
+<div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="choropleth.css"/>
 <link type="text/css" rel="stylesheet" href="colorbrewer.css"/>
 <script type="text/javascript" src="../d3.js"> </script>

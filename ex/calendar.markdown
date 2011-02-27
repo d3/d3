@@ -3,11 +3,9 @@ layout: ex
 title: Calendar View
 ---
 
-# d3.js ~ Calendar View
+# Calendar View
 
-## Data-Driven Documents
-
-<div id="chart"> </div>
+<div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="calendar.css"/>
 <link type="text/css" rel="stylesheet" href="colorbrewer.css"/>
 <script type="text/javascript" src="../d3.js"> </script>

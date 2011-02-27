@@ -19,21 +19,13 @@ a:hover {
   margin: auto;
 }
 
-.sidebar {
-  width: 150px;
-  margin-top: 128px;
-  margin-right: 10px;
-  float: left;
-}
-
-.sidebar a {
-  display: block;
-  margin-bottom: 1em;
+.topbar a {
+  margin-right: .5em;
 }
 
 .content {
-  width: 710px;
-  float: left;
+  position: relative;
+  margin-left: 240px;
 }
 
 .content img {
@@ -41,40 +33,38 @@ a:hover {
   margin: auto;
 }
 
-.gallery {
-  width: 644px;
-  margin: auto;
+.sidebar {
+  position: absolute;
+  left: -240px;
+  width: 230px;
+  font-weight: 300;
 }
 
-.content .gallery img, .content .list img {
+.gallery {
+  position: relative;
+  left: -240px;
+  width: 970px;
+}
+
+.content .gallery img {
   display: inline;
-  width: 200px;
+  width: 226px;
   height: 180px;
   border: solid 2px #ccc;
-  margin: 4px;
+  margin-right: 10px;
+  margin-bottom: 8px;
 }
 
-.content .gallery a:hover img, .content .list a:hover img {
+.content .gallery a:hover img {
   border-color: steelblue;
 }
 
-.content .list {
-  clear: both;
+.list {
+  clear: left;
 }
 
-.content .list div {
-  margin-right: 12px;
+.list img {
   float: left;
-}
-
-.content .list .desc {
-  width: 486px;
-  margin-right: 0;
-}
-
-.content .list h4 {
-  font-weight: normal;
-  margin: 0;
 }
 
 h1 {
@@ -83,35 +73,32 @@ h1 {
   margin-bottom: .3em;
 }
 
-h2 {
+.sidebar {
   color: #666;
-  font-weight: normal;
 }
 
-.foot {
-  font-weight: 300;
-  margin-left: 160px;
-  padding-top: 3em;
-  width: 800px;
-  clear: both;
-}
-
-.side {
-  float: left;
-  width: 110px;
-  padding-right: 40px;
-  margin-right: 10px;
-}
-
-.side ul {
+.sidebar ul {
   padding-left: 0;
   list-style-type: none;
 }
 
-.center {
-  float: left;
-  width: 790px;
-  margin-right: 0px;
+.sidebar li {
+  white-space: nowrap;
+  width: 230px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar h3 {
+  font-weight: 300;
+}
+
+.foot {
+  font-weight: 300;
+  margin-left: 240px;
+  padding-top: 3em;
+  width: 710px;
+  clear: both;
 }
 
 button {

@@ -2,22 +2,33 @@
 layout: default
 ---
 
-# d3.js
-
-## Data-Driven Documents
+# Data-Driven Documents
 
 **D3.js** is a small, [free](https://github.com/mbostock/d3/raw/master/LICENSE)
 JavaScript library for manipulating documents based on data.
 
 <div class="gallery">
-  <a title="Calendar View" href="ex/calendar.html"><img src="calendar.png"></a>
-  <a title="Chord Diagram" href="ex/chord.html"><img src="chord.png"></a>
-  <a title="Choropleth Map" href="ex/choropleth.html"><img src="choropleth.png"></a>
-  <a title="Force-Directed Graph" href="ex/force.html"><img src="force.png"></a>
-  <a title="Scatterplot Matrix" href="ex/splom.html"><img src="splom.png"></a>
-  <a title="Stacked Bars" href="ex/stack.html"><img src="stack.png"></a>
-  <a title="Streamgraph" href="ex/stream.html"><img src="stream.png"></a>
-  <a title="Voronoi Diagram" href="ex/voronoi.html"><img src="voronoi.png"></a>
+  <a title="Calendar View" href="ex/calendar.html"><img src="calendar.png"></a
+  ><a title="Chord Diagram" href="ex/chord.html"><img src="chord.png"></a
+  ><a title="Choropleth Map" href="ex/choropleth.html"><img src="choropleth.png"></a
+  ><a title="Force-Directed Graph" href="ex/force.html"><img src="force.png"></a
+  ><a title="Scatterplot Matrix" href="ex/splom.html"><img src="splom.png"></a
+  ><a title="Stacked Bars" href="ex/stack.html"><img src="stack.png"></a
+  ><a title="Streamgraph" href="ex/stream.html"><img src="stream.png"></a
+  ><a title="Voronoi Diagram" href="ex/voronoi.html"><img src="voronoi.png"></a>
+</div>
+
+<div class="sidebar">
+  <ul>
+    <li><a href="#selections">Selections</a></li>
+    <li><a href="#dynamic_properties">Dynamic Properties</a></li>
+    <li><a href="#enter_and_exit">Enter and Exit</a></li>
+    <li><a href="#transformation_not_representation">Transformation, not Representation</a></li>
+    <li><a href="#transitions">Transitions</a></li>
+    <li><a href="#subselections">Subselections</a></li>
+    <li><a href="#data_keys">Data Keys</a></li>
+    <li><a href="#modules">Modules</a></li>
+  </ul>
 </div>
 
 D3 allows you to bind arbitrary data to a Document Object Model (DOM), and then

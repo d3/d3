@@ -3,9 +3,7 @@ layout: tutorial
 title: A Bar Chart, Part 1
 ---
 
-# d3.js ~ A Bar Chart, Part 1
-
-## Data-Driven Documents
+# A Bar Chart, Part 1
 
 <style type="text/css">
 
@@ -48,7 +46,7 @@ One of the ways you might visualize this univariate data is a bar chart. This
 guide will examine how to create a simple bar chart using D3, first with basic
 HTML, and then a more advanced example with SVG.
 
-### HTML
+## HTML
 
 To get started with HTML, you'll first need a container for the chart:
 
@@ -175,7 +173,7 @@ bars, is difficult in pure HTML. Chart types such as pies and streamgraphs are
 practically impossible. Fortunately, there's a convenient alternative: [Scalable
 Vector Graphics](http://en.wikipedia.org/wiki/Scalable_Vector_Graphics) (SVG)!
 
-### SVG
+## SVG
 
 You use SVG much the same way as HTML, but it offers substantially more
 flexibility. To start with SVG, create an `svg:svg` container instead of a

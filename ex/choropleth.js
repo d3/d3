@@ -1,9 +1,6 @@
 var data; // loaded asynchronously
 
-var path = d3.geo.path()
-    .projection(d3.geo.albersUsa()
-    .scale(740)
-    .translate([355, 185]));
+var path = d3.geo.path();
 
 var svg = d3.select("#chart")
   .append("svg:svg");
