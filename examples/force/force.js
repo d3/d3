@@ -1,157 +1,47 @@
-function layout_force() {
-  var force = {},
-      event = d3.dispatch("tick"),
-      size = {x: 1, y: 1},
-      alpha = .1,
-      nodeDistance = 60,
-      linkDistance = 30,
-      interval,
-      nodes,
-      links;
+var w = 960,
+    h = 500;
 
-  // TODO
-  // slow the interval as the graph stabilizes
-  // allow the nodes to be dragged interactively
+var vis = d3.select("#chart")
+  .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
 
-  function tick() {
-    var n = nodes.length,
-        m = links.length,
-        i, // current index
-        j, // current index
-        o, // current link
-        s, // current source
-        t, // current target
-        l, // current distance
-        x,
-        y;
+d3.json("miserables.json", function(json) {
+  var force = layout_force()
+      .nodes(json.nodes)
+      .links(json.links)
+      .size({x: w, y: h})
+      .start();
 
-    // repel nodes
-    for (i = 0; i < n; ++i) {
-      s = nodes[i];
-      for (j = i + 1; j < n; ++j) {
-        t = nodes[j];
-        x = t.x - s.x;
-        y = t.y - s.y;
-        l = Math.sqrt(x * x + y * y);
-        if (l < nodeDistance) {
-          l = alpha * (l - nodeDistance) / l;
-          x *= l;
-          y *= l;
-          if (s.fixed) {
-	        if (t.fixed) continue;
-			t.x -= x;
-            t.y -= y;
-          } else if (t.fixed) {
-            s.x += x;
-            s.y += y;
-          } else {
-            s.x += x;
-            s.y += y;
-            t.x -= x;
-            t.y -= y;
-          }
-        }
-      }
-    }
+  var link = vis.selectAll("line.link")
+      .data(json.links)
+    .enter().append("svg:line")
+      .attr("class", "link")
+      .attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
 
-    // position constraint for links
-    for (i = 0; i < m; ++i) {
-      o = links[i];
-      s = o.source;
-      t = o.target;
-      x = t.x - s.x;
-      y = t.y - s.y;
-      l = Math.sqrt(x * x + y * y);
-      if (l <= 0) l = 0.01;
-      l = alpha * (l - linkDistance) / l;
-      x *= l;
-      y *= l;
-      if (s.fixed) {
-        if (t.fixed) continue;
-        t.x -= x;
-        t.y -= y;
-      } else if (t.fixed) {
-        s.x += x;
-        s.y += y;
-      } else {
-        s.x += x;
-        s.y += y;
-        t.x -= x;
-        t.y -= y;
-      }
-    }
+  var node = vis.selectAll("circle.node")
+      .data(json.nodes)
+    .enter().append("svg:circle")
+      .attr("class", "node")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", 4.5);
 
-    event.tick.dispatch({type: "tick"});
-  }
+  vis.attr("opacity", 0)
+    .transition()
+      .duration(1000)
+      .attr("opacity", 1);
 
-  force.on = function(type, listener) {
-    event[type].add(listener);
-    return force;
-  };
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
 
-  force.nodes = function(x) {
-    if (!arguments.length) return nodes;
-    nodes = x;
-    return force;
-  };
-
-  force.links = function(x) {
-    if (!arguments.length) return links;
-    links = x;
-    return force;
-  };
-
-  force.size = function(x) {
-    if (!arguments.length) return size;
-    size = x;
-    return force;
-  };
-
-  force.nodeDistance = function(d) {
-    if (!arguments.length) return nodeDistance;
-    nodeDistance = d;
-    return force;
-  };
-
-  force.linkDistance = function(d) {
-    if (!arguments.length) return linkDistance;
-    linkDistance = d;
-    return force;
-  };
-
-  force.start = function() {
-    var i,
-        n = nodes.length,
-        m = links.length,
-        w = size.x,
-        h = size.y,
-        o;
-    for (i = 0; i < n; ++i) {
-      o = nodes[i];
-      o.x = o.x || Math.random() * w;
-      o.y = o.y || Math.random() * h;
-      o.fixed = 0;
-    }
-    for (i = 0; i < m; ++i) {
-      o = links[i];
-      o.source = nodes[o.source];
-      o.target = nodes[o.target];
-    }
-    if (interval) clearInterval(interval);
-    interval = setInterval(tick, 24);
-    return force;
-  };
-
-  force.resume = function() {
-    if (interval) clearInterval(interval);
-    interval = setInterval(tick, 24);
-    return force;
-  };
-
-  force.stop = function() {
-    interval = clearInterval(interval);
-    return force;
-  };
-
-  return force;
-}
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+});
