@@ -5,66 +5,11 @@
     <title>Voronoi Tesselation</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.geom.js"></script>
-    <style type="text/css">
-
-@import url("../../lib/colorbrewer/colorbrewer.css");
-
-svg {
-  border: solid 1px #666;
-}
-
-path {
-  fill: yellow;
-  stroke: #000;
-  stroke-width: .5px;
-}
-
-circle {
-  fill: #ccc;
-  stroke: #000;
-  pointer-events: none;
-}
-
-    </style>
+    <link type="text/css" rel="stylesheet" href="../../lib/colorbrewer/colorbrewer.css"/>
+    <link type="text/css" rel="stylesheet" href="voronoi.css"/>
   </head>
   <body>
-    <script type="text/javascript">
-
-var w = 960,
-    h = 500;
-
-var vertices = d3.range(100).map(function(d) {
-  return [Math.random() * w, Math.random() * h];
-});
-
-var svg = d3.select("body")
-  .append("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
-    .attr("class", "PiYG")
-    .on("mousemove", update);
-
-svg.selectAll("path")
-    .data(d3.geom.voronoi(vertices))
-  .enter().append("svg:path")
-    .attr("class", function(d, i) { return i ? "q" + (i % 9) + "-9" : null; })
-    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
-
-svg.selectAll("circle")
-    .data(vertices.slice(1))
-  .enter().append("svg:circle")
-    .attr("transform", function(d) { return "translate(" + d + ")"; })
-    .attr("r", 2);
-
-function update() {
-  vertices[0] = d3.svg.mouse(this);
-  svg.selectAll("path")
-      .data(d3.geom.voronoi(vertices)
-      .map(function(d) { return "M" + d.join("L") + "Z"; }))
-      .filter(function(d) { return this.getAttribute("d") != d; })
-      .attr("d", function(d) { return d; });
-}
-
-    </script>
+    <div id="chart"></div>
+    <script type="text/javascript" src="voronoi.js"></script>
   </body>
 </html>
