@@ -5,7 +5,7 @@ title: Chord Diagram
 
 # Chord Diagram
 
-<div class="gallery" id="chart"> </div>
+<div id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="chord.css"/>
 <script type="text/javascript" src="../d3.js"> </script>
 <script type="text/javascript" src="../d3.layout.js"> </script>
