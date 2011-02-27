@@ -8,7 +8,7 @@ d3.csv("dji.csv", function(csv) {
       .domain([-.05, .05])
       .range(d3.range(9));
 
-  var w = 710,
+  var w = 960,
       pw = 14,
       z = ~~((w - pw * 2) / 53),
       ph = z >> 1,
@@ -26,6 +26,7 @@ d3.csv("dji.csv", function(csv) {
 
   vis.append("svg:text")
       .attr("transform", "translate(-6," + h / 2 + ")rotate(-90)")
+      .attr("text-anchor", "middle")
       .text(function(d) { return d; });
 
   vis.selectAll("rect.day")
