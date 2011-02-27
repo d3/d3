@@ -20,12 +20,16 @@ EX_FILES = \
 	../ex/choropleth.css \
 	../ex/choropleth.js \
 	../ex/colorbrewer.css \
+	../ex/cross.js \
 	../ex/dji.csv \
 	../ex/dji.js \
 	../ex/force.css \
 	../ex/force.js \
 	../ex/force_layout.js \
 	../ex/miserables.json \
+	../ex/splom.css \
+	../ex/splom.js \
+	../ex/flowers.json \
 	../ex/unemployment.json \
 	../ex/us-counties.json \
 	../ex/us-states.json
@@ -34,7 +38,9 @@ INCLUDE_FILES = \
 	chord.js \
 	choropleth.js \
 	dji.js \
-	force.js
+	force.js \
+	splom.js \
+	cross.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
@@ -105,3 +111,20 @@ $(SRC_FILES):
 ../ex/miserables.json:
 	@rm -rf $@
 	git cat-file blob master:examples/force/miserables.json > $@
+
+../ex/splom.js splom.js:
+	@rm -rf $@
+	git cat-file blob master:examples/splom/splom.js > $@
+	git cat-file blob master:examples/splom/cross.js >> $@
+
+../ex/cross.js cross.js:
+	@rm -rf $@
+	git cat-file blob master:examples/splom/cross.js > $@
+
+../ex/splom.css:
+	@rm -rf $@
+	git cat-file blob master:examples/splom/splom.css > $@
+
+../ex/flowers.json:
+	@rm -rf $@
+	git cat-file blob master:examples/splom/flowers.json > $@

@@ -9,7 +9,7 @@ var chord = d3.layout.chord()
     [ 1013,   990,  940, 6907]
   ]);
 
-var w = 960,
+var w = 600,
     h = 600,
     r0 = Math.min(w, h) * .41,
     r1 = r0 * 1.1;
