@@ -22,6 +22,10 @@ EX_FILES = \
 	../ex/colorbrewer.css \
 	../ex/dji.csv \
 	../ex/dji.js \
+	../ex/force.css \
+	../ex/force.js \
+	../ex/force_layout.js \
+	../ex/miserables.json \
 	../ex/unemployment.json \
 	../ex/us-counties.json \
 	../ex/us-states.json
@@ -29,7 +33,8 @@ EX_FILES = \
 INCLUDE_FILES = \
 	chord.js \
 	choropleth.js \
-	dji.js
+	dji.js \
+	force.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
@@ -84,3 +89,19 @@ $(SRC_FILES):
 ../ex/unemployment.json:
 	@rm -rf $@
 	git cat-file blob master:examples/choropleth/unemployment.json > $@
+
+../ex/force.js force.js:
+	@rm -rf $@
+	git cat-file blob master:examples/force/force.js > $@
+
+../ex/force_layout.js:
+	@rm -rf $@
+	git cat-file blob master:examples/force/layout.js >> $@
+
+../ex/force.css:
+	@rm -rf $@
+	git cat-file blob master:examples/force/force.css > $@
+
+../ex/miserables.json:
+	@rm -rf $@
+	git cat-file blob master:examples/force/miserables.json > $@

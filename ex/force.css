@@ -1,0 +1,9 @@
+circle.node {
+  fill: lightsteelblue;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+line.link {
+  stroke: #333;
+}
