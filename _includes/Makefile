@@ -39,6 +39,8 @@ EX_FILES = \
 	../ex/stream.js \
 	../ex/stream_layers.js \
 	../ex/stack.js \
+	../ex/voronoi.css \
+	../ex/voronoi.js
 
 INCLUDE_FILES = \
 	chord.js \
@@ -49,7 +51,8 @@ INCLUDE_FILES = \
 	cross.js \
 	stream.js \
 	stream_layers.js \
-	stack.js
+	stack.js \
+	voronoi.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
@@ -161,3 +164,11 @@ $(SRC_FILES):
 ../ex/button.css:
 	@rm -rf $@
 	git cat-file blob master:examples/stream/button.css > $@
+
+../ex/voronoi.css:
+	@rm -rf $@
+	git cat-file blob master:examples/voronoi/voronoi.css > $@
+
+../ex/voronoi.js voronoi.js:
+	@rm -rf $@
+	git cat-file blob master:examples/voronoi/voronoi.js > $@
