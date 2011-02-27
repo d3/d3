@@ -1,0 +1,32 @@
+button {
+  font: 14px Helvetica Neue;
+  background: #222 url(http://bost.ocks.org/button-overlay.png) repeat-x;
+  color: #fff;
+  text-rendering: optimizeLegibility;
+  text-shadow: 0 -1px 1px #222;
+  padding: 6px 10px 6px 10px;
+  border: 0;
+  border-radius: 0;
+  border-bottom: 1px solid #222;
+  margin: 0;
+  -moz-box-shadow: 0 1px 3px #999;
+  -webkit-box-shadow: 0 1px 3px #999;
+}
+
+button.first {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+button.last {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+button.active {
+  background-color: rgb(65,102,133);
+}
+
+button:hover {
+  background-color: steelblue;
+}
