@@ -1,9 +1,9 @@
 circle.node {
-  fill: lightsteelblue;
-  stroke: steelblue;
+  stroke: #fff;
   stroke-width: 1.5px;
 }
 
 line.link {
-  stroke: #333;
+  stroke: #999;
+  stroke-opacity: .6;
 }
