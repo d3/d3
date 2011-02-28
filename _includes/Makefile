@@ -17,6 +17,8 @@ EX_FILES = \
 	../ex/calendar.css \
 	../ex/chord.css \
 	../ex/chord.js \
+	../ex/cartogram.css \
+	../ex/cartogram.js \
 	../ex/choropleth.css \
 	../ex/choropleth.js \
 	../ex/colorbrewer.css \
@@ -43,6 +45,7 @@ EX_FILES = \
 	../ex/voronoi.js
 
 INCLUDE_FILES = \
+	cartogram.js \
 	chord.js \
 	choropleth.js \
 	dji.js \
@@ -67,6 +70,14 @@ $(SRC_FILES):
 ../ex/calendar.css:
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/calendar.css > $@
+
+../ex/cartogram.css:
+	@rm -rf $@
+	git cat-file blob master:examples/cartogram/cartogram.css > $@
+
+../ex/cartogram.js cartogram.js:
+	@rm -rf $@
+	git cat-file blob master:examples/cartogram/cartogram.js > $@
 
 ../ex/chord.css:
 	@rm -rf $@

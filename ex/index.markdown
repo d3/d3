@@ -41,6 +41,18 @@ title: Examples
 </div>
 
 <div class="list">
+  <a href="cartogram.html">
+    <img src="../cartogram.png"/>
+  </a>
+  <h4><a href="cartogram.html">Non-Contiguous Cartogram</a></h4>
+
+  <p>Unlike choropleth maps, cartograms encode data using area rather than
+  color, resulting in distorted geographic boundaries. In this example, states
+  are rescaled around their centroid, preserving local shape but not
+  topology.</p>
+</div>
+
+<div class="list">
   <a href="force.html">
     <img src="../force.png"/>
   </a>
