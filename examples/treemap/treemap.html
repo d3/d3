@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Treemap</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="layout.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+.cell {
+  position: absolute;
+  background: lightsteelblue;
+  border: solid 1px white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500;
+
+var div = d3.select("body").append("div")
+    .style("position", "relative");
+
+var treemap = layout_treemap()
+    .size([w, h])
+    .children(function(d, i) { return typeof d.value == "object" && d3.entries(d.value); })
+    .value(function(d) { return d.value; });
+
+d3.json("flare.json", function(json) {
+  div.data([{key: "flare", value: json}]).selectAll("div")
+      .data(treemap)
+    .enter().append("div")
+      .attr("class", "cell")
+      .style("left", function(d) { return d.x + "px"; })
+      .style("top", function(d) { return d.y + "px"; })
+      .style("width", function(d) { return d.dx + "px"; })
+      .style("height", function(d) { return d.dy + "px"; })
+      .text(function(d) { return d.data.key; });
+});
+
+    </script>
+  </body>
+</html>
