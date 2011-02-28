@@ -5,7 +5,7 @@ var n = 4, // number of layers
 
 var p = 20,
     w = 960,
-    h = 500 - p,
+    h = 500 - .5 - p,
     mx = m,
     my = d3.max(data, function(d) {
       return d3.max(d, function(d) {
