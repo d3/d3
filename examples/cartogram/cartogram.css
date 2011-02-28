@@ -1,0 +1,20 @@
+#chart {
+  width: 960px;
+  height: 500px;
+}
+
+.black path {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 3px;
+}
+
+.white path {
+  fill: #fff;
+  stroke: #fff;
+}
+
+.grey path {
+  fill: #ccc;
+  stroke: #666;
+}

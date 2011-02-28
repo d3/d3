@@ -1,5 +1,6 @@
 var w = 960,
-    h = 500;
+    h = 500,
+    fill = d3.scale.category20();
 
 var vis = d3.select("#chart")
   .append("svg:svg")
@@ -28,7 +29,8 @@ d3.json("miserables.json", function(json) {
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-      .attr("r", 4.5);
+      .attr("r", 5)
+      .style("fill", function(d) { return fill(d.group); });
 
   vis.attr("opacity", 0)
     .transition()

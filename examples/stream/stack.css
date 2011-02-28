@@ -2,11 +2,6 @@
   font: 10px sans-serif;
 }
 
-rect {
-  shape-rendering: crispEdges;
-}
-
 line {
   stroke: black;
-  shape-rendering: crispEdges;
 }

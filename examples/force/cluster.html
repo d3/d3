@@ -178,6 +178,7 @@ function drag(n) {
       var m = d3.svg.mouse(vis[0][0]);
       active.x = m[0];
       active.y = m[1];
+      force.resume(); // restart annealing
     });
 
     return false;
@@ -221,8 +222,7 @@ function init() {
       .nodes(net.nodes)
       .links(net.links)
       .size({x: w, y: h})
-      .nodeDistance(100)
-      .linkDistance(60)
+      .distance(60)
       .start();
 
   hullg.selectAll("path.hull").remove();
