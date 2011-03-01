@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.3.0"}; // semver
+(function(){d3 = {version: "1.4.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -73,43 +73,58 @@ d3.nest = function() {
       sortValues,
       rollup;
 
-  function recurse(j, array) {
-    if (j >= keys.length) return rollup
+  function map(array, depth) {
+    if (depth >= keys.length) return rollup
         ? rollup.call(nest, array) : (sortValues
         ? array.sort(sortValues)
         : array);
 
     var i = -1,
         n = array.length,
-        key = keys[j],
+        key = keys[depth++],
         keyValue,
-        keyValues = [],
-        sortKey = sortKeys[j],
         object,
-        map = {};
+        o = {};
 
     while (++i < n) {
-      if ((keyValue = key(object = array[i])) in map) {
-        map[keyValue].push(object);
+      if ((keyValue = key(object = array[i])) in o) {
+        o[keyValue].push(object);
       } else {
-        map[keyValue] = [object];
-        keyValues.push(keyValue);
+        o[keyValue] = [object];
       }
     }
 
-    j++;
-    i = -1;
-    n = keyValues.length;
-    while (++i < n) {
-      object = map[keyValue = keyValues[i]];
-      map[keyValue] = recurse(j, object);
+    for (keyValue in o) {
+      o[keyValue] = map(o[keyValue], depth);
     }
 
-    return map;
+    return o;
+  }
+
+  function entries(map, depth) {
+    if (depth >= keys.length) return map;
+
+    var a = [],
+        sortKey = sortKeys[depth++],
+        key;
+
+    for (key in map) {
+      a.push({key: key, values: entries(map[key], depth)});
+    }
+
+    if (sortKey) a.sort(function(a, b) {
+      return sortKey(a.key, b.key);
+    });
+
+    return a;
   }
 
   nest.map = function(array) {
-    return recurse(0, array);
+    return map(array, 0);
+  };
+
+  nest.entries = function(array) {
+    return entries(map(array, 0), 0);
   };
 
   nest.key = function(d) {
@@ -117,11 +132,15 @@ d3.nest = function() {
     return nest;
   };
 
+  // Specifies the order for the most-recently specified key.
+  // Note: only applies to entries. Map keys are unordered!
   nest.sortKeys = function(order) {
     sortKeys[keys.length - 1] = order;
     return nest;
   };
 
+  // Specifies the order for leaf values.
+  // Applies to both maps and entries array.
   nest.sortValues = function(order) {
     sortValues = order;
     return nest;
