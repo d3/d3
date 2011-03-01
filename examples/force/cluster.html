@@ -157,34 +157,6 @@ function drawCluster(d) {
   return curve(d.path); // 0.8
 }
 
-function drag(n) {
-  var active = null;
-  n.on("mouseover", function(d) { if (d != active) d.fixed = true; })
-   .on("mouseout", function(d) { if (d != active) d.fixed = false; })
-   .on("mousedown", function(d) {
-    if (d3.event.preventDefault) { d3.event.preventDefault(); }
-    active = d;
-
-    // unregister drag listeners
-    body.on("mouseup", function(d) {
-      active = null;
-      body.on("mouseup", noop)
-          .on("mousemove", noop);
-    });
-
-    // update node position on drag
-    body.on("mousemove", function() {
-      if (active == null) return false;
-      var m = d3.svg.mouse(vis[0][0]);
-      active.x = m[0];
-      active.y = m[1];
-      force.resume(); // restart annealing
-    });
-
-    return false;
-  });
-}
-
 // --------------------------------------------------------
 
 var body = d3.select("body");
@@ -251,11 +223,12 @@ function init() {
       .attr("r", function(d) { return d.size ? d.size + dr : dr+1; })
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-      .call(drag)
       .on("dblclick", function(d) {
         if (d.size) { expand[d.group] = true; init(); }
       });
-  node = nodeg.selectAll("circle.node");
+
+  node = nodeg.selectAll("circle.node")
+      .call(force.drag);
 
   force.on("tick", function() {
     if (!hull.empty()) {
