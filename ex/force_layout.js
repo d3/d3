@@ -153,5 +153,41 @@ function layout_force() {
     return force;
   };
 
+  // use `node.call(force.drag)` to make nodes draggable
+  force.drag = function() {
+    var node, element;
+
+    this
+      .on("mouseover", function(d) { d.fixed = true; })
+      .on("mouseout", function(d) { if (d != node) d.fixed = false; })
+      .on("mousedown", mousedown);
+
+    d3.select(window)
+      .on("mousemove", mousemove)
+      .on("mouseup", mouseup);
+
+    function mousedown(d) {
+      (node = d).fixed = true;
+      element = this;
+      d3.event.preventDefault();
+    }
+
+    function mousemove() {
+      if (!node) return;
+      var m = d3.svg.mouse(element);
+      node.x = m[0];
+      node.y = m[1];
+      force.resume(); // restart annealing
+    }
+
+    function mouseup() {
+      if (!node) return;
+      mousemove();
+      node = element = null;
+    }
+
+    return force;
+  };
+
   return force;
 }

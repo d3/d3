@@ -30,7 +30,8 @@ d3.json("miserables.json", function(json) {
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", 5)
-      .style("fill", function(d) { return fill(d.group); });
+      .style("fill", function(d) { return fill(d.group); })
+      .call(force.drag);
 
   vis.attr("opacity", 0)
     .transition()
