@@ -1868,7 +1868,11 @@ d3.scale.linear = function() {
   }
 
   scale.invert = function(y) {
-    return (y - y0) * ky + x0; // TODO assumes number?
+    if(typeof x0.getTime !== 'function'){
+      return (y - y0) * ky + x0;
+    }else{
+      return new Date((y - y0) * ky + x0.getTime())
+    }
   };
 
   scale.domain = function(x) {
