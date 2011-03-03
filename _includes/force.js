@@ -8,10 +8,10 @@ var vis = d3.select("#chart")
     .attr("height", h);
 
 d3.json("miserables.json", function(json) {
-  var force = layout_force()
+  var force = d3.layout.force()
       .nodes(json.nodes)
       .links(json.links)
-      .size({x: w, y: h})
+      .size([w, h])
       .start();
 
   var link = vis.selectAll("line.link")

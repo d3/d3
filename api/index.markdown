@@ -43,7 +43,7 @@ title: Documentation
 
 ascending, descending, min, max, keys, values, entries, split, merge, range,
 xhr, text, json, html, xml, format, nest (map, key, sortKeys, sortValues,
-rollup), ns, event, rgb, hsl, ease, interpolate, interpolateNumber,
+rollup, entries), ns, event, rgb, hsl, ease, interpolate, interpolateNumber,
 interpolateRound, interpolateString, interpolateRgb, interpolateArray,
 interpolateObject.
 
@@ -69,26 +69,28 @@ category20b, category20c, quantile (quantiles), quantize.
 
 mouse, arc (innerRadius, outerRadius, startAngle, endAngle), line (x, y,
 interpolate, tension) area, (x, y0, y1, interpolate, tension), chord (radius,
-source, target, startAngle, endAngle)
+source, target, startAngle, endAngle).
 
 ### d3.time
 
-format (format, parse, toString)
+format (format, parse, toString).
 
 ### d3.layout
 
 chord (matrix, padding, sortGroups, sortSubgroups, sortChords, chords, groups),
-stack (order, offset)
+stack (order, offset), force (on, nodes, links, size, distance, start, stop,
+resume, drag), pie (value, sort, startAngle, endAngle),  treemap (children,
+value, size, round).
 
 ### d3.geom
 
-contour, hull, voronoi, delaunay, quadtree, polygon (area, clip)
+contour, hull, voronoi, delaunay, quadtree, polygon (area, clip).
 
 ### d3.geo
 
 albers (origin, parallels, scale, translate), albersUsa (scale, translate),
-mercator (scale, translate), path (projection, area, pointRadius)
+mercator (scale, translate), path (projection, area, pointRadius).
 
 ### d3.csv
 
-parse, parseRows, format
+parse, parseRows, format.

@@ -65,6 +65,17 @@ title: Examples
 </div>
 
 <div class="list">
+  <a href="treemap.html">
+    <img src="../treemap.png"/>
+  </a>
+  <h4><a href="treemap.html">Treemap</a></h4>
+
+  <p>A treemap recursively subdivides area into rectangles; the area of any node
+  in the tree corresponds to its value. This example uses color to encode
+  different packages of the Flare visualization toolkit.</p>
+</div>
+
+<div class="list">
   <a href="splom.html">
     <img src="../splom.png"/>
   </a>

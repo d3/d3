@@ -27,7 +27,9 @@ EX_FILES = \
 	../ex/dji.js \
 	../ex/force.css \
 	../ex/force.js \
-	../ex/force_layout.js \
+	../ex/flare.json \
+	../ex/treemap.css \
+	../ex/treemap.js \
 	../ex/miserables.json \
 	../ex/splom.css \
 	../ex/splom.js \
@@ -50,6 +52,7 @@ INCLUDE_FILES = \
 	choropleth.js \
 	dji.js \
 	force.js \
+	treemap.js \
 	splom.js \
 	cross.js \
 	stream.js \
@@ -123,10 +126,6 @@ $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:examples/force/force.js > $@
 
-../ex/force_layout.js:
-	@rm -rf $@
-	git cat-file blob master:examples/force/layout.js >> $@
-
 ../ex/force.css:
 	@rm -rf $@
 	git cat-file blob master:examples/force/force.css > $@
@@ -134,6 +133,18 @@ $(SRC_FILES):
 ../ex/miserables.json:
 	@rm -rf $@
 	git cat-file blob master:examples/force/miserables.json > $@
+
+../ex/treemap.js treemap.js:
+	@rm -rf $@
+	git cat-file blob master:examples/treemap/treemap.js > $@
+
+../ex/treemap.css:
+	@rm -rf $@
+	git cat-file blob master:examples/treemap/treemap.css > $@
+
+../ex/flare.json:
+	@rm -rf $@
+	git cat-file blob master:examples/treemap/flare.json > $@
 
 ../ex/splom.js splom.js:
 	@rm -rf $@
