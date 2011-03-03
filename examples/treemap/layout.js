@@ -2,6 +2,7 @@
 function layout_treemap() {
   var children = layout_treemapChildren,
       value = layout_treemapValue,
+      round = Math.round,
       size = [1, 1]; // width, height
 
   // Recursively compute the node depth and value.
@@ -43,17 +44,17 @@ function layout_treemap() {
     }
   }
 
-  // Arranges the specified children into squarified rows.
-  function squarify(children, node) {
+  // Recursively arranges the specified node's children into squarified rows.
+  function squarify(node) {
+    if (!node.children) return;
     var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
         row = [],
+        children = node.children.slice().sort(layout_treemapSort),
         child,
         best = Infinity, // the best row score so far
         score, // the current row score
         u = Math.min(rect.dx, rect.dy), // initial orientation
         n;
-    children = children.slice(); // copy-on-write
-    children.sort(function(a, b) { return b.area - a.area; });
     row.area = 0;
     while ((n = children.length) > 0) {
       row.push(child = children[n - 1]);
@@ -63,16 +64,17 @@ function layout_treemap() {
         best = score;
       } else { // abort, and try a different orientation
         row.area -= row.pop().area;
-        position(row, u, rect);
+        position(row, u, rect, false);
         u = Math.min(rect.dx, rect.dy);
         row.length = row.area = 0;
         best = Infinity;
       }
     }
     if (row.length) {
-      position(row, u, rect);
+      position(row, u, rect, true);
       row.length = row.area = 0;
     }
+    node.children.forEach(squarify);
   }
 
   // Computes the score for the specified row, as the worst aspect ratio.
@@ -94,42 +96,37 @@ function layout_treemap() {
   }
 
   // Positions the specified row of nodes. Modifies `rect`.
-  function position(row, u, rect) {
+  function position(row, u, rect, flush) {
     var i = -1,
         n = row.length,
         x = rect.x,
         y = rect.y,
-        v = u ? row.area / u : 0,
+        v = u ? round(row.area / u) : 0,
         o;
     if (u == rect.dx) { // horizontal subdivision
+      if (flush || v > rect.dy) v = rect.dy; // over+underflow
       while (++i < n) {
         o = row[i];
         o.x = x;
         o.y = y;
         o.dy = v;
-        x += o.dx = o.area / v;
+        x += o.dx = round(o.area / v);
       }
+      o.dx += rect.x + rect.dx - x; // rounding error
       rect.y += v;
       rect.dy -= v;
     } else { // vertical subdivision
+      if (flush || v > rect.dx) v = rect.dx; // over+underflow
       while (++i < n) {
         o = row[i];
         o.x = x;
         o.y = y;
         o.dx = v;
-        y += o.dy = o.area / v;
+        y += o.dy = round(o.area / v);
       }
+      o.dy += rect.y + rect.dy - y; // rounding error
       rect.x += v;
       rect.dx -= v;
-    }
-  }
-
-  // Recursively computes the treemap layout for the node and its children.
-  function layout(node) {
-    var children = node.children;
-    if (children) {
-      squarify(children, node);
-      children.forEach(layout);
     }
   }
 
@@ -140,7 +137,7 @@ function layout_treemap() {
     root.y = 0;
     root.dx = size[0];
     root.dy = size[1];
-    layout(root);
+    squarify(root);
     return nodes;
   }
 
@@ -162,6 +159,12 @@ function layout_treemap() {
     return treemap;
   };
 
+  treemap.round = function(x) {
+    if (!arguments.length) return round != Number;
+    round = x ? Math.round : Number;
+    return treemap;
+  };
+
   return treemap;
 }
 
@@ -171,4 +174,8 @@ function layout_treemapChildren(d) {
 
 function layout_treemapValue(d) {
   return d.value;
+}
+
+function layout_treemapSort(a, b) {
+  return b.area - a.area;
 }
