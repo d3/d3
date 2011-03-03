@@ -94,8 +94,10 @@ d3.layout.js: \
 	src/start.js \
 	src/layout/layout.js \
 	src/layout/chord.js \
+	src/layout/force.js \
 	src/layout/pie.js \
 	src/layout/stack.js \
+	src/layout/treemap.js \
 	src/end.js
 
 d3.geo.js: \

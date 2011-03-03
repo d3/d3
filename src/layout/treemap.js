@@ -1,7 +1,7 @@
 // Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
-function layout_treemap() {
-  var children = layout_treemapChildren,
-      value = layout_treemapValue,
+d3.layout.treemap = function() {
+  var children = d3_layout_treemapChildren,
+      value = d3_layout_treemapValue,
       round = Math.round,
       size = [1, 1]; // width, height
 
@@ -49,7 +49,7 @@ function layout_treemap() {
     if (!node.children) return;
     var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
         row = [],
-        children = node.children.slice().sort(layout_treemapSort),
+        children = node.children.slice().sort(d3_layout_treemapSort),
         child,
         best = Infinity, // the best row score so far
         score, // the current row score
@@ -166,16 +166,16 @@ function layout_treemap() {
   };
 
   return treemap;
-}
+};
 
-function layout_treemapChildren(d) {
+function d3_layout_treemapChildren(d) {
   return d.children;
 }
 
-function layout_treemapValue(d) {
+function d3_layout_treemapValue(d) {
   return d.value;
 }
 
-function layout_treemapSort(a, b) {
+function d3_layout_treemapSort(a, b) {
   return b.area - a.area;
 }
