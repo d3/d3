@@ -1,8 +1,8 @@
 // A rudimentary force layout using Gauss-Seidel.
-function layout_force() {
+d3.layout.force = function() {
   var force = {},
       event = d3.dispatch("tick"),
-      size = {x: 1, y: 1},
+      size = [1, 1],
       alpha = .5,
       distance = 30,
       interval,
@@ -88,8 +88,8 @@ function layout_force() {
         k,
         n = nodes.length,
         m = links.length,
-        w = size.x,
-        h = size.y,
+        w = size[0],
+        h = size[1],
         o;
 
     var paths = [];
@@ -183,6 +183,7 @@ function layout_force() {
     function mouseup() {
       if (!node) return;
       mousemove();
+      node.fixed = false;
       node = element = null;
     }
 
@@ -190,4 +191,4 @@ function layout_force() {
   };
 
   return force;
-}
+};

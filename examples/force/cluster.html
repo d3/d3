@@ -4,7 +4,7 @@
     <title>Clustered Network</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.geom.js"></script>
-    <script type="text/javascript" src="layout.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
     <style type="text/css">
 svg {
   border: 1px solid #ccc;
@@ -190,10 +190,10 @@ function init() {
 
   net = network(data, net, getGroup, expand);
 
-  force = layout_force()
+  force = d3.layout.force()
       .nodes(net.nodes)
       .links(net.links)
-      .size({x: w, y: h})
+      .size([w, h])
       .distance(60)
       .start();
 
