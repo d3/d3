@@ -133,6 +133,9 @@ d3.geom.js: \
 	src/geom/quadtree.js \
 	src/end.js
 
+tests: \
+	tests/test-format.test
+
 %.min.js: %.js Makefile
 	@rm -f $@
 	$(JS_COMPILER) --js $< --js_output_file $@
@@ -141,6 +144,13 @@ d3.js d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
+
+%.test: %.js %.out d3.js
+	@/bin/echo -n "test: $* "
+	@node $< > $*.actual
+	@diff -U 3 $*.out $*.actual && rm -f $*.actual \
+		&& echo '\033[1;32mPASS\033[0m' \
+		|| echo test: $* '\033[1;31mFAIL\033[0m'
 
 clean:
 	rm -f d3*.js
