@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.5.1"}; // semver
+(function(){d3 = {version: "1.5.2"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -995,7 +995,7 @@ var d3_select = function(s, n) { return n.querySelector(s); },
 // Use Sizzle, if available.
 if (typeof Sizzle == "function") {
   d3_select = function(s, n) { return Sizzle(s, n)[0]; };
-  d3_selectAll = Sizzle;
+  d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
 }
 
 var d3_root = d3_selection([[document]]);

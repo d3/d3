@@ -134,6 +134,8 @@ d3.geom.js: \
 	src/end.js
 
 tests: \
+	tests/test-append.test \
+	tests/test-attr.test \
 	tests/test-format.test
 
 %.min.js: %.js Makefile
