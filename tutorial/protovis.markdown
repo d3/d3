@@ -128,19 +128,43 @@ attribute defintion (*e.g.*, *right* = *width* - *x*).
 
 The next big difference is that D3 code describes *transformations* of scenes
 (scene changes), whereas Protovis describes *representations* (the scenes
-themselves). This means you may write more code with D3—where Protovis would
-automatically re-evaluate all properties to update the scene, D3 needs explicit
-instruction. However, it also eliminates the substantial overhead discussed in
-the previous section. And it's not a matter of deficient implementation—Protovis
-is not given enough information, in terms of dependencies between properties and
-data, to update the scene efficiently.
+themselves). For example, to create a set of labels in Protovis:
 
-In conjunction with transformations, D3's data-binding allows [enter &
-exit](../#enter_and_exit) selections, which control which elements are added or
-removed, and what happens to them during enter and exit. You can even bind data
-to existing documents, decoupling transformation from generation. D3 supports
-automatic *transitions*, where attributes or styles are smoothly interpolated
-over time. Transitions were
+{% highlight js linenos %}
+var l = vis.add(pv.Label)
+    .data([4, 8, 15, 16, 23, 42])
+    .text(String);
+{% endhighlight %}
+
+If the data changed, Protovis would automatically re-evaluate the text property,
+and add or remove labels as necessary, on re-render. D3, in contrast, requires
+more explicit instruction. However, by specifying transformations explicitly,
+you can control which elements are added or removed, and what happens to them:
+
+{% highlight js linenos %}
+// Update…
+var l = vis.selectAll("svg:text")
+    .data([4, 8, 15, 16, 23, 42])
+    .text(String);
+
+// Enter…
+l.enter().append("svg:text")
+    .text(String);
+
+// Exit…
+l.exit().remove();
+{% endhighlight %}
+
+This approach eliminates the substantial overhead discussed in the previous
+section, and offers greater expressiveness. Performance is not just a matter of
+implementation—Protovis does not have enough information, in terms of
+dependencies, to update the scene efficiently. D3 can even bind data to existing
+documents, decoupling transformation from generation. For more on
+transformations, see the [enter & exit](../#enter_and_exit) section of the
+overview, and [part 2](bar-2.html) of the bar chart tutorial.
+
+Perhaps the sexiest change is that D3 supports automatic *transitions*, where
+attributes or styles are smoothly interpolated over time. Transitions were
 [experimented](https://github.com/mbostock/protovis/tree/transition) with
 Protovis, but without direct control over transformations, the Protovis model
 became unwieldy for dynamic scenes.
