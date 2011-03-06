@@ -33,6 +33,16 @@ title: Documentation
   animations.</p>
 </div>
 
+<div class="list">
+  <a href="../tutorial/protovis.html">
+    <img src="../tutorial/protovis.png"/>
+  </a>
+  <h4><a href="../tutorial/protovis.html">For Protovis Users</a></h4>
+
+  <p>An introduction to D3 for users of Protovis. Covers design motivation as
+  well as tips on converting Protovis visualizations to D3.</p>
+</div>
+
 </div>
 
 <br clear="left"/>
