@@ -136,7 +136,7 @@ var l = vis.add(pv.Label)
     .text(String);
 {% endhighlight %}
 
-If the data changed, Protovis would automatically re-evaluate the text property,
+If the data changed, Protovis would automatically re-evaluate all properties,
 and add or remove labels as necessary, on re-render. D3, in contrast, requires
 more explicit instruction. However, by specifying transformations explicitly,
 you can control which elements are added or removed, and what happens to them:
