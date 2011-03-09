@@ -14,5 +14,5 @@ if __name__ == "__main__":
   })
   http_server = tornado.httpserver.HTTPServer(application)
   http_server.listen(tornado.options.options.port)
-  print "http://0.0.0.0:%d/examples/index.html" % tornado.options.options.port
+  print "http://localhost:%d/examples/index.html" % tornado.options.options.port
   tornado.ioloop.IOLoop.instance().start()
