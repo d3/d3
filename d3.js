@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.5.0"}; // semver
+(function(){d3 = {version: "1.6.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -335,30 +335,45 @@ function d3_dispatch(type) {
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),
       fill = match[1] || " ",
-      sign = d3_format_signs[match[3]] || d3_format_signs["-"],
+      sign = match[3] || "",
       zfill = match[5],
       width = +match[6],
       comma = match[7],
       precision = match[8],
       type = match[9];
   if (precision) precision = precision.substring(1);
-  if (zfill) fill = "0"; // TODO align = "=";
+  if (zfill) {
+    fill = "0"; // TODO align = "=";
+    if (comma) width -= Math.floor((width - 1) / 4);
+  }
   if (type == "d") precision = "0";
   return function(value) {
     var number = +value,
-        negative = (number < 0) && (number = -number);
+        negative = (number < 0) && (number = -number) ? "\u2212" : sign;
+
+    // Return the empty string for floats formatted as ints.
     if ((type == "d") && (number % 1)) return "";
+
+    // Convert the input value to the desired precision.
     if (precision) value = number.toFixed(precision);
     else value = "" + number;
-    if (comma) {
-      var i = value.lastIndexOf("."),
-          f = i >= 0 ? value.substring(i) : (i = value.length, ""),
-          t = [];
-      while (i > 0) t.push(value.substring(i -= 3, i + 3));
-      value = t.reverse().join(",") + f;
+
+    // If the fill character is 0, the sign and group is applied after the fill.
+    if (zfill) {
+      var length = value.length + negative.length;
+      if (length < width) value = new Array(width - length + 1).join(fill) + value;
+      if (comma) value = d3_format_group(value);
+      value = negative + value;
     }
-    var length = (value = sign(negative, value)).length;
-    if (length < width) value = new Array(width - length + 1).join(fill) + value;
+
+    // Otherwise (e.g., space-filling), the sign and group is applied before.
+    else {
+      if (comma) value = d3_format_group(value);
+      value = negative + value;
+      var length = value.length;
+      if (length < width) value = new Array(width - length + 1).join(fill) + value;
+    }
+
     return value;
   };
 };
@@ -366,11 +381,14 @@ d3.format = function(specifier) {
 // [[fill]align][sign][#][0][width][,][.precision][type]
 var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
 
-var d3_format_signs = {
-  "+": function(negative, value) { return (negative ? "\u2212" : "+") + value; },
-  " ": function(negative, value) { return (negative ? "\u2212" : " ") + value; },
-  "-": function(negative, value) { return negative ? "\u2212" + value : value; }
-};
+// Apply comma grouping for thousands.
+function d3_format_group(value) {
+  var i = value.lastIndexOf("."),
+      f = i >= 0 ? value.substring(i) : (i = value.length, ""),
+      t = [];
+  while (i > 0) t.push(value.substring(i -= 3, i + 3));
+  return t.reverse().join(",") + f;
+}
 /*
  * TERMS OF USE - EASING EQUATIONS
  *
@@ -977,7 +995,7 @@ var d3_select = function(s, n) { return n.querySelector(s); },
 // Use Sizzle, if available.
 if (typeof Sizzle == "function") {
   d3_select = function(s, n) { return Sizzle(s, n)[0]; };
-  d3_selectAll = Sizzle;
+  d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
 }
 
 var d3_root = d3_selection([[document]]);
@@ -1846,6 +1864,11 @@ var d3_timer_queue = null,
     d3_timer_timeout = 0,
     d3_timer_interval;
 
+// The timer will continue to fire until callback returns true.
+d3.timer = function(callback) {
+  d3_timer(callback, 0);
+};
+
 function d3_timer(callback, delay) {
   var now = Date.now(),
       found = false,
@@ -1884,8 +1907,9 @@ function d3_timer(callback, delay) {
 }
 
 function d3_timer_start() {
-  d3_timer_interval = setInterval(d3_timer_step, 24);
+  d3_timer_interval = 1;
   d3_timer_timeout = 0;
+  d3_timer_frame(d3_timer_step);
 }
 
 function d3_timer_step() {
@@ -1899,6 +1923,7 @@ function d3_timer_step() {
     t1 = (t0 = t1).next;
   }
   d3_timer_flush();
+  if (d3_timer_interval) d3_timer_frame(d3_timer_step);
 }
 
 // Flush after callbacks, to avoid concurrent queue modification.
@@ -1910,8 +1935,15 @@ function d3_timer_flush() {
         ? (t0 ? t0.next = t1.next : d3_timer_queue = t1.next)
         : (t0 = t1).next;
   }
-  if (!t0) d3_timer_interval = clearInterval(d3_timer_interval);
+  if (!t0) d3_timer_interval = 0;
 }
+
+var d3_timer_frame = window.requestAnimationFrame
+    || window.webkitRequestAnimationFrame
+    || window.mozRequestAnimationFrame
+    || window.oRequestAnimationFrame
+    || window.msRequestAnimationFrame
+    || function(callback) { setTimeout(callback, 17); };
 d3.scale = {};
 d3.scale.linear = function() {
   var x0 = 0,

@@ -4,7 +4,7 @@ var w = 960,
 
 var treemap = d3.layout.treemap()
     .size([w, h])
-    .children(function(d, i) { return typeof d.value == "object" && d3.entries(d.value); })
+    .children(function(d) { return typeof d.value == "object" && d3.entries(d.value); })
     .value(function(d) { return d.value; });
 
 var div = d3.select("#chart").append("div")
