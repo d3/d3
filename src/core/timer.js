@@ -2,6 +2,11 @@ var d3_timer_queue = null,
     d3_timer_timeout = 0,
     d3_timer_interval;
 
+// The timer will continue to fire until callback returns true.
+d3.timer = function(callback) {
+  d3_timer(callback, 0);
+};
+
 function d3_timer(callback, delay) {
   var now = Date.now(),
       found = false,

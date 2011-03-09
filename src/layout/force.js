@@ -31,26 +31,21 @@ d3.layout.force = function() {
         l = alpha / (o.distance * o.distance) * (l - distance * o.distance) / l;
         x *= l;
         y *= l;
-        if (s.fixed) {
-          if (t.fixed) continue;
+        if (!t.fixed) {
           t.x -= x;
           t.y -= y;
-        } else if (t.fixed) {
+        }
+        if (!s.fixed) {
           s.x += x;
           s.y += y;
-        } else {
-          s.x += x;
-          s.y += y;
-          t.x -= x;
-          t.y -= y;
         }
       }
     }
 
-    // simulated annealing, basically
-    if ((alpha *= .99) < 1e-6) force.stop();
-
     event.tick.dispatch({type: "tick"});
+
+    // simulated annealing, basically
+    return (alpha *= .99) < .005;
   }
 
   force.on = function(type, listener) {
@@ -137,19 +132,18 @@ d3.layout.force = function() {
       return a.distance - b.distance;
     });
 
-    if (interval) clearInterval(interval);
-    interval = setInterval(tick, 24);
+    d3.timer(tick);
     return force;
   };
 
   force.resume = function() {
     alpha = .1;
-    if (!interval) interval = setInterval(tick, 24);
+    d3.timer(tick);
     return force;
   };
 
   force.stop = function() {
-    interval = clearInterval(interval);
+    alpha = 0;
     return force;
   };
 
