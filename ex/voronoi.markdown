@@ -11,7 +11,12 @@ title: Voronoi Diagram
 <script type="text/javascript" src="../d3.geom.js?1.6.0"> </script>
 <script type="text/javascript" src="voronoi.js"> </script>
 
-Colors by [Cynthia Brewer](http://colorbrewer.org/).
+Colors by [Cynthia Brewer](http://colorbrewer.org/). Voronoi algorithm
+by [Steven Fortune](http://ect.bell-labs.com/who/sjf/), with
+implementation based on work by [Nicolas Garcia
+Belmonte](http://blog.thejit.org/2010/02/12/voronoi-tessellation/).
+Mouseover interaction inspired by [Raymond
+Hill](http://www.raymondhill.net/blog/?p=9).
 
 ### Source Code
 
