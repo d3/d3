@@ -17,6 +17,9 @@ title: Streamgraph
 <script type="text/javascript" src="stream_layers.js"> </script>
 <script type="text/javascript" src="stream.js"> </script>
 
+Streamgraph algorithm, colors, and data generation inspired by
+[Byron and Wattenberg](http://www.leebyron.com/else/streamgraph/).
+
 ### Source Code
 
 {% highlight js linenos %}

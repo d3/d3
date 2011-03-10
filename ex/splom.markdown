@@ -10,6 +10,11 @@ title: Scatterplot Matrix
 <script type="text/javascript" src="cross.js"> </script>
 <script type="text/javascript" src="splom.js"> </script>
 
+Scatterplot matrix design invented by J. A. Hartigan; see also
+[R](http://www.r-project.org/) and [GGobi](http://www.ggobi.org/).
+Data on *Iris* flowers collected by Edgar Anderson and published by
+Ronald Fisher.
+
 ### Source Code
 
 {% highlight js linenos %}

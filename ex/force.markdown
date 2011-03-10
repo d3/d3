@@ -10,6 +10,11 @@ title: Force-Directed Graph
 <script type="text/javascript" src="../d3.layout.js?1.6.0"> </script>
 <script type="text/javascript" src="force.js"> </script>
 
+Layout algorithm inspired by [Tim Dwyer](http://www.csse.monash.edu.au/~tdwyer/) and
+[Thomas Jakobsen](http://web.archive.org/web/20080410171619/http://www.teknikus.dk/tj/gdc2001.htm).
+Data based on character coappearence in Victor Hugo's *Les Misérables*,
+compiled by [Donald Knuth](http://www-cs-faculty.stanford.edu/~uno/sgb.html).
+
 ### Source Code
 
 {% highlight js linenos %}

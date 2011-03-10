@@ -10,6 +10,9 @@ title: Chord Diagram
 <script type="text/javascript" src="../d3.layout.js?1.6.0"> </script>
 <script type="text/javascript" src="chord.js"> </script>
 
+Layout inspired by [Martin Krzywinski](http://mkweb.bcgsc.ca/)'s beautiful
+work on [Circos](http://mkweb.bcgsc.ca/circos/).
+
 ### Source Code
 
 {% highlight js linenos %}

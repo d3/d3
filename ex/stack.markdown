@@ -20,6 +20,9 @@ title: Stacked Bars
 <script type="text/javascript" src="stream_layers.js"> </script>
 <script type="text/javascript" src="stack.js"> </script>
 
+Animation design by [Heer and Robertson](http://vis.berkeley.edu/papers/animated_transitions/).
+Colors and data generation inspired by [Byron and Wattenberg](http://www.leebyron.com/else/streamgraph/).
+
 ### Source Code
 
 {% highlight js linenos %}

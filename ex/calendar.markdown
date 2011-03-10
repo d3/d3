@@ -13,7 +13,11 @@ title: Calendar View
 <script type="text/javascript" src="calendar.js"> </script>
 <script type="text/javascript" src="dji.js"> </script>
 
-Colors by [Cynthia Brewer](http://colorbrewer.org/).
+Colors by [Cynthia Brewer](http://colorbrewer.org/). Layout inspired by
+[Rick Wicklin and Robert
+Allison](http://stat-computing.org/dataexpo/2009/posters/). Dow Jones
+historical data copyright [Yahoo! Finance](http://finance.yahoo.com/) or
+independent data provider; fair use for educational purposes.
 
 ### Source Code
 
