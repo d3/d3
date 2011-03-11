@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.6.0"}; // semver
+(function(){d3 = {version: "1.6.0+1"}; // this branch not semver!
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -2086,17 +2086,9 @@ d3.scale.log = function() {
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),
       tick = d3.scale.linear(), // TODO better tick formatting...
-      p = 1,
-      b = 1 / p,
-      n = false;
-
-  function powp(x) {
-    return n ? -Math.pow(-x, p) : Math.pow(x, p);
-  }
-
-  function powb(x) {
-    return n ? -Math.pow(-x, b) : Math.pow(x, b);
-  }
+      exponent = 1,
+      powp = Number,
+      powb = powp;
 
   function scale(x) {
     return linear(powp(x));
@@ -2108,7 +2100,9 @@ d3.scale.pow = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(powb);
-    n = (x[0] || x[1]) < 0;
+    var pow = (x[0] || x[1]) < 0 ? d3_scale_pown : d3_scale_pow;
+    powp = pow(exponent);
+    powb = pow(1 / exponent);
     linear.domain(x.map(powp));
     tick.domain(x);
     return scale;
@@ -2116,20 +2110,31 @@ d3.scale.pow = function() {
 
   scale.range = d3_rebind(scale, linear.range);
   scale.rangeRound = d3_rebind(scale, linear.rangeRound);
-  scale.inteprolate = d3_rebind(scale, linear.interpolate);
+  scale.interpolate = d3_rebind(scale, linear.interpolate);
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
 
   scale.exponent = function(x) {
-    if (!arguments.length) return p;
+    if (!arguments.length) return exponent;
     var domain = scale.domain();
-    p = x;
-    b = 1 / x;
+    exponent = x;
     return scale.domain(domain);
   };
 
   return scale;
 };
+
+function d3_scale_pow(e) {
+  return function(x) {
+    return Math.pow(x, e);
+  };
+}
+
+function d3_scale_pown(e) {
+  return function(x) {
+    return -Math.pow(-x, e);
+  };
+}
 d3.scale.sqrt = function() {
   return d3.scale.pow().exponent(.5);
 };
