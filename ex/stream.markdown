@@ -8,7 +8,7 @@ title: Streamgraph
 <div class="gallery" id="chart">
   <button class="first last" onclick="transition()">
     Update
-  </button><br>
+  </button><p/>
 </div>
 
 <link type="text/css" rel="stylesheet" href="stream.css"/>

@@ -11,7 +11,7 @@ title: Stacked Bars
   </button
   ><button id="stack" class="last active" onclick="transitionStack()">
     Stack
-  </button><br>
+  </button><p/>
 </div>
 
 <link type="text/css" rel="stylesheet" href="stack.css"/>
