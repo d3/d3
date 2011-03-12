@@ -2,6 +2,11 @@ var d3_timer_queue = null,
     d3_timer_timeout = 0,
     d3_timer_interval;
 
+// The timer will continue to fire until callback returns true.
+d3.timer = function(callback) {
+  d3_timer(callback, 0);
+};
+
 function d3_timer(callback, delay) {
   var now = Date.now(),
       found = false,
@@ -40,8 +45,9 @@ function d3_timer(callback, delay) {
 }
 
 function d3_timer_start() {
-  d3_timer_interval = setInterval(d3_timer_step, 24);
+  d3_timer_interval = 1;
   d3_timer_timeout = 0;
+  d3_timer_frame(d3_timer_step);
 }
 
 function d3_timer_step() {
@@ -55,6 +61,7 @@ function d3_timer_step() {
     t1 = (t0 = t1).next;
   }
   d3_timer_flush();
+  if (d3_timer_interval) d3_timer_frame(d3_timer_step);
 }
 
 // Flush after callbacks, to avoid concurrent queue modification.
@@ -66,5 +73,12 @@ function d3_timer_flush() {
         ? (t0 ? t0.next = t1.next : d3_timer_queue = t1.next)
         : (t0 = t1).next;
   }
-  if (!t0) d3_timer_interval = clearInterval(d3_timer_interval);
+  if (!t0) d3_timer_interval = 0;
 }
+
+var d3_timer_frame = window.requestAnimationFrame
+    || window.webkitRequestAnimationFrame
+    || window.mozRequestAnimationFrame
+    || window.oRequestAnimationFrame
+    || window.msRequestAnimationFrame
+    || function(callback) { setTimeout(callback, 17); };

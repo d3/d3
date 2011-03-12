@@ -1,0 +1,6 @@
+transition start:
+   white
+
+transition end:
+   rgb(255,0,0)
+
