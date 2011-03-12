@@ -1,6 +1,5 @@
 function d3_call(callback) {
   var f = callback;
-  arguments[0] = this;
-  f.apply(this, arguments);
+  f.apply(this, (arguments[0] = this) && arguments);
   return this;
 }
