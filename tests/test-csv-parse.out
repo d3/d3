@@ -1,0 +1,9 @@
+parse UNIX newlines:
+  1:2:3|4:5:6
+
+parse DOS newlines:
+  1:2:3|4:5:6
+
+parse Mac newlines:
+  1:2:3|4:5:6
+

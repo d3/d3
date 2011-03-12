@@ -137,6 +137,7 @@ tests: \
 	tests/test-append.test \
 	tests/test-attr.test \
 	tests/test-call.test \
+	tests/test-csv-parse.test \
 	tests/test-format.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
