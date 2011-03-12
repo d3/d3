@@ -41,8 +41,14 @@ d3.csv.parseRows = function(text, f) {
           i++;
         }
       }
-      if (text.charCodeAt(i + 1) == 10) eol = true;
       re.lastIndex = i + 2;
+      var c = text.charAt(i + 1);
+      if (c === '\r') {
+        eol = true;
+        if (text.charAt(i + 2) === '\n') re.lastIndex++;
+      } else if (c === '\n') {
+        eol = true;
+      }
       return text.substring(j + 1, i).replace(/""/g, "\"");
     }
 
