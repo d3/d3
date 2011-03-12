@@ -1,0 +1,10 @@
+zero arguments:
+  this: vis
+  a: vis
+  b: undefined
+
+one argument:
+  this: vis
+  a: vis
+  b: test
+
