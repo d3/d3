@@ -1,0 +1,63 @@
+d3.layout.hierarchy = function() {
+  var children = d3_layout_hierarchyChildren,
+      value = d3_layout_hierarchyValue;
+
+  // Recursively compute the node depth and value.
+  // Also converts the data representation into a standard hierarchy structure.
+  function recurse(data, depth, nodes) {
+    var datas = children.call(hierarchy, data, depth),
+        node = {depth: depth, data: data};
+    nodes.push(node);
+    if (datas) {
+      var i = -1,
+          n = datas.length,
+          c = node.children = [],
+          v = 0,
+          j = depth + 1;
+      while (++i < n) {
+        d = recurse(datas[i], j, nodes);
+        if (d.value > 0) { // ignore NaN, negative, etc.
+          c.push(d);
+          v += d.value;
+          d.parent = node;
+        }
+      }
+      node.value = v;
+    } else {
+      node.value = value.call(hierarchy, data, depth);
+    }
+    return node;
+  }
+
+  function hierarchy(d) {
+    var nodes = [];
+    recurse(d, 0, nodes);
+    return nodes;
+  }
+
+  hierarchy.children = function(x) {
+    if (!arguments.length) return children;
+    children = x;
+    return hierarchy;
+  };
+
+  hierarchy.value = function(x) {
+    if (!arguments.length) return value;
+    value = x;
+    return hierarchy;
+  };
+
+  return hierarchy;
+}
+
+function d3_layout_hierarchyChildren(d) {
+  return d.children;
+}
+
+function d3_layout_hierarchyValue(d) {
+  return d.value;
+}
+
+function d3_layout_hierarchySort(a, b) {
+  return b.value - a.value;
+}

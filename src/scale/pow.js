@@ -23,9 +23,9 @@ d3.scale.pow = function() {
     return scale;
   };
 
-  scale.range = d3_rebind(scale, linear.range);
-  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
-  scale.interpolate = d3_rebind(scale, linear.interpolate);
+  scale.range = d3.rebind(scale, linear.range);
+  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
+  scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
 

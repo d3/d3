@@ -28,12 +28,12 @@ function d3_functor(v) {
   return typeof v == "function" ? v : function() { return v; };
 }
 // A getter-setter method that preserves the appropriate `this` context.
-function d3_rebind(object, method) {
+d3.rebind = function(object, method) {
   return function() {
     var x = method.apply(object, arguments);
     return arguments.length ? object : x;
   };
-}
+};
 d3.ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : 0;
 };
@@ -2060,9 +2060,9 @@ d3.scale.log = function() {
     return scale;
   };
 
-  scale.range = d3_rebind(scale, linear.range);
-  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
-  scale.interpolate = d3_rebind(scale, linear.interpolate);
+  scale.range = d3.rebind(scale, linear.range);
+  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
+  scale.interpolate = d3.rebind(scale, linear.interpolate);
 
   scale.ticks = function() {
     var d = linear.domain(),
@@ -2117,9 +2117,9 @@ d3.scale.pow = function() {
     return scale;
   };
 
-  scale.range = d3_rebind(scale, linear.range);
-  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
-  scale.interpolate = d3_rebind(scale, linear.interpolate);
+  scale.range = d3.rebind(scale, linear.range);
+  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
+  scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
 
