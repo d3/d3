@@ -76,6 +76,18 @@ title: Examples
 </div>
 
 <div class="list">
+  <a href="sunburst.html">
+    <img src="../sunburst.png"/>
+  </a>
+  <h4><a href="sunburst.html">Sunburst</a></h4>
+
+  <p>A sunburst is similar to the treemap, except it uses a radial layout. The
+  root node of the tree is at the center, with leaves on the circumference. The
+  area (or angle, depending on implementation) of each arc corresponds to its
+  value.</p>
+</div>
+
+<div class="list">
   <a href="splom.html">
     <img src="../splom.png"/>
   </a>

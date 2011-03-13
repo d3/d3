@@ -44,7 +44,8 @@ EX_FILES = \
 	../ex/stream_layers.js \
 	../ex/stack.js \
 	../ex/voronoi.css \
-	../ex/voronoi.js
+	../ex/voronoi.js \
+	../ex/sunburst.js
 
 INCLUDE_FILES = \
 	cartogram.js \
@@ -58,7 +59,8 @@ INCLUDE_FILES = \
 	stream.js \
 	stream_layers.js \
 	stack.js \
-	voronoi.js
+	voronoi.js \
+	sunburst.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
@@ -144,7 +146,7 @@ $(SRC_FILES):
 
 ../ex/flare.json:
 	@rm -rf $@
-	git cat-file blob master:examples/treemap/flare.json > $@
+	git cat-file blob master:data/flare.json > $@
 
 ../ex/splom.js splom.js:
 	@rm -rf $@
@@ -185,7 +187,7 @@ $(SRC_FILES):
 
 ../ex/button.css:
 	@rm -rf $@
-	git cat-file blob master:examples/stream/button.css > $@
+	git cat-file blob master:examples/button.css > $@
 
 ../ex/voronoi.css:
 	@rm -rf $@
@@ -194,3 +196,7 @@ $(SRC_FILES):
 ../ex/voronoi.js voronoi.js:
 	@rm -rf $@
 	git cat-file blob master:examples/voronoi/voronoi.js > $@
+
+../ex/sunburst.js sunburst.js:
+	@rm -rf $@
+	git cat-file blob master:examples/partition/partition-sunburst.js > $@

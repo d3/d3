@@ -7,7 +7,7 @@ title: Treemap
 
 <div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="treemap.css"/>
-<script type="text/javascript" src="../d3.layout.js?1.6.0"> </script>
+<script type="text/javascript" src="../d3.layout.js?1.7.0"> </script>
 <script type="text/javascript" src="treemap.js"> </script>
 
 Treemap design invented by [Ben Shneiderman](http://www.cs.umd.edu/~ben/).
