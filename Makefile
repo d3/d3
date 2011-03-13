@@ -147,7 +147,8 @@ tests: \
 	tests/test-scale-sqrt.test \
 	tests/test-scale-pow.test \
 	tests/test-svg-area.test \
-	tests/test-svg-line.test
+	tests/test-svg-line.test \
+	tests/test-svg-symbol.test
 
 %.min.js: %.js Makefile
 	@rm -f $@
