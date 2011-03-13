@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Partition - Icicle</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
+  </head>
+  <body>
+    <div id="chart"></div>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 250,
+    color = d3.scale.category20c();
+
+var vis = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var partition = d3.layout.partition()
+    .size([w, h])
+    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
+    .value(function(d) { return d.value; });
+
+d3.json("../treemap/flare.json", function(json) {
+  vis.data(d3.entries(json)).selectAll("rect")
+      .data(partition)
+    .enter().append("svg:rect")
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; })
+      .attr("width", function(d) { return d.dx; })
+      .attr("height", function(d) { return d.dy; })
+      .attr("stroke", "#fff")
+      .attr("fill", function(d) { return color((d.children ? d : d.parent).data.key); });
+});
+
+    </script>
+  </body>
+</html>

@@ -95,8 +95,10 @@ d3.layout.js: \
 	src/layout/layout.js \
 	src/layout/chord.js \
 	src/layout/force.js \
+	src/layout/partition.js \
 	src/layout/pie.js \
 	src/layout/stack.js \
+	src/layout/hierarchy.js \
 	src/layout/treemap.js \
 	src/end.js
 
@@ -138,10 +140,16 @@ tests: \
 	tests/test-attr.test \
 	tests/test-call.test \
 	tests/test-format.test \
+	tests/test-time-format.test \
+	tests/test-time-parse.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
 	tests/test-scale-sqrt.test \
-	tests/test-scale-pow.test
+	tests/test-scale-pow.test \
+	tests/test-svg-arc.test \
+	tests/test-svg-area.test \
+	tests/test-svg-line.test \
+	tests/test-svg-symbol.test
 
 %.min.js: %.js Makefile
 	@rm -f $@
@@ -152,7 +160,7 @@ d3.js d3%.js: Makefile
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
 
-%.test: %.js %.out d3.js
+%.test: %.js %.out all
 	@/bin/echo -n "test: $* "
 	@node $< > $*.actual
 	@diff -U 3 $*.out $*.actual && rm -f $*.actual \

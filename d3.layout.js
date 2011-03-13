@@ -338,6 +338,58 @@ d3.layout.force = function() {
 
   return force;
 };
+d3.layout.partition = function() {
+  var hierarchy = d3.layout.hierarchy(),
+      size = [1, 1]; // width, height
+
+  function position(node, x, dx, dy) {
+    var children = node.children;
+    node.x = x;
+    node.y = node.depth * dy;
+    node.dx = dx;
+    node.dy = dy;
+    if (children) {
+      var i = -1,
+          n = children.length,
+          c,
+          d;
+      dx /= node.value;
+      while (++i < n) {
+        position(c = children[i], x, d = c.value * dx, dy);
+        x += d;
+      }
+    }
+  }
+
+  function depth(node) {
+    var children = node.children,
+        d = 0;
+    if (children) {
+      var i = -1,
+          n = children.length;
+      while (++i < n) d = Math.max(d, depth(children[i]));
+    }
+    return 1 + d;
+  }
+
+  function partition(d, i) {
+    var nodes = hierarchy.call(this, d, i);
+    position(nodes[0], 0, size[0], size[1] / depth(nodes[0]));
+    return nodes;
+  }
+
+  partition.sort = d3.rebind(partition, hierarchy.sort);
+  partition.children = d3.rebind(partition, hierarchy.children);
+  partition.value = d3.rebind(partition, hierarchy.value);
+
+  partition.size = function(x) {
+    if (!arguments.length) return size;
+    size = x;
+    return partition;
+  };
+
+  return partition;
+};
 d3.layout.pie = function() {
   var value = Number,
       sort = null,
@@ -595,18 +647,15 @@ function d3_layout_stackMaxIndex(array) {
 function d3_layout_stackSum(p, d) {
   return p + d.y;
 }
-// Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
-d3.layout.treemap = function() {
-  var children = d3_layout_treemapChildren,
-      value = d3_layout_treemapValue,
-      round = Math.round,
-      size = [1, 1]; // width, height
+d3.layout.hierarchy = function() {
+  var sort = d3_layout_hierarchySort,
+      children = d3_layout_hierarchyChildren,
+      value = d3_layout_hierarchyValue;
 
   // Recursively compute the node depth and value.
-  // Also converts the data representation into a standard tree structure.
-  // Also sorts child nodes by descending value to optimize squarification.
-  function sum(data, depth, nodes) {
-    var datas = children.call(treemap, data, depth),
+  // Also converts the data representation into a standard hierarchy structure.
+  function recurse(data, depth, nodes) {
+    var datas = children.call(hierarchy, data, depth),
         node = {depth: depth, data: data};
     nodes.push(node);
     if (datas) {
@@ -616,19 +665,64 @@ d3.layout.treemap = function() {
           v = 0,
           j = depth + 1;
       while (++i < n) {
-        d = sum(datas[i], j, nodes);
+        d = recurse(datas[i], j, nodes);
         if (d.value > 0) { // ignore NaN, negative, etc.
           c.push(d);
           v += d.value;
+          d.parent = node;
         }
       }
+      if (sort) c.sort(sort);
       node.value = v;
     } else {
-      node.value = value.call(treemap, data, depth);
+      node.value = value.call(hierarchy, data, depth);
     }
-    if (!depth) scale(node, size[0] * size[1] / node.value); // root
     return node;
   }
+
+  function hierarchy(d) {
+    var nodes = [];
+    recurse(d, 0, nodes);
+    return nodes;
+  }
+
+  hierarchy.sort = function(x) {
+    if (!arguments.length) return sort;
+    sort = x;
+    return hierarchy;
+  };
+
+  hierarchy.children = function(x) {
+    if (!arguments.length) return children;
+    children = x;
+    return hierarchy;
+  };
+
+  hierarchy.value = function(x) {
+    if (!arguments.length) return value;
+    value = x;
+    return hierarchy;
+  };
+
+  return hierarchy;
+}
+
+function d3_layout_hierarchyChildren(d) {
+  return d.children;
+}
+
+function d3_layout_hierarchyValue(d) {
+  return d.value;
+}
+
+function d3_layout_hierarchySort(a, b) {
+  return b.value - a.value;
+}
+// Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
+d3.layout.treemap = function() {
+  var hierarchy = d3.layout.hierarchy(),
+      round = Math.round,
+      size = [1, 1]; // width, height
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
@@ -642,11 +736,12 @@ d3.layout.treemap = function() {
   }
 
   // Recursively arranges the specified node's children into squarified rows.
+  // Also sorts child nodes by descending value to optimize squarification.
   function squarify(node) {
     if (!node.children) return;
     var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
         row = [],
-        children = node.children.slice().sort(d3_layout_treemapSort),
+        children = node.children.slice(), // copy-on-write
         child,
         best = Infinity, // the best row score so far
         score, // the current row score
@@ -727,28 +822,21 @@ d3.layout.treemap = function() {
     }
   }
 
-  function treemap(d) {
-    var nodes = [],
-        root = sum(d, 0, nodes);
+  function treemap(d, i) {
+    var nodes = hierarchy.call(this, d, i),
+        root = nodes[0];
     root.x = 0;
     root.y = 0;
     root.dx = size[0];
     root.dy = size[1];
+    scale(root, size[0] * size[1] / root.value);
     squarify(root);
     return nodes;
   }
 
-  treemap.children = function(x) {
-    if (!arguments.length) return children;
-    children = x;
-    return treemap;
-  };
-
-  treemap.value = function(x) {
-    if (!arguments.length) return value;
-    value = x;
-    return treemap;
-  };
+  treemap.sort = d3.rebind(treemap, hierarchy.sort);
+  treemap.children = d3.rebind(treemap, hierarchy.children);
+  treemap.value = d3.rebind(treemap, hierarchy.value);
 
   treemap.size = function(x) {
     if (!arguments.length) return size;
@@ -764,16 +852,4 @@ d3.layout.treemap = function() {
 
   return treemap;
 };
-
-function d3_layout_treemapChildren(d) {
-  return d.children;
-}
-
-function d3_layout_treemapValue(d) {
-  return d.value;
-}
-
-function d3_layout_treemapSort(a, b) {
-  return b.area - a.area;
-}
 })()
