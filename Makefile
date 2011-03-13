@@ -146,6 +146,7 @@ tests: \
 	tests/test-scale-linear.test \
 	tests/test-scale-sqrt.test \
 	tests/test-scale-pow.test \
+	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
 	tests/test-svg-line.test \
 	tests/test-svg-symbol.test
