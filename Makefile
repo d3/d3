@@ -140,6 +140,8 @@ tests: \
 	tests/test-attr.test \
 	tests/test-call.test \
 	tests/test-format.test \
+	tests/test-time-format.test \
+	tests/test-time-parse.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
 	tests/test-scale-sqrt.test \
@@ -156,7 +158,7 @@ d3.js d3%.js: Makefile
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
 
-%.test: %.js %.out d3.js
+%.test: %.js %.out all
 	@/bin/echo -n "test: $* "
 	@node $< > $*.actual
 	@diff -U 3 $*.out $*.actual && rm -f $*.actual \
