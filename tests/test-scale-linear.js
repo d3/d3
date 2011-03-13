@@ -1,5 +1,4 @@
 require("./../lib/env-js/envjs/node");
-require("./../lib/sizzle/sizzle");
 require("./../d3");
 
 var f = d3.format(" .3f");
@@ -48,4 +47,26 @@ console.log("          0.0  -> ", x(0.0));
 console.log("          0.5  -> ", x(0.5));
 console.log("          1.0  -> ", x(1.0));
 console.log("          1.5  -> ", x(1.5));
+console.log("");
+
+var x = d3.scale.linear();
+console.log("domain coercion:");
+console.log("       String  -> ", x.domain(["1", "2"]).domain());
+console.log("         Date  -> ", x.domain([new Date(1990, 0, 1), new Date(1991, 0, 1)]).domain());
+console.log("       Number  -> ", x.domain([new Number(41), new Number(42)]).domain());
+console.log("");
+
+var x = d3.scale.linear();
+console.log("domain coercion, invert:");
+console.log("       String  -> ", x.domain(["0", "2"]).invert(.5));
+console.log("         Date  -> ", x.domain([new Date(1990, 0, 1), new Date(1991, 0, 1)]).invert(.5));
+console.log("       Number  -> ", x.domain([new Number(0), new Number(42)]).invert(.5));
+console.log("");
+
+var x = d3.scale.linear();
+console.log("range coercion, invert:");
+console.log("       String  -> ", x.range(["0", "2"]).invert("1"));
+console.log("         Date  -> ", x.range([new Date(1990, 0, 1), new Date(1991, 0, 1)]).invert(new Date(1990, 6, 2, 13)));
+console.log("       Number  -> ", x.range([new Number(0), new Number(42)]).invert(new Number(21)));
+console.log("          ???  -> ", x.range(["#000", "#fff"]).invert("#999")); // can't be coerced
 console.log("");

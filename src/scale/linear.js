@@ -3,8 +3,8 @@ d3.scale.linear = function() {
       x1 = 1,
       y0 = 0,
       y1 = 1,
-      kx = 1 / (x1 - x0),
-      ky = (x1 - x0) / (y1 - y0),
+      kx = 1, // 1 / (x1 - x0)
+      ky = 1, // (x1 - x0) / (y1 - y0)
       interpolate = d3.interpolate,
       i = interpolate(y0, y1);
 
@@ -12,14 +12,15 @@ d3.scale.linear = function() {
     return i((x - x0) * kx);
   }
 
+  // Note: requires range is coercible to number!
   scale.invert = function(y) {
-    return (y - y0) * ky + x0; // TODO assumes number?
+    return (y - y0) * ky + x0;
   };
 
   scale.domain = function(x) {
     if (!arguments.length) return [x0, x1];
-    x0 = x[0];
-    x1 = x[1];
+    x0 = +x[0];
+    x1 = +x[1];
     kx = 1 / (x1 - x0);
     ky = (x1 - x0) / (y1 - y0);
     return scale;

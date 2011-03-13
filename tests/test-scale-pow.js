@@ -1,5 +1,4 @@
 require("./../lib/env-js/envjs/node");
-require("./../lib/sizzle/sizzle");
 require("./../d3");
 
 var f = d3.format(" .3f");

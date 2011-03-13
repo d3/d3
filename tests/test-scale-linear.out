@@ -34,3 +34,19 @@ domain([0, 1]).range(["red", "blue"]).interpolate(hsl):
           1.0  ->  #0000ff
           1.5  ->  #ff0000
 
+domain coercion:
+       String  ->  [ 1, 2 ]
+         Date  ->  [ 631180800000, 662716800000 ]
+       Number  ->  [ 41, 42 ]
+
+domain coercion, invert:
+       String  ->  1
+         Date  ->  646948800000
+       Number  ->  21
+
+range coercion, invert:
+       String  ->  0.5
+         Date  ->  0.5
+       Number  ->  0.5
+          ???  ->  NaN
+
