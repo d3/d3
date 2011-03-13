@@ -88,10 +88,7 @@ function repartition(value) {
 
 // Interpolate the arcs in data space.
 function arcTween(a) {
-  var i = d3.interpolate(
-    {x: a.prev.x, dx: a.prev.dx},
-    {x: a.x, dx: a.dx, y: a.y, dy: a.dy}
-  );
+  var i = d3.interpolate({x: a.prev.x, dx: a.prev.dx}, a);
   return function(t) {
     return arc(i(t));
   };
