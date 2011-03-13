@@ -21,7 +21,7 @@ d3.layout.treemap = function() {
     if (!node.children) return;
     var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
         row = [],
-        children = node.children.slice().sort(d3_layout_hierarchySort),
+        children = node.children.slice(), // copy-on-write
         child,
         best = Infinity, // the best row score so far
         score, // the current row score
@@ -114,6 +114,7 @@ d3.layout.treemap = function() {
     return nodes;
   }
 
+  treemap.sort = d3.rebind(treemap, hierarchy.sort);
   treemap.children = d3.rebind(treemap, hierarchy.children);
   treemap.value = d3.rebind(treemap, hierarchy.value);
 

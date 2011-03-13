@@ -1,5 +1,6 @@
 d3.layout.hierarchy = function() {
-  var children = d3_layout_hierarchyChildren,
+  var sort = d3_layout_hierarchySort,
+      children = d3_layout_hierarchyChildren,
       value = d3_layout_hierarchyValue;
 
   // Recursively compute the node depth and value.
@@ -22,6 +23,7 @@ d3.layout.hierarchy = function() {
           d.parent = node;
         }
       }
+      if (sort) c.sort(sort);
       node.value = v;
     } else {
       node.value = value.call(hierarchy, data, depth);
@@ -34,6 +36,12 @@ d3.layout.hierarchy = function() {
     recurse(d, 0, nodes);
     return nodes;
   }
+
+  hierarchy.sort = function(x) {
+    if (!arguments.length) return sort;
+    sort = x;
+    return hierarchy;
+  };
 
   hierarchy.children = function(x) {
     if (!arguments.length) return children;

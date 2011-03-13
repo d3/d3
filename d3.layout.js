@@ -350,7 +350,7 @@ d3.layout.partition = function() {
     node.dy = dy;
     if (children) {
       var i = -1,
-          n = (children = children.slice().sort(d3_layout_hierarchySort)).length,
+          n = children.length,
           c,
           d;
       dx /= node.value;
@@ -378,6 +378,7 @@ d3.layout.partition = function() {
     return nodes;
   }
 
+  partition.sort = d3.rebind(partition, hierarchy.sort);
   partition.children = d3.rebind(partition, hierarchy.children);
   partition.value = d3.rebind(partition, hierarchy.value);
 
@@ -647,7 +648,8 @@ function d3_layout_stackSum(p, d) {
   return p + d.y;
 }
 d3.layout.hierarchy = function() {
-  var children = d3_layout_hierarchyChildren,
+  var sort = d3_layout_hierarchySort,
+      children = d3_layout_hierarchyChildren,
       value = d3_layout_hierarchyValue;
 
   // Recursively compute the node depth and value.
@@ -670,6 +672,7 @@ d3.layout.hierarchy = function() {
           d.parent = node;
         }
       }
+      if (sort) c.sort(sort);
       node.value = v;
     } else {
       node.value = value.call(hierarchy, data, depth);
@@ -682,6 +685,12 @@ d3.layout.hierarchy = function() {
     recurse(d, 0, nodes);
     return nodes;
   }
+
+  hierarchy.sort = function(x) {
+    if (!arguments.length) return sort;
+    sort = x;
+    return hierarchy;
+  };
 
   hierarchy.children = function(x) {
     if (!arguments.length) return children;
@@ -732,7 +741,7 @@ d3.layout.treemap = function() {
     if (!node.children) return;
     var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
         row = [],
-        children = node.children.slice().sort(d3_layout_hierarchySort),
+        children = node.children.slice(), // copy-on-write
         child,
         best = Infinity, // the best row score so far
         score, // the current row score
@@ -825,6 +834,7 @@ d3.layout.treemap = function() {
     return nodes;
   }
 
+  treemap.sort = d3.rebind(treemap, hierarchy.sort);
   treemap.children = d3.rebind(treemap, hierarchy.children);
   treemap.value = d3.rebind(treemap, hierarchy.value);
 

@@ -10,7 +10,7 @@ d3.layout.partition = function() {
     node.dy = dy;
     if (children) {
       var i = -1,
-          n = (children = children.slice().sort(d3_layout_hierarchySort)).length,
+          n = children.length,
           c,
           d;
       dx /= node.value;
@@ -38,6 +38,7 @@ d3.layout.partition = function() {
     return nodes;
   }
 
+  partition.sort = d3.rebind(partition, hierarchy.sort);
   partition.children = d3.rebind(partition, hierarchy.children);
   partition.value = d3.rebind(partition, hierarchy.value);
 
