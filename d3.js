@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.7.0"}; // semver
+(function(){d3 = {version: "1.8.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1959,8 +1959,8 @@ d3.scale.linear = function() {
       x1 = 1,
       y0 = 0,
       y1 = 1,
-      kx = 1 / (x1 - x0),
-      ky = (x1 - x0) / (y1 - y0),
+      kx = 1, // 1 / (x1 - x0)
+      ky = 1, // (x1 - x0) / (y1 - y0)
       interpolate = d3.interpolate,
       i = interpolate(y0, y1);
 
@@ -1968,14 +1968,15 @@ d3.scale.linear = function() {
     return i((x - x0) * kx);
   }
 
+  // Note: requires range is coercible to number!
   scale.invert = function(y) {
-    return (y - y0) * ky + x0; // TODO assumes number?
+    return (y - y0) * ky + x0;
   };
 
   scale.domain = function(x) {
     if (!arguments.length) return [x0, x1];
-    x0 = x[0];
-    x1 = x[1];
+    x0 = +x[0];
+    x1 = +x[1];
     kx = 1 / (x1 - x0);
     ky = (x1 - x0) / (y1 - y0);
     return scale;
@@ -2035,15 +2036,8 @@ d3.scale.linear = function() {
 };
 d3.scale.log = function() {
   var linear = d3.scale.linear(),
-      n = false;
-
-  function log(x) {
-    return (n ? -Math.log(-x) : Math.log(x)) / Math.LN10;
-  }
-
-  function pow(y) {
-    return n ? -Math.pow(10, -y) : Math.pow(10, y);
-  }
+      log = d3_scale_log,
+      pow = log.pow;
 
   function scale(x) {
     return linear(log(x));
@@ -2055,7 +2049,8 @@ d3.scale.log = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(pow);
-    n = (x[0] || x[1]) < 0;
+    log = (x[0] || x[1]) < 0 ? d3_scale_logn : d3_scale_log;
+    pow = log.pow;
     linear.domain(x.map(log));
     return scale;
   };
@@ -2091,6 +2086,22 @@ d3.scale.log = function() {
   };
 
   return scale;
+};
+
+function d3_scale_log(x) {
+  return Math.log(x) / Math.LN10;
+}
+
+function d3_scale_logn(x) {
+  return -Math.log(-x) / Math.LN10;
+}
+
+d3_scale_log.pow = function(x) {
+  return Math.pow(10, x);
+};
+
+d3_scale_logn.pow = function(x) {
+  return -Math.pow(10, -x);
 };
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),

@@ -144,6 +144,7 @@ tests: \
 	tests/test-time-parse.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
+	tests/test-scale-log.test \
 	tests/test-scale-sqrt.test \
 	tests/test-scale-pow.test \
 	tests/test-svg-arc.test \
