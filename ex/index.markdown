@@ -162,4 +162,16 @@ title: Examples
   unleash the cuteness!</p>
 </div>
 
+<div class="list">
+  <a href="http://www.visualizing.org/visualizations/urban-water-explorer/">
+    <img src="../water.png"/>
+  </a>
+  <h4><a href="http://www.visualizing.org/visualizations/urban-water-explorer/">Urban Water Explorer</a></h4>
+
+  <p><a href="http://www.janwillemtulp.com/">Jan Willem Tulp</a> created this
+  fun interactive visualization of global water consumption as part of the
+  <a href="http://www.visualizing.org">Visualizing.org</a> World Water Day
+  challenge.</p>
+</div>
+
 </div>
