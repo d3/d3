@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.8.0"}; // semver
+(function(){d3 = {version: "1.8.1"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -234,7 +234,7 @@ var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
 d3.xhr = function(url, mime, callback) {
   var req = new XMLHttpRequest();
   if (arguments.length < 3) callback = mime;
-  else if (mime) req.overrideMimeType(mime);
+  else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
   req.open("GET", url, true);
   req.onreadystatechange = function() {
     if (req.readyState == 4) callback(req.status < 300 ? req : null);
