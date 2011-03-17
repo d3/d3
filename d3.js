@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.8.1"}; // semver
+(function(){d3 = {version: "1.8.2"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1785,7 +1785,7 @@ function d3_transition(groups) {
   };
 
   transition.ease = function(value) {
-    ease = typeof value == "string" ? d3.ease(value) : value;
+    ease = typeof value == "function" ? value : d3.ease.apply(d3, arguments);
     return transition;
   };
 

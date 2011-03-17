@@ -141,7 +141,7 @@ function d3_transition(groups) {
   };
 
   transition.ease = function(value) {
-    ease = typeof value == "string" ? d3.ease(value) : value;
+    ease = typeof value == "function" ? value : d3.ease.apply(d3, arguments);
     return transition;
   };
 
