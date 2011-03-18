@@ -139,6 +139,7 @@ tests: \
 	tests/test-append.test \
 	tests/test-attr.test \
 	tests/test-call.test \
+	tests/test-csv-parse.test \
 	tests/test-format.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
