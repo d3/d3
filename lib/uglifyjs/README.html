@@ -1,0 +1,782 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>UglifyJS -- a JavaScript parser/compressor/beautifier</title>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2011-02-28 22:35:00 EET"/>
+<meta name="author" content="Mihai Bazon"/>
+<meta name="description" content="a JavaScript parser/compressor/beautifier in JavaScript"/>
+<meta name="keywords" content="javascript, js, parser, compiler, compressor, mangle, minify, minifier"/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="docstyle.css" />
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+<div id="content">
+
+<h1 class="title">UglifyJS &ndash; a JavaScript parser/compressor/beautifier</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 UglifyJS &mdash; a JavaScript parser/compressor/beautifier </a>
+<ul>
+<li><a href="#sec-1_1">1.1 Unsafe transformations </a>
+<ul>
+<li><a href="#sec-1_1_1">1.1.1 Calls involving the global Array constructor </a></li>
+</ul>
+</li>
+<li><a href="#sec-1_2">1.2 Usage </a>
+<ul>
+<li><a href="#sec-1_2_1">1.2.1 API </a></li>
+<li><a href="#sec-1_2_2">1.2.2 Beautifier shortcoming &ndash; no more comments </a></li>
+</ul>
+</li>
+<li><a href="#sec-1_3">1.3 Compression &ndash; how good is it? </a></li>
+<li><a href="#sec-1_4">1.4 Bugs? </a></li>
+<li><a href="#sec-1_5">1.5 Links </a></li>
+<li><a href="#sec-1_6">1.6 License </a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> UglifyJS &mdash; a JavaScript parser/compressor/beautifier </h2>
+<div class="outline-text-2" id="text-1">
+
+
+<p>
+<b>Update</b>: please read the section on <a href="#sec-1_1">unsafe transformations</a>.
+</p>
+<p>
+This package implements a general-purpose JavaScript
+parser/compressor/beautifier toolkit.  It is developed on <a href="http://nodejs.org/">NodeJS</a>, but it
+should work on any JavaScript platform supporting the CommonJS module system
+(and if your platform of choice doesn't support CommonJS, you can easily
+implement it, or discard the <code>exports.*</code> lines from UglifyJS sources).
+</p>
+<p>
+The tokenizer/parser generates an abstract syntax tree from JS code.  You
+can then traverse the AST to learn more about the code, or do various
+manipulations on it.  This part is implemented in <a href="../lib/parse-js.js">parse-js.js</a> and it's a
+port to JavaScript of the excellent <a href="http://marijn.haverbeke.nl/parse-js/">parse-js</a> Common Lisp library from <a href="http://marijn.haverbeke.nl/">Marijn Haverbeke</a>.
+</p>
+<p>
+( See <a href="http://github.com/mishoo/cl-uglify-js">cl-uglify-js</a> if you're looking for the Common Lisp version of
+UglifyJS. )
+</p>
+<p>
+The second part of this package, implemented in <a href="../lib/process.js">process.js</a>, inspects and
+manipulates the AST generated by the parser to provide the following:
+</p>
+<ul>
+<li>
+ability to re-generate JavaScript code from the AST.  Optionally
+indented&mdash;you can use this if you want to “beautify” a program that has
+been compressed, so that you can inspect the source.  But you can also run
+our code generator to print out an AST without any whitespace, so you
+achieve compression as well.
+
+</li>
+<li>
+shorten variable names (usually to single characters).  Our mangler will
+analyze the code and generate proper variable names, depending on scope
+and usage, and is smart enough to deal with globals defined elsewhere, or
+with <code>eval()</code> calls or <code>with{}</code> statements.  In short, if <code>eval()</code> or
+<code>with{}</code> are used in some scope, then all variables in that scope and any
+variables in the parent scopes will remain unmangled, and any references
+to such variables remain unmangled as well.
+
+</li>
+<li>
+various small optimizations that may lead to faster code but certainly
+lead to smaller code.  Where possible, we do the following:
+
+<ul>
+<li>
+foo["bar"]  ==&gt;  foo.bar
+
+</li>
+<li>
+remove block brackets <code>{}</code>
+
+</li>
+<li>
+join consecutive var declarations:
+var a = 10; var b = 20; ==&gt; var a=10,b=20;
+
+</li>
+<li>
+resolve simple constant expressions: 1 +2 * 3 ==&gt; 7.  We only do the
+replacement if the result occupies less bytes; for example 1/3 would
+translate to 0.333333333333, so in this case we don't replace it.
+
+</li>
+<li>
+consecutive statements in blocks are merged into a sequence; in many
+cases, this leaves blocks with a single statement, so then we can remove
+the block brackets.
+
+</li>
+<li>
+various optimizations for IF statements:
+
+<ul>
+<li>
+if (foo) bar(); else baz(); ==&gt; foo?bar():baz();
+</li>
+<li>
+if (!foo) bar(); else baz(); ==&gt; foo?baz():bar();
+</li>
+<li>
+if (foo) bar(); ==&gt; foo&amp;&amp;bar();
+</li>
+<li>
+if (!foo) bar(); ==&gt; foo||bar();
+</li>
+<li>
+if (foo) return bar(); else return baz(); ==&gt; return foo?bar():baz();
+</li>
+<li>
+if (foo) return bar(); else something(); ==&gt; {if(foo)return bar();something()}
+
+</li>
+</ul>
+</li>
+<li>
+remove some unreachable code and warn about it (code that follows a
+<code>return</code>, <code>throw</code>, <code>break</code> or <code>continue</code> statement, except
+function/variable declarations).
+</li>
+</ul>
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-1_1" class="outline-3">
+<h3 id="sec-1_1"><span class="section-number-3">1.1</span> <span class="target">Unsafe transformations</span>  </h3>
+<div class="outline-text-3" id="text-1_1">
+
+
+<p>
+UglifyJS tries its best to achieve great compression while leaving the
+semantics of the code intact.  In general, if your code logic is broken by
+UglifyJS then it's a bug in UglifyJS and you should report it and I should
+fix it. :-)
+</p>
+<p>
+However, I opted to include the following potentially unsafe transformations
+as default behavior.  Discussion is welcome, if you have ideas of how to
+handle this better, or any objections to these optimizations, please let me
+know.
+</p>
+
+</div>
+
+<div id="outline-container-1_1_1" class="outline-4">
+<h4 id="sec-1_1_1"><span class="section-number-4">1.1.1</span> Calls involving the global Array constructor </h4>
+<div class="outline-text-4" id="text-1_1_1">
+
+
+<p>
+The following transformations occur:
+</p>
+
+
+
+<pre class="src src-espresso"><span style="color: #afeeee; font-weight: bold;">new</span> <span style="color: #87ceeb; font-weight: bold;">Array</span>(1, 2, 3, 4)  =&gt; [1,2,3,4]
+Array(a, b, c)         =&gt; [a,b,c]
+<span style="color: #afeeee; font-weight: bold;">new</span> <span style="color: #87ceeb; font-weight: bold;">Array</span>(5)           =&gt; Array(5)
+<span style="color: #afeeee; font-weight: bold;">new</span> <span style="color: #87ceeb; font-weight: bold;">Array</span>(a)           =&gt; Array(a)
+</pre>
+
+
+
+<p>
+These are all safe if the Array name isn't redefined.  JavaScript does allow
+one to globally redefine Array (and pretty much everything, in fact) but I
+personally don't see why would anyone do that.
+</p>
+<p>
+UglifyJS does handle the case where Array is redefined locally, or even
+globally but with a <code>function</code> or <code>var</code> declaration.  Therefore, in the
+following cases UglifyJS <b>doesn't touch</b> calls or instantiations of Array:
+</p>
+
+
+
+<pre class="src src-espresso"><span style="color: #add8e6;">// </span><span style="color: #add8e6;">case 1.  globally declared variable
+</span>  <span style="color: #afeeee; font-weight: bold;">var</span> <span style="color: #40e0d0; font-weight: bold;">Array</span>;
+  <span style="color: #afeeee; font-weight: bold;">new</span> <span style="color: #87ceeb; font-weight: bold;">Array</span>(1, 2, 3);
+  Array(a, b);
+
+  <span style="color: #add8e6;">// </span><span style="color: #add8e6;">or (can be declared later)
+</span>  <span style="color: #afeeee; font-weight: bold;">new</span> <span style="color: #87ceeb; font-weight: bold;">Array</span>(1, 2, 3);
+  <span style="color: #afeeee; font-weight: bold;">var</span> <span style="color: #40e0d0; font-weight: bold;">Array</span>;
+
+  <span style="color: #add8e6;">// </span><span style="color: #add8e6;">or (can be a function)
+</span>  <span style="color: #afeeee; font-weight: bold;">new</span> <span style="color: #87ceeb; font-weight: bold;">Array</span>(1, 2, 3);
+  <span style="color: #afeeee; font-weight: bold;">function</span> <span style="color: #7fffd4; font-weight: bold;">Array</span>() { ... }
+
+<span style="color: #add8e6;">// </span><span style="color: #add8e6;">case 2.  declared in a function
+</span>  (<span style="color: #afeeee; font-weight: bold;">function</span>(){
+    a = <span style="color: #afeeee; font-weight: bold;">new</span> <span style="color: #87ceeb; font-weight: bold;">Array</span>(1, 2, 3);
+    b = Array(5, 6);
+    <span style="color: #afeeee; font-weight: bold;">var</span> <span style="color: #40e0d0; font-weight: bold;">Array</span>;
+  })();
+
+  <span style="color: #add8e6;">// </span><span style="color: #add8e6;">or
+</span>  (<span style="color: #afeeee; font-weight: bold;">function</span>(<span style="color: #40e0d0; font-weight: bold;">Array</span>){
+    <span style="color: #afeeee; font-weight: bold;">return</span> Array(5, 6, 7);
+  })();
+
+  <span style="color: #add8e6;">// </span><span style="color: #add8e6;">or
+</span>  (<span style="color: #afeeee; font-weight: bold;">function</span>(){
+    <span style="color: #afeeee; font-weight: bold;">return</span> <span style="color: #afeeee; font-weight: bold;">new</span> <span style="color: #87ceeb; font-weight: bold;">Array</span>(1, 2, 3, 4);
+    <span style="color: #afeeee; font-weight: bold;">function</span> <span style="color: #7fffd4; font-weight: bold;">Array</span>() { ... }
+  })();
+
+  <span style="color: #add8e6;">// </span><span style="color: #add8e6;">etc.
+</span></pre>
+
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1_2" class="outline-3">
+<h3 id="sec-1_2"><span class="section-number-3">1.2</span> Usage </h3>
+<div class="outline-text-3" id="text-1_2">
+
+
+<p>
+There is a helper script now &mdash; <code>bin/uglifyjs</code> &mdash; that uses the library to
+compress a script using the maximum compression settings.  Synopsis:
+</p>
+
+
+
+<pre class="src src-sh">uglifyjs [ options... ] [ filename ]
+</pre>
+
+
+
+<p>
+<code>filename</code> should be the last argument and should name the file from which
+to read the JavaScript code.  If you don't specify it, it will read code
+from STDIN.
+</p>
+<p>
+Supported options:
+</p>
+<ul>
+<li>
+<code>-b</code> or <code>--beautify</code> &mdash; output indented code; when passed, additional
+options control the beautifier:
+
+<ul>
+<li>
+<code>-i N</code> or <code>--indent N</code> &mdash; indentation level (number of spaces)
+
+</li>
+<li>
+<code>-q</code> or <code>--quote-keys</code> &mdash; quote keys in literal objects (by default,
+only keys that cannot be identifier names will be quotes).
+
+</li>
+</ul>
+</li>
+<li>
+<code>--ascii</code> &mdash; pass this argument to encode non-ASCII characters as
+<code>\uXXXX</code> sequences.  By default UglifyJS won't bother to do it and will
+output Unicode characters instead.  (the output is always encoded in UTF8,
+but if you pass this option you'll only get ASCII).
+
+</li>
+<li>
+<code>-nm</code> or <code>--no-mangle</code> &mdash; don't mangle variable names
+
+</li>
+<li>
+<code>-ns</code> or <code>--no-squeeze</code> &mdash; don't call <code>ast_squeeze()</code> (which does various
+optimizations that result in smaller, less readable code).
+
+</li>
+<li>
+<code>-mt</code> or <code>--mangle-toplevel</code> &mdash; mangle names in the toplevel scope too
+(by default we don't do this).
+
+</li>
+<li>
+<code>--no-seqs</code> &mdash; when <code>ast_squeeze()</code> is called (thus, unless you pass
+<code>--no-squeeze</code>) it will reduce consecutive statements in blocks into a
+sequence.  For example, "a = 10; b = 20; foo();" will be written as
+"a=10,b=20,foo();".  In various occasions, this allows us to discard the
+block brackets (since the block becomes a single statement).  This is ON
+by default because it seems safe and saves a few hundred bytes on some
+libs that I tested it on, but pass <code>--no-seqs</code> to disable it.
+
+</li>
+<li>
+<code>--no-dead-code</code> &mdash; by default, UglifyJS will remove code that is
+obviously unreachable (code that follows a <code>return</code>, <code>throw</code>, <code>break</code> or
+<code>continue</code> statement and is not a function/variable declaration).  Pass
+this option to disable this optimization.
+
+</li>
+<li>
+<code>-nc</code> or <code>--no-copyright</code> &mdash; by default, <code>uglifyjs</code> will keep the initial
+comment tokens in the generated code (assumed to be copyright information
+etc.).  If you pass this it will discard it.
+
+</li>
+<li>
+<code>-o filename</code> or <code>--output filename</code> &mdash; put the result in <code>filename</code>.  If
+this isn't given, the result goes to standard output (or see next one).
+
+</li>
+<li>
+<code>--overwrite</code> &mdash; if the code is read from a file (not from STDIN) and you
+pass <code>--overwrite</code> then the output will be written in the same file.
+
+</li>
+<li>
+<code>--ast</code> &mdash; pass this if you want to get the Abstract Syntax Tree instead
+of JavaScript as output.  Useful for debugging or learning more about the
+internals.
+
+</li>
+<li>
+<code>-v</code> or <code>--verbose</code> &mdash; output some notes on STDERR (for now just how long
+each operation takes).
+
+</li>
+<li>
+<code>--extra</code> &mdash; enable additional optimizations that have not yet been
+extensively tested.  These might, or might not, break your code.  If you
+find a bug using this option, please report a test case.
+
+</li>
+<li>
+<code>--unsafe</code> &mdash; enable other additional optimizations that are known to be
+unsafe in some contrived situations, but could still be generally useful.
+For now only this:
+
+<ul>
+<li>
+foo.toString()  ==&gt;  foo+""
+
+</li>
+</ul>
+</li>
+<li>
+<code>--max-line-len</code> (default 32K characters) &mdash; add a newline after around
+32K characters.  I've seen both FF and Chrome croak when all the code was
+on a single line of around 670K.  Pass &ndash;max-line-len 0 to disable this
+safety feature.
+
+</li>
+<li>
+<code>--reserved-names</code> &mdash; some libraries rely on certain names to be used, as
+pointed out in issue #92 and #81, so this option allow you to exclude such
+names from the mangler.  For example, to keep names <code>require</code> and <code>$super</code>
+intact you'd specify &ndash;reserved-names "require,$super".
+</li>
+</ul>
+
+
+
+</div>
+
+<div id="outline-container-1_2_1" class="outline-4">
+<h4 id="sec-1_2_1"><span class="section-number-4">1.2.1</span> API </h4>
+<div class="outline-text-4" id="text-1_2_1">
+
+
+<p>
+Symlink the <b>lib</b> directory as <b>~/.node_libraries/uglifyjs</b>, so that the
+<b>require</b> calls in the following sample will work:
+</p>
+
+
+
+<pre class="src src-espresso"><span style="color: #afeeee; font-weight: bold;">var</span> <span style="color: #40e0d0; font-weight: bold;">jsp</span> = require(<span style="color: #87cefa;">"uglifyjs/parse-js"</span>);
+<span style="color: #afeeee; font-weight: bold;">var</span> <span style="color: #40e0d0; font-weight: bold;">pro</span> = require(<span style="color: #87cefa;">"uglifyjs/process"</span>);
+
+<span style="color: #afeeee; font-weight: bold;">var</span> <span style="color: #40e0d0; font-weight: bold;">orig_code</span> = <span style="color: #87cefa;">"... JS code here"</span>;
+<span style="color: #afeeee; font-weight: bold;">var</span> <span style="color: #40e0d0; font-weight: bold;">ast</span> = jsp.parse(orig_code); <span style="color: #add8e6;">// </span><span style="color: #add8e6;">parse code and get the initial AST
+</span>ast = pro.ast_mangle(ast); <span style="color: #add8e6;">// </span><span style="color: #add8e6;">get a new AST with mangled names
+</span>ast = pro.ast_squeeze(ast); <span style="color: #add8e6;">// </span><span style="color: #add8e6;">get an AST with compression optimizations
+</span><span style="color: #afeeee; font-weight: bold;">var</span> <span style="color: #40e0d0; font-weight: bold;">final_code</span> = pro.gen_code(ast); <span style="color: #add8e6;">// </span><span style="color: #add8e6;">compressed code here
+</span></pre>
+
+
+
+<p>
+The above performs the full compression that is possible right now.  As you
+can see, there are a sequence of steps which you can apply.  For example if
+you want compressed output but for some reason you don't want to mangle
+variable names, you would simply skip the line that calls
+<code>pro.ast_mangle(ast)</code>.
+</p>
+<p>
+Some of these functions take optional arguments.  Here's a description:
+</p>
+<ul>
+<li>
+<code>jsp.parse(code, strict_semicolons)</code> &ndash; parses JS code and returns an AST.
+<code>strict_semicolons</code> is optional and defaults to <code>false</code>.  If you pass
+<code>true</code> then the parser will throw an error when it expects a semicolon and
+it doesn't find it.  For most JS code you don't want that, but it's useful
+if you want to strictly sanitize your code.
+
+</li>
+<li>
+<code>pro.ast_mangle(ast, options)</code> &ndash; generates a new AST containing mangled
+(compressed) variable and function names.  It supports the following
+options:
+
+<ul>
+<li>
+<code>toplevel</code> &ndash; mangle toplevel names (by default we don't touch them).
+</li>
+<li>
+<code>except</code> &ndash; an array of names to exclude from compression.
+
+</li>
+</ul>
+</li>
+<li>
+<code>pro.ast_squeeze(ast, options)</code> &ndash; employs further optimizations designed
+to reduce the size of the code that <code>gen_code</code> would generate from the
+AST.  Returns a new AST.  <code>options</code> can be a hash; the supported options
+are:
+
+<ul>
+<li>
+<code>make_seqs</code> (default true) which will cause consecutive statements in a
+block to be merged using the "sequence" (comma) operator
+
+</li>
+<li>
+<code>dead_code</code> (default true) which will remove unreachable code.
+
+</li>
+</ul>
+</li>
+<li>
+<code>pro.gen_code(ast, options)</code> &ndash; generates JS code from the AST.  By
+default it's minified, but using the <code>options</code> argument you can get nicely
+formatted output.  <code>options</code> is, well, optional :-) and if you pass it it
+must be an object and supports the following properties (below you can see
+the default values):
+
+<ul>
+<li>
+<code>beautify: false</code> &ndash; pass <code>true</code> if you want indented output
+</li>
+<li>
+<code>indent_start: 0</code> (only applies when <code>beautify</code> is <code>true</code>) &ndash; initial
+indentation in spaces
+</li>
+<li>
+<code>indent_level: 4</code> (only applies when <code>beautify</code> is <code>true</code>) --
+indentation level, in spaces (pass an even number)
+</li>
+<li>
+<code>quote_keys: false</code> &ndash; if you pass <code>true</code> it will quote all keys in
+literal objects
+</li>
+<li>
+<code>space_colon: false</code> (only applies when <code>beautify</code> is <code>true</code>) &ndash; wether
+to put a space before the colon in object literals
+</li>
+<li>
+<code>ascii_only: false</code> &ndash; pass <code>true</code> if you want to encode non-ASCII
+characters as <code>\uXXXX</code>.
+</li>
+</ul>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_2_2" class="outline-4">
+<h4 id="sec-1_2_2"><span class="section-number-4">1.2.2</span> Beautifier shortcoming &ndash; no more comments </h4>
+<div class="outline-text-4" id="text-1_2_2">
+
+
+<p>
+The beautifier can be used as a general purpose indentation tool.  It's
+useful when you want to make a minified file readable.  One limitation,
+though, is that it discards all comments, so you don't really want to use it
+to reformat your code, unless you don't have, or don't care about, comments.
+</p>
+<p>
+In fact it's not the beautifier who discards comments &mdash; they are dumped at
+the parsing stage, when we build the initial AST.  Comments don't really
+make sense in the AST, and while we could add nodes for them, it would be
+inconvenient because we'd have to add special rules to ignore them at all
+the processing stages.
+</p>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-1_3" class="outline-3">
+<h3 id="sec-1_3"><span class="section-number-3">1.3</span> Compression &ndash; how good is it? </h3>
+<div class="outline-text-3" id="text-1_3">
+
+
+<p>
+(XXX: this is somewhat outdated.  On the jQuery source code we beat Closure
+by 168 bytes (560 after gzip) and by many seconds.)
+</p>
+<p>
+There are a few popular JS minifiers nowadays &ndash; the two most well known
+being the GoogleClosure (GCL) compiler and the YUI compressor.  For some
+reason they are both written in Java.  I didn't really hope to beat any of
+them, but finally I did &ndash; UglifyJS compresses better than the YUI
+compressor, and safer than GoogleClosure.
+</p>
+<p>
+I tested it on two big libraries.  <a href="http://www.dynarchlib.com/">DynarchLIB</a> is my own, and it's big enough
+to contain probably all the JavaScript tricks known to mankind.  <a href="http://jquery.com/">jQuery</a> is
+definitely the most popular JavaScript library (to some people, it's a
+synonym to JavaScript itself).
+</p>
+<p>
+I cannot swear that there are no bugs in the generated codes, but they
+appear to work fine.
+</p>
+<p>
+Compression results:
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col align="left" /><col align="right" /><col align="right" /><col align="left" /><col align="left" />
+</colgroup>
+<thead>
+<tr><th scope="col">Library</th><th scope="col">Orig. size</th><th scope="col">UglifyJS</th><th scope="col">YUI</th><th scope="col">GCL</th></tr>
+</thead>
+<tbody>
+<tr><td>DynarchLIB</td><td>636896</td><td>241441</td><td>246452 (+5011)</td><td>240439 (-1002) (buggy)</td></tr>
+<tr><td>jQuery</td><td>163855</td><td>72006</td><td>79702  (+7696)</td><td>71858   (-148)</td></tr>
+</tbody>
+</table>
+
+
+<p>
+UglifyJS is the fastest to run.  On my laptop UglifyJS takes 1.35s for
+DynarchLIB, while YUI takes 2.7s and GCL takes 6.5s.
+</p>
+<p>
+GoogleClosure does a lot of smart ass optimizations.  I had to strive really
+hard to get close to it.  It should be possible to even beat it, but then
+again, GCL has a gazillion lines of code and runs terribly slow, so I'm not
+sure it worths spending the effort to save a few bytes.  Also, GCL doesn't
+cope with <code>eval()</code> or <code>with{}</code> &ndash; it just dumps a warning and proceeds to
+mangle names anyway; my DynarchLIB compiled with it is buggy because of
+this.
+</p>
+<p>
+UglifyJS consists of ~1100 lines of code for the tokenizer/parser, and ~1100
+lines for the compressor and code generator.  That should make it very
+maintainable and easily extensible, so I would say it has a good place in
+this field and it's bound to become the de-facto standard JS minifier.  And
+I shall rule the world. :-) Use it, and <b>spread the word</b>!
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1_4" class="outline-3">
+<h3 id="sec-1_4"><span class="section-number-3">1.4</span> Bugs? </h3>
+<div class="outline-text-3" id="text-1_4">
+
+
+<p>
+Unfortunately, for the time being there is no automated test suite.  But I
+ran the compressor manually on non-trivial code, and then I tested that the
+generated code works as expected.  A few hundred times.
+</p>
+<p>
+DynarchLIB was started in times when there was no good JS minifier.
+Therefore I was quite religious about trying to write short code manually,
+and as such DL contains a lot of syntactic hacks<sup><a class="footref" name="fnr.1" href="#fn.1">1</a></sup> such as “foo == bar ?  a
+= 10 : b = 20”, though the more readable version would clearly be to use
+“if/else”.
+</p>
+<p>
+Since the parser/compressor runs fine on DL and jQuery, I'm quite confident
+that it's solid enough for production use.  If you can identify any bugs,
+I'd love to hear about them (<a href="http://groups.google.com/group/uglifyjs">use the Google Group</a> or email me directly).
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-1_5" class="outline-3">
+<h3 id="sec-1_5"><span class="section-number-3">1.5</span> Links </h3>
+<div class="outline-text-3" id="text-1_5">
+
+
+<ul>
+<li>
+Project at GitHub: <a href="http://github.com/mishoo/UglifyJS">http://github.com/mishoo/UglifyJS</a>
+</li>
+<li>
+Google Group: <a href="http://groups.google.com/group/uglifyjs">http://groups.google.com/group/uglifyjs</a>
+</li>
+<li>
+Common Lisp JS parser: <a href="http://marijn.haverbeke.nl/parse-js/">http://marijn.haverbeke.nl/parse-js/</a>
+</li>
+<li>
+JS-to-Lisp compiler: <a href="http://github.com/marijnh/js">http://github.com/marijnh/js</a>
+</li>
+<li>
+Common Lisp JS uglifier: <a href="http://github.com/mishoo/cl-uglify-js">http://github.com/mishoo/cl-uglify-js</a>
+</li>
+</ul>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-1_6" class="outline-3">
+<h3 id="sec-1_6"><span class="section-number-3">1.6</span> License </h3>
+<div class="outline-text-3" id="text-1_6">
+
+
+<p>
+UglifyJS is released under the BSD license:
+</p>
+
+
+
+<pre class="example">Copyright 2010 (c) Mihai Bazon &lt;mihai.bazon@gmail.com&gt;
+Based on parse-js (http://marijn.haverbeke.nl/parse-js/).
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
+
+    * Redistributions of source code must retain the above
+      copyright notice, this list of conditions and the following
+      disclaimer.
+
+    * Redistributions in binary form must reproduce the above
+      copyright notice, this list of conditions and the following
+      disclaimer in the documentation and/or other materials
+      provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDER “AS IS” AND ANY
+EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE
+LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY,
+OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
+THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGE.
+</pre>
+
+
+
+
+</div>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+<p class="footnote"><sup><a class="footnum" name="fn.1" href="#fnr.1">1</a></sup> I even reported a few bugs and suggested some fixes in the original
+<a href="http://marijn.haverbeke.nl/parse-js/">parse-js</a> library, and Marijn pushed fixes literally in minutes.
+</p>
+</div>
+</div>
+<div id="postamble">
+<p class="author"> Author: Mihai Bazon
+</p>
+<p class="date"> Date: 2011-02-28 22:35:00 EET</p>
+<p class="creator">HTML generated by org-mode 7.01trans in emacs 23</p>
+</div>
+</div>
+</body>
+</html>
