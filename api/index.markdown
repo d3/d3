@@ -112,3 +112,5 @@ mercator (scale, translate), path (projection, area, pointRadius).
 ### d3.csv
 
 parse, parseRows, format.
+
+foo
