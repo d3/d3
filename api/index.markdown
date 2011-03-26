@@ -62,13 +62,11 @@ interpolateObject.
 select, selectAll, filter, data, each, empty, node, classed, style,
 property, text, html, append, insert, remove, sort, on, transition, call.
 
-attr(name, value): Set the attribute named _name_ to _value_ on the selected 
+*attr*(name, value): Set the attribute named _name_ to _value_ on the selected 
 DOM node. _name_ is XML namespace aware. _value_ can be one of three things:
-* empty: remove the attribute
-* constant: set the attribute to the supplied value
-* function: set the attribute to the result of calling the function. The
-  function is invoked with two arguments: the bound data and the index of
-  the bound data.
+- empty: remove the attribute
+- constant: set the attribute to the supplied value
+- function: set the attribute to the result of calling the function. The function is invoked with two arguments: the bound data and the index of the bound data.
 
 #### d3.transition
 
