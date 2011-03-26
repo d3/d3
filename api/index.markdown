@@ -1,4 +1,4 @@
----
+>---
 layout: api
 title: Documentation
 ---
@@ -69,7 +69,7 @@ DOM node. _name_ is XML namespace aware. _value_ can be one of three things:
 
 -   empty: remove the attribute
 -   constant: set the attribute to the supplied value
--   function: set the attribute to the result of calling the function. The function is invoked with two arguments: the bound data and the index of the bound data.
+-   function: set the attribute to the result of invoking the function for each item in the selection. The function is invoked with two arguments: the bound data and the index of the bound data.
 
 #### d3.transition
 
