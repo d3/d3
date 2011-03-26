@@ -59,19 +59,64 @@ interpolateObject.
 
 #### d3.select\[All\]
 
-select, selectAll, filter, data, empty, node, classed, style,
-property, text, html, append, insert, remove, sort, on, transition, call.
+select, selectAll, filter, data, classed, insert, sort.
+
+#####empty(name)#####
+Returns true if the selection is empty.
+
+#####node(name)######
+Return the DOM node for the first element in the selection.
+
+#####append(name)#####
+Append a new element _name_ as the last child for every element in the selection.
+
+#####remove(name)#####
+Remove selected elements.
+
+#####call(function, optargs)#####
+Call _function_ once for the entire selection. The function is invoked with the entire selection as an array of elements as the first argument and any _optargs_ as subsequent arguments.
 
 #####each(function)#####
 Call _function_ for every element in the selection. The function is invoked with two arguments: the bound data for the element and the index of the bound data.
 
 #####attr(name, value)#####
-Get or set the value of the attribute _name_. _name_ is XML namespace aware. _value_ can be one of four things:
+Get or set the value of the attribute _name_ for every element in the selection. _value_ can be one of four things:
 
 -   empty: get the value of the attribute for the first element in the selection
 -   null: remove the attribute
 -   constant: set the attribute to the supplied value for each element.
 -   function: set the attribute to the result of evaluating the function for each element in the selection. The function is invoked with two arguments: the bound data for the element and the index of the bound data.
+
+#####style(name, value, priority)#####
+Get or set the CSS style property _name_ for every element in the selection. _priority_ can be "important". _value_ can be one of four things:
+
+-   empty: get the value of the style property for the first element in the selection
+-   null: remove the style property
+-   constant: set the style property to the supplied value for each element.
+-   function: set the style property to the result of evaluating the function for each element in the selection. The function is invoked with two arguments: the bound data for the element and the index of the bound data.
+
+#####property(name, value)#####
+Get or set the Javascript object property _name_ for every element in the selection. _value_ can be one of four things:
+
+-   empty: get the value of the object property for the first element in the selection
+-   null: remove the object property
+-   constant: set the object property to the supplied value for each element.
+-   function: set the object property to the result of evaluating the function for each element in the selection. The function is invoked with two arguments: the bound data for the element and the index of the bound data.
+
+#####text(value)#####
+#####html(value)#####
+Get or set the content inside the selected elements. _text()_ sets the contents as text (via createTextNode(), _html()_ sets the contents as HTML (via innerHTML). _value_ can be one of four things:
+
+- empty: get the value of the content for the first element in the selection
+- null: remove the content
+- constant: set the content to the supplied value for each element.
+- function: set the content to the result of evaluating the function for each element in the selection. The function is invoked with two arguments: the bound data for the element and the index of the bound data.
+
+#####on(type, listener)#####
+Arrange for _listener_ to be invoked when a DOM event of type _type_ occurs on the selected elements. Any previous _listener_ of that type is removed (set _listener_ to null to remove a listener without adding a new one). The _listener_ function is invoked with two arguments: the bound data for the element and the index of the bound data. To access the event itself from within the listener see _d3.event()_.
+
+#####transition()#####
+Initiate a transition for the selected elements. See d3.transition for details.
 
 #### d3.transition
 
