@@ -59,8 +59,10 @@ interpolateObject.
 
 #### d3.select\[All\]
 
-select, selectAll, filter, data, each, empty, node, classed, style,
+select, selectAll, filter, data, empty, node, classed, style,
 property, text, html, append, insert, remove, sort, on, transition, call.
+
+**each**(function): Call _function_ for every item in the bound dataset. The function is invoked with two arguments: the bound data and the index of the bound data.
 
 **attr**(name, value): Set the attribute named _name_ to _value_ on the selected 
 DOM node. _name_ is XML namespace aware. _value_ can be one of three things:
