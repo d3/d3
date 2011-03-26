@@ -62,13 +62,16 @@ interpolateObject.
 select, selectAll, filter, data, empty, node, classed, style,
 property, text, html, append, insert, remove, sort, on, transition, call.
 
-**each**(function): Call _function_ for every item in the bound dataset. The function is invoked with two arguments: the bound data and the index of the bound data.
+#####each(function)#####
+Call _function_ for every element in the selection. The function is invoked with two arguments: the bound data for the element and the index of the bound data.
 
-**attr**(name, value): Set the attribute named _name_ to _value_ on the selected elements. _name_ is XML namespace aware. _value_ can be one of three things:
+#####attr(name, value)#####
+Get or set the value of the attribute _name_. _name_ is XML namespace aware. _value_ can be one of four things:
 
--   empty: remove the attribute
--   constant: set the attribute to the supplied value
--   function: set the attribute to the result of invoking the function for each item in the selection. The function is invoked with two arguments: the bound data and the index of the bound data.
+-   empty: get the value of the attribute for the first element in the selection
+-   null: remove the attribute
+-   constant: set the attribute to the supplied value for each element.
+-   function: set the attribute to the result of evaluating the function for each element in the selection. The function is invoked with two arguments: the bound data for the element and the index of the bound data.
 
 #### d3.transition
 
