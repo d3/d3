@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.8.3"}; // semver
+(function(){d3 = {version: "1.8.4"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -2067,7 +2067,7 @@ d3.scale.log = function() {
           j = Math.ceil(d[1]),
           u = pow(d[0]),
           v = pow(d[1]);
-      if (n) {
+      if (log === d3_scale_logn) {
         ticks.push(pow(i));
         for (; i++ < j;) for (var k = 9; k > 0; k--) ticks.push(pow(i) * k);
       } else {

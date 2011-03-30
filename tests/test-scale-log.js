@@ -67,3 +67,11 @@ console.log("            1  -> ", x(1));
 console.log("            5  -> ", x(5));
 console.log("           10  -> ", x(10));
 console.log("");
+
+var x = d3.scale.log(), f = x.tickFormat();
+console.log("ticks:");
+console.log("     [.1, 10]  -> ", x.ticks().map(f).join(", "));
+console.log("    [.1, 100]  -> ", x.domain([.1, 100]).ticks().map(f).join(", "));
+console.log("     [1, 100]  -> ", x.domain([1, 100]).ticks().map(f).join(", "));
+console.log("   [-100, -1]  -> ", x.domain([-100, -1]).ticks().map(f).join(", "));
+console.log("");

@@ -70,3 +70,11 @@ console.log("         Date  -> ", x.range([new Date(1990, 0, 1), new Date(1991, 
 console.log("       Number  -> ", x.range([new Number(0), new Number(42)]).invert(new Number(21)));
 console.log("          ???  -> ", x.range(["#000", "#fff"]).invert("#999")); // can't be coerced
 console.log("");
+
+var x = d3.scale.linear();
+console.log("ticks:");
+console.log("            1  -> ", x.ticks(1).map(x.tickFormat(1)).join(", "));
+console.log("            2  -> ", x.ticks(2).map(x.tickFormat(2)).join(", "));
+console.log("            5  -> ", x.ticks(5).map(x.tickFormat(5)).join(", "));
+console.log("           10  -> ", x.ticks(10).map(x.tickFormat(10)).join(", "));
+console.log("");
