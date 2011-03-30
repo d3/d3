@@ -20,17 +20,11 @@ compatibility layer. The examples should work on Firefox, Chrome (Chromium),
 Safari (WebKit), Opera and IE9.
 
 Note: Chrome has strict permissions for reading files out of the local file
-system. To view some of the examples locally, you will need to start a local web
-server. One easy way to do that is to install Tornado:
+system. Also some examples use AJAX which works differently via HTTP
+instead of local files. For the best experience, load the D3 examples from
+your own machine via HTTP. Any static file web server will work, for example
+you can run Python's built-in server:
 
-    cd ..
-    git clone https://github.com/facebook/tornado.git
-    cd tornado
-    sudo python setup.py install
-    cd ../d3
+    python -m SimpleHTTPServer 8888
 
-We have provided a Tornado script for serving static files:
-
-    python examples
-
-Once this is running, go to: <http://0.0.0.0:8888/examples/index.html>
+Once this is running, go to: <http://127.0.0.1:8888/examples/index.html>
