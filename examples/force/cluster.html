@@ -14,10 +14,8 @@ body {
 }
 circle.node {
   fill: lightsteelblue;
-}
-circle.leaf {
-  fill: white;
-  stroke: black;
+  stroke: #fff;
+  stroke-width: 1.5px;
 }
 path.hull {
   fill: lightsteelblue;
@@ -37,7 +35,8 @@ var w = 960,     // svg width
     off = 15,    // cluster hull offset
     expand = {}, // expanded clusters
     data, net, force, hullg, hull, linkg, link, nodeg, node,
-    curve = d3.svg.line().interpolate("cardinal-closed").tension(.85);
+    curve = d3.svg.line().interpolate("cardinal-closed").tension(.85),
+    fill = d3.scale.category20();
 
 function noop() { return false; }
 
@@ -194,7 +193,7 @@ function init() {
       .nodes(net.nodes)
       .links(net.links)
       .size([w, h])
-      .distance(60)
+      .distance(50)
       .start();
 
   hullg.selectAll("path.hull").remove();
@@ -203,6 +202,7 @@ function init() {
     .enter().append("svg:path")
      .attr("class", "hull")
      .attr("d", drawCluster)
+     .style("fill", function(d) { return fill(d.group); })
      .on("dblclick", function(d) { expand[d.group] = false; init(); });
 
   link = linkg.selectAll("line.link").data(net.links, linkid);
@@ -223,6 +223,7 @@ function init() {
       .attr("r", function(d) { return d.size ? d.size + dr : dr+1; })
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
+      .style("fill", function(d) { return fill(d.group); })
       .on("dblclick", function(d) {
         if (d.size) { expand[d.group] = true; init(); }
       });
