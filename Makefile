@@ -1,7 +1,5 @@
 JS_COMPILER = \
-	java -jar lib/google-compiler/compiler.jar \
-	--externs=src/externs.js \
-	--charset=UTF-8
+	./lib/uglifyjs/bin/uglifyjs
 
 all: \
 	d3.js \
@@ -156,7 +154,7 @@ tests: \
 
 %.min.js: %.js Makefile
 	@rm -f $@
-	$(JS_COMPILER) --js $< --js_output_file $@
+	$(JS_COMPILER) < $< > $@
 
 d3.js d3%.js: Makefile
 	@rm -f $@
