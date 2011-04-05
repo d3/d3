@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.8.4"}; // semver
+(function(){d3 = {version: "1.8.5"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -197,9 +197,7 @@ function d3_collapse(s) {
 }
 //
 // Note: assigning to the arguments array simultaneously changes the value of
-// the corresponding argument! However, the Google Closure compiler doesn't
-// realize this, and so can optimize-away our attempt to avoid side-effects.
-// This fix by Jason Davies has been tested to survive minimization.
+// the corresponding argument!
 //
 // TODO The `this` argument probably shouldn't be the first argument to the
 // callback, anyway, since it's redundant. However, that will require a major
