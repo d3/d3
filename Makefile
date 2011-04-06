@@ -91,6 +91,7 @@ d3.behavior.js: \
 d3.layout.js: \
 	src/start.js \
 	src/layout/layout.js \
+	src/layout/bullet.js \
 	src/layout/chord.js \
 	src/layout/force.js \
 	src/layout/partition.js \
