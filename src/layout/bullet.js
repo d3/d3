@@ -18,7 +18,6 @@ d3.layout.bullet = function() {
       measures = [],
       horizontal,
       maximum = null,
-      size = 500,
       rangeColor = d3.scale.linear(),
       measureColor = d3.scale.linear(),
       scale = d3.scale.linear();
@@ -30,25 +29,25 @@ d3.layout.bullet = function() {
       .data(ranges)
         .enter().append('svg:rect')
         .attr('class', 'range')
-        .attr('width', function(d) { return scale(d) })
-        .attr('height', 30)
+        .attr('width', function(d) { return scale(d) + '%' })
+        .attr('height', '100%')
         .attr('style', function(d, i) { return 'fill:' + rangeColor(i) });
     this.selectAll('rect.measure')
       .data(measures)
         .enter().append('svg:rect')
         .attr('class', 'measure')
-        .attr('width', function(d) { return scale(d) })
-        .attr('height', 10)
-        .attr('y', 10)
+        .attr('width', function(d) { return scale(d) + '%' })
+        .attr('height', '34%')
+        .attr('y', '33%')
         .attr('fill', function(d, i) { return measureColor(i) });
     this.selectAll('line.marker')
       .data(markers)
         .enter().append('svg:line')
         .attr('class', 'marker')
-        .attr('x1', function(d) { return scale(d) })
-        .attr('x2', function(d) { return scale(d) })
-        .attr('y1', 5)
-        .attr('y2', 25)
+        .attr('x1', function(d) { return scale(d) + '%' })
+        .attr('x2', function(d) { return scale(d) + '%' })
+        .attr('y1', '15%')
+        .attr('y2', '85%')
         .attr('stroke', '#000')
         .attr('stroke-width', '2px')
   }
@@ -61,7 +60,7 @@ d3.layout.bullet = function() {
     measureColor.domain([0, Math.max(1, measures.length - 1)])
         .range(["lightsteelblue", "steelblue"]);
     maximum = maximum || d3.max([].concat(ranges, markers, measures));
-    scale.domain([0, maximum]).range([0, size]);
+    scale.domain([0, maximum]).range([0, 100]);
   };
 
   // left, right, top, bottom
