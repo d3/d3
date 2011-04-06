@@ -22,6 +22,10 @@ d3.layout.bullet = function() {
       measureColor = d3.scale.linear(),
       scale = d3.scale.linear();
 
+  var x = function(d) {
+    return scale(d) + '%';
+  };
+
   var bullet = function() {
     ranges.sort(function(a, b) { return b - a });
     measures.sort(function(a, b) { return b - a });
@@ -29,14 +33,14 @@ d3.layout.bullet = function() {
       .data(ranges)
         .enter().append('svg:rect')
         .attr('class', 'range')
-        .attr('width', function(d) { return scale(d) + '%' })
+        .attr('width', x)
         .attr('height', '100%')
         .attr('style', function(d, i) { return 'fill:' + rangeColor(i) });
     this.selectAll('rect.measure')
       .data(measures)
         .enter().append('svg:rect')
         .attr('class', 'measure')
-        .attr('width', function(d) { return scale(d) + '%' })
+        .attr('width', x)
         .attr('height', '34%')
         .attr('y', '33%')
         .attr('fill', function(d, i) { return measureColor(i) });
@@ -44,8 +48,8 @@ d3.layout.bullet = function() {
       .data(markers)
         .enter().append('svg:line')
         .attr('class', 'marker')
-        .attr('x1', function(d) { return scale(d) + '%' })
-        .attr('x2', function(d) { return scale(d) + '%' })
+        .attr('x1', x)
+        .attr('x2', x)
         .attr('y1', '15%')
         .attr('y2', '85%')
         .attr('stroke', '#000')
