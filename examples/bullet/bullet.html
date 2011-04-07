@@ -1,49 +1,41 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bullet Layout</title>
-    <script src="../../d3.js"></script>
-    <script src="../../d3.chart.js"></script>
-    <style>
-      text {
-        font-family: sans-serif;
-      }
-      .tick {
-        font-size: .7em;
-        fill: #999;
-      }
-    </style>
+    <title>Bullet Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.chart.js"></script>
+    <link type="text/css" rel="stylesheet" href="bullet.css"/>
   </head>
   <body>
     <script>
 
 var bullet = d3.chart.bullet()
-    .orient('left')
-    .tickFormat(function(d) { return d/1e6 });
+    .orient("left")
+    .tickFormat(function(d) { return d / 1e6; });
 
-var vis = d3.select('body').append('svg:svg')
-    .attr('width', 800)
-    .attr('height', 300);
+var vis = d3.select("body").append("svg:svg")
+    .attr("width", 800)
+    .attr("height", 300);
 
-vis.append('svg:text')
-    .attr('dy', '1em')
-    .attr('style', 'font-weight: bold')
-    .text('Revenue');
-vis.append('svg:text')
-    .attr('dy', '2.5em')
-    .attr('style', 'font-size: .7em')
-    .attr('fill', '#999')
-    .text('US$, in millions');
+vis.append("svg:text")
+    .attr("dy", "1em")
+    .style("font-weight", "bold")
+    .text("Revenue");
 
-var chart = vis.append('svg:g')
-    .attr('transform', 'translate(80,0)');
-chart.selectAll('g')
+vis.append("svg:text")
+    .attr("dy", "2.5em")
+    .style("font-size", ".7em")
+    .style("fill", "#999")
+    .text("US$, in millions");
+
+vis.append("svg:g")
     .data([{
       ranges: [2.1e6, 2.85e6, 4e6],
       measures: [2.3e6, 3.01e6],
       markers: [1.15e6, 3.0e6]
     }])
-  .enter().append('svg:g')
+    .attr("class", "bullet")
+    .attr("transform", "translate(80,0)")
     .call(bullet);
 
     </script>
