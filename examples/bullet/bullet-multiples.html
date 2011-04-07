@@ -1,0 +1,44 @@
+<!DOCTYPE>
+<html>
+  <head>
+    <title>Bullet Chart</title>
+    <script src="../../d3.js"></script>
+    <script src="../../d3.chart.js"></script>
+    <script src="bullets.js"></script>
+    <style>
+
+span {
+  display: block !important;
+}
+
+circle {
+  fill: red;
+}
+
+path {
+  fill: #fff;
+  stroke: #000;
+}
+
+    </style>
+  </head>
+  <body>
+    <script>
+
+var bullet = d3.chart.bullet().orient('left');
+
+var vis = d3.select('body').append('svg:svg')
+    .attr('width', 1200)
+    .attr('height', 300)
+    .append('svg:g')
+    .attr('transform', 'translate(10)')
+  .selectAll('g.bullet')
+    .data(bullets)
+  .enter().append('svg:g')
+    .attr('class', 'bullet')
+    .attr('transform', function(d, i) { return 'translate(0,' + (i * 60) + ')' })
+    .call(bullet);
+
+    </script>
+  </body>
+</html>

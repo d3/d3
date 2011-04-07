@@ -34,10 +34,9 @@ d3.chart.bullet = function() {
 
   var bullet = function() {
     var data = [];
-    for (var i=0, ii=this.length; i<ii; i++) {
-      data.push(this[i][0].__data__);
+    for (var i=0, ii=this[0].length; i<ii; i++) {
+      data.push(this[0][i].__data__);
     }
-    // temporary hack for testing
     var cache = {
       ranges: data.map(ranges),
       measures: data.map(measures),
@@ -47,28 +46,25 @@ d3.chart.bullet = function() {
     // sort to lay SVG in correct order
     reverse(cache.ranges);
     reverse(cache.measures);
-    var chart = this.selectAll('g.bullet')
-        .data(data)
-      .enter().append('svg:g')
-        .attr('class', 'bullet');
+    var chart = this;
     chart.selectAll('rect.range')
-      .data(function(d, i) { return cache.ranges[i] })
-        .enter().append('svg:rect')
+        .data(ranges)
+      .enter().append('svg:rect')
         .attr('class', 'range')
         .attr('width', scale)
         .attr('height', height)
         .attr('style', function(d, i) { return 'fill:' + rangeColor(i) });
     chart.selectAll('rect.measure')
-      .data(function(d, i) { return cache.measures[i] })
-        .enter().append('svg:rect')
+        .data(measures)
+      .enter().append('svg:rect')
         .attr('class', 'measure')
         .attr('width', scale)
         .attr('height', height / 3)
         .attr('y', height / 3)
         .attr('fill', function(d, i) { return measureColor(i) });
     chart.selectAll('line.marker')
-      .data(function(d, i) { return cache.markers[i] })
-        .enter().append('svg:line')
+        .data(markers)
+      .enter().append('svg:line')
         .attr('class', 'marker')
         .attr('x1', scale)
         .attr('x2', scale)
