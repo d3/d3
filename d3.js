@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.8.5"}; // semver
+(function(){d3 = {version: "1.8.6"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -1508,10 +1508,9 @@ function d3_selection(groups) {
   // TODO remove(node)?
   // TODO remove(function)?
   groups.remove = function() {
-    return select(function(node) {
+    return groups.each(function(node) {
       var parent = node.parentNode;
-      parent.removeChild(node);
-      return parent;
+      if (parent) parent.removeChild(node);
     });
   };
 
