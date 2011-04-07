@@ -9,9 +9,9 @@
  */
 
 /**
- * Constructs a new, empty bullet layout.
+ * Constructs a new, empty bullet chart.
  */
-d3.layout.bullet = function() {
+d3.chart.bullet = function() {
   var orient = 'left',
       ranges = [],
       markers = [],
@@ -80,7 +80,7 @@ d3.layout.bullet = function() {
         .text(tickFormat)
   }
 
-  /** Cache layout state to optimize properties. */
+  /** Cache chart state to optimize properties. */
   var buildCache = function() {
     horizontal = /^left|right$/.test(orient);
     rangeColor.domain([0, Math.max(1, ranges.length - 1)])
