@@ -28,7 +28,8 @@ d3.chart.bullet = function() {
       tickFormat = d3.format(',.0f'),
       transition = function(x) { return x };
 
-  var reverse = function(l) {
+  // ensures each array in an array is in descending order
+  var ensureDescending = function(l) {
     for (var i=0, ii=l.length; i<ii; i++) {
       l[i].sort(function(a, b) { return b - a });
     }
@@ -39,32 +40,40 @@ d3.chart.bullet = function() {
     for (var i=0, ii=this[0].length; i<ii; i++) {
       data.push(this[0][i].__data__);
     }
+
+    // retrieve the data so we can compute ranges
     var cache = {
       ranges: data.map(ranges),
       measures: data.map(measures),
       markers: data.map(markers)
     };
     buildCache(cache);
+
     // sort to lay SVG in correct order
-    reverse(cache.ranges);
-    reverse(cache.measures);
+    // note: this actually reorders the original data
+    ensureDescending(cache.ranges);
+    ensureDescending(cache.measures);
+
     chart.selectAll('rect.range')
         .data(ranges)
       .enter().append('svg:rect')
         .attr('class', 'range');
+
     transition(chart.selectAll('rect.range'))
         .attr('width', scale)
         .attr('height', height)
         .attr('fill', function(d, i) { return rangeColor(i) });
+
     chart.selectAll('rect.measure')
         .data(measures)
       .enter().append('svg:rect')
         .attr('class', 'measure');
     transition(chart.selectAll('rect.measure'))
+        .attr('fill', function(d, i) { return measureColor(i) })
         .attr('width', scale)
         .attr('height', height / 3)
         .attr('y', height / 3)
-        .attr('fill', function(d, i) { return measureColor(i) });
+
     chart.selectAll('line.marker')
         .data(markers)
       .enter().append('svg:line')
@@ -76,9 +85,9 @@ d3.chart.bullet = function() {
         .attr('x2', scale)
         .attr('y1', height/6)
         .attr('y2', height * 5/6)
+
     var ticks = scale.ticks(10);
-    var ruleLine = this.selectAll('line.rule')
-        .data(ticks)
+    var ruleLine = chart.selectAll('line.rule').data(ticks);
     ruleLine.exit().remove();
     ruleLine.enter().append('svg:line')
         .attr('class', 'rule')
@@ -89,18 +98,18 @@ d3.chart.bullet = function() {
         .attr('x2', scale)
         .attr('y1', height)
         .attr('y2', height * 7/6)
-    var tickText = this.selectAll('text.tick')
-        .data(ticks);
+
+    var tickText = chart.selectAll('text.tick').data(ticks);
     tickText.exit().remove();
     tickText.enter().append('svg:text')
         .attr('class', 'tick')
         .attr('text-anchor', 'middle')
-        .attr('dy', '1em')
+        .attr('dy', '1em');
     transition(chart.selectAll('text.tick')
       .text(tickFormat))
         .attr('x', scale)
-        .attr('y', height * 7/6)
-  }
+        .attr('y', height * 7/6);
+  };
 
   var maxlength = function(l) {
     return d3.max(l, function(d) { return d.length });
