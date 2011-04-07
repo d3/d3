@@ -31,7 +31,10 @@ d3.chart.bullet = function() {
     }
   };
 
-  var bullet = function() {
+  var bullet = function(chart, duration) {
+    var transition = duration ? 
+      function(x) { return x.transition().duration(duration) } :
+      function(x) { return x };
     var data = [];
     for (var i=0, ii=this[0].length; i<ii; i++) {
       data.push(this[0][i].__data__);
@@ -45,22 +48,19 @@ d3.chart.bullet = function() {
     // sort to lay SVG in correct order
     reverse(cache.ranges);
     reverse(cache.measures);
-    var chart = this;
     chart.selectAll('rect.range')
         .data(ranges)
       .enter().append('svg:rect')
         .attr('class', 'range');
-    chart.selectAll('rect.range')
-      .transition()
+    transition(chart.selectAll('rect.range'))
         .attr('width', scale)
         .attr('height', height)
-        .attr('style', function(d, i) { return 'fill:' + rangeColor(i) });
+        .attr('fill', function(d, i) { return rangeColor(i) });
     chart.selectAll('rect.measure')
         .data(measures)
       .enter().append('svg:rect')
         .attr('class', 'measure');
-    chart.selectAll('rect.measure')
-      .transition()
+    transition(chart.selectAll('rect.measure'))
         .attr('width', scale)
         .attr('height', height / 3)
         .attr('y', height / 3)
@@ -71,8 +71,7 @@ d3.chart.bullet = function() {
         .attr('class', 'marker')
         .attr('stroke', '#000')
         .attr('stroke-width', '2px')
-    chart.selectAll('line.marker')
-      .transition()
+    transition(chart.selectAll('line.marker'))
         .attr('x1', scale)
         .attr('x2', scale)
         .attr('y1', height/6)
@@ -85,8 +84,7 @@ d3.chart.bullet = function() {
         .attr('class', 'rule')
         .attr('stroke', '#666')
         .attr('stroke-width', '.5px')
-    this.selectAll('line.rule')
-      .transition()
+    transition(chart.selectAll('line.rule'))
         .attr('x1', scale)
         .attr('x2', scale)
         .attr('y1', height)
@@ -98,9 +96,8 @@ d3.chart.bullet = function() {
         .attr('class', 'tick')
         .attr('text-anchor', 'middle')
         .attr('dy', '1em')
-    this.selectAll('text.tick')
-        .text(tickFormat)
-      .transition()
+    transition(chart.selectAll('text.tick')
+      .text(tickFormat))
         .attr('x', scale)
         .attr('y', height * 7/6)
   }
