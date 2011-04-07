@@ -18,7 +18,7 @@ d3.chart.bullet = function() {
       measures = function(d) { return d.measures },
       horizontal,
       maximum = null,
-      width = 500,
+      width = 800,
       height = 30,
       rangeColor = d3.scale.linear(),
       measureColor = d3.scale.linear(),
@@ -49,14 +49,16 @@ d3.chart.bullet = function() {
     chart.selectAll('rect.range')
         .data(ranges)
       .enter().append('svg:rect')
-        .attr('class', 'range')
+        .attr('class', 'range');
+    chart.selectAll('rect.range')
         .attr('width', scale)
         .attr('height', height)
         .attr('style', function(d, i) { return 'fill:' + rangeColor(i) });
     chart.selectAll('rect.measure')
         .data(measures)
       .enter().append('svg:rect')
-        .attr('class', 'measure')
+        .attr('class', 'measure');
+    chart.selectAll('rect.measure')
         .attr('width', scale)
         .attr('height', height / 3)
         .attr('y', height / 3)
@@ -65,31 +67,36 @@ d3.chart.bullet = function() {
         .data(markers)
       .enter().append('svg:line')
         .attr('class', 'marker')
+        .attr('stroke', '#000')
+        .attr('stroke-width', '2px')
+    chart.selectAll('line.marker')
         .attr('x1', scale)
         .attr('x2', scale)
         .attr('y1', height/6)
         .attr('y2', height * 5/6)
-        .attr('stroke', '#000')
-        .attr('stroke-width', '2px')
     var ticks = scale.ticks(10);
-    this.selectAll('line.rule')
-      .data(ticks)
-        .enter().append('svg:line')
+    var ruleLine = this.selectAll('line.rule')
+        .data(ticks)
+    ruleLine.exit().remove();
+    ruleLine.enter().append('svg:line')
         .attr('class', 'rule')
+        .attr('stroke', '#666')
+        .attr('stroke-width', '.5px')
+    this.selectAll('line.rule')
         .attr('x1', scale)
         .attr('x2', scale)
         .attr('y1', height)
         .attr('y2', height * 7/6)
-        .attr('stroke', '#666')
-        .attr('stroke-width', '.5px')
-    this.selectAll('text.tick')
-      .data(ticks)
-        .enter().append('svg:text')
+    var tickText = this.selectAll('text.tick')
+        .data(ticks);
+    tickText.exit().remove();
+    tickText.enter().append('svg:text')
         .attr('class', 'tick')
-        .attr('x', scale)
-        .attr('y', height * 7/6)
         .attr('text-anchor', 'middle')
         .attr('dy', '1em')
+    this.selectAll('text.tick')
+        .attr('x', scale)
+        .attr('y', height * 7/6)
         .text(tickFormat)
   }
 

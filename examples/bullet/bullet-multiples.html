@@ -12,17 +12,31 @@
 var bullet = d3.chart.bullet().orient('left');
 
 var vis = d3.select('body').append('svg:svg')
-    .attr('width', 1200)
+    .attr('width', 900)
     .attr('height', 300)
     .append('svg:g')
-    .attr('transform', 'translate(10)')
-  .selectAll('g.bullet')
+    .attr('transform', 'translate(10)');
+vis.selectAll('g.chart')
     .data(bullets)
   .enter().append('svg:g')
-    .attr('class', 'bullet')
-    .attr('transform', function(d, i) { return 'translate(0,' + (i * 60) + ')' })
+    .attr('class', 'chart')
+    .attr('transform', function(d, i) { return 'translate(0,' + (i * 60) + ')' });
+vis.selectAll('g.chart')
     .call(bullet);
 
+var randomize = function() {
+  for (var i=0, ii=bullets.length; i<ii; i++) {
+    var b = bullets[i];
+    b.ranges = b.ranges.map(function(d) { return Math.random() * 1000 });
+    b.markers = b.markers.map(function(d) { return Math.random() * 1000 });
+    b.measures = b.measures.map(function(d) { return Math.random() * 1000 });
+  }
+  var chart = vis.selectAll('g.chart');
+  chart.data(bullets);
+  chart.call(bullet);
+}
+
     </script>
+    <input type="button" value="Randomize!" onclick="randomize()">
   </body>
 </html>
