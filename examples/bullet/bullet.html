@@ -19,9 +19,6 @@
 
 var bullet = d3.chart.bullet()
     .orient('left')
-    .ranges([2.1e6, 2.85e6, 4e6])
-    .measures([2.3e6, 3.01e6])
-    .markers([1.15e6, 3.0e6])
     .tickFormat(function(d) { return d/1e6 });
 
 var vis = d3.select('body').append('svg:svg')
@@ -37,8 +34,16 @@ vis.append('svg:text')
     .attr('style', 'font-size: .7em')
     .attr('fill', '#999')
     .text('US$, in millions');
-vis.append('svg:g')
-    .attr('transform', 'translate(80,0)')
+
+var chart = vis.append('svg:g')
+    .attr('transform', 'translate(80,0)');
+chart.selectAll('g')
+    .data([{
+      ranges: [2.1e6, 2.85e6, 4e6],
+      measures: [2.3e6, 3.01e6],
+      markers: [1.15e6, 3.0e6]
+    }])
+  .enter().append('svg:g')
     .call(bullet);
 
     </script>

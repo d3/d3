@@ -14,9 +14,9 @@
  */
 d3.chart.bullet = function() {
   var orient = 'left',
-      ranges = [],
-      markers = [],
-      measures = [],
+      ranges = function(d) { return d.ranges },
+      markers = function(d) { return d.markers },
+      measures = function(d) { return d.measures },
       horizontal,
       maximum = null,
       width = 500,
@@ -26,35 +26,52 @@ d3.chart.bullet = function() {
       scale = d3.scale.linear(),
       tickFormat = d3.format(',.0f');
 
-  var x = function(d) {
-    return scale(d);
+  var reverse = function(l) {
+    for (var i=0, ii=l.length; i<ii; i++) {
+      l[i].sort(function(a, b) { return b - a });
+    }
   };
 
   var bullet = function() {
-    ranges.sort(function(a, b) { return b - a });
-    measures.sort(function(a, b) { return b - a });
-    var chart = this.append('svg:g');
+    var data = [];
+    for (var i=0, ii=this.length; i<ii; i++) {
+      data.push(this[i][0].__data__);
+    }
+    // temporary hack for testing
+    var cache = {
+      ranges: data.map(ranges),
+      measures: data.map(measures),
+      markers: data.map(markers)
+    };
+    buildCache(cache);
+    // sort to lay SVG in correct order
+    reverse(cache.ranges);
+    reverse(cache.measures);
+    var chart = this.selectAll('g.bullet')
+        .data(data)
+      .enter().append('svg:g')
+        .attr('class', 'bullet');
     chart.selectAll('rect.range')
-      .data(ranges)
+      .data(function(d, i) { return cache.ranges[i] })
         .enter().append('svg:rect')
         .attr('class', 'range')
-        .attr('width', x)
+        .attr('width', scale)
         .attr('height', height)
         .attr('style', function(d, i) { return 'fill:' + rangeColor(i) });
     chart.selectAll('rect.measure')
-      .data(measures)
+      .data(function(d, i) { return cache.measures[i] })
         .enter().append('svg:rect')
         .attr('class', 'measure')
-        .attr('width', x)
+        .attr('width', scale)
         .attr('height', height / 3)
         .attr('y', height / 3)
         .attr('fill', function(d, i) { return measureColor(i) });
     chart.selectAll('line.marker')
-      .data(markers)
+      .data(function(d, i) { return cache.markers[i] })
         .enter().append('svg:line')
         .attr('class', 'marker')
-        .attr('x1', x)
-        .attr('x2', x)
+        .attr('x1', scale)
+        .attr('x2', scale)
         .attr('y1', height/6)
         .attr('y2', height * 5/6)
         .attr('stroke', '#000')
@@ -64,8 +81,8 @@ d3.chart.bullet = function() {
       .data(ticks)
         .enter().append('svg:line')
         .attr('class', 'rule')
-        .attr('x1', x)
-        .attr('x2', x)
+        .attr('x1', scale)
+        .attr('x2', scale)
         .attr('y1', height)
         .attr('y2', height * 7/6)
         .attr('stroke', '#666')
@@ -74,21 +91,25 @@ d3.chart.bullet = function() {
       .data(ticks)
         .enter().append('svg:text')
         .attr('class', 'tick')
-        .attr('x', x)
+        .attr('x', scale)
         .attr('y', height * 7/6)
         .attr('text-anchor', 'middle')
         .attr('dy', '1em')
         .text(tickFormat)
   }
 
+  var maxlength = function(l) {
+    return d3.max(l, function(d) { return d.length });
+  }
+
   /** Cache chart state to optimize properties. */
-  var buildCache = function() {
+  var buildCache = function(cache) {
     horizontal = /^left|right$/.test(orient);
-    rangeColor.domain([0, Math.max(1, ranges.length - 1)])
+    rangeColor.domain([0, Math.max(1, maxlength(cache.ranges) - 1)])
         .range(["#eee", "#bbb"]);
-    measureColor.domain([0, Math.max(1, measures.length - 1)])
+    measureColor.domain([0, Math.max(1, maxlength(cache.measures) - 1)])
         .range(["lightsteelblue", "steelblue"]);
-    maximum = maximum || d3.max([].concat(ranges, markers, measures));
+    maximum = d3.max([].concat(cache.ranges, cache.markers, cache.measures), function(d) { return d3.max(d) });
     scale.domain([0, maximum]).range([0, width]);
   };
 
@@ -96,60 +117,51 @@ d3.chart.bullet = function() {
   bullet.orient = function(x) {
     if (!arguments.length) return orient;
     orient = x;
-    buildCache();
     return bullet;
   };
 
   bullet.ranges = function(x) {
     if (!arguments.length) return ranges;
     ranges = x;
-    buildCache();
     return bullet;
   };
 
   bullet.markers = function(x) {
     if (!arguments.length) return markers;
     markers = x;
-    buildCache();
     return bullet;
   };
 
   bullet.measures = function(x) {
     if (!arguments.length) return measures;
     measures = x;
-    buildCache();
     return bullet;
   };
 
   bullet.maximum = function(x) {
     if (!arguments.length) return maximum;
     maximum = x;
-    buildCache();
     return bullet;
   };
 
   bullet.width = function(x) {
     if (!arguments.length) return width;
     width = x;
-    buildCache();
     return bullet;
   };
 
   bullet.height = function(x) {
     if (!arguments.length) return height;
     height = x;
-    buildCache();
     return bullet;
   };
 
   bullet.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
     tickFormat = x;
-    buildCache();
     return bullet;
   };
 
-  buildCache();
   return bullet;
 };
 })()
