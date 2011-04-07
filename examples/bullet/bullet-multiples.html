@@ -33,7 +33,7 @@ var randomize = function() {
   }
   var chart = vis.selectAll('g.chart');
   chart.data(bullets);
-  chart.call(bullet, 1000);
+  chart.call(bullet.duration(1000));
 }
 
     </script>

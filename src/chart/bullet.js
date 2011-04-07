@@ -13,6 +13,7 @@
  */
 d3.chart.bullet = function() {
   var orient = 'left',
+      duration = 0,
       ranges = function(d) { return d.ranges },
       markers = function(d) { return d.markers },
       measures = function(d) { return d.measures },
@@ -31,7 +32,7 @@ d3.chart.bullet = function() {
     }
   };
 
-  var bullet = function(chart, duration) {
+  var bullet = function(chart) {
     var transition = duration ? 
       function(x) { return x.transition().duration(duration) } :
       function(x) { return x };
@@ -163,6 +164,12 @@ d3.chart.bullet = function() {
   bullet.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
     tickFormat = x;
+    return bullet;
+  };
+
+  bullet.duration = function(x) {
+    if (!arguments.length) return duration;
+    duration = x;
     return bullet;
   };
 
