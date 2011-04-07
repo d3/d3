@@ -51,6 +51,7 @@ d3.chart.bullet = function() {
       .enter().append('svg:rect')
         .attr('class', 'range');
     chart.selectAll('rect.range')
+      .transition()
         .attr('width', scale)
         .attr('height', height)
         .attr('style', function(d, i) { return 'fill:' + rangeColor(i) });
@@ -59,6 +60,7 @@ d3.chart.bullet = function() {
       .enter().append('svg:rect')
         .attr('class', 'measure');
     chart.selectAll('rect.measure')
+      .transition()
         .attr('width', scale)
         .attr('height', height / 3)
         .attr('y', height / 3)
@@ -70,6 +72,7 @@ d3.chart.bullet = function() {
         .attr('stroke', '#000')
         .attr('stroke-width', '2px')
     chart.selectAll('line.marker')
+      .transition()
         .attr('x1', scale)
         .attr('x2', scale)
         .attr('y1', height/6)
@@ -83,6 +86,7 @@ d3.chart.bullet = function() {
         .attr('stroke', '#666')
         .attr('stroke-width', '.5px')
     this.selectAll('line.rule')
+      .transition()
         .attr('x1', scale)
         .attr('x2', scale)
         .attr('y1', height)
@@ -95,9 +99,10 @@ d3.chart.bullet = function() {
         .attr('text-anchor', 'middle')
         .attr('dy', '1em')
     this.selectAll('text.tick')
+        .text(tickFormat)
+      .transition()
         .attr('x', scale)
         .attr('y', height * 7/6)
-        .text(tickFormat)
   }
 
   var maxlength = function(l) {
