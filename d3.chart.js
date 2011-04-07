@@ -25,7 +25,8 @@ d3.chart.bullet = function() {
       rangeColor = d3.scale.linear(),
       measureColor = d3.scale.linear(),
       scale = d3.scale.linear(),
-      tickFormat = d3.format(',.0f');
+      tickFormat = d3.format(',.0f'),
+      transition = function(x) { return x };
 
   var reverse = function(l) {
     for (var i=0, ii=l.length; i<ii; i++) {
@@ -34,9 +35,6 @@ d3.chart.bullet = function() {
   };
 
   var bullet = function(chart) {
-    var transition = duration ? 
-      function(x) { return x.transition().duration(duration) } :
-      function(x) { return x };
     var data = [];
     for (var i=0, ii=this[0].length; i<ii; i++) {
       data.push(this[0][i].__data__);
@@ -171,6 +169,8 @@ d3.chart.bullet = function() {
   bullet.duration = function(x) {
     if (!arguments.length) return duration;
     duration = x;
+    transition = duration ? function(x) { return x.transition().duration(duration) } :
+      function(x) { return x };
     return bullet;
   };
 
