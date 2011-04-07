@@ -510,10 +510,9 @@ function d3_selection(groups) {
   // TODO remove(node)?
   // TODO remove(function)?
   groups.remove = function() {
-    return select(function(node) {
+    return groups.each(function(node) {
       var parent = node.parentNode;
-      parent.removeChild(node);
-      return parent;
+      if (parent) parent.removeChild(node);
     });
   };
 
