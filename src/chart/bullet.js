@@ -149,7 +149,7 @@ d3.chart.bullet = function() {
 
     var translate = function(f) {
       return function(d) {
-        return "translate(" + f(d) + ",0)";
+        return "translate(" + f(d) + ")";
       };
     };
 
