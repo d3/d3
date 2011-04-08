@@ -46,10 +46,10 @@ d3.chart.bullet = function() {
     var reversed = orient === "right" || orient === "bottom";
 
     // Update the x-scales.
-    var range = reversed ? [width, 0] : [0, width];
-    x1.domain([0, max]).range(range);
+    var xRange = reversed ? [width, 0] : [0, width];
+    x1.domain([0, max]).range(xRange);
     if (x0 === null)
-      x0 = d3.scale.linear().domain([0, Infinity]).range(range);
+      x0 = d3.scale.linear().domain([0, Infinity]).range(xRange);
 
     // Update the title.
     var titleText = g.select("text.title");
@@ -198,7 +198,7 @@ d3.chart.bullet = function() {
 
     // Lastly, restore the original data and update the previous scale!
     g.map(d3_chart_bulletData);
-    x0.domain([0, max]).range(reversed ? [width, 0] : [0, width]);
+    x0.domain([0, max]).range(xRange);
   }
 
   // left, right, top, bottom
