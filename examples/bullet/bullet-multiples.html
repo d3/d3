@@ -10,11 +10,16 @@
   <body>
     <script type="text/javascript">
 
-var bullet = function(orient) {
-  d3.select(this).selectAll("g.bullet")
-    .call(d3.chart.bullet()
+var chartCache = [];
+
+var bullet = function(orient, i) {
+  var chart = chartCache[i];
+  if (!chart)
+    chart = chartCache[i] = d3.chart.bullet()
       .orient(orient)
-      .duration(1000));
+      .duration(1000);
+  d3.select(this).selectAll("g.bullet")
+    .call(chart);
 };
 
 var vis = d3.select("body").selectAll("svg")
