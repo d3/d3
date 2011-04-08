@@ -11,8 +11,8 @@
 d3.chart.bullet = function() {
   var orient = "left",
       duration = 0,
-      title = d3_chart_title,
-      subtitle = d3_chart_subtitle,
+      title = d3_chart_bulletTitle,
+      subtitle = d3_chart_bulletSubtitle,
       ranges = d3_chart_bulletRanges,
       markers = d3_chart_bulletMarkers,
       measures = d3_chart_bulletMeasures,
@@ -55,7 +55,7 @@ d3.chart.bullet = function() {
 
     // Update the title.
     var titleText = g.selectAll('text.title')
-        .data(d3_chart_title);
+        .data(d3_chart_bulletTitle);
 
     titleText.enter().append("svg:text")
         .attr('class', 'title')
@@ -67,7 +67,7 @@ d3.chart.bullet = function() {
 
     // Update the subtitle.
     var subtitleText = g.selectAll('text.subtitle')
-        .data(d3_chart_subtitle);
+        .data(d3_chart_bulletSubtitle);
 
     subtitleText.enter().append("svg:text")
         .attr('class', 'subtitle')
@@ -265,11 +265,11 @@ d3.chart.bullet = function() {
   return bullet;
 };
 
-function d3_chart_title(d) {
+function d3_chart_bulletTitle(d) {
   return d.title;
 }
 
-function d3_chart_subtitle(d) {
+function d3_chart_bulletSubtitle(d) {
   return d.subtitle;
 }
 
