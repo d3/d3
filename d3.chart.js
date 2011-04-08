@@ -36,11 +36,9 @@ d3.chart.bullet = function() {
       return {
         title: [title.call(this, d, i)],
         subtitle: [subtitle.call(this, d, i)],
-        chart: [{
-          ranges: r,
-          markers: m,
-          measures: z,
-        }],
+        ranges: r,
+        markers: m,
+        measures: z,
         data: d
       };
     });
@@ -55,38 +53,33 @@ d3.chart.bullet = function() {
     };
 
     // Update the title.
-    var titleText = g.selectAll('text.title')
-        .data(d3_chart_bulletTitle);
+    var titleText = g.select("text.title");
 
-    titleText.enter().append("svg:text")
-        .attr('class', 'title')
-        .attr("dy", "1em")
-        .style("font-weight", "bold")
-        .text(d3_chart_identity);
+    if (titleText.empty())
+      titleText = g.append("svg:text")
+          .attr("class", "title")
+          .attr("dy", "1em")
+          .style("font-weight", "bold");
     titleText
-        .text(d3_chart_identity);
+        .text(d3_chart_bulletTitle);
 
     // Update the subtitle.
-    var subtitleText = g.selectAll('text.subtitle')
-        .data(d3_chart_bulletSubtitle);
-
-    subtitleText.enter().append("svg:text")
-        .attr('class', 'subtitle')
-        .attr("dy", "2.5em")
-        .style("font-size", ".7em")
-        .style("fill", "#999")
-        .text(d3_chart_identity);
+    var subtitleText = g.select("text.subtitle");
+    if (subtitleText.empty())
+      subtitleText = g.append("svg:text")
+          .attr("class", "subtitle")
+          .attr("dy", "2.5em")
+          .style("font-size", ".7em")
+          .style("fill", "#999");
     subtitleText
-        .text(d3_chart_identity);
+        .text(d3_chart_bulletSubtitle);
 
     // Update the chart.
-    g.selectAll('g.chart')
-        .data(d3_chart_bulletChart)
-      .enter().append("svg:g")
-        .attr('class', 'chart')
-        .attr("transform", "translate(120)");
-
-    var chart = g.selectAll('g.chart');
+    var chart = g.select("g.chart");
+    if (chart.empty())
+      chart = g.append("svg:g")
+          .attr("class", "chart")
+          .attr("transform", "translate(120)");
 
     // Update the range rects.
     var range = chart.selectAll("rect.range")
@@ -286,15 +279,7 @@ function d3_chart_bulletMeasures(d) {
   return d.measures;
 }
 
-function d3_chart_bulletChart(d) {
-  return d.chart;
-}
-
 function d3_chart_bulletData(d) {
   return d.data;
-}
-
-function d3_chart_identity(d) {
-  return d;
 }
 })()

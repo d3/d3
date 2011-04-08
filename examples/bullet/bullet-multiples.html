@@ -17,8 +17,8 @@ var bullet = function(orient) {
       .duration(1000));
 };
 
-var vis = d3.select("body").selectAll('svg')
-    .data(['left', 'right', 'top', 'bottom'])
+var vis = d3.select("body").selectAll("svg")
+    .data(["left", "right", "top", "bottom"])
   .enter().append("svg:svg")
     .attr("width", 520)
     .attr("height", 300)
