@@ -10,7 +10,7 @@
  */
 
 d3.chart.bullet = function() {
-  var orient = "left",
+  var orient = "left", // TODO top & bottom
       duration = 0,
       ranges = d3_chart_bulletRanges,
       markers = d3_chart_bulletMarkers,
@@ -18,7 +18,7 @@ d3.chart.bullet = function() {
       width = 380,
       height = 30,
       x0,
-      tickFormat = d3.format(",.0f");
+      tickFormat = null;
 
   function bullet(g) {
     var max = 0,
@@ -117,9 +117,12 @@ d3.chart.bullet = function() {
         .attr("y1", height / 6)
         .attr("y2", height * 5 / 6);
 
+    // Compute the tick format.
+    var format = tickFormat || x1.tickFormat(8);
+
     // Update the tick groups.
     var tick = g.selectAll("g.tick")
-        .data(x1.ticks(8), tickFormat);
+        .data(x1.ticks(8), format);
 
     // Initialize the ticks with the old scale, x0.
     var tickEnter = tick.enter().append("svg:g")
@@ -135,7 +138,7 @@ d3.chart.bullet = function() {
         .attr("text-anchor", "middle")
         .attr("dy", "1em")
         .attr("y", height * 7 / 6)
-        .text(tickFormat);
+        .text(format);
 
     // Transition the entering ticks to the new scale, x1.
     tickEnter.transition()
