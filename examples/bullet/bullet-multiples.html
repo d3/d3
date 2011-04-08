@@ -11,32 +11,27 @@
     <input type="button" value="Randomize!" onclick="randomize()"><br>
     <script type="text/javascript">
 
-var w = 500,
-    h = 50,
+var w = 380,
+    h = 25,
     m = [5, 40, 20, 120]; // top right bottom left
 
-var bullet = d3.chart.bullet()
-    .width(w - m[1] - m[3])
-    .height(h - m[0] - m[2])
-    .duration(1000);
-
 var vis = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h * bullets.length);
+    .attr("width", w + m[1] + m[3])
+    .attr("height", (h + m[0] + m[2]) * bullets.length);
 
 var g = vis.selectAll("g.bullet")
-    .data(bullets)
+    .data(bullets.map(chart))
   .enter().append("svg:g")
     .attr("class", "bullet")
     .attr("transform", function(d, i) {
-      return "translate(" + m[3] + "," + (i * h + m[0]) + ")";
+      return "translate(" + m[3] + "," + (i * (h + m[0] + m[2]) + m[0]) + ")";
     });
 
 g.append("svg:text")
     .attr("class", "title")
     .attr("text-anchor", "end")
     .attr("dx", "-6")
-    .attr("y", bullet.height() / 2)
+    .attr("y", h / 2)
     .text(function(d) { return d.title; });
 
 g.append("svg:text")
@@ -44,13 +39,21 @@ g.append("svg:text")
     .attr("text-anchor", "end")
     .attr("dx", "-6")
     .attr("dy", "1em")
-    .attr("y", bullet.height() / 2)
+    .attr("y", h / 2)
     .text(function(d) { return d.subtitle; });
 
-vis.each(refresh);
+g.each(refresh);
 
-function refresh() {
-  d3.select(this).selectAll("g.bullet").call(bullet);
+function chart(d) {
+  d.chart = d3.chart.bullet()
+      .width(w)
+      .height(h)
+      .duration(1000);
+  return d;
+}
+
+function refresh(d) {
+  d3.select(this).call(d.chart);
 }
 
 function randomize() {
@@ -60,7 +63,7 @@ function randomize() {
     b.markers = b.markers.map(random);
     b.measures = b.measures.map(random);
   }
-  vis.each(refresh);
+  g.each(refresh);
 }
 
 function random() {
