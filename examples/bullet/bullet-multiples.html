@@ -10,14 +10,11 @@
   <body>
     <script type="text/javascript">
 
-var bullet = function(chart) {
-  chart.each(function(orient) {
-    var bulletChart = d3.chart.bullet()
-      .orient(orient).duration(1000);
-    // Is there a simpler way to construct a group from the current node?
-    chart.filter(function(d) { return d === orient; })
-        .selectAll('g.bullet').call(bulletChart);
-  });
+var bullet = function(orient) {
+  d3.select(this).selectAll("g.bullet")
+    .call(d3.chart.bullet()
+      .orient(orient)
+      .duration(1000));
 };
 
 var vis = d3.select("body").selectAll('svg')
@@ -34,7 +31,7 @@ vis.selectAll("g.bullet")
     .attr("class", "bullet")
     .attr("transform", function(d, i) { return "translate(0," + (i * 60) + ")"; })
 
-vis.call(bullet);
+vis.each(bullet);
 
 function randomize() {
   for (var i = 0, ii = bullets.length; i < ii; i++) {
@@ -43,7 +40,7 @@ function randomize() {
     b.markers = b.markers.map(function(d) { return Math.random() * 1000; });
     b.measures = b.measures.map(function(d) { return Math.random() * 1000; });
   }
-  vis.call(bullet);
+  vis.each(bullet);
 }
 
     </script>
