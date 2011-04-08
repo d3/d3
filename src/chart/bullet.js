@@ -53,6 +53,7 @@ d3.chart.bullet = function() {
       return reversed ? function(d) { return width - scale(d); } : 0;
     };
 
+    // Update the title.
     var titleText = g.selectAll('text.title')
         .data(d3_chart_title);
 
@@ -64,6 +65,7 @@ d3.chart.bullet = function() {
     titleText
         .text(d3_chart_identity);
 
+    // Update the subtitle.
     var subtitleText = g.selectAll('text.subtitle')
         .data(d3_chart_subtitle);
 
@@ -76,6 +78,7 @@ d3.chart.bullet = function() {
     subtitleText
         .text(d3_chart_identity);
 
+    // Update the chart.
     g.selectAll('g.chart')
         .data(d3_chart_bulletChart)
       .enter().append("svg:g")
