@@ -144,11 +144,11 @@ function d3_selection(groups) {
         for (i = 0; i < n; i++) {
           key = join.call(node = group[i], node.__data__, i);
           if (key in nodeByKey) {
-            exitNodes[j++] = group[i];
+            exitNodes[j++] = group[i]; // duplicate key
           } else {
             nodeByKey[key] = node;
-            keys.push(key);
           }
+          keys.push(key);
         }
 
         for (i = 0; i < m; i++) {
@@ -510,9 +510,9 @@ function d3_selection(groups) {
   // TODO remove(node)?
   // TODO remove(function)?
   groups.remove = function() {
-    return groups.each(function(node) {
-      var parent = node.parentNode;
-      if (parent) parent.removeChild(node);
+    return groups.each(function() {
+      var parent = this.parentNode;
+      if (parent) parent.removeChild(this);
     });
   };
 

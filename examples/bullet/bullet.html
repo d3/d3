@@ -9,15 +9,20 @@
   <body>
     <script>
 
+var w = 500,
+    h = 50,
+    m = [5, 40, 20, 120]; // top right bottom left
+
 var bullet = d3.chart.bullet()
-    .orient("left")
-    .tickFormat(function(d) { return d / 1e6; });
+    .width(w - m[1] - m[3])
+    .height(h - m[0] - m[2])
+    .tickFormat(function(d) { return (d / 1e6).toFixed(1); });
 
 var vis = d3.select("body").append("svg:svg")
-    .attr("width", 800)
-    .attr("height", 300);
+    .attr("width", w)
+    .attr("height", h);
 
-vis.append("svg:g")
+var g = vis.append("svg:g")
     .data([{
       title: "Revenue",
       subtitle: "US$, in millions",
@@ -26,7 +31,23 @@ vis.append("svg:g")
       markers: [1.15e6, 3.0e6]
     }])
     .attr("class", "bullet")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
     .call(bullet);
+
+g.append("svg:text")
+    .attr("class", "title")
+    .attr("text-anchor", "end")
+    .attr("dx", "-6")
+    .attr("y", bullet.height() / 2)
+    .text(function(d) { return d.title; });
+
+g.append("svg:text")
+    .attr("class", "subtitle")
+    .attr("text-anchor", "end")
+    .attr("dx", "-6")
+    .attr("dy", "1em")
+    .attr("y", bullet.height() / 2)
+    .text(function(d) { return d.subtitle; });
 
     </script>
   </body>

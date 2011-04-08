@@ -8,47 +8,65 @@
     <link type="text/css" rel="stylesheet" href="bullet.css"/>
   </head>
   <body>
+    <input type="button" value="Randomize!" onclick="randomize()"><br>
     <script type="text/javascript">
 
-var chartCache = [];
+var w = 500,
+    h = 50,
+    m = [5, 40, 20, 120]; // top right bottom left
 
-var bullet = function(orient, i) {
-  var chart = chartCache[i];
-  if (!chart)
-    chart = chartCache[i] = d3.chart.bullet()
-      .orient(orient)
-      .duration(1000);
-  d3.select(this).selectAll("g.bullet")
-    .call(chart);
-};
+var bullet = d3.chart.bullet()
+    .width(w - m[1] - m[3])
+    .height(h - m[0] - m[2])
+    .duration(5000);
 
-var vis = d3.select("body").selectAll("svg")
-    .data(["left", "right", "top", "bottom"])
-  .enter().append("svg:svg")
-    .attr("width", 520)
-    .attr("height", 300)
-  .append("svg:g")
-    .attr("transform", "translate(10,0)");
+var vis = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h * bullets.length);
 
-vis.selectAll("g.bullet")
+var g = vis.selectAll("g.bullet")
     .data(bullets)
   .enter().append("svg:g")
     .attr("class", "bullet")
-    .attr("transform", function(d, i) { return "translate(0," + (i * 60) + ")"; })
+    .attr("transform", function(d, i) {
+      return "translate(" + m[3] + "," + (i * h + m[0]) + ")";
+    });
 
-vis.each(bullet);
+g.append("svg:text")
+    .attr("class", "title")
+    .attr("text-anchor", "end")
+    .attr("dx", "-6")
+    .attr("y", bullet.height() / 2)
+    .text(function(d) { return d.title; });
+
+g.append("svg:text")
+    .attr("class", "subtitle")
+    .attr("text-anchor", "end")
+    .attr("dx", "-6")
+    .attr("dy", "1em")
+    .attr("y", bullet.height() / 2)
+    .text(function(d) { return d.subtitle; });
+
+vis.each(refresh);
+
+function refresh() {
+  d3.select(this).selectAll("g.bullet").call(bullet);
+}
 
 function randomize() {
-  for (var i = 0, ii = bullets.length; i < ii; i++) {
-    var b = bullets[i];
-    b.ranges = b.ranges.map(function(d) { return Math.random() * 1000; });
-    b.markers = b.markers.map(function(d) { return Math.random() * 1000; });
-    b.measures = b.measures.map(function(d) { return Math.random() * 1000; });
+  for (var i = -1, n = bullets.length, b; ++i < n;) {
+    b = bullets[i];
+    b.ranges = b.ranges.map(random);
+    b.markers = b.markers.map(random);
+    b.measures = b.measures.map(random);
   }
-  vis.each(bullet);
+  vis.each(refresh);
+}
+
+function random() {
+  return Math.random() * 1000;
 }
 
     </script>
-    <input type="button" value="Randomize!" onclick="randomize()">
   </body>
 </html>
