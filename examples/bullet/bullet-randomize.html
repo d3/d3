@@ -1,25 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bullet Chart (Multiples)</title>
+    <title>Bullet Chart (Randomize)</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.chart.js"></script>
-    <script type="text/javascript" src="bullets.js"></script>
     <link type="text/css" rel="stylesheet" href="bullet.css"/>
   </head>
   <body>
+    <input type="button" value="Randomize!" onclick="randomize()"><br>
     <script type="text/javascript">
 
 var w = 380,
     h = 25,
-    m = [5, 40, 20, 120]; // top right bottom left
+    m = [5, 40, 20, 120], // top right bottom left
+    n = 5;
+
+var chart = d3.chart.bullet()
+    .width(w)
+    .height(h)
+    .duration(1000);
 
 var vis = d3.select("body").append("svg:svg")
     .attr("width", w + m[1] + m[3])
-    .attr("height", (h + m[0] + m[2]) * bullets.length);
+    .attr("height", (h + m[0] + m[2]) * n);
 
 var g = vis.selectAll("g.bullet")
-    .data(bullets.map(chart))
+    .data(randomBullets)
   .enter().append("svg:g")
     .attr("class", "bullet")
     .attr("transform", function(d, i) {
@@ -41,14 +47,26 @@ g.append("svg:text")
     .attr("y", h / 2)
     .text(function(d) { return d.subtitle; });
 
-g.each(function(d) {
-  d3.select(this).call(d.chart);
-});
+g.call(chart);
 
-// Initialize a separate chart per multiple, for distinct scales.
-function chart(d) {
-  d.chart = d3.chart.bullet().width(w).height(h);
-  return d;
+function randomize() {
+  g.data(randomBullets).call(chart);
+}
+
+function randomBullets() {
+  return d3.range(n).map(function(i) {
+    return {
+      title: String.fromCharCode(65 + i),
+      subtitle: "numbers",
+      ranges: d3.range(3).map(randomNumber),
+      markers: d3.range(1).map(randomNumber),
+      measures: d3.range(1).map(randomNumber)
+    };
+  });
+}
+
+function randomNumber() {
+  return Math.random() * 1000;
 }
 
     </script>
