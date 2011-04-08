@@ -13,7 +13,7 @@ var w = 500,
     h = 50,
     m = [5, 40, 20, 120]; // top right bottom left
 
-var bullet = d3.chart.bullet()
+var chart = d3.chart.bullet()
     .width(w - m[1] - m[3])
     .height(h - m[0] - m[2])
     .tickFormat(function(d) { return (d / 1e6).toFixed(1); });
@@ -32,13 +32,13 @@ var g = vis.append("svg:g")
     }])
     .attr("class", "bullet")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
-    .call(bullet);
+    .call(chart);
 
 g.append("svg:text")
     .attr("class", "title")
     .attr("text-anchor", "end")
     .attr("dx", "-6")
-    .attr("y", bullet.height() / 2)
+    .attr("y", chart.height() / 2)
     .text(function(d) { return d.title; });
 
 g.append("svg:text")
@@ -46,7 +46,7 @@ g.append("svg:text")
     .attr("text-anchor", "end")
     .attr("dx", "-6")
     .attr("dy", "1em")
-    .attr("y", bullet.height() / 2)
+    .attr("y", chart.height() / 2)
     .text(function(d) { return d.subtitle; });
 
     </script>
