@@ -17,25 +17,15 @@ var vis = d3.select("body").append("svg:svg")
     .attr("width", 800)
     .attr("height", 300);
 
-vis.append("svg:text")
-    .attr("dy", "1em")
-    .style("font-weight", "bold")
-    .text("Revenue");
-
-vis.append("svg:text")
-    .attr("dy", "2.5em")
-    .style("font-size", ".7em")
-    .style("fill", "#999")
-    .text("US$, in millions");
-
 vis.append("svg:g")
     .data([{
+      title: "Revenue",
+      subtitle: "US$, in millions",
       ranges: [2.1e6, 2.85e6, 4e6],
       measures: [2.3e6, 3.01e6],
       markers: [1.15e6, 3.0e6]
     }])
     .attr("class", "bullet")
-    .attr("transform", "translate(80,0)")
     .call(bullet);
 
     </script>
