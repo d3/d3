@@ -54,19 +54,17 @@ function randomize() {
 }
 
 function randomBullets() {
+  var k = 10 + Math.random() * 90,
+      r = function() { return Math.random() * k; };
   return d3.range(n).map(function(i) {
     return {
       title: String.fromCharCode(65 + i),
       subtitle: "numbers",
-      ranges: d3.range(3).map(randomNumber),
-      markers: d3.range(1).map(randomNumber),
-      measures: d3.range(1).map(randomNumber)
+      ranges: d3.range(3).map(r),
+      markers: d3.range(1).map(r),
+      measures: d3.range(1).map(r)
     };
   });
-}
-
-function randomNumber() {
-  return Math.random() * 1000;
 }
 
     </script>
