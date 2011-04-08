@@ -15,7 +15,7 @@ var bullet = function(chart) {
     var bulletChart = d3.chart.bullet()
       .orient(orient).duration(1000);
     // Is there a simpler way to construct a group from the current node?
-    chart.filter(function(d) { return d === orient })
+    chart.filter(function(d) { return d === orient; })
         .selectAll('g.bullet').call(bulletChart);
   });
 };

@@ -59,7 +59,7 @@ d3.chart.bullet = function() {
       .transition()
         .duration(duration)
         .attr("width", x1)
-        .attr("x", startpos(x1))
+        .attr("x", startpos(x1));
 
     range.transition()
         .duration(duration)
@@ -80,7 +80,7 @@ d3.chart.bullet = function() {
       .transition()
         .duration(duration)
         .attr("width", x1)
-        .attr("x", startpos(x1))
+        .attr("x", startpos(x1));
 
     measure.transition()
         .duration(duration)
