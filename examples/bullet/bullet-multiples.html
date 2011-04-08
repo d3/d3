@@ -10,12 +10,20 @@
   <body>
     <script type="text/javascript">
 
-var bullet = d3.chart.bullet()
-    .orient("left")
-    .duration(1000);
+var bullet = function(chart) {
+  chart.each(function(orient) {
+    var bulletChart = d3.chart.bullet()
+      .orient(orient).duration(1000);
+    // Is there a simpler way to construct a group from the current node?
+    chart.filter(function(d) { return d === orient })
+        .selectAll('g.bullet').call(bulletChart);
+  });
+};
 
-var vis = d3.select("body").append("svg:svg")
-    .attr("width", 900)
+var vis = d3.select("body").selectAll('svg')
+    .data(['left', 'right', 'top', 'bottom'])
+  .enter().append("svg:svg")
+    .attr("width", 520)
     .attr("height", 300)
   .append("svg:g")
     .attr("transform", "translate(10,0)");
@@ -25,7 +33,8 @@ vis.selectAll("g.bullet")
   .enter().append("svg:g")
     .attr("class", "bullet")
     .attr("transform", function(d, i) { return "translate(0," + (i * 60) + ")"; })
-    .call(bullet);
+
+vis.call(bullet);
 
 function randomize() {
   for (var i = 0, ii = bullets.length; i < ii; i++) {
@@ -34,7 +43,7 @@ function randomize() {
     b.markers = b.markers.map(function(d) { return Math.random() * 1000; });
     b.measures = b.measures.map(function(d) { return Math.random() * 1000; });
   }
-  vis.selectAll("g.bullet").call(bullet);
+  vis.call(bullet);
 }
 
     </script>

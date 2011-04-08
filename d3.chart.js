@@ -15,7 +15,7 @@ d3.chart.bullet = function() {
       ranges = d3_chart_bulletRanges,
       markers = d3_chart_bulletMarkers,
       measures = d3_chart_bulletMeasures,
-      width = 800,
+      width = 500,
       height = 30,
       x0 = d3.scale.linear().domain([0, Infinity]).range([0, width]),
       x1 = d3.scale.linear().range([0, width]),
@@ -39,8 +39,14 @@ d3.chart.bullet = function() {
       };
     });
 
+    var reversed = orient === "right" || orient === "bottom";
+
     // Update the x-scale.
     x1.domain([0, max]);
+
+    var startpos = function(scale) {
+      return reversed ? function(d) { return width - scale(d); } : 0;
+    };
 
     // Update the range rects.
     var range = chart.selectAll("rect.range")
@@ -50,12 +56,15 @@ d3.chart.bullet = function() {
         .attr("class", function(d, i) { return "range s" + i; })
         .attr("width", x0)
         .attr("height", height)
+        .attr("x", startpos(x0))
       .transition()
         .duration(duration)
-        .attr("width", x1);
+        .attr("width", x1)
+        .attr("x", startpos(x1))
 
     range.transition()
         .duration(duration)
+        .attr("x", startpos(x1))
         .attr("width", x1)
         .attr("height", height);
 
@@ -67,36 +76,43 @@ d3.chart.bullet = function() {
         .attr("class", function(d, i) { return "measure s" + i; })
         .attr("width", x0)
         .attr("height", height / 3)
+        .attr("x", startpos(x0))
         .attr("y", height / 3)
       .transition()
         .duration(duration)
-        .attr("width", x1);
+        .attr("width", x1)
+        .attr("x", startpos(x1))
 
     measure.transition()
         .duration(duration)
         .attr("width", x1)
         .attr("height", height / 3)
+        .attr("x", startpos(x1))
         .attr("y", height / 3);
 
     // Update the marker lines.
     var marker = chart.selectAll("line.marker")
         .data(d3_chart_bulletMarkers);
 
+    var pos = function(scale) {
+      return reversed ? function(d) { return width - scale(d); } : scale;
+    };
+
     marker.enter().append("svg:line")
         .attr("class", "marker")
-        .attr("x1", x0)
-        .attr("x2", x0)
+        .attr("x1", pos(x0))
+        .attr("x2", pos(x0))
         .attr("y1", height / 6)
         .attr("y2", height * 5 / 6)
       .transition()
         .duration(duration)
-        .attr("x1", x1)
-        .attr("x2", x1);
+        .attr("x1", pos(x1))
+        .attr("x2", pos(x1));
 
     marker.transition()
         .duration(duration)
-        .attr("x1", x1)
-        .attr("x2", x1)
+        .attr("x1", pos(x1))
+        .attr("x2", pos(x1))
         .attr("y1", height / 6)
         .attr("y2", height * 5 / 6);
 
@@ -104,10 +120,16 @@ d3.chart.bullet = function() {
     var tick = chart.selectAll("g.tick")
         .data(x1.ticks(10), tickFormat);
 
+    var translate = function(f) {
+      return function(d) {
+        return "translate(" + f(d) + ",0)";
+      };
+    };
+
     // Initialize the ticks with the old scale, x0.
     var tickEnter = tick.enter().append("svg:g")
         .attr("class", "tick")
-        .attr("transform", function(d) { return "translate(" + x0(d) + ",0)"; })
+        .attr("transform", translate(pos(x0)))
         .attr("opacity", 1e-6);
 
     tickEnter.append("svg:line")
@@ -123,13 +145,13 @@ d3.chart.bullet = function() {
     // Transition the entering ticks to the new scale, x1.
     tickEnter.transition()
         .duration(duration)
-        .attr("transform", function(d) { return "translate(" + x1(d) + ",0)"; })
+        .attr("transform", translate(pos(x1)))
         .attr("opacity", 1);
 
     // Transition the updating ticks to the new scale, x1.
     var tickUpdate = tick.transition()
         .duration(duration)
-        .attr("transform", function(d) { return "translate(" + x1(d) + ",0)"; })
+        .attr("transform", translate(pos(x1)))
         .attr("opacity", 1);
 
     tickUpdate.select("line")
@@ -142,7 +164,7 @@ d3.chart.bullet = function() {
     // Transition the exiting ticks to the new scale, x1.
     tick.exit().transition()
         .duration(duration)
-        .attr("transform", function(d) { return "translate(" + x1(d) + ",0)"; })
+        .attr("transform", translate(pos(x1)))
         .attr("opacity", 1e-6)
         .remove();
 
