@@ -131,6 +131,19 @@ title: Examples
   interaction!</p>
 </div>
 
+<div class="list">
+  <a href="bullet.html">
+    <img src="../bullet.png"/>
+  </a>
+  <h4><a href="bullet.html">Bullet Charts</a></h4>
+
+  <p>Designed by Stephen Few, a bullet chart &ldquo;provides a rich display of
+  data in a small space.&rdquo; A variation on a bar chart, bullet charts
+  compare a given quantitative measure (such as profit or revenue)
+  against qualitative ranges (e.g., poor, satisfactory, good) and
+  related markers (e.g., the same measure a year ago).</p>
+</div>
+
 </div>
 <br clear="left"/>
 

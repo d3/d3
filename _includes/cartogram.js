@@ -1,16 +1,16 @@
-var data; // loaded asynchronously
+// Ratio of Obese (BMI >= 30) in U.S. Adults, CDC 2008
+var data = [
+  , .187, .198, , .133, .175, .151, , .1, .125, .171, , .172, .133, , .108,
+  .142, .167, .201, .175, .159, .169, .177, .141, .163, .117, .182, .153, .195,
+  .189, .134, .163, .133, .151, .145, .13, .139, .169, .164, .175, .135, .152,
+  .169, , .132, .167, .139, .184, .159, .14, .146, .157, , .139, .183, .16, .143
+];
 
 var svg = d3.select("#chart")
   .append("svg:svg");
 
 d3.json("us-states.json", function(json) {
   var path = d3.geo.path();
-
-  // Synthesize a random data variable to visualize…
-  // Note: This has a baked-in sqrt transform!
-  json.features.forEach(function(f) {
-    f.properties.value = Math.sqrt(.2 + .8 * Math.random());
-  });
 
   // A thick black stroke for the exterior.
   svg.append("svg:g")
@@ -39,10 +39,12 @@ d3.json("us-states.json", function(json) {
             x = centroid[0],
             y = centroid[1];
         return "translate(" + x + "," + y + ")"
-            + "scale(" + d.properties.value + ")"
+            + "scale(" + Math.sqrt(data[+d.id] * 5 || 0) + ")"
             + "translate(" + -x + "," + -y + ")";
       })
-      .attr("stroke-width", function(d) { return 1 / d.properties.value; })
+      .attr("stroke-width", function(d) {
+        return 1 / Math.sqrt(data[+d.id] * 5);
+      })
       .attr("d", path);
 
 });

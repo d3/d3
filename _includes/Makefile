@@ -1,6 +1,8 @@
 SRC_FILES = \
 	../d3.js \
 	../d3.min.js \
+	../d3.chart.js \
+	../d3.chart.min.js \
 	../d3.csv.js \
 	../d3.csv.min.js \
 	../d3.geo.js \
@@ -45,7 +47,10 @@ EX_FILES = \
 	../ex/stack.js \
 	../ex/voronoi.css \
 	../ex/voronoi.js \
-	../ex/sunburst.js
+	../ex/sunburst.js \
+	../ex/bullet.js \
+	../ex/bullet.css \
+	../ex/bullets.json
 
 INCLUDE_FILES = \
 	cartogram.js \
@@ -60,7 +65,9 @@ INCLUDE_FILES = \
 	stream_layers.js \
 	stack.js \
 	voronoi.js \
-	sunburst.js
+	sunburst.js \
+	bullet.js \
+	bullets.json
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
@@ -75,6 +82,18 @@ $(SRC_FILES):
 ../ex/calendar.css:
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/calendar.css > $@
+
+../ex/bullet.js bullet.js:
+	@rm -rf $@
+	git cat-file blob master:examples/bullet/bullet.js > $@
+
+../ex/bullet.css:
+	@rm -rf $@
+	git cat-file blob master:examples/bullet/bullet.css > $@
+
+../ex/bullets.json bullets.json:
+	@rm -rf $@
+	git cat-file blob master:examples/bullet/bullets.json > $@
 
 ../ex/cartogram.css:
 	@rm -rf $@

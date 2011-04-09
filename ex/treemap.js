@@ -45,7 +45,6 @@ d3.json("flare.json", function(json) {
   });
 });
 
-
 function cell() {
   this
       .style("left", function(d) { return d.x + "px"; })
