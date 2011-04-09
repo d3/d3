@@ -10,6 +10,7 @@
 
 d3.chart.bullet = function() {
   var orient = "left", // TODO top & bottom
+      reverse = false,
       duration = 0,
       ranges = d3_chart_bulletRanges,
       markers = d3_chart_bulletMarkers,
@@ -18,176 +19,151 @@ d3.chart.bullet = function() {
       height = 30,
       tickFormat = null;
 
+  // For each small multiple…
   function bullet(g) {
-    var max = 0,
-        reverse = orient == "right" || orient == "bottom";
+    g.each(function(d, i) {
+      var rangez = ranges.call(this, d, i).slice().sort(d3.descending),
+          markerz = markers.call(this, d, i).slice().sort(d3.descending),
+          measurez = measures.call(this, d, i).slice().sort(d3.descending),
+          g = d3.select(this);
 
-    // Convert the data to a standardized representation, and if necessary also
-    // compute the maximum value, needed to standardize the x-scale across
-    // multiples.
-    g.map(function(d, i) {
-      var r = ranges.call(this, d, i).slice().sort(d3.descending),
-          m = markers.call(this, d, i).slice().sort(d3.descending),
-          z = measures.call(this, d, i).slice().sort(d3.descending);
-      max = Math.max(max, r[0], m[0], z[0]);
-      return {
-        ranges: r,
-        markers: m,
-        measures: z,
-        data: d
-      };
-    });
-
-    // Update the x-scales.
-    var x0,
-        x1 = d3.scale.linear()
-          .domain([0, max])
+      // Compute the new x-scale.
+      var x1 = d3.scale.linear()
+          .domain([0, Math.max(rangez[0], markerz[0], measurez[0])])
           .range(reverse ? [width, 0] : [0, width]);
 
-    // Initialize the old scale, if this is the first render.
-    var ticks = g.selectAll("g.ticks");
-    if (ticks.empty()) {
-      x0 = d3.scale.linear()
-        .domain([0, Infinity])
-        .range(x1.range());
-      ticks.data([x0])
-        .enter().append("svg:g")
-          .attr("class", "ticks");
-      ticks = g.selectAll("g.ticks");
-    } else {
-      // Otherwise retrieve the old scale
-      ticks.each(function(d) {
-        x0 = d;
-      });
-    }
+      // Retrieve the old x-scale, if this is an update.
+      var x0 = this.__chart__ || d3.scale.linear()
+          .domain([0, Infinity])
+          .range(x1.range());
 
-    // Derive width-scales from the x-scales.
-    var w0 = d3_chart_bulletWidth(x0),
-        w1 = d3_chart_bulletWidth(x1);
+      // Stash the new scale.
+      this.__chart__ = x1;
 
-    // Update the range rects.
-    var range = g.selectAll("rect.range")
-        .data(d3_chart_bulletRanges);
+      // Derive width-scales from the x-scales.
+      var w0 = d3_chart_bulletWidth(x0),
+          w1 = d3_chart_bulletWidth(x1);
 
-    range.enter().append("svg:rect")
-        .attr("class", function(d, i) { return "range s" + i; })
-        .attr("width", w0)
-        .attr("height", height)
-        .attr("x", reverse ? x0 : 0)
-      .transition()
-        .duration(duration)
-        .attr("width", w1)
-        .attr("x", reverse ? x1 : 0);
+      // Update the range rects.
+      var range = g.selectAll("rect.range")
+          .data(rangez);
 
-    range.transition()
-        .duration(duration)
-        .attr("x", reverse ? x1 : 0)
-        .attr("width", w1)
-        .attr("height", height);
+      range.enter().append("svg:rect")
+          .attr("class", function(d, i) { return "range s" + i; })
+          .attr("width", w0)
+          .attr("height", height)
+          .attr("x", reverse ? x0 : 0)
+        .transition()
+          .duration(duration)
+          .attr("width", w1)
+          .attr("x", reverse ? x1 : 0);
 
-    // Update the measure rects.
-    var measure = g.selectAll("rect.measure")
-        .data(d3_chart_bulletMeasures);
+      range.transition()
+          .duration(duration)
+          .attr("x", reverse ? x1 : 0)
+          .attr("width", w1)
+          .attr("height", height);
 
-    measure.enter().append("svg:rect")
-        .attr("class", function(d, i) { return "measure s" + i; })
-        .attr("width", w0)
-        .attr("height", height / 3)
-        .attr("x", reverse ? x0 : 0)
-        .attr("y", height / 3)
-      .transition()
-        .duration(duration)
-        .attr("width", w1)
-        .attr("x", reverse ? x1 : 0);
+      // Update the measure rects.
+      var measure = g.selectAll("rect.measure")
+          .data(measurez);
 
-    measure.transition()
-        .duration(duration)
-        .attr("width", w1)
-        .attr("height", height / 3)
-        .attr("x", reverse ? x1 : 0)
-        .attr("y", height / 3);
+      measure.enter().append("svg:rect")
+          .attr("class", function(d, i) { return "measure s" + i; })
+          .attr("width", w0)
+          .attr("height", height / 3)
+          .attr("x", reverse ? x0 : 0)
+          .attr("y", height / 3)
+        .transition()
+          .duration(duration)
+          .attr("width", w1)
+          .attr("x", reverse ? x1 : 0);
 
-    // Update the marker lines.
-    var marker = g.selectAll("line.marker")
-        .data(d3_chart_bulletMarkers);
+      measure.transition()
+          .duration(duration)
+          .attr("width", w1)
+          .attr("height", height / 3)
+          .attr("x", reverse ? x1 : 0)
+          .attr("y", height / 3);
 
-    marker.enter().append("svg:line")
-        .attr("class", "marker")
-        .attr("x1", x0)
-        .attr("x2", x0)
-        .attr("y1", height / 6)
-        .attr("y2", height * 5 / 6)
-      .transition()
-        .duration(duration)
-        .attr("x1", x1)
-        .attr("x2", x1);
+      // Update the marker lines.
+      var marker = g.selectAll("line.marker")
+          .data(markerz);
 
-    marker.transition()
-        .duration(duration)
-        .attr("x1", x1)
-        .attr("x2", x1)
-        .attr("y1", height / 6)
-        .attr("y2", height * 5 / 6);
+      marker.enter().append("svg:line")
+          .attr("class", "marker")
+          .attr("x1", x0)
+          .attr("x2", x0)
+          .attr("y1", height / 6)
+          .attr("y2", height * 5 / 6)
+        .transition()
+          .duration(duration)
+          .attr("x1", x1)
+          .attr("x2", x1);
 
-    // Compute the tick format.
-    var format = tickFormat || x1.tickFormat(8);
+      marker.transition()
+          .duration(duration)
+          .attr("x1", x1)
+          .attr("x2", x1)
+          .attr("y1", height / 6)
+          .attr("y2", height * 5 / 6);
 
-    // Update the tick groups.
-    var tick = ticks.selectAll("g.tick")
-        .data(x1.ticks(8), format);
+      // Compute the tick format.
+      var format = tickFormat || x1.tickFormat(8);
 
-    // Initialize the ticks with the old scale, x0.
-    var tickEnter = tick.enter().append("svg:g")
-        .attr("class", "tick")
-        .attr("transform", d3_chart_bulletTranslate(x0))
-        .attr("opacity", 1e-6);
+      // Update the tick groups.
+      var tick = g.selectAll("g.tick")
+          .data(x1.ticks(8), format);
 
-    tickEnter.append("svg:line")
-        .attr("y1", height)
-        .attr("y2", height * 7 / 6);
+      // Initialize the ticks with the old scale, x0.
+      var tickEnter = tick.enter().append("svg:g")
+          .attr("class", "tick")
+          .attr("transform", d3_chart_bulletTranslate(x0))
+          .attr("opacity", 1e-6);
 
-    tickEnter.append("svg:text")
-        .attr("text-anchor", "middle")
-        .attr("dy", "1em")
-        .attr("y", height * 7 / 6)
-        .text(format);
+      tickEnter.append("svg:line")
+          .attr("y1", height)
+          .attr("y2", height * 7 / 6);
 
-    // Transition the entering ticks to the new scale, x1.
-    tickEnter.transition()
-        .duration(duration)
-        .attr("transform", d3_chart_bulletTranslate(x1))
-        .attr("opacity", 1);
+      tickEnter.append("svg:text")
+          .attr("text-anchor", "middle")
+          .attr("dy", "1em")
+          .attr("y", height * 7 / 6)
+          .text(format);
 
-    // Transition the updating ticks to the new scale, x1.
-    var tickUpdate = tick.transition()
-        .duration(duration)
-        .attr("transform", d3_chart_bulletTranslate(x1))
-        .attr("opacity", 1);
+      // Transition the entering ticks to the new scale, x1.
+      tickEnter.transition()
+          .duration(duration)
+          .attr("transform", d3_chart_bulletTranslate(x1))
+          .attr("opacity", 1);
 
-    tickUpdate.select("line")
-        .attr("y1", height)
-        .attr("y2", height * 7 / 6);
+      // Transition the updating ticks to the new scale, x1.
+      var tickUpdate = tick.transition()
+          .duration(duration)
+          .attr("transform", d3_chart_bulletTranslate(x1))
+          .attr("opacity", 1);
 
-    tickUpdate.select("text")
-        .attr("y", height * 7 / 6);
+      tickUpdate.select("line")
+          .attr("y1", height)
+          .attr("y2", height * 7 / 6);
 
-    // Transition the exiting ticks to the new scale, x1.
-    tick.exit().transition()
-        .duration(duration)
-        .attr("transform", d3_chart_bulletTranslate(x1))
-        .attr("opacity", 1e-6)
-        .remove();
+      tickUpdate.select("text")
+          .attr("y", height * 7 / 6);
 
-    // Lastly, restore the original data and update the previous scale!
-    g.map(d3_chart_bulletData);
-    g.selectAll("g.ticks")
-      .data([x1]);
+      // Transition the exiting ticks to the new scale, x1.
+      tick.exit().transition()
+          .duration(duration)
+          .attr("transform", d3_chart_bulletTranslate(x1))
+          .attr("opacity", 1e-6)
+          .remove();
+    });
   }
 
   // left, right, top, bottom
   bullet.orient = function(x) {
     if (!arguments.length) return orient;
     orient = x;
+    reverse = orient == "right" || orient == "bottom";
     return bullet;
   };
 
@@ -246,10 +222,6 @@ function d3_chart_bulletMarkers(d) {
 
 function d3_chart_bulletMeasures(d) {
   return d.measures;
-}
-
-function d3_chart_bulletData(d) {
-  return d.data;
 }
 
 function d3_chart_bulletTranslate(x) {
