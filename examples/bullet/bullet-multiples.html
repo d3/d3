@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Bullet Chart (Multiples)</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.chart.js"></script>
+    <script type="text/javascript" src="bullets.js"></script>
+    <link type="text/css" rel="stylesheet" href="bullet.css"/>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 380,
+    h = 25,
+    m = [5, 40, 20, 120]; // top right bottom left
+
+var vis = d3.select("body").append("svg:svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", (h + m[0] + m[2]) * bullets.length);
+
+var g = vis.selectAll("g.bullet")
+    .data(bullets)
+  .enter().append("svg:g")
+    .attr("class", "bullet")
+    .attr("transform", function(d, i) {
+      return "translate(" + m[3] + "," + (i * (h + m[0] + m[2]) + m[0]) + ")";
+    });
+
+g.append("svg:text")
+    .attr("class", "title")
+    .attr("text-anchor", "end")
+    .attr("dx", "-6")
+    .attr("y", h / 2)
+    .text(function(d) { return d.title; });
+
+g.append("svg:text")
+    .attr("class", "subtitle")
+    .attr("text-anchor", "end")
+    .attr("dx", "-6")
+    .attr("dy", "1em")
+    .attr("y", h / 2)
+    .text(function(d) { return d.subtitle; });
+
+var chart = d3.chart.bullet().width(w).height(h);
+
+g.each(function(d) {
+  d3.select(this).call(chart);
+});
+
+    </script>
+  </body>
+</html>

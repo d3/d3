@@ -6,6 +6,8 @@ all: \
 	d3.min.js \
 	d3.behavior.js \
 	d3.behavior.min.js \
+	d3.chart.js \
+	d3.chart.min.js \
 	d3.layout.js \
 	d3.layout.min.js \
 	d3.csv.js \
@@ -86,6 +88,12 @@ d3.behavior.js: \
 	src/start.js \
 	src/behavior/behavior.js \
 	src/behavior/zoom.js \
+	src/end.js
+
+d3.chart.js: \
+	src/start.js \
+	src/chart/chart.js \
+	src/chart/bullet.js \
 	src/end.js
 
 d3.layout.js: \

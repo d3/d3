@@ -108,7 +108,7 @@ d3.behavior.zoom = function() {
     };
 
     function transform(scale, o) {
-      var domain = scale.__domain || (scale.__domain = scale.domain());
+      var domain = scale.__domain || (scale.__domain = scale.domain()),
           range = scale.range().map(function(v) { return (v - o) / k; });
       scale.domain(domain).domain(range.map(scale.invert));
     }
