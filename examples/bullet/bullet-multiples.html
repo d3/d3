@@ -19,7 +19,7 @@ var vis = d3.select("body").append("svg:svg")
     .attr("height", (h + m[0] + m[2]) * bullets.length);
 
 var g = vis.selectAll("g.bullet")
-    .data(bullets.map(chart))
+    .data(bullets)
   .enter().append("svg:g")
     .attr("class", "bullet")
     .attr("transform", function(d, i) {
@@ -41,15 +41,11 @@ g.append("svg:text")
     .attr("y", h / 2)
     .text(function(d) { return d.subtitle; });
 
-g.each(function(d) {
-  d3.select(this).call(d.chart);
-});
+var chart = d3.chart.bullet().width(w).height(h);
 
-// Initialize a separate chart per multiple, for distinct scales.
-function chart(d) {
-  d.chart = d3.chart.bullet().width(w).height(h);
-  return d;
-}
+g.each(function(d) {
+  d3.select(this).call(chart);
+});
 
     </script>
   </body>

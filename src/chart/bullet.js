@@ -16,15 +16,15 @@ d3.chart.bullet = function() {
       measures = d3_chart_bulletMeasures,
       width = 380,
       height = 30,
-      x0,
       tickFormat = null;
 
   function bullet(g) {
     var max = 0,
         reverse = orient == "right" || orient == "bottom";
 
-    // Convert the data to a standardized representation, and also compute the
-    // maximum value, needed to standardize the x-scale across multiples.
+    // Convert the data to a standardized representation, and if necessary also
+    // compute the maximum value, needed to standardize the x-scale across
+    // multiples.
     g.map(function(d, i) {
       var r = ranges.call(this, d, i).slice().sort(d3.descending),
           m = markers.call(this, d, i).slice().sort(d3.descending),
@@ -39,14 +39,27 @@ d3.chart.bullet = function() {
     });
 
     // Update the x-scales.
-    var x1 = d3.scale.linear()
-        .domain([0, max])
-        .range(reverse ? [width, 0] : [0, width]);
+    var x0,
+        x1 = d3.scale.linear()
+          .domain([0, max])
+          .range(reverse ? [width, 0] : [0, width]);
 
     // Initialize the old scale, if this is the first render.
-    if (!x0) x0 = d3.scale.linear()
+    var ticks = g.selectAll("g.ticks");
+    if (ticks.empty()) {
+      x0 = d3.scale.linear()
         .domain([0, Infinity])
         .range(x1.range());
+      ticks.data([x0])
+        .enter().append("svg:g")
+          .attr("class", "ticks");
+      ticks = g.selectAll("g.ticks");
+    } else {
+      // Otherwise retrieve the old scale
+      ticks.each(function(d) {
+        x0 = d;
+      });
+    }
 
     // Derive width-scales from the x-scales.
     var w0 = d3_chart_bulletWidth(x0),
@@ -120,7 +133,7 @@ d3.chart.bullet = function() {
     var format = tickFormat || x1.tickFormat(8);
 
     // Update the tick groups.
-    var tick = g.selectAll("g.tick")
+    var tick = ticks.selectAll("g.tick")
         .data(x1.ticks(8), format);
 
     // Initialize the ticks with the old scale, x0.
@@ -167,7 +180,8 @@ d3.chart.bullet = function() {
 
     // Lastly, restore the original data and update the previous scale!
     g.map(d3_chart_bulletData);
-    x0 = x1;
+    g.selectAll("g.ticks")
+      .data([x1]);
   }
 
   // left, right, top, bottom
