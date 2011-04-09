@@ -1033,7 +1033,6 @@ function d3_selection(groups) {
       group = groups[j];
       subgroups.push(subgroup = []);
       subgroup.parentNode = group.parentNode;
-      subgroup.parentData = group.parentData;
       for (var i = 0, n = group.length; i < n; i++) {
         if (node = group[i]) {
           subgroup.push(subnode = select(node));
@@ -1057,7 +1056,6 @@ function d3_selection(groups) {
         if (node = group[i]) {
           subgroups.push(subgroup = selectAll(node));
           subgroup.parentNode = node;
-          subgroup.parentData = node.__data__;
         }
       }
     }
@@ -1088,7 +1086,6 @@ function d3_selection(groups) {
       group = groups[j];
       subgroups.push(subgroup = []);
       subgroup.parentNode = group.parentNode;
-      subgroup.parentData = group.parentData;
       for (var i = 0, n = group.length; i < n; i++) {
         if ((node = group[i]) && filter.call(node, node.__data__, i)) {
           subgroup.push(node);
@@ -1128,10 +1125,6 @@ function d3_selection(groups) {
           node,
           nodeData;
 
-      function enterNode(data) {
-        return {__data__: data};
-      }
-
       if (join) {
         var nodeByKey = {},
             exitData = [],
@@ -1156,7 +1149,7 @@ function d3_selection(groups) {
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
           } else {
-            enterNodes[i] = enterNode(nodeData),
+            enterNodes[i] = d3_selection_enterNode(nodeData),
             updateNodes[i] = exitNodes[i] = null;
           }
           delete nodeByKey[key];
@@ -1176,12 +1169,12 @@ function d3_selection(groups) {
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
           } else {
-            enterNodes[i] = enterNode(nodeData);
+            enterNodes[i] = d3_selection_enterNode(nodeData);
             updateNodes[i] = exitNodes[i] = null;
           }
         }
         for (; i < m; i++) {
-          enterNodes[i] = enterNode(groupData[i]);
+          enterNodes[i] = d3_selection_enterNode(groupData[i]);
           updateNodes[i] = exitNodes[i] = null;
         }
         for (; i < n1; i++) {
@@ -1195,11 +1188,6 @@ function d3_selection(groups) {
           = exitNodes.parentNode
           = group.parentNode;
 
-      enterNodes.parentData
-          = updateNodes.parentData
-          = exitNodes.parentData
-          = group.parentData;
-
       enter.push(enterNodes);
       update.push(updateNodes);
       exit.push(exitNodes);
@@ -1210,7 +1198,7 @@ function d3_selection(groups) {
         group;
     if (typeof data == "function") {
       while (++i < n) {
-        bind(group = groups[i], data.call(group, group.parentData, i));
+        bind(group = groups[i], data.call(group, group.parentNode.__data__, i));
       }
     } else {
       while (++i < n) {
@@ -1580,7 +1568,6 @@ function d3_selectionEnter(groups) {
       group = groups[j];
       subgroups.push(subgroup = []);
       subgroup.parentNode = group.parentNode;
-      subgroup.parentData = group.parentData;
       for (var i = 0, n = group.length; i < n; i++) {
         if (node = group[i]) {
           subgroup.push(subnode = select(group.parentNode));
@@ -1638,6 +1625,10 @@ function d3_selection_comparator(comparator) {
   return function(a, b) {
     return comparator(a && a.__data__, b && b.__data__);
   };
+}
+
+function d3_selection_enterNode(data) {
+  return {__data__: data};
 }
 d3.transition = d3_root.transition;
 
