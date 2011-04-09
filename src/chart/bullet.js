@@ -143,6 +143,9 @@ d3.chart.bullet = function() {
           .attr("transform", d3_chart_bulletTranslate(x1))
           .attr("opacity", 1);
 
+      // Update the tick text with the new scale
+      tick.text(format);
+
       tickUpdate.select("line")
           .attr("y1", height)
           .attr("y2", height * 7 / 6);
