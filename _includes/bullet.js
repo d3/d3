@@ -4,8 +4,7 @@ var w = 960,
 
 var chart = d3.chart.bullet()
     .width(w - m[1] - m[3])
-    .height(h - m[0] - m[2])
-    .duration(1000);
+    .height(h - m[0] - m[2]);
 
 d3.json("bullets.json", function(data) {
 
@@ -32,6 +31,7 @@ d3.json("bullets.json", function(data) {
       .attr("dy", "1em")
       .text(function(d) { return d.subtitle; });
 
+  chart.duration(1000);
   window.transition = function() {
     vis.map(randomize).call(chart);
   };
