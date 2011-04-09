@@ -1,54 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bullet Chart</title>
+    <title>Bullet Charts</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.chart.js"></script>
+    <link type="text/css" rel="stylesheet" href="../button.css"/>
     <link type="text/css" rel="stylesheet" href="bullet.css"/>
   </head>
   <body>
-    <script>
-
-var w = 500,
-    h = 50,
-    m = [5, 40, 20, 120]; // top right bottom left
-
-var chart = d3.chart.bullet()
-    .width(w - m[1] - m[3])
-    .height(h - m[0] - m[2])
-    .tickFormat(function(d) { return (d / 1e6).toFixed(1); });
-
-var vis = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
-
-var g = vis.append("svg:g")
-    .data([{
-      title: "Revenue",
-      subtitle: "US$, in millions",
-      ranges: [2.1e6, 2.85e6, 4e6],
-      measures: [2.3e6, 3.01e6],
-      markers: [1.15e6, 3.0e6]
-    }])
-    .attr("class", "bullet")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
-    .call(chart);
-
-g.append("svg:text")
-    .attr("class", "title")
-    .attr("text-anchor", "end")
-    .attr("dx", "-6")
-    .attr("y", chart.height() / 2)
-    .text(function(d) { return d.title; });
-
-g.append("svg:text")
-    .attr("class", "subtitle")
-    .attr("text-anchor", "end")
-    .attr("dx", "-6")
-    .attr("dy", "1em")
-    .attr("y", chart.height() / 2)
-    .text(function(d) { return d.subtitle; });
-
-    </script>
+    <div id="chart">
+      <button class="first last" onclick="transition()">
+        Update
+      </button><p>
+    </div>
+    <script type="text/javascript" src="bullet.js"></script>
   </body>
 </html>
