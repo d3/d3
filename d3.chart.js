@@ -114,7 +114,9 @@ d3.chart.bullet = function() {
 
       // Update the tick groups.
       var tick = g.selectAll("g.tick")
-          .data(x1.ticks(8), format);
+          .data(x1.ticks(8), function(d) {
+            return this.textContent || format(d);
+          });
 
       // Initialize the ticks with the old scale, x0.
       var tickEnter = tick.enter().append("svg:g")
