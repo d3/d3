@@ -1,0 +1,9 @@
+insert span before div:
+   <span/><div/>
+
+insert b before div:
+   <span/><b/><div/>
+
+insert a before span:
+   <a/><span/><b/><div/>
+
