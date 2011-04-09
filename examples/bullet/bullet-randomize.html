@@ -55,16 +55,25 @@ function randomize() {
 
 function randomBullets() {
   var k = 10 + Math.random() * 90,
-      r = function() { return Math.random() * k; };
-  return d3.range(n).map(function(i) {
-    return {
+      r = function() { return Math.random() * k; },
+      max = 0;
+  var data = d3.range(n).map(function(i) {
+    var d = {
       title: String.fromCharCode(65 + i),
       subtitle: "numbers",
-      ranges: d3.range(3).map(r),
       markers: d3.range(1).map(r),
-      measures: d3.range(1).map(r)
+      measures: d3.range(2).map(r)
     };
+    max = Math.max(max, d3.max(d.markers), d3.max(d.measures));
+    return d;
   });
+  var magnitude = Math.pow(10, Math.floor(Math.log(max) / Math.log(10)));
+  max = Math.ceil(max / magnitude) * magnitude;
+  var ranges = d3.range(0, max * 4/3, max / 3);
+  data.forEach(function(d) {
+    d.ranges = ranges;
+  });
+  return data;
 }
 
     </script>
