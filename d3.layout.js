@@ -783,43 +783,42 @@ d3.layout.tree = function() {
       }
     }
 
-    function secondWalk(v, m, depth) {
-      v.breadth = v.prelim + m;
-      if (v.breadth < x0) x0 = v.breadth;
-      if (v.breadth > x1) x1 = v.breadth;
-      if (depth > y1) y1 = depth;
-      m += v.mod;
-      var children = v.children;
+    function secondWalk(node, x, y) {
+      node.breadth = node.prelim + x;
+      var children = node.children;
       if (children) {
-        for (var i=0, ii=children.length; i<ii; i++) {
-          secondWalk(children[i], m, depth + 1);
+        var i = -1,
+            n = children.length;
+        x += node.mod;
+        y += 1;
+        while (++i < n) {
+          secondWalk(children[i], x, y);
         }
       }
+
+      if (node.breadth < x0) x0 = node.breadth;
+      if (node.breadth > x1) x1 = node.breadth;
+      if (y > y1) y1 = y;
     }
 
-    // vl is the previous sibling of v
-    function apportion(v, vl, a) {
-      var w = vl;
-      if (w) {
-        var vip = v,
-            vop = v,
-            vim = w,
-            vom = v.parent.children[0],
+    function apportion(node, previousSibling, ancestor) {
+      if (previousSibling) {
+        var vip = node,
+            vop = node,
+            vim = previousSibling,
+            vom = node.parent.children[0],
             sip = vip.mod,
             sop = vop.mod,
             sim = vim.mod,
             som = vom.mod,
-            nr = d3_tree_layoutRight(vim),
-            nl = d3_tree_layoutLeft(vip);
-        while (nr && nl) {
-          vim = nr;
-          vip = nl;
+            shift;
+        while (vim = d3_tree_layoutRight(vim), vip = d3_tree_layoutLeft(vip), vim && vip) {
           vom = d3_tree_layoutLeft(vom);
           vop = d3_tree_layoutRight(vop);
-          vop.ancestor = v;
-          var shift = (vim.prelim + sim) - (vip.prelim + sip) + separation(vim, vip);
+          vop.ancestor = node;
+          shift = vim.prelim + sim - vip.prelim - sip + separation(vim, vip);
           if (shift > 0) {
-            d3_layout_treeMove(d3_layout_treeAncestor(vim, v, a), v, shift);
+            d3_layout_treeMove(d3_layout_treeAncestor(vim, node, ancestor), node, shift);
             sip += shift;
             sop += shift;
           }
@@ -827,20 +826,18 @@ d3.layout.tree = function() {
           sip += vip.mod;
           som += vom.mod;
           sop += vop.mod;
-          nr = d3_tree_layoutRight(vim);
-          nl = d3_tree_layoutLeft(vip);
         }
-        if (nr && !d3_tree_layoutRight(vop)) {
-          vop.thread = nr;
+        if (vim && !d3_tree_layoutRight(vop)) {
+          vop.thread = vim;
           vop.mod += sim - sop;
         }
-        if (nl && !d3_tree_layoutLeft(vom)) {
-          vom.thread = nl;
+        if (vip && !d3_tree_layoutLeft(vom)) {
+          vom.thread = vip;
           vom.mod += sip - som;
-          a = v;
+          ancestor = node;
         }
       }
-      return a;
+      return ancestor;
     }
 
     // Initialize temporary layout variables. TODO store separately?
@@ -902,56 +899,58 @@ function d3_layout_treeSeparation(a, b) {
 //   return (a.parent == b.parent ? 1 : 2) / a.depth;
 // }
 
-function d3_tree_layoutLeft(v) {
-  return v.children ? v.children[0] : v.thread;
+function d3_tree_layoutLeft(node) {
+  return node.children ? node.children[0] : node.thread;
 }
 
-function d3_tree_layoutRight(v) {
-  return v.children ? v.children[v.children.length - 1] : v.thread;
+function d3_tree_layoutRight(node) {
+  return node.children ? node.children[node.children.length - 1] : node.thread;
 }
 
-function d3_layout_treeVisitAfter(n, f) {
-  function visit(n, nl, i) {
-    var children = n.children;
+function d3_layout_treeVisitAfter(node, callback) {
+  function visit(node, previousSibling, depth) {
+    var children = node.children;
     if (children) {
-      var cl = null;
-      for (var j=0, jj=children.length; j<jj; j++) {
-        var c = children[j];
-        visit(c, cl, i + 1);
-        cl = c;
+      var child,
+          previousChild = null,
+          i = -1,
+          n = children.length;
+      while (++i < n) {
+        child = children[i];
+        visit(child, previousChild, depth + 1);
+        previousChild = child;
       }
     }
-    f(n, nl, i);
+    callback(node, previousSibling, depth);
   }
-  visit(n, null, 0);
+  visit(node, null, 0);
 }
 
-function d3_layout_treeShift(v) {
+function d3_layout_treeShift(node) {
   var shift = 0,
       change = 0,
-      children = v.children,
+      children = node.children,
       i = children.length,
-      c;
+      child;
   while (--i >= 0) {
-    c = children[i];
-    c.prelim += shift;
-    c.mod += shift;
-    change += c.change;
-    shift += c.shift + change;
+    child = children[i];
+    child.prelim += shift;
+    child.mod += shift;
+    shift += child.shift + (change += child.change);
   }
 }
 
-function d3_layout_treeMove(wm, wp, shift) {
-  var subtrees = wp.number - wm.number;
-  wp.change -= shift / subtrees;
-  wp.shift += shift;
-  wm.change += shift / subtrees;
-  wp.prelim += shift;
-  wp.mod += shift;
+function d3_layout_treeMove(ancestor, node, shift) {
+  var subtrees = node.number - ancestor.number;
+  node.change -= shift / subtrees;
+  node.shift += shift;
+  ancestor.change += shift / subtrees;
+  node.prelim += shift;
+  node.mod += shift;
 }
 
-function d3_layout_treeAncestor(vim, v, a) {
-  return vim.ancestor.parent == v.parent ? vim.ancestor : a;
+function d3_layout_treeAncestor(vim, node, ancestor) {
+  return vim.ancestor.parent == node.parent ? vim.ancestor : ancestor;
 }
 // Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
 d3.layout.treemap = function() {
