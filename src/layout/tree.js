@@ -99,7 +99,6 @@ d3.layout.tree = function() {
       return a;
     }
 
-    /** @private */
     function nextLeft(v) {
       return v.children ? v.children[0] : v.thread;
     }
@@ -168,7 +167,7 @@ d3.layout.tree = function() {
     firstWalk(root);
     secondWalk(root, -root.prelim, 0);
 
-    /** @private Returns the angle of the given node. */
+    /** Returns the angle of the given node. */
     function midAngle(n) {
       return (orient === "radial") ? n.breadth / depth : 0;
     }
