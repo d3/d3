@@ -1953,14 +1953,8 @@ d3.scale.linear = function() {
       clamp = false;
 
   function scale(x) {
-    if (clamp) {
-      if (x0 < x1) {
-        x = Math.max(x0, Math.min(x, x1));
-      } else {
-        x = Math.max(x1, Math.min(x, x0));
-      }
-    }
-    return i((x - x0) * kx);
+    x = (x - x0) * kx;
+    return i(clamp ? Math.max(0, Math.min(1, x)) : x);
   }
 
   // Note: requires range is coercible to number!
