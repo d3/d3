@@ -35,3 +35,7 @@ domain([0, 1]).range(["red", "blue"]).interpolate(hsl):
          1.00  ->  #0000ff
          2.00  ->  #0000ff
 
+domain clamping:
+        under  ->  0
+         over  ->  1
+

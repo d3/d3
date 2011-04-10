@@ -1949,15 +1949,29 @@ d3.scale.linear = function() {
       kx = 1, // 1 / (x1 - x0)
       ky = 1, // (x1 - x0) / (y1 - y0)
       interpolate = d3.interpolate,
-      i = interpolate(y0, y1);
+      i = interpolate(y0, y1),
+      clamp = false;
 
   function scale(x) {
+    if (clamp) {
+      if (x0 < x1) {
+        x = Math.max(x0, Math.min(x, x1));
+      } else {
+        x = Math.max(x1, Math.min(x, x0));
+      }
+    }
     return i((x - x0) * kx);
   }
 
   // Note: requires range is coercible to number!
   scale.invert = function(y) {
     return (y - y0) * ky + x0;
+  };
+  
+  scale.clamped = function(x) {
+    if (!arguments.length) return clamp;
+    clamp = x;
+    return scale;
   };
 
   scale.domain = function(x) {
@@ -2045,6 +2059,7 @@ d3.scale.log = function() {
   scale.range = d3.rebind(scale, linear.range);
   scale.rangeRound = d3.rebind(scale, linear.rangeRound);
   scale.interpolate = d3.rebind(scale, linear.interpolate);
+  scale.clamped = d3.rebind(scale, linear.clamped);
 
   scale.ticks = function() {
     var d = linear.domain(),
@@ -2118,6 +2133,7 @@ d3.scale.pow = function() {
   scale.range = d3.rebind(scale, linear.range);
   scale.rangeRound = d3.rebind(scale, linear.rangeRound);
   scale.interpolate = d3.rebind(scale, linear.interpolate);
+  scale.clamped = d3.rebind(scale, linear.clamped);
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
 
