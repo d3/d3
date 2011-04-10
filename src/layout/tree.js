@@ -42,22 +42,22 @@ d3.layout.tree = function() {
       }
     }
 
-    function secondWalk(node, x, y) {
+    function secondWalk(node, x) {
       node.breadth = node.prelim + x;
       var children = node.children;
       if (children) {
         var i = -1,
             n = children.length;
         x += node.mod;
-        y += 1;
         while (++i < n) {
-          secondWalk(children[i], x, y);
+          secondWalk(children[i], x);
         }
       }
 
+      // Compute extent of breadth and depth.
       if (node.breadth < x0) x0 = node.breadth;
       if (node.breadth > x1) x1 = node.breadth;
-      if (y > y1) y1 = y;
+      if (node.depth > y1) y1 = node.depth;
     }
 
     function apportion(node, previousSibling, ancestor) {
@@ -100,33 +100,31 @@ d3.layout.tree = function() {
     }
 
     // Initialize temporary layout variables. TODO store separately?
-    d3_layout_treeVisitAfter(root, function(v, vl, i) {
-      v.ancestor = v;
-      v.prelim = 0;
-      v.mod = 0;
-      v.change = 0;
-      v.shift = 0;
-      v.number = vl ? vl.number + 1 : 0;
-      v.depth = i;
+    d3_layout_treeVisitAfter(root, function(node, previousSibling) {
+      node.ancestor = node;
+      node.prelim = 0;
+      node.mod = 0;
+      node.change = 0;
+      node.shift = 0;
+      node.number = previousSibling ? previousSibling.number + 1 : 0;
     });
 
     // Compute the layout using Buchheim et al.'s algorithm.
     firstWalk(root);
-    secondWalk(root, -root.prelim, 0);
+    secondWalk(root, -root.prelim);
 
     // Clear temporary layout variables; transform depth and breadth.
-    d3_layout_treeVisitAfter(root, function(v) {
-      v.x = ((v.breadth - x0) / (x1 - x0)) * size[0];
-      v.y = v.depth / y1 * size[1];
-      delete v.breadth;
-      delete v.depth;
-      delete v.ancestor;
-      delete v.prelim;
-      delete v.mod;
-      delete v.change;
-      delete v.shift;
-      delete v.number;
-      delete v.thread;
+    d3_layout_treeVisitAfter(root, function(node) {
+      node.x = ((node.breadth - x0) / (x1 - x0)) * size[0];
+      node.y = node.depth / y1 * size[1];
+      delete node.breadth;
+      delete node.ancestor;
+      delete node.prelim;
+      delete node.mod;
+      delete node.change;
+      delete node.shift;
+      delete node.number;
+      delete node.thread;
     });
 
     return nodes;
@@ -167,7 +165,7 @@ function d3_tree_layoutRight(node) {
 }
 
 function d3_layout_treeVisitAfter(node, callback) {
-  function visit(node, previousSibling, depth) {
+  function visit(node, previousSibling) {
     var children = node.children;
     if (children) {
       var child,
@@ -176,13 +174,13 @@ function d3_layout_treeVisitAfter(node, callback) {
           n = children.length;
       while (++i < n) {
         child = children[i];
-        visit(child, previousChild, depth + 1);
+        visit(child, previousChild);
         previousChild = child;
       }
     }
-    callback(node, previousSibling, depth);
+    callback(node, previousSibling);
   }
-  visit(node, null, 0);
+  visit(node, null);
 }
 
 function d3_layout_treeShift(node) {
