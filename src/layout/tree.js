@@ -11,33 +11,33 @@ d3.layout.tree = function() {
         x1 = 0, // max breadth
         y1 = 0; // max depth
 
-    // vl is the previous sibling of v
-    function firstWalk(v, vl) {
-      var children = v.children,
-          l, r, a;
+    function firstWalk(node, previousSibling) {
+      var children = node.children;
       if (!children) {
-        if (l = vl) {
-          v.prelim = l.prelim + separation(v, l);
+        if (previousSibling) {
+          node.prelim = previousSibling.prelim + separation(node, previousSibling);
         }
       } else {
-        var childCount = children.length;
-        l = children[0];
-        r = children[childCount-1];
-        a = l; // default ancestor
-        var cl = null; // previous sibling
-        for (var i=0; i<childCount; i++) {
-          var c = children[i];
-          firstWalk(c, cl);
-          a = apportion(c, cl, a);
-          cl = c;
+        var n = children.length,
+            firstChild = children[0],
+            lastChild = children[n - 1],
+            ancestor = firstChild,
+            previousChild,
+            child,
+            i = -1;
+        while (++i < n) {
+          child = children[i];
+          firstWalk(child, previousChild);
+          ancestor = apportion(child, previousChild, ancestor);
+          previousChild = child;
         }
-        d3_layout_treeShift(v);
-        var midpoint = .5 * (l.prelim + r.prelim);
-        if (l = vl) {
-          v.prelim = l.prelim + separation(v, l);
-          v.mod = v.prelim - midpoint;
+        d3_layout_treeShift(node);
+        var midpoint = .5 * (firstChild.prelim + lastChild.prelim);
+        if (previousSibling) {
+          node.prelim = previousSibling.prelim + separation(node, previousSibling);
+          node.mod = node.prelim - midpoint;
         } else {
-          v.prelim = midpoint;
+          node.prelim = midpoint;
         }
       }
     }
