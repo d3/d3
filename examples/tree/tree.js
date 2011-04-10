@@ -2,14 +2,14 @@ var w = 960,
     h = 2000;
 
 var tree = d3.layout.tree()
-    .size([h - 20, w - 160])
+    .size([h, w - 160])
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
 var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
     .attr("height", h)
   .append("svg:g")
-    .attr("transform", "translate(40, 10)");
+    .attr("transform", "translate(40, 0)");
 
 d3.json("flare.json", function(json) {
   var nodes = tree(d3.entries(json)[0]);

@@ -747,10 +747,7 @@ d3.layout.tree = function() {
 
   function tree(d, i) {
     var nodes = hierarchy.call(this, d, i),
-        root = nodes[0],
-        x0 = 0, // min x
-        x1 = 0, // max x
-        y1 = 0; // max y
+        root = nodes[0];
 
     function firstWalk(node, previousSibling) {
       var children = node.children,
@@ -792,11 +789,6 @@ d3.layout.tree = function() {
         while (++i < n) {
           secondWalk(children[i], x);
         }
-      } else {
-        // Compute extent of breadth and depth.
-        if (node.x < x0) x0 = node.x;
-        if (node.x > x1) x1 = node.x;
-        if (node.depth > y1) y1 = node.depth;
       }
     }
 
@@ -855,7 +847,15 @@ d3.layout.tree = function() {
     firstWalk(root);
     secondWalk(root, -root._tree.prelim);
 
-    // Clear temporary layout variables; transform depth and breadth.
+    // Compute the left-most, right-most, and depth-most nodes for extents.
+    var left = d3_tree_layoutSearch(root, d3_tree_layoutLeftmost),
+        right = d3_tree_layoutSearch(root, d3_tree_layoutRightmost),
+        deep = d3_tree_layoutSearch(root, d3_tree_layoutDeepest),
+        x0 = left.x - separation(left, right) / 2,
+        x1 = right.x + separation(right, left) / 2,
+        y1 = deep.depth;
+
+    // Clear temporary layout variables; transform x and y.
     d3_layout_treeVisitAfter(root, function(node) {
       node.x = (node.x - x0) / (x1 - x0) * size[0];
       node.y = node.depth / y1 * size[1];
@@ -897,6 +897,33 @@ function d3_tree_layoutLeft(node) {
 
 function d3_tree_layoutRight(node) {
   return node.children ? node.children[node.children.length - 1] : node._tree.thread;
+}
+
+function d3_tree_layoutSearch(node, compare) {
+  var children = node.children;
+  if (children) {
+    var child,
+        n = children.length,
+        i = -1;
+    while (++i < n) {
+      if (compare(child = d3_tree_layoutSearch(children[i], compare), node) > 0) {
+        node = child;
+      }
+    }
+  }
+  return node;
+}
+
+function d3_tree_layoutRightmost(a, b) {
+  return a.x - b.x;
+}
+
+function d3_tree_layoutLeftmost(a, b) {
+  return b.x - a.x;
+}
+
+function d3_tree_layoutDeepest(a, b) {
+  return a.depth - b.depth;
 }
 
 function d3_layout_treeVisitAfter(node, callback) {
