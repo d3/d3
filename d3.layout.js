@@ -748,9 +748,9 @@ d3.layout.tree = function() {
   function tree(d, i) {
     var nodes = hierarchy.call(this, d, i),
         root = nodes[0],
-        x0 = 0, // min breadth
-        x1 = 0, // max breadth
-        y1 = 0; // max depth
+        x0 = 0, // min x
+        x1 = 0, // max x
+        y1 = 0; // max y
 
     function firstWalk(node, previousSibling) {
       var children = node.children,
@@ -792,12 +792,12 @@ d3.layout.tree = function() {
         while (++i < n) {
           secondWalk(children[i], x);
         }
+      } else {
+        // Compute extent of breadth and depth.
+        if (node.x < x0) x0 = node.x;
+        if (node.x > x1) x1 = node.x;
+        if (node.depth > y1) y1 = node.depth;
       }
-
-      // Compute extent of breadth and depth.
-      if (node.x < x0) x0 = node.x;
-      if (node.x > x1) x1 = node.x;
-      if (node.depth > y1) y1 = node.depth;
     }
 
     function apportion(node, previousSibling, ancestor) {
@@ -857,7 +857,7 @@ d3.layout.tree = function() {
 
     // Clear temporary layout variables; transform depth and breadth.
     d3_layout_treeVisitAfter(root, function(node) {
-      node.x = ((node.x - x0) / (x1 - x0)) * size[0];
+      node.x = (node.x - x0) / (x1 - x0) * size[0];
       node.y = node.depth / y1 * size[1];
       delete node._tree;
     });
