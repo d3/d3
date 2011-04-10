@@ -1,18 +1,15 @@
-var w = 700,
-    h = 2300;
+var w = 960,
+    h = 2000;
 
 var tree = d3.layout.tree()
-    .orient("left")
-    .breadth(10)
-    .depth(120)
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
-    .value(function(d) { return d.value; });
+    .size([h - 20, w - 160])
+    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
 var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
     .attr("height", h)
   .append("svg:g")
-    .attr("transform", "translate(40, 100)");
+    .attr("transform", "translate(40, 10)");
 
 d3.json("flare.json", function(json) {
   var nodes = tree(d3.entries(json)[0]);
@@ -25,16 +22,16 @@ d3.json("flare.json", function(json) {
   link.selectAll("line")
       .data(children)
     .enter().append("svg:line")
-      .attr("x1", function(d) { return d.parent.x; })
-      .attr("y1", function(d) { return d.parent.y; })
-      .attr("x2", function(d) { return d.child.x; })
-      .attr("y2", function(d) { return d.child.y; });
+      .attr("x1", function(d) { return d.parent.y; })
+      .attr("y1", function(d) { return d.parent.x; })
+      .attr("x2", function(d) { return d.child.y; })
+      .attr("y2", function(d) { return d.child.x; });
 
   var node = vis.selectAll("g.node")
       .data(nodes)
     .enter().append("svg:g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
 
   node.append("svg:circle")
       .attr("class", "node")
