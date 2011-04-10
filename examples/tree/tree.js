@@ -15,30 +15,44 @@ var vis = d3.select("body").append("svg:svg")
     .attr("transform", "translate(40, 100)");
 
 d3.json("flare.json", function(json) {
-  var node = vis.data(d3.entries(json)).selectAll("g.node")
-      .data(tree);
-  var nodeEnter = node.enter().append("svg:g")
+  var nodes = tree(d3.entries(json)[0]);
+
+  var link = vis.selectAll("g.link")
+      .data(nodes)
+    .enter().append("svg:g")
+      .attr("class", "link");
+
+  link.selectAll("line")
+      .data(children)
+    .enter().append("svg:line")
+      .attr("x1", function(d) { return d.parent.x; })
+      .attr("y1", function(d) { return d.parent.y; })
+      .attr("x2", function(d) { return d.child.x; })
+      .attr("y2", function(d) { return d.child.y; });
+
+  var node = vis.selectAll("g.node")
+      .data(nodes)
+    .enter().append("svg:g")
       .attr("class", "node")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
 
-  nodeEnter.selectAll("line.link")
-      .data(function(d) {
-        return (d.children || []).map(function(c) {
-          return {x: c.x-d.x, y: c.y-d.y};
-        });
-      })
-    .enter().append("svg:line")
-      .attr("class", "link")
-      .attr("x1", 0).attr("y1", 0)
-      .attr("x2", function(d) { return d.x; })
-      .attr("y2", function(d) { return d.y; });
-  nodeEnter.append("svg:circle")
+  node.append("svg:circle")
       .attr("class", "node")
       .attr("r", 5);
-  nodeEnter.append("svg:text")
+
+  node.append("svg:text")
       .attr("dx", function(d) { return d.children ? -8 : 8; })
       .attr("dy", 3)
       .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
       .text(function(d) { return d.data.key; });
 
+  // Returns parent+child objects for any children of `d`.
+  function children(d) {
+    return (d.children || []).map(function(v) {
+      return {
+        parent: d,
+        child: v
+      };
+    });
+  }
 });
