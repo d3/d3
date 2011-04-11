@@ -806,11 +806,11 @@ function d3_layout_packCircle(nodes) {
       n = nodes.length,
       a, b, c, j, k;
 
-  function bound(n) {
-    xMin = Math.min(n.x - n.r, xMin);
-    xMax = Math.max(n.x + n.r, xMax);
-    yMin = Math.min(n.y - n.r, yMin);
-    yMax = Math.max(n.y + n.r, yMax);
+  function bound(node) {
+    xMin = Math.min(node.x - node.r, xMin);
+    xMax = Math.max(node.x + node.r, xMax);
+    yMin = Math.min(node.y - node.r, yMin);
+    yMax = Math.max(node.y + node.r, yMax);
   }
 
   // Create node links.
