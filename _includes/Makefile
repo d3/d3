@@ -50,7 +50,9 @@ EX_FILES = \
 	../ex/sunburst.js \
 	../ex/bullet.js \
 	../ex/bullet.css \
-	../ex/bullets.json
+	../ex/bullets.json \
+	../ex/tree.js \
+	../ex/tree.css
 
 INCLUDE_FILES = \
 	cartogram.js \
@@ -67,7 +69,8 @@ INCLUDE_FILES = \
 	voronoi.js \
 	sunburst.js \
 	bullet.js \
-	bullets.json
+	bullets.json \
+	tree.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
@@ -207,6 +210,14 @@ $(SRC_FILES):
 ../ex/button.css:
 	@rm -rf $@
 	git cat-file blob master:examples/button.css > $@
+
+../ex/tree.js tree.js:
+	@rm -rf $@
+	git cat-file blob master:examples/tree/tree-radial.js > $@
+
+../ex/tree.css:
+	@rm -rf $@
+	git cat-file blob master:examples/tree/tree.css > $@
 
 ../ex/voronoi.css:
 	@rm -rf $@

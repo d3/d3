@@ -15,7 +15,7 @@ title: Sunburst
 </div>
 
 <link type="text/css" rel="stylesheet" href="button.css"/>
-<script type="text/javascript" src="../d3.layout.js?1.9.1"> </script>
+<script type="text/javascript" src="../d3.layout.js?1.10.0"> </script>
 <script type="text/javascript" src="sunburst.js"> </script>
 
 Sunburst design by [John Stasko](http://www.cc.gatech.edu/gvu/ii/sunburst/).

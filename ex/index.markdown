@@ -110,6 +110,18 @@ title: Examples
 </div>
 
 <div class="list">
+  <a href="tree.html">
+    <img src="../tree.png"/>
+  </a>
+  <h4><a href="tree.html">Node-Link Tree</a></h4>
+
+  <p>The <tt>tree</tt> layout implements the Reingold-Tilford algorithm
+  for efficient, tidy arrangement of layered nodes. The depth of nodes
+  is computed by distance from the root, leading to a ragged appearance.
+  Cartesian orientations are also supported.</p>
+</div>
+
+<div class="list">
   <a href="stream.html">
     <img src="../stream.png"/>
   </a>
