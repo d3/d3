@@ -1,12 +1,11 @@
-circle.node {
+.node circle {
   fill: #fff;
   stroke: steelblue;
   stroke-width: 1.5px;
 }
 
-g.node {
-  font-size: .7em;
-  font-family: sans-serif;
+.node {
+  font: 10px sans-serif;
 }
 
 .link {

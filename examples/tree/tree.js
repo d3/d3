@@ -3,6 +3,7 @@ var w = 960,
 
 var tree = d3.layout.tree()
     .size([h, w - 160])
+    .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
 var vis = d3.select("body").append("svg:svg")
@@ -34,7 +35,6 @@ d3.json("flare.json", function(json) {
       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
 
   node.append("svg:circle")
-      .attr("class", "node")
       .attr("r", 5);
 
   node.append("svg:text")

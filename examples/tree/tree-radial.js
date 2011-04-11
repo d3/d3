@@ -2,7 +2,7 @@ var r = 960 / 2;
 
 var tree = d3.layout.tree()
     .size([360, r - 120])
-    .sort(function(a, b) { return d3.ascending(a.data.key, b.data.key); })
+    .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
     .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
@@ -35,12 +35,13 @@ d3.json("flare.json", function(json) {
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
 
   node.append("svg:circle")
-      .attr("class", "node")
       .attr("r", 5);
 
   node.append("svg:text")
-      .attr("dx", 8)
+      .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
       .attr("dy", ".31em")
+      .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
+      .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
       .text(function(d) { return d.data.key; });
 
   // Returns parent+child objects for any children of `d`.
