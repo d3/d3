@@ -74,7 +74,15 @@ Returns a new transition. Nodes can then be selected, as an alternative to deriv
 
 #### Selections
 
-filter, data, classed, insert, sort.
+#####`selection.filter()
+
+#####`selection.data()
+
+#####`selection.classed()
+
+#####`selection.insert()
+
+#####`selection.sort()
 
 ##### `selection.empty()`
 Returns true if the selection is empty.
