@@ -6,9 +6,9 @@ var tree = d3.layout.tree()
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
     .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
-var vis = d3.select("body").append("svg:svg")
+var vis = d3.select("#chart").append("svg:svg")
     .attr("width", r * 2)
-    .attr("height", r * 2)
+    .attr("height", r * 2 - 150)
   .append("svg:g")
     .attr("transform", "translate(" + r + "," + r + ")");
 

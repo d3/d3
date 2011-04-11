@@ -6,7 +6,7 @@ var tree = d3.layout.tree()
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
-var vis = d3.select("body").append("svg:svg")
+var vis = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h)
   .append("svg:g")
