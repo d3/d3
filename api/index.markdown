@@ -53,9 +53,7 @@ title: Documentation
 
 ascending, descending, min, max, keys, values, entries, split, merge, range,
 xhr, text, json, html, xml, format, nest (map, key, sortKeys, sortValues,
-rollup, entries), ns, event, rgb, hsl, ease, interpolate, interpolateNumber,
-interpolateRound, interpolateString, interpolateRgb, interpolateArray,
-interpolateObject.
+rollup, entries), ns, event, rgb, hsl, ease.
 
 ##### `d3.select(node)`
 Returns a selection containing the specified node. _node_ can be one of two things:
@@ -181,13 +179,45 @@ Map the domain (an element of a set) to the range (an element of a set).
 A set of ordinal scales that map the domain to a range of 10 or 20 colours defined by a <a href="http://colorbrewer.org/">ColorBrewer</a> scale.
 
 ####`d3.scale.quantize`
-
 Map the domain (a number) to the range (an element of a set).
     s = d3.scale.quantize().domain([0,4]).range(["zero", "one", "two", "three"])
     s(2.7) == "two"
 
 ####`d3.scale.quantile`
 
+### interpolation
+
+In D3, interpolation functions map numbers in the interval [0,1] to some output range. Interpolation functions can be used directly or passed as parameters to the d3.scale.*.interpolate() method.
+
+####`interpolateNumber`
+Interpolate via a linear scale to the specified interval.
+
+    i = d3.interpolateNumber(10,20)
+    i(0.47) == 14.7
+
+####`interpolateRound`
+Interpolate via a linear scale to the specified interval, rounding the output to the nearest integer
+
+    d3.interpolateRound(10,20)(0.47) == 15
+
+####`interpolateRgb`
+Interpolate between two RGB specified colors, interpolating linearly in red, green, and blue.
+
+    d3.interpolateRgb("#ff0000", "#0000ff")(0.3) == "rgb(179,0,77)"
+
+####`interpolateHsl`
+Interpolate between two HSL specified colors, interpolating linearly in hue, saturation, and lightness. The output is an RGB specification for compatibility with limited CSS implementations.
+
+    d3.interpolateHsl("hsl(180,75,50)","hsl(180,0,0)")(0.5) == "#285858"
+    
+####`interpolateString`
+
+####`interpolateArray`
+
+####`interpolateObject`
+
+####`interpolate`
+A function that determines the type of interpolation required and in turn calls interpolateNumber(), interpolateRgb(), interpolateString(), interpolateArray(), or interpolateObject() as appropriate.
 
 
 ### d3.svg
