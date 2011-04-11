@@ -153,6 +153,38 @@ tickFormat), log (invert, rangeRound, interpolate, ticks, tickFormat), pow
 (rangePoints, rangeBands, rangeRoundBands, rangeBand), category10, category20,
 category20b, category20c, quantile (quantiles), quantize.
 
+####`d3.scale.linear`
+Map the domain to the range with a linear function.
+    s = d3.scale.linear().domain([0,100]).range([10,20])
+    s(50) == 15
+
+####`d3.scale.pow`
+Map the domain to the range with a power function
+    s = d3.scale.pow().domain([0,10]).range([0,10]).exponent(2)
+    s(5) == 2.5
+
+####`d3.scale.sqrt`
+Map the domain to the range with a square root function. Equivalent to pow.exponent(0.5)
+
+####`d3.scale.log`
+Map the domain to the range with a logarithmic function.
+
+    s = d3.scale.log().domain([1,10]).range([0,10])
+    s(5) == 6.9897000433601875
+
+####`d3.scale.category`
+
+####`d3.scale.ordinal`
+
+####`d3.scale.quantile`
+
+####`d3.scale.quantize`
+
+####`d3.scale.scale
+
+
+
+
 ### d3.svg
 
 mouse, arc (innerRadius, outerRadius, startAngle, endAngle), line (x, y,
