@@ -24,11 +24,8 @@ d3.json("flare.json", function(json) {
       .data(children)
     .enter();
 
-  link.append("svg:line")
-      .attr("x1", function(d) { return x(d.parent); })
-      .attr("y1", function(d) { return y(d.parent); })
-      .attr("x2", function(d) { return x(d.child); })
-      .attr("y2", function(d) { return y(d.child); });
+  link.append("svg:path")
+      .attr("d", path);
 
   var node = vis.selectAll("g.node")
       .data(nodes)
@@ -55,6 +52,19 @@ d3.json("flare.json", function(json) {
         child: v
       };
     });
+  }
+
+  // Computes a pretty Bézier curve from parent to child. TODO reusable helper?
+  function path(d) {
+    var depth = (d.parent.depth + d.child.depth) / 2,
+        p0 = d.parent,
+        p3 = d.child,
+        p1 = {breadth: p0.breadth, depth: depth},
+        p2 = {breadth: p3.breadth, depth: depth};
+    return "M" + x(p0) + "," + y(p0)
+         + "C" + x(p1) + "," + y(p1)
+         + " " + x(p2) + "," + y(p2)
+         + " " + x(p3) + "," + y(p3);
   }
 
   // Radial scales for x and y.
