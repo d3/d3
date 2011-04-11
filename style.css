@@ -104,7 +104,6 @@ h1 {
 button {
   background: #222 url(button-overlay.png) repeat-x;
   font: 12px Helvetica Neue;
-  text-rendering: optimizeLegibility;
   color: #fff;
   text-shadow: 0 -1px 1px #222;
   padding: 6px 10px 6px 10px;
@@ -121,3 +120,10 @@ button:hover {
   background-color: #555;
 }
 
+.highlight {
+  font: 12px monospace;
+}
+
+.highlight pre {
+  overflow-x: auto;
+}
