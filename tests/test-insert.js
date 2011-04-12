@@ -20,3 +20,9 @@ d3.select("body").insert("a", "span");
 console.log("insert a before span:");
 console.log("  ", document.body.innerHTML);
 console.log("");
+
+d3.select("body").insert("#text", "span").text("hello");
+
+console.log("insert text \"hello\" before span:");
+console.log("  ", document.body.innerHTML);
+console.log("");

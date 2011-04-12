@@ -7,3 +7,6 @@ insert b before div:
 insert a before span:
    <a/><span/><b/><div/>
 
+insert text "hello" before span:
+   <a/>hello<span/><b/><div/>
+

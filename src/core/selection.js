@@ -418,7 +418,10 @@ function d3_selection(groups) {
 
     /** @this {Element} */
     function textConstant() {
-      this.appendChild(document.createTextNode(value));
+      if (this.nodeName === "#text")
+        this.parentNode.replaceChild(document.createTextNode(value), this);
+      else
+        this.appendChild(document.createTextNode(value));
     }
 
     /** @this {Element} */
@@ -459,6 +462,8 @@ function d3_selection(groups) {
   // TODO append(node)?
   // TODO append(function)?
   groups.append = function(name) {
+    if (name === "#text") return select(appendText);
+
     name = d3.ns.qualify(name);
 
     function append(node) {
@@ -469,6 +474,10 @@ function d3_selection(groups) {
       return node.appendChild(document.createElementNS(name.space, name.local));
     }
 
+    function appendText(node) {
+      return node.appendChild(document.createTextNode(""));
+    }
+
     return select(name.local ? appendNS : append);
   };
 
@@ -476,6 +485,8 @@ function d3_selection(groups) {
   // TODO insert(function, string)?
   // TODO insert(function, function)?
   groups.insert = function(name, before) {
+    if (name === "#text") return select(insertText);
+
     name = d3.ns.qualify(name);
 
     function insert(node) {
@@ -487,6 +498,12 @@ function d3_selection(groups) {
     function insertNS(node) {
       return node.insertBefore(
           document.createElementNS(name.space, name.local),
+          d3_select(before, node));
+    }
+
+    function insertText(node) {
+      return node.insertBefore(
+          document.createTextNode(""),
           d3_select(before, node));
     }
 

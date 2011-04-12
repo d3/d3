@@ -13,3 +13,9 @@ d3.select("body").append("div");
 console.log("append div:");
 console.log("  ", document.body.innerHTML);
 console.log("");
+
+d3.select("body").append("#text").text("hello");
+
+console.log("append text \"hello\":");
+console.log("  ", document.body.innerHTML);
+console.log("");

@@ -4,3 +4,6 @@ append svg:svg:
 append div:
    <svg/><div/>
 
+append text "hello":
+   <svg/><div/>hello
+
