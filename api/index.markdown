@@ -73,14 +73,19 @@ Returns a new transition. Nodes can then be selected, as an alternative to deriv
 #### Selections
 
 #####`selection.filter()`
+…
 
 #####`selection.data()`
+…
 
 #####`selection.classed()`
+…
 
 #####`selection.insert()`
+…
 
 #####`selection.sort()`
+…
 
 ##### `selection.empty()`
 Returns true if the selection is empty.
@@ -145,23 +150,25 @@ remove, each.
 
 ### d3.scale
 
-scale, domain, range, linear (invert, rangeRound, interpolate, ticks,
-tickFormat), log (invert, rangeRound, interpolate, ticks, tickFormat), pow
-(invert, rangeRound, interpolate, ticks, tickFormat, exponent), sqrt, ordinal
-(rangePoints, rangeBands, rangeRoundBands, rangeBand), category10, category20,
-category20b, category20c, quantile (quantiles), quantize.
-
 ####`d3.scale.linear`
 Map a number in the domain to a number in the range with a linear function.
 
-    s = d3.scale.linear().domain([0,100]).range([10,20])
-    s(50) == 15
+{% highlight js linenos %}
+s = d3.scale.linear().domain([0,100]).range([10,20])
+s(50) == 15
+{% endhighlight %}
+
+(domain, range, clamp, invert, rangeRound, interpolate, ticks, tickFormat)
 
 ####`d3.scale.pow`
 Map a number in the domain to a number in the range with a power function.
 
-    s = d3.scale.pow().domain([0,10]).range([0,10]).exponent(2)
-    s(5) == 2.5
+{% highlight js linenos %}
+s = d3.scale.pow().domain([0,10]).range([0,10]).exponent(2)
+s(5) == 2.5
+{% endhighlight %}
+
+(domain, range, clamp, invert, rangeRound, interpolate, ticks, tickFormat, exponent)
 
 ####`d3.scale.sqrt`
 Map a number in the domain to a number in the range with a square root function. Equivalent to pow.exponent(0.5)
@@ -169,70 +176,97 @@ Map a number in the domain to a number in the range with a square root function.
 ####`d3.scale.log`
 Map a number in the domain to a number in the range with a logarithmic function.
 
-    s = d3.scale.log().domain([1,10]).range([0,10])
-    s(5) == 6.9897000433601875
+{% highlight js linenos %}
+s = d3.scale.log().domain([1,10]).range([0,10])
+s(5) == 6.9897000433601875
+{% endhighlight %}
+
+(domain, range, clamp, invert, rangeRound, interpolate, ticks, tickFormat)
 
 ####`d3.scale.ordinal`
 Map an element in the domain set to an element in the range set.
 
-    s = d3.scale.ordinal().domain(["a", "b", "c"]).range(["one", "two", "three"])
-    s("b") == "two"
+{% highlight js linenos %}
+s = d3.scale.ordinal().domain(["a", "b", "c"]).range(["one", "two", "three"])
+s("b") == "two"
+{% endhighlight %}
 
-####`d3.scale.category10`, `d3.scale.category20`, `d3.scale.category20b`, `d3.scale.category20c`
-Ordinal scales that map the domain to a range of 10 or 20 colours defined by a <a href="http://colorbrewer.org/">ColorBrewer</a> scale.
+(domain, rangePoints, rangeBands, rangeRoundBands, rangeBand)
+
+####`d3.scale.category{10,20,20b,20c}`
+Ordinal scales that map the domain to a range of 10 or 20 colours defined by a [ColorBrewer](http://colorbrewer2.org) scale.
 
 ####`d3.scale.quantize`
 Map a number in the domain to an element of a set in the range.
 
-    s = d3.scale.quantize().domain([0,4]).range(["zero", "one", "two", "three"])
-    s(2.7) == "two"
+{% highlight js linenos %}
+s = d3.scale.quantize().domain([0,4]).range(["zero", "one", "two", "three"])
+s(2.7) == "two"
+{% endhighlight %}
+
+(domain, range)
 
 ####`d3.scale.quantile`
-???
+…
+
+(quantiles)
 
 ### interpolation
 
-In D3, interpolation functions map numbers in the interval [0,1] to some output range. Interpolation functions can be used directly or passed as parameters to the d3.scale.*.interpolate() method.
+In D3, interpolation functions map numbers in the interval \[0,1\] to some output range. Interpolation functions can be used directly or passed as parameters to a scale's `interpolate` method.
 
 ####`interpolateNumber`
 Interpolate via a linear scale to the specified interval.
 
-    i = d3.interpolateNumber(10,20)
-    i(0.47) == 14.7
+{% highlight js linenos %}
+i = d3.interpolateNumber(10,20)
+i(0.47) == 14.7
+{% endhighlight %}
 
 ####`interpolateRound`
 Interpolate via a linear scale to the specified interval, rounding the output to the nearest integer
 
-    d3.interpolateRound(10,20)(0.47) == 15
+{% highlight js linenos %}
+d3.interpolateRound(10,20)(0.47) == 15
+{% endhighlight %}
 
 ####`interpolateRgb`
 Interpolate between two RGB specified colors, interpolating linearly in red, green, and blue.
 
-    d3.interpolateRgb("#ff0000", "#0000ff")(0.3) == "rgb(179,0,77)"
+{% highlight js linenos %}
+d3.interpolateRgb("#ff0000", "#0000ff")(0.3) == "rgb(179,0,77)"
+{% endhighlight %}
 
 ####`interpolateHsl`
 Interpolate between two HSL specified colors, interpolating linearly in hue, saturation, and lightness. The output is an RGB specification for compatibility with limited CSS implementations.
 
-    d3.interpolateHsl("hsl(180,75,50)","hsl(180,0,0)")(0.5) == "#285858"
-    
-####`interpolateString`
-Interpolate between two strings with embedded numbers; inputs can be font sizes, color strings, SVG path data, etc. The output is a string. Numbers embedded in the start and end string are discovered and numeric interpolators constructed between them; a templatized string is used to generate interpolated outputs. 
+{% highlight js linenos %}
+d3.interpolateHsl("hsl(180,75,50)","hsl(180,0,0)")(0.5) == "#285858"
+{% endhighlight %}
 
-    d3.interpolateString("10px sans-serif", "20px sans-serif")(0.5) == "15px sans-serif"
+####`interpolateString`
+Interpolate between two strings with embedded numbers; inputs can be font sizes, color strings, SVG path data, etc. The output is a string. Numbers embedded in the start and end string are discovered and numeric interpolators constructed between them; a templatized string is used to generate interpolated outputs.
+
+{% highlight js linenos %}
+d3.interpolateString("10px sans-serif", "20px sans-serif")(0.5) == "15px sans-serif"
+{% endhighlight %}
 
 ####`interpolateArray`
 Interpolate between two arrays by iterating interpolators over the elements. For each value in the start and end array, a generic interpolator is constructed using `d3.interpolate`. The array interpolator returns an array containing the result of evaluating the nested interpolators.
 
-    d3.interpolateArray([0,1,2], [1,2,3])(0.5) == [0.5,1.5,2.5]
+{% highlight js linenos %}
+d3.interpolateArray([0,1,2], [1,2,3])(0.5) == [0.5,1.5,2.5]
+{% endhighlight %}
 
 ####`interpolateObject`
 Interpolate between two objects by iterating interpolators over the object properties. For each value in the start and end object, a generic interpolator is constructed using `d3.interpolate`. The object interpolator returns an object containing the result of evaluating the nested interpolators.
 
-    d3.interpolateObject({foo: 0, bar: 1}, {foo: 1, bar: 2})(0.5) == {foo: 0.5, bar: 1.5}
+{% highlight js linenos %}
+d3.interpolateObject({foo: 0, bar: 1}, {foo: 1, bar: 2})(0.5) == {foo: 0.5, bar: 1.5}
+{% endhighlight %}
 
 ####`interpolate`
-A function that determines the type of interpolation required and in turn calls interpolateNumber(), interpolateRgb(), interpolateString(), interpolateArray(), or interpolateObject() as appropriate.
-
+A function that determines the type of interpolation required and in turn calls `interpolateNumber`, `interpolateRgb`, `interpolateString`, `interpolateArray`, or `interpolateObject` as appropriate.
 
 ### d3.svg
 
