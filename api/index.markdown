@@ -216,13 +216,19 @@ Interpolate between two HSL specified colors, interpolating linearly in hue, sat
     d3.interpolateHsl("hsl(180,75,50)","hsl(180,0,0)")(0.5) == "#285858"
     
 ####`interpolateString`
-???
+Interpolate between two strings with embedded numbers; inputs can be font sizes, color strings, SVG path data, etc. The output is a string. Numbers embedded in the start and end string are discovered and numeric interpolators constructed between them; a templatized string is used to generate interpolated outputs. 
+
+    d3.interpolateString("10px sans-serif", "20px sans-serif")(0.5) == "15px sans-serif"
 
 ####`interpolateArray`
-???
+Interpolate between two arrays by iterating interpolators over the elements. For each value in the start and end array, a generic interpolator is constructed using `d3.interpolate`. The array interpolator returns an array containing the result of evaluating the nested interpolators.
+
+   d3.interpolateArray([0,1,2], [1,2,3])(0.5) == [0.5,1.5,2.5]
 
 ####`interpolateObject`
-???
+Interpolate between two objects by iterating interpolators over the object properties. For each value in the start and end object, a generic interpolator is constructed using `d3.interpolate`. The object interpolator returns an object containing the result of evaluating the nested interpolators.
+
+   d3.interpolateObject({foo: 0, bar: 1}, {foo: 1, bar: 2})(0.5) == {foo: 0.5, bar: 1.5}
 
 ####`interpolate`
 A function that determines the type of interpolation required and in turn calls interpolateNumber(), interpolateRgb(), interpolateString(), interpolateArray(), or interpolateObject() as appropriate.
