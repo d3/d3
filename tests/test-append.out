@@ -7,3 +7,6 @@ append div:
 append text "hello":
    <svg/><div/>hello
 
+append text "there" via a function:
+   <svg/><div/>hello there
+

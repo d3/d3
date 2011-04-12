@@ -427,7 +427,8 @@ function d3_selection(groups) {
     /** @this {Element} */
     function textFunction() {
       var x = value.apply(this, arguments);
-      if (x != null) this.appendChild(document.createTextNode(x));
+      if (this.nodeType === 3) this.nodeValue = x;
+      else if (x != null) this.appendChild(document.createTextNode(x));
     }
 
     groups.each(textNull);

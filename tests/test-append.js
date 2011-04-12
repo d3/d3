@@ -19,3 +19,9 @@ d3.select("body").append("#text").text("hello");
 console.log("append text \"hello\":");
 console.log("  ", document.body.innerHTML);
 console.log("");
+
+d3.select("body").append("#text").text(function() { return "there"; });
+
+console.log("append text \"there\" via a function:");
+console.log("  ", document.body.innerHTML);
+console.log("");
