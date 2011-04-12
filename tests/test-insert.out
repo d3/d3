@@ -10,3 +10,6 @@ insert a before span:
 insert text "hello" before span:
    <a/>hello<span/><b/><div/>
 
+insert text "there" before span via a function:
+   <a/>hello there<span/><b/><div/>
+

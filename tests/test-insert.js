@@ -26,3 +26,9 @@ d3.select("body").insert("#text", "span").text("hello");
 console.log("insert text \"hello\" before span:");
 console.log("  ", document.body.innerHTML);
 console.log("");
+
+d3.select("body").insert("#text", "span").text(function() { return "there"; });
+
+console.log("insert text \"there\" before span via a function:");
+console.log("  ", document.body.innerHTML);
+console.log("");
