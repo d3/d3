@@ -105,6 +105,7 @@ d3.layout.js: \
 	src/layout/pie.js \
 	src/layout/stack.js \
 	src/layout/hierarchy.js \
+	src/layout/tree.js \
 	src/layout/treemap.js \
 	src/end.js
 

@@ -19,11 +19,12 @@ circle.node {
 }
 path.hull {
   fill: lightsteelblue;
-  opacity: 0.3;
+  fill-opacity: 0.3;
 }
 line.link {
   stroke: #333;
-  opacity: 0.5;
+  stroke-opacity: 0.5;
+  pointer-events: none;
 }
     </style>
   </head>
@@ -144,9 +145,7 @@ function convexHulls(nodes, index, offset) {
   // create convex hulls
   var hulls = [];
   for (i in h) {
-    var p = d3.geom.hull(h[i]);
-    p.push(p[0]); // close the loop
-    hulls.push({group: i, path: p});
+    hulls.push({group: i, path: d3.geom.hull(h[i])});
   }
 
   return hulls;

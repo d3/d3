@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.9.1"}; // semver
+(function(){d3 = {version: "1.10.1"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -2573,7 +2573,7 @@ function d3_svg_lineStepAfter(points) {
 function d3_svg_lineCardinalClosed(points, tension) {
   return points.length < 3
       ? d3_svg_lineLinear(points)
-      : points[0] + d3_svg_lineHermite(points,
+      : points[0] + d3_svg_lineHermite((points.push(points[0]), points),
         d3_svg_lineCardinalTangents([points[points.length - 2]]
         .concat(points, [points[1]]), tension));
 }
@@ -2637,18 +2637,17 @@ function d3_svg_lineHermite(points, tangents) {
 function d3_svg_lineCardinalTangents(points, tension) {
   var tangents = [],
       a = (1 - tension) / 2,
-      p0 = points[0],
-      p1 = points[1],
-      p2 = points[2],
-      i = 2,
+      p0,
+      p1 = points[0],
+      p2 = points[1],
+      i = 1,
       n = points.length;
   while (++i < n) {
-    tangents.push([a * (p2[0] - p0[0]), a * (p2[1] - p0[1])]);
     p0 = p1;
     p1 = p2;
     p2 = points[i];
+    tangents.push([a * (p2[0] - p0[0]), a * (p2[1] - p0[1])]);
   }
-  tangents.push([a * (p2[0] - p0[0]), a * (p2[1] - p0[1])]);
   return tangents;
 }
 
