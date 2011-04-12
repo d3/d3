@@ -418,8 +418,8 @@ function d3_selection(groups) {
 
     /** @this {Element} */
     function textConstant() {
-      if (this.nodeName === "#text")
-        this.parentNode.replaceChild(document.createTextNode(value), this);
+      if (this.nodeType === 3)
+        this.nodeValue = value;
       else
         this.appendChild(document.createTextNode(value));
     }
