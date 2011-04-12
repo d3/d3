@@ -79,15 +79,22 @@ console.log("            5  -> ", x.ticks(5).map(x.tickFormat(5)).join(", "));
 console.log("           10  -> ", x.ticks(10).map(x.tickFormat(10)).join(", "));
 console.log("");
 
-var x = d3.scale.linear().clamped(true);
+var x = d3.scale.linear().clamp(true);
 console.log("domain clamping:")
-console.log("   inspection  -> ", x.clamped());
+console.log("   inspection  -> ", x.clamp());
 console.log("        under  -> ", x(-1));
 console.log("         over  -> ", x(2));
 console.log("");
 
-var x = d3.scale.linear().domain([1, 0]).clamped(true);
+var x = d3.scale.linear().domain([1, 0]).clamp(true);
 console.log("domain clamping reversed:")
 console.log("        under  -> ", x(-1));
 console.log("         over  -> ", x(2));
 console.log("");
+
+var x = d3.scale.linear().clamp(false);
+console.log("domain unclamping:")
+console.log("        under  -> ", x(-1));
+console.log("         over  -> ", x(11));
+console.log("");
+

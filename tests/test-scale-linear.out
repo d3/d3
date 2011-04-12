@@ -65,3 +65,7 @@ domain clamping reversed:
         under  ->  1
          over  ->  0
 
+domain unclamping:
+        under  ->  -1
+         over  ->  11
+

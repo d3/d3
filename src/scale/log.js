@@ -22,7 +22,7 @@ d3.scale.log = function() {
   scale.range = d3.rebind(scale, linear.range);
   scale.rangeRound = d3.rebind(scale, linear.rangeRound);
   scale.interpolate = d3.rebind(scale, linear.interpolate);
-  scale.clamped = d3.rebind(scale, linear.clamped);
+  scale.clamp = d3.rebind(scale, linear.clamp);
 
   scale.ticks = function() {
     var d = linear.domain(),

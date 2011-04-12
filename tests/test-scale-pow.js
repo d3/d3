@@ -50,7 +50,7 @@ console.log("         1.00  -> ", x(1.00));
 console.log("         2.00  -> ", x(2.00));
 console.log("");
 
-var x = d3.scale.pow().exponent(2).domain([1, 2]).range([0, 1]).clamped(true);
+var x = d3.scale.pow().exponent(2).domain([1, 2]).range([0, 1]).clamp(true);
 console.log("domain clamping:")
 console.log("        under  -> ", x(-1));
 console.log("         over  -> ", x(2));

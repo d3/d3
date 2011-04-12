@@ -7,11 +7,11 @@ d3.scale.linear = function() {
       ky = 1, // (x1 - x0) / (y1 - y0)
       interpolate = d3.interpolate,
       i = interpolate(y0, y1),
-      clamp = false;
+      clamped = false;
 
   function scale(x) {
     x = (x - x0) * kx;
-    return i(clamp ? Math.max(0, Math.min(1, x)) : x);
+    return i(clamped ? Math.max(0, Math.min(1, x)) : x);
   }
 
   // Note: requires range is coercible to number!
@@ -19,9 +19,9 @@ d3.scale.linear = function() {
     return (y - y0) * ky + x0;
   };
   
-  scale.clamped = function(x) {
-    if (!arguments.length) return clamp;
-    clamp = x;
+  scale.clamp = function(x) {
+    if (!arguments.length) return clamped;
+    clamped = x;
     return scale;
   };
 
