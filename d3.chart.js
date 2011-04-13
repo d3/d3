@@ -1,17 +1,18 @@
 (function(){d3.chart = {};
-// Inspired by http://informationandvisualization.de/files/boxplottest.html
+// Inspired by http://informationandvisualization.de/blog/box-plot
 d3.chart.boxplot = function() {
   var width = 1,
       height = 1,
       duration = 0,
       domain = null,
+      sort = d3_chart_boxplotSort,
       tickFormat = null;
 
   // For each small multiple…
   function boxplot(g) {
     g.each(function(d, i) {
       d = d.slice();
-      d.sort(function(a, b) { return a - b; });
+      d.sort(sort);
       var len = d.length,
           min = d[0],
           q1 = d[Math.floor(.25 * len)],
@@ -102,6 +103,7 @@ d3.chart.boxplot = function() {
       // Compute the tick format.
       var format = tickFormat || x1.tickFormat(8);
 
+      // Update ticks.
       var tick = g.selectAll("text")
           .data([min, q1, median, q3, max]);
 
@@ -153,8 +155,18 @@ d3.chart.boxplot = function() {
     return boxplot;
   };
 
+  boxplot.sort = function(x) {
+    if (!arguments.length) return sort;
+    sort = x;
+    return boxplot;
+  };
+
   return boxplot;
 };
+
+function d3_chart_boxplotSort(a, b) {
+  return a - b;
+}
 // ranges (bad, satisfactory, good)
 // measures (actual, forecast)
 // markers (previous, goal)
