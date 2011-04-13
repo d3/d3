@@ -5,18 +5,23 @@ d3.chart.boxplot = function() {
       duration = 0,
       domain = null,
       value = Number,
+      whiskers = d3_chart_boxplotWhiskers,
       tickFormat = null;
 
   // For each small multiple…
   function boxplot(g) {
     g.each(function(d, i) {
       d = d.map(value).sort(d3.ascending);
-      var len = d.length,
+      var whiskerIndices = whiskers.call(this, d),
+          whiskerData = whiskerIndices.map(function(i) { return d[i]; }),
+          firstWhisker = whiskerIndices[0],
+          lastWhisker = whiskerIndices[whiskerIndices.length - 1],
+          whiskerRange = lastWhisker - firstWhisker,
           min = d[0],
-          q1 = d[Math.floor(.25 * len)],
-          median = d[Math.floor(.5 * len)],
-          q3 = d[Math.floor(.75 * len)],
-          max = d[len-1],
+          q1 = d[firstWhisker + Math.floor(.25 * whiskerRange)],
+          median = d[firstWhisker + Math.floor(.5 * whiskerRange)],
+          q3 = d[firstWhisker + Math.floor(.75 * whiskerRange)],
+          max = d[d.length-1],
           g = d3.select(this);
 
       // Compute the new x-scale.
@@ -76,12 +81,12 @@ d3.chart.boxplot = function() {
 
       box.exit().remove();
 
-      // Update markers.
-      var marker = g.selectAll("line.marker")
-          .data([min, median, max]);
+      // Update median line
+      var medianLine = g.selectAll("line.median")
+          .data([median]);
 
-      marker.enter().append("svg:line")
-          .attr("class", "marker")
+      medianLine.enter().append("svg:line")
+          .attr("class", "median")
           .attr("x1", 0)
           .attr("y1", x0)
           .attr("x2", width)
@@ -91,12 +96,34 @@ d3.chart.boxplot = function() {
           .attr("y1", x1)
           .attr("y2", x1);
 
-      marker.transition()
+      medianLine.transition()
           .duration(duration)
           .attr("y1", x1)
           .attr("y2", x1);
 
-      marker.exit().remove();
+      medianLine.exit().remove();
+
+      // Update whiskers.
+      var whisker = g.selectAll("line.whisker")
+          .data(whiskerData);
+
+      whisker.enter().append("svg:line")
+          .attr("class", "whisker")
+          .attr("x1", 0)
+          .attr("y1", x0)
+          .attr("x2", width)
+          .attr("y2", x0)
+        .transition()
+          .duration(duration)
+          .attr("y1", x1)
+          .attr("y2", x1);
+
+      whisker.transition()
+          .duration(duration)
+          .attr("y1", x1)
+          .attr("y2", x1);
+
+      whisker.exit().remove();
 
       // Compute the tick format.
       var format = tickFormat || x1.tickFormat(8);
@@ -159,5 +186,15 @@ d3.chart.boxplot = function() {
     return boxplot;
   };
 
+  boxplot.whiskers = function(x) {
+    if (!arguments.length) return value;
+    whiskers = x;
+    return boxplot;
+  };
+
   return boxplot;
 };
+
+function d3_chart_boxplotWhiskers(d) {
+  return [0, d.length-1];
+}

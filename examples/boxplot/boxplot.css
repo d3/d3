@@ -1,4 +1,4 @@
-.boxplot .marker { stroke: #000; stroke-width: 2px; }
+.boxplot .whisker, .boxplot .median { stroke: #000; stroke-width: 2px; }
 .boxplot .box { stroke: #000; stroke-width: 1.5px; fill: #fff; }
 .boxplot .center { stroke: #000; stroke-width: 1px; stroke-dasharray: 3 3; }
 .boxplot .tick line { stroke: #666; stroke-width: .5px; }
