@@ -5,6 +5,16 @@ var w = 120,
     max = Number.MIN_VALUE;
 
 var chart = d3.chart.box()
+    .whiskers(function(d, i, quartiles) {
+      var q1 = quartiles[0],
+          q3 = quartiles[2],
+          iqr = q3 - q1,
+          w0 = -1,
+          w1 = d.length;
+      while (d[++w0] < q1 - iqr * 1.5);
+      while (d[--w1] > q3 + iqr * 1.5);
+      return [w0, w1];
+    })
     .width(w - m[1] - m[3])
     .height(h - m[0] - m[2]);
 

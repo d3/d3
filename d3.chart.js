@@ -17,12 +17,12 @@ d3.chart.box = function() {
       var len = d.length,
           min = d[0],
           max = d[len-1],
-          whiskerIndices = whiskers.call(this, d, i),
+          quartileData = quartiles(d),
+          whiskerIndices = whiskers.call(this, d, i, quartileData),
           whiskerData = whiskerIndices.map(function(i) { return d[i]; }),
           firstWhisker = whiskerIndices[0],
           lastWhisker = whiskerIndices[whiskerIndices.length - 1],
           whiskerRange = lastWhisker - firstWhisker,
-          quartileData = quartiles(d.slice(firstWhisker, lastWhisker)),
           outliers = d.slice(0, firstWhisker).concat(d.slice(lastWhisker + 1, len)),
           g = d3.select(this);
 
