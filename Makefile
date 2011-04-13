@@ -93,7 +93,7 @@ d3.behavior.js: \
 d3.chart.js: \
 	src/start.js \
 	src/chart/chart.js \
-	src/chart/boxplot.js \
+	src/chart/box.js \
 	src/chart/bullet.js \
 	src/end.js
 

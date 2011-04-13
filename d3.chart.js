@@ -1,17 +1,17 @@
 (function(){d3.chart = {};
 // Inspired by http://informationandvisualization.de/blog/box-plot
-d3.chart.boxplot = function() {
+d3.chart.box = function() {
   var width = 1,
       height = 1,
       duration = 0,
       domain = null,
       value = Number,
-      whiskers = d3_chart_boxplotWhiskers,
-      quartiles = d3_chart_boxplotQuartiles,
+      whiskers = d3_chart_boxWhiskers,
+      quartiles = d3_chart_boxQuartiles,
       tickFormat = null;
 
   // For each small multiple…
-  function boxplot(g) {
+  function box(g) {
     g.each(function(d, i) {
       d = d.map(value).sort(d3.ascending);
       var len = d.length,
@@ -171,62 +171,62 @@ d3.chart.boxplot = function() {
     });
   }
 
-  boxplot.width = function(x) {
+  box.width = function(x) {
     if (!arguments.length) return width;
     width = x;
-    return boxplot;
+    return box;
   };
 
-  boxplot.height = function(x) {
+  box.height = function(x) {
     if (!arguments.length) return height;
     height = x;
-    return boxplot;
+    return box;
   };
 
-  boxplot.tickFormat = function(x) {
+  box.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
     tickFormat = x;
-    return boxplot;
+    return box;
   };
 
-  boxplot.duration = function(x) {
+  box.duration = function(x) {
     if (!arguments.length) return duration;
     duration = x;
-    return boxplot;
+    return box;
   };
 
-  boxplot.domain = function(x) {
+  box.domain = function(x) {
     if (!arguments.length) return domain;
     domain = d3.functor(x);
-    return boxplot;
+    return box;
   };
 
-  boxplot.value = function(x) {
+  box.value = function(x) {
     if (!arguments.length) return value;
     value = x;
-    return boxplot;
+    return box;
   };
 
-  boxplot.whiskers = function(x) {
+  box.whiskers = function(x) {
     if (!arguments.length) return whiskers;
     whiskers = x;
-    return boxplot;
+    return box;
   };
 
-  boxplot.quartiles = function(x) {
+  box.quartiles = function(x) {
     if (!arguments.length) return quartiles;
     quartiles = x;
-    return boxplot;
+    return box;
   };
 
-  return boxplot;
+  return box;
 };
 
-function d3_chart_boxplotWhiskers(d) {
+function d3_chart_boxWhiskers(d) {
   return [0, d.length-1];
 }
 
-function d3_chart_boxplotQuartiles(d) {
+function d3_chart_boxQuartiles(d) {
   var len = d.length;
   return [.25, .5, .75].map(function(q) {
     q *= len;
