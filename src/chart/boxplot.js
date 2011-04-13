@@ -22,7 +22,7 @@ d3.chart.boxplot = function() {
 
       // Compute the new x-scale.
       var x1 = d3.scale.linear()
-          .domain(domain || [min, max])
+          .domain(domain ? domain.call(this, d, i) : [min, max])
           .range([height, 0]);
 
       // Retrieve the old x-scale, if this is an update.
@@ -150,7 +150,7 @@ d3.chart.boxplot = function() {
 
   boxplot.domain = function(x) {
     if (!arguments.length) return domain;
-    domain = x;
+    domain = d3.functor(x);
     return boxplot;
   };
 
