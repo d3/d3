@@ -4,14 +4,13 @@ d3.chart.boxplot = function() {
       height = 1,
       duration = 0,
       domain = null,
-      sort = d3_chart_boxplotSort,
+      value = Number,
       tickFormat = null;
 
   // For each small multiple…
   function boxplot(g) {
     g.each(function(d, i) {
-      d = d.slice();
-      d.sort(sort);
+      d = d.map(value).sort(d3.ascending);
       var len = d.length,
           min = d[0],
           q1 = d[Math.floor(.25 * len)],
@@ -154,15 +153,11 @@ d3.chart.boxplot = function() {
     return boxplot;
   };
 
-  boxplot.sort = function(x) {
-    if (!arguments.length) return sort;
-    sort = x;
+  boxplot.value = function(x) {
+    if (!arguments.length) return value;
+    value = x;
     return boxplot;
   };
 
   return boxplot;
 };
-
-function d3_chart_boxplotSort(a, b) {
-  return a - b;
-}
