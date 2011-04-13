@@ -230,8 +230,7 @@ function d3_chart_boxQuartiles(d) {
   var len = d.length;
   return [.25, .5, .75].map(function(q) {
     q *= len;
-    if (parseInt(q) === q) return (d[q] + q[q + 1]) / 2;
-    return d[Math.round(q)];
+    return ~~q === q ? (d[q] + d[q + 1]) / 2 : d[Math.round(q)];
   });
 }
 // ranges (bad, satisfactory, good)
