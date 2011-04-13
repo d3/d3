@@ -6,22 +6,25 @@ d3.chart.boxplot = function() {
       domain = null,
       value = Number,
       whiskers = d3_chart_boxplotWhiskers,
+      outlierSymbol = d3.svg.symbol(),
       tickFormat = null;
 
   // For each small multiple…
   function boxplot(g) {
     g.each(function(d, i) {
       d = d.map(value).sort(d3.ascending);
-      var whiskerIndices = whiskers.call(this, d),
+      var len = d.length,
+          min = d[0],
+          max = d[len-1],
+          whiskerIndices = whiskers.call(this, d, i),
           whiskerData = whiskerIndices.map(function(i) { return d[i]; }),
           firstWhisker = whiskerIndices[0],
           lastWhisker = whiskerIndices[whiskerIndices.length - 1],
           whiskerRange = lastWhisker - firstWhisker,
-          min = d[0],
           q1 = d[firstWhisker + Math.floor(.25 * whiskerRange)],
           median = d[firstWhisker + Math.floor(.5 * whiskerRange)],
           q3 = d[firstWhisker + Math.floor(.75 * whiskerRange)],
-          max = d[d.length-1],
+          outliers = d.slice(0, firstWhisker).concat(d.slice(lastWhisker + 1, len)),
           g = d3.select(this);
 
       // Compute the new x-scale.
@@ -125,6 +128,26 @@ d3.chart.boxplot = function() {
 
       whisker.exit().remove();
 
+      // Update outliers.
+      var outlier = g.selectAll("path.outlier")
+          .data(outliers);
+
+      outlier.enter().append("svg:path")
+          .attr("class", "outlier")
+          .attr("d", outlierSymbol)
+          .attr("transform", function(d) { return "translate(" + width / 2 + "," + x0(d) + ")"; })
+        .transition()
+          .duration(duration)
+          .attr("d", outlierSymbol)
+          .attr("transform", function(d) { return "translate(" + width / 2 + "," + x1(d) + ")"; });
+
+      outlier.transition()
+          .duration(duration)
+          .attr("d", outlierSymbol)
+          .attr("transform", function(d) { return "translate(" + width / 2 + "," + x1(d) + ")"; });
+
+      outlier.exit().remove();
+
       // Compute the tick format.
       var format = tickFormat || x1.tickFormat(8);
 
@@ -187,8 +210,14 @@ d3.chart.boxplot = function() {
   };
 
   boxplot.whiskers = function(x) {
-    if (!arguments.length) return value;
+    if (!arguments.length) return whiskers;
     whiskers = x;
+    return boxplot;
+  };
+
+  boxplot.outlierSymbol = function(x) {
+    if (!arguments.length) return outlierSymbol;
+    outlierSymbol = x;
     return boxplot;
   };
 
