@@ -3,19 +3,19 @@ var w = 120,
     m = [10, 40, 20, 40], // top right bottom left
     max = 50;
 
-var chart = d3.chart.boxplot()
+var chart = d3.chart.box()
     .tickFormat(d3.format(".1"))
     .domain([0, max])
     .whiskers(function(d) { return [1, d.length - 2]; })
     .width(w - m[1] - m[3])
     .height(h - m[0] - m[2]);
 
-d3.json("boxplot.json", function(data) {
+d3.json("box.json", function(data) {
 
   var vis = d3.select("#chart").selectAll("svg")
       .data(data)
     .enter().append("svg:svg")
-      .attr("class", "boxplot")
+      .attr("class", "box")
       .attr("width", w)
       .attr("height", h)
     .append("svg:g")

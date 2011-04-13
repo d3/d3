@@ -1,4 +1,4 @@
-.boxplot .whisker, .boxplot .median { stroke: #000; stroke-width: 1.5px; }
-.boxplot .box { stroke: #000; stroke-width: 1.5px; fill: #fff; }
-.boxplot .center { stroke: #000; stroke-width: 1px; stroke-dasharray: 3 3; }
-.boxplot .outlier { stroke: #666; stroke-width: .5px; fill: none; }
+.box .whisker, .box .median { stroke: #000; stroke-width: 1.5px; }
+.box .box { stroke: #000; stroke-width: 1.5px; fill: #fff; }
+.box .center { stroke: #000; stroke-width: 1px; stroke-dasharray: 3 3; }
+.box .outlier { stroke: #666; stroke-width: .5px; fill: none; }
