@@ -7,6 +7,7 @@ d3.chart.boxplot = function() {
       domain = null,
       value = Number,
       whiskers = d3_chart_boxplotWhiskers,
+      quartiles = d3_chart_boxplotQuartiles,
       outlierSymbol = d3.svg.symbol(),
       tickFormat = null;
 
@@ -22,9 +23,7 @@ d3.chart.boxplot = function() {
           firstWhisker = whiskerIndices[0],
           lastWhisker = whiskerIndices[whiskerIndices.length - 1],
           whiskerRange = lastWhisker - firstWhisker,
-          q1 = d[firstWhisker + Math.floor(.25 * whiskerRange)],
-          median = d[firstWhisker + Math.floor(.5 * whiskerRange)],
-          q3 = d[firstWhisker + Math.floor(.75 * whiskerRange)],
+          quartileData = quartiles(d.slice(firstWhisker, lastWhisker)),
           outliers = d.slice(0, firstWhisker).concat(d.slice(lastWhisker + 1, len)),
           g = d3.select(this);
 
@@ -65,7 +64,7 @@ d3.chart.boxplot = function() {
 
       // Update boxes.
       var box = g.selectAll("rect.box")
-          .data([[q1, q3]]);
+          .data([[quartileData[0], quartileData[2]]]);
 
       box.enter().append("svg:rect")
           .attr("class", "box")
@@ -87,7 +86,7 @@ d3.chart.boxplot = function() {
 
       // Update median line
       var medianLine = g.selectAll("line.median")
-          .data([median]);
+          .data([quartileData[1]]);
 
       medianLine.enter().append("svg:line")
           .attr("class", "median")
@@ -154,7 +153,7 @@ d3.chart.boxplot = function() {
 
       // Update ticks.
       var tick = g.selectAll("text")
-          .data([min, q1, median, q3, max]);
+          .data(quartileData.concat(whiskerData));
 
       tick.enter().append("svg:text")
           .attr("dy", ".3em")
@@ -222,11 +221,26 @@ d3.chart.boxplot = function() {
     return boxplot;
   };
 
+  boxplot.quartiles = function(x) {
+    if (!arguments.length) return quartiles;
+    quartiles = x;
+    return boxplot;
+  };
+
   return boxplot;
 };
 
 function d3_chart_boxplotWhiskers(d) {
   return [0, d.length-1];
+}
+
+function d3_chart_boxplotQuartiles(d) {
+  var len = d.length;
+  return [.25, .5, .75].map(function(q) {
+    q *= len;
+    if (parseInt(q) === q) return (d[q] + q[q + 1]) / 2;
+    return d[Math.round(q)];
+  });
 }
 // ranges (bad, satisfactory, good)
 // measures (actual, forecast)
