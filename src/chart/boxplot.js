@@ -40,7 +40,7 @@ d3.chart.boxplot = function() {
 
       // Update center line.
       var center = g.selectAll("line.center")
-          .data([[min, max]]);
+          .data([[whiskerData[0], whiskerData[whiskerData.length - 1]]]);
 
       center.enter().append("svg:line")
           .attr("class", "center")
