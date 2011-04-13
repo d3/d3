@@ -1,3 +1,3 @@
-function d3_functor(v) {
+d3.functor = function(v) {
   return typeof v == "function" ? v : function() { return v; };
-}
+};
