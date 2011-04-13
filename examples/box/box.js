@@ -1,16 +1,15 @@
 var w = 120,
     h = 500,
     m = [10, 50, 20, 50], // top right bottom left
-    max = 50;
+    min = Number.MAX_VALUE,
+    max = Number.MIN_VALUE;
 
 var chart = d3.chart.box()
     .width(w - m[1] - m[3])
     .height(h - m[0] - m[2]);
 
 d3.csv("morley.csv", function(csv) {
-  var data = [],
-      min = Number.MAX_VALUE,
-      max = Number.MIN_VALUE;
+  var data = [];
 
   csv.forEach(function(x) {
     var e = parseInt(x.Expt) - 1,
@@ -54,6 +53,6 @@ function randomize(d) {
 function randomizer(d) {
   var k = d3.max(d) * .2;
   return function(d) {
-    return Math.min(Math.max(0, d + k * (Math.random() - .5)), max);
+    return Math.min(Math.max(min, d + k * (Math.random() - .5)), max);
   };
 }
