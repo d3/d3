@@ -12,9 +12,9 @@ d3.csv("morley.csv", function(csv) {
   var data = [];
 
   csv.forEach(function(x) {
-    var e = parseInt(x.Expt) - 1,
-        r = parseInt(x.Run) - 1,
-        s = parseInt(x.Speed),
+    var e = ~~x.Expt - 1,
+        r = ~~x.Run - 1,
+        s = ~~x.Speed,
         d = data[e];
     if (!d) d = data[e] = [s];
     else d.push(s);
