@@ -8,7 +8,6 @@ d3.chart.boxplot = function() {
       value = Number,
       whiskers = d3_chart_boxplotWhiskers,
       quartiles = d3_chart_boxplotQuartiles,
-      outlierSymbol = d3.svg.symbol(),
       tickFormat = null;
 
   // For each small multiple…
@@ -129,22 +128,21 @@ d3.chart.boxplot = function() {
       whisker.exit().remove();
 
       // Update outliers.
-      var outlier = g.selectAll("path.outlier")
+      var outlier = g.selectAll("circle.outlier")
           .data(outliers);
 
-      outlier.enter().append("svg:path")
+      outlier.enter().append("svg:circle")
           .attr("class", "outlier")
-          .attr("d", outlierSymbol)
-          .attr("transform", function(d) { return "translate(" + width / 2 + "," + x0(d) + ")"; })
+          .attr("r", 5)
+          .attr("cx", width / 2)
+          .attr("cy", x0)
         .transition()
           .duration(duration)
-          .attr("d", outlierSymbol)
-          .attr("transform", function(d) { return "translate(" + width / 2 + "," + x1(d) + ")"; });
+          .attr("cy", x1);
 
       outlier.transition()
           .duration(duration)
-          .attr("d", outlierSymbol)
-          .attr("transform", function(d) { return "translate(" + width / 2 + "," + x1(d) + ")"; });
+          .attr("cy", x1);
 
       outlier.exit().remove();
 
@@ -212,12 +210,6 @@ d3.chart.boxplot = function() {
   boxplot.whiskers = function(x) {
     if (!arguments.length) return whiskers;
     whiskers = x;
-    return boxplot;
-  };
-
-  boxplot.outlierSymbol = function(x) {
-    if (!arguments.length) return outlierSymbol;
-    outlierSymbol = x;
     return boxplot;
   };
 

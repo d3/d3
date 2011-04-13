@@ -7,7 +7,6 @@ var chart = d3.chart.boxplot()
     .tickFormat(d3.format(".1"))
     .domain([0, max])
     .whiskers(function(d) { return [1, d.length - 2]; })
-    .outlierSymbol(d3.svg.symbol().type("cross"))
     .width(w - m[1] - m[3])
     .height(h - m[0] - m[2]);
 
