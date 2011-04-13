@@ -1,16 +1,29 @@
 var w = 120,
     h = 500,
-    m = [10, 40, 20, 40], // top right bottom left
+    m = [10, 50, 20, 50], // top right bottom left
     max = 50;
 
 var chart = d3.chart.box()
-    .tickFormat(d3.format(".1"))
-    .domain([0, max])
-    .whiskers(function(d) { return [1, d.length - 2]; })
     .width(w - m[1] - m[3])
     .height(h - m[0] - m[2]);
 
-d3.json("box.json", function(data) {
+d3.csv("morley.csv", function(csv) {
+  var data = [],
+      min = Number.MAX_VALUE,
+      max = Number.MIN_VALUE;
+
+  csv.forEach(function(x) {
+    var e = parseInt(x.Expt) - 1,
+        r = parseInt(x.Run) - 1,
+        s = parseInt(x.Speed),
+        d = data[e];
+    if (!d) d = data[e] = [s];
+    else d.push(s);
+    if (s > max) max = s;
+    if (s < min) min = s;
+  });
+
+  chart.domain([min, max]);
 
   var vis = d3.select("#chart").selectAll("svg")
       .data(data)
