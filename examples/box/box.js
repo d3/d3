@@ -34,10 +34,6 @@ d3.csv("morley.csv", function(csv) {
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
       .call(chart);
   
-  var title = vis.append("svg:g")
-      .attr("text-anchor", "end")
-      .attr("transform", "translate(" + (w - m[0] - m[2]) / 2 + ")");
-
   chart.duration(1000);
   window.transition = function() {
     vis.map(randomize).call(chart);
