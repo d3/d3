@@ -195,9 +195,9 @@ d3.chart.box = function() {
           .duration(duration)
           .attr("y", x1);
 
-      boxTick.text(format)
-        .transition()
+      boxTick.transition()
           .duration(duration)
+          .text(format)
           .attr("y", x1);
 
       // Update whisker ticks. These are handled separately from the box
@@ -219,9 +219,9 @@ d3.chart.box = function() {
           .attr("y", x1)
           .style("opacity", 1);
 
-      whiskerTick.text(format)
-        .transition()
+      whiskerTick.transition()
           .duration(duration)
+          .text(format)
           .attr("y", x1)
           .style("opacity", 1);
 

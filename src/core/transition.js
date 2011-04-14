@@ -79,12 +79,16 @@ function d3_transition(groups) {
         event.start.dispatch.apply(this, arguments);
         ik = interpolators[k] = {};
         tx.active = transitionId;
-        for (tk in tweens) ik[tk] = tweens[tk].apply(this, arguments);
+        for (tk in tweens) {
+          if (te = tweens[tk].apply(this, arguments)) {
+            ik[tk] = te;
+          }
+        }
       }
 
       // Apply the interpolators!
       te = ease(t);
-      for (tk in tweens) ik[tk].call(this, te);
+      for (tk in ik) ik[tk].call(this, te);
 
       // Handle ending transitions.
       if (t == 1) {
@@ -189,6 +193,15 @@ function d3_transition(groups) {
   transition.style = function(name, value, priority) {
     if (arguments.length < 3) priority = null;
     return transition.styleTween(name, d3_transitionTween(value), priority);
+  };
+
+  transition.text = function(value) {
+    tweens.text = function(d, i) {
+      this.textContent = typeof value == "function"
+          ? value.call(this, d, i)
+          : value;
+    };
+    return transition;
   };
 
   transition.select = function(query) {
