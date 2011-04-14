@@ -54,7 +54,7 @@ d3.chart.box = function() {
       var center = g.selectAll("line.center")
           .data(whiskerData ? [whiskerData] : []);
 
-      center.enter().append("svg:line")
+      center.enter().insert("svg:line", "rect")
           .attr("class", "center")
           .attr("x1", width / 2)
           .attr("y1", function(d) { return x0(d[0]); })
@@ -124,7 +124,7 @@ d3.chart.box = function() {
       var whisker = g.selectAll("line.whisker")
           .data(whiskerData || []);
 
-      whisker.enter().append("svg:line")
+      whisker.enter().insert("svg:line", "circle, text")
           .attr("class", "whisker")
           .attr("x1", 0)
           .attr("y1", x0)
@@ -154,7 +154,7 @@ d3.chart.box = function() {
       var outlier = g.selectAll("circle.outlier")
           .data(outlierIndices, Number);
 
-      outlier.enter().append("svg:circle")
+      outlier.enter().insert("svg:circle", "text")
           .attr("class", "outlier")
           .attr("r", 5)
           .attr("cx", width / 2)
