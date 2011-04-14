@@ -81,6 +81,7 @@ d3.svg.js: \
 	src/svg/line.js \
 	src/svg/area.js \
 	src/svg/chord.js \
+	src/svg/diagonal.js \
 	src/svg/mouse.js \
 	src/svg/symbol.js
 

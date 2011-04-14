@@ -968,11 +968,11 @@ d3.layout.tree = function() {
   return tree;
 };
 
-// Returns an array parent+child objects for the specified nodes.
+// Returns an array source+target objects for the specified nodes.
 function d3_layout_treeLinks(nodes) {
   return d3.merge(nodes.map(function(parent) {
     return (parent.children || []).map(function(child) {
-      return {parent: parent, child: child};
+      return {source: parent, target: child};
     });
   }));
 }

@@ -5,6 +5,12 @@ var cluster = d3.layout.cluster()
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
+var diagonal = d3.svg.diagonal()
+    .projection(function(d) {
+      var r = d.y, a = (d.x - 90) / 180 * Math.PI;
+      return [r * Math.cos(a), r * Math.sin(a)];
+    });
+
 var vis = d3.select("#chart").append("svg:svg")
     .attr("width", r * 2)
     .attr("height", r * 2)
@@ -18,7 +24,7 @@ d3.json("flare.json", function(json) {
       .data(cluster.links(nodes))
     .enter().append("svg:path")
       .attr("class", "link")
-      .attr("d", path);
+      .attr("d", diagonal);
 
   var node = vis.selectAll("g.node")
       .data(nodes)
@@ -35,21 +41,4 @@ d3.json("flare.json", function(json) {
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
       .text(function(d) { return d.data.key; });
-
-  // Computes a pretty Bézier curve from parent to child. TODO reusable helper?
-  function path(d) {
-    var y0 = (d.parent.y + d.child.y) / 2,
-        p0 = d.parent,
-        p3 = d.child,
-        p1 = {x: p0.x, y: y0},
-        p2 = {x: p3.x, y: y0};
-    return "M" + x(p0) + "," + y(p0)
-         + "C" + x(p1) + "," + y(p1)
-         + " " + x(p2) + "," + y(p2)
-         + " " + x(p3) + "," + y(p3);
-  }
-
-  // Radial scales for x and y.
-  function x(d) { return d.y * Math.cos((d.x - 90) / 180 * Math.PI); }
-  function y(d) { return d.y * Math.sin((d.x - 90) / 180 * Math.PI); }
 });
