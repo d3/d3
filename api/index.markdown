@@ -47,6 +47,33 @@ title: Documentation
 
 <br clear="left"/>
 
+## User Guides
+
+<div class="gallery">
+
+<div class="list">
+  <a href="http://www.janwillemtulp.com/category/d3/">
+    <img src="janwillemtulp.png"/>
+  </a>
+  <h4><a href="http://www.janwillemtulp.com/category/d3/">Jan Willem Tulp's Blog</a></h4>
+
+  <p>Jan Willem Tulp has posted a number of introductory tutorials on D3 to his
+  blog.</p>
+</div>
+
+<div class="list">
+  <a href="http://groups.google.com/group/d3-js">
+    <img src="group.png"/>
+  </a>
+  <h4><a href="http://groups.google.com/group/d3-js">Google Group d3-js</a></h4>
+
+  <p>Questions about D3? Post them to our Google Group.</p>
+</div>
+
+</div>
+
+<br clear="left"/>
+
 ## Reference
 
 ### d3

@@ -15,6 +15,11 @@ SRC_FILES = \
 	../d3.time.min.js
 
 EX_FILES = \
+	../ex/box.js \
+	../ex/box.css \
+	../ex/morley.csv \
+	../ex/cluster.js \
+	../ex/cluster.css \
 	../ex/calendar.js \
 	../ex/calendar.css \
 	../ex/chord.css \
@@ -33,6 +38,8 @@ EX_FILES = \
 	../ex/treemap.css \
 	../ex/treemap.js \
 	../ex/miserables.json \
+	../ex/pack.js \
+	../ex/pack.css \
 	../ex/splom.css \
 	../ex/splom.js \
 	../ex/flowers.json \
@@ -55,6 +62,8 @@ EX_FILES = \
 	../ex/tree.css
 
 INCLUDE_FILES = \
+  box.js \
+  cluster.js \
 	cartogram.js \
 	chord.js \
 	choropleth.js \
@@ -70,6 +79,7 @@ INCLUDE_FILES = \
 	sunburst.js \
 	bullet.js \
 	bullets.json \
+	pack.js \
 	tree.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
@@ -85,6 +95,34 @@ $(SRC_FILES):
 ../ex/calendar.css:
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/calendar.css > $@
+
+../ex/box.js box.js:
+	@rm -rf $@
+	git cat-file blob master:examples/box/box.js > $@
+
+../ex/morley.csv:
+	@rm -rf $@
+	git cat-file blob master:examples/box/morley.csv > $@
+
+../ex/box.css:
+	@rm -rf $@
+	git cat-file blob master:examples/box/box.css > $@
+
+../ex/pack.js pack.js:
+	@rm -rf $@
+	git cat-file blob master:examples/pack/pack.js > $@
+
+../ex/pack.css:
+	@rm -rf $@
+	git cat-file blob master:examples/pack/pack.css > $@
+
+../ex/cluster.js cluster.js:
+	@rm -rf $@
+	git cat-file blob master:examples/cluster/cluster.js > $@
+
+../ex/cluster.css:
+	@rm -rf $@
+	git cat-file blob master:examples/cluster/cluster.css > $@
 
 ../ex/bullet.js bullet.js:
 	@rm -rf $@

@@ -156,6 +156,40 @@ title: Examples
   related markers (e.g., the same measure a year ago).</p>
 </div>
 
+<div class="list">
+  <a href="box.html">
+    <img src="../box.png"/>
+  </a>
+  <h4><a href="box.html">Box Plots</a></h4>
+
+  <p>A box-and-whisker plot uses simple glyphs that summarize a quantitative
+  distribution with five standard statistics: the smallest value, lower
+  quartile, median, upper quartile, and largest value. This summary approach
+  allows the viewer to easily recognize differences between distributions.</p>
+</div>
+
+<div class="list">
+  <a href="pack.html">
+    <img src="../pack.png"/>
+  </a>
+  <h4><a href="pack.html">Circle Packing</a></h4>
+
+  <p>Enclosure diagrams use containment to represent the hierarchy. Although
+  circle packing is not as space-efficient as a treemap, it better reveals the
+  hierarchy.</p>
+</div>
+
+<div class="list">
+  <a href="cluster.html">
+    <img src="../cluster.png"/>
+  </a>
+  <h4><a href="cluster.html">Dendrogram</a></h4>
+
+  <p>A dendrogram is a node-link diagram that places leaf nodes of the tree at
+  the same depth. In this example, the classes (leaf nodes) are aligned on the
+  right edge, with the packages (internal nodes) to the left.</p>
+</div>
+
 </div>
 <br clear="left"/>
 
@@ -197,6 +231,17 @@ title: Examples
   fun interactive visualization of global water consumption as part of the
   <a href="http://www.visualizing.org">Visualizing.org</a> World Water Day
   challenge.</p>
+</div>
+
+<div class="list">
+  <a href="http://www.datavizchallenge.org/viz/73">
+    <img src="../whatdoyouworkfor.png"/>
+  </a>
+  <h4><a href="http://www.datavizchallenge.org/viz/73">What Do You Work For?</a></h4>
+
+  <p>What if you paid your federal taxes with your entire income starting
+  January first? Where would your money go? Jeffrey Baumes submitted this entry
+  to Google's Data Viz Challenge.</p>
 </div>
 
 </div>
