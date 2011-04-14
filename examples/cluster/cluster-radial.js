@@ -1,10 +1,9 @@
 var r = 960 / 2;
 
-var tree = d3.layout.tree()
+var cluster = d3.layout.cluster()
     .size([360, r - 120])
     .sort(null)
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
-    .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
+    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) {
@@ -14,15 +13,15 @@ var diagonal = d3.svg.diagonal()
 
 var vis = d3.select("#chart").append("svg:svg")
     .attr("width", r * 2)
-    .attr("height", r * 2 - 150)
+    .attr("height", r * 2)
   .append("svg:g")
     .attr("transform", "translate(" + r + "," + r + ")");
 
 d3.json("flare.json", function(json) {
-  var nodes = tree(d3.entries(json)[0]);
+  var nodes = cluster(d3.entries(json)[0]);
 
   var link = vis.selectAll("path.link")
-      .data(tree.links(nodes))
+      .data(cluster.links(nodes))
     .enter().append("svg:path")
       .attr("class", "link")
       .attr("d", diagonal);

@@ -6,10 +6,12 @@ d3.scale.linear = function() {
       kx = 1, // 1 / (x1 - x0)
       ky = 1, // (x1 - x0) / (y1 - y0)
       interpolate = d3.interpolate,
-      i = interpolate(y0, y1);
+      i = interpolate(y0, y1),
+      clamp = false;
 
   function scale(x) {
-    return i((x - x0) * kx);
+    x = (x - x0) * kx;
+    return i(clamp ? Math.max(0, Math.min(1, x)) : x);
   }
 
   // Note: requires range is coercible to number!
@@ -37,6 +39,12 @@ d3.scale.linear = function() {
 
   scale.rangeRound = function(x) {
     return scale.range(x).interpolate(d3.interpolateRound);
+  };
+
+  scale.clamp = function(x) {
+    if (!arguments.length) return clamp;
+    clamp = x;
+    return scale;
   };
 
   scale.interpolate = function(x) {

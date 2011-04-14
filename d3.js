@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.10.1"}; // semver
+(function(){d3 = {version: "1.11.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -24,9 +24,9 @@ try {
 } catch(e) {
   d3_array = d3_arrayCopy;
 }
-function d3_functor(v) {
+d3.functor = function(v) {
   return typeof v == "function" ? v : function() { return v; };
-}
+};
 // A getter-setter method that preserves the appropriate `this` context.
 d3.rebind = function(object, method) {
   return function() {
@@ -551,6 +551,9 @@ d3.interpolateString = function(a, b) {
       n, // q.length
       o;
 
+  // Reset our regular expression!
+  d3_interpolate_number.lastIndex = 0;
+
   // Find all numbers in b.
   for (i = 0; m = d3_interpolate_number.exec(b); ++i) {
     if (m.index) s.push(b.substring(s0, s1 = m.index));
@@ -686,7 +689,6 @@ d3.interpolateObject = function(a, b) {
 }
 
 var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g,
-    d3_interpolate_digits = /[-+]?\d*\.?\d*(?:[eE][-]?\d+)?(.*)/,
     d3_interpolate_rgb = {background: 1, fill: 1, stroke: 1};
 
 function d3_interpolateByName(n) {
@@ -1410,24 +1412,16 @@ function d3_selection(groups) {
     }
 
     /** @this {Element} */
-    function textNull() {
-      while (this.lastChild) this.removeChild(this.lastChild);
-    }
-
-    /** @this {Element} */
     function textConstant() {
-      this.appendChild(document.createTextNode(value));
+      this.textContent = value;
     }
 
     /** @this {Element} */
     function textFunction() {
-      var x = value.apply(this, arguments);
-      if (x != null) this.appendChild(document.createTextNode(x));
+      this.textContent = value.apply(this, arguments);
     }
 
-    groups.each(textNull);
-    return value == null ? groups
-        : groups.each(typeof value == "function"
+    return groups.each(typeof value == "function"
         ? textFunction : textConstant);
   };
 
@@ -1710,12 +1704,16 @@ function d3_transition(groups) {
         event.start.dispatch.apply(this, arguments);
         ik = interpolators[k] = {};
         tx.active = transitionId;
-        for (tk in tweens) ik[tk] = tweens[tk].apply(this, arguments);
+        for (tk in tweens) {
+          if (te = tweens[tk].apply(this, arguments)) {
+            ik[tk] = te;
+          }
+        }
       }
 
       // Apply the interpolators!
       te = ease(t);
-      for (tk in tweens) ik[tk].call(this, te);
+      for (tk in ik) ik[tk].call(this, te);
 
       // Handle ending transitions.
       if (t == 1) {
@@ -1820,6 +1818,15 @@ function d3_transition(groups) {
   transition.style = function(name, value, priority) {
     if (arguments.length < 3) priority = null;
     return transition.styleTween(name, d3_transitionTween(value), priority);
+  };
+
+  transition.text = function(value) {
+    tweens.text = function(d, i) {
+      this.textContent = typeof value == "function"
+          ? value.call(this, d, i)
+          : value;
+    };
+    return transition;
   };
 
   transition.select = function(query) {
@@ -1949,10 +1956,12 @@ d3.scale.linear = function() {
       kx = 1, // 1 / (x1 - x0)
       ky = 1, // (x1 - x0) / (y1 - y0)
       interpolate = d3.interpolate,
-      i = interpolate(y0, y1);
+      i = interpolate(y0, y1),
+      clamp = false;
 
   function scale(x) {
-    return i((x - x0) * kx);
+    x = (x - x0) * kx;
+    return i(clamp ? Math.max(0, Math.min(1, x)) : x);
   }
 
   // Note: requires range is coercible to number!
@@ -1980,6 +1989,12 @@ d3.scale.linear = function() {
 
   scale.rangeRound = function(x) {
     return scale.range(x).interpolate(d3.interpolateRound);
+  };
+
+  scale.clamp = function(x) {
+    if (!arguments.length) return clamp;
+    clamp = x;
+    return scale;
   };
 
   scale.interpolate = function(x) {
@@ -2045,6 +2060,7 @@ d3.scale.log = function() {
   scale.range = d3.rebind(scale, linear.range);
   scale.rangeRound = d3.rebind(scale, linear.rangeRound);
   scale.interpolate = d3.rebind(scale, linear.interpolate);
+  scale.clamp = d3.rebind(scale, linear.clamp);
 
   scale.ticks = function() {
     var d = linear.domain(),
@@ -2118,6 +2134,7 @@ d3.scale.pow = function() {
   scale.range = d3.rebind(scale, linear.range);
   scale.rangeRound = d3.rebind(scale, linear.rangeRound);
   scale.interpolate = d3.rebind(scale, linear.interpolate);
+  scale.clamp = d3.rebind(scale, linear.clamp);
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
 
@@ -2389,25 +2406,25 @@ d3.svg.arc = function() {
 
   arc.innerRadius = function(v) {
     if (!arguments.length) return innerRadius;
-    innerRadius = d3_functor(v);
+    innerRadius = d3.functor(v);
     return arc;
   };
 
   arc.outerRadius = function(v) {
     if (!arguments.length) return outerRadius;
-    outerRadius = d3_functor(v);
+    outerRadius = d3.functor(v);
     return arc;
   };
 
   arc.startAngle = function(v) {
     if (!arguments.length) return startAngle;
-    startAngle = d3_functor(v);
+    startAngle = d3.functor(v);
     return arc;
   };
 
   arc.endAngle = function(v) {
     if (!arguments.length) return endAngle;
-    endAngle = d3_functor(v);
+    endAngle = d3.functor(v);
     return arc;
   };
 
@@ -2820,31 +2837,31 @@ d3.svg.chord = function() {
 
   chord.radius = function(v) {
     if (!arguments.length) return radius;
-    radius = d3_functor(v);
+    radius = d3.functor(v);
     return chord;
   };
 
   chord.source = function(v) {
     if (!arguments.length) return source;
-    source = d3_functor(v);
+    source = d3.functor(v);
     return chord;
   };
 
   chord.target = function(v) {
     if (!arguments.length) return target;
-    target = d3_functor(v);
+    target = d3.functor(v);
     return chord;
   };
 
   chord.startAngle = function(v) {
     if (!arguments.length) return startAngle;
-    startAngle = d3_functor(v);
+    startAngle = d3.functor(v);
     return chord;
   };
 
   chord.endAngle = function(v) {
     if (!arguments.length) return endAngle;
-    endAngle = d3_functor(v);
+    endAngle = d3.functor(v);
     return chord;
   };
 
@@ -2869,6 +2886,44 @@ function d3_svg_chordStartAngle(d) {
 
 function d3_svg_chordEndAngle(d) {
   return d.endAngle;
+}
+d3.svg.diagonal = function() {
+  var source = d3_svg_chordSource,
+      target = d3_svg_chordTarget,
+      projection = d3_svg_diagonalProjection;
+
+  function diagonal(d, i) {
+    var p0 = source.call(this, d, i),
+        p3 = target.call(this, d, i),
+        m = (p0.y + p3.y) / 2,
+        p = [p0, {x: p0.x, y: m}, {x: p3.x, y: m}, p3];
+    p = p.map(projection);
+    return "M" + p[0] + "C" + p[1] + " " + p[2] + " " + p[3];
+  }
+
+  diagonal.source = function(x) {
+    if (!arguments.length) return source;
+    source = d3_functor(x);
+    return diagonal;
+  };
+
+  diagonal.target = function(x) {
+    if (!arguments.length) return target;
+    target = d3_functor(x);
+    return diagonal;
+  };
+
+  diagonal.projection = function(x) {
+    if (!arguments.length) return projection;
+    projection = x;
+    return diagonal;
+  };
+
+  return diagonal;
+};
+
+function d3_svg_diagonalProjection(d) {
+  return [d.x, d.y];
 }
 d3.svg.mouse = function(container) {
   var point = (container.ownerSVGElement || container).createSVGPoint();
@@ -2907,14 +2962,14 @@ d3.svg.symbol = function() {
 
   symbol.type = function(x) {
     if (!arguments.length) return type;
-    type = d3_functor(x);
+    type = d3.functor(x);
     return symbol;
   };
 
   // size of symbol in square pixels
   symbol.size = function(x) {
     if (!arguments.length) return size;
-    size = d3_functor(x);
+    size = d3.functor(x);
     return symbol;
   };
 

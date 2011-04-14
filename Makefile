@@ -81,6 +81,7 @@ d3.svg.js: \
 	src/svg/line.js \
 	src/svg/area.js \
 	src/svg/chord.js \
+	src/svg/diagonal.js \
 	src/svg/mouse.js \
 	src/svg/symbol.js
 
@@ -93,6 +94,7 @@ d3.behavior.js: \
 d3.chart.js: \
 	src/start.js \
 	src/chart/chart.js \
+	src/chart/box.js \
 	src/chart/bullet.js \
 	src/end.js
 
@@ -105,6 +107,8 @@ d3.layout.js: \
 	src/layout/pie.js \
 	src/layout/stack.js \
 	src/layout/hierarchy.js \
+	src/layout/pack.js \
+	src/layout/cluster.js \
 	src/layout/tree.js \
 	src/layout/treemap.js \
 	src/end.js
@@ -149,6 +153,7 @@ tests: \
 	tests/test-csv-parse.test \
 	tests/test-format.test \
 	tests/test-insert.test \
+	tests/test-interpolate.test \
 	tests/test-nest.test \
 	tests/test-remove.test \
 	tests/test-time-format.test \
