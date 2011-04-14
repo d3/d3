@@ -3,7 +3,7 @@
  * @param {number=} l
  */
 d3.hsl = function(h, s, l) {
-  return arguments.length == 1
+  return arguments.length === 1
       ? d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl)
       : d3_hsl(+h, +s, +l);
 };

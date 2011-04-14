@@ -11,7 +11,7 @@ d3.geo.path = function() {
       projection = d3.geo.albersUsa();
 
   function path(d, i) {
-    if (typeof pointRadius == "function") {
+    if (typeof pointRadius === "function") {
       pointCircle = d3_path_circle(pointRadius.apply(this, arguments));
     }
     return d3_geo_pathType(pathTypes, d);
@@ -262,7 +262,7 @@ d3.geo.path = function() {
   };
 
   path.pointRadius = function(x) {
-    if (typeof x == "function") pointRadius = x;
+    if (typeof x === "function") pointRadius = x;
     else {
       pointRadius = +x;
       pointCircle = d3_path_circle(pointRadius);

@@ -27,7 +27,7 @@ d3.geom.hull = function(vertices) {
 
   // calculate polar angles from ref point and sort
   for (i=0; i<len; ++i) {
-    if (i == h) continue;
+    if (i === h) continue;
     y1 = vertices[i][1] - vertices[h][1];
     x1 = vertices[i][0] - vertices[h][0];
     points.push({angle: Math.atan2(y1, x1), index: i});
@@ -73,7 +73,7 @@ d3.geom.hull = function(vertices) {
 
   // do graham's scan
   for (; j<plen; ++j) {
-    if (points[j].index == -1) continue; // skip tossed out points
+    if (points[j].index === -1) continue; // skip tossed out points
     while (!d3_geom_hullCCW(stack[sp-2], stack[sp-1], points[j].index, vertices)) {
       --sp;
     }

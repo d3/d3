@@ -7,12 +7,12 @@ d3.layout.pie = function() {
   function pie(data, i) {
 
     // Compute the start angle.
-    var a = +(typeof startAngle == "function"
+    var a = +(typeof startAngle === "function"
         ? startAngle.apply(this, arguments)
         : startAngle);
 
     // Compute the angular range (end - start).
-    var k = (typeof endAngle == "function"
+    var k = (typeof endAngle === "function"
         ? endAngle.apply(this, arguments)
         : endAngle) - startAngle;
 
