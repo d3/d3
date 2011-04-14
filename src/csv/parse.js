@@ -50,7 +50,7 @@ d3.csv.parseRows = function(text, f) {
     // common case
     var m = re.exec(text);
     if (m) {
-      eol = m[0].charCodeAt(0) != 44;
+      eol = m[0].charCodeAt(0) !== 44;
       return text.substring(j, m.index);
     }
     re.lastIndex = text.length;

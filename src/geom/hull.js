@@ -64,7 +64,7 @@ d3.geom.hull = function(vertices) {
   // initialize the stack
   stack.push(h);
   for (i=0, j=0; i<2; ++j) {
-    if (points[j].index != -1) {
+    if (points[j].index !== -1) {
       stack.push(points[j].index);
       i++;
     }
