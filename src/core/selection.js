@@ -412,24 +412,16 @@ function d3_selection(groups) {
     }
 
     /** @this {Element} */
-    function textNull() {
-      while (this.lastChild) this.removeChild(this.lastChild);
-    }
-
-    /** @this {Element} */
     function textConstant() {
-      this.appendChild(document.createTextNode(value));
+      this.textContent = value;
     }
 
     /** @this {Element} */
     function textFunction() {
-      var x = value.apply(this, arguments);
-      if (x != null) this.appendChild(document.createTextNode(x));
+      this.textContent = value.apply(this, arguments);
     }
 
-    groups.each(textNull);
-    return value == null ? groups
-        : groups.each(typeof value == "function"
+    return groups.each(typeof value == "function"
         ? textFunction : textConstant);
   };
 

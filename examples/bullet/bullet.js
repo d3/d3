@@ -17,15 +17,15 @@ d3.json("bullets.json", function(data) {
     .append("svg:g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
       .call(chart);
-  
+
   var title = vis.append("svg:g")
       .attr("text-anchor", "end")
       .attr("transform", "translate(-6," + (h - m[0] - m[2]) / 2 + ")");
-  
+
   title.append("svg:text")
       .attr("class", "title")
       .text(function(d) { return d.title; });
-  
+
   title.append("svg:text")
       .attr("class", "subtitle")
       .attr("dy", "1em")

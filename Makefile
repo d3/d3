@@ -94,6 +94,7 @@ d3.behavior.js: \
 d3.chart.js: \
 	src/start.js \
 	src/chart/chart.js \
+	src/chart/box.js \
 	src/chart/bullet.js \
 	src/end.js
 
@@ -152,6 +153,7 @@ tests: \
 	tests/test-csv-parse.test \
 	tests/test-format.test \
 	tests/test-insert.test \
+	tests/test-interpolate.test \
 	tests/test-nest.test \
 	tests/test-remove.test \
 	tests/test-time-format.test \

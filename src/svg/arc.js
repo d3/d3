@@ -42,25 +42,25 @@ d3.svg.arc = function() {
 
   arc.innerRadius = function(v) {
     if (!arguments.length) return innerRadius;
-    innerRadius = d3_functor(v);
+    innerRadius = d3.functor(v);
     return arc;
   };
 
   arc.outerRadius = function(v) {
     if (!arguments.length) return outerRadius;
-    outerRadius = d3_functor(v);
+    outerRadius = d3.functor(v);
     return arc;
   };
 
   arc.startAngle = function(v) {
     if (!arguments.length) return startAngle;
-    startAngle = d3_functor(v);
+    startAngle = d3.functor(v);
     return arc;
   };
 
   arc.endAngle = function(v) {
     if (!arguments.length) return endAngle;
-    endAngle = d3_functor(v);
+    endAngle = d3.functor(v);
     return arc;
   };
 
