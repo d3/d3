@@ -1,7 +1,7 @@
 var w = 960,
-    h = 2000;
+    h = 2200;
 
-var tree = d3.layout.tree()
+var cluster = d3.layout.cluster()
     .size([h, w - 160])
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
@@ -16,10 +16,10 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("transform", "translate(40, 0)");
 
 d3.json("flare.json", function(json) {
-  var nodes = tree(d3.entries(json)[0]);
+  var nodes = cluster(d3.entries(json)[0]);
 
   var link = vis.selectAll("path.link")
-      .data(tree.links(nodes))
+      .data(cluster.links(nodes))
     .enter().append("svg:path")
       .attr("class", "link")
       .attr("d", diagonal);
