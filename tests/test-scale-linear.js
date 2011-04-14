@@ -97,4 +97,3 @@ console.log("domain unclamping:")
 console.log("        under  -> ", x(-1));
 console.log("         over  -> ", x(11));
 console.log("");
-
