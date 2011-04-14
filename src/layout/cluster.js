@@ -42,6 +42,7 @@ d3.layout.cluster = function() {
   cluster.sort = d3.rebind(cluster, hierarchy.sort);
   cluster.children = d3.rebind(cluster, hierarchy.children);
   cluster.value = d3.rebind(cluster, hierarchy.value);
+  cluster.links = d3_layout_treeLinks;
 
   cluster.separation = function(x) {
     if (!arguments.length) return separation;

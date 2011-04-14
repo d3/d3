@@ -128,6 +128,7 @@ d3.layout.tree = function() {
   tree.sort = d3.rebind(tree, hierarchy.sort);
   tree.children = d3.rebind(tree, hierarchy.children);
   tree.value = d3.rebind(tree, hierarchy.value);
+  tree.links = d3_layout_treeLinks;
 
   tree.separation = function(x) {
     if (!arguments.length) return separation;
@@ -143,6 +144,15 @@ d3.layout.tree = function() {
 
   return tree;
 };
+
+// Returns an array parent+child objects for the specified nodes.
+function d3_layout_treeLinks(nodes) {
+  return d3.merge(nodes.map(function(parent) {
+    return (parent.children || []).map(function(child) {
+      return {parent: parent, child: child};
+    });
+  }));
+}
 
 function d3_layout_treeSeparation(a, b) {
   return a.parent == b.parent ? 1 : 2;

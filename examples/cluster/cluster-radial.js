@@ -14,14 +14,10 @@ var vis = d3.select("#chart").append("svg:svg")
 d3.json("flare.json", function(json) {
   var nodes = cluster(d3.entries(json)[0]);
 
-  var link = vis.selectAll("g.link")
-      .data(nodes)
-    .enter().append("svg:g")
-      .attr("class", "link");
-
-  link.selectAll("path")
-      .data(children)
+  var link = vis.selectAll("path.link")
+      .data(cluster.links(nodes))
     .enter().append("svg:path")
+      .attr("class", "link")
       .attr("d", path);
 
   var node = vis.selectAll("g.node")
@@ -39,16 +35,6 @@ d3.json("flare.json", function(json) {
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
       .text(function(d) { return d.data.key; });
-
-  // Returns parent+child objects for any children of `d`.
-  function children(d) {
-    return (d.children || []).map(function(v) {
-      return {
-        parent: d,
-        child: v
-      };
-    });
-  }
 
   // Computes a pretty Bézier curve from parent to child. TODO reusable helper?
   function path(d) {
