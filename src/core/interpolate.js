@@ -30,6 +30,9 @@ d3.interpolateString = function(a, b) {
       n, // q.length
       o;
 
+  // Reset our regular expression!
+  d3_interpolate_number.lastIndex = 0;
+
   // Find all numbers in b.
   for (i = 0; m = d3_interpolate_number.exec(b); ++i) {
     if (m.index) s.push(b.substring(s0, s1 = m.index));
@@ -165,7 +168,6 @@ d3.interpolateObject = function(a, b) {
 }
 
 var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g,
-    d3_interpolate_digits = /[-+]?\d*\.?\d*(?:[eE][-]?\d+)?(.*)/,
     d3_interpolate_rgb = {background: 1, fill: 1, stroke: 1};
 
 function d3_interpolateByName(n) {
