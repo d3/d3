@@ -32,13 +32,13 @@ d3.json("flare.json", function(json) {
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
 
   node.append("svg:circle")
-      .attr("r", 5);
+      .attr("r", 4.5);
 
   node.append("svg:text")
       .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
-      .attr("transform", function(d) { return (d.x < 180) ^ (d.children) ? null : "rotate(180)"; })
+      .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
       .text(function(d) { return d.data.key; });
 
   // Returns parent+child objects for any children of `d`.

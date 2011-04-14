@@ -742,64 +742,40 @@ function d3_layout_hierarchySort(a, b) {
 // Implements a hierarchical layout using the cluster (or dendogram) algorithm.
 d3.layout.cluster = function() {
   var hierarchy = d3.layout.hierarchy(),
-      group = 0;
+      separation = d3_layout_treeSeparation,
+      size = [1, 1]; // width, height
 
   function cluster(d, i) {
     var nodes = hierarchy.call(this, d, i),
         root = nodes[0],
-        leafCount = 0,
-        leafIndex = .5 - group / 2;
+        previousNode,
+        x = 0,
+        kx,
+        ky;
 
-    /* Count the leaf nodes and compute the depth of descendants. */
-    var p = undefined;
-    d3_layout_clusterVisitAfter(root, function(n) {
-      if (n.children) {
-        n.depth = 1 + d3.max(n.children, function(n) { return n.depth; });
+    // First walk, computing the initial x & y values.
+    d3_layout_treeVisitAfter(root, function(node) {
+      if (node.children) {
+        node.x = d3_layout_clusterX(node.children);
+        node.y = d3_layout_clusterY(node.children);
       } else {
-        if (group && (p != n.parent)) {
-          p = n.parent;
-          leafCount += group;
-        }
-        leafCount++;
-        n.depth = 0;
+        node.x = previousNode ? x += separation(node, previousNode) : 0;
+        node.y = 0;
+        previousNode = node;
       }
     });
-    var breadth = 1 / leafCount;
-    var depth = 1 / root.depth;
 
-    /* Compute the unit breadth and depth of each node. */
-    var p = undefined;
-    d3_layout_clusterVisitAfter(root, function(n) {
-      if (n.children) {
-        n.breadth = d3_layout_clusterMean(n.children, function(n) { return n.breadth; });
-      } else {
-        if (group && (p != n.parent)) {
-          p = n.parent;
-          leafIndex += group;
-        }
-        n.breadth = breadth * leafIndex++;
-      }
-      n.depth = 1 - n.depth * depth;
-    });
+    // Compute the left-most, right-most, and depth-most nodes for extents.
+    var left = d3_layout_clusterLeft(root),
+        right = d3_layout_clusterRight(root),
+        x0 = left.x - separation(left, right) / 2,
+        x1 = right.x + separation(right, left) / 2;
 
-    /* Compute breadth and depth ranges for space-filling layouts. */
-    d3_layout_clusterVisitAfter(root, function(n) {
-      n.minBreadth = n.children
-          ? n.children[0].minBreadth
-          : (n.breadth - breadth / 2);
-      n.maxBreadth = n.children
-          ? n.children[n.children.length - 1].maxBreadth
-          : (n.breadth + breadth / 2);
+    // Second walk, normalizing x & y to the desired size.
+    d3_layout_treeVisitAfter(root, function(node) {
+      node.x = (node.x - x0) / (x1 - x0) * size[0];
+      node.y = (1 - node.y / root.y) * size[1];
     });
-    d3_layout_clusterVisitBefore(root, function(n) {
-      n.minDepth = n.parent
-          ? n.parent.maxDepth
-          : 0;
-      n.maxDepth = n.parent
-          ? (n.depth + root.depth)
-          : (n.minDepth + 2 * root.depth);
-    });
-    root.minDepth = -depth;
 
     return nodes;
   }
@@ -808,45 +784,41 @@ d3.layout.cluster = function() {
   cluster.children = d3.rebind(cluster, hierarchy.children);
   cluster.value = d3.rebind(cluster, hierarchy.value);
 
-  cluster.group = function(x) {
-    if (!arguments.length) return group;
-    group = x;
+  cluster.separation = function(x) {
+    if (!arguments.length) return separation;
+    separation = x;
+    return cluster;
+  };
+
+  cluster.size = function(x) {
+    if (!arguments.length) return size;
+    size = x;
     return cluster;
   };
 
   return cluster;
 };
 
-d3_layout_clusterVisitAfter = d3_layout_treeVisitAfter;
-
-function d3_layout_clusterVisitBefore(node, callback) {
-  function visit(node, previousSibling) {
-    callback(node, previousSibling);
-    var children = node.children;
-    if (children) {
-      var child,
-          previousChild = null,
-          i = -1,
-          n = children.length;
-      while (++i < n) {
-        child = children[i];
-        visit(child, previousChild);
-        previousChild = child;
-      }
-    }
-  }
-  visit(node, null);
+function d3_layout_clusterY(children) {
+  return 1 + d3.max(children, function(child) {
+    return child.y;
+  });
 }
 
-function d3_layout_clusterSum(array, f) {
-  var o = {};
-  return array.reduce(f
-      ? function(p, d, i) { o.index = i; return p + f.call(o, d); }
-      : function(p, d) { return p + d; }, 0);
+function d3_layout_clusterX(children) {
+  return children.reduce(function(x, child) {
+    return x + child.x;
+  }, 0) / children.length;
 }
 
-function d3_layout_clusterMean(array, f) {
-  return d3_layout_clusterSum(array, f) / array.length;
+function d3_layout_clusterLeft(node) {
+  var children = node.children;
+  return children ? d3_layout_clusterLeft(children[0]) : node;
+}
+
+function d3_layout_clusterRight(node) {
+  var children = node.children;
+  return children ? d3_layout_clusterRight(children[children.length - 1]) : node;
 }
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {

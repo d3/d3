@@ -20,13 +20,10 @@ d3.json("flare.json", function(json) {
     .enter().append("svg:g")
       .attr("class", "link");
 
-  link.selectAll("line")
+  link.selectAll("path")
       .data(children)
-    .enter().append("svg:line")
-      .attr("x1", function(d) { return d.parent.y; })
-      .attr("y1", function(d) { return d.parent.x; })
-      .attr("x2", function(d) { return d.child.y; })
-      .attr("y2", function(d) { return d.child.x; });
+    .enter().append("svg:path")
+      .attr("d", path);
 
   var node = vis.selectAll("g.node")
       .data(nodes)
@@ -35,7 +32,7 @@ d3.json("flare.json", function(json) {
       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
 
   node.append("svg:circle")
-      .attr("r", 5);
+      .attr("r", 4.5);
 
   node.append("svg:text")
       .attr("dx", function(d) { return d.children ? -8 : 8; })
@@ -51,5 +48,18 @@ d3.json("flare.json", function(json) {
         child: v
       };
     });
+  }
+
+  // Computes a pretty Bézier curve from parent to child. TODO reusable helper?
+  function path(d) {
+    var y = (d.parent.y + d.child.y) / 2,
+        p0 = d.parent,
+        p3 = d.child,
+        p1 = {x: p0.x, y: y},
+        p2 = {x: p3.x, y: y};
+    return "M" + p0.y + "," + p0.x
+         + "C" + p1.y + "," + p1.x
+         + " " + p2.y + "," + p2.x
+         + " " + p3.y + "," + p3.x;
   }
 });

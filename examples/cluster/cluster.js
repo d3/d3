@@ -1,15 +1,13 @@
-var w = 200,
-    h = 2200,
-    x = d3.scale.linear().range([0, w]),
-    y = d3.scale.linear().range([0, h]);
+var w = 960,
+    h = 2200;
 
 var cluster = d3.layout.cluster()
+    .size([h, w - 160])
     .sort(null)
-    .group(true)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
 var vis = d3.select("#chart").append("svg:svg")
-    .attr("width", w + 40 + 120)
+    .attr("width", w)
     .attr("height", h)
   .append("svg:g")
     .attr("transform", "translate(40, 0)");
@@ -20,27 +18,18 @@ d3.json("flare.json", function(json) {
   var link = vis.selectAll("g.link")
       .data(nodes)
     .enter().append("svg:g")
-      .attr("class", "link")
-    .selectAll("line")
-      .data(children)
-    .enter();
+      .attr("class", "link");
 
-  link.append("svg:line")
-      .attr("x1", function(d) { return x(d.parent.depth); })
-      .attr("y1", function(d) { return y(d.parent.breadth); })
-      .attr("x2", function(d) { return x(d.parent.depth); })
-      .attr("y2", function(d) { return y(d.child.breadth); });
-  link.append("svg:line")
-      .attr("x1", function(d) { return x(d.parent.depth); })
-      .attr("y1", function(d) { return y(d.child.breadth); })
-      .attr("x2", function(d) { return x(d.child.depth); })
-      .attr("y2", function(d) { return y(d.child.breadth); });
+  link.selectAll("path")
+      .data(children)
+    .enter().append("svg:path")
+      .attr("d", path);
 
   var node = vis.selectAll("g.node")
       .data(nodes)
     .enter().append("svg:g")
       .attr("class", "node")
-      .attr("transform", function(d) { return "translate(" + x(d.depth) + "," + y(d.breadth) + ")"; })
+      .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
 
   node.append("svg:circle")
       .attr("r", 4.5);
@@ -59,5 +48,18 @@ d3.json("flare.json", function(json) {
         child: v
       };
     });
+  }
+
+  // Computes a pretty Bézier curve from parent to child. TODO reusable helper?
+  function path(d) {
+    var y = (d.parent.y + d.child.y) / 2,
+        p0 = d.parent,
+        p3 = d.child,
+        p1 = {x: p0.x, y: y},
+        p2 = {x: p3.x, y: y};
+    return "M" + p0.y + "," + p0.x
+         + "C" + p1.y + "," + p1.x
+         + " " + p2.y + "," + p2.x
+         + " " + p3.y + "," + p3.x;
   }
 });
