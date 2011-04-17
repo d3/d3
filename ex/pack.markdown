@@ -6,7 +6,7 @@ title: Circle Packing
 # Circle Packing
 
 <div class="gallery" id="chart"> </div>
-<link type="text/css" rel="stylesheet" href="pack.css"/>
+<link type="text/css" rel="stylesheet" href="pack.css?1"/>
 <script type="text/javascript" src="../d3.layout.js?1.11.0"> </script>
 <script type="text/javascript" src="pack.js"> </script>
 
