@@ -372,7 +372,7 @@ d3.layout.force = function() {
     var m = d3.svg.mouse(d3_layout_forceDragElement);
     d3_layout_forceDragNode.px = m[0];
     d3_layout_forceDragNode.py = m[1];
-    force.start(); // restart annealing
+    alpha = .1; // restart annealing
   }
 
   function dragup() {
