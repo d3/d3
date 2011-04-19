@@ -159,7 +159,7 @@ d3.layout.force = function() {
       drag = .9,
       distance = 30,
       charge = -60,
-      gravity = 180,
+      gravity = .02,
       theta = .8,
       interval,
       nodes,
@@ -248,16 +248,17 @@ d3.layout.force = function() {
     accumulate(q);
 
     // apply gravity forces
-    x = size[0] / 2 - q.cx;
-    y = size[1] / 2 - q.cy;
-    l = Math.min(.02, 1 / Math.sqrt(x * x + y * y));
-    l = alpha * gravity * l * l;
-    x *= l;
-    y *= l;
+    x = size[0] / 2;
+    y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
-      o.fx += x;
-      o.fy += y;
+      s = x - o.x;
+      t = y - o.y;
+      l = alpha * gravity / n * Math.sqrt(s * s + t * t);
+      s *= l;
+      t *= l;
+      o.fx += s;
+      o.fy += t;
     }
 
     // apply charge forces
