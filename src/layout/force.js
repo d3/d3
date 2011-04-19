@@ -3,42 +3,127 @@ d3.layout.force = function() {
   var force = {},
       event = d3.dispatch("tick"),
       size = [1, 1],
-      alpha = .5,
+      alpha = .1,
+      drag = .9,
       distance = 30,
+      charge = -60,
+      gravity = 180,
+      theta = .8,
       interval,
       nodes,
       links,
       distances;
 
+  function accumulate(n) {
+    var cx = 0,
+        cy = 0;
+    n.count = 0;
+    if (!n.leaf) {
+      n.nodes.forEach(function(c) {
+        accumulate(c);
+        n.count += c.count;
+        cx += c.count * c.cx;
+        cy += c.count * c.cy;
+      });
+    }
+    if (n.point) {
+      n.count++;
+      cx += n.point.x;
+      cy += n.point.y;
+    }
+    n.cx = cx / n.count;
+    n.cy = cy / n.count;
+  }
+
+  function repulse(p) {
+    return function(n, x1, y1, x2, y2) {
+      var dx = n.cx - p.x,
+          dy = n.cy - p.y,
+          dn = 1 / Math.sqrt(dx * dx + dy * dy);
+
+      /* Barnes-Hut criterion. */
+      if ((x2 - x1) * dn < theta) {
+        var k = alpha * charge * n.count * dn * dn;
+        p.fx += dx * k;
+        p.fy += dy * k;
+        return true;
+      }
+
+      if (n.point && (n.point != p)) {
+        var k = alpha * charge * dn * dn;
+        p.fx += dx * k;
+        p.fy += dy * k;
+      }
+    };
+  }
+
   function tick() {
-    var n = distances.length,
+    var n = nodes.length,
+        m = links.length,
+        q = d3.geom.quadtree(nodes),
         i, // current index
-        o, // current link
+        o, // current object
         s, // current source
         t, // current target
         l, // current distance
         x, // x-distance
         y; // y-distance
 
-    // gauss-seidel relaxation
-    for (i = 0; i < n; ++i) {
-      o = distances[i];
+    // reset forces
+    i = -1; while (++i < n) {
+      (o = nodes[i]).fx = o.fy = 0;
+    }
+
+    // gauss-seidel relaxation for links
+    for (i = 0; i < m; ++i) {
+      o = links[i];
       s = o.source;
       t = o.target;
       x = t.x - s.x;
       y = t.y - s.y;
       if (l = Math.sqrt(x * x + y * y)) {
-        l = alpha / (o.distance * o.distance) * (l - distance * o.distance) / l;
+        l = alpha * (l - distance) / l;
         x *= l;
         y *= l;
-        if (!t.fixed) {
-          t.x -= x;
-          t.y -= y;
-        }
-        if (!s.fixed) {
-          s.x += x;
-          s.y += y;
-        }
+        t.x -= x;
+        t.y -= y;
+        s.x += x;
+        s.y += y;
+      }
+    }
+
+    // compute quadtree center of mass
+    accumulate(q);
+
+    // apply gravity forces
+    x = size[0] / 2 - q.cx;
+    y = size[1] / 2 - q.cy;
+    l = Math.min(.02, 1 / Math.sqrt(x * x + y * y));
+    l = alpha * gravity * l * l;
+    x *= l;
+    y *= l;
+    i = -1; while (++i < n) {
+      o = nodes[i];
+      o.fx += x;
+      o.fy += y;
+    }
+
+    // apply charge forces
+    i = -1; while (++i < n) {
+      q.visit(repulse(nodes[i]));
+    }
+
+    // position verlet integration
+    i = -1; while (++i < n) {
+      o = nodes[i];
+      if (o.fixed) {
+        o.x = o.px;
+        o.y = o.py;
+      } else {
+        x = o.px - (o.px = o.x);
+        y = o.py - (o.py = o.y);
+        o.x += o.fx - x * drag;
+        o.y += o.fy - y * drag;
       }
     }
 
@@ -79,58 +164,26 @@ d3.layout.force = function() {
 
   force.start = function() {
     var i,
-        j,
-        k,
         n = nodes.length,
         m = links.length,
         w = size[0],
         h = size[1],
         o;
 
-    var paths = [];
+    // TODO initialize positions of new nodes using constraints (links)
     for (i = 0; i < n; ++i) {
       o = nodes[i];
-      o.x = o.x || Math.random() * w;
-      o.y = o.y || Math.random() * h;
-      o.fixed = 0;
-      paths[i] = [];
-      for (j = 0; j < n; ++j) {
-        paths[i][j] = Infinity;
-      }
-      paths[i][i] = 0;
+      if (isNaN(o.x)) o.x = Math.random() * w;
+      if (isNaN(o.y)) o.y = Math.random() * h;
+      if (isNaN(o.px)) o.px = o.x;
+      if (isNaN(o.py)) o.py = o.y;
     }
 
     for (i = 0; i < m; ++i) {
       o = links[i];
-      paths[o.source][o.target] = 1;
-      paths[o.target][o.source] = 1;
-      o.source = nodes[o.source];
-      o.target = nodes[o.target];
+      if (typeof o.source == "number") o.source = nodes[o.source];
+      if (typeof o.target == "number") o.target = nodes[o.target];
     }
-
-    // Floyd-Warshall
-    for (k = 0; k < n; ++k) {
-      for (i = 0; i < n; ++i) {
-        for (j = 0; j < n; ++j) {
-          paths[i][j] = Math.min(paths[i][j], paths[i][k] + paths[k][j]);
-        }
-      }
-    }
-
-    distances = [];
-    for (i = 0; i < n; ++i) {
-      for (j = i + 1; j < n; ++j) {
-        distances.push({
-          source: nodes[i],
-          target: nodes[j],
-          distance: paths[i][j] * paths[i][j]
-        });
-      }
-    }
-
-    distances.sort(function(a, b) {
-      return a.distance - b.distance;
-    });
 
     d3.timer(tick);
     return force;
@@ -169,8 +222,8 @@ d3.layout.force = function() {
     function mousemove() {
       if (!node) return;
       var m = d3.svg.mouse(element);
-      node.x = m[0];
-      node.y = m[1];
+      node.px = m[0];
+      node.py = m[1];
       force.resume(); // restart annealing
     }
 
