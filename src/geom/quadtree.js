@@ -7,23 +7,26 @@
  * can be used to accelerate various spatial operations, such as the Barnes-Hut
  * approximation for computing n-body forces, or collision detection.
  *
- * @param points [[x1, y1], [x2, y2], …]
- * @return quadtree root {left: boolean, nodes: […], point: [x, y]}
+ * @param points [{x: x1, y: y1}, {x: x2, y: y2}, …]
+ * @return quadtree root {left: boolean, nodes: […], point: {x: x, y: y}}
  */
 d3.geom.quadtree = function(points) {
   var p,
       i = -1,
       n = points.length;
 
+  /* Type conversion for deprecated API. */
+  if (n && isNaN(points[0].x)) points = points.map(d3_geom_quadtreePoint);
+
   /* Compute bounds. */
-  var x1 = Number.POSITIVE_INFINITY, y1 = x1,
-      x2 = Number.NEGATIVE_INFINITY, y2 = x2;
+  var x1 = Infinity, y1 = x1,
+      x2 = -Infinity, y2 = x2;
   while (++i < n) {
     p = points[i];
-    if (p[0] < x1) x1 = p[0];
-    if (p[1] < y1) y1 = p[1];
-    if (p[0] > x2) x2 = p[0];
-    if (p[1] > y2) y2 = p[1];
+    if (p.x < x1) x1 = p.x;
+    if (p.y < y1) y1 = p.y;
+    if (p.x > x2) x2 = p.x;
+    if (p.y > y2) y2 = p.y;
   }
 
   /* Squarify the bounds. */
@@ -38,7 +41,7 @@ d3.geom.quadtree = function(points) {
    * <i>x2</i>] and [<i>y1</i>, <i>y2</i>].
    */
   function insert(n, p, x1, y1, x2, y2) {
-    if (isNaN(p[0]) || isNaN(p[1])) return; // ignore invalid points
+    if (isNaN(p.x) || isNaN(p.y)) return; // ignore invalid points
     if (n.leaf) {
       var v = n.point;
       if (v) {
@@ -48,7 +51,7 @@ d3.geom.quadtree = function(points) {
          * internal node while adding the new point to a child node. This
          * avoids infinite recursion.
          */
-        if ((Math.abs(v[0] - p[0]) + Math.abs(v[1] - p[1])) < .01) {
+        if ((Math.abs(v.x - p.x) + Math.abs(v.y - p.y)) < .01) {
           insertChild(n, p, x1, y1, x2, y2);
         } else {
           n.point = null;
@@ -72,8 +75,8 @@ d3.geom.quadtree = function(points) {
     /* Compute the split point, and the quadrant in which to insert p. */
     var sx = (x1 + x2) * .5,
         sy = (y1 + y2) * .5,
-        right = p[0] >= sx,
-        bottom = p[1] >= sy,
+        right = p.x >= sx,
+        bottom = p.y >= sy,
         i = (bottom << 1) + right;
 
     /* Recursively insert into the child node. */
@@ -119,4 +122,11 @@ function d3_geom_quadtreeVisit(f, node, x1, y1, x2, y2) {
     if (children[2]) d3_geom_quadtreeVisit(f, children[2], x1, sy, sx, y2);
     if (children[3]) d3_geom_quadtreeVisit(f, children[3], sx, sy, x2, y2);
   }
+}
+
+function d3_geom_quadtreePoint(p) {
+  return {
+    x: p[0],
+    y: p[1]
+  };
 }
