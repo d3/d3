@@ -3,7 +3,7 @@ d3.layout.force = function() {
   var force = {},
       event = d3.dispatch("tick"),
       size = [1, 1],
-      alpha = .1,
+      alpha,
       drag = .9,
       distance = 30,
       charge = -60,
@@ -37,22 +37,24 @@ d3.layout.force = function() {
 
   function repulse(p) {
     return function(n, x1, y1, x2, y2) {
-      var dx = n.cx - p.x,
-          dy = n.cy - p.y,
-          dn = 1 / Math.sqrt(dx * dx + dy * dy);
+      if (n.point != p) {
+        var dx = (n.cx - p.x) || Math.random(),
+            dy = (n.cy - p.y) || Math.random(),
+            dn = 1 / Math.sqrt(dx * dx + dy * dy);
 
-      /* Barnes-Hut criterion. */
-      if ((x2 - x1) * dn < theta) {
-        var k = alpha * charge * n.count * dn * dn;
-        p.fx += dx * k;
-        p.fy += dy * k;
-        return true;
-      }
+        /* Barnes-Hut criterion. */
+        if ((x2 - x1) * dn < theta) {
+          var k = alpha * charge * n.count * dn * dn;
+          p.fx += dx * k;
+          p.fy += dy * k;
+          return true;
+        }
 
-      if (n.point && (n.point != p)) {
-        var k = alpha * charge * dn * dn;
-        p.fx += dx * k;
-        p.fy += dy * k;
+        if (n.point) {
+          var k = alpha * charge * dn * dn;
+          p.fx += dx * k;
+          p.fy += dy * k;
+        }
       }
     };
   }
@@ -186,15 +188,12 @@ d3.layout.force = function() {
       if (typeof o.target == "number") o.target = nodes[o.target];
     }
 
-    d3.timer(tick);
-    return force;
-  };
-
-  force.resume = function() {
     alpha = .1;
     d3.timer(tick);
     return force;
   };
+
+  force.resume = force.start;
 
   force.stop = function() {
     alpha = 0;
@@ -203,40 +202,52 @@ d3.layout.force = function() {
 
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
-    var node, element;
 
     this
-      .on("mouseover", function(d) { d.fixed = true; })
-      .on("mouseout", function(d) { if (d != node) d.fixed = false; })
-      .on("mousedown", mousedown);
+      .on("mouseover", d3_layout_forceDragOver)
+      .on("mouseout", d3_layout_forceDragOut)
+      .on("mousedown", d3_layout_forceDragDown);
 
     d3.select(window)
-      .on("mousemove", mousemove)
-      .on("mouseup", mouseup);
-
-    function mousedown(d) {
-      (node = d).fixed = true;
-      element = this;
-      d3.event.preventDefault();
-    }
-
-    function mousemove() {
-      if (!node) return;
-      var m = d3.svg.mouse(element);
-      node.px = m[0];
-      node.py = m[1];
-      force.resume(); // restart annealing
-    }
-
-    function mouseup() {
-      if (!node) return;
-      mousemove();
-      node.fixed = false;
-      node = element = null;
-    }
+      .on("mousemove", dragmove)
+      .on("mouseup", dragup);
 
     return force;
   };
 
+  function dragmove() {
+    if (!d3_layout_forceDragNode) return;
+    var m = d3.svg.mouse(d3_layout_forceDragElement);
+    d3_layout_forceDragNode.px = m[0];
+    d3_layout_forceDragNode.py = m[1];
+    force.start(); // restart annealing
+  }
+
+  function dragup() {
+    if (!d3_layout_forceDragNode) return;
+    dragmove();
+    d3_layout_forceDragNode.fixed = false;
+    d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+  }
+
   return force;
 };
+
+var d3_layout_forceDragNode,
+    d3_layout_forceDragElement;
+
+function d3_layout_forceDragOver(d) {
+  d.fixed = true;
+}
+
+function d3_layout_forceDragOut(d) {
+  if (d !== d3_layout_forceDragNode) {
+    d.fixed = false;
+  }
+}
+
+function d3_layout_forceDragDown(d) {
+  (d3_layout_forceDragNode = d).fixed = true;
+  d3_layout_forceDragElement = this;
+  d3.event.preventDefault();
+}
