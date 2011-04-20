@@ -7,53 +7,53 @@ d3.layout.force = function() {
       drag = .9,
       distance = 30,
       charge = -60,
-      gravity = .02,
+      gravity = .001,
       theta = .8,
       interval,
       nodes,
       links,
       distances;
 
-  function accumulate(n) {
+  function accumulate(quad) {
     var cx = 0,
         cy = 0;
-    n.count = 0;
-    if (!n.leaf) {
-      n.nodes.forEach(function(c) {
+    quad.count = 0;
+    if (!quad.leaf) {
+      quad.nodes.forEach(function(c) {
         accumulate(c);
-        n.count += c.count;
+        quad.count += c.count;
         cx += c.count * c.cx;
         cy += c.count * c.cy;
       });
     }
-    if (n.point) {
-      n.count++;
-      cx += n.point.x;
-      cy += n.point.y;
+    if (quad.point) {
+      quad.count++;
+      cx += quad.point.x;
+      cy += quad.point.y;
     }
-    n.cx = cx / n.count;
-    n.cy = cy / n.count;
+    quad.cx = cx / quad.count;
+    quad.cy = cy / quad.count;
   }
 
-  function repulse(p) {
-    return function(n, x1, y1, x2, y2) {
-      if (n.point != p) {
-        var dx = (n.cx - p.x) || Math.random(),
-            dy = (n.cy - p.y) || Math.random(),
+  function repulse(node, kc) {
+    return function(quad, x1, y1, x2, y2) {
+      if (quad.point != node) {
+        var dx = (quad.cx - node.x) || Math.random(),
+            dy = (quad.cy - node.y) || Math.random(),
             dn = 1 / Math.sqrt(dx * dx + dy * dy);
 
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
-          var k = alpha * charge * n.count * dn * dn;
-          p.fx += dx * k;
-          p.fy += dy * k;
+          var k = kc * quad.count * dn * dn;
+          node.fx += dx * k;
+          node.fy += dy * k;
           return true;
         }
 
-        if (n.point) {
-          var k = alpha * charge * dn * dn;
-          p.fx += dx * k;
-          p.fy += dy * k;
+        if (quad.point) {
+          var k = kc * dn * dn;
+          node.fx += dx * k;
+          node.fy += dy * k;
         }
       }
     };
@@ -98,13 +98,14 @@ d3.layout.force = function() {
     accumulate(q);
 
     // apply gravity forces
+    var kg = alpha * gravity;
     x = size[0] / 2;
     y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
       s = x - o.x;
       t = y - o.y;
-      l = alpha * gravity / n * Math.sqrt(s * s + t * t);
+      l = kg * Math.sqrt(s * s + t * t);
       s *= l;
       t *= l;
       o.fx += s;
@@ -112,8 +113,9 @@ d3.layout.force = function() {
     }
 
     // apply charge forces
+    var kc = alpha * charge;
     i = -1; while (++i < n) {
-      q.visit(repulse(nodes[i]));
+      q.visit(repulse(nodes[i], kc));
     }
 
     // position verlet integration
