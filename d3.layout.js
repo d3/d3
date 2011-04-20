@@ -313,9 +313,33 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.distance = function(d) {
+  force.distance = function(x) {
     if (!arguments.length) return distance;
-    distance = d;
+    distance = x;
+    return force;
+  };
+
+  force.drag = function(x) {
+    if (!arguments.length) return drag;
+    drag = x;
+    return force;
+  };
+
+  force.charge = function(x) {
+    if (!arguments.length) return charge;
+    charge = x;
+    return force;
+  };
+
+  force.gravity = function(x) {
+    if (!arguments.length) return gravity;
+    gravity = x;
+    return force;
+  };
+
+  force.theta = function(x) {
+    if (!arguments.length) return theta;
+    theta = x;
     return force;
   };
 
