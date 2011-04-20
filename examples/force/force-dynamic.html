@@ -64,7 +64,7 @@ vis.on("mousemove", function() {
   cursor.attr("transform", "translate(" + d3.svg.mouse(this) + ")");
 });
 
-vis.on("click", function() {
+vis.on("mousedown", function() {
   var point = d3.svg.mouse(this),
       node = {x: point[0], y: point[1]},
       n = nodes.push(node);

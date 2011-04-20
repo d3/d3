@@ -340,12 +340,14 @@ d3.layout.force = function() {
       if (typeof o.target == "number") o.target = nodes[o.target];
     }
 
+    return force.resume();
+  };
+
+  force.resume = function() {
     alpha = .1;
     d3.timer(tick);
     return force;
   };
-
-  force.resume = force.start;
 
   force.stop = function() {
     alpha = 0;
@@ -372,7 +374,7 @@ d3.layout.force = function() {
     var m = d3.svg.mouse(d3_layout_forceDragElement);
     d3_layout_forceDragNode.px = m[0];
     d3_layout_forceDragNode.py = m[1];
-    alpha = .1; // restart annealing
+    force.resume(); // restart annealing
   }
 
   function dragup() {
@@ -401,6 +403,7 @@ function d3_layout_forceDragOut(d) {
 function d3_layout_forceDragDown(d) {
   (d3_layout_forceDragNode = d).fixed = true;
   d3_layout_forceDragElement = this;
+  d3.event.stopPropagation();
   d3.event.preventDefault();
 }
 d3.layout.partition = function() {
