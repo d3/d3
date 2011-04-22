@@ -1,0 +1,194 @@
+entries(year/variety/site):
+[
+ {
+  "key": "1931",
+  "values": [
+   {
+    "key": "Manchuria",
+    "values": [
+     {
+      "key": "Duluth",
+      "values": [
+       {
+        "yield": 28.96667,
+        "variety": "Manchuria",
+        "year": 1931,
+        "site": "Duluth"
+       }
+      ]
+     }
+    ]
+   },
+   {
+    "key": "Glabron",
+    "values": [
+     {
+      "key": "University Farm",
+      "values": [
+       {
+        "yield": 43.06666,
+        "variety": "Glabron",
+        "year": 1931,
+        "site": "University Farm"
+       }
+      ]
+     },
+     {
+      "key": "Waseca",
+      "values": [
+       {
+        "yield": 55.2,
+        "variety": "Glabron",
+        "year": 1931,
+        "site": "Waseca"
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+]
+
+map(year/variety/site):
+{
+ "1931": {
+  "Manchuria": {
+   "Duluth": [
+    {
+     "yield": 28.96667,
+     "variety": "Manchuria",
+     "year": 1931,
+     "site": "Duluth"
+    }
+   ]
+  },
+  "Glabron": {
+   "University Farm": [
+    {
+     "yield": 43.06666,
+     "variety": "Glabron",
+     "year": 1931,
+     "site": "University Farm"
+    }
+   ],
+   "Waseca": [
+    {
+     "yield": 55.2,
+     "variety": "Glabron",
+     "year": 1931,
+     "site": "Waseca"
+    }
+   ]
+  }
+ }
+}
+
+rollup(year):
+{
+ "1931": 2224.6666799999985,
+ "1932": 1905.7999600000003
+}
+
+rollup(year/variety):
+{
+ "1931": {
+  "Manchuria": 205.16667999999999,
+  "Glabron": 223.96666000000002,
+  "Svansota": 204.06667,
+  "Velvet": 206.93332,
+  "Trebi": 254.79996,
+  "No. 457": 241.50001,
+  "No. 462": 234.33336999999997,
+  "Peatland": 219.5,
+  "No. 475": 190.89999999999998,
+  "Wisconsin No. 38": 243.50000999999997
+ },
+ "1932": {
+  "Manchuria": 172.39999999999998,
+  "Glabron": 176.13333000000003,
+  "Svansota": 160.46666,
+  "Velvet": 189.79998999999998,
+  "Trebi": 217.99996,
+  "No. 457": 188.66667999999999,
+  "No. 462": 190.20000000000002,
+  "Peatland": 190.66667,
+  "No. 475": 190.23333,
+  "Wisconsin No. 38": 229.23334000000003
+ }
+}
+
+sortKeys(variety):
+[
+ {
+  "key": "Glabron",
+  "values": [
+   {
+    "yield": 43.06666,
+    "variety": "Glabron",
+    "year": 1931,
+    "site": "University Farm"
+   },
+   {
+    "yield": 55.2,
+    "variety": "Glabron",
+    "year": 1931,
+    "site": "Waseca"
+   }
+  ]
+ },
+ {
+  "key": "Manchuria",
+  "values": [
+   {
+    "yield": 28.96667,
+    "variety": "Manchuria",
+    "year": 1931,
+    "site": "Duluth"
+   }
+  ]
+ }
+]
+
+sortValues(year):
+{
+ "1931": [
+  {
+   "yield": 55.2,
+   "variety": "Glabron",
+   "year": 1931,
+   "site": "Waseca"
+  },
+  {
+   "yield": 43.06666,
+   "variety": "Glabron",
+   "year": 1931,
+   "site": "University Farm"
+  },
+  {
+   "yield": 38.13333,
+   "variety": "Glabron",
+   "year": 1931,
+   "site": "Crookston"
+  },
+  {
+   "yield": 29.66667,
+   "variety": "Glabron",
+   "year": 1931,
+   "site": "Duluth"
+  },
+  {
+   "yield": 29.13333,
+   "variety": "Glabron",
+   "year": 1931,
+   "site": "Grand Rapids"
+  },
+  {
+   "yield": 28.76667,
+   "variety": "Glabron",
+   "year": 1931,
+   "site": "Morris"
+  }
+ ]
+}
+

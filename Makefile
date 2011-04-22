@@ -1,13 +1,13 @@
 JS_COMPILER = \
-	java -jar lib/google-compiler/compiler.jar \
-	--externs=src/externs.js \
-	--charset=UTF-8
+	./lib/uglifyjs/bin/uglifyjs
 
 all: \
 	d3.js \
 	d3.min.js \
 	d3.behavior.js \
 	d3.behavior.min.js \
+	d3.chart.js \
+	d3.chart.min.js \
 	d3.layout.js \
 	d3.layout.min.js \
 	d3.csv.js \
@@ -81,6 +81,7 @@ d3.svg.js: \
 	src/svg/line.js \
 	src/svg/area.js \
 	src/svg/chord.js \
+	src/svg/diagonal.js \
 	src/svg/mouse.js \
 	src/svg/symbol.js
 
@@ -90,13 +91,25 @@ d3.behavior.js: \
 	src/behavior/zoom.js \
 	src/end.js
 
+d3.chart.js: \
+	src/start.js \
+	src/chart/chart.js \
+	src/chart/box.js \
+	src/chart/bullet.js \
+	src/end.js
+
 d3.layout.js: \
 	src/start.js \
 	src/layout/layout.js \
 	src/layout/chord.js \
 	src/layout/force.js \
+	src/layout/partition.js \
 	src/layout/pie.js \
 	src/layout/stack.js \
+	src/layout/hierarchy.js \
+	src/layout/pack.js \
+	src/layout/cluster.js \
+	src/layout/tree.js \
 	src/layout/treemap.js \
 	src/end.js
 
@@ -137,20 +150,35 @@ d3.geom.js: \
 tests: \
 	tests/test-append.test \
 	tests/test-attr.test \
+	tests/test-call.test \
+	tests/test-csv-parse.test \
 	tests/test-format.test \
+	tests/test-insert.test \
+	tests/test-interpolate.test \
+	tests/test-nest.test \
+	tests/test-remove.test \
+	tests/test-time-format.test \
+	tests/test-time-parse.test \
 	tests/test-transition.test \
-	tests/test-scale-linear.test
+	tests/test-scale-linear.test \
+	tests/test-scale-log.test \
+	tests/test-scale-sqrt.test \
+	tests/test-scale-pow.test \
+	tests/test-svg-arc.test \
+	tests/test-svg-area.test \
+	tests/test-svg-line.test \
+	tests/test-svg-symbol.test
 
 %.min.js: %.js Makefile
 	@rm -f $@
-	$(JS_COMPILER) --js $< --js_output_file $@
+	$(JS_COMPILER) < $< > $@
 
 d3.js d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
 
-%.test: %.js %.out d3.js
+%.test: %.js %.out all
 	@/bin/echo -n "test: $* "
 	@node $< > $*.actual
 	@diff -U 3 $*.out $*.actual && rm -f $*.actual \

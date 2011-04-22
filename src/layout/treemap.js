@@ -1,37 +1,10 @@
 // Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
 d3.layout.treemap = function() {
-  var children = d3_layout_treemapChildren,
-      value = d3_layout_treemapValue,
+  var hierarchy = d3.layout.hierarchy(),
       round = Math.round,
-      size = [1, 1]; // width, height
-
-  // Recursively compute the node depth and value.
-  // Also converts the data representation into a standard tree structure.
-  // Also sorts child nodes by descending value to optimize squarification.
-  function sum(data, depth, nodes) {
-    var datas = children.call(treemap, data, depth),
-        node = {depth: depth, data: data};
-    nodes.push(node);
-    if (datas) {
-      var i = -1,
-          n = datas.length,
-          c = node.children = [],
-          v = 0,
-          j = depth + 1;
-      while (++i < n) {
-        d = sum(datas[i], j, nodes);
-        if (d.value > 0) { // ignore NaN, negative, etc.
-          c.push(d);
-          v += d.value;
-        }
-      }
-      node.value = v;
-    } else {
-      node.value = value.call(treemap, data, depth);
-    }
-    if (!depth) scale(node, size[0] * size[1] / node.value); // root
-    return node;
-  }
+      size = [1, 1], // width, height
+      sticky = false,
+      stickies;
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
@@ -49,7 +22,7 @@ d3.layout.treemap = function() {
     if (!node.children) return;
     var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
         row = [],
-        children = node.children.slice().sort(d3_layout_treemapSort),
+        children = node.children.slice(), // copy-on-write
         child,
         best = Infinity, // the best row score so far
         score, // the current row score
@@ -75,6 +48,26 @@ d3.layout.treemap = function() {
       row.length = row.area = 0;
     }
     node.children.forEach(squarify);
+  }
+
+  // Recursively resizes the specified node's children into existing rows.
+  // Preserves the existing layout!
+  function stickify(node) {
+    if (!node.children) return;
+    var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
+        children = node.children.slice(), // copy-on-write
+        child,
+        row = [];
+    row.area = 0;
+    while (child = children.pop()) {
+      row.push(child);
+      row.area += child.area;
+      if (child.z != null) {
+        position(row, child.z ? rect.dx : rect.dy, rect, !children.length);
+        row.length = row.area = 0;
+      }
+    }
+    node.children.forEach(stickify);
   }
 
   // Computes the score for the specified row, as the worst aspect ratio.
@@ -112,6 +105,7 @@ d3.layout.treemap = function() {
         o.dy = v;
         x += o.dx = round(o.area / v);
       }
+      o.z = true;
       o.dx += rect.x + rect.dx - x; // rounding error
       rect.y += v;
       rect.dy -= v;
@@ -124,6 +118,7 @@ d3.layout.treemap = function() {
         o.dx = v;
         y += o.dy = round(o.area / v);
       }
+      o.z = false;
       o.dy += rect.y + rect.dy - y; // rounding error
       rect.x += v;
       rect.dx -= v;
@@ -131,27 +126,22 @@ d3.layout.treemap = function() {
   }
 
   function treemap(d) {
-    var nodes = [],
-        root = sum(d, 0, nodes);
+    var nodes = stickies || hierarchy(d),
+        root = nodes[0];
     root.x = 0;
     root.y = 0;
     root.dx = size[0];
     root.dy = size[1];
-    squarify(root);
+    if (stickies) hierarchy.revalue(root);
+    scale(root, size[0] * size[1] / root.value);
+    (stickies ? stickify : squarify)(root);
+    if (sticky) stickies = nodes;
     return nodes;
   }
 
-  treemap.children = function(x) {
-    if (!arguments.length) return children;
-    children = x;
-    return treemap;
-  };
-
-  treemap.value = function(x) {
-    if (!arguments.length) return value;
-    value = x;
-    return treemap;
-  };
+  treemap.sort = d3.rebind(treemap, hierarchy.sort);
+  treemap.children = d3.rebind(treemap, hierarchy.children);
+  treemap.value = d3.rebind(treemap, hierarchy.value);
 
   treemap.size = function(x) {
     if (!arguments.length) return size;
@@ -165,17 +155,12 @@ d3.layout.treemap = function() {
     return treemap;
   };
 
+  treemap.sticky = function(x) {
+    if (!arguments.length) return sticky;
+    sticky = x;
+    stickies = null;
+    return treemap;
+  };
+
   return treemap;
 };
-
-function d3_layout_treemapChildren(d) {
-  return d.children;
-}
-
-function d3_layout_treemapValue(d) {
-  return d.value;
-}
-
-function d3_layout_treemapSort(a, b) {
-  return b.area - a.area;
-}

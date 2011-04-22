@@ -1,7 +1,5 @@
 require("./../lib/env-js/envjs/node");
-require("./../lib/sizzle/sizzle");
 require("./../d3");
-require("./../d3.time");
 
 var f = d3.format(" .3f");
 
@@ -49,4 +47,53 @@ console.log("          0.0  -> ", x(0.0));
 console.log("          0.5  -> ", x(0.5));
 console.log("          1.0  -> ", x(1.0));
 console.log("          1.5  -> ", x(1.5));
+console.log("");
+
+var x = d3.scale.linear();
+console.log("domain coercion:");
+console.log("       String  -> ", x.domain(["1", "2"]).domain());
+console.log("         Date  -> ", x.domain([new Date(1990, 0, 1), new Date(1991, 0, 1)]).domain());
+console.log("       Number  -> ", x.domain([new Number(41), new Number(42)]).domain());
+console.log("");
+
+var x = d3.scale.linear();
+console.log("domain coercion, invert:");
+console.log("       String  -> ", x.domain(["0", "2"]).invert(.5));
+console.log("         Date  -> ", x.domain([new Date(1990, 0, 1), new Date(1991, 0, 1)]).invert(.5));
+console.log("       Number  -> ", x.domain([new Number(0), new Number(42)]).invert(.5));
+console.log("");
+
+var x = d3.scale.linear();
+console.log("range coercion, invert:");
+console.log("       String  -> ", x.range(["0", "2"]).invert("1"));
+console.log("         Date  -> ", x.range([new Date(1990, 0, 1), new Date(1991, 0, 1)]).invert(new Date(1990, 6, 2, 13)));
+console.log("       Number  -> ", x.range([new Number(0), new Number(42)]).invert(new Number(21)));
+console.log("          ???  -> ", x.range(["#000", "#fff"]).invert("#999")); // can't be coerced
+console.log("");
+
+var x = d3.scale.linear();
+console.log("ticks:");
+console.log("            1  -> ", x.ticks(1).map(x.tickFormat(1)).join(", "));
+console.log("            2  -> ", x.ticks(2).map(x.tickFormat(2)).join(", "));
+console.log("            5  -> ", x.ticks(5).map(x.tickFormat(5)).join(", "));
+console.log("           10  -> ", x.ticks(10).map(x.tickFormat(10)).join(", "));
+console.log("");
+
+var x = d3.scale.linear().clamp(true);
+console.log("domain clamping:")
+console.log("   inspection  -> ", x.clamp());
+console.log("        under  -> ", x(-1));
+console.log("         over  -> ", x(2));
+console.log("");
+
+var x = d3.scale.linear().domain([1, 0]).clamp(true);
+console.log("domain clamping reversed:")
+console.log("        under  -> ", x(-1));
+console.log("         over  -> ", x(2));
+console.log("");
+
+var x = d3.scale.linear().clamp(false);
+console.log("domain unclamping:")
+console.log("        under  -> ", x(-1));
+console.log("         over  -> ", x(11));
 console.log("");

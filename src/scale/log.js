@@ -1,14 +1,7 @@
 d3.scale.log = function() {
   var linear = d3.scale.linear(),
-      n = false;
-
-  function log(x) {
-    return (n ? -Math.log(-x) : Math.log(x)) / Math.LN10;
-  }
-
-  function pow(y) {
-    return n ? -Math.pow(10, -y) : Math.pow(10, y);
-  }
+      log = d3_scale_log,
+      pow = log.pow;
 
   function scale(x) {
     return linear(log(x));
@@ -20,14 +13,16 @@ d3.scale.log = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(pow);
-    n = (x[0] || x[1]) < 0;
+    log = (x[0] || x[1]) < 0 ? d3_scale_logn : d3_scale_log;
+    pow = log.pow;
     linear.domain(x.map(log));
     return scale;
   };
 
-  scale.range = d3_rebind(scale, linear.range);
-  scale.rangeRound = d3_rebind(scale, linear.rangeRound);
-  scale.interpolate = d3_rebind(scale, linear.interpolate);
+  scale.range = d3.rebind(scale, linear.range);
+  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
+  scale.interpolate = d3.rebind(scale, linear.interpolate);
+  scale.clamp = d3.rebind(scale, linear.clamp);
 
   scale.ticks = function() {
     var d = linear.domain(),
@@ -37,7 +32,7 @@ d3.scale.log = function() {
           j = Math.ceil(d[1]),
           u = pow(d[0]),
           v = pow(d[1]);
-      if (n) {
+      if (log === d3_scale_logn) {
         ticks.push(pow(i));
         for (; i++ < j;) for (var k = 9; k > 0; k--) ticks.push(pow(i) * k);
       } else {
@@ -56,4 +51,20 @@ d3.scale.log = function() {
   };
 
   return scale;
+};
+
+function d3_scale_log(x) {
+  return Math.log(x) / Math.LN10;
+}
+
+function d3_scale_logn(x) {
+  return -Math.log(-x) / Math.LN10;
+}
+
+d3_scale_log.pow = function(x) {
+  return Math.pow(10, x);
+};
+
+d3_scale_logn.pow = function(x) {
+  return -Math.pow(10, -x);
 };

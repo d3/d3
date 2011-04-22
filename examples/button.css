@@ -1,6 +1,9 @@
 button {
   font: 14px Helvetica Neue;
-  background: #222 url(http://bost.ocks.org/button-overlay.png) repeat-x;
+  background-color: #222;
+  background-image: -moz-linear-gradient(top, rgba(255,255,255,.25), rgba(255,255,255,.11));
+  background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, rgba(255,255,255,.25)),color-stop(1, rgba(255,255,255,.11)));
+  background-image: -webkit-linear-gradient(rgba(255,255,255,.25), rgba(255,255,255,.11));
   color: #fff;
   text-rendering: optimizeLegibility;
   text-shadow: 0 -1px 1px #222;

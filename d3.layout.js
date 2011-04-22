@@ -338,6 +338,58 @@ d3.layout.force = function() {
 
   return force;
 };
+d3.layout.partition = function() {
+  var hierarchy = d3.layout.hierarchy(),
+      size = [1, 1]; // width, height
+
+  function position(node, x, dx, dy) {
+    var children = node.children;
+    node.x = x;
+    node.y = node.depth * dy;
+    node.dx = dx;
+    node.dy = dy;
+    if (children) {
+      var i = -1,
+          n = children.length,
+          c,
+          d;
+      dx /= node.value;
+      while (++i < n) {
+        position(c = children[i], x, d = c.value * dx, dy);
+        x += d;
+      }
+    }
+  }
+
+  function depth(node) {
+    var children = node.children,
+        d = 0;
+    if (children) {
+      var i = -1,
+          n = children.length;
+      while (++i < n) d = Math.max(d, depth(children[i]));
+    }
+    return 1 + d;
+  }
+
+  function partition(d, i) {
+    var nodes = hierarchy.call(this, d, i);
+    position(nodes[0], 0, size[0], size[1] / depth(nodes[0]));
+    return nodes;
+  }
+
+  partition.sort = d3.rebind(partition, hierarchy.sort);
+  partition.children = d3.rebind(partition, hierarchy.children);
+  partition.value = d3.rebind(partition, hierarchy.value);
+
+  partition.size = function(x) {
+    if (!arguments.length) return size;
+    size = x;
+    return partition;
+  };
+
+  return partition;
+};
 d3.layout.pie = function() {
   var value = Number,
       sort = null,
@@ -595,18 +647,15 @@ function d3_layout_stackMaxIndex(array) {
 function d3_layout_stackSum(p, d) {
   return p + d.y;
 }
-// Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
-d3.layout.treemap = function() {
-  var children = d3_layout_treemapChildren,
-      value = d3_layout_treemapValue,
-      round = Math.round,
-      size = [1, 1]; // width, height
+d3.layout.hierarchy = function() {
+  var sort = d3_layout_hierarchySort,
+      children = d3_layout_hierarchyChildren,
+      value = d3_layout_hierarchyValue;
 
   // Recursively compute the node depth and value.
-  // Also converts the data representation into a standard tree structure.
-  // Also sorts child nodes by descending value to optimize squarification.
-  function sum(data, depth, nodes) {
-    var datas = children.call(treemap, data, depth),
+  // Also converts the data representation into a standard hierarchy structure.
+  function recurse(data, depth, nodes) {
+    var datas = children.call(hierarchy, data, depth),
         node = {depth: depth, data: data};
     nodes.push(node);
     if (datas) {
@@ -616,19 +665,621 @@ d3.layout.treemap = function() {
           v = 0,
           j = depth + 1;
       while (++i < n) {
-        d = sum(datas[i], j, nodes);
+        d = recurse(datas[i], j, nodes);
         if (d.value > 0) { // ignore NaN, negative, etc.
           c.push(d);
           v += d.value;
+          d.parent = node;
         }
       }
+      if (sort) c.sort(sort);
       node.value = v;
     } else {
-      node.value = value.call(treemap, data, depth);
+      node.value = value.call(hierarchy, data, depth);
     }
-    if (!depth) scale(node, size[0] * size[1] / node.value); // root
     return node;
   }
+
+  // Recursively re-evaluates the node value.
+  function revalue(node, depth) {
+    var children = node.children,
+        v = 0;
+    if (children) {
+      var i = -1,
+          n = children.length,
+          j = depth + 1;
+      while (++i < n) v += revalue(children[i], j);
+    } else {
+      v = value.call(hierarchy, node.data, depth);
+    }
+    return node.value = v;
+  }
+
+  function hierarchy(d) {
+    var nodes = [];
+    recurse(d, 0, nodes);
+    return nodes;
+  }
+
+  hierarchy.sort = function(x) {
+    if (!arguments.length) return sort;
+    sort = x;
+    return hierarchy;
+  };
+
+  hierarchy.children = function(x) {
+    if (!arguments.length) return children;
+    children = x;
+    return hierarchy;
+  };
+
+  hierarchy.value = function(x) {
+    if (!arguments.length) return value;
+    value = x;
+    return hierarchy;
+  };
+
+  // Re-evaluates the `value` property for the specified hierarchy.
+  hierarchy.revalue = function(root) {
+    revalue(root, 0);
+    return root;
+  };
+
+  return hierarchy;
+}
+
+function d3_layout_hierarchyChildren(d) {
+  return d.children;
+}
+
+function d3_layout_hierarchyValue(d) {
+  return d.value;
+}
+
+function d3_layout_hierarchySort(a, b) {
+  return b.value - a.value;
+}
+d3.layout.pack = function() {
+  var hierarchy = d3.layout.hierarchy(),
+      size = [1, 1];
+
+  function pack(d, i) {
+    var nodes = hierarchy.call(this, d, i),
+        root = nodes[0];
+
+    // Recursively compute the layout.
+    root.x = 0;
+    root.y = 0;
+    d3_layout_packTree(root);
+
+    // Scale the layout to fit the requested size.
+    var w = size[0],
+        h = size[1],
+        k = 1 / Math.max(2 * root.r / w, 2 * root.r / h);
+    d3_layout_packTransform(root, w / 2, h / 2, k);
+
+    return nodes;
+  }
+
+  pack.sort = d3.rebind(pack, hierarchy.sort);
+  pack.children = d3.rebind(pack, hierarchy.children);
+  pack.value = d3.rebind(pack, hierarchy.value);
+
+  pack.size = function(x) {
+    if (!arguments.length) return size;
+    size = x;
+    return pack;
+  };
+
+  return pack.sort(d3_layout_packSort);
+};
+
+function d3_layout_packSort(a, b) {
+  return a.value - b.value;
+}
+
+function d3_layout_packInsert(a, b) {
+  var c = a._pack_next;
+  a._pack_next = b;
+  b._pack_prev = a;
+  b._pack_next = c;
+  c._pack_prev = b;
+}
+
+function d3_layout_packSplice(a, b) {
+  a._pack_next = b;
+  b._pack_prev = a;
+}
+
+function d3_layout_packIntersects(a, b) {
+  var dx = b.x - a.x,
+      dy = b.y - a.y,
+      dr = a.r + b.r;
+  return (dr * dr - dx * dx - dy * dy) > .001; // within epsilon
+}
+
+function d3_layout_packCircle(nodes) {
+  var xMin = Infinity,
+      xMax = -Infinity,
+      yMin = Infinity,
+      yMax = -Infinity,
+      n = nodes.length,
+      a, b, c, j, k;
+
+  function bound(node) {
+    xMin = Math.min(node.x - node.r, xMin);
+    xMax = Math.max(node.x + node.r, xMax);
+    yMin = Math.min(node.y - node.r, yMin);
+    yMax = Math.max(node.y + node.r, yMax);
+  }
+
+  // Create node links.
+  nodes.forEach(d3_layout_packLink);
+
+  // Create first node.
+  a = nodes[0];
+  a.x = -a.r;
+  a.y = 0;
+  bound(a);
+
+  // Create second node.
+  if (n > 1) {
+    b = nodes[1];
+    b.x = b.r;
+    b.y = 0;
+    bound(b);
+
+    // Create third node and build chain.
+    if (n > 2) {
+      c = nodes[2];
+      d3_layout_packPlace(a, b, c);
+      bound(c);
+      d3_layout_packInsert(a, c);
+      a._pack_prev = c;
+      d3_layout_packInsert(c, b);
+      b = a._pack_next;
+
+      // Now iterate through the rest.
+      for (var i = 3; i < n; i++) {
+        d3_layout_packPlace(a, b, c = nodes[i]);
+
+        // Search for the closest intersection.
+        var isect = 0, s1 = 1, s2 = 1;
+        for (j = b._pack_next; j != b; j = j._pack_next, s1++) {
+          if (d3_layout_packIntersects(j, c)) {
+            isect = 1;
+            break;
+          }
+        }
+        if (isect == 1) {
+          for (k = a._pack_prev; k != j._pack_prev; k = k._pack_prev, s2++) {
+            if (d3_layout_packIntersects(k, c)) {
+              if (s2 < s1) {
+                isect = -1;
+                j = k;
+              }
+              break;
+            }
+          }
+        }
+
+        // Update node chain.
+        if (isect == 0) {
+          d3_layout_packInsert(a, c);
+          b = c;
+          bound(c);
+        } else if (isect > 0) {
+          d3_layout_packSplice(a, j);
+          b = j;
+          i--;
+        } else { // isect < 0
+          d3_layout_packSplice(j, b);
+          a = j;
+          i--;
+        }
+      }
+    }
+  }
+
+  // Re-center the circles and return the encompassing radius.
+  var cx = (xMin + xMax) / 2,
+      cy = (yMin + yMax) / 2,
+      cr = 0;
+  for (var i = 0; i < n; i++) {
+    var node = nodes[i];
+    node.x -= cx;
+    node.y -= cy;
+    cr = Math.max(cr, node.r + Math.sqrt(node.x * node.x + node.y * node.y));
+  }
+
+  // Remove node links.
+  nodes.forEach(d3_layout_packUnlink);
+
+  return cr;
+}
+
+function d3_layout_packLink(node) {
+  node._pack_next = node._pack_prev = node;
+}
+
+function d3_layout_packUnlink(node) {
+  delete node._pack_next;
+  delete node._pack_prev;
+}
+
+function d3_layout_packTree(node) {
+  var children = node.children;
+  if (children) {
+    children.forEach(d3_layout_packTree);
+    node.r = d3_layout_packCircle(children);
+  } else {
+    node.r = Math.sqrt(node.value);
+  }
+}
+
+function d3_layout_packTransform(node, x, y, k) {
+  var children = node.children;
+  node.x = (x += k * node.x);
+  node.y = (y += k * node.y);
+  node.r *= k;
+  if (children) {
+    var i = -1, n = children.length;
+    while (++i < n) d3_layout_packTransform(children[i], x, y, k);
+  }
+}
+
+function d3_layout_packPlace(a, b, c) {
+  var da = b.r + c.r,
+      db = a.r + c.r,
+      dx = b.x - a.x,
+      dy = b.y - a.y,
+      dc = Math.sqrt(dx * dx + dy * dy),
+      cos = (db * db + dc * dc - da * da) / (2 * db * dc),
+      theta = Math.acos(cos),
+      x = cos * db,
+      h = Math.sin(theta) * db;
+  dx /= dc;
+  dy /= dc;
+  c.x = a.x + x * dx + h * dy;
+  c.y = a.y + x * dy - h * dx;
+}
+// Implements a hierarchical layout using the cluster (or dendogram) algorithm.
+d3.layout.cluster = function() {
+  var hierarchy = d3.layout.hierarchy(),
+      separation = d3_layout_treeSeparation,
+      size = [1, 1]; // width, height
+
+  function cluster(d, i) {
+    var nodes = hierarchy.call(this, d, i),
+        root = nodes[0],
+        previousNode,
+        x = 0,
+        kx,
+        ky;
+
+    // First walk, computing the initial x & y values.
+    d3_layout_treeVisitAfter(root, function(node) {
+      if (node.children) {
+        node.x = d3_layout_clusterX(node.children);
+        node.y = d3_layout_clusterY(node.children);
+      } else {
+        node.x = previousNode ? x += separation(node, previousNode) : 0;
+        node.y = 0;
+        previousNode = node;
+      }
+    });
+
+    // Compute the left-most, right-most, and depth-most nodes for extents.
+    var left = d3_layout_clusterLeft(root),
+        right = d3_layout_clusterRight(root),
+        x0 = left.x - separation(left, right) / 2,
+        x1 = right.x + separation(right, left) / 2;
+
+    // Second walk, normalizing x & y to the desired size.
+    d3_layout_treeVisitAfter(root, function(node) {
+      node.x = (node.x - x0) / (x1 - x0) * size[0];
+      node.y = (1 - node.y / root.y) * size[1];
+    });
+
+    return nodes;
+  }
+
+  cluster.sort = d3.rebind(cluster, hierarchy.sort);
+  cluster.children = d3.rebind(cluster, hierarchy.children);
+  cluster.value = d3.rebind(cluster, hierarchy.value);
+  cluster.links = d3_layout_treeLinks;
+
+  cluster.separation = function(x) {
+    if (!arguments.length) return separation;
+    separation = x;
+    return cluster;
+  };
+
+  cluster.size = function(x) {
+    if (!arguments.length) return size;
+    size = x;
+    return cluster;
+  };
+
+  return cluster;
+};
+
+function d3_layout_clusterY(children) {
+  return 1 + d3.max(children, function(child) {
+    return child.y;
+  });
+}
+
+function d3_layout_clusterX(children) {
+  return children.reduce(function(x, child) {
+    return x + child.x;
+  }, 0) / children.length;
+}
+
+function d3_layout_clusterLeft(node) {
+  var children = node.children;
+  return children ? d3_layout_clusterLeft(children[0]) : node;
+}
+
+function d3_layout_clusterRight(node) {
+  var children = node.children;
+  return children ? d3_layout_clusterRight(children[children.length - 1]) : node;
+}
+// Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
+d3.layout.tree = function() {
+  var hierarchy = d3.layout.hierarchy(),
+      separation = d3_layout_treeSeparation,
+      size = [1, 1]; // width, height
+
+  function tree(d, i) {
+    var nodes = hierarchy.call(this, d, i),
+        root = nodes[0];
+
+    function firstWalk(node, previousSibling) {
+      var children = node.children,
+          layout = node._tree;
+      if (children) {
+        var n = children.length,
+            firstChild = children[0],
+            previousChild,
+            ancestor = firstChild,
+            child,
+            i = -1;
+        while (++i < n) {
+          child = children[i];
+          firstWalk(child, previousChild);
+          ancestor = apportion(child, previousChild, ancestor);
+          previousChild = child;
+        }
+        d3_layout_treeShift(node);
+        var midpoint = .5 * (firstChild._tree.prelim + child._tree.prelim);
+        if (previousSibling) {
+          layout.prelim = previousSibling._tree.prelim + separation(node, previousSibling);
+          layout.mod = layout.prelim - midpoint;
+        } else {
+          layout.prelim = midpoint;
+        }
+      } else {
+        if (previousSibling) {
+          layout.prelim = previousSibling._tree.prelim + separation(node, previousSibling);
+        }
+      }
+    }
+
+    function secondWalk(node, x) {
+      node.x = node._tree.prelim + x;
+      var children = node.children;
+      if (children) {
+        var i = -1,
+            n = children.length;
+        x += node._tree.mod;
+        while (++i < n) {
+          secondWalk(children[i], x);
+        }
+      }
+    }
+
+    function apportion(node, previousSibling, ancestor) {
+      if (previousSibling) {
+        var vip = node,
+            vop = node,
+            vim = previousSibling,
+            vom = node.parent.children[0],
+            sip = vip._tree.mod,
+            sop = vop._tree.mod,
+            sim = vim._tree.mod,
+            som = vom._tree.mod,
+            shift;
+        while (vim = d3_layout_treeRight(vim), vip = d3_layout_treeLeft(vip), vim && vip) {
+          vom = d3_layout_treeLeft(vom);
+          vop = d3_layout_treeRight(vop);
+          vop._tree.ancestor = node;
+          shift = vim._tree.prelim + sim - vip._tree.prelim - sip + separation(vim, vip);
+          if (shift > 0) {
+            d3_layout_treeMove(d3_layout_treeAncestor(vim, node, ancestor), node, shift);
+            sip += shift;
+            sop += shift;
+          }
+          sim += vim._tree.mod;
+          sip += vip._tree.mod;
+          som += vom._tree.mod;
+          sop += vop._tree.mod;
+        }
+        if (vim && !d3_layout_treeRight(vop)) {
+          vop._tree.thread = vim;
+          vop._tree.mod += sim - sop;
+        }
+        if (vip && !d3_layout_treeLeft(vom)) {
+          vom._tree.thread = vip;
+          vom._tree.mod += sip - som;
+          ancestor = node;
+        }
+      }
+      return ancestor;
+    }
+
+    // Initialize temporary layout variables.
+    d3_layout_treeVisitAfter(root, function(node, previousSibling) {
+      node._tree = {
+        ancestor: node,
+        prelim: 0,
+        mod: 0,
+        change: 0,
+        shift: 0,
+        number: previousSibling ? previousSibling._tree.number + 1 : 0
+      };
+    });
+
+    // Compute the layout using Buchheim et al.'s algorithm.
+    firstWalk(root);
+    secondWalk(root, -root._tree.prelim);
+
+    // Compute the left-most, right-most, and depth-most nodes for extents.
+    var left = d3_layout_treeSearch(root, d3_layout_treeLeftmost),
+        right = d3_layout_treeSearch(root, d3_layout_treeRightmost),
+        deep = d3_layout_treeSearch(root, d3_layout_treeDeepest),
+        x0 = left.x - separation(left, right) / 2,
+        x1 = right.x + separation(right, left) / 2,
+        y1 = deep.depth;
+
+    // Clear temporary layout variables; transform x and y.
+    d3_layout_treeVisitAfter(root, function(node) {
+      node.x = (node.x - x0) / (x1 - x0) * size[0];
+      node.y = node.depth / y1 * size[1];
+      delete node._tree;
+    });
+
+    return nodes;
+  }
+
+  tree.sort = d3.rebind(tree, hierarchy.sort);
+  tree.children = d3.rebind(tree, hierarchy.children);
+  tree.value = d3.rebind(tree, hierarchy.value);
+  tree.links = d3_layout_treeLinks;
+
+  tree.separation = function(x) {
+    if (!arguments.length) return separation;
+    separation = x;
+    return tree;
+  };
+
+  tree.size = function(x) {
+    if (!arguments.length) return size;
+    size = x;
+    return tree;
+  };
+
+  return tree;
+};
+
+// Returns an array source+target objects for the specified nodes.
+function d3_layout_treeLinks(nodes) {
+  return d3.merge(nodes.map(function(parent) {
+    return (parent.children || []).map(function(child) {
+      return {source: parent, target: child};
+    });
+  }));
+}
+
+function d3_layout_treeSeparation(a, b) {
+  return a.parent == b.parent ? 1 : 2;
+}
+
+// function d3_layout_treeSeparationRadial(a, b) {
+//   return (a.parent == b.parent ? 1 : 2) / a.depth;
+// }
+
+function d3_layout_treeLeft(node) {
+  return node.children ? node.children[0] : node._tree.thread;
+}
+
+function d3_layout_treeRight(node) {
+  return node.children ? node.children[node.children.length - 1] : node._tree.thread;
+}
+
+function d3_layout_treeSearch(node, compare) {
+  var children = node.children;
+  if (children) {
+    var child,
+        n = children.length,
+        i = -1;
+    while (++i < n) {
+      if (compare(child = d3_layout_treeSearch(children[i], compare), node) > 0) {
+        node = child;
+      }
+    }
+  }
+  return node;
+}
+
+function d3_layout_treeRightmost(a, b) {
+  return a.x - b.x;
+}
+
+function d3_layout_treeLeftmost(a, b) {
+  return b.x - a.x;
+}
+
+function d3_layout_treeDeepest(a, b) {
+  return a.depth - b.depth;
+}
+
+function d3_layout_treeVisitAfter(node, callback) {
+  function visit(node, previousSibling) {
+    var children = node.children;
+    if (children) {
+      var child,
+          previousChild = null,
+          i = -1,
+          n = children.length;
+      while (++i < n) {
+        child = children[i];
+        visit(child, previousChild);
+        previousChild = child;
+      }
+    }
+    callback(node, previousSibling);
+  }
+  visit(node, null);
+}
+
+function d3_layout_treeShift(node) {
+  var shift = 0,
+      change = 0,
+      children = node.children,
+      i = children.length,
+      child;
+  while (--i >= 0) {
+    child = children[i]._tree;
+    child.prelim += shift;
+    child.mod += shift;
+    shift += child.shift + (change += child.change);
+  }
+}
+
+function d3_layout_treeMove(ancestor, node, shift) {
+  ancestor = ancestor._tree;
+  node = node._tree;
+  var change = shift / (node.number - ancestor.number);
+  ancestor.change += change;
+  node.change -= change;
+  node.shift += shift;
+  node.prelim += shift;
+  node.mod += shift;
+}
+
+function d3_layout_treeAncestor(vim, node, ancestor) {
+  return vim._tree.ancestor.parent == node.parent
+      ? vim._tree.ancestor
+      : ancestor;
+}
+// Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
+d3.layout.treemap = function() {
+  var hierarchy = d3.layout.hierarchy(),
+      round = Math.round,
+      size = [1, 1], // width, height
+      sticky = false,
+      stickies;
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
@@ -646,7 +1297,7 @@ d3.layout.treemap = function() {
     if (!node.children) return;
     var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
         row = [],
-        children = node.children.slice().sort(d3_layout_treemapSort),
+        children = node.children.slice(), // copy-on-write
         child,
         best = Infinity, // the best row score so far
         score, // the current row score
@@ -672,6 +1323,26 @@ d3.layout.treemap = function() {
       row.length = row.area = 0;
     }
     node.children.forEach(squarify);
+  }
+
+  // Recursively resizes the specified node's children into existing rows.
+  // Preserves the existing layout!
+  function stickify(node) {
+    if (!node.children) return;
+    var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
+        children = node.children.slice(), // copy-on-write
+        child,
+        row = [];
+    row.area = 0;
+    while (child = children.pop()) {
+      row.push(child);
+      row.area += child.area;
+      if (child.z != null) {
+        position(row, child.z ? rect.dx : rect.dy, rect, !children.length);
+        row.length = row.area = 0;
+      }
+    }
+    node.children.forEach(stickify);
   }
 
   // Computes the score for the specified row, as the worst aspect ratio.
@@ -709,6 +1380,7 @@ d3.layout.treemap = function() {
         o.dy = v;
         x += o.dx = round(o.area / v);
       }
+      o.z = true;
       o.dx += rect.x + rect.dx - x; // rounding error
       rect.y += v;
       rect.dy -= v;
@@ -721,6 +1393,7 @@ d3.layout.treemap = function() {
         o.dx = v;
         y += o.dy = round(o.area / v);
       }
+      o.z = false;
       o.dy += rect.y + rect.dy - y; // rounding error
       rect.x += v;
       rect.dx -= v;
@@ -728,27 +1401,22 @@ d3.layout.treemap = function() {
   }
 
   function treemap(d) {
-    var nodes = [],
-        root = sum(d, 0, nodes);
+    var nodes = stickies || hierarchy(d),
+        root = nodes[0];
     root.x = 0;
     root.y = 0;
     root.dx = size[0];
     root.dy = size[1];
-    squarify(root);
+    if (stickies) hierarchy.revalue(root);
+    scale(root, size[0] * size[1] / root.value);
+    (stickies ? stickify : squarify)(root);
+    if (sticky) stickies = nodes;
     return nodes;
   }
 
-  treemap.children = function(x) {
-    if (!arguments.length) return children;
-    children = x;
-    return treemap;
-  };
-
-  treemap.value = function(x) {
-    if (!arguments.length) return value;
-    value = x;
-    return treemap;
-  };
+  treemap.sort = d3.rebind(treemap, hierarchy.sort);
+  treemap.children = d3.rebind(treemap, hierarchy.children);
+  treemap.value = d3.rebind(treemap, hierarchy.value);
 
   treemap.size = function(x) {
     if (!arguments.length) return size;
@@ -762,18 +1430,13 @@ d3.layout.treemap = function() {
     return treemap;
   };
 
+  treemap.sticky = function(x) {
+    if (!arguments.length) return sticky;
+    sticky = x;
+    stickies = null;
+    return treemap;
+  };
+
   return treemap;
 };
-
-function d3_layout_treemapChildren(d) {
-  return d.children;
-}
-
-function d3_layout_treemapValue(d) {
-  return d.value;
-}
-
-function d3_layout_treemapSort(a, b) {
-  return b.area - a.area;
-}
 })()

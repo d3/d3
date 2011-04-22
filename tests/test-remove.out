@@ -1,0 +1,9 @@
+initialize:
+   <body><svg/><div/></body>
+
+remove svg:
+   <body><div/></body>
+
+removeAll div:
+   <body/>
+
