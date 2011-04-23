@@ -1,4 +1,43 @@
 (function(){d3.geo = {};
+d3.geo.azimuthal = function() {
+  var scale = 200,
+      translate = [480, 250],
+      pole = 1;
+
+  function azimuthal(coordinates) {
+    var p = p < 0 ? 0 :
+      p > 1 ? 1 :
+      1 - pole * coordinates[1] / 90,
+        t = coordinates[0] * d3_radians,
+        x = p * Math.cos(t),
+        y = p * Math.sin(t);
+    return [
+      scale * x + translate[0],
+      scale * y + translate[1]
+    ];
+  }
+
+  // 1 or -1 means N or S hemisphere
+  azimuthal.hemisphere = function(x) {
+    if (!arguments.length) return pole;
+    pole = +x;
+    return azimuthal;
+  };
+
+  azimuthal.scale = function(x) {
+    if (!arguments.length) return scale;
+    scale = +x;
+    return azimuthal;
+  };
+
+  azimuthal.translate = function(x) {
+    if (!arguments.length) return translate;
+    translate = [+x[0], +x[1]];
+    return azimuthal;
+  };
+
+  return azimuthal;
+};
 // Derived from Tom Carden's Albers implementation for Protovis.
 // http://gist.github.com/476238
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
@@ -140,45 +179,6 @@ d3.geo.mercator = function() {
   };
 
   return mercator;
-};
-d3.geo.stereographic = function() {
-  var scale = 200,
-      translate = [480, 250],
-      pole = 1;
-
-  function stereographic(coordinates) {
-    var p = 1 - pole * coordinates[1] / 90,
-        t = coordinates[0] * d3_radians;
-    if (p < 0) p = 0;
-    else if (p > 1) p = 1;
-    var x = p * Math.cos(t),
-        y = p * Math.sin(t);
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
-  }
-
-  // 1 or -1 means N or S hemisphere
-  stereographic.hemisphere = function(x) {
-    if (!arguments.length) return pole;
-    pole = +x;
-    return stereographic;
-  };
-
-  stereographic.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return stereographic;
-  };
-
-  stereographic.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return stereographic;
-  };
-
-  return stereographic;
 };
 /**
  * Returns a function that, given a GeoJSON object (e.g., a feature), returns

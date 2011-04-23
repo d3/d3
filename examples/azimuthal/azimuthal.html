@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Polar Stereographic Projection</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.geo.js"></script>
+    <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="azimuthal.css"/>
+  </head>
+  <body>
+    <h3>Polar Stereographic Projection</h3>
+    <script type="text/javascript" src="azimuthal.js"></script><p>
+    <div id="scale">scale: <span>200</span></div><p>
+    <div id="translate-x">translate.x: <span>480</span></div><p>
+    <div id="translate-y">translate.y: <span>250</span></div>
+    <script type="text/javascript">
+
+  $("#scale").slider({
+    min: 0,
+    max: 3000,
+    value: 200,
+    slide: function(event, ui) {
+      xy.scale(ui.value);
+      refresh();
+    }
+  });
+
+  $("#translate-x").slider({
+    min: -2000,
+    max: 2000,
+    value: 480,
+    slide: function(event, ui) {
+      var translate = xy.translate();
+      translate[0] = ui.value;
+      xy.translate(translate);
+      refresh();
+    }
+  });
+
+  $("#translate-y").slider({
+    min: -2000,
+    max: 2000,
+    value: 250,
+    slide: function(event, ui) {
+      var translate = xy.translate();
+      translate[1] = ui.value;
+      xy.translate(translate);
+      refresh();
+    }
+  });
+
+    </script>
+  </body>
+</html>

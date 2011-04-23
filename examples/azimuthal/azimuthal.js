@@ -1,5 +1,5 @@
 // Our projection.
-var xy = d3.geo.stereographic(),
+var xy = d3.geo.azimuthal(),
     path = d3.geo.path().projection(xy);
 
 var states = d3.select("body")
