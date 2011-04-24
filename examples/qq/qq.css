@@ -1,0 +1,3 @@
+.qq circle, .qq .diagonal, .qq .box { stroke: #000; stroke-width: .5px; fill: none; }
+.qq .box { stroke: #666; }
+.qq { font: 12px sans-serif; }
