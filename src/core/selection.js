@@ -339,7 +339,7 @@ function d3_selection(groups) {
   };
 
   groups.style = function(name, value, priority) {
-    if (arguments.length < 3) priority = null;
+    if (arguments.length < 3) priority = "";
 
     // If no value is specified, return the first value.
     if (arguments.length < 2) {
