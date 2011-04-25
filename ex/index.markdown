@@ -180,6 +180,17 @@ title: Examples
 </div>
 
 <div class="list">
+  <a href="bubble.html">
+    <img src="../bubble.png"/>
+  </a>
+  <h4><a href="bubble.html">Bubble Chart</a></h4>
+
+  <p>Bubble charts encode data in the area of circles. Although less
+  perceptually-accurate than bar charts, they can pack hundreds of values into a
+  small space.</p>
+</div>
+
+<div class="list">
   <a href="cluster.html">
     <img src="../cluster.png"/>
   </a>
