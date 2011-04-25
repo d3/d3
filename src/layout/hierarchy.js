@@ -17,15 +17,13 @@ d3.layout.hierarchy = function() {
           j = depth + 1;
       while (++i < n) {
         d = recurse(datas[i], j, nodes);
-        if (d.value > 0) { // ignore NaN, negative, etc.
-          c.push(d);
-          v += d.value;
-          d.parent = node;
-        }
+        d.parent = node;
+        c.push(d);
+        v += d.value;
       }
       if (sort) c.sort(sort);
-      node.value = v;
-    } else {
+      if (value) node.value = v;
+    } else if (value) {
       node.value = value.call(hierarchy, data, depth);
     }
     return node;
@@ -40,10 +38,11 @@ d3.layout.hierarchy = function() {
           n = children.length,
           j = depth + 1;
       while (++i < n) v += revalue(children[i], j);
-    } else {
+    } else if (value) {
       v = value.call(hierarchy, node.data, depth);
     }
-    return node.value = v;
+    if (value) node.value = v;
+    return v;
   }
 
   function hierarchy(d) {

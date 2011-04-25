@@ -760,15 +760,13 @@ d3.layout.hierarchy = function() {
           j = depth + 1;
       while (++i < n) {
         d = recurse(datas[i], j, nodes);
-        if (d.value > 0) { // ignore NaN, negative, etc.
-          c.push(d);
-          v += d.value;
-          d.parent = node;
-        }
+        d.parent = node;
+        c.push(d);
+        v += d.value;
       }
       if (sort) c.sort(sort);
-      node.value = v;
-    } else {
+      if (value) node.value = v;
+    } else if (value) {
       node.value = value.call(hierarchy, data, depth);
     }
     return node;
@@ -783,10 +781,11 @@ d3.layout.hierarchy = function() {
           n = children.length,
           j = depth + 1;
       while (++i < n) v += revalue(children[i], j);
-    } else {
+    } else if (value) {
       v = value.call(hierarchy, node.data, depth);
     }
-    return node.value = v;
+    if (value) node.value = v;
+    return v;
   }
 
   function hierarchy(d) {
@@ -1039,7 +1038,7 @@ function d3_layout_packPlace(a, b, c) {
 }
 // Implements a hierarchical layout using the cluster (or dendogram) algorithm.
 d3.layout.cluster = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
       size = [1, 1]; // width, height
 
@@ -1080,7 +1079,6 @@ d3.layout.cluster = function() {
 
   cluster.sort = d3.rebind(cluster, hierarchy.sort);
   cluster.children = d3.rebind(cluster, hierarchy.children);
-  cluster.value = d3.rebind(cluster, hierarchy.value);
   cluster.links = d3_layout_treeLinks;
 
   cluster.separation = function(x) {
@@ -1121,7 +1119,7 @@ function d3_layout_clusterRight(node) {
 }
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
       size = [1, 1]; // width, height
 
@@ -1248,7 +1246,6 @@ d3.layout.tree = function() {
 
   tree.sort = d3.rebind(tree, hierarchy.sort);
   tree.children = d3.rebind(tree, hierarchy.children);
-  tree.value = d3.rebind(tree, hierarchy.value);
   tree.links = d3_layout_treeLinks;
 
   tree.separation = function(x) {

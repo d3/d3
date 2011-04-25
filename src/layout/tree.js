@@ -1,6 +1,6 @@
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
       size = [1, 1]; // width, height
 
@@ -127,7 +127,6 @@ d3.layout.tree = function() {
 
   tree.sort = d3.rebind(tree, hierarchy.sort);
   tree.children = d3.rebind(tree, hierarchy.children);
-  tree.value = d3.rebind(tree, hierarchy.value);
   tree.links = d3_layout_treeLinks;
 
   tree.separation = function(x) {
