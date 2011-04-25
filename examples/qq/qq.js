@@ -35,13 +35,14 @@ normal3.label = "Mixture of 3 Gaussians";
 
 var w = 270,
     h = 270,
-    m = [10, 50, 20, 30], // top right bottom left
+    m = [10, 30, 20, 60], // top right bottom left
     min = Infinity,
     max = -Infinity;
 
 var chart = d3.chart.qq()
     .width(w).height(h)
     .domain([-.5, 1.5])
+    .tickFormat(function(d) { return d * 100; })
     .distribution(function(d) { return d.dist; });
 
 /* Distributions for comparison. */
@@ -53,7 +54,8 @@ var wrapper = d3.select("#chart").append("svg:svg")
 var vis = wrapper.selectAll("g")
     .data(dists.map(function(d) { return {dist: d3.range(10000).map(d), values: turkers.percent.values, label: d.label}; }))
   .enter().append("svg:g")
-    .attr("transform", function(d, i) { return "translate(" + ((w + m[3]) * i + m[3]) + "," + m[0] + ")"; })
+    .attr("transform", function(d, i) { return "translate(" + ((w + m[1]) * i + m[3]) + "," + m[0] + ")"; })
+    .attr("class", function(d, i) { return "qq" + i; })
     .call(chart);
 
 wrapper.append("svg:text")

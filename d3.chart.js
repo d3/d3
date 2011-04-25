@@ -542,6 +542,7 @@ d3.chart.qq = function() {
       duration = 0,
       domain = null,
       intervals = 100,
+      tickFormat = null,
       distribution = d3_chart_qqUniform;
       values = d3_chart_qqValues;
       qi = d3_chart_qqQi;
@@ -645,6 +646,89 @@ d3.chart.qq = function() {
           .duration(duration)
           .attr("width", function(d) { return x1(d[0]); })
           .attr("height", function(d) { return x1(d[1]); });
+
+      var xformat = tickFormat || x1.tickFormat(4);
+
+      // Update x-ticks.
+      var xtick = g.selectAll("g.x.tick")
+          .data(x1.ticks(4), function(d) {
+            return this.textContent || xformat(d);
+          });
+
+      var xtickEnter = xtick.enter().append("svg:g")
+          .attr("class", "x tick")
+          .attr("transform", function(d) { return "translate(" + x0(d) + "," + height + ")"; })
+          .attr("opacity", 1e-6);
+
+      xtickEnter.append("svg:line")
+          .attr("y1", 0)
+          .attr("y2", -5);
+
+      xtickEnter.append("svg:text")
+          .attr("text-anchor", "middle")
+          .attr("dy", "1em")
+          .text(xformat);
+
+      // Transition the entering ticks to the new scale, x1.
+      xtickEnter.transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(" + x1(d) + "," + height + ")"; })
+          .attr("opacity", 1);
+
+      // Transition the updating ticks to the new scale, x1.
+      var xtickUpdate = xtick.transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(" + x1(d) + "," + height + ")"; })
+          .attr("opacity", 1);
+
+      // Transition the exiting ticks to the new scale, x1.
+      xtick.exit().transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(" + x1(d) + "," + height + ")"; })
+          .attr("opacity", 1e-6)
+          .remove();
+
+      var yformat = tickFormat || y1.tickFormat(4);
+
+      // Update ticks.
+      var ytick = g.selectAll("g.y.tick")
+          .data(y1.ticks(4), function(d) {
+            return this.textContent || yformat(d);
+          });
+
+      var ytickEnter = ytick.enter().append("svg:g")
+          .attr("class", "y tick")
+          .attr("transform", function(d) { return "translate(0," + y0(d) + ")"; })
+          .attr("opacity", 1e-6);
+
+      ytickEnter.append("svg:line")
+          .attr("x1", 0)
+          .attr("x2", 5);
+
+      ytickEnter.append("svg:text")
+          .attr("text-anchor", "end")
+          .attr("dx", "-.5em")
+          .attr("dy", ".3em")
+          .text(yformat);
+
+      // Transition the entering ticks to the new scale, y1.
+      ytickEnter.transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(0," + y1(d) + ")"; })
+          .attr("opacity", 1);
+
+      // Transition the updating ticks to the new scale, y1.
+      var ytickUpdate = ytick.transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(0," + y1(d) + ")"; })
+          .attr("opacity", 1);
+
+      // Transition the exiting ticks to the new scale, y1.
+      ytick.exit().transition()
+          .duration(duration)
+          .attr("transform", function(d) { return "translate(0," + y1(d) + ")"; })
+          .attr("opacity", 1e-6)
+          .remove();
     });
   }
 
@@ -687,6 +771,12 @@ d3.chart.qq = function() {
   qq.values = function(x) {
     if (!arguments.length) return values;
     values = x;
+    return qq;
+  };
+
+  qq.tickFormat = function(x) {
+    if (!arguments.length) return tickFormat;
+    tickFormat = x;
     return qq;
   };
 
