@@ -18,6 +18,7 @@ d3.json("miserables.json", function(json) {
       .data(json.links)
     .enter().append("svg:line")
       .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
@@ -33,10 +34,13 @@ d3.json("miserables.json", function(json) {
       .style("fill", function(d) { return fill(d.group); })
       .call(force.drag);
 
-  vis.attr("opacity", 0)
+  node.append("svg:title")
+      .text(function(d) { return d.name; });
+
+  vis.style("opacity", 1e-6)
     .transition()
       .duration(1000)
-      .attr("opacity", 1);
+      .style("opacity", 1);
 
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })
