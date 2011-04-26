@@ -1513,7 +1513,8 @@ function d3_selection(groups) {
 
   // type can be namespaced, e.g., "click.foo"
   // listener can be null for removal
-  groups.on = function(type, listener) {
+  groups.on = function(type, listener, capture) {
+    if (arguments.length < 3) capture = false;
 
     // parse the type specifier
     var i = type.indexOf("."),
@@ -1522,8 +1523,8 @@ function d3_selection(groups) {
 
     // remove the old event listener, and add the new event listener
     return groups.each(function(d, i) {
-      if (this[name]) this.removeEventListener(typo, this[name], false);
-      if (listener) this.addEventListener(typo, this[name] = l, false);
+      if (this[name]) this.removeEventListener(typo, this[name], capture);
+      if (listener) this.addEventListener(typo, this[name] = l, capture);
 
       // wrapped event listener that preserves d, i
       function l(e) {
