@@ -349,21 +349,41 @@ d3.layout.force = function() {
         m = links.length,
         w = size[0],
         h = size[1],
+        neighbors,
         o;
 
-    // TODO initialize positions of new nodes using constraints (links)
     for (i = 0; i < n; ++i) {
-      o = nodes[i];
-      if (isNaN(o.x)) o.x = Math.random() * w;
-      if (isNaN(o.y)) o.y = Math.random() * h;
-      if (isNaN(o.px)) o.px = o.x;
-      if (isNaN(o.py)) o.py = o.y;
+      (o = nodes[i]).index = i;
     }
 
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
       if (typeof o.target == "number") o.target = nodes[o.target];
+    }
+
+    for (i = 0; i < n; ++i) {
+      o = nodes[i];
+      if (isNaN(o.x)) o.x = d3_layout_forcePosition(neighbor(i), "x", w);
+      if (isNaN(o.y)) o.y = d3_layout_forcePosition(neighbor(i), "y", h);
+      if (isNaN(o.px)) o.px = o.x;
+      if (isNaN(o.py)) o.py = o.y;
+    }
+
+    // initialize neighbors lazily
+    function neighbor(i) {
+      if (!neighbors) {
+        neighbors = [];
+        for (j = 0; j < n; ++j) {
+          neighbors[j] = [];
+        }
+        for (j = 0; j < m; ++j) {
+          var o = links[j];
+          neighbors[o.source.index].push(o.target);
+          neighbors[o.target.index].push(o.source);
+        }
+      }
+      return neighbors[i];
     }
 
     return force.resume();
@@ -449,6 +469,22 @@ function d3_layout_forceDragDown(d, i) {
   d3_layout_forceDragElement = this;
   d3.event.stopPropagation();
   d3.event.preventDefault();
+}
+
+// initialize node position based on neighbors
+function d3_layout_forcePosition(nodes, dimension, size) {
+  var i = -1,
+      n = nodes.length,
+      m = 0,
+      x,
+      sum = 0;
+  while (++i < n) {
+    if (!isNaN(x = nodes[i][dimension])) {
+      sum += x;
+      m++;
+    }
+  }
+  return m ? sum / m : Math.random() * size;
 }
 d3.layout.partition = function() {
   var hierarchy = d3.layout.hierarchy(),
