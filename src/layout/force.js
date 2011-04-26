@@ -5,9 +5,9 @@ d3.layout.force = function() {
       size = [1, 1],
       alpha,
       drag = .9,
-      distance = 30,
-      charge = -60,
-      gravity = .001,
+      distance = 20,
+      charge = -30,
+      gravity = .1,
       theta = .8,
       interval,
       nodes,
@@ -105,7 +105,7 @@ d3.layout.force = function() {
       o = nodes[i];
       s = x - o.x;
       t = y - o.y;
-      l = kg * Math.sqrt(s * s + t * t);
+      l = kg * Math.pow(s * s + t * t, .01);
       s *= l;
       t *= l;
       o.fx += s;
