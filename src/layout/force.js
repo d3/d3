@@ -5,9 +5,9 @@ d3.layout.force = function() {
       size = [1, 1],
       alpha,
       drag = .9,
-      distance = 30,
-      charge = -60,
-      gravity = .001,
+      distance = 20,
+      charge = -30,
+      gravity = .1,
       theta = .8,
       interval,
       nodes,
@@ -105,7 +105,7 @@ d3.layout.force = function() {
       o = nodes[i];
       s = x - o.x;
       t = y - o.y;
-      l = kg * Math.sqrt(s * s + t * t);
+      l = kg * Math.pow(s * s + t * t, .01);
       s *= l;
       t *= l;
       o.fx += s;
@@ -193,25 +193,56 @@ d3.layout.force = function() {
 
   force.start = function() {
     var i,
+        j,
         n = nodes.length,
         m = links.length,
         w = size[0],
         h = size[1],
+        neighbors,
         o;
 
-    // TODO initialize positions of new nodes using constraints (links)
     for (i = 0; i < n; ++i) {
-      o = nodes[i];
-      if (isNaN(o.x)) o.x = Math.random() * w;
-      if (isNaN(o.y)) o.y = Math.random() * h;
-      if (isNaN(o.px)) o.px = o.x;
-      if (isNaN(o.py)) o.py = o.y;
+      (o = nodes[i]).index = i;
     }
 
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
       if (typeof o.target == "number") o.target = nodes[o.target];
+    }
+
+    for (i = 0; i < n; ++i) {
+      o = nodes[i];
+      if (isNaN(o.x)) o.x = position("x", w);
+      if (isNaN(o.y)) o.y = position("y", h);
+      if (isNaN(o.px)) o.px = o.x;
+      if (isNaN(o.py)) o.py = o.y;
+    }
+
+    // initialize node position based on first neighbor
+    function position(dimension, size) {
+      var neighbors = neighbor(i),
+          j = -1,
+          m = neighbors.length,
+          x;
+      while (++j < m) if (!isNaN(x = neighbors[j][dimension])) return x;
+      return Math.random() * size;
+    }
+
+    // initialize neighbors lazily
+    function neighbor() {
+      if (!neighbors) {
+        neighbors = [];
+        for (j = 0; j < n; ++j) {
+          neighbors[j] = [];
+        }
+        for (j = 0; j < m; ++j) {
+          var o = links[j];
+          neighbors[o.source.index].push(o.target);
+          neighbors[o.target.index].push(o.source);
+        }
+      }
+      return neighbors[i];
     }
 
     return force.resume();
@@ -232,20 +263,29 @@ d3.layout.force = function() {
   force.drag = function() {
 
     this
-      .on("mouseover", d3_layout_forceDragOver)
-      .on("mouseout", d3_layout_forceDragOut)
-      .on("mousedown", d3_layout_forceDragDown);
+      .on("mouseover.force", d3_layout_forceDragOver)
+      .on("mouseout.force", d3_layout_forceDragOut)
+      .on("mousedown.force", d3_layout_forceDragDown);
 
     d3.select(window)
-      .on("mousemove", dragmove)
-      .on("mouseup", dragup);
+      .on("mousemove.force", dragmove)
+      .on("mouseup.force", dragup, true);
 
     return force;
   };
 
   function dragmove() {
     if (!d3_layout_forceDragNode) return;
+
+    // O NOES! The drag element was removed from the DOM.
+    if (!d3_layout_forceDragElement.parentNode) {
+      d3_layout_forceDragNode.fixed = false;
+      d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+      return;
+    }
+
     var m = d3.svg.mouse(d3_layout_forceDragElement);
+    d3_layout_forceDragMoved = true;
     d3_layout_forceDragNode.px = m[0];
     d3_layout_forceDragNode.py = m[1];
     force.resume(); // restart annealing
@@ -253,6 +293,13 @@ d3.layout.force = function() {
 
   function dragup() {
     if (!d3_layout_forceDragNode) return;
+
+    // If the node was moved, prevent the mouseup from propagating.
+    if (d3_layout_forceDragMoved) {
+      d3.event.stopPropagation();
+      d3.event.preventDefault();
+    }
+
     dragmove();
     d3_layout_forceDragNode.fixed = false;
     d3_layout_forceDragNode = d3_layout_forceDragElement = null;
@@ -262,6 +309,7 @@ d3.layout.force = function() {
 };
 
 var d3_layout_forceDragNode,
+    d3_layout_forceDragMoved,
     d3_layout_forceDragElement;
 
 function d3_layout_forceDragOver(d) {
@@ -274,8 +322,9 @@ function d3_layout_forceDragOut(d) {
   }
 }
 
-function d3_layout_forceDragDown(d) {
+function d3_layout_forceDragDown(d, i) {
   (d3_layout_forceDragNode = d).fixed = true;
+  d3_layout_forceDragMoved = false;
   d3_layout_forceDragElement = this;
   d3.event.stopPropagation();
   d3.event.preventDefault();

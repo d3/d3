@@ -39,6 +39,7 @@ var vis = d3.select("#chart")
     .attr("height", h);
 
 var force = d3.layout.force()
+    .distance(30)
     .nodes(nodes)
     .links(links)
     .size([w, h]);
@@ -84,6 +85,7 @@ vis.on("mousedown", function() {
 restart();
 
 function restart() {
+  force.start();
 
   vis.selectAll("line.link")
       .data(links)
@@ -100,10 +102,8 @@ function restart() {
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-      .attr("r", 5)
+      .attr("r", 4.5)
       .call(force.drag);
-
-  force.start();
 }
 
     </script>
