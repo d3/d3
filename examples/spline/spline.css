@@ -9,11 +9,12 @@ circle, .line {
 }
 
 circle {
-  fill: rgba(255,255,255,.2);
+  fill: #fff;
+  fill-opacity: .2;
   cursor: move;
 }
 
 circle.selected {
-  fill: rgba(255,239,14,.2);
+  fill: #ff7f0e;
   stroke: #ff7f0e;
 }
