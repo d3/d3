@@ -230,6 +230,7 @@ d3.chart.box = function() {
           .style("opacity", 1e-6)
           .remove();
     });
+    d3.timer.immediate();
   }
 
   box.width = function(x) {

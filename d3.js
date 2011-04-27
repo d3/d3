@@ -1873,6 +1873,10 @@ d3.timer = function(callback) {
   d3_timer(callback, 0);
 };
 
+d3.timer.immediate = function() {
+  d3_timer_step(true);
+};
+
 function d3_timer(callback, delay) {
   var now = Date.now(),
       found = false,
@@ -1909,16 +1913,22 @@ function d3_timer(callback, delay) {
   }
 }
 
-function d3_timer_step() {
+function d3_timer_step(immediateOnly) {
   var elapsed,
       now = Date.now(),
-      t0 = null,
       t1 = d3_timer_queue;
 
   while (t1) {
     elapsed = now - t1.then;
-    if (elapsed > t1.delay) t1.flush = t1.callback(elapsed);
-    t1 = (t0 = t1).next;
+    if (immediateOnly && t1.delay === 0 ||
+        !immediateOnly && elapsed > t1.delay)
+      t1.flush = t1.callback(elapsed);
+    t1 = t1.next;
+  }
+
+  if (immediateOnly) {
+    d3_timer_flush();
+    return;
   }
 
   var delay = d3_timer_flush() - now;
