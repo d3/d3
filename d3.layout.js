@@ -345,6 +345,7 @@ d3.layout.force = function() {
 
   force.start = function() {
     var i,
+        j,
         n = nodes.length,
         m = links.length,
         w = size[0],
@@ -364,14 +365,24 @@ d3.layout.force = function() {
 
     for (i = 0; i < n; ++i) {
       o = nodes[i];
-      if (isNaN(o.x)) o.x = d3_layout_forcePosition(neighbor(i), "x", w);
-      if (isNaN(o.y)) o.y = d3_layout_forcePosition(neighbor(i), "y", h);
+      if (isNaN(o.x)) o.x = position("x", w);
+      if (isNaN(o.y)) o.y = position("y", h);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
     }
 
+    // initialize node position based on first neighbor
+    function position(dimension, size) {
+      var neighbors = neighbor(i),
+          j = -1,
+          m = neighbors.length,
+          x;
+      while (++j < m) if (!isNaN(x = neighbors[j][dimension])) return x;
+      return Math.random() * size;
+    }
+
     // initialize neighbors lazily
-    function neighbor(i) {
+    function neighbor() {
       if (!neighbors) {
         neighbors = [];
         for (j = 0; j < n; ++j) {
@@ -469,22 +480,6 @@ function d3_layout_forceDragDown(d, i) {
   d3_layout_forceDragElement = this;
   d3.event.stopPropagation();
   d3.event.preventDefault();
-}
-
-// initialize node position based on neighbors
-function d3_layout_forcePosition(nodes, dimension, size) {
-  var i = -1,
-      n = nodes.length,
-      m = 0,
-      x,
-      sum = 0;
-  while (++i < n) {
-    if (!isNaN(x = nodes[i][dimension])) {
-      sum += x;
-      m++;
-    }
-  }
-  return m ? sum / m : Math.random() * size;
 }
 d3.layout.partition = function() {
   var hierarchy = d3.layout.hierarchy(),
