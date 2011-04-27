@@ -255,13 +255,8 @@ d3.layout.force = function() {
     y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
-      s = x - o.x;
-      t = y - o.y;
-      l = kg * Math.pow(s * s + t * t, .01);
-      s *= l;
-      t *= l;
-      o.fx += s;
-      o.fy += t;
+      o.fx += (x - o.x) * kg;
+      o.fy += (y - o.y) * kg;
     }
 
     // apply charge forces
@@ -421,7 +416,8 @@ d3.layout.force = function() {
 
     d3.select(window)
       .on("mousemove.force", dragmove)
-      .on("mouseup.force", dragup, true);
+      .on("mouseup.force", dragup, true)
+      .on("click.force", d3_layout_forceDragClick, true);
 
     return force;
   };
@@ -447,9 +443,10 @@ d3.layout.force = function() {
     if (!d3_layout_forceDragNode) return;
 
     // If the node was moved, prevent the mouseup from propagating.
+    // Also prevent the subsequent click from propagating (e.g., for anchors).
     if (d3_layout_forceDragMoved) {
-      d3.event.stopPropagation();
-      d3.event.preventDefault();
+      d3_layout_forceStopClick = true;
+      d3_layout_forceCancel();
     }
 
     dragmove();
@@ -462,6 +459,7 @@ d3.layout.force = function() {
 
 var d3_layout_forceDragNode,
     d3_layout_forceDragMoved,
+    d3_layout_forceStopClick,
     d3_layout_forceDragElement;
 
 function d3_layout_forceDragOver(d) {
@@ -478,6 +476,17 @@ function d3_layout_forceDragDown(d, i) {
   (d3_layout_forceDragNode = d).fixed = true;
   d3_layout_forceDragMoved = false;
   d3_layout_forceDragElement = this;
+  d3_layout_forceCancel();
+}
+
+function d3_layout_forceDragClick() {
+  if (d3_layout_forceStopClick) {
+    d3_layout_forceCancel();
+    d3_layout_forceStopClick = false;
+  }
+}
+
+function d3_layout_forceCancel() {
   d3.event.stopPropagation();
   d3.event.preventDefault();
 }

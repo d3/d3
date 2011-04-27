@@ -103,13 +103,8 @@ d3.layout.force = function() {
     y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
-      s = x - o.x;
-      t = y - o.y;
-      l = kg * Math.pow(s * s + t * t, .01);
-      s *= l;
-      t *= l;
-      o.fx += s;
-      o.fy += t;
+      o.fx += (x - o.x) * kg;
+      o.fy += (y - o.y) * kg;
     }
 
     // apply charge forces
