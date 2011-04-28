@@ -16,9 +16,9 @@ d3.layout.force = function() {
 
   function repulse(node, kc) {
     return function(quad, x1, y1, x2, y2) {
-      if (quad.point != node) {
-        var dx = (quad.cx - node.x) || Math.random(),
-            dy = (quad.cy - node.y) || Math.random(),
+      if (quad.point !== node) {
+        var dx = quad.cx - node.x,
+            dy = quad.cy - node.y,
             dn = 1 / Math.sqrt(dx * dx + dy * dy);
 
         /* Barnes-Hut criterion. */
@@ -29,7 +29,7 @@ d3.layout.force = function() {
           return true;
         }
 
-        if (quad.point) {
+        if (quad.point && isFinite(dn)) {
           var k = kc * dn * dn;
           node.x += dx * k;
           node.y += dy * k;
@@ -324,6 +324,11 @@ function d3_layout_forceAccumulate(quad) {
     });
   }
   if (quad.point) {
+    // jitter internal nodes that are coincident
+    if (!quad.leaf) {
+      quad.point.x += Math.random() - .5;
+      quad.point.y += Math.random() - .5;
+    }
     quad.count++;
     cx += quad.point.x;
     cy += quad.point.y;
