@@ -14,27 +14,6 @@ d3.layout.force = function() {
       links,
       distances;
 
-  function accumulate(quad) {
-    var cx = 0,
-        cy = 0;
-    quad.count = 0;
-    if (!quad.leaf) {
-      quad.nodes.forEach(function(c) {
-        accumulate(c);
-        quad.count += c.count;
-        cx += c.count * c.cx;
-        cy += c.count * c.cy;
-      });
-    }
-    if (quad.point) {
-      quad.count++;
-      cx += quad.point.x;
-      cy += quad.point.y;
-    }
-    quad.cx = cx / quad.count;
-    quad.cy = cy / quad.count;
-  }
-
   function repulse(node, kc) {
     return function(quad, x1, y1, x2, y2) {
       if (quad.point != node) {
@@ -45,15 +24,15 @@ d3.layout.force = function() {
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
           var k = kc * quad.count * dn * dn;
-          node.fx += dx * k;
-          node.fy += dy * k;
+          node.x += dx * k;
+          node.y += dy * k;
           return true;
         }
 
         if (quad.point) {
           var k = kc * dn * dn;
-          node.fx += dx * k;
-          node.fy += dy * k;
+          node.x += dx * k;
+          node.y += dy * k;
         }
       }
     };
@@ -71,11 +50,6 @@ d3.layout.force = function() {
         x, // x-distance
         y; // y-distance
 
-    // reset forces
-    i = -1; while (++i < n) {
-      (o = nodes[i]).fx = o.fy = 0;
-    }
-
     // gauss-seidel relaxation for links
     for (i = 0; i < m; ++i) {
       o = links[i];
@@ -83,8 +57,8 @@ d3.layout.force = function() {
       t = o.target;
       x = t.x - s.x;
       y = t.y - s.y;
-      if (l = Math.sqrt(x * x + y * y)) {
-        l = alpha * (l - distance) / l;
+      if (l = (x * x + y * y)) {
+        l = alpha * ((l = Math.sqrt(l)) - distance) / l;
         x *= l;
         y *= l;
         t.x -= x;
@@ -94,18 +68,18 @@ d3.layout.force = function() {
       }
     }
 
-    // compute quadtree center of mass
-    accumulate(q);
-
     // apply gravity forces
     var kg = alpha * gravity;
     x = size[0] / 2;
     y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
-      o.fx += (x - o.x) * kg;
-      o.fy += (y - o.y) * kg;
+      o.x += (x - o.x) * kg;
+      o.y += (y - o.y) * kg;
     }
+
+    // compute quadtree center of mass
+    d3_layout_forceAccumulate(q);
 
     // apply charge forces
     var kc = alpha * charge;
@@ -120,14 +94,12 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        x = o.px - (o.px = o.x);
-        y = o.py - (o.py = o.y);
-        o.x += o.fx - x * drag;
-        o.y += o.fy - y * drag;
+        o.x -= (o.px - (o.px = o.x)) * drag;
+        o.y -= (o.py - (o.py = o.y)) * drag;
       }
     }
 
-    event.tick.dispatch({type: "tick"});
+    event.tick.dispatch({type: "tick", alpha: alpha});
 
     // simulated annealing, basically
     return (alpha *= .99) < .005;
@@ -337,4 +309,25 @@ function d3_layout_forceDragClick() {
 function d3_layout_forceCancel() {
   d3.event.stopPropagation();
   d3.event.preventDefault();
+}
+
+function d3_layout_forceAccumulate(quad) {
+  var cx = 0,
+      cy = 0;
+  quad.count = 0;
+  if (!quad.leaf) {
+    quad.nodes.forEach(function(c) {
+      d3_layout_forceAccumulate(c);
+      quad.count += c.count;
+      cx += c.count * c.cx;
+      cy += c.count * c.cy;
+    });
+  }
+  if (quad.point) {
+    quad.count++;
+    cx += quad.point.x;
+    cy += quad.point.y;
+  }
+  quad.cx = cx / quad.count;
+  quad.cy = cy / quad.count;
 }
