@@ -11,19 +11,18 @@ var points = d3.range(1, 5).map(function(i) {
 
 var selected = points[0];
 
-var wrapper = d3.select("#chart")
+var vis = d3.select("#chart")
   .append("svg:svg")
     .attr("width", w + p * 2)
-    .attr("height", h + p * 2);
-
-var vis = wrapper.append("svg:g")
+    .attr("height", h + p * 2)
+    .on("mousedown", function(d) {
+      var m = d3.svg.mouse(this),
+          index = points.push([m[0] - p, m[1] - p]) - 1;
+      selected = points[index];
+      update();
+    })
+  .append("svg:g")
     .attr("transform", "translate(" + p + "," + p + ")");
-
-// Use <rect> to ensure all "mousemove" events are captured.
-vis.append("svg:rect")
-    .attr("fill", "#fff")
-    .attr("width", w)
-    .attr("height", h);
 
 var line = d3.svg.line()
     .x(function(d) { return d[0]; })
@@ -50,13 +49,14 @@ function update() {
       .attr("cy", function(d) { return d[1]; })
       .attr("r", 6.5)
       .on("mousedown", function(d) {
+        var that = this;
         selected = d;
         update();
         var circle = d3.select(this);
-        wrapper.on("mousemove", function() {
-          var m = d3.svg.mouse(this);
-          d[0] = m[0] - p;
-          d[1] = m[1] - p;
+        d3.select(window).on("mousemove", function() {
+          var m = d3.svg.mouse(that);
+          d[0] = Math.max(0, Math.min(m[0], w));
+          d[1] = Math.max(0, Math.min(m[1], h));
           circle
               .attr("cx", d[0])
               .attr("cy", d[1]);
@@ -75,29 +75,22 @@ function update() {
 
 update();
 
-wrapper.on("mousedown", function(d) {
-  var m = d3.svg.mouse(this),
-      index = points.push([m[0] - p, m[1] - p]) - 1;
-  selected = points[index];
-  update();
-});
-
-wrapper.on("mouseup", function() {
-  wrapper.on("mousemove", null);
-  update();
-});
-
-d3.select(window).on("keydown", function() {
-  var e = d3.event;
-  // code 8 is backspace, code 46 is delete
-  if ((e.keyCode == 8 || e.keyCode == 46) && selected !== null) {
-    var index = points.indexOf(selected);
-    points.splice(index, 1);
-    selected = points.length ? points[index > 0 ? index - 1 : 0] : null;
-    update();
-    e.preventDefault();
-  }
-});
+d3.select(window)
+    .on("mouseup", function() {
+      d3.select(window).on("mousemove", null);
+      update();
+    })
+    .on("keydown", function() {
+      var e = d3.event;
+      // code 8 is backspace, code 46 is delete
+      if ((e.keyCode == 8 || e.keyCode == 46) && selected !== null) {
+        var index = points.indexOf(selected);
+        points.splice(index, 1);
+        selected = points.length ? points[index > 0 ? index - 1 : 0] : null;
+        update();
+        e.preventDefault();
+      }
+    });
 
 // Add interpolator dropdown
 var interpolators = [
