@@ -28,17 +28,12 @@ var line = d3.svg.line()
     .x(function(d) { return d[0]; })
     .y(function(d) { return d[1]; });
 
+var path = vis.append("svg:path")
+  .data([points])
+    .attr("class", "line");
+
 function update() {
-  var path = vis.selectAll("path")
-    .data(points.length ? [points] : []);
-
-  path.enter().append("svg:path")
-      .attr("class", "line")
-      .attr("d", line);
-
   path.attr("d", line);
-
-  path.exit().remove();
 
   var circle = vis.selectAll("circle")
       .data(points, function(d) { return d; });
