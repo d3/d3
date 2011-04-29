@@ -1,0 +1,5 @@
+.radar { font: 12px sans-serif; }
+.radar .observation.ob0 { stroke: lightsteelblue; fill: lightsteelblue; }
+.radar .observation.ob1 { stroke: steelblue; fill: steelblue; }
+.radar path { stroke-width: 1.5px; fill: none; }
+.radar .axes line { stroke: #ccc; stroke-width: 1.5px; }
