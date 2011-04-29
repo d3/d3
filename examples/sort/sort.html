@@ -8,9 +8,12 @@
   </head>
   <body>
     <div id="chart">
-      <button class="first last" onclick="randomize()">
+      <button class="first last"
+        onclick="randomize(document.getElementById('parallel').checked)">
         Restart
-      </button><p>
+      </button>
+      <label for="parallel"><input type="checkbox" id="parallel"/> Parallel</label>
+      <p>
     </div>
     <script type="text/javascript" src="sort.js"></script>
   </body>

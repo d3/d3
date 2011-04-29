@@ -17,8 +17,8 @@ randomize();
 
 var passes, i, timer = null;
 
-function randomize() {
-  passes = mergesort(d3.range(n).map(Math.random));
+function randomize(parallel) {
+  passes = mergesort(d3.range(n).map(Math.random), parallel);
   i = 0;
   if (timer != null) clearTimeout(timer);
   update();
@@ -52,25 +52,41 @@ function update() {
  * each sequential pass.
  * The first pass is performed at size = 2.
  */
-function mergesort(array) {
+function mergesort(array, parallel) {
   var passes = [array.slice()], size = 2;
   for (; size < array.length; size <<= 1) {
+    var chunks = [],
+        max = 0;
     for (var i = 0; i < array.length;) {
-      merge(array, i, i + (size >> 1), i += size);
+      var chunk = merge(array, i, i + (size >> 1), i += size);
+      if (chunk.length > max) max = chunk.length;
+      if (chunk.length) chunks.push(chunk);
+    }
+    if (parallel) {
+      var pass = null;
+      for (var i = 0; i < max; i++) {
+        pass = chunks.map(function(c, j) { return c[i] || pass[j]; });
+        passes.push(Array.prototype.concat.apply([], pass));
+      }
+    } else {
+      passes = passes.concat(Array.prototype.concat.apply([], chunks));
     }
   }
-  merge(array, 0, size >> 1, array.length);
+  passes = passes.concat(merge(array, 0, size >> 1, array.length));
 
   // Merges two adjacent sorted arrays in-place.
   function merge(array, start, middle, end) {
+    var passes = [],
+        start0 = start;
     for (; start < middle; start++) {
       if (array[start] > array[middle]) {
         var v = array[start];
         array[start] = array[middle];
         insert(array, middle, end, v);
-        passes.push(array.slice());
+        passes.push(parallel ? array.slice(start0, end) : array.slice());
       }
     }
+    return passes;
   }
 
   // Inserts the value v into the subarray specified by start and end.
