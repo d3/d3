@@ -1,8 +1,9 @@
-text {
-  font: bold 12px sans-serif;
-  fill: #fff;
+#clock {
+  background: #222;
+  width: 960px;
+  height: 700px;
 }
 
-circle {
-  fill: #222;
+text {
+  font: bold 13px sans-serif;
 }
