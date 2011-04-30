@@ -1,39 +1,54 @@
-var w = 800,
-    h = 600,
-    p = 20;
+var w = 960,
+    h = 500,
+    line = d3.svg.line(),
+    points = d3.range(1, 5).map(function(i) { return [i * w / 5, 50 + Math.random() * (h - 100)]; }),
+    dragged = null,
+    selected = points[0];
 
-var points = d3.range(1, 5).map(function(i) {
-  return [
-    i * w / 5,
-    50 + Math.random() * (h - 100)
-  ];
-});
+var vis = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
 
-var selected = points[0];
+vis.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h)
+    .on("mousedown", function() {
+      points.push(selected = dragged = d3.svg.mouse(vis.node()));
+      update();
+    });
 
-var vis = d3.select("#chart")
-  .append("svg:svg")
-    .attr("width", w + p * 2)
-    .attr("height", h + p * 2)
-    .on("mousedown", function(d) {
-      var m = d3.svg.mouse(this),
-          index = points.push([m[0] - p, m[1] - p]) - 1;
-      selected = points[index];
+vis.append("svg:path")
+    .data([points])
+    .attr("class", "line")
+    .call(update);
+
+d3.select(window)
+    .on("mousemove", mousemove)
+    .on("mouseup", mouseup)
+    .on("keydown", keydown);
+
+// Add interpolator dropdown
+d3.select("#interpolate")
+    .on("change", function() {
+      line.interpolate(this.value);
       update();
     })
-  .append("svg:g")
-    .attr("transform", "translate(" + p + "," + p + ")");
-
-var line = d3.svg.line()
-    .x(function(d) { return d[0]; })
-    .y(function(d) { return d[1]; });
-
-var path = vis.append("svg:path")
-  .data([points])
-    .attr("class", "line");
+  .selectAll("option")
+    .data([
+      "linear",
+      "step-before",
+      "step-after",
+      "basis",
+      "basis-closed",
+      "cardinal",
+      "cardinal-closed"
+    ])
+  .enter().append("option")
+    .attr("value", String)
+    .text(String);
 
 function update() {
-  path.attr("d", line);
+  vis.select("path").attr("d", line);
 
   var circle = vis.selectAll("circle")
       .data(points, function(d) { return d; });
@@ -42,71 +57,54 @@ function update() {
       .attr("class", function(d) { return d === selected ? "selected" : null; })
       .attr("cx", function(d) { return d[0]; })
       .attr("cy", function(d) { return d[1]; })
-      .attr("r", 6.5)
+      .attr("r", 1e-6)
       .on("mousedown", function(d) {
-        var that = this;
-        selected = d;
+        selected = dragged = d;
         update();
-        var circle = d3.select(this);
-        d3.select(window).on("mousemove", function() {
-          var m = d3.svg.mouse(that);
-          d[0] = Math.max(0, Math.min(m[0], w));
-          d[1] = Math.max(0, Math.min(m[1], h));
-          circle
-              .attr("cx", d[0])
-              .attr("cy", d[1]);
-          vis.selectAll("path")
-              .attr("d", line);
-        });
-        d3.event.preventDefault();
-        d3.event.stopPropagation();
-      });
+      })
+    .transition()
+      .duration(750)
+      .ease("elastic")
+      .attr("r", 6.5);
 
   circle
-      .attr("class", function(d) { return d === selected ? "selected" : null; });
+      .attr("class", function(d) { return d === selected ? "selected" : null; })
+      .attr("cx", function(d) { return d[0]; })
+      .attr("cy", function(d) { return d[1]; });
 
   circle.exit().remove();
+
+  if (d3.event) {
+    d3.event.preventDefault();
+    d3.event.stopPropagation();
+  }
 }
 
-update();
 
-d3.select(window)
-    .on("mouseup", function() {
-      d3.select(window).on("mousemove", null);
-      update();
-    })
-    .on("keydown", function() {
-      var e = d3.event;
-      // code 8 is backspace, code 46 is delete
-      if ((e.keyCode == 8 || e.keyCode == 46) && selected !== null) {
-        var index = points.indexOf(selected);
-        points.splice(index, 1);
-        selected = points.length ? points[index > 0 ? index - 1 : 0] : null;
-        update();
-        e.preventDefault();
-      }
-    });
-
-// Add interpolator dropdown
-var interpolators = [
-  "linear",
-  "step-before",
-  "step-after",
-  "basis",
-  "basis-closed",
-  "cardinal",
-  "cardinal-closed"
-];
-
-var select = d3.select("#interpolate");
-  
-select.selectAll("option")
-    .data(interpolators)
-  .enter().append("option")
-    .attr("value", String)
-    .text(String);
-
-select.on("change", function() {
-  line.interpolate(this.value);
+function mousemove() {
+  if (!dragged) return;
+  var m = d3.svg.mouse(vis.node());
+  dragged[0] = Math.max(0, Math.min(w, m[0]));
+  dragged[1] = Math.max(0, Math.min(h, m[1]));
   update();
-});
+}
+
+function mouseup() {
+  if (!dragged) return;
+  mousemove();
+  dragged = null;
+}
+
+function keydown() {
+  if (!selected) return;
+  switch (d3.event.keyCode) {
+    case 8: // backspace
+    case 46: { // delete
+      var i = points.indexOf(selected);
+      points.splice(i, 1);
+      selected = points.length ? points[i > 0 ? i - 1 : 0] : null;
+      update();
+      break;
+    }
+  }
+}

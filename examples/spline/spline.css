@@ -2,6 +2,16 @@ body {
   font: 13px sans-serif;
 }
 
+#chart svg {
+  width: 960px;
+  height: 500px;
+  border: solid 1px #ccc;
+}
+
+rect {
+  fill: #fff;
+}
+
 circle, .line {
   fill: none;
   stroke: steelblue;
