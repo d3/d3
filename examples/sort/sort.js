@@ -1,96 +1,104 @@
 // Based on http://vis.stanford.edu/protovis/ex/sort.html
+// Based on work by Robert Sedgewick
 
-var w = 760,
+var w = 960,
     h = 50,
-    n = 200,
-    interval = 20,
-    x = d3.scale.linear().domain([0, n]).range([0, w]),
-    a = d3.scale.linear().range([90 + 60, 270 - 60]);
+    n = 240,
+    x = d3.scale.linear().domain([0, n]).range([h, w - h]),
+    a = d3.scale.linear().domain([0, n - 1]).range([90 + 60, 270 - 60]),
+    data = shuffle(d3.range(n)),
+    duration = 250;
 
 var vis = d3.select("#chart").append("svg:svg")
-    .attr("width", w + 2 * h)
-    .attr("height", h)
-  .append("svg:g")
-    .attr("transform", "translate(" + h + ")");
+    .attr("width", w)
+    .attr("height", h);
 
-randomize();
+var line = vis.selectAll("line")
+    .data(data)
+  .enter().append("svg:line")
+    .attr("x1", 0)
+    .attr("y1", 0)
+    .attr("x2", 0)
+    .attr("y2", h)
+    .attr("transform", transform);
 
-var passes, i, timer = null;
+start();
 
-function randomize(parallel) {
-  passes = mergesort(d3.range(n).map(Math.random), parallel);
-  i = 0;
-  if (timer != null) clearTimeout(timer);
+// Start the animation!
+function start() {
+  var passes = mergesort(data).reverse();
+
   update();
-}
 
-function update() {
-  var line = vis.selectAll("line")
-      .data(passes[i++]);
+  function update() {
+    var pass = passes.pop();
 
-  line.enter().append("svg:line")
-      .attr("x1", 0)
-      .attr("y1", 0)
-      .attr("x2", 0)
-      .attr("y2", h)
-      .attr("transform", function(d, i) {
-        return "translate(" + x(i) + "," + h + ")rotate(" + a(d) + ")";
-      });
+    line.data(pass, Number)
+      .transition()
+        .duration(duration)
+        .attr("transform", transform);
 
-  line.transition()
-      .duration(interval / 2)
-      .attr("transform", function(d, i) {
-        return "translate(" + x(i) + "," + h + ")rotate(" + a(d) + ")";
-      });
-
-  if (i < passes.length) timer = setTimeout(update, interval);
-}
-
-/**
- * Sorts the specified array using bottom-up mergesort, returning an array of
- * arrays representing the state of the specified array after each insertion for
- * each sequential pass.
- * The first pass is performed at size = 2.
- */
-function mergesort(array, parallel) {
-  var passes = [array.slice()], size = 2;
-  for (; size < array.length; size <<= 1) {
-    var chunks = [],
-        max = 0;
-    for (var i = 0; i < array.length;) {
-      var chunk = merge(array, i, i + (size >> 1), i += size);
-      if (chunk.length > max) max = chunk.length;
-      if (chunk.length) chunks.push(chunk);
-    }
-    if (parallel) {
-      var pass = null;
-      for (var i = 0; i < max; i++) {
-        pass = chunks.map(function(c, j) { return c[i] || pass[j]; });
-        passes.push(Array.prototype.concat.apply([], pass));
-      }
+    if (passes.length) {
+      setTimeout(update, duration);
     } else {
-      passes = passes.concat(Array.prototype.concat.apply([], chunks));
+      shuffle(data);
+      setTimeout(start, duration + 4000);
     }
   }
-  passes = passes.concat(merge(array, 0, size >> 1, array.length));
+}
+
+function transform(d, i) {
+  return "translate(" + x(i) + "," + h + ")rotate(" + a(d) + ")";
+}
+
+// Fisher-Yates shuffle
+function shuffle(array) {
+  var i = array.length, j, t;
+  while (--i > 0) {
+    j = ~~(Math.random() * (i + 1));
+    t = array[j];
+    array[j] = array[i];
+    array[i] = t;
+  }
+  return array;
+}
+
+//
+// Sorts the specified array using bottom-up mergesort, returning an array of
+// arrays representing the state of the specified array after each insertion for
+// each parallel pass. The first pass is performed at size = 2.
+//
+function mergesort(array) {
+  var passes = [],
+      i,
+      j,
+      n = array.length,
+      m = 1;
+
+  // double the size each pass
+  while (m < array.length) {
+    i = j = 0; while (i < array.length) j += merge(i, i += m, i += m);
+    if (j) passes.push(array.slice());
+    else m <<= 1;
+  }
 
   // Merges two adjacent sorted arrays in-place.
-  function merge(array, start, middle, end) {
-    var passes = [],
-        start0 = start;
+  function merge(start, middle, end) {
+    middle = Math.min(array.length, middle);
+    end = Math.min(array.length, end);
     for (; start < middle; start++) {
       if (array[start] > array[middle]) {
         var v = array[start];
         array[start] = array[middle];
-        insert(array, middle, end, v);
-        passes.push(parallel ? array.slice(start0, end) : array.slice());
+        insert(middle, end, v);
+        return true;
       }
     }
-    return passes;
+    return false;
   }
 
   // Inserts the value v into the subarray specified by start and end.
-  function insert(array, start, end, v) {
+  function insert(start, end, v) {
     while (start + 1 < end && array[start + 1] < v) {
       var tmp = array[start];
       array[start] = array[start + 1];
@@ -102,4 +110,3 @@ function mergesort(array, parallel) {
 
   return passes;
 }
-
