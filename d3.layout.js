@@ -166,46 +166,25 @@ d3.layout.force = function() {
       links,
       distances;
 
-  function accumulate(quad) {
-    var cx = 0,
-        cy = 0;
-    quad.count = 0;
-    if (!quad.leaf) {
-      quad.nodes.forEach(function(c) {
-        accumulate(c);
-        quad.count += c.count;
-        cx += c.count * c.cx;
-        cy += c.count * c.cy;
-      });
-    }
-    if (quad.point) {
-      quad.count++;
-      cx += quad.point.x;
-      cy += quad.point.y;
-    }
-    quad.cx = cx / quad.count;
-    quad.cy = cy / quad.count;
-  }
-
   function repulse(node, kc) {
     return function(quad, x1, y1, x2, y2) {
-      if (quad.point != node) {
-        var dx = (quad.cx - node.x) || Math.random(),
-            dy = (quad.cy - node.y) || Math.random(),
+      if (quad.point !== node) {
+        var dx = quad.cx - node.x,
+            dy = quad.cy - node.y,
             dn = 1 / Math.sqrt(dx * dx + dy * dy);
 
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
           var k = kc * quad.count * dn * dn;
-          node.fx += dx * k;
-          node.fy += dy * k;
+          node.x += dx * k;
+          node.y += dy * k;
           return true;
         }
 
-        if (quad.point) {
+        if (quad.point && isFinite(dn)) {
           var k = kc * dn * dn;
-          node.fx += dx * k;
-          node.fy += dy * k;
+          node.x += dx * k;
+          node.y += dy * k;
         }
       }
     };
@@ -223,11 +202,6 @@ d3.layout.force = function() {
         x, // x-distance
         y; // y-distance
 
-    // reset forces
-    i = -1; while (++i < n) {
-      (o = nodes[i]).fx = o.fy = 0;
-    }
-
     // gauss-seidel relaxation for links
     for (i = 0; i < m; ++i) {
       o = links[i];
@@ -235,8 +209,8 @@ d3.layout.force = function() {
       t = o.target;
       x = t.x - s.x;
       y = t.y - s.y;
-      if (l = Math.sqrt(x * x + y * y)) {
-        l = alpha * (l - distance) / l;
+      if (l = (x * x + y * y)) {
+        l = alpha * ((l = Math.sqrt(l)) - distance) / l;
         x *= l;
         y *= l;
         t.x -= x;
@@ -246,23 +220,18 @@ d3.layout.force = function() {
       }
     }
 
-    // compute quadtree center of mass
-    accumulate(q);
-
     // apply gravity forces
     var kg = alpha * gravity;
     x = size[0] / 2;
     y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
-      s = x - o.x;
-      t = y - o.y;
-      l = kg * Math.pow(s * s + t * t, .01);
-      s *= l;
-      t *= l;
-      o.fx += s;
-      o.fy += t;
+      o.x += (x - o.x) * kg;
+      o.y += (y - o.y) * kg;
     }
+
+    // compute quadtree center of mass
+    d3_layout_forceAccumulate(q);
 
     // apply charge forces
     var kc = alpha * charge;
@@ -277,14 +246,12 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        x = o.px - (o.px = o.x);
-        y = o.py - (o.py = o.y);
-        o.x += o.fx - x * drag;
-        o.y += o.fy - y * drag;
+        o.x -= (o.px - (o.px = o.x)) * drag;
+        o.y -= (o.py - (o.py = o.y)) * drag;
       }
     }
 
-    event.tick.dispatch({type: "tick"});
+    event.tick.dispatch({type: "tick", alpha: alpha});
 
     // simulated annealing, basically
     return (alpha *= .99) < .005;
@@ -421,7 +388,8 @@ d3.layout.force = function() {
 
     d3.select(window)
       .on("mousemove.force", dragmove)
-      .on("mouseup.force", dragup, true);
+      .on("mouseup.force", dragup, true)
+      .on("click.force", d3_layout_forceDragClick, true);
 
     return force;
   };
@@ -447,9 +415,10 @@ d3.layout.force = function() {
     if (!d3_layout_forceDragNode) return;
 
     // If the node was moved, prevent the mouseup from propagating.
+    // Also prevent the subsequent click from propagating (e.g., for anchors).
     if (d3_layout_forceDragMoved) {
-      d3.event.stopPropagation();
-      d3.event.preventDefault();
+      d3_layout_forceStopClick = true;
+      d3_layout_forceCancel();
     }
 
     dragmove();
@@ -462,6 +431,7 @@ d3.layout.force = function() {
 
 var d3_layout_forceDragNode,
     d3_layout_forceDragMoved,
+    d3_layout_forceStopClick,
     d3_layout_forceDragElement;
 
 function d3_layout_forceDragOver(d) {
@@ -478,8 +448,45 @@ function d3_layout_forceDragDown(d, i) {
   (d3_layout_forceDragNode = d).fixed = true;
   d3_layout_forceDragMoved = false;
   d3_layout_forceDragElement = this;
+  d3_layout_forceCancel();
+}
+
+function d3_layout_forceDragClick() {
+  if (d3_layout_forceStopClick) {
+    d3_layout_forceCancel();
+    d3_layout_forceStopClick = false;
+  }
+}
+
+function d3_layout_forceCancel() {
   d3.event.stopPropagation();
   d3.event.preventDefault();
+}
+
+function d3_layout_forceAccumulate(quad) {
+  var cx = 0,
+      cy = 0;
+  quad.count = 0;
+  if (!quad.leaf) {
+    quad.nodes.forEach(function(c) {
+      d3_layout_forceAccumulate(c);
+      quad.count += c.count;
+      cx += c.count * c.cx;
+      cy += c.count * c.cy;
+    });
+  }
+  if (quad.point) {
+    // jitter internal nodes that are coincident
+    if (!quad.leaf) {
+      quad.point.x += Math.random() - .5;
+      quad.point.y += Math.random() - .5;
+    }
+    quad.count++;
+    cx += quad.point.x;
+    cy += quad.point.y;
+  }
+  quad.cx = cx / quad.count;
+  quad.cy = cy / quad.count;
 }
 d3.layout.partition = function() {
   var hierarchy = d3.layout.hierarchy(),
