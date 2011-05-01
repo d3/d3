@@ -396,15 +396,16 @@ d3.layout.force = function() {
 
   function dragmove() {
     if (!d3_layout_forceDragNode) return;
+    var parent = d3_layout_forceDragElement.parentNode;
 
     // O NOES! The drag element was removed from the DOM.
-    if (!d3_layout_forceDragElement.parentNode) {
+    if (!parent) {
       d3_layout_forceDragNode.fixed = false;
       d3_layout_forceDragNode = d3_layout_forceDragElement = null;
       return;
     }
 
-    var m = d3.svg.mouse(d3_layout_forceDragElement);
+    var m = d3.svg.mouse(parent);
     d3_layout_forceDragMoved = true;
     d3_layout_forceDragNode.px = m[0];
     d3_layout_forceDragNode.py = m[1];
