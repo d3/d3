@@ -15,8 +15,8 @@ var calendar = {
         Date: calendar.format(date)
       });
       date.setDate(date.getDate() + 1);
-      if (day == 6) week++;
-    } while (date.getFullYear() == year);
+      if (day === 6) week++;
+    } while (date.getFullYear() === year);
     return dates;
   },
 
@@ -34,16 +34,16 @@ var calendar = {
       month = date.getMonth();
       do {
         day = date.getDay();
-        if (day == 6) week++;
+        if (day === 6) week++;
         date.setDate(date.getDate() + 1);
-      } while (date.getMonth() == month);
+      } while (date.getMonth() === month);
       months.push({
         firstDay: firstDay,
         firstWeek: firstWeek,
         lastDay: day,
-        lastWeek: day == 6 ? week - 1 : week
+        lastWeek: day === 6 ? week - 1 : week
       });
-    } while (date.getFullYear() == year);
+    } while (date.getFullYear() === year);
     return months;
   }
 
