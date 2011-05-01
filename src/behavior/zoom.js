@@ -122,7 +122,7 @@ d3.behavior.zoom = function() {
   }
 
   zoom.on = function(type, listener) {
-    if (type === "zoom") listeners.push(listener);
+    if (type == "zoom") listeners.push(listener);
     return zoom;
   };
 

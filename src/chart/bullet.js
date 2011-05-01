@@ -165,7 +165,7 @@ d3.chart.bullet = function() {
   bullet.orient = function(x) {
     if (!arguments.length) return orient;
     orient = x;
-    reverse = orient === "right" || orient === "bottom";
+    reverse = orient == "right" || orient == "bottom";
     return bullet;
   };
 
