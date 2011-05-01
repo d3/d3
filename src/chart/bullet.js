@@ -159,7 +159,7 @@ d3.chart.bullet = function() {
           .attr("opacity", 1e-6)
           .remove();
     });
-    d3.timer.immediate();
+    d3.timer.flush();
   }
 
   // left, right, top, bottom
