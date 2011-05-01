@@ -26,6 +26,8 @@ d3.csv.parseRows = function(text, f) {
       t, // the current token
       eol; // is the current token followed by EOL?
 
+  re.lastIndex = 0; // work-around bug in FF 3.6
+
   /** @private Returns the next token. */
   function token() {
     if (re.lastIndex == text.length) return EOF; // special case: end of file
