@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Histogram</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+// Generate an Irwin-Hall distribution.
+var n = 10000, // number of trials
+    m = 10, // number of random variables
+    data = [];
+for (var i = 0; i < n; i++) {
+  var s = 0;
+  for (var j = 0; j < m; j++) {
+    s += Math.random();
+  }
+  data.push(s);
+}
+
+var w = 400,
+    h = 400,
+    x = d3.scale.linear().domain([0, m]).range([0, w]);
+    bins = d3.layout.histogram().ticks(x.ticks(20))(data),
+    max = d3.max(bins, function(d) { return d.y; }),
+    y = d3.scale.linear().domain([0, max]).range([0, h]);
+
+var vis = d3.select("body")
+  .append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var bars = vis.selectAll("g.bar")
+    .data(bins)
+  .enter().append("svg:g")
+    .attr("class", "bar")
+    .attr("transform", function(d, i) {
+      return "translate(" + x(d.x) + "," + (h - y(d.y)) + ")";
+    });
+
+bars.append("svg:rect")
+    .attr("fill", "steelblue")
+    .attr("width", function(d) { return x(d.dx) - 1; })
+    .attr("height", function(d) { return y(d.y); });
+
+    </script>
+  </body>
+</html>
