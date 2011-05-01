@@ -1,103 +1,66 @@
-/** Sample from a normal distribution with mean 0, stddev 1. */
-function normal_sample() {
-  var x = 0, y = 0, rds, c;
-  do {
-    x = Math.random() * 2 - 1;
-    y = Math.random() * 2 - 1;
-    rds = x * x + y * y;
-  } while (rds == 0 || rds > 1);
-  c = Math.sqrt(-2 * Math.log(rds) / rds); // Box-Muller transform
-  return x * c; // throw away extra sample y * c
-}
-
-// Uniform random distribution
-var uniform = function() { return Math.random(); };
-uniform.label = "Uniform Distribution";
-
-// Simple 1D Gaussian (normal) distribution
-var avg = mean(turkers.percent.values);
-var dev = deviation(turkers.percent.values);
-var normal1 = function() { return avg + dev * normal_sample(); }
-normal1.label = "Gaussian (Normal) Distribution";
-
-// Gaussian Mixture Model (k=3) fit using E-M algorithm
-var normal3 = function() {
-  var dd = [
-        [0.10306430789206111, 0.0036139086950272735, 0.30498647327844536],
-        [0.5924252668569606, 0.0462763685758622, 0.4340870312025223],
-        [0.9847627827855167, 2.352350767874714E-4, 0.2609264955190324]],
-      r = Math.random(),
-      i = r < dd[0][2] ? 0 : r < dd[0][2] + dd[1][2] ? 1 : 2,
-      d = dd[i];
-  return d[0] + Math.sqrt(d[1]) * normal_sample();
-}
-normal3.label = "Mixture of 3 Gaussians";
-
-var w = 270,
-    h = 270,
-    m = [10, 30, 20, 60], // top right bottom left
-    min = Infinity,
-    max = -Infinity;
+var w = 280,
+    h = 280,
+    m = [10, 0, 20, 35], // top right bottom left
+    n = 10000; // number of samples to generate
 
 var chart = d3.chart.qq()
-    .width(w).height(h)
-    .domain([-.5, 1.5])
-    .tickFormat(function(d) { return d * 100; })
-    .distribution(function(d) { return d.dist; });
+    .width(w)
+    .height(h)
+    .domain([-.1, 1.1])
+    .tickFormat(function(d) { return ~~(d * 100); });
 
-/* Distributions for comparison. */
-var dists = [uniform, normal1, normal3];
+var vis = d3.select("#chart")
+  .append("svg:svg")
+  .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-var wrapper = d3.select("#chart").append("svg:svg")
-    .attr("class", "qq");
+d3.json("turkers.json", function(turkers) {
+  var tm = mean(turkers),
+      td = deviation(turkers),
+      dd = [
+        [0.10306430789206111, 0.0036139086950272735, 0.30498647327844536],
+        [0.5924252668569606, 0.0462763685758622, 0.4340870312025223],
+        [0.9847627827855167, 2.352350767874714e-4, 0.2609264955190324]
+      ];
 
-var vis = wrapper.selectAll("g")
-    .data(dists.map(function(d) { return {dist: d3.range(10000).map(d), values: turkers.percent.values, label: d.label}; }))
-  .enter().append("svg:g")
-    .attr("transform", function(d, i) { return "translate(" + ((w + m[1]) * i + m[3]) + "," + m[0] + ")"; })
-    .attr("class", function(d, i) { return "qq" + i; })
-    .call(chart);
+  var g = vis.selectAll("g")
+      .data([{
+        x: d3.range(n).map(Math.random),
+        y: turkers,
+        label: "Uniform Distribution"
+      }, {
+        x: d3.range(n).map(normal1(tm, td)),
+        y: turkers,
+        label: "Gaussian (Normal) Distribution"
+      }, {
+        x: d3.range(n).map(normal3(dd)),
+        y: turkers,
+        label: "Mixture of 3 Gaussians"
+      }])
+    .enter().append("svg:g")
+      .attr("class", "qq")
+      .attr("transform", function(d, i) { return "translate(" + (w + m[1] + m[3]) * i + ")"; });
 
-wrapper.append("svg:text")
-    .attr("transform", "rotate(-90)translate(" + -(h / 2 + m[0]) + ", 20)")
-    .attr("text-anchor", "middle")
-    .text("Turker Task Group Completion %");
+  g.append("svg:rect")
+      .attr("class", "box")
+      .attr("width", w)
+      .attr("height", h);
 
-vis.append("svg:text")
-    .attr("dy", "1em")
-    .attr("dx", ".3em")
-    .text(function(d, i) { return d.label; });
+  g.call(chart);
 
-function sum(array) {
-  var s = 0, i = -1, n = array.length;
-  while (++i < n) s += array[i];
-  return s;
-}
+  g.append("svg:text")
+      .attr("dy", "1.3em")
+      .attr("dx", ".6em")
+      .text(function(d) { return d.label; });
 
-function mean(array) {
-  return sum(array) / array.length;
-}
+  chart.duration(1000);
 
-function variance(array) {
-  if (array.length < 1) return NaN;
-  if (array.length === 1) return 0;
-  var m = mean(array), sum = 0;
-  for (var i = 0; i < array.length; i++) {
-    var d = array[i] - m;
-    sum += d * d;
-  }
-  return sum;
-}
-
-function deviation(array) {
-  return Math.sqrt(variance(array) / (array.length - 1));
-}
-
-chart.duration(1000);
-window.transition = function() {
-  vis.map(randomize).call(chart);
-};
+  window.transition = function() {
+    g.map(randomize).call(chart);
+  };
+});
 
 function randomize(d) {
-  return {dist: d.dist, values: d.values.map(Math.random)};
+  d.y = d3.range(n).map(Math.random);
+  return d;
 }

@@ -4,113 +4,97 @@ d3.chart.qq = function() {
       height = 1,
       duration = 0,
       domain = null,
-      intervals = 100,
       tickFormat = null,
-      distribution = d3_chart_qqUniform;
-      values = d3_chart_qqValues;
-      qi = d3_chart_qqQi;
+      n = 100,
+      x = d3_chart_qqX,
+      y = d3_chart_qqY;
 
   // For each small multiple…
   function qq(g) {
     g.each(function(d, i) {
       var g = d3.select(this),
-          q1 = d3_chart_qqQuantile(intervals, distribution.call(this, d, i)),
-          q2 = d3_chart_qqQuantile(intervals, values.call(this, d, i));
+          qx = d3_chart_qqQuantiles(n, x.call(this, d, i)),
+          qy = d3_chart_qqQuantiles(n, y.call(this, d, i)),
+          xd = domain && domain.call(this, d, i) || [d3.min(qx), d3.max(qx)], // new x-domain
+          yd = domain && domain.call(this, d, i) || [d3.min(qy), d3.max(qy)], // new y-domain
+          x0, // old x-scale
+          y0; // old y-scale
 
       // Compute the new x-scale.
       var x1 = d3.scale.linear()
-          .domain(domain && domain.call(this, d, i) || [d3.min(q1), d3.max(q1)])
+          .domain(xd)
           .range([0, width]);
+
+      // Compute the new y-scale.
       var y1 = d3.scale.linear()
-          .domain(domain && domain.call(this, d, i) || [d3.min(q1), d3.max(q2)])
+          .domain(yd)
           .range([height, 0]);
 
       // Retrieve the old scales, if this is an update.
-      var x0, y0;
       if (this.__chart__) {
         x0 = this.__chart__.x;
         y0 = this.__chart__.y;
       } else {
-        x0 = d3.scale.linear()
-            .domain([0, Infinity])
-            .range(x1.range());
-        y0 = d3.scale.linear()
-            .domain([0, Infinity])
-            .range(y1.range());
+        x0 = d3.scale.linear().domain([0, Infinity]).range(x1.range());
+        y0 = d3.scale.linear().domain([0, Infinity]).range(y1.range());
       }
 
       // Stash the new scales.
       this.__chart__ = {x: x1, y: y1};
 
       // Update diagonal line.
-      var xd = x1.domain(), yd = y1.domain();
       var diagonal = g.selectAll("line.diagonal")
-          .data([{x1: x1(yd[0]), y1: y1(xd[0]), x2: x1(yd[1]), y2: y1(xd[1])}]);
+          .data([null]);
 
       diagonal.enter().append("svg:line")
           .attr("class", "diagonal")
-          .attr("x1", function(d) { return d.x1; })
-          .attr("y1", function(d) { return d.y1; })
-          .attr("x2", function(d) { return d.x2; })
-          .attr("y2", function(d) { return d.y2; })
-          .style("opacity", 1e-6)
-        .transition()
-          .duration(duration)
-          .style("opacity", 1);
+          .attr("x1", x1(yd[0]))
+          .attr("y1", y1(xd[0]))
+          .attr("x2", x1(yd[1]))
+          .attr("y2", y1(xd[1]));
 
       diagonal.transition()
           .duration(duration)
-          .attr("x1", function(d) { return d.x1; })
-          .attr("y1", function(d) { return d.y1; })
-          .attr("x2", function(d) { return d.x2; })
-          .attr("y2", function(d) { return d.y2; });
+          .attr("x1", x1(yd[0]))
+          .attr("y1", y1(xd[0]))
+          .attr("x2", x1(yd[1]))
+          .attr("y2", y1(xd[1]));
 
       // Update quantile plots.
-      var datum = g.selectAll("circle")
-          .data(d3.range(.01, 1, .01));
+      var circle = g.selectAll("circle")
+          .data(d3.range(n).map(function(i) {
+            return {x: qx[i], y: qy[i]};
+          }));
 
-      datum.enter().append("svg:circle")
-          .attr("cx", function(d) { return x0(qi(d, q1)); })
-          .attr("cy", function(d) { return y0(qi(d, q2)); })
-          .attr("r", 5)
+      circle.enter().append("svg:circle")
+          .attr("class", "quantile")
+          .attr("r", 4.5)
+          .attr("cx", function(d) { return x0(d.x); })
+          .attr("cy", function(d) { return y0(d.y); })
+          .style("opacity", 1e-6)
         .transition()
           .duration(duration)
-          .attr("cx", function(d) { return x1(qi(d, q1)); })
-          .attr("cy", function(d) { return y1(qi(d, q2)); });
+          .attr("cx", function(d) { return x1(d.x); })
+          .attr("cy", function(d) { return y1(d.y); })
+          .style("opacity", 1);
 
-      datum.transition()
+      circle.transition()
           .duration(duration)
-          .attr("cx", function(d) { return x1(qi(d, q1)); })
-          .attr("cy", function(d) { return y1(qi(d, q2)); });
+          .attr("cx", function(d) { return x1(d.x); })
+          .attr("cy", function(d) { return y1(d.y); })
+          .style("opacity", 1);
 
-      datum.exit().transition()
+      circle.exit().transition()
           .duration(duration)
+          .attr("cx", function(d) { return x1(d.x); })
+          .attr("cy", function(d) { return y1(d.y); })
           .style("opacity", 1e-6)
-          .attr("cx", function(d) { return x1(qi(d, q1)); })
-          .attr("cy", function(d) { return y1(qi(d, q2)); })
           .remove();
 
-      // Update border box.
-      var box = g.selectAll("rect")
-          .data([[xd[1], yd[1]]]);
-
-      box.enter().append("svg:rect")
-          .attr("class", "box")
-          .attr("x", 0)
-          .attr("y", 0)
-          .attr("width", function(d) { return x0(d[0]); })
-          .attr("height", function(d) { return x0(d[1]); })
-        .transition()
-          .duration(duration)
-          .attr("width", function(d) { return x1(d[0]); })
-          .attr("height", function(d) { return x1(d[1]); });
-
-      box.transition()
-          .duration(duration)
-          .attr("width", function(d) { return x1(d[0]); })
-          .attr("height", function(d) { return x1(d[1]); });
-
-      var xformat = tickFormat || x1.tickFormat(4);
+      var xformat = tickFormat || x1.tickFormat(4),
+          yformat = tickFormat || y1.tickFormat(4),
+          tx = function(d) { return "translate(" + x1(d) + "," + height + ")"; },
+          ty = function(d) { return "translate(0," + y1(d) + ")"; };
 
       // Update x-ticks.
       var xtick = g.selectAll("g.x.tick")
@@ -125,7 +109,7 @@ d3.chart.qq = function() {
 
       xtickEnter.append("svg:line")
           .attr("y1", 0)
-          .attr("y2", -5);
+          .attr("y2", -6);
 
       xtickEnter.append("svg:text")
           .attr("text-anchor", "middle")
@@ -135,23 +119,21 @@ d3.chart.qq = function() {
       // Transition the entering ticks to the new scale, x1.
       xtickEnter.transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + x1(d) + "," + height + ")"; })
+          .attr("transform", tx)
           .attr("opacity", 1);
 
       // Transition the updating ticks to the new scale, x1.
-      var xtickUpdate = xtick.transition()
+      xtick.transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + x1(d) + "," + height + ")"; })
+          .attr("transform", tx)
           .attr("opacity", 1);
 
       // Transition the exiting ticks to the new scale, x1.
       xtick.exit().transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + x1(d) + "," + height + ")"; })
+          .attr("transform", tx)
           .attr("opacity", 1e-6)
           .remove();
-
-      var yformat = tickFormat || y1.tickFormat(4);
 
       // Update ticks.
       var ytick = g.selectAll("g.y.tick")
@@ -166,7 +148,7 @@ d3.chart.qq = function() {
 
       ytickEnter.append("svg:line")
           .attr("x1", 0)
-          .attr("x2", 5);
+          .attr("x2", 6);
 
       ytickEnter.append("svg:text")
           .attr("text-anchor", "end")
@@ -177,19 +159,19 @@ d3.chart.qq = function() {
       // Transition the entering ticks to the new scale, y1.
       ytickEnter.transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(0," + y1(d) + ")"; })
+          .attr("transform", ty)
           .attr("opacity", 1);
 
       // Transition the updating ticks to the new scale, y1.
-      var ytickUpdate = ytick.transition()
+      ytick.transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(0," + y1(d) + ")"; })
+          .attr("transform", ty)
           .attr("opacity", 1);
 
       // Transition the exiting ticks to the new scale, y1.
       ytick.exit().transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(0," + y1(d) + ")"; })
+          .attr("transform", ty)
           .attr("opacity", 1e-6)
           .remove();
     });
@@ -219,21 +201,21 @@ d3.chart.qq = function() {
     return qq;
   };
 
-  qq.intervals = function(x) {
-    if (!arguments.length) return intervals;
-    intervals = x;
+  qq.count = function(z) {
+    if (!arguments.length) return n;
+    n = z;
     return qq;
   };
 
-  qq.distribution = function(x) {
-    if (!arguments.length) return distribution;
-    distribution = x;
+  qq.x = function(z) {
+    if (!arguments.length) return x;
+    x = z;
     return qq;
   };
 
-  qq.values = function(x) {
-    if (!arguments.length) return values;
-    values = x;
+  qq.y = function(z) {
+    if (!arguments.length) return y;
+    y = z;
     return qq;
   };
 
@@ -246,21 +228,18 @@ d3.chart.qq = function() {
   return qq;
 };
 
-// Compute quantiles of a distribution.
-function d3_chart_qqQuantile(n, values) {
-  values = values.slice().sort(function(a, b) { return a - b; });
-  return d3.range(n).map(function(i) { return values[Math.floor(i * (values.length - 1) / n)]; });
+function d3_chart_qqQuantiles(n, values) {
+  var m = values.length - 1;
+  values = values.slice().sort(d3.ascending);
+  return d3.range(n).map(function(i) {
+    return values[~~(i * m / n)];
+  });
 }
 
-// Lookup the value for an input quantile.
-function d3_chart_qqQi(f, quantiles) {
-  return quantiles[Math.round(f * (quantiles.length - 1))];
+function d3_chart_qqX(d) {
+  return d.x;
 }
 
-function d3_chart_qqUniform() {
-  return d3.range(10000).map(Math.random);
-}
-
-function d3_chart_qqValues(d) {
-  return d.values;
+function d3_chart_qqY(d) {
+  return d.y;
 }

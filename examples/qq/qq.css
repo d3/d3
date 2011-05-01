@@ -1,6 +1,18 @@
-.qq circle, .qq .diagonal, .qq .box { stroke: #000; stroke-width: .5px; fill: none; }
-.qq .box { stroke: #666; }
-.qq { font: 12px sans-serif; }
-.y.tick text { display: none; }
-.qq0 .y.tick text { display: block; }
-.tick line { stroke: #666; stroke-width: .5px; fill: none; }
+#chart {
+  font: 10px sans-serif;
+  width: 960px;
+  height: 310px;
+}
+
+.qq .box, .qq .tick line, .qq .quantile, .qq .diagonal {
+  stroke: #aaa;
+  fill: none;
+}
+
+.qq .quantile {
+  stroke: #000;
+}
+
+.qq g + g .y.tick {
+  display: none;
+}
