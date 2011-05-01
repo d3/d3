@@ -1912,13 +1912,12 @@ function d3_timer(callback, delay) {
 function d3_timer_step() {
   var elapsed,
       now = Date.now(),
-      t0 = null,
       t1 = d3_timer_queue;
 
   while (t1) {
     elapsed = now - t1.then;
     if (elapsed > t1.delay) t1.flush = t1.callback(elapsed);
-    t1 = (t0 = t1).next;
+    t1 = t1.next;
   }
 
   var delay = d3_timer_flush() - now;
