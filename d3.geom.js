@@ -29,12 +29,12 @@ d3.geom.contour = function(grid, start) {
     if (grid(x,   y  )) i += 8;
 
     // determine next direction
-    if (i == 6) {
-      dx = pdy == -1 ? -1 : 1;
+    if (i === 6) {
+      dx = pdy === -1 ? -1 : 1;
       dy = 0;
-    } else if (i == 9) {
+    } else if (i === 9) {
       dx = 0;
-      dy = pdx == 1 ? -1 : 1;
+      dy = pdx === 1 ? -1 : 1;
     } else {
       dx = d3_geom_contourDx[i];
       dy = d3_geom_contourDy[i];
@@ -68,7 +68,7 @@ function d3_geom_contourStart(grid) {
     if (grid(x,y)) {
       return [x,y];
     }
-    if (x == 0) {
+    if (x === 0) {
       x = y + 1;
       y = 0;
     } else {
@@ -76,7 +76,8 @@ function d3_geom_contourStart(grid) {
       y = y + 1;
     }
   }
-}/**
+}
+/**
  * Computes the 2D convex hull of a set of points using Graham's scanning
  * algorithm. The algorithm has been implemented as described in Cormen,
  * Leiserson, and Rivest's Introduction to Algorithms. The running time of
@@ -105,7 +106,7 @@ d3.geom.hull = function(vertices) {
 
   // calculate polar angles from ref point and sort
   for (i=0; i<len; ++i) {
-    if (i == h) continue;
+    if (i === h) continue;
     y1 = vertices[i][1] - vertices[h][1];
     x1 = vertices[i][0] - vertices[h][0];
     points.push({angle: Math.atan2(y1, x1), index: i});
@@ -142,7 +143,7 @@ d3.geom.hull = function(vertices) {
   // initialize the stack
   stack.push(h);
   for (i=0, j=0; i<2; ++j) {
-    if (points[j].index != -1) {
+    if (points[j].index !== -1) {
       stack.push(points[j].index);
       i++;
     }
@@ -151,7 +152,7 @@ d3.geom.hull = function(vertices) {
 
   // do graham's scan
   for (; j<plen; ++j) {
-    if (points[j].index == -1) continue; // skip tossed out points
+    if (points[j].index === -1) continue; // skip tossed out points
     while (!d3_geom_hullCCW(stack[sp-2], stack[sp-1], points[j].index, vertices)) {
       --sp;
     }
@@ -173,7 +174,8 @@ function d3_geom_hullCCW(i1, i2, i3, v) {
   t = v[i2]; c = t[0]; d = t[1];
   t = v[i3]; e = t[0]; f = t[1];
   return ((f-b)*(c-a) - (d-b)*(e-a)) > 0;
-}// Note: requires coordinates to be counterclockwise and convex!
+}
+// Note: requires coordinates to be counterclockwise and convex!
 d3.geom.polygon = function(coordinates) {
 
   coordinates.area = function() {
@@ -281,14 +283,14 @@ d3.geom.voronoi = function(vertices) {
         x2,
         y1,
         y2;
-    if (e.a == 1 && e.b >= 0) {
+    if (e.a === 1 && e.b >= 0) {
       s1 = e.ep.r;
       s2 = e.ep.l;
     } else {
       s1 = e.ep.l;
       s2 = e.ep.r;
     }
-    if (e.a == 1) {
+    if (e.a === 1) {
       y1 = s1 ? s1.y : -1e6;
       x1 = e.c - e.b * y1;
       y2 = s2 ? s2.y : 1e6;
@@ -463,8 +465,8 @@ function d3_voronoi_tessellate(vertices, callback) {
         e = e2;
       }
       var rightOfSite = (xint >= e.region.r.x);
-      if ((rightOfSite && (el.side == "l")) ||
-        (!rightOfSite && (el.side == "r"))) {
+      if ((rightOfSite && (el.side === "l")) ||
+        (!rightOfSite && (el.side === "r"))) {
         return null;
       }
       return {
@@ -478,13 +480,13 @@ function d3_voronoi_tessellate(vertices, callback) {
           topsite = e.region.r,
           rightOfSite = (p.x > topsite.x);
 
-      if (rightOfSite && (he.side == "l")) {
+      if (rightOfSite && (he.side === "l")) {
         return 1;
       }
-      if (!rightOfSite && (he.side == "r")) {
+      if (!rightOfSite && (he.side === "r")) {
         return 0;
       }
-      if (e.a == 1) {
+      if (e.a === 1) {
         var dyp = p.y - topsite.y,
             dxp = p.x - topsite.x,
             fast = 0,
@@ -519,7 +521,7 @@ function d3_voronoi_tessellate(vertices, callback) {
 
         above = (t1 * t1) > (t2 * t2 + t3 * t3);
       }
-      return he.side == "l" ? above : !above;
+      return he.side === "l" ? above : !above;
     },
 
     endPoint: function(edge, side, site) {
@@ -559,7 +561,7 @@ function d3_voronoi_tessellate(vertices, callback) {
       ls.splice(i, 1);
     },
 
-    empty: function() { return EventQueue.list.length == 0; },
+    empty: function() { return EventQueue.list.length === 0; },
 
     nextEvent: function(he) {
       for (var i=0, ls=EventQueue.list, l=ls.length; i<l; ++i) {
