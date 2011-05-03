@@ -155,6 +155,7 @@ tests: \
 	tests/test-format.test \
 	tests/test-insert.test \
 	tests/test-interpolate.test \
+	tests/test-keys.test \
 	tests/test-nest.test \
 	tests/test-remove.test \
 	tests/test-time-format.test \
