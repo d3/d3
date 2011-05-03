@@ -43,7 +43,8 @@ d3.select("#interpolate")
       "basis-closed",
       "cardinal",
       "cardinal-open",
-      "cardinal-closed"
+      "cardinal-closed",
+      "monotone"
     ])
   .enter().append("option")
     .attr("value", String)
