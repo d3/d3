@@ -107,6 +107,7 @@ d3.layout.js: \
 	src/layout/partition.js \
 	src/layout/pie.js \
 	src/layout/stack.js \
+	src/layout/histogram.js \
 	src/layout/hierarchy.js \
 	src/layout/pack.js \
 	src/layout/cluster.js \
