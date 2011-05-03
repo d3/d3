@@ -321,7 +321,7 @@ function d3_selection(groups) {
 
     /** @this {Element} */
     function classedRemove() {
-      var classes = d3_collapse(this.className.replace(re, " "));
+      var classes = d3_collapse(this.className.toString().replace(re, " "));
       this.className = classes.length ? classes : null;
     }
 
