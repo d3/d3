@@ -1306,23 +1306,30 @@ function d3_selection(groups) {
     if (arguments.length < 2) {
       return first(function() {
         re.lastIndex = 0;
-        return re.test(this.className);
+        return re.test(this.className.baseVal != null
+          ? this.className.baseVal : this.className);
       });
     }
 
     /** @this {Element} */
     function classedAdd() {
-      var classes = this.className;
+      var isAnimatedString = this.className.baseVal != null,
+          classes = isAnimatedString ? this.className.baseVal : this.className;
       re.lastIndex = 0;
       if (!re.test(classes)) {
-        this.className = d3_collapse(classes + " " + name);
+        classes = d3_collapse(classes + " " + name);
+        if (isAnimatedString) this.className.baseVal = classes;
+        else this.className = classes;
       }
     }
 
     /** @this {Element} */
     function classedRemove() {
-      var classes = d3_collapse(this.className.toString().replace(re, " "));
-      this.className = classes.length ? classes : null;
+      var isAnimatedString = this.className.baseVal != null,
+          classes = isAnimatedString ? this.className.baseVal : this.className;
+      classes = d3_collapse(classes.replace(re, " "));
+      if (isAnimatedString) this.className.baseVal = classes;
+      else this.className = classes.length ? classes : null;
     }
 
     /** @this {Element} */
