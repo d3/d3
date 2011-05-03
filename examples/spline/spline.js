@@ -42,6 +42,7 @@ d3.select("#interpolate")
       "basis-open",
       "basis-closed",
       "cardinal",
+      "cardinal-open",
       "cardinal-closed"
     ])
   .enter().append("option")

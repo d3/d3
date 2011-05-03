@@ -2550,6 +2550,7 @@ var d3_svg_lineInterpolators = {
   "basis-open": d3_svg_lineBasisOpen,
   "basis-closed": d3_svg_lineBasisClosed,
   "cardinal": d3_svg_lineCardinal,
+  "cardinal-open": d3_svg_lineCardinalOpen,
   "cardinal-closed": d3_svg_lineCardinalClosed
 };
 
@@ -2584,6 +2585,14 @@ function d3_svg_lineStepAfter(points) {
   path.push(p[0], ",", p[1]);
   while (++i < n) path.push("H", (p = points[i])[0], "V", p[1]);
   return path.join("");
+}
+
+// Open cardinal spline interpolation; generates "C" commands.
+function d3_svg_lineCardinalOpen(points, tension) {
+  return points.length < 4
+      ? d3_svg_lineLinear(points)
+      : points[1] + d3_svg_lineHermite(points.slice(1, points.length - 1),
+        d3_svg_lineCardinalTangents(points, tension));
 }
 
 // Closed cardinal spline interpolation; generates "C" commands.
@@ -2698,7 +2707,7 @@ function d3_svg_lineBasis(points) {
 
 // Open B-spline interpolation; generates "C" commands.
 function d3_svg_lineBasisOpen(points) {
-  if (points.length < 3) return d3_svg_lineLinear(points);
+  if (points.length < 4) return d3_svg_lineLinear(points);
   var path = [],
       i = -1,
       n = points.length,
