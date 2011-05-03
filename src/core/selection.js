@@ -329,7 +329,7 @@ function d3_selection(groups) {
           classes = isAnimatedString ? this.className.baseVal : this.className;
       classes = d3_collapse(classes.replace(re, " "));
       if (isAnimatedString) this.className.baseVal = classes;
-      else this.className = classes.length ? classes : null;
+      else this.className = classes;
     }
 
     /** @this {Element} */
