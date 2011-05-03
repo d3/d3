@@ -358,9 +358,8 @@ function d3_svg_lineMonotoneTangents(points) {
     }
   }
 
-  var len;
   for (var i = 0; i < points.length; i++) {
-    len = 1 + m[i] * m[i]; // pv.vector(1, m[i]).norm().times(dx[i]/3)
+    var len = 1 + m[i] * m[i]; // pv.vector(1, m[i]).norm().times(dx[i]/3)
     tangents.push([dx[i] / 3 / len, m[i] * dx[i] / 3 / len]);
   }
 
