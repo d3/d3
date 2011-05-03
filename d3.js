@@ -2547,9 +2547,12 @@ var d3_svg_lineInterpolators = {
   "step-before": d3_svg_lineStepBefore,
   "step-after": d3_svg_lineStepAfter,
   "basis": d3_svg_lineBasis,
+  "basis-open": d3_svg_lineBasisOpen,
   "basis-closed": d3_svg_lineBasisClosed,
   "cardinal": d3_svg_lineCardinal,
-  "cardinal-closed": d3_svg_lineCardinalClosed
+  "cardinal-open": d3_svg_lineCardinalOpen,
+  "cardinal-closed": d3_svg_lineCardinalClosed,
+  "monotone": d3_svg_lineMonotone
 };
 
 // Linear interpolation; generates "L" commands.
@@ -2583,6 +2586,14 @@ function d3_svg_lineStepAfter(points) {
   path.push(p[0], ",", p[1]);
   while (++i < n) path.push("H", (p = points[i])[0], "V", p[1]);
   return path.join("");
+}
+
+// Open cardinal spline interpolation; generates "C" commands.
+function d3_svg_lineCardinalOpen(points, tension) {
+  return points.length < 4
+      ? d3_svg_lineLinear(points)
+      : points[1] + d3_svg_lineHermite(points.slice(1, points.length - 1),
+        d3_svg_lineCardinalTangents(points, tension));
 }
 
 // Closed cardinal spline interpolation; generates "C" commands.
@@ -2667,7 +2678,7 @@ function d3_svg_lineCardinalTangents(points, tension) {
   return tangents;
 }
 
-// Open B-spline interpolation; generates "C" commands.
+// B-spline interpolation; generates "C" commands.
 function d3_svg_lineBasis(points) {
   if (points.length < 3) return d3_svg_lineLinear(points);
   var path = [],
@@ -2688,6 +2699,31 @@ function d3_svg_lineBasis(points) {
   }
   i = -1;
   while (++i < 2) {
+    px.shift(); px.push(pi[0]);
+    py.shift(); py.push(pi[1]);
+    d3_svg_lineBasisBezier(path, px, py);
+  }
+  return path.join("");
+}
+
+// Open B-spline interpolation; generates "C" commands.
+function d3_svg_lineBasisOpen(points) {
+  if (points.length < 4) return d3_svg_lineLinear(points);
+  var path = [],
+      i = -1,
+      n = points.length,
+      pi,
+      px = [0],
+      py = [0];
+  while (++i < 3) {
+    pi = points[i];
+    px.push(pi[0]);
+    py.push(pi[1]);
+  }
+  path.push(d3_svg_lineDot4(d3_svg_lineBasisBezier3, px)
+    + "," + d3_svg_lineDot4(d3_svg_lineBasisBezier3, py));
+  --i; while (++i < n) {
+    pi = points[i];
     px.shift(); px.push(pi[0]);
     py.shift(); py.push(pi[1]);
     d3_svg_lineBasisBezier(path, px, py);
@@ -2743,6 +2779,66 @@ function d3_svg_lineBasisBezier(path, x, y) {
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier2, y),
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, x),
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, y));
+}
+
+// Interpolates the given points using Fritsch-Carlson Monotone cubic Hermite
+// interpolation. Returns an array of tangent vectors.
+function d3_svg_lineMonotoneTangents(points) {
+  var tangents = [],
+      d = [],
+      m = [],
+      dx = [],
+      k = 0;
+
+  // Compute the slopes of the secant lines between successive points.
+  for (k = 0; k < points.length-1; k++) {
+    d[k] = (points[k+1][1] - points[k][1]) / (points[k+1][0] - points[k][0]);
+  }
+
+  // Initialize the tangents at every point as the average of the secants.
+  m[0] = d[0];
+  dx[0] = points[1][0] - points[0][0];
+  for (k = 1; k < points.length - 1; k++) {
+    m[k] = (d[k-1] + d[k]) / 2;
+    dx[k] = (points[k+1][0] - points[k-1][0]) / 2;
+  }
+  m[k] = d[k-1];
+  dx[k] = (points[k][0] - points[k-1][0]);
+
+  // Step 3. Very important, step 3. Yep. Wouldn't miss it.
+  for (k = 0; k < points.length - 1; k++) {
+    if (d[k] == 0) {
+      m[ k ] = 0;
+      m[k+1] = 0;
+    }
+  }
+
+  // Step 4 + 5. Out of 5 or more steps.
+  for (k = 0; k < points.length - 1; k++) {
+    if ((Math.abs(m[k]) < 1e-5) || (Math.abs(m[k+1]) < 1e-5)) continue;
+    var ak = m[k] / d[k],
+        bk = m[k + 1] / d[k],
+        s = ak * ak + bk * bk; // monotone constant (?)
+    if (s > 9) {
+      var tk = 3 / Math.sqrt(s);
+      m[k] = tk * ak * d[k];
+      m[k + 1] = tk * bk * d[k];
+    }
+  }
+
+  for (var i = 0; i < points.length; i++) {
+    var len = 1 + m[i] * m[i]; // pv.vector(1, m[i]).norm().times(dx[i]/3)
+    tangents.push([dx[i] / 3 / len, m[i] * dx[i] / 3 / len]);
+  }
+
+  return tangents;
+}
+
+function d3_svg_lineMonotone(points) {
+  return points.length < 3
+      ? d3_svg_lineLinear(points)
+      : points[0] +
+        d3_svg_lineHermite(points, d3_svg_lineMonotoneTangents(points));
 }
 d3.svg.area = function() {
   var x = d3_svg_lineX,
