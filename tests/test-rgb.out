@@ -1,9 +1,15 @@
 rgb:
   #646400
 
-rgb brighter:
+rgb-darker:
+  #464600
+
+rgb-hsl-darker-rgb:
+  #464600
+
+rgb-brighter:
   #8e8e00
 
-rgb darker:
-  #464600
+rgb-hsl-brighter-rgb:
+  #8f8f00
 
