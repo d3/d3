@@ -305,6 +305,7 @@ function d3_selection(groups) {
     // If no value is specified, return the first value.
     if (arguments.length < 2) {
       return first(function() {
+        if ("classList" in this) return this.classList.contains(name);
         re.lastIndex = 0;
         return re.test(this.className.baseVal != null
           ? this.className.baseVal : this.className);
@@ -313,6 +314,7 @@ function d3_selection(groups) {
 
     /** @this {Element} */
     function classedAdd() {
+      if ("classList" in this) return this.classList.add(name);
       var isAnimatedString = this.className.baseVal != null,
           classes = isAnimatedString ? this.className.baseVal : this.className;
       re.lastIndex = 0;
@@ -325,6 +327,7 @@ function d3_selection(groups) {
 
     /** @this {Element} */
     function classedRemove() {
+      if ("classList" in this) return this.classList.remove(name);
       var isAnimatedString = this.className.baseVal != null,
           classes = isAnimatedString ? this.className.baseVal : this.className;
       classes = d3_collapse(classes.replace(re, " "));
