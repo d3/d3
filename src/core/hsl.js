@@ -19,7 +19,7 @@ function d3_Hsl(h, s, l) {
 }
 
 d3_Hsl.prototype.toString = d3_hsl_format;
-d3_Hsl.prototype.hsl = d3_hsl_rgb;
+d3_Hsl.prototype.rgb = d3_hsl_rgb;
 
 /** @this d3_hsl */
 function d3_hsl_format() {
