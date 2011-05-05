@@ -1307,7 +1307,8 @@ function d3_selection(groups) {
       return first(function() {
         if ("classList" in this) return this.classList.contains(name);
         re.lastIndex = 0;
-        return re.test(this.className.baseVal != null
+        return re.test(typeof this.className === "object" &&
+            "baseVal" in this.className
           ? this.className.baseVal : this.className);
       });
     }
@@ -1315,7 +1316,8 @@ function d3_selection(groups) {
     /** @this {Element} */
     function classedAdd() {
       if ("classList" in this) return this.classList.add(name);
-      var isAnimatedString = this.className.baseVal != null,
+      var isAnimatedString = typeof this.className === "object" &&
+            "baseVal" in this.className,
           classes = isAnimatedString ? this.className.baseVal : this.className;
       re.lastIndex = 0;
       if (!re.test(classes)) {
@@ -1328,7 +1330,8 @@ function d3_selection(groups) {
     /** @this {Element} */
     function classedRemove() {
       if ("classList" in this) return this.classList.remove(name);
-      var isAnimatedString = this.className.baseVal != null,
+      var isAnimatedString = typeof this.className === "object" &&
+            "baseVal" in this.className,
           classes = isAnimatedString ? this.className.baseVal : this.className;
       classes = d3_collapse(classes.replace(re, " "));
       if (isAnimatedString) this.className.baseVal = classes;
