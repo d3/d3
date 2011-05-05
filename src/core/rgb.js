@@ -9,13 +9,19 @@ d3.rgb = function(r, g, b) {
 };
 
 function d3_rgb(r, g, b) {
-  return {
-    r: r, g: g, b: b,
-    toString: d3_rgb_format,
-    brighter: d3_rgb_brighter,
-    darker: d3_rgb_darker
-  };
+  return new d3_Rgb(r, g, b);
 }
+
+function d3_Rgb(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
+}
+
+d3_Rgb.prototype.toString = d3_rgb_format;
+d3_Rgb.prototype.brighter = d3_rgb_brighter;
+d3_Rgb.prototype.darker = d3_rgb_darker;
+d3_Rgb.prototype.hsl = d3_rgb_hsl;
 
 function d3_rgb_brighter(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);

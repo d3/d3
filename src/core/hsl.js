@@ -9,8 +9,17 @@ d3.hsl = function(h, s, l) {
 };
 
 function d3_hsl(h, s, l) {
-  return {h: h, s: s, l: l, toString: d3_hsl_format};
+  return new d3_Hsl(h, s, l);
 }
+
+function d3_Hsl(h, s, l) {
+  this.h = h;
+  this.s = s;
+  this.l = l;
+}
+
+d3_Hsl.prototype.toString = d3_hsl_format;
+d3_Hsl.prototype.hsl = d3_hsl_rgb;
 
 /** @this d3_hsl */
 function d3_hsl_format() {
