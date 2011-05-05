@@ -229,6 +229,16 @@ d3.requote = function(s) {
 };
 
 var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
+d3.search = function(array, value) {
+  var low = 0, high = array.length - 1;
+  while (low <= high) {
+    var mid = (low + high) >> 1, midValue = array[mid];
+    if (midValue < value) low = mid + 1;
+    else if (midValue > value) high = mid - 1;
+    else return mid;
+  }
+  return -low - 1;
+}
 d3.xhr = function(url, mime, callback) {
   var req = new XMLHttpRequest();
   if (arguments.length < 3) callback = mime;
@@ -1958,41 +1968,41 @@ var d3_timer_frame = window.requestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.scale = {};
 d3.scale.linear = function() {
-  var x0 = 0,
-      x1 = 1,
-      y0 = 0,
-      y1 = 1,
-      kx = 1, // 1 / (x1 - x0)
-      ky = 1, // (x1 - x0) / (y1 - y0)
+  var d = [0, 1],
+      r = [0, 1],
       interpolate = d3.interpolate,
-      i = interpolate(y0, y1),
+      i = [interpolate(0, 1)],
       clamp = false;
 
   function scale(x) {
-    x = (x - x0) * kx;
-    return i(clamp ? Math.max(0, Math.min(1, x)) : x);
+    var j = d3.search(d, x);
+    if (j < 0) j = -j - 2;
+    j = Math.max(0, Math.min(i.length - 1, j));
+    x = (x - d[j]) / (d[j + 1] - d[j]);
+    return i[j](clamp ? Math.max(0, Math.min(1, x)) : x);
   }
 
   // Note: requires range is coercible to number!
   scale.invert = function(y) {
-    return (y - y0) * ky + x0;
+    var j = d3.search(r, y);
+    if (j < 0) j = -j - 2;
+    j = Math.max(0, Math.min(i.length - 1, j));
+    return d[j] + (y - r[j]) / (r[j + 1] - r[j]) * (d[j + 1] - d[j]);
   };
 
   scale.domain = function(x) {
-    if (!arguments.length) return [x0, x1];
-    x0 = +x[0];
-    x1 = +x[1];
-    kx = 1 / (x1 - x0);
-    ky = (x1 - x0) / (y1 - y0);
+    if (!arguments.length) return d;
+    d = x.map(Number);
     return scale;
   };
 
   scale.range = function(x) {
-    if (!arguments.length) return [y0, y1];
-    y0 = x[0];
-    y1 = x[1];
-    ky = (x1 - x0) / (y1 - y0);
-    i = interpolate(y0, y1);
+    if (!arguments.length) return r;
+    r = x;
+    i = [];
+    for (var j = 0; j < r.length - 1; j++) {
+      i.push(interpolate(r[j], r[j + 1]));
+    }
     return scale;
   };
 
@@ -2008,14 +2018,18 @@ d3.scale.linear = function() {
 
   scale.interpolate = function(x) {
     if (!arguments.length) return interpolate;
-    i = (interpolate = x)(y0, y1);
+    interpolate = x;
+    i = [];
+    for (var j = 0; j < r.length - 1; j++) {
+      i.push(interpolate(r[j], r[j + 1]));
+    }
     return scale;
   };
 
   // TODO Dates? Ugh.
   function tickRange(m) {
-    var start = Math.min(x0, x1),
-        stop = Math.max(x0, x1),
+    var start = d3.min(d),
+        stop = d3.max(d),
         span = stop - start,
         step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
         err = m / (span / step);
