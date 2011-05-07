@@ -1157,7 +1157,7 @@ function d3_selection(groups) {
           var nodeByKey = {},
               keys = [],
               key,
-              j = groupData.length;
+              j = m;
 
           for (i = 0; i < n; i++) {
             key = join.call(node = group[i], node.__data__, i);
