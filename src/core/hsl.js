@@ -1,7 +1,3 @@
-/**
- * @param {number=} s
- * @param {number=} l
- */
 d3.hsl = function(h, s, l) {
   return arguments.length == 1
       ? d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl)
@@ -9,13 +5,32 @@ d3.hsl = function(h, s, l) {
 };
 
 function d3_hsl(h, s, l) {
-  return {h: h, s: s, l: l, toString: d3_hsl_format};
+  return new d3_Hsl(h, s, l);
 }
 
-/** @this d3_hsl */
-function d3_hsl_format() {
-  return "hsl(" + this.h + "," + this.s * 100 + "%," + this.l * 100 + "%)";
+function d3_Hsl(h, s, l) {
+  this.h = h;
+  this.s = s;
+  this.l = l;
 }
+
+d3_Hsl.prototype.brighter = function(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_hsl(this.h, this.s, this.l / k);
+};
+
+d3_Hsl.prototype.darker = function(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_hsl(this.h, this.s, k * this.l);
+};
+
+d3_Hsl.prototype.rgb = function() {
+  return d3_hsl_rgb(this.h, this.s, this.l);
+};
+
+d3_Hsl.prototype.toString = function() {
+  return "hsl(" + this.h + "," + this.s * 100 + "%," + this.l * 100 + "%)";
+};
 
 function d3_hsl_rgb(h, s, l) {
   var m1,
