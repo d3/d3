@@ -1,24 +1,51 @@
 require("./../lib/env-js/envjs/node");
 require("./../d3");
 
-var color = d3.rgb(100, 100, 0);
-
 console.log("rgb:");
-console.log("  " + color);
+console.log("  " + d3.rgb(102, 102, 0));
+console.log("  " + d3.rgb(102.4, 102.4, 0.4));
+console.log("  " + d3.rgb(102.6, 102.6, 0.6));
+console.log("  " + JSON.stringify(d3.rgb(102, 102, 0)));
 console.log("");
 
-console.log("rgb-darker:");
-console.log("  " + color.darker());
+console.log("parse rgb:");
+console.log("  " + d3.rgb("#660"));
+console.log("  " + d3.rgb("#666600"));
+console.log("  " + d3.rgb("rgb(102, 102, 0)"));
+console.log("  " + JSON.stringify(d3.rgb("#660")));
 console.log("");
 
-console.log("rgb-hsl-darker-rgb:");
-console.log("  " + color.hsl().darker().rgb());
+console.log("parse hsl:");
+console.log("  " + d3.rgb("hsl(60, 100%, 20%)"));
+console.log("  " + d3.rgb(d3.hsl(60, 1, .2)));
+console.log("  " + JSON.stringify(d3.rgb("hsl(60, 100%, 20%)")));
 console.log("");
 
-console.log("rgb-brighter:");
-console.log("  " + color.brighter());
+console.log("parse names:");
+console.log("  " + d3.rgb("aliceblue"));
+console.log("  " + d3.rgb("moccasin"));
+console.log("  " + d3.rgb("yellow"));
 console.log("");
 
-console.log("rgb-hsl-brighter-rgb:");
-console.log("  " + color.hsl().brighter().rgb());
+console.log("convert to hsl:");
+console.log("  " + d3.rgb("#660").hsl());
+console.log("  " + d3.rgb("#666600").hsl());
+console.log("  " + d3.rgb(102, 102, 0).hsl());
+console.log("  " + JSON.stringify(d3.rgb("#660").hsl()));
+console.log("");
+
+console.log("brighter:");
+console.log("  " + d3.rgb(102, 102, 0).brighter());
+console.log("  " + d3.rgb("#660").brighter());
+console.log("  " + d3.rgb("hsl(60, 100%, 20%)").brighter());
+console.log("  " + d3.rgb(d3.hsl(60, 1, .2)).brighter());
+console.log("  " + JSON.stringify(d3.rgb("#660").brighter()));
+console.log("");
+
+console.log("darker:");
+console.log("  " + d3.rgb(102, 102, 0).darker());
+console.log("  " + d3.rgb("#660").darker());
+console.log("  " + d3.rgb("hsl(60, 100%, 20%)").darker());
+console.log("  " + d3.rgb(d3.hsl(60, 1, .2)).darker());
+console.log("  " + JSON.stringify(d3.rgb("#660").darker()));
 console.log("");

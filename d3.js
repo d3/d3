@@ -696,10 +696,6 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
-/**
- * @param {number=} g
- * @param {number=} b
- */
 d3.rgb = function(r, g, b) {
   return arguments.length == 1
       ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
@@ -716,14 +712,7 @@ function d3_Rgb(r, g, b) {
   this.b = b;
 }
 
-d3_Rgb.prototype.toString = d3_rgb_format;
-d3_Rgb.prototype.brighter = d3_rgb_brighter;
-d3_Rgb.prototype.darker = d3_rgb_darker;
-d3_Rgb.prototype.hsl = function() {
-  return d3_rgb_hsl(this.r, this.g, this.b);
-};
-
-function d3_rgb_brighter(k) {
+d3_Rgb.prototype.brighter = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   var r = this.r,
       g = this.g,
@@ -739,18 +728,21 @@ function d3_rgb_brighter(k) {
     Math.min(255, Math.floor(b / k)));
 };
 
-function d3_rgb_darker(k) {
+d3_Rgb.prototype.darker = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_rgb(
     Math.max(0, Math.floor(k * this.r)),
     Math.max(0, Math.floor(k * this.g)),
     Math.max(0, Math.floor(k * this.b)));
-}
+};
 
-/** @this d3_rgb */
-function d3_rgb_format() {
+d3_Rgb.prototype.hsl = function() {
+  return d3_rgb_hsl(this.r, this.g, this.b);
+};
+
+d3_Rgb.prototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
-}
+};
 
 function d3_rgb_hex(v) {
   return v < 0x10 ? "0" + v.toString(16) : v.toString(16);
@@ -988,10 +980,6 @@ for (var d3_rgb_name in d3_rgb_names) {
       d3_rgb,
       d3_hsl_rgb);
 }
-/**
- * @param {number=} s
- * @param {number=} l
- */
 d3.hsl = function(h, s, l) {
   return arguments.length == 1
       ? d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl)
@@ -1008,27 +996,23 @@ function d3_Hsl(h, s, l) {
   this.l = l;
 }
 
-d3_Hsl.prototype.toString = d3_hsl_format;
-d3_Hsl.prototype.brighter = d3_hsl_brighter;
-d3_Hsl.prototype.darker = d3_hsl_darker;
+d3_Hsl.prototype.brighter = function(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_hsl(this.h, this.s, this.l / k);
+};
+
+d3_Hsl.prototype.darker = function(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_hsl(this.h, this.s, k * this.l);
+};
+
 d3_Hsl.prototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
 
-function d3_hsl_brighter(k) {
-  k = Math.pow(0.7, arguments.length ? k : 1);
-  return d3_hsl(this.h, this.s, this.l / k);
-}
-
-function d3_hsl_darker(k) {
-  k = Math.pow(0.7, arguments.length ? k : 1);
-  return d3_hsl(this.h, this.s, k * this.l);
-}
-
-/** @this d3_hsl */
-function d3_hsl_format() {
+d3_Hsl.prototype.toString = function() {
   return "hsl(" + this.h + "," + this.s * 100 + "%," + this.l * 100 + "%)";
-}
+};
 
 function d3_hsl_rgb(h, s, l) {
   var m1,

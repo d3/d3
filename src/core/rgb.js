@@ -1,7 +1,3 @@
-/**
- * @param {number=} g
- * @param {number=} b
- */
 d3.rgb = function(r, g, b) {
   return arguments.length == 1
       ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
@@ -18,14 +14,7 @@ function d3_Rgb(r, g, b) {
   this.b = b;
 }
 
-d3_Rgb.prototype.toString = d3_rgb_format;
-d3_Rgb.prototype.brighter = d3_rgb_brighter;
-d3_Rgb.prototype.darker = d3_rgb_darker;
-d3_Rgb.prototype.hsl = function() {
-  return d3_rgb_hsl(this.r, this.g, this.b);
-};
-
-function d3_rgb_brighter(k) {
+d3_Rgb.prototype.brighter = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   var r = this.r,
       g = this.g,
@@ -41,18 +30,21 @@ function d3_rgb_brighter(k) {
     Math.min(255, Math.floor(b / k)));
 };
 
-function d3_rgb_darker(k) {
+d3_Rgb.prototype.darker = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_rgb(
     Math.max(0, Math.floor(k * this.r)),
     Math.max(0, Math.floor(k * this.g)),
     Math.max(0, Math.floor(k * this.b)));
-}
+};
 
-/** @this d3_rgb */
-function d3_rgb_format() {
+d3_Rgb.prototype.hsl = function() {
+  return d3_rgb_hsl(this.r, this.g, this.b);
+};
+
+d3_Rgb.prototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
-}
+};
 
 function d3_rgb_hex(v) {
   return v < 0x10 ? "0" + v.toString(16) : v.toString(16);
