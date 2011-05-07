@@ -1,5 +1,5 @@
 d3.rgb = function(r, g, b) {
-  return arguments.length == 1
+  return arguments.length === 1
       ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
       : d3_rgb(~~r, ~~g, ~~b);
 };
@@ -84,12 +84,12 @@ function d3_rgb_parse(format, rgb, hsl) {
   if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
-  if (format != null && format.charAt(0) == "#") {
-    if (format.length == 4) {
+  if (format != null && format.charAt(0) === "#") {
+    if (format.length === 4) {
       r = format.charAt(1); r += r;
       g = format.charAt(2); g += g;
       b = format.charAt(3); b += b;
-    } else if (format.length == 7) {
+    } else if (format.length === 7) {
       r = format.substring(1, 3);
       g = format.substring(3, 5);
       b = format.substring(5, 7);
@@ -123,7 +123,7 @@ function d3_rgb_hsl(r, g, b) {
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);
-  return c.charAt(c.length - 1) == "%" ? Math.round(f * 2.55) : f;
+  return c.charAt(c.length - 1) === "%" ? Math.round(f * 2.55) : f;
 }
 
 var d3_rgb_names = {

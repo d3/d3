@@ -2,7 +2,7 @@ var d3_select = function(s, n) { return n.querySelector(s); },
     d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
 
 // Use Sizzle, if available.
-if (typeof Sizzle == "function") {
+if (typeof Sizzle === "function") {
   d3_select = function(s, n) { return Sizzle(s, n)[0]; };
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
 }
@@ -12,13 +12,13 @@ d3_root[0].parentNode = document.documentElement;
 
 // TODO fast singleton implementation!
 d3.select = function(selector) {
-  return typeof selector == "string"
+  return typeof selector === "string"
       ? d3_root.select(selector)
       : d3_selection([[selector]]); // assume node
 };
 
 d3.selectAll = function(selector) {
-  return typeof selector == "string"
+  return typeof selector === "string"
       ? d3_root.selectAll(selector)
       : d3_selection([d3_array(selector)]); // assume node[]
 };
@@ -197,7 +197,7 @@ function d3_selection(groups) {
     var i = -1,
         n = groups.length,
         group;
-    if (typeof data == "function") {
+    if (typeof data === "function") {
       while (++i < n) {
         bind(group = groups[i], data.call(group, group.parentNode.__data__, i));
       }
@@ -294,7 +294,7 @@ function d3_selection(groups) {
     }
 
     return groups.each(value == null
-        ? (name.local ? attrNullNS : attrNull) : (typeof value == "function"
+        ? (name.local ? attrNullNS : attrNull) : (typeof value === "function"
         ? (name.local ? attrFunctionNS : attrFunction)
         : (name.local ? attrConstantNS : attrConstant)));
   };
@@ -344,7 +344,7 @@ function d3_selection(groups) {
           : classedRemove).call(this);
     }
 
-    return groups.each(typeof value == "function"
+    return groups.each(typeof value === "function"
         ? classedFunction : value
         ? classedAdd
         : classedRemove);
@@ -378,7 +378,7 @@ function d3_selection(groups) {
     }
 
     return groups.each(value == null
-        ? styleNull : (typeof value == "function"
+        ? styleNull : (typeof value === "function"
         ? styleFunction : styleConstant));
   };
 
@@ -410,7 +410,7 @@ function d3_selection(groups) {
     }
 
     return groups.each(value == null
-        ? propertyNull : (typeof value == "function"
+        ? propertyNull : (typeof value === "function"
         ? propertyFunction : propertyConstant));
   };
 
@@ -433,7 +433,7 @@ function d3_selection(groups) {
       this.textContent = value.apply(this, arguments);
     }
 
-    return groups.each(typeof value == "function"
+    return groups.each(typeof value === "function"
         ? textFunction : textConstant);
   };
 
@@ -456,7 +456,7 @@ function d3_selection(groups) {
       this.innerHTML = value.apply(this, arguments);
     }
 
-    return groups.each(typeof value == "function"
+    return groups.each(typeof value === "function"
         ? htmlFunction : htmlConstant);
   };
 
@@ -530,7 +530,7 @@ function d3_selection(groups) {
 
     // parse the type specifier
     var i = type.indexOf("."),
-        typo = i == -1 ? type : type.substring(0, i),
+        typo = i === -1 ? type : type.substring(0, i),
         name = "__on" + type;
 
     // remove the old event listener, and add the new event listener

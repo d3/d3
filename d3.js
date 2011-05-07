@@ -25,7 +25,7 @@ try {
   d3_array = d3_arrayCopy;
 }
 d3.functor = function(v) {
-  return typeof v == "function" ? v : function() { return v; };
+  return typeof v === "function" ? v : function() { return v; };
 };
 // A getter-setter method that preserves the appropriate `this` context.
 d3.rebind = function(object, method) {
@@ -45,7 +45,7 @@ d3.min = function(array, f) {
       n = array.length,
       a = array[0],
       b;
-  if (arguments.length == 1) {
+  if (arguments.length === 1) {
     while (++i < n) if (a > (b = array[i])) a = b;
   } else {
     a = f(array[0]);
@@ -58,7 +58,7 @@ d3.max = function(array, f) {
       n = array.length,
       a = array[0],
       b;
-  if (arguments.length == 1) {
+  if (arguments.length === 1) {
     while (++i < n) if (a < (b = array[i])) a = b;
   } else {
     a = f(a);
@@ -214,7 +214,7 @@ function d3_call(callback) {
  * @param {number=} step
  */
 d3.range = function(start, stop, step) {
-  if (arguments.length == 1) { stop = start; start = 0; }
+  if (arguments.length === 1) { stop = start; start = 0; }
   if (step == null) step = 1;
   if ((stop - start) / step == Infinity) throw new Error("infinite range");
   var range = [],
@@ -235,7 +235,7 @@ d3.xhr = function(url, mime, callback) {
   else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
   req.open("GET", url, true);
   req.onreadystatechange = function() {
-    if (req.readyState == 4) callback(req.status < 300 ? req : null);
+    if (req.readyState === 4) callback(req.status < 300 ? req : null);
   };
   req.send(null);
 };
@@ -353,13 +353,13 @@ d3.format = function(specifier) {
     fill = "0"; // TODO align = "=";
     if (comma) width -= Math.floor((width - 1) / 4);
   }
-  if (type == "d") precision = "0";
+  if (type === "d") precision = "0";
   return function(value) {
     var number = +value,
         negative = (number < 0) && (number = -number) ? "\u2212" : sign;
 
     // Return the empty string for floats formatted as ints.
-    if ((type == "d") && (number % 1)) return "";
+    if ((type === "d") && (number % 1)) return "";
 
     // Convert the input value to the desired precision.
     if (precision) value = number.toFixed(precision);
@@ -520,8 +520,8 @@ function d3_ease_bounce(t) {
 }
 d3.event = null;
 d3.interpolate = function(a, b) {
-  if (typeof b == "number") return d3.interpolateNumber(+a, b);
-  if (typeof b == "string") {
+  if (typeof b === "number") return d3.interpolateNumber(+a, b);
+  if (typeof b === "string") {
     return (b in d3_rgb_names) || /^(#|rgb\(|hsl\()/.test(b)
         ? d3.interpolateRgb(String(a), b)
         : d3.interpolateString(String(a), b);
@@ -607,7 +607,7 @@ d3.interpolateString = function(a, b) {
   }
 
   // Special optimization for only a single match.
-  if (s.length == 1) {
+  if (s.length === 1) {
     return s[0] == null ? q[0].x : function() { return b; };
   }
 
@@ -697,7 +697,7 @@ function d3_interpolateByName(n) {
       : d3.interpolate;
 }
 d3.rgb = function(r, g, b) {
-  return arguments.length == 1
+  return arguments.length === 1
       ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
       : d3_rgb(~~r, ~~g, ~~b);
 };
@@ -782,12 +782,12 @@ function d3_rgb_parse(format, rgb, hsl) {
   if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
-  if (format != null && format.charAt(0) == "#") {
-    if (format.length == 4) {
+  if (format != null && format.charAt(0) === "#") {
+    if (format.length === 4) {
       r = format.charAt(1); r += r;
       g = format.charAt(2); g += g;
       b = format.charAt(3); b += b;
-    } else if (format.length == 7) {
+    } else if (format.length === 7) {
       r = format.substring(1, 3);
       g = format.substring(3, 5);
       b = format.substring(5, 7);
@@ -821,7 +821,7 @@ function d3_rgb_hsl(r, g, b) {
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);
-  return c.charAt(c.length - 1) == "%" ? Math.round(f * 2.55) : f;
+  return c.charAt(c.length - 1) === "%" ? Math.round(f * 2.55) : f;
 }
 
 var d3_rgb_names = {
@@ -981,7 +981,7 @@ for (var d3_rgb_name in d3_rgb_names) {
       d3_hsl_rgb);
 }
 d3.hsl = function(h, s, l) {
-  return arguments.length == 1
+  return arguments.length === 1
       ? d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl)
       : d3_hsl(+h, +s, +l);
 };
@@ -1046,7 +1046,7 @@ var d3_select = function(s, n) { return n.querySelector(s); },
     d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
 
 // Use Sizzle, if available.
-if (typeof Sizzle == "function") {
+if (typeof Sizzle === "function") {
   d3_select = function(s, n) { return Sizzle(s, n)[0]; };
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
 }
@@ -1056,13 +1056,13 @@ d3_root[0].parentNode = document.documentElement;
 
 // TODO fast singleton implementation!
 d3.select = function(selector) {
-  return typeof selector == "string"
+  return typeof selector === "string"
       ? d3_root.select(selector)
       : d3_selection([[selector]]); // assume node
 };
 
 d3.selectAll = function(selector) {
-  return typeof selector == "string"
+  return typeof selector === "string"
       ? d3_root.selectAll(selector)
       : d3_selection([d3_array(selector)]); // assume node[]
 };
@@ -1241,7 +1241,7 @@ function d3_selection(groups) {
     var i = -1,
         n = groups.length,
         group;
-    if (typeof data == "function") {
+    if (typeof data === "function") {
       while (++i < n) {
         bind(group = groups[i], data.call(group, group.parentNode.__data__, i));
       }
@@ -1338,7 +1338,7 @@ function d3_selection(groups) {
     }
 
     return groups.each(value == null
-        ? (name.local ? attrNullNS : attrNull) : (typeof value == "function"
+        ? (name.local ? attrNullNS : attrNull) : (typeof value === "function"
         ? (name.local ? attrFunctionNS : attrFunction)
         : (name.local ? attrConstantNS : attrConstant)));
   };
@@ -1388,7 +1388,7 @@ function d3_selection(groups) {
           : classedRemove).call(this);
     }
 
-    return groups.each(typeof value == "function"
+    return groups.each(typeof value === "function"
         ? classedFunction : value
         ? classedAdd
         : classedRemove);
@@ -1422,7 +1422,7 @@ function d3_selection(groups) {
     }
 
     return groups.each(value == null
-        ? styleNull : (typeof value == "function"
+        ? styleNull : (typeof value === "function"
         ? styleFunction : styleConstant));
   };
 
@@ -1454,7 +1454,7 @@ function d3_selection(groups) {
     }
 
     return groups.each(value == null
-        ? propertyNull : (typeof value == "function"
+        ? propertyNull : (typeof value === "function"
         ? propertyFunction : propertyConstant));
   };
 
@@ -1477,7 +1477,7 @@ function d3_selection(groups) {
       this.textContent = value.apply(this, arguments);
     }
 
-    return groups.each(typeof value == "function"
+    return groups.each(typeof value === "function"
         ? textFunction : textConstant);
   };
 
@@ -1500,7 +1500,7 @@ function d3_selection(groups) {
       this.innerHTML = value.apply(this, arguments);
     }
 
-    return groups.each(typeof value == "function"
+    return groups.each(typeof value === "function"
         ? htmlFunction : htmlConstant);
   };
 
@@ -1574,7 +1574,7 @@ function d3_selection(groups) {
 
     // parse the type specifier
     var i = type.indexOf("."),
-        typo = i == -1 ? type : type.substring(0, i),
+        typo = i === -1 ? type : type.substring(0, i),
         name = "__on" + type;
 
     // remove the old event listener, and add the new event listener
@@ -1730,7 +1730,7 @@ function d3_transition(groups) {
     var clear = true,
         k = -1;
     groups.each(function() {
-      if (stage[++k] == 2) return; // ended
+      if (stage[++k] === 2) return; // ended
       var t = (elapsed - delay[k]) / duration[k],
           tx = this.__transition__,
           te, // ease(t)
@@ -1750,7 +1750,7 @@ function d3_transition(groups) {
       // 1 - In progress.
       // 2 - Ended.
       if (stage[k]) {
-        if (!tx || tx.active != transitionId) {
+        if (!tx || tx.active !== transitionId) {
           stage[k] = 2;
           return;
         }
@@ -1774,11 +1774,11 @@ function d3_transition(groups) {
       for (tk in ik) ik[tk].call(this, te);
 
       // Handle ending transitions.
-      if (t == 1) {
+      if (t === 1) {
         stage[k] = 2;
-        if (tx.active == transitionId) {
+        if (tx.active === transitionId) {
           var owner = tx.owner;
-          if (owner == transitionId) {
+          if (owner === transitionId) {
             delete this.__transition__;
             if (remove) this.parentNode.removeChild(this);
           }
@@ -1795,7 +1795,7 @@ function d3_transition(groups) {
   transition.delay = function(value) {
     var delayMin = Infinity,
         k = -1;
-    if (typeof value == "function") {
+    if (typeof value === "function") {
       groups.each(function(d, i) {
         var x = delay[++k] = +value.apply(this, arguments);
         if (x < delayMin) delayMin = x;
@@ -1812,7 +1812,7 @@ function d3_transition(groups) {
 
   transition.duration = function(value) {
     var k = -1;
-    if (typeof value == "function") {
+    if (typeof value === "function") {
       durationMax = 0;
       groups.each(function(d, i) {
         var x = duration[++k] = +value.apply(this, arguments);
@@ -1828,7 +1828,7 @@ function d3_transition(groups) {
   };
 
   transition.ease = function(value) {
-    ease = typeof value == "function" ? value : d3.ease.apply(d3, arguments);
+    ease = typeof value === "function" ? value : d3.ease.apply(d3, arguments);
     return transition;
   };
 
@@ -1880,7 +1880,7 @@ function d3_transition(groups) {
 
   transition.text = function(value) {
     tweens.text = function(d, i) {
-      this.textContent = typeof value == "function"
+      this.textContent = typeof value === "function"
           ? value.call(this, d, i)
           : value;
     };
@@ -1917,7 +1917,7 @@ function d3_transition(groups) {
 }
 
 function d3_transitionTween(b) {
-  return typeof b == "function"
+  return typeof b === "function"
       ? function(d, i, a) { return d3.interpolate(a, String(b.call(this, d, i))); }
       : (b = String(b), function(d, i, a) { return d3.interpolate(a, b); });
 }
@@ -2583,8 +2583,8 @@ function d3_svg_linePoints(self, d, x, y) {
   var points = [],
       i = -1,
       n = d.length,
-      fx = typeof x == "function",
-      fy = typeof y == "function",
+      fx = typeof x === "function",
+      fy = typeof y === "function",
       value;
   if (fx && fy) {
     while (++i < n) points.push([

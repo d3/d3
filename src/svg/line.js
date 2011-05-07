@@ -45,8 +45,8 @@ function d3_svg_linePoints(self, d, x, y) {
   var points = [],
       i = -1,
       n = d.length,
-      fx = typeof x == "function",
-      fy = typeof y == "function",
+      fx = typeof x === "function",
+      fy = typeof y === "function",
       value;
   if (fx && fy) {
     while (++i < n) points.push([

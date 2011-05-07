@@ -28,12 +28,12 @@ d3.geom.contour = function(grid, start) {
     if (grid(x,   y  )) i += 8;
 
     // determine next direction
-    if (i == 6) {
-      dx = pdy == -1 ? -1 : 1;
+    if (i === 6) {
+      dx = pdy === -1 ? -1 : 1;
       dy = 0;
-    } else if (i == 9) {
+    } else if (i === 9) {
       dx = 0;
-      dy = pdx == 1 ? -1 : 1;
+      dy = pdx === 1 ? -1 : 1;
     } else {
       dx = d3_geom_contourDx[i];
       dy = d3_geom_contourDy[i];
@@ -67,7 +67,7 @@ function d3_geom_contourStart(grid) {
     if (grid(x,y)) {
       return [x,y];
     }
-    if (x == 0) {
+    if (x === 0) {
       x = y + 1;
       y = 0;
     } else {
