@@ -150,6 +150,7 @@ d3.geom.js: \
 tests: \
 	tests/test-append.test \
 	tests/test-attr.test \
+	tests/test-classed.test \
 	tests/test-call.test \
 	tests/test-csv-parse.test \
 	tests/test-format.test \

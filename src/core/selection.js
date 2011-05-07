@@ -305,24 +305,36 @@ function d3_selection(groups) {
     // If no value is specified, return the first value.
     if (arguments.length < 2) {
       return first(function() {
+        if (c = this.classList) return c.contains(name);
+        var c = this.className;
         re.lastIndex = 0;
-        return re.test(this.className);
+        return re.test(c.baseVal != null ? c.baseVal : c);
       });
     }
 
     /** @this {Element} */
     function classedAdd() {
-      var classes = this.className;
+      if (c = this.classList) return c.add(name);
+      var c = this.className,
+          cb = c.baseVal != null,
+          cv = cb ? c.baseVal : c;
       re.lastIndex = 0;
-      if (!re.test(classes)) {
-        this.className = d3_collapse(classes + " " + name);
+      if (!re.test(cv)) {
+        cv = d3_collapse(cv + " " + name);
+        if (cb) c.baseVal = cv;
+        else this.className = cv;
       }
     }
 
     /** @this {Element} */
     function classedRemove() {
-      var classes = d3_collapse(this.className.replace(re, " "));
-      this.className = classes.length ? classes : null;
+      if (c = this.classList) return c.remove(name);
+      var c = this.className,
+          cb = c.baseVal != null,
+          cv = cb ? c.baseVal : c;
+      cv = d3_collapse(cv.replace(re, " "));
+      if (cb) c.baseVal = cv;
+      else this.className = cv;
     }
 
     /** @this {Element} */
