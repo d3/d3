@@ -2781,54 +2781,77 @@ function d3_svg_lineBasisBezier(path, x, y) {
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, y));
 }
 
+// Computes the slope from points p0 to p1.
+function d3_svg_lineSlope(p0, p1) {
+  return (p1[1] - p0[1]) / (p1[0] - p0[0]);
+}
+
+// Compute three-point differences for the given points.
+// http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Finite_difference
+function d3_svg_lineFiniteDifferences(points) {
+  var i = 0,
+      j = points.length - 1,
+      m = [],
+      p0 = points[0],
+      p1 = points[1],
+      d = m[0] = d3_svg_lineSlope(p0, p1);
+  while (++i < j) {
+    m[i] = d + (d = d3_svg_lineSlope(p0 = p1, p1 = points[i + 1]));
+  }
+  m[i] = d;
+  return m;
+}
+
 // Interpolates the given points using Fritsch-Carlson Monotone cubic Hermite
-// interpolation. Returns an array of tangent vectors.
+// interpolation. Returns an array of tangent vectors. For details, see
+// http://en.wikipedia.org/wiki/Monotone_cubic_interpolation
 function d3_svg_lineMonotoneTangents(points) {
   var tangents = [],
-      d = [],
-      m = [],
-      dx = [],
-      k = 0;
+      d,
+      a,
+      b,
+      s,
+      m = d3_svg_lineFiniteDifferences(points),
+      i = -1,
+      j = points.length - 1;
 
-  // Compute the slopes of the secant lines between successive points.
-  for (k = 0; k < points.length-1; k++) {
-    d[k] = (points[k+1][1] - points[k][1]) / (points[k+1][0] - points[k][0]);
-  }
+  // The first two steps are done by computing finite-differences:
+  // 1. Compute the slopes of the secant lines between successive points.
+  // 2. Initialize the tangents at every point as the average of the secants.
 
-  // Initialize the tangents at every point as the average of the secants.
-  m[0] = d[0];
-  dx[0] = points[1][0] - points[0][0];
-  for (k = 1; k < points.length - 1; k++) {
-    m[k] = (d[k-1] + d[k]) / 2;
-    dx[k] = (points[k+1][0] - points[k-1][0]) / 2;
-  }
-  m[k] = d[k-1];
-  dx[k] = (points[k][0] - points[k-1][0]);
+  // Then, for each segment…
+  while (++i < j) {
+    d = d3_svg_lineSlope(points[i], points[i + 1]);
 
-  // Step 3. Very important, step 3. Yep. Wouldn't miss it.
-  for (k = 0; k < points.length - 1; k++) {
-    if (d[k] == 0) {
-      m[ k ] = 0;
-      m[k+1] = 0;
+    // 3. If two successive yk = y{k + 1} are equal (i.e., d is zero), then set
+    // mk = m{k + 1} = 0 as the spline connecting these points must be flat to
+    // preserve monotonicity. Ignore step 4 and 5 for those k.
+
+    if (Math.abs(d) < 1e-6) {
+      m[i] = m[i + 1] = 0;
+    } else {
+      // 4. Let ak = mk / dk and bk = m{k + 1} / dk.
+      a = m[i] / d;
+      b = m[i + 1] / d;
+
+      // 5. Prevent overshoot and ensure monotonicity by restricting the
+      // magnitude of vector <ak, bk> to a circle of radius 3.
+      s = a * a + b * b;
+      if (s > 9) {
+        s = d * 3 / Math.sqrt(s);
+        m[i] = s * a;
+        m[i + 1] = s * b;
+      }
     }
   }
 
-  // Step 4 + 5. Out of 5 or more steps.
-  for (k = 0; k < points.length - 1; k++) {
-    if ((Math.abs(m[k]) < 1e-5) || (Math.abs(m[k+1]) < 1e-5)) continue;
-    var ak = m[k] / d[k],
-        bk = m[k + 1] / d[k],
-        s = ak * ak + bk * bk; // monotone constant (?)
-    if (s > 9) {
-      var tk = 3 / Math.sqrt(s);
-      m[k] = tk * ak * d[k];
-      m[k + 1] = tk * bk * d[k];
-    }
-  }
-
-  for (var i = 0; i < points.length; i++) {
-    var len = 1 + m[i] * m[i]; // pv.vector(1, m[i]).norm().times(dx[i]/3)
-    tangents.push([dx[i] / 3 / len, m[i] * dx[i] / 3 / len]);
+  // Compute the normalized tangent vector from the slopes. Note that if x is
+  // not monotonic, it's possible that the slope will be infinite, so we protect
+  // against NaN by setting the coordinate to zero.
+  i = -1; while (++i <= j) {
+    s = (points[Math.min(j, i + 1)][0] - points[Math.max(0, i - 1)][0])
+      / (6 * (1 + m[i] * m[i]));
+    tangents.push([s || 0, m[i] * s || 0]);
   }
 
   return tangents;
