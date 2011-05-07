@@ -1,0 +1,23 @@
+constant classed:
+   <div class="foo"/>
+
+add existing class:
+   <div class="foo"/>
+   true
+
+function classed:
+   <div class="foo bar"/>
+   true
+
+remove constant class:
+   <div class="bar"/>
+   false
+
+remove missing class:
+   <div class="bar"/>
+   false
+
+remove function class:
+   <div class=""/>
+   false
+
