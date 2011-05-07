@@ -1582,12 +1582,13 @@ function d3_selection(groups) {
       if (this[name]) this.removeEventListener(typo, this[name], capture);
       if (listener) this.addEventListener(typo, this[name] = l, capture);
 
-      // wrapped event listener that preserves d, i
+      // wrapped event listener that preserves i
+      var node = this;
       function l(e) {
         var o = d3.event; // Events can be reentrant (e.g., focus).
         d3.event = e;
         try {
-          listener.call(this, d, i);
+          listener.call(this, node.__data__, i);
         } finally {
           d3.event = o;
         }
