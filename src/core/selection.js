@@ -111,6 +111,21 @@ function d3_selection(groups) {
 
   // TODO data(null) for clearing data?
   groups.data = function(data, join) {
+    if (!arguments.length) {
+      data = [];
+      var i = -1,
+          n = groups.length,
+          group,
+          node;
+      while (++i < n) {
+        var j = -1,
+            n0 = (group = groups[i]).length;
+        while (++j < n0) {
+          if (node = group[j]) data.push(node.__data__);
+        }
+      }
+      return data;
+    }
     var enter = [],
         update = [],
         exit = [];
@@ -118,69 +133,81 @@ function d3_selection(groups) {
     function bind(group, groupData) {
       var i = 0,
           n = group.length,
-          m = groupData.length,
-          n0 = Math.min(n, m),
-          n1 = Math.max(n, m),
+          node,
           updateNodes = [],
           enterNodes = [],
-          exitNodes = [],
-          node,
-          nodeData;
+          exitNodes = [];
 
-      if (join) {
-        var nodeByKey = {},
-            keys = [],
-            key,
-            j = groupData.length;
-
-        for (i = 0; i < n; i++) {
-          key = join.call(node = group[i], node.__data__, i);
-          if (key in nodeByKey) {
-            exitNodes[j++] = group[i]; // duplicate key
-          } else {
-            nodeByKey[key] = node;
-          }
-          keys.push(key);
-        }
-
-        for (i = 0; i < m; i++) {
-          node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
+      if (groupData == null) {
+        for( ; i < n; i++) {
+          node = group[i];
           if (node) {
-            node.__data__ = nodeData;
+            delete node.__data__;
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
-          } else {
-            enterNodes[i] = d3_selection_enterNode(nodeData);
-            updateNodes[i] = exitNodes[i] = null;
-          }
-          delete nodeByKey[key];
-        }
-
-        for (i = 0; i < n; i++) {
-          if (keys[i] in nodeByKey) {
-            exitNodes[i] = group[i];
           }
         }
       } else {
-        for (; i < n0; i++) {
-          node = group[i];
-          nodeData = groupData[i];
-          if (node) {
-            node.__data__ = nodeData;
-            updateNodes[i] = node;
-            enterNodes[i] = exitNodes[i] = null;
-          } else {
-            enterNodes[i] = d3_selection_enterNode(nodeData);
+        var m = groupData.length,
+            n0 = Math.min(n, m),
+            n1 = Math.max(n, m),
+            nodeData;
+
+        if (join) {
+          var nodeByKey = {},
+              keys = [],
+              key,
+              j = m;
+
+          for (i = 0; i < n; i++) {
+            key = join.call(node = group[i], node.__data__, i);
+            if (key in nodeByKey) {
+              exitNodes[j++] = group[i]; // duplicate key
+            } else {
+              nodeByKey[key] = node;
+            }
+            keys.push(key);
+          }
+
+          for (i = 0; i < m; i++) {
+            node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
+            if (node) {
+              node.__data__ = nodeData;
+              updateNodes[i] = node;
+              enterNodes[i] = exitNodes[i] = null;
+            } else {
+              enterNodes[i] = d3_selection_enterNode(nodeData);
+              updateNodes[i] = exitNodes[i] = null;
+            }
+            delete nodeByKey[key];
+          }
+
+          for (i = 0; i < n; i++) {
+            if (keys[i] in nodeByKey) {
+              exitNodes[i] = group[i];
+            }
+          }
+        } else {
+          for (; i < n0; i++) {
+            node = group[i];
+            nodeData = groupData[i];
+            if (node) {
+              node.__data__ = nodeData;
+              updateNodes[i] = node;
+              enterNodes[i] = exitNodes[i] = null;
+            } else {
+              enterNodes[i] = d3_selection_enterNode(nodeData);
+              updateNodes[i] = exitNodes[i] = null;
+            }
+          }
+          for (; i < m; i++) {
+            enterNodes[i] = d3_selection_enterNode(groupData[i]);
             updateNodes[i] = exitNodes[i] = null;
           }
-        }
-        for (; i < m; i++) {
-          enterNodes[i] = d3_selection_enterNode(groupData[i]);
-          updateNodes[i] = exitNodes[i] = null;
-        }
-        for (; i < n1; i++) {
-          exitNodes[i] = group[i];
-          enterNodes[i] = updateNodes[i] = null;
+          for (; i < n1; i++) {
+            exitNodes[i] = group[i];
+            enterNodes[i] = updateNodes[i] = null;
+          }
         }
       }
 
