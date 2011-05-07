@@ -152,6 +152,7 @@ tests: \
 	tests/test-attr.test \
 	tests/test-call.test \
 	tests/test-csv-parse.test \
+	tests/test-data.test \
 	tests/test-format.test \
 	tests/test-insert.test \
 	tests/test-interpolate.test \
