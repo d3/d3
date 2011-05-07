@@ -305,37 +305,36 @@ function d3_selection(groups) {
     // If no value is specified, return the first value.
     if (arguments.length < 2) {
       return first(function() {
-        var c;
         if (c = this.classList) return c.contains(name);
+        var c = this.className;
         re.lastIndex = 0;
-        return re.test((c = this.className).baseVal != null
-          ? c.baseVal : c);
+        return re.test(c.baseVal != null ? c.baseVal : c);
       });
     }
 
     /** @this {Element} */
     function classedAdd() {
-      var c;
       if (c = this.classList) return c.add(name);
-      var isAnimatedString = (c = this.className).baseVal != null,
-          classes = isAnimatedString ? c.baseVal : c;
+      var c = this.className,
+          cb = c.baseVal != null,
+          cv = cb ? c.baseVal : c;
       re.lastIndex = 0;
-      if (!re.test(classes)) {
-        classes = d3_collapse(classes + " " + name);
-        if (isAnimatedString) c.baseVal = classes;
-        else this.className = classes;
+      if (!re.test(cv)) {
+        cv = d3_collapse(cv + " " + name);
+        if (cb) c.baseVal = cv;
+        else this.className = cv;
       }
     }
 
     /** @this {Element} */
     function classedRemove() {
-      var c;
       if (c = this.classList) return c.remove(name);
-      var isAnimatedString = (c = this.className).baseVal != null,
-          classes = isAnimatedString ? c.baseVal : c;
-      classes = d3_collapse(classes.replace(re, " "));
-      if (isAnimatedString) c.baseVal = classes;
-      else this.className = classes;
+      var c = this.className,
+          cb = c.baseVal != null,
+          cv = cb ? c.baseVal : c;
+      cv = d3_collapse(cv.replace(re, " "));
+      if (cb) c.baseVal = cv;
+      else this.className = cv;
     }
 
     /** @this {Element} */
