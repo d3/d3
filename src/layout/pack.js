@@ -104,14 +104,14 @@ function d3_layout_packCircle(nodes) {
 
         // Search for the closest intersection.
         var isect = 0, s1 = 1, s2 = 1;
-        for (j = b._pack_next; j != b; j = j._pack_next, s1++) {
+        for (j = b._pack_next; j !== b; j = j._pack_next, s1++) {
           if (d3_layout_packIntersects(j, c)) {
             isect = 1;
             break;
           }
         }
         if (isect == 1) {
-          for (k = a._pack_prev; k != j._pack_prev; k = k._pack_prev, s2++) {
+          for (k = a._pack_prev; k !== j._pack_prev; k = k._pack_prev, s2++) {
             if (d3_layout_packIntersects(k, c)) {
               if (s2 < s1) {
                 isect = -1;

@@ -1,6 +1,6 @@
 d3.interpolate = function(a, b) {
-  if (typeof b == "number") return d3.interpolateNumber(+a, b);
-  if (typeof b == "string") {
+  if (typeof b === "number") return d3.interpolateNumber(+a, b);
+  if (typeof b === "string") {
     return (b in d3_rgb_names) || /^(#|rgb\(|hsl\()/.test(b)
         ? d3.interpolateRgb(String(a), b)
         : d3.interpolateString(String(a), b);
@@ -86,7 +86,7 @@ d3.interpolateString = function(a, b) {
   }
 
   // Special optimization for only a single match.
-  if (s.length == 1) {
+  if (s.length === 1) {
     return s[0] == null ? q[0].x : function() { return b; };
   }
 

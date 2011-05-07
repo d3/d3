@@ -150,13 +150,17 @@ d3.geom.js: \
 tests: \
 	tests/test-append.test \
 	tests/test-attr.test \
+	tests/test-classed.test \
 	tests/test-call.test \
 	tests/test-csv-parse.test \
 	tests/test-format.test \
 	tests/test-insert.test \
 	tests/test-interpolate.test \
+	tests/test-keys.test \
 	tests/test-nest.test \
 	tests/test-remove.test \
+	tests/test-rgb.test \
+	tests/test-hsl.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
 	tests/test-transition.test \

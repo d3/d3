@@ -82,3 +82,12 @@ console.log("                         [[0, 0]]:", line([[0, 0]]));
 console.log("                 [[0, 0], [5, 5]]:", line([[0, 0], [5, 5]]));
 console.log("        [[0, 0], [5, 5], [10, 0]]:", line([[0, 0], [5, 5], [10, 0]]));
 console.log("");
+
+var line = d3.svg.line()
+    .interpolate("monotone");
+
+console.log("interpolate(monotone):");
+console.log("                         [[0, 0]]:", line([[0, 0]]));
+console.log("                 [[0, 0], [5, 5]]:", line([[0, 0], [5, 5]]));
+console.log("        [[0, 0], [5, 5], [10, 0]]:", line([[0, 0], [5, 5], [10, 0]]));
+console.log("");
