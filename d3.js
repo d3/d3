@@ -707,7 +707,44 @@ d3.rgb = function(r, g, b) {
 };
 
 function d3_rgb(r, g, b) {
-  return {r: r, g: g, b: b, toString: d3_rgb_format};
+  return new d3_Rgb(r, g, b);
+}
+
+function d3_Rgb(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
+}
+
+d3_Rgb.prototype.toString = d3_rgb_format;
+d3_Rgb.prototype.brighter = d3_rgb_brighter;
+d3_Rgb.prototype.darker = d3_rgb_darker;
+d3_Rgb.prototype.hsl = function() {
+  return d3_rgb_hsl(this.r, this.g, this.b);
+};
+
+function d3_rgb_brighter(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  var r = this.r,
+      g = this.g,
+      b = this.b,
+      i = 30;
+  if (!r && !g && !b) return d3_rgb(i, i, i);
+  if (r && r < i) r = i;
+  if (g && g < i) g = i;
+  if (b && b < i) b = i;
+  return d3_rgb(
+    Math.min(255, Math.floor(r / k)),
+    Math.min(255, Math.floor(g / k)),
+    Math.min(255, Math.floor(b / k)));
+};
+
+function d3_rgb_darker(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_rgb(
+    Math.max(0, Math.floor(k * this.r)),
+    Math.max(0, Math.floor(k * this.g)),
+    Math.max(0, Math.floor(k * this.b)));
 }
 
 /** @this d3_rgb */
@@ -962,7 +999,30 @@ d3.hsl = function(h, s, l) {
 };
 
 function d3_hsl(h, s, l) {
-  return {h: h, s: s, l: l, toString: d3_hsl_format};
+  return new d3_Hsl(h, s, l);
+}
+
+function d3_Hsl(h, s, l) {
+  this.h = h;
+  this.s = s;
+  this.l = l;
+}
+
+d3_Hsl.prototype.toString = d3_hsl_format;
+d3_Hsl.prototype.brighter = d3_hsl_brighter;
+d3_Hsl.prototype.darker = d3_hsl_darker;
+d3_Hsl.prototype.rgb = function() {
+  return d3_hsl_rgb(this.h, this.s, this.l);
+};
+
+function d3_hsl_brighter(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_hsl(this.h, this.s, this.l / k);
+}
+
+function d3_hsl_darker(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_hsl(this.h, this.s, k * this.l);
 }
 
 /** @this d3_hsl */

@@ -9,7 +9,30 @@ d3.hsl = function(h, s, l) {
 };
 
 function d3_hsl(h, s, l) {
-  return {h: h, s: s, l: l, toString: d3_hsl_format};
+  return new d3_Hsl(h, s, l);
+}
+
+function d3_Hsl(h, s, l) {
+  this.h = h;
+  this.s = s;
+  this.l = l;
+}
+
+d3_Hsl.prototype.toString = d3_hsl_format;
+d3_Hsl.prototype.brighter = d3_hsl_brighter;
+d3_Hsl.prototype.darker = d3_hsl_darker;
+d3_Hsl.prototype.rgb = function() {
+  return d3_hsl_rgb(this.h, this.s, this.l);
+};
+
+function d3_hsl_brighter(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_hsl(this.h, this.s, this.l / k);
+}
+
+function d3_hsl_darker(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_hsl(this.h, this.s, k * this.l);
 }
 
 /** @this d3_hsl */
