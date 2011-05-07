@@ -79,9 +79,12 @@ var d3_svg_lineInterpolators = {
   "step-before": d3_svg_lineStepBefore,
   "step-after": d3_svg_lineStepAfter,
   "basis": d3_svg_lineBasis,
+  "basis-open": d3_svg_lineBasisOpen,
   "basis-closed": d3_svg_lineBasisClosed,
   "cardinal": d3_svg_lineCardinal,
-  "cardinal-closed": d3_svg_lineCardinalClosed
+  "cardinal-open": d3_svg_lineCardinalOpen,
+  "cardinal-closed": d3_svg_lineCardinalClosed,
+  "monotone": d3_svg_lineMonotone
 };
 
 // Linear interpolation; generates "L" commands.
@@ -115,6 +118,14 @@ function d3_svg_lineStepAfter(points) {
   path.push(p[0], ",", p[1]);
   while (++i < n) path.push("H", (p = points[i])[0], "V", p[1]);
   return path.join("");
+}
+
+// Open cardinal spline interpolation; generates "C" commands.
+function d3_svg_lineCardinalOpen(points, tension) {
+  return points.length < 4
+      ? d3_svg_lineLinear(points)
+      : points[1] + d3_svg_lineHermite(points.slice(1, points.length - 1),
+        d3_svg_lineCardinalTangents(points, tension));
 }
 
 // Closed cardinal spline interpolation; generates "C" commands.
@@ -199,7 +210,7 @@ function d3_svg_lineCardinalTangents(points, tension) {
   return tangents;
 }
 
-// Open B-spline interpolation; generates "C" commands.
+// B-spline interpolation; generates "C" commands.
 function d3_svg_lineBasis(points) {
   if (points.length < 3) return d3_svg_lineLinear(points);
   var path = [],
@@ -220,6 +231,31 @@ function d3_svg_lineBasis(points) {
   }
   i = -1;
   while (++i < 2) {
+    px.shift(); px.push(pi[0]);
+    py.shift(); py.push(pi[1]);
+    d3_svg_lineBasisBezier(path, px, py);
+  }
+  return path.join("");
+}
+
+// Open B-spline interpolation; generates "C" commands.
+function d3_svg_lineBasisOpen(points) {
+  if (points.length < 4) return d3_svg_lineLinear(points);
+  var path = [],
+      i = -1,
+      n = points.length,
+      pi,
+      px = [0],
+      py = [0];
+  while (++i < 3) {
+    pi = points[i];
+    px.push(pi[0]);
+    py.push(pi[1]);
+  }
+  path.push(d3_svg_lineDot4(d3_svg_lineBasisBezier3, px)
+    + "," + d3_svg_lineDot4(d3_svg_lineBasisBezier3, py));
+  --i; while (++i < n) {
+    pi = points[i];
     px.shift(); px.push(pi[0]);
     py.shift(); py.push(pi[1]);
     d3_svg_lineBasisBezier(path, px, py);
@@ -275,4 +311,87 @@ function d3_svg_lineBasisBezier(path, x, y) {
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier2, y),
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, x),
       ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, y));
+}
+
+// Computes the slope from points p0 to p1.
+function d3_svg_lineSlope(p0, p1) {
+  return (p1[1] - p0[1]) / (p1[0] - p0[0]);
+}
+
+// Compute three-point differences for the given points.
+// http://en.wikipedia.org/wiki/Cubic_Hermite_spline#Finite_difference
+function d3_svg_lineFiniteDifferences(points) {
+  var i = 0,
+      j = points.length - 1,
+      m = [],
+      p0 = points[0],
+      p1 = points[1],
+      d = m[0] = d3_svg_lineSlope(p0, p1);
+  while (++i < j) {
+    m[i] = d + (d = d3_svg_lineSlope(p0 = p1, p1 = points[i + 1]));
+  }
+  m[i] = d;
+  return m;
+}
+
+// Interpolates the given points using Fritsch-Carlson Monotone cubic Hermite
+// interpolation. Returns an array of tangent vectors. For details, see
+// http://en.wikipedia.org/wiki/Monotone_cubic_interpolation
+function d3_svg_lineMonotoneTangents(points) {
+  var tangents = [],
+      d,
+      a,
+      b,
+      s,
+      m = d3_svg_lineFiniteDifferences(points),
+      i = -1,
+      j = points.length - 1;
+
+  // The first two steps are done by computing finite-differences:
+  // 1. Compute the slopes of the secant lines between successive points.
+  // 2. Initialize the tangents at every point as the average of the secants.
+
+  // Then, for each segment…
+  while (++i < j) {
+    d = d3_svg_lineSlope(points[i], points[i + 1]);
+
+    // 3. If two successive yk = y{k + 1} are equal (i.e., d is zero), then set
+    // mk = m{k + 1} = 0 as the spline connecting these points must be flat to
+    // preserve monotonicity. Ignore step 4 and 5 for those k.
+
+    if (Math.abs(d) < 1e-6) {
+      m[i] = m[i + 1] = 0;
+    } else {
+      // 4. Let ak = mk / dk and bk = m{k + 1} / dk.
+      a = m[i] / d;
+      b = m[i + 1] / d;
+
+      // 5. Prevent overshoot and ensure monotonicity by restricting the
+      // magnitude of vector <ak, bk> to a circle of radius 3.
+      s = a * a + b * b;
+      if (s > 9) {
+        s = d * 3 / Math.sqrt(s);
+        m[i] = s * a;
+        m[i + 1] = s * b;
+      }
+    }
+  }
+
+  // Compute the normalized tangent vector from the slopes. Note that if x is
+  // not monotonic, it's possible that the slope will be infinite, so we protect
+  // against NaN by setting the coordinate to zero.
+  i = -1; while (++i <= j) {
+    s = (points[Math.min(j, i + 1)][0] - points[Math.max(0, i - 1)][0])
+      / (6 * (1 + m[i] * m[i]));
+    tangents.push([s || 0, m[i] * s || 0]);
+  }
+
+  return tangents;
+}
+
+function d3_svg_lineMonotone(points) {
+  return points.length < 3
+      ? d3_svg_lineLinear(points)
+      : points[0] +
+        d3_svg_lineHermite(points, d3_svg_lineMonotoneTangents(points));
 }
