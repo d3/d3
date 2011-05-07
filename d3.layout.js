@@ -767,6 +767,21 @@ var d3_layout_stackOffsets = {
     for (j = 0; j < m; ++j) data[i0][j].y0 -= o0;
   },
 
+  "expand": function(data, index) {
+    var n = data.length,
+        m = data[0].length,
+        k = 1 / n,
+        i,
+        j,
+        o;
+    for (j = 0; j < m; ++j) {
+      for (i = 0, o = 0; i < n; i++) o += data[i][j].y;
+      if (o) for (i = 0; i < n; i++) data[i][j].y /= o;
+      else for (i = 0; i < n; i++) data[i][j].y = k;
+    }
+    for (i = index[0], j = 0; j < m; ++j) data[i][j].y0 = 0;
+  },
+
   "zero": function(data, index) {
     var j = 0,
         m = data[0].length,
