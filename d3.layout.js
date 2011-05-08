@@ -157,55 +157,34 @@ d3.layout.force = function() {
       size = [1, 1],
       alpha,
       drag = .9,
-      distance = 30,
-      charge = -60,
-      gravity = .001,
+      distance = 20,
+      charge = -30,
+      gravity = .1,
       theta = .8,
       interval,
       nodes,
       links,
       distances;
 
-  function accumulate(quad) {
-    var cx = 0,
-        cy = 0;
-    quad.count = 0;
-    if (!quad.leaf) {
-      quad.nodes.forEach(function(c) {
-        accumulate(c);
-        quad.count += c.count;
-        cx += c.count * c.cx;
-        cy += c.count * c.cy;
-      });
-    }
-    if (quad.point) {
-      quad.count++;
-      cx += quad.point.x;
-      cy += quad.point.y;
-    }
-    quad.cx = cx / quad.count;
-    quad.cy = cy / quad.count;
-  }
-
   function repulse(node, kc) {
     return function(quad, x1, y1, x2, y2) {
-      if (quad.point != node) {
-        var dx = (quad.cx - node.x) || Math.random(),
-            dy = (quad.cy - node.y) || Math.random(),
+      if (quad.point !== node) {
+        var dx = quad.cx - node.x,
+            dy = quad.cy - node.y,
             dn = 1 / Math.sqrt(dx * dx + dy * dy);
 
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
           var k = kc * quad.count * dn * dn;
-          node.fx += dx * k;
-          node.fy += dy * k;
+          node.x += dx * k;
+          node.y += dy * k;
           return true;
         }
 
-        if (quad.point) {
+        if (quad.point && isFinite(dn)) {
           var k = kc * dn * dn;
-          node.fx += dx * k;
-          node.fy += dy * k;
+          node.x += dx * k;
+          node.y += dy * k;
         }
       }
     };
@@ -223,11 +202,6 @@ d3.layout.force = function() {
         x, // x-distance
         y; // y-distance
 
-    // reset forces
-    i = -1; while (++i < n) {
-      (o = nodes[i]).fx = o.fy = 0;
-    }
-
     // gauss-seidel relaxation for links
     for (i = 0; i < m; ++i) {
       o = links[i];
@@ -235,8 +209,8 @@ d3.layout.force = function() {
       t = o.target;
       x = t.x - s.x;
       y = t.y - s.y;
-      if (l = Math.sqrt(x * x + y * y)) {
-        l = alpha * (l - distance) / l;
+      if (l = (x * x + y * y)) {
+        l = alpha * ((l = Math.sqrt(l)) - distance) / l;
         x *= l;
         y *= l;
         t.x -= x;
@@ -246,23 +220,18 @@ d3.layout.force = function() {
       }
     }
 
-    // compute quadtree center of mass
-    accumulate(q);
-
     // apply gravity forces
     var kg = alpha * gravity;
     x = size[0] / 2;
     y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
-      s = x - o.x;
-      t = y - o.y;
-      l = kg * Math.sqrt(s * s + t * t);
-      s *= l;
-      t *= l;
-      o.fx += s;
-      o.fy += t;
+      o.x += (x - o.x) * kg;
+      o.y += (y - o.y) * kg;
     }
+
+    // compute quadtree center of mass
+    d3_layout_forceAccumulate(q);
 
     // apply charge forces
     var kc = alpha * charge;
@@ -277,14 +246,12 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        x = o.px - (o.px = o.x);
-        y = o.py - (o.py = o.y);
-        o.x += o.fx - x * drag;
-        o.y += o.fy - y * drag;
+        o.x -= (o.px - (o.px = o.x)) * drag;
+        o.y -= (o.py - (o.py = o.y)) * drag;
       }
     }
 
-    event.tick.dispatch({type: "tick"});
+    event.tick.dispatch({type: "tick", alpha: alpha});
 
     // simulated annealing, basically
     return (alpha *= .99) < .005;
@@ -345,25 +312,56 @@ d3.layout.force = function() {
 
   force.start = function() {
     var i,
+        j,
         n = nodes.length,
         m = links.length,
         w = size[0],
         h = size[1],
+        neighbors,
         o;
 
-    // TODO initialize positions of new nodes using constraints (links)
     for (i = 0; i < n; ++i) {
-      o = nodes[i];
-      if (isNaN(o.x)) o.x = Math.random() * w;
-      if (isNaN(o.y)) o.y = Math.random() * h;
-      if (isNaN(o.px)) o.px = o.x;
-      if (isNaN(o.py)) o.py = o.y;
+      (o = nodes[i]).index = i;
     }
 
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
       if (typeof o.target == "number") o.target = nodes[o.target];
+    }
+
+    for (i = 0; i < n; ++i) {
+      o = nodes[i];
+      if (isNaN(o.x)) o.x = position("x", w);
+      if (isNaN(o.y)) o.y = position("y", h);
+      if (isNaN(o.px)) o.px = o.x;
+      if (isNaN(o.py)) o.py = o.y;
+    }
+
+    // initialize node position based on first neighbor
+    function position(dimension, size) {
+      var neighbors = neighbor(i),
+          j = -1,
+          m = neighbors.length,
+          x;
+      while (++j < m) if (!isNaN(x = neighbors[j][dimension])) return x;
+      return Math.random() * size;
+    }
+
+    // initialize neighbors lazily
+    function neighbor() {
+      if (!neighbors) {
+        neighbors = [];
+        for (j = 0; j < n; ++j) {
+          neighbors[j] = [];
+        }
+        for (j = 0; j < m; ++j) {
+          var o = links[j];
+          neighbors[o.source.index].push(o.target);
+          neighbors[o.target.index].push(o.source);
+        }
+      }
+      return neighbors[i];
     }
 
     return force.resume();
@@ -384,20 +382,31 @@ d3.layout.force = function() {
   force.drag = function() {
 
     this
-      .on("mouseover", d3_layout_forceDragOver)
-      .on("mouseout", d3_layout_forceDragOut)
-      .on("mousedown", d3_layout_forceDragDown);
+      .on("mouseover.force", d3_layout_forceDragOver)
+      .on("mouseout.force", d3_layout_forceDragOut)
+      .on("mousedown.force", d3_layout_forceDragDown);
 
     d3.select(window)
-      .on("mousemove", dragmove)
-      .on("mouseup", dragup);
+      .on("mousemove.force", dragmove)
+      .on("mouseup.force", dragup, true)
+      .on("click.force", d3_layout_forceDragClick, true);
 
     return force;
   };
 
   function dragmove() {
     if (!d3_layout_forceDragNode) return;
-    var m = d3.svg.mouse(d3_layout_forceDragElement);
+    var parent = d3_layout_forceDragElement.parentNode;
+
+    // O NOES! The drag element was removed from the DOM.
+    if (!parent) {
+      d3_layout_forceDragNode.fixed = false;
+      d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+      return;
+    }
+
+    var m = d3.svg.mouse(parent);
+    d3_layout_forceDragMoved = true;
     d3_layout_forceDragNode.px = m[0];
     d3_layout_forceDragNode.py = m[1];
     force.resume(); // restart annealing
@@ -405,6 +414,14 @@ d3.layout.force = function() {
 
   function dragup() {
     if (!d3_layout_forceDragNode) return;
+
+    // If the node was moved, prevent the mouseup from propagating.
+    // Also prevent the subsequent click from propagating (e.g., for anchors).
+    if (d3_layout_forceDragMoved) {
+      d3_layout_forceStopClick = true;
+      d3_layout_forceCancel();
+    }
+
     dragmove();
     d3_layout_forceDragNode.fixed = false;
     d3_layout_forceDragNode = d3_layout_forceDragElement = null;
@@ -414,6 +431,8 @@ d3.layout.force = function() {
 };
 
 var d3_layout_forceDragNode,
+    d3_layout_forceDragMoved,
+    d3_layout_forceStopClick,
     d3_layout_forceDragElement;
 
 function d3_layout_forceDragOver(d) {
@@ -426,11 +445,49 @@ function d3_layout_forceDragOut(d) {
   }
 }
 
-function d3_layout_forceDragDown(d) {
+function d3_layout_forceDragDown(d, i) {
   (d3_layout_forceDragNode = d).fixed = true;
+  d3_layout_forceDragMoved = false;
   d3_layout_forceDragElement = this;
+  d3_layout_forceCancel();
+}
+
+function d3_layout_forceDragClick() {
+  if (d3_layout_forceStopClick) {
+    d3_layout_forceCancel();
+    d3_layout_forceStopClick = false;
+  }
+}
+
+function d3_layout_forceCancel() {
   d3.event.stopPropagation();
   d3.event.preventDefault();
+}
+
+function d3_layout_forceAccumulate(quad) {
+  var cx = 0,
+      cy = 0;
+  quad.count = 0;
+  if (!quad.leaf) {
+    quad.nodes.forEach(function(c) {
+      d3_layout_forceAccumulate(c);
+      quad.count += c.count;
+      cx += c.count * c.cx;
+      cy += c.count * c.cy;
+    });
+  }
+  if (quad.point) {
+    // jitter internal nodes that are coincident
+    if (!quad.leaf) {
+      quad.point.x += Math.random() - .5;
+      quad.point.y += Math.random() - .5;
+    }
+    quad.count++;
+    cx += quad.point.x;
+    cy += quad.point.y;
+  }
+  quad.cx = cx / quad.count;
+  quad.cy = cy / quad.count;
 }
 d3.layout.partition = function() {
   var hierarchy = d3.layout.hierarchy(),
@@ -493,12 +550,12 @@ d3.layout.pie = function() {
   function pie(data, i) {
 
     // Compute the start angle.
-    var a = +(typeof startAngle == "function"
+    var a = +(typeof startAngle === "function"
         ? startAngle.apply(this, arguments)
         : startAngle);
 
     // Compute the angular range (end - start).
-    var k = (typeof endAngle == "function"
+    var k = (typeof endAngle === "function"
         ? endAngle.apply(this, arguments)
         : endAngle) - startAngle;
 
@@ -708,6 +765,21 @@ var d3_layout_stackOffsets = {
       if (o < o0) o0 = o;
     }
     for (j = 0; j < m; ++j) data[i0][j].y0 -= o0;
+  },
+
+  "expand": function(data, index) {
+    var n = data.length,
+        m = data[0].length,
+        k = 1 / n,
+        i,
+        j,
+        o;
+    for (j = 0; j < m; ++j) {
+      for (i = 0, o = 0; i < n; i++) o += data[i][j].y;
+      if (o) for (i = 0; i < n; i++) data[i][j].y /= o;
+      else for (i = 0; i < n; i++) data[i][j].y = k;
+    }
+    for (i = index[0], j = 0; j < m; ++j) data[i][j].y0 = 0;
   },
 
   "zero": function(data, index) {
@@ -938,14 +1010,14 @@ function d3_layout_packCircle(nodes) {
 
         // Search for the closest intersection.
         var isect = 0, s1 = 1, s2 = 1;
-        for (j = b._pack_next; j != b; j = j._pack_next, s1++) {
+        for (j = b._pack_next; j !== b; j = j._pack_next, s1++) {
           if (d3_layout_packIntersects(j, c)) {
             isect = 1;
             break;
           }
         }
         if (isect == 1) {
-          for (k = a._pack_prev; k != j._pack_prev; k = k._pack_prev, s2++) {
+          for (k = a._pack_prev; k !== j._pack_prev; k = k._pack_prev, s2++) {
             if (d3_layout_packIntersects(k, c)) {
               if (s2 < s1) {
                 isect = -1;
