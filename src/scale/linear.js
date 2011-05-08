@@ -7,10 +7,10 @@ d3.scale.linear = function() {
       input;
 
   function rescale() {
-    var scaler = domain.length == 2 ? d3_scale_bilinear : d3_scale_polylinear,
+    var linear = domain.length == 2 ? d3_scale_bilinear : d3_scale_polylinear,
         uninterpolate = clamp ? d3_uninterpolateClamp : d3_uninterpolateNumber;
-    output = scaler(domain, range, uninterpolate, interpolate);
-    input = scaler(range, domain, uninterpolate, d3.interpolate);
+    output = linear(domain, range, uninterpolate, interpolate);
+    input = linear(range, domain, uninterpolate, d3.interpolate);
     return scale;
   }
 
