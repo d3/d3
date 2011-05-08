@@ -706,6 +706,15 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
+function d3_uninterpolateNumber(a, b) {
+  b = 1 / (b - (a = +a));
+  return function(x) { return (x - a) * b; };
+}
+
+function d3_uninterpolateClamp(a, b) {
+  b = 1 / (b - (a = +a));
+  return function(x) { return Math.max(0, Math.min(1, (x - a) * b)); };
+}
 /**
  * @param {number=} g
  * @param {number=} b
@@ -1968,42 +1977,40 @@ var d3_timer_frame = window.requestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.scale = {};
 d3.scale.linear = function() {
-  var d = [0, 1],
-      r = [0, 1],
+  var domain = [0, 1],
+      range = [0, 1],
       interpolate = d3.interpolate,
-      i = [interpolate(0, 1)],
-      clamp = false;
+      clamp = false,
+      output,
+      input;
+
+  function rescale() {
+    var scaler = domain.length == 2 ? d3_scale_bilinear : d3_scale_polylinear,
+        uninterpolate = clamp ? d3_uninterpolateClamp : d3_uninterpolateNumber;
+    output = scaler(domain, range, uninterpolate, interpolate);
+    input = scaler(range, domain, uninterpolate, d3.interpolate);
+    return scale;
+  }
 
   function scale(x) {
-    var j = d3.search(d, x);
-    if (j < 0) j = -j - 2;
-    j = Math.max(0, Math.min(i.length - 1, j));
-    x = (x - d[j]) / (d[j + 1] - d[j]);
-    return i[j](clamp ? Math.max(0, Math.min(1, x)) : x);
+    return output(x);
   }
 
   // Note: requires range is coercible to number!
   scale.invert = function(y) {
-    var j = d3.search(r, y);
-    if (j < 0) j = -j - 2;
-    j = Math.max(0, Math.min(i.length - 1, j));
-    return d[j] + (y - r[j]) / (r[j + 1] - r[j]) * (d[j + 1] - d[j]);
+    return input(y);
   };
 
   scale.domain = function(x) {
-    if (!arguments.length) return d;
-    d = x.map(Number);
-    return scale;
+    if (!arguments.length) return domain;
+    domain = x.map(Number);
+    return rescale();
   };
 
   scale.range = function(x) {
-    if (!arguments.length) return r;
-    r = x;
-    i = [];
-    for (var j = 0; j < r.length - 1; j++) {
-      i.push(interpolate(r[j], r[j + 1]));
-    }
-    return scale;
+    if (!arguments.length) return range;
+    range = x;
+    return rescale();
   };
 
   scale.rangeRound = function(x) {
@@ -2013,23 +2020,19 @@ d3.scale.linear = function() {
   scale.clamp = function(x) {
     if (!arguments.length) return clamp;
     clamp = x;
-    return scale;
+    return rescale();
   };
 
   scale.interpolate = function(x) {
     if (!arguments.length) return interpolate;
     interpolate = x;
-    i = [];
-    for (var j = 0; j < r.length - 1; j++) {
-      i.push(interpolate(r[j], r[j + 1]));
-    }
-    return scale;
+    return rescale();
   };
 
   // TODO Dates? Ugh.
   function tickRange(m) {
-    var start = d3.min(d),
-        stop = d3.max(d),
+    var start = d3.min(domain),
+        stop = d3.max(domain),
         span = stop - start,
         step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
         err = m / (span / step);
@@ -2057,8 +2060,42 @@ d3.scale.linear = function() {
     return d3.format(",." + n + "f");
   };
 
-  return scale;
+  return rescale();
 };
+function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
+  var u = uninterpolate(domain[0], domain[1]),
+      i = interpolate(range[0], range[1]);
+  return function(x) {
+    return i(u(x));
+  };
+}
+function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
+  var u = [],
+      i = [],
+      j = 0,
+      n = domain.length;
+
+  while (++j < n) {
+    u.push(uninterpolate(domain[j - 1], domain[j]));
+    i.push(interpolate(range[j - 1], range[j]));
+  }
+
+  function search(x) {
+    var low = 1, high = domain.length - 2;
+    while (low <= high) {
+      var mid = (low + high) >> 1, midValue = domain[mid];
+      if (midValue < x) low = mid + 1;
+      else if (midValue > x) high = mid - 1;
+      else return mid;
+    }
+    return low - 1;
+  }
+
+  return function(x) {
+    var j = search(x);
+    return i[j](u[j](x));
+  };
+}
 d3.scale.log = function() {
   var linear = d3.scale.linear(),
       log = d3_scale_log,
