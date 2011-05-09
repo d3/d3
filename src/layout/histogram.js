@@ -19,8 +19,7 @@ d3.layout.histogram = function() {
 
     // Count the number of samples per bin.
     for (var i = 0; i < x.length; i++) {
-      var j = d3_layout_histogramSearchIndex(ticks, x[i]) - 1,
-          bin = bins[Math.max(0, Math.min(bins.length - 1, j))];
+      var bin = bins[d3_layout_histogramSearch(ticks, x[i])];
       bin.y++;
       bin.push(data[i]);
     }
@@ -55,23 +54,15 @@ d3.layout.histogram = function() {
 };
 
 // Performs a binary search on a sorted array.
-// Returns the index of the value if found, otherwise -(insertion point) - 1.
-// The insertion point is the index at which value should be inserted into the
-// array for the array to remain sorted.
 function d3_layout_histogramSearch(array, value) {
-  var low = 0, high = array.length - 1;
+  var low = 1, high = array.length - 2;
   while (low <= high) {
     var mid = (low + high) >> 1, midValue = array[mid];
     if (midValue < value) low = mid + 1;
     else if (midValue > value) high = mid - 1;
     else return mid;
   }
-  return -low - 1;
-}
-
-function d3_layout_histogramSearchIndex(array, value) {
-  var i = d3_layout_histogramSearch(array, value);
-  return (i < 0) ? (-i - 1) : i;
+  return low - 1;
 }
 
 function d3_layout_histogramTicks(x) {
