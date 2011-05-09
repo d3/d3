@@ -6,6 +6,8 @@ all: \
 	d3.min.js \
 	d3.behavior.js \
 	d3.behavior.min.js \
+	d3.stats.js \
+	d3.stats.min.js \
 	d3.chart.js \
 	d3.chart.min.js \
 	d3.layout.js \
@@ -89,6 +91,13 @@ d3.behavior.js: \
 	src/start.js \
 	src/behavior/behavior.js \
 	src/behavior/zoom.js \
+	src/end.js
+
+d3.stats.js: \
+	src/start.js \
+	src/stats/stats.js \
+	src/stats/kernel.js \
+	src/stats/kde.js \
 	src/end.js
 
 d3.chart.js: \
