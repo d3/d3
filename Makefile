@@ -47,7 +47,6 @@ d3.core.js: \
 	src/core/call.js \
 	src/core/range.js \
 	src/core/requote.js \
-	src/core/search.js \
 	src/core/xhr.js \
 	src/core/text.js \
 	src/core/json.js \

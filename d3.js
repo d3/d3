@@ -229,16 +229,6 @@ d3.requote = function(s) {
 };
 
 var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
-d3.search = function(array, value) {
-  var low = 0, high = array.length - 1;
-  while (low <= high) {
-    var mid = (low + high) >> 1, midValue = array[mid];
-    if (midValue < value) low = mid + 1;
-    else if (midValue > value) high = mid - 1;
-    else return mid;
-  }
-  return -low - 1;
-}
 d3.xhr = function(url, mime, callback) {
   var req = new XMLHttpRequest();
   if (arguments.length < 3) callback = mime;
