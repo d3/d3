@@ -58,6 +58,7 @@ d3.core.js: \
 	src/core/ease.js \
 	src/core/event.js \
 	src/core/interpolate.js \
+	src/core/uninterpolate.js \
 	src/core/rgb.js \
 	src/core/hsl.js \
 	src/core/selection.js \
@@ -67,6 +68,8 @@ d3.core.js: \
 d3.scale.js: \
 	src/scale/scale.js \
 	src/scale/linear.js \
+	src/scale/bilinear.js \
+	src/scale/polylinear.js \
 	src/scale/log.js \
 	src/scale/pow.js \
 	src/scale/sqrt.js \
@@ -165,6 +168,7 @@ tests: \
 	tests/test-time-parse.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
+	tests/test-scale-polylinear.test \
 	tests/test-scale-log.test \
 	tests/test-scale-sqrt.test \
 	tests/test-scale-pow.test \
