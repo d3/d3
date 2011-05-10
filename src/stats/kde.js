@@ -1,6 +1,6 @@
 // http://exploringdata.net/den_trac.htm
 d3.stats.kde = function() {
-  var kernel = d3.stats.kernel.epanechnikov,
+  var kernel = d3.stats.kernel.gaussian,
       sample = [],
       bandwidth = d3.stats.bandwidth.nrd;
 
