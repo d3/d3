@@ -105,6 +105,7 @@ d3.chart.js: \
 	src/chart/chart.js \
 	src/chart/box.js \
 	src/chart/bullet.js \
+	src/chart/qq.js \
 	src/end.js
 
 d3.layout.js: \
@@ -115,6 +116,7 @@ d3.layout.js: \
 	src/layout/partition.js \
 	src/layout/pie.js \
 	src/layout/stack.js \
+	src/layout/histogram.js \
 	src/layout/hierarchy.js \
 	src/layout/pack.js \
 	src/layout/cluster.js \

@@ -1,42 +1,3 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Area Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
-
-body {
-  font: 10px sans-serif;
-}
-
-.rule line {
-  stroke: #eee;
-  shape-rendering: crispEdges;
-}
-
-.rule line.axis {
-  stroke: #000;
-}
-
-.area {
-  fill: lightsteelblue;
-}
-
-.line, circle.area {
-  fill: none;
-  stroke: steelblue;
-  stroke-width: 1.5px;
-}
-
-circle.area {
-  fill: #fff;
-}
-
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
-
 var data = d3.range(20).map(function(i) {
   return {x: i / 19, y: (Math.sin(i / 3) + 1) / 2};
 });
@@ -48,8 +9,8 @@ var w = 450,
     y = d3.scale.linear().domain([0, 1]).range([h, 0]);
 
 var vis = d3.select("body")
-  .append("svg:svg")
     .data([data])
+  .append("svg:svg")
     .attr("width", w + p * 2)
     .attr("height", h + p * 2)
   .append("svg:g")
@@ -88,26 +49,15 @@ rules.append("svg:text")
     .text(y.tickFormat(10));
 
 vis.append("svg:path")
-    .attr("class", "area")
-    .attr("d", d3.svg.area()
-    .x(function(d) { return x(d.x); })
-    .y0(h - 1)
-    .y1(function(d) { return y(d.y); }));
-
-vis.append("svg:path")
     .attr("class", "line")
     .attr("d", d3.svg.line()
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.y); }));
 
-vis.selectAll("circle.area")
+vis.selectAll("circle.line")
     .data(data)
   .enter().append("svg:circle")
-    .attr("class", "area")
+    .attr("class", "line")
     .attr("cx", function(d) { return x(d.x); })
     .attr("cy", function(d) { return y(d.y); })
     .attr("r", 3.5);
-
-    </script>
-  </body>
-</html>
