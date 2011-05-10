@@ -96,8 +96,13 @@ d3.behavior.js: \
 d3.stats.js: \
 	src/start.js \
 	src/stats/stats.js \
+	src/stats/bandwidth.js \
 	src/stats/kernel.js \
 	src/stats/kde.js \
+	src/stats/iqr.js \
+	src/stats/mean.js \
+	src/stats/quantiles.js \
+	src/stats/variance.js \
 	src/end.js
 
 d3.chart.js: \

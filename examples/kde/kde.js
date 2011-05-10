@@ -32,9 +32,9 @@ d3.json("faithful.json", function(faithful) {
       .y(function(d) { return h - y(d[1]); });
 
   vis.selectAll("path")
-      .data([1, 7, 20])
+      .data(d3.values(d3.stats.bandwidth))
     .enter().append("svg:path")
       .attr("d", function(h) {
-        return line(kde.scale(h)(d3.range(30, 110, .1)));
+        return line(kde.bandwidth(h)(d3.range(30, 110, .1)));
       });
 });
