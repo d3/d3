@@ -3176,7 +3176,10 @@ d3.svg.mouse = function(container) {
     d3_mouse_bug44083 = !(ctm.f || ctm.e);
     svg.remove();
   }
-  if (d3_mouse_bug44083) {
+  if (d3.event.touches && d3.event.touches.length > 0) {
+    point.x = d3.event.touches[0].pageX;
+    point.y = d3.event.touches[0].pageY;
+  } else if (d3_mouse_bug44083) {
     point.x = d3.event.pageX;
     point.y = d3.event.pageY;
   } else {
