@@ -142,8 +142,8 @@ d3.stats.quantiles = function(d, quantiles) {
     return ~~q === q ? (d[q] + d[q + 1]) / 2 : d[Math.round(q)];
   });
 };
-// TODO: replace with more stable algorithm.
-// Sample variance.
+// Unbiased estimate of a sample's variance.
+// Also known as the sample variance, where the denominator is n - 1.
 d3.stats.variance = function(x) {
   var mean = d3.stats.mean(x),
       n = x.length,
