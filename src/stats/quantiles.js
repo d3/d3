@@ -1,5 +1,5 @@
 d3.stats.quantiles = function(d, quantiles) {
-  d = d.sort(d3.ascending);
+  d = d.slice().sort(d3.ascending);
   var n = d.length;
   return quantiles.map(function(q) {
     q *= n;
