@@ -103,6 +103,7 @@ d3.stats.js: \
 	src/stats/iqr.js \
 	src/stats/mean.js \
 	src/stats/median.js \
+	src/stats/mode.js \
 	src/stats/quantiles.js \
 	src/stats/variance.js \
 	src/end.js
