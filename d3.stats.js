@@ -100,12 +100,13 @@ d3.stats.iqr = function(x) {
   return quartiles[1] - quartiles[0];
 };
 d3.stats.mean = function(x) {
-  var s = 0,
-      n = x.length,
-      i = -1;
-  while (++i < n) s += x[i];
-  return s / n;
+  return d3.sum(x) / x.length;
 }
+d3.stats.median = function(x) {
+  var i = x.length / 2,
+      j = Math.floor(i);
+  return i === j ? (x[j - 1] + x[j]) / 2 : x[j];
+};
 d3.stats.quantiles = function(d, quantiles) {
   d = d.slice().sort(d3.ascending);
   var n = d.length;

@@ -39,6 +39,7 @@ d3.core.js: \
 	src/core/descending.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/sum.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
@@ -101,6 +102,7 @@ d3.stats.js: \
 	src/stats/kde.js \
 	src/stats/iqr.js \
 	src/stats/mean.js \
+	src/stats/median.js \
 	src/stats/quantiles.js \
 	src/stats/variance.js \
 	src/end.js
@@ -179,6 +181,7 @@ tests: \
 	tests/test-scale-log.test \
 	tests/test-scale-sqrt.test \
 	tests/test-scale-pow.test \
+	tests/test-stats-median.test \
 	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
 	tests/test-svg-line.test \
