@@ -99,9 +99,14 @@ d3.stats.iqr = function(x) {
   var quartiles = d3.stats.quantiles(x, [.25, .75]);
   return quartiles[1] - quartiles[0];
 };
+// Welford's algorithm.
 d3.stats.mean = function(x) {
-  return d3.sum(x) / x.length;
-}
+  var m = 0,
+      n = x.length,
+      i = -1;
+  while (++i < n) m += (x[i] - m) / (i + 1);
+  return m;
+};
 d3.stats.median = function(x) {
   var i = x.length / 2,
       j = Math.floor(i);
