@@ -3172,6 +3172,13 @@ function d3_svg_diagonalProjection(d) {
   return [d.x, d.y];
 }
 d3.svg.mouse = function(container) {
+  return d3_svg_mousePoints(container, [d3.event])[0];
+};
+
+// https://bugs.webkit.org/show_bug.cgi?id=44083
+var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+
+function d3_svg_mousePoints(container, events) {
   var point = (container.ownerSVGElement || container).createSVGPoint();
   if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
     var svg = d3.select(document.body)
@@ -3183,19 +3190,23 @@ d3.svg.mouse = function(container) {
     d3_mouse_bug44083 = !(ctm.f || ctm.e);
     svg.remove();
   }
-  if (d3_mouse_bug44083) {
-    point.x = d3.event.pageX;
-    point.y = d3.event.pageY;
-  } else {
-    point.x = d3.event.clientX;
-    point.y = d3.event.clientY;
-  }
-  point = point.matrixTransform(container.getScreenCTM().inverse());
-  return [point.x, point.y];
+  return events.map(function(e) {
+    if (d3_mouse_bug44083) {
+      point.x = e.pageX;
+      point.y = e.pageY;
+    } else {
+      point.x = e.clientX;
+      point.y = e.clientY;
+    }
+    point = point.matrixTransform(container.getScreenCTM().inverse());
+    return [point.x, point.y];
+  });
 };
-
-// https://bugs.webkit.org/show_bug.cgi?id=44083
-var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+d3.svg.touches = function(container) {
+  var touches = d3.event.touches;
+  return touches && touches.length
+    ? d3_svg_mousePoints(container, d3_array(touches)) : [];
+};
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
       size = d3_svg_symbolSize;
