@@ -3172,13 +3172,13 @@ function d3_svg_diagonalProjection(d) {
   return [d.x, d.y];
 }
 d3.svg.mouse = function(container) {
-  return d3_svg_mousePoints(container, [d3.event])[0];
+  return d3_svg_mousePoint(container, d3.event);
 };
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083
 var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
 
-function d3_svg_mousePoints(container, events) {
+function d3_svg_mousePoint(container, e) {
   var point = (container.ownerSVGElement || container).createSVGPoint();
   if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
     var svg = d3.select(document.body)
@@ -3190,21 +3190,23 @@ function d3_svg_mousePoints(container, events) {
     d3_mouse_bug44083 = !(ctm.f || ctm.e);
     svg.remove();
   }
-  return events.map(function(e) {
-    if (d3_mouse_bug44083) {
-      point.x = e.pageX;
-      point.y = e.pageY;
-    } else {
-      point.x = e.clientX;
-      point.y = e.clientY;
-    }
-    point = point.matrixTransform(container.getScreenCTM().inverse());
-    return [point.x, point.y];
-  });
+  if (d3_mouse_bug44083) {
+    point.x = e.pageX;
+    point.y = e.pageY;
+  } else {
+    point.x = e.clientX;
+    point.y = e.clientY;
+  }
+  point = point.matrixTransform(container.getScreenCTM().inverse());
+  return [point.x, point.y];
 };
 d3.svg.touches = function(container) {
   var touches = d3.event.touches;
-  return touches ? d3_svg_mousePoints(container, d3_array(touches)) : [];
+  return touches ? d3_array(touches).map(function(touch) {
+    var point = d3_svg_mousePoint(container, touch);
+    point.identifier = touch.identifier;
+    return point;
+  }) : [];
 };
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
