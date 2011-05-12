@@ -168,6 +168,13 @@ d3.entries = function(map) {
   for (var key in map) entries.push({key: key, value: map[key]});
   return entries;
 };
+d3.permute = function(array, indexes) {
+  var permutes = [],
+      i = -1,
+      n = indexes.length;
+  while (++i < n) permutes[i] = array[indexes[i]];
+  return permutes;
+};
 d3.merge = function(arrays) {
   return Array.prototype.concat.apply([], arrays);
 };

@@ -41,6 +41,7 @@ d3.core.js: \
 	src/core/keys.js \
 	src/core/values.js \
 	src/core/entries.js \
+	src/core/permute.js \
 	src/core/merge.js \
 	src/core/split.js \
 	src/core/collapse.js \
@@ -161,6 +162,7 @@ tests: \
 	tests/test-interpolate.test \
 	tests/test-keys.test \
 	tests/test-nest.test \
+	tests/test-permute.test \
 	tests/test-remove.test \
 	tests/test-rgb.test \
 	tests/test-hsl.test \
