@@ -17,7 +17,11 @@ function d3_svg_mousePoints(container, events) {
     d3_mouse_bug44083 = !(ctm.f || ctm.e);
     svg.remove();
   }
-  return events.map(function(e) {
+  var i = -1,
+      n = events.length,
+      points = [];
+  while (++i < n) {
+    var e = events[i];
     if (d3_mouse_bug44083) {
       point.x = e.pageX;
       point.y = e.pageY;
@@ -26,6 +30,7 @@ function d3_svg_mousePoints(container, events) {
       point.y = e.clientY;
     }
     point = point.matrixTransform(container.getScreenCTM().inverse());
-    return [point.x, point.y];
-  });
+    points.push([point.x, point.y]);
+  }
+  return points;
 };
