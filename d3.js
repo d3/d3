@@ -3183,11 +3183,7 @@ function d3_svg_mousePoints(container, events) {
     d3_mouse_bug44083 = !(ctm.f || ctm.e);
     svg.remove();
   }
-  var i = -1,
-      n = events.length,
-      points = [];
-  while (++i < n) {
-    var e = events[i];
+  return events.map(function(e) {
     if (d3_mouse_bug44083) {
       point.x = e.pageX;
       point.y = e.pageY;
@@ -3196,14 +3192,13 @@ function d3_svg_mousePoints(container, events) {
       point.y = e.clientY;
     }
     point = point.matrixTransform(container.getScreenCTM().inverse());
-    points.push([point.x, point.y]);
-  }
-  return points;
+    return [point.x, point.y];
+  });
 };
 d3.svg.touches = function(container) {
   var touches = d3.event.touches;
   return touches && touches.length
-    ? d3_svg_mousePoints(container, touches) : [];
+    ? d3_svg_mousePoints(container, d3_array(touches)) : [];
 };
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
