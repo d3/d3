@@ -10,7 +10,8 @@ d3.behavior.zoom = function() {
       z = 0,
       listeners = [],
       pan,
-      zoom;
+      zoom,
+      last = 0;
 
   function zoom() {
     var container = this
@@ -18,22 +19,93 @@ d3.behavior.zoom = function() {
         .on("mousewheel", mousewheel)
         .on("DOMMouseScroll", mousewheel)
         .on("dblclick", mousewheel)
-        .on("touchstart", mousedown);
+        .on("touchstart", touchstart);
 
     d3.select(window)
         .on("mousemove", mousemove)
         .on("mouseup", mouseup)
-        .on("touchmove", mousemove)
-        .on("touchend", mouseup)
-        .on("touchcancel", mouseup);
+        .on("touchmove", touchmove);
+  }
+
+  function touchstart(d, i) {
+    var n = d3.event.touches.length,
+        t = Date.now();
+
+    // doubletap detection
+    if ((n === 1) && (t - last < 300)) {
+      var p = d3.svg.touches(this.nearestViewportElement || this)[0],
+          z0 = z;
+
+      z = Math.floor(z) + 1;
+
+      // adjust x and y to center around mouse location
+      var k = Math.pow(2, z - z0) - 1;
+      x += (x - p[0]) * k;
+      y += (y - p[1]) * k;
+
+      // dispatch redraw
+      dispatch.call(this, d, i);
+    } else if (n > 0) {
+      var p,
+          t0 = d3.event.touches[0];
+      if (n > 1) {
+        // Use d3.svg.touches to avoid drift.
+        var svgp = d3.svg.touches(this.nearestViewportElement || this),
+            t1 = d3.event.touches[1];
+        zoom = {
+          x1: x - (svgp[0][0] + svgp[1][0]) / 2,
+          y1: y - (svgp[0][1] + svgp[1][1]) / 2,
+          z0: z
+        };
+        p = [(t0.clientX + t1.clientX) / 2, (t0.clientY + t1.clientY) / 2];
+      } else p = [t0.clientX, t0.clientY];
+      pan = {
+        x0: x - p[0],
+        y0: y - p[1],
+        target: this,
+        data: d,
+        index: i
+      };
+    }
+    last = t;
+    d3.event.preventDefault();
+    window.focus(); // TODO focusableParent
+  }
+
+  function touchmove(d, i) {
+    var e = d3.event;
+    switch (e.touches.length) {
+      case 1: { // single-touch pan
+        var t0 = e.touches[0];
+        if (pan) {
+          x = t0.clientX + pan.x0;
+          y = t0.clientY + pan.y0;
+          dispatch.call(pan.target, pan.data, pan.index);
+        }
+        e.preventDefault();
+        break;
+      }
+      case 2: { // double-touch pan + zoom + rotate
+        var t0 = e.touches[0],
+            t1 = e.touches[1],
+            k = e.scale - 1;
+
+        x = pan.x0 + zoom.x1 * k + (t0.clientX + t1.clientX) / 2;
+        y = pan.y0 + zoom.y1 * k + (t0.clientY + t1.clientY) / 2;
+        z = zoom.z0 + Math.log(e.scale) / Math.LN2;
+
+        // dispatch redraw
+        dispatch.call(this, d, i);
+        e.preventDefault();
+        break;
+      }
+    }
   }
 
   function mousedown(d, i) {
-    var touches = d3.event.touches,
-        e = touches ? touches[0] : d3.event;
     pan = {
-      x0: x - e.clientX,
-      y0: y - e.clientY,
+      x0: x - d3.event.clientX,
+      y0: y - d3.event.clientY,
       target: this,
       data: d,
       index: i
@@ -43,12 +115,10 @@ d3.behavior.zoom = function() {
   }
 
   function mousemove() {
-    var touches = d3.event.touches,
-        e = touches ? touches[0] : d3.event;
     zoom = null;
     if (pan) {
-      x = e.clientX + pan.x0;
-      y = e.clientY + pan.y0;
+      x = d3.event.clientX + pan.x0;
+      y = d3.event.clientY + pan.y0;
       dispatch.call(pan.target, pan.data, pan.index);
     }
   }
