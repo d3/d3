@@ -18,17 +18,23 @@ d3.behavior.zoom = function() {
         .on("mousedown", mousedown)
         .on("mousewheel", mousewheel)
         .on("DOMMouseScroll", mousewheel)
-        .on("dblclick", mousewheel);
+        .on("dblclick", mousewheel)
+        .on("touchstart", mousedown);
 
     d3.select(window)
         .on("mousemove", mousemove)
-        .on("mouseup", mouseup);
+        .on("mouseup", mouseup)
+        .on("touchmove", mousemove)
+        .on("touchend", mouseup)
+        .on("touchcancel", mouseup);
   }
 
   function mousedown(d, i) {
+    var touches = d3.event.touches,
+        e = touches ? touches[0] : d3.event;
     pan = {
-      x0: x - d3.event.clientX,
-      y0: y - d3.event.clientY,
+      x0: x - e.clientX,
+      y0: y - e.clientY,
       target: this,
       data: d,
       index: i
@@ -38,10 +44,12 @@ d3.behavior.zoom = function() {
   }
 
   function mousemove() {
+    var touches = d3.event.touches,
+        e = touches ? touches[0] : d3.event;
     zoom = null;
     if (pan) {
-      x = d3.event.clientX + pan.x0;
-      y = d3.event.clientY + pan.y0;
+      x = e.clientX + pan.x0;
+      y = e.clientY + pan.y0;
       dispatch.call(pan.target, pan.data, pan.index);
     }
   }
