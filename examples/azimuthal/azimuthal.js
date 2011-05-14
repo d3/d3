@@ -2,9 +2,31 @@
 var xy = d3.geo.azimuthal(),
     path = d3.geo.path().projection(xy);
 
+var geopath = function(d) {
+  var c0 = xy([0, 270]), c1 = xy([180, 270]),
+      r = Math.abs(c0[0] - c1[0]) / 2,
+      arc = " A " + r + "," + r + " 0 0,1 ",
+      useArc = false,
+      min = 360,
+      max = 0,
+      i = -1,
+      n = d.length;
+  while (++i < n) {
+    var lon = d[i][0];
+    if (lon < min) min = lon;
+    if (lon > max) max = lon;
+    if (max - min >= 180) {
+      useArc = true;
+      break;
+    }
+  }
+  return path(d) + (useArc ? " M " + c0.join(",") + arc + c1.join(",") + arc + c0.join(",") + " z" : "");
+};
+
 var states = d3.select("body")
   .append("svg:svg")
   .append("svg:g")
+    //.attr("fill-rule", "evenodd")
     .attr("id", "states");
 
 var grid = d3.select("svg")
@@ -28,7 +50,7 @@ d3.json("../../data/world-countries.json", function(collection) {
     .selectAll("path")
       .data(collection.features)
     .enter().append("svg:path")
-      .attr("d", path)
+      .attr("d", geopath)
     .append("svg:title")
       .text(function(d) { return d.properties.name; });
 
@@ -37,7 +59,7 @@ d3.json("../../data/world-countries.json", function(collection) {
 function refresh() {
   states
     .selectAll("path")
-      .attr("d", path);
+      .attr("d", geopath);
 
   grid
     .selectAll('path')
