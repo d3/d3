@@ -22,8 +22,10 @@ all: \
 .INTERMEDIATE d3.js: \
 	src/start.js \
 	d3.core.js \
+	d3.matrix.js \
 	d3.scale.js \
 	d3.svg.js \
+	d3.vector.js \
 	src/end.js
 
 d3.core.js: \
@@ -92,6 +94,21 @@ d3.svg.js: \
 	src/svg/mouse.js \
 	src/svg/touches.js \
 	src/svg/symbol.js
+
+d3.matrix.js: \
+	src/matrix/matrix.js \
+	src/matrix/determinant.js \
+	src/matrix/gaussjordan.js \
+	src/matrix/inverse.js \
+	src/matrix/multiply.js \
+	src/matrix/transpose.js
+
+d3.vector.js: \
+	src/vector/vector.js \
+	src/vector/cross.js \
+	src/vector/dot.js \
+	src/vector/length.js \
+	src/vector/normalize.js
 
 d3.behavior.js: \
 	src/start.js \
@@ -177,6 +194,8 @@ tests: \
 	tests/test-rgb.test \
 	tests/test-round.test \
 	tests/test-hsl.test \
+	tests/test-matrix.test \
+	tests/test-vector.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
 	tests/test-transition.test \
