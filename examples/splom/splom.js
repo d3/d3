@@ -68,7 +68,8 @@ d3.json("flowers.json", function(flower) {
       .attr("stroke", "#aaa")
       .attr("stroke-width", 1.5)
       .attr("pointer-events", "all")
-      .on("mousedown", mousedown);
+      .on("mousedown", mousedown)
+      .on("touchstart", mousedown);
 
   // Dot plot.
   var dot = row.selectAll("circle")
@@ -83,12 +84,14 @@ d3.json("flowers.json", function(flower) {
 
   d3.select(window)
       .on("mousemove", mousemove)
-      .on("mouseup", mouseup);
+      .on("mouseup", mouseup)
+      .on("touchmove", mousemove)
+      .on("touchend", mouseup);
 
   var rect, x0, x1, count;
 
   function mousedown() {
-    x0 = d3.svg.mouse(this);
+    x0 = d3.event.touches ? d3.svg.touches(this)[0] : d3.svg.mouse(this);
     count = 0;
 
     rect = d3.select(this.parentNode)
@@ -101,7 +104,8 @@ d3.json("flowers.json", function(flower) {
 
   function mousemove() {
     if (!rect) return;
-    x1 = d3.svg.mouse(rect.node());
+    var node = rect.node();
+    x1 = d3.event.touches ? d3.svg.touches(node)[0] : d3.svg.mouse(node);
 
     x1[0] = Math.max(padding / 2, Math.min(size - padding / 2, x1[0]));
     x1[1] = Math.max(padding / 2, Math.min(size - padding / 2, x1[1]));
