@@ -151,3 +151,14 @@ console.log("  ", d3.format("%")(-42));
 console.log("  ", d3.format("%")(-4200000));
 console.log("  ", d3.format("%")(-42000000));
 console.log("");
+
+console.log("exponent:");
+console.log("  ", d3.format("e")(0));
+console.log("  ", d3.format("e")(42));
+console.log("  ", d3.format("e")(42000000));
+console.log("  ", d3.format("e")(420000000));
+console.log("  ", d3.format("e")(-4));
+console.log("  ", d3.format("e")(-42));
+console.log("  ", d3.format("e")(-4200000));
+console.log("  ", d3.format("e")(-42000000));
+console.log("");

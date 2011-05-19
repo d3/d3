@@ -16,14 +16,13 @@ d3.format = function(specifier) {
   } else if (type === "%") {
     percentage = true;
     type = "f";
-  } else if (type === "d")
-    precision = "0";
-
+  }
   if (precision) precision = precision.substring(1);
   if (zfill) {
     fill = "0"; // TODO align = "=";
     if (comma) width -= Math.floor((width - 1) / 4);
   }
+  if (type === "d") precision = "0";
 
   return function(value) {
     var number = percentage ? value * 100 : +value,
@@ -33,13 +32,12 @@ d3.format = function(specifier) {
     if ((type === "d") && (number % 1)) return "";
 
     // Convert the input value to the desired precision.
-    if (precision) {
-      value = type === "g" ? number.toPrecision(precision).replace(/\.0+$/, "")
-        : type === "G" ? number.toPrecision(precision).replace(/\.0+$/, "").replace("e", "E")
-        : type === "e" ? number.toExponential(precision)
-        : type === "E" ? number.toExponential(precision).replace("e", "E")
-        : number.toFixed(precision);
-    } else value = "" + number;
+    value = type === "g" ? number.toPrecision(precision).replace(/\.0+$/, "")
+      : type === "G" ? number.toPrecision(precision).replace(/\.0+$/, "").replace("e", "E")
+      : type === "e" ? number.toExponential(precision)
+      : type === "E" ? number.toExponential(precision).replace("e", "E")
+      : type === "f" ? number.toFixed(precision)
+      : "" + number;
 
     // If the fill character is 0, the sign and group is applied after the fill.
     if (zfill) {
