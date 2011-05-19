@@ -7,7 +7,7 @@ if (!Object.create) Object.create = function(o) {
   f.prototype = o;
   return new f();
 };
-var d3_array = d3_arraySlice; // conversion for NodeLists
+d3.array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(psuedoarray) {
   var i = -1, n = psuedoarray.length, array = [];
@@ -20,9 +20,9 @@ function d3_arraySlice(psuedoarray) {
 }
 
 try {
-  d3_array(document.documentElement.childNodes)[0].nodeType;
+  d3.array(document.documentElement.childNodes)[0].nodeType;
 } catch(e) {
-  d3_array = d3_arrayCopy;
+  d3.array = d3_arrayCopy;
 }
 d3.functor = function(v) {
   return typeof v === "function" ? v : function() { return v; };
@@ -1059,7 +1059,7 @@ function d3_hsl_rgb(h, s, l) {
   return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
 }
 var d3_select = function(s, n) { return n.querySelector(s); },
-    d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
+    d3_selectAll = function(s, n) { return d3.array(n.querySelectorAll(s)); };
 
 // Use Sizzle, if available.
 if (typeof Sizzle === "function") {
@@ -1080,7 +1080,7 @@ d3.select = function(selector) {
 d3.selectAll = function(selector) {
   return typeof selector === "string"
       ? d3_root.selectAll(selector)
-      : d3_selection([d3_array(selector)]); // assume node[]
+      : d3_selection([d3.array(selector)]); // assume node[]
 };
 
 function d3_selection(groups) {
@@ -3202,7 +3202,7 @@ function d3_svg_mousePoint(container, e) {
 };
 d3.svg.touches = function(container) {
   var touches = d3.event.touches;
-  return touches ? d3_array(touches).map(function(touch) {
+  return touches ? d3.array(touches).map(function(touch) {
     var point = d3_svg_mousePoint(container, touch);
     point.identifier = touch.identifier;
     return point;

@@ -384,71 +384,88 @@ d3.layout.force = function() {
     this
       .on("mouseover.force", d3_layout_forceDragOver)
       .on("mouseout.force", d3_layout_forceDragOut)
-      .on("mousedown.force", d3_layout_forceDragDown);
+      .on("mousedown.force", d3_layout_forceDragDown)
+      .on("touchstart.force", d3_layout_forceDragDown);
 
     d3.select(window)
       .on("mousemove.force", dragmove)
+      .on("touchmove.force", dragmove)
       .on("mouseup.force", dragup, true)
+      .on("touchend.force", dragup, true)
       .on("click.force", d3_layout_forceDragClick, true);
 
     return force;
   };
 
   function dragmove() {
-    if (!d3_layout_forceDragNode) return;
-    var parent = d3_layout_forceDragElement.parentNode;
+    if (!d3.keys(d3_layout_forceDragNodes).length) return;
+    (d3.event.touches
+      ? d3.array(d3.event.touches).map(function(t) { return t.identifier; })
+      : [null]).forEach(function(id) {
+      var parent = d3_layout_forceDragElements[id].parentNode;
 
-    // O NOES! The drag element was removed from the DOM.
-    if (!parent) {
-      d3_layout_forceDragNode.fixed = false;
-      d3_layout_forceDragNode = d3_layout_forceDragElement = null;
-      return;
-    }
+      // O NOES! The drag element was removed from the DOM.
+      if (!parent) {
+        d3_layout_forceDragNodes[id].fixed = false;
+        delete d3_layout_forceDragNodes[id];
+        delete d3_layout_forceDragElements[id];
+        return;
+      }
 
-    var m = d3.svg.mouse(parent);
-    d3_layout_forceDragMoved = true;
-    d3_layout_forceDragNode.px = m[0];
-    d3_layout_forceDragNode.py = m[1];
+      var m = id === null
+        ? d3.svg.mouse(parent)
+        : d3.svg.touches(parent)
+          .filter(function(t) { return t.identifier === id; })[0];
+
+      d3_layout_forceDragMoved[id] = true;
+      d3_layout_forceDragNodes[id].px = m[0];
+      d3_layout_forceDragNodes[id].py = m[1];
+    });
     force.resume(); // restart annealing
   }
 
   function dragup() {
-    if (!d3_layout_forceDragNode) return;
-
-    // If the node was moved, prevent the mouseup from propagating.
-    // Also prevent the subsequent click from propagating (e.g., for anchors).
-    if (d3_layout_forceDragMoved) {
-      d3_layout_forceStopClick = true;
-      d3_layout_forceCancel();
-    }
-
-    dragmove();
-    d3_layout_forceDragNode.fixed = false;
-    d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+    if (!d3.keys(d3_layout_forceDragNodes).length) return;
+    var touches = d3.event.changedTouches || d3.event.touches;
+    (touches ? d3.array(touches).map(function(t) { return t.identifier; })
+      : [null]).forEach(function(id) {
+      // If the node was moved, prevent the mouseup from propagating.
+      // Also prevent the subsequent click from propagating (e.g., for anchors).
+      if (d3_layout_forceDragMoved[id]) {
+        d3_layout_forceStopClick = true;
+        d3_layout_forceCancel();
+      }
+      dragmove();
+      d3_layout_forceDragNodes[id].fixed = false;
+      delete d3_layout_forceDragNodes[id];
+      delete d3_layout_forceDragElements[id];
+    });
   }
 
   return force;
 };
 
-var d3_layout_forceDragNode,
-    d3_layout_forceDragMoved,
-    d3_layout_forceStopClick,
-    d3_layout_forceDragElement;
+var d3_layout_forceDragNodes = {},
+    d3_layout_forceDragMoved = {},
+    d3_layout_forceStopClick = false,
+    d3_layout_forceDragElements = {};
 
 function d3_layout_forceDragOver(d) {
   d.fixed = true;
 }
 
 function d3_layout_forceDragOut(d) {
-  if (d !== d3_layout_forceDragNode) {
+  if (d !== d3_layout_forceDragNodes[id]) {
     d.fixed = false;
   }
 }
 
 function d3_layout_forceDragDown(d, i) {
-  (d3_layout_forceDragNode = d).fixed = true;
-  d3_layout_forceDragMoved = false;
-  d3_layout_forceDragElement = this;
+  var id = d3.event.touches ? d3.event.touches[0].identifier : null;
+  d.fixed = true;
+  d3_layout_forceDragNodes[id] = d;
+  if (id in d3_layout_forceDragMoved) delete d3_layout_forceDragMoved[id];
+  d3_layout_forceDragElements[id] = this;
   d3_layout_forceCancel();
 }
 

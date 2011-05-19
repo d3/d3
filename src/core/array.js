@@ -1,4 +1,4 @@
-var d3_array = d3_arraySlice; // conversion for NodeLists
+d3.array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(psuedoarray) {
   var i = -1, n = psuedoarray.length, array = [];
@@ -11,7 +11,7 @@ function d3_arraySlice(psuedoarray) {
 }
 
 try {
-  d3_array(document.documentElement.childNodes)[0].nodeType;
+  d3.array(document.documentElement.childNodes)[0].nodeType;
 } catch(e) {
-  d3_array = d3_arrayCopy;
+  d3.array = d3_arrayCopy;
 }
