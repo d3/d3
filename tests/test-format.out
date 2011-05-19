@@ -66,7 +66,17 @@ grouping with space fill (overflow):
    12,345,678
    1,234,567,890,123
 
-precision:
+grouping with general notation:
+   0
+   42
+   42,000,000
+   420,000,000
+   −4
+   −42
+   −4,200,000
+   −42,000,000
+
+precision (fixed-point notation):
    0.5
    0.45
    0.445
@@ -75,6 +85,16 @@ precision:
    100.00
    100.000
    100.00000
+
+precision (significant digits):
+   0.5
+   0.45
+   0.445
+   0.44445
+   1e+2
+   1.0e+2
+   100
+   100
 
 precision and grouping with space fill:
     123,456.5
@@ -91,4 +111,24 @@ float type passed int:
 
 int type passed float:
    
+
+number:
+   0
+   42
+   42,000,000
+   420,000,000
+   −4
+   −42
+   −4,200,000
+   −42,000,000
+
+percentage:
+   0%
+   4200%
+   4200000000%
+   42000000000%
+   −400%
+   −4200%
+   −420000000%
+   −4200000000%
 
