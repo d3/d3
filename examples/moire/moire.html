@@ -39,14 +39,18 @@ var circle = svg.append("svg:g")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")")
     .attr("r", function(d) { return d * 3; });
 
-svg.on("mousemove", function() {
-  var mouse = d3.svg.mouse(this),
+svg.on("mousemove", mousemove)
+    .on("touchmove", mousemove);
+    
+function mousemove() {
+  var mouse = d3.event.touches ? d3.svg.touches(this)[0] : d3.svg.mouse(this),
       r = (Math.sqrt(mouse[0]) + 10) / 10;
 
   circle
       .attr("transform", "translate(" + mouse + ")")
       .attr("r", function(d) { return d * r; });
-});
+  d3.event.preventDefault();
+}
 
     </script>
   </body>
