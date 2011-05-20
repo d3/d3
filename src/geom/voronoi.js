@@ -18,14 +18,14 @@ d3.geom.voronoi = function(vertices) {
         x2,
         y1,
         y2;
-    if (e.a == 1 && e.b >= 0) {
+    if (e.a === 1 && e.b >= 0) {
       s1 = e.ep.r;
       s2 = e.ep.l;
     } else {
       s1 = e.ep.l;
       s2 = e.ep.r;
     }
-    if (e.a == 1) {
+    if (e.a === 1) {
       y1 = s1 ? s1.y : -1e6;
       x1 = e.c - e.b * y1;
       y2 = s2 ? s2.y : 1e6;
@@ -200,8 +200,8 @@ function d3_voronoi_tessellate(vertices, callback) {
         e = e2;
       }
       var rightOfSite = (xint >= e.region.r.x);
-      if ((rightOfSite && (el.side == "l")) ||
-        (!rightOfSite && (el.side == "r"))) {
+      if ((rightOfSite && (el.side === "l")) ||
+        (!rightOfSite && (el.side === "r"))) {
         return null;
       }
       return {
@@ -215,13 +215,13 @@ function d3_voronoi_tessellate(vertices, callback) {
           topsite = e.region.r,
           rightOfSite = (p.x > topsite.x);
 
-      if (rightOfSite && (he.side == "l")) {
+      if (rightOfSite && (he.side === "l")) {
         return 1;
       }
-      if (!rightOfSite && (he.side == "r")) {
+      if (!rightOfSite && (he.side === "r")) {
         return 0;
       }
-      if (e.a == 1) {
+      if (e.a === 1) {
         var dyp = p.y - topsite.y,
             dxp = p.x - topsite.x,
             fast = 0,
@@ -256,7 +256,7 @@ function d3_voronoi_tessellate(vertices, callback) {
 
         above = (t1 * t1) > (t2 * t2 + t3 * t3);
       }
-      return he.side == "l" ? above : !above;
+      return he.side === "l" ? above : !above;
     },
 
     endPoint: function(edge, side, site) {
@@ -296,7 +296,7 @@ function d3_voronoi_tessellate(vertices, callback) {
       ls.splice(i, 1);
     },
 
-    empty: function() { return EventQueue.list.length == 0; },
+    empty: function() { return EventQueue.list.length === 0; },
 
     nextEvent: function(he) {
       for (var i=0, ls=EventQueue.list, l=ls.length; i<l; ++i) {

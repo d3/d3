@@ -1,0 +1,27 @@
+permute reverses:
+    2,1,0: 2,1,0
+
+permute does not modify input array:
+    0,1,2: 0,1,2
+
+permute does nothing:
+    0,1,2: 0,1,2
+
+permute duplicates:
+    0,0,0: 0,0,0
+
+permute returns fewer elements:
+      2,1: 2,1
+        1: 1
+        0: 0
+         : 
+
+permute returns undefined elements:
+       10: 
+       -1: 
+     0,-1: 0,
+
+permute returns more elements:
+  0,0,1,2: 0,0,1,2
+  0,1,1,1: 0,1,1,1
+

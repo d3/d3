@@ -1,40 +1,38 @@
 d3.scale.linear = function() {
-  var x0 = 0,
-      x1 = 1,
-      y0 = 0,
-      y1 = 1,
-      kx = 1, // 1 / (x1 - x0)
-      ky = 1, // (x1 - x0) / (y1 - y0)
+  var domain = [0, 1],
+      range = [0, 1],
       interpolate = d3.interpolate,
-      i = interpolate(y0, y1),
-      clamp = false;
+      clamp = false,
+      output,
+      input;
+
+  function rescale() {
+    var linear = domain.length == 2 ? d3_scale_bilinear : d3_scale_polylinear,
+        uninterpolate = clamp ? d3_uninterpolateClamp : d3_uninterpolateNumber;
+    output = linear(domain, range, uninterpolate, interpolate);
+    input = linear(range, domain, uninterpolate, d3.interpolate);
+    return scale;
+  }
 
   function scale(x) {
-    x = (x - x0) * kx;
-    return i(clamp ? Math.max(0, Math.min(1, x)) : x);
+    return output(x);
   }
 
   // Note: requires range is coercible to number!
   scale.invert = function(y) {
-    return (y - y0) * ky + x0;
+    return input(y);
   };
 
   scale.domain = function(x) {
-    if (!arguments.length) return [x0, x1];
-    x0 = +x[0];
-    x1 = +x[1];
-    kx = 1 / (x1 - x0);
-    ky = (x1 - x0) / (y1 - y0);
-    return scale;
+    if (!arguments.length) return domain;
+    domain = x.map(Number);
+    return rescale();
   };
 
   scale.range = function(x) {
-    if (!arguments.length) return [y0, y1];
-    y0 = x[0];
-    y1 = x[1];
-    ky = (x1 - x0) / (y1 - y0);
-    i = interpolate(y0, y1);
-    return scale;
+    if (!arguments.length) return range;
+    range = x;
+    return rescale();
   };
 
   scale.rangeRound = function(x) {
@@ -44,19 +42,19 @@ d3.scale.linear = function() {
   scale.clamp = function(x) {
     if (!arguments.length) return clamp;
     clamp = x;
-    return scale;
+    return rescale();
   };
 
   scale.interpolate = function(x) {
     if (!arguments.length) return interpolate;
-    i = (interpolate = x)(y0, y1);
-    return scale;
+    interpolate = x;
+    return rescale();
   };
 
   // TODO Dates? Ugh.
   function tickRange(m) {
-    var start = Math.min(x0, x1),
-        stop = Math.max(x0, x1),
+    var start = d3.min(domain),
+        stop = d3.max(domain),
         span = stop - start,
         step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
         err = m / (span / step);
@@ -84,5 +82,5 @@ d3.scale.linear = function() {
     return d3.format(",." + n + "f");
   };
 
-  return scale;
+  return rescale();
 };

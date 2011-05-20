@@ -13,13 +13,13 @@ d3.format = function(specifier) {
     fill = "0"; // TODO align = "=";
     if (comma) width -= Math.floor((width - 1) / 4);
   }
-  if (type == "d") precision = "0";
+  if (type === "d") precision = "0";
   return function(value) {
     var number = +value,
         negative = (number < 0) && (number = -number) ? "\u2212" : sign;
 
     // Return the empty string for floats formatted as ints.
-    if ((type == "d") && (number % 1)) return "";
+    if ((type === "d") && (number % 1)) return "";
 
     // Convert the input value to the desired precision.
     if (precision) value = number.toFixed(precision);
