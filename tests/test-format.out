@@ -97,6 +97,20 @@ precision (significant digits):
    100
    100
 
+precision and rounding (significant digits):
+   0.05
+   0.5
+   0.45
+   0.445
+   0.44445
+   123
+   100
+   120
+   123
+   123.5
+   123.45
+   123.450
+
 precision and grouping with space fill:
     123,456.5
    1,234,567.45
@@ -111,7 +125,7 @@ float type passed int:
    42
 
 int type passed float:
-   
+
 
 number:
    0.0042
@@ -127,13 +141,22 @@ number:
 
 percentage:
    0%
-   4200%
-   4200000000%
-   42000000000%
-   −400%
-   −4200%
-   −420000000%
-   −4200000000%
+   4%
+   42%
+   420%
+   −4%
+   −42%
+   −420%
+
+percentage with rounding and sign:
+   +0.12%
+   +1.2%
+   +12%
+   +120%
+   −0.12%
+   −1.2%
+   −12%
+   −120%
 
 exponent:
    0e+0

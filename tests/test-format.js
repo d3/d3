@@ -94,10 +94,10 @@ console.log("  ", d3.format(".1f")(0.49));
 console.log("  ", d3.format(".2f")(0.449));
 console.log("  ", d3.format(".3f")(0.4449));
 console.log("  ", d3.format(".5f")(0.444449));
-console.log("  ", d3.format(".1f")(100));
-console.log("  ", d3.format(".2f")(100));
-console.log("  ", d3.format(".3f")(100));
-console.log("  ", d3.format(".5f")(100));
+console.log("  ", d3.format(".1F")(100));
+console.log("  ", d3.format(".2F")(100));
+console.log("  ", d3.format(".3F")(100));
+console.log("  ", d3.format(".5F")(100));
 console.log("");
 
 console.log("precision (significant digits):");
@@ -110,6 +110,21 @@ console.log("  ", d3.format(".1g")(100));
 console.log("  ", d3.format(".2g")(100));
 console.log("  ", d3.format(".3g")(100));
 console.log("  ", d3.format(".5g")(100));
+console.log("");
+
+console.log("precision and rounding (significant digits):");
+console.log("  ", d3.format(".1r")(0.049));
+console.log("  ", d3.format(".1r")(0.49));
+console.log("  ", d3.format(".2r")(0.449));
+console.log("  ", d3.format(".3r")(0.4449));
+console.log("  ", d3.format(".5r")(0.444449));
+console.log("  ", d3.format("r")(123.45));
+console.log("  ", d3.format(".1r")(123.45));
+console.log("  ", d3.format(".2r")(123.45));
+console.log("  ", d3.format(".3r")(123.45));
+console.log("  ", d3.format(".4r")(123.45));
+console.log("  ", d3.format(".5r")(123.45));
+console.log("  ", d3.format(".6r")(123.45));
 console.log("");
 
 console.log("precision and grouping with space fill:");
@@ -128,7 +143,7 @@ console.log("  ", d3.format("f")(42));
 console.log("");
 
 console.log("int type passed float:");
-console.log("  ", d3.format("d")(4.2));
+console.log(d3.format("d")(4.2));
 console.log("");
 
 console.log("number:");
@@ -146,13 +161,23 @@ console.log("");
 
 console.log("percentage:");
 console.log("  ", d3.format("%")(0));
-console.log("  ", d3.format("%")(42));
-console.log("  ", d3.format("%")(42000000));
-console.log("  ", d3.format("%")(420000000));
-console.log("  ", d3.format("%")(-4));
-console.log("  ", d3.format("%")(-42));
-console.log("  ", d3.format("%")(-4200000));
-console.log("  ", d3.format("%")(-42000000));
+console.log("  ", d3.format("%")(.042));
+console.log("  ", d3.format("%")(.42));
+console.log("  ", d3.format("%")(4.2));
+console.log("  ", d3.format("%")(-.042));
+console.log("  ", d3.format("%")(-.42));
+console.log("  ", d3.format("%")(-4.2));
+console.log("");
+
+console.log("percentage with rounding and sign:");
+console.log("  ", d3.format("+.2p")(.00123));
+console.log("  ", d3.format("+.2p")(.0123));
+console.log("  ", d3.format("+.2p")(.123));
+console.log("  ", d3.format("+.2p")(1.23));
+console.log("  ", d3.format("+.2p")(-.00123));
+console.log("  ", d3.format("+.2p")(-.0123));
+console.log("  ", d3.format("+.2p")(-.123));
+console.log("  ", d3.format("+.2p")(-1.23));
 console.log("");
 
 console.log("exponent:");
