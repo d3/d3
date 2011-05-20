@@ -101,6 +101,7 @@ console.log("  ", d3.format(".5f")(100));
 console.log("");
 
 console.log("precision (significant digits):");
+console.log("  ", d3.format(".1g")(0.049));
 console.log("  ", d3.format(".1g")(0.49));
 console.log("  ", d3.format(".2g")(0.449));
 console.log("  ", d3.format(".3g")(0.4449));
@@ -131,6 +132,8 @@ console.log("  ", d3.format("d")(4.2));
 console.log("");
 
 console.log("number:");
+console.log("  ", d3.format("n")(.0042));
+console.log("  ", d3.format("n")(.42));
 console.log("  ", d3.format("n")(0));
 console.log("  ", d3.format("n")(42));
 console.log("  ", d3.format("n")(42000000));

@@ -87,6 +87,7 @@ precision (fixed-point notation):
    100.00000
 
 precision (significant digits):
+   0.05
    0.5
    0.45
    0.445
@@ -113,6 +114,8 @@ int type passed float:
    
 
 number:
+   0.0042
+   0.42
    0
    42
    42,000,000
@@ -131,4 +134,14 @@ percentage:
    −4200%
    −420000000%
    −4200000000%
+
+exponent:
+   0e+0
+   4.2e+1
+   4.2e+7
+   4.2e+8
+   −4e+0
+   −4.2e+1
+   −4.2e+6
+   −4.2e+7
 
