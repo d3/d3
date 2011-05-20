@@ -236,6 +236,11 @@ d3.requote = function(s) {
 };
 
 var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
+d3.round = function(x, n) {
+  return n
+      ? Math.round(x * Math.pow(10, n)) * Math.pow(10, -n)
+      : Math.round(x);
+};
 d3.xhr = function(url, mime, callback) {
   var req = new XMLHttpRequest();
   if (arguments.length < 3) callback = mime;
