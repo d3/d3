@@ -38,19 +38,19 @@ for (var i = 0; i < n; i++) {
 }
 
 var w = 400,
-    h = 400,
-    ticks = d3.range(0, m, .25);
+    h = 400;
 
 var histogram = d3.layout.histogram()
     .frequency(true)
-    .ticks(ticks);
+    .bins(40)
+    (data);
 
 var x = d3.scale.ordinal()
-    .domain(ticks)
+    .domain(histogram.map(function(d) { return d.x; }))
     .rangeRoundBands([0, w]);
 
 var y = d3.scale.linear()
-    .domain([0, .12])
+    .domain([0, d3.max(histogram, function(d) { return d.y; })])
     .range([0, h]);
 
 var vis = d3.select("body").append("svg:svg")
@@ -60,7 +60,7 @@ var vis = d3.select("body").append("svg:svg")
     .attr("transform", "translate(.5)");
 
 vis.selectAll("rect")
-    .data(histogram(data))
+    .data(histogram)
   .enter().append("svg:rect")
     .attr("transform", function(d) { return "translate(" + x(d.x) + "," + (h - y(d.y)) + ")"; })
     .attr("width", x.rangeBand())
