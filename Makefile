@@ -101,6 +101,7 @@ d3.chart.js: \
 	src/chart/chart.js \
 	src/chart/box.js \
 	src/chart/bullet.js \
+	src/chart/horizon.js \
 	src/chart/qq.js \
 	src/end.js
 
