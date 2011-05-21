@@ -876,13 +876,13 @@ d3.layout.histogram = function() {
   var frequency = true,
       valuer = Number,
       ranger = d3_layout_histogramRange,
-      binner = d3_layout_histogramBins10;
+      binner = d3_layout_histogramBinSturges;
 
   function histogram(data, i) {
     var bins = [],
         values = data.map(valuer, this),
         range = ranger.call(this, values, i),
-        thresholds = binner.call(this, range, i),
+        thresholds = binner.call(this, range, values, i),
         bin,
         i = -1,
         n = values.length,
@@ -897,7 +897,7 @@ d3.layout.histogram = function() {
       bin.y = 0;
     }
 
-    // Fill the bins.
+    // Fill the bins, ignoring values outside the range.
     i = -1; while(++i < n) {
       x = values[i];
       if ((x >= range[0]) && (x <= range[1])) {
@@ -935,12 +935,15 @@ d3.layout.histogram = function() {
   // uniformly into the given number of bins. Or, `x` may be an array of
   // threshold values, defining the bins; the specified array must contain the
   // rightmost (upper) value, thus specifying n + 1 values for n bins. Or, `x`
-  // may be a function which is evaluated, being passed the array of values and
-  // the current index `i`, returning an array of thresholds. The default bin
-  // function will divide the values into ten uniform bins.
+  // may be a function which is evaluated, being passed the range, the array of
+  // values, and the current index `i`, returning an array of thresholds. The
+  // default bin function will divide the values into uniform bins using
+  // Sturges' formula.
   histogram.bins = function(x) {
     if (!arguments.length) return binner;
-    binner = typeof x === "number" ? d3_layout_histogramBins(x) : d3.functor(x);
+    binner = typeof x === "number"
+        ? function(range) { return d3_layout_histogramBinFixed(range, x); }
+        : d3.functor(x);
     return histogram;
   };
 
@@ -955,17 +958,17 @@ d3.layout.histogram = function() {
   return histogram;
 };
 
-var d3_layout_histogramBins10 = d3_layout_histogramBins(10);
+function d3_layout_histogramBinSturges(range, values) {
+  return d3_layout_histogramBinFixed(range, Math.ceil(Math.log(values.length) / Math.LN2 + 1));
+}
 
-function d3_layout_histogramBins(n) {
-  return function(range) {
-    var x = -1,
-        b = +range[0],
-        m = (range[1] - b) / n,
-        f = [];
-    while (++x <= n) f[x] = m * x + b;
-    return f;
-  };
+function d3_layout_histogramBinFixed(range, n) {
+  var x = -1,
+      b = +range[0],
+      m = (range[1] - b) / n,
+      f = [];
+  while (++x <= n) f[x] = m * x + b;
+  return f;
 }
 
 function d3_layout_histogramRange(values) {
