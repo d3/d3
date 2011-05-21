@@ -548,8 +548,8 @@ function d3_chart_bulletWidth(x) {
 d3.chart.horizon = function() {
   var bands = 2,
       mode, // TODO "mirror" and "offset"
-      xValue = Number,
-      yValue = Number,
+      xValue = d3_chart_horizonX,
+      yValue = d3_chart_horizonY,
       size = [1, 1],
       duration = 0;
 
@@ -661,6 +661,14 @@ d3.chart.horizon = function() {
  
   return horizon;
 };
+
+function d3_chart_horizonX(d) {
+  return d.x;
+}
+
+function d3_chart_horizonY(d) {
+  return d.y;
+}
 // Based on http://vis.stanford.edu/protovis/ex/qqplot.html
 d3.chart.qq = function() {
   var width = 1,
