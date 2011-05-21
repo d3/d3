@@ -4,29 +4,27 @@ d3.layout.histogram = function() {
       ticksFunction = d3_layout_histogramTicks;
 
   function histogram(data, i) {
-    var x = data.map(value), bins = [];
-
-    // Initialize default ticks.
-    var ticks = ticksFunction.call(this, data, i);
+    var x = data.map(value),
+        bins = [],
+        bin,
+        ticks = ticksFunction.call(this, data, i),
+        i = -1,
+        n = x.length,
+        m = ticks.length - 1,
+        k = frequency ? 1 / n : 1;
 
     // Initialize the bins.
-    for (var i = 0; i < ticks.length - 1; i++) {
-      var bin = bins[i] = [];
-      bin.x = ticks[i];
-      bin.dx = ticks[i + 1] - ticks[i];
+    while (++i < m) {
+      bin = bins[i] = [];
+      bin.dx = ticks[i + 1] - (bin.x = ticks[i]);
       bin.y = 0;
     }
 
     // Count the number of samples per bin.
-    for (var i = 0; i < x.length; i++) {
-      var bin = bins[d3_layout_histogramSearch(ticks, x[i])];
-      bin.y++;
+    i = -1; while(++i < n) {
+      bin = bins[d3.bisect(ticks, x[i], 0, m - 1)];
+      bin.y += k;
       bin.push(data[i]);
-    }
-
-    // Convert frequencies to probabilities.
-    if (!frequency) for (var i = 0; i < bins.length; i++) {
-      bins[i].y /= x.length;
     }
 
     return bins;
@@ -34,7 +32,7 @@ d3.layout.histogram = function() {
 
   histogram.frequency = function(x) {
     if (!arguments.length) return frequency;
-    frequency = Boolean(x);
+    frequency = !!x;
     return histogram;
   };
 
@@ -52,18 +50,6 @@ d3.layout.histogram = function() {
 
   return histogram;
 };
-
-// Performs a binary search on a sorted array.
-function d3_layout_histogramSearch(array, value) {
-  var low = 1, high = array.length - 2;
-  while (low <= high) {
-    var mid = (low + high) >> 1, midValue = array[mid];
-    if (midValue < value) low = mid + 1;
-    else if (midValue > value) high = mid - 1;
-    else return mid;
-  }
-  return low - 1;
-}
 
 function d3_layout_histogramTicks(x) {
   return d3.scale.linear().domain(x).ticks(10);

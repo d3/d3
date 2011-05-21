@@ -48,6 +48,7 @@ d3.core.js: \
 	src/core/call.js \
 	src/core/range.js \
 	src/core/requote.js \
+	src/core/bisect.js \
 	src/core/xhr.js \
 	src/core/text.js \
 	src/core/json.js \
@@ -176,6 +177,8 @@ tests: \
 	tests/test-scale-log.test \
 	tests/test-scale-sqrt.test \
 	tests/test-scale-pow.test \
+	tests/test-scale-quantile.test \
+	tests/test-bisect.test \
 	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
 	tests/test-svg-line.test \

@@ -4,26 +4,21 @@ d3.scale.quantile = function() {
       thresholds = [];
 
   function rescale() {
-    var i = -1,
-        n = thresholds.length = range.length,
-        k = domain.length / n;
-    while (++i < n) thresholds[i] = domain[~~(i * k)];
-  }
-
-  function quantile(value) {
-    if (isNaN(value = +value)) return NaN;
-    var low = 0, high = thresholds.length - 1;
-    while (low <= high) {
-      var mid = (low + high) >> 1, midValue = thresholds[mid];
-      if (midValue < value) low = mid + 1;
-      else if (midValue > value) high = mid - 1;
-      else return mid;
+    var k = 0,
+        n = domain.length,
+        q = range.length,
+        i;
+    thresholds.length = Math.max(0, q - 1);
+    while (++k < q) {
+      i = n * k / q;
+      if (i % 1) thresholds[k - 1] = domain[~~i];
+      else thresholds[k - 1] = (domain[i = ~~i] + domain[i - 1]) / 2;
     }
-    return high < 0 ? 0 : high;
   }
 
   function scale(x) {
-    return range[quantile(x)];
+    if (isNaN(x = +x)) return NaN;
+    return range[d3.bisect(thresholds, x)];
   }
 
   scale.domain = function(x) {

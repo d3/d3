@@ -236,6 +236,44 @@ d3.requote = function(s) {
 };
 
 var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
+// Locate the insertion point for x in a to maintain sorted order. The
+// arguments lo and hi may be used to specify a subset of the array which should
+// be considered; by default the entire array is used. If x is already present
+// in a, the insertion point will be before (to the left of) any existing
+// entries. The return value is suitable for use as the first argument to
+// `array.splice` assuming that a is already sorted.
+//
+// The returned insertion point i partitions the array a into two halves so that
+// all v < x for v in a[lo:i] for the left side and all v >= x for v in a[i:hi]
+// for the right side.
+d3.bisectLeft = function(a, x, lo, hi) {
+  if (arguments.length < 3) lo = 0;
+  if (arguments.length < 4) hi = a.length;
+  while (lo < hi) {
+    var mid = (lo + hi) >> 1;
+    if (a[mid] < x) lo = mid + 1;
+    else hi = mid;
+  }
+  return lo;
+};
+
+// Similar to bisectLeft, but returns an insertion point which comes after (to
+// the right of) any existing entries of x in a.
+//
+// The returned insertion point i partitions the array into two halves so that
+// all v <= x for v in a[lo:i] for the left side and all v > x for v in a[i:hi]
+// for the right side.
+d3.bisect =
+d3.bisectRight = function(a, x, lo, hi) {
+  if (arguments.length < 3) lo = 0;
+  if (arguments.length < 4) hi = a.length;
+  while (lo < hi) {
+    var mid = (lo + hi) >> 1;
+    if (x < a[mid]) hi = mid;
+    else lo = mid + 1;
+  }
+  return lo;
+};
 d3.xhr = function(url, mime, callback) {
   var req = new XMLHttpRequest();
   if (arguments.length < 3) callback = mime;
@@ -2147,19 +2185,8 @@ function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
     i.push(interpolate(range[j - 1], range[j]));
   }
 
-  function search(x) {
-    var low = 1, high = domain.length - 2;
-    while (low <= high) {
-      var mid = (low + high) >> 1, midValue = domain[mid];
-      if (midValue < x) low = mid + 1;
-      else if (midValue > x) high = mid - 1;
-      else return mid;
-    }
-    return low - 1;
-  }
-
   return function(x) {
-    var j = search(x);
+    var j = d3.bisect(domain, x, 1, domain.length - 1) - 1;
     return i[j](u[j](x));
   };
 }
@@ -2417,26 +2444,21 @@ d3.scale.quantile = function() {
       thresholds = [];
 
   function rescale() {
-    var i = -1,
-        n = thresholds.length = range.length,
-        k = domain.length / n;
-    while (++i < n) thresholds[i] = domain[~~(i * k)];
-  }
-
-  function quantile(value) {
-    if (isNaN(value = +value)) return NaN;
-    var low = 0, high = thresholds.length - 1;
-    while (low <= high) {
-      var mid = (low + high) >> 1, midValue = thresholds[mid];
-      if (midValue < value) low = mid + 1;
-      else if (midValue > value) high = mid - 1;
-      else return mid;
+    var k = 0,
+        n = domain.length,
+        q = range.length,
+        i;
+    thresholds.length = Math.max(0, q - 1);
+    while (++k < q) {
+      i = n * k / q;
+      if (i % 1) thresholds[k - 1] = domain[~~i];
+      else thresholds[k - 1] = (domain[i = ~~i] + domain[i - 1]) / 2;
     }
-    return high < 0 ? 0 : high;
   }
 
   function scale(x) {
-    return range[quantile(x)];
+    if (isNaN(x = +x)) return NaN;
+    return range[d3.bisect(thresholds, x)];
   }
 
   scale.domain = function(x) {
