@@ -2450,9 +2450,9 @@ d3.scale.quantile = function() {
         i;
     thresholds.length = Math.max(0, q - 1);
     while (++k < q) {
-      i = n * k / q;
-      if (i % 1) thresholds[k - 1] = domain[~~i];
-      else thresholds[k - 1] = (domain[i = ~~i] + domain[i - 1]) / 2;
+      thresholds[k - 1] = (i = n * k / q) % 1
+          ? domain[~~i]
+          : (domain[i = ~~i] + domain[i - 1]) / 2;
     }
   }
 
