@@ -37,6 +37,7 @@ d3.core.js: \
 	src/core/descending.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/bisect.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
@@ -48,7 +49,7 @@ d3.core.js: \
 	src/core/call.js \
 	src/core/range.js \
 	src/core/requote.js \
-	src/core/bisect.js \
+	src/core/round.js \
 	src/core/xhr.js \
 	src/core/text.js \
 	src/core/json.js \
@@ -168,6 +169,7 @@ tests: \
 	tests/test-permute.test \
 	tests/test-remove.test \
 	tests/test-rgb.test \
+	tests/test-round.test \
 	tests/test-hsl.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
