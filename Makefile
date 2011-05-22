@@ -37,6 +37,7 @@ d3.core.js: \
 	src/core/descending.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/bisect.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
@@ -48,6 +49,7 @@ d3.core.js: \
 	src/core/call.js \
 	src/core/range.js \
 	src/core/requote.js \
+	src/core/round.js \
 	src/core/xhr.js \
 	src/core/text.js \
 	src/core/json.js \
@@ -112,6 +114,7 @@ d3.layout.js: \
 	src/layout/partition.js \
 	src/layout/pie.js \
 	src/layout/stack.js \
+	src/layout/histogram.js \
 	src/layout/hierarchy.js \
 	src/layout/pack.js \
 	src/layout/cluster.js \
@@ -166,6 +169,7 @@ tests: \
 	tests/test-permute.test \
 	tests/test-remove.test \
 	tests/test-rgb.test \
+	tests/test-round.test \
 	tests/test-hsl.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
@@ -175,6 +179,8 @@ tests: \
 	tests/test-scale-log.test \
 	tests/test-scale-sqrt.test \
 	tests/test-scale-pow.test \
+	tests/test-scale-quantile.test \
+	tests/test-bisect.test \
 	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
 	tests/test-svg-line.test \

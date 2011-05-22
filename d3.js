@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.16.0"}; // semver
+(function(){d3 = {version: "1.17.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date();
 };
@@ -65,6 +65,44 @@ d3.max = function(array, f) {
     while (++i < n) if (a < (b = f(array[i]))) a = b;
   }
   return a;
+};
+// Locate the insertion point for x in a to maintain sorted order. The
+// arguments lo and hi may be used to specify a subset of the array which should
+// be considered; by default the entire array is used. If x is already present
+// in a, the insertion point will be before (to the left of) any existing
+// entries. The return value is suitable for use as the first argument to
+// `array.splice` assuming that a is already sorted.
+//
+// The returned insertion point i partitions the array a into two halves so that
+// all v < x for v in a[lo:i] for the left side and all v >= x for v in a[i:hi]
+// for the right side.
+d3.bisectLeft = function(a, x, lo, hi) {
+  if (arguments.length < 3) lo = 0;
+  if (arguments.length < 4) hi = a.length;
+  while (lo < hi) {
+    var mid = (lo + hi) >> 1;
+    if (a[mid] < x) lo = mid + 1;
+    else hi = mid;
+  }
+  return lo;
+};
+
+// Similar to bisectLeft, but returns an insertion point which comes after (to
+// the right of) any existing entries of x in a.
+//
+// The returned insertion point i partitions the array into two halves so that
+// all v <= x for v in a[lo:i] for the left side and all v > x for v in a[i:hi]
+// for the right side.
+d3.bisect =
+d3.bisectRight = function(a, x, lo, hi) {
+  if (arguments.length < 3) lo = 0;
+  if (arguments.length < 4) hi = a.length;
+  while (lo < hi) {
+    var mid = (lo + hi) >> 1;
+    if (x < a[mid]) hi = mid;
+    else lo = mid + 1;
+  }
+  return lo;
 };
 d3.nest = function() {
   var nest = {},
@@ -236,6 +274,11 @@ d3.requote = function(s) {
 };
 
 var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
+d3.round = function(x, n) {
+  return n
+      ? Math.round(x * Math.pow(10, n)) * Math.pow(10, -n)
+      : Math.round(x);
+};
 d3.xhr = function(url, mime, callback) {
   var req = new XMLHttpRequest();
   if (arguments.length < 3) callback = mime;
@@ -345,7 +388,7 @@ function d3_dispatch(type) {
 
   return dispatch;
 };
-// TODO align, type
+// TODO align
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),
       fill = match[1] || " ",
@@ -354,23 +397,35 @@ d3.format = function(specifier) {
       width = +match[6],
       comma = match[7],
       precision = match[8],
-      type = match[9];
+      type = match[9],
+      percentage = false,
+      integer = false;
+
   if (precision) precision = precision.substring(1);
+
   if (zfill) {
     fill = "0"; // TODO align = "=";
     if (comma) width -= Math.floor((width - 1) / 4);
   }
-  if (type === "d") precision = "0";
+
+  switch (type) {
+    case "n": comma = true; type = "g"; break;
+    case "%": percentage = true; type = "f"; break;
+    case "p": percentage = true; type = "r"; break;
+    case "d": integer = true; precision = "0"; break;
+  }
+
+  type = d3_format_types[type] || d3_format_typeDefault;
+
   return function(value) {
-    var number = +value,
+    var number = percentage ? value * 100 : +value,
         negative = (number < 0) && (number = -number) ? "\u2212" : sign;
 
     // Return the empty string for floats formatted as ints.
-    if ((type === "d") && (number % 1)) return "";
+    if (integer && (number % 1)) return "";
 
     // Convert the input value to the desired precision.
-    if (precision) value = number.toFixed(precision);
-    else value = "" + number;
+    value = type(number, precision);
 
     // If the fill character is 0, the sign and group is applied after the fill.
     if (zfill) {
@@ -387,6 +442,7 @@ d3.format = function(specifier) {
       var length = value.length;
       if (length < width) value = new Array(width - length + 1).join(fill) + value;
     }
+    if (percentage) value += "%";
 
     return value;
   };
@@ -394,6 +450,20 @@ d3.format = function(specifier) {
 
 // [[fill]align][sign][#][0][width][,][.precision][type]
 var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
+
+var d3_format_types = {
+  g: function(x, p) { return x.toPrecision(p); },
+  e: function(x, p) { return x.toExponential(p); },
+  f: function(x, p) { return x.toFixed(p); },
+  r: function(x, p) {
+    var n = 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10);
+    return d3.round(x, p - n).toFixed(Math.max(0, p - n));
+  }
+};
+
+function d3_format_typeDefault(x) {
+  return x + "";
+}
 
 // Apply comma grouping for thousands.
 function d3_format_group(value) {
@@ -2147,19 +2217,8 @@ function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
     i.push(interpolate(range[j - 1], range[j]));
   }
 
-  function search(x) {
-    var low = 1, high = domain.length - 2;
-    while (low <= high) {
-      var mid = (low + high) >> 1, midValue = domain[mid];
-      if (midValue < x) low = mid + 1;
-      else if (midValue > x) high = mid - 1;
-      else return mid;
-    }
-    return low - 1;
-  }
-
   return function(x) {
-    var j = search(x);
+    var j = d3.bisect(domain, x, 1, domain.length - 1) - 1;
     return i[j](u[j](x));
   };
 }
@@ -2417,26 +2476,21 @@ d3.scale.quantile = function() {
       thresholds = [];
 
   function rescale() {
-    var i = -1,
-        n = thresholds.length = range.length,
-        k = domain.length / n;
-    while (++i < n) thresholds[i] = domain[~~(i * k)];
-  }
-
-  function quantile(value) {
-    if (isNaN(value = +value)) return NaN;
-    var low = 0, high = thresholds.length - 1;
-    while (low <= high) {
-      var mid = (low + high) >> 1, midValue = thresholds[mid];
-      if (midValue < value) low = mid + 1;
-      else if (midValue > value) high = mid - 1;
-      else return mid;
+    var k = 0,
+        n = domain.length,
+        q = range.length,
+        i;
+    thresholds.length = Math.max(0, q - 1);
+    while (++k < q) {
+      thresholds[k - 1] = (i = n * k / q) % 1
+          ? domain[~~i]
+          : (domain[i = ~~i] + domain[i - 1]) / 2;
     }
-    return high < 0 ? 0 : high;
   }
 
   function scale(x) {
-    return range[quantile(x)];
+    if (isNaN(x = +x)) return NaN;
+    return range[d3.bisect(thresholds, x)];
   }
 
   scale.domain = function(x) {
