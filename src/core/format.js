@@ -19,7 +19,6 @@ d3.format = function(specifier) {
   }
 
   switch (type) {
-    case "F": type = "f"; break;
     case "n": comma = true; type = "g"; break;
     case "%": percentage = true; type = "f"; break;
     case "p": percentage = true; type = "r"; break;
@@ -63,10 +62,8 @@ d3.format = function(specifier) {
 var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
 
 var d3_format_types = {
-  g: function(x, p) { return x.toPrecision(p).replace(/\.0+$/, ""); },
-  G: function(x, p) { return d3_format_types.g(x, p).replace("e", "E"); },
+  g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
-  E: function(x, p) { return d3_format_types.e(x, p).replace("e", "E"); },
   f: function(x, p) { return x.toFixed(p); },
   r: function(x, p) {
     var n = 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10);

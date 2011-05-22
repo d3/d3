@@ -95,7 +95,9 @@ precision (significant digits):
    1e+2
    1.0e+2
    100
-   100
+   100.00
+   100.20
+   0.0020
 
 precision and rounding (significant digits):
    0.05

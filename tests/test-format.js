@@ -94,10 +94,10 @@ console.log("  ", d3.format(".1f")(0.49));
 console.log("  ", d3.format(".2f")(0.449));
 console.log("  ", d3.format(".3f")(0.4449));
 console.log("  ", d3.format(".5f")(0.444449));
-console.log("  ", d3.format(".1F")(100));
-console.log("  ", d3.format(".2F")(100));
-console.log("  ", d3.format(".3F")(100));
-console.log("  ", d3.format(".5F")(100));
+console.log("  ", d3.format(".1f")(100));
+console.log("  ", d3.format(".2f")(100));
+console.log("  ", d3.format(".3f")(100));
+console.log("  ", d3.format(".5f")(100));
 console.log("");
 
 console.log("precision (significant digits):");
@@ -110,6 +110,8 @@ console.log("  ", d3.format(".1g")(100));
 console.log("  ", d3.format(".2g")(100));
 console.log("  ", d3.format(".3g")(100));
 console.log("  ", d3.format(".5g")(100));
+console.log("  ", d3.format(".5g")(100.2));
+console.log("  ", d3.format(".2g")(0.002));
 console.log("");
 
 console.log("precision and rounding (significant digits):");
