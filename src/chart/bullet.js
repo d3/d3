@@ -1,13 +1,6 @@
-// ranges (bad, satisfactory, good)
-// measures (actual, forecast)
-// markers (previous, goal)
-
-/*
- * Chart design based on the recommendations of Stephen Few. Implementation
- * based on the work of Clint Ivy, Jamie Love, and Jason Davies.
- * http://projects.instantcognition.com/protovis/bulletchart/
- */
-
+// Chart design based on the recommendations of Stephen Few. Implementation
+// based on the work of Clint Ivy, Jamie Love, and Jason Davies.
+// http://projects.instantcognition.com/protovis/bulletchart/
 d3.chart.bullet = function() {
   var orient = "left", // TODO top & bottom
       reverse = false,
@@ -170,18 +163,21 @@ d3.chart.bullet = function() {
     return bullet;
   };
 
+  // ranges (bad, satisfactory, good)
   bullet.ranges = function(x) {
     if (!arguments.length) return ranges;
     ranges = x;
     return bullet;
   };
 
+  // markers (previous, goal)
   bullet.markers = function(x) {
     if (!arguments.length) return markers;
     markers = x;
     return bullet;
   };
 
+  // measures (actual, forecast)
   bullet.measures = function(x) {
     if (!arguments.length) return measures;
     measures = x;
