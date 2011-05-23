@@ -1,21 +1,50 @@
-/**
- * @param {number=} g
- * @param {number=} b
- */
 d3.rgb = function(r, g, b) {
-  return arguments.length == 1
+  return arguments.length === 1
       ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
       : d3_rgb(~~r, ~~g, ~~b);
 };
 
 function d3_rgb(r, g, b) {
-  return {r: r, g: g, b: b, toString: d3_rgb_format};
+  return new d3_Rgb(r, g, b);
 }
 
-/** @this d3_rgb */
-function d3_rgb_format() {
-  return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
+function d3_Rgb(r, g, b) {
+  this.r = r;
+  this.g = g;
+  this.b = b;
 }
+
+d3_Rgb.prototype.brighter = function(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  var r = this.r,
+      g = this.g,
+      b = this.b,
+      i = 30;
+  if (!r && !g && !b) return d3_rgb(i, i, i);
+  if (r && r < i) r = i;
+  if (g && g < i) g = i;
+  if (b && b < i) b = i;
+  return d3_rgb(
+    Math.min(255, Math.floor(r / k)),
+    Math.min(255, Math.floor(g / k)),
+    Math.min(255, Math.floor(b / k)));
+};
+
+d3_Rgb.prototype.darker = function(k) {
+  k = Math.pow(0.7, arguments.length ? k : 1);
+  return d3_rgb(
+    Math.max(0, Math.floor(k * this.r)),
+    Math.max(0, Math.floor(k * this.g)),
+    Math.max(0, Math.floor(k * this.b)));
+};
+
+d3_Rgb.prototype.hsl = function() {
+  return d3_rgb_hsl(this.r, this.g, this.b);
+};
+
+d3_Rgb.prototype.toString = function() {
+  return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
+};
 
 function d3_rgb_hex(v) {
   return v < 0x10 ? "0" + v.toString(16) : v.toString(16);
@@ -55,12 +84,12 @@ function d3_rgb_parse(format, rgb, hsl) {
   if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
-  if (format != null && format.charAt(0) == "#") {
-    if (format.length == 4) {
+  if (format != null && format.charAt(0) === "#") {
+    if (format.length === 4) {
       r = format.charAt(1); r += r;
       g = format.charAt(2); g += g;
       b = format.charAt(3); b += b;
-    } else if (format.length == 7) {
+    } else if (format.length === 7) {
       r = format.substring(1, 3);
       g = format.substring(3, 5);
       b = format.substring(5, 7);
@@ -94,7 +123,7 @@ function d3_rgb_hsl(r, g, b) {
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);
-  return c.charAt(c.length - 1) == "%" ? Math.round(f * 2.55) : f;
+  return c.charAt(c.length - 1) === "%" ? Math.round(f * 2.55) : f;
 }
 
 var d3_rgb_names = {

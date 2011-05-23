@@ -1,79 +1,102 @@
 d3.layout.histogram = function() {
   var frequency = true,
-      value = Number,
-      ticksFunction = d3_layout_histogramTicks;
+      valuer = Number,
+      ranger = d3_layout_histogramRange,
+      binner = d3_layout_histogramBinSturges;
 
   function histogram(data, i) {
-    var x = data.map(value), bins = [];
-
-    // Initialize default ticks.
-    var ticks = ticksFunction.call(this, data, i);
+    var bins = [],
+        values = data.map(valuer, this),
+        range = ranger.call(this, values, i),
+        thresholds = binner.call(this, range, values, i),
+        bin,
+        i = -1,
+        n = values.length,
+        m = thresholds.length - 1,
+        k = frequency ? 1 / n : 1,
+        x;
 
     // Initialize the bins.
-    for (var i = 0; i < ticks.length - 1; i++) {
-      var bin = bins[i] = [];
-      bin.x = ticks[i];
-      bin.dx = ticks[i + 1] - ticks[i];
+    while (++i < m) {
+      bin = bins[i] = [];
+      bin.dx = thresholds[i + 1] - (bin.x = thresholds[i]);
       bin.y = 0;
     }
 
-    // Count the number of samples per bin.
-    for (var i = 0; i < x.length; i++) {
-      var j = d3_layout_histogramSearchIndex(ticks, x[i]) - 1,
-          bin = bins[Math.max(0, Math.min(bins.length - 1, j))];
-      bin.y++;
-      bin.push(data[i]);
-    }
-
-    // Convert frequencies to probabilities.
-    if (!frequency) for (var i = 0; i < bins.length; i++) {
-      bins[i].y /= x.length;
+    // Fill the bins, ignoring values outside the range.
+    i = -1; while(++i < n) {
+      x = values[i];
+      if ((x >= range[0]) && (x <= range[1])) {
+        bin = bins[d3.bisect(thresholds, x, 1, m) - 1];
+        bin.y += k;
+        bin.push(data[i]);
+      }
     }
 
     return bins;
   }
 
+  // Specifies how to extract a value from the associated data. The default
+  // value function is `Number`, which is equivalent to the identity function.
+  histogram.value = function(x) {
+    if (!arguments.length) return valuer;
+    valuer = x;
+    return histogram;
+  };
+
+  // Specifies the range of the histogram. Values outside the specified range
+  // will be ignored. The argument `x` may be specified either as a two-element
+  // array representing the minimum and maximum value of the range, or as a
+  // function that returns the range given the array of values and the current
+  // index `i`. The default range is the extent (minimum and maximum) of the
+  // values.
+  histogram.range = function(x) {
+    if (!arguments.length) return ranger;
+    ranger = d3.functor(x);
+    return histogram;
+  };
+
+  // Specifies how to bin values in the histogram. The argument `x` may be
+  // specified as a number, in which case the range of values will be split
+  // uniformly into the given number of bins. Or, `x` may be an array of
+  // threshold values, defining the bins; the specified array must contain the
+  // rightmost (upper) value, thus specifying n + 1 values for n bins. Or, `x`
+  // may be a function which is evaluated, being passed the range, the array of
+  // values, and the current index `i`, returning an array of thresholds. The
+  // default bin function will divide the values into uniform bins using
+  // Sturges' formula.
+  histogram.bins = function(x) {
+    if (!arguments.length) return binner;
+    binner = typeof x === "number"
+        ? function(range) { return d3_layout_histogramBinFixed(range, x); }
+        : d3.functor(x);
+    return histogram;
+  };
+
+  // Specifies whether the histogram's `y` value is a count (frequency) or a
+  // probability (density). The default value is true.
   histogram.frequency = function(x) {
     if (!arguments.length) return frequency;
-    frequency = Boolean(x);
-    return histogram;
-  };
-
-  histogram.ticks = function(x) {
-    if (!arguments.length) return ticksFunction;
-    ticksFunction = d3.functor(x);
-    return histogram;
-  };
-
-  histogram.value = function(x) {
-    if (!arguments.length) return value;
-    value = x;
+    frequency = !!x;
     return histogram;
   };
 
   return histogram;
 };
 
-// Performs a binary search on a sorted array.
-// Returns the index of the value if found, otherwise -(insertion point) - 1.
-// The insertion point is the index at which value should be inserted into the
-// array for the array to remain sorted.
-function d3_layout_histogramSearch(array, value) {
-  var low = 0, high = array.length - 1;
-  while (low <= high) {
-    var mid = (low + high) >> 1, midValue = array[mid];
-    if (midValue < value) low = mid + 1;
-    else if (midValue > value) high = mid - 1;
-    else return mid;
-  }
-  return -low - 1;
+function d3_layout_histogramBinSturges(range, values) {
+  return d3_layout_histogramBinFixed(range, Math.ceil(Math.log(values.length) / Math.LN2 + 1));
 }
 
-function d3_layout_histogramSearchIndex(array, value) {
-  var i = d3_layout_histogramSearch(array, value);
-  return (i < 0) ? (-i - 1) : i;
+function d3_layout_histogramBinFixed(range, n) {
+  var x = -1,
+      b = +range[0],
+      m = (range[1] - b) / n,
+      f = [];
+  while (++x <= n) f[x] = m * x + b;
+  return f;
 }
 
-function d3_layout_histogramTicks(x) {
-  return d3.scale.linear().domain(x).ticks(10);
+function d3_layout_histogramRange(values) {
+  return [d3.min(values), d3.max(values)];
 }

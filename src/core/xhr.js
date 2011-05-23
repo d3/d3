@@ -4,7 +4,7 @@ d3.xhr = function(url, mime, callback) {
   else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
   req.open("GET", url, true);
   req.onreadystatechange = function() {
-    if (req.readyState == 4) callback(req.status < 300 ? req : null);
+    if (req.readyState === 4) callback(req.status < 300 ? req : null);
   };
   req.send(null);
 };

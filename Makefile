@@ -40,16 +40,19 @@ d3.core.js: \
 	src/core/min.js \
 	src/core/max.js \
 	src/core/sum.js \
+	src/core/bisect.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
 	src/core/entries.js \
+	src/core/permute.js \
 	src/core/merge.js \
 	src/core/split.js \
 	src/core/collapse.js \
 	src/core/call.js \
 	src/core/range.js \
 	src/core/requote.js \
+	src/core/round.js \
 	src/core/xhr.js \
 	src/core/text.js \
 	src/core/json.js \
@@ -61,6 +64,7 @@ d3.core.js: \
 	src/core/ease.js \
 	src/core/event.js \
 	src/core/interpolate.js \
+	src/core/uninterpolate.js \
 	src/core/rgb.js \
 	src/core/hsl.js \
 	src/core/selection.js \
@@ -70,6 +74,8 @@ d3.core.js: \
 d3.scale.js: \
 	src/scale/scale.js \
 	src/scale/linear.js \
+	src/scale/bilinear.js \
+	src/scale/polylinear.js \
 	src/scale/log.js \
 	src/scale/pow.js \
 	src/scale/sqrt.js \
@@ -86,6 +92,7 @@ d3.svg.js: \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
 	src/svg/mouse.js \
+	src/svg/touches.js \
 	src/svg/symbol.js
 
 d3.behavior.js: \
@@ -168,20 +175,29 @@ d3.geom.js: \
 tests: \
 	tests/test-append.test \
 	tests/test-attr.test \
+	tests/test-classed.test \
 	tests/test-call.test \
 	tests/test-csv-parse.test \
 	tests/test-format.test \
 	tests/test-insert.test \
 	tests/test-interpolate.test \
+	tests/test-keys.test \
 	tests/test-nest.test \
+	tests/test-permute.test \
 	tests/test-remove.test \
+	tests/test-rgb.test \
+	tests/test-round.test \
+	tests/test-hsl.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
+	tests/test-scale-polylinear.test \
 	tests/test-scale-log.test \
 	tests/test-scale-sqrt.test \
 	tests/test-scale-pow.test \
+	tests/test-scale-quantile.test \
+	tests/test-bisect.test \
 	tests/test-stats-median.test \
 	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
