@@ -38,16 +38,18 @@ var vis = d3.select("#chart")
     .attr("width", w)
     .attr("height", h);
 
+// Capture area for mouse events in Safari.
+vis
+  .append("svg:rect")
+    .attr("fill", "#fff")
+    .attr("width", w)
+    .attr("height", h);
+
 var force = d3.layout.force()
     .distance(30)
     .nodes(nodes)
     .links(links)
     .size([w, h]);
-
-var cursor = vis.append("svg:circle")
-    .attr("r", 30)
-    .attr("transform", "translate(-100,-100)")
-    .attr("class", "cursor");
 
 force.on("tick", function() {
   vis.selectAll("line.link")
@@ -61,26 +63,58 @@ force.on("tick", function() {
       .attr("cy", function(d) { return d.y; });
 });
 
+function transform(d) { return "translate(" + d + ")"; }
+
 vis.on("mousemove", function() {
-  cursor.attr("transform", "translate(" + d3.svg.mouse(this) + ")");
+  var c = vis.selectAll("circle.cursor")
+      .data([d3.svg.mouse(this)]);
+  c.enter().append("svg:circle")
+      .attr("r", 30)
+      .attr("class", "cursor")
+      .attr("transform", transform);
+  c.attr("transform", transform);
+  c.exit().remove();
 });
 
-vis.on("mousedown", function() {
-  var point = d3.svg.mouse(this),
-      node = {x: point[0], y: point[1]},
-      n = nodes.push(node);
+vis.on("touchmove", touchmove);
+vis.on("touchend", touchmove);
 
-  // add links to any nearby nodes
-  nodes.forEach(function(target) {
-    var x = target.x - node.x,
-        y = target.y - node.y;
-    if (Math.sqrt(x * x + y * y) < 30) {
-      links.push({source: node, target: target});
-    }
+function touchmove() {
+  var c = vis.selectAll("circle.cursor")
+      .data(d3.svg.touches(this));
+  c.enter().append("svg:circle")
+      .attr("r", 30)
+      .attr("class", "cursor")
+      .attr("transform", transform);
+  c.attr("transform", transform);
+  c.exit().remove();
+  d3.event.preventDefault();
+}
+
+vis.on("mousedown", mousedown);
+vis.on("touchstart", function() {
+  touchmove.call(this);
+  mousedown.call(this);
+});
+
+function mousedown() {
+  (d3.event.touches
+    ? d3.svg.touches(this) : [d3.svg.mouse(this)]).forEach(function(p) {
+    var node = {x: p[0], y: p[1]};
+    nodes.push(node);
+    // add links to any nearby nodes
+    nodes.forEach(function(target) {
+      var x = target.x - node.x,
+          y = target.y - node.y;
+      if (Math.sqrt(x * x + y * y) < 30) {
+        links.push({source: node, target: target});
+      }
+    });
   });
 
   restart();
-});
+  d3.event.preventDefault();
+}
 
 restart();
 
