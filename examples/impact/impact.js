@@ -21,6 +21,13 @@ d3.json("impact.json", function(data) {
       .on("click", function(d, i) {
         var a = data.authors[d.key];
         d3.select("#intro")
-            .text(a.n + " (" + a.c + " commits, " + a.a + " additions, " + a.d + " deletions)");
+            .text(a.n + " (" +
+              a.c + " commits, " +
+              a.a + " additions, " +
+              a.d + " deletions)");
+        vis.selectAll("path")
+            .sort(function(d0, d1) {
+              return d0.key === d.key ? 1 : d1.key === d.key ? -1 : 0;
+            });
       });
 });
