@@ -37,7 +37,6 @@ function transition() {
         return data0 = d;
       })
     .transition()
-      .delay(500)
       .duration(2500)
       .attr("d", area);
 }

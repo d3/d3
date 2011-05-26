@@ -8,6 +8,10 @@ var chart = d3.chart.horizon()
     .mode("offset")
     .interpolate("basis");
 
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
 d3.json("unemployment.json", function(data) {
 
   // Offset so that positive is above-average and negative is below-average.
@@ -18,10 +22,22 @@ d3.json("unemployment.json", function(data) {
     return [Date.UTC(data.year[i], data.month[i] - 1), rate - mean];
   });
 
-  d3.select("body").append("svg:svg")
-      .data([data])
-      .attr("class", "RdBu")
-      .attr("width", w)
-      .attr("height", h)
-      .call(chart);
+  // Render the chart.
+  svg.data([data]).call(chart);
+
+  // Enable mode buttons.
+  d3.selectAll("#mode button")
+      .data(["offset", "mirror"])
+      .on("click", function(m) {
+        svg.call(chart.duration(0).mode(m));
+        d3.selectAll("#mode button")
+            .classed("active", function(d) { return d == m; });
+      });
+
+  // Enable bands buttons.
+  d3.selectAll("#bands button")
+      .data([-1, 1])
+      .on("click", function bands(db) {
+        svg.call(chart.duration(1000).bands(Math.max(1, chart.bands() + db)));
+      });
 });

@@ -550,6 +550,10 @@ d3.chart.horizon = function() {
       h = 40,
       duration = 0;
 
+  var color = d3.scale.linear()
+      .domain([-1, 0, 1])
+      .range(["#d62728", "#fff", "#1f77b4"]);
+
   // For each small multiple…
   function horizon(g) {
     g.each(function(d, i) {
@@ -587,9 +591,6 @@ d3.chart.horizon = function() {
         y0 = d3.scale.linear().domain([0, Infinity]).range(y1.range());
         id = ++d3_chart_horizonId;
       }
-
-      // Stash the new scales.
-      this.__chart__ = {x: x1, y: y1, id: id};
 
       // We'll use a defs to store the area path and the clip path.
       var defs = g.selectAll("defs")
@@ -640,20 +641,29 @@ d3.chart.horizon = function() {
 
       // Instantiate each copy of the path with different transforms.
       var u = g.select("g").selectAll("use")
-          .data(d3.range(-1, -bands - 1, -1).concat(d3.range(1, bands + 1)))
-          .attr("class", function(d) { return "q" + (d + bands) + "-" + n; });
+          .data(d3.range(-1, -bands - 1, -1).concat(d3.range(1, bands + 1)), Number);
 
+      // TODO don't fudge the enter transition
       u.enter().append("svg:use")
           .attr("xlink:href", "#d3_chart_horizon_path" + id)
-          .attr("class", function(d) { return "q" + (d + bands) + "-" + n; })
-          .attr("transform", transform);
-
-      // TODO Better transitions when the number of bands changes.
-      u.transition()
+          .attr("transform", function(d) { return transform(d + (d > 0 ? 1 : -1)); })
+          .style("fill", color)
+        .transition()
           .duration(duration)
           .attr("transform", transform);
 
-      u.exit().remove();
+      u.transition()
+          .duration(duration)
+          .attr("transform", transform)
+          .style("fill", color);
+
+      u.exit().transition()
+          .duration(duration)
+          .attr("transform", transform)
+          .remove();
+
+      // Stash the new scales.
+      this.__chart__ = {x: x1, y: y1, id: id};
     });
     d3.timer.flush();
   }
@@ -667,12 +677,19 @@ d3.chart.horizon = function() {
   horizon.bands = function(x) {
     if (!arguments.length) return bands;
     bands = +x;
+    color.domain([-bands, 0, bands]);
     return horizon;
   };
 
   horizon.mode = function(x) {
     if (!arguments.length) return mode;
     mode = x + "";
+    return horizon;
+  };
+
+  horizon.colors = function(x) {
+    if (!arguments.length) return color.range();
+    color.range(x);
     return horizon;
   };
 
