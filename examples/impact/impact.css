@@ -1,0 +1,3 @@
+body { font: 12px sans-serif; }
+path { cursor: pointer; }
+#chart { overflow-x: scroll; }
