@@ -1,11 +1,11 @@
 (function(){d3 = {version: "1.17.1"}; // semver
 if (!Date.now) Date.now = function() {
-  return +new Date();
+  return +new Date;
 };
 if (!Object.create) Object.create = function(o) {
   /** @constructor */ function f() {}
   f.prototype = o;
-  return new f();
+  return new f;
 };
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
@@ -280,7 +280,7 @@ d3.round = function(x, n) {
       : Math.round(x);
 };
 d3.xhr = function(url, mime, callback) {
-  var req = new XMLHttpRequest();
+  var req = new XMLHttpRequest;
   if (arguments.length < 3) callback = mime;
   else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
   req.open("GET", url, true);

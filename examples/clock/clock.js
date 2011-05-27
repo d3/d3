@@ -63,7 +63,7 @@ d3.timer(function() {
 
 // Generate the fields for the current date/time.
 function fields() {
-  var d = new Date();
+  var d = new Date;
 
   function days() {
     return 32 - new Date(d.getYear(), d.getMonth(), 32).getDate();
