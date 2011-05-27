@@ -64,9 +64,9 @@ d3.json("flowers.json", function(flower) {
       .attr("y", padding / 2)
       .attr("width", size - padding)
       .attr("height", size - padding)
-      .attr("fill", "none")
-      .attr("stroke", "#aaa")
-      .attr("stroke-width", 1.5)
+      .style("fill", "none")
+      .style("stroke", "#aaa")
+      .style("stroke-width", 1.5)
       .attr("pointer-events", "all")
       .on("mousedown", mousedown);
 
@@ -77,8 +77,8 @@ d3.json("flowers.json", function(flower) {
       .attr("cx", function(d) { return position[d.x.x](d.y[d.x.x]); })
       .attr("cy", function(d) { return size - position[d.x.y](d.y[d.x.y]); })
       .attr("r", 3)
-      .attr("fill", function(d) { return color(d.y.species); })
-      .attr("fill-opacity", .5)
+      .style("fill", function(d) { return color(d.y.species); })
+      .style("fill-opacity", .5)
       .attr("pointer-events", "none");
 
   d3.select(window)
@@ -93,8 +93,8 @@ d3.json("flowers.json", function(flower) {
 
     rect = d3.select(this.parentNode)
       .append("svg:rect")
-        .attr("fill", "#999")
-        .attr("fill-opacity", .5);
+        .style("fill", "#999")
+        .style("fill-opacity", .5);
 
     d3.event.preventDefault();
   }
@@ -127,7 +127,7 @@ d3.json("flowers.json", function(flower) {
 
     count = 0;
     svg.selectAll("circle")
-        .attr("fill", function(d) {
+        .style("fill", function(d) {
           return mins <= d.y[v.x] && maxs >= d.y[v.x]
               && mint <= d.y[v.y] && maxt >= d.y[v.y]
               ? (count++, color(d.y.species))
@@ -141,7 +141,7 @@ d3.json("flowers.json", function(flower) {
     rect = null;
 
     if (!count) svg.selectAll("circle")
-        .attr("fill", function(d) {
+        .style("fill", function(d) {
           return color(d.y.species);
         });
   }

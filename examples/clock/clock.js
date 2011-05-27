@@ -33,7 +33,7 @@ var g = vis.selectAll("g")
   .enter().append("svg:g");
 
 g.append("svg:path")
-    .attr("fill", function(d) { return fill(d.value); })
+    .style("fill", function(d) { return fill(d.value); })
     .attr("d", arc);
 
 g.append("svg:text")
@@ -48,7 +48,7 @@ d3.timer(function() {
       .data(fields);
 
   g.select("path")
-      .attr("fill", function(d) { return fill(d.value); })
+      .style("fill", function(d) { return fill(d.value); })
       .attr("d", arc);
 
   g.select("text")

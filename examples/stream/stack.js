@@ -30,7 +30,7 @@ var vis = d3.select("#chart")
 var layers = vis.selectAll("g.layer")
     .data(data)
   .enter().append("svg:g")
-    .attr("fill", function(d, i) { return color(i / (n - 1)); })
+    .style("fill", function(d, i) { return color(i / (n - 1)); })
     .attr("class", "layer");
 
 var bars = layers.selectAll("g.bar")
