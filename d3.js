@@ -66,6 +66,16 @@ d3.max = function(array, f) {
   }
   return a;
 };
+d3.zip = function() {
+  var n = arguments.length,
+      length = d3.max(arguments, function(d) { return d.length; }),
+      results = new Array(length);
+  for (var i = 0; i < length; i++) {
+    results[i] = new Array(n);
+    for (var j = 0; j < length; j++) results[i][j] = arguments[j][i];
+  }
+  return results;
+};
 // Locate the insertion point for x in a to maintain sorted order. The
 // arguments lo and hi may be used to specify a subset of the array which should
 // be considered; by default the entire array is used. If x is already present
