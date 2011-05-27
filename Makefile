@@ -37,6 +37,7 @@ d3.core.js: \
 	src/core/descending.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/zip.js \
 	src/core/bisect.js \
 	src/core/nest.js \
 	src/core/keys.js \
@@ -167,6 +168,7 @@ tests: \
 	tests/test-keys.test \
 	tests/test-nest.test \
 	tests/test-permute.test \
+	tests/test-zip.test \
 	tests/test-remove.test \
 	tests/test-rgb.test \
 	tests/test-round.test \
