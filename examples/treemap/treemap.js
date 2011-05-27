@@ -6,7 +6,8 @@ var treemap = d3.layout.treemap()
     .size([w, h])
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
     .value(function(d) { return d.value; })
-    .sticky(true);
+    .sticky(true)
+    .ratio(+location.search.substring(1));
 
 var div = d3.select("#chart").append("div")
     .style("position", "relative")

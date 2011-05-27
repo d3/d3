@@ -6,7 +6,7 @@ d3.layout.treemap = function() {
       size = [1, 1], // width, height
       sticky = false,
       stickies,
-      target = 0.5 * (1 + Math.sqrt(5));
+      ratio = 0.5 * (1 + Math.sqrt(5)); // golden ratio
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
@@ -87,9 +87,7 @@ d3.layout.treemap = function() {
     }
     s *= s;
     u *= u;
-	r = Math.abs((u * rmax) / s - target);
-	s = Math.abs(s / (u * rmin) - target);
-    return Math.max(r, s);
+    return Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio));
   }
 
   // Positions the specified row of nodes. Modifies `rect`.
@@ -166,9 +164,9 @@ d3.layout.treemap = function() {
     return treemap;
   };
 
-  treemap.target = function(x) {
-    if (!arguments.length) return target;
-    target = x;
+  treemap.ratio = function(x) {
+    if (!arguments.length) return ratio;
+    ratio = x;
     return treemap;
   };
 
