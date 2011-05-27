@@ -67,16 +67,18 @@ d3.max = function(array, f) {
   return a;
 };
 d3.zip = function() {
-  var n = arguments.length;
-  if (n === 0) return [];
-  var length = d3.min(arguments, function(d) { return d.length; }),
-      results = new Array(length);
-  for (var i = 0; i < length; i++) {
-    results[i] = new Array(n);
-    for (var j = 0; j < n; j++) results[i][j] = arguments[j][i];
+  if (!(n = arguments.length)) return [];
+  for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m;) {
+    for (var j = -1, n, zip = zips[i] = new Array(n); ++j < n;) {
+      zip[j] = arguments[j][i];
+    }
   }
-  return results;
+  return zips;
 };
+
+function d3_zipLength(d) {
+  return d.length;
+}
 // Locate the insertion point for x in a to maintain sorted order. The
 // arguments lo and hi may be used to specify a subset of the array which should
 // be considered; by default the entire array is used. If x is already present

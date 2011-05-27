@@ -1,11 +1,7 @@
 require("./../lib/env-js/envjs/node");
 require("./../d3");
 
-function s(array) {
-  return "[" + array.map(function(d) {
-    return "[" + d.join(",") + "]";
-  }) + "]";
-}
+var s = JSON.stringify;
 
 console.log("zip [1, 2] [3, 4]:");
 console.log("  " + s(d3.zip([1, 2], [3, 4])));
