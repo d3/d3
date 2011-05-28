@@ -11,20 +11,9 @@ svg {
   background: #eee;
 }
 
-line {
-  stroke: brown;
-  stroke-dasharray: 4,2;
-}
-
 path {
-  fill: none;
+  fill: #ccc;
   stroke: #fff;
-}
-
-path.grid {
-  fill: none;
-  stroke: #eee;
-  stroke-width: .5;
 }
 
 div {
