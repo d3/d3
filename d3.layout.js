@@ -1496,12 +1496,14 @@ function d3_layout_treeAncestor(vim, node, ancestor) {
       : ancestor;
 }
 // Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
+// Modified to support a target aspect ratio by Jeff Heer and Mike Bostock
 d3.layout.treemap = function() {
   var hierarchy = d3.layout.hierarchy(),
       round = Math.round,
       size = [1, 1], // width, height
       sticky = false,
-      stickies;
+      stickies,
+      aspect = 0.5 * (1 + Math.sqrt(5));
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
@@ -1576,7 +1578,7 @@ d3.layout.treemap = function() {
         i = -1,
         n = row.length;
     while (++i < n) {
-      r = row[i].area;
+      r = row[i].area * aspect;
       if (r < rmin) rmin = r;
       if (r > rmax) rmax = r;
     }
@@ -1656,6 +1658,12 @@ d3.layout.treemap = function() {
     if (!arguments.length) return sticky;
     sticky = x;
     stickies = null;
+    return treemap;
+  };
+
+  treemap.aspect = function(x) {
+    if (!arguments.length) return aspect;
+    aspect = x;
     return treemap;
   };
 
