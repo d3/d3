@@ -1,0 +1,23 @@
+#clock {
+  position: relative;
+  background: #222;
+  width: 960px;
+  height: 700px;
+}
+
+#clock div {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  color: #ddd;
+  font: 10px sans-serif;
+}
+
+#clock a {
+  color: #fff;
+  font-weight: bold;
+}
+
+text {
+  font: bold 13px sans-serif;
+}

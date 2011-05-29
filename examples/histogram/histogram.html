@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Histogram</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+rect {
+  fill: steelblue;
+  stroke: white;
+}
+
+line {
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var n = 10000, // number of trials
+    m = 10,    // number of random variables
+    data = [];
+
+// Generate an Irwin-Hall distribution.
+for (var i = 0; i < n; i++) {
+  for (var s = 0, j = 0; j < m; j++) {
+    s += Math.random();
+  }
+  data.push(s);
+}
+
+var w = 400,
+    h = 400;
+
+var histogram = d3.layout.histogram()
+    (data);
+
+var x = d3.scale.ordinal()
+    .domain(histogram.map(function(d) { return d.x; }))
+    .rangeRoundBands([0, w]);
+
+var y = d3.scale.linear()
+    .domain([0, d3.max(histogram, function(d) { return d.y; })])
+    .range([0, h]);
+
+var vis = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+  .append("svg:g")
+    .attr("transform", "translate(.5)");
+
+vis.selectAll("rect")
+    .data(histogram)
+  .enter().append("svg:rect")
+    .attr("transform", function(d) { return "translate(" + x(d.x) + "," + (h - y(d.y)) + ")"; })
+    .attr("width", x.rangeBand())
+    .attr("y", function(d) { return y(d.y); })
+    .attr("height", 0)
+  .transition()
+    .duration(750)
+    .attr("y", 0)
+    .attr("height", function(d) { return y(d.y); });
+
+vis.append("svg:line")
+    .attr("x1", 0)
+    .attr("x2", w)
+    .attr("y1", h)
+    .attr("y2", h);
+
+    </script>
+  </body>
+</html>

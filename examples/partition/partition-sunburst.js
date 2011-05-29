@@ -27,8 +27,8 @@ d3.json("flare.json", function(json) {
     .enter().append("svg:path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
-      .attr("stroke", "#fff")
-      .attr("fill", function(d) { return color((d.children ? d : d.parent).data.key); })
+      .style("stroke", "#fff")
+      .style("fill", function(d) { return color((d.children ? d : d.parent).data.key); })
       .attr("fill-rule", "evenodd");
 
   d3.select("#size").on("click", function() {

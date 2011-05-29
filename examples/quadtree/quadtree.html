@@ -29,10 +29,10 @@ var w = 500,
 
 // Generate random points.
 var data = d3.range(500).map(function() {
-  return [
-    5 + Math.random() * (w - 10),
-    5 + Math.random() * (h - 10)
-  ];
+  return {
+    x: 5 + Math.random() * (w - 10),
+    y: 5 + Math.random() * (h - 10)
+  };
 });
 
 var vis = d3.select("body")
@@ -43,8 +43,8 @@ var vis = d3.select("body")
 vis.selectAll("circle")
     .data(data)
   .enter().append("svg:circle")
-    .attr("cx", function(d) { return d[0]; })
-    .attr("cy", function(d) { return d[1]; })
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
     .attr("r", 4.5);
 
 vis.selectAll("rect")

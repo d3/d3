@@ -10,7 +10,7 @@ var vis = d3.select("#chart")
   .enter().append("svg:svg")
     .attr("width", w)
     .attr("height", h + ph * 2)
-    .attr("class", "RdGy")
+    .attr("class", "RdYlGn")
   .append("svg:g")
     .attr("transform", "translate(" + pw + "," + ph + ")");
 
@@ -25,7 +25,6 @@ vis.selectAll("rect.day")
     .attr("x", function(d) { return d.week * z; })
     .attr("y", function(d) { return d.day * z; })
     .attr("class", "day")
-    .attr("fill", "#fff")
     .attr("width", z)
     .attr("height", z);
 

@@ -68,7 +68,7 @@ d3.behavior.zoom = function() {
     }
 
     // adjust zoom level
-    if (e.type == "dblclick") {
+    if (e.type === "dblclick") {
       z = e.shiftKey ? Math.ceil(z - 1) : Math.floor(z + 1);
     } else {
      var delta = (e.wheelDelta / 120 || -e.detail) * .1;
@@ -79,7 +79,7 @@ d3.behavior.zoom = function() {
         if ((since > 9) && (Math.abs(e.wheelDelta) / since >= 50)) bug40441 = 1;
         bug40441Last = now;
       }
-      if (bug40441 == 1) delta *= .03;
+      if (bug40441 === 1) delta *= .03;
 
       z += delta;
     }

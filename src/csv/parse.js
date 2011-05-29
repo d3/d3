@@ -21,27 +21,29 @@ d3.csv.parseRows = function(text, f) {
       t, // the current token
       eol; // is the current token followed by EOL?
 
+  re.lastIndex = 0; // work-around bug in FF 3.6
+
   /** @private Returns the next token. */
   function token() {
-    if (re.lastIndex == text.length) return EOF; // special case: end of file
+    if (re.lastIndex === text.length) return EOF; // special case: end of file
     if (eol) { eol = false; return EOL; } // special case: end of line
 
     // special case: quotes
     var j = re.lastIndex;
-    if (text.charCodeAt(j) == 34) {
+    if (text.charCodeAt(j) === 34) {
       var i = j;
       while (i++ < text.length) {
-        if (text.charCodeAt(i) == 34) {
-          if (text.charCodeAt(i + 1) != 34) break;
+        if (text.charCodeAt(i) === 34) {
+          if (text.charCodeAt(i + 1) !== 34) break;
           i++;
         }
       }
       re.lastIndex = i + 2;
       var c = text.charCodeAt(i + 1);
-      if (c == 13) {
+      if (c === 13) {
         eol = true;
-        if (text.charCodeAt(i + 2) == 10) re.lastIndex++;
-      } else if (c == 10) {
+        if (text.charCodeAt(i + 2) === 10) re.lastIndex++;
+      } else if (c === 10) {
         eol = true;
       }
       return text.substring(j + 1, i).replace(/""/g, "\"");
@@ -50,7 +52,7 @@ d3.csv.parseRows = function(text, f) {
     // common case
     var m = re.exec(text);
     if (m) {
-      eol = m[0].charCodeAt(0) != 44;
+      eol = m[0].charCodeAt(0) !== 44;
       return text.substring(j, m.index);
     }
     re.lastIndex = text.length;

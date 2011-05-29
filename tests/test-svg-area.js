@@ -93,3 +93,12 @@ console.log("                         [[0, 0]]:", area([[0, 0]]));
 console.log("                 [[0, 0], [5, 5]]:", area([[0, 0], [5, 5]]));
 console.log("        [[0, 0], [5, 5], [10, 0]]:", area([[0, 0], [5, 5], [10, 0]]));
 console.log("");
+
+var area = d3.svg.area()
+    .interpolate("monotone");
+
+console.log("interpolate(monotone):");
+console.log("                         [[0, 0]]:", area([[0, 0]]));
+console.log("                 [[0, 0], [5, 5]]:", area([[0, 0], [5, 5]]));
+console.log("        [[0, 0], [5, 5], [10, 0]]:", area([[0, 0], [5, 5], [10, 0]]));
+console.log("");

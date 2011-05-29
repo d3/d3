@@ -1,6 +1,6 @@
 // Implements a hierarchical layout using the cluster (or dendogram) algorithm.
 d3.layout.cluster = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
       size = [1, 1]; // width, height
 
@@ -41,7 +41,6 @@ d3.layout.cluster = function() {
 
   cluster.sort = d3.rebind(cluster, hierarchy.sort);
   cluster.children = d3.rebind(cluster, hierarchy.children);
-  cluster.value = d3.rebind(cluster, hierarchy.value);
   cluster.links = d3_layout_treeLinks;
 
   cluster.separation = function(x) {

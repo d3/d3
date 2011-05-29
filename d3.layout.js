@@ -155,46 +155,103 @@ d3.layout.force = function() {
   var force = {},
       event = d3.dispatch("tick"),
       size = [1, 1],
-      alpha = .5,
-      distance = 30,
+      alpha,
+      drag = .9,
+      distance = 20,
+      charge = -30,
+      gravity = .1,
+      theta = .8,
       interval,
       nodes,
       links,
       distances;
 
+  function repulse(node, kc) {
+    return function(quad, x1, y1, x2, y2) {
+      if (quad.point !== node) {
+        var dx = quad.cx - node.x,
+            dy = quad.cy - node.y,
+            dn = 1 / Math.sqrt(dx * dx + dy * dy);
+
+        /* Barnes-Hut criterion. */
+        if ((x2 - x1) * dn < theta) {
+          var k = kc * quad.count * dn * dn;
+          node.x += dx * k;
+          node.y += dy * k;
+          return true;
+        }
+
+        if (quad.point && isFinite(dn)) {
+          var k = kc * dn * dn;
+          node.x += dx * k;
+          node.y += dy * k;
+        }
+      }
+    };
+  }
+
   function tick() {
-    var n = distances.length,
+    var n = nodes.length,
+        m = links.length,
+        q = d3.geom.quadtree(nodes),
         i, // current index
-        o, // current link
+        o, // current object
         s, // current source
         t, // current target
         l, // current distance
         x, // x-distance
         y; // y-distance
 
-    // gauss-seidel relaxation
-    for (i = 0; i < n; ++i) {
-      o = distances[i];
+    // gauss-seidel relaxation for links
+    for (i = 0; i < m; ++i) {
+      o = links[i];
       s = o.source;
       t = o.target;
       x = t.x - s.x;
       y = t.y - s.y;
-      if (l = Math.sqrt(x * x + y * y)) {
-        l = alpha / (o.distance * o.distance) * (l - distance * o.distance) / l;
+      if (l = (x * x + y * y)) {
+        l = alpha * ((l = Math.sqrt(l)) - distance) / l;
         x *= l;
         y *= l;
-        if (!t.fixed) {
-          t.x -= x;
-          t.y -= y;
-        }
-        if (!s.fixed) {
-          s.x += x;
-          s.y += y;
-        }
+        t.x -= x;
+        t.y -= y;
+        s.x += x;
+        s.y += y;
       }
     }
 
-    event.tick.dispatch({type: "tick"});
+    // apply gravity forces
+    var kg = alpha * gravity;
+    x = size[0] / 2;
+    y = size[1] / 2;
+    i = -1; while (++i < n) {
+      o = nodes[i];
+      o.x += (x - o.x) * kg;
+      o.y += (y - o.y) * kg;
+    }
+
+    // compute quadtree center of mass
+    d3_layout_forceAccumulate(q);
+
+    // apply charge forces
+    var kc = alpha * charge;
+    i = -1; while (++i < n) {
+      q.visit(repulse(nodes[i], kc));
+    }
+
+    // position verlet integration
+    i = -1; while (++i < n) {
+      o = nodes[i];
+      if (o.fixed) {
+        o.x = o.px;
+        o.y = o.py;
+      } else {
+        o.x -= (o.px - (o.px = o.x)) * drag;
+        o.y -= (o.py - (o.py = o.y)) * drag;
+      }
+    }
+
+    event.tick.dispatch({type: "tick", alpha: alpha});
 
     // simulated annealing, basically
     return (alpha *= .99) < .005;
@@ -223,69 +280,91 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.distance = function(d) {
+  force.distance = function(x) {
     if (!arguments.length) return distance;
-    distance = d;
+    distance = x;
+    return force;
+  };
+
+  force.drag = function(x) {
+    if (!arguments.length) return drag;
+    drag = x;
+    return force;
+  };
+
+  force.charge = function(x) {
+    if (!arguments.length) return charge;
+    charge = x;
+    return force;
+  };
+
+  force.gravity = function(x) {
+    if (!arguments.length) return gravity;
+    gravity = x;
+    return force;
+  };
+
+  force.theta = function(x) {
+    if (!arguments.length) return theta;
+    theta = x;
     return force;
   };
 
   force.start = function() {
     var i,
         j,
-        k,
         n = nodes.length,
         m = links.length,
         w = size[0],
         h = size[1],
+        neighbors,
         o;
 
-    var paths = [];
     for (i = 0; i < n; ++i) {
-      o = nodes[i];
-      o.x = o.x || Math.random() * w;
-      o.y = o.y || Math.random() * h;
-      o.fixed = 0;
-      paths[i] = [];
-      for (j = 0; j < n; ++j) {
-        paths[i][j] = Infinity;
-      }
-      paths[i][i] = 0;
+      (o = nodes[i]).index = i;
     }
 
     for (i = 0; i < m; ++i) {
       o = links[i];
-      paths[o.source][o.target] = 1;
-      paths[o.target][o.source] = 1;
-      o.source = nodes[o.source];
-      o.target = nodes[o.target];
+      if (typeof o.source == "number") o.source = nodes[o.source];
+      if (typeof o.target == "number") o.target = nodes[o.target];
     }
 
-    // Floyd-Warshall
-    for (k = 0; k < n; ++k) {
-      for (i = 0; i < n; ++i) {
+    for (i = 0; i < n; ++i) {
+      o = nodes[i];
+      if (isNaN(o.x)) o.x = position("x", w);
+      if (isNaN(o.y)) o.y = position("y", h);
+      if (isNaN(o.px)) o.px = o.x;
+      if (isNaN(o.py)) o.py = o.y;
+    }
+
+    // initialize node position based on first neighbor
+    function position(dimension, size) {
+      var neighbors = neighbor(i),
+          j = -1,
+          m = neighbors.length,
+          x;
+      while (++j < m) if (!isNaN(x = neighbors[j][dimension])) return x;
+      return Math.random() * size;
+    }
+
+    // initialize neighbors lazily
+    function neighbor() {
+      if (!neighbors) {
+        neighbors = [];
         for (j = 0; j < n; ++j) {
-          paths[i][j] = Math.min(paths[i][j], paths[i][k] + paths[k][j]);
+          neighbors[j] = [];
+        }
+        for (j = 0; j < m; ++j) {
+          var o = links[j];
+          neighbors[o.source.index].push(o.target);
+          neighbors[o.target.index].push(o.source);
         }
       }
+      return neighbors[i];
     }
 
-    distances = [];
-    for (i = 0; i < n; ++i) {
-      for (j = i + 1; j < n; ++j) {
-        distances.push({
-          source: nodes[i],
-          target: nodes[j],
-          distance: paths[i][j] * paths[i][j]
-        });
-      }
-    }
-
-    distances.sort(function(a, b) {
-      return a.distance - b.distance;
-    });
-
-    d3.timer(tick);
-    return force;
+    return force.resume();
   };
 
   force.resume = function() {
@@ -301,43 +380,115 @@ d3.layout.force = function() {
 
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
-    var node, element;
 
     this
-      .on("mouseover", function(d) { d.fixed = true; })
-      .on("mouseout", function(d) { if (d != node) d.fixed = false; })
-      .on("mousedown", mousedown);
+      .on("mouseover.force", d3_layout_forceDragOver)
+      .on("mouseout.force", d3_layout_forceDragOut)
+      .on("mousedown.force", d3_layout_forceDragDown);
 
     d3.select(window)
-      .on("mousemove", mousemove)
-      .on("mouseup", mouseup);
-
-    function mousedown(d) {
-      (node = d).fixed = true;
-      element = this;
-      d3.event.preventDefault();
-    }
-
-    function mousemove() {
-      if (!node) return;
-      var m = d3.svg.mouse(element);
-      node.x = m[0];
-      node.y = m[1];
-      force.resume(); // restart annealing
-    }
-
-    function mouseup() {
-      if (!node) return;
-      mousemove();
-      node.fixed = false;
-      node = element = null;
-    }
+      .on("mousemove.force", dragmove)
+      .on("mouseup.force", dragup, true)
+      .on("click.force", d3_layout_forceDragClick, true);
 
     return force;
   };
 
+  function dragmove() {
+    if (!d3_layout_forceDragNode) return;
+    var parent = d3_layout_forceDragElement.parentNode;
+
+    // O NOES! The drag element was removed from the DOM.
+    if (!parent) {
+      d3_layout_forceDragNode.fixed = false;
+      d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+      return;
+    }
+
+    var m = d3.svg.mouse(parent);
+    d3_layout_forceDragMoved = true;
+    d3_layout_forceDragNode.px = m[0];
+    d3_layout_forceDragNode.py = m[1];
+    force.resume(); // restart annealing
+  }
+
+  function dragup() {
+    if (!d3_layout_forceDragNode) return;
+
+    // If the node was moved, prevent the mouseup from propagating.
+    // Also prevent the subsequent click from propagating (e.g., for anchors).
+    if (d3_layout_forceDragMoved) {
+      d3_layout_forceStopClick = true;
+      d3_layout_forceCancel();
+    }
+
+    dragmove();
+    d3_layout_forceDragNode.fixed = false;
+    d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+  }
+
   return force;
 };
+
+var d3_layout_forceDragNode,
+    d3_layout_forceDragMoved,
+    d3_layout_forceStopClick,
+    d3_layout_forceDragElement;
+
+function d3_layout_forceDragOver(d) {
+  d.fixed = true;
+}
+
+function d3_layout_forceDragOut(d) {
+  if (d !== d3_layout_forceDragNode) {
+    d.fixed = false;
+  }
+}
+
+function d3_layout_forceDragDown(d, i) {
+  (d3_layout_forceDragNode = d).fixed = true;
+  d3_layout_forceDragMoved = false;
+  d3_layout_forceDragElement = this;
+  d3_layout_forceCancel();
+}
+
+function d3_layout_forceDragClick() {
+  if (d3_layout_forceStopClick) {
+    d3_layout_forceCancel();
+    d3_layout_forceStopClick = false;
+  }
+}
+
+function d3_layout_forceCancel() {
+  d3.event.stopPropagation();
+  d3.event.preventDefault();
+}
+
+function d3_layout_forceAccumulate(quad) {
+  var cx = 0,
+      cy = 0;
+  quad.count = 0;
+  if (!quad.leaf) {
+    quad.nodes.forEach(function(c) {
+      d3_layout_forceAccumulate(c);
+      quad.count += c.count;
+      cx += c.count * c.cx;
+      cy += c.count * c.cy;
+    });
+  }
+  if (quad.point) {
+    // jitter internal nodes that are coincident
+    if (!quad.leaf) {
+      quad.point.x += Math.random() - .5;
+      quad.point.y += Math.random() - .5;
+    }
+    quad.count++;
+    cx += quad.point.x;
+    cy += quad.point.y;
+  }
+  quad.cx = cx / quad.count;
+  quad.cy = cy / quad.count;
+}
 d3.layout.partition = function() {
   var hierarchy = d3.layout.hierarchy(),
       size = [1, 1]; // width, height
@@ -399,12 +550,12 @@ d3.layout.pie = function() {
   function pie(data, i) {
 
     // Compute the start angle.
-    var a = +(typeof startAngle == "function"
+    var a = +(typeof startAngle === "function"
         ? startAngle.apply(this, arguments)
         : startAngle);
 
     // Compute the angular range (end - start).
-    var k = (typeof endAngle == "function"
+    var k = (typeof endAngle === "function"
         ? endAngle.apply(this, arguments)
         : endAngle) - startAngle;
 
@@ -485,47 +636,102 @@ d3.layout.pie = function() {
   return pie;
 };
 // data is two-dimensional array of x,y; we populate y0
-// TODO perhaps make the `x`, `y` and `y0` structure customizable
 d3.layout.stack = function() {
-  var order = "default",
-      offset = "zero";
+  var values = Object,
+      order = d3_layout_stackOrders["default"],
+      offset = d3_layout_stackOffsets["zero"],
+      out = d3_layout_stackOut,
+      x = d3_layout_stackX,
+      y = d3_layout_stackY;
 
-  function stack(data) {
-    var n = data.length,
-        m = data[0].length,
+  function stack(data, index) {
+
+    // Convert series to canonical two-dimensional representation.
+    var series = data.map(function(d, i) {
+      return values.call(stack, d, i);
+    });
+
+    // Convert each series to canonical [[x,y]] representation.
+    var points = series.map(function(d, i) {
+      return d.map(function(v, i) {
+        return [x.call(stack, v, i), y.call(stack, v, i)];
+      });
+    });
+
+    // Compute the order of series, and permute them.
+    var orders = order.call(stack, points, index);
+    series = d3.permute(series, orders);
+    points = d3.permute(points, orders);
+
+    // Compute the baseline…
+    var offsets = offset.call(stack, points, index);
+
+    // And propagate it to other series.
+    var n = series.length,
+        m = series[0].length,
         i,
         j,
-        y0;
-
-    // compute the order of series
-    var index = d3_layout_stackOrders[order](data);
-
-    // set y0 on the baseline
-    d3_layout_stackOffsets[offset](data, index);
-
-    // propagate offset to other series
+        o;
     for (j = 0; j < m; ++j) {
-      for (i = 1, y0 = data[index[0]][j].y0; i < n; ++i) {
-        data[index[i]][j].y0 = y0 += data[index[i - 1]][j].y;
+      out.call(stack, series[0][j], o = offsets[j], points[0][j][1]);
+      for (i = 1; i < n; ++i) {
+        out.call(stack, series[i][j], o += points[i - 1][j][1], points[i][j][1]);
       }
     }
 
     return data;
   }
 
+  stack.values = function(x) {
+    if (!arguments.length) return values;
+    values = x;
+    return stack;
+  };
+
   stack.order = function(x) {
     if (!arguments.length) return order;
-    order = x;
+    order = typeof x === "function" ? x : d3_layout_stackOrders[x];
     return stack;
   };
 
   stack.offset = function(x) {
     if (!arguments.length) return offset;
-    offset = x;
+    offset = typeof x === "function" ? x : d3_layout_stackOffsets[x];
+    return stack;
+  };
+
+  stack.x = function(z) {
+    if (!arguments.length) return x;
+    x = z;
+    return stack;
+  };
+
+  stack.y = function(z) {
+    if (!arguments.length) return y;
+    y = z;
+    return stack;
+  };
+
+  stack.out = function(z) {
+    if (!arguments.length) return out;
+    out = z;
     return stack;
   };
 
   return stack;
+}
+
+function d3_layout_stackX(d) {
+  return d.x;
+}
+
+function d3_layout_stackY(d) {
+  return d.y;
+}
+
+function d3_layout_stackOut(d, y0, y) {
+  d.y0 = y0;
+  d.y = y;
 }
 
 var d3_layout_stackOrders = {
@@ -541,7 +747,7 @@ var d3_layout_stackOrders = {
         bottom = 0,
         tops = [],
         bottoms = [];
-    for (i = 0; i < n; i++) {
+    for (i = 0; i < n; ++i) {
       j = index[i];
       if (top < bottom) {
         top += sums[j];
@@ -566,25 +772,27 @@ var d3_layout_stackOrders = {
 
 var d3_layout_stackOffsets = {
 
-  "silhouette": function(data, index) {
+  "silhouette": function(data) {
     var n = data.length,
         m = data[0].length,
         sums = [],
         max = 0,
         i,
         j,
-        o;
+        o,
+        y0 = [];
     for (j = 0; j < m; ++j) {
-      for (i = 0, o = 0; i < n; i++) o += data[i][j].y;
+      for (i = 0, o = 0; i < n; i++) o += data[i][j][1];
       if (o > max) max = o;
       sums.push(o);
     }
-    for (j = 0, i = index[0]; j < m; ++j) {
-      data[i][j].y0 = (max - sums[j]) / 2;
+    for (j = 0; j < m; ++j) {
+      y0[j] = (max - sums[j]) / 2;
     }
+    return y0;
   },
 
-  "wiggle": function(data, index) {
+  "wiggle": function(data) {
     var n = data.length,
         x = data[0],
         m = x.length,
@@ -592,51 +800,64 @@ var d3_layout_stackOffsets = {
         i,
         j,
         k,
-        ii,
-        ik,
-        i0 = index[0],
         s1,
         s2,
         s3,
         dx,
         o,
-        o0;
-    data[i0][0].y0 = o = o0 = 0;
+        o0,
+        y0 = [];
+    y0[0] = o = o0 = 0;
     for (j = 1; j < m; ++j) {
-      for (i = 0, s1 = 0; i < n; ++i) s1 += data[i][j].y;
-      for (i = 0, s2 = 0, dx = x[j].x - x[j - 1].x; i < n; ++i) {
-        for (k = 0, ii = index[i], s3 = (data[ii][j].y - data[ii][j - 1].y) / (2 * dx); k < i; ++k) {
-          s3 += (data[ik = index[k]][j].y - data[ik][j - 1].y) / dx;
+      for (i = 0, s1 = 0; i < n; ++i) s1 += data[i][j][1];
+      for (i = 0, s2 = 0, dx = x[j][0] - x[j - 1][0]; i < n; ++i) {
+        for (k = 0, s3 = (data[i][j][1] - data[i][j - 1][1]) / (2 * dx); k < i; ++k) {
+          s3 += (data[k][j][1] - data[k][j - 1][1]) / dx;
         }
-        s2 += s3 * data[ii][j].y;
+        s2 += s3 * data[i][j][1];
       }
-      data[i0][j].y0 = o -= s1 ? s2 / s1 * dx : 0;
+      y0[j] = o -= s1 ? s2 / s1 * dx : 0;
       if (o < o0) o0 = o;
     }
-    for (j = 0; j < m; ++j) data[i0][j].y0 -= o0;
+    for (j = 0; j < m; ++j) y0[j] -= o0;
+    return y0;
   },
 
-  "zero": function(data, index) {
-    var j = 0,
+  "expand": function(data) {
+    var n = data.length,
         m = data[0].length,
-        i0 = index[0];
-    for (; j < m; ++j) data[i0][j].y0 = 0;
+        k = 1 / n,
+        i,
+        j,
+        o,
+        y0 = [];
+    for (j = 0; j < m; ++j) {
+      for (i = 0, o = 0; i < n; i++) o += data[i][j][1];
+      if (o) for (i = 0; i < n; i++) data[i][j][1] /= o;
+      else for (i = 0; i < n; i++) data[i][j][1] = k;
+    }
+    for (j = 0; j < m; ++j) y0[j] = 0;
+    return y0;
+  },
+
+  "zero": function(data) {
+    var j = -1,
+        m = data[0].length,
+        y0 = [];
+    while (++j < m) y0[j] = 0;
+    return y0;
   }
 
 };
 
-function d3_layout_stackReduceSum(d) {
-  return d.reduce(d3_layout_stackSum, 0);
-}
-
 function d3_layout_stackMaxIndex(array) {
   var i = 1,
       j = 0,
-      v = array[0].y,
+      v = array[0][1],
       k,
       n = array.length;
   for (; i < n; ++i) {
-    if ((k = array[i].y) > v) {
+    if ((k = array[i][1]) > v) {
       j = i;
       v = k;
     }
@@ -644,8 +865,114 @@ function d3_layout_stackMaxIndex(array) {
   return j;
 }
 
+function d3_layout_stackReduceSum(d) {
+  return d.reduce(d3_layout_stackSum, 0);
+}
+
 function d3_layout_stackSum(p, d) {
-  return p + d.y;
+  return p + d[1];
+}
+d3.layout.histogram = function() {
+  var frequency = true,
+      valuer = Number,
+      ranger = d3_layout_histogramRange,
+      binner = d3_layout_histogramBinSturges;
+
+  function histogram(data, i) {
+    var bins = [],
+        values = data.map(valuer, this),
+        range = ranger.call(this, values, i),
+        thresholds = binner.call(this, range, values, i),
+        bin,
+        i = -1,
+        n = values.length,
+        m = thresholds.length - 1,
+        k = frequency ? 1 / n : 1,
+        x;
+
+    // Initialize the bins.
+    while (++i < m) {
+      bin = bins[i] = [];
+      bin.dx = thresholds[i + 1] - (bin.x = thresholds[i]);
+      bin.y = 0;
+    }
+
+    // Fill the bins, ignoring values outside the range.
+    i = -1; while(++i < n) {
+      x = values[i];
+      if ((x >= range[0]) && (x <= range[1])) {
+        bin = bins[d3.bisect(thresholds, x, 1, m) - 1];
+        bin.y += k;
+        bin.push(data[i]);
+      }
+    }
+
+    return bins;
+  }
+
+  // Specifies how to extract a value from the associated data. The default
+  // value function is `Number`, which is equivalent to the identity function.
+  histogram.value = function(x) {
+    if (!arguments.length) return valuer;
+    valuer = x;
+    return histogram;
+  };
+
+  // Specifies the range of the histogram. Values outside the specified range
+  // will be ignored. The argument `x` may be specified either as a two-element
+  // array representing the minimum and maximum value of the range, or as a
+  // function that returns the range given the array of values and the current
+  // index `i`. The default range is the extent (minimum and maximum) of the
+  // values.
+  histogram.range = function(x) {
+    if (!arguments.length) return ranger;
+    ranger = d3.functor(x);
+    return histogram;
+  };
+
+  // Specifies how to bin values in the histogram. The argument `x` may be
+  // specified as a number, in which case the range of values will be split
+  // uniformly into the given number of bins. Or, `x` may be an array of
+  // threshold values, defining the bins; the specified array must contain the
+  // rightmost (upper) value, thus specifying n + 1 values for n bins. Or, `x`
+  // may be a function which is evaluated, being passed the range, the array of
+  // values, and the current index `i`, returning an array of thresholds. The
+  // default bin function will divide the values into uniform bins using
+  // Sturges' formula.
+  histogram.bins = function(x) {
+    if (!arguments.length) return binner;
+    binner = typeof x === "number"
+        ? function(range) { return d3_layout_histogramBinFixed(range, x); }
+        : d3.functor(x);
+    return histogram;
+  };
+
+  // Specifies whether the histogram's `y` value is a count (frequency) or a
+  // probability (density). The default value is true.
+  histogram.frequency = function(x) {
+    if (!arguments.length) return frequency;
+    frequency = !!x;
+    return histogram;
+  };
+
+  return histogram;
+};
+
+function d3_layout_histogramBinSturges(range, values) {
+  return d3_layout_histogramBinFixed(range, Math.ceil(Math.log(values.length) / Math.LN2 + 1));
+}
+
+function d3_layout_histogramBinFixed(range, n) {
+  var x = -1,
+      b = +range[0],
+      m = (range[1] - b) / n,
+      f = [];
+  while (++x <= n) f[x] = m * x + b;
+  return f;
+}
+
+function d3_layout_histogramRange(values) {
+  return [d3.min(values), d3.max(values)];
 }
 d3.layout.hierarchy = function() {
   var sort = d3_layout_hierarchySort,
@@ -666,15 +993,13 @@ d3.layout.hierarchy = function() {
           j = depth + 1;
       while (++i < n) {
         d = recurse(datas[i], j, nodes);
-        if (d.value > 0) { // ignore NaN, negative, etc.
-          c.push(d);
-          v += d.value;
-          d.parent = node;
-        }
+        d.parent = node;
+        c.push(d);
+        v += d.value;
       }
       if (sort) c.sort(sort);
-      node.value = v;
-    } else {
+      if (value) node.value = v;
+    } else if (value) {
       node.value = value.call(hierarchy, data, depth);
     }
     return node;
@@ -689,10 +1014,11 @@ d3.layout.hierarchy = function() {
           n = children.length,
           j = depth + 1;
       while (++i < n) v += revalue(children[i], j);
-    } else {
+    } else if (value) {
       v = value.call(hierarchy, node.data, depth);
     }
-    return node.value = v;
+    if (value) node.value = v;
+    return v;
   }
 
   function hierarchy(d) {
@@ -845,14 +1171,14 @@ function d3_layout_packCircle(nodes) {
 
         // Search for the closest intersection.
         var isect = 0, s1 = 1, s2 = 1;
-        for (j = b._pack_next; j != b; j = j._pack_next, s1++) {
+        for (j = b._pack_next; j !== b; j = j._pack_next, s1++) {
           if (d3_layout_packIntersects(j, c)) {
             isect = 1;
             break;
           }
         }
         if (isect == 1) {
-          for (k = a._pack_prev; k != j._pack_prev; k = k._pack_prev, s2++) {
+          for (k = a._pack_prev; k !== j._pack_prev; k = k._pack_prev, s2++) {
             if (d3_layout_packIntersects(k, c)) {
               if (s2 < s1) {
                 isect = -1;
@@ -945,7 +1271,7 @@ function d3_layout_packPlace(a, b, c) {
 }
 // Implements a hierarchical layout using the cluster (or dendogram) algorithm.
 d3.layout.cluster = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
       size = [1, 1]; // width, height
 
@@ -986,7 +1312,6 @@ d3.layout.cluster = function() {
 
   cluster.sort = d3.rebind(cluster, hierarchy.sort);
   cluster.children = d3.rebind(cluster, hierarchy.children);
-  cluster.value = d3.rebind(cluster, hierarchy.value);
   cluster.links = d3_layout_treeLinks;
 
   cluster.separation = function(x) {
@@ -1027,7 +1352,7 @@ function d3_layout_clusterRight(node) {
 }
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
       size = [1, 1]; // width, height
 
@@ -1154,7 +1479,6 @@ d3.layout.tree = function() {
 
   tree.sort = d3.rebind(tree, hierarchy.sort);
   tree.children = d3.rebind(tree, hierarchy.children);
-  tree.value = d3.rebind(tree, hierarchy.value);
   tree.links = d3_layout_treeLinks;
 
   tree.separation = function(x) {
