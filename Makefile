@@ -165,6 +165,8 @@ tests: \
 	tests/test-insert.test \
 	tests/test-interpolate.test \
 	tests/test-keys.test \
+	tests/test-max.test \
+	tests/test-min.test \
 	tests/test-nest.test \
 	tests/test-permute.test \
 	tests/test-remove.test \

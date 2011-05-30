@@ -6,8 +6,8 @@ d3.min = function(array, f) {
   if (arguments.length === 1) {
     while (++i < n) if (a > (b = array[i])) a = b;
   } else {
-    a = f(array[0]);
-    while (++i < n) if (a > (b = f(array[i]))) a = b;
+    a = f.call(array, a, 0);
+    while (++i < n) if (a > (b = f.call(array, array[i], i))) a = b;
   }
   return a;
 };
