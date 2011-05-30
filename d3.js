@@ -1,11 +1,11 @@
-(function(){d3 = {version: "1.17.1"}; // semver
+(function(){d3 = {version: "1.18.0"}; // semver
 if (!Date.now) Date.now = function() {
-  return +new Date();
+  return +new Date;
 };
 if (!Object.create) Object.create = function(o) {
   /** @constructor */ function f() {}
   f.prototype = o;
-  return new f();
+  return new f;
 };
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
@@ -41,31 +41,42 @@ d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : 0;
 };
 d3.min = function(array, f) {
-  var i = 0,
+  var i = -1,
       n = array.length,
-      a = array[0],
+      a = Infinity,
       b;
   if (arguments.length === 1) {
-    while (++i < n) if (a > (b = array[i])) a = b;
+    while (++i < n) if ((b = array[i]) != null && a > b) a = b;
   } else {
-    a = f(array[0]);
-    while (++i < n) if (a > (b = f(array[i]))) a = b;
+    while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
   }
   return a;
 };
 d3.max = function(array, f) {
-  var i = 0,
+  var i = -1,
       n = array.length,
-      a = array[0],
+      a = -Infinity,
       b;
   if (arguments.length === 1) {
-    while (++i < n) if (a < (b = array[i])) a = b;
+    while (++i < n) if ((b = array[i]) != null && b > a) a = b;
   } else {
-    a = f(a);
-    while (++i < n) if (a < (b = f(array[i]))) a = b;
+    while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
   }
   return a;
 };
+d3.zip = function() {
+  if (!(n = arguments.length)) return [];
+  for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m;) {
+    for (var j = -1, n, zip = zips[i] = new Array(n); ++j < n;) {
+      zip[j] = arguments[j][i];
+    }
+  }
+  return zips;
+};
+
+function d3_zipLength(d) {
+  return d.length;
+}
 // Locate the insertion point for x in a to maintain sorted order. The
 // arguments lo and hi may be used to specify a subset of the array which should
 // be considered; by default the entire array is used. If x is already present
@@ -280,7 +291,7 @@ d3.round = function(x, n) {
       : Math.round(x);
 };
 d3.xhr = function(url, mime, callback) {
-  var req = new XMLHttpRequest();
+  var req = new XMLHttpRequest;
   if (arguments.length < 3) callback = mime;
   else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
   req.open("GET", url, true);
