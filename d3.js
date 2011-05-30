@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.19.0"}; // semver
+(function(){d3 = {version: "1.19.1"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -43,11 +43,13 @@ d3.descending = function(a, b) {
 d3.min = function(array, f) {
   var i = -1,
       n = array.length,
-      a = Infinity,
+      a,
       b;
   if (arguments.length === 1) {
+    while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
     while (++i < n) if ((b = array[i]) != null && a > b) a = b;
   } else {
+    while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
     while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
   }
   return a;
@@ -55,11 +57,13 @@ d3.min = function(array, f) {
 d3.max = function(array, f) {
   var i = -1,
       n = array.length,
-      a = -Infinity,
+      a,
       b;
   if (arguments.length === 1) {
+    while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
     while (++i < n) if ((b = array[i]) != null && b > a) a = b;
   } else {
+    while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
     while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
   }
   return a;
