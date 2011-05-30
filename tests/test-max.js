@@ -16,3 +16,11 @@ console.log("  " + d3.max([1, 2, 3, 4, 5], function(d, i) {
   return i;
 }));
 console.log("");
+
+console.log("max with first element NaN:");
+console.log("  " + d3.max([NaN, 1, 2, 3, 4, 5]));
+console.log("");
+
+console.log("max with last element NaN:");
+console.log("  " + d3.max([1, 2, 3, 4, 5, NaN]));
+console.log("");

@@ -7,3 +7,9 @@ max with accessor function:
 max index:
   4
 
+max with first element NaN:
+  5
+
+max with last element NaN:
+  5
+

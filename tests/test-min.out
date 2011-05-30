@@ -7,3 +7,9 @@ min with accessor function:
 min index:
   0
 
+min with first element NaN:
+  1
+
+min with last element NaN:
+  1
+
