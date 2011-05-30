@@ -52,16 +52,16 @@ d3.behavior.zoom = function() {
   // mousewheel events are totally broken!
   // https://bugs.webkit.org/show_bug.cgi?id=40441
   // not only that, but Chrome and Safari differ in re. to acceleration!
-  var inner = document.createElement("div"),
-      outer = document.createElement("div");
-  outer.style.visibility = "hidden";
-  outer.style.top = "0px";
-  outer.style.height = "0px";
-  outer.style.width = "0px";
-  outer.style.overflowY = "scroll";
-  inner.style.height = "2000px";
-  outer.appendChild(inner);
-  document.body.appendChild(outer);
+
+  var outer = d3.select("body").append("div")
+      .style("visibility", "hidden")
+      .style("position", "absolute")
+      .style("top", "-3000px")
+      .style("height", 0)
+      .style("overflow-y", "scroll")
+    .append("div")
+      .style("height", "2000px")
+    .node().parentNode;
 
   function mousewheel(d, i) {
     var e = d3.event;
