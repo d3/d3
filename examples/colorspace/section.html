@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>CIELAB Cross Section Viewer</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.color.js"></script>
+	<script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="section.css"/>
+  </head>
+  <body>
+	<h3>CIE L*a*b* Cross-Section Viewer</h3>
+    <script type="text/javascript" src="section.js"></script><p>
+    <div id="Llabel">L* = <span>50</span></div>
+    <div id="L"></div>
+
+    <script type="text/javascript">
+$("#L").slider({
+  min: 0,
+  max: 100,
+  step: 1,
+  value: 50,
+  slide: function(event, ui) {
+    d3.select("#Llabel span").text(ui.value);
+    L = ui.value;
+    refresh();
+  }
+});	
+    </script>
+  </body>
+</html>
