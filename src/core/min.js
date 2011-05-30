@@ -4,9 +4,9 @@ d3.min = function(array, f) {
       a = Infinity,
       b;
   if (arguments.length === 1) {
-    while (++i < n) if (a > (b = array[i])) a = b;
+    while (++i < n) if ((b = array[i]) != null && a > b) a = b;
   } else {
-    while (++i < n) if (a > (b = f.call(array, array[i], i))) a = b;
+    while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
   }
   return a;
 };

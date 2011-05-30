@@ -24,3 +24,7 @@ console.log("");
 console.log("min with last element NaN:");
 console.log("  " + d3.min([1, 2, 3, 4, 5, NaN]));
 console.log("");
+
+console.log("min with null and undefined elements:");
+console.log("  " + d3.min([10, null, 3, undefined, 5, NaN]));
+console.log("");

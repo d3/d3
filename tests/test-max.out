@@ -13,3 +13,6 @@ max with first element NaN:
 max with last element NaN:
   5
 
+max with null and undefined elements:
+  -3
+

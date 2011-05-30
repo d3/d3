@@ -13,3 +13,6 @@ min with first element NaN:
 min with last element NaN:
   1
 
+min with null and undefined elements:
+  3
+

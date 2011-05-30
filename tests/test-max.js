@@ -24,3 +24,7 @@ console.log("");
 console.log("max with last element NaN:");
 console.log("  " + d3.max([1, 2, 3, 4, 5, NaN]));
 console.log("");
+
+console.log("max with null and undefined elements:");
+console.log("  " + d3.max([-5, null, -3, undefined, -10, NaN]));
+console.log("");
