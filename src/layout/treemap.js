@@ -81,13 +81,13 @@ d3.layout.treemap = function() {
         i = -1,
         n = row.length;
     while (++i < n) {
-      r = row[i].area * aspect;
+      r = row[i].area;
       if (r < rmin) rmin = r;
       if (r > rmax) rmax = r;
     }
     s *= s;
     u *= u;
-    return Math.max((u * rmax) / s, s / (u * rmin));
+    return Math.max((u * rmax * aspect) / s, s / (u * rmin * aspect));
   }
 
   // Positions the specified row of nodes. Modifies `rect`.
