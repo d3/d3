@@ -1,10 +1,12 @@
 // Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
+// Modified to support a target aspect ratio by Jeff Heer
 d3.layout.treemap = function() {
   var hierarchy = d3.layout.hierarchy(),
       round = Math.round,
       size = [1, 1], // width, height
       sticky = false,
-      stickies;
+      stickies,
+      ratio = 0.5 * (1 + Math.sqrt(5)); // golden ratio
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
@@ -85,7 +87,7 @@ d3.layout.treemap = function() {
     }
     s *= s;
     u *= u;
-    return Math.max((u * rmax) / s, s / (u * rmin));
+    return Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio));
   }
 
   // Positions the specified row of nodes. Modifies `rect`.
@@ -159,6 +161,12 @@ d3.layout.treemap = function() {
     if (!arguments.length) return sticky;
     sticky = x;
     stickies = null;
+    return treemap;
+  };
+
+  treemap.ratio = function(x) {
+    if (!arguments.length) return ratio;
+    ratio = x;
     return treemap;
   };
 

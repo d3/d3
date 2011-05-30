@@ -37,6 +37,7 @@ d3.core.js: \
 	src/core/descending.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/zip.js \
 	src/core/bisect.js \
 	src/core/nest.js \
 	src/core/keys.js \
@@ -103,6 +104,7 @@ d3.chart.js: \
 	src/chart/chart.js \
 	src/chart/box.js \
 	src/chart/bullet.js \
+	src/chart/horizon.js \
 	src/chart/qq.js \
 	src/end.js
 
@@ -165,8 +167,11 @@ tests: \
 	tests/test-insert.test \
 	tests/test-interpolate.test \
 	tests/test-keys.test \
+	tests/test-max.test \
+	tests/test-min.test \
 	tests/test-nest.test \
 	tests/test-permute.test \
+	tests/test-zip.test \
 	tests/test-remove.test \
 	tests/test-rgb.test \
 	tests/test-round.test \
