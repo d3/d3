@@ -1,0 +1,21 @@
+@import url("../../lib/jquery-ui/jquery-ui.css");
+
+body, .ui-widget {
+  font: 14px Helvetica Neue;
+}
+
+svg {
+  width: 960px;
+  height: 500px;
+  border: solid 1px #ccc;
+  background: #eee;
+}
+
+path {
+  fill: #ccc;
+  stroke: #fff;
+}
+
+div {
+  width: 960px;
+}

@@ -2,10 +2,7 @@
 // TODO unbind listener?
 d3.behavior.zoom = function() {
 
-  // https://bugs.webkit.org/show_bug.cgi?id=40441
-  var bug40441 = /WebKit\/533/.test(navigator.userAgent) ? -1 : 0,
-      bug40441Last = 0,
-      x = 0,
+  var x = 0,
       y = 0,
       z = 0,
       listeners = [],
@@ -52,6 +49,20 @@ d3.behavior.zoom = function() {
     }
   }
 
+  // mousewheel events are totally broken!
+  // https://bugs.webkit.org/show_bug.cgi?id=40441
+  // not only that, but Chrome and Safari differ in re. to acceleration!
+
+  var outer = d3.select("body").append("div")
+      .style("visibility", "hidden")
+      .style("position", "absolute")
+      .style("top", "-3000px")
+      .style("height", 0)
+      .style("overflow-y", "scroll")
+    .append("div")
+      .style("height", "2000px")
+    .node().parentNode;
+
   function mousewheel(d, i) {
     var e = d3.event;
 
@@ -71,16 +82,17 @@ d3.behavior.zoom = function() {
     if (e.type === "dblclick") {
       z = e.shiftKey ? Math.ceil(z - 1) : Math.floor(z + 1);
     } else {
-     var delta = (e.wheelDelta / 120 || -e.detail) * .1;
-
-      /* Detect fast & large wheel events on WebKit. */
-      if (bug40441 < 0) {
-        var now = Date.now(), since = now - bug40441Last;
-        if ((since > 9) && (Math.abs(e.wheelDelta) / since >= 50)) bug40441 = 1;
-        bug40441Last = now;
+      var delta = e.wheelDelta || -e.detail;
+      if (delta) {
+        try {
+          outer.scrollTop = 1000;
+          outer.dispatchEvent(e);
+          delta = 1000 - outer.scrollTop;
+        } catch (error) {
+          // Derp! Hope for the best?
+        }
+        delta *= .005;
       }
-      if (bug40441 === 1) delta *= .03;
-
       z += delta;
     }
 

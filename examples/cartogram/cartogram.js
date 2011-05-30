@@ -42,7 +42,7 @@ d3.json("us-states.json", function(json) {
             + "scale(" + Math.sqrt(data[+d.id] * 5 || 0) + ")"
             + "translate(" + -x + "," + -y + ")";
       })
-      .attr("stroke-width", function(d) {
+      .style("stroke-width", function(d) {
         return 1 / Math.sqrt(data[+d.id] * 5);
       })
       .attr("d", path);
