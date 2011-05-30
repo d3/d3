@@ -127,6 +127,7 @@ d3.layout.js: \
 d3.geo.js: \
 	src/start.js \
 	src/geo/geo.js \
+	src/geo/azimuthal.js \
 	src/geo/albers.js \
 	src/geo/mercator.js \
 	src/geo/path.js \
