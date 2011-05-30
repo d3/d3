@@ -10,6 +10,8 @@ all: \
 	d3.chart.min.js \
 	d3.layout.js \
 	d3.layout.min.js \
+	d3.color.js \
+	d3.color.min.js \
 	d3.csv.js \
 	d3.csv.min.js \
 	d3.geo.js \
@@ -65,6 +67,9 @@ d3.core.js: \
 	src/core/selection.js \
 	src/core/transition.js \
 	src/core/timer.js
+
+d3.color.js: \
+	src/color/lab.js
 
 d3.scale.js: \
 	src/scale/scale.js \
@@ -167,6 +172,7 @@ tests: \
 	tests/test-remove.test \
 	tests/test-rgb.test \
 	tests/test-hsl.test \
+	tests/test-color-lab.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
 	tests/test-transition.test \
