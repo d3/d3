@@ -641,7 +641,7 @@ d3.interpolateRound = function(a, b) {
 d3.interpolateString = function(a, b) {
   var m, // current match
       i, // current index
-      j, // current index (for coallescing)
+      j, // current index (for coalescing)
       s0 = 0, // start index of current string prefix
       s1 = 0, // end index of current string prefix
       s = [], // string constants and placeholders
@@ -2385,10 +2385,6 @@ d3.matrix.inverse = function(m) {
 
   // Check if the matrix is square.
   if (n !== m[0].length) return;
-  var det = d3.matrix.determinant(m);
-
-  // Check if the matrix is singular.
-  if (det === 0) return;
 
   // Augment with identity matrix I to get AI.
   m = m.map(function(row, i) {
