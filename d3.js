@@ -832,7 +832,7 @@ function d3_interpolateMatrixDecompose(matrix) {
       cross = d3.vector.cross,
       length = d3.vector.length,
       normalize = d3.vector.normalize,
-      combine = d3_interpolateCombine,
+      combine = d3_interpolateMatrixCombine,
 
       perspective = new Array(4),
       row = new Array(3),
@@ -901,7 +901,7 @@ function d3_interpolateMatrixDecompose(matrix) {
 
   // Compute XY shear factor and make 2nd row orthogonal to 1st.
   skew[0] = dot(row[0], row[1]);
-  row[1] = combine(row[1], row[0], 1.0, -skew[0]);
+  combine(row[1], row[0], 1, -skew[0]);
 
   // Now, compute Y scale and normalize 2nd row.
   scale[1] = length(row[1]);
@@ -910,9 +910,9 @@ function d3_interpolateMatrixDecompose(matrix) {
 
   // Compute XZ and YZ shears, orthogonalize 3rd row
   skew[1] = dot(row[0], row[2]);
-  row[2] = combine(row[2], row[0], 1.0, -skew[1]);
+  combine(row[2], row[0], 1, -skew[1]);
   skew[2] = dot(row[1], row[2]);
-  row[2] = combine(row[2], row[1], 1.0, -skew[2]);
+  combine(row[2], row[1], 1, -skew[2]);
 
   // Next, get Z scale and normalize 3rd row.
   scale[2] = length(row[2]);
@@ -933,7 +933,7 @@ function d3_interpolateMatrixDecompose(matrix) {
     }
   }
 
-  // Now, get the rotations ou
+  // Now, get the rotations out.
   rotate[1] = Math.asin(-row[0][2]);
   if (Math.cos(rotate[1]) !== 0) {
     rotate[0] = Math.atan2(row[1][2], row[2][2]);
@@ -952,6 +952,14 @@ function d3_interpolateMatrixDecompose(matrix) {
   };
 };
 
+function d3_interpolateMatrixCombine(a, b, ascl, bscl) {
+  var n = a.length,
+      i = -1;
+  while (++i < n) {
+    a[i] = ascl * a[i] + bscl * b[i];
+  }
+}
+
 var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g,
     d3_interpolate_rgb = {background: 1, fill: 1, stroke: 1};
 
@@ -959,12 +967,6 @@ function d3_interpolateByName(n) {
   return n in d3_interpolate_rgb || /\bcolor\b/.test(n)
       ? d3.interpolateRgb
       : d3.interpolate;
-}
-
-function d3_interpolateCombine(a, b, ascl, bscl) {
-  return a.map(function(d, i) {
-    return ascl * d + bscl * b[i];
-  });
 }
 function d3_uninterpolateNumber(a, b) {
   b = 1 / (b - (a = +a));
