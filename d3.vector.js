@@ -305,4 +305,33 @@ function d3_vectorInterpolateCombine(a, b, ascl, bscl) {
     a[i] = ascl * a[i] + bscl * b[i];
   }
 }
+
+var d3_vectorInterpolateRegex = /^matrix3d\(([^\)]+)\)$/;
+
+function d3_vectorInterpolateParse(s) {
+  // TODO cope with 2D transformations
+  var numbers = s.split(/[^\d]+/),
+      matrix = new Array(4),
+      i = -1,
+      j,
+      k = -1;
+
+  while (++i < 4) {
+    matrix[i] = new Array(4);
+    j = -1; while (++j < 4) {
+      matrix[i][j] = +numbers[++k];
+    }
+  }
+  return matrix;
+}
+
+d3.interpolators.push(function(a, b) {
+  var ma, mb;
+  return (
+    (ma = a.match(d3_vectorInterpolateRegex)) &&
+    (mb = b.match(d3_vectorInterpolateRegex)) &&
+    d3.vector.interpolate(
+      d3_vectorInterpolateParse(ma[1]),
+      d3_vectorInterpolateParse(mb[1])));
+});
 })()

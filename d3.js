@@ -612,20 +612,10 @@ function d3_ease_bounce(t) {
 }
 d3.event = null;
 d3.interpolate = function(a, b) {
-  if (typeof b === "number") return d3.interpolateNumber(+a, b);
-  if (typeof b === "string") {
-    var ma, mb;
-    return (b in d3_rgb_names) || /^(#|rgb\(|hsl\()/.test(b)
-        ? d3.interpolateRgb(String(a), b)
-        : ((ma = a.match(d3_interpolateMatrixRegex)) &&
-           (mb = b.match(d3_interpolateMatrixRegex)))
-        ? d3.vector.interpolate(
-            d3_interpolateMatrixParse(ma[1]),
-            d3_interpolateMatrixParse(mb[1]))
-        : d3.interpolateString(String(a), b);
-  }
-  if (b instanceof Array) return d3.interpolateArray(a, b);
-  return d3.interpolateObject(a, b);
+  var i = d3.interpolators.length,
+      f;
+  while (--i >= 0 && (f = d3.interpolators[i](a, b)) == null);
+  return f;
 };
 
 d3.interpolateNumber = function(a, b) {
@@ -795,25 +785,18 @@ function d3_interpolateByName(n) {
       : d3.interpolate;
 }
 
-var d3_interpolateMatrixRegex = /^matrix3d\(([^\)]+)\)$/;
-
-function d3_interpolateMatrixParse(s) {
-  // TODO cope with 2D transformations
-  var numbers = s.split(/[^\d]+/),
-      matrix = new Array(4),
-      i = -1,
-      j,
-      k = -1;
-
-  while (++i < 4) {
-    matrix[i] = new Array(4);
-    j = -1; while (++j < 4) {
-      matrix[i][j] = +numbers[++k];
-    }
-  }
-  return matrix;
-}
-
+d3.interpolators = [
+  d3.interpolateObject,
+  function(a, b) {
+    return b instanceof Array ? d3.interpolateArray(a, b) : null; },
+  function(a, b) {
+    return typeof b === "string" ? d3.interpolateString(String(a), b) : null; },
+  function(a, b) {
+    return (b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b))
+    ? d3.interpolateRgb(String(a), b) : null; },
+  function(a, b) {
+    return typeof b === "number" ? d3.interpolateNumber(+a, b) : null; }
+];
 function d3_uninterpolateNumber(a, b) {
   b = 1 / (b - (a = +a));
   return function(x) { return (x - a) * b; };
