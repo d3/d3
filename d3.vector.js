@@ -172,7 +172,7 @@ function d3_vectorInterpolateRecompose(d) {
 
 // Based on <http://www.w3.org/TR/css3-2d-transforms/#matrix-decomposition>,
 // which in turn is based on The "unmatrix" method in "Graphics Gems II, edited
-// by Jim Arvo"
+// by Jim Arvo".
 function d3_vectorInterpolateDecompose(matrix) {
   var dot = d3.vector.dot,
       cross = d3.vector.cross,
@@ -237,9 +237,8 @@ function d3_vectorInterpolateDecompose(matrix) {
   matrix[3][2] = 0;
 
   // Now get scale and shear. 'row' is a 3 element array of 3 component vectors
-  for (var i = 0; i < 3; i++) {
+  for (var i = 0; i < 3; i++)
     row[i] = matrix[i].slice();
-  }
 
   // Compute X scale factor and normalize first row.
   scale[0] = length(row[0]);
@@ -306,8 +305,6 @@ function d3_vectorInterpolateCombine(a, b, ascl, bscl) {
   }
 }
 
-var d3_vectorInterpolateRegex = /^matrix3d\(([^\)]+)\)$/;
-
 function d3_vectorInterpolateParse(s) {
   // TODO cope with 2D transformations
   var numbers = s.split(/[^\d]+/),
@@ -325,11 +322,13 @@ function d3_vectorInterpolateParse(s) {
   return matrix;
 }
 
+var d3_vectorInterpolateRegex = /^matrix3d\(([^\)]+)\)$/;
+
 d3.interpolators.push(function(a, b) {
   var ma, mb;
   return (
-    (ma = a.match(d3_vectorInterpolateRegex)) &&
-    (mb = b.match(d3_vectorInterpolateRegex)) &&
+    (ma = String(a).match(d3_vectorInterpolateRegex)) &&
+    (mb = String(b).match(d3_vectorInterpolateRegex)) &&
     d3.vector.interpolate(
       d3_vectorInterpolateParse(ma[1]),
       d3_vectorInterpolateParse(mb[1])));
