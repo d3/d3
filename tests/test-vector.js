@@ -1,5 +1,6 @@
 require("./../lib/env-js/envjs/node");
 require("./../d3");
+require("./../d3.vector");
 
 console.log("length:");
 console.log("  " + d3.vector.length([]));

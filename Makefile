@@ -17,15 +17,15 @@ all: \
 	d3.geom.js \
 	d3.geom.min.js \
 	d3.time.js \
-	d3.time.min.js
+	d3.time.min.js \
+	d3.vector.js \
+	d3.vector.min.js
 
 .INTERMEDIATE d3.js: \
 	src/start.js \
 	d3.core.js \
-	d3.matrix.js \
 	d3.scale.js \
 	d3.svg.js \
-	d3.vector.js \
 	src/end.js
 
 d3.core.js: \
@@ -95,20 +95,20 @@ d3.svg.js: \
 	src/svg/touches.js \
 	src/svg/symbol.js
 
-d3.matrix.js: \
-	src/matrix/matrix.js \
-	src/matrix/determinant.js \
-	src/matrix/gaussjordan.js \
-	src/matrix/inverse.js \
-	src/matrix/multiply.js \
-	src/matrix/transpose.js
-
 d3.vector.js: \
+	src/start.js \
 	src/vector/vector.js \
 	src/vector/cross.js \
 	src/vector/dot.js \
 	src/vector/length.js \
-	src/vector/normalize.js
+	src/vector/normalize.js \
+	src/vector/determinant.js \
+	src/vector/gaussjordan.js \
+	src/vector/inverse.js \
+	src/vector/multiply.js \
+	src/vector/transpose.js \
+	src/vector/interpolate.js \
+	src/end.js
 
 d3.behavior.js: \
 	src/start.js \
@@ -194,8 +194,8 @@ tests: \
 	tests/test-rgb.test \
 	tests/test-round.test \
 	tests/test-hsl.test \
-	tests/test-matrix.test \
 	tests/test-vector.test \
+	tests/test-vector-matrix.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
 	tests/test-transition.test \

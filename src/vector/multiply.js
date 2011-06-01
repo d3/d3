@@ -1,4 +1,4 @@
-d3.matrix.multiply = function(a, b) {
+d3.vector.multiply = function(a, b) {
   var m = a.length,
       n = b[0].length,
       p = b.length,

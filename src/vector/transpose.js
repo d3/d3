@@ -1,4 +1,4 @@
-d3.matrix.transpose = function(a) {
+d3.vector.transpose = function(a) {
   var m = a.length,
       n = a[0].length,
       i = -1,

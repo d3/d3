@@ -1,5 +1,6 @@
 require("./../lib/env-js/envjs/node");
 require("./../d3");
+require("./../d3.vector");
 
 var x = d3.interpolate("200 0", "250");
 console.log("interpolate(200 0, 250):");
@@ -64,7 +65,7 @@ console.log("          1.0  -> ", x(1.0));
 console.log("          1.5  -> ", x(1.5));
 console.log("");
 
-var x = d3.interpolateMatrix([
+var x = d3.vector.interpolate([
   [1, 0, 0, 0],
   [0, 1, 0, 0],
   [0, 0, 1, 0],
@@ -83,7 +84,7 @@ console.log("          1.0  -> ", x(1.0));
 console.log("          1.5  -> ", x(1.5));
 console.log("");
 
-var x = d3.interpolateMatrix([
+var x = d3.vector.interpolate([
   [1, 0, 0, 1],
   [0, 1, 0, 0],
   [0, 0, 1, 0],

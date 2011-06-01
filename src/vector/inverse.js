@@ -1,5 +1,5 @@
 // Find matrix inverse using Gauss-Jordan.
-d3.matrix.inverse = function(m) {
+d3.vector.inverse = function(m) {
   var n = m.length
       i = -1;
 
@@ -15,7 +15,7 @@ d3.matrix.inverse = function(m) {
   });
 
   // Compute IA^-1.
-  d3.matrix.gaussjordan(m);
+  d3.vector.gaussjordan(m);
 
   // Remove identity matrix I to get A^-1.
   while (++i < n) {
