@@ -26,7 +26,7 @@ var vis = d3.select("#chart")
 vis.selectAll("path")
     .data(data0)
   .enter().append("svg:path")
-    .attr("fill", function() { return color(Math.random()); })
+    .style("fill", function() { return color(Math.random()); })
     .attr("d", area);
 
 function transition() {
@@ -37,7 +37,6 @@ function transition() {
         return data0 = d;
       })
     .transition()
-      .delay(500)
       .duration(2500)
       .attr("d", area);
 }

@@ -1,11 +1,11 @@
-(function(){d3 = {version: "1.15.0"}; // semver
+(function(){d3 = {version: "1.19.1"}; // semver
 if (!Date.now) Date.now = function() {
-  return +new Date();
+  return +new Date;
 };
 if (!Object.create) Object.create = function(o) {
   /** @constructor */ function f() {}
   f.prototype = o;
-  return new f();
+  return new f;
 };
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
@@ -41,30 +41,83 @@ d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : 0;
 };
 d3.min = function(array, f) {
-  var i = 0,
+  var i = -1,
       n = array.length,
-      a = array[0],
+      a,
       b;
   if (arguments.length === 1) {
-    while (++i < n) if (a > (b = array[i])) a = b;
+    while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
+    while (++i < n) if ((b = array[i]) != null && a > b) a = b;
   } else {
-    a = f(array[0]);
-    while (++i < n) if (a > (b = f(array[i]))) a = b;
+    while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+    while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
   }
   return a;
 };
 d3.max = function(array, f) {
-  var i = 0,
+  var i = -1,
       n = array.length,
-      a = array[0],
+      a,
       b;
   if (arguments.length === 1) {
-    while (++i < n) if (a < (b = array[i])) a = b;
+    while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
+    while (++i < n) if ((b = array[i]) != null && b > a) a = b;
   } else {
-    a = f(a);
-    while (++i < n) if (a < (b = f(array[i]))) a = b;
+    while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+    while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
   }
   return a;
+};
+d3.zip = function() {
+  if (!(n = arguments.length)) return [];
+  for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m;) {
+    for (var j = -1, n, zip = zips[i] = new Array(n); ++j < n;) {
+      zip[j] = arguments[j][i];
+    }
+  }
+  return zips;
+};
+
+function d3_zipLength(d) {
+  return d.length;
+}
+// Locate the insertion point for x in a to maintain sorted order. The
+// arguments lo and hi may be used to specify a subset of the array which should
+// be considered; by default the entire array is used. If x is already present
+// in a, the insertion point will be before (to the left of) any existing
+// entries. The return value is suitable for use as the first argument to
+// `array.splice` assuming that a is already sorted.
+//
+// The returned insertion point i partitions the array a into two halves so that
+// all v < x for v in a[lo:i] for the left side and all v >= x for v in a[i:hi]
+// for the right side.
+d3.bisectLeft = function(a, x, lo, hi) {
+  if (arguments.length < 3) lo = 0;
+  if (arguments.length < 4) hi = a.length;
+  while (lo < hi) {
+    var mid = (lo + hi) >> 1;
+    if (a[mid] < x) lo = mid + 1;
+    else hi = mid;
+  }
+  return lo;
+};
+
+// Similar to bisectLeft, but returns an insertion point which comes after (to
+// the right of) any existing entries of x in a.
+//
+// The returned insertion point i partitions the array into two halves so that
+// all v <= x for v in a[lo:i] for the left side and all v > x for v in a[i:hi]
+// for the right side.
+d3.bisect =
+d3.bisectRight = function(a, x, lo, hi) {
+  if (arguments.length < 3) lo = 0;
+  if (arguments.length < 4) hi = a.length;
+  while (lo < hi) {
+    var mid = (lo + hi) >> 1;
+    if (x < a[mid]) hi = mid;
+    else lo = mid + 1;
+  }
+  return lo;
 };
 d3.nest = function() {
   var nest = {},
@@ -168,6 +221,13 @@ d3.entries = function(map) {
   for (var key in map) entries.push({key: key, value: map[key]});
   return entries;
 };
+d3.permute = function(array, indexes) {
+  var permutes = [],
+      i = -1,
+      n = indexes.length;
+  while (++i < n) permutes[i] = array[indexes[i]];
+  return permutes;
+};
 d3.merge = function(arrays) {
   return Array.prototype.concat.apply([], arrays);
 };
@@ -229,8 +289,13 @@ d3.requote = function(s) {
 };
 
 var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
+d3.round = function(x, n) {
+  return n
+      ? Math.round(x * Math.pow(10, n)) * Math.pow(10, -n)
+      : Math.round(x);
+};
 d3.xhr = function(url, mime, callback) {
-  var req = new XMLHttpRequest();
+  var req = new XMLHttpRequest;
   if (arguments.length < 3) callback = mime;
   else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
   req.open("GET", url, true);
@@ -338,7 +403,7 @@ function d3_dispatch(type) {
 
   return dispatch;
 };
-// TODO align, type
+// TODO align
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),
       fill = match[1] || " ",
@@ -347,23 +412,35 @@ d3.format = function(specifier) {
       width = +match[6],
       comma = match[7],
       precision = match[8],
-      type = match[9];
+      type = match[9],
+      percentage = false,
+      integer = false;
+
   if (precision) precision = precision.substring(1);
+
   if (zfill) {
     fill = "0"; // TODO align = "=";
     if (comma) width -= Math.floor((width - 1) / 4);
   }
-  if (type === "d") precision = "0";
+
+  switch (type) {
+    case "n": comma = true; type = "g"; break;
+    case "%": percentage = true; type = "f"; break;
+    case "p": percentage = true; type = "r"; break;
+    case "d": integer = true; precision = "0"; break;
+  }
+
+  type = d3_format_types[type] || d3_format_typeDefault;
+
   return function(value) {
-    var number = +value,
+    var number = percentage ? value * 100 : +value,
         negative = (number < 0) && (number = -number) ? "\u2212" : sign;
 
     // Return the empty string for floats formatted as ints.
-    if ((type === "d") && (number % 1)) return "";
+    if (integer && (number % 1)) return "";
 
     // Convert the input value to the desired precision.
-    if (precision) value = number.toFixed(precision);
-    else value = "" + number;
+    value = type(number, precision);
 
     // If the fill character is 0, the sign and group is applied after the fill.
     if (zfill) {
@@ -380,6 +457,7 @@ d3.format = function(specifier) {
       var length = value.length;
       if (length < width) value = new Array(width - length + 1).join(fill) + value;
     }
+    if (percentage) value += "%";
 
     return value;
   };
@@ -387,6 +465,20 @@ d3.format = function(specifier) {
 
 // [[fill]align][sign][#][0][width][,][.precision][type]
 var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
+
+var d3_format_types = {
+  g: function(x, p) { return x.toPrecision(p); },
+  e: function(x, p) { return x.toExponential(p); },
+  f: function(x, p) { return x.toFixed(p); },
+  r: function(x, p) {
+    var n = 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10);
+    return d3.round(x, p - n).toFixed(Math.max(0, p - n));
+  }
+};
+
+function d3_format_typeDefault(x) {
+  return x + "";
+}
 
 // Apply comma grouping for thousands.
 function d3_format_group(value) {
@@ -695,6 +787,15 @@ function d3_interpolateByName(n) {
   return n in d3_interpolate_rgb || /\bcolor\b/.test(n)
       ? d3.interpolateRgb
       : d3.interpolate;
+}
+function d3_uninterpolateNumber(a, b) {
+  b = 1 / (b - (a = +a));
+  return function(x) { return (x - a) * b; };
+}
+
+function d3_uninterpolateClamp(a, b) {
+  b = 1 / (b - (a = +a));
+  return function(x) { return Math.max(0, Math.min(1, (x - a) * b)); };
 }
 d3.rgb = function(r, g, b) {
   return arguments.length === 1
@@ -2028,42 +2129,40 @@ var d3_timer_frame = window.requestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.scale = {};
 d3.scale.linear = function() {
-  var x0 = 0,
-      x1 = 1,
-      y0 = 0,
-      y1 = 1,
-      kx = 1, // 1 / (x1 - x0)
-      ky = 1, // (x1 - x0) / (y1 - y0)
+  var domain = [0, 1],
+      range = [0, 1],
       interpolate = d3.interpolate,
-      i = interpolate(y0, y1),
-      clamp = false;
+      clamp = false,
+      output,
+      input;
+
+  function rescale() {
+    var linear = domain.length == 2 ? d3_scale_bilinear : d3_scale_polylinear,
+        uninterpolate = clamp ? d3_uninterpolateClamp : d3_uninterpolateNumber;
+    output = linear(domain, range, uninterpolate, interpolate);
+    input = linear(range, domain, uninterpolate, d3.interpolate);
+    return scale;
+  }
 
   function scale(x) {
-    x = (x - x0) * kx;
-    return i(clamp ? Math.max(0, Math.min(1, x)) : x);
+    return output(x);
   }
 
   // Note: requires range is coercible to number!
   scale.invert = function(y) {
-    return (y - y0) * ky + x0;
+    return input(y);
   };
 
   scale.domain = function(x) {
-    if (!arguments.length) return [x0, x1];
-    x0 = +x[0];
-    x1 = +x[1];
-    kx = 1 / (x1 - x0);
-    ky = (x1 - x0) / (y1 - y0);
-    return scale;
+    if (!arguments.length) return domain;
+    domain = x.map(Number);
+    return rescale();
   };
 
   scale.range = function(x) {
-    if (!arguments.length) return [y0, y1];
-    y0 = x[0];
-    y1 = x[1];
-    ky = (x1 - x0) / (y1 - y0);
-    i = interpolate(y0, y1);
-    return scale;
+    if (!arguments.length) return range;
+    range = x;
+    return rescale();
   };
 
   scale.rangeRound = function(x) {
@@ -2073,19 +2172,19 @@ d3.scale.linear = function() {
   scale.clamp = function(x) {
     if (!arguments.length) return clamp;
     clamp = x;
-    return scale;
+    return rescale();
   };
 
   scale.interpolate = function(x) {
     if (!arguments.length) return interpolate;
-    i = (interpolate = x)(y0, y1);
-    return scale;
+    interpolate = x;
+    return rescale();
   };
 
   // TODO Dates? Ugh.
   function tickRange(m) {
-    var start = Math.min(x0, x1),
-        stop = Math.max(x0, x1),
+    var start = d3.min(domain),
+        stop = d3.max(domain),
         span = stop - start,
         step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
         err = m / (span / step);
@@ -2113,8 +2212,31 @@ d3.scale.linear = function() {
     return d3.format(",." + n + "f");
   };
 
-  return scale;
+  return rescale();
 };
+function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
+  var u = uninterpolate(domain[0], domain[1]),
+      i = interpolate(range[0], range[1]);
+  return function(x) {
+    return i(u(x));
+  };
+}
+function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
+  var u = [],
+      i = [],
+      j = 0,
+      n = domain.length;
+
+  while (++j < n) {
+    u.push(uninterpolate(domain[j - 1], domain[j]));
+    i.push(interpolate(range[j - 1], range[j]));
+  }
+
+  return function(x) {
+    var j = d3.bisect(domain, x, 1, domain.length - 1) - 1;
+    return i[j](u[j](x));
+  };
+}
 d3.scale.log = function() {
   var linear = d3.scale.linear(),
       log = d3_scale_log,
@@ -2369,26 +2491,21 @@ d3.scale.quantile = function() {
       thresholds = [];
 
   function rescale() {
-    var i = -1,
-        n = thresholds.length = range.length,
-        k = domain.length / n;
-    while (++i < n) thresholds[i] = domain[~~(i * k)];
-  }
-
-  function quantile(value) {
-    if (isNaN(value = +value)) return NaN;
-    var low = 0, high = thresholds.length - 1;
-    while (low <= high) {
-      var mid = (low + high) >> 1, midValue = thresholds[mid];
-      if (midValue < value) low = mid + 1;
-      else if (midValue > value) high = mid - 1;
-      else return mid;
+    var k = 0,
+        n = domain.length,
+        q = range.length,
+        i;
+    thresholds.length = Math.max(0, q - 1);
+    while (++k < q) {
+      thresholds[k - 1] = (i = n * k / q) % 1
+          ? domain[~~i]
+          : (domain[i = ~~i] + domain[i - 1]) / 2;
     }
-    return high < 0 ? 0 : high;
   }
 
   function scale(x) {
-    return range[quantile(x)];
+    if (isNaN(x = +x)) return NaN;
+    return range[d3.bisect(thresholds, x)];
   }
 
   scale.domain = function(x) {
@@ -3124,6 +3241,13 @@ function d3_svg_diagonalProjection(d) {
   return [d.x, d.y];
 }
 d3.svg.mouse = function(container) {
+  return d3_svg_mousePoint(container, d3.event);
+};
+
+// https://bugs.webkit.org/show_bug.cgi?id=44083
+var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+
+function d3_svg_mousePoint(container, e) {
   var point = (container.ownerSVGElement || container).createSVGPoint();
   if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
     var svg = d3.select(document.body)
@@ -3136,18 +3260,23 @@ d3.svg.mouse = function(container) {
     svg.remove();
   }
   if (d3_mouse_bug44083) {
-    point.x = d3.event.pageX;
-    point.y = d3.event.pageY;
+    point.x = e.pageX;
+    point.y = e.pageY;
   } else {
-    point.x = d3.event.clientX;
-    point.y = d3.event.clientY;
+    point.x = e.clientX;
+    point.y = e.clientY;
   }
   point = point.matrixTransform(container.getScreenCTM().inverse());
   return [point.x, point.y];
 };
-
-// https://bugs.webkit.org/show_bug.cgi?id=44083
-var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+d3.svg.touches = function(container) {
+  var touches = d3.event.touches;
+  return touches ? d3_array(touches).map(function(touch) {
+    var point = d3_svg_mousePoint(container, touch);
+    point.identifier = touch.identifier;
+    return point;
+  }) : [];
+};
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
       size = d3_svg_symbolSize;

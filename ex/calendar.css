@@ -3,7 +3,7 @@
 }
 
 .day {
-  fill: none;
+  fill: #fff;
   stroke: #ccc;
   shape-rendering: crispEdges;
 }

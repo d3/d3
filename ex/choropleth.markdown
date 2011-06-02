@@ -8,7 +8,7 @@ title: Choropleth
 <div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="choropleth.css"/>
 <link type="text/css" rel="stylesheet" href="colorbrewer.css"/>
-<script type="text/javascript" src="../d3.geo.js?1.15.0"> </script>
+<script type="text/javascript" src="../d3.geo.js?1.19.1"> </script>
 <script type="text/javascript" src="choropleth.js"> </script>
 
 Choropleth design invented by [Charles Dupin](http://en.wikipedia.org/wiki/Charles_Dupin).

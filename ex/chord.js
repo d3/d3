@@ -29,8 +29,8 @@ svg.append("svg:g")
   .selectAll("path")
     .data(chord.groups)
   .enter().append("svg:path")
-    .attr("fill", function(d) { return fill(d.index); })
-    .attr("stroke", function(d) { return fill(d.index); })
+    .style("fill", function(d) { return fill(d.index); })
+    .style("stroke", function(d) { return fill(d.index); })
     .attr("d", d3.svg.arc().innerRadius(r0).outerRadius(r1))
     .on("mouseover", fade(.1))
     .on("mouseout", fade(1));
@@ -52,7 +52,7 @@ ticks.append("svg:line")
     .attr("y1", 0)
     .attr("x2", 5)
     .attr("y2", 0)
-    .attr("stroke", "#000");
+    .style("stroke", "#000");
 
 ticks.append("svg:text")
     .attr("x", 8)
@@ -70,9 +70,9 @@ svg.append("svg:g")
   .selectAll("path")
     .data(chord.chords)
   .enter().append("svg:path")
-    .attr("fill", function(d) { return fill(d.target.index); })
+    .style("fill", function(d) { return fill(d.target.index); })
     .attr("d", d3.svg.chord().radius(r0))
-    .attr("opacity", 1);
+    .style("opacity", 1);
 
 /** Returns an array of tick angles and labels, given a group. */
 function groupTicks(d) {
@@ -93,6 +93,6 @@ function fade(opacity) {
           return d.source.index != i && d.target.index != i;
         })
       .transition()
-        .attr("opacity", opacity);
+        .style("opacity", opacity);
   };
 }
