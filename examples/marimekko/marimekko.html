@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Marimekko Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+rect {
+  stroke: #000;
+}
+
+svg {
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500,
+    m = 20,
+    x = d3.scale.linear().range([0, w - 3 * m]),
+    y = d3.scale.linear().range([0, h - 2 * m]),
+    z = d3.scale.category10(),
+    n = d3.format(",d"),
+    p = d3.format("%");
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+  .append("svg:g")
+    .attr("transform", "translate(" + 2 * m + "," + m + ")");
+
+d3.json("marimekko.json", function(data) {
+  var offset = 0;
+
+  // Nest values by segment. We assume each segment+market is unique.
+  var segments = d3.nest()
+      .key(function(d) { return d.segment; })
+      .entries(data);
+
+  // Compute the total sum, the per-segment sum, and the per-market offset.
+  // You can use reduce rather than reduceRight to reverse the ordering.
+  // We also record a reference to the parent segment for each market.
+  var sum = segments.reduce(function(v, p) {
+    return (p.offset = v) + (p.sum = p.values.reduceRight(function(v, d) {
+      d.parent = p;
+      return (d.offset = v) + d.value;
+    }, 0));
+  }, 0);
+
+  // Add x-axis ticks.
+  var xtick = svg.selectAll(".x")
+      .data(x.ticks(10))
+    .enter().append("svg:g")
+      .attr("class", "x")
+      .attr("transform", function(d) { return "translate(" + x(d) + "," + y(1) + ")"; });
+
+  xtick.append("svg:line")
+      .attr("y2", 6)
+      .style("stroke", "#000");
+
+  xtick.append("svg:text")
+      .attr("y", 8)
+      .attr("text-anchor", "middle")
+      .attr("dy", ".71em")
+      .text(p);
+
+  // Add y-axis ticks.
+  var ytick = svg.selectAll(".y")
+      .data(y.ticks(10))
+    .enter().append("svg:g")
+      .attr("class", "y")
+      .attr("transform", function(d) { return "translate(0," + y(1 - d) + ")"; });
+
+  ytick.append("svg:line")
+      .attr("x1", -6)
+      .style("stroke", "#000");
+
+  ytick.append("svg:text")
+      .attr("x", -8)
+      .attr("text-anchor", "end")
+      .attr("dy", ".35em")
+      .text(p);
+
+  // Add a group for each segment.
+  var segments = svg.selectAll(".segment")
+      .data(segments)
+    .enter().append("svg:g")
+      .attr("class", "segment")
+      .attr("xlink:title", function(d) { return d.key; })
+      .attr("transform", function(d) { return "translate(" + x(d.offset / sum) + ")"; });
+
+  // Add a rect for each market.
+  var markets = segments.selectAll(".market")
+      .data(function(d) { return d.values; })
+    .enter().append("svg:a")
+      .attr("class", "market")
+      .attr("xlink:title", function(d) { return d.market + " " + d.parent.key + ": " + n(d.value); })
+    .append("svg:rect")
+      .attr("y", function(d) { return y(d.offset / d.parent.sum); })
+      .attr("height", function(d) { return y(d.value / d.parent.sum); })
+      .attr("width", function(d) { return x(d.parent.sum / sum); })
+      .style("fill", function(d) { return z(d.market); });
+});
+
+    </script>
+  </body>
+</html>
