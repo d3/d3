@@ -1274,6 +1274,7 @@ function d3_selection(groups) {
 
       if (join) {
         var nodeByKey = {},
+ 	    nodes,
             keys = [],
             key,
             j = groupData.length;
@@ -1281,29 +1282,33 @@ function d3_selection(groups) {
         for (i = 0; i < n; i++) {
           key = join.call(node = group[i], node.__data__, i);
           if (key in nodeByKey) {
-            exitNodes[j++] = group[i]; // duplicate key
+	      nodeByKey[key].push(node);
           } else {
-            nodeByKey[key] = node;
+            nodeByKey[key] = [node];
           }
           keys.push(key);
         }
 
         for (i = 0; i < m; i++) {
-          node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
-          if (node) {
+          nodes = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
+          if (nodes && (node=nodes.pop())) {
             node.__data__ = nodeData;
             updateNodes[i] = node;
             enterNodes[i] = exitNodes[i] = null;
+	    if (nodes.length==0)
+	      delete nodeByKey[key];
           } else {
             enterNodes[i] = d3_selection_enterNode(nodeData);
             updateNodes[i] = exitNodes[i] = null;
           }
-          delete nodeByKey[key];
         }
 
         for (i = 0; i < n; i++) {
-          if (keys[i] in nodeByKey) {
+          if (nodes=nodeByKey[keys[i]]){
+	    nodes.pop();
             exitNodes[i] = group[i];
+	    if (nodes.length==0)
+               delete nodeByKey[keys[i]];
           }
         }
       } else {
