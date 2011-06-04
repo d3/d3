@@ -19,29 +19,15 @@ d3.chart.qq = function() {
           qy = d3_chart_qqQuantiles(n, y.call(this, d, i)),
           xd = domain && domain.call(this, d, i) || [d3.min(qx), d3.max(qx)], // new x-domain
           yd = domain && domain.call(this, d, i) || [d3.min(qy), d3.max(qy)], // new y-domain
+          x1 = d3.scale.linear().domain(xd).range([0, width]), // new x-scale
+          y1 = d3.scale.linear().domain(yd).range([height, 0]), // new y-scale
+          x0 = this.__chart__ && this.__chart__.x || x1, // old x-scale
+          y0 = this.__chart__ && this.__chart__.y || y1; // old y-scale
           x0, // old x-scale
           y0; // old y-scale
 
-      // Compute the new x-scale.
-      var x1 = d3.scale.linear()
-          .domain(xd)
-          .range([0, width]);
-
-      // Compute the new y-scale.
-      var y1 = d3.scale.linear()
-          .domain(yd)
-          .range([height, 0]);
-
-      if (this.__chart__) {
-        x0 = this.__chart__.x;
-        y0 = this.__chart__.y;
-      } else {
-        x0 = d3.scale.linear().domain([0, Infinity]).range(x1.range());
-        y0 = d3.scale.linear().domain([0, Infinity]).range(y1.range());
-      }
-
-      g.call(xAxis.scales([x0, x1]));
-      g.call(yAxis.scales([y0, y1]));
+      g.call(xAxis.scale(x1));
+      g.call(yAxis.scale(y1));
 
       // Stash the new scales.
       this.__chart__ = {x: x1, y: y1};

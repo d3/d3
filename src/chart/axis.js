@@ -6,7 +6,7 @@ d3.chart.axis = function() {
       tickFormat = null,
       tickCount = 10,
       duration = 0,
-      scales,
+      scale1,
       size;
 
   function subdivide(ticks) {
@@ -24,7 +24,7 @@ d3.chart.axis = function() {
   function axis(g) {
     g.each(function(d, i) {
       var g = d3.select(this),
-          format = tickFormat || scales[1].tickFormat(tickCount);
+          format = tickFormat || scale1.tickFormat(tickCount);
 
       // Add the axis container.
       g.selectAll(dimension + ".axis")
@@ -34,14 +34,14 @@ d3.chart.axis = function() {
 
       // Update ticks.
       var tick = g.select(".axis." + dimension).selectAll("g.tick")
-          .data(subdivide(scales[1].ticks(tickCount)), function(d) {
+          .data(subdivide(scale1.ticks(tickCount)), function(d) {
             return this.textContent || tickFormat(d);
           });
 
       // enter
       var tickEnter = tick.enter().append("svg:g")
           .attr("class", "tick")
-          .call(transform, scales[0], size, 1e-6);
+          .call(transform, this.__chart__ && this.__chart__[dimension] || scale1, size, 1e-6);
 
       if (dimension == "y") {
         tickEnter.append("svg:line")
@@ -67,17 +67,17 @@ d3.chart.axis = function() {
 
       tickEnter.transition()
           .duration(duration)
-          .call(transform, scales[1], size, 1);
+          .call(transform, scale1, size, 1);
 
       // update
       tick.transition()
           .duration(duration)
-          .call(transform, scales[1], size, 1);
+          .call(transform, scale1, size, 1);
 
       // exit
       tick.exit().transition()
           .duration(duration)
-          .call(transform, scales[1], size, 1e-6)
+          .call(transform, scale1, size, 1e-6)
           .remove();
     });
   }
@@ -107,9 +107,9 @@ d3.chart.axis = function() {
     return axis;
   };
 
-  axis.scales = function(x) {
-    if (!arguments.length) return scales;
-    scales = x;
+  axis.scale = function(x) {
+    if (!arguments.length) return scale1;
+    scale1 = x;
     return axis;
   };
 

@@ -7,7 +7,7 @@ d3.chart.axis = function() {
       tickFormat = null,
       tickCount = 10,
       duration = 0,
-      scales,
+      scale1,
       size;
 
   function subdivide(ticks) {
@@ -25,7 +25,7 @@ d3.chart.axis = function() {
   function axis(g) {
     g.each(function(d, i) {
       var g = d3.select(this),
-          format = tickFormat || scales[1].tickFormat(tickCount);
+          format = tickFormat || scale1.tickFormat(tickCount);
 
       // Add the axis container.
       g.selectAll(dimension + ".axis")
@@ -35,14 +35,14 @@ d3.chart.axis = function() {
 
       // Update ticks.
       var tick = g.select(".axis." + dimension).selectAll("g.tick")
-          .data(subdivide(scales[1].ticks(tickCount)), function(d) {
+          .data(subdivide(scale1.ticks(tickCount)), function(d) {
             return this.textContent || tickFormat(d);
           });
 
       // enter
       var tickEnter = tick.enter().append("svg:g")
           .attr("class", "tick")
-          .call(transform, scales[0], size, 1e-6);
+          .call(transform, this.__chart__ && this.__chart__[dimension] || scale1, size, 1e-6);
 
       if (dimension == "y") {
         tickEnter.append("svg:line")
@@ -68,17 +68,17 @@ d3.chart.axis = function() {
 
       tickEnter.transition()
           .duration(duration)
-          .call(transform, scales[1], size, 1);
+          .call(transform, scale1, size, 1);
 
       // update
       tick.transition()
           .duration(duration)
-          .call(transform, scales[1], size, 1);
+          .call(transform, scale1, size, 1);
 
       // exit
       tick.exit().transition()
           .duration(duration)
-          .call(transform, scales[1], size, 1e-6)
+          .call(transform, scale1, size, 1e-6)
           .remove();
     });
   }
@@ -108,9 +108,9 @@ d3.chart.axis = function() {
     return axis;
   };
 
-  axis.scales = function(x) {
-    if (!arguments.length) return scales;
-    scales = x;
+  axis.scale = function(x) {
+    if (!arguments.length) return scale1;
+    scale1 = x;
     return axis;
   };
 
@@ -896,29 +896,15 @@ d3.chart.qq = function() {
           qy = d3_chart_qqQuantiles(n, y.call(this, d, i)),
           xd = domain && domain.call(this, d, i) || [d3.min(qx), d3.max(qx)], // new x-domain
           yd = domain && domain.call(this, d, i) || [d3.min(qy), d3.max(qy)], // new y-domain
+          x1 = d3.scale.linear().domain(xd).range([0, width]), // new x-scale
+          y1 = d3.scale.linear().domain(yd).range([height, 0]), // new y-scale
+          x0 = this.__chart__ && this.__chart__.x || x1, // old x-scale
+          y0 = this.__chart__ && this.__chart__.y || y1; // old y-scale
           x0, // old x-scale
           y0; // old y-scale
 
-      // Compute the new x-scale.
-      var x1 = d3.scale.linear()
-          .domain(xd)
-          .range([0, width]);
-
-      // Compute the new y-scale.
-      var y1 = d3.scale.linear()
-          .domain(yd)
-          .range([height, 0]);
-
-      if (this.__chart__) {
-        x0 = this.__chart__.x;
-        y0 = this.__chart__.y;
-      } else {
-        x0 = d3.scale.linear().domain([0, Infinity]).range(x1.range());
-        y0 = d3.scale.linear().domain([0, Infinity]).range(y1.range());
-      }
-
-      g.call(xAxis.scales([x0, x1]));
-      g.call(yAxis.scales([y0, y1]));
+      g.call(xAxis.scale(x1));
+      g.call(yAxis.scale(y1));
 
       // Stash the new scales.
       this.__chart__ = {x: x1, y: y1};
