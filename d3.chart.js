@@ -779,6 +779,7 @@ d3.chart.mekko = function() {
       // unique.
       var groups = d3.nest()
           .key(categoryX)
+          .rollup(function(d) { return d.map(function(d) { return {data: d}; }); })
           .entries(data);
 
       // Compute the total sum, the per-x sum, and the per-y offset.
@@ -788,7 +789,8 @@ d3.chart.mekko = function() {
       var sum = groups.reduce(function(v, p) {
         return (p.offset = v) + (p.sum = p.values.reduceRight(function(v, d) {
           d.parent = p;
-          return (d.offset = v) + value.call(this, d);
+          d.category = categoryY.call(this, d.data, p);
+          return (d.offset = v) + (d.value = value.call(this, d.data, p));
         }, 0));
       }, 0);
 
@@ -896,7 +898,7 @@ d3.chart.mekko = function() {
 
       // Add a rect for each y-category.
       function title(d, i) {
-        return categoryY.call(this, d, i) + " " + d.parent.key + ": " + n(d.value);
+        return d.category + " " + d.parent.key + ": " + n(d.value);
       }
 
       // Re-select to include entering and existing x-category groups.
@@ -910,7 +912,7 @@ d3.chart.mekko = function() {
           .attr("y", function(d) { return y0(d.offset / d.parent.sum); })
           .attr("height", function(d) { return y0(d.value / d.parent.sum); })
           .attr("width", function(d) { return x0(d.parent.sum / sum); })
-          .style("fill", function(d, i) { return z(categoryY.call(this, d, i)); })
+          .style("fill", function(d, i) { return z(d.category); })
           .style("opacity", 1e-6)
         .transition()
           .duration(duration)
