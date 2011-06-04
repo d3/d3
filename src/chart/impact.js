@@ -13,7 +13,6 @@ d3.chart.impact = function() {
 
   // For each small multiple…
   function impact(g) {
-    var w = width, h = height, p = 20;
     g.each(function(d, i) {
       var g = d3.select(this),
           n = d.length,
@@ -60,7 +59,7 @@ d3.chart.impact = function() {
       // Compute the new x-scale.
       var x1 = d3.scale.linear()
           .domain([0, n])
-          .range([0, width]),
+          .range([0, width + xPadding]),
           y1 = d3.scale.linear()
           .domain([0, max])
           .range([0, height]);
@@ -68,14 +67,12 @@ d3.chart.impact = function() {
       // Retrieve the old x-scale, if this is an update.
       var x0 = this.__chart__ || d3.scale.linear()
           .domain([0, n])
-          .range([0, width]);
+          .range([0, width + xPadding]);
 
       // Stash the new scale.
       this.__chart__ = x1;
 
-      paths = d3.keys(paths).map(function(k) {
-        return {path: paths[k], key: k};
-      });
+      paths = d3.entries(paths);
 
       var line0 = d3_chart_impactPath(x0, y1, xPadding, yPadding),
           line1 = d3_chart_impactPath(x1, y1, xPadding, yPadding),
@@ -89,10 +86,12 @@ d3.chart.impact = function() {
       path.enter().append("svg:path")
           .attr("class", function(d, i) { return "q" + color(i) + "-9"; })
           .attr("d", line0)
-          .transition().duration(duration)
+        .transition()
+          .duration(duration)
           .attr("d", line1);
 
-      path.transition().duration(duration)
+      path.transition()
+          .duration(duration)
           .attr("d", line1);
 
       path.exit().remove();
@@ -165,7 +164,7 @@ d3.chart.impact = function() {
 
 function d3_chart_impactPath(x, y, xp, yp) {
   return function(d) {
-    d = d.path;
+    d = d.value;
     var a = [], b = [],
         n = d.length,
         i = -1;
