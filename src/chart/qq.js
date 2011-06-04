@@ -8,8 +8,8 @@ d3.chart.qq = function() {
       n = 100,
       x = d3_chart_qqX,
       y = d3_chart_qqY,
-      xAxis = d3.chart.axis().dimension("x").mode("line").size(height).tickCount(6),
-      yAxis = d3.chart.axis().dimension("y").mode("line").size(width).tickCount(6);
+      xAxis = d3.chart.axis().dimension("x").mode("line").size(height).tickCount(3),
+      yAxis = d3.chart.axis().dimension("y").mode("line").size(width).tickCount(3);
 
   // For each small multiple…
   function qq(g) {

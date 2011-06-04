@@ -26,10 +26,10 @@
   display: none;
 }
 
-.qq .tick:nth-child(2n - 1) line {
+.qq .tick:nth-child(2n) line {
   stroke-width: .5px;
 }
 
-.qq .tick:nth-child(2n - 1) text {
+.qq .tick:nth-child(2n) text {
   display: none;
 }

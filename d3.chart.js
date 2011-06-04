@@ -10,20 +10,38 @@ d3.chart.axis = function() {
       scales,
       size;
 
+  function subdivide(ticks) {
+    var ticks2 = [],
+        i = -1,
+        n = ticks.length - 1;
+    while (++i < n) {
+      ticks2.push(ticks[i]);
+      ticks2.push((ticks[i] + ticks[i + 1]) / 2);
+    }
+    ticks2.push(ticks[i]);
+    return ticks2;
+  }
+
   function axis(g) {
     g.each(function(d, i) {
       var g = d3.select(this),
           format = tickFormat || scales[1].tickFormat(tickCount);
 
+      // Add the axis container.
+      g.selectAll(dimension + ".axis")
+          .data([null])
+        .enter().append("svg:g")
+          .attr("class", dimension + " axis");
+
       // Update ticks.
-      var tick = g.selectAll("g." + dimension + ".tick")
-          .data(scales[1].ticks(tickCount), function(d) {
+      var tick = g.select(".axis." + dimension).selectAll("g.tick")
+          .data(subdivide(scales[1].ticks(tickCount)), function(d) {
             return this.textContent || tickFormat(d);
           });
 
       // enter
       var tickEnter = tick.enter().append("svg:g")
-          .attr("class", dimension + " tick")
+          .attr("class", "tick")
           .call(transform, scales[0], size, 1e-6);
 
       if (dimension == "y") {
@@ -867,8 +885,8 @@ d3.chart.qq = function() {
       n = 100,
       x = d3_chart_qqX,
       y = d3_chart_qqY,
-      xAxis = d3.chart.axis().dimension("x").mode("line").size(height).tickCount(6),
-      yAxis = d3.chart.axis().dimension("y").mode("line").size(width).tickCount(6);
+      xAxis = d3.chart.axis().dimension("x").mode("line").size(height).tickCount(3),
+      yAxis = d3.chart.axis().dimension("y").mode("line").size(width).tickCount(3);
 
   // For each small multiple…
   function qq(g) {
