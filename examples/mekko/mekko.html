@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Marimekko Chart</title>
+    <title>Mekko Chart</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.chart.js"></script>
     <link type="text/css" rel="stylesheet" href="../button.css"/>
@@ -45,18 +45,16 @@ var chart = d3.chart.mekko()
     .width(w - 3 * m)
     .height(h - 2 * m)
     .value(function(d) { return d.value; })
-    .categoryY(function(d) { return d.market; })
     .categoryX(function(d) { return d.segment; })
+    .categoryY(function(d) { return d.market; });
 
-d3.json("marimekko.json", function(d) {
+d3.json("mekko.json", function(d) {
   svg.data([data = d]).call(chart);
   chart.duration(1000);
 });
 
 function transition() {
-  data.forEach(function(d) {
-    d.value = Math.random() * 1000;
-  });
+  data.forEach(function(d) { d.value = Math.random() * 1000; });
   svg.data([data]).call(chart);
 }
     </script>
