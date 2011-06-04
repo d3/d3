@@ -23,8 +23,6 @@ d3.chart.qq = function() {
           y1 = d3.scale.linear().domain(yd).range([height, 0]), // new y-scale
           x0 = this.__chart__ && this.__chart__.x || x1, // old x-scale
           y0 = this.__chart__ && this.__chart__.y || y1; // old y-scale
-          x0, // old x-scale
-          y0; // old y-scale
 
       g.call(xAxis.scale(x1));
       g.call(yAxis.scale(y1));
