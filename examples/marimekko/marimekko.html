@@ -42,7 +42,6 @@ var svg = d3.select("body").append("svg:svg")
     .attr("transform", "translate(" + 2 * m + "," + m + ")");
 
 var chart = d3.chart.mekko()
-    .duration(1000)
     .width(w - 3 * m)
     .height(h - 2 * m)
     .value(function(d) { return d.value; })
@@ -51,6 +50,7 @@ var chart = d3.chart.mekko()
 
 d3.json("marimekko.json", function(d) {
   svg.data([data = d]).call(chart);
+  chart.duration(1000);
 });
 
 function transition() {
