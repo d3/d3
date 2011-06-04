@@ -1,4 +1,143 @@
 (function(){d3.chart = {};
+// TODO align (left/right/top/bottom?)
+d3.chart.axis = function() {
+  var dimension = "y", // or x
+      transform = d3_chart_axisTransformY,
+      tickFormat = null,
+      tickCount = 10,
+      duration = 0,
+      scale1,
+      size;
+
+  function subdivide(ticks) {
+    var ticks2 = [],
+        i = -1,
+        n = ticks.length - 1;
+    while (++i < n) {
+      ticks2.push(ticks[i]);
+      ticks2.push((ticks[i] + ticks[i + 1]) / 2);
+    }
+    ticks2.push(ticks[i]);
+    return ticks2;
+  }
+
+  function axis(g) {
+    g.each(function(d, i) {
+      var g = d3.select(this),
+          format = tickFormat || scale1.tickFormat(tickCount);
+
+      // Add the axis container.
+      g.selectAll(dimension + ".axis")
+          .data([null])
+        .enter().append("svg:g")
+          .attr("class", dimension + " axis");
+
+      // Update ticks.
+      var tick = g.select(".axis." + dimension).selectAll("g")
+          .data(subdivide(scale1.ticks(tickCount)), function(d) {
+            return this.textContent || format(d);
+          });
+
+      // enter
+      var tickEnter = tick.enter().append("svg:g")
+          .call(transform, this.__chart__ && this.__chart__[dimension] || scale1, size, 1e-6);
+
+      if (dimension == "y") {
+        tickEnter.append("svg:line")
+            .attr("class", "line")
+            .attr("x2", size);
+
+        tickEnter.append("svg:line")
+            .attr("class", "tick")
+            .attr("x2", -6);
+
+        tickEnter.append("svg:text")
+            .attr("text-anchor", "end")
+            .attr("x", -9)
+            .attr("dy", ".35em")
+            .text(format);
+      } else {
+        tickEnter.append("svg:line")
+            .attr("class", "line")
+            .attr("y2", -size);
+
+        tickEnter.append("svg:line")
+            .attr("class", "tick")
+            .attr("y2", 6);
+
+        tickEnter.append("svg:text")
+            .attr("text-anchor", "middle")
+            .attr("y", 9)
+            .attr("dy", ".71em")
+            .text(format);
+      }
+
+      tickEnter.transition()
+          .duration(duration)
+          .call(transform, scale1, size, 1);
+
+      // update
+      tick.transition()
+          .duration(duration)
+          .call(transform, scale1, size, 1);
+
+      // exit
+      tick.exit().transition()
+          .duration(duration)
+          .call(transform, scale1, size, 1e-6)
+          .remove();
+    });
+  }
+
+  axis.dimension = function(x) {
+    if (!arguments.length) return dimension;
+    dimension = x;
+    transform = x == "y" ? d3_chart_axisTransformY : d3_chart_axisTransformX;
+    return axis;
+  };
+
+  axis.tickFormat = function(x) {
+    if (!arguments.length) return tickFormat;
+    tickFormat = x;
+    return axis;
+  };
+
+  axis.tickCount = function(x) {
+    if (!arguments.length) return tickCount;
+    tickCount = x;
+    return axis;
+  };
+
+  axis.scale = function(x) {
+    if (!arguments.length) return scale1;
+    scale1 = x;
+    return axis;
+  };
+
+  axis.size = function(x) {
+    if (!arguments.length) return size;
+    size = x;
+    return axis;
+  };
+
+  axis.duration = function(x) {
+    if (!arguments.length) return duration;
+    duration = x;
+    return axis;
+  };
+
+  return axis;
+}
+
+function d3_chart_axisTransformX(tick, x, size, o) {
+  tick.attr("transform", function(d) { return "translate(" + x(d) + "," + size + ")"; })
+      .style("opacity", o);
+}
+
+function d3_chart_axisTransformY(tick, y, size, o) {
+  tick.attr("transform", function(d) { return "translate(0," + y(d) + ")"; })
+      .style("opacity", o);
+}
 // Inspired by http://informationandvisualization.de/blog/box-plot
 d3.chart.box = function() {
   var width = 1,
@@ -308,7 +447,8 @@ d3.chart.bullet = function() {
       measures = d3_chart_bulletMeasures,
       width = 380,
       height = 30,
-      tickFormat = null;
+      tickFormat = null,
+      axis = d3.chart.axis().dimension("x").size(height).tickCount(3);
 
   // For each small multiple…
   function bullet(g) {
@@ -324,12 +464,14 @@ d3.chart.bullet = function() {
           .range(reverse ? [width, 0] : [0, width]);
 
       // Retrieve the old x-scale, if this is an update.
-      var x0 = this.__chart__ || d3.scale.linear()
+      var x0 = this.__chart__ && this.__chart__.x || d3.scale.linear()
           .domain([0, Infinity])
           .range(x1.range());
 
+      g.call(axis.scale(x1));
+
       // Stash the new scale.
-      this.__chart__ = x1;
+      this.__chart__ = {x: x1};
 
       // Derive width-scales from the x-scales.
       var w0 = d3_chart_bulletWidth(x0),
@@ -398,57 +540,6 @@ d3.chart.bullet = function() {
           .attr("x2", x1)
           .attr("y1", height / 6)
           .attr("y2", height * 5 / 6);
-
-      // Compute the tick format.
-      var format = tickFormat || x1.tickFormat(8);
-
-      // Update the tick groups.
-      var tick = g.selectAll("g.tick")
-          .data(x1.ticks(8), function(d) {
-            return this.textContent || format(d);
-          });
-
-      // Initialize the ticks with the old scale, x0.
-      var tickEnter = tick.enter().append("svg:g")
-          .attr("class", "tick")
-          .attr("transform", d3_chart_bulletTranslate(x0))
-          .style("opacity", 1e-6);
-
-      tickEnter.append("svg:line")
-          .attr("y1", height)
-          .attr("y2", height * 7 / 6);
-
-      tickEnter.append("svg:text")
-          .attr("text-anchor", "middle")
-          .attr("dy", "1em")
-          .attr("y", height * 7 / 6)
-          .text(format);
-
-      // Transition the entering ticks to the new scale, x1.
-      tickEnter.transition()
-          .duration(duration)
-          .attr("transform", d3_chart_bulletTranslate(x1))
-          .style("opacity", 1);
-
-      // Transition the updating ticks to the new scale, x1.
-      var tickUpdate = tick.transition()
-          .duration(duration)
-          .attr("transform", d3_chart_bulletTranslate(x1))
-          .style("opacity", 1);
-
-      tickUpdate.select("line")
-          .attr("y1", height)
-          .attr("y2", height * 7 / 6);
-
-      tickUpdate.select("text")
-          .attr("y", height * 7 / 6);
-
-      // Transition the exiting ticks to the new scale, x1.
-      tick.exit().transition()
-          .duration(duration)
-          .attr("transform", d3_chart_bulletTranslate(x1))
-          .style("opacity", 1e-6)
-          .remove();
     });
     d3.timer.flush();
   }
@@ -490,19 +581,19 @@ d3.chart.bullet = function() {
 
   bullet.height = function(x) {
     if (!arguments.length) return height;
-    height = x;
+    axis.size(height = x);
     return bullet;
   };
 
   bullet.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
-    tickFormat = x;
+    axis.tickFormat(tickFormat = x);
     return bullet;
   };
 
   bullet.duration = function(x) {
     if (!arguments.length) return duration;
-    duration = x;
+    axis.duration(duration = x);
     return bullet;
   };
 
@@ -745,7 +836,9 @@ d3.chart.qq = function() {
       tickFormat = null,
       n = 100,
       x = d3_chart_qqX,
-      y = d3_chart_qqY;
+      y = d3_chart_qqY,
+      xAxis = d3.chart.axis().dimension("x").size(height).tickCount(3),
+      yAxis = d3.chart.axis().dimension("y").size(width).tickCount(3);
 
   // For each small multiple…
   function qq(g) {
@@ -755,27 +848,13 @@ d3.chart.qq = function() {
           qy = d3_chart_qqQuantiles(n, y.call(this, d, i)),
           xd = domain && domain.call(this, d, i) || [d3.min(qx), d3.max(qx)], // new x-domain
           yd = domain && domain.call(this, d, i) || [d3.min(qy), d3.max(qy)], // new y-domain
-          x0, // old x-scale
-          y0; // old y-scale
+          x1 = d3.scale.linear().domain(xd).range([0, width]), // new x-scale
+          y1 = d3.scale.linear().domain(yd).range([height, 0]), // new y-scale
+          x0 = this.__chart__ && this.__chart__.x || x1, // old x-scale
+          y0 = this.__chart__ && this.__chart__.y || y1; // old y-scale
 
-      // Compute the new x-scale.
-      var x1 = d3.scale.linear()
-          .domain(xd)
-          .range([0, width]);
-
-      // Compute the new y-scale.
-      var y1 = d3.scale.linear()
-          .domain(yd)
-          .range([height, 0]);
-
-      // Retrieve the old scales, if this is an update.
-      if (this.__chart__) {
-        x0 = this.__chart__.x;
-        y0 = this.__chart__.y;
-      } else {
-        x0 = d3.scale.linear().domain([0, Infinity]).range(x1.range());
-        y0 = d3.scale.linear().domain([0, Infinity]).range(y1.range());
-      }
+      g.call(xAxis.scale(x1));
+      g.call(yAxis.scale(y1));
 
       // Stash the new scales.
       this.__chart__ = {x: x1, y: y1};
@@ -828,102 +907,18 @@ d3.chart.qq = function() {
           .attr("cy", function(d) { return y1(d.y); })
           .style("opacity", 1e-6)
           .remove();
-
-      var xformat = tickFormat || x1.tickFormat(4),
-          yformat = tickFormat || y1.tickFormat(4),
-          tx = function(d) { return "translate(" + x1(d) + "," + height + ")"; },
-          ty = function(d) { return "translate(0," + y1(d) + ")"; };
-
-      // Update x-ticks.
-      var xtick = g.selectAll("g.x.tick")
-          .data(x1.ticks(4), function(d) {
-            return this.textContent || xformat(d);
-          });
-
-      var xtickEnter = xtick.enter().append("svg:g")
-          .attr("class", "x tick")
-          .attr("transform", function(d) { return "translate(" + x0(d) + "," + height + ")"; })
-          .style("opacity", 1e-6);
-
-      xtickEnter.append("svg:line")
-          .attr("y1", 0)
-          .attr("y2", -6);
-
-      xtickEnter.append("svg:text")
-          .attr("text-anchor", "middle")
-          .attr("dy", "1em")
-          .text(xformat);
-
-      // Transition the entering ticks to the new scale, x1.
-      xtickEnter.transition()
-          .duration(duration)
-          .attr("transform", tx)
-          .style("opacity", 1);
-
-      // Transition the updating ticks to the new scale, x1.
-      xtick.transition()
-          .duration(duration)
-          .attr("transform", tx)
-          .style("opacity", 1);
-
-      // Transition the exiting ticks to the new scale, x1.
-      xtick.exit().transition()
-          .duration(duration)
-          .attr("transform", tx)
-          .style("opacity", 1e-6)
-          .remove();
-
-      // Update ticks.
-      var ytick = g.selectAll("g.y.tick")
-          .data(y1.ticks(4), function(d) {
-            return this.textContent || yformat(d);
-          });
-
-      var ytickEnter = ytick.enter().append("svg:g")
-          .attr("class", "y tick")
-          .attr("transform", function(d) { return "translate(0," + y0(d) + ")"; })
-          .style("opacity", 1e-6);
-
-      ytickEnter.append("svg:line")
-          .attr("x1", 0)
-          .attr("x2", 6);
-
-      ytickEnter.append("svg:text")
-          .attr("text-anchor", "end")
-          .attr("dx", "-.5em")
-          .attr("dy", ".3em")
-          .text(yformat);
-
-      // Transition the entering ticks to the new scale, y1.
-      ytickEnter.transition()
-          .duration(duration)
-          .attr("transform", ty)
-          .style("opacity", 1);
-
-      // Transition the updating ticks to the new scale, y1.
-      ytick.transition()
-          .duration(duration)
-          .attr("transform", ty)
-          .style("opacity", 1);
-
-      // Transition the exiting ticks to the new scale, y1.
-      ytick.exit().transition()
-          .duration(duration)
-          .attr("transform", ty)
-          .style("opacity", 1e-6)
-          .remove();
     });
   }
 
   qq.width = function(x) {
     if (!arguments.length) return width;
-    width = x;
+    yAxis.size(width = x);
     return qq;
   };
 
   qq.height = function(x) {
     if (!arguments.length) return height;
-    height = x;
+    xAxis.size(height = x);
     return qq;
   };
 
@@ -960,6 +955,8 @@ d3.chart.qq = function() {
   qq.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
     tickFormat = x;
+    xAxis.tickFormat(tickFormat);
+    yAxis.tickFormat(tickFormat);
     return qq;
   };
 
