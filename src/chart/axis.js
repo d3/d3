@@ -6,7 +6,7 @@ d3.chart.axis = function() {
       tickCount = 10,
       duration = 0,
       scale1,
-      size;
+      size = 0;
 
   function subdivide(ticks) {
     var ticks2 = [],
@@ -33,8 +33,8 @@ d3.chart.axis = function() {
 
       // Update ticks.
       var tick = g.select(".axis." + dimension).selectAll("g")
-          .data(subdivide(scale1.ticks(tickCount)), function(d) {
-            return this.textContent || format(d);
+          .data(subdivide(scale1.ticks(tickCount)), function(d, i) {
+            return (this.textContent || format(d)) + "," + i % 2;
           });
 
       // enter

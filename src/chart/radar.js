@@ -5,7 +5,8 @@ d3.chart.radar = function() {
       value = d3_chartRadarValue,
       variables = d3_chartRadarVariables,
       tickFormat = null, // TODO add ticks
-      labelOffset = 14.5;
+      labelOffset = 14.5,
+      rAxis = d3.chart.axis().dimension("x").tickCount(5);
 
   // For each small multiple…
   function radar(g) {
@@ -30,7 +31,7 @@ d3.chart.radar = function() {
       // Retrieve the old scales, if this is an update.
       var r0, a0;
       if (this.__chart__) {
-        r0 = this.__chart__.r;
+        r0 = this.__chart__.x;
         a0 = this.__chart__.a;
       } else {
         r0 = d3.scale.linear()
@@ -42,8 +43,10 @@ d3.chart.radar = function() {
             .range(a1.range());
       }
 
+      g.call(rAxis.scale(r1));
+
       // Stash the new scales.
-      this.__chart__ = {r: r1, a: a1};
+      this.__chart__ = {x: r1, a: a1};
 
       function x(r, a) {
         return function(d, i) {
@@ -176,7 +179,7 @@ d3.chart.radar = function() {
 
   radar.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
-    tickFormat = x;
+    rAxis.tickFormat(tickFormat = x);
     return radar;
   };
 
