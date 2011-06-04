@@ -45,8 +45,8 @@ var chart = d3.chart.mekko()
     .width(w - 3 * m)
     .height(h - 2 * m)
     .value(function(d) { return d.value; })
-    .categoryY(function(d) { return d.market; })
     .categoryX(function(d) { return d.segment; })
+    .categoryY(function(d) { return d.market; });
 
 d3.json("marimekko.json", function(d) {
   svg.data([data = d]).call(chart);
@@ -54,9 +54,7 @@ d3.json("marimekko.json", function(d) {
 });
 
 function transition() {
-  data.forEach(function(d) {
-    d.value = Math.random() * 1000;
-  });
+  data.forEach(function(d) { d.value = Math.random() * 1000; });
   svg.data([data]).call(chart);
 }
     </script>

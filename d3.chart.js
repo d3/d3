@@ -774,12 +774,10 @@ d3.chart.mekko = function() {
       // Stash the new scales.
       this.__chart__ = {x: x1, y: y1};
 
-
-      // Nest values by x-category. We assume each (x-category, y-category) is
-      // unique.
+      // Nest values by x-category. We assume the categories are distinct.
       var groups = d3.nest()
           .key(categoryX)
-          .rollup(function(d) { return d.map(function(d) { return {data: d}; }); })
+          .rollup(function(d) { return d.map(d3_chartMekkoData); })
           .entries(data);
 
       // Compute the total sum, the per-x sum, and the per-y offset.
@@ -794,17 +792,13 @@ d3.chart.mekko = function() {
         }, 0));
       }, 0);
 
-      var tx = function(d) { return "translate(" + x1(d) + "," + y1(1) + ")"; },
-          ty = function(d) { return "translate(0," + y1(1 - d) + ")"; };
-
       // Add x-axis ticks.
       var xtick = svg.selectAll("g.x")
           .data(x1.ticks(10));
 
       var xtickEnter = xtick.enter().append("svg:g")
           .attr("class", "x")
-          .attr("transform", function(d) { return "translate(" + x0(d) + "," + y0(1) + ")"; })
-          .style("opacity", 1e-6);
+          .call(tick, tx0, 1e-6);
 
       xtickEnter.append("svg:line")
           .attr("y2", 6)
@@ -819,20 +813,17 @@ d3.chart.mekko = function() {
       // Transition the entering ticks to the new scale, x1.
       xtickEnter.transition()
           .duration(duration)
-          .attr("transform", tx)
-          .style("opacity", 1);
+          .call(tick, tx1, 1);
 
       // Transition the updating ticks to the new scale, x1.
       xtick.transition()
           .duration(duration)
-          .attr("transform", tx)
-          .style("opacity", 1);
+          .call(tick, tx1, 1);
 
       // Transition the exiting ticks to the new scale, x1.
       xtick.exit().transition()
           .duration(duration)
-          .attr("transform", tx)
-          .style("opacity", 1e-6)
+          .call(tick, tx1, 1e-6)
           .remove();
 
       // Add y-axis ticks.
@@ -841,7 +832,7 @@ d3.chart.mekko = function() {
 
       var ytickEnter = ytick.enter().append("svg:g")
           .attr("class", "y")
-          .attr("transform", function(d) { return "translate(0," + y0(1 - d) + ")"; });
+          .call(tick, ty0, 1e-6);
 
       ytickEnter.append("svg:line")
           .attr("x1", -6)
@@ -856,86 +847,96 @@ d3.chart.mekko = function() {
       // Transition the entering ticks to the new scale, y1.
       ytickEnter.transition()
           .duration(duration)
-          .attr("transform", ty)
-          .style("opacity", 1);
+          .call(tick, ty1, 1);
 
       // Transition the updating ticks to the new scale, y1.
       ytick.transition()
           .duration(duration)
-          .attr("transform", ty)
-          .style("opacity", 1);
+          .call(tick, ty1, 1);
 
       // Transition the exiting ticks to the new scale, y1.
       ytick.exit().transition()
           .duration(duration)
-          .attr("transform", ty)
-          .style("opacity", 1e-6)
+          .call(tick, ty1, 1e-6)
           .remove();
 
       // Add a group for each x-category.
       var xGroup = svg.selectAll("g.group")
-          .data(groups);
+          .data(groups, function(d) { return d.key; });
 
       xGroup.enter().append("svg:g")
           .attr("class", "group")
           .attr("xlink:title", function(d) { return d.key; })
-          .attr("transform", function(d) { return "translate(" + x0(d.offset / sum) + ")"; })
-          .style("opacity", 1e-6)
+          .call(groupX, x0, 1e-6)
         .transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + x1(d.offset / sum) + ")"; })
-          .style("opacity", 1);
+          .call(groupX, x1, 1);
 
       xGroup.transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + x1(d.offset / sum) + ")"; });
+          .call(groupX, x1, 1);
 
       xGroup.exit().transition()
           .duration(duration)
-          .attr("transform", function(d) { return "translate(" + x1(d.offset / sum) + ")"; })
-          .style("opacity", 1e-6)
+          .call(groupX, x1, 1e-6)
           .remove();
 
-      // Add a rect for each y-category.
-      function title(d, i) {
-        return d.category + " " + d.parent.key + ": " + n(d.value);
-      }
-
-      // Re-select to include entering and existing x-category groups.
+      // Add a rect for each y-category. Re-select to get current x-categories.
       var yGroup = svg.selectAll("g.group").selectAll("a.y")
-          .data(function(d) { return d.values; });
+          .data(function(d) { return d.values; }, function(d) { return d.category; });
 
       yGroup.enter().append("svg:a")
           .attr("class", "y")
           .attr("xlink:title", title)
         .append("svg:rect")
-          .attr("y", function(d) { return y0(d.offset / d.parent.sum); })
-          .attr("height", function(d) { return y0(d.value / d.parent.sum); })
-          .attr("width", function(d) { return x0(d.parent.sum / sum); })
           .style("fill", function(d, i) { return z(d.category); })
-          .style("opacity", 1e-6)
+          .call(groupY, x0, y0, 1e-6)
         .transition()
           .duration(duration)
-          .attr("y", function(d) { return y1(d.offset / d.parent.sum); })
-          .attr("height", function(d) { return y1(d.value / d.parent.sum); })
-          .attr("width", function(d) { return x1(d.parent.sum / sum); })
-          .style("opacity", 1);
+          .call(groupY, x1, y1, 1);
 
       yGroup
           .attr("xlink:title", title)
         .select("rect").transition()
           .duration(duration)
-          .attr("y", function(d) { return y1(d.offset / d.parent.sum); })
-          .attr("height", function(d) { return y1(d.value / d.parent.sum); })
-          .attr("width", function(d) { return x1(d.parent.sum / sum); });
+          .call(groupY, x1, y1, 1);
 
       yGroup.exit().transition()
           .duration(duration)
-          .attr("y", function(d) { return y1(d.offset / d.parent.sum); })
-          .attr("height", function(d) { return y1(d.value / d.parent.sum); })
-          .attr("width", function(d) { return x1(d.parent.sum / sum); })
-          .style("opacity", 1e-6)
-          .remove();
+          .remove()
+        .select("rect")
+          .call(groupY, x1, y1, 1e-6);
+
+      // Translate functions for x- and y-ticks.
+      function tx0(d) { return "translate(" + x0(d) + "," + y0(1) + ")"; }
+      function tx1(d) { return "translate(" + x1(d) + "," + y1(1) + ")"; }
+      function ty0(d) { return "translate(0," + y0(1 - d) + ")"; }
+      function ty1(d) { return "translate(0," + y1(1 - d) + ")"; }
+
+      // Update the position and opacity of the specified tick group.
+      function tick(g, t, o) {
+           g.attr("transform", t)
+            .style("opacity", o);
+      }
+
+      // Update the position and opacity of the specified x-category group.
+      function groupX(g, x, o) {
+           g.attr("transform", function(d) { return "translate(" + x(d.offset / sum) + ")"; })
+            .style("opacity", o)
+      }
+
+      // Update the position and opacity of the specified y-category group.
+      function groupY(rect, x, y, o) {
+        rect.attr("y", function(d) { return y(d.offset / d.parent.sum); })
+            .attr("height", function(d) { return y(d.value / d.parent.sum); })
+            .attr("width", function(d) { return x(d.parent.sum / sum); })
+            .style("opacity", o);
+      }
+
+      // Compute the title toolkit for the specified y-category.
+      function title(d) {
+        return d.category + " " + d.parent.key + ": " + n(d.value);
+      }
 
       d3.timer.flush();
     });
@@ -985,11 +986,15 @@ function d3_chartMekkoValue(d) {
 }
 
 function d3_chartMekkoCategoryX(d) {
-  return d.a;
+  return d.x;
 }
 
 function d3_chartMekkoCategoryY(d) {
-  return d.b;
+  return d.y;
+}
+
+function d3_chartMekkoData(d) {
+  return {data: d};
 }
 // Based on http://vis.stanford.edu/protovis/ex/qqplot.html
 d3.chart.qq = function() {
