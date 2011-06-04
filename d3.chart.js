@@ -35,7 +35,7 @@ d3.chart.axis = function() {
       // Update ticks.
       var tick = g.select(".axis." + dimension).selectAll("g")
           .data(subdivide(scale1.ticks(tickCount)), function(d) {
-            return this.textContent || tickFormat(d);
+            return this.textContent || format(d);
           });
 
       // enter
@@ -447,7 +447,8 @@ d3.chart.bullet = function() {
       measures = d3_chart_bulletMeasures,
       width = 380,
       height = 30,
-      tickFormat = null;
+      tickFormat = null,
+      axis = d3.chart.axis().dimension("x").size(height).tickCount(3);
 
   // For each small multiple…
   function bullet(g) {
@@ -469,6 +470,8 @@ d3.chart.bullet = function() {
 
       // Stash the new scale.
       this.__chart__ = x1;
+
+      g.call(axis.scale(x1));
 
       // Derive width-scales from the x-scales.
       var w0 = d3_chart_bulletWidth(x0),
@@ -537,57 +540,6 @@ d3.chart.bullet = function() {
           .attr("x2", x1)
           .attr("y1", height / 6)
           .attr("y2", height * 5 / 6);
-
-      // Compute the tick format.
-      var format = tickFormat || x1.tickFormat(8);
-
-      // Update the tick groups.
-      var tick = g.selectAll("g.tick")
-          .data(x1.ticks(8), function(d) {
-            return this.textContent || format(d);
-          });
-
-      // Initialize the ticks with the old scale, x0.
-      var tickEnter = tick.enter().append("svg:g")
-          .attr("class", "tick")
-          .attr("transform", d3_chart_bulletTranslate(x0))
-          .style("opacity", 1e-6);
-
-      tickEnter.append("svg:line")
-          .attr("y1", height)
-          .attr("y2", height * 7 / 6);
-
-      tickEnter.append("svg:text")
-          .attr("text-anchor", "middle")
-          .attr("dy", "1em")
-          .attr("y", height * 7 / 6)
-          .text(format);
-
-      // Transition the entering ticks to the new scale, x1.
-      tickEnter.transition()
-          .duration(duration)
-          .attr("transform", d3_chart_bulletTranslate(x1))
-          .style("opacity", 1);
-
-      // Transition the updating ticks to the new scale, x1.
-      var tickUpdate = tick.transition()
-          .duration(duration)
-          .attr("transform", d3_chart_bulletTranslate(x1))
-          .style("opacity", 1);
-
-      tickUpdate.select("line")
-          .attr("y1", height)
-          .attr("y2", height * 7 / 6);
-
-      tickUpdate.select("text")
-          .attr("y", height * 7 / 6);
-
-      // Transition the exiting ticks to the new scale, x1.
-      tick.exit().transition()
-          .duration(duration)
-          .attr("transform", d3_chart_bulletTranslate(x1))
-          .style("opacity", 1e-6)
-          .remove();
     });
     d3.timer.flush();
   }
@@ -629,19 +581,19 @@ d3.chart.bullet = function() {
 
   bullet.height = function(x) {
     if (!arguments.length) return height;
-    height = x;
+    axis.size(height = x);
     return bullet;
   };
 
   bullet.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
-    tickFormat = x;
+    axis.tickFormat(tickFormat = x);
     return bullet;
   };
 
   bullet.duration = function(x) {
     if (!arguments.length) return duration;
-    duration = x;
+    axis.duration(duration = x);
     return bullet;
   };
 

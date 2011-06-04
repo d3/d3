@@ -34,7 +34,7 @@ d3.chart.axis = function() {
       // Update ticks.
       var tick = g.select(".axis." + dimension).selectAll("g")
           .data(subdivide(scale1.ticks(tickCount)), function(d) {
-            return this.textContent || tickFormat(d);
+            return this.textContent || format(d);
           });
 
       // enter
