@@ -4,6 +4,7 @@
     <title>Marimekko Chart</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.chart.js"></script>
+    <link type="text/css" rel="stylesheet" href="../button.css"/>
     <style type="text/css">
 
 body {
@@ -21,6 +22,9 @@ svg {
     </style>
   </head>
   <body>
+    <button class="first last" onclick="transition()">
+      Update
+    </button><p>
     <script type="text/javascript">
 
 var w = 960,
@@ -28,7 +32,8 @@ var w = 960,
     m = 20,
     z = d3.scale.category10(),
     n = d3.format(",d"),
-    p = d3.format("%");
+    p = d3.format("%"),
+    data = [];
 
 var svg = d3.select("body").append("svg:svg")
     .attr("width", w)
@@ -37,16 +42,23 @@ var svg = d3.select("body").append("svg:svg")
     .attr("transform", "translate(" + 2 * m + "," + m + ")");
 
 var chart = d3.chart.mekko()
+    .duration(1000)
     .width(w - 3 * m)
     .height(h - 2 * m)
     .value(function(d) { return d.value; })
     .categoryY(function(d) { return d.market; })
     .categoryX(function(d) { return d.segment; })
 
-d3.json("marimekko.json", function(data) {
-  svg.data([data]).call(chart);
+d3.json("marimekko.json", function(d) {
+  svg.data([data = d]).call(chart);
 });
 
+function transition() {
+  data.forEach(function(d) {
+    d.value = Math.random() * 1000;
+  });
+  svg.data([data]).call(chart);
+}
     </script>
   </body>
 </html>
