@@ -4,15 +4,32 @@
   height: 310px;
 }
 
-.qq .box, .qq .tick line, .qq .quantile, .qq .diagonal {
-  stroke: #aaa;
-  fill: none;
+.qq .tick line, .qq .diagonal {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.qq .tick text {
+  fill: #777;
+}
+
+.qq .box {
+  fill: #dfdfdf;
 }
 
 .qq .quantile {
   stroke: #000;
+  fill: none;
 }
 
 .qq g + g .y.tick {
+  display: none;
+}
+
+.qq .tick:nth-child(2n - 1) line {
+  stroke-width: .5px;
+}
+
+.qq .tick:nth-child(2n - 1) text {
   display: none;
 }

@@ -8,13 +8,8 @@ d3.chart.qq = function() {
       n = 100,
       x = d3_chart_qqX,
       y = d3_chart_qqY,
-      yaxis = d3.chart.axis("y")
-        .count(3)
-        .transform(function(y, d) { return "translate(0," + y(d) + ")"; }),
-      xaxis = d3.chart.axis("x")
-        .count(3)
-        .transform(function(x, d) {
-          return "translate(" + x(d) + "," + height + ")"; });
+      xAxis = d3.chart.axis().dimension("x").mode("line").size(height).tickCount(6),
+      yAxis = d3.chart.axis().dimension("y").mode("line").size(width).tickCount(6);
 
   // For each small multiple…
   function qq(g) {
@@ -31,7 +26,7 @@ d3.chart.qq = function() {
       var x1 = d3.scale.linear()
           .domain(xd)
           .range([0, width]);
-          
+
       // Compute the new y-scale.
       var y1 = d3.scale.linear()
           .domain(yd)
@@ -45,26 +40,8 @@ d3.chart.qq = function() {
         y0 = d3.scale.linear().domain([0, Infinity]).range(y1.range());
       }
 
-      var xtick = xaxis.scales([x0, x1])(g);
-
-      xtick.append("svg:line")
-          .attr("y1", 0)
-          .attr("y2", -6);
-      xtick.append("svg:text")
-          .attr("text-anchor", "middle")
-          .attr("dy", "1em")
-          .text(tickFormat || x1.tickFormat(3));
-      
-      var ytick = yaxis.scales([y0, y1])(g);
-
-      ytick.append("svg:line")
-          .attr("x1", 0)
-          .attr("x2", 6);
-      ytick.append("svg:text")
-          .attr("text-anchor", "end")
-          .attr("dy", ".3em")
-          .attr("dx", "-.5em")
-          .text(tickFormat || y1.tickFormat(3));
+      g.call(xAxis.scales([x0, x1]));
+      g.call(yAxis.scales([y0, y1]));
 
       // Stash the new scales.
       this.__chart__ = {x: x1, y: y1};
@@ -122,13 +99,13 @@ d3.chart.qq = function() {
 
   qq.width = function(x) {
     if (!arguments.length) return width;
-    width = x;
+    yAxis.size(width = x);
     return qq;
   };
 
   qq.height = function(x) {
     if (!arguments.length) return height;
-    height = x;
+    xAxis.size(height = x);
     return qq;
   };
 
@@ -165,8 +142,8 @@ d3.chart.qq = function() {
   qq.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
     tickFormat = x;
-    xaxis.format(tickFormat);
-    yaxis.format(tickFormat);
+    xAxis.tickFormat(tickFormat);
+    yAxis.tickFormat(tickFormat);
     return qq;
   };
 

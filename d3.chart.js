@@ -1,68 +1,104 @@
 (function(){d3.chart = {};
-d3.chart.axis = function(cls) {
-  var format = null,
-      count = 10,
-      transform = d3_chartAxisTransform,
+// TODO align (left/right/top/bottom?)
+d3.chart.axis = function() {
+  var dimension = "y", // or x
+      mode = "tick", // or line
+      transform = d3_chart_axisTransformY,
+      tickFormat = null,
+      tickCount = 10,
       duration = 0,
-      x0 = null,
-      x1 = null;
+      scales,
+      size;
 
   function axis(g) {
-    var tformat = format || x1.tickFormat(count),
-        tx = transform(x1);
+    g.each(function(d, i) {
+      var g = d3.select(this),
+          format = tickFormat || scales[1].tickFormat(tickCount);
 
-    // Update x-ticks.
-    var tick = g.selectAll("g." + cls + ".tick")
-        .data(x1.ticks(count), function(d) {
-          return this.textContent || tformat(d);
-        });
+      // Update ticks.
+      var tick = g.selectAll("g." + dimension + ".tick")
+          .data(scales[1].ticks(tickCount), function(d) {
+            return this.textContent || tickFormat(d);
+          });
 
-    var tickEnter = tick.enter().append("svg:g")
-        .attr("class", cls + " tick")
-        .attr("transform", transform(x0))
-        .style("opacity", 1e-6);
+      // enter
+      var tickEnter = tick.enter().append("svg:g")
+          .attr("class", dimension + " tick")
+          .call(transform, scales[0], size, 1e-6);
 
-    // Transition the entering ticks to the new scale, x1.
-    tickEnter.transition()
-        .duration(duration)
-        .attr("transform", tx)
-        .style("opacity", 1);
+      if (dimension == "y") {
+        tickEnter.append("svg:line")
+            .attr("x1", 0)
+            .attr("x2", mode == "tick" ? -6 : size);
 
-    // Transition the updating ticks to the new scale, x1.
-    tick.transition()
-        .duration(duration)
-        .attr("transform", tx)
-        .style("opacity", 1);
+        tickEnter.append("svg:text")
+            .attr("text-anchor", "end")
+            .attr("x", mode == "tick" ? -9 : -3)
+            .attr("dy", ".35em")
+            .text(format);
+      } else {
+        tickEnter.append("svg:line")
+            .attr("y1", 0)
+            .attr("y2", mode == "tick" ? 6 : -size);
 
-    // Transition the exiting ticks to the new scale, x1.
-    tick.exit().transition()
-        .duration(duration)
-        .attr("transform", tx)
-        .style("opacity", 1e-6)
-        .remove();
+        tickEnter.append("svg:text")
+            .attr("text-anchor", "middle")
+            .attr("y", mode == "tick" ? 9 : 3)
+            .attr("dy", ".71em")
+            .text(format);
+      }
 
-    return tickEnter;
+      tickEnter.transition()
+          .duration(duration)
+          .call(transform, scales[1], size, 1);
+
+      // update
+      tick.transition()
+          .duration(duration)
+          .call(transform, scales[1], size, 1);
+
+      // exit
+      tick.exit().transition()
+          .duration(duration)
+          .call(transform, scales[1], size, 1e-6)
+          .remove();
+    });
   }
 
-  axis.transform = function(x) {
-    if (!arguments.length) return transform;
-    transform = function(scale) {
-      return function(d) {
-        return x(scale, d);
-      };
-    };
+  axis.dimension = function(x) {
+    if (!arguments.length) return dimension;
+    dimension = x;
+    transform = x == "y" ? d3_chart_axisTransformY : d3_chart_axisTransformX;
     return axis;
   };
 
-  axis.format = function(x) {
-    if (!arguments.length) return format;
-    format = x;
+  axis.mode = function(x) {
+    if (!arguments.length) return mode;
+    mode = x;
     return axis;
   };
 
-  axis.count = function(x) {
-    if (!arguments.length) return count;
-    count = x;
+  axis.tickFormat = function(x) {
+    if (!arguments.length) return tickFormat;
+    tickFormat = x;
+    return axis;
+  };
+
+  axis.tickCount = function(x) {
+    if (!arguments.length) return tickCount;
+    tickCount = x;
+    return axis;
+  };
+
+  axis.scales = function(x) {
+    if (!arguments.length) return scales;
+    scales = x;
+    return axis;
+  };
+
+  axis.size = function(x) {
+    if (!arguments.length) return size;
+    size = x;
     return axis;
   };
 
@@ -72,20 +108,17 @@ d3.chart.axis = function(cls) {
     return axis;
   };
 
-  axis.scales = function(x) {
-    if (!arguments.length) return [x0, x1];
-    x0 = x[0];
-    x1 = x[1];
-    return axis;
-  };
-
   return axis;
 }
 
-function d3_chartAxisTransform(x) {
-  return function(d) {
-    return "translate(" + x(d) + ")";
-  };
+function d3_chart_axisTransformX(tick, x, size, o) {
+  tick.attr("transform", function(d) { return "translate(" + x(d) + "," + size + ")"; })
+      .style("opacity", o);
+}
+
+function d3_chart_axisTransformY(tick, y, size, o) {
+  tick.attr("transform", function(d) { return "translate(0," + y(d) + ")"; })
+      .style("opacity", o);
 }
 // Inspired by http://informationandvisualization.de/blog/box-plot
 d3.chart.box = function() {
@@ -834,13 +867,8 @@ d3.chart.qq = function() {
       n = 100,
       x = d3_chart_qqX,
       y = d3_chart_qqY,
-      yaxis = d3.chart.axis("y")
-        .count(3)
-        .transform(function(y, d) { return "translate(0," + y(d) + ")"; }),
-      xaxis = d3.chart.axis("x")
-        .count(3)
-        .transform(function(x, d) {
-          return "translate(" + x(d) + "," + height + ")"; });
+      xAxis = d3.chart.axis().dimension("x").mode("line").size(height).tickCount(6),
+      yAxis = d3.chart.axis().dimension("y").mode("line").size(width).tickCount(6);
 
   // For each small multiple…
   function qq(g) {
@@ -857,7 +885,7 @@ d3.chart.qq = function() {
       var x1 = d3.scale.linear()
           .domain(xd)
           .range([0, width]);
-          
+
       // Compute the new y-scale.
       var y1 = d3.scale.linear()
           .domain(yd)
@@ -871,26 +899,8 @@ d3.chart.qq = function() {
         y0 = d3.scale.linear().domain([0, Infinity]).range(y1.range());
       }
 
-      var xtick = xaxis.scales([x0, x1])(g);
-
-      xtick.append("svg:line")
-          .attr("y1", 0)
-          .attr("y2", -6);
-      xtick.append("svg:text")
-          .attr("text-anchor", "middle")
-          .attr("dy", "1em")
-          .text(tickFormat || x1.tickFormat(3));
-      
-      var ytick = yaxis.scales([y0, y1])(g);
-
-      ytick.append("svg:line")
-          .attr("x1", 0)
-          .attr("x2", 6);
-      ytick.append("svg:text")
-          .attr("text-anchor", "end")
-          .attr("dy", ".3em")
-          .attr("dx", "-.5em")
-          .text(tickFormat || y1.tickFormat(3));
+      g.call(xAxis.scales([x0, x1]));
+      g.call(yAxis.scales([y0, y1]));
 
       // Stash the new scales.
       this.__chart__ = {x: x1, y: y1};
@@ -948,13 +958,13 @@ d3.chart.qq = function() {
 
   qq.width = function(x) {
     if (!arguments.length) return width;
-    width = x;
+    yAxis.size(width = x);
     return qq;
   };
 
   qq.height = function(x) {
     if (!arguments.length) return height;
-    height = x;
+    xAxis.size(height = x);
     return qq;
   };
 
@@ -991,8 +1001,8 @@ d3.chart.qq = function() {
   qq.tickFormat = function(x) {
     if (!arguments.length) return tickFormat;
     tickFormat = x;
-    xaxis.format(tickFormat);
-    yaxis.format(tickFormat);
+    xAxis.tickFormat(tickFormat);
+    yAxis.tickFormat(tickFormat);
     return qq;
   };
 
