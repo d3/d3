@@ -1,35 +1,27 @@
+@import url("../axis/ggplot2.css");
+
 #chart {
   font: 10px sans-serif;
   width: 960px;
   height: 310px;
 }
 
-.qq .tick line, .qq .diagonal {
+/*
+.qq .diagonal, .qq .box {
+  stroke: #000;
+  fill: none;
+}
+*/
+
+.qq .diagonal {
   stroke: #fff;
   stroke-width: 1.5px;
 }
-
-.qq .tick text {
-  fill: #777;
-}
-
 .qq .box {
-  fill: #dfdfdf;
+  fill: #e9e9e9;
 }
 
 .qq .quantile {
   stroke: #000;
   fill: none;
-}
-
-.qq g + g .y.tick {
-  display: none;
-}
-
-.qq .tick:nth-child(2n) line {
-  stroke-width: .5px;
-}
-
-.qq .tick:nth-child(2n) text {
-  display: none;
 }
