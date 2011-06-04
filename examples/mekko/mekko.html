@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Mekko Chart</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.chart.js"></script>
+    <link type="text/css" rel="stylesheet" href="../button.css"/>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+rect {
+  stroke: #000;
+}
+
+svg {
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <button class="first last" onclick="transition()">
+      Update
+    </button><p>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500,
+    m = 20,
+    z = d3.scale.category10(),
+    n = d3.format(",d"),
+    p = d3.format("%"),
+    data = [];
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+  .append("svg:g")
+    .attr("transform", "translate(" + 2 * m + "," + m + ")");
+
+var chart = d3.chart.mekko()
+    .width(w - 3 * m)
+    .height(h - 2 * m)
+    .value(function(d) { return d.value; })
+    .categoryX(function(d) { return d.segment; })
+    .categoryY(function(d) { return d.market; });
+
+d3.json("mekko.json", function(d) {
+  svg.data([data = d]).call(chart);
+  chart.duration(1000);
+});
+
+function transition() {
+  data.forEach(function(d) { d.value = Math.random() * 1000; });
+  svg.data([data]).call(chart);
+}
+    </script>
+  </body>
+</html>
