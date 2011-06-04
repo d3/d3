@@ -464,14 +464,14 @@ d3.chart.bullet = function() {
           .range(reverse ? [width, 0] : [0, width]);
 
       // Retrieve the old x-scale, if this is an update.
-      var x0 = this.__chart__ || d3.scale.linear()
+      var x0 = this.__chart__ && this.__chart__.x || d3.scale.linear()
           .domain([0, Infinity])
           .range(x1.range());
 
-      // Stash the new scale.
-      this.__chart__ = x1;
-
       g.call(axis.scale(x1));
+
+      // Stash the new scale.
+      this.__chart__ = {x: x1};
 
       // Derive width-scales from the x-scales.
       var w0 = d3_chart_bulletWidth(x0),
