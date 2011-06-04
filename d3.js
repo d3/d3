@@ -3310,7 +3310,8 @@ d3.svg.symbolTypes = [
   "diamond",
   "square",
   "triangle-down",
-  "triangle-up"
+  "triangle-up",
+  "heart"
 ];
 
 function d3_svg_symbolSize() {
@@ -3377,6 +3378,23 @@ var d3_svg_symbols = {
         + "L" + rx +"," + ry
         + " " + -rx + "," + ry
         + "Z";
+  },
+  "heart": function(size) {
+	var r = Math.sqrt(size / Math.PI)/4;
+	return "M " +  0 * r + "," + -3 * r 
+			+ "C " +  2 * r + "," + -5 * r
+			+ "  " +  5 * r + "," + -4 * r 
+			+ "  " +  5 * r + "," + -1 * r 
+			+ "C " +  5 * r + "," +  1 * r
+			+ "  " +  3 * r + "," +  2 * r
+			+ "  " +  0 * r + "," +  5 * r
+			+ "C " + -3 * r + "," +  2 * r
+			+ "  " + -5 * r + "," +  1 * r
+			+ "  " + -5 * r + "," + -1 * r
+			+ "C " + -5 * r + "," + -4 * r
+			+ "  " + -2 * r + "," + -5 * r
+			+ "  " +  0 * r + "," + -3 * r
+			+ "Z";
   }
 };
 
