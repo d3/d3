@@ -136,7 +136,7 @@ d3.chart.mekko = function() {
 
       // Add a group for each x-category.
       var xGroup = svg.selectAll("g.group")
-          .data(groups);
+          .data(groups, function(d) { return d.key; });
 
       xGroup.enter().append("svg:g")
           .attr("class", "group")
@@ -165,7 +165,7 @@ d3.chart.mekko = function() {
 
       // Re-select to include entering and existing x-category groups.
       var yGroup = svg.selectAll("g.group").selectAll("a.y")
-          .data(function(d) { return d.values; });
+          .data(function(d) { return d.values; }, function(d) { return d.category; });
 
       yGroup.enter().append("svg:a")
           .attr("class", "y")
