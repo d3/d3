@@ -108,6 +108,7 @@ d3.chart.js: \
 	src/chart/horizon.js \
 	src/chart/qq.js \
 	src/chart/radar.js \
+	src/chart/scatter.js \
 	src/end.js
 
 d3.layout.js: \
