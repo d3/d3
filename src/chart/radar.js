@@ -203,7 +203,7 @@ d3.chart.radar = function() {
 
   radar.variables = function(x) {
     if (!arguments.length) return variables;
-    variables = x == null ? x : d3.functor(variables);
+    variables = x == null ? x : d3.functor(x);
     return radar;
   };
 
