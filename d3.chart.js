@@ -1044,8 +1044,8 @@ d3.chart.radar = function() {
           y0 = y(r0, a0),
           x1 = x(r1, a1),
           y1 = y(r1, a1),
-          line0 = d3.svg.line().x(x0).y(y0),
-          line1 = d3.svg.line().x(x1).y(y1);
+          line0 = closed(d3.svg.line().x(x0).y(y0)),
+          line1 = closed(d3.svg.line().x(x1).y(y1));
 
       function closed(f) {
         return function(d, i) {
@@ -1119,35 +1119,30 @@ d3.chart.radar = function() {
           .attr("class", function(d, i) { return "observation ob" + i; });
 
       obEnter.append("svg:path")
-          .attr("d", closed(line0))
+          .attr("d", line0)
         .transition()
           .duration(duration)
-          .attr("d", closed(line1));
+          .attr("d", line1);
 
       var marker = g.selectAll("g.observation").selectAll("circle")
           .data(Object, function(d, i) { return vars[i]; });
 
       marker.enter().append("svg:circle")
           .attr("r", 5.5)
-          .attr("cx", x0)
-          .attr("cy", y0)
+          .attr("transform", function(d, i) { return rotate0(d, i) + "translate(" + r0(d) + ")"; })
         .transition()
           .duration(duration)
-          .attr("cx", x1)
-          .attr("cy", y1);
+          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d) + ")"; });
 
       marker.transition()
           .duration(duration)
-          .attr("cx", x1)
-          .attr("cy", y1);
+          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d) + ")"; });
 
       marker.exit().remove();
 
-      ob.select("path")
-          .attr("d", closed(line0))
-        .transition()
+      ob.select("path").transition()
           .duration(duration)
-          .attr("d", closed(line1));
+          .attr("d", line1);
 
       ob.exit().remove();
     });
