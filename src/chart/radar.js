@@ -163,7 +163,9 @@ d3.chart.radar = function() {
 
       marker.exit().remove();
 
-      ob.select("path").transition()
+      ob.select("path")
+          .attr("d", closed(line0))
+        .transition()
           .duration(duration)
           .attr("d", closed(line1));
 
