@@ -982,8 +982,8 @@ d3.chart.radar = function() {
   var radius = 1,
       duration = 0,
       domain = null,
-      value = d3_chartRadarValue,
-      variables = d3_chartRadarVariables,
+      value = d3_chart_radarValue,
+      variables = d3_chart_radarVariables,
       tickFormat = null, // TODO add ticks
       labelOffset = 14.5,
       rAxis = d3.chart.axis().dimension("x").tickCount(5);
@@ -1191,11 +1191,11 @@ d3.chart.radar = function() {
   return radar;
 };
 
-function d3_chartRadarValue(d, v) {
+function d3_chart_radarValue(d, v) {
   return d[v];
 }
 
-function d3_chartRadarVariables(d) {
+function d3_chart_radarVariables(d) {
   return d3.keys(d[0]);
 }
 })()
