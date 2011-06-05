@@ -11,7 +11,7 @@ d3.chart.bullet = function() {
       width = 380,
       height = 30,
       tickFormat = null,
-      axis = d3.chart.axis().dimension("x").size(height).tickCount(8);
+      axis = d3.chart.axis().orient("bottom").size(height).tickCount(8);
 
   // For each small multiple…
   function bullet(g) {
@@ -29,7 +29,11 @@ d3.chart.bullet = function() {
       // Retrieve the old x-scale, if this is an update.
       var x0 = this.__chart__ && this.__chart__.x || x1;
 
-      g.call(axis.scale(x1));
+      // axis
+      var ga = g.selectAll(".axis").data([,]);
+      ga.enter().append("svg:g").attr("class", "axis");
+      ga.call(axis.scales([x0, x1]));
+//       g.call(axis.scale(x1));
 
       // Stash the new scale.
       this.__chart__ = {x: x1};

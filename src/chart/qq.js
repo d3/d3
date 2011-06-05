@@ -8,8 +8,8 @@ d3.chart.qq = function() {
       n = 100,
       x = d3_chart_qqX,
       y = d3_chart_qqY,
-      xAxis = d3.chart.axis().dimension("x").size(height).tickCount(3),
-      yAxis = d3.chart.axis().dimension("y").size(width).tickCount(3);
+      xAxis = d3.chart.axis().orient("bottom").size(height).tickCount(3),
+      yAxis = d3.chart.axis().orient("left").size(width).tickCount(3);
 
   // For each small multiple…
   function qq(g) {
@@ -24,8 +24,15 @@ d3.chart.qq = function() {
           x0 = this.__chart__ && this.__chart__.x || x1, // old x-scale
           y0 = this.__chart__ && this.__chart__.y || y1; // old y-scale
 
-      g.call(xAxis.scale(x1));
-      g.call(yAxis.scale(y1));
+      // x-axis
+      var gx = g.selectAll(".x.axis").data([,]);
+      gx.enter().append("svg:g").attr("class", "x axis");
+      gx.call(xAxis.scales([x0, x1]));
+
+      // y-axis
+      var gy = g.selectAll(".y.axis").data([,]);
+      gy.enter().append("svg:g").attr("class", "y axis")
+      gy.call(yAxis.scales([y0, y1]));
 
       // Stash the new scales.
       this.__chart__ = {x: x1, y: y1};
