@@ -10,8 +10,7 @@ d3.chart.bullet = function() {
       measures = d3_chart_bulletMeasures,
       width = 380,
       height = 30,
-      tickFormat = null,
-      axis = d3.chart.axis().orient("bottom").size(height).tickCount(8);
+      tickFormat = null;
 
   // For each small multiple…
   function bullet(g) {
@@ -28,12 +27,6 @@ d3.chart.bullet = function() {
 
       // Retrieve the old x-scale, if this is an update.
       var x0 = this.__chart__ && this.__chart__.x || x1;
-
-      // axis
-      var ga = g.selectAll(".axis").data([,]);
-      ga.enter().append("svg:g").attr("class", "axis");
-      ga.call(axis.scales([x0, x1]));
-//       g.call(axis.scale(x1));
 
       // Stash the new scale.
       this.__chart__ = {x: x1};
@@ -61,6 +54,11 @@ d3.chart.bullet = function() {
           .attr("x", reverse ? x1 : 0)
           .attr("width", w1)
           .attr("height", height);
+
+      // Update the axis.
+      var ga = g.selectAll(".axis").data([,]);
+      ga.enter().append("svg:g").attr("class", "axis");
+      ga.attr("transform", "translate(0," + height + ")").call(axis.scales([x0, x1]));
 
       // Update the measure rects.
       var measure = g.selectAll("rect.measure")
@@ -146,7 +144,7 @@ d3.chart.bullet = function() {
 
   bullet.height = function(x) {
     if (!arguments.length) return height;
-    axis.size(height = x);
+    height = x;
     return bullet;
   };
 
@@ -161,6 +159,11 @@ d3.chart.bullet = function() {
     axis.duration(duration = x);
     return bullet;
   };
+
+  var axis = bullet.axis = d3.chart.axis()
+      .orient("bottom")
+      .mode("open")
+      .tickCount(8);
 
   return bullet;
 };

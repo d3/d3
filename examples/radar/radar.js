@@ -14,18 +14,18 @@ var chart = d3.chart.radar()
 var vis = d3.select("#chart").selectAll("svg")
     .data([data])
   .enter().append("svg:svg")
-    .attr("class", "radar")
     .attr("width", 2 * (r + p))
     .attr("height", 2 * (r + p))
   .append("svg:g")
+    .attr("class", "radar")
     .attr("transform", "translate(" + (r + p) + "," + (r + p) + ")")
     .call(chart);
 
 chart.duration(1000);
 
 window.transition = function() {
-  var n = allVariables.length - 2;
-  chart.variables(allVariables.slice(0, 3 + Math.floor(Math.random() * n)));
+//   var n = allVariables.length - 2;
+//   chart.variables(allVariables.slice(0, 3 + Math.floor(Math.random() * n)));
   vis.map(randomize).call(chart);
 };
 

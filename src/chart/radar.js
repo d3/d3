@@ -2,173 +2,147 @@ d3.chart.radar = function() {
   var radius = 1,
       duration = 0,
       domain = null,
-      value = d3_chart_radarValue,
-      variables = d3_chart_radarVariables,
+      dimensions = d3_chart_radarDimensions,
       tickFormat = null, // TODO add ticks
-      labelOffset = 14.5,
       rAxis = d3.chart.axis().orient("bottom").tickCount(5);
 
   // For each small multiple…
   function radar(g) {
     g.each(function(d, i) {
       var g = d3.select(this),
-          vars = variables.call(this, d, i),
-          data = d.map(function(d) {
-            return vars.map(function(v) {
-              return {key: v, value: value(d, v)};
-            });
-          }),
-          max = d3.max(data, function(d) { return d3.max(d); });
-
-      // Compute the new r-scale.
-      var r1 = d3.scale.linear()
-          .domain(domain && domain.call(this, d, i) || [0, max])
-          .range([0, radius]);
-
-      // Compute the new a-scale.
-      var a1 = d3.scale.linear()
-          .domain([0, vars.length])
-          .range([0, 360]);
-
-      // Retrieve the old scales, if this is an update.
-      var r0, a0;
-      if (this.__chart__) {
-        r0 = this.__chart__.x;
-        a0 = this.__chart__.a;
-      } else {
-        r0 = d3.scale.linear()
-            .domain([0, Infinity])
-            .range(r1.range());
-
-        a0 = d3.scale.linear()
-            .domain([0, Infinity])
-            .range(a1.range());
-      }
-
-      g.call(rAxis.scales([r0, r1]));
+          dims = dimensions.call(this, d, i),
+          r1 = d3.scale.linear().domain(domain.call(this, d, i)).range([0, radius]), // TODO allow null
+          r0 = this.__chart__ && this.__chart__.r || r1,
+          a1 = d3.scale.linear().domain([0, dims.length]).range([0, 360]);
+          a0 = this.__chart__ && this.__chart__.a || a1;
 
       // Stash the new scales.
-      this.__chart__ = {x: r1, a: a1};
-
-      function x(r, a) {
-        return function(d, i) {
-          return r(d) * Math.cos(Math.PI * a(i) / 180);
-        };
-      }
-
-      function y(r, a) {
-        return function(d, i) {
-          return r(d) * Math.sin(Math.PI * a(i) / 180);
-        };
-      }
-
-      var x0 = x(r0, a0),
-          y0 = y(r0, a0),
-          x1 = x(r1, a1),
-          y1 = y(r1, a1),
-          line0 = closed(d3.svg.line().x(x0).y(y0)),
-          line1 = closed(d3.svg.line().x(x1).y(y1));
-
-      function closed(f) {
-        return function(d, i) {
-          return f(d.map(function(d) { return d.value }), i) + "z";
-        };
-      }
+      this.__chart__ = {r: r1, a: a1};
 
       // Use <g> to ensure axes appear below lines and markers.
-      var axes = g.select("g.axes");
-      if (axes.empty()) axes = g.append("svg:g").attr("class", "axes");
+      var axis = g.selectAll("g.axes")
+          .data(dims, String);
 
-      var rotate0 = function(d, i) { return "rotate(" + a0(i) + ")"; };
-      var rotate1 = function(d, i) { return "rotate(" + a1(i) + ")"; };
+      var axisEnter = axis.enter().append("svg:g")
+          .attr("class", "axes")
+          .attr("transform", t0);
 
-      var axis = axes.selectAll("line")
-          .data(vars, String);
+      axisEnter.append("svg:line")
+          .attr("x2", r0.range()[1]);
 
-      axis.enter().append("svg:line")
-          .attr("x1", 0)
-          .attr("y1", 0)
-          .attr("x2", r0.range()[1])
-          .attr("y2", 0)
-          .attr("transform", rotate0)
-        .transition()
-          .duration(duration)
-          .attr("transform", rotate1)
-          .attr("x2", r1.range()[1]);
-
-      axis.transition()
-          .duration(duration)
-          .attr("x2", r1.range()[1])
-          .attr("transform", rotate1);
-
-      axis.exit().remove();
-
-      var label = axes.selectAll("g")
-          .data(vars, String);
-
-      var labelEnter = label.enter().append("svg:g")
-          .attr("transform", function(d, i) { return rotate0(d, i) + "translate(" + (r0.range()[1] + labelOffset) + ")"; });
-
-      labelEnter.transition()
-          .duration(duration)
-          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + (r1.range()[1] + labelOffset) + ")"; });
-
-      labelEnter.append("svg:text")
-          .attr("text-anchor", "middle")
-          .attr("dy", ".3em")
-          .attr("transform", function(d, i) { return rotate0(d, -i); })
-        .transition()
-          .duration(duration)
-          .text(String)
-          .attr("transform", function(d, i) { return rotate1(d, -i); });
-
-      label.select("text")
-        .transition()
-          .duration(duration)
-          .attr("transform", function(d, i) { return rotate1(d, -i); })
+      axisEnter.append("svg:text")
+          .attr("text-anchor", "start")
+          .attr("dy", ".35em")
+          .attr("x", r0.range()[1] + 3)
           .text(String);
 
-      label.transition()
+      axis
+          .call(rAxis.scales([r0, r1]))
+          .filter(function(d, i) { return i; })
+        .selectAll(".tick text")
+          .style("display", "none");
+
+      axis.selectAll(".tick")
+          .filter(function(d, i) { return !i; })
+          .style("display", "none");
+
+      axis.each(function(dim) {
+        var point = d3.select(this).selectAll("circle")
+            .data(d); // TODO customizable join?
+
+        point.enter().append("svg:circle")
+            .attr("cx", function(d, i) { return r0(d[dim]); })
+            .attr("r", 4.5);
+
+        point.transition()
+            .duration(duration)
+            .attr("cx", function(d) { return r1(d[dim]); });
+      });
+
+      var axisUpdate = axis.transition()
           .duration(duration)
-          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + (r1.range()[1] + labelOffset) + ")"; });
+          .attr("transform", t1);
 
-      label.exit().remove();
+      axisUpdate.select("line")
+          .attr("x2", r1.range()[1]);
 
-      var ob = g.selectAll("g.observation")
-          .data(data);
+      axisUpdate.select("text")
+          .attr("x", r1.range()[1] + 3);
 
-      var obEnter = ob.enter().append("svg:g")
-          .attr("class", function(d, i) { return "observation ob" + i; });
-
-      obEnter.append("svg:path")
-          .attr("d", line0)
-        .transition()
+      var axisExit = axis.exit().transition()
           .duration(duration)
-          .attr("d", line1);
+          .attr("transform", t1)
+          .remove();
 
-      var marker = g.selectAll("g.observation").selectAll("circle")
-          .data(Object, function(d) { return d.key; });
+      axisExit.select("line")
+          .attr("x2", r1.range()[1]);
 
-      marker.enter().append("svg:circle")
-          .attr("r", 5.5)
-          .attr("transform", function(d, i) { return rotate0(d, i) + "translate(" + r0(d.value) + ")"; })
-        .transition()
-          .duration(duration)
-          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d.value) + ")"; });
+      axisExit.select("text")
+          .attr("x", r1.range()[1] + 3);
 
-      marker.transition()
-          .duration(duration)
-          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d.value) + ")"; });
+      function t0(d, i) { return "rotate(" + a0(i) + ")"; }
+      function t1(d, i) { return "rotate(" + a1(i) + ")"; }
 
-      marker.exit().remove();
+//       function x(r, a) {
+//         return function(d, i) {
+//           return r(d) * Math.cos(Math.PI * a(i) / 180);
+//         };
+//       }
+//
+//       function y(r, a) {
+//         return function(d, i) {
+//           return r(d) * Math.sin(Math.PI * a(i) / 180);
+//         };
+//       }
 
-      ob.select("path")
-          .attr("d", line0)
-        .transition()
-          .duration(duration)
-          .attr("d", line1);
+//       var x0 = x(r0, a0),
+//           y0 = y(r0, a0),
+//           x1 = x(r1, a1),
+//           y1 = y(r1, a1),
+//           line0 = closed(d3.svg.line().x(x0).y(y0)),
+//           line1 = closed(d3.svg.line().x(x1).y(y1));
 
-      ob.exit().remove();
+//       function closed(f) {
+//         return function(d, i) {
+//           return f(d.map(function(d) { return d.value }), i) + "z";
+//         };
+//       }
+
+//       var ob = g.selectAll("g.observation")
+//           .data(data);
+//
+//       var obEnter = ob.enter().append("svg:g")
+//           .attr("class", function(d, i) { return "observation ob" + i; });
+//
+//       obEnter.append("svg:path")
+//           .attr("d", line0)
+//         .transition()
+//           .duration(duration)
+//           .attr("d", line1);
+//
+//       var marker = g.selectAll("g.observation").selectAll("circle")
+//           .data(Object, function(d) { return d.key; });
+//
+//       marker.enter().append("svg:circle")
+//           .attr("r", 5.5)
+//           .attr("transform", function(d, i) { return rotate0(d, i) + "translate(" + r0(d.value) + ")"; })
+//         .transition()
+//           .duration(duration)
+//           .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d.value) + ")"; });
+//
+//       marker.transition()
+//           .duration(duration)
+//           .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d.value) + ")"; });
+//
+//       marker.exit().remove();
+//
+//       ob.select("path")
+//           .attr("d", line0)
+//         .transition()
+//           .duration(duration)
+//           .attr("d", line1);
+//
+//       ob.exit().remove();
     });
   }
 
@@ -196,25 +170,15 @@ d3.chart.radar = function() {
     return radar;
   };
 
-  radar.value = function(x) {
-    if (!arguments.length) return value;
-    value = x;
-    return radar;
-  };
-
-  radar.variables = function(x) {
-    if (!arguments.length) return variables;
-    variables = x == null ? x : d3.functor(x);
+  radar.dimensions = function(x) {
+    if (!arguments.length) return dimensions;
+    dimensions = x == null ? x : d3.functor(x);
     return radar;
   };
 
   return radar;
 };
 
-function d3_chart_radarValue(d, v) {
-  return d[v];
-}
-
-function d3_chart_radarVariables(d) {
+function d3_chart_radarDimensions(d) {
   return d3.keys(d[0]);
 }

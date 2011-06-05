@@ -6,3 +6,8 @@
 .axis line {
   stroke: #777;
 }
+
+.axis path {
+  stroke: #000;
+  fill: none;
+}
