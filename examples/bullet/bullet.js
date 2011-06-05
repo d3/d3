@@ -3,6 +3,7 @@ var w = 960,
     m = [5, 40, 20, 120]; // top right bottom left
 
 var chart = d3.chart.bullet()
+    .orient("right")
     .width(w - m[1] - m[3])
     .height(h - m[0] - m[2]);
 

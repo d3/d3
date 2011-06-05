@@ -11,12 +11,3 @@
 .axis .tick {
   stroke: #777;
 }
-
-.axis g:nth-child(2n) .line {
-  stroke-width: .5px;
-}
-
-.axis g:nth-child(2n) text,
-.axis g:nth-child(2n) .tick {
-  display: none;
-}

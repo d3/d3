@@ -9,17 +9,18 @@ d3.chart.axis = function() {
       scale1,
       size = 0;
 
-  function subdivide(ticks) {
-    var ticks2 = [],
-        i = -1,
-        n = ticks.length - 1;
-    while (++i < n) {
-      ticks2.push(ticks[i]);
-      ticks2.push((ticks[i] + ticks[i + 1]) / 2);
-    }
-    ticks2.push(ticks[i]);
-    return ticks2;
-  }
+// TODO
+//   function subdivide(ticks) {
+//     var ticks2 = [],
+//         i = -1,
+//         n = ticks.length - 1;
+//     while (++i < n) {
+//       ticks2.push(ticks[i]);
+//       ticks2.push((ticks[i] + ticks[i + 1]) / 2);
+//     }
+//     ticks2.push(ticks[i]);
+//     return ticks2;
+//   }
 
   function axis(g) {
     g.each(function(d, i) {
@@ -34,8 +35,8 @@ d3.chart.axis = function() {
 
       // Update ticks.
       var tick = g.select(".axis." + dimension).selectAll("g")
-          .data(subdivide(scale1.ticks(tickCount)), function(d, i) {
-            return (this.textContent || format(d)) + "," + i % 2;
+          .data(scale1.ticks(tickCount), function(d, i) {
+            return this.textContent || format(d);
           });
 
       // enter
@@ -448,7 +449,7 @@ d3.chart.bullet = function() {
       width = 380,
       height = 30,
       tickFormat = null,
-      axis = d3.chart.axis().dimension("x").size(height).tickCount(3);
+      axis = d3.chart.axis().dimension("x").size(height).tickCount(8);
 
   // For each small multiple…
   function bullet(g) {
@@ -464,9 +465,7 @@ d3.chart.bullet = function() {
           .range(reverse ? [width, 0] : [0, width]);
 
       // Retrieve the old x-scale, if this is an update.
-      var x0 = this.__chart__ && this.__chart__.x || d3.scale.linear()
-          .domain([0, Infinity])
-          .range(x1.range());
+      var x0 = this.__chart__ && this.__chart__.x || x1;
 
       g.call(axis.scale(x1));
 
