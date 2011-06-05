@@ -3,13 +3,6 @@
   fill: #777;
 }
 
-.axis .tick {
+.axis line {
   stroke: #777;
 }
-
-/*
-.axis .line {
-  stroke: #fff;
-  stroke-width: 1.5px;
-}
-*/

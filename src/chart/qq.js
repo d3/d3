@@ -8,8 +8,8 @@ d3.chart.qq = function() {
       n = 100,
       x = d3_chart_qqX,
       y = d3_chart_qqY,
-      xAxis = d3.chart.axis().orient("bottom").size(height).tickCount(3),
-      yAxis = d3.chart.axis().orient("left").size(width).tickCount(3);
+      xAxis = d3.chart.axis().orient("bottom").tickCount(3),
+      yAxis = d3.chart.axis().orient("left").tickCount(3);
 
   // For each small multiple…
   function qq(g) {
@@ -27,7 +27,7 @@ d3.chart.qq = function() {
       // x-axis
       var gx = g.selectAll(".x.axis").data([,]);
       gx.enter().append("svg:g").attr("class", "x axis");
-      gx.call(xAxis.scales([x0, x1]));
+      gx.attr("transform", "translate(0," + height + ")").call(xAxis.scales([x0, x1]));
 
       // y-axis
       var gy = g.selectAll(".y.axis").data([,]);
@@ -90,13 +90,13 @@ d3.chart.qq = function() {
 
   qq.width = function(x) {
     if (!arguments.length) return width;
-    yAxis.size(width = x);
+    width = x;
     return qq;
   };
 
   qq.height = function(x) {
     if (!arguments.length) return height;
-    xAxis.size(height = x);
+    height = x;
     return qq;
   };
 
