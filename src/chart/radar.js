@@ -14,7 +14,9 @@ d3.chart.radar = function() {
       var g = d3.select(this),
           vars = variables.call(this, d, i),
           data = d.map(function(d) {
-            return vars.map(function(v) { return value(d, v); });
+            return vars.map(function(v) {
+              return {key: v, value: value(d, v)};
+            });
           }),
           max = d3.max(data, function(d) { return d3.max(d); });
 
@@ -69,7 +71,7 @@ d3.chart.radar = function() {
 
       function closed(f) {
         return function(d, i) {
-          return f(d, i) + "z";
+          return f(d.map(function(d) { return d.value }), i) + "z";
         };
       }
 
@@ -145,22 +147,24 @@ d3.chart.radar = function() {
           .attr("d", line1);
 
       var marker = g.selectAll("g.observation").selectAll("circle")
-          .data(Object, function(d, i) { return vars[i]; });
+          .data(Object, function(d) { return d.key; });
 
       marker.enter().append("svg:circle")
           .attr("r", 5.5)
-          .attr("transform", function(d, i) { return rotate0(d, i) + "translate(" + r0(d) + ")"; })
+          .attr("transform", function(d, i) { return rotate0(d, i) + "translate(" + r0(d.value) + ")"; })
         .transition()
           .duration(duration)
-          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d) + ")"; });
+          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d.value) + ")"; });
 
       marker.transition()
           .duration(duration)
-          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d) + ")"; });
+          .attr("transform", function(d, i) { return rotate1(d, i) + "translate(" + r1(d.value) + ")"; });
 
       marker.exit().remove();
 
-      ob.select("path").transition()
+      ob.select("path")
+          .attr("d", line0)
+        .transition()
           .duration(duration)
           .attr("d", line1);
 
