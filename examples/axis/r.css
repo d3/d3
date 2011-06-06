@@ -1,0 +1,12 @@
+.axis text {
+  font: 10px sans-serif;
+}
+
+.axis .tick {
+  stroke: #000;
+}
+
+.axis .line,
+.axis g:nth-child(2n) {
+  display: none;
+}
