@@ -145,8 +145,10 @@ d3.stats.quantiles = function(d, quantiles) {
 // Unbiased estimate of a sample's variance.
 // Also known as the sample variance, where the denominator is n - 1.
 d3.stats.variance = function(x) {
+  var n = x.length;
+  if (n < 1) return NaN;
+  if (n === 1) return 0;
   var mean = d3.stats.mean(x),
-      n = x.length,
       i = -1,
       s = 0;
   while (++i < n) {
