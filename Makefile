@@ -199,6 +199,7 @@ tests: \
 	tests/test-scale-quantile.test \
 	tests/test-bisect.test \
 	tests/test-stats-median.test \
+	tests/test-stats-variance.test \
 	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
 	tests/test-svg-line.test \
