@@ -13,8 +13,7 @@ d3.stats.bandwidth = {
   // Scott, D. W. (1992) Multivariate Density Estimation: Theory, Practice, and
   // Visualization. Wiley.
   nrd: function(x) {
-    var r = d3.stats.quantiles(x, [.25, .75]),
-        h = (r[1] - r[0]) / 1.34;
+    var h = d3.stats.iqr(x) / 1.34;
     return 1.06 * Math.min(Math.sqrt(d3.stats.variance(x)), h)
       * Math.pow(x.length, -1/5);
   }

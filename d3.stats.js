@@ -14,8 +14,7 @@ d3.stats.bandwidth = {
   // Scott, D. W. (1992) Multivariate Density Estimation: Theory, Practice, and
   // Visualization. Wiley.
   nrd: function(x) {
-    var r = d3.stats.quantiles(x, [.25, .75]),
-        h = (r[1] - r[0]) / 1.34;
+    var h = d3.stats.iqr(x) / 1.34;
     return 1.06 * Math.min(Math.sqrt(d3.stats.variance(x)), h)
       * Math.pow(x.length, -1/5);
   }
@@ -108,9 +107,7 @@ d3.stats.mean = function(x) {
   return m;
 };
 d3.stats.median = function(x) {
-  var i = x.length / 2,
-      j = Math.floor(i);
-  return i === j ? (x[j - 1] + x[j]) / 2 : x[j];
+  return d3.stats.quantiles(x, [.5])[0];
 };
 d3.stats.mode = function(x) {
   x = x.slice().sort(d3.ascending);
@@ -134,12 +131,20 @@ d3.stats.mode = function(x) {
   }
   return mode;
 };
+// Uses R's quantile algorithm type=7.
 d3.stats.quantiles = function(d, quantiles) {
   d = d.slice().sort(d3.ascending);
-  var n = d.length;
+  var n_1 = d.length - 1;
   return quantiles.map(function(q) {
-    q *= n;
-    return ~~q === q ? (d[q] + d[q + 1]) / 2 : d[Math.round(q)];
+    if (q === 0) return d[0];
+    else if (q === 1) return d[n_1];
+
+    var index = 1 + q * n_1,
+        lo = Math.floor(index),
+        h = index - lo,
+        a = d[lo - 1];
+
+    return h === 0 ? a : a + h * (d[lo] - a);
   });
 };
 // Unbiased estimate of a sample's variance.
