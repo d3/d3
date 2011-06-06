@@ -25,9 +25,15 @@ d3.scale.log = function() {
   scale.clamp = d3.rebind(scale, linear.clamp);
 
   scale.nice = function() {
-    var d = linear.domain().map(pow);
-    linear.domain([log.floor(d[0]), log.ceil(d[1])].map(log));
-    return scale;
+    var d = linear.domain().map(pow),
+        start = d[0],
+        end = d[1],
+        reverse = end < start,
+        min = reverse ? end : start,
+        max = reverse ? start : end,
+        domain = [log.floor(min), log.ceil(max)];
+    if (reverse) domain.reverse();
+    return scale.domain(domain);
   };
 
   scale.ticks = function() {
