@@ -27,6 +27,7 @@ d3.scale.pow = function() {
   scale.rangeRound = d3.rebind(scale, linear.rangeRound);
   scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.clamp = d3.rebind(scale, linear.clamp);
+  scale.nice = d3.rebind(scale, linear.nice);
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
 

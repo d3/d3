@@ -68,6 +68,13 @@ console.log("            5  -> ", x(5));
 console.log("           10  -> ", x(10));
 console.log("");
 
+var x = d3.scale.log();
+[[1.1, 10.9], [10.9, 1.1], [.7, 11.001], [123.1, 6.7], [0, .49]].forEach(function(d) {
+  console.log("domain([" + d.map(f) + " ]).nice():");
+  console.log("", x.domain(d).nice().domain().map(f).join(","));
+  console.log("");
+});
+
 var x = d3.scale.log(), f = x.tickFormat();
 console.log("ticks:");
 console.log("     [.1, 10]  -> ", x.ticks().map(f).join(", "));

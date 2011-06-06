@@ -2278,6 +2278,12 @@ d3.scale.log = function() {
   scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.clamp = d3.rebind(scale, linear.clamp);
 
+  scale.nice = function() {
+    var d = linear.domain().map(pow);
+    linear.domain([log.floor(d[0]), log.ceil(d[1])].map(log));
+    return scale;
+  };
+
   scale.ticks = function() {
     var d = linear.domain(),
         ticks = [];
@@ -2322,6 +2328,22 @@ d3_scale_log.pow = function(x) {
 d3_scale_logn.pow = function(x) {
   return -Math.pow(10, -x);
 };
+
+d3_scale_log.floor = function(x) {
+  return d3_scale_log.pow(Math.floor(d3_scale_log(x)));
+}
+
+d3_scale_logn.floor = function(x) {
+  return d3_scale_logn.pow(Math.floor(d3_scale_logn(x)));
+}
+
+d3_scale_log.ceil = function(x) {
+  return d3_scale_log.pow(Math.ceil(d3_scale_log(x)));
+}
+
+d3_scale_logn.ceil = function(x) {
+  return d3_scale_logn.pow(Math.ceil(d3_scale_logn(x)));
+}
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),
       tick = d3.scale.linear(), // TODO better tick formatting...
@@ -2351,6 +2373,7 @@ d3.scale.pow = function() {
   scale.rangeRound = d3.rebind(scale, linear.rangeRound);
   scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.clamp = d3.rebind(scale, linear.clamp);
+  scale.nice = d3.rebind(scale, linear.nice);
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
 
