@@ -2212,6 +2212,21 @@ d3.scale.linear = function() {
     return d3.format(",." + n + "f");
   };
 
+  scale.nice = function() {
+    var start = domain[0],
+        end = domain[domain.length - 1],
+        reverse = end < start,
+        min = reverse ? end : start,
+        max = reverse ? start : end,
+        span = max - min;
+
+    var step = Math.pow(10, Math.round(Math.log(span) / Math.log(10)) - 1);
+    domain = [Math.floor(min / step) * step, Math.ceil(max / step) * step];
+    if (reverse) domain.reverse();
+
+    return rescale();
+  };
+
   return rescale();
 };
 function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
