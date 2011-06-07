@@ -1395,6 +1395,14 @@ function d3_selection(groups) {
   };
 
   groups.attr = function(name, value) {
+    // If first parameter is object, set group.attr for each key/value pair
+    if ( typeof name === "object" ) {
+      for ( var key in name) {
+        this.attr(key, name[key]);
+      }
+      return;
+    }
+
     name = d3.ns.qualify(name);
 
     // If no value is specified, return the first value.
