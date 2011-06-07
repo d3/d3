@@ -2280,14 +2280,15 @@ d3.scale.log = function() {
   scale.clamp = d3.rebind(scale, linear.clamp);
 
   scale.nice = function() {
-    var d = linear.domain().map(pow),
-        start = d[0],
-        end = d[1],
+    var domain = linear.domain().map(pow),
+        last = domain.length - 1,
+        start = domain[0],
+        end = domain[last],
         reverse = end < start,
         min = reverse ? end : start,
-        max = reverse ? start : end,
-        domain = [log.floor(min), log.ceil(max)];
-    if (reverse) domain.reverse();
+        max = reverse ? start : end;
+    domain[reverse ? last : 0] = log.floor(min);
+    domain[reverse ? 0 : last] = log.ceil(max);
     return scale.domain(domain);
   };
 
