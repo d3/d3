@@ -91,6 +91,7 @@ d3.svg.js: \
 	src/svg/diagonal.js \
 	src/svg/mouse.js \
 	src/svg/touches.js \
+	src/svg/superformula.js \
 	src/svg/symbol.js
 
 d3.behavior.js: \
