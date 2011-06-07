@@ -2339,19 +2339,19 @@ d3_scale_logn.pow = function(x) {
 
 d3_scale_log.floor = function(x) {
   return d3_scale_log.pow(Math.floor(d3_scale_log(x)));
-}
+};
 
 d3_scale_logn.floor = function(x) {
   return d3_scale_logn.pow(Math.floor(d3_scale_logn(x)));
-}
+};
 
 d3_scale_log.ceil = function(x) {
   return d3_scale_log.pow(Math.ceil(d3_scale_log(x)));
-}
+};
 
 d3_scale_logn.ceil = function(x) {
   return d3_scale_logn.pow(Math.ceil(d3_scale_logn(x)));
-}
+};
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),
       tick = d3.scale.linear(), // TODO better tick formatting...
