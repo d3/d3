@@ -55,3 +55,13 @@ console.log("domain clamping:")
 console.log("        under  -> ", x(-1));
 console.log("         over  -> ", x(2));
 console.log("");
+
+var x = d3.scale.pow().exponent(2);
+[
+  [1.1, 10.9], [10.9, 1.1], [.7, 11.001], [123.1, 6.7], [0, .49],
+  [.1, 1, 2.5, 3, 10.9]
+].forEach(function(d) {
+  console.log("domain([" + d.map(f) + " ]).nice():");
+  console.log("  ", x.domain(d).nice().domain());
+  console.log("");
+});
