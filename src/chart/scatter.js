@@ -37,31 +37,28 @@ d3.chart.scatter = function() {
       this.__chart__ = {x: x1, y: y1};
 
       // Update scatter plots.
-      var circle = g.selectAll("circle")
+      var datum = g.selectAll("g.datum")
           .data(dx);
 
-      circle.enter().append("svg:circle")
-          .attr("class", "quantile")
-          .attr("r", 4.5)
-          .attr("cx", function(d) { return x0(d); })
-          .attr("cy", function(d, i) { return y0(dy[i]); })
+      var t = function(d, i) { return "translate(" + x1(d) + "," + y1(dy[i]) + ")"; };
+
+      datum.enter().append("svg:g")
+          .attr("class", "datum")
+          .attr("transform", function(d, i) { return "translate(" + x0(d) + "," + y0(dy[i]) + ")"; })
           .style("opacity", 1e-6)
         .transition()
           .duration(duration)
-          .attr("cx", function(d) { return x1(d); })
-          .attr("cy", function(d, i) { return y1(dy[i]); })
+          .attr("transform", t)
           .style("opacity", 1);
 
-      circle.transition()
+      datum.transition()
           .duration(duration)
-          .attr("cx", function(d) { return x1(d); })
-          .attr("cy", function(d, i) { return y1(dy[i]); })
+          .attr("transform", t)
           .style("opacity", 1);
 
-      circle.exit().transition()
+      datum.exit().transition()
           .duration(duration)
-          .attr("cx", function(d) { return x1(d); })
-          .attr("cy", function(d, i) { return y1(dy[i]); })
+          .attr("transform", t)
           .style("opacity", 1e-6)
           .remove();
 

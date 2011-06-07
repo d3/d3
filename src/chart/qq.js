@@ -22,6 +22,13 @@ d3.chart.qq = function() {
 
       g.call(scatter);
 
+      g.selectAll("g.datum").each(function(d, i) {
+        var g = d3.select(this);
+        if (g.select("circle").empty())
+          g.append("svg:circle")
+              .attr("r", 4.5);
+      });
+
       var xRange = this.__chart__.x.range(),
           yRange = this.__chart__.y.range();
 
@@ -29,7 +36,7 @@ d3.chart.qq = function() {
       var diagonal = g.selectAll("line.diagonal")
           .data([null]);
 
-      diagonal.enter().insert("svg:line", "circle")
+      diagonal.enter().insert("svg:line", "g")
           .attr("class", "diagonal")
           .attr("x1", xRange[0])
           .attr("y1", yRange[0])
