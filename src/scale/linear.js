@@ -82,5 +82,21 @@ d3.scale.linear = function() {
     return d3.format(",." + n + "f");
   };
 
+  scale.nice = function() {
+    var last = domain.length - 1,
+        start = domain[0],
+        end = domain[last],
+        reverse = end < start,
+        min = reverse ? end : start,
+        max = reverse ? start : end,
+        span = max - min;
+
+    var step = Math.pow(10, Math.round(Math.log(span) / Math.log(10)) - 1);
+    domain[reverse ? last : 0] = Math.floor(min / step) * step;
+    domain[reverse ? 0 : last] = Math.ceil(max / step) * step;
+
+    return rescale();
+  };
+
   return rescale();
 };

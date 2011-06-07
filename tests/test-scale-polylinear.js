@@ -28,3 +28,10 @@ console.log("          0.5 -> " + f(x(.5)));
 console.log("          1.0 -> " + f(x(1)));
 console.log("          1.5 -> " + f(x(1.5)));
 console.log("");
+
+var x = d3.scale.linear();
+[[1.1, 1, 2, 3, 10.9], [123.1, 1, 2, 3, -.9]].forEach(function(d) {
+  console.log("domain([" + d.map(f) + " ]).nice():");
+  console.log("  ", x.domain(d).nice().domain());
+  console.log("");
+});

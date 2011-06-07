@@ -24,6 +24,19 @@ d3.scale.log = function() {
   scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.clamp = d3.rebind(scale, linear.clamp);
 
+  scale.nice = function() {
+    var domain = linear.domain().map(pow),
+        last = domain.length - 1,
+        start = domain[0],
+        end = domain[last],
+        reverse = end < start,
+        min = reverse ? end : start,
+        max = reverse ? start : end;
+    domain[reverse ? last : 0] = log.floor(min);
+    domain[reverse ? 0 : last] = log.ceil(max);
+    return scale.domain(domain);
+  };
+
   scale.ticks = function() {
     var d = linear.domain(),
         ticks = [];
@@ -67,4 +80,20 @@ d3_scale_log.pow = function(x) {
 
 d3_scale_logn.pow = function(x) {
   return -Math.pow(10, -x);
+};
+
+d3_scale_log.floor = function(x) {
+  return d3_scale_log.pow(Math.floor(d3_scale_log(x)));
+};
+
+d3_scale_logn.floor = function(x) {
+  return d3_scale_logn.pow(Math.floor(d3_scale_logn(x)));
+};
+
+d3_scale_log.ceil = function(x) {
+  return d3_scale_log.pow(Math.ceil(d3_scale_log(x)));
+};
+
+d3_scale_logn.ceil = function(x) {
+  return d3_scale_logn.pow(Math.ceil(d3_scale_logn(x)));
 };

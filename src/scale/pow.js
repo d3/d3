@@ -30,6 +30,19 @@ d3.scale.pow = function() {
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
 
+  scale.nice = function() {
+    var domain = linear.domain().map(powb),
+        last = domain.length - 1,
+        start = domain[0],
+        end = domain[last],
+        reverse = end < start,
+        min = reverse ? end : start,
+        max = reverse ? start : end;
+    domain[reverse ? last : 0] = Math.floor(min);
+    domain[reverse ? 0 : last] = Math.ceil(max);
+    return scale.domain(domain);
+  };
+
   scale.exponent = function(x) {
     if (!arguments.length) return exponent;
     var domain = scale.domain();
