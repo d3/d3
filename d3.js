@@ -3277,6 +3277,112 @@ d3.svg.touches = function(container) {
     return point;
   }) : [];
 };
+
+d3.svg.tweenable = function() {
+  var type = d3_svg_tweenableType,
+      size = d3_svg_tweenableSize;
+  function tweenable(d, i) {
+    return (d3_svg_tweenables[type.call(this, d, i)]
+        || d3_svg_tweenables.circle)
+        (size.call(this, d, i), type.call(this, d, i));
+  }
+
+  tweenable.type = function(x) {
+    if (!arguments.length) return type;
+    type = d3.functor(x);
+    return tweenable;
+  };
+
+  // size of tweenable in square pixels
+  tweenable.size = function(x) {
+    if (!arguments.length) return size;
+    size = d3.functor(x);
+    return tweenable;
+  };
+
+  return tweenable;
+};
+
+d3.svg.tweenableTypes = [
+	"circle",
+	"cross",
+	"diamond",
+	"square",
+	"triangle",
+	"star",
+	"ellipse",
+	"pentagon",
+	"hexagon",
+	"heptagon",
+	"gear",
+	"drop"
+];
+
+function d3_svg_tweenableSize() {
+  return 64;
+}
+
+function d3_svg_tweenableType() {
+  return "circle";
+}
+
+var superformulator = {
+	computeSupershape : function (s, diameter){
+		var rotationAngle = 0;
+		var thetaSteps = 100;
+		var thetaStepSize = Math.PI*2/(thetaSteps-1);
+		var path = [];
+		var r = [];
+		var rMax = 0;
+		var theta, t1, t2;
+		for(var i=0; i<thetaSteps; i++){
+			theta = i*thetaStepSize-(Math.PI);
+			t1 = Math.pow(Math.abs(Math.cos(s.m*theta/4)/s.a), s.n2);
+			t2 = Math.pow(Math.abs(Math.sin(s.m*theta/4)/s.b), s.n3);
+			r[i] = Math.pow(Math.abs(t1+t2), -1/s.n1);
+			if(r[i] > rMax){
+				rMax = r[i];
+			}
+		}
+		var radiusMult = (diameter/2) / rMax;
+		var x, y;
+		for(var i=0; i<thetaSteps;i++){
+			x = r[i]*radiusMult*Math.cos(thetaStepSize*i+rotationAngle);
+			x = Math.round(x*100)/100;
+			y = r[i]*radiusMult*Math.sin(thetaStepSize*i+rotationAngle);
+			y = Math.round(y*100)/100;
+			path[i] = [x, y];
+		}
+		return path;
+	},
+
+	getSVGPath : function (superVars, diameter){
+		var arrayPath = this.computeSupershape(superVars, diameter);
+		var pathString = 'M';
+		for(key in arrayPath){
+			if(key != 0) pathString += 'L';
+			pathString += arrayPath[key].toString().replace(',', ' ')+' ';
+		}
+		pathString += 'Z';
+		return pathString;
+	}
+}
+
+var d3_svg_tweenables = {
+	"circle": function(size) {return superformulator.getSVGPath({'m':4, 'n1':2, 'n2':2, 'n3':2, 'a':1, 'b':1}, Math.sqrt(size));},
+	"cross": function(size) {return superformulator.getSVGPath({'m':8, 'n1':1.3, 'n2':0.01, 'n3':8, 'a':1, 'b':1}, Math.sqrt(size));},
+	"diamond": function(size) {return superformulator.getSVGPath({'m':4, 'n1':1, 'n2':1, 'n3':1, 'a':1, 'b':1}, Math.sqrt(size));},
+	"square": function(size, d) {return superformulator.getSVGPath({'m':4, 'n1':100, 'n2':100, 'n3':100, 'a':1, 'b':1}, Math.sqrt(size));},
+	"triangle": function(size) {return superformulator.getSVGPath({'m':3, 'n1':100, 'n2':200, 'n3':200, 'a':1, 'b':1}, Math.sqrt(size));},
+	"star": function(size) {return superformulator.getSVGPath({'m':5, 'n1':30, 'n2':100, 'n3':100, 'a':1, 'b':1}, Math.sqrt(size));},
+	"ellipse": function(size) {return superformulator.getSVGPath({'m':4, 'n1':2, 'n2':2, 'n3':2, 'a':9, 'b':6}, Math.sqrt(size));},
+	"pentagon": function(size) {return superformulator.getSVGPath({'m':5, 'n1':1000, 'n2':600, 'n3':600, 'a':1, 'b':1}, Math.sqrt(size));},
+	"hexagon": function(size) {return superformulator.getSVGPath({'m':6, 'n1':1000, 'n2':400, 'n3':400, 'a':1, 'b':1}, Math.sqrt(size));},
+	"heptagon": function(size) {return superformulator.getSVGPath({'m':6, 'n1':1000, 'n2':400, 'n3':400, 'a':1, 'b':1}, Math.sqrt(size));},
+	"gear": function(size) {return superformulator.getSVGPath({'m':19, 'n1':100, 'n2':50, 'n3':50, 'a':1, 'b':1}, Math.sqrt(size));},
+	"drop": function(size) {return superformulator.getSVGPath({'m':1, 'n1':0.5, 'n2':0.5, 'n3':0.5, 'a':1, 'b':1}, Math.sqrt(size));}
+};
+
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
       size = d3_svg_symbolSize;
