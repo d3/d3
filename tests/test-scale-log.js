@@ -69,14 +69,16 @@ console.log("           10  -> ", x(10));
 console.log("");
 
 var x = d3.scale.log();
+console.log("nice():");
 [
   [1.1, 10.9], [10.9, 1.1], [.7, 11.001], [123.1, 6.7], [0, .49],
   [.12, 1, 2.5, 3, 10.9]  
 ].forEach(function(d) {
-  console.log("domain([" + d.map(f) + " ]).nice():");
-  console.log("", x.domain(d).nice().domain().map(f).join(","));
-  console.log("");
+  var s = " [" + d.map(f) + " ]";
+  while (s.length < 21) s += " ";
+  console.log(" ", s + " -> ", x.domain(d).nice().domain().map(f).join(","));
 });
+console.log("");
 
 var x = d3.scale.log(), f = x.tickFormat();
 console.log("ticks:");

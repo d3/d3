@@ -99,8 +99,10 @@ console.log("         over  -> ", x(11));
 console.log("");
 
 var x = d3.scale.linear();
+console.log("nice():");
 [[1.1, 10.9], [10.9, 1.1], [.7, 11.001], [123.1, 6.7], [0, .49]].forEach(function(d) {
-  console.log("domain([" + d.map(f) + " ]).nice():");
-  console.log("  ", x.domain(d).nice().domain());
-  console.log("");
+  var s = " [" + d.map(f) + " ]";
+  while (s.length < 21) s += " ";
+  console.log(" ", s + " -> ", x.domain(d).nice().domain().map(f).join(","));
 });
+console.log("");
