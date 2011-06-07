@@ -3334,6 +3334,8 @@ function d3_svg_superformulaPath(params, n, diameter) {
     if (t > r) r = t;
     points.push(t);
   }
+  var shiftValue = -(params.rot/360*n);
+  points = points.slice(shiftValue).concat(points.slice(0, shiftValue));
 
   r = diameter * Math.SQRT1_2 / r;
   i = -1; while (++i < n) {
@@ -3346,27 +3348,28 @@ function d3_svg_superformulaPath(params, n, diameter) {
 }
 
 var d3_svg_superformulaTypes = {
-  asterisk: {m: 12, n1: .3, n2: 0, n3: 10, a: 1, b: 1},
-  bean: {m: 2, n1: 1, n2: 4, n3: 8, a: 1, b: 1},
-  butterfly: {m: 3, n1: 1, n2: 6, n3: 2, a: .6, b: 1},
-  circle: {m: 4, n1: 2, n2: 2, n3: 2, a: 1, b: 1},
-  clover: {m: 6, n1: .3, n2: 0, n3: 10, a: 1, b: 1},
-  cloverFour: {m: 8, n1: 10, n2: -1, n3: -8, a: 1, b: 1},
-  cross: {m: 8, n1: 1.3, n2: .01, n3: 8, a: 1, b: 1},
-  diamond: {m: 4, n1: 1, n2: 1, n3: 1, a: 1, b: 1},
-  drop: {m: 1, n1: .5, n2: .5, n3: .5, a: 1, b: 1},
-  ellipse: {m: 4, n1: 2, n2: 2, n3: 2, a: 9, b: 6},
-  gear: {m: 19, n1: 100, n2: 50, n3: 50, a: 1, b: 1},
-  heart: {m: 1, n1: .8, n2: 1, n3: -8, a: 1, b: .18},
-  heptagon: {m: 7, n1: 1000, n2: 400, n3: 400, a: 1, b: 1},
-  hexagon: {m: 6, n1: 1000, n2: 400, n3: 400, a: 1, b: 1},
-  malteseCross: {m: 8, n1: .9, n2: .1, n3: 100, a: 1, b: 1},
-  pentagon: {m: 5, n1: 1000, n2: 600, n3: 600, a: 1, b: 1},
-  rectangle: {m: 4, n1: 100, n2: 100, n3: 100, a: 2, b: 1},
-  roundedStar: {m: 5, n1: 2, n2: 7, n3: 7, a: 1, b: 1},
-  square: {m: 4, n1: 100, n2: 100, n3: 100, a: 1, b: 1},
-  star: {m: 5, n1: 30, n2: 100, n3: 100, a: 1, b: 1},
-  triangle: {m: 3, n1: 100, n2: 200, n3: 200, a: 1, b: 1}
+  asterisk: {m: 12, n1: .3, n2: 0, n3: 10, a: 1, b: 1, rot: 0},
+  bean: {m: 2, n1: 1, n2: 4, n3: 8, a: 1, b: 1, rot: 0},
+  butterfly: {m: 3, n1: 1, n2: 6, n3: 2, a: .6, b: 1, rot: 90},
+  circle: {m: 4, n1: 2, n2: 2, n3: 2, a: 1, b: 1, rot: 0},
+  clover: {m: 6, n1: .3, n2: 0, n3: 10, a: 1, b: 1, rot: 0},
+  cloverFour: {m: 8, n1: 10, n2: -1, n3: -8, a: 1, b: 1, rot: 0},
+  cross: {m: 8, n1: 1.3, n2: 0, n3: 8, a: 1, b: 1, rot: 0},
+  diamond: {m: 4, n1: 1, n2: 1, n3: 1, a: 1, b: 1, rot: 0},
+  drop: {m: 1, n1: .5, n2: .5, n3: .5, a: 1, b: 1, rot: 90},
+  ellipse: {m: 4, n1: 2, n2: 2, n3: 2, a: 9, b: 6, rot: 0},
+  gear: {m: 19, n1: 100, n2: 50, n3: 50, a: 1, b: 1, rot: 0},
+  heart: {m: 1, n1: .8, n2: 1, n3: -8, a: 1, b: .18, rot: 90},
+  heptagon: {m: 7, n1: 1000, n2: 400, n3: 400, a: 1, b: 1, rot: 16},
+  hexagon: {m: 6, n1: 1000, n2: 400, n3: 400, a: 1, b: 1, rot: 0},
+  malteseCross: {m: 8, n1: .9, n2: .1, n3: 100, a: 1, b: 1, rot: 0},
+  mult: {m: 8, n1: 1.3, n2: 0, n3: 8, a: 1, b: 1, rot: 45},
+  pentagon: {m: 5, n1: 1000, n2: 600, n3: 600, a: 1, b: 1, rot: 60},
+  rectangle: {m: 4, n1: 100, n2: 100, n3: 100, a: 2, b: 1, rot: 0},
+  roundedStar: {m: 5, n1: 2, n2: 7, n3: 7, a: 1, b: 1, rot:60},
+  square: {m: 4, n1: 100, n2: 100, n3: 100, a: 1, b: 1, rot: 0},
+  star: {m: 5, n1: 30, n2: 100, n3: 100, a: 1, b: 1, rot: 60},
+  triangle: {m: 3, n1: 100, n2: 200, n3: 200, a: 1, b: 1, rot: 0}
 };
 
 d3.svg.superformulaTypes = d3.keys(d3_svg_superformulaTypes);
