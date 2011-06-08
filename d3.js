@@ -42,7 +42,7 @@ d3.descending = function(a, b) {
 };
 d3.each = function(obj, f, opts) {
   // only for objects now
-  for ( var key in obj) {
+  for (var key in obj) {
     if (obj.hasOwnProperty(key)) {
       f(key, obj[key], opts);
     }
@@ -1403,7 +1403,7 @@ function d3_selection(groups) {
   };
 
   groups.attr = function(name, value) {
-    if ( typeof name === "object" ) {
+    if (typeof name === "object") {
       d3.each(name, this.attr);
       return this;
     }
@@ -1509,7 +1509,7 @@ function d3_selection(groups) {
   };
 
   groups.style = function(name, value, priority) {
-    if ( typeof name === "object" ) {
+    if (typeof name === "object") {
       priority = value; // TODO: remove. Use second argument as priority
       d3.each(name, this.style, priority);
       return this;
@@ -1547,7 +1547,7 @@ function d3_selection(groups) {
   };
 
   groups.property = function(name, value) {
-    if ( typeof name === "object" ) {
+    if (typeof name === "object") {
       d3.each(name, this.property);
       return this;
     }
@@ -1695,7 +1695,7 @@ function d3_selection(groups) {
   // type can be namespaced, e.g., "click.foo"
   // listener can be null for removal
   groups.on = function(type, listener, capture) {
-    if ( typeof type === "object" ) {
+    if (typeof type === "object") {
       capture = listener; // TODO: remove. Use second argument as capture 
       d3.each(type, this.on, capture);
       return this;
