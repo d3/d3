@@ -24,16 +24,6 @@ d3.svg.symbol = function() {
   return symbol;
 };
 
-// TODO cross-diagonal?
-d3.svg.symbolTypes = [
-  "circle",
-  "cross",
-  "diamond",
-  "square",
-  "triangle-down",
-  "triangle-up"
-];
-
 function d3_svg_symbolSize() {
   return 64;
 }
@@ -42,6 +32,7 @@ function d3_svg_symbolType() {
   return "circle";
 }
 
+// TODO cross-diagonal?
 var d3_svg_symbols = {
   "circle": function(size) {
     var r = Math.sqrt(size / Math.PI);
@@ -100,6 +91,8 @@ var d3_svg_symbols = {
         + "Z";
   }
 };
+
+d3.svg.symbolTypes = d3.keys(d3_svg_symbols);
 
 var d3_svg_symbolSqrt3 = Math.sqrt(3),
     d3_svg_symbolTan30 = Math.tan(30 * Math.PI / 180);
