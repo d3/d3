@@ -40,6 +40,14 @@ d3.ascending = function(a, b) {
 d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : 0;
 };
+d3.each = function(obj, f, opts) {
+  // only for objects now
+  for ( var key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      f(key, obj[key], opts);
+    }
+  }
+};
 d3.min = function(array, f) {
   var i = -1,
       n = array.length,
@@ -1395,12 +1403,9 @@ function d3_selection(groups) {
   };
 
   groups.attr = function(name, value) {
-    // If first parameter is object, set group.attr for each key/value pair
     if ( typeof name === "object" ) {
-      for ( var key in name) {
-        this.attr(key, name[key]);
-      }
-      return;
+      d3.each(name, this.attr);
+      return this;
     }
 
     name = d3.ns.qualify(name);
@@ -1504,6 +1509,12 @@ function d3_selection(groups) {
   };
 
   groups.style = function(name, value, priority) {
+    if ( typeof name === "object" ) {
+      priority = value; // TODO: remove. Use second argument as priority
+      d3.each(name, this.style, priority);
+      return this;
+    }
+
     if (arguments.length < 3) priority = "";
 
     // If no value is specified, return the first value.
@@ -1536,6 +1547,11 @@ function d3_selection(groups) {
   };
 
   groups.property = function(name, value) {
+    if ( typeof name === "object" ) {
+      d3.each(name, this.property);
+      return this;
+    }
+
     name = d3.ns.qualify(name);
 
     // If no value is specified, return the first value.
@@ -1679,6 +1695,12 @@ function d3_selection(groups) {
   // type can be namespaced, e.g., "click.foo"
   // listener can be null for removal
   groups.on = function(type, listener, capture) {
+    if ( typeof type === "object" ) {
+      capture = listener; // TODO: remove. Use second argument as capture 
+      d3.each(type, this.on, capture);
+      return this;
+    }
+
     if (arguments.length < 3) capture = false;
 
     // parse the type specifier
