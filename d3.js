@@ -1394,11 +1394,6 @@ function d3_selection(groups) {
     return first(function() { return this; });
   };
 
-  groups.debug = function(toPrint) {
-    console.log(toPrint, this);
-    return this;
-  };
-
   groups.attr = function(name, value) {
     name = d3.ns.qualify(name);
 
@@ -1772,11 +1767,6 @@ function d3_selectionEnter(groups) {
     }
 
     return select(name.local ? insertNS : insert);
-  };
-
-  groups.debug = function(toPrint) {
-    console.log(toPrint, this);
-    return this;
   };
 
   return groups;
