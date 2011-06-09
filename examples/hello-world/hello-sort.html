@@ -14,7 +14,6 @@ html, body, svg {
 }
 
 circle {
-  fill: steelblue;
   fill-opacity: .8;
   stroke: #fff;
 }
@@ -49,9 +48,14 @@ function transform() {
       .data(d3.range(400).map(Math.random));
 
   circle.enter().append("svg:circle")
-      .attr("cx", function() { return 100 + Math.random() * 800; })
-      .attr("cy", function() { return 100 + Math.random() * 800; })
-      .attr("r", function(d) { return 50 * d; });
+    .attr( function(d) {
+      return {
+        "cx": function() { return 100 + Math.random() * 800; },
+        "cy": function() { return 100 + Math.random() * 800; },
+        "r": 50 * d,
+        "fill": "hsl(" + (100*d+100) + ", 70%, 50%)"
+        }
+      });
 
   circle
     .transition()

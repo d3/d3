@@ -20,8 +20,10 @@ var fill = d3.scale.ordinal()
 
 var svg = d3.select("#chart")
   .append("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr({
+      "width": w,
+      "height": h
+      })
   .append("svg:g")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
@@ -29,11 +31,15 @@ svg.append("svg:g")
   .selectAll("path")
     .data(chord.groups)
   .enter().append("svg:path")
-    .style("fill", function(d) { return fill(d.index); })
-    .style("stroke", function(d) { return fill(d.index); })
+    .style({
+      "fill": function(d) { return fill(d.index); },
+      "stroke": function(d) { return fill(d.index); }
+      })
     .attr("d", d3.svg.arc().innerRadius(r0).outerRadius(r1))
-    .on("mouseover", fade(.1))
-    .on("mouseout", fade(1));
+    .on({
+      "mouseover": fade(.1),
+      "mouseout": fade(1)
+      });
 
 var ticks = svg.append("svg:g")
   .selectAll("g")
@@ -48,21 +54,25 @@ var ticks = svg.append("svg:g")
     });
 
 ticks.append("svg:line")
-    .attr("x1", 1)
-    .attr("y1", 0)
-    .attr("x2", 5)
-    .attr("y2", 0)
-    .style("stroke", "#000");
+    .attr({
+      "x1": 1,
+      "y1": 0,
+      "x2": 5,
+      "y2": 0,
+      "stroke": "#000"
+      });
 
 ticks.append("svg:text")
-    .attr("x", 8)
-    .attr("dy", ".35em")
-    .attr("text-anchor", function(d) {
-      return d.angle > Math.PI ? "end" : null;
-    })
-    .attr("transform", function(d) {
-      return d.angle > Math.PI ? "rotate(180)translate(-16)" : null;
-    })
+    .attr({
+      "x": 8,
+      "dy": ".35em",
+      "text-anchor": function(d) {
+          return d.angle > Math.PI ? "end" : null;
+        },
+      "transform": function(d) {
+          return d.angle > Math.PI ? "rotate(180)translate(-16)" : null;
+        }
+      })
     .text(function(d) { return d.label; });
 
 svg.append("svg:g")
@@ -70,9 +80,11 @@ svg.append("svg:g")
   .selectAll("path")
     .data(chord.chords)
   .enter().append("svg:path")
-    .style("fill", function(d) { return fill(d.target.index); })
     .attr("d", d3.svg.chord().radius(r0))
-    .style("opacity", 1);
+    .style({
+      "fill": function(d) { return fill(d.target.index); },
+      "opacity": 1
+      });
 
 /** Returns an array of tick angles and labels, given a group. */
 function groupTicks(d) {
