@@ -1156,16 +1156,19 @@ d3.chart.scatter = function() {
           .style("opacity", 1e-6)
         .transition()
           .duration(duration)
+          .delay(function(d) { return x0(d) * 5; })
           .attr("transform", t)
           .style("opacity", 1);
 
       datum.transition()
           .duration(duration)
+          .delay(function(d) { return x1(d) * 5; })
           .attr("transform", t)
           .style("opacity", 1);
 
       datum.exit().transition()
           .duration(duration)
+          .delay(function(d) { return x1(d) * 5; })
           .attr("transform", t)
           .style("opacity", 1e-6)
           .remove();
