@@ -1408,6 +1408,22 @@ function d3_selection(groups) {
       return this;
     }
 
+    // support for functions which return a map
+    // TODO: Refactor to use attrFunction, attrConstant, etc
+    if (typeof name === "function") {
+      return groups.each(function() {
+        var node = this,
+            args = arguments,
+            obj = name.apply(this, arguments);    
+        d3.each(obj, function(key, value) {
+          if (typeof value === "function") {
+            value = value.apply(node, args);
+          }
+          node.setAttribute(key, value);
+        });
+      });
+    }
+
     name = d3.ns.qualify(name);
 
     // If no value is specified, return the first value.
