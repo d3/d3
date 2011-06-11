@@ -4,6 +4,8 @@ JS_COMPILER = \
 all: \
 	d3.js \
 	d3.min.js \
+	d3.ai.js \
+	d3.ai.min.js \
 	d3.behavior.js \
 	d3.behavior.min.js \
 	d3.chart.js \
@@ -93,6 +95,12 @@ d3.svg.js: \
 	src/svg/mouse.js \
 	src/svg/touches.js \
 	src/svg/symbol.js
+
+d3.ai.js: \
+	src/start.js \
+	src/ai/ai.js \
+	src/ai/boid.js \
+	src/end.js
 
 d3.behavior.js: \
 	src/start.js \
