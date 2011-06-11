@@ -71,6 +71,7 @@ d3.core.js: \
 
 d3.scale.js: \
 	src/scale/scale.js \
+	src/scale/nice.js \
 	src/scale/linear.js \
 	src/scale/bilinear.js \
 	src/scale/polylinear.js \

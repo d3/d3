@@ -82,5 +82,18 @@ d3.scale.linear = function() {
     return d3.format(",." + n + "f");
   };
 
+  scale.nice = function() {
+    d3_scale_nice(domain, d3_scale_linearNice);
+    return rescale();
+  };
+
   return rescale();
 };
+
+function d3_scale_linearNice(dx) {
+  dx = Math.pow(10, Math.round(Math.log(dx) / Math.log(10)) - 1);
+  return {
+    floor: function(x) { return Math.floor(x / dx) * dx; },
+    ceil: function(x) { return Math.ceil(x / dx) * dx; },
+  };
+}

@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.19.1"}; // semver
+(function(){d3 = {version: "1.20.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -612,14 +612,9 @@ function d3_ease_bounce(t) {
 }
 d3.event = null;
 d3.interpolate = function(a, b) {
-  if (typeof b === "number") return d3.interpolateNumber(+a, b);
-  if (typeof b === "string") {
-    return (b in d3_rgb_names) || /^(#|rgb\(|hsl\()/.test(b)
-        ? d3.interpolateRgb(String(a), b)
-        : d3.interpolateString(String(a), b);
-  }
-  if (b instanceof Array) return d3.interpolateArray(a, b);
-  return d3.interpolateObject(a, b);
+  var i = d3.interpolators.length, f;
+  while (--i >= 0 && !(f = d3.interpolators[i](a, b)));
+  return f;
 };
 
 d3.interpolateNumber = function(a, b) {
@@ -788,6 +783,14 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
+
+d3.interpolators = [
+  d3.interpolateObject,
+  function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
+  function(a, b) { return (typeof b === "string") && d3.interpolateString(String(a), b); },
+  function(a, b) { return (b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b)) && d3.interpolateRgb(String(a), b); },
+  function(a, b) { return (typeof b === "number") && d3.interpolateNumber(+a, b); }
+];
 function d3_uninterpolateNumber(a, b) {
   b = 1 / (b - (a = +a));
   return function(x) { return (x - a) * b; };
@@ -1938,7 +1941,7 @@ function d3_transition(groups) {
     /** @this {Element} */
     function attrTween(d, i) {
       var f = tween.call(this, d, i, this.getAttribute(name));
-      return function(t) {
+      return f && function(t) {
         this.setAttribute(name, f(t));
       };
     }
@@ -1946,7 +1949,7 @@ function d3_transition(groups) {
     /** @this {Element} */
     function attrTweenNS(d, i) {
       var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
-      return function(t) {
+      return f && function(t) {
         this.setAttributeNS(name.space, name.local, f(t));
       };
     }
@@ -1965,7 +1968,7 @@ function d3_transition(groups) {
     /** @this {Element} */
     function styleTween(d, i) {
       var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-      return function(t) {
+      return f && function(t) {
         this.style.setProperty(name, f(t), priority);
       };
     }
@@ -2019,8 +2022,8 @@ function d3_transition(groups) {
 
 function d3_transitionTween(b) {
   return typeof b === "function"
-      ? function(d, i, a) { return d3.interpolate(a, String(b.call(this, d, i))); }
-      : (b = String(b), function(d, i, a) { return d3.interpolate(a, b); });
+      ? function(d, i, a) { var v = b.call(this, d, i) + ""; return a != v && d3.interpolate(a, v); }
+      : (b = b + "", function(d, i, a) { return a != b && d3.interpolate(a, b); });
 }
 var d3_timer_queue = null,
     d3_timer_interval, // is an interval (or frame) active?
@@ -2128,6 +2131,27 @@ var d3_timer_frame = window.requestAnimationFrame
     || window.msRequestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.scale = {};
+function d3_scale_nice(domain, nice) {
+  var i0 = 0,
+      i1 = domain.length - 1,
+      x0 = domain[i0],
+      x1 = domain[i1],
+      dx;
+
+  if (x1 < x0) {
+    dx = i0; i0 = i1; i1 = dx;
+    dx = x0; x0 = x1; x1 = dx;
+  }
+
+  nice = nice(x1 - x0);
+  domain[i0] = nice.floor(x0);
+  domain[i1] = nice.ceil(x1);
+  return domain;
+}
+
+function d3_scale_niceDefault() {
+  return Math;
+}
 d3.scale.linear = function() {
   var domain = [0, 1],
       range = [0, 1],
@@ -2212,8 +2236,21 @@ d3.scale.linear = function() {
     return d3.format(",." + n + "f");
   };
 
+  scale.nice = function() {
+    d3_scale_nice(domain, d3_scale_linearNice);
+    return rescale();
+  };
+
   return rescale();
 };
+
+function d3_scale_linearNice(dx) {
+  dx = Math.pow(10, Math.round(Math.log(dx) / Math.log(10)) - 1);
+  return {
+    floor: function(x) { return Math.floor(x / dx) * dx; },
+    ceil: function(x) { return Math.ceil(x / dx) * dx; },
+  };
+}
 function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
   var u = uninterpolate(domain[0], domain[1]),
       i = interpolate(range[0], range[1]);
@@ -2262,6 +2299,11 @@ d3.scale.log = function() {
   scale.rangeRound = d3.rebind(scale, linear.rangeRound);
   scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.clamp = d3.rebind(scale, linear.clamp);
+
+  scale.nice = function() {
+    linear.domain(d3_scale_nice(linear.domain(), d3_scale_niceDefault));
+    return scale;
+  };
 
   scale.ticks = function() {
     var d = linear.domain(),
@@ -2338,6 +2380,10 @@ d3.scale.pow = function() {
   scale.clamp = d3.rebind(scale, linear.clamp);
   scale.ticks = tick.ticks;
   scale.tickFormat = tick.tickFormat;
+
+  scale.nice = function() {
+    return scale.domain(d3_scale_nice(scale.domain(), d3_scale_niceDefault));
+  };
 
   scale.exponent = function(x) {
     if (!arguments.length) return exponent;
