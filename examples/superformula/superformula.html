@@ -3,6 +3,7 @@
   <head>
     <title>Superformula</title>
     <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="superformula.js"></script>
     <style type="text/css">
 
 path {
@@ -31,24 +32,24 @@ path.small:hover {
 var size = 1000;
 
 var x = d3.scale.ordinal()
-    .domain(d3.svg.superformulaTypes)
+    .domain(superformulaTypes)
     .rangePoints([0, 960], 1);
 
 var svg = d3.select("body").append("svg:svg")
     .attr("width", 960)
     .attr("height", 500);
 
-var small = d3.svg.superformula()
+var small = superformula()
     .type(String)
     .size(size);
 
-var big = d3.svg.superformula()
+var big = superformula()
     .type("square")
     .size(size * 50)
     .segments(360);
 
 svg.selectAll("a")
-    .data(d3.svg.superformulaTypes)
+    .data(superformulaTypes)
   .enter().append("svg:a")
     .attr("xlink:title", String)
     .attr("transform", function(d, i) { return "translate("+ x(d) + ",40)"; })
