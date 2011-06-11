@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <title>Superformula</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="superformula.js"></script>
+    <style type="text/css">
+
+path {
+  stroke-width: 1.5px;
+}
+
+path.small {
+  fill: steelblue;
+}
+
+path.big {
+  stroke: #666;
+  fill: #ddd;
+}
+
+path.small:hover {
+  stroke: steelblue;
+  fill: lightsteelblue;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var size = 1000;
+
+var x = d3.scale.ordinal()
+    .domain(superformulaTypes)
+    .rangePoints([0, 960], 1);
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", 960)
+    .attr("height", 500);
+
+var small = superformula()
+    .type(String)
+    .size(size);
+
+var big = superformula()
+    .type("square")
+    .size(size * 50)
+    .segments(360);
+
+svg.selectAll("a")
+    .data(superformulaTypes)
+  .enter().append("svg:a")
+    .attr("xlink:title", String)
+    .attr("transform", function(d, i) { return "translate("+ x(d) + ",40)"; })
+  .append("svg:path")
+    .attr("class", "small")
+    .attr("d", small)
+    .on("mousedown", function() { d3.select(this).style("fill", "aliceblue"); })
+    .on("mouseup", function() { d3.select(this).style("fill", null); })
+    .on("click", function(d) { d3.select(".big").transition().duration(500).attr("d", big.type(d)); });
+
+svg.append("svg:path")
+    .attr("class", "big")
+    .attr("transform", "translate(450,250)")
+    .attr("d", big);
+
+    </script>
+  </body>
+</html>
