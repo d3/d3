@@ -1938,7 +1938,7 @@ function d3_transition(groups) {
     /** @this {Element} */
     function attrTween(d, i) {
       var f = tween.call(this, d, i, this.getAttribute(name));
-      return function(t) {
+      return f && function(t) {
         this.setAttribute(name, f(t));
       };
     }
@@ -1946,7 +1946,7 @@ function d3_transition(groups) {
     /** @this {Element} */
     function attrTweenNS(d, i) {
       var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
-      return function(t) {
+      return f && function(t) {
         this.setAttributeNS(name.space, name.local, f(t));
       };
     }
@@ -1965,7 +1965,7 @@ function d3_transition(groups) {
     /** @this {Element} */
     function styleTween(d, i) {
       var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-      return function(t) {
+      return f && function(t) {
         this.style.setProperty(name, f(t), priority);
       };
     }
@@ -2019,8 +2019,8 @@ function d3_transition(groups) {
 
 function d3_transitionTween(b) {
   return typeof b === "function"
-      ? function(d, i, a) { return d3.interpolate(a, String(b.call(this, d, i))); }
-      : (b = String(b), function(d, i, a) { return d3.interpolate(a, b); });
+      ? function(d, i, a) { var v = b.call(this, d, i) + ""; return a != v && d3.interpolate(a, v); }
+      : (b = b + "", function(d, i, a) { return a != b && d3.interpolate(a, b); });
 }
 var d3_timer_queue = null,
     d3_timer_interval, // is an interval (or frame) active?
