@@ -78,6 +78,15 @@ d3.layout.hierarchy = function() {
   return hierarchy;
 }
 
+// A method assignment helper for hierarchy subclasses.
+function d3_layout_hierarchyRebind(object, hierarchy) {
+  object.sort = d3.rebind(object, hierarchy.sort);
+  object.children = d3.rebind(object, hierarchy.children);
+  object.links = d3_layout_hierarchyLinks;
+  object.value = d3.rebind(object, hierarchy.value);
+  return object;
+}
+
 function d3_layout_hierarchyChildren(d) {
   return d.children;
 }
@@ -88,4 +97,13 @@ function d3_layout_hierarchyValue(d) {
 
 function d3_layout_hierarchySort(a, b) {
   return b.value - a.value;
+}
+
+// Returns an array source+target objects for the specified nodes.
+function d3_layout_hierarchyLinks(nodes) {
+  return d3.merge(nodes.map(function(parent) {
+    return (parent.children || []).map(function(child) {
+      return {source: parent, target: child};
+    });
+  }));
 }

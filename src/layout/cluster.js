@@ -39,10 +39,6 @@ d3.layout.cluster = function() {
     return nodes;
   }
 
-  cluster.sort = d3.rebind(cluster, hierarchy.sort);
-  cluster.children = d3.rebind(cluster, hierarchy.children);
-  cluster.links = d3_layout_treeLinks;
-
   cluster.separation = function(x) {
     if (!arguments.length) return separation;
     separation = x;
@@ -55,7 +51,7 @@ d3.layout.cluster = function() {
     return cluster;
   };
 
-  return cluster;
+  return d3_layout_hierarchyRebind(cluster, hierarchy);
 };
 
 function d3_layout_clusterY(children) {
