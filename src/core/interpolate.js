@@ -1,12 +1,7 @@
 d3.interpolate = function(a, b) {
-  if (typeof b === "number") return d3.interpolateNumber(+a, b);
-  if (typeof b === "string") {
-    return (b in d3_rgb_names) || /^(#|rgb\(|hsl\()/.test(b)
-        ? d3.interpolateRgb(String(a), b)
-        : d3.interpolateString(String(a), b);
-  }
-  if (b instanceof Array) return d3.interpolateArray(a, b);
-  return d3.interpolateObject(a, b);
+  var i = d3.interpolators.length, f;
+  while (--i >= 0 && !(f = d3.interpolators[i](a, b)));
+  return f;
 };
 
 d3.interpolateNumber = function(a, b) {
@@ -175,3 +170,11 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
+
+d3.interpolators = [
+  d3.interpolateObject,
+  function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
+  function(a, b) { return (typeof b === "string") && d3.interpolateString(String(a), b); },
+  function(a, b) { return (b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b)) && d3.interpolateRgb(String(a), b); },
+  function(a, b) { return (typeof b === "number") && d3.interpolateNumber(+a, b); }
+];
