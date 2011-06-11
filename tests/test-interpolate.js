@@ -63,3 +63,25 @@ console.log("          0.5  -> ", x(0.5));
 console.log("          1.0  -> ", x(1.0));
 console.log("          1.5  -> ", x(1.5));
 console.log("");
+
+d3.interpolators.push(function(a, b) {
+  return a == "one" && b == "two" && d3.interpolateNumber(1, 2);
+});
+
+var x = d3.interpolate("one", "two");
+console.log("interpolateOneTwo(one, two):");
+console.log("         -0.5  -> ", x(-0.5));
+console.log("          0.0  -> ", x(0.0));
+console.log("          0.5  -> ", x(0.5));
+console.log("          1.0  -> ", x(1.0));
+console.log("          1.5  -> ", x(1.5));
+console.log("");
+
+var x = d3.interpolate("one", "three");
+console.log("interpolate(one, three):");
+console.log("         -0.5  -> ", x(-0.5));
+console.log("          0.0  -> ", x(0.0));
+console.log("          0.5  -> ", x(0.5));
+console.log("          1.0  -> ", x(1.0));
+console.log("          1.5  -> ", x(1.5));
+console.log("");
