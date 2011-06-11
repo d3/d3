@@ -3,6 +3,7 @@
   <head>
     <title>Dot Plot</title>
     <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="superformula.js"></script>
     <style type="text/css">
 
 body {
@@ -39,7 +40,7 @@ var w = 450,
     p = 20,
     x = d3.scale.linear().range([0, w]),
     y = d3.scale.linear().range([h, 0]),
-    superformula = d3.scale.ordinal().range(d3.svg.superformulaTypes),
+    type = d3.scale.ordinal().range(superformulaTypes),
     color = d3.scale.category10();
 
 var vis = d3.select("body")
@@ -95,8 +96,8 @@ vis.selectAll("path.dot")
     .attr("class", "dot")
     .attr("stroke", function(d, i) { return color(i); })
     .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; })
-    .attr("d", d3.svg.superformula()
-    .type(function(d, i) { return superformula(i); }));
+    .attr("d", superformula()
+    .type(function(d, i) { return type(i); }));
 
     </script>
   </body>
