@@ -1364,7 +1364,9 @@ function d3_selection(groups) {
 
   // TODO mask forEach? or rename for eachData?
   // TODO offer the same semantics for map, reduce, etc.?
-  groups.each = function(callback) {
+  groups.each = each;
+
+  function each(callback) {
     for (var j = 0, m = groups.length; j < m; j++) {
       var group = groups[j];
       for (var i = 0, n = group.length; i < n; i++) {
@@ -1373,7 +1375,7 @@ function d3_selection(groups) {
       }
     }
     return groups;
-  };
+  }
 
   function first(callback) {
     for (var j = 0, m = groups.length; j < m; j++) {
@@ -1395,53 +1397,22 @@ function d3_selection(groups) {
   };
 
   groups.attr = function(name, value) {
-    name = d3.ns.qualify(name);
-
-    // If no value is specified, return the first value.
     if (arguments.length < 2) {
-      return first(name.local
-          ? function() { return this.getAttributeNS(name.space, name.local); }
-          : function() { return this.getAttribute(name); });
+      switch (typeof name) {
+        case "object": {
+          for (value in name) each(d3_selection_attrSetter(d3.ns.qualify(value), name[value]));
+          return groups;
+        }
+        case "function": {
+          return each(function() {
+            var x = name.apply(this, arguments);
+            for (value in x) d3_selection_attrSetterConstant(d3.ns.qualify(value), x[value]).apply(this, arguments);
+          });
+        }
+      }
+      return first(d3_selection_attrGetter(d3.ns.qualify(name)));
     }
-
-    /** @this {Element} */
-    function attrNull() {
-      this.removeAttribute(name);
-    }
-
-    /** @this {Element} */
-    function attrNullNS() {
-      this.removeAttributeNS(name.space, name.local);
-    }
-
-    /** @this {Element} */
-    function attrConstant() {
-      this.setAttribute(name, value);
-    }
-
-    /** @this {Element} */
-    function attrConstantNS() {
-      this.setAttributeNS(name.space, name.local, value);
-    }
-
-    /** @this {Element} */
-    function attrFunction() {
-      var x = value.apply(this, arguments);
-      if (x == null) this.removeAttribute(name);
-      else this.setAttribute(name, x);
-    }
-
-    /** @this {Element} */
-    function attrFunctionNS() {
-      var x = value.apply(this, arguments);
-      if (x == null) this.removeAttributeNS(name.space, name.local);
-      else this.setAttributeNS(name.space, name.local, x);
-    }
-
-    return groups.each(value == null
-        ? (name.local ? attrNullNS : attrNull) : (typeof value === "function"
-        ? (name.local ? attrFunctionNS : attrFunction)
-        : (name.local ? attrConstantNS : attrConstant)));
+    return each(d3_selection_attrSetter(d3.ns.qualify(name), value));
   };
 
   groups.classed = function(name, value) {
@@ -1457,7 +1428,6 @@ function d3_selection(groups) {
       });
     }
 
-    /** @this {Element} */
     function classedAdd() {
       if (c = this.classList) return c.add(name);
       var c = this.className,
@@ -1471,7 +1441,6 @@ function d3_selection(groups) {
       }
     }
 
-    /** @this {Element} */
     function classedRemove() {
       if (c = this.classList) return c.remove(name);
       var c = this.className,
@@ -1482,7 +1451,6 @@ function d3_selection(groups) {
       else this.className = cv;
     }
 
-    /** @this {Element} */
     function classedFunction() {
       (value.apply(this, arguments)
           ? classedAdd
@@ -1505,17 +1473,14 @@ function d3_selection(groups) {
       });
     }
 
-    /** @this {Element} */
     function styleNull() {
       this.style.removeProperty(name);
     }
 
-    /** @this {Element} */
     function styleConstant() {
       this.style.setProperty(name, value, priority);
     }
 
-    /** @this {Element} */
     function styleFunction() {
       var x = value.apply(this, arguments);
       if (x == null) this.style.removeProperty(name);
@@ -1537,17 +1502,14 @@ function d3_selection(groups) {
       });
     }
 
-    /** @this {Element} */
     function propertyNull() {
       delete this[name];
     }
 
-    /** @this {Element} */
     function propertyConstant() {
       this[name] = value;
     }
 
-    /** @this {Element} */
     function propertyFunction() {
       var x = value.apply(this, arguments);
       if (x == null) delete this[name];
@@ -1568,12 +1530,10 @@ function d3_selection(groups) {
       });
     }
 
-    /** @this {Element} */
     function textConstant() {
       this.textContent = value;
     }
 
-    /** @this {Element} */
     function textFunction() {
       this.textContent = value.apply(this, arguments);
     }
@@ -1591,12 +1551,10 @@ function d3_selection(groups) {
       });
     }
 
-    /** @this {Element} */
     function htmlConstant() {
       this.innerHTML = value;
     }
 
-    /** @this {Element} */
     function htmlFunction() {
       this.innerHTML = value.apply(this, arguments);
     }
@@ -1782,6 +1740,54 @@ function d3_selection_comparator(comparator) {
 function d3_selection_enterNode(data) {
   return {__data__: data};
 }
+
+function d3_selection_attrGetter(name) {
+  return name.local
+      ? function() { return this.getAttributeNS(name.space, name.local); }
+      : function() { return this.getAttribute(name); };
+}
+
+function d3_selection_attrSetter(name, value) {
+
+  function attrFunction() {
+    var x = value.apply(this, arguments);
+    if (x == null) this.removeAttribute(name);
+    else this.setAttribute(name, x);
+  }
+
+  function attrFunctionNS() {
+    var x = value.apply(this, arguments);
+    if (x == null) this.removeAttributeNS(name.space, name.local);
+    else this.setAttributeNS(name.space, name.local, x);
+  }
+
+  return typeof value === "function"
+      ? (name.local ? attrFunctionNS : attrFunction)
+      : d3_selection_attrSetterConstant(name, value);
+}
+
+function d3_selection_attrSetterConstant(name, value) {
+
+  function attrNull() {
+    this.removeAttribute(name);
+  }
+
+  function attrNullNS() {
+    this.removeAttributeNS(name.space, name.local);
+  }
+
+  function attrConstant() {
+    this.setAttribute(name, value);
+  }
+
+  function attrConstantNS() {
+    this.setAttributeNS(name.space, name.local, value);
+  }
+
+  return value == null
+      ? (name.local ? attrNullNS : attrNull)
+      : (name.local ? attrConstantNS : attrConstant);
+}
 d3.transition = d3_root.transition;
 
 var d3_transitionId = 0,
@@ -1935,7 +1941,6 @@ function d3_transition(groups) {
 
   transition.attrTween = function(name, tween) {
 
-    /** @this {Element} */
     function attrTween(d, i) {
       var f = tween.call(this, d, i, this.getAttribute(name));
       return function(t) {
@@ -1943,7 +1948,6 @@ function d3_transition(groups) {
       };
     }
 
-    /** @this {Element} */
     function attrTweenNS(d, i) {
       var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
       return function(t) {
@@ -1962,7 +1966,6 @@ function d3_transition(groups) {
   transition.styleTween = function(name, tween, priority) {
     if (arguments.length < 3) priority = null;
 
-    /** @this {Element} */
     function styleTween(d, i) {
       var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
       return function(t) {

@@ -14,3 +14,9 @@ function attr:
    j 9
    k 10
 
+map attr:
+   <svg left="10" top="20"/>
+
+map function attr:
+   <svg foo="foo" bar="42"/>
+

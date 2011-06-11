@@ -151,7 +151,6 @@ function d3_transition(groups) {
 
   transition.attrTween = function(name, tween) {
 
-    /** @this {Element} */
     function attrTween(d, i) {
       var f = tween.call(this, d, i, this.getAttribute(name));
       return function(t) {
@@ -159,7 +158,6 @@ function d3_transition(groups) {
       };
     }
 
-    /** @this {Element} */
     function attrTweenNS(d, i) {
       var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
       return function(t) {
@@ -178,7 +176,6 @@ function d3_transition(groups) {
   transition.styleTween = function(name, tween, priority) {
     if (arguments.length < 3) priority = null;
 
-    /** @this {Element} */
     function styleTween(d, i) {
       var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
       return function(t) {
