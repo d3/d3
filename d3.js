@@ -2128,6 +2128,27 @@ var d3_timer_frame = window.requestAnimationFrame
     || window.msRequestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.scale = {};
+function d3_scale_nice(domain, nice) {
+  var i0 = 0,
+      i1 = domain.length - 1,
+      x0 = domain[i0],
+      x1 = domain[i1],
+      dx;
+
+  if (x1 < x0) {
+    dx = i0; i0 = i1; i1 = dx;
+    dx = x0; x0 = x1; x1 = dx;
+  }
+
+  nice = nice(x1 - x0);
+  domain[i0] = nice.floor(x0);
+  domain[i1] = nice.ceil(x1);
+  return domain;
+}
+
+function d3_scale_niceDefault() {
+  return Math;
+}
 d3.scale.linear = function() {
   var domain = [0, 1],
       range = [0, 1],
@@ -2213,23 +2234,20 @@ d3.scale.linear = function() {
   };
 
   scale.nice = function() {
-    var last = domain.length - 1,
-        start = domain[0],
-        end = domain[last],
-        reverse = end < start,
-        min = reverse ? end : start,
-        max = reverse ? start : end,
-        span = max - min;
-
-    var step = Math.pow(10, Math.round(Math.log(span) / Math.log(10)) - 1);
-    domain[reverse ? last : 0] = Math.floor(min / step) * step;
-    domain[reverse ? 0 : last] = Math.ceil(max / step) * step;
-
+    d3_scale_nice(domain, d3_scale_linearNice);
     return rescale();
   };
 
   return rescale();
 };
+
+function d3_scale_linearNice(dx) {
+  dx = Math.pow(10, Math.round(Math.log(dx) / Math.log(10)) - 1);
+  return {
+    floor: function(x) { return Math.floor(x / dx) * dx; },
+    ceil: function(x) { return Math.ceil(x / dx) * dx; },
+  };
+}
 function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
   var u = uninterpolate(domain[0], domain[1]),
       i = interpolate(range[0], range[1]);
@@ -2280,16 +2298,8 @@ d3.scale.log = function() {
   scale.clamp = d3.rebind(scale, linear.clamp);
 
   scale.nice = function() {
-    var domain = linear.domain().map(pow),
-        last = domain.length - 1,
-        start = domain[0],
-        end = domain[last],
-        reverse = end < start,
-        min = reverse ? end : start,
-        max = reverse ? start : end;
-    domain[reverse ? last : 0] = log.floor(min);
-    domain[reverse ? 0 : last] = log.ceil(max);
-    return scale.domain(domain);
+    linear.domain(d3_scale_nice(linear.domain(), d3_scale_niceDefault));
+    return scale;
   };
 
   scale.ticks = function() {
@@ -2336,22 +2346,6 @@ d3_scale_log.pow = function(x) {
 d3_scale_logn.pow = function(x) {
   return -Math.pow(10, -x);
 };
-
-d3_scale_log.floor = function(x) {
-  return d3_scale_log.pow(Math.floor(d3_scale_log(x)));
-};
-
-d3_scale_logn.floor = function(x) {
-  return d3_scale_logn.pow(Math.floor(d3_scale_logn(x)));
-};
-
-d3_scale_log.ceil = function(x) {
-  return d3_scale_log.pow(Math.ceil(d3_scale_log(x)));
-};
-
-d3_scale_logn.ceil = function(x) {
-  return d3_scale_logn.pow(Math.ceil(d3_scale_logn(x)));
-};
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),
       tick = d3.scale.linear(), // TODO better tick formatting...
@@ -2385,16 +2379,7 @@ d3.scale.pow = function() {
   scale.tickFormat = tick.tickFormat;
 
   scale.nice = function() {
-    var domain = linear.domain().map(powb),
-        last = domain.length - 1,
-        start = domain[0],
-        end = domain[last],
-        reverse = end < start,
-        min = reverse ? end : start,
-        max = reverse ? start : end;
-    domain[reverse ? last : 0] = Math.floor(min);
-    domain[reverse ? 0 : last] = Math.ceil(max);
-    return scale.domain(domain);
+    return scale.domain(d3_scale_nice(scale.domain(), d3_scale_niceDefault));
   };
 
   scale.exponent = function(x) {
