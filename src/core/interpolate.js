@@ -1,12 +1,8 @@
 d3.interpolate = function(a, b) {
-  if (typeof b === "number") return d3.interpolateNumber(+a, b);
-  if (typeof b === "string") {
-    return (b in d3_rgb_names) || /^(#|rgb\(|hsl\()/.test(b)
-        ? d3.interpolateRgb(String(a), b)
-        : d3.interpolateString(String(a), b);
-  }
-  if (b instanceof Array) return d3.interpolateArray(a, b);
-  return d3.interpolateObject(a, b);
+  var i = d3.interpolators.length,
+      f;
+  while (--i >= 0 && (f = d3.interpolators[i](a, b)) == null);
+  return f;
 };
 
 d3.interpolateNumber = function(a, b) {
@@ -22,7 +18,7 @@ d3.interpolateRound = function(a, b) {
 d3.interpolateString = function(a, b) {
   var m, // current match
       i, // current index
-      j, // current index (for coallescing)
+      j, // current index (for coalescing)
       s0 = 0, // start index of current string prefix
       s1 = 0, // end index of current string prefix
       s = [], // string constants and placeholders
@@ -165,7 +161,7 @@ d3.interpolateObject = function(a, b) {
     for (k in i) c[k] = i[k](t);
     return c;
   };
-}
+};
 
 var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g,
     d3_interpolate_rgb = {background: 1, fill: 1, stroke: 1};
@@ -175,3 +171,16 @@ function d3_interpolateByName(n) {
       ? d3.interpolateRgb
       : d3.interpolate;
 }
+
+d3.interpolators = [
+  d3.interpolateObject,
+  function(a, b) {
+    return b instanceof Array ? d3.interpolateArray(a, b) : null; },
+  function(a, b) {
+    return typeof b === "string" ? d3.interpolateString(String(a), b) : null; },
+  function(a, b) {
+    return (b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b))
+    ? d3.interpolateRgb(String(a), b) : null; },
+  function(a, b) {
+    return typeof b === "number" ? d3.interpolateNumber(+a, b) : null; }
+];
