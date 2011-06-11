@@ -1357,7 +1357,7 @@ function d3_selection(groups) {
 
     var selection = d3_selection(update);
     selection.enter = function() {
-      return d3_selectionEnter(enter);
+      return d3_selectionEnter(enter, update);
     };
     selection.exit = function() {
       return d3_selection(exit);
@@ -1711,21 +1711,23 @@ function d3_selection(groups) {
   return groups;
 }
 
-function d3_selectionEnter(groups) {
+function d3_selectionEnter(groups, upgroups) {
 
   function select(select) {
     var subgroups = [],
         subgroup,
         subnode,
+        upgroup,
         group,
         node;
     for (var j = 0, m = groups.length; j < m; j++) {
       group = groups[j];
+      upgroup = upgroups[j];
       subgroups.push(subgroup = []);
       subgroup.parentNode = group.parentNode;
       for (var i = 0, n = group.length; i < n; i++) {
         if (node = group[i]) {
-          subgroup.push(subnode = select(group.parentNode));
+          subgroup.push(upgroup[i] = subnode = select(group.parentNode));
           subnode.__data__ = node.__data__;
         } else {
           subgroup.push(null);
