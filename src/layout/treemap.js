@@ -141,10 +141,6 @@ d3.layout.treemap = function() {
     return nodes;
   }
 
-  treemap.sort = d3.rebind(treemap, hierarchy.sort);
-  treemap.children = d3.rebind(treemap, hierarchy.children);
-  treemap.value = d3.rebind(treemap, hierarchy.value);
-
   treemap.size = function(x) {
     if (!arguments.length) return size;
     size = x;
@@ -170,5 +166,5 @@ d3.layout.treemap = function() {
     return treemap;
   };
 
-  return treemap;
+  return d3_layout_hierarchyRebind(treemap, hierarchy);
 };

@@ -529,17 +529,13 @@ d3.layout.partition = function() {
     return nodes;
   }
 
-  partition.sort = d3.rebind(partition, hierarchy.sort);
-  partition.children = d3.rebind(partition, hierarchy.children);
-  partition.value = d3.rebind(partition, hierarchy.value);
-
   partition.size = function(x) {
     if (!arguments.length) return size;
     size = x;
     return partition;
   };
 
-  return partition;
+  return d3_layout_hierarchyRebind(partition, hierarchy);
 };
 d3.layout.pie = function() {
   var value = Number,
@@ -1054,6 +1050,15 @@ d3.layout.hierarchy = function() {
   return hierarchy;
 }
 
+// A method assignment helper for hierarchy subclasses.
+function d3_layout_hierarchyRebind(object, hierarchy) {
+  object.sort = d3.rebind(object, hierarchy.sort);
+  object.children = d3.rebind(object, hierarchy.children);
+  object.links = d3_layout_hierarchyLinks;
+  object.value = d3.rebind(object, hierarchy.value);
+  return object;
+}
+
 function d3_layout_hierarchyChildren(d) {
   return d.children;
 }
@@ -1065,8 +1070,17 @@ function d3_layout_hierarchyValue(d) {
 function d3_layout_hierarchySort(a, b) {
   return b.value - a.value;
 }
+
+// Returns an array source+target objects for the specified nodes.
+function d3_layout_hierarchyLinks(nodes) {
+  return d3.merge(nodes.map(function(parent) {
+    return (parent.children || []).map(function(child) {
+      return {source: parent, target: child};
+    });
+  }));
+}
 d3.layout.pack = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
       size = [1, 1];
 
   function pack(d, i) {
@@ -1087,17 +1101,13 @@ d3.layout.pack = function() {
     return nodes;
   }
 
-  pack.sort = d3.rebind(pack, hierarchy.sort);
-  pack.children = d3.rebind(pack, hierarchy.children);
-  pack.value = d3.rebind(pack, hierarchy.value);
-
   pack.size = function(x) {
     if (!arguments.length) return size;
     size = x;
     return pack;
   };
 
-  return pack.sort(d3_layout_packSort);
+  return d3_layout_hierarchyRebind(pack, hierarchy);
 };
 
 function d3_layout_packSort(a, b) {
@@ -1310,10 +1320,6 @@ d3.layout.cluster = function() {
     return nodes;
   }
 
-  cluster.sort = d3.rebind(cluster, hierarchy.sort);
-  cluster.children = d3.rebind(cluster, hierarchy.children);
-  cluster.links = d3_layout_treeLinks;
-
   cluster.separation = function(x) {
     if (!arguments.length) return separation;
     separation = x;
@@ -1326,7 +1332,7 @@ d3.layout.cluster = function() {
     return cluster;
   };
 
-  return cluster;
+  return d3_layout_hierarchyRebind(cluster, hierarchy);
 };
 
 function d3_layout_clusterY(children) {
@@ -1465,7 +1471,7 @@ d3.layout.tree = function() {
         deep = d3_layout_treeSearch(root, d3_layout_treeDeepest),
         x0 = left.x - separation(left, right) / 2,
         x1 = right.x + separation(right, left) / 2,
-        y1 = deep.depth;
+        y1 = deep.depth || 1;
 
     // Clear temporary layout variables; transform x and y.
     d3_layout_treeVisitAfter(root, function(node) {
@@ -1476,10 +1482,6 @@ d3.layout.tree = function() {
 
     return nodes;
   }
-
-  tree.sort = d3.rebind(tree, hierarchy.sort);
-  tree.children = d3.rebind(tree, hierarchy.children);
-  tree.links = d3_layout_treeLinks;
 
   tree.separation = function(x) {
     if (!arguments.length) return separation;
@@ -1493,17 +1495,8 @@ d3.layout.tree = function() {
     return tree;
   };
 
-  return tree;
+  return d3_layout_hierarchyRebind(tree, hierarchy);
 };
-
-// Returns an array source+target objects for the specified nodes.
-function d3_layout_treeLinks(nodes) {
-  return d3.merge(nodes.map(function(parent) {
-    return (parent.children || []).map(function(child) {
-      return {source: parent, target: child};
-    });
-  }));
-}
 
 function d3_layout_treeSeparation(a, b) {
   return a.parent == b.parent ? 1 : 2;
@@ -1740,10 +1733,6 @@ d3.layout.treemap = function() {
     return nodes;
   }
 
-  treemap.sort = d3.rebind(treemap, hierarchy.sort);
-  treemap.children = d3.rebind(treemap, hierarchy.children);
-  treemap.value = d3.rebind(treemap, hierarchy.value);
-
   treemap.size = function(x) {
     if (!arguments.length) return size;
     size = x;
@@ -1769,6 +1758,6 @@ d3.layout.treemap = function() {
     return treemap;
   };
 
-  return treemap;
+  return d3_layout_hierarchyRebind(treemap, hierarchy);
 };
 })()
