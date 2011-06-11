@@ -47,3 +47,17 @@ interpolateHsl(red, blue):
           1.0  ->  #0000ff
           1.5  ->  #ff0000
 
+interpolateOneTwo(one, two):
+         -0.5  ->  0.5
+          0.0  ->  1
+          0.5  ->  1.5
+          1.0  ->  2
+          1.5  ->  2.5
+
+interpolate(one, three):
+         -0.5  ->  three
+          0.0  ->  three
+          0.5  ->  three
+          1.0  ->  three
+          1.5  ->  three
+

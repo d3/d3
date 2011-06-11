@@ -24,6 +24,11 @@ d3.scale.log = function() {
   scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.clamp = d3.rebind(scale, linear.clamp);
 
+  scale.nice = function() {
+    linear.domain(d3_scale_nice(linear.domain(), d3_scale_niceDefault));
+    return scale;
+  };
+
   scale.ticks = function() {
     var d = linear.domain(),
         ticks = [];
