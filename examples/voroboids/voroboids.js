@@ -5,7 +5,7 @@ var w = 960,
 
 // Initialise boids.
 var boids = d3.range(100).map(function() {
-  return d3.ai.boid()
+  return boid()
       .position([Math.random() * w, Math.random() * h])
       .velocity([Math.random() * 2 - 1, Math.random() * 2 - 1])
       .gravityCenter(mouse);
