@@ -2,8 +2,8 @@
 d3.ai.boid = function() {
   var position = [0, 0],
       velocity = [0, 0],
-      gravityCentre = null,
-      neighbourRadius = 50,
+      gravityCenter = null,
+      neighborRadius = 50,
       maxForce = .1,
       maxSpeed = 1,
       separationWeight = 2,
@@ -11,13 +11,13 @@ d3.ai.boid = function() {
       cohesionWeight = 1,
       desiredSeparation = 10;
 
-  function boid(neighbours) {
-    var accel = flock(neighbours);
+  function boid(neighbors) {
+    var accel = flock(neighbors);
     d3_ai_boidWrap(position);
     velocity[0] += accel[0];
     velocity[1] += accel[1];
-    if (gravityCentre) {
-      var g = d3_ai_boidGravity(gravityCentre, position, neighbourRadius);
+    if (gravityCenter) {
+      var g = d3_ai_boidGravity(gravityCenter, position, neighborRadius);
       velocity[0] += g[0];
       velocity[1] += g[1];
     }
@@ -27,7 +27,7 @@ d3.ai.boid = function() {
     return position;
   }
 
-  function flock(neighbours) {
+  function flock(neighbors) {
     var separation = [0, 0],
         alignment = [0, 0],
         cohesion = [0, 0],
@@ -35,9 +35,9 @@ d3.ai.boid = function() {
         alignmentCount = 0,
         cohesionCount = 0,
         i = -1,
-        l = neighbours.length;
+        l = neighbors.length;
     while (++i < l) {
-      var n = neighbours[i];
+      var n = neighbors[i];
       if (n === this) continue;
       var npos = n.position(),
           d = d3_ai_boidDistance(position, npos);
@@ -48,7 +48,7 @@ d3.ai.boid = function() {
           separation[1] += tmp[1] / d;
           separationCount++;
         }
-        if (d < neighbourRadius) {
+        if (d < neighborRadius) {
           var nvel = n.velocity();
           alignment[0] += nvel[0];
           alignment[1] += nvel[1];
@@ -122,15 +122,15 @@ d3.ai.boid = function() {
     return boid;
   }
 
-  boid.gravityCentre = function(x) {
-    if (!arguments.length) return gravityCentre;
-    gravityCentre = x;
+  boid.gravityCenter = function(x) {
+    if (!arguments.length) return gravityCenter;
+    gravityCenter = x;
     return boid;
   }
 
-  boid.neighbourRadius = function(x) {
-    if (!arguments.length) return neighbourRadius;
-    neighbourRadius = x;
+  boid.neighborRadius = function(x) {
+    if (!arguments.length) return neighborRadius;
+    neighborRadius = x;
     return boid;
   }
 
@@ -189,11 +189,11 @@ function d3_ai_boidWrap(position) {
   else if (position[1] < 0) position[1] = h;
 }
 
-function d3_ai_boidGravity(centre, position, neighbourRadius) {
-  if (centre[0] != null) {
-    var m = d3_ai_boidSubtract(centre.slice(), position),
+function d3_ai_boidGravity(center, position, neighborRadius) {
+  if (center[0] != null) {
+    var m = d3_ai_boidSubtract(center.slice(), position),
         d = d3_ai_boidMagnitude(m) - 10;
-    if (d > 0 && d < neighbourRadius * 5) {
+    if (d > 0 && d < neighborRadius * 5) {
       d3_ai_boidNormalize(m);
       m[0] /= d;
       m[1] /= d;

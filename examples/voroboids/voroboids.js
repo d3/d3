@@ -7,7 +7,7 @@ var boids = d3.range(100).map(function(d) {
   return d3.ai.boid()
     .position([Math.random() * w, Math.random() * h])
     .velocity([Math.random() * 2 - 1, Math.random() * 2 - 1])
-    .gravityCentre(mouse);
+    .gravityCenter(mouse);
 });
 
 // Compute initial positions.
@@ -15,7 +15,7 @@ var vertices = boids.map(function(boid) {
   return boid(boids);
 });
 
-// Insert mouse position (gravity centre).
+// Insert mouse position (gravity center).
 vertices.unshift(mouse);
 
 var svg = d3.select("#vis")
