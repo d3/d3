@@ -63,13 +63,14 @@ var types = {
 };
 
 var format = d3.format(".4n"),
-    scale = d3.scale.log().domain([.01, 1000]).range([0, 1000]);
+    scale = d3.scale.linear().domain([-10, 20, 1000]).range([0, 800, 1000]);
 
 var svg = d3.select("body").append("svg:svg")
     .attr("width", 960)
     .attr("height", 500);
 
 var shape = superformula()
+    .type("asterisk")
     .size(100000)
     .segments(3600);
 
@@ -79,7 +80,7 @@ var path = svg.append("svg:path")
     .attr("d", shape);
 
 var control = d3.select("#controls").selectAll("div")
-    .data(d3.entries(types.circle))
+    .data(d3.entries(types.asterisk))
   .enter().append("div")
     .attr("id", function(d) { return d.key; });
 
@@ -90,7 +91,7 @@ control.append("input")
     .attr("type", "range")
     .attr("max", 1000)
     .attr("min", 0)
-    .attr("value", function(d) { return scale(d.value); })
+    .property("value", function(d) { return scale(d.value); })
     .on("change", function(d) {
       var v = scale.invert(this.value);
       path.attr("d", shape.param(d.key, v));
