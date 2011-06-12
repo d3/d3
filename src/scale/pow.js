@@ -31,7 +31,7 @@ d3.scale.pow = function() {
   scale.tickFormat = tick.tickFormat;
 
   scale.nice = function() {
-    return scale.domain(d3_scale_nice(scale.domain(), d3_scale_niceDefault));
+    return scale.domain(d3_scale_nice(scale.domain(), d3_scale_linearNice));
   };
 
   scale.exponent = function(x) {
