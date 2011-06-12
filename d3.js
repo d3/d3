@@ -3112,7 +3112,7 @@ function d3_svg_lineMonotone(points) {
 }
 d3.svg.area = function() {
   var x = d3_svg_lineX,
-      y0 = d3_svg_areaY0,
+      y0 = 0,
       y1 = d3_svg_lineY,
       interpolate = "linear",
       interpolator = d3_svg_lineInterpolators[interpolate],
@@ -3159,10 +3159,6 @@ d3.svg.area = function() {
 
   return area;
 };
-
-function d3_svg_areaY0() {
-  return 0;
-}
 d3.svg.chord = function() {
   var source = d3_svg_chordSource,
       target = d3_svg_chordTarget,
