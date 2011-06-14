@@ -162,8 +162,8 @@ d3.layout.force = function() {
       gravity = .1,
       theta = .8,
       interval,
-      nodes,
-      links,
+      nodes = [],
+      links = [],
       distances;
 
   function repulse(node, kc) {
