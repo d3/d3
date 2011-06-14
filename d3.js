@@ -3421,4 +3421,4 @@ d3.svg.symbolTypes = d3.keys(d3_svg_symbols);
 
 var d3_svg_symbolSqrt3 = Math.sqrt(3),
     d3_svg_symbolTan30 = Math.tan(30 * Math.PI / 180);
-})()
+})();
