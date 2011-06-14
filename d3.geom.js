@@ -825,4 +825,4 @@ function d3_geom_quadtreePoint(p) {
     y: p[1]
   };
 }
-})()
+})();

@@ -2248,7 +2248,7 @@ function d3_scale_linearNice(dx) {
   dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
   return {
     floor: function(x) { return Math.floor(x / dx) * dx; },
-    ceil: function(x) { return Math.ceil(x / dx) * dx; },
+    ceil: function(x) { return Math.ceil(x / dx) * dx; }
   };
 }
 function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
@@ -3421,4 +3421,4 @@ d3.svg.symbolTypes = d3.keys(d3_svg_symbols);
 
 var d3_svg_symbolSqrt3 = Math.sqrt(3),
     d3_svg_symbolTan30 = Math.tan(30 * Math.PI / 180);
-})()
+})();

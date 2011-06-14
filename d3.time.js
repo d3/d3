@@ -310,4 +310,4 @@ function d3_time_zone(d) {
       zm = Math.abs(z) % 60;
   return zs + d3_time_zfill2(zh) + d3_time_zfill2(zm);
 }
-})()
+})();

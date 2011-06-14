@@ -89,4 +89,4 @@ function d3_csv_formatValue(text) {
       ? "\"" + text.replace(/\"/g, "\"\"") + "\""
       : text;
 }
-})()
+})();
