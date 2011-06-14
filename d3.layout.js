@@ -715,7 +715,7 @@ d3.layout.stack = function() {
   };
 
   return stack;
-}
+};
 
 function d3_layout_stackX(d) {
   return d.x;
@@ -1048,7 +1048,7 @@ d3.layout.hierarchy = function() {
   };
 
   return hierarchy;
-}
+};
 
 // A method assignment helper for hierarchy subclasses.
 function d3_layout_hierarchyRebind(object, hierarchy) {
@@ -1760,4 +1760,4 @@ d3.layout.treemap = function() {
 
   return d3_layout_hierarchyRebind(treemap, hierarchy);
 };
-})()
+})();
