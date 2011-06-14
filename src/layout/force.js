@@ -4,14 +4,14 @@ d3.layout.force = function() {
       event = d3.dispatch("tick"),
       size = [1, 1],
       alpha,
-      drag = .9,
+      friction = .9,
       distance = 20,
       charge = -30,
       gravity = .1,
       theta = .8,
       interval,
-      nodes,
-      links,
+      nodes = [],
+      links = [],
       distances;
 
   function repulse(node, kc) {
@@ -94,8 +94,8 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        o.x -= (o.px - (o.px = o.x)) * drag;
-        o.y -= (o.py - (o.py = o.y)) * drag;
+        o.x -= (o.px - (o.px = o.x)) * friction;
+        o.y -= (o.py - (o.py = o.y)) * friction;
       }
     }
 
@@ -134,9 +134,9 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.drag = function(x) {
-    if (!arguments.length) return drag;
-    drag = x;
+  force.friction = function(x) {
+    if (!arguments.length) return friction;
+    friction = x;
     return force;
   };
 
