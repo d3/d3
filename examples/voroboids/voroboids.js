@@ -1,6 +1,6 @@
 var w = 960,
     h = 500,
-    mouse = [0, 0],
+    mouse = [null, null],
     fill = d3.scale.linear().domain([0, 1e4]).range(["brown", "steelblue"]);
 
 // Initialise boids.
@@ -16,6 +16,8 @@ var vertices = boids.map(function(boid) {
   return boid(boids);
 });
 
+d3.select(window).on("blur", nullGravity);
+
 var svg = d3.select("#vis")
   .append("svg:svg")
     .attr("width", w)
@@ -25,7 +27,8 @@ var svg = d3.select("#vis")
       var m = d3.svg.mouse(this);
       mouse[0] = m[0];
       mouse[1] = m[1];
-    });
+    })
+    .on("mouseout", nullGravity);
 
 svg.selectAll("path")
     .data(d3.geom.voronoi(vertices))
@@ -56,3 +59,7 @@ d3.timer(function() {
       .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
       .style("fill", function(d) { return fill((d3.geom.polygon(d).area())); });
 });
+
+function nullGravity() {
+  mouse[0] = mouse[1] = null;
+}
