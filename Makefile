@@ -182,6 +182,7 @@ tests: \
 	tests/test-hsl.test \
 	tests/test-time-format.test \
 	tests/test-time-parse.test \
+	tests/test-time-parse-utc.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
 	tests/test-scale-polylinear.test \
