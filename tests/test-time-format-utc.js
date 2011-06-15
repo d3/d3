@@ -7,16 +7,16 @@ var formats = [
   "p",  "S",  "U",  "w",  "W",  "x",  "X",  "y", "Y",  "Z",  "%"
 ];
 
-var now = new Date(1990, 0, 1);
+var now = new Date(Date.UTC(1990, 0, 1));
 console.log("format 01/01/1990 00:00:00:");
 formats.forEach(function(f) {
-   console.log("  " + f + ":", d3.time.format("%" + f)(now));
+   console.log("  " + f + ":", d3.time.format.utc("%" + f)(now));
 });
 console.log("");
 
-var now = new Date(2011, 11, 31, 23, 59, 59);
+var now = new Date(Date.UTC(2011, 11, 31, 23, 59, 59));
 console.log("format 12/31/2011 23:59:59:");
 formats.forEach(function(f) {
-   console.log("  " + f + ":", d3.time.format("%" + f)(now));
+   console.log("  " + f + ":", d3.time.format.utc("%" + f)(now));
 });
 console.log("");

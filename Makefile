@@ -181,6 +181,7 @@ tests: \
 	tests/test-round.test \
 	tests/test-hsl.test \
 	tests/test-time-format.test \
+	tests/test-time-format-utc.test \
 	tests/test-time-parse.test \
 	tests/test-time-parse-utc.test \
 	tests/test-transition.test \
