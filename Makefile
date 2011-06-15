@@ -146,6 +146,8 @@ d3.time.js: \
 	src/start.js \
 	src/time/time.js \
 	src/time/format.js \
+	src/time/format-utc.js \
+	src/time/format-iso.js \
 	src/end.js
 
 d3.geom.js: \
