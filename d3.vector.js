@@ -152,22 +152,27 @@ d3.vector.transpose = function(a) {
   return b;
 };
 d3.vector.interpolate = function(a, b) {
-  return d3.interpolateString(
-    d3_vectorInterpolateRecompose(d3_vectorInterpolateDecompose(a)),
-    d3_vectorInterpolateRecompose(d3_vectorInterpolateDecompose(b)));
-}
-
-function d3_vectorInterpolateRecompose(d) {
-  return (
-    "matrix3d(1,0,0,0, 0,1,0,0, 0,0,1,0, " + d.perspective.join(",") + ")" +
-    "translate3d(" + d.translate.join(",") + ")" +
-    "rotateX(" + d.rotate[0] + ")" +
-    "rotateY(" + d.rotate[1] + ")" +
-    "rotateZ(" + d.rotate[2] + ")" +
-    "matrix3d(1,0,0,0, 0,1,0,0, 0," + d.skew[2] + ",1,0, 0,0,0,1)" +
-    "matrix3d(1,0,0,0, 0,1,0,0, " + d.skew[1] + ",0,1,0, 0,0,0,1)" +
-    "matrix3d(1,0,0,0, " + d.skew[0] + ",1,0,0, 0,0,1,0, 0,0,0,1)" +
-    "scale3d(" + d.scale.join(",") + ")");
+  a = d3_vectorInterpolateDecompose(a);
+  b = d3_vectorInterpolateDecompose(b);
+  var perspective = d3.interpolateArray(a.perspective, b.perspective),
+      translate = d3.interpolateArray(a.translate, b.translate),
+      rotate = d3.interpolateArray(a.rotate, b.rotate),
+      skew = d3.interpolateArray(a.skew, b.skew),
+      scale = d3.interpolateArray(a.scale, b.scale);
+  return function(t) {
+    var r = rotate(t),
+        s = skew(t);
+    return (
+      "matrix3d(1,0,0,0, 0,1,0,0, 0,0,1,0, " + perspective(t) + ")" +
+      "translate3d(" + translate(t) + ")" +
+      "rotateX(" + r[0] + "rad)" +
+      "rotateY(" + r[1] + "rad)" +
+      "rotateZ(" + r[2] + "rad)" +
+      "matrix3d(1,0,0,0, 0,1,0,0, 0," + s[2] + ",1,0, 0,0,0,1)" +
+      "matrix3d(1,0,0,0, 0,1,0,0, " + s[1] + ",0,1,0, 0,0,0,1)" +
+      "matrix3d(1,0,0,0, " + s[0] + ",1,0,0, 0,0,1,0, 0,0,0,1)" +
+      "scale3d(" + scale(t) + ")");
+  };
 }
 
 // Based on <http://www.w3.org/TR/css3-2d-transforms/#matrix-decomposition>,
@@ -305,24 +310,25 @@ function d3_vectorInterpolateCombine(a, b, ascl, bscl) {
   }
 }
 
-function d3_vectorInterpolateParse(s) {
+function d3_vectorInterpolateParse(type, s) {
   // TODO cope with 2D transformations
-  var numbers = s.split(/[^\d]+/),
+  var numbers = s.split(/[^\d-]+/),
       matrix = new Array(4),
       i = -1,
       j,
-      k = -1;
+      k = -1,
+      side = type === "3d" ? 4 : 2;
 
   while (++i < 4) {
     matrix[i] = new Array(4);
     j = -1; while (++j < 4) {
-      matrix[i][j] = +numbers[++k];
+      matrix[i][j] = i < side && j < side ? +numbers[++k] : (i === j) & 1;
     }
   }
   return matrix;
 }
 
-var d3_vectorInterpolateRegex = /^matrix3d\(([^\)]+)\)$/;
+var d3_vectorInterpolateRegex = /^matrix(3d)?\(([^\)]+)\)$/;
 
 d3.interpolators.push(function(a, b) {
   var ma, mb;
@@ -330,7 +336,7 @@ d3.interpolators.push(function(a, b) {
     (ma = String(a).match(d3_vectorInterpolateRegex)) &&
     (mb = String(b).match(d3_vectorInterpolateRegex)) &&
     d3.vector.interpolate(
-      d3_vectorInterpolateParse(ma[1]),
-      d3_vectorInterpolateParse(mb[1])));
+      d3_vectorInterpolateParse(ma[1], ma[2]),
+      d3_vectorInterpolateParse(mb[1], mb[2])));
 });
 })()
