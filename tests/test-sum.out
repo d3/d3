@@ -1,0 +1,25 @@
+sum:
+                                 [] -> 0
+                                [1] -> 1
+                    [5, 1, 2, 3, 4] -> 15
+                    ["a", "b", "c"] -> 0
+                        ["20", "3"] -> 23
+                        ["3", "20"] -> 23
+                            [20, 3] -> 23
+                            [3, 20] -> 23
+
+sum ignores null, undefined, and NaN:
+               [NaN, 1, 2, 3, 4, 5] -> 15
+               [1, 2, 3, 4, 5, NaN] -> 15
+   [10, null, 3, undefined, 5, NaN] -> 18
+
+sum treats heterogenous types as numbers:
+                          [20, "3"] -> 23
+                          ["20", 3] -> 23
+                          [3, "20"] -> 23
+                          ["3", 20] -> 23
+
+sum applies accessor function:
+  [1, 2, 3, 4, 5], [2, 4, 6, 8, 10] -> 45
+                    [1, 2, 3, 4, 5] -> 10
+

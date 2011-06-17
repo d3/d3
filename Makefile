@@ -37,6 +37,7 @@ d3.core.js: \
 	src/core/descending.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/sum.js \
 	src/core/zip.js \
 	src/core/bisect.js \
 	src/core/nest.js \
@@ -146,6 +147,8 @@ d3.time.js: \
 	src/start.js \
 	src/time/time.js \
 	src/time/format.js \
+	src/time/format-utc.js \
+	src/time/format-iso.js \
 	src/end.js
 
 d3.geom.js: \
@@ -171,6 +174,7 @@ tests: \
 	tests/test-keys.test \
 	tests/test-max.test \
 	tests/test-min.test \
+	tests/test-sum.test \
 	tests/test-nest.test \
 	tests/test-permute.test \
 	tests/test-zip.test \
@@ -179,7 +183,11 @@ tests: \
 	tests/test-round.test \
 	tests/test-hsl.test \
 	tests/test-time-format.test \
+	tests/test-time-format-iso.test \
+	tests/test-time-format-utc.test \
 	tests/test-time-parse.test \
+	tests/test-time-parse-iso.test \
+	tests/test-time-parse-utc.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
 	tests/test-scale-polylinear.test \

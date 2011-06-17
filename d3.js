@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.20.3"}; // semver
+(function(){d3 = {version: "1.21.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -67,6 +67,20 @@ d3.max = function(array, f) {
     while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
   }
   return a;
+};
+d3.sum = function(array, f) {
+  var s = 0,
+      n = array.length,
+      a,
+      i = -1;
+
+  if (arguments.length === 1) {
+    while (++i < n) if (!isNaN(a = +array[i])) s += a;
+  } else {
+    while (++i < n) if (!isNaN(a = +f.call(array, array[i], i))) s += a;
+  }
+
+  return s;
 };
 d3.zip = function() {
   if (!(n = arguments.length)) return [];
