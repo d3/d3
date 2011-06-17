@@ -55,10 +55,8 @@ d3.json("dependency-data.json", function(json) {
     if (node.data.value.name) nodeMap[node.data.value.name] = node;
   });
 
-  var bundles = cluster.bundles(nodes);
-
   var link = vis.selectAll("path.link")
-      .data(bundles)
+      .data(cluster.bundles(nodes))
     .enter().append("svg:path")
       .style("stroke", function(d) { return stroke(d[0].value); })
       .attr("class", "link")
