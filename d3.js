@@ -2221,10 +2221,11 @@ d3.scale.linear = function() {
 
   // TODO Dates? Ugh.
   function tickRange(m) {
-    var start = d3.min(domain),
-        stop = d3.max(domain),
+    var reverse = domain[0] > domain[1],
+        start = (reverse ? d3.max : d3.min)(domain),
+        stop = (reverse ? d3.min : d3.max)(domain),
         span = stop - start,
-        step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
+        step = (reverse ? -1 : 1) * Math.pow(10, Math.floor(Math.log((reverse ? -1 : 1) * span / m) / Math.LN10)),
         err = m / (span / step);
 
     // Filter ticks to get closer to the desired count.
@@ -2246,7 +2247,7 @@ d3.scale.linear = function() {
   };
 
   scale.tickFormat = function(m) {
-    var n = Math.max(0, -Math.floor(Math.log(tickRange(m).step) / Math.LN10 + .01));
+    var n = Math.max(0, -Math.floor(Math.log(Math.abs(tickRange(m).step)) / Math.LN10 + .01));
     return d3.format(",." + n + "f");
   };
 
@@ -2323,10 +2324,13 @@ d3.scale.log = function() {
     var d = linear.domain(),
         ticks = [];
     if (d.every(isFinite)) {
-      var i = Math.floor(d[0]),
-          j = Math.ceil(d[1]),
-          u = pow(d[0]),
-          v = pow(d[1]);
+      var reverse = d[0] > d[1],
+          min = d3.min(d),
+          max = d3.max(d),
+          i = Math.floor(min),
+          j = Math.ceil(max),
+          u = pow(min),
+          v = pow(max);
       if (log === d3_scale_logn) {
         ticks.push(pow(i));
         for (; i++ < j;) for (var k = 9; k > 0; k--) ticks.push(pow(i) * k);
@@ -2337,6 +2341,7 @@ d3.scale.log = function() {
       for (i = 0; ticks[i] < u; i++) {} // strip small values
       for (j = ticks.length; ticks[j - 1] > v; j--) {} // strip big values
       ticks = ticks.slice(i, j);
+      if (reverse) ticks.reverse();
     }
     return ticks;
   };

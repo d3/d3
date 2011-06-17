@@ -53,10 +53,11 @@ d3.scale.linear = function() {
 
   // TODO Dates? Ugh.
   function tickRange(m) {
-    var start = d3.min(domain),
-        stop = d3.max(domain),
+    var reverse = domain[0] > domain[1],
+        start = (reverse ? d3.max : d3.min)(domain),
+        stop = (reverse ? d3.min : d3.max)(domain),
         span = stop - start,
-        step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
+        step = (reverse ? -1 : 1) * Math.pow(10, Math.floor(Math.log((reverse ? -1 : 1) * span / m) / Math.LN10)),
         err = m / (span / step);
 
     // Filter ticks to get closer to the desired count.
@@ -78,7 +79,7 @@ d3.scale.linear = function() {
   };
 
   scale.tickFormat = function(m) {
-    var n = Math.max(0, -Math.floor(Math.log(tickRange(m).step) / Math.LN10 + .01));
+    var n = Math.max(0, -Math.floor(Math.log(Math.abs(tickRange(m).step)) / Math.LN10 + .01));
     return d3.format(",." + n + "f");
   };
 
