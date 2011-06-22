@@ -8,37 +8,16 @@ var cluster = d3.layout.cluster()
 
 var bundle = d3.layout.bundle();
 
-// From http://www.devmaster.net/forums/showthread.php?t=5784
-function sin(x) {
-  if (x > Math.PI) x -= 2 * Math.PI;
-  var B = 4 / Math.PI,
-      C = -4 / (Math.PI * Math.PI),
-
-      y = B * x + C * x * Math.abs(x);
-
-  //#ifdef EXTRA_PRECISION
-    var Q = 0.775,
-        P = 0.225;
-
-    y = P * (y * Math.abs(y) - y) + y;   // Q * y + P * y * abs(y)
-  //#endif
-  return y;
-}
-
-function cos(x) {
-  return sin(x + Math.PI / 2);
-}
-
 var line = d3.svg.line()
     .interpolate("basis")
     .beta(.85)
     .x(function(d) {
       var r = d.y, a = (d.x - 90) / 180 * Math.PI;
-      return r * cos(a);
+      return r * Math.cos(a);
     })
     .y(function(d) {
       var r = d.y, a = (d.x - 90) / 180 * Math.PI;
-      return r * sin(a);
+      return r * Math.sin(a);
     });
 
 var vis = d3.select("#chart").append("svg:svg")
