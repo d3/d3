@@ -4,42 +4,26 @@
 // the parent hierarchy to the least common ancestor, and then back down to the
 // destination node.
 d3.layout.bundle = function() {
-  var beta = .85,
-      outgoing = d3_layout_bundleOutgoing;
-
-  function bundle(nodes) {
+  return function(links) {
     var splines = [],
         i = -1,
-        n = nodes.length;
-    while (++i < n) {
-      var node = nodes[i],
-          // TODO cache outgoing?
-          targets = outgoing.call(this, node, i);
-      for (var j = 0; j < targets.length; j++) {
-        splines.push(d3_layout_bundleSpline(node, targets[j]));
-      }
-    }
+        n = links.length;
+    while (++i < n) splines.push(d3_layout_bundleSpline(links[i]));
     return splines;
   };
-
-  bundle.outgoing = function(x) {
-    if (!arguments.length) return outgoing;
-    outgoing = x;
-    return bundle;
-  };
-
-  return bundle;
 };
 
-function d3_layout_bundleSpline(start, end) {
-  var lca = d3_layout_bundleLeastCommonAncestor(start, end),
+function d3_layout_bundleSpline(link) {
+  var start = link.source,
+      end = link.target,
+      lca = d3_layout_bundleLeastCommonAncestor(start, end),
       points = [start];
-  while (start != lca) {
+  while (start !== lca) {
     start = start.parent;
     points.push(start);
   }
   var k = points.length;
-  while (end != lca) {
+  while (end !== lca) {
     points.splice(k, 0, end);
     end = end.parent;
   }
@@ -59,25 +43,18 @@ function d3_layout_bundleAncestors(node) {
 }
 
 function d3_layout_bundleLeastCommonAncestor(a, b) {
-  if (a == b) {
-    return a;
-  }
+  if (a === b) return a;
   var aNodes = d3_layout_bundleAncestors(a),
       bNodes = d3_layout_bundleAncestors(b),
       aNode = aNodes.pop(),
       bNode = bNodes.pop(),
       sharedNode = null;
-
-  while (aNode == bNode) {
+  while (aNode === bNode) {
     sharedNode = aNode;
     aNode = aNodes.pop();
     bNode = bNodes.pop();
   }
   return sharedNode;
-}
-
-function d3_layout_bundleOutgoing(d, i) {
-  return d.outgoing;
 }
 d3.layout.chord = function() {
   var chord = {},

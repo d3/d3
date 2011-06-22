@@ -3,11 +3,12 @@ d3.svg.line = function() {
       y = d3_svg_lineY,
       interpolate = "linear",
       interpolator = d3_svg_lineInterpolators[interpolate],
-      tension = .7;
+      tension = .7,
+      beta = 1;
 
   function line(d) {
     return d.length < 1 ? null
-        : "M" + interpolator(d3_svg_linePoints(this, d, x, y), tension);
+        : "M" + interpolator(d3_svg_lineStraighten(d3_svg_linePoints(this, d, x, y), beta), tension);
   }
 
   line.x = function(v) {
@@ -34,8 +35,32 @@ d3.svg.line = function() {
     return line;
   };
 
+  line.beta = function(v) {
+    if (!arguments.length) return beta;
+    beta = v;
+    return line;
+  };
+
   return line;
 };
+
+function d3_svg_lineStraighten(points, beta) {
+  var n = points.length - 1,
+      x0 = points[0][0],
+      y0 = points[0][1],
+      dx = points[n][0] - x0,
+      dy = points[n][1] - y0,
+      i = -1,
+      p,
+      t;
+  while (++i <= n) {
+    p = points[i];
+    t = i / n;
+    p[0] = beta * p[0] + (1 - beta) * (x0 + t * dx);
+    p[1] = beta * p[1] + (1 - beta) * (y0 + t * dy);
+  }
+  return points;
+}
 
 // Converts the specified array of data into an array of points
 // (x-y tuples), by evaluating the specified `x` and `y` functions on each

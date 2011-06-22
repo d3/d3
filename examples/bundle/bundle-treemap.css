@@ -9,6 +9,6 @@
 
 .link {
   stroke: #000;
-  stroke-width: .5px;
+  stroke-opacity: .5;
   fill: none;
 }
