@@ -92,6 +92,7 @@ d3.svg.js: \
 	src/svg/area.js \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
+	src/svg/diagonal-radial.js \
 	src/svg/mouse.js \
 	src/svg/touches.js \
 	src/svg/symbol.js
