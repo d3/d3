@@ -3,16 +3,10 @@
 // the parent hierarchy to the least common ancestor, and then back down to the
 // destination node.
 d3.layout.bundle = function() {
-  var hierarchy = d3.layout.cluster(), // or tree?
-      beta = .85,
-      outgoing = d3_layout_bundleOutgoing,
-      nodeMap;
+  var beta = .85,
+      outgoing = d3_layout_bundleOutgoing;
 
-  function bundle(d, i) {
-    return hierarchy.call(this, d, i);
-  }
-
-  bundle.bundles = function(nodes) {
+  function bundle(nodes) {
     var splines = [],
         i = -1,
         n = nodes.length;
@@ -33,9 +27,7 @@ d3.layout.bundle = function() {
     return bundle;
   };
 
-  bundle.size = d3.rebind(bundle, hierarchy.size);
-
-  return d3_layout_hierarchyRebind(bundle, hierarchy);
+  return bundle;
 };
 
 function d3_layout_bundleSpline(start, end) {

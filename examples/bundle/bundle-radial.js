@@ -1,19 +1,20 @@
 var r = 960 / 2,
-    stroke = d3.scale.linear().domain([0, 1e4]).range(["black", "steelblue"]);
+    stroke = d3.scale.linear().domain([0, 1e4]).range(["black", "steelblue"]),
+    nodeMap = {};
 
-var nodeMap = {};
-
-var cluster = d3.layout.bundle()
+var cluster = d3.layout.cluster()
     .size([360, r - 120])
     .sort(null)
+    .value(function(d) { return d.value.size; })
+    .children(function(d) { return isNaN(d.value.size) ? d3.entries(d.value) : null; });
+
+var bundle = d3.layout.bundle()
     .outgoing(function(d) {
       if (!d.data.value.imports) return [];
       return d.data.value.imports.map(function(d) {
         return nodeMap[d];
       });
-    })
-    .value(function(d) { return d.value.size; })
-    .children(function(d) { return isNaN(d.value.size) ? d3.entries(d.value) : null; });
+    });
 
 var line = d3.svg.line()
     .interpolate("basis")
@@ -56,7 +57,7 @@ d3.json("dependency-data.json", function(json) {
   });
 
   var link = vis.selectAll("path.link")
-      .data(cluster.bundles(nodes))
+      .data(bundle(nodes))
     .enter().append("svg:path")
       .style("stroke", function(d) { return stroke(d[0].value); })
       .attr("class", "link")
