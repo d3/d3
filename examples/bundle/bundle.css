@@ -3,6 +3,7 @@
 }
 
 .link {
+  stroke: steelblue;
+  stroke-opacity: .4;
   fill: none;
-  stroke-width: .5px;
 }

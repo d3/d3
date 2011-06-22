@@ -1,5 +1,5 @@
 var r = 960 / 2,
-    stroke = d3.scale.linear().domain([0, 1e4]).range(["brown", "steelblue"]);
+    splines = [];
 
 var cluster = d3.layout.cluster()
     .size([360, r - 120])
@@ -64,9 +64,8 @@ d3.json("dependency-data.json", function(classes) {
   });
 
   vis.selectAll("path.link")
-      .data(bundle(links))
+      .data(splines = bundle(links))
     .enter().append("svg:path")
-      .style("stroke", function(d) { return stroke(d[0].value); })
       .attr("class", "link")
       .attr("d", line);
 
@@ -81,4 +80,10 @@ d3.json("dependency-data.json", function(classes) {
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
       .text(function(d) { return d.data.key; });
+});
+
+d3.select("svg").on("mousemove", function() {
+  vis.selectAll("path.link")
+      .data(splines)
+      .attr("d", line.beta(d3.svg.mouse(this)[0] / 960));
 });
