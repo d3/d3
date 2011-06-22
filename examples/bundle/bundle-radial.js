@@ -1,5 +1,6 @@
 var r = 960 / 2,
-    splines = [];
+    splines = [],
+    beta = .85;
 
 var cluster = d3.layout.cluster()
     .size([360, r - 120])
@@ -10,7 +11,7 @@ var bundle = d3.layout.bundle();
 
 var line = d3.svg.line()
     .interpolate("basis")
-    .beta(.85)
+    .beta(beta)
     .x(function(d) {
       var r = d.y, a = (d.x - 90) / 180 * Math.PI;
       return r * Math.cos(a);
@@ -82,8 +83,17 @@ d3.json("dependency-data.json", function(classes) {
       .text(function(d) { return d.data.key; });
 });
 
-d3.select("svg").on("mousemove", function() {
+d3.select(window).on("mousemove", function() {
+  beta = Math.min(1, d3.event.clientX / 960);
+});
+
+var lastBeta = beta;
+
+function update() {
+  if (lastBeta === beta) return;
   vis.selectAll("path.link")
       .data(splines)
-      .attr("d", line.beta(d3.svg.mouse(this)[0] / 960));
-});
+      .attr("d", line.beta(lastBeta = beta));
+}
+
+d3.timer(update);
