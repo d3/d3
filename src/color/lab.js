@@ -108,7 +108,7 @@ function d3_cie76(x, y) {
   // distance of ~= 2.3 corresponds to one JND
   var dL = x.L - y.L,
       da = x.a - y.a,
-      db = x.b = y.b;
+      db = x.b - y.b;
   return Math.sqrt(dL*dL + da*da + db*db);
 }
 
@@ -117,7 +117,7 @@ function d3_cie94(x, y) {
   // NOT textiles (2, 0.048, 0.014)
   var dL  = x.L - y.L,
       da  = x.a - y.a,
-      db  = x.b = y.b,
+      db  = x.b - y.b,
       C1  = Math.sqrt(x.a*x.a + x.b*x.b),
       C2  = Math.sqrt(y.a*y.a + y.b*y.b),
       dC  = C1 - C2,
