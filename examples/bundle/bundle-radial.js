@@ -9,17 +9,11 @@ var cluster = d3.layout.cluster()
 
 var bundle = d3.layout.bundle();
 
-var line = d3.svg.line()
+var line = d3.svg.line.radial()
     .interpolate("basis")
     .beta(beta)
-    .x(function(d) {
-      var r = d.y, a = (d.x - 90) / 180 * Math.PI;
-      return r * Math.cos(a);
-    })
-    .y(function(d) {
-      var r = d.y, a = (d.x - 90) / 180 * Math.PI;
-      return r * Math.sin(a);
-    });
+    .radius(function(d) { return d.y; })
+    .angle(function(d) { return d.x / 180 * Math.PI; });
 
 var vis = d3.select("#chart").append("svg:svg")
     .attr("width", r * 2)

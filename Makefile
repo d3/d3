@@ -88,6 +88,7 @@ d3.svg.js: \
 	src/svg/svg.js \
 	src/svg/arc.js \
 	src/svg/line.js \
+	src/svg/line-radial.js \
 	src/svg/area.js \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
