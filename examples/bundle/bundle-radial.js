@@ -9,8 +9,8 @@ var cluster = d3.layout.cluster()
 var bundle = d3.layout.bundle();
 
 var line = d3.svg.line.radial()
-    .interpolate("basis")
-    .beta(.85)
+    .interpolate("bundle")
+    .tension(.85)
     .radius(function(d) { return d.y; })
     .angle(function(d) { return d.x / 180 * Math.PI; });
 
@@ -46,5 +46,5 @@ d3.json("flare-imports.json", function(classes) {
 d3.select(window).on("mousemove", function() {
   vis.selectAll("path.link")
       .data(splines)
-      .attr("d", line.beta(Math.min(1, d3.event.clientX / 960)));
+      .attr("d", line.tension(Math.min(1, d3.event.clientX / 960)));
 });

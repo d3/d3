@@ -15,8 +15,8 @@ var div = d3.select("#chart").append("div")
     .style("height", h + "px");
 
 var line = d3.svg.line()
-    .interpolate("basis")
-    .beta(.85)
+    .interpolate("bundle")
+    .tension(.85)
     .x(function(d) { return d.x + d.dx / 2; })
     .y(function(d) { return d.y + d.dy / 2; });
 

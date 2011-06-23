@@ -2718,12 +2718,11 @@ d3.svg.line = function() {
       y = d3_svg_lineY,
       interpolate = "linear",
       interpolator = d3_svg_lineInterpolators[interpolate],
-      tension = .7,
-      beta = 1;
+      tension = .7;
 
   function line(d) {
     return d.length < 1 ? null
-        : "M" + interpolator(d3_svg_lineStraighten(d3_svg_linePoints(this, d, x, y), beta), tension);
+        : "M" + interpolator(d3_svg_linePoints(this, d, x, y), tension);
   }
 
   line.x = function(v) {
@@ -2750,32 +2749,8 @@ d3.svg.line = function() {
     return line;
   };
 
-  line.beta = function(v) {
-    if (!arguments.length) return beta;
-    beta = v;
-    return line;
-  };
-
   return line;
 };
-
-function d3_svg_lineStraighten(points, beta) {
-  var n = points.length - 1,
-      x0 = points[0][0],
-      y0 = points[0][1],
-      dx = points[n][0] - x0,
-      dy = points[n][1] - y0,
-      i = -1,
-      p,
-      t;
-  while (++i <= n) {
-    p = points[i];
-    t = i / n;
-    p[0] = beta * p[0] + (1 - beta) * (x0 + t * dx);
-    p[1] = beta * p[1] + (1 - beta) * (y0 + t * dy);
-  }
-  return points;
-}
 
 // Converts the specified array of data into an array of points
 // (x-y tuples), by evaluating the specified `x` and `y` functions on each
@@ -2821,6 +2796,7 @@ var d3_svg_lineInterpolators = {
   "basis": d3_svg_lineBasis,
   "basis-open": d3_svg_lineBasisOpen,
   "basis-closed": d3_svg_lineBasisClosed,
+  "bundle": d3_svg_lineBundle,
   "cardinal": d3_svg_lineCardinal,
   "cardinal-open": d3_svg_lineCardinalOpen,
   "cardinal-closed": d3_svg_lineCardinalClosed,
@@ -3030,6 +3006,24 @@ function d3_svg_lineBasisClosed(points) {
   return path.join("");
 }
 
+function d3_svg_lineBundle(points, tension) {
+  var n = points.length - 1,
+      x0 = points[0][0],
+      y0 = points[0][1],
+      dx = points[n][0] - x0,
+      dy = points[n][1] - y0,
+      i = -1,
+      p,
+      t;
+  while (++i <= n) {
+    p = points[i];
+    t = i / n;
+    p[0] = tension * p[0] + (1 - tension) * (x0 + t * dx);
+    p[1] = tension * p[1] + (1 - tension) * (y0 + t * dy);
+  }
+  return d3_svg_lineBasis(points);
+}
+
 // Returns the dot product of the given four-element vectors.
 function d3_svg_lineDot4(a, b) {
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
@@ -3158,7 +3152,6 @@ d3.svg.line.radial = function() {
 
   line.interpolate = d3.rebind(line, cartesian.interpolate);
   line.tension = d3.rebind(line, cartesian.tension);
-  line.beta = d3.rebind(line, cartesian.beta);
 
   return line;
 };

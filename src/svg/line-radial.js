@@ -21,7 +21,6 @@ d3.svg.line.radial = function() {
 
   line.interpolate = d3.rebind(line, cartesian.interpolate);
   line.tension = d3.rebind(line, cartesian.tension);
-  line.beta = d3.rebind(line, cartesian.beta);
 
   return line;
 };
