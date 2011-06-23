@@ -1,18 +1,18 @@
 // Implements hierarchical edge bundling using Holten's algorithm. For each
-// edge, an open uniform b-spline is computed that travels through the tree, up
-// the parent hierarchy to the least common ancestor, and then back down to the
-// destination node.
+// input link, a path is computed that travels through the tree, up the parent
+// hierarchy to the least common ancestor, and then back down to the destination
+// node. Each path is simply an array of nodes.
 d3.layout.bundle = function() {
   return function(links) {
-    var splines = [],
+    var paths = [],
         i = -1,
         n = links.length;
-    while (++i < n) splines.push(d3_layout_bundleSpline(links[i]));
-    return splines;
+    while (++i < n) paths.push(d3_layout_bundlePath(links[i]));
+    return paths;
   };
 };
 
-function d3_layout_bundleSpline(link) {
+function d3_layout_bundlePath(link) {
   var start = link.source,
       end = link.target,
       lca = d3_layout_bundleLeastCommonAncestor(start, end),
