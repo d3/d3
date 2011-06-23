@@ -20,42 +20,9 @@ var vis = d3.select("#chart").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-d3.json("dependency-data.json", function(classes) {
-  var map = {},
-      links = [];
-
-  function find(name, data) {
-    var node = map[name], i;
-    if (!node) {
-      node = map[name] = data || {name: name, children: []};
-      if (name.length) {
-        node.parent = find(name.substring(0, i = name.lastIndexOf(".")));
-        node.parent.children.push(node);
-        node.key = name.substring(i + 1);
-      }
-    }
-    return node;
-  }
-
-  // Lazily construct the package hierarchy from class names.
-  classes.forEach(function(d) {
-    find(d.name, d);
-  });
-
-  // Compute the cluster layout, starting at the root node!
-  var nodes = cluster(map[""]);
-
-  // Store a reference from class data object to the layout node.
-  nodes.forEach(function(d) {
-    d.data.node = d;
-  });
-
-  // For each import, construct a link from the source to target node.
-  classes.forEach(function(d) {
-    d.imports.forEach(function(i) {
-      links.push({source: map[d.name].node, target: map[i].node});
-    });
-  });
+d3.json("flare-imports.json", function(classes) {
+  var nodes = cluster(packages.root(classes)),
+      links = packages.imports(nodes);
 
   vis.selectAll("path.link")
       .data(splines = bundle(links))
