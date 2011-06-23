@@ -88,9 +88,11 @@ d3.svg.js: \
 	src/svg/svg.js \
 	src/svg/arc.js \
 	src/svg/line.js \
+	src/svg/line-radial.js \
 	src/svg/area.js \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
+	src/svg/diagonal-radial.js \
 	src/svg/mouse.js \
 	src/svg/touches.js \
 	src/svg/symbol.js
@@ -113,6 +115,7 @@ d3.chart.js: \
 d3.layout.js: \
 	src/start.js \
 	src/layout/layout.js \
+	src/layout/bundle.js \
 	src/layout/chord.js \
 	src/layout/force.js \
 	src/layout/partition.js \
