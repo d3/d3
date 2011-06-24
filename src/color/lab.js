@@ -50,30 +50,30 @@ function d3_lab_rgb(L, a, b) {
       x = y + a/500,
       z = y - b/200;
 
-  // D50 standard referent
-  var X = 0.964221, Y = 1, Z = 0.825211;
+  // D65 standard referent
+  var X = 0.950470, Y = 1.0, Z = 1.088830;
 
   x = X * (x > 0.206893034 ? x*x*x : (x - 4.0/29) / 7.787037);
   y = Y * (y > 0.206893034 ? y*y*y : (y - 4.0/29) / 7.787037);
   z = Z * (z > 0.206893034 ? z*z*z : (z - 4.0/29) / 7.787037);
 
   // second, map CIE XYZ to sRGB
-  var r =  3.1338561*x - 1.6168667*y - 0.4906146*z,
-      g = -0.9787684*x + 1.9161415*y + 0.0334540*z,
-      b =  0.0719453*x - 0.2289914*y + 1.4052427*z;
+  var r =  3.2404542*x - 1.5371385*y - 0.4985314*z,
+      g = -0.9692660*x + 1.8760108*y + 0.0415560*z,
+      b =  0.0556434*x - 0.2040259*y + 1.0572252*z;
   r = r <= 0.00304 ? 12.92*r : 1.055*Math.pow(r,1/2.4) - 0.055,
   g = g <= 0.00304 ? 12.92*g : 1.055*Math.pow(g,1/2.4) - 0.055,
   b = b <= 0.00304 ? 12.92*b : 1.055*Math.pow(b,1/2.4) - 0.055;
 
   // third, discretize and return RGB values
-  var r = Math.round(255*r);
-	  g = Math.round(255*g);
-	  b = Math.round(255*b),
-      c = d3.rgb(
-        Math.max(0, Math.min(255, r)),
-	    Math.max(0, Math.min(255, g)),
-	    Math.max(0, Math.min(255, b))
-      );
+  r = Math.round(255*r);
+  g = Math.round(255*g);
+  b = Math.round(255*b);
+  var c = d3.rgb(
+    Math.max(0, Math.min(255, r)),
+    Math.max(0, Math.min(255, g)),
+    Math.max(0, Math.min(255, b))
+  );
   if (r<0 || r>255 || g<0 || g>255 || b<0 || b>255)
     c.clipped = true; // out of RGB gamut
   return c;
@@ -85,16 +85,16 @@ function d3_rgb_lab(r, g, b) {
   g = g / 255.0;
   b = b / 255.0;
 
-  // D50 standard referent
-  var X = 0.964221, Y = 1, Z = 0.825211;
+  // D65 standard referent
+  var X = 0.950470, Y = 1.0, Z = 1.088830;
 
   // second, map sRGB to CIE XYZ
   r = r <= 0.04045 ? r/12.92 : Math.pow((r+0.055)/1.055, 2.4);
   g = g <= 0.04045 ? g/12.92 : Math.pow((g+0.055)/1.055, 2.4);
   b = b <= 0.04045 ? b/12.92 : Math.pow((b+0.055)/1.055, 2.4);
-  var x = (0.4360747*r + 0.3850649*g + 0.1430804*b) / X,
-      y = (0.2225045*r + 0.7168786*g + 0.0606169*b) / Y,
-      z = (0.0139322*r + 0.0971045*g + 0.7141733*b) / Z;
+  var x = (0.4124564*r + 0.3575761*g + 0.1804375*b) / X,
+      y = (0.2126729*r + 0.7151522*g + 0.0721750*b) / Y,
+      z = (0.0193339*r + 0.1191920*g + 0.9503041*b) / Z;
 
   // third, map CIE XYZ to CIE L*a*b* and return
   x = x > 0.008856 ? Math.pow(x, 1/3) : 7.787037*x + 4.0/29;
