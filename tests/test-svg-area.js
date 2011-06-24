@@ -10,6 +10,16 @@ console.log("                 [[0, 0], [1, 1]]:", area([[0, 0], [1, 1]]));
 console.log("         [[0, 0], [1, 1], [2, 0]]:", area([[0, 0], [1, 1], [2, 0]]));
 console.log("");
 
+var i = 0,
+    area = d3.svg.area()
+    .x(function() { return i++; });
+
+console.log("x(function() { return i++; }):");
+console.log("                         [[0, 0]]:", area([[0, 0]]));
+console.log("                 [[0, 0], [1, 1]]:", area([[0, 0], [1, 1]]));
+console.log("         [[0, 0], [1, 1], [2, 0]]:", area([[0, 0], [1, 1], [2, 0]]));
+console.log("");
+
 var area = d3.svg.area()
     .y0(-1);
 
