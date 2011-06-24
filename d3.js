@@ -2796,6 +2796,7 @@ var d3_svg_lineInterpolators = {
   "basis": d3_svg_lineBasis,
   "basis-open": d3_svg_lineBasisOpen,
   "basis-closed": d3_svg_lineBasisClosed,
+  "bundle": d3_svg_lineBundle,
   "cardinal": d3_svg_lineCardinal,
   "cardinal-open": d3_svg_lineCardinalOpen,
   "cardinal-closed": d3_svg_lineCardinalClosed,
@@ -3005,6 +3006,24 @@ function d3_svg_lineBasisClosed(points) {
   return path.join("");
 }
 
+function d3_svg_lineBundle(points, tension) {
+  var n = points.length - 1,
+      x0 = points[0][0],
+      y0 = points[0][1],
+      dx = points[n][0] - x0,
+      dy = points[n][1] - y0,
+      i = -1,
+      p,
+      t;
+  while (++i <= n) {
+    p = points[i];
+    t = i / n;
+    p[0] = tension * p[0] + (1 - tension) * (x0 + t * dx);
+    p[1] = tension * p[1] + (1 - tension) * (y0 + t * dy);
+  }
+  return d3_svg_lineBasis(points);
+}
+
 // Returns the dot product of the given four-element vectors.
 function d3_svg_lineDot4(a, b) {
   return a[0] * b[0] + a[1] * b[1] + a[2] * b[2] + a[3] * b[3];
@@ -3109,6 +3128,49 @@ function d3_svg_lineMonotone(points) {
       ? d3_svg_lineLinear(points)
       : points[0] +
         d3_svg_lineHermite(points, d3_svg_lineMonotoneTangents(points));
+}
+d3.svg.line.radial = function() {
+  var cartesian = d3.svg.line(),
+      radius = d3_svg_lineX,
+      angle = d3_svg_lineY;
+
+  function line(d) {
+    return cartesian(d3_svg_lineRadialPoints(this, d, radius, angle));
+  }
+
+  line.radius = function(x) {
+    if (!arguments.length) return radius;
+    radius = x;
+    return line;
+  };
+
+  line.angle = function(x) {
+    if (!arguments.length) return angle;
+    angle = x;
+    return line;
+  };
+
+  line.interpolate = d3.rebind(line, cartesian.interpolate);
+  line.tension = d3.rebind(line, cartesian.tension);
+
+  return line;
+};
+
+function d3_svg_lineRadialPoints(self, d, x, y) {
+  var points = d3_svg_linePoints(self, d, x, y),
+      point,
+      i = -1,
+      n = points.length,
+      r,
+      a;
+  while (++i < n) {
+    point = points[i];
+    r = point[0];
+    a = point[1] + d3_svg_arcOffset;
+    point[0] = r * Math.cos(a);
+    point[1] = r * Math.sin(a);
+  }
+  return points;
 }
 d3.svg.area = function() {
   var x0 = d3_svg_lineX,
@@ -3326,6 +3388,28 @@ d3.svg.diagonal = function() {
 
 function d3_svg_diagonalProjection(d) {
   return [d.x, d.y];
+}
+d3.svg.diagonal.radial = function() {
+  var diagonal = d3.svg.diagonal(),
+      projection = d3_svg_diagonalProjection,
+      projection_ = diagonal.projection;
+
+  diagonal.projection = function(x) {
+    return arguments.length
+        ? projection_(d3_svg_diagonalRadialProjection(projection = x))
+        : projection;
+  };
+
+  return diagonal;
+};
+
+function d3_svg_diagonalRadialProjection(projection) {
+  return function() {
+    var d = projection.apply(this, arguments),
+        r = d[0],
+        a = d[1] + d3_svg_arcOffset;
+    return [r * Math.cos(a), r * Math.sin(a)];
+  };
 }
 d3.svg.mouse = function(container) {
   return d3_svg_mousePoint(container, d3.event);
