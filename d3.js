@@ -2145,6 +2145,11 @@ var d3_timer_frame = window.requestAnimationFrame
     || window.msRequestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.scale = {};
+
+function d3_scaleExtent(domain) {
+  var start = domain[0], stop = domain[domain.length - 1];
+  return start < stop ? [start, stop] : [stop, start];
+}
 function d3_scale_nice(domain, nice) {
   var i0 = 0,
       i1 = domain.length - 1,
@@ -2219,36 +2224,12 @@ d3.scale.linear = function() {
     return rescale();
   };
 
-  // TODO Dates? Ugh.
-  function tickRange(m) {
-    var reverse = domain[0] > domain[1],
-        start = (reverse ? d3.max : d3.min)(domain),
-        stop = (reverse ? d3.min : d3.max)(domain),
-        span = stop - start,
-        step = (reverse ? -1 : 1) * Math.pow(10, Math.floor(Math.log((reverse ? -1 : 1) * span / m) / Math.LN10)),
-        err = m / (span / step);
-
-    // Filter ticks to get closer to the desired count.
-    if (err <= .15) step *= 10;
-    else if (err <= .35) step *= 5;
-    else if (err <= .75) step *= 2;
-
-    // Round start and stop values to step interval.
-    return {
-      start: Math.ceil(start / step) * step,
-      stop: Math.floor(stop / step) * step + step * .5, // inclusive
-      step: step
-    };
-  }
-
   scale.ticks = function(m) {
-    var range = tickRange(m);
-    return d3.range(range.start, range.stop, range.step);
+    return d3_scale_linearTicks(domain, m);
   };
 
   scale.tickFormat = function(m) {
-    var n = Math.max(0, -Math.floor(Math.log(Math.abs(tickRange(m).step)) / Math.LN10 + .01));
-    return d3.format(",." + n + "f");
+    return d3_scale_linearTickFormat(domain, m);
   };
 
   scale.nice = function() {
@@ -2259,12 +2240,47 @@ d3.scale.linear = function() {
   return rescale();
 };
 
+function d3_scale_linearRebind(scale, linear) {
+  scale.range = d3.rebind(scale, linear.range);
+  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
+  scale.interpolate = d3.rebind(scale, linear.interpolate);
+  scale.clamp = d3.rebind(scale, linear.clamp);
+  return scale;
+};
+
 function d3_scale_linearNice(dx) {
   dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
   return {
     floor: function(x) { return Math.floor(x / dx) * dx; },
     ceil: function(x) { return Math.ceil(x / dx) * dx; },
   };
+}
+
+// TODO Dates? Ugh.
+function d3_scale_linearTickRange(domain, m) {
+  var extent = d3_scaleExtent(domain),
+      span = extent[1] - extent[0],
+      step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
+      err = m / span * step;
+
+  // Filter ticks to get closer to the desired count.
+  if (err <= .15) step *= 10;
+  else if (err <= .35) step *= 5;
+  else if (err <= .75) step *= 2;
+
+  // Round start and stop values to step interval.
+  extent[0] = Math.ceil(extent[0] / step) * step;
+  extent[1] = Math.floor(extent[1] / step) * step + step * .5; // inclusive
+  extent[2] = step;
+  return extent;
+}
+
+function d3_scale_linearTicks(domain, m) {
+  return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
+}
+
+function d3_scale_linearTickFormat(domain, m) {
+  return d3.format(",." + Math.max(0, -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01)) + "f");
 }
 function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
   var u = uninterpolate(domain[0], domain[1]),
@@ -2304,16 +2320,11 @@ d3.scale.log = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(pow);
-    log = (x[0] || x[1]) < 0 ? d3_scale_logn : d3_scale_log;
+    log = x[0] < 0 ? d3_scale_logn : d3_scale_log;
     pow = log.pow;
     linear.domain(x.map(log));
     return scale;
   };
-
-  scale.range = d3.rebind(scale, linear.range);
-  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
-  scale.interpolate = d3.rebind(scale, linear.interpolate);
-  scale.clamp = d3.rebind(scale, linear.clamp);
 
   scale.nice = function() {
     linear.domain(d3_scale_nice(linear.domain(), d3_scale_niceDefault));
@@ -2321,16 +2332,13 @@ d3.scale.log = function() {
   };
 
   scale.ticks = function() {
-    var d = linear.domain(),
+    var extent = d3_scaleExtent(linear.domain()),
         ticks = [];
-    if (d.every(isFinite)) {
-      var reverse = d[0] > d[1],
-          min = d3.min(d),
-          max = d3.max(d),
-          i = Math.floor(min),
-          j = Math.ceil(max),
-          u = pow(min),
-          v = pow(max);
+    if (extent.every(isFinite)) {
+      var i = Math.floor(extent[0]),
+          j = Math.ceil(extent[1]),
+          u = pow(extent[0]),
+          v = pow(extent[1]);
       if (log === d3_scale_logn) {
         ticks.push(pow(i));
         for (; i++ < j;) for (var k = 9; k > 0; k--) ticks.push(pow(i) * k);
@@ -2341,16 +2349,15 @@ d3.scale.log = function() {
       for (i = 0; ticks[i] < u; i++) {} // strip small values
       for (j = ticks.length; ticks[j - 1] > v; j--) {} // strip big values
       ticks = ticks.slice(i, j);
-      if (reverse) ticks.reverse();
     }
     return ticks;
   };
 
   scale.tickFormat = function() {
-    return function(d) { return d.toPrecision(1); };
+    return d3_scale_logTickFormat;
   };
 
-  return scale;
+  return d3_scale_linearRebind(scale, linear);
 };
 
 function d3_scale_log(x) {
@@ -2368,9 +2375,12 @@ d3_scale_log.pow = function(x) {
 d3_scale_logn.pow = function(x) {
   return -Math.pow(10, -x);
 };
+
+function d3_scale_logTickFormat(d) {
+  return d.toPrecision(1);
+}
 d3.scale.pow = function() {
   var linear = d3.scale.linear(),
-      tick = d3.scale.linear(), // TODO better tick formatting...
       exponent = 1,
       powp = Number,
       powb = powp;
@@ -2385,20 +2395,20 @@ d3.scale.pow = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(powb);
-    var pow = (x[0] || x[1]) < 0 ? d3_scale_pown : d3_scale_pow;
+    var pow = (x[0] || x[x.length - 1]) < 0 ? d3_scale_pown : d3_scale_pow;
     powp = pow(exponent);
     powb = pow(1 / exponent);
     linear.domain(x.map(powp));
-    tick.domain(x);
     return scale;
   };
 
-  scale.range = d3.rebind(scale, linear.range);
-  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
-  scale.interpolate = d3.rebind(scale, linear.interpolate);
-  scale.clamp = d3.rebind(scale, linear.clamp);
-  scale.ticks = tick.ticks;
-  scale.tickFormat = tick.tickFormat;
+  scale.ticks = function(m) {
+    return d3_scale_linearTicks(scale.domain(), m);
+  };
+
+  scale.tickFormat = function(m) {
+    return d3_scale_linearTickFormat(scale.domain(), m);
+  };
 
   scale.nice = function() {
     return scale.domain(d3_scale_nice(scale.domain(), d3_scale_linearNice));
@@ -2411,7 +2421,7 @@ d3.scale.pow = function() {
     return scale.domain(domain);
   };
 
-  return scale;
+  return d3_scale_linearRebind(scale, linear);
 };
 
 function d3_scale_pow(e) {
