@@ -1,4 +1,61 @@
 (function(){d3.layout = {};
+// Implements hierarchical edge bundling using Holten's algorithm. For each
+// input link, a path is computed that travels through the tree, up the parent
+// hierarchy to the least common ancestor, and then back down to the destination
+// node. Each path is simply an array of nodes.
+d3.layout.bundle = function() {
+  return function(links) {
+    var paths = [],
+        i = -1,
+        n = links.length;
+    while (++i < n) paths.push(d3_layout_bundlePath(links[i]));
+    return paths;
+  };
+};
+
+function d3_layout_bundlePath(link) {
+  var start = link.source,
+      end = link.target,
+      lca = d3_layout_bundleLeastCommonAncestor(start, end),
+      points = [start];
+  while (start !== lca) {
+    start = start.parent;
+    points.push(start);
+  }
+  var k = points.length;
+  while (end !== lca) {
+    points.splice(k, 0, end);
+    end = end.parent;
+  }
+  return points;
+}
+
+function d3_layout_bundleAncestors(node) {
+  var ancestors = [],
+      parent = node.parent;
+  while (parent != null) {
+    ancestors.push(node);
+    node = parent;
+    parent = parent.parent;
+  }
+  ancestors.push(node);
+  return ancestors;
+}
+
+function d3_layout_bundleLeastCommonAncestor(a, b) {
+  if (a === b) return a;
+  var aNodes = d3_layout_bundleAncestors(a),
+      bNodes = d3_layout_bundleAncestors(b),
+      aNode = aNodes.pop(),
+      bNode = bNodes.pop(),
+      sharedNode = null;
+  while (aNode === bNode) {
+    sharedNode = aNode;
+    aNode = aNodes.pop();
+    bNode = bNodes.pop();
+  }
+  return sharedNode;
+}
 d3.layout.chord = function() {
   var chord = {},
       chords,
@@ -156,14 +213,14 @@ d3.layout.force = function() {
       event = d3.dispatch("tick"),
       size = [1, 1],
       alpha,
-      drag = .9,
+      friction = .9,
       distance = 20,
       charge = -30,
       gravity = .1,
       theta = .8,
       interval,
-      nodes,
-      links,
+      nodes = [],
+      links = [],
       distances;
 
   function repulse(node, kc) {
@@ -246,8 +303,8 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        o.x -= (o.px - (o.px = o.x)) * drag;
-        o.y -= (o.py - (o.py = o.y)) * drag;
+        o.x -= (o.px - (o.px = o.x)) * friction;
+        o.y -= (o.py - (o.py = o.y)) * friction;
       }
     }
 
@@ -286,9 +343,9 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.drag = function(x) {
-    if (!arguments.length) return drag;
-    drag = x;
+  force.friction = function(x) {
+    if (!arguments.length) return friction;
+    friction = x;
     return force;
   };
 
@@ -1760,4 +1817,4 @@ d3.layout.treemap = function() {
 
   return d3_layout_hierarchyRebind(treemap, hierarchy);
 };
-})()
+})();
