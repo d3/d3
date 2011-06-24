@@ -15,6 +15,18 @@ console.log("           10  -> ", f(x(10)));
 console.log("          100  -> ", f(x(100)));
 console.log("");
 
+var x = d3.scale.log().domain([10, 1]);
+console.log("domain([10, 1]).range([0, 1]):");
+console.log("           -5  -> ", f(x(-5)));
+console.log("            0  -> ", f(x(0)));
+console.log("         0.01  -> ", f(x(0.01)));
+console.log("          0.1  -> ", f(x(0.1)));
+console.log("            1  -> ", f(x(1)));
+console.log("            5  -> ", f(x(5)));
+console.log("           10  -> ", f(x(10)));
+console.log("          100  -> ", f(x(100)));
+console.log("");
+
 var x = d3.scale.log().invert;
 console.log("domain([1, 10]).range([0, 1]).invert:");
 console.log("            0  -> ", f(x(0)));
@@ -86,6 +98,7 @@ console.log("     [.1, 10]  -> ", x.ticks().map(f).join(", "));
 console.log("    [.1, 100]  -> ", x.domain([.1, 100]).ticks().map(f).join(", "));
 console.log("     [1, 100]  -> ", x.domain([1, 100]).ticks().map(f).join(", "));
 console.log("   [-100, -1]  -> ", x.domain([-100, -1]).ticks().map(f).join(", "));
+console.log("     [100, 1]  -> ", x.domain([100, 1]).ticks().map(f).join(", "));
 console.log("");
 
 var x = d3.scale.log().domain([1, 2]).clamp(true);
