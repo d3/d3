@@ -90,6 +90,7 @@ d3.svg.js: \
 	src/svg/line.js \
 	src/svg/line-radial.js \
 	src/svg/area.js \
+	src/svg/area-radial.js \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
 	src/svg/diagonal-radial.js \

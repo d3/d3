@@ -1,33 +1,12 @@
 d3.svg.line.radial = function() {
-  var cartesian = d3.svg.line(),
-      radius = d3_svg_lineX,
-      angle = d3_svg_lineY;
-
-  function line(d) {
-    return cartesian(d3_svg_lineRadialPoints(this, d, radius, angle));
-  }
-
-  line.radius = function(x) {
-    if (!arguments.length) return radius;
-    radius = x;
-    return line;
-  };
-
-  line.angle = function(x) {
-    if (!arguments.length) return angle;
-    angle = x;
-    return line;
-  };
-
-  line.interpolate = d3.rebind(line, cartesian.interpolate);
-  line.tension = d3.rebind(line, cartesian.tension);
-
+  var line = d3_svg_line(d3_svg_lineRadial);
+  line.radius = line.x, delete line.x;
+  line.angle = line.y, delete line.y;
   return line;
 };
 
-function d3_svg_lineRadialPoints(self, d, x, y) {
-  var points = d3_svg_linePoints(self, d, x, y),
-      point,
+function d3_svg_lineRadial(points) {
+  var point,
       i = -1,
       n = points.length,
       r,

@@ -1,4 +1,4 @@
-d3.svg.area = function() {
+function d3_svg_area(projection) {
   var x0 = d3_svg_lineX,
       x1 = d3_svg_lineX,
       y0 = 0,
@@ -11,8 +11,8 @@ d3.svg.area = function() {
     if (d.length < 1) return null;
     var points0 = d3_svg_linePoints(this, d, x0, y0),
         points1 = d3_svg_linePoints(this, d, x0 === x1 ? d3_svg_areaX(points0) : x1, y0 === y1 ? d3_svg_areaY(points0) : y1);
-    return "M" + interpolator(points1, tension)
-         + "L" + interpolator(points0.reverse(), tension)
+    return "M" + interpolator(projection(points1), tension)
+         + "L" + interpolator(projection(points0.reverse()), tension)
          + "Z";
   }
 
@@ -65,6 +65,10 @@ d3.svg.area = function() {
   };
 
   return area;
+}
+
+d3.svg.area = function() {
+  return d3_svg_area(Object);
 };
 
 function d3_svg_areaX(points) {

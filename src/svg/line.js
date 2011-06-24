@@ -1,4 +1,4 @@
-d3.svg.line = function() {
+function d3_svg_line(projection) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
       interpolate = "linear",
@@ -6,8 +6,7 @@ d3.svg.line = function() {
       tension = .7;
 
   function line(d) {
-    return d.length < 1 ? null
-        : "M" + interpolator(d3_svg_linePoints(this, d, x, y), tension);
+    return d.length < 1 ? null : "M" + interpolator(projection(d3_svg_linePoints(this, d, x, y)), tension);
   }
 
   line.x = function(v) {
@@ -35,6 +34,10 @@ d3.svg.line = function() {
   };
 
   return line;
+}
+
+d3.svg.line = function() {
+  return d3_svg_line(Object);
 };
 
 // Converts the specified array of data into an array of points

@@ -2713,7 +2713,7 @@ function d3_svg_arcStartAngle(d) {
 function d3_svg_arcEndAngle(d) {
   return d.endAngle;
 }
-d3.svg.line = function() {
+function d3_svg_line(projection) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
       interpolate = "linear",
@@ -2721,8 +2721,7 @@ d3.svg.line = function() {
       tension = .7;
 
   function line(d) {
-    return d.length < 1 ? null
-        : "M" + interpolator(d3_svg_linePoints(this, d, x, y), tension);
+    return d.length < 1 ? null : "M" + interpolator(projection(d3_svg_linePoints(this, d, x, y)), tension);
   }
 
   line.x = function(v) {
@@ -2750,6 +2749,10 @@ d3.svg.line = function() {
   };
 
   return line;
+}
+
+d3.svg.line = function() {
+  return d3_svg_line(Object);
 };
 
 // Converts the specified array of data into an array of points
@@ -3130,35 +3133,14 @@ function d3_svg_lineMonotone(points) {
         d3_svg_lineHermite(points, d3_svg_lineMonotoneTangents(points));
 }
 d3.svg.line.radial = function() {
-  var cartesian = d3.svg.line(),
-      radius = d3_svg_lineX,
-      angle = d3_svg_lineY;
-
-  function line(d) {
-    return cartesian(d3_svg_lineRadialPoints(this, d, radius, angle));
-  }
-
-  line.radius = function(x) {
-    if (!arguments.length) return radius;
-    radius = x;
-    return line;
-  };
-
-  line.angle = function(x) {
-    if (!arguments.length) return angle;
-    angle = x;
-    return line;
-  };
-
-  line.interpolate = d3.rebind(line, cartesian.interpolate);
-  line.tension = d3.rebind(line, cartesian.tension);
-
+  var line = d3_svg_line(d3_svg_lineRadial);
+  line.radius = line.x, delete line.x;
+  line.angle = line.y, delete line.y;
   return line;
 };
 
-function d3_svg_lineRadialPoints(self, d, x, y) {
-  var points = d3_svg_linePoints(self, d, x, y),
-      point,
+function d3_svg_lineRadial(points) {
+  var point,
       i = -1,
       n = points.length,
       r,
@@ -3172,7 +3154,7 @@ function d3_svg_lineRadialPoints(self, d, x, y) {
   }
   return points;
 }
-d3.svg.area = function() {
+function d3_svg_area(projection) {
   var x0 = d3_svg_lineX,
       x1 = d3_svg_lineX,
       y0 = 0,
@@ -3185,8 +3167,8 @@ d3.svg.area = function() {
     if (d.length < 1) return null;
     var points0 = d3_svg_linePoints(this, d, x0, y0),
         points1 = d3_svg_linePoints(this, d, x0 === x1 ? d3_svg_areaX(points0) : x1, y0 === y1 ? d3_svg_areaY(points0) : y1);
-    return "M" + interpolator(points1, tension)
-         + "L" + interpolator(points0.reverse(), tension)
+    return "M" + interpolator(projection(points1), tension)
+         + "L" + interpolator(projection(points0.reverse()), tension)
          + "Z";
   }
 
@@ -3239,6 +3221,10 @@ d3.svg.area = function() {
   };
 
   return area;
+}
+
+d3.svg.area = function() {
+  return d3_svg_area(Object);
 };
 
 function d3_svg_areaX(points) {
@@ -3252,6 +3238,16 @@ function d3_svg_areaY(points) {
     return points[i][1];
   };
 }
+d3.svg.area.radial = function() {
+  var area = d3_svg_area(d3_svg_lineRadial);
+  area.radius = area.x, delete area.x;
+  area.innerRadius = area.x0, delete area.x0;
+  area.outerRadius = area.x1, delete area.x1;
+  area.angle = area.y, delete area.y;
+  area.startAngle = area.y0, delete area.y0;
+  area.endAngle = area.y1, delete area.y1;
+  return area;
+};
 d3.svg.chord = function() {
   var source = d3_svg_chordSource,
       target = d3_svg_chordTarget,
