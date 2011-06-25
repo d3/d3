@@ -7,8 +7,8 @@ title: Force-Directed Graph
 
 <div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="force.css"/>
-<script type="text/javascript" src="../d3.layout.js?1.22.0"> </script>
-<script type="text/javascript" src="../d3.geom.js?1.22.0"> </script>
+<script type="text/javascript" src="../d3.layout.js?1.22.1"> </script>
+<script type="text/javascript" src="../d3.geom.js?1.22.1"> </script>
 <script type="text/javascript" src="force.js"> </script>
 
 Layout algorithm inspired by [Tim Dwyer](http://www.csse.monash.edu.au/~tdwyer/) and
