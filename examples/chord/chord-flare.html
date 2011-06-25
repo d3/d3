@@ -13,8 +13,6 @@ body {
 
 path.chord {
   fill-opacity: .67;
-  stroke: #000;
-  stroke-width: .5px;
 }
 
     </style>
@@ -100,6 +98,7 @@ d3.json("../bundle/flare-imports.json", function(imports) {
       .data(chord.chords)
     .enter().append("svg:path")
       .attr("class", "chord")
+      .style("stroke", function(d) { return d3.rgb(fill(d.source.index)).darker(); })
       .style("fill", function(d) { return fill(d.source.index); })
       .attr("d", d3.svg.chord().radius(r0));
 
