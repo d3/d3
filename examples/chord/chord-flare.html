@@ -100,7 +100,7 @@ d3.json("../bundle/flare-imports.json", function(imports) {
       .data(chord.chords)
     .enter().append("svg:path")
       .attr("class", "chord")
-      .style("fill", function(d) { return fill(d.target.index); })
+      .style("fill", function(d) { return fill(d.source.index); })
       .attr("d", d3.svg.chord().radius(r0));
 
 });

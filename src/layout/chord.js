@@ -83,10 +83,9 @@ d3.layout.chord = function() {
         var source = subgroups[i + "-" + j],
             target = subgroups[j + "-" + i];
         if (source.value || target.value) {
-          chords.push({
-            source: source,
-            target: target
-          })
+          chords.push(source.value < target.value
+              ? {source: target, target: source}
+              : {source: source, target: target})
         }
       }
     }
@@ -96,9 +95,7 @@ d3.layout.chord = function() {
 
   function resort() {
     chords.sort(function(a, b) {
-      a = Math.min(a.source.value, a.target.value);
-      b = Math.min(b.source.value, b.target.value);
-      return sortChords(a, b);
+      return sortChords(a.target.value, b.target.value);
     });
   }
 
