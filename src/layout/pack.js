@@ -1,5 +1,5 @@
 d3.layout.pack = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
       size = [1, 1];
 
   function pack(d, i) {
@@ -20,17 +20,13 @@ d3.layout.pack = function() {
     return nodes;
   }
 
-  pack.sort = d3.rebind(pack, hierarchy.sort);
-  pack.children = d3.rebind(pack, hierarchy.children);
-  pack.value = d3.rebind(pack, hierarchy.value);
-
   pack.size = function(x) {
     if (!arguments.length) return size;
     size = x;
     return pack;
   };
 
-  return pack.sort(d3_layout_packSort);
+  return d3_layout_hierarchyRebind(pack, hierarchy);
 };
 
 function d3_layout_packSort(a, b) {

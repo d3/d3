@@ -5,11 +5,8 @@ var cluster = d3.layout.cluster()
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
-var diagonal = d3.svg.diagonal()
-    .projection(function(d) {
-      var r = d.y, a = (d.x - 90) / 180 * Math.PI;
-      return [r * Math.cos(a), r * Math.sin(a)];
-    });
+var diagonal = d3.svg.diagonal.radial()
+    .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
 var vis = d3.select("#chart").append("svg:svg")
     .attr("width", r * 2)

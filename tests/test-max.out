@@ -17,7 +17,7 @@ max of empty array is undefined:
 max ignores null, undefined, and NaN:
                [NaN, 1, 2, 3, 4, 5] -> 5
                [1, 2, 3, 4, 5, NaN] -> 5
-   [10, null, 3, undefined, 3, NaN] -> 10
+   [10, null, 3, undefined, 5, NaN] -> 10
 
 max compares heterogenous types as numbers:
                           [20, "3"] -> 20

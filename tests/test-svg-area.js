@@ -1,5 +1,4 @@
 require("./../lib/env-js/envjs/node");
-require("./../lib/sizzle/sizzle");
 require("./../d3");
 
 var area = d3.svg.area();
@@ -8,6 +7,26 @@ console.log("default:");
 console.log("                         [[0, 0]]:", area([[0, 0]]));
 console.log("                 [[0, 0], [1, 1]]:", area([[0, 0], [1, 1]]));
 console.log("         [[0, 0], [1, 1], [2, 0]]:", area([[0, 0], [1, 1], [2, 0]]));
+console.log("");
+
+var i = 0,
+    area = d3.svg.area()
+    .x(function() { return i++; });
+
+console.log("x(function() { return i++; }):");
+console.log("                         [[0, 0]]:", area([[0, 0]]));
+console.log("                 [[0, 0], [1, 1]]:", area([[0, 0], [1, 1]]));
+console.log("         [[0, 0], [1, 1], [2, 0]]:", area([[0, 0], [1, 1], [2, 0]]));
+console.log("");
+
+var i = 0,
+    area = d3.svg.area()
+    .y(function() { return i++; });
+
+console.log("y(function() { return i++; }):");
+console.log("                         [[0, 0]]:", area([[0, 0]]));
+console.log("                 [[0, 0], [1, 1]]:", area([[0, 0], [1, 1]]));
+console.log("         [[0, 0], [1, 1], [0, 2]]:", area([[0, 0], [1, 1], [0, 2]]));
 console.log("");
 
 var area = d3.svg.area()
