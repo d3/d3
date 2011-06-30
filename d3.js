@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.23.0"}; // semver
+(function(){d3 = {version: "1.24.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -132,6 +132,32 @@ d3.bisectRight = function(a, x, lo, hi) {
     else lo = mid + 1;
   }
   return lo;
+};
+d3.first = function(array, f) {
+  var i = 0,
+      n = array.length,
+      a = array[0],
+      b;
+  if (arguments.length === 1) f = d3.ascending;
+  while (++i < n) {
+    if (f.call(array, a, b = array[i]) > 0) {
+      a = b;
+    }
+  }
+  return a;
+};
+d3.last = function(array, f) {
+  var i = 0,
+      n = array.length,
+      a = array[0],
+      b;
+  if (arguments.length === 1) f = d3.ascending;
+  while (++i < n) {
+    if (f.call(array, a, b = array[i]) <= 0) {
+      a = b;
+    }
+  }
+  return a;
 };
 d3.nest = function() {
   var nest = {},
