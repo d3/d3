@@ -8,7 +8,7 @@ title: Voronoi Diagram
 <div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="colorbrewer.css"/>
 <link type="text/css" rel="stylesheet" href="voronoi.css"/>
-<script type="text/javascript" src="../d3.geom.js?1.22.1"> </script>
+<script type="text/javascript" src="../d3.geom.js?1.24.0"> </script>
 <script type="text/javascript" src="voronoi.js"> </script>
 
 Colors by [Cynthia Brewer](http://colorbrewer.org/). Voronoi design
