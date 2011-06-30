@@ -251,7 +251,7 @@ Consider the wheel. In Processing, you create a circle using the `ellipse`
 operator, which takes four arguments: the *x* and *y* of the ellipse center, and
 the *width* and *height*. Raphaël provides an `ellipse` operator with the same
 arguments, and a `circle` operator that takes three arguments using *radius*.
-Protovis defines `pv.Dot` and `pv.Wedge` mark types. D3, in contast, does not
+Protovis defines `pv.Dot` and `pv.Wedge` mark types. D3, in contrast, does not
 reinvent the wheel, instead using the standard `svg:circle` element:
 
 {% highlight js linenos %}
