@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.24.0"}; // semver
+(function(){d3 = {version: "1.24.1"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -2278,7 +2278,7 @@ function d3_scale_linearNice(dx) {
   dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
   return {
     floor: function(x) { return Math.floor(x / dx) * dx; },
-    ceil: function(x) { return Math.ceil(x / dx) * dx; },
+    ceil: function(x) { return Math.ceil(x / dx) * dx; }
   };
 }
 
