@@ -36,8 +36,7 @@ d3.json("../data/flare.json", function(json) {
         .data(partition.value(function(d) { return d.size; }))
       .transition()
         .duration(1500)
-        .attrTween("d", arcTween)
-        .each("end", stash);
+        .attrTween("d", arcTween);
 
     d3.select("#size").classed("active", true);
     d3.select("#count").classed("active", false);
@@ -48,8 +47,7 @@ d3.json("../data/flare.json", function(json) {
         .data(partition.value(function(d) { return 1; }))
       .transition()
         .duration(1500)
-        .attrTween("d", arcTween)
-        .each("end", stash);
+        .attrTween("d", arcTween);
 
     d3.select("#size").classed("active", false);
     d3.select("#count").classed("active", true);
@@ -66,6 +64,9 @@ function stash(d) {
 function arcTween(a) {
   var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
   return function(t) {
-    return arc(i(t));
+    var b = i(t);
+    a.x0 = b.x;
+    a.dx0 = b.dx;
+    return arc(b);
   };
 }
