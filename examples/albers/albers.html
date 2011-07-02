@@ -51,7 +51,7 @@ d3.select("body")
   .append("svg:g")
     .attr("id", "states");
 
-d3.json("../../data/us-states.json", function(collection) {
+d3.json("../data/us-states.json", function(collection) {
   d3.select("#states")
     .selectAll("path")
       .data(collection.features)

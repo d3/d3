@@ -34,7 +34,7 @@ var fill = d3.scale.log()
     .domain([10, 500])
     .range(["brown", "steelblue"]);
 
-d3.json("../../data/us-counties.json", function(json) {
+d3.json("../data/us-counties.json", function(json) {
   counties.selectAll("path")
       .data(json.features)
     .enter().append("svg:path")

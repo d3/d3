@@ -20,15 +20,15 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-d3.json("flare.json", function(json) {
-  var path = vis.data(hierarchy(json).children).selectAll("path")
+d3.json("../data/flare.json", function(json) {
+  var path = vis.data([json]).selectAll("path")
       .data(partition)
     .enter().append("svg:path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
       .attr("fill-rule", "evenodd")
       .style("stroke", "#fff")
-      .style("fill", function(d) { return color((d.children ? d : d.parent).key); })
+      .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
       .each(stash);
 
   d3.select("#size").on("click", function() {
@@ -68,16 +68,4 @@ function arcTween(a) {
   return function(t) {
     return arc(i(t));
   };
-}
-
-// Convert a hierarchy of file sizes into a tree.
-function hierarchy(d, key) {
-  var node = {key: key};
-  if (isNaN(d)) {
-    node.children = [];
-    for (key in d) node.children.push(hierarchy(d[key], key));
-  } else {
-    node.size = d;
-  }
-  return node;
 }

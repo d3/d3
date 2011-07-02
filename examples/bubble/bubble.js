@@ -11,7 +11,7 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("height", r)
     .attr("class", "bubble");
 
-d3.json("flare.json", function(json) {
+d3.json("../data/flare.json", function(json) {
   var node = vis.selectAll("g.node")
       .data(bubble(classes(json))
       .filter(function(d) { return !d.children; }))
@@ -37,18 +37,8 @@ function classes(root) {
   var classes = [];
 
   function recurse(name, node) {
-    for (var childName in node) {
-      var child = node[childName];
-      if (isNaN(child)) {
-        recurse(childName, child);
-      } else {
-        classes.push({
-          className: childName,
-          packageName: name,
-          value: child
-        });
-      }
-    }
+    if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+    else classes.push({packageName: name, className: node.name, value: node.size});
   }
 
   recurse(null, root);
