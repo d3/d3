@@ -42,13 +42,12 @@ col.selectAll("rect")
     .attr("transform", function(c, i) { return "translate(0," + i*span + ")"; })
     .attr("width", span)
     .attr("height", span)
-    .attr("fill", color)
+    .style("fill", color)
   .append("svg:title").text(tooltip);
 
 
 function refresh() {
-  var rect = svg.selectAll("g").selectAll("rect")
+  svg.selectAll("g").selectAll("rect")
     .data(cross(b))
-    .attr("fill", color);
-  rect.select("title").text(tooltip);
+    .style("fill", color);
 }

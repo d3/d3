@@ -73,7 +73,7 @@ function update(res) {
       .attr("transform", function(c, i) { return "translate(0," + i*span + ")"; })
       .attr("width", span)
       .attr("height", span)
-      .attr("fill", function(c) { return c.rgb().clipped ? "#808080" : c; })
+      .style("fill", function(c) { return c.rgb().clipped ? "#808080" : c; })
     .append("svg:title")
       .text(function(c) {
         return [c.L,c.a,c.b].map(function(d) { return d.toFixed(1); }).join(", ")
