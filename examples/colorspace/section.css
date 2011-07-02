@@ -1,0 +1,9 @@
+@import url("../../lib/jquery-ui/jquery-ui.css");
+
+* { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; }
+
+body, .ui-widget { font-size: 14px; }
+
+#Llabel { margin-bottom: 6px; }
+
+div { width: 500px; }

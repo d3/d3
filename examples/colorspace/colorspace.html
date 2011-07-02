@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>CIELAB Color Space</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.color.js"></script>
+    <style type="text/css">
+      * { font-family: Helvetica Neue, Helvetica, Arial, sans-serif; }
+      div.section {
+        display: inline-block;
+        padding-right: 15px;
+        padding-bottom: 15px;
+      }
+      .header { margin-bottom: 20px; }
+      .title { font-size: 18px; font-weight: bold; }
+      .selector { margin-left: 20px; }
+    </style>
+  </head>
+  <body>
+	<div class="header">
+	  <span class="title">L*a*b* Color Space, Clipped to the RGB Gamut</span>
+      <span class="selector">Step size (in a*, b*): &nbsp;
+       <select id="select"></select>
+      </span>
+    </div>
+    <div id="colors">
+    </div>
+    <script type="text/javascript" src="colorspace.js"></script>
+  </body>
+</html>
