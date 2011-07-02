@@ -3,7 +3,6 @@ var r = 960,
     fill = d3.scale.category20c();
 
 var bubble = d3.layout.pack()
-    .inline(true)
     .sort(null)
     .size([r, r]);
 

@@ -28,7 +28,6 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("height", h);
 
 var partition = d3.layout.partition()
-    .inline(true)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
     .value(function(d) { return d.value; });
 

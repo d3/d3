@@ -2,7 +2,6 @@ var w = 960,
     h = 2000;
 
 var tree = d3.layout.tree()
-    .inline(true)
     .size([h, w - 160])
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });

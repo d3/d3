@@ -3,7 +3,6 @@ var w = 960,
     format = d3.format(",d");
 
 var pack = d3.layout.pack()
-    .inline(true)
     .size([w - 4, h - 4])
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 

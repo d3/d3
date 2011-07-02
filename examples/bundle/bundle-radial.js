@@ -2,7 +2,6 @@ var r = 960 / 2,
     splines = [];
 
 var cluster = d3.layout.cluster()
-    .inline(true)
     .size([360, r - 120])
     .sort(null)
     .value(function(d) { return d.size; });

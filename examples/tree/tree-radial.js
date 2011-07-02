@@ -1,7 +1,6 @@
 var r = 960 / 2;
 
 var tree = d3.layout.tree()
-    .inline(true)
     .size([360, r - 120])
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })

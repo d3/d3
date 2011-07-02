@@ -2,7 +2,6 @@ var w = 960,
     h = 2200;
 
 var cluster = d3.layout.cluster()
-    .inline(true)
     .size([h, w - 160])
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });

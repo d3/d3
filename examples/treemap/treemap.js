@@ -3,7 +3,6 @@ var w = 960,
     color = d3.scale.category20c();
 
 var treemap = d3.layout.treemap()
-    .inline(true)
     .size([w, h])
     .sticky(true)
     .value(function(d) { return d.size; });

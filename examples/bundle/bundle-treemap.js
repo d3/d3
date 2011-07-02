@@ -4,7 +4,6 @@ var w = 960,
     stroke = d3.scale.linear().domain([0, 1e4]).range(["brown", "steelblue"]);
 
 var treemap = d3.layout.treemap()
-    .inline(true)
     .size([w, h])
     .value(function(d) { return d.size; });
 

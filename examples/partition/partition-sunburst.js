@@ -10,7 +10,6 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
 var partition = d3.layout.partition()
-    .inline(true)
     .sort(null)
     .size([2 * Math.PI, r * r])
     .value(function(d) { return 1; });
