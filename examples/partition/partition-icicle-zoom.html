@@ -28,6 +28,7 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("height", h);
 
 var partition = d3.layout.partition()
+    .inline(true)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
     .value(function(d) { return d.value; });
 
@@ -39,7 +40,7 @@ d3.json("../treemap/flare.json", function(json) {
       .attr("y", function(d) { return y(d.y); })
       .attr("width", function(d) { return x(d.dx); })
       .attr("height", function(d) { return y(d.dy); })
-      .attr("fill", function(d) { return color((d.children ? d : d.parent).data.key); })
+      .attr("fill", function(d) { return color((d.children ? d : d.parent).key); })
       .on("click", click);
 
   function click(d) {

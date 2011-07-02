@@ -2,6 +2,7 @@ var w = 960,
     h = 2200;
 
 var cluster = d3.layout.cluster()
+    .inline(true)
     .size([h, w - 160])
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
@@ -37,5 +38,5 @@ d3.json("flare.json", function(json) {
       .attr("dx", function(d) { return d.children ? -8 : 8; })
       .attr("dy", 3)
       .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
-      .text(function(d) { return d.data.key; });
+      .text(function(d) { return d.key; });
 });

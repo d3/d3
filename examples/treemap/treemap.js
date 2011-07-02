@@ -3,10 +3,10 @@ var w = 960,
     color = d3.scale.category20c();
 
 var treemap = d3.layout.treemap()
+    .inline(true)
     .size([w, h])
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
-    .value(function(d) { return d.value; })
-    .sticky(true);
+    .sticky(true)
+    .value(function(d) { return d.size; });
 
 var div = d3.select("#chart").append("div")
     .style("position", "relative")
@@ -14,17 +14,17 @@ var div = d3.select("#chart").append("div")
     .style("height", h + "px");
 
 d3.json("flare.json", function(json) {
-  div.data(d3.entries(json)).selectAll("div")
+  div.data(hierarchy(json).children).selectAll("div")
       .data(treemap)
     .enter().append("div")
       .attr("class", "cell")
-      .style("background", function(d) { return d.children ? color(d.data.key) : null; })
+      .style("background", function(d) { return d.children ? color(d.key) : null; })
       .call(cell)
-      .text(function(d) { return d.children ? null : d.data.key; });
+      .text(function(d) { return d.children ? null : d.key; });
 
   d3.select("#size").on("click", function() {
     div.selectAll("div")
-        .data(treemap.value(function(d) { return d.value; }))
+        .data(treemap.value(function(d) { return d.size; }))
       .transition()
         .duration(1500)
         .call(cell);
@@ -51,4 +51,16 @@ function cell() {
       .style("top", function(d) { return d.y + "px"; })
       .style("width", function(d) { return d.dx - 1 + "px"; })
       .style("height", function(d) { return d.dy - 1 + "px"; });
+}
+
+// Convert a map of file sizes into a hierarchy.
+function hierarchy(d, key) {
+  var node = {key: key};
+  if (isNaN(d)) {
+    node.children = [];
+    for (key in d) node.children.push(hierarchy(d[key], key));
+  } else {
+    node.size = d;
+  }
+  return node;
 }

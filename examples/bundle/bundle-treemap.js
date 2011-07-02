@@ -4,6 +4,7 @@ var w = 960,
     stroke = d3.scale.linear().domain([0, 1e4]).range(["brown", "steelblue"]);
 
 var treemap = d3.layout.treemap()
+    .inline(true)
     .size([w, h])
     .value(function(d) { return d.size; });
 
@@ -28,9 +29,9 @@ d3.json("flare-imports.json", function(classes) {
       .data(nodes)
     .enter().append("div")
       .attr("class", "cell")
-      .style("background", function(d) { return d.children ? fill(d.data.key) : null; })
+      .style("background", function(d) { return d.children ? fill(d.key) : null; })
       .call(cell)
-      .text(function(d) { return d.children ? null : d.data.key; });
+      .text(function(d) { return d.children ? null : d.key; });
 
   div.append("svg:svg")
       .attr("width", w)

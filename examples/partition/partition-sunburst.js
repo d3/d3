@@ -10,9 +10,9 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
 var partition = d3.layout.partition()
+    .inline(true)
     .sort(null)
     .size([2 * Math.PI, r * r])
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
     .value(function(d) { return 1; });
 
 var arc = d3.svg.arc()
@@ -22,54 +22,63 @@ var arc = d3.svg.arc()
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
 d3.json("flare.json", function(json) {
-  vis.data(d3.entries(json)).selectAll("path")
+  var path = vis.data(hierarchy(json).children).selectAll("path")
       .data(partition)
     .enter().append("svg:path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
+      .attr("fill-rule", "evenodd")
       .style("stroke", "#fff")
-      .style("fill", function(d) { return color((d.children ? d : d.parent).data.key); })
-      .attr("fill-rule", "evenodd");
+      .style("fill", function(d) { return color((d.children ? d : d.parent).key); })
+      .each(stash);
 
   d3.select("#size").on("click", function() {
-    vis.selectAll("path")
-        .data(repartition(function(d) { return d.value; }))
+    path
+        .data(partition.value(function(d) { return d.size; }))
       .transition()
         .duration(1500)
-        .attrTween("d", arcTween);
+        .attrTween("d", arcTween)
+        .each("end", stash);
 
     d3.select("#size").classed("active", true);
     d3.select("#count").classed("active", false);
   });
 
   d3.select("#count").on("click", function() {
-    vis.selectAll("path")
-        .data(repartition(function(d) { return 1; }))
+    path
+        .data(partition.value(function(d) { return 1; }))
       .transition()
         .duration(1500)
-        .attrTween("d", arcTween);
+        .attrTween("d", arcTween)
+        .each("end", stash);
 
     d3.select("#size").classed("active", false);
     d3.select("#count").classed("active", true);
   });
 });
 
-// Compute a new partition, stashing the old value for transition.
-function repartition(value) {
-  return function(d) {
-    var olds = partition(d),
-        news = partition.value(value)(d);
-    news.forEach(function(d, i) {
-      d.prev = olds[i];
-    });
-    return news;
-  };
+// Stash the old values for transition.
+function stash(d) {
+  d.x0 = d.x;
+  d.dx0 = d.dx;
 }
 
 // Interpolate the arcs in data space.
 function arcTween(a) {
-  var i = d3.interpolate({x: a.prev.x, dx: a.prev.dx}, a);
+  var i = d3.interpolate({x: a.x0, dx: a.dx0}, a);
   return function(t) {
     return arc(i(t));
   };
+}
+
+// Convert a hierarchy of file sizes into a tree.
+function hierarchy(d, key) {
+  var node = {key: key};
+  if (isNaN(d)) {
+    node.children = [];
+    for (key in d) node.children.push(hierarchy(d[key], key));
+  } else {
+    node.size = d;
+  }
+  return node;
 }

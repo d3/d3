@@ -1,6 +1,7 @@
 var r = 960 / 2;
 
 var tree = d3.layout.tree()
+    .inline(true)
     .size([360, r - 120])
     .sort(null)
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
@@ -38,5 +39,5 @@ d3.json("flare.json", function(json) {
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
-      .text(function(d) { return d.data.key; });
+      .text(function(d) { return d.key; });
 });

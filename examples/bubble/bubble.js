@@ -3,6 +3,7 @@ var r = 960,
     fill = d3.scale.category20c();
 
 var bubble = d3.layout.pack()
+    .inline(true)
     .sort(null)
     .size([r, r]);
 
@@ -20,16 +21,16 @@ d3.json("flare.json", function(json) {
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
   node.append("svg:title")
-      .text(function(d) { return d.data.className + ": " + format(d.value); });
+      .text(function(d) { return d.className + ": " + format(d.value); });
 
   node.append("svg:circle")
       .attr("r", function(d) { return d.r; })
-      .style("fill", function(d) { return fill(d.data.packageName); });
+      .style("fill", function(d) { return fill(d.packageName); });
 
   node.append("svg:text")
       .attr("text-anchor", "middle")
       .attr("dy", ".3em")
-      .text(function(d) { return d.data.className.substring(0, d.r / 3); });
+      .text(function(d) { return d.className.substring(0, d.r / 3); });
 });
 
 // Returns a flattened hierarchy containing all leaf nodes under the root.

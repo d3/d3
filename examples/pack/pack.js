@@ -3,6 +3,7 @@ var w = 960,
     format = d3.format(",d");
 
 var pack = d3.layout.pack()
+    .inline(true)
     .size([w - 4, h - 4])
     .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
 
@@ -21,7 +22,7 @@ d3.json("flare.json", function(json) {
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
   node.append("svg:title")
-      .text(function(d) { return d.data.key + (d.children ? "" : ": " + format(d.value)); });
+      .text(function(d) { return d.key + (d.children ? "" : ": " + format(d.value)); });
 
   node.append("svg:circle")
       .attr("r", function(d) { return d.r; });
@@ -29,5 +30,5 @@ d3.json("flare.json", function(json) {
   node.filter(function(d) { return !d.children; }).append("svg:text")
       .attr("text-anchor", "middle")
       .attr("dy", ".3em")
-      .text(function(d) { return d.data.key.substring(0, d.r / 3); });
+      .text(function(d) { return d.key.substring(0, d.r / 3); });
 });

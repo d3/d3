@@ -32,13 +32,13 @@
 
       // Compute a map from name to node.
       nodes.forEach(function(d) {
-        map[d.data.name] = d;
+        map[d.name] = d;
       });
 
       // For each import, construct a link from the source to target node.
       nodes.forEach(function(d) {
-        if (d.data.imports) d.data.imports.forEach(function(i) {
-          imports.push({source: map[d.data.name], target: map[i]});
+        if (d.imports) d.imports.forEach(function(i) {
+          imports.push({source: map[d.name], target: map[i]});
         });
       });
 
