@@ -40,7 +40,7 @@ var svg = d3.select("body").append("svg:svg");
 svg.append("svg:g").attr("id", "states");
 svg.append("svg:g").attr("id", "state-centroids");
 
-d3.json("../../data/us-states.json", function(collection) {
+d3.json("../data/us-states.json", function(collection) {
   svg.select("#states")
     .selectAll("path")
       .data(collection.features)
@@ -48,7 +48,7 @@ d3.json("../../data/us-states.json", function(collection) {
       .attr("d", d3.geo.path().projection(xy));
 });
 
-d3.json("../../data/us-state-centroids.json", function(collection) {
+d3.json("../data/us-state-centroids.json", function(collection) {
   svg.select("#state-centroids")
     .selectAll("circle")
       .data(collection.features

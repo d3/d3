@@ -28,18 +28,17 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("height", h);
 
 var partition = d3.layout.partition()
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
-    .value(function(d) { return d.value; });
+    .value(function(d) { return d.size; });
 
-d3.json("../treemap/flare.json", function(json) {
-  var rect = vis.selectAll("rect")
-      .data(partition(d3.entries(json)[0]))
+d3.json("../data/flare.json", function(json) {
+  var rect = vis.data([json]).selectAll("rect")
+      .data(partition.nodes)
     .enter().append("svg:rect")
       .attr("x", function(d) { return x(d.x); })
       .attr("y", function(d) { return y(d.y); })
       .attr("width", function(d) { return x(d.dx); })
       .attr("height", function(d) { return y(d.dy); })
-      .attr("fill", function(d) { return color((d.children ? d : d.parent).data.key); })
+      .attr("fill", function(d) { return color((d.children ? d : d.parent).name); })
       .on("click", click);
 
   function click(d) {

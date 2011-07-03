@@ -2,9 +2,7 @@ var w = 960,
     h = 2000;
 
 var tree = d3.layout.tree()
-    .size([h, w - 160])
-    .sort(null)
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
+    .size([h, w - 160]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
@@ -15,8 +13,8 @@ var vis = d3.select("#chart").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(40, 0)");
 
-d3.json("flare.json", function(json) {
-  var nodes = tree(d3.entries(json)[0]);
+d3.json("../data/flare.json", function(json) {
+  var nodes = tree.nodes(json);
 
   var link = vis.selectAll("path.link")
       .data(tree.links(nodes))
@@ -37,5 +35,5 @@ d3.json("flare.json", function(json) {
       .attr("dx", function(d) { return d.children ? -8 : 8; })
       .attr("dy", 3)
       .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })
-      .text(function(d) { return d.data.key; });
+      .text(function(d) { return d.name; });
 });
