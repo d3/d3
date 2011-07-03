@@ -54,7 +54,7 @@ function update() {
   data.push(d);
 
   // Compute the new tree layout. We'll stash the old layout in the data.
-  var nodes = tree(root);
+  var nodes = tree.nodes(root);
 
   // Update the nodes…
   var node = vis.selectAll("circle.node")

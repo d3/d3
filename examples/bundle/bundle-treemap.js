@@ -21,7 +21,7 @@ var line = d3.svg.line()
     .y(function(d) { return d.y + d.dy / 2; });
 
 d3.json("flare-imports.json", function(classes) {
-  var nodes = treemap(packages.root(classes)),
+  var nodes = treemap.nodes(packages.root(classes)),
       links = packages.imports(nodes);
 
   div.selectAll("div")

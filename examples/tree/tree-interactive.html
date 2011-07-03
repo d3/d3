@@ -53,7 +53,7 @@ d3.json("../data/flare.json", function(json) {
 function update(source) {
 
   // Compute the new tree layout.
-  var nodes = tree(root).reverse();
+  var nodes = tree.nodes(root).reverse();
 
   // Update the nodes…
   var node = vis.selectAll("circle.node")

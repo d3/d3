@@ -15,7 +15,7 @@ var vis = d3.select("#chart").append("svg:svg")
 
 d3.json("../data/flare.json", function(json) {
   var node = vis.data([json]).selectAll("g.node")
-      .data(pack)
+      .data(pack.nodes)
     .enter().append("svg:g")
       .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });

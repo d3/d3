@@ -13,7 +13,7 @@ var vis = d3.select("#chart").append("svg:svg")
 
 d3.json("../data/flare.json", function(json) {
   var node = vis.selectAll("g.node")
-      .data(bubble(classes(json))
+      .data(bubble.nodes(classes(json))
       .filter(function(d) { return !d.children; }))
     .enter().append("svg:g")
       .attr("class", "node")

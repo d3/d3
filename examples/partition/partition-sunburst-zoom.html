@@ -42,7 +42,7 @@ var arc = d3.svg.arc()
 
 d3.json("../data/flare.json", function(json) {
   var path = vis.data([json]).selectAll("path")
-      .data(partition)
+      .data(partition.nodes)
     .enter().append("svg:path")
       .attr("d", arc)
       .style("fill", function(d) { return color((d.children ? d : d.parent).name); })

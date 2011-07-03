@@ -22,7 +22,7 @@ var arc = d3.svg.arc()
 
 d3.json("../data/flare.json", function(json) {
   var path = vis.data([json]).selectAll("path")
-      .data(partition)
+      .data(partition.nodes)
     .enter().append("svg:path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)

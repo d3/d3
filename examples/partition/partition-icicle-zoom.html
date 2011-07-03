@@ -32,7 +32,7 @@ var partition = d3.layout.partition()
 
 d3.json("../data/flare.json", function(json) {
   var rect = vis.data([json]).selectAll("rect")
-      .data(partition)
+      .data(partition.nodes)
     .enter().append("svg:rect")
       .attr("x", function(d) { return x(d.x); })
       .attr("y", function(d) { return y(d.y); })

@@ -14,7 +14,7 @@ var div = d3.select("#chart").append("div")
 
 d3.json("../data/flare.json", function(json) {
   div.data([json]).selectAll("div")
-      .data(treemap)
+      .data(treemap.nodes)
     .enter().append("div")
       .attr("class", "cell")
       .style("background", function(d) { return d.children ? color(d.name) : null; })

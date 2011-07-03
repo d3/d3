@@ -14,7 +14,7 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("transform", "translate(" + r + "," + r + ")");
 
 d3.json("../data/flare.json", function(json) {
-  var nodes = tree(json);
+  var nodes = tree.nodes(json);
 
   var link = vis.selectAll("path.link")
       .data(tree.links(nodes))
