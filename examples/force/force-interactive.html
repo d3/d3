@@ -10,14 +10,13 @@
 
 circle.node {
   cursor: pointer;
-  fill: #fff;
-  stroke: steelblue;
+  stroke: #3182bd;
   stroke-width: 1.5px;
 }
 
 line.link {
   fill: none;
-  stroke: #ccc;
+  stroke: #9ecae1;
   stroke-width: 1.5px;
 }
 
@@ -71,15 +70,15 @@ function update() {
   // Update the nodes…
   var node = vis.selectAll("circle.node")
       .data(nodes, function(d) { return d.id; })
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+      .style("fill", color);
 
   // Enter any new nodes.
   node.enter().append("svg:circle")
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-      .attr("r", 5)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; })
+      .attr("r", function(d) { return Math.sqrt(d.size) / 10 || 4.5; })
+      .style("fill", color)
       .on("click", click)
       .call(force.drag);
 
@@ -101,6 +100,11 @@ function update() {
   });
 }
 
+// Color leaf nodes orange, and packages white or blue.
+function color(d) {
+  return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
+}
+
 // Toggle children on click.
 function click(d) {
   if (d.children) {
@@ -119,7 +123,7 @@ function flatten(root) {
 
   function recurse(node) {
     if (node.children) node.children.forEach(recurse);
-    node.id = ++i;
+    if (!node.id) node.id = ++i;
     nodes.push(node);
   }
 
