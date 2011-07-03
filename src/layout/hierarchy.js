@@ -77,7 +77,7 @@ d3.layout.hierarchy = function() {
   };
 
   return hierarchy;
-}
+};
 
 // A method assignment helper for hierarchy subclasses.
 function d3_layout_hierarchyRebind(object, hierarchy) {
