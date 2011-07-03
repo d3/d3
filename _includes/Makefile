@@ -34,7 +34,7 @@ EX_FILES = \
 	../ex/dji.js \
 	../ex/force.css \
 	../ex/force.js \
-	../ex/flare.json \
+	../data/flare.json \
 	../ex/treemap.css \
 	../ex/treemap.js \
 	../ex/miserables.json \
@@ -46,8 +46,8 @@ EX_FILES = \
 	../ex/splom.js \
 	../ex/flowers.json \
 	../ex/unemployment.json \
-	../ex/us-counties.json \
-	../ex/us-states.json \
+	../data/us-counties.json \
+	../data/us-states.json \
 	../ex/stream.css \
 	../ex/button.css \
 	../ex/stack.css \
@@ -183,13 +183,13 @@ $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/dji.csv > $@
 
-../ex/us-counties.json:
+../data/us-counties.json:
 	@rm -rf $@
-	git cat-file blob master:data/us-counties.json > $@
+	git cat-file blob master:examples/data/us-counties.json > $@
 
-../ex/us-states.json:
+../data/us-states.json:
 	@rm -rf $@
-	git cat-file blob master:data/us-states.json > $@
+	git cat-file blob master:examples/data/us-states.json > $@
 
 ../ex/unemployment.json:
 	@rm -rf $@
@@ -215,9 +215,9 @@ $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:examples/treemap/treemap.css > $@
 
-../ex/flare.json:
+../data/flare.json:
 	@rm -rf $@
-	git cat-file blob master:data/flare.json > $@
+	git cat-file blob master:examples/data/flare.json > $@
 
 ../ex/splom.js splom.js:
 	@rm -rf $@

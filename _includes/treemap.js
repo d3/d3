@@ -4,27 +4,26 @@ var w = 960,
 
 var treemap = d3.layout.treemap()
     .size([w, h])
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
-    .value(function(d) { return d.value; })
-    .sticky(true);
+    .sticky(true)
+    .value(function(d) { return d.size; });
 
 var div = d3.select("#chart").append("div")
     .style("position", "relative")
     .style("width", w + "px")
     .style("height", h + "px");
 
-d3.json("flare.json", function(json) {
-  div.data(d3.entries(json)).selectAll("div")
-      .data(treemap)
+d3.json("../data/flare.json", function(json) {
+  div.data([json]).selectAll("div")
+      .data(treemap.nodes)
     .enter().append("div")
       .attr("class", "cell")
-      .style("background", function(d) { return d.children ? color(d.data.key) : null; })
+      .style("background", function(d) { return d.children ? color(d.name) : null; })
       .call(cell)
-      .text(function(d) { return d.children ? null : d.data.key; });
+      .text(function(d) { return d.children ? null : d.name; });
 
   d3.select("#size").on("click", function() {
     div.selectAll("div")
-        .data(treemap.value(function(d) { return d.value; }))
+        .data(treemap.value(function(d) { return d.size; }))
       .transition()
         .duration(1500)
         .call(cell);
