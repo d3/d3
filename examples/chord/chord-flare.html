@@ -40,7 +40,7 @@ var svg = d3.select("body").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(" + r1 + "," + r1 + ")");
 
-d3.json("../bundle/flare-imports.json", function(imports) {
+d3.json("../data/flare-imports.json", function(imports) {
   var indexByName = {},
       nameByIndex = {},
       matrix = [],
