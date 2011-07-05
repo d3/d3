@@ -31,15 +31,24 @@ title: Documentation
 <div class="gallery">
 
 <div class="list">
+  <a href="../tutorial/circle.html">
+    <img src="../tutorial/circle.png"/>
+  </a>
+  <h4><a href="../tutorial/circle.html">Three Little Circles</a></h4>
+
+  <p>Learn the basics of D3 with this introductory tutorial, covering the core
+  concepts of selections and data binding. Read me first!</p>
+</div>
+
+<div class="list">
   <a href="../tutorial/bar-1.html">
     <img src="../tutorial/bar-1.png"/>
   </a>
   <h4><a href="../tutorial/bar-1.html">A Bar Chart, Part 1</a></h4>
 
-  <p>Learn the basics of D3 with this introductory tutorial. Using the
-  example of a no-frills, static bar chart, this guide describes the core D3
-  concepts, including selections, functional properties, and scales. You'll
-  also see how D3 can be applied to HTML, CSS and SVG.</p>
+  <p>Using the example of a no-frills, static bar chart, this guide describes
+  the core D3 concepts, including selections, functional properties, and scales.
+  You'll also see how D3 can be applied to HTML, CSS and SVG.</p>
 </div>
 
 <div class="list">
