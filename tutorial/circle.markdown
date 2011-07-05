@@ -431,8 +431,8 @@ var circle = svg.selectAll("circle")
         .style("stroke", "#ccc")
       .transition()
         .duration(750)
-        .style("fill", "lightcoral")
-        .style("stroke", "red");
+        .style("fill", "lightgreen")
+        .style("stroke", "green");
   });
 })();
 </script>
@@ -492,8 +492,8 @@ enter.attr("r", function(d) {
       .attr("y", -10)
       .attr("width", 20)
       .attr("height", 20)
-      .style("fill", "lightcoral")
-      .style("stroke", "red");
+      .style("fill", "lightgreen")
+      .style("stroke", "green");
 
   g.append("svg:text")
       .attr("dy", ".35em")
@@ -555,8 +555,8 @@ enter.attr("r", function(d) {
       .attr("y", -10)
       .attr("width", 20)
       .attr("height", 20)
-      .style("fill", "lightcoral")
-      .style("stroke", "red");
+      .style("fill", "lightgreen")
+      .style("stroke", "green");
 
   g.append("svg:text")
       .attr("dy", ".35em")
@@ -624,8 +624,8 @@ svg.selectAll("circle")
       .attr("y", -10)
       .attr("width", 20)
       .attr("height", 20)
-      .style("fill", "lightcoral")
-      .style("stroke", "red");
+      .style("fill", "lightgreen")
+      .style("stroke", "green");
 
   g.append("svg:text")
       .attr("dy", ".35em")
