@@ -196,7 +196,7 @@ code continues. So you can run them again or redefine them however you like.
 
 ## Binding Data
 
-This is beginning to look at lot like [jQuery](http://jquery.com/). More
+This is beginning to look a lot like [jQuery](http://jquery.com/). More
 commonly, though, we want to use *data* to drive the appearance of our circles.
 To do that, we need some data. For the sake of example, let's imaginge that each
 of these circles represents a number: 32, 57 and 112. The
@@ -437,7 +437,7 @@ var circle = svg.selectAll("circle")
 })();
 </script>
 
-Using the enter selection, we can create new circle for any missing data. Each
+Using the enter selection, we can create new circles for any missing data. Each
 new circle is already bound to the data, so we can use data to compute
 attributes and styles:
 
