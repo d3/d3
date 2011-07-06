@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Area Chart (Radial)</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+.area {
+  fill: lightsteelblue;
+}
+
+.line {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var r = 960 / 2,
+    data = d3.range(361).map(function(i) { return .8 + Math.sin(i / 20 * Math.PI) / 6; });
+
+var svg = d3.select("body").append("svg:svg")
+    .data([data])
+    .attr("width", r * 2)
+    .attr("height", r * 2)
+  .append("svg:g")
+    .attr("transform", "translate(" + r + "," + r + ")");
+
+svg.append("svg:path")
+    .attr("class", "area")
+    .attr("d", d3.svg.area.radial()
+    .innerRadius(r / 2)
+    .outerRadius(function(d) { return r * d; })
+    .angle(function(d, i) { return i / 180 * Math.PI; }));
+
+svg.append("svg:path")
+    .attr("class", "line")
+    .attr("d", d3.svg.line.radial()
+    .radius(function(d) { return r * d; })
+    .angle(function(d, i) { return i / 180 * Math.PI; }));
+
+    </script>
+  </body>
+</html>

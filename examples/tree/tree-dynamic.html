@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Node-Link Tree</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.layout.js"></script>
+    <style type="text/css">
+
+.node {
+  stroke: #fff;
+  stroke-width: 2px;
+}
+
+.link {
+  fill: none;
+  stroke: #000;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500,
+    root = {},
+    data = [root],
+    tree = d3.layout.tree().size([w - 20, h - 20]),
+    diagonal = d3.svg.diagonal(),
+    duration = 750,
+    timer = setInterval(update, duration);
+
+var vis = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+  .append("svg:g")
+    .attr("transform", "translate(10, 10)");
+
+vis.selectAll("circle")
+    .data(tree(root))
+  .enter().append("svg:circle")
+    .attr("class", "node")
+    .attr("r", 3.5)
+    .attr("cx", x)
+    .attr("cy", y);
+
+function update() {
+  if (data.length >= 500) return clearInterval(timer);
+
+  // Add a new datum to a random parent.
+  var d = {id: data.length}, parent = data[~~(Math.random() * data.length)];
+  if (parent.children) parent.children.push(d); else parent.children = [d];
+  data.push(d);
+
+  // Compute the new tree layout. We'll stash the old layout in the data.
+  var nodes = tree.nodes(root);
+
+  // Update the nodes…
+  var node = vis.selectAll("circle.node")
+      .data(nodes, function(d) { return d.id; });
+
+  // Enter any new nodes at the parent's previous position.
+  node.enter().append("svg:circle")
+      .attr("class", "node")
+      .attr("r", 3.5)
+      .attr("cx", function(d) { return d.parent.x0; })
+      .attr("cy", function(d) { return d.parent.y0; })
+    .transition()
+      .duration(duration)
+      .attr("cx", x)
+      .attr("cy", y);
+
+  // Transition nodes to their new position.
+  node.transition()
+      .duration(duration)
+      .attr("cx", x)
+      .attr("cy", y);
+
+  // Update the links…
+  var link = vis.selectAll("path.link")
+      .data(tree.links(nodes), function(d) { return d.target.id; });
+
+  // Enter any new links at the parent's previous position.
+  link.enter().insert("svg:path", "circle")
+      .attr("class", "link")
+      .attr("d", function(d) {
+        var o = {x: d.source.x0, y: d.source.y0};
+        return diagonal({source: o, target: o});
+      })
+    .transition()
+      .duration(duration)
+      .attr("d", diagonal);
+
+  // Transition links to their new position.
+  link.transition()
+      .duration(duration)
+      .attr("d", diagonal);
+}
+
+function x(d) {
+  return d.x0 = d.x;
+}
+
+function y(d) {
+  return d.y0 = d.y;
+}
+
+    </script>
+  </body>
+</html>

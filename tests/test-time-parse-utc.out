@@ -1,0 +1,64 @@
+parse a m/d/Y:
+            Sun 01/01/1990: Sun Dec 31 16:00:00 1989
+            Wed 01/01/1990: Sun Dec 31 16:00:00 1989
+            XXX 01/01/1990: null
+
+parse A m/d/Y:
+         Sunday 01/01/1990: Sun Dec 31 16:00:00 1989
+      Wednesday 01/01/1990: Sun Dec 31 16:00:00 1989
+       Caturday 01/01/1990: null
+
+parse m/d/y:
+                    1/1/90: Sat Dec 31 16:00:00 2089
+                    1/1/10: Thu Dec 31 16:00:00 2009
+
+parse x:
+                    1/1/90: Sat Dec 31 16:00:00 2089
+                    1/1/10: Thu Dec 31 16:00:00 2009
+
+parse b d Y:
+              jan 01, 1990: Sun Dec 31 16:00:00 1989
+              jan  1, 1990: Sun Dec 31 16:00:00 1989
+              1 Feb., 1990: Wed Jan 31 16:00:00 1990
+             01 Feb., 1990: Wed Jan 31 16:00:00 1990
+              1 Feb., 1990: Wed Jan 31 16:00:00 1990
+              1 Feb., 1990: Wed Jan 31 16:00:00 1990
+                Moy 1 1990: null
+
+parse B d Y:
+          January 01, 1990: Sun Dec 31 16:00:00 1989
+          january  1, 1990: Sun Dec 31 16:00:00 1989
+          1 February, 1990: Wed Jan 31 16:00:00 1990
+         01 February, 1990: Wed Jan 31 16:00:00 1990
+          1 February, 1990: Wed Jan 31 16:00:00 1990
+          1 February, 1990: Wed Jan 31 16:00:00 1990
+               Juin 1 1990: null
+
+parse c:
+  Mon Jan  1 00:00:00 1990: Sun Dec 31 16:00:00 1989
+  Sun Jan  1 00:00:00 1990: Sun Dec 31 16:00:00 1989
+  Mon Jan 01 00:00:00 1990: Sun Dec 31 16:00:00 1989
+   Mon Jan 1 00:00:00 1990: Sun Dec 31 16:00:00 1989
+      Mon Jan 1 0:0:0 1990: Sun Dec 31 16:00:00 1989
+
+parse H M S:
+                  00:00:00: Sun Dec 31 16:00:00 1899
+                  11:59:59: Mon Jan  1 03:59:59 1900
+                  12:00:00: Mon Jan  1 04:00:00 1900
+                  12:00:01: Mon Jan  1 04:00:01 1900
+                  23:59:59: Mon Jan  1 15:59:59 1900
+
+parse X:
+                  00:00:00: Sun Dec 31 16:00:00 1899
+                  11:59:59: Mon Jan  1 03:59:59 1900
+                  12:00:00: Mon Jan  1 04:00:00 1900
+                  12:00:01: Mon Jan  1 04:00:01 1900
+                  23:59:59: Mon Jan  1 15:59:59 1900
+
+parse I M S p:
+               12:00:00 am: Sun Dec 31 16:00:00 1899
+               11:59:59 AM: Mon Jan  1 03:59:59 1900
+               12:00:00 pm: Mon Jan  1 04:00:00 1900
+               12:00:01 pm: Mon Jan  1 04:00:01 1900
+               11:59:59 PM: Mon Jan  1 15:59:59 1900
+

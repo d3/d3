@@ -1,4 +1,61 @@
 (function(){d3.layout = {};
+// Implements hierarchical edge bundling using Holten's algorithm. For each
+// input link, a path is computed that travels through the tree, up the parent
+// hierarchy to the least common ancestor, and then back down to the destination
+// node. Each path is simply an array of nodes.
+d3.layout.bundle = function() {
+  return function(links) {
+    var paths = [],
+        i = -1,
+        n = links.length;
+    while (++i < n) paths.push(d3_layout_bundlePath(links[i]));
+    return paths;
+  };
+};
+
+function d3_layout_bundlePath(link) {
+  var start = link.source,
+      end = link.target,
+      lca = d3_layout_bundleLeastCommonAncestor(start, end),
+      points = [start];
+  while (start !== lca) {
+    start = start.parent;
+    points.push(start);
+  }
+  var k = points.length;
+  while (end !== lca) {
+    points.splice(k, 0, end);
+    end = end.parent;
+  }
+  return points;
+}
+
+function d3_layout_bundleAncestors(node) {
+  var ancestors = [],
+      parent = node.parent;
+  while (parent != null) {
+    ancestors.push(node);
+    node = parent;
+    parent = parent.parent;
+  }
+  ancestors.push(node);
+  return ancestors;
+}
+
+function d3_layout_bundleLeastCommonAncestor(a, b) {
+  if (a === b) return a;
+  var aNodes = d3_layout_bundleAncestors(a),
+      bNodes = d3_layout_bundleAncestors(b),
+      aNode = aNodes.pop(),
+      bNode = bNodes.pop(),
+      sharedNode = null;
+  while (aNode === bNode) {
+    sharedNode = aNode;
+    aNode = aNodes.pop();
+    bNode = bNodes.pop();
+  }
+  return sharedNode;
+}
 d3.layout.chord = function() {
   var chord = {},
       chords,
@@ -84,10 +141,9 @@ d3.layout.chord = function() {
         var source = subgroups[i + "-" + j],
             target = subgroups[j + "-" + i];
         if (source.value || target.value) {
-          chords.push({
-            source: source,
-            target: target
-          })
+          chords.push(source.value < target.value
+              ? {source: target, target: source}
+              : {source: source, target: target})
         }
       }
     }
@@ -97,9 +153,7 @@ d3.layout.chord = function() {
 
   function resort() {
     chords.sort(function(a, b) {
-      a = Math.min(a.source.value, a.target.value);
-      b = Math.min(b.source.value, b.target.value);
-      return sortChords(a, b);
+      return sortChords(a.target.value, b.target.value);
     });
   }
 
@@ -156,14 +210,14 @@ d3.layout.force = function() {
       event = d3.dispatch("tick"),
       size = [1, 1],
       alpha,
-      drag = .9,
+      friction = .9,
       distance = 20,
       charge = -30,
       gravity = .1,
       theta = .8,
       interval,
-      nodes,
-      links,
+      nodes = [],
+      links = [],
       distances;
 
   function repulse(node, kc) {
@@ -246,8 +300,8 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        o.x -= (o.px - (o.px = o.x)) * drag;
-        o.y -= (o.py - (o.py = o.y)) * drag;
+        o.x -= (o.px - (o.px = o.x)) * friction;
+        o.y -= (o.py - (o.py = o.y)) * friction;
       }
     }
 
@@ -286,9 +340,9 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.drag = function(x) {
-    if (!arguments.length) return drag;
-    drag = x;
+  force.friction = function(x) {
+    if (!arguments.length) return friction;
+    friction = x;
     return force;
   };
 
@@ -529,17 +583,13 @@ d3.layout.partition = function() {
     return nodes;
   }
 
-  partition.sort = d3.rebind(partition, hierarchy.sort);
-  partition.children = d3.rebind(partition, hierarchy.children);
-  partition.value = d3.rebind(partition, hierarchy.value);
-
   partition.size = function(x) {
     if (!arguments.length) return size;
     size = x;
     return partition;
   };
 
-  return partition;
+  return d3_layout_hierarchyRebind(partition, hierarchy);
 };
 d3.layout.pie = function() {
   var value = Number,
@@ -982,17 +1032,18 @@ d3.layout.hierarchy = function() {
   // Recursively compute the node depth and value.
   // Also converts the data representation into a standard hierarchy structure.
   function recurse(data, depth, nodes) {
-    var datas = children.call(hierarchy, data, depth),
-        node = {depth: depth, data: data};
+    var childs = children.call(hierarchy, data, depth),
+        node = d3_layout_hierarchyInline ? data : {data: data};
+    node.depth = depth;
     nodes.push(node);
-    if (datas) {
+    if (childs) {
       var i = -1,
-          n = datas.length,
+          n = childs.length,
           c = node.children = [],
           v = 0,
           j = depth + 1;
       while (++i < n) {
-        d = recurse(datas[i], j, nodes);
+        d = recurse(childs[i], j, nodes);
         d.parent = node;
         c.push(d);
         v += d.value;
@@ -1015,7 +1066,7 @@ d3.layout.hierarchy = function() {
           j = depth + 1;
       while (++i < n) v += revalue(children[i], j);
     } else if (value) {
-      v = value.call(hierarchy, node.data, depth);
+      v = value.call(hierarchy, d3_layout_hierarchyInline ? node : node.data, depth);
     }
     if (value) node.value = v;
     return v;
@@ -1052,6 +1103,22 @@ d3.layout.hierarchy = function() {
   };
 
   return hierarchy;
+};
+
+// A method assignment helper for hierarchy subclasses.
+function d3_layout_hierarchyRebind(object, hierarchy) {
+  object.sort = d3.rebind(object, hierarchy.sort);
+  object.children = d3.rebind(object, hierarchy.children);
+  object.links = d3_layout_hierarchyLinks;
+  object.value = d3.rebind(object, hierarchy.value);
+
+  // If the new API is used, enabling inlining.
+  object.nodes = function(d) {
+    d3_layout_hierarchyInline = true;
+    return (object.nodes = object)(d);
+  };
+
+  return object;
 }
 
 function d3_layout_hierarchyChildren(d) {
@@ -1065,8 +1132,20 @@ function d3_layout_hierarchyValue(d) {
 function d3_layout_hierarchySort(a, b) {
   return b.value - a.value;
 }
+
+// Returns an array source+target objects for the specified nodes.
+function d3_layout_hierarchyLinks(nodes) {
+  return d3.merge(nodes.map(function(parent) {
+    return (parent.children || []).map(function(child) {
+      return {source: parent, target: child};
+    });
+  }));
+}
+
+// For backwards-compatibility, don't enable inlining by default.
+var d3_layout_hierarchyInline = false;
 d3.layout.pack = function() {
-  var hierarchy = d3.layout.hierarchy(),
+  var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
       size = [1, 1];
 
   function pack(d, i) {
@@ -1087,17 +1166,13 @@ d3.layout.pack = function() {
     return nodes;
   }
 
-  pack.sort = d3.rebind(pack, hierarchy.sort);
-  pack.children = d3.rebind(pack, hierarchy.children);
-  pack.value = d3.rebind(pack, hierarchy.value);
-
   pack.size = function(x) {
     if (!arguments.length) return size;
     size = x;
     return pack;
   };
 
-  return pack.sort(d3_layout_packSort);
+  return d3_layout_hierarchyRebind(pack, hierarchy);
 };
 
 function d3_layout_packSort(a, b) {
@@ -1310,10 +1385,6 @@ d3.layout.cluster = function() {
     return nodes;
   }
 
-  cluster.sort = d3.rebind(cluster, hierarchy.sort);
-  cluster.children = d3.rebind(cluster, hierarchy.children);
-  cluster.links = d3_layout_treeLinks;
-
   cluster.separation = function(x) {
     if (!arguments.length) return separation;
     separation = x;
@@ -1326,7 +1397,7 @@ d3.layout.cluster = function() {
     return cluster;
   };
 
-  return cluster;
+  return d3_layout_hierarchyRebind(cluster, hierarchy);
 };
 
 function d3_layout_clusterY(children) {
@@ -1465,7 +1536,7 @@ d3.layout.tree = function() {
         deep = d3_layout_treeSearch(root, d3_layout_treeDeepest),
         x0 = left.x - separation(left, right) / 2,
         x1 = right.x + separation(right, left) / 2,
-        y1 = deep.depth;
+        y1 = deep.depth || 1;
 
     // Clear temporary layout variables; transform x and y.
     d3_layout_treeVisitAfter(root, function(node) {
@@ -1476,10 +1547,6 @@ d3.layout.tree = function() {
 
     return nodes;
   }
-
-  tree.sort = d3.rebind(tree, hierarchy.sort);
-  tree.children = d3.rebind(tree, hierarchy.children);
-  tree.links = d3_layout_treeLinks;
 
   tree.separation = function(x) {
     if (!arguments.length) return separation;
@@ -1493,17 +1560,8 @@ d3.layout.tree = function() {
     return tree;
   };
 
-  return tree;
+  return d3_layout_hierarchyRebind(tree, hierarchy);
 };
-
-// Returns an array source+target objects for the specified nodes.
-function d3_layout_treeLinks(nodes) {
-  return d3.merge(nodes.map(function(parent) {
-    return (parent.children || []).map(function(child) {
-      return {source: parent, target: child};
-    });
-  }));
-}
 
 function d3_layout_treeSeparation(a, b) {
   return a.parent == b.parent ? 1 : 2;
@@ -1598,12 +1656,14 @@ function d3_layout_treeAncestor(vim, node, ancestor) {
       : ancestor;
 }
 // Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
+// Modified to support a target aspect ratio by Jeff Heer
 d3.layout.treemap = function() {
   var hierarchy = d3.layout.hierarchy(),
       round = Math.round,
       size = [1, 1], // width, height
       sticky = false,
-      stickies;
+      stickies,
+      ratio = 0.5 * (1 + Math.sqrt(5)); // golden ratio
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
@@ -1684,7 +1744,7 @@ d3.layout.treemap = function() {
     }
     s *= s;
     u *= u;
-    return Math.max((u * rmax) / s, s / (u * rmin));
+    return Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio));
   }
 
   // Positions the specified row of nodes. Modifies `rect`.
@@ -1738,10 +1798,6 @@ d3.layout.treemap = function() {
     return nodes;
   }
 
-  treemap.sort = d3.rebind(treemap, hierarchy.sort);
-  treemap.children = d3.rebind(treemap, hierarchy.children);
-  treemap.value = d3.rebind(treemap, hierarchy.value);
-
   treemap.size = function(x) {
     if (!arguments.length) return size;
     size = x;
@@ -1761,6 +1817,12 @@ d3.layout.treemap = function() {
     return treemap;
   };
 
-  return treemap;
+  treemap.ratio = function(x) {
+    if (!arguments.length) return ratio;
+    ratio = x;
+    return treemap;
+  };
+
+  return d3_layout_hierarchyRebind(treemap, hierarchy);
 };
-})()
+})();

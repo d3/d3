@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dot Plot</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="superformula.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+path.dot {
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+rect {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.x line, .y line {
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var data = d3.range(100).map(function(i) {
+  return {x: i / 99, y: Math.random()};
+});
+
+var w = 450,
+    h = 450,
+    p = 20,
+    x = d3.scale.linear().range([0, w]),
+    y = d3.scale.linear().range([h, 0]),
+    type = d3.scale.ordinal().range(superformulaTypes),
+    color = d3.scale.category10();
+
+var vis = d3.select("body")
+  .append("svg:svg")
+    .attr("width", w + p * 2)
+    .attr("height", h + p * 2)
+  .append("svg:g")
+    .attr("transform", "translate(" + p + "," + p + ")");
+
+var xrule = vis.selectAll("g.x")
+    .data(x.ticks(10))
+  .enter().append("svg:g")
+    .attr("class", "x");
+
+xrule.append("svg:line")
+    .attr("x1", x)
+    .attr("x2", x)
+    .attr("y1", 0)
+    .attr("y2", h);
+
+xrule.append("svg:text")
+    .attr("x", x)
+    .attr("y", h + 3)
+    .attr("dy", ".71em")
+    .attr("text-anchor", "middle")
+    .text(x.tickFormat(10));
+
+var yrule = vis.selectAll("g.y")
+    .data(y.ticks(10))
+  .enter().append("svg:g")
+    .attr("class", "y");
+
+yrule.append("svg:line")
+    .attr("x1", 0)
+    .attr("x2", w)
+    .attr("y1", y)
+    .attr("y2", y);
+
+yrule.append("svg:text")
+    .attr("x", -3)
+    .attr("y", y)
+    .attr("dy", ".35em")
+    .attr("text-anchor", "end")
+    .text(y.tickFormat(10));
+
+vis.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
+vis.selectAll("path.dot")
+    .data(data)
+  .enter().append("svg:path")
+    .attr("class", "dot")
+    .attr("stroke", function(d, i) { return color(i); })
+    .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; })
+    .attr("d", superformula()
+    .type(function(d, i) { return type(i); }));
+
+    </script>
+  </body>
+</html>

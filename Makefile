@@ -38,7 +38,10 @@ d3.core.js: \
 	src/core/min.js \
 	src/core/max.js \
 	src/core/sum.js \
+	src/core/zip.js \
 	src/core/bisect.js \
+	src/core/first.js \
+	src/core/last.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
@@ -71,6 +74,7 @@ d3.core.js: \
 
 d3.scale.js: \
 	src/scale/scale.js \
+	src/scale/nice.js \
 	src/scale/linear.js \
 	src/scale/bilinear.js \
 	src/scale/polylinear.js \
@@ -86,9 +90,12 @@ d3.svg.js: \
 	src/svg/svg.js \
 	src/svg/arc.js \
 	src/svg/line.js \
+	src/svg/line-radial.js \
 	src/svg/area.js \
+	src/svg/area-radial.js \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
+	src/svg/diagonal-radial.js \
 	src/svg/mouse.js \
 	src/svg/touches.js \
 	src/svg/symbol.js
@@ -104,12 +111,14 @@ d3.chart.js: \
 	src/chart/chart.js \
 	src/chart/box.js \
 	src/chart/bullet.js \
+	src/chart/horizon.js \
 	src/chart/qq.js \
 	src/end.js
 
 d3.layout.js: \
 	src/start.js \
 	src/layout/layout.js \
+	src/layout/bundle.js \
 	src/layout/chord.js \
 	src/layout/force.js \
 	src/layout/partition.js \
@@ -126,6 +135,7 @@ d3.layout.js: \
 d3.geo.js: \
 	src/start.js \
 	src/geo/geo.js \
+	src/geo/azimuthal.js \
 	src/geo/albers.js \
 	src/geo/mercator.js \
 	src/geo/path.js \
@@ -143,6 +153,8 @@ d3.time.js: \
 	src/start.js \
 	src/time/time.js \
 	src/time/format.js \
+	src/time/format-utc.js \
+	src/time/format-iso.js \
 	src/end.js
 
 d3.geom.js: \
@@ -166,14 +178,22 @@ tests: \
 	tests/test-insert.test \
 	tests/test-interpolate.test \
 	tests/test-keys.test \
+	tests/test-max.test \
+	tests/test-min.test \
+	tests/test-sum.test \
 	tests/test-nest.test \
 	tests/test-permute.test \
+	tests/test-zip.test \
 	tests/test-remove.test \
 	tests/test-rgb.test \
 	tests/test-round.test \
 	tests/test-hsl.test \
 	tests/test-time-format.test \
+	tests/test-time-format-iso.test \
+	tests/test-time-format-utc.test \
 	tests/test-time-parse.test \
+	tests/test-time-parse-iso.test \
+	tests/test-time-parse-utc.test \
 	tests/test-transition.test \
 	tests/test-scale-linear.test \
 	tests/test-scale-polylinear.test \

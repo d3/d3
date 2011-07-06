@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+  <html>
+  <head>
+    <title>Superformula</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="superformula.js"></script>
+    <style type="text/css">
+
+path {
+  stroke-width: 1.5px;
+  stroke: #666;
+  fill: #ddd;
+}
+
+#controls {
+  position: absolute;
+  width: 240px;
+  font: 10px sans-serif;
+}
+
+#controls span, #controls label {
+  position: relative;
+  top: -5px;
+  padding: 5px;
+  display: inline-block;
+  width: 20px;
+}
+
+#controls button {
+  font: 10px sans-serif;
+  padding: 5px;
+  width: 70px;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="controls"></div>
+    <script type="text/javascript">
+
+var types = {
+  asterisk: {m: 12, n1: .3, n2: 0, n3: 10, a: 1, b: 1},
+  bean: {m: 2, n1: 1, n2: 4, n3: 8, a: 1, b: 1},
+  butterfly: {m: 3, n1: 1, n2: 6, n3: 2, a: .6, b: 1},
+  circle: {m: 4, n1: 2, n2: 2, n3: 2, a: 1, b: 1},
+  clover: {m: 6, n1: .3, n2: 0, n3: 10, a: 1, b: 1},
+  cloverFour: {m: 8, n1: 10, n2: -1, n3: -8, a: 1, b: 1},
+  cross: {m: 8, n1: 1.3, n2: .01, n3: 8, a: 1, b: 1},
+  diamond: {m: 4, n1: 1, n2: 1, n3: 1, a: 1, b: 1},
+  drop: {m: 1, n1: .5, n2: .5, n3: .5, a: 1, b: 1},
+  ellipse: {m: 4, n1: 2, n2: 2, n3: 2, a: 9, b: 6},
+  gear: {m: 19, n1: 100, n2: 50, n3: 50, a: 1, b: 1},
+  heart: {m: 1, n1: .8, n2: 1, n3: -8, a: 1, b: .18},
+  heptagon: {m: 7, n1: 1000, n2: 400, n3: 400, a: 1, b: 1},
+  hexagon: {m: 6, n1: 1000, n2: 400, n3: 400, a: 1, b: 1},
+  malteseCross: {m: 8, n1: .9, n2: .1, n3: 100, a: 1, b: 1},
+  pentagon: {m: 5, n1: 1000, n2: 600, n3: 600, a: 1, b: 1},
+  rectangle: {m: 4, n1: 100, n2: 100, n3: 100, a: 2, b: 1},
+  roundedStar: {m: 5, n1: 2, n2: 7, n3: 7, a: 1, b: 1},
+  square: {m: 4, n1: 100, n2: 100, n3: 100, a: 1, b: 1},
+  star: {m: 5, n1: 30, n2: 100, n3: 100, a: 1, b: 1},
+  triangle: {m: 3, n1: 100, n2: 200, n3: 200, a: 1, b: 1}
+};
+
+var format = d3.format(".4n"),
+    scale = d3.scale.linear().domain([-10, 20, 1000]).range([0, 800, 1000]);
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", 960)
+    .attr("height", 500);
+
+var shape = superformula()
+    .type("asterisk")
+    .size(100000)
+    .segments(3600);
+
+var path = svg.append("svg:path")
+    .attr("class", "big")
+    .attr("transform", "translate(480,250)")
+    .attr("d", shape);
+
+var control = d3.select("#controls").selectAll("div")
+    .data(d3.entries(types.asterisk))
+  .enter().append("div")
+    .attr("id", function(d) { return d.key; });
+
+control.append("label")
+    .text(function(d) { return d.key; });
+
+control.append("input")
+    .attr("type", "range")
+    .attr("max", 1000)
+    .attr("min", 0)
+    .property("value", function(d) { return scale(d.value); })
+    .on("change", function(d) {
+      var v = scale.invert(this.value);
+      path.attr("d", shape.param(d.key, v));
+      d3.select(this.nextSibling).text(format(v));
+    });
+
+control.append("span")
+    .text(function(d) { return format(d.value); });
+
+var types = d3.select("#controls").append("div").selectAll("button")
+    .data(d3.entries(types))
+  .enter().append("button")
+    .text(function(d) { return d.key; })
+    .on("click", function(d) {
+      for (var param in d.value) {
+        var control = d3.select("#" + param);
+        control.select("input").property("value", scale(d.value[param]));
+        control.select("span").text(format(d.value[param]));
+        shape.param(param, d.value[param]);
+      }
+      path.attr("d", shape);
+    });
+
+    </script>
+  </body>
+</html>

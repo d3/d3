@@ -1,13 +1,14 @@
 d3.min = function(array, f) {
-  var i = 0,
+  var i = -1,
       n = array.length,
-      a = array[0],
+      a,
       b;
   if (arguments.length === 1) {
-    while (++i < n) if (a > (b = array[i])) a = b;
+    while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
+    while (++i < n) if ((b = array[i]) != null && a > b) a = b;
   } else {
-    a = f(array[0]);
-    while (++i < n) if (a > (b = f(array[i]))) a = b;
+    while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+    while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
   }
   return a;
 };

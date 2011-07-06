@@ -51,36 +51,61 @@ d3.scale.linear = function() {
     return rescale();
   };
 
-  // TODO Dates? Ugh.
-  function tickRange(m) {
-    var start = d3.min(domain),
-        stop = d3.max(domain),
-        span = stop - start,
-        step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
-        err = m / (span / step);
-
-    // Filter ticks to get closer to the desired count.
-    if (err <= .15) step *= 10;
-    else if (err <= .35) step *= 5;
-    else if (err <= .75) step *= 2;
-
-    // Round start and stop values to step interval.
-    return {
-      start: Math.ceil(start / step) * step,
-      stop: Math.floor(stop / step) * step + step * .5, // inclusive
-      step: step
-    };
-  }
-
   scale.ticks = function(m) {
-    var range = tickRange(m);
-    return d3.range(range.start, range.stop, range.step);
+    return d3_scale_linearTicks(domain, m);
   };
 
   scale.tickFormat = function(m) {
-    var n = Math.max(0, -Math.floor(Math.log(tickRange(m).step) / Math.LN10 + .01));
-    return d3.format(",." + n + "f");
+    return d3_scale_linearTickFormat(domain, m);
+  };
+
+  scale.nice = function() {
+    d3_scale_nice(domain, d3_scale_linearNice);
+    return rescale();
   };
 
   return rescale();
 };
+
+function d3_scale_linearRebind(scale, linear) {
+  scale.range = d3.rebind(scale, linear.range);
+  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
+  scale.interpolate = d3.rebind(scale, linear.interpolate);
+  scale.clamp = d3.rebind(scale, linear.clamp);
+  return scale;
+};
+
+function d3_scale_linearNice(dx) {
+  dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
+  return {
+    floor: function(x) { return Math.floor(x / dx) * dx; },
+    ceil: function(x) { return Math.ceil(x / dx) * dx; }
+  };
+}
+
+// TODO Dates? Ugh.
+function d3_scale_linearTickRange(domain, m) {
+  var extent = d3_scaleExtent(domain),
+      span = extent[1] - extent[0],
+      step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
+      err = m / span * step;
+
+  // Filter ticks to get closer to the desired count.
+  if (err <= .15) step *= 10;
+  else if (err <= .35) step *= 5;
+  else if (err <= .75) step *= 2;
+
+  // Round start and stop values to step interval.
+  extent[0] = Math.ceil(extent[0] / step) * step;
+  extent[1] = Math.floor(extent[1] / step) * step + step * .5; // inclusive
+  extent[2] = step;
+  return extent;
+}
+
+function d3_scale_linearTicks(domain, m) {
+  return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
+}
+
+function d3_scale_linearTickFormat(domain, m) {
+  return d3.format(",." + Math.max(0, -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01)) + "f");
+}

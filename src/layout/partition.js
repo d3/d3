@@ -38,15 +38,11 @@ d3.layout.partition = function() {
     return nodes;
   }
 
-  partition.sort = d3.rebind(partition, hierarchy.sort);
-  partition.children = d3.rebind(partition, hierarchy.children);
-  partition.value = d3.rebind(partition, hierarchy.value);
-
   partition.size = function(x) {
     if (!arguments.length) return size;
     size = x;
     return partition;
   };
 
-  return partition;
+  return d3_layout_hierarchyRebind(partition, hierarchy);
 };

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Polar Stereographic Projection</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.geo.js"></script>
+    <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="azimuthal.css"/>
+  </head>
+  <body>
+    <h3>Azimuthal Projection</h3>
+    <script type="text/javascript" src="azimuthal.js"></script><p>
+    <div id="lon">origin.longitude: <span>0</span></div>
+    <div id="lat">origin.latitude: <span>0</span></div><p>
+    <div id="scale">scale: <span>240</span></div><p>
+    <div id="translate-x">translate.x: <span>480</span></div>
+    <div id="translate-y">translate.y: <span>250</span></div>
+    <script type="text/javascript">
+
+$("#lon").slider({
+  min: -180,
+  max: 180,
+  step: 1e-1,
+  value: 0,
+  slide: function(event, ui) {
+    var origin = xy.origin();
+    origin[0] = ui.value;
+    xy.origin(origin);
+    refresh();
+  }
+});
+
+$("#lat").slider({
+  min: -90,
+  max: 90,
+  step: 1e-1,
+  value: 0,
+  slide: function(event, ui) {
+    var origin = xy.origin();
+    origin[1] = ui.value;
+    xy.origin(origin);
+    refresh();
+  }
+});
+
+$("#scale").slider({
+  min: 0,
+  max: 3000,
+  value: 240,
+  slide: function(event, ui) {
+    xy.scale(ui.value);
+    refresh();
+  }
+});
+
+$("#translate-x").slider({
+  min: -2000,
+  max: 2000,
+  value: 480,
+  slide: function(event, ui) {
+    var translate = xy.translate();
+    translate[0] = ui.value;
+    xy.translate(translate);
+    refresh();
+  }
+});
+
+$("#translate-y").slider({
+  min: -2000,
+  max: 2000,
+  value: 250,
+  slide: function(event, ui) {
+    var translate = xy.translate();
+    translate[1] = ui.value;
+    xy.translate(translate);
+    refresh();
+  }
+});
+
+    </script>
+  </body>
+</html>

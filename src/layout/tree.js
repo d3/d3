@@ -113,7 +113,7 @@ d3.layout.tree = function() {
         deep = d3_layout_treeSearch(root, d3_layout_treeDeepest),
         x0 = left.x - separation(left, right) / 2,
         x1 = right.x + separation(right, left) / 2,
-        y1 = deep.depth;
+        y1 = deep.depth || 1;
 
     // Clear temporary layout variables; transform x and y.
     d3_layout_treeVisitAfter(root, function(node) {
@@ -124,10 +124,6 @@ d3.layout.tree = function() {
 
     return nodes;
   }
-
-  tree.sort = d3.rebind(tree, hierarchy.sort);
-  tree.children = d3.rebind(tree, hierarchy.children);
-  tree.links = d3_layout_treeLinks;
 
   tree.separation = function(x) {
     if (!arguments.length) return separation;
@@ -141,17 +137,8 @@ d3.layout.tree = function() {
     return tree;
   };
 
-  return tree;
+  return d3_layout_hierarchyRebind(tree, hierarchy);
 };
-
-// Returns an array source+target objects for the specified nodes.
-function d3_layout_treeLinks(nodes) {
-  return d3.merge(nodes.map(function(parent) {
-    return (parent.children || []).map(function(child) {
-      return {source: parent, target: child};
-    });
-  }));
-}
 
 function d3_layout_treeSeparation(a, b) {
   return a.parent == b.parent ? 1 : 2;

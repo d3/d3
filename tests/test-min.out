@@ -1,0 +1,31 @@
+min:
+                                [1] -> 1
+                    [5, 1, 2, 3, 4] -> 1
+                    ["a", "b", "c"] -> "a"
+                        ["20", "3"] -> "20"
+                        ["3", "20"] -> "20"
+                            [20, 3] -> 3
+                            [3, 20] -> 3
+
+min of empty array is undefined:
+                                 [] -> undefined
+                             [null] -> undefined
+                        [undefined] -> undefined
+                              [NaN] -> undefined
+                         [NaN, NaN] -> undefined
+
+min ignores null, undefined, and NaN:
+               [NaN, 1, 2, 3, 4, 5] -> 1
+               [1, 2, 3, 4, 5, NaN] -> 1
+   [10, null, 3, undefined, 5, NaN] -> 3
+
+min compares heterogenous types as numbers:
+                          [20, "3"] -> "3"
+                          ["20", 3] -> 3
+                          [3, "20"] -> 3
+                          ["3", 20] -> "3"
+
+min applies accessor function:
+  [1, 2, 3, 4, 5], [2, 4, 6, 8, 10] -> 5
+                    [1, 2, 3, 4, 5] -> 0
+

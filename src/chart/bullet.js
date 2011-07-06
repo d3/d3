@@ -1,13 +1,6 @@
-// ranges (bad, satisfactory, good)
-// measures (actual, forecast)
-// markers (previous, goal)
-
-/*
- * Chart design based on the recommendations of Stephen Few. Implementation
- * based on the work of Clint Ivy, Jamie Love, and Jason Davies.
- * http://projects.instantcognition.com/protovis/bulletchart/
- */
-
+// Chart design based on the recommendations of Stephen Few. Implementation
+// based on the work of Clint Ivy, Jamie Love, and Jason Davies.
+// http://projects.instantcognition.com/protovis/bulletchart/
 d3.chart.bullet = function() {
   var orient = "left", // TODO top & bottom
       reverse = false,
@@ -121,7 +114,7 @@ d3.chart.bullet = function() {
       var tickEnter = tick.enter().append("svg:g")
           .attr("class", "tick")
           .attr("transform", d3_chart_bulletTranslate(x0))
-          .attr("opacity", 1e-6);
+          .style("opacity", 1e-6);
 
       tickEnter.append("svg:line")
           .attr("y1", height)
@@ -137,13 +130,13 @@ d3.chart.bullet = function() {
       tickEnter.transition()
           .duration(duration)
           .attr("transform", d3_chart_bulletTranslate(x1))
-          .attr("opacity", 1);
+          .style("opacity", 1);
 
       // Transition the updating ticks to the new scale, x1.
       var tickUpdate = tick.transition()
           .duration(duration)
           .attr("transform", d3_chart_bulletTranslate(x1))
-          .attr("opacity", 1);
+          .style("opacity", 1);
 
       tickUpdate.select("line")
           .attr("y1", height)
@@ -156,7 +149,7 @@ d3.chart.bullet = function() {
       tick.exit().transition()
           .duration(duration)
           .attr("transform", d3_chart_bulletTranslate(x1))
-          .attr("opacity", 1e-6)
+          .style("opacity", 1e-6)
           .remove();
     });
     d3.timer.flush();
@@ -170,18 +163,21 @@ d3.chart.bullet = function() {
     return bullet;
   };
 
+  // ranges (bad, satisfactory, good)
   bullet.ranges = function(x) {
     if (!arguments.length) return ranges;
     ranges = x;
     return bullet;
   };
 
+  // markers (previous, goal)
   bullet.markers = function(x) {
     if (!arguments.length) return markers;
     markers = x;
     return bullet;
   };
 
+  // measures (actual, forecast)
   bullet.measures = function(x) {
     if (!arguments.length) return measures;
     measures = x;

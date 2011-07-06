@@ -33,7 +33,7 @@ var g = vis.selectAll("g")
   .enter().append("svg:g");
 
 g.append("svg:path")
-    .attr("fill", function(d) { return fill(d.value); })
+    .style("fill", function(d) { return fill(d.value); })
     .attr("d", arc);
 
 g.append("svg:text")
@@ -48,7 +48,7 @@ d3.timer(function() {
       .data(fields);
 
   g.select("path")
-      .attr("fill", function(d) { return fill(d.value); })
+      .style("fill", function(d) { return fill(d.value); })
       .attr("d", arc);
 
   g.select("text")
@@ -63,7 +63,7 @@ d3.timer(function() {
 
 // Generate the fields for the current date/time.
 function fields() {
-  var d = new Date();
+  var d = new Date;
 
   function days() {
     return 32 - new Date(d.getYear(), d.getMonth(), 32).getDate();

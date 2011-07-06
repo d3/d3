@@ -12,7 +12,7 @@ var counties = svg.append("svg:g")
 var states = svg.append("svg:g")
     .attr("id", "states");
 
-d3.json("us-counties.json", function(json) {
+d3.json("../data/us-counties.json", function(json) {
   counties.selectAll("path")
       .data(json.features)
     .enter().append("svg:path")
@@ -20,7 +20,7 @@ d3.json("us-counties.json", function(json) {
       .attr("d", path);
 });
 
-d3.json("us-states.json", function(json) {
+d3.json("../data/us-states.json", function(json) {
   states.selectAll("path")
       .data(json.features)
     .enter().append("svg:path")
