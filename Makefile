@@ -182,11 +182,6 @@ tests: \
 	tests/test-scale-pow.test \
 	tests/test-scale-quantile.test \
 	tests/test-bisect.test \
-	tests/test-stats-bandwidth.test \
-	tests/test-stats-iqr.test \
-	tests/test-stats-mean.test \
-	tests/test-stats-median.test \
-	tests/test-stats-variance.test \
 	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
 	tests/test-svg-line.test \
