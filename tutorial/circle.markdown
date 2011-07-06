@@ -198,7 +198,7 @@ code continues. So you can run them again or redefine them however you like.
 
 This is beginning to look a lot like [jQuery](http://jquery.com/). More
 commonly, though, we want to use *data* to drive the appearance of our circles.
-To do that, we need some data. For the sake of example, let's imaginge that each
+To do that, we need some data. For the sake of example, let's imagine that each
 of these circles represents a number: 32, 57 and 112. The
 [data](https://github.com/mbostock/d3/wiki/Selections#data) operator binds these
 numbers to the circles:
