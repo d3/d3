@@ -1,5 +1,5 @@
 // Based on http://bl.ocks.org/900762 by John Firebaugh
-d3.json("faithful.json", function(faithful) {
+d3.json("../data/faithful.json", function(faithful) {
   data = faithful;
   var w = 800,
       h = 400,
