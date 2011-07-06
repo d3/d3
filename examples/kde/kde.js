@@ -4,10 +4,10 @@ d3.json("faithful.json", function(faithful) {
   var w = 800,
       h = 400,
       x = d3.scale.linear().domain([30, 110]).range([0, w]);
-      bins = d3.layout.histogram().frequency(false).ticks(x.ticks(60))(data),
+      bins = d3.layout.histogram().frequency(true).bins(x.ticks(60))(data),
       max = d3.max(bins, function(d) { return d.y; }),
       y = d3.scale.linear().domain([0, .1]).range([0, h]),
-      kde = d3.stats.kde().sample(data);
+      kde = science.stats.kde().sample(data);
 
   var vis = d3.select("body")
     .append("svg:svg")
@@ -32,7 +32,7 @@ d3.json("faithful.json", function(faithful) {
       .y(function(d) { return h - y(d[1]); });
 
   vis.selectAll("path")
-      .data(d3.values(d3.stats.bandwidth))
+      .data(d3.values(science.stats.bandwidth))
     .enter().append("svg:path")
       .attr("d", function(h) {
         return line(kde.bandwidth(h)(d3.range(30, 110, .1)));

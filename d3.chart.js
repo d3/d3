@@ -291,7 +291,11 @@ function d3_chart_boxWhiskers(d) {
 
 function d3_chart_boxQuartiles(d) {
   // TODO avoid sorting data twice?
-  return d3.stats.quantiles(d, [.25, .5, .75]);
+  var n = d.length;
+  return [.25, .5, .75].map(function(q) {
+    q *= n;
+    return ~~q === q ? (d[q] + d[q + 1]) / 2 : d[Math.round(q)];
+  });
 }
 // ranges (bad, satisfactory, good)
 // measures (actual, forecast)
