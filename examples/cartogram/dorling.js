@@ -7,56 +7,52 @@ var data = [
 ];
 
 var force = d3.layout.force()
-    .gravity(.015)
+    .gravity(0)
+    .charge(0)
     .distance(function(l) {
       return l.length;
     })
     .size([960, 500]);
 
-var svg = d3.select("#chart")
-  .append("svg:svg");
+var svg = d3.select("#chart").append("svg:svg");
 
-d3.json("../data/us-borders.json", function(borders) {
-  d3.json("../data/us-state-centroids.json", function(states) {
-    var project = d3.geo.albersUsa(),
-        idToNode = {},
-        links = [],
-        nodes = states.features.map(function(d) {
-      var xy = project(d.geometry.coordinates);
-      return idToNode[d.id] = {x: xy[0], y: xy[1], r: Math.sqrt(data[+d.id] * 5000)};
-    });
+d3.json("../data/us-state-centroids.json", function(states) {
+  var project = d3.geo.albersUsa(),
+      idToNode = {},
+      links = [],
+      nodes = states.features.map(function(d) {
+    var xy = project(d.geometry.coordinates);
+    return idToNode[d.id] = {x: xy[0], y: xy[1], r: Math.sqrt(data[+d.id] * 5000)};
+  });
 
-    states.features.forEach(function(d) {
-      var stateBorders = borders[d.id];
-      if (!stateBorders) return;
-      stateBorders.forEach(function(b) {
-        if (idToNode[d.id] && idToNode[b] && d.id < b) {
-          var nodeA = idToNode[d.id],
-              nodeB = idToNode[b],
-              dx = nodeA.x - nodeB.x,
-              dy = nodeA.y - nodeB.y,
-              dist = Math.sqrt(dx * dx + dy * dy);
-          links.push({source: nodeA, target: nodeB, length: dist});
+  force
+      .nodes(nodes)
+      .links(links)
+      .start()
+      .on("tick", function(e) {
+    var k = .1 * e.alpha;
+    nodes.forEach(function(a, i) {
+      nodes.forEach(function(b, i) {
+        // Check for collision
+        var dx = a.x - b.x,
+            dy = a.y - b.y,
+            dr = a.r + b.r;
+        if (dx * dx + dy * dy < dr * dr) {
+          a.x += dx * k;
+          a.y += dy * k;
         }
       });
     });
 
-    force
-        .nodes(nodes)
-        .links(links)
-        .start();
-
     svg.selectAll("circle")
-        .data(nodes)
-      .enter().append("svg:circle")
         .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; })
-        .attr("r", function(d, i) { return d.r; });
+        .attr("cy", function(d) { return d.y; });
   });
-});
 
-force.on("tick", function(e) {
   svg.selectAll("circle")
+      .data(nodes)
+    .enter().append("svg:circle")
       .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; });
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", function(d, i) { return d.r; });
 });
