@@ -345,6 +345,12 @@ d3.layout.force = function() {
   // For backwards-compatibility.
   force.distance = force.linkDistance;
 
+  force.linkStrength = function(x) {
+    if (!arguments.length) return linkStrength;
+    linkStrength = d3.functor(x);
+    return force;
+  };
+
   force.friction = function(x) {
     if (!arguments.length) return friction;
     friction = x;
