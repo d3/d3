@@ -11,10 +11,10 @@ var color = d3.scale.linear()
     .range(["#aad", "#556"]); 
 
 var force = d3.layout.force()
-    .gravity(0)
     .charge(0)
-    .distance(function(l) {
-      return l.length;
+    .gravity(0)
+    .gravityCenter(function(node) {
+      return node.gravity;
     })
     .size([960, 500]);
 
@@ -26,7 +26,13 @@ d3.json("../data/us-state-centroids.json", function(states) {
       links = [],
       nodes = states.features.map(function(d) {
     var xy = project(d.geometry.coordinates);
-    return idToNode[d.id] = {x: xy[0], y: xy[1], r: Math.sqrt(data[+d.id] * 5000), value: data[+d.id]};
+    return idToNode[d.id] = {
+      x: xy[0],
+      y: xy[1],
+      gravity: {x: xy[0], y: xy[1]},
+      r: Math.sqrt(data[+d.id] * 5000),
+      value: data[+d.id]
+    };
   });
 
   force
@@ -34,16 +40,24 @@ d3.json("../data/us-state-centroids.json", function(states) {
       .links(links)
       .start()
       .on("tick", function(e) {
-    var k = .1 * e.alpha;
+    var k = e.alpha;
     nodes.forEach(function(a, i) {
-      nodes.forEach(function(b, i) {
+      nodes.slice(i + 1).forEach(function(b, i) {
         // Check for collision
         var dx = a.x - b.x,
             dy = a.y - b.y,
-            dr = a.r + b.r;
-        if (dx * dx < dr * dr && dy * dy < dr * dr) {
-          a.x += dx * k;
-          a.y += dy * k;
+            d = a.r + b.r,
+            lx = Math.abs(dx),
+            ly = Math.abs(dy);
+        if (lx < d && ly < d) {
+          lx = (lx - d) / lx * k;
+          ly = (ly - d) / ly * k;
+          dx *= lx;
+          dy *= ly;
+          a.x -= dx;
+          a.y -= dy;
+          b.x += dx;
+          b.y += dy;
         }
       });
     });

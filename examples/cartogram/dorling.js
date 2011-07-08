@@ -11,14 +11,18 @@ var color = d3.scale.linear()
     .range(["#aad", "#556"]); 
 
 var force = d3.layout.force()
-    .gravity(0)
     .charge(0)
-    .distance(function(l) {
-      return l.length;
+    .gravity(0)
+    .gravityCenter(function(node) {
+      return node.gravity;
     })
     .size([960, 500]);
 
-var svg = d3.select("#chart").append("svg:svg");
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", 960 + 100)
+    .attr("height", 500 + 100)
+  .append("svg:g")
+    .attr("transform", "translate(50,50)");
 
 d3.json("../data/us-state-centroids.json", function(states) {
   var project = d3.geo.albersUsa(),
@@ -26,7 +30,13 @@ d3.json("../data/us-state-centroids.json", function(states) {
       links = [],
       nodes = states.features.map(function(d) {
     var xy = project(d.geometry.coordinates);
-    return idToNode[d.id] = {x: xy[0], y: xy[1], r: Math.sqrt(data[+d.id] * 5000), value: data[+d.id]};
+    return idToNode[d.id] = {
+      x: xy[0],
+      y: xy[1],
+      gravity: {x: xy[0], y: xy[1]},
+      r: Math.sqrt(data[+d.id] * 5000),
+      value: data[+d.id]
+    };
   });
 
   force
@@ -34,16 +44,22 @@ d3.json("../data/us-state-centroids.json", function(states) {
       .links(links)
       .start()
       .on("tick", function(e) {
-    var k = .1 * e.alpha;
+    var k = e.alpha;
     nodes.forEach(function(a, i) {
-      nodes.forEach(function(b, i) {
-        // Check for collision
+      nodes.slice(i + 1).forEach(function(b, i) {
+        // Check for collisions.
         var dx = a.x - b.x,
             dy = a.y - b.y,
-            dr = a.r + b.r;
-        if (dx * dx + dy * dy < dr * dr) {
-          a.x += dx * k;
-          a.y += dy * k;
+            l = Math.sqrt(dx * dx + dy * dy),
+            d = a.r + b.r;
+        if (l < d) {
+          l = (l - d) / l * k;
+          dx *= l;
+          dy *= l;
+          a.x -= dx;
+          a.y -= dy;
+          b.x += dx;
+          b.y += dy;
         }
       });
     });
