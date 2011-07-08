@@ -378,7 +378,7 @@ d3.layout.force = function() {
       (o = nodes[i]).index = i;
     }
 
-    distances = new Array(m);
+    distances = [];
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
