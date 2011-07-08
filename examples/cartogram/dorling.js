@@ -6,6 +6,10 @@ var data = [
   .169, , .132, .167, .139, .184, .159, .14, .146, .157, , .139, .183, .16, .143
 ];
 
+var color = d3.scale.linear()
+    .domain([d3.min(data), d3.max(data)])
+    .range(["#aad", "#556"]); 
+
 var force = d3.layout.force()
     .gravity(0)
     .charge(0)
@@ -22,7 +26,7 @@ d3.json("../data/us-state-centroids.json", function(states) {
       links = [],
       nodes = states.features.map(function(d) {
     var xy = project(d.geometry.coordinates);
-    return idToNode[d.id] = {x: xy[0], y: xy[1], r: Math.sqrt(data[+d.id] * 5000)};
+    return idToNode[d.id] = {x: xy[0], y: xy[1], r: Math.sqrt(data[+d.id] * 5000), value: data[+d.id]};
   });
 
   force
@@ -52,6 +56,7 @@ d3.json("../data/us-state-centroids.json", function(states) {
   svg.selectAll("circle")
       .data(nodes)
     .enter().append("svg:circle")
+      .style("fill", function(d) { return color(d.value); })
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
       .attr("r", function(d, i) { return d.r; });
