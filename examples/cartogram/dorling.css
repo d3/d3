@@ -1,0 +1,9 @@
+#chart {
+  width: 960px;
+  height: 500px;
+}
+
+circle {
+  stroke: #ccc;
+  stroke-width: 1.5px;
+}
