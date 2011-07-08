@@ -215,7 +215,6 @@ d3.layout.force = function() {
       linkStrength = d3_layout_forceLinkStrength,
       charge = -30,
       gravity = .1,
-      gravityCenter = null,
       theta = .8,
       interval,
       nodes = [],
@@ -283,11 +282,6 @@ d3.layout.force = function() {
     y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
-      if (gravityCenter != null) {
-        var gxy = gravityCenter.call(this, o, i);
-        x = gxy.x;
-        y = gxy.y;
-      }
       o.x += (x - o.x) * kg;
       o.y += (y - o.y) * kg;
     }
@@ -372,12 +366,6 @@ d3.layout.force = function() {
   force.gravity = function(x) {
     if (!arguments.length) return gravity;
     gravity = x;
-    return force;
-  };
-
-  force.gravityCenter = function(x) {
-    if (!arguments.length) return gravityCenter;
-    gravityCenter = x == null ? null : d3.functor(x);
     return force;
   };
 

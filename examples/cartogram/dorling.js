@@ -13,9 +13,6 @@ var color = d3.scale.linear()
 var force = d3.layout.force()
     .charge(0)
     .gravity(0)
-    .gravityCenter(function(node) {
-      return node.gravity;
-    })
     .size([960, 500]);
 
 var svg = d3.select("#chart").append("svg:svg")
@@ -44,9 +41,13 @@ d3.json("../data/us-state-centroids.json", function(states) {
       .links(links)
       .start()
       .on("tick", function(e) {
-    var k = e.alpha;
+    var k = e.alpha,
+        kg = k * .02;
     nodes.forEach(function(a, i) {
-      nodes.slice(i + 1).forEach(function(b, i) {
+      // Apply gravity forces.
+      a.x += (a.gravity.x - a.x) * kg;
+      a.y += (a.gravity.y - a.y) * kg;
+      nodes.slice(i + 1).forEach(function(b) {
         // Check for collisions.
         var dx = a.x - b.x,
             dy = a.y - b.y,
