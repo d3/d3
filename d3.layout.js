@@ -211,14 +211,16 @@ d3.layout.force = function() {
       size = [1, 1],
       alpha,
       friction = .9,
-      distance = d3_layout_forceDistance,
+      linkDistance = d3_layout_forceLinkDistance,
+      linkStrength = d3_layout_forceLinkStrength,
       charge = -30,
       gravity = .1,
       theta = .8,
       interval,
       nodes = [],
       links = [],
-      distances;
+      distances,
+      strengths;
 
   function repulse(node, kc) {
     return function(quad, x1, y1, x2, y2) {
@@ -264,7 +266,7 @@ d3.layout.force = function() {
       x = t.x - s.x;
       y = t.y - s.y;
       if (l = (x * x + y * y)) {
-        l = alpha * ((l = Math.sqrt(l)) - distances[i]) / l;
+        l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
         t.x -= x;
@@ -334,11 +336,14 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.distance = function(x) {
-    if (!arguments.length) return distance;
-    distance = d3.functor(x);
+  force.linkDistance = function(x) {
+    if (!arguments.length) return linkDistance;
+    linkDistance = d3.functor(x);
     return force;
   };
+
+  // For backwards-compatibility.
+  force.distance = force.linkDistance;
 
   force.friction = function(x) {
     if (!arguments.length) return friction;
@@ -379,11 +384,13 @@ d3.layout.force = function() {
     }
 
     distances = [];
+    strengths = [];
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
       if (typeof o.target == "number") o.target = nodes[o.target];
-      distances[i] = distance.call(this, o, i);
+      distances[i] = linkDistance.call(this, o, i);
+      strengths[i] = linkStrength.call(this, o, i);
     }
 
     for (i = 0; i < n; ++i) {
@@ -546,8 +553,12 @@ function d3_layout_forceAccumulate(quad) {
   quad.cy = cy / quad.count;
 }
 
-function d3_layout_forceDistance(link) {
+function d3_layout_forceLinkDistance(link) {
   return 20;
+}
+
+function d3_layout_forceLinkStrength(link) {
+  return 1;
 }
 d3.layout.partition = function() {
   var hierarchy = d3.layout.hierarchy(),
