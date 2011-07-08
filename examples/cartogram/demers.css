@@ -2,3 +2,8 @@
   width: 960px;
   height: 500px;
 }
+
+rect {
+  stroke: #000;
+  stroke-width: .5px;
+}
