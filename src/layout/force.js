@@ -5,7 +5,7 @@ d3.layout.force = function() {
       size = [1, 1],
       alpha,
       friction = .9,
-      distance = 20,
+      distance = d3_layout_forceDistance,
       charge = -30,
       gravity = .1,
       theta = .8,
@@ -58,7 +58,7 @@ d3.layout.force = function() {
       x = t.x - s.x;
       y = t.y - s.y;
       if (l = (x * x + y * y)) {
-        l = alpha * ((l = Math.sqrt(l)) - distance) / l;
+        l = alpha * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
         t.x -= x;
@@ -130,7 +130,7 @@ d3.layout.force = function() {
 
   force.distance = function(x) {
     if (!arguments.length) return distance;
-    distance = x;
+    distance = d3.functor(x);
     return force;
   };
 
@@ -172,10 +172,12 @@ d3.layout.force = function() {
       (o = nodes[i]).index = i;
     }
 
+    distances = new Array(m);
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
       if (typeof o.target == "number") o.target = nodes[o.target];
+      distances[i] = distance.call(this, o, i);
     }
 
     for (i = 0; i < n; ++i) {
@@ -336,4 +338,8 @@ function d3_layout_forceAccumulate(quad) {
   }
   quad.cx = cx / quad.count;
   quad.cy = cy / quad.count;
+}
+
+function d3_layout_forceDistance(link) {
+  return 20;
 }
