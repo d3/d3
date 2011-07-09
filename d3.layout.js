@@ -470,14 +470,14 @@ d3.layout.force = function() {
     // O NOES! The drag element was removed from the DOM.
     if (!parent) {
       d3_layout_forceDragNode.fixed = false;
-      d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+      d3_layout_forceDragOffset = d3_layout_forceDragNode = d3_layout_forceDragElement = null;
       return;
     }
 
     var m = d3.svg.mouse(parent);
     d3_layout_forceDragMoved = true;
-    d3_layout_forceDragNode.px = m[0];
-    d3_layout_forceDragNode.py = m[1];
+    d3_layout_forceDragNode.px = m[0] - d3_layout_forceDragOffset[0];
+    d3_layout_forceDragNode.py = m[1] - d3_layout_forceDragOffset[1];
     force.resume(); // restart annealing
   }
 
@@ -493,7 +493,7 @@ d3.layout.force = function() {
 
     dragmove();
     d3_layout_forceDragNode.fixed = false;
-    d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+    d3_layout_forceDragOffset = d3_layout_forceDragNode = d3_layout_forceDragElement = null;
   }
 
   return force;
@@ -501,6 +501,7 @@ d3.layout.force = function() {
 
 var d3_layout_forceDragNode,
     d3_layout_forceDragMoved,
+    d3_layout_forceDragOffset,
     d3_layout_forceStopClick,
     d3_layout_forceDragElement;
 
@@ -515,9 +516,11 @@ function d3_layout_forceDragOut(d) {
 }
 
 function d3_layout_forceDragDown(d, i) {
+  var m = d3.svg.mouse(this.parentNode);
   (d3_layout_forceDragNode = d).fixed = true;
   d3_layout_forceDragMoved = false;
   d3_layout_forceDragElement = this;
+  d3_layout_forceDragOffset = [m[0] - d.x, m[1] - d.y];
   d3_layout_forceCancel();
 }
 
