@@ -1,0 +1,9 @@
+body {
+  font: 10px sans-serif;
+}
+
+path {
+  stroke: #000;
+  stroke-width: 1.5px;
+  fill: none;
+}

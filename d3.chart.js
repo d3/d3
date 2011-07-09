@@ -290,6 +290,7 @@ function d3_chart_boxWhiskers(d) {
 }
 
 function d3_chart_boxQuartiles(d) {
+  // TODO avoid sorting data twice?
   var n = d.length;
   return [.25, .5, .75].map(function(q) {
     q *= n;
