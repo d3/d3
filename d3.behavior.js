@@ -8,7 +8,7 @@ d3.behavior.zoom = function() {
       z = 0,
       listeners = [],
       pan,
-      _zoom;
+      zooming;
 
   function zoom() {
     var container = this
@@ -35,7 +35,7 @@ d3.behavior.zoom = function() {
   }
 
   function mousemove() {
-    _zoom = null;
+    zooming = null;
     if (pan) {
       x = d3.event.clientX + pan.x0;
       y = d3.event.clientY + pan.y0;
@@ -68,9 +68,9 @@ d3.behavior.zoom = function() {
     var e = d3.event;
 
     // initialize the mouse location for zooming (to avoid drift)
-    if (!_zoom) {
+    if (!zooming) {
       var p = d3.svg.mouse(this.nearestViewportElement || this);
-      _zoom = {
+      zooming = {
         x0: x,
         y0: y,
         z0: z,
@@ -98,9 +98,9 @@ d3.behavior.zoom = function() {
     }
 
     // adjust x and y to center around mouse location
-    var k = Math.pow(2, z - _zoom.z0) - 1;
-    x = _zoom.x0 + _zoom.x1 * k;
-    y = _zoom.y0 + _zoom.y1 * k;
+    var k = Math.pow(2, z - zooming.z0) - 1;
+    x = zooming.x0 + zooming.x1 * k;
+    y = zooming.y0 + zooming.y1 * k;
 
     // dispatch redraw
     dispatch.call(this, d, i);
