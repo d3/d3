@@ -5,14 +5,16 @@ d3.layout.force = function() {
       size = [1, 1],
       alpha,
       friction = .9,
-      distance = 20,
+      linkDistance = d3_layout_forceLinkDistance,
+      linkStrength = d3_layout_forceLinkStrength,
       charge = -30,
       gravity = .1,
       theta = .8,
       interval,
       nodes = [],
       links = [],
-      distances;
+      distances,
+      strengths;
 
   function repulse(node, kc) {
     return function(quad, x1, y1, x2, y2) {
@@ -58,7 +60,7 @@ d3.layout.force = function() {
       x = t.x - s.x;
       y = t.y - s.y;
       if (l = (x * x + y * y)) {
-        l = alpha * ((l = Math.sqrt(l)) - distance) / l;
+        l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
         t.x -= x;
@@ -128,9 +130,18 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.distance = function(x) {
-    if (!arguments.length) return distance;
-    distance = x;
+  force.linkDistance = function(x) {
+    if (!arguments.length) return linkDistance;
+    linkDistance = d3.functor(x);
+    return force;
+  };
+
+  // For backwards-compatibility.
+  force.distance = force.linkDistance;
+
+  force.linkStrength = function(x) {
+    if (!arguments.length) return linkStrength;
+    linkStrength = d3.functor(x);
     return force;
   };
 
@@ -172,10 +183,14 @@ d3.layout.force = function() {
       (o = nodes[i]).index = i;
     }
 
+    distances = [];
+    strengths = [];
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
       if (typeof o.target == "number") o.target = nodes[o.target];
+      distances[i] = linkDistance.call(this, o, i);
+      strengths[i] = linkStrength.call(this, o, i);
     }
 
     for (i = 0; i < n; ++i) {
@@ -249,14 +264,14 @@ d3.layout.force = function() {
     // O NOES! The drag element was removed from the DOM.
     if (!parent) {
       d3_layout_forceDragNode.fixed = false;
-      d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+      d3_layout_forceDragOffset = d3_layout_forceDragNode = d3_layout_forceDragElement = null;
       return;
     }
 
     var m = d3.svg.mouse(parent);
     d3_layout_forceDragMoved = true;
-    d3_layout_forceDragNode.px = m[0];
-    d3_layout_forceDragNode.py = m[1];
+    d3_layout_forceDragNode.px = m[0] - d3_layout_forceDragOffset[0];
+    d3_layout_forceDragNode.py = m[1] - d3_layout_forceDragOffset[1];
     force.resume(); // restart annealing
   }
 
@@ -272,7 +287,7 @@ d3.layout.force = function() {
 
     dragmove();
     d3_layout_forceDragNode.fixed = false;
-    d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+    d3_layout_forceDragOffset = d3_layout_forceDragNode = d3_layout_forceDragElement = null;
   }
 
   return force;
@@ -280,6 +295,7 @@ d3.layout.force = function() {
 
 var d3_layout_forceDragNode,
     d3_layout_forceDragMoved,
+    d3_layout_forceDragOffset,
     d3_layout_forceStopClick,
     d3_layout_forceDragElement;
 
@@ -294,9 +310,11 @@ function d3_layout_forceDragOut(d) {
 }
 
 function d3_layout_forceDragDown(d, i) {
+  var m = d3.svg.mouse(this.parentNode);
   (d3_layout_forceDragNode = d).fixed = true;
   d3_layout_forceDragMoved = false;
   d3_layout_forceDragElement = this;
+  d3_layout_forceDragOffset = [m[0] - d.x, m[1] - d.y];
   d3_layout_forceCancel();
 }
 
@@ -336,4 +354,12 @@ function d3_layout_forceAccumulate(quad) {
   }
   quad.cx = cx / quad.count;
   quad.cy = cy / quad.count;
+}
+
+function d3_layout_forceLinkDistance(link) {
+  return 20;
+}
+
+function d3_layout_forceLinkStrength(link) {
+  return 1;
 }
