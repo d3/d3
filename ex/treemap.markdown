@@ -16,7 +16,7 @@ title: Treemap
 
 <link type="text/css" rel="stylesheet" href="button.css"/>
 <link type="text/css" rel="stylesheet" href="treemap.css"/>
-<script type="text/javascript" src="../d3.layout.js?1.26.0"> </script>
+<script type="text/javascript" src="../d3.layout.js?1.27.1"> </script>
 <script type="text/javascript" src="treemap.js"> </script>
 
 Treemap design invented by [Ben Shneiderman](http://www.cs.umd.edu/~ben/).

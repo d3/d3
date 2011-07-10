@@ -9,7 +9,7 @@ var chart = d3.chart.box()
     .width(w - m[1] - m[3])
     .height(h - m[0] - m[2]);
 
-d3.csv("morley.csv", function(csv) {
+d3.csv("../data/morley.csv", function(csv) {
   var data = [];
 
   csv.forEach(function(x) {

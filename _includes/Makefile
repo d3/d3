@@ -1,6 +1,8 @@
 SRC_FILES = \
 	../d3.js \
 	../d3.min.js \
+	../d3.behavior.js \
+	../d3.behavior.min.js \
 	../d3.chart.js \
 	../d3.chart.min.js \
 	../d3.csv.js \
@@ -17,7 +19,7 @@ SRC_FILES = \
 EX_FILES = \
 	../ex/box.js \
 	../ex/box.css \
-	../ex/morley.csv \
+	../data/morley.csv \
 	../ex/cluster.js \
 	../ex/cluster.css \
 	../ex/calendar.js \
@@ -103,9 +105,9 @@ $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:examples/box/box.js > $@
 
-../ex/morley.csv:
+../data/morley.csv:
 	@rm -rf $@
-	git cat-file blob master:examples/box/morley.csv > $@
+	git cat-file blob master:examples/data/morley.csv > $@
 
 ../ex/box.css:
 	@rm -rf $@
