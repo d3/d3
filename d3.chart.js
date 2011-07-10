@@ -836,14 +836,17 @@ function d3_chart_horizonY(d) {
 }
 // Based on http://vis.stanford.edu/protovis/ex/qqplot.html
 d3.chart.qq = function() {
-  var width = 1,
-      height = 1,
-      duration = 0,
+  var n = 100,
+      x = d3_chart_scatterX,
+      y = d3_chart_scatterY,
+      scatter = d3.chart.scatter()
+        .x(function(d, i) {
+          return d3_chart_qqQuantiles(n, x.call(this, d, i));
+        })
+        .y(function(d, i) {
+          return d3_chart_qqQuantiles(n, y.call(this, d, i));
+        }),
       domain = null,
-      tickFormat = null,
-      n = 100,
-      x = d3_chart_qqX,
-      y = d3_chart_qqY,
       xAxis = d3.chart.axis().orient("bottom").tickCount(3),
       yAxis = d3.chart.axis().orient("left").tickCount(3);
 
@@ -851,102 +854,45 @@ d3.chart.qq = function() {
   function qq(g) {
     g.each(function(d, i) {
       var g = d3.select(this),
-          qx = d3_chart_qqQuantiles(n, x.call(this, d, i)),
-          qy = d3_chart_qqQuantiles(n, y.call(this, d, i)),
-          xd = domain && domain.call(this, d, i) || [d3.min(qx), d3.max(qx)], // new x-domain
-          yd = domain && domain.call(this, d, i) || [d3.min(qy), d3.max(qy)], // new y-domain
-          x1 = d3.scale.linear().domain(xd).range([0, width]), // new x-scale
-          y1 = d3.scale.linear().domain(yd).range([height, 0]), // new y-scale
-          x0 = this.__chart__ && this.__chart__.x || x1, // old x-scale
-          y0 = this.__chart__ && this.__chart__.y || y1; // old y-scale
+          duration = scatter.duration();
 
-      // x-axis
-      var gx = g.selectAll(".x.axis").data([,]);
-      gx.enter().append("svg:g").attr("class", "x axis");
-      gx.attr("transform", "translate(0," + height + ")").call(xAxis.scales([x0, x1]));
+      g.call(scatter);
 
-      // y-axis
-      var gy = g.selectAll(".y.axis").data([,]);
-      gy.enter().append("svg:g").attr("class", "y axis")
-      gy.call(yAxis.scales([y0, y1]));
+      g.selectAll("g.datum").each(function(d, i) {
+        var g = d3.select(this);
+        if (g.select("circle").empty())
+          g.append("svg:circle")
+              .attr("r", 4.5);
+      });
 
-      // Stash the new scales.
-      this.__chart__ = {x: x1, y: y1};
+      var xRange = this.__chart__.x.range(),
+          yRange = this.__chart__.y.range();
 
       // Update diagonal line.
       var diagonal = g.selectAll("line.diagonal")
           .data([null]);
 
-      diagonal.enter().append("svg:line")
+      diagonal.enter().insert("svg:line", "g")
           .attr("class", "diagonal")
-          .attr("x1", x1(yd[0]))
-          .attr("y1", y1(xd[0]))
-          .attr("x2", x1(yd[1]))
-          .attr("y2", y1(xd[1]));
+          .attr("x1", xRange[0])
+          .attr("y1", yRange[0])
+          .attr("x2", xRange[1])
+          .attr("y2", yRange[1]);
 
       diagonal.transition()
           .duration(duration)
-          .attr("x1", x1(yd[0]))
-          .attr("y1", y1(xd[0]))
-          .attr("x2", x1(yd[1]))
-          .attr("y2", y1(xd[1]));
-
-      // Update quantile plots.
-      var circle = g.selectAll("circle")
-          .data(d3.range(n).map(function(i) {
-            return {x: qx[i], y: qy[i]};
-          }));
-
-      circle.enter().append("svg:circle")
-          .attr("class", "quantile")
-          .attr("r", 4.5)
-          .attr("cx", function(d) { return x0(d.x); })
-          .attr("cy", function(d) { return y0(d.y); })
-          .style("opacity", 1e-6)
-        .transition()
-          .duration(duration)
-          .attr("cx", function(d) { return x1(d.x); })
-          .attr("cy", function(d) { return y1(d.y); })
-          .style("opacity", 1);
-
-      circle.transition()
-          .duration(duration)
-          .attr("cx", function(d) { return x1(d.x); })
-          .attr("cy", function(d) { return y1(d.y); })
-          .style("opacity", 1);
-
-      circle.exit().transition()
-          .duration(duration)
-          .attr("cx", function(d) { return x1(d.x); })
-          .attr("cy", function(d) { return y1(d.y); })
-          .style("opacity", 1e-6)
-          .remove();
+          .attr("x1", xRange[0])
+          .attr("y1", yRange[0])
+          .attr("x2", xRange[1])
+          .attr("y2", yRange[1]);
     });
   }
 
-  qq.width = function(x) {
-    if (!arguments.length) return width;
-    width = x;
-    return qq;
-  };
-
-  qq.height = function(x) {
-    if (!arguments.length) return height;
-    height = x;
-    return qq;
-  };
-
-  qq.duration = function(x) {
-    if (!arguments.length) return duration;
-    duration = x;
-    return qq;
-  };
-
-  qq.domain = function(x) {
-    if (!arguments.length) return domain;
-    domain = x == null ? x : d3.functor(x);
-    return qq;
-  };
+  qq.width = d3.rebind(qq, scatter.width);
+  qq.height = d3.rebind(qq, scatter.height);
+  qq.duration = d3.rebind(qq, scatter.duration);
+  qq.tickFormat = d3.rebind(qq, scatter.tickFormat);
+  qq.domain = d3.rebind(qq, scatter.domain);
 
   qq.count = function(z) {
     if (!arguments.length) return n;
@@ -966,14 +912,6 @@ d3.chart.qq = function() {
     return qq;
   };
 
-  qq.tickFormat = function(x) {
-    if (!arguments.length) return tickFormat;
-    tickFormat = x;
-    xAxis.tickFormat(tickFormat);
-    yAxis.tickFormat(tickFormat);
-    return qq;
-  };
-
   return qq;
 };
 
@@ -983,14 +921,6 @@ function d3_chart_qqQuantiles(n, values) {
   return d3.range(n).map(function(i) {
     return values[~~(i * m / n)];
   });
-}
-
-function d3_chart_qqX(d) {
-  return d.x;
-}
-
-function d3_chart_qqY(d) {
-  return d.y;
 }
 d3.chart.radar = function() {
   var radius = 1,
@@ -1175,5 +1105,130 @@ d3.chart.radar = function() {
 
 function d3_chart_radarDimensions(d) {
   return d3.keys(d[0]);
+}
+d3.chart.scatter = function() {
+  var width = 1,
+      height = 1,
+      duration = 0,
+      domain = null,
+      tickFormat = null,
+      x = d3_chart_scatterX,
+      y = d3_chart_scatterY,
+      xAxis = d3.chart.axis().orient("bottom").tickCount(3),
+      yAxis = d3.chart.axis().orient("left").tickCount(3);
+
+  function scatter(g) {
+    g.each(function(d, i) {
+      var g = d3.select(this),
+          xMin = Infinity, xMin = Infinity,
+          xMax = -Infinity, xMax = -Infinity,
+          dx = x.call(this, d, i),
+          dy = y.call(this, d, i),
+          xd = domain && domain.call(this, d, i) || [d3.min(dx), d3.max(dx)], // new x-domain
+          yd = domain && domain.call(this, d, i) || [d3.min(dy), d3.max(dy)], // new y-domain
+          x1 = d3.scale.linear().domain(xd).range([0, width]), // new x-scale
+          y1 = d3.scale.linear().domain(yd).range([height, 0]), // new y-scale
+          x0 = this.__chart__ && this.__chart__.x || x1, // old x-scale
+          y0 = this.__chart__ && this.__chart__.y || y1; // old y-scale
+
+      // x-axis
+      var gx = g.selectAll(".x.axis").data([,]);
+      gx.enter().append("svg:g").attr("class", "x axis");
+      gx.attr("transform", "translate(0," + height + ")").call(xAxis.scales([x0, x1]));
+
+      // y-axis
+      var gy = g.selectAll(".y.axis").data([,]);
+      gy.enter().append("svg:g").attr("class", "y axis")
+      gy.call(yAxis.scales([y0, y1]));
+
+      // Stash the new scales.
+      this.__chart__ = {x: x1, y: y1};
+
+      // Update scatter plots.
+      var datum = g.selectAll("g.datum")
+          .data(dx);
+
+      var t = function(d, i) { return "translate(" + x1(d) + "," + y1(dy[i]) + ")"; };
+
+      datum.enter().append("svg:g")
+          .attr("class", "datum")
+          .attr("transform", function(d, i) { return "translate(" + x0(d) + "," + y0(dy[i]) + ")"; })
+          .style("opacity", 1e-6)
+        .transition()
+          .duration(duration)
+          .delay(function(d) { return x0(d) * 5; })
+          .attr("transform", t)
+          .style("opacity", 1);
+
+      datum.transition()
+          .duration(duration)
+          .delay(function(d) { return x1(d) * 5; })
+          .attr("transform", t)
+          .style("opacity", 1);
+
+      datum.exit().transition()
+          .duration(duration)
+          .delay(function(d) { return x1(d) * 5; })
+          .attr("transform", t)
+          .style("opacity", 1e-6)
+          .remove();
+
+      d3.timer.flush();
+    });
+  }
+
+  scatter.width = function(x) {
+    if (!arguments.length) return width;
+    width = x;
+    return scatter;
+  };
+
+  scatter.height = function(x) {
+    if (!arguments.length) return height;
+    height = x;
+    return scatter;
+  };
+
+  scatter.duration = function(x) {
+    if (!arguments.length) return duration;
+    duration = x;
+    return scatter;
+  };
+
+  scatter.domain = function(x) {
+    if (!arguments.length) return domain;
+    domain = x == null ? x : d3.functor(x);
+    return scatter;
+  };
+
+  scatter.x = function(z) {
+    if (!arguments.length) return x;
+    x = z;
+    return scatter;
+  };
+
+  scatter.y = function(z) {
+    if (!arguments.length) return y;
+    y = z;
+    return scatter;
+  };
+
+  scatter.tickFormat = function(x) {
+    if (!arguments.length) return tickFormat;
+    tickFormat = x;
+    xAxis.tickFormat(tickFormat);
+    yAxis.tickFormat(tickFormat);
+    return scatter;
+  };
+
+  return scatter;
+};
+
+function d3_chart_scatterX(d) {
+  return d.x;
+}
+
+function d3_chart_scatterY(d) {
+  return d.y;
 }
 })()

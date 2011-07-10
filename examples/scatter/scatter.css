@@ -1,0 +1,11 @@
+@import url("../axis/ggplot2.css");
+
+#chart {
+  font: 10px sans-serif;
+  width: 960px;
+  height: 310px;
+}
+
+.scatter .box {
+  fill: #e9e9e9;
+}
