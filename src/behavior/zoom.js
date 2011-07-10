@@ -1,111 +1,158 @@
 // TODO unbind zoom behavior?
 // TODO unbind listener?
 d3.behavior.zoom = function() {
-
   var x = 0,
       y = 0,
       z = 0,
-      listeners = [],
-      pan,
-      zooming;
-
-  function zoom() {
-    var container = this
-        .on("mousedown", mousedown)
-        .on("mousewheel", mousewheel)
-        .on("DOMMouseScroll", mousewheel)
-        .on("dblclick", mousewheel);
-
-    d3.select(window)
-        .on("mousemove", mousemove)
-        .on("mouseup", mouseup);
-  }
-
-  function mousedown(d, i) {
-    pan = {
-      x0: x - d3.event.clientX,
-      y0: y - d3.event.clientY,
-      target: this,
-      data: d,
-      index: i
-    };
-    d3.event.preventDefault();
-    window.focus(); // TODO focusableParent
-  }
-
-  function mousemove() {
-    zooming = null;
-    if (pan) {
-      x = d3.event.clientX + pan.x0;
-      y = d3.event.clientY + pan.y0;
-      dispatch.call(pan.target, pan.data, pan.index);
-    }
-  }
-
-  function mouseup() {
-    if (pan) {
-      mousemove();
-      pan = null;
-    }
-  }
+      panning,
+      zooming,
+      locations = {}, // identifier -> location
+      last = 0,
+      target,
+      targuments,
+      event = d3.dispatch("zoom");
 
   // mousewheel events are totally broken!
   // https://bugs.webkit.org/show_bug.cgi?id=40441
   // not only that, but Chrome and Safari differ in re. to acceleration!
-
-  var outer = d3.select("body").append("div")
+  var div = d3.select("body").append("div")
       .style("visibility", "hidden")
-      .style("position", "absolute")
-      .style("top", "-3000px")
+      .style("top", 0)
       .style("height", 0)
+      .style("width", 0)
       .style("overflow-y", "scroll")
     .append("div")
       .style("height", "2000px")
     .node().parentNode;
 
-  function mousewheel(d, i) {
-    var e = d3.event;
+  function zoom() {
+    this
+        .on("mousedown.zoom", mousedown)
+        .on("mousewheel.zoom", mousewheel)
+        .on("DOMMouseScroll.zoom", dblclick)
+        .on("dblclick.zoom", dblclick)
+        .on("touchstart.zoom", touchstart);
 
-    // initialize the mouse location for zooming (to avoid drift)
-    if (!zooming) {
-      var p = d3.svg.mouse(this.nearestViewportElement || this);
-      zooming = {
-        x0: x,
-        y0: y,
-        z0: z,
-        x1: x - p[0],
-        y1: y - p[1]
-      };
-    }
-
-    // adjust zoom level
-    if (e.type === "dblclick") {
-      z = e.shiftKey ? Math.ceil(z - 1) : Math.floor(z + 1);
-    } else {
-      var delta = e.wheelDelta || -e.detail;
-      if (delta) {
-        try {
-          outer.scrollTop = 1000;
-          outer.dispatchEvent(e);
-          delta = 1000 - outer.scrollTop;
-        } catch (error) {
-          // Derp! Hope for the best?
-        }
-        delta *= .005;
-      }
-      z += delta;
-    }
-
-    // adjust x and y to center around mouse location
-    var k = Math.pow(2, z - zooming.z0) - 1;
-    x = zooming.x0 + zooming.x1 * k;
-    y = zooming.y0 + zooming.y1 * k;
-
-    // dispatch redraw
-    dispatch.call(this, d, i);
+    d3.select(window)
+        .on("mousemove.zoom", mousemove)
+        .on("mouseup.zoom", mouseup)
+        .on("touchmove.zoom", touchmove)
+        .on("touchend.zoom", touchup);
   }
 
-  function dispatch(d, i) {
+  function location(point) {
+    return [point[0] - x, point[1] - y, z];
+  }
+
+  // snapshot the target, data and index for subsequent dispatch
+  function start() {
+    target = this;
+    targuments = arguments;
+  }
+
+  // Note: Since we don't rotate, it's possible for the touches to become
+  // slightly detached from their original positions. Thus, we recompute the
+  // touch points on touchend as well as touchstart!
+  function touchup() {
+    var touches = d3.svg.touches(target),
+        i = -1,
+        n = touches.length,
+        touch;
+    while (++i < n) locations[(touch = touches[i]).identifier] = location(touch);
+    return touches;
+  }
+
+  function touchstart() {
+    start.apply(this, arguments);
+    var touches = touchup(),
+        touch,
+        now = Date.now();
+
+    // doubletap detection
+    if ((touches.length === 1) && (now - last < 300)) {
+      var touch = touches[0];
+      zoomto(1 + Math.floor(z), touch, locations[touch.identifier]);
+    }
+    last = now;
+  }
+
+  function touchmove() {
+    var touches = d3.svg.touches(target);
+    switch (touches.length) {
+
+      // single-touch pan
+      case 1: {
+        var touch = touches[0];
+        zoomto(z, touch, locations[touch.identifier]);
+        break;
+      }
+
+      // double-touch pan + zoom
+      case 2: {
+        var p0 = touches[0],
+            p1 = touches[1],
+            p2 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2],
+            l0 = locations[p0.identifier],
+            l1 = locations[p1.identifier],
+            l2 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2, l0[2]];
+        zoomto(Math.log(d3.event.scale) / Math.LN2 + l0[2], p2, l2);
+        break;
+      }
+    }
+  }
+
+  function mousedown() {
+    start.apply(this, arguments);
+    panning = location(d3.svg.mouse(target));
+    d3.event.preventDefault();
+    window.focus();
+  }
+
+  function mousemove() {
+    zooming = null;
+    if (panning) zoomto(z, d3.svg.mouse(target), panning);
+  }
+
+  function mouseup() {
+    if (panning) {
+      mousemove();
+      panning = null;
+    }
+  }
+
+  function mousewheel() {
+    start.apply(this, arguments);
+
+    // store starting mouse location
+    if (!zooming) zooming = location(d3.svg.mouse(target));
+
+    // detect the pixels that would be scrolled by this wheel event
+    var e = d3.event, delta;
+    try {
+      div.scrollTop = 1000;
+      div.dispatchEvent(e);
+      delta = 1000 - div.scrollTop;
+    } catch (error) {
+      delta = e.wheelDelta || -e.detail;
+    }
+
+    zoomto(delta * .005 + z, d3.svg.mouse(target), zooming);
+  }
+
+  function dblclick() {
+    start.apply(this, arguments);
+    var mouse = d3.svg.mouse(target);
+    zoomto(d3.event.shiftKey ? Math.ceil(z - 1) : Math.floor(z + 1), mouse, location(mouse));
+  }
+
+  function zoomto(z1, x0, x1) {
+    var k = Math.pow(2, (z = z1) - x1[2]);
+    x = x0[0] - k * x1[0];
+    y = x0[1] - k * x1[1];
+    dispatch();
+  }
+
+  function dispatch() {
     var o = d3.event, // Events can be reentrant (e.g., focus).
         k = Math.pow(2, z);
 
@@ -125,16 +172,16 @@ d3.behavior.zoom = function() {
     }
 
     try {
-      for (var j = 0, m = listeners.length; j < m; j++) {
-        listeners[j].call(this, d, i);
-      }
+      event.zoom.dispatch.apply(target, targuments);
     } finally {
       d3.event = o;
     }
+
+    o.preventDefault();
   }
 
   zoom.on = function(type, listener) {
-    if (type == "zoom") listeners.push(listener);
+    event[type].add(listener);
     return zoom;
   };
 
