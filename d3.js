@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.26.0"}; // semver
+(function(){d3 = {version: "1.27.0"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -81,6 +81,14 @@ d3.sum = function(array, f) {
   }
 
   return s;
+};
+// R-7 per <http://en.wikipedia.org/wiki/Quantile>
+d3.quantile = function(values, p) {
+  var H = (values.length - 1) * p + 1,
+      h = Math.floor(H),
+      v = values[h - 1],
+      e = H - h;
+  return e ? v + e * (values[h] - v) : v;
 };
 d3.zip = function() {
   if (!(n = arguments.length)) return [];
@@ -2594,14 +2602,9 @@ d3.scale.quantile = function() {
   function rescale() {
     var k = 0,
         n = domain.length,
-        q = range.length,
-        i;
+        q = range.length;
     thresholds.length = Math.max(0, q - 1);
-    while (++k < q) {
-      thresholds[k - 1] = (i = n * k / q) % 1
-          ? domain[~~i]
-          : (domain[i = ~~i] + domain[i - 1]) / 2;
-    }
+    while (++k < q) thresholds[k - 1] = d3.quantile(domain, k / q);
   }
 
   function scale(x) {

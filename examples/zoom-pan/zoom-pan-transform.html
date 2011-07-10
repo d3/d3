@@ -33,15 +33,14 @@ var y = d3.scale.linear()
     .domain([+1.00, -1.00])
     .range([0, size[1]]);
 
-var svg = d3.select("body")
-  .append("svg:svg")
+var svg = d3.select("body").append("svg:svg")
     .attr("width", size[0] + padding[3] + padding[1])
     .attr("height", size[1] + padding[0] + padding[2])
     .attr("pointer-events", "all")
-    .call(d3.behavior.zoom()
-    .on("zoom", redraw))
   .append("svg:g")
-    .attr("transform", "translate(" + padding[3] + "," + padding[0] + ")");
+    .attr("transform", "translate(" + padding[3] + "," + padding[0] + ")")
+    .call(d3.behavior.zoom().on("zoom", redraw))
+  .append("svg:g");
 
 // Generate x-ticks…
 var gx = svg.selectAll("g.x")
@@ -88,8 +87,7 @@ svg.append("svg:rect")
 function redraw() {
   svg.attr("transform",
       "translate(" + d3.event.translate + ")"
-      + "scale(" + d3.event.scale + ")"
-      + "translate(" + padding[3] + "," + padding[0] + ")");
+      + "scale(" + d3.event.scale + ")");
 }
 
     </script>
