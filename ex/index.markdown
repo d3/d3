@@ -255,4 +255,16 @@ title: Examples
   to Google's Data Viz Challenge.</p>
 </div>
 
+
+<div class="list">
+  <a href="http://keminglabs.com/ukuni/">
+    <img src="../university_linked_treemap.png"/>
+  </a>
+  <h4><a href="http://keminglabs.com/ukuni/">University Admissions Statistics</a></h4>
+
+  <p><a href="http://keminglabs.com">Kevin Lynagh</a> created this linked treemap &amp; line chart 
+  to show trends in admission and acceptance rates at UK universities by age, ethnicity, gender, and subject.</p>
+</div>
+
+
 </div>
