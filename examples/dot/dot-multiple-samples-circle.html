@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dot Plot</title>
+    <script type="text/javascript" src="../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+path.dot {
+  fill: white;
+  stroke-width: 1.5px;
+}
+
+rect {
+  fill: none;
+  stroke: black;
+  shape-rendering: crispEdges;
+}
+
+.x line, .y line {
+  stroke: #ccc;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+// Same as dot-multiple-samples.html but using 
+// the circle element instead of dot
+// Only change in the last visualization chain
+
+var gen_data = function(ne, color) { // ne: number of elements
+    return d3.range(ne).map(function(i) {
+      return {x: i / 9, y: Math.random(), color: color};
+    });
+  };
+
+var data = gen_data(10, 0)          // Data from first sample
+           .concat(gen_data(20, 1)) // Data from second sample
+           .concat(gen_data(10, 2)) // Data from third sample
+           .concat(gen_data(15, 3));// Data from fourth sample
+
+var w = 650, 
+    h = 450, 
+    p = 20,  
+    x = d3.scale.linear().range([0, w]),
+    y = d3.scale.linear().range([h, 0]),
+    symbol = d3.scale.ordinal().range(d3.svg.symbolTypes),
+    color = d3.scale.category10();
+
+var vis = d3.select("body")
+  .append("svg:svg") 
+    .attr("width", w + p * 2) 
+    .attr("height", h + p * 2)
+  .append("svg:g")
+    .attr("transform", "translate(" + p + "," + p + ")");
+
+var xrule = vis.selectAll("g.x") 
+  .data(x.ticks(10)) 
+  .enter().append("svg:g")
+    .attr("class", "x");
+
+xrule.append("svg:line")
+    .attr("x1", x)
+    .attr("x2", x)
+    .attr("y1", 0)
+    .attr("y2", h);
+
+xrule.append("svg:text")
+    .attr("x", x)
+    .attr("y", h + 3)
+    .attr("dy", ".71em")
+    .attr("text-anchor", "middle")
+    .text(x.tickFormat(10));
+
+var yrule = vis.selectAll("g.y")
+  .data(y.ticks(10))
+  .enter().append("svg:g")
+    .attr("class", "y");
+
+yrule.append("svg:line")
+    .attr("x1", 0)
+    .attr("x2", w)
+    .attr("y1", y)
+    .attr("y2", y);
+
+yrule.append("svg:text")
+    .attr("x", -3)
+    .attr("y", y)
+    .attr("dy", ".35em")
+    .attr("text-anchor", "end")
+    .text(y.tickFormat(10));
+
+vis.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
+vis.selectAll("circle")
+  .data(data)
+  .enter()
+  .append("svg:circle")
+  .attr("cx", function(d) { return x(d.x);})
+  .attr("cy", function(d) { return y(d.y);})
+  .attr("r", 4)
+  .attr("stroke", "black") 
+  .attr("stroke-width", 1)
+  .attr("fill", function(d) { return color(d.color); })
+  .attr("fill-opacity", .65)
+
+    </script>
+  </body>
+</html>
