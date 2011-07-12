@@ -32,12 +32,7 @@ d3.layout.treemap = function() {
         n;
     row.area = 0;
     while ((n = children.length) > 0) {
-      child = children[n - 1];
-      if (isNaN(child.area) || child.area <= 0) {
-        children.pop();
-        continue;
-      }
-      row.push(child);
+      row.push(child = children[n - 1]);
       row.area += child.area;
       if ((score = worst(row, u)) <= best) { // continue with this orientation
         children.pop();
@@ -92,7 +87,8 @@ d3.layout.treemap = function() {
     }
     s *= s;
     u *= u;
-    return Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio));
+    return s === 0 && rmin === 0
+      ? Infinity : Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio));
   }
 
   // Positions the specified row of nodes. Modifies `rect`.
