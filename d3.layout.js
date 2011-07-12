@@ -1712,8 +1712,9 @@ d3.layout.treemap = function() {
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
-    var children = node.children;
-    node.area = node.value * k;
+    var children = node.children,
+        v = node.value;
+    node.area = isNaN(v) || v < 0 ? 0 : v * k;
     if (children) {
       var i = -1,
           n = children.length;
@@ -1789,8 +1790,8 @@ d3.layout.treemap = function() {
     }
     s *= s;
     u *= u;
-    return s === 0 && rmin === 0
-      ? Infinity : Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio));
+    return rmin || rmax
+      ? Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio)) : Infinity;
   }
 
   // Positions the specified row of nodes. Modifies `rect`.
