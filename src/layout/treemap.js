@@ -33,7 +33,7 @@ d3.layout.treemap = function() {
     row.area = 0;
     while ((n = children.length) > 0) {
       child = children[n - 1];
-      if (!child.area) {
+      if (isNaN(child.area) || child.area <= 0) {
         children.pop();
         continue;
       }
