@@ -1734,7 +1734,12 @@ d3.layout.treemap = function() {
         n;
     row.area = 0;
     while ((n = children.length) > 0) {
-      row.push(child = children[n - 1]);
+      child = children[n - 1];
+      if (!child.area) {
+        children.pop();
+        continue;
+      }
+      row.push(child);
       row.area += child.area;
       if ((score = worst(row, u)) <= best) { // continue with this orientation
         children.pop();
