@@ -31,6 +31,7 @@ d3.layout.pie = function() {
     // Compute the arcs!
     var arcs = index.map(function(i) {
       return {
+        data: data[i],
         value: d = values[i],
         startAngle: a,
         endAngle: a += d * k
