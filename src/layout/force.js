@@ -354,12 +354,18 @@ function d3_layout_forceAccumulate(quad) {
       cy = 0;
   quad.count = 0;
   if (!quad.leaf) {
-    quad.nodes.forEach(function(c) {
+    var nodes = quad.nodes,
+        n = nodes.length,
+        i = -1,
+        c;
+    while (++i < n) {
+      c = nodes[i];
+      if (c == null) continue;
       d3_layout_forceAccumulate(c);
       quad.count += c.count;
       cx += c.count * c.cx;
       cy += c.count * c.cy;
-    });
+    }
   }
   if (quad.point) {
     // jitter internal nodes that are coincident
