@@ -560,12 +560,18 @@ function d3_layout_forceAccumulate(quad) {
       cy = 0;
   quad.count = 0;
   if (!quad.leaf) {
-    quad.nodes.forEach(function(c) {
+    var nodes = quad.nodes,
+        n = nodes.length,
+        i = -1,
+        c;
+    while (++i < n) {
+      c = nodes[i];
+      if (c == null) continue;
       d3_layout_forceAccumulate(c);
       quad.count += c.count;
       cx += c.count * c.cx;
       cy += c.count * c.cy;
-    });
+    }
   }
   if (quad.point) {
     // jitter internal nodes that are coincident
@@ -669,6 +675,7 @@ d3.layout.pie = function() {
     // Compute the arcs!
     var arcs = index.map(function(i) {
       return {
+        data: data[i],
         value: d = values[i],
         startAngle: a,
         endAngle: a += d * k
@@ -1712,8 +1719,9 @@ d3.layout.treemap = function() {
 
   // Recursively compute the node area based on value & scale.
   function scale(node, k) {
-    var children = node.children;
-    node.area = node.value * k;
+    var children = node.children,
+        value = node.value;
+    node.area = isNaN(value) || value < 0 ? 0 : value * k;
     if (children) {
       var i = -1,
           n = children.length;
@@ -1789,7 +1797,9 @@ d3.layout.treemap = function() {
     }
     s *= s;
     u *= u;
-    return Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio));
+    return rmin || rmax
+        ? Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio))
+        : Infinity;
   }
 
   // Positions the specified row of nodes. Modifies `rect`.

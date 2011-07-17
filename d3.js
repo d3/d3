@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.27.1"}; // semver
+(function(){d3 = {version: "1.27.2"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -1332,7 +1332,7 @@ function d3_selection(groups) {
         for (i = 0; i < n; i++) {
           key = join.call(node = group[i], node.__data__, i);
           if (key in nodeByKey) {
-            exitNodes[j++] = group[i]; // duplicate key
+            exitNodes[j++] = node; // duplicate key
           } else {
             nodeByKey[key] = node;
           }
@@ -1932,7 +1932,7 @@ function d3_transition(groups) {
           var owner = tx.owner;
           if (owner === transitionId) {
             delete this.__transition__;
-            if (remove) this.parentNode.removeChild(this);
+            if (remove && this.parentNode) this.parentNode.removeChild(this);
           }
           d3_transitionInheritId = transitionId;
           event.end.dispatch.apply(this, arguments);
