@@ -177,13 +177,13 @@ d3.chart.horizon = function() {
   };
 
   horizon.width = function(x) {
-    if (!arguments.length) return width;
+    if (!arguments.length) return w;
     w = +x;
     return horizon;
   };
 
   horizon.height = function(x) {
-    if (!arguments.length) return height;
+    if (!arguments.length) return h;
     h = +x;
     return horizon;
   };
