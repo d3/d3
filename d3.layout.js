@@ -1713,7 +1713,8 @@ d3.layout.treemap = function() {
   var hierarchy = d3.layout.hierarchy(),
       round = Math.round,
       size = [1, 1], // width, height
-      padding = d3_layout_treemapPadding, // top, right, bottom, left
+      padding = null,
+      nodeRect = d3_layout_treemapPadNull,
       sticky = false,
       stickies,
       ratio = 0.5 * (1 + Math.sqrt(5)); // golden ratio
@@ -1728,17 +1729,6 @@ d3.layout.treemap = function() {
       value = (child = children[i]).value;
       child.area = isNaN(value) || value < 0 ? 0 : value * k;
     }
-  }
-
-  // Computes the rectangle for a particular node.
-  function nodeRect(node) {
-    var p = padding.call(treemap, node, node.depth);
-    return {
-      x: node.x + p[3],
-      y: node.y + p[0],
-      dx: node.dx - p[1] - p[3],
-      dy: node.dy - p[0] - p[2]
-    };
   }
 
   // Recursively arranges the specified node's children into squarified rows.
@@ -1855,12 +1845,18 @@ d3.layout.treemap = function() {
 
   function treemap(d) {
     var nodes = stickies || hierarchy(d),
-        root = nodes[0],
-        p = padding.call(treemap, root, root.depth);
-    root.x = p[3];
-    root.y = p[0];
-    root.dx = size[0] - p[3] - p[1];
-    root.dy = size[1] - p[0] - p[2];
+        root = nodes[0];
+    root.x = 0;
+    root.y = 0;
+    root.dx = size[0];
+    root.dy = size[1];
+    if (padding != null) {
+      var rect = nodeRect(root);
+      root.x = rect.x;
+      root.y = rect.y;
+      root.dx = rect.dx;
+      root.dy = rect.dy;
+    }
     if (stickies) hierarchy.revalue(root);
     scale([root], root.dx * root.dy / root.value);
     (stickies ? stickify : squarify)(root);
@@ -1876,7 +1872,43 @@ d3.layout.treemap = function() {
 
   treemap.padding = function(x) {
     if (!arguments.length) return padding;
-    padding = d3.functor(x);
+
+    function padFunction(n) {
+      var p = x.call(treemap, n, n.depth);
+      return {
+        x: n.x + p[3],
+        y: n.y + p[0],
+        dx: n.dx - p[1] - p[3],
+        dy: n.dy - p[0] - p[2]
+      };
+    }
+
+    function padNumber(n) {
+      return {
+        x: n.x + x,
+        y: n.y + x,
+        dx: n.dx - x - x,
+        dy: n.dy - x - x
+      };
+    }
+
+    function padArray(n) {
+      return {
+        x: n.x + x[3],
+        y: n.y + x[0],
+        dx: n.dx - x[1] - x[3],
+        dy: n.dy - x[0] - x[2]
+      };
+    }
+
+    var type = typeof x;
+    nodeRect = type === "function" ? padFunction
+        : type === "number" ? padNumber
+        : x == null ? d3_layout_treemapPadding
+        : padArray
+
+    padding = x;
+
     return treemap;
   };
 
@@ -1902,7 +1934,7 @@ d3.layout.treemap = function() {
   return d3_layout_hierarchyRebind(treemap, hierarchy);
 };
 
-function d3_layout_treemapPadding(node) {
-  return [0, 0, 0, 0];
+function d3_layout_treemapPadNull(n) {
+  return {x: n.x, y: n.y, dx: n.dx, dy: n.dy};
 }
 })();
