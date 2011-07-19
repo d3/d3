@@ -1714,7 +1714,7 @@ d3.layout.treemap = function() {
       round = Math.round,
       size = [1, 1], // width, height
       padding = null,
-      nodeRect = d3_layout_treemapPadNull,
+      pad = d3_layout_treemapPadNull,
       sticky = false,
       stickies,
       ratio = 0.5 * (1 + Math.sqrt(5)); // golden ratio
@@ -1734,7 +1734,7 @@ d3.layout.treemap = function() {
   // Recursively arranges the specified node's children into squarified rows.
   function squarify(node) {
     if (!node.children) return;
-    var rect = nodeRect(node),
+    var rect = pad(node),
         row = [],
         children = node.children.slice(), // copy-on-write
         child,
@@ -1769,7 +1769,7 @@ d3.layout.treemap = function() {
   // Preserves the existing layout!
   function stickify(node) {
     if (!node.children) return;
-    var rect = nodeRect(node),
+    var rect = pad(node),
         children = node.children.slice(), // copy-on-write
         child,
         row = [];
@@ -1895,10 +1895,10 @@ d3.layout.treemap = function() {
     }
 
     var type = typeof x;
-    nodeRect = type === "function" ? padFunction
+    pad = type === "function" ? padFunction
         : type === "number" ? padNumber
         : x == null ? d3_layout_treemapPadding
-        : padArray
+        : padArray;
 
     padding = x;
 
