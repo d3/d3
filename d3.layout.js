@@ -1732,7 +1732,7 @@ d3.layout.treemap = function() {
 
   // Computes the rectangle for a particular node.
   function nodeRect(node) {
-    var p = padding.call(this, node);
+    var p = padding.call(treemap, node, node.depth);
     return {
       x: node.x + p[3],
       y: node.y + p[0],
@@ -1856,13 +1856,13 @@ d3.layout.treemap = function() {
   function treemap(d) {
     var nodes = stickies || hierarchy(d),
         root = nodes[0],
-        p = padding.call(this, root);
+        p = padding.call(treemap, root, root.depth);
     root.x = p[3];
     root.y = p[0];
     root.dx = size[0] - p[3] - p[1];
     root.dy = size[1] - p[0] - p[2];
     if (stickies) hierarchy.revalue(root);
-    scale(nodes, root.dx * root.dy / root.value);
+    scale([root], root.dx * root.dy / root.value);
     (stickies ? stickify : squarify)(root);
     if (sticky) stickies = nodes;
     return nodes;
