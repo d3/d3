@@ -12,13 +12,14 @@ d3.layout.treemap = function() {
 
   // Compute the area for each child based on value & scale.
   function scale(children, k) {
+    if (isNaN(k) || k < 0) k = 0;
     var i = -1,
         n = children.length,
         child,
         value;
     while (++i < n) {
       value = (child = children[i]).value;
-      child.area = isNaN(value) || value < 0 ? 0 : value * k;
+      child.area = isNaN(value) || value <= 0 ? 0 : value * k;
     }
   }
 

@@ -1,0 +1,29 @@
+zero, negative and NaN values:
+{value: 0}    0
+{value: -1}   0
+{value: NaN}  0
+
+size([0, 0]):
+{value: 0}    0
+{value: -1}   0
+{value: NaN}  0
+{value: 1}    0
+
+size([-1, -1]):
+{value: 0}    0
+{value: -1}   0
+{value: NaN}  0
+{value: 1}    1
+
+size([-1, 1]):
+{value: 0}    0
+{value: -1}   0
+{value: NaN}  0
+{value: 1}    0
+
+size([NaN, NaN]):
+{value: 0}    0
+{value: -1}   0
+{value: NaN}  0
+{value: 1}    0
+

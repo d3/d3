@@ -203,6 +203,7 @@ tests: \
 	tests/test-scale-pow.test \
 	tests/test-scale-quantile.test \
 	tests/test-bisect.test \
+	tests/test-layout-treemap.test \
 	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
 	tests/test-svg-line.test \
