@@ -12,14 +12,13 @@ d3.layout.treemap = function() {
 
   // Compute the area for each child based on value & scale.
   function scale(children, k) {
-    if (isNaN(k) || k < 0) k = 0;
     var i = -1,
         n = children.length,
         child,
-        value;
+        area;
     while (++i < n) {
-      value = (child = children[i]).value;
-      child.area = isNaN(value) || value <= 0 ? 0 : value * k;
+      area = (child = children[i]).value * (k < 0 ? 0 : k);
+      child.area = isNaN(area) || area <= 0 ? 0 : area;
     }
   }
 
@@ -142,13 +141,6 @@ d3.layout.treemap = function() {
     root.y = 0;
     root.dx = size[0];
     root.dy = size[1];
-    if (padding != null) {
-      var rect = nodeRect(root);
-      root.x = rect.x;
-      root.y = rect.y;
-      root.dx = rect.dx;
-      root.dy = rect.dy;
-    }
     if (stickies) hierarchy.revalue(root);
     scale([root], root.dx * root.dy / root.value);
     (stickies ? stickify : squarify)(root);
