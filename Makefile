@@ -156,6 +156,21 @@ d3.time.js: \
 	src/time/format.js \
 	src/time/format-utc.js \
 	src/time/format-iso.js \
+	src/time/range.js \
+	src/time/second.js \
+	src/time/seconds.js \
+	src/time/minute.js \
+	src/time/minutes.js \
+	src/time/hour.js \
+	src/time/hours.js \
+	src/time/day.js \
+	src/time/days.js \
+	src/time/week.js \
+	src/time/weeks.js \
+	src/time/month.js \
+	src/time/months.js \
+	src/time/year.js \
+	src/time/years.js \
 	src/end.js
 
 d3.geom.js: \
@@ -206,7 +221,21 @@ tests: \
 	tests/test-svg-arc.test \
 	tests/test-svg-area.test \
 	tests/test-svg-line.test \
-	tests/test-svg-symbol.test
+	tests/test-svg-symbol.test \
+	tests/test-time-second.test \
+	tests/test-time-seconds.test \
+	tests/test-time-minute.test \
+	tests/test-time-minutes.test \
+	tests/test-time-hour.test \
+	tests/test-time-hours.test \
+	tests/test-time-day.test \
+	tests/test-time-days.test \
+	tests/test-time-week.test \
+	tests/test-time-weeks.test \
+	tests/test-time-month.test \
+	tests/test-time-months.test \
+	tests/test-time-year.test \
+	tests/test-time-years.test
 
 %.min.js: %.js Makefile
 	@rm -f $@
