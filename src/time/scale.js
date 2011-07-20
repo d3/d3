@@ -7,26 +7,26 @@ d3.time.scale = function() {
   }
 
   scale.invert = function(x) {
-    return d3_scale_time(linear.invert(x));
+    return d3_time_scaleDate(linear.invert(x));
   };
 
   scale.domain = function(x) {
-    if (!arguments.length) return linear.domain().map(d3_scale_time);
+    if (!arguments.length) return linear.domain().map(d3_time_scaleDate);
     linear.domain(x);
     return scale;
   };
 
   scale.ticks = function(m) {
-    var extent = d3_scale_timeExtent(scale.domain()),
+    var extent = d3_time_scaleExtent(scale.domain()),
         span = extent[1] - extent[0],
         target = span / m;
-        i = d3.bisect(d3_scale_timeSteps, target, 1, d3_scale_timeSteps.length - 1);
-    if (Math.log(target / d3_scale_timeSteps[i - 1]) < Math.log(d3_scale_timeSteps[i] / target)) --i;
-    return d3_scale_timeMethods[i](extent[0], extent[1]);
+        i = d3.bisect(d3_time_scaleSteps, target, 1, d3_time_scaleSteps.length - 1);
+    if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
+    return d3_time_scaleMethods[i](extent[0], extent[1]);
   };
 
   scale.tickFormat = function() {
-    return d3_scale_timeFormat;
+    return d3_time_scaleFormat;
   };
 
   // TOOD expose d3_scale_linear_rebind?
@@ -39,16 +39,16 @@ d3.time.scale = function() {
 };
 
 // TODO expose d3_scaleExtent?
-function d3_scale_timeExtent(domain) {
+function d3_time_scaleExtent(domain) {
   var start = domain[0], stop = domain[domain.length - 1];
   return start < stop ? [start, stop] : [stop, start];
 }
 
-function d3_scale_time(t) {
+function d3_time_scaleDate(t) {
   return new Date(t);
 }
 
-var d3_scale_timeFormats = [
+var d3_time_scaleFormats = [
   [d3.time.format("%Y"), function(d) { return true; }],
   [d3.time.format("%B"), function(d) { return d.getMonth(); }],
   [d3.time.format("%b %d"), function(d) { return d.getDate() != 1; }],
@@ -58,13 +58,13 @@ var d3_scale_timeFormats = [
   [d3.time.format(":%S"), function(d) { return d.getSeconds() || d.getMilliseconds(); }]
 ];
 
-var d3_scale_timeFormat = function(date) {
-  var i = d3_scale_timeFormats.length - 1, f = d3_scale_timeFormats[i];
-  while (!f[1](date)) f = d3_scale_timeFormats[--i];
+var d3_time_scaleFormat = function(date) {
+  var i = d3_time_scaleFormats.length - 1, f = d3_time_scaleFormats[i];
+  while (!f[1](date)) f = d3_time_scaleFormats[--i];
   return f[0](date);
 };
 
-var d3_scale_timeSteps = [
+var d3_time_scaleSteps = [
   1e3,    // 1-second
   5e3,    // 5-second
   15e3,   // 15-second
@@ -85,7 +85,7 @@ var d3_scale_timeSteps = [
   31536e6 // 1-year
 ];
 
-var d3_scale_timeMethods = [
+var d3_time_scaleMethods = [
   d3.time.seconds,
   function(a, b) { return d3.time.seconds(a, b).filter(function(t) { return !(t.getSeconds() % 5); }); },
   function(a, b) { return d3.time.seconds(a, b).filter(function(t) { return !(t.getSeconds() % 15); }); },
@@ -106,7 +106,7 @@ var d3_scale_timeMethods = [
   d3.time.years
 ];
 
-function d3_scale_timeFilter(method, filter) {
+function d3_time_scaleFilter(method, filter) {
   return function(a, b) {
     return method(a, b).filter(filter);
   };
