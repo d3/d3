@@ -3,9 +3,9 @@ var w = 960,
     color = d3.scale.category20c();
 
 var treemap = d3.layout.treemap()
-    .size([w + 1, h + 1])
-    .value(function(d) { return d.size; })
-    .sticky(true);
+    .padding(4)
+    .size([w, h])
+    .value(function(d) { return d.size; });
 
 var svg = d3.select("body").append("svg:svg")
     .style("width", w)

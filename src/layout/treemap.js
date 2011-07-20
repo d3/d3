@@ -112,7 +112,7 @@ d3.layout.treemap = function() {
         o.x = x;
         o.y = y;
         o.dy = v;
-        x += o.dx = round(o.area / v);
+        x += o.dx = v ? round(o.area / v) : 0;
       }
       o.z = true;
       o.dx += rect.x + rect.dx - x; // rounding error
@@ -125,7 +125,7 @@ d3.layout.treemap = function() {
         o.x = x;
         o.y = y;
         o.dx = v;
-        y += o.dy = round(o.area / v);
+        y += o.dy = v ? round(o.area / v) : 0;
       }
       o.z = false;
       o.dy += rect.y + rect.dy - y; // rounding error
@@ -157,42 +157,22 @@ d3.layout.treemap = function() {
   treemap.padding = function(x) {
     if (!arguments.length) return padding;
 
-    function padFunction(n) {
-      var p = x.call(treemap, n, n.depth);
-      return {
-        x: n.x + p[3],
-        y: n.y + p[0],
-        dx: n.dx - p[1] - p[3],
-        dy: n.dy - p[0] - p[2]
-      };
+    function padFunction(node) {
+      var p = x.call(treemap, node, node.depth);
+      return p == null
+          ? d3_layout_treemapPadNull(node)
+          : d3_layout_treemapPad(node, typeof p === "number" ? [p, p, p, p] : p);
     }
 
-    function padNumber(n) {
-      return {
-        x: n.x + x,
-        y: n.y + x,
-        dx: n.dx - x - x,
-        dy: n.dy - x - x
-      };
+    function padConstant(node) {
+      return d3_layout_treemapPad(node, x);
     }
 
-    function padArray(n) {
-      return {
-        x: n.x + x[3],
-        y: n.y + x[0],
-        dx: n.dx - x[1] - x[3],
-        dy: n.dy - x[0] - x[2]
-      };
-    }
-
-    var type = typeof x;
-    pad = type === "function" ? padFunction
-        : type === "number" ? padNumber
-        : x == null ? d3_layout_treemapPadNull
-        : padArray;
-
-    padding = x;
-
+    var type;
+    pad = (padding = x) == null ? d3_layout_treemapPadNull
+        : (type = typeof x) === "function" ? padFunction
+        : type === "number" ? (x = [x, x, x, x], padConstant)
+        : padConstant;
     return treemap;
   };
 
@@ -218,6 +198,16 @@ d3.layout.treemap = function() {
   return d3_layout_hierarchyRebind(treemap, hierarchy);
 };
 
-function d3_layout_treemapPadNull(n) {
-  return {x: n.x, y: n.y, dx: n.dx, dy: n.dy};
+function d3_layout_treemapPadNull(node) {
+  return {x: node.x, y: node.y, dx: node.dx, dy: node.dy};
+}
+
+function d3_layout_treemapPad(node, padding) {
+  var x = node.x + padding[3],
+      y = node.y + padding[0],
+      dx = node.dx - padding[1] - padding[3],
+      dy = node.dy - padding[0] - padding[2];
+  if (dx < 0) { x += dx / 2; dx = 0; }
+  if (dy < 0) { y += dy / 2; dy = 0; }
+  return {x: x, y: y, dx: dx, dy: dy};
 }
