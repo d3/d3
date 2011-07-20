@@ -27,3 +27,9 @@ size([NaN, NaN]):
 {value: NaN}  0
 {value: 1}    0
 
+padding:
+1                         -1
+[1, 1, 1, 1]              -1
+function(x) [1, 1, 1, 1]  -1
+null                      1
+

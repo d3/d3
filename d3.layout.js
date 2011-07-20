@@ -1897,7 +1897,7 @@ d3.layout.treemap = function() {
     var type = typeof x;
     pad = type === "function" ? padFunction
         : type === "number" ? padNumber
-        : x == null ? d3_layout_treemapPadding
+        : x == null ? d3_layout_treemapPadNull
         : padArray;
 
     padding = x;
