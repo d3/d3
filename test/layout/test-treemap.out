@@ -1,0 +1,43 @@
+zero, negative and NaN values:
+  {value: 0}    0
+  {value: -1}   0
+  {value: NaN}  0
+
+size([0, 0]):
+  {value: 0}    0
+  {value: -1}   0
+  {value: NaN}  0
+  {value: 1}    0
+
+size([-1, -1]):
+  {value: 0}    0
+  {value: -1}   0
+  {value: NaN}  0
+  {value: 1}    1
+
+size([-1, 1]):
+  {value: 0}    0
+  {value: -1}   0
+  {value: NaN}  0
+  {value: 1}    0
+
+size([NaN, NaN]):
+  {value: 0}    0
+  {value: -1}   0
+  {value: NaN}  0
+  {value: 1}    0
+
+padding:
+  default                   0,0,10,10
+  1                         1,1,8,8
+  10                        5,5,0,0
+  [1, 1, 1, 1]              1,1,8,8
+  [10, 1, 10, 1]            1,5,8,0
+  [1, 10, 1, 10]            5,1,0,8
+  function(x) 1             1,1,8,8
+  function(x) 10            5,5,0,0
+  function(x) [1, 1, 1, 1]  1,1,8,8
+  function(x) [1, 10, 1, 1] 0.5,1,0,8
+  function(x) null          0,0,10,10
+  null                      0,0,10,10
+

@@ -156,6 +156,23 @@ d3.time.js: \
 	src/time/format.js \
 	src/time/format-utc.js \
 	src/time/format-iso.js \
+	src/time/range.js \
+	src/time/second.js \
+	src/time/seconds.js \
+	src/time/minute.js \
+	src/time/minutes.js \
+	src/time/hour.js \
+	src/time/hours.js \
+	src/time/day.js \
+	src/time/days.js \
+	src/time/week.js \
+	src/time/weeks.js \
+	src/time/month.js \
+	src/time/months.js \
+	src/time/year.js \
+	src/time/years.js \
+	src/time/scale.js \
+	src/time/scale-utc.js \
 	src/end.js
 
 d3.geom.js: \
@@ -169,44 +186,62 @@ d3.geom.js: \
 	src/geom/quadtree.js \
 	src/end.js
 
-tests: \
-	tests/test-append.test \
-	tests/test-attr.test \
-	tests/test-classed.test \
-	tests/test-call.test \
-	tests/test-csv-parse.test \
-	tests/test-format.test \
-	tests/test-insert.test \
-	tests/test-interpolate.test \
-	tests/test-keys.test \
-	tests/test-max.test \
-	tests/test-min.test \
-	tests/test-sum.test \
-	tests/test-nest.test \
-	tests/test-permute.test \
-	tests/test-zip.test \
-	tests/test-remove.test \
-	tests/test-rgb.test \
-	tests/test-round.test \
-	tests/test-hsl.test \
-	tests/test-time-format.test \
-	tests/test-time-format-iso.test \
-	tests/test-time-format-utc.test \
-	tests/test-time-parse.test \
-	tests/test-time-parse-iso.test \
-	tests/test-time-parse-utc.test \
-	tests/test-transition.test \
-	tests/test-scale-linear.test \
-	tests/test-scale-polylinear.test \
-	tests/test-scale-log.test \
-	tests/test-scale-sqrt.test \
-	tests/test-scale-pow.test \
-	tests/test-scale-quantile.test \
-	tests/test-bisect.test \
-	tests/test-svg-arc.test \
-	tests/test-svg-area.test \
-	tests/test-svg-line.test \
-	tests/test-svg-symbol.test
+test: \
+	test/core/test-append.test \
+	test/core/test-attr.test \
+	test/core/test-bisect.test \
+	test/core/test-call.test \
+	test/core/test-classed.test \
+	test/core/test-format.test \
+	test/core/test-hsl.test \
+	test/core/test-insert.test \
+	test/core/test-interpolate.test \
+	test/core/test-keys.test \
+	test/core/test-max.test \
+	test/core/test-min.test \
+	test/core/test-nest.test \
+	test/core/test-permute.test \
+	test/core/test-remove.test \
+	test/core/test-rgb.test \
+	test/core/test-round.test \
+	test/core/test-sum.test \
+	test/core/test-transition.test \
+	test/core/test-zip.test \
+	test/csv/test-parse.test \
+	test/layout/test-histogram.test \
+	test/layout/test-treemap.test \
+	test/scale/test-linear.test \
+	test/scale/test-log.test \
+	test/scale/test-polylinear.test \
+	test/scale/test-pow.test \
+	test/scale/test-quantile.test \
+	test/scale/test-sqrt.test \
+	test/svg/test-arc.test \
+	test/svg/test-area.test \
+	test/svg/test-line.test \
+	test/svg/test-symbol.test \
+	test/time/test-day.test \
+	test/time/test-days.test \
+	test/time/test-format-iso.test \
+	test/time/test-format-utc.test \
+	test/time/test-format.test \
+	test/time/test-hour.test \
+	test/time/test-hours.test \
+	test/time/test-minute.test \
+	test/time/test-minutes.test \
+	test/time/test-month.test \
+	test/time/test-months.test \
+	test/time/test-parse-iso.test \
+	test/time/test-parse-utc.test \
+	test/time/test-parse.test \
+	test/time/test-scale.test \
+	test/time/test-scale-utc.test \
+	test/time/test-second.test \
+	test/time/test-seconds.test \
+	test/time/test-week.test \
+	test/time/test-weeks.test \
+	test/time/test-year.test \
+	test/time/test-years.test
 
 %.min.js: %.js Makefile
 	@rm -f $@
