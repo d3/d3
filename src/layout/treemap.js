@@ -4,26 +4,28 @@ d3.layout.treemap = function() {
   var hierarchy = d3.layout.hierarchy(),
       round = Math.round,
       size = [1, 1], // width, height
+      padding = null,
+      pad = d3_layout_treemapPadNull,
       sticky = false,
       stickies,
       ratio = 0.5 * (1 + Math.sqrt(5)); // golden ratio
 
-  // Recursively compute the node area based on value & scale.
-  function scale(node, k) {
-    var children = node.children,
-        value = node.value;
-    node.area = isNaN(value) || value < 0 ? 0 : value * k;
-    if (children) {
-      var i = -1,
-          n = children.length;
-      while (++i < n) scale(children[i], k);
+  // Compute the area for each child based on value & scale.
+  function scale(children, k) {
+    var i = -1,
+        n = children.length,
+        child,
+        area;
+    while (++i < n) {
+      area = (child = children[i]).value * (k < 0 ? 0 : k);
+      child.area = isNaN(area) || area <= 0 ? 0 : area;
     }
   }
 
   // Recursively arranges the specified node's children into squarified rows.
   function squarify(node) {
     if (!node.children) return;
-    var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
+    var rect = pad(node),
         row = [],
         children = node.children.slice(), // copy-on-write
         child,
@@ -31,6 +33,7 @@ d3.layout.treemap = function() {
         score, // the current row score
         u = Math.min(rect.dx, rect.dy), // initial orientation
         n;
+    scale(children, rect.dx * rect.dy / node.value);
     row.area = 0;
     while ((n = children.length) > 0) {
       row.push(child = children[n - 1]);
@@ -57,10 +60,11 @@ d3.layout.treemap = function() {
   // Preserves the existing layout!
   function stickify(node) {
     if (!node.children) return;
-    var rect = {x: node.x, y: node.y, dx: node.dx, dy: node.dy},
+    var rect = pad(node),
         children = node.children.slice(), // copy-on-write
         child,
         row = [];
+    scale(children, rect.dx * rect.dy / node.value);
     row.area = 0;
     while (child = children.pop()) {
       row.push(child);
@@ -138,7 +142,7 @@ d3.layout.treemap = function() {
     root.dx = size[0];
     root.dy = size[1];
     if (stickies) hierarchy.revalue(root);
-    scale(root, size[0] * size[1] / root.value);
+    scale([root], root.dx * root.dy / root.value);
     (stickies ? stickify : squarify)(root);
     if (sticky) stickies = nodes;
     return nodes;
@@ -147,6 +151,48 @@ d3.layout.treemap = function() {
   treemap.size = function(x) {
     if (!arguments.length) return size;
     size = x;
+    return treemap;
+  };
+
+  treemap.padding = function(x) {
+    if (!arguments.length) return padding;
+
+    function padFunction(n) {
+      var p = x.call(treemap, n, n.depth);
+      return {
+        x: n.x + p[3],
+        y: n.y + p[0],
+        dx: n.dx - p[1] - p[3],
+        dy: n.dy - p[0] - p[2]
+      };
+    }
+
+    function padNumber(n) {
+      return {
+        x: n.x + x,
+        y: n.y + x,
+        dx: n.dx - x - x,
+        dy: n.dy - x - x
+      };
+    }
+
+    function padArray(n) {
+      return {
+        x: n.x + x[3],
+        y: n.y + x[0],
+        dx: n.dx - x[1] - x[3],
+        dy: n.dy - x[0] - x[2]
+      };
+    }
+
+    var type = typeof x;
+    pad = type === "function" ? padFunction
+        : type === "number" ? padNumber
+        : x == null ? d3_layout_treemapPadNull
+        : padArray;
+
+    padding = x;
+
     return treemap;
   };
 
@@ -171,3 +217,7 @@ d3.layout.treemap = function() {
 
   return d3_layout_hierarchyRebind(treemap, hierarchy);
 };
+
+function d3_layout_treemapPadNull(n) {
+  return {x: n.x, y: n.y, dx: n.dx, dy: n.dy};
+}

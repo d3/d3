@@ -5,6 +5,7 @@ var w = 960,
 var treemap = d3.layout.treemap()
     .size([w, h])
     .sticky(true)
+    .padding([5, 5, 5, 5])
     .value(function(d) { return d.size; });
 
 var div = d3.select("#chart").append("div")
