@@ -18,7 +18,7 @@ d3.time.hours(parse("2011-11-06T07:00:00Z"), parse("2011-11-06T11:00:00Z")).forE
 console.log("");
 
 console.log("hours.utc(2010-12-31T22:00:00Z, 2011-01-01T02:00:00Z):");
-d3.time.hours(parse("2010-12-31T22:00:00Z"), parse("2011-01-01T02:00:00Z")).forEach(log);
+d3.time.hours.utc(parse("2010-12-31T22:00:00Z"), parse("2011-01-01T02:00:00Z")).forEach(log);
 console.log("");
 
 function log(date) {

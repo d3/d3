@@ -1,0 +1,465 @@
+1-second ticks:
+  12 PM
+  :01
+  :02
+  :03
+  :04
+  :05
+  :06
+  :07
+  :08
+  :09
+
+5-second ticks:
+  12 PM
+  :05
+  :10
+  :15
+  :20
+  :25
+  :30
+  :35
+  :40
+  :45
+
+15-second ticks:
+  12 PM
+  :15
+  :30
+  :45
+  12:01
+  :15
+  :30
+  :45
+  12:02
+  :15
+
+30-second ticks:
+  12 PM
+  :30
+  12:01
+  :30
+  12:02
+  :30
+  12:03
+  :30
+  12:04
+  :30
+
+1-minute ticks:
+  12 PM
+  12:01
+  12:02
+  12:03
+  12:04
+  12:05
+  12:06
+  12:07
+  12:08
+  12:09
+
+5-minute ticks:
+  12 PM
+  12:05
+  12:10
+  12:15
+  12:20
+  12:25
+  12:30
+  12:35
+  12:40
+  12:45
+  12:50
+  12:55
+
+15-minute ticks:
+  12 PM
+  12:15
+  12:30
+  12:45
+  01 PM
+  01:15
+  01:30
+  01:45
+  02 PM
+  02:15
+  02:30
+  02:45
+
+30-minute ticks:
+  12 PM
+  12:30
+  01 PM
+  01:30
+  02 PM
+  02:30
+  03 PM
+  03:30
+  04 PM
+  04:30
+  05 PM
+  05:30
+
+1-hour ticks:
+  06 AM
+  07 AM
+  08 AM
+  09 AM
+  10 AM
+  11 AM
+  12 PM
+  01 PM
+  02 PM
+  03 PM
+  04 PM
+  05 PM
+
+3-hour ticks:
+  06 AM
+  09 AM
+  12 PM
+  03 PM
+  06 PM
+  09 PM
+  Jan 02
+  03 AM
+  06 AM
+  09 AM
+  12 PM
+  03 PM
+
+6-hour ticks:
+  06 AM
+  12 PM
+  06 PM
+  Jan 02
+  06 AM
+  12 PM
+  06 PM
+  Mon 03
+  06 AM
+  12 PM
+  06 PM
+  Tue 04
+  06 AM
+  12 PM
+
+12-hour ticks:
+  12 PM
+  Jan 02
+  12 PM
+  Mon 03
+  12 PM
+  Tue 04
+  12 PM
+  Wed 05
+  12 PM
+  Thu 06
+  12 PM
+  Fri 07
+  12 PM
+
+1-day ticks:
+  Jan 02
+  Mon 03
+  Tue 04
+  Wed 05
+  Thu 06
+  Fri 07
+  Sat 08
+  Jan 09
+  Mon 10
+  Tue 11
+  Wed 12
+  Thu 13
+  Fri 14
+
+2-day ticks:
+  Mon 03
+  Wed 05
+  Fri 07
+  Jan 09
+  Tue 11
+  Thu 13
+  Sat 15
+  Mon 17
+  Wed 19
+  Fri 21
+  Jan 23
+  Tue 25
+  Thu 27
+
+1-week ticks:
+  Jan 02
+  Jan 09
+  Jan 16
+  Jan 23
+  Jan 30
+  Feb 06
+  Feb 13
+  Feb 20
+  Feb 27
+
+1-month ticks:
+  February
+  March
+  April
+  May
+  June
+  July
+  August
+  September
+  October
+
+3-month ticks:
+  April
+  July
+  October
+  2012
+  April
+  July
+  October
+  2013
+
+1-year ticks:
+  2012
+  2013
+  2014
+  2015
+  2016
+  2017
+  2018
+  2019
+  2020
+
+seconds around minute:
+  :56
+  :57
+  :58
+  :59
+  01:03
+  :01
+  :02
+  :03
+  :04
+
+seconds around hour:
+  :56
+  :57
+  :58
+  :59
+  03 AM
+  :01
+  :02
+  :03
+  :04
+
+seconds around day:
+  :56
+  :57
+  :58
+  :59
+  Wed 02
+  :01
+  :02
+  :03
+  :04
+
+seconds around week:
+  :56
+  :57
+  :58
+  :59
+  Feb 13
+  :01
+  :02
+  :03
+  :04
+
+seconds around month:
+  :56
+  :57
+  :58
+  :59
+  March
+  :01
+  :02
+  :03
+  :04
+
+seconds around year:
+  :56
+  :57
+  :58
+  :59
+  2011
+  :01
+  :02
+  :03
+  :04
+
+minutes around hour:
+  02:56
+  02:57
+  02:58
+  02:59
+  03 AM
+  03:01
+  03:02
+  03:03
+  03:04
+
+minutes around day:
+  11:56
+  11:57
+  11:58
+  11:59
+  Wed 02
+  12:01
+  12:02
+  12:03
+  12:04
+
+minutes around week:
+  11:56
+  11:57
+  11:58
+  11:59
+  Feb 13
+  12:01
+  12:02
+  12:03
+  12:04
+
+minutes around month:
+  11:56
+  11:57
+  11:58
+  11:59
+  March
+  12:01
+  12:02
+  12:03
+  12:04
+
+minutes around year:
+  11:56
+  11:57
+  11:58
+  11:59
+  2011
+  12:01
+  12:02
+  12:03
+  12:04
+
+hours around day:
+  08 PM
+  09 PM
+  10 PM
+  11 PM
+  Wed 02
+  01 AM
+  02 AM
+  03 AM
+  04 AM
+
+hours around week:
+  08 PM
+  09 PM
+  10 PM
+  11 PM
+  Feb 13
+  01 AM
+  02 AM
+  03 AM
+  04 AM
+
+hours around month:
+  08 PM
+  09 PM
+  10 PM
+  11 PM
+  March
+  01 AM
+  02 AM
+  03 AM
+  04 AM
+
+hours around year:
+  08 PM
+  09 PM
+  10 PM
+  11 PM
+  2011
+  01 AM
+  02 AM
+  03 AM
+  04 AM
+
+days around week:
+  Wed 09
+  Thu 10
+  Fri 11
+  Sat 12
+  Feb 13
+  Mon 14
+  Tue 15
+  Wed 16
+  Thu 17
+
+days around month:
+  Fri 25
+  Sat 26
+  Feb 27
+  Mon 28
+  March
+  Wed 02
+  Thu 03
+  Fri 04
+  Sat 05
+
+days around year:
+  Tue 28
+  Wed 29
+  Thu 30
+  Fri 31
+  2011
+  Jan 02
+  Mon 03
+  Tue 04
+  Wed 05
+
+weeks around month:
+  Apr 03
+  Apr 10
+  Apr 17
+  Apr 24
+  May
+  May 08
+  May 15
+  May 22
+  May 29
+
+weeks around year:
+  Dec 04
+  Dec 11
+  Dec 18
+  Dec 25
+  2006
+  Jan 08
+  Jan 15
+  Jan 22
+  Jan 29
+
+months around year:
+  September
+  October
+  November
+  December
+  2006
+  February
+  March
+  April
+  May
+

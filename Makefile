@@ -172,6 +172,7 @@ d3.time.js: \
 	src/time/year.js \
 	src/time/years.js \
 	src/time/scale.js \
+	src/time/scale-utc.js \
 	src/end.js
 
 d3.geom.js: \
@@ -232,6 +233,7 @@ test: \
 	test/time/test-parse-utc.test \
 	test/time/test-parse.test \
 	test/time/test-scale.test \
+	test/time/test-scale-utc.test \
 	test/time/test-second.test \
 	test/time/test-seconds.test \
 	test/time/test-week.test \
