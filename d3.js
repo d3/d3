@@ -2280,7 +2280,7 @@ function d3_scale_linearRebind(scale, linear) {
   scale.interpolate = d3.rebind(scale, linear.interpolate);
   scale.clamp = d3.rebind(scale, linear.clamp);
   return scale;
-};
+}
 
 function d3_scale_linearNice(dx) {
   dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
