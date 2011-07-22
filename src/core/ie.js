@@ -1,23 +1,30 @@
-// Is the browser Internet Explorer
-var ie = (function()
+// Returns the version of Internet Explorer or a -1
+// (indicating the use of another browser).
+var ie = (function getInternetExplorerVersion()
 {
+  var result = -1; 
   if (navigator.appName == 'Microsoft Internet Explorer')
-  {  
-    return true;
+  {
+    var ua = navigator.userAgent;
+    var re  = new RegExp("MSIE ([0-9]{1,}[\.0-9]{0,})");
+    if (re.exec(ua) != null)
+      result = parseFloat( RegExp.$1 );
   }
-  return false;
+  return result;
 })();
 
-function setStyleProperty(obj, name, value, priority) {
-  if (ie)
-    obj.style[name] = value;
-  else
-    obj.style.setProperty(name, value, priority);
-}
+// Does the browser support style.setProperty, IE9 and below don't
+var d3_setStyleProperty = (ie > -1) ?
+    function(obj, name, value, priority) { obj.style[name] = value; }  :
+    function(obj, name, value, priority) { obj.style.setProperty(name, value, priority); };
 
-function removeStyleProperty(obj, name) {
-  if (ie)
-    delete obj.style[name];
-  else
-    obj.style.removeProperty(name);
-}                      
+// Does the browser support style.removeProperty, IE8 and below don't
+var d3_removeStyleProperty = (ie > -1 && ie < 9) ?
+    function(obj, name) { delete obj.style[name]; }  :
+    function(obj, name) { obj.style.removeProperty(name); };
+
+// Does the browser support style.getPropertyValue, IE8 and below don't
+var d3_getStylePropertyValue = (ie > -1 && ie < 9) ?
+    function(obj, name) { return obj[name]; }  :
+    function(obj, name) { return obj.getPropertyValue(name); };
+
