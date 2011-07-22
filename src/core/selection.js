@@ -362,19 +362,19 @@ function d3_selection(groups) {
 
     /** @this {Element} */
     function styleNull() {
-      this.style.removeProperty(name);
+      removeStyleProperty(this, name);
     }
 
     /** @this {Element} */
     function styleConstant() {
-      this.style.setProperty(name, value, priority);
+      setStyleProperty(this, name, value, priority);
     }
 
     /** @this {Element} */
     function styleFunction() {
       var x = value.apply(this, arguments);
-      if (x == null) this.style.removeProperty(name);
-      else this.style.setProperty(name, x, priority);
+      if (x == null) removeStyleProperty(this, name);
+      else setStyleProperty(this, name, x, priority);
     }
 
     return groups.each(value == null

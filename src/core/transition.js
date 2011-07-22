@@ -182,7 +182,7 @@ function d3_transition(groups) {
     function styleTween(d, i) {
       var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
       return f && function(t) {
-        this.style.setProperty(name, f(t), priority);
+        setStyleProperty(this, name, f(t), priority);
       };
     }
 
