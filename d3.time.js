@@ -484,15 +484,41 @@ function d3_time_scale(methods, format) {
   scale.ticks = function(m) {
     var extent = d3_time_scaleExtent(scale.domain()),
         span = extent[1] - extent[0],
-        target = span / m;
+        target = span / m,
         i = d3.bisect(d3_time_scaleSteps, target, 1, d3_time_scaleSteps.length - 1);
     if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
+    console.log( m, extent, span, target, i );
     return methods[i](extent[0], extent[1]);
   };
 
   scale.tickFormat = function() {
     return format;
   };
+  
+  
+  /* create an alternate tick system here
+   *
+   * the goal is to make it possible to create ticks by a specified time interval
+   */
+  
+  var steps = {
+    "%Y": 31536e6,      // year
+    "%B": 1728e6,       // month
+    "%b %d": 6048e5,    // week
+    "%a %d": 864e5,     // day
+    "%I %p": 36e5,      // hour
+    "%I:%M": 6e4,       // minute
+    ":%S": 1e3          // second
+  }
+  
+  scale.interval = function(format) {
+    var extent = d3_time_scaleExtent(scale.domain());
+        span = extent[1] - extent[0],
+        n = Math.ceil(span / steps[format]);    // figure out how many ticks we want, roughly.
+    return scale.ticks(n);                      // lean on the standard tick system
+  };
+  
+  /* end of alternate tick system */
 
   // TOOD expose d3_scale_linear_rebind?
   scale.range = d3.rebind(scale, linear.range);
