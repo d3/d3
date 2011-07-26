@@ -511,12 +511,17 @@ function d3_time_scale(methods, format) {
     ":%S": 1e3          // second
   }
   
-  scale.interval = function(format) {
+  scale.interval = function( format ) {
     var extent = d3_time_scaleExtent(scale.domain());
         span = extent[1] - extent[0],
         n = Math.ceil(span / steps[format]);    // figure out how many ticks we want, roughly.
     return scale.ticks(n);                      // lean on the standard tick system
   };
+  
+  // returns a tick name according to the specified format/interval
+  scale.intervalFormat = function( t ) {
+    return format.interval(t);
+  }
   
   /* end of alternate tick system */
 
@@ -540,12 +545,24 @@ function d3_time_scaleDate(t) {
 }
 
 function d3_time_scaleFormat(formats) {
-  return function(date) {
+  var ret = function(date) {
     var i = formats.length - 1, f = formats[i];
     while (!f[1](date)) f = formats[--i];
     return f[0](date);
   };
+  // the interval variant lets you specify a "template" format t
+  // to label the scale with. For use with the interval scale
+  ret.interval = function(t){
+    return function(date) {
+      var i = formats.length - 1, f = formats[i];
+      while( f[0] != t ) f = formats[--i];   // track down the format we asked for..
+      return f[0](date);
+    }
+  }
+  
+  return ret;
 }
+
 
 var d3_time_scaleSteps = [
   1e3,    // 1-second
