@@ -487,7 +487,6 @@ function d3_time_scale(methods, format) {
         target = span / m,
         i = d3.bisect(d3_time_scaleSteps, target, 1, d3_time_scaleSteps.length - 1);
     if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
-    console.log( m, extent, span, target, i );
     return methods[i](extent[0], extent[1]);
   };
 
@@ -511,7 +510,7 @@ function d3_time_scale(methods, format) {
     ":%S": 1e3          // second
   }
   
-  scale.interval = function( format ) {
+  scale.interval = function(format) {
     var extent = d3_time_scaleExtent(scale.domain());
         span = extent[1] - extent[0],
         n = Math.ceil(span / steps[format]);    // figure out how many ticks we want, roughly.
@@ -519,7 +518,7 @@ function d3_time_scale(methods, format) {
   };
   
   // returns a tick name according to the specified format/interval
-  scale.intervalFormat = function( t ) {
+  scale.intervalFormat = function(t) {
     return format.interval(t);
   }
   
@@ -562,7 +561,6 @@ function d3_time_scaleFormat(formats) {
   
   return ret;
 }
-
 
 var d3_time_scaleSteps = [
   1e3,    // 1-second
