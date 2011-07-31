@@ -60,6 +60,12 @@ console.log("  function(x) null         ", log(treemap.padding(function(x) { ret
 console.log("  null                     ", log(treemap.padding(null).nodes(tree)[1]));
 console.log("");
 
+treemap.size([1000, 1000]);
+var tree = {children: [{value: 2}, {value: 260}, {value: 180}, {value: 2}, {value: 1}, {value: 0}]};
+console.log("zero-sized node:");
+treemap.nodes(tree).forEach(function(node) { console.log(new Array(node.depth + 2).join("  ") + log(node)); });
+console.log("");
+
 function log(node) {
   return node.x + "," + node.y + "," + node.dx + "," + node.dy;
 }
