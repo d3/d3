@@ -7,7 +7,7 @@ title: Node-Link Tree
 
 <div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="tree.css"/>
-<script type="text/javascript" src="../d3.layout.js?1.27.2"> </script>
+<script type="text/javascript" src="../d3.layout.js?1.29.0"> </script>
 <script type="text/javascript" src="tree.js"> </script>
 
 Implementation based on work by [Jeff Heer](http://jheer.org/) and
