@@ -1795,14 +1795,13 @@ d3.layout.treemap = function() {
         i = -1,
         n = row.length;
     while (++i < n) {
-      r = row[i].area;
-      if (r <= 0 || isNaN(r)) continue;
+      if (!(r = row[i].area)) continue;
       if (r < rmin) rmin = r;
       if (r > rmax) rmax = r;
     }
     s *= s;
     u *= u;
-    return s && (rmin || rmax)
+    return s
         ? Math.max((u * rmax * ratio) / s, s / (u * rmin * ratio))
         : Infinity;
   }
