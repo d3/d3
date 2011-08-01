@@ -2430,9 +2430,8 @@ d3.scale.pow = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(powb);
-    var pow = (x[0] || x[x.length - 1]) < 0 ? d3_scale_pown : d3_scale_pow;
-    powp = pow(exponent);
-    powb = pow(1 / exponent);
+    powp = d3_scale_powPow(exponent);
+    powb = d3_scale_powPow(1 / exponent);
     linear.domain(x.map(powp));
     return scale;
   };
@@ -2459,15 +2458,9 @@ d3.scale.pow = function() {
   return d3_scale_linearRebind(scale, linear);
 };
 
-function d3_scale_pow(e) {
+function d3_scale_powPow(e) {
   return function(x) {
-    return Math.pow(x, e);
-  };
-}
-
-function d3_scale_pown(e) {
-  return function(x) {
-    return -Math.pow(-x, e);
+    return x < 0 ? -Math.pow(-x, e) : Math.pow(x, e);
   };
 }
 d3.scale.sqrt = function() {
