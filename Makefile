@@ -71,7 +71,8 @@ d3.core.js: \
 	src/core/hsl.js \
 	src/core/selection.js \
 	src/core/transition.js \
-	src/core/timer.js
+	src/core/timer.js \
+	src/core/noop.js
 
 d3.scale.js: \
 	src/scale/scale.js \
@@ -229,7 +230,8 @@ test/scale: \
 	test/scale/test-polylinear.test \
 	test/scale/test-pow.test \
 	test/scale/test-quantile.test \
-	test/scale/test-sqrt.test
+	test/scale/test-sqrt.test \
+	test/scale/test-ordinal.test
 
 test/svg: \
 	test/svg/test-arc.test \

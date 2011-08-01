@@ -1,0 +1,61 @@
+range([a, b, c]):
+  0 -> a
+  1 -> b
+  2 -> c
+  3 -> a
+  4 -> b
+  5 -> c
+  6 -> a
+  0 -> a
+  1 -> b
+  2 -> c
+  3 -> a
+
+domain([]).range([a, b, c]):
+  1 -> a
+  2 -> b
+  3 -> c
+  0 -> a
+  1 -> a
+  2 -> b
+
+domain([a, b, c]).rangePoints([0, 120]):
+  a -> 0
+  b -> 60
+  c -> 120
+  d -> 0
+
+rangePoints([0, 120]).domain([a, b, c]):
+  a -> 0
+  b -> 60
+  c -> 120
+  d -> 0
+
+domain([a, b, c]).rangeBands([0, 120]):
+  rangeBand: 40
+  a -> 0
+  b -> 40
+  c -> 80
+  d -> 0
+
+rangeBands([0, 120]).domain([a, b, c]):
+  rangeBand: 40
+  a -> 0
+  b -> 40
+  c -> 80
+  d -> 0
+
+domain([a, b, c]).rangeRoundBands([0, 119]):
+  rangeBand: 39
+  a -> 1
+  b -> 40
+  c -> 79
+  d -> 118
+
+rangeRoundBands([0, 119]).domain([a, b, c]):
+  rangeBand: 39
+  a -> 1
+  b -> 40
+  c -> 79
+  d -> 118
+
