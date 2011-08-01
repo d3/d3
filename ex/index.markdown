@@ -41,6 +41,16 @@ title: Examples
 </div>
 
 <div class="list">
+  <a href="population.html">
+    <img src="../population.png"/>
+  </a>
+  <h4><a href="population.html">Population Pyramid</a></h4>
+
+  <p>This diagram shows the distribution of age groups in the United States over
+  the last 150 years. Use the arrow keys to observe the changing population.</p>
+</div>
+
+<div class="list">
   <a href="cartogram.html">
     <img src="../cartogram.png"/>
   </a>
@@ -262,7 +272,7 @@ title: Examples
   </a>
   <h4><a href="http://keminglabs.com/ukuni/">University Admissions Statistics</a></h4>
 
-  <p><a href="http://keminglabs.com">Kevin Lynagh</a> created this linked treemap &amp; line chart 
+  <p><a href="http://keminglabs.com">Kevin Lynagh</a> created this linked treemap &amp; line chart
   to show trends in admission and acceptance rates at UK universities by age, ethnicity, gender, and subject.</p>
 </div>
 
