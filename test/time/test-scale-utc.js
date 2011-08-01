@@ -5,7 +5,11 @@ require("./../../d3.time");
 var f = d3.time.scale.utc().tickFormat(),
     u = d3.time.format.iso;
 
-console.log("1-second ticks:");
+console.log("1-second ticks (explicit):");
+d3.time.scale.utc().domain([u.parse("2011-01-01T12:00:00Z"), u.parse("2011-01-01T12:00:10Z")]).ticks(d3.time.seconds.utc).forEach(log);
+console.log("");
+
+console.log("1-second ticks (implicit):");
 d3.time.scale.utc().domain([u.parse("2011-01-01T12:00:00Z"), u.parse("2011-01-01T12:00:10Z")]).ticks(10).forEach(log);
 console.log("");
 
@@ -49,8 +53,12 @@ console.log("6-hour ticks:");
 d3.time.scale.utc().domain([u.parse("2011-01-01T06:00:00Z"), u.parse("2011-01-04T18:00:00Z")]).ticks(10).forEach(log);
 console.log("");
 
-console.log("12-hour ticks:");
+console.log("12-hour ticks (implicit):");
 d3.time.scale.utc().domain([u.parse("2011-01-01T06:00:00Z"), u.parse("2011-01-07T18:00:00Z")]).ticks(10).forEach(log);
+console.log("");
+
+console.log("12-hour ticks (explicit):");
+d3.time.scale.utc().domain([u.parse("2011-01-01T06:00:00Z"), u.parse("2011-01-07T18:00:00Z")]).ticks(d3.time.hours.utc, 12).forEach(log);
 console.log("");
 
 console.log("1-day ticks:");
