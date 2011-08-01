@@ -187,6 +187,14 @@ d3.geom.js: \
 	src/end.js
 
 test: \
+	test/core \
+	test/csv \
+	test/layout \
+	test/scale \
+	test/svg \
+	test/time
+
+test/core: \
 	test/core/test-append.test \
 	test/core/test-attr.test \
 	test/core/test-bisect.test \
@@ -206,20 +214,30 @@ test: \
 	test/core/test-round.test \
 	test/core/test-sum.test \
 	test/core/test-transition.test \
-	test/core/test-zip.test \
-	test/csv/test-parse.test \
+	test/core/test-zip.test
+
+test/csv: \
+	test/csv/test-parse.test
+
+test/layout: \
 	test/layout/test-histogram.test \
-	test/layout/test-treemap.test \
+	test/layout/test-treemap.test
+
+test/scale: \
 	test/scale/test-linear.test \
 	test/scale/test-log.test \
 	test/scale/test-polylinear.test \
 	test/scale/test-pow.test \
 	test/scale/test-quantile.test \
-	test/scale/test-sqrt.test \
+	test/scale/test-sqrt.test
+
+test/svg: \
 	test/svg/test-arc.test \
 	test/svg/test-area.test \
 	test/svg/test-line.test \
-	test/svg/test-symbol.test \
+	test/svg/test-symbol.test
+
+test/time: \
 	test/time/test-day.test \
 	test/time/test-days.test \
 	test/time/test-format-iso.test \
