@@ -14,8 +14,9 @@ Data from the [U.S. Census Bureau](http://www.census.gov/). Use the arrow keys
 to change the displayed year. The blue bars are the male population for each
 five-year age bracket, while the pink bars are the female population; the bars
 are partially transparent so that you can see how they overlap, unlike the
-traditional side-by-side display which makes it difficult to compare the
-relative distribution of the sexes.
+traditional [side-by-side](http://en.wikipedia.org/wiki/Population_pyramid)
+display which makes it difficult to compare the relative distribution of the
+sexes.
 
 ### Source Code
 
