@@ -16,13 +16,18 @@ function d3_time_scale(methods, format) {
     return scale;
   };
 
-  scale.ticks = function(m) {
-    var extent = d3_time_scaleExtent(scale.domain()),
-        span = extent[1] - extent[0],
-        target = span / m;
-        i = d3.bisect(d3_time_scaleSteps, target, 1, d3_time_scaleSteps.length - 1);
-    if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
-    return methods[i](extent[0], extent[1]);
+  scale.ticks = function(m, k) {
+    var extent = d3_time_scaleExtent(scale.domain());
+    if (typeof m !== "function") {
+      var span = extent[1] - extent[0],
+          target = span / m,
+          i = d3.bisect(d3_time_scaleSteps, target, 1, d3_time_scaleSteps.length - 1);
+      if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
+      m = methods[i];
+      k = m[1];
+      m = m[0];
+    }
+    return m(extent[0], extent[1], k);
   };
 
   scale.tickFormat = function() {
@@ -78,24 +83,24 @@ var d3_time_scaleSteps = [
 ];
 
 var d3_time_scaleLocalMethods = [
-  d3.time.seconds,
-  function(a, b) { return d3.time.seconds(a, b).filter(function(t) { return !(t.getSeconds() % 5); }); },
-  function(a, b) { return d3.time.seconds(a, b).filter(function(t) { return !(t.getSeconds() % 15); }); },
-  function(a, b) { return d3.time.seconds(a, b).filter(function(t) { return !(t.getSeconds() % 30); }); },
-  d3.time.minutes,
-  function(a, b) { return d3.time.minutes(a, b).filter(function(t) { return !(t.getMinutes() % 5); }); },
-  function(a, b) { return d3.time.minutes(a, b).filter(function(t) { return !(t.getMinutes() % 15); }); },
-  function(a, b) { return d3.time.minutes(a, b).filter(function(t) { return !(t.getMinutes() % 30); }); },
-  d3.time.hours,
-  function(a, b) { return d3.time.hours(a, b).filter(function(t) { return !(t.getHours() % 3); }); },
-  function(a, b) { return d3.time.hours(a, b).filter(function(t) { return !(t.getHours() % 6); }); },
-  function(a, b) { return d3.time.hours(a, b).filter(function(t) { return !(t.getHours() % 12); }); },
-  d3.time.days,
-  function(a, b) { return d3.time.days(a, b).filter(function(t) { return t.getDate() % 2; }); },
-  d3.time.weeks,
-  d3.time.months,
-  function(a, b) { return d3.time.months(a, b).filter(function(t) { return !(t.getMonth() % 3); }); },
-  d3.time.years
+  [d3.time.seconds, 1],
+  [d3.time.seconds, 5],
+  [d3.time.seconds, 15],
+  [d3.time.seconds, 30],
+  [d3.time.minutes, 1],
+  [d3.time.minutes, 5],
+  [d3.time.minutes, 15],
+  [d3.time.minutes, 30],
+  [d3.time.hours, 1],
+  [d3.time.hours, 3],
+  [d3.time.hours, 6],
+  [d3.time.hours, 12],
+  [d3.time.days, 1],
+  [d3.time.days, 2],
+  [d3.time.weeks, 1],
+  [d3.time.months, 1],
+  [d3.time.months, 3],
+  [d3.time.years, 1]
 ];
 
 var d3_time_scaleLocalFormats = [

@@ -1,4 +1,16 @@
-1-second ticks:
+1-second ticks (explicit):
+  04 AM
+  :01
+  :02
+  :03
+  :04
+  :05
+  :06
+  :07
+  :08
+  :09
+
+1-second ticks (implicit):
   04 AM
   :01
   :02
@@ -144,7 +156,22 @@
   Tue 04
   06 AM
 
-12-hour ticks:
+12-hour ticks (implicit):
+  2011
+  12 PM
+  Jan 02
+  12 PM
+  Mon 03
+  12 PM
+  Tue 04
+  12 PM
+  Wed 05
+  12 PM
+  Thu 06
+  12 PM
+  Fri 07
+
+12-hour ticks (explicit):
   2011
   12 PM
   Jan 02

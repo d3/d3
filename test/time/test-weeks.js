@@ -17,8 +17,16 @@ console.log("weeks(2011-10-25T07:00:00Z, 2011-11-17T11:00:00Z):");
 d3.time.weeks(parse("2011-10-25T07:00:00Z"), parse("2011-11-17T11:00:00Z")).forEach(log);
 console.log("");
 
+console.log("weeks(2011-10-25T07:00:00Z, 2012-11-17T11:00:00Z, 4):");
+d3.time.weeks(parse("2011-10-25T07:00:00Z"), parse("2012-11-17T11:00:00Z"), 4).forEach(log);
+console.log("");
+
 console.log("weeks.utc(2010-12-20T22:00:00Z, 2011-01-12T02:00:00Z):");
 d3.time.weeks.utc(parse("2010-12-20T22:00:00Z"), parse("2011-01-12T02:00:00Z")).forEach(log);
+console.log("");
+
+console.log("weeks.utc(2010-12-20T22:00:00Z, 2011-01-12T02:00:00Z, 4):");
+d3.time.weeks.utc(parse("2010-12-20T22:00:00Z"), parse("2012-01-12T02:00:00Z"), 4).forEach(log);
 console.log("");
 
 function log(date) {
