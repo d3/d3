@@ -16,7 +16,7 @@ d3.chart.impact = function() {
     g.each(function(d, i) {
       var g = d3.select(this),
           n = d.length,
-          paths = {}
+          paths = {},
           max = -Infinity;
 
       // First pass: track end positions of paths.
