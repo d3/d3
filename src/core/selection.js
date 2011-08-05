@@ -414,6 +414,19 @@ function d3_selection(groups) {
         ? propertyFunction : propertyConstant));
   };
 
+  groups.zindex = function(value) {
+    if(this.length != 0 && this[0].length != 0 && this[0][0].namespaceURI === "http://www.w3.org/2000/svg"){
+      // Then we need to manually reorder the elements on the DOM
+      var zcompare = function(a, b){
+        return value(a) - value(b);
+      };
+      return groups.sort(zcompare);
+    }else{
+      // We can just style the z-index
+      return groups.style("z-index", value);
+    }
+  };
+
   groups.text = function(value) {
 
     // If no value is specified, return the first value.
