@@ -2207,11 +2207,11 @@ function d3_scale_niceDefault() {
   return Math;
 }
 d3.scale.linear = function() {
-  var domain = [0, 1],
-      range = [0, 1],
-      interpolate = d3.interpolate,
-      clamp = false,
-      output,
+  return d3_scale_linear([0, 1], [0, 1], d3.interpolate, false);
+};
+
+function d3_scale_linear(domain, range, interpolate, clamp) {
+  var output,
       input;
 
   function rescale() {
@@ -2270,6 +2270,10 @@ d3.scale.linear = function() {
   scale.nice = function() {
     d3_scale_nice(domain, d3_scale_linearNice);
     return rescale();
+  };
+
+  scale.copy = function() {
+    return d3_scale_linear(domain, range, interpolate, clamp);
   };
 
   return rescale();
@@ -2341,9 +2345,11 @@ function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
   };
 }
 d3.scale.log = function() {
-  var linear = d3.scale.linear(),
-      log = d3_scale_log,
-      pow = log.pow;
+  return d3_scale_log(d3.scale.linear(), d3_scale_logp);
+};
+
+function d3_scale_log(linear, log) {
+  var pow = log.pow;
 
   function scale(x) {
     return linear(log(x));
@@ -2355,7 +2361,7 @@ d3.scale.log = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(pow);
-    log = x[0] < 0 ? d3_scale_logn : d3_scale_log;
+    log = x[0] < 0 ? d3_scale_logn : d3_scale_logp;
     pow = log.pow;
     linear.domain(x.map(log));
     return scale;
@@ -2392,10 +2398,14 @@ d3.scale.log = function() {
     return d3_scale_logTickFormat;
   };
 
+  scale.copy = function() {
+    return d3_scale_log(linear.copy(), log);
+  };
+
   return d3_scale_linearRebind(scale, linear);
 };
 
-function d3_scale_log(x) {
+function d3_scale_logp(x) {
   return Math.log(x) / Math.LN10;
 }
 
@@ -2403,7 +2413,7 @@ function d3_scale_logn(x) {
   return -Math.log(-x) / Math.LN10;
 }
 
-d3_scale_log.pow = function(x) {
+d3_scale_logp.pow = function(x) {
   return Math.pow(10, x);
 };
 
@@ -2415,10 +2425,12 @@ function d3_scale_logTickFormat(d) {
   return d.toPrecision(1);
 }
 d3.scale.pow = function() {
-  var linear = d3.scale.linear(),
-      exponent = 1,
-      powp = Number,
-      powb = powp;
+  return d3_scale_pow(d3.scale.linear(), 1);
+};
+
+function d3_scale_pow(linear, exponent) {
+  var powp = d3_scale_powPow(exponent),
+      powb = d3_scale_powPow(1 / exponent);
 
   function scale(x) {
     return linear(powp(x));
@@ -2430,8 +2442,6 @@ d3.scale.pow = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(powb);
-    powp = d3_scale_powPow(exponent);
-    powb = d3_scale_powPow(1 / exponent);
     linear.domain(x.map(powp));
     return scale;
   };
@@ -2451,8 +2461,13 @@ d3.scale.pow = function() {
   scale.exponent = function(x) {
     if (!arguments.length) return exponent;
     var domain = scale.domain();
-    exponent = x;
+    powp = d3_scale_powPow(exponent = x);
+    powb = d3_scale_powPow(1 / exponent);
     return scale.domain(domain);
+  };
+
+  scale.copy = function() {
+    return d3_scale_pow(linear.copy(), exponent);
   };
 
   return d3_scale_linearRebind(scale, linear);
@@ -2467,25 +2482,23 @@ d3.scale.sqrt = function() {
   return d3.scale.pow().exponent(.5);
 };
 d3.scale.ordinal = function() {
-  var domain = [],
-      index = {},
-      range = [],
-      rangeBand = 0,
-      rerange = d3_noop;
+  return d3_scale_ordinal({}, 0, d3_noop);
+};
+
+function d3_scale_ordinal(domain, size, rerange) {
+  var range = [],
+      rangeBand = 0;
 
   function scale(x) {
-    var i = x in index ? index[x] : (index[x] = domain.push(x) - 1);
-    return range[i % range.length];
+    return range[((domain[x] || (domain[x] = ++size)) - 1) % range.length];
   }
 
   scale.domain = function(x) {
-    if (!arguments.length) return domain;
-    domain = x;
-    index = {};
-    var i = -1, j = -1, n = domain.length; while (++i < n) {
-      x = domain[i];
-      if (!(x in index)) index[x] = ++j;
-    }
+    if (!arguments.length) return d3.keys(domain);
+    domain = {};
+    size = 0;
+    var i = -1, n = x.length, xi;
+    while (++i < n) if (!domain[xi = x[i]]) domain[xi] = ++size;
     rerange();
     return scale;
   };
@@ -2493,17 +2506,17 @@ d3.scale.ordinal = function() {
   scale.range = function(x) {
     if (!arguments.length) return range;
     range = x;
+    rangeBand = 0;
     rerange = d3_noop;
     return scale;
   };
 
   scale.rangePoints = function(x, padding) {
     if (arguments.length < 2) padding = 0;
+    var start = x[0], stop = x[1];
     (rerange = function() {
-      var start = x[0],
-          stop = x[1],
-          step = (stop - start) / (domain.length - 1 + padding);
-      range = domain.length == 1
+      var step = (stop - start) / (size - 1 + padding);
+      range = size < 2
           ? [(start + stop) / 2]
           : d3.range(start + step * padding / 2, stop + step / 2, step);
       rangeBand = 0;
@@ -2513,10 +2526,9 @@ d3.scale.ordinal = function() {
 
   scale.rangeBands = function(x, padding) {
     if (arguments.length < 2) padding = 0;
+    var start = x[0], stop = x[1];
     (rerange = function() {
-      var start = x[0],
-          stop = x[1],
-          step = (stop - start) / (domain.length + padding);
+      var step = (stop - start) / (size + padding);
       range = d3.range(start + step * padding, stop, step);
       rangeBand = step * (1 - padding);
     })();
@@ -2525,12 +2537,10 @@ d3.scale.ordinal = function() {
 
   scale.rangeRoundBands = function(x, padding) {
     if (arguments.length < 2) padding = 0;
+    var start = x[0], stop = x[1];
     (rerange = function() {
-      var start = x[0],
-          stop = x[1],
-          diff = stop - start,
-          step = Math.floor(diff / (domain.length + padding)),
-          err = diff - (domain.length - padding) * step;
+      var step = Math.floor((stop - start) / (size + padding)),
+          err = stop - start - (size - padding) * step;
       range = d3.range(start + Math.round(err / 2), stop, step);
       rangeBand = Math.round(step * (1 - padding));
     })();
@@ -2541,6 +2551,13 @@ d3.scale.ordinal = function() {
     return rangeBand;
   };
 
+  scale.copy = function() {
+    var copy = {}, x;
+    for (x in domain) copy[x] = domain[x];
+    return d3_scale_ordinal(copy, size, rerange);
+  };
+
+  rerange();
   return scale;
 };
 /*
@@ -2598,16 +2615,19 @@ var d3_category20c = [
   "#636363", "#969696", "#bdbdbd", "#d9d9d9"
 ];
 d3.scale.quantile = function() {
-  var domain = [],
-      range = [],
-      thresholds = [];
+  return d3_scale_quantile([], []);
+};
+
+function d3_scale_quantile(domain, range) {
+  var thresholds;
 
   function rescale() {
     var k = 0,
         n = domain.length,
         q = range.length;
-    thresholds.length = Math.max(0, q - 1);
+    thresholds = [];
     while (++k < q) thresholds[k - 1] = d3.quantile(domain, k / q);
+    return scale;
   }
 
   function scale(x) {
@@ -2618,51 +2638,60 @@ d3.scale.quantile = function() {
   scale.domain = function(x) {
     if (!arguments.length) return domain;
     domain = x.filter(function(d) { return !isNaN(d); }).sort(d3.ascending);
-    rescale();
-    return scale;
+    return rescale();
   };
 
   scale.range = function(x) {
     if (!arguments.length) return range;
     range = x;
-    rescale();
-    return scale;
+    return rescale();
   };
 
   scale.quantiles = function() {
     return thresholds;
   };
 
-  return scale;
+  scale.copy = function() {
+    return d3_scale_quantile(domain, range); // copy on write!
+  };
+
+  return rescale();
 };
 d3.scale.quantize = function() {
-  var x0 = 0,
-      x1 = 1,
-      kx = 2,
-      i = 1,
-      range = [0, 1];
+  return d3_scale_quantize(0, 1, [0, 1]);
+};
+
+function d3_scale_quantize(x0, x1, range) {
+  var kx, i;
 
   function scale(x) {
     return range[Math.max(0, Math.min(i, Math.floor(kx * (x - x0))))];
   }
 
+  function rescale() {
+    kx = range.length / (x1 - x0);
+    i = range.length - 1;
+    return scale;
+  }
+
   scale.domain = function(x) {
     if (!arguments.length) return [x0, x1];
-    x0 = x[0];
-    x1 = x[1];
-    kx = range.length / (x1 - x0);
-    return scale;
+    x0 = +domain[0];
+    x1 = +domain[domain.length - 1];
+    return rescale();
   };
 
   scale.range = function(x) {
     if (!arguments.length) return range;
     range = x;
-    kx = range.length / (x1 - x0);
-    i = range.length - 1;
-    return scale;
+    return rescale();
   };
 
-  return scale;
+  scale.copy = function() {
+    return d3_scale_quantize(x0, x1, range); // copy on write
+  };
+
+  return rescale();
 };
 d3.svg = {};
 d3.svg.arc = function() {

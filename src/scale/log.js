@@ -1,7 +1,9 @@
 d3.scale.log = function() {
-  var linear = d3.scale.linear(),
-      log = d3_scale_log,
-      pow = log.pow;
+  return d3_scale_log(d3.scale.linear(), d3_scale_logp);
+};
+
+function d3_scale_log(linear, log) {
+  var pow = log.pow;
 
   function scale(x) {
     return linear(log(x));
@@ -13,7 +15,7 @@ d3.scale.log = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return linear.domain().map(pow);
-    log = x[0] < 0 ? d3_scale_logn : d3_scale_log;
+    log = x[0] < 0 ? d3_scale_logn : d3_scale_logp;
     pow = log.pow;
     linear.domain(x.map(log));
     return scale;
@@ -50,10 +52,14 @@ d3.scale.log = function() {
     return d3_scale_logTickFormat;
   };
 
+  scale.copy = function() {
+    return d3_scale_log(linear.copy(), log);
+  };
+
   return d3_scale_linearRebind(scale, linear);
 };
 
-function d3_scale_log(x) {
+function d3_scale_logp(x) {
   return Math.log(x) / Math.LN10;
 }
 
@@ -61,7 +67,7 @@ function d3_scale_logn(x) {
   return -Math.log(-x) / Math.LN10;
 }
 
-d3_scale_log.pow = function(x) {
+d3_scale_logp.pow = function(x) {
   return Math.pow(10, x);
 };
 

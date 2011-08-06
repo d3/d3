@@ -1,9 +1,9 @@
 d3.scale.linear = function() {
-  var domain = [0, 1],
-      range = [0, 1],
-      interpolate = d3.interpolate,
-      clamp = false,
-      output,
+  return d3_scale_linear([0, 1], [0, 1], d3.interpolate, false);
+};
+
+function d3_scale_linear(domain, range, interpolate, clamp) {
+  var output,
       input;
 
   function rescale() {
@@ -62,6 +62,10 @@ d3.scale.linear = function() {
   scale.nice = function() {
     d3_scale_nice(domain, d3_scale_linearNice);
     return rescale();
+  };
+
+  scale.copy = function() {
+    return d3_scale_linear(domain, range, interpolate, clamp);
   };
 
   return rescale();
