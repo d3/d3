@@ -13,7 +13,8 @@ d3.layout.partition = function() {
           n = children.length,
           c,
           d;
-      dx /= node.value;
+      dx = node.value === 0
+        ? 0 : dx / node.value;
       while (++i < n) {
         position(c = children[i], x, d = c.value * dx, dy);
         x += d;
