@@ -1,12 +1,13 @@
 var w = 960,
     h = 500,
-    x = d3.scale.linear().range([0, w - 30]),
+    x = d3.scale.linear().range([0, w]),
     y = d3.scale.linear().range([0, h - 40]);
 
 // An SVG element with a bottom-right origin.
 var svg = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h)
+    .style("padding-right", "30px")
   .append("svg:g")
     .attr("transform", "translate(" + x(1) + "," + (h - 20) + ")scale(-1,-1)");
 
@@ -21,7 +22,7 @@ var rules = svg.append("svg:g");
 var title = svg.append("svg:text")
     .attr("class", "title")
     .attr("dy", ".71em")
-    .attr("transform", "translate(" + (x(1) - 20) + "," + y(1) + ")scale(-1,-1)")
+    .attr("transform", "translate(" + x(1) + "," + y(1) + ")scale(-1,-1)")
     .text(2000);
 
 d3.csv("population.csv", function(data) {
@@ -55,7 +56,7 @@ d3.csv("population.csv", function(data) {
       .attr("x2", w);
 
   rules.append("svg:text")
-      .attr("x", 4)
+      .attr("x", 6)
       .attr("dy", ".35em")
       .attr("transform", "rotate(180)")
       .text(function(d) { return Math.round(d / 1e6) + "M"; });
@@ -69,6 +70,7 @@ d3.csv("population.csv", function(data) {
   years.selectAll("rect")
       .data(d3.range(2))
     .enter().append("svg:rect")
+      .attr("x", 1)
       .attr("width", x(5) - 2)
       .attr("height", 1e-6);
 
