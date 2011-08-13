@@ -13,23 +13,23 @@ suite.addBatch({
     },
     "sets a property as a string": function(body) {
       body.style("background-color", "red");
-      assert.equal(body[0][0].style["background-color"], "red");
+      assert.equal(document.body.style["background-color"], "red");
     },
     "sets a property as a number": function(body) {
       body.style("opacity", .3);
-      assert.equal(body[0][0].style["opacity"], ".3");
+      assert.equal(document.body.style["opacity"], ".3");
     },
     "sets a property as a function": function(body) {
       body.style("background-color", function() { return "orange"; });
-      assert.equal(body[0][0].style["background-color"], "orange");
+      assert.equal(document.body.style["background-color"], "orange");
     },
     "gets a property value": function(body) {
-      body[0][0].style.setProperty("background-color", "yellow", "");
+      document.body.style.setProperty("background-color", "yellow", "");
       assert.equal(body.style("background-color"), "yellow");
     },
     "observes the specified priority": function(body) {
       body.style("background-color", "green", "important");
-      assert.equal(body[0][0].style.getPropertyPriority("background-color"), "important");
+      assert.equal(document.body.style.getPropertyPriority("background-color"), "important");
     }
   }
 });

@@ -7,39 +7,39 @@ var vows = require("vows"),
 var suite = vows.describe("selection.attr");
 
 suite.addBatch({
-  "select": {
+  "select(body)": {
     topic: function() {
       return d3.select("body");
     },
     "sets an attribute as a string": function(body) {
       body.attr("bgcolor", "red");
-      assert.equal(body[0][0].getAttribute("bgcolor"), "red");
+      assert.equal(document.body.getAttribute("bgcolor"), "red");
     },
     "sets an attribute as a number": function(body) {
       body.attr("opacity", 1);
-      assert.equal(body[0][0].getAttribute("opacity"), "1");
+      assert.equal(document.body.getAttribute("opacity"), "1");
     },
     "sets an attribute as a function": function(body) {
       body.attr("bgcolor", function() { return "orange"; });
-      assert.equal(body[0][0].getAttribute("bgcolor"), "orange");
+      assert.equal(document.body.getAttribute("bgcolor"), "orange");
     },
     "sets an attribute as a function of data": function(body) {
       body.data(["cyan"]).attr("bgcolor", String);
-      assert.equal(body[0][0].getAttribute("bgcolor"), "cyan");
+      assert.equal(document.body.getAttribute("bgcolor"), "cyan");
     },
     "sets an attribute as a function of index": function(body) {
       body.attr("bgcolor", function(d, i) { return "orange-" + i; });
-      assert.equal(body[0][0].getAttribute("bgcolor"), "orange-0");
+      assert.equal(document.body.getAttribute("bgcolor"), "orange-0");
     },
     "gets an attribute value": function(body) {
-      body[0][0].setAttribute("bgcolor", "yellow");
+      document.body.setAttribute("bgcolor", "yellow");
       assert.equal(body.attr("bgcolor"), "yellow");
     }
   }
 });
 
 suite.addBatch({
-  "selectAll": {
+  "selectAll(div)": {
     topic: function() {
       return d3.select("body").html("").selectAll("div").data(d3.range(2)).enter().append("div");
     },

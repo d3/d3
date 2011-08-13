@@ -13,18 +13,18 @@ suite.addBatch({
     },
     "sets a property as a string": function(body) {
       body.property("bgcolor", "red");
-      assert.equal(body[0][0].bgcolor, "red");
+      assert.equal(document.body.bgcolor, "red");
     },
     "sets a property as a number": function(body) {
       body.property("opacity", 1);
-      assert.equal(body[0][0].opacity, "1");
+      assert.equal(document.body.opacity, "1");
     },
     "sets a property as a function": function(body) {
       body.property("bgcolor", function() { return "orange"; });
-      assert.equal(body[0][0].bgcolor, "orange");
+      assert.equal(document.body.bgcolor, "orange");
     },
     "gets a property value": function(body) {
-      body[0][0].bgcolor = "yellow";
+      document.body.bgcolor = "yellow";
       assert.equal(body.property("bgcolor"), "yellow");
     }
   }

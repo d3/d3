@@ -1,5 +1,8 @@
-document = require("jsdom").jsdom("<html><head></head><body></body></html>", null, {features: {QuerySelector: true}});
+document = require("jsdom").jsdom("<html><head></head><body></body></html>");
 window = document.createWindow();
 navigator = window.navigator;
+
+require("../lib/sizzle/sizzle");
+Sizzle = window.Sizzle;
 
 process.env.TZ = "America/Los_Angeles";

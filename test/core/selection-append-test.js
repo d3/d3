@@ -7,7 +7,7 @@ var vows = require("vows"),
 var suite = vows.describe("selection.append");
 
 suite.addBatch({
-  "select": {
+  "select(body)": {
     topic: function() {
       return d3.select("body").html("");
     },
@@ -15,21 +15,21 @@ suite.addBatch({
       var div = body.append("div");
       assert.equal(div[0][0].tagName, "DIV");
       assert.isNull(div[0][0].namespaceURI);
-      assert.isTrue(div[0][0].parentNode === body[0][0]);
-      assert.isTrue(body[0][0].lastChild === div[0][0]);
+      assert.isTrue(div[0][0].parentNode === document.body);
+      assert.isTrue(div[0][0] === document.body.lastChild);
     },
     "appends an SVG element": function(body) {
       var svg = body.append("svg:svg");
       assert.equal(svg[0][0].tagName, "SVG");
       assert.equal(svg[0][0].namespaceURI, "http://www.w3.org/2000/svg");
-      assert.isTrue(svg[0][0].parentNode === body[0][0]);
-      assert.isTrue(body[0][0].lastChild === svg[0][0]);
+      assert.isTrue(svg[0][0].parentNode === document.body);
+      assert.isTrue(svg[0][0] === document.body.lastChild);
     }
   }
 });
 
 suite.addBatch({
-  "selectAll": {
+  "selectAll(div)": {
     topic: function() {
       return d3.select("body").html("").selectAll("div").data(d3.range(2)).enter().append("div");
     },
