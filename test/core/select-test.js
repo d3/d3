@@ -7,50 +7,34 @@ var vows = require("vows"),
 var suite = vows.describe("d3.select");
 
 suite.addBatch({
-  "style": {
+  "select": {
     topic: function() {
-      return d3.select("body");
+      var body = d3.select("body").html("");
+      body.append("span").attr("class", "f00").attr("id", "b4r").attr("name", "b4z");
+      body.append("div").attr("class", "foo").attr("id", "bar").attr("name", "baz");
+      return body;
     },
-    "can set a property as a string": function(body) {
-      body.style("background-color", "red");
-      assert.equal(body[0][0].style["background-color"], "red");
+    "selects by element name": function() {
+      var div = d3.select("div");
+      assert.equal(div[0][0].tagName, "DIV");
     },
-    "can set a property as a number": function(body) {
-      body.style("opacity", .3);
-      assert.equal(body[0][0].style["opacity"], ".3");
+    "selects by class name": function() {
+      var div = d3.select(".foo");
+      assert.equal(div[0][0].className, "foo");
     },
-    "can set a property as a function": function(body) {
-      body.style("background-color", function() { return "orange"; });
-      assert.equal(body[0][0].style["background-color"], "orange");
+    "selects by id": function() {
+      var div = d3.select("div#bar");
+      assert.equal(div[0][0].id, "bar");
     },
-    "can get a property value": function(body) {
-      body[0][0].style.setProperty("background-color", "yellow", "");
-      assert.equal(body.style("background-color"), "yellow");
+    "selects by attribute value": function() {
+      var div = d3.select("[name=baz]");
+      assert.equal(div[0][0].getAttribute("name"), "baz");
     },
-    "observes the specified priority": function(body) {
-      body.style("background-color", "green", "important");
-      assert.equal(body[0][0].style.getPropertyPriority("background-color"), "important");
-    }
-  },
-  "attr": {
-    topic: function() {
-      return d3.select("body");
-    },
-    "can set an attribute as a string": function(body) {
-      body.attr("bgcolor", "red");
-      assert.equal(body[0][0].getAttribute("bgcolor"), "red");
-    },
-    "can set an attribute as a number": function(body) {
-      body.attr("opacity", 1);
-      assert.equal(body[0][0].getAttribute("opacity"), "1");
-    },
-    "can set an attribute as a function": function(body) {
-      body.attr("bgcolor", function() { return "orange"; });
-      assert.equal(body[0][0].getAttribute("bgcolor"), "orange");
-    },
-    "can get an attribute value": function(body) {
-      body[0][0].setAttribute("bgcolor", "yellow");
-      assert.equal(body.attr("bgcolor"), "yellow");
+    "selects by node": function() {
+      var div = d3.select(document.body.lastChild);
+      assert.isTrue(div[0][0] === document.body.lastChild);
+      assert.length(div, 1);
+      assert.length(div[0], 1);
     }
   }
 });
