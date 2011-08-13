@@ -80,6 +80,13 @@ suite.addBatch({
       div.style("background-color", "red").style("background-color", function() { return null; });
       assert.equal(div[0][0].style["background-color"], "");
       assert.equal(div[0][1].style["background-color"], "");
+    },
+    "ignores null nodes": function(div) {
+      var some = d3.selectAll("div");
+      some[0][1] = null;
+      some.style("background-color", null).style("background-color", "red");
+      assert.equal(div[0][0].style["background-color"], "red");
+      assert.equal(div[0][1].style["background-color"], "");
     }
   }
 });

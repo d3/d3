@@ -133,6 +133,13 @@ suite.addBatch({
       div.attr("xlink:foo", "bar").attr("xlink:foo", function() { return null; });
       assert.equal(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
       assert.equal(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
+    },
+    "ignores null nodes": function(div) {
+      var some = d3.selectAll("div");
+      some[0][1] = null;
+      some.attr("href", null).attr("href", "url");
+      assert.equal(div[0][0].getAttribute("href"), "url");
+      assert.equal(div[0][1].getAttribute("href"), "");
     }
   }
 });

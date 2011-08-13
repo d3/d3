@@ -46,6 +46,13 @@ suite.addBatch({
       var indexes = [];
       span.filter(function(d, i) { return d & 1; }).each(function(d, i) { indexes.push(i); });
       assert.deepEqual(indexes, [0, 0]);
+    },
+    "ignores null nodes": function() {
+      var span = d3.selectAll("span");
+      span[0][1] = null;
+      var some = span.filter(function(d, i) { return d & 1; });
+      assert.isTrue(some[0][0] === span[0][3]);
+      assert.equal(some.length, 1);
     }
   }
 });

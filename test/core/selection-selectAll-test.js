@@ -89,6 +89,15 @@ suite.addBatch({
       assert.equal(div.length, 2);
       assert.equal(div[0].length, 0);
       assert.equal(div[1].length, 0);
+    },
+    "ignores null nodes": function(div) {
+      var some = d3.selectAll("div");
+      some[0][1] = null;
+      var span = some.selectAll("span");
+      assert.equal(span.length, 1);
+      assert.equal(span[0].length, 2);
+      assert.isTrue(span[0][0].parentNode === div[0][0]);
+      assert.isTrue(span[0][1].parentNode === div[0][0]);
     }
   }
 });

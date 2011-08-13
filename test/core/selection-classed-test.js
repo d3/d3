@@ -180,6 +180,13 @@ suite.addBatch({
       assert.isFalse(div.classed("foob"));
       assert.isFalse(div.classed("bare"));
       assert.isFalse(div.classed("rbaz"));
+    },
+    "ignores null nodes": function(div) {
+      var some = d3.selectAll("div");
+      some[0][1] = null;
+      some.attr("class", null).classed("foo", true);
+      assert.equal(div[0][0].className, "foo");
+      assert.equal(div[0][1].className, "");
     }
   }
 });

@@ -71,6 +71,13 @@ suite.addBatch({
       div.property("bgcolor", "yellow").property("bgcolor", function() { return null });
       assert.isFalse("bgcolor" in div[0][0]);
       assert.isFalse("bgcolor" in div[0][1]);
+    },
+    "ignores null nodes": function(div) {
+      var some = d3.selectAll("div");
+      some[0][1] = null;
+      some.property("bgcolor", null).property("bgcolor", "red");
+      assert.equal(div[0][0].bgcolor, "red");
+      assert.isFalse("bgcolor" in div[0][1]);
     }
   }
 });

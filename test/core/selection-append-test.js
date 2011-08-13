@@ -56,6 +56,18 @@ suite.addBatch({
       assert.isTrue(svg[0][1].parentNode === div[0][1]);
       assert.isTrue(div[0][0].lastChild === svg[0][0]);
       assert.isTrue(div[0][1].lastChild === svg[0][1]);
+    },
+    "ignores null nodes": function(div) {
+      div.html("");
+      var some = d3.selectAll("div");
+      some[0][1] = null;
+      var span = some.append("span");
+      assert.equal(span[0].length, 2);
+      assert.equal(span[0][0].tagName, "SPAN");
+      assert.isNull(span[0][1]);
+      assert.isTrue(span[0][0].parentNode === div[0][0]);
+      assert.isTrue(div[0][0].lastChild === span[0][0]);
+      assert.isNull(div[0][1].lastChild);
     }
   }
 });
