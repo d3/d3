@@ -31,9 +31,37 @@ suite.addBatch({
       body.attr("bgcolor", function(d, i) { return "orange-" + i; });
       assert.equal(document.body.getAttribute("bgcolor"), "orange-0");
     },
+    "sets a namespaced attribute as a string": function(body) {
+      body.attr("xlink:href", "url");
+      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "url");
+    },
+    "sets a namespaced attribute as a function": function(body) {
+      body.data(["orange"]).attr("xlink:href", function(d, i) { return d + "-" + i; });
+      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0");
+    },
     "gets an attribute value": function(body) {
       document.body.setAttribute("bgcolor", "yellow");
       assert.equal(body.attr("bgcolor"), "yellow");
+    },
+    "gets a namespaced attribute value": function(body) {
+      document.body.setAttributeNS("http://www.w3.org/1999/xlink", "foo", "bar");
+      assert.equal(body.attr("xlink:foo"), "bar");
+    },
+    "removes an attribute as null": function(body) {
+      body.attr("bgcolor", "red").attr("bgcolor", null);
+      assert.equal(body.attr("bgcolor"), "");
+    },
+    "removes an attribute as a function": function(body) {
+      body.attr("bgcolor", "red").attr("bgcolor", function() { return null; });
+      assert.equal(body.attr("bgcolor"), "");
+    },
+    "removes a namespaced attribute as null": function(body) {
+      body.attr("xlink:href", "url").attr("xlink:href", null);
+      assert.equal(body.attr("bgcolor"), "");
+    },
+    "removes a namespaced attribute as a function": function(body) {
+      body.attr("xlink:href", "url").attr("xlink:href", function() { return null; });
+      assert.equal(body.attr("xlink:href"), "");
     }
   }
 });
@@ -68,9 +96,43 @@ suite.addBatch({
       assert.equal(div[0][0].getAttribute("bgcolor"), "color-0");
       assert.equal(div[0][1].getAttribute("bgcolor"), "color-1");
     },
+    "sets a namespaced attribute as a string": function(div) {
+      div.attr("xlink:href", "url");
+      assert.equal(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "href"), "url");
+      assert.equal(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "href"), "url");
+    },
+    "sets a namespaced attribute as a function": function(div) {
+      div.data(["red", "blue"]).attr("xlink:href", function(d, i) { return d + "-" + i; });
+      assert.equal(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "href"), "red-0");
+      assert.equal(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "href"), "blue-1");
+    },
     "gets an attribute value": function(div) {
       div[0][0].setAttribute("bgcolor", "purple");
       assert.equal(div.attr("bgcolor"), "purple");
+    },
+    "gets a namespaced attribute value": function(div) {
+      div[0][0].setAttributeNS("http://www.w3.org/1999/xlink", "foo", "bar");
+      assert.equal(div.attr("xlink:foo"), "bar");
+    },
+    "removes an attribute as null": function(div) {
+      div.attr("href", "url").attr("href", null);
+      assert.equal(div[0][0].getAttribute("href"), "");
+      assert.equal(div[0][1].getAttribute("href"), "");
+    },
+    "removes an attribute as a function": function(div) {
+      div.attr("href", "url").attr("href", function() { return null; });
+      assert.equal(div[0][0].getAttribute("href"), "");
+      assert.equal(div[0][1].getAttribute("href"), "");
+    },
+    "removes a namespaced attribute as null": function(div) {
+      div.attr("xlink:foo", "bar").attr("xlink:foo", null);
+      assert.equal(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
+      assert.equal(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
+    },
+    "removes a namespaced attribute as a function": function(div) {
+      div.attr("xlink:foo", "bar").attr("xlink:foo", function() { return null; });
+      assert.equal(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
+      assert.equal(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
     }
   }
 });

@@ -30,6 +30,14 @@ suite.addBatch({
     "observes the specified priority": function(body) {
       body.style("background-color", "green", "important");
       assert.equal(document.body.style.getPropertyPriority("background-color"), "important");
+    },
+    "removes a property as null": function(body) {
+      body.style("background-color", "green").style("background-color", null);
+      assert.equal(body.style("background-color"), "");
+    },
+    "removes a property as a function": function(body) {
+      body.style("background-color", "green").style("background-color", function() { return null; });
+      assert.equal(body.style("background-color"), "");
     }
   }
 });
@@ -62,6 +70,16 @@ suite.addBatch({
       div.style("background-color", "blue", "important");
       assert.equal(div[0][0].style.getPropertyPriority("background-color"), "important");
       assert.equal(div[0][1].style.getPropertyPriority("background-color"), "important");
+    },
+    "removes a property as null": function(div) {
+      div.style("background-color", "red").style("background-color", null);
+      assert.equal(div[0][0].style["background-color"], "");
+      assert.equal(div[0][1].style["background-color"], "");
+    },
+    "removes a property as a function": function(div) {
+      div.style("background-color", "red").style("background-color", function() { return null; });
+      assert.equal(div[0][0].style["background-color"], "");
+      assert.equal(div[0][1].style["background-color"], "");
     }
   }
 });
