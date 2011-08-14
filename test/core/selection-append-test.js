@@ -81,6 +81,33 @@ suite.addBatch({
   }
 });
 
-// TODO enter().append()
+suite.addBatch({
+  "selectAll(div).data(…).enter()": {
+    topic: function() {
+      return d3.select("body");
+    },
+    "appends to the parent node": function(body) {
+      var div = body.html("").selectAll("div").data(d3.range(2)).enter().append("div");
+      assert.equal(div.length, 1);
+      assert.equal(div[0].length, 2);
+      assert.domEqual(div[0][0].parentNode, document.body);
+      assert.domEqual(div[0][1].parentNode, document.body);
+    },
+    "propagates data to new elements": function(body) {
+      var a = new Object(), b = new Object(), div = body.html("").selectAll("div").data([a, b]).enter().append("div");
+      assert.strictEqual(div[0][0].__data__, a);
+      assert.strictEqual(div[0][1].__data__, b);
+    },
+    "ignores null nodes": function(body) {
+      body.html("").append("div");
+      var div = body.selectAll("div").data(d3.range(3)).enter().append("div");
+      assert.equal(div.length, 1);
+      assert.equal(div[0].length, 3);
+      assert.domNull(div[0][0]);
+      assert.domEqual(div[0][1].parentNode, document.body);
+      assert.domEqual(div[0][2].parentNode, document.body);
+    }
+  }
+});
 
 suite.export(module);
