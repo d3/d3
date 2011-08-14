@@ -23,12 +23,12 @@ assert.domEqual = function(actual, expected, message) {
 
 assert.rgbEqual = function(actual, r, g, b, message) {
   if (actual.r !== r || actual.g !== g || actual.b !== b) {
-    assert.fail("rgb(" + actual.r + ", " + actual.g + ", " + actual.b + ")", "rgb(" + r + ", " + g + ", " + b + ")", message || "expected {expected}, got {actual}", "===", assert.rgbEqual);
+    assert.fail("rgb(" + actual.r + "," + actual.g + "," + actual.b + ")", "rgb(" + r + ", " + g + ", " + b + ")", message || "expected {expected}, got {actual}", "===", assert.rgbEqual);
   }
 };
 
 assert.hslEqual = function(actual, h, s, l, message) {
-  if (actual.h !== h || actual.s !== s || actual.l !== l) {
-    assert.fail(actual+"", "hsl(" + h + ", " + (s * 100) + "%, " + (l * 100) + "%)", message || "expected {expected}, got {actual}", "===", assert.hslEqual);
+  if (Math.abs(actual.h - h) > 1e-6 || Math.abs(actual.s - s) > 1e-6 || Math.abs(actual.l - l) > 1e-6) {
+    assert.fail(actual+"", "hsl(" + h + "," + (s * 100) + "%," + (l * 100) + "%)", message || "expected {expected}, got {actual}", null, assert.hslEqual);
   }
 };
