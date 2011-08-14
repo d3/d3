@@ -13,8 +13,7 @@ suite.addBatch({
           .data([1, 2, 10, 20])
         .enter().append("div").selectAll("span")
           .data(function(d) { return [20 + d, 2 + d, 10, 1]; })
-        .enter().append("span")
-          .attr("class", String);
+        .enter().append("span");
     },
     "sorts elements by natural order": function(span) {
       span.sort();
