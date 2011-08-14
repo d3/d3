@@ -12,7 +12,7 @@ suite.addBatch({
       return d3.keys;
     },
     "enumerates every defined key": function(keys) {
-      assert.deepEqual(d3.keys({a: 1, b: 1}), ["a", "b"]);
+      assert.deepEqual(keys({a: 1, b: 1}), ["a", "b"]);
     },
     "includes keys defined on prototypes": function(keys) {
       function abc() {
@@ -20,10 +20,10 @@ suite.addBatch({
         this.b = 2;
       }
       abc.prototype.c = 3;
-      assert.deepEqual(d3.keys(new abc()), ["a", "b", "c"]);
+      assert.deepEqual(keys(new abc()), ["a", "b", "c"]);
     },
     "includes keys with null or undefined values": function(keys) {
-      assert.deepEqual(d3.keys({a: undefined, b: null, c: NaN}), ["a", "b", "c"]);
+      assert.deepEqual(keys({a: undefined, b: null, c: NaN}), ["a", "b", "c"]);
     }
   }
 });
