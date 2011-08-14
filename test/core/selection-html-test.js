@@ -29,7 +29,7 @@ suite.addBatch({
       assert.equal(document.body.lastChild.textContent, "0");
     },
     /*
-    unfiled jsdom bug
+    https://github.com/tmpvar/jsdom/issues/276
     "clears the inner HTML as null": function(body) {
       body.html(null);
       assert.equal(document.body.innerHTML, "");
@@ -88,7 +88,7 @@ suite.addBatch({
       assert.equal(div[0][1].lastChild.textContent, "1");
     },
     /*
-    unfiled jsdom bug
+    https://github.com/tmpvar/jsdom/issues/276
     "clears the inner HTML as null": function(div) {
       div.html(null);
       assert.equal(div[0][0].innerHTML, "");
