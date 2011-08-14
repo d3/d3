@@ -15,7 +15,7 @@ suite.addBatch({
       body.data([42]).map(function(d, i) { return d + i; });
       assert.equal(document.body.__data__, 42);
     },
-    "returns the same selection": function(body) {
+    "returns the current selection": function(body) {
       assert.isTrue(body.map(function() { return 1; }) === body);
     }
   }
@@ -31,7 +31,7 @@ suite.addBatch({
       assert.equal(div[0][0].__data__, 42);
       assert.equal(div[0][1].__data__, 44);
     },
-    "returns the same selection": function(div) {
+    "returns the current selection": function(div) {
       assert.isTrue(div.map(function() { return 1; }) === div);
     },
     "ignores null nodes": function(div) {

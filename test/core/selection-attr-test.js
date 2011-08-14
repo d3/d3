@@ -62,6 +62,9 @@ suite.addBatch({
     "removes a namespaced attribute as a function": function(body) {
       body.attr("xlink:href", "url").attr("xlink:href", function() { return null; });
       assert.equal(body.attr("xlink:href"), "");
+    },
+    "returns the current selection": function(body) {
+      assert.isTrue(body.attr("foo", "bar") === body);
     }
   }
 });
@@ -140,6 +143,9 @@ suite.addBatch({
       some.attr("href", null).attr("href", "url");
       assert.equal(div[0][0].getAttribute("href"), "url");
       assert.equal(div[0][1].getAttribute("href"), "");
+    },
+    "returns the current selection": function(div) {
+      assert.isTrue(div.attr("foo", "bar") === div);
     }
   }
 });

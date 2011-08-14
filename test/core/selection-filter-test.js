@@ -53,6 +53,9 @@ suite.addBatch({
       var some = span.filter(function(d, i) { return d & 1; });
       assert.isTrue(some[0][0] === span[0][3]);
       assert.equal(some.length, 1);
+    },
+    "returns a new selection": function(span) {
+      assert.isFalse(span.filter(function() { return 1; }) === span);
     }
   }
 });

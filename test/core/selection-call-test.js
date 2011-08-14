@@ -30,6 +30,9 @@ suite.addBatch({
       var s;
       body.call(function() { s = this; });
       assert.isTrue(s === body);
+    },
+    "returns the current selection": function(body) {
+      assert.isTrue(body.call(function() {}) === body);
     }
   }
 });
@@ -58,6 +61,9 @@ suite.addBatch({
       var s;
       div.call(function() { s = this; });
       assert.isTrue(s === div);
+    },
+    "returns the current selection": function(div) {
+      assert.isTrue(div.call(function() {}) === div);
     }
   }
 });

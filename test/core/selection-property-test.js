@@ -34,6 +34,9 @@ suite.addBatch({
     "removes a property as a function": function(body) {
       body.property("bgcolor", "yellow").property("bgcolor", function() { return null });
       assert.isFalse("bgcolor" in document.body);
+    },
+    "returns the current selection": function(body) {
+      assert.isTrue(body.property("bgcolor", "yellow") === body);
     }
   }
 });
@@ -78,6 +81,9 @@ suite.addBatch({
       some.property("bgcolor", null).property("bgcolor", "red");
       assert.equal(div[0][0].bgcolor, "red");
       assert.isFalse("bgcolor" in div[0][1]);
+    },
+    "returns the current selection": function(div) {
+      assert.isTrue(div.property("bgcolor", "yellow") === div);
     }
   }
 });

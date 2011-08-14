@@ -80,6 +80,9 @@ suite.addBatch({
       assert.isFalse(body.classed("foob"));
       assert.isFalse(body.classed("bare"));
       assert.isFalse(body.classed("rbaz"));
+    },
+    "returns the current selection": function(body) {
+      assert.isTrue(body.classed("foo", true) === body);
     }
   }
 });
@@ -187,6 +190,9 @@ suite.addBatch({
       some.attr("class", null).classed("foo", true);
       assert.equal(div[0][0].className, "foo");
       assert.equal(div[0][1].className, "");
+    },
+    "returns the current selection": function(div) {
+      assert.isTrue(div.classed("foo", true) === div);
     }
   }
 });

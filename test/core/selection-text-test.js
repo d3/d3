@@ -45,6 +45,9 @@ suite.addBatch({
       document.body.textContent = "foo";
       body.text("bar");
       assert.equal(document.body.textContent, "foo");
+    },
+    "returns the current selection": function(body) {
+      assert.isTrue(body.text("hello") === body);
     }
   }
 });
@@ -96,6 +99,9 @@ suite.addBatch({
       some.text("bar");
       assert.equal(div[0][0].textContent, "foo");
       assert.equal(div[0][1].textContent, "bar");
+    },
+    "returns the current selection": function(div) {
+      assert.isTrue(div.text("hello") === div);
     }
   }
 });

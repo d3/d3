@@ -35,6 +35,9 @@ suite.addBatch({
       body[0][0] = null;
       body.each(function() { ++count; });
       assert.equal(count, 0);
+    },
+    "returns the current selection": function(body) {
+      assert.isTrue(body.each(function() {}) === body);
     }
   }
 });
@@ -70,6 +73,9 @@ suite.addBatch({
       some[0][0] = null;
       some.each(function() { ++count; });
       assert.equal(count, 1);
+    },
+    "returns the current selection": function(div) {
+      assert.isTrue(div.each(function() {}) === div);
     }
   }
 });

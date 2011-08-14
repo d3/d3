@@ -26,6 +26,9 @@ suite.addBatch({
       document.body.__data__ = expected;
       body.each(function(d) { actual = d; });
       assert.strictEqual(actual, expected);
+    },
+    "returns a new selection": function(body) {
+      assert.isFalse(body.data([1]) === body);
     }
   }
 });
@@ -53,6 +56,9 @@ suite.addBatch({
       div[0][1].__data__ = b;
       div.each(function(d) { actual.push(d); });
       assert.deepEqual(actual, [a, b]);
+    },
+    "returns a new selection": function(div) {
+      assert.isFalse(div.data([0, 1]) === div);
     }
   }
 });

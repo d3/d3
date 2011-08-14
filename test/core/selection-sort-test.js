@@ -44,6 +44,10 @@ suite.addBatch({
       assert.isTrue(nulls > 0);
       assert.domNull(span[0][0].previousSibling);
       assert.deepEqual(some[0].slice(1).map(data), [3, 10, 21]);
+    },
+    "returns the current selection": function(span) {
+      span = d3.select("body"); // https://github.com/tmpvar/jsdom/issues/277
+      assert.isTrue(span.sort() === span);
     }
   }
 });

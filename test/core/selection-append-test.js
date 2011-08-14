@@ -28,6 +28,9 @@ suite.addBatch({
     "propagates data to new element": function(body) {
       var data = new Object(), div = body.data([data]).append("div");
       assert.strictEqual(div[0][0].__data__, data);
+    },
+    "returns a new selection": function(body) {
+      assert.isFalse(body.append("div") === body);
     }
   }
 });
@@ -77,6 +80,9 @@ suite.addBatch({
       var a = new Object(), b = new Object(), span = div.data([a, b]).append("span");
       assert.strictEqual(span[0][0].__data__, a);
       assert.strictEqual(span[0][1].__data__, b);
+    },
+    "returns a new selection": function(div) {
+      assert.isFalse(div.append("div") === div);
     }
   }
 });

@@ -38,6 +38,9 @@ suite.addBatch({
     "removes a property as a function": function(body) {
       body.style("background-color", "green").style("background-color", function() { return null; });
       assert.equal(body.style("background-color"), "");
+    },
+    "returns the current selection": function(body) {
+      assert.isTrue(body.style("background-color", "green") === body);
     }
   }
 });
@@ -87,6 +90,9 @@ suite.addBatch({
       some.style("background-color", null).style("background-color", "red");
       assert.equal(div[0][0].style["background-color"], "red");
       assert.equal(div[0][1].style["background-color"], "");
+    },
+    "returns the current selection": function(div) {
+      assert.isTrue(div.style("background-color", "green") === div);
     }
   }
 });
