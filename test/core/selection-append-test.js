@@ -24,6 +24,10 @@ suite.addBatch({
       assert.equal(svg[0][0].namespaceURI, "http://www.w3.org/2000/svg");
       assert.isTrue(svg[0][0].parentNode === document.body);
       assert.isTrue(svg[0][0] === document.body.lastChild);
+    },
+    "propagates data to new element": function(body) {
+      var data = new Object(), div = body.data([data]).append("div");
+      assert.strictEqual(div[0][0].__data__, data);
     }
   }
 });
@@ -68,6 +72,11 @@ suite.addBatch({
       assert.isTrue(span[0][0].parentNode === div[0][0]);
       assert.isTrue(div[0][0].lastChild === span[0][0]);
       assert.isNull(div[0][1].lastChild);
+    },
+    "propagates data to new elements": function(div) {
+      var a = new Object(), b = new Object(), span = div.data([a, b]).append("span");
+      assert.strictEqual(span[0][0].__data__, a);
+      assert.strictEqual(span[0][1].__data__, b);
     }
   }
 });
