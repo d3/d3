@@ -133,6 +133,12 @@ suite.addBatch({
       assert.equal(x(-5), "rgb(255,128,128)");
       assert.equal(x(50), "rgb(128,192,128)");
       assert.equal(x(75), "rgb(64,160,64)");
+    },
+    "nicing a polylinear domain only affects the extent": function(linear) {
+      var x = linear().domain([1.1, 1, 2, 3, 10.9]).nice();
+      assert.deepEqual(x.domain(), [1, 1, 2, 3, 11]);
+      var x = linear().domain([123.1, 1, 2, 3, -.9]).nice();
+      assert.deepEqual(x.domain(), [130, 1, 2, 3, -10]);
     }
   }
 });

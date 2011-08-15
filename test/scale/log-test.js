@@ -127,11 +127,17 @@ suite.addBatch({
       var x = log().domain([.01, .49]).nice();
       assert.deepEqual(x.domain(), [.01, 1]);
     },
-    "can specify a polylinear domain and range": function(log) {
+    "can specify a polylog domain and range": function(log) {
       var x = log().domain([.1, 1, 100]).range(["red", "white", "green"]);
       assert.equal(x(.5), "rgb(255,178,178)");
       assert.equal(x(50), "rgb(38,147,38)");
       assert.equal(x(75), "rgb(16,136,16)");
+    },
+    "nicing a polylog domain only affects the extent": function(log) {
+      var x = log().domain([1.1, 1.5, 10.9]).nice();
+      assert.deepEqual(x.domain(), [1, 1.5, 100]);
+      var x = log().domain([-123.1, -1.5, -.5]).nice();
+      assert.deepEqual(x.domain(), [-1000, -1.5, -.1]);
     }
   }
 });
