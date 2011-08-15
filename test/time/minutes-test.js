@@ -25,6 +25,14 @@ suite.addBatch({
     "has an exclusive upper bound": function(range) {
       assert.deepEqual(range(local(2010, 11, 31, 23, 59), local(2011, 0, 1, 0, 2))[2], local(2011, 0, 1, 0, 1));
     },
+    "can skip minutes": function(range) {
+      assert.deepEqual(range(local(2011, 1, 1, 12, 7), local(2011, 1, 1, 13, 7), 15), [
+        local(2011, 1, 1, 12, 15),
+        local(2011, 1, 1, 12, 30),
+        local(2011, 1, 1, 12, 45),
+        local(2011, 1, 1, 13, 0)
+      ]);
+    },
     "observes start of daylight savings time": function(range) {
       assert.deepEqual(range(utc(2011, 2, 13, 9, 59), utc(2011, 2, 13, 10, 2)), [
         utc(2011, 2, 13, 9, 59),
@@ -55,6 +63,14 @@ suite.addBatch({
       },
       "has an exclusive upper bound": function(range) {
         assert.deepEqual(range(utc(2010, 11, 31, 23, 59), utc(2011, 0, 1, 0, 2))[2], utc(2011, 0, 1, 0, 1));
+      },
+      "can skip minutes": function(range) {
+        assert.deepEqual(range(utc(2011, 1, 1, 12, 7), utc(2011, 1, 1, 13, 7), 15), [
+          utc(2011, 1, 1, 12, 15),
+          utc(2011, 1, 1, 12, 30),
+          utc(2011, 1, 1, 12, 45),
+          utc(2011, 1, 1, 13, 0)
+        ]);
       },
       "does not observe the start of daylight savings time": function(range) {
         assert.deepEqual(range(utc(2011, 2, 13, 9, 59), utc(2011, 2, 13, 10, 2)), [
