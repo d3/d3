@@ -32,3 +32,42 @@ assert.hslEqual = function(actual, h, s, l, message) {
     assert.fail(actual+"", "hsl(" + h + "," + (s * 100) + "%," + (l * 100) + "%)", message || "expected {expected}, got {actual}", null, assert.hslEqual);
   }
 };
+
+assert.pathEqual = function(actual, expected, message) {
+  if (!pathEqual(actual, expected)) {
+    assert.fail(actual, expected, message || "expected {expected}, got {actual}", null, assert.pathEqual);
+  }
+};
+
+function pathEqual(a, b) {
+  a = parsePath(a);
+  b = parsePath(b);
+  var n = a.length, i = -1, x, y;
+  if (n !== b.length) return false;
+  while (++i < n) {
+    x = a[i];
+    y = b[i];
+    if (typeof x === "string") {
+      if (x !== y) return false;
+    } else if (typeof y !== "number") {
+      return false;
+    } else if (Math.abs(x - y) > 1e-6) {
+      return false;
+    }
+  }
+  return true;
+}
+
+function parsePath(path) {
+  var re = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g, parts = [];
+  for (var i = 0, s0 = 0, s1, m; m = re.exec(path); ++i) {
+    if (m.index) {
+      var part = path.substring(s0, s1 = m.index);
+      if (!/^[, ]$/.test(part)) parts.push(part);
+    }
+    parts.push(parseFloat(m[0]));
+    s0 = re.lastIndex;
+  }
+  if (s0 < path.length) parts.push(path.substring(s0));
+  return parts;
+}
