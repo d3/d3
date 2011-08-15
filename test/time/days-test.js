@@ -12,7 +12,7 @@ suite.addBatch({
     topic: function() {
       return d3.time.days;
     },
-    "returns midnights in local time": function(range) {
+    "returns midnights": function(range) {
       assert.deepEqual(range(local(2010, 11, 31, 12), local(2011, 0, 3, 12)), [
         local(2011, 0, 1),
         local(2011, 0, 2),
@@ -45,7 +45,7 @@ suite.addBatch({
       topic: function(range) {
         return range.utc;
       },
-      "returns midnights in local time": function(range) {
+      "returns midnights": function(range) {
         assert.deepEqual(range(utc(2010, 11, 31, 12), utc(2011, 0, 3, 12)), [
           utc(2011, 0, 1),
           utc(2011, 0, 2),
