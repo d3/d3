@@ -39,7 +39,25 @@ suite.addBatch({
         utc(2011, 10, 6, 9)
       ]);
     },
-    "utc": {
+    "NPT": {
+      "observes 15-minute offset": tz("Asia/Kathmandu", function(range) {
+        assert.deepEqual(range(local(2011, 10, 7, 0), local(2011, 10, 7, 3)), [
+          utc(2011, 10, 6, 18, 15),
+          utc(2011, 10, 6, 19, 15),
+          utc(2011, 10, 6, 20, 15)
+        ]);
+      })
+    },
+    "IST": {
+      "observes 30-minute offset": tz("Asia/Calcutta", function(range) {
+        assert.deepEqual(range(local(2011, 10, 7, 0), local(2011, 10, 7, 3)), [
+          utc(2011, 10, 6, 18, 30),
+          utc(2011, 10, 6, 19, 30),
+          utc(2011, 10, 6, 20, 30)
+        ]);
+      })
+    },
+    "UTC": {
       topic: function(range) {
         return range.utc;
       },
@@ -80,6 +98,22 @@ function local(year, month, day, hours, minutes, seconds) {
 
 function utc(year, month, day, hours, minutes, seconds) {
   return new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0));
+}
+
+function tz(tz, scope) {
+  return function() {
+    var o = process.env.TZ;
+    try {
+      process.env.TZ = tz;
+      new Date(0).toString(); // invalidate node's dst cache
+      new Date().toString();
+      scope.apply(this, arguments);
+    } finally {
+      process.env.TZ = o;
+      new Date(0).toString(); // invalidate node's dst cache
+      new Date().toString();
+    }
+  };
 }
 
 suite.export(module);
