@@ -41,7 +41,7 @@ suite.addBatch({
         local(2011, 10, 8)
       ]);
     },
-    "utc": {
+    "UTC": {
       topic: function(range) {
         return range.utc;
       },

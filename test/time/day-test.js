@@ -29,7 +29,7 @@ suite.addBatch({
       assert.deepEqual(floor(utc(2011, 10, 6, 9)), local(2011, 10, 6));
       assert.deepEqual(floor(utc(2011, 10, 6, 10)), local(2011, 10, 6));
     },
-    "utc": {
+    "UTC": {
       topic: function(floor) {
         return floor.utc;
       },
