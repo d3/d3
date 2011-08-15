@@ -9,6 +9,14 @@ process.env.TZ = "America/Los_Angeles";
 
 var assert = require("assert");
 
+assert.inDelta = function (actual, expected, delta, message) {
+  var lower = expected - delta;
+  var upper = expected + delta;
+  if (actual != +actual || actual < lower || actual > upper) {
+    assert.fail(actual, expected, message || "expected {actual} to be in within *" + delta.toString() + "* of {expected}", null, assert.inDelta);
+  }
+};
+
 assert.domNull = function(actual, message) {
   if (actual !== null) {
     assert.fail(actual+"", null, message || "expected null, got {actual}", "===", assert.domNull);
