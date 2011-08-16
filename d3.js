@@ -322,8 +322,13 @@ function d3_call(callback) {
  * @param {number=} step
  */
 d3.range = function(start, stop, step) {
-  if (arguments.length === 1) { stop = start; start = 0; }
-  if (step == null) step = 1;
+  if (arguments.length < 3) {
+    step = 1;
+    if (arguments.length < 2) {
+      stop = start;
+      start = 0;
+    }
+  }
   if ((stop - start) / step == Infinity) throw new Error("infinite range");
   var range = [],
        i = -1,
