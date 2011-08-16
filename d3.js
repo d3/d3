@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.29.3"}; // semver
+(function(){d3 = {version: "1.29.4"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -322,8 +322,13 @@ function d3_call(callback) {
  * @param {number=} step
  */
 d3.range = function(start, stop, step) {
-  if (arguments.length === 1) { stop = start; start = 0; }
-  if (step == null) step = 1;
+  if (arguments.length < 3) {
+    step = 1;
+    if (arguments.length < 2) {
+      stop = start;
+      start = 0;
+    }
+  }
   if ((stop - start) / step == Infinity) throw new Error("infinite range");
   var range = [],
        i = -1,
@@ -336,7 +341,7 @@ d3.requote = function(s) {
   return s.replace(d3_requote_re, "\\$&");
 };
 
-var d3_requote_re = /[\\\^\$\*\+\?\[\]\(\)\.\{\}]/g;
+var d3_requote_re = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
 d3.round = function(x, n) {
   return n
       ? Math.round(x * Math.pow(10, n)) * Math.pow(10, -n)
@@ -628,7 +633,7 @@ function d3_ease_sin(t) {
 }
 
 function d3_ease_exp(t) {
-  return t ? Math.pow(2, 10 * (t - 1)) - 1e-3 : 0;
+  return Math.pow(2, 10 * (t - 1));
 }
 
 function d3_ease_circle(t) {
