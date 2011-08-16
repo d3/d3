@@ -633,7 +633,7 @@ function d3_ease_sin(t) {
 }
 
 function d3_ease_exp(t) {
-  return t ? Math.pow(2, 10 * (t - 1)) - 1e-3 : 0;
+  return Math.pow(2, 10 * (t - 1));
 }
 
 function d3_ease_circle(t) {
