@@ -35,10 +35,10 @@ d3.rebind = function(object, method) {
   };
 };
 d3.ascending = function(a, b) {
-  return a < b ? -1 : a > b ? 1 : 0;
+  return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
 };
 d3.descending = function(a, b) {
-  return b < a ? -1 : b > a ? 1 : 0;
+  return b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN;
 };
 d3.min = function(array, f) {
   var i = -1,

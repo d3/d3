@@ -16,6 +16,16 @@ suite.addBatch({
     },
     "returns zero if a == b": function() {
       assert.equal(d3.ascending(0, 0), 0);
+    },
+    "returns NaN if a or b is undefined": function() {
+      assert.isNaN(d3.ascending(0, undefined));
+      assert.isNaN(d3.ascending(undefined, 0));
+      assert.isNaN(d3.ascending(undefined, undefined));
+    },
+    "returns NaN if a or b is NaN": function() {
+      assert.isNaN(d3.ascending(0, NaN));
+      assert.isNaN(d3.ascending(NaN, 0));
+      assert.isNaN(d3.ascending(NaN, NaN));
     }
   }
 });
