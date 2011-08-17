@@ -2650,8 +2650,8 @@ d3.scale.quantize = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return [x0, x1];
-    x0 = x[0];
-    x1 = x[1];
+    x0 = +x[0];
+    x1 = +x[x.length - 1];
     kx = range.length / (x1 - x0);
     return scale;
   };
