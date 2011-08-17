@@ -123,7 +123,7 @@ function d3_transition(groups) {
         delay[++k] = delayMin;
       });
     }
-    d3_timer(step, delayMin);
+    d3.timer(step, delayMin);
     return transition;
   };
 

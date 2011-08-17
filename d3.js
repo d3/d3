@@ -1963,7 +1963,7 @@ function d3_transition(groups) {
         delay[++k] = delayMin;
       });
     }
-    d3_timer(step, delayMin);
+    d3.timer(step, delayMin);
     return transition;
   };
 
@@ -2083,17 +2083,14 @@ var d3_timer_queue = null,
     d3_timer_timeout; // is a timeout active?
 
 // The timer will continue to fire until callback returns true.
-d3.timer = function(callback) {
-  d3_timer(callback, 0);
-};
-
-function d3_timer(callback, delay) {
+d3.timer = function(callback, delay) {
   var now = Date.now(),
       found = false,
       t0,
       t1 = d3_timer_queue;
 
-  if (!isFinite(delay)) return;
+  if (arguments.length < 2) delay = 0;
+  else if (!isFinite(delay)) return;
 
   // See if the callback's already in the queue.
   while (t1) {
@@ -2130,7 +2127,7 @@ function d3_timer_step() {
 
   while (t1) {
     elapsed = now - t1.then;
-    if (elapsed > t1.delay) t1.flush = t1.callback(elapsed);
+    if (elapsed >= t1.delay) t1.flush = t1.callback(elapsed);
     t1 = t1.next;
   }
 
