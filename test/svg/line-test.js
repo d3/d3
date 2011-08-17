@@ -71,6 +71,13 @@ suite.addBatch({
       assert.isNull(line()([]));
     },
 
+    "interpolate(linear)": {
+      "supports linear interpolation": function(line) {
+        var l = line().interpolate("linear");
+        assert.pathEqual(l([[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]]), "M0,0L1,1L2,0L3,1L4,0");
+      }
+    },
+
     "interpolate(step)": {
       "supports step-before interpolation": function(line) {
         var l = line().interpolate("step-before");
