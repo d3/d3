@@ -105,6 +105,10 @@ suite.addBatch({
       assert.strictEqual(format(".5r")(123.45), "123.45");
       assert.strictEqual(format(".6r")(123.45), "123.450");
     },
+    "can round very small numbers": function(format) {
+      var f = format(".2r");
+      assert.strictEqual(f(1e-22), "0.00000000000000000000");
+    },
     "can group thousands": function(format) {
       var f = format(",d");
       assert.strictEqual(f(0), "0");
