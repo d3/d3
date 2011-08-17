@@ -5,7 +5,7 @@ require("../../d3.csv");
 var vows = require("vows"),
     assert = require("assert");
 
-var suite = vows.describe("d3.csv");
+var suite = vows.describe("d3.csv.parse");
 
 suite.addBatch({
   "parse": {
