@@ -1,5 +1,5 @@
 JS_COMPILER = \
-	./lib/uglifyjs/bin/uglifyjs
+	./lib/uglify-js/bin/uglifyjs
 
 all: \
 	d3.js \
