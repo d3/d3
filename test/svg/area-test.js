@@ -135,17 +135,17 @@ suite.addBatch({
       assert.equal(area().interpolate(), "linear");
     },
     "interpolate can be defined as a constant": function(area) {
-      var l = area().interpolate("step-before");
-      assert.pathEqual(l([[0, 0], [1, 1]]), "M0,0V1H1L1,0V0H0Z");
-      assert.equal(l.interpolate(), "step-before");
+      var a = area().interpolate("step-before");
+      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0V1H1L1,0V0H0Z");
+      assert.equal(a.interpolate(), "step-before");
     },
 
     "tension defaults to .7": function(area) {
       assert.equal(area().tension(), .7);
     },
     "tension can be specified as a constant": function(area) {
-      var l = area().tension(.5);
-      assert.equal(l.tension(), .5);
+      var a = area().tension(.5);
+      assert.equal(a.tension(), .5);
     },
 
     "returns null if input points array is empty": function(area) {

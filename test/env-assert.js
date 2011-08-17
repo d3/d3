@@ -34,7 +34,7 @@ assert.hslEqual = function(actual, h, s, l, message) {
 
 assert.pathEqual = function(actual, expected, message) {
   if (!pathEqual(actual, expected)) {
-    assert.fail(actual, expected, message || "expected {expected}, got {actual}", null, assert.pathEqual);
+    assert.fail(formatPath(actual), formatPath(expected), message || "expected {expected}, got {actual}", null, assert.pathEqual);
   }
 };
 
@@ -57,16 +57,25 @@ function pathEqual(a, b) {
   return true;
 }
 
+var reNumber = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g;
+
 function parsePath(path) {
-  var re = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g, parts = [];
-  for (var i = 0, s0 = 0, s1, m; m = re.exec(path); ++i) {
+  var parts = [];
+  reNumber.lastIndex = 0;
+  for (var i = 0, s0 = 0, s1, m; m = reNumber.exec(path); ++i) {
     if (m.index) {
       var part = path.substring(s0, s1 = m.index);
       if (!/^[, ]$/.test(part)) parts.push(part);
     }
     parts.push(parseFloat(m[0]));
-    s0 = re.lastIndex;
+    s0 = reNumber.lastIndex;
   }
   if (s0 < path.length) parts.push(path.substring(s0));
   return parts;
+}
+
+function formatPath(path) {
+  return path.replace(reNumber, function(s) {
+    return Math.abs((s = +s) - Math.floor(s)) < 1e-6 ? Math.floor(s) : s.toFixed(6);
+  });
 }

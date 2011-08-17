@@ -111,12 +111,14 @@ suite.addBatch({
 function testInterpolation(interpolate) {
   var data = [[10, 0], [20, 1], [20, 2], [10, 3]];
 
+  var radial = d3.svg.line.radial();
+
   var cartesian = d3.svg.line()
       .x(function(d) { return d[0] * Math.cos(d[1] - Math.PI / 2); })
       .y(function(d) { return d[0] * Math.sin(d[1] - Math.PI / 2); });
 
-  return function(line) {
-    assert.pathEqual(line().interpolate(interpolate)(data), cartesian.interpolate(interpolate)(data));
+  return function() {
+    assert.pathEqual(radial.interpolate(interpolate)(data), cartesian.interpolate(interpolate)(data));
   };
 }
 
