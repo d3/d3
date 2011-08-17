@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.29.4"}; // semver
+(function(){d3 = {version: "1.29.5"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -525,7 +525,7 @@ var d3_format_types = {
   f: function(x, p) { return x.toFixed(p); },
   r: function(x, p) {
     var n = 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10);
-    return d3.round(x, p - n).toFixed(Math.max(0, p - n));
+    return d3.round(x, p - n).toFixed(Math.max(0, Math.min(20, p - n)));
   }
 };
 
@@ -1963,7 +1963,7 @@ function d3_transition(groups) {
         delay[++k] = delayMin;
       });
     }
-    d3_timer(step, delayMin);
+    d3.timer(step, delayMin);
     return transition;
   };
 
@@ -2083,17 +2083,14 @@ var d3_timer_queue = null,
     d3_timer_timeout; // is a timeout active?
 
 // The timer will continue to fire until callback returns true.
-d3.timer = function(callback) {
-  d3_timer(callback, 0);
-};
-
-function d3_timer(callback, delay) {
+d3.timer = function(callback, delay) {
   var now = Date.now(),
       found = false,
       t0,
       t1 = d3_timer_queue;
 
-  if (!isFinite(delay)) return;
+  if (arguments.length < 2) delay = 0;
+  else if (!isFinite(delay)) return;
 
   // See if the callback's already in the queue.
   while (t1) {
@@ -2130,7 +2127,7 @@ function d3_timer_step() {
 
   while (t1) {
     elapsed = now - t1.then;
-    if (elapsed > t1.delay) t1.flush = t1.callback(elapsed);
+    if (elapsed >= t1.delay) t1.flush = t1.callback(elapsed);
     t1 = t1.next;
   }
 
@@ -2653,8 +2650,8 @@ d3.scale.quantize = function() {
 
   scale.domain = function(x) {
     if (!arguments.length) return [x0, x1];
-    x0 = x[0];
-    x1 = x[1];
+    x0 = +x[0];
+    x1 = +x[x.length - 1];
     kx = range.length / (x1 - x0);
     return scale;
   };
@@ -2681,7 +2678,7 @@ d3.svg.arc = function() {
         r1 = outerRadius.apply(this, arguments),
         a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset,
         a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset,
-        da = a1 - a0,
+        da = (a1 < a0 && (da = a0, a0 = a1, a1 = da), a1 - a0),
         df = da < Math.PI ? "0" : "1",
         c0 = Math.cos(a0),
         s0 = Math.sin(a0),

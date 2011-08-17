@@ -9,7 +9,7 @@ d3.svg.arc = function() {
         r1 = outerRadius.apply(this, arguments),
         a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset,
         a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset,
-        da = a1 - a0,
+        da = (a1 < a0 && (da = a0, a0 = a1, a1 = da), a1 - a0),
         df = da < Math.PI ? "0" : "1",
         c0 = Math.cos(a0),
         s0 = Math.sin(a0),
