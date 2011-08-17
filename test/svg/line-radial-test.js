@@ -64,8 +64,6 @@ suite.addBatch({
       assert.equal(l.interpolate(), "cardinal");
     },
 
-    // We could test the other interpolation modes here, but that'd be redundant.
-
     "tension defaults to .7": function(line) {
       assert.equal(line().tension(), .7);
     },
@@ -76,8 +74,50 @@ suite.addBatch({
 
     "returns null if input points array is empty": function(line) {
       assert.isNull(line()([]));
+    },
+
+    "interpolate(linear)": {
+      "supports linear interpolation": testInterpolation("linear")
+    },
+
+    "interpolate(step)": {
+      "supports step-before interpolation": testInterpolation("step-before"),
+      "supports step-after interpolation": testInterpolation("step-after")
+    },
+
+    "interpolate(basis)": {
+      "supports basis interpolation": testInterpolation("basis"),
+      "supports basis-open interpolation": testInterpolation("basis-open"),
+      "supports basis-closed interpolation": testInterpolation("basis-closed")
+    },
+
+    "interpolate(bundle)": {
+      "supports bundle interpolation": testInterpolation("bundle")
+    },
+
+    "interpolate(cardinal)": {
+      "supports cardinal interpolation": testInterpolation("cardinal"),
+      "supports cardinal-open interpolation": testInterpolation("cardinal-open"),
+      "supports cardinal-closed interpolation": testInterpolation("cardinal-closed")
+    },
+
+    "interpolate(monotone)": {
+      "supports monotone interpolation": testInterpolation("monotone")
     }
   }
 });
+
+// A radial line is just a transformation of a Cartesian line.
+function testInterpolation(interpolate) {
+  var data = [[10, 0], [20, 1], [20, 2], [10, 3]];
+
+  var cartesian = d3.svg.line()
+      .x(function(d) { return d[0] * Math.cos(d[1] - Math.PI / 2); })
+      .y(function(d) { return d[0] * Math.sin(d[1] - Math.PI / 2); });
+
+  return function(line) {
+    assert.pathEqual(line().interpolate(interpolate)(data), cartesian.interpolate(interpolate)(data));
+  };
+}
 
 suite.export(module);

@@ -11,85 +11,181 @@ suite.addBatch({
     topic: function() {
       return d3.svg.area;
     },
-    "default accessors assume tuple input": function(area) {
+
+    "x is an alias for setting x0 and x1": function(area) {
+      var a = area().x(f);
+      function f() {}
+      assert.equal(a.x(), f);
+      assert.equal(a.x0(), f);
+      assert.equal(a.x1(), f);
+    },
+    "x is an alias for getting x1": function(area) {
+      var a = area().x1(f);
+      function f() {}
+      assert.equal(a.x(), f);
+    },
+
+    "y is an alias for setting y0 and y1": function(area) {
+      var a = area().y(f);
+      function f() {}
+      assert.equal(a.y(), f);
+      assert.equal(a.y0(), f);
+      assert.equal(a.y1(), f);
+    },
+    "y is an alias for getting x1": function(area) {
+      var a = area().y1(f);
+      function f() {}
+      assert.equal(a.y(), f);
+    },
+
+    "x0 defaults to a function accessor": function(area) {
       var a = area();
-      assert.pathEqual(a([[0, 0]]), "M0,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0L1,1L1,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,0L1,1L2,0L2,0L1,0L0,0Z");
+      assert.pathEqual(a([[1, 2], [4, 3]]), "M1,2L4,3L4,0L1,0Z");
+      assert.typeOf(a.x0(), "function");
     },
-    "can specify x-accessor as a function": function(area) {
-      var i = 0, a = area().x(function() { return ++i; });
-      assert.pathEqual(a([[0, 0]]), "M1,0L1,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M2,0L3,1L3,0L2,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M4,0L5,1L6,0L6,0L5,0L4,0Z");
+    "x0 can be defined as a constant": function(area) {
+      var a = area().x0(0);
+      assert.pathEqual(a([[1, 2], [4, 3]]), "M1,2L4,3L0,0L0,0Z");
+      assert.equal(a.x0(), 0);
     },
-    "can specify y-accessor as a function": function(area) {
-      var i = 0, a = area().y(function() { return ++i; });
-      assert.pathEqual(a([[0, 0]]), "M0,1L0,1Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,2L1,3L1,3L0,2Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,4L1,5L2,6L2,6L1,5L0,4Z");
+    "x0 can be defined as a function": function(area) {
+      var a = area().x0(f), t = {}, dd = [], ii = [], tt = [];
+      function f(d, i) { dd.push(d); ii.push(i); tt.push(this); return 0; }
+      assert.pathEqual(a.call(t, [[1, 2], [4, 3]]), "M1,2L4,3L0,0L0,0Z");
+      assert.deepEqual(dd, [[1, 2], [4, 3]], "expected data, got {actual}");
+      assert.deepEqual(ii, [0, 1], "expected index, got {actual}");
+      assert.deepEqual(tt, [t, t], "expected this, got {actual}");
     },
-    "can specify y0-accessor as a constant": function(area) {
-      var a = area().y0(-1);
-      assert.pathEqual(a([[0, 0]]), "M0,0L0,-1Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0L1,1L1,-1L0,-1Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,0L1,1L2,0L2,-1L1,-1L0,-1Z");
+
+    "x1 defaults to a function accessor": function(area) {
+      var a = area();
+      assert.pathEqual(a([[1, 2], [4, 3]]), "M1,2L4,3L4,0L1,0Z");
+      assert.typeOf(a.x1(), "function");
     },
-    "can specify y0-accessor as a function": function(area) {
-      var a = area().x(function(d) { return d.x; }).y0(function(d) { return -d.y; }).y1(function(d) { return d.y; });
-      assert.pathEqual(a([{x:0,y:0}]), "M0,0L0,0Z");
-      assert.pathEqual(a([{x:0,y:0},{x:1,y:1}]), "M0,0L1,1L1,-1L0,0Z");
-      assert.pathEqual(a([{x:0,y:0},{x:1,y:1},{x:2,y:0}]), "M0,0L1,1L2,0L2,0L1,-1L0,0Z");
+    "x1 can be defined as a constant": function(area) {
+      var a = area().x1(0);
+      assert.pathEqual(a([[1, 2], [4, 3]]), "M0,2L0,3L4,0L1,0Z");
+      assert.equal(a.x1(), 0);
     },
-    "can specify y1-accessor as a function": function(area) {
-      var a = area().x(function(d) { return d.x; }).y1(function(d) { return d.y; });
-      assert.pathEqual(a([{x:0,y:0}]), "M0,0L0,0Z");
-      assert.pathEqual(a([{x:0,y:0},{x:1,y:1}]), "M0,0L1,1L1,0L0,0Z");
-      assert.pathEqual(a([{x:0,y:0},{x:1,y:1},{x:2,y:0}]), "M0,0L1,1L2,0L2,0L1,0L0,0Z");
+    "x1 can be defined as a function": function(area) {
+      var a = area().x1(f), t = {}, dd = [], ii = [], tt = [];
+      function f(d, i) { dd.push(d); ii.push(i); tt.push(this); return 0; }
+      assert.pathEqual(a.call(t, [[1, 2], [4, 3]]), "M0,2L0,3L4,0L1,0Z");
+      assert.deepEqual(dd, [[1, 2], [4, 3]], "expected data, got {actual}");
+      assert.deepEqual(ii, [0, 1], "expected index, got {actual}");
+      assert.deepEqual(tt, [t, t], "expected this, got {actual}");
     },
-    "supports step-before interpolation": function(area) {
-      var a = area().interpolate("step-before");
-      assert.pathEqual(a([[0, 0]]), "M0,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0V1H1L1,0V0H0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,0V1H1V0H2L2,0V0H1V0H0Z");
+
+    "y0 defaults to zero": function(area) {
+      var a = area();
+      assert.pathEqual(a([[1, 2], [4, 3]]), "M1,2L4,3L4,0L1,0Z");
+      assert.equal(a.y0(), 0);
     },
-    "supports step-after interpolation": function(area) {
-      var a = area().interpolate("step-after");
-      assert.pathEqual(a([[0, 0]]), "M0,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0H1V1L1,0H0V0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,0H1V1H2V0L2,0H1V0H0V0Z");
+    "y0 can be defined as a constant": function(area) {
+      var a = area().y0(1);
+      assert.pathEqual(a([[1, 2], [4, 3]]), "M1,2L4,3L4,1L1,1Z");
+      assert.equal(a.y0(), 1);
     },
-    "supports basis interpolation": function(area) {
-      var a = area().interpolate("basis");
-      assert.pathEqual(a([[0, 0]]), "M0,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0L1,1L1,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,0C0,0,0,0,0.16666666666666666,0.16666666666666666C0.3333333333333333,0.3333333333333333,0.6666666666666666,0.6666666666666666,1,0.6666666666666666C1.3333333333333333,0.6666666666666666,1.6666666666666665,0.3333333333333333,1.8333333333333333,0.16666666666666666C2,0,2,0,1.9999999999999998,0L2,0C2,0,2,0,1.8333333333333333,0C1.6666666666666665,0,1.3333333333333333,0,1,0C0.6666666666666666,0,0.3333333333333333,0,0.16666666666666666,0C0,0,0,0,0,0Z");
+    "y0 can be defined as a function": function(area) {
+      var a = area().y0(f), t = {}, dd = [], ii = [], tt = [];
+      function f(d, i) { dd.push(d); ii.push(i); tt.push(this); return 1; }
+      assert.pathEqual(a.call(t, [[1, 2], [4, 3]]), "M1,2L4,3L4,1L1,1Z");
+      assert.deepEqual(dd, [[1, 2], [4, 3]], "expected data, got {actual}");
+      assert.deepEqual(ii, [0, 1], "expected index, got {actual}");
+      assert.deepEqual(tt, [t, t], "expected this, got {actual}");
     },
-    "supports basis-closed interpolation": function(area) {
-      var a = area().interpolate("basis-closed");
-      assert.pathEqual(a([[0, 0]]), "M0,0C0,0,0,0,0,0L0,0C0,0,0,0,0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0.3333333333333333,0.3333333333333333C0.3333333333333333,0.3333333333333333,0.6666666666666666,0.6666666666666666,0.6666666666666666,0.6666666666666666C0.6666666666666666,0.6666666666666666,0.3333333333333333,0.3333333333333333,0.3333333333333333,0.3333333333333333L0.6666666666666666,0C0.6666666666666666,0,0.3333333333333333,0,0.3333333333333333,0C0.3333333333333333,0,0.6666666666666666,0,0.6666666666666666,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M1.5,0.16666666666666666C1.3333333333333333,0,0.6666666666666666,0,0.5,0.16666666666666666C0.3333333333333333,0.3333333333333333,0.6666666666666666,0.6666666666666666,1,0.6666666666666666C1.3333333333333333,0.6666666666666666,1.6666666666666665,0.3333333333333333,1.5,0.16666666666666666L0.5,0C0.6666666666666666,0,1.3333333333333333,0,1.5,0C1.6666666666666665,0,1.3333333333333333,0,1,0C0.6666666666666666,0,0.3333333333333333,0,0.5,0Z");
+
+    "y1 defaults to a function accessor": function(area) {
+      var a = area();
+      assert.pathEqual(a([[1, 2], [4, 3]]), "M1,2L4,3L4,0L1,0Z");
+      assert.typeOf(a.y1(), "function");
     },
-    "supports cardinal interpolation": function(area) {
-      var a = area().interpolate("cardinal");
-      assert.pathEqual(a([[0, 0]]), "M0,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0L1,1L1,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,0Q0.7999999999999999,1,1,1Q1.2,1,2,0L2,0Q1.2,0,1,0Q0.7999999999999999,0,0,0Z");
+    "y1 can be defined as a constant": function(area) {
+      var a = area().y1(1);
+      assert.pathEqual(a([[1, 2], [4, 3]]), "M1,1L4,1L4,0L1,0Z");
+      assert.equal(a.y1(), 1);
     },
-    "supports cardinal-closed interpolation": function(area) {
-      var a = area().interpolate("cardinal-closed");
-      assert.pathEqual(a([[0, 0]]), "M0,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0L1,1L1,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,0C-0.15000000000000002,0.15000000000000002,0.7,1,1,1S2.15,0.15000000000000002,2,0S0.15000000000000002,-0.15000000000000002,0,0L2,0C2.15,0,1.3,0,1,0S-0.15000000000000002,0,0,0S1.85,0,2,0Z");
+    "y1 can be defined as a function": function(area) {
+      var a = area().y1(f), t = {}, dd = [], ii = [], tt = [];
+      function f(d, i) { dd.push(d); ii.push(i); tt.push(this); return 1; }
+      assert.pathEqual(a.call(t, [[1, 2], [4, 3]]), "M1,1L4,1L4,0L1,0Z");
+      assert.deepEqual(dd, [[1, 2], [4, 3]], "expected data, got {actual}");
+      assert.deepEqual(ii, [0, 1], "expected index, got {actual}");
+      assert.deepEqual(tt, [t, t], "expected this, got {actual}");
     },
-    "supports monotone interpolation": function(area) {
-      var a = area().interpolate("monotone");
-      assert.pathEqual(a([[0, 0]]), "M0,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0L1,1L1,0L0,0Z");
-      assert.pathEqual(a([[0, 0], [1, 1], [2, 0]]), "M0,0C0.08333333333333333,0.08333333333333333,0.6666666666666667,1,1,1S1.9166666666666667,0.08333333333333333,2,0L2,0C1.8333333333333333,0,1.3333333333333333,0,1,0S0.16666666666666666,0,0,0Z");
+
+    "if x0 === x1, x is only evaluated once per point": function(area) {
+      var a = area().x(f), t = {}, dd = [], ii = [], tt = [];
+      function f(d, i) { dd.push(d); ii.push(i); tt.push(this); return 0; }
+      assert.pathEqual(a.call(t, [[1, 2], [4, 3]]), "M0,2L0,3L0,0L0,0Z");
+      assert.deepEqual(dd, [[1, 2], [4, 3]], "expected data, got {actual}");
+      assert.deepEqual(ii, [0, 1], "expected index, got {actual}");
+      assert.deepEqual(tt, [t, t], "expected this, got {actual}");
+    },
+    "if y0 === y1, y is only evaluated once per point": function(area) {
+      var a = area().y(f), t = {}, dd = [], ii = [], tt = [];
+      function f(d, i) { dd.push(d); ii.push(i); tt.push(this); return 1; }
+      assert.pathEqual(a.call(t, [[1, 2], [4, 3]]), "M1,1L4,1L4,1L1,1Z");
+      assert.deepEqual(dd, [[1, 2], [4, 3]], "expected data, got {actual}");
+      assert.deepEqual(ii, [0, 1], "expected index, got {actual}");
+      assert.deepEqual(tt, [t, t], "expected this, got {actual}");
+    },
+
+    "interpolate defaults to linear": function(area) {
+      assert.equal(area().interpolate(), "linear");
+    },
+    "interpolate can be defined as a constant": function(area) {
+      var l = area().interpolate("step-before");
+      assert.pathEqual(l([[0, 0], [1, 1]]), "M0,0V1H1L1,0V0H0Z");
+      assert.equal(l.interpolate(), "step-before");
+    },
+
+    "tension defaults to .7": function(area) {
+      assert.equal(area().tension(), .7);
+    },
+    "tension can be specified as a constant": function(area) {
+      var l = area().tension(.5);
+      assert.equal(l.tension(), .5);
+    },
+
+    "returns null if input points array is empty": function(area) {
+      assert.isNull(area()([]));
+    },
+
+    "interpolate(linear)": {
+      "supports linear interpolation": testInterpolation("linear")
+    },
+
+    "interpolate(step)": {
+      "supports step-before interpolation": testInterpolation("step-before"),
+      "supports step-after interpolation": testInterpolation("step-after")
+    },
+
+    "interpolate(basis)": {
+      "supports basis interpolation": testInterpolation("basis"),
+      "supports basis-open interpolation": testInterpolation("basis-open")
+    },
+
+    "interpolate(cardinal)": {
+      "supports cardinal interpolation": testInterpolation("cardinal"),
+      "supports cardinal-open interpolation": testInterpolation("cardinal-open")
+    },
+
+    "interpolate(monotone)": {
+      "supports monotone interpolation": testInterpolation("monotone")
     }
   }
 });
+
+// An area is just two lines, with one reversed.
+function testInterpolation(interpolate) {
+  return function(area) {
+    var a = area().interpolate(interpolate),
+        d = [[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]],
+        l0 = d3.svg.line().interpolate(interpolate).x(a.x0()).y(a.y0()),
+        l1 = d3.svg.line().interpolate(interpolate).x(a.x1()).y(a.y1());
+    assert.pathEqual(a(d), l1(d) + "L" + l0(d.reverse()).substring(1) + "Z");
+  };
+}
 
 suite.export(module);
