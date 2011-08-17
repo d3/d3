@@ -136,7 +136,7 @@ function d3_selection(groups) {
         for (i = 0; i < n; i++) {
           key = join.call(node = group[i], node.__data__, i);
           if (key in nodeByKey) {
-            exitNodes[j++] = group[i]; // duplicate key
+            exitNodes[j++] = node; // duplicate key
           } else {
             nodeByKey[key] = node;
           }

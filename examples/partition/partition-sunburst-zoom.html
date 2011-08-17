@@ -32,8 +32,7 @@ var vis = d3.select("#chart").append("svg:svg")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
 var partition = d3.layout.partition()
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
-    .value(function(d) { return d.value; });
+    .value(function(d) { return d.size; });
 
 var arc = d3.svg.arc()
     .startAngle(function(d) { return Math.max(0, Math.min(2 * Math.PI, x(d.x))); })
@@ -41,12 +40,12 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.max(0, y(d.y)); })
     .outerRadius(function(d) { return Math.max(0, y(d.y + d.dy)); });
 
-d3.json("../treemap/flare.json", function(json) {
-  var path = vis.selectAll("path")
-      .data(partition(d3.entries(json)[0]))
+d3.json("../data/flare.json", function(json) {
+  var path = vis.data([json]).selectAll("path")
+      .data(partition.nodes)
     .enter().append("svg:path")
       .attr("d", arc)
-      .style("fill", function(d) { return color((d.children ? d : d.parent).data.key); })
+      .style("fill", function(d) { return color((d.children ? d : d.parent).name); })
       .on("click", click);
 
   function click(d) {

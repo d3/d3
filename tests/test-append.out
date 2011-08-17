@@ -1,6 +1,0 @@
-append svg:svg:
-   <svg/>
-
-append div:
-   <svg/><div/>
-

@@ -1,28 +1,3 @@
-function sum(array) {
-  var s = 0, i = -1, n = array.length;
-  while (++i < n) s += array[i];
-  return s;
-}
-
-function mean(array) {
-  return sum(array) / array.length;
-}
-
-function variance(array) {
-  if (array.length < 1) return NaN;
-  if (array.length === 1) return 0;
-  var m = mean(array), sum = 0;
-  for (var i = 0; i < array.length; i++) {
-    var d = array[i] - m;
-    sum += d * d;
-  }
-  return sum;
-}
-
-function deviation(array) {
-  return Math.sqrt(variance(array) / (array.length - 1));
-}
-
 // Sample from a normal distribution with mean 0, stddev 1.
 function normal() {
   var x = 0, y = 0, rds, c;

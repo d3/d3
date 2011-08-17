@@ -290,11 +290,11 @@ function d3_chart_boxWhiskers(d) {
 }
 
 function d3_chart_boxQuartiles(d) {
-  var n = d.length;
-  return [.25, .5, .75].map(function(q) {
-    q *= n;
-    return ~~q === q ? (d[q] + d[q + 1]) / 2 : d[Math.round(q)];
-  });
+  return [
+    d3.quantile(d, .25),
+    d3.quantile(d, .5),
+    d3.quantile(d, .75)
+  ];
 }
 // Chart design based on the recommendations of Stephen Few. Implementation
 // based on the work of Clint Ivy, Jamie Love, and Jason Davies.
@@ -712,13 +712,13 @@ d3.chart.horizon = function() {
   };
 
   horizon.width = function(x) {
-    if (!arguments.length) return width;
+    if (!arguments.length) return w;
     w = +x;
     return horizon;
   };
 
   horizon.height = function(x) {
-    if (!arguments.length) return height;
+    if (!arguments.length) return h;
     h = +x;
     return horizon;
   };

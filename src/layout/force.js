@@ -5,14 +5,16 @@ d3.layout.force = function() {
       size = [1, 1],
       alpha,
       friction = .9,
-      distance = 20,
+      linkDistance = d3_layout_forceLinkDistance,
+      linkStrength = d3_layout_forceLinkStrength,
       charge = -30,
       gravity = .1,
       theta = .8,
       interval,
       nodes = [],
       links = [],
-      distances;
+      distances,
+      strengths;
 
   function repulse(node, kc) {
     return function(quad, x1, y1, x2, y2) {
@@ -58,7 +60,7 @@ d3.layout.force = function() {
       x = t.x - s.x;
       y = t.y - s.y;
       if (l = (x * x + y * y)) {
-        l = alpha * ((l = Math.sqrt(l)) - distance) / l;
+        l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
         t.x -= x;
@@ -128,9 +130,18 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.distance = function(x) {
-    if (!arguments.length) return distance;
-    distance = x;
+  force.linkDistance = function(x) {
+    if (!arguments.length) return linkDistance;
+    linkDistance = d3.functor(x);
+    return force;
+  };
+
+  // For backwards-compatibility.
+  force.distance = force.linkDistance;
+
+  force.linkStrength = function(x) {
+    if (!arguments.length) return linkStrength;
+    linkStrength = d3.functor(x);
     return force;
   };
 
@@ -172,10 +183,14 @@ d3.layout.force = function() {
       (o = nodes[i]).index = i;
     }
 
+    distances = [];
+    strengths = [];
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
       if (typeof o.target == "number") o.target = nodes[o.target];
+      distances[i] = linkDistance.call(this, o, i);
+      strengths[i] = linkStrength.call(this, o, i);
     }
 
     for (i = 0; i < n; ++i) {
@@ -232,54 +247,36 @@ d3.layout.force = function() {
     this
       .on("mouseover.force", d3_layout_forceDragOver)
       .on("mouseout.force", d3_layout_forceDragOut)
-      .on("mousedown.force", d3_layout_forceDragDown);
+      .on("mousedown.force", dragdown)
+      .on("touchstart.force", dragdown);
 
     d3.select(window)
-      .on("mousemove.force", dragmove)
-      .on("mouseup.force", dragup, true)
+      .on("mousemove.force", d3_layout_forceDragMove)
+      .on("touchmove.force", d3_layout_forceDragMove)
+      .on("mouseup.force", d3_layout_forceDragUp, true)
+      .on("touchend.force", d3_layout_forceDragUp, true)
       .on("click.force", d3_layout_forceDragClick, true);
 
     return force;
   };
 
-  function dragmove() {
-    if (!d3_layout_forceDragNode) return;
-    var parent = d3_layout_forceDragElement.parentNode;
-
-    // O NOES! The drag element was removed from the DOM.
-    if (!parent) {
-      d3_layout_forceDragNode.fixed = false;
-      d3_layout_forceDragNode = d3_layout_forceDragElement = null;
-      return;
-    }
-
-    var m = d3.svg.mouse(parent);
-    d3_layout_forceDragMoved = true;
-    d3_layout_forceDragNode.px = m[0];
-    d3_layout_forceDragNode.py = m[1];
-    force.resume(); // restart annealing
-  }
-
-  function dragup() {
-    if (!d3_layout_forceDragNode) return;
-
-    // If the node was moved, prevent the mouseup from propagating.
-    // Also prevent the subsequent click from propagating (e.g., for anchors).
-    if (d3_layout_forceDragMoved) {
-      d3_layout_forceStopClick = true;
-      d3_layout_forceCancel();
-    }
-
-    dragmove();
-    d3_layout_forceDragNode.fixed = false;
-    d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+  function dragdown(d, i) {
+    var m = d3_layout_forcePoint(this.parentNode);
+    (d3_layout_forceDragNode = d).fixed = true;
+    d3_layout_forceDragMoved = false;
+    d3_layout_forceDragElement = this;
+    d3_layout_forceDragForce = force;
+    d3_layout_forceDragOffset = [m[0] - d.x, m[1] - d.y];
+    d3_layout_forceCancel();
   }
 
   return force;
 };
 
-var d3_layout_forceDragNode,
+var d3_layout_forceDragForce,
+    d3_layout_forceDragNode,
     d3_layout_forceDragMoved,
+    d3_layout_forceDragOffset,
     d3_layout_forceStopClick,
     d3_layout_forceDragElement;
 
@@ -293,11 +290,51 @@ function d3_layout_forceDragOut(d) {
   }
 }
 
-function d3_layout_forceDragDown(d, i) {
-  (d3_layout_forceDragNode = d).fixed = true;
-  d3_layout_forceDragMoved = false;
-  d3_layout_forceDragElement = this;
+function d3_layout_forcePoint(container) {
+  return d3.event.touches
+      ? d3.svg.touches(container)[0]
+      : d3.svg.mouse(container);
+}
+
+function d3_layout_forceDragMove() {
+  if (!d3_layout_forceDragNode) return;
+  var parent = d3_layout_forceDragElement.parentNode;
+
+  // O NOES! The drag element was removed from the DOM.
+  if (!parent) {
+    d3_layout_forceDragNode.fixed = false;
+    d3_layout_forceDragOffset = d3_layout_forceDragNode = d3_layout_forceDragElement = null;
+    return;
+  }
+
+  var m = d3_layout_forcePoint(parent);
+  d3_layout_forceDragMoved = true;
+  d3_layout_forceDragNode.px = m[0] - d3_layout_forceDragOffset[0];
+  d3_layout_forceDragNode.py = m[1] - d3_layout_forceDragOffset[1];
   d3_layout_forceCancel();
+  d3_layout_forceDragForce.resume(); // restart annealing
+}
+
+function d3_layout_forceDragUp() {
+  if (!d3_layout_forceDragNode) return;
+
+  // If the node was moved, prevent the mouseup from propagating.
+  // Also prevent the subsequent click from propagating (e.g., for anchors).
+  if (d3_layout_forceDragMoved) {
+    d3_layout_forceStopClick = true;
+    d3_layout_forceCancel();
+  }
+
+  // Don't trigger this for touchend.
+  if (d3.event.type === "mouseup") {
+    d3_layout_forceDragMove();
+  }
+
+  d3_layout_forceDragNode.fixed = false;
+  d3_layout_forceDragForce =
+  d3_layout_forceDragOffset =
+  d3_layout_forceDragNode =
+  d3_layout_forceDragElement = null;
 }
 
 function d3_layout_forceDragClick() {
@@ -317,12 +354,18 @@ function d3_layout_forceAccumulate(quad) {
       cy = 0;
   quad.count = 0;
   if (!quad.leaf) {
-    quad.nodes.forEach(function(c) {
+    var nodes = quad.nodes,
+        n = nodes.length,
+        i = -1,
+        c;
+    while (++i < n) {
+      c = nodes[i];
+      if (c == null) continue;
       d3_layout_forceAccumulate(c);
       quad.count += c.count;
       cx += c.count * c.cx;
       cy += c.count * c.cy;
-    });
+    }
   }
   if (quad.point) {
     // jitter internal nodes that are coincident
@@ -336,4 +379,12 @@ function d3_layout_forceAccumulate(quad) {
   }
   quad.cx = cx / quad.count;
   quad.cy = cy / quad.count;
+}
+
+function d3_layout_forceLinkDistance(link) {
+  return 20;
+}
+
+function d3_layout_forceLinkStrength(link) {
+  return 1;
 }

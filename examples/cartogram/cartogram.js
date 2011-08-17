@@ -6,10 +6,11 @@ var data = [
   .169, , .132, .167, .139, .184, .159, .14, .146, .157, , .139, .183, .16, .143
 ];
 
-var svg = d3.select("#chart")
-  .append("svg:svg");
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", 960)
+    .attr("height", 500);
 
-d3.json("us-states.json", function(json) {
+d3.json("../data/us-states.json", function(json) {
   var path = d3.geo.path();
 
   // A thick black stroke for the exterior.

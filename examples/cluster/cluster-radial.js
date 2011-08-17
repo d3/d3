@@ -1,9 +1,7 @@
 var r = 960 / 2;
 
 var cluster = d3.layout.cluster()
-    .size([360, r - 120])
-    .sort(null)
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; });
+    .size([360, r - 120]);
 
 var diagonal = d3.svg.diagonal.radial()
     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
@@ -14,8 +12,8 @@ var vis = d3.select("#chart").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-d3.json("flare.json", function(json) {
-  var nodes = cluster(d3.entries(json)[0]);
+d3.json("../data/flare.json", function(json) {
+  var nodes = cluster.nodes(json);
 
   var link = vis.selectAll("path.link")
       .data(cluster.links(nodes))
@@ -37,5 +35,5 @@ d3.json("flare.json", function(json) {
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
-      .text(function(d) { return d.data.key; });
+      .text(function(d) { return d.name; });
 });

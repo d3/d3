@@ -7,6 +7,10 @@
     <script type="text/javascript" src="../../d3.layout.js"></script>
     <style type="text/css">
 
+rect {
+  fill: #fff;
+}
+
 .node {
   fill: #000;
 }
@@ -33,8 +37,11 @@ var w = 960,
     nodes = [],
     links = [];
 
-var vis = d3.select("#chart")
-  .append("svg:svg")
+var vis = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+vis.append("svg:rect")
     .attr("width", w)
     .attr("height", h);
 

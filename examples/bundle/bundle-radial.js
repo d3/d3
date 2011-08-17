@@ -20,8 +20,8 @@ var vis = d3.select("#chart").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-d3.json("flare-imports.json", function(classes) {
-  var nodes = cluster(packages.root(classes)),
+d3.json("../data/flare-imports.json", function(classes) {
+  var nodes = cluster.nodes(packages.root(classes)),
       links = packages.imports(nodes);
 
   vis.selectAll("path.link")
@@ -40,7 +40,7 @@ d3.json("flare-imports.json", function(classes) {
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
-      .text(function(d) { return d.data.key; });
+      .text(function(d) { return d.key; });
 });
 
 d3.select(window).on("mousemove", function() {

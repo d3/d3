@@ -20,17 +20,17 @@ var line = d3.svg.line()
     .x(function(d) { return d.x + d.dx / 2; })
     .y(function(d) { return d.y + d.dy / 2; });
 
-d3.json("flare-imports.json", function(classes) {
-  var nodes = treemap(packages.root(classes)),
+d3.json("../data/flare-imports.json", function(classes) {
+  var nodes = treemap.nodes(packages.root(classes)),
       links = packages.imports(nodes);
 
   div.selectAll("div")
       .data(nodes)
     .enter().append("div")
       .attr("class", "cell")
-      .style("background", function(d) { return d.children ? fill(d.data.key) : null; })
+      .style("background", function(d) { return d.children ? fill(d.key) : null; })
       .call(cell)
-      .text(function(d) { return d.children ? null : d.data.key; });
+      .text(function(d) { return d.children ? null : d.key; });
 
   div.append("svg:svg")
       .attr("width", w)

@@ -15,8 +15,8 @@ var vis = d3.select("#chart")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
 d3.json("turkers.json", function(turkers) {
-  var tm = mean(turkers),
-      td = deviation(turkers),
+  var tm = science.stats.mean(turkers),
+      td = Math.sqrt(science.stats.variance(turkers)),
       dd = [
         [0.10306430789206111, 0.0036139086950272735, 0.30498647327844536],
         [0.5924252668569606, 0.0462763685758622, 0.4340870312025223],

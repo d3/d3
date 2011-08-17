@@ -6,6 +6,10 @@
     <script type="text/javascript" src="../../d3.geom.js"></script>
     <style type="text/css">
 
+svg {
+  padding: 2px;
+}
+
 circle {
   fill: lightsteelblue;
   stroke: steelblue;
@@ -16,7 +20,6 @@ rect {
   fill: none;
   stroke: #000;
   stroke-opacity: .3;
-  shape-rendering: crispEdges;
 }
 
     </style>
@@ -24,21 +27,31 @@ rect {
   <body>
     <script type="text/javascript">
 
-var w = 500,
-    h = 500;
+var w = 500;
 
 // Generate random points.
 var data = d3.range(500).map(function() {
   return {
-    x: 5 + Math.random() * (w - 10),
-    y: 5 + Math.random() * (h - 10)
+    x: Math.random() * w,
+    y: Math.random() * w
   };
 });
 
-var vis = d3.select("body")
-  .append("svg:svg")
+// Generate a quadtree of the specified data.
+var quadtree = d3.geom.quadtree(data, 0, w);
+
+var vis = d3.select("body").append("svg:svg")
     .attr("width", w)
-    .attr("height", h);
+    .attr("height", w)
+    .style("pointer-events", "all");
+
+vis.selectAll("rect")
+    .data(nodes(quadtree))
+  .enter().append("svg:rect")
+    .attr("x", function(d) { return d.x; })
+    .attr("y", function(d) { return d.y; })
+    .attr("width", function(d) { return d.width; })
+    .attr("height", function(d) { return d.height; });
 
 vis.selectAll("circle")
     .data(data)
@@ -47,26 +60,53 @@ vis.selectAll("circle")
     .attr("cy", function(d) { return d.y; })
     .attr("r", 4.5);
 
-vis.selectAll("rect")
-    .data(quadtree(data))
-  .enter().append("svg:rect")
-    .attr("x", function(d) { return d.x; })
-    .attr("y", function(d) { return d.y; })
-    .attr("width", function(d) { return d.width; })
-    .attr("height", function(d) { return d.height; });
+// Highlight selected nodes using the quadtree.
+vis.on("mousedown", function() {
+  var m0 = d3.svg.mouse(this);
+
+  var rect = d3.select(this).append("svg:rect")
+      .style("fill", "#999")
+      .style("fill-opacity", .5);
+
+  d3.select(window).on("mousemove", function() {
+    var m1 = d3.svg.mouse(rect.node()),
+        x0 = Math.min(w, m0[0], m1[0]),
+        y0 = Math.min(w, m0[1], m1[1]),
+        x1 = Math.max(0, m0[0], m1[0]),
+        y1 = Math.max(0, m0[1], m1[1]);
+
+    data.forEach(function(d) { d.z = 0; })
+    find(quadtree, x0, y0, x1, y1).forEach(function(d) { d.z = 1; });
+    vis.selectAll("circle").style("fill", function(d) { return d.z ? "red" : null; });
+    rect.attr("x", x0).attr("y", y0).attr("width", x1 - x0).attr("height", y1 - y0);
+  });
+
+  d3.select(window).on("mouseup", function() {
+    rect.remove();
+    d3.select(window).on("mousemove", null).on("mouseup", null);
+  });
+
+  d3.event.preventDefault();
+});
 
 // Collapse the quadtree into an array of rectangles.
-function quadtree(data) {
+function nodes(quadtree) {
   var nodes = [];
-  d3.geom.quadtree(data).visit(function(node, x1, y1, x2, y2) {
-    nodes.push({
-      x: x1,
-      y: y1,
-      width: x2 - x1,
-      height: y2 - y1
-    });
+  quadtree.visit(function(node, x1, y1, x2, y2) {
+    nodes.push({x: x1, y: y1, width: x2 - x1, height: y2 - y1});
   });
   return nodes;
+}
+
+// Find the nodes within the specified rectangle.
+function find(quadtree, x0, y0, x3, y3) {
+  var points = [];
+  quadtree.visit(function(node, x1, y1, x2, y2) {
+    var p = node.point;
+    if (p && (p.x >= x0) && (p.x < x3) && (p.y >= y0) && (p.y < y3)) points.push(p);
+    return x1 >= x3 || y1 >= y3 || x2 < x0 || y2 < y0;
+  });
+  return points;
 }
 
     </script>

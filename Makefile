@@ -38,8 +38,11 @@ d3.core.js: \
 	src/core/min.js \
 	src/core/max.js \
 	src/core/sum.js \
+	src/core/quantile.js \
 	src/core/zip.js \
 	src/core/bisect.js \
+	src/core/first.js \
+	src/core/last.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
@@ -68,7 +71,8 @@ d3.core.js: \
 	src/core/hsl.js \
 	src/core/selection.js \
 	src/core/transition.js \
-	src/core/timer.js
+	src/core/timer.js \
+	src/core/noop.js
 
 d3.scale.js: \
 	src/scale/scale.js \
@@ -153,6 +157,23 @@ d3.time.js: \
 	src/time/format.js \
 	src/time/format-utc.js \
 	src/time/format-iso.js \
+	src/time/range.js \
+	src/time/second.js \
+	src/time/seconds.js \
+	src/time/minute.js \
+	src/time/minutes.js \
+	src/time/hour.js \
+	src/time/hours.js \
+	src/time/day.js \
+	src/time/days.js \
+	src/time/week.js \
+	src/time/weeks.js \
+	src/time/month.js \
+	src/time/months.js \
+	src/time/year.js \
+	src/time/years.js \
+	src/time/scale.js \
+	src/time/scale-utc.js \
 	src/end.js
 
 d3.geom.js: \
@@ -166,44 +187,8 @@ d3.geom.js: \
 	src/geom/quadtree.js \
 	src/end.js
 
-tests: \
-	tests/test-append.test \
-	tests/test-attr.test \
-	tests/test-classed.test \
-	tests/test-call.test \
-	tests/test-csv-parse.test \
-	tests/test-format.test \
-	tests/test-insert.test \
-	tests/test-interpolate.test \
-	tests/test-keys.test \
-	tests/test-max.test \
-	tests/test-min.test \
-	tests/test-sum.test \
-	tests/test-nest.test \
-	tests/test-permute.test \
-	tests/test-zip.test \
-	tests/test-remove.test \
-	tests/test-rgb.test \
-	tests/test-round.test \
-	tests/test-hsl.test \
-	tests/test-time-format.test \
-	tests/test-time-format-iso.test \
-	tests/test-time-format-utc.test \
-	tests/test-time-parse.test \
-	tests/test-time-parse-iso.test \
-	tests/test-time-parse-utc.test \
-	tests/test-transition.test \
-	tests/test-scale-linear.test \
-	tests/test-scale-polylinear.test \
-	tests/test-scale-log.test \
-	tests/test-scale-sqrt.test \
-	tests/test-scale-pow.test \
-	tests/test-scale-quantile.test \
-	tests/test-bisect.test \
-	tests/test-svg-arc.test \
-	tests/test-svg-area.test \
-	tests/test-svg-line.test \
-	tests/test-svg-symbol.test
+test: all
+	@vows
 
 %.min.js: %.js Makefile
 	@rm -f $@
@@ -213,13 +198,6 @@ d3.js d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
-
-%.test: %.js %.out all
-	@/bin/echo -n "test: $* "
-	@node $< > $*.actual
-	@diff -U 3 $*.out $*.actual && rm -f $*.actual \
-		&& echo '\033[1;32mPASS\033[0m' \
-		|| echo test: $* '\033[1;31mFAIL\033[0m'
 
 clean:
 	rm -f d3*.js

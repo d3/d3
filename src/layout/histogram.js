@@ -13,7 +13,7 @@ d3.layout.histogram = function() {
         i = -1,
         n = values.length,
         m = thresholds.length - 1,
-        k = frequency ? 1 / n : 1,
+        k = frequency ? 1 : 1 / n,
         x;
 
     // Initialize the bins.
