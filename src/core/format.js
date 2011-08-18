@@ -67,7 +67,7 @@ var d3_format_types = {
   f: function(x, p) { return x.toFixed(p); },
   r: function(x, p) {
     var n = 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10);
-    return d3.round(x, p - n).toFixed(Math.max(0, p - n));
+    return d3.round(x, p - n).toFixed(Math.max(0, Math.min(20, p - n)));
   }
 };
 

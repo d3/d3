@@ -17,8 +17,8 @@ function d3_scale_quantize(x0, x1, range) {
 
   scale.domain = function(x) {
     if (!arguments.length) return [x0, x1];
-    x0 = +domain[0];
-    x1 = +domain[domain.length - 1];
+    x0 = +x[0];
+    x1 = +x[x.length - 1];
     return rescale();
   };
 

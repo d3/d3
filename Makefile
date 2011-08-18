@@ -1,5 +1,7 @@
-JS_COMPILER = \
-	./lib/uglifyjs/bin/uglifyjs
+# See the README for installation instructions.
+
+JS_COMPILER = ./node_modules/uglify-js/bin/uglifyjs
+JS_TESTER = ./node_modules/vows/bin/vows
 
 all: \
 	d3.js \
@@ -187,81 +189,8 @@ d3.geom.js: \
 	src/geom/quadtree.js \
 	src/end.js
 
-test: \
-	test/core \
-	test/csv \
-	test/layout \
-	test/scale \
-	test/svg \
-	test/time
-
-test/core: \
-	test/core/test-append.test \
-	test/core/test-attr.test \
-	test/core/test-bisect.test \
-	test/core/test-call.test \
-	test/core/test-classed.test \
-	test/core/test-format.test \
-	test/core/test-hsl.test \
-	test/core/test-insert.test \
-	test/core/test-interpolate.test \
-	test/core/test-keys.test \
-	test/core/test-max.test \
-	test/core/test-min.test \
-	test/core/test-nest.test \
-	test/core/test-permute.test \
-	test/core/test-remove.test \
-	test/core/test-rgb.test \
-	test/core/test-round.test \
-	test/core/test-sum.test \
-	test/core/test-transition.test \
-	test/core/test-zip.test
-
-test/csv: \
-	test/csv/test-parse.test
-
-test/layout: \
-	test/layout/test-histogram.test \
-	test/layout/test-treemap.test
-
-test/scale: \
-	test/scale/test-linear.test \
-	test/scale/test-log.test \
-	test/scale/test-polylinear.test \
-	test/scale/test-pow.test \
-	test/scale/test-quantile.test \
-	test/scale/test-sqrt.test \
-	test/scale/test-ordinal.test
-
-test/svg: \
-	test/svg/test-arc.test \
-	test/svg/test-area.test \
-	test/svg/test-line.test \
-	test/svg/test-symbol.test
-
-test/time: \
-	test/time/test-day.test \
-	test/time/test-days.test \
-	test/time/test-format-iso.test \
-	test/time/test-format-utc.test \
-	test/time/test-format.test \
-	test/time/test-hour.test \
-	test/time/test-hours.test \
-	test/time/test-minute.test \
-	test/time/test-minutes.test \
-	test/time/test-month.test \
-	test/time/test-months.test \
-	test/time/test-parse-iso.test \
-	test/time/test-parse-utc.test \
-	test/time/test-parse.test \
-	test/time/test-scale.test \
-	test/time/test-scale-utc.test \
-	test/time/test-second.test \
-	test/time/test-seconds.test \
-	test/time/test-week.test \
-	test/time/test-weeks.test \
-	test/time/test-year.test \
-	test/time/test-years.test
+test: all
+	@$(JS_TESTER)
 
 %.min.js: %.js Makefile
 	@rm -f $@
@@ -271,13 +200,6 @@ d3.js d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
-
-%.test: %.js %.out all
-	@/bin/echo -n "test: $* "
-	@node $< > $*.actual
-	@diff -U 3 $*.out $*.actual && rm -f $*.actual \
-		&& echo '\033[1;32mPASS\033[0m' \
-		|| echo test: $* '\033[1;31mFAIL\033[0m'
 
 clean:
 	rm -f d3*.js
