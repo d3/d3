@@ -1,5 +1,7 @@
-JS_COMPILER = \
-	./lib/uglify-js/bin/uglifyjs
+# See the README for installation instructions.
+
+JS_COMPILER = ./node_modules/uglify-js/bin/uglifyjs
+JS_TESTER = ./node_modules/vows/bin/vows
 
 all: \
 	d3.js \
@@ -188,7 +190,7 @@ d3.geom.js: \
 	src/end.js
 
 test: all
-	@vows
+	@$(JS_TESTER)
 
 %.min.js: %.js Makefile
 	@rm -f $@

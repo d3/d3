@@ -28,3 +28,24 @@ built-in server:
     python -m SimpleHTTPServer 8888
 
 Once this is running, go to: <http://localhost:8888/examples/>
+
+### Development Setup
+
+This repository should work out of the box if you just want to create new
+visualizations using D3. On the other hand, if you want to extend D3 with new
+features, fix bugs, or run tests, you'll need to install a few more things.
+
+D3's test framework uses [Vows](http://vowsjs.org), which depends on
+[Node.js](http://nodejs.org/) and [NPM](http://npmjs.org/). If you are
+developing on Mac OS X, an easy way to install Node and NPM is using
+[Homebrew](http://mxcl.github.com/homebrew/):
+
+    brew install node
+    brew install npm
+
+Next, from the root directory of this repository, install D3's dependencies:
+
+    npm install
+
+You can see the list of dependencies in package.json. The packages will be
+installed in the node_modules directory.
