@@ -107,6 +107,7 @@ d3.svg.js: \
 d3.behavior.js: \
 	src/start.js \
 	src/behavior/behavior.js \
+	src/behavior/drag.js \
 	src/behavior/zoom.js \
 	src/end.js
 

@@ -243,110 +243,38 @@ d3.layout.force = function() {
 
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
-
     this
-      .on("mouseover.force", d3_layout_forceDragOver)
-      .on("mouseout.force", d3_layout_forceDragOut)
-      .on("mousedown.force", dragdown)
-      .on("touchstart.force", dragdown);
-
-    d3.select(window)
-      .on("mousemove.force", d3_layout_forceDragMove)
-      .on("touchmove.force", d3_layout_forceDragMove)
-      .on("mouseup.force", d3_layout_forceDragUp, true)
-      .on("touchend.force", d3_layout_forceDragUp, true)
-      .on("click.force", d3_layout_forceDragClick, true);
+      .call(d3.behavior.drag()
+        .on("dragstart", dragstart)
+        .on("drag", d3_layout_forceDrag)
+        .on("dragend", d3_layout_forceDragEnd));
 
     return force;
   };
 
-  function dragdown(d, i) {
-    var m = d3_layout_forcePoint(this.parentNode);
+  function dragstart(d) {
     (d3_layout_forceDragNode = d).fixed = true;
-    d3_layout_forceDragMoved = false;
-    d3_layout_forceDragElement = this;
     d3_layout_forceDragForce = force;
-    d3_layout_forceDragOffset = [m[0] - d.x, m[1] - d.y];
-    d3_layout_forceCancel();
   }
 
   return force;
 };
 
 var d3_layout_forceDragForce,
-    d3_layout_forceDragNode,
-    d3_layout_forceDragMoved,
-    d3_layout_forceDragOffset,
-    d3_layout_forceStopClick,
-    d3_layout_forceDragElement;
+    d3_layout_forceDragNode;
 
-function d3_layout_forceDragOver(d) {
-  d.fixed = true;
-}
-
-function d3_layout_forceDragOut(d) {
-  if (d !== d3_layout_forceDragNode) {
-    d.fixed = false;
-  }
-}
-
-function d3_layout_forcePoint(container) {
-  return d3.event.touches
-      ? d3.svg.touches(container)[0]
-      : d3.svg.mouse(container);
-}
-
-function d3_layout_forceDragMove() {
-  if (!d3_layout_forceDragNode) return;
-  var parent = d3_layout_forceDragElement.parentNode;
-
-  // O NOES! The drag element was removed from the DOM.
-  if (!parent) {
-    d3_layout_forceDragNode.fixed = false;
-    d3_layout_forceDragOffset = d3_layout_forceDragNode = d3_layout_forceDragElement = null;
-    return;
-  }
-
-  var m = d3_layout_forcePoint(parent);
-  d3_layout_forceDragMoved = true;
-  d3_layout_forceDragNode.px = m[0] - d3_layout_forceDragOffset[0];
-  d3_layout_forceDragNode.py = m[1] - d3_layout_forceDragOffset[1];
-  d3_layout_forceCancel();
-  d3_layout_forceDragForce.resume(); // restart annealing
-}
-
-function d3_layout_forceDragUp() {
-  if (!d3_layout_forceDragNode) return;
-
-  // If the node was moved, prevent the mouseup from propagating.
-  // Also prevent the subsequent click from propagating (e.g., for anchors).
-  if (d3_layout_forceDragMoved) {
-    d3_layout_forceStopClick = true;
-    d3_layout_forceCancel();
-  }
-
-  // Don't trigger this for touchend.
-  if (d3.event.type === "mouseup") {
-    d3_layout_forceDragMove();
-  }
-
+function d3_layout_forceDragEnd(d) {
   d3_layout_forceDragNode.fixed = false;
   d3_layout_forceDragForce =
-  d3_layout_forceDragOffset =
-  d3_layout_forceDragNode =
-  d3_layout_forceDragElement = null;
+  d3_layout_forceDragNode = null;
 }
 
-function d3_layout_forceDragClick() {
-  if (d3_layout_forceStopClick) {
-    d3_layout_forceCancel();
-    d3_layout_forceStopClick = false;
-  }
-}
+function d3_layout_forceDrag() {
+  var m = d3.event.position;
 
-function d3_layout_forceCancel() {
-  d3.event.stopPropagation();
-  d3.event.preventDefault();
+  d3_layout_forceDragNode.px = m[0];
+  d3_layout_forceDragNode.py = m[1];
+  d3_layout_forceDragForce.resume(); // restart annealing
 }
 
 function d3_layout_forceAccumulate(quad) {
