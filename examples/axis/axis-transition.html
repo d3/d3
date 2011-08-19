@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.csv.js"></script>
+    <script type="text/javascript" src="../../d3.chart.js"></script>
+    <script type="text/javascript" src="../../d3.time.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+  margin: 0;
+}
+
+path.line {
+  fill: none;
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+path.area {
+  fill: #e7e7e7;
+}
+
+.axis line {
+  fill: none;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.axis path {
+  display: none;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var m = [20, 20, 20, 20],
+    w = 960 - m[1] - m[3],
+    h = 140 - m[0] - m[2],
+    parse = d3.time.format("%b %Y").parse;
+
+// Scales. Note the inverted domain for the y-scale: bigger is up!
+var x = d3.time.scale().range([0, w]),
+    y = d3.scale.linear().range([h, 0]);
+
+// X-axis.
+var xAxis = d3.chart.axis()
+    .scale(x)
+    .tickSize(-h);
+
+// An area generator, for the light fill.
+var area = d3.svg.area()
+    .interpolate("monotone")
+    .x(function(d) { return x(d.date); })
+    .y0(h)
+    .y1(function(d) { return y(d.price); });
+
+// A line generator, for the dark stroke.
+var line = d3.svg.line()
+    .interpolate("monotone")
+    .x(function(d) { return x(d.date); })
+    .y(function(d) { return y(d.price); });
+
+d3.csv("../data/stocks.csv", function(data) {
+
+  // Filter to one symbol; the S&P 500.
+  var values = data.filter(function(d) {
+    return d.symbol == "S&P 500";
+  });
+
+  // Parse dates and numbers. We assume values are sorted by date.
+  values.forEach(function(d) {
+    d.date = parse(d.date);
+    d.price = +d.price;
+  });
+
+  // Compute the minimum and maximum date, and the maximum price.
+  x.domain([values[0].date, values[values.length - 1].date]);
+  y.domain([0, d3.max(values, function(d) { return d.price; })]);
+
+  // Add an SVG element with the desired dimensions and margin.
+  var svg = d3.select("body").append("svg:svg")
+      .attr("width", w + m[1] + m[3])
+      .attr("height", h + m[0] + m[2])
+    .append("svg:g")
+      .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+  // Add the area path.
+  svg.append("svg:path")
+      .attr("class", "area")
+      .attr("d", area(values));
+
+  // Add the x-axis.
+  svg.append("svg:g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + h + ")")
+      .call(xAxis);
+
+  // Add the line path.
+  svg.append("svg:path")
+      .attr("class", "line")
+      .attr("d", line(values));
+
+  // Add a small label for the symbol name.
+  svg.append("svg:text")
+      .attr("x", w - 6)
+      .attr("y", h - 6)
+      .attr("text-anchor", "end")
+      .text(values[0].symbol);
+
+  // On click, update the x-axis.
+  svg.on("click", function() {
+    var n = values.length - 1,
+        i = Math.floor(Math.random() * n / 2),
+        j = i + Math.floor(Math.random() * n / 2) + 1;
+    x.domain([values[i].date, values[j].date]);
+    svg.select(".x.axis").call(xAxis);
+    svg.select(".area").attr("d", area(values));
+    svg.select(".line").attr("d", line(values));
+  });
+});
+
+    </script>
+  </body>
+</html>

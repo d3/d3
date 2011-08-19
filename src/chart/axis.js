@@ -14,23 +14,37 @@ d3.chart.axis = function() {
 
       // Ticks.
       var tick = g.selectAll("g.tick")
-          .data(ticks)
-        .enter().append("svg:g")
-          .attr("class", "tick")
-          .attr("transform", function(d) { return "translate(" + scale(d) + ",0)"; });
+          .data(ticks);
 
-      tick.append("svg:line")
+      var tickEnter = tick.enter().append("svg:g")
+          .attr("class", "tick");
+
+      tickEnter.append("svg:line");
+
+      tickEnter.append("svg:text")
+          .attr("dy", ".71em")
+          .attr("text-anchor", "middle");
+
+      tick.exit().remove();
+
+      tick
+          .attr("transform", function(d) { return "translate(" + scale(d) + ",0)"; })
+
+      tick.select("line")
           .attr("y2", tickSize);
 
-      tick.append("svg:text")
+      tick.select("text")
           .attr("y", Math.max(tickSize, 0) + tickPadding)
-          .attr("dy", ".71em")
-          .attr("text-anchor", "middle")
           .text(tickFormat);
 
       // Domain.
-      var path = g.append("svg:path")
-          .attr("class", "domain")
+      var path = g.selectAll("path.domain")
+          .data([,]);
+
+      path.enter().append("svg:path")
+          .attr("class", "domain");
+
+      path
           .attr("d", "M" + range[0] + "," + tickSize + "V0H" + range[1] + "V" + tickSize);
     });
   }
