@@ -529,11 +529,9 @@ function d3_layout_forceDragUp() {
   if (d3_layout_forceDragMoved) {
     d3_layout_forceStopClick = true;
     d3_layout_forceCancel();
-  }
 
-  // Don't trigger this for touchend.
-  if (d3.event.type === "mouseup") {
-    d3_layout_forceDragMove();
+    // Don't trigger mousemove for touchend.
+    if (d3.event.type === "mouseup") d3_layout_forceDragMove();
   }
 
   d3_layout_forceDragNode.fixed = false;
@@ -1486,8 +1484,8 @@ d3.layout.tree = function() {
     function firstWalk(node, previousSibling) {
       var children = node.children,
           layout = node._tree;
-      if (children) {
-        var n = children.length,
+      if (children && (n = children.length)) {
+        var n,
             firstChild = children[0],
             previousChild,
             ancestor = firstChild,

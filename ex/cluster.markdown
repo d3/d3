@@ -7,7 +7,7 @@ title: Dendrogram
 
 <div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="cluster.css"/>
-<script type="text/javascript" src="../d3.layout.js?1.29.5"> </script>
+<script type="text/javascript" src="../d3.layout.js?1.29.6"> </script>
 <script type="text/javascript" src="cluster.js"> </script>
 
 Data shows the [Flare](http://flare.prefuse.org/) class hierarchy, courtesy
