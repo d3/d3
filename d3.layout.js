@@ -1484,8 +1484,8 @@ d3.layout.tree = function() {
     function firstWalk(node, previousSibling) {
       var children = node.children,
           layout = node._tree;
-      if (children && children.length) {
-        var n = children.length,
+      if (children && (n = children.length)) {
+        var n,
             firstChild = children[0],
             previousChild,
             ancestor = firstChild,
