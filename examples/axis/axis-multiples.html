@@ -24,7 +24,7 @@ path.area {
 
 .axis path, .axis line {
   fill: none;
-  stroke: #000;
+  stroke: #fff;
   shape-rendering: crispEdges;
 }
 
@@ -44,7 +44,8 @@ var x = d3.time.scale().range([0, w]),
 
 // X-axis.
 var xAxis = d3.chart.axis()
-    .scale(x);
+    .scale(x)
+    .tickSize(-h);
 
 // An area generator, for the light fill.
 var area = d3.svg.area()

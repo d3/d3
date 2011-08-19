@@ -50,6 +50,18 @@ suite.addBatch({
         line.each(function() {
           assert.equal(d3.select(this).attr("y2"), 3);
         });
+      },
+      "if negative, labels are placed on the opposite end": function(axis) {
+        axis.tickSize(-80);
+        var g = d3.select("body").html("").append("svg:g").call(axis),
+            line = g.selectAll("g.tick line"),
+            text = g.selectAll("g.tick text");
+        line.each(function() {
+          assert.equal(d3.select(this).attr("y2"), -80);
+        });
+        text.each(function() {
+          assert.equal(d3.select(this).attr("y"), 3);
+        });
       }
     },
 

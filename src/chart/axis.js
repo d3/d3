@@ -23,7 +23,7 @@ d3.chart.axis = function() {
           .attr("y2", tickSize);
 
       tick.append("svg:text")
-          .attr("y", tickSize + tickPadding)
+          .attr("y", Math.max(tickSize, 0) + tickPadding)
           .attr("dy", ".71em")
           .attr("text-anchor", "middle")
           .text(tickFormat);
