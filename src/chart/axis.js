@@ -41,5 +41,17 @@ d3.chart.axis = function() {
     return axis;
   };
 
+  axis.tickSize = function(x) {
+    if (!arguments.length) return tickSize;
+    tickSize = +x;
+    return axis;
+  };
+
+  axis.tickPadding = function(x) {
+    if (!arguments.length) return tickPadding;
+    tickPadding = +x;
+    return axis;
+  };
+
   return axis;
 };

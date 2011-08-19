@@ -25,10 +25,60 @@ suite.addBatch({
       }
     },
 
+    "tickSize": {
+      "defaults to six pixels": function(axis) {
+        assert.equal(axis.tickSize(), 6);
+      },
+      "can be defined as a number": function(axis) {
+        axis.tickSize(3);
+        assert.equal(axis.tickSize(), 3);
+      },
+      "coerces input value to a number": function(axis) {
+        axis.tickSize("3");
+        assert.strictEqual(axis.tickSize(), 3);
+      },
+      "affects the generated domain path": function(axis) {
+        axis.tickSize(3);
+        var g = d3.select("body").html("").append("svg:g").call(axis),
+            path = g.select("path.domain");
+        assert.equal(path.attr("d"), "M0,3V0H1V3");
+      },
+      "affects the generated tick lines": function(axis) {
+        axis.tickSize(3);
+        var g = d3.select("body").html("").append("svg:g").call(axis),
+            line = g.selectAll("g.tick line");
+        line.each(function() {
+          assert.equal(d3.select(this).attr("y2"), 3);
+        });
+      }
+    },
+
+    "tickPadding": {
+      "defaults to three pixels": function(axis) {
+        assert.equal(axis.tickPadding(), 3);
+      },
+      "can be defined as a number": function(axis) {
+        axis.tickPadding(6);
+        assert.equal(axis.tickPadding(), 6);
+      },
+      "coerces input value to a number": function(axis) {
+        axis.tickPadding("6");
+        assert.strictEqual(axis.tickPadding(), 6);
+      },
+      "affects the generated tick labels": function(axis) {
+        axis.tickSize(2).tickPadding(7);
+        var g = d3.select("body").html("").append("svg:g").call(axis),
+            text = g.selectAll("g.tick text");
+        text.each(function() {
+          assert.equal(d3.select(this).attr("y"), 9);
+        });
+      }
+    },
+
     "generates a domain path": function(axis) {
       var g = d3.select("body").html("").append("svg:g").call(axis),
-          path = g.select("path.domain");
-      assert.isFalse(path.empty());
+          path = g.selectAll("path.domain");
+      assert.equal(path[0].length, 1);
       assert.equal(path.attr("d"), "M0,6V0H1V6");
       assert.isNull(path.node().nextSibling);
     },

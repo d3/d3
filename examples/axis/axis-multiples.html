@@ -42,6 +42,10 @@ var m = [20, 20, 20, 20],
 var x = d3.time.scale().range([0, w]),
     y = d3.scale.linear().range([h, 0]);
 
+// X-axis.
+var xAxis = d3.chart.axis()
+    .scale(x);
+
 // An area generator, for the light fill.
 var area = d3.svg.area()
     .interpolate("monotone")
@@ -93,7 +97,7 @@ d3.csv("../data/stocks.csv", function(data) {
   svg.append("svg:g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + h + ")")
-      .call(d3.chart.axis().scale(x));
+      .call(xAxis);
 
   // Add the line path elements. Note: the y-domain is set per element.
   svg.append("svg:path")
