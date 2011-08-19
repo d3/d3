@@ -289,9 +289,9 @@ function d3_chart_boxWhiskers(d) {
 }
 
 function d3_chart_boxQuartiles(d) {
-  var n = d.length;
-  return [.25, .5, .75].map(function(q) {
-    q *= n;
-    return ~~q === q ? (d[q] + d[q + 1]) / 2 : d[Math.round(q)];
-  });
+  return [
+    d3.quantile(d, .25),
+    d3.quantile(d, .5),
+    d3.quantile(d, .75)
+  ];
 }

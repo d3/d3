@@ -97,7 +97,7 @@ function d3_transition(groups) {
           var owner = tx.owner;
           if (owner === transitionId) {
             delete this.__transition__;
-            if (remove) this.parentNode.removeChild(this);
+            if (remove && this.parentNode) this.parentNode.removeChild(this);
           }
           d3_transitionInheritId = transitionId;
           event.end.dispatch.apply(this, arguments);
@@ -123,7 +123,7 @@ function d3_transition(groups) {
         delay[++k] = delayMin;
       });
     }
-    d3_timer(step, delayMin);
+    d3.timer(step, delayMin);
     return transition;
   };
 

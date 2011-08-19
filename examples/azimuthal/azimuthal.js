@@ -2,7 +2,7 @@ var xy = d3.geo.azimuthal().scale(240).mode("stereographic"),
     path = d3.geo.path().projection(xy),
     svg = d3.select("body").append("svg:svg");
 
-d3.json("../../data/world-countries.json", function(collection) {
+d3.json("../data/world-countries.json", function(collection) {
   svg.selectAll("path")
       .data(collection.features)
     .enter().append("svg:path")

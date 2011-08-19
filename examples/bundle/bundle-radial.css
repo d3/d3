@@ -1,0 +1,9 @@
+.node {
+  font: 10px sans-serif;
+}
+
+.link {
+  stroke: steelblue;
+  stroke-opacity: .4;
+  fill: none;
+}

@@ -21,7 +21,7 @@ d3.time.format = function(template) {
   }
 
   format.parse = function(string) {
-    var date = new Date(1900, 0, 1),
+    var date = new d3_time(1900, 0, 1),
         i = d3_time_parse(date, template, string, 0);
     if (i != string.length) return null;
     if (date.hour12) {
@@ -84,7 +84,7 @@ var d3_time_formats = {
   W: d3_time_weekNumberMonday,
   x: d3.time.format("%m/%d/%y"),
   X: d3.time.format("%H:%M:%S"),
-  y: function(d) { return d3_time_zfill2(d.getYear() % 100); },
+  y: function(d) { return d3_time_zfill2(d.getFullYear() % 100); },
   Y: function(d) { return d3_time_zfill4(d.getFullYear() % 10000); },
   Z: d3_time_zone,
   "%": function(d) { return "%"; }
@@ -287,17 +287,21 @@ var d3_time_amPmLookup = {
   pm: 1
 };
 
+function d3_time_year(d) {
+  return new d3_time(d.getFullYear(), 0, 1);
+}
+
 function d3_time_dayOfYear(d) {
-  return d3_time_zfill3(1 + ~~((d - new Date(d.getFullYear(), 0, 1)) / 864e5));
+  return d3_time_zfill3(1 + ~~((d - d3_time_year(d)) / 864e5));
 }
 
 function d3_time_weekNumberSunday(d) {
-  var d0 = new Date(d.getFullYear(), 0, 1);
+  var d0 = d3_time_year(d);
   return d3_time_zfill2(~~(((d - d0) / 864e5 + d0.getDay()) / 7));
 }
 
 function d3_time_weekNumberMonday(d) {
-  var d0 = new Date(d.getFullYear(), 0, 1);
+  var d0 = d3_time_year(d);
   return d3_time_zfill2(~~(((d - d0) / 864e5 + (d0.getDay() + 6) % 7) / 7));
 }
 

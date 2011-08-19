@@ -6,14 +6,9 @@ d3.scale.quantile = function() {
   function rescale() {
     var k = 0,
         n = domain.length,
-        q = range.length,
-        i;
+        q = range.length;
     thresholds.length = Math.max(0, q - 1);
-    while (++k < q) {
-      thresholds[k - 1] = (i = n * k / q) % 1
-          ? domain[~~i]
-          : (domain[i = ~~i] + domain[i - 1]) / 2;
-    }
+    while (++k < q) thresholds[k - 1] = d3.quantile(domain, k / q);
   }
 
   function scale(x) {

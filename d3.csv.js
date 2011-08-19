@@ -30,7 +30,7 @@ d3.csv.parseRows = function(text, f) {
 
   /** @private Returns the next token. */
   function token() {
-    if (re.lastIndex === text.length) return EOF; // special case: end of file
+    if (re.lastIndex >= text.length) return EOF; // special case: end of file
     if (eol) { eol = false; return EOL; } // special case: end of line
 
     // special case: quotes
@@ -89,4 +89,4 @@ function d3_csv_formatValue(text) {
       ? "\"" + text.replace(/\"/g, "\"\"") + "\""
       : text;
 }
-})()
+})();

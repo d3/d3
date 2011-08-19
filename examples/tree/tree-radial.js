@@ -2,15 +2,10 @@ var r = 960 / 2;
 
 var tree = d3.layout.tree()
     .size([360, r - 120])
-    .sort(null)
-    .children(function(d) { return isNaN(d.value) ? d3.entries(d.value) : null; })
     .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
-var diagonal = d3.svg.diagonal()
-    .projection(function(d) {
-      var r = d.y, a = (d.x - 90) / 180 * Math.PI;
-      return [r * Math.cos(a), r * Math.sin(a)];
-    });
+var diagonal = d3.svg.diagonal.radial()
+    .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
 var vis = d3.select("#chart").append("svg:svg")
     .attr("width", r * 2)
@@ -18,8 +13,8 @@ var vis = d3.select("#chart").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-d3.json("flare.json", function(json) {
-  var nodes = tree(d3.entries(json)[0]);
+d3.json("../data/flare.json", function(json) {
+  var nodes = tree.nodes(json);
 
   var link = vis.selectAll("path.link")
       .data(tree.links(nodes))
@@ -41,5 +36,5 @@ d3.json("flare.json", function(json) {
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? null : "rotate(180)"; })
-      .text(function(d) { return d.data.key; });
+      .text(function(d) { return d.name; });
 });

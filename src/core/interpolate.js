@@ -175,6 +175,6 @@ d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
   function(a, b) { return (typeof b === "string") && d3.interpolateString(String(a), b); },
-  function(a, b) { return (b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b)) && d3.interpolateRgb(String(a), b); },
+  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(String(a), b); },
   function(a, b) { return (typeof b === "number") && d3.interpolateNumber(+a, b); }
 ];
