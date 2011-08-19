@@ -530,9 +530,8 @@ function d3_layout_forceDragUp() {
     d3_layout_forceStopClick = true;
     d3_layout_forceCancel();
 
-    // Don't trigger this for touchend.
-    if (d3.event.type === "mouseup")
-      d3_layout_forceDragMove();
+    // Don't trigger mousemove for touchend.
+    if (d3.event.type === "mouseup") d3_layout_forceDragMove();
   }
 
   d3_layout_forceDragNode.fixed = false;
