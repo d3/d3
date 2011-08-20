@@ -143,7 +143,7 @@ d3.layout.chord = function() {
         if (source.value || target.value) {
           chords.push(source.value < target.value
               ? {source: target, target: source}
-              : {source: source, target: target})
+              : {source: source, target: target});
         }
       }
     }
