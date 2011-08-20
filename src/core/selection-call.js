@@ -7,7 +7,7 @@
 // version bump due to backwards compatibility, so I'm not changing it right
 // away.
 //
-function d3_call(callback) {
+function d3_selection_call(callback) {
   callback.apply(this, (arguments[0] = this, arguments));
   return this;
 }

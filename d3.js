@@ -24,6 +24,18 @@ try {
 } catch(e) {
   d3_array = d3_arrayCopy;
 }
+
+var d3_arraySubclass = [].__proto__?
+
+// Until ECMAScript supports array subclassing, prototype injection works well.
+function(array, prototype) {
+  array.__proto__ = prototype;
+}:
+
+// And if your browser doesn't support __proto__, we'll use direct extension.
+function(array, prototype) {
+  for (var property in prototype) array[property] = prototype[property];
+};
 d3.functor = function(v) {
   return typeof v === "function" ? v : function() { return v; };
 };
@@ -302,19 +314,6 @@ function d3_splitter(d) {
 }
 function d3_collapse(s) {
   return s.replace(/(^\s+)|(\s+$)/g, "").replace(/\s+/g, " ");
-}
-//
-// Note: assigning to the arguments array simultaneously changes the value of
-// the corresponding argument!
-//
-// TODO The `this` argument probably shouldn't be the first argument to the
-// callback, anyway, since it's redundant. However, that will require a major
-// version bump due to backwards compatibility, so I'm not changing it right
-// away.
-//
-function d3_call(callback) {
-  callback.apply(this, (arguments[0] = this, arguments));
-  return this;
 }
 /**
  * @param {number} start
@@ -1199,886 +1198,814 @@ function d3_hsl_rgb(h, s, l) {
 
   return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
 }
+// TODO fast singleton implementation!
+d3.select = function(selector) {
+  return typeof selector === "string"
+      ? d3_selectionRoot.select(selector)
+      : d3_selection([[selector]]); // assume node
+};
+d3.selectAll = function(selector) {
+  return typeof selector === "string"
+      ? d3_selectionRoot.selectAll(selector)
+      : d3_selection([d3_array(selector)]); // assume node[]
+};
+function d3_selection(groups) {
+  d3_arraySubclass(groups, d3_selectionPrototype);
+  return groups;
+}
+
+var d3_selectionPrototype = [];
+
+// Subselection
+d3_selectionPrototype.select = d3_selection_select;
+d3_selectionPrototype.selectAll = d3_selection_selectAll;
+
+// Content
+d3_selectionPrototype.attr = d3_selection_attr;
+d3_selectionPrototype.classed = d3_selection_classed;
+d3_selectionPrototype.style = d3_selection_style;
+d3_selectionPrototype.property = d3_selection_property;
+d3_selectionPrototype.text = d3_selection_text;
+d3_selectionPrototype.html = d3_selection_html;
+d3_selectionPrototype.append = d3_selection_append;
+d3_selectionPrototype.insert = d3_selection_insert;
+d3_selectionPrototype.remove = d3_selection_remove;
+
+// Data
+d3_selectionPrototype.data = d3_selection_data;
+d3_selectionPrototype.filter = d3_selection_filter;
+d3_selectionPrototype.map = d3_selection_map;
+d3_selectionPrototype.sort = d3_selection_sort;
+
+// Animation & Interaction
+d3_selectionPrototype.on = d3_selection_on;
+d3_selectionPrototype.transition = d3_selection_transition;
+
+// Control
+d3_selectionPrototype.each = d3_selection_each;
+d3_selectionPrototype.call = d3_selection_call;
+d3_selectionPrototype.empty = d3_selection_empty;
+d3_selectionPrototype.node = d3_selection_node;
+
+// Default to using the W3C Selectors API.
 var d3_select = function(s, n) { return n.querySelector(s); },
     d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
 
-// Use Sizzle, if available.
+// Prefer Sizzle, if available.
 if (typeof Sizzle === "function") {
   d3_select = function(s, n) { return Sizzle(s, n)[0]; };
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
 }
 
-var d3_root = d3_selection([[document]]);
-d3_root[0].parentNode = document.documentElement;
+var d3_selectionRoot = d3_selection([[document]]);
+d3_selectionRoot[0].parentNode = document.documentElement;
+function d3_selection_select(selector) {
+  var subgroups = [],
+      subgroup,
+      subnode,
+      group,
+      node;
 
-// TODO fast singleton implementation!
-d3.select = function(selector) {
-  return typeof selector === "string"
-      ? d3_root.select(selector)
-      : d3_selection([[selector]]); // assume node
-};
+  if (typeof selector !== "function") selector = d3_selection_selector(selector);
 
-d3.selectAll = function(selector) {
-  return typeof selector === "string"
-      ? d3_root.selectAll(selector)
-      : d3_selection([d3_array(selector)]); // assume node[]
-};
-
-function d3_selection(groups) {
-
-  function select(select) {
-    var subgroups = [],
-        subgroup,
-        subnode,
-        group,
-        node;
-    for (var j = 0, m = groups.length; j < m; j++) {
-      group = groups[j];
-      subgroups.push(subgroup = []);
-      subgroup.parentNode = group.parentNode;
-      for (var i = 0, n = group.length; i < n; i++) {
-        if (node = group[i]) {
-          subgroup.push(subnode = select(node));
-          if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
-        } else {
-          subgroup.push(null);
-        }
-      }
-    }
-    return d3_selection(subgroups);
-  }
-
-  function selectAll(selectAll) {
-    var subgroups = [],
-        subgroup,
-        group,
-        node;
-    for (var j = 0, m = groups.length; j < m; j++) {
-      group = groups[j];
-      for (var i = 0, n = group.length; i < n; i++) {
-        if (node = group[i]) {
-          subgroups.push(subgroup = selectAll(node));
-          subgroup.parentNode = node;
-        }
-      }
-    }
-    return d3_selection(subgroups);
-  }
-
-  // TODO select(function)?
-  groups.select = function(selector) {
-    return select(function(node) {
-      return d3_select(selector, node);
-    });
-  };
-
-  // TODO selectAll(function)?
-  groups.selectAll = function(selector) {
-    return selectAll(function(node) {
-      return d3_selectAll(selector, node);
-    });
-  };
-
-  // TODO preserve null elements to maintain index?
-  groups.filter = function(filter) {
-    var subgroups = [],
-        subgroup,
-        group,
-        node;
-    for (var j = 0, m = groups.length; j < m; j++) {
-      group = groups[j];
-      subgroups.push(subgroup = []);
-      subgroup.parentNode = group.parentNode;
-      for (var i = 0, n = group.length; i < n; i++) {
-        if ((node = group[i]) && filter.call(node, node.__data__, i)) {
-          subgroup.push(node);
-        }
-      }
-    }
-    return d3_selection(subgroups);
-  };
-
-  groups.map = function(map) {
-    var group,
-        node;
-    for (var j = 0, m = groups.length; j < m; j++) {
-      group = groups[j];
-      for (var i = 0, n = group.length; i < n; i++) {
-        if (node = group[i]) node.__data__ = map.call(node, node.__data__, i);
-      }
-    }
-    return groups;
-  };
-
-  // TODO data(null) for clearing data?
-  groups.data = function(data, join) {
-    var enter = [],
-        update = [],
-        exit = [];
-
-    function bind(group, groupData) {
-      var i = 0,
-          n = group.length,
-          m = groupData.length,
-          n0 = Math.min(n, m),
-          n1 = Math.max(n, m),
-          updateNodes = [],
-          enterNodes = [],
-          exitNodes = [],
-          node,
-          nodeData;
-
-      if (join) {
-        var nodeByKey = {},
-            keys = [],
-            key,
-            j = groupData.length;
-
-        for (i = 0; i < n; i++) {
-          key = join.call(node = group[i], node.__data__, i);
-          if (key in nodeByKey) {
-            exitNodes[j++] = node; // duplicate key
-          } else {
-            nodeByKey[key] = node;
-          }
-          keys.push(key);
-        }
-
-        for (i = 0; i < m; i++) {
-          node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
-          if (node) {
-            node.__data__ = nodeData;
-            updateNodes[i] = node;
-            enterNodes[i] = exitNodes[i] = null;
-          } else {
-            enterNodes[i] = d3_selection_enterNode(nodeData);
-            updateNodes[i] = exitNodes[i] = null;
-          }
-          delete nodeByKey[key];
-        }
-
-        for (i = 0; i < n; i++) {
-          if (keys[i] in nodeByKey) {
-            exitNodes[i] = group[i];
-          }
-        }
+  for (var j = -1, m = this.length; ++j < m;) {
+    subgroups.push(subgroup = []);
+    subgroup.parentNode = (group = this[j]).parentNode;
+    for (var i = -1, n = group.length; ++i < n;) {
+      if (node = group[i]) {
+        subgroup.push(subnode = selector(node));
+        if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
       } else {
-        for (; i < n0; i++) {
-          node = group[i];
-          nodeData = groupData[i];
-          if (node) {
-            node.__data__ = nodeData;
-            updateNodes[i] = node;
-            enterNodes[i] = exitNodes[i] = null;
-          } else {
-            enterNodes[i] = d3_selection_enterNode(nodeData);
-            updateNodes[i] = exitNodes[i] = null;
-          }
-        }
-        for (; i < m; i++) {
-          enterNodes[i] = d3_selection_enterNode(groupData[i]);
-          updateNodes[i] = exitNodes[i] = null;
-        }
-        for (; i < n1; i++) {
-          exitNodes[i] = group[i];
-          enterNodes[i] = updateNodes[i] = null;
-        }
-      }
-
-      enterNodes.parentNode
-          = updateNodes.parentNode
-          = exitNodes.parentNode
-          = group.parentNode;
-
-      enter.push(enterNodes);
-      update.push(updateNodes);
-      exit.push(exitNodes);
-    }
-
-    var i = -1,
-        n = groups.length,
-        group;
-    if (typeof data === "function") {
-      while (++i < n) {
-        bind(group = groups[i], data.call(group, group.parentNode.__data__, i));
-      }
-    } else {
-      while (++i < n) {
-        bind(group = groups[i], data);
+        subgroup.push(null);
       }
     }
-
-    var selection = d3_selection(update);
-    selection.enter = function() {
-      return d3_selectionEnter(enter, update);
-    };
-    selection.exit = function() {
-      return d3_selection(exit);
-    };
-    return selection;
-  };
-
-  // TODO mask forEach? or rename for eachData?
-  // TODO offer the same semantics for map, reduce, etc.?
-  groups.each = function(callback) {
-    for (var j = 0, m = groups.length; j < m; j++) {
-      var group = groups[j];
-      for (var i = 0, n = group.length; i < n; i++) {
-        var node = group[i];
-        if (node) callback.call(node, node.__data__, i);
-      }
-    }
-    return groups;
-  };
-
-  function first(callback) {
-    for (var j = 0, m = groups.length; j < m; j++) {
-      var group = groups[j];
-      for (var i = 0, n = group.length; i < n; i++) {
-        var node = group[i];
-        if (node) return callback.call(node, node.__data__, i);
-      }
-    }
-    return null;
   }
 
-  groups.empty = function() {
-    return !first(function() { return true; });
+  return d3_selection(subgroups);
+}
+
+function d3_selection_selector(selector) {
+  return function(node) {
+    return d3_select(selector, node);
   };
+}
+function d3_selection_selectAll(selector) {
+  var subgroups = [],
+      subgroup,
+      node;
 
-  groups.node = function() {
-    return first(function() { return this; });
-  };
+  if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
 
-  groups.attr = function(name, value) {
-    name = d3.ns.qualify(name);
-
-    // If no value is specified, return the first value.
-    if (arguments.length < 2) {
-      return first(name.local
-          ? function() { return this.getAttributeNS(name.space, name.local); }
-          : function() { return this.getAttribute(name); });
-    }
-
-    /** @this {Element} */
-    function attrNull() {
-      this.removeAttribute(name);
-    }
-
-    /** @this {Element} */
-    function attrNullNS() {
-      this.removeAttributeNS(name.space, name.local);
-    }
-
-    /** @this {Element} */
-    function attrConstant() {
-      this.setAttribute(name, value);
-    }
-
-    /** @this {Element} */
-    function attrConstantNS() {
-      this.setAttributeNS(name.space, name.local, value);
-    }
-
-    /** @this {Element} */
-    function attrFunction() {
-      var x = value.apply(this, arguments);
-      if (x == null) this.removeAttribute(name);
-      else this.setAttribute(name, x);
-    }
-
-    /** @this {Element} */
-    function attrFunctionNS() {
-      var x = value.apply(this, arguments);
-      if (x == null) this.removeAttributeNS(name.space, name.local);
-      else this.setAttributeNS(name.space, name.local, x);
-    }
-
-    return groups.each(value == null
-        ? (name.local ? attrNullNS : attrNull) : (typeof value === "function"
-        ? (name.local ? attrFunctionNS : attrFunction)
-        : (name.local ? attrConstantNS : attrConstant)));
-  };
-
-  groups.classed = function(name, value) {
-    var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
-
-    // If no value is specified, return the first value.
-    if (arguments.length < 2) {
-      return first(function() {
-        if (c = this.classList) return c.contains(name);
-        var c = this.className;
-        re.lastIndex = 0;
-        return re.test(c.baseVal != null ? c.baseVal : c);
-      });
-    }
-
-    /** @this {Element} */
-    function classedAdd() {
-      if (c = this.classList) return c.add(name);
-      var c = this.className,
-          cb = c.baseVal != null,
-          cv = cb ? c.baseVal : c;
-      re.lastIndex = 0;
-      if (!re.test(cv)) {
-        cv = d3_collapse(cv + " " + name);
-        if (cb) c.baseVal = cv;
-        else this.className = cv;
+  for (var j = -1, m = this.length; ++j < m;) {
+    for (var group = this[j], i = -1, n = group.length; ++i < n;) {
+      if (node = group[i]) {
+        subgroups.push(subgroup = selector(node));
+        subgroup.parentNode = node;
       }
     }
+  }
 
-    /** @this {Element} */
-    function classedRemove() {
-      if (c = this.classList) return c.remove(name);
-      var c = this.className,
-          cb = c.baseVal != null,
-          cv = cb ? c.baseVal : c;
-      cv = d3_collapse(cv.replace(re, " "));
+  return d3_selection(subgroups);
+}
+
+function d3_selection_selectorAll(selector) {
+  return function(node) {
+    return d3_selectAll(selector, node);
+  };
+}
+function d3_selection_attr(name, value) {
+  name = d3.ns.qualify(name);
+
+  // If no value is specified, return the first value.
+  if (arguments.length < 2) {
+    var node = this.node();
+    return name.local
+        ? node.getAttributeNS(name.space, name.local)
+        : node.getAttribute(name);
+  }
+
+  function attrNull() {
+    this.removeAttribute(name);
+  }
+
+  function attrNullNS() {
+    this.removeAttributeNS(name.space, name.local);
+  }
+
+  function attrConstant() {
+    this.setAttribute(name, value);
+  }
+
+  function attrConstantNS() {
+    this.setAttributeNS(name.space, name.local, value);
+  }
+
+  function attrFunction() {
+    var x = value.apply(this, arguments);
+    if (x == null) this.removeAttribute(name);
+    else this.setAttribute(name, x);
+  }
+
+  function attrFunctionNS() {
+    var x = value.apply(this, arguments);
+    if (x == null) this.removeAttributeNS(name.space, name.local);
+    else this.setAttributeNS(name.space, name.local, x);
+  }
+
+  return this.each(value == null
+      ? (name.local ? attrNullNS : attrNull) : (typeof value === "function"
+      ? (name.local ? attrFunctionNS : attrFunction)
+      : (name.local ? attrConstantNS : attrConstant)));
+}
+function d3_selection_classed(name, value) {
+  var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
+
+  // If no value is specified, return the first value.
+  if (arguments.length < 2) {
+    var node = this.node();
+    if (c = node.classList) return c.contains(name);
+    var c = node.className;
+    re.lastIndex = 0;
+    return re.test(c.baseVal != null ? c.baseVal : c);
+  }
+
+  function classedAdd() {
+    if (c = this.classList) return c.add(name);
+    var c = this.className,
+        cb = c.baseVal != null,
+        cv = cb ? c.baseVal : c;
+    re.lastIndex = 0;
+    if (!re.test(cv)) {
+      cv = d3_collapse(cv + " " + name);
       if (cb) c.baseVal = cv;
       else this.className = cv;
     }
-
-    /** @this {Element} */
-    function classedFunction() {
-      (value.apply(this, arguments)
-          ? classedAdd
-          : classedRemove).call(this);
-    }
-
-    return groups.each(typeof value === "function"
-        ? classedFunction : value
-        ? classedAdd
-        : classedRemove);
-  };
-
-  groups.style = function(name, value, priority) {
-    if (arguments.length < 3) priority = "";
-
-    // If no value is specified, return the first value.
-    if (arguments.length < 2) {
-      return first(function() {
-        return window.getComputedStyle(this, null).getPropertyValue(name);
-      });
-    }
-
-    /** @this {Element} */
-    function styleNull() {
-      this.style.removeProperty(name);
-    }
-
-    /** @this {Element} */
-    function styleConstant() {
-      this.style.setProperty(name, value, priority);
-    }
-
-    /** @this {Element} */
-    function styleFunction() {
-      var x = value.apply(this, arguments);
-      if (x == null) this.style.removeProperty(name);
-      else this.style.setProperty(name, x, priority);
-    }
-
-    return groups.each(value == null
-        ? styleNull : (typeof value === "function"
-        ? styleFunction : styleConstant));
-  };
-
-  groups.property = function(name, value) {
-    name = d3.ns.qualify(name);
-
-    // If no value is specified, return the first value.
-    if (arguments.length < 2) {
-      return first(function() {
-        return this[name];
-      });
-    }
-
-    /** @this {Element} */
-    function propertyNull() {
-      delete this[name];
-    }
-
-    /** @this {Element} */
-    function propertyConstant() {
-      this[name] = value;
-    }
-
-    /** @this {Element} */
-    function propertyFunction() {
-      var x = value.apply(this, arguments);
-      if (x == null) delete this[name];
-      else this[name] = x;
-    }
-
-    return groups.each(value == null
-        ? propertyNull : (typeof value === "function"
-        ? propertyFunction : propertyConstant));
-  };
-
-  groups.text = function(value) {
-
-    // If no value is specified, return the first value.
-    if (arguments.length < 1) {
-      return first(function() {
-        return this.textContent;
-      });
-    }
-
-    /** @this {Element} */
-    function textConstant() {
-      this.textContent = value;
-    }
-
-    /** @this {Element} */
-    function textFunction() {
-      this.textContent = value.apply(this, arguments);
-    }
-
-    return groups.each(typeof value === "function"
-        ? textFunction : textConstant);
-  };
-
-  groups.html = function(value) {
-
-    // If no value is specified, return the first value.
-    if (arguments.length < 1) {
-      return first(function() {
-        return this.innerHTML;
-      });
-    }
-
-    /** @this {Element} */
-    function htmlConstant() {
-      this.innerHTML = value;
-    }
-
-    /** @this {Element} */
-    function htmlFunction() {
-      this.innerHTML = value.apply(this, arguments);
-    }
-
-    return groups.each(typeof value === "function"
-        ? htmlFunction : htmlConstant);
-  };
-
-  // TODO append(node)?
-  // TODO append(function)?
-  groups.append = function(name) {
-    name = d3.ns.qualify(name);
-
-    function append(node) {
-      return node.appendChild(document.createElement(name));
-    }
-
-    function appendNS(node) {
-      return node.appendChild(document.createElementNS(name.space, name.local));
-    }
-
-    return select(name.local ? appendNS : append);
-  };
-
-  // TODO insert(node, function)?
-  // TODO insert(function, string)?
-  // TODO insert(function, function)?
-  groups.insert = function(name, before) {
-    name = d3.ns.qualify(name);
-
-    function insert(node) {
-      return node.insertBefore(
-          document.createElement(name),
-          d3_select(before, node));
-    }
-
-    function insertNS(node) {
-      return node.insertBefore(
-          document.createElementNS(name.space, name.local),
-          d3_select(before, node));
-    }
-
-    return select(name.local ? insertNS : insert);
-  };
-
-  // TODO remove(selector)?
-  // TODO remove(node)?
-  // TODO remove(function)?
-  groups.remove = function() {
-    return groups.each(function() {
-      var parent = this.parentNode;
-      if (parent) parent.removeChild(this);
-    });
-  };
-
-  groups.sort = function(comparator) {
-    comparator = d3_selection_comparator.apply(this, arguments);
-    for (var j = 0, m = groups.length; j < m; j++) {
-      var group = groups[j];
-      group.sort(comparator);
-      for (var i = 1, n = group.length, prev = group[0]; i < n; i++) {
-        var node = group[i];
-        if (node) {
-          if (prev) prev.parentNode.insertBefore(node, prev.nextSibling);
-          prev = node;
-        }
-      }
-    }
-    return groups;
-  };
-
-  // type can be namespaced, e.g., "click.foo"
-  // listener can be null for removal
-  groups.on = function(type, listener, capture) {
-    if (arguments.length < 3) capture = false;
-
-    // parse the type specifier
-    var i = type.indexOf("."),
-        typo = i === -1 ? type : type.substring(0, i),
-        name = "__on" + type;
-
-    // remove the old event listener, and add the new event listener
-    return groups.each(function(d, i) {
-      if (this[name]) this.removeEventListener(typo, this[name], capture);
-      if (listener) this.addEventListener(typo, this[name] = l, capture);
-
-      // wrapped event listener that preserves i
-      var node = this;
-      function l(e) {
-        var o = d3.event; // Events can be reentrant (e.g., focus).
-        d3.event = e;
-        try {
-          listener.call(this, node.__data__, i);
-        } finally {
-          d3.event = o;
-        }
-      }
-    });
-  };
-
-  // TODO slice?
-
-  groups.transition = function() {
-    return d3_transition(groups);
-  };
-
-  groups.call = d3_call;
-
-  return groups;
-}
-
-function d3_selectionEnter(groups, upgroups) {
-
-  function select(select) {
-    var subgroups = [],
-        subgroup,
-        subnode,
-        upgroup,
-        group,
-        node;
-    for (var j = 0, m = groups.length; j < m; j++) {
-      group = groups[j];
-      upgroup = upgroups[j];
-      subgroups.push(subgroup = []);
-      subgroup.parentNode = group.parentNode;
-      for (var i = 0, n = group.length; i < n; i++) {
-        if (node = group[i]) {
-          subgroup.push(upgroup[i] = subnode = select(group.parentNode));
-          subnode.__data__ = node.__data__;
-        } else {
-          subgroup.push(null);
-        }
-      }
-    }
-    return d3_selection(subgroups);
   }
 
-  // TODO append(node)?
-  // TODO append(function)?
-  groups.append = function(name) {
-    name = d3.ns.qualify(name);
+  function classedRemove() {
+    if (c = this.classList) return c.remove(name);
+    var c = this.className,
+        cb = c.baseVal != null,
+        cv = cb ? c.baseVal : c;
+    cv = d3_collapse(cv.replace(re, " "));
+    if (cb) c.baseVal = cv;
+    else this.className = cv;
+  }
 
-    function append(node) {
-      return node.appendChild(document.createElement(name));
+  function classedFunction() {
+    (value.apply(this, arguments)
+        ? classedAdd
+        : classedRemove).call(this);
+  }
+
+  return this.each(typeof value === "function"
+      ? classedFunction : value
+      ? classedAdd
+      : classedRemove);
+}
+function d3_selection_style(name, value, priority) {
+  if (arguments.length < 3) priority = "";
+
+  // If no value is specified, return the first value.
+  if (arguments.length < 2) return window
+      .getComputedStyle(this.node(), null)
+      .getPropertyValue(name);
+
+  function styleNull() {
+    this.style.removeProperty(name);
+  }
+
+  function styleConstant() {
+    this.style.setProperty(name, value, priority);
+  }
+
+  function styleFunction() {
+    var x = value.apply(this, arguments);
+    if (x == null) this.style.removeProperty(name);
+    else this.style.setProperty(name, x, priority);
+  }
+
+  return this.each(value == null
+      ? styleNull : (typeof value === "function"
+      ? styleFunction : styleConstant));
+}
+function d3_selection_property(name, value) {
+
+  // If no value is specified, return the first value.
+  if (arguments.length < 2) return this.node()[name];
+
+  function propertyNull() {
+    delete this[name];
+  }
+
+  function propertyConstant() {
+    this[name] = value;
+  }
+
+  function propertyFunction() {
+    var x = value.apply(this, arguments);
+    if (x == null) delete this[name];
+    else this[name] = x;
+  }
+
+  return this.each(value == null
+      ? propertyNull : (typeof value === "function"
+      ? propertyFunction : propertyConstant));
+}
+function d3_selection_text(value) {
+  return arguments.length < 1 ? this.node().textContent
+      : (this.each(typeof value === "function"
+      ? function() { this.textContent = value.apply(this, arguments); }
+      : function() { this.textContent = value; }));
+}
+function d3_selection_html(value) {
+  return arguments.length < 1 ? this.node().innerHTML
+      : (this.each(typeof value === "function"
+      ? function() { this.innerHTML = value.apply(this, arguments); }
+      : function() { this.innerHTML = value; }));
+}
+// TODO append(node)?
+// TODO append(function)?
+function d3_selection_append(name) {
+  name = d3.ns.qualify(name);
+
+  function append(node) {
+    return node.appendChild(document.createElement(name));
+  }
+
+  function appendNS(node) {
+    return node.appendChild(document.createElementNS(name.space, name.local));
+  }
+
+  return this.select(name.local ? appendNS : append);
+}
+// TODO insert(node, function)?
+// TODO insert(function, string)?
+// TODO insert(function, function)?
+function d3_selection_insert(name, before) {
+  name = d3.ns.qualify(name);
+
+  function insert(node) {
+    return node.insertBefore(
+        document.createElement(name),
+        d3_select(before, node));
+  }
+
+  function insertNS(node) {
+    return node.insertBefore(
+        document.createElementNS(name.space, name.local),
+        d3_select(before, node));
+  }
+
+  return this.select(name.local ? insertNS : insert);
+}
+// TODO remove(selector)?
+// TODO remove(node)?
+// TODO remove(function)?
+function d3_selection_remove() {
+  return this.each(function() {
+    var parent = this.parentNode;
+    if (parent) parent.removeChild(this);
+  });
+}
+// TODO data(null) for clearing data?
+function d3_selection_data(data, join) {
+  var enter = [],
+      update = [],
+      exit = [];
+
+  function bind(group, groupData) {
+    var i,
+        n = group.length,
+        m = groupData.length,
+        n0 = Math.min(n, m),
+        n1 = Math.max(n, m),
+        updateNodes = [],
+        enterNodes = [],
+        exitNodes = [],
+        node,
+        nodeData;
+
+    if (join) {
+      var nodeByKey = {},
+          keys = [],
+          key,
+          j = groupData.length;
+
+      for (i = -1; ++i < n;) {
+        key = join.call(node = group[i], node.__data__, i);
+        if (key in nodeByKey) {
+          exitNodes[j++] = node; // duplicate key
+        } else {
+          nodeByKey[key] = node;
+        }
+        keys.push(key);
+      }
+
+      for (i = -1; ++i < m;) {
+        node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
+        if (node) {
+          node.__data__ = nodeData;
+          updateNodes[i] = node;
+          enterNodes[i] = exitNodes[i] = null;
+        } else {
+          enterNodes[i] = d3_selection_dataNode(nodeData);
+          updateNodes[i] = exitNodes[i] = null;
+        }
+        delete nodeByKey[key];
+      }
+
+      for (i = -1; ++i < n;) {
+        if (keys[i] in nodeByKey) {
+          exitNodes[i] = group[i];
+        }
+      }
+    } else {
+      for (i = -1; ++i < n0;) {
+        node = group[i];
+        nodeData = groupData[i];
+        if (node) {
+          node.__data__ = nodeData;
+          updateNodes[i] = node;
+          enterNodes[i] = exitNodes[i] = null;
+        } else {
+          enterNodes[i] = d3_selection_dataNode(nodeData);
+          updateNodes[i] = exitNodes[i] = null;
+        }
+      }
+      for (; i < m; ++i) {
+        enterNodes[i] = d3_selection_dataNode(groupData[i]);
+        updateNodes[i] = exitNodes[i] = null;
+      }
+      for (; i < n1; ++i) {
+        exitNodes[i] = group[i];
+        enterNodes[i] = updateNodes[i] = null;
+      }
     }
 
-    function appendNS(node) {
-      return node.appendChild(document.createElementNS(name.space, name.local));
+    enterNodes.update
+        = updateNodes;
+
+    enterNodes.parentNode
+        = updateNodes.parentNode
+        = exitNodes.parentNode
+        = group.parentNode;
+
+    enter.push(enterNodes);
+    update.push(updateNodes);
+    exit.push(exitNodes);
+  }
+
+  var i = -1,
+      n = this.length,
+      group;
+  if (typeof data === "function") {
+    while (++i < n) {
+      bind(group = this[i], data.call(group, group.parentNode.__data__, i));
     }
-
-    return select(name.local ? appendNS : append);
-  };
-
-  // TODO insert(node, function)?
-  // TODO insert(function, string)?
-  // TODO insert(function, function)?
-  groups.insert = function(name, before) {
-    name = d3.ns.qualify(name);
-
-    function insert(node) {
-      return node.insertBefore(
-          document.createElement(name),
-          d3_select(before, node));
+  } else {
+    while (++i < n) {
+      bind(group = this[i], data);
     }
+  }
 
-    function insertNS(node) {
-      return node.insertBefore(
-          document.createElementNS(name.space, name.local),
-          d3_select(before, node));
-    }
-
-    return select(name.local ? insertNS : insert);
-  };
-
-  return groups;
+  var selection = d3_selection(update);
+  selection.enter = function() { return d3_selection_enter(enter); };
+  selection.exit = function() { return d3_selection(exit); };
+  return selection;
 }
 
-function d3_selection_comparator(comparator) {
+function d3_selection_dataNode(data) {
+  return {__data__: data};
+}
+function d3_selection_enter(selection) {
+  d3_arraySubclass(selection, d3_selection_enterPrototype);
+  return selection;
+}
+
+var d3_selection_enterPrototype = [];
+
+// Subselection
+d3_selection_enterPrototype.select = d3_selection_enter_select;
+
+// Content
+d3_selection_enterPrototype.append = d3_selection_append;
+d3_selection_enterPrototype.insert = d3_selection_insert;
+
+// Control
+d3_selection_enterPrototype.empty = d3_selection_empty;
+function d3_selection_enter_select(selector) {
+  var subgroups = [],
+      subgroup,
+      subnode,
+      upgroup,
+      group,
+      node;
+
+  for (var j = -1, m = this.length; ++j < m;) {
+    upgroup = (group = this[j]).update;
+    subgroups.push(subgroup = []);
+    subgroup.parentNode = group.parentNode;
+    for (var i = -1, n = group.length; ++i < n;) {
+      if (node = group[i]) {
+        subgroup.push(upgroup[i] = subnode = selector(group.parentNode));
+        subnode.__data__ = node.__data__;
+      } else {
+        subgroup.push(null);
+      }
+    }
+  }
+
+  return d3_selection(subgroups);
+}
+// TODO preserve null elements to maintain index?
+function d3_selection_filter(filter) {
+  var subgroups = [],
+      subgroup,
+      group,
+      node;
+
+  for (var j = 0, m = this.length; j < m; j++) {
+    subgroups.push(subgroup = []);
+    subgroup.parentNode = (group = this[j]).parentNode;
+    for (var i = 0, n = group.length; i < n; i++) {
+      if ((node = group[i]) && filter.call(node, node.__data__, i)) {
+        subgroup.push(node);
+      }
+    }
+  }
+
+  return d3_selection(subgroups);
+}
+function d3_selection_map(map) {
+  for (var j = 0, m = this.length; j < m; j++) {
+    for (var group = this[j], i = 0, n = group.length, node; i < n; i++) {
+      if (node = group[i]) node.__data__ = map.call(node, node.__data__, i);
+    }
+  }
+  return this;
+}
+function d3_selection_sort(comparator) {
+  comparator = d3_selection_sortComparator.apply(this, arguments);
+  for (var j = 0, m = this.length; j < m; j++) {
+    for (var group = this[j].sort(comparator), i = 1, n = group.length, prev = group[0]; i < n; i++) {
+      var node = group[i];
+      if (node) {
+        if (prev) prev.parentNode.insertBefore(node, prev.nextSibling);
+        prev = node;
+      }
+    }
+  }
+  return this;
+}
+
+function d3_selection_sortComparator(comparator) {
   if (!arguments.length) comparator = d3.ascending;
   return function(a, b) {
     return comparator(a && a.__data__, b && b.__data__);
   };
 }
+// type can be namespaced, e.g., "click.foo"
+// listener can be null for removal
+function d3_selection_on(type, listener, capture) {
+  if (arguments.length < 3) capture = false;
 
-function d3_selection_enterNode(data) {
-  return {__data__: data};
-}
-d3.transition = d3_root.transition;
+  // parse the type specifier
+  var i = type.indexOf("."),
+      typo = i === -1 ? type : type.substring(0, i),
+      name = "__on" + type;
 
-var d3_transitionId = 0,
-    d3_transitionInheritId = 0;
+  // remove the old event listener, and add the new event listener
+  return this.each(function(d, i) {
+    if (this[name]) this.removeEventListener(typo, this[name], capture);
+    if (listener) this.addEventListener(typo, this[name] = l, capture);
 
-function d3_transition(groups) {
-  var transition = {},
-      transitionId = d3_transitionInheritId || ++d3_transitionId,
-      tweens = {},
-      interpolators = [],
-      remove = false,
-      event = d3.dispatch("start", "end"),
-      stage = [],
-      delay = [],
-      duration = [],
-      durationMax,
-      ease = d3.ease("cubic-in-out");
-
-  //
-  // Be careful with concurrent transitions!
-  //
-  // Say transition A causes an exit. Before A finishes, a transition B is
-  // created, and believes it only needs to do an update, because the elements
-  // haven't been removed yet (which happens at the very end of the exit
-  // transition).
-  //
-  // Even worse, what if either transition A or B has a staggered delay? Then,
-  // some elements may be removed, while others remain. Transition B does not
-  // know to enter the elements because they were still present at the time
-  // the transition B was created (but not yet started).
-  //
-  // To prevent such confusion, we only trigger end events for transitions if
-  // the transition ending is the only one scheduled for the given element.
-  // Similarly, we only allow one transition to be active for any given
-  // element, so that concurrent transitions do not overwrite each other's
-  // properties.
-  //
-  // TODO Support transition namespaces, so that transitions can proceed
-  // concurrently on the same element if needed. Hopefully, this is rare!
-  //
-
-  groups.each(function() {
-    (this.__transition__ || (this.__transition__ = {})).owner = transitionId;
+    // wrapped event listener that preserves i
+    var node = this;
+    function l(e) {
+      var o = d3.event; // Events can be reentrant (e.g., focus).
+      d3.event = e;
+      try {
+        listener.call(this, node.__data__, i);
+      } finally {
+        d3.event = o;
+      }
+    }
   });
+}
+function d3_selection_each(callback) {
+  for (var j = -1, m = this.length; ++j < m;) {
+    for (var group = this[j], i = -1, n = group.length; ++i < n;) {
+      var node = group[i];
+      if (node) callback.call(node, node.__data__, i, j);
+    }
+  }
+  return this;
+}
+//
+// Note: assigning to the arguments array simultaneously changes the value of
+// the corresponding argument!
+//
+// TODO The `this` argument probably shouldn't be the first argument to the
+// callback, anyway, since it's redundant. However, that will require a major
+// version bump due to backwards compatibility, so I'm not changing it right
+// away.
+//
+function d3_selection_call(callback) {
+  callback.apply(this, (arguments[0] = this, arguments));
+  return this;
+}
+function d3_selection_empty() {
+  return !this.node();
+}
+function d3_selection_node(callback) {
+  for (var j = 0, m = this.length; j < m; j++) {
+    for (var group = this[j], i = 0, n = group.length; i < n; i++) {
+      var node = group[i];
+      if (node) return node;
+    }
+  }
+  return null;
+}
+function d3_selection_transition() {
+  var subgroups = [],
+      subgroup,
+      node;
 
-  function step(elapsed) {
-    var clear = true,
-        k = -1;
-    groups.each(function() {
-      if (stage[++k] === 2) return; // ended
-      var t = (elapsed - delay[k]) / duration[k],
-          tx = this.__transition__,
-          te, // ease(t)
-          tk, // tween key
-          ik = interpolators[k];
+  for (var j = -1, m = this.length; ++j < m;) {
+    subgroups.push(subgroup = []);
+    for (var group = this[j], i = -1, n = group.length; ++i < n;) {
+      subgroup.push((node = group[i]) ? {node: node, delay: 0, duration: 250} : null);
+    }
+  }
 
-      // Check if the (un-eased) time is outside the range [0,1].
-      if (t < 1) {
-        clear = false;
-        if (t < 0) return;
-      } else {
-        t = 1;
+  return d3_transition(subgroups);
+}
+function d3_transition(groups) {
+  d3_arraySubclass(groups, d3_transitionPrototype);
+
+  var id = d3_transitionInheritId || ++d3_transitionId,
+      tweens = {},
+      event = d3.dispatch("start", "end"),
+      ease = d3_transitionEase;
+
+  groups.tween = function(name, tween) {
+    if (arguments.length < 2) return tweens[name];
+    if (tween == null) delete tweens[name];
+    else tweens[name] = tween;
+    return groups;
+  };
+
+  groups.ease = function(value) {
+    if (!arguments.length) return ease;
+    ease = typeof value === "function" ? value : d3.ease.apply(d3, arguments);
+    return groups;
+  };
+
+  groups.each = function(type, listener) {
+    if (arguments.length < 2) return d3_transition_each.call(groups, type);
+    event[type].add(listener);
+    return groups;
+  };
+
+  d3.timer(function(elapsed) {
+    groups.each(function(d, i, j) {
+      var tweened = [],
+          node = this,
+          delay = groups[j][i].delay - elapsed,
+          duration = groups[j][i].duration,
+          lock = node.__transition__ || (node.__transition__ = {active: 0});
+
+      lock.owner = id;
+      delay <= 0 ? start(0) : d3.timer(start, delay);
+
+      function start(elapsed) {
+        if (lock.active <= id) {
+          lock.active = id;
+          event.start.dispatch.call(node, d, i);
+
+          for (var tween in tweens) {
+            if (tween = tweens[tween].call(node, d, i)) {
+              tweened.push(tween);
+            }
+          }
+
+          delay -= elapsed;
+          d3.timer(tick);
+        }
+        return true;
       }
 
-      // Determine the stage of this transition.
-      // 0 - Not yet started.
-      // 1 - In progress.
-      // 2 - Ended.
-      if (stage[k]) {
-        if (!tx || tx.active !== transitionId) {
-          stage[k] = 2;
-          return;
-        }
-      } else if (!tx || tx.active > transitionId) {
-        stage[k] = 2;
-        return;
-      } else {
-        stage[k] = 1;
-        event.start.dispatch.apply(this, arguments);
-        ik = interpolators[k] = {};
-        tx.active = transitionId;
-        for (tk in tweens) {
-          if (te = tweens[tk].apply(this, arguments)) {
-            ik[tk] = te;
-          }
-        }
-      }
+      function tick(elapsed) {
+        if (lock.active !== id) return true;
 
-      // Apply the interpolators!
-      te = ease(t);
-      for (tk in ik) ik[tk].call(this, te);
+        var t = Math.min(1, (elapsed - delay) / duration),
+            e = ease(t),
+            i = -1,
+            n = tweened.length;
 
-      // Handle ending transitions.
-      if (t === 1) {
-        stage[k] = 2;
-        if (tx.active === transitionId) {
-          var owner = tx.owner;
-          if (owner === transitionId) {
-            delete this.__transition__;
-            if (remove && this.parentNode) this.parentNode.removeChild(this);
-          }
-          d3_transitionInheritId = transitionId;
-          event.end.dispatch.apply(this, arguments);
+        while (++i < n) tweened[i].call(node, e);
+
+        if (t === 1) {
+          d3_transitionInheritId = id;
+          event.end.dispatch.call(node, d, i);
           d3_transitionInheritId = 0;
-          tx.owner = owner;
+          if (lock.owner === id) delete node.__transition__;
+          return true;
         }
       }
     });
-    return clear;
-  }
+    return true;
+  });
 
-  transition.delay = function(value) {
-    var delayMin = Infinity,
-        k = -1;
-    if (typeof value === "function") {
-      groups.each(function(d, i) {
-        var x = delay[++k] = +value.apply(this, arguments);
-        if (x < delayMin) delayMin = x;
-      });
-    } else {
-      delayMin = +value;
-      groups.each(function(d, i) {
-        delay[++k] = delayMin;
-      });
-    }
-    d3.timer(step, delayMin);
-    return transition;
-  };
-
-  transition.duration = function(value) {
-    var k = -1;
-    if (typeof value === "function") {
-      durationMax = 0;
-      groups.each(function(d, i) {
-        var x = duration[++k] = +value.apply(this, arguments);
-        if (x > durationMax) durationMax = x;
-      });
-    } else {
-      durationMax = +value;
-      groups.each(function(d, i) {
-        duration[++k] = durationMax;
-      });
-    }
-    return transition;
-  };
-
-  transition.ease = function(value) {
-    ease = typeof value === "function" ? value : d3.ease.apply(d3, arguments);
-    return transition;
-  };
-
-  transition.attrTween = function(name, tween) {
-
-    /** @this {Element} */
-    function attrTween(d, i) {
-      var f = tween.call(this, d, i, this.getAttribute(name));
-      return f && function(t) {
-        this.setAttribute(name, f(t));
-      };
-    }
-
-    /** @this {Element} */
-    function attrTweenNS(d, i) {
-      var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
-      return f && function(t) {
-        this.setAttributeNS(name.space, name.local, f(t));
-      };
-    }
-
-    tweens["attr." + name] = name.local ? attrTweenNS : attrTween;
-    return transition;
-  };
-
-  transition.attr = function(name, value) {
-    return transition.attrTween(name, d3_transitionTween(value));
-  };
-
-  transition.styleTween = function(name, tween, priority) {
-    if (arguments.length < 3) priority = null;
-
-    /** @this {Element} */
-    function styleTween(d, i) {
-      var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-      return f && function(t) {
-        this.style.setProperty(name, f(t), priority);
-      };
-    }
-
-    tweens["style." + name] = styleTween;
-    return transition;
-  };
-
-  transition.style = function(name, value, priority) {
-    if (arguments.length < 3) priority = null;
-    return transition.styleTween(name, d3_transitionTween(value), priority);
-  };
-
-  transition.text = function(value) {
-    tweens.text = function(d, i) {
-      this.textContent = typeof value === "function"
-          ? value.call(this, d, i)
-          : value;
-    };
-    return transition;
-  };
-
-  transition.select = function(query) {
-    var k, t = d3_transition(groups.select(query)).ease(ease);
-    k = -1; t.delay(function(d, i) { return delay[++k]; });
-    k = -1; t.duration(function(d, i) { return duration[++k]; });
-    return t;
-  };
-
-  transition.selectAll = function(query) {
-    var k, t = d3_transition(groups.selectAll(query)).ease(ease);
-    k = -1; t.delay(function(d, i) { return delay[i ? k : ++k]; })
-    k = -1; t.duration(function(d, i) { return duration[i ? k : ++k]; });
-    return t;
-  };
-
-  transition.remove = function() {
-    remove = true;
-    return transition;
-  };
-
-  transition.each = function(type, listener) {
-    event[type].add(listener);
-    return transition;
-  };
-
-  transition.call = d3_call;
-
-  return transition.delay(0).duration(250);
+  return groups;
 }
 
 function d3_transitionTween(b) {
   return typeof b === "function"
       ? function(d, i, a) { var v = b.call(this, d, i) + ""; return a != v && d3.interpolate(a, v); }
       : (b = b + "", function(d, i, a) { return a != b && d3.interpolate(a, b); });
+}
+
+var d3_transitionPrototype = [],
+    d3_transitionId = 0,
+    d3_transitionInheritId = 0,
+    d3_transitionEase = d3.ease("cubic-in-out");
+
+// Subtransitions
+d3_transitionPrototype.select = d3_transition_select;
+d3_transitionPrototype.selectAll = d3_transition_selectAll;
+
+// Content
+d3_transitionPrototype.attr = d3_transition_attr;
+d3_transitionPrototype.attrTween = d3_transition_attrTween;
+d3_transitionPrototype.style = d3_transition_style;
+d3_transitionPrototype.styleTween = d3_transition_styleTween;
+d3_transitionPrototype.text = d3_transition_text;
+d3_transitionPrototype.remove = d3_transition_remove;
+
+// Animation
+d3_transitionPrototype.delay = d3_transition_delay;
+d3_transitionPrototype.duration = d3_transition_duration;
+
+// Control
+d3_transitionPrototype.call = d3_selection_call;
+
+d3.transition = function() {
+  return d3_selectionRoot.transition();
+};
+function d3_transition_select(selector) {
+  var subgroups = [],
+      subgroup,
+      subnode,
+      node;
+
+  if (typeof selector !== "function") selector = d3_selection_selector(selector);
+
+  for (var j = -1, m = this.length; ++j < m;) {
+    subgroups.push(subgroup = []);
+    for (var group = this[j], i = -1, n = group.length; ++i < n;) {
+      if ((node = group[i]) && (subnode = selector(node.node))) {
+        if ("__data__" in node.node) subnode.__data__ = node.node.__data__;
+        subgroup.push({node: subnode, delay: node.delay, duration: node.duration});
+      } else {
+        subgroup.push(null);
+      }
+    }
+  }
+
+  return d3_transition(subgroups).ease(this.ease());
+}
+function d3_transition_selectAll(selector) {
+  var subgroups = [],
+      subgroup,
+      node;
+
+  if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
+
+  for (var j = -1, m = this.length; ++j < m;) {
+    for (var group = this[j], i = -1, n = group.length; ++i < n;) {
+      if (node = group[i]) {
+        subgroups.push(subgroup = selector(node.node));
+        for (var k = -1, o = subgroup.length; ++k < o;) {
+          subgroup[k] = {node: subgroup[k], delay: node.delay, duration: node.duration};
+        }
+      }
+    }
+  }
+
+  return d3_transition(subgroups).ease(this.ease());
+}
+function d3_transition_attr(name, value) {
+  return this.attrTween(name, d3_transitionTween(value));
+}
+
+function d3_transition_attrTween(name, tween) {
+  name = d3.ns.qualify(name);
+
+  function attrTween(d, i) {
+    var f = tween.call(this, d, i, this.getAttribute(name));
+    return f && function(t) {
+      this.setAttribute(name, f(t));
+    };
+  }
+
+  function attrTweenNS(d, i) {
+    var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
+    return f && function(t) {
+      this.setAttributeNS(name.space, name.local, f(t));
+    };
+  }
+
+  return this.tween("attr." + name, name.local ? attrTweenNS : attrTween);
+}
+function d3_transition_style(name, value, priority) {
+  if (arguments.length < 3) priority = null;
+  return this.styleTween(name, d3_transitionTween(value), priority);
+}
+
+function d3_transition_styleTween(name, tween, priority) {
+  if (arguments.length < 3) priority = null;
+  return this.tween("style." + name, function(d, i) {
+    var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
+    return f && function(t) {
+      this.style.setProperty(name, f(t), priority);
+    };
+  });
+}
+function d3_transition_text(value) {
+  return this.tween("text", function(d, i) {
+    this.textContent = typeof value === "function"
+        ? value.call(this, d, i)
+        : value;
+  });
+}
+function d3_transition_remove() {
+  return this.each("end", function() {
+    var t = this.__transition__, p;
+    if ((t.owner === t.active) && (p = this.parentNode)) p.removeChild(this);
+  });
+}
+function d3_transition_delay(value) {
+  var groups = this;
+  return groups.each(typeof value === "function"
+      ? function(d, i, j) { groups[j][i].delay = +value.apply(this, arguments); }
+      : (value = +value, function(d, i, j) { groups[j][i].delay = value; }));
+}
+function d3_transition_duration(value) {
+  var groups = this;
+  return groups.each(typeof value === "function"
+      ? function(d, i, j) { groups[j][i].duration = +value.apply(this, arguments); }
+      : (value = +value, function(d, i, j) { groups[j][i].duration = value; }));
+}
+function d3_transition_each(callback) {
+  for (var j = 0, m = this.length; j < m; j++) {
+    for (var group = this[j], i = 0, n = group.length; i < n; i++) {
+      var node = group[i];
+      if (node) callback.call(node = node.node, node.__data__, i, j);
+    }
+  }
+  return this;
 }
 var d3_timer_queue = null,
     d3_timer_interval, // is an interval (or frame) active?
