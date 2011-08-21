@@ -23,9 +23,26 @@ suite.export(module);
 var suite = vows.describe("transition");
 
 suite.addBatch({
-  "each": require("./transition-test-each"),
+
+  // Subtransitions
+  // select
+  // selectAll
+
+  // Content
   "attr": require("./transition-test-attr"),
-  "style": require("./transition-test-style")
+  "style": require("./transition-test-style"),
+  // text
+  // remove
+
+  // Animation
+  "delay": require("./transition-test-delay"),
+  "duration": require("./transition-test-duration"),
+
+  // Control
+  "each": require("./transition-test-each")
+  // tween
+  // call
+
 });
 
 suite.export(module);
