@@ -31,7 +31,7 @@ suite.addBatch({
   // Content
   "attr": require("./transition-test-attr"),
   "style": require("./transition-test-style"),
-  // text
+  "text": require("./transition-test-text"),
   // remove
 
   // Animation
