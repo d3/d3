@@ -39,9 +39,9 @@ suite.addBatch({
   "duration": require("./transition-test-duration"),
 
   // Control
-  "each": require("./transition-test-each")
+  "each": require("./transition-test-each"),
+  "call": require("./transition-test-call")
   // tween
-  // call
 
 });
 
