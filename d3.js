@@ -1811,9 +1811,10 @@ function d3_transition(groups) {
           node = this,
           delay = groups[j][i].delay - elapsed,
           duration = groups[j][i].duration,
-          lock = node.__transition__ || (node.__transition__ = {active: 0});
+          lock = node.__transition__;
 
-      lock.owner = id;
+      if (!lock) lock = node.__transition__ = {active: 0, owner: id};
+      else if (lock.owner < id) lock.owner = id;
       delay <= 0 ? start(0) : d3.timer(start, delay);
 
       function start(elapsed) {

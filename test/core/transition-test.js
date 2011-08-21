@@ -32,7 +32,7 @@ suite.addBatch({
   "attr": require("./transition-test-attr"),
   "style": require("./transition-test-style"),
   "text": require("./transition-test-text"),
-  // remove
+  "remove": require("./transition-test-remove"),
 
   // Animation
   "delay": require("./transition-test-delay"),

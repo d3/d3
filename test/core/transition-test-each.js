@@ -42,7 +42,7 @@ module.exports = {
     },
 
     "invokes the listener after the specified delay": function(result) {
-      assert.inDelta(result.delay, [150, 150], 17);
+      assert.inDelta(result.delay, [150, 150], 20);
     },
     "invokes each listener exactly once, in order": function(result) {
       assert.deepEqual(result.count, [2, 4]);
@@ -120,7 +120,7 @@ module.exports = {
     },
 
     "invokes the listener after the specified delay": function(result) {
-      assert.inDelta(result.delay, [150, 150], 17);
+      assert.inDelta(result.delay, [150, 150], 20);
     },
     "invokes each listener exactly once, in order": function(result) {
       assert.deepEqual(result.count, [2, 4]);
