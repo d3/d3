@@ -58,16 +58,18 @@ function d3_transition(groups) {
 
         var t = Math.min(1, (elapsed - delay) / duration),
             e = ease(t),
-            i = -1,
             n = tweened.length;
 
-        while (++i < n) tweened[i].call(node, e);
+        while (--n >= 0) {
+          tweened[n].call(node, e);
+        }
 
         if (t === 1) {
+          lock.active = 0;
+          if (lock.owner === id) delete node.__transition__;
           d3_transitionInheritId = id;
           event.end.dispatch.call(node, d, i);
           d3_transitionInheritId = 0;
-          if (lock.owner === id) delete node.__transition__;
           return true;
         }
       }

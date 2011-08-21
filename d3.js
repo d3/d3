@@ -1838,16 +1838,18 @@ function d3_transition(groups) {
 
         var t = Math.min(1, (elapsed - delay) / duration),
             e = ease(t),
-            i = -1,
             n = tweened.length;
 
-        while (++i < n) tweened[i].call(node, e);
+        while (--n >= 0) {
+          tweened[n].call(node, e);
+        }
 
         if (t === 1) {
+          lock.active = 0;
+          if (lock.owner === id) delete node.__transition__;
           d3_transitionInheritId = id;
           event.end.dispatch.call(node, d, i);
           d3_transitionInheritId = 0;
-          if (lock.owner === id) delete node.__transition__;
           return true;
         }
       }
@@ -1979,8 +1981,8 @@ function d3_transition_text(value) {
 }
 function d3_transition_remove() {
   return this.each("end", function() {
-    var t = this.__transition__, p;
-    if ((t.owner === t.active) && (p = this.parentNode)) p.removeChild(this);
+    var p;
+    if (!this.__transition__ && (p = this.parentNode)) p.removeChild(this);
   });
 }
 function d3_transition_delay(value) {
