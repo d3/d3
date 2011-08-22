@@ -25,7 +25,7 @@ var suite = vows.describe("transition");
 suite.addBatch({
 
   // Subtransitions
-  // select
+  "select": require("./transition-test-select"),
   // selectAll
 
   // Content
