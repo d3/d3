@@ -14,7 +14,7 @@ module.exports = {
     var t = s.transition()
         .style("background-color", "green")
         .style("background-color", "red")
-        .style("color", "green", "important")
+        .style("color", function() { return "green"; }, "important")
         .each("end", function() { cb(null, {selection: s, transition: t}); });
   },
   "defines the corresponding style tween": function(result) {
@@ -25,6 +25,9 @@ module.exports = {
     assert.equal(result.selection.style("background-color"), "rgb(255,0,0)");
   },
   "sets a property as a string": function(result) {
+    assert.equal(result.selection.style("background-color"), "rgb(255,0,0)");
+  },
+  "sets a property as a function": function(result) {
     assert.equal(result.selection.style("color"), "rgb(0,128,0)");
   },
   "observes the specified priority": function(result) {

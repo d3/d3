@@ -9,7 +9,8 @@ module.exports = {
         dd = [],
         ii = [],
         tt = [],
-        vv = [];
+        vv = [],
+        fails = 0;
 
     var s = d3.select("body").append("div").selectAll("div")
         .data(["red", "green"])
@@ -17,6 +18,7 @@ module.exports = {
         .style("background-color", function(d) { return d3.rgb(d)+""; });
 
     var t = s.transition()
+        .styleTween("background-color", function() { ++fails; })
         .styleTween("background-color", tween);
 
     function tween(d, i, v) {
@@ -29,7 +31,8 @@ module.exports = {
         data: dd,
         index: ii,
         value: vv,
-        context: tt
+        context: tt,
+        fails: fails
       });
       return i && d3.interpolateHsl(v, "blue");
     }
@@ -43,6 +46,9 @@ module.exports = {
 
   "defines the corresponding style tween": function(result) {
     assert.typeOf(result.transition.tween("style.background-color"), "function");
+  },
+  "the last style tween takes precedence": function(result) {
+    assert.equal(result.fails, 0);
   },
   "invokes the tween function": function(result) {
     assert.deepEqual(result.data, ["red", "green"], "expected data, got {actual}");

@@ -5,16 +5,29 @@ var assert = require("assert");
 
 module.exports = {
   topic: function() {
-    var callback = this.callback,
-        div = d3.select("body").append("div");
+    var cb = this.callback;
 
-    div
+    var s = d3.select("body").append("div")
         .attr("width", 20)
-      .transition()
+        .attr("color", "red");
+
+    var t = s.transition()
+        .attr("width", 100)
         .attr("width", 200)
-        .each("end", function() { callback(null, div); });
+        .attr("color", function() { return "green"; })
+        .each("end", function() { cb(null, {selection: s, transition: t}); });
   },
-  "sets an attribute as a number": function(div) {
-    assert.equal(div.attr("width"), "200");
+  "defines the corresponding attr tween": function(result) {
+    assert.typeOf(result.transition.tween("attr.width"), "function");
+    assert.typeOf(result.transition.tween("attr.color"), "function");
+  },
+  "the last attr operator takes precedence": function(result) {
+    assert.equal(result.selection.attr("width"), "200");
+  },
+  "sets an attribute as a number": function(result) {
+    assert.equal(result.selection.attr("width"), "200");
+  },
+  "sets an attribute as a function": function(result) {
+    assert.equal(result.selection.attr("color"), "rgb(0,128,0)");
   }
 };
