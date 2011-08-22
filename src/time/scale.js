@@ -33,8 +33,8 @@ function d3_time_scale(linear, methods, format) {
     return format;
   };
 
-  scale.clone = function() {
-    return d3_time_scale(linear.clone(), methods, format);
+  scale.copy = function() {
+    return d3_time_scale(linear.copy(), methods, format);
   };
 
   // TOOD expose d3_scale_linear_rebind?
