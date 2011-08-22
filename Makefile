@@ -32,6 +32,8 @@ d3.core.js: \
 	src/core/core.js \
 	src/core/date.js \
 	src/core/object.js \
+	src/core/map.js \
+	src/core/ie.js \
 	src/core/array.js \
 	src/core/functor.js \
 	src/core/rebind.js \

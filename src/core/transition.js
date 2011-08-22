@@ -180,9 +180,9 @@ function d3_transition(groups) {
 
     /** @this {Element} */
     function styleTween(d, i) {
-      var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
+      var f = tween.call(this, d, i, d3_getStylePropertyValue(window.getComputedStyle(this, null), name));;
       return f && function(t) {
-        this.style.setProperty(name, f(t), priority);
+        d3_setStyleProperty(this, name, f(t), priority);
       };
     }
 
