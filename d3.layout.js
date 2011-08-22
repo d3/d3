@@ -269,10 +269,10 @@ d3.layout.force = function() {
         l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
-        t.x -= x;
-        t.y -= y;
-        s.x += x;
-        s.y += y;
+        t.x -= x / t.weight;
+        t.y -= y / t.weight;
+        s.x += x / s.weight;
+        s.y += y / s.weight;
       }
     }
 
@@ -387,6 +387,7 @@ d3.layout.force = function() {
 
     for (i = 0; i < n; ++i) {
       (o = nodes[i]).index = i;
+      o.weight = 0;
     }
 
     distances = [];
@@ -397,6 +398,8 @@ d3.layout.force = function() {
       if (typeof o.target == "number") o.target = nodes[o.target];
       distances[i] = linkDistance.call(this, o, i);
       strengths[i] = linkStrength.call(this, o, i);
+      ++o.source.weight;
+      ++o.target.weight;
     }
 
     for (i = 0; i < n; ++i) {
