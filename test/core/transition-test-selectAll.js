@@ -44,5 +44,12 @@ module.exports = {
   "returns empty if no match is found": function(transition) {
     var t = transition.selectAll("span");
     assert.isEmpty(t[0]);
+  },
+  "inherits transition id": function(transition) {
+    var id = transition.id,
+        t0 = transition.selectAll("span"),
+        t1 = transition.selectAll("span");
+    assert.equal(t0.id, id);
+    assert.equal(t1.id, id);
   }
 };

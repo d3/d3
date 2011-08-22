@@ -1776,15 +1776,16 @@ function d3_selection_transition() {
     }
   }
 
-  return d3_transition(subgroups);
+  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId);
 }
-function d3_transition(groups) {
+function d3_transition(groups, id) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
-  var id = d3_transitionInheritId || ++d3_transitionId,
-      tweens = {},
+  var tweens = {},
       event = d3.dispatch("start", "end"),
       ease = d3_transitionEase;
+
+  groups.id = id;
 
   groups.tween = function(name, tween) {
     if (arguments.length < 2) return tweens[name];
@@ -1914,7 +1915,7 @@ function d3_transition_select(selector) {
     }
   }
 
-  return d3_transition(subgroups).ease(this.ease());
+  return d3_transition(subgroups, this.id).ease(this.ease());
 }
 function d3_transition_selectAll(selector) {
   var subgroups = [],
@@ -1934,7 +1935,7 @@ function d3_transition_selectAll(selector) {
     }
   }
 
-  return d3_transition(subgroups).ease(this.ease());
+  return d3_transition(subgroups, this.id).ease(this.ease());
 }
 function d3_transition_attr(name, value) {
   return this.attrTween(name, d3_transitionTween(value));

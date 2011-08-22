@@ -43,7 +43,8 @@ suite.addBatch({
   // Control
   "each": require("./transition-test-each"),
   "call": require("./transition-test-call"),
-  "tween": require("./transition-test-tween")
+  "tween": require("./transition-test-tween"),
+  "id": require("./transition-test-id")
 
 });
 

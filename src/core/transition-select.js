@@ -18,5 +18,5 @@ function d3_transition_select(selector) {
     }
   }
 
-  return d3_transition(subgroups).ease(this.ease());
+  return d3_transition(subgroups, this.id).ease(this.ease());
 }

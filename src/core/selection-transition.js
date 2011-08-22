@@ -10,5 +10,5 @@ function d3_selection_transition() {
     }
   }
 
-  return d3_transition(subgroups);
+  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId);
 }

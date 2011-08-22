@@ -52,5 +52,12 @@ module.exports = {
   "returns null if no match is found": function(transition) {
     var t = transition.select("span");
     assert.isNull(t[0][0]);
+  },
+  "inherits transition id": function(transition) {
+    var id = transition.id,
+        t0 = transition.select("span"),
+        t1 = transition.select("span");
+    assert.equal(t0.id, id);
+    assert.equal(t1.id, id);
   }
 };

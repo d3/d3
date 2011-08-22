@@ -36,7 +36,8 @@ module.exports = {
           context: context,
           data: data,
           index: index,
-          count: count
+          count: count,
+          id: transition.id
         });
       });
     },
@@ -66,7 +67,7 @@ module.exports = {
     },
 
     "sets an exclusive lock on transitioning nodes": function(result) {
-      var id = result.selection[0][0].__transition__.owner;
+      var id = result.id;
       assert.isTrue(id > 0);
       assert.equal(result.selection[0][0].__transition__.owner, id);
       assert.equal(result.selection[0][1].__transition__.owner, id);
@@ -87,13 +88,7 @@ module.exports = {
           data = [],
           index = [],
           count = [],
-          delay = [],
-          id;
-
-      // A callback to grab the transition id.
-      transition.each("start", function() {
-        id = this.__transition__.active;
-      });
+          delay = [];
 
       // A callback to verify that multiple callbacks are allowed.
       transition.each("end", function() {
@@ -114,7 +109,7 @@ module.exports = {
           data: data,
           index: index,
           count: count,
-          id: id
+          id: transition.id
         });
       });
     },
