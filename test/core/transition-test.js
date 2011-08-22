@@ -30,7 +30,9 @@ suite.addBatch({
 
   // Content
   "attr": require("./transition-test-attr"),
+  "attrTween": require("./transition-test-attrTween"),
   "style": require("./transition-test-style"),
+  "styleTween": require("./transition-test-styleTween"),
   "text": require("./transition-test-text"),
   "remove": require("./transition-test-remove"),
 

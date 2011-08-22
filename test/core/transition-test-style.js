@@ -5,22 +5,30 @@ var assert = require("assert");
 
 module.exports = {
   topic: function() {
-    var callback = this.callback,
-        div = d3.select("body").append("div");
+    var cb = this.callback;
 
-    div
+    var s = d3.select("body").append("div")
         .style("background-color", "white")
-        .style("color", "red")
-      .transition()
+        .style("color", "red");
+
+    var t = s.transition()
+        .style("background-color", "green")
         .style("background-color", "red")
         .style("color", "green", "important")
-        .each("end", function() { callback(null, div); });
+        .each("end", function() { cb(null, {selection: s, transition: t}); });
   },
-  "sets a property as a string": function(div) {
-    assert.equal(div.style("background-color"), "rgb(255,0,0)");
+  "defines the corresponding style tween": function(result) {
+    assert.typeOf(result.transition.tween("style.background-color"), "function");
+    assert.typeOf(result.transition.tween("style.color"), "function");
   },
-  "observes the specified priority": function(div) {
-    var style = div.node().style;
+  "the last style operator takes precedence": function(result) {
+    assert.equal(result.selection.style("background-color"), "rgb(255,0,0)");
+  },
+  "sets a property as a string": function(result) {
+    assert.equal(result.selection.style("color"), "rgb(0,128,0)");
+  },
+  "observes the specified priority": function(result) {
+    var style = result.selection.node().style;
     assert.equal(style.getPropertyPriority("background-color"), "");
     assert.equal(style.getPropertyPriority("color"), "important");
   }
