@@ -26,7 +26,7 @@ suite.addBatch({
 
   // Subtransitions
   "select": require("./transition-test-select"),
-  // selectAll
+  "selectAll": require("./transition-test-selectAll"),
 
   // Content
   "attr": require("./transition-test-attr"),
