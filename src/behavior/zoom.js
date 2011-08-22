@@ -16,7 +16,8 @@ d3.behavior.zoom = function() {
         .on("mousemove.zoom", d3_behavior_zoomMousemove)
         .on("mouseup.zoom", d3_behavior_zoomMouseup)
         .on("touchmove.zoom", d3_behavior_zoomTouchmove)
-        .on("touchend.zoom", d3_behavior_zoomTouchup);
+        .on("touchend.zoom", d3_behavior_zoomTouchup)
+        .on("click.zoom", d3_behavior_zoomClick, true);
   }
 
   // snapshot the local context for subsequent dispatch
@@ -30,6 +31,7 @@ d3.behavior.zoom = function() {
   function mousedown() {
     start.apply(this, arguments);
     d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
+    d3_behavior_zoomMoved = false;
     d3.event.preventDefault();
     window.focus();
   }
@@ -75,7 +77,8 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomXyz,
     d3_behavior_zoomDispatch,
     d3_behavior_zoomTarget,
-    d3_behavior_zoomArguments;
+    d3_behavior_zoomArguments,
+    d3_behavior_zoomStopClick;
 
 function d3_behavior_zoomLocation(point) {
   return [
@@ -154,13 +157,25 @@ function d3_behavior_zoomTouchmove() {
 
 function d3_behavior_zoomMousemove() {
   d3_behavior_zoomZooming = null;
-  if (d3_behavior_zoomPanning) d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
+  if (d3_behavior_zoomPanning) {
+    d3_behavior_zoomMoved = true;
+    d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
+  }
 }
 
 function d3_behavior_zoomMouseup() {
   if (d3_behavior_zoomPanning) {
+    if (d3_behavior_zoomMoved) d3_behavior_zoomStopClick = true;
     d3_behavior_zoomMousemove();
     d3_behavior_zoomPanning = null;
+  }
+}
+
+function d3_behavior_zoomClick() {
+  if (d3_behavior_zoomStopClick) {
+    d3.event.stopPropagation();
+    d3.event.preventDefault();
+    d3_behavior_zoomStopClick = false;
   }
 }
 

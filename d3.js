@@ -1,4 +1,4 @@
-(function(){d3 = {version: "1.29.6"}; // semver
+(function(){d3 = {version: "1.29.7"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -9,14 +9,14 @@ if (!Object.create) Object.create = function(o) {
 };
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
-function d3_arrayCopy(psuedoarray) {
-  var i = -1, n = psuedoarray.length, array = [];
-  while (++i < n) array.push(psuedoarray[i]);
+function d3_arrayCopy(pseudoarray) {
+  var i = -1, n = pseudoarray.length, array = [];
+  while (++i < n) array.push(pseudoarray[i]);
   return array;
 }
 
-function d3_arraySlice(psuedoarray) {
-  return Array.prototype.slice.call(psuedoarray);
+function d3_arraySlice(pseudoarray) {
+  return Array.prototype.slice.call(pseudoarray);
 }
 
 try {
