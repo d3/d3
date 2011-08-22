@@ -262,7 +262,7 @@ d3.layout.force = function() {
 
   function dragdown(d, i) {
     var m = d3_layout_forcePoint(this.parentNode);
-    (d3_layout_forceDragNode = d).fixed = true;
+    (d3_layout_forceDragNode = d).fixed |= 2;
     d3_layout_forceDragMoved = false;
     d3_layout_forceDragElement = this;
     d3_layout_forceDragForce = force;
@@ -281,13 +281,11 @@ var d3_layout_forceDragForce,
     d3_layout_forceDragElement;
 
 function d3_layout_forceDragOver(d) {
-  d.fixed = true;
+  d.fixed |= 2;
 }
 
 function d3_layout_forceDragOut(d) {
-  if (d !== d3_layout_forceDragNode) {
-    d.fixed = false;
-  }
+  if (d !== d3_layout_forceDragNode) d.fixed &= 1;
 }
 
 function d3_layout_forcePoint(container) {
@@ -302,7 +300,7 @@ function d3_layout_forceDragMove() {
 
   // O NOES! The drag element was removed from the DOM.
   if (!parent) {
-    d3_layout_forceDragNode.fixed = false;
+    d3_layout_forceDragNode.fixed &= 1;
     d3_layout_forceDragOffset = d3_layout_forceDragNode = d3_layout_forceDragElement = null;
     return;
   }
@@ -328,7 +326,7 @@ function d3_layout_forceDragUp() {
     if (d3.event.type === "mouseup") d3_layout_forceDragMove();
   }
 
-  d3_layout_forceDragNode.fixed = false;
+  d3_layout_forceDragNode.fixed &= 1;
   d3_layout_forceDragForce =
   d3_layout_forceDragOffset =
   d3_layout_forceDragNode =
