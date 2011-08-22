@@ -25,7 +25,7 @@ suite.addBatch({
     },
     "selection prototype can be extended": function(selection) {
       d3.selection.prototype.foo = function(v) { return this.attr("foo", v); };
-      selection.select("body").foo(42)
+      selection.select("body").foo(42);
       assert.equal(document.body.getAttribute("foo"), "42");
       delete d3.selection.prototype.foo;
     }

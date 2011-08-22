@@ -24,7 +24,7 @@ suite.addBatch({
     "transition prototype can be extended": function(transition) {
       var vv = [];
       d3.transition.prototype.foo = function(v) { vv.push(v); return this; };
-      transition.select("body").foo(42)
+      transition.select("body").foo(42);
       assert.deepEqual(vv, [42]);
       delete d3.transition.prototype.foo;
     }
