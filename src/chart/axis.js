@@ -3,8 +3,8 @@ d3.chart.axis = function() {
       tickSize = 6,
       tickPadding = 3;
 
-  function axis(g) {
-    g.each(function(d, i) {
+  function axis(selection) {
+    selection.each(function(d, i, j) {
       var g = d3.select(this);
 
       // Scale data.
@@ -12,12 +12,23 @@ d3.chart.axis = function() {
           ticks = scale.ticks(10),
           tickFormat = scale.tickFormat(10);
 
+      // If the transition is interrupted, then really we'd prefer to know the
+      // current state of the scale rather than the previous state (at the end
+      // of the transition). We might be able to do that by using a custom tween
+      // that stores the parameter t and an interpolated scale, but, meh.
+
+      // Stash the new scale and grab the old scale.
+      var scale0 = this.__chart__ || scale;
+      this.__chart__ = scale.copy();
+
       // Ticks.
       var tick = g.selectAll("g.tick")
-          .data(ticks);
+          .data(ticks, String);
 
       var tickEnter = tick.enter().append("svg:g")
-          .attr("class", "tick");
+          .attr("class", "tick")
+          .attr("transform", function(d) { return "translate(" + scale0(d) + ",0)"; })
+          .style("opacity", 1e-6);
 
       tickEnter.append("svg:line");
 
@@ -25,15 +36,19 @@ d3.chart.axis = function() {
           .attr("dy", ".71em")
           .attr("text-anchor", "middle");
 
-      tick.exit().remove();
+      transition(tick.exit())
+          .attr("transform", function(d) { return "translate(" + scale(d) + ",0)"; })
+          .style("opacity", 1e-6)
+          .remove();
 
-      tick
+      var tickUpdate = transition(tick)
+          .style("opacity", 1)
           .attr("transform", function(d) { return "translate(" + scale(d) + ",0)"; })
 
-      tick.select("line")
+      tickUpdate.select("line")
           .attr("y2", tickSize);
 
-      tick.select("text")
+      tickUpdate.select("text")
           .attr("y", Math.max(tickSize, 0) + tickPadding)
           .text(tickFormat);
 
@@ -44,8 +59,15 @@ d3.chart.axis = function() {
       path.enter().append("svg:path")
           .attr("class", "domain");
 
-      path
+      transition(path)
           .attr("d", "M" + range[0] + "," + tickSize + "V0H" + range[1] + "V" + tickSize);
+
+      function transition(o) {
+        return selection.delay ? o.transition()
+            .delay(selection[j][i].delay)
+            .duration(selection[j][i].duration)
+            .ease(selection.ease()) : o;
+      }
     });
   }
 

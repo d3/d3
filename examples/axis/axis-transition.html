@@ -117,9 +117,10 @@ d3.csv("../data/stocks.csv", function(data) {
         i = Math.floor(Math.random() * n / 2),
         j = i + Math.floor(Math.random() * n / 2) + 1;
     x.domain([values[i].date, values[j].date]);
-    svg.select(".x.axis").call(xAxis);
-    svg.select(".area").attr("d", area(values));
-    svg.select(".line").attr("d", line(values));
+    var t = svg.transition().duration(750);
+    t.select(".x.axis").call(xAxis);
+    t.select(".area").attr("d", area(values));
+    t.select(".line").attr("d", line(values));
   });
 });
 
