@@ -1,4 +1,4 @@
-function d3_selection_style(name, value, priority) {
+d3_selectionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = "";
 
   // If no value is specified, return the first value.
@@ -23,4 +23,4 @@ function d3_selection_style(name, value, priority) {
   return this.each(value == null
       ? styleNull : (typeof value === "function"
       ? styleFunction : styleConstant));
-}
+};

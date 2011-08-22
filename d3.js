@@ -1214,40 +1214,6 @@ function d3_selection(groups) {
   return groups;
 }
 
-var d3_selectionPrototype = [];
-
-// Subselection
-d3_selectionPrototype.select = d3_selection_select;
-d3_selectionPrototype.selectAll = d3_selection_selectAll;
-
-// Content
-d3_selectionPrototype.attr = d3_selection_attr;
-d3_selectionPrototype.classed = d3_selection_classed;
-d3_selectionPrototype.style = d3_selection_style;
-d3_selectionPrototype.property = d3_selection_property;
-d3_selectionPrototype.text = d3_selection_text;
-d3_selectionPrototype.html = d3_selection_html;
-d3_selectionPrototype.append = d3_selection_append;
-d3_selectionPrototype.insert = d3_selection_insert;
-d3_selectionPrototype.remove = d3_selection_remove;
-
-// Data
-d3_selectionPrototype.data = d3_selection_data;
-d3_selectionPrototype.filter = d3_selection_filter;
-d3_selectionPrototype.map = d3_selection_map;
-d3_selectionPrototype.sort = d3_selection_sort;
-
-// Animation & Interaction
-d3_selectionPrototype.on = d3_selection_on;
-d3_selectionPrototype.transition = d3_selection_transition;
-
-// Control
-d3_selectionPrototype.each = d3_selection_each;
-d3_selectionPrototype.call = d3_selection_call;
-d3_selectionPrototype.empty = d3_selection_empty;
-d3_selectionPrototype.node = d3_selection_node;
-
-// Default to using the W3C Selectors API.
 var d3_select = function(s, n) { return n.querySelector(s); },
     d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
 
@@ -1257,9 +1223,17 @@ if (typeof Sizzle === "function") {
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
 }
 
-var d3_selectionRoot = d3_selection([[document]]);
+var d3_selectionPrototype = [],
+    d3_selectionRoot = d3_selection([[document]]);
+
 d3_selectionRoot[0].parentNode = document.documentElement;
-function d3_selection_select(selector) {
+
+d3.selection = function() {
+  return d3_selectionRoot;
+};
+
+d3.selection.prototype = d3_selectionPrototype;
+d3_selectionPrototype.select = function(selector) {
   var subgroups = [],
       subgroup,
       subnode,
@@ -1282,14 +1256,14 @@ function d3_selection_select(selector) {
   }
 
   return d3_selection(subgroups);
-}
+};
 
 function d3_selection_selector(selector) {
   return function(node) {
     return d3_select(selector, node);
   };
 }
-function d3_selection_selectAll(selector) {
+d3_selectionPrototype.selectAll = function(selector) {
   var subgroups = [],
       subgroup,
       node;
@@ -1306,14 +1280,14 @@ function d3_selection_selectAll(selector) {
   }
 
   return d3_selection(subgroups);
-}
+};
 
 function d3_selection_selectorAll(selector) {
   return function(node) {
     return d3_selectAll(selector, node);
   };
 }
-function d3_selection_attr(name, value) {
+d3_selectionPrototype.attr = function(name, value) {
   name = d3.ns.qualify(name);
 
   // If no value is specified, return the first value.
@@ -1356,8 +1330,8 @@ function d3_selection_attr(name, value) {
       ? (name.local ? attrNullNS : attrNull) : (typeof value === "function"
       ? (name.local ? attrFunctionNS : attrFunction)
       : (name.local ? attrConstantNS : attrConstant)));
-}
-function d3_selection_classed(name, value) {
+};
+d3_selectionPrototype.classed = function(name, value) {
   var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
 
   // If no value is specified, return the first value.
@@ -1402,8 +1376,8 @@ function d3_selection_classed(name, value) {
       ? classedFunction : value
       ? classedAdd
       : classedRemove);
-}
-function d3_selection_style(name, value, priority) {
+};
+d3_selectionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = "";
 
   // If no value is specified, return the first value.
@@ -1428,8 +1402,8 @@ function d3_selection_style(name, value, priority) {
   return this.each(value == null
       ? styleNull : (typeof value === "function"
       ? styleFunction : styleConstant));
-}
-function d3_selection_property(name, value) {
+};
+d3_selectionPrototype.property = function(name, value) {
 
   // If no value is specified, return the first value.
   if (arguments.length < 2) return this.node()[name];
@@ -1451,22 +1425,22 @@ function d3_selection_property(name, value) {
   return this.each(value == null
       ? propertyNull : (typeof value === "function"
       ? propertyFunction : propertyConstant));
-}
-function d3_selection_text(value) {
+};
+d3_selectionPrototype.text = function(value) {
   return arguments.length < 1 ? this.node().textContent
       : (this.each(typeof value === "function"
       ? function() { this.textContent = value.apply(this, arguments); }
       : function() { this.textContent = value; }));
-}
-function d3_selection_html(value) {
+};
+d3_selectionPrototype.html = function(value) {
   return arguments.length < 1 ? this.node().innerHTML
       : (this.each(typeof value === "function"
       ? function() { this.innerHTML = value.apply(this, arguments); }
       : function() { this.innerHTML = value; }));
-}
+};
 // TODO append(node)?
 // TODO append(function)?
-function d3_selection_append(name) {
+d3_selectionPrototype.append = function(name) {
   name = d3.ns.qualify(name);
 
   function append(node) {
@@ -1478,11 +1452,11 @@ function d3_selection_append(name) {
   }
 
   return this.select(name.local ? appendNS : append);
-}
+};
 // TODO insert(node, function)?
 // TODO insert(function, string)?
 // TODO insert(function, function)?
-function d3_selection_insert(name, before) {
+d3_selectionPrototype.insert = function(name, before) {
   name = d3.ns.qualify(name);
 
   function insert(node) {
@@ -1498,18 +1472,18 @@ function d3_selection_insert(name, before) {
   }
 
   return this.select(name.local ? insertNS : insert);
-}
+};
 // TODO remove(selector)?
 // TODO remove(node)?
 // TODO remove(function)?
-function d3_selection_remove() {
+d3_selectionPrototype.remove = function() {
   return this.each(function() {
     var parent = this.parentNode;
     if (parent) parent.removeChild(this);
   });
-}
+};
 // TODO data(null) for clearing data?
-function d3_selection_data(data, join) {
+d3_selectionPrototype.data = function(data, join) {
   var enter = [],
       update = [],
       exit = [];
@@ -1613,7 +1587,7 @@ function d3_selection_data(data, join) {
   selection.enter = function() { return d3_selection_enter(enter); };
   selection.exit = function() { return d3_selection(exit); };
   return selection;
-}
+};
 
 function d3_selection_dataNode(data) {
   return {__data__: data};
@@ -1625,16 +1599,10 @@ function d3_selection_enter(selection) {
 
 var d3_selection_enterPrototype = [];
 
-// Subselection
-d3_selection_enterPrototype.select = d3_selection_enter_select;
-
-// Content
-d3_selection_enterPrototype.append = d3_selection_append;
-d3_selection_enterPrototype.insert = d3_selection_insert;
-
-// Control
-d3_selection_enterPrototype.empty = d3_selection_empty;
-function d3_selection_enter_select(selector) {
+d3_selection_enterPrototype.append = d3_selectionPrototype.append;
+d3_selection_enterPrototype.insert = d3_selectionPrototype.insert;
+d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
+d3_selection_enterPrototype.select = function(selector) {
   var subgroups = [],
       subgroup,
       subnode,
@@ -1657,9 +1625,9 @@ function d3_selection_enter_select(selector) {
   }
 
   return d3_selection(subgroups);
-}
+};
 // TODO preserve null elements to maintain index?
-function d3_selection_filter(filter) {
+d3_selectionPrototype.filter = function(filter) {
   var subgroups = [],
       subgroup,
       group,
@@ -1676,13 +1644,13 @@ function d3_selection_filter(filter) {
   }
 
   return d3_selection(subgroups);
-}
-function d3_selection_map(map) {
+};
+d3_selectionPrototype.map = function(map) {
   return this.each(function() {
     this.__data__ = map.apply(this, arguments);
   });
-}
-function d3_selection_sort(comparator) {
+};
+d3_selectionPrototype.sort = function(comparator) {
   comparator = d3_selection_sortComparator.apply(this, arguments);
   for (var j = 0, m = this.length; j < m; j++) {
     for (var group = this[j].sort(comparator), i = 1, n = group.length, prev = group[0]; i < n; i++) {
@@ -1694,7 +1662,7 @@ function d3_selection_sort(comparator) {
     }
   }
   return this;
-}
+};
 
 function d3_selection_sortComparator(comparator) {
   if (!arguments.length) comparator = d3.ascending;
@@ -1704,7 +1672,7 @@ function d3_selection_sortComparator(comparator) {
 }
 // type can be namespaced, e.g., "click.foo"
 // listener can be null for removal
-function d3_selection_on(type, listener, capture) {
+d3_selectionPrototype.on = function(type, listener, capture) {
   if (arguments.length < 3) capture = false;
 
   // parse the type specifier
@@ -1729,8 +1697,8 @@ function d3_selection_on(type, listener, capture) {
       }
     }
   });
-}
-function d3_selection_each(callback) {
+};
+d3_selectionPrototype.each = function(callback) {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
       var node = group[i];
@@ -1738,7 +1706,7 @@ function d3_selection_each(callback) {
     }
   }
   return this;
-}
+};
 //
 // Note: assigning to the arguments array simultaneously changes the value of
 // the corresponding argument!
@@ -1748,14 +1716,14 @@ function d3_selection_each(callback) {
 // version bump due to backwards compatibility, so I'm not changing it right
 // away.
 //
-function d3_selection_call(callback) {
+d3_selectionPrototype.call = function(callback) {
   callback.apply(this, (arguments[0] = this, arguments));
   return this;
-}
-function d3_selection_empty() {
+};
+d3_selectionPrototype.empty = function() {
   return !this.node();
-}
-function d3_selection_node(callback) {
+};
+d3_selectionPrototype.node = function(callback) {
   for (var j = 0, m = this.length; j < m; j++) {
     for (var group = this[j], i = 0, n = group.length; i < n; i++) {
       var node = group[i];
@@ -1763,8 +1731,8 @@ function d3_selection_node(callback) {
     }
   }
   return null;
-}
-function d3_selection_transition() {
+};
+d3_selectionPrototype.transition = function() {
   var subgroups = [],
       subgroup,
       node;
@@ -1777,7 +1745,7 @@ function d3_selection_transition() {
   }
 
   return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId);
-}
+};
 function d3_transition(groups, id) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
@@ -1873,29 +1841,14 @@ var d3_transitionPrototype = [],
     d3_transitionInheritId = 0,
     d3_transitionEase = d3.ease("cubic-in-out");
 
-// Subtransitions
-d3_transitionPrototype.select = d3_transition_select;
-d3_transitionPrototype.selectAll = d3_transition_selectAll;
-
-// Content
-d3_transitionPrototype.attr = d3_transition_attr;
-d3_transitionPrototype.attrTween = d3_transition_attrTween;
-d3_transitionPrototype.style = d3_transition_style;
-d3_transitionPrototype.styleTween = d3_transition_styleTween;
-d3_transitionPrototype.text = d3_transition_text;
-d3_transitionPrototype.remove = d3_transition_remove;
-
-// Animation
-d3_transitionPrototype.delay = d3_transition_delay;
-d3_transitionPrototype.duration = d3_transition_duration;
-
-// Control
-d3_transitionPrototype.call = d3_selection_call;
+d3_transitionPrototype.call = d3_selectionPrototype.call;
 
 d3.transition = function() {
   return d3_selectionRoot.transition();
 };
-function d3_transition_select(selector) {
+
+d3.transition.prototype = d3_transitionPrototype;
+d3_transitionPrototype.select = function(selector) {
   var subgroups = [],
       subgroup,
       subnode,
@@ -1916,8 +1869,8 @@ function d3_transition_select(selector) {
   }
 
   return d3_transition(subgroups, this.id).ease(this.ease());
-}
-function d3_transition_selectAll(selector) {
+};
+d3_transitionPrototype.selectAll = function(selector) {
   var subgroups = [],
       subgroup,
       node;
@@ -1936,12 +1889,12 @@ function d3_transition_selectAll(selector) {
   }
 
   return d3_transition(subgroups, this.id).ease(this.ease());
-}
-function d3_transition_attr(name, value) {
+};
+d3_transitionPrototype.attr = function(name, value) {
   return this.attrTween(name, d3_transitionTween(value));
-}
+};
 
-function d3_transition_attrTween(name, tween) {
+d3_transitionPrototype.attrTween = function(name, tween) {
   name = d3.ns.qualify(name);
 
   function attrTween(d, i) {
@@ -1959,13 +1912,13 @@ function d3_transition_attrTween(name, tween) {
   }
 
   return this.tween("attr." + name, name.local ? attrTweenNS : attrTween);
-}
-function d3_transition_style(name, value, priority) {
+};
+d3_transitionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = null;
   return this.styleTween(name, d3_transitionTween(value), priority);
-}
+};
 
-function d3_transition_styleTween(name, tween, priority) {
+d3_transitionPrototype.styleTween = function(name, tween, priority) {
   if (arguments.length < 3) priority = null;
   return this.tween("style." + name, function(d, i) {
     var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
@@ -1973,32 +1926,32 @@ function d3_transition_styleTween(name, tween, priority) {
       this.style.setProperty(name, f(t), priority);
     };
   });
-}
-function d3_transition_text(value) {
+};
+d3_transitionPrototype.text = function(value) {
   return this.tween("text", function(d, i) {
     this.textContent = typeof value === "function"
         ? value.call(this, d, i)
         : value;
   });
-}
-function d3_transition_remove() {
+};
+d3_transitionPrototype.remove = function() {
   return this.each("end", function() {
     var p;
     if (!this.__transition__ && (p = this.parentNode)) p.removeChild(this);
   });
-}
-function d3_transition_delay(value) {
+};
+d3_transitionPrototype.delay = function(value) {
   var groups = this;
   return groups.each(typeof value === "function"
       ? function(d, i, j) { groups[j][i].delay = +value.apply(this, arguments); }
       : (value = +value, function(d, i, j) { groups[j][i].delay = value; }));
-}
-function d3_transition_duration(value) {
+};
+d3_transitionPrototype.duration = function(value) {
   var groups = this;
   return groups.each(typeof value === "function"
       ? function(d, i, j) { groups[j][i].duration = +value.apply(this, arguments); }
       : (value = +value, function(d, i, j) { groups[j][i].duration = value; }));
-}
+};
 function d3_transition_each(callback) {
   for (var j = 0, m = this.length; j < m; j++) {
     for (var group = this[j], i = 0, n = group.length; i < n; i++) {

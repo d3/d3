@@ -1,6 +1,6 @@
 // type can be namespaced, e.g., "click.foo"
 // listener can be null for removal
-function d3_selection_on(type, listener, capture) {
+d3_selectionPrototype.on = function(type, listener, capture) {
   if (arguments.length < 3) capture = false;
 
   // parse the type specifier
@@ -25,4 +25,4 @@ function d3_selection_on(type, listener, capture) {
       }
     }
   });
-}
+};

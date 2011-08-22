@@ -1,4 +1,4 @@
-function d3_selection_selectAll(selector) {
+d3_selectionPrototype.selectAll = function(selector) {
   var subgroups = [],
       subgroup,
       node;
@@ -15,7 +15,7 @@ function d3_selection_selectAll(selector) {
   }
 
   return d3_selection(subgroups);
-}
+};
 
 function d3_selection_selectorAll(selector) {
   return function(node) {

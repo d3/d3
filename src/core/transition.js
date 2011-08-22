@@ -93,25 +93,10 @@ var d3_transitionPrototype = [],
     d3_transitionInheritId = 0,
     d3_transitionEase = d3.ease("cubic-in-out");
 
-// Subtransitions
-d3_transitionPrototype.select = d3_transition_select;
-d3_transitionPrototype.selectAll = d3_transition_selectAll;
-
-// Content
-d3_transitionPrototype.attr = d3_transition_attr;
-d3_transitionPrototype.attrTween = d3_transition_attrTween;
-d3_transitionPrototype.style = d3_transition_style;
-d3_transitionPrototype.styleTween = d3_transition_styleTween;
-d3_transitionPrototype.text = d3_transition_text;
-d3_transitionPrototype.remove = d3_transition_remove;
-
-// Animation
-d3_transitionPrototype.delay = d3_transition_delay;
-d3_transitionPrototype.duration = d3_transition_duration;
-
-// Control
-d3_transitionPrototype.call = d3_selection_call;
+d3_transitionPrototype.call = d3_selectionPrototype.call;
 
 d3.transition = function() {
   return d3_selectionRoot.transition();
 };
+
+d3.transition.prototype = d3_transitionPrototype;

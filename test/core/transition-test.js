@@ -9,11 +9,24 @@ var suite = vows.describe("d3.transition");
 suite.addBatch({
   "transition": {
     topic: function() {
-      return d3.transition;
+      return d3.transition();
     },
     "selects the document": function(transition) {
-      var t = transition();
-      assert.domEqual(t[0][0].node, document);
+      assert.domEqual(transition[0][0].node, document);
+    },
+    "is an instanceof d3.transition": function(transition) {
+      assert.isTrue(transition instanceof d3.transition);
+    },
+    "subselections are also instanceof d3.transition": function(transition) {
+      assert.isTrue(transition.select("body") instanceof d3.transition);
+      assert.isTrue(transition.selectAll("body") instanceof d3.transition);
+    },
+    "transition prototype can be extended": function(transition) {
+      var vv = [];
+      d3.transition.prototype.foo = function(v) { vv.push(v); return this; };
+      transition.select("body").foo(42)
+      assert.deepEqual(vv, [42]);
+      delete d3.transition.prototype.foo;
     }
   }
 });

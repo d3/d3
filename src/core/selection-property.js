@@ -1,4 +1,4 @@
-function d3_selection_property(name, value) {
+d3_selectionPrototype.property = function(name, value) {
 
   // If no value is specified, return the first value.
   if (arguments.length < 2) return this.node()[name];
@@ -20,4 +20,4 @@ function d3_selection_property(name, value) {
   return this.each(value == null
       ? propertyNull : (typeof value === "function"
       ? propertyFunction : propertyConstant));
-}
+};

@@ -1,6 +1,6 @@
 // TODO append(node)?
 // TODO append(function)?
-function d3_selection_append(name) {
+d3_selectionPrototype.append = function(name) {
   name = d3.ns.qualify(name);
 
   function append(node) {
@@ -12,4 +12,4 @@ function d3_selection_append(name) {
   }
 
   return this.select(name.local ? appendNS : append);
-}
+};

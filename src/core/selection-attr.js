@@ -1,4 +1,4 @@
-function d3_selection_attr(name, value) {
+d3_selectionPrototype.attr = function(name, value) {
   name = d3.ns.qualify(name);
 
   // If no value is specified, return the first value.
@@ -41,4 +41,4 @@ function d3_selection_attr(name, value) {
       ? (name.local ? attrNullNS : attrNull) : (typeof value === "function"
       ? (name.local ? attrFunctionNS : attrFunction)
       : (name.local ? attrConstantNS : attrConstant)));
-}
+};

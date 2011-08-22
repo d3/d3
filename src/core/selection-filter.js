@@ -1,5 +1,5 @@
 // TODO preserve null elements to maintain index?
-function d3_selection_filter(filter) {
+d3_selectionPrototype.filter = function(filter) {
   var subgroups = [],
       subgroup,
       group,
@@ -16,4 +16,4 @@ function d3_selection_filter(filter) {
   }
 
   return d3_selection(subgroups);
-}
+};

@@ -1,5 +1,5 @@
 // TODO data(null) for clearing data?
-function d3_selection_data(data, join) {
+d3_selectionPrototype.data = function(data, join) {
   var enter = [],
       update = [],
       exit = [];
@@ -103,7 +103,7 @@ function d3_selection_data(data, join) {
   selection.enter = function() { return d3_selection_enter(enter); };
   selection.exit = function() { return d3_selection(exit); };
   return selection;
-}
+};
 
 function d3_selection_dataNode(data) {
   return {__data__: data};

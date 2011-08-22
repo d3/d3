@@ -1,4 +1,4 @@
-function d3_transition_select(selector) {
+d3_transitionPrototype.select = function(selector) {
   var subgroups = [],
       subgroup,
       subnode,
@@ -19,4 +19,4 @@ function d3_transition_select(selector) {
   }
 
   return d3_transition(subgroups, this.id).ease(this.ease());
-}
+};

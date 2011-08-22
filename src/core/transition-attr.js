@@ -1,8 +1,8 @@
-function d3_transition_attr(name, value) {
+d3_transitionPrototype.attr = function(name, value) {
   return this.attrTween(name, d3_transitionTween(value));
-}
+};
 
-function d3_transition_attrTween(name, tween) {
+d3_transitionPrototype.attrTween = function(name, tween) {
   name = d3.ns.qualify(name);
 
   function attrTween(d, i) {
@@ -20,4 +20,4 @@ function d3_transition_attrTween(name, tween) {
   }
 
   return this.tween("attr." + name, name.local ? attrTweenNS : attrTween);
-}
+};

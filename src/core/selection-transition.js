@@ -1,4 +1,4 @@
-function d3_selection_transition() {
+d3_selectionPrototype.transition = function() {
   var subgroups = [],
       subgroup,
       node;
@@ -11,4 +11,4 @@ function d3_selection_transition() {
   }
 
   return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId);
-}
+};

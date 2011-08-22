@@ -1,4 +1,4 @@
-function d3_selection_classed(name, value) {
+d3_selectionPrototype.classed = function(name, value) {
   var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
 
   // If no value is specified, return the first value.
@@ -43,4 +43,4 @@ function d3_selection_classed(name, value) {
       ? classedFunction : value
       ? classedAdd
       : classedRemove);
-}
+};

@@ -1,4 +1,4 @@
-function d3_transition_selectAll(selector) {
+d3_transitionPrototype.selectAll = function(selector) {
   var subgroups = [],
       subgroup,
       node;
@@ -17,4 +17,4 @@ function d3_transition_selectAll(selector) {
   }
 
   return d3_transition(subgroups, this.id).ease(this.ease());
-}
+};
