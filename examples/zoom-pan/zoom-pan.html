@@ -47,6 +47,13 @@ svg.append("svg:rect")
     .attr("stroke", stroke)
     .attr("fill", "none");
 
+svg.append("svg:a")
+    .attr("xlink:href", "http://mbostock.github.com/d3/")
+  .append("svg:text")
+    .style("font-size", "3em")
+    .attr("transform", "translate(110.5, 110.5)")
+    .text("D3.js");
+
 redraw();
 
 function redraw() {
