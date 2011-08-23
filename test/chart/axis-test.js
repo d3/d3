@@ -261,13 +261,13 @@ suite.addBatch({
       "updates the domain path": function(axis) {
         var a = axis(),
             g = d3.select("body").html("").append("svg:g").call(a);
-        a.scale().range([1, 2]);
+        a.scale().domain([0, 2]).range([1, 2]);
         a.tickSize(3);
         g.call(a);
         var path = g.selectAll("path.domain");
         assert.equal(path[0].length, 1);
         assert.equal(path.attr("d"), "M1,3V0H2V3");
-        assert.isNull(path.node().nextSibling);
+        assert.domEqual(path.node().nextSibling, null);
       },
       "enters, exits and updates tick marks": function(axis) {
         var a = axis(),
@@ -287,7 +287,7 @@ suite.addBatch({
           assert.equal(t.select("text").text(), tickFormat(ticks[i]));
         });
       }
-    },
+    }
   }
 });
 

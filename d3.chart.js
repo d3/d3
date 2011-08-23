@@ -15,7 +15,7 @@ d3.chart.axis = function() {
       var ticks = scale.ticks.apply(scale, tickArguments_),
           tickFormat = tickFormat_ || scale.tickFormat.apply(scale, tickArguments_),
           tick = g.selectAll("g.tick").data(ticks, String),
-          tickEnter = tick.enter().append("svg:g").attr("class", "tick").style("opacity", 1e-6),
+          tickEnter = tick.enter().insert("svg:g", "path").attr("class", "tick").style("opacity", 1e-6),
           tickExit = transition(tick.exit()).style("opacity", 1e-6).remove(),
           tickUpdate = transition(tick).style("opacity", 1),
           tickTransform;
