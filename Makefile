@@ -19,7 +19,8 @@ all: \
 	d3.geom.js \
 	d3.geom.min.js \
 	d3.time.js \
-	d3.time.min.js
+	d3.time.min.js \
+	package.json
 
 .INTERMEDIATE d3.js: \
 	src/start.js \
@@ -200,6 +201,9 @@ d3.js d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
+
+package.json: d3.js
+	sed -e s/{version}/`node -e 'require("./test/env"); require("./d3"); d3.version'`/ $@.template > $@
 
 clean:
 	rm -f d3*.js
