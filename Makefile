@@ -19,7 +19,8 @@ all: \
 	d3.geom.js \
 	d3.geom.min.js \
 	d3.time.js \
-	d3.time.min.js
+	d3.time.min.js \
+	d3.all.min.js
 
 .INTERMEDIATE d3.js: \
 	src/start.js \
@@ -195,11 +196,16 @@ test: all
 %.min.js: %.js Makefile
 	@rm -f $@
 	$(JS_COMPILER) < $< > $@
+	echo ";" >> $@
 
 d3.js d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
+
+d3.all.min.js: Makefile
+	@rm -f $@
+	cat d3*.min.js > $@
 
 clean:
 	rm -f d3*.js
