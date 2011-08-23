@@ -6,8 +6,6 @@ JS_TESTER = ./node_modules/vows/bin/vows
 all: \
 	d3.js \
 	d3.min.js \
-	d3.behavior.js \
-	d3.behavior.min.js \
 	d3.chart.js \
 	d3.chart.min.js \
 	d3.layout.js \
@@ -26,6 +24,7 @@ all: \
 	d3.core.js \
 	d3.scale.js \
 	d3.svg.js \
+	d3.behavior.js \
 	src/end.js
 
 d3.core.js: \
@@ -53,7 +52,6 @@ d3.core.js: \
 	src/core/merge.js \
 	src/core/split.js \
 	src/core/collapse.js \
-	src/core/call.js \
 	src/core/range.js \
 	src/core/requote.js \
 	src/core/round.js \
@@ -71,10 +69,45 @@ d3.core.js: \
 	src/core/uninterpolate.js \
 	src/core/rgb.js \
 	src/core/hsl.js \
+	src/core/select.js \
+	src/core/selectAll.js \
 	src/core/selection.js \
+	src/core/selection-select.js \
+	src/core/selection-selectAll.js \
+	src/core/selection-attr.js \
+	src/core/selection-classed.js \
+	src/core/selection-style.js \
+	src/core/selection-property.js \
+	src/core/selection-text.js \
+	src/core/selection-html.js \
+	src/core/selection-append.js \
+	src/core/selection-insert.js \
+	src/core/selection-remove.js \
+	src/core/selection-data.js \
+	src/core/selection-enter.js \
+	src/core/selection-enter-select.js \
+	src/core/selection-filter.js \
+	src/core/selection-map.js \
+	src/core/selection-sort.js \
+	src/core/selection-on.js \
+	src/core/selection-each.js \
+	src/core/selection-call.js \
+	src/core/selection-empty.js \
+	src/core/selection-node.js \
+	src/core/selection-transition.js \
 	src/core/transition.js \
+	src/core/transition-select.js \
+	src/core/transition-selectAll.js \
+	src/core/transition-attr.js \
+	src/core/transition-style.js \
+	src/core/transition-text.js \
+	src/core/transition-remove.js \
+	src/core/transition-delay.js \
+	src/core/transition-duration.js \
+	src/core/transition-each.js \
 	src/core/timer.js \
 	src/core/noop.js
+
 
 d3.scale.js: \
 	src/scale/scale.js \
@@ -102,13 +135,13 @@ d3.svg.js: \
 	src/svg/diagonal-radial.js \
 	src/svg/mouse.js \
 	src/svg/touches.js \
-	src/svg/symbol.js
+	src/svg/symbol.js \
+	src/svg/axis.js
 
 d3.behavior.js: \
-	src/start.js \
 	src/behavior/behavior.js \
-	src/behavior/zoom.js \
-	src/end.js
+	src/behavior/drag.js \
+	src/behavior/zoom.js
 
 d3.chart.js: \
 	src/start.js \

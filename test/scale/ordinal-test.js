@@ -11,13 +11,67 @@ suite.addBatch({
     topic: function() {
       return d3.scale.ordinal;
     },
-    "has an empty domain by default": function(ordinal) {
-      assert.isEmpty(ordinal().domain());
+
+    "domain": {
+      "defaults to the empty array": function(ordinal) {
+        assert.isEmpty(ordinal().domain());
+      },
+      "new input values are added to the domain": function(ordinal) {
+        var x = ordinal().range(["foo", "bar"]);
+        assert.equal(x(0), "foo");
+        assert.deepEqual(x.domain(), ["0"]);
+        assert.equal(x(1), "bar");
+        assert.deepEqual(x.domain(), ["0", "1"]);
+        assert.equal(x(0), "foo");
+        assert.deepEqual(x.domain(), ["0", "1"]);
+      },
+      "setting the domain forgets previous values": function(ordinal) {
+        var x = ordinal().range(["foo", "bar"]);
+        assert.equal(x(1), "foo");
+        assert.equal(x(0), "bar");
+        assert.deepEqual(x.domain(), ["0", "1"]);
+        x.domain(["0", "1"]);
+        assert.equal(x(0), "foo"); // it changed!
+        assert.equal(x(1), "bar");
+        assert.deepEqual(x.domain(), ["0", "1"]);
+      },
+      "coerces domain values to strings": function(ordinal) {
+        var x = ordinal().domain([0, 1]);
+        assert.deepEqual(x.domain(), ["0", "1"]);
+        assert.typeOf(x.domain()[0], "string");
+        assert.typeOf(x.domain()[1], "string");
+      }
     },
-    "has an empty range by default": function(ordinal) {
-      assert.isEmpty(ordinal().range());
+
+    "range": {
+      "defaults to the empty array": function(ordinal) {
+        var x = ordinal();
+        assert.isEmpty(x.range());
+        assert.isUndefined(x(0));
+      },
+      "setting the range remembers previous values": function(ordinal) {
+        var x = ordinal();
+        assert.isUndefined(x(0));
+        assert.isUndefined(x(1));
+        x.range(["foo", "bar"]);
+        assert.equal(x(0), "foo");
+        assert.equal(x(1), "bar");
+      },
+      "recycles values when exhausted": function(ordinal) {
+        var x = ordinal().range(["a", "b", "c"]);
+        assert.equal(x(0), "a");
+        assert.equal(x(1), "b");
+        assert.equal(x(2), "c");
+        assert.equal(x(3), "a");
+        assert.equal(x(4), "b");
+        assert.equal(x(5), "c");
+        assert.equal(x(2), "c");
+        assert.equal(x(1), "b");
+        assert.equal(x(0), "a");
+      }
     },
-    "maps distinct domain values to discrete range values": function(ordinal) {
+
+    "maps distinct values to discrete values": function(ordinal) {
       var x = ordinal().range(["a", "b", "c"]);
       assert.equal(x(0), "a");
       assert.equal(x("0"), "a");
@@ -26,49 +80,90 @@ suite.addBatch({
       assert.equal(x(2.0), "c");
       assert.equal(x(new Number(2)), "c");
     },
-    "recycles range values when exhausted": function(ordinal) {
-      var x = ordinal().range(["a", "b", "c"]);
-      assert.equal(x(0), "a");
-      assert.equal(x(1), "b");
-      assert.equal(x(2), "c");
-      assert.equal(x(3), "a");
-      assert.equal(x(4), "b");
-      assert.equal(x(5), "c");
-      assert.equal(x(2), "c");
-      assert.equal(x(1), "b");
-      assert.equal(x(0), "a");
+
+    "rangePoints": {
+      "computes discrete points in a continuous range": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120]);
+        assert.deepEqual(x.range(), [0, 60, 120]);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 1);
+        assert.deepEqual(x.range(), [20, 60, 100]);
+        assert.equal(x.rangeBand(), 0);
+      }
     },
-    "computes discrete points in a continuous range": function(ordinal) {
-      var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120]);
-      assert.deepEqual(x.range(), [0, 60, 120]);
-      assert.equal(x.rangeBand(), 0);
-      var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 1);
-      assert.deepEqual(x.range(), [20, 60, 100]);
-      assert.equal(x.rangeBand(), 0);
+
+    "rangeBands": {
+      "computes discrete bands in a continuous range": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([0, 120]);
+        assert.deepEqual(x.range(), [0, 40, 80]);
+        assert.equal(x.rangeBand(), 40);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([0, 120], .2);
+        assert.deepEqual(x.range(), [7.5, 45, 82.5]);
+        assert.equal(x.rangeBand(), 30);
+      },
+      "setting domain recomputes range bands": function(ordinal) {
+        var x = ordinal().rangeRoundBands([0, 100]).domain(["a", "b", "c"]);
+        assert.deepEqual(x.range(), [1, 34, 67]);
+        assert.equal(x.rangeBand(), 33);
+        x.domain(["a", "b", "c", "d"]);
+        assert.deepEqual(x.range(), [0, 25, 50, 75]);
+        assert.equal(x.rangeBand(), 25);
+      }
     },
-    "computes discrete bands in a continuous range": function(ordinal) {
-      var x = ordinal().domain(["a", "b", "c"]).rangeBands([0, 120]);
-      assert.deepEqual(x.range(), [0, 40, 80]);
-      assert.equal(x.rangeBand(), 40);
-      var x = ordinal().domain(["a", "b", "c"]).rangeBands([0, 120], .2);
-      assert.deepEqual(x.range(), [7.5, 45, 82.5]);
-      assert.equal(x.rangeBand(), 30);
+
+    "rangeRoundBands": {
+      "computes discrete rounded bands in a continuous range": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100]);
+        assert.deepEqual(x.range(), [1, 34, 67]);
+        assert.equal(x.rangeBand(), 33);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100], .2);
+        assert.deepEqual(x.range(), [7, 38, 69]);
+        assert.equal(x.rangeBand(), 25);
+      }
     },
-    "computes discrete rounded bands in a continuous range": function(ordinal) {
-      var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100]);
-      assert.deepEqual(x.range(), [1, 34, 67]);
-      assert.equal(x.rangeBand(), 33);
-      var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100], .2);
-      assert.deepEqual(x.range(), [7, 38, 69]);
-      assert.equal(x.rangeBand(), 25);
-    },
-    "setting domain recomputes range bands": function(ordinal) {
-      var x = ordinal().rangeRoundBands([0, 100]).domain(["a", "b", "c"]);
-      assert.deepEqual(x.range(), [1, 34, 67]);
-      assert.equal(x.rangeBand(), 33);
-      x.domain(["a", "b", "c", "d"]);
-      assert.deepEqual(x.range(), [0, 25, 50, 75]);
-      assert.equal(x.rangeBand(), 25);
+
+    "copy": {
+      "changes to the domain are isolated": function(ordinal) {
+        var x = ordinal().range(["foo", "bar"]), y = x.copy();
+        x.domain([1, 2]);
+        assert.deepEqual(y.domain(), []);
+        assert.equal(x(1), "foo");
+        assert.equal(y(1), "foo");
+        y.domain([2, 3]);
+        assert.equal(x(2), "bar");
+        assert.equal(y(2), "foo");
+        assert.deepEqual(x.domain(), ["1", "2"]);
+        assert.deepEqual(y.domain(), ["2", "3"]);
+      },
+      "changes to the range are isolated": function(ordinal) {
+        var x = ordinal().range(["foo", "bar"]), y = x.copy();
+        x.range(["bar", "foo"]);
+        assert.equal(x(1), "bar");
+        assert.equal(y(1), "foo");
+        assert.deepEqual(y.range(), ["foo", "bar"]);
+        y.range(["foo", "baz"]);
+        assert.equal(x(2), "foo");
+        assert.equal(y(2), "baz");
+        assert.deepEqual(x.range(), ["bar", "foo"]);
+        assert.deepEqual(y.range(), ["foo", "baz"]);
+      },
+      "changes to the range type are isolated": function(ordinal) {
+        var x = ordinal().domain([0, 1]).rangeBands([0, 1], .2), y = x.copy();
+        x.rangePoints([1, 2]);
+        assert.inDelta(x(0), 1, 1e-6);
+        assert.inDelta(x(1), 2, 1e-6);
+        assert.inDelta(x.rangeBand(), 0, 1e-6);
+        assert.inDelta(y(0), 1/11, 1e-6);
+        assert.inDelta(y(1), 6/11, 1e-6);
+        assert.inDelta(y.rangeBand(), 4/11, 1e-6);
+        y.rangeBands([0, 1]);
+        assert.inDelta(x(0), 1, 1e-6);
+        assert.inDelta(x(1), 2, 1e-6);
+        assert.inDelta(x.rangeBand(), 0, 1e-6);
+        assert.inDelta(y(0), 0, 1e-6);
+        assert.inDelta(y(1), 1/2, 1e-6);
+        assert.inDelta(y.rangeBand(), 1/2, 1e-6);
+      }
     }
   }
 });

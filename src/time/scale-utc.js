@@ -32,5 +32,5 @@ var d3_time_scaleUTCFormats = [
 var d3_time_scaleUTCFormat = d3_time_scaleFormat(d3_time_scaleUTCFormats);
 
 d3.time.scale.utc = function() {
-  return d3_time_scale(d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
+  return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
 };

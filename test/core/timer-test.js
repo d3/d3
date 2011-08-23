@@ -14,25 +14,25 @@ suite.addBatch({
     "with no delay": {
       topic: timer(),
       "first calls after 17 ms or less": function(info) {
-        assert.inDelta(info.start - info.scheduled, 17, 15);
+        assert.inDelta(info.start - info.scheduled, 17, 20);
       },
       "calls until the function returns true": function(info) {
         assert.equal(info.count, 4);
       },
       "calls every 17 ms": function(info) {
-        assert.inDelta(info.stop - info.start, 17 * 3, 15);
+        assert.inDelta(info.stop - info.start, 17 * 3, 20);
       }
     },
     "with a specified delay": {
       topic: timer(250),
       "first calls after the delay": function(info) {
-        assert.inDelta(info.start - info.scheduled, 250, 15);
+        assert.inDelta(info.start - info.scheduled, 250, 20);
       },
       "calls until the function returns true": function(info) {
         assert.equal(info.count, 4);
       },
       "calls every 17 ms": function(info) {
-        assert.inDelta(info.stop - info.start, 17 * 3, 15);
+        assert.inDelta(info.stop - info.start, 17 * 3, 20);
       }
     }
   }

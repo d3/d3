@@ -1,14 +1,17 @@
 d3.scale.quantile = function() {
-  var domain = [],
-      range = [],
-      thresholds = [];
+  return d3_scale_quantile([], []);
+};
+
+function d3_scale_quantile(domain, range) {
+  var thresholds;
 
   function rescale() {
     var k = 0,
         n = domain.length,
         q = range.length;
-    thresholds.length = Math.max(0, q - 1);
+    thresholds = [];
     while (++k < q) thresholds[k - 1] = d3.quantile(domain, k / q);
+    return scale;
   }
 
   function scale(x) {
@@ -19,20 +22,22 @@ d3.scale.quantile = function() {
   scale.domain = function(x) {
     if (!arguments.length) return domain;
     domain = x.filter(function(d) { return !isNaN(d); }).sort(d3.ascending);
-    rescale();
-    return scale;
+    return rescale();
   };
 
   scale.range = function(x) {
     if (!arguments.length) return range;
     range = x;
-    rescale();
-    return scale;
+    return rescale();
   };
 
   scale.quantiles = function() {
     return thresholds;
   };
 
-  return scale;
+  scale.copy = function() {
+    return d3_scale_quantile(domain, range); // copy on write!
+  };
+
+  return rescale();
 };

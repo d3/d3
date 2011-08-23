@@ -502,8 +502,7 @@ d3.time.years.utc = d3_time_range(d3.time.year.utc, function(date) {
   return date.getUTCFullYear();
 });
 // TODO nice
-function d3_time_scale(methods, format) {
-  var linear = d3.scale.linear();
+function d3_time_scale(linear, methods, format) {
 
   function scale(x) {
     return linear(x);
@@ -535,6 +534,10 @@ function d3_time_scale(methods, format) {
 
   scale.tickFormat = function() {
     return format;
+  };
+
+  scale.copy = function() {
+    return d3_time_scale(linear.copy(), methods, format);
   };
 
   // TOOD expose d3_scale_linear_rebind?
@@ -619,7 +622,7 @@ var d3_time_scaleLocalFormats = [
 var d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
 
 d3.time.scale = function() {
-  return d3_time_scale(d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
+  return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
 };
 var d3_time_scaleUTCMethods = [
   [d3.time.seconds.utc, 1],
@@ -655,6 +658,6 @@ var d3_time_scaleUTCFormats = [
 var d3_time_scaleUTCFormat = d3_time_scaleFormat(d3_time_scaleUTCFormats);
 
 d3.time.scale.utc = function() {
-  return d3_time_scale(d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
+  return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
 };
 })();
