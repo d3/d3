@@ -6,8 +6,6 @@ JS_TESTER = ./node_modules/vows/bin/vows
 all: \
 	d3.js \
 	d3.min.js \
-	d3.behavior.js \
-	d3.behavior.min.js \
 	d3.chart.js \
 	d3.chart.min.js \
 	d3.layout.js \
@@ -26,6 +24,7 @@ all: \
 	d3.core.js \
 	d3.scale.js \
 	d3.svg.js \
+	d3.behavior.js \
 	src/end.js
 
 d3.core.js: \
@@ -105,10 +104,9 @@ d3.svg.js: \
 	src/svg/symbol.js
 
 d3.behavior.js: \
-	src/start.js \
 	src/behavior/behavior.js \
-	src/behavior/zoom.js \
-	src/end.js
+	src/behavior/drag.js \
+	src/behavior/zoom.js
 
 d3.chart.js: \
 	src/start.js \
