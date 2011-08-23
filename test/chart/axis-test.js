@@ -26,6 +26,73 @@ suite.addBatch({
       }
     },
 
+    "orient": {
+      "defaults to bottom": function(axis) {
+        var a = axis();
+        assert.equal(a.orient(), "bottom");
+      },
+      "supports top orientation": function(axis) {
+        var a = axis().orient("top"),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            tick = g.select("g.tick:nth-child(3)"),
+            text = tick.select("text"),
+            line = tick.select("line"),
+            path = g.select("path.domain");
+        assert.equal(tick.attr("transform"), "translate(0.2,0)");
+        assert.equal(text.attr("y"), -9)
+        assert.equal(text.attr("dy"), "");
+        assert.equal(text.attr("text-anchor"), "middle");
+        assert.equal(text.text(), "0.2");
+        assert.equal(line.attr("y2"), -6);
+        assert.equal(path.attr("d"), "M0,-6V0H1V-6");
+      },
+      "supports right orientation": function(axis) {
+        var a = axis().orient("right"),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            tick = g.select("g.tick:nth-child(3)"),
+            text = tick.select("text"),
+            line = tick.select("line"),
+            path = g.select("path.domain");
+        assert.equal(tick.attr("transform"), "translate(0,0.2)");
+        assert.equal(text.attr("x"), 9)
+        assert.equal(text.attr("dy"), ".32em");
+        assert.equal(text.attr("text-anchor"), "");
+        assert.equal(text.text(), "0.2");
+        assert.equal(line.attr("x2"), 6);
+        assert.equal(path.attr("d"), "M6,0H0V1H6");
+      },
+      "supports bottom orientation": function(axis) {
+        var a = axis().orient("bottom"),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            tick = g.select("g.tick:nth-child(3)"),
+            text = tick.select("text"),
+            line = tick.select("line"),
+            path = g.select("path.domain");
+        assert.equal(tick.attr("transform"), "translate(0.2,0)");
+        assert.equal(text.attr("y"), 9)
+        assert.equal(text.attr("dy"), ".71em");
+        assert.equal(text.attr("text-anchor"), "middle");
+        assert.equal(text.text(), "0.2");
+        assert.equal(line.attr("y2"), 6);
+        assert.equal(path.attr("d"), "M0,6V0H1V6");
+      },
+      "supports left orientation": function(axis) {
+        var a = axis().orient("left"),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            tick = g.select("g.tick:nth-child(3)"),
+            text = tick.select("text"),
+            line = tick.select("line"),
+            path = g.select("path.domain");
+        assert.equal(tick.attr("transform"), "translate(0,0.2)");
+        assert.equal(text.attr("x"), -9)
+        assert.equal(text.attr("dy"), ".32em");
+        assert.equal(text.attr("text-anchor"), "end");
+        assert.equal(text.text(), "0.2");
+        assert.equal(line.attr("x2"), -6);
+        assert.equal(path.attr("d"), "M-6,0H0V1H-6");
+      }
+    },
+
     "tickSize": {
       "defaults to six pixels": function(axis) {
         var a = axis();

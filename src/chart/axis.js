@@ -1,5 +1,6 @@
 d3.chart.axis = function() {
   var scale = d3.scale.linear(),
+      orient = "bottom",
       tickSize = 6,
       tickPadding = 3,
       tickArguments_ = [10],
@@ -9,60 +10,67 @@ d3.chart.axis = function() {
     selection.each(function(d, i, j) {
       var g = d3.select(this);
 
-      // Scale data.
-      var range = scale.range(),
-          ticks = scale.ticks.apply(scale, tickArguments_),
-          tickFormat = tickFormat_ || scale.tickFormat.apply(scale, tickArguments_);
+      // Ticks.
+      var ticks = scale.ticks.apply(scale, tickArguments_),
+          tickFormat = tickFormat_ || scale.tickFormat.apply(scale, tickArguments_),
+          tick = g.selectAll("g.tick").data(ticks, String),
+          tickEnter = tick.enter().append("svg:g").attr("class", "tick").style("opacity", 1e-6),
+          tickExit = transition(tick.exit()).style("opacity", 1e-6).remove(),
+          tickUpdate = transition(tick).style("opacity", 1),
+          tickTransform;
 
-      // If the transition is interrupted, then really we'd prefer to know the
-      // current state of the scale rather than the previous state (at the end
-      // of the transition). We might be able to do that by using a custom tween
-      // that stores the parameter t and an interpolated scale, but, meh.
+      // Domain.
+      var range = scale.range(),
+          path = g.selectAll("path.domain").data([,]),
+          pathEnter = path.enter().append("svg:path").attr("class", "domain"),
+          pathUpdate = transition(path);
 
       // Stash the new scale and grab the old scale.
       var scale0 = this.__chart__ || scale;
       this.__chart__ = scale.copy();
 
-      // Ticks.
-      var tick = g.selectAll("g.tick")
-          .data(ticks, String);
-
-      var tickEnter = tick.enter().append("svg:g")
-          .attr("class", "tick")
-          .attr("transform", function(d) { return "translate(" + scale0(d) + ",0)"; })
-          .style("opacity", 1e-6);
-
       tickEnter.append("svg:line");
+      tickEnter.append("svg:text");
+      tickUpdate.select("text").text(tickFormat);
 
-      tickEnter.append("svg:text")
-          .attr("dy", ".71em")
-          .attr("text-anchor", "middle");
+      switch (orient) {
+        case "bottom": {
+          tickTransform = d3_chart_axisX;
+          tickEnter.select("text").attr("dy", ".71em").attr("text-anchor", "middle");
+          tickUpdate.select("line").attr("y2", tickSize);
+          tickUpdate.select("text").attr("y", Math.max(tickSize, 0) + tickPadding);
+          pathUpdate.attr("d", "M" + range[0] + "," + tickSize + "V0H" + range[1] + "V" + tickSize);
+          break;
+        }
+        case "top": {
+          tickTransform = d3_chart_axisX;
+          tickEnter.select("text").attr("text-anchor", "middle");
+          tickUpdate.select("line").attr("y2", -tickSize);
+          tickUpdate.select("text").attr("y", -(Math.max(tickSize, 0) + tickPadding));
+          pathUpdate.attr("d", "M" + range[0] + "," + -tickSize + "V0H" + range[1] + "V" + -tickSize);
+          break;
+        }
+        case "left": {
+          tickTransform = d3_chart_axisY;
+          tickEnter.select("text").attr("dy", ".32em").attr("text-anchor", "end");
+          tickUpdate.select("line").attr("x2", -tickSize);
+          tickUpdate.select("text").attr("x", -(Math.max(tickSize, 0) + tickPadding));
+          pathUpdate.attr("d", "M" + -tickSize + "," + range[0] + "H0V" + range[1] + "H" + -tickSize);
+          break;
+        }
+        case "right": {
+          tickTransform = d3_chart_axisY;
+          tickEnter.select("text").attr("dy", ".32em");
+          tickUpdate.select("line").attr("x2", tickSize);
+          tickUpdate.select("text").attr("x", Math.max(tickSize, 0) + tickPadding);
+          pathUpdate.attr("d", "M" + tickSize + "," + range[0] + "H0V" + range[1] + "H" + tickSize);
+          break;
+        }
+      }
 
-      transition(tick.exit())
-          .attr("transform", function(d) { return "translate(" + scale(d) + ",0)"; })
-          .style("opacity", 1e-6)
-          .remove();
-
-      var tickUpdate = transition(tick)
-          .style("opacity", 1)
-          .attr("transform", function(d) { return "translate(" + scale(d) + ",0)"; })
-
-      tickUpdate.select("line")
-          .attr("y2", tickSize);
-
-      tickUpdate.select("text")
-          .attr("y", Math.max(tickSize, 0) + tickPadding)
-          .text(tickFormat);
-
-      // Domain.
-      var path = g.selectAll("path.domain")
-          .data([,]);
-
-      path.enter().append("svg:path")
-          .attr("class", "domain");
-
-      transition(path)
-          .attr("d", "M" + range[0] + "," + tickSize + "V0H" + range[1] + "V" + tickSize);
+      tickEnter.call(tickTransform, scale0);
+      tickUpdate.call(tickTransform, scale);
+      tickExit.call(tickTransform, scale);
 
       function transition(o) {
         return selection.delay ? o.transition()
@@ -76,6 +84,12 @@ d3.chart.axis = function() {
   axis.scale = function(x) {
     if (!arguments.length) return scale;
     scale = x;
+    return axis;
+  };
+
+  axis.orient = function(x) {
+    if (!arguments.length) return orient;
+    orient = x;
     return axis;
   };
 
@@ -105,3 +119,11 @@ d3.chart.axis = function() {
 
   return axis;
 };
+
+function d3_chart_axisX(selection, x) {
+  selection.attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
+}
+
+function d3_chart_axisY(selection, y) {
+  selection.attr("transform", function(d) { return "translate(0," + y(d) + ")"; });
+}

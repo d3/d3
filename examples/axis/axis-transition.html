@@ -22,14 +22,21 @@ path.area {
   fill: #e7e7e7;
 }
 
-.axis line {
-  fill: none;
-  stroke: #fff;
+.axis {
   shape-rendering: crispEdges;
 }
 
-.axis path {
+.x.axis line {
+  stroke: #fff;
+}
+
+.x.axis path {
   display: none;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: #000;
 }
 
     </style>
@@ -37,7 +44,7 @@ path.area {
   <body>
     <script type="text/javascript">
 
-var m = [20, 20, 20, 20],
+var m = [20, 40, 20, 20],
     w = 960 - m[1] - m[3],
     h = 140 - m[0] - m[2],
     parse = d3.time.format("%b %Y").parse;
@@ -46,10 +53,9 @@ var m = [20, 20, 20, 20],
 var x = d3.time.scale().range([0, w]),
     y = d3.scale.linear().range([h, 0]);
 
-// X-axis.
-var xAxis = d3.chart.axis()
-    .scale(x)
-    .tickSize(-h);
+// Axes.
+var xAxis = d3.chart.axis().scale(x).tickSize(-h),
+    yAxis = d3.chart.axis().scale(y).ticks(4).orient("right");
 
 // An area generator, for the light fill.
 var area = d3.svg.area()
@@ -98,6 +104,12 @@ d3.csv("../data/stocks.csv", function(data) {
       .attr("class", "x axis")
       .attr("transform", "translate(0," + h + ")")
       .call(xAxis);
+
+  // Add the y-axis.
+  svg.append("svg:g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(" + w + ",0)")
+      .call(yAxis);
 
   // Add the line path.
   svg.append("svg:path")
