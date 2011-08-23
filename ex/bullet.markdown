@@ -13,7 +13,7 @@ title: Bullet Charts
 
 <link type="text/css" rel="stylesheet" href="button.css"/>
 <link type="text/css" rel="stylesheet" href="bullet.css"/>
-<script type="text/javascript" src="../d3.chart.js?1.29.7"> </script>
+<script type="text/javascript" src="../d3.chart.js?2.0.0"> </script>
 <script type="text/javascript" src="bullet.js"> </script>
 
 Layout inspired by [Stephen Few](http://www.perceptualedge.com/articles/misc/Bullet_Graph_Design_Spec.pdf).

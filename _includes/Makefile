@@ -1,8 +1,6 @@
 SRC_FILES = \
 	../d3.js \
 	../d3.min.js \
-	../d3.behavior.js \
-	../d3.behavior.min.js \
 	../d3.chart.js \
 	../d3.chart.min.js \
 	../d3.csv.js \
