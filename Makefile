@@ -19,6 +19,14 @@ all: \
 	d3.time.js \
 	d3.time.min.js
 
+# Modify this rule to build your own custom release.
+# Run `make d3.custom.min.js` to produce the minified version.
+
+d3.custom.js: \
+	d3.js \
+	d3.geom.js \
+	d3.layout.js
+
 .INTERMEDIATE d3.js: \
 	src/start.js \
 	d3.core.js \
@@ -107,7 +115,6 @@ d3.core.js: \
 	src/core/transition-each.js \
 	src/core/timer.js \
 	src/core/noop.js
-
 
 d3.scale.js: \
 	src/scale/scale.js \
