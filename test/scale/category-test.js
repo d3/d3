@@ -16,9 +16,19 @@ suite.addBatch({
 function category(category, n) {
   return {
     "is an ordinal scale": function() {
-      var x = category();
+      var x = category(), colors = x.range();
       assert.length(x.domain(), 0);
       assert.length(x.range(), n);
+      assert.equal(x(1), colors[0]);
+      assert.equal(x(2), colors[1]);
+      assert.equal(x(1), colors[0]);
+      var y = x.copy();
+      assert.deepEqual(y.domain(), x.domain());
+      assert.deepEqual(y.range(), x.range());
+      x.domain(d3.range(n));
+      for (var i = 0; i < n; ++i) assert.equal(x(i + n), x(i));
+      assert.equal(y(1), colors[0]);
+      assert.equal(y(2), colors[1]);
     },
     "each instance is isolated": function() {
       var a = category(), b = category(), colors = a.range();
@@ -26,17 +36,6 @@ function category(category, n) {
       assert.equal(b(2), colors[0]);
       assert.equal(b(1), colors[1]);
       assert.equal(a(1), colors[0]);
-    },
-    "discrete domain values are remembered": function() {
-      var x = category(), colors = x.range();
-      assert.equal(x(1), colors[0]);
-      assert.equal(x(2), colors[1]);
-      assert.equal(x(1), colors[0]);
-    },
-    "recycles range values when exhausted": function() {
-      var x = category();
-      for (var i = 0; i < n; ++i) x(i);
-      for (; i < 2 * n; ++i) assert.equal(x(i), x(i - n));
     },
     "contains the expected number of values in the range": function() {
       var x = category();

@@ -1,10 +1,8 @@
 var assert = require("assert");
 
-assert.inDelta = function (actual, expected, delta, message) {
-  var lower = expected - delta;
-  var upper = expected + delta;
-  if (actual != +actual || actual < lower || actual > upper) {
-    assert.fail(actual, expected, message || "expected {actual} to be in within *" + delta.toString() + "* of {expected}", null, assert.inDelta);
+assert.inDelta = function(actual, expected, delta, message) {
+  if (!inDelta(actual, expected, delta)) {
+    assert.fail(actual, expected, message || "expected {actual} to be in within *" + delta + "* of {expected}", null, assert.inDelta);
   }
 };
 
@@ -37,6 +35,21 @@ assert.pathEqual = function(actual, expected, message) {
     assert.fail(formatPath(actual), formatPath(expected), message || "expected {expected}, got {actual}", null, assert.pathEqual);
   }
 };
+
+function inDelta(actual, expected, delta) {
+  return (Array.isArray(expected) ? inDeltaArray : inDeltaNumber)(actual, expected, delta);
+}
+
+function inDeltaArray(actual, expected, delta) {
+  var n = expected.length, i = -1;
+  if (actual.length !== n) return false;
+  while (++i < n) if (!inDelta(actual[i], expected[i], delta)) return false;
+  return true;
+}
+
+function inDeltaNumber(actual, expected, delta) {
+  return actual >= expected - delta && actual <= expected + delta;
+}
 
 function pathEqual(a, b) {
   a = parsePath(a);
@@ -75,7 +88,9 @@ function parsePath(path) {
 }
 
 function formatPath(path) {
-  return path.replace(reNumber, function(s) {
-    return Math.abs((s = +s) - Math.floor(s)) < 1e-6 ? Math.floor(s) : s.toFixed(6);
-  });
+  return path.replace(reNumber, formatNumber);
+}
+
+function formatNumber(s) {
+  return Math.abs((s = +s) - Math.floor(s)) < 1e-6 ? Math.floor(s) : s.toFixed(6);
 }
