@@ -42,6 +42,12 @@ suite.addBatch({
         assert.equal(x(-5), "rgb(255,128,128)");
         assert.equal(x(50), "rgb(128,192,128)");
         assert.equal(x(75), "rgb(64,160,64)");
+      },
+      "an empty domain maps to the range start": function(linear) {
+        var x = linear().domain([0, 0]).range(["red", "green"]);
+        assert.equal(x(0), "rgb(255,0,0)");
+        assert.equal(x(-1), "rgb(255,0,0)");
+        assert.equal(x(1), "rgb(255,0,0)");
       }
     },
 
