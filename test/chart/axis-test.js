@@ -131,6 +131,20 @@ suite.addBatch({
         text.each(function() {
           assert.equal(d3.select(this).attr("y"), 3);
         });
+      },
+      "with two arguments, specifies end tick size": function(axis) {
+        var a = axis().tickSize(6, 3),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            path = g.selectAll("path");
+        assert.equal(path.attr("d"), "M0,3V0H1V3");
+      },
+      "with three arguments, specifies end and minor tick sizes": function(axis) {
+        var a = axis().tickSubdivide(3).tickSize(6, 3, 9),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            path = g.selectAll("path"),
+            line = g.select(".minor");
+        assert.equal(path.attr("d"), "M0,9V0H1V9");
+        assert.equal(line.attr("y2"), "3");
       }
     },
 

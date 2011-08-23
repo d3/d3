@@ -1,7 +1,9 @@
 d3.chart.axis = function() {
   var scale = d3.scale.linear(),
       orient = "bottom",
-      tickSize = 6,
+      tickMajorSize = 6,
+      tickMinorSize = 6,
+      tickEndSize = 6,
       tickPadding = 3,
       tickArguments_ = [10],
       tickFormat_,
@@ -46,38 +48,38 @@ d3.chart.axis = function() {
       switch (orient) {
         case "bottom": {
           tickTransform = d3_chart_axisX;
-          subtickUpdate.attr("y2", tickSize);
+          subtickUpdate.attr("y2", tickMinorSize);
           tickEnter.select("text").attr("dy", ".71em").attr("text-anchor", "middle");
-          tickUpdate.select("line").attr("y2", tickSize);
-          tickUpdate.select("text").attr("y", Math.max(tickSize, 0) + tickPadding);
-          pathUpdate.attr("d", "M" + range[0] + "," + tickSize + "V0H" + range[1] + "V" + tickSize);
+          tickUpdate.select("line").attr("y2", tickMajorSize);
+          tickUpdate.select("text").attr("y", Math.max(tickMajorSize, 0) + tickPadding);
+          pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[1] + "V" + tickEndSize);
           break;
         }
         case "top": {
           tickTransform = d3_chart_axisX;
-          subtickUpdate.attr("y2", -tickSize);
+          subtickUpdate.attr("y2", -tickMinorSize);
           tickEnter.select("text").attr("text-anchor", "middle");
-          tickUpdate.select("line").attr("y2", -tickSize);
-          tickUpdate.select("text").attr("y", -(Math.max(tickSize, 0) + tickPadding));
-          pathUpdate.attr("d", "M" + range[0] + "," + -tickSize + "V0H" + range[1] + "V" + -tickSize);
+          tickUpdate.select("line").attr("y2", -tickMajorSize);
+          tickUpdate.select("text").attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
+          pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[1] + "V" + -tickEndSize);
           break;
         }
         case "left": {
           tickTransform = d3_chart_axisY;
-          subtickUpdate.attr("x2", -tickSize);
+          subtickUpdate.attr("x2", -tickMinorSize);
           tickEnter.select("text").attr("dy", ".32em").attr("text-anchor", "end");
-          tickUpdate.select("line").attr("x2", -tickSize);
-          tickUpdate.select("text").attr("x", -(Math.max(tickSize, 0) + tickPadding));
-          pathUpdate.attr("d", "M" + -tickSize + "," + range[0] + "H0V" + range[1] + "H" + -tickSize);
+          tickUpdate.select("line").attr("x2", -tickMajorSize);
+          tickUpdate.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding));
+          pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + -tickEndSize);
           break;
         }
         case "right": {
           tickTransform = d3_chart_axisY;
-          subtickUpdate.attr("x2", tickSize);
+          subtickUpdate.attr("x2", tickMinorSize);
           tickEnter.select("text").attr("dy", ".32em");
-          tickUpdate.select("line").attr("x2", tickSize);
-          tickUpdate.select("text").attr("x", Math.max(tickSize, 0) + tickPadding);
-          pathUpdate.attr("d", "M" + tickSize + "," + range[0] + "H0V" + range[1] + "H" + tickSize);
+          tickUpdate.select("line").attr("x2", tickMajorSize);
+          tickUpdate.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding);
+          pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
           break;
         }
       }
@@ -123,9 +125,12 @@ d3.chart.axis = function() {
     return axis;
   };
 
-  axis.tickSize = function(x) {
-    if (!arguments.length) return tickSize;
-    tickSize = +x;
+  axis.tickSize = function(x, y, z) {
+    if (!arguments.length) return tickMajorSize;
+    var n = arguments.length - 1;
+    tickMajorSize = +x;
+    tickMinorSize = n > 1 ? +y : tickMajorSize;
+    tickEndSize = n > 0 ? +arguments[n] : tickMajorSize;
     return axis;
   };
 
