@@ -94,9 +94,17 @@ d3.csv("../data/stocks.csv", function(data) {
     .append("svg:g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
+  // Add the clip path.
+  svg.append("svg:clipPath")
+      .attr("id", "clip")
+    .append("svg:rect")
+      .attr("width", w)
+      .attr("height", h);
+
   // Add the area path.
   svg.append("svg:path")
       .attr("class", "area")
+      .attr("clip-path", "url(#clip)")
       .attr("d", area(values));
 
   // Add the x-axis.
@@ -114,6 +122,7 @@ d3.csv("../data/stocks.csv", function(data) {
   // Add the line path.
   svg.append("svg:path")
       .attr("class", "line")
+      .attr("clip-path", "url(#clip)")
       .attr("d", line(values));
 
   // Add a small label for the symbol name.
