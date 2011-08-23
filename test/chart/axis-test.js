@@ -34,7 +34,7 @@ suite.addBatch({
       "supports top orientation": function(axis) {
         var a = axis().orient("top"),
             g = d3.select("body").html("").append("svg:g").call(a),
-            tick = g.select("g.tick:nth-child(3)"),
+            tick = g.select("g:nth-child(3)"),
             text = tick.select("text"),
             line = tick.select("line"),
             path = g.select("path.domain");
@@ -49,7 +49,7 @@ suite.addBatch({
       "supports right orientation": function(axis) {
         var a = axis().orient("right"),
             g = d3.select("body").html("").append("svg:g").call(a),
-            tick = g.select("g.tick:nth-child(3)"),
+            tick = g.select("g:nth-child(3)"),
             text = tick.select("text"),
             line = tick.select("line"),
             path = g.select("path.domain");
@@ -64,7 +64,7 @@ suite.addBatch({
       "supports bottom orientation": function(axis) {
         var a = axis().orient("bottom"),
             g = d3.select("body").html("").append("svg:g").call(a),
-            tick = g.select("g.tick:nth-child(3)"),
+            tick = g.select("g:nth-child(3)"),
             text = tick.select("text"),
             line = tick.select("line"),
             path = g.select("path.domain");
@@ -79,7 +79,7 @@ suite.addBatch({
       "supports left orientation": function(axis) {
         var a = axis().orient("left"),
             g = d3.select("body").html("").append("svg:g").call(a),
-            tick = g.select("g.tick:nth-child(3)"),
+            tick = g.select("g:nth-child(3)"),
             text = tick.select("text"),
             line = tick.select("line"),
             path = g.select("path.domain");
@@ -115,7 +115,7 @@ suite.addBatch({
       "affects the generated tick lines": function(axis) {
         var a = axis().tickSize(3),
             g = d3.select("body").html("").append("svg:g").call(a),
-            line = g.selectAll("g.tick line");
+            line = g.selectAll("g line");
         line.each(function() {
           assert.equal(d3.select(this).attr("y2"), 3);
         });
@@ -123,8 +123,8 @@ suite.addBatch({
       "if negative, labels are placed on the opposite end": function(axis) {
         var a = axis().tickSize(-80),
             g = d3.select("body").html("").append("svg:g").call(a),
-            line = g.selectAll("g.tick line"),
-            text = g.selectAll("g.tick text");
+            line = g.selectAll("g line"),
+            text = g.selectAll("g text");
         line.each(function() {
           assert.equal(d3.select(this).attr("y2"), -80);
         });
@@ -150,7 +150,7 @@ suite.addBatch({
       "affects the generated tick labels": function(axis) {
         var a = axis().tickSize(2).tickPadding(7),
             g = d3.select("body").html("").append("svg:g").call(a),
-            text = g.selectAll("g.tick text");
+            text = g.selectAll("g text");
         text.each(function() {
           assert.equal(d3.select(this).attr("y"), 9);
         });
@@ -181,8 +181,30 @@ suite.addBatch({
       "affects the generated ticks": function(axis) {
         var a = axis().ticks(20),
             g = d3.select("body").html("").append("svg:g").call(a),
-            t = g.selectAll("g.tick");
+            t = g.selectAll("g");
         assert.equal(t[0].length, 21);
+      }
+    },
+
+    "tickSubdivide": {
+      "defaults to zero": function(axis) {
+        var a = axis();
+        assert.equal(a.tickSubdivide(), 0);
+      },
+      "coerces input value to a number": function(axis) {
+        var a = axis().tickSubdivide(true);
+        assert.strictEqual(a.tickSubdivide(), 1);
+      },
+      "does not generate minor ticks when zero": function(axis) {
+        var g = d3.select("body").html("").append("svg:g").call(axis());
+        assert.isTrue(g.selectAll(".minor").empty());
+      },
+      "affects the generated minor ticks": function(axis) {
+        var a = axis().tickSubdivide(3),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            t = g.selectAll("line.tick.minor");
+        assert.equal(t[0].length, 30);
+        assert.equal(t[0][1].getAttribute("transform"), "translate(0.05,0)");
       }
     },
 
@@ -202,7 +224,7 @@ suite.addBatch({
         };
 
         g.call(a);
-        var t = g.selectAll("g.tick text");
+        var t = g.selectAll("g text");
         assert.equal(t.text(), "foo-0");
       },
       "passes any arguments to the scale's tick format function": function(axis) {
@@ -226,7 +248,7 @@ suite.addBatch({
       "affects the generated tick labels": function(axis) {
         var a = axis().tickFormat(d3.format("+.2%")),
             g = d3.select("body").html("").append("svg:g").call(a),
-            t = g.selectAll("g.tick text");
+            t = g.selectAll("g text");
         assert.equal(t.text(), "+0.00%");
       }
     },
@@ -244,7 +266,7 @@ suite.addBatch({
         var a = axis(),
             g = d3.select("body").html("").append("svg:g").call(a),
             x = d3.scale.linear(),
-            tick = g.selectAll("g.tick"),
+            tick = g.selectAll("g"),
             ticks = x.ticks(10),
             tickFormat = x.tickFormat(10);
         assert.equal(tick[0].length, ticks.length);
@@ -276,7 +298,7 @@ suite.addBatch({
         a.scale().domain(x.domain());
         a.tickSize(3).tickPadding(9);
         g.call(a);
-        var tick = g.selectAll("g.tick"),
+        var tick = g.selectAll("g"),
             ticks = x.ticks(10),
             tickFormat = x.tickFormat(10);
         assert.equal(tick[0].length, ticks.length);

@@ -30,6 +30,10 @@ path.area {
   stroke: #fff;
 }
 
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
 .x.axis path {
   display: none;
 }
@@ -54,7 +58,7 @@ var x = d3.time.scale().range([0, w]),
     y = d3.scale.linear().range([h, 0]);
 
 // Axes.
-var xAxis = d3.chart.axis().scale(x).tickSize(-h),
+var xAxis = d3.chart.axis().scale(x).tickSize(-h).tickSubdivide(true),
     yAxis = d3.chart.axis().scale(y).ticks(4).orient("right");
 
 // An area generator, for the light fill.
