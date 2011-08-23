@@ -136,7 +136,8 @@ d3.svg.js: \
 	src/svg/diagonal-radial.js \
 	src/svg/mouse.js \
 	src/svg/touches.js \
-	src/svg/symbol.js
+	src/svg/symbol.js \
+	src/svg/axis.js
 
 d3.behavior.js: \
 	src/start.js \
@@ -147,7 +148,6 @@ d3.behavior.js: \
 d3.chart.js: \
 	src/start.js \
 	src/chart/chart.js \
-	src/chart/axis.js \
 	src/chart/box.js \
 	src/chart/bullet.js \
 	src/chart/horizon.js \

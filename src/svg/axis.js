@@ -1,4 +1,4 @@
-d3.chart.axis = function() {
+d3.svg.axis = function() {
   var scale = d3.scale.linear(),
       orient = "bottom",
       tickMajorSize = 6,
@@ -18,7 +18,7 @@ d3.chart.axis = function() {
           tickFormat = tickFormat_ || scale.tickFormat.apply(scale, tickArguments_);
 
       // Minor ticks.
-      var subticks = d3_chart_axisSubdivide(scale, ticks, tickSubdivide),
+      var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
           subtick = g.selectAll(".minor").data(subticks, String),
           subtickEnter = subtick.enter().insert("svg:line", "g").attr("class", "tick minor").style("opacity", 1e-6),
           subtickExit = transition(subtick.exit()).style("opacity", 1e-6).remove(),
@@ -47,7 +47,7 @@ d3.chart.axis = function() {
 
       switch (orient) {
         case "bottom": {
-          tickTransform = d3_chart_axisX;
+          tickTransform = d3_svg_axisX;
           subtickUpdate.attr("y2", tickMinorSize);
           tickEnter.select("text").attr("dy", ".71em").attr("text-anchor", "middle");
           tickUpdate.select("line").attr("y2", tickMajorSize);
@@ -56,7 +56,7 @@ d3.chart.axis = function() {
           break;
         }
         case "top": {
-          tickTransform = d3_chart_axisX;
+          tickTransform = d3_svg_axisX;
           subtickUpdate.attr("y2", -tickMinorSize);
           tickEnter.select("text").attr("text-anchor", "middle");
           tickUpdate.select("line").attr("y2", -tickMajorSize);
@@ -65,7 +65,7 @@ d3.chart.axis = function() {
           break;
         }
         case "left": {
-          tickTransform = d3_chart_axisY;
+          tickTransform = d3_svg_axisY;
           subtickUpdate.attr("x2", -tickMinorSize);
           tickEnter.select("text").attr("dy", ".32em").attr("text-anchor", "end");
           tickUpdate.select("line").attr("x2", -tickMajorSize);
@@ -74,7 +74,7 @@ d3.chart.axis = function() {
           break;
         }
         case "right": {
-          tickTransform = d3_chart_axisY;
+          tickTransform = d3_svg_axisY;
           subtickUpdate.attr("x2", tickMinorSize);
           tickEnter.select("text").attr("dy", ".32em");
           tickUpdate.select("line").attr("x2", tickMajorSize);
@@ -149,18 +149,18 @@ d3.chart.axis = function() {
   return axis;
 };
 
-function d3_chart_axisX(selection, x) {
+function d3_svg_axisX(selection, x) {
   selection.attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 }
 
-function d3_chart_axisY(selection, y) {
+function d3_svg_axisY(selection, y) {
   selection.attr("transform", function(d) { return "translate(0," + y(d) + ")"; });
 }
 
-function d3_chart_axisSubdivide(scale, ticks, m) {
+function d3_svg_axisSubdivide(scale, ticks, m) {
   subticks = [];
   if (m && ticks.length > 1) {
-    var extent = d3_chart_axisExtent(scale),
+    var extent = d3_scaleExtent(scale.domain()),
         subticks,
         i = -1,
         n = ticks.length,
@@ -179,9 +179,4 @@ function d3_chart_axisSubdivide(scale, ticks, m) {
     }
   }
   return subticks;
-}
-
-function d3_chart_axisExtent(scale) {
-  var domain = scale.domain(), start = domain[0], stop = domain[domain.length - 1];
-  return start < stop ? [start, stop] : [stop, start];
 }

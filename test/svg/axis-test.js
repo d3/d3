@@ -1,16 +1,15 @@
 require("../env");
 require("../../d3");
-require("../../d3.chart");
 
 var vows = require("vows"),
     assert = require("assert");
 
-var suite = vows.describe("d3.chart.axis");
+var suite = vows.describe("d3.svg.axis");
 
 suite.addBatch({
   "axis": {
     topic: function() {
-      return d3.chart.axis;
+      return d3.svg.axis;
     },
 
     "scale": {

@@ -3,7 +3,6 @@
   <head>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.csv.js"></script>
-    <script type="text/javascript" src="../../d3.chart.js"></script>
     <script type="text/javascript" src="../../d3.time.js"></script>
     <style type="text/css">
 
@@ -58,8 +57,8 @@ var x = d3.time.scale().range([0, w]),
     y = d3.scale.linear().range([h, 0]);
 
 // Axes.
-var xAxis = d3.chart.axis().scale(x).tickSize(-h).tickSubdivide(true),
-    yAxis = d3.chart.axis().scale(y).ticks(4).orient("right");
+var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true),
+    yAxis = d3.svg.axis().scale(y).ticks(4).orient("right");
 
 // An area generator, for the light fill.
 var area = d3.svg.area()
