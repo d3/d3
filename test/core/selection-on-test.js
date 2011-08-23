@@ -80,6 +80,14 @@ suite.addBatch({
     },
     "returns the current selection": function(body) {
       assert.isTrue(body.on("submit", function() {}) === body);
+    },
+    "returns the assigned listener if called with one argument": function(body) {
+      body.on("mouseover", f).on("click.foo", f);
+      function f() {}
+      assert.equal(body.on("mouseover"), f);
+      assert.equal(body.on("click.foo"), f);
+      assert.isUndefined(body.on("click"));
+      assert.isUndefined(body.on("mouseover.foo"));
     }
   }
 });

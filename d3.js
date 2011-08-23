@@ -1676,26 +1676,32 @@ d3_selectionPrototype.on = function(type, listener, capture) {
   if (arguments.length < 3) capture = false;
 
   // parse the type specifier
-  var i = type.indexOf("."),
-      typo = i === -1 ? type : type.substring(0, i),
-      name = "__on" + type;
+  var name = "__on" + type, i = type.indexOf(".");
+  if (i > 0) type = type.substring(0, i);
+
+  // if called with only one argument, return the current listener
+  if (arguments.length < 2) return (i = this.node()[name]) && i._;
 
   // remove the old event listener, and add the new event listener
   return this.each(function(d, i) {
-    if (this[name]) this.removeEventListener(typo, this[name], capture);
-    if (listener) this.addEventListener(typo, this[name] = l, capture);
+    var node = this;
+
+    if (node[name]) node.removeEventListener(type, node[name], capture);
+    if (listener) node.addEventListener(type, node[name] = l, capture);
 
     // wrapped event listener that preserves i
-    var node = this;
     function l(e) {
       var o = d3.event; // Events can be reentrant (e.g., focus).
       d3.event = e;
       try {
-        listener.call(this, node.__data__, i);
+        listener.call(node, node.__data__, i);
       } finally {
         d3.event = o;
       }
     }
+
+    // stash the unwrapped listener for retrieval
+    l._ = listener;
   });
 };
 d3_selectionPrototype.each = function(callback) {
