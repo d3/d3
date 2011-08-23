@@ -90,6 +90,80 @@ suite.addBatch({
       }
     },
 
+    "ticks": {
+      "defaults to 10": function(axis) {
+        var a = axis();
+        assert.deepEqual(a.ticks(), [10]);
+      },
+      "can be defined as any arguments": function(axis) {
+        var b = {}, a = axis().ticks(b, 42), t = a.ticks();
+        assert.equal(t[0], b);
+        assert.equal(t[1], 42);
+        assert.equal(t.length, 2);
+      },
+      "passes any arguments to the scale's ticks function": function(axis) {
+        var x = d3.scale.linear(), b = {}, a = axis().ticks(b, 42).scale(x), aa = [],
+            g = d3.select("body").html("").append("svg:g");
+        x.ticks = function() { aa.push(arguments); return [42]; };
+        g.call(a);
+        assert.equal(aa.length, 1);
+        assert.equal(aa[0].length, 2);
+        assert.equal(aa[0][0], b);
+        assert.equal(aa[0][1], 42);
+      },
+      "affects the generated ticks": function(axis) {
+        var a = axis().ticks(20),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            t = g.selectAll("g.tick");
+        assert.equal(t[0].length, 21);
+      }
+    },
+
+    "tickFormat": {
+      "defaults to null": function(axis) {
+        var a = axis();
+        assert.isTrue(a.tickFormat() == null);
+      },
+      "when null, uses the scale's tick format": function(axis) {
+        var x = d3.scale.linear(), a = axis().scale(x),
+            g = d3.select("body").html("").append("svg:g");
+
+        x.tickFormat = function() {
+          return function(d) {
+            return "foo-" + d;
+          };
+        };
+
+        g.call(a);
+        var t = g.selectAll("g.tick text");
+        assert.equal(t.text(), "foo-0");
+      },
+      "passes any arguments to the scale's tick format function": function(axis) {
+        var b = {},
+            x = d3.scale.linear(),
+            a = axis().scale(x).ticks(b, 42),
+            g = d3.select("body").html("").append("svg:g"),
+            aa = [];
+
+        x.tickFormat = function() {
+          aa.push(arguments);
+          return String;
+        };
+
+        g.call(a);
+        assert.equal(aa.length, 1);
+        assert.equal(aa[0].length, 2);
+        assert.equal(aa[0][0], b);
+        assert.equal(aa[0][1], 42);
+      },
+      "affects the generated tick labels": function(axis) {
+        var a = axis().tickFormat(d3.format("+.2%")),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            t = g.selectAll("g.tick text");
+        assert.equal(t.text(), "+0.00%");
+      }
+    },
+
     "enter": {
       "generates a new domain path": function(axis) {
         var a = axis(),

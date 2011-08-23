@@ -1,7 +1,9 @@
 d3.chart.axis = function() {
   var scale = d3.scale.linear(),
       tickSize = 6,
-      tickPadding = 3;
+      tickPadding = 3,
+      tickArguments_ = [10],
+      tickFormat_;
 
   function axis(selection) {
     selection.each(function(d, i, j) {
@@ -9,8 +11,8 @@ d3.chart.axis = function() {
 
       // Scale data.
       var range = scale.range(),
-          ticks = scale.ticks(10),
-          tickFormat = scale.tickFormat(10);
+          ticks = scale.ticks.apply(scale, tickArguments_),
+          tickFormat = tickFormat_ || scale.tickFormat.apply(scale, tickArguments_);
 
       // If the transition is interrupted, then really we'd prefer to know the
       // current state of the scale rather than the previous state (at the end
@@ -86,6 +88,18 @@ d3.chart.axis = function() {
   axis.tickPadding = function(x) {
     if (!arguments.length) return tickPadding;
     tickPadding = +x;
+    return axis;
+  };
+
+  axis.ticks = function() {
+    if (!arguments.length) return tickArguments_;
+    tickArguments_ = arguments;
+    return axis;
+  };
+
+  axis.tickFormat = function(x) {
+    if (!arguments.length) return tickFormat_;
+    tickFormat_ = x;
     return axis;
   };
 
