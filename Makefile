@@ -195,6 +195,7 @@ test: all
 %.min.js: %.js Makefile
 	@rm -f $@
 	$(JS_COMPILER) < $< > $@
+	echo ";" >> $@
 
 d3.js d3%.js: Makefile
 	@rm -f $@
