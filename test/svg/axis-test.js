@@ -22,6 +22,12 @@ suite.addBatch({
       "can be defined as a scale object": function(axis) {
         var x = d3.scale.linear(), a = axis().scale(x);
         assert.equal(a.scale(), x);
+      },
+      "can be a polylinear scale": function(axis) {
+        var a = axis().scale(d3.scale.linear().domain([0, 1, 10]).range([2, 20, 200])),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            path = g.selectAll("path");
+        assert.equal(path.attr("d"), "M2,6V0H200V6");
       }
     },
 

@@ -32,7 +32,7 @@ d3.svg.axis = function() {
           tickTransform;
 
       // Domain.
-      var range = scale.range(),
+      var range = d3_scaleExtent(scale.range()),
           path = g.selectAll(".domain").data([,]),
           pathEnter = path.enter().append("svg:path").attr("class", "domain"),
           pathUpdate = transition(path);
