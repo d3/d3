@@ -3,7 +3,8 @@ function d3_transition(groups, id) {
 
   var tweens = {},
       event = d3.dispatch("start", "end"),
-      ease = d3_transitionEase;
+      ease = d3_transitionEase,
+      then = Date.now();
 
   groups.id = id;
 
@@ -30,15 +31,15 @@ function d3_transition(groups, id) {
     groups.each(function(d, i, j) {
       var tweened = [],
           node = this,
-          delay = groups[j][i].delay - elapsed,
+          delay = groups[j][i].delay,
           duration = groups[j][i].duration,
           lock = node.__transition__;
 
       if (!lock) lock = node.__transition__ = {active: 0, owner: id};
       else if (lock.owner < id) lock.owner = id;
-      delay <= 0 ? start(0) : d3.timer(start, delay);
+      delay <= elapsed ? start() : d3.timer(start, delay, then);
 
-      function start(elapsed) {
+      function start() {
         if (lock.active <= id) {
           lock.active = id;
           event.start.dispatch.call(node, d, i);
@@ -49,8 +50,7 @@ function d3_transition(groups, id) {
             }
           }
 
-          delay -= elapsed;
-          d3.timer(tick);
+          d3.timer(tick, 0, then);
         }
         return true;
       }
@@ -77,7 +77,7 @@ function d3_transition(groups, id) {
       }
     });
     return true;
-  });
+  }, 0, then);
 
   return groups;
 }

@@ -3,19 +3,21 @@ var d3_timer_queue = null,
     d3_timer_timeout; // is a timeout active?
 
 // The timer will continue to fire until callback returns true.
-d3.timer = function(callback, delay) {
-  var now = Date.now(),
-      found = false,
+d3.timer = function(callback, delay, then) {
+  var found = false,
       t0,
       t1 = d3_timer_queue;
 
-  if (arguments.length < 2) delay = 0;
-  else if (!isFinite(delay)) return;
+  if (arguments.length < 3) {
+    if (arguments.length < 2) delay = 0;
+    else if (!isFinite(delay)) return;
+    then = Date.now();
+  }
 
   // See if the callback's already in the queue.
   while (t1) {
     if (t1.callback === callback) {
-      t1.then = now;
+      t1.then = then;
       t1.delay = delay;
       found = true;
       break;
@@ -27,7 +29,7 @@ d3.timer = function(callback, delay) {
   // Otherwise, add the callback to the queue.
   if (!found) d3_timer_queue = {
     callback: callback,
-    then: now,
+    then: then,
     delay: delay,
     next: d3_timer_queue
   };
