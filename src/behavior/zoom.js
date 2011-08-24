@@ -78,6 +78,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomDispatch,
     d3_behavior_zoomTarget,
     d3_behavior_zoomArguments,
+    d3_behavior_zoomMoved,
     d3_behavior_zoomStopClick;
 
 function d3_behavior_zoomLocation(point) {
