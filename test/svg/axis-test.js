@@ -191,6 +191,24 @@ suite.addBatch({
         assert.equal(aa[0][0], b);
         assert.equal(aa[0][1], 42);
       },
+      "passes any arguments to the scale's tickFormat function": function(axis) {
+        var b = {},
+            x = d3.scale.linear(),
+            a = axis().scale(x).ticks(b, 42),
+            g = d3.select("body").html("").append("svg:g"),
+            aa = [];
+
+        x.tickFormat = function() {
+          aa.push(arguments);
+          return String;
+        };
+
+        g.call(a);
+        assert.equal(aa.length, 1);
+        assert.equal(aa[0].length, 2);
+        assert.equal(aa[0][0], b);
+        assert.equal(aa[0][1], 42);
+      },
       "affects the generated ticks": function(axis) {
         var a = axis().ticks(20),
             g = d3.select("body").html("").append("svg:g").call(a),
@@ -240,29 +258,23 @@ suite.addBatch({
         var t = g.selectAll("g text");
         assert.equal(t.text(), "foo-0");
       },
-      "passes any arguments to the scale's tick format function": function(axis) {
-        var b = {},
-            x = d3.scale.linear(),
-            a = axis().scale(x).ticks(b, 42),
-            g = d3.select("body").html("").append("svg:g"),
-            aa = [];
-
-        x.tickFormat = function() {
-          aa.push(arguments);
-          return String;
-        };
-
-        g.call(a);
-        assert.equal(aa.length, 1);
-        assert.equal(aa[0].length, 2);
-        assert.equal(aa[0][0], b);
-        assert.equal(aa[0][1], 42);
-      },
       "affects the generated tick labels": function(axis) {
         var a = axis().tickFormat(d3.format("+.2%")),
             g = d3.select("body").html("").append("svg:g").call(a),
             t = g.selectAll("g text");
         assert.equal(t.text(), "+0.00%");
+      },
+      "can be set to a constant": function(axis) {
+        var a = axis().tickFormat("I'm a tick!"),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            t = g.selectAll("g text");
+        assert.equal(t.text(), "I'm a tick!");
+      },
+      "can be set to a falsey constant": function(axis) {
+        var a = axis().tickFormat(""),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            t = g.selectAll("g text");
+        assert.equal(t.text(), "");
       }
     },
 
