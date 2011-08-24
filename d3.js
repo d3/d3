@@ -3727,6 +3727,7 @@ d3.behavior.drag = function() {
 
 var d3_behavior_dragEvent,
     d3_behavior_dragTarget,
+    d3_behavior_dragArguments,
     d3_behavior_dragOffset,
     d3_behavior_dragMoved,
     d3_behavior_dragStopClick;
@@ -3772,7 +3773,7 @@ function d3_behavior_dragMove() {
 function d3_behavior_dragUp() {
   if (!d3_behavior_dragTarget) return;
   d3_behavior_dragDispatch("dragend");
-  d3_behavior_dragForce = d3_behavior_dragTarget = null;
+  d3_behavior_dragTarget = null;
 
   // If the node was moved, prevent the mouseup from propagating.
   // Also prevent the subsequent click from propagating (e.g., for anchors).
@@ -3873,6 +3874,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomDispatch,
     d3_behavior_zoomTarget,
     d3_behavior_zoomArguments,
+    d3_behavior_zoomMoved,
     d3_behavior_zoomStopClick;
 
 function d3_behavior_zoomLocation(point) {
