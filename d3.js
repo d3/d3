@@ -7,24 +7,6 @@ if (!Object.create) Object.create = function(o) {
   f.prototype = o;
   return new f;
 };
-var d3_array = d3_arraySlice; // conversion for NodeLists
-
-function d3_arrayCopy(pseudoarray) {
-  var i = -1, n = pseudoarray.length, array = [];
-  while (++i < n) array.push(pseudoarray[i]);
-  return array;
-}
-
-function d3_arraySlice(pseudoarray) {
-  return Array.prototype.slice.call(pseudoarray);
-}
-
-try {
-  d3_array(document.documentElement.childNodes)[0].nodeType;
-} catch(e) {
-  d3_array = d3_arrayCopy;
-}
-
 var d3_arraySubclass = [].__proto__?
 
 // Until ECMAScript supports array subclassing, prototype injection works well.
@@ -1207,7 +1189,7 @@ d3.select = function(selector) {
 d3.selectAll = function(selector) {
   return typeof selector === "string"
       ? d3_selectionRoot.selectAll(selector)
-      : d3_selection([d3_array(selector)]); // assume node[]
+      : d3_selection([selector]); // assume node[]
 };
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);
@@ -1215,7 +1197,7 @@ function d3_selection(groups) {
 }
 
 var d3_select = function(s, n) { return n.querySelector(s); },
-    d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
+    d3_selectAll = function(s, n) { return n.querySelectorAll(s); };
 
 // Prefer Sizzle, if available.
 if (typeof Sizzle === "function") {
@@ -1247,7 +1229,7 @@ d3_selectionPrototype.select = function(selector) {
     subgroup.parentNode = (group = this[j]).parentNode;
     for (var i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroup.push(subnode = selector(node));
+        subgroup.push(subnode = selector.call(node, node.__data__, i));
         if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
       } else {
         subgroup.push(null);
@@ -1259,8 +1241,8 @@ d3_selectionPrototype.select = function(selector) {
 };
 
 function d3_selection_selector(selector) {
-  return function(node) {
-    return d3_select(selector, node);
+  return function() {
+    return d3_select(selector, this);
   };
 }
 d3_selectionPrototype.selectAll = function(selector) {
@@ -1273,7 +1255,7 @@ d3_selectionPrototype.selectAll = function(selector) {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroups.push(subgroup = selector(node));
+        subgroups.push(subgroup = selector.call(node, node.__data__, i));
         subgroup.parentNode = node;
       }
     }
@@ -1283,8 +1265,8 @@ d3_selectionPrototype.selectAll = function(selector) {
 };
 
 function d3_selection_selectorAll(selector) {
-  return function(node) {
-    return d3_selectAll(selector, node);
+  return function() {
+    return d3_selectAll(selector, this);
   };
 }
 d3_selectionPrototype.attr = function(name, value) {
@@ -1443,12 +1425,12 @@ d3_selectionPrototype.html = function(value) {
 d3_selectionPrototype.append = function(name) {
   name = d3.ns.qualify(name);
 
-  function append(node) {
-    return node.appendChild(document.createElement(name));
+  function append() {
+    return this.appendChild(document.createElement(name));
   }
 
-  function appendNS(node) {
-    return node.appendChild(document.createElementNS(name.space, name.local));
+  function appendNS() {
+    return this.appendChild(document.createElementNS(name.space, name.local));
   }
 
   return this.select(name.local ? appendNS : append);
@@ -1459,16 +1441,16 @@ d3_selectionPrototype.append = function(name) {
 d3_selectionPrototype.insert = function(name, before) {
   name = d3.ns.qualify(name);
 
-  function insert(node) {
-    return node.insertBefore(
+  function insert() {
+    return this.insertBefore(
         document.createElement(name),
-        d3_select(before, node));
+        d3_select(before, this));
   }
 
-  function insertNS(node) {
-    return node.insertBefore(
+  function insertNS() {
+    return this.insertBefore(
         document.createElementNS(name.space, name.local),
-        d3_select(before, node));
+        d3_select(before, this));
   }
 
   return this.select(name.local ? insertNS : insert);
@@ -1616,7 +1598,7 @@ d3_selection_enterPrototype.select = function(selector) {
     subgroup.parentNode = group.parentNode;
     for (var i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroup.push(upgroup[i] = subnode = selector(group.parentNode));
+        subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i));
         subnode.__data__ = node.__data__;
       } else {
         subgroup.push(null);
@@ -1865,7 +1847,7 @@ d3_transitionPrototype.select = function(selector) {
   for (var j = -1, m = this.length; ++j < m;) {
     subgroups.push(subgroup = []);
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
-      if ((node = group[i]) && (subnode = selector(node.node))) {
+      if ((node = group[i]) && (subnode = selector.call(node.node, node.node.__data__, i))) {
         if ("__data__" in node.node) subnode.__data__ = node.node.__data__;
         subgroup.push({node: subnode, delay: node.delay, duration: node.duration});
       } else {
@@ -1886,7 +1868,7 @@ d3_transitionPrototype.selectAll = function(selector) {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroups.push(subgroup = selector(node.node));
+        subgroups.push(subgroup = selector.call(node.node, node.node.__data__, i));
         for (var k = -1, o = subgroup.length; ++k < o;) {
           subgroup[k] = {node: subgroup[k], delay: node.delay, duration: node.duration};
         }
@@ -3401,7 +3383,7 @@ function d3_svg_mousePoint(container, e) {
 };
 d3.svg.touches = function(container) {
   var touches = d3.event.touches;
-  return touches ? d3_array(touches).map(function(touch) {
+  return touches ? Array.prototype.map.call(touches, function(touch) {
     var point = d3_svg_mousePoint(container, touch);
     point.identifier = touch.identifier;
     return point;

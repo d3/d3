@@ -4,7 +4,7 @@ function d3_selection(groups) {
 }
 
 var d3_select = function(s, n) { return n.querySelector(s); },
-    d3_selectAll = function(s, n) { return d3_array(n.querySelectorAll(s)); };
+    d3_selectAll = function(s, n) { return n.querySelectorAll(s); };
 
 // Prefer Sizzle, if available.
 if (typeof Sizzle === "function") {

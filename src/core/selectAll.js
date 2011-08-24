@@ -1,5 +1,5 @@
 d3.selectAll = function(selector) {
   return typeof selector === "string"
       ? d3_selectionRoot.selectAll(selector)
-      : d3_selection([d3_array(selector)]); // assume node[]
+      : d3_selection([selector]); // assume node[]
 };

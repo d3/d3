@@ -12,7 +12,7 @@ d3_selection_enterPrototype.select = function(selector) {
     subgroup.parentNode = group.parentNode;
     for (var i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroup.push(upgroup[i] = subnode = selector(group.parentNode));
+        subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i));
         subnode.__data__ = node.__data__;
       } else {
         subgroup.push(null);
