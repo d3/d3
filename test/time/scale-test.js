@@ -272,13 +272,13 @@ suite.addBatch({
       },
       "formats minute on second zero": function(format) {
         assert.equal(format(local(2011, 1, 2, 11, 59)), "11:59");
-        assert.equal(format(local(2011, 1, 2, 12, 01)), "12:01");
-        assert.equal(format(local(2011, 1, 2, 12, 02)), "12:02");
+        assert.equal(format(local(2011, 1, 2, 12,  1)), "12:01");
+        assert.equal(format(local(2011, 1, 2, 12,  2)), "12:02");
       },
       "otherwise, formats second": function(format) {
-        assert.equal(format(local(2011, 1, 2, 12, 01, 09)), ":09");
-        assert.equal(format(local(2011, 1, 2, 12, 01, 10)), ":10");
-        assert.equal(format(local(2011, 1, 2, 12, 01, 11)), ":11");
+        assert.equal(format(local(2011, 1, 2, 12, 1,  9)), ":09");
+        assert.equal(format(local(2011, 1, 2, 12, 1, 10)), ":10");
+        assert.equal(format(local(2011, 1, 2, 12, 1, 11)), ":11");
       }
     },
 
@@ -501,13 +501,13 @@ suite.addBatch({
         },
         "formats minute on second zero": function(format) {
           assert.equal(format(utc(2011, 1, 2, 11, 59)), "11:59");
-          assert.equal(format(utc(2011, 1, 2, 12, 01)), "12:01");
-          assert.equal(format(utc(2011, 1, 2, 12, 02)), "12:02");
+          assert.equal(format(utc(2011, 1, 2, 12,  1)), "12:01");
+          assert.equal(format(utc(2011, 1, 2, 12,  2)), "12:02");
         },
         "otherwise, formats second": function(format) {
-          assert.equal(format(utc(2011, 1, 2, 12, 01, 09)), ":09");
-          assert.equal(format(utc(2011, 1, 2, 12, 01, 10)), ":10");
-          assert.equal(format(utc(2011, 1, 2, 12, 01, 11)), ":11");
+          assert.equal(format(utc(2011, 1, 2, 12, 1,  9)), ":09");
+          assert.equal(format(utc(2011, 1, 2, 12, 1, 10)), ":10");
+          assert.equal(format(utc(2011, 1, 2, 12, 1, 11)), ":11");
         }
       }
     }

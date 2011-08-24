@@ -22,12 +22,12 @@ suite.addBatch({
         var x = pow().domain([new Date(1990, 0, 1), new Date(1991, 0, 1)]);
         assert.equal(typeof x.domain()[0], "number");
         assert.equal(typeof x.domain()[1], "number");
-        assert.inDelta(x(new Date(1989, 09, 20)), -.2, 1e-2);
-        assert.inDelta(x(new Date(1990, 00, 01)), 0, 1e-2);
-        assert.inDelta(x(new Date(1990, 02, 15)), .2, 1e-2);
-        assert.inDelta(x(new Date(1990, 04, 27)), .4, 1e-2);
-        assert.inDelta(x(new Date(1991, 00, 01)), 1, 1e-2);
-        assert.inDelta(x(new Date(1991, 02, 15)), 1.2, 1e-2);
+        assert.inDelta(x(new Date(1989, 9, 20)), -.2, 1e-2);
+        assert.inDelta(x(new Date(1990, 0,  1)), 0, 1e-2);
+        assert.inDelta(x(new Date(1990, 2, 15)), .2, 1e-2);
+        assert.inDelta(x(new Date(1990, 4, 27)), .4, 1e-2);
+        assert.inDelta(x(new Date(1991, 0,  1)), 1, 1e-2);
+        assert.inDelta(x(new Date(1991, 2, 15)), 1.2, 1e-2);
         var x = pow().domain(["0", "1"]);
         assert.equal(typeof x.domain()[0], "number");
         assert.equal(typeof x.domain()[1], "number");
