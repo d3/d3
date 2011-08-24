@@ -41,6 +41,16 @@ suite.addBatch({
       var span = body.selectAll("span");
       assert.equal(span.length, 1);
       assert.equal(span[0].length, 0);
+    },
+    "can select via function": function(body) {
+      var d = {}, dd = [], ii = [], tt = [],
+          s = body.data([d]).selectAll(function(d, i) { dd.push(d); ii.push(i); tt.push(this); return this.childNodes; });
+      assert.deepEqual(dd, [d], "expected data, got {actual}");
+      assert.deepEqual(ii, [0], "expected index, got {actual}");
+      assert.domEqual(tt[0], document.body, "expected this, got {actual}");
+      assert.domEqual(s[0][0], document.body.firstChild);
+      assert.domEqual(s[0][1], document.body.lastChild);
+      delete document.body.__data__;
     }
   }
 });
@@ -98,6 +108,18 @@ suite.addBatch({
       assert.equal(span[0].length, 2);
       assert.isTrue(span[0][0].parentNode === div[0][0]);
       assert.isTrue(span[0][1].parentNode === div[0][0]);
+    },
+    "can select via function": function(div) {
+      var dd = [], ii = [], tt = [],
+          s = div.data(["a", "b"]).selectAll(function(d, i) { dd.push(d); ii.push(i); tt.push(this); return this.childNodes; });
+      assert.deepEqual(dd, ["a", "b"], "expected data, got {actual}");
+      assert.deepEqual(ii, [0, 1], "expected index, got {actual}");
+      assert.domEqual(tt[0], div[0][0], "expected this, got {actual}");
+      assert.domEqual(tt[1], div[0][1], "expected this, got {actual}");
+      assert.domEqual(s[0][0], div[0][0].firstChild);
+      assert.domEqual(s[0][1], div[0][0].lastChild);
+      assert.domEqual(s[1][0], div[0][1].firstChild);
+      assert.domEqual(s[1][1], div[0][1].lastChild);
     }
   }
 });

@@ -3,12 +3,12 @@
 d3_selectionPrototype.append = function(name) {
   name = d3.ns.qualify(name);
 
-  function append(node) {
-    return node.appendChild(document.createElement(name));
+  function append() {
+    return this.appendChild(document.createElement(name));
   }
 
-  function appendNS(node) {
-    return node.appendChild(document.createElementNS(name.space, name.local));
+  function appendNS() {
+    return this.appendChild(document.createElementNS(name.space, name.local));
   }
 
   return this.select(name.local ? appendNS : append);

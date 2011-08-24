@@ -4,16 +4,16 @@
 d3_selectionPrototype.insert = function(name, before) {
   name = d3.ns.qualify(name);
 
-  function insert(node) {
-    return node.insertBefore(
+  function insert() {
+    return this.insertBefore(
         document.createElement(name),
-        d3_select(before, node));
+        d3_select(before, this));
   }
 
-  function insertNS(node) {
-    return node.insertBefore(
+  function insertNS() {
+    return this.insertBefore(
         document.createElementNS(name.space, name.local),
-        d3_select(before, node));
+        d3_select(before, this));
   }
 
   return this.select(name.local ? insertNS : insert);
