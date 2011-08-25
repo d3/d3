@@ -18,6 +18,9 @@ function(array, prototype) {
 function(array, prototype) {
   for (var property in prototype) array[property] = prototype[property];
 };
+function d3_this() {
+  return this;
+}
 d3.functor = function(v) {
   return typeof v === "function" ? v : function() { return v; };
 };
@@ -1949,6 +1952,9 @@ function d3_transition_each(callback) {
   }
   return this;
 }
+d3_transitionPrototype.transition = function() {
+  return this.select(d3_this);
+};
 var d3_timer_queue = null,
     d3_timer_interval, // is an interval (or frame) active?
     d3_timer_timeout; // is a timeout active?
