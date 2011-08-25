@@ -203,7 +203,7 @@ d3.js d3%.js: Makefile
 	@chmod a-w $@
 
 package.json: d3.js
-	sed -e s/{version}/`node -e 'require("./test/env"); require("./d3"); d3.version'`/ $@.template > $@
+	node src/package.js > $@
 
 clean:
 	rm -f d3*.js

@@ -1,6 +1,9 @@
-{
+require("../test/env");
+require("../d3");
+
+require("util").puts(JSON.stringify({
   "name": "d3",
-  "version": "{version}",
+  "version": d3.version,
   "description": "A small, free JavaScript library for manipulating documents based on data.",
   "keywords": ["dom", "w3c", "visualization", "svg", "animation", "canvas"],
   "homepage": "http://mbostock.github.com/d3/",
@@ -11,4 +14,4 @@
     "jsdom": "0.2.3",
     "vows": "0.5.10"
   }
-}
+}, null, 2));
