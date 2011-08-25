@@ -1,4 +1,4 @@
-(function(){d3 = {version: "2.0.1"}; // semver
+(function(){d3 = {version: "2.0.2"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -18,6 +18,9 @@ function(array, prototype) {
 function(array, prototype) {
   for (var property in prototype) array[property] = prototype[property];
 };
+function d3_this() {
+  return this;
+}
 d3.functor = function(v) {
   return typeof v === "function" ? v : function() { return v; };
 };
@@ -1739,7 +1742,8 @@ function d3_transition(groups, id) {
 
   var tweens = {},
       event = d3.dispatch("start", "end"),
-      ease = d3_transitionEase;
+      ease = d3_transitionEase,
+      then = Date.now();
 
   groups.id = id;
 
@@ -1766,15 +1770,15 @@ function d3_transition(groups, id) {
     groups.each(function(d, i, j) {
       var tweened = [],
           node = this,
-          delay = groups[j][i].delay - elapsed,
+          delay = groups[j][i].delay,
           duration = groups[j][i].duration,
           lock = node.__transition__;
 
       if (!lock) lock = node.__transition__ = {active: 0, owner: id};
       else if (lock.owner < id) lock.owner = id;
-      delay <= 0 ? start(0) : d3.timer(start, delay);
+      delay <= elapsed ? start() : d3.timer(start, delay, then);
 
-      function start(elapsed) {
+      function start() {
         if (lock.active <= id) {
           lock.active = id;
           event.start.dispatch.call(node, d, i);
@@ -1785,8 +1789,7 @@ function d3_transition(groups, id) {
             }
           }
 
-          delay -= elapsed;
-          d3.timer(tick);
+          d3.timer(tick, 0, then);
         }
         return true;
       }
@@ -1813,7 +1816,7 @@ function d3_transition(groups, id) {
       }
     });
     return true;
-  });
+  }, 0, then);
 
   return groups;
 }
@@ -1949,24 +1952,29 @@ function d3_transition_each(callback) {
   }
   return this;
 }
+d3_transitionPrototype.transition = function() {
+  return this.select(d3_this);
+};
 var d3_timer_queue = null,
     d3_timer_interval, // is an interval (or frame) active?
     d3_timer_timeout; // is a timeout active?
 
 // The timer will continue to fire until callback returns true.
-d3.timer = function(callback, delay) {
-  var now = Date.now(),
-      found = false,
+d3.timer = function(callback, delay, then) {
+  var found = false,
       t0,
       t1 = d3_timer_queue;
 
-  if (arguments.length < 2) delay = 0;
-  else if (!isFinite(delay)) return;
+  if (arguments.length < 3) {
+    if (arguments.length < 2) delay = 0;
+    else if (!isFinite(delay)) return;
+    then = Date.now();
+  }
 
   // See if the callback's already in the queue.
   while (t1) {
     if (t1.callback === callback) {
-      t1.then = now;
+      t1.then = then;
       t1.delay = delay;
       found = true;
       break;
@@ -1978,7 +1986,7 @@ d3.timer = function(callback, delay) {
   // Otherwise, add the callback to the queue.
   if (!found) d3_timer_queue = {
     callback: callback,
-    then: now,
+    then: then,
     delay: delay,
     next: d3_timer_queue
   };
@@ -3504,7 +3512,7 @@ d3.svg.axis = function() {
 
       // Ticks.
       var ticks = scale.ticks.apply(scale, tickArguments_),
-          tickFormat = tickFormat_ || scale.tickFormat.apply(scale, tickArguments_);
+          tickFormat = tickFormat_ == null ? scale.tickFormat.apply(scale, tickArguments_) : tickFormat_;
 
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
@@ -3521,7 +3529,7 @@ d3.svg.axis = function() {
           tickTransform;
 
       // Domain.
-      var range = scale.range(),
+      var range = d3_scaleExtent(scale.range()),
           path = g.selectAll(".domain").data([,]),
           pathEnter = path.enter().append("svg:path").attr("class", "domain"),
           pathUpdate = transition(path);

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+line, path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.minor :not(.minor) {
+  display: none;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var m = [10, 10, 20, 10],
+    w = 960 - m[1] - m[3],
+    h = 80 - m[0] - m[2],
+    x = d3.scale.linear().domain([.05, .95]).range([0, w]),
+    y = d3.scale.linear().range([0, h]);
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+  .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+svg.append("svg:g")
+    .attr("class", "x minor")
+    .attr("transform", "translate(0," + h + ")")
+    .call(d3.svg.axis().scale(x).tickSubdivide(2).tickSize(-6));
+
+svg.append("svg:g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + h + ")")
+    .call(d3.svg.axis().scale(x));
+
+    </script>
+  </body>
+</html>

@@ -40,6 +40,7 @@ d3.core.js: \
 	src/core/date.js \
 	src/core/object.js \
 	src/core/array.js \
+	src/core/this.js \
 	src/core/functor.js \
 	src/core/rebind.js \
 	src/core/ascending.js \
@@ -113,6 +114,7 @@ d3.core.js: \
 	src/core/transition-delay.js \
 	src/core/transition-duration.js \
 	src/core/transition-each.js \
+	src/core/transition-transition.js \
 	src/core/timer.js \
 	src/core/noop.js
 

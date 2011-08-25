@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.time.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis line, .axis path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var m = [20, 40, 20, 40],
+    w = 960 - m[1] - m[3],
+    h = 500 - m[0] - m[2],
+    x = d3.time.scale().domain([new Date(2011, 07, 01), new Date(2011, 07, 08)]).range([0, w]),
+    y = d3.scale.sqrt().range([h, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .ticks(d3.time.days)
+    .tickFormat(d3.time.format("%m/%d"));
+
+var yAxis = d3.svg.axis()
+    .scale(y);
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+  .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+svg.append("svg:g")
+    .attr("class", "bottom axis")
+    .attr("transform", "translate(0," + h + ")")
+    .call(xAxis.orient("bottom"));
+
+svg.append("svg:g")
+    .attr("class", "top axis")
+    .call(xAxis.orient("top"));
+
+svg.append("svg:g")
+    .attr("class", "left axis")
+    .call(yAxis.orient("left"));
+
+svg.append("svg:g")
+    .attr("class", "right axis")
+    .attr("transform", "translate(" + w + ",0)")
+    .call(yAxis.orient("right"));
+
+    </script>
+  </body>
+</html>

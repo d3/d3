@@ -83,7 +83,7 @@ d3.geo.albersUsa = function() {
   function albersUsa(coordinates) {
     var lon = coordinates[0],
         lat = coordinates[1];
-    return (lat < 25
+    return (lat < 21
         ? (lon < -100 ? hawaii : puertoRico)
         : (lat > 50 ? alaska : lower48))(coordinates);
   }
