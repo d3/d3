@@ -78,8 +78,6 @@ d3.core.js: \
 	src/core/uninterpolate.js \
 	src/core/rgb.js \
 	src/core/hsl.js \
-	src/core/select.js \
-	src/core/selectAll.js \
 	src/core/selection.js \
 	src/core/selection-select.js \
 	src/core/selection-selectAll.js \
@@ -104,6 +102,7 @@ d3.core.js: \
 	src/core/selection-empty.js \
 	src/core/selection-node.js \
 	src/core/selection-transition.js \
+	src/core/selection-root.js \
 	src/core/transition.js \
 	src/core/transition-select.js \
 	src/core/transition-selectAll.js \

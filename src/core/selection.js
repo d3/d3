@@ -12,10 +12,7 @@ if (typeof Sizzle === "function") {
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
 }
 
-var d3_selectionPrototype = [],
-    d3_selectionRoot = d3_selection([[document]]);
-
-d3_selectionRoot[0].parentNode = document.documentElement;
+var d3_selectionPrototype = [];
 
 d3.selection = function() {
   return d3_selectionRoot;
