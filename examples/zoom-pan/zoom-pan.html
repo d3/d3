@@ -44,8 +44,8 @@ var svg = d3.select("body").append("svg:svg")
 svg.append("svg:rect")
     .attr("width", size[0])
     .attr("height", size[1])
-    .attr("stroke", stroke)
-    .attr("fill", "none");
+    .attr("stroke", "none")
+    .style("fill", "#fff");
 
 svg.append("svg:a")
     .attr("xlink:href", "http://mbostock.github.com/d3/")
@@ -70,7 +70,7 @@ function redraw() {
   gx.select("text")
       .text(fx);
 
-  var gxe = gx.enter().insert("svg:g", "rect")
+  var gxe = gx.enter().insert("svg:g", "a")
       .attr("class", "x")
       .attr("transform", tx);
 
@@ -95,7 +95,7 @@ function redraw() {
   gy.select("text")
       .text(fy);
 
-  var gye = gy.enter().insert("svg:g", "rect")
+  var gye = gy.enter().insert("svg:g", "a")
       .attr("class", "y")
       .attr("transform", ty);
 

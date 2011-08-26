@@ -8,7 +8,7 @@ d3.behavior.zoom = function() {
     this
         .on("mousedown.zoom", mousedown)
         .on("mousewheel.zoom", mousewheel)
-        .on("DOMMouseScroll.zoom", dblclick)
+        .on("DOMMouseScroll.zoom", mousewheel)
         .on("dblclick.zoom", dblclick)
         .on("touchstart.zoom", touchstart);
 
@@ -113,7 +113,7 @@ function d3_behavior_zoomDelta() {
     d3_behavior_zoomDiv.dispatchEvent(e);
     delta = 1000 - d3_behavior_zoomDiv.scrollTop;
   } catch (error) {
-    delta = e.wheelDelta || -e.detail;
+    delta = e.wheelDelta || (-e.detail * 5);
   }
 
   return delta * .005;
