@@ -40,6 +40,7 @@ suite.addBatch({
   // Subtransitions
   "select": require("./transition-test-select"),
   "selectAll": require("./transition-test-selectAll"),
+  "transition": require("./transition-test-transition"),
 
   // Content
   "attr": require("./transition-test-attr"),

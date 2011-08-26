@@ -69,8 +69,8 @@ module.exports = {
     "sets an exclusive lock on transitioning nodes": function(result) {
       var id = result.id;
       assert.isTrue(id > 0);
-      assert.equal(result.selection[0][0].__transition__.owner, id);
-      assert.equal(result.selection[0][1].__transition__.owner, id);
+      assert.equal(result.selection[0][0].__transition__.count, 1);
+      assert.equal(result.selection[0][1].__transition__.count, 1);
       assert.equal(result.selection[0][0].__transition__.active, id);
       assert.equal(result.selection[0][1].__transition__.active, id);
     }
@@ -158,7 +158,7 @@ module.exports = {
       },
       "inherits the same transition id": function(result) {
         assert.isTrue(result.id > 0);
-        assert.equal(result.node.__transition__.owner, result.id);
+        assert.equal(result.node.__transition__.count, 1);
         assert.equal(result.node.__transition__.active, result.id);
       }
     }
