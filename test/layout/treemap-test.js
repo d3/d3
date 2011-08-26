@@ -134,6 +134,36 @@ suite.addBatch({
         {x: 1, y: 556, dx: 599, dy: 277},
         {x: 1, y: 1, dx: 599, dy: 555}
       ]);
+    },
+    "no negatively sized rectangles": function(treemap) {
+      var t = treemap().size([615, 500]).sort(function(a, b) { return a.value - b.value; }).padding(29),
+          nodes = t.nodes({"children": [
+            {"value": 1},
+            {"value": 9},
+            {"value": 3},
+            {"value": 15},
+            {"value": 44},
+            {"value": 28},
+            {"value": 32},
+            {"value": 41},
+            {"value": 50},
+            {"value": 60},
+            {"value": 64},
+            {"value": 75},
+            {"value": 76},
+            {"value": 84},
+            {"value": 88},
+            {"value": 100},
+            {"value": 140},
+            {"value": 142},
+            {"value": 363},
+            {"value": 657},
+            {"value": 670},
+            {"value": 822},
+            {"value": 1173},
+            {"value": 1189}
+          ]}).map(layout);
+      assert.equal(nodes.filter(function(n) { return n.dx < 0 || n.dy < 0; }).length, 0);
     }
   }
 });
