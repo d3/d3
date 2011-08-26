@@ -1774,50 +1774,53 @@ function d3_transition(groups, id) {
           node = this,
           delay = groups[j][i].delay,
           duration = groups[j][i].duration,
-          lock = node.__transition__;
+          lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0});
 
-      if (!lock) lock = node.__transition__ = {active: 0, owner: id};
-      else if (lock.owner < id) lock.owner = id;
+      ++lock.count;
+
       delay <= elapsed ? start() : d3.timer(start, delay, then);
 
       function start() {
-        if (lock.active <= id) {
-          lock.active = id;
-          event.start.dispatch.call(node, d, i);
+        if (lock.active > id) return stop();
+        lock.active = id;
 
-          for (var tween in tweens) {
-            if (tween = tweens[tween].call(node, d, i)) {
-              tweened.push(tween);
-            }
+        for (var tween in tweens) {
+          if (tween = tweens[tween].call(node, d, i)) {
+            tweened.push(tween);
           }
-
-          d3.timer(tick, 0, then);
         }
-        return true;
+
+        event.start.dispatch.call(node, d, i);
+        d3.timer(tick, 0, then);
+        return 1;
       }
 
       function tick(elapsed) {
-        if (lock.active !== id) return true;
+        if (lock.active !== id) return stop();
 
         var t = Math.min(1, (elapsed - delay) / duration),
             e = ease(t),
             n = tweened.length;
 
-        while (--n >= 0) {
-          tweened[n].call(node, e);
+        while (n > 0) {
+          tweened[--n].call(node, e);
         }
 
         if (t === 1) {
-          lock.active = 0;
-          if (lock.owner === id) delete node.__transition__;
+          stop();
           d3_transitionInheritId = id;
           event.end.dispatch.call(node, d, i);
           d3_transitionInheritId = 0;
-          return true;
+          return 1;
         }
       }
+
+      function stop() {
+        if (!--lock.count) delete node.__transition__;
+        return 1;
+      }
     });
-    return true;
+    return 1;
   }, 0, then);
 
   return groups;
