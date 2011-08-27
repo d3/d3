@@ -1,4 +1,4 @@
-(function(){d3 = {version: "2.0.3"}; // semver
+(function(){d3 = {version: "2.0.4"}; // semver
 if (!Date.now) Date.now = function() {
   return +new Date;
 };
@@ -1183,17 +1183,6 @@ function d3_hsl_rgb(h, s, l) {
 
   return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
 }
-// TODO fast singleton implementation!
-d3.select = function(selector) {
-  return typeof selector === "string"
-      ? d3_selectionRoot.select(selector)
-      : d3_selection([[selector]]); // assume node
-};
-d3.selectAll = function(selector) {
-  return typeof selector === "string"
-      ? d3_selectionRoot.selectAll(selector)
-      : d3_selection([selector]); // assume node[]
-};
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);
   return groups;
@@ -1208,10 +1197,7 @@ if (typeof Sizzle === "function") {
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
 }
 
-var d3_selectionPrototype = [],
-    d3_selectionRoot = d3_selection([[document]]);
-
-d3_selectionRoot[0].parentNode = document.documentElement;
+var d3_selectionPrototype = [];
 
 d3.selection = function() {
   return d3_selectionRoot;
@@ -1737,6 +1723,22 @@ d3_selectionPrototype.transition = function() {
 
   return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId);
 };
+var d3_selectionRoot = d3_selection([[document]]);
+
+d3_selectionRoot[0].parentNode = document.documentElement;
+
+// TODO fast singleton implementation!
+d3.select = function(selector) {
+  return typeof selector === "string"
+      ? d3_selectionRoot.select(selector)
+      : d3_selection([[selector]]); // assume node
+};
+
+d3.selectAll = function(selector) {
+  return typeof selector === "string"
+      ? d3_selectionRoot.selectAll(selector)
+      : d3_selection([selector]); // assume node[]
+};
 function d3_transition(groups, id) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
@@ -1772,50 +1774,53 @@ function d3_transition(groups, id) {
           node = this,
           delay = groups[j][i].delay,
           duration = groups[j][i].duration,
-          lock = node.__transition__;
+          lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0});
 
-      if (!lock) lock = node.__transition__ = {active: 0, owner: id};
-      else if (lock.owner < id) lock.owner = id;
+      ++lock.count;
+
       delay <= elapsed ? start() : d3.timer(start, delay, then);
 
       function start() {
-        if (lock.active <= id) {
-          lock.active = id;
-          event.start.dispatch.call(node, d, i);
+        if (lock.active > id) return stop();
+        lock.active = id;
 
-          for (var tween in tweens) {
-            if (tween = tweens[tween].call(node, d, i)) {
-              tweened.push(tween);
-            }
+        for (var tween in tweens) {
+          if (tween = tweens[tween].call(node, d, i)) {
+            tweened.push(tween);
           }
-
-          d3.timer(tick, 0, then);
         }
-        return true;
+
+        event.start.dispatch.call(node, d, i);
+        d3.timer(tick, 0, then);
+        return 1;
       }
 
       function tick(elapsed) {
-        if (lock.active !== id) return true;
+        if (lock.active !== id) return stop();
 
         var t = Math.min(1, (elapsed - delay) / duration),
             e = ease(t),
             n = tweened.length;
 
-        while (--n >= 0) {
-          tweened[n].call(node, e);
+        while (n > 0) {
+          tweened[--n].call(node, e);
         }
 
         if (t === 1) {
-          lock.active = 0;
-          if (lock.owner === id) delete node.__transition__;
+          stop();
           d3_transitionInheritId = id;
           event.end.dispatch.call(node, d, i);
           d3_transitionInheritId = 0;
-          return true;
+          return 1;
         }
       }
+
+      function stop() {
+        if (!--lock.count) delete node.__transition__;
+        return 1;
+      }
     });
-    return true;
+    return 1;
   }, 0, then);
 
   return groups;
@@ -3794,7 +3799,7 @@ d3.behavior.zoom = function() {
     this
         .on("mousedown.zoom", mousedown)
         .on("mousewheel.zoom", mousewheel)
-        .on("DOMMouseScroll.zoom", dblclick)
+        .on("DOMMouseScroll.zoom", mousewheel)
         .on("dblclick.zoom", dblclick)
         .on("touchstart.zoom", touchstart);
 
@@ -3899,7 +3904,7 @@ function d3_behavior_zoomDelta() {
     d3_behavior_zoomDiv.dispatchEvent(e);
     delta = 1000 - d3_behavior_zoomDiv.scrollTop;
   } catch (error) {
-    delta = e.wheelDelta || -e.detail;
+    delta = e.wheelDelta || (-e.detail * 5);
   }
 
   return delta * .005;
