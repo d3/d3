@@ -12,11 +12,11 @@ d3.geo.mercator = function() {
   }
 
   mercator.invert = function(xy) {
-    var lon = 360 * (xy[0] - translate[0]) / scale,
-        lat = -360 * (xy[1] - translate[1]) / scale;
+    var x = (xy[0] - translate[0]) / scale,
+        y = (xy[1] - translate[1]) / scale;
     return [
-      lon,
-      2 * Math.atan(Math.exp(lat * d3_radians)) / d3_radians - 90
+      360 * x,
+      2 * Math.atan(Math.exp(-360 * y * d3_radians)) / d3_radians - 90
     ];
   };
 

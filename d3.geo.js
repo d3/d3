@@ -28,14 +28,14 @@ d3.geo.azimuthal = function() {
 
   azimuthal.invert = function(xy) {
     var x = (xy[0] - translate[0]) / scale,
-        y = -(xy[1] - translate[1]) / scale,
+        y = (xy[1] - translate[1]) / scale,
         p = Math.sqrt(x * x + y * y),
         c = mode === "stereographic" ? 2 * Math.atan(p) : Math.asin(p),
         sc = Math.sin(c),
         cc = Math.cos(c);
     return [
-      (x0 + Math.atan2(x * sc, p * cy0 * cc - y * sy0 * sc)) / d3_radians,
-      Math.asin(cc * sy0 + (y * sc * cy0) / p) / d3_radians
+      (x0 + Math.atan2(x * sc, p * cy0 * cc + y * sy0 * sc)) / d3_radians,
+      Math.asin(cc * sy0 - (y * sc * cy0) / p) / d3_radians
     ];
   };
 
@@ -94,8 +94,8 @@ d3.geo.albers = function() {
 
   albers.invert = function(xy) {
     var x = (xy[0] - translate[0]) / scale,
-        y = -(xy[1] - translate[1]) / scale,
-        p0y = p0 - y,
+        y = (xy[1] - translate[1]) / scale,
+        p0y = p0 + y,
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);
     return [
@@ -211,11 +211,11 @@ d3.geo.mercator = function() {
   }
 
   mercator.invert = function(xy) {
-    var lon = 360 * (xy[0] - translate[0]) / scale,
-        lat = -360 * (xy[1] - translate[1]) / scale;
+    var x = (xy[0] - translate[0]) / scale,
+        y = (xy[1] - translate[1]) / scale;
     return [
-      lon,
-      2 * Math.atan(Math.exp(lat * d3_radians)) / d3_radians - 90
+      360 * x,
+      2 * Math.atan(Math.exp(-360 * y * d3_radians)) / d3_radians - 90
     ];
   };
 
