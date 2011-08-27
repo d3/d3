@@ -50,7 +50,7 @@ module.exports = {
         d3.timer(function() {
           cb(null, t1);
           return true;
-        });
+        }, 50);
       });
     },
     "decrements the lock's reference count": function(t1) {
