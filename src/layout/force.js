@@ -50,6 +50,7 @@ d3.layout.force = function() {
         s, // current source
         t, // current target
         l, // current distance
+        k, // current force
         x, // x-distance
         y; // y-distance
 
@@ -64,30 +65,30 @@ d3.layout.force = function() {
         l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
-        t.x -= x / t.weight;
-        t.y -= y / t.weight;
-        s.x += x / s.weight;
-        s.y += y / s.weight;
+        t.x -= x * (k = s.weight / (t.weight + s.weight));
+        t.y -= y * k;
+        s.x += x * (k = 1 - k);
+        s.y += y * k;
       }
     }
 
     // apply gravity forces
-    var kg = alpha * gravity;
+    k = alpha * gravity;
     x = size[0] / 2;
     y = size[1] / 2;
     i = -1; while (++i < n) {
       o = nodes[i];
-      o.x += (x - o.x) * kg;
-      o.y += (y - o.y) * kg;
+      o.x += (x - o.x) * k;
+      o.y += (y - o.y) * k;
     }
 
     // compute quadtree center of mass
     d3_layout_forceAccumulate(q);
 
     // apply charge forces
-    var kc = alpha * charge;
+    k = alpha * charge;
     i = -1; while (++i < n) {
-      q.visit(repulse(nodes[i], kc));
+      q.visit(repulse(nodes[i], k));
     }
 
     // position verlet integration
