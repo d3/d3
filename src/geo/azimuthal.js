@@ -25,9 +25,9 @@ d3.geo.azimuthal = function() {
     ];
   }
 
-  azimuthal.invert = function(xy) {
-    var x = (xy[0] - translate[0]) / scale,
-        y = (xy[1] - translate[1]) / scale,
+  azimuthal.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale,
         p = Math.sqrt(x * x + y * y),
         c = mode === "stereographic" ? 2 * Math.atan(p) : Math.asin(p),
         sc = Math.sin(c),

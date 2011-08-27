@@ -21,9 +21,9 @@ d3.geo.albers = function() {
     ];
   }
 
-  albers.invert = function(xy) {
-    var x = (xy[0] - translate[0]) / scale,
-        y = (xy[1] - translate[1]) / scale,
+  albers.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale,
         p0y = p0 + y,
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);

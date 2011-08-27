@@ -26,9 +26,9 @@ d3.geo.azimuthal = function() {
     ];
   }
 
-  azimuthal.invert = function(xy) {
-    var x = (xy[0] - translate[0]) / scale,
-        y = (xy[1] - translate[1]) / scale,
+  azimuthal.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale,
         p = Math.sqrt(x * x + y * y),
         c = mode === "stereographic" ? 2 * Math.atan(p) : Math.asin(p),
         sc = Math.sin(c),
@@ -92,9 +92,9 @@ d3.geo.albers = function() {
     ];
   }
 
-  albers.invert = function(xy) {
-    var x = (xy[0] - translate[0]) / scale,
-        y = (xy[1] - translate[1]) / scale,
+  albers.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale,
         p0y = p0 + y,
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);
@@ -210,9 +210,9 @@ d3.geo.mercator = function() {
     ];
   }
 
-  mercator.invert = function(xy) {
-    var x = (xy[0] - translate[0]) / scale,
-        y = (xy[1] - translate[1]) / scale;
+  mercator.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale;
     return [
       360 * x,
       2 * Math.atan(Math.exp(-360 * y * d3_radians)) / d3_radians - 90

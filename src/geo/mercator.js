@@ -11,9 +11,9 @@ d3.geo.mercator = function() {
     ];
   }
 
-  mercator.invert = function(xy) {
-    var x = (xy[0] - translate[0]) / scale,
-        y = (xy[1] - translate[1]) / scale;
+  mercator.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale;
     return [
       360 * x,
       2 * Math.atan(Math.exp(-360 * y * d3_radians)) / d3_radians - 90
