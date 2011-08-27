@@ -31,6 +31,10 @@ suite.addBatch({
     },
     "returns a new selection": function(body) {
       assert.isFalse(body.append("div") === body);
+    },
+    "inherits namespace from parent node": function(body) {
+      var g = body.append("svg:svg").append("g");
+      assert.equal(g[0][0].namespaceURI, "http://www.w3.org/2000/svg");
     }
   }
 });
