@@ -16,7 +16,7 @@ d3.geo.azimuthal = function() {
         sx1 = Math.sin(x1),
         cy1 = Math.cos(y1),
         sy1 = Math.sin(y1),
-        k = mode == "stereographic" ? 1 / (1 + sy0 * sy1 + cy0 * cy1 * cx1) : 1,
+        k = mode === "stereographic" ? 1 / (1 + sy0 * sy1 + cy0 * cy1 * cx1) : 1,
         x = k * cy1 * sx1,
         y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
     return [
@@ -24,6 +24,19 @@ d3.geo.azimuthal = function() {
       scale * y + translate[1]
     ];
   }
+
+  azimuthal.invert = function(xy) {
+    var x = (xy[0] - translate[0]) / scale,
+        y = -(xy[1] - translate[1]) / scale,
+        p = Math.sqrt(x * x + y * y),
+        c = mode === "stereographic" ? 2 * Math.atan(p) : Math.asin(p),
+        sc = Math.sin(c),
+        cc = Math.cos(c);
+    return [
+      (x0 + Math.atan2(x * sc, p * cy0 * cc - y * sy0 * sc)) / d3_radians,
+      Math.asin(cc * sy0 + (y * sc * cy0) / p) / d3_radians
+    ];
+  };
 
   azimuthal.mode = function(x) {
     if (!arguments.length) return mode;
