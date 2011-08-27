@@ -40,7 +40,7 @@ d3.geo.azimuthal = function() {
 
   azimuthal.mode = function(x) {
     if (!arguments.length) return mode;
-    mode = x;
+    mode = x + "";
     return azimuthal;
   };
 
