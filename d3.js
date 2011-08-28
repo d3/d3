@@ -1523,30 +1523,30 @@ function d3_selection(groups) {
     if (arguments.length < 3) priority = "";
 
     // If no value is specified, return the first value.
-    if (arguments.length < 2) {
-      switch (typeof name) {
-        case "string": {
-          return first(function() {
-            return window.getComputedStyle(this, null).getPropertyValue(name);
-          });
-        }
-        case "object": {
-          for (key in name) {
-            each(function() {
-              this.style.setProperty(key, name[key], priority);
-            });
-          }
-          return groups;
-        }
-        case "function": {
-          return each(function() {
-            var x = name.apply(this, arguments);
-            for (value in x) {
-              this.style.setProperty(value, x[value], priority);
-            }
-          });
-        }
+    if (arguments.length < 2 && typeof name == "string") {
+      return first(function() {
+        return window.getComputedStyle(this, null).getPropertyValue(name);
+      });
+    }
+
+    if (typeof name == "object") {
+      priority = value || "";
+      for (key in name) {
+        each(function() {
+          this.style.setProperty(key, name[key], priority);
+        });
       }
+      return groups;
+    }
+
+    if (typeof name == "function") {
+      priority = value || "";
+      return each(function() {
+        var x = name.apply(this, arguments);
+        for (value in x) {
+          this.style.setProperty(value, x[value], priority);
+        }
+      });
     }
 
     function styleNull() {
