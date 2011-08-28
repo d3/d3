@@ -2044,7 +2044,6 @@ function d3_transition(groups) {
 
     function styleTween(d, i) {
       var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-      console.log(f);
       return f && function(t) {
         this.style.setProperty(name, f(t), priority);
       };
@@ -2054,13 +2053,18 @@ function d3_transition(groups) {
     return transition;
   };
 
-  transition.styleMultiTween = function(tween, priority) {
+  transition.styleMultiTween = function(name, tween, priority) {
+
     function styleTween(d, i) {
+      var computedStyles = {};
+      for (key in name(0)) {
+        computedStyles[key] = window.getComputedStyle(this, null).getPropertyValue(key);
+      }
       // THIS DOESN'T WORK-- may need to make a new d3_transitionTween
-      var f = tween.call(this, d, i);
+      var f = tween.call(this, d, i, computedStyles);
       return f && function(t) {
         var ft = f(t);
-        for (name in f(t)) {
+        for (name in ft) {
           this.style.setProperty(name, ft[name], priority);
         }
       };
@@ -2074,7 +2078,7 @@ function d3_transition(groups) {
 
     if (typeof name == "function") {
       priority = value || "";
-      return transition.styleMultiTween(d3_transitionTween(name), priority);
+      return transition.styleMultiTween(name, d3_transitionTween(name), priority);
     }
     return transition.styleTween(name, d3_transitionTween(value), priority);
   };
