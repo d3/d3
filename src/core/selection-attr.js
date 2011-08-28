@@ -1,13 +1,28 @@
 d3_selectionPrototype.attr = function(name, value) {
-  name = d3.ns.qualify(name);
-
-  // If no value is specified, return the first value.
   if (arguments.length < 2) {
-    var node = this.node();
-    return name.local
-        ? node.getAttributeNS(name.space, name.local)
-        : node.getAttribute(name);
+
+    if ((value = typeof name) === "object") {
+      for (value in name) this.attr(value, name[value]);
+      return this;
+    }
+
+    if (value === "function") {
+      return this.each(function() {
+        var x = name.apply(this, arguments);
+        for (value in x) d3_selection_attr(value, x[value]).apply(this, arguments);
+      });
+    }
+
+    value = this.node();
+    return (name = d3.ns.qualify(name)).local
+        ? value.getAttributeNS(name.space, name.local)
+        : value.getAttribute(name);
   }
+  return this.each(d3_selection_attr(name, value));
+};
+
+function d3_selection_attr(name, value) {
+  name = d3.ns.qualify(name);
 
   function attrNull() {
     this.removeAttribute(name);
@@ -37,8 +52,8 @@ d3_selectionPrototype.attr = function(name, value) {
     else this.setAttributeNS(name.space, name.local, x);
   }
 
-  return this.each(value == null
+  return value == null
       ? (name.local ? attrNullNS : attrNull) : (typeof value === "function"
       ? (name.local ? attrFunctionNS : attrFunction)
-      : (name.local ? attrConstantNS : attrConstant)));
-};
+      : (name.local ? attrConstantNS : attrConstant));
+}
