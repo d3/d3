@@ -46,8 +46,12 @@ d3.json("../data/flare.json", function(json) {
 
 function cell() {
   this
-      .style("left", function(d) { return d.x + "px"; })
-      .style("top", function(d) { return d.y + "px"; })
-      .style("width", function(d) { return d.dx - 1 + "px"; })
-      .style("height", function(d) { return d.dy - 1 + "px"; });
+      .style(function(d) {
+        return {
+          "left": d.x + "px",
+          "top": d.y + "px",
+          "width": d.dx - 1 + "px",
+          "height": d.dy - 1 + "px"
+        };
+      });
 }

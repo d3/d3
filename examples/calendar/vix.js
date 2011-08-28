@@ -21,11 +21,15 @@ vis.append("svg:text")
 vis.selectAll("rect.day")
     .data(calendar.dates)
   .enter().append("svg:rect")
-    .attr("x", function(d) { return d.week * z; })
-    .attr("y", function(d) { return d.day * z; })
-    .attr("class", "day")
-    .attr("width", z)
-    .attr("height", z);
+    .attr(function(d) {
+      return {
+        "x": d.week * z,
+        "y": d.day * z,
+        "class": "day",
+        "width": z,
+        "height": z
+      };
+    });
 
 vis.selectAll("path.month")
     .data(calendar.months)

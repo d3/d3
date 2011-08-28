@@ -1523,9 +1523,29 @@ function d3_selection(groups) {
     if (arguments.length < 3) priority = "";
 
     // If no value is specified, return the first value.
-    if (arguments.length < 2) {
+    if (arguments.length < 2 && typeof name == "string") {
       return first(function() {
         return window.getComputedStyle(this, null).getPropertyValue(name);
+      });
+    }
+
+    if (typeof name == "object") {
+      priority = value || "";
+      for (key in name) {
+        each(function() {
+          this.style.setProperty(key, name[key], priority);
+        });
+      }
+      return groups;
+    }
+
+    if (typeof name == "function") {
+      priority = value || "";
+      return each(function() {
+        var x = name.apply(this, arguments);
+        for (value in x) {
+          this.style.setProperty(value, x[value], priority);
+        }
       });
     }
 
@@ -2033,8 +2053,33 @@ function d3_transition(groups) {
     return transition;
   };
 
+  transition.styleMultiTween = function(name, tween, priority) {
+
+    function styleTween(d, i) {
+      var computedStyles = {};
+      for (key in name(0)) {
+        computedStyles[key] = window.getComputedStyle(this, null).getPropertyValue(key);
+      }
+      // THIS DOESN'T WORK-- may need to make a new d3_transitionTween
+      var f = tween.call(this, d, i, computedStyles);
+      return f && function(t) {
+        var ft = f(t);
+        for (name in ft) {
+          this.style.setProperty(name, ft[name], priority);
+        }
+      };
+    }
+    tweens["style.multi"] = styleTween;
+    return transition;
+  };
+
   transition.style = function(name, value, priority) {
     if (arguments.length < 3) priority = null;
+
+    if (typeof name == "function") {
+      priority = value || "";
+      return transition.styleMultiTween(name, d3_transitionTween(name), priority);
+    }
     return transition.styleTween(name, d3_transitionTween(value), priority);
   };
 
