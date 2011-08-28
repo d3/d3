@@ -1471,8 +1471,25 @@
     return this.each(typeof value === "function" ? classedFunction : value ? classedAdd : classedRemove);
   }
   d3_selectionPrototype.style = function(name, value, priority) {
-    if (arguments.length < 3) priority = "";
-    if (arguments.length < 2) return window.getComputedStyle(this.node(), null).getPropertyValue(name);
+    if (arguments.length < 3) {
+      if ((priority = typeof name) === "object") {
+        if (arguments.length < 2) value = "";
+        for (priority in name) this.style(priority, name[priority], value);
+        return this;
+      }
+      if (priority === "function") {
+        if (arguments.length < 2) value = "";
+        return this.each(function() {
+          var x = name.apply(this, arguments);
+          for (priority in x) d3_selection_style(priority, x[priority], value).apply(this, arguments);
+        });
+      }
+      if (arguments.length < 2) return window.getComputedStyle(this.node(), null).getPropertyValue(name);
+      priority = "";
+    }
+    return this.each(d3_selection_style(name, value, priority));
+  };
+  function d3_selection_style(name, value, priority) {
     function styleNull() {
       this.style.removeProperty(name);
     }
@@ -1483,8 +1500,8 @@
       var x = value.apply(this, arguments);
       if (x == null) this.style.removeProperty(name); else this.style.setProperty(name, x, priority);
     }
-    return this.each(value == null ? styleNull : typeof value === "function" ? styleFunction : styleConstant);
-  };
+    return value == null ? styleNull : typeof value === "function" ? styleFunction : styleConstant;
+  }
   d3_selectionPrototype.property = function(name, value) {
     if (arguments.length < 2) return this.node()[name];
     function propertyNull() {
