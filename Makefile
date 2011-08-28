@@ -185,6 +185,7 @@ d3.geo.js: \
 	src/geo/mercator.js \
 	src/geo/path.js \
 	src/geo/bounds.js \
+	src/geo/greatcircle.js \
 	src/end.js
 
 d3.csv.js: \
