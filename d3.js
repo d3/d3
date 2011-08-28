@@ -1524,9 +1524,29 @@ function d3_selection(groups) {
 
     // If no value is specified, return the first value.
     if (arguments.length < 2) {
-      return first(function() {
-        return window.getComputedStyle(this, null).getPropertyValue(name);
-      });
+      switch (typeof name) {
+        case "string": {
+          return first(function() {
+            return window.getComputedStyle(this, null).getPropertyValue(name);
+          });
+        }
+        case "object": {
+          for (key in name) {
+            each(function() {
+              this.style.setProperty(key, name[key], priority);
+            });
+          }
+          return groups;
+        }
+        case "function": {
+          return each(function() {
+            var x = name.apply(this, arguments);
+            for (value in x) {
+              this.style.setProperty(value, x[value], priority);
+            }
+          });
+        }
+      }
     }
 
     function styleNull() {
