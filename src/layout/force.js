@@ -27,15 +27,15 @@ d3.layout.force = function() {
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
           var k = kc * quad.count * dn * dn;
-          node.x += dx * k;
-          node.y += dy * k;
+          node.px -= dx * k;
+          node.py -= dy * k;
           return true;
         }
 
         if (quad.point && isFinite(dn)) {
           var k = kc * dn * dn;
-          node.x += dx * k;
-          node.y += dy * k;
+          node.px -= dx * k;
+          node.py -= dy * k;
         }
       }
     };
@@ -44,7 +44,7 @@ d3.layout.force = function() {
   function tick() {
     var n = nodes.length,
         m = links.length,
-        q = d3.geom.quadtree(nodes),
+        q,
         i, // current index
         o, // current object
         s, // current source
@@ -73,22 +73,24 @@ d3.layout.force = function() {
     }
 
     // apply gravity forces
-    k = alpha * gravity;
-    x = size[0] / 2;
-    y = size[1] / 2;
-    i = -1; while (++i < n) {
-      o = nodes[i];
-      o.x += (x - o.x) * k;
-      o.y += (y - o.y) * k;
+    if (k = alpha * gravity) {
+      x = size[0] / 2;
+      y = size[1] / 2;
+      i = -1; if (k) while (++i < n) {
+        o = nodes[i];
+        o.x += (x - o.x) * k;
+        o.y += (y - o.y) * k;
+      }
     }
 
-    // compute quadtree center of mass
-    d3_layout_forceAccumulate(q);
-
-    // apply charge forces
-    k = alpha * charge;
-    i = -1; while (++i < n) {
-      q.visit(repulse(nodes[i], k));
+    // compute quadtree center of mass and apply charge forces
+    if (k = alpha * charge) {
+      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes));
+      i = -1; while (++i < n) {
+        if (!(o = nodes[i]).fixed) {
+          q.visit(repulse(o, k));
+        }
+      }
     }
 
     // position verlet integration
