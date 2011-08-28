@@ -1261,11 +1261,13 @@ function d3_selection_selectorAll(selector) {
 d3_selectionPrototype.attr = function(name, value) {
   if (arguments.length < 2) {
 
+    // map:object
     if ((value = typeof name) === "object") {
       for (value in name) this.attr(value, name[value]);
       return this;
     }
 
+    // map:function
     if (value === "function") {
       return this.each(function() {
         var x = name.apply(this, arguments);
@@ -1273,11 +1275,16 @@ d3_selectionPrototype.attr = function(name, value) {
       });
     }
 
+    // name:string
     value = this.node();
     return (name = d3.ns.qualify(name)).local
         ? value.getAttributeNS(name.space, name.local)
         : value.getAttribute(name);
   }
+
+  // name:string, value:constant
+  // name:string, value:null
+  // name:string, value:function
   return this.each(d3_selection_attr(name, value));
 };
 
@@ -1364,12 +1371,44 @@ d3_selectionPrototype.classed = function(name, value) {
       : classedRemove);
 };
 d3_selectionPrototype.style = function(name, value, priority) {
-  if (arguments.length < 3) priority = "";
+  if (arguments.length < 3) {
 
-  // If no value is specified, return the first value.
-  if (arguments.length < 2) return window
-      .getComputedStyle(this.node(), null)
-      .getPropertyValue(name);
+    // map:object, priority:string
+    // map:object
+    if ((priority = typeof name) === "object") {
+      if (arguments.length < 2) value = "";
+      for (priority in name) this.style(priority, name[priority], value);
+      return this;
+    }
+
+    // map:function, priority:string
+    // map:function
+    if (priority === "function") {
+      if (arguments.length < 2) value = "";
+      return this.each(function() {
+        var x = name.apply(this, arguments);
+        for (priority in x) d3_selection_style(priority, x[priority], value).apply(this, arguments);
+      });
+    }
+
+    // name:string
+    if (arguments.length < 2) return window
+        .getComputedStyle(this.node(), null)
+        .getPropertyValue(name);
+
+    // name:string, value:constant
+    // name:string, value:null
+    // name:string, value:function
+    priority = "";
+  }
+
+  // name:string, value:constant, priority:string
+  // name:string, value:null, priority:string
+  // name:string, value:function, priority:string
+  return this.each(d3_selection_style(name, value, priority));
+};
+
+function d3_selection_style(name, value, priority) {
 
   function styleNull() {
     this.style.removeProperty(name);
@@ -1385,10 +1424,10 @@ d3_selectionPrototype.style = function(name, value, priority) {
     else this.style.setProperty(name, x, priority);
   }
 
-  return this.each(value == null
+  return value == null
       ? styleNull : (typeof value === "function"
-      ? styleFunction : styleConstant));
-};
+      ? styleFunction : styleConstant);
+}
 d3_selectionPrototype.property = function(name, value) {
 
   // If no value is specified, return the first value.

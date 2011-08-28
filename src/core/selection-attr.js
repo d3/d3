@@ -1,11 +1,13 @@
 d3_selectionPrototype.attr = function(name, value) {
   if (arguments.length < 2) {
 
+    // map:object
     if ((value = typeof name) === "object") {
       for (value in name) this.attr(value, name[value]);
       return this;
     }
 
+    // map:function
     if (value === "function") {
       return this.each(function() {
         var x = name.apply(this, arguments);
@@ -13,11 +15,16 @@ d3_selectionPrototype.attr = function(name, value) {
       });
     }
 
+    // name:string
     value = this.node();
     return (name = d3.ns.qualify(name)).local
         ? value.getAttributeNS(name.space, name.local)
         : value.getAttribute(name);
   }
+
+  // name:string, value:constant
+  // name:string, value:null
+  // name:string, value:function
   return this.each(d3_selection_attr(name, value));
 };
 
