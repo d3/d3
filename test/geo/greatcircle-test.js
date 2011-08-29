@@ -10,17 +10,18 @@ var suite = vows.describe("d3.geo.greatcircle");
 suite.addBatch({
   "greatcircle": {
     topic: function() {
-      return d3.geo.greatcircle();
+      return d3.geo.greatcircle()
+          .n(12);
     },
     "distance": function(circle) {
-      assert.equal(circle.distance([0, 0], [0, 0]), 0);
-      assert.inDelta(circle.distance(
-        [118 + 24 / 60, 33 + 57 / 60],
-        [ 73 + 47 / 60, 40 + 38 / 60]
-      ), 3973, .5);
+      assert.equal(circle.distance({source: [0, 0], target: [0, 0]}), 0);
+      assert.inDelta(circle.distance({
+        source: [118 + 24 / 60, 33 + 57 / 60],
+        target: [ 73 + 47 / 60, 40 + 38 / 60]
+      }), 3973, .5);
     },
     "geodesic": function(circle) {
-      assert.inDelta(circle([5, 52], [-120, 37], 12), [
+      assert.inDelta(circle({source: [5, 52], target: [-120, 37]}), [
         [   5,        52      ],
         [  -3.805036, 57.05083],
         [ -15.122869, 61.30118],

@@ -566,20 +566,23 @@ function d3_geo_boundsPolygon(o, f) {
 }
 // From http://williams.best.vwh.net/avform.htm#Intermediate
 d3.geo.greatcircle = function() {
+  var source = d3_geo_greatcircleSource,
+      target = d3_geo_greatcircleTarget,
+      n = 100,
+      radius = 6371; // Mean radius of Earth, in km.
   // TODO: breakAtDateLine?
-  function greatcircle(from, to, n) {
-    var x0 = from[0] * d3_radians,
+
+  function greatcircle(d, i) {
+    var from = source.call(this, d, i),
+        to = target.call(this, d, i),
+        x0 = from[0] * d3_radians,
         y0 = from[1] * d3_radians,
         x1 = to[0] * d3_radians,
         y1 = to[1] * d3_radians,
-        cx0 = Math.cos(x0),
-        sx0 = Math.sin(x0),
-        cy0 = Math.cos(y0),
-        sy0 = Math.sin(y0),
-        cx1 = Math.cos(x1),
-        sx1 = Math.sin(x1),
-        cy1 = Math.cos(y1),
-        sy1 = Math.sin(y1),
+        cx0 = Math.cos(x0), sx0 = Math.sin(x0),
+        cy0 = Math.cos(y0), sy0 = Math.sin(y0),
+        cx1 = Math.cos(x1), sx1 = Math.sin(x1),
+        cy1 = Math.cos(y1), sy1 = Math.sin(y1),
         d = Math.acos(sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)),
         sd = Math.sin(d),
         f = d / (n - 1),
@@ -603,22 +606,53 @@ d3.geo.greatcircle = function() {
     return path;
   }
 
-  greatcircle.distance = d3_geo_greatcircleDistance;
+  greatcircle.source = function(x) {
+    if (!arguments.length) return source;
+    source = x;
+    return greatcircle;
+  };
+
+  greatcircle.target = function(x) {
+    if (!arguments.length) return target;
+    target = x;
+    return greatcircle;
+  };
+
+  greatcircle.n = function(x) {
+    if (!arguments.length) return n;
+    n = +x;
+    return greatcircle;
+  };
+
+  greatcircle.radius = function(x) {
+    if (!arguments.length) return radius;
+    radius = +x;
+    return greatcircle;
+  };
+
+  // Haversine formula for great-circle distance.
+  greatcircle.distance = function(d, i) {
+    var from = source.call(this, d, i),
+        to = target.call(this, d, i),
+        x0 = from[0] * d3_radians,
+        y0 = from[1] * d3_radians,
+        x1 = to[0] * d3_radians,
+        y1 = to[1] * d3_radians,
+        sy = Math.sin((y1 - y0) / 2),
+        sx = Math.sin((x1 - x0) / 2),
+        a = sy * sy + Math.cos(y0) * Math.cos(y1) * sx * sx;
+
+    return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  };
 
   return greatcircle;
 };
 
-// Haversine formula for great-circle distance.
-function d3_geo_greatcircleDistance(from, to, radius) {
-  if (arguments.length < 3) radius = 6371;
-  var x0 = from[0] * d3_radians,
-      y0 = from[1] * d3_radians,
-      x1 = to[0] * d3_radians,
-      y1 = to[1] * d3_radians,
-      sy = Math.sin((y1 - y0) / 2),
-      sx = Math.sin((x1 - x0) / 2),
-      a = sy * sy + Math.cos(y0) * Math.cos(y1) * sx * sx;
+function d3_geo_greatcircleSource(d) {
+  return d.source;
+}
 
-  return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-};
+function d3_geo_greatcircleTarget(d) {
+  return d.target;
+}
 })();
