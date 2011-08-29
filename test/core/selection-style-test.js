@@ -17,7 +17,7 @@ suite.addBatch({
     },
     "sets a property as a number": function(body) {
       body.style("opacity", .3);
-      assert.equal(document.body.style["opacity"], ".3");
+      assert.equal(document.body.style["opacity"], "0.3");
     },
     "sets a property as a function": function(body) {
       body.style("background-color", function() { return "orange"; });
@@ -57,8 +57,8 @@ suite.addBatch({
     },
     "sets a property as a number": function(div) {
       div.style("opacity", .5);
-      assert.equal(div[0][0].style["opacity"], ".5");
-      assert.equal(div[0][1].style["opacity"], ".5");
+      assert.equal(div[0][0].style["opacity"], "0.5");
+      assert.equal(div[0][1].style["opacity"], "0.5");
     },
     "sets a property as a function": function(div) {
       div.style("background-color", d3.interpolateRgb("orange", "yellow"));

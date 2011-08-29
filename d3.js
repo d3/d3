@@ -1,12 +1,16 @@
-(function(){d3 = {version: "2.0.4"}; // semver
-if (!Date.now) Date.now = function() {
+(function(){if (!Date.now) Date.now = function() {
   return +new Date;
 };
-if (!Object.create) Object.create = function(o) {
-  /** @constructor */ function f() {}
-  f.prototype = o;
-  return new f;
-};
+try {
+  document.createElement("div").style.setProperty("opacity", 0, "");
+} catch (error) {
+  var d3_style_prototype = CSSStyleDeclaration.prototype,
+      d3_style_setProperty = d3_style_prototype.setProperty;
+  d3_style_prototype.setProperty = function(name, value, priority) {
+    d3_style_setProperty.call(this, name, value + "", priority);
+  };
+}
+d3 = {version: "2.0.4"}; // semver
 var d3_arraySubclass = [].__proto__?
 
 // Until ECMAScript supports array subclassing, prototype injection works well.

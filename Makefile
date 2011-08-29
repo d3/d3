@@ -36,9 +36,9 @@ d3.custom.js: \
 	src/end.js
 
 d3.core.js: \
+	src/compat/date.js \
+	src/compat/style.js \
 	src/core/core.js \
-	src/core/date.js \
-	src/core/object.js \
 	src/core/array.js \
 	src/core/this.js \
 	src/core/functor.js \
