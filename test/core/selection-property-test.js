@@ -22,6 +22,21 @@ suite.addBatch({
       body.property("bgcolor", function() { return "orange"; });
       assert.equal(document.body.bgcolor, "orange");
     },
+    "sets properties as a map of constants": function(body) {
+      body.property({bgcolor: "purple", opacity: .41});
+      assert.equal(document.body.bgcolor, "purple");
+      assert.equal(document.body.opacity, .41);
+    },
+    "sets properties as a map of functions": function(body) {
+      body.data(["cyan"]).property({bgcolor: String, opacity: function(d, i) { return i; }});
+      assert.equal(document.body.bgcolor, "cyan");
+      assert.equal(document.body.opacity, 0);
+    },
+    "sets properties as a function that returns a map": function(body) {
+      body.data([.14]).property(function(d, i) { return {bgcolor: "black", opacity: d}; });
+      assert.equal(document.body.bgcolor, "black");
+      assert.equal(document.body.opacity, .14);
+    },
     "gets a property value": function(body) {
       document.body.bgcolor = "yellow";
       assert.equal(body.property("bgcolor"), "yellow");
@@ -32,6 +47,21 @@ suite.addBatch({
     },
     "removes a property as a function": function(body) {
       body.property("bgcolor", "yellow").property("bgcolor", function() { return null });
+      assert.isFalse("bgcolor" in document.body);
+    },
+    "removes properties as a map of nulls": function(body) {
+      document.body.bgcolor = "red";
+      body.property({bgcolor: null});
+      assert.isFalse("bgcolor" in document.body);
+    },
+    "removes properties as a map of functions that return null": function(body) {
+      document.body.bgcolor = "red";
+      body.property({bgcolor: function() {}});
+      assert.isFalse("bgcolor" in document.body);
+    },
+    "removes properties as a function that returns a map of nulls": function(body) {
+      document.body.bgcolor = "red";
+      body.property(function() { return {bgcolor: null}; });
       assert.isFalse("bgcolor" in document.body);
     },
     "returns the current selection": function(body) {

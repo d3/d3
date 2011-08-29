@@ -1,7 +1,31 @@
 d3_selectionPrototype.property = function(name, value) {
+  if (arguments.length < 2) {
 
-  // If no value is specified, return the first value.
-  if (arguments.length < 2) return this.node()[name];
+    // map:object
+    if ((value = typeof name) === "object") {
+      for (value in name) this.property(value, name[value]);
+      return this;
+    }
+
+    // map:function
+    if (value === "function") {
+      return this.each(function() {
+        var x = name.apply(this, arguments);
+        for (value in x) d3_selection_property(value, x[value]).apply(this, arguments);
+      });
+    }
+
+    // name:string
+    return this.node()[name];
+  }
+
+  // name:string, value:constant
+  // name:string, value:null
+  // name:string, value:function
+  return this.each(d3_selection_property(name, value));
+};
+
+function d3_selection_property(name, value) {
 
   function propertyNull() {
     delete this[name];
@@ -17,7 +41,7 @@ d3_selectionPrototype.property = function(name, value) {
     else this[name] = x;
   }
 
-  return this.each(value == null
+  return value == null
       ? propertyNull : (typeof value === "function"
-      ? propertyFunction : propertyConstant));
-};
+      ? propertyFunction : propertyConstant);
+}

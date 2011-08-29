@@ -1503,7 +1503,22 @@
     return value == null ? styleNull : typeof value === "function" ? styleFunction : styleConstant;
   }
   d3_selectionPrototype.property = function(name, value) {
-    if (arguments.length < 2) return this.node()[name];
+    if (arguments.length < 2) {
+      if ((value = typeof name) === "object") {
+        for (value in name) this.property(value, name[value]);
+        return this;
+      }
+      if (value === "function") {
+        return this.each(function() {
+          var x = name.apply(this, arguments);
+          for (value in x) d3_selection_property(value, x[value]).apply(this, arguments);
+        });
+      }
+      return this.node()[name];
+    }
+    return this.each(d3_selection_property(name, value));
+  };
+  function d3_selection_property(name, value) {
     function propertyNull() {
       delete this[name];
     }
@@ -1514,8 +1529,8 @@
       var x = value.apply(this, arguments);
       if (x == null) delete this[name]; else this[name] = x;
     }
-    return this.each(value == null ? propertyNull : typeof value === "function" ? propertyFunction : propertyConstant);
-  };
+    return value == null ? propertyNull : typeof value === "function" ? propertyFunction : propertyConstant;
+  }
   d3_selectionPrototype.text = function(value) {
     return arguments.length < 1 ? this.node().textContent : this.each(typeof value === "function" ? function() {
       var v = value.apply(this, arguments);
