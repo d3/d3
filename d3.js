@@ -1,12 +1,16 @@
-(function(){d3 = {version: "2.0.4"}; // semver
-if (!Date.now) Date.now = function() {
+(function(){if (!Date.now) Date.now = function() {
   return +new Date;
 };
-if (!Object.create) Object.create = function(o) {
-  /** @constructor */ function f() {}
-  f.prototype = o;
-  return new f;
-};
+try {
+  document.createElement("div").style.setProperty("opacity", 0, "");
+} catch (error) {
+  var d3_style_prototype = CSSStyleDeclaration.prototype,
+      d3_style_setProperty = d3_style_prototype.setProperty;
+  d3_style_prototype.setProperty = function(name, value, priority) {
+    d3_style_setProperty.call(this, name, value + "", priority);
+  };
+}
+d3 = {version: "2.1.0"}; // semver
 var d3_arraySubclass = [].__proto__?
 
 // Until ECMAScript supports array subclassing, prototype injection works well.
@@ -1780,7 +1784,7 @@ function d3_transition(groups, id) {
 
       delay <= elapsed ? start() : d3.timer(start, delay, then);
 
-      function start() {
+      function start(elapsed) {
         if (lock.active > id) return stop();
         lock.active = id;
 
@@ -1791,7 +1795,7 @@ function d3_transition(groups, id) {
         }
 
         event.start.dispatch.call(node, d, i);
-        d3.timer(tick, 0, then);
+        if (!tick(elapsed)) d3.timer(tick, 0, then);
         return 1;
       }
 
@@ -1910,12 +1914,12 @@ d3_transitionPrototype.attrTween = function(name, tween) {
   return this.tween("attr." + name, name.local ? attrTweenNS : attrTween);
 };
 d3_transitionPrototype.style = function(name, value, priority) {
-  if (arguments.length < 3) priority = null;
+  if (arguments.length < 3) priority = "";
   return this.styleTween(name, d3_transitionTween(value), priority);
 };
 
 d3_transitionPrototype.styleTween = function(name, tween, priority) {
-  if (arguments.length < 3) priority = null;
+  if (arguments.length < 3) priority = "";
   return this.tween("style." + name, function(d, i) {
     var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
     return f && function(t) {
@@ -2368,23 +2372,24 @@ d3.scale.sqrt = function() {
   return d3.scale.pow().exponent(.5);
 };
 d3.scale.ordinal = function() {
-  return d3_scale_ordinal({}, 0, {t: "range", x: []});
+  return d3_scale_ordinal([], {t: "range", x: []});
 };
 
-function d3_scale_ordinal(domain, size, ranger) {
-  var range,
+function d3_scale_ordinal(domain, ranger) {
+  var index,
+      range,
       rangeBand;
 
   function scale(x) {
-    return range[((domain[x] || (domain[x] = ++size)) - 1) % range.length];
+    return range[((index[x] || (index[x] = domain.push(x))) - 1) % range.length];
   }
 
   scale.domain = function(x) {
-    if (!arguments.length) return d3.keys(domain);
-    domain = {};
-    size = 0;
+    if (!arguments.length) return domain;
+    domain = [];
+    index = {};
     var i = -1, n = x.length, xi;
-    while (++i < n) if (!domain[xi = x[i]]) domain[xi] = ++size;
+    while (++i < n) if (!index[xi = x[i]]) index[xi] = domain.push(xi);
     return scale[ranger.t](ranger.x, ranger.p);
   };
 
@@ -2400,8 +2405,8 @@ function d3_scale_ordinal(domain, size, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = (stop - start) / (size - 1 + padding);
-    range = size < 2 ? [(start + stop) / 2] : d3.range(start + step * padding / 2, stop + step / 2, step);
+        step = (stop - start) / (domain.length - 1 + padding);
+    range = domain.length < 2 ? [(start + stop) / 2] : d3.range(start + step * padding / 2, stop + step / 2, step);
     rangeBand = 0;
     ranger = {t: "rangePoints", x: x, p: padding};
     return scale;
@@ -2411,7 +2416,7 @@ function d3_scale_ordinal(domain, size, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = (stop - start) / (size + padding);
+        step = (stop - start) / (domain.length + padding);
     range = d3.range(start + step * padding, stop, step);
     rangeBand = step * (1 - padding);
     ranger = {t: "rangeBands", x: x, p: padding};
@@ -2422,8 +2427,8 @@ function d3_scale_ordinal(domain, size, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = Math.floor((stop - start) / (size + padding)),
-        err = stop - start - (size - padding) * step;
+        step = Math.floor((stop - start) / (domain.length + padding)),
+        err = stop - start - (domain.length - padding) * step;
     range = d3.range(start + Math.round(err / 2), stop, step);
     rangeBand = Math.round(step * (1 - padding));
     ranger = {t: "rangeRoundBands", x: x, p: padding};
@@ -2435,12 +2440,10 @@ function d3_scale_ordinal(domain, size, ranger) {
   };
 
   scale.copy = function() {
-    var copy = {}, x;
-    for (x in domain) copy[x] = domain[x];
-    return d3_scale_ordinal(copy, size, ranger);
+    return d3_scale_ordinal(domain, ranger);
   };
 
-  return scale[ranger.t](ranger.x, ranger.p);
+  return scale.domain(domain);
 };
 /*
  * This product includes color specifications and designs developed by Cynthia

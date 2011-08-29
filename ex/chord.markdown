@@ -7,7 +7,7 @@ title: Chord Diagram
 
 <div id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="chord.css"/>
-<script type="text/javascript" src="../d3.layout.js?2.0.4"> </script>
+<script type="text/javascript" src="../d3.layout.js?2.1.0"> </script>
 <script type="text/javascript" src="chord.js"> </script>
 
 Layout inspired by [Martin Krzywinski](http://mkweb.bcgsc.ca/)'s beautiful

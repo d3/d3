@@ -17,7 +17,7 @@ d3.geo.azimuthal = function() {
         sx1 = Math.sin(x1),
         cy1 = Math.cos(y1),
         sy1 = Math.sin(y1),
-        k = mode == "stereographic" ? 1 / (1 + sy0 * sy1 + cy0 * cy1 * cx1) : 1,
+        k = mode === "stereographic" ? 1 / (1 + sy0 * sy1 + cy0 * cy1 * cx1) : 1,
         x = k * cy1 * sx1,
         y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
     return [
@@ -26,9 +26,22 @@ d3.geo.azimuthal = function() {
     ];
   }
 
+  azimuthal.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale,
+        p = Math.sqrt(x * x + y * y),
+        c = mode === "stereographic" ? 2 * Math.atan(p) : Math.asin(p),
+        sc = Math.sin(c),
+        cc = Math.cos(c);
+    return [
+      (x0 + Math.atan2(x * sc, p * cy0 * cc + y * sy0 * sc)) / d3_radians,
+      Math.asin(cc * sy0 - (y * sc * cy0) / p) / d3_radians
+    ];
+  };
+
   azimuthal.mode = function(x) {
     if (!arguments.length) return mode;
-    mode = x;
+    mode = x + "";
     return azimuthal;
   };
 
@@ -78,6 +91,18 @@ d3.geo.albers = function() {
       scale * (p * Math.cos(t) - p0) + translate[1]
     ];
   }
+
+  albers.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale,
+        p0y = p0 + y,
+        t = Math.atan2(x, p0y),
+        p = Math.sqrt(x * x + p0y * p0y);
+    return [
+      (lng0 + t / n) / d3_radians,
+      Math.asin((C - p * p * n * n) / (2 * n)) / d3_radians
+    ];
+  };
 
   function reload() {
     var phi1 = d3_radians * parallels[0],
@@ -177,13 +202,22 @@ d3.geo.mercator = function() {
       translate = [480, 250];
 
   function mercator(coordinates) {
-    var x = (coordinates[0]) / 360,
-        y = (-180 / Math.PI * Math.log(Math.tan(Math.PI / 4 + coordinates[1] * Math.PI / 360))) / 360;
+    var x = coordinates[0] / 360,
+        y = -(Math.log(Math.tan(Math.PI / 4 + coordinates[1] * d3_radians / 2)) / d3_radians) / 360;
     return [
       scale * x + translate[0],
       scale * Math.max(-.5, Math.min(.5, y)) + translate[1]
     ];
   }
+
+  mercator.invert = function(coordinates) {
+    var x = (coordinates[0] - translate[0]) / scale,
+        y = (coordinates[1] - translate[1]) / scale;
+    return [
+      360 * x,
+      2 * Math.atan(Math.exp(-360 * y * d3_radians)) / d3_radians - 90
+    ];
+  };
 
   mercator.scale = function(x) {
     if (!arguments.length) return scale;
@@ -563,5 +597,96 @@ function d3_geo_boundsPolygon(o, f) {
   for (var a = o.coordinates[0], i = 0, n = a.length; i < n; i++) {
     f.apply(null, a[i]);
   }
+}
+// From http://williams.best.vwh.net/avform.htm#Intermediate
+d3.geo.greatCircle = function() {
+  var source = d3_geo_greatCircleSource,
+      target = d3_geo_greatCircleTarget,
+      n = 100,
+      radius = 6371; // Mean radius of Earth, in km.
+  // TODO: breakAtDateLine?
+
+  function greatCircle(d, i) {
+    var from = source.call(this, d, i),
+        to = target.call(this, d, i),
+        x0 = from[0] * d3_radians,
+        y0 = from[1] * d3_radians,
+        x1 = to[0] * d3_radians,
+        y1 = to[1] * d3_radians,
+        cx0 = Math.cos(x0), sx0 = Math.sin(x0),
+        cy0 = Math.cos(y0), sy0 = Math.sin(y0),
+        cx1 = Math.cos(x1), sx1 = Math.sin(x1),
+        cy1 = Math.cos(y1), sy1 = Math.sin(y1),
+        d = Math.acos(sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)),
+        sd = Math.sin(d),
+        f = d / (n - 1),
+        e = -f,
+        path = [],
+        i = -1;
+
+    while (++i < n) {
+      e += f;
+      var A = Math.sin(d - e) / sd,
+          B = Math.sin(e) / sd,
+          x = A * cy0 * cx0 + B * cy1 * cx1,
+          y = A * cy0 * sx0 + B * cy1 * sx1,
+          z = A * sy0       + B * sy1;
+      path[i] = [
+        Math.atan2(y, x) / d3_radians,
+        Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians
+      ];
+    }
+
+    return path;
+  }
+
+  greatCircle.source = function(x) {
+    if (!arguments.length) return source;
+    source = x;
+    return greatCircle;
+  };
+
+  greatCircle.target = function(x) {
+    if (!arguments.length) return target;
+    target = x;
+    return greatCircle;
+  };
+
+  greatCircle.n = function(x) {
+    if (!arguments.length) return n;
+    n = +x;
+    return greatCircle;
+  };
+
+  greatCircle.radius = function(x) {
+    if (!arguments.length) return radius;
+    radius = +x;
+    return greatCircle;
+  };
+
+  // Haversine formula for great-circle distance.
+  greatCircle.distance = function(d, i) {
+    var from = source.call(this, d, i),
+        to = target.call(this, d, i),
+        x0 = from[0] * d3_radians,
+        y0 = from[1] * d3_radians,
+        x1 = to[0] * d3_radians,
+        y1 = to[1] * d3_radians,
+        sy = Math.sin((y1 - y0) / 2),
+        sx = Math.sin((x1 - x0) / 2),
+        a = sy * sy + Math.cos(y0) * Math.cos(y1) * sx * sx;
+
+    return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  };
+
+  return greatCircle;
+};
+
+function d3_geo_greatCircleSource(d) {
+  return d.source;
+}
+
+function d3_geo_greatCircleTarget(d) {
+  return d.target;
 }
 })();
