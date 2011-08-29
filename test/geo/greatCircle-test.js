@@ -5,12 +5,12 @@ require("../../d3.geo");
 var vows = require("vows"),
     assert = require("assert");
 
-var suite = vows.describe("d3.geo.greatcircle");
+var suite = vows.describe("d3.geo.greatCircle");
 
 suite.addBatch({
-  "greatcircle": {
+  "greatCircle": {
     topic: function() {
-      return d3.geo.greatcircle()
+      return d3.geo.greatCircle()
           .n(12);
     },
     "distance": function(circle) {

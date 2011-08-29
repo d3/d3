@@ -1,12 +1,12 @@
 // From http://williams.best.vwh.net/avform.htm#Intermediate
-d3.geo.greatcircle = function() {
-  var source = d3_geo_greatcircleSource,
-      target = d3_geo_greatcircleTarget,
+d3.geo.greatCircle = function() {
+  var source = d3_geo_greatCircleSource,
+      target = d3_geo_greatCircleTarget,
       n = 100,
       radius = 6371; // Mean radius of Earth, in km.
   // TODO: breakAtDateLine?
 
-  function greatcircle(d, i) {
+  function greatCircle(d, i) {
     var from = source.call(this, d, i),
         to = target.call(this, d, i),
         x0 = from[0] * d3_radians,
@@ -40,32 +40,32 @@ d3.geo.greatcircle = function() {
     return path;
   }
 
-  greatcircle.source = function(x) {
+  greatCircle.source = function(x) {
     if (!arguments.length) return source;
     source = x;
-    return greatcircle;
+    return greatCircle;
   };
 
-  greatcircle.target = function(x) {
+  greatCircle.target = function(x) {
     if (!arguments.length) return target;
     target = x;
-    return greatcircle;
+    return greatCircle;
   };
 
-  greatcircle.n = function(x) {
+  greatCircle.n = function(x) {
     if (!arguments.length) return n;
     n = +x;
-    return greatcircle;
+    return greatCircle;
   };
 
-  greatcircle.radius = function(x) {
+  greatCircle.radius = function(x) {
     if (!arguments.length) return radius;
     radius = +x;
-    return greatcircle;
+    return greatCircle;
   };
 
   // Haversine formula for great-circle distance.
-  greatcircle.distance = function(d, i) {
+  greatCircle.distance = function(d, i) {
     var from = source.call(this, d, i),
         to = target.call(this, d, i),
         x0 = from[0] * d3_radians,
@@ -79,13 +79,13 @@ d3.geo.greatcircle = function() {
     return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
 
-  return greatcircle;
+  return greatCircle;
 };
 
-function d3_geo_greatcircleSource(d) {
+function d3_geo_greatCircleSource(d) {
   return d.source;
 }
 
-function d3_geo_greatcircleTarget(d) {
+function d3_geo_greatCircleTarget(d) {
   return d.target;
 }
