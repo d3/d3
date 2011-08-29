@@ -37,7 +37,7 @@ function d3_transition(groups, id) {
 
       ++lock.count;
 
-      delay <= elapsed ? start() : d3.timer(start, delay, then);
+      delay <= elapsed ? start(elapsed) : d3.timer(start, delay, then);
 
       function start(elapsed) {
         if (lock.active > id) return stop();

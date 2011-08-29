@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.1.0"}; // semver
+d3 = {version: "2.1.1"}; // semver
 var d3_arraySubclass = [].__proto__?
 
 // Until ECMAScript supports array subclassing, prototype injection works well.
@@ -1782,7 +1782,7 @@ function d3_transition(groups, id) {
 
       ++lock.count;
 
-      delay <= elapsed ? start() : d3.timer(start, delay, then);
+      delay <= elapsed ? start(elapsed) : d3.timer(start, delay, then);
 
       function start(elapsed) {
         if (lock.active > id) return stop();
