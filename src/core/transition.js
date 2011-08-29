@@ -39,7 +39,7 @@ function d3_transition(groups, id) {
 
       delay <= elapsed ? start() : d3.timer(start, delay, then);
 
-      function start() {
+      function start(elapsed) {
         if (lock.active > id) return stop();
         lock.active = id;
 
@@ -50,7 +50,7 @@ function d3_transition(groups, id) {
         }
 
         event.start.dispatch.call(node, d, i);
-        d3.timer(tick, 0, then);
+        if (!tick(elapsed)) d3.timer(tick, 0, then);
         return 1;
       }
 
