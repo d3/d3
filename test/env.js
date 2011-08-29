@@ -1,6 +1,7 @@
 document = require("jsdom").jsdom("<html><head></head><body></body></html>");
 window = document.createWindow();
 navigator = window.navigator;
+CSSStyleDeclaration = window.CSSStyleDeclaration;
 
 require("../lib/sizzle/sizzle");
 Sizzle = window.Sizzle;
