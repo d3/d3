@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.1.1"}; // semver
+d3 = {version: "2.1.2"}; // semver
 var d3_arraySubclass = [].__proto__?
 
 // Until ECMAScript supports array subclassing, prototype injection works well.
@@ -591,8 +591,14 @@ d3.ease = function(name) {
   var i = name.indexOf("-"),
       t = i >= 0 ? name.substring(0, i) : name,
       m = i >= 0 ? name.substring(i + 1) : "in";
-  return d3_ease_mode[m](d3_ease[t].apply(null, Array.prototype.slice.call(arguments, 1)));
+  return d3_ease_clamp(d3_ease_mode[m](d3_ease[t].apply(null, Array.prototype.slice.call(arguments, 1))));
 };
+
+function d3_ease_clamp(f) {
+  return function(t) {
+    return t <= 0 ? 0 : t >= 1 ? 1 : f(t);
+  };
+}
 
 function d3_ease_reverse(f) {
   return function(t) {
@@ -1802,7 +1808,7 @@ function d3_transition(groups, id) {
       function tick(elapsed) {
         if (lock.active !== id) return stop();
 
-        var t = Math.min(1, (elapsed - delay) / duration),
+        var t = (elapsed - delay) / duration,
             e = ease(t),
             n = tweened.length;
 
@@ -1810,7 +1816,7 @@ function d3_transition(groups, id) {
           tweened[--n].call(node, e);
         }
 
-        if (t === 1) {
+        if (t >= 1) {
           stop();
           d3_transitionInheritId = id;
           event.end.dispatch.call(node, d, i);
@@ -2602,8 +2608,8 @@ d3.svg.arc = function() {
       + "A" + r1 + "," + r1 + " 0 1,1 0," + (-r1)
       + "A" + r1 + "," + r1 + " 0 1,1 0," + r1
       + "M0," + r0
-      + "A" + r0 + "," + r0 + " 0 1,1 0," + (-r0)
-      + "A" + r0 + "," + r0 + " 0 1,1 0," + r0
+      + "A" + r0 + "," + r0 + " 0 1,0 0," + (-r0)
+      + "A" + r0 + "," + r0 + " 0 1,0 0," + r0
       + "Z"
       : "M0," + r1
       + "A" + r1 + "," + r1 + " 0 1,1 0," + (-r1)

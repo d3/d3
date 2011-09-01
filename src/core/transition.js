@@ -57,7 +57,7 @@ function d3_transition(groups, id) {
       function tick(elapsed) {
         if (lock.active !== id) return stop();
 
-        var t = Math.min(1, (elapsed - delay) / duration),
+        var t = (elapsed - delay) / duration,
             e = ease(t),
             n = tweened.length;
 
@@ -65,7 +65,7 @@ function d3_transition(groups, id) {
           tweened[--n].call(node, e);
         }
 
-        if (t === 1) {
+        if (t >= 1) {
           stop();
           d3_transitionInheritId = id;
           event.end.dispatch.call(node, d, i);

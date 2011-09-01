@@ -60,8 +60,14 @@ d3.ease = function(name) {
   var i = name.indexOf("-"),
       t = i >= 0 ? name.substring(0, i) : name,
       m = i >= 0 ? name.substring(i + 1) : "in";
-  return d3_ease_mode[m](d3_ease[t].apply(null, Array.prototype.slice.call(arguments, 1)));
+  return d3_ease_clamp(d3_ease_mode[m](d3_ease[t].apply(null, Array.prototype.slice.call(arguments, 1))));
 };
+
+function d3_ease_clamp(f) {
+  return function(t) {
+    return t <= 0 ? 0 : t >= 1 ? 1 : f(t);
+  };
+}
 
 function d3_ease_reverse(f) {
   return function(t) {

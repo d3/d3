@@ -51,33 +51,33 @@ suite.addBatch({
       var e = ease("bounce");
       assert.inDelta(e(.5), 0.765625, 1e-6);
     },
-    "all easing functions return approximately 0 for t = 0": function(ease) {
-      assert.inDelta(ease("linear")(0), 0, 1e-9);
-      assert.inDelta(ease("poly", 2)(0), 0, 1e-9);
-      assert.inDelta(ease("quad")(0), 0, 1e-9);
-      assert.inDelta(ease("cubic")(0), 0, 1e-9);
-      assert.inDelta(ease("sin")(0), 0, 1e-9);
-      assert.inDelta(ease("exp")(0), 0, 1e-3); // XXX
-      assert.inDelta(ease("circle")(0), 0, 1e-9);
-      assert.inDelta(ease("elastic")(0), 0, 1e-9);
-      assert.inDelta(ease("back")(0), 0, 1e-9);
-      assert.inDelta(ease("bounce")(0), 0, 1e-9);
+    "all easing functions return exactly 0 for t = 0": function(ease) {
+      assert.equal(ease("linear")(0), 0);
+      assert.equal(ease("poly", 2)(0), 0);
+      assert.equal(ease("quad")(0), 0);
+      assert.equal(ease("cubic")(0), 0);
+      assert.equal(ease("sin")(0), 0);
+      assert.equal(ease("exp")(0), 0);
+      assert.equal(ease("circle")(0), 0);
+      assert.equal(ease("elastic")(0), 0);
+      assert.equal(ease("back")(0), 0);
+      assert.equal(ease("bounce")(0), 0);
     },
-    "all easing functions return approximately 1 for t = 1": function(ease) {
-      assert.inDelta(ease("linear")(1), 1, 1e-9);
-      assert.inDelta(ease("poly", 2)(1), 1, 1e-9);
-      assert.inDelta(ease("quad")(1), 1, 1e-9);
-      assert.inDelta(ease("cubic")(1), 1, 1e-9);
-      assert.inDelta(ease("sin")(1), 1, 1e-9);
-      assert.inDelta(ease("exp")(1), 1, 1e-9);
-      assert.inDelta(ease("circle")(1), 1, 1e-9);
-      assert.inDelta(ease("elastic")(1), 1, 1e-3); // XXX
-      assert.inDelta(ease("back")(1), 1, 1e-9);
-      assert.inDelta(ease("bounce")(1), 1, 1e-9);
+    "all easing functions return exactly 1 for t = 1": function(ease) {
+      assert.equal(ease("linear")(1), 1);
+      assert.equal(ease("poly", 2)(1), 1);
+      assert.equal(ease("quad")(1), 1);
+      assert.equal(ease("cubic")(1), 1);
+      assert.equal(ease("sin")(1), 1);
+      assert.equal(ease("exp")(1), 1);
+      assert.equal(ease("circle")(1), 1);
+      assert.equal(ease("elastic")(1), 1);
+      assert.equal(ease("back")(1), 1);
+      assert.equal(ease("bounce")(1), 1);
     },
     "the -in suffix returns the identity": function(ease) {
-      assert.equal(ease("linear-in"), ease("linear"));
-      assert.equal(ease("quad-in"), ease("quad"));
+      assert.inDelta(ease("linear-in")(.25), ease("linear")(.25), 1e-6);
+      assert.inDelta(ease("quad-in")(.75), ease("quad")(.75), 1e-6);
     },
     "the -out suffix returns the reverse": function(ease) {
       assert.inDelta(ease("sin-out")(.25), 1 - ease("sin-in")(.75), 1e-6);
@@ -94,10 +94,10 @@ suite.addBatch({
       assert.inDelta(ease("bounce-out-in")(.25), .5 * ease("bounce-out")(.5), 1e-6);
       assert.inDelta(ease("elastic-out-in")(.25), .5 * ease("elastic-out")(.5), 1e-6);
     },
-    "does not clamp input time": function(ease) {
+    "clamps input time": function(ease) {
       var e = ease("linear");
-      assert.inDelta(e(-1), -1, 1e-6);
-      assert.inDelta(e(2), 2, 1e-6);
+      assert.inDelta(e(-1), 0, 1e-6);
+      assert.inDelta(e(2), 1, 1e-6);
     },
     "poly": {
       "supports an optional polynomial": function(ease) {
