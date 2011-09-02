@@ -164,7 +164,7 @@ function d3_layout_packUnlink(node) {
 
 function d3_layout_packTree(node) {
   var children = node.children;
-  if (children) {
+  if (children && children.length) {
     children.forEach(d3_layout_packTree);
     node.r = d3_layout_packCircle(children);
   } else {
@@ -184,17 +184,22 @@ function d3_layout_packTransform(node, x, y, k) {
 }
 
 function d3_layout_packPlace(a, b, c) {
-  var da = b.r + c.r,
-      db = a.r + c.r,
+  var db = a.r + c.r,
       dx = b.x - a.x,
       dy = b.y - a.y,
-      dc = Math.sqrt(dx * dx + dy * dy),
-      cos = (db * db + dc * dc - da * da) / (2 * db * dc),
-      theta = Math.acos(cos),
-      x = cos * db,
-      h = Math.sin(theta) * db;
-  dx /= dc;
-  dy /= dc;
-  c.x = a.x + x * dx + h * dy;
-  c.y = a.y + x * dy - h * dx;
+      dc = Math.sqrt(dx * dx + dy * dy);
+  if (db && dc) {
+    var da = b.r + c.r,
+        cos = Math.min(1, (db * db + dc * dc - da * da) / (2 * db * dc)),
+        theta = Math.acos(cos),
+        x = cos * db,
+        h = Math.sin(theta) * db;
+    dx /= dc;
+    dy /= dc;
+    c.x = a.x + x * dx + h * dy;
+    c.y = a.y + x * dy - h * dx;
+  } else {
+    c.x = a.x;
+    c.y = a.y;
+  }
 }
