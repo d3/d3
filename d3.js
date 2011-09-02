@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.1.2"}; // semver
+d3 = {version: "2.1.3"}; // semver
 var d3_arraySubclass = [].__proto__?
 
 // Until ECMAScript supports array subclassing, prototype injection works well.
@@ -3544,7 +3544,7 @@ d3.svg.axis = function() {
 
       // Domain.
       var range = d3_scaleExtent(scale.range()),
-          path = g.selectAll(".domain").data([,]),
+          path = g.selectAll(".domain").data([0]),
           pathEnter = path.enter().append("svg:path").attr("class", "domain"),
           pathUpdate = transition(path);
 

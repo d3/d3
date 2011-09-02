@@ -33,7 +33,7 @@ d3.svg.axis = function() {
 
       // Domain.
       var range = d3_scaleExtent(scale.range()),
-          path = g.selectAll(".domain").data([,]),
+          path = g.selectAll(".domain").data([0]),
           pathEnter = path.enter().append("svg:path").attr("class", "domain"),
           pathUpdate = transition(path);
 
