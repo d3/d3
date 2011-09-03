@@ -23,6 +23,18 @@ suite.addBatch({
         {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0},
         {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5}
       ]);
+    },
+    "can handle residual floating point error": function(pack) {
+      var result = pack.nodes({children: [
+        {value: 0.005348322447389364},
+        {value: 0.8065882022492588},
+        {value: 0}
+      ]}).map(layout);
+      assert.deepEqual(result.map(function(d) { return d.depth; }), [0, 1, 1, 1]);
+      assert.inDelta(result.map(function(d) { return d.value; }), [.811936, .005348, .806588, .0],      1e-6);
+      assert.inDelta(result.map(function(d) { return d.x; }),     [.5,      .962350, .462350, .924701], 1e-6);
+      assert.inDelta(result.map(function(d) { return d.y; }),     [.5,      .5,      .5,      .5],      1e-6);
+      assert.inDelta(result.map(function(d) { return d.r; }),     [.5,      .037649, .462350, .0],      1e-6);
     }
   }
 });
