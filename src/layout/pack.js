@@ -186,10 +186,10 @@ function d3_layout_packTransform(node, x, y, k) {
 function d3_layout_packPlace(a, b, c) {
   var db = a.r + c.r,
       dx = b.x - a.x,
-      dy = b.y - a.y,
-      dc = Math.sqrt(dx * dx + dy * dy);
-  if (db && dc) {
+      dy = b.y - a.y;
+  if (db && dx && dy) {
     var da = b.r + c.r,
+        dc = Math.sqrt(dx * dx + dy * dy),
         cos = Math.min(1, (db * db + dc * dc - da * da) / (2 * db * dc)),
         theta = Math.acos(cos),
         x = cos * db,
