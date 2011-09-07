@@ -7,12 +7,12 @@ d3.layout.hierarchy = function() {
   // Also converts the data representation into a standard hierarchy structure.
   function recurse(data, depth, nodes) {
     var childs = children.call(hierarchy, data, depth),
+        n,
         node = d3_layout_hierarchyInline ? data : {data: data};
     node.depth = depth;
     nodes.push(node);
-    if (childs) {
+    if (childs && (n = childs.length)) {
       var i = -1,
-          n = childs.length,
           c = node.children = [],
           v = 0,
           j = depth + 1;
