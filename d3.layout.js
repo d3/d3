@@ -588,7 +588,10 @@ d3.layout.pie = function() {
   var value = Number,
       sort = null,
       startAngle = 0,
-      endAngle = 2 * Math.PI;
+      endAngle = 2 * Math.PI,
+      innerRadius = 0,
+      outerRadius = 100;
+
 
   function pie(data, i) {
 
@@ -601,6 +604,16 @@ d3.layout.pie = function() {
     var k = (typeof endAngle === "function"
         ? endAngle.apply(this, arguments)
         : endAngle) - startAngle;
+
+    // Obtain the inner radius
+    var iR = +(typeof innerRadius === "function"
+        ? innerRadius.apply(this, arguments)
+        : innerRadius);
+
+    // Obtain the outer radius
+    var oR = +(typeof outerRadius === "function"
+        ? outerRadius.apply(this, arguments)
+        : outerRadius);
 
     // Optionally sort the data.
     var index = d3.range(data.length);
@@ -620,7 +633,9 @@ d3.layout.pie = function() {
         data: data[i],
         value: d = values[i],
         startAngle: a,
-        endAngle: a += d * k
+        endAngle: a += d * k,
+        innerRadius: iR,
+        outerRadius: oR
       };
     });
 
@@ -676,6 +691,32 @@ d3.layout.pie = function() {
     endAngle = x;
     return pie;
   };
+
+  /**
+   * Specifies the overall inner radius of the pie chart. Defaults to 0. The
+   * inner radius can be specified either as a constant or as a function; in the
+   * case of a function, it is evaluated once per array (as opposed to per
+   * element).
+   */
+  pie.innerRadius = function(x) {
+    if (!arguments.length) return innerRadius;
+    innerRadius = x;
+    return pie;
+  };
+  /**
+   * Specifies the overall outer radius of the pie chart. Defaults to 100. The
+   * outer radius can be specified either as a constant or as a function; in the
+   * case of a function, it is evaluated once per array (as opposed to per
+   * element).
+   */
+  pie.outerRadius = function(x) {
+    if (!arguments.length) return outerRadius;
+    outerRadius = x;
+    return pie;
+  };
+
+
+
 
   return pie;
 };
