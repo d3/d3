@@ -23,6 +23,17 @@ suite.addBatch({
         {x: 3, y: 2, dx: 0, dy: 1},
         {x: 3, y: 2, dx: 0, dy: 1}
       ]);
+    },
+    "can handle an empty children array": function(partition) {
+      var p = partition();
+      assert.deepEqual(p({children: []}).map(metadata), [
+        {x: 0, y: 0, dx: 1, dy: 1}
+      ]);
+      assert.deepEqual(p({children: [{children: []}, {value: 1}]}).map(metadata), [
+        {x: 0, y: 0,   dx: 1, dy: 0.5},
+        {x: 1, y: 0.5, dx: 0, dy: 0.5},
+        {x: 0, y: 0.5, dx: 1, dy: 0.5}
+      ]);
     }
   }
 });
