@@ -14,7 +14,7 @@ suite.addBatch({
     },
     "ignores zero values": function(partition) {
       var p = partition().size([3, 3]);
-      assert.deepEqual(p({children: [{value: 1}, {value: 0}, {value: 2}, {children: [{value: 0}, {value: 0}]}]}).map(metadata), [
+      assert.deepEqual(p.nodes({children: [{value: 1}, {value: 0}, {value: 2}, {children: [{value: 0}, {value: 0}]}]}).map(metadata), [
         {x: 0, y: 0, dx: 3, dy: 1},
         {x: 2, y: 1, dx: 1, dy: 1},
         {x: 3, y: 1, dx: 0, dy: 1},
@@ -26,10 +26,10 @@ suite.addBatch({
     },
     "can handle an empty children array": function(partition) {
       var p = partition();
-      assert.deepEqual(p({children: []}).map(metadata), [
+      assert.deepEqual(p.nodes({children: []}).map(metadata), [
         {x: 0, y: 0, dx: 1, dy: 1}
       ]);
-      assert.deepEqual(p({children: [{children: []}, {value: 1}]}).map(metadata), [
+      assert.deepEqual(p.nodes({children: [{children: []}, {value: 1}]}).map(metadata), [
         {x: 0, y: 0,   dx: 1, dy: 0.5},
         {x: 1, y: 0.5, dx: 0, dy: 0.5},
         {x: 0, y: 0.5, dx: 1, dy: 0.5}
