@@ -16,7 +16,9 @@ d3.geo.azimuthal = function() {
         sx1 = Math.sin(x1),
         cy1 = Math.cos(y1),
         sy1 = Math.sin(y1),
-        k = mode === "stereographic" ? 1 / (1 + sy0 * sy1 + cy0 * cy1 * cx1) : 1,
+        k = mode === "stereographic" ? 1 / (sy0 * sy1 + cy0 * cy1 * cx1 + 1)
+          : mode === "gnomonic" ?      1 / (sy0 * sy1 + cy0 * cy1 * cx1)
+          : 1,
         x = k * cy1 * sx1,
         y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
     return [
@@ -29,7 +31,9 @@ d3.geo.azimuthal = function() {
     var x = (coordinates[0] - translate[0]) / scale,
         y = (coordinates[1] - translate[1]) / scale,
         p = Math.sqrt(x * x + y * y),
-        c = mode === "stereographic" ? 2 * Math.atan(p) : Math.asin(p),
+        c = mode === "stereographic" ? 2 * Math.atan(p)
+          : mode === "gnomonic" ? Math.atan(p)
+          : Math.asin(p),
         sc = Math.sin(c),
         cc = Math.cos(c);
     return [

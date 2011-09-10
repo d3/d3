@@ -70,11 +70,17 @@ suite.addBatch({
       var coords = azimuthal([-180, 0]);
       assert.inDelta(coords[0], 0, 1e-6);
       assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
     },
     "Phillipines": function(azimuthal) {
       var coords = azimuthal([180, 0]);
       assert.inDelta(coords[0], 0, 1e-6);
       assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
     },
     "Inversion works for non-zero translation": function() {
       var azimuthal = d3.geo.azimuthal().mode("orthographic").translate([123, 99]).scale(100),
@@ -83,7 +89,51 @@ suite.addBatch({
       assert.inDelta(lonlat[0], 0, 1e-6);
       assert.inDelta(lonlat[1], 85, 1e-6);
     }
-  }
+  },
+  "azimuthal.gnomonic": {
+    topic: function() {
+      return d3.geo.azimuthal().mode("gnomonic").translate([0, 0]).scale(100);
+    },
+    "Arctic": function(azimuthal) {
+      var coords = azimuthal([0, 85]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], -1143.005230, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 85, 1e-6);
+    },
+    "Antarctic": function(azimuthal) {
+      var coords = azimuthal([0, -85]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], 1143.005230, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], -85, 1e-6);
+    },
+    "Hawaii": function(azimuthal) {
+      var coords = azimuthal([-180, 0]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
+    },
+    "Phillipines": function(azimuthal) {
+      var coords = azimuthal([180, 0]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
+    },
+    "Inversion works for non-zero translation": function() {
+      var azimuthal = d3.geo.azimuthal().mode("stereographic").translate([123, 99]).scale(100),
+          coords = azimuthal([0, 85]),
+          lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 85, 1e-6);
+    }
+  },
 });
 
 suite.export(module);
