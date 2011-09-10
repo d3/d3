@@ -253,7 +253,8 @@ d3.geo.mercator = function() {
 d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_path_circle(pointRadius),
-      projection = d3.geo.albersUsa();
+      projection = d3.geo.albersUsa(),
+      clip = Object;
 
   function path(d, i) {
     if (typeof pointRadius === "function") {
@@ -282,12 +283,14 @@ d3.geo.path = function() {
     },
 
     Point: function(o) {
-      return "M" + project(o.coordinates) + pointCircle;
+      var coordinates = clip.call(this, [o.coordinates]);
+      return coordinates.length
+        ? "M" + project(coordinates[0]) + pointCircle : "";
     },
 
     MultiPoint: function(o) {
       var path = [],
-          coordinates = o.coordinates,
+          coordinates = clip.call(this, o.coordinates),
           i = -1, // coordinates.index
           n = coordinates.length;
       while (++i < n) path.push("M", project(coordinates[i]), pointCircle);
@@ -296,7 +299,7 @@ d3.geo.path = function() {
 
     LineString: function(o) {
       var path = ["M"],
-          coordinates = o.coordinates,
+          coordinates = clip.call(this, o.coordinates),
           i = -1, // coordinates.index
           n = coordinates.length;
       while (++i < n) path.push(project(coordinates[i]), "L");
@@ -313,7 +316,7 @@ d3.geo.path = function() {
           j, // subcoordinates.index
           m; // subcoordinates.length
       while (++i < n) {
-        subcoordinates = coordinates[i];
+        subcoordinates = clip.call(this, coordinates[i]);
         j = -1;
         m = subcoordinates.length;
         path.push("M");
@@ -332,9 +335,10 @@ d3.geo.path = function() {
           j, // subcoordinates.index
           m; // subcoordinates.length
       while (++i < n) {
-        subcoordinates = coordinates[i];
+        subcoordinates = clip.call(this, coordinates[i]);
         j = -1;
-        m = subcoordinates.length;
+        m = subcoordinates.length - 1;
+        if (m < 1) continue;
         path.push("M");
         while (++j < m) path.push(project(subcoordinates[j]), "L");
         path[path.length - 1] = "Z";
@@ -358,9 +362,10 @@ d3.geo.path = function() {
         j = -1;
         m = subcoordinates.length;
         while (++j < m) {
-          subsubcoordinates = subcoordinates[j];
+          subsubcoordinates = clip.call(this, subcoordinates[j]);
           k = -1;
           p = subsubcoordinates.length - 1;
+          if (p < 1) continue;
           path.push("M");
           while (++k < p) path.push(project(subsubcoordinates[k]), "L");
           path[path.length - 1] = "Z";
@@ -498,6 +503,12 @@ d3.geo.path = function() {
     return path;
   };
 
+  path.clip = function(x) {
+    if (!arguments.length) return clip;
+    clip = x;
+    return path;
+  }
+
   path.area = function(d) {
     return d3_geo_pathType(areaTypes, d);
   };
@@ -616,7 +627,7 @@ d3.geo.greatCircle = function() {
       radius = 6371; // Mean radius of Earth, in km.
   // TODO: breakAtDateLine?
 
-  function greatCircle(d, i) {
+  function greatCircle(d, i, dist) {
     var from = source.call(this, d, i),
         to = target.call(this, d, i),
         x0 = from[0] * d3_radians,
@@ -627,12 +638,14 @@ d3.geo.greatCircle = function() {
         cy0 = Math.cos(y0), sy0 = Math.sin(y0),
         cx1 = Math.cos(x1), sx1 = Math.sin(x1),
         cy1 = Math.cos(y1), sy1 = Math.sin(y1),
-        d = Math.acos(sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)),
+        d = dist || Math.acos(sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)),
         sd = Math.sin(d),
         f = d / (n - 1),
         e = -f,
         path = [],
         i = -1;
+
+    if (d === 0) return [from];
 
     while (++i < n) {
       e += f;
@@ -698,5 +711,90 @@ function d3_geo_greatCircleSource(d) {
 
 function d3_geo_greatCircleTarget(d) {
   return d.target;
+}
+d3.geo.clip = function() {
+  var origin = [0, 0],
+      angle = 90,
+      r = 6371 * angle / 180 * Math.PI;
+
+  function clip(d) {
+    var o = {source: origin, target: null},
+        n = d.length,
+        i = -1,
+        j,
+        path,
+        clipped = [],
+        p = null,
+        q = null;
+    while (++i < n) {
+      o.target = d[i];
+      distance = d3_geo_clipGreatCircle.distance(o);
+      if (distance < r) {
+        if (q) {
+          path = d3_geo_clipGreatCircle({source: q, target: o.target});
+          j = d3_geo_clipClosest(path, o, r);
+          if (p) {
+            clipped.push.apply(clipped, d3_geo_clipGreatCircle({source: p, target: o.target}));
+          }
+          clipped.push.apply(clipped, path.slice(j));
+          p = q = null;
+        } else {
+          clipped.push(o.target);
+        }
+      } else {
+        q = o.target;
+        if (!p && clipped.length) {
+          path = d3_geo_clipGreatCircle({source: clipped[clipped.length - 1], target: o.target});
+          j = d3_geo_clipClosest(path, o, r);
+          clipped.push.apply(clipped, path.slice(0, j));
+          p = o.target;
+        }
+      }
+    }
+    if (q && clipped.length) {
+      o.target = clipped[0];
+      path = d3_geo_clipGreatCircle({source: q, target: o.target});
+      j = d3_geo_clipClosest(path, o, r);
+      if (p) {
+        clipped.push.apply(clipped, d3_geo_clipGreatCircle({source: p, target: o.target}));
+      }
+      clipped.push.apply(clipped, path.slice(j));
+    }
+    return clipped;
+  }
+
+  clip.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = x;
+    return clip;
+  };
+
+  clip.angle = function(x) {
+    if (!arguments.length) return angle;
+    angle = +x;
+    r = 6371 * angle / 180 * Math.PI;
+    return clip;
+  };
+
+  return clip;
+}
+
+var d3_geo_clipGreatCircle = d3.geo.greatCircle().n(100);
+
+function d3_geo_clipClosest(path, o, r) {
+  var i = -1,
+      n = path.length,
+      index = 0,
+      best = Infinity;
+  while (++i < n) {
+    o.target = path[i];
+    var d = Math.abs(d3_geo_clipGreatCircle.distance(o) - r);
+    if (d < best) {
+      best = d;
+      index = i;
+    }
+  }
+  o.target = path[index];
+  return index;
 }
 })();

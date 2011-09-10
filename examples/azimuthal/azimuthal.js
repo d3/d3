@@ -1,5 +1,6 @@
-var xy = d3.geo.azimuthal().scale(240).mode("equalarea"),
-    path = d3.geo.path().projection(xy),
+var xy = d3.geo.azimuthal().scale(240).mode("stereographic"),
+    clip = d3.geo.clip().angle(89),
+    path = d3.geo.path().projection(xy).clip(clip),
     svg = d3.select("body").append("svg:svg");
 
 d3.json("../data/world-countries.json", function(collection) {
@@ -11,9 +12,10 @@ d3.json("../data/world-countries.json", function(collection) {
       .text(function(d) { return d.properties.name; });
 });
 
-function refresh() {
-  svg.selectAll("path")
-      .attr("d", path);
+function refresh(duration) {
+  var p = svg.selectAll("path");
+  if (duration) p = p.transition().duration(duration);
+  p.attr("d", path);
   d3.select("#lon span")
       .text(xy.origin()[0]);
   d3.select("#lat span")

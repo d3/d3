@@ -186,6 +186,7 @@ d3.geo.js: \
 	src/geo/path.js \
 	src/geo/bounds.js \
 	src/geo/greatCircle.js \
+	src/geo/clip.js \
 	src/end.js
 
 d3.csv.js: \

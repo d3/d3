@@ -8,7 +8,8 @@
 d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_path_circle(pointRadius),
-      projection = d3.geo.albersUsa();
+      projection = d3.geo.albersUsa(),
+      clip = Object;
 
   function path(d, i) {
     if (typeof pointRadius === "function") {
@@ -37,12 +38,14 @@ d3.geo.path = function() {
     },
 
     Point: function(o) {
-      return "M" + project(o.coordinates) + pointCircle;
+      var coordinates = clip.call(this, [o.coordinates]);
+      return coordinates.length
+        ? "M" + project(coordinates[0]) + pointCircle : "";
     },
 
     MultiPoint: function(o) {
       var path = [],
-          coordinates = o.coordinates,
+          coordinates = clip.call(this, o.coordinates),
           i = -1, // coordinates.index
           n = coordinates.length;
       while (++i < n) path.push("M", project(coordinates[i]), pointCircle);
@@ -51,7 +54,7 @@ d3.geo.path = function() {
 
     LineString: function(o) {
       var path = ["M"],
-          coordinates = o.coordinates,
+          coordinates = clip.call(this, o.coordinates),
           i = -1, // coordinates.index
           n = coordinates.length;
       while (++i < n) path.push(project(coordinates[i]), "L");
@@ -68,7 +71,7 @@ d3.geo.path = function() {
           j, // subcoordinates.index
           m; // subcoordinates.length
       while (++i < n) {
-        subcoordinates = coordinates[i];
+        subcoordinates = clip.call(this, coordinates[i]);
         j = -1;
         m = subcoordinates.length;
         path.push("M");
@@ -87,9 +90,10 @@ d3.geo.path = function() {
           j, // subcoordinates.index
           m; // subcoordinates.length
       while (++i < n) {
-        subcoordinates = coordinates[i];
+        subcoordinates = clip.call(this, coordinates[i]);
         j = -1;
-        m = subcoordinates.length;
+        m = subcoordinates.length - 1;
+        if (m < 1) continue;
         path.push("M");
         while (++j < m) path.push(project(subcoordinates[j]), "L");
         path[path.length - 1] = "Z";
@@ -113,9 +117,10 @@ d3.geo.path = function() {
         j = -1;
         m = subcoordinates.length;
         while (++j < m) {
-          subsubcoordinates = subcoordinates[j];
+          subsubcoordinates = clip.call(this, subcoordinates[j]);
           k = -1;
           p = subsubcoordinates.length - 1;
+          if (p < 1) continue;
           path.push("M");
           while (++k < p) path.push(project(subsubcoordinates[k]), "L");
           path[path.length - 1] = "Z";
@@ -252,6 +257,12 @@ d3.geo.path = function() {
     projection = x;
     return path;
   };
+
+  path.clip = function(x) {
+    if (!arguments.length) return clip;
+    clip = x;
+    return path;
+  }
 
   path.area = function(d) {
     return d3_geo_pathType(areaTypes, d);
