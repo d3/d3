@@ -1,4 +1,4 @@
-var xy = d3.geo.azimuthal().scale(240).mode("stereographic"),
+var xy = d3.geo.azimuthal().scale(240).mode("equalarea"),
     path = d3.geo.path().projection(xy),
     svg = d3.select("body").append("svg:svg");
 
