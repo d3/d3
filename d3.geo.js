@@ -3,7 +3,7 @@
 var d3_radians = Math.PI / 180;
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
-  var mode = "orthographic", // or stereographic
+  var mode = "orthographic", // or stereographic, gnomonic or equidistant
       origin,
       scale = 200,
       translate = [480, 250],
@@ -19,8 +19,11 @@ d3.geo.azimuthal = function() {
         sx1 = Math.sin(x1),
         cy1 = Math.cos(y1),
         sy1 = Math.sin(y1),
-        k = mode === "stereographic" ? 1 / (sy0 * sy1 + cy0 * cy1 * cx1 + 1)
-          : mode === "gnomonic" ?      1 / (sy0 * sy1 + cy0 * cy1 * cx1)
+        cc = mode !== "orthographic" ? sy0 * sy1 + cy0 * cy1 * cx1 : null,
+        c,
+        k = mode === "stereographic" ? 1 / (1 + cc)
+          : mode === "gnomonic" ? 1 / cc
+          : mode === "equidistant" ? (c = Math.acos(cc), c / Math.sin(c))
           : 1,
         x = k * cy1 * sx1,
         y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
@@ -36,6 +39,7 @@ d3.geo.azimuthal = function() {
         p = Math.sqrt(x * x + y * y),
         c = mode === "stereographic" ? 2 * Math.atan(p)
           : mode === "gnomonic" ? Math.atan(p)
+          : mode === "equidistant" ? p
           : Math.asin(p),
         sc = Math.sin(c),
         cc = Math.cos(c);
