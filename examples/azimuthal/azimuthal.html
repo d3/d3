@@ -89,7 +89,9 @@ $("#translate-y").slider({
 });
 
 $("#mode").change(function() {
-  xy.mode($(this).val());
+  var mode = $(this).val();
+  xy.mode(mode);
+  path.clip(mode === "gnomonic" ? clip : circle.polyline);
   refresh(500);
 });
 

@@ -1,10 +1,12 @@
 d3.geo.clip = function() {
   var origin = [0, 0],
       angle = 90,
-      r = d3_geo_earthRadius * angle / 180 * Math.PI;
+      r = d3_geo_earthRadius * angle / 180 * Math.PI,
+      coordinates = Object;
 
-  function clip(d) {
-    var o = {source: origin, target: null},
+  function clip(d, i) {
+    var d = coordinates.call(this, d, i),
+        o = {source: origin, target: null},
         n = d.length,
         i = -1,
         j,
@@ -19,10 +21,7 @@ d3.geo.clip = function() {
         if (q) {
           path = d3_geo_clipGreatCircle({source: q, target: o.target});
           j = d3_geo_clipClosest(path, o, r);
-          if (p) {
-            clipped.push.apply(clipped, d3_geo_clipGreatCircle({source: p, target: o.target}));
-          }
-          clipped.push.apply(clipped, path.slice(j));
+          if (path.length) clipped.push(path[j]);
           p = q = null;
         } else {
           clipped.push(o.target);
@@ -32,7 +31,7 @@ d3.geo.clip = function() {
         if (!p && clipped.length) {
           path = d3_geo_clipGreatCircle({source: clipped[clipped.length - 1], target: o.target});
           j = d3_geo_clipClosest(path, o, r);
-          clipped.push.apply(clipped, path.slice(0, j));
+          if (path.length) clipped.push(path[j]);
           p = o.target;
         }
       }
@@ -41,13 +40,16 @@ d3.geo.clip = function() {
       o.target = clipped[0];
       path = d3_geo_clipGreatCircle({source: q, target: o.target});
       j = d3_geo_clipClosest(path, o, r);
-      if (p) {
-        clipped.push.apply(clipped, d3_geo_clipGreatCircle({source: p, target: o.target}));
-      }
-      clipped.push.apply(clipped, path.slice(j));
+      if (path.length) clipped.push(path[j]);
     }
     return clipped;
   }
+
+  clip.coordinates = function(x) {
+    if (!arguments.length) return coordinates;
+    coordinates = x;
+    return clip;
+  };
 
   clip.origin = function(x) {
     if (!arguments.length) return origin;
@@ -65,7 +67,7 @@ d3.geo.clip = function() {
   return clip;
 }
 
-var d3_geo_clipGreatCircle = d3.geo.greatCircle().n(100);
+var d3_geo_clipGreatCircle = d3.geo.greatCircle();
 
 function d3_geo_clipClosest(path, o, r) {
   var i = -1,
