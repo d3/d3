@@ -3,17 +3,18 @@ d3.geo.greatCircle = function() {
   var source = d3_geo_greatCircleSource,
       target = d3_geo_greatCircleTarget,
       coordinates = Object, // for use with polyline
-      precision = 1,
+      precision = null,
+      n = 100,
       radius = d3_geo_earthRadius;
   // TODO: breakAtDateLine?
 
   function greatCircle(d, i) {
     return d3_geo_greatCirclePath([
-      source.call(this, d, i), target.call(this, d, i)], precision);
+      source.call(this, d, i), target.call(this, d, i)], precision, n);
   }
 
   greatCircle.polyline = function(d, i) {
-    return d3_geo_greatCirclePath(coordinates.call(this, d, i), precision);
+    return d3_geo_greatCirclePath(coordinates.call(this, d, i), precision, n);
   };
 
   greatCircle.coordinates = function(x) {
@@ -22,9 +23,17 @@ d3.geo.greatCircle = function() {
     return greatCircle;
   };
 
+  greatCircle.n = function(x) {
+    if (!arguments.length) return n;
+    n = +x;
+    precision = null;
+    return greatCircle;
+  };
+
   greatCircle.precision = function(x) {
     if (!arguments.length) return precision;
     precision = +x;
+    n = null;
     return greatCircle;
   };
 
@@ -51,7 +60,7 @@ d3.geo.greatCircle = function() {
   return greatCircle;
 };
 
-function d3_geo_greatCirclePath(coordinates, precision) {
+function d3_geo_greatCirclePath(coordinates, precision, segments) {
   var m = coordinates.length;
   if (m < 2) return coordinates;
 
@@ -73,7 +82,7 @@ function d3_geo_greatCirclePath(coordinates, precision) {
         cy1 = Math.cos(y1), sy1 = Math.sin(y1),
         d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))),
         sd = Math.sin(d),
-        n = Math.ceil(d / p),
+        n = segments != null ? segments - 1 : Math.ceil(d / p),
         f = d / n,
         e = 0,
         j = 0;

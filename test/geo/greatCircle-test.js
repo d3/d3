@@ -10,7 +10,7 @@ var suite = vows.describe("d3.geo.greatCircle");
 suite.addBatch({
   "greatCircle": {
     topic: function() {
-      return d3.geo.greatCircle().precision(7.5);
+      return d3.geo.greatCircle().n(12);
     },
     "distance": function(circle) {
       assert.equal(circle.distance({source: [0, 0], target: [0, 0]}), 0);
