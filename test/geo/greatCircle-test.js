@@ -13,14 +13,14 @@ suite.addBatch({
       return d3.geo.greatCircle().precision(7.5);
     },
     "distance": function(circle) {
-      assert.equal(circle.distance({source: [0, 0], target: [0, 0]}), 0);
-      assert.inDelta(circle.distance({
-        source: [118 + 24 / 60, 33 + 57 / 60],
-        target: [ 73 + 47 / 60, 40 + 38 / 60]
-      }), 3973, .5);
+      assert.equal(circle.distance([[0, 0], [0, 0]]), 0);
+      assert.inDelta(circle.distance([
+        [118 + 24 / 60, 33 + 57 / 60],
+        [ 73 + 47 / 60, 40 + 38 / 60]
+      ]), 3973, .5);
     },
     "geodesic": function(circle) {
-      assert.inDelta(circle({source: [5, 52], target: [-120, 37]}), [
+      assert.inDelta(circle([[5, 52], [-120, 37]]), [
         [   5,        52      ],
         [  -3.805036, 57.05083],
         [ -15.122869, 61.30118],

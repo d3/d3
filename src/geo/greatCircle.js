@@ -1,15 +1,12 @@
 // From http://williams.best.vwh.net/avform.htm#Intermediate
 d3.geo.greatCircle = function() {
-  var source = d3_geo_greatCircleSource,
-      target = d3_geo_greatCircleTarget,
-      coordinates = Object,
+  var coordinates = Object,
       precision = 1,
       radius = d3_geo_earthRadius;
   // TODO: breakAtDateLine?
 
   function greatCircle(d, i) {
-    return d3_geo_greatCirclePath([
-      source.call(this, d, i), target.call(this, d, i)], precision);
+    return d3_geo_greatCirclePath(coordinates.call(this, d, i), precision);
   }
 
   greatCircle.coordinates = function(x) {
@@ -32,21 +29,29 @@ d3.geo.greatCircle = function() {
 
   // Haversine formula for great-circle distance.
   greatCircle.distance = function(d, i) {
-    var from = source.call(this, d, i),
-        to = target.call(this, d, i),
+    d = coordinates.call(this, d, i);
+    if (d.length < 2) return NaN;
+
+    var from = d[0],
+        to,
         x0 = from[0] * d3_radians,
         y0 = from[1] * d3_radians,
-        x1 = to[0] * d3_radians,
-        y1 = to[1] * d3_radians,
-        sy = Math.sin((y1 - y0) / 2),
-        sx = Math.sin((x1 - x0) / 2),
-        a = sy * sy + Math.cos(y0) * Math.cos(y1) * sx * sx;
+        n = d.length,
+        i = 0,
+        s = 0;
 
-    return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  };
-
-  greatCircle.polyline = function(d, i) {
-    return d3_geo_greatCirclePath(coordinates.call(this, d, i), precision);
+    while (++i < n) {
+      to = d[i];
+      var x1 = to[0] * d3_radians,
+          y1 = to[1] * d3_radians,
+          sy = Math.sin((y1 - y0) / 2),
+          sx = Math.sin((x1 - x0) / 2),
+          a = sy * sy + Math.cos(y0) * Math.cos(y1) * sx * sx;
+      x0 = x1;
+      y0 = y1;
+      s += radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    }
+    return s;
   };
 
   return greatCircle;
@@ -99,12 +104,4 @@ function d3_geo_greatCirclePath(coordinates, precision) {
   }
 
   return path;
-}
-
-function d3_geo_greatCircleSource(d) {
-  return d.source;
-}
-
-function d3_geo_greatCircleTarget(d) {
-  return d.target;
 }

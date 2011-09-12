@@ -67,7 +67,9 @@ d3.geo.clip = function() {
   return clip;
 }
 
-var d3_geo_clipGreatCircle = d3.geo.greatCircle();
+var d3_geo_clipGreatCircle = d3.geo.greatCircle().coordinates(function(d) {
+  return [d.source, d.target];
+});
 
 function d3_geo_clipClosest(path, o, r) {
   var i = -1,
