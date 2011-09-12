@@ -1,7 +1,7 @@
 var xy = d3.geo.azimuthal().scale(240).mode("stereographic"),
     clip = d3.geo.clip().angle(89),
     circle = d3.geo.greatCircle().precision(10).coordinates(clip),
-    path = d3.geo.path().projection(xy).clip(circle),
+    path = d3.geo.path().projection(xy).clip(circle.polyline),
     svg = d3.select("body").append("svg:svg");
 
 d3.json("../data/world-countries.json", function(collection) {

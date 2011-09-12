@@ -61,9 +61,7 @@ d3.geo.clip = function() {
   return clip;
 }
 
-var d3_geo_clipGreatCircle = d3.geo.greatCircle().coordinates(function(d) {
-  return [d.source, d.target];
-});
+var d3_geo_clipGreatCircle = d3.geo.greatCircle();
 
 function d3_geo_clipIntersect(from, to, f) {
   var x0 = from[0] * d3_radians,
