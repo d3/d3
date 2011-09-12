@@ -20,7 +20,7 @@ d3.geo.azimuthal = function() {
         c,
         k = mode === "stereographic" ? 1 / (1 + cc)
           : mode === "gnomonic" ? 1 / cc
-          : mode === "equidistant" ? (c = Math.acos(cc), c / Math.sin(c))
+          : mode === "equidistant" ? (c = Math.acos(cc), c ? c / Math.sin(c) : 0)
           : mode === "equalarea" ? Math.sqrt(2 / (1 + cc))
           : 1,
         x = k * cy1 * sx1,
@@ -44,7 +44,7 @@ d3.geo.azimuthal = function() {
         cc = Math.cos(c);
     return [
       (x0 + Math.atan2(x * sc, p * cy0 * cc + y * sy0 * sc)) / d3_radians,
-      Math.asin(cc * sy0 - (y * sc * cy0) / p) / d3_radians
+      Math.asin(cc * sy0 - (p ? (y * sc * cy0) / p : 0)) / d3_radians
     ];
   };
 

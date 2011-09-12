@@ -12,6 +12,14 @@ suite.addBatch({
     topic: function() {
       return d3.geo.azimuthal().mode("stereographic").translate([0, 0]).scale(100);
     },
+    "origin": function(azimuthal) {
+      var coords = azimuthal([0, 0]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
+    },
     "Arctic": function(azimuthal) {
       var coords = azimuthal([0, 85]);
       assert.inDelta(coords[0], 0, 1e-6);
@@ -49,6 +57,14 @@ suite.addBatch({
   "azimuthal.orthographic": {
     topic: function() {
       return d3.geo.azimuthal().mode("orthographic").translate([0, 0]).scale(100);
+    },
+    "origin": function(azimuthal) {
+      var coords = azimuthal([0, 0]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
     },
     "Arctic": function(azimuthal) {
       var coords = azimuthal([0, 85]);
@@ -94,6 +110,14 @@ suite.addBatch({
     topic: function() {
       return d3.geo.azimuthal().mode("gnomonic").translate([0, 0]).scale(100);
     },
+    "origin": function(azimuthal) {
+      var coords = azimuthal([0, 0]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
+    },
     "Arctic": function(azimuthal) {
       var coords = azimuthal([0, 85]);
       assert.inDelta(coords[0], 0, 1e-6);
@@ -138,6 +162,14 @@ suite.addBatch({
     topic: function() {
       return d3.geo.azimuthal().mode("equidistant").translate([0, 0]).scale(100);
     },
+    "origin": function(azimuthal) {
+      var coords = azimuthal([0, 0]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
+    },
     "Arctic": function(azimuthal) {
       var coords = azimuthal([0, 85]);
       assert.inDelta(coords[0], 0, 1e-6);
@@ -147,12 +179,12 @@ suite.addBatch({
       assert.inDelta(lonlat[1], 85, 1e-6);
     },
     "Antarctic": function(azimuthal) {
-      var coords = azimuthal([0, -85]);
+      var coords = azimuthal([0, -90]);
       assert.inDelta(coords[0], 0, 1e-6);
-      assert.inDelta(coords[1], 148.352986, 1e-6);
+      assert.inDelta(coords[1], 157.079632, 1e-6);
       var lonlat = azimuthal.invert(coords);
       assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], -85, 1e-6);
+      assert.inDelta(lonlat[1], -90, 1e-6);
     },
     "Hawaii": function(azimuthal) {
       var coords = azimuthal([-180, 0]);
@@ -182,6 +214,14 @@ suite.addBatch({
     topic: function() {
       return d3.geo.azimuthal().mode("equalarea").translate([0, 0]).scale(100);
     },
+    "origin": function(azimuthal) {
+      var coords = azimuthal([0, 0]);
+      assert.inDelta(coords[0], 0, 1e-6);
+      assert.inDelta(coords[1], 0, 1e-6);
+      var lonlat = azimuthal.invert(coords);
+      assert.inDelta(lonlat[0], 0, 1e-6);
+      assert.inDelta(lonlat[1], 0, 1e-6);
+    },
     "Arctic": function(azimuthal) {
       var coords = azimuthal([0, 85]);
       assert.inDelta(coords[0], 0, 1e-6);
@@ -191,12 +231,12 @@ suite.addBatch({
       assert.inDelta(lonlat[1], 85, 1e-6);
     },
     "Antarctic": function(azimuthal) {
-      var coords = azimuthal([0, -85]);
+      var coords = azimuthal([0, -90]);
       assert.inDelta(coords[0], 0, 1e-6);
-      assert.inDelta(coords[1], 135.118041, 1e-6);
+      assert.inDelta(coords[1], 141.421356, 1e-6);
       var lonlat = azimuthal.invert(coords);
-      assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], -85, 1e-6);
+      assert.inDelta(lonlat[0], 180, 1e-6);
+      assert.inDelta(lonlat[1], -90, 1e-6);
     },
     "Hawaii": function(azimuthal) {
       var coords = azimuthal([-180, 0]);
