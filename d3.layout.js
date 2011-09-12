@@ -1030,9 +1030,9 @@ d3.layout.hierarchy = function() {
         node = d3_layout_hierarchyInline ? data : {data: data};
     node.depth = depth;
     nodes.push(node);
-    if (childs) {
+    if (childs && (n = childs.length)) {
       var i = -1,
-          n = childs.length,
+          n,
           c = node.children = [],
           v = 0,
           j = depth + 1;
@@ -1054,9 +1054,9 @@ d3.layout.hierarchy = function() {
   function revalue(node, depth) {
     var children = node.children,
         v = 0;
-    if (children) {
+    if (children && (n = children.length)) {
       var i = -1,
-          n = children.length,
+          n,
           j = depth + 1;
       while (++i < n) v += revalue(children[i], j);
     } else if (value) {
@@ -1094,6 +1094,12 @@ d3.layout.hierarchy = function() {
   hierarchy.revalue = function(root) {
     revalue(root, 0);
     return root;
+  };
+
+  // If the new API is used, enabling inlining.
+  hierarchy.nodes = function(d) {
+    d3_layout_hierarchyInline = true;
+    return (hierarchy.nodes = hierarchy)(d);
   };
 
   return hierarchy;
@@ -1354,9 +1360,10 @@ d3.layout.cluster = function() {
 
     // First walk, computing the initial x & y values.
     d3_layout_treeVisitAfter(root, function(node) {
-      if (node.children) {
-        node.x = d3_layout_clusterX(node.children);
-        node.y = d3_layout_clusterY(node.children);
+      var children = node.children;
+      if (children && children.length) {
+        node.x = d3_layout_clusterX(children);
+        node.y = d3_layout_clusterY(children);
       } else {
         node.x = previousNode ? x += separation(node, previousNode) : 0;
         node.y = 0;
@@ -1408,12 +1415,15 @@ function d3_layout_clusterX(children) {
 
 function d3_layout_clusterLeft(node) {
   var children = node.children;
-  return children ? d3_layout_clusterLeft(children[0]) : node;
+  return children && children.length
+    ? d3_layout_clusterLeft(children[0]) : node;
 }
 
 function d3_layout_clusterRight(node) {
-  var children = node.children;
-  return children ? d3_layout_clusterRight(children[children.length - 1]) : node;
+  var children = node.children,
+      n;
+  return children && (n = children.length)
+    ? d3_layout_clusterRight(children[n - 1]) : node;
 }
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {
