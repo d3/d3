@@ -10,8 +10,7 @@ var suite = vows.describe("d3.geo.greatCircle");
 suite.addBatch({
   "greatCircle": {
     topic: function() {
-      return d3.geo.greatCircle()
-          .n(12);
+      return d3.geo.greatCircle().n(12);
     },
     "distance": function(circle) {
       assert.equal(circle.distance({source: [0, 0], target: [0, 0]}), 0);
@@ -21,7 +20,7 @@ suite.addBatch({
       }), 3973, .5);
     },
     "geodesic": function(circle) {
-      assert.inDelta(circle({source: [5, 52], target: [-120, 37]}), [
+      assert.inDelta(circle.polyline([[5, 52], [-120, 37]]), [
         [   5,        52      ],
         [  -3.805036, 57.05083],
         [ -15.122869, 61.30118],

@@ -1,6 +1,6 @@
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
-  var mode = "orthographic", // or stereographic
+  var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
       origin,
       scale = 200,
       translate = [480, 250],
@@ -16,7 +16,13 @@ d3.geo.azimuthal = function() {
         sx1 = Math.sin(x1),
         cy1 = Math.cos(y1),
         sy1 = Math.sin(y1),
-        k = mode === "stereographic" ? 1 / (1 + sy0 * sy1 + cy0 * cy1 * cx1) : 1,
+        cc = mode !== "orthographic" ? sy0 * sy1 + cy0 * cy1 * cx1 : null,
+        c,
+        k = mode === "stereographic" ? 1 / (1 + cc)
+          : mode === "gnomonic" ? 1 / cc
+          : mode === "equidistant" ? (c = Math.acos(cc), c ? c / Math.sin(c) : 0)
+          : mode === "equalarea" ? Math.sqrt(2 / (1 + cc))
+          : 1,
         x = k * cy1 * sx1,
         y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
     return [
@@ -29,12 +35,16 @@ d3.geo.azimuthal = function() {
     var x = (coordinates[0] - translate[0]) / scale,
         y = (coordinates[1] - translate[1]) / scale,
         p = Math.sqrt(x * x + y * y),
-        c = mode === "stereographic" ? 2 * Math.atan(p) : Math.asin(p),
+        c = mode === "stereographic" ? 2 * Math.atan(p)
+          : mode === "gnomonic" ? Math.atan(p)
+          : mode === "equidistant" ? p
+          : mode === "equalarea" ? 2 * Math.asin(.5 * p)
+          : Math.asin(p),
         sc = Math.sin(c),
         cc = Math.cos(c);
     return [
       (x0 + Math.atan2(x * sc, p * cy0 * cc + y * sy0 * sc)) / d3_radians,
-      Math.asin(cc * sy0 - (y * sc * cy0) / p) / d3_radians
+      Math.asin(cc * sy0 - (p ? (y * sc * cy0) / p : 0)) / d3_radians
     ];
   };
 

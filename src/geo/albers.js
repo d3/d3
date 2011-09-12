@@ -124,5 +124,3 @@ d3.geo.albersUsa = function() {
 
   return albersUsa.scale(lower48.scale());
 };
-
-var d3_radians = Math.PI / 180;
