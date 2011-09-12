@@ -6,7 +6,7 @@ d3.geo.greatCircle = function() {
       radius = 6371; // Mean radius of Earth, in km.
   // TODO: breakAtDateLine?
 
-  function greatCircle(d, i, dist) {
+  function greatCircle(d, i) {
     var from = source.call(this, d, i),
         to = target.call(this, d, i),
         x0 = from[0] * d3_radians,
@@ -17,14 +17,12 @@ d3.geo.greatCircle = function() {
         cy0 = Math.cos(y0), sy0 = Math.sin(y0),
         cx1 = Math.cos(x1), sx1 = Math.sin(x1),
         cy1 = Math.cos(y1), sy1 = Math.sin(y1),
-        d = dist || Math.acos(sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)),
+        d = Math.acos(sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)),
         sd = Math.sin(d),
         f = d / (n - 1),
         e = -f,
         path = [],
         i = -1;
-
-    if (d === 0) return [from];
 
     while (++i < n) {
       e += f;
