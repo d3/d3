@@ -1,7 +1,7 @@
 d3.geo.clip = function() {
   var origin = [0, 0],
       angle = 90,
-      r = 6371 * angle / 180 * Math.PI;
+      r = d3_geo_earthRadius * angle / 180 * Math.PI;
 
   function clip(d) {
     var o = {source: origin, target: null},
@@ -58,7 +58,7 @@ d3.geo.clip = function() {
   clip.angle = function(x) {
     if (!arguments.length) return angle;
     angle = +x;
-    r = 6371 * angle / 180 * Math.PI;
+    r = d3_geo_earthRadius * angle / 180 * Math.PI;
     return clip;
   };
 

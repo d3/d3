@@ -3,7 +3,7 @@ d3.geo.greatCircle = function() {
   var source = d3_geo_greatCircleSource,
       target = d3_geo_greatCircleTarget,
       n = 100,
-      radius = 6371; // Mean radius of Earth, in km.
+      radius = d3_geo_earthRadius;
   // TODO: breakAtDateLine?
 
   function greatCircle(d, i) {

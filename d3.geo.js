@@ -1,6 +1,7 @@
 (function(){d3.geo = {};
 
-var d3_radians = Math.PI / 180;
+var d3_radians = Math.PI / 180,
+    d3_geo_earthRadius = 6371; // Mean radius of Earth, in km.
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
   var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
@@ -624,7 +625,7 @@ d3.geo.greatCircle = function() {
   var source = d3_geo_greatCircleSource,
       target = d3_geo_greatCircleTarget,
       n = 100,
-      radius = 6371; // Mean radius of Earth, in km.
+      radius = d3_geo_earthRadius;
   // TODO: breakAtDateLine?
 
   function greatCircle(d, i) {
@@ -713,7 +714,7 @@ function d3_geo_greatCircleTarget(d) {
 d3.geo.clip = function() {
   var origin = [0, 0],
       angle = 90,
-      r = 6371 * angle / 180 * Math.PI;
+      r = d3_geo_earthRadius * angle / 180 * Math.PI;
 
   function clip(d) {
     var o = {source: origin, target: null},
@@ -770,7 +771,7 @@ d3.geo.clip = function() {
   clip.angle = function(x) {
     if (!arguments.length) return angle;
     angle = +x;
-    r = 6371 * angle / 180 * Math.PI;
+    r = d3_geo_earthRadius * angle / 180 * Math.PI;
     return clip;
   };
 
