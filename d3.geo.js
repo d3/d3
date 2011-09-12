@@ -751,10 +751,9 @@ d3.geo.clip = function() {
           path = d3_geo_clipGreatCircle({source: q, target: o.target});
           j = d3_geo_clipClosest(path, o, r);
           if (path.length) clipped.push(path[j]);
-          p = q = null;
-        } else {
-          clipped.push(o.target);
         }
+        clipped.push(d[i]);
+        p = q = null;
       } else {
         q = o.target;
         if (!p && clipped.length) {
