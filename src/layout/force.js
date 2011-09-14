@@ -15,7 +15,8 @@ d3.layout.force = function() {
       nodes = [],
       links = [],
       distances,
-      strengths;
+      strengths,
+      charges;
 
   function repulse(node, kc) {
     return function(quad, x1, y1, x2, y2) {
@@ -149,6 +150,12 @@ d3.layout.force = function() {
     return force;
   };
 
+  force.charge = function(x) {
+    if (!arguments.length) return nodeCharge;
+    nodeCharge = d3.functor(x);
+    return force;
+  };
+
   force.friction = function(x) {
     if (!arguments.length) return friction;
     friction = x;
@@ -200,12 +207,14 @@ d3.layout.force = function() {
       ++o.target.weight;
     }
 
+    charges = [];
     for (i = 0; i < n; ++i) {
       o = nodes[i];
       if (isNaN(o.x)) o.x = position("x", w);
       if (isNaN(o.y)) o.y = position("y", h);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
+      charges[i] = nodeCharge.call(this, o, i);
     }
 
     // initialize node position based on first neighbor
@@ -315,15 +324,9 @@ function d3_layout_forceAccumulate(quad) {
       quad.point.x += Math.random() - .5;
       quad.point.y += Math.random() - .5;
     }
-    if ("chargeMultiplier" in quad.point) {
-      quad.count += quad.point.chargeMultiplier;
-      cx += quad.point.x * quad.point.chargeMultiplier;
-      cy += quad.point.y * quad.point.chargeMultiplier;
-    } else {
-      quad.count++;
-      cx += quad.point.x;
-      cy += quad.point.y;
-    }
+    quad.count += charges[i];
+    cx += charges[i]*quad.point.x;
+    cy += charges[i]*quad.point.y;
   }
   quad.cx = cx / quad.count;
   quad.cy = cy / quad.count;
