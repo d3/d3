@@ -93,33 +93,30 @@ var d3_svg_lineInterpolators = {
 
 // Linear interpolation; generates "L" commands.
 function d3_svg_lineLinear(points) {
-  var path = [],
-      i = 0,
+  var i = 0,
       n = points.length,
-      p = points[0];
-  path.push(p[0], ",", p[1]);
+      p = points[0],
+      path = [p[0], ",", p[1]];
   while (++i < n) path.push("L", (p = points[i])[0], ",", p[1]);
   return path.join("");
 }
 
 // Step interpolation; generates "H" and "V" commands.
 function d3_svg_lineStepBefore(points) {
-  var path = [],
-      i = 0,
+  var i = 0,
       n = points.length,
-      p = points[0];
-  path.push(p[0], ",", p[1]);
+      p = points[0],
+      path = [p[0], ",", p[1]];
   while (++i < n) path.push("V", (p = points[i])[1], "H", p[0]);
   return path.join("");
 }
 
 // Step interpolation; generates "H" and "V" commands.
 function d3_svg_lineStepAfter(points) {
-  var path = [],
-      i = 0,
+  var i = 0,
       n = points.length,
-      p = points[0];
-  path.push(p[0], ",", p[1]);
+      p = points[0],
+      path = [p[0], ",", p[1]];
   while (++i < n) path.push("H", (p = points[i])[0], "V", p[1]);
   return path.join("");
 }
@@ -217,15 +214,14 @@ function d3_svg_lineCardinalTangents(points, tension) {
 // B-spline interpolation; generates "C" commands.
 function d3_svg_lineBasis(points) {
   if (points.length < 3) return d3_svg_lineLinear(points);
-  var path = [],
-      i = 1,
+  var i = 1,
       n = points.length,
       pi = points[0],
       x0 = pi[0],
       y0 = pi[1],
       px = [x0, x0, x0, (pi = points[1])[0]],
-      py = [y0, y0, y0, pi[1]];
-  path.push(x0, ",", y0);
+      py = [y0, y0, y0, pi[1]],
+      path = [x0, ",", y0];
   d3_svg_lineBasisBezier(path, px, py);
   while (++i < n) {
     pi = points[i];
