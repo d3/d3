@@ -150,15 +150,15 @@ d3.layout.force = function() {
     return force;
   };
 
-  force.charge = function(x) {
-    if (!arguments.length) return charge;
-    charge = d3.functor(x);
-    return force;
-  };
-
   force.friction = function(x) {
     if (!arguments.length) return friction;
     friction = x;
+    return force;
+  };
+
+  force.charge = function(x) {
+    if (!arguments.length) return charge;
+    charge = x;
     return force;
   };
 
@@ -208,7 +208,15 @@ d3.layout.force = function() {
       if (isNaN(o.y)) o.y = position("y", h);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
-      charges[i] = charge.call(this, o, i);
+    }
+    if (typeof charge === "function") {
+      for (i = 0; i < n; ++i) {
+        charges[i] = charge.call(this, nodes[i], i);
+      }
+    } else {
+      for (i = 0; i < n; ++i) {
+        charges[i] = charge;
+      }
     }
 
     // initialize node position based on first neighbor
