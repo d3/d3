@@ -8,7 +8,7 @@ d3.layout.force = function() {
       friction = .9,
       linkDistance = d3_layout_forceLinkDistance,
       linkStrength = d3_layout_forceLinkStrength,
-      charge = d3_layout_forceCharge,
+      charge = -30,
       gravity = .1,
       theta = .8,
       interval,
@@ -340,8 +340,4 @@ function d3_layout_forceLinkDistance(link) {
 
 function d3_layout_forceLinkStrength(link) {
   return 1;
-}
-
-function d3_layout_forceCharge(node) {
-  return -30;
 }
