@@ -8,7 +8,7 @@ d3.layout.force = function() {
       friction = .9,
       linkDistance = d3_layout_forceLinkDistance,
       linkStrength = d3_layout_forceLinkStrength,
-      charge = -30,
+      charge = d3_layout_forceCharge,
       gravity = .1,
       theta = .8,
       interval,
@@ -151,8 +151,8 @@ d3.layout.force = function() {
   };
 
   force.charge = function(x) {
-    if (!arguments.length) return nodeCharge;
-    nodeCharge = d3.functor(x);
+    if (!arguments.length) return charge;
+    charge = d3.functor(x);
     return force;
   };
 
@@ -214,7 +214,7 @@ d3.layout.force = function() {
       if (isNaN(o.y)) o.y = position("y", h);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
-      charges[i] = nodeCharge.call(this, o, i);
+      charges[i] = charge.call(this, o, i);
     }
 
     // initialize node position based on first neighbor
@@ -338,4 +338,8 @@ function d3_layout_forceLinkDistance(link) {
 
 function d3_layout_forceLinkStrength(link) {
   return 1;
+}
+
+function d3_layout_forceCharge(node) {
+  return -30;
 }
