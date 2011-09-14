@@ -86,7 +86,7 @@ d3.layout.force = function() {
 
     // compute quadtree center of mass and apply charge forces
     if (k = alpha) {
-      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes));
+      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes), charges);
       i = -1; while (++i < n) {
         if (!(o = nodes[i]).fixed) {
           q.visit(repulse(o, k));
@@ -294,7 +294,7 @@ function d3_layout_forceDrag() {
   d3_layout_forceDragForce.resume(); // restart annealing
 }
 
-function d3_layout_forceAccumulate(quad) {
+function d3_layout_forceAccumulate(quad, charges) {
   var cx = 0,
       cy = 0;
   quad.totalCharge = 0;
@@ -306,7 +306,7 @@ function d3_layout_forceAccumulate(quad) {
     while (++i < n) {
       c = nodes[i];
       if (c == null) continue;
-      d3_layout_forceAccumulate(c);
+      d3_layout_forceAccumulate(c, charges);
       quad.totalCharge += c.totalCharge;
       cx += c.totalCharge * c.cx;
       cy += c.totalCharge * c.cy;
