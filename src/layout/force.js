@@ -318,9 +318,10 @@ function d3_layout_forceAccumulate(quad) {
       quad.point.x += Math.random() - .5;
       quad.point.y += Math.random() - .5;
     }
-    quad.totalCharge += charges[i];
-    cx += charges[i]*quad.point.x;
-    cy += charges[i]*quad.point.y;
+    var k = charges[quad.point.index];
+    quad.totalCharge += k;
+    cx += k*quad.point.x;
+    cy += k*quad.point.y;
   }
   quad.cx = cx / quad.totalCharge;
   quad.cy = cy / quad.totalCharge;
