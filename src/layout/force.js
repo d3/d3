@@ -157,8 +157,7 @@ d3.layout.force = function() {
   };
 
   force.charge = function(x) {
-    if (!arguments.length) return charge;
-    charge = x;
+    charge = typeof x === function ? x : +x;
     return force;
   };
 
@@ -211,7 +210,7 @@ d3.layout.force = function() {
     }
     if (typeof charge === "function") {
       for (i = 0; i < n; ++i) {
-        charges[i] = charge.call(this, nodes[i], i);
+        charges[i] = +charge.call(this, nodes[i], i);
       }
     } else {
       for (i = 0; i < n; ++i) {
