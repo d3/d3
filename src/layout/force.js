@@ -85,7 +85,7 @@ d3.layout.force = function() {
     }
 
     // compute quadtree center of mass and apply charge forces
-    if (k = alpha * charge) {
+    if (k = alpha) {
       d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes));
       i = -1; while (++i < n) {
         if (!(o = nodes[i]).fixed) {
@@ -159,12 +159,6 @@ d3.layout.force = function() {
   force.friction = function(x) {
     if (!arguments.length) return friction;
     friction = x;
-    return force;
-  };
-
-  force.charge = function(x) {
-    if (!arguments.length) return charge;
-    charge = x;
     return force;
   };
 
@@ -303,7 +297,7 @@ function d3_layout_forceDrag() {
 function d3_layout_forceAccumulate(quad) {
   var cx = 0,
       cy = 0;
-  quad.count = 0;
+  quad.totalCharge = 0;
   if (!quad.leaf) {
     var nodes = quad.nodes,
         n = nodes.length,
@@ -313,9 +307,9 @@ function d3_layout_forceAccumulate(quad) {
       c = nodes[i];
       if (c == null) continue;
       d3_layout_forceAccumulate(c);
-      quad.count += c.count;
-      cx += c.count * c.cx;
-      cy += c.count * c.cy;
+      quad.totalCharge += c.totalCharge;
+      cx += c.totalCharge * c.cx;
+      cy += c.totalCharge * c.cy;
     }
   }
   if (quad.point) {
@@ -324,12 +318,12 @@ function d3_layout_forceAccumulate(quad) {
       quad.point.x += Math.random() - .5;
       quad.point.y += Math.random() - .5;
     }
-    quad.count += charges[i];
+    quad.totalCharge += charges[i];
     cx += charges[i]*quad.point.x;
     cy += charges[i]*quad.point.y;
   }
-  quad.cx = cx / quad.count;
-  quad.cy = cy / quad.count;
+  quad.cx = cx / quad.totalCharge;
+  quad.cy = cy / quad.totalCharge;
 }
 
 function d3_layout_forceLinkDistance(link) {
