@@ -315,9 +315,15 @@ function d3_layout_forceAccumulate(quad) {
       quad.point.x += Math.random() - .5;
       quad.point.y += Math.random() - .5;
     }
-    quad.count++;
-    cx += quad.point.x;
-    cy += quad.point.y;
+    if ("chargeMultiplier" in quad.point) {
+      quad.count += quad.point.chargeMultiplier;
+      cx += quad.point.x * quad.point.chargeMultiplier;
+      cy += quad.point.y * quad.point.chargeMultiplier;
+    } else {
+      quad.count++;
+      cx += quad.point.x;
+      cy += quad.point.y;
+    }
   }
   quad.cx = cx / quad.count;
   quad.cy = cy / quad.count;
