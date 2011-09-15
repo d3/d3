@@ -304,7 +304,7 @@ function d3_layout_forceDrag() {
 function d3_layout_forceAccumulate(quad, charges) {
   var cx = 0,
       cy = 0;
-  quad.totalCharge = 0;
+  quad.count = 0;
   if (!quad.leaf) {
     var nodes = quad.nodes,
         n = nodes.length,
@@ -314,9 +314,9 @@ function d3_layout_forceAccumulate(quad, charges) {
       c = nodes[i];
       if (c == null) continue;
       d3_layout_forceAccumulate(c, charges);
-      quad.totalCharge += c.totalCharge;
-      cx += c.totalCharge * c.cx;
-      cy += c.totalCharge * c.cy;
+      quad.count += c.count;
+      cx += c.count * c.cx;
+      cy += c.count * c.cy;
     }
   }
   if (quad.point) {
@@ -326,12 +326,12 @@ function d3_layout_forceAccumulate(quad, charges) {
       quad.point.y += Math.random() - .5;
     }
     var k = charges[quad.point.index];
-    quad.totalCharge += k;
+    quad.count += k;
     cx += k*quad.point.x;
     cy += k*quad.point.y;
   }
-  quad.cx = cx / quad.totalCharge;
-  quad.cy = cy / quad.totalCharge;
+  quad.cx = cx / quad.count;
+  quad.cy = cy / quad.count;
 }
 
 function d3_layout_forceLinkDistance(link) {
