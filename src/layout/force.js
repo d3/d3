@@ -15,9 +15,10 @@ d3.layout.force = function() {
       nodes = [],
       links = [],
       distances,
-      strengths;
+      strengths,
+      charges;
 
-  function repulse(node, kc) {
+  function repulse(node) {
     return function(quad, x1, y1, x2, y2) {
       if (quad.point !== node) {
         var dx = quad.cx - node.x,
@@ -26,7 +27,7 @@ d3.layout.force = function() {
 
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
-          var k = kc * quad.count * dn * dn;
+          var k = alpha * quad.count * dn * dn;
           node.px -= dx * k;
           node.py -= dy * k;
           return true;
@@ -84,11 +85,11 @@ d3.layout.force = function() {
     }
 
     // compute quadtree center of mass and apply charge forces
-    if (k = alpha * charge) {
-      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes));
+    if (charge && alpha) {
+      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes), charges);
       i = -1; while (++i < n) {
         if (!(o = nodes[i]).fixed) {
-          q.visit(repulse(o, k));
+          q.visit(repulse(o));
         }
       }
     }
@@ -156,8 +157,7 @@ d3.layout.force = function() {
   };
 
   force.charge = function(x) {
-    if (!arguments.length) return charge;
-    charge = x;
+    charge = typeof x === function ? x : +x;
     return force;
   };
 
@@ -200,12 +200,22 @@ d3.layout.force = function() {
       ++o.target.weight;
     }
 
+    charges = [];
     for (i = 0; i < n; ++i) {
       o = nodes[i];
       if (isNaN(o.x)) o.x = position("x", w);
       if (isNaN(o.y)) o.y = position("y", h);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
+    }
+    if (typeof charge === "function") {
+      for (i = 0; i < n; ++i) {
+        charges[i] = +charge.call(this, nodes[i], i);
+      }
+    } else {
+      for (i = 0; i < n; ++i) {
+        charges[i] = charge;
+      }
     }
 
     // initialize node position based on first neighbor
@@ -291,7 +301,7 @@ function d3_layout_forceDrag() {
   d3_layout_forceDragForce.resume(); // restart annealing
 }
 
-function d3_layout_forceAccumulate(quad) {
+function d3_layout_forceAccumulate(quad, charges) {
   var cx = 0,
       cy = 0;
   quad.count = 0;
@@ -303,7 +313,7 @@ function d3_layout_forceAccumulate(quad) {
     while (++i < n) {
       c = nodes[i];
       if (c == null) continue;
-      d3_layout_forceAccumulate(c);
+      d3_layout_forceAccumulate(c, charges);
       quad.count += c.count;
       cx += c.count * c.cx;
       cy += c.count * c.cy;
@@ -315,9 +325,10 @@ function d3_layout_forceAccumulate(quad) {
       quad.point.x += Math.random() - .5;
       quad.point.y += Math.random() - .5;
     }
-    quad.count++;
-    cx += quad.point.x;
-    cy += quad.point.y;
+    var k = charges[quad.point.index];
+    quad.count += k;
+    cx += k*quad.point.x;
+    cy += k*quad.point.y;
   }
   quad.cx = cx / quad.count;
   quad.cy = cy / quad.count;
