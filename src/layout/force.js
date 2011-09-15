@@ -18,7 +18,7 @@ d3.layout.force = function() {
       strengths,
       charges;
 
-  function repulse(node, kc) {
+  function repulse(node) {
     return function(quad, x1, y1, x2, y2) {
       if (quad.point !== node) {
         var dx = quad.cx - node.x,
@@ -27,7 +27,7 @@ d3.layout.force = function() {
 
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
-          var k = kc * quad.count * dn * dn;
+          var k = alpha * quad.count * dn * dn;
           node.px -= dx * k;
           node.py -= dy * k;
           return true;
@@ -85,11 +85,11 @@ d3.layout.force = function() {
     }
 
     // compute quadtree center of mass and apply charge forces
-    if (k = alpha) {
+    if (charge && alpha) {
       d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes), charges);
       i = -1; while (++i < n) {
         if (!(o = nodes[i]).fixed) {
-          q.visit(repulse(o, k));
+          q.visit(repulse(o));
         }
       }
     }
