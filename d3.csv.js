@@ -1,11 +1,12 @@
-(function(){d3.csv = function(url, callback) {
-  d3.text(url, "text/csv", function(text) {
-    callback(text && d3.csv.parse(text));
+(function(){d3.csv = function(url, sep, callback) {
+  s = sep ? sep : ',' //check to see if sep is specified, else use commas
+  d3.text(url, "text/csv", function(text, s) {
+    callback(text && d3.csv.parse(text, s));
   });
 };
-d3.csv.parse = function(text) {
+d3.csv.parse = function(text, s) {
   var header;
-  return d3.csv.parseRows(text, function(row, i) {
+  return d3.csv.parseRows(text, s, function(row, i) {
     if (i) {
       var o = {}, j = -1, m = header.length;
       while (++j < m) o[header[j]] = row[j];
@@ -17,11 +18,12 @@ d3.csv.parse = function(text) {
   });
 };
 
-d3.csv.parseRows = function(text, f) {
+d3.csv.parseRows = function(text, s, f) {
   var EOL = {}, // sentinel value for end-of-line
       EOF = {}, // sentinel value for end-of-file
       rows = [], // output rows
-      re = /\r\n|[,\r\n]/g, // field separator regex
+      S = RegExp(s)
+      re = /\r\n|[S\r\n]/g, // field separator regex.
       n = 0, // the current line number
       t, // the current token
       eol; // is the current token followed by EOL?
@@ -80,8 +82,8 @@ d3.csv.format = function(rows) {
   return rows.map(d3_csv_formatRow).join("\n");
 };
 
-function d3_csv_formatRow(row) {
-  return row.map(d3_csv_formatValue).join(",");
+function d3_csv_formatRow(row, s) {
+  return row.map(d3_csv_formatValue).join(s);
 }
 
 function d3_csv_formatValue(text) {
