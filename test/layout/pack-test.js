@@ -30,11 +30,11 @@ suite.addBatch({
         {value: 0.8065882022492588},
         {value: 0}
       ]}).map(layout);
-      assert.deepEqual(result.map(function(d) { return d.depth; }), [0, 1, 1, 1]);
-      assert.inDelta(result.map(function(d) { return d.value; }), [0.8119365246966481, 0.005348322447389364, 0.8065882022492588, 0], 1e-6);
-      assert.inDelta(result.map(function(d) { return d.x; }), [0.5, 0.9623509026331429, 0.4623509026331429, 0.9247018052662859], 1e-6);
-      assert.inDelta(result.map(function(d) { return d.y; }), [0.5, 0.5, 0.5, 0.5], 1e-6);
-      assert.inDelta(result.map(function(d) { return d.r; }), [0.5, 0.037649097366857086, 0.46235090263314294, 0], 1e-6);
+      assert.isFalse(result.map(function(d) { return d.depth; }).some(isNaN));
+      assert.isFalse(result.map(function(d) { return d.value; }).some(isNaN));
+      assert.isFalse(result.map(function(d) { return d.x; }).some(isNaN));
+      assert.isFalse(result.map(function(d) { return d.y; }).some(isNaN));
+      assert.isFalse(result.map(function(d) { return d.r; }).some(isNaN));
     }
   }
 });
