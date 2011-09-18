@@ -76,12 +76,6 @@ d3.layout.hierarchy = function() {
     return root;
   };
 
-  // If the new API is used, enabling inlining.
-  hierarchy.nodes = function(d) {
-    d3_layout_hierarchyInline = true;
-    return (hierarchy.nodes = hierarchy)(d);
-  };
-
   return hierarchy;
 };
 

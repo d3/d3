@@ -1096,12 +1096,6 @@ d3.layout.hierarchy = function() {
     return root;
   };
 
-  // If the new API is used, enabling inlining.
-  hierarchy.nodes = function(d) {
-    d3_layout_hierarchyInline = true;
-    return (hierarchy.nodes = hierarchy)(d);
-  };
-
   return hierarchy;
 };
 
@@ -1415,15 +1409,12 @@ function d3_layout_clusterX(children) {
 
 function d3_layout_clusterLeft(node) {
   var children = node.children;
-  return children && children.length
-    ? d3_layout_clusterLeft(children[0]) : node;
+  return children && children.length ? d3_layout_clusterLeft(children[0]) : node;
 }
 
 function d3_layout_clusterRight(node) {
-  var children = node.children,
-      n;
-  return children && (n = children.length)
-    ? d3_layout_clusterRight(children[n - 1]) : node;
+  var children = node.children, n;
+  return children && (n = children.length) ? d3_layout_clusterRight(children[n - 1]) : node;
 }
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {
