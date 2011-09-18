@@ -164,6 +164,16 @@ suite.addBatch({
             {"value": 1189}
           ]}).map(layout);
       assert.equal(nodes.filter(function(n) { return n.dx < 0 || n.dy < 0; }).length, 0);
+    },
+    "can handle an empty children array": function(treemap) {
+      assert.deepEqual(treemap().nodes({children: []}).map(layout), [
+        {x: 0, y: 0, dx: 1, dy: 1}
+      ]);
+      assert.deepEqual(treemap().nodes({children: [{children: []}, {value: 1}]}).map(layout), [
+        {x: 0, y: 0, dx: 1, dy: 1},
+        {x: 0, y: 0, dx: 0, dy: 1},
+        {x: 0, y: 0, dx: 1, dy: 1}
+      ]);
     }
   }
 });

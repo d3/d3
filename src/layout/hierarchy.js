@@ -10,9 +10,9 @@ d3.layout.hierarchy = function() {
         node = d3_layout_hierarchyInline ? data : {data: data};
     node.depth = depth;
     nodes.push(node);
-    if (childs) {
+    if (childs && (n = childs.length)) {
       var i = -1,
-          n = childs.length,
+          n,
           c = node.children = [],
           v = 0,
           j = depth + 1;
@@ -34,9 +34,9 @@ d3.layout.hierarchy = function() {
   function revalue(node, depth) {
     var children = node.children,
         v = 0;
-    if (children) {
+    if (children && (n = children.length)) {
       var i = -1,
-          n = children.length,
+          n,
           j = depth + 1;
       while (++i < n) v += revalue(children[i], j);
     } else if (value) {
@@ -74,6 +74,12 @@ d3.layout.hierarchy = function() {
   hierarchy.revalue = function(root) {
     revalue(root, 0);
     return root;
+  };
+
+  // If the new API is used, enabling inlining.
+  hierarchy.nodes = function(d) {
+    d3_layout_hierarchyInline = true;
+    return (hierarchy.nodes = hierarchy)(d);
   };
 
   return hierarchy;
