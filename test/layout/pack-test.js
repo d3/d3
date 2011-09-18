@@ -35,6 +35,21 @@ suite.addBatch({
       assert.isFalse(result.map(function(d) { return d.x; }).some(isNaN));
       assert.isFalse(result.map(function(d) { return d.y; }).some(isNaN));
       assert.isFalse(result.map(function(d) { return d.r; }).some(isNaN));
+    },
+    "avoids coincident circles": function(pack) {
+      var result = pack({children: [
+        {children: [{value: 17010}, {value: 5842}, {value: 0}, {value: 0}]},
+        {children: [
+          {children: [{value: 721}, {value: 4294}, {value: 9800}, {value: 1314}, {value: 2220}]},
+          {value: 1759}, {value: 2165}, {value: 586}, {value: 3331}, {value: 772}, {value: 3322}
+        ]}
+      ]}).map(layout);
+      result.sort(function(a, b) {
+        return a.x < b.x && a.y < b.y ? -1 : 1;
+      });
+      assert.isFalse(result.slice(1).some(function(d, i) {
+        return d.x === result[i].x && d.y === result[i].y && d.value > 0;
+      }));
     }
   }
 });
