@@ -17,7 +17,8 @@ all: \
 	d3.geom.js \
 	d3.geom.min.js \
 	d3.time.js \
-	d3.time.min.js
+	d3.time.min.js \
+	package.json
 
 # Modify this rule to build your own custom release.
 # Run `make d3.custom.min.js` to produce the minified version.
@@ -182,6 +183,7 @@ d3.geo.js: \
 	src/geo/geo.js \
 	src/geo/azimuthal.js \
 	src/geo/albers.js \
+	src/geo/equirectangular.js \
 	src/geo/mercator.js \
 	src/geo/path.js \
 	src/geo/bounds.js \
@@ -242,6 +244,9 @@ d3.js d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
+
+package.json: d3.js
+	node src/package.js > $@
 
 clean:
 	rm -f d3*.js

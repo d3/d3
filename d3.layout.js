@@ -221,9 +221,10 @@ d3.layout.force = function() {
       nodes = [],
       links = [],
       distances,
-      strengths;
+      strengths,
+      charges;
 
-  function repulse(node, kc) {
+  function repulse(node) {
     return function(quad, x1, y1, x2, y2) {
       if (quad.point !== node) {
         var dx = quad.cx - node.x,
@@ -232,14 +233,14 @@ d3.layout.force = function() {
 
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
-          var k = kc * quad.count * dn * dn;
+          var k = quad.charge * dn * dn;
           node.px -= dx * k;
           node.py -= dy * k;
           return true;
         }
 
         if (quad.point && isFinite(dn)) {
-          var k = kc * dn * dn;
+          var k = quad.pointCharge * dn * dn;
           node.px -= dx * k;
           node.py -= dy * k;
         }
@@ -290,11 +291,11 @@ d3.layout.force = function() {
     }
 
     // compute quadtree center of mass and apply charge forces
-    if (k = alpha * charge) {
-      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes));
+    if (charge) {
+      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes), alpha, charges);
       i = -1; while (++i < n) {
         if (!(o = nodes[i]).fixed) {
-          q.visit(repulse(o, k));
+          q.visit(repulse(o));
         }
       }
     }
@@ -363,7 +364,7 @@ d3.layout.force = function() {
 
   force.charge = function(x) {
     if (!arguments.length) return charge;
-    charge = x;
+    charge = typeof x === "function" ? x : +x;
     return force;
   };
 
@@ -412,6 +413,17 @@ d3.layout.force = function() {
       if (isNaN(o.y)) o.y = position("y", h);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
+    }
+
+    charges = [];
+    if (typeof charge === "function") {
+      for (i = 0; i < n; ++i) {
+        charges[i] = +charge.call(this, nodes[i], i);
+      }
+    } else {
+      for (i = 0; i < n; ++i) {
+        charges[i] = charge;
+      }
     }
 
     // initialize node position based on first neighbor
@@ -497,10 +509,10 @@ function d3_layout_forceDrag() {
   d3_layout_forceDragForce.resume(); // restart annealing
 }
 
-function d3_layout_forceAccumulate(quad) {
+function d3_layout_forceAccumulate(quad, alpha, charges) {
   var cx = 0,
       cy = 0;
-  quad.count = 0;
+  quad.charge = 0;
   if (!quad.leaf) {
     var nodes = quad.nodes,
         n = nodes.length,
@@ -509,10 +521,10 @@ function d3_layout_forceAccumulate(quad) {
     while (++i < n) {
       c = nodes[i];
       if (c == null) continue;
-      d3_layout_forceAccumulate(c);
-      quad.count += c.count;
-      cx += c.count * c.cx;
-      cy += c.count * c.cy;
+      d3_layout_forceAccumulate(c, alpha, charges);
+      quad.charge += c.charge;
+      cx += c.charge * c.cx;
+      cy += c.charge * c.cy;
     }
   }
   if (quad.point) {
@@ -521,12 +533,13 @@ function d3_layout_forceAccumulate(quad) {
       quad.point.x += Math.random() - .5;
       quad.point.y += Math.random() - .5;
     }
-    quad.count++;
-    cx += quad.point.x;
-    cy += quad.point.y;
+    var k = alpha * charges[quad.point.index];
+    quad.charge += quad.pointCharge = k;
+    cx += k * quad.point.x;
+    cy += k * quad.point.y;
   }
-  quad.cx = cx / quad.count;
-  quad.cy = cy / quad.count;
+  quad.cx = cx / quad.charge;
+  quad.cy = cy / quad.charge;
 }
 
 function d3_layout_forceLinkDistance(link) {
@@ -1030,9 +1043,9 @@ d3.layout.hierarchy = function() {
         node = d3_layout_hierarchyInline ? data : {data: data};
     node.depth = depth;
     nodes.push(node);
-    if (childs) {
+    if (childs && (n = childs.length)) {
       var i = -1,
-          n = childs.length,
+          n,
           c = node.children = [],
           v = 0,
           j = depth + 1;
@@ -1054,9 +1067,9 @@ d3.layout.hierarchy = function() {
   function revalue(node, depth) {
     var children = node.children,
         v = 0;
-    if (children) {
+    if (children && (n = children.length)) {
       var i = -1,
-          n = children.length,
+          n,
           j = depth + 1;
       while (++i < n) v += revalue(children[i], j);
     } else if (value) {
@@ -1304,7 +1317,7 @@ function d3_layout_packUnlink(node) {
 
 function d3_layout_packTree(node) {
   var children = node.children;
-  if (children) {
+  if (children && children.length) {
     children.forEach(d3_layout_packTree);
     node.r = d3_layout_packCircle(children);
   } else {
@@ -1324,19 +1337,22 @@ function d3_layout_packTransform(node, x, y, k) {
 }
 
 function d3_layout_packPlace(a, b, c) {
-  var da = b.r + c.r,
-      db = a.r + c.r,
+  var db = a.r + c.r,
       dx = b.x - a.x,
-      dy = b.y - a.y,
-      dc = Math.sqrt(dx * dx + dy * dy),
-      cos = (db * db + dc * dc - da * da) / (2 * db * dc),
-      theta = Math.acos(cos),
-      x = cos * db,
-      h = Math.sin(theta) * db;
-  dx /= dc;
-  dy /= dc;
-  c.x = a.x + x * dx + h * dy;
-  c.y = a.y + x * dy - h * dx;
+      dy = b.y - a.y;
+  if (db && (dx || dy)) {
+    var da = b.r + c.r,
+        dc = Math.sqrt(dx * dx + dy * dy),
+        cos = Math.max(-1, Math.min(1, (db * db + dc * dc - da * da) / (2 * db * dc))),
+        theta = Math.acos(cos),
+        x = cos * (db /= dc),
+        y = Math.sin(theta) * db;
+    c.x = a.x + x * dx + y * dy;
+    c.y = a.y + x * dy - y * dx;
+  } else {
+    c.x = a.x + db;
+    c.y = a.y;
+  }
 }
 // Implements a hierarchical layout using the cluster (or dendogram) algorithm.
 d3.layout.cluster = function() {
@@ -1354,9 +1370,10 @@ d3.layout.cluster = function() {
 
     // First walk, computing the initial x & y values.
     d3_layout_treeVisitAfter(root, function(node) {
-      if (node.children) {
-        node.x = d3_layout_clusterX(node.children);
-        node.y = d3_layout_clusterY(node.children);
+      var children = node.children;
+      if (children && children.length) {
+        node.x = d3_layout_clusterX(children);
+        node.y = d3_layout_clusterY(children);
       } else {
         node.x = previousNode ? x += separation(node, previousNode) : 0;
         node.y = 0;
@@ -1408,12 +1425,12 @@ function d3_layout_clusterX(children) {
 
 function d3_layout_clusterLeft(node) {
   var children = node.children;
-  return children ? d3_layout_clusterLeft(children[0]) : node;
+  return children && children.length ? d3_layout_clusterLeft(children[0]) : node;
 }
 
 function d3_layout_clusterRight(node) {
-  var children = node.children;
-  return children ? d3_layout_clusterRight(children[children.length - 1]) : node;
+  var children = node.children, n;
+  return children && (n = children.length) ? d3_layout_clusterRight(children[n - 1]) : node;
 }
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {
