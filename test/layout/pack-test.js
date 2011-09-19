@@ -30,11 +30,26 @@ suite.addBatch({
         {value: 0.8065882022492588},
         {value: 0}
       ]}).map(layout);
-      assert.deepEqual(result.map(function(d) { return d.depth; }), [0, 1, 1, 1]);
-      assert.inDelta(result.map(function(d) { return d.value; }), [0.8119365246966481, 0.005348322447389364, 0.8065882022492588, 0], 1e-6);
-      assert.inDelta(result.map(function(d) { return d.x; }), [0.5, 0.9623509026331429, 0.4623509026331429, 0.9247018052662859], 1e-6);
-      assert.inDelta(result.map(function(d) { return d.y; }), [0.5, 0.5, 0.5, 0.5], 1e-6);
-      assert.inDelta(result.map(function(d) { return d.r; }), [0.5, 0.037649097366857086, 0.46235090263314294, 0], 1e-6);
+      assert.isFalse(result.map(function(d) { return d.depth; }).some(isNaN));
+      assert.isFalse(result.map(function(d) { return d.value; }).some(isNaN));
+      assert.isFalse(result.map(function(d) { return d.x; }).some(isNaN));
+      assert.isFalse(result.map(function(d) { return d.y; }).some(isNaN));
+      assert.isFalse(result.map(function(d) { return d.r; }).some(isNaN));
+    },
+    "avoids coincident circles": function(pack) {
+      var result = pack({children: [
+        {children: [{value: 17010}, {value: 5842}, {value: 0}, {value: 0}]},
+        {children: [
+          {children: [{value: 721}, {value: 4294}, {value: 9800}, {value: 1314}, {value: 2220}]},
+          {value: 1759}, {value: 2165}, {value: 586}, {value: 3331}, {value: 772}, {value: 3322}
+        ]}
+      ]}).map(layout);
+      result.sort(function(a, b) {
+        return a.x < b.x && a.y < b.y ? -1 : 1;
+      });
+      assert.isFalse(result.slice(1).some(function(d, i) {
+        return d.x === result[i].x && d.y === result[i].y && d.value > 0;
+      }));
     }
   }
 });
