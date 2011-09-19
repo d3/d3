@@ -150,6 +150,7 @@ d3.svg.js: \
 d3.behavior.js: \
 	src/behavior/behavior.js \
 	src/behavior/drag.js \
+	src/behavior/select.js \
 	src/behavior/zoom.js
 
 d3.chart.js: \
