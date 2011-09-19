@@ -16,7 +16,7 @@ d3.behavior.select = function() {
           })
           .call(d3.behavior.drag()
             .on("dragstart", function() {
-              dispatch.call(target, "selectstart", arguments);
+              dispatch.call(target, "selectstart", s, arguments);
             })
             .on("drag", function() {
               var e = d3.event;
@@ -25,13 +25,13 @@ d3.behavior.select = function() {
               dispatch.call(target, "select", s, arguments);
             })
             .on("dragend", function() {
-              dispatch.call(target, "selectend", arguments);
+              dispatch.call(target, "selectend", s, arguments);
             }));
       d3.select(this)
           .on("mousedown", d3_behavior_selectCancel)
           .call(d3.behavior.drag()
             .on("dragstart", function() {
-              dispatch.call(this, "selectstart", arguments);
+              dispatch.call(this, "selectstart", s, arguments);
             })
             .on("drag", function() {
               var e = d3.event;
@@ -40,7 +40,7 @@ d3.behavior.select = function() {
               dispatch.call(this, "select", s, arguments);
             })
             .on("dragend", function() {
-              dispatch.call(this, "selectend", arguments);
+              dispatch.call(this, "selectend", s, arguments);
             }));
     });
     return select;
