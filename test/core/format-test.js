@@ -70,6 +70,17 @@ suite.addBatch({
       assert.strictEqual(f(-4200000), "−4.2e+6");
       assert.strictEqual(f(-42000000), "−4.2e+7");
     },
+    "can output SI prefix notation": function(format) {
+      var f = format("s");
+      assert.strictEqual(f(0), "0");
+      assert.strictEqual(f(1), "1");
+      assert.strictEqual(f(100), "100");
+      assert.strictEqual(f(999.5), "1k");
+      assert.strictEqual(f(1000), "1k");
+      assert.strictEqual(f(145500000), "146M");
+      assert.strictEqual(f(145999999.999999347), "146M");
+      assert.strictEqual(f(.000001), "1μ");
+    },
     "can output a percentage": function(format) {
       var f = format("%");
       assert.strictEqual(f(0), "0%");
