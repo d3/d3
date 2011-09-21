@@ -28,9 +28,12 @@ line.link {
 
 var w = 960,
     h = 500,
+    node,
+    link,
     root;
 
 var force = d3.layout.force()
+    .on("tick", tick)
     .size([w, h]);
 
 var vis = d3.select("#chart").append("svg:svg")
@@ -53,7 +56,7 @@ function update() {
       .start();
 
   // Update the links…
-  var link = vis.selectAll("line.link")
+  link = vis.selectAll("line.link")
       .data(links, function(d) { return d.target.id; });
 
   // Enter any new links.
@@ -68,7 +71,7 @@ function update() {
   link.exit().remove();
 
   // Update the nodes…
-  var node = vis.selectAll("circle.node")
+  node = vis.selectAll("circle.node")
       .data(nodes, function(d) { return d.id; })
       .style("fill", color);
 
@@ -84,20 +87,16 @@ function update() {
 
   // Exit any old nodes.
   node.exit().remove();
+}
 
-  // Re-select for update.
-  link = vis.selectAll("line.link");
-  node = vis.selectAll("circle.node");
+function tick() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
 
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  });
+  node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
 }
 
 // Color leaf nodes orange, and packages white or blue.
