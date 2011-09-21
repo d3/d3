@@ -79,6 +79,7 @@ suite.addBatch({
       assert.strictEqual(f(1500.5), "1.5k");
       assert.strictEqual(f(145500000), "146M");
       assert.strictEqual(f(145999999.999999347), "146M");
+      assert.strictEqual(f(1e26), "100Y");
       assert.strictEqual(f(.000001), "1μ");
     },
     "can output a percentage": function(format) {

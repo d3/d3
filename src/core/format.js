@@ -37,7 +37,7 @@ d3.format = function(specifier) {
         exponent = si ? d3_format_getExponent(number) : 0,
         scale = si ? Math.pow(10, -exponent) : 1,
         si_prefixes = ['y','z','a','f','p','n','μ','m','','k','M','G','T','P','E','Z','Y'],
-        suffix = percentage ? '%' : si ? (Math.abs(exponent) <= 24) ? si_prefixes[(exponent + 24) / 3] : "e" + exponent : '';
+        suffix = percentage ? '%' : si ? (Math.abs(exponent) < 27) ? si_prefixes[(exponent + 24) / 3] : "e" + exponent : '';
 
     // Return the empty string for floats formatted as ints.
     if (integer && (number % 1)) return "";
