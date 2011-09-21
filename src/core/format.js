@@ -10,6 +10,7 @@ d3.format = function(specifier) {
       type = match[9],
       percentage = false,
       integer = false,
+      trim_decimal_zero = false,
       si = false;
 
   if (precision) precision = precision.substring(1);
@@ -24,7 +25,8 @@ d3.format = function(specifier) {
     case "%": percentage = true; type = "f"; break;
     case "p": percentage = true; type = "r"; break;
     case "d": integer = true; precision = "0"; break;
-    case "s": si = true; type = "r"; precision = "3"; break;
+    case "s": si = true; trim_decimal_zero = true; 
+              type = "r"; precision = "3"; break;
   }
 
   type = d3_format_types[type] || d3_format_typeDefault;
@@ -44,7 +46,7 @@ d3.format = function(specifier) {
     value = type(number * scale, precision);
 
     // if using SI prefix notation, scale and trim insignificant zeros
-    if (si) {
+    if (trim_decimal_zero) {
       value = (new Number(value)).toPrecision();
     }
 

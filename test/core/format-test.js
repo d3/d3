@@ -72,11 +72,11 @@ suite.addBatch({
     },
     "can output SI prefix notation": function(format) {
       var f = format("s");
-      assert.strictEqual(f(0), "0");
       assert.strictEqual(f(1), "1");
       assert.strictEqual(f(100), "100");
       assert.strictEqual(f(999.5), "1k");
       assert.strictEqual(f(1000), "1k");
+      assert.strictEqual(f(1500.5), "1.5k");
       assert.strictEqual(f(145500000), "146M");
       assert.strictEqual(f(145999999.999999347), "146M");
       assert.strictEqual(f(.000001), "1μ");
