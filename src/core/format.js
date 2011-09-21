@@ -32,7 +32,7 @@ d3.format = function(specifier) {
   return function(value) {
     var number = percentage ? value * 100 : +value,
         negative = (number < 0) && (number = -number) ? "\u2212" : sign;
-        exponent = si ? d3_format_getExponent(number, 3) : 0,
+        exponent = si ? d3_format_getExponent(number) : 0,
         scale = si ? Math.pow(10, -exponent) : 1,
         si_prefixes = ['y','z','a','f','p','n','μ','m','','k','M','G','T','P','E','Z','Y'],
         suffix = percentage ? '%' : si ? (Math.abs(exponent) <= 24) ? si_prefixes[(exponent + 24) / 3] : "e" + exponent : '';
@@ -106,21 +106,21 @@ var d3_format_types = {
   }
 };
 
-function d3_format_getExponent(value, mod) {
+function d3_format_getExponent(value) {
   if (value == 0) return 0;
   var l10 = Math.log(value) / Math.LN10,
       exponent = Math.floor(l10),
       mantissa = l10 - exponent;
       significand = Math.pow(10, mantissa),
-      em = exponent % mod;
+      em = exponent % 3;
     if (em < 0) exponent -= 3;
     exponent -= em;
-    // mantissa += (mod + em) % mod;
+    // equivalent to mantissa += (mod + em) % mod;
     significand *= Math.pow(10, (3 + em) % 3);
-    // decimal fixup
+    // if rounding the sig up would bring it above 1e3, adjust the exponent
     var tolerance = .5 + 1e-15;
-    if (significand + tolerance >= 1e3) exponent += mod;
-    // if (Math.pow(10, mantissa) + tolerance >= 1e3) exponent += mod;
+    if (significand + tolerance >= 1e3) exponent += 3;
+    // equivalent to if (Math.pow(10, mantissa) + tolerance >= 1e3) exponent += mod;
     return exponent;
 }
 
