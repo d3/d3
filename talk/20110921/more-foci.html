@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Foci</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+circle {
+  stroke: #fff;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">forces are additive</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800,
+    color = d3.scale.category10().domain([1, 2, 4]);
+
+var force = d3.layout.force()
+    .gravity(0)
+    .charge(-10)
+    .size([w, h]);
+
+var nodes = force.nodes(),
+    a = {type: 1, x: 3 * w / 6, y: 2 * h / 6, fixed: true},
+    b = {type: 2, x: 4 * w / 6, y: 4 * h / 6, fixed: true},
+    c = {type: 4, x: 2 * w / 6, y: 4 * h / 6, fixed: true};
+
+nodes.push(a, b, c);
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+svg.selectAll("circle")
+    .data(nodes)
+  .enter().append("svg:circle")
+    .attr("r", 12)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .style("fill", fill)
+    .call(force.drag);
+
+force.on("tick", function(e) {
+  var k = e.alpha * .1;
+
+  nodes.forEach(function(node) {
+    if (node.type & 1) {
+      node.x += (a.x - node.x) * k;
+      node.y += (a.y - node.y) * k;
+    }
+    if (node.type & 2) {
+      node.x += (b.x - node.x) * k;
+      node.y += (b.y - node.y) * k;
+    }
+    if (node.type & 4) {
+      node.x += (c.x - node.x) * k;
+      node.y += (c.y - node.y) * k;
+    }
+  });
+
+  svg.selectAll("circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+});
+
+var p0;
+
+svg.on("mousemove", function() {
+  var p1 = d3.svg.mouse(this),
+      node = {type: (Math.random() * 7 + 1) | 0, x: p1[0], y: p1[1], px: (p0 || (p0 = p1))[0], py: p0[1]};
+
+  p0 = p1;
+
+  svg.append("svg:circle")
+      .data([node])
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", 4.5)
+      .style("fill", fill)
+    .transition()
+      .delay(3000)
+      .attr("r", 1e-6)
+      .each("end", function() { nodes.splice(3, 1); })
+      .remove();
+
+  nodes.push(node);
+  force.start();
+});
+
+function fill(d) {
+  return color(d.type);
+}
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+circle.node {
+  cursor: pointer;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+line.link {
+  fill: none;
+  stroke: #9ecae1;
+  stroke-width: 1.5px;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">
+        collapsible tree
+      </div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800,
+    node,
+    link,
+    root;
+
+var force = d3.layout.force()
+    .on("tick", tick)
+    .size([w, h]);
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+d3.json("flare.json", function(json) {
+  root = json;
+  update();
+});
+
+function update() {
+  var nodes = flatten(root),
+      links = d3.layout.tree().links(nodes);
+
+  // Restart the force layout.
+  force
+      .nodes(nodes)
+      .links(links)
+      .start();
+
+  // Update the links.
+  link = svg.selectAll("line")
+      .data(links, function(d) { return d.target.id; });
+
+  link.enter().insert("svg:line", ".node")
+      .attr("class", "link");
+
+  link.exit().remove();
+
+  // Update the nodes.
+  node = svg.selectAll("circle.node")
+      .data(nodes, function(d) { return d.id; });
+
+  node.transition()
+      .attr("r", function(d) { return d.children ? 4.5 : Math.sqrt(d.size) / 10; })
+      .style("fill", color);
+
+  node.enter().append("svg:circle")
+      .attr("class", "node")
+      .attr("r", function(d) { return d.children ? 4.5 : Math.sqrt(d.size) / 10; })
+      .style("fill", color)
+      .on("click", click)
+      .call(force.drag);
+
+  node.sort(function(a, b) { return (!b.children - !a.children) || (b.size - a.size); });
+
+  node.exit().remove();
+}
+
+function tick() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
+
+  node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+}
+
+// Color leaf nodes orange, and packages white or blue.
+function color(d) {
+  return d._children ? "#3182bd" : d.children ? "#c6dbef" : "#fd8d3c";
+}
+
+// Toggle children on click.
+function click(d) {
+  if (d.children) {
+    d._children = d.children;
+    d.children = null;
+  } else {
+    d.children = d._children;
+    d._children = null;
+  }
+  update();
+}
+
+// Returns a list of all nodes under the root.
+function flatten(root) {
+  var nodes = [], i = 0;
+
+  function recurse(node) {
+    if (!node.id) node.id = ++i;
+    nodes.push(node);
+    return node.children
+        ? node.size = node.children.reduce(function(p, v) { return p + recurse(v); }, 0)
+        : node.size;
+  }
+
+  recurse(root);
+  return nodes;
+}
+
+    </script>
+  </body>
+</html>

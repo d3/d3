@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Labels</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+line {
+  stroke: rgba(32,32,32,.3);
+}
+
+text {
+  font: 12px sans-serif;
+  pointer-events: none;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">images &amp; labels</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800;
+
+var force = d3.layout.force()
+    .charge(-240)
+    .linkDistance(80)
+    .size([w, h]);
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+d3.json("miserables.json", function(json) {
+  var link = svg.selectAll("line")
+      .data(json.links)
+    .enter().append("svg:line");
+
+  var node = svg.selectAll("image")
+      .data(json.nodes)
+    .enter().append("svg:image")
+      .attr("xlink:href", "smile.png")
+      .attr("x", "-8px")
+      .attr("y", "-8px")
+      .attr("width", "16px")
+      .attr("height", "16px")
+      .call(force.drag);
+
+  var label = svg.selectAll("text")
+      .data(json.nodes)
+    .enter().append("svg:text")
+      .attr("dx", 12)
+      .attr("dy", ".35em")
+      .text(function(d) { return d.name; });
+
+  // Merge images and text for update.
+  node = svg.selectAll("image, text");
+
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .on("tick", tick)
+      .start();
+
+  function tick() {
+    node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+  }
+});
+
+    </script>
+  </body>
+</html>

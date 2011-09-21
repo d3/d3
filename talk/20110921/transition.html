@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Transition</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">fun with transitions</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800;
+
+var force = d3.layout.force()
+    .linkDistance(2)
+    .linkStrength(2)
+    .gravity(.02)
+    .charge(-10)
+    .size([w, h]);
+
+var nodes = force.nodes(),
+    links = force.links();
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+force.on("tick", function() {
+  svg.selectAll("circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+});
+
+var p0;
+
+svg.on("mousemove", function() {
+  var p1 = d3.svg.mouse(this),
+      node = {x: p1[0], y: p1[1], px: (p0 || (p0 = p1))[0], py: p0[1]},
+      link = {source: node, target: nodes[nodes.length - 1] || node};
+
+  p0 = p1;
+  if (nodes.length > 1) {
+    node.fixed = true;
+    nodes[nodes.length - 1].fixed = false;
+  }
+
+  svg.append("svg:circle")
+      .data([node])
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", 1e-6)
+      .style("fill", "none")
+    .transition()
+      .ease(Math.sqrt)
+      .duration(3000)
+      .attr("r", 80)
+      .styleTween("stroke", function() { return d3.interpolateHsl("hsl(210,100%,0%)", "hsl(180,100%,100%)"); })
+      .each("end", function() { nodes.shift(); links.shift(); })
+      .remove();
+
+  nodes.push(node);
+  links.push(link);
+  force.start();
+});
+
+    </script>
+  </body>
+</html>

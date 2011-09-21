@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Foci</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.csv.js"></script>
+    <script type="text/javascript" src="d3/d3.geo.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+text {
+  font: 10px sans-serif;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">2008 Olympic Medals</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800;
+
+var color = d3.scale.ordinal()
+    .domain(["gold", "silver", "bronze"])
+    .range(["#EEC765", "#D1D1D1", "#C79C88"]);
+
+var projection = d3.geo.mercator()
+    .scale(1200)
+    .translate([540, 500]);
+
+var force = d3.layout.force()
+    .gravity(0)
+    .charge(-5)
+    .size([w, h]);
+
+var nodes = force.nodes();
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+force.on("tick", function(e) {
+  var k = e.alpha * .2;
+  nodes.forEach(function(node) {
+    node.x += (node.center[0] - node.x) * k;
+    node.y += (node.center[1] - node.y) * k;
+  });
+
+  svg.selectAll("circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+
+  svg.selectAll("text")
+      .attr("x", function(d) { return d.x; })
+      .attr("y", function(d) { return d.y; });
+});
+
+d3.json("world-countries.json", function(collection) {
+  var centroids = {},
+      path = d3.geo.path().projection(projection);
+
+  collection.features.forEach(function(feature) {
+    centroids[feature.properties.name] = path.centroid(feature);
+  });
+
+  d3.csv("medals.csv", function(medals) {
+    medals.forEach(function(medal) {
+      var c = centroids[medal.country];
+      if (!c) return console.warn("unknown country: " + medal.country);
+      c.present = true;
+      color.domain().forEach(function(type) {
+        var n = medal[type];
+        while (--n >= 0) nodes.push({
+          type: type,
+          center: c,
+          x: c[0] + 10 * Math.random() - 5,
+          y: c[1] + 10 * Math.random() - 5
+        });
+      });
+      nodes[nodes.length - 1].name = medal.country;
+    });
+
+    svg.append("svg:g").selectAll("circle")
+        .data(nodes)
+      .enter().append("svg:circle")
+        .attr("r", 3.5)
+        .style("fill", function(d) { return color(d.type); });
+
+    svg.append("svg:g").selectAll("text")
+        .data(nodes.filter(function(d) { return d.name; }))
+      .enter().append("svg:text")
+        .attr("text-anchor", "middle")
+        .attr("dy", ".35em")
+        .text(function(d) { return d.name; });
+
+    force.start();
+  });
+});
+
+    </script>
+  </body>
+</html>

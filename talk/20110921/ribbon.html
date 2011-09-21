@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Ribbon</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+path {
+  fill: none;
+  stroke: #000;
+  stroke-width: 12px;
+  stroke-linecap: round;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">arbitrary visual representation</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800;
+
+var force = d3.layout.force()
+    .linkDistance(2)
+    .linkStrength(2)
+    .gravity(.02)
+    .charge(-10)
+    .size([w, h]);
+
+var nodes = force.nodes(),
+    links = force.links();
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var path = svg.append("svg:path")
+    .data([nodes]);
+
+var line = d3.svg.line()
+    .interpolate("basis")
+    .x(function(d) { return d.x; })
+    .y(function(d) { return d.y; });
+
+force.on("tick", function() {
+  path.attr("d", line);
+});
+
+var p0;
+
+svg.on("mousemove", function() {
+  var p1 = d3.svg.mouse(this),
+      node = {x: p1[0], y: p1[1], px: (p0 || (p0 = p1))[0], py: p0[1]},
+      link = {source: node, target: nodes[nodes.length - 1] || node};
+
+  p0 = p1;
+  if (nodes.length > 1) {
+    node.fixed = true;
+    nodes[nodes.length - 1].fixed = false;
+  }
+
+  d3.timer(function() {
+    nodes.shift();
+    links.shift();
+    return true;
+  }, 3000);
+
+  nodes.push(node);
+  links.push(link);
+  force.start();
+});
+
+    </script>
+  </body>
+</html>

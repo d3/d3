@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Depth Foci</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">depth foci (global)</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800;
+
+var force = d3.layout.force()
+    .gravity(.2)
+    .charge(-80)
+    .size([w, h]);
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+d3.json("flare.json", function(root) {
+  var nodes = flatten(root),
+      links = d3.layout.tree().links(nodes);
+
+  root.fixed = true;
+  root.x = w / 2;
+  root.y = 120;
+
+  force
+      .nodes(nodes)
+      .links(links)
+      .start();
+
+  var link = svg.selectAll("line")
+      .data(links)
+    .enter().insert("svg:line");
+
+  var node = svg.selectAll("circle.node")
+      .data(nodes)
+    .enter().append("svg:circle")
+      .attr("r", 4.5)
+      .call(force.drag);
+
+  force.on("tick", function(e) {
+
+    var ky = 1.2 * e.alpha;
+    links.forEach(function(d, i) {
+      d.target.y += (d.target.depth * 120 - d.target.y) * ky;
+    });
+
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+  });
+});
+
+function flatten(root) {
+  var nodes = [];
+  function recurse(node, depth) {
+    if (node.children) {
+      node.children.forEach(function(child) {
+        recurse(child, depth + 1);
+      });
+    }
+    node.depth = depth;
+    nodes.push(node);
+  }
+  recurse(root, 1);
+  return nodes;
+}
+
+    </script>
+  </body>
+</html>

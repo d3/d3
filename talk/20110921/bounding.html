@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Bounding Box</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+circle {
+  stroke-width: 1.5px;
+}
+
+line {
+  stroke: rgba(32,32,32,.3);
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">bounding box</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800,
+    r = 6,
+    z = d3.scale.category20c();
+
+var force = d3.layout.force()
+    .gravity(0.06)
+    .charge(-150)
+    .linkDistance(40)
+    .size([w *= 2 / 3, h *= 2 / 3]);
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h)
+  .append("svg:g")
+    .attr("transform", "translate(" + w / 4 + "," + h / 3 + ")");
+
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h)
+    .style("fill", "none")
+    .style("stroke", "#000");
+
+d3.json("miserables.json", function(json) {
+  var link = svg.selectAll("line")
+      .data(json.links)
+    .enter().append("svg:line");
+
+  var node = svg.selectAll("circle")
+      .data(json.nodes)
+    .enter().append("svg:circle")
+      .attr("r", r - .75)
+      .style("fill", function(d) { return z(d.group); })
+      .style("stroke", function(d) { return d3.rgb(z(d.group)).darker(); })
+      .call(force.drag);
+
+  force
+      .nodes(json.nodes)
+      .links(json.links)
+      .on("tick", tick)
+      .start();
+
+  function tick() {
+    node.attr("cx", function(d) { return d.x = Math.max(r, Math.min(w - r, d.x)); })
+        .attr("cy", function(d) { return d.y = Math.max(r, Math.min(h - r, d.y)); });
+
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+  }
+});
+
+    </script>
+  </body>
+</html>

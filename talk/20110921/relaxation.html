@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Constraints Relaxation</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">constraints relaxation</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800;
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var desired = svg.append("svg:line")
+    .attr("x1", w / 6)
+    .attr("x2", 5 * w / 6)
+    .attr("y1", h / 2)
+    .attr("y2", h / 2)
+    .style("stroke", "#000")
+    .style("stroke-width", "4px")
+    .style("stroke-dasharray", "2,4 0");
+
+svg.append("svg:circle")
+    .attr("r", 20)
+    .attr("cy", h / 2)
+    .attr("cx", w / 6)
+    .style("fill", "#fff")
+    .style("stroke", "#000")
+    .style("stroke-width", "4px")
+    .style("stroke-dasharray", "2,2 0");
+
+svg.append("svg:circle")
+    .attr("r", 20)
+    .attr("cy", h / 2)
+    .attr("cx", 5 * w / 6)
+    .style("fill", "#fff")
+    .style("stroke", "#000")
+    .style("stroke-width", "4px")
+    .style("stroke-dasharray", "2,2 0");
+
+var current = svg.append("svg:line")
+    .attr("x1", w / 3)
+    .attr("x2", 2 * w / 3)
+    .attr("y1", h / 2)
+    .attr("y2", h / 2)
+    .style("stroke", "#000")
+    .style("stroke-width", "4px");
+
+var a = svg.append("svg:g")
+    .attr("transform", "translate(" + w / 3 + "," + h / 2 + ")");
+
+a.append("svg:circle")
+    .style("stroke", "#000")
+    .style("stroke-width", "4px")
+    .attr("r", 20);
+
+a.append("svg:text")
+    .attr("y", 40)
+    .attr("text-anchor", "middle")
+    .attr("dy", ".71em")
+    .style("font-size", "36px")
+    .text("A");
+
+var b = svg.append("svg:g")
+    .attr("transform", "translate(" + 2 * w / 3 + "," + h / 2 + ")");
+
+b.append("svg:circle")
+    .style("stroke", "#000")
+    .style("stroke-width", "4px")
+    .attr("r", 20);
+
+b.append("svg:text")
+    .attr("y", 40)
+    .attr("text-anchor", "middle")
+    .attr("dy", ".71em")
+    .style("font-size", "36px")
+    .text("B");
+
+svg.on("click", function() {
+
+  a.attr("transform", "translate(" + w / 3 + "," + h / 2 + ")")
+    .transition()
+      .duration(1000)
+      .attr("transform", "translate(" + w / 6 + "," + h / 2 + ")")
+    .transition()
+      .delay(3000)
+      .attr("transform", "translate(" + w / 3 + "," + h / 2 + ")");
+
+  b.attr("transform", "translate(" + 2 * w / 3 + "," + h / 2 + ")")
+    .transition()
+      .duration(1000)
+      .attr("transform", "translate(" + 5 * w / 6 + "," + h / 2 + ")")
+    .transition()
+      .delay(3000)
+      .attr("transform", "translate(" + 2 * w / 3 + "," + h / 2 + ")");
+
+  current
+      .attr("x1", w / 3)
+      .attr("x2", 2 * w / 3)
+    .transition()
+      .duration(1000)
+      .attr("x1", w / 6)
+      .attr("x2", 5 * w / 6)
+    .transition()
+      .delay(3000)
+      .attr("x1", w / 3)
+      .attr("x2", 2 * w / 3);
+});
+
+    </script>
+  </body>
+</html>

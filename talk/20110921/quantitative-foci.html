@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Force Layouts - Quantitative Foci</title>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript" src="d3/d3.layout.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+circle {
+  stroke: #fff;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="chart"></div>
+      <div id="header">quantitative foci</div>
+    </div>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800;
+
+var color = d3.scale.linear()
+    .domain([h - 100, 100])
+    .range(["hsl(180,100%,10%)", "hsl(210,100%,90%)"])
+    .interpolate(d3.interpolateHsl);
+
+var force = d3.layout.force()
+    .gravity(0)
+    .charge(0)
+    .size([w, h]);
+
+var nodes = force.nodes();
+
+var svg = d3.select("#chart").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+force.on("tick", function(e) {
+  var k = e.alpha * .1;
+  nodes.forEach(function(node) {
+    node.y += (node.cy - node.y) * k;
+  });
+
+  svg.selectAll("circle")
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
+});
+
+var p0;
+
+svg.on("mousemove", function() {
+  var p1 = d3.svg.mouse(this);
+
+  var node = {
+    x: p1[0],
+    y: p1[1],
+    px: (p0 || (p0 = p1))[0],
+    py: p0[1],
+    cy: Math.random() * (h - 200) + 100
+  };
+
+  p0 = p1;
+
+  svg.append("svg:circle")
+      .data([node])
+      .attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; })
+      .attr("r", 15)
+      .style("fill", function(d) { return color(d.cy); })
+    .transition()
+      .delay(3000)
+      .attr("r", 1e-6)
+      .each("end", function() { nodes.shift(); })
+      .remove();
+
+  nodes.push(node);
+  force.start();
+});
+
+    </script>
+  </body>
+</html>
