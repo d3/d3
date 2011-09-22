@@ -1,7 +1,11 @@
-// TODO append(node)?
 // TODO append(function)?
 d3_selectionPrototype.append = function(name) {
-  name = d3.ns.qualify(name);
+
+  if (typeof name === "string") {
+    name = d3.ns.qualify(name);
+  }else{
+    var node = name;
+  }
 
   function append() {
     return this.appendChild(document.createElement(name));
@@ -11,5 +15,11 @@ d3_selectionPrototype.append = function(name) {
     return this.appendChild(document.createElementNS(name.space, name.local));
   }
 
-  return this.select(name.local ? appendNS : append);
+  function appendNode() {
+    return this.appendChild(node);
+  }
+
+  return this.select(node
+                     ? appendNode
+                     : (name.local ? appendNS : append));
 };
