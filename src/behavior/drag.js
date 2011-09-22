@@ -4,14 +4,14 @@ d3.behavior.drag = function() {
   function drag() {
     this
         .on("mousedown.drag", mousedown)
-        .on("touchstart.drag", mousedown)
-        .on("click.drag", d3_behavior_dragClick, true);
+        .on("touchstart.drag", mousedown);
 
     d3.select(window)
         .on("mousemove.drag", d3_behavior_dragMove)
         .on("touchmove.drag", d3_behavior_dragMove)
         .on("mouseup.drag", d3_behavior_dragUp, true)
-        .on("touchend.drag", d3_behavior_dragUp, true);
+        .on("touchend.drag", d3_behavior_dragUp, true)
+        .on("click.drag", d3_behavior_dragClick, true);
   }
 
   // snapshot the local context for subsequent dispatch
