@@ -22,6 +22,10 @@ var svg = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
 var desired = svg.append("svg:line")
     .attr("x1", w / 6)
     .attr("x2", 5 * w / 6)

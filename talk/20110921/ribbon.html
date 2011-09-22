@@ -42,6 +42,10 @@ var svg = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
 var path = svg.append("svg:path")
     .data([nodes]);
 

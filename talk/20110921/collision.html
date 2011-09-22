@@ -45,6 +45,10 @@ var svg = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
 svg.selectAll("circle")
     .data(nodes.slice(1))
   .enter().append("svg:circle")

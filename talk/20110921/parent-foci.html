@@ -26,6 +26,10 @@ var svg = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
 d3.json("flare.json", function(root) {
   var nodes = flatten(root),
       links = d3.layout.tree().links(nodes);

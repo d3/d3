@@ -25,6 +25,11 @@ svg {
   font: 300 36px "Helvetica Neue";
 }
 
+rect {
+  fill: none;
+  pointer-events: all;
+}
+
 pre {
   font-size: 18px;
 }

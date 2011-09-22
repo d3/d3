@@ -41,6 +41,10 @@ var svg = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
 force.on("tick", function(e) {
   var k = e.alpha * .1;
   nodes.forEach(function(node) {

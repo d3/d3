@@ -28,6 +28,10 @@ var svg = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
 d3.json("miserables.json", function(data) {
   force
       .nodes(data.nodes)

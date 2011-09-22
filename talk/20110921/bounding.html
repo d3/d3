@@ -46,7 +46,6 @@ var svg = d3.select("#chart").append("svg:svg")
 svg.append("svg:rect")
     .attr("width", w)
     .attr("height", h)
-    .style("fill", "none")
     .style("stroke", "#000");
 
 d3.json("miserables.json", function(json) {

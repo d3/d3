@@ -108,6 +108,10 @@ var svg = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
 // Per-type markers, as they don't inherit styles.
 svg.append("svg:defs").selectAll("marker")
     .data(["suit", "licensing", "resolved"])
