@@ -3933,8 +3933,9 @@ function d3_behavior_dragCancel() {
 // TODO unbind zoom behavior?
 // TODO unbind listener?
 d3.behavior.zoom = function() {
-  var xyz = [0, 0, 0],
-      event = d3.dispatch("zoom");
+  var xyz,
+      event = d3.dispatch("zoom"),
+      origin = d3_behavior_zoomOrigin;
 
   function zoom() {
     this
@@ -3954,7 +3955,7 @@ d3.behavior.zoom = function() {
 
   // snapshot the local context for subsequent dispatch
   function start() {
-    d3_behavior_zoomXyz = xyz;
+    d3_behavior_zoomXyz = xyz = origin.apply(this, arguments);
     d3_behavior_zoomDispatch = event.zoom.dispatch;
     d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
@@ -3994,6 +3995,12 @@ d3.behavior.zoom = function() {
     d3_behavior_zoomLast = now;
   }
 
+  zoom.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = x == null ? d3_behavior_zoomOrigin : origin;
+    return zoom;
+  };
+
   zoom.on = function(type, listener) {
     event[type].add(listener);
     return zoom;
@@ -4008,6 +4015,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomLocations = {}, // identifier -> location
     d3_behavior_zoomLast = 0,
     d3_behavior_zoomXyz,
+    d3_behavior_zoomExtents,
     d3_behavior_zoomDispatch,
     d3_behavior_zoomEventTarget,
     d3_behavior_zoomTarget,
@@ -4118,12 +4126,17 @@ function d3_behavior_zoomClick() {
 }
 
 function d3_behavior_zoomTo(z, x0, x1) {
+  z = d3_behavior_zoomExtents[2](z);
   var K = Math.pow(2, (d3_behavior_zoomXyz[2] = z) - x1[2]),
       x = d3_behavior_zoomXyz[0] = x0[0] - K * x1[0],
       y = d3_behavior_zoomXyz[1] = x0[1] - K * x1[1],
       o = d3.event, // Events can be reentrant (e.g., focus).
       k = Math.pow(2, z);
 
+  console.log(x);
+  x = d3_behavior_zoomExtents[0](x / k) * k;
+  console.log(x);
+  y = d3_behavior_zoomExtents[1](y / k) * k;
   d3.event = {
     scale: k,
     translate: [x, y],
@@ -4134,9 +4147,9 @@ function d3_behavior_zoomTo(z, x0, x1) {
   };
 
   function transform(scale, o) {
-    var domain = scale.__domain || (scale.__domain = scale.domain()),
-        range = scale.range().map(function(v) { return (v - o) / k; });
-    scale.domain(domain).domain(range.map(scale.invert));
+    console.log(o, k);
+    var range = scale.range().map(function(v) { return (v - o) / k; });
+    scale.range(range);
   }
 
   try {
@@ -4147,4 +4160,14 @@ function d3_behavior_zoomTo(z, x0, x1) {
 
   o.preventDefault();
 }
+
+function d3_behavior_zoomRange(range) {
+  return function(x) {
+    return Math.max(range[0], Math.min(range[1], x));
+  };
+}
+
+var d3_behavior_zoomOrigin = (function(origin) {
+  return function() { return origin; };
+})([0, 0, 0]);
 })();
