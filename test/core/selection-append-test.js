@@ -31,6 +31,14 @@ suite.addBatch({
     },
     "returns a new selection": function(body) {
       assert.isFalse(body.append("div") === body);
+    },
+    "appends a raw node": function(body) {
+      var svg_node = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      var svg = body.append(svg_node);
+      assert.equal(svg[0][0].tagName, "SVG");
+      assert.equal(svg[0][0].namespaceURI, "http://www.w3.org/2000/svg");
+      assert.isTrue(svg[0][0] === svg_node);
+      assert.isTrue(svg[0][0].parentNode === document.body);
     }
   }
 });
