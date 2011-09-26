@@ -201,7 +201,7 @@ d3.geo.bonne = function() {
   var origin,
       scale = 200,
       translate = [480, 250],
-      standardParallel, // 90 for Wener, 0 for Sinusoidal
+      parallel, // 90 for Wener, 0 for Sinusoidal
       p0,
       ctp0,
       x0,
@@ -232,10 +232,10 @@ d3.geo.bonne = function() {
     ];
   };
 
-  bonne.standardParallel = function(x) {
-    if (!arguments.length) return standardParallel;
-    standardParallel = +x;
-    ctp0 = 1 / Math.tan(p0 = standardParallel * d3_radians);
+  bonne.parallel = function(x) {
+    if (!arguments.length) return parallel;
+    parallel = +x;
+    ctp0 = 1 / Math.tan(p0 = parallel * d3_radians);
     return bonne;
   };
 
@@ -259,7 +259,7 @@ d3.geo.bonne = function() {
     return bonne;
   };
 
-  return bonne.origin([0, 0]).standardParallel(40);
+  return bonne.origin([0, 0]).parallel(40);
 };
 d3.geo.equirectangular = function() {
   var scale = 500,
