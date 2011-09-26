@@ -163,8 +163,8 @@ function d3_layout_packUnlink(node) {
 }
 
 function d3_layout_packTree(node) {
-  var children = node.children;
-  if (children && children.length) {
+  var children;
+  if (node.hasOwnProperty('children') && (children = node.children) && children.length) {
     children.forEach(d3_layout_packTree);
     node.r = d3_layout_packCircle(children);
   } else {
@@ -173,11 +173,11 @@ function d3_layout_packTree(node) {
 }
 
 function d3_layout_packTransform(node, x, y, k) {
-  var children = node.children;
+  var children;
   node.x = (x += k * node.x);
   node.y = (y += k * node.y);
   node.r *= k;
-  if (children) {
+  if (node.hasOwnProperty('children') && (children = node.children)) {
     var i = -1, n = children.length;
     while (++i < n) d3_layout_packTransform(children[i], x, y, k);
   }

@@ -9,9 +9,9 @@ d3.layout.tree = function() {
         root = nodes[0];
 
     function firstWalk(node, previousSibling) {
-      var children = node.children,
+      var children,
           layout = node._tree;
-      if (children && (n = children.length)) {
+      if (node.hasOwnProperty('children') && (node.hasOwnProperty('children') && (children = node.children)) && (n = children.length)) {
         var n,
             firstChild = children[0],
             previousChild,
@@ -41,8 +41,8 @@ d3.layout.tree = function() {
 
     function secondWalk(node, x) {
       node.x = node._tree.prelim + x;
-      var children = node.children;
-      if (children) {
+      var children;
+      if (node.hasOwnProperty('children') && (children = node.children)) {
         var i = -1,
             n = children.length;
         x += node._tree.mod;
@@ -149,16 +149,16 @@ function d3_layout_treeSeparation(a, b) {
 // }
 
 function d3_layout_treeLeft(node) {
-  return node.children ? node.children[0] : node._tree.thread;
+  return node.hasOwnProperty('children') && node.children ? node.children[0] : node._tree.thread;
 }
 
 function d3_layout_treeRight(node) {
-  return node.children ? node.children[node.children.length - 1] : node._tree.thread;
+  return node.hasOwnProperty('children') && node.children ? node.children[node.children.length - 1] : node._tree.thread;
 }
 
 function d3_layout_treeSearch(node, compare) {
-  var children = node.children;
-  if (children) {
+  var children;
+  if (node.hasOwnProperty('children') && (children = node.children)) {
     var child,
         n = children.length,
         i = -1;
@@ -185,8 +185,8 @@ function d3_layout_treeDeepest(a, b) {
 
 function d3_layout_treeVisitAfter(node, callback) {
   function visit(node, previousSibling) {
-    var children = node.children;
-    if (children) {
+    var children;
+    if (node.hasOwnProperty('children') && (children = node.children)) {
       var child,
           previousChild = null,
           i = -1,
@@ -205,7 +205,7 @@ function d3_layout_treeVisitAfter(node, callback) {
 function d3_layout_treeShift(node) {
   var shift = 0,
       change = 0,
-      children = node.children,
+      children = node.hasOwnProperty('children') && node.children,
       i = children.length,
       child;
   while (--i >= 0) {

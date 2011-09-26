@@ -24,7 +24,7 @@ d3.layout.treemap = function() {
 
   // Recursively arranges the specified node's children into squarified rows.
   function squarify(node) {
-    if (!node.children) return;
+    if (!node.hasOwnProperty('children')) return;
     var rect = pad(node),
         row = [],
         children = node.children.slice(), // copy-on-write
@@ -59,7 +59,7 @@ d3.layout.treemap = function() {
   // Recursively resizes the specified node's children into existing rows.
   // Preserves the existing layout!
   function stickify(node) {
-    if (!node.children) return;
+    if (!node.hasOwnProperty('children')) return;
     var rect = pad(node),
         children = node.children.slice(), // copy-on-write
         child,

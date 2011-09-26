@@ -32,9 +32,9 @@ d3.layout.hierarchy = function() {
 
   // Recursively re-evaluates the node value.
   function revalue(node, depth) {
-    var children = node.children,
+    var children,
         v = 0;
-    if (children && (n = children.length)) {
+    if (node.hasOwnProperty('children') && (children = node.children) && (n = children.length)) {
       var i = -1,
           n,
           j = depth + 1;
@@ -96,7 +96,7 @@ function d3_layout_hierarchyRebind(object, hierarchy) {
 }
 
 function d3_layout_hierarchyChildren(d) {
-  return d.children;
+  return d.hasOwnProperty('children') && d.children;
 }
 
 function d3_layout_hierarchyValue(d) {
@@ -110,7 +110,7 @@ function d3_layout_hierarchySort(a, b) {
 // Returns an array source+target objects for the specified nodes.
 function d3_layout_hierarchyLinks(nodes) {
   return d3.merge(nodes.map(function(parent) {
-    return (parent.children || []).map(function(child) {
+    return (parent.hasOwnProperty('children') && parent.children || []).map(function(child) {
       return {source: parent, target: child};
     });
   }));

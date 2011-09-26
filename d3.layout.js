@@ -554,12 +554,12 @@ d3.layout.partition = function() {
       size = [1, 1]; // width, height
 
   function position(node, x, dx, dy) {
-    var children = node.children;
+    var children;
     node.x = x;
     node.y = node.depth * dy;
     node.dx = dx;
     node.dy = dy;
-    if (children) {
+    if (node.hasOwnProperty('children') && (children = node.children)) {
       var i = -1,
           n = children.length,
           c,
@@ -573,9 +573,9 @@ d3.layout.partition = function() {
   }
 
   function depth(node) {
-    var children = node.children,
+    var children,
         d = 0;
-    if (children) {
+    if (node.hasOwnProperty('children') && (children = node.children)) {
       var i = -1,
           n = children.length;
       while (++i < n) d = Math.max(d, depth(children[i]));
@@ -1065,9 +1065,9 @@ d3.layout.hierarchy = function() {
 
   // Recursively re-evaluates the node value.
   function revalue(node, depth) {
-    var children = node.children,
+    var children,
         v = 0;
-    if (children && (n = children.length)) {
+    if (node.hasOwnProperty('children') && (children = node.children) && (n = children.length)) {
       var i = -1,
           n,
           j = depth + 1;
@@ -1129,7 +1129,7 @@ function d3_layout_hierarchyRebind(object, hierarchy) {
 }
 
 function d3_layout_hierarchyChildren(d) {
-  return d.children;
+  return d.hasOwnProperty('children') && d.children;
 }
 
 function d3_layout_hierarchyValue(d) {
@@ -1143,7 +1143,7 @@ function d3_layout_hierarchySort(a, b) {
 // Returns an array source+target objects for the specified nodes.
 function d3_layout_hierarchyLinks(nodes) {
   return d3.merge(nodes.map(function(parent) {
-    return (parent.children || []).map(function(child) {
+    return (parent.hasOwnProperty('children') && parent.children || []).map(function(child) {
       return {source: parent, target: child};
     });
   }));
@@ -1316,8 +1316,8 @@ function d3_layout_packUnlink(node) {
 }
 
 function d3_layout_packTree(node) {
-  var children = node.children;
-  if (children && children.length) {
+  var children;
+  if (node.hasOwnProperty('children') && (children = node.children) && children.length) {
     children.forEach(d3_layout_packTree);
     node.r = d3_layout_packCircle(children);
   } else {
@@ -1326,11 +1326,11 @@ function d3_layout_packTree(node) {
 }
 
 function d3_layout_packTransform(node, x, y, k) {
-  var children = node.children;
+  var children;
   node.x = (x += k * node.x);
   node.y = (y += k * node.y);
   node.r *= k;
-  if (children) {
+  if (node.hasOwnProperty('children') && (children = node.children)) {
     var i = -1, n = children.length;
     while (++i < n) d3_layout_packTransform(children[i], x, y, k);
   }
@@ -1370,8 +1370,8 @@ d3.layout.cluster = function() {
 
     // First walk, computing the initial x & y values.
     d3_layout_treeVisitAfter(root, function(node) {
-      var children = node.children;
-      if (children && children.length) {
+      var children;
+      if (node.hasOwnProperty('children') && (children = node.children) && children.length) {
         node.x = d3_layout_clusterX(children);
         node.y = d3_layout_clusterY(children);
       } else {
@@ -1424,13 +1424,13 @@ function d3_layout_clusterX(children) {
 }
 
 function d3_layout_clusterLeft(node) {
-  var children = node.children;
-  return children && children.length ? d3_layout_clusterLeft(children[0]) : node;
+    var children;
+    return node.hasOwnProperty('children') && (children = node.children) && children.length ? d3_layout_clusterLeft(children[0]) : node;
 }
 
 function d3_layout_clusterRight(node) {
-  var children = node.children, n;
-  return children && (n = children.length) ? d3_layout_clusterRight(children[n - 1]) : node;
+    var children, n;
+    return node.hasOwnProperty('children') && (children = node.children) && (n = children.length) ? d3_layout_clusterRight(children[n - 1]) : node;
 }
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {
@@ -1443,9 +1443,9 @@ d3.layout.tree = function() {
         root = nodes[0];
 
     function firstWalk(node, previousSibling) {
-      var children = node.children,
+      var children,
           layout = node._tree;
-      if (children && (n = children.length)) {
+      if (node.hasOwnProperty('children') && (node.hasOwnProperty('children') && (children = node.children)) && (n = children.length)) {
         var n,
             firstChild = children[0],
             previousChild,
@@ -1475,8 +1475,8 @@ d3.layout.tree = function() {
 
     function secondWalk(node, x) {
       node.x = node._tree.prelim + x;
-      var children = node.children;
-      if (children) {
+      var children;
+      if (node.hasOwnProperty('children') && (children = node.children)) {
         var i = -1,
             n = children.length;
         x += node._tree.mod;
@@ -1583,16 +1583,16 @@ function d3_layout_treeSeparation(a, b) {
 // }
 
 function d3_layout_treeLeft(node) {
-  return node.children ? node.children[0] : node._tree.thread;
+  return node.hasOwnProperty('children') && node.children ? node.children[0] : node._tree.thread;
 }
 
 function d3_layout_treeRight(node) {
-  return node.children ? node.children[node.children.length - 1] : node._tree.thread;
+  return node.hasOwnProperty('children') && node.children ? node.children[node.children.length - 1] : node._tree.thread;
 }
 
 function d3_layout_treeSearch(node, compare) {
-  var children = node.children;
-  if (children) {
+  var children;
+  if (node.hasOwnProperty('children') && (children = node.children)) {
     var child,
         n = children.length,
         i = -1;
@@ -1619,8 +1619,8 @@ function d3_layout_treeDeepest(a, b) {
 
 function d3_layout_treeVisitAfter(node, callback) {
   function visit(node, previousSibling) {
-    var children = node.children;
-    if (children) {
+    var children;
+    if (node.hasOwnProperty('children') && (children = node.children)) {
       var child,
           previousChild = null,
           i = -1,
@@ -1639,7 +1639,7 @@ function d3_layout_treeVisitAfter(node, callback) {
 function d3_layout_treeShift(node) {
   var shift = 0,
       change = 0,
-      children = node.children,
+      children = node.hasOwnProperty('children') && node.children,
       i = children.length,
       child;
   while (--i >= 0) {
@@ -1692,7 +1692,7 @@ d3.layout.treemap = function() {
 
   // Recursively arranges the specified node's children into squarified rows.
   function squarify(node) {
-    if (!node.children) return;
+    if (!node.hasOwnProperty('children')) return;
     var rect = pad(node),
         row = [],
         children = node.children.slice(), // copy-on-write
@@ -1727,7 +1727,7 @@ d3.layout.treemap = function() {
   // Recursively resizes the specified node's children into existing rows.
   // Preserves the existing layout!
   function stickify(node) {
-    if (!node.children) return;
+    if (!node.hasOwnProperty('children')) return;
     var rect = pad(node),
         children = node.children.slice(), // copy-on-write
         child,

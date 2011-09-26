@@ -3,12 +3,12 @@ d3.layout.partition = function() {
       size = [1, 1]; // width, height
 
   function position(node, x, dx, dy) {
-    var children = node.children;
+    var children;
     node.x = x;
     node.y = node.depth * dy;
     node.dx = dx;
     node.dy = dy;
-    if (children) {
+    if (node.hasOwnProperty('children') && (children = node.children)) {
       var i = -1,
           n = children.length,
           c,
@@ -22,9 +22,9 @@ d3.layout.partition = function() {
   }
 
   function depth(node) {
-    var children = node.children,
+    var children,
         d = 0;
-    if (children) {
+    if (node.hasOwnProperty('children') && (children = node.children)) {
       var i = -1,
           n = children.length;
       while (++i < n) d = Math.max(d, depth(children[i]));
