@@ -1,7 +1,10 @@
 (function(){d3.geo = {};
+
+var d3_radians = Math.PI / 180,
+    d3_geo_earthRadius = 6371; // Mean radius of Earth, in km.
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
-  var mode = "orthographic", // or stereographic
+  var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
       origin,
       scale = 200,
       translate = [480, 250],
@@ -17,7 +20,13 @@ d3.geo.azimuthal = function() {
         sx1 = Math.sin(x1),
         cy1 = Math.cos(y1),
         sy1 = Math.sin(y1),
-        k = mode === "stereographic" ? 1 / (1 + sy0 * sy1 + cy0 * cy1 * cx1) : 1,
+        cc = mode !== "orthographic" ? sy0 * sy1 + cy0 * cy1 * cx1 : null,
+        c,
+        k = mode === "stereographic" ? 1 / (1 + cc)
+          : mode === "gnomonic" ? 1 / cc
+          : mode === "equidistant" ? (c = Math.acos(cc), c ? c / Math.sin(c) : 0)
+          : mode === "equalarea" ? Math.sqrt(2 / (1 + cc))
+          : 1,
         x = k * cy1 * sx1,
         y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
     return [
@@ -30,12 +39,16 @@ d3.geo.azimuthal = function() {
     var x = (coordinates[0] - translate[0]) / scale,
         y = (coordinates[1] - translate[1]) / scale,
         p = Math.sqrt(x * x + y * y),
-        c = mode === "stereographic" ? 2 * Math.atan(p) : Math.asin(p),
+        c = mode === "stereographic" ? 2 * Math.atan(p)
+          : mode === "gnomonic" ? Math.atan(p)
+          : mode === "equidistant" ? p
+          : mode === "equalarea" ? 2 * Math.asin(.5 * p)
+          : Math.asin(p),
         sc = Math.sin(c),
         cc = Math.cos(c);
     return [
       (x0 + Math.atan2(x * sc, p * cy0 * cc + y * sy0 * sc)) / d3_radians,
-      Math.asin(cc * sy0 - (y * sc * cy0) / p) / d3_radians
+      Math.asin(cc * sy0 - (p ? (y * sc * cy0) / p : 0)) / d3_radians
     ];
   };
 
@@ -195,8 +208,6 @@ d3.geo.albersUsa = function() {
 
   return albersUsa.scale(lower48.scale());
 };
-
-var d3_radians = Math.PI / 180;
 d3.geo.equirectangular = function() {
   var scale = 500,
       translate = [480, 250];
@@ -279,7 +290,8 @@ d3.geo.mercator = function() {
 d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_path_circle(pointRadius),
-      projection = d3.geo.albersUsa();
+      projection = d3.geo.albersUsa(),
+      clip = Object;
 
   function path(d, i) {
     if (typeof pointRadius === "function") {
@@ -308,12 +320,14 @@ d3.geo.path = function() {
     },
 
     Point: function(o) {
-      return "M" + project(o.coordinates) + pointCircle;
+      var coordinates = clip.call(this, [o.coordinates]);
+      return coordinates.length
+        ? "M" + project(coordinates[0]) + pointCircle : "";
     },
 
     MultiPoint: function(o) {
       var path = [],
-          coordinates = o.coordinates,
+          coordinates = clip.call(this, o.coordinates),
           i = -1, // coordinates.index
           n = coordinates.length;
       while (++i < n) path.push("M", project(coordinates[i]), pointCircle);
@@ -322,7 +336,7 @@ d3.geo.path = function() {
 
     LineString: function(o) {
       var path = ["M"],
-          coordinates = o.coordinates,
+          coordinates = clip.call(this, o.coordinates),
           i = -1, // coordinates.index
           n = coordinates.length;
       while (++i < n) path.push(project(coordinates[i]), "L");
@@ -339,7 +353,7 @@ d3.geo.path = function() {
           j, // subcoordinates.index
           m; // subcoordinates.length
       while (++i < n) {
-        subcoordinates = coordinates[i];
+        subcoordinates = clip.call(this, coordinates[i]);
         j = -1;
         m = subcoordinates.length;
         path.push("M");
@@ -358,9 +372,10 @@ d3.geo.path = function() {
           j, // subcoordinates.index
           m; // subcoordinates.length
       while (++i < n) {
-        subcoordinates = coordinates[i];
+        subcoordinates = clip.call(this, coordinates[i]);
         j = -1;
-        m = subcoordinates.length;
+        m = subcoordinates.length - 1;
+        if (m < 1) continue;
         path.push("M");
         while (++j < m) path.push(project(subcoordinates[j]), "L");
         path[path.length - 1] = "Z";
@@ -384,9 +399,10 @@ d3.geo.path = function() {
         j = -1;
         m = subcoordinates.length;
         while (++j < m) {
-          subsubcoordinates = subcoordinates[j];
+          subsubcoordinates = clip.call(this, subcoordinates[j]);
           k = -1;
           p = subsubcoordinates.length - 1;
+          if (p < 1) continue;
           path.push("M");
           while (++k < p) path.push(project(subsubcoordinates[k]), "L");
           path[path.length - 1] = "Z";
@@ -524,6 +540,12 @@ d3.geo.path = function() {
     return path;
   };
 
+  path.clip = function(x) {
+    if (!arguments.length) return clip;
+    clip = x;
+    return path;
+  }
+
   path.area = function(d) {
     return d3_geo_pathType(areaTypes, d);
   };
@@ -638,59 +660,38 @@ function d3_geo_boundsPolygon(o, f) {
 d3.geo.greatCircle = function() {
   var source = d3_geo_greatCircleSource,
       target = d3_geo_greatCircleTarget,
+      coordinates = Object, // for use with polyline
+      precision = null,
       n = 100,
-      radius = 6371; // Mean radius of Earth, in km.
+      radius = d3_geo_earthRadius;
   // TODO: breakAtDateLine?
 
   function greatCircle(d, i) {
-    var from = source.call(this, d, i),
-        to = target.call(this, d, i),
-        x0 = from[0] * d3_radians,
-        y0 = from[1] * d3_radians,
-        x1 = to[0] * d3_radians,
-        y1 = to[1] * d3_radians,
-        cx0 = Math.cos(x0), sx0 = Math.sin(x0),
-        cy0 = Math.cos(y0), sy0 = Math.sin(y0),
-        cx1 = Math.cos(x1), sx1 = Math.sin(x1),
-        cy1 = Math.cos(y1), sy1 = Math.sin(y1),
-        d = Math.acos(sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)),
-        sd = Math.sin(d),
-        f = d / (n - 1),
-        e = -f,
-        path = [],
-        i = -1;
-
-    while (++i < n) {
-      e += f;
-      var A = Math.sin(d - e) / sd,
-          B = Math.sin(e) / sd,
-          x = A * cy0 * cx0 + B * cy1 * cx1,
-          y = A * cy0 * sx0 + B * cy1 * sx1,
-          z = A * sy0       + B * sy1;
-      path[i] = [
-        Math.atan2(y, x) / d3_radians,
-        Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians
-      ];
-    }
-
-    return path;
+    return d3_geo_greatCirclePath([
+      source.call(this, d, i), target.call(this, d, i)], precision, n);
   }
 
-  greatCircle.source = function(x) {
-    if (!arguments.length) return source;
-    source = x;
-    return greatCircle;
+  greatCircle.polyline = function(d, i) {
+    return d3_geo_greatCirclePath(coordinates.call(this, d, i), precision, n);
   };
 
-  greatCircle.target = function(x) {
-    if (!arguments.length) return target;
-    target = x;
+  greatCircle.coordinates = function(x) {
+    if (!arguments.length) return coordinates;
+    coordinates = x;
     return greatCircle;
   };
 
   greatCircle.n = function(x) {
     if (!arguments.length) return n;
     n = +x;
+    precision = null;
+    return greatCircle;
+  };
+
+  greatCircle.precision = function(x) {
+    if (!arguments.length) return precision;
+    precision = +x;
+    n = null;
     return greatCircle;
   };
 
@@ -711,12 +712,60 @@ d3.geo.greatCircle = function() {
         sy = Math.sin((y1 - y0) / 2),
         sx = Math.sin((x1 - x0) / 2),
         a = sy * sy + Math.cos(y0) * Math.cos(y1) * sx * sx;
-
     return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
 
   return greatCircle;
 };
+
+function d3_geo_greatCirclePath(coordinates, precision, segments) {
+  var m = coordinates.length;
+  if (m < 2) return coordinates;
+
+  var i = 0,
+      p = precision * d3_radians,
+      from = coordinates[0],
+      to,
+      x0 = from[0] * d3_radians,
+      y0 = from[1] * d3_radians,
+      cx0 = Math.cos(x0), sx0 = Math.sin(x0),
+      cy0 = Math.cos(y0), sy0 = Math.sin(y0),
+      path = [from];
+
+  while (++i < m) {
+    to = coordinates[i];
+    var x1 = to[0] * d3_radians,
+        y1 = to[1] * d3_radians,
+        cx1 = Math.cos(x1), sx1 = Math.sin(x1),
+        cy1 = Math.cos(y1), sy1 = Math.sin(y1),
+        d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))),
+        sd = Math.sin(d),
+        n = segments != null ? segments - 1 : Math.ceil(d / p),
+        f = d / n,
+        e = 0,
+        j = 0;
+
+    while (++j < n) {
+      e += f;
+      var A = Math.sin(d - e) / sd,
+          B = Math.sin(e) / sd,
+          x = A * cy0 * cx0 + B * cy1 * cx1,
+          y = A * cy0 * sx0 + B * cy1 * sx1,
+          z = A * sy0       + B * sy1;
+      path.push([
+        Math.atan2(y, x) / d3_radians,
+        Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians
+      ]);
+    }
+    path.push(to);
+    x0 = x1;
+    y0 = y1;
+    cx0 = cx1; sx0 = sx1;
+    cy0 = cy1; sy0 = sy1;
+  }
+
+  return path;
+}
 
 function d3_geo_greatCircleSource(d) {
   return d.source;
@@ -724,5 +773,93 @@ function d3_geo_greatCircleSource(d) {
 
 function d3_geo_greatCircleTarget(d) {
   return d.target;
+}
+d3.geo.clip = function() {
+  var origin = [0, 0],
+      angle = 90,
+      r = d3_geo_earthRadius * angle / 180 * Math.PI,
+      coordinates = Object;
+
+  function clip(d, i) {
+    var d = coordinates.call(this, d, i),
+        o = {source: origin, target: null},
+        n = d.length,
+        i = -1,
+        path,
+        clipped = [],
+        p = null,
+        q = null,
+        distance,
+        oldDistance;
+    while (++i < n) {
+      o.target = d[i];
+      distance = d3_geo_clipGreatCircle.distance(o);
+      if (distance < r) {
+        if (q) clipped.push(d3_geo_clipIntersect(q, o.target, (oldDistance - r) / (oldDistance - distance)));
+        clipped.push(d[i]);
+        p = q = null;
+      } else {
+        q = o.target;
+        if (!p && clipped.length) {
+          clipped.push(d3_geo_clipIntersect(clipped[clipped.length - 1], q, (r - oldDistance) / (distance - oldDistance)));
+          p = q;
+        }
+      }
+      oldDistance = distance;
+    }
+    if (q && clipped.length) {
+      o.target = clipped[0];
+      distance = d3_geo_clipGreatCircle.distance(o);
+      clipped.push(d3_geo_clipIntersect(q, o.target, (oldDistance - r) / (oldDistance - distance)));
+    }
+    return clipped;
+  }
+
+  clip.coordinates = function(x) {
+    if (!arguments.length) return coordinates;
+    coordinates = x;
+    return clip;
+  };
+
+  clip.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = x;
+    return clip;
+  };
+
+  clip.angle = function(x) {
+    if (!arguments.length) return angle;
+    angle = +x;
+    r = d3_geo_earthRadius * angle / 180 * Math.PI;
+    return clip;
+  };
+
+  return clip;
+}
+
+var d3_geo_clipGreatCircle = d3.geo.greatCircle();
+
+function d3_geo_clipIntersect(from, to, f) {
+  var x0 = from[0] * d3_radians,
+      y0 = from[1] * d3_radians,
+      x1 = to[0] * d3_radians,
+      y1 = to[1] * d3_radians,
+      cx0 = Math.cos(x0), sx0 = Math.sin(x0),
+      cy0 = Math.cos(y0), sy0 = Math.sin(y0),
+      cx1 = Math.cos(x1), sx1 = Math.sin(x1),
+      cy1 = Math.cos(y1), sy1 = Math.sin(y1),
+      d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))),
+      e = f * d,
+      sd = Math.sin(d),
+      A = Math.sin(d - e) / sd,
+      B = Math.sin(e) / sd,
+      x = A * cy0 * cx0 + B * cy1 * cx1,
+      y = A * cy0 * sx0 + B * cy1 * sx1,
+      z = A * sy0       + B * sy1;
+
+  return [
+    Math.atan2(y, x) / d3_radians,
+    Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians
+  ];
 }
 })();
