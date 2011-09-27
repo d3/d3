@@ -135,7 +135,7 @@ d3.geo.path = function() {
       return path.join("");
     }
 
-  }, "");
+  });
 
   var areaType = path.area = d3_geo_type({
 
