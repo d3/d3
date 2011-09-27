@@ -47,5 +47,5 @@ Next, from the root directory of this repository, install D3's dependencies:
 
     npm install
 
-You can see the list of dependencies in package.json. The packages will be
-installed in the node_modules directory.
+You can see the list of dependencies in package.json. Npm will install the
+packages in your $NODE_PATH, or in the node_modules directory, if unset.
