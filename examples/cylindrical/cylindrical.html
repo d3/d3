@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Equirectangular Projection</title>
+    <title>Cylindrical Projection</title>
     <script type="text/javascript" src="../../d3.js"></script>
     <script type="text/javascript" src="../../d3.geo.js"></script>
     <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
@@ -39,11 +39,11 @@ div {
     </style>
   </head>
   <body>
-    <h3>Equirectangular Projection</h3>
+    <h3>Cylindrical Projection</h3>
     <script type="text/javascript">
 
 // Our projection.
-var xy = d3.geo.equirectangular(),
+var xy = d3.geo.cylindrical(),
     path = d3.geo.path().projection(xy);
 
 var states = d3.select("body")
@@ -82,6 +82,8 @@ function refresh() {
 
   d3.select("#scale span")
       .text(xy.scale());
+  d3.select("#parallel span")
+      .text(xy.parallel());
   d3.select("#translate-x span")
       .text(xy.translate()[0]);
   d3.select("#translate-y span")
@@ -90,6 +92,7 @@ function refresh() {
 
     </script><p>
     <div id="scale">scale: <span>500</span></div><p>
+    <div id="parallel">parallel: <span>0</span></div><p>
     <div id="translate-x">translate.x: <span>480</span></div>
     <div id="translate-y">translate.y: <span>250</span></div>
     <script type="text/javascript">
@@ -100,6 +103,16 @@ $("#scale").slider({
   value: 500,
   slide: function(event, ui) {
     xy.scale(ui.value);
+    refresh();
+  }
+});
+
+$("#parallel").slider({
+  min: 0,
+  max: 90,
+  value: 0,
+  slide: function(event, ui) {
+    xy.parallel(ui.value);
     refresh();
   }
 });

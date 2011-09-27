@@ -277,54 +277,56 @@ d3.geo.bonne = function() {
 
   return bonne.origin([0, 0]).parallel(45);
 };
-d3.geo.equirectangular = function() {
+d3.geo.cylindrical = function() {
   var scale = 500,
       translate = [480, 250],
       parallel,
-      c1;
+      c1,
+      mode = "equidistant"; // or equalarea
 
-  function equirectangular(coordinates) {
-    var x = coordinates[0] / 360,
-        y = coordinates[1] / 360;
+  function cylindrical(coordinates) {
+    var x = coordinates[0] * d3_geo_radians,
+        y = coordinates[1] * d3_geo_radians;
     x *= c1;
-    y *= -1;
+    y = mode === "equidistant" ? -y : -Math.sin(y) / c1;
 
     return [
-      scale * x + translate[0],
-      scale * y + translate[1]
+      (scale * x) / (d3_geo_radians * 360) + translate[0],
+      (scale * y) / (d3_geo_radians * 360) + translate[1]
     ];
   }
 
-  equirectangular.invert = function(coordinates) {
+  cylindrical.invert = function(coordinates) {
     var x = (coordinates[0] - translate[0]) / scale,
         y = (coordinates[1] - translate[1]) / scale;
     return [
       (x / c1) * 360,
-      -y * 360
+      (mode === "equidistant" ? -y : Math.sin(-y * c1)) * 360
     ];
   };
 
-  equirectangular.parallel = function(x) {
+  cylindrical.parallel = function(x) {
     if (!arguments.length) return parallel;
     parallel = +x;
-    c1 = Math.cos(parallel * d3_radians);
-    return equirectangular;
+    c1 = Math.cos(parallel * d3_geo_radians);
+    return cylindrical;
   };
 
-  equirectangular.scale = function(x) {
+  cylindrical.scale = function(x) {
     if (!arguments.length) return scale;
     scale = +x;
-    return equirectangular;
+    return cylindrical;
   };
 
-  equirectangular.translate = function(x) {
+  cylindrical.translate = function(x) {
     if (!arguments.length) return translate;
     translate = [+x[0], +x[1]];
-    return equirectangular;
+    return cylindrical;
   };
 
-  return equirectangular.parallel(0);
+  return cylindrical.parallel(0);
 };
+d3.geo.equirectangular = d3.geo.cylindrical;
 d3.geo.mercator = function() {
   var scale = 500,
       translate = [480, 250];

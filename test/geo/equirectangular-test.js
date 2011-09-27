@@ -7,19 +7,24 @@ var vows = require("vows"),
 
 var suite = vows.describe("d3.geo.equirectangular");
 
+var geoTests = {
+};
+
 suite.addBatch({
   "equirectangular": {
-    topic: d3.geo.equirectangular,
-    "Arctic":      testProjection([0,    85], [480, 131.944444]),
-    "Antarctic":   testProjection([0,   -85], [480, 368.055555]),
-    "Hawaii":      testProjection([-180,  0], [230, 250]),
-    "Phillipines": testProjection([ 180,  0], [730, 250]),
-    "Inversion works for non-zero translation": function() {
-      var equirectangular = d3.geo.equirectangular().translate([123, 99]).scale(100),
-          coords = equirectangular([0, 85]),
-          lonlat = equirectangular.invert(coords);
-      assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], 85, 1e-6);
+    "zero origin": {
+      topic: d3.geo.equirectangular,
+      "Arctic":      testProjection([0,    85], [480, 131.944444]),
+      "Antarctic":   testProjection([0,   -85], [480, 368.055555]),
+      "Hawaii":      testProjection([-180,  0], [230, 250]),
+      "Phillipines": testProjection([ 180,  0], [730, 250]),
+      "Inversion works for non-zero translation": function() {
+        var equirectangular = d3.geo.equirectangular().translate([123, 99]).scale(100),
+            coords = equirectangular([0, 85]),
+            lonlat = equirectangular.invert(coords);
+        assert.inDelta(lonlat[0], 0, 1e-6);
+        assert.inDelta(lonlat[1], 85, 1e-6);
+      }
     }
   }
 });

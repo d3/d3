@@ -185,6 +185,7 @@ d3.geo.js: \
 	src/geo/azimuthal.js \
 	src/geo/albers.js \
 	src/geo/bonne.js \
+	src/geo/cylindrical.js \
 	src/geo/equirectangular.js \
 	src/geo/mercator.js \
 	src/geo/type.js \
