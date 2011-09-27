@@ -10,7 +10,25 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.2.0"}; // semver
+d3 = {version: "2.2.1"}; // semver
+var d3_array = d3_arraySlice; // conversion for NodeLists
+
+function d3_arrayCopy(pseudoarray) {
+  var i = -1, n = pseudoarray.length, array = [];
+  while (++i < n) array.push(pseudoarray[i]);
+  return array;
+}
+
+function d3_arraySlice(pseudoarray) {
+  return Array.prototype.slice.call(pseudoarray);
+}
+
+try {
+  d3_array(document.documentElement.childNodes)[0].nodeType;
+} catch(e) {
+  d3_array = d3_arrayCopy;
+}
+
 var d3_arraySubclass = [].__proto__?
 
 // Until ECMAScript supports array subclassing, prototype injection works well.
@@ -1254,7 +1272,7 @@ d3_selectionPrototype.selectAll = function(selector) {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroups.push(subgroup = selector.call(node, node.__data__, i));
+        subgroups.push(subgroup = d3_array(selector.call(node, node.__data__, i)));
         subgroup.parentNode = node;
       }
     }
@@ -1738,16 +1756,18 @@ var d3_selectionRoot = d3_selection([[document]]);
 d3_selectionRoot[0].parentNode = document.documentElement;
 
 // TODO fast singleton implementation!
+// TODO select(function)
 d3.select = function(selector) {
   return typeof selector === "string"
       ? d3_selectionRoot.select(selector)
       : d3_selection([[selector]]); // assume node
 };
 
+// TODO selectAll(function)
 d3.selectAll = function(selector) {
   return typeof selector === "string"
       ? d3_selectionRoot.selectAll(selector)
-      : d3_selection([selector]); // assume node[]
+      : d3_selection([d3_array(selector)]); // assume node[]
 };
 function d3_transition(groups, id) {
   d3_arraySubclass(groups, d3_transitionPrototype);
@@ -3401,7 +3421,7 @@ function d3_svg_mousePoint(container, e) {
 };
 d3.svg.touches = function(container) {
   var touches = d3.event.touches;
-  return touches ? Array.prototype.map.call(touches, function(touch) {
+  return touches ? d3_array(touches).map(function(touch) {
     var point = d3_svg_mousePoint(container, touch);
     point.identifier = touch.identifier;
     return point;
