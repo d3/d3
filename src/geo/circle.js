@@ -3,7 +3,7 @@
 
 d3.geo.circle = function() {
   var origin = [0, 0],
-      degrees = 89,
+      degrees = 90 - 1e-2,
       radians = degrees * d3_geo_radians,
       arc = d3.geo.greatArc().target(Object);
 
