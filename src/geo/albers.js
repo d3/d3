@@ -7,14 +7,14 @@ d3.geo.albers = function() {
       parallels = [29.5, 45.5],
       scale = 1000,
       translate = [480, 250],
-      lng0, // d3_radians * origin[0]
+      lng0, // d3_geo_radians * origin[0]
       n,
       C,
       p0;
 
   function albers(coordinates) {
-    var t = n * (d3_radians * coordinates[0] - lng0),
-        p = Math.sqrt(C - 2 * n * Math.sin(d3_radians * coordinates[1])) / n;
+    var t = n * (d3_geo_radians * coordinates[0] - lng0),
+        p = Math.sqrt(C - 2 * n * Math.sin(d3_geo_radians * coordinates[1])) / n;
     return [
       scale * p * Math.sin(t) + translate[0],
       scale * (p * Math.cos(t) - p0) + translate[1]
@@ -28,18 +28,18 @@ d3.geo.albers = function() {
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);
     return [
-      (lng0 + t / n) / d3_radians,
-      Math.asin((C - p * p * n * n) / (2 * n)) / d3_radians
+      (lng0 + t / n) / d3_geo_radians,
+      Math.asin((C - p * p * n * n) / (2 * n)) / d3_geo_radians
     ];
   };
 
   function reload() {
-    var phi1 = d3_radians * parallels[0],
-        phi2 = d3_radians * parallels[1],
-        lat0 = d3_radians * origin[1],
+    var phi1 = d3_geo_radians * parallels[0],
+        phi2 = d3_geo_radians * parallels[1],
+        lat0 = d3_geo_radians * origin[1],
         s = Math.sin(phi1),
         c = Math.cos(phi1);
-    lng0 = d3_radians * origin[0];
+    lng0 = d3_geo_radians * origin[0];
     n = .5 * (s + Math.sin(phi2));
     C = c * c + 2 * n * s;
     p0 = Math.sqrt(C - 2 * n * Math.sin(lat0)) / n;

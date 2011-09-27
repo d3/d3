@@ -10,8 +10,8 @@ d3.geo.azimuthal = function() {
       sy0;
 
   function azimuthal(coordinates) {
-    var x1 = coordinates[0] * d3_radians - x0,
-        y1 = coordinates[1] * d3_radians,
+    var x1 = coordinates[0] * d3_geo_radians - x0,
+        y1 = coordinates[1] * d3_geo_radians,
         cx1 = Math.cos(x1),
         sx1 = Math.sin(x1),
         cy1 = Math.cos(y1),
@@ -43,8 +43,8 @@ d3.geo.azimuthal = function() {
         sc = Math.sin(c),
         cc = Math.cos(c);
     return [
-      (x0 + Math.atan2(x * sc, p * cy0 * cc + y * sy0 * sc)) / d3_radians,
-      Math.asin(cc * sy0 - (p ? (y * sc * cy0) / p : 0)) / d3_radians
+      (x0 + Math.atan2(x * sc, p * cy0 * cc + y * sy0 * sc)) / d3_geo_radians,
+      Math.asin(cc * sy0 - (p ? (y * sc * cy0) / p : 0)) / d3_geo_radians
     ];
   };
 
@@ -57,8 +57,8 @@ d3.geo.azimuthal = function() {
   azimuthal.origin = function(x) {
     if (!arguments.length) return origin;
     origin = x;
-    x0 = origin[0] * d3_radians;
-    y0 = origin[1] * d3_radians;
+    x0 = origin[0] * d3_geo_radians;
+    y0 = origin[1] * d3_geo_radians;
     cy0 = Math.cos(y0);
     sy0 = Math.sin(y0);
     return azimuthal;

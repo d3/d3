@@ -185,10 +185,11 @@ d3.geo.js: \
 	src/geo/albers.js \
 	src/geo/equirectangular.js \
 	src/geo/mercator.js \
+	src/geo/type.js \
 	src/geo/path.js \
 	src/geo/bounds.js \
+	src/geo/greatArc.js \
 	src/geo/greatCircle.js \
-	src/geo/clip.js \
 	src/end.js
 
 d3.csv.js: \

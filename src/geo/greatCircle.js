@@ -1,118 +1,149 @@
-// From http://williams.best.vwh.net/avform.htm#Intermediate
-d3.geo.greatCircle = function() {
-  var source = d3_geo_greatCircleSource,
-      target = d3_geo_greatCircleTarget,
-      coordinates = Object, // for use with polyline
-      precision = null,
-      n = 100,
-      radius = d3_geo_earthRadius;
-  // TODO: breakAtDateLine?
+// TODO breakAtDateLine?
 
-  function greatCircle(d, i) {
-    return d3_geo_greatCirclePath([
-      source.call(this, d, i), target.call(this, d, i)], precision, n);
+d3.geo.greatCircle = function() {
+  var origin = [0, 0],
+      degrees = 89,
+      radius = degrees * d3_geo_radians,
+      arc = d3.geo.greatArc().target(Object);
+
+  function greatCircle() {
+// TODO
+//     var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
+//     return d3_geo_greatCircleArc({
+//       source: [o[0] - 180, o[1] - degrees],
+//       target: [o[0] + 180, o[1] - degrees]
+//     });
   }
 
-  greatCircle.polyline = function(d, i) {
-    return d3_geo_greatCirclePath(coordinates.call(this, d, i), precision, n);
+// TODO
+//
+//   function visible(point) {
+//     return arc.distance(point) < radius;
+//   }
+
+  greatCircle.clip = function(d) {
+    arc.source(typeof origin === "function" ? origin.apply(this, arguments) : origin);
+    return clipType(d);
   };
 
-  greatCircle.coordinates = function(x) {
-    if (!arguments.length) return coordinates;
-    coordinates = x;
+  var clipType = d3_geo_type({
+
+    FeatureCollection: function(o) {
+      var features = o.features.map(clipType).filter(Object);
+      return features && (o = Object.create(o), o.features = features, o);
+    },
+
+    Feature: function(o) {
+      var geometry = clipType(o.geometry);
+      return geometry && (o = Object.create(o), o.geometry = geometry, o);
+    },
+
+// TODO
+//
+//     Point: function(o) {
+//       return visible(o.coordinates) && o;
+//     },
+//
+//     MultiPoint: function(o) {
+//       var coordinates = o.coordinates.filter(visible);
+//       return coordinates.length && {
+//         type: o.type,
+//         coordinates: coordinates
+//       };
+//     },
+
+    LineString: function(o) {
+      var coordinates = clip(o.coordinates);
+      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
+    },
+
+    MultiLineString: function(o) {
+      var coordinates = o.coordinates.map(clip).filter(function(d) { return d.length; });
+      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
+    },
+
+    Polygon: function(o) {
+      var coordinates = o.coordinates.map(clip);
+      return coordinates[0].length && (o = Object.create(o), o.coordinates = coordinates, o);
+    },
+
+    MultiPolygon: function(o) {
+      var coordinates = o.coordinates.map(function(d) { return d.map(clip); }).filter(function(d) { return d[0].length; });
+      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
+    },
+
+    GeometryCollection: function(o) {
+      var geometries = o.geometries.map(clipType).filter(Object);
+      return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
+    }
+
+  });
+
+  function clip(coordinates) {
+    var i = -1,
+        n = coordinates.length,
+        clipped = [],
+        p0,
+        p1,
+        p2,
+        d0,
+        d1;
+
+    while (++i < n) {
+      d1 = arc.distance(p2 = coordinates[i]);
+      if (d1 < radius) {
+        if (p1) clipped.push(d3_geo_greatArcInterpolate(p1, p2)((d0 - radius) / (d0 - d1)));
+        clipped.push(p2);
+        p0 = p1 = null;
+      } else {
+        p1 = p2;
+        if (!p0 && clipped.length) {
+          clipped.push(d3_geo_greatArcInterpolate(clipped[clipped.length - 1], p1)((radius - d0) / (d1 - d0)));
+          p0 = p1;
+        }
+      }
+      d0 = d1;
+    }
+
+    if (p1 && clipped.length) {
+      d1 = arc.distance(p2 = clipped[0]);
+      clipped.push(d3_geo_greatArcInterpolate(p1, p2)((d0 - radius) / (d0 - d1)));
+    }
+
+    return resample(clipped);
+  }
+
+  // Resample coordinates, creating great arcs between each.
+  function resample(coordinates) {
+    var i = 0,
+        n = coordinates.length,
+        j,
+        m,
+        resampled = n ? [coordinates[0]] : coordinates,
+        resamples,
+        origin = arc.source();
+
+    while (++i < n) {
+      resamples = arc.source(coordinates[i - 1])(coordinates[i]).coordinates;
+      for (j = 0, m = resamples.length; ++j < m;) resampled.push(resamples[j]);
+    }
+
+    arc.source(origin);
+    return resampled;
+  }
+
+  greatCircle.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = x;
     return greatCircle;
   };
 
-  greatCircle.n = function(x) {
-    if (!arguments.length) return n;
-    n = +x;
-    precision = null;
-    return greatCircle;
-  };
-
+  // Precision is specified in degrees.
   greatCircle.precision = function(x) {
-    if (!arguments.length) return precision;
-    precision = +x;
-    n = null;
+    if (!arguments.length) return arc.precision();
+    arc.precision(x);
     return greatCircle;
-  };
-
-  greatCircle.radius = function(x) {
-    if (!arguments.length) return radius;
-    radius = +x;
-    return greatCircle;
-  };
-
-  // Haversine formula for great-circle distance.
-  greatCircle.distance = function(d, i) {
-    var from = source.call(this, d, i),
-        to = target.call(this, d, i),
-        x0 = from[0] * d3_radians,
-        y0 = from[1] * d3_radians,
-        x1 = to[0] * d3_radians,
-        y1 = to[1] * d3_radians,
-        sy = Math.sin((y1 - y0) / 2),
-        sx = Math.sin((x1 - x0) / 2),
-        a = sy * sy + Math.cos(y0) * Math.cos(y1) * sx * sx;
-    return radius * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
   };
 
   return greatCircle;
-};
-
-function d3_geo_greatCirclePath(coordinates, precision, segments) {
-  var m = coordinates.length;
-  if (m < 2) return coordinates;
-
-  var i = 0,
-      p = precision * d3_radians,
-      from = coordinates[0],
-      to,
-      x0 = from[0] * d3_radians,
-      y0 = from[1] * d3_radians,
-      cx0 = Math.cos(x0), sx0 = Math.sin(x0),
-      cy0 = Math.cos(y0), sy0 = Math.sin(y0),
-      path = [from];
-
-  while (++i < m) {
-    to = coordinates[i];
-    var x1 = to[0] * d3_radians,
-        y1 = to[1] * d3_radians,
-        cx1 = Math.cos(x1), sx1 = Math.sin(x1),
-        cy1 = Math.cos(y1), sy1 = Math.sin(y1),
-        d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))),
-        sd = Math.sin(d),
-        n = segments != null ? segments - 1 : Math.ceil(d / p),
-        f = d / n,
-        e = 0,
-        j = 0;
-
-    while (++j < n) {
-      e += f;
-      var A = Math.sin(d - e) / sd,
-          B = Math.sin(e) / sd,
-          x = A * cy0 * cx0 + B * cy1 * cx1,
-          y = A * cy0 * sx0 + B * cy1 * sx1,
-          z = A * sy0       + B * sy1;
-      path.push([
-        Math.atan2(y, x) / d3_radians,
-        Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians
-      ]);
-    }
-    path.push(to);
-    x0 = x1;
-    y0 = y1;
-    cx0 = cx1; sx0 = sx1;
-    cy0 = cy1; sy0 = sy1;
-  }
-
-  return path;
-}
-
-function d3_geo_greatCircleSource(d) {
-  return d.source;
-}
-
-function d3_geo_greatCircleTarget(d) {
-  return d.target;
 }
