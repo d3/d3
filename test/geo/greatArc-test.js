@@ -5,23 +5,22 @@ require("../../d3.geo");
 var vows = require("vows"),
     assert = require("assert");
 
-var suite = vows.describe("d3.geo.greatCircle");
+var suite = vows.describe("d3.geo.greatArc");
 
 suite.addBatch({
-  "greatCircle": {
+  "greatArc": {
     topic: function() {
-      return d3.geo.greatCircle()
-          .n(12);
+      return d3.geo.greatArc();
     },
-    "distance": function(circle) {
-      assert.equal(circle.distance({source: [0, 0], target: [0, 0]}), 0);
-      assert.inDelta(circle.distance({
+    "distance": function(arc) {
+      assert.equal(arc.distance({source: [0, 0], target: [0, 0]}), 0);
+      assert.inDelta(arc.distance({
         source: [118 + 24 / 60, 33 + 57 / 60],
         target: [ 73 + 47 / 60, 40 + 38 / 60]
-      }), 3973, .5);
+      }), 3973 / 6371, .5);
     },
-    "geodesic": function(circle) {
-      assert.inDelta(circle({source: [5, 52], target: [-120, 37]}), [
+    "geodesic": function(arc) {
+      assert.inDelta(arc.precision(7.2)({source: [5, 52], target: [-120, 37]}).coordinates, [
         [   5,        52      ],
         [  -3.805036, 57.05083],
         [ -15.122869, 61.30118],
