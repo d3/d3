@@ -43,43 +43,30 @@ div {
     <script type="text/javascript">
 
 // Our projection.
-var xy = d3.geo.bonne().origin([0, 0]),
+var xy = d3.geo.bonne(),
     path = d3.geo.path().projection(xy);
 
-var states = d3.select("body")
-  .append("svg:svg")
-  .append("svg:g")
-    .attr("id", "states");
-
-var equator = d3.select("svg")
-  .append("svg:line")
-    .attr("x1", "0%")
-    .attr("x2", "100%");
+var countries = d3.select("body").append("svg:svg")
+    .attr("id", "countries");
 
 d3.json("../data/world-countries.json", function(collection) {
-
-  states
-    .selectAll("path")
+  countries.selectAll("path")
       .data(collection.features)
     .enter().append("svg:path")
       .attr("d", path)
     .append("svg:title")
       .text(function(d) { return d.properties.name; });
-
-  equator
-      .attr("y1", xy([0, 0])[1])
-      .attr("y2", xy([0, 0])[1])
 });
 
 function refresh() {
-  states
-    .selectAll("path")
+  countries.selectAll("path")
       .attr("d", path);
-
-  equator
-      .attr("y1", xy([0, 0])[1])
-      .attr("y2", xy([0, 0])[1])
-
+  d3.select("#lon span")
+      .text(xy.origin()[0]);
+  d3.select("#lat span")
+      .text(xy.origin()[1]);
+  d3.select("#parallel span")
+      .text(xy.parallel());
   d3.select("#scale span")
       .text(xy.scale());
   d3.select("#translate-x span")
@@ -91,7 +78,8 @@ function refresh() {
     </script><p>
     <div id="lon">origin.longitude: <span>0</span></div>
     <div id="lat">origin.latitude: <span>0</span></div><p>
-    <div id="scale">scale: <span>500</span></div><p>
+    <div id="parallel">parallel: <span>45</span></div><p>
+    <div id="scale">scale: <span>200</span></div><p>
     <div id="translate-x">translate.x: <span>480</span></div>
     <div id="translate-y">translate.y: <span>250</span></div>
     <script type="text/javascript">
@@ -122,10 +110,20 @@ $("#lat").slider({
   }
 });
 
+$("#parallel").slider({
+  min: 0,
+  max: 90,
+  value: 45,
+  slide: function(event, ui) {
+    xy.parallel(ui.value);
+    refresh();
+  }
+});
+
 $("#scale").slider({
   min: 0,
-  max: 3000,
-  value: 500,
+  max: 800,
+  value: 200,
   slide: function(event, ui) {
     xy.scale(ui.value);
     refresh();
