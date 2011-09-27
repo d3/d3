@@ -1,7 +1,8 @@
 # See the README for installation instructions.
 
-JS_COMPILER = ./node_modules/uglify-js/bin/uglifyjs
-JS_TESTER = ./node_modules/vows/bin/vows
+NODE_PATH ?= ./node_modules
+JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
+JS_TESTER = $(NODE_PATH)/vows/bin/vows
 
 all: \
 	d3.js \
@@ -183,10 +184,14 @@ d3.geo.js: \
 	src/geo/geo.js \
 	src/geo/azimuthal.js \
 	src/geo/albers.js \
+	src/geo/bonne.js \
 	src/geo/equirectangular.js \
 	src/geo/mercator.js \
+	src/geo/type.js \
 	src/geo/path.js \
 	src/geo/bounds.js \
+	src/geo/circle.js \
+	src/geo/greatArc.js \
 	src/geo/greatCircle.js \
 	src/end.js
 
@@ -244,6 +249,10 @@ d3.js d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
+
+install:
+	mkdir -p node_modules
+	npm install
 
 package.json: d3.js
 	node src/package.js > $@
