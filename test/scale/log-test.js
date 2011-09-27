@@ -39,7 +39,11 @@ suite.addBatch({
       },
       "can specify negative domain values": function(log) {
         var x = log().domain([-100, -1]);
-        assert.deepEqual(x.ticks().map(x.tickFormat()), [-100, -90, -80, -70, -60, -50, -40, -30, -20, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1]);
+        assert.deepEqual(x.ticks().map(x.tickFormat()), [
+          "−1e+2",
+          "−9e+1", "−8e+1", "−7e+1", "−6e+1", "−5e+1", "−4e+1", "−3e+1", "−2e+1", "−1e+1",
+          "−9e+0", "−8e+0", "−7e+0", "−6e+0", "−5e+0", "−4e+0", "−3e+0", "−2e+0", "−1e+0"
+        ]);
         assert.inDelta(x(-50), 0.150515, 1e-6);
       },
       "can specify a polylog domain and range": function(log) {
@@ -143,9 +147,38 @@ suite.addBatch({
     "ticks": {
       "can generate ticks": function(log) {
         var x = log();
-        assert.deepEqual(x.ticks().map(x.tickFormat()), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+        assert.deepEqual(x.ticks().map(x.tickFormat()), [
+          "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "6e+0", "7e+0", "8e+0", "9e+0",
+          "1e+1"
+        ]);
         var x = log().domain([100, 1]);
-        assert.deepEqual(x.ticks().map(x.tickFormat()), [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]);
+        assert.deepEqual(x.ticks().map(x.tickFormat()), [
+          "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "6e+0", "7e+0", "8e+0", "9e+0",
+          "1e+1", "2e+1", "3e+1", "4e+1", "5e+1", "6e+1", "7e+1", "8e+1", "9e+1",
+          "1e+2"
+        ]);
+      },
+      "can generate fewer ticks, if desired": function(log) {
+        var x = log();
+        assert.deepEqual(x.ticks().map(x.tickFormat(5)), [
+          "1e+0", "2e+0", "3e+0", "4e+0", "", "", "", "", "",
+          "1e+1"
+        ]);
+        var x = log().domain([100, 1]);
+        assert.deepEqual(x.ticks().map(x.tickFormat(10)), [
+          "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "", "", "", "",
+          "1e+1", "2e+1", "3e+1", "4e+1", "5e+1", "", "", "", "",
+          "1e+2"
+        ]);
+      },
+      "can override the tick format": function(log) {
+        var x = log().domain([1000, 1]);
+        assert.deepEqual(x.ticks().map(x.tickFormat(10, d3.format("+,d"))), [
+          "+1", "+2", "+3", "", "", "", "", "", "",
+          "+10", "+20", "+30", "", "", "", "", "", "",
+          "+100", "+200", "+300", "", "", "", "", "", "",
+          "+1,000"
+        ]);
       }
     },
 
