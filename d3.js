@@ -3727,6 +3727,7 @@ d3.behavior.drag = function() {
   // snapshot the local context for subsequent dispatch
   function start() {
     d3_behavior_dragEvent = event;
+    d3_behavior_dragEventTarget = d3.event.target;
     d3_behavior_dragOffset = d3_behavior_dragPoint((d3_behavior_dragTarget = this).parentNode);
     d3_behavior_dragMoved = 0;
     d3_behavior_dragArguments = arguments;
@@ -3746,6 +3747,7 @@ d3.behavior.drag = function() {
 };
 
 var d3_behavior_dragEvent,
+    d3_behavior_dragEventTarget,
     d3_behavior_dragTarget,
     d3_behavior_dragArguments,
     d3_behavior_dragOffset,
@@ -3797,16 +3799,17 @@ function d3_behavior_dragUp() {
 
   // If the node was moved, prevent the mouseup from propagating.
   // Also prevent the subsequent click from propagating (e.g., for anchors).
-  if (d3_behavior_dragMoved) {
+  if (d3_behavior_dragMoved && d3_behavior_dragEventTarget === d3.event.target) {
     d3_behavior_dragStopClick = true;
     d3_behavior_dragCancel();
   }
 }
 
 function d3_behavior_dragClick() {
-  if (d3_behavior_dragStopClick) {
+  if (d3_behavior_dragStopClick && d3_behavior_dragEventTarget === d3.event.target) {
     d3_behavior_dragCancel();
     d3_behavior_dragStopClick = false;
+    d3_behavior_dragEventTarget = null;
   }
 }
 
@@ -3840,6 +3843,7 @@ d3.behavior.zoom = function() {
   function start() {
     d3_behavior_zoomXyz = xyz;
     d3_behavior_zoomDispatch = event.zoom.dispatch;
+    d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
     d3_behavior_zoomArguments = arguments;
   }
@@ -3892,6 +3896,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomLast = 0,
     d3_behavior_zoomXyz,
     d3_behavior_zoomDispatch,
+    d3_behavior_zoomEventTarget,
     d3_behavior_zoomTarget,
     d3_behavior_zoomArguments,
     d3_behavior_zoomMoved,
@@ -3982,17 +3987,20 @@ function d3_behavior_zoomMousemove() {
 
 function d3_behavior_zoomMouseup() {
   if (d3_behavior_zoomPanning) {
-    if (d3_behavior_zoomMoved) d3_behavior_zoomStopClick = true;
+    if (d3_behavior_zoomMoved && d3_behavior_zoomEventTarget === d3.event.target) {
+      d3_behavior_zoomStopClick = true;
+    }
     d3_behavior_zoomMousemove();
     d3_behavior_zoomPanning = null;
   }
 }
 
 function d3_behavior_zoomClick() {
-  if (d3_behavior_zoomStopClick) {
+  if (d3_behavior_zoomStopClick && d3_behavior_zoomEventTarget === d3.event.target) {
     d3.event.stopPropagation();
     d3.event.preventDefault();
     d3_behavior_zoomStopClick = false;
+    d3_behavior_zoomEventTarget = null;
   }
 }
 
