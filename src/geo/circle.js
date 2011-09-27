@@ -7,12 +7,7 @@ d3.geo.circle = function() {
       arc = d3.geo.greatArc().target(Object);
 
   function circle() {
-// TODO
-//     var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
-//     return d3_geo_greatCircleArc({
-//       source: [o[0] - 180, o[1] - degrees],
-//       target: [o[0] + 180, o[1] - degrees]
-//     });
+    // TODO render a circle as a Polygon
   }
 
   function visible(point) {
@@ -136,7 +131,7 @@ d3.geo.circle = function() {
 
   circle.angle = function(x) {
     if (!arguments.length) return degrees;
-    degrees = +x;
+    radians = (degrees = +x) * d3_geo_radians;
     return circle;
   };
 
