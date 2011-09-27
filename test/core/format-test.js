@@ -92,6 +92,7 @@ suite.addBatch({
       assert.strictEqual(f(-1.23), "−120%");
     },
     "can round to significant digits": function(format) {
+      assert.strictEqual(format(".2r")(0), "0.0");
       assert.strictEqual(format(".1r")(0.049), "0.05");
       assert.strictEqual(format(".1r")(0.49), "0.5");
       assert.strictEqual(format(".2r")(0.449), "0.45");
