@@ -1,7 +1,8 @@
 # See the README for installation instructions.
 
-JS_COMPILER = ./node_modules/uglify-js/bin/uglifyjs
-JS_TESTER = ./node_modules/vows/bin/vows
+NODE_PATH ?= ./node_modules
+JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
+JS_TESTER = $(NODE_PATH)/vows/bin/vows
 
 all: \
 	d3.js \
