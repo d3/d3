@@ -245,6 +245,7 @@ d3.layout.force = function() {
           node.py -= dy * k;
         }
       }
+      return !quad.charge;
     };
   }
 
