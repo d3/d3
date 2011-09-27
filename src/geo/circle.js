@@ -1,5 +1,4 @@
 // TODO breakAtDateLine?
-// TODO use 90 degrees rather than 89 degrees
 
 d3.geo.circle = function() {
   var origin = [0, 0],
@@ -16,11 +15,9 @@ d3.geo.circle = function() {
 //     });
   }
 
-// TODO
-//
-//   function visible(point) {
-//     return arc.distance(point) < radians;
-//   }
+  function visible(point) {
+    return arc.distance(point) < radians;
+  }
 
   circle.clip = function(d) {
     arc.source(typeof origin === "function" ? origin.apply(this, arguments) : origin);
@@ -39,19 +36,17 @@ d3.geo.circle = function() {
       return geometry && (o = Object.create(o), o.geometry = geometry, o);
     },
 
-// TODO
-//
-//     Point: function(o) {
-//       return visible(o.coordinates) && o;
-//     },
-//
-//     MultiPoint: function(o) {
-//       var coordinates = o.coordinates.filter(visible);
-//       return coordinates.length && {
-//         type: o.type,
-//         coordinates: coordinates
-//       };
-//     },
+    Point: function(o) {
+      return visible(o.coordinates) && o;
+    },
+
+    MultiPoint: function(o) {
+      var coordinates = o.coordinates.filter(visible);
+      return coordinates.length && {
+        type: o.type,
+        coordinates: coordinates
+      };
+    },
 
     LineString: function(o) {
       var coordinates = clip(o.coordinates);
