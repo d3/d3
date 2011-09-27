@@ -7,7 +7,7 @@ title: Bubble Chart
 
 <div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="bubble.css"/>
-<script type="text/javascript" src="../d3.layout.js?2.2.1"> </script>
+<script type="text/javascript" src="../d3.layout.js?2.3.0"> </script>
 <script type="text/javascript" src="bubble.js"> </script>
 
 Implementation based on work by [Jeff Heer](http://jheer.org/). Data shows the

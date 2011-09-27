@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.2.1"}; // semver
+d3 = {version: "2.3.0"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -530,7 +530,7 @@ var d3_format_types = {
   e: function(x, p) { return x.toExponential(p); },
   f: function(x, p) { return x.toFixed(p); },
   r: function(x, p) {
-    var n = 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10);
+    var n = x ? 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10) : 1;
     return d3.round(x, p - n).toFixed(Math.max(0, Math.min(20, p - n)));
   }
 };
@@ -2294,8 +2294,8 @@ function d3_scale_log(linear, log) {
     if (extent.every(isFinite)) {
       var i = Math.floor(extent[0]),
           j = Math.ceil(extent[1]),
-          u = pow(extent[0]),
-          v = pow(extent[1]);
+          u = Math.round(pow(extent[0])),
+          v = Math.round(pow(extent[1]));
       if (log === d3_scale_logn) {
         ticks.push(pow(i));
         for (; i++ < j;) for (var k = 9; k > 0; k--) ticks.push(pow(i) * k);
@@ -2310,8 +2310,15 @@ function d3_scale_log(linear, log) {
     return ticks;
   };
 
-  scale.tickFormat = function() {
-    return d3_scale_logTickFormat;
+  scale.tickFormat = function(n, format) {
+    if (arguments.length < 2) format = d3_scale_logFormat;
+    if (arguments.length < 1) return format;
+    var k = n / scale.ticks().length,
+        f = log === d3_scale_logn ? (e = -1e-15, Math.floor) : (e = 1e-15, Math.ceil),
+        e;
+    return function(d) {
+      return d / pow(f(log(d) + e)) < k ? format(d) : "";
+    };
   };
 
   scale.copy = function() {
@@ -2320,6 +2327,8 @@ function d3_scale_log(linear, log) {
 
   return d3_scale_linearRebind(scale, linear);
 };
+
+var d3_scale_logFormat = d3.format("e");
 
 function d3_scale_logp(x) {
   return Math.log(x) / Math.LN10;
@@ -2336,10 +2345,6 @@ d3_scale_logp.pow = function(x) {
 d3_scale_logn.pow = function(x) {
   return -Math.pow(10, -x);
 };
-
-function d3_scale_logTickFormat(d) {
-  return d.toPrecision(1);
-}
 d3.scale.pow = function() {
   return d3_scale_pow(d3.scale.linear(), 1);
 };
@@ -3727,6 +3732,7 @@ d3.behavior.drag = function() {
   // snapshot the local context for subsequent dispatch
   function start() {
     d3_behavior_dragEvent = event;
+    d3_behavior_dragEventTarget = d3.event.target;
     d3_behavior_dragOffset = d3_behavior_dragPoint((d3_behavior_dragTarget = this).parentNode);
     d3_behavior_dragMoved = 0;
     d3_behavior_dragArguments = arguments;
@@ -3746,6 +3752,7 @@ d3.behavior.drag = function() {
 };
 
 var d3_behavior_dragEvent,
+    d3_behavior_dragEventTarget,
     d3_behavior_dragTarget,
     d3_behavior_dragArguments,
     d3_behavior_dragOffset,
@@ -3797,16 +3804,17 @@ function d3_behavior_dragUp() {
 
   // If the node was moved, prevent the mouseup from propagating.
   // Also prevent the subsequent click from propagating (e.g., for anchors).
-  if (d3_behavior_dragMoved) {
+  if (d3_behavior_dragMoved && d3_behavior_dragEventTarget === d3.event.target) {
     d3_behavior_dragStopClick = true;
     d3_behavior_dragCancel();
   }
 }
 
 function d3_behavior_dragClick() {
-  if (d3_behavior_dragStopClick) {
+  if (d3_behavior_dragStopClick && d3_behavior_dragEventTarget === d3.event.target) {
     d3_behavior_dragCancel();
     d3_behavior_dragStopClick = false;
+    d3_behavior_dragEventTarget = null;
   }
 }
 
@@ -3840,6 +3848,7 @@ d3.behavior.zoom = function() {
   function start() {
     d3_behavior_zoomXyz = xyz;
     d3_behavior_zoomDispatch = event.zoom.dispatch;
+    d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
     d3_behavior_zoomArguments = arguments;
   }
@@ -3892,6 +3901,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomLast = 0,
     d3_behavior_zoomXyz,
     d3_behavior_zoomDispatch,
+    d3_behavior_zoomEventTarget,
     d3_behavior_zoomTarget,
     d3_behavior_zoomArguments,
     d3_behavior_zoomMoved,
@@ -3982,17 +3992,20 @@ function d3_behavior_zoomMousemove() {
 
 function d3_behavior_zoomMouseup() {
   if (d3_behavior_zoomPanning) {
-    if (d3_behavior_zoomMoved) d3_behavior_zoomStopClick = true;
+    if (d3_behavior_zoomMoved && d3_behavior_zoomEventTarget === d3.event.target) {
+      d3_behavior_zoomStopClick = true;
+    }
     d3_behavior_zoomMousemove();
     d3_behavior_zoomPanning = null;
   }
 }
 
 function d3_behavior_zoomClick() {
-  if (d3_behavior_zoomStopClick) {
+  if (d3_behavior_zoomStopClick && d3_behavior_zoomEventTarget === d3.event.target) {
     d3.event.stopPropagation();
     d3.event.preventDefault();
     d3_behavior_zoomStopClick = false;
+    d3_behavior_zoomEventTarget = null;
   }
 }
 
