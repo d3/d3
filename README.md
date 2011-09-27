@@ -45,7 +45,7 @@ developing on Mac OS X, an easy way to install Node and NPM is using
 
 Next, from the root directory of this repository, install D3's dependencies:
 
-    npm install
+    make install
 
-You can see the list of dependencies in package.json. Npm will install the
-packages in your $NODE_PATH, or in the node_modules directory, if unset.
+You can see the list of dependencies in package.json. NPM will install the
+packages in the node_modules directory.

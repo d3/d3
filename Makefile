@@ -246,6 +246,10 @@ d3.js d3%.js: Makefile
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
 
+install:
+	mkdir -p node_modules
+	npm install
+
 package.json: d3.js
 	node src/package.js > $@
 
