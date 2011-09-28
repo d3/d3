@@ -75,6 +75,36 @@ suite.addBatch({
     }
   },
 
+  "Bonne at 40° parallel with non-zero origin": {
+    topic: function() {
+      return d3.geo.bonne().parallel(40).origin([13, 17]);
+    },
+    "Arctic": function(bonne) {
+      var lonlat = [0, 85],
+          coords = bonne(lonlat);
+      assert.inDelta(coords, [380.528803, 49.218092], 1e-6);
+      assert.inDelta(bonne.invert(coords), lonlat, 1e-6);
+    },
+    "Antarctic": function(bonne) {
+      var lonlat = [0, -85],
+          coords = bonne(lonlat);
+      assert.inDelta(coords, [476.077063, 627.328061], 1e-6);
+      assert.inDelta(bonne.invert(coords), lonlat, 1e-6);
+    },
+    "Hawaii": function(bonne) {
+      var lonlat = [-180, 0],
+          coords = bonne(lonlat);
+      assert.inDelta(coords, [897.200976, 137.442637], 1e-6);
+      assert.inDelta(bonne.invert(coords), [180, 0], 1e-6);
+    },
+    "Phillipines": function(bonne) {
+      var lonlat = [180, 0],
+          coords = bonne(lonlat);
+      assert.inDelta(coords, [897.200976, 137.442637], 1e-6);
+      assert.inDelta(bonne.invert(coords), lonlat, 1e-6);
+    }
+  },
+
   "Werner": {
     topic: function() {
       return d3.geo.bonne().parallel(90);
