@@ -83,6 +83,25 @@ suite.addBatch({
     },
     "returns the current selection": function(body) {
       assert.isTrue(body.classed("foo", true) === body);
+    },
+    "adds missing classes as true": function(body) {
+      body.attr("class", null);
+      body.classed("foo bar", true);
+      assert.equal(document.body.className, "foo bar");
+    },
+    "gets existing classes": function(body) {
+      body.attr("class", " foo\tbar  baz");
+      assert.isTrue(body.classed("foo"));
+      assert.isTrue(body.classed("foo bar"));
+      assert.isTrue(body.classed("bar baz"));
+      assert.isTrue(body.classed("foo bar baz"));
+    },
+    "does not get missing classes": function(body) {
+      body.attr("class", " foo\tbar  baz");
+      assert.isFalse(body.classed("foob"));
+      assert.isFalse(body.classed("foob bar"));
+      assert.isFalse(body.classed("bar baz blah"));
+      assert.isFalse(body.classed("foo bar baz moo"));
     }
   }
 });
