@@ -3,6 +3,11 @@
 d3_selectionPrototype.on = function(type, listener, capture) {
   if (arguments.length < 3) capture = false;
 
+  if (typeof type === "object") {
+    for (var t in type) this.on(t, type[t], capture);
+    return this;
+  }
+
   // parse the type specifier
   var name = "__on" + type, i = type.indexOf(".");
   if (i > 0) type = type.substring(0, i);

@@ -43,6 +43,16 @@ suite.addBatch({
       assert.equal(foo, 1);
       assert.equal(bar, 1);
     },
+    "registers event listeners for the specified map of types": function(body) {
+      var form = body.append("form"), foo = 0, bar = 0;
+      form.on({
+        "submit.foo": function() { ++foo; },
+        "submit.bar": function() { ++bar; }
+      });
+      form.append("input").attr("type", "submit").node().click();
+      assert.equal(foo, 1);
+      assert.equal(bar, 1);
+    },
     /*
     Not really sure how to test this one…
     "observes the specified capture flag": function(body) {
