@@ -11,9 +11,9 @@ d3.geo.bonne = function() {
     var x = coordinates[0] * d3_geo_radians - x0,
         y = coordinates[1] * d3_geo_radians;
     if (y0) {
-      var r = rotate([x, y]);
-      x = r[0];
-      y = r[1];
+      var r = rotate([x / d3_geo_radians, y / d3_geo_radians]);
+      x = r[0] * d3_geo_radians;
+      y = r[1] * d3_geo_radians;
     }
     if (y1) {
       var p = c1 + y1 - y,
@@ -42,9 +42,9 @@ d3.geo.bonne = function() {
       x /= Math.cos(y);
     }
     if (y0) {
-      var r = rotate.invert([x, y]);
-      x = r[0];
-      y = r[1];
+      var r = rotate.invert([x / d3_geo_radians, y / d3_geo_radians]);
+      x = r[0] * d3_geo_radians;
+      y = r[1] * d3_geo_radians;
     }
     return [
       (x + x0) / d3_geo_radians,
@@ -63,7 +63,7 @@ d3.geo.bonne = function() {
     if (!arguments.length) return [x0 / d3_geo_radians, y0 / d3_geo_radians];
     x0 = x[0] * d3_geo_radians;
     y0 = x[1] * d3_geo_radians;
-    if (y0) rotate = d3.geo.rotate().y(y0);
+    if (y0) rotate = d3.geo.rotate().y(x[1]);
     return bonne;
   };
 
