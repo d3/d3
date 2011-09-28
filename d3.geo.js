@@ -64,12 +64,16 @@ d3.geo.rotate = function() {
         s = Math.sin(angle),
         my = m[1],
         mz = m[2],
+        my0 = my[0],
         my1 = my[1],
         my2 = my[2],
+        mz0 = mz[0],
         mz1 = mz[1],
         mz2 = mz[2];
+    my[0] = c * my0 - s * mz0;
     my[1] = c * my1 - s * mz1;
     my[2] = c * my2 - s * mz2;
+    mz[0] = s * my0 + c * mz0;
     mz[1] = s * my1 + c * mz1;
     mz[2] = s * my2 + c * mz2;
     return rotate;
@@ -83,12 +87,16 @@ d3.geo.rotate = function() {
         mx = m[0],
         mz = m[2],
         mx0 = mx[0],
+        mx1 = mx[1],
         mx2 = mx[2],
         mz0 = mz[0],
+        mz1 = mz[1],
         mz2 = mz[2];
     mx[0] = c * mx0 - s * mz0;
+    mx[1] = c * mx1 - s * mz1;
     mx[2] = c * mx2 - s * mz2;
     mz[0] = s * mx0 + c * mz0;
+    mz[1] = s * mx1 + c * mz1;
     mz[2] = s * mx2 + c * mz2;
     return rotate;
   };
@@ -102,12 +110,16 @@ d3.geo.rotate = function() {
         my = m[1],
         mx0 = mx[0],
         mx1 = mx[1],
+        mx2 = mx[2],
         my0 = my[0],
-        my1 = my[1];
+        my1 = my[1],
+        my2 = my[2];
     mx[0] = c * mx0 - s * my0;
     mx[1] = c * mx1 - s * my1;
+    mx[2] = c * mx2 - s * my2;
     my[0] = s * mx0 + c * my0;
     my[1] = s * mx1 + c * my1;
+    my[2] = s * mx2 + c * my2;
     return rotate;
   };
 

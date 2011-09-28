@@ -14,7 +14,7 @@ suite.addBatch({
     },
     "project(invert(point)) equals point": function(rotate) {
       for (var i = -1; i < 20; ++i) {
-        var point = [Math.random() * 700 + 100, Math.random() * 400 + 50];
+        var point = [Math.random() * 10 + 100, Math.random() * 10 + 50];
         assert.inDelta(point, rotate(rotate.invert(point)), 1e-6);
       }
     }
