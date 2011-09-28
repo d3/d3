@@ -1,24 +1,19 @@
 d3.geo.bonne = function() {
   var scale = 200,
       translate = [480, 250],
+      rotate = null,
       x0, // origin longitude in radians
       y0, // origin latitude in radians
       y1, // parallel latitude in radians
-      s0, // sin(y0)
-      c0, // cos(y0)
       c1; // cot(y1)
 
   function bonne(coordinates) {
     var x = coordinates[0] * d3_geo_radians - x0,
         y = coordinates[1] * d3_geo_radians;
     if (y0) {
-      // Rotate about Cartesian y-axis.
-      var sx = Math.sin(x),
-          cy = Math.cos(y),
-          sy = Math.sin(y),
-          X = Math.cos(x) * cy;
-      x = Math.atan2(sx * cy, -s0 * sy + c0 * X);
-      y = Math.asin(c0 * sy + s0 * X);
+      var r = rotate([x, y]);
+      x = r[0];
+      y = r[1];
     }
     if (y1) {
       var p = c1 + y1 - y,
@@ -47,13 +42,9 @@ d3.geo.bonne = function() {
       x /= Math.cos(y);
     }
     if (y0) {
-      // Rotate about Cartesian y-axis.
-      var sx = Math.sin(x),
-          cy = Math.cos(y),
-          sy = Math.sin(y),
-          X = Math.cos(x) * cy;
-      x = Math.atan2(sx * cy, s0 * sy + c0 * X);
-      y = Math.asin(c0 * sy - s0 * X);
+      var r = rotate.invert([x, y]);
+      x = r[0];
+      y = r[1];
     }
     return [
       (x + x0) / d3_geo_radians,
@@ -72,8 +63,7 @@ d3.geo.bonne = function() {
     if (!arguments.length) return [x0 / d3_geo_radians, y0 / d3_geo_radians];
     x0 = x[0] * d3_geo_radians;
     y0 = x[1] * d3_geo_radians;
-    s0 = Math.sin(y0);
-    c0 = Math.cos(y0);
+    if (y0) rotate = d3.geo.rotate().y(y0);
     return bonne;
   };
 
