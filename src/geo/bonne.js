@@ -1,20 +1,15 @@
 d3.geo.bonne = function() {
   var scale = 200,
       translate = [480, 250],
-      rotate = null,
-      x0, // origin longitude in radians
-      y0, // origin latitude in radians
+      rotate = d3.geo.rotate(),
+      origin, // origin in degrees
       y1, // parallel latitude in radians
       c1; // cot(y1)
 
   function bonne(coordinates) {
-    var x = coordinates[0] * d3_geo_radians - x0,
+    coordinates = rotate(coordinates);
+    var x = coordinates[0] * d3_geo_radians,
         y = coordinates[1] * d3_geo_radians;
-    if (y0) {
-      var r = rotate([x / d3_geo_radians, y / d3_geo_radians]);
-      x = r[0] * d3_geo_radians;
-      y = r[1] * d3_geo_radians;
-    }
     if (y1) {
       var p = c1 + y1 - y,
           E = x * Math.cos(y) / p;
@@ -41,15 +36,7 @@ d3.geo.bonne = function() {
       y *= -1;
       x /= Math.cos(y);
     }
-    if (y0) {
-      var r = rotate.invert([x / d3_geo_radians, y / d3_geo_radians]);
-      x = r[0] * d3_geo_radians;
-      y = r[1] * d3_geo_radians;
-    }
-    return [
-      (x + x0) / d3_geo_radians,
-      y / d3_geo_radians
-    ];
+    return rotate.invert([x / d3_geo_radians, y / d3_geo_radians]);
   };
 
   // 90° for Werner, 0° for Sinusoidal
@@ -60,10 +47,9 @@ d3.geo.bonne = function() {
   };
 
   bonne.origin = function(x) {
-    if (!arguments.length) return [x0 / d3_geo_radians, y0 / d3_geo_radians];
-    x0 = x[0] * d3_geo_radians;
-    y0 = x[1] * d3_geo_radians;
-    if (y0) rotate = d3.geo.rotate().y(x[1]);
+    if (!arguments.length) return origin;
+    origin = [+x[0], +x[1]];
+    rotate = d3.geo.rotate().z(-origin[0]).y(origin[1]);
     return bonne;
   };
 

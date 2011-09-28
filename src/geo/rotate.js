@@ -1,11 +1,13 @@
 d3.geo.rotate = function() {
-  var m = [
-    [1, 0, 0],
-    [0, 1, 0],
-    [0, 0, 1]
-  ];
+  var m = [[1, 0, 0],
+           [0, 1, 0],
+           [0, 0, 1]],
+      zAngle = 0;
 
   function rotate(coordinates) {
+    if (zAngle != null) {
+      return zAngle ? [coordinates[0] + zAngle, coordinates[1]] : coordinates;
+    }
     var lon = coordinates[0] * d3_geo_radians,
         lat = coordinates[1] * d3_geo_radians,
         s0 = Math.sin(lon),
@@ -28,6 +30,9 @@ d3.geo.rotate = function() {
   }
 
   rotate.invert = function(coordinates) {
+    if (zAngle != null) {
+      return zAngle ? [coordinates[0] - zAngle, coordinates[1]] : coordinates;
+    }
     var lon = coordinates[0] * d3_geo_radians,
         lat = coordinates[1] * d3_geo_radians,
         s0 = Math.sin(lon),
@@ -40,8 +45,8 @@ d3.geo.rotate = function() {
         mx = m[0],
         my = m[1],
         mz = m[2],
-        rx = x * mx[0] + y * my[0] + z * mz[0];
-        ry = x * mx[1] + y * my[1] + z * mz[1];
+        rx = x * mx[0] + y * my[0] + z * mz[0],
+        ry = x * mx[1] + y * my[1] + z * mz[1],
         rz = x * mx[2] + y * my[2] + z * mz[2];
     return [
       Math.atan2(ry, rx) / d3_geo_radians,
@@ -50,8 +55,10 @@ d3.geo.rotate = function() {
   };
 
   rotate.x = function(angle) {
-    var c = Math.cos(angle * d3_geo_radians),
-        s = Math.sin(angle * d3_geo_radians),
+    if (angle === 0) return rotate;
+    zAngle = null;
+    var c = Math.cos(angle *= d3_geo_radians),
+        s = Math.sin(angle),
         my = m[1],
         mz = m[2],
         my1 = my[1],
@@ -66,8 +73,10 @@ d3.geo.rotate = function() {
   };
 
   rotate.y = function(angle) {
-    var c = Math.cos(angle * d3_geo_radians),
-        s = Math.sin(angle * d3_geo_radians);
+    if (angle === 0) return rotate;
+    zAngle = null;
+    var c = Math.cos(angle *= d3_geo_radians),
+        s = Math.sin(angle),
         mx = m[0],
         mz = m[2],
         mx0 = mx[0],
@@ -82,8 +91,10 @@ d3.geo.rotate = function() {
   };
 
   rotate.z = function(angle) {
-    var c = Math.cos(angle * d3_geo_radians),
-        s = Math.sin(angle * d3_geo_radians);
+    if (angle === 0) return rotate;
+    if (zAngle != null) zAngle = angle;
+    var c = Math.cos(angle *= d3_geo_radians),
+        s = Math.sin(angle),
         mx = m[0],
         my = m[1],
         mx0 = mx[0],

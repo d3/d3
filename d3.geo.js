@@ -2,13 +2,15 @@
 
 var d3_geo_radians = Math.PI / 180;
 d3.geo.rotate = function() {
-  var m = [
-    [1, 0, 0],
-    [0, 1, 0],
-    [0, 0, 1]
-  ];
+  var m = [[1, 0, 0],
+           [0, 1, 0],
+           [0, 0, 1]],
+      zAngle = 0;
 
   function rotate(coordinates) {
+    if (zAngle != null) {
+      return zAngle ? [coordinates[0] + zAngle, coordinates[1]] : coordinates;
+    }
     var lon = coordinates[0] * d3_geo_radians,
         lat = coordinates[1] * d3_geo_radians,
         s0 = Math.sin(lon),
@@ -31,6 +33,9 @@ d3.geo.rotate = function() {
   }
 
   rotate.invert = function(coordinates) {
+    if (zAngle != null) {
+      return zAngle ? [coordinates[0] - zAngle, coordinates[1]] : coordinates;
+    }
     var lon = coordinates[0] * d3_geo_radians,
         lat = coordinates[1] * d3_geo_radians,
         s0 = Math.sin(lon),
@@ -43,8 +48,8 @@ d3.geo.rotate = function() {
         mx = m[0],
         my = m[1],
         mz = m[2],
-        rx = x * mx[0] + y * my[0] + z * mz[0];
-        ry = x * mx[1] + y * my[1] + z * mz[1];
+        rx = x * mx[0] + y * my[0] + z * mz[0],
+        ry = x * mx[1] + y * my[1] + z * mz[1],
         rz = x * mx[2] + y * my[2] + z * mz[2];
     return [
       Math.atan2(ry, rx) / d3_geo_radians,
@@ -53,8 +58,10 @@ d3.geo.rotate = function() {
   };
 
   rotate.x = function(angle) {
-    var c = Math.cos(angle * d3_geo_radians),
-        s = Math.sin(angle * d3_geo_radians),
+    if (angle === 0) return rotate;
+    zAngle = null;
+    var c = Math.cos(angle *= d3_geo_radians),
+        s = Math.sin(angle),
         my = m[1],
         mz = m[2],
         my1 = my[1],
@@ -69,8 +76,10 @@ d3.geo.rotate = function() {
   };
 
   rotate.y = function(angle) {
-    var c = Math.cos(angle * d3_geo_radians),
-        s = Math.sin(angle * d3_geo_radians);
+    if (angle === 0) return rotate;
+    zAngle = null;
+    var c = Math.cos(angle *= d3_geo_radians),
+        s = Math.sin(angle),
         mx = m[0],
         mz = m[2],
         mx0 = mx[0],
@@ -85,8 +94,10 @@ d3.geo.rotate = function() {
   };
 
   rotate.z = function(angle) {
-    var c = Math.cos(angle * d3_geo_radians),
-        s = Math.sin(angle * d3_geo_radians);
+    if (angle === 0) return rotate;
+    if (zAngle != null) zAngle = angle;
+    var c = Math.cos(angle *= d3_geo_radians),
+        s = Math.sin(angle),
         mx = m[0],
         my = m[1],
         mx0 = mx[0],
@@ -311,20 +322,15 @@ d3.geo.albersUsa = function() {
 d3.geo.bonne = function() {
   var scale = 200,
       translate = [480, 250],
-      rotate = null,
-      x0, // origin longitude in radians
-      y0, // origin latitude in radians
+      rotate = d3.geo.rotate(),
+      origin, // origin in degrees
       y1, // parallel latitude in radians
       c1; // cot(y1)
 
   function bonne(coordinates) {
-    var x = coordinates[0] * d3_geo_radians - x0,
+    coordinates = rotate(coordinates);
+    var x = coordinates[0] * d3_geo_radians,
         y = coordinates[1] * d3_geo_radians;
-    if (y0) {
-      var r = rotate([x / d3_geo_radians, y / d3_geo_radians]);
-      x = r[0] * d3_geo_radians;
-      y = r[1] * d3_geo_radians;
-    }
     if (y1) {
       var p = c1 + y1 - y,
           E = x * Math.cos(y) / p;
@@ -351,15 +357,7 @@ d3.geo.bonne = function() {
       y *= -1;
       x /= Math.cos(y);
     }
-    if (y0) {
-      var r = rotate.invert([x / d3_geo_radians, y / d3_geo_radians]);
-      x = r[0] * d3_geo_radians;
-      y = r[1] * d3_geo_radians;
-    }
-    return [
-      (x + x0) / d3_geo_radians,
-      y / d3_geo_radians
-    ];
+    return rotate.invert([x / d3_geo_radians, y / d3_geo_radians]);
   };
 
   // 90° for Werner, 0° for Sinusoidal
@@ -370,10 +368,9 @@ d3.geo.bonne = function() {
   };
 
   bonne.origin = function(x) {
-    if (!arguments.length) return [x0 / d3_geo_radians, y0 / d3_geo_radians];
-    x0 = x[0] * d3_geo_radians;
-    y0 = x[1] * d3_geo_radians;
-    if (y0) rotate = d3.geo.rotate().y(x[1]);
+    if (!arguments.length) return origin;
+    origin = [+x[0], +x[1]];
+    rotate = d3.geo.rotate().z(-origin[0]).y(origin[1]);
     return bonne;
   };
 
