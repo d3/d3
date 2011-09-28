@@ -69,6 +69,58 @@ suite.addBatch({
       body.classed("bar", function() { return false; });
       assert.equal(document.body.className, "");
     },
+    "adds missing classes as a map of truth": function(body) {
+      body.attr("class", null);
+      body.classed({"foo": true, "bar": true});
+      assert.equal(document.body.className, "foo bar");
+    },
+    "adds missing classes as a map of functions": function(body) {
+      body.attr("class", null);
+      body.classed({
+        "foo": function() { return true; },
+        "bar": function() { return true; }
+      });
+      assert.equal(document.body.className, "foo bar");
+    },
+    "removes existing classes as a map of false": function(body) {
+      body.attr("class", "bar foo");
+      body.classed({"foo": false, "bar": false});
+      assert.equal(document.body.className, "");
+    },
+    "removes existing classes as a map of functions": function(body) {
+      body.attr("class", "bar foo");
+      body.classed({
+        "foo": function() { return false; },
+        "bar": function() { return false; }
+      });
+      assert.equal(document.body.className, "");
+    },
+    "preserves existing classes as a map of truth": function(body) {
+      body.attr("class", "bar foo");
+      body.classed({"foo": true, "bar": true});
+      assert.equal(document.body.className, "bar foo");
+    },
+    "preserves existing classes as a map of functions": function(body) {
+      body.attr("class", "bar foo");
+      body.classed({
+        "foo": function() { return true; },
+        "bar": function() { return true; }
+      });
+      assert.equal(document.body.className, "bar foo");
+    },
+    "preserves missing classes as a map of false": function(body) {
+      body.attr("class", "baz");
+      body.classed({"foo": false, "bar": false});
+      assert.equal(document.body.className, "baz");
+    },
+    "preserves missing classes as a map of functions": function(body) {
+      body.attr("class", "baz");
+      body.classed({
+        "foo": function() { return false; },
+        "bar": function() { return false; }
+      });
+      assert.equal(document.body.className, "baz");
+    },
     "gets an existing class": function(body) {
       body.attr("class", " foo\tbar  baz");
       assert.isTrue(body.classed("foo"));
@@ -83,6 +135,9 @@ suite.addBatch({
     },
     "returns the current selection": function(body) {
       assert.isTrue(body.classed("foo", true) === body);
+    },
+    "returns the current selection when using a map": function(body) {
+      assert.isTrue(body.classed({"foo": true}) === body);
     }
   }
 });

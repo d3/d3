@@ -1325,6 +1325,11 @@ function d3_selection_attr(name, value) {
       : (name.local ? attrConstantNS : attrConstant));
 }
 d3_selectionPrototype.classed = function(name, value) {
+  if (typeof name === "object") {
+    for (value in name) this.classed(value, name[value]);
+    return this;
+  }
+
   var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
 
   // If no value is specified, return the first value.
