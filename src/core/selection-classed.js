@@ -7,9 +7,8 @@ d3_selectionPrototype.classed = function(name, value) {
       while (++i < n) d3_selection_classed.call(this, names[i], value);
       return this;
     } else {
-      value = true;
-      while (++i < n) value = value && d3_selection_classed.call(this, names[i]);
-      return value;
+      while (++i < n) if (!d3_selection_classed.call(this, names[i])) return false;
+      return true;
     }
   }
   return d3_selection_classed.apply(this, arguments);
