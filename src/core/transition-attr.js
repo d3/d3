@@ -1,4 +1,8 @@
 d3_transitionPrototype.attr = function(name, value) {
+  if (typeof name === "object") {
+    for (value in name) this.attr(value, name[value]);
+    return this;
+  }
   return this.attrTween(name, d3_transitionTween(value));
 };
 
