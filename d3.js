@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.3.0"}; // semver
+d3 = {version: "2.3.1"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -1899,6 +1899,7 @@ d3_transitionPrototype.select = function(selector) {
 d3_transitionPrototype.selectAll = function(selector) {
   var subgroups = [],
       subgroup,
+      subnodes,
       node;
 
   if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
@@ -1906,9 +1907,10 @@ d3_transitionPrototype.selectAll = function(selector) {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroups.push(subgroup = selector.call(node.node, node.node.__data__, i));
-        for (var k = -1, o = subgroup.length; ++k < o;) {
-          subgroup[k] = {node: subgroup[k], delay: node.delay, duration: node.duration};
+        subnodes = selector.call(node.node, node.node.__data__, i);
+        subgroups.push(subgroup = []);
+        for (var k = -1, o = subnodes.length; ++k < o;) {
+          subgroup.push({node: subnodes[k], delay: node.delay, duration: node.duration});
         }
       }
     }
