@@ -14,12 +14,11 @@ suite.addBatch({
       assert.deepEqual(tree.nodes({children: []}).map(layout), [
         {depth: 0, x: 0.5, y: 0}
       ]);
-      var result = tree.nodes({children: [
+      assert.deepEqual(tree.nodes({children: [
         {children: []},
         {children: [{}]},
         {children: [{}]}
-      ]}).map(layout);
-      assert.deepEqual(result, [
+      ]}).map(layout), [
         {depth: 0, x: .5,   y: 0},
         {depth: 1, x: .125, y: 0.5},
         {depth: 1, x: .375, y: 0.5},
