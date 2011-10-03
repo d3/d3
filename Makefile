@@ -245,7 +245,12 @@ test: all
 	@rm -f $@
 	$(JS_COMPILER) < $< > $@
 
-d3.js d3%.js: Makefile
+d3.js: Makefile
+	@rm -f $@
+	cat $(filter %.js,$^) > $@
+	@chmod a-w $@
+
+d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
