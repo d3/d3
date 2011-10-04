@@ -1,6 +1,7 @@
 d3.geo.bonne = function() {
   var scale = 200,
       translate = [480, 250],
+      geotranslate = geotranslate_ = [0, 0],
       x0, // origin longitude in radians
       y0, // origin latitude in radians
       y1, // parallel latitude in radians
@@ -18,14 +19,14 @@ d3.geo.bonne = function() {
       y *= -1;
     }
     return [
-      scale * x + translate[0],
-      scale * y + translate[1]
+      scale * x + translate[0] - geotranslate_[0],
+      scale * y + translate[1] - geotranslate_[1]
     ];
   }
 
   bonne.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
+    var x = (coordinates[0] - translate[0] + geotranslate_[0]) / scale,
+        y = (coordinates[1] - translate[1] + geotranslate_[1]) / scale;
     if (y1) {
       var c = c1 + y, p = Math.sqrt(x * x + c * c);
       y = c1 + y1 - p;
@@ -57,12 +58,26 @@ d3.geo.bonne = function() {
   bonne.scale = function(x) {
     if (!arguments.length) return scale;
     scale = +x;
+    geotranslate_ = [0, 0];
+    if(geotranslate[0] != 0 && geotranslate[1] != 0) {
+        geotranslate_ = this(geotranslate);
+    }
     return bonne;
   };
 
   bonne.translate = function(x) {
     if (!arguments.length) return translate;
     translate = [+x[0], +x[1]];
+    return bonne;
+  };
+
+  bonne.geotranslate = function(x) {
+    if (!arguments.length) return geotranslate;
+    geotranslate = [+x[0], +x[1]];
+    geotranslate_ = [0, 0];
+    if(geotranslate[0] != 0 && geotranslate[1] != 0) {
+        geotranslate_ = this(geotranslate);
+    }
     return bonne;
   };
 
