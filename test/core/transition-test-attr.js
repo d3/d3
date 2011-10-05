@@ -8,10 +8,12 @@ module.exports = {
     var cb = this.callback;
 
     var s = d3.select("body").append("div")
+        .attr("display", "none")
         .attr("width", 20)
         .attr("color", "red");
 
     var t = s.transition()
+        .attr("display", null)
         .attr("width", 100)
         .attr("width", 200)
         .attr("color", function() { return "green"; })
@@ -29,5 +31,8 @@ module.exports = {
   },
   "sets an attribute as a function": function(result) {
     assert.equal(result.selection.attr("color"), "rgb(0,128,0)");
+  },
+  "removes an attribute": function(result) {
+    assert.equal(result.selection.attr("display"), "");
   }
 };
