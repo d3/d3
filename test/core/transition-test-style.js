@@ -9,9 +9,11 @@ module.exports = {
 
     var s = d3.select("body").append("div")
         .style("background-color", "white")
-        .style("color", "red");
+        .style("color", "red")
+        .style("display", "none");
 
     var t = s.transition()
+        .style("display", null)
         .style("background-color", "green")
         .style("background-color", "red")
         .style("color", function() { return "green"; }, "important")
@@ -34,5 +36,8 @@ module.exports = {
     var style = result.selection.node().style;
     assert.equal(style.getPropertyPriority("background-color"), "");
     assert.equal(style.getPropertyPriority("color"), "important");
+  },
+  "removes a style": function(result) {
+    assert.equal(result.selection.style("display"), "");
   }
 };
