@@ -87,8 +87,8 @@ function d3_transition(groups, id) {
 
 var d3_transitionRemove = {};
 
-function d3_transitionNull() {
-  return d3_transitionRemove;
+function d3_transitionNull(d, i, a) {
+  if (a != "") return d3_transitionRemove;
 }
 
 function d3_transitionTween(b) {
