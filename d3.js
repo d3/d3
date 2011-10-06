@@ -1942,14 +1942,15 @@ d3_transitionPrototype.attrTween = function(nameNS, tween) {
 
   function attrTween(d, i) {
     var f = tween.call(this, d, i, this.getAttribute(name));
-    return f === d3_transitionRemove ? this.removeAttribute(name)
+    return f === d3_transitionRemove
+      ? (this.removeAttribute(name), null)
       : f && function(t) { this.setAttribute(name, f(t)); };
   }
 
   function attrTweenNS(d, i) {
     var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
     return f === d3_transitionRemove
-      ? (this.removeAttributeNS(name.space, name.local), null) // TODO remove workaround for JSDOM
+      ? (this.removeAttributeNS(name.space, name.local), null)
       : f && function(t) { this.setAttributeNS(name.space, name.local, f(t)); };
   }
 
@@ -1964,10 +1965,9 @@ d3_transitionPrototype.styleTween = function(name, tween, priority) {
   if (arguments.length < 3) priority = "";
   return this.tween("style." + name, function(d, i) {
     var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-    if (f !== d3_transitionRemove) {
-      return f && function(t) { this.style.setProperty(name, f(t), priority); };
-    }
-    this.style.removeProperty(name);
+    return f === d3_transitionRemove
+      ? (this.style.removeProperty(name), null)
+      : f && function(t) { this.style.setProperty(name, f(t), priority); };
   });
 };
 d3_transitionPrototype.text = function(value) {
