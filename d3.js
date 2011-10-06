@@ -1859,19 +1859,22 @@ function d3_transition(groups, id) {
 var d3_transitionRemove = {};
 
 function d3_transitionNull(d, i, a) {
-  if (a != "") return d3_transitionRemove;
+  return a != "" && d3_transitionRemove;
 }
 
 function d3_transitionTween(b) {
-  return typeof b === "function"
-      ? function(d, i, a) {
-        var v = b.call(this, d, i);
-        if (v == null) {
-          if (a != "") return d3_transitionRemove;
-        } else return a != v && d3.interpolate(a, v);
-      }
+  function transitionFunction(d, i, a) {
+    var v = b.call(this, d, i);
+    return v == null
+        ? a != "" && d3_transitionRemove
+        : a != v && d3.interpolate(a, v);
+  }
+  function transitionString(d, i, a) {
+    return a != b && d3.interpolate(a, b);
+  }
+  return typeof b === "function" ? transitionFunction
       : b == null ? d3_transitionNull
-      : (b = b + "", function(d, i, a) { return a != b && d3.interpolate(a, b); });
+      : (b += "", transitionString);
 }
 
 var d3_transitionPrototype = [],
@@ -1934,25 +1937,23 @@ d3_transitionPrototype.attr = function(name, value) {
   return this.attrTween(name, d3_transitionTween(value));
 };
 
-d3_transitionPrototype.attrTween = function(name, tween) {
-  name = d3.ns.qualify(name);
+d3_transitionPrototype.attrTween = function(nameNS, tween) {
+  var name = d3.ns.qualify(nameNS);
 
   function attrTween(d, i) {
     var f = tween.call(this, d, i, this.getAttribute(name));
-    if (f === d3_transitionRemove) this.removeAttribute(name);
-    else return f && function(t) {
-      this.setAttribute(name, f(t));
-    };
+    return f === d3_transitionRemove ? this.removeAttribute(name)
+      : f && function(t) { this.setAttribute(name, f(t)); };
   }
 
   function attrTweenNS(d, i) {
     var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
-    return f && function(t) {
-      this.setAttributeNS(name.space, name.local, f(t));
-    };
+    return f === d3_transitionRemove
+      ? (this.removeAttributeNS(name.space, name.local), null) // TODO remove workaround for JSDOM
+      : f && function(t) { this.setAttributeNS(name.space, name.local, f(t)); };
   }
 
-  return this.tween("attr." + name, name.local ? attrTweenNS : attrTween);
+  return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
 };
 d3_transitionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = "";
@@ -1963,10 +1964,10 @@ d3_transitionPrototype.styleTween = function(name, tween, priority) {
   if (arguments.length < 3) priority = "";
   return this.tween("style." + name, function(d, i) {
     var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-    if (f === d3_transitionRemove) this.style.removeProperty(name);
-    else return f && function(t) {
-      this.style.setProperty(name, f(t), priority);
-    };
+    if (f !== d3_transitionRemove) {
+      return f && function(t) { this.style.setProperty(name, f(t), priority); };
+    }
+    this.style.removeProperty(name);
   });
 };
 d3_transitionPrototype.text = function(value) {

@@ -88,19 +88,22 @@ function d3_transition(groups, id) {
 var d3_transitionRemove = {};
 
 function d3_transitionNull(d, i, a) {
-  if (a != "") return d3_transitionRemove;
+  return a != "" && d3_transitionRemove;
 }
 
 function d3_transitionTween(b) {
-  return typeof b === "function"
-      ? function(d, i, a) {
-        var v = b.call(this, d, i);
-        if (v == null) {
-          if (a != "") return d3_transitionRemove;
-        } else return a != v && d3.interpolate(a, v);
-      }
+  function transitionFunction(d, i, a) {
+    var v = b.call(this, d, i);
+    return v == null
+        ? a != "" && d3_transitionRemove
+        : a != v && d3.interpolate(a, v);
+  }
+  function transitionString(d, i, a) {
+    return a != b && d3.interpolate(a, b);
+  }
+  return typeof b === "function" ? transitionFunction
       : b == null ? d3_transitionNull
-      : (b = b + "", function(d, i, a) { return a != b && d3.interpolate(a, b); });
+      : (b += "", transitionString);
 }
 
 var d3_transitionPrototype = [],
