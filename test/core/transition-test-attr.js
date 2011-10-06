@@ -9,10 +9,13 @@ module.exports = {
 
     var s = d3.select("body").append("div")
         .attr("display", "none")
+        .attr("font-size", "20px")
         .attr("width", 20)
         .attr("color", "red");
 
     var t = s.transition()
+        .attr("display", null)
+        .attr("font-size", function() { return null; })
         .attr("display", null)
         .attr("width", 100)
         .attr("width", 200)
@@ -32,7 +35,10 @@ module.exports = {
   "sets an attribute as a function": function(result) {
     assert.equal(result.selection.attr("color"), "rgb(0,128,0)");
   },
-  "removes an attribute": function(result) {
+  "removes an attribute using a constant null": function(result) {
     assert.equal(result.selection.attr("display"), "");
+  },
+  "removes an attribute using a function null": function(result) {
+    assert.equal(result.selection.attr("font-size"), "");
   }
 };

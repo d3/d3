@@ -85,18 +85,21 @@ function d3_transition(groups, id) {
   return groups;
 }
 
-function d3_transitionTweenNull() {
-  return d3_transitionTweenNullNull;
-}
+var d3_transitionRemove = {};
 
-function d3_transitionTweenNullNull() {
-  return null;
+function d3_transitionNull() {
+  return d3_transitionRemove;
 }
 
 function d3_transitionTween(b) {
   return typeof b === "function"
-      ? function(d, i, a) { var v = b.call(this, d, i) + ""; return a != v && d3.interpolate(a, v); }
-      : b == null ? d3_transitionTweenNull
+      ? function(d, i, a) {
+        var v = b.call(this, d, i);
+        if (v == null) {
+          if (a != "") return d3_transitionRemove;
+        } else return a != v && d3.interpolate(a, v);
+      }
+      : b == null ? d3_transitionNull
       : (b = b + "", function(d, i, a) { return a != b && d3.interpolate(a, b); });
 }
 

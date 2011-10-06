@@ -7,9 +7,9 @@ d3_transitionPrototype.styleTween = function(name, tween, priority) {
   if (arguments.length < 3) priority = "";
   return this.tween("style." + name, function(d, i) {
     var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-    return f && function(t) {
-      if ((t = f(t)) != null) this.style.setProperty(name, t, priority);
-      else this.style.removeProperty(name);
+    if (f === d3_transitionRemove) this.style.removeProperty(name);
+    else return f && function(t) {
+      this.style.setProperty(name, f(t), priority);
     };
   });
 };
