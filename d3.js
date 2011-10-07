@@ -1333,6 +1333,21 @@ d3_selectionPrototype.attr = function(name, value) {
       : (name.local ? attrConstantNS : attrConstant)));
 };
 d3_selectionPrototype.classed = function(name, value) {
+  var names = name.split(d3_selection_classedWhitespace),
+      n = names.length,
+      i = -1;
+  if (arguments.length > 1) {
+    while (++i < n) d3_selection_classed.call(this, names[i], value);
+    return this;
+  } else {
+    while (++i < n) if (!d3_selection_classed.call(this, names[i])) return false;
+    return true;
+  }
+};
+
+var d3_selection_classedWhitespace = /\s+/g;
+
+function d3_selection_classed(name, value) {
   var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
 
   // If no value is specified, return the first value.
@@ -1377,7 +1392,7 @@ d3_selectionPrototype.classed = function(name, value) {
       ? classedFunction : value
       ? classedAdd
       : classedRemove);
-};
+}
 d3_selectionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = "";
 
