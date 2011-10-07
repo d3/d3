@@ -26,7 +26,7 @@ assert.rgbEqual = function(actual, r, g, b, message) {
 
 assert.hslEqual = function(actual, h, s, l, message) {
   if (Math.abs(actual.h - h) > 1e-6 || Math.abs(actual.s - s) > 1e-6 || Math.abs(actual.l - l) > 1e-6) {
-    assert.fail(actual+"", "hsl(" + h + "," + (s * 100) + "%," + (l * 100) + "%)", message || "expected {expected}, got {actual}", null, assert.hslEqual);
+    assert.fail("hsl(" + actual.h + "," + (actual.s * 100) + "%," + (actual.l * 100) + "%)", "hsl(" + h + "," + (s * 100) + "%," + (l * 100) + "%)", message || "expected {expected}, got {actual}", null, assert.hslEqual);
   }
 };
 

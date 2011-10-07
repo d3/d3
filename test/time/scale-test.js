@@ -42,7 +42,7 @@ suite.addBatch({
         var x = scale().domain([local(2009, 0, 1), local(2010, 0, 1)]).range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
         assert.equal(x(local(2009, 6, 1)), "#04ff00");
-        assert.equal(y(local(2009, 6, 1)), "rgb(129,0,126)");
+        assert.equal(y(local(2009, 6, 1)), "#81007e");
         assert.equal(y.interpolate(), d3.interpolate);
       },
       "changes to clamping are isolated": function(scale) {

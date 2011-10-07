@@ -58,8 +58,8 @@ suite.addBatch({
     },
     "sets a property as a function": function(div) {
       div.property("bgcolor", d3.interpolateRgb("brown", "steelblue"));
-      assert.equal(div[0][0].bgcolor, "rgb(165,42,42)");
-      assert.equal(div[0][1].bgcolor, "rgb(70,130,180)");
+      assert.equal(div[0][0].bgcolor, "#a52a2a");
+      assert.equal(div[0][1].bgcolor, "#4682b4");
     },
     "gets a property value": function(div) {
       div[0][0].bgcolor = "purple";

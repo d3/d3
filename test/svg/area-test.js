@@ -136,7 +136,7 @@ suite.addBatch({
     },
     "interpolate can be defined as a constant": function(area) {
       var a = area().interpolate("step-before");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0V1H1L1,0V0H0Z");
+      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0V1H1L1,0H0V0Z");
       assert.equal(a.interpolate(), "step-before");
     },
 
@@ -157,8 +157,8 @@ suite.addBatch({
     },
 
     "interpolate(step)": {
-      "supports step-before interpolation": testInterpolation("step-before"),
-      "supports step-after interpolation": testInterpolation("step-after")
+      "supports step-before interpolation": testInterpolation("step-before", "step-after"),
+      "supports step-after interpolation": testInterpolation("step-after", "step-before")
     },
 
     "interpolate(basis)": {
@@ -178,12 +178,13 @@ suite.addBatch({
 });
 
 // An area is just two lines, with one reversed.
-function testInterpolation(interpolate) {
+function testInterpolation(i0, i1) {
+  if (arguments.length < 2) i1 = i0;
   return function(area) {
-    var a = area().interpolate(interpolate),
+    var a = area().interpolate(i0),
         d = [[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]],
-        l0 = d3.svg.line().interpolate(interpolate).x(a.x0()).y(a.y0()),
-        l1 = d3.svg.line().interpolate(interpolate).x(a.x1()).y(a.y1());
+        l0 = d3.svg.line().interpolate(i1).x(a.x0()).y(a.y0()),
+        l1 = d3.svg.line().interpolate(i0).x(a.x1()).y(a.y1());
     assert.pathEqual(a(d), l1(d) + "L" + l0(d.reverse()).substring(1) + "Z");
   };
 }
