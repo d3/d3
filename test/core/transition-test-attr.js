@@ -28,6 +28,6 @@ module.exports = {
     assert.equal(result.selection.attr("width"), "200");
   },
   "sets an attribute as a function": function(result) {
-    assert.equal(result.selection.attr("color"), "rgb(0,128,0)");
+    assert.equal(result.selection.attr("color"), "#008000");
   }
 };

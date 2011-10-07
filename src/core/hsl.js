@@ -29,7 +29,7 @@ d3_Hsl.prototype.rgb = function() {
 };
 
 d3_Hsl.prototype.toString = function() {
-  return "hsl(" + this.h + "," + this.s * 100 + "%," + this.l * 100 + "%)";
+  return this.rgb().toString();
 };
 
 function d3_hsl_rgb(h, s, l) {

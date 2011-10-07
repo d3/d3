@@ -780,10 +780,10 @@ d3.interpolateRgb = function(a, b) {
       bg = b.g - ag,
       bb = b.b - ab;
   return function(t) {
-    return "rgb(" + Math.round(ar + br * t)
-        + "," + Math.round(ag + bg * t)
-        + "," + Math.round(ab + bb * t)
-        + ")";
+    return "#"
+        + d3_rgb_hex(Math.round(ar + br * t))
+        + d3_rgb_hex(Math.round(ag + bg * t))
+        + d3_rgb_hex(Math.round(ab + bb * t));
   };
 };
 
@@ -1180,7 +1180,7 @@ d3_Hsl.prototype.rgb = function() {
 };
 
 d3_Hsl.prototype.toString = function() {
-  return "hsl(" + this.h + "," + this.s * 100 + "%," + this.l * 100 + "%)";
+  return this.rgb().toString();
 };
 
 function d3_hsl_rgb(h, s, l) {

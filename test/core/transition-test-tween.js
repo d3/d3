@@ -62,7 +62,7 @@ module.exports = {
       result.transition.each("end", function(d, i) { if (i >= 1) cb(null, result); });
     },
     "uses the returned tweener": function(result) {
-      assert.equal(result.selection[0][1].textContent, "hsl(230,50%,100%)");
+      assert.equal(result.selection[0][1].textContent, "#ffffff");
     },
     "does nothing if the tweener is falsey": function(result) {
       assert.equal(result.selection[0][0].textContent, "#ff0000");
