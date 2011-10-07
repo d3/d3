@@ -867,7 +867,8 @@ function d3_uninterpolateClamp(a, b) {
 }
 d3.rgb = function(r, g, b) {
   return arguments.length === 1
-      ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
+      ? (r instanceof d3_Rgb ? d3_rgb(r.r, r.g, r.b)
+      : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb))
       : d3_rgb(~~r, ~~g, ~~b);
 };
 
@@ -1151,7 +1152,8 @@ for (var d3_rgb_name in d3_rgb_names) {
 }
 d3.hsl = function(h, s, l) {
   return arguments.length === 1
-      ? d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl)
+      ? (h instanceof d3_Hsl ? d3_hsl(h.h, h.s, h.l)
+      : d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl))
       : d3_hsl(+h, +s, +l);
 };
 
