@@ -1880,15 +1880,18 @@ function d3_transitionNull(d, i, a) {
 }
 
 function d3_transitionTween(b) {
+
   function transitionFunction(d, i, a) {
     var v = b.call(this, d, i);
     return v == null
         ? a != "" && d3_transitionRemove
         : a != v && d3.interpolate(a, v);
   }
+
   function transitionString(d, i, a) {
     return a != b && d3.interpolate(a, b);
   }
+
   return typeof b === "function" ? transitionFunction
       : b == null ? d3_transitionNull
       : (b += "", transitionString);
@@ -1960,15 +1963,15 @@ d3_transitionPrototype.attrTween = function(nameNS, tween) {
   function attrTween(d, i) {
     var f = tween.call(this, d, i, this.getAttribute(name));
     return f === d3_transitionRemove
-      ? (this.removeAttribute(name), null)
-      : f && function(t) { this.setAttribute(name, f(t)); };
+        ? (this.removeAttribute(name), null)
+        : f && function(t) { this.setAttribute(name, f(t)); };
   }
 
   function attrTweenNS(d, i) {
     var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
     return f === d3_transitionRemove
-      ? (this.removeAttributeNS(name.space, name.local), null)
-      : f && function(t) { this.setAttributeNS(name.space, name.local, f(t)); };
+        ? (this.removeAttributeNS(name.space, name.local), null)
+        : f && function(t) { this.setAttributeNS(name.space, name.local, f(t)); };
   }
 
   return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
@@ -1983,8 +1986,8 @@ d3_transitionPrototype.styleTween = function(name, tween, priority) {
   return this.tween("style." + name, function(d, i) {
     var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
     return f === d3_transitionRemove
-      ? (this.style.removeProperty(name), null)
-      : f && function(t) { this.style.setProperty(name, f(t), priority); };
+        ? (this.style.removeProperty(name), null)
+        : f && function(t) { this.style.setProperty(name, f(t), priority); };
   });
 };
 d3_transitionPrototype.text = function(value) {
