@@ -8,25 +8,48 @@ var vows = require("vows"),
 var suite = vows.describe("d3.geom.polygon");
 
 suite.addBatch({
-  "polygon": {
+  "counterclockwise polygon (last point equal to start point)": {
     topic: function() {
-      return d3.geom.polygon;
+      return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]);
     },
-    "area": {
-      "last point equal to start point": function(polygon) {
-        assert.equal(polygon([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]).area(), 1);
-      },
-      "implicitly ending at start point": function(polygon) {
-        assert.equal(polygon([[0, 0], [0, 1], [1, 1], [1, 0]]).area(), 1);
-      }
+    "area": function(polygon) {
+      assert.equal(polygon.area(), 1);
     },
-    "centroid": {
-      "last point equal to start point": function(polygon) {
-        assert.deepEqual(polygon([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]).centroid(), [.5, .5]);
-      },
-      "implicitly ending at start point": function(polygon) {
-        assert.deepEqual(polygon([[0, 0], [0, 1], [1, 1], [1, 0]]).centroid(), [.5, .5]);
-      }
+    "centroid": function(polygon) {
+      assert.deepEqual(polygon.centroid(), [.5, .5]);
+    }
+  },
+  "counterclockwise polygon (implicitly ending at start point)": {
+    topic: function() {
+      return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0]]);
+    },
+    "area": function(polygon) {
+      assert.equal(polygon.area(), 1);
+    },
+    "centroid": function(polygon) {
+      assert.deepEqual(polygon.centroid(), [.5, .5]);
+    }
+  },
+  "clockwise polygon (last point equal to start point)": {
+    topic: function() {
+      return d3.geom.polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]);
+    },
+    "area": function(polygon) {
+      assert.equal(polygon.area(), -1);
+    },
+    "centroid": function(polygon) {
+      assert.deepEqual(polygon.centroid(), [.5, .5]);
+    }
+  },
+  "clockwise polygon (implicitly ending at start point)": {
+    topic: function() {
+      return d3.geom.polygon([[0, 0], [1, 0], [1, 1], [0, 1]]);
+    },
+    "area": function(polygon) {
+      assert.equal(polygon.area(), -1);
+    },
+    "centroid": function(polygon) {
+      assert.deepEqual(polygon.centroid(), [.5, .5]);
     }
   }
 });
