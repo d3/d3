@@ -10,6 +10,7 @@ suite.addBatch({
   "select(body)": {
     topic: function() {
       var body = d3.select("body").html("");
+      if ("__data__" in body[0][0]) delete body[0][0].__data__;
       body.append("div").attr("class", "first");
       body.append("div").attr("class", "second");
       return body;
