@@ -7,7 +7,7 @@ module.exports = {
   "start": {
     topic: function() {
       var cb = this.callback,
-          div = d3.select("body").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
+          div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
           transition = div.transition().delay(150),
           then = Date.now(),
           n = 0,
@@ -79,7 +79,7 @@ module.exports = {
   "end": {
     topic: function() {
       var cb = this.callback,
-          div = d3.select("body").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
+          div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
           transition = div.transition().duration(150),
           then = Date.now(),
           n = 0,

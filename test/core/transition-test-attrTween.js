@@ -11,7 +11,7 @@ module.exports = {
         tt = [],
         vv = [];
 
-    var s = d3.select("body").append("div").selectAll("div")
+    var s = d3.select("body").html("").append("div").selectAll("div")
         .data(["red", "green"])
       .enter().append("div")
         .attr("color", function(d) { return d3.rgb(d)+""; });
