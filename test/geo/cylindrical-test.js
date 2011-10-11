@@ -27,7 +27,7 @@ suite.addBatch({
     },
     "equalarea": {
       "zero origin": {
-        topic: function() { return d3.geo.cylindrical().mode("equalarea"); },
+        topic: function() { return d3.geo.conic().mode("equalarea").parallels(0).origin([0, 0]).scale(500); },
         "Arctic":      testProjection([0,    85], [480, 170.725344]),
         "Antarctic":   testProjection([0,   -85], [480, 329.274655]),
         "Hawaii":      testProjection([-180,  0], [230, 250]),
