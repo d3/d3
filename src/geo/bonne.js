@@ -52,8 +52,7 @@ d3.geo.bonne = function() {
     return bonne;
   };
 
-  bonne.scale = d3.rebind(bonne, zoom.scale);
-  bonne.translate = d3.rebind(bonne, zoom.translate);
+  d3_geo_zoomRebind(bonne, zoom);
 
   return bonne.origin([0, 0]).parallel(45).scale(200);
 };

@@ -3,7 +3,7 @@
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
 
 d3.geo.albers = function() {
-  var zoom = d3.geo.zoom(),
+  var zoom = d3.geo.zoom().scale(1000),
       origin = [-98, 38],
       parallels = [29.5, 45.5],
       lng0, // d3_geo_radians * origin[0]
@@ -54,10 +54,9 @@ d3.geo.albers = function() {
     return reload();
   };
 
-  albers.scale = d3.rebind(albers, zoom.scale);
-  albers.translate = d3.rebind(albers, zoom.translate);
+  d3_geo_zoomRebind(albers, zoom);
 
-  return reload().scale(1000);
+  return reload();
 };
 
 // A composite projection for the United States, 960x500. The set of standard

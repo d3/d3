@@ -100,10 +100,15 @@ d3.geo.zoom = function() {
 
   return zoom;
 };
+
+function d3_geo_zoomRebind(projection, zoom) {
+  projection.scale = d3.rebind(projection, zoom.scale);
+  projection.translate = d3.rebind(projection, zoom.translate);
+}
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
   var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
-      zoom = d3.geo.zoom(),
+      zoom = d3.geo.zoom().scale(200),
       origin,
       x0,
       y0,
@@ -164,8 +169,7 @@ d3.geo.azimuthal = function() {
     return azimuthal;
   };
 
-  azimuthal.scale = d3.rebind(azimuthal, zoom.scale);
-  azimuthal.translate = d3.rebind(azimuthal, zoom.translate);
+  d3_geo_zoomRebind(azimuthal, zoom);
 
   return azimuthal.origin([0, 0]);
 };
@@ -174,7 +178,7 @@ d3.geo.azimuthal = function() {
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
 
 d3.geo.albers = function() {
-  var zoom = d3.geo.zoom(),
+  var zoom = d3.geo.zoom().scale(1000),
       origin = [-98, 38],
       parallels = [29.5, 45.5],
       lng0, // d3_geo_radians * origin[0]
@@ -225,10 +229,9 @@ d3.geo.albers = function() {
     return reload();
   };
 
-  albers.scale = d3.rebind(albers, zoom.scale);
-  albers.translate = d3.rebind(albers, zoom.translate);
+  d3_geo_zoomRebind(albers, zoom);
 
-  return reload().scale(1000);
+  return reload();
 };
 
 // A composite projection for the United States, 960x500. The set of standard
@@ -336,8 +339,7 @@ d3.geo.bonne = function() {
     return bonne;
   };
 
-  bonne.scale = d3.rebind(bonne, zoom.scale);
-  bonne.translate = d3.rebind(bonne, zoom.translate);
+  d3_geo_zoomRebind(bonne, zoom);
 
   return bonne.origin([0, 0]).parallel(45).scale(200);
 };
@@ -347,7 +349,7 @@ d3.geo.equirectangular = function() {
   function equirectangular(coordinates) {
     return zoom([
       coordinates[0] / 360,
-      y = -coordinates[1] / 360
+      -coordinates[1] / 360
     ]);
   }
 
@@ -359,8 +361,7 @@ d3.geo.equirectangular = function() {
     ];
   };
 
-  equirectangular.scale = d3.rebind(equirectangular, zoom.scale);
-  equirectangular.translate = d3.rebind(equirectangular, zoom.translate);
+  d3_geo_zoomRebind(equirectangular, zoom);
 
   return equirectangular;
 };
@@ -381,8 +382,7 @@ d3.geo.mercator = function() {
     ];
   };
 
-  mercator.scale = d3.rebind(mercator, zoom.scale);
-  mercator.translate = d3.rebind(mercator, zoom.translate);
+  d3_geo_zoomRebind(mercator, zoom);
 
   return mercator;
 };

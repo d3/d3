@@ -1,7 +1,7 @@
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
   var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
-      zoom = d3.geo.zoom(),
+      zoom = d3.geo.zoom().scale(200),
       origin,
       x0,
       y0,
@@ -62,8 +62,7 @@ d3.geo.azimuthal = function() {
     return azimuthal;
   };
 
-  azimuthal.scale = d3.rebind(azimuthal, zoom.scale);
-  azimuthal.translate = d3.rebind(azimuthal, zoom.translate);
+  d3_geo_zoomRebind(azimuthal, zoom);
 
   return azimuthal.origin([0, 0]);
 };

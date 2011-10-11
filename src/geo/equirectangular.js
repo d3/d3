@@ -4,7 +4,7 @@ d3.geo.equirectangular = function() {
   function equirectangular(coordinates) {
     return zoom([
       coordinates[0] / 360,
-      y = -coordinates[1] / 360
+      -coordinates[1] / 360
     ]);
   }
 
@@ -16,8 +16,7 @@ d3.geo.equirectangular = function() {
     ];
   };
 
-  equirectangular.scale = d3.rebind(equirectangular, zoom.scale);
-  equirectangular.translate = d3.rebind(equirectangular, zoom.translate);
+  d3_geo_zoomRebind(equirectangular, zoom);
 
   return equirectangular;
 };

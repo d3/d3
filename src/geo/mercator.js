@@ -15,8 +15,7 @@ d3.geo.mercator = function() {
     ];
   };
 
-  mercator.scale = d3.rebind(mercator, zoom.scale);
-  mercator.translate = d3.rebind(mercator, zoom.translate);
+  d3_geo_zoomRebind(mercator, zoom);
 
   return mercator;
 };
