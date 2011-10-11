@@ -282,13 +282,15 @@ d3.geo.cylindrical = function() {
       translate = [480, 250],
       parallel,
       c1,
-      mode = "equidistant"; // or equalarea
+      mode = "equidistant"; // or equalarea, mercator
 
   function cylindrical(coordinates) {
     var x = coordinates[0] * d3_geo_radians,
         y = coordinates[1] * d3_geo_radians;
     x *= c1;
-    y = mode === "equidistant" ? -y : -Math.sin(y) / c1;
+    y = mode === "equidistant" ? -y
+      : mode === "mercator" ? -Math.log(Math.tan(Math.PI / 4 + y / 2))
+      : -Math.sin(y) / c1;
 
     return [
       (scale * x) / (d3_geo_radians * 360) + translate[0],
@@ -299,9 +301,13 @@ d3.geo.cylindrical = function() {
   cylindrical.invert = function(coordinates) {
     var x = (coordinates[0] - translate[0]) / scale * d3_geo_radians * 360,
         y = (coordinates[1] - translate[1]) / scale * d3_geo_radians * 360;
+    x /= c1;
+    y = mode === "equidistant" ? -y
+      : mode === "mercator" ? 2 * Math.atan(Math.exp(-y)) - Math.PI / 2
+      : Math.asin(-y * c1);
     return [
-      (x / c1) / d3_geo_radians,
-      (mode === "equidistant" ? -y : Math.asin(-y * c1)) / d3_geo_radians
+      x / d3_geo_radians,
+      y / d3_geo_radians
     ];
   };
 
@@ -311,10 +317,12 @@ d3.geo.cylindrical = function() {
     return cylindrical;
   };
 
+  // Equidistant: 0° for plate carrée.
+  // Equalarea: 0° for Lambert, 30° for Behrmann, 45° for Gall–Peters.
+  // Mercator: not used.
   cylindrical.parallel = function(x) {
     if (!arguments.length) return parallel;
-    parallel = +x;
-    c1 = Math.cos(parallel * d3_geo_radians);
+    c1 = Math.cos((parallel = +x) * d3_geo_radians);
     return cylindrical;
   };
 
@@ -334,40 +342,7 @@ d3.geo.cylindrical = function() {
 };
 d3.geo.equirectangular = d3.geo.cylindrical;
 d3.geo.mercator = function() {
-  var scale = 500,
-      translate = [480, 250];
-
-  function mercator(coordinates) {
-    var x = coordinates[0] / 360,
-        y = -(Math.log(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2)) / d3_geo_radians) / 360;
-    return [
-      scale * x + translate[0],
-      scale * Math.max(-.5, Math.min(.5, y)) + translate[1]
-    ];
-  }
-
-  mercator.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
-    return [
-      360 * x,
-      2 * Math.atan(Math.exp(-360 * y * d3_geo_radians)) / d3_geo_radians - 90
-    ];
-  };
-
-  mercator.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return mercator;
-  };
-
-  mercator.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return mercator;
-  };
-
-  return mercator;
+  return d3.geo.cylindrical().mode("mercator");
 };
 function d3_geo_type(types, defaultValue) {
   return function(object) {
