@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.3.4"}; // semver
+d3 = {version: "2.4.0"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -59,6 +59,24 @@ d3.ascending = function(a, b) {
 d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN;
 };
+d3.mean = function(array, f) {
+  var n = array.length,
+      a,
+      m = 0,
+      i = -1,
+      j = 0;
+  if (arguments.length === 1) {
+    while (++i < n) if (d3_number(a = array[i])) m += (a - m) / ++j;
+  } else {
+    while (++i < n) if (d3_number(a = f.call(array, array[i], i))) m += (a - m) / ++j;
+  }
+  return j ? m : undefined;
+};
+d3.median = function(array, f) {
+  if (arguments.length > 1) array = array.map(f);
+  array = array.filter(d3_number);
+  return array.length ? d3.quantile(array.sort(d3.ascending), .5) : undefined;
+};
 d3.min = function(array, f) {
   var i = -1,
       n = array.length,
@@ -87,6 +105,9 @@ d3.max = function(array, f) {
   }
   return a;
 };
+function d3_number(x) {
+  return x != null && !isNaN(x);
+}
 d3.sum = function(array, f) {
   var s = 0,
       n = array.length,
@@ -472,10 +493,11 @@ d3.format = function(specifier) {
       comma = match[7],
       precision = match[8],
       type = match[9],
-      percentage = false,
+      scale = 1,
+      suffix = "",
       integer = false;
 
-  if (precision) precision = precision.substring(1);
+  if (precision) precision = +precision.substring(1);
 
   if (zfill) {
     fill = "0"; // TODO align = "=";
@@ -484,22 +506,36 @@ d3.format = function(specifier) {
 
   switch (type) {
     case "n": comma = true; type = "g"; break;
-    case "%": percentage = true; type = "f"; break;
-    case "p": percentage = true; type = "r"; break;
-    case "d": integer = true; precision = "0"; break;
+    case "%": scale = 100; suffix = "%"; type = "f"; break;
+    case "p": scale = 100; suffix = "%"; type = "r"; break;
+    case "d": integer = true; precision = 0; break;
+    case "s": scale = -1; type = "r"; break;
   }
+
+  // If no precision is specified for r, fallback to general notation.
+  if (type == "r" && !precision) type = "g";
 
   type = d3_format_types[type] || d3_format_typeDefault;
 
   return function(value) {
-    var number = percentage ? value * 100 : +value,
-        negative = (number < 0) && (number = -number) ? "\u2212" : sign;
 
     // Return the empty string for floats formatted as ints.
-    if (integer && (number % 1)) return "";
+    if (integer && (value % 1)) return "";
 
-    // Convert the input value to the desired precision.
-    value = type(number, precision);
+    // Convert negative to positive, and record the sign prefix.
+    var negative = (value < 0) && (value = -value) ? "\u2212" : sign;
+
+    // Apply the scale, computing it from the value's exponent for si format.
+    if (scale < 0) {
+      var exponent = Math.max(-24, Math.min(24, d3_format_exponent(value, precision)));
+      value *= Math.pow(10, -exponent);
+      suffix = d3_format_si[8 + exponent / 3];
+    } else {
+      value *= scale;
+    }
+
+    // Convert to the desired precision.
+    value = type(value, precision);
 
     // If the fill character is 0, the sign and group is applied after the fill.
     if (zfill) {
@@ -516,24 +552,32 @@ d3.format = function(specifier) {
       var length = value.length;
       if (length < width) value = new Array(width - length + 1).join(fill) + value;
     }
-    if (percentage) value += "%";
 
-    return value;
+    return value + suffix;
   };
 };
 
 // [[fill]align][sign][#][0][width][,][.precision][type]
-var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
+var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/,
+    d3_format_si = ["y","z","a","f","p","n","μ","m","","k","M","G","T","P","E","Z","Y"];
 
 var d3_format_types = {
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
   f: function(x, p) { return x.toFixed(p); },
-  r: function(x, p) {
-    var n = x ? 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10) : 1;
-    return d3.round(x, p - n).toFixed(Math.max(0, Math.min(20, p - n)));
-  }
+  r: function(x, p) { return d3.round(x, p = d3_format_precision(x, p)).toFixed(Math.max(0, Math.min(20, p))); }
 };
+
+function d3_format_precision(x, p) {
+  return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
+}
+
+function d3_format_exponent(x, p) {
+  if (!x) return 0;
+  if (p) x = d3.round(x, d3_format_precision(x, p));
+  var d = 1 + Math.floor(Math.log(1e-9 + x) / Math.LN10);
+  return Math.floor((d <= 0 ? d + 1 : d - 1) / 3) * 3;
+}
 
 function d3_format_typeDefault(x) {
   return x + "";
@@ -3589,6 +3633,20 @@ d3.svg.axis = function() {
     selection.each(function(d, i, j) {
       var g = d3.select(this);
 
+      // If selection is a transition, create subtransitions.
+      var transition = selection.delay ? function(o) {
+        var id = d3_transitionInheritId;
+        try {
+          d3_transitionInheritId = selection.id;
+          return o.transition()
+              .delay(selection[j][i].delay)
+              .duration(selection[j][i].duration)
+              .ease(selection.ease());
+        } finally {
+          d3_transitionInheritId = id;
+        }
+      } : Object;
+
       // Ticks.
       var ticks = scale.ticks.apply(scale, tickArguments_),
           tickFormat = tickFormat_ == null ? scale.tickFormat.apply(scale, tickArguments_) : tickFormat_;
@@ -3624,37 +3682,33 @@ d3.svg.axis = function() {
       switch (orient) {
         case "bottom": {
           tickTransform = d3_svg_axisX;
-          subtickUpdate.attr("y2", tickMinorSize);
-          tickEnter.select("text").attr("dy", ".71em").attr("text-anchor", "middle");
-          tickUpdate.select("line").attr("y2", tickMajorSize);
-          tickUpdate.select("text").attr("y", Math.max(tickMajorSize, 0) + tickPadding);
+          subtickUpdate.attr("x2", 0).attr("y2", tickMinorSize);
+          tickUpdate.select("line").attr("x2", 0).attr("y2", tickMajorSize);
+          tickUpdate.select("text").attr("x", 0).attr("y", Math.max(tickMajorSize, 0) + tickPadding).attr("dy", ".71em").attr("text-anchor", "middle");
           pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[1] + "V" + tickEndSize);
           break;
         }
         case "top": {
           tickTransform = d3_svg_axisX;
-          subtickUpdate.attr("y2", -tickMinorSize);
-          tickEnter.select("text").attr("text-anchor", "middle");
-          tickUpdate.select("line").attr("y2", -tickMajorSize);
-          tickUpdate.select("text").attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
+          subtickUpdate.attr("x2", 0).attr("y2", -tickMinorSize);
+          tickUpdate.select("line").attr("x2", 0).attr("y2", -tickMajorSize);
+          tickUpdate.select("text").attr("x", 0).attr("y", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("dy", "0em").attr("text-anchor", "middle");
           pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[1] + "V" + -tickEndSize);
           break;
         }
         case "left": {
           tickTransform = d3_svg_axisY;
-          subtickUpdate.attr("x2", -tickMinorSize);
-          tickEnter.select("text").attr("dy", ".32em").attr("text-anchor", "end");
-          tickUpdate.select("line").attr("x2", -tickMajorSize);
-          tickUpdate.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding));
+          subtickUpdate.attr("x2", -tickMinorSize).attr("y2", 0);
+          tickUpdate.select("line").attr("x2", -tickMajorSize).attr("y2", 0);
+          tickUpdate.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "end");
           pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + -tickEndSize);
           break;
         }
         case "right": {
           tickTransform = d3_svg_axisY;
-          subtickUpdate.attr("x2", tickMinorSize);
-          tickEnter.select("text").attr("dy", ".32em");
-          tickUpdate.select("line").attr("x2", tickMajorSize);
-          tickUpdate.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding);
+          subtickUpdate.attr("x2", tickMinorSize).attr("y2", 0);
+          tickUpdate.select("line").attr("x2", tickMajorSize).attr("y2", 0);
+          tickUpdate.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "start");
           pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
           break;
         }
@@ -3667,13 +3721,6 @@ d3.svg.axis = function() {
       subtickEnter.call(tickTransform, scale0);
       subtickUpdate.call(tickTransform, scale);
       subtickExit.call(tickTransform, scale);
-
-      function transition(o) {
-        return selection.delay ? o.transition()
-            .delay(selection[j][i].delay)
-            .duration(selection[j][i].duration)
-            .ease(selection.ease()) : o;
-      }
     });
   }
 
