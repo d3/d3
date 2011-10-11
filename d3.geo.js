@@ -297,12 +297,18 @@ d3.geo.cylindrical = function() {
   }
 
   cylindrical.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
+    var x = (coordinates[0] - translate[0]) / scale * d3_geo_radians * 360,
+        y = (coordinates[1] - translate[1]) / scale * d3_geo_radians * 360;
     return [
-      (x / c1) * 360,
-      (mode === "equidistant" ? -y : Math.sin(-y * c1)) * 360
+      (x / c1) / d3_geo_radians,
+      (mode === "equidistant" ? -y : Math.asin(-y * c1)) / d3_geo_radians
     ];
+  };
+
+  cylindrical.mode = function(x) {
+    if (!arguments.length) return mode;
+    mode = x + "";
+    return cylindrical;
   };
 
   cylindrical.parallel = function(x) {
