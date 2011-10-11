@@ -28,7 +28,7 @@ d3.svg.axis = function() {
       } : Object;
 
       // Ticks, or domain values for ordinal scales.
-      var ticks = tickArguments_[0] instanceof Array && tickArguments_.length == 1 ? tickArguments_[0] : (scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain()),
+      var ticks = tickArguments_.length == 1 && tickArguments_[0] instanceof Array ? tickArguments_[0] : (scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain()),
           tickFormat = tickFormat_ == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : String) : tickFormat_;
 
       // Minor ticks.
