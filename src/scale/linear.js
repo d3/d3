@@ -80,6 +80,7 @@ function d3_scale_linearRebind(scale, linear) {
 }
 
 function d3_scale_linearNice(dx) {
+  if (dx === 0) return {floor: Number, ceil: Number};
   dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
   return {
     floor: function(x) { return Math.floor(x / dx) * dx; },

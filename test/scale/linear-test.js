@@ -180,6 +180,10 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [130, 0]);
         var x = linear().domain([0, .49]).nice();
         assert.deepEqual(x.domain(), [0, .5]);
+        var x = linear().domain([0, 0]).nice();
+        assert.deepEqual(x.domain(), [0, 0]);
+        var x = linear().domain([.5, .5]).nice();
+        assert.deepEqual(x.domain(), [.5, .5]);
       },
       "nicing a polylinear domain only affects the extent": function(linear) {
         var x = linear().domain([1.1, 1, 2, 3, 10.9]).nice();
