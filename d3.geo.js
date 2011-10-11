@@ -2,7 +2,9 @@
 
 var d3_geo_radians = Math.PI / 180;
 d3.geo.rotate = function(z, y, x) {
-  if (!(x = ~~x) && !(y = ~~y) && !(z = ~~z)) return d3_geo_rotateIdentity;
+  if (!(x = +x || 0) && !(y = +y || 0) && !(z = +z || 0)) {
+    return d3_geo_rotateIdentity;
+  }
 
   var m = d3_geo_rotateMatrix(y, x),
       zAngle = z;
