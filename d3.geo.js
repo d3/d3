@@ -319,7 +319,7 @@ d3.geo.cylindrical = function() {
 
   // Equidistant: 0° for plate carrée.
   // Equalarea: 0° for Lambert, 30° for Behrmann, 45° for Gall–Peters.
-  // Mercator: not used.
+  // Mercator: TODO make this set the "latitude of true scale".
   cylindrical.parallel = function(x) {
     if (!arguments.length) return parallel;
     c1 = Math.cos((parallel = +x) * d3_geo_radians);
