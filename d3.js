@@ -66,11 +66,16 @@ d3.mean = function(array, f) {
       i = -1,
       j = 0;
   if (arguments.length === 1) {
-    while (++i < n) if (!isNaN(a = array[i]) && a != null) m += (a - m) / ++j;
+    while (++i < n) if (d3_number(a = array[i])) m += (a - m) / ++j;
   } else {
-    while (++i < n) if (!isNaN(a = f.call(array, array[i], i)) && a != null) m += (a - m) / ++j;
+    while (++i < n) if (d3_number(a = f.call(array, array[i], i))) m += (a - m) / ++j;
   }
   return j ? m : undefined;
+};
+d3.median = function(array, f) {
+  if (arguments.length > 1) array = array.map(f);
+  array = array.filter(d3_number);
+  return array.length ? d3.quantile(array.sort(d3.ascending), .5) : undefined;
 };
 d3.min = function(array, f) {
   var i = -1,
@@ -100,6 +105,9 @@ d3.max = function(array, f) {
   }
   return a;
 };
+function d3_number(x) {
+  return x != null && !isNaN(x);
+}
 d3.sum = function(array, f) {
   var s = 0,
       n = array.length,
