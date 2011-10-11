@@ -542,18 +542,20 @@ d3.geo.path = function() {
 
   function polygonCentroid(coordinates) {
     var polygon = d3.geom.polygon(coordinates[0].map(projection)), // exterior ring
-        centroid = polygon.centroid(1),
+        area = polygon.area(),
+        centroid = polygon.centroid(area < 0 ? (area *= -1, 1) : -1),
         x = centroid[0],
         y = centroid[1],
-        z = Math.abs(polygon.area()),
+        z = area,
         i = 0, // coordinates index
         n = coordinates.length;
     while (++i < n) {
       polygon = d3.geom.polygon(coordinates[i].map(projection)); // holes
-      centroid = polygon.centroid(1);
+      area = polygon.area();
+      centroid = polygon.centroid(area < 0 ? (area *= -1, 1) : -1);
       x -= centroid[0];
       y -= centroid[1];
-      z -= Math.abs(polygon.area());
+      z -= area;
     }
     return [x, y, 6 * z]; // weighted centroid
   }
