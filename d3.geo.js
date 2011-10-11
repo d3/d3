@@ -2,10 +2,10 @@
 
 var d3_geo_radians = Math.PI / 180;
 d3.geo.rotate = function(z, y, x) {
-  if (!arguments.length) return d3_geo_rotateIdentity;
+  if (!(x = ~~x) && !(y = ~~y) && !(z = ~~z)) return d3_geo_rotateIdentity;
 
-  var m = d3_geo_rotateMatrix(y || 0, x || 0),
-      zAngle = z || 0;
+  var m = d3_geo_rotateMatrix(y, x),
+      zAngle = z;
 
   function rotate(coordinates) {
     var lon = (coordinates[0] + zAngle) * d3_geo_radians,
