@@ -59,6 +59,19 @@ d3.ascending = function(a, b) {
 d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN;
 };
+d3.mean = function(array, f) {
+  var n = array.length,
+      a,
+      m = 0,
+      i = -1,
+      j = 0;
+  if (arguments.length === 1) {
+    while (++i < n) if (!isNaN(a = array[i]) && a != null) m += (a - m) / ++j;
+  } else {
+    while (++i < n) if (!isNaN(a = f.call(array, array[i], i)) && a != null) m += (a - m) / ++j;
+  }
+  return j ? m : undefined;
+};
 d3.min = function(array, f) {
   var i = -1,
       n = array.length,

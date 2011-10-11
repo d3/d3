@@ -44,6 +44,7 @@ d3.core.js: \
 	src/core/rebind.js \
 	src/core/ascending.js \
 	src/core/descending.js \
+	src/core/mean.js \
 	src/core/min.js \
 	src/core/max.js \
 	src/core/sum.js \
