@@ -74,6 +74,7 @@ d3.core.js: \
 	src/core/ns.js \
 	src/core/dispatch.js \
 	src/core/format.js \
+	src/core/formatPrefix.js \
 	src/core/ease.js \
 	src/core/event.js \
 	src/core/interpolate.js \

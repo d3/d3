@@ -96,9 +96,11 @@ suite.addBatch({
       assert.strictEqual(f(145999999.999999347), "146M");
       assert.strictEqual(f(1e26), "100Y");
       assert.strictEqual(f(.000001), "1.00μ");
+      assert.strictEqual(f(.009995), "0.0100");
       var f = format(".4s");
       assert.strictEqual(f(999.5), "999.5");
       assert.strictEqual(f(999500), "999.5k");
+      assert.strictEqual(f(.009995), "9.995m");
     },
     "can output a percentage": function(format) {
       var f = format("%");

@@ -42,9 +42,9 @@ d3.format = function(specifier) {
 
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {
-      var exponent = Math.max(-24, Math.min(24, d3_format_exponent(value, precision)));
-      value *= Math.pow(10, -exponent);
-      suffix = d3_format_si[8 + exponent / 3];
+      var prefix = d3.formatPrefix(value, precision);
+      value *= prefix.scale;
+      suffix = prefix.symbol;
     } else {
       value *= scale;
     }
@@ -73,8 +73,7 @@ d3.format = function(specifier) {
 };
 
 // [[fill]align][sign][#][0][width][,][.precision][type]
-var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/,
-    d3_format_si = ["y","z","a","f","p","n","μ","m","","k","M","G","T","P","E","Z","Y"];
+var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
 
 var d3_format_types = {
   g: function(x, p) { return x.toPrecision(p); },
@@ -85,13 +84,6 @@ var d3_format_types = {
 
 function d3_format_precision(x, p) {
   return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
-}
-
-function d3_format_exponent(x, p) {
-  if (!x) return 0;
-  if (p) x = d3.round(x, d3_format_precision(x, p));
-  var d = 1 + Math.floor(Math.log(1e-9 + x) / Math.LN10);
-  return Math.floor((d <= 0 ? d + 1 : d - 1) / 3) * 3;
 }
 
 function d3_format_typeDefault(x) {

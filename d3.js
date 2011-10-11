@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.4.0"}; // semver
+d3 = {version: "2.4.1"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -527,9 +527,9 @@ d3.format = function(specifier) {
 
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {
-      var exponent = Math.max(-24, Math.min(24, d3_format_exponent(value, precision)));
-      value *= Math.pow(10, -exponent);
-      suffix = d3_format_si[8 + exponent / 3];
+      var prefix = d3.formatPrefix(value, precision);
+      value *= prefix.scale;
+      suffix = prefix.symbol;
     } else {
       value *= scale;
     }
@@ -558,8 +558,7 @@ d3.format = function(specifier) {
 };
 
 // [[fill]align][sign][#][0][width][,][.precision][type]
-var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/,
-    d3_format_si = ["y","z","a","f","p","n","μ","m","","k","M","G","T","P","E","Z","Y"];
+var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
 
 var d3_format_types = {
   g: function(x, p) { return x.toPrecision(p); },
@@ -570,13 +569,6 @@ var d3_format_types = {
 
 function d3_format_precision(x, p) {
   return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
-}
-
-function d3_format_exponent(x, p) {
-  if (!x) return 0;
-  if (p) x = d3.round(x, d3_format_precision(x, p));
-  var d = 1 + Math.floor(Math.log(1e-9 + x) / Math.LN10);
-  return Math.floor((d <= 0 ? d + 1 : d - 1) / 3) * 3;
 }
 
 function d3_format_typeDefault(x) {
@@ -591,6 +583,26 @@ function d3_format_group(value) {
   while (i > 0) t.push(value.substring(i -= 3, i + 3));
   return t.reverse().join(",") + f;
 }
+var d3_formatPrefixes = ["y","z","a","f","p","n","μ","m","","k","M","G","T","P","E","Z","Y"].map(d3_formatPrefix);
+
+d3.formatPrefix = function(value, precision) {
+  var i = 0;
+  if (value) {
+    if (value < 0) value *= -1;
+    if (precision) value = d3.round(value, d3_format_precision(value, precision));
+    i = 1 + Math.floor(1e-12 + Math.log(value) / Math.LN10);
+    i = Math.max(-24, Math.min(24, Math.floor((i <= 0 ? i + 1 : i - 1) / 3) * 3));
+  }
+  return d3_formatPrefixes[8 + i / 3];
+};
+
+function d3_formatPrefix(d, i) {
+  return {
+    scale: Math.pow(10, (8 - i) * 3),
+    symbol: d
+  };
+}
+
 /*
  * TERMS OF USE - EASING EQUATIONS
  *
