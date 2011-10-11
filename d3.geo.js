@@ -1,17 +1,14 @@
 (function(){d3.geo = {};
 
 var d3_geo_radians = Math.PI / 180;
-d3.geo.rotate = function() {
-  var m = [[1, 0, 0],
-           [0, 1, 0],
-           [0, 0, 1]],
-      zAngle = 0;
+d3.geo.rotate = function(z, y, x) {
+  if (!arguments.length) return d3_geo_rotateIdentity;
+
+  var m = d3_geo_rotateMatrix(y || 0, x || 0),
+      zAngle = z || 0;
 
   function rotate(coordinates) {
-    if (zAngle != null) {
-      return zAngle ? [coordinates[0] + zAngle, coordinates[1]] : coordinates;
-    }
-    var lon = coordinates[0] * d3_geo_radians,
+    var lon = (coordinates[0] + zAngle) * d3_geo_radians,
         lat = coordinates[1] * d3_geo_radians,
         s0 = Math.sin(lon),
         c0 = Math.cos(lon),
@@ -33,9 +30,6 @@ d3.geo.rotate = function() {
   }
 
   rotate.invert = function(coordinates) {
-    if (zAngle != null) {
-      return zAngle ? [coordinates[0] - zAngle, coordinates[1]] : coordinates;
-    }
     var lon = coordinates[0] * d3_geo_radians,
         lat = coordinates[1] * d3_geo_radians,
         s0 = Math.sin(lon),
@@ -52,79 +46,28 @@ d3.geo.rotate = function() {
         ry = x * mx[1] + y * my[1] + z * mz[1],
         rz = x * mx[2] + y * my[2] + z * mz[2];
     return [
-      Math.atan2(ry, rx) / d3_geo_radians,
+      Math.atan2(ry, rx) / d3_geo_radians - zAngle,
       Math.asin(rz) / d3_geo_radians
     ];
   };
 
-  rotate.x = function(angle) {
-    if (angle === 0) return rotate;
-    zAngle = null;
-    var c = Math.cos(angle *= d3_geo_radians),
-        s = Math.sin(angle),
-        my = m[1],
-        mz = m[2],
-        my0 = my[0],
-        my1 = my[1],
-        my2 = my[2],
-        mz0 = mz[0],
-        mz1 = mz[1],
-        mz2 = mz[2];
-    my[0] = c * my0 - s * mz0;
-    my[1] = c * my1 - s * mz1;
-    my[2] = c * my2 - s * mz2;
-    mz[0] = s * my0 + c * mz0;
-    mz[1] = s * my1 + c * mz1;
-    mz[2] = s * my2 + c * mz2;
-    return rotate;
-  };
-
-  rotate.y = function(angle) {
-    if (angle === 0) return rotate;
-    zAngle = null;
-    var c = Math.cos(angle *= d3_geo_radians),
-        s = Math.sin(angle),
-        mx = m[0],
-        mz = m[2],
-        mx0 = mx[0],
-        mx1 = mx[1],
-        mx2 = mx[2],
-        mz0 = mz[0],
-        mz1 = mz[1],
-        mz2 = mz[2];
-    mx[0] = c * mx0 - s * mz0;
-    mx[1] = c * mx1 - s * mz1;
-    mx[2] = c * mx2 - s * mz2;
-    mz[0] = s * mx0 + c * mz0;
-    mz[1] = s * mx1 + c * mz1;
-    mz[2] = s * mx2 + c * mz2;
-    return rotate;
-  };
-
-  rotate.z = function(angle) {
-    if (angle === 0) return rotate;
-    if (zAngle != null) zAngle = angle;
-    var c = Math.cos(angle *= d3_geo_radians),
-        s = Math.sin(angle),
-        mx = m[0],
-        my = m[1],
-        mx0 = mx[0],
-        mx1 = mx[1],
-        mx2 = mx[2],
-        my0 = my[0],
-        my1 = my[1],
-        my2 = my[2];
-    mx[0] = c * mx0 - s * my0;
-    mx[1] = c * mx1 - s * my1;
-    mx[2] = c * mx2 - s * my2;
-    my[0] = s * mx0 + c * my0;
-    my[1] = s * mx1 + c * my1;
-    my[2] = s * mx2 + c * my2;
-    return rotate;
-  };
-
   return rotate;
 };
+
+function d3_geo_rotateMatrix(y, x) {
+  var cy = Math.cos(y *= d3_geo_radians),
+      sy = Math.sin(y),
+      cx = Math.cos(x *= d3_geo_radians),
+      sx = Math.sin(x);
+  return [
+    [ cy,       0,      -sy],
+    [-sx * sy, cx, -sx * cy],
+    [ cx * sy, sx,  cx * cy]
+  ];
+}
+
+function d3_geo_rotateIdentity(coordinates) { return coordinates; }
+d3_geo_rotateIdentity.invert = d3_geo_rotateIdentity;
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
   var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
@@ -362,7 +305,8 @@ d3.geo.bonne = function() {
     var x = (coordinates[0] - translate[0]) / scale,
         y = (coordinates[1] - translate[1]) / scale;
     if (y1) {
-      var c = c1 + y, p = Math.sqrt(x * x + c * c);
+      var c = c1 + y,
+          p = Math.sqrt(x * x + c * c);
       y = c1 + y1 - p;
       x = p * Math.atan2(x, c) / Math.cos(y);
     } else {
@@ -375,14 +319,15 @@ d3.geo.bonne = function() {
   // 90° for Werner, 0° for Sinusoidal
   bonne.parallel = function(x) {
     if (!arguments.length) return y1 / d3_geo_radians;
-    c1 = 1 / Math.tan(y1 = x * d3_geo_radians);
+    y1 = x * d3_geo_radians;
+    c1 = x === 90 || x === -90 ? 0 : 1 / Math.tan(y1);
     return bonne;
   };
 
   bonne.origin = function(x) {
     if (!arguments.length) return origin;
     origin = [+x[0], +x[1]];
-    rotate = d3.geo.rotate().z(-origin[0]).y(origin[1]);
+    rotate = d3.geo.rotate(-origin[0], origin[1]);
     return bonne;
   };
 

@@ -8,14 +8,27 @@ var vows = require("vows"),
 var suite = vows.describe("d3.geo.rotate");
 
 suite.addBatch({
-  "Inversion": {
-    topic: function() {
-      return d3.geo.rotate().x(13).y(17).z(23);
-    },
-    "project(invert(point)) equals point": function(rotate) {
-      for (var i = -1; i < 20; ++i) {
-        var point = [Math.random() * 10 + 100, Math.random() * 10 + 50];
-        assert.inDelta(point, rotate(rotate.invert(point)), 1e-6);
+  "x-, y- and x-axes": {
+    "Inversion": {
+      topic: function() {
+        return d3.geo.rotate(23, 17, 13);
+      },
+      "project(invert(point)) equals point": function(rotate) {
+        for (var i = -1; i < 20; ++i) {
+          var point = [Math.random() * 10 + 100, Math.random() * 10 + 50];
+          assert.inDelta(point, rotate(rotate.invert(point)), 1e-6);
+        }
+      }
+    }
+  },
+  "zero": {
+    "Inversion": {
+      topic: d3.geo.rotate,
+      "project(invert(point)) equals point": function(rotate) {
+        for (var i = -1; i < 20; ++i) {
+          var point = [Math.random() * 360 - 180, Math.random() * 180 - 90];
+          assert.inDelta(point, rotate(rotate.invert(point)), 1e-6);
+        }
       }
     }
   }

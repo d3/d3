@@ -29,7 +29,8 @@ d3.geo.bonne = function() {
     var x = (coordinates[0] - translate[0]) / scale,
         y = (coordinates[1] - translate[1]) / scale;
     if (y1) {
-      var c = c1 + y, p = Math.sqrt(x * x + c * c);
+      var c = c1 + y,
+          p = Math.sqrt(x * x + c * c);
       y = c1 + y1 - p;
       x = p * Math.atan2(x, c) / Math.cos(y);
     } else {
@@ -42,14 +43,15 @@ d3.geo.bonne = function() {
   // 90° for Werner, 0° for Sinusoidal
   bonne.parallel = function(x) {
     if (!arguments.length) return y1 / d3_geo_radians;
-    c1 = 1 / Math.tan(y1 = x * d3_geo_radians);
+    y1 = x * d3_geo_radians;
+    c1 = x === 90 || x === -90 ? 0 : 1 / Math.tan(y1);
     return bonne;
   };
 
   bonne.origin = function(x) {
     if (!arguments.length) return origin;
     origin = [+x[0], +x[1]];
-    rotate = d3.geo.rotate().z(-origin[0]).y(origin[1]);
+    rotate = d3.geo.rotate(-origin[0], origin[1]);
     return bonne;
   };
 

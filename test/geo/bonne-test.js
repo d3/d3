@@ -69,7 +69,7 @@ suite.addBatch({
     },
     "project(invert(point)) equals point": function(bonne) {
       for (var i = -1; i < 20; ++i) {
-        var point = [Math.random() * 700 + 100, Math.random() * 400 + 50];
+        var point = [Math.random() * 200 + 380, Math.random() * 200 + 150];
         assert.inDelta(point, bonne(bonne.invert(point)), .5);
       }
     }
@@ -117,13 +117,13 @@ suite.addBatch({
     },
     "project(invert(point)) equals point": function(bonne) {
       for (var i = -1; i < 20; ++i) {
-        var point = [Math.random() * 700 + 100, Math.random() * 400 + 50];
+        var point = [Math.random() * 200 + 380, Math.random() * 100 + 200];
         assert.inDelta(point, bonne(bonne.invert(point)), .5);
       }
     }
   },
 
-  "Sinsuoidal": {
+  "Sinusoidal": {
     topic: function() {
       return d3.geo.bonne().parallel(0);
     },
@@ -135,7 +135,7 @@ suite.addBatch({
     },
     "project(invert(point)) equals point": function(bonne) {
       for (var i = -1; i < 20; ++i) {
-        var point = [Math.random() * 700 + 100, Math.random() * 400 + 50];
+        var point = [Math.random() * 200 + 380, Math.random() * 200 + 150];
         assert.inDelta(point, bonne(bonne.invert(point)), .5);
       }
     }
