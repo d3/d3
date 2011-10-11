@@ -2202,8 +2202,8 @@ function d3_scale_nice(domain, nice) {
   return domain;
 }
 
-function d3_scale_niceDefault() {
-  return Math;
+function d3_scale_niceDefault(dx) {
+  return dx ? Math : {floor: Number, ceil: Number};
 }
 d3.scale.linear = function() {
   return d3_scale_linear([0, 1], [0, 1], d3.interpolate, false);
@@ -2287,6 +2287,7 @@ function d3_scale_linearRebind(scale, linear) {
 }
 
 function d3_scale_linearNice(dx) {
+  if (dx === 0) return {floor: Number, ceil: Number};
   dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
   return {
     floor: function(x) { return Math.floor(x / dx) * dx; },
