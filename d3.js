@@ -472,12 +472,11 @@ d3.format = function(specifier) {
       comma = match[7],
       precision = match[8],
       type = match[9],
-      percentage = false,
-      integer = false,
-      trim_decimal_zero = false,
-      si = false;
+      scale = 1,
+      suffix = "",
+      integer = false;
 
-  if (precision) precision = precision.substring(1);
+  if (precision) precision = +precision.substring(1);
 
   if (zfill) {
     fill = "0"; // TODO align = "=";
@@ -486,33 +485,36 @@ d3.format = function(specifier) {
 
   switch (type) {
     case "n": comma = true; type = "g"; break;
-    case "%": percentage = true; type = "f"; break;
-    case "p": percentage = true; type = "r"; break;
-    case "d": integer = true; precision = "0"; break;
-    case "s": si = true; trim_decimal_zero = true; 
-              type = "r"; precision = "3"; break;
+    case "%": scale = 100; suffix = "%"; type = "f"; break;
+    case "p": scale = 100; suffix = "%"; type = "r"; break;
+    case "d": integer = true; precision = 0; break;
+    case "s": scale = -1; type = "r"; break;
   }
+
+  // If no precision is specified for r, fallback to general notation.
+  if (type == "r" && !precision) type = "g";
 
   type = d3_format_types[type] || d3_format_typeDefault;
 
   return function(value) {
-    var number = percentage ? value * 100 : +value,
-        negative = (number < 0) && (number = -number) ? "\u2212" : sign;
-        exponent = si ? d3_format_getExponent(number) : 0,
-        scale = si ? Math.pow(10, -exponent) : 1,
-        si_prefixes = ['y','z','a','f','p','n','μ','m','','k','M','G','T','P','E','Z','Y'],
-        suffix = percentage ? '%' : si ? (Math.abs(exponent) < 27) ? si_prefixes[(exponent + 24) / 3] : "e" + exponent : '';
 
     // Return the empty string for floats formatted as ints.
-    if (integer && (number % 1)) return "";
+    if (integer && (value % 1)) return "";
 
-    // Convert the input value to the desired precision.
-    value = type(number * scale, precision);
+    // Convert negative to positive, and record the sign prefix.
+    var negative = (value < 0) && (value = -value) ? "\u2212" : sign;
 
-    // if using SI prefix notation, scale and trim insignificant zeros
-    if (trim_decimal_zero) {
-      value = (new Number(value)).toPrecision();
+    // Apply the scale, computing it from the value's exponent for si format.
+    if (scale < 0) {
+      var exponent = Math.max(-24, Math.min(24, d3_format_exponent(value, precision)));
+      value *= Math.pow(10, -exponent);
+      suffix = d3_format_si[8 + exponent / 3];
+    } else {
+      value *= scale;
     }
+
+    // Convert to the desired precision.
+    value = type(value, precision);
 
     // If the fill character is 0, the sign and group is applied after the fill.
     if (zfill) {
@@ -529,65 +531,31 @@ d3.format = function(specifier) {
       var length = value.length;
       if (length < width) value = new Array(width - length + 1).join(fill) + value;
     }
-    value += suffix;
 
-
-    return value;
+    return value + suffix;
   };
 };
 
 // [[fill]align][sign][#][0][width][,][.precision][type]
-var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
+var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/,
+    d3_format_si = ["y","z","a","f","p","n","μ","m","","k","M","G","T","P","E","Z","Y"];
 
 var d3_format_types = {
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
   f: function(x, p) { return x.toFixed(p); },
-  r: function(x, p) {
-    var n = x ? 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10) : 1;
-    return d3.round(x, p - n).toFixed(Math.max(0, Math.min(20, p - n)));
-  // },
-  // s: function(x, p) {
-  //   // copied from gnuplot and modified
-  //   // find exponent and significand
-  //   var l10 = Math.log(x) / Math.LN10,
-  //       exponent = Math.floor(l10),
-  //       mantissa = l10 - exponent,
-  //       significand = Math.pow(10, mantissa);
-  //   // round exponent to integer multiple of 3
-  //   var pr = exponent % 3;
-  //   if (pr < 0) exponent -= 3;
-  //   significand *= Math.pow(10, (3 + pr) % 3); // if 1 or -2, 10. if -1 or 2, 100.
-  //   exponent -= pr;
-  //   // decimal significand fixup
-  //   var tolerance = 1e-2;
-  //   if (significand + tolerance >= 1e3) {
-  //     significand /= 1e3;
-  //     exponent += 3;
-  //   }
-  //   var metric_suffix = (Math.abs(exponent) <= 24) ? si_prefixes[(exponent + 24) / 3] : "e" + exponent;
-  //   // floating point joy
-  //   var sig_round = new Number(d3.format(".3r")(significand));
-  //   return sig_round.toPrecision() + metric_suffix;
-  }
+  r: function(x, p) { return d3.round(x, p = d3_format_precision(x, p)).toFixed(Math.max(0, Math.min(20, p))); }
 };
 
-function d3_format_getExponent(value) {
-  if (value == 0) return 0;
-  var l10 = Math.log(value) / Math.LN10,
-      exponent = Math.floor(l10),
-      mantissa = l10 - exponent;
-      significand = Math.pow(10, mantissa),
-      em = exponent % 3;
-    if (em < 0) exponent -= 3;
-    exponent -= em;
-    // equivalent to mantissa += (mod + em) % mod;
-    significand *= Math.pow(10, (3 + em) % 3);
-    // if rounding the sig up would bring it above 1e3, adjust the exponent
-    var tolerance = .5 + 1e-15;
-    if (significand + tolerance >= 1e3) exponent += 3;
-    // equivalent to if (Math.pow(10, mantissa) + tolerance >= 1e3) exponent += mod;
-    return exponent;
+function d3_format_precision(x, p) {
+  return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
+}
+
+function d3_format_exponent(x, p) {
+  if (!x) return 0;
+  if (p) x = d3.round(x, d3_format_precision(x, p));
+  var d = 1 + Math.floor(Math.log(1e-9 + x) / Math.LN10);
+  return Math.floor((d <= 0 ? d + 1 : d - 1) / 3) * 3;
 }
 
 function d3_format_typeDefault(x) {
