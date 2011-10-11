@@ -68,12 +68,43 @@ function d3_geo_rotateMatrix(y, x) {
 
 function d3_geo_rotateIdentity(coordinates) { return coordinates; }
 d3_geo_rotateIdentity.invert = d3_geo_rotateIdentity;
+d3.geo.zoom = function() {
+  var scale = 500,
+      translate = [480, 250];
+
+  function zoom(coordinates) {
+    return [
+      scale * coordinates[0] + translate[0],
+      scale * coordinates[1] + translate[1]
+    ];
+  }
+
+  zoom.invert = function(coordinates) {
+    return [
+      (coordinates[0] - translate[0]) / scale,
+      (coordinates[1] - translate[1]) / scale
+    ];
+  };
+
+  zoom.scale = function(x) {
+    if (!arguments.length) return scale;
+    scale = +x;
+    return zoom;
+  };
+
+  zoom.translate = function(x) {
+    if (!arguments.length) return translate;
+    translate = [+x[0], +x[1]];
+    return zoom;
+  };
+
+  return zoom;
+};
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
   var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
+      zoom = d3.geo.zoom(),
       origin,
-      scale = 200,
-      translate = [480, 250],
       x0,
       y0,
       cy0,
@@ -92,18 +123,17 @@ d3.geo.azimuthal = function() {
           : mode === "gnomonic" ? 1 / cc
           : mode === "equidistant" ? (c = Math.acos(cc), c ? c / Math.sin(c) : 0)
           : mode === "equalarea" ? Math.sqrt(2 / (1 + cc))
-          : 1,
-        x = k * cy1 * sx1,
-        y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
+          : 1;
+    return zoom([
+      k * cy1 * sx1,
+      k * (sy0 * cy1 * cx1 - cy0 * sy1)
+    ]);
   }
 
   azimuthal.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale,
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        y = coordinates[1],
         p = Math.sqrt(x * x + y * y),
         c = mode === "stereographic" ? 2 * Math.atan(p)
           : mode === "gnomonic" ? Math.atan(p)
@@ -134,17 +164,8 @@ d3.geo.azimuthal = function() {
     return azimuthal;
   };
 
-  azimuthal.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return azimuthal;
-  };
-
-  azimuthal.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return azimuthal;
-  };
+  azimuthal.scale = d3.rebind(azimuthal, zoom.scale);
+  azimuthal.translate = d3.rebind(azimuthal, zoom.translate);
 
   return azimuthal.origin([0, 0]);
 };
@@ -153,10 +174,9 @@ d3.geo.azimuthal = function() {
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
 
 d3.geo.albers = function() {
-  var origin = [-98, 38],
+  var zoom = d3.geo.zoom(),
+      origin = [-98, 38],
       parallels = [29.5, 45.5],
-      scale = 1000,
-      translate = [480, 250],
       lng0, // d3_geo_radians * origin[0]
       n,
       C,
@@ -165,16 +185,13 @@ d3.geo.albers = function() {
   function albers(coordinates) {
     var t = n * (d3_geo_radians * coordinates[0] - lng0),
         p = Math.sqrt(C - 2 * n * Math.sin(d3_geo_radians * coordinates[1])) / n;
-    return [
-      scale * p * Math.sin(t) + translate[0],
-      scale * (p * Math.cos(t) - p0) + translate[1]
-    ];
+    return zoom([p * Math.sin(t), p * Math.cos(t) - p0]);
   }
 
   albers.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale,
-        p0y = p0 + y,
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        p0y = p0 + coordinates[1],
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);
     return [
@@ -208,19 +225,10 @@ d3.geo.albers = function() {
     return reload();
   };
 
-  albers.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return albers;
-  };
+  albers.scale = d3.rebind(albers, zoom.scale);
+  albers.translate = d3.rebind(albers, zoom.translate);
 
-  albers.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return albers;
-  };
-
-  return reload();
+  return reload().scale(1000);
 };
 
 // A composite projection for the United States, 960x500. The set of standard
@@ -275,9 +283,8 @@ d3.geo.albersUsa = function() {
   return albersUsa.scale(lower48.scale());
 };
 d3.geo.bonne = function() {
-  var scale = 200,
-      translate = [480, 250],
-      rotate = d3.geo.rotate(),
+  var rotate = d3.geo.rotate(),
+      zoom = d3.geo.zoom(),
       origin, // origin in degrees
       y1, // parallel latitude in radians
       c1; // cot(y1)
@@ -295,15 +302,13 @@ d3.geo.bonne = function() {
       x *= Math.cos(y);
       y *= -1;
     }
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
+    return zoom([x, y]);
   }
 
   bonne.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        y = coordinates[1];
     if (y1) {
       var c = c1 + y,
           p = Math.sqrt(x * x + c * c);
@@ -331,89 +336,53 @@ d3.geo.bonne = function() {
     return bonne;
   };
 
-  bonne.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return bonne;
-  };
+  bonne.scale = d3.rebind(bonne, zoom.scale);
+  bonne.translate = d3.rebind(bonne, zoom.translate);
 
-  bonne.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return bonne;
-  };
-
-  return bonne.origin([0, 0]).parallel(45);
+  return bonne.origin([0, 0]).parallel(45).scale(200);
 };
 d3.geo.equirectangular = function() {
-  var scale = 500,
-      translate = [480, 250];
+  var zoom = d3.geo.zoom();
 
   function equirectangular(coordinates) {
-    var x = coordinates[0] / 360,
-        y = -coordinates[1] / 360;
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
+    return zoom([
+      coordinates[0] / 360,
+      y = -coordinates[1] / 360
+    ]);
   }
 
   equirectangular.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
+    coordinates = zoom.invert(coordinates);
     return [
-      360 * x,
-      -360 * y
+      360 * coordinates[0],
+      -360 * coordinates[1]
     ];
   };
 
-  equirectangular.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return equirectangular;
-  };
-
-  equirectangular.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return equirectangular;
-  };
+  equirectangular.scale = d3.rebind(equirectangular, zoom.scale);
+  equirectangular.translate = d3.rebind(equirectangular, zoom.translate);
 
   return equirectangular;
 };
 d3.geo.mercator = function() {
-  var scale = 500,
-      translate = [480, 250];
+  var zoom = d3.geo.zoom();
 
   function mercator(coordinates) {
     var x = coordinates[0] / 360,
         y = -(Math.log(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2)) / d3_geo_radians) / 360;
-    return [
-      scale * x + translate[0],
-      scale * Math.max(-.5, Math.min(.5, y)) + translate[1]
-    ];
+    return zoom([x, Math.max(-.5, Math.min(.5, y))]);
   }
 
   mercator.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
+    coordinates = zoom.invert(coordinates);
     return [
-      360 * x,
-      2 * Math.atan(Math.exp(-360 * y * d3_geo_radians)) / d3_geo_radians - 90
+      360 * coordinates[0],
+      2 * Math.atan(Math.exp(-360 * coordinates[1] * d3_geo_radians)) / d3_geo_radians - 90
     ];
   };
 
-  mercator.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return mercator;
-  };
-
-  mercator.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return mercator;
-  };
+  mercator.scale = d3.rebind(mercator, zoom.scale);
+  mercator.translate = d3.rebind(mercator, zoom.translate);
 
   return mercator;
 };

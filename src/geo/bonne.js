@@ -1,7 +1,6 @@
 d3.geo.bonne = function() {
-  var scale = 200,
-      translate = [480, 250],
-      rotate = d3.geo.rotate(),
+  var rotate = d3.geo.rotate(),
+      zoom = d3.geo.zoom(),
       origin, // origin in degrees
       y1, // parallel latitude in radians
       c1; // cot(y1)
@@ -19,15 +18,13 @@ d3.geo.bonne = function() {
       x *= Math.cos(y);
       y *= -1;
     }
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
+    return zoom([x, y]);
   }
 
   bonne.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        y = coordinates[1];
     if (y1) {
       var c = c1 + y,
           p = Math.sqrt(x * x + c * c);
@@ -55,17 +52,8 @@ d3.geo.bonne = function() {
     return bonne;
   };
 
-  bonne.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return bonne;
-  };
+  bonne.scale = d3.rebind(bonne, zoom.scale);
+  bonne.translate = d3.rebind(bonne, zoom.translate);
 
-  bonne.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return bonne;
-  };
-
-  return bonne.origin([0, 0]).parallel(45);
+  return bonne.origin([0, 0]).parallel(45).scale(200);
 };

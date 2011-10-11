@@ -3,10 +3,9 @@
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
 
 d3.geo.albers = function() {
-  var origin = [-98, 38],
+  var zoom = d3.geo.zoom(),
+      origin = [-98, 38],
       parallels = [29.5, 45.5],
-      scale = 1000,
-      translate = [480, 250],
       lng0, // d3_geo_radians * origin[0]
       n,
       C,
@@ -15,16 +14,13 @@ d3.geo.albers = function() {
   function albers(coordinates) {
     var t = n * (d3_geo_radians * coordinates[0] - lng0),
         p = Math.sqrt(C - 2 * n * Math.sin(d3_geo_radians * coordinates[1])) / n;
-    return [
-      scale * p * Math.sin(t) + translate[0],
-      scale * (p * Math.cos(t) - p0) + translate[1]
-    ];
+    return zoom([p * Math.sin(t), p * Math.cos(t) - p0]);
   }
 
   albers.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale,
-        p0y = p0 + y,
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        p0y = p0 + coordinates[1],
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);
     return [
@@ -58,19 +54,10 @@ d3.geo.albers = function() {
     return reload();
   };
 
-  albers.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return albers;
-  };
+  albers.scale = d3.rebind(albers, zoom.scale);
+  albers.translate = d3.rebind(albers, zoom.translate);
 
-  albers.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return albers;
-  };
-
-  return reload();
+  return reload().scale(1000);
 };
 
 // A composite projection for the United States, 960x500. The set of standard

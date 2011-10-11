@@ -1,36 +1,23 @@
 d3.geo.equirectangular = function() {
-  var scale = 500,
-      translate = [480, 250];
+  var zoom = d3.geo.zoom();
 
   function equirectangular(coordinates) {
-    var x = coordinates[0] / 360,
-        y = -coordinates[1] / 360;
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
+    return zoom([
+      coordinates[0] / 360,
+      y = -coordinates[1] / 360
+    ]);
   }
 
   equirectangular.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
+    coordinates = zoom.invert(coordinates);
     return [
-      360 * x,
-      -360 * y
+      360 * coordinates[0],
+      -360 * coordinates[1]
     ];
   };
 
-  equirectangular.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return equirectangular;
-  };
-
-  equirectangular.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return equirectangular;
-  };
+  equirectangular.scale = d3.rebind(equirectangular, zoom.scale);
+  equirectangular.translate = d3.rebind(equirectangular, zoom.translate);
 
   return equirectangular;
 };
