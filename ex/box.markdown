@@ -13,8 +13,8 @@ title: Box Plots
 
 <link type="text/css" rel="stylesheet" href="button.css"/>
 <link type="text/css" rel="stylesheet" href="box.css"/>
-<script type="text/javascript" src="../d3.csv.js?2.4.1"> </script>
-<script type="text/javascript" src="../d3.chart.js?2.4.1"> </script>
+<script type="text/javascript" src="../d3.csv.js?2.4.2"> </script>
+<script type="text/javascript" src="../d3.chart.js?2.4.2"> </script>
 <script type="text/javascript" src="box.js"> </script>
 
 Data from the [Michelson–Morley experiment](http://en.wikipedia.org/wiki/Michelson%E2%80%93Morley_experiment).
