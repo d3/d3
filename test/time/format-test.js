@@ -94,6 +94,11 @@ suite.addBatch({
       assert.equal(f(local(1990, 0, 1, 0, 0, 0)), "00");
       assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
     },
+    "formats zero-padded millisecond": function(format) {
+      var f = format("%L");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 0, 0)), "000");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 0, 432)), "432");
+    },
     "formats zero-padded week number": function(format) {
       var f = format("%U");
       assert.equal(f(local(1990, 0, 1)), "00");
@@ -215,6 +220,11 @@ suite.addBatch({
         assert.equal(f(utc(1990, 0, 1, 0, 0, 0)), "00");
         assert.equal(f(utc(1990, 0, 1, 0, 0, 32)), "32");
       },
+      "formats zero-padded millisecond": function(format) {
+        var f = format("%L");
+        assert.equal(f(utc(1990, 0, 1, 0, 0, 0, 0)), "000");
+        assert.equal(f(utc(1990, 0, 1, 0, 0, 0, 432)), "432");
+      },
       "formats zero-padded week number": function(format) {
         var f = format("%U");
         assert.equal(f(utc(1990, 0, 1)), "00");
@@ -255,9 +265,12 @@ suite.addBatch({
       topic: function(format) {
         return format.iso;
       },
+      "toString is %Y-%m-%dT%H:%M:%S.%LZ": function(format) {
+        assert.equal(format + "", "%Y-%m-%dT%H:%M:%S.%LZ");
+      },
       "formats as ISO 8601": function(format) {
-        assert.equal(format(utc(1990, 0, 1, 0, 0, 0)), "1990-01-01T00:00:00Z");
-        assert.equal(format(utc(2011, 11, 31, 23, 59, 59)), "2011-12-31T23:59:59Z");
+        assert.equal(format(utc(1990, 0, 1, 0, 0, 0)), "1990-01-01T00:00:00.000Z");
+        assert.equal(format(utc(2011, 11, 31, 23, 59, 59)), "2011-12-31T23:59:59.000Z");
       }
     }
   },
@@ -412,19 +425,19 @@ suite.addBatch({
       },
       "parses as ISO 8601": function(format) {
         var p = format.parse;
-        assert.deepEqual(p("1990-01-01T00:00:00Z"), utc(1990, 0, 1, 0, 0, 0));
-        assert.deepEqual(p("2011-12-31T23:59:59Z"), utc(2011, 11, 31, 23, 59, 59));
+        assert.deepEqual(p("1990-01-01T00:00:00.000Z"), utc(1990, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("2011-12-31T23:59:59.000Z"), utc(2011, 11, 31, 23, 59, 59));
       }
     }
   }
 });
 
-function local(year, month, day, hours, minutes, seconds) {
-  return new Date(year, month, day, hours || 0, minutes || 0, seconds || 0);
+function local(year, month, day, hours, minutes, seconds, milliseconds) {
+  return new Date(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
 }
 
-function utc(year, month, day, hours, minutes, seconds) {
-  return new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0));
+function utc(year, month, day, hours, minutes, seconds, milliseconds) {
+  return new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0));
 }
 
 suite.export(module);

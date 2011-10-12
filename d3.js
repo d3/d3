@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.4.1"}; // semver
+d3 = {version: "2.4.2"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -2208,9 +2208,12 @@ function d3_scale_nice(domain, nice) {
     dx = x0; x0 = x1; x1 = dx;
   }
 
-  nice = nice(x1 - x0);
-  domain[i0] = nice.floor(x0);
-  domain[i1] = nice.ceil(x1);
+  if (dx = x1 - x0) {
+    nice = nice(dx);
+    domain[i0] = nice.floor(x0);
+    domain[i1] = nice.ceil(x1);
+  }
+
   return domain;
 }
 

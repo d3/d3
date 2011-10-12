@@ -75,6 +75,7 @@ var d3_time_formats = {
   H: function(d) { return d3_time_zfill2(d.getHours()); },
   I: function(d) { return d3_time_zfill2(d.getHours() % 12 || 12); },
   j: d3_time_dayOfYear,
+  L: function(d) { return d3_time_zfill3(d.getMilliseconds()); },
   m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
   M: function(d) { return d3_time_zfill2(d.getMinutes()); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
@@ -101,6 +102,7 @@ var d3_time_parsers = {
   H: d3_time_parseHour24,
   I: d3_time_parseHour12,
   // j: function(d, s, i) { /*TODO day of year [001,366] */ return i; },
+  L: d3_time_parseMilliseconds,
   m: d3_time_parseMonthNumber,
   M: d3_time_parseMinutes,
   p: d3_time_parseAmPm,
@@ -272,6 +274,12 @@ function d3_time_parseSeconds(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
   return n ? (date.setSeconds(+n[0]), i += n[0].length) : -1;
+}
+
+function d3_time_parseMilliseconds(date, string, i) {
+  d3_time_numberRe.lastIndex = 0;
+  var n = d3_time_numberRe.exec(string.substring(i, i + 3));
+  return n ? (date.setMilliseconds(+n[0]), i += n[0].length) : -1;
 }
 
 // Note: we don't look at the next directive.

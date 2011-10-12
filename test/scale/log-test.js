@@ -194,6 +194,10 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [1000, 1]);
         var x = log().domain([.01, .49]).nice();
         assert.deepEqual(x.domain(), [.01, 1]);
+        var x = log().domain([0, 0]).nice();
+        assert.deepEqual(x.domain(), [0, 0]);
+        var x = log().domain([.5, .5]).nice();
+        assert.inDelta(x.domain(), [.5, .5], 1e-6);
       },
       "nicing a polylog domain only affects the extent": function(log) {
         var x = log().domain([1.1, 1.5, 10.9]).nice();
