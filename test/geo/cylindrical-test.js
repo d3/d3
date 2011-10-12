@@ -11,7 +11,7 @@ suite.addBatch({
   "cylindrical": {
     "equidistant": {
       "zero origin": {
-        topic: d3.geo.cylindrical,
+        topic: function() { return d3.geo.cylindrical().mode("equidistant").scale(500 / (2 * Math.PI)); },
         "Arctic":      testProjection([0,    85], [480, 131.944444]),
         "Antarctic":   testProjection([0,   -85], [480, 368.055555]),
         "Hawaii":      testProjection([-180,  0], [230, 250]),
@@ -27,7 +27,7 @@ suite.addBatch({
     },
     "equalarea": {
       "zero origin": {
-        topic: function() { return d3.geo.conic().mode("equalarea").parallels(0).origin([0, 0]).scale(500); },
+        topic: function() { return d3.geo.cylindrical().mode("equalarea").scale(500 / (2 * Math.PI)); },
         "Arctic":      testProjection([0,    85], [480, 170.725344]),
         "Antarctic":   testProjection([0,   -85], [480, 329.274655]),
         "Hawaii":      testProjection([-180,  0], [230, 250]),

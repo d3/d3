@@ -233,7 +233,7 @@ d3.geo.bonne = function() {
 
   return bonne.origin([0, 0]).parallel(45).scale(200);
 };
-// Derived from Tom Carden's Albers implementation for Protovis.
+// Albers derived from Tom Carden's implementation for Protovis.
 // http://gist.github.com/476238
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
 
@@ -241,7 +241,7 @@ d3.geo.conic = function() {
   var origin = [-98, 38],
       parallels = [29.5, 45.5],
       lng0, // d3_geo_radians * origin[0]
-      zoom = d3.geo.zoom(),
+      zoom = d3.geo.zoom().scale(1000),
       n,
       C,
       p0,
@@ -249,14 +249,14 @@ d3.geo.conic = function() {
 
   function conic(coordinates) {
     var t = (n || 1) * (d3_geo_radians * coordinates[0] - lng0),
-        p = mode === "equalarea" ? n ? Math.sqrt(C - 2 * n * Math.sin(d3_geo_radians * coordinates[1])) / n : C
-          : mode === "equidistant" ? C - coordinates[1]
-          : 0; // TODO conformal
-    var x = n ? p * Math.sin(t) : C * t,
-        y = n ? (p * Math.cos(t) - p0) : -Math.sin(d3_geo_radians * coordinates[1]) / C;
+        p = mode === "equalarea" ? (n ? Math.sqrt(C - 2 * n * Math.sin(d3_geo_radians * coordinates[1])) / n : C)
+          : mode === "equidistant" ? d3_geo_radians * -coordinates[1]
+          : n ? C / Math.pow(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2), n) : C;
     return zoom([
-      x / (d3_geo_radians * 360),
-      y / (d3_geo_radians * 360)
+      n ? p * Math.sin(t) : C * t,
+      mode === "equalarea" ? n ? (p * Math.cos(t) - p0) : -Math.sin(d3_geo_radians * coordinates[1]) / C
+      : mode === "equidistant" ? p
+      : n ? p0 - p * Math.cos(t) : -Math.log(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2))
     ]);
   }
 
@@ -267,10 +267,14 @@ d3.geo.conic = function() {
         p0y = p0 + y,
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);
-    //Math.asin(-y * c1)
     return [
-      (lng0 + t / n) / d3_geo_radians,
-      Math.asin((C - p * p * n * n) / (2 * n)) / d3_geo_radians
+      (lng0 + (n ? t / n : x / C)) / d3_geo_radians,
+      (mode === "equalarea" ? Math.asin(n ? (C - p * p * n * n) / (2 * n) : -y * C)
+      : mode === "equidistant" ? -y
+      : 2 * (n
+        ? Math.atan2(Math.pow(C, 1 / n), Math.pow((n < 0 ? -1 : 1) * p, 1 / n))
+        : Math.atan(Math.exp(-y))) - Math.PI / 2
+      ) / d3_geo_radians
     ];
   };
 
@@ -278,12 +282,28 @@ d3.geo.conic = function() {
     var phi1 = d3_geo_radians * parallels[0],
         phi2 = d3_geo_radians * parallels[1],
         lat0 = d3_geo_radians * origin[1],
-        s = Math.sin(phi1),
-        c = Math.cos(phi1);
+        c1 = Math.cos(phi1);
     lng0 = d3_geo_radians * origin[0];
-    n = .5 * (s + Math.sin(phi2));
-    C = n ? c * c + 2 * n * s : c;
-    p0 = n ? Math.sqrt(C - 2 * n * Math.sin(lat0)) / n : 0;
+    switch(mode) {
+      case "equalarea":
+        var s = Math.sin(phi1);
+        n = .5 * (s + Math.sin(phi2));
+        C = n ? c1 * c1 + 2 * n * s : c1;
+        p0 = n ? Math.sqrt(C - 2 * n * Math.sin(lat0)) / n : 0;
+        break;
+      case "equidistant":
+        n = (c1 - Math.cos(phi2)) / (phi2 - phi1);
+        C = n ? c1 / n + phi1 : c1;
+        p0 = C - lat0;
+        break;
+      case "conformal":
+        n = Math.log(Math.cos(phi1) / Math.cos(phi2))
+            / Math.log(Math.tan(Math.PI / 4 + phi2 / 2)
+              / Math.tan(Math.PI / 4 + phi1 / 2));
+        C = n ? Math.cos(phi1) * Math.pow(Math.tan(Math.PI / 4 + phi1 / 2), n) / n : 1;
+        p0 = n ? C / Math.pow(Math.tan(Math.PI / 4 + lat0 / 2), n) : 0;
+        break;
+    }
     return conic;
   }
 
@@ -299,14 +319,17 @@ d3.geo.conic = function() {
     return reload();
   };
 
+  // Cylindrical:
+  // * Equidistant: 0° for plate carrée.
+  // * Equalarea: 0° for Lambert, 30° for Behrmann, 45° for Gall–Peters.
+  // * Mercator: TODO make this set the "latitude of true scale".
   conic.parallels = function(x) {
     if (!arguments.length) return parallels;
     parallels = typeof x === "number" ? [x, -x] : [+x[0], +x[1]];
     return reload();
   };
 
-  conic.scale = d3.rebind(conic, zoom.scale);
-  conic.translate = d3.rebind(conic, zoom.translate);
+  d3_geo_zoomRebind(conic, zoom);
 
   return reload();
 };
@@ -364,71 +387,11 @@ d3.geo.albersUsa = function() {
   return albersUsa.scale(lower48.scale());
 };
 d3.geo.cylindrical = function() {
-  var scale = 500,
-      translate = [480, 250],
-      parallel,
-      c1,
-      mode = "equidistant"; // or equalarea, mercator
-
-  function cylindrical(coordinates) {
-    var x = coordinates[0] * d3_geo_radians,
-        y = coordinates[1] * d3_geo_radians;
-    x *= c1;
-    y = mode === "equidistant" ? -y
-      : mode === "mercator" ? -Math.log(Math.tan(Math.PI / 4 + y / 2))
-      : -Math.sin(y) / c1;
-
-    return [
-      (scale * x) / (d3_geo_radians * 360) + translate[0],
-      (scale * y) / (d3_geo_radians * 360) + translate[1]
-    ];
-  }
-
-  cylindrical.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale * d3_geo_radians * 360,
-        y = (coordinates[1] - translate[1]) / scale * d3_geo_radians * 360;
-    x /= c1;
-    y = mode === "equidistant" ? -y
-      : mode === "mercator" ? 2 * Math.atan(Math.exp(-y)) - Math.PI / 2
-      : Math.asin(-y * c1);
-    return [
-      x / d3_geo_radians,
-      y / d3_geo_radians
-    ];
-  };
-
-  cylindrical.mode = function(x) {
-    if (!arguments.length) return mode;
-    mode = x + "";
-    return cylindrical;
-  };
-
-  // Equidistant: 0° for plate carrée.
-  // Equalarea: 0° for Lambert, 30° for Behrmann, 45° for Gall–Peters.
-  // Mercator: TODO make this set the "latitude of true scale".
-  cylindrical.parallel = function(x) {
-    if (!arguments.length) return parallel;
-    c1 = Math.cos((parallel = +x) * d3_geo_radians);
-    return cylindrical;
-  };
-
-  cylindrical.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return cylindrical;
-  };
-
-  cylindrical.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return cylindrical;
-  };
-
-  return cylindrical.parallel(0);
+  return d3.geo.conic().parallels(0).origin([0, 0]);
 };
 d3.geo.equirectangular = d3.geo.cylindrical;
 d3.geo.mercator = function() {
-  return d3.geo.cylindrical().mode("mercator");
+  return d3.geo.conic().mode("conformal").parallels(0).origin([0, 0]);
 };
 function d3_geo_type(types, defaultValue) {
   return function(object) {
