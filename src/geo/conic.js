@@ -21,7 +21,7 @@ d3.geo.conic = function() {
       n ? p * Math.sin(t) : C * t,
       mode === "equalarea" ? n ? (p * Math.cos(t) - p0) : -Math.sin(d3_geo_radians * coordinates[1]) / C
       : mode === "equidistant" ? p
-      : n ? p0 - p * Math.cos(t) : -Math.log(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2))
+      : n ? p * Math.cos(t) - p0 : -Math.log(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2))
     ]);
   }
 
