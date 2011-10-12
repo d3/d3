@@ -185,8 +185,10 @@ d3.geo.js: \
 	src/geo/rotate.js \
 	src/geo/zoom.js \
 	src/geo/azimuthal.js \
-	src/geo/albers.js \
 	src/geo/bonne.js \
+	src/geo/conic.js \
+	src/geo/albers.js \
+	src/geo/cylindrical.js \
 	src/geo/equirectangular.js \
 	src/geo/mercator.js \
 	src/geo/type.js \
