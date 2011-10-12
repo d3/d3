@@ -10,9 +10,12 @@ function d3_scale_nice(domain, nice) {
     dx = x0; x0 = x1; x1 = dx;
   }
 
-  nice = nice(x1 - x0);
-  domain[i0] = nice.floor(x0);
-  domain[i1] = nice.ceil(x1);
+  if (dx = x1 - x0) {
+    nice = nice(dx);
+    domain[i0] = nice.floor(x0);
+    domain[i1] = nice.ceil(x1);
+  }
+
   return domain;
 }
 
