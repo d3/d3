@@ -186,6 +186,7 @@ d3.geo.js: \
 	src/geo/zoom.js \
 	src/geo/azimuthal.js \
 	src/geo/bonne.js \
+	src/geo/collignon.js \
 	src/geo/conic.js \
 	src/geo/albers.js \
 	src/geo/cylindrical.js \
