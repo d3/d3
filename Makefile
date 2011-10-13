@@ -255,7 +255,7 @@ install:
 	mkdir -p node_modules
 	npm install
 
-package.json: d3.js
+package.json: d3.js src/package.js
 	node src/package.js > $@
 
 clean:
