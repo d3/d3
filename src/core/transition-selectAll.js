@@ -18,5 +18,5 @@ d3_transitionPrototype.selectAll = function(selector) {
     }
   }
 
-  return d3_transition(subgroups, this.id).ease(this.ease());
+  return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };

@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.4.3"}; // semver
+d3 = {version: "2.4.4"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -1824,7 +1824,7 @@ d3_selectionPrototype.transition = function() {
     }
   }
 
-  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId);
+  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId, Date.now());
 };
 var d3_selectionRoot = d3_selection([[document]]);
 
@@ -1844,15 +1844,16 @@ d3.selectAll = function(selector) {
       ? d3_selectionRoot.selectAll(selector)
       : d3_selection([d3_array(selector)]); // assume node[]
 };
-function d3_transition(groups, id) {
+function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
   var tweens = {},
       event = d3.dispatch("start", "end"),
-      ease = d3_transitionEase,
-      then = Date.now();
+      ease = d3_transitionEase;
 
   groups.id = id;
+
+  groups.time = time;
 
   groups.tween = function(name, tween) {
     if (arguments.length < 2) return tweens[name];
@@ -1883,7 +1884,7 @@ function d3_transition(groups, id) {
 
       ++lock.count;
 
-      delay <= elapsed ? start(elapsed) : d3.timer(start, delay, then);
+      delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time);
 
       function start(elapsed) {
         if (lock.active > id) return stop();
@@ -1896,7 +1897,7 @@ function d3_transition(groups, id) {
         }
 
         event.start.dispatch.call(node, d, i);
-        if (!tick(elapsed)) d3.timer(tick, 0, then);
+        if (!tick(elapsed)) d3.timer(tick, 0, time);
         return 1;
       }
 
@@ -1926,7 +1927,7 @@ function d3_transition(groups, id) {
       }
     });
     return 1;
-  }, 0, then);
+  }, 0, time);
 
   return groups;
 }
@@ -1987,7 +1988,7 @@ d3_transitionPrototype.select = function(selector) {
     }
   }
 
-  return d3_transition(subgroups, this.id).ease(this.ease());
+  return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.selectAll = function(selector) {
   var subgroups = [],
@@ -2009,7 +2010,7 @@ d3_transitionPrototype.selectAll = function(selector) {
     }
   }
 
-  return d3_transition(subgroups, this.id).ease(this.ease());
+  return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.attr = function(name, value) {
   return this.attrTween(name, d3_transitionTween(value));

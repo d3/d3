@@ -10,5 +10,5 @@ d3_selectionPrototype.transition = function() {
     }
   }
 
-  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId);
+  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId, Date.now());
 };
