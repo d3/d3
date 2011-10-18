@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+.curve, .line {
+  fill: none;
+  stroke-width: 1.5px;
+}
+
+.curve {
+  stroke: #000;
+  stroke-opacity: .5;
+  stroke-width: 3px;
+}
+
+circle {
+  stroke: none;
+}
+
+.control {
+  fill: #ccc;
+  stroke: #aaa;
+}
+
+text {
+  font-size: 11px;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="footer">
+        Bézier Curves by Jason Davies
+        <div class="hint">drag control points to reshape</div>
+        <div style="font-size:12px;line-height:60px;"><input type="checkbox" id="play"> <label for="play">animate <i>t</t></label></div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+// Implementation by Jason Davies
+// http://www.jasondavies.com/animated-bezier/
+
+var w = 250,
+    h = 600,
+    t = .5,
+    delta = .01,
+    padding = 30,
+    bezier = {},
+    line = d3.svg.line().x(x).y(y),
+    n = 4,
+    orders = d3.range(2, n + 2),
+    color = d3.scale.category10(),
+    stop = true,
+    last = 0;
+
+var points = [
+  {"x":0,"y":496},
+  {"x":230,"y":319},
+  {"x":84,"y":92},
+  {"x":0,"y":244},
+  {"x":67,"y":310},
+];
+
+var vis = d3.select("#body").append("div")
+    .style("margin-left", "20px")
+  .selectAll("svg")
+    .data(orders)
+  .enter().append("svg:svg")
+    .attr("width", w + 2 * padding)
+    .attr("height", h + 2 * padding)
+  .append("svg:g")
+    .attr("transform", "translate(" + padding + "," + padding + ")");
+
+vis.selectAll("circle.control")
+    .data(function(d) { return points.slice(0, d) })
+  .enter().append("svg:circle")
+    .attr("class", "control")
+    .attr("r", 7)
+    .attr("cx", x)
+    .attr("cy", y)
+    .call(d3.behavior.drag()
+      .on("dragstart", function(d) {
+        this.__origin__ = [d.x, d.y];
+      })
+      .on("drag", function(d) {
+        d.x = Math.min(w, Math.max(0, this.__origin__[0] += d3.event.dx));
+        d.y = Math.min(h, Math.max(0, this.__origin__[1] += d3.event.dy));
+        bezier = {};
+        update();
+        vis.selectAll("circle.control")
+          .attr("cx", x)
+          .attr("cy", y);
+      })
+      .on("dragend", function() {
+        delete this.__origin__;
+      }));
+
+vis.selectAll("text.controltext")
+    .data(function(d) { return points.slice(0, d); })
+  .enter().append("svg:text")
+    .attr("class", "controltext")
+    .attr("dx", "10px")
+    .attr("dy", ".4em")
+    .text(function(d, i) { return "P" + i });
+
+update();
+
+d3.select("input[type=checkbox]").on("change", function() {
+  if (!(stop = !this.checked)) {
+    last = 0;
+    d3.timer(start);
+  }
+});
+
+function start(elapsed) {
+  t = (t + (elapsed - last) / 5000) % 1;
+  last = elapsed;
+  update();
+  return stop;
+}
+
+function update() {
+  var interpolation = vis.selectAll("g")
+      .data(function(d) { return getLevels(d, t); });
+
+  interpolation.enter().append("svg:g")
+      .style("pointer-events", "none")
+      .style("fill", function(d, i) { return color(i); })
+      .style("stroke", function(d, i) { return color(i); });
+
+  var circle = interpolation.selectAll("circle")
+      .data(Object);
+
+  circle.enter().append("svg:circle")
+      .attr("r", 4);
+
+  circle
+      .attr("cx", x)
+      .attr("cy", y);
+
+  var path = interpolation.selectAll("path")
+      .data(function(d) { return [d]; });
+
+  path.enter().append("svg:path")
+      .attr("class", "line");
+
+  path.attr("d", line);
+
+  var curve = vis.selectAll("path.curve")
+      .data(getCurve);
+
+  curve.enter().append("svg:path")
+      .attr("class", "curve");
+
+  curve.attr("d", line);
+
+  vis.selectAll("text.controltext")
+      .attr("x", x)
+      .attr("y", y);
+}
+
+function interpolate(d, p) {
+  if (arguments.length < 2) p = t;
+  var r = [];
+  for (var i=1; i<d.length; i++) {
+    var d0 = d[i-1], d1 = d[i];
+    r.push({x: d0.x + (d1.x - d0.x) * p, y: d0.y + (d1.y - d0.y) * p});
+  }
+  return r;
+}
+
+function getLevels(d, t_) {
+  if (arguments.length < 2) t_ = t;
+  var x = [points.slice(0, d)];
+  for (var i=1; i<d; i++) {
+    x.push(interpolate(x[x.length-1], t_));
+  }
+  return x;
+}
+
+function getCurve(d) {
+  var curve = bezier[d];
+  if (!curve) {
+    curve = bezier[d] = [];
+    for (var t_=0; t_<=1; t_+=delta) {
+      var x = getLevels(d, t_);
+      curve.push(x[x.length-1][0]);
+    }
+  }
+  return [curve.slice(0, t / delta + 1)];
+}
+
+function x(d) { return d.x; }
+function y(d) { return d.y; }
+
+    </script>
+  </body>
+</html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <div id="body">
+      <pre style="margin-left:80px;font-size:36px;"><code>
+// converts dates to pixel coordinates
+var x = d3.time.scale()…;
+
+// draw major and minor grid lines
+svg.append("svg:g")
+    .attr("class", "x grid")
+    .attr("transform", "translate(0," + h + ")")
+    .call(xAxis.tickSubdivide(1).tickSize(-h));
+
+// draw major ticks
+svg.append("svg:g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + h + ")")
+    .call(xAxis.tickSubdivide(0).tickSize(6));
+</code></pre>
+      <div id="footer">
+        scales and axes
+        <div class="hint">
+          composable pieces for visualization
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="hijs/hi.js"></script>
+  </body>
+</html>

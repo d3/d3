@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <div id="body">
+      <pre style="margin-left:80px;font-size:36px;"><code>
+// computes node positions for a hierarchy
+var layout = d3.layout.cluster()
+    .size([2 * Math.PI, r]);
+
+// computes least common ancestor for links
+var bundle = d3.layout.bundle();
+
+// converts node positions to path data
+var line = d3.svg.line.radial()
+    .interpolate("bundle")
+    .angle(function(d) { return d.x; })
+    .radius(function(d) { return d.y; });
+</code></pre>
+      <div id="footer">
+        layouts and shapes
+        <div class="hint">composable pieces for visualization</div>
+      </div>
+    </div>
+    <script type="text/javascript" src="hijs/hi.js"></script>
+  </body>
+</html>

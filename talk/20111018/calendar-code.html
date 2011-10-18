@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <div id="body">
+      <pre style="margin-left:80px;font-size:36px;"><code>
+// generates path data for month t0
+function monthPath(t0) {
+  var t1 = lastDayOfMonth(t0),
+      d0 = dayInWeek(t0), // %w
+      d1 = dayInWeek(t1),
+      w0 = weekInYear(t0), // %U
+      w1 = weekInYear(t1);
+  return "M" + (w0 + 1) * z + "," + (d0 + 0) * z
+       + "H" + (w0 + 0) * z + "V" + (     7) * z
+       + "H" + (w1 + 0) * z + "V" + (d1 + 1) * z
+       + "H" + (w1 + 1) * z + "V" + (     0) * z
+       + "H" + (w0 + 1) * z + "Z";
+}
+</code></pre>
+      <div id="footer">
+        transparent representation
+        <div class="hint">
+          lowers barrier to customization and extension
+        </div>
+      </div>
+    </div>
+    <script type="text/javascript" src="hijs/hi.js"></script>
+  </body>
+</html>

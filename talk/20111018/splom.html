@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <style type="text/css">
+
+svg {
+  display: block;
+  margin: auto;
+  margin-top: 40px;
+  font-size: 10px;
+}
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.axis line {
+  stroke: #ddd;
+  stroke-width: .5px;
+}
+
+.axis path {
+  display: none;
+}
+
+circle {
+  fill-opacity: .5;
+  pointer-events: none;
+}
+
+circle.hidden {
+  fill: #ccc !important;
+}
+
+.cell text {
+  font-size: 12px;
+}
+
+rect {
+  cursor: crosshair;
+  fill: #fff;
+  fill-opacity: .5;
+  stroke: #aaa;
+  stroke-width: 1.5px;
+  pointer-events: all;
+}
+
+rect.brush {
+  fill: #999;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="footer">
+        Iris Flowers
+        <div class="hint">drag to highlight samples</div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+d3.json("flowers.json", function(flower) {
+
+  // Size parameters.
+  var size = 150,
+      padding = 19.5,
+      n = flower.traits.length;
+
+  // Color scale.
+  var color = d3.scale.ordinal().range([
+    "rgb(50%, 0%, 0%)",
+    "rgb(0%, 50%, 0%)",
+    "rgb(0%, 0%, 50%)"
+  ]);
+
+  // Position scales.
+  var x = {}, y = {};
+  flower.traits.forEach(function(trait) {
+    var domain = [d3.min(flower.values, value), d3.max(flower.values, value)],
+        range = [padding / 2, size - padding / 2];
+
+    x[trait] = d3.scale.linear().domain(domain).range(range);
+    y[trait] = d3.scale.linear().domain(domain).range(range.reverse());
+
+    function value(d) { return d[trait]; }
+  });
+
+  // Axes.
+  var axis = d3.svg.axis()
+      .ticks(5)
+      .tickSize(size * n);
+
+  // Root panel.
+  var svg = d3.select("#body").append("svg:svg")
+      .attr("width", size * n + padding)
+      .attr("height", size * n + padding);
+
+  // X-axis.
+  svg.selectAll("g.x.axis")
+      .data(flower.traits)
+    .enter().append("svg:g")
+      .attr("class", "x axis")
+      .attr("transform", function(d, i) { return "translate(" + i * size + ",0)"; })
+      .each(function(d) { d3.select(this).call(axis.scale(x[d]).orient("bottom")); });
+
+  // Y-axis.
+  svg.selectAll("g.y.axis")
+      .data(flower.traits)
+    .enter().append("svg:g")
+      .attr("class", "y axis")
+      .attr("transform", function(d, i) { return "translate(0," + i * size + ")"; })
+      .each(function(d) { d3.select(this).call(axis.scale(y[d]).orient("right")); });
+
+  // Cell and plot.
+  var cell = svg.selectAll("g.cell")
+      .data(cross(flower.traits, flower.traits))
+    .enter().append("svg:g")
+      .attr("class", "cell")
+      .attr("transform", function(d) { return "translate(" + d.i * size + "," + d.j * size + ")"; })
+      .each(plot);
+
+  // Plot frame.
+  cell.insert("svg:rect", "circle")
+      .attr("x", padding / 2)
+      .attr("y", padding / 2)
+      .attr("width", size - padding)
+      .attr("height", size - padding)
+      .on("mousedown", mousedown);
+
+  // Titles for the diagonal.
+  cell.filter(function(d) { return d.i == d.j; }).append("svg:text")
+      .attr("x", padding)
+      .attr("y", padding)
+      .attr("dy", ".71em")
+      .text(function(d) { return d.x; });
+
+  function plot(p) {
+    d3.select(this).selectAll("circle")
+        .data(flower.values)
+      .enter().append("svg:circle")
+        .attr("cx", function(d) { return x[p.x](d[p.x]); })
+        .attr("cy", function(d) { return y[p.y](d[p.y]); })
+        .attr("r", 3)
+        .style("fill", function(d) { return color(d.species); });
+  }
+
+  d3.select(window)
+      .on("mousemove", mousemove)
+      .on("mouseup", mouseup);
+
+  var rect, x0, x1, count;
+
+  function mousedown() {
+    x0 = d3.svg.mouse(this);
+    count = 0;
+    rect = d3.select(this.parentNode).append("svg:rect").attr("class", "brush");
+    d3.event.preventDefault();
+  }
+
+  function mousemove() {
+    if (!rect) return;
+    x1 = d3.svg.mouse(rect.node());
+
+    x1[0] = Math.max(padding / 2, Math.min(size - padding / 2, x1[0]));
+    x1[1] = Math.max(padding / 2, Math.min(size - padding / 2, x1[1]));
+
+    var minx = Math.min(x0[0], x1[0]),
+        maxx = Math.max(x0[0], x1[0]),
+        miny = Math.min(x0[1], x1[1]),
+        maxy = Math.max(x0[1], x1[1]);
+
+    rect
+        .attr("x", minx - .5)
+        .attr("y", miny - .5)
+        .attr("width", maxx - minx + 1)
+        .attr("height", maxy - miny + 1);
+
+    var v = rect.node().__data__,
+        mins = x[v.x].invert(minx),
+        maxs = x[v.x].invert(maxx),
+        mint = y[v.y].invert(maxy),
+        maxt = y[v.y].invert(miny);
+
+    count = 0;
+    svg.selectAll("circle").classed("hidden", function(d) {
+      return (mins > d[v.x] || maxs < d[v.x]
+          || mint > d[v.y] || maxt < d[v.y])
+          && ++count;
+    });
+  }
+
+  function mouseup() {
+    if (!rect) return;
+    rect.remove();
+    rect = null;
+    if (!count) svg.selectAll("circle").classed("hidden", false);
+  }
+
+});
+
+function cross(a, b) {
+  var c = [], n = a.length, m = b.length, i, j;
+  for (i = -1; ++i < n;) for (j = -1; ++j < m;) c.push({x: a[i], i: i, y: b[j], j: j});
+  return c;
+}
+
+    </script>
+  </body>
+</html>

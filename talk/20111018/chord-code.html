@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <div id="body">
+      <pre style="margin-left:80px;font-size:36px;"><code>
+// converts matrix to chord and arc angles
+var layout = d3.layout.chord()
+    .sortSubgroups(d3.descending)
+    .sortChords(d3.descending)
+    .padding(.04);
+
+// converts chord angles to path data
+var chord = d3.svg.chord()
+    .radius(r);
+
+// converts arc angles to path data
+var arc = d3.svg.arc()
+    .innerRadius(r)
+    .outerRadius(r + 20);
+</code></pre>
+      <div id="footer">
+        layouts and shapes
+        <div class="hint">composable pieces for visualization</div>
+      </div>
+    </div>
+    <script type="text/javascript" src="hijs/hi.js"></script>
+  </body>
+</html>

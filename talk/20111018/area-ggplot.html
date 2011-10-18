@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.csv.js"></script>
+    <script type="text/javascript" src="d3/d3.time.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+svg {
+  font-size: 10px;
+}
+
+rect {
+  fill: #ddd;
+}
+
+path.area {
+  fill: #000;
+  fill-opacity: .75;
+}
+
+.axis line, .grid line {
+  stroke-width: .5px;
+  shape-rendering: crispEdges;
+}
+
+.grid line {
+  stroke: #fff;
+}
+
+.grid line.minor {
+  stroke-opacity: .5;
+}
+
+.grid text {
+  display: none;
+}
+
+.axis line {
+  stroke: #000;
+}
+
+.grid path, .axis path {
+  display: none;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="footer">
+        <span>DJI, 1996-2009</span>
+        <div class="hint">click or option-click to toggle zoom</div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+var m = [79, 80, 160, 79],
+    w = 1280 - m[1] - m[3],
+    h = 800 - m[0] - m[2],
+    parse = d3.time.format("%Y-%m-%d").parse,
+    format = d3.time.format("%Y");
+
+// Scales. Note the inverted domain for the y-scale: bigger is up!
+var x = d3.time.scale().range([20, w - 20]),
+    y = d3.scale.linear().range([h - 20, 20]),
+    d0 = [],
+    d1 = [];
+
+// Axes.
+var xAxis = d3.svg.axis().scale(x).orient("bottom"),
+    yAxis = d3.svg.axis().scale(y).orient("right");
+
+// An area generator.
+var area = d3.svg.area()
+    .x(function(d) { return x(d.Date); })
+    .y0(y(0))
+    .y1(function(d) { return y(d.Close); });
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+  .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
+svg.append("svg:clipPath")
+    .attr("id", "clip")
+  .append("svg:rect")
+    .attr("x", x(0))
+    .attr("y", y(1))
+    .attr("width", x(1) - x(0))
+    .attr("height", y(0) - y(1));
+
+d3.csv("dji.csv", function(data) {
+
+  // Parse dates and numbers.
+  data.reverse().forEach(function(d) {
+    d.Date = parse(d.Date);
+    d.Close = +d.Close;
+  });
+
+  // Filter the data down to weekly closes (for faster zooming).
+  data = data.filter(function(d) {
+    return d.Date.getDay() === 1;
+  });
+
+  // Compute the minimum and maximum date, and the maximum price.
+  d0 = [new Date(1996, 0, 1), new Date(2010, 0, 0)];
+  d1 = [data[0].Date, data[data.length - 1].Date];
+  x.domain(d0);
+  y.domain([0, d3.max(data, function(d) { return d.Close; })]);
+
+  svg.append("svg:g")
+      .attr("class", "x grid")
+      .attr("transform", "translate(0," + h + ")")
+      .call(xAxis.tickSubdivide(1).tickSize(-h));
+
+  svg.append("svg:g")
+      .attr("class", "y grid")
+      .attr("transform", "translate(" + w + ",0)")
+      .call(yAxis.tickSubdivide(1).tickSize(-w));
+
+  svg.append("svg:g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + h + ")")
+      .call(xAxis.tickSubdivide(0).tickSize(6));
+
+  svg.append("svg:g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(" + w + ",0)")
+      .call(yAxis.tickSubdivide(0).tickSize(6));
+
+  svg.append("svg:path")
+      .data([data])
+      .attr("class", "area")
+      .attr("clip-path", "url(#clip)")
+      .attr("d", area);
+});
+
+// On click, update the x-axis.
+svg.on("click", function() {
+  var d = x.domain()[0] - d0[0] ? d0 : d1;
+  x.domain(d);
+  d3.select("#footer span").text("DJI, " + d.map(format).join("-"));
+  var t = svg.transition().duration(d3.event.altKey ? 7500 : 750);
+  t.select("g.x.grid").call(xAxis.tickSubdivide(1).tickSize(-h));
+  t.select("g.y.grid").call(yAxis.tickSubdivide(1).tickSize(-w));
+  t.select("g.x.axis").call(xAxis.tickSubdivide(0).tickSize(6));
+  t.select("g.y.axis").call(yAxis.tickSubdivide(0).tickSize(6));
+  t.select("path.area").attr("d", area);
+});
+
+    </script>
+  </body>
+</html>

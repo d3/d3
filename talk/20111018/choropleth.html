@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.geo.js"></script>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <link type="text/css" rel="stylesheet" href="colorbrewer/colorbrewer.css"/>
+    <style type="text/css">
+
+#counties path {
+  stroke: #fff;
+  stroke-width: .25px;
+}
+
+#states path {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+    </style>
+  </head>
+  <body>
+    <div id="body">
+      <div id="footer">
+        U.S. Unemployment, 2008
+        <div class="hint">use the menu to change the color scale</div>
+        <div><select>
+          <optgroup label="Colors by Cynthia Brewer.">
+            <option value="YlGn">YlGn</option>
+            <option value="YlGnBu">YlGnBu</option>
+            <option value="GnBu">GnBu</option>
+            <option value="BuGn">BuGn</option>
+            <option value="PuBuGn">PuBuGn</option>
+            <option value="PuBu">PuBu</option>
+            <option value="BuPu">BuPu</option>
+            <option value="RdPu">RdPu</option>
+            <option value="PuRd">PuRd</option>
+            <option value="OrRd">OrRd</option>
+            <option value="YlOrRd">YlOrRd</option>
+            <option value="YlOrBr">YlOrBr</option>
+            <option value="Purples">Purples</option>
+            <option value="Blues" selected>Blues</option>
+            <option value="Greens">Greens</option>
+            <option value="Oranges">Oranges</option>
+            <option value="Reds">Reds</option>
+            <option value="Greys">Greys</option>
+          </optgroup>
+        </select></div>
+      </div>
+    </div>
+    <script type="text/javascript">
+
+var path = d3.geo.path()
+    .projection(d3.geo.albersUsa()
+    .scale(1400)
+    .translate([680, 360]));
+
+var svg = d3.select("#body").append("svg:svg")
+    .attr("class", "Blues")
+    .attr("width", 1280)
+    .attr("height", 800);
+
+var counties = svg.append("svg:g")
+    .attr("id", "counties");
+
+var states = svg.append("svg:g")
+    .attr("id", "states");
+
+d3.json("unemployment.json", function(data) {
+  var pad = d3.format("05d"),
+      quantize = d3.scale.quantile().domain([0, 15]).range(d3.range(9));
+
+  d3.json("us-counties.json", function(json) {
+    counties.selectAll("path")
+        .data(json.features)
+      .enter().append("svg:path")
+        .attr("class", function(d) { return "q" + quantize(data[pad(d.id)]) + "-9"; })
+        .attr("d", path)
+      .append("svg:title")
+        .text(function(d) { return d.properties.name + ": " + data[pad(d.id)] + "%"; });
+  });
+});
+
+d3.json("us-states.json", function(json) {
+  states.selectAll("path")
+      .data(json.features)
+    .enter().append("svg:path")
+      .attr("d", path);
+});
+
+d3.select("select").on("change", function() {
+  d3.selectAll("svg").attr("class", this.value);
+});
+
+    </script>
+  </body>
+</html>
