@@ -20,7 +20,6 @@ EX_FILES = \
 	../data/morley.csv \
 	../ex/cluster.js \
 	../ex/cluster.css \
-	../ex/calendar.js \
 	../ex/calendar.css \
 	../ex/chord.css \
 	../ex/chord.js \
@@ -94,10 +93,6 @@ INCLUDE_FILES = \
 $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:$(subst ../,,$@) > $@
-
-../ex/calendar.js:
-	@rm -rf $@
-	git cat-file blob master:examples/calendar/calendar.js > $@
 
 ../ex/calendar.css:
 	@rm -rf $@

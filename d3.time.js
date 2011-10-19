@@ -302,18 +302,22 @@ function d3_time_year(d) {
   return new d3_time(d.getFullYear(), 0, 1);
 }
 
+function d3_time_daysElapsed(d0, d1) {
+  return ~~((d1 - d0) / 864e5 - (d1.getTimezoneOffset() - d0.getTimezoneOffset()) / 1440);
+}
+
 function d3_time_dayOfYear(d) {
-  return d3_time_zfill3(1 + ~~((d - d3_time_year(d)) / 864e5));
+  return d3_time_zfill3(1 + d3_time_daysElapsed(d3_time_year(d), d));
 }
 
 function d3_time_weekNumberSunday(d) {
   var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~(((d - d0) / 864e5 + d0.getDay()) / 7));
+  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + d0.getDay()) / 7));
 }
 
 function d3_time_weekNumberMonday(d) {
   var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~(((d - d0) / 864e5 + (d0.getDay() + 6) % 7) / 7));
+  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + (d0.getDay() + 6) % 7) / 7));
 }
 
 // TODO table of time zone offset names?
@@ -328,9 +332,14 @@ d3.time.format.utc = function(template) {
   var local = d3.time.format(template);
 
   function format(date) {
-    var utc = new d3_time_format_utc();
-    utc._ = date;
-    return local(utc);
+    try {
+      d3_time = d3_time_format_utc;
+      var utc = new d3_time();
+      utc._ = date;
+      return local(utc);
+    } finally {
+      d3_time = Date;
+    }
   }
 
   format.parse = function(string) {

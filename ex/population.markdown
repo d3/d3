@@ -7,7 +7,7 @@ title: Population Pyramid
 
 <div class="gallery" id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="population.css"/>
-<script type="text/javascript" src="../d3.csv.js?2.4.2"> </script>
+<script type="text/javascript" src="../d3.csv.js?2.4.4"> </script>
 <script type="text/javascript" src="population.js"> </script>
 
 Data from the [Minnesota Population Center](http://ipums.org/). Use the arrow
