@@ -306,6 +306,7 @@ d3.chart.bullet = function() {
       ranges = d3_chart_bulletRanges,
       markers = d3_chart_bulletMarkers,
       measures = d3_chart_bulletMeasures,
+      ticks = d3_chart_bulletTicks,
       width = 380,
       height = 30,
       tickFormat = null;
@@ -322,6 +323,8 @@ d3.chart.bullet = function() {
       var x1 = d3.scale.linear()
           .domain([0, Math.max(rangez[0], markerz[0], measurez[0])])
           .range(reverse ? [width, 0] : [0, width]);
+
+      var tickz = ticks.call(this, d, x1);
 
       // Retrieve the old x-scale, if this is an update.
       var x0 = this.__chart__ || d3.scale.linear()
@@ -404,7 +407,7 @@ d3.chart.bullet = function() {
 
       // Update the tick groups.
       var tick = g.selectAll("g.tick")
-          .data(x1.ticks(8), function(d) {
+          .data(tickz, function(d) {
             return this.textContent || format(d);
           });
 
@@ -500,6 +503,12 @@ d3.chart.bullet = function() {
     return bullet;
   };
 
+  bullet.ticks = function(x) {
+    if (!arguments.length) return ticks;
+    ticks = x;
+    return bullet;
+  };
+
   bullet.duration = function(x) {
     if (!arguments.length) return duration;
     duration = x;
@@ -520,7 +529,9 @@ function d3_chart_bulletMarkers(d) {
 function d3_chart_bulletMeasures(d) {
   return d.measures;
 }
-
+function d3_chart_bulletTicks(d, scale) {
+  return scale.ticks(8);
+}
 function d3_chart_bulletTranslate(x) {
   return function(d) {
     return "translate(" + x(d) + ",0)";
