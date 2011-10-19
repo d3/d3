@@ -35,6 +35,7 @@ d3.json("../data/us-states.json", function(json) {
     .selectAll("path")
       .data(json.features)
     .enter().append("svg:path")
+      .attr("d", path)
       .attr("transform", function(d) {
         var centroid = path.centroid(d),
             x = centroid[0],
@@ -44,8 +45,7 @@ d3.json("../data/us-states.json", function(json) {
             + "translate(" + -x + "," + -y + ")";
       })
       .style("stroke-width", function(d) {
-        return 1 / Math.sqrt(data[+d.id] * 5);
-      })
-      .attr("d", path);
+        return 1 / Math.sqrt(data[+d.id] * 5 || 1);
+      });
 
 });
