@@ -4,8 +4,8 @@ d3.behavior.zoom = function() {
   var xyz = [0, 0, 0],
       event = d3.dispatch("zoom"),
       origin = d3_behavior_zoomOrigin([0, 0, 0]),
-      extents = [[-Infinity, Infinity],
-                 [-Infinity, Infinity],
+      extents = [[Infinity, Infinity],
+                 [Infinity, Infinity],
                  [-Infinity, Infinity]];
 
   function zoom() {
@@ -241,11 +241,13 @@ function d3_behavior_zoomTo(z, x0, x1) {
 }
 
 function d3_behavior_zoomExtentsRange(x, i, k) {
-  var range = d3_behavior_zoomExtents[i];
+  var range = d3_behavior_zoomExtents[i],
+      r1 = range[1];
   if (k) {
-    return Math.max(range[1] * (1 / k - 1), Math.min(range[0], x / k)) * k;
+    return Math.max(k === 1 && r1 === Infinity ? -Infinity : r1 * (1 / k - 1),
+        Math.min(range[0], x / k)) * k;
   }
-  return Math.max(range[0], Math.min(range[1], x));
+  return Math.max(range[0], Math.min(r1, x));
 }
 
 function d3_behavior_zoomOrigin(origin) {
