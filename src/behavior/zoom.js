@@ -1,9 +1,12 @@
 // TODO unbind zoom behavior?
 // TODO unbind listener?
 d3.behavior.zoom = function() {
-  var xyz,
+  var xyz = [0, 0, 0],
       event = d3.dispatch("zoom"),
-      origin = d3_behavior_zoomOrigin;
+      origin = d3_behavior_zoomOrigin([0, 0, 0]),
+      extents = [[-Infinity, Infinity],
+                 [-Infinity, Infinity],
+                 [-Infinity, Infinity]];
 
   function zoom() {
     this
@@ -24,6 +27,7 @@ d3.behavior.zoom = function() {
   // snapshot the local context for subsequent dispatch
   function start() {
     d3_behavior_zoomXyz = xyz = origin.apply(this, arguments);
+    d3_behavior_zoomExtents = extents;
     d3_behavior_zoomDispatch = event.zoom.dispatch;
     d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
@@ -65,7 +69,13 @@ d3.behavior.zoom = function() {
 
   zoom.origin = function(x) {
     if (!arguments.length) return origin;
-    origin = x == null ? d3_behavior_zoomOrigin : origin;
+    origin = x == null ? d3_behavior_zoomOrigin([0, 0, 0]) : x;
+    return zoom;
+  };
+
+  zoom.extents = function(x) {
+    if (!arguments.length) return extents;
+    extents = x == null ? Object : x;
     return zoom;
   };
 
@@ -194,30 +204,31 @@ function d3_behavior_zoomClick() {
 }
 
 function d3_behavior_zoomTo(z, x0, x1) {
-  z = d3_behavior_zoomExtents[2](z);
-  var K = Math.pow(2, (d3_behavior_zoomXyz[2] = z) - x1[2]),
-      x = d3_behavior_zoomXyz[0] = x0[0] - K * x1[0],
-      y = d3_behavior_zoomXyz[1] = x0[1] - K * x1[1],
-      o = d3.event, // Events can be reentrant (e.g., focus).
-      k = Math.pow(2, z);
+  z = d3_behavior_zoomExtentsRange(z, 2);
+  var j = Math.pow(2, d3_behavior_zoomXyz[2]),
+      k = Math.pow(2, z),
+      K = Math.pow(2, (d3_behavior_zoomXyz[2] = z) - x1[2]),
+      x = d3_behavior_zoomExtentsRange((x0[0] - x1[0] * K), 0, k),
+      y = d3_behavior_zoomExtentsRange((x0[1] - x1[1] * K), 1, k),
+      x_ = d3_behavior_zoomXyz[0],
+      y_ = d3_behavior_zoomXyz[1],
+      o = d3.event; // Events can be reentrant (e.g., focus).
 
-  console.log(x);
-  x = d3_behavior_zoomExtents[0](x / k) * k;
-  console.log(x);
-  y = d3_behavior_zoomExtents[1](y / k) * k;
+  d3_behavior_zoomXyz[0] = x;
+  d3_behavior_zoomXyz[1] = y;
+
   d3.event = {
     scale: k,
     translate: [x, y],
     transform: function(sx, sy) {
-      if (sx) transform(sx, x);
-      if (sy) transform(sy, y);
+      if (sx) transform(sx, x_, x);
+      if (sy) transform(sy, y_, y);
     }
   };
 
-  function transform(scale, o) {
-    console.log(o, k);
-    var range = scale.range().map(function(v) { return (v - o) / k; });
-    scale.range(range);
+  function transform(scale, a, b) {
+    var range = scale.range().map(function(v) { return ((v - b) * j) / k + a; });
+    scale.domain(range.map(scale.invert));
   }
 
   try {
@@ -229,12 +240,14 @@ function d3_behavior_zoomTo(z, x0, x1) {
   o.preventDefault();
 }
 
-function d3_behavior_zoomRange(range) {
-  return function(x) {
-    return Math.max(range[0], Math.min(range[1], x));
-  };
+function d3_behavior_zoomExtentsRange(x, i, k) {
+  var range = d3_behavior_zoomExtents[i];
+  if (k) {
+    return Math.max(range[1] * (1 / k - 1), Math.min(range[0], x / k)) * k;
+  }
+  return Math.max(range[0], Math.min(range[1], x));
 }
 
-var d3_behavior_zoomOrigin = (function(origin) {
+function d3_behavior_zoomOrigin(origin) {
   return function() { return origin; };
-})([0, 0, 0]);
+}
