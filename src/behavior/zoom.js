@@ -244,7 +244,7 @@ function d3_behavior_zoomExtentsRange(x, i, k) {
   var range = d3_behavior_zoomExtents[i],
       r1 = range[1];
   if (arguments.length === 3) {
-    return Math.max(r1 === -Infinity ? -Infinity : r1 * (1 / k - 1),
+    return Math.max(r1 * (r1 === -Infinity ? 1 : 1 / k - 1),
         Math.min(range[0], x / k)) * k;
   }
   return Math.max(range[0], Math.min(r1, x));
