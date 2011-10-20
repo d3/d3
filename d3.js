@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.4.4"}; // semver
+d3 = {version: "2.4.5"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -1666,40 +1666,6 @@ d3_selectionPrototype.data = function(data, join) {
 function d3_selection_dataNode(data) {
   return {__data__: data};
 }
-function d3_selection_enter(selection) {
-  d3_arraySubclass(selection, d3_selection_enterPrototype);
-  return selection;
-}
-
-var d3_selection_enterPrototype = [];
-
-d3_selection_enterPrototype.append = d3_selectionPrototype.append;
-d3_selection_enterPrototype.insert = d3_selectionPrototype.insert;
-d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
-d3_selection_enterPrototype.select = function(selector) {
-  var subgroups = [],
-      subgroup,
-      subnode,
-      upgroup,
-      group,
-      node;
-
-  for (var j = -1, m = this.length; ++j < m;) {
-    upgroup = (group = this[j]).update;
-    subgroups.push(subgroup = []);
-    subgroup.parentNode = group.parentNode;
-    for (var i = -1, n = group.length; ++i < n;) {
-      if (node = group[i]) {
-        subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i));
-        subnode.__data__ = node.__data__;
-      } else {
-        subgroup.push(null);
-      }
-    }
-  }
-
-  return d3_selection(subgroups);
-};
 // TODO preserve null elements to maintain index?
 d3_selectionPrototype.filter = function(filter) {
   var subgroups = [],
@@ -1843,6 +1809,41 @@ d3.selectAll = function(selector) {
   return typeof selector === "string"
       ? d3_selectionRoot.selectAll(selector)
       : d3_selection([d3_array(selector)]); // assume node[]
+};
+function d3_selection_enter(selection) {
+  d3_arraySubclass(selection, d3_selection_enterPrototype);
+  return selection;
+}
+
+var d3_selection_enterPrototype = [];
+
+d3_selection_enterPrototype.append = d3_selectionPrototype.append;
+d3_selection_enterPrototype.insert = d3_selectionPrototype.insert;
+d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
+d3_selection_enterPrototype.node = d3_selectionPrototype.node;
+d3_selection_enterPrototype.select = function(selector) {
+  var subgroups = [],
+      subgroup,
+      subnode,
+      upgroup,
+      group,
+      node;
+
+  for (var j = -1, m = this.length; ++j < m;) {
+    upgroup = (group = this[j]).update;
+    subgroups.push(subgroup = []);
+    subgroup.parentNode = group.parentNode;
+    for (var i = -1, n = group.length; ++i < n;) {
+      if (node = group[i]) {
+        subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i));
+        subnode.__data__ = node.__data__;
+      } else {
+        subgroup.push(null);
+      }
+    }
+  }
+
+  return d3_selection(subgroups);
 };
 function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
