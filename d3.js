@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.4.5"}; // semver
+d3 = {version: "2.4.6"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {

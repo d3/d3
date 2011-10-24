@@ -116,7 +116,7 @@ d3.layout.chord = function() {
     x = 0, i = -1; while (++i < n) {
       x0 = x, j = -1; while (++j < n) {
         var di = groupIndex[i],
-            dj = subgroupIndex[i][j],
+            dj = subgroupIndex[di][j],
             v = matrix[di][dj];
         subgroups[di + "-" + dj] = {
           index: di,
@@ -153,7 +153,9 @@ d3.layout.chord = function() {
 
   function resort() {
     chords.sort(function(a, b) {
-      return sortChords(a.target.value, b.target.value);
+      return sortChords(
+          (a.source.value + a.target.value) / 2,
+          (b.source.value + b.target.value) / 2);
     });
   }
 
