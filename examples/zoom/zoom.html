@@ -87,7 +87,8 @@ d3.csv("dji.csv", function(csv) {
       .attr("fill", "none")
       .attr("pointer-events", "all")
       .attr("cursor", "crosshair")
-      .on("mousedown", mousedown);
+      .on("mousedown", mousedown)
+      .on("touchstart", mousedown);
 
   context.append("svg:path")
       .data([csv])
@@ -117,17 +118,24 @@ d3.csv("dji.csv", function(csv) {
 
 d3.select(window)
     .on("mousemove", mousemove)
-    .on("mouseup", mouseup);
+    .on("touchmove", mousemove)
+    .on("mouseup", mouseup)
+    .on("touchend", mouseup);
+
+function mousePosition(n) {
+  return d3.event.touches ? d3.svg.touches(n)[0][0] : d3.svg.mouse(n)[0];
+}
 
 function mousedown() {
-  xx = x.invert(d3.svg.mouse(this)[0]);
+  xx = x.invert(mousePosition(this));
+  d3.event.preventDefault();
 }
 
 function mousemove() {
   if (xx != null) {
 
     // Compute the new (clamped) focus region.
-    var xy = x.invert(d3.svg.mouse(active[0][0])[0]);
+    var xy = x.invert(mousePosition(active[0][0]));
     if (xx < xy) { x0 = xx; x1 = xy; }
     else if (xx > xy) { x0 = xy; x1 = xx; }
     else return;
@@ -151,10 +159,12 @@ function mousemove() {
         .attr("x", x(x0))
         .attr("width", x(x1) - x(x0));
   }
+  d3.event.preventDefault();
 }
 
 function mouseup() {
   xx = null;
+  d3.event.preventDefault();
 }
 
     </script>

@@ -10,7 +10,9 @@ var svg = d3.select("#chart")
     .attr("width", w)
     .attr("height", h)
     .attr("class", "PiYG")
-    .on("mousemove", update);
+    .on("mousemove", update)
+    .on("touchstart", update)
+    .on("touchmove", update);
 
 svg.selectAll("path")
     .data(d3.geom.voronoi(vertices))
@@ -19,16 +21,24 @@ svg.selectAll("path")
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
 svg.selectAll("circle")
-    .data(vertices.slice(1))
+    .data(vertices)
   .enter().append("svg:circle")
     .attr("transform", function(d) { return "translate(" + d + ")"; })
     .attr("r", 2);
 
 function update() {
-  vertices[0] = d3.svg.mouse(this);
+  if (d3.event.touches)
+    d3.svg.touches(this).forEach(function(t, i) {
+      vertices[i] = t;
+    });
+  else vertices[0] = d3.svg.mouse(this);
   svg.selectAll("path")
       .data(d3.geom.voronoi(vertices)
       .map(function(d) { return "M" + d.join("L") + "Z"; }))
       .filter(function(d) { return this.getAttribute("d") != d; })
       .attr("d", function(d) { return d; });
+  svg.selectAll("circle")
+      .data(vertices)
+      .attr("transform", function(d) { return "translate(" + d + ")"; });
+  d3.event.preventDefault();
 }
