@@ -75,7 +75,7 @@ element or an external stylesheet referenced by a `link` element, rather than
 the `script` element used for JavaScript:
 
 {% highlight css linenos %}
-div.chart {
+.chart div {
   font: 10px sans-serif;
   background-color: steelblue;
   text-align: right;
