@@ -66,8 +66,11 @@ function d3_behavior_dragDispatch(type) {
 }
 
 function d3_behavior_dragPoint(container) {
+  // TODO Track touch points by identifier.
   return d3.event.touches
       ? d3.svg.touches(container)[0]
+      : d3.event.changedTouches
+      ? d3.svg.touches(container, d3.event.changedTouches)[0]
       : d3.svg.mouse(container);
 }
 
