@@ -3872,7 +3872,7 @@ function d3_behavior_dragDispatch(type) {
   var o = d3.event, p = d3_behavior_dragTarget.parentNode, dx = 0, dy = 0;
 
   if (p) {
-    p = d3_behavior_dragPoint(p);
+    p = d3_behavior_dragPoint(p, type);
     dx = p[0] - d3_behavior_dragOffset[0];
     dy = p[1] - d3_behavior_dragOffset[1];
     d3_behavior_dragOffset = p;
@@ -3889,12 +3889,10 @@ function d3_behavior_dragDispatch(type) {
   o.preventDefault();
 }
 
-function d3_behavior_dragPoint(container) {
+function d3_behavior_dragPoint(container, type) {
   // TODO Track touch points by identifier.
   return d3.event.touches
-      ? d3.svg.touches(container)[0]
-      : d3.event.changedTouches
-      ? d3.svg.touches(container, d3.event.changedTouches)[0]
+      ? d3.svg.touches(container, d3.event[type === "touchend" ? "changedTouches" : "touches"])[0]
       : d3.svg.mouse(container);
 }
 
