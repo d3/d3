@@ -8,7 +8,7 @@ var data = [
 
 var color = d3.scale.linear()
     .domain([d3.min(data), d3.max(data)])
-    .range(["#aad", "#556"]); 
+    .range(["#aad", "#556"]);
 
 var force = d3.layout.force()
     .charge(0)
