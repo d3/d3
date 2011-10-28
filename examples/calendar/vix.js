@@ -50,7 +50,7 @@ d3.csv("vix.csv", function(csv) {
   rect
       .attr("class", function(d) { return "day q" + color(data[format(d)]) + "-9"; })
     .append("svg:title")
-      .text(function(d) { var D = format(d), v = data[D]; return D + (isNaN(v) ? "" : ": " + v); });
+      .text(function(d) { return (d = format(d)) + (d in data ? ": " + data[d] : ""); });
 });
 
 function monthPath(t0) {
