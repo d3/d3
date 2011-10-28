@@ -23,7 +23,7 @@ d3.layout.pie = function() {
     });
 
     // Compute the numeric values for each data element.
-    var values = data.map(value);
+    var values = data.map(function(d, i) { return +value.call(pie, d, i); });
 
     // Convert k into a scale factor from value to angle, using the sum.
     k /= values.reduce(function(p, d) { return p + d; }, 0);
