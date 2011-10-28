@@ -5,7 +5,6 @@ var m = [19, 20, 20, 19], // top right bottom left margin
 
 var day = d3.time.format("%w"),
     week = d3.time.format("%U"),
-    percent = d3.format(".1%"),
     format = d3.time.format("%Y-%m-%d");
 
 var color = d3.scale.quantile()
@@ -51,7 +50,7 @@ d3.csv("vix.csv", function(csv) {
   rect
       .attr("class", function(d) { return "day q" + color(data[format(d)]) + "-9"; })
     .append("svg:title")
-      .text(function(d) { return format(d) + ": " + data[format(d)]; });
+      .text(function(d) { return (d = format(d)) + (d in data ? ": " + data[d] : ""); });
 });
 
 function monthPath(t0) {
