@@ -64,9 +64,10 @@ d3.layout.chord = function() {
           index: di,
           subindex: dj,
           startAngle: x,
-          endAngle: x += v * k,
+          endAngle: x + v * k,
           value: v
         };
+        x += v * k;
       }
       groups.push({
         index: di,
