@@ -200,9 +200,9 @@ suite.addBatch({
         assert.equal(t.length, 2);
       },
       "can be given as array of positions": function(axis) {
-        var l = [1, 2.5, 3], a = axis().ticks(l), t = a.ticks();
-        assert.equal(t[0], l);
-        assert.equal(t.length, 1);
+        var l = [1, 2.5, 3], a = axis().tickValues(l), t = a.tickValues();
+        assert.equal(t, l);
+        assert.equal(t.length, 3);
       },
       "passes any arguments to the scale's ticks function": function(axis) {
         var x = d3.scale.linear(), b = {}, a = axis().ticks(b, 42).scale(x), aa = [],
