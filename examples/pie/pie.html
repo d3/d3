@@ -20,7 +20,7 @@ var w = 400,
     r = Math.min(w, h) / 2,
     data = d3.range(10).map(Math.random),
     color = d3.scale.category20(),
-    donut = d3.layout.pie().sort(d3.descending),
+    donut = d3.layout.pie(),
     arc = d3.svg.arc().innerRadius(r * .6).outerRadius(r);
 
 var vis = d3.select("body")
