@@ -65,10 +65,10 @@ function d3_behavior_dragDispatch(type) {
   o.preventDefault();
 }
 
-function d3_behavior_dragPoint(container) {
-  return d3.event.touches
-      ? d3.svg.touches(container)[0]
-      : d3.svg.mouse(container);
+function d3_behavior_dragPoint(container, type) {
+  // TODO Track touch points by identifier.
+  var t = d3.event.changedTouches;
+  return t ? d3.svg.touches(container, t)[0] : d3.svg.mouse(container);
 }
 
 function d3_behavior_dragMove() {

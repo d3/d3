@@ -3541,8 +3541,9 @@ function d3_svg_mousePoint(container, e) {
   point = point.matrixTransform(container.getScreenCTM().inverse());
   return [point.x, point.y];
 };
-d3.svg.touches = function(container) {
-  var touches = d3.event.touches;
+d3.svg.touches = function(container, touches) {
+  if (arguments.length < 2) touches = d3.event.touches;
+
   return touches ? d3_array(touches).map(function(touch) {
     var point = d3_svg_mousePoint(container, touch);
     point.identifier = touch.identifier;
@@ -3900,10 +3901,10 @@ function d3_behavior_dragDispatch(type) {
   o.preventDefault();
 }
 
-function d3_behavior_dragPoint(container) {
-  return d3.event.touches
-      ? d3.svg.touches(container)[0]
-      : d3.svg.mouse(container);
+function d3_behavior_dragPoint(container, type) {
+  // TODO Track touch points by identifier.
+  var t = d3.event.changedTouches;
+  return t ? d3.svg.touches(container, t)[0] : d3.svg.mouse(container);
 }
 
 function d3_behavior_dragMove() {
