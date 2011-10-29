@@ -29,7 +29,7 @@ d3.behavior.drag = function() {
   }
 
   drag.on = function(type, listener) {
-    event[type].add(listener);
+    event.on(type, listener);
     return drag;
   };
 
@@ -57,7 +57,7 @@ function d3_behavior_dragDispatch(type) {
 
   try {
     d3.event = {dx: dx, dy: dy};
-    d3_behavior_dragEvent[type].dispatch.apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
+    d3_behavior_dragEvent[type].apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
   } finally {
     d3.event = o;
   }

@@ -438,47 +438,59 @@ d3.ns = {
   }
 
 };
-/** @param {...string} types */
-d3.dispatch = function(types) {
-  var dispatch = {},
-      type;
-  for (var i = 0, n = arguments.length; i < n; i++) {
-    type = arguments[i];
-    dispatch[type] = d3_dispatch(type);
-  }
+d3.dispatch = function() {
+  var dispatch = new d3_dispatch(),
+      i = -1,
+      n = arguments.length;
+  while (++i < n) dispatch[arguments[i]] = d3_dispatch_event();
   return dispatch;
 };
 
-function d3_dispatch(type) {
-  var dispatch = {},
-      listeners = [];
+function d3_dispatch() {}
 
-  dispatch.add = function(listener) {
-    for (var i = 0; i < listeners.length; i++) {
-      if (listeners[i].listener == listener) return dispatch; // already registered
+d3_dispatch.prototype.on = function(type, listener) {
+  var i = type.indexOf("."),
+      name = "";
+
+  // Extract optional namespace, e.g., "click.foo"
+  if (i > 0) {
+    name = type.substring(i + 1);
+    type = type.substring(0, i);
+  }
+
+  this[type].on(name, listener);
+};
+
+function d3_dispatch_event() {
+  var listeners = [],
+      listenerByName = {};
+
+  function dispatch() {
+    var z = listeners, // defensive reference
+        i = -1,
+        n = z.length,
+        l;
+    while (++i < n) if ((l = z[i])._on) l.apply(this, arguments);
+  }
+
+  dispatch.on = function(name, listener) {
+    var l, i;
+
+    // remove the old listener, if any
+    if (l = listenerByName[name]) {
+      l._on = false;
+      listeners = listeners.slice(0, i = listeners.indexOf(l)).concat(listeners.slice(i + 1));
+      delete listenerByName[name];
     }
-    listeners.push({listener: listener, on: true});
+
+    // add the new listener, if any
+    if (listener) {
+      listener._on = true;
+      listeners.push(listener);
+      listenerByName[name] = listener;
+    }
+
     return dispatch;
-  };
-
-  dispatch.remove = function(listener) {
-    for (var i = 0; i < listeners.length; i++) {
-      var l = listeners[i];
-      if (l.listener == listener) {
-        l.on = false;
-        listeners = listeners.slice(0, i).concat(listeners.slice(i + 1));
-        break;
-      }
-    }
-    return dispatch;
-  };
-
-  dispatch.dispatch = function() {
-    var ls = listeners; // defensive reference
-    for (var i = 0, n = ls.length; i < n; i++) {
-      var l = ls[i];
-      if (l.on) l.listener.apply(this, arguments);
-    }
   };
 
   return dispatch;
@@ -1871,7 +1883,7 @@ function d3_transition(groups, id, time) {
 
   groups.each = function(type, listener) {
     if (arguments.length < 2) return d3_transition_each.call(groups, type);
-    event[type].add(listener);
+    event.on(type, listener);
     return groups;
   };
 
@@ -1897,7 +1909,7 @@ function d3_transition(groups, id, time) {
           }
         }
 
-        event.start.dispatch.call(node, d, i);
+        event.start.call(node, d, i);
         if (!tick(elapsed)) d3.timer(tick, 0, time);
         return 1;
       }
@@ -1916,7 +1928,7 @@ function d3_transition(groups, id, time) {
         if (t >= 1) {
           stop();
           d3_transitionInheritId = id;
-          event.end.dispatch.call(node, d, i);
+          event.end.call(node, d, i);
           d3_transitionInheritId = 0;
           return 1;
         }
@@ -3852,7 +3864,7 @@ d3.behavior.drag = function() {
   }
 
   drag.on = function(type, listener) {
-    event[type].add(listener);
+    event.on(type, listener);
     return drag;
   };
 
@@ -3880,7 +3892,7 @@ function d3_behavior_dragDispatch(type) {
 
   try {
     d3.event = {dx: dx, dy: dy};
-    d3_behavior_dragEvent[type].dispatch.apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
+    d3_behavior_dragEvent[type].apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
   } finally {
     d3.event = o;
   }
@@ -3955,7 +3967,7 @@ d3.behavior.zoom = function() {
   // snapshot the local context for subsequent dispatch
   function start() {
     d3_behavior_zoomXyz = xyz;
-    d3_behavior_zoomDispatch = event.zoom.dispatch;
+    d3_behavior_zoomDispatch = event.zoom;
     d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
     d3_behavior_zoomArguments = arguments;
@@ -3995,7 +4007,7 @@ d3.behavior.zoom = function() {
   }
 
   zoom.on = function(type, listener) {
-    event[type].add(listener);
+    event.on(type, listener);
     return zoom;
   };
 

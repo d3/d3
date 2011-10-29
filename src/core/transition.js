@@ -24,7 +24,7 @@ function d3_transition(groups, id, time) {
 
   groups.each = function(type, listener) {
     if (arguments.length < 2) return d3_transition_each.call(groups, type);
-    event[type].add(listener);
+    event.on(type, listener);
     return groups;
   };
 
@@ -50,7 +50,7 @@ function d3_transition(groups, id, time) {
           }
         }
 
-        event.start.dispatch.call(node, d, i);
+        event.start.call(node, d, i);
         if (!tick(elapsed)) d3.timer(tick, 0, time);
         return 1;
       }
@@ -69,7 +69,7 @@ function d3_transition(groups, id, time) {
         if (t >= 1) {
           stop();
           d3_transitionInheritId = id;
-          event.end.dispatch.call(node, d, i);
+          event.end.call(node, d, i);
           d3_transitionInheritId = 0;
           return 1;
         }

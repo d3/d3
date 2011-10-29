@@ -23,7 +23,7 @@ d3.behavior.zoom = function() {
   // snapshot the local context for subsequent dispatch
   function start() {
     d3_behavior_zoomXyz = xyz;
-    d3_behavior_zoomDispatch = event.zoom.dispatch;
+    d3_behavior_zoomDispatch = event.zoom;
     d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
     d3_behavior_zoomArguments = arguments;
@@ -63,7 +63,7 @@ d3.behavior.zoom = function() {
   }
 
   zoom.on = function(type, listener) {
-    event[type].add(listener);
+    event.on(type, listener);
     return zoom;
   };
 
