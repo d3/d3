@@ -51,5 +51,9 @@ module.exports = {
         t1 = transition.selectAll("span");
     assert.equal(t0.id, id);
     assert.equal(t1.id, id);
+  },
+  "groups are not instances of NodeList": function(transition) {
+    var t = transition.selectAll(function() { return this.getElementsByClassName("span"); });
+    assert.isFalse(t[0] instanceof window.NodeList);
   }
 };

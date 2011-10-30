@@ -91,8 +91,8 @@ suite.addBatch({
     },
     "sets an attribute as a function of data": function(div) {
       div.attr("bgcolor", d3.interpolateRgb("brown", "steelblue"));
-      assert.equal(div[0][0].getAttribute("bgcolor"), "rgb(165,42,42)");
-      assert.equal(div[0][1].getAttribute("bgcolor"), "rgb(70,130,180)");
+      assert.equal(div[0][0].getAttribute("bgcolor"), "#a52a2a");
+      assert.equal(div[0][1].getAttribute("bgcolor"), "#4682b4");
     },
     "sets an attribute as a function of index": function(div) {
       div.attr("bgcolor", function(d, i) { return "color-" + i; });

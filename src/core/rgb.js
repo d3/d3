@@ -1,6 +1,7 @@
 d3.rgb = function(r, g, b) {
   return arguments.length === 1
-      ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
+      ? (r instanceof d3_Rgb ? d3_rgb(r.r, r.g, r.b)
+      : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb))
       : d3_rgb(~~r, ~~g, ~~b);
 };
 
@@ -25,17 +26,17 @@ d3_Rgb.prototype.brighter = function(k) {
   if (g && g < i) g = i;
   if (b && b < i) b = i;
   return d3_rgb(
-    Math.min(255, Math.floor(r / k)),
-    Math.min(255, Math.floor(g / k)),
-    Math.min(255, Math.floor(b / k)));
+      Math.min(255, Math.floor(r / k)),
+      Math.min(255, Math.floor(g / k)),
+      Math.min(255, Math.floor(b / k)));
 };
 
 d3_Rgb.prototype.darker = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_rgb(
-    Math.max(0, Math.floor(k * this.r)),
-    Math.max(0, Math.floor(k * this.g)),
-    Math.max(0, Math.floor(k * this.b)));
+      Math.floor(k * this.r),
+      Math.floor(k * this.g),
+      Math.floor(k * this.b));
 };
 
 d3_Rgb.prototype.hsl = function() {
@@ -47,7 +48,9 @@ d3_Rgb.prototype.toString = function() {
 };
 
 function d3_rgb_hex(v) {
-  return v < 0x10 ? "0" + v.toString(16) : v.toString(16);
+  return v < 0x10
+      ? "0" + Math.max(0, v).toString(16)
+      : Math.min(255, v).toString(16);
 }
 
 function d3_rgb_parse(format, rgb, hsl) {

@@ -32,7 +32,7 @@ suite.addBatch({
       color.h++;
       color.s += .1;
       color.l += .1;
-      assert.equal(color + "", "hsl(181,60%,70%)");
+      assert.equal(color + "", "#85dfe0");
     },
     "parses hexadecimal shorthand format (e.g., \"#abc\")": function(hsl) {
       assert.hslEqual(hsl("#abc"), 210, .25, .733333);
@@ -72,14 +72,9 @@ suite.addBatch({
       assert.hslEqual(hsl("lightsteelblue").darker(1), 213.913043, .4107143, .5462745);
       assert.hslEqual(hsl("lightsteelblue").darker(2), 213.913043, .4107143, .38239216);
     },
-    "string coercion returns HSL format": function(hsl) {
-      var re = /^hsl\([0-9]+(.[0-9]+)?,[0-9.]+%,[0-9.]+%\)$/;
-      assert.match(hsl("#abcdef"), re);
-      assert.match(hsl("moccasin"), re);
-      assert.strictEqual(hsl("hsl(60, 100%, 20%)") + "", "hsl(60,100%,20%)");
-      assert.match(hsl("rgb(12, 34, 56))"), re);
-      assert.match(hsl(d3.rgb(12, 34, 56)), re);
-      assert.strictEqual(hsl(d3.hsl(60, 1, .2)) + "", "hsl(60,100%,20%)");
+    "string coercion returns RGB format": function(hsl) {
+      assert.strictEqual(hsl("hsl(60, 100%, 20%)") + "", "#666600");
+      assert.strictEqual(hsl(d3.hsl(60, 1, .2)) + "", "#666600");
     }
   }
 });

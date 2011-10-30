@@ -4,21 +4,18 @@ NODE_PATH ?= ./node_modules
 JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
 
-all: \
+JS_FILES = \
 	d3.js \
-	d3.min.js \
 	d3.chart.js \
-	d3.chart.min.js \
 	d3.layout.js \
-	d3.layout.min.js \
 	d3.csv.js \
-	d3.csv.min.js \
 	d3.geo.js \
-	d3.geo.min.js \
 	d3.geom.js \
-	d3.geom.min.js \
-	d3.time.js \
-	d3.time.min.js \
+	d3.time.js
+
+all: \
+	$(JS_FILES) \
+	$(JS_FILES:.js=.min.js) \
 	package.json
 
 # Modify this rule to build your own custom release.
@@ -47,8 +44,11 @@ d3.core.js: \
 	src/core/rebind.js \
 	src/core/ascending.js \
 	src/core/descending.js \
+	src/core/mean.js \
+	src/core/median.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/number.js \
 	src/core/sum.js \
 	src/core/quantile.js \
 	src/core/zip.js \
@@ -74,6 +74,7 @@ d3.core.js: \
 	src/core/ns.js \
 	src/core/dispatch.js \
 	src/core/format.js \
+	src/core/formatPrefix.js \
 	src/core/ease.js \
 	src/core/event.js \
 	src/core/interpolate.js \
@@ -93,8 +94,6 @@ d3.core.js: \
 	src/core/selection-insert.js \
 	src/core/selection-remove.js \
 	src/core/selection-data.js \
-	src/core/selection-enter.js \
-	src/core/selection-enter-select.js \
 	src/core/selection-filter.js \
 	src/core/selection-map.js \
 	src/core/selection-sort.js \
@@ -105,6 +104,8 @@ d3.core.js: \
 	src/core/selection-node.js \
 	src/core/selection-transition.js \
 	src/core/selection-root.js \
+	src/core/selection-enter.js \
+	src/core/selection-enter-select.js \
 	src/core/transition.js \
 	src/core/transition-select.js \
 	src/core/transition-selectAll.js \
@@ -250,7 +251,7 @@ test: all
 	@rm -f $@
 	$(JS_COMPILER) < $< > $@
 
-d3.js d3%.js: Makefile
+d3.%: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
@@ -259,7 +260,7 @@ install:
 	mkdir -p node_modules
 	npm install
 
-package.json: d3.js
+package.json: d3.js src/package.js
 	node src/package.js > $@
 
 clean:

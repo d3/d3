@@ -26,6 +26,7 @@ suite.addBatch({
       assert.equal(max([NaN, 1, 2, 3, 4, 5]), 5);
       assert.equal(max([1, 2, 3, 4, 5, NaN]), 5);
       assert.equal(max([10, null, 3, undefined, 5, NaN]), 10);
+      assert.equal(max([-1, null, -3, undefined, -5, NaN]), -1);
     },
     "compares heterogenous types as numbers": function(max) {
       assert.strictEqual(max([20, "3"]), 20);

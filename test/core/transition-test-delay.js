@@ -5,7 +5,7 @@ var assert = require("assert");
 
 module.exports = {
   topic: function() {
-    return d3.select("body").selectAll()
+    return d3.select("body").html("").selectAll()
         .data(["foo", "bar"])
       .enter().append("div")
         .attr("class", String);

@@ -48,9 +48,9 @@ suite.addBatch({
       },
       "can specify a polylog domain and range": function(log) {
         var x = log().domain([.1, 1, 100]).range(["red", "white", "green"]);
-        assert.equal(x(.5), "rgb(255,178,178)");
-        assert.equal(x(50), "rgb(38,147,38)");
-        assert.equal(x(75), "rgb(16,136,16)");
+        assert.equal(x(.5), "#ffb2b2");
+        assert.equal(x(50), "#269326");
+        assert.equal(x(75), "#108810");
       }
     },
 
@@ -67,21 +67,21 @@ suite.addBatch({
       },
       "can specify range values as colors": function(log) {
         var x = log().range(["red", "blue"]);
-        assert.equal(x(5), "rgb(77,0,178)");
+        assert.equal(x(5), "#4d00b2");
         var x = log().range(["#ff0000", "#0000ff"]);
-        assert.equal(x(5), "rgb(77,0,178)");
+        assert.equal(x(5), "#4d00b2");
         var x = log().range(["#f00", "#00f"]);
-        assert.equal(x(5), "rgb(77,0,178)");
+        assert.equal(x(5), "#4d00b2");
         var x = log().range([d3.rgb(255,0,0), d3.hsl(240,1,.5)]);
-        assert.equal(x(5), "rgb(77,0,178)");
+        assert.equal(x(5), "#4d00b2");
         var x = log().range(["hsl(0,100%,50%)", "hsl(240,100%,50%)"]);
-        assert.equal(x(5), "rgb(77,0,178)");
+        assert.equal(x(5), "#4d00b2");
       },
       "can specify range values as arrays or objects": function(log) {
         var x = log().range([{color: "red"}, {color: "blue"}]);
-        assert.deepEqual(x(5), {color: "rgb(77,0,178)"});
+        assert.deepEqual(x(5), {color: "#4d00b2"});
         var x = log().range([["red"], ["blue"]]);
-        assert.deepEqual(x(5), ["rgb(77,0,178)"]);
+        assert.deepEqual(x(5), ["#4d00b2"]);
       }
     },
 
@@ -89,7 +89,7 @@ suite.addBatch({
       "defaults to d3.interpolate": function(log) {
         var x = log().range(["red", "blue"]);
         assert.equal(x.interpolate(), d3.interpolate);
-        assert.equal(x(5), "rgb(77,0,178)");
+        assert.equal(x(5), "#4d00b2");
       },
       "can specify a custom interpolator": function(log) {
         var x = log().range(["red", "blue"]).interpolate(d3.interpolateHsl);
@@ -194,6 +194,10 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [1000, 1]);
         var x = log().domain([.01, .49]).nice();
         assert.deepEqual(x.domain(), [.01, 1]);
+        var x = log().domain([0, 0]).nice();
+        assert.deepEqual(x.domain(), [0, 0]);
+        var x = log().domain([.5, .5]).nice();
+        assert.inDelta(x.domain(), [.5, .5], 1e-6);
       },
       "nicing a polylog domain only affects the extent": function(log) {
         var x = log().domain([1.1, 1.5, 10.9]).nice();
@@ -232,7 +236,7 @@ suite.addBatch({
         var x = log().range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
         assert.equal(x(5), "#00ffcb");
-        assert.equal(y(5), "rgb(77,0,178)");
+        assert.equal(y(5), "#4d00b2");
         assert.equal(y.interpolate(), d3.interpolate);
       },
       "changes to clamping are isolated": function(log) {

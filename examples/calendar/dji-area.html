@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>DJI</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.csv.js"></script>
+    <script type="text/javascript" src="../../d3.time.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+rect {
+  fill: #ddd;
+}
+
+path.area {
+  fill: #000;
+  fill-opacity: .75;
+}
+
+.axis, .grid {
+  shape-rendering: crispEdges;
+}
+
+.grid line {
+  stroke: #fff;
+}
+
+.grid line.minor {
+  stroke-opacity: .5;
+}
+
+.grid text {
+  display: none;
+}
+
+.axis line {
+  stroke: #000;
+}
+
+.grid path, .axis path {
+  display: none;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var m = [10, 50, 20, 10],
+    w = 960 - m[1] - m[3],
+    h = 500 - m[0] - m[2],
+    parse = d3.time.format("%Y-%m-%d").parse;
+
+// Scales. Note the inverted domain for the y-scale: bigger is up!
+var x = d3.time.scale().range([20, w - 20]),
+    y = d3.scale.linear().range([h - 20, 20]);
+
+// Axes.
+var xAxis = d3.svg.axis().scale(x).orient("bottom"),
+    yAxis = d3.svg.axis().scale(y).orient("right");
+
+// An area generator.
+var area = d3.svg.area()
+    .x(function(d) { return x(d.Date); })
+    .y0(y(0))
+    .y1(function(d) { return y(d.Close); });
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+  .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+svg.append("svg:rect")
+    .attr("width", w)
+    .attr("height", h);
+
+d3.csv("dji.csv", function(data) {
+
+  // Parse dates and numbers.
+  data.reverse().forEach(function(d) {
+    d.Date = parse(d.Date);
+    d.Close = +d.Close;
+  });
+
+  // Compute the minimum and maximum date, and the maximum price.
+  x.domain([data[0].Date, data[data.length - 1].Date]);
+  y.domain([0, d3.max(data, function(d) { return d.Close; })]);
+
+  svg.append("svg:g")
+      .attr("class", "x grid")
+      .attr("transform", "translate(0," + h + ")")
+      .call(xAxis.tickSubdivide(1).tickSize(-h));
+
+  svg.append("svg:g")
+      .attr("class", "y grid")
+      .attr("transform", "translate(" + w + ",0)")
+      .call(yAxis.tickSubdivide(1).tickSize(-w));
+
+  svg.append("svg:g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + h + ")")
+      .call(xAxis.tickSubdivide(0).tickSize(6));
+
+  svg.append("svg:g")
+      .attr("class", "y axis")
+      .attr("transform", "translate(" + w + ",0)")
+      .call(yAxis.tickSubdivide(0).tickSize(6));
+
+  svg.append("svg:path")
+      .attr("class", "area")
+      .attr("d", area(data));
+});
+
+    </script>
+  </body>
+</html>

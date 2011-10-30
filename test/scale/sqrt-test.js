@@ -39,9 +39,9 @@ suite.addBatch({
       },
       "can specify a polypower domain and range": function(sqrt) {
         var x = sqrt().domain([-10, 0, 100]).range(["red", "white", "green"]);
-        assert.equal(x(-5), "rgb(255,75,75)");
-        assert.equal(x(50), "rgb(75,165,75)");
-        assert.equal(x(75), "rgb(34,145,34)");
+        assert.equal(x(-5), "#ff4b4b");
+        assert.equal(x(50), "#4ba54b");
+        assert.equal(x(75), "#229122");
       }
     },
 
@@ -66,21 +66,21 @@ suite.addBatch({
       },
       "can specify range values as colors": function(sqrt) {
         var x = sqrt().range(["red", "blue"]);
-        assert.equal(x(.25), "rgb(128,0,128)");
+        assert.equal(x(.25), "#800080");
         var x = sqrt().range(["#ff0000", "#0000ff"]);
-        assert.equal(x(.25), "rgb(128,0,128)");
+        assert.equal(x(.25), "#800080");
         var x = sqrt().range(["#f00", "#00f"]);
-        assert.equal(x(.25), "rgb(128,0,128)");
+        assert.equal(x(.25), "#800080");
         var x = sqrt().range([d3.rgb(255,0,0), d3.hsl(240,1,.5)]);
-        assert.equal(x(.25), "rgb(128,0,128)");
+        assert.equal(x(.25), "#800080");
         var x = sqrt().range(["hsl(0,100%,50%)", "hsl(240,100%,50%)"]);
-        assert.equal(x(.25), "rgb(128,0,128)");
+        assert.equal(x(.25), "#800080");
       },
       "can specify range values as arrays or objects": function(sqrt) {
         var x = sqrt().range([{color: "red"}, {color: "blue"}]);
-        assert.deepEqual(x(.25), {color: "rgb(128,0,128)"});
+        assert.deepEqual(x(.25), {color: "#800080"});
         var x = sqrt().range([["red"], ["blue"]]);
-        assert.deepEqual(x(.25), ["rgb(128,0,128)"]);
+        assert.deepEqual(x(.25), ["#800080"]);
       }
     },
 
@@ -121,7 +121,7 @@ suite.addBatch({
       "defaults to d3.interpolate": function(sqrt) {
         var x = sqrt().range(["red", "blue"]);
         assert.equal(x.interpolate(), d3.interpolate);
-        assert.equal(x(.5), "rgb(75,0,180)");
+        assert.equal(x(.5), "#4b00b4");
       },
       "can specify a custom interpolator": function(sqrt) {
         var x = sqrt().range(["red", "blue"]).interpolate(d3.interpolateHsl);
@@ -235,7 +235,7 @@ suite.addBatch({
         var x = sqrt().range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
         assert.equal(x(0.5), "#00ffd3");
-        assert.equal(y(0.5), "rgb(75,0,180)");
+        assert.equal(y(0.5), "#4b00b4");
         assert.equal(y.interpolate(), d3.interpolate);
       },
       "changes to clamping are isolated": function(sqrt) {

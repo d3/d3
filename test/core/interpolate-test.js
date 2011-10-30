@@ -15,7 +15,7 @@ suite.addBatch({
       assert.equal(interpolate(2, 12)(.4), 6);
     },
     "interpolates colors": function(interpolate) {
-      assert.equal(interpolate("#abcdef", "#fedcba")(.4), "rgb(204,211,218)");
+      assert.equal(interpolate("#abcdef", "#fedcba")(.4), "#ccd3da");
     },
     "interpolates strings": function(interpolate) {
       assert.equal(interpolate("width:10px;", "width:50px;")(.2), "width:18px;");
@@ -83,22 +83,22 @@ suite.addBatch({
       return d3.interpolateRgb;
     },
     "parses string input": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "rgb(107,104,144)");
-      assert.equal(interpolate("steelblue", "#f00")(.6), "rgb(181,52,72)");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#6b6890");
+      assert.equal(interpolate("steelblue", "#f00")(.6), "#b53448");
     },
     "parses d3.rgb input": function(interpolate) {
-      assert.equal(interpolate(d3.rgb("steelblue"), "#f00")(.2), "rgb(107,104,144)");
-      assert.equal(interpolate("steelblue", d3.rgb(255, 0, 0))(.6), "rgb(181,52,72)");
+      assert.equal(interpolate(d3.rgb("steelblue"), "#f00")(.2), "#6b6890");
+      assert.equal(interpolate("steelblue", d3.rgb(255, 0, 0))(.6), "#b53448");
     },
     "parses d3.hsl input": function(interpolate) {
-      assert.equal(interpolate(d3.hsl("steelblue"), "#f00")(.2), "rgb(107,104,144)");
-      assert.equal(interpolate("steelblue", d3.hsl(0, 1, .5))(.6), "rgb(181,52,72)");
+      assert.equal(interpolate(d3.hsl("steelblue"), "#f00")(.2), "#6b6890");
+      assert.equal(interpolate("steelblue", d3.hsl(0, 1, .5))(.6), "#b53448");
     },
     "interpolates in RGB color space": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "rgb(107,104,144)");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#6b6890");
     },
     "outputs an RGB string": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "rgb(107,104,144)");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#6b6890");
     }
   }
 });
@@ -162,10 +162,10 @@ suite.addBatch({
       assert.deepEqual(interpolate(new a(2), new a(4))(.5), {a: 3, b: 12});
     },
     "interpolates color properties as rgb": function(interpolate) {
-      assert.deepEqual(interpolate({background: "red"}, {background: "green"})(.5), {background: "rgb(128,64,0)"});
-      assert.deepEqual(interpolate({fill: "red"}, {fill: "green"})(.5), {fill: "rgb(128,64,0)"});
-      assert.deepEqual(interpolate({stroke: "red"}, {stroke: "green"})(.5), {stroke: "rgb(128,64,0)"});
-      assert.deepEqual(interpolate({color: "red"}, {color: "green"})(.5), {color: "rgb(128,64,0)"});
+      assert.deepEqual(interpolate({background: "red"}, {background: "green"})(.5), {background: "#804000"});
+      assert.deepEqual(interpolate({fill: "red"}, {fill: "green"})(.5), {fill: "#804000"});
+      assert.deepEqual(interpolate({stroke: "red"}, {stroke: "green"})(.5), {stroke: "#804000"});
+      assert.deepEqual(interpolate({color: "red"}, {color: "green"})(.5), {color: "#804000"});
     },
     "interpolates nested objects and arrays": function(interpolate) {
       assert.deepEqual(interpolate({foo: [2, 12]}, {foo: [4, 24]})(.5), {foo: [3, 18]});

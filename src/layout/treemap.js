@@ -24,57 +24,61 @@ d3.layout.treemap = function() {
 
   // Recursively arranges the specified node's children into squarified rows.
   function squarify(node) {
-    if (!node.children) return;
-    var rect = pad(node),
-        row = [],
-        children = node.children.slice(), // copy-on-write
-        child,
-        best = Infinity, // the best row score so far
-        score, // the current row score
-        u = Math.min(rect.dx, rect.dy), // initial orientation
-        n;
-    scale(children, rect.dx * rect.dy / node.value);
-    row.area = 0;
-    while ((n = children.length) > 0) {
-      row.push(child = children[n - 1]);
-      row.area += child.area;
-      if ((score = worst(row, u)) <= best) { // continue with this orientation
-        children.pop();
-        best = score;
-      } else { // abort, and try a different orientation
-        row.area -= row.pop().area;
-        position(row, u, rect, false);
-        u = Math.min(rect.dx, rect.dy);
-        row.length = row.area = 0;
-        best = Infinity;
+    var children = node.children;
+    if (children && children.length) {
+      var rect = pad(node),
+          row = [],
+          remaining = children.slice(), // copy-on-write
+          child,
+          best = Infinity, // the best row score so far
+          score, // the current row score
+          u = Math.min(rect.dx, rect.dy), // initial orientation
+          n;
+      scale(remaining, rect.dx * rect.dy / node.value);
+      row.area = 0;
+      while ((n = remaining.length) > 0) {
+        row.push(child = remaining[n - 1]);
+        row.area += child.area;
+        if ((score = worst(row, u)) <= best) { // continue with this orientation
+          remaining.pop();
+          best = score;
+        } else { // abort, and try a different orientation
+          row.area -= row.pop().area;
+          position(row, u, rect, false);
+          u = Math.min(rect.dx, rect.dy);
+          row.length = row.area = 0;
+          best = Infinity;
+        }
       }
+      if (row.length) {
+        position(row, u, rect, true);
+        row.length = row.area = 0;
+      }
+      children.forEach(squarify);
     }
-    if (row.length) {
-      position(row, u, rect, true);
-      row.length = row.area = 0;
-    }
-    node.children.forEach(squarify);
   }
 
   // Recursively resizes the specified node's children into existing rows.
   // Preserves the existing layout!
   function stickify(node) {
-    if (!node.children) return;
-    var rect = pad(node),
-        children = node.children.slice(), // copy-on-write
-        child,
-        row = [];
-    scale(children, rect.dx * rect.dy / node.value);
-    row.area = 0;
-    while (child = children.pop()) {
-      row.push(child);
-      row.area += child.area;
-      if (child.z != null) {
-        position(row, child.z ? rect.dx : rect.dy, rect, !children.length);
-        row.length = row.area = 0;
+    var children = node.children;
+    if (children && children.length) {
+      var rect = pad(node),
+          remaining = children.slice(), // copy-on-write
+          child,
+          row = [];
+      scale(remaining, rect.dx * rect.dy / node.value);
+      row.area = 0;
+      while (child = remaining.pop()) {
+        row.push(child);
+        row.area += child.area;
+        if (child.z != null) {
+          position(row, child.z ? rect.dx : rect.dy, rect, !remaining.length);
+          row.length = row.area = 0;
+        }
       }
+      children.forEach(stickify);
     }
-    node.children.forEach(stickify);
   }
 
   // Computes the score for the specified row, as the worst aspect ratio.

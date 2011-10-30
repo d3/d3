@@ -136,7 +136,7 @@ suite.addBatch({
     },
     "interpolate can be defined as a constant": function(area) {
       var a = area().interpolate("step-before");
-      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0V-0.540302H0.841471L0,-1V0H0Z");
+      assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0V-0.540302H0.841471L0,-1H0V0Z");
       assert.equal(a.interpolate(), "step-before");
     },
 

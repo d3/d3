@@ -39,9 +39,9 @@ suite.addBatch({
       },
       "can specify a polypower domain and range": function(pow) {
         var x = pow().domain([-10, 0, 100]).range(["red", "white", "green"]);
-        assert.equal(x(-5), "rgb(255,128,128)");
-        assert.equal(x(50), "rgb(128,192,128)");
-        assert.equal(x(75), "rgb(64,160,64)");
+        assert.equal(x(-5), "#ff8080");
+        assert.equal(x(50), "#80c080");
+        assert.equal(x(75), "#40a040");
       }
     },
 
@@ -66,21 +66,21 @@ suite.addBatch({
       },
       "can specify range values as colors": function(pow) {
         var x = pow().range(["red", "blue"]);
-        assert.equal(x(.5), "rgb(128,0,128)");
+        assert.equal(x(.5), "#800080");
         var x = pow().range(["#ff0000", "#0000ff"]);
-        assert.equal(x(.5), "rgb(128,0,128)");
+        assert.equal(x(.5), "#800080");
         var x = pow().range(["#f00", "#00f"]);
-        assert.equal(x(.5), "rgb(128,0,128)");
+        assert.equal(x(.5), "#800080");
         var x = pow().range([d3.rgb(255,0,0), d3.hsl(240,1,.5)]);
-        assert.equal(x(.5), "rgb(128,0,128)");
+        assert.equal(x(.5), "#800080");
         var x = pow().range(["hsl(0,100%,50%)", "hsl(240,100%,50%)"]);
-        assert.equal(x(.5), "rgb(128,0,128)");
+        assert.equal(x(.5), "#800080");
       },
       "can specify range values as arrays or objects": function(pow) {
         var x = pow().range([{color: "red"}, {color: "blue"}]);
-        assert.deepEqual(x(.5), {color: "rgb(128,0,128)"});
+        assert.deepEqual(x(.5), {color: "#800080"});
         var x = pow().range([["red"], ["blue"]]);
-        assert.deepEqual(x(.5), ["rgb(128,0,128)"]);
+        assert.deepEqual(x(.5), ["#800080"]);
       }
     },
 
@@ -124,7 +124,7 @@ suite.addBatch({
       "defaults to d3.interpolate": function(pow) {
         var x = pow().range(["red", "blue"]);
         assert.equal(x.interpolate(), d3.interpolate);
-        assert.equal(x(.5), "rgb(128,0,128)");
+        assert.equal(x(.5), "#800080");
       },
       "can specify a custom interpolator": function(pow) {
         var x = pow().range(["red", "blue"]).interpolate(d3.interpolateHsl);
@@ -187,6 +187,10 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [130, 0]);
         var x = pow().domain([0, .49]).nice();
         assert.deepEqual(x.domain(), [0, .5]);
+        var x = pow().domain([0, 0]).nice();
+        assert.deepEqual(x.domain(), [0, 0]);
+        var x = pow().domain([.5, .5]).nice();
+        assert.deepEqual(x.domain(), [.5, .5]);
       },
       "nicing a polypower domain only affects the extent": function(pow) {
         var x = pow().domain([1.1, 1, 2, 3, 10.9]).nice();
@@ -238,7 +242,7 @@ suite.addBatch({
         var x = pow().range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
         assert.equal(x(0.5), "#00ff00");
-        assert.equal(y(0.5), "rgb(128,0,128)");
+        assert.equal(y(0.5), "#800080");
         assert.equal(y.interpolate(), d3.interpolate);
       },
       "changes to clamping are isolated": function(pow) {
