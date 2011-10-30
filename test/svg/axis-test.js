@@ -185,6 +185,43 @@ suite.addBatch({
         text.each(function() {
           assert.equal(d3.select(this).attr("y"), 9);
         });
+      },
+      "passes any arguments to the scale's tickFormat function": function(axis) {
+        var x = d3.scale.linear(),
+            a = axis().scale(x).tickValues([1,2,3]),
+            g = d3.select("body").html("").append("svg:g"),
+            aa = [];
+
+        x.tickFormat = function() {
+          aa.push(arguments);
+          return String;
+        };
+
+        g.call(a);
+        assert.equal(aa.length, 1);
+        assert.equal(aa[0].length, 3);
+        assert.equal(aa[0][0], 1);
+        assert.equal(aa[0][1], 2);
+        assert.equal(aa[0][2], 3);
+      }
+    },
+
+    "tickValues": {
+      "defaults to null": function(axis) {
+        var a = axis().tickValues();
+        assert.equal(a, null);
+      },
+      "can be given as array of positions": function(axis) {
+        var l = [1, 2.5, 3], a = axis().tickValues(l), t = a.tickValues();
+        assert.equal(t, l);
+        assert.equal(t.length, 3);
+      },
+      "is reset by ticks()": function(axis) {
+        var l = [1, 2.5, 3], a = axis().tickValues(l), t = a.tickValues();
+        assert.equal(t, l);
+        assert.equal(t.length, 3);
+        a.ticks([10]);
+        assert.equal(a.tickValues(), null);
       }
     },
 
@@ -199,10 +236,13 @@ suite.addBatch({
         assert.equal(t[1], 42);
         assert.equal(t.length, 2);
       },
-      "can be given as array of positions": function(axis) {
-        var l = [1, 2.5, 3], a = axis().tickValues(l), t = a.tickValues();
-        assert.equal(t, l);
-        assert.equal(t.length, 3);
+      "is set to null by tickValues()": function(axis) {
+        var b = {}, a = axis().ticks(b, 42), t = a.ticks();
+        assert.equal(t[0], b);
+        assert.equal(t[1], 42);
+        assert.equal(t.length, 2);
+        a.tickValues([10]);
+        assert.equal(a.ticks(), null);
       },
       "passes any arguments to the scale's ticks function": function(axis) {
         var x = d3.scale.linear(), b = {}, a = axis().ticks(b, 42).scale(x), aa = [],

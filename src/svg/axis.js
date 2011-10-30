@@ -146,6 +146,7 @@ d3.svg.axis = function() {
 
   axis.ticks = function() {
     if (!arguments.length) return tickArguments_;
+    tickValues = null;
     tickArguments_ = arguments;
     return axis;
   };
@@ -179,6 +180,7 @@ d3.svg.axis = function() {
 
   axis.tickValues = function(x) {
     if (!arguments.length) return tickValues;
+    tickArguments_ = null;
     tickValues = x;
     return axis;
   };
