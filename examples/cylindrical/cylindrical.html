@@ -43,7 +43,7 @@ div {
     <script type="text/javascript">
 
 // Our projection.
-var xy = d3.geo.cylindrical(),
+var xy = d3.geo.cylindrical().scale(200),
     path = d3.geo.path().projection(xy);
 
 var states = d3.select("body")
@@ -83,7 +83,7 @@ function refresh() {
   d3.select("#scale span")
       .text(xy.scale());
   d3.select("#parallel span")
-      .text(xy.parallel());
+      .text(xy.parallels());
   d3.select("#translate-x span")
       .text(xy.translate()[0]);
   d3.select("#translate-y span")
@@ -91,7 +91,7 @@ function refresh() {
 }
 
     </script><p>
-    <div id="scale">scale: <span>500</span></div><p>
+    <div id="scale">scale: <span>200</span></div><p>
     <div id="parallel">parallel: <span>0</span></div><p>
     <div id="translate-x">translate.x: <span>480</span></div>
     <div id="translate-y">translate.y: <span>250</span></div>
@@ -100,7 +100,7 @@ function refresh() {
 $("#scale").slider({
   min: 0,
   max: 3000,
-  value: 500,
+  value: 200,
   slide: function(event, ui) {
     xy.scale(ui.value);
     refresh();
@@ -112,7 +112,7 @@ $("#parallel").slider({
   max: 90,
   value: 0,
   slide: function(event, ui) {
-    xy.parallel(ui.value);
+    xy.parallels(ui.value);
     refresh();
   }
 });
