@@ -79,7 +79,7 @@ function d3_behavior_dragMove() {
   if (!parent) return d3_behavior_dragUp();
 
   d3_behavior_dragDispatch("drag");
-  d3_behavior_dragCancel();
+  d3_eventCancel();
 }
 
 function d3_behavior_dragUp() {
@@ -91,19 +91,14 @@ function d3_behavior_dragUp() {
   // Also prevent the subsequent click from propagating (e.g., for anchors).
   if (d3_behavior_dragMoved && d3_behavior_dragEventTarget === d3.event.target) {
     d3_behavior_dragStopClick = true;
-    d3_behavior_dragCancel();
+    d3_eventCancel();
   }
 }
 
 function d3_behavior_dragClick() {
   if (d3_behavior_dragStopClick && d3_behavior_dragEventTarget === d3.event.target) {
-    d3_behavior_dragCancel();
+    d3_eventCancel();
     d3_behavior_dragStopClick = false;
     d3_behavior_dragEventTarget = null;
   }
-}
-
-function d3_behavior_dragCancel() {
-  d3.event.stopPropagation();
-  d3.event.preventDefault();
 }
