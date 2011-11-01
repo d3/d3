@@ -3847,8 +3847,9 @@ d3.svg.brush = function() {
   function brush(selection) {
     selection.each(function(d, i, j) {
       var g = d3.select(this).on("mousedown.brush", down),
-          bg = g.selectAll("rect.background").data([d]),
-          fg = g.selectAll("rect.selection").data([d]),
+          bg = g.selectAll("rect.background").data([,]),
+          fg = g.selectAll("rect.selection").data([,]),
+          tz = g.selectAll("rect.resize").data(["n", "e", "s", "w", "nw", "ne", "se", "sw"]),
           e;
 
       // An invisible, mouseable area for starting a new brush.
@@ -3860,6 +3861,16 @@ d3.svg.brush = function() {
       // The current brush selection, made visible.
       fg.enter().append("svg:rect")
           .attr("class", "selection");
+
+      // More visible rects for resizing the selection.
+      // TODO We only want some of these thumbs, depending on what scales are defined.
+      tz.enter().append("svg:rect")
+          .attr("class", function(d) { return "resize " + d; })
+          .attr("width", 6)
+          .attr("height", 6)
+          .style("visibility", "hidden")
+          .style("pointer-events", "all")
+          .style("cursor", d3_svg_brushCursor);
 
       // Initialize the background to fill the defined range.
       // If the range isn't defined, we let the caller post-process.
@@ -3927,14 +3938,45 @@ var d3_svg_brushEvent,
 function d3_svg_brushMove() {
   if (d3_svg_brushOffset) {
     var mouse = d3.svg.mouse(d3_svg_brushTarget),
-        selection = d3.select(d3_svg_brushTarget).select(".selection");
-    if (d3_svg_brushX) selection.call(d3_svg_brushMove1, mouse, d3_svg_brushX, 0, "x", "width");
-    if (d3_svg_brushY) selection.call(d3_svg_brushMove1, mouse, d3_svg_brushY, 1, "y", "height");
+        g = d3.select(d3_svg_brushTarget);
+
+    if (d3_svg_brushX) {
+      d3_svg_brushMove1(mouse, d3_svg_brushX, 0);
+
+      g.select(".selection")
+          .attr("x", d3_svg_brushSelection[0][0]);
+
+      g.selectAll(".n,.s,.w,.nw,.sw")
+          .attr("x", d3_svg_brushSelection[0][0] - 2);
+
+      g.selectAll(".e,.ne,.se")
+          .attr("x", d3_svg_brushSelection[1][0] - 3);
+
+      g.selectAll(".selection,.n,.s")
+          .attr("width", d3_svg_brushSelection[1][0] - d3_svg_brushSelection[0][0]);
+    }
+
+    if (d3_svg_brushY) {
+      d3_svg_brushMove1(mouse, d3_svg_brushY, 1);
+
+      g.select(".selection")
+          .attr("y", d3_svg_brushSelection[0][1]);
+
+      g.selectAll(".n,.e,.w,.nw,.ne")
+          .attr("y", d3_svg_brushSelection[0][1] - 3);
+
+      g.selectAll(".s,.se,.sw")
+          .attr("y", d3_svg_brushSelection[1][1] - 4);
+
+      g.selectAll(".selection,.e,.w")
+          .attr("height", d3_svg_brushSelection[1][1] - d3_svg_brushSelection[0][1]);
+    }
+
     d3_svg_brushEvent.apply(d3_svg_brushTarget, d3_svg_brushArguments);
   }
 }
 
-function d3_svg_brushMove1(selection, mouse, scale, i, position, length) {
+function d3_svg_brushMove1(mouse, scale, i) {
   var range = d3_scaleExtent(scale.range()),
       offset = d3_svg_brushOffset[i],
       size = d3_svg_brushSelection[1][i] - d3_svg_brushSelection[0][i],
@@ -3960,10 +4002,9 @@ function d3_svg_brushMove1(selection, mouse, scale, i, position, length) {
     max = offset;
   }
 
-  // Update the selection rect and stored bounds.
-  selection
-      .attr(position, d3_svg_brushSelection[0][i] = min)
-      .attr(length, (d3_svg_brushSelection[1][i] = max) - min);
+  // Update the stored bounds.
+  d3_svg_brushSelection[0][i] = min;
+  d3_svg_brushSelection[1][i] = max;
 }
 
 function d3_svg_brushUp() {
@@ -3978,6 +4019,13 @@ function d3_svg_brushUp() {
     d3_svg_brushOffset = null;
     d3_eventCancel();
   }
+}
+
+function d3_svg_brushCursor(d, i) {
+  return (i < 4
+      ? (i & 1 ? "ew" : "ns")
+      : (i & 1 ? "nesw" : "nwse"))
+      + "-resize";
 }
 d3.behavior = {};
 d3.behavior.drag = function() {
