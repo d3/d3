@@ -1,19 +1,19 @@
 d3.svg.brush = function() {
-  var event = d3.dispatch("brush"),
+  var event = d3.dispatch("brushstart", "brush", "brushend"),
       x, // x-scale, optional
       y, // y-scale, optional
-      selection = [[0, 0], [0, 0]]; // [x0, y0], [x1, y1]
+      extent = [[0, 0], [0, 0]]; // [x0, y0], [x1, y1]
 
-  function brush(selection) {
-    var resizes = x && y ? d3_svg_brushResizeXY
-        : x ? d3_svg_brushResizeX
-        : y ? d3_svg_brushResizeY
+  function brush(g) {
+    var resizes = x && y ? ["n", "e", "s", "w", "nw", "ne", "se", "sw"]
+        : x ? ["e", "w"]
+        : y ? ["n", "s"]
         : [];
 
-    selection.each(function(d, i, j) {
+    g.each(function() {
       var g = d3.select(this).on("mousedown.brush", down),
           bg = g.selectAll(".background").data([,]),
-          fg = g.selectAll(".selection").data([,]),
+          fg = g.selectAll(".extent").data([,]),
           tz = g.selectAll(".resize").data(resizes, String),
           e;
 
@@ -24,12 +24,12 @@ d3.svg.brush = function() {
           .style("pointer-events", "all")
           .style("cursor", "crosshair");
 
-      // The current brush selection, made visible.
+      // The visible brush extent; style this as you like!
       fg.enter().append("svg:rect")
-          .attr("class", "selection")
+          .attr("class", "extent")
           .style("cursor", "move");
 
-      // More visible rects for resizing the selection.
+      // More invisible rects for resizing the extent.
       tz.enter().append("svg:rect")
           .attr("class", function(d) { return "resize " + d; })
           .attr("width", 6)
@@ -42,47 +42,70 @@ d3.svg.brush = function() {
       tz.exit().remove();
 
       // Initialize the background to fill the defined range.
-      // If the range isn't defined, we let the caller post-process.
+      // If the range isn't defined, you can post-process.
       if (x) {
         e = d3_scaleExtent(x.range());
         bg.attr("x", e[0]).attr("width", e[1] - e[0]);
+        d3_svg_brushRedrawX(g, extent);
       }
       if (y) {
         e = d3_scaleExtent(y.range());
         bg.attr("y", e[0]).attr("height", e[1] - e[0]);
+        d3_svg_brushRedrawY(g, extent);
       }
+
+      // Notify listeners of the (possibly) changed extent.
+      e = dispatcher(this, arguments);
+      e("brushstart");
+      e("brush");
+      e("brushend");
     });
   }
 
   function down() {
     var target = d3.select(d3.event.target);
 
-    d3_svg_brush = brush;
-    d3_svg_brushEvent = event.brush;
+    // Store some global state for the duration of the brush gesture.
     d3_svg_brushTarget = this;
-    d3_svg_brushArguments = arguments;
-    d3_svg_brushSelection = selection;
+    d3_svg_brushExtent = extent;
     d3_svg_brushOffset = d3.svg.mouse(d3_svg_brushTarget);
-    d3_eventCancel();
 
-    // If the selection was clicked on, use dragging rather than brushing;
-    // store the offset between the mouse and selection origin instead.
-    if (d3_svg_brushMode = target.classed("selection")) {
-      d3_svg_brushOffset[0] = selection[0][0] - d3_svg_brushOffset[0];
-      d3_svg_brushOffset[1] = selection[0][1] - d3_svg_brushOffset[1];
+    // If the extent was clicked on, drag rather than brush;
+    // store the offset between the mouse and extent origin instead.
+    if (d3_svg_brushMode = target.classed("extent")) {
+      d3_svg_brushOffset[0] = extent[0][0] - d3_svg_brushOffset[0];
+      d3_svg_brushOffset[1] = extent[0][1] - d3_svg_brushOffset[1];
     }
 
-    // If a resizer was clicked on, record which side is resized.
-    // Also, set the offset appropriately to the opposite side.
+    // If a resizer was clicked on, record which side is to be resized.
+    // Also, set the offset to the opposite side.
     else if (target.classed("resize")) {
       d3_svg_brushMode = d3.event.target.__data__;
-      d3_svg_brushOffset[0] = selection[+/w$/.test(d3_svg_brushMode)][0];
-      d3_svg_brushOffset[1] = selection[+/^n/.test(d3_svg_brushMode)][1];
+      d3_svg_brushOffset[0] = extent[+/w$/.test(d3_svg_brushMode)][0];
+      d3_svg_brushOffset[1] = extent[+/^n/.test(d3_svg_brushMode)][1];
     }
 
     // Restrict which dimensions are resized.
     d3_svg_brushX = !/^(n|s)$/.test(d3_svg_brushMode) && x;
     d3_svg_brushY = !/^(e|w)$/.test(d3_svg_brushMode) && y;
+
+    // Notify listeners.
+    d3_svg_brushDispatch = dispatcher(this, arguments);
+    d3_svg_brushDispatch("brushstart");
+    d3_svg_brushMove();
+    d3_eventCancel();
+  }
+
+  function dispatcher(that, argumentz) {
+    return function(type) {
+      var e = d3.event;
+      try {
+        d3.event = {type: type, target: brush};
+        event[type].apply(that, argumentz);
+      } finally {
+        d3.event = e;
+      }
+    };
   }
 
   brush.x = function(z) {
@@ -97,15 +120,44 @@ d3.svg.brush = function() {
     return brush;
   };
 
-  brush.selection = function() {
-    var sx = d3_svg_brushInvert(x, selection, 0),
-        sy = d3_svg_brushInvert(y, selection, 1);
-    return x && y ? d3.zip(sx, sy) : sx || sy;
+  brush.extent = function(z) {
+    var x0, x1, y0, y1, t;
+
+    // Invert the pixel extent to data-space.
+    if (!arguments.length) {
+      if (x) {
+        x0 = x.invert(extent[0][0]), x1 = x.invert(extent[1][0]);
+        if (x1 < x0) t = x0, x0 = x1, x1 = t;
+      }
+      if (y) {
+        y0 = y.invert(extent[0][1]), y1 = y.invert(extent[1][1]);
+        if (y1 < y0) t = y0, y0 = y1, y1 = t;
+      }
+      return x && y ? [[x0, y0], [x1, y1]] : x ? [x0, x1] : y && [y0, y1];
+    }
+
+    // Scale the data-space extent to pixels.
+    if (x) {
+      x0 = z[0], x1 = z[1];
+      if (y) x0 = x0[0], x1 = x1[0];
+      x0 = x(x0), x1 = x(x1);
+      if (x1 < x0) t = x0, x0 = x1, x1 = t;
+      extent[0][0] = x0, extent[1][0] = x1;
+    }
+    if (y) {
+      y0 = z[0], y1 = z[1];
+      if (x) y0 = y0[1], y1 = y1[1];
+      y0 = y(y0), y1 = y(y1);
+      if (y1 < y0) t = y0, y0 = y1, y1 = t;
+      extent[0][1] = y0, extent[1][1] = y1;
+    }
+
+    return brush;
   };
 
   brush.empty = function() {
-    return (x && selection[0][0] === selection[1][0])
-        || (y && selection[0][1] === selection[1][1]);
+    return (x && extent[0][0] === extent[1][0])
+        || (y && extent[0][1] === extent[1][1]);
   };
 
   brush.on = function(type, listener) {
@@ -120,74 +172,61 @@ d3.svg.brush = function() {
   return brush;
 };
 
-var d3_svg_brushResizeXY = ["n", "e", "s", "w", "nw", "ne", "se", "sw"],
-    d3_svg_brushResizeX = ["e", "w"],
-    d3_svg_brushResizeY = ["n", "s"],
-    d3_svg_brush,
-    d3_svg_brushEvent,
+var d3_svg_brushDispatch,
     d3_svg_brushTarget,
-    d3_svg_brushArguments,
     d3_svg_brushX,
     d3_svg_brushY,
-    d3_svg_brushSelection,
+    d3_svg_brushExtent,
     d3_svg_brushMode,
     d3_svg_brushOffset;
 
-function d3_svg_brushInvert(scale, selection, i) {
-  if (scale) {
-    selection = [scale.invert(selection[0][i]), scale.invert(selection[1][i])];
-    return selection[1] < selection[0] ? selection.reverse() : selection;
-  }
+function d3_svg_brushRedrawX(g, extent) {
+  g.select(".extent").attr("x", extent[0][0]);
+  g.selectAll(".n,.s,.w,.nw,.sw").attr("x", extent[0][0] - 2);
+  g.selectAll(".e,.ne,.se").attr("x", extent[1][0] - 3);
+  g.selectAll(".extent,.n,.s").attr("width", extent[1][0] - extent[0][0]);
+}
+
+function d3_svg_brushRedrawY(g, extent) {
+  g.select(".extent").attr("y", extent[0][1]);
+  g.selectAll(".n,.e,.w,.nw,.ne").attr("y", extent[0][1] - 3);
+  g.selectAll(".s,.se,.sw").attr("y", extent[1][1] - 4);
+  g.selectAll(".extent,.e,.w").attr("height", extent[1][1] - extent[0][1]);
 }
 
 function d3_svg_brushMove() {
   if (d3_svg_brushOffset) {
     var mouse = d3.svg.mouse(d3_svg_brushTarget),
-        g = d3.select(d3_svg_brushTarget),
-        e = d3.event;
-
+        g = d3.select(d3_svg_brushTarget);
     if (d3_svg_brushX) {
       d3_svg_brushMove1(mouse, d3_svg_brushX, 0);
-      g.select(".selection").attr("x", d3_svg_brushSelection[0][0]);
-      g.selectAll(".n,.s,.w,.nw,.sw").attr("x", d3_svg_brushSelection[0][0] - 2);
-      g.selectAll(".e,.ne,.se").attr("x", d3_svg_brushSelection[1][0] - 3);
-      g.selectAll(".selection,.n,.s").attr("width", d3_svg_brushSelection[1][0] - d3_svg_brushSelection[0][0]);
+      d3_svg_brushRedrawX(g, d3_svg_brushExtent);
     }
-
     if (d3_svg_brushY) {
       d3_svg_brushMove1(mouse, d3_svg_brushY, 1);
-      g.select(".selection").attr("y", d3_svg_brushSelection[0][1]);
-      g.selectAll(".n,.e,.w,.nw,.ne").attr("y", d3_svg_brushSelection[0][1] - 3);
-      g.selectAll(".s,.se,.sw").attr("y", d3_svg_brushSelection[1][1] - 4);
-      g.selectAll(".selection,.e,.w").attr("height", d3_svg_brushSelection[1][1] - d3_svg_brushSelection[0][1]);
+      d3_svg_brushRedrawY(g, d3_svg_brushExtent);
     }
-
-    try {
-      d3.event = {target: d3_svg_brush};
-      d3_svg_brushEvent.apply(d3_svg_brushTarget, d3_svg_brushArguments);
-    } finally {
-      d3.event = e;
-    }
+    d3_svg_brushDispatch("brush");
   }
 }
 
 function d3_svg_brushMove1(mouse, scale, i) {
   var range = d3_scaleExtent(scale.range()),
       offset = d3_svg_brushOffset[i],
-      size = d3_svg_brushSelection[1][i] - d3_svg_brushSelection[0][i],
+      size = d3_svg_brushExtent[1][i] - d3_svg_brushExtent[0][i],
       min,
       max;
 
-  // When dragging, reduce the range by the selection size and offset.
+  // When dragging, reduce the range by the extent size and offset.
   if (+d3_svg_brushMode) {
     range[0] -= offset;
     range[1] -= size + offset;
   }
 
-  // Clamp the mouse so that the selection fits within the range extent.
+  // Clamp the mouse so that the extent fits within the range extent.
   min = Math.max(range[0], Math.min(range[1], mouse[i]));
 
-  // Compute the new selection bounds.
+  // Compute the new extent bounds.
   if (+d3_svg_brushMode) {
     max = (min += offset) + size;
   } else if (offset < min) {
@@ -198,20 +237,19 @@ function d3_svg_brushMove1(mouse, scale, i) {
   }
 
   // Update the stored bounds.
-  d3_svg_brushSelection[0][i] = min;
-  d3_svg_brushSelection[1][i] = max;
+  d3_svg_brushExtent[0][i] = min;
+  d3_svg_brushExtent[1][i] = max;
 }
 
 function d3_svg_brushUp() {
   if (d3_svg_brushOffset) {
     d3_svg_brushMove();
-    d3_svg_brush =
-    d3_svg_brushEvent =
+    d3_svg_brushDispatch("brushend");
+    d3_svg_brushDispatch =
     d3_svg_brushTarget =
-    d3_svg_brushArguments =
     d3_svg_brushX =
     d3_svg_brushY =
-    d3_svg_brushSelection =
+    d3_svg_brushExtent =
     d3_svg_brushMode =
     d3_svg_brushOffset = null;
     d3_eventCancel();
