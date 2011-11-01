@@ -48,6 +48,7 @@ d3.core.js: \
 	src/core/median.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/random.js \
 	src/core/number.js \
 	src/core/sum.js \
 	src/core/quantile.js \

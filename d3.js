@@ -105,6 +105,21 @@ d3.max = function(array, f) {
   }
   return a;
 };
+d3.random = {
+  normal: function(mean, deviation) {
+    if (arguments.length < 2) deviation = 1;
+    if (arguments.length < 1) mean = 0;
+    return function() {
+      var x = 0, y = 0, r;
+      do {
+        x = Math.random() * 2 - 1;
+        y = Math.random() * 2 - 1;
+        r = x * x + y * y;
+      } while (!r || r > 1);
+      return mean + deviation * x * Math.sqrt(-2 * Math.log(r) / r);
+    };
+  }
+};
 function d3_number(x) {
   return x != null && !isNaN(x);
 }
@@ -3897,11 +3912,10 @@ d3.svg.brush = function() {
   function down() {
     var target = d3.select(d3.event.target);
 
+    d3_svg_brush = brush;
     d3_svg_brushEvent = event.brush;
     d3_svg_brushTarget = this;
     d3_svg_brushArguments = arguments;
-    d3_svg_brushX = x;
-    d3_svg_brushY = y;
     d3_svg_brushSelection = selection;
     d3_svg_brushOffset = d3.svg.mouse(d3_svg_brushTarget);
     d3_eventCancel();
@@ -3920,6 +3934,10 @@ d3.svg.brush = function() {
       d3_svg_brushOffset[0] = selection[+/w$/.test(d3_svg_brushMode)][0];
       d3_svg_brushOffset[1] = selection[+/^n/.test(d3_svg_brushMode)][1];
     }
+
+    // Restrict which dimensions are resized.
+    d3_svg_brushX = !/^(n|s)$/.test(d3_svg_brushMode) && x;
+    d3_svg_brushY = !/^(e|w)$/.test(d3_svg_brushMode) && y;
   }
 
   brush.x = function(z) {
@@ -3932,6 +3950,17 @@ d3.svg.brush = function() {
     if (!arguments.length) return y;
     y = z;
     return brush;
+  };
+
+  brush.selection = function() {
+    var sx = d3_svg_brushInvert(x, selection, 0),
+        sy = d3_svg_brushInvert(y, selection, 1);
+    return x && y ? d3.zip(sx, sy) : sx || sy;
+  };
+
+  brush.empty = function() {
+    return (x && selection[0][0] === selection[1][0])
+        || (y && selection[0][1] === selection[1][1]);
   };
 
   brush.on = function(type, listener) {
@@ -3949,20 +3978,30 @@ d3.svg.brush = function() {
 var d3_svg_brushResizeXY = ["n", "e", "s", "w", "nw", "ne", "se", "sw"],
     d3_svg_brushResizeX = ["e", "w"],
     d3_svg_brushResizeY = ["n", "s"],
+    d3_svg_brush,
     d3_svg_brushEvent,
     d3_svg_brushTarget,
     d3_svg_brushArguments,
     d3_svg_brushX,
     d3_svg_brushY,
+    d3_svg_brushSelection,
     d3_svg_brushMode,
     d3_svg_brushOffset;
+
+function d3_svg_brushInvert(scale, selection, i) {
+  if (scale) {
+    selection = [scale.invert(selection[0][i]), scale.invert(selection[1][i])];
+    return selection[1] < selection[0] ? selection.reverse() : selection;
+  }
+}
 
 function d3_svg_brushMove() {
   if (d3_svg_brushOffset) {
     var mouse = d3.svg.mouse(d3_svg_brushTarget),
-        g = d3.select(d3_svg_brushTarget);
+        g = d3.select(d3_svg_brushTarget),
+        e = d3.event;
 
-    if (d3_svg_brushX && !/^(n|s)$/.test(d3_svg_brushMode)) {
+    if (d3_svg_brushX) {
       d3_svg_brushMove1(mouse, d3_svg_brushX, 0);
       g.select(".selection").attr("x", d3_svg_brushSelection[0][0]);
       g.selectAll(".n,.s,.w,.nw,.sw").attr("x", d3_svg_brushSelection[0][0] - 2);
@@ -3970,7 +4009,7 @@ function d3_svg_brushMove() {
       g.selectAll(".selection,.n,.s").attr("width", d3_svg_brushSelection[1][0] - d3_svg_brushSelection[0][0]);
     }
 
-    if (d3_svg_brushY && !/^(e|w)$/.test(d3_svg_brushMode)) {
+    if (d3_svg_brushY) {
       d3_svg_brushMove1(mouse, d3_svg_brushY, 1);
       g.select(".selection").attr("y", d3_svg_brushSelection[0][1]);
       g.selectAll(".n,.e,.w,.nw,.ne").attr("y", d3_svg_brushSelection[0][1] - 3);
@@ -3978,7 +4017,12 @@ function d3_svg_brushMove() {
       g.selectAll(".selection,.e,.w").attr("height", d3_svg_brushSelection[1][1] - d3_svg_brushSelection[0][1]);
     }
 
-    d3_svg_brushEvent.apply(d3_svg_brushTarget, d3_svg_brushArguments);
+    try {
+      d3.event = {target: d3_svg_brush};
+      d3_svg_brushEvent.apply(d3_svg_brushTarget, d3_svg_brushArguments);
+    } finally {
+      d3.event = e;
+    }
   }
 }
 
@@ -4016,11 +4060,13 @@ function d3_svg_brushMove1(mouse, scale, i) {
 function d3_svg_brushUp() {
   if (d3_svg_brushOffset) {
     d3_svg_brushMove();
+    d3_svg_brush =
     d3_svg_brushEvent =
     d3_svg_brushTarget =
     d3_svg_brushArguments =
     d3_svg_brushX =
     d3_svg_brushY =
+    d3_svg_brushSelection =
     d3_svg_brushMode =
     d3_svg_brushOffset = null;
     d3_eventCancel();

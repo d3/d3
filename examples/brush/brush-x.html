@@ -10,6 +10,15 @@ svg {
   font: 10px sans-serif;
 }
 
+.selecting circle {
+  fill: #ccc;
+}
+
+.selecting circle.selected {
+  fill: #f00;
+  stroke: #000;
+}
+
 .axis path, .axis line {
   fill: none;
   stroke: #000;
@@ -27,11 +36,14 @@ svg {
   <body>
     <script type="text/javascript">
 
+var data = d3.range(800).map(Math.random);
+
 var m = [10, 10, 20, 10],
     w = 960 - m[1] - m[3],
-    h = 500 - m[0] - m[2];
+    h = 100 - m[0] - m[2];
 
-var x = d3.scale.linear().range([0, w]);
+var x = d3.scale.linear().range([0, w]),
+    y = d3.random.normal(h / 2, h / 8);
 
 var svg = d3.select("body").append("svg:svg")
     .attr("width", w + m[1] + m[3])
@@ -44,11 +56,23 @@ svg.append("svg:g")
     .attr("transform", "translate(0," + h + ")")
     .call(d3.svg.axis().scale(x).orient("bottom"));
 
+var circle = svg.selectAll("circle")
+    .data(data)
+  .enter().append("svg:circle")
+    .attr("transform", function(d) { return "translate(" + x(d) + "," + y() + ")"; })
+    .attr("r", 3.5);
+
 svg.append("svg:g")
     .attr("class", "brush")
-    .call(d3.svg.brush().x(x))
+    .call(d3.svg.brush().x(x).on("brush", brush))
   .selectAll("rect")
     .attr("height", h);
+
+function brush() {
+  var s = d3.event.target.selection();
+  circle.classed("selected", function(d) { return s[0] <= d && d < s[1]; });
+  svg.classed("selecting", !d3.event.target.empty());
+}
 
     </script>
   </body>
