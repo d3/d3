@@ -3853,9 +3853,6 @@ function d3_svg_axisSubdivide(scale, ticks, m) {
   }
   return subticks;
 }
-// TODO the SPACE key should temporarily switch to dragging
-// TODO the SHIFT key should preserve aspect ratio
-
 d3.svg.brush = function() {
   var event = d3.dispatch("brushstart", "brush", "brushend"),
       x, // x-scale, optional
@@ -3930,7 +3927,7 @@ d3.svg.brush = function() {
 
     // If the extent was clicked on, drag rather than brush;
     // store the offset between the mouse and extent origin instead.
-    if (d3_svg_brushMode = target.classed("extent")) {
+    if (d3_svg_brushDrag = target.classed("extent")) {
       d3_svg_brushOffset[0] = extent[0][0] - d3_svg_brushOffset[0];
       d3_svg_brushOffset[1] = extent[0][1] - d3_svg_brushOffset[1];
     }
@@ -3938,19 +3935,19 @@ d3.svg.brush = function() {
     // If a resizer was clicked on, record which side is to be resized.
     // Also, set the offset to the opposite side.
     else if (target.classed("resize")) {
-      d3_svg_brushMode = d3.event.target.__data__;
-      d3_svg_brushOffset[0] = extent[+/w$/.test(d3_svg_brushMode)][0];
-      d3_svg_brushOffset[1] = extent[+/^n/.test(d3_svg_brushMode)][1];
+      d3_svg_brushResize = d3.event.target.__data__;
+      d3_svg_brushOffset[0] = extent[+/w$/.test(d3_svg_brushResize)][0];
+      d3_svg_brushOffset[1] = extent[+/^n/.test(d3_svg_brushResize)][1];
     }
 
     // If the ALT key is down when starting a brush, the center is at the mouse.
     else if (d3.event.altKey) {
-      d3_svg_brushCenter = d3_svg_brushOffset;
+      d3_svg_brushCenter = d3_svg_brushOffset.slice();
     }
 
     // Restrict which dimensions are resized.
-    d3_svg_brushX = !/^(n|s)$/.test(d3_svg_brushMode) && x;
-    d3_svg_brushY = !/^(e|w)$/.test(d3_svg_brushMode) && y;
+    d3_svg_brushX = !/^(n|s)$/.test(d3_svg_brushResize) && x;
+    d3_svg_brushY = !/^(e|w)$/.test(d3_svg_brushResize) && y;
 
     // Notify listeners.
     d3_svg_brushDispatch = dispatcher(this, arguments);
@@ -4030,7 +4027,9 @@ d3.svg.brush = function() {
 
   d3.select(window)
       .on("mousemove.brush", d3_svg_brushMove)
-      .on("mouseup.brush", d3_svg_brushUp);
+      .on("mouseup.brush", d3_svg_brushUp)
+      .on("keydown.brush", d3_svg_brushKeydown)
+      .on("keyup.brush", d3_svg_brushKeyup);
 
   return brush;
 };
@@ -4040,7 +4039,8 @@ var d3_svg_brushDispatch,
     d3_svg_brushX,
     d3_svg_brushY,
     d3_svg_brushExtent,
-    d3_svg_brushMode,
+    d3_svg_brushDrag,
+    d3_svg_brushResize,
     d3_svg_brushCenter,
     d3_svg_brushOffset;
 
@@ -4058,26 +4058,48 @@ function d3_svg_brushRedrawY(g, extent) {
   g.selectAll(".extent,.e,.w").attr("height", extent[1][1] - extent[0][1]);
 }
 
+function d3_svg_brushKeydown() {
+  if (d3.event.keyCode == 32 && d3_svg_brushTarget && !d3_svg_brushDrag) {
+    d3_svg_brushCenter = null;
+    d3_svg_brushOffset[0] -= d3_svg_brushExtent[1][0];
+    d3_svg_brushOffset[1] -= d3_svg_brushExtent[1][1];
+    d3_svg_brushDrag = 2;
+    d3_eventCancel();
+  }
+}
+
+function d3_svg_brushKeyup() {
+  if (d3.event.keyCode == 32 && d3_svg_brushDrag == 2) {
+    d3_svg_brushOffset[0] += d3_svg_brushExtent[1][0];
+    d3_svg_brushOffset[1] += d3_svg_brushExtent[1][1];
+    d3_svg_brushDrag = 0;
+    d3_eventCancel();
+  }
+}
+
 function d3_svg_brushMove() {
   if (d3_svg_brushOffset) {
     var mouse = d3.svg.mouse(d3_svg_brushTarget),
         g = d3.select(d3_svg_brushTarget);
 
-    // If needed, determine the center from the current extent.
-    if (d3.event.altKey) {
-      if (!d3_svg_brushCenter) {
-        d3_svg_brushCenter = [
-          (d3_svg_brushExtent[0][0] + d3_svg_brushExtent[1][0]) / 2,
-          (d3_svg_brushExtent[0][1] + d3_svg_brushExtent[1][1]) / 2
-        ];
-      }
-    }
+    if (!d3_svg_brushDrag) {
 
-    // When the ALT key is released, we restore the offset as appropriate.
-    else if (d3_svg_brushCenter) {
-      d3_svg_brushOffset[0] = d3_svg_brushExtent[+(mouse[0] < d3_svg_brushCenter[0])][0];
-      d3_svg_brushOffset[1] = d3_svg_brushExtent[+(mouse[1] < d3_svg_brushCenter[1])][1];
-      d3_svg_brushCenter = null;
+      // If needed, determine the center from the current extent.
+      if (d3.event.altKey) {
+        if (!d3_svg_brushCenter) {
+          d3_svg_brushCenter = [
+            (d3_svg_brushExtent[0][0] + d3_svg_brushExtent[1][0]) / 2,
+            (d3_svg_brushExtent[0][1] + d3_svg_brushExtent[1][1]) / 2
+          ];
+        }
+
+        // Update the offset, for when the ALT key is released.
+        d3_svg_brushOffset[0] = d3_svg_brushExtent[+(mouse[0] < d3_svg_brushCenter[0])][0];
+        d3_svg_brushOffset[1] = d3_svg_brushExtent[+(mouse[1] < d3_svg_brushCenter[1])][1];
+      }
+
+      // When the ALT key is released, we clear the center.
+      else d3_svg_brushCenter = null;
     }
 
     // Update the brush extent for each dimension.
@@ -4103,7 +4125,7 @@ function d3_svg_brushMove1(mouse, scale, i) {
       max;
 
   // When dragging, reduce the range by the extent size and offset.
-  if (+d3_svg_brushMode) {
+  if (d3_svg_brushDrag) {
     range[0] -= offset;
     range[1] -= size + offset;
   }
@@ -4112,14 +4134,12 @@ function d3_svg_brushMove1(mouse, scale, i) {
   min = Math.max(range[0], Math.min(range[1], mouse[i]));
 
   // Compute the new extent bounds.
-  if (+d3_svg_brushMode) {
+  if (d3_svg_brushDrag) {
     max = (min += offset) + size;
   } else {
 
     // If the ALT key is pressed, then preserve the center of the extent.
-    if (d3_svg_brushCenter) {
-      offset = Math.max(range[0], Math.min(range[1], 2 * d3_svg_brushCenter[i] - min));
-    }
+    if (d3_svg_brushCenter) offset = Math.max(range[0], Math.min(range[1], 2 * d3_svg_brushCenter[i] - min));
 
     // Compute the min and max of the offset and mouse.
     if (offset < min) {
@@ -4144,7 +4164,8 @@ function d3_svg_brushUp() {
     d3_svg_brushX =
     d3_svg_brushY =
     d3_svg_brushExtent =
-    d3_svg_brushMode =
+    d3_svg_brushDrag =
+    d3_svg_brushResize =
     d3_svg_brushCenter =
     d3_svg_brushOffset = null;
     d3_eventCancel();
