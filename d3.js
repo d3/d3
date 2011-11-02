@@ -3908,12 +3908,6 @@ d3.svg.brush = function() {
         bg.attr("y", e[0]).attr("height", e[1] - e[0]);
         d3_svg_brushRedrawY(g, extent);
       }
-
-      // Notify listeners of the (possibly) changed extent.
-      e = dispatcher(this, arguments);
-      e("brushstart");
-      e("brush");
-      e("brushend");
     });
   }
 
@@ -4012,6 +4006,14 @@ d3.svg.brush = function() {
       extent[0][1] = y0, extent[1][1] = y1;
     }
 
+    return brush;
+  };
+
+  brush.clear = function() {
+    extent[0][0] =
+    extent[0][1] =
+    extent[1][0] =
+    extent[1][1] = 0;
     return brush;
   };
 
