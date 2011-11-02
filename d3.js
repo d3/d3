@@ -105,6 +105,9 @@ d3.max = function(array, f) {
   }
   return a;
 };
+d3.extent = function() {
+  return [d3.min.apply(d3, arguments), d3.max.apply(d3, arguments)];
+};
 d3.random = {
   normal: function(mean, deviation) {
     if (arguments.length < 2) deviation = 1;
@@ -3890,7 +3893,7 @@ d3.svg.brush = function() {
           .attr("width", 6)
           .attr("height", 6)
           .style("visibility", "hidden")
-          .style("pointer-events", "all")
+          .style("pointer-events", brush.empty() ? "none" : "all")
           .style("cursor", function(d) { return d3_svg_brushCursor[d]; });
 
       // Remove any superfluous resizers.
@@ -3915,6 +3918,7 @@ d3.svg.brush = function() {
     var target = d3.select(d3.event.target);
 
     // Store some global state for the duration of the brush gesture.
+    d3_svg_brush = brush;
     d3_svg_brushTarget = this;
     d3_svg_brushExtent = extent;
     d3_svg_brushOffset = d3.svg.mouse(d3_svg_brushTarget);
@@ -4036,7 +4040,8 @@ d3.svg.brush = function() {
   return brush;
 };
 
-var d3_svg_brushDispatch,
+var d3_svg_brush,
+    d3_svg_brushDispatch,
     d3_svg_brushTarget,
     d3_svg_brushX,
     d3_svg_brushY,
@@ -4160,7 +4165,9 @@ function d3_svg_brushMove1(mouse, scale, i) {
 function d3_svg_brushUp() {
   if (d3_svg_brushOffset) {
     d3_svg_brushMove();
+    d3.select(d3_svg_brushTarget).selectAll(".resize").style("pointer-events", d3_svg_brush.empty() ? "none" : "all");
     d3_svg_brushDispatch("brushend");
+    d3_svg_brush =
     d3_svg_brushDispatch =
     d3_svg_brushTarget =
     d3_svg_brushX =
