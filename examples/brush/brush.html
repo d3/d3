@@ -72,7 +72,7 @@ var circle = svg.selectAll("circle")
 
 svg.append("svg:g")
     .attr("class", "brush")
-    .call(b = d3.svg.brush().x(x).y(y)
+    .call(d3.svg.brush().x(x).y(y)
     .on("brushstart", brushstart)
     .on("brush", brush)
     .on("brushend", brushend));
