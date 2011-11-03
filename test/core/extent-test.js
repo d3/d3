@@ -26,6 +26,7 @@ suite.addBatch({
       assert.deepEqual(extent([NaN, 1, 2, 3, 4, 5]), [1, 5]);
       assert.deepEqual(extent([1, 2, 3, 4, 5, NaN]), [1, 5]);
       assert.deepEqual(extent([10, null, 3, undefined, 5, NaN]), [3, 10]);
+      assert.deepEqual(extent([-1, null, -3, undefined, -5, NaN]), [-5, -1]);
     },
     "compares heterogenous types as numbers": function(extent) {
       assert.deepEqual(extent([20, "3"]), ["3", 20]);

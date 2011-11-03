@@ -106,8 +106,25 @@ d3.max = function(array, f) {
   return a;
 };
 d3.extent = function(array, f) {
-  if (arguments.length > 1) array = array.map(f);
-  return [d3.min(array), d3.max(array)];
+  var i = -1,
+      n = array.length,
+      a,
+      b,
+      c;
+  if (arguments.length === 1) {
+    while (++i < n && ((a = c = array[i]) == null || a != a)) a = c = undefined;
+    while (++i < n) if ((b = array[i]) != null) {
+      if (a > b) a = b;
+      if (c < b) c = b;
+    }
+  } else {
+    while (++i < n && ((a = c = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+    while (++i < n) if ((b = f.call(array, array[i], i)) != null) {
+      if (a > b) a = b;
+      if (c < b) c = b;
+    }
+  }
+  return [a, c];
 };
 d3.random = {
   normal: function(mean, deviation) {
