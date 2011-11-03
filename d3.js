@@ -105,8 +105,9 @@ d3.max = function(array, f) {
   }
   return a;
 };
-d3.extent = function() {
-  return [d3.min.apply(d3, arguments), d3.max.apply(d3, arguments)];
+d3.extent = function(array, f) {
+  if (arguments.length > 1) array = array.map(f);
+  return [d3.min(array), d3.max(array)];
 };
 d3.random = {
   normal: function(mean, deviation) {
