@@ -162,7 +162,7 @@ d3.interpolateObject = function(a, b) {
   };
 }
 
-var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g;
+var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-+]?\d+)?/g;
 
 d3.interpolators = [
   d3.interpolateObject,
