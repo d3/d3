@@ -2,9 +2,7 @@
 d3.behavior.zoom = function() {
   var xyz = [0, 0, 0],
       event = d3.dispatch("zoom"),
-      extent = [[-Infinity, Infinity],
-                [-Infinity, Infinity],
-                [-Infinity, Infinity]];
+      extent = d3_behavior_zoomInfiniteExtent;
 
   function zoom() {
     this
@@ -67,7 +65,7 @@ d3.behavior.zoom = function() {
 
   zoom.extent = function(x) {
     if (!arguments.length) return extent;
-    extent = x == null ? (x = [-Infinity, Infinity], [x, x, x]) : x;
+    extent = x == null ? d3_behavior_zoomInfiniteExtent : x;
     return zoom;
   };
 
@@ -230,6 +228,12 @@ function d3_behavior_zoomTo(z, x0, x1) {
 
   o.preventDefault();
 }
+
+var d3_behavior_zoomInfiniteExtent = [
+  [-Infinity, Infinity],
+  [-Infinity, Infinity],
+  [-Infinity, Infinity]
+];
 
 function d3_behavior_zoomExtentClamp(x, i, k) {
   var range = d3_behavior_zoomExtent[i],
