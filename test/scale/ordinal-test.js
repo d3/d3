@@ -111,6 +111,9 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 1);
         assert.deepEqual(x.range(), [20, 60, 100]);
         assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 2);
+        assert.deepEqual(x.range(), [30, 60, 90]);
+        assert.equal(x.rangeBand(), 0);
       }
     },
 
