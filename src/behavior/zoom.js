@@ -26,7 +26,7 @@ d3.behavior.zoom = function() {
   function start() {
     d3_behavior_zoomXyz = xyz;
     d3_behavior_zoomExtent = extent;
-    d3_behavior_zoomDispatch = event.zoom.dispatch;
+    d3_behavior_zoomDispatch = event.zoom;
     d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
     d3_behavior_zoomArguments = arguments;
