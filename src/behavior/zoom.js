@@ -68,7 +68,7 @@ d3.behavior.zoom = function() {
 
   zoom.extents = function(x) {
     if (!arguments.length) return extents;
-    extents = x == null ? Object : x;
+    extents = x == null ? (x = [-Infinity, Infinity], [x, x, x]) : x;
     return zoom;
   };
 
