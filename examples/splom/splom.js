@@ -20,6 +20,12 @@ d3.json("flowers.json", function(flower) {
       .ticks(5)
       .tickSize(size * n);
 
+  // Brush.
+  var brush = d3.svg.brush()
+      .on("brushstart", brushstart)
+      .on("brush", brush)
+      .on("brushend", brushend);
+
   // Root panel.
   var svg = d3.select("#chart").append("svg:svg")
       .attr("width", size * n + padding)
@@ -76,20 +82,21 @@ d3.json("flowers.json", function(flower) {
         .attr("cy", function(d) { return y[p.y](d[p.y]); })
         .attr("r", 3);
 
-    // Plot brush; stash in the data so that we can clear programmatically.
-    cell.call(p.brush = d3.svg.brush()
-        .x(x[p.x])
-        .y(y[p.y])
-        .on("brush", brush)
-        .on("brushend", brushend));
+    // Plot brush.
+    cell.call(brush.x(x[p.x]).y(y[p.y]));
   }
 
-  var b; // the active brush
+  // Clear the previously-active brush, if any.
+  function brushstart(p) {
+    if (brush.data !== p) {
+      cell.call(brush.clear());
+      brush.x(x[p.x]).y(y[p.y]).data = p;
+    }
+  }
 
-  // Clear the previously-active brush, if any, and highlight selected circles.
+  // Highlight the selected circles.
   function brush(p) {
-    if (b && b !== d3.event.target) cell.filter(function(d) { return d.brush === b; }).call(b.clear());
-    var e = (b = d3.event.target).extent();
+    var e = brush.extent();
     svg.selectAll("circle").attr("class", function(d) {
       return e[0][0] <= d[p.x] && d[p.x] < e[1][0]
           && e[0][1] <= d[p.y] && d[p.y] < e[1][1]
@@ -97,9 +104,9 @@ d3.json("flowers.json", function(flower) {
     });
   }
 
-  // If the active brush is empty, select all circles.
+  // If the brush is empty, select all circles.
   function brushend() {
-    if (b.empty()) svg.selectAll("circle").attr("class", function(d) {
+    if (brush.empty()) svg.selectAll("circle").attr("class", function(d) {
       return d.species;
     });
   }
