@@ -4,7 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Zoom + Pan</title>
     <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.behavior.js"></script>
     <style type="text/css">
 
 svg {
@@ -39,7 +38,9 @@ var svg = d3.select("body").append("svg:svg")
     .attr("pointer-events", "all")
   .append("svg:g")
     .attr("transform", "translate(" + padding[3] + "," + padding[0] + ")")
-    .call(d3.behavior.zoom().on("zoom", redraw))
+    .call(d3.behavior.zoom()
+      .extent([[0, size[0]], [0, size[1]], [0, Infinity]])
+      .on("zoom", redraw))
   .append("svg:g");
 
 // Generate x-ticks…
