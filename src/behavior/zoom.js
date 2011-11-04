@@ -200,14 +200,11 @@ function d3_behavior_zoomTo(z, x0, x1) {
   var j = Math.pow(2, d3_behavior_zoomXyz[2]),
       k = Math.pow(2, z),
       K = Math.pow(2, (d3_behavior_zoomXyz[2] = z) - x1[2]),
-      x = d3_behavior_zoomExtentClamp((x0[0] - x1[0] * K), 0, k),
-      y = d3_behavior_zoomExtentClamp((x0[1] - x1[1] * K), 1, k),
       x_ = d3_behavior_zoomXyz[0],
       y_ = d3_behavior_zoomXyz[1],
+      x = d3_behavior_zoomXyz[0] = d3_behavior_zoomExtentClamp((x0[0] - x1[0] * K), 0, k),
+      y = d3_behavior_zoomXyz[1] = d3_behavior_zoomExtentClamp((x0[1] - x1[1] * K), 1, k),
       o = d3.event; // Events can be reentrant (e.g., focus).
-
-  d3_behavior_zoomXyz[0] = x;
-  d3_behavior_zoomXyz[1] = y;
 
   d3.event = {
     scale: k,
