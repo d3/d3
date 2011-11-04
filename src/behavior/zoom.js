@@ -1,11 +1,10 @@
 // TODO unbind zoom behavior?
-// TODO unbind listener?
 d3.behavior.zoom = function() {
   var xyz = [0, 0, 0],
       event = d3.dispatch("zoom"),
-      extents = [[-Infinity, Infinity],
-                 [-Infinity, Infinity],
-                 [-Infinity, Infinity]];
+      extent = [[-Infinity, Infinity],
+                [-Infinity, Infinity],
+                [-Infinity, Infinity]];
 
   function zoom() {
     this
@@ -26,7 +25,7 @@ d3.behavior.zoom = function() {
   // snapshot the local context for subsequent dispatch
   function start() {
     d3_behavior_zoomXyz = xyz;
-    d3_behavior_zoomExtents = extents;
+    d3_behavior_zoomExtent = extent;
     d3_behavior_zoomDispatch = event.zoom.dispatch;
     d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
@@ -66,14 +65,14 @@ d3.behavior.zoom = function() {
     d3_behavior_zoomLast = now;
   }
 
-  zoom.extents = function(x) {
-    if (!arguments.length) return extents;
-    extents = x == null ? (x = [-Infinity, Infinity], [x, x, x]) : x;
+  zoom.extent = function(x) {
+    if (!arguments.length) return extent;
+    extent = x == null ? (x = [-Infinity, Infinity], [x, x, x]) : x;
     return zoom;
   };
 
   zoom.on = function(type, listener) {
-    event[type].add(listener);
+    event.on(type, listener);
     return zoom;
   };
 
@@ -86,7 +85,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomLocations = {}, // identifier -> location
     d3_behavior_zoomLast = 0,
     d3_behavior_zoomXyz,
-    d3_behavior_zoomExtents,
+    d3_behavior_zoomExtent,
     d3_behavior_zoomDispatch,
     d3_behavior_zoomEventTarget,
     d3_behavior_zoomTarget,
@@ -197,12 +196,12 @@ function d3_behavior_zoomClick() {
 }
 
 function d3_behavior_zoomTo(z, x0, x1) {
-  z = d3_behavior_zoomExtentsClamp(z, 2);
+  z = d3_behavior_zoomExtentClamp(z, 2);
   var j = Math.pow(2, d3_behavior_zoomXyz[2]),
       k = Math.pow(2, z),
       K = Math.pow(2, (d3_behavior_zoomXyz[2] = z) - x1[2]),
-      x = d3_behavior_zoomExtentsClamp((x0[0] - x1[0] * K), 0, k),
-      y = d3_behavior_zoomExtentsClamp((x0[1] - x1[1] * K), 1, k),
+      x = d3_behavior_zoomExtentClamp((x0[0] - x1[0] * K), 0, k),
+      y = d3_behavior_zoomExtentClamp((x0[1] - x1[1] * K), 1, k),
       x_ = d3_behavior_zoomXyz[0],
       y_ = d3_behavior_zoomXyz[1],
       o = d3.event; // Events can be reentrant (e.g., focus).
@@ -220,8 +219,7 @@ function d3_behavior_zoomTo(z, x0, x1) {
   };
 
   function transform(scale, a, b) {
-    var range = scale.range().map(function(v) { return ((v - b) * j) / k + a; });
-    scale.domain(range.map(scale.invert));
+    scale.domain(scale.range().map(function(v) { return scale.invert(((v - b) * j) / k + a); }));
   }
 
   try {
@@ -233,13 +231,12 @@ function d3_behavior_zoomTo(z, x0, x1) {
   o.preventDefault();
 }
 
-function d3_behavior_zoomExtentsClamp(x, i, k) {
-  var range = d3_behavior_zoomExtents[i],
+function d3_behavior_zoomExtentClamp(x, i, k) {
+  var range = d3_behavior_zoomExtent[i],
       r0 = range[0],
       r1 = range[1];
-  if (arguments.length === 3) {
-    return Math.max(r1 * (r1 === Infinity ? -Infinity : 1 / k - 1),
-        Math.min(r0 === -Infinity ? Infinity : r0, x / k)) * k;
-  }
-  return Math.max(r0, Math.min(r1, x));
+  return arguments.length === 3
+      ? Math.max(r1 * (r1 === Infinity ? -Infinity : 1 / k - 1),
+        Math.min(r0 === -Infinity ? Infinity : r0, x / k)) * k
+      : Math.max(r0, Math.min(r1, x));
 }

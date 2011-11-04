@@ -11,6 +11,10 @@ function d3_scale_ordinal(domain, ranger) {
     return range[((index[x] || (index[x] = domain.push(x))) - 1) % range.length];
   }
 
+  function steps(start, step) {
+    return d3.range(domain.length).map(function(i) { return start + step * i; });
+  }
+
   scale.domain = function(x) {
     if (!arguments.length) return domain;
     domain = [];
@@ -33,7 +37,7 @@ function d3_scale_ordinal(domain, ranger) {
     var start = x[0],
         stop = x[1],
         step = (stop - start) / (domain.length - 1 + padding);
-    range = domain.length < 2 ? [(start + stop) / 2] : d3.range(start + step * padding / 2, stop + step / 2, step);
+    range = steps(domain.length < 2 ? (start + stop) / 2 : start + step * padding / 2, step);
     rangeBand = 0;
     ranger = {t: "rangePoints", x: x, p: padding};
     return scale;
@@ -44,7 +48,7 @@ function d3_scale_ordinal(domain, ranger) {
     var start = x[0],
         stop = x[1],
         step = (stop - start) / (domain.length + padding);
-    range = d3.range(start + step * padding, stop, step);
+    range = steps(start + step * padding, step);
     rangeBand = step * (1 - padding);
     ranger = {t: "rangeBands", x: x, p: padding};
     return scale;
@@ -54,9 +58,8 @@ function d3_scale_ordinal(domain, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = Math.floor((stop - start) / (domain.length + padding)),
-        err = stop - start - (domain.length - padding) * step;
-    range = d3.range(start + Math.round(err / 2), stop, step);
+        step = Math.floor((stop - start) / (domain.length + padding));
+    range = steps(start + Math.round((stop - start - (domain.length - padding) * step) / 2), step);
     rangeBand = Math.round(step * (1 - padding));
     ranger = {t: "rangeRoundBands", x: x, p: padding};
     return scale;

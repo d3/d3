@@ -39,7 +39,7 @@ var svg = d3.select("body").append("svg:svg")
   .append("svg:g")
     .attr("transform", "translate(" + padding[3] + "," + padding[0] + ")")
     .call(d3.behavior.zoom()
-      .extents([[0, size[0]], [0, size[1]], [0, Infinity]])
+      .extent([[0, size[0]], [0, size[1]], [0, 3]])
       .on("zoom", redraw));
 
 svg.append("svg:rect")
