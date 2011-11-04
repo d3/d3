@@ -150,7 +150,7 @@ d3.interpolateObject = function(a, b) {
       k;
   for (k in a) {
     if (k in b) {
-      i[k] = d3.interpolate(a[k], b[k]);
+      i[k] = d3_interpolateByName(k)(a[k], b[k]);
     } else {
       c[k] = a[k];
     }
@@ -167,6 +167,12 @@ d3.interpolateObject = function(a, b) {
 }
 
 var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g;
+
+function d3_interpolateByName(n) {
+  return n == "transform"
+      ? d3.interpolateTransform
+      : d3.interpolate;
+}
 
 d3.interpolators = [
   d3.interpolateObject,

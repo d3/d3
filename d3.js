@@ -937,7 +937,7 @@ d3.interpolateObject = function(a, b) {
       k;
   for (k in a) {
     if (k in b) {
-      i[k] = d3.interpolate(a[k], b[k]);
+      i[k] = d3_interpolateByName(k)(a[k], b[k]);
     } else {
       c[k] = a[k];
     }
@@ -954,6 +954,12 @@ d3.interpolateObject = function(a, b) {
 }
 
 var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g;
+
+function d3_interpolateByName(n) {
+  return n == "transform"
+      ? d3.interpolateTransform
+      : d3.interpolate;
+}
 
 d3.interpolators = [
   d3.interpolateObject,
@@ -1989,17 +1995,18 @@ function d3_transitionNull(d, i, a) {
   return a != "" && d3_transitionRemove;
 }
 
-function d3_transitionTween(b) {
+function d3_transitionTween(name, b) {
+  var interpolate = d3_interpolateByName(name);
 
   function transitionFunction(d, i, a) {
     var v = b.call(this, d, i);
     return v == null
         ? a != "" && d3_transitionRemove
-        : a != v && d3.interpolate(a, v);
+        : a != v && interpolate(a, v);
   }
 
   function transitionString(d, i, a) {
-    return a != b && d3.interpolate(a, b);
+    return a != b && interpolate(a, b);
   }
 
   return typeof b === "function" ? transitionFunction
@@ -2064,7 +2071,7 @@ d3_transitionPrototype.selectAll = function(selector) {
   return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.attr = function(name, value) {
-  return this.attrTween(name, d3_transitionTween(value));
+  return this.attrTween(name, d3_transitionTween(name, value));
 };
 
 d3_transitionPrototype.attrTween = function(nameNS, tween) {
@@ -2088,7 +2095,7 @@ d3_transitionPrototype.attrTween = function(nameNS, tween) {
 };
 d3_transitionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = "";
-  return this.styleTween(name, d3_transitionTween(value), priority);
+  return this.styleTween(name, d3_transitionTween(name, value), priority);
 };
 
 d3_transitionPrototype.styleTween = function(name, tween, priority) {
