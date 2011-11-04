@@ -933,7 +933,7 @@ d3.interpolateObject = function(a, b) {
       k;
   for (k in a) {
     if (k in b) {
-      i[k] = d3_interpolateByName(k)(a[k], b[k]);
+      i[k] = d3.interpolate(a[k], b[k]);
     } else {
       c[k] = a[k];
     }
@@ -949,14 +949,7 @@ d3.interpolateObject = function(a, b) {
   };
 }
 
-var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g,
-    d3_interpolate_rgb = {background: 1, fill: 1, stroke: 1};
-
-function d3_interpolateByName(n) {
-  return n in d3_interpolate_rgb || /\bcolor\b/.test(n)
-      ? d3.interpolateRgb
-      : d3.interpolate;
-}
+var d3_interpolate_number = /[-+]?(?:\d+\.\d+|\d+\.|\.\d+|\d+)(?:[eE][-]?\d+)?/g;
 
 d3.interpolators = [
   d3.interpolateObject,
