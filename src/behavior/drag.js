@@ -29,7 +29,7 @@ d3.behavior.drag = function() {
   }
 
   drag.on = function(type, listener) {
-    event[type].add(listener);
+    event.on(type, listener);
     return drag;
   };
 
@@ -57,7 +57,7 @@ function d3_behavior_dragDispatch(type) {
 
   try {
     d3.event = {dx: dx, dy: dy};
-    d3_behavior_dragEvent[type].dispatch.apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
+    d3_behavior_dragEvent[type].apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
   } finally {
     d3.event = o;
   }
@@ -65,10 +65,10 @@ function d3_behavior_dragDispatch(type) {
   o.preventDefault();
 }
 
-function d3_behavior_dragPoint(container) {
-  return d3.event.touches
-      ? d3.svg.touches(container)[0]
-      : d3.svg.mouse(container);
+function d3_behavior_dragPoint(container, type) {
+  // TODO Track touch points by identifier.
+  var t = d3.event.changedTouches;
+  return t ? d3.svg.touches(container, t)[0] : d3.svg.mouse(container);
 }
 
 function d3_behavior_dragMove() {
@@ -79,7 +79,7 @@ function d3_behavior_dragMove() {
   if (!parent) return d3_behavior_dragUp();
 
   d3_behavior_dragDispatch("drag");
-  d3_behavior_dragCancel();
+  d3_eventCancel();
 }
 
 function d3_behavior_dragUp() {
@@ -91,19 +91,14 @@ function d3_behavior_dragUp() {
   // Also prevent the subsequent click from propagating (e.g., for anchors).
   if (d3_behavior_dragMoved && d3_behavior_dragEventTarget === d3.event.target) {
     d3_behavior_dragStopClick = true;
-    d3_behavior_dragCancel();
+    d3_eventCancel();
   }
 }
 
 function d3_behavior_dragClick() {
   if (d3_behavior_dragStopClick && d3_behavior_dragEventTarget === d3.event.target) {
-    d3_behavior_dragCancel();
+    d3_eventCancel();
     d3_behavior_dragStopClick = false;
     d3_behavior_dragEventTarget = null;
   }
-}
-
-function d3_behavior_dragCancel() {
-  d3.event.stopPropagation();
-  d3.event.preventDefault();
 }

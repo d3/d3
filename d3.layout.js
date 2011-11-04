@@ -113,16 +113,19 @@ d3.layout.chord = function() {
     k = (2 * Math.PI - padding * n) / k;
 
     // Compute the start and end angle for each group and subgroup.
+    // Note: Opera has a bug reordering object literal properties!
     x = 0, i = -1; while (++i < n) {
       x0 = x, j = -1; while (++j < n) {
         var di = groupIndex[i],
             dj = subgroupIndex[di][j],
-            v = matrix[di][dj];
+            v = matrix[di][dj],
+            a0 = x,
+            a1 = x += v * k;
         subgroups[di + "-" + dj] = {
           index: di,
           subindex: dj,
-          startAngle: x,
-          endAngle: x += v * k,
+          startAngle: a0,
+          endAngle: a1,
           value: v
         };
       }
@@ -315,14 +318,14 @@ d3.layout.force = function() {
       }
     }
 
-    event.tick.dispatch({type: "tick", alpha: alpha});
+    event.tick({type: "tick", alpha: alpha});
 
     // simulated annealing, basically
     return (alpha *= .99) < .005;
   }
 
   force.on = function(type, listener) {
-    event[type].add(listener);
+    event.on(type, listener);
     return force;
   };
 
@@ -602,33 +605,31 @@ d3.layout.partition = function() {
 };
 d3.layout.pie = function() {
   var value = Number,
-      sort = null,
+      sort = d3_layout_pieSortByValue,
       startAngle = 0,
       endAngle = 2 * Math.PI;
 
   function pie(data, i) {
+
+    // Compute the numeric values for each data element.
+    var values = data.map(function(d, i) { return +value.call(pie, d, i); });
 
     // Compute the start angle.
     var a = +(typeof startAngle === "function"
         ? startAngle.apply(this, arguments)
         : startAngle);
 
-    // Compute the angular range (end - start).
-    var k = (typeof endAngle === "function"
+    // Compute the angular scale factor: from value to radians.
+    var k = ((typeof endAngle === "function"
         ? endAngle.apply(this, arguments)
-        : endAngle) - startAngle;
+        : endAngle) - startAngle)
+        / d3.sum(values);
 
     // Optionally sort the data.
     var index = d3.range(data.length);
-    if (sort != null) index.sort(function(i, j) {
-      return sort(data[i], data[j]);
-    });
-
-    // Compute the numeric values for each data element.
-    var values = data.map(value);
-
-    // Convert k into a scale factor from value to angle, using the sum.
-    k /= values.reduce(function(p, d) { return p + d; }, 0);
+    if (sort != null) index.sort(sort === d3_layout_pieSortByValue
+        ? function(i, j) { return values[j] - values[i]; }
+        : function(i, j) { return sort(data[i], data[j]); });
 
     // Compute the arcs!
     var arcs = index.map(function(i) {
@@ -695,6 +696,8 @@ d3.layout.pie = function() {
 
   return pie;
 };
+
+var d3_layout_pieSortByValue = {};
 // data is two-dimensional array of x,y; we populate y0
 d3.layout.stack = function() {
   var values = Object,

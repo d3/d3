@@ -107,14 +107,14 @@ d3.layout.force = function() {
       }
     }
 
-    event.tick.dispatch({type: "tick", alpha: alpha});
+    event.tick({type: "tick", alpha: alpha});
 
     // simulated annealing, basically
     return (alpha *= .99) < .005;
   }
 
   force.on = function(type, listener) {
-    event[type].add(listener);
+    event.on(type, listener);
     return force;
   };
 
