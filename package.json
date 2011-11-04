@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "2.4.4",
+  "version": "2.4.6",
   "description": "A small, free JavaScript library for manipulating documents based on data.",
   "keywords": [
     "dom",
@@ -20,8 +20,8 @@
     "url": "http://github.com/mbostock/d3.git"
   },
   "dependencies": {
-    "uglify-js": "1.0.6",
-    "jsdom": "0.2.3",
-    "vows": "0.5.10"
+    "uglify-js": "1.1.1",
+    "jsdom": "0.2.8",
+    "vows": "0.5.11"
   }
 }

@@ -94,8 +94,6 @@ d3.core.js: \
 	src/core/selection-insert.js \
 	src/core/selection-remove.js \
 	src/core/selection-data.js \
-	src/core/selection-enter.js \
-	src/core/selection-enter-select.js \
 	src/core/selection-filter.js \
 	src/core/selection-map.js \
 	src/core/selection-sort.js \
@@ -106,6 +104,8 @@ d3.core.js: \
 	src/core/selection-node.js \
 	src/core/selection-transition.js \
 	src/core/selection-root.js \
+	src/core/selection-enter.js \
+	src/core/selection-enter-select.js \
 	src/core/transition.js \
 	src/core/transition-select.js \
 	src/core/transition-selectAll.js \
@@ -255,7 +255,7 @@ install:
 	mkdir -p node_modules
 	npm install
 
-package.json: d3.js
+package.json: d3.js src/package.js
 	node src/package.js > $@
 
 clean:
