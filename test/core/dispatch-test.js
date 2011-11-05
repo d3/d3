@@ -22,92 +22,91 @@ suite.addBatch({
     },
     "added listeners receive subsequent events": function(dispatch) {
       var d = dispatch("foo"), events = 0;
-      d.foo.add(function() { ++events; });
-      d.foo.dispatch();
+      d.on("foo", function() { ++events; });
+      d.foo();
       assert.equal(events, 1);
-      d.foo.dispatch();
-      d.foo.dispatch();
+      d.foo();
+      d.foo();
       assert.equal(events, 3);
     },
     "the listener is passed any arguments to dispatch": function(dispatch) {
       var d = dispatch("foo"), a = {}, b = {}, aa, bb;
-      d.foo.add(function(a, b) { aa = a; bb = b; });
-      d.foo.dispatch(a, b);
+      d.on("foo", function(a, b) { aa = a; bb = b; });
+      d.foo(a, b);
       assert.equal(aa, a);
       assert.equal(bb, b);
-      d.foo.dispatch(1, "foo");
+      d.foo(1, "foo");
       assert.equal(aa, 1);
       assert.equal(bb, "foo");
     },
     "the listener's context is the same as dispatch's": function(dispatch) {
       var d = dispatch("foo"), a = {}, b = {}, that;
-      d.foo.add(function() { that = this; });
-      d.foo.dispatch.call(a);
+      d.on("foo", function() { that = this; });
+      d.foo.call(a);
       assert.equal(that, a);
-      d.foo.dispatch.call(b);
+      d.foo.call(b);
       assert.equal(that, b);
     },
-    "listeners are notified in the order they are first added": function(dispatch) {
+    "listeners are notified in the order they are added": function(dispatch) {
       var d = dispatch("foo"), a = {}, b = {}, those = [];
       function A() { those.push(a); }
       function B() { those.push(b); }
-      d.foo.add(A);
-      d.foo.add(B);
-      d.foo.dispatch();
+      d.on("foo.a", A);
+      d.on("foo.b", B);
+      d.foo();
       assert.deepEqual(those, [a, b]);
       those = [];
-      d.foo.remove(A);
-      d.foo.add(A);
-      d.foo.dispatch();
-      assert.deepEqual(those, [a, b]);
+      d.on("foo.a", A); // move to the end
+      d.foo();
+      assert.deepEqual(those, [b, a]);
     },
     "removed listeners do not receive subsequent events": function(dispatch) {
       var d = dispatch("foo"), a = {}, b = {}, those = [];
       function A() { those.push(a); }
       function B() { those.push(b); }
-      d.foo.add(A);
-      d.foo.add(B);
-      d.foo.dispatch();
+      d.on("foo.a", A);
+      d.on("foo.b", B);
+      d.foo();
       those = [];
-      d.foo.remove(A);
-      d.foo.dispatch();
+      d.on("foo.a", null);
+      d.foo();
       assert.deepEqual(those, [b]);
     },
     "adding an existing listener has no effect": function(dispatch) {
       var d = dispatch("foo"), events = 0;
       function A() { ++events; }
-      d.foo.add(A);
-      d.foo.dispatch();
-      d.foo.add(A);
-      d.foo.add(A);
-      d.foo.dispatch();
+      d.on("foo.a", A);
+      d.foo();
+      d.on("foo.a", A);
+      d.on("foo.a", A);
+      d.foo();
       assert.equal(events, 2);
     },
     "removing a missing listener has no effect": function(dispatch) {
       var d = dispatch("foo"), events = 0;
       function A() { ++events; }
-      d.foo.remove(A);
-      d.foo.add(A);
-      d.foo.remove(A);
-      d.foo.remove(A);
-      d.foo.dispatch();
+      d.on("foo.a", null);
+      d.on("foo", A);
+      d.on("foo", null);
+      d.on("foo", null);
+      d.foo();
       assert.equal(events, 0);
     },
     "adding a listener does not affect the current event": function(dispatch) {
       var d = dispatch("foo"), a = {}, b = {}, those = [];
-      function A() { d.foo.add(B); those.push(a); }
+      function A() { d.on("foo.b", B); those.push(a); }
       function B() { those.push(b); }
-      d.foo.add(A);
-      d.foo.dispatch();
+      d.on("foo.a", A);
+      d.foo();
       assert.deepEqual(those, [a]);
     },
     "removing a listener does affect the current event": function(dispatch) {
       var d = dispatch("foo"), a = {}, b = {}, those = [];
-      function A() { d.foo.remove(B); those.push(a); }
+      function A() { d.on("foo.b", null); those.push(a); }
       function B() { those.push(b); }
-      d.foo.add(A);
-      d.foo.add(B);
-      d.foo.dispatch();
+      d.on("foo.a", A);
+      d.on("foo.b", B);
+      d.foo();
       assert.deepEqual(those, [a]);
     }
   }

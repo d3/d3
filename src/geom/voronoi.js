@@ -3,6 +3,17 @@
 // http://blog.thejit.org/assets/voronoijs/voronoi.js
 // See lib/jit/LICENSE for details.
 
+// Notes:
+//
+// This implementation does not clip the returned polygons, so if you want to
+// clip them to a particular shape you will need to do that either in SVG or by
+// post-processing with d3.geom.polygon's clip method.
+//
+// If any vertices are coincident or have NaN positions, the behavior of this
+// method is undefined. Most likely invalid polygons will be returned. You
+// should filter invalid points, and consolidate coincident points, before
+// computing the tessellation.
+
 /**
  * @param vertices [[x1, y1], [x2, y2], …]
  * @returns polygons [[[x1, y1], [x2, y2], …], …]
@@ -10,7 +21,6 @@
 d3.geom.voronoi = function(vertices) {
   var polygons = vertices.map(function() { return []; });
 
-  // Note: we expect the caller to clip the polygons, if needed.
   d3_voronoi_tessellate(vertices, function(e) {
     var s1,
         s2,

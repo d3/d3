@@ -24,7 +24,7 @@ function d3_transition(groups, id, time) {
 
   groups.each = function(type, listener) {
     if (arguments.length < 2) return d3_transition_each.call(groups, type);
-    event[type].add(listener);
+    event.on(type, listener);
     return groups;
   };
 
@@ -50,7 +50,7 @@ function d3_transition(groups, id, time) {
           }
         }
 
-        event.start.dispatch.call(node, d, i);
+        event.start.call(node, d, i);
         if (!tick(elapsed)) d3.timer(tick, 0, time);
         return 1;
       }
@@ -69,7 +69,7 @@ function d3_transition(groups, id, time) {
         if (t >= 1) {
           stop();
           d3_transitionInheritId = id;
-          event.end.dispatch.call(node, d, i);
+          event.end.call(node, d, i);
           d3_transitionInheritId = 0;
           return 1;
         }
@@ -92,17 +92,18 @@ function d3_transitionNull(d, i, a) {
   return a != "" && d3_transitionRemove;
 }
 
-function d3_transitionTween(b) {
+function d3_transitionTween(name, b) {
+  var interpolate = d3_interpolateByName(name);
 
   function transitionFunction(d, i, a) {
     var v = b.call(this, d, i);
     return v == null
         ? a != "" && d3_transitionRemove
-        : a != v && d3.interpolate(a, v);
+        : a != v && interpolate(a, v);
   }
 
   function transitionString(d, i, a) {
-    return a != b && d3.interpolate(a, b);
+    return a != b && interpolate(a, b);
   }
 
   return typeof b === "function" ? transitionFunction

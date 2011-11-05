@@ -48,6 +48,8 @@ d3.core.js: \
 	src/core/median.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/extent.js \
+	src/core/random.js \
 	src/core/number.js \
 	src/core/sum.js \
 	src/core/quantile.js \
@@ -118,6 +120,7 @@ d3.core.js: \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
 	src/core/timer.js \
+	src/core/transform.js \
 	src/core/noop.js
 
 d3.scale.js: \
@@ -147,7 +150,8 @@ d3.svg.js: \
 	src/svg/mouse.js \
 	src/svg/touches.js \
 	src/svg/symbol.js \
-	src/svg/axis.js
+	src/svg/axis.js \
+	src/svg/brush.js
 
 d3.behavior.js: \
 	src/behavior/behavior.js \
