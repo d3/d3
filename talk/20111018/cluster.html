@@ -57,11 +57,14 @@ var cluster = d3.layout.cluster()
 var diagonal = d3.svg.diagonal.radial()
     .projection(function(d) { return [d.y, d.x / 180 * Math.PI]; });
 
-var svg = d3.select("#body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", w);
+var svg = d3.select("#body").append("div")
+    .style("width", w + "px")
+    .style("height", w + "px");
 
-var vis = svg.append("svg:g")
+var vis = svg.append("svg:svg")
+    .attr("width", w)
+    .attr("height", w)
+  .append("svg:g")
     .attr("transform", "translate(" + rx + "," + ry + ")");
 
 vis.append("svg:path")

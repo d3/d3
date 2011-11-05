@@ -7,7 +7,7 @@
     <script type="text/javascript" src="d3/d3.layout.js"></script>
     <style type="text/css">
 
-svg {
+.chart {
   display: block;
   margin: auto;
   margin-top: 60px;
@@ -45,7 +45,11 @@ var w = 1120,
     x = d3.scale.linear().range([0, w]),
     y = d3.scale.linear().range([0, h]);
 
-var vis = d3.select("#body").append("svg:svg")
+var vis = d3.select("#body").append("div")
+    .attr("class", "chart")
+    .style("width", w + "px")
+    .style("height", h + "px")
+  .append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 

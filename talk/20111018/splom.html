@@ -6,7 +6,7 @@
     <script type="text/javascript" src="d3/d3.js"></script>
     <style type="text/css">
 
-svg {
+.chart {
   display: block;
   margin: auto;
   margin-top: 40px;
@@ -95,7 +95,11 @@ d3.json("flowers.json", function(flower) {
       .tickSize(size * n);
 
   // Root panel.
-  var svg = d3.select("#body").append("svg:svg")
+  var svg = d3.select("#body").append("div")
+      .attr("class", "chart")
+      .style("width", size * n + padding + "px")
+      .style("height", size * n + padding + "px")
+    .append("svg:svg")
       .attr("width", size * n + padding)
       .attr("height", size * n + padding);
 

@@ -60,9 +60,14 @@ var day = d3.time.format("%w"),
     formatNumber = d3.format(",d"),
     formatPercent = d3.format("+.1%");
 
-var svg = d3.select("#body").selectAll("svg")
+var svg = d3.select("#body").selectAll(".year")
     .data(d3.range(1995, 2009))
-  .enter().append("svg:svg")
+  .enter().append("div")
+    .attr("class", "year")
+    .style("width", w + m[1] + m[3] + "px")
+    .style("height", h + m[0] + m[2] + "px")
+    .style("display", "inline-block")
+  .append("svg:svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
     .attr("class", "RdYlGn")
