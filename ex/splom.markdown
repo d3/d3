@@ -7,7 +7,6 @@ title: Scatterplot Matrix
 
 <div id="chart"> </div>
 <link type="text/css" rel="stylesheet" href="splom.css"/>
-<script type="text/javascript" src="cross.js"> </script>
 <script type="text/javascript" src="splom.js"> </script>
 
 Scatterplot matrix design invented by J. A. Hartigan; see also

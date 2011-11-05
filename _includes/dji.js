@@ -50,7 +50,7 @@ d3.csv("dji.csv", function(csv) {
   rect
       .attr("class", function(d) { return "day q" + color(data[format(d)]) + "-9"; })
     .append("svg:title")
-      .text(function(d) { return format(d) + ": " + percent(data[format(d)]); });
+      .text(function(d) { return (d = format(d)) + (d in data ? ": " + percent(data[d]) : ""); });
 });
 
 function monthPath(t0) {

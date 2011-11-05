@@ -28,7 +28,6 @@ EX_FILES = \
 	../ex/choropleth.css \
 	../ex/choropleth.js \
 	../ex/colorbrewer.css \
-	../ex/cross.js \
 	../ex/dji.csv \
 	../ex/dji.js \
 	../ex/force.css \
@@ -75,7 +74,6 @@ INCLUDE_FILES = \
 	force.js \
 	treemap.js \
 	splom.js \
-	cross.js \
 	stream.js \
 	stream_layers.js \
 	stack.js \
@@ -221,11 +219,6 @@ $(SRC_FILES):
 ../ex/splom.js splom.js:
 	@rm -rf $@
 	git cat-file blob master:examples/splom/splom.js > $@
-	git cat-file blob master:examples/splom/cross.js >> $@
-
-../ex/cross.js cross.js:
-	@rm -rf $@
-	git cat-file blob master:examples/splom/cross.js > $@
 
 ../ex/splom.css:
 	@rm -rf $@
