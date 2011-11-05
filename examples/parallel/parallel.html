@@ -99,10 +99,10 @@ d3.csv("cars.csv", function(cars) {
       .call(d3.behavior.drag()
         .on("dragstart", function(d) {
           dragging[d] = this.__origin__ = x(d);
+          background.attr("visibility", "hidden");
         })
         .on("drag", function(d) {
           dragging[d] = Math.min(w, Math.max(0, this.__origin__ += d3.event.dx));
-          background.attr("d", path);
           foreground.attr("d", path);
           dimensions.sort(function(a, b) { return position(a) - position(b); });
           x.domain(dimensions);
@@ -112,8 +112,14 @@ d3.csv("cars.csv", function(cars) {
           delete this.__origin__;
           delete dragging[d];
           transition(d3.select(this)).attr("transform", "translate(" + x(d) + ")");
-          transition(background).attr("d", path);
-          transition(foreground).attr("d", path);
+          transition(foreground)
+              .attr("d", path);
+          background
+              .attr("d", path)
+              .transition()
+              .delay(500)
+              .duration(0)
+              .attr("visibility", null);
         }));
 
   // Add an axis and title.
