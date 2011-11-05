@@ -92,17 +92,18 @@ function d3_transitionNull(d, i, a) {
   return a != "" && d3_transitionRemove;
 }
 
-function d3_transitionTween(b) {
+function d3_transitionTween(name, b) {
+  var interpolate = d3_interpolateByName(name);
 
   function transitionFunction(d, i, a) {
     var v = b.call(this, d, i);
     return v == null
         ? a != "" && d3_transitionRemove
-        : a != v && d3.interpolate(a, v);
+        : a != v && interpolate(a, v);
   }
 
   function transitionString(d, i, a) {
-    return a != b && d3.interpolate(a, b);
+    return a != b && interpolate(a, b);
   }
 
   return typeof b === "function" ? transitionFunction

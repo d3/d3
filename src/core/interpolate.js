@@ -92,6 +92,10 @@ d3.interpolateString = function(a, b) {
   };
 };
 
+d3.interpolateTransform = function(a, b) {
+  return d3.interpolateString(d3.transform(a) + "", d3.transform(b) + "");
+};
+
 d3.interpolateRgb = function(a, b) {
   a = d3.rgb(a);
   b = d3.rgb(b);
@@ -146,7 +150,7 @@ d3.interpolateObject = function(a, b) {
       k;
   for (k in a) {
     if (k in b) {
-      i[k] = d3.interpolate(a[k], b[k]);
+      i[k] = d3_interpolateByName(k)(a[k], b[k]);
     } else {
       c[k] = a[k];
     }
@@ -164,10 +168,16 @@ d3.interpolateObject = function(a, b) {
 
 var d3_interpolate_number = /[-+]?(?:\d*\.?\d+)(?:[eE][-+]?\d+)?/g;
 
+function d3_interpolateByName(n) {
+  return n == "transform"
+      ? d3.interpolateTransform
+      : d3.interpolate;
+}
+
 d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
-  function(a, b) { return (typeof b === "string") && d3.interpolateString(String(a), b); },
-  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(String(a), b); },
+  function(a, b) { return (typeof b === "string") && d3.interpolateString(a + "", b); },
+  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a + "", b); },
   function(a, b) { return (typeof b === "number") && d3.interpolateNumber(+a, b); }
 ];
