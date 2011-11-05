@@ -2250,8 +2250,7 @@ var d3_timer_frame = window.requestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.transform = function(string) {
   d3_transformG.setAttribute("transform", string);
-  var m = d3_transformG.transform.baseVal.consolidate().matrix;
-  if (m.a * m.d - m.b * m.c) return new d3_transform(m); // if invertible
+  return new d3_transform(d3_transformG.transform.baseVal.consolidate().matrix);
 };
 
 // Compute x-scale and normalize the first row.
@@ -2266,8 +2265,8 @@ function d3_transform(m) {
       ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz));
   this.translate = [m.e, m.f];
   this.rotate = Math.atan2(m.b, m.a) * d3_transformDegrees;
-  this.scale = [kx, ky];
-  this.skew = kz / ky * d3_transformDegrees;
+  this.scale = [kx, ky || 0];
+  this.skew = ky ? kz / ky * d3_transformDegrees : 0;
 };
 
 d3_transform.prototype.toString = function() {
