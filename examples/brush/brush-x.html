@@ -80,7 +80,7 @@ function brushstart() {
 
 function brush() {
   var s = d3.event.target.extent();
-  circle.classed("selected", function(d) { return s[0] <= d && d < s[1]; });
+  circle.classed("selected", function(d) { return s[0] <= d && d <= s[1]; });
 }
 
 function brushend() {

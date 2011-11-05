@@ -98,8 +98,8 @@ d3.json("flowers.json", function(flower) {
   function brush(p) {
     var e = brush.extent();
     svg.selectAll("circle").attr("class", function(d) {
-      return e[0][0] <= d[p.x] && d[p.x] < e[1][0]
-          && e[0][1] <= d[p.y] && d[p.y] < e[1][1]
+      return e[0][0] <= d[p.x] && d[p.x] <= e[1][0]
+          && e[0][1] <= d[p.y] && d[p.y] <= e[1][1]
           ? d.species : null;
     });
   }
