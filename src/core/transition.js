@@ -1,12 +1,13 @@
-function d3_transition(groups, id) {
+function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
   var tweens = {},
       event = d3.dispatch("start", "end"),
-      ease = d3_transitionEase,
-      then = Date.now();
+      ease = d3_transitionEase;
 
   groups.id = id;
+
+  groups.time = time;
 
   groups.tween = function(name, tween) {
     if (arguments.length < 2) return tweens[name];
@@ -37,9 +38,9 @@ function d3_transition(groups, id) {
 
       ++lock.count;
 
-      delay <= elapsed ? start() : d3.timer(start, delay, then);
+      delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time);
 
-      function start() {
+      function start(elapsed) {
         if (lock.active > id) return stop();
         lock.active = id;
 
@@ -50,14 +51,14 @@ function d3_transition(groups, id) {
         }
 
         event.start.dispatch.call(node, d, i);
-        d3.timer(tick, 0, then);
+        if (!tick(elapsed)) d3.timer(tick, 0, time);
         return 1;
       }
 
       function tick(elapsed) {
         if (lock.active !== id) return stop();
 
-        var t = Math.min(1, (elapsed - delay) / duration),
+        var t = (elapsed - delay) / duration,
             e = ease(t),
             n = tweened.length;
 
@@ -65,7 +66,7 @@ function d3_transition(groups, id) {
           tweened[--n].call(node, e);
         }
 
-        if (t === 1) {
+        if (t >= 1) {
           stop();
           d3_transitionInheritId = id;
           event.end.dispatch.call(node, d, i);
@@ -80,15 +81,33 @@ function d3_transition(groups, id) {
       }
     });
     return 1;
-  }, 0, then);
+  }, 0, time);
 
   return groups;
 }
 
+var d3_transitionRemove = {};
+
+function d3_transitionNull(d, i, a) {
+  return a != "" && d3_transitionRemove;
+}
+
 function d3_transitionTween(b) {
-  return typeof b === "function"
-      ? function(d, i, a) { var v = b.call(this, d, i) + ""; return a != v && d3.interpolate(a, v); }
-      : (b = b + "", function(d, i, a) { return a != b && d3.interpolate(a, b); });
+
+  function transitionFunction(d, i, a) {
+    var v = b.call(this, d, i);
+    return v == null
+        ? a != "" && d3_transitionRemove
+        : a != v && d3.interpolate(a, v);
+  }
+
+  function transitionString(d, i, a) {
+    return a != b && d3.interpolate(a, b);
+  }
+
+  return typeof b === "function" ? transitionFunction
+      : b == null ? d3_transitionNull
+      : (b += "", transitionString);
 }
 
 var d3_transitionPrototype = [],

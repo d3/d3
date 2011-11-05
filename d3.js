@@ -1,12 +1,34 @@
-(function(){d3 = {version: "2.0.4"}; // semver
-if (!Date.now) Date.now = function() {
+(function(){if (!Date.now) Date.now = function() {
   return +new Date;
 };
-if (!Object.create) Object.create = function(o) {
-  /** @constructor */ function f() {}
-  f.prototype = o;
-  return new f;
-};
+try {
+  document.createElement("div").style.setProperty("opacity", 0, "");
+} catch (error) {
+  var d3_style_prototype = CSSStyleDeclaration.prototype,
+      d3_style_setProperty = d3_style_prototype.setProperty;
+  d3_style_prototype.setProperty = function(name, value, priority) {
+    d3_style_setProperty.call(this, name, value + "", priority);
+  };
+}
+d3 = {version: "2.4.6"}; // semver
+var d3_array = d3_arraySlice; // conversion for NodeLists
+
+function d3_arrayCopy(pseudoarray) {
+  var i = -1, n = pseudoarray.length, array = [];
+  while (++i < n) array.push(pseudoarray[i]);
+  return array;
+}
+
+function d3_arraySlice(pseudoarray) {
+  return Array.prototype.slice.call(pseudoarray);
+}
+
+try {
+  d3_array(document.documentElement.childNodes)[0].nodeType;
+} catch(e) {
+  d3_array = d3_arrayCopy;
+}
+
 var d3_arraySubclass = [].__proto__?
 
 // Until ECMAScript supports array subclassing, prototype injection works well.
@@ -37,6 +59,24 @@ d3.ascending = function(a, b) {
 d3.descending = function(a, b) {
   return b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN;
 };
+d3.mean = function(array, f) {
+  var n = array.length,
+      a,
+      m = 0,
+      i = -1,
+      j = 0;
+  if (arguments.length === 1) {
+    while (++i < n) if (d3_number(a = array[i])) m += (a - m) / ++j;
+  } else {
+    while (++i < n) if (d3_number(a = f.call(array, array[i], i))) m += (a - m) / ++j;
+  }
+  return j ? m : undefined;
+};
+d3.median = function(array, f) {
+  if (arguments.length > 1) array = array.map(f);
+  array = array.filter(d3_number);
+  return array.length ? d3.quantile(array.sort(d3.ascending), .5) : undefined;
+};
 d3.min = function(array, f) {
   var i = -1,
       n = array.length,
@@ -65,6 +105,9 @@ d3.max = function(array, f) {
   }
   return a;
 };
+function d3_number(x) {
+  return x != null && !isNaN(x);
+}
 d3.sum = function(array, f) {
   var s = 0,
       n = array.length,
@@ -450,10 +493,11 @@ d3.format = function(specifier) {
       comma = match[7],
       precision = match[8],
       type = match[9],
-      percentage = false,
+      scale = 1,
+      suffix = "",
       integer = false;
 
-  if (precision) precision = precision.substring(1);
+  if (precision) precision = +precision.substring(1);
 
   if (zfill) {
     fill = "0"; // TODO align = "=";
@@ -462,22 +506,36 @@ d3.format = function(specifier) {
 
   switch (type) {
     case "n": comma = true; type = "g"; break;
-    case "%": percentage = true; type = "f"; break;
-    case "p": percentage = true; type = "r"; break;
-    case "d": integer = true; precision = "0"; break;
+    case "%": scale = 100; suffix = "%"; type = "f"; break;
+    case "p": scale = 100; suffix = "%"; type = "r"; break;
+    case "d": integer = true; precision = 0; break;
+    case "s": scale = -1; type = "r"; break;
   }
+
+  // If no precision is specified for r, fallback to general notation.
+  if (type == "r" && !precision) type = "g";
 
   type = d3_format_types[type] || d3_format_typeDefault;
 
   return function(value) {
-    var number = percentage ? value * 100 : +value,
-        negative = (number < 0) && (number = -number) ? "\u2212" : sign;
 
     // Return the empty string for floats formatted as ints.
-    if (integer && (number % 1)) return "";
+    if (integer && (value % 1)) return "";
 
-    // Convert the input value to the desired precision.
-    value = type(number, precision);
+    // Convert negative to positive, and record the sign prefix.
+    var negative = (value < 0) && (value = -value) ? "\u2212" : sign;
+
+    // Apply the scale, computing it from the value's exponent for si format.
+    if (scale < 0) {
+      var prefix = d3.formatPrefix(value, precision);
+      value *= prefix.scale;
+      suffix = prefix.symbol;
+    } else {
+      value *= scale;
+    }
+
+    // Convert to the desired precision.
+    value = type(value, precision);
 
     // If the fill character is 0, the sign and group is applied after the fill.
     if (zfill) {
@@ -494,9 +552,8 @@ d3.format = function(specifier) {
       var length = value.length;
       if (length < width) value = new Array(width - length + 1).join(fill) + value;
     }
-    if (percentage) value += "%";
 
-    return value;
+    return value + suffix;
   };
 };
 
@@ -507,11 +564,12 @@ var d3_format_types = {
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
   f: function(x, p) { return x.toFixed(p); },
-  r: function(x, p) {
-    var n = 1 + Math.floor(1e-15 + Math.log(x) / Math.LN10);
-    return d3.round(x, p - n).toFixed(Math.max(0, Math.min(20, p - n)));
-  }
+  r: function(x, p) { return d3.round(x, p = d3_format_precision(x, p)).toFixed(Math.max(0, Math.min(20, p))); }
 };
+
+function d3_format_precision(x, p) {
+  return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
+}
 
 function d3_format_typeDefault(x) {
   return x + "";
@@ -525,6 +583,26 @@ function d3_format_group(value) {
   while (i > 0) t.push(value.substring(i -= 3, i + 3));
   return t.reverse().join(",") + f;
 }
+var d3_formatPrefixes = ["y","z","a","f","p","n","μ","m","","k","M","G","T","P","E","Z","Y"].map(d3_formatPrefix);
+
+d3.formatPrefix = function(value, precision) {
+  var i = 0;
+  if (value) {
+    if (value < 0) value *= -1;
+    if (precision) value = d3.round(value, d3_format_precision(value, precision));
+    i = 1 + Math.floor(1e-12 + Math.log(value) / Math.LN10);
+    i = Math.max(-24, Math.min(24, Math.floor((i <= 0 ? i + 1 : i - 1) / 3) * 3));
+  }
+  return d3_formatPrefixes[8 + i / 3];
+};
+
+function d3_formatPrefix(d, i) {
+  return {
+    scale: Math.pow(10, (8 - i) * 3),
+    symbol: d
+  };
+}
+
 /*
  * TERMS OF USE - EASING EQUATIONS
  *
@@ -587,8 +665,14 @@ d3.ease = function(name) {
   var i = name.indexOf("-"),
       t = i >= 0 ? name.substring(0, i) : name,
       m = i >= 0 ? name.substring(i + 1) : "in";
-  return d3_ease_mode[m](d3_ease[t].apply(null, Array.prototype.slice.call(arguments, 1)));
+  return d3_ease_clamp(d3_ease_mode[m](d3_ease[t].apply(null, Array.prototype.slice.call(arguments, 1))));
 };
+
+function d3_ease_clamp(f) {
+  return function(t) {
+    return t <= 0 ? 0 : t >= 1 ? 1 : f(t);
+  };
+}
 
 function d3_ease_reverse(f) {
   return function(t) {
@@ -752,10 +836,10 @@ d3.interpolateRgb = function(a, b) {
       bg = b.g - ag,
       bb = b.b - ab;
   return function(t) {
-    return "rgb(" + Math.round(ar + br * t)
-        + "," + Math.round(ag + bg * t)
-        + "," + Math.round(ab + bb * t)
-        + ")";
+    return "#"
+        + d3_rgb_hex(Math.round(ar + br * t))
+        + d3_rgb_hex(Math.round(ag + bg * t))
+        + d3_rgb_hex(Math.round(ab + bb * t));
   };
 };
 
@@ -839,7 +923,8 @@ function d3_uninterpolateClamp(a, b) {
 }
 d3.rgb = function(r, g, b) {
   return arguments.length === 1
-      ? d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb)
+      ? (r instanceof d3_Rgb ? d3_rgb(r.r, r.g, r.b)
+      : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb))
       : d3_rgb(~~r, ~~g, ~~b);
 };
 
@@ -864,17 +949,17 @@ d3_Rgb.prototype.brighter = function(k) {
   if (g && g < i) g = i;
   if (b && b < i) b = i;
   return d3_rgb(
-    Math.min(255, Math.floor(r / k)),
-    Math.min(255, Math.floor(g / k)),
-    Math.min(255, Math.floor(b / k)));
+      Math.min(255, Math.floor(r / k)),
+      Math.min(255, Math.floor(g / k)),
+      Math.min(255, Math.floor(b / k)));
 };
 
 d3_Rgb.prototype.darker = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_rgb(
-    Math.max(0, Math.floor(k * this.r)),
-    Math.max(0, Math.floor(k * this.g)),
-    Math.max(0, Math.floor(k * this.b)));
+      Math.floor(k * this.r),
+      Math.floor(k * this.g),
+      Math.floor(k * this.b));
 };
 
 d3_Rgb.prototype.hsl = function() {
@@ -886,7 +971,9 @@ d3_Rgb.prototype.toString = function() {
 };
 
 function d3_rgb_hex(v) {
-  return v < 0x10 ? "0" + v.toString(16) : v.toString(16);
+  return v < 0x10
+      ? "0" + Math.max(0, v).toString(16)
+      : Math.min(255, v).toString(16);
 }
 
 function d3_rgb_parse(format, rgb, hsl) {
@@ -1123,7 +1210,8 @@ for (var d3_rgb_name in d3_rgb_names) {
 }
 d3.hsl = function(h, s, l) {
   return arguments.length === 1
-      ? d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl)
+      ? (h instanceof d3_Hsl ? d3_hsl(h.h, h.s, h.l)
+      : d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl))
       : d3_hsl(+h, +s, +l);
 };
 
@@ -1152,7 +1240,7 @@ d3_Hsl.prototype.rgb = function() {
 };
 
 d3_Hsl.prototype.toString = function() {
-  return "hsl(" + this.h + "," + this.s * 100 + "%," + this.l * 100 + "%)";
+  return this.rgb().toString();
 };
 
 function d3_hsl_rgb(h, s, l) {
@@ -1244,7 +1332,7 @@ d3_selectionPrototype.selectAll = function(selector) {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroups.push(subgroup = selector.call(node, node.__data__, i));
+        subgroups.push(subgroup = d3_array(selector.call(node, node.__data__, i)));
         subgroup.parentNode = node;
       }
     }
@@ -1330,6 +1418,21 @@ d3_selectionPrototype.classed = function(name, value) {
     return this;
   }
 
+  var names = name.split(d3_selection_classedWhitespace),
+      n = names.length,
+      i = -1;
+  if (arguments.length > 1) {
+    while (++i < n) d3_selection_classed.call(this, names[i], value);
+    return this;
+  } else {
+    while (++i < n) if (!d3_selection_classed.call(this, names[i])) return false;
+    return true;
+  }
+};
+
+var d3_selection_classedWhitespace = /\s+/g;
+
+function d3_selection_classed(name, value) {
   var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
 
   // If no value is specified, return the first value.
@@ -1374,7 +1477,7 @@ d3_selectionPrototype.classed = function(name, value) {
       ? classedFunction : value
       ? classedAdd
       : classedRemove);
-};
+}
 d3_selectionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) {
 
@@ -1646,40 +1749,6 @@ d3_selectionPrototype.data = function(data, join) {
 function d3_selection_dataNode(data) {
   return {__data__: data};
 }
-function d3_selection_enter(selection) {
-  d3_arraySubclass(selection, d3_selection_enterPrototype);
-  return selection;
-}
-
-var d3_selection_enterPrototype = [];
-
-d3_selection_enterPrototype.append = d3_selectionPrototype.append;
-d3_selection_enterPrototype.insert = d3_selectionPrototype.insert;
-d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
-d3_selection_enterPrototype.select = function(selector) {
-  var subgroups = [],
-      subgroup,
-      subnode,
-      upgroup,
-      group,
-      node;
-
-  for (var j = -1, m = this.length; ++j < m;) {
-    upgroup = (group = this[j]).update;
-    subgroups.push(subgroup = []);
-    subgroup.parentNode = group.parentNode;
-    for (var i = -1, n = group.length; ++i < n;) {
-      if (node = group[i]) {
-        subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i));
-        subnode.__data__ = node.__data__;
-      } else {
-        subgroup.push(null);
-      }
-    }
-  }
-
-  return d3_selection(subgroups);
-};
 // TODO preserve null elements to maintain index?
 d3_selectionPrototype.filter = function(filter) {
   var subgroups = [],
@@ -1809,33 +1878,71 @@ d3_selectionPrototype.transition = function() {
     }
   }
 
-  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId);
+  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId, Date.now());
 };
 var d3_selectionRoot = d3_selection([[document]]);
 
 d3_selectionRoot[0].parentNode = document.documentElement;
 
 // TODO fast singleton implementation!
+// TODO select(function)
 d3.select = function(selector) {
   return typeof selector === "string"
       ? d3_selectionRoot.select(selector)
       : d3_selection([[selector]]); // assume node
 };
 
+// TODO selectAll(function)
 d3.selectAll = function(selector) {
   return typeof selector === "string"
       ? d3_selectionRoot.selectAll(selector)
-      : d3_selection([selector]); // assume node[]
+      : d3_selection([d3_array(selector)]); // assume node[]
 };
-function d3_transition(groups, id) {
+function d3_selection_enter(selection) {
+  d3_arraySubclass(selection, d3_selection_enterPrototype);
+  return selection;
+}
+
+var d3_selection_enterPrototype = [];
+
+d3_selection_enterPrototype.append = d3_selectionPrototype.append;
+d3_selection_enterPrototype.insert = d3_selectionPrototype.insert;
+d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
+d3_selection_enterPrototype.node = d3_selectionPrototype.node;
+d3_selection_enterPrototype.select = function(selector) {
+  var subgroups = [],
+      subgroup,
+      subnode,
+      upgroup,
+      group,
+      node;
+
+  for (var j = -1, m = this.length; ++j < m;) {
+    upgroup = (group = this[j]).update;
+    subgroups.push(subgroup = []);
+    subgroup.parentNode = group.parentNode;
+    for (var i = -1, n = group.length; ++i < n;) {
+      if (node = group[i]) {
+        subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i));
+        subnode.__data__ = node.__data__;
+      } else {
+        subgroup.push(null);
+      }
+    }
+  }
+
+  return d3_selection(subgroups);
+};
+function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
   var tweens = {},
       event = d3.dispatch("start", "end"),
-      ease = d3_transitionEase,
-      then = Date.now();
+      ease = d3_transitionEase;
 
   groups.id = id;
+
+  groups.time = time;
 
   groups.tween = function(name, tween) {
     if (arguments.length < 2) return tweens[name];
@@ -1866,9 +1973,9 @@ function d3_transition(groups, id) {
 
       ++lock.count;
 
-      delay <= elapsed ? start() : d3.timer(start, delay, then);
+      delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time);
 
-      function start() {
+      function start(elapsed) {
         if (lock.active > id) return stop();
         lock.active = id;
 
@@ -1879,14 +1986,14 @@ function d3_transition(groups, id) {
         }
 
         event.start.dispatch.call(node, d, i);
-        d3.timer(tick, 0, then);
+        if (!tick(elapsed)) d3.timer(tick, 0, time);
         return 1;
       }
 
       function tick(elapsed) {
         if (lock.active !== id) return stop();
 
-        var t = Math.min(1, (elapsed - delay) / duration),
+        var t = (elapsed - delay) / duration,
             e = ease(t),
             n = tweened.length;
 
@@ -1894,7 +2001,7 @@ function d3_transition(groups, id) {
           tweened[--n].call(node, e);
         }
 
-        if (t === 1) {
+        if (t >= 1) {
           stop();
           d3_transitionInheritId = id;
           event.end.dispatch.call(node, d, i);
@@ -1909,15 +2016,33 @@ function d3_transition(groups, id) {
       }
     });
     return 1;
-  }, 0, then);
+  }, 0, time);
 
   return groups;
 }
 
+var d3_transitionRemove = {};
+
+function d3_transitionNull(d, i, a) {
+  return a != "" && d3_transitionRemove;
+}
+
 function d3_transitionTween(b) {
-  return typeof b === "function"
-      ? function(d, i, a) { var v = b.call(this, d, i) + ""; return a != v && d3.interpolate(a, v); }
-      : (b = b + "", function(d, i, a) { return a != b && d3.interpolate(a, b); });
+
+  function transitionFunction(d, i, a) {
+    var v = b.call(this, d, i);
+    return v == null
+        ? a != "" && d3_transitionRemove
+        : a != v && d3.interpolate(a, v);
+  }
+
+  function transitionString(d, i, a) {
+    return a != b && d3.interpolate(a, b);
+  }
+
+  return typeof b === "function" ? transitionFunction
+      : b == null ? d3_transitionNull
+      : (b += "", transitionString);
 }
 
 var d3_transitionPrototype = [],
@@ -1952,11 +2077,12 @@ d3_transitionPrototype.select = function(selector) {
     }
   }
 
-  return d3_transition(subgroups, this.id).ease(this.ease());
+  return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.selectAll = function(selector) {
   var subgroups = [],
       subgroup,
+      subnodes,
       node;
 
   if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
@@ -1964,51 +2090,56 @@ d3_transitionPrototype.selectAll = function(selector) {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroups.push(subgroup = selector.call(node.node, node.node.__data__, i));
-        for (var k = -1, o = subgroup.length; ++k < o;) {
-          subgroup[k] = {node: subgroup[k], delay: node.delay, duration: node.duration};
+        subnodes = selector.call(node.node, node.node.__data__, i);
+        subgroups.push(subgroup = []);
+        for (var k = -1, o = subnodes.length; ++k < o;) {
+          subgroup.push({node: subnodes[k], delay: node.delay, duration: node.duration});
         }
       }
     }
   }
 
-  return d3_transition(subgroups, this.id).ease(this.ease());
+  return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.attr = function(name, value) {
+  if (typeof name === "object") {
+    for (value in name) this.attr(value, name[value]);
+    return this;
+  }
   return this.attrTween(name, d3_transitionTween(value));
 };
 
-d3_transitionPrototype.attrTween = function(name, tween) {
-  name = d3.ns.qualify(name);
+d3_transitionPrototype.attrTween = function(nameNS, tween) {
+  var name = d3.ns.qualify(nameNS);
 
   function attrTween(d, i) {
     var f = tween.call(this, d, i, this.getAttribute(name));
-    return f && function(t) {
-      this.setAttribute(name, f(t));
-    };
+    return f === d3_transitionRemove
+        ? (this.removeAttribute(name), null)
+        : f && function(t) { this.setAttribute(name, f(t)); };
   }
 
   function attrTweenNS(d, i) {
     var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
-    return f && function(t) {
-      this.setAttributeNS(name.space, name.local, f(t));
-    };
+    return f === d3_transitionRemove
+        ? (this.removeAttributeNS(name.space, name.local), null)
+        : f && function(t) { this.setAttributeNS(name.space, name.local, f(t)); };
   }
 
-  return this.tween("attr." + name, name.local ? attrTweenNS : attrTween);
+  return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
 };
 d3_transitionPrototype.style = function(name, value, priority) {
-  if (arguments.length < 3) priority = null;
+  if (arguments.length < 3) priority = "";
   return this.styleTween(name, d3_transitionTween(value), priority);
 };
 
 d3_transitionPrototype.styleTween = function(name, tween, priority) {
-  if (arguments.length < 3) priority = null;
+  if (arguments.length < 3) priority = "";
   return this.tween("style." + name, function(d, i) {
     var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-    return f && function(t) {
-      this.style.setProperty(name, f(t), priority);
-    };
+    return f === d3_transitionRemove
+        ? (this.style.removeProperty(name), null)
+        : f && function(t) { this.style.setProperty(name, f(t), priority); };
   });
 };
 d3_transitionPrototype.text = function(value) {
@@ -2171,9 +2302,12 @@ function d3_scale_nice(domain, nice) {
     dx = x0; x0 = x1; x1 = dx;
   }
 
-  nice = nice(x1 - x0);
-  domain[i0] = nice.floor(x0);
-  domain[i1] = nice.ceil(x1);
+  if (dx = x1 - x0) {
+    nice = nice(dx);
+    domain[i0] = nice.floor(x0);
+    domain[i1] = nice.ceil(x1);
+  }
+
   return domain;
 }
 
@@ -2352,8 +2486,8 @@ function d3_scale_log(linear, log) {
     if (extent.every(isFinite)) {
       var i = Math.floor(extent[0]),
           j = Math.ceil(extent[1]),
-          u = pow(extent[0]),
-          v = pow(extent[1]);
+          u = Math.round(pow(extent[0])),
+          v = Math.round(pow(extent[1]));
       if (log === d3_scale_logn) {
         ticks.push(pow(i));
         for (; i++ < j;) for (var k = 9; k > 0; k--) ticks.push(pow(i) * k);
@@ -2368,8 +2502,15 @@ function d3_scale_log(linear, log) {
     return ticks;
   };
 
-  scale.tickFormat = function() {
-    return d3_scale_logTickFormat;
+  scale.tickFormat = function(n, format) {
+    if (arguments.length < 2) format = d3_scale_logFormat;
+    if (arguments.length < 1) return format;
+    var k = n / scale.ticks().length,
+        f = log === d3_scale_logn ? (e = -1e-15, Math.floor) : (e = 1e-15, Math.ceil),
+        e;
+    return function(d) {
+      return d / pow(f(log(d) + e)) < k ? format(d) : "";
+    };
   };
 
   scale.copy = function() {
@@ -2378,6 +2519,8 @@ function d3_scale_log(linear, log) {
 
   return d3_scale_linearRebind(scale, linear);
 };
+
+var d3_scale_logFormat = d3.format("e");
 
 function d3_scale_logp(x) {
   return Math.log(x) / Math.LN10;
@@ -2394,10 +2537,6 @@ d3_scale_logp.pow = function(x) {
 d3_scale_logn.pow = function(x) {
   return -Math.pow(10, -x);
 };
-
-function d3_scale_logTickFormat(d) {
-  return d.toPrecision(1);
-}
 d3.scale.pow = function() {
   return d3_scale_pow(d3.scale.linear(), 1);
 };
@@ -2456,23 +2595,24 @@ d3.scale.sqrt = function() {
   return d3.scale.pow().exponent(.5);
 };
 d3.scale.ordinal = function() {
-  return d3_scale_ordinal({}, 0, {t: "range", x: []});
+  return d3_scale_ordinal([], {t: "range", x: []});
 };
 
-function d3_scale_ordinal(domain, size, ranger) {
-  var range,
+function d3_scale_ordinal(domain, ranger) {
+  var index,
+      range,
       rangeBand;
 
   function scale(x) {
-    return range[((domain[x] || (domain[x] = ++size)) - 1) % range.length];
+    return range[((index[x] || (index[x] = domain.push(x))) - 1) % range.length];
   }
 
   scale.domain = function(x) {
-    if (!arguments.length) return d3.keys(domain);
-    domain = {};
-    size = 0;
+    if (!arguments.length) return domain;
+    domain = [];
+    index = {};
     var i = -1, n = x.length, xi;
-    while (++i < n) if (!domain[xi = x[i]]) domain[xi] = ++size;
+    while (++i < n) if (!index[xi = x[i]]) index[xi] = domain.push(xi);
     return scale[ranger.t](ranger.x, ranger.p);
   };
 
@@ -2488,8 +2628,8 @@ function d3_scale_ordinal(domain, size, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = (stop - start) / (size - 1 + padding);
-    range = size < 2 ? [(start + stop) / 2] : d3.range(start + step * padding / 2, stop + step / 2, step);
+        step = (stop - start) / (domain.length - 1 + padding);
+    range = domain.length < 2 ? [(start + stop) / 2] : d3.range(start + step * padding / 2, stop + step / 2, step);
     rangeBand = 0;
     ranger = {t: "rangePoints", x: x, p: padding};
     return scale;
@@ -2499,7 +2639,7 @@ function d3_scale_ordinal(domain, size, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = (stop - start) / (size + padding);
+        step = (stop - start) / (domain.length + padding);
     range = d3.range(start + step * padding, stop, step);
     rangeBand = step * (1 - padding);
     ranger = {t: "rangeBands", x: x, p: padding};
@@ -2510,8 +2650,8 @@ function d3_scale_ordinal(domain, size, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = Math.floor((stop - start) / (size + padding)),
-        err = stop - start - (size - padding) * step;
+        step = Math.floor((stop - start) / (domain.length + padding)),
+        err = stop - start - (domain.length - padding) * step;
     range = d3.range(start + Math.round(err / 2), stop, step);
     rangeBand = Math.round(step * (1 - padding));
     ranger = {t: "rangeRoundBands", x: x, p: padding};
@@ -2523,12 +2663,10 @@ function d3_scale_ordinal(domain, size, ranger) {
   };
 
   scale.copy = function() {
-    var copy = {}, x;
-    for (x in domain) copy[x] = domain[x];
-    return d3_scale_ordinal(copy, size, ranger);
+    return d3_scale_ordinal(domain, ranger);
   };
 
-  return scale[ranger.t](ranger.x, ranger.p);
+  return scale.domain(domain);
 };
 /*
  * This product includes color specifications and designs developed by Cynthia
@@ -2687,8 +2825,8 @@ d3.svg.arc = function() {
       + "A" + r1 + "," + r1 + " 0 1,1 0," + (-r1)
       + "A" + r1 + "," + r1 + " 0 1,1 0," + r1
       + "M0," + r0
-      + "A" + r0 + "," + r0 + " 0 1,1 0," + (-r0)
-      + "A" + r0 + "," + r0 + " 0 1,1 0," + r0
+      + "A" + r0 + "," + r0 + " 0 1,0 0," + (-r0)
+      + "A" + r0 + "," + r0 + " 0 1,0 0," + r0
       + "Z"
       : "M0," + r1
       + "A" + r1 + "," + r1 + " 0 1,1 0," + (-r1)
@@ -2854,33 +2992,30 @@ var d3_svg_lineInterpolators = {
 
 // Linear interpolation; generates "L" commands.
 function d3_svg_lineLinear(points) {
-  var path = [],
-      i = 0,
+  var i = 0,
       n = points.length,
-      p = points[0];
-  path.push(p[0], ",", p[1]);
+      p = points[0],
+      path = [p[0], ",", p[1]];
   while (++i < n) path.push("L", (p = points[i])[0], ",", p[1]);
   return path.join("");
 }
 
 // Step interpolation; generates "H" and "V" commands.
 function d3_svg_lineStepBefore(points) {
-  var path = [],
-      i = 0,
+  var i = 0,
       n = points.length,
-      p = points[0];
-  path.push(p[0], ",", p[1]);
+      p = points[0],
+      path = [p[0], ",", p[1]];
   while (++i < n) path.push("V", (p = points[i])[1], "H", p[0]);
   return path.join("");
 }
 
 // Step interpolation; generates "H" and "V" commands.
 function d3_svg_lineStepAfter(points) {
-  var path = [],
-      i = 0,
+  var i = 0,
       n = points.length,
-      p = points[0];
-  path.push(p[0], ",", p[1]);
+      p = points[0],
+      path = [p[0], ",", p[1]];
   while (++i < n) path.push("H", (p = points[i])[0], "V", p[1]);
   return path.join("");
 }
@@ -2978,15 +3113,14 @@ function d3_svg_lineCardinalTangents(points, tension) {
 // B-spline interpolation; generates "C" commands.
 function d3_svg_lineBasis(points) {
   if (points.length < 3) return d3_svg_lineLinear(points);
-  var path = [],
-      i = 1,
+  var i = 1,
       n = points.length,
       pi = points[0],
       x0 = pi[0],
       y0 = pi[1],
       px = [x0, x0, x0, (pi = points[1])[0]],
-      py = [y0, y0, y0, pi[1]];
-  path.push(x0, ",", y0);
+      py = [y0, y0, y0, pi[1]],
+      path = [x0, ",", y0];
   d3_svg_lineBasisBezier(path, px, py);
   while (++i < n) {
     pi = points[i];
@@ -3205,16 +3339,17 @@ function d3_svg_area(projection) {
       x1 = d3_svg_lineX,
       y0 = 0,
       y1 = d3_svg_lineY,
-      interpolate = "linear",
-      interpolator = d3_svg_lineInterpolators[interpolate],
+      interpolate,
+      i0,
+      i1,
       tension = .7;
 
   function area(d) {
     if (d.length < 1) return null;
     var points0 = d3_svg_linePoints(this, d, x0, y0),
         points1 = d3_svg_linePoints(this, d, x0 === x1 ? d3_svg_areaX(points0) : x1, y0 === y1 ? d3_svg_areaY(points0) : y1);
-    return "M" + interpolator(projection(points1), tension)
-         + "L" + interpolator(projection(points0.reverse()), tension)
+    return "M" + i0(projection(points1), tension)
+         + "L" + i1(projection(points0.reverse()), tension)
          + "Z";
   }
 
@@ -3256,7 +3391,8 @@ function d3_svg_area(projection) {
 
   area.interpolate = function(x) {
     if (!arguments.length) return interpolate;
-    interpolator = d3_svg_lineInterpolators[interpolate = x];
+    i0 = d3_svg_lineInterpolators[interpolate = x];
+    i1 = i0.reverse || i0;
     return area;
   };
 
@@ -3266,8 +3402,11 @@ function d3_svg_area(projection) {
     return area;
   };
 
-  return area;
+  return area.interpolate("linear");
 }
+
+d3_svg_lineStepBefore.reverse = d3_svg_lineStepAfter;
+d3_svg_lineStepAfter.reverse = d3_svg_lineStepBefore;
 
 d3.svg.area = function() {
   return d3_svg_area(Object);
@@ -3484,7 +3623,7 @@ function d3_svg_mousePoint(container, e) {
 };
 d3.svg.touches = function(container) {
   var touches = d3.event.touches;
-  return touches ? Array.prototype.map.call(touches, function(touch) {
+  return touches ? d3_array(touches).map(function(touch) {
     var point = d3_svg_mousePoint(container, touch);
     point.identifier = touch.identifier;
     return point;
@@ -3603,6 +3742,20 @@ d3.svg.axis = function() {
     selection.each(function(d, i, j) {
       var g = d3.select(this);
 
+      // If selection is a transition, create subtransitions.
+      var transition = selection.delay ? function(o) {
+        var id = d3_transitionInheritId;
+        try {
+          d3_transitionInheritId = selection.id;
+          return o.transition()
+              .delay(selection[j][i].delay)
+              .duration(selection[j][i].duration)
+              .ease(selection.ease());
+        } finally {
+          d3_transitionInheritId = id;
+        }
+      } : Object;
+
       // Ticks.
       var ticks = scale.ticks.apply(scale, tickArguments_),
           tickFormat = tickFormat_ == null ? scale.tickFormat.apply(scale, tickArguments_) : tickFormat_;
@@ -3623,7 +3776,7 @@ d3.svg.axis = function() {
 
       // Domain.
       var range = d3_scaleExtent(scale.range()),
-          path = g.selectAll(".domain").data([,]),
+          path = g.selectAll(".domain").data([0]),
           pathEnter = path.enter().append("svg:path").attr("class", "domain"),
           pathUpdate = transition(path);
 
@@ -3638,37 +3791,33 @@ d3.svg.axis = function() {
       switch (orient) {
         case "bottom": {
           tickTransform = d3_svg_axisX;
-          subtickUpdate.attr("y2", tickMinorSize);
-          tickEnter.select("text").attr("dy", ".71em").attr("text-anchor", "middle");
-          tickUpdate.select("line").attr("y2", tickMajorSize);
-          tickUpdate.select("text").attr("y", Math.max(tickMajorSize, 0) + tickPadding);
+          subtickUpdate.attr("x2", 0).attr("y2", tickMinorSize);
+          tickUpdate.select("line").attr("x2", 0).attr("y2", tickMajorSize);
+          tickUpdate.select("text").attr("x", 0).attr("y", Math.max(tickMajorSize, 0) + tickPadding).attr("dy", ".71em").attr("text-anchor", "middle");
           pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[1] + "V" + tickEndSize);
           break;
         }
         case "top": {
           tickTransform = d3_svg_axisX;
-          subtickUpdate.attr("y2", -tickMinorSize);
-          tickEnter.select("text").attr("text-anchor", "middle");
-          tickUpdate.select("line").attr("y2", -tickMajorSize);
-          tickUpdate.select("text").attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
+          subtickUpdate.attr("x2", 0).attr("y2", -tickMinorSize);
+          tickUpdate.select("line").attr("x2", 0).attr("y2", -tickMajorSize);
+          tickUpdate.select("text").attr("x", 0).attr("y", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("dy", "0em").attr("text-anchor", "middle");
           pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[1] + "V" + -tickEndSize);
           break;
         }
         case "left": {
           tickTransform = d3_svg_axisY;
-          subtickUpdate.attr("x2", -tickMinorSize);
-          tickEnter.select("text").attr("dy", ".32em").attr("text-anchor", "end");
-          tickUpdate.select("line").attr("x2", -tickMajorSize);
-          tickUpdate.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding));
+          subtickUpdate.attr("x2", -tickMinorSize).attr("y2", 0);
+          tickUpdate.select("line").attr("x2", -tickMajorSize).attr("y2", 0);
+          tickUpdate.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "end");
           pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + -tickEndSize);
           break;
         }
         case "right": {
           tickTransform = d3_svg_axisY;
-          subtickUpdate.attr("x2", tickMinorSize);
-          tickEnter.select("text").attr("dy", ".32em");
-          tickUpdate.select("line").attr("x2", tickMajorSize);
-          tickUpdate.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding);
+          subtickUpdate.attr("x2", tickMinorSize).attr("y2", 0);
+          tickUpdate.select("line").attr("x2", tickMajorSize).attr("y2", 0);
+          tickUpdate.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "start");
           pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
           break;
         }
@@ -3681,13 +3830,6 @@ d3.svg.axis = function() {
       subtickEnter.call(tickTransform, scale0);
       subtickUpdate.call(tickTransform, scale);
       subtickExit.call(tickTransform, scale);
-
-      function transition(o) {
-        return selection.delay ? o.transition()
-            .delay(selection[j][i].delay)
-            .duration(selection[j][i].duration)
-            .ease(selection.ease()) : o;
-      }
     });
   }
 
@@ -3790,6 +3932,7 @@ d3.behavior.drag = function() {
   // snapshot the local context for subsequent dispatch
   function start() {
     d3_behavior_dragEvent = event;
+    d3_behavior_dragEventTarget = d3.event.target;
     d3_behavior_dragOffset = d3_behavior_dragPoint((d3_behavior_dragTarget = this).parentNode);
     d3_behavior_dragMoved = 0;
     d3_behavior_dragArguments = arguments;
@@ -3809,6 +3952,7 @@ d3.behavior.drag = function() {
 };
 
 var d3_behavior_dragEvent,
+    d3_behavior_dragEventTarget,
     d3_behavior_dragTarget,
     d3_behavior_dragArguments,
     d3_behavior_dragOffset,
@@ -3860,16 +4004,17 @@ function d3_behavior_dragUp() {
 
   // If the node was moved, prevent the mouseup from propagating.
   // Also prevent the subsequent click from propagating (e.g., for anchors).
-  if (d3_behavior_dragMoved) {
+  if (d3_behavior_dragMoved && d3_behavior_dragEventTarget === d3.event.target) {
     d3_behavior_dragStopClick = true;
     d3_behavior_dragCancel();
   }
 }
 
 function d3_behavior_dragClick() {
-  if (d3_behavior_dragStopClick) {
+  if (d3_behavior_dragStopClick && d3_behavior_dragEventTarget === d3.event.target) {
     d3_behavior_dragCancel();
     d3_behavior_dragStopClick = false;
+    d3_behavior_dragEventTarget = null;
   }
 }
 
@@ -3903,6 +4048,7 @@ d3.behavior.zoom = function() {
   function start() {
     d3_behavior_zoomXyz = xyz;
     d3_behavior_zoomDispatch = event.zoom.dispatch;
+    d3_behavior_zoomEventTarget = d3.event.target;
     d3_behavior_zoomTarget = this;
     d3_behavior_zoomArguments = arguments;
   }
@@ -3955,6 +4101,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomLast = 0,
     d3_behavior_zoomXyz,
     d3_behavior_zoomDispatch,
+    d3_behavior_zoomEventTarget,
     d3_behavior_zoomTarget,
     d3_behavior_zoomArguments,
     d3_behavior_zoomMoved,
@@ -4045,17 +4192,20 @@ function d3_behavior_zoomMousemove() {
 
 function d3_behavior_zoomMouseup() {
   if (d3_behavior_zoomPanning) {
-    if (d3_behavior_zoomMoved) d3_behavior_zoomStopClick = true;
+    if (d3_behavior_zoomMoved && d3_behavior_zoomEventTarget === d3.event.target) {
+      d3_behavior_zoomStopClick = true;
+    }
     d3_behavior_zoomMousemove();
     d3_behavior_zoomPanning = null;
   }
 }
 
 function d3_behavior_zoomClick() {
-  if (d3_behavior_zoomStopClick) {
+  if (d3_behavior_zoomStopClick && d3_behavior_zoomEventTarget === d3.event.target) {
     d3.event.stopPropagation();
     d3.event.preventDefault();
     d3_behavior_zoomStopClick = false;
+    d3_behavior_zoomEventTarget = null;
   }
 }
 

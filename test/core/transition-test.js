@@ -58,7 +58,8 @@ suite.addBatch({
   "each": require("./transition-test-each"),
   "call": require("./transition-test-call"),
   "tween": require("./transition-test-tween"),
-  "id": require("./transition-test-id")
+  "id": require("./transition-test-id"),
+  "time": require("./transition-test-time")
 
 });
 

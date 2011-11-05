@@ -70,6 +70,38 @@ suite.addBatch({
       assert.strictEqual(f(-4200000), "−4.2e+6");
       assert.strictEqual(f(-42000000), "−4.2e+7");
     },
+    "can output SI prefix notation": function(format) {
+      var f = format("s");
+      assert.strictEqual(f(0), "0");
+      assert.strictEqual(f(1), "1");
+      assert.strictEqual(f(10), "10");
+      assert.strictEqual(f(100), "100");
+      assert.strictEqual(f(999.5), "999.5");
+      assert.strictEqual(f(999500), "999.5k");
+      assert.strictEqual(f(1000), "1k");
+      assert.strictEqual(f(1500.5), "1.5005k");
+      assert.strictEqual(f(.000001), "1μ");
+    },
+    "can output SI prefix notation with appropriate rounding": function(format) {
+      var f = format(".3s");
+      assert.strictEqual(f(0), "0.00");
+      assert.strictEqual(f(1), "1.00");
+      assert.strictEqual(f(10), "10.0");
+      assert.strictEqual(f(100), "100");
+      assert.strictEqual(f(999.5), "1.00k");
+      assert.strictEqual(f(999500), "1.00M");
+      assert.strictEqual(f(1000), "1.00k");
+      assert.strictEqual(f(1500.5), "1.50k");
+      assert.strictEqual(f(145500000), "146M");
+      assert.strictEqual(f(145999999.999999347), "146M");
+      assert.strictEqual(f(1e26), "100Y");
+      assert.strictEqual(f(.000001), "1.00μ");
+      assert.strictEqual(f(.009995), "0.0100");
+      var f = format(".4s");
+      assert.strictEqual(f(999.5), "999.5");
+      assert.strictEqual(f(999500), "999.5k");
+      assert.strictEqual(f(.009995), "9.995m");
+    },
     "can output a percentage": function(format) {
       var f = format("%");
       assert.strictEqual(f(0), "0%");
@@ -92,12 +124,15 @@ suite.addBatch({
       assert.strictEqual(f(-1.23), "−120%");
     },
     "can round to significant digits": function(format) {
+      assert.strictEqual(format(".2r")(0), "0.0");
       assert.strictEqual(format(".1r")(0.049), "0.05");
       assert.strictEqual(format(".1r")(0.49), "0.5");
       assert.strictEqual(format(".2r")(0.449), "0.45");
       assert.strictEqual(format(".3r")(0.4449), "0.445");
+      assert.strictEqual(format(".3r")(1.00), "1.00");
+      assert.strictEqual(format(".3r")(0.9995), "1.00");
       assert.strictEqual(format(".5r")(0.444449), "0.44445");
-      assert.strictEqual(format("r")(123.45), "123");
+      assert.strictEqual(format("r")(123.45), "123.45");
       assert.strictEqual(format(".1r")(123.45), "100");
       assert.strictEqual(format(".2r")(123.45), "120");
       assert.strictEqual(format(".3r")(123.45), "123");

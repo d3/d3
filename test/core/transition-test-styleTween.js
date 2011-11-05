@@ -12,7 +12,7 @@ module.exports = {
         vv = [],
         fails = 0;
 
-    var s = d3.select("body").append("div").selectAll("div")
+    var s = d3.select("body").html("").append("div").selectAll("div")
         .data(["red", "green"])
       .enter().append("div")
         .style("background-color", function(d) { return d3.rgb(d)+""; });
