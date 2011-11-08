@@ -1362,7 +1362,7 @@ d3_selectionPrototype.select = function(selector) {
     subgroup.parentNode = (group = this[j]).parentNode;
     for (var i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroup.push(subnode = selector.call(node, node.__data__, i));
+        subgroup.push(subnode = selector.call(node, node.__data__, i, j));
         if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
       } else {
         subgroup.push(null);
@@ -1388,7 +1388,7 @@ d3_selectionPrototype.selectAll = function(selector) {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
       if (node = group[i]) {
-        subgroups.push(subgroup = d3_array(selector.call(node, node.__data__, i)));
+        subgroups.push(subgroup = d3_array(selector.call(node, node.__data__, i, j)));
         subgroup.parentNode = node;
       }
     }
@@ -1610,6 +1610,11 @@ d3_selectionPrototype.remove = function() {
   return this.each(function() {
     var parent = this.parentNode;
     if (parent) parent.removeChild(this);
+  });
+};
+d3_selectionPrototype.adopt = function(selection) {
+  return this.select(function(d, i, j) {
+    return (d = selection[i]) && (d = d[j]) && this.appendChild(d);
   });
 };
 // TODO data(null) for clearing data?
@@ -1900,6 +1905,11 @@ d3_selection_enterPrototype.select = function(selector) {
   }
 
   return d3_selection(subgroups);
+};
+d3.create = function(name) {
+  return d3.select((name = d3.ns.qualify(name)).local
+      ? document.createElementNS(name.space, name.local)
+      : document.createElement(name));
 };
 function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);

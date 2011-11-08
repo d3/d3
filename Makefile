@@ -95,6 +95,7 @@ d3.core.js: \
 	src/core/selection-append.js \
 	src/core/selection-insert.js \
 	src/core/selection-remove.js \
+	src/core/selection-adopt.js \
 	src/core/selection-data.js \
 	src/core/selection-filter.js \
 	src/core/selection-map.js \
@@ -108,6 +109,7 @@ d3.core.js: \
 	src/core/selection-root.js \
 	src/core/selection-enter.js \
 	src/core/selection-enter-select.js \
+	src/core/create.js \
 	src/core/transition.js \
 	src/core/transition-select.js \
 	src/core/transition-selectAll.js \
