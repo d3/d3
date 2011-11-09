@@ -33,8 +33,8 @@ suite.addBatch({
     "selects by array": function() {
       var div = d3.selectAll([document.body.lastChild]);
       assert.isTrue(div[0][0] === document.body.lastChild);
-      assert.length(div, 1);
-      assert.length(div[0], 1);
+      assert.lengthOf(div, 1);
+      assert.lengthOf(div[0], 1);
     },
     "groups are not instances of NodeList": function() {
       var div = d3.select("body").selectAll(function() { return this.getElementsByClassName("div"); });
