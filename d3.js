@@ -2533,7 +2533,7 @@ function d3_scale_log(linear, log) {
   return d3_scale_linearRebind(scale, linear);
 };
 
-var d3_scale_logFormat = d3.format("e");
+var d3_scale_logFormat = d3.format(".0e");
 
 function d3_scale_logp(x) {
   return Math.log(x) / Math.LN10;
