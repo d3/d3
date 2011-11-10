@@ -172,7 +172,7 @@ suite.addBatch({
         ]);
       },
       "can override the tick format": function(log) {
-        var x = log().domain([1000, 1]);
+        var x = log().domain([1000.1, 1]);
         assert.deepEqual(x.ticks().map(x.tickFormat(10, d3.format("+,d"))), [
           "+1", "+2", "+3", "", "", "", "", "", "",
           "+10", "+20", "+30", "", "", "", "", "", "",
