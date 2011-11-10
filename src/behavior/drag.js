@@ -20,6 +20,7 @@ d3.behavior.drag = function() {
   // snapshot the local context for subsequent dispatch
   function start() {
     d3_behavior_dragEvent = event;
+    d3_behavior_dragEventTarget = d3.event.target;
     d3_behavior_dragTarget = this;
     d3_behavior_dragArguments = arguments;
     d3_behavior_dragOrigin = d3_behavior_dragPoint();
@@ -52,12 +53,12 @@ d3.behavior.drag = function() {
 };
 
 var d3_behavior_dragEvent,
+    d3_behavior_dragEventTarget,
     d3_behavior_dragTarget,
     d3_behavior_dragArguments,
     d3_behavior_dragOffset,
     d3_behavior_dragOrigin,
-    d3_behavior_dragMoved,
-    d3_behavior_dragStopClick;
+    d3_behavior_dragMoved;
 
 function d3_behavior_dragDispatch(type) {
   var p = d3_behavior_dragPoint(),
@@ -105,23 +106,24 @@ function d3_behavior_dragUp() {
   if (!d3_behavior_dragTarget) return;
   d3_behavior_dragDispatch("dragend");
 
+  // If the node was moved, prevent the mouseup from propagating.
+  // Also prevent the subsequent click from propagating (e.g., for anchors).
+  if (d3_behavior_dragMoved) {
+    d3_eventCancel();
+    d3_behavior_dragMoved = d3.event.target === d3_behavior_dragEventTarget;
+  }
+
   d3_behavior_dragEvent =
+  d3_behavior_dragEventTarget =
   d3_behavior_dragTarget =
   d3_behavior_dragArguments =
   d3_behavior_dragOffset =
   d3_behavior_dragOrigin = null;
-
-  // If the node was moved, prevent the mouseup from propagating.
-  // Also prevent the subsequent click from propagating (e.g., for anchors).
-  if (d3_behavior_dragMoved) {
-    d3_behavior_dragStopClick = true;
-    d3_eventCancel();
-  }
 }
 
 function d3_behavior_dragClick() {
-  if (d3_behavior_dragStopClick) {
+  if (d3_behavior_dragMoved) {
     d3_eventCancel();
-    d3_behavior_dragStopClick = false;
+    d3_behavior_dragMoved = 0;
   }
 }
