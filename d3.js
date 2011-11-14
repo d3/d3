@@ -4292,7 +4292,7 @@ d3.behavior.drag = function() {
 
   function mousedown() {
     start.apply(this, arguments);
-    d3_behavior_dragDispatch("dragstart");
+    d3.event.preventDefault();
   }
 
   drag.on = function(type, listener) {
@@ -4345,6 +4345,7 @@ function d3_behavior_dragMove() {
   // O NOES! The drag element was removed from the DOM.
   if (!parent) return d3_behavior_dragUp();
 
+  if (!d3_behavior_dragMoved) d3_behavior_dragDispatch("dragstart");
   d3_behavior_dragDispatch("drag");
   d3_eventCancel();
 }
