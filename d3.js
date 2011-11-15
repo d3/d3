@@ -2258,13 +2258,21 @@ d3.transform = function(string) {
 // Compute y-scale and normalize the second row.
 // Finally, compute the rotation.
 function d3_transform(m) {
-  var r0 = [m.a, m.b],
+  var a = m.a,
+      b = m.b,
+      r0 = [a, b],
       r1 = [m.c, m.d],
       kx = d3_transformNormalize(r0),
       kz = d3_transformDot(r0, r1),
       ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz));
   this.translate = [m.e, m.f];
-  this.rotate = Math.atan2(m.b, m.a) * d3_transformDegrees;
+  // Check for coordinate system flip.
+  if (a * m.d - b * m.c < 0) {
+    a = -a;
+    b = -b;
+    kx = -kx;
+  }
+  this.rotate = Math.atan2(b, a) * d3_transformDegrees;
   this.scale = [kx, ky || 0];
   this.skew = ky ? kz / ky * d3_transformDegrees : 0;
 };
