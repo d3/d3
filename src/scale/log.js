@@ -32,8 +32,8 @@ function d3_scale_log(linear, log) {
     if (extent.every(isFinite)) {
       var i = Math.floor(extent[0]),
           j = Math.ceil(extent[1]),
-          u = Math.round(pow(extent[0])),
-          v = Math.round(pow(extent[1]));
+          u = pow(extent[0]),
+          v = pow(extent[1]);
       if (log === d3_scale_logn) {
         ticks.push(pow(i));
         for (; i++ < j;) for (var k = 9; k > 0; k--) ticks.push(pow(i) * k);
@@ -66,7 +66,7 @@ function d3_scale_log(linear, log) {
   return d3_scale_linearRebind(scale, linear);
 };
 
-var d3_scale_logFormat = d3.format("e");
+var d3_scale_logFormat = d3.format(".0e");
 
 function d3_scale_logp(x) {
   return Math.log(x) / Math.LN10;
