@@ -20,9 +20,7 @@ function d3_transform(m) {
     kx *= -1;
     kz *= -1;
   }
-  this.rotate = (kx === 0 ? Math.atan2(-r1[0], r1[1])
-      : Math.atan2( r0[1], r0[0])) * d3_transformDegrees;
-
+  this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_transformDegrees;
   this.translate = [m.e, m.f];
   this.scale = [kx, ky];
   this.skew = ky ? Math.atan2(kz, ky) * d3_transformDegrees : 0;
@@ -42,7 +40,7 @@ function d3_transformDot(a, b) {
 
 function d3_transformNormalize(a) {
   var k = Math.sqrt(d3_transformDot(a, a));
-  if (k != 0) {
+  if (k) {
     a[0] /= k;
     a[1] /= k;
   }
