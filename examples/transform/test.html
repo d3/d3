@@ -42,7 +42,7 @@ for (var tx = -10; tx <= 10; tx += 5) {
             a = matrix(el);
             g.attr("transform", d3.transform(v));
             b = matrix(el);
-            if (!deepEqual(a, b, 1e-1)) {
+            if (!deepEqual(a, b, 1e-6)) {
               failures++;
               results
                   .style("display", null)
