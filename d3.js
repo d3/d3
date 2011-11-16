@@ -2250,7 +2250,8 @@ var d3_timer_frame = window.requestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.transform = function(string) {
   d3_transformG.setAttribute("transform", string);
-  return new d3_transform(d3_transformG.transform.baseVal.consolidate().matrix);
+  var t = d3_transformG.transform.baseVal.consolidate();
+  return new d3_transform(t ? t.matrix : d3_transformIdentity);
 };
 
 // Compute x-scale and normalize the first row.
@@ -2262,11 +2263,17 @@ function d3_transform(m) {
       r1 = [m.c, m.d],
       kx = d3_transformNormalize(r0),
       kz = d3_transformDot(r0, r1),
-      ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz));
+      ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz)) || 0;
+  if (r0[0] * r1[1] < r1[0] * r0[1]) {
+    r0[0] *= -1;
+    r0[1] *= -1;
+    kx *= -1;
+    kz *= -1;
+  }
+  this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_transformDegrees;
   this.translate = [m.e, m.f];
-  this.rotate = Math.atan2(m.b, m.a) * d3_transformDegrees;
-  this.scale = [kx, ky || 0];
-  this.skew = ky ? kz / ky * d3_transformDegrees : 0;
+  this.scale = [kx, ky];
+  this.skew = ky ? Math.atan2(kz, ky) * d3_transformDegrees : 0;
 };
 
 d3_transform.prototype.toString = function() {
@@ -2283,8 +2290,10 @@ function d3_transformDot(a, b) {
 
 function d3_transformNormalize(a) {
   var k = Math.sqrt(d3_transformDot(a, a));
-  a[0] /= k;
-  a[1] /= k;
+  if (k) {
+    a[0] /= k;
+    a[1] /= k;
+  }
   return k;
 }
 
@@ -2295,6 +2304,7 @@ function d3_transformCombine(a, b, k) {
 }
 
 var d3_transformG = document.createElementNS(d3.ns.prefix.svg, "g"),
+    d3_transformIdentity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0},
     d3_transformDegrees = 180 / Math.PI;
 function d3_noop() {}
 d3.scale = {};
