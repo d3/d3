@@ -33,7 +33,7 @@ d3.behavior.zoom = function() {
   function mousedown() {
     start.apply(this, arguments);
     d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
-    d3_behavior_zoomMoved = false;
+    d3_behavior_zoomMoved = 0;
     d3.event.preventDefault();
     window.focus();
   }
@@ -88,8 +88,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomEventTarget,
     d3_behavior_zoomTarget,
     d3_behavior_zoomArguments,
-    d3_behavior_zoomMoved,
-    d3_behavior_zoomStopClick;
+    d3_behavior_zoomMoved;
 
 function d3_behavior_zoomLocation(point) {
   return [
@@ -169,27 +168,32 @@ function d3_behavior_zoomTouchmove() {
 function d3_behavior_zoomMousemove() {
   d3_behavior_zoomZooming = null;
   if (d3_behavior_zoomPanning) {
-    d3_behavior_zoomMoved = true;
+    d3_behavior_zoomMoved = 1;
     d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
   }
 }
 
 function d3_behavior_zoomMouseup() {
   if (d3_behavior_zoomPanning) {
-    if (d3_behavior_zoomMoved && d3_behavior_zoomEventTarget === d3.event.target) {
-      d3_behavior_zoomStopClick = true;
+    if (d3_behavior_zoomMoved) {
+      d3_eventCancel();
+      d3_behavior_zoomMoved = d3_behavior_zoomEventTarget === d3.event.target;
     }
-    d3_behavior_zoomMousemove();
+
+    d3_behavior_zoomXyz =
+    d3_behavior_zoomExtent =
+    d3_behavior_zoomDispatch =
+    d3_behavior_zoomEventTarget =
+    d3_behavior_zoomTarget =
+    d3_behavior_zoomArguments =
     d3_behavior_zoomPanning = null;
   }
 }
 
 function d3_behavior_zoomClick() {
-  if (d3_behavior_zoomStopClick && d3_behavior_zoomEventTarget === d3.event.target) {
-    d3.event.stopPropagation();
-    d3.event.preventDefault();
-    d3_behavior_zoomStopClick = false;
-    d3_behavior_zoomEventTarget = null;
+  if (d3_behavior_zoomMoved) {
+    d3_eventCancel();
+    d3_behavior_zoomMoved = 0;
   }
 }
 

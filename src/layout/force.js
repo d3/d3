@@ -264,6 +264,7 @@ d3.layout.force = function() {
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
     if (!drag) drag = d3.behavior.drag()
+        .origin(Object)
         .on("dragstart", dragstart)
         .on("drag", d3_layout_forceDrag)
         .on("dragend", d3_layout_forceDragEnd);
@@ -299,8 +300,8 @@ function d3_layout_forceDragEnd() {
 }
 
 function d3_layout_forceDrag() {
-  d3_layout_forceDragNode.px += d3.event.dx;
-  d3_layout_forceDragNode.py += d3.event.dy;
+  d3_layout_forceDragNode.px = d3.event.x;
+  d3_layout_forceDragNode.py = d3.event.y;
   d3_layout_forceDragForce.resume(); // restart annealing
 }
 
