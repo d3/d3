@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+  </head>
+  <body>
+    <h2>
+      source excerpt<br>
+      bar chart
+    </h2>
+<pre style="font-size:32px;"><code>var data = [63, 39, 31, 53, 25, 32, 175, 69, 51],
+    x = d3.scale.linear()…, // data ↦ width
+    y = d3.scale.ordinal()…; // index ↦ y
+
+// Data ↦ Element
+var rect = svg.selectAll("rect")
+    .data(data);
+
+// Data Attributes ↦ Element Attributes
+rect.enter().append("svg:rect")
+    .attr("width", function(d, i) { return x(d); })
+    .attr("y", function(d, i) { return y(i); })
+    .attr("height", y.rangeBand());</code></pre>
+    <script type="text/javascript" src="hijs/hi.js"></script>
+  </body>
+</html>

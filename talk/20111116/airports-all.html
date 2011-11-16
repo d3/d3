@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+#states path {
+  fill: #ccc;
+  stroke: #fff;
+}
+
+path.cell {
+  fill: none;
+  pointer-events: all;
+  stroke: brown;
+}
+
+circle {
+  fill: black;
+}
+
+    </style>
+  </head>
+  <body>
+    <h2>
+      <span>U.S. airports</span>, 2008<br>
+      Voronoi diagram
+    </h2>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript" src="d3/d3.csv.js"></script>
+    <script type="text/javascript" src="d3/d3.geo.js"></script>
+    <script type="text/javascript" src="d3/d3.geom.js"></script>
+    <script type="text/javascript">
+
+var w = 1280,
+    h = 800;
+
+var projection = d3.geo.azimuthal()
+    .mode("equidistant")
+    .origin([-98, 38])
+    .scale(1400)
+    .translate([640, 360]);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("body").insert("svg:svg", "h2")
+    .attr("width", w)
+    .attr("height", h);
+
+var states = svg.append("svg:g")
+    .attr("id", "states");
+
+var cells = svg.append("svg:g")
+    .attr("id", "cells");
+
+d3.json("us-states.json", function(collection) {
+  states.selectAll("path")
+      .data(collection.features)
+    .enter().append("svg:path")
+      .attr("d", path);
+});
+
+d3.csv("airports.csv", function(airports) {
+  var positions = [];
+
+  airports.forEach(function(airport) {
+    positions.push(projection([+airport.longitude, +airport.latitude]));
+  });
+
+  // Compute the Voronoi diagram of airports' projected positions.
+  var polygons = d3.geom.voronoi(positions);
+
+  var g = cells.selectAll("g")
+      .data(airports)
+    .enter().append("svg:g");
+
+  g.append("svg:path")
+      .attr("class", "cell")
+      .attr("d", function(d, i) { return "M" + polygons[i].join("L") + "Z"; })
+      .on("mouseover", function(d, i) {
+        d3.select("#footer span").text(d.name);
+        d3.select("#footer .hint").text(d.city + ", " + d.state);
+      });
+
+  g.append("svg:circle")
+      .attr("cx", function(d, i) { return positions[i][0]; })
+      .attr("cy", function(d, i) { return positions[i][1]; })
+      .attr("r", 1.5);
+});
+
+    </script>
+  </body>
+</html>

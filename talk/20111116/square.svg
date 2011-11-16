@@ -1,0 +1,12 @@
+<?xml version="1.0" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"
+  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="32" height="32" version="1.1" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient x2="0%" y2="100%" id="gradient">
+      <stop offset="0%" stop-color="#A5A8A8"/>
+      <stop offset="100%" stop-color="#85898A"/>
+    </linearGradient>
+  </defs>
+  <path stroke="#000" stroke-width=".25" stroke-opacity=".4" fill="url(#gradient)" d="M4,0H28A4,4 0,0 1 32,4V28A4,4 0,0 1 28,32H4A4,4 0,0 1 0,28V4A4,4 0,0 1 4,0ZM25,5H7A2,2 0,0 0 5,7V25A2,2 0,0 0 7,27H25A2,2 0,0 0 27,25V7A2,2 0,0 0 25,5ZM13,11H19A2,2 0,0 1 21,13V19A2,2 0,0 1 19,21H13A2,2 0,0 1 11,19V13A2,2 0,0 1 13,11Z"/>
+</svg>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+.bar text {
+  font-size: 24px;
+}
+
+.bar rect {
+  fill: #1f77b4;
+}
+
+    </style>
+  </head>
+  <body>
+    <h1>rect: data ↦ width, index ↦ y</h1>
+    <h2>
+      quantitative data<br>
+      bar chart
+    </h2>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript">
+
+var data = [63, 39, 31, 53, 25, 32, 175, 69, 51];
+
+var m = [200, 160, 200, 160],
+    w = 1280 - m[1] - m[3],
+    h = 800 - m[0] - m[2];
+
+var x = d3.scale.linear()
+    .domain([0, d3.max(data)])
+    .range([0, w]);
+
+var y = d3.scale.ordinal()
+    .domain(d3.range(data.length))
+    .rangeRoundBands([0, h], .2);
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+  .append("svg:g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+
+var bar = svg.selectAll("g.bar")
+    .data(data)
+  .enter().append("svg:g")
+    .attr("class", "bar")
+    .attr("transform", function(d, i) { return "translate(" + i * 60 + ")"; });
+
+bar.append("svg:rect")
+    .attr("width", 60)
+    .attr("height", y.rangeBand())
+    .style("fill", "white")
+    .style("stroke", "black");
+
+bar.append("svg:text")
+    .attr("x", 60)
+    .attr("y", y.rangeBand() / 2)
+    .attr("dx", -6)
+    .attr("dy", ".35em")
+    .attr("text-anchor", "end")
+    .style("fill", "black")
+    .text(function(d) { return d; });
+
+d3.select(window).on("click", dataToBar);
+
+function dataToBar() {
+  d3.select(window).on("click", barToData);
+
+  var t0 = bar.transition()
+      .delay(function(d, i) { return i * 50; })
+      .duration(1000)
+      .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; })
+      .each("end", t1);
+
+  function t1(d, i) {
+    var t1 = d3.select(this).transition()
+        .duration(1000)
+        .delay(250);
+
+    t1.select("rect")
+        .attr("width", x)
+        .style("fill", "steelblue")
+        .style("stroke-opacity", 0);
+
+    t1.select("text")
+        .attr("x", x)
+        .style("fill", "white");
+  }
+}
+
+function barToData() {
+  d3.select(window).on("click", dataToBar);
+
+  var t0 = bar.transition()
+      .delay(function(d, i) { return i * 50; })
+      .duration(1000)
+      .attr("transform", function(d, i) { return "translate(" + i * 60 + ")"; });
+
+  t0.select("rect")
+      .attr("width", 60)
+      .style("fill", "white")
+      .style("stroke-opacity", 1);
+
+  t0.select("text")
+      .attr("x", 60)
+      .style("fill", "black");
+}
+
+    </script>
+  </body>
+</html>

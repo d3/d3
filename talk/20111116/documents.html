@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <link type="text/css" rel="stylesheet" href="style.css"/>
+    <style type="text/css">
+
+li span {
+  position: relative;
+  white-space: nowrap;
+}
+
+li span div {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+}
+
+    </style>
+  </head>
+  <body>
+    <h1>Data Graphics &sub; Documents</h1>
+    <p>
+    <ul style="list-style-type:none;">
+      <li><b>Datum ↦ Element</b><br>First we need a graphical mark (a geometric primitive such as <span id="bar"></span> or <span id="dot"></span>) to represent each data point.</li>
+      <p>
+      <li><b>Data Attribute ↦ Element Attribute</b><br>Then we need properties of the mark (visual channels such as <span id="position"></span>, <span id="length"></span> and <span id="hue"></span>) to encode dimensions of data.</li>
+    </ul>
+    <script type="text/javascript" src="d3/d3.js"></script>
+    <script type="text/javascript">
+
+// Argh, Chrome 15's stupid iframe SVG bug!
+
+d3.select("#bar").append("div")
+    .style("width", "24px")
+    .style("background", "#1f77b4");
+
+d3.select("#dot").append("div")
+    .style("width", "24px")
+  .append("svg:svg")
+    .attr("width", 24)
+    .attr("height", 24)
+  .append("svg:circle")
+    .attr("cx", 12)
+    .attr("cy", 12)
+    .attr("r", 12)
+    .style("fill", "#1f77b4");
+
+var position = d3.select("#position").append("span").append("div")
+    .style("width", "140px")
+  .append("svg:svg")
+    .attr("width", 140)
+    .attr("height", 24);
+
+position.append("svg:path")
+    .attr("d", "M0.5,19V10V14.5H139.5V10V19")
+    .style("fill", "none")
+    .style("stroke", "black");
+
+position.selectAll("circle")
+    .data([1, 2, 5, 8, 12])
+  .enter()  .append("svg:circle")
+    .attr("cx", function(d) { return d * 10; })
+    .attr("cy", 14.5)
+    .attr("r", 5.5)
+    .style("fill", "#1f77b4")
+    .style("stroke", "white")
+    .style("stroke-width", "1.5px");
+
+var length = d3.select("#length").append("span").selectAll("div")
+    .data([2, 3, 5, 8, 12])
+  .enter().append("div")
+    .style("width", function(d) { return d * 2 + (d == 12 ? 0 : 4) + "px"; })
+  .append("svg:svg")
+    .attr("width", function(d) { return d * 2; })
+    .attr("height", 24);
+
+length.append("svg:rect")
+    .attr("y", 5)
+    .attr("width", function(d) { return d * 2; })
+    .attr("height", 19)
+    .style("fill", "#1f77b4");
+
+var hue = d3.select("#hue").append("span").selectAll("div")
+    .data([2, 3, 5, 8, 12])
+  .enter().append("div")
+  .append("svg:svg")
+    .attr("width", 24)
+    .attr("height", 24);
+
+hue.append("svg:rect")
+    .attr("y", 5)
+    .attr("x", 3)
+    .attr("width", 19)
+    .attr("height", 19)
+    .style("fill", d3.scale.category10());
+
+    </script>
+  </body>
+</html>
