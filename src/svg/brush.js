@@ -168,18 +168,13 @@ d3.svg.brush = function() {
         || (y && extent[0][1] === extent[1][1]);
   };
 
-  brush.on = function(type, listener) {
-    event.on(type, listener);
-    return brush;
-  };
-
   d3.select(window)
       .on("mousemove.brush", d3_svg_brushMove)
       .on("mouseup.brush", d3_svg_brushUp)
       .on("keydown.brush", d3_svg_brushKeydown)
       .on("keyup.brush", d3_svg_brushKeyup);
 
-  return brush;
+  return d3.rebind(brush, event, "on");
 };
 
 var d3_svg_brush,

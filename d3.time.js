@@ -570,12 +570,7 @@ function d3_time_scale(linear, methods, format) {
   };
 
   // TOOD expose d3_scale_linear_rebind?
-  scale.range = d3.rebind(scale, linear.range);
-  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
-  scale.interpolate = d3.rebind(scale, linear.interpolate);
-  scale.clamp = d3.rebind(scale, linear.clamp);
-
-  return scale;
+  return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
 }
 
 // TODO expose d3_scaleExtent?

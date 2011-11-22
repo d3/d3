@@ -51,8 +51,7 @@ suite.addBatch({
       var d = dispatch("foo"), a = {}, b = {}, those = [];
       function A() { those.push(a); }
       function B() { those.push(b); }
-      d.on("foo.a", A);
-      d.on("foo.b", B);
+      d.on("foo.a", A).on("foo.b", B);
       d.foo();
       assert.deepEqual(those, [a, b]);
       those = [];
@@ -64,31 +63,37 @@ suite.addBatch({
       var d = dispatch("foo"), a = {}, b = {}, those = [];
       function A() { those.push(a); }
       function B() { those.push(b); }
-      d.on("foo.a", A);
-      d.on("foo.b", B);
+      d.on("foo.a", A).on("foo.b", B);
       d.foo();
       those = [];
       d.on("foo.a", null);
       d.foo();
       assert.deepEqual(those, [b]);
     },
+    "removing a shared listener only affects the intended event": function(dispatch) {
+      var d = dispatch("foo", "bar"), a = 0;
+      function A() { ++a; }
+      d.on("foo", A).on("bar", A);
+      d.foo();
+      d.bar();
+      assert.equal(a, 2);
+      d.on("foo", null);
+      d.bar();
+      assert.equal(a, 3);
+    },
     "adding an existing listener has no effect": function(dispatch) {
       var d = dispatch("foo"), events = 0;
       function A() { ++events; }
       d.on("foo.a", A);
       d.foo();
-      d.on("foo.a", A);
-      d.on("foo.a", A);
+      d.on("foo.a", A).on("foo.a", A);
       d.foo();
       assert.equal(events, 2);
     },
     "removing a missing listener has no effect": function(dispatch) {
       var d = dispatch("foo"), events = 0;
       function A() { ++events; }
-      d.on("foo.a", null);
-      d.on("foo", A);
-      d.on("foo", null);
-      d.on("foo", null);
+      d.on("foo.a", null).on("foo", A).on("foo", null).on("foo", null);
       d.foo();
       assert.equal(events, 0);
     },
@@ -104,10 +109,19 @@ suite.addBatch({
       var d = dispatch("foo"), a = {}, b = {}, those = [];
       function A() { d.on("foo.b", null); those.push(a); }
       function B() { those.push(b); }
-      d.on("foo.a", A);
-      d.on("foo.b", B);
+      d.on("foo.a", A).on("foo.b", B);
       d.foo();
       assert.deepEqual(those, [a]);
+    },
+    "getting a listener returns the correct listener": function(dispatch) {
+      var d = dispatch("foo");
+      function A() {}
+      function B() {}
+      function C() {}
+      d.on("foo.a", A).on("foo.b", B).on("foo", C);
+      assert.equal(d.on("foo.a"), A);
+      assert.equal(d.on("foo.b"), B);
+      assert.equal(d.on("foo"), C);
     }
   }
 });
