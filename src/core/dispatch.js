@@ -30,24 +30,22 @@ function d3_dispatch_event() {
         i = -1,
         n = z.length,
         l;
-    while (++i < n) if ((l = z[i])._on) l.apply(this, arguments);
+    while (++i < n) if (l = z[i].on) l.apply(this, arguments);
   }
 
   dispatch.on = function(name, listener) {
     var l, i;
 
-    // remove the old listener, if any
+    // remove the old listener, if any (with copy-on-write)
     if (l = listenerByName[name]) {
-      l._on = false;
+      l.on = null;
       listeners = listeners.slice(0, i = listeners.indexOf(l)).concat(listeners.slice(i + 1));
       delete listenerByName[name];
     }
 
     // add the new listener, if any
     if (listener) {
-      listener._on = true;
-      listeners.push(listener);
-      listenerByName[name] = listener;
+      listeners.push(listenerByName[name] = {on: listener});
     }
 
     return dispatch;

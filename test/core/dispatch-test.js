@@ -72,6 +72,18 @@ suite.addBatch({
       d.foo();
       assert.deepEqual(those, [b]);
     },
+    "removing a shared listener only affects the desired event": function(dispatch) {
+      var d = dispatch("foo", "bar"), a = 0;
+      function A() { ++a; }
+      d.on("foo", A);
+      d.on("bar", A);
+      d.foo();
+      d.bar();
+      assert.equal(a, 2);
+      d.on("foo", null);
+      d.bar();
+      assert.equal(a, 3);
+    },
     "adding an existing listener has no effect": function(dispatch) {
       var d = dispatch("foo"), events = 0;
       function A() { ++events; }
