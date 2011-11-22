@@ -113,11 +113,6 @@ d3.layout.force = function() {
     return (alpha *= .99) < .005;
   }
 
-  force.on = function(type, listener) {
-    event.on(type, listener);
-    return force;
-  };
-
   force.nodes = function(x) {
     if (!arguments.length) return nodes;
     nodes = x;
@@ -278,7 +273,7 @@ d3.layout.force = function() {
     d3_layout_forceDragForce = force;
   }
 
-  return force;
+  return d3.rebind(force, event, "on");
 };
 
 var d3_layout_forceDragForce,

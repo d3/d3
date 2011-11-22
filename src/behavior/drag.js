@@ -28,12 +28,7 @@ d3.behavior.drag = function() {
     d3_behavior_dragDispatch("dragstart");
   }
 
-  drag.on = function(type, listener) {
-    event.on(type, listener);
-    return drag;
-  };
-
-  return drag;
+  return d3.rebind(drag, event, "on");
 };
 
 var d3_behavior_dragEvent,

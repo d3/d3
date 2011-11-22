@@ -69,12 +69,7 @@ d3.behavior.zoom = function() {
     return zoom;
   };
 
-  zoom.on = function(type, listener) {
-    event.on(type, listener);
-    return zoom;
-  };
-
-  return zoom;
+  return d3.rebind(zoom, event, "on");
 };
 
 var d3_behavior_zoomDiv,

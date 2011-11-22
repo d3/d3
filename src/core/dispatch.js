@@ -18,7 +18,9 @@ d3_dispatch.prototype.on = function(type, listener) {
     type = type.substring(0, i);
   }
 
-  this[type].on(name, listener);
+  return arguments.length < 2
+      ? this[type].on(name)
+      : (this[type].on(name, listener), this);
 };
 
 function d3_dispatch_event() {
@@ -35,6 +37,9 @@ function d3_dispatch_event() {
 
   dispatch.on = function(name, listener) {
     var l, i;
+
+    // return the current listener, if any
+    if (arguments.length < 2) return (l = listenerByName[name]) && l.on;
 
     // remove the old listener, if any (with copy-on-write)
     if (l = listenerByName[name]) {

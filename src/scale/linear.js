@@ -72,11 +72,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
 };
 
 function d3_scale_linearRebind(scale, linear) {
-  scale.range = d3.rebind(scale, linear.range);
-  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
-  scale.interpolate = d3.rebind(scale, linear.interpolate);
-  scale.clamp = d3.rebind(scale, linear.clamp);
-  return scale;
+  return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
 }
 
 function d3_scale_linearNice(dx) {

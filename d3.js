@@ -46,13 +46,22 @@ function d3_this() {
 d3.functor = function(v) {
   return typeof v === "function" ? v : function() { return v; };
 };
-// A getter-setter method that preserves the appropriate `this` context.
-d3.rebind = function(object, method) {
-  return function() {
-    var x = method.apply(object, arguments);
-    return arguments.length ? object : x;
-  };
+// Copies a variable number of methods from source to target.
+d3.rebind = function(target, source) {
+  var i = 1, n = arguments.length, method;
+  while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]);
+  return target;
 };
+
+// Method is assumed to be a standard D3 getter-setter:
+// If passed with no arguments, gets the value.
+// If passed with arguments, sets the value and returns the target.
+function d3_rebind(target, source, method) {
+  return function() {
+    var value = method.apply(source, arguments);
+    return arguments.length ? target : value;
+  };
+}
 d3.ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
 };
@@ -494,7 +503,9 @@ d3_dispatch.prototype.on = function(type, listener) {
     type = type.substring(0, i);
   }
 
-  this[type].on(name, listener);
+  return arguments.length < 2
+      ? this[type].on(name)
+      : (this[type].on(name, listener), this);
 };
 
 function d3_dispatch_event() {
@@ -511,6 +522,9 @@ function d3_dispatch_event() {
 
   dispatch.on = function(name, listener) {
     var l, i;
+
+    // return the current listener, if any
+    if (arguments.length < 2) return (l = listenerByName[name]) && l.on;
 
     // remove the old listener, if any (with copy-on-write)
     if (l = listenerByName[name]) {
@@ -2409,11 +2423,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
 };
 
 function d3_scale_linearRebind(scale, linear) {
-  scale.range = d3.rebind(scale, linear.range);
-  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
-  scale.interpolate = d3.rebind(scale, linear.interpolate);
-  scale.clamp = d3.rebind(scale, linear.clamp);
-  return scale;
+  return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
 }
 
 function d3_scale_linearNice(dx) {
@@ -4107,18 +4117,13 @@ d3.svg.brush = function() {
         || (y && extent[0][1] === extent[1][1]);
   };
 
-  brush.on = function(type, listener) {
-    event.on(type, listener);
-    return brush;
-  };
-
   d3.select(window)
       .on("mousemove.brush", d3_svg_brushMove)
       .on("mouseup.brush", d3_svg_brushUp)
       .on("keydown.brush", d3_svg_brushKeydown)
       .on("keyup.brush", d3_svg_brushKeyup);
 
-  return brush;
+  return d3.rebind(brush, event, "on");
 };
 
 var d3_svg_brush,
@@ -4303,12 +4308,7 @@ d3.behavior.drag = function() {
     d3_behavior_dragDispatch("dragstart");
   }
 
-  drag.on = function(type, listener) {
-    event.on(type, listener);
-    return drag;
-  };
-
-  return drag;
+  return d3.rebind(drag, event, "on");
 };
 
 var d3_behavior_dragEvent,
@@ -4448,12 +4448,7 @@ d3.behavior.zoom = function() {
     return zoom;
   };
 
-  zoom.on = function(type, listener) {
-    event.on(type, listener);
-    return zoom;
-  };
-
-  return zoom;
+  return d3.rebind(zoom, event, "on");
 };
 
 var d3_behavior_zoomDiv,
