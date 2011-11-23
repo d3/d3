@@ -12,21 +12,21 @@ var color = d3.scale.quantile()
 
 var svg = d3.select("#chart").selectAll("svg")
     .data(d3.range(1993, 2011))
-  .enter().append("svg:svg")
+  .enter().append("svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
     .attr("class", "RdYlGn")
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + (m[3] + (w - z * 53) / 2) + "," + (m[0] + (h - z * 7) / 2) + ")");
 
-svg.append("svg:text")
+svg.append("text")
     .attr("transform", "translate(-6," + z * 3.5 + ")rotate(-90)")
     .attr("text-anchor", "middle")
     .text(String);
 
 var rect = svg.selectAll("rect.day")
     .data(function(d) { return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("class", "day")
     .attr("width", z)
     .attr("height", z)
@@ -35,7 +35,7 @@ var rect = svg.selectAll("rect.day")
 
 svg.selectAll("path.month")
     .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
-  .enter().append("svg:path")
+  .enter().append("path")
     .attr("class", "month")
     .attr("d", monthPath);
 
@@ -49,7 +49,7 @@ d3.csv("vix.csv", function(csv) {
 
   rect
       .attr("class", function(d) { return "day q" + color(data[format(d)]) + "-9"; })
-    .append("svg:title")
+    .append("title")
       .text(function(d) { return (d = format(d)) + (d in data ? ": " + data[d] : ""); });
 });
 

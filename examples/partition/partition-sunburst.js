@@ -3,10 +3,10 @@ var w = 960,
     r = Math.min(w, h) / 2,
     color = d3.scale.category20c();
 
-var vis = d3.select("#chart").append("svg:svg")
+var vis = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
 var partition = d3.layout.partition()
@@ -23,7 +23,7 @@ var arc = d3.svg.arc()
 d3.json("../data/flare.json", function(json) {
   var path = vis.data([json]).selectAll("path")
       .data(partition.nodes)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("display", function(d) { return d.depth ? null : "none"; }) // hide inner ring
       .attr("d", arc)
       .attr("fill-rule", "evenodd")

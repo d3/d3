@@ -32,25 +32,25 @@ var y = d3.scale.linear()
     .domain([+1.00, -1.00])
     .range([0, size[1]]);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", size[0] + padding[3] + padding[1])
     .attr("height", size[1] + padding[0] + padding[2])
     .attr("pointer-events", "all")
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + padding[3] + "," + padding[0] + ")")
     .call(d3.behavior.zoom()
       .extent([[0, size[0]], [0, size[1]], [0, 3]])
       .on("zoom", redraw));
 
-svg.append("svg:rect")
+svg.append("rect")
     .attr("width", size[0])
     .attr("height", size[1])
     .attr("stroke", "none")
     .style("fill", "#fff");
 
-svg.append("svg:a")
+svg.append("a")
     .attr("xlink:href", "http://mbostock.github.com/d3/")
-  .append("svg:text")
+  .append("text")
     .style("font-size", "3em")
     .attr("transform", "translate(110.5, 110.5)")
     .text("D3.js");
@@ -71,16 +71,16 @@ function redraw() {
   gx.select("text")
       .text(fx);
 
-  var gxe = gx.enter().insert("svg:g", "a")
+  var gxe = gx.enter().insert("g", "a")
       .attr("class", "x")
       .attr("transform", tx);
 
-  gxe.append("svg:line")
+  gxe.append("line")
       .attr("stroke", stroke)
       .attr("y1", 0)
       .attr("y2", size[1]);
 
-  gxe.append("svg:text")
+  gxe.append("text")
       .attr("y", size[1])
       .attr("dy", "1em")
       .attr("text-anchor", "middle")
@@ -96,16 +96,16 @@ function redraw() {
   gy.select("text")
       .text(fy);
 
-  var gye = gy.enter().insert("svg:g", "a")
+  var gye = gy.enter().insert("g", "a")
       .attr("class", "y")
       .attr("transform", ty);
 
-  gye.append("svg:line")
+  gye.append("line")
       .attr("stroke", stroke)
       .attr("x1", 0)
       .attr("x2", size[0]);
 
-  gye.append("svg:text")
+  gye.append("text")
       .attr("x", -3)
       .attr("dy", ".35em")
       .attr("text-anchor", "end")

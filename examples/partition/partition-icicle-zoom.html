@@ -23,7 +23,7 @@ var w = 960,
     y = d3.scale.linear().range([0, h]),
     color = d3.scale.category20c();
 
-var vis = d3.select("#chart").append("svg:svg")
+var vis = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h);
 
@@ -33,7 +33,7 @@ var partition = d3.layout.partition()
 d3.json("../data/flare.json", function(json) {
   var rect = vis.data([json]).selectAll("rect")
       .data(partition.nodes)
-    .enter().append("svg:rect")
+    .enter().append("rect")
       .attr("x", function(d) { return x(d.x); })
       .attr("y", function(d) { return y(d.y); })
       .attr("width", function(d) { return x(d.dx); })

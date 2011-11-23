@@ -31,15 +31,15 @@ var w = 960,
     duration = 750,
     timer = setInterval(update, duration);
 
-var vis = d3.select("body").append("svg:svg")
+var vis = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(10, 10)");
 
 vis.selectAll("circle")
     .data(tree(root))
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("class", "node")
     .attr("r", 3.5)
     .attr("cx", x)
@@ -61,7 +61,7 @@ function update() {
       .data(nodes, function(d) { return d.id; });
 
   // Enter any new nodes at the parent's previous position.
-  node.enter().append("svg:circle")
+  node.enter().append("circle")
       .attr("class", "node")
       .attr("r", 3.5)
       .attr("cx", function(d) { return d.parent.x0; })
@@ -82,7 +82,7 @@ function update() {
       .data(tree.links(nodes), function(d) { return d.target.id; });
 
   // Enter any new links at the parent's previous position.
-  link.enter().insert("svg:path", "circle")
+  link.enter().insert("path", "circle")
       .attr("class", "link")
       .attr("d", function(d) {
         var o = {x: d.source.x0, y: d.source.y0};

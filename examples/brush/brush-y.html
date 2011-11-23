@@ -48,23 +48,23 @@ var m = [10, 10, 10, 40],
 var x = d3.random.normal(w / 2, w / 8),
     y = d3.scale.linear().range([h, 0]);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "y axis")
     .call(d3.svg.axis().scale(y).orient("left"));
 
 var circle = svg.selectAll("circle")
     .data(data)
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("transform", function(d) { return "translate(" + x() + "," + y(d) + ")"; })
     .attr("r", 3.5);
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "brush")
     .call(d3.svg.brush().y(y)
     .on("brushstart", brushstart)

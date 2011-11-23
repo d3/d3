@@ -22,21 +22,21 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return d.index * r; })
     .outerRadius(function(d) { return (d.index + s) * r; });
 
-var vis = d3.select("#clock").append("svg:svg")
+var vis = d3.select("#clock").append("svg")
     .attr("width", w)
     .attr("height", h)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
 
 var g = vis.selectAll("g")
     .data(fields)
-  .enter().append("svg:g");
+  .enter().append("g");
 
-g.append("svg:path")
+g.append("path")
     .style("fill", function(d) { return fill(d.value); })
     .attr("d", arc);
 
-g.append("svg:text")
+g.append("text")
     .attr("text-anchor", "middle")
     .attr("dy", "1em")
     .text(function(d) { return d.text; });

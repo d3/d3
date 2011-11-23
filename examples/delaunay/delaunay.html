@@ -27,15 +27,15 @@ var vertices = d3.range(500).map(function(d) {
 });
 
 var svg = d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w)
     .attr("height", h)
     .attr("class", "PiYG");
 
-svg.append("svg:g")
+svg.append("g")
   .selectAll("path")
     .data(d3.geom.delaunay(vertices))
-  .enter().append("svg:path")
+  .enter().append("path")
     .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 

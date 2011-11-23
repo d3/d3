@@ -27,7 +27,7 @@ svg {
 
 var color = d3.scale.category10();
 
-var svg = d3.select("body").append("svg:svg");
+var svg = d3.select("body").append("svg");
 
 d3.select("body")
     .on("touchstart", touch)
@@ -42,7 +42,7 @@ function touch() {
       .attr("cx", function(d) { return d[0]; })
       .attr("cy", function(d) { return d[1]; });
 
-  circle.enter().append("svg:circle")
+  circle.enter().append("circle")
       .attr("class", "touch")
       .attr("cx", function(d) { return d[0]; })
       .attr("cy", function(d) { return d[1]; })

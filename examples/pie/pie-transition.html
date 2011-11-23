@@ -23,18 +23,18 @@ var w = 400,
     arc = d3.svg.arc().outerRadius(r),
     donut = d3.layout.pie();
 
-var vis = d3.select("body").append("svg:svg")
+var vis = d3.select("body").append("svg")
     .data([data])
     .attr("width", w)
     .attr("height", h);
 
 var arcs = vis.selectAll("g.arc")
     .data(donut)
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-var paths = arcs.append("svg:path")
+var paths = arcs.append("path")
     .attr("fill", function(d, i) { return color(i); });
 
 paths.transition()

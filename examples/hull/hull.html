@@ -38,7 +38,7 @@ var vertices = d3.range(15).map(function(d) {
 });
 
 var svg = d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w)
     .attr("height", h)
     .attr("pointer-events", "all")
@@ -51,12 +51,12 @@ function update() {
   svg.selectAll("path")
       .data([d3.geom.hull(vertices)])
       .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-	  .enter().append("svg:path")
+	  .enter().append("path")
 	    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
   svg.selectAll("circle")
       .data(vertices.slice(1))
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("transform", function(d) { return "translate(" + d + ")"; })
       .attr("r", 3);
 }

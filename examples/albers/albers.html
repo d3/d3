@@ -47,18 +47,18 @@ var xy = d3.geo.albers(),
     path = d3.geo.path().projection(xy);
 
 d3.select("body")
-  .append("svg:svg")
-  .append("svg:g")
+  .append("svg")
+  .append("g")
     .attr("id", "states");
 
 d3.json("../data/us-states.json", function(collection) {
   d3.select("#states")
     .selectAll("path")
       .data(collection.features)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", path);
   d3.select("#states")
-    .append("svg:circle")
+    .append("circle")
       .attr("r", 10)
       .attr("transform", "translate(" + xy(xy.origin()).join(",") + ")")
 });

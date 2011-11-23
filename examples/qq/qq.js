@@ -10,8 +10,8 @@ var chart = d3.chart.qq()
     .tickFormat(function(d) { return ~~(d * 100); });
 
 var vis = d3.select("#chart")
-  .append("svg:svg")
-  .append("svg:g")
+  .append("svg")
+  .append("g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
 d3.json("turkers.json", function(turkers) {
@@ -37,18 +37,18 @@ d3.json("turkers.json", function(turkers) {
         y: turkers,
         label: "Mixture of 3 Gaussians"
       }])
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "qq")
       .attr("transform", function(d, i) { return "translate(" + (w + m[1] + m[3]) * i + ")"; });
 
-  g.append("svg:rect")
+  g.append("rect")
       .attr("class", "box")
       .attr("width", w)
       .attr("height", h);
 
   g.call(chart);
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", "1.3em")
       .attr("dx", ".6em")
       .text(function(d) { return d.label; });
