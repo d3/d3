@@ -69,6 +69,10 @@ function d3_scale_ordinal(domain, ranger) {
     return rangeBand;
   };
 
+  scale.rangeExtent = function() {
+    return ranger.x;
+  };
+
   scale.copy = function() {
     return d3_scale_ordinal(domain, ranger);
   };
