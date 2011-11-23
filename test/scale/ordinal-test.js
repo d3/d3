@@ -147,6 +147,17 @@ suite.addBatch({
       }
     },
 
+    "rangeExtent": {
+      "returns the continuous range": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([20, 120]);
+        assert.deepEqual(x.rangeExtent(), [20, 120]);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([10, 110]);
+        assert.deepEqual(x.rangeExtent(), [10, 110]);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100]);
+        assert.deepEqual(x.rangeExtent(), [0, 100]);
+      }
+    },
+
     "copy": {
       "changes to the domain are isolated": function(ordinal) {
         var x = ordinal().range(["foo", "bar"]), y = x.copy();
