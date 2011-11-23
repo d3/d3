@@ -2325,6 +2325,10 @@ function d3_scaleExtent(domain) {
   var start = domain[0], stop = domain[domain.length - 1];
   return start < stop ? [start, stop] : [stop, start];
 }
+
+function d3_scaleRange(scale) {
+  return scale.rangeExtent ? scale.rangeExtent() : d3_scaleExtent(scale.range());
+}
 function d3_scale_nice(domain, nice) {
   var i0 = 0,
       i1 = domain.length - 1,
@@ -3814,7 +3818,7 @@ d3.svg.axis = function() {
           tickTransform;
 
       // Domain.
-      var range = scale.rangeExtent ? scale.rangeExtent() : d3_scaleExtent(scale.range()),
+      var range = d3_scaleRange(scale),
           path = g.selectAll(".domain").data([0]),
           pathEnter = path.enter().append("svg:path").attr("class", "domain"),
           pathUpdate = transition(path);
@@ -4012,12 +4016,12 @@ d3.svg.brush = function() {
       // Initialize the background to fill the defined range.
       // If the range isn't defined, you can post-process.
       if (x) {
-        e = d3_scaleExtent(x.range());
+        e = d3_scaleRange(x);
         bg.attr("x", e[0]).attr("width", e[1] - e[0]);
         d3_svg_brushRedrawX(g, extent);
       }
       if (y) {
-        e = d3_scaleExtent(y.range());
+        e = d3_scaleRange(y);
         bg.attr("y", e[0]).attr("height", e[1] - e[0]);
         d3_svg_brushRedrawY(g, extent);
       }
@@ -4094,11 +4098,13 @@ d3.svg.brush = function() {
     // Invert the pixel extent to data-space.
     if (!arguments.length) {
       if (x) {
-        x0 = x.invert(extent[0][0]), x1 = x.invert(extent[1][0]);
+        x0 = extent[0][0], x1 = extent[1][0];
+        if (x.invert) x0 = x.invert(x0), x1 = x.invert(x1);
         if (x1 < x0) t = x0, x0 = x1, x1 = t;
       }
       if (y) {
-        y0 = y.invert(extent[0][1]), y1 = y.invert(extent[1][1]);
+        y0 = extent[0][1], y1 = extent[1][1];
+        if (y.invert) y0 = y.invert(y0), y1 = y.invert(y1);
         if (y1 < y0) t = y0, y0 = y1, y1 = t;
       }
       return x && y ? [[x0, y0], [x1, y1]] : x ? [x0, x1] : y && [y0, y1];
@@ -4108,14 +4114,14 @@ d3.svg.brush = function() {
     if (x) {
       x0 = z[0], x1 = z[1];
       if (y) x0 = x0[0], x1 = x1[0];
-      x0 = x(x0), x1 = x(x1);
+      if (x.invert) x0 = x(x0), x1 = x(x1);
       if (x1 < x0) t = x0, x0 = x1, x1 = t;
       extent[0][0] = x0, extent[1][0] = x1;
     }
     if (y) {
       y0 = z[0], y1 = z[1];
       if (x) y0 = y0[1], y1 = y1[1];
-      y0 = y(y0), y1 = y(y1);
+      if (y.invert) y0 = y(y0), y1 = y(y1);
       if (y1 < y0) t = y0, y0 = y1, y1 = t;
       extent[0][1] = y0, extent[1][1] = y1;
     }
@@ -4230,7 +4236,9 @@ function d3_svg_brushMove() {
 }
 
 function d3_svg_brushMove1(mouse, scale, i) {
-  var range = d3_scaleExtent(scale.range()),
+  var range = d3_scaleRange(scale),
+      r0 = range[0],
+      r1 = range[1],
       offset = d3_svg_brushOffset[i],
       size = d3_svg_brushExtent[1][i] - d3_svg_brushExtent[0][i],
       min,
@@ -4238,12 +4246,12 @@ function d3_svg_brushMove1(mouse, scale, i) {
 
   // When dragging, reduce the range by the extent size and offset.
   if (d3_svg_brushDrag) {
-    range[0] -= offset;
-    range[1] -= size + offset;
+    r0 -= offset;
+    r1 -= size + offset;
   }
 
   // Clamp the mouse so that the extent fits within the range extent.
-  min = Math.max(range[0], Math.min(range[1], mouse[i]));
+  min = Math.max(r0, Math.min(r1, mouse[i]));
 
   // Compute the new extent bounds.
   if (d3_svg_brushDrag) {
@@ -4251,7 +4259,7 @@ function d3_svg_brushMove1(mouse, scale, i) {
   } else {
 
     // If the ALT key is pressed, then preserve the center of the extent.
-    if (d3_svg_brushCenter) offset = Math.max(range[0], Math.min(range[1], 2 * d3_svg_brushCenter[i] - min));
+    if (d3_svg_brushCenter) offset = Math.max(r0, Math.min(r1, 2 * d3_svg_brushCenter[i] - min));
 
     // Compute the min and max of the offset and mouse.
     if (offset < min) {
