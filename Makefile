@@ -53,6 +53,7 @@ d3.core.js: \
 	src/core/number.js \
 	src/core/sum.js \
 	src/core/quantile.js \
+	src/core/transpose.js \
 	src/core/zip.js \
 	src/core/bisect.js \
 	src/core/first.js \
