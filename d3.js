@@ -2696,6 +2696,10 @@ function d3_scale_ordinal(domain, ranger) {
     return rangeBand;
   };
 
+  scale.rangeExtent = function() {
+    return ranger.x;
+  };
+
   scale.copy = function() {
     return d3_scale_ordinal(domain, ranger);
   };
@@ -3791,9 +3795,9 @@ d3.svg.axis = function() {
         }
       } : Object;
 
-      // Ticks.
-      var ticks = scale.ticks.apply(scale, tickArguments_),
-          tickFormat = tickFormat_ == null ? scale.tickFormat.apply(scale, tickArguments_) : tickFormat_;
+      // Ticks, or domain values for ordinal scales.
+      var ticks = scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain(),
+          tickFormat = tickFormat_ == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : String) : tickFormat_;
 
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
@@ -3810,14 +3814,15 @@ d3.svg.axis = function() {
           tickTransform;
 
       // Domain.
-      var range = d3_scaleExtent(scale.range()),
+      var range = scale.rangeExtent ? scale.rangeExtent() : d3_scaleExtent(scale.range()),
           path = g.selectAll(".domain").data([0]),
           pathEnter = path.enter().append("svg:path").attr("class", "domain"),
           pathUpdate = transition(path);
 
-      // Stash the new scale and grab the old scale.
-      var scale0 = this.__chart__ || scale;
-      this.__chart__ = scale.copy();
+      // Stash a snapshot of the new scale, and retrieve the old snapshot.
+      var scale1 = scale.copy(),
+          scale0 = this.__chart__ || scale1;
+      this.__chart__ = scale1;
 
       tickEnter.append("svg:line").attr("class", "tick");
       tickEnter.append("svg:text");
@@ -3858,13 +3863,27 @@ d3.svg.axis = function() {
         }
       }
 
-      tickEnter.call(tickTransform, scale0);
-      tickUpdate.call(tickTransform, scale);
-      tickExit.call(tickTransform, scale);
+      // For quantitative scales:
+      // - enter new ticks from the old scale
+      // - exit old ticks to the new scale
+      if (scale.ticks) {
+        tickEnter.call(tickTransform, scale0);
+        tickUpdate.call(tickTransform, scale1);
+        tickExit.call(tickTransform, scale1);
+        subtickEnter.call(tickTransform, scale0);
+        subtickUpdate.call(tickTransform, scale1);
+        subtickExit.call(tickTransform, scale1);
+      }
 
-      subtickEnter.call(tickTransform, scale0);
-      subtickUpdate.call(tickTransform, scale);
-      subtickExit.call(tickTransform, scale);
+      // For ordinal scales:
+      // - any entering ticks are undefined in the old scale
+      // - any exiting ticks are undefined in the new scale
+      // Therefore, we only need to transition updating ticks.
+      else {
+        var dx = scale1.rangeBand() / 2, x = function(d) { return scale1(d) + dx; };
+        tickEnter.call(tickTransform, x);
+        tickUpdate.call(tickTransform, x);
+      }
     });
   }
 
