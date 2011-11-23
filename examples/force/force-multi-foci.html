@@ -15,7 +15,7 @@ var w = 960,
     fill = d3.scale.category10(),
     nodes = d3.range(100).map(Object);
 
-var vis = d3.select("#chart").append("svg:svg")
+var vis = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h);
 
@@ -27,7 +27,7 @@ var force = d3.layout.force()
 
 var node = vis.selectAll("circle.node")
     .data(nodes)
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("class", "node")
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })

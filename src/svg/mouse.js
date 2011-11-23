@@ -9,7 +9,7 @@ function d3_svg_mousePoint(container, e) {
   var point = (container.ownerSVGElement || container).createSVGPoint();
   if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
     var svg = d3.select(document.body)
-      .append("svg:svg")
+      .append("svg")
         .style("position", "absolute")
         .style("top", 0)
         .style("left", 0);

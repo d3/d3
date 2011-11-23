@@ -38,7 +38,7 @@ var force = d3.layout.force()
     .linkDistance(function(d) { return d.target._children ? 80 : 30; })
     .size([w, h]);
 
-var vis = d3.select("#chart").append("svg:svg")
+var vis = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h);
 
@@ -65,7 +65,7 @@ function update() {
       .data(links, function(d) { return d.target.id; });
 
   // Enter any new links.
-  link.enter().insert("svg:line", ".node")
+  link.enter().insert("line", ".node")
       .attr("class", "link")
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
@@ -84,7 +84,7 @@ function update() {
       .attr("r", function(d) { return d.children ? 4.5 : Math.sqrt(d.size) / 10; });
 
   // Enter any new nodes.
-  node.enter().append("svg:circle")
+  node.enter().append("circle")
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })

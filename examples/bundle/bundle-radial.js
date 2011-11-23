@@ -14,10 +14,10 @@ var line = d3.svg.line.radial()
     .radius(function(d) { return d.y; })
     .angle(function(d) { return d.x / 180 * Math.PI; });
 
-var vis = d3.select("#chart").append("svg:svg")
+var vis = d3.select("#chart").append("svg")
     .attr("width", r * 2)
     .attr("height", r * 2)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + r + "," + r + ")");
 
 d3.json("../data/flare-imports.json", function(classes) {
@@ -26,16 +26,16 @@ d3.json("../data/flare-imports.json", function(classes) {
 
   vis.selectAll("path.link")
       .data(splines = bundle(links))
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("class", "link")
       .attr("d", line);
 
   vis.selectAll("g.node")
       .data(nodes.filter(function(n) { return !n.children; }))
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) { return "rotate(" + (d.x - 90) + ")translate(" + d.y + ")"; })
-    .append("svg:text")
+    .append("text")
       .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })

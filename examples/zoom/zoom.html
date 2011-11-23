@@ -35,15 +35,15 @@ var w = 960,
     y2 = d3.scale.linear().range([h2, 0]);
 
 var svg = d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w)
     .attr("height", h1 + h2);
 
 // Focus view.
-var focus = svg.append("svg:g");
+var focus = svg.append("g");
 
 // Context view.
-var context = svg.append("svg:g")
+var context = svg.append("g")
     .attr("transform", "translate(0," + h1 + ")");
 
 d3.csv("dji.csv", function(csv) {
@@ -67,21 +67,21 @@ d3.csv("dji.csv", function(csv) {
   y2.domain([0, maxY]);
 
   // Focus view.
-  focus.append("svg:path")
+  focus.append("path")
       .data([csv])
       .attr("d", d3.svg.area()
       .x(function(d) { return x(d.x); })
       .y0(y1(0))
       .y1(function(d) { return y1(d.y); }));
 
-  focus.append("svg:line")
+  focus.append("line")
       .attr("x1", 0)
       .attr("x2", w)
       .attr("y1", y1(0))
       .attr("y2", y1(0));
 
   // Context view.
-  context.append("svg:rect")
+  context.append("rect")
       .attr("width", w)
       .attr("height", h2)
       .attr("fill", "none")
@@ -89,7 +89,7 @@ d3.csv("dji.csv", function(csv) {
       .attr("cursor", "crosshair")
       .on("mousedown", mousedown);
 
-  context.append("svg:path")
+  context.append("path")
       .data([csv])
       .attr("pointer-events", "none")
       .attr("d", d3.svg.area()
@@ -97,14 +97,14 @@ d3.csv("dji.csv", function(csv) {
       .y0(y2(0))
       .y1(function(d) { return y2(d.y); }));
 
-  context.append("svg:line")
+  context.append("line")
       .attr("x1", 0)
       .attr("x2", w)
       .attr("y1", y2(0))
       .attr("y2", y2(0));
 
   // Active focus region.
-  active = context.append("svg:rect")
+  active = context.append("rect")
       .attr("pointer-events", "none")
       .attr("id", "active")
       .attr("x", x(x0 = minX))

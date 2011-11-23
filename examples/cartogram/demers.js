@@ -15,7 +15,7 @@ var force = d3.layout.force()
     .gravity(0)
     .size([960, 500]);
 
-var svg = d3.select("#chart").append("svg:svg");
+var svg = d3.select("#chart").append("svg");
 
 d3.json("../data/us-state-centroids.json", function(states) {
   var project = d3.geo.albersUsa(),
@@ -70,7 +70,7 @@ d3.json("../data/us-state-centroids.json", function(states) {
 
   svg.selectAll("rect")
       .data(nodes)
-    .enter().append("svg:rect")
+    .enter().append("rect")
       .style("fill", function(d) { return color(d.value); })
       .attr("x", function(d) { return d.x - d.r; })
       .attr("y", function(d) { return d.y - d.r; })

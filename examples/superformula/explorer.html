@@ -65,7 +65,7 @@ var types = {
 var format = d3.format(".4n"),
     scale = d3.scale.linear().domain([-10, 20, 1000]).range([0, 800, 1000]);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", 960)
     .attr("height", 500);
 
@@ -74,7 +74,7 @@ var shape = superformula()
     .size(100000)
     .segments(3600);
 
-var path = svg.append("svg:path")
+var path = svg.append("path")
     .attr("class", "big")
     .attr("transform", "translate(480,250)")
     .attr("d", shape);

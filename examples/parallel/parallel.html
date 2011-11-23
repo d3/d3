@@ -57,10 +57,10 @@ var line = d3.svg.line(),
     background,
     foreground;
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
 d3.csv("cars.csv", function(cars) {
@@ -73,39 +73,39 @@ d3.csv("cars.csv", function(cars) {
   }));
 
   // Add grey background lines for context.
-  background = svg.append("svg:g")
+  background = svg.append("g")
       .attr("class", "background")
     .selectAll("path")
       .data(cars)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", path);
 
   // Add blue foreground lines for focus.
-  foreground = svg.append("svg:g")
+  foreground = svg.append("g")
       .attr("class", "foreground")
     .selectAll("path")
       .data(cars)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", path);
 
   // Add a group element for each dimension.
   var g = svg.selectAll(".dimension")
       .data(dimensions)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "dimension")
       .attr("transform", function(d) { return "translate(" + x(d) + ")"; });
 
   // Add an axis and title.
-  g.append("svg:g")
+  g.append("g")
       .attr("class", "axis")
       .each(function(d) { d3.select(this).call(axis.scale(y[d])); })
-    .append("svg:text")
+    .append("text")
       .attr("text-anchor", "middle")
       .attr("y", -9)
       .text(String);
 
   // Add and store a brush for each axis.
-  g.append("svg:g")
+  g.append("g")
       .attr("class", "brush")
       .each(function(d) { d3.select(this).call(y[d].brush = d3.svg.brush().y(y[d]).on("brush", brush)); })
     .selectAll("rect")

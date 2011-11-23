@@ -82,30 +82,30 @@ d3.csv("../data/stocks.csv", function(data) {
   // Add an SVG element for each symbol, with the desired dimensions and margin.
   var svg = d3.select("body").selectAll("svg")
       .data(symbols)
-    .enter().append("svg:svg")
+    .enter().append("svg")
       .attr("width", w + m[1] + m[3])
       .attr("height", h + m[0] + m[2])
-    .append("svg:g")
+    .append("g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
   // Add the area path elements. Note: the y-domain is set per element.
-  svg.append("svg:path")
+  svg.append("path")
       .attr("class", "area")
       .attr("d", function(d) { y.domain([0, d.maxPrice]); return area(d.values); });
 
   // Add the x-axis.
-  svg.append("svg:g")
+  svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + h + ")")
       .call(xAxis);
 
   // Add the line path elements. Note: the y-domain is set per element.
-  svg.append("svg:path")
+  svg.append("path")
       .attr("class", "line")
       .attr("d", function(d) { y.domain([0, d.maxPrice]); return line(d.values); });
 
   // Add a small label for the symbol name.
-  svg.append("svg:text")
+  svg.append("text")
       .attr("x", w - 6)
       .attr("y", h - 6)
       .attr("text-anchor", "end")

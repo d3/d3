@@ -32,13 +32,13 @@ d3.json("../data/flare-imports.json", function(classes) {
       .call(cell)
       .text(function(d) { return d.children ? null : d.key; });
 
-  div.append("svg:svg")
+  div.append("svg")
       .attr("width", w)
       .attr("height", h)
       .style("position", "absolute")
     .selectAll("path.link")
       .data(bundle(links))
-    .enter().append("svg:path")
+    .enter().append("path")
       .style("stroke", function(d) { return stroke(d[0].value); })
       .attr("class", "link")
       .attr("d", line);

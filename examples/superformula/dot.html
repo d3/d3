@@ -44,24 +44,24 @@ var w = 450,
     color = d3.scale.category10();
 
 var vis = d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w + p * 2)
     .attr("height", h + p * 2)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + p + "," + p + ")");
 
 var xrule = vis.selectAll("g.x")
     .data(x.ticks(10))
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "x");
 
-xrule.append("svg:line")
+xrule.append("line")
     .attr("x1", x)
     .attr("x2", x)
     .attr("y1", 0)
     .attr("y2", h);
 
-xrule.append("svg:text")
+xrule.append("text")
     .attr("x", x)
     .attr("y", h + 3)
     .attr("dy", ".71em")
@@ -70,29 +70,29 @@ xrule.append("svg:text")
 
 var yrule = vis.selectAll("g.y")
     .data(y.ticks(10))
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "y");
 
-yrule.append("svg:line")
+yrule.append("line")
     .attr("x1", 0)
     .attr("x2", w)
     .attr("y1", y)
     .attr("y2", y);
 
-yrule.append("svg:text")
+yrule.append("text")
     .attr("x", -3)
     .attr("y", y)
     .attr("dy", ".35em")
     .attr("text-anchor", "end")
     .text(y.tickFormat(10));
 
-vis.append("svg:rect")
+vis.append("rect")
     .attr("width", w)
     .attr("height", h);
 
 vis.selectAll("path.dot")
     .data(data)
-  .enter().append("svg:path")
+  .enter().append("path")
     .attr("class", "dot")
     .attr("stroke", function(d, i) { return color(i); })
     .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; })

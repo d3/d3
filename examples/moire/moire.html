@@ -20,22 +20,22 @@ var w = 960,
     h = 500;
 
 var svg = d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w)
     .attr("height", h)
     .attr("pointer-events", "all");
 
-svg.append("svg:g")
+svg.append("g")
   .selectAll("circle")
     .data(d3.range(110))
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")")
     .attr("r", function(d) { return d * 5; });
 
-var circle = svg.append("svg:g")
+var circle = svg.append("g")
   .selectAll("circle")
     .data(d3.range(60))
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")")
     .attr("r", function(d) { return d * 3; });
 

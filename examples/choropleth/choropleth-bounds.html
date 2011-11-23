@@ -22,9 +22,9 @@ svg {
     <script type="text/javascript">
 
 var svg = d3.select("body")
-  .append("svg:svg");
+  .append("svg");
 
-var counties = svg.append("svg:g")
+var counties = svg.append("g")
     .attr("id", "counties");
 
 var path = d3.geo.path();
@@ -32,7 +32,7 @@ var path = d3.geo.path();
 d3.json("../data/us-counties.json", function(json) {
   counties.selectAll("path")
       .data(json.features)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", function(d) {
         return path({
           type: "LineString",

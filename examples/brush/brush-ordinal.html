@@ -48,24 +48,24 @@ var m = [10, 10, 20, 10],
 
 var x = d3.scale.ordinal().domain(data).rangePoints([0, w], 1);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + h + ")")
     .call(d3.svg.axis().scale(x).orient("bottom"));
 
-var symbol = svg.append("svg:g").selectAll("path")
+var symbol = svg.append("g").selectAll("path")
     .data(data)
-  .enter().append("svg:path")
+  .enter().append("path")
     .attr("transform", function(d) { return "translate(" + x(d) + "," + (h / 2) + ")"; })
     .attr("d", d3.svg.symbol().type(String).size(200));
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "brush")
     .call(d3.svg.brush().x(x)
     .on("brushstart", brushstart)

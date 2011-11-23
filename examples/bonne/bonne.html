@@ -46,15 +46,15 @@ div {
 var xy = d3.geo.bonne(),
     path = d3.geo.path().projection(xy);
 
-var countries = d3.select("body").append("svg:svg")
+var countries = d3.select("body").append("svg")
     .attr("id", "countries");
 
 d3.json("../data/world-countries.json", function(collection) {
   countries.selectAll("path")
       .data(collection.features)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", path)
-    .append("svg:title")
+    .append("title")
       .text(function(d) { return d.properties.name; });
 });
 
