@@ -175,6 +175,9 @@ d3.quantile = function(values, p) {
       e = H - h;
   return e ? v + e * (values[h] - v) : v;
 };
+d3.transpose = function(matrix) {
+  return d3.zip.apply(d3, matrix);
+};
 d3.zip = function() {
   if (!(n = arguments.length)) return [];
   for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m;) {
