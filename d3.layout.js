@@ -324,11 +324,6 @@ d3.layout.force = function() {
     return (alpha *= .99) < .005;
   }
 
-  force.on = function(type, listener) {
-    event.on(type, listener);
-    return force;
-  };
-
   force.nodes = function(x) {
     if (!arguments.length) return nodes;
     nodes = x;
@@ -475,6 +470,7 @@ d3.layout.force = function() {
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
     if (!drag) drag = d3.behavior.drag()
+        .origin(Object)
         .on("dragstart", dragstart)
         .on("drag", d3_layout_forceDrag)
         .on("dragend", d3_layout_forceDragEnd);
@@ -489,7 +485,7 @@ d3.layout.force = function() {
     d3_layout_forceDragForce = force;
   }
 
-  return force;
+  return d3.rebind(force, event, "on");
 };
 
 var d3_layout_forceDragForce,
@@ -510,8 +506,8 @@ function d3_layout_forceDragEnd() {
 }
 
 function d3_layout_forceDrag() {
-  d3_layout_forceDragNode.px += d3.event.dx;
-  d3_layout_forceDragNode.py += d3.event.dy;
+  d3_layout_forceDragNode.px = d3.event.x;
+  d3_layout_forceDragNode.py = d3.event.y;
   d3_layout_forceDragForce.resume(); // restart annealing
 }
 
@@ -1120,10 +1116,10 @@ d3.layout.hierarchy = function() {
 
 // A method assignment helper for hierarchy subclasses.
 function d3_layout_hierarchyRebind(object, hierarchy) {
-  object.sort = d3.rebind(object, hierarchy.sort);
-  object.children = d3.rebind(object, hierarchy.children);
+  d3.rebind(object, hierarchy, "sort", "children", "value");
+
+  // Add an alias for links, for convenience.
   object.links = d3_layout_hierarchyLinks;
-  object.value = d3.rebind(object, hierarchy.value);
 
   // If the new API is used, enabling inlining.
   object.nodes = function(d) {

@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.5.1"}; // semver
+d3 = {version: "2.6.0"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -46,13 +46,22 @@ function d3_this() {
 d3.functor = function(v) {
   return typeof v === "function" ? v : function() { return v; };
 };
-// A getter-setter method that preserves the appropriate `this` context.
-d3.rebind = function(object, method) {
-  return function() {
-    var x = method.apply(object, arguments);
-    return arguments.length ? object : x;
-  };
+// Copies a variable number of methods from source to target.
+d3.rebind = function(target, source) {
+  var i = 1, n = arguments.length, method;
+  while (++i < n) target[method = arguments[i]] = d3_rebind(target, source, source[method]);
+  return target;
 };
+
+// Method is assumed to be a standard D3 getter-setter:
+// If passed with no arguments, gets the value.
+// If passed with arguments, sets the value and returns the target.
+function d3_rebind(target, source, method) {
+  return function() {
+    var value = method.apply(source, arguments);
+    return arguments.length ? target : value;
+  };
+}
 d3.ascending = function(a, b) {
   return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
 };
@@ -165,6 +174,9 @@ d3.quantile = function(values, p) {
       v = values[h - 1],
       e = H - h;
   return e ? v + e * (values[h] - v) : v;
+};
+d3.transpose = function(matrix) {
+  return d3.zip.apply(d3, matrix);
 };
 d3.zip = function() {
   if (!(n = arguments.length)) return [];
@@ -455,24 +467,22 @@ d3.xml = function(url, mime, callback) {
   }
   d3.xhr(url, mime, ready);
 };
+var d3_nsPrefix = {
+  svg: "http://www.w3.org/2000/svg",
+  xhtml: "http://www.w3.org/1999/xhtml",
+  xlink: "http://www.w3.org/1999/xlink",
+  xml: "http://www.w3.org/XML/1998/namespace",
+  xmlns: "http://www.w3.org/2000/xmlns/"
+};
+
 d3.ns = {
-
-  prefix: {
-    svg: "http://www.w3.org/2000/svg",
-    xhtml: "http://www.w3.org/1999/xhtml",
-    xlink: "http://www.w3.org/1999/xlink",
-    xml: "http://www.w3.org/XML/1998/namespace",
-    xmlns: "http://www.w3.org/2000/xmlns/"
-  },
-
+  prefix: d3_nsPrefix,
   qualify: function(name) {
     var i = name.indexOf(":");
-    return i < 0 ? name : {
-      space: d3.ns.prefix[name.substring(0, i)],
-      local: name.substring(i + 1)
-    };
+    return i < 0 ? (name in d3_nsPrefix
+      ? {space: d3_nsPrefix[name], local: name} : name)
+      : {space: d3_nsPrefix[name.substring(0, i)], local: name.substring(i + 1)};
   }
-
 };
 d3.dispatch = function() {
   var dispatch = new d3_dispatch(),
@@ -494,7 +504,9 @@ d3_dispatch.prototype.on = function(type, listener) {
     type = type.substring(0, i);
   }
 
-  this[type].on(name, listener);
+  return arguments.length < 2
+      ? this[type].on(name)
+      : (this[type].on(name, listener), this);
 };
 
 function d3_dispatch_event() {
@@ -506,24 +518,25 @@ function d3_dispatch_event() {
         i = -1,
         n = z.length,
         l;
-    while (++i < n) if ((l = z[i])._on) l.apply(this, arguments);
+    while (++i < n) if (l = z[i].on) l.apply(this, arguments);
   }
 
   dispatch.on = function(name, listener) {
     var l, i;
 
-    // remove the old listener, if any
+    // return the current listener, if any
+    if (arguments.length < 2) return (l = listenerByName[name]) && l.on;
+
+    // remove the old listener, if any (with copy-on-write)
     if (l = listenerByName[name]) {
-      l._on = false;
+      l.on = null;
       listeners = listeners.slice(0, i = listeners.indexOf(l)).concat(listeners.slice(i + 1));
       delete listenerByName[name];
     }
 
     // add the new listener, if any
     if (listener) {
-      listener._on = true;
-      listeners.push(listener);
-      listenerByName[name] = listener;
+      listeners.push(listenerByName[name] = {on: listener});
     }
 
     return dispatch;
@@ -1574,7 +1587,7 @@ d3_selectionPrototype.append = function(name) {
   name = d3.ns.qualify(name);
 
   function append() {
-    return this.appendChild(document.createElement(name));
+    return this.appendChild(document.createElementNS(this.namespaceURI, name));
   }
 
   function appendNS() {
@@ -1591,7 +1604,7 @@ d3_selectionPrototype.insert = function(name, before) {
 
   function insert() {
     return this.insertBefore(
-        document.createElement(name),
+        document.createElementNS(this.namespaceURI, name),
         d3_select(before, this));
   }
 
@@ -2313,6 +2326,10 @@ function d3_scaleExtent(domain) {
   var start = domain[0], stop = domain[domain.length - 1];
   return start < stop ? [start, stop] : [stop, start];
 }
+
+function d3_scaleRange(scale) {
+  return scale.rangeExtent ? scale.rangeExtent() : d3_scaleExtent(scale.range());
+}
 function d3_scale_nice(domain, nice) {
   var i0 = 0,
       i1 = domain.length - 1,
@@ -2411,11 +2428,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
 };
 
 function d3_scale_linearRebind(scale, linear) {
-  scale.range = d3.rebind(scale, linear.range);
-  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
-  scale.interpolate = d3.rebind(scale, linear.interpolate);
-  scale.clamp = d3.rebind(scale, linear.clamp);
-  return scale;
+  return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
 }
 
 function d3_scale_linearNice(dx) {
@@ -2686,6 +2699,10 @@ function d3_scale_ordinal(domain, ranger) {
 
   scale.rangeBand = function() {
     return rangeBand;
+  };
+
+  scale.rangeExtent = function() {
+    return ranger.x;
   };
 
   scale.copy = function() {
@@ -3783,9 +3800,9 @@ d3.svg.axis = function() {
         }
       } : Object;
 
-      // Ticks.
-      var ticks = scale.ticks.apply(scale, tickArguments_),
-          tickFormat = tickFormat_ == null ? scale.tickFormat.apply(scale, tickArguments_) : tickFormat_;
+      // Ticks, or domain values for ordinal scales.
+      var ticks = scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain(),
+          tickFormat = tickFormat_ == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : String) : tickFormat_;
 
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
@@ -3802,14 +3819,15 @@ d3.svg.axis = function() {
           tickTransform;
 
       // Domain.
-      var range = d3_scaleExtent(scale.range()),
+      var range = d3_scaleRange(scale),
           path = g.selectAll(".domain").data([0]),
           pathEnter = path.enter().append("svg:path").attr("class", "domain"),
           pathUpdate = transition(path);
 
-      // Stash the new scale and grab the old scale.
-      var scale0 = this.__chart__ || scale;
-      this.__chart__ = scale.copy();
+      // Stash a snapshot of the new scale, and retrieve the old snapshot.
+      var scale1 = scale.copy(),
+          scale0 = this.__chart__ || scale1;
+      this.__chart__ = scale1;
 
       tickEnter.append("svg:line").attr("class", "tick");
       tickEnter.append("svg:text");
@@ -3850,13 +3868,27 @@ d3.svg.axis = function() {
         }
       }
 
-      tickEnter.call(tickTransform, scale0);
-      tickUpdate.call(tickTransform, scale);
-      tickExit.call(tickTransform, scale);
+      // For quantitative scales:
+      // - enter new ticks from the old scale
+      // - exit old ticks to the new scale
+      if (scale.ticks) {
+        tickEnter.call(tickTransform, scale0);
+        tickUpdate.call(tickTransform, scale1);
+        tickExit.call(tickTransform, scale1);
+        subtickEnter.call(tickTransform, scale0);
+        subtickUpdate.call(tickTransform, scale1);
+        subtickExit.call(tickTransform, scale1);
+      }
 
-      subtickEnter.call(tickTransform, scale0);
-      subtickUpdate.call(tickTransform, scale);
-      subtickExit.call(tickTransform, scale);
+      // For ordinal scales:
+      // - any entering ticks are undefined in the old scale
+      // - any exiting ticks are undefined in the new scale
+      // Therefore, we only need to transition updating ticks.
+      else {
+        var dx = scale1.rangeBand() / 2, x = function(d) { return scale1(d) + dx; };
+        tickEnter.call(tickTransform, x);
+        tickUpdate.call(tickTransform, x);
+      }
     });
   }
 
@@ -3985,12 +4017,12 @@ d3.svg.brush = function() {
       // Initialize the background to fill the defined range.
       // If the range isn't defined, you can post-process.
       if (x) {
-        e = d3_scaleExtent(x.range());
+        e = d3_scaleRange(x);
         bg.attr("x", e[0]).attr("width", e[1] - e[0]);
         d3_svg_brushRedrawX(g, extent);
       }
       if (y) {
-        e = d3_scaleExtent(y.range());
+        e = d3_scaleRange(y);
         bg.attr("y", e[0]).attr("height", e[1] - e[0]);
         d3_svg_brushRedrawY(g, extent);
       }
@@ -4067,11 +4099,13 @@ d3.svg.brush = function() {
     // Invert the pixel extent to data-space.
     if (!arguments.length) {
       if (x) {
-        x0 = x.invert(extent[0][0]), x1 = x.invert(extent[1][0]);
+        x0 = extent[0][0], x1 = extent[1][0];
+        if (x.invert) x0 = x.invert(x0), x1 = x.invert(x1);
         if (x1 < x0) t = x0, x0 = x1, x1 = t;
       }
       if (y) {
-        y0 = y.invert(extent[0][1]), y1 = y.invert(extent[1][1]);
+        y0 = extent[0][1], y1 = extent[1][1];
+        if (y.invert) y0 = y.invert(y0), y1 = y.invert(y1);
         if (y1 < y0) t = y0, y0 = y1, y1 = t;
       }
       return x && y ? [[x0, y0], [x1, y1]] : x ? [x0, x1] : y && [y0, y1];
@@ -4081,14 +4115,14 @@ d3.svg.brush = function() {
     if (x) {
       x0 = z[0], x1 = z[1];
       if (y) x0 = x0[0], x1 = x1[0];
-      x0 = x(x0), x1 = x(x1);
+      if (x.invert) x0 = x(x0), x1 = x(x1);
       if (x1 < x0) t = x0, x0 = x1, x1 = t;
       extent[0][0] = x0, extent[1][0] = x1;
     }
     if (y) {
       y0 = z[0], y1 = z[1];
       if (x) y0 = y0[1], y1 = y1[1];
-      y0 = y(y0), y1 = y(y1);
+      if (y.invert) y0 = y(y0), y1 = y(y1);
       if (y1 < y0) t = y0, y0 = y1, y1 = t;
       extent[0][1] = y0, extent[1][1] = y1;
     }
@@ -4109,18 +4143,13 @@ d3.svg.brush = function() {
         || (y && extent[0][1] === extent[1][1]);
   };
 
-  brush.on = function(type, listener) {
-    event.on(type, listener);
-    return brush;
-  };
-
   d3.select(window)
       .on("mousemove.brush", d3_svg_brushMove)
       .on("mouseup.brush", d3_svg_brushUp)
       .on("keydown.brush", d3_svg_brushKeydown)
       .on("keyup.brush", d3_svg_brushKeyup);
 
-  return brush;
+  return d3.rebind(brush, event, "on");
 };
 
 var d3_svg_brush,
@@ -4208,7 +4237,9 @@ function d3_svg_brushMove() {
 }
 
 function d3_svg_brushMove1(mouse, scale, i) {
-  var range = d3_scaleExtent(scale.range()),
+  var range = d3_scaleRange(scale),
+      r0 = range[0],
+      r1 = range[1],
       offset = d3_svg_brushOffset[i],
       size = d3_svg_brushExtent[1][i] - d3_svg_brushExtent[0][i],
       min,
@@ -4216,12 +4247,12 @@ function d3_svg_brushMove1(mouse, scale, i) {
 
   // When dragging, reduce the range by the extent size and offset.
   if (d3_svg_brushDrag) {
-    range[0] -= offset;
-    range[1] -= size + offset;
+    r0 -= offset;
+    r1 -= size + offset;
   }
 
   // Clamp the mouse so that the extent fits within the range extent.
-  min = Math.max(range[0], Math.min(range[1], mouse[i]));
+  min = Math.max(r0, Math.min(r1, mouse[i]));
 
   // Compute the new extent bounds.
   if (d3_svg_brushDrag) {
@@ -4229,7 +4260,7 @@ function d3_svg_brushMove1(mouse, scale, i) {
   } else {
 
     // If the ALT key is pressed, then preserve the center of the extent.
-    if (d3_svg_brushCenter) offset = Math.max(range[0], Math.min(range[1], 2 * d3_svg_brushCenter[i] - min));
+    if (d3_svg_brushCenter) offset = Math.max(r0, Math.min(r1, 2 * d3_svg_brushCenter[i] - min));
 
     // Compute the min and max of the offset and mouse.
     if (offset < min) {
@@ -4275,8 +4306,11 @@ var d3_svg_brushCursor = {
   sw: "nesw-resize"
 };
 d3.behavior = {};
+// TODO Track touch points by identifier.
+
 d3.behavior.drag = function() {
-  var event = d3.dispatch("drag", "dragstart", "dragend");
+  var event = d3.dispatch("drag", "dragstart", "dragend"),
+      origin = null;
 
   function drag() {
     this
@@ -4295,9 +4329,16 @@ d3.behavior.drag = function() {
   function start() {
     d3_behavior_dragEvent = event;
     d3_behavior_dragEventTarget = d3.event.target;
-    d3_behavior_dragOffset = d3_behavior_dragPoint((d3_behavior_dragTarget = this).parentNode);
-    d3_behavior_dragMoved = 0;
+    d3_behavior_dragTarget = this;
     d3_behavior_dragArguments = arguments;
+    d3_behavior_dragOrigin = d3_behavior_dragPoint();
+    if (origin) {
+      d3_behavior_dragOffset = origin.apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
+      d3_behavior_dragOffset = [d3_behavior_dragOffset.x - d3_behavior_dragOrigin[0], d3_behavior_dragOffset.y - d3_behavior_dragOrigin[1]];
+    } else {
+      d3_behavior_dragOffset = [0, 0];
+    }
+    d3_behavior_dragMoved = 0;
   }
 
   function mousedown() {
@@ -4305,12 +4346,13 @@ d3.behavior.drag = function() {
     d3_behavior_dragDispatch("dragstart");
   }
 
-  drag.on = function(type, listener) {
-    event.on(type, listener);
+  drag.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = x;
     return drag;
   };
 
-  return drag;
+  return d3.rebind(drag, event, "on");
 };
 
 var d3_behavior_dragEvent,
@@ -4318,34 +4360,39 @@ var d3_behavior_dragEvent,
     d3_behavior_dragTarget,
     d3_behavior_dragArguments,
     d3_behavior_dragOffset,
-    d3_behavior_dragMoved,
-    d3_behavior_dragStopClick;
+    d3_behavior_dragOrigin,
+    d3_behavior_dragMoved;
 
 function d3_behavior_dragDispatch(type) {
-  var o = d3.event, p = d3_behavior_dragTarget.parentNode, dx = 0, dy = 0;
+  var p = d3_behavior_dragPoint(),
+      o = d3.event,
+      e = d3.event = {type: type};
 
   if (p) {
-    p = d3_behavior_dragPoint(p);
-    dx = p[0] - d3_behavior_dragOffset[0];
-    dy = p[1] - d3_behavior_dragOffset[1];
-    d3_behavior_dragOffset = p;
-    d3_behavior_dragMoved |= dx | dy;
+    e.x = p[0] + d3_behavior_dragOffset[0];
+    e.y = p[1] + d3_behavior_dragOffset[1];
+    e.dx = p[0] - d3_behavior_dragOrigin[0];
+    e.dy = p[1] - d3_behavior_dragOrigin[1];
+    d3_behavior_dragMoved |= e.dx | e.dy;
+    d3_behavior_dragOrigin = p;
   }
 
   try {
-    d3.event = {dx: dx, dy: dy};
     d3_behavior_dragEvent[type].apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
   } finally {
     d3.event = o;
   }
 
+  o.stopPropagation();
   o.preventDefault();
 }
 
-function d3_behavior_dragPoint(container, type) {
-  // TODO Track touch points by identifier.
-  var t = d3.event.changedTouches;
-  return t ? d3.svg.touches(container, t)[0] : d3.svg.mouse(container);
+function d3_behavior_dragPoint() {
+  var p = d3_behavior_dragTarget.parentNode,
+      t = d3.event.changedTouches;
+  return p && (t
+      ? d3.svg.touches(p, t)[0]
+      : d3.svg.mouse(p));
 }
 
 function d3_behavior_dragMove() {
@@ -4362,21 +4409,26 @@ function d3_behavior_dragMove() {
 function d3_behavior_dragUp() {
   if (!d3_behavior_dragTarget) return;
   d3_behavior_dragDispatch("dragend");
-  d3_behavior_dragTarget = null;
 
   // If the node was moved, prevent the mouseup from propagating.
   // Also prevent the subsequent click from propagating (e.g., for anchors).
-  if (d3_behavior_dragMoved && d3_behavior_dragEventTarget === d3.event.target) {
-    d3_behavior_dragStopClick = true;
+  if (d3_behavior_dragMoved) {
     d3_eventCancel();
+    d3_behavior_dragMoved = d3.event.target === d3_behavior_dragEventTarget;
   }
+
+  d3_behavior_dragEvent =
+  d3_behavior_dragEventTarget =
+  d3_behavior_dragTarget =
+  d3_behavior_dragArguments =
+  d3_behavior_dragOffset =
+  d3_behavior_dragOrigin = null;
 }
 
 function d3_behavior_dragClick() {
-  if (d3_behavior_dragStopClick && d3_behavior_dragEventTarget === d3.event.target) {
+  if (d3_behavior_dragMoved) {
     d3_eventCancel();
-    d3_behavior_dragStopClick = false;
-    d3_behavior_dragEventTarget = null;
+    d3_behavior_dragMoved = 0;
   }
 }
 // TODO unbind zoom behavior?
@@ -4414,7 +4466,7 @@ d3.behavior.zoom = function() {
   function mousedown() {
     start.apply(this, arguments);
     d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
-    d3_behavior_zoomMoved = false;
+    d3_behavior_zoomMoved = 0;
     d3.event.preventDefault();
     window.focus();
   }
@@ -4450,12 +4502,7 @@ d3.behavior.zoom = function() {
     return zoom;
   };
 
-  zoom.on = function(type, listener) {
-    event.on(type, listener);
-    return zoom;
-  };
-
-  return zoom;
+  return d3.rebind(zoom, event, "on");
 };
 
 var d3_behavior_zoomDiv,
@@ -4469,8 +4516,7 @@ var d3_behavior_zoomDiv,
     d3_behavior_zoomEventTarget,
     d3_behavior_zoomTarget,
     d3_behavior_zoomArguments,
-    d3_behavior_zoomMoved,
-    d3_behavior_zoomStopClick;
+    d3_behavior_zoomMoved;
 
 function d3_behavior_zoomLocation(point) {
   return [
@@ -4550,27 +4596,32 @@ function d3_behavior_zoomTouchmove() {
 function d3_behavior_zoomMousemove() {
   d3_behavior_zoomZooming = null;
   if (d3_behavior_zoomPanning) {
-    d3_behavior_zoomMoved = true;
+    d3_behavior_zoomMoved = 1;
     d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
   }
 }
 
 function d3_behavior_zoomMouseup() {
   if (d3_behavior_zoomPanning) {
-    if (d3_behavior_zoomMoved && d3_behavior_zoomEventTarget === d3.event.target) {
-      d3_behavior_zoomStopClick = true;
+    if (d3_behavior_zoomMoved) {
+      d3_eventCancel();
+      d3_behavior_zoomMoved = d3_behavior_zoomEventTarget === d3.event.target;
     }
-    d3_behavior_zoomMousemove();
+
+    d3_behavior_zoomXyz =
+    d3_behavior_zoomExtent =
+    d3_behavior_zoomDispatch =
+    d3_behavior_zoomEventTarget =
+    d3_behavior_zoomTarget =
+    d3_behavior_zoomArguments =
     d3_behavior_zoomPanning = null;
   }
 }
 
 function d3_behavior_zoomClick() {
-  if (d3_behavior_zoomStopClick && d3_behavior_zoomEventTarget === d3.event.target) {
-    d3.event.stopPropagation();
-    d3.event.preventDefault();
-    d3_behavior_zoomStopClick = false;
-    d3_behavior_zoomEventTarget = null;
+  if (d3_behavior_zoomMoved) {
+    d3_eventCancel();
+    d3_behavior_zoomMoved = 0;
   }
 }
 
