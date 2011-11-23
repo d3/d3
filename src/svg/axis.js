@@ -34,13 +34,13 @@ d3.svg.axis = function() {
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
           subtick = g.selectAll(".minor").data(subticks, String),
-          subtickEnter = subtick.enter().insert("svg:line", "g").attr("class", "tick minor").style("opacity", 1e-6),
+          subtickEnter = subtick.enter().insert("line", "g").attr("class", "tick minor").style("opacity", 1e-6),
           subtickExit = transition(subtick.exit()).style("opacity", 1e-6).remove(),
           subtickUpdate = transition(subtick).style("opacity", 1);
 
       // Major ticks.
       var tick = g.selectAll("g").data(ticks, String),
-          tickEnter = tick.enter().insert("svg:g", "path").style("opacity", 1e-6),
+          tickEnter = tick.enter().insert("g", "path").style("opacity", 1e-6),
           tickExit = transition(tick.exit()).style("opacity", 1e-6).remove(),
           tickUpdate = transition(tick).style("opacity", 1),
           tickTransform;
@@ -48,7 +48,7 @@ d3.svg.axis = function() {
       // Domain.
       var range = d3_scaleRange(scale),
           path = g.selectAll(".domain").data([0]),
-          pathEnter = path.enter().append("svg:path").attr("class", "domain"),
+          pathEnter = path.enter().append("path").attr("class", "domain"),
           pathUpdate = transition(path);
 
       // Stash a snapshot of the new scale, and retrieve the old snapshot.
@@ -56,8 +56,8 @@ d3.svg.axis = function() {
           scale0 = this.__chart__ || scale1;
       this.__chart__ = scale1;
 
-      tickEnter.append("svg:line").attr("class", "tick");
-      tickEnter.append("svg:text");
+      tickEnter.append("line").attr("class", "tick");
+      tickEnter.append("text");
       tickUpdate.select("text").text(tickFormat);
 
       switch (orient) {
