@@ -17,8 +17,8 @@ function category(category, n) {
   return {
     "is an ordinal scale": function() {
       var x = category(), colors = x.range();
-      assert.length(x.domain(), 0);
-      assert.length(x.range(), n);
+      assert.lengthOf(x.domain(), 0);
+      assert.lengthOf(x.range(), n);
       assert.equal(x(1), colors[0]);
       assert.equal(x(2), colors[1]);
       assert.equal(x(1), colors[0]);
@@ -39,7 +39,7 @@ function category(category, n) {
     },
     "contains the expected number of values in the range": function() {
       var x = category();
-      assert.length(x.range(), n);
+      assert.lengthOf(x.range(), n);
     },
     "each range value is distinct": function() {
       var map = {}, count = 0, x = category();

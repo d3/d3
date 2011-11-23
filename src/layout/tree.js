@@ -42,9 +42,9 @@ d3.layout.tree = function() {
     function secondWalk(node, x) {
       node.x = node._tree.prelim + x;
       var children = node.children;
-      if (children) {
+      if (children && (n = children.length)) {
         var i = -1,
-            n = children.length;
+            n;
         x += node._tree.mod;
         while (++i < n) {
           secondWalk(children[i], x);
@@ -149,18 +149,21 @@ function d3_layout_treeSeparation(a, b) {
 // }
 
 function d3_layout_treeLeft(node) {
-  return node.children ? node.children[0] : node._tree.thread;
+  var children = node.children;
+  return children && children.length ? children[0] : node._tree.thread;
 }
 
 function d3_layout_treeRight(node) {
-  return node.children ? node.children[node.children.length - 1] : node._tree.thread;
+  var children = node.children,
+      n;
+  return children && (n = children.length) ? children[n - 1] : node._tree.thread;
 }
 
 function d3_layout_treeSearch(node, compare) {
   var children = node.children;
-  if (children) {
+  if (children && (n = children.length)) {
     var child,
-        n = children.length,
+        n,
         i = -1;
     while (++i < n) {
       if (compare(child = d3_layout_treeSearch(children[i], compare), node) > 0) {
@@ -186,11 +189,11 @@ function d3_layout_treeDeepest(a, b) {
 function d3_layout_treeVisitAfter(node, callback) {
   function visit(node, previousSibling) {
     var children = node.children;
-    if (children) {
+    if (children && (n = children.length)) {
       var child,
           previousChild = null,
           i = -1,
-          n = children.length;
+          n;
       while (++i < n) {
         child = children[i];
         visit(child, previousChild);

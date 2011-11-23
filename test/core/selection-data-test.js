@@ -109,6 +109,7 @@ suite.addBatch({
     },
     "defines an enter selection for entering data": function(span) {
       var enter = span.data(d3.range(4)).enter();
+      assert.isFalse(enter.empty());
       assert.equal(enter.length, 2);
       assert.equal(enter[0].length, 4);
       assert.equal(enter[1].length, 4);
@@ -123,6 +124,7 @@ suite.addBatch({
     },
     "defines an exit selection for exiting data": function(span) {
       var exit = span.data(d3.range(1)).exit();
+      assert.isFalse(exit.empty());
       assert.equal(exit.length, 2);
       assert.equal(exit[0].length, 2);
       assert.equal(exit[1].length, 2);
@@ -133,6 +135,7 @@ suite.addBatch({
     },
     "observes the specified key function": function(span) {
       var update = span.data([1, 2], Number);
+      assert.isFalse(update.empty());
       assert.equal(update.length, 2);
       assert.equal(update[0].length, 2);
       assert.equal(update[1].length, 2);

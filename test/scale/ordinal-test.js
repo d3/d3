@@ -29,17 +29,39 @@ suite.addBatch({
         var x = ordinal().range(["foo", "bar"]);
         assert.equal(x(1), "foo");
         assert.equal(x(0), "bar");
-        assert.deepEqual(x.domain(), ["0", "1"]);
+        assert.deepEqual(x.domain(), [1, 0]);
         x.domain(["0", "1"]);
         assert.equal(x(0), "foo"); // it changed!
         assert.equal(x(1), "bar");
         assert.deepEqual(x.domain(), ["0", "1"]);
       },
-      "coerces domain values to strings": function(ordinal) {
+      "uniqueness is based on string coercion": function(ordinal) {
+        var x = ordinal().domain(["foo"]).range([42, 43, 44]);
+        assert.equal(x(new String("foo")), 42);
+        assert.equal(x({toString: function() { return "foo"; }}), 42);
+        assert.equal(x({toString: function() { return "bar"; }}), 43);
+      },
+      "orders domain values by the order in which they are seen": function(ordinal) {
+        var x = ordinal();
+        x("foo");
+        x("bar");
+        x("baz");
+        assert.deepEqual(x.domain(), ["foo", "bar", "baz"]);
+        x.domain(["baz", "bar"]);
+        x("foo");
+        assert.deepEqual(x.domain(), ["baz", "bar", "foo"]);
+        x.domain(["baz", "foo"]);
+        assert.deepEqual(x.domain(), ["baz", "foo"]);
+        x.domain([]);
+        x("foo");
+        x("bar");
+        assert.deepEqual(x.domain(), ["foo", "bar"]);
+      },
+      "does not coerce domain values to strings": function(ordinal) {
         var x = ordinal().domain([0, 1]);
-        assert.deepEqual(x.domain(), ["0", "1"]);
-        assert.typeOf(x.domain()[0], "string");
-        assert.typeOf(x.domain()[1], "string");
+        assert.deepEqual(x.domain(), [0, 1]);
+        assert.typeOf(x.domain()[0], "number");
+        assert.typeOf(x.domain()[1], "number");
       }
     },
 
@@ -88,6 +110,9 @@ suite.addBatch({
         assert.equal(x.rangeBand(), 0);
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 1);
         assert.deepEqual(x.range(), [20, 60, 100]);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 2);
+        assert.deepEqual(x.range(), [30, 60, 90]);
         assert.equal(x.rangeBand(), 0);
       }
     },

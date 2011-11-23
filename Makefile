@@ -1,23 +1,22 @@
 # See the README for installation instructions.
 
-JS_COMPILER = ./node_modules/uglify-js/bin/uglifyjs
-JS_TESTER = ./node_modules/vows/bin/vows
+NODE_PATH ?= ./node_modules
+JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
+JS_TESTER = $(NODE_PATH)/vows/bin/vows
+
+JS_FILES = \
+	d3.js \
+	d3.chart.js \
+	d3.layout.js \
+	d3.csv.js \
+	d3.geo.js \
+	d3.geom.js \
+	d3.time.js
 
 all: \
-	d3.js \
-	d3.min.js \
-	d3.chart.js \
-	d3.chart.min.js \
-	d3.layout.js \
-	d3.layout.min.js \
-	d3.csv.js \
-	d3.csv.min.js \
-	d3.geo.js \
-	d3.geo.min.js \
-	d3.geom.js \
-	d3.geom.min.js \
-	d3.time.js \
-	d3.time.min.js
+	$(JS_FILES) \
+	$(JS_FILES:.js=.min.js) \
+	package.json
 
 # Modify this rule to build your own custom release.
 # Run `make d3.custom.min.js` to produce the minified version.
@@ -36,17 +35,22 @@ d3.custom.js: \
 	src/end.js
 
 d3.core.js: \
+	src/compat/date.js \
+	src/compat/style.js \
 	src/core/core.js \
-	src/core/date.js \
-	src/core/object.js \
 	src/core/array.js \
 	src/core/this.js \
 	src/core/functor.js \
 	src/core/rebind.js \
 	src/core/ascending.js \
 	src/core/descending.js \
+	src/core/mean.js \
+	src/core/median.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/extent.js \
+	src/core/random.js \
+	src/core/number.js \
 	src/core/sum.js \
 	src/core/quantile.js \
 	src/core/zip.js \
@@ -72,6 +76,7 @@ d3.core.js: \
 	src/core/ns.js \
 	src/core/dispatch.js \
 	src/core/format.js \
+	src/core/formatPrefix.js \
 	src/core/ease.js \
 	src/core/event.js \
 	src/core/interpolate.js \
@@ -91,8 +96,6 @@ d3.core.js: \
 	src/core/selection-insert.js \
 	src/core/selection-remove.js \
 	src/core/selection-data.js \
-	src/core/selection-enter.js \
-	src/core/selection-enter-select.js \
 	src/core/selection-filter.js \
 	src/core/selection-map.js \
 	src/core/selection-sort.js \
@@ -103,6 +106,8 @@ d3.core.js: \
 	src/core/selection-node.js \
 	src/core/selection-transition.js \
 	src/core/selection-root.js \
+	src/core/selection-enter.js \
+	src/core/selection-enter-select.js \
 	src/core/transition.js \
 	src/core/transition-select.js \
 	src/core/transition-selectAll.js \
@@ -115,6 +120,7 @@ d3.core.js: \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
 	src/core/timer.js \
+	src/core/transform.js \
 	src/core/noop.js
 
 d3.scale.js: \
@@ -144,7 +150,8 @@ d3.svg.js: \
 	src/svg/mouse.js \
 	src/svg/touches.js \
 	src/svg/symbol.js \
-	src/svg/axis.js
+	src/svg/axis.js \
+	src/svg/brush.js
 
 d3.behavior.js: \
 	src/behavior/behavior.js \
@@ -182,9 +189,15 @@ d3.geo.js: \
 	src/geo/geo.js \
 	src/geo/azimuthal.js \
 	src/geo/albers.js \
+	src/geo/bonne.js \
+	src/geo/equirectangular.js \
 	src/geo/mercator.js \
+	src/geo/type.js \
 	src/geo/path.js \
 	src/geo/bounds.js \
+	src/geo/circle.js \
+	src/geo/greatArc.js \
+	src/geo/greatCircle.js \
 	src/end.js
 
 d3.csv.js: \
@@ -237,10 +250,17 @@ test: all
 	@rm -f $@
 	$(JS_COMPILER) < $< > $@
 
-d3.js d3%.js: Makefile
+d3.%: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
+
+install:
+	mkdir -p node_modules
+	npm install
+
+package.json: d3.js src/package.js
+	node src/package.js > $@
 
 clean:
 	rm -f d3*.js

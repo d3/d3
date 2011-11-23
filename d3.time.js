@@ -78,6 +78,7 @@ var d3_time_formats = {
   H: function(d) { return d3_time_zfill2(d.getHours()); },
   I: function(d) { return d3_time_zfill2(d.getHours() % 12 || 12); },
   j: d3_time_dayOfYear,
+  L: function(d) { return d3_time_zfill3(d.getMilliseconds()); },
   m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
   M: function(d) { return d3_time_zfill2(d.getMinutes()); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
@@ -104,6 +105,7 @@ var d3_time_parsers = {
   H: d3_time_parseHour24,
   I: d3_time_parseHour12,
   // j: function(d, s, i) { /*TODO day of year [001,366] */ return i; },
+  L: d3_time_parseMilliseconds,
   m: d3_time_parseMonthNumber,
   M: d3_time_parseMinutes,
   p: d3_time_parseAmPm,
@@ -277,6 +279,12 @@ function d3_time_parseSeconds(date, string, i) {
   return n ? (date.setSeconds(+n[0]), i += n[0].length) : -1;
 }
 
+function d3_time_parseMilliseconds(date, string, i) {
+  d3_time_numberRe.lastIndex = 0;
+  var n = d3_time_numberRe.exec(string.substring(i, i + 3));
+  return n ? (date.setMilliseconds(+n[0]), i += n[0].length) : -1;
+}
+
 // Note: we don't look at the next directive.
 var d3_time_numberRe = /\s*\d+/;
 
@@ -294,18 +302,22 @@ function d3_time_year(d) {
   return new d3_time(d.getFullYear(), 0, 1);
 }
 
+function d3_time_daysElapsed(d0, d1) {
+  return ~~((d1 - d0) / 864e5 - (d1.getTimezoneOffset() - d0.getTimezoneOffset()) / 1440);
+}
+
 function d3_time_dayOfYear(d) {
-  return d3_time_zfill3(1 + ~~((d - d3_time_year(d)) / 864e5));
+  return d3_time_zfill3(1 + d3_time_daysElapsed(d3_time_year(d), d));
 }
 
 function d3_time_weekNumberSunday(d) {
   var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~(((d - d0) / 864e5 + d0.getDay()) / 7));
+  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + d0.getDay()) / 7));
 }
 
 function d3_time_weekNumberMonday(d) {
   var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~(((d - d0) / 864e5 + (d0.getDay() + 6) % 7) / 7));
+  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + (d0.getDay() + 6) % 7) / 7));
 }
 
 // TODO table of time zone offset names?
@@ -320,9 +332,14 @@ d3.time.format.utc = function(template) {
   var local = d3.time.format(template);
 
   function format(date) {
-    var utc = new d3_time_format_utc();
-    utc._ = date;
-    return local(utc);
+    try {
+      d3_time = d3_time_format_utc;
+      var utc = new d3_time();
+      utc._ = date;
+      return local(utc);
+    } finally {
+      d3_time = Date;
+    }
   }
 
   format.parse = function(string) {
@@ -364,7 +381,19 @@ d3_time_format_utc.prototype = {
   setMonth: function(x) { this._.setUTCMonth(x); },
   setSeconds: function(x) { this._.setUTCSeconds(x); }
 };
-d3.time.format.iso = d3.time.format.utc("%Y-%m-%dT%H:%M:%SZ");
+var d3_time_formatIso = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
+
+d3.time.format.iso = Date.prototype.toISOString ? d3_time_formatIsoNative : d3_time_formatIso;
+
+function d3_time_formatIsoNative(date) {
+  return date.toISOString();
+}
+
+d3_time_formatIsoNative.parse = function(string) {
+  return new Date(string);
+};
+
+d3_time_formatIsoNative.toString = d3_time_formatIso.toString;
 function d3_time_range(floor, step, number) {
   return function(t0, t1, dt) {
     var time = floor(t0), times = [];
@@ -541,12 +570,7 @@ function d3_time_scale(linear, methods, format) {
   };
 
   // TOOD expose d3_scale_linear_rebind?
-  scale.range = d3.rebind(scale, linear.range);
-  scale.rangeRound = d3.rebind(scale, linear.rangeRound);
-  scale.interpolate = d3.rebind(scale, linear.interpolate);
-  scale.clamp = d3.rebind(scale, linear.clamp);
-
-  return scale;
+  return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
 }
 
 // TODO expose d3_scaleExtent?

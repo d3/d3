@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <title>Bonne Projection</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.geo.js"></script>
+    <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
+    <style type="text/css">
+
+@import url("../../lib/jquery-ui/jquery-ui.css");
+
+body, .ui-widget {
+  font: 14px Helvetica Neue;
+}
+
+svg {
+  width: 960px;
+  height: 500px;
+  border: solid 1px #ccc;
+  background: #eee;
+}
+
+line {
+  stroke: brown;
+  stroke-dasharray: 4,2;
+}
+
+path {
+  fill: #ccc;
+  stroke: #fff;
+}
+
+div {
+  width: 960px;
+}
+
+    </style>
+  </head>
+  <body>
+    <h3>Bonne Projection</h3>
+    <script type="text/javascript">
+
+// Our projection.
+var xy = d3.geo.bonne(),
+    path = d3.geo.path().projection(xy);
+
+var countries = d3.select("body").append("svg:svg")
+    .attr("id", "countries");
+
+d3.json("../data/world-countries.json", function(collection) {
+  countries.selectAll("path")
+      .data(collection.features)
+    .enter().append("svg:path")
+      .attr("d", path)
+    .append("svg:title")
+      .text(function(d) { return d.properties.name; });
+});
+
+function refresh() {
+  countries.selectAll("path")
+      .attr("d", path);
+  d3.select("#lon span")
+      .text(xy.origin()[0]);
+  d3.select("#lat span")
+      .text(xy.origin()[1]);
+  d3.select("#parallel span")
+      .text(xy.parallel());
+  d3.select("#scale span")
+      .text(xy.scale());
+  d3.select("#translate-x span")
+      .text(xy.translate()[0]);
+  d3.select("#translate-y span")
+      .text(xy.translate()[1]);
+}
+
+    </script><p>
+    <div id="lon">origin.longitude: <span>0</span></div>
+    <div id="lat">origin.latitude: <span>0</span></div><p>
+    <div id="parallel">parallel: <span>45</span></div><p>
+    <div id="scale">scale: <span>200</span></div><p>
+    <div id="translate-x">translate.x: <span>480</span></div>
+    <div id="translate-y">translate.y: <span>250</span></div>
+    <script type="text/javascript">
+
+$("#lon").slider({
+  min: -180,
+  max: 180,
+  step: 1e-1,
+  value: 0,
+  slide: function(event, ui) {
+    var origin = xy.origin();
+    origin[0] = ui.value;
+    xy.origin(origin);
+    refresh();
+  }
+});
+
+$("#lat").slider({
+  min: -90,
+  max: 90,
+  step: 1e-1,
+  value: 0,
+  slide: function(event, ui) {
+    var origin = xy.origin();
+    origin[1] = ui.value;
+    xy.origin(origin);
+    refresh();
+  }
+});
+
+$("#parallel").slider({
+  min: 0,
+  max: 90,
+  value: 45,
+  slide: function(event, ui) {
+    xy.parallel(ui.value);
+    refresh();
+  }
+});
+
+$("#scale").slider({
+  min: 0,
+  max: 800,
+  value: 200,
+  slide: function(event, ui) {
+    xy.scale(ui.value);
+    refresh();
+  }
+});
+
+$("#translate-x").slider({
+  min: -2000,
+  max: 2000,
+  value: 480,
+  slide: function(event, ui) {
+    var translate = xy.translate();
+    translate[0] = ui.value;
+    xy.translate(translate);
+    refresh();
+  }
+});
+
+$("#translate-y").slider({
+  min: -2000,
+  max: 2000,
+  value: 250,
+  slide: function(event, ui) {
+    var translate = xy.translate();
+    translate[1] = ui.value;
+    xy.translate(translate);
+    refresh();
+  }
+});
+
+    </script>
+  </body>
+</html>

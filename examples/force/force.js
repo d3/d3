@@ -2,14 +2,14 @@ var w = 960,
     h = 500,
     fill = d3.scale.category20();
 
-var vis = d3.select("#chart")
-  .append("svg:svg")
+var vis = d3.select("#chart").append("svg:svg")
     .attr("width", w)
     .attr("height", h);
 
 d3.json("miserables.json", function(json) {
   var force = d3.layout.force()
-      .charge(-60)
+      .charge(-120)
+      .linkDistance(30)
       .nodes(json.nodes)
       .links(json.links)
       .size([w, h])
@@ -37,11 +37,6 @@ d3.json("miserables.json", function(json) {
 
   node.append("svg:title")
       .text(function(d) { return d.name; });
-
-  vis.style("opacity", 1e-6)
-    .transition()
-      .duration(1000)
-      .style("opacity", 1);
 
   force.on("tick", function() {
     link.attr("x1", function(d) { return d.source.x; })

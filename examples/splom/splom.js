@@ -2,148 +2,118 @@ d3.json("flowers.json", function(flower) {
 
   // Size parameters.
   var size = 150,
-      padding = 20;
-
-  // Color scale.
-  var color = d3.scale.ordinal().range([
-    "rgb(50%, 0%, 0%)",
-    "rgb(0%, 50%, 0%)",
-    "rgb(0%, 0%, 50%)"
-  ]);
+      padding = 19.5,
+      n = flower.traits.length;
 
   // Position scales.
-  var position = {};
+  var x = {}, y = {};
   flower.traits.forEach(function(trait) {
-    function value(d) { return d[trait]; }
-    position[trait] = d3.scale.linear()
-        .domain([d3.min(flower.values, value), d3.max(flower.values, value)])
-        .range([padding / 2, size - padding / 2]);
+    var value = function(d) { return d[trait]; },
+        domain = [d3.min(flower.values, value), d3.max(flower.values, value)],
+        range = [padding / 2, size - padding / 2];
+    x[trait] = d3.scale.linear().domain(domain).range(range);
+    y[trait] = d3.scale.linear().domain(domain).range(range.reverse());
   });
 
-  // Root panel.
-  var svg = d3.select("#chart")
-    .append("svg:svg")
-      .attr("width", size * flower.traits.length)
-      .attr("height", size * flower.traits.length);
+  // Axes.
+  var axis = d3.svg.axis()
+      .ticks(5)
+      .tickSize(size * n);
 
-  // One column per trait.
-  var column = svg.selectAll("g")
+  // Brush.
+  var brush = d3.svg.brush()
+      .on("brushstart", brushstart)
+      .on("brush", brush)
+      .on("brushend", brushend);
+
+  // Root panel.
+  var svg = d3.select("#chart").append("svg:svg")
+      .attr("width", size * n + padding)
+      .attr("height", size * n + padding);
+
+  // X-axis.
+  svg.selectAll("g.x.axis")
       .data(flower.traits)
     .enter().append("svg:g")
-      .attr("transform", function(d, i) { return "translate(" + i * size + ",0)"; });
+      .attr("class", "x axis")
+      .attr("transform", function(d, i) { return "translate(" + i * size + ",0)"; })
+      .each(function(d) { d3.select(this).call(axis.scale(x[d]).orient("bottom")); });
 
-  // One row per trait.
-  var row = column.selectAll("g")
-      .data(cross(flower.traits))
+  // Y-axis.
+  svg.selectAll("g.y.axis")
+      .data(flower.traits)
     .enter().append("svg:g")
-      .attr("transform", function(d, i) { return "translate(0," + i * size + ")"; });
+      .attr("class", "y axis")
+      .attr("transform", function(d, i) { return "translate(0," + i * size + ")"; })
+      .each(function(d) { d3.select(this).call(axis.scale(y[d]).orient("right")); });
 
-  // X-ticks. TODO Cross the trait into the tick data?
-  row.selectAll("line.x")
-      .data(function(d) { return position[d.x].ticks(5).map(position[d.x]); })
-    .enter().append("svg:line")
-      .attr("class", "x")
-      .attr("x1", function(d) { return d; })
-      .attr("x2", function(d) { return d; })
-      .attr("y1", padding / 2)
-      .attr("y2", size - padding / 2);
+  // Cell and plot.
+  var cell = svg.selectAll("g.cell")
+      .data(cross(flower.traits, flower.traits))
+    .enter().append("svg:g")
+      .attr("class", "cell")
+      .attr("transform", function(d) { return "translate(" + d.i * size + "," + d.j * size + ")"; })
+      .each(plot);
 
-  // Y-ticks. TODO Cross the trait into the tick data?
-  row.selectAll("line.y")
-      .data(function(d) { return position[d.y].ticks(5).map(position[d.y]); })
-    .enter().append("svg:line")
-      .attr("class", "y")
-      .attr("x1", padding / 2)
-      .attr("x2", size - padding / 2)
-      .attr("y1", function(d) { return d; })
-      .attr("y2", function(d) { return d; });
+  // Titles for the diagonal.
+  cell.filter(function(d) { return d.i == d.j; }).append("svg:text")
+      .attr("x", padding)
+      .attr("y", padding)
+      .attr("dy", ".71em")
+      .text(function(d) { return d.x; });
 
-  // Frame.
-  row.append("svg:rect")
-      .attr("x", padding / 2)
-      .attr("y", padding / 2)
-      .attr("width", size - padding)
-      .attr("height", size - padding)
-      .style("fill", "none")
-      .style("stroke", "#aaa")
-      .style("stroke-width", 1.5)
-      .attr("pointer-events", "all")
-      .on("mousedown", mousedown);
+  function plot(p) {
+    var cell = d3.select(this);
 
-  // Dot plot.
-  var dot = row.selectAll("circle")
-      .data(cross(flower.values))
-    .enter().append("svg:circle")
-      .attr("cx", function(d) { return position[d.x.x](d.y[d.x.x]); })
-      .attr("cy", function(d) { return size - position[d.x.y](d.y[d.x.y]); })
-      .attr("r", 3)
-      .style("fill", function(d) { return color(d.y.species); })
-      .style("fill-opacity", .5)
-      .attr("pointer-events", "none");
+    // Plot frame.
+    cell.append("svg:rect")
+        .attr("class", "frame")
+        .attr("x", padding / 2)
+        .attr("y", padding / 2)
+        .attr("width", size - padding)
+        .attr("height", size - padding);
 
-  d3.select(window)
-      .on("mousemove", mousemove)
-      .on("mouseup", mouseup);
+    // Plot dots.
+    cell.selectAll("circle")
+        .data(flower.values)
+      .enter().append("svg:circle")
+        .attr("class", function(d) { return d.species; })
+        .attr("cx", function(d) { return x[p.x](d[p.x]); })
+        .attr("cy", function(d) { return y[p.y](d[p.y]); })
+        .attr("r", 3);
 
-  var rect, x0, x1, count;
-
-  function mousedown() {
-    x0 = d3.svg.mouse(this);
-    count = 0;
-
-    rect = d3.select(this.parentNode)
-      .append("svg:rect")
-        .style("fill", "#999")
-        .style("fill-opacity", .5);
-
-    d3.event.preventDefault();
+    // Plot brush.
+    cell.call(brush.x(x[p.x]).y(y[p.y]));
   }
 
-  function mousemove() {
-    if (!rect) return;
-    x1 = d3.svg.mouse(rect.node());
-
-    x1[0] = Math.max(padding / 2, Math.min(size - padding / 2, x1[0]));
-    x1[1] = Math.max(padding / 2, Math.min(size - padding / 2, x1[1]));
-
-    var minx = Math.min(x0[0], x1[0]),
-        maxx = Math.max(x0[0], x1[0]),
-        miny = Math.min(x0[1], x1[1]),
-        maxy = Math.max(x0[1], x1[1]);
-
-    rect
-        .attr("x", minx - .5)
-        .attr("y", miny - .5)
-        .attr("width", maxx - minx + 1)
-        .attr("height", maxy - miny + 1);
-
-    var v = rect.node().__data__,
-        x = position[v.x],
-        y = position[v.y],
-        mins = x.invert(minx),
-        maxs = x.invert(maxx),
-        mint = y.invert(size - maxy),
-        maxt = y.invert(size - miny);
-
-    count = 0;
-    svg.selectAll("circle")
-        .style("fill", function(d) {
-          return mins <= d.y[v.x] && maxs >= d.y[v.x]
-              && mint <= d.y[v.y] && maxt >= d.y[v.y]
-              ? (count++, color(d.y.species))
-              : "#ccc";
-        });
+  // Clear the previously-active brush, if any.
+  function brushstart(p) {
+    if (brush.data !== p) {
+      cell.call(brush.clear());
+      brush.x(x[p.x]).y(y[p.y]).data = p;
+    }
   }
 
-  function mouseup() {
-    if (!rect) return;
-    rect.remove();
-    rect = null;
-
-    if (!count) svg.selectAll("circle")
-        .style("fill", function(d) {
-          return color(d.y.species);
-        });
+  // Highlight the selected circles.
+  function brush(p) {
+    var e = brush.extent();
+    svg.selectAll("circle").attr("class", function(d) {
+      return e[0][0] <= d[p.x] && d[p.x] <= e[1][0]
+          && e[0][1] <= d[p.y] && d[p.y] <= e[1][1]
+          ? d.species : null;
+    });
   }
 
+  // If the brush is empty, select all circles.
+  function brushend() {
+    if (brush.empty()) svg.selectAll("circle").attr("class", function(d) {
+      return d.species;
+    });
+  }
+
+  function cross(a, b) {
+    var c = [], n = a.length, m = b.length, i, j;
+    for (i = -1; ++i < n;) for (j = -1; ++j < m;) c.push({x: a[i], i: i, y: b[j], j: j});
+    return c;
+  }
 });

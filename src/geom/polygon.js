@@ -21,7 +21,7 @@ d3.geom.polygon = function(coordinates) {
         a,
         b,
         c;
-    if (!arguments.length) k = 1 / (6 * coordinates.area());
+    if (!arguments.length) k = -1 / (6 * coordinates.area());
     while (++i < n) {
       a = coordinates[i];
       b = coordinates[i + 1];

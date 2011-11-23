@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Great Arc</title>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.geo.js"></script>
+    <style type="text/css">
+
+#states path {
+  fill: #ddd;
+  stroke: #fff;
+}
+
+#arcs path {
+  fill: none;
+  stroke: #000;
+  stroke-width: .5px;
+  stroke-opacity: .2;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500;
+
+var projection = d3.geo.azimuthal()
+    .origin([-115, 50])
+    .scale(500);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var arc = d3.geo.greatArc();
+
+var svg = d3.select("body").append("svg:svg")
+    .attr("width", w)
+    .attr("height", h);
+
+var states = svg.append("svg:g")
+    .attr("id", "states");
+
+var arcs = svg.append("svg:g")
+    .attr("id", "arcs");
+
+d3.json("../data/us-states.json", function(collection) {
+  states.selectAll("path")
+      .data(collection.features)
+    .enter().append("svg:path")
+      .attr("d", path);
+});
+
+d3.json("../data/us-state-centroids.json", function(collection) {
+  var links = [];
+
+  // Create a link between each state centroid.
+  collection.features.forEach(function(a) {
+    collection.features.forEach(function(b) {
+      if (a !== b) {
+        links.push({
+          source: a.geometry.coordinates,
+          target: b.geometry.coordinates
+        });
+      }
+    });
+  });
+
+  arcs.selectAll("path")
+      .data(links)
+    .enter().append("svg:path")
+      .attr("d", function(d) { return path(arc(d)); });
+});
+
+    </script>
+  </body>
+</html>

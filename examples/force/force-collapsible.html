@@ -10,8 +10,8 @@
 
 circle.node {
   cursor: pointer;
-  stroke: #3182bd;
-  stroke-width: 1.5px;
+  stroke: #000;
+  stroke-width: .5px;
 }
 
 line.link {
@@ -28,9 +28,14 @@ line.link {
 
 var w = 960,
     h = 500,
+    node,
+    link,
     root;
 
 var force = d3.layout.force()
+    .on("tick", tick)
+    .charge(function(d) { return d._children ? -d.size / 100 : -30; })
+    .linkDistance(function(d) { return d.target._children ? 80 : 30; })
     .size([w, h]);
 
 var vis = d3.select("#chart").append("svg:svg")
@@ -39,6 +44,9 @@ var vis = d3.select("#chart").append("svg:svg")
 
 d3.json("../data/flare.json", function(json) {
   root = json;
+  root.fixed = true;
+  root.x = w / 2;
+  root.y = h / 2;
   update();
 });
 
@@ -53,7 +61,7 @@ function update() {
       .start();
 
   // Update the links…
-  var link = vis.selectAll("line.link")
+  link = vis.selectAll("line.link")
       .data(links, function(d) { return d.target.id; });
 
   // Enter any new links.
@@ -68,36 +76,35 @@ function update() {
   link.exit().remove();
 
   // Update the nodes…
-  var node = vis.selectAll("circle.node")
+  node = vis.selectAll("circle.node")
       .data(nodes, function(d) { return d.id; })
       .style("fill", color);
+
+  node.transition()
+      .attr("r", function(d) { return d.children ? 4.5 : Math.sqrt(d.size) / 10; });
 
   // Enter any new nodes.
   node.enter().append("svg:circle")
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })
-      .attr("r", function(d) { return Math.sqrt(d.size) / 10 || 4.5; })
+      .attr("r", function(d) { return d.children ? 4.5 : Math.sqrt(d.size) / 10; })
       .style("fill", color)
       .on("click", click)
       .call(force.drag);
 
   // Exit any old nodes.
   node.exit().remove();
+}
 
-  // Re-select for update.
-  link = vis.selectAll("line.link");
-  node = vis.selectAll("circle.node");
+function tick() {
+  link.attr("x1", function(d) { return d.source.x; })
+      .attr("y1", function(d) { return d.source.y; })
+      .attr("x2", function(d) { return d.target.x; })
+      .attr("y2", function(d) { return d.target.y; });
 
-  force.on("tick", function() {
-    link.attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
-
-    node.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
-  });
+  node.attr("cx", function(d) { return d.x; })
+      .attr("cy", function(d) { return d.y; });
 }
 
 // Color leaf nodes orange, and packages white or blue.
@@ -122,12 +129,13 @@ function flatten(root) {
   var nodes = [], i = 0;
 
   function recurse(node) {
-    if (node.children) node.children.forEach(recurse);
+    if (node.children) node.size = node.children.reduce(function(p, v) { return p + recurse(v); }, 0);
     if (!node.id) node.id = ++i;
     nodes.push(node);
+    return node.size;
   }
 
-  recurse(root);
+  root.size = recurse(root);
   return nodes;
 }
 
