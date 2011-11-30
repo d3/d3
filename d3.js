@@ -977,9 +977,9 @@ function d3_interpolateByName(n) {
 d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
-  function(a, b) { return (typeof b === "string") && d3.interpolateString(a + "", b); },
-  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a + "", b); },
-  function(a, b) { return (typeof b === "number") && d3.interpolateNumber(+a, b); }
+  function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
+  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
+  function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
 ];
 function d3_uninterpolateNumber(a, b) {
   b = b - (a = +a) ? 1 / (b - a) : 0;
