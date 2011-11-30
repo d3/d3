@@ -162,6 +162,10 @@ suite.addBatch({
           "7e-3", "8e-3", "9e-3", "1e-2", "2e-2", "3e-2", "4e-2", "5e-2",
           "6e-2", "7e-2", "8e-2", "9e-2", "1e-1", "2e-1", "3e-1", "4e-1"
         ]);
+        var x = log().domain([.95, 1.05e8]);
+        assert.deepEqual(x.ticks().map(x.tickFormat(8)).filter(String), [
+          '1e+0', '1e+1', '1e+2', '1e+3', '1e+4', '1e+5', '1e+6', '1e+7', '1e+8'
+        ]);
       },
       "can generate fewer ticks, if desired": function(log) {
         var x = log();
