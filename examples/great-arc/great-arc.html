@@ -35,20 +35,20 @@ var path = d3.geo.path()
 
 var arc = d3.geo.greatArc();
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h);
 
-var states = svg.append("svg:g")
+var states = svg.append("g")
     .attr("id", "states");
 
-var arcs = svg.append("svg:g")
+var arcs = svg.append("g")
     .attr("id", "arcs");
 
 d3.json("../data/us-states.json", function(collection) {
   states.selectAll("path")
       .data(collection.features)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", path);
 });
 
@@ -69,7 +69,7 @@ d3.json("../data/us-state-centroids.json", function(collection) {
 
   arcs.selectAll("path")
       .data(links)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", function(d) { return path(arc(d)); });
 });
 

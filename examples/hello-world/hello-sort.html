@@ -35,7 +35,7 @@ div {
     <script type="text/javascript">
 
 d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .attr("viewBox", "0 0 1000 1000");
 
 d3.select("#sort")
@@ -48,7 +48,7 @@ function transform() {
     .selectAll("circle")
       .data(d3.range(400).map(Math.random));
 
-  circle.enter().append("svg:circle")
+  circle.enter().append("circle")
       .attr("cx", function() { return 100 + Math.random() * 800; })
       .attr("cy", function() { return 100 + Math.random() * 800; })
       .attr("r", function(d) { return 50 * d; });

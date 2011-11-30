@@ -31,18 +31,18 @@ var force = d3.layout.force()
     .linkDistance(30)
     .size([w, h]);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h);
 
 d3.json("miserables.json", function(json) {
   var link = svg.selectAll("line")
       .data(json.links)
-    .enter().append("svg:line");
+    .enter().append("line");
 
   var node = svg.selectAll("circle")
       .data(json.nodes)
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("r", r - .75)
       .style("fill", function(d) { return fill(d.group); })
       .style("stroke", function(d) { return d3.rgb(fill(d.group)).darker(); })

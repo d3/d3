@@ -34,10 +34,10 @@ var arc = d3.svg.arc()
     .innerRadius(r0)
     .outerRadius(r0 + 20);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", r1 * 2)
     .attr("height", r1 * 2)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + r1 + "," + r1 + ")");
 
 d3.json("../data/flare-imports.json", function(imports) {
@@ -75,15 +75,15 @@ d3.json("../data/flare-imports.json", function(imports) {
 
   var g = svg.selectAll("g.group")
       .data(chord.groups)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "group");
 
-  g.append("svg:path")
+  g.append("path")
       .style("fill", function(d) { return fill(d.index); })
       .style("stroke", function(d) { return fill(d.index); })
       .attr("d", arc);
 
-  g.append("svg:text")
+  g.append("text")
       .each(function(d) { d.angle = (d.startAngle + d.endAngle) / 2; })
       .attr("dy", ".35em")
       .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
@@ -96,7 +96,7 @@ d3.json("../data/flare-imports.json", function(imports) {
 
   svg.selectAll("path.chord")
       .data(chord.chords)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("class", "chord")
       .style("stroke", function(d) { return d3.rgb(fill(d.source.index)).darker(); })
       .style("fill", function(d) { return fill(d.source.index); })

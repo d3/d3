@@ -24,22 +24,22 @@ var w = 400,
     arc = d3.svg.arc().innerRadius(r * .6).outerRadius(r);
 
 var vis = d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .data([data])
     .attr("width", w)
     .attr("height", h);
 
 var arcs = vis.selectAll("g.arc")
     .data(donut)
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r + "," + r + ")");
 
-arcs.append("svg:path")
+arcs.append("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
 
-arcs.append("svg:text")
+arcs.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")

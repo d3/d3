@@ -30,7 +30,7 @@ var w = 960,
 var path = d3.geo.path(),
     force = d3.layout.force().size([w, h]);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h);
 
@@ -63,7 +63,7 @@ d3.json("../data/us-states.json", function(states) {
 
   var link = svg.selectAll("line")
       .data(links)
-    .enter().append("svg:line")
+    .enter().append("line")
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
@@ -71,10 +71,10 @@ d3.json("../data/us-states.json", function(states) {
 
   var node = svg.selectAll("g")
       .data(nodes)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("transform", function(d) { return "translate(" + -d.x + "," + -d.y + ")"; })
       .call(force.drag)
-    .append("svg:path")
+    .append("path")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .attr("d", function(d) { return path(d.feature); });
 

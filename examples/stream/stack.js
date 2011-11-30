@@ -23,23 +23,23 @@ var p = 20,
     y2 = function(d) { return d.y * h / mz; }; // or `my` to not rescale
 
 var vis = d3.select("#chart")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w)
     .attr("height", h + p);
 
 var layers = vis.selectAll("g.layer")
     .data(data)
-  .enter().append("svg:g")
+  .enter().append("g")
     .style("fill", function(d, i) { return color(i / (n - 1)); })
     .attr("class", "layer");
 
 var bars = layers.selectAll("g.bar")
     .data(function(d) { return d; })
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "bar")
     .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 
-bars.append("svg:rect")
+bars.append("rect")
     .attr("width", x({x: .9}))
     .attr("x", 0)
     .attr("y", h)
@@ -51,7 +51,7 @@ bars.append("svg:rect")
 
 var labels = vis.selectAll("text.label")
     .data(data[0])
-  .enter().append("svg:text")
+  .enter().append("text")
     .attr("class", "label")
     .attr("x", x)
     .attr("y", h + 6)
@@ -60,7 +60,7 @@ var labels = vis.selectAll("text.label")
     .attr("text-anchor", "middle")
     .text(function(d, i) { return i; });
 
-vis.append("svg:line")
+vis.append("line")
     .attr("x1", 0)
     .attr("x2", w - x({x: .1}))
     .attr("y1", h)

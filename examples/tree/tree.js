@@ -7,10 +7,10 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-var vis = d3.select("#chart").append("svg:svg")
+var vis = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(40, 0)");
 
 d3.json("../data/flare.json", function(json) {
@@ -18,20 +18,20 @@ d3.json("../data/flare.json", function(json) {
 
   var link = vis.selectAll("path.link")
       .data(tree.links(nodes))
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("class", "link")
       .attr("d", diagonal);
 
   var node = vis.selectAll("g.node")
       .data(nodes)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "node")
       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
 
-  node.append("svg:circle")
+  node.append("circle")
       .attr("r", 4.5);
 
-  node.append("svg:text")
+  node.append("text")
       .attr("dx", function(d) { return d.children ? -8 : 8; })
       .attr("dy", 3)
       .attr("text-anchor", function(d) { return d.children ? "end" : "start"; })

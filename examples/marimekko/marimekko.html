@@ -32,10 +32,10 @@ var w = 960,
     n = d3.format(",d"),
     p = d3.format("%");
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + 2 * m + "," + m + ")");
 
 d3.json("marimekko.json", function(data) {
@@ -59,15 +59,15 @@ d3.json("marimekko.json", function(data) {
   // Add x-axis ticks.
   var xtick = svg.selectAll(".x")
       .data(x.ticks(10))
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "x")
       .attr("transform", function(d) { return "translate(" + x(d) + "," + y(1) + ")"; });
 
-  xtick.append("svg:line")
+  xtick.append("line")
       .attr("y2", 6)
       .style("stroke", "#000");
 
-  xtick.append("svg:text")
+  xtick.append("text")
       .attr("y", 8)
       .attr("text-anchor", "middle")
       .attr("dy", ".71em")
@@ -76,15 +76,15 @@ d3.json("marimekko.json", function(data) {
   // Add y-axis ticks.
   var ytick = svg.selectAll(".y")
       .data(y.ticks(10))
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "y")
       .attr("transform", function(d) { return "translate(0," + y(1 - d) + ")"; });
 
-  ytick.append("svg:line")
+  ytick.append("line")
       .attr("x1", -6)
       .style("stroke", "#000");
 
-  ytick.append("svg:text")
+  ytick.append("text")
       .attr("x", -8)
       .attr("text-anchor", "end")
       .attr("dy", ".35em")
@@ -93,7 +93,7 @@ d3.json("marimekko.json", function(data) {
   // Add a group for each segment.
   var segments = svg.selectAll(".segment")
       .data(segments)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "segment")
       .attr("xlink:title", function(d) { return d.key; })
       .attr("transform", function(d) { return "translate(" + x(d.offset / sum) + ")"; });
@@ -101,10 +101,10 @@ d3.json("marimekko.json", function(data) {
   // Add a rect for each market.
   var markets = segments.selectAll(".market")
       .data(function(d) { return d.values; })
-    .enter().append("svg:a")
+    .enter().append("a")
       .attr("class", "market")
       .attr("xlink:title", function(d) { return d.market + " " + d.parent.key + ": " + n(d.value); })
-    .append("svg:rect")
+    .append("rect")
       .attr("y", function(d) { return y(d.offset / d.parent.sum); })
       .attr("height", function(d) { return y(d.value / d.parent.sum); })
       .attr("width", function(d) { return x(d.parent.sum / sum); })

@@ -18,19 +18,19 @@ d3.svg.brush = function() {
           e;
 
       // An invisible, mouseable area for starting a new brush.
-      bg.enter().append("svg:rect")
+      bg.enter().append("rect")
           .attr("class", "background")
           .style("visibility", "hidden")
           .style("pointer-events", "all")
           .style("cursor", "crosshair");
 
       // The visible brush extent; style this as you like!
-      fg.enter().append("svg:rect")
+      fg.enter().append("rect")
           .attr("class", "extent")
           .style("cursor", "move");
 
       // More invisible rects for resizing the extent.
-      tz.enter().append("svg:rect")
+      tz.enter().append("rect")
           .attr("class", function(d) { return "resize " + d; })
           .attr("width", 6)
           .attr("height", 6)

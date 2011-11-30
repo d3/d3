@@ -8,7 +8,7 @@ var chart = d3.chart.horizon()
     .mode("offset")
     .interpolate("basis");
 
-var svg = d3.select("#chart").append("svg:svg")
+var svg = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h);
 

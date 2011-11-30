@@ -36,15 +36,15 @@ var r = d3.scale.sqrt()
 // Our projection.
 var xy = d3.geo.albersUsa();
 
-var svg = d3.select("body").append("svg:svg");
-svg.append("svg:g").attr("id", "states");
-svg.append("svg:g").attr("id", "state-centroids");
+var svg = d3.select("body").append("svg");
+svg.append("g").attr("id", "states");
+svg.append("g").attr("id", "state-centroids");
 
 d3.json("../data/us-states.json", function(collection) {
   svg.select("#states")
     .selectAll("path")
       .data(collection.features)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", d3.geo.path().projection(xy));
 });
 
@@ -53,7 +53,7 @@ d3.json("../data/us-state-centroids.json", function(collection) {
     .selectAll("circle")
       .data(collection.features
       .sort(function(a, b) { return b.properties.population - a.properties.population; }))
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("transform", function(d) { return "translate(" + xy(d.geometry.coordinates) + ")"; })
       .attr("r", 0)
     .transition()

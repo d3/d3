@@ -40,14 +40,14 @@ var data = d3.range(500).map(function() {
 // Generate a quadtree of the specified data.
 var quadtree = d3.geom.quadtree(data, 0, w);
 
-var vis = d3.select("body").append("svg:svg")
+var vis = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", w)
     .style("pointer-events", "all");
 
 vis.selectAll("rect")
     .data(nodes(quadtree))
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("x", function(d) { return d.x; })
     .attr("y", function(d) { return d.y; })
     .attr("width", function(d) { return d.width; })
@@ -55,7 +55,7 @@ vis.selectAll("rect")
 
 vis.selectAll("circle")
     .data(data)
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .attr("r", 4.5);
@@ -64,7 +64,7 @@ vis.selectAll("circle")
 vis.on("mousedown", function() {
   var m0 = d3.svg.mouse(this);
 
-  var rect = d3.select(this).append("svg:rect")
+  var rect = d3.select(this).append("rect")
       .style("fill", "#999")
       .style("fill-opacity", .5);
 

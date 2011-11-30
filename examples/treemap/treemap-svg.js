@@ -7,25 +7,25 @@ var treemap = d3.layout.treemap()
     .size([w, h])
     .value(function(d) { return d.size; });
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(-.5,-.5)");
 
 d3.json("../data/flare.json", function(json) {
   var cell = svg.data([json]).selectAll("g")
       .data(treemap)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "cell")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
-  cell.append("svg:rect")
+  cell.append("rect")
       .attr("width", function(d) { return d.dx; })
       .attr("height", function(d) { return d.dy; })
       .style("fill", function(d) { return d.children ? color(d.data.name) : null; });
 
-  cell.append("svg:text")
+  cell.append("text")
       .attr("x", function(d) { return d.dx / 2; })
       .attr("y", function(d) { return d.dy / 2; })
       .attr("dy", ".35em")

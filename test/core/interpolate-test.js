@@ -13,12 +13,14 @@ suite.addBatch({
     },
     "interpolates numbers": function(interpolate) {
       assert.equal(interpolate(2, 12)(.4), 6);
+      assert.equal(interpolate("2px", 12)(.4), 6);
     },
     "interpolates colors": function(interpolate) {
       assert.equal(interpolate("#abcdef", "#fedcba")(.4), "#ccd3da");
     },
     "interpolates strings": function(interpolate) {
       assert.equal(interpolate("width:10px;", "width:50px;")(.2), "width:18px;");
+      assert.equal(interpolate(2, "12px")(.4), "6px");
     },
     "interpolates arrays": function(interpolate) {
       assert.deepEqual(interpolate([2, 4], [12, 24])(.4), [6, 12]);

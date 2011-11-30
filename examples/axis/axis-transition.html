@@ -91,45 +91,45 @@ d3.csv("../data/stocks.csv", function(data) {
   y.domain([0, d3.max(values, function(d) { return d.price; })]);
 
   // Add an SVG element with the desired dimensions and margin.
-  var svg = d3.select("body").append("svg:svg")
+  var svg = d3.select("body").append("svg")
       .attr("width", w + m[1] + m[3])
       .attr("height", h + m[0] + m[2])
-    .append("svg:g")
+    .append("g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
   // Add the clip path.
-  svg.append("svg:clipPath")
+  svg.append("clipPath")
       .attr("id", "clip")
-    .append("svg:rect")
+    .append("rect")
       .attr("width", w)
       .attr("height", h);
 
   // Add the area path.
-  svg.append("svg:path")
+  svg.append("path")
       .attr("class", "area")
       .attr("clip-path", "url(#clip)")
       .attr("d", area(values));
 
   // Add the x-axis.
-  svg.append("svg:g")
+  svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + h + ")")
       .call(xAxis);
 
   // Add the y-axis.
-  svg.append("svg:g")
+  svg.append("g")
       .attr("class", "y axis")
       .attr("transform", "translate(" + w + ",0)")
       .call(yAxis);
 
   // Add the line path.
-  svg.append("svg:path")
+  svg.append("path")
       .attr("class", "line")
       .attr("clip-path", "url(#clip)")
       .attr("d", line(values));
 
   // Add a small label for the symbol name.
-  svg.append("svg:text")
+  svg.append("text")
       .attr("x", w - 6)
       .attr("y", h - 6)
       .attr("text-anchor", "end")

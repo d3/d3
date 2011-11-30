@@ -22,11 +22,11 @@ var drag = d3.behavior.drag()
     .origin(Object)
     .on("drag", dragmove);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h)
 
-var circle = svg.append("svg:circle")
+var circle = svg.append("circle")
     .data([{x: w / 2, y: h / 2}])
     .attr("r", r)
     .attr("cx", function(d) { return d.x; })

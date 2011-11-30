@@ -10,23 +10,23 @@ d3.json("bullets.json", function(data) {
 
   var vis = d3.select("#chart").selectAll("svg")
       .data(data)
-    .enter().append("svg:svg")
+    .enter().append("svg")
       .attr("class", "bullet")
       .attr("width", w)
       .attr("height", h)
-    .append("svg:g")
+    .append("g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
       .call(chart);
 
-  var title = vis.append("svg:g")
+  var title = vis.append("g")
       .attr("text-anchor", "end")
       .attr("transform", "translate(-6," + (h - m[0] - m[2]) / 2 + ")");
 
-  title.append("svg:text")
+  title.append("text")
       .attr("class", "title")
       .text(function(d) { return d.title; });
 
-  title.append("svg:text")
+  title.append("text")
       .attr("class", "subtitle")
       .attr("dy", "1em")
       .text(function(d) { return d.subtitle; });
