@@ -25,6 +25,7 @@ function d3_geo_bounds(o, f) {
 var d3_geo_boundsTypes = {
   Feature: d3_geo_boundsFeature,
   FeatureCollection: d3_geo_boundsFeatureCollection,
+  GeometryCollection: d3_geo_boundsGeometryCollection,
   LineString: d3_geo_boundsLineString,
   MultiLineString: d3_geo_boundsMultiLineString,
   MultiPoint: d3_geo_boundsLineString,
@@ -40,6 +41,12 @@ function d3_geo_boundsFeature(o, f) {
 function d3_geo_boundsFeatureCollection(o, f) {
   for (var a = o.features, i = 0, n = a.length; i < n; i++) {
     d3_geo_bounds(a[i].geometry, f);
+  }
+}
+
+function d3_geo_boundsGeometryCollection(o, f) {
+  for (var a = o.geometries, i = 0, n = a.length; i < n; i++) {
+    d3_geo_bounds(a[i], f);
   }
 }
 
