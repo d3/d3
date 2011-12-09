@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.6.1"}; // semver
+d3 = {version: "2.7.0"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -1346,12 +1346,16 @@ function d3_selection(groups) {
 }
 
 var d3_select = function(s, n) { return n.querySelector(s); },
-    d3_selectAll = function(s, n) { return n.querySelectorAll(s); };
+    d3_selectAll = function(s, n) { return n.querySelectorAll(s); },
+    d3_selectRoot = document.documentElement,
+    d3_selectMatcher = d3_selectRoot.matchesSelector || d3_selectRoot.webkitMatchesSelector || d3_selectRoot.mozMatchesSelector || d3_selectRoot.msMatchesSelector || d3_selectRoot.oMatchesSelector,
+    d3_selectMatches = function(n, s) { return d3_selectMatcher.call(n, s); };
 
 // Prefer Sizzle, if available.
 if (typeof Sizzle === "function") {
   d3_select = function(s, n) { return Sizzle(s, n)[0]; };
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
+  d3_selectMatches = Sizzle.matchesSelector;
 }
 
 var d3_selectionPrototype = [];
@@ -1735,12 +1739,13 @@ d3_selectionPrototype.data = function(data, join) {
 function d3_selection_dataNode(data) {
   return {__data__: data};
 }
-// TODO preserve null elements to maintain index?
 d3_selectionPrototype.filter = function(filter) {
   var subgroups = [],
       subgroup,
       group,
       node;
+
+  if (typeof filter !== "function") filter = d3_selection_filter(filter);
 
   for (var j = 0, m = this.length; j < m; j++) {
     subgroups.push(subgroup = []);
@@ -1754,23 +1759,32 @@ d3_selectionPrototype.filter = function(filter) {
 
   return d3_selection(subgroups);
 };
+
+function d3_selection_filter(selector) {
+  return function() {
+    return d3_selectMatches(this, selector);
+  };
+}
 d3_selectionPrototype.map = function(map) {
   return this.each(function() {
     this.__data__ = map.apply(this, arguments);
   });
 };
-d3_selectionPrototype.sort = function(comparator) {
-  comparator = d3_selection_sortComparator.apply(this, arguments);
-  for (var j = 0, m = this.length; j < m; j++) {
-    for (var group = this[j].sort(comparator), i = 1, n = group.length, prev = group[0]; i < n; i++) {
-      var node = group[i];
-      if (node) {
-        if (prev) prev.parentNode.insertBefore(node, prev.nextSibling);
-        prev = node;
+d3_selectionPrototype.order = function() {
+  for (var j = -1, m = this.length; ++j < m;) {
+    for (var group = this[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
+      if (node = group[i]) {
+        if (next) next.parentNode.insertBefore(node, next);
+        next = node;
       }
     }
   }
   return this;
+};
+d3_selectionPrototype.sort = function(comparator) {
+  comparator = d3_selection_sortComparator.apply(this, arguments);
+  for (var j = -1, m = this.length; ++j < m;) this[j].sort(comparator);
+  return this.order();
 };
 
 function d3_selection_sortComparator(comparator) {
@@ -1863,7 +1877,7 @@ d3_selectionPrototype.transition = function() {
 };
 var d3_selectionRoot = d3_selection([[document]]);
 
-d3_selectionRoot[0].parentNode = document.documentElement;
+d3_selectionRoot[0].parentNode = d3_selectRoot;
 
 // TODO fast singleton implementation!
 // TODO select(function)
