@@ -1759,18 +1759,21 @@ d3_selectionPrototype.map = function(map) {
     this.__data__ = map.apply(this, arguments);
   });
 };
-d3_selectionPrototype.sort = function(comparator) {
-  comparator = d3_selection_sortComparator.apply(this, arguments);
-  for (var j = 0, m = this.length; j < m; j++) {
-    for (var group = this[j].sort(comparator), i = 1, n = group.length, prev = group[0]; i < n; i++) {
-      var node = group[i];
-      if (node) {
-        if (prev) prev.parentNode.insertBefore(node, prev.nextSibling);
-        prev = node;
+d3_selectionPrototype.order = function() {
+  for (var j = -1, m = this.length; ++j < m;) {
+    for (var group = this[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
+      if (node = group[i]) {
+        if (next) next.parentNode.insertBefore(node, next);
+        next = node;
       }
     }
   }
   return this;
+};
+d3_selectionPrototype.sort = function(comparator) {
+  comparator = d3_selection_sortComparator.apply(this, arguments);
+  for (var j = -1, m = this.length; ++j < m;) this[j].sort(comparator);
+  return this.order();
 };
 
 function d3_selection_sortComparator(comparator) {
