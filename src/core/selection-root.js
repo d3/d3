@@ -1,6 +1,6 @@
 var d3_selectionRoot = d3_selection([[document]]);
 
-d3_selectionRoot[0].parentNode = document.documentElement;
+d3_selectionRoot[0].parentNode = d3_selectRoot;
 
 // TODO fast singleton implementation!
 // TODO select(function)
