@@ -27,14 +27,14 @@ d3.json("flowers.json", function(flower) {
       .on("brushend", brushend);
 
   // Root panel.
-  var svg = d3.select("#chart").append("svg:svg")
+  var svg = d3.select("#chart").append("svg")
       .attr("width", size * n + padding)
       .attr("height", size * n + padding);
 
   // X-axis.
   svg.selectAll("g.x.axis")
       .data(flower.traits)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "x axis")
       .attr("transform", function(d, i) { return "translate(" + i * size + ",0)"; })
       .each(function(d) { d3.select(this).call(axis.scale(x[d]).orient("bottom")); });
@@ -42,7 +42,7 @@ d3.json("flowers.json", function(flower) {
   // Y-axis.
   svg.selectAll("g.y.axis")
       .data(flower.traits)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "y axis")
       .attr("transform", function(d, i) { return "translate(0," + i * size + ")"; })
       .each(function(d) { d3.select(this).call(axis.scale(y[d]).orient("right")); });
@@ -50,13 +50,13 @@ d3.json("flowers.json", function(flower) {
   // Cell and plot.
   var cell = svg.selectAll("g.cell")
       .data(cross(flower.traits, flower.traits))
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "cell")
       .attr("transform", function(d) { return "translate(" + d.i * size + "," + d.j * size + ")"; })
       .each(plot);
 
   // Titles for the diagonal.
-  cell.filter(function(d) { return d.i == d.j; }).append("svg:text")
+  cell.filter(function(d) { return d.i == d.j; }).append("text")
       .attr("x", padding)
       .attr("y", padding)
       .attr("dy", ".71em")
@@ -66,7 +66,7 @@ d3.json("flowers.json", function(flower) {
     var cell = d3.select(this);
 
     // Plot frame.
-    cell.append("svg:rect")
+    cell.append("rect")
         .attr("class", "frame")
         .attr("x", padding / 2)
         .attr("y", padding / 2)
@@ -76,7 +76,7 @@ d3.json("flowers.json", function(flower) {
     // Plot dots.
     cell.selectAll("circle")
         .data(flower.values)
-      .enter().append("svg:circle")
+      .enter().append("circle")
         .attr("class", function(d) { return d.species; })
         .attr("cx", function(d) { return x[p.x](d[p.x]); })
         .attr("cy", function(d) { return y[p.y](d[p.y]); })

@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.6.0"}; // semver
+d3 = {version: "2.7.0"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -977,9 +977,9 @@ function d3_interpolateByName(n) {
 d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
-  function(a, b) { return (typeof b === "string") && d3.interpolateString(a + "", b); },
-  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a + "", b); },
-  function(a, b) { return (typeof b === "number") && d3.interpolateNumber(+a, b); }
+  function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
+  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
+  function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
 ];
 function d3_uninterpolateNumber(a, b) {
   b = b - (a = +a) ? 1 / (b - a) : 0;
@@ -1346,12 +1346,16 @@ function d3_selection(groups) {
 }
 
 var d3_select = function(s, n) { return n.querySelector(s); },
-    d3_selectAll = function(s, n) { return n.querySelectorAll(s); };
+    d3_selectAll = function(s, n) { return n.querySelectorAll(s); },
+    d3_selectRoot = document.documentElement,
+    d3_selectMatcher = d3_selectRoot.matchesSelector || d3_selectRoot.webkitMatchesSelector || d3_selectRoot.mozMatchesSelector || d3_selectRoot.msMatchesSelector || d3_selectRoot.oMatchesSelector,
+    d3_selectMatches = function(n, s) { return d3_selectMatcher.call(n, s); };
 
 // Prefer Sizzle, if available.
 if (typeof Sizzle === "function") {
   d3_select = function(s, n) { return Sizzle(s, n)[0]; };
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
+  d3_selectMatches = Sizzle.matchesSelector;
 }
 
 var d3_selectionPrototype = [];
@@ -1735,12 +1739,13 @@ d3_selectionPrototype.data = function(data, join) {
 function d3_selection_dataNode(data) {
   return {__data__: data};
 }
-// TODO preserve null elements to maintain index?
 d3_selectionPrototype.filter = function(filter) {
   var subgroups = [],
       subgroup,
       group,
       node;
+
+  if (typeof filter !== "function") filter = d3_selection_filter(filter);
 
   for (var j = 0, m = this.length; j < m; j++) {
     subgroups.push(subgroup = []);
@@ -1754,23 +1759,32 @@ d3_selectionPrototype.filter = function(filter) {
 
   return d3_selection(subgroups);
 };
+
+function d3_selection_filter(selector) {
+  return function() {
+    return d3_selectMatches(this, selector);
+  };
+}
 d3_selectionPrototype.map = function(map) {
   return this.each(function() {
     this.__data__ = map.apply(this, arguments);
   });
 };
-d3_selectionPrototype.sort = function(comparator) {
-  comparator = d3_selection_sortComparator.apply(this, arguments);
-  for (var j = 0, m = this.length; j < m; j++) {
-    for (var group = this[j].sort(comparator), i = 1, n = group.length, prev = group[0]; i < n; i++) {
-      var node = group[i];
-      if (node) {
-        if (prev) prev.parentNode.insertBefore(node, prev.nextSibling);
-        prev = node;
+d3_selectionPrototype.order = function() {
+  for (var j = -1, m = this.length; ++j < m;) {
+    for (var group = this[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
+      if (node = group[i]) {
+        if (next) next.parentNode.insertBefore(node, next);
+        next = node;
       }
     }
   }
   return this;
+};
+d3_selectionPrototype.sort = function(comparator) {
+  comparator = d3_selection_sortComparator.apply(this, arguments);
+  for (var j = -1, m = this.length; ++j < m;) this[j].sort(comparator);
+  return this.order();
 };
 
 function d3_selection_sortComparator(comparator) {
@@ -1863,7 +1877,7 @@ d3_selectionPrototype.transition = function() {
 };
 var d3_selectionRoot = d3_selection([[document]]);
 
-d3_selectionRoot[0].parentNode = document.documentElement;
+d3_selectionRoot[0].parentNode = d3_selectRoot;
 
 // TODO fast singleton implementation!
 // TODO select(function)
@@ -2542,7 +2556,7 @@ function d3_scale_log(linear, log) {
     if (arguments.length < 2) format = d3_scale_logFormat;
     if (arguments.length < 1) return format;
     var k = n / scale.ticks().length,
-        f = log === d3_scale_logn ? (e = -1e-15, Math.floor) : (e = 1e-15, Math.ceil),
+        f = log === d3_scale_logn ? (e = -1e-12, Math.floor) : (e = 1e-12, Math.ceil),
         e;
     return function(d) {
       return d / pow(f(log(d) + e)) < k ? format(d) : "";
@@ -3646,7 +3660,7 @@ function d3_svg_mousePoint(container, e) {
   var point = (container.ownerSVGElement || container).createSVGPoint();
   if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
     var svg = d3.select(document.body)
-      .append("svg:svg")
+      .append("svg")
         .style("position", "absolute")
         .style("top", 0)
         .style("left", 0);
@@ -3807,13 +3821,13 @@ d3.svg.axis = function() {
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
           subtick = g.selectAll(".minor").data(subticks, String),
-          subtickEnter = subtick.enter().insert("svg:line", "g").attr("class", "tick minor").style("opacity", 1e-6),
+          subtickEnter = subtick.enter().insert("line", "g").attr("class", "tick minor").style("opacity", 1e-6),
           subtickExit = transition(subtick.exit()).style("opacity", 1e-6).remove(),
           subtickUpdate = transition(subtick).style("opacity", 1);
 
       // Major ticks.
       var tick = g.selectAll("g").data(ticks, String),
-          tickEnter = tick.enter().insert("svg:g", "path").style("opacity", 1e-6),
+          tickEnter = tick.enter().insert("g", "path").style("opacity", 1e-6),
           tickExit = transition(tick.exit()).style("opacity", 1e-6).remove(),
           tickUpdate = transition(tick).style("opacity", 1),
           tickTransform;
@@ -3821,7 +3835,7 @@ d3.svg.axis = function() {
       // Domain.
       var range = d3_scaleRange(scale),
           path = g.selectAll(".domain").data([0]),
-          pathEnter = path.enter().append("svg:path").attr("class", "domain"),
+          pathEnter = path.enter().append("path").attr("class", "domain"),
           pathUpdate = transition(path);
 
       // Stash a snapshot of the new scale, and retrieve the old snapshot.
@@ -3829,8 +3843,8 @@ d3.svg.axis = function() {
           scale0 = this.__chart__ || scale1;
       this.__chart__ = scale1;
 
-      tickEnter.append("svg:line").attr("class", "tick");
-      tickEnter.append("svg:text");
+      tickEnter.append("line").attr("class", "tick");
+      tickEnter.append("text");
       tickUpdate.select("text").text(tickFormat);
 
       switch (orient) {
@@ -3991,19 +4005,19 @@ d3.svg.brush = function() {
           e;
 
       // An invisible, mouseable area for starting a new brush.
-      bg.enter().append("svg:rect")
+      bg.enter().append("rect")
           .attr("class", "background")
           .style("visibility", "hidden")
           .style("pointer-events", "all")
           .style("cursor", "crosshair");
 
       // The visible brush extent; style this as you like!
-      fg.enter().append("svg:rect")
+      fg.enter().append("rect")
           .attr("class", "extent")
           .style("cursor", "move");
 
       // More invisible rects for resizing the extent.
-      tz.enter().append("svg:rect")
+      tz.enter().append("rect")
           .attr("class", function(d) { return "resize " + d; })
           .attr("width", 6)
           .attr("height", 6)

@@ -27,11 +27,11 @@ d3.csv("../data/morley.csv", function(csv) {
 
   var vis = d3.select("#chart").selectAll("svg")
       .data(data)
-    .enter().append("svg:svg")
+    .enter().append("svg")
       .attr("class", "box")
       .attr("width", w)
       .attr("height", h)
-    .append("svg:g")
+    .append("g")
       .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
       .call(chart);
 
