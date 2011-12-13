@@ -37,9 +37,11 @@ d3.layout.pie = function() {
     });
 
     // Return the arcs in the original data's order.
-    return data.map(function(d, i) {
-      return arcs[index[i]];
+    data = [];
+    arcs.forEach(function(arc, i) {
+      data[index[i]] = arc;
     });
+    return data;
   }
 
   /**
