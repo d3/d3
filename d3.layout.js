@@ -628,21 +628,17 @@ d3.layout.pie = function() {
         : function(i, j) { return sort(data[i], data[j]); });
 
     // Compute the arcs!
-    var arcs = index.map(function(i) {
-      return {
+    // They are stored in the original data's order.
+    var arcs = [];
+    index.forEach(function(i, j) {
+      arcs[i] = {
         data: data[i],
         value: d = values[i],
         startAngle: a,
         endAngle: a += d * k
       };
     });
-
-    // Return the arcs in the original data's order.
-    data = [];
-    arcs.forEach(function(arc, i) {
-      data[index[i]] = arc;
-    });
-    return data;
+    return arcs;
   }
 
   /**
