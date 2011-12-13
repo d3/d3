@@ -1392,7 +1392,7 @@ d3.layout.cluster = function() {
     // Second walk, normalizing x & y to the desired size.
     d3_layout_treeVisitAfter(root, function(node) {
       node.x = (node.x - x0) / (x1 - x0) * size[0];
-      node.y = (1 - node.y / root.y) * size[1];
+      node.y = (1 - (root.y ? node.y / root.y : 1)) * size[1];
     });
 
     return nodes;
