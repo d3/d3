@@ -3853,7 +3853,7 @@ d3.svg.axis = function() {
           subtickUpdate.attr("x2", 0).attr("y2", tickMinorSize);
           tickUpdate.select("line").attr("x2", 0).attr("y2", tickMajorSize);
           tickUpdate.select("text").attr("x", 0).attr("y", Math.max(tickMajorSize, 0) + tickPadding).attr("dy", ".71em").attr("text-anchor", "middle");
-          pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[1] + "V" + tickEndSize);
+          pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[range.length - 1] + "V" + tickEndSize);
           break;
         }
         case "top": {
@@ -3861,7 +3861,7 @@ d3.svg.axis = function() {
           subtickUpdate.attr("x2", 0).attr("y2", -tickMinorSize);
           tickUpdate.select("line").attr("x2", 0).attr("y2", -tickMajorSize);
           tickUpdate.select("text").attr("x", 0).attr("y", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("dy", "0em").attr("text-anchor", "middle");
-          pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[1] + "V" + -tickEndSize);
+          pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[range.length - 1] + "V" + -tickEndSize);
           break;
         }
         case "left": {
@@ -3869,7 +3869,7 @@ d3.svg.axis = function() {
           subtickUpdate.attr("x2", -tickMinorSize).attr("y2", 0);
           tickUpdate.select("line").attr("x2", -tickMajorSize).attr("y2", 0);
           tickUpdate.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "end");
-          pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + -tickEndSize);
+          pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[range.length - 1] + "H" + -tickEndSize);
           break;
         }
         case "right": {
@@ -3877,7 +3877,7 @@ d3.svg.axis = function() {
           subtickUpdate.attr("x2", tickMinorSize).attr("y2", 0);
           tickUpdate.select("line").attr("x2", tickMajorSize).attr("y2", 0);
           tickUpdate.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "start");
-          pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
+          pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[range.length - 1] + "H" + tickEndSize);
           break;
         }
       }
