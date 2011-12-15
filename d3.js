@@ -1576,13 +1576,21 @@ d3_selectionPrototype.property = function(name, value) {
 d3_selectionPrototype.text = function(value) {
   return arguments.length < 1 ? this.node().textContent
       : (this.each(typeof value === "function"
-      ? function() { this.textContent = value.apply(this, arguments); }
+      ? function() {
+        var v = value.apply(this, arguments);
+        this.textContent = v != null ? v : null;
+      } : typeof value === "undefined"
+      ? function() { this.textContent = null; }
       : function() { this.textContent = value; }));
 };
 d3_selectionPrototype.html = function(value) {
   return arguments.length < 1 ? this.node().innerHTML
       : (this.each(typeof value === "function"
-      ? function() { this.innerHTML = value.apply(this, arguments); }
+      ? function() {
+        var v = value.apply(this, arguments);
+        this.innerHTML = v != null ? v : null;
+      } : typeof value === "undefined"
+      ? function() { this.innerHTML = null; }
       : function() { this.innerHTML = value; }));
 };
 // TODO append(node)?
