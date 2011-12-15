@@ -3,8 +3,8 @@ d3_selectionPrototype.text = function(value) {
       : (this.each(typeof value === "function"
       ? function() {
         var v = value.apply(this, arguments);
-        this.textContent = v != null ? v : null;
-      } : typeof value === "undefined"
-      ? function() { this.textContent = null; }
+        this.textContent = v != null ? v : "";
+      } : value == null
+      ? function() { this.textContent = ""; }
       : function() { this.textContent = value; }));
 };

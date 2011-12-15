@@ -1578,9 +1578,9 @@ d3_selectionPrototype.text = function(value) {
       : (this.each(typeof value === "function"
       ? function() {
         var v = value.apply(this, arguments);
-        this.textContent = v != null ? v : null;
-      } : typeof value === "undefined"
-      ? function() { this.textContent = null; }
+        this.textContent = v != null ? v : "";
+      } : value == null
+      ? function() { this.textContent = ""; }
       : function() { this.textContent = value; }));
 };
 d3_selectionPrototype.html = function(value) {
@@ -1588,9 +1588,9 @@ d3_selectionPrototype.html = function(value) {
       : (this.each(typeof value === "function"
       ? function() {
         var v = value.apply(this, arguments);
-        this.innerHTML = v != null ? v : null;
-      } : typeof value === "undefined"
-      ? function() { this.innerHTML = null; }
+        this.innerHTML = v != null ? v : "";
+      } : value == null
+      ? function() { this.innerHTML = ""; }
       : function() { this.innerHTML = value; }));
 };
 // TODO append(node)?
