@@ -48,13 +48,15 @@ d3.csv("dji.csv", function(csv) {
     .map(csv);
 
   rect
-      .attr("class", function(d) { return "day q" + color(data[format(d)]) + "-9"; })
+      .attr("class", function(d) { 
+		var dv = data[format(d)];
+		return "day q" + (dv ? color(dv) : "X") + "-9"; })
     .append("title")
       .text(function(d) { return (d = format(d)) + (d in data ? ": " + percent(data[d]) : ""); });
 });
 
 function monthPath(t0) {
-  var t1 = new Date(t0.getUTCFullYear(), t0.getUTCMonth() + 1, 0),
+  var t1 = new Date(t0.getUTCFullYear(), t0.getUTCMonth() + 2, 0),
       d0 = +day(t0), w0 = +week(t0),
       d1 = +day(t1), w1 = +week(t1);
   return "M" + (w0 + 1) * z + "," + d0 * z
