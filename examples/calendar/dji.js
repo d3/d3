@@ -48,7 +48,7 @@ d3.csv("dji.csv", function(csv) {
     .map(csv);
 
   rect
-      .attr("class", function(d) { 
+      .attr("class", function(d) {
 		var dv = data[format(d)];
 		return "day q" + (dv ? color(dv) : "X") + "-9"; })
     .append("title")
@@ -56,7 +56,7 @@ d3.csv("dji.csv", function(csv) {
 });
 
 function monthPath(t0) {
-  var t1 = new Date(t0.getUTCFullYear(), t0.getUTCMonth() + 2, 0),
+  var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
       d0 = +day(t0), w0 = +week(t0),
       d1 = +day(t1), w1 = +week(t1);
   return "M" + (w0 + 1) * z + "," + d0 * z
