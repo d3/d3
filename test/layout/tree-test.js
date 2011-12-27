@@ -26,6 +26,11 @@ suite.addBatch({
         {depth: 1, x: .875, y: 0.5},
         {depth: 2, x: .875, y: 1}
       ]);
+    },
+    "can handle a single node": function(tree) {
+      assert.deepEqual(tree.nodes({value: 0}).map(layout), [
+        {depth: 0, x: 0.5, y: 0}
+      ]);
     }
   }
 });
