@@ -33,7 +33,11 @@ var rect = svg.selectAll("rect.day")
     .attr("width", z)
     .attr("height", z)
     .attr("x", function(d) { return week(d) * z; })
-    .attr("y", function(d) { return day(d) * z; });
+    .attr("y", function(d) { return day(d) * z; })
+    .map(format);
+
+rect.append("title")
+    .text(function(d) { return d; });
 
 svg.selectAll("path.month")
     .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
@@ -47,12 +51,10 @@ d3.csv("dji.csv", function(csv) {
     .rollup(function(d) { return (d[0].Close - d[0].Open) / d[0].Open; })
     .map(csv);
 
-  rect
-      .attr("class", function(d) {
-		var dv = data[format(d)];
-		return "day q" + (dv ? color(dv) : "X") + "-9"; })
-    .append("title")
-      .text(function(d) { return (d = format(d)) + (d in data ? ": " + percent(data[d]) : ""); });
+  rect.filter(function(d) { return d in data; })
+      .attr("class", function(d) { return "day q" + color(data[d]) + "-9"; })
+    .select("title")
+      .text(function(d) { return d + ": " + percent(data[d]); });
 });
 
 function monthPath(t0) {
