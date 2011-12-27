@@ -54,7 +54,7 @@ d3.csv("dji.csv", function(csv) {
 });
 
 function monthPath(t0) {
-  var t1 = new Date(t0.getUTCFullYear(), t0.getUTCMonth() + 1, 0),
+  var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
       d0 = +day(t0), w0 = +week(t0),
       d1 = +day(t1), w1 = +week(t1);
   return "M" + (w0 + 1) * z + "," + d0 * z
