@@ -70,7 +70,7 @@ function d3_scale_ordinal(domain, ranger) {
   };
 
   scale.rangeExtent = function() {
-    return ranger.x;
+    return ranger.t === "range" ? d3_scaleExtent(ranger.x) : ranger.x;
   };
 
   scale.copy = function() {
