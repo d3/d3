@@ -3,7 +3,7 @@ d3_transitionPrototype.attr = function(name, value) {
     for (value in name) this.attr(value, name[value]);
     return this;
   }
-  return this.attrTween(name, d3_transitionTween(value));
+  return this.attrTween(name, d3_transitionTween(name, value));
 };
 
 d3_transitionPrototype.attrTween = function(nameNS, tween) {

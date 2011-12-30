@@ -19,7 +19,7 @@ module.exports = {
           delay = [];
 
       // A callback to verify that multiple callbacks are allowed.
-      transition.each("start", function() {
+      transition.each("start.other", function() {
         ++n;
       });
 
@@ -91,7 +91,7 @@ module.exports = {
           delay = [];
 
       // A callback to verify that multiple callbacks are allowed.
-      transition.each("end", function() {
+      transition.each("end.other", function() {
         ++n;
       });
 

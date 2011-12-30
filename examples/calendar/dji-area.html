@@ -68,13 +68,13 @@ var area = d3.svg.area()
     .y0(y(0))
     .y1(function(d) { return y(d.Close); });
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-svg.append("svg:rect")
+svg.append("rect")
     .attr("width", w)
     .attr("height", h);
 
@@ -90,27 +90,27 @@ d3.csv("dji.csv", function(data) {
   x.domain([data[0].Date, data[data.length - 1].Date]);
   y.domain([0, d3.max(data, function(d) { return d.Close; })]);
 
-  svg.append("svg:g")
+  svg.append("g")
       .attr("class", "x grid")
       .attr("transform", "translate(0," + h + ")")
       .call(xAxis.tickSubdivide(1).tickSize(-h));
 
-  svg.append("svg:g")
+  svg.append("g")
       .attr("class", "y grid")
       .attr("transform", "translate(" + w + ",0)")
       .call(yAxis.tickSubdivide(1).tickSize(-w));
 
-  svg.append("svg:g")
+  svg.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + h + ")")
       .call(xAxis.tickSubdivide(0).tickSize(6));
 
-  svg.append("svg:g")
+  svg.append("g")
       .attr("class", "y axis")
       .attr("transform", "translate(" + w + ",0)")
       .call(yAxis.tickSubdivide(0).tickSize(6));
 
-  svg.append("svg:path")
+  svg.append("path")
       .attr("class", "area")
       .attr("d", area(data));
 });

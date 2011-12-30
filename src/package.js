@@ -9,9 +9,10 @@ require("util").puts(JSON.stringify({
   "homepage": "http://mbostock.github.com/d3/",
   "author": {"name": "Mike Bostock", "url": "http://bost.ocks.org/mike"},
   "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
+  "main": "d3.js",
   "dependencies": {
     "uglify-js": "1.1.1",
-    "jsdom": "0.2.8",
-    "vows": "0.5.11"
+    "jsdom": "0.2.9",
+    "vows": "0.5.13"
   }
 }, null, 2));

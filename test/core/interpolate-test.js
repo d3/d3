@@ -13,12 +13,14 @@ suite.addBatch({
     },
     "interpolates numbers": function(interpolate) {
       assert.equal(interpolate(2, 12)(.4), 6);
+      assert.equal(interpolate("2px", 12)(.4), 6);
     },
     "interpolates colors": function(interpolate) {
       assert.equal(interpolate("#abcdef", "#fedcba")(.4), "#ccd3da");
     },
     "interpolates strings": function(interpolate) {
       assert.equal(interpolate("width:10px;", "width:50px;")(.2), "width:18px;");
+      assert.equal(interpolate(2, "12px")(.4), "6px");
     },
     "interpolates arrays": function(interpolate) {
       assert.deepEqual(interpolate([2, 4], [12, 24])(.4), [6, 12]);
@@ -73,6 +75,10 @@ suite.addBatch({
     "preserves equal-value numbers in both strings": function(interpolate) {
       assert.equal(interpolate(" 10/20 100 20", "50/10 100, 20 ")(.2), "18/18 100, 20 ");
       assert.equal(interpolate(" 10/20 100 20", "50/10 100, 20 ")(.4), "26/16 100, 20 ");
+    },
+    "interpolates exponent notation correctly": function(interpolate) {
+      assert.equal(interpolate("1e+3", "1e+4")(.5), "5500");
+      assert.equal(interpolate("1e-3", "1e-4")(.5), "0.00055");
     }
   }
 });

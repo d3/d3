@@ -26,19 +26,19 @@ var w = 400,
     data,
     color = d3.scale.category20(),
     arc = d3.svg.arc(),
-    donut = d3.layout.pie();
+    donut = d3.layout.pie().sort(null);
 
 var vis = d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w)
     .attr("height", h);
 
 vis.selectAll("g.arc")
     .data(arcs(data0, data1))
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "arc")
     .attr("transform", "translate(" + r1 + "," + r1 + ")")
-  .append("svg:path")
+  .append("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
 

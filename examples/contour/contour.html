@@ -64,18 +64,18 @@ function translateX(d, i) { return "translate("+(i*sz)+",0)"; }
 function scale(p) { return [p[0]*sz, p[1]*sz]; }
 
 var svg = d3.select("body")
- .append("svg:svg")
+ .append("svg")
   .attr("width", dw*sz)
   .attr("height", dh*sz);
 
 var g = svg.selectAll("g")
   .data(data)
- .enter().append("svg:g")
+ .enter().append("g")
   .attr("transform", translateY);
 
 g.selectAll("rect")
   .data(function(d) { return d; })
- .enter().append("svg:rect")
+ .enter().append("rect")
   .attr("transform", translateX)
   .attr("width", sz)
   .attr("height", sz)
@@ -88,7 +88,7 @@ function contour(grid, start) {
   svg.selectAll("path")
     .data([d3.geom.contour(grid, start).map(scale)])
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-   .enter().append("svg:path")
+   .enter().append("path")
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 }
 

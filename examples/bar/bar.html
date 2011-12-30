@@ -3,14 +3,36 @@
   <head>
     <title>Bar Chart</title>
     <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.csv.js"></script>
     <style type="text/css">
 
 body {
   font: 10px sans-serif;
 }
 
-svg {
+.bar rect {
+  fill: steelblue;
+}
+
+.bar text.value {
+  fill: white;
+}
+
+.axis {
   shape-rendering: crispEdges;
+}
+
+.axis path {
+  fill: none;
+}
+
+.x.axis line {
+  stroke: #fff;
+  stroke-opacity: .8;
+}
+
+.y.axis path {
+  stroke: black;
 }
 
     </style>
@@ -18,75 +40,61 @@ svg {
   <body>
     <script type="text/javascript">
 
-var data = d3.range(10).map(Math.random);
+var m = [30, 10, 10, 30],
+    w = 960 - m[1] - m[3],
+    h = 930 - m[0] - m[2];
 
-var w = 430,
-    h = 230,
-    x = d3.scale.linear().domain([0, 1]).range([0, w]),
-    y = d3.scale.ordinal().domain(d3.range(data.length)).rangeBands([0, h], .2);
+var format = d3.format(",.0f");
 
-var vis = d3.select("body")
-  .append("svg:svg")
-    .attr("width", w + 40)
-    .attr("height", h + 20)
-  .append("svg:g")
-    .attr("transform", "translate(20,0)");
+var x = d3.scale.linear().range([0, w]),
+    y = d3.scale.ordinal().rangeRoundBands([0, h], .1);
 
-var bars = vis.selectAll("g.bar")
-    .data(data)
-  .enter().append("svg:g")
-    .attr("class", "bar")
-    .attr("transform", function(d, i) { return "translate(0," + y(i) + ")"; });
+var xAxis = d3.svg.axis().scale(x).orient("top").tickSize(-h),
+    yAxis = d3.svg.axis().scale(y).orient("left").tickSize(0);
 
-bars.append("svg:rect")
-    .attr("fill", "steelblue")
-    .attr("width", x)
-    .attr("height", y.rangeBand());
+var svg = d3.select("body").append("svg")
+    .attr("width", w + m[1] + m[3])
+    .attr("height", h + m[0] + m[2])
+  .append("g")
+    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-bars.append("svg:text")
-    .attr("x", x)
-    .attr("y", y.rangeBand() / 2)
-    .attr("dx", -6)
-    .attr("dy", ".35em")
-    .attr("fill", "white")
-    .attr("text-anchor", "end")
-    .text(x.tickFormat(100));
+d3.csv("sample-data.csv", function(data) {
 
-bars.append("svg:text")
-    .attr("x", 0)
-    .attr("y", y.rangeBand() / 2)
-    .attr("dx", -6)
-    .attr("dy", ".35em")
-    .attr("text-anchor", "end")
-    .text(function(d, i) { return String.fromCharCode(65 + i); });
+  // Parse numbers, and sort by value.
+  data.forEach(function(d) { d.value = +d.value; });
+  data.sort(function(a, b) { return b.value - a.value; });
 
-var rules = vis.selectAll("g.rule")
-    .data(x.ticks(10))
-  .enter().append("svg:g")
-    .attr("class", "rule")
-    .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
+  // Set the scale domain.
+  x.domain([0, d3.max(data, function(d) { return d.value; })]);
+  y.domain(data.map(function(d) { return d.name; }));
 
-rules.append("svg:line")
-    .attr("y1", h)
-    .attr("y2", h + 6)
-    .attr("stroke", "black");
+  var bar = svg.selectAll("g.bar")
+      .data(data)
+    .enter().append("g")
+      .attr("class", "bar")
+      .attr("transform", function(d) { return "translate(0," + y(d.name) + ")"; });
 
-rules.append("svg:line")
-    .attr("y1", 0)
-    .attr("y2", h)
-    .attr("stroke", "white")
-    .attr("stroke-opacity", .3);
+  bar.append("rect")
+      .attr("width", function(d) { return x(d.value); })
+      .attr("height", y.rangeBand());
 
-rules.append("svg:text")
-    .attr("y", h + 9)
-    .attr("dy", ".71em")
-    .attr("text-anchor", "middle")
-    .text(x.tickFormat(10));
+  bar.append("text")
+      .attr("class", "value")
+      .attr("x", function(d) { return x(d.value); })
+      .attr("y", y.rangeBand() / 2)
+      .attr("dx", -3)
+      .attr("dy", ".35em")
+      .attr("text-anchor", "end")
+      .text(function(d) { return format(d.value); });
 
-vis.append("svg:line")
-    .attr("y1", 0)
-    .attr("y2", h)
-    .attr("stroke", "black");
+  svg.append("g")
+      .attr("class", "x axis")
+      .call(xAxis);
+
+  svg.append("g")
+      .attr("class", "y axis")
+      .call(yAxis);
+});
 
     </script>
   </body>

@@ -6,7 +6,7 @@ var vertices = d3.range(100).map(function(d) {
 });
 
 var svg = d3.select("#chart")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w)
     .attr("height", h)
     .attr("class", "PiYG")
@@ -14,13 +14,13 @@ var svg = d3.select("#chart")
 
 svg.selectAll("path")
     .data(d3.geom.voronoi(vertices))
-  .enter().append("svg:path")
+  .enter().append("path")
     .attr("class", function(d, i) { return i ? "q" + (i % 9) + "-9" : null; })
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
 svg.selectAll("circle")
     .data(vertices.slice(1))
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("transform", function(d) { return "translate(" + d + ")"; })
     .attr("r", 2);
 

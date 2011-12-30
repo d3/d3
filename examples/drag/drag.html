@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <style type="text/css">
+
+svg {
+  border: solid 1px #aaa;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript">
+
+var w = 960,
+    h = 500,
+    r = 120;
+
+var drag = d3.behavior.drag()
+    .origin(Object)
+    .on("drag", dragmove);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", w)
+    .attr("height", h)
+
+var circle = svg.append("circle")
+    .data([{x: w / 2, y: h / 2}])
+    .attr("r", r)
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; })
+    .call(drag);
+
+function dragmove(d) {
+  circle
+      .attr("cx", d.x = Math.max(r, Math.min(w - r, d3.event.x)))
+      .attr("cy", d.y = Math.max(r, Math.min(h - r, d3.event.y)));
+}
+
+    </script>
+  </body>
+</html>

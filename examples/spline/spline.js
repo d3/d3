@@ -5,11 +5,11 @@ var w = 960,
     dragged = null,
     selected = points[0];
 
-var vis = d3.select("#chart").append("svg:svg")
+var vis = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h);
 
-vis.append("svg:rect")
+vis.append("rect")
     .attr("width", w)
     .attr("height", h)
     .on("mousedown", function() {
@@ -17,7 +17,7 @@ vis.append("svg:rect")
       update();
     });
 
-vis.append("svg:path")
+vis.append("path")
     .data([points])
     .attr("class", "line")
     .call(update);
@@ -56,7 +56,7 @@ function update() {
   var circle = vis.selectAll("circle")
       .data(points, function(d) { return d; });
 
-  circle.enter().append("svg:circle")
+  circle.enter().append("circle")
       .attr("class", function(d) { return d === selected ? "selected" : null; })
       .attr("cx", function(d) { return d[0]; })
       .attr("cy", function(d) { return d[1]; })

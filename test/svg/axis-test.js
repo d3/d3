@@ -28,6 +28,12 @@ suite.addBatch({
             g = d3.select("body").html("").append("svg:g").call(a),
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M2,6V0H200V6");
+      },
+      "can be an ordinal scale": function(axis) {
+        var a = axis().scale(d3.scale.ordinal().domain(["A", "B", "C"]).rangeBands([10, 90])),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            path = g.selectAll("path");
+        assert.equal(path.attr("d"), "M10,6V0H90V6");
       }
     },
 

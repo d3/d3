@@ -19,13 +19,13 @@ var area = d3.svg.area()
     .y1(function(d) { return h - (d.y + d.y0) * h / my; });
 
 var vis = d3.select("#chart")
-  .append("svg:svg")
+  .append("svg")
     .attr("width", w)
     .attr("height", h);
 
 vis.selectAll("path")
     .data(data0)
-  .enter().append("svg:path")
+  .enter().append("path")
     .style("fill", function() { return color(Math.random()); })
     .attr("d", area);
 

@@ -47,12 +47,12 @@ var xy = d3.geo.mercator(),
     path = d3.geo.path().projection(xy);
 
 var states = d3.select("body")
-  .append("svg:svg")
-  .append("svg:g")
+  .append("svg")
+  .append("g")
     .attr("id", "states");
 
 var equator = d3.select("svg")
-  .append("svg:line")
+  .append("line")
     .attr("x1", "0%")
     .attr("x2", "100%");
 
@@ -61,9 +61,9 @@ d3.json("../data/world-countries.json", function(collection) {
   states
     .selectAll("path")
       .data(collection.features)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", path)
-    .append("svg:title")
+    .append("title")
       .text(function(d) { return d.properties.name; });
 
   equator

@@ -51,15 +51,15 @@ var y = d3.scale.linear()
     .domain([0, d3.max(histogram, function(d) { return d.y; })])
     .range([0, h]);
 
-var vis = d3.select("body").append("svg:svg")
+var vis = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(.5)");
 
 vis.selectAll("rect")
     .data(histogram)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("transform", function(d) { return "translate(" + x(d.x) + "," + (h - y(d.y)) + ")"; })
     .attr("width", x.rangeBand())
     .attr("y", function(d) { return y(d.y); })
@@ -69,7 +69,7 @@ vis.selectAll("rect")
     .attr("y", 0)
     .attr("height", function(d) { return y(d.y); });
 
-vis.append("svg:line")
+vis.append("line")
     .attr("x1", 0)
     .attr("x2", w)
     .attr("y1", h)

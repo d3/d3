@@ -107,16 +107,11 @@ d3.layout.force = function() {
       }
     }
 
-    event.tick.dispatch({type: "tick", alpha: alpha});
+    event.tick({type: "tick", alpha: alpha});
 
     // simulated annealing, basically
     return (alpha *= .99) < .005;
   }
-
-  force.on = function(type, listener) {
-    event[type].add(listener);
-    return force;
-  };
 
   force.nodes = function(x) {
     if (!arguments.length) return nodes;
@@ -264,6 +259,7 @@ d3.layout.force = function() {
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
     if (!drag) drag = d3.behavior.drag()
+        .origin(Object)
         .on("dragstart", dragstart)
         .on("drag", d3_layout_forceDrag)
         .on("dragend", d3_layout_forceDragEnd);
@@ -278,7 +274,7 @@ d3.layout.force = function() {
     d3_layout_forceDragForce = force;
   }
 
-  return force;
+  return d3.rebind(force, event, "on");
 };
 
 var d3_layout_forceDragForce,
@@ -299,8 +295,8 @@ function d3_layout_forceDragEnd() {
 }
 
 function d3_layout_forceDrag() {
-  d3_layout_forceDragNode.px += d3.event.dx;
-  d3_layout_forceDragNode.py += d3.event.dy;
+  d3_layout_forceDragNode.px = d3.event.x;
+  d3_layout_forceDragNode.py = d3.event.y;
   d3_layout_forceDragForce.resume(); // restart annealing
 }
 

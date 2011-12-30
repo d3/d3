@@ -34,26 +34,26 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w + m[1] + m[3])
     .attr("height", h + m[0] + m[2])
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "bottom axis")
     .attr("transform", "translate(0," + h + ")")
     .call(xAxis.orient("bottom"));
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "top axis")
     .call(xAxis.orient("top"));
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "left axis")
     .call(yAxis.orient("left"));
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "right axis")
     .attr("transform", "translate(" + w + ",0)")
     .call(yAxis.orient("right"));

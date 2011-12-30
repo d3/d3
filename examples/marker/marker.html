@@ -100,14 +100,14 @@ var force = d3.layout.force()
     .on("tick", tick)
     .start();
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", w)
     .attr("height", h);
 
 // Per-type markers, as they don't inherit styles.
-svg.append("svg:defs").selectAll("marker")
+svg.append("defs").selectAll("marker")
     .data(["suit", "licensing", "resolved"])
-  .enter().append("svg:marker")
+  .enter().append("marker")
     .attr("id", String)
     .attr("viewBox", "0 -5 10 10")
     .attr("refX", 15)
@@ -115,33 +115,33 @@ svg.append("svg:defs").selectAll("marker")
     .attr("markerWidth", 6)
     .attr("markerHeight", 6)
     .attr("orient", "auto")
-  .append("svg:path")
+  .append("path")
     .attr("d", "M0,-5L10,0L0,5");
 
-var path = svg.append("svg:g").selectAll("path")
+var path = svg.append("g").selectAll("path")
     .data(force.links())
-  .enter().append("svg:path")
+  .enter().append("path")
     .attr("class", function(d) { return "link " + d.type; })
     .attr("marker-end", function(d) { return "url(#" + d.type + ")"; });
 
-var circle = svg.append("svg:g").selectAll("circle")
+var circle = svg.append("g").selectAll("circle")
     .data(force.nodes())
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("r", 6)
     .call(force.drag);
 
-var text = svg.append("svg:g").selectAll("g")
+var text = svg.append("g").selectAll("g")
     .data(force.nodes())
-  .enter().append("svg:g");
+  .enter().append("g");
 
 // A copy of the text with a thick white stroke for legibility.
-text.append("svg:text")
+text.append("text")
     .attr("x", 8)
     .attr("y", ".31em")
     .attr("class", "shadow")
     .text(function(d) { return d.name; });
 
-text.append("svg:text")
+text.append("text")
     .attr("x", 8)
     .attr("y", ".31em")
     .text(function(d) { return d.name; });

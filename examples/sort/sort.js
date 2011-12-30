@@ -9,13 +9,13 @@ var w = 960,
     data = shuffle(d3.range(n)),
     duration = 250;
 
-var vis = d3.select("#chart").append("svg:svg")
+var vis = d3.select("#chart").append("svg")
     .attr("width", w)
     .attr("height", h);
 
 var line = vis.selectAll("line")
     .data(data)
-  .enter().append("svg:line")
+  .enter().append("line")
     .attr("x1", 0)
     .attr("y1", 0)
     .attr("x2", 0)

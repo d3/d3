@@ -4,7 +4,6 @@
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Zoom + Pan</title>
     <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.behavior.js"></script>
     <style type="text/css">
 
 svg {
@@ -33,28 +32,30 @@ var y = d3.scale.linear()
     .domain([+1.00, -1.00])
     .range([0, size[1]]);
 
-var svg = d3.select("body").append("svg:svg")
+var svg = d3.select("body").append("svg")
     .attr("width", size[0] + padding[3] + padding[1])
     .attr("height", size[1] + padding[0] + padding[2])
     .attr("pointer-events", "all")
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(" + padding[3] + "," + padding[0] + ")")
-    .call(d3.behavior.zoom().on("zoom", redraw))
-  .append("svg:g");
+    .call(d3.behavior.zoom()
+      .extent([[0, size[0]], [0, size[1]], [0, Infinity]])
+      .on("zoom", redraw))
+  .append("g");
 
 // Generate x-ticks…
 var gx = svg.selectAll("g.x")
     .data(x.ticks(10))
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "x")
     .attr("transform", tx);
 
-gx.append("svg:line")
+gx.append("line")
     .attr("stroke", stroke)
     .attr("y1", 0)
     .attr("y2", size[1]);
 
-gx.append("svg:text")
+gx.append("text")
     .attr("y", size[1])
     .attr("dy", "1em")
     .attr("text-anchor", "middle")
@@ -63,22 +64,22 @@ gx.append("svg:text")
 // Generate y-ticks…
 var gy = svg.selectAll("g.y")
     .data(y.ticks(10))
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "y")
     .attr("transform", ty);
 
-gy.append("svg:line")
+gy.append("line")
     .attr("stroke", stroke)
     .attr("x1", 0)
     .attr("x2", size[0]);
 
-gy.append("svg:text")
+gy.append("text")
     .attr("x", -3)
     .attr("dy", ".35em")
     .attr("text-anchor", "end")
     .text(y.tickFormat(10));
 
-svg.append("svg:rect")
+svg.append("rect")
     .attr("width", size[0])
     .attr("height", size[1])
     .attr("stroke", stroke)

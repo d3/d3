@@ -46,6 +46,11 @@ suite.addBatch({
       var name = d3.ns.qualify("foo:bar");
       assert.isUndefined(name.space);
       assert.equal(name.local, "bar");
+    },
+    "known local name returns space and local": function() {
+      var name = d3.ns.qualify("svg");
+      assert.equal(name.space, "http://www.w3.org/2000/svg");
+      assert.equal(name.local, "svg");
     }
   }
 });
