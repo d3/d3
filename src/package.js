@@ -10,10 +10,12 @@ require("util").puts(JSON.stringify({
   "author": {"name": "Mike Bostock", "url": "http://bost.ocks.org/mike"},
   "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
   "main": "d3.js",
+  "dependencies": {
+    "jsdom": "0.2.10"
+  },
   "devDependencies": {
     "uglify-js": "1.2.3",
-    "jsdom": "0.2.10",
-    "vows": "0.6.1"
+    "vows": "0.6.x"
   },
   "scripts": {"test": "./node_modules/vows/bin/vows"}
 }, null, 2));
