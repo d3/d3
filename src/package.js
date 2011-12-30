@@ -11,8 +11,11 @@ require("util").puts(JSON.stringify({
   "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
   "main": "d3.js",
   "dependencies": {
-    "uglify-js": "1.1.1",
-    "jsdom": "0.2.9",
-    "vows": "0.5.13"
-  }
+    "jsdom": "0.2.10"
+  },
+  "devDependencies": {
+    "uglify-js": "1.2.3",
+    "vows": "0.6.x"
+  },
+  "scripts": {"test": "./node_modules/vows/bin/vows"}
 }, null, 2));

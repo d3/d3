@@ -1,7 +1,11 @@
 d3.transform = function(string) {
-  d3_transformG.setAttribute("transform", string);
-  var t = d3_transformG.transform.baseVal.consolidate();
-  return new d3_transform(t ? t.matrix : d3_transformIdentity);
+  var g = document.createElementNS(d3.ns.prefix.svg, "g"),
+      identity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0};
+  return (d3.transform = function(string) {
+    g.setAttribute("transform", string);
+    var t = g.transform.baseVal.consolidate();
+    return new d3_transform(t ? t.matrix : identity);
+  })(string);
 };
 
 // Compute x-scale and normalize the first row.
@@ -53,6 +57,4 @@ function d3_transformCombine(a, b, k) {
   return a;
 }
 
-var d3_transformG = document.createElementNS(d3.ns.prefix.svg, "g"),
-    d3_transformIdentity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0},
-    d3_transformDegrees = 180 / Math.PI;
+var d3_transformDegrees = 180 / Math.PI;

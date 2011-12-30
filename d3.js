@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.7.0"}; // semver
+d3 = {version: "2.7.1"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -424,9 +424,10 @@ d3.round = function(x, n) {
 };
 d3.xhr = function(url, mime, callback) {
   var req = new XMLHttpRequest;
-  if (arguments.length < 3) callback = mime;
+  if (arguments.length < 3) callback = mime, mime = null;
   else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
   req.open("GET", url, true);
+  if (mime) req.setRequestHeader("Accept", mime);
   req.onreadystatechange = function() {
     if (req.readyState === 4) callback(req.status < 300 ? req : null);
   };
@@ -1574,16 +1575,18 @@ d3_selectionPrototype.property = function(name, value) {
       ? propertyFunction : propertyConstant));
 };
 d3_selectionPrototype.text = function(value) {
-  return arguments.length < 1 ? this.node().textContent
-      : (this.each(typeof value === "function"
-      ? function() { this.textContent = value.apply(this, arguments); }
-      : function() { this.textContent = value; }));
+  return arguments.length < 1
+      ? this.node().textContent : this.each(typeof value === "function"
+      ? function() { var v = value.apply(this, arguments); this.textContent = v == null ? "" : v; } : value == null
+      ? function() { this.textContent = ""; }
+      : function() { this.textContent = value; });
 };
 d3_selectionPrototype.html = function(value) {
-  return arguments.length < 1 ? this.node().innerHTML
-      : (this.each(typeof value === "function"
-      ? function() { this.innerHTML = value.apply(this, arguments); }
-      : function() { this.innerHTML = value; }));
+  return arguments.length < 1
+      ? this.node().innerHTML : this.each(typeof value === "function"
+      ? function() { var v = value.apply(this, arguments); this.innerHTML = v == null ? "" : v; } : value == null
+      ? function() { this.innerHTML = ""; }
+      : function() { this.innerHTML = value; });
 };
 // TODO append(node)?
 // TODO append(function)?
@@ -2276,9 +2279,13 @@ var d3_timer_frame = window.requestAnimationFrame
     || window.msRequestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.transform = function(string) {
-  d3_transformG.setAttribute("transform", string);
-  var t = d3_transformG.transform.baseVal.consolidate();
-  return new d3_transform(t ? t.matrix : d3_transformIdentity);
+  var g = document.createElementNS(d3.ns.prefix.svg, "g"),
+      identity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0};
+  return (d3.transform = function(string) {
+    g.setAttribute("transform", string);
+    var t = g.transform.baseVal.consolidate();
+    return new d3_transform(t ? t.matrix : identity);
+  })(string);
 };
 
 // Compute x-scale and normalize the first row.
@@ -2330,9 +2337,7 @@ function d3_transformCombine(a, b, k) {
   return a;
 }
 
-var d3_transformG = document.createElementNS(d3.ns.prefix.svg, "g"),
-    d3_transformIdentity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0},
-    d3_transformDegrees = 180 / Math.PI;
+var d3_transformDegrees = 180 / Math.PI;
 function d3_noop() {}
 d3.scale = {};
 
@@ -2716,7 +2721,7 @@ function d3_scale_ordinal(domain, ranger) {
   };
 
   scale.rangeExtent = function() {
-    return ranger.x;
+    return ranger.t === "range" ? d3_scaleExtent(ranger.x) : ranger.x;
   };
 
   scale.copy = function() {
@@ -3503,10 +3508,10 @@ d3.svg.chord = function() {
     var s = subgroup(this, source, d, i),
         t = subgroup(this, target, d, i);
     return "M" + s.p0
-      + arc(s.r, s.p1) + (equals(s, t)
+      + arc(s.r, s.p1, s.a1 - s.a0) + (equals(s, t)
       ? curve(s.r, s.p1, s.r, s.p0)
       : curve(s.r, s.p1, t.r, t.p0)
-      + arc(t.r, t.p1)
+      + arc(t.r, t.p1, t.a1 - t.a0)
       + curve(t.r, t.p1, s.r, s.p0))
       + "Z";
   }
@@ -3529,8 +3534,8 @@ d3.svg.chord = function() {
     return a.a0 == b.a0 && a.a1 == b.a1;
   }
 
-  function arc(r, p) {
-    return "A" + r + "," + r + " 0 0,1 " + p;
+  function arc(r, p, a) {
+    return "A" + r + "," + r + " 0 " + +(a > Math.PI) + ",1 " + p;
   }
 
   function curve(r0, p0, r1, p1) {

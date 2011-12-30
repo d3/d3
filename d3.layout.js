@@ -628,19 +628,17 @@ d3.layout.pie = function() {
         : function(i, j) { return sort(data[i], data[j]); });
 
     // Compute the arcs!
-    var arcs = index.map(function(i) {
-      return {
+    // They are stored in the original data's order.
+    var arcs = [];
+    index.forEach(function(i) {
+      arcs[i] = {
         data: data[i],
         value: d = values[i],
         startAngle: a,
         endAngle: a += d * k
       };
     });
-
-    // Return the arcs in the original data's order.
-    return data.map(function(d, i) {
-      return arcs[index[i]];
-    });
+    return arcs;
   }
 
   /**
@@ -1392,7 +1390,7 @@ d3.layout.cluster = function() {
     // Second walk, normalizing x & y to the desired size.
     d3_layout_treeVisitAfter(root, function(node) {
       node.x = (node.x - x0) / (x1 - x0) * size[0];
-      node.y = (1 - node.y / root.y) * size[1];
+      node.y = (1 - (root.y ? node.y / root.y : 1)) * size[1];
     });
 
     return nodes;

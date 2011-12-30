@@ -155,6 +155,8 @@ suite.addBatch({
         assert.deepEqual(x.rangeExtent(), [10, 110]);
         var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100]);
         assert.deepEqual(x.rangeExtent(), [0, 100]);
+        var x = ordinal().domain(["a", "b", "c"]).range([0, 20, 100]);
+        assert.deepEqual(x.rangeExtent(), [0, 100]);
       }
     },
 

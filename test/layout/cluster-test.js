@@ -23,6 +23,11 @@ suite.addBatch({
         {value: 0, depth: 1, x: 0.25, y: 1},
         {value: 1, depth: 1, x: 0.75, y: 1}
       ]);
+    },
+    "can handle a single node": function(cluster) {
+      assert.deepEqual(cluster.nodes({value: 0}).map(layout), [
+        {value: 0, depth: 0, x: 0.5,  y: 0}
+      ]);
     }
   }
 });
