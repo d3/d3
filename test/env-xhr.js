@@ -11,12 +11,11 @@ XMLHttpRequest = function() {
   self.open = function(m, u, a) {
     info.url = u;
     info.async = a;
-    Object.freeze(info);
     self.send = a ? read : readSync;
   };
 
-  self.overrideMimeType = function(x) {
-    info.mimeType = x;
+  self.setRequestHeader = function(n, v) {
+    if (/^Accept$/i.test(n)) info.mimeType = v;
   };
 
   function read() {
