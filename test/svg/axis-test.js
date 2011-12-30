@@ -34,6 +34,12 @@ suite.addBatch({
             g = d3.select("body").html("").append("svg:g").call(a),
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M10,6V0H90V6");
+      },
+      "can be an ordinal scale with explicit range": function(axis) {
+        var a = axis().scale(d3.scale.ordinal().domain(["A", "B", "C"]).range([10, 50, 90])),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            path = g.selectAll("path");
+        assert.equal(path.attr("d"), "M10,6V0H90V6");
       }
     },
 
