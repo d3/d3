@@ -28,14 +28,21 @@ suite.addBatch({
       assert.equal(document.body.textContent, "<h1>Hello, world!</h1>");
       assert.equal(document.body.firstChild.nodeType, document.TEXT_NODE);
     },
-    /*
-    https://github.com/tmpvar/jsdom/issues/276
+    /* <https://github.com/tmpvar/jsdom/issues/276>
     "clears the text content as null": function(body) {
       body.text(null);
       assert.equal(document.body.textContent, "");
     },
-    "clears the text content as a function": function(body) {
+    "clears the text content as undefined": function(body) {
+      body.text(undefined);
+      assert.equal(document.body.textContent, "");
+    },
+    "clears the text content as a function returning null": function(body) {
       body.text(function() { return null; });
+      assert.equal(document.body.textContent, "");
+    },
+    "clears the text content as a function returning undefined": function(body) {
+      body.text(function() { return undefined; });
       assert.equal(document.body.textContent, "");
     },
     */
