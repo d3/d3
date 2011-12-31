@@ -2213,6 +2213,11 @@ d3_transitionPrototype.attrTween = function(nameNS, tween) {
   return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
 };
 d3_transitionPrototype.style = function(name, value, priority) {
+  if (typeof name === "object") {
+    priority = arguments.length > 1 ? value : "";
+    for (var n in name) this.style(n, name[n], priority);
+    return this;
+  }
   if (arguments.length < 3) priority = "";
   return this.styleTween(name, d3_transitionTween(name, value), priority);
 };
