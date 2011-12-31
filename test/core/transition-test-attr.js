@@ -13,7 +13,13 @@ module.exports = {
         .attr("width", 20)
         .attr("color", "red")
         .attr("xlink:type", "simple")
-        .attr("xlink:href", "http://mbostock.github.com/d3/");
+        .attr("xlink:href", "http://mbostock.github.com/d3/")
+        .attr({
+          height: 0,
+          foo: 0,
+          bar: 1,
+          baz: 1
+        });
 
     var t = s.transition()
         .attr("display", null)
@@ -24,6 +30,12 @@ module.exports = {
         .attr("color", function() { return "green"; })
         .attr("xlink:href", null)
         .attr("xlink:type", function() { return null; })
+        .attr({
+          height: 100,
+          foo: function() { return 1; },
+          bar: null,
+          baz: function() { return null; }
+        })
         .each("end", function() { cb(null, {selection: s, transition: t}); });
   },
   "defines the corresponding attr tween": function(result) {
@@ -39,6 +51,12 @@ module.exports = {
   "sets an attribute as a function": function(result) {
     assert.equal(result.selection.attr("color"), "#008000");
   },
+  "sets an attribute as a map of numbers": function(result) {
+    assert.equal(result.selection.attr("height"), "100");
+  },
+  "sets an attribute as a map of functions": function(result) {
+    assert.equal(result.selection.attr("foo"), "1");
+  },
   "removes an attribute using a constant null": function(result) {
     assert.equal(result.selection.attr("display"), "");
   },
@@ -50,5 +68,11 @@ module.exports = {
   },
   "removes a namespaced attribute using a function null": function(result) {
     assert.equal(result.selection.attr("xlink:type"), "");
+  },
+  "removes an attribute using a map of constant nulls": function(result) {
+    assert.equal(result.selection.attr("bar"), "");
+  },
+  "removes an attribute using a map of function nulls": function(result) {
+    assert.equal(result.selection.attr("baz"), "");
   }
 };
