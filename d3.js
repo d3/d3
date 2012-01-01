@@ -2578,11 +2578,11 @@ function d3_scale_log(linear, log) {
 var d3_scale_logFormat = d3.format(".0e");
 
 function d3_scale_logp(x) {
-  return Math.log(x) / Math.LN10;
+  return Math.log(x < 0 ? 0 : x) / Math.LN10;
 }
 
 function d3_scale_logn(x) {
-  return -Math.log(-x) / Math.LN10;
+  return -Math.log(x > 0 ? 0 : -x) / Math.LN10;
 }
 
 d3_scale_logp.pow = function(x) {
