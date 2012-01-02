@@ -63,7 +63,10 @@ d3.svg.axis = function() {
       switch (orient) {
         case "bottom": {
           tickTransform = d3_svg_axisX;
+          subtickEnter.attr("y2", tickMinorSize);
           subtickUpdate.attr("x2", 0).attr("y2", tickMinorSize);
+          tickEnter.select("line").attr("y2", tickMajorSize);
+          tickEnter.select("text").attr("y", Math.max(tickMajorSize, 0) + tickPadding);
           tickUpdate.select("line").attr("x2", 0).attr("y2", tickMajorSize);
           tickUpdate.select("text").attr("x", 0).attr("y", Math.max(tickMajorSize, 0) + tickPadding).attr("dy", ".71em").attr("text-anchor", "middle");
           pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[1] + "V" + tickEndSize);
@@ -71,7 +74,10 @@ d3.svg.axis = function() {
         }
         case "top": {
           tickTransform = d3_svg_axisX;
+          subtickEnter.attr("y2", -tickMinorSize);
           subtickUpdate.attr("x2", 0).attr("y2", -tickMinorSize);
+          tickEnter.select("line").attr("y2", -tickMajorSize);
+          tickEnter.select("text").attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
           tickUpdate.select("line").attr("x2", 0).attr("y2", -tickMajorSize);
           tickUpdate.select("text").attr("x", 0).attr("y", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("dy", "0em").attr("text-anchor", "middle");
           pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[1] + "V" + -tickEndSize);
@@ -79,7 +85,10 @@ d3.svg.axis = function() {
         }
         case "left": {
           tickTransform = d3_svg_axisY;
+          subtickEnter.attr("x2", -tickMinorSize);
           subtickUpdate.attr("x2", -tickMinorSize).attr("y2", 0);
+          tickEnter.select("line").attr("x2", -tickMajorSize);
+          tickEnter.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding));
           tickUpdate.select("line").attr("x2", -tickMajorSize).attr("y2", 0);
           tickUpdate.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "end");
           pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + -tickEndSize);
@@ -87,7 +96,10 @@ d3.svg.axis = function() {
         }
         case "right": {
           tickTransform = d3_svg_axisY;
+          subtickEnter.attr("x2", tickMinorSize);
           subtickUpdate.attr("x2", tickMinorSize).attr("y2", 0);
+          tickEnter.select("line").attr("x2", tickMajorSize);
+          tickEnter.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding);
           tickUpdate.select("line").attr("x2", tickMajorSize).attr("y2", 0);
           tickUpdate.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "start");
           pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
