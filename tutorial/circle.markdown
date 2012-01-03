@@ -81,24 +81,24 @@ var circle = svg.selectAll("circle");
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-2").append("svg:svg")
+  var svg = d3.select("#chart-2").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  svg.selectAll("circle")
+  svg.selectAll(".little")
       .data(data)
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("class", "little")
       .attr("cx", x)
       .attr("cy", y)
       .attr("r", 12);
 
   d3.select("#chart-2 button").on("click", function() {
-    svg.selectAll("circle.select").remove();
+    svg.selectAll(".select").remove();
 
-    svg.selectAll("circle.select")
+    svg.selectAll(".select")
         .data(data)
-      .enter().append("svg:circle")
+      .enter().append("circle")
         .attr("class", "select")
         .attr("cx", x)
         .attr("cy", y)
@@ -132,13 +132,13 @@ circle.attr("r", 30);
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-3").append("svg:svg")
+  var svg = d3.select("#chart-3").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  var circle = svg.selectAll("circle")
+  var circle = svg.selectAll(".little")
       .data(data)
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("class", "little")
       .attr("cx", x)
       .attr("cy", y)
@@ -168,21 +168,20 @@ circle.attr("cx", function() {
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-4").append("svg:svg")
+  var svg = d3.select("#chart-4").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  svg.selectAll("circle")
+  var circle = svg.selectAll(".little")
       .data(data)
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("class", "little")
       .attr("cx", x)
       .attr("cy", y)
       .attr("r", 12);
 
   d3.select("#chart-4 button").on("click", function() {
-    svg.selectAll("circle")
-      .transition()
+    circle.transition()
         .duration(750)
         .attr("cx", function() { return Math.random() * w; });
   });
@@ -212,31 +211,31 @@ circle.data([32, 57, 112]);
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-5").append("svg:svg")
+  var svg = d3.select("#chart-5").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  svg.selectAll("circle")
+  svg.selectAll(".little")
       .data(data)
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("class", "little")
       .attr("cx", x)
       .attr("cy", y)
       .attr("r", 12);
 
-  var g = svg.selectAll("g.data")
+  var g = svg.selectAll(".data")
       .data(data)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "data")
       .attr("transform", function(d, i) { return "translate(" + 20 * (i + 1) + ",20)"; });
 
-  g.append("svg:rect")
+  g.append("rect")
       .attr("x", -10)
       .attr("y", -10)
       .attr("width", 20)
       .attr("height", 20);
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
@@ -282,20 +281,20 @@ circle.attr("r", function(d) {
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-6").append("svg:svg")
+  var svg = d3.select("#chart-6").append("svg")
       .attr("width", w)
       .attr("height", h);
 
   var g = svg.selectAll("g")
       .data(data)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("transform", function(d) { return "translate(" + x(d) + "," + y(d) + ")"; });
 
-  g.append("svg:circle")
+  g.append("circle")
       .attr("class", "little")
       .attr("r", 12);
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
@@ -333,20 +332,20 @@ circle.attr("cx", function(d, i) {
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-6b").append("svg:svg")
+  var svg = d3.select("#chart-6b").append("svg")
       .attr("width", w)
       .attr("height", h);
 
   var g = svg.selectAll("g")
       .data(data)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("transform", function(d) { return "translate(" + x(d) + "," + y(d) + ")"; });
 
-  g.append("svg:circle")
+  g.append("circle")
       .attr("class", "little")
       .attr("r", 12);
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(function(d, i) { return i; });
@@ -385,31 +384,31 @@ var circle = svg.selectAll("circle")
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-7").append("svg:svg")
+  var svg = d3.select("#chart-7").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  svg.selectAll("circle")
+  svg.selectAll(".little")
       .data(data)
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("class", "little")
       .attr("cx", x)
       .attr("cy", y)
       .attr("r", 12);
 
-  var g = svg.selectAll("g.data")
+  var g = svg.selectAll(".data")
       .data(dataEnter)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "data")
       .attr("transform", function(d, i) { return "translate(" + 20 * (i + 1) + ",20)"; });
 
-  g.append("svg:rect")
+  g.append("rect")
       .attr("x", -10)
       .attr("y", -10)
       .attr("width", 20)
       .attr("height", 20);
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
@@ -443,7 +442,7 @@ attributes and styles:
 
 <div id="chart-8" class="chart">
 <pre class="code">
-var enter = circle.enter().append("svg:circle");
+var enter = circle.enter().append("circle");
 
 enter.attr("cy", 90);
 
@@ -458,36 +457,36 @@ enter.attr("r", function(d) {
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-8").append("svg:svg")
+  var svg = d3.select("#chart-8").append("svg")
       .attr("width", w)
       .attr("height", h);
 
   var g = svg.selectAll("g")
       .data(data)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("transform", function(d) { return "translate(" + x(d) + "," + y(d) + ")"; });
 
-  g.append("svg:circle")
+  g.append("circle")
       .attr("class", "little")
       .attr("r", 12);
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
 
-  var g = svg.selectAll("g.data")
+  var g = svg.selectAll(".data")
       .data(dataEnter)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "data")
       .attr("transform", function(d, i) { return "translate(" + 20 * (i + 1) + ",20)"; })
       .filter(function(d, i) { return i == 3; });
 
-  g.append("svg:circle")
+  g.append("circle")
       .attr("class", "little")
       .attr("r", 1e-6);
 
-  g.append("svg:rect")
+  g.append("rect")
       .attr("x", -10)
       .attr("y", -10)
       .attr("width", 20)
@@ -495,7 +494,7 @@ enter.attr("r", function(d) {
       .style("fill", "lightgreen")
       .style("stroke", "green");
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
@@ -519,7 +518,7 @@ joining data to an empty selection, and all of the data ends up in *enter*:
 
 <div id="chart-9" class="chart">
 <pre class="code">
-var enter = circle.enter().append("svg:circle");
+var enter = circle.enter().append("circle");
 
 enter.attr("cy", 90);
 
@@ -536,21 +535,21 @@ enter.attr("r", function(d) {
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-9").append("svg:svg")
+  var svg = d3.select("#chart-9").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  var g = svg.selectAll("g.data")
+  var g = svg.selectAll(".data")
       .data(dataEnter)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "data")
       .attr("transform", function(d, i) { return "translate(" + 20 * (i + 1) + ",20)"; });
 
-  g.append("svg:circle")
+  g.append("circle")
       .attr("class", "little")
       .attr("r", 1e-6);
 
-  g.append("svg:rect")
+  g.append("rect")
       .attr("x", -10)
       .attr("y", -10)
       .attr("width", 20)
@@ -558,7 +557,7 @@ enter.attr("r", function(d) {
       .style("fill", "lightgreen")
       .style("stroke", "green");
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
@@ -595,7 +594,7 @@ For example, the above code can be rewritten:
 <pre class="code">
 svg.selectAll("circle")
     .data([32, 57, 112, 293])
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("cy", 90)
     .attr("cx", String)
     .attr("r", Math.sqrt);
@@ -605,21 +604,21 @@ svg.selectAll("circle")
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-10").append("svg:svg")
+  var svg = d3.select("#chart-10").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  var g = svg.selectAll("g.data")
+  var g = svg.selectAll(".data")
       .data(dataEnter)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "data")
       .attr("transform", function(d, i) { return "translate(" + 20 * (i + 1) + ",20)"; });
 
-  g.append("svg:circle")
+  g.append("circle")
       .attr("class", "little")
       .attr("r", 1e-6);
 
-  g.append("svg:rect")
+  g.append("rect")
       .attr("x", -10)
       .attr("y", -10)
       .attr("width", 20)
@@ -627,7 +626,7 @@ svg.selectAll("circle")
       .style("fill", "lightgreen")
       .style("stroke", "green");
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
@@ -677,32 +676,32 @@ var circle = svg.selectAll("circle")
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-11").append("svg:svg")
+  var svg = d3.select("#chart-11").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  var circle = svg.selectAll("circle")
+  var circle = svg.selectAll(".little")
       .data(data)
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("class", "little")
       .attr("cx", x)
       .attr("cy", y)
       .attr("r", 12)
       .filter(function(d, i) { return i == 2; });
 
-  var g = svg.selectAll("g.data")
+  var g = svg.selectAll(".data")
       .data(dataExit)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "data")
       .attr("transform", function(d, i) { return "translate(" + 20 * (i + 1) + ",20)"; });
 
-  g.append("svg:rect")
+  g.append("rect")
       .attr("x", -10)
       .attr("y", -10)
       .attr("width", 20)
       .attr("height", 20);
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
@@ -741,21 +740,21 @@ circle.exit().remove();
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-12").append("svg:svg")
+  var svg = d3.select("#chart-12").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  var g = svg.selectAll("g.data")
+  var g = svg.selectAll(".data")
       .data(data)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "data")
       .attr("transform", function(d) { return "translate(" + x(d) + "," + y(d) + ")"; });
 
-  g.append("svg:circle")
+  g.append("circle")
       .attr("class", "little")
       .attr("r", 12);
 
-  g.append("svg:text")
+  g.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
@@ -804,7 +803,7 @@ case, we have both enter and exit.
 var circle = svg.selectAll("circle")
     .data([32, 57, 293], String);
 
-circle.enter().append("svg:circle")
+circle.enter().append("circle")
     .attr("cy", 90)
     .attr("cx", String)
     .attr("r", Math.sqrt);
@@ -816,45 +815,45 @@ circle.exit().remove();
 
 <script type="text/javascript">
 (function() {
-  var svg = d3.select("#chart-13").append("svg:svg")
+  var svg = d3.select("#chart-13").append("svg")
       .attr("width", w)
       .attr("height", h);
 
-  var gd = svg.selectAll("g.data")
+  var gd = svg.selectAll(".data")
       .data([32, 57, 293])
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "data")
       .attr("transform", function(d, i) { return "translate(" + 20 * (i + 1) + ",20)"; });
 
   var ed = gd.filter(function(d, i) { return i == 2; }),
       ud = gd.filter(function(d, i) { return i != 2; });
 
-  ed.append("svg:circle")
+  ed.append("circle")
       .attr("class", "little")
       .attr("r", 1e-6);
 
-  gd.append("svg:rect")
+  gd.append("rect")
       .attr("x", -10)
       .attr("y", -10)
       .attr("width", 20)
       .attr("height", 20);
 
-  gd.append("svg:text")
+  gd.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);
 
-  var ge = svg.selectAll("g.element")
+  var ge = svg.selectAll(".element")
       .data(data)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("class", "element")
       .attr("transform", function(d) { return "translate(" + d + ",90)"; });
 
-  ge.append("svg:circle")
+  ge.append("circle")
       .attr("class", "little")
       .attr("r", Math.sqrt);
 
-  ge.append("svg:text")
+  ge.append("text")
       .attr("dy", ".35em")
       .attr("text-anchor", "middle")
       .text(String);

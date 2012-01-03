@@ -53,7 +53,7 @@ In D3, the equivalent representation is just SVG's
 is what Protovis uses under the hood!
 
 {% highlight js linenos %}
-vis.append("svg:rect")
+vis.append("rect")
     .attr("x", 0)
     .attr("y", 25)
     .attr("width", 80)
@@ -143,12 +143,12 @@ you can control which elements are added or removed, and what happens to them:
 
 {% highlight js linenos %}
 // Update…
-var l = vis.selectAll("svg:text")
+var l = vis.selectAll("text")
     .data([4, 8, 15, 16, 23, 42])
     .text(String);
 
 // Enter…
-l.enter().append("svg:text")
+l.enter().append("text")
     .text(String);
 
 // Exit…

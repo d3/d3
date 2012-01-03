@@ -113,8 +113,7 @@ transition.
 With the scales ready, construct the SVG container for the chart:
 
 {% highlight js linenos %}
-var chart = d3.select("body")
-  .append("svg:svg")
+var chart = d3.select("body").append("svg")
     .attr("class", "chart")
     .attr("width", w * data.length - 1)
     .attr("height", h);
@@ -125,7 +124,7 @@ Add the initial bars:
 {% highlight js linenos %}
 chart.selectAll("rect")
     .data(data)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("x", function(d, i) { return x(i) - .5; })
     .attr("y", function(d) { return h - y(d.value) - .5; })
     .attr("width", w)
@@ -144,17 +143,17 @@ type, and don't care for crisp edges, you may omit this step.
 Add the *y*-axis last, so that it appears on top of the bars:
 
 {% highlight js linenos %}
-chart.append("svg:line")
+chart.append("line")
     .attr("x1", 0)
     .attr("x2", w * data.length)
     .attr("y1", h - .5)
     .attr("y2", h - .5)
-    .attr("stroke", "#000");
+    .style("stroke", "#000");
 {% endhighlight %}
 
 SVG draws shapes in the order they are specified, so to have the axis appear on
 top of the bars, the line must exist *after* the rects in the DOM. It is
-sometimes convenient to use `svg:g` elements to group shapes into the desired
+sometimes convenient to use `g` elements to group shapes into the desired
 z-order.
 
 A little bit of CSS will set the bar colors:
@@ -213,26 +212,25 @@ The code so far produces a static bar chart:
 
 <script type="text/javascript">
 
-var chart = d3.select(".content")
-  .append("svg:svg")
+var chart = d3.select(".content").append("svg")
     .attr("class", "chart")
     .attr("width", w * data.length - 1)
     .attr("height", h);
 
 chart.selectAll("rect")
     .data(data)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("x", function(d, i) { return x(i) - .5; })
     .attr("y", function(d) { return h - y(d.value) - .5; })
     .attr("width", w)
     .attr("height", function(d) { return y(d.value); });
 
-chart.append("svg:line")
+chart.append("line")
     .attr("x1", 0)
     .attr("x2", w * data.length)
     .attr("y1", h - .5)
     .attr("y2", h - .5)
-    .attr("stroke", "#000");
+    .style("stroke", "#000");
 
 </script>
 
@@ -256,26 +254,25 @@ Observe how the bars dance happily in response to changing data:
 
 <script type="text/javascript">
 
-var chart1 = d3.select(".content")
-  .append("svg:svg")
+var chart1 = d3.select(".content").append("svg")
     .attr("class", "chart")
     .attr("width", w * data.length - 1)
     .attr("height", h);
 
 chart1.selectAll("rect")
     .data(data)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("x", function(d, i) { return x(i) - .5; })
     .attr("y", function(d) { return h - y(d.value) - .5; })
     .attr("width", w)
     .attr("height", function(d) { return y(d.value); });
 
-chart1.append("svg:line")
+chart1.append("line")
     .attr("x1", 0)
     .attr("x2", w * data.length)
     .attr("y1", h - .5)
     .attr("y2", h - .5)
-    .attr("stroke", "#000");
+    .style("stroke", "#000");
 
 redraw1();
 
@@ -314,7 +311,7 @@ function redraw() {
       .data(data, function(d) { return d.time; });
 
   // Enter…
-  rect.enter().insert("svg:rect", "line")
+  rect.enter().insert("rect", "line")
       .attr("x", function(d, i) { return x(i) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
       .attr("width", w)
@@ -348,18 +345,17 @@ The bar chart now slides as desired, but the enter and exit are a bit clunky:
 
 <script type="text/javascript">
 
-var chart2 = d3.select(".content")
-  .append("svg:svg")
+var chart2 = d3.select(".content").append("svg")
     .attr("class", "chart")
     .attr("width", w * data.length - 1)
     .attr("height", h);
 
-chart2.append("svg:line")
+chart2.append("line")
     .attr("x1", 0)
     .attr("x2", w * data.length)
     .attr("y1", h - .5)
     .attr("y2", h - .5)
-    .attr("stroke", "#000");
+    .style("stroke", "#000");
 
 redraw2();
 
@@ -368,7 +364,7 @@ function redraw2() {
   var rect = chart2.selectAll("rect")
       .data(data, function(d) { return d.time; });
 
-  rect.enter().insert("svg:rect", "line")
+  rect.enter().insert("rect", "line")
       .attr("x", function(d, i) { return x(i) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
       .attr("width", w)
@@ -397,7 +393,7 @@ function redraw() {
   var rect = chart.selectAll("rect")
       .data(data, function(d) { return d.time; });
 
-  rect.enter().insert("svg:rect", "line")
+  rect.enter().insert("rect", "line")
       .attr("x", function(d, i) { return x(i + 1) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
       .attr("width", w)
@@ -426,18 +422,17 @@ Et voilà!
 
 <script type="text/javascript">
 
-var chart3 = d3.select(".content")
-  .append("svg:svg")
+var chart3 = d3.select(".content").append("svg")
     .attr("class", "chart")
     .attr("width", w * data.length - 1)
     .attr("height", h);
 
-chart3.append("svg:line")
+chart3.append("line")
     .attr("x1", 0)
     .attr("x2", w * data.length)
     .attr("y1", h - .5)
     .attr("y2", h - .5)
-    .attr("stroke", "#000");
+    .style("stroke", "#000");
 
 redraw3();
 
@@ -446,7 +441,7 @@ function redraw3() {
   var rect = chart3.selectAll("rect")
       .data(data, function(d) { return d.time; });
 
-  rect.enter().insert("svg:rect", "line")
+  rect.enter().insert("rect", "line")
       .attr("x", function(d, i) { return x(i + 1) - .5; })
       .attr("y", function(d) { return h - y(d.value) - .5; })
       .attr("width", w)

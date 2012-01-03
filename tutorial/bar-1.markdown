@@ -51,8 +51,7 @@ HTML, and then a more advanced example with SVG.
 To get started with HTML, you'll first need a container for the chart:
 
 {% highlight js linenos %}
-var chart = d3.select("body")
-  .append("div")
+var chart = d3.select("body").append("div")
     .attr("class", "chart");
 {% endhighlight %}
 
@@ -114,8 +113,7 @@ comma-grouping of thousands and fixed precision.
 The above code results in a rudimentary bar chart:
 
 <script type="text/javascript">
-d3.select(".content")
-  .append("div")
+d3.select(".content").append("div")
     .attr("class", "chart")
   .selectAll("div")
     .data(data)
@@ -176,12 +174,11 @@ Vector Graphics](http://en.wikipedia.org/wiki/Scalable_Vector_Graphics) (SVG)!
 ## SVG
 
 You use SVG much the same way as HTML, but it offers substantially more
-flexibility. To start with SVG, create an `svg:svg` container instead of a
+flexibility. To start with SVG, create an `svg` container instead of a
 `div`:
 
 {% highlight js linenos %}
-var chart = d3.select("body")
-  .append("svg:svg")
+var chart = d3.select("body").append("svg")
     .attr("class", "chart")
     .attr("width", 420)
     .attr("height", 20 * data.length);
@@ -212,7 +209,7 @@ height explicitly:
 {% highlight js linenos %}
 chart.selectAll("rect")
     .data(data)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("y", function(d, i) { return i * 20; })
     .attr("width", x)
     .attr("height", 20);
@@ -233,14 +230,13 @@ The SVG-based chart is now almost identical to our original. The chart is
 currently missing labels, but that will be fixed shortly:
 
 <script type="text/javascript">
-d3.select(".content")
-  .append("svg:svg")
+d3.select(".content").append("svg")
     .attr("class", "chart")
     .attr("width", 420)
     .attr("height", 20 * data.length)
   .selectAll("rect")
     .data(data)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("y", function(d, i) { return i * 20; })
     .attr("width", x)
     .attr("height", 20);
@@ -276,7 +272,7 @@ The new scale plugs into the bar specification, replacing the "y" attribute:
 {% highlight js linenos %}
 chart.selectAll("rect")
     .data(data)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("y", y)
     .attr("width", x)
     .attr("height", y.rangeBand());
@@ -289,7 +285,7 @@ text:
 {% highlight js linenos %}
 chart.selectAll("text")
     .data(data)
-  .enter().append("svg:text")
+  .enter().append("text")
     .attr("x", x)
     .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })
     .attr("dx", -3) // padding-right
@@ -307,22 +303,21 @@ settings for alignment and padding!
 The SVG chart now looks identical to the earlier HTML version:
 
 <script type="text/javascript">
-var chart = d3.select(".content")
-  .append("svg:svg")
+var chart = d3.select(".content").append("svg")
     .attr("class", "chart")
     .attr("width", 420)
     .attr("height", 120);
 
 chart.selectAll("rect")
     .data(data)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("y", y)
     .attr("width", x)
     .attr("height", y.rangeBand());
 
 chart.selectAll("text")
     .data(data)
-  .enter().append("svg:text")
+  .enter().append("text")
     .attr("class", "bar")
     .attr("x", x)
     .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })
@@ -336,16 +331,15 @@ With the basic chart is in place, you can place additional marks to improve
 readability. As a first step, pad the SVG container to make space for labels:
 
 {% highlight js linenos %}
-var chart = d3.select(".content")
-  .append("svg:svg")
+var chart = d3.select("body").append("svg")
     .attr("class", "chart")
     .attr("width", 440)
     .attr("height", 140)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(10,15)");
 {% endhighlight %}
 
-The `svg:g` element is a [container
+The `g` element is a [container
 element](http://www.w3.org/TR/SVG/struct.html), much like the `div` element in
 HTML. Setting a
 [transform](http://www.w3.org/TR/SVG/coords.html#TransformAttribute) on a
@@ -361,20 +355,20 @@ generate. These tick values serve as data for reference lines:
 {% highlight js linenos %}
 chart.selectAll("line")
     .data(x.ticks(10))
-  .enter().append("svg:line")
+  .enter().append("line")
     .attr("x1", x)
     .attr("x2", x)
     .attr("y1", 0)
     .attr("y2", 120)
-    .attr("stroke", "#ccc");
+    .style("stroke", "#ccc");
 {% endhighlight %}
 
 Positioning text above the reference lines reveals their value:
 
 {% highlight js linenos %}
-chart.selectAll("text.rule")
+chart.selectAll(".rule")
     .data(x.ticks(10))
-  .enter().append("svg:text")
+  .enter().append("text")
     .attr("class", "rule")
     .attr("x", x)
     .attr("y", 0)
@@ -389,36 +383,35 @@ put reference labels in a separate `g` container.) Lastly, add a single black
 line for the *y*-axis:
 
 {% highlight js linenos %}
-chart.append("svg:line")
+chart.append("line")
     .attr("y1", 0)
     .attr("y2", 120)
-    .attr("stroke", "#000");
+    .style("stroke", "#000");
 {% endhighlight %}
 
 Et voilà!
 
 <script type="text/javascript">
-var chart = d3.select(".content")
-  .append("svg:svg")
+var chart = d3.select(".content").append("svg")
     .attr("class", "chart")
     .attr("width", 440)
     .attr("height", 140)
     .style("margin-left", "32px") // Tweak alignment…
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(10,15)");
 
 chart.selectAll("line")
     .data(x.ticks(10))
-  .enter().append("svg:line")
+  .enter().append("line")
     .attr("x1", x)
     .attr("x2", x)
     .attr("y1", 0)
     .attr("y2", 120)
-    .attr("stroke", "#ccc");
+    .style("stroke", "#ccc");
 
-chart.selectAll("text.rule")
+chart.selectAll(".rule")
     .data(x.ticks(10))
-  .enter().append("svg:text")
+  .enter().append("text")
     .attr("x", x)
     .attr("y", 0)
     .attr("dy", -3)
@@ -427,14 +420,14 @@ chart.selectAll("text.rule")
 
 chart.selectAll("rect")
     .data(data)
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("y", y)
     .attr("width", x)
     .attr("height", y.rangeBand());
 
-chart.selectAll("text.bar")
+chart.selectAll(".bar")
     .data(data)
-  .enter().append("svg:text")
+  .enter().append("text")
     .attr("class", "bar")
     .attr("x", x)
     .attr("y", function(d) { return y(d) + y.rangeBand() / 2; })
@@ -443,10 +436,10 @@ chart.selectAll("text.bar")
     .attr("text-anchor", "end")
     .text(String);
 
-chart.append("svg:line")
+chart.append("line")
     .attr("y1", 0)
     .attr("y2", 120)
-    .attr("stroke", "#000");
+    .style("stroke", "#000");
 </script>
 
 This tutorial covered many of the core concepts in D3, including selections,
