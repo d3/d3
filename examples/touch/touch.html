@@ -38,7 +38,7 @@ function touch() {
   d3.event.preventDefault();
 
   var circle = svg.selectAll("circle.touch")
-      .data(d3.svg.touches(svg.node()), function(d) { return d.identifier; })
+      .data(d3.behavior.touches(svg.node()), function(d) { return d.identifier; })
       .attr("cx", function(d) { return d[0]; })
       .attr("cy", function(d) { return d[1]; });
 

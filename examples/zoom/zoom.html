@@ -120,14 +120,14 @@ d3.select(window)
     .on("mouseup", mouseup);
 
 function mousedown() {
-  xx = x.invert(d3.svg.mouse(this)[0]);
+  xx = x.invert(d3.behavior.mouse(this)[0]);
 }
 
 function mousemove() {
   if (xx != null) {
 
     // Compute the new (clamped) focus region.
-    var xy = x.invert(d3.svg.mouse(active[0][0])[0]);
+    var xy = x.invert(d3.behavior.mouse(active[0][0])[0]);
     if (xx < xy) { x0 = xx; x1 = xy; }
     else if (xx > xy) { x0 = xy; x1 = xx; }
     else return;

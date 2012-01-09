@@ -40,7 +40,7 @@ var circle = svg.append("g")
     .attr("r", function(d) { return d * 3; });
 
 svg.on("mousemove", function() {
-  var mouse = d3.svg.mouse(this),
+  var mouse = d3.behavior.mouse(this),
       r = (Math.sqrt(mouse[0]) + 10) / 10;
 
   circle

@@ -69,11 +69,11 @@ force.on("tick", function() {
 });
 
 vis.on("mousemove", function() {
-  cursor.attr("transform", "translate(" + d3.svg.mouse(this) + ")");
+  cursor.attr("transform", "translate(" + d3.behavior.mouse(this) + ")");
 });
 
 vis.on("mousedown", function() {
-  var point = d3.svg.mouse(this),
+  var point = d3.behavior.mouse(this),
       node = {x: point[0], y: point[1]},
       n = nodes.push(node);
 
