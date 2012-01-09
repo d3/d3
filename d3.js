@@ -3654,15 +3654,6 @@ function d3_svg_diagonalRadialProjection(projection) {
     return [r * Math.cos(a), r * Math.sin(a)];
   };
 }
-d3.svg.touches = function(container, touches) {
-  if (arguments.length < 2) touches = d3.event.touches;
-
-  return touches ? d3_array(touches).map(function(touch) {
-    var point = d3_svg_mousePoint(container, touch);
-    point.identifier = touch.identifier;
-    return point;
-  }) : [];
-};
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
       size = d3_svg_symbolSize;
@@ -4466,6 +4457,15 @@ function d3_behavior_mousePoint(container, e) {
     y = e.clientX + b.scrollTop + d.scrollTop;
   }
   return [x - rect.left, y - rect.top];
+};
+d3.behavior.touches = function(container, touches) {
+  if (arguments.length < 2) touches = d3.event.touches;
+
+  return touches ? d3_array(touches).map(function(touch) {
+    var point = d3_svg_mousePoint(container, touch);
+    point.identifier = touch.identifier;
+    return point;
+  }) : [];
 };
 // TODO unbind zoom behavior?
 d3.behavior.zoom = function() {

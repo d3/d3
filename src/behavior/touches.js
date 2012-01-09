@@ -1,4 +1,4 @@
-d3.svg.touches = function(container, touches) {
+d3.behavior.touches = function(container, touches) {
   if (arguments.length < 2) touches = d3.event.touches;
 
   return touches ? d3_array(touches).map(function(touch) {

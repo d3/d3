@@ -149,7 +149,6 @@ d3.svg.js: \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
 	src/svg/diagonal-radial.js \
-	src/svg/touches.js \
 	src/svg/symbol.js \
 	src/svg/axis.js \
 	src/svg/brush.js
@@ -158,6 +157,7 @@ d3.behavior.js: \
 	src/behavior/behavior.js \
 	src/behavior/drag.js \
 	src/behavior/mouse.js \
+	src/behavior/touches.js \
 	src/behavior/zoom.js
 
 d3.chart.js: \
