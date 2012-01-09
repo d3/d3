@@ -32,7 +32,7 @@ d3.behavior.zoom = function() {
 
   function mousedown() {
     start.apply(this, arguments);
-    d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
+    d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.behavior.mouse(d3_behavior_zoomTarget));
     d3_behavior_zoomMoved = 0;
     d3.event.preventDefault();
     window.focus();
@@ -41,13 +41,13 @@ d3.behavior.zoom = function() {
   // store starting mouse location
   function mousewheel() {
     start.apply(this, arguments);
-    if (!d3_behavior_zoomZooming) d3_behavior_zoomZooming = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
-    d3_behavior_zoomTo(d3_behavior_zoomDelta() + xyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomZooming);
+    if (!d3_behavior_zoomZooming) d3_behavior_zoomZooming = d3_behavior_zoomLocation(d3.behavior.mouse(d3_behavior_zoomTarget));
+    d3_behavior_zoomTo(d3_behavior_zoomDelta() + xyz[2], d3.behavior.mouse(d3_behavior_zoomTarget), d3_behavior_zoomZooming);
   }
 
   function dblclick() {
     start.apply(this, arguments);
-    var mouse = d3.svg.mouse(d3_behavior_zoomTarget);
+    var mouse = d3.behavior.mouse(d3_behavior_zoomTarget);
     d3_behavior_zoomTo(d3.event.shiftKey ? Math.ceil(xyz[2] - 1) : Math.floor(xyz[2] + 1), mouse, d3_behavior_zoomLocation(mouse));
   }
 
@@ -127,7 +127,7 @@ function d3_behavior_zoomDelta() {
 // slightly detached from their original positions. Thus, we recompute the
 // touch points on touchend as well as touchstart!
 function d3_behavior_zoomTouchup() {
-  var touches = d3.svg.touches(d3_behavior_zoomTarget),
+  var touches = d3.behavior.touches(d3_behavior_zoomTarget),
       i = -1,
       n = touches.length,
       touch;
@@ -136,7 +136,7 @@ function d3_behavior_zoomTouchup() {
 }
 
 function d3_behavior_zoomTouchmove() {
-  var touches = d3.svg.touches(d3_behavior_zoomTarget);
+  var touches = d3.behavior.touches(d3_behavior_zoomTarget);
   switch (touches.length) {
 
     // single-touch pan
@@ -164,7 +164,7 @@ function d3_behavior_zoomMousemove() {
   d3_behavior_zoomZooming = null;
   if (d3_behavior_zoomPanning) {
     d3_behavior_zoomMoved = 1;
-    d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
+    d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.behavior.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
   }
 }
 

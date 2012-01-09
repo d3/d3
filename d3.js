@@ -4017,7 +4017,7 @@ d3.svg.brush = function() {
     d3_svg_brush = brush;
     d3_svg_brushTarget = this;
     d3_svg_brushExtent = extent;
-    d3_svg_brushOffset = d3.svg.mouse(d3_svg_brushTarget);
+    d3_svg_brushOffset = d3.behavior.mouse(d3_svg_brushTarget);
 
     // If the extent was clicked on, drag rather than brush;
     // store the offset between the mouse and extent origin instead.
@@ -4179,7 +4179,7 @@ function d3_svg_brushKeyup() {
 
 function d3_svg_brushMove() {
   if (d3_svg_brushOffset) {
-    var mouse = d3.svg.mouse(d3_svg_brushTarget),
+    var mouse = d3.behavior.mouse(d3_svg_brushTarget),
         g = d3.select(d3_svg_brushTarget);
 
     if (!d3_svg_brushDrag) {
@@ -4372,8 +4372,8 @@ function d3_behavior_dragPoint() {
   var p = d3_behavior_dragTarget.parentNode,
       t = d3.event.changedTouches;
   return p && (t
-      ? d3.svg.touches(p, t)[0]
-      : d3.svg.mouse(p));
+      ? d3.behavior.touches(p, t)[0]
+      : d3.behavior.mouse(p));
 }
 
 function d3_behavior_dragMove() {
@@ -4462,7 +4462,7 @@ d3.behavior.touches = function(container, touches) {
   if (arguments.length < 2) touches = d3.event.touches;
 
   return touches ? d3_array(touches).map(function(touch) {
-    var point = d3_svg_mousePoint(container, touch);
+    var point = d3_behavior_mousePoint(container, touch);
     point.identifier = touch.identifier;
     return point;
   }) : [];
@@ -4501,7 +4501,7 @@ d3.behavior.zoom = function() {
 
   function mousedown() {
     start.apply(this, arguments);
-    d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
+    d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.behavior.mouse(d3_behavior_zoomTarget));
     d3_behavior_zoomMoved = 0;
     d3.event.preventDefault();
     window.focus();
@@ -4510,13 +4510,13 @@ d3.behavior.zoom = function() {
   // store starting mouse location
   function mousewheel() {
     start.apply(this, arguments);
-    if (!d3_behavior_zoomZooming) d3_behavior_zoomZooming = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
-    d3_behavior_zoomTo(d3_behavior_zoomDelta() + xyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomZooming);
+    if (!d3_behavior_zoomZooming) d3_behavior_zoomZooming = d3_behavior_zoomLocation(d3.behavior.mouse(d3_behavior_zoomTarget));
+    d3_behavior_zoomTo(d3_behavior_zoomDelta() + xyz[2], d3.behavior.mouse(d3_behavior_zoomTarget), d3_behavior_zoomZooming);
   }
 
   function dblclick() {
     start.apply(this, arguments);
-    var mouse = d3.svg.mouse(d3_behavior_zoomTarget);
+    var mouse = d3.behavior.mouse(d3_behavior_zoomTarget);
     d3_behavior_zoomTo(d3.event.shiftKey ? Math.ceil(xyz[2] - 1) : Math.floor(xyz[2] + 1), mouse, d3_behavior_zoomLocation(mouse));
   }
 
@@ -4596,7 +4596,7 @@ function d3_behavior_zoomDelta() {
 // slightly detached from their original positions. Thus, we recompute the
 // touch points on touchend as well as touchstart!
 function d3_behavior_zoomTouchup() {
-  var touches = d3.svg.touches(d3_behavior_zoomTarget),
+  var touches = d3.behavior.touches(d3_behavior_zoomTarget),
       i = -1,
       n = touches.length,
       touch;
@@ -4605,7 +4605,7 @@ function d3_behavior_zoomTouchup() {
 }
 
 function d3_behavior_zoomTouchmove() {
-  var touches = d3.svg.touches(d3_behavior_zoomTarget);
+  var touches = d3.behavior.touches(d3_behavior_zoomTarget);
   switch (touches.length) {
 
     // single-touch pan
@@ -4633,7 +4633,7 @@ function d3_behavior_zoomMousemove() {
   d3_behavior_zoomZooming = null;
   if (d3_behavior_zoomPanning) {
     d3_behavior_zoomMoved = 1;
-    d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
+    d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.behavior.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
   }
 }
 

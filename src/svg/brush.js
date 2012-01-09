@@ -63,7 +63,7 @@ d3.svg.brush = function() {
     d3_svg_brush = brush;
     d3_svg_brushTarget = this;
     d3_svg_brushExtent = extent;
-    d3_svg_brushOffset = d3.svg.mouse(d3_svg_brushTarget);
+    d3_svg_brushOffset = d3.behavior.mouse(d3_svg_brushTarget);
 
     // If the extent was clicked on, drag rather than brush;
     // store the offset between the mouse and extent origin instead.
@@ -225,7 +225,7 @@ function d3_svg_brushKeyup() {
 
 function d3_svg_brushMove() {
   if (d3_svg_brushOffset) {
-    var mouse = d3.svg.mouse(d3_svg_brushTarget),
+    var mouse = d3.behavior.mouse(d3_svg_brushTarget),
         g = d3.select(d3_svg_brushTarget);
 
     if (!d3_svg_brushDrag) {
