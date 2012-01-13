@@ -57,9 +57,6 @@ function update() {
       .data(points, function(d) { return d; });
 
   circle.enter().append("circle")
-      .attr("class", function(d) { return d === selected ? "selected" : null; })
-      .attr("cx", function(d) { return d[0]; })
-      .attr("cy", function(d) { return d[1]; })
       .attr("r", 1e-6)
       .on("mousedown", function(d) {
         selected = dragged = d;
@@ -71,7 +68,7 @@ function update() {
       .attr("r", 6.5);
 
   circle
-      .attr("class", function(d) { return d === selected ? "selected" : null; })
+      .classed("selected", function(d) { return d === selected; })
       .attr("cx", function(d) { return d[0]; })
       .attr("cy", function(d) { return d[1]; });
 
