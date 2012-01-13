@@ -110,6 +110,16 @@ suite.addBatch({
         assert.inDelta(x(-.5), 1, 1e-6);
         assert.inDelta(x(.5), .5, 1e-6);
         assert.inDelta(x(1.5), 0, 1e-6);
+      },
+      "can clamp to the range": function(linear) {
+        var x = linear().clamp(true);
+        assert.inDelta(x.invert(-.5), 0, 1e-6);
+        assert.inDelta(x.invert(.5), .5, 1e-6);
+        assert.inDelta(x.invert(1.5), 1, 1e-6);
+        var x = linear().range([1, 0]).clamp(true);
+        assert.inDelta(x.invert(-.5), 1, 1e-6);
+        assert.inDelta(x.invert(.5), .5, 1e-6);
+        assert.inDelta(x.invert(1.5), 0, 1e-6);
       }
     },
 

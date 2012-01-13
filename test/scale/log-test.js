@@ -106,13 +106,23 @@ suite.addBatch({
       },
       "can clamp to the domain": function(log) {
         var x = log().clamp(true);
-        assert.inDelta(x(.5), 0, 1e-6);
+        assert.inDelta(x(-1), 0, 1e-6);
         assert.inDelta(x(5), 0.69897, 1e-6);
         assert.inDelta(x(15), 1, 1e-6);
         var x = log().domain([10, 1]).clamp(true);
-        assert.inDelta(x(.5), 1, 1e-6);
+        assert.inDelta(x(-1), 1, 1e-6);
         assert.inDelta(x(5), 0.30103, 1e-6);
         assert.inDelta(x(15), 0, 1e-6);
+      },
+      "can clamp to the range": function(log) {
+        var x = log().clamp(true);
+        assert.inDelta(x.invert(-.1), 1, 1e-6);
+        assert.inDelta(x.invert(0.69897), 5, 1e-6);
+        assert.inDelta(x.invert(1.5), 10, 1e-6);
+        var x = log().domain([10, 1]).clamp(true);
+        assert.inDelta(x.invert(-.1), 10, 1e-6);
+        assert.inDelta(x.invert(0.30103), 5, 1e-6);
+        assert.inDelta(x.invert(1.5), 1, 1e-6);
       }
     },
 
