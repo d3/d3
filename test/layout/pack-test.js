@@ -24,6 +24,32 @@ suite.addBatch({
         {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5}
       ]);
     },
+    "can handle small nodes": function() {
+      assert.deepEqual(d3.layout.pack().sort(null).nodes({children: [
+        {value: .01},
+        {value: 2},
+        {value: 2},
+        {value: 1}
+      ]}).map(layout), [
+        {y: 0.5, x: 0.5, value: 5.01, r: 0.5, depth: 0},
+        {y: 0.5084543199854831, x: 0.4682608366855136, value: 0.01, r: 0.016411496513964046, depth: 1},
+        {y: 0.5084543199854831, x: 0.7167659426883449, value: 2, r: 0.23209360948886723, depth: 1},
+        {y: 0.34256315498862167, x: 0.2832340573116551, value: 2, r: 0.23209360948886723, depth: 1},
+        {y: 0.7254154893606051, x: 0.3852405506102519, value: 1, r: 0.16411496513964044, depth: 1}
+      ]);
+      assert.deepEqual(d3.layout.pack().sort(null).nodes({children: [
+        {value: 2},
+        {value: 2},
+        {value: 1},
+        {value: .01}
+      ]}).map(layout), [
+        {y: 0.5, x: 0.5, value: 5.01, r: 0.5, depth: 0},
+        {y: 0.6274712284943809, x: 0.26624891409386664, value: 2, r: 0.23375108590613333, depth: 1},
+        {y: 0.6274712284943809, x: 0.7337510859061334, value: 2, r: 0.23375108590613333, depth: 1},
+        {y: 0.30406466355343187, x: 0.5, value: 1, r: 0.1652869779539461, depth: 1},
+        {y: 0.3878967195987758, x: 0.3386645534068855, value: 0.01, r: 0.01652869779539461, depth: 1}
+      ]);
+    },
     "can handle residual floating point error": function(pack) {
       var result = pack.nodes({children: [
         {value: 0.005348322447389364},

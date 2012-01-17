@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.7.1"}; // semver
+d3 = {version: "2.7.2"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -1777,7 +1777,7 @@ d3_selectionPrototype.order = function() {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
       if (node = group[i]) {
-        if (next) next.parentNode.insertBefore(node, next);
+        if (next && next !== node.nextSibling) next.parentNode.insertBefore(node, next);
         next = node;
       }
     }
@@ -2578,11 +2578,11 @@ function d3_scale_log(linear, log) {
 var d3_scale_logFormat = d3.format(".0e");
 
 function d3_scale_logp(x) {
-  return Math.log(x) / Math.LN10;
+  return Math.log(x < 0 ? 0 : x) / Math.LN10;
 }
 
 function d3_scale_logn(x) {
-  return -Math.log(-x) / Math.LN10;
+  return -Math.log(x > 0 ? 0 : -x) / Math.LN10;
 }
 
 d3_scale_logp.pow = function(x) {
@@ -3855,7 +3855,10 @@ d3.svg.axis = function() {
       switch (orient) {
         case "bottom": {
           tickTransform = d3_svg_axisX;
+          subtickEnter.attr("y2", tickMinorSize);
           subtickUpdate.attr("x2", 0).attr("y2", tickMinorSize);
+          tickEnter.select("line").attr("y2", tickMajorSize);
+          tickEnter.select("text").attr("y", Math.max(tickMajorSize, 0) + tickPadding);
           tickUpdate.select("line").attr("x2", 0).attr("y2", tickMajorSize);
           tickUpdate.select("text").attr("x", 0).attr("y", Math.max(tickMajorSize, 0) + tickPadding).attr("dy", ".71em").attr("text-anchor", "middle");
           pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[1] + "V" + tickEndSize);
@@ -3863,7 +3866,10 @@ d3.svg.axis = function() {
         }
         case "top": {
           tickTransform = d3_svg_axisX;
+          subtickEnter.attr("y2", -tickMinorSize);
           subtickUpdate.attr("x2", 0).attr("y2", -tickMinorSize);
+          tickEnter.select("line").attr("y2", -tickMajorSize);
+          tickEnter.select("text").attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
           tickUpdate.select("line").attr("x2", 0).attr("y2", -tickMajorSize);
           tickUpdate.select("text").attr("x", 0).attr("y", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("dy", "0em").attr("text-anchor", "middle");
           pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[1] + "V" + -tickEndSize);
@@ -3871,7 +3877,10 @@ d3.svg.axis = function() {
         }
         case "left": {
           tickTransform = d3_svg_axisY;
+          subtickEnter.attr("x2", -tickMinorSize);
           subtickUpdate.attr("x2", -tickMinorSize).attr("y2", 0);
+          tickEnter.select("line").attr("x2", -tickMajorSize);
+          tickEnter.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding));
           tickUpdate.select("line").attr("x2", -tickMajorSize).attr("y2", 0);
           tickUpdate.select("text").attr("x", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "end");
           pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + -tickEndSize);
@@ -3879,7 +3888,10 @@ d3.svg.axis = function() {
         }
         case "right": {
           tickTransform = d3_svg_axisY;
+          subtickEnter.attr("x2", tickMinorSize);
           subtickUpdate.attr("x2", tickMinorSize).attr("y2", 0);
+          tickEnter.select("line").attr("x2", tickMajorSize);
+          tickEnter.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding);
           tickUpdate.select("line").attr("x2", tickMajorSize).attr("y2", 0);
           tickUpdate.select("text").attr("x", Math.max(tickMajorSize, 0) + tickPadding).attr("y", 0).attr("dy", ".32em").attr("text-anchor", "start");
           pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);

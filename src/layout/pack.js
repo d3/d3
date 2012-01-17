@@ -50,7 +50,7 @@ function d3_layout_packIntersects(a, b) {
   var dx = b.x - a.x,
       dy = b.y - a.y,
       dr = a.r + b.r;
-  return (dr * dr - dx * dx - dy * dy) > .001; // within epsilon
+  return dr * dr - dx * dx - dy * dy > .001; // within epsilon
 }
 
 function d3_layout_packCircle(nodes) {
@@ -109,28 +109,20 @@ function d3_layout_packCircle(nodes) {
         if (isect == 1) {
           for (k = a._pack_prev; k !== j._pack_prev; k = k._pack_prev, s2++) {
             if (d3_layout_packIntersects(k, c)) {
-              if (s2 < s1) {
-                isect = -1;
-                j = k;
-              }
               break;
             }
           }
         }
 
         // Update node chain.
-        if (isect == 0) {
+        if (isect) {
+          if (s1 < s2 || (s1 == s2 && b.r < a.r)) d3_layout_packSplice(a, b = j);
+          else d3_layout_packSplice(a = k, b);
+          i--;
+        } else {
           d3_layout_packInsert(a, c);
           b = c;
           bound(c);
-        } else if (isect > 0) {
-          d3_layout_packSplice(a, j);
-          b = j;
-          i--;
-        } else { // isect < 0
-          d3_layout_packSplice(j, b);
-          a = j;
-          i--;
         }
       }
     }
