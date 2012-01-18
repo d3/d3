@@ -148,6 +148,20 @@ suite.addBatch({
         assert.inDelta(x.invert(new Date(1990, 6, 2, 13)), .5, 1e-6);
         var x = linear().range(["#000", "#fff"]);
         assert.isNaN(x.invert("#999"));
+      },
+      "can invert a polylinear descending domain": function(linear) {
+        var x = linear().domain([4, 2, 1]).range([1, 2, 4]);
+        assert.inDelta(x(1.5), 3, 1e-6);
+        assert.inDelta(x(3), 1.5, 1e-6);
+        assert.inDelta(x.invert(1.5), 3, 1e-6);
+        assert.inDelta(x.invert(3), 1.5, 1e-6);
+      },
+      "can invert a polylinear descending range": function(linear) {
+        var x = linear().domain([1, 2, 4]).range([4, 2, 1]);
+        assert.inDelta(x(1.5), 3, 1e-6);
+        assert.inDelta(x(3), 1.5, 1e-6);
+        assert.inDelta(x.invert(1.5), 3, 1e-6);
+        assert.inDelta(x.invert(3), 1.5, 1e-6);
       }
     },
 
