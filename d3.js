@@ -4016,8 +4016,8 @@ d3.svg.brush = function() {
 
     g.each(function() {
       var g = d3.select(this).on("mousedown.brush", down),
-          bg = g.selectAll(".background").data([]),
-          fg = g.selectAll(".extent").data([]),
+          bg = g.selectAll(".background").data([0]),
+          fg = g.selectAll(".extent").data([0]),
           tz = g.selectAll(".resize").data(resizes, String),
           e;
 
