@@ -201,12 +201,16 @@ function d3_zipLength(d) {
 // The returned insertion point i partitions the array a into two halves so that
 // all v < x for v in a[lo:i] for the left side and all v >= x for v in a[i:hi]
 // for the right side.
-d3.bisectLeft = function(a, x, lo, hi) {
+d3.bisectLeft = function(a, x, lo, hi, f) {
   if (arguments.length < 3) lo = 0;
   if (arguments.length < 4) hi = a.length;
-  while (lo < hi) {
+  if (arguments.length < 5) while (lo < hi) {
     var mid = (lo + hi) >> 1;
     if (a[mid] < x) lo = mid + 1;
+    else hi = mid;
+  } else while (lo < hi) {
+    var mid = (lo + hi) >> 1;
+    if (f.call(a, a[mid], mid) < x) lo = mid + 1;
     else hi = mid;
   }
   return lo;
@@ -219,12 +223,16 @@ d3.bisectLeft = function(a, x, lo, hi) {
 // all v <= x for v in a[lo:i] for the left side and all v > x for v in a[i:hi]
 // for the right side.
 d3.bisect =
-d3.bisectRight = function(a, x, lo, hi) {
+d3.bisectRight = function(a, x, lo, hi, f) {
   if (arguments.length < 3) lo = 0;
   if (arguments.length < 4) hi = a.length;
-  while (lo < hi) {
+  if (arguments.length < 5) while (lo < hi) {
     var mid = (lo + hi) >> 1;
     if (x < a[mid]) hi = mid;
+    else lo = mid + 1;
+  } else while (lo < hi) {
+    var mid = (lo + hi) >> 1;
+    if (x < f.call(a, a[mid], mid)) hi = mid;
     else lo = mid + 1;
   }
   return lo;
