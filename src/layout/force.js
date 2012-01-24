@@ -56,6 +56,13 @@ d3.layout.force = function() {
         x, // x-distance
         y; // y-distance
 
+    // save previous values
+    for (i = 0; i < n; ++i) {
+      o = nodes[i];
+      o.px = o.x;
+      o.py = o.y;
+    }
+
     // gauss-seidel relaxation for links
     for (i = 0; i < m; ++i) {
       o = links[i];
@@ -295,8 +302,8 @@ function d3_layout_forceDragEnd() {
 }
 
 function d3_layout_forceDrag() {
-  d3_layout_forceDragNode.px = d3.event.x;
-  d3_layout_forceDragNode.py = d3.event.y;
+  d3_layout_forceDragNode.x = d3.event.x;
+  d3_layout_forceDragNode.y = d3.event.y;
   d3_layout_forceDragForce.resume(); // restart annealing
 }
 
