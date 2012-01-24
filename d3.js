@@ -4024,8 +4024,8 @@ d3.svg.brush = function() {
       // An invisible, mouseable area for starting a new brush.
       bg.enter().append("rect")
           .attr("class", "background")
-          .attr("width", 0)
-          .attr("height", 0)
+          .attr("width", "100%")
+          .attr("height", "100%")
           .style("visibility", "hidden")
           .style("pointer-events", "all")
           .style("cursor", "crosshair");
