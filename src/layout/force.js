@@ -56,12 +56,8 @@ d3.layout.force = function() {
         x, // x-distance
         y; // y-distance
 
-    // save previous values
-    for (i = 0; i < n; ++i) {
-      o = nodes[i];
-      o.px = o.x;
-      o.py = o.y;
-    }
+    // note: .px and .py are modified to accumulate forces, which are then
+    // applied to .x and .y at the end.
 
     // gauss-seidel relaxation for links
     for (i = 0; i < m; ++i) {
@@ -74,10 +70,10 @@ d3.layout.force = function() {
         l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
-        t.x -= x * (k = s.weight / (t.weight + s.weight));
-        t.y -= y * k;
-        s.x += x * (k = 1 - k);
-        s.y += y * k;
+        t.px += x * (k = s.weight / (t.weight + s.weight));
+        t.py += y * k;
+        s.px -= x * (k = 1 - k);
+        s.py -= y * k;
       }
     }
 
@@ -87,8 +83,8 @@ d3.layout.force = function() {
       y = size[1] / 2;
       i = -1; if (k) while (++i < n) {
         o = nodes[i];
-        o.x += (x - o.x) * k;
-        o.y += (y - o.y) * k;
+        o.px -= (x - o.x) * k;
+        o.py -= (y - o.y) * k;
       }
     }
 
@@ -106,8 +102,8 @@ d3.layout.force = function() {
     i = -1; while (++i < n) {
       o = nodes[i];
       if (o.fixed) {
-        o.x = o.px;
-        o.y = o.py;
+        o.px = o.x;
+        o.py = o.y;
       } else {
         o.x -= (o.px - (o.px = o.x)) * friction;
         o.y -= (o.py - (o.py = o.y)) * friction;
