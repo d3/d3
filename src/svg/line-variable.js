@@ -80,12 +80,12 @@ function d3_svg_lineVariablePoints(self, d, x, y, w, intpol, t) {
         if(i > 0) {
             var dx = thisx - spinePoints[i-1][0],
                 dy = thisy - spinePoints[i-1][1];
-            aleft = Math.PI - Math.atan(dy/dx);
+            aleft = Math.PI - Math.atan2(dy, dx);
         }
         if(i < n-1) {
             var dx = spinePoints[i+1][0] - thisx,
                 dy = thisy - spinePoints[i+1][1];
-            aright = Math.atan(dy/dx);
+            aright = Math.atan2(dy, dx);
         }
         var gamma = aleft - aright,
             diff = width/2 / Math.sin(gamma/2),
