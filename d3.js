@@ -2145,7 +2145,7 @@ d3_transitionPrototype.text = function(value) {
   });
 };
 d3_transitionPrototype.remove = function() {
-  return this.each("end", function() {
+  return this.each("end.transition", function() {
     var p;
     if (!this.__transition__ && (p = this.parentNode)) p.removeChild(this);
   });
