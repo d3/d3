@@ -201,13 +201,24 @@ function d3_zipLength(d) {
 // The returned insertion point i partitions the array a into two halves so that
 // all v < x for v in a[lo:i] for the left side and all v >= x for v in a[i:hi]
 // for the right side.
-d3.bisectLeft = function(a, x, lo, hi) {
-  if (arguments.length < 3) lo = 0;
-  if (arguments.length < 4) hi = a.length;
-  while (lo < hi) {
-    var mid = (lo + hi) >> 1;
-    if (a[mid] < x) lo = mid + 1;
-    else hi = mid;
+d3.bisectLeft = function(a, f, x, lo, hi) {
+  if (typeof f === "function") {
+    if (arguments.length < 4) lo = 0;
+    if (arguments.length < 5) hi = a.length;
+    while (lo < hi) {
+      var mid = (lo + hi) >> 1;
+      if (f.call(a, a[mid], mid) < x) lo = mid + 1;
+      else hi = mid;
+    }
+  } else {
+    hi = (arguments.length < 4) ? a.length : lo;
+    lo = (arguments.length < 3) ? 0 : x;
+    x = f;    // shift arguments rightward from optional accessor
+    while (lo < hi) {
+      var mid = (lo + hi) >> 1;
+      if (a[mid] < x) lo = mid + 1;
+      else hi = mid;
+    }
   }
   return lo;
 };
@@ -219,13 +230,24 @@ d3.bisectLeft = function(a, x, lo, hi) {
 // all v <= x for v in a[lo:i] for the left side and all v > x for v in a[i:hi]
 // for the right side.
 d3.bisect =
-d3.bisectRight = function(a, x, lo, hi) {
-  if (arguments.length < 3) lo = 0;
-  if (arguments.length < 4) hi = a.length;
-  while (lo < hi) {
-    var mid = (lo + hi) >> 1;
-    if (x < a[mid]) hi = mid;
-    else lo = mid + 1;
+d3.bisectRight = function(a, f, x, lo, hi) {
+  if (typeof f === "function") {
+    if (arguments.length < 4) lo = 0;
+    if (arguments.length < 5) hi = a.length;
+    while (lo < hi) {
+      var mid = (lo + hi) >> 1;
+      if (x < f.call(a, a[mid], mid)) hi = mid;
+      else lo = mid + 1;
+    }
+  } else {
+    hi = (arguments.length < 4) ? a.length : lo;
+    lo = (arguments.length < 3) ? 0 : x;
+    x = f;    // shift arguments rightward from optional accessor
+    while (lo < hi) {
+      var mid = (lo + hi) >> 1;
+      if (x < a[mid]) hi = mid;
+      else lo = mid + 1;
+    }
   }
   return lo;
 };
