@@ -9,7 +9,7 @@
 // all v < x for v in a[lo:i] for the left side and all v >= x for v in a[i:hi]
 // for the right side.
 d3.bisectLeft = function(a, f, x, lo, hi) {
-  if (typeof arguments[1] === "function") {
+  if (typeof f === "function") {
     if (arguments.length < 4) lo = 0;
     if (arguments.length < 5) hi = a.length;
     while (lo < hi) {
@@ -38,7 +38,7 @@ d3.bisectLeft = function(a, f, x, lo, hi) {
 // for the right side.
 d3.bisect =
 d3.bisectRight = function(a, f, x, lo, hi) {
-  if (typeof arguments[1] === "function") {
+  if (typeof f === "function") {
     if (arguments.length < 4) lo = 0;
     if (arguments.length < 5) hi = a.length;
     while (lo < hi) {
