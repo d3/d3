@@ -607,7 +607,7 @@ var d3_time_scaleSteps = [
   864e5,  // 1-day
   1728e5, // 2-day
   6048e5, // 1-week
-  1728e6, // 1-month
+  2592e6, // 1-month
   7776e6, // 3-month
   31536e6 // 1-year
 ];

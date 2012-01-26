@@ -2145,7 +2145,7 @@ d3_transitionPrototype.text = function(value) {
   });
 };
 d3_transitionPrototype.remove = function() {
-  return this.each("end", function() {
+  return this.each("end.transition", function() {
     var p;
     if (!this.__transition__ && (p = this.parentNode)) p.removeChild(this);
   });
@@ -2495,15 +2495,21 @@ function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
   var u = [],
       i = [],
       j = 0,
-      n = domain.length;
+      k = domain.length - 1;
 
-  while (++j < n) {
+  // Handle descending domains.
+  if (domain[k] < domain[0]) {
+    domain = domain.slice().reverse();
+    range = range.slice().reverse();
+  }
+
+  while (++j <= k) {
     u.push(uninterpolate(domain[j - 1], domain[j]));
     i.push(interpolate(range[j - 1], range[j]));
   }
 
   return function(x) {
-    var j = d3.bisect(domain, x, 1, domain.length - 1) - 1;
+    var j = d3.bisect(domain, x, 1, k) - 1;
     return i[j](u[j](x));
   };
 }
@@ -4039,8 +4045,10 @@ d3.svg.brush = function() {
           .attr("width", 6)
           .attr("height", 6)
           .style("visibility", "hidden")
-          .style("pointer-events", brush.empty() ? "none" : "all")
           .style("cursor", function(d) { return d3_svg_brushCursor[d]; });
+
+      // Update the resizers.
+      tz.style("pointer-events", brush.empty() ? "none" : "all");
 
       // Remove any superfluous resizers.
       tz.exit().remove();

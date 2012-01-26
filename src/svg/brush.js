@@ -35,8 +35,10 @@ d3.svg.brush = function() {
           .attr("width", 6)
           .attr("height", 6)
           .style("visibility", "hidden")
-          .style("pointer-events", brush.empty() ? "none" : "all")
           .style("cursor", function(d) { return d3_svg_brushCursor[d]; });
+
+      // Update the resizers.
+      tz.style("pointer-events", brush.empty() ? "none" : "all");
 
       // Remove any superfluous resizers.
       tz.exit().remove();
