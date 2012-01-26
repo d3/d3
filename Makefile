@@ -23,8 +23,11 @@ all: \
 
 d3.custom.js: \
 	d3.js \
+	d3.layout.js \
+	d3.csv.js \
+	d3.geo.js \
 	d3.geom.js \
-	d3.layout.js
+	d3.time.js
 
 .INTERMEDIATE d3.js: \
 	src/start.js \
