@@ -512,7 +512,8 @@ d3_dispatch.prototype.on = function(type, listener) {
 
 function d3_dispatch_event() {
   var listeners = [],
-      listenerByName = {};
+      listenerByName = {},
+      that = this;
 
   function dispatch() {
     var z = listeners, // defensive reference
@@ -520,6 +521,7 @@ function d3_dispatch_event() {
         n = z.length,
         l;
     while (++i < n) if (l = z[i].on) l.apply(this, arguments);
+    return that;
   }
 
   dispatch.on = function(name, listener) {
