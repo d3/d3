@@ -489,7 +489,7 @@ d3.dispatch = function() {
   var dispatch = new d3_dispatch(),
       i = -1,
       n = arguments.length;
-  while (++i < n) dispatch[arguments[i]] = d3_dispatch_event();
+  while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
   return dispatch;
 };
 
@@ -507,22 +507,23 @@ d3_dispatch.prototype.on = function(type, listener) {
 
   return arguments.length < 2
       ? this[type].on(name)
-      : (this[type].on(name, listener), this);
+      : this[type].on(name, listener);
 };
 
-function d3_dispatch_event() {
+function d3_dispatch_event(dispatch) {
   var listeners = [],
       listenerByName = {};
 
-  function dispatch() {
+  function event() {
     var z = listeners, // defensive reference
         i = -1,
         n = z.length,
         l;
     while (++i < n) if (l = z[i].on) l.apply(this, arguments);
+    return dispatch;
   }
 
-  dispatch.on = function(name, listener) {
+  event.on = function(name, listener) {
     var l, i;
 
     // return the current listener, if any
@@ -543,7 +544,7 @@ function d3_dispatch_event() {
     return dispatch;
   };
 
-  return dispatch;
+  return event;
 };
 // TODO align
 d3.format = function(specifier) {
