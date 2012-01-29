@@ -2,8 +2,7 @@ d3_selectionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = "";
 
   // If no value is specified, return the first value.
-  if (arguments.length < 2) return window
-      .getComputedStyle(this.node(), null)
+  if (arguments.length < 2) return this.node().style
       .getPropertyValue(name);
 
   function styleNull() {
