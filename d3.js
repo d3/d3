@@ -1529,8 +1529,7 @@ d3_selectionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = "";
 
   // If no value is specified, return the first value.
-  if (arguments.length < 2) return window
-      .getComputedStyle(this.node(), null)
+  if (arguments.length < 2) return this.node().style
       .getPropertyValue(name);
 
   function styleNull() {
@@ -2131,7 +2130,7 @@ d3_transitionPrototype.style = function(name, value, priority) {
 d3_transitionPrototype.styleTween = function(name, tween, priority) {
   if (arguments.length < 3) priority = "";
   return this.tween("style." + name, function(d, i) {
-    var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
+    var f = tween.call(this, d, i, this.style.getPropertyValue(name));
     return f === d3_transitionRemove
         ? (this.style.removeProperty(name), null)
         : f && function(t) { this.style.setProperty(name, f(t), priority); };
