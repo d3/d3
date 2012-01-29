@@ -20,7 +20,9 @@ function d3_time_scale(linear, methods, format) {
     if (typeof m !== "function") {
       var span = extent[1] - extent[0],
           target = span / m,
-          i = d3.bisect(d3_time_scaleSteps, target, 1, d3_time_scaleSteps.length - 1);
+          i = d3.bisect(d3_time_scaleSteps, target);
+      if (i == d3_time_scaleSteps.length) return methods.year(extent, m);
+      if (!i) return linear.ticks(m).map(d3_time_scaleDate);
       if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
       m = methods[i];
       k = m[1];
@@ -57,6 +59,19 @@ function d3_time_scaleFormat(formats) {
     while (!f[1](date)) f = formats[--i];
     return f[0](date);
   };
+}
+
+function d3_time_scaleSetYear(y) {
+  var d = new Date(y, 0, 1);
+  d.setFullYear(y); // Y2K fail
+  return d;
+}
+
+function d3_time_scaleGetYear(d) {
+  var y = d.getFullYear(),
+      d0 = d3_time_scaleSetYear(y),
+      d1 = d3_time_scaleSetYear(y + 1);
+  return y + (d - d0) / (d1 - d0);
 }
 
 var d3_time_scaleSteps = [
@@ -108,10 +123,16 @@ var d3_time_scaleLocalFormats = [
   [d3.time.format("%a %d"), function(d) { return d.getDay() && d.getDate() != 1; }],
   [d3.time.format("%I %p"), function(d) { return d.getHours(); }],
   [d3.time.format("%I:%M"), function(d) { return d.getMinutes(); }],
-  [d3.time.format(":%S"), function(d) { return d.getSeconds() || d.getMilliseconds(); }]
+  [d3.time.format(":%S"), function(d) { return d.getSeconds(); }],
+  [d3.time.format(".%L"), function(d) { return d.getMilliseconds(); }]
 ];
 
-var d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
+var d3_time_scaleLinear = d3.scale.linear(),
+    d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
+
+d3_time_scaleLocalMethods.year = function(extent, m) {
+  return d3_time_scaleLinear.domain(extent.map(d3_time_scaleGetYear)).ticks(m).map(d3_time_scaleSetYear);
+};
 
 d3.time.scale = function() {
   return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
