@@ -94,7 +94,8 @@ suite.addBatch({
           local(2011, 0, 1, 12, 0, 0),
           local(2011, 0, 1, 12, 0, 1),
           local(2011, 0, 1, 12, 0, 2),
-          local(2011, 0, 1, 12, 0, 3)
+          local(2011, 0, 1, 12, 0, 3),
+          local(2011, 0, 1, 12, 0, 4)
         ]);
       },
       "generates 5-second ticks": function(scale) {
@@ -103,7 +104,8 @@ suite.addBatch({
           local(2011, 0, 1, 12, 0, 0),
           local(2011, 0, 1, 12, 0, 5),
           local(2011, 0, 1, 12, 0, 10),
-          local(2011, 0, 1, 12, 0, 15)
+          local(2011, 0, 1, 12, 0, 15),
+          local(2011, 0, 1, 12, 0, 20)
         ]);
       },
       "generates 15-second ticks": function(scale) {
@@ -343,7 +345,8 @@ suite.addBatch({
             utc(2011, 0, 1, 12, 0, 0),
             utc(2011, 0, 1, 12, 0, 1),
             utc(2011, 0, 1, 12, 0, 2),
-            utc(2011, 0, 1, 12, 0, 3)
+            utc(2011, 0, 1, 12, 0, 3),
+            utc(2011, 0, 1, 12, 0, 4)
           ]);
         },
         "generates 5-second ticks": function(scale) {
@@ -352,7 +355,8 @@ suite.addBatch({
             utc(2011, 0, 1, 12, 0, 0),
             utc(2011, 0, 1, 12, 0, 5),
             utc(2011, 0, 1, 12, 0, 10),
-            utc(2011, 0, 1, 12, 0, 15)
+            utc(2011, 0, 1, 12, 0, 15),
+            utc(2011, 0, 1, 12, 0, 20)
           ]);
         },
         "generates 15-second ticks": function(scale) {

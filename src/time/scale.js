@@ -28,7 +28,7 @@ function d3_time_scale(linear, methods, format) {
       k = m[1];
       m = m[0];
     }
-    return m(extent[0], extent[1], k);
+    return m(extent[0], new Date(+extent[1] + 1), k); // inclusive upper bound
   };
 
   scale.tickFormat = function() {
