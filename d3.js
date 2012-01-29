@@ -2458,7 +2458,6 @@ function d3_scale_linearNice(dx) {
   };
 }
 
-// TODO Dates? Ugh.
 function d3_scale_linearTickRange(domain, m) {
   var extent = d3_scaleExtent(domain),
       span = extent[1] - extent[0],
