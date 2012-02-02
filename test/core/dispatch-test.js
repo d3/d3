@@ -59,6 +59,15 @@ suite.addBatch({
       d.foo();
       assert.deepEqual(those, [b, a]);
     },
+    "notifying listeners returns the dispatch object": function(dispatch) {
+      var d = dispatch("foo");
+      assert.equal(d.foo(), d);
+    },
+    "adding a listener returns the dispatch object": function(dispatch) {
+      var d = dispatch("foo");
+      function A() {}
+      assert.equal(d.on("foo", A), d);
+    },
     "removed listeners do not receive subsequent events": function(dispatch) {
       var d = dispatch("foo"), a = {}, b = {}, those = [];
       function A() { those.push(a); }
