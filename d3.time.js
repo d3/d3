@@ -552,13 +552,15 @@ function d3_time_scale(linear, methods, format) {
     if (typeof m !== "function") {
       var span = extent[1] - extent[0],
           target = span / m,
-          i = d3.bisect(d3_time_scaleSteps, target, 1, d3_time_scaleSteps.length - 1);
+          i = d3.bisect(d3_time_scaleSteps, target);
+      if (i == d3_time_scaleSteps.length) return methods.year(extent, m);
+      if (!i) return linear.ticks(m).map(d3_time_scaleDate);
       if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
       m = methods[i];
       k = m[1];
       m = m[0];
     }
-    return m(extent[0], extent[1], k);
+    return m(extent[0], new Date(+extent[1] + 1), k); // inclusive upper bound
   };
 
   scale.tickFormat = function() {
@@ -589,6 +591,19 @@ function d3_time_scaleFormat(formats) {
     while (!f[1](date)) f = formats[--i];
     return f[0](date);
   };
+}
+
+function d3_time_scaleSetYear(y) {
+  var d = new Date(y, 0, 1);
+  d.setFullYear(y); // Y2K fail
+  return d;
+}
+
+function d3_time_scaleGetYear(d) {
+  var y = d.getFullYear(),
+      d0 = d3_time_scaleSetYear(y),
+      d1 = d3_time_scaleSetYear(y + 1);
+  return y + (d - d0) / (d1 - d0);
 }
 
 var d3_time_scaleSteps = [
@@ -640,10 +655,16 @@ var d3_time_scaleLocalFormats = [
   [d3.time.format("%a %d"), function(d) { return d.getDay() && d.getDate() != 1; }],
   [d3.time.format("%I %p"), function(d) { return d.getHours(); }],
   [d3.time.format("%I:%M"), function(d) { return d.getMinutes(); }],
-  [d3.time.format(":%S"), function(d) { return d.getSeconds() || d.getMilliseconds(); }]
+  [d3.time.format(":%S"), function(d) { return d.getSeconds(); }],
+  [d3.time.format(".%L"), function(d) { return d.getMilliseconds(); }]
 ];
 
-var d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
+var d3_time_scaleLinear = d3.scale.linear(),
+    d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
+
+d3_time_scaleLocalMethods.year = function(extent, m) {
+  return d3_time_scaleLinear.domain(extent.map(d3_time_scaleGetYear)).ticks(m).map(d3_time_scaleSetYear);
+};
 
 d3.time.scale = function() {
   return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
@@ -676,10 +697,28 @@ var d3_time_scaleUTCFormats = [
   [d3.time.format.utc("%a %d"), function(d) { return d.getUTCDay() && d.getUTCDate() != 1; }],
   [d3.time.format.utc("%I %p"), function(d) { return d.getUTCHours(); }],
   [d3.time.format.utc("%I:%M"), function(d) { return d.getUTCMinutes(); }],
-  [d3.time.format.utc(":%S"), function(d) { return d.getUTCSeconds() || d.getUTCMilliseconds(); }]
+  [d3.time.format.utc(":%S"), function(d) { return d.getUTCSeconds(); }],
+  [d3.time.format.utc(".%L"), function(d) { return d.getUTCMilliseconds(); }]
 ];
 
 var d3_time_scaleUTCFormat = d3_time_scaleFormat(d3_time_scaleUTCFormats);
+
+function d3_time_scaleUTCSetYear(y) {
+  var d = new Date(Date.UTC(y, 0, 1));
+  d.setUTCFullYear(y); // Y2K fail
+  return d;
+}
+
+function d3_time_scaleUTCGetYear(d) {
+  var y = d.getUTCFullYear(),
+      d0 = d3_time_scaleUTCSetYear(y),
+      d1 = d3_time_scaleUTCSetYear(y + 1);
+  return y + (d - d0) / (d1 - d0);
+}
+
+d3_time_scaleUTCMethods.year = function(extent, m) {
+  return d3_time_scaleLinear.domain(extent.map(d3_time_scaleUTCGetYear)).ticks(m).map(d3_time_scaleUTCSetYear);
+};
 
 d3.time.scale.utc = function() {
   return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);

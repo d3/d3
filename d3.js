@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.7.3"}; // semver
+d3 = {version: "2.7.4"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -489,7 +489,7 @@ d3.dispatch = function() {
   var dispatch = new d3_dispatch(),
       i = -1,
       n = arguments.length;
-  while (++i < n) dispatch[arguments[i]] = d3_dispatch_event();
+  while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
   return dispatch;
 };
 
@@ -507,22 +507,23 @@ d3_dispatch.prototype.on = function(type, listener) {
 
   return arguments.length < 2
       ? this[type].on(name)
-      : (this[type].on(name, listener), this);
+      : this[type].on(name, listener);
 };
 
-function d3_dispatch_event() {
+function d3_dispatch_event(dispatch) {
   var listeners = [],
       listenerByName = {};
 
-  function dispatch() {
+  function event() {
     var z = listeners, // defensive reference
         i = -1,
         n = z.length,
         l;
     while (++i < n) if (l = z[i].on) l.apply(this, arguments);
+    return dispatch;
   }
 
-  dispatch.on = function(name, listener) {
+  event.on = function(name, listener) {
     var l, i;
 
     // return the current listener, if any
@@ -543,7 +544,7 @@ function d3_dispatch_event() {
     return dispatch;
   };
 
-  return dispatch;
+  return event;
 };
 // TODO align
 d3.format = function(specifier) {
@@ -894,7 +895,54 @@ d3.interpolateString = function(a, b) {
 };
 
 d3.interpolateTransform = function(a, b) {
-  return d3.interpolateString(d3.transform(a) + "", d3.transform(b) + "");
+  var s = [], // string constants and placeholders
+      q = [], // number interpolators
+      n,
+      A = d3.transform(a),
+      B = d3.transform(b),
+      ta = A.translate,
+      tb = B.translate,
+      ra = A.rotate,
+      rb = B.rotate,
+      wa = A.skew,
+      wb = B.skew,
+      ka = A.scale,
+      kb = B.scale;
+
+  if (ta[0] != tb[0] || ta[1] != tb[1]) {
+    s.push("translate(", null, ",", null, ")");
+    q.push({i: 1, x: d3.interpolateNumber(ta[0], tb[0])}, {i: 3, x: d3.interpolateNumber(ta[1], tb[1])});
+  } else if (tb[0] || tb[1]) {
+    s.push("translate(" + tb + ")");
+  } else {
+    s.push("");
+  }
+
+  if (ra != rb) {
+    q.push({i: s.push(s.pop() + "rotate(", null, ")") - 2, x: d3.interpolateNumber(ra, rb)});
+  } else if (rb) {
+    s.push(s.pop() + "rotate(" + rb + ")");
+  }
+
+  if (wa != wb) {
+    q.push({i: s.push(s.pop() + "skewX(", null, ")") - 2, x: d3.interpolateNumber(wa, wb)});
+  } else if (wb) {
+    s.push(s.pop() + "skewX(" + wb + ")");
+  }
+
+  if (ka[0] != kb[0] || ka[1] != kb[1]) {
+    n = s.push(s.pop() + "scale(", null, ",", null, ")");
+    q.push({i: n - 4, x: d3.interpolateNumber(ka[0], kb[0])}, {i: n - 2, x: d3.interpolateNumber(ka[1], kb[1])});
+  } else if (kb[0] != 1 || kb[1] != 1) {
+    s.push(s.pop() + "scale(" + kb + ")");
+  }
+
+  n = q.length;
+  return function(t) {
+    var i = -1, o;
+    while (++i < n) s[(o = q[i]).i] = o.x(t);
+    return s.join("");
+  };
 };
 
 d3.interpolateRgb = function(a, b) {
@@ -2458,7 +2506,6 @@ function d3_scale_linearNice(dx) {
   };
 }
 
-// TODO Dates? Ugh.
 function d3_scale_linearTickRange(domain, m) {
   var extent = d3_scaleExtent(domain),
       span = extent[1] - extent[0],
