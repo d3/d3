@@ -58,4 +58,4 @@ function d3_dispatch_event(dispatch) {
   };
 
   return event;
-};
+}
