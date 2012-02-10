@@ -129,10 +129,7 @@ function update(source) {
       .attr("d", function(d) {
         var o = {x: source.x0, y: source.y0};
         return diagonal({source: o, target: o});
-      })
-    .transition()
-      .duration(duration)
-      .attr("d", diagonal);
+      });
 
   // Transition links to their new position.
   link.transition()
