@@ -219,6 +219,15 @@ title: Examples
 <div class="gallery">
 
 <div class="list">
+  <a href="https://github.com/mbostock/d3/wiki">
+    <img src="../wiki.png"/>
+  </a>
+  <h4><a href="https://github.com/mbostock/d3/wiki">D3 Wiki</a></h4>
+
+  <p>The official D3 wiki is full of additional examples and tutorials.</p>
+</div>
+
+<div class="list">
   <a href="http://www.jasondavies.com/animated-bezier/">
     <img src="../bezier.png"/>
   </a>
