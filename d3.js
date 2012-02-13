@@ -2492,7 +2492,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
   };
 
   return rescale();
-};
+}
 
 function d3_scale_linearRebind(scale, linear) {
   return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
@@ -2626,7 +2626,7 @@ function d3_scale_log(linear, log) {
   };
 
   return d3_scale_linearRebind(scale, linear);
-};
+}
 
 var d3_scale_logFormat = d3.format(".0e");
 
@@ -2692,7 +2692,7 @@ function d3_scale_pow(linear, exponent) {
   };
 
   return d3_scale_linearRebind(scale, linear);
-};
+}
 
 function d3_scale_powPow(e) {
   return function(x) {
@@ -2782,7 +2782,7 @@ function d3_scale_ordinal(domain, ranger) {
   };
 
   return scale.domain(domain);
-};
+}
 /*
  * This product includes color specifications and designs developed by Cynthia
  * Brewer (http://colorbrewer.org/). See lib/colorbrewer for more information.
@@ -2879,7 +2879,7 @@ function d3_scale_quantile(domain, range) {
   };
 
   return rescale();
-};
+}
 d3.scale.quantize = function() {
   return d3_scale_quantize(0, 1, [0, 1]);
 };
@@ -2915,7 +2915,7 @@ function d3_scale_quantize(x0, x1, range) {
   };
 
   return rescale();
-};
+}
 d3.svg = {};
 d3.svg.arc = function() {
   var innerRadius = d3_svg_arcInnerRadius,
