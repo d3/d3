@@ -35,6 +35,7 @@ suite.addBatch({
       assert.deepEqual(range(5, 9, .5), [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5]);
       assert.deepEqual(range(5, 8.5, .5), [5, 5.5, 6, 6.5, 7, 7.5, 8]);
       assert.deepEqual(range(2, 0, -.5), [2, 1.5, 1, .5]);
+      assert.deepEqual(range(0,0.5,0.1), [0, 0.1, 0.2, 0.3, 0.4]);
     },
     "returns an ascending range if step is positive": function(range) {
       assert.deepEqual(range(0, 5, 1), [0, 1, 2, 3, 4]);
