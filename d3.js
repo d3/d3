@@ -545,7 +545,7 @@ function d3_dispatch_event(dispatch) {
   };
 
   return event;
-};
+}
 // TODO align
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),
