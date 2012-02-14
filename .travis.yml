@@ -13,3 +13,4 @@ before_script:
 # configure notifications (email, IRC, campfire etc)
 notifications:
   irc: "irc.freenode.org#d3-travis"
+  email: "d3-travis@mailinator.com"
