@@ -2863,6 +2863,429 @@ function d3_scale_quantize(x0, x1, range) {
 
   return rescale();
 };
+d3.behavior = {};
+// TODO Track touch points by identifier.
+
+d3.behavior.drag = function() {
+  var event = d3.dispatch("drag", "dragstart", "dragend"),
+      origin = null;
+
+  function drag() {
+    this
+        .on("mousedown.drag", mousedown)
+        .on("touchstart.drag", mousedown);
+
+    d3.select(window)
+        .on("mousemove.drag", d3_behavior_dragMove)
+        .on("touchmove.drag", d3_behavior_dragMove)
+        .on("mouseup.drag", d3_behavior_dragUp, true)
+        .on("touchend.drag", d3_behavior_dragUp, true)
+        .on("click.drag", d3_behavior_dragClick, true);
+  }
+
+  // snapshot the local context for subsequent dispatch
+  function start() {
+    d3_behavior_dragEvent = event;
+    d3_behavior_dragEventTarget = d3.event.target;
+    d3_behavior_dragTarget = this;
+    d3_behavior_dragArguments = arguments;
+    d3_behavior_dragOrigin = d3_behavior_dragPoint();
+    if (origin) {
+      d3_behavior_dragOffset = origin.apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
+      d3_behavior_dragOffset = [d3_behavior_dragOffset.x - d3_behavior_dragOrigin[0], d3_behavior_dragOffset.y - d3_behavior_dragOrigin[1]];
+    } else {
+      d3_behavior_dragOffset = [0, 0];
+    }
+    d3_behavior_dragMoved = 0;
+  }
+
+  function mousedown() {
+    start.apply(this, arguments);
+    d3_behavior_dragDispatch("dragstart");
+  }
+
+  drag.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = x;
+    return drag;
+  };
+
+  return d3.rebind(drag, event, "on");
+};
+
+var d3_behavior_dragEvent,
+    d3_behavior_dragEventTarget,
+    d3_behavior_dragTarget,
+    d3_behavior_dragArguments,
+    d3_behavior_dragOffset,
+    d3_behavior_dragOrigin,
+    d3_behavior_dragMoved;
+
+function d3_behavior_dragDispatch(type) {
+  var p = d3_behavior_dragPoint(),
+      o = d3.event,
+      e = d3.event = {type: type};
+
+  if (p) {
+    e.x = p[0] + d3_behavior_dragOffset[0];
+    e.y = p[1] + d3_behavior_dragOffset[1];
+    e.dx = p[0] - d3_behavior_dragOrigin[0];
+    e.dy = p[1] - d3_behavior_dragOrigin[1];
+    d3_behavior_dragMoved |= e.dx | e.dy;
+    d3_behavior_dragOrigin = p;
+  }
+
+  try {
+    d3_behavior_dragEvent[type].apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
+  } finally {
+    d3.event = o;
+  }
+
+  o.stopPropagation();
+  o.preventDefault();
+}
+
+function d3_behavior_dragPoint() {
+  var p = d3_behavior_dragTarget.parentNode,
+      t = d3.event.changedTouches;
+  return p && (t
+      ? d3.behavior.touches(p, t)[0]
+      : d3.behavior.mouse(p));
+}
+
+function d3_behavior_dragMove() {
+  if (!d3_behavior_dragTarget) return;
+  var parent = d3_behavior_dragTarget.parentNode;
+
+  // O NOES! The drag element was removed from the DOM.
+  if (!parent) return d3_behavior_dragUp();
+
+  d3_behavior_dragDispatch("drag");
+  d3_eventCancel();
+}
+
+function d3_behavior_dragUp() {
+  if (!d3_behavior_dragTarget) return;
+  d3_behavior_dragDispatch("dragend");
+
+  // If the node was moved, prevent the mouseup from propagating.
+  // Also prevent the subsequent click from propagating (e.g., for anchors).
+  if (d3_behavior_dragMoved) {
+    d3_eventCancel();
+    d3_behavior_dragMoved = d3.event.target === d3_behavior_dragEventTarget;
+  }
+
+  d3_behavior_dragEvent =
+  d3_behavior_dragEventTarget =
+  d3_behavior_dragTarget =
+  d3_behavior_dragArguments =
+  d3_behavior_dragOffset =
+  d3_behavior_dragOrigin = null;
+}
+
+function d3_behavior_dragClick() {
+  if (d3_behavior_dragMoved) {
+    d3_eventCancel();
+    d3_behavior_dragMoved = 0;
+  }
+}
+d3.behavior.mouse = function(container) {
+  return d3_behavior_mousePoint(container, d3.event);
+};
+
+// https://bugs.webkit.org/show_bug.cgi?id=44083
+var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+
+function d3_behavior_mousePoint(container, e) {
+  var svg = container.ownerSVGElement || container;
+  if (svg instanceof SVGSVGElement) {
+    var point = svg.createSVGPoint();
+    if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
+      svg = d3.select(document.body)
+        .append("svg")
+          .style("position", "absolute")
+          .style("top", 0)
+          .style("left", 0);
+      var ctm = svg[0][0].getScreenCTM();
+      d3_mouse_bug44083 = !(ctm.f || ctm.e);
+      svg.remove();
+    }
+    if (d3_mouse_bug44083) {
+      point.x = e.pageX;
+      point.y = e.pageY;
+    } else {
+      point.x = e.clientX;
+      point.y = e.clientY;
+    }
+    point = point.matrixTransform(container.getScreenCTM().inverse());
+    return [point.x, point.y];
+  }
+  var rect = container.getBoundingClientRect(),
+      b = document.body,
+      d = document.documentElement,
+      x = 0,
+      y = 0;
+  // http://www.quirksmode.org/js/events_properties.html#link8
+  if (e.pageX || e.pageY) {
+    x = e.pageX;
+    y = e.pageY;
+  } else if (e.clientX || e.clientY) {
+    x = e.clientX + b.scrollLeft + d.scrollLeft;
+    y = e.clientX + b.scrollTop + d.scrollTop;
+  }
+  return [x - rect.left, y - rect.top];
+};
+d3.behavior.touches = function(container, touches) {
+  if (arguments.length < 2) touches = d3.event.touches;
+
+  return touches ? d3_array(touches).map(function(touch) {
+    var point = d3_behavior_mousePoint(container, touch);
+    point.identifier = touch.identifier;
+    return point;
+  }) : [];
+};
+// TODO unbind zoom behavior?
+d3.behavior.zoom = function() {
+  var xyz = [0, 0, 0],
+      event = d3.dispatch("zoom"),
+      extent = d3_behavior_zoomInfiniteExtent;
+
+  function zoom() {
+    this
+        .on("mousedown.zoom", mousedown)
+        .on("mousewheel.zoom", mousewheel)
+        .on("DOMMouseScroll.zoom", mousewheel)
+        .on("dblclick.zoom", dblclick)
+        .on("touchstart.zoom", touchstart);
+
+    d3.select(window)
+        .on("mousemove.zoom", d3_behavior_zoomMousemove)
+        .on("mouseup.zoom", d3_behavior_zoomMouseup)
+        .on("touchmove.zoom", d3_behavior_zoomTouchmove)
+        .on("touchend.zoom", d3_behavior_zoomTouchup)
+        .on("click.zoom", d3_behavior_zoomClick, true);
+  }
+
+  // snapshot the local context for subsequent dispatch
+  function start() {
+    d3_behavior_zoomXyz = xyz;
+    d3_behavior_zoomExtent = extent;
+    d3_behavior_zoomDispatch = event.zoom;
+    d3_behavior_zoomEventTarget = d3.event.target;
+    d3_behavior_zoomTarget = this;
+    d3_behavior_zoomArguments = arguments;
+  }
+
+  function mousedown() {
+    start.apply(this, arguments);
+    d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.behavior.mouse(d3_behavior_zoomTarget));
+    d3_behavior_zoomMoved = 0;
+    d3.event.preventDefault();
+    window.focus();
+  }
+
+  // store starting mouse location
+  function mousewheel() {
+    start.apply(this, arguments);
+    if (!d3_behavior_zoomZooming) d3_behavior_zoomZooming = d3_behavior_zoomLocation(d3.behavior.mouse(d3_behavior_zoomTarget));
+    d3_behavior_zoomTo(d3_behavior_zoomDelta() + xyz[2], d3.behavior.mouse(d3_behavior_zoomTarget), d3_behavior_zoomZooming);
+  }
+
+  function dblclick() {
+    start.apply(this, arguments);
+    var mouse = d3.behavior.mouse(d3_behavior_zoomTarget);
+    d3_behavior_zoomTo(d3.event.shiftKey ? Math.ceil(xyz[2] - 1) : Math.floor(xyz[2] + 1), mouse, d3_behavior_zoomLocation(mouse));
+  }
+
+  // doubletap detection
+  function touchstart() {
+    start.apply(this, arguments);
+    var touches = d3_behavior_zoomTouchup(),
+        touch,
+        now = Date.now();
+    if ((touches.length === 1) && (now - d3_behavior_zoomLast < 300)) {
+      d3_behavior_zoomTo(1 + Math.floor(xyz[2]), touch = touches[0], d3_behavior_zoomLocations[touch.identifier]);
+    }
+    d3_behavior_zoomLast = now;
+  }
+
+  zoom.extent = function(x) {
+    if (!arguments.length) return extent;
+    extent = x == null ? d3_behavior_zoomInfiniteExtent : x;
+    return zoom;
+  };
+
+  return d3.rebind(zoom, event, "on");
+};
+
+var d3_behavior_zoomDiv,
+    d3_behavior_zoomPanning,
+    d3_behavior_zoomZooming,
+    d3_behavior_zoomLocations = {}, // identifier -> location
+    d3_behavior_zoomLast = 0,
+    d3_behavior_zoomXyz,
+    d3_behavior_zoomExtent,
+    d3_behavior_zoomDispatch,
+    d3_behavior_zoomEventTarget,
+    d3_behavior_zoomTarget,
+    d3_behavior_zoomArguments,
+    d3_behavior_zoomMoved;
+
+function d3_behavior_zoomLocation(point) {
+  return [
+    point[0] - d3_behavior_zoomXyz[0],
+    point[1] - d3_behavior_zoomXyz[1],
+    d3_behavior_zoomXyz[2]
+  ];
+}
+
+// detect the pixels that would be scrolled by this wheel event
+function d3_behavior_zoomDelta() {
+
+  // mousewheel events are totally broken!
+  // https://bugs.webkit.org/show_bug.cgi?id=40441
+  // not only that, but Chrome and Safari differ in re. to acceleration!
+  if (!d3_behavior_zoomDiv) {
+    d3_behavior_zoomDiv = d3.select("body").append("div")
+        .style("visibility", "hidden")
+        .style("top", 0)
+        .style("height", 0)
+        .style("width", 0)
+        .style("overflow-y", "scroll")
+      .append("div")
+        .style("height", "2000px")
+      .node().parentNode;
+  }
+
+  var e = d3.event, delta;
+  try {
+    d3_behavior_zoomDiv.scrollTop = 1000;
+    d3_behavior_zoomDiv.dispatchEvent(e);
+    delta = 1000 - d3_behavior_zoomDiv.scrollTop;
+  } catch (error) {
+    delta = e.wheelDelta || (-e.detail * 5);
+  }
+
+  return delta * .005;
+}
+
+// Note: Since we don't rotate, it's possible for the touches to become
+// slightly detached from their original positions. Thus, we recompute the
+// touch points on touchend as well as touchstart!
+function d3_behavior_zoomTouchup() {
+  var touches = d3.behavior.touches(d3_behavior_zoomTarget),
+      i = -1,
+      n = touches.length,
+      touch;
+  while (++i < n) d3_behavior_zoomLocations[(touch = touches[i]).identifier] = d3_behavior_zoomLocation(touch);
+  return touches;
+}
+
+function d3_behavior_zoomTouchmove() {
+  var touches = d3.behavior.touches(d3_behavior_zoomTarget);
+  switch (touches.length) {
+
+    // single-touch pan
+    case 1: {
+      var touch = touches[0];
+      d3_behavior_zoomTo(d3_behavior_zoomXyz[2], touch, d3_behavior_zoomLocations[touch.identifier]);
+      break;
+    }
+
+    // double-touch pan + zoom
+    case 2: {
+      var p0 = touches[0],
+          p1 = touches[1],
+          p2 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2],
+          l0 = d3_behavior_zoomLocations[p0.identifier],
+          l1 = d3_behavior_zoomLocations[p1.identifier],
+          l2 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2, l0[2]];
+      d3_behavior_zoomTo(Math.log(d3.event.scale) / Math.LN2 + l0[2], p2, l2);
+      break;
+    }
+  }
+}
+
+function d3_behavior_zoomMousemove() {
+  d3_behavior_zoomZooming = null;
+  if (d3_behavior_zoomPanning) {
+    d3_behavior_zoomMoved = 1;
+    d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.behavior.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
+  }
+}
+
+function d3_behavior_zoomMouseup() {
+  if (d3_behavior_zoomPanning) {
+    if (d3_behavior_zoomMoved) {
+      d3_eventCancel();
+      d3_behavior_zoomMoved = d3_behavior_zoomEventTarget === d3.event.target;
+    }
+
+    d3_behavior_zoomXyz =
+    d3_behavior_zoomExtent =
+    d3_behavior_zoomDispatch =
+    d3_behavior_zoomEventTarget =
+    d3_behavior_zoomTarget =
+    d3_behavior_zoomArguments =
+    d3_behavior_zoomPanning = null;
+  }
+}
+
+function d3_behavior_zoomClick() {
+  if (d3_behavior_zoomMoved) {
+    d3_eventCancel();
+    d3_behavior_zoomMoved = 0;
+  }
+}
+
+function d3_behavior_zoomTo(z, x0, x1) {
+  z = d3_behavior_zoomExtentClamp(z, 2);
+  var j = Math.pow(2, d3_behavior_zoomXyz[2]),
+      k = Math.pow(2, z),
+      K = Math.pow(2, (d3_behavior_zoomXyz[2] = z) - x1[2]),
+      x_ = d3_behavior_zoomXyz[0],
+      y_ = d3_behavior_zoomXyz[1],
+      x = d3_behavior_zoomXyz[0] = d3_behavior_zoomExtentClamp((x0[0] - x1[0] * K), 0, k),
+      y = d3_behavior_zoomXyz[1] = d3_behavior_zoomExtentClamp((x0[1] - x1[1] * K), 1, k),
+      o = d3.event; // Events can be reentrant (e.g., focus).
+
+  d3.event = {
+    scale: k,
+    translate: [x, y],
+    transform: function(sx, sy) {
+      if (sx) transform(sx, x_, x);
+      if (sy) transform(sy, y_, y);
+    }
+  };
+
+  function transform(scale, a, b) {
+    scale.domain(scale.range().map(function(v) { return scale.invert(((v - b) * j) / k + a); }));
+  }
+
+  try {
+    d3_behavior_zoomDispatch.apply(d3_behavior_zoomTarget, d3_behavior_zoomArguments);
+  } finally {
+    d3.event = o;
+  }
+
+  o.preventDefault();
+}
+
+var d3_behavior_zoomInfiniteExtent = [
+  [-Infinity, Infinity],
+  [-Infinity, Infinity],
+  [-Infinity, Infinity]
+];
+
+function d3_behavior_zoomExtentClamp(x, i, k) {
+  var range = d3_behavior_zoomExtent[i],
+      r0 = range[0],
+      r1 = range[1];
+  return arguments.length === 3
+      ? Math.max(r1 * (r1 === Infinity ? -Infinity : 1 / k - 1),
+        Math.min(r0 === -Infinity ? Infinity : r0, x / k)) * k
+      : Math.max(r0, Math.min(r1, x));
+}
 d3.svg = {};
 d3.svg.arc = function() {
   var innerRadius = d3_svg_arcInnerRadius,
@@ -4286,427 +4709,6 @@ var d3_svg_brushCursor = {
   se: "nwse-resize",
   sw: "nesw-resize"
 };
-d3.behavior = {};
-// TODO Track touch points by identifier.
-
-d3.behavior.drag = function() {
-  var event = d3.dispatch("drag", "dragstart", "dragend"),
-      origin = null;
-
-  function drag() {
-    this
-        .on("mousedown.drag", mousedown)
-        .on("touchstart.drag", mousedown);
-
-    d3.select(window)
-        .on("mousemove.drag", d3_behavior_dragMove)
-        .on("touchmove.drag", d3_behavior_dragMove)
-        .on("mouseup.drag", d3_behavior_dragUp, true)
-        .on("touchend.drag", d3_behavior_dragUp, true)
-        .on("click.drag", d3_behavior_dragClick, true);
-  }
-
-  // snapshot the local context for subsequent dispatch
-  function start() {
-    d3_behavior_dragEvent = event;
-    d3_behavior_dragEventTarget = d3.event.target;
-    d3_behavior_dragTarget = this;
-    d3_behavior_dragArguments = arguments;
-    d3_behavior_dragOrigin = d3_behavior_dragPoint();
-    if (origin) {
-      d3_behavior_dragOffset = origin.apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
-      d3_behavior_dragOffset = [d3_behavior_dragOffset.x - d3_behavior_dragOrigin[0], d3_behavior_dragOffset.y - d3_behavior_dragOrigin[1]];
-    } else {
-      d3_behavior_dragOffset = [0, 0];
-    }
-    d3_behavior_dragMoved = 0;
-  }
-
-  function mousedown() {
-    start.apply(this, arguments);
-    d3_behavior_dragDispatch("dragstart");
-  }
-
-  drag.origin = function(x) {
-    if (!arguments.length) return origin;
-    origin = x;
-    return drag;
-  };
-
-  return d3.rebind(drag, event, "on");
-};
-
-var d3_behavior_dragEvent,
-    d3_behavior_dragEventTarget,
-    d3_behavior_dragTarget,
-    d3_behavior_dragArguments,
-    d3_behavior_dragOffset,
-    d3_behavior_dragOrigin,
-    d3_behavior_dragMoved;
-
-function d3_behavior_dragDispatch(type) {
-  var p = d3_behavior_dragPoint(),
-      o = d3.event,
-      e = d3.event = {type: type};
-
-  if (p) {
-    e.x = p[0] + d3_behavior_dragOffset[0];
-    e.y = p[1] + d3_behavior_dragOffset[1];
-    e.dx = p[0] - d3_behavior_dragOrigin[0];
-    e.dy = p[1] - d3_behavior_dragOrigin[1];
-    d3_behavior_dragMoved |= e.dx | e.dy;
-    d3_behavior_dragOrigin = p;
-  }
-
-  try {
-    d3_behavior_dragEvent[type].apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
-  } finally {
-    d3.event = o;
-  }
-
-  o.stopPropagation();
-  o.preventDefault();
-}
-
-function d3_behavior_dragPoint() {
-  var p = d3_behavior_dragTarget.parentNode,
-      t = d3.event.changedTouches;
-  return p && (t
-      ? d3.behavior.touches(p, t)[0]
-      : d3.behavior.mouse(p));
-}
-
-function d3_behavior_dragMove() {
-  if (!d3_behavior_dragTarget) return;
-  var parent = d3_behavior_dragTarget.parentNode;
-
-  // O NOES! The drag element was removed from the DOM.
-  if (!parent) return d3_behavior_dragUp();
-
-  d3_behavior_dragDispatch("drag");
-  d3_eventCancel();
-}
-
-function d3_behavior_dragUp() {
-  if (!d3_behavior_dragTarget) return;
-  d3_behavior_dragDispatch("dragend");
-
-  // If the node was moved, prevent the mouseup from propagating.
-  // Also prevent the subsequent click from propagating (e.g., for anchors).
-  if (d3_behavior_dragMoved) {
-    d3_eventCancel();
-    d3_behavior_dragMoved = d3.event.target === d3_behavior_dragEventTarget;
-  }
-
-  d3_behavior_dragEvent =
-  d3_behavior_dragEventTarget =
-  d3_behavior_dragTarget =
-  d3_behavior_dragArguments =
-  d3_behavior_dragOffset =
-  d3_behavior_dragOrigin = null;
-}
-
-function d3_behavior_dragClick() {
-  if (d3_behavior_dragMoved) {
-    d3_eventCancel();
-    d3_behavior_dragMoved = 0;
-  }
-}
-d3.behavior.mouse = function(container) {
-  return d3_behavior_mousePoint(container, d3.event);
-};
-
-// https://bugs.webkit.org/show_bug.cgi?id=44083
-var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
-
-function d3_behavior_mousePoint(container, e) {
-  var svg = container.ownerSVGElement || container;
-  if (svg instanceof SVGSVGElement) {
-    var point = svg.createSVGPoint();
-    if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
-      svg = d3.select(document.body)
-        .append("svg")
-          .style("position", "absolute")
-          .style("top", 0)
-          .style("left", 0);
-      var ctm = svg[0][0].getScreenCTM();
-      d3_mouse_bug44083 = !(ctm.f || ctm.e);
-      svg.remove();
-    }
-    if (d3_mouse_bug44083) {
-      point.x = e.pageX;
-      point.y = e.pageY;
-    } else {
-      point.x = e.clientX;
-      point.y = e.clientY;
-    }
-    point = point.matrixTransform(container.getScreenCTM().inverse());
-    return [point.x, point.y];
-  }
-  var rect = container.getBoundingClientRect(),
-      b = document.body,
-      d = document.documentElement,
-      x = 0,
-      y = 0;
-  // http://www.quirksmode.org/js/events_properties.html#link8
-  if (e.pageX || e.pageY) {
-    x = e.pageX;
-    y = e.pageY;
-  } else if (e.clientX || e.clientY) {
-    x = e.clientX + b.scrollLeft + d.scrollLeft;
-    y = e.clientX + b.scrollTop + d.scrollTop;
-  }
-  return [x - rect.left, y - rect.top];
-};
-d3.behavior.touches = function(container, touches) {
-  if (arguments.length < 2) touches = d3.event.touches;
-
-  return touches ? d3_array(touches).map(function(touch) {
-    var point = d3_behavior_mousePoint(container, touch);
-    point.identifier = touch.identifier;
-    return point;
-  }) : [];
-};
-// TODO unbind zoom behavior?
-d3.behavior.zoom = function() {
-  var xyz = [0, 0, 0],
-      event = d3.dispatch("zoom"),
-      extent = d3_behavior_zoomInfiniteExtent;
-
-  function zoom() {
-    this
-        .on("mousedown.zoom", mousedown)
-        .on("mousewheel.zoom", mousewheel)
-        .on("DOMMouseScroll.zoom", mousewheel)
-        .on("dblclick.zoom", dblclick)
-        .on("touchstart.zoom", touchstart);
-
-    d3.select(window)
-        .on("mousemove.zoom", d3_behavior_zoomMousemove)
-        .on("mouseup.zoom", d3_behavior_zoomMouseup)
-        .on("touchmove.zoom", d3_behavior_zoomTouchmove)
-        .on("touchend.zoom", d3_behavior_zoomTouchup)
-        .on("click.zoom", d3_behavior_zoomClick, true);
-  }
-
-  // snapshot the local context for subsequent dispatch
-  function start() {
-    d3_behavior_zoomXyz = xyz;
-    d3_behavior_zoomExtent = extent;
-    d3_behavior_zoomDispatch = event.zoom;
-    d3_behavior_zoomEventTarget = d3.event.target;
-    d3_behavior_zoomTarget = this;
-    d3_behavior_zoomArguments = arguments;
-  }
-
-  function mousedown() {
-    start.apply(this, arguments);
-    d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.behavior.mouse(d3_behavior_zoomTarget));
-    d3_behavior_zoomMoved = 0;
-    d3.event.preventDefault();
-    window.focus();
-  }
-
-  // store starting mouse location
-  function mousewheel() {
-    start.apply(this, arguments);
-    if (!d3_behavior_zoomZooming) d3_behavior_zoomZooming = d3_behavior_zoomLocation(d3.behavior.mouse(d3_behavior_zoomTarget));
-    d3_behavior_zoomTo(d3_behavior_zoomDelta() + xyz[2], d3.behavior.mouse(d3_behavior_zoomTarget), d3_behavior_zoomZooming);
-  }
-
-  function dblclick() {
-    start.apply(this, arguments);
-    var mouse = d3.behavior.mouse(d3_behavior_zoomTarget);
-    d3_behavior_zoomTo(d3.event.shiftKey ? Math.ceil(xyz[2] - 1) : Math.floor(xyz[2] + 1), mouse, d3_behavior_zoomLocation(mouse));
-  }
-
-  // doubletap detection
-  function touchstart() {
-    start.apply(this, arguments);
-    var touches = d3_behavior_zoomTouchup(),
-        touch,
-        now = Date.now();
-    if ((touches.length === 1) && (now - d3_behavior_zoomLast < 300)) {
-      d3_behavior_zoomTo(1 + Math.floor(xyz[2]), touch = touches[0], d3_behavior_zoomLocations[touch.identifier]);
-    }
-    d3_behavior_zoomLast = now;
-  }
-
-  zoom.extent = function(x) {
-    if (!arguments.length) return extent;
-    extent = x == null ? d3_behavior_zoomInfiniteExtent : x;
-    return zoom;
-  };
-
-  return d3.rebind(zoom, event, "on");
-};
-
-var d3_behavior_zoomDiv,
-    d3_behavior_zoomPanning,
-    d3_behavior_zoomZooming,
-    d3_behavior_zoomLocations = {}, // identifier -> location
-    d3_behavior_zoomLast = 0,
-    d3_behavior_zoomXyz,
-    d3_behavior_zoomExtent,
-    d3_behavior_zoomDispatch,
-    d3_behavior_zoomEventTarget,
-    d3_behavior_zoomTarget,
-    d3_behavior_zoomArguments,
-    d3_behavior_zoomMoved;
-
-function d3_behavior_zoomLocation(point) {
-  return [
-    point[0] - d3_behavior_zoomXyz[0],
-    point[1] - d3_behavior_zoomXyz[1],
-    d3_behavior_zoomXyz[2]
-  ];
-}
-
-// detect the pixels that would be scrolled by this wheel event
-function d3_behavior_zoomDelta() {
-
-  // mousewheel events are totally broken!
-  // https://bugs.webkit.org/show_bug.cgi?id=40441
-  // not only that, but Chrome and Safari differ in re. to acceleration!
-  if (!d3_behavior_zoomDiv) {
-    d3_behavior_zoomDiv = d3.select("body").append("div")
-        .style("visibility", "hidden")
-        .style("top", 0)
-        .style("height", 0)
-        .style("width", 0)
-        .style("overflow-y", "scroll")
-      .append("div")
-        .style("height", "2000px")
-      .node().parentNode;
-  }
-
-  var e = d3.event, delta;
-  try {
-    d3_behavior_zoomDiv.scrollTop = 1000;
-    d3_behavior_zoomDiv.dispatchEvent(e);
-    delta = 1000 - d3_behavior_zoomDiv.scrollTop;
-  } catch (error) {
-    delta = e.wheelDelta || (-e.detail * 5);
-  }
-
-  return delta * .005;
-}
-
-// Note: Since we don't rotate, it's possible for the touches to become
-// slightly detached from their original positions. Thus, we recompute the
-// touch points on touchend as well as touchstart!
-function d3_behavior_zoomTouchup() {
-  var touches = d3.behavior.touches(d3_behavior_zoomTarget),
-      i = -1,
-      n = touches.length,
-      touch;
-  while (++i < n) d3_behavior_zoomLocations[(touch = touches[i]).identifier] = d3_behavior_zoomLocation(touch);
-  return touches;
-}
-
-function d3_behavior_zoomTouchmove() {
-  var touches = d3.behavior.touches(d3_behavior_zoomTarget);
-  switch (touches.length) {
-
-    // single-touch pan
-    case 1: {
-      var touch = touches[0];
-      d3_behavior_zoomTo(d3_behavior_zoomXyz[2], touch, d3_behavior_zoomLocations[touch.identifier]);
-      break;
-    }
-
-    // double-touch pan + zoom
-    case 2: {
-      var p0 = touches[0],
-          p1 = touches[1],
-          p2 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2],
-          l0 = d3_behavior_zoomLocations[p0.identifier],
-          l1 = d3_behavior_zoomLocations[p1.identifier],
-          l2 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2, l0[2]];
-      d3_behavior_zoomTo(Math.log(d3.event.scale) / Math.LN2 + l0[2], p2, l2);
-      break;
-    }
-  }
-}
-
-function d3_behavior_zoomMousemove() {
-  d3_behavior_zoomZooming = null;
-  if (d3_behavior_zoomPanning) {
-    d3_behavior_zoomMoved = 1;
-    d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.behavior.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
-  }
-}
-
-function d3_behavior_zoomMouseup() {
-  if (d3_behavior_zoomPanning) {
-    if (d3_behavior_zoomMoved) {
-      d3_eventCancel();
-      d3_behavior_zoomMoved = d3_behavior_zoomEventTarget === d3.event.target;
-    }
-
-    d3_behavior_zoomXyz =
-    d3_behavior_zoomExtent =
-    d3_behavior_zoomDispatch =
-    d3_behavior_zoomEventTarget =
-    d3_behavior_zoomTarget =
-    d3_behavior_zoomArguments =
-    d3_behavior_zoomPanning = null;
-  }
-}
-
-function d3_behavior_zoomClick() {
-  if (d3_behavior_zoomMoved) {
-    d3_eventCancel();
-    d3_behavior_zoomMoved = 0;
-  }
-}
-
-function d3_behavior_zoomTo(z, x0, x1) {
-  z = d3_behavior_zoomExtentClamp(z, 2);
-  var j = Math.pow(2, d3_behavior_zoomXyz[2]),
-      k = Math.pow(2, z),
-      K = Math.pow(2, (d3_behavior_zoomXyz[2] = z) - x1[2]),
-      x_ = d3_behavior_zoomXyz[0],
-      y_ = d3_behavior_zoomXyz[1],
-      x = d3_behavior_zoomXyz[0] = d3_behavior_zoomExtentClamp((x0[0] - x1[0] * K), 0, k),
-      y = d3_behavior_zoomXyz[1] = d3_behavior_zoomExtentClamp((x0[1] - x1[1] * K), 1, k),
-      o = d3.event; // Events can be reentrant (e.g., focus).
-
-  d3.event = {
-    scale: k,
-    translate: [x, y],
-    transform: function(sx, sy) {
-      if (sx) transform(sx, x_, x);
-      if (sy) transform(sy, y_, y);
-    }
-  };
-
-  function transform(scale, a, b) {
-    scale.domain(scale.range().map(function(v) { return scale.invert(((v - b) * j) / k + a); }));
-  }
-
-  try {
-    d3_behavior_zoomDispatch.apply(d3_behavior_zoomTarget, d3_behavior_zoomArguments);
-  } finally {
-    d3.event = o;
-  }
-
-  o.preventDefault();
-}
-
-var d3_behavior_zoomInfiniteExtent = [
-  [-Infinity, Infinity],
-  [-Infinity, Infinity],
-  [-Infinity, Infinity]
-];
-
-function d3_behavior_zoomExtentClamp(x, i, k) {
-  var range = d3_behavior_zoomExtent[i],
-      r0 = range[0],
-      r1 = range[1];
-  return arguments.length === 3
-      ? Math.max(r1 * (r1 === Infinity ? -Infinity : 1 / k - 1),
-        Math.min(r0 === -Infinity ? Infinity : r0, x / k)) * k
-      : Math.max(r0, Math.min(r1, x));
-}
+d3.svg.mouse = d3.behavior.mouse;
+d3.svg.touches = d3.behavior.touches;
 })();

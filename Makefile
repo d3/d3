@@ -30,8 +30,8 @@ d3.custom.js: \
 	src/start.js \
 	d3.core.js \
 	d3.scale.js \
-	d3.svg.js \
 	d3.behavior.js \
+	d3.svg.js \
 	src/end.js
 
 d3.core.js: \
@@ -151,7 +151,9 @@ d3.svg.js: \
 	src/svg/diagonal-radial.js \
 	src/svg/symbol.js \
 	src/svg/axis.js \
-	src/svg/brush.js
+	src/svg/brush.js \
+	src/svg/mouse.js \
+	src/svg/touches.js
 
 d3.behavior.js: \
 	src/behavior/behavior.js \
