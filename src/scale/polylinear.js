@@ -2,7 +2,7 @@ function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
   var u = [],
       i = [],
       j = 0,
-      k = domain.length - 1;
+      k = Math.min(domain.length, range.length) - 1;
 
   // Handle descending domains.
   if (domain[k] < domain[0]) {

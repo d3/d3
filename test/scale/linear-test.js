@@ -43,6 +43,14 @@ suite.addBatch({
         assert.equal(x(50), "#80c080");
         assert.equal(x(75), "#40a040");
       },
+      "the smaller of the domain or range is observed": function(linear) {
+        var x = linear().domain([-10, 0]).range(["red", "white", "green"]).clamp(true);
+        assert.equal(x(-5), "#ff8080");
+        assert.equal(x(50), "#ffffff");
+        var x = linear().domain([-10, 0, 100]).range(["red", "white"]).clamp(true);
+        assert.equal(x(-5), "#ff8080");
+        assert.equal(x(50), "#ffffff");
+      },
       "an empty domain maps to the range start": function(linear) {
         var x = linear().domain([0, 0]).range(["red", "green"]);
         assert.equal(x(0), "#ff0000");
