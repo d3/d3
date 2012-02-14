@@ -60,7 +60,13 @@ d3.json("../data/world-countries.json", function(collection) {
 });
 
 function move() {
-  projection.translate(d3.event.translate).scale(d3.event.scale);
+  var t = d3.event.translate,
+      s = d3.event.scale,
+      w = Math.max(0, s - width),
+      h = Math.max(0, s - height);
+  t[0] = Math.max(width - w, Math.min(width + w, 2 * t[0])) / 2;
+  t[1] = Math.max(height - h, Math.min(height + h, 2 * t[1])) / 2;
+  projection.translate(t).scale(s);
   feature.attr("d", path);
 }
 
