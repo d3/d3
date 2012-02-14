@@ -3020,20 +3020,8 @@ function d3_behavior_mousePoint(container, e) {
     point = point.matrixTransform(container.getScreenCTM().inverse());
     return [point.x, point.y];
   }
-  var rect = container.getBoundingClientRect(),
-      b = document.body,
-      d = document.documentElement,
-      x = 0,
-      y = 0;
-  // http://www.quirksmode.org/js/events_properties.html#link8
-  if (e.pageX || e.pageY) {
-    x = e.pageX;
-    y = e.pageY;
-  } else if (e.clientX || e.clientY) {
-    x = e.clientX + b.scrollLeft + d.scrollLeft;
-    y = e.clientX + b.scrollTop + d.scrollTop;
-  }
-  return [x - rect.left, y - rect.top];
+  var rect = container.getBoundingClientRect();
+  return [e.pageX - rect.left, e.pageY - rect.top];
 };
 d3.behavior.touches = function(container, touches) {
   if (arguments.length < 2) touches = d3.event.touches;
