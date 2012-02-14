@@ -1,0 +1,15 @@
+language: node_js
+
+# test on all these node.js versions:
+node_js:
+  - 0.4
+  - 0.6
+  - 0.7
+
+# install all npm dependencies locally
+before_script:
+  - "make install"
+
+# configure notifications (email, IRC, campfire etc)
+notifications:
+  irc: "irc.freenode.org#d3-travis"
