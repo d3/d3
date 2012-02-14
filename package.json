@@ -19,6 +19,9 @@
     "type": "git",
     "url": "http://github.com/mbostock/d3.git"
   },
+  "scripts": {
+    "test": "node_modules/vows/bin/vows"
+  },
   "dependencies": {
     "uglify-js": "1.1.1",
     "jsdom": "0.2.8",
