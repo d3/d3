@@ -10,6 +10,10 @@ svg {
   font: 10px sans-serif;
 }
 
+circle {
+  -webkit-transition: fill-opacity 250ms linear;
+}
+
 .selecting circle {
   fill-opacity: .2;
 }
@@ -23,11 +27,6 @@ svg {
   fill-opacity: .8;
   stroke: #000;
   stroke-width: 1.5px;
-  display: none;
-}
-
-.selecting .resize path {
-  display: inherit;
 }
 
 .axis path, .axis line {

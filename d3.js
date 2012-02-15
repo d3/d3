@@ -4068,7 +4068,7 @@ d3.svg.brush = function() {
         : [];
 
     g.each(function() {
-      var g = d3.select(this).on("mousedown.brush", down),
+      var g = d3.select(this).style("pointer-events", "all").on("mousedown.brush", down),
           bg = g.selectAll(".background").data([0]),
           fg = g.selectAll(".extent").data([0]),
           tz = g.selectAll(".resize").data(resizes, String),
@@ -4078,7 +4078,6 @@ d3.svg.brush = function() {
       bg.enter().append("rect")
           .attr("class", "background")
           .style("visibility", "hidden")
-          .style("pointer-events", "all")
           .style("cursor", "crosshair");
 
       // The visible brush extent; style this as you like!
@@ -4097,8 +4096,8 @@ d3.svg.brush = function() {
           .attr("height", 6)
           .style("visibility", "hidden");
 
-      // Update the resizers.
-      tz.style("pointer-events", brush.empty() ? "none" : "all");
+      // Show or hide the resizers.
+      tz.style("display", brush.empty() ? "none" : null);
 
       // Remove any superfluous resizers.
       tz.exit().remove();
@@ -4120,7 +4119,7 @@ d3.svg.brush = function() {
   }
 
   function down() {
-    var target = d3.event.target,
+    var target = d3.select(d3.event.target),
         resize;
 
     // Store some global state for the duration of the brush gesture.
@@ -4131,14 +4130,14 @@ d3.svg.brush = function() {
 
     // If the extent was clicked on, drag rather than brush;
     // store the point between the mouse and extent origin instead.
-    if (d3_svg_brushDrag = d3.select(target).classed("extent")) {
+    if (d3_svg_brushDrag = target.classed("extent")) {
       d3_svg_brushPoint[0] = extent[0][0] - d3_svg_brushPoint[0];
       d3_svg_brushPoint[1] = extent[0][1] - d3_svg_brushPoint[1];
     }
 
     // If a resizer was clicked on, record which side is to be resized.
     // Also, set the point to the opposite side.
-    else if (resize = target.__data__) {
+    else if (resize = target[0][0].__data__) {
       var ex = +/w$/.test(resize), ey = +/^n/.test(resize);
       d3_svg_brushOffset = [extent[1 - ex][0] - d3_svg_brushPoint[0], extent[1 - ey][1] - d3_svg_brushPoint[1]];
       d3_svg_brushPoint[0] = extent[ex][0];
@@ -4149,6 +4148,10 @@ d3.svg.brush = function() {
     else if (d3.event.altKey) {
       d3_svg_brushCenter = d3_svg_brushPoint.slice();
     }
+
+    // Propagate the active cursor to the body for the drag duration.
+    d3.select(this).style("pointer-events", "none").selectAll(".resize").style("display", null);
+    d3.select("body").style("cursor", target.style("cursor"));
 
     // Restrict which dimensions are resized.
     d3_svg_brushX = !/^(n|s)$/.test(resize) && x;
@@ -4382,7 +4385,8 @@ function d3_svg_brushMove1(mouse, scale, i) {
 function d3_svg_brushUp() {
   if (d3_svg_brushPoint) {
     d3_svg_brushMove();
-    d3.select(d3_svg_brushTarget).selectAll(".resize").style("pointer-events", d3_svg_brush.empty() ? "none" : "all");
+    d3.select(d3_svg_brushTarget).style("pointer-events", "all").selectAll(".resize").style("display", d3_svg_brush.empty() ? "none" : null);
+    d3.select("body").style("cursor", null);
     d3_svg_brushDispatch("brushend");
     d3_svg_brush =
     d3_svg_brushDispatch =
