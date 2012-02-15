@@ -61,12 +61,11 @@ d3.json("../data/world-countries.json", function(collection) {
 
 function move() {
   var t = d3.event.translate,
-      s = d3.event.scale,
-      s2 = s / 2;
-  projection.translate([
-    s2 + Math.max(-s, Math.min(width, t[0] - s2)),
-    s2 + Math.max(-s, Math.min(height, t[1] - s2))
-  ]).scale(s);
+      s = d3.event.scale;
+  t[0] = Math.max(-s / 2, Math.min(width + s / 2, t[0]));
+  t[1] = Math.max(-s / 2, Math.min(height + s / 2, t[1]));
+  zoom.translate(t);
+  projection.translate(t).scale(s);
   feature.attr("d", path);
 }
 
