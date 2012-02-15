@@ -174,6 +174,12 @@ d3.layout.force = function() {
     return force;
   };
 
+  force.alpha = function(x) {
+    if (!arguments.length) return alpha;
+    alpha = x;
+    return force;
+  };
+
   force.start = function() {
     var i,
         j,
