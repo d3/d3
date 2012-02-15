@@ -4090,8 +4090,8 @@ d3.svg.brush = function() {
           .attr("class", function(d) { return "resize " + d; })
           .style("cursor", function(d) { return d3_svg_brushCursor[d]; })
         .append("rect")
-          .attr("x", function(d) { return /e$/.test(d) ? -3 : -2; })
-          .attr("y", function(d) { return /^s/.test(d) ? -4 : -3; })
+          .attr("x", function(d) { return /[ew]$/.test(d) ? -3 : null; })
+          .attr("y", function(d) { return /^[ns]/.test(d) ? -3 : null; })
           .attr("width", 6)
           .attr("height", 6)
           .style("visibility", "hidden");
