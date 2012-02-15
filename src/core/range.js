@@ -23,6 +23,9 @@ d3.range = function(start, stop, step) {
 
 // calculate correction for IEEE error
 function calcRdx(n, m) {
-	var val = n > m ? n : m;
-	return Math.pow(10, 18 - ~~(Math.log((val > 0) ? val : -val) * Math.LOG10E));
+  var low = n < m ? n : m,
+      fix = 1;
+  if (isNaN(+low)) return low;
+  while ((fix *= 10) * low % 1 !== 0);
+  return fix;
 }
