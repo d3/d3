@@ -146,11 +146,9 @@ function rollup() {
     i = -1; while (++i < m) {
       var value = linkValue.call(this, d = links[i], i),
           source = linkSource.call(this, d, i),
-          target = linkTarget.call(this, d, i);
-      if (typeof source !== "number") source = source.index;
-      if (typeof target !== "number") target = target.index;
-      var rsource = rnodes[id(source)],
-          rtarget = rnodes[id(target)],
+          target = linkTarget.call(this, d, i),
+          rsource = rnodes[id(typeof source === "number" ? source : source.index)],
+          rtarget = rnodes[id(typeof target === "number" ? target : target.index)],
           linkId = !directed && rsource.index > rtarget.index
               ? rtarget.index + "," + rsource.index
               : rsource.index + "," + rtarget.index,
