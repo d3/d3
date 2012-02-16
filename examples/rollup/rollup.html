@@ -199,6 +199,24 @@ function rollup() {
     return rollup;
   };
 
+  rollup.linkSource = function(x) {
+    if (!arguments.length) return linkSource;
+    linkSource = x;
+    return rollup;
+  };
+
+  rollup.linkTarget = function(x) {
+    if (!arguments.length) return linkTarget;
+    linkTarget = x;
+    return rollup;
+  };
+
+  rollup.linkValue = function(x) {
+    if (!arguments.length) return linkValue;
+    linkValue = x;
+    return rollup;
+  };
+
   rollup.directed = function(x) {
     if (!arguments.length) return directed;
     directed = x;
