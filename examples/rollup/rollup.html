@@ -80,8 +80,8 @@ vis.selectAll("circle")
     .data(g.nodes)
   .enter().append("circle")
     .attr("r", function(d) { return Math.sqrt(d.nodes.length * 20); })
-    .attr("cx", function(d) { return d.y; })
-    .attr("cy", function(d) { return d.x; });
+    .attr("cx", function(d) { return d.x; })
+    .attr("cy", function(d) { return d.y; });
 
 vis.selectAll("text.x")
     .data(x.domain())
