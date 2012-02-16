@@ -118,22 +118,17 @@ function rollup() {
         n = nodes.length,
         m = links.length,
         i = -1,
-        o,
         x = [],
         y = [],
         rnindex = 0,
         rnodes = {},
         rlinks = {};
 
-    // Iterate over the data, evaluating the x and y functions.
-    while (++i < n) {
-      (o = nodes[i]).index = i;
-      x[i] = x_.call(this, o, i);
-      y[i] = y_.call(this, o, i);
-    }
-
     // Compute rollup nodes.
-    i = -1; while (++i < n) {
+    while (++i < n) {
+      (d = nodes[i]).index = i;
+      x[i] = x_.call(this, d, i);
+      y[i] = y_.call(this, d, i);
       var nodeId = id(i),
           rn = rnodes[nodeId];
       if (!rn) {
@@ -144,21 +139,19 @@ function rollup() {
           nodes: []
         };
       }
-      rn.nodes.push(nodes[i]);
+      rn.nodes.push(d);
     }
 
     // Compute rollup links.
     i = -1; while (++i < m) {
-      o = links[i];
-      var value = linkValue.call(this, o, i),
-          source = linkSource.call(this, o, i),
-          target = linkTarget.call(this, o, i);
-      if (typeof source === "number") source = nodes[source];
-      if (typeof target === "number") target = nodes[target];
-      var rsource = rnodes[id(source.index)],
-          rtarget = rnodes[id(target.index)],
-          reverse = !directed && rsource.index > rtarget.index,
-          linkId = reverse
+      var value = linkValue.call(this, d = links[i], i),
+          source = linkSource.call(this, d, i),
+          target = linkTarget.call(this, d, i);
+      if (typeof source !== "number") source = source.index;
+      if (typeof target !== "number") target = target.index;
+      var rsource = rnodes[id(source)],
+          rtarget = rnodes[id(target)],
+          linkId = !directed && rsource.index > rtarget.index
               ? rtarget.index + "," + rsource.index
               : rsource.index + "," + rtarget.index,
           rl = rlinks[linkId];
