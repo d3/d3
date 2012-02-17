@@ -11,7 +11,9 @@ d3.svg.brush = function() {
         : [];
 
     g.each(function() {
-      var g = d3.select(this).on("mousedown.brush", down),
+      var g = d3.select(this)
+            .on("mousedown.brush", down)
+            .on("touchstart.brush", down),
           bg = g.selectAll(".background").data([0]),
           fg = g.selectAll(".extent").data([0]),
           tz = g.selectAll(".resize").data(resizes, String),
@@ -59,13 +61,16 @@ d3.svg.brush = function() {
   }
 
   function down() {
-    var target = d3.select(d3.event.target);
+    var target = d3.select(d3.event.target),
+        touches = d3.event.changedTouches;
 
     // Store some global state for the duration of the brush gesture.
     d3_svg_brush = brush;
     d3_svg_brushTarget = this;
     d3_svg_brushExtent = extent;
-    d3_svg_brushOffset = d3.svg.mouse(d3_svg_brushTarget);
+    d3_svg_brushOffset = touches
+        ? d3.svg.touches(d3_svg_brushTarget, touches)[0]
+        : d3.svg.mouse(d3_svg_brushTarget);
 
     // If the extent was clicked on, drag rather than brush;
     // store the offset between the mouse and extent origin instead.
@@ -175,6 +180,8 @@ d3.svg.brush = function() {
   d3.select(window)
       .on("mousemove.brush", d3_svg_brushMove)
       .on("mouseup.brush", d3_svg_brushUp)
+      .on("touchmove.brush", d3_svg_brushMove)
+      .on("touchend.brush", d3_svg_brushUp)
       .on("keydown.brush", d3_svg_brushKeydown)
       .on("keyup.brush", d3_svg_brushKeyup);
 
@@ -227,7 +234,10 @@ function d3_svg_brushKeyup() {
 
 function d3_svg_brushMove() {
   if (d3_svg_brushOffset) {
-    var mouse = d3.svg.mouse(d3_svg_brushTarget),
+    var touches = d3.event.changedTouches,
+        mouse = touches
+          ? d3.svg.touches(d3_svg_brushTarget, touches)[0]
+          : d3.svg.mouse(d3_svg_brushTarget),
         g = d3.select(d3_svg_brushTarget);
 
     if (!d3_svg_brushDrag) {
