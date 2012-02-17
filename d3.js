@@ -4068,14 +4068,17 @@ d3.svg.brush = function() {
         : [];
 
     g.each(function() {
-      var g = d3.select(this)
-            .style("pointer-events", "all")
-            .on("mousedown.brush", down)
-            .on("touchstart.brush", down),
+      var g = d3.select(this),
           bg = g.selectAll(".background").data([0]),
           fg = g.selectAll(".extent").data([0]),
           tz = g.selectAll(".resize").data(resizes, String),
           e;
+
+      // Prepare the brush container for events.
+      g
+          .style("pointer-events", "all")
+          .on("mousedown.brush", down)
+          .on("touchstart.brush", down);
 
       // An invisible, mouseable area for starting a new brush.
       bg.enter().append("rect")
@@ -4123,16 +4126,13 @@ d3.svg.brush = function() {
 
   function down() {
     var target = d3.select(d3.event.target),
-        touches = d3.event.changedTouches,
         resize;
 
     // Store some global state for the duration of the brush gesture.
     d3_svg_brush = brush;
     d3_svg_brushTarget = this;
     d3_svg_brushExtent = extent;
-    d3_svg_brushPoint = touches
-        ? d3.svg.touches(d3_svg_brushTarget, touches)[0]
-        : d3.svg.mouse(d3_svg_brushTarget);
+    d3_svg_brushPoint = d3_svg_brushMouse();
 
     // If the extent was clicked on, drag rather than brush;
     // store the point between the mouse and extent origin instead.
@@ -4266,6 +4266,13 @@ var d3_svg_brush,
     d3_svg_brushPoint,
     d3_svg_brushOffset;
 
+function d3_svg_brushMouse() {
+  var touches = d3.event.changedTouches;
+  return touches
+      ? d3.svg.touches(d3_svg_brushTarget, touches)[0]
+      : d3.svg.mouse(d3_svg_brushTarget);
+}
+
 function d3_svg_brushRedraw(g, extent) {
   g.selectAll(".resize").attr("transform", function(d) {
     return "translate(" + extent[+/e$/.test(d)][0] + "," + extent[+/^s/.test(d)][1] + ")";
@@ -4305,10 +4312,7 @@ function d3_svg_brushKeyup() {
 
 function d3_svg_brushMove() {
   if (d3_svg_brushPoint) {
-    var touches = d3.event.changedTouches,
-        mouse = touches
-          ? d3.svg.touches(d3_svg_brushTarget, touches)[0]
-          : d3.svg.mouse(d3_svg_brushTarget),
+    var mouse = d3_svg_brushMouse(),
         g = d3.select(d3_svg_brushTarget);
 
     // Preserve the offset for thick resizers.
