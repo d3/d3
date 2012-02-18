@@ -6,6 +6,7 @@ d3.svg.axis = function() {
       tickEndSize = 6,
       tickPadding = 3,
       tickArguments_ = [10],
+      tickValues = null,
       tickFormat_,
       tickSubdivide = 0;
 
@@ -28,8 +29,8 @@ d3.svg.axis = function() {
       } : Object;
 
       // Ticks, or domain values for ordinal scales.
-      var ticks = scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain(),
-          tickFormat = tickFormat_ == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : String) : tickFormat_;
+      var ticks = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain()) : tickValues,
+          tickFormat = tickFormat_ == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, (tickArguments_ == null ? tickValues : tickArguments_)) : String) : tickFormat_;
 
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
@@ -145,6 +146,7 @@ d3.svg.axis = function() {
 
   axis.ticks = function() {
     if (!arguments.length) return tickArguments_;
+    tickValues = null;
     tickArguments_ = arguments;
     return axis;
   };
@@ -173,6 +175,13 @@ d3.svg.axis = function() {
   axis.tickSubdivide = function(x) {
     if (!arguments.length) return tickSubdivide;
     tickSubdivide = +x;
+    return axis;
+  };
+
+  axis.tickValues = function(x) {
+    if (!arguments.length) return tickValues;
+    tickArguments_ = null;
+    tickValues = x;
     return axis;
   };
 
