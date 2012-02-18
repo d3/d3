@@ -78,4 +78,4 @@ function d3_scale_ordinal(domain, ranger) {
   };
 
   return scale.domain(domain);
-};
+}
