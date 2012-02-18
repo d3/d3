@@ -95,6 +95,23 @@ suite.addBatch({
       assert.equal(f(local(1990, 0, 1, 0)), "AM");
       assert.equal(f(local(1990, 0, 1, 13)), "PM");
     },
+    "formats ordinal date suffix": function(format) {
+      var f = format("%s");
+      var i = 0;
+      assert.equal(f(local(1990, 0, 1)), "st");
+      assert.equal(f(local(1990, 0, 2)), "nd");
+      assert.equal(f(local(1990, 0, 3)), "rd");
+      for (i = 4; i <= 20; i++) {
+        assert.equal(f(local(1990, 0, i)), "th");
+      }
+      assert.equal(f(local(1990, 0, 21)), "st");
+      assert.equal(f(local(1990, 0, 22)), "nd");
+      assert.equal(f(local(1990, 0, 23)), "rd");
+      for (i = 24; i <= 30; i++) {
+        assert.equal(f(local(1990, 0, i)), "th");
+      }
+      assert.equal(f(local(1990, 0, 31)), "st");
+    },
     "formats zero-padded second": function(format) {
       var f = format("%S");
       assert.equal(f(local(1990, 0, 1, 0, 0, 0)), "00");
