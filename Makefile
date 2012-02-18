@@ -265,7 +265,9 @@ install:
 	npm install
 
 package.json: d3.js src/package.js
+	@rm -f $@
 	node src/package.js > $@
+	@chmod a-w $@
 
 clean:
 	rm -f d3*.js
