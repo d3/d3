@@ -1,18 +1,6 @@
 SRC_FILES = \
-	../d3.js \
-	../d3.min.js \
-	../d3.chart.js \
-	../d3.chart.min.js \
-	../d3.csv.js \
-	../d3.csv.min.js \
-	../d3.geo.js \
-	../d3.geo.min.js \
-	../d3.geom.js \
-	../d3.geom.min.js \
-	../d3.layout.js \
-	../d3.layout.min.js \
-	../d3.time.js \
-	../d3.time.min.js
+	../d3.v2.js \
+	../d3.v2.min.js
 
 EX_FILES = \
 	../ex/box.js \
@@ -65,8 +53,8 @@ EX_FILES = \
 	../ex/population.css
 
 INCLUDE_FILES = \
-  box.js \
-  cluster.js \
+	box.js \
+	cluster.js \
 	cartogram.js \
 	chord.js \
 	choropleth.js \
@@ -86,11 +74,17 @@ INCLUDE_FILES = \
 	tree.js \
 	population.js
 
-.PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
+.PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES) d3.js d3.min.js
 
 $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:$(subst ../,,$@) > $@
+
+../d3.js: ../d3.v2.js
+	cp $^ $@
+
+../d3.min.js: ../d3.v2.min.js
+	cp $^ $@
 
 ../ex/calendar.css:
 	@rm -rf $@

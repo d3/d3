@@ -4762,8 +4762,7 @@ function d3_behavior_zoomExtentClamp(x, i, k) {
         Math.min(r0 === -Infinity ? Infinity : r0, x / k)) * k
       : Math.max(r0, Math.min(r1, x));
 }
-})();
-(function(){d3.layout = {};
+d3.layout = {};
 // Implements hierarchical edge bundling using Holten's algorithm. For each
 // input link, a path is computed that travels through the tree, up the parent
 // hierarchy to the least common ancestor, and then back down to the destination
@@ -6644,8 +6643,7 @@ function d3_layout_treemapPad(node, padding) {
   if (dy < 0) { y += dy / 2; dy = 0; }
   return {x: x, y: y, dx: dx, dy: dy};
 }
-})();
-(function(){d3.csv = function(url, callback) {
+d3.csv = function(url, callback) {
   d3.text(url, "text/csv", function(text) {
     callback(text && d3.csv.parse(text));
   });
@@ -6736,8 +6734,7 @@ function d3_csv_formatValue(text) {
       ? "\"" + text.replace(/\"/g, "\"\"") + "\""
       : text;
 }
-})();
-(function(){d3.geo = {};
+d3.geo = {};
 
 var d3_geo_radians = Math.PI / 180;
 // TODO clip input coordinates on opposite hemisphere
@@ -7674,8 +7671,7 @@ function d3_geo_greatArcInterpolate(a, b) {
   return interpolate;
 }
 d3.geo.greatCircle = d3.geo.circle;
-})();
-(function(){d3.geom = {};
+d3.geom = {};
 /**
  * Computes a contour for a given input grid function using the <a
  * href="http://en.wikipedia.org/wiki/Marching_squares">marching
@@ -8509,8 +8505,7 @@ function d3_geom_quadtreePoint(p) {
     y: p[1]
   };
 }
-})();
-(function(){d3.time = {};
+d3.time = {};
 
 var d3_time = Date;
 d3.time.format = function(template) {

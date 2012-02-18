@@ -13,7 +13,6 @@ title: Streamgraph
 
 <link type="text/css" rel="stylesheet" href="stream.css"/>
 <link type="text/css" rel="stylesheet" href="button.css"/>
-<script type="text/javascript" src="../d3.layout.js?2.7.4"> </script>
 <script type="text/javascript" src="stream_layers.js"> </script>
 <script type="text/javascript" src="stream.js"> </script>
 
