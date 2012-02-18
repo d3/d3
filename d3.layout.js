@@ -255,6 +255,9 @@ d3.layout.force = function() {
   }
 
   function tick() {
+    // simulated annealing, basically
+    if ((alpha *= .99) < .005) return true;
+
     var n = nodes.length,
         m = links.length,
         q,
@@ -319,9 +322,6 @@ d3.layout.force = function() {
     }
 
     event.tick({type: "tick", alpha: alpha});
-
-    // simulated annealing, basically
-    return (alpha *= .99) < .005;
   }
 
   force.nodes = function(x) {
@@ -1346,7 +1346,8 @@ function d3_layout_packPlace(a, b, c) {
     c.y = a.y;
   }
 }
-// Implements a hierarchical layout using the cluster (or dendogram) algorithm.
+// Implements a hierarchical layout using the cluster (or dendrogram)
+// algorithm.
 d3.layout.cluster = function() {
   var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,

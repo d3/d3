@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.7.4"}; // semver
+d3 = {version: "2.7.5"}; // semver
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -391,11 +391,6 @@ function d3_splitter(d) {
 function d3_collapse(s) {
   return s.replace(/(^\s+)|(\s+$)/g, "").replace(/\s+/g, " ");
 }
-/**
- * @param {number} start
- * @param {number=} stop
- * @param {number=} step
- */
 d3.range = function(start, stop, step) {
   if (arguments.length < 3) {
     step = 1;
@@ -404,14 +399,22 @@ d3.range = function(start, stop, step) {
       start = 0;
     }
   }
-  if ((stop - start) / step == Infinity) throw new Error("infinite range");
+  if ((stop - start) / step === Infinity) throw new Error("infinite range");
   var range = [],
+       k = d3_range_integerScale(Math.abs(step)),
        i = -1,
        j;
-  if (step < 0) while ((j = start + step * ++i) > stop) range.push(j);
-  else while ((j = start + step * ++i) < stop) range.push(j);
+  start *= k, stop *= k, step *= k;
+  if (step < 0) while ((j = start + step * ++i) > stop) range.push(j / k);
+  else while ((j = start + step * ++i) < stop) range.push(j / k);
   return range;
 };
+
+function d3_range_integerScale(x) {
+  var k = 1;
+  while (x * k % 1) k *= 10;
+  return k;
+}
 d3.requote = function(s) {
   return s.replace(d3_requote_re, "\\$&");
 };
@@ -545,7 +548,7 @@ function d3_dispatch_event(dispatch) {
   };
 
   return event;
-};
+}
 // TODO align
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),
@@ -2430,7 +2433,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
       input;
 
   function rescale() {
-    var linear = domain.length == 2 ? d3_scale_bilinear : d3_scale_polylinear,
+    var linear = Math.min(domain.length, range.length) > 2 ? d3_scale_polylinear : d3_scale_bilinear,
         uninterpolate = clamp ? d3_uninterpolateClamp : d3_uninterpolateNumber;
     output = linear(domain, range, uninterpolate, interpolate);
     input = linear(range, domain, uninterpolate, d3.interpolate);
@@ -2492,7 +2495,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
   };
 
   return rescale();
-};
+}
 
 function d3_scale_linearRebind(scale, linear) {
   return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
@@ -2542,7 +2545,7 @@ function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
   var u = [],
       i = [],
       j = 0,
-      k = domain.length - 1;
+      k = Math.min(domain.length, range.length) - 1;
 
   // Handle descending domains.
   if (domain[k] < domain[0]) {
@@ -2626,7 +2629,7 @@ function d3_scale_log(linear, log) {
   };
 
   return d3_scale_linearRebind(scale, linear);
-};
+}
 
 var d3_scale_logFormat = d3.format(".0e");
 
@@ -2692,7 +2695,7 @@ function d3_scale_pow(linear, exponent) {
   };
 
   return d3_scale_linearRebind(scale, linear);
-};
+}
 
 function d3_scale_powPow(e) {
   return function(x) {
@@ -2782,7 +2785,7 @@ function d3_scale_ordinal(domain, ranger) {
   };
 
   return scale.domain(domain);
-};
+}
 /*
  * This product includes color specifications and designs developed by Cynthia
  * Brewer (http://colorbrewer.org/). See lib/colorbrewer for more information.
@@ -2879,7 +2882,7 @@ function d3_scale_quantile(domain, range) {
   };
 
   return rescale();
-};
+}
 d3.scale.quantize = function() {
   return d3_scale_quantize(0, 1, [0, 1]);
 };
@@ -2915,7 +2918,7 @@ function d3_scale_quantize(x0, x1, range) {
   };
 
   return rescale();
-};
+}
 d3.svg = {};
 d3.svg.arc = function() {
   var innerRadius = d3_svg_arcInnerRadius,

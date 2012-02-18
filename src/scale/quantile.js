@@ -40,4 +40,4 @@ function d3_scale_quantile(domain, range) {
   };
 
   return rescale();
-};
+}

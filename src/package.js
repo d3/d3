@@ -9,7 +9,7 @@ require("util").puts(JSON.stringify({
   "homepage": "http://mbostock.github.com/d3/",
   "author": {"name": "Mike Bostock", "url": "http://bost.ocks.org/mike"},
   "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
-  "main": "d3.js",
+  "main": "index.js",
   "dependencies": {
     "jsdom": "0.2.10"
   },
