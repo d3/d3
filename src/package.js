@@ -1,5 +1,4 @@
-require("../test/env");
-require("../d3");
+require("../index");
 
 require("util").puts(JSON.stringify({
   "name": "d3",

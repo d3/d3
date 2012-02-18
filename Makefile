@@ -4,37 +4,24 @@ NODE_PATH ?= ./node_modules
 JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
 
-JS_FILES = \
-	d3.js \
-	d3.chart.js \
-	d3.layout.js \
-	d3.csv.js \
-	d3.geo.js \
-	d3.geom.js \
-	d3.time.js
-
 all: \
-	$(JS_FILES) \
-	$(JS_FILES:.js=.min.js) \
+	d3.v2.js \
+	d3.v2.min.js \
 	package.json
 
 # Modify this rule to build your own custom release.
-# Run `make d3.custom.min.js` to produce the minified version.
 
-d3.custom.js: \
-	d3.js \
-	d3.layout.js \
-	d3.csv.js \
-	d3.geo.js \
-	d3.geom.js \
-	d3.time.js
-
-.INTERMEDIATE d3.js: \
+.INTERMEDIATE d3.v2.js: \
 	src/start.js \
 	d3.core.js \
 	d3.scale.js \
 	d3.svg.js \
 	d3.behavior.js \
+	d3.layout.js \
+	d3.csv.js \
+	d3.geo.js \
+	d3.geom.js \
+	d3.time.js \
 	src/end.js
 
 d3.core.js: \
@@ -163,17 +150,7 @@ d3.behavior.js: \
 	src/behavior/drag.js \
 	src/behavior/zoom.js
 
-d3.chart.js: \
-	src/start.js \
-	src/chart/chart.js \
-	src/chart/box.js \
-	src/chart/bullet.js \
-	src/chart/horizon.js \
-	src/chart/qq.js \
-	src/end.js
-
 d3.layout.js: \
-	src/start.js \
 	src/layout/layout.js \
 	src/layout/bundle.js \
 	src/layout/chord.js \
@@ -186,11 +163,9 @@ d3.layout.js: \
 	src/layout/pack.js \
 	src/layout/cluster.js \
 	src/layout/tree.js \
-	src/layout/treemap.js \
-	src/end.js
+	src/layout/treemap.js
 
 d3.geo.js: \
-	src/start.js \
 	src/geo/geo.js \
 	src/geo/azimuthal.js \
 	src/geo/albers.js \
@@ -202,18 +177,14 @@ d3.geo.js: \
 	src/geo/bounds.js \
 	src/geo/circle.js \
 	src/geo/greatArc.js \
-	src/geo/greatCircle.js \
-	src/end.js
+	src/geo/greatCircle.js
 
 d3.csv.js: \
-	src/start.js \
 	src/csv/csv.js \
 	src/csv/parse.js \
-	src/csv/format.js \
-	src/end.js
+	src/csv/format.js
 
 d3.time.js: \
-	src/start.js \
 	src/time/time.js \
 	src/time/format.js \
 	src/time/format-utc.js \
@@ -234,19 +205,16 @@ d3.time.js: \
 	src/time/year.js \
 	src/time/years.js \
 	src/time/scale.js \
-	src/time/scale-utc.js \
-	src/end.js
+	src/time/scale-utc.js
 
 d3.geom.js: \
-	src/start.js \
 	src/geom/geom.js \
 	src/geom/contour.js \
 	src/geom/hull.js \
 	src/geom/polygon.js \
 	src/geom/voronoi.js \
 	src/geom/delaunay.js \
-	src/geom/quadtree.js \
-	src/end.js
+	src/geom/quadtree.js
 
 test: all
 	@$(JS_TESTER)
@@ -255,7 +223,7 @@ test: all
 	@rm -f $@
 	$(JS_COMPILER) < $< > $@
 
-d3.%: Makefile
+d3%.js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
@@ -264,10 +232,10 @@ install:
 	mkdir -p node_modules
 	npm install
 
-package.json: d3.js src/package.js
+package.json: d3.v2.js src/package.js
 	@rm -f $@
 	node src/package.js > $@
 	@chmod a-w $@
 
 clean:
-	rm -f d3*.js
+	rm -f d3*.js package.json

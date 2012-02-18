@@ -1,16 +1,28 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <title>PivotGraph (Rollup) Layout</title>
-
 <style>
-  body { font-family: sans-serif; font-size: 10px; }
-  path { fill: none; stroke: #ccc; }
-  circle { fill: #fff; stroke: steelblue; }
-</style>
-<script src="../../d3.js"></script>
 
+body {
+  font-family: sans-serif;
+  font-size: 10px;
+}
+
+path {
+  fill: none;
+  stroke: #ccc;
+}
+
+circle {
+  fill: #fff;
+  stroke: steelblue;
+}
+
+</style>
 <body>
+<script src="../../d3.v2.js"></script>
 <script>
+
 var social = {
   nodes: [
     {gender: "M", group: 1},
@@ -233,4 +245,5 @@ function rollup() {
   function rollupLinkSource(d) { return d.source; }
   function rollupLinkTarget(d) { return d.target; }
 }
+
 </script>

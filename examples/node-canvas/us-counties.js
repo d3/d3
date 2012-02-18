@@ -1,6 +1,4 @@
 require("../../test/env");
-require("../../d3");
-require("../../d3.geo");
 
 var fs = require("fs"),
     util = require("util"),

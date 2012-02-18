@@ -11,12 +11,7 @@ window = document.createWindow();
 navigator = window.navigator;
 CSSStyleDeclaration = window.CSSStyleDeclaration;
 
-require("./d3");
-require("./d3.csv");
-require("./d3.geo");
-require("./d3.geom");
-require("./d3.layout");
-require("./d3.time");
+require("./d3.v2");
 
 module.exports = d3;
 
