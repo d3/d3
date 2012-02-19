@@ -1,4 +1,3 @@
-// TODO nice
 function d3_time_scale(linear, methods, format) {
 
   function scale(x) {
@@ -15,6 +14,11 @@ function d3_time_scale(linear, methods, format) {
     return scale;
   };
 
+  scale.nice = function(m) {
+    var extent = d3_time_scaleExtent(scale.domain());
+    return scale.domain([m.floor(extent[0]), m.ceil(extent[1])]);
+  };
+
   scale.ticks = function(m, k) {
     var extent = d3_time_scaleExtent(scale.domain());
     if (typeof m !== "function") {
@@ -26,7 +30,7 @@ function d3_time_scale(linear, methods, format) {
       if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
       m = methods[i];
       k = m[1];
-      m = m[0];
+      m = m[0].range;
     }
     return m(extent[0], new Date(+extent[1] + 1), k); // inclusive upper bound
   };
@@ -96,24 +100,24 @@ var d3_time_scaleSteps = [
 ];
 
 var d3_time_scaleLocalMethods = [
-  [d3.time.seconds, 1],
-  [d3.time.seconds, 5],
-  [d3.time.seconds, 15],
-  [d3.time.seconds, 30],
-  [d3.time.minutes, 1],
-  [d3.time.minutes, 5],
-  [d3.time.minutes, 15],
-  [d3.time.minutes, 30],
-  [d3.time.hours, 1],
-  [d3.time.hours, 3],
-  [d3.time.hours, 6],
-  [d3.time.hours, 12],
-  [d3.time.days, 1],
-  [d3.time.days, 2],
-  [d3.time.weeks, 1],
-  [d3.time.months, 1],
-  [d3.time.months, 3],
-  [d3.time.years, 1]
+  [d3.time.second, 1],
+  [d3.time.second, 5],
+  [d3.time.second, 15],
+  [d3.time.second, 30],
+  [d3.time.minute, 1],
+  [d3.time.minute, 5],
+  [d3.time.minute, 15],
+  [d3.time.minute, 30],
+  [d3.time.hour, 1],
+  [d3.time.hour, 3],
+  [d3.time.hour, 6],
+  [d3.time.hour, 12],
+  [d3.time.day, 1],
+  [d3.time.day, 2],
+  [d3.time.week, 1],
+  [d3.time.month, 1],
+  [d3.time.month, 3],
+  [d3.time.year, 1]
 ];
 
 var d3_time_scaleLocalFormats = [
