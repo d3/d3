@@ -1,8 +1,3 @@
-/**
- * @param {number} start
- * @param {number=} stop
- * @param {number=} step
- */
 d3.range = function(start, stop, step) {
   if (arguments.length < 3) {
     step = 1;
@@ -11,18 +6,19 @@ d3.range = function(start, stop, step) {
       start = 0;
     }
   }
-  if ((stop - start) / step == Infinity) throw new Error("infinite range");
+  if ((stop - start) / step === Infinity) throw new Error("infinite range");
   var range = [],
-       h = calcRdx(start, stop),
+       k = d3_range_integerScale(Math.abs(step)),
        i = -1,
        j;
-  if (step < 0) while ((j = (h * start + h * step * ++i) / h) > stop) range.push(j);
-  else while ((j = (h * start + h * step * ++i) / h) < stop) range.push(j);
+  start *= k, stop *= k, step *= k;
+  if (step < 0) while ((j = start + step * ++i) > stop) range.push(j / k);
+  else while ((j = start + step * ++i) < stop) range.push(j / k);
   return range;
 };
 
-// calculate correction for IEEE error
-function calcRdx(n, m) {
-	var val = n > m ? n : m;
-	return Math.pow(10, 18 - ~~(Math.log((val > 0) ? val : -val) * Math.LOG10E));
+function d3_range_integerScale(x) {
+  var k = 1;
+  while (x * k % 1) k *= 10;
+  return k;
 }

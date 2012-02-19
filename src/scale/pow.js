@@ -45,7 +45,7 @@ function d3_scale_pow(linear, exponent) {
   };
 
   return d3_scale_linearRebind(scale, linear);
-};
+}
 
 function d3_scale_powPow(e) {
   return function(x) {

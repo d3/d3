@@ -7,7 +7,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
       input;
 
   function rescale() {
-    var linear = domain.length == 2 ? d3_scale_bilinear : d3_scale_polylinear,
+    var linear = Math.min(domain.length, range.length) > 2 ? d3_scale_polylinear : d3_scale_bilinear,
         uninterpolate = clamp ? d3_uninterpolateClamp : d3_uninterpolateNumber;
     output = linear(domain, range, uninterpolate, interpolate);
     input = linear(range, domain, uninterpolate, d3.interpolate);
@@ -69,7 +69,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
   };
 
   return rescale();
-};
+}
 
 function d3_scale_linearRebind(scale, linear) {
   return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");

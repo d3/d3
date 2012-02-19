@@ -44,6 +44,9 @@ d3.layout.force = function() {
   }
 
   function tick() {
+    // simulated annealing, basically
+    if ((alpha *= .99) < .005) return true;
+
     var n = nodes.length,
         m = links.length,
         q,
@@ -108,9 +111,6 @@ d3.layout.force = function() {
     }
 
     event.tick({type: "tick", alpha: alpha});
-
-    // simulated annealing, basically
-    return (alpha *= .99) < .005;
   }
 
   force.nodes = function(x) {
