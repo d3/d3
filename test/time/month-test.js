@@ -27,22 +27,6 @@ suite.addBatch({
       },
       "observes the end of the daylight savings time": function(floor) {
         assert.deepEqual(floor(local(2011, 10, 06, 01)), local(2011, 10, 01));
-      },
-      "UTC": {
-        topic: function(floor) {
-          return floor.utc;
-        },
-        "returns months": function(floor) {
-          assert.deepEqual(floor(utc(2010, 11, 31, 23, 59, 59)), utc(2010, 11, 01));
-          assert.deepEqual(floor(utc(2011, 00, 01, 00, 00, 00)), utc(2011, 00, 01));
-          assert.deepEqual(floor(utc(2011, 00, 01, 00, 00, 01)), utc(2011, 00, 01));
-        },
-        "does not observe the start of daylight savings time": function(floor) {
-          assert.deepEqual(floor(utc(2011, 02, 13, 01)), utc(2011, 02, 01));
-        },
-        "does not observe the end of the daylight savings time": function(floor) {
-          assert.deepEqual(floor(utc(2011, 10, 06, 01)), utc(2011, 10, 01));
-        }
       }
     },
     "ceil": {
@@ -59,10 +43,34 @@ suite.addBatch({
       },
       "observes the end of the daylight savings time": function(ceil) {
         assert.deepEqual(ceil(local(2011, 10, 06, 01)), local(2011, 11, 01));
+      }
+    },
+    "UTC": {
+      topic: function(interval) {
+        return interval.utc;
       },
-      "UTC": {
-        topic: function(ceil) {
-          return ceil.utc;
+      "defaults to floor": function(interval) {
+        assert.strictEqual(interval, interval.floor);
+      },
+      "floor": {
+        topic: function(interval) {
+          return interval.floor;
+        },
+        "returns months": function(floor) {
+          assert.deepEqual(floor(utc(2010, 11, 31, 23, 59, 59)), utc(2010, 11, 01));
+          assert.deepEqual(floor(utc(2011, 00, 01, 00, 00, 00)), utc(2011, 00, 01));
+          assert.deepEqual(floor(utc(2011, 00, 01, 00, 00, 01)), utc(2011, 00, 01));
+        },
+        "does not observe the start of daylight savings time": function(floor) {
+          assert.deepEqual(floor(utc(2011, 02, 13, 01)), utc(2011, 02, 01));
+        },
+        "does not observe the end of the daylight savings time": function(floor) {
+          assert.deepEqual(floor(utc(2011, 10, 06, 01)), utc(2011, 10, 01));
+        }
+      },
+      "ceil": {
+        topic: function(interval) {
+          return interval.ceil;
         },
         "returns months": function(ceil) {
           assert.deepEqual(ceil(utc(2010, 11, 31, 23, 59, 59)), utc(2011, 00, 01));

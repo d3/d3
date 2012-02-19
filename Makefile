@@ -190,21 +190,13 @@ d3.time.js: \
 	src/time/format-utc.js \
 	src/time/format-iso.js \
 	src/time/interval.js \
-	src/time/range.js \
 	src/time/second.js \
-	src/time/seconds.js \
 	src/time/minute.js \
-	src/time/minutes.js \
 	src/time/hour.js \
-	src/time/hours.js \
 	src/time/day.js \
-	src/time/days.js \
 	src/time/week.js \
-	src/time/weeks.js \
 	src/time/month.js \
-	src/time/months.js \
 	src/time/year.js \
-	src/time/years.js \
 	src/time/scale.js \
 	src/time/scale-utc.js
 
