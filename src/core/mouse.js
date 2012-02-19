@@ -30,6 +30,6 @@ function d3_mousePoint(container, e) {
     return [point.x, point.y];
   }
   var rect = container.getBoundingClientRect();
-  return [e.pageX - rect.left - container.clientLeft - window.pageXOffset,
-      e.pageY - rect.top - container.clientTop - window.pageYOffset];
+  return [e.clientX - rect.left - container.clientLeft,
+      e.clientY - rect.top - container.clientTop];
 };
