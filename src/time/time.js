@@ -17,6 +17,7 @@ d3_time_utc.prototype = {
   getMinutes: function() { return this._.getUTCMinutes(); },
   getMonth: function() { return this._.getUTCMonth(); },
   getSeconds: function() { return this._.getUTCSeconds(); },
+  getTime: function() { return this._.getTime(); },
   getTimezoneOffset: function() { return 0; },
   valueOf: function() { return this._.valueOf(); },
   setDate: function(x) { this._.setUTCDate(x); },
@@ -26,5 +27,6 @@ d3_time_utc.prototype = {
   setMilliseconds: function(x) { this._.setUTCMilliseconds(x); },
   setMinutes: function(x) { this._.setUTCMinutes(x); },
   setMonth: function(x) { this._.setUTCMonth(x); },
-  setSeconds: function(x) { this._.setUTCSeconds(x); }
+  setSeconds: function(x) { this._.setUTCSeconds(x); },
+  setTime: function(x) { this._.setTime(x); }
 };
