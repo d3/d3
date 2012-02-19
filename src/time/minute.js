@@ -1,5 +1,3 @@
-d3.time.minute = function(date) {
-  return new Date(~~(date / 6e4) * 6e4);
-};
-
-d3.time.minute.utc = d3.time.minute;
+d3.time.minute = d3_time_interval(function(date) {
+  return new d3_time(Math.floor(date / 6e4) * 6e4);
+});

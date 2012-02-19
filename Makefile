@@ -189,6 +189,7 @@ d3.time.js: \
 	src/time/format.js \
 	src/time/format-utc.js \
 	src/time/format-iso.js \
+	src/time/interval.js \
 	src/time/range.js \
 	src/time/second.js \
 	src/time/seconds.js \
