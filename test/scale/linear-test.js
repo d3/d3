@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -42,6 +41,14 @@ suite.addBatch({
         assert.equal(x(-5), "#ff8080");
         assert.equal(x(50), "#80c080");
         assert.equal(x(75), "#40a040");
+      },
+      "the smaller of the domain or range is observed": function(linear) {
+        var x = linear().domain([-10, 0]).range(["red", "white", "green"]).clamp(true);
+        assert.equal(x(-5), "#ff8080");
+        assert.equal(x(50), "#ffffff");
+        var x = linear().domain([-10, 0, 100]).range(["red", "white"]).clamp(true);
+        assert.equal(x(-5), "#ff8080");
+        assert.equal(x(50), "#ffffff");
       },
       "an empty domain maps to the range start": function(linear) {
         var x = linear().domain([0, 0]).range(["red", "green"]);
@@ -110,6 +117,16 @@ suite.addBatch({
         assert.inDelta(x(-.5), 1, 1e-6);
         assert.inDelta(x(.5), .5, 1e-6);
         assert.inDelta(x(1.5), 0, 1e-6);
+      },
+      "can clamp to the range": function(linear) {
+        var x = linear().clamp(true);
+        assert.inDelta(x.invert(-.5), 0, 1e-6);
+        assert.inDelta(x.invert(.5), .5, 1e-6);
+        assert.inDelta(x.invert(1.5), 1, 1e-6);
+        var x = linear().range([1, 0]).clamp(true);
+        assert.inDelta(x.invert(-.5), 1, 1e-6);
+        assert.inDelta(x.invert(.5), .5, 1e-6);
+        assert.inDelta(x.invert(1.5), 0, 1e-6);
       }
     },
 
@@ -138,6 +155,20 @@ suite.addBatch({
         assert.inDelta(x.invert(new Date(1990, 6, 2, 13)), .5, 1e-6);
         var x = linear().range(["#000", "#fff"]);
         assert.isNaN(x.invert("#999"));
+      },
+      "can invert a polylinear descending domain": function(linear) {
+        var x = linear().domain([4, 2, 1]).range([1, 2, 4]);
+        assert.inDelta(x(1.5), 3, 1e-6);
+        assert.inDelta(x(3), 1.5, 1e-6);
+        assert.inDelta(x.invert(1.5), 3, 1e-6);
+        assert.inDelta(x.invert(3), 1.5, 1e-6);
+      },
+      "can invert a polylinear descending range": function(linear) {
+        var x = linear().domain([1, 2, 4]).range([4, 2, 1]);
+        assert.inDelta(x(1.5), 3, 1e-6);
+        assert.inDelta(x(3), 1.5, 1e-6);
+        assert.inDelta(x.invert(1.5), 3, 1e-6);
+        assert.inDelta(x.invert(3), 1.5, 1e-6);
       }
     },
 

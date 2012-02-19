@@ -1,6 +1,4 @@
 require("../env");
-require("../../d3");
-require("../../d3.csv");
 
 var vows = require("vows"),
     assert = require("assert");

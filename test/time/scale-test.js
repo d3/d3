@@ -1,6 +1,4 @@
 require("../env");
-require("../../d3");
-require("../../d3.time");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -77,13 +75,25 @@ suite.addBatch({
           local(2011, 0, 1, 12, 30)
         ]);
       },
+      "generates sub-second ticks": function(scale) {
+        var x = scale().domain([local(2011, 0, 1, 12, 0, 0), local(2011, 0, 1, 12, 0, 1)]);
+        assert.deepEqual(x.ticks(4), [
+          local(2011, 0, 1, 12, 0, 0,   0),
+          local(2011, 0, 1, 12, 0, 0, 200),
+          local(2011, 0, 1, 12, 0, 0, 400),
+          local(2011, 0, 1, 12, 0, 0, 600),
+          local(2011, 0, 1, 12, 0, 0, 800),
+          local(2011, 0, 1, 12, 0, 1,   0)
+        ]);
+      },
       "generates 1-second ticks": function(scale) {
         var x = scale().domain([local(2011, 0, 1, 12, 0, 0), local(2011, 0, 1, 12, 0, 4)]);
         assert.deepEqual(x.ticks(4), [
           local(2011, 0, 1, 12, 0, 0),
           local(2011, 0, 1, 12, 0, 1),
           local(2011, 0, 1, 12, 0, 2),
-          local(2011, 0, 1, 12, 0, 3)
+          local(2011, 0, 1, 12, 0, 3),
+          local(2011, 0, 1, 12, 0, 4)
         ]);
       },
       "generates 5-second ticks": function(scale) {
@@ -92,7 +102,8 @@ suite.addBatch({
           local(2011, 0, 1, 12, 0, 0),
           local(2011, 0, 1, 12, 0, 5),
           local(2011, 0, 1, 12, 0, 10),
-          local(2011, 0, 1, 12, 0, 15)
+          local(2011, 0, 1, 12, 0, 15),
+          local(2011, 0, 1, 12, 0, 20)
         ]);
       },
       "generates 15-second ticks": function(scale) {
@@ -238,6 +249,15 @@ suite.addBatch({
           local(2013, 0, 1, 0, 0),
           local(2014, 0, 1, 0, 0)
         ]);
+      },
+      "generates multi-year ticks": function(scale) {
+        var x = scale().domain([local(0, 11, 18), local(2014, 2, 2)]);
+        assert.deepEqual(x.ticks(6), [
+          local( 500, 0, 1, 0, 0),
+          local(1000, 0, 1, 0, 0),
+          local(1500, 0, 1, 0, 0),
+          local(2000, 0, 1, 0, 0)
+        ]);
       }
     },
 
@@ -272,13 +292,13 @@ suite.addBatch({
       },
       "formats minute on second zero": function(format) {
         assert.equal(format(local(2011, 1, 2, 11, 59)), "11:59");
-        assert.equal(format(local(2011, 1, 2, 12, 01)), "12:01");
-        assert.equal(format(local(2011, 1, 2, 12, 02)), "12:02");
+        assert.equal(format(local(2011, 1, 2, 12,  1)), "12:01");
+        assert.equal(format(local(2011, 1, 2, 12,  2)), "12:02");
       },
       "otherwise, formats second": function(format) {
-        assert.equal(format(local(2011, 1, 2, 12, 01, 09)), ":09");
-        assert.equal(format(local(2011, 1, 2, 12, 01, 10)), ":10");
-        assert.equal(format(local(2011, 1, 2, 12, 01, 11)), ":11");
+        assert.equal(format(local(2011, 1, 2, 12,  1,  9)), ":09");
+        assert.equal(format(local(2011, 1, 2, 12,  1, 10)), ":10");
+        assert.equal(format(local(2011, 1, 2, 12,  1, 11)), ":11");
       }
     },
 
@@ -306,13 +326,25 @@ suite.addBatch({
             utc(2011, 0, 1, 12, 30)
           ]);
         },
+        "generates sub-second ticks": function(scale) {
+          var x = scale().domain([utc(2011, 0, 1, 12, 0, 0), utc(2011, 0, 1, 12, 0, 1)]);
+          assert.deepEqual(x.ticks(4), [
+            utc(2011, 0, 1, 12, 0, 0,   0),
+            utc(2011, 0, 1, 12, 0, 0, 200),
+            utc(2011, 0, 1, 12, 0, 0, 400),
+            utc(2011, 0, 1, 12, 0, 0, 600),
+            utc(2011, 0, 1, 12, 0, 0, 800),
+            utc(2011, 0, 1, 12, 0, 1,   0)
+          ]);
+        },
         "generates 1-second ticks": function(scale) {
           var x = scale().domain([utc(2011, 0, 1, 12, 0, 0), utc(2011, 0, 1, 12, 0, 4)]);
           assert.deepEqual(x.ticks(4), [
             utc(2011, 0, 1, 12, 0, 0),
             utc(2011, 0, 1, 12, 0, 1),
             utc(2011, 0, 1, 12, 0, 2),
-            utc(2011, 0, 1, 12, 0, 3)
+            utc(2011, 0, 1, 12, 0, 3),
+            utc(2011, 0, 1, 12, 0, 4)
           ]);
         },
         "generates 5-second ticks": function(scale) {
@@ -321,7 +353,8 @@ suite.addBatch({
             utc(2011, 0, 1, 12, 0, 0),
             utc(2011, 0, 1, 12, 0, 5),
             utc(2011, 0, 1, 12, 0, 10),
-            utc(2011, 0, 1, 12, 0, 15)
+            utc(2011, 0, 1, 12, 0, 15),
+            utc(2011, 0, 1, 12, 0, 20)
           ]);
         },
         "generates 15-second ticks": function(scale) {
@@ -467,6 +500,15 @@ suite.addBatch({
             utc(2013, 0, 1, 0, 0),
             utc(2014, 0, 1, 0, 0)
           ]);
+        },
+        "generates multi-year ticks": function(scale) {
+          var x = scale().domain([utc(0, 11, 18), utc(2014, 2, 2)]);
+          assert.deepEqual(x.ticks(6), [
+            utc( 500, 0, 1, 0, 0),
+            utc(1000, 0, 1, 0, 0),
+            utc(1500, 0, 1, 0, 0),
+            utc(2000, 0, 1, 0, 0)
+          ]);
         }
       },
 
@@ -501,25 +543,34 @@ suite.addBatch({
         },
         "formats minute on second zero": function(format) {
           assert.equal(format(utc(2011, 1, 2, 11, 59)), "11:59");
-          assert.equal(format(utc(2011, 1, 2, 12, 01)), "12:01");
-          assert.equal(format(utc(2011, 1, 2, 12, 02)), "12:02");
+          assert.equal(format(utc(2011, 1, 2, 12,  1)), "12:01");
+          assert.equal(format(utc(2011, 1, 2, 12,  2)), "12:02");
         },
-        "otherwise, formats second": function(format) {
-          assert.equal(format(utc(2011, 1, 2, 12, 01, 09)), ":09");
-          assert.equal(format(utc(2011, 1, 2, 12, 01, 10)), ":10");
-          assert.equal(format(utc(2011, 1, 2, 12, 01, 11)), ":11");
+        "formats second on millisecond zero": function(format) {
+          assert.equal(format(utc(2011, 1, 2, 12,  1,  9)), ":09");
+          assert.equal(format(utc(2011, 1, 2, 12,  1, 10)), ":10");
+          assert.equal(format(utc(2011, 1, 2, 12,  1, 11)), ":11");
+        },
+        "otherwise, formats milliseconds": function(format) {
+          assert.equal(format(utc(2011, 1, 2, 12,  1,  0,   9)), ".009");
+          assert.equal(format(utc(2011, 1, 2, 12,  1,  0,  10)), ".010");
+          assert.equal(format(utc(2011, 1, 2, 12,  1,  0,  11)), ".011");
         }
       }
     }
   }
 });
 
-function local(year, month, day, hours, minutes, seconds) {
-  return new Date(year, month, day, hours || 0, minutes || 0, seconds || 0);
+function local(year, month, day, hours, minutes, seconds, milliseconds) {
+  var date = new Date(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
+  date.setFullYear(year); // Y2K fail
+  return date;
 }
 
-function utc(year, month, day, hours, minutes, seconds) {
-  return new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0));
+function utc(year, month, day, hours, minutes, seconds, milliseconds) {
+  var date = new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0));
+  date.setUTCFullYear(year); // Y2K fail
+  return date;
 }
 
 suite.export(module);

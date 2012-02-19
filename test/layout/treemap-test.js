@@ -1,6 +1,4 @@
 require("../env");
-require("../../d3");
-require("../../d3.layout");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -137,33 +135,15 @@ suite.addBatch({
     },
     "no negatively sized rectangles": function(treemap) {
       var t = treemap().size([615, 500]).sort(function(a, b) { return a.value - b.value; }).padding(29),
-          nodes = t.nodes({"children": [
-            {"value": 1},
-            {"value": 9},
-            {"value": 3},
-            {"value": 15},
-            {"value": 44},
-            {"value": 28},
-            {"value": 32},
-            {"value": 41},
-            {"value": 50},
-            {"value": 60},
-            {"value": 64},
-            {"value": 75},
-            {"value": 76},
-            {"value": 84},
-            {"value": 88},
-            {"value": 100},
-            {"value": 140},
-            {"value": 142},
-            {"value": 363},
-            {"value": 657},
-            {"value": 670},
-            {"value": 822},
-            {"value": 1173},
-            {"value": 1189}
-          ]}).map(layout);
+          data = [1, 9, 3, 15, 44, 28, 32, 41, 50, 60, 64, 75, 76, 84, 88, 100, 140, 142, 363, 657, 670, 822, 1173, 1189],
+          nodes = t.nodes({children: data.map(function(d) { return {value: d}; })}).map(layout);
       assert.equal(nodes.filter(function(n) { return n.dx < 0 || n.dy < 0; }).length, 0);
+    },
+    "no overhanging rectangles": function(treemap) {
+      var t = treemap().size([100, 100]).sort(function(a, b) { return a.value - b.value; }),
+          data = [0, 0, 81681.85, 370881.9, 0, 0, 0, 255381.59, 0, 0, 0, 0, 0, 0, 0, 125323.95, 0, 0, 0, 186975.07, 185707.05, 267370.93, 0]
+          nodes = t.nodes({children: data.map(function(d) { return {value: d}; })}).map(layout);
+      assert.equal(nodes.filter(function(n) { return n.dx < 0 || n.dy < 0 || n.x + n.dx > 100 || n.y + n.dy > 100; }).length, 0);
     },
     "can handle an empty children array": function(treemap) {
       assert.deepEqual(treemap().nodes({children: []}).map(layout), [

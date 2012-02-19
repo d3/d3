@@ -110,26 +110,26 @@ d3.layout.treemap = function() {
         v = u ? round(row.area / u) : 0,
         o;
     if (u == rect.dx) { // horizontal subdivision
-      if (flush || v > rect.dy) v = v ? rect.dy : 0; // over+underflow
+      if (flush || v > rect.dy) v = rect.dy; // over+underflow
       while (++i < n) {
         o = row[i];
         o.x = x;
         o.y = y;
         o.dy = v;
-        x += o.dx = v ? round(o.area / v) : 0;
+        x += o.dx = Math.min(rect.x + rect.dx - x, v ? round(o.area / v) : 0);
       }
       o.z = true;
       o.dx += rect.x + rect.dx - x; // rounding error
       rect.y += v;
       rect.dy -= v;
     } else { // vertical subdivision
-      if (flush || v > rect.dx) v = v ? rect.dx : 0; // over+underflow
+      if (flush || v > rect.dx) v = rect.dx; // over+underflow
       while (++i < n) {
         o = row[i];
         o.x = x;
         o.y = y;
         o.dx = v;
-        y += o.dy = v ? round(o.area / v) : 0;
+        y += o.dy = Math.min(rect.y + rect.dy - y, v ? round(o.area / v) : 0);
       }
       o.z = false;
       o.dy += rect.y + rect.dy - y; // rounding error

@@ -33,4 +33,4 @@ function d3_scale_quantize(x0, x1, range) {
   };
 
   return rescale();
-};
+}
