@@ -8529,6 +8529,22 @@ var d3_time_zfill2 = d3.format("02d"),
     d3_time_zfill4 = d3.format("04d"),
     d3_time_sfill2 = d3.format("2d");
 
+function d3_time_ordinal_suffix(number) {
+  var suffix = "th",
+      tail = number % 100;
+
+  if (tail < 11 || tail > 13) {
+    switch (tail % 10) {
+      case 1: suffix = "st"; break;
+      case 2: suffix = "nd"; break;
+      case 3: suffix = "rd"; break;
+      default: break;
+    }
+  }
+
+  return suffix;
+}
+
 var d3_time_formats = {
   a: function(d) { return d3_time_weekdays[d.getDay()].substring(0, 3); },
   A: function(d) { return d3_time_weekdays[d.getDay()]; },
@@ -8544,6 +8560,7 @@ var d3_time_formats = {
   m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
   M: function(d) { return d3_time_zfill2(d.getMinutes()); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
+  s: function(d) { return d3_time_ordinal_suffix(d.getDate()); },
   S: function(d) { return d3_time_zfill2(d.getSeconds()); },
   U: d3_time_weekNumberSunday,
   w: function(d) { return d.getDay(); },
@@ -9115,7 +9132,7 @@ var d3_time_scaleLocalFormats = [
   [d3.time.format("%B"), function(d) { return d.getMonth(); }],
   [d3.time.format("%b %d"), function(d) { return d.getDate() != 1; }],
   [d3.time.format("%a %d"), function(d) { return d.getDay() && d.getDate() != 1; }],
-  [d3.time.format("%I %p"), function(d) { return d.getHours(); }],
+  [d3.time.format("%H"), function(d) { return d.getHours(); }],   // [abh] Make the "auto-scaling" time formats use 24-hour hours instead of 12-hours and AM/PM
   [d3.time.format("%I:%M"), function(d) { return d.getMinutes(); }],
   [d3.time.format(":%S"), function(d) { return d.getSeconds(); }],
   [d3.time.format(".%L"), function(d) { return d.getMilliseconds(); }]
@@ -9157,7 +9174,7 @@ var d3_time_scaleUTCFormats = [
   [d3.time.format.utc("%B"), function(d) { return d.getUTCMonth(); }],
   [d3.time.format.utc("%b %d"), function(d) { return d.getUTCDate() != 1; }],
   [d3.time.format.utc("%a %d"), function(d) { return d.getUTCDay() && d.getUTCDate() != 1; }],
-  [d3.time.format.utc("%I %p"), function(d) { return d.getUTCHours(); }],
+  [d3.time.format.utc("%H"), function(d) { return d.getUTCHours(); }],  // [abh] Make the "auto-scaling" time formats use 24-hour hours instead of 12-hours and AM/PM
   [d3.time.format.utc("%I:%M"), function(d) { return d.getUTCMinutes(); }],
   [d3.time.format.utc(":%S"), function(d) { return d.getUTCSeconds(); }],
   [d3.time.format.utc(".%L"), function(d) { return d.getUTCMilliseconds(); }]
