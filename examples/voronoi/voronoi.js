@@ -25,7 +25,7 @@ svg.selectAll("circle")
     .attr("r", 2);
 
 function update() {
-  vertices[0] = d3.svg.mouse(this);
+  vertices[0] = d3.mouse(this);
   svg.selectAll("path")
       .data(d3.geom.voronoi(vertices)
       .map(function(d) { return "M" + d.join("L") + "Z"; }))
