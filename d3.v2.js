@@ -8908,12 +8908,13 @@ d3_time_formatIsoNative.toString = d3_time_formatIso.toString;
 function d3_time_interval(local, step, number) {
 
   function offset(date, offset) {
-    step(date, offset);
+    step(date = new d3_time(+date), offset);
     return date;
   }
 
   function ceil(date) {
-    return offset(local(new d3_time(date - 1)), 1);
+    step(date = local(new d3_time(date - 1)), 1);
+    return date;
   }
 
   function range(t0, t1, dt) {

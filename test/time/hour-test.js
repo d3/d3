@@ -93,6 +93,34 @@ suite.addBatch({
         })
       }
     },
+    "offset": {
+      topic: function(interval) {
+        return interval.offset;
+      },
+      "does not modify the passed-in date": function(offset) {
+        var date = local(2010, 11, 31, 23, 59, 59, 999);
+        offset(date, +1);
+        assert.deepEqual(date, local(2010, 11, 31, 23, 59, 59, 999));
+      },
+      "does not round the passed-in-date": function(offset) {
+        assert.deepEqual(offset(local(2010, 11, 31, 23, 59, 59, 999), +1), local(2011, 00, 01, 00, 59, 59, 999));
+        assert.deepEqual(offset(local(2010, 11, 31, 23, 59, 59, 456), -2), local(2010, 11, 31, 21, 59, 59, 456));
+      },
+      "allows negative offsets": function(offset) {
+        assert.deepEqual(offset(local(2010, 11, 31, 12), -1), local(2010, 11, 31, 11));
+        assert.deepEqual(offset(local(2011, 00, 01, 01), -2), local(2010, 11, 31, 23));
+        assert.deepEqual(offset(local(2011, 00, 01, 00), -1), local(2010, 11, 31, 23));
+      },
+      "allows positive offsets": function(offset) {
+        assert.deepEqual(offset(local(2010, 11, 31, 11), +1), local(2010, 11, 31, 12));
+        assert.deepEqual(offset(local(2010, 11, 31, 23), +2), local(2011, 00, 01, 01));
+        assert.deepEqual(offset(local(2010, 11, 31, 23), +1), local(2011, 00, 01, 00));
+      },
+      "allows zero offset": function(offset) {
+        assert.deepEqual(offset(local(2010, 11, 31, 23, 59, 59, 999), 0), local(2010, 11, 31, 23, 59, 59, 999));
+        assert.deepEqual(offset(local(2010, 11, 31, 23, 59, 58, 000), 0), local(2010, 11, 31, 23, 59, 58, 000));
+      }
+    },
     "UTC": {
       topic: function(interval) {
         return interval.utc;
@@ -150,6 +178,34 @@ suite.addBatch({
           assert.deepEqual(ceil(utc(2011, 10, 06, 08, 59)), utc(2011, 10, 06, 09));
           assert.deepEqual(ceil(utc(2011, 10, 06, 09, 00)), utc(2011, 10, 06, 09));
           assert.deepEqual(ceil(utc(2011, 10, 06, 09, 01)), utc(2011, 10, 06, 10));
+        }
+      },
+      "offset": {
+        topic: function(interval) {
+          return interval.offset;
+        },
+        "does not modify the passed-in date": function(offset) {
+          var date = utc(2010, 11, 31, 23, 59, 59, 999);
+          offset(date, +1);
+          assert.deepEqual(date, utc(2010, 11, 31, 23, 59, 59, 999));
+        },
+        "does not round the passed-in-date": function(offset) {
+          assert.deepEqual(offset(utc(2010, 11, 31, 23, 59, 59, 999), +1), utc(2011, 00, 01, 00, 59, 59, 999));
+          assert.deepEqual(offset(utc(2010, 11, 31, 23, 59, 59, 456), -2), utc(2010, 11, 31, 21, 59, 59, 456));
+        },
+        "allows negative offsets": function(offset) {
+          assert.deepEqual(offset(utc(2010, 11, 31, 12), -1), utc(2010, 11, 31, 11));
+          assert.deepEqual(offset(utc(2011, 00, 01, 01), -2), utc(2010, 11, 31, 23));
+          assert.deepEqual(offset(utc(2011, 00, 01, 00), -1), utc(2010, 11, 31, 23));
+        },
+        "allows positive offsets": function(offset) {
+          assert.deepEqual(offset(utc(2010, 11, 31, 11), +1), utc(2010, 11, 31, 12));
+          assert.deepEqual(offset(utc(2010, 11, 31, 23), +2), utc(2011, 00, 01, 01));
+          assert.deepEqual(offset(utc(2010, 11, 31, 23), +1), utc(2011, 00, 01, 00));
+        },
+        "allows zero offset": function(offset) {
+          assert.deepEqual(offset(utc(2010, 11, 31, 23, 59, 59, 999), 0), utc(2010, 11, 31, 23, 59, 59, 999));
+          assert.deepEqual(offset(utc(2010, 11, 31, 23, 59, 58, 000), 0), utc(2010, 11, 31, 23, 59, 58, 000));
         }
       }
     }
