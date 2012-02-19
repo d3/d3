@@ -1,11 +1,11 @@
-d3.behavior.mouse = function(container) {
-  return d3_behavior_mousePoint(container, d3.event);
+d3.mouse = function(container) {
+  return d3_mousePoint(container, d3.event);
 };
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083
 var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
 
-function d3_behavior_mousePoint(container, e) {
+function d3_mousePoint(container, e) {
   var svg = container.ownerSVGElement || container;
   if (svg instanceof SVGSVGElement) {
     var point = svg.createSVGPoint();

@@ -1,1 +1,1 @@
-d3.svg.touches = d3.behavior.touches;
+d3.svg.touches = d3.touches;

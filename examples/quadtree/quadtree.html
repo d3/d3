@@ -62,14 +62,14 @@ vis.selectAll("circle")
 
 // Highlight selected nodes using the quadtree.
 vis.on("mousedown", function() {
-  var m0 = d3.behavior.mouse(this);
+  var m0 = d3.mouse(this);
 
   var rect = d3.select(this).append("rect")
       .style("fill", "#999")
       .style("fill-opacity", .5);
 
   d3.select(window).on("mousemove", function() {
-    var m1 = d3.behavior.mouse(rect.node()),
+    var m1 = d3.mouse(rect.node()),
         x0 = Math.min(w, m0[0], m1[0]),
         y0 = Math.min(w, m0[1], m1[1]),
         x1 = Math.max(0, m0[0], m1[0]),

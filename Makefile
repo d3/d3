@@ -123,6 +123,8 @@ d3.core.js: \
 	src/core/transition-transition.js \
 	src/core/timer.js \
 	src/core/transform.js \
+	src/core/mouse.js \
+	src/core/touches.js \
 	src/core/noop.js
 
 d3.scale.js: \
@@ -158,8 +160,6 @@ d3.svg.js: \
 d3.behavior.js: \
 	src/behavior/behavior.js \
 	src/behavior/drag.js \
-	src/behavior/mouse.js \
-	src/behavior/touches.js \
 	src/behavior/zoom.js
 
 d3.chart.js: \

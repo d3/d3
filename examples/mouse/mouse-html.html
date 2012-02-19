@@ -17,7 +17,7 @@ var body = d3.select("body"),
 
 d3.select(window)
     .on("mousemove", function() {
-      span.text(d3.behavior.mouse(div[0][0]));
+      span.text(d3.mouse(div[0][0]));
     });
     </script>
   </body>

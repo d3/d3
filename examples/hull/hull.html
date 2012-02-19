@@ -62,12 +62,12 @@ function update() {
 }
 
 function move() {
-  vertices[0] = d3.behavior.mouse(this);
+  vertices[0] = d3.mouse(this);
   update();
 }
 
 function click() {
-  vertices.push(d3.behavior.mouse(this));
+  vertices.push(d3.mouse(this));
   update();
 }
     </script>
