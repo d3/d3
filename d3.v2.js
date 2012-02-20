@@ -8642,7 +8642,7 @@ var d3_time_parsers = {
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekdayAbbrev(date, string, i) {
-  return string.substring(i, i += 3).toLowerCase() in d3_time_weekdayAbbrevLookup ? i : -1;
+  return d3_time_weekdayAbbrevLookup.hasOwnProperty(string.substring(i, i += 3).toLowerCase()) ? i : -1;
 }
 
 var d3_time_weekdayAbbrevLookup = {
