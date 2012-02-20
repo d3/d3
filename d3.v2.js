@@ -309,11 +309,12 @@ d3.nest = function() {
         keyValue,
         object,
         o = new d3_Map,
+        l,
         r = {};
 
     while (++i < n) {
-      if (o.has(keyValue = key(object = array[i]))) {
-        o.get(keyValue).push(object);
+      if (l = o.get(keyValue = key(object = array[i]))) {
+        l.push(object);
       } else {
         o.set(keyValue, [object]);
       }
