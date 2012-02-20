@@ -26,6 +26,17 @@ suite.addBatch({
     },
     "interpolates objects": function(interpolate) {
       assert.deepEqual(interpolate({foo: 2}, {foo: 12})(.4), {foo: 6});
+    },
+    "interpolates objects with default object prototype properties": function(interpolate) {
+      assert.deepEqual(interpolate({foo: 2, hasOwnProperty: 1}, {foo: 12})(1), {foo: 12, hasOwnProperty: 1});
+    },
+    "interpolates inherited properties of objects": function(interpolate) {
+      var a = Object.create({foo: 0}),
+          b = Object.create({foo: 2});
+      assert.deepEqual(interpolate(a, b)(.5), {foo: 1});
+    },
+    "doesn't interpret properties in the default object's prototype chain as RGB": function(interpolate) {
+      assert.equal(interpolate("hasOwnProperty", "hasOwnProperty")(0), "hasOwnProperty");
     }
   }
 });

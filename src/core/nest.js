@@ -16,21 +16,23 @@ d3.nest = function() {
         key = keys[depth++],
         keyValue,
         object,
-        o = {};
+        o = new d3_Map,
+        l,
+        r = {};
 
     while (++i < n) {
-      if ((keyValue = key(object = array[i])) in o) {
-        o[keyValue].push(object);
+      if (l = o.get(keyValue = key(object = array[i]))) {
+        l.push(object);
       } else {
-        o[keyValue] = [object];
+        o.set(keyValue, [object]);
       }
     }
 
-    for (keyValue in o) {
-      o[keyValue] = map(o[keyValue], depth);
-    }
+    o.keys().forEach(function(keyValue) {
+      r[keyValue] = map(o.get(keyValue), depth);
+    });
 
-    return o;
+    return r;
   }
 
   function entries(map, depth) {

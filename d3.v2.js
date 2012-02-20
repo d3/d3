@@ -41,7 +41,7 @@ function(array, prototype) {
   for (var property in prototype) array[property] = prototype[property];
 };
 d3.map = function(object) {
-  var map = new d3_Map();
+  var map = new d3_Map;
   for (var key in object) map.set(key, object[key]);
   return map;
 };
@@ -308,21 +308,23 @@ d3.nest = function() {
         key = keys[depth++],
         keyValue,
         object,
-        o = {};
+        o = new d3_Map,
+        l,
+        r = {};
 
     while (++i < n) {
-      if ((keyValue = key(object = array[i])) in o) {
-        o[keyValue].push(object);
+      if (l = o.get(keyValue = key(object = array[i]))) {
+        l.push(object);
       } else {
-        o[keyValue] = [object];
+        o.set(keyValue, [object]);
       }
     }
 
-    for (keyValue in o) {
-      o[keyValue] = map(o[keyValue], depth);
-    }
+    o.keys().forEach(function(keyValue) {
+      r[keyValue] = map(o.get(keyValue), depth);
+    });
 
-    return o;
+    return r;
   }
 
   function entries(map, depth) {
@@ -518,9 +520,16 @@ d3.ns = {
   prefix: d3_nsPrefix,
   qualify: function(name) {
     var i = name.indexOf(":");
-    return i < 0 ? (name in d3_nsPrefix
-      ? {space: d3_nsPrefix[name], local: name} : name)
-      : {space: d3_nsPrefix[name.substring(0, i)], local: name.substring(i + 1)};
+    if (i < 0) {
+      return d3_nsPrefix.hasOwnProperty(name)
+          ? {space: d3_nsPrefix[name], local: name} : name;
+    }
+    var prefix = name.substring(0, i);
+    return {
+      space: d3_nsPrefix.hasOwnProperty(prefix)
+          ? d3_nsPrefix[prefix] : undefined,
+      local: name.substring(i + 1)
+    };
   }
 };
 d3.dispatch = function() {
@@ -1034,16 +1043,18 @@ d3.interpolateArray = function(a, b) {
 d3.interpolateObject = function(a, b) {
   var i = {},
       c = {},
-      k;
+      k,
+      aMap = d3.map(a),
+      bMap = d3.map(b);
   for (k in a) {
-    if (k in b) {
+    if (bMap.has(k)) {
       i[k] = d3_interpolateByName(k)(a[k], b[k]);
     } else {
       c[k] = a[k];
     }
   }
   for (k in b) {
-    if (!(k in a)) {
+    if (!aMap.has(k)) {
       c[k] = b[k];
     }
   }
@@ -1065,7 +1076,7 @@ d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
   function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
-  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
+  function(a, b) { return (typeof b === "string" ? d3_rgb_names.hasOwnProperty(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
   function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
 ];
 function d3_uninterpolateNumber(a, b) {
@@ -1737,36 +1748,36 @@ d3_selectionPrototype.data = function(data, join) {
         nodeData;
 
     if (join) {
-      var nodeByKey = {},
+      var nodeByKey = new d3_Map,
           keys = [],
           key,
           j = groupData.length;
 
       for (i = -1; ++i < n;) {
         key = join.call(node = group[i], node.__data__, i);
-        if (key in nodeByKey) {
+        if (nodeByKey.has(key)) {
           exitNodes[j++] = node; // duplicate key
         } else {
-          nodeByKey[key] = node;
+          nodeByKey.set(key, node);
         }
         keys.push(key);
       }
 
       for (i = -1; ++i < m;) {
-        node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
-        if (node) {
+        key = join.call(groupData, nodeData = groupData[i], i)
+        if (nodeByKey.has(key)) {
+          updateNodes[i] = node = nodeByKey.get(key);
           node.__data__ = nodeData;
-          updateNodes[i] = node;
           enterNodes[i] = exitNodes[i] = null;
         } else {
           enterNodes[i] = d3_selection_dataNode(nodeData);
           updateNodes[i] = exitNodes[i] = null;
         }
-        delete nodeByKey[key];
+        nodeByKey.delete(key);
       }
 
       for (i = -1; ++i < n;) {
-        if (keys[i] in nodeByKey) {
+        if (nodeByKey.has(keys[i])) {
           exitNodes[i] = group[i];
         }
       }
@@ -7445,7 +7456,7 @@ d3.geo.bounds = function(feature) {
 };
 
 function d3_geo_bounds(o, f) {
-  if (o.type in d3_geo_boundsTypes) d3_geo_boundsTypes[o.type](o, f);
+  if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
 }
 
 var d3_geo_boundsTypes = {
@@ -8723,7 +8734,7 @@ var d3_time_parsers = {
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekdayAbbrev(date, string, i) {
-  return string.substring(i, i += 3).toLowerCase() in d3_time_weekdayAbbrevLookup ? i : -1;
+  return d3_time_weekdayAbbrevLookup.hasOwnProperty(string.substring(i, i += 3).toLowerCase()) ? i : -1;
 }
 
 var d3_time_weekdayAbbrevLookup = {

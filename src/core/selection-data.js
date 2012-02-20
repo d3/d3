@@ -17,36 +17,36 @@ d3_selectionPrototype.data = function(data, join) {
         nodeData;
 
     if (join) {
-      var nodeByKey = {},
+      var nodeByKey = new d3_Map,
           keys = [],
           key,
           j = groupData.length;
 
       for (i = -1; ++i < n;) {
         key = join.call(node = group[i], node.__data__, i);
-        if (key in nodeByKey) {
+        if (nodeByKey.has(key)) {
           exitNodes[j++] = node; // duplicate key
         } else {
-          nodeByKey[key] = node;
+          nodeByKey.set(key, node);
         }
         keys.push(key);
       }
 
       for (i = -1; ++i < m;) {
-        node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
-        if (node) {
+        key = join.call(groupData, nodeData = groupData[i], i)
+        if (nodeByKey.has(key)) {
+          updateNodes[i] = node = nodeByKey.get(key);
           node.__data__ = nodeData;
-          updateNodes[i] = node;
           enterNodes[i] = exitNodes[i] = null;
         } else {
           enterNodes[i] = d3_selection_dataNode(nodeData);
           updateNodes[i] = exitNodes[i] = null;
         }
-        delete nodeByKey[key];
+        nodeByKey.delete(key);
       }
 
       for (i = -1; ++i < n;) {
-        if (keys[i] in nodeByKey) {
+        if (nodeByKey.has(keys[i])) {
           exitNodes[i] = group[i];
         }
       }

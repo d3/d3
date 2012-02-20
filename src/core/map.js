@@ -1,5 +1,5 @@
 d3.map = function(object) {
-  var map = new d3_Map();
+  var map = new d3_Map;
   for (var key in object) map.set(key, object[key]);
   return map;
 };
