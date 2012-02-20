@@ -228,6 +228,13 @@ suite.addBatch({
     "if no keys are specified, the input array is returned": function(nest) {
       var array = [new Object()];
       assert.strictEqual(nest().map(array), array);
+    },
+    "handles keys that are built-in prototype properties": function(nest) {
+      var properties = ["hasOwnProperty"];
+      var keys = nest()
+          .key(String)
+          .map(properties);
+      assert.deepEqual(keys, {hasOwnProperty: ["hasOwnProperty"]});
     }
   }
 });

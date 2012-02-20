@@ -9,9 +9,19 @@ var d3_nsPrefix = {
 d3.ns = {
   prefix: d3_nsPrefix,
   qualify: function(name) {
-    var i = name.indexOf(":");
-    return i < 0 ? (name in d3_nsPrefix
-      ? {space: d3_nsPrefix[name], local: name} : name)
-      : {space: d3_nsPrefix[name.substring(0, i)], local: name.substring(i + 1)};
+    var i = name.indexOf(":"),
+        prefix,
+        local;
+    if (i < 0) {
+      return d3_nsPrefix.hasOwnProperty(name)
+          ? {space: d3_nsPrefix[name], local: name} : name;
+    }
+    var prefix = name.substring(0, i),
+        local = name.substring(i + 1);
+    return {
+      space: d3_nsPrefix.hasOwnProperty(prefix)
+          ? d3_nsPrefix[prefix] : undefined,
+      local: local
+    };
   }
 };
