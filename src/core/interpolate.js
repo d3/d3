@@ -194,16 +194,20 @@ d3.interpolateArray = function(a, b) {
 d3.interpolateObject = function(a, b) {
   var i = {},
       c = {},
+      a_ = {},
+      b_ = {},
       k;
+  // Workaround for inconsistent behavior of propertyIsEnumerable.
+  for (k in b) b_[k] = b[k];
   for (k in a) {
-    if (b.propertyIsEnumerable(k)) {
-      i[k] = d3_interpolateByName(k)(a[k], b[k]);
+    if (Object.hasOwnProperty.call(b_, k)) {
+      i[k] = d3_interpolateByName(k)(a_[k] = a[k], b[k]);
     } else {
-      c[k] = a[k];
+      c[k] = a_[k] = a[k];
     }
   }
   for (k in b) {
-    if (!a.propertyIsEnumerable(k)) {
+    if (!Object.hasOwnProperty.call(a_, k)) {
       c[k] = b[k];
     }
   }
