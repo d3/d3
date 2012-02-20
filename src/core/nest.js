@@ -19,7 +19,7 @@ d3.nest = function() {
         o = {};
 
     while (++i < n) {
-      if ((keyValue = key(object = array[i])) in o) {
+      if (Object.hasOwnProperty.call(o, keyValue = key(object = array[i]))) {
         o[keyValue].push(object);
       } else {
         o[keyValue] = [object];

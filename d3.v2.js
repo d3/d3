@@ -276,7 +276,7 @@ d3.nest = function() {
         o = {};
 
     while (++i < n) {
-      if ((keyValue = key(object = array[i])) in o) {
+      if (Object.hasOwnProperty.call(o, keyValue = key(object = array[i]))) {
         o[keyValue].push(object);
       } else {
         o[keyValue] = [object];
@@ -482,10 +482,19 @@ var d3_nsPrefix = {
 d3.ns = {
   prefix: d3_nsPrefix,
   qualify: function(name) {
-    var i = name.indexOf(":");
-    return i < 0 ? (name in d3_nsPrefix
-      ? {space: d3_nsPrefix[name], local: name} : name)
-      : {space: d3_nsPrefix[name.substring(0, i)], local: name.substring(i + 1)};
+    var i = name.indexOf(":"),
+        prefix,
+        local;
+    if (i < 0) {
+      return d3_nsPrefix.hasOwnProperty(name)
+          ? {space: d3_nsPrefix[name], local: name} : name;
+    }
+    var prefix = name.substring(0, i);
+    return {
+      space: d3_nsPrefix.hasOwnProperty(prefix)
+          ? d3_nsPrefix[prefix] : undefined,
+      local: name.substring(i + 1)
+    };
   }
 };
 d3.dispatch = function() {
@@ -1001,14 +1010,14 @@ d3.interpolateObject = function(a, b) {
       c = {},
       k;
   for (k in a) {
-    if (k in b) {
+    if (b.propertyIsEnumerable(k)) {
       i[k] = d3_interpolateByName(k)(a[k], b[k]);
     } else {
       c[k] = a[k];
     }
   }
   for (k in b) {
-    if (!(k in a)) {
+    if (!a.propertyIsEnumerable(k)) {
       c[k] = b[k];
     }
   }
@@ -1030,7 +1039,7 @@ d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
   function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
-  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
+  function(a, b) { return (typeof b === "string" ? d3_rgb_names.hasOwnProperty(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
   function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
 ];
 function d3_uninterpolateNumber(a, b) {
@@ -1709,7 +1718,7 @@ d3_selectionPrototype.data = function(data, join) {
 
       for (i = -1; ++i < n;) {
         key = join.call(node = group[i], node.__data__, i);
-        if (key in nodeByKey) {
+        if (Object.hasOwnProperty.call(nodeByKey, key)) {
           exitNodes[j++] = node; // duplicate key
         } else {
           nodeByKey[key] = node;
@@ -1718,10 +1727,10 @@ d3_selectionPrototype.data = function(data, join) {
       }
 
       for (i = -1; ++i < m;) {
-        node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
-        if (node) {
+        key = join.call(groupData, nodeData = groupData[i], i)
+        if (Object.hasOwnProperty.call(nodeByKey, key)) {
+          updateNodes[i] = node = nodeByKey[key];
           node.__data__ = nodeData;
-          updateNodes[i] = node;
           enterNodes[i] = exitNodes[i] = null;
         } else {
           enterNodes[i] = d3_selection_dataNode(nodeData);
@@ -1731,7 +1740,7 @@ d3_selectionPrototype.data = function(data, join) {
       }
 
       for (i = -1; ++i < n;) {
-        if (keys[i] in nodeByKey) {
+        if (Object.hasOwnProperty.call(nodeByKey, keys[i])) {
           exitNodes[i] = group[i];
         }
       }
@@ -7380,7 +7389,7 @@ d3.geo.bounds = function(feature) {
 };
 
 function d3_geo_bounds(o, f) {
-  if (o.type in d3_geo_boundsTypes) d3_geo_boundsTypes[o.type](o, f);
+  if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
 }
 
 var d3_geo_boundsTypes = {
@@ -8658,7 +8667,7 @@ var d3_time_parsers = {
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekdayAbbrev(date, string, i) {
-  return string.substring(i, i += 3).toLowerCase() in d3_time_weekdayAbbrevLookup ? i : -1;
+  return d3_time_weekdayAbbrevLookup.hasOwnProperty(string.substring(i, i += 3).toLowerCase()) ? i : -1;
 }
 
 var d3_time_weekdayAbbrevLookup = {

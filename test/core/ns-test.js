@@ -50,6 +50,11 @@ suite.addBatch({
       var name = d3.ns.qualify("svg");
       assert.equal(name.space, "http://www.w3.org/2000/svg");
       assert.equal(name.local, "svg");
+    },
+    "built-in prototype properties are ignored": function(qualify) {
+      var name = qualify("hasOwnProperty:test");
+      assert.isUndefined(name.space);
+      assert.equal(name.local, "test");
     }
   }
 });
