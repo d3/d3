@@ -137,7 +137,7 @@ function d3_rgb_hsv(r, g, b) {
       h,
       s,
       v = max;
-  if (max == min) {
+  if (max === min) {
     h = 0.0;
     s = 0.0;
   } else {
@@ -145,10 +145,10 @@ function d3_rgb_hsv(r, g, b) {
     var rc = (max - r) / (max - min);
     var gc = (max - g) / (max - min);
     var bc = (max - b) / (max - min);
-    if (r == max) {
+    if (r === max) {
       h = bc - gc;
     }
-    else if (g == max) {
+    else if (g === max) {
       h = 2.0 + rc - bc;
     }
     else {

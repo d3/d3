@@ -27,7 +27,7 @@ function d3_hsv_rgb(h, s, v) {
   var r, g, b;
   h /= 360;
 
-  if (s == 0.0) {
+  if (s === 0.0) {
     r = g = b = v;
   }
   else {
@@ -37,27 +37,27 @@ function d3_hsv_rgb(h, s, v) {
     var q = v * (1.0 - s * f);
     var t = v * (1.0 - s * (1.0 - f));
     i = i % 6;
-    if (i == 0) {
+    if (i === 0) {
       r = v;
       g = t;
       b = p;
     }
-    else if (i == 1) {
+    else if (i === 1) {
       r = q;
       g = v;
       b = p;
     }
-    else if (i == 2) {
+    else if (i === 2) {
       r = p;
       g = v;
       b = t;
     }
-    else if (i == 3) {
+    else if (i === 3) {
       r = p;
       g = q;
       b = v;
     }
-    else if (i == 4) {
+    else if (i === 4) {
       r = t;
       g = p;
       b = v;
