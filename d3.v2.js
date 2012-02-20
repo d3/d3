@@ -489,12 +489,11 @@ d3.ns = {
       return d3_nsPrefix.hasOwnProperty(name)
           ? {space: d3_nsPrefix[name], local: name} : name;
     }
-    var prefix = name.substring(0, i),
-        local = name.substring(i + 1);
+    var prefix = name.substring(0, i);
     return {
       space: d3_nsPrefix.hasOwnProperty(prefix)
           ? d3_nsPrefix[prefix] : undefined,
-      local: local
+      local: name.substring(i + 1)
     };
   }
 };
