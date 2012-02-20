@@ -230,10 +230,9 @@ suite.addBatch({
       assert.strictEqual(nest().map(array), array);
     },
     "handles keys that are built-in prototype properties": function(nest) {
-      var properties = ["hasOwnProperty"];
       var keys = nest()
           .key(String)
-          .map(properties);
+          .map(["hasOwnProperty"]);
       assert.deepEqual(keys, {hasOwnProperty: ["hasOwnProperty"]});
     }
   }
