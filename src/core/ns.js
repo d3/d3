@@ -9,9 +9,7 @@ var d3_nsPrefix = {
 d3.ns = {
   prefix: d3_nsPrefix,
   qualify: function(name) {
-    var i = name.indexOf(":"),
-        prefix,
-        local;
+    var i = name.indexOf(":");
     if (i < 0) {
       return d3_nsPrefix.hasOwnProperty(name)
           ? {space: d3_nsPrefix[name], local: name} : name;
