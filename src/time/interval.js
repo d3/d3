@@ -1,12 +1,17 @@
 function d3_time_interval(local, step, number) {
 
-  function offset(date, offset) {
-    step(date = new d3_time(+date), offset);
-    return date;
+  function round(date) {
+    var d0 = local(date), d1 = offset(d0, 1);
+    return date - d0 < d1 - date ? d0 : d1;
   }
 
   function ceil(date) {
     step(date = local(new d3_time(date - 1)), 1);
+    return date;
+  }
+
+  function offset(date, k) {
+    step(date = new d3_time(+date), k);
     return date;
   }
 
@@ -35,12 +40,14 @@ function d3_time_interval(local, step, number) {
   }
 
   local.floor = local;
+  local.round = round;
   local.ceil = ceil;
   local.offset = offset;
   local.range = range;
 
   var utc = local.utc = d3_time_interval_utc(local);
   utc.floor = utc;
+  utc.round = d3_time_interval_utc(round);
   utc.ceil = d3_time_interval_utc(ceil);
   utc.offset = d3_time_interval_utc(offset);
   utc.range = range_utc;
@@ -49,12 +56,12 @@ function d3_time_interval(local, step, number) {
 }
 
 function d3_time_interval_utc(method) {
-  return function(date, offset) {
+  return function(date, k) {
     try {
       d3_time = d3_time_utc;
       var utc = new d3_time_utc();
       utc._ = date;
-      return method(utc, offset)._;
+      return method(utc, k)._;
     } finally {
       d3_time = Date;
     }

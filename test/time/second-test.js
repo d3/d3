@@ -23,6 +23,16 @@ suite.addBatch({
         assert.deepEqual(floor(local(2011, 00, 01, 00, 00, 00, 001)), local(2011, 00, 01, 00, 00, 00));
       }
     },
+    "round": {
+      topic: function(interval) {
+        return interval.round;
+      },
+      "returns seconds": function(round) {
+        assert.deepEqual(round(local(2010, 11, 31, 23, 59, 59, 999)), local(2011, 00, 01, 00, 00, 00));
+        assert.deepEqual(round(local(2011, 00, 01, 00, 00, 00, 499)), local(2011, 00, 01, 00, 00, 00));
+        assert.deepEqual(round(local(2011, 00, 01, 00, 00, 00, 500)), local(2011, 00, 01, 00, 00, 01));
+      }
+    },
     "ceil": {
       topic: function(interval) {
         return interval.ceil;
@@ -76,6 +86,16 @@ suite.addBatch({
           assert.deepEqual(floor(utc(2010, 11, 31, 23, 59, 59, 999)), utc(2010, 11, 31, 23, 59, 59));
           assert.deepEqual(floor(utc(2011, 00, 01, 00, 00, 00, 000)), utc(2011, 00, 01, 00, 00, 00));
           assert.deepEqual(floor(utc(2011, 00, 01, 00, 00, 00, 001)), utc(2011, 00, 01, 00, 00, 00));
+        }
+      },
+      "round": {
+        topic: function(interval) {
+          return interval.round;
+        },
+        "returns seconds": function(round) {
+          assert.deepEqual(round(utc(2010, 11, 31, 23, 59, 59, 999)), utc(2011, 00, 01, 00, 00, 00));
+          assert.deepEqual(round(utc(2011, 00, 01, 00, 00, 00, 499)), utc(2011, 00, 01, 00, 00, 00));
+          assert.deepEqual(round(utc(2011, 00, 01, 00, 00, 00, 500)), utc(2011, 00, 01, 00, 00, 01));
         }
       },
       "ceil": {
