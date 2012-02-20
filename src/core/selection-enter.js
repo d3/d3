@@ -5,6 +5,9 @@ function d3_selection_enter(selection) {
 
 var d3_selection_enterPrototype = [];
 
+d3.selection.enter = d3_selection_enter;
+d3.selection.enter.prototype = d3_selection_enterPrototype;
+
 d3_selection_enterPrototype.append = d3_selectionPrototype.append;
 d3_selection_enterPrototype.insert = d3_selectionPrototype.insert;
 d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
