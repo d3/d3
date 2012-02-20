@@ -74,15 +74,15 @@ var d3_time_formats = {
   e: function(d) { return d3_time_sfill2(d.getDate()); },
   H: function(d) { return d3_time_zfill2(d.getHours()); },
   I: function(d) { return d3_time_zfill2(d.getHours() % 12 || 12); },
-  j: d3_time_dayOfYear,
+  j: function(d) { return d3_time_zfill3(1 + d3.time.dayOfYear(d)); },
   L: function(d) { return d3_time_zfill3(d.getMilliseconds()); },
   m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
   M: function(d) { return d3_time_zfill2(d.getMinutes()); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
   S: function(d) { return d3_time_zfill2(d.getSeconds()); },
-  U: d3_time_weekNumberSunday,
+  U: function(d) { return d3_time_zfill2(d3.time.sundayOfYear(d)); },
   w: function(d) { return d.getDay(); },
-  W: d3_time_weekNumberMonday,
+  W: function(d) { return d3_time_zfill2(d3.time.mondayOfYear(d)); },
   x: d3.time.format("%m/%d/%y"),
   X: d3.time.format("%H:%M:%S"),
   y: function(d) { return d3_time_zfill2(d.getFullYear() % 100); },
@@ -294,28 +294,6 @@ var d3_time_amPmLookup = {
   am: 0,
   pm: 1
 };
-
-function d3_time_year(d) {
-  return new d3_time(d.getFullYear(), 0, 1);
-}
-
-function d3_time_daysElapsed(d0, d1) {
-  return ~~((d1 - d0) / 864e5 - (d1.getTimezoneOffset() - d0.getTimezoneOffset()) / 1440);
-}
-
-function d3_time_dayOfYear(d) {
-  return d3_time_zfill3(1 + d3_time_daysElapsed(d3_time_year(d), d));
-}
-
-function d3_time_weekNumberSunday(d) {
-  var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + d0.getDay()) / 7));
-}
-
-function d3_time_weekNumberMonday(d) {
-  var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + (d0.getDay() + 6) % 7) / 7));
-}
 
 // TODO table of time zone offset names?
 function d3_time_zone(d) {
