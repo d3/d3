@@ -29,6 +29,7 @@ d3.core.js: \
 	src/compat/style.js \
 	src/core/core.js \
 	src/core/array.js \
+	src/core/map.js \
 	src/core/this.js \
 	src/core/functor.js \
 	src/core/rebind.js \
@@ -129,7 +130,8 @@ d3.scale.js: \
 	src/scale/ordinal.js \
 	src/scale/category.js \
 	src/scale/quantile.js \
-	src/scale/quantize.js
+	src/scale/quantize.js \
+	src/scale/identity.js
 
 d3.svg.js: \
 	src/svg/svg.js \

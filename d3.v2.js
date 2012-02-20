@@ -40,6 +40,41 @@ function(array, prototype) {
 function(array, prototype) {
   for (var property in prototype) array[property] = prototype[property];
 };
+d3.map = function(object) {
+  var map = new d3_Map;
+  for (var key in object) map.set(key, object[key]);
+  return map;
+};
+
+function d3_Map() {}
+
+d3_Map.prototype = {
+  has: function(key) {
+    return d3_map_prefix + key in this;
+  },
+  get: function(key) {
+    return this[d3_map_prefix + key];
+  },
+  set: function(key, value) {
+    this[d3_map_prefix + key] = value;
+  },
+  delete: function(key) {
+    key = d3_map_prefix + key;
+    return key in this && delete this[key];
+  },
+  keys: function() {
+    var keys = [];
+    for (var key in this) {
+      if (key.charCodeAt(0) === d3_map_prefixCode) {
+        keys.push(key.substring(1));
+      }
+    }
+    return keys;
+  }
+};
+
+var d3_map_prefix = "\0", // prevent collision with built-ins
+    d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
 function d3_this() {
   return this;
 }
@@ -273,21 +308,22 @@ d3.nest = function() {
         key = keys[depth++],
         keyValue,
         object,
-        o = {};
+        o = new d3_Map,
+        r = {};
 
     while (++i < n) {
-      if (Object.hasOwnProperty.call(o, keyValue = key(object = array[i]))) {
-        o[keyValue].push(object);
+      if (o.has(keyValue = key(object = array[i]))) {
+        o.get(keyValue).push(object);
       } else {
-        o[keyValue] = [object];
+        o.set(keyValue, [object]);
       }
     }
 
-    for (keyValue in o) {
-      o[keyValue] = map(o[keyValue], depth);
-    }
+    o.keys().forEach(function(keyValue) {
+      r[keyValue] = map(o.get(keyValue), depth);
+    });
 
-    return o;
+    return r;
   }
 
   function entries(map, depth) {
@@ -1006,20 +1042,18 @@ d3.interpolateArray = function(a, b) {
 d3.interpolateObject = function(a, b) {
   var i = {},
       c = {},
-      a_ = {},
-      b_ = {},
-      k;
-  // Workaround for inconsistent behavior of propertyIsEnumerable.
-  for (k in b) b_[k] = b[k];
+      k,
+      aMap = d3.map(a),
+      bMap = d3.map(b);
   for (k in a) {
-    if (Object.hasOwnProperty.call(b_, k)) {
-      i[k] = d3_interpolateByName(k)(a_[k] = a[k], b[k]);
+    if (bMap.has(k)) {
+      i[k] = d3_interpolateByName(k)(a[k], b[k]);
     } else {
-      c[k] = a_[k] = a[k];
+      c[k] = a[k];
     }
   }
   for (k in b) {
-    if (!Object.hasOwnProperty.call(a_, k)) {
+    if (!aMap.has(k)) {
       c[k] = b[k];
     }
   }
@@ -1713,36 +1747,36 @@ d3_selectionPrototype.data = function(data, join) {
         nodeData;
 
     if (join) {
-      var nodeByKey = {},
+      var nodeByKey = new d3_Map,
           keys = [],
           key,
           j = groupData.length;
 
       for (i = -1; ++i < n;) {
         key = join.call(node = group[i], node.__data__, i);
-        if (Object.hasOwnProperty.call(nodeByKey, key)) {
+        if (nodeByKey.has(key)) {
           exitNodes[j++] = node; // duplicate key
         } else {
-          nodeByKey[key] = node;
+          nodeByKey.set(key, node);
         }
         keys.push(key);
       }
 
       for (i = -1; ++i < m;) {
         key = join.call(groupData, nodeData = groupData[i], i)
-        if (Object.hasOwnProperty.call(nodeByKey, key)) {
-          updateNodes[i] = node = nodeByKey[key];
+        if (nodeByKey.has(key)) {
+          updateNodes[i] = node = nodeByKey.get(key);
           node.__data__ = nodeData;
           enterNodes[i] = exitNodes[i] = null;
         } else {
           enterNodes[i] = d3_selection_dataNode(nodeData);
           updateNodes[i] = exitNodes[i] = null;
         }
-        delete nodeByKey[key];
+        nodeByKey.delete(key);
       }
 
       for (i = -1; ++i < n;) {
-        if (Object.hasOwnProperty.call(nodeByKey, keys[i])) {
+        if (nodeByKey.has(keys[i])) {
           exitNodes[i] = group[i];
         }
       }
@@ -2972,6 +3006,36 @@ function d3_scale_quantize(x0, x1, range) {
   };
 
   return rescale();
+}
+d3.scale.identity = function() {
+  return d3_scale_identity([0, 1]);
+};
+
+function d3_scale_identity(domain) {
+
+  function identity(x) { return x; }
+
+  identity.invert = identity;
+
+  identity.domain = identity.range = function(x) {
+    if (!arguments.length) return domain;
+    domain = x;
+    return identity;
+  };
+
+  identity.ticks = function(m) {
+    return d3_scale_linearTicks(domain, m);
+  };
+
+  identity.tickFormat = function(m) {
+    return d3_scale_linearTickFormat(domain, m);
+  };
+
+  identity.copy = function() {
+    return d3_scale_identity(domain);
+  };
+
+  return identity;
 }
 d3.svg = {};
 d3.svg.arc = function() {
