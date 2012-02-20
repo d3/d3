@@ -113,6 +113,8 @@ d3.core.js: \
 	src/core/transition-transition.js \
 	src/core/timer.js \
 	src/core/transform.js \
+	src/core/mouse.js \
+	src/core/touches.js \
 	src/core/noop.js
 
 d3.scale.js: \

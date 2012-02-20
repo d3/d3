@@ -89,14 +89,14 @@ d3.behavior.zoom = function() {
         argumentz = arguments,
         target = d3.event.target,
         w = d3.select(window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
-        l = location(d3.svg.mouse(that));
+        l = location(d3.mouse(that));
 
     window.focus();
     d3_eventCancel();
 
     function mousemove() {
       moved = 1;
-      translateTo(d3.svg.mouse(that), l);
+      translateTo(d3.mouse(that), l);
       dispatch(argumentz);
     }
 
@@ -112,9 +112,9 @@ d3.behavior.zoom = function() {
   }
 
   function mousewheel() {
-    if (!translate0) translate0 = location(d3.svg.mouse(this));
+    if (!translate0) translate0 = location(d3.mouse(this));
     scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
-    translateTo(d3.svg.mouse(this), translate0);
+    translateTo(d3.mouse(this), translate0);
     dispatch(arguments);
   }
 
@@ -123,14 +123,14 @@ d3.behavior.zoom = function() {
   }
 
   function dblclick() {
-    var p = d3.svg.mouse(this), l = location(p);
+    var p = d3.mouse(this), l = location(p);
     scaleTo(d3.event.shiftKey ? scale / 2 : scale * 2);
     translateTo(p, l);
     dispatch(arguments);
   }
 
   function touchstart() {
-    var touches = d3.svg.touches(this),
+    var touches = d3.touches(this),
         now = Date.now();
 
     scale0 = scale;
@@ -148,7 +148,7 @@ d3.behavior.zoom = function() {
   }
 
   function touchmove() {
-    var touches = d3.svg.touches(this),
+    var touches = d3.touches(this),
         p0 = touches[0],
         l0 = translate0[p0.identifier];
     if (p1 = touches[1]) {

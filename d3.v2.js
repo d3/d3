@@ -2389,6 +2389,49 @@ function d3_transformCombine(a, b, k) {
 }
 
 var d3_transformDegrees = 180 / Math.PI;
+d3.mouse = function(container) {
+  return d3_mousePoint(container, d3.event);
+};
+
+// https://bugs.webkit.org/show_bug.cgi?id=44083
+var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+
+function d3_mousePoint(container, e) {
+  var svg = container.ownerSVGElement || container;
+  if (svg.createSVGPoint) {
+    var point = svg.createSVGPoint();
+    if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
+      svg = d3.select(document.body)
+        .append("svg")
+          .style("position", "absolute")
+          .style("top", 0)
+          .style("left", 0);
+      var ctm = svg[0][0].getScreenCTM();
+      d3_mouse_bug44083 = !(ctm.f || ctm.e);
+      svg.remove();
+    }
+    if (d3_mouse_bug44083) {
+      point.x = e.pageX;
+      point.y = e.pageY;
+    } else {
+      point.x = e.clientX;
+      point.y = e.clientY;
+    }
+    point = point.matrixTransform(container.getScreenCTM().inverse());
+    return [point.x, point.y];
+  }
+  var rect = container.getBoundingClientRect();
+  return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
+};
+d3.touches = function(container, touches) {
+  if (arguments.length < 2) touches = d3.event.touches;
+
+  return touches ? d3_array(touches).map(function(touch) {
+    var point = d3_mousePoint(container, touch);
+    point.identifier = touch.identifier;
+    return point;
+  }) : [];
+};
 function d3_noop() {}
 d3.scale = {};
 
@@ -3710,44 +3753,8 @@ function d3_svg_diagonalRadialProjection(projection) {
     return [r * Math.cos(a), r * Math.sin(a)];
   };
 }
-d3.svg.mouse = function(container) {
-  return d3_svg_mousePoint(container, d3.event);
-};
-
-// https://bugs.webkit.org/show_bug.cgi?id=44083
-var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
-
-function d3_svg_mousePoint(container, e) {
-  var point = (container.ownerSVGElement || container).createSVGPoint();
-  if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
-    var svg = d3.select(document.body)
-      .append("svg")
-        .style("position", "absolute")
-        .style("top", 0)
-        .style("left", 0);
-    var ctm = svg[0][0].getScreenCTM();
-    d3_mouse_bug44083 = !(ctm.f || ctm.e);
-    svg.remove();
-  }
-  if (d3_mouse_bug44083) {
-    point.x = e.pageX;
-    point.y = e.pageY;
-  } else {
-    point.x = e.clientX;
-    point.y = e.clientY;
-  }
-  point = point.matrixTransform(container.getScreenCTM().inverse());
-  return [point.x, point.y];
-};
-d3.svg.touches = function(container, touches) {
-  if (arguments.length < 2) touches = d3.event.touches;
-
-  return touches ? d3_array(touches).map(function(touch) {
-    var point = d3_svg_mousePoint(container, touch);
-    point.identifier = touch.identifier;
-    return point;
-  }) : [];
-};
+d3.svg.mouse = d3.mouse;
+d3.svg.touches = d3.touches;
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
       size = d3_svg_symbolSize;
@@ -4272,8 +4279,8 @@ var d3_svg_brush,
 function d3_svg_brushMouse() {
   var touches = d3.event.changedTouches;
   return touches
-      ? d3.svg.touches(d3_svg_brushTarget, touches)[0]
-      : d3.svg.mouse(d3_svg_brushTarget);
+      ? d3.touches(d3_svg_brushTarget, touches)[0]
+      : d3.mouse(d3_svg_brushTarget);
 }
 
 function d3_svg_brushRedraw(g, extent) {
@@ -4516,8 +4523,8 @@ function d3_behavior_dragPoint() {
   var p = d3_behavior_dragTarget.parentNode,
       t = d3.event.changedTouches;
   return p && (t
-      ? d3.svg.touches(p, t)[0]
-      : d3.svg.mouse(p));
+      ? d3.touches(p, t)[0]
+      : d3.mouse(p));
 }
 
 function d3_behavior_dragMove() {
@@ -4647,14 +4654,14 @@ d3.behavior.zoom = function() {
         argumentz = arguments,
         target = d3.event.target,
         w = d3.select(window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
-        l = location(d3.svg.mouse(that));
+        l = location(d3.mouse(that));
 
     window.focus();
     d3_eventCancel();
 
     function mousemove() {
       moved = 1;
-      translateTo(d3.svg.mouse(that), l);
+      translateTo(d3.mouse(that), l);
       dispatch(argumentz);
     }
 
@@ -4670,9 +4677,9 @@ d3.behavior.zoom = function() {
   }
 
   function mousewheel() {
-    if (!translate0) translate0 = location(d3.svg.mouse(this));
+    if (!translate0) translate0 = location(d3.mouse(this));
     scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
-    translateTo(d3.svg.mouse(this), translate0);
+    translateTo(d3.mouse(this), translate0);
     dispatch(arguments);
   }
 
@@ -4681,14 +4688,14 @@ d3.behavior.zoom = function() {
   }
 
   function dblclick() {
-    var p = d3.svg.mouse(this), l = location(p);
+    var p = d3.mouse(this), l = location(p);
     scaleTo(d3.event.shiftKey ? scale / 2 : scale * 2);
     translateTo(p, l);
     dispatch(arguments);
   }
 
   function touchstart() {
-    var touches = d3.svg.touches(this),
+    var touches = d3.touches(this),
         now = Date.now();
 
     scale0 = scale;
@@ -4706,7 +4713,7 @@ d3.behavior.zoom = function() {
   }
 
   function touchmove() {
-    var touches = d3.svg.touches(this),
+    var touches = d3.touches(this),
         p0 = touches[0],
         l0 = translate0[p0.identifier];
     if (p1 = touches[1]) {

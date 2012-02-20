@@ -212,8 +212,8 @@ var d3_svg_brush,
 function d3_svg_brushMouse() {
   var touches = d3.event.changedTouches;
   return touches
-      ? d3.svg.touches(d3_svg_brushTarget, touches)[0]
-      : d3.svg.mouse(d3_svg_brushTarget);
+      ? d3.touches(d3_svg_brushTarget, touches)[0]
+      : d3.mouse(d3_svg_brushTarget);
 }
 
 function d3_svg_brushRedraw(g, extent) {
