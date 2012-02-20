@@ -129,7 +129,8 @@ d3.scale.js: \
 	src/scale/ordinal.js \
 	src/scale/category.js \
 	src/scale/quantile.js \
-	src/scale/quantize.js
+	src/scale/quantize.js \
+	src/scale/identity.js
 
 d3.svg.js: \
 	src/svg/svg.js \
