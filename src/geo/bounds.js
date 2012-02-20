@@ -19,7 +19,7 @@ d3.geo.bounds = function(feature) {
 };
 
 function d3_geo_bounds(o, f) {
-  if (o.type in d3_geo_boundsTypes) d3_geo_boundsTypes[o.type](o, f);
+  if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
 }
 
 var d3_geo_boundsTypes = {
