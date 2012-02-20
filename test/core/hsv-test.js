@@ -27,7 +27,7 @@ suite.addBatch({
       color.h++;
       color.s += .1;
       color.v += .1;
-      assert.rgbEqual(color.rgb(), 92, 227, 230)
+      assert.rgbEqual(color.rgb(), 92, 227, 230);
       assert.equal(color + "", "#5ce3e6");
     },
     "parses and converts RGB format (e.g., \"rgb(102, 102, 0)\")": function(hsv) {
