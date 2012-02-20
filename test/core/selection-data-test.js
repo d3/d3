@@ -169,6 +169,8 @@ suite.addBatch({
       assert.domNull(update[0][2]);
       assert.domNull(update[0][3]);
       assert.domNull(update[0][4]);
+      // This throws an error if Object.hasOwnProperty isn't used.
+      span.data([0], function() { return "hasOwnProperty"; });
     }
   }
 });
