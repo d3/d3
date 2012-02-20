@@ -2398,6 +2398,49 @@ function d3_transformCombine(a, b, k) {
 }
 
 var d3_transformDegrees = 180 / Math.PI;
+d3.mouse = function(container) {
+  return d3_mousePoint(container, d3.event);
+};
+
+// https://bugs.webkit.org/show_bug.cgi?id=44083
+var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+
+function d3_mousePoint(container, e) {
+  var svg = container.ownerSVGElement || container;
+  if (svg.createSVGPoint) {
+    var point = svg.createSVGPoint();
+    if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
+      svg = d3.select(document.body)
+        .append("svg")
+          .style("position", "absolute")
+          .style("top", 0)
+          .style("left", 0);
+      var ctm = svg[0][0].getScreenCTM();
+      d3_mouse_bug44083 = !(ctm.f || ctm.e);
+      svg.remove();
+    }
+    if (d3_mouse_bug44083) {
+      point.x = e.pageX;
+      point.y = e.pageY;
+    } else {
+      point.x = e.clientX;
+      point.y = e.clientY;
+    }
+    point = point.matrixTransform(container.getScreenCTM().inverse());
+    return [point.x, point.y];
+  }
+  var rect = container.getBoundingClientRect();
+  return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
+};
+d3.touches = function(container, touches) {
+  if (arguments.length < 2) touches = d3.event.touches;
+
+  return touches ? d3_array(touches).map(function(touch) {
+    var point = d3_mousePoint(container, touch);
+    point.identifier = touch.identifier;
+    return point;
+  }) : [];
+};
 function d3_noop() {}
 d3.scale = {};
 
@@ -3719,44 +3762,8 @@ function d3_svg_diagonalRadialProjection(projection) {
     return [r * Math.cos(a), r * Math.sin(a)];
   };
 }
-d3.svg.mouse = function(container) {
-  return d3_svg_mousePoint(container, d3.event);
-};
-
-// https://bugs.webkit.org/show_bug.cgi?id=44083
-var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
-
-function d3_svg_mousePoint(container, e) {
-  var point = (container.ownerSVGElement || container).createSVGPoint();
-  if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
-    var svg = d3.select(document.body)
-      .append("svg")
-        .style("position", "absolute")
-        .style("top", 0)
-        .style("left", 0);
-    var ctm = svg[0][0].getScreenCTM();
-    d3_mouse_bug44083 = !(ctm.f || ctm.e);
-    svg.remove();
-  }
-  if (d3_mouse_bug44083) {
-    point.x = e.pageX;
-    point.y = e.pageY;
-  } else {
-    point.x = e.clientX;
-    point.y = e.clientY;
-  }
-  point = point.matrixTransform(container.getScreenCTM().inverse());
-  return [point.x, point.y];
-};
-d3.svg.touches = function(container, touches) {
-  if (arguments.length < 2) touches = d3.event.touches;
-
-  return touches ? d3_array(touches).map(function(touch) {
-    var point = d3_svg_mousePoint(container, touch);
-    point.identifier = touch.identifier;
-    return point;
-  }) : [];
-};
+d3.svg.mouse = d3.mouse;
+d3.svg.touches = d3.touches;
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
       size = d3_svg_symbolSize;
@@ -4080,17 +4087,22 @@ d3.svg.brush = function() {
         : [];
 
     g.each(function() {
-      var g = d3.select(this).on("mousedown.brush", down),
+      var g = d3.select(this),
           bg = g.selectAll(".background").data([0]),
           fg = g.selectAll(".extent").data([0]),
           tz = g.selectAll(".resize").data(resizes, String),
           e;
 
+      // Prepare the brush container for events.
+      g
+          .style("pointer-events", "all")
+          .on("mousedown.brush", down)
+          .on("touchstart.brush", down);
+
       // An invisible, mouseable area for starting a new brush.
       bg.enter().append("rect")
           .attr("class", "background")
           .style("visibility", "hidden")
-          .style("pointer-events", "all")
           .style("cursor", "crosshair");
 
       // The visible brush extent; style this as you like!
@@ -4099,15 +4111,18 @@ d3.svg.brush = function() {
           .style("cursor", "move");
 
       // More invisible rects for resizing the extent.
-      tz.enter().append("rect")
+      tz.enter().append("g")
           .attr("class", function(d) { return "resize " + d; })
+          .style("cursor", function(d) { return d3_svg_brushCursor[d]; })
+        .append("rect")
+          .attr("x", function(d) { return /[ew]$/.test(d) ? -3 : null; })
+          .attr("y", function(d) { return /^[ns]/.test(d) ? -3 : null; })
           .attr("width", 6)
           .attr("height", 6)
-          .style("visibility", "hidden")
-          .style("cursor", function(d) { return d3_svg_brushCursor[d]; });
+          .style("visibility", "hidden");
 
-      // Update the resizers.
-      tz.style("pointer-events", brush.empty() ? "none" : "all");
+      // Show or hide the resizers.
+      tz.style("display", brush.empty() ? "none" : null);
 
       // Remove any superfluous resizers.
       tz.exit().remove();
@@ -4124,41 +4139,48 @@ d3.svg.brush = function() {
         bg.attr("y", e[0]).attr("height", e[1] - e[0]);
         d3_svg_brushRedrawY(g, extent);
       }
+      d3_svg_brushRedraw(g, extent);
     });
   }
 
   function down() {
-    var target = d3.select(d3.event.target);
+    var target = d3.select(d3.event.target),
+        resize;
 
     // Store some global state for the duration of the brush gesture.
     d3_svg_brush = brush;
     d3_svg_brushTarget = this;
     d3_svg_brushExtent = extent;
-    d3_svg_brushOffset = d3.svg.mouse(d3_svg_brushTarget);
+    d3_svg_brushPoint = d3_svg_brushMouse();
 
     // If the extent was clicked on, drag rather than brush;
-    // store the offset between the mouse and extent origin instead.
+    // store the point between the mouse and extent origin instead.
     if (d3_svg_brushDrag = target.classed("extent")) {
-      d3_svg_brushOffset[0] = extent[0][0] - d3_svg_brushOffset[0];
-      d3_svg_brushOffset[1] = extent[0][1] - d3_svg_brushOffset[1];
+      d3_svg_brushPoint[0] = extent[0][0] - d3_svg_brushPoint[0];
+      d3_svg_brushPoint[1] = extent[0][1] - d3_svg_brushPoint[1];
     }
 
     // If a resizer was clicked on, record which side is to be resized.
-    // Also, set the offset to the opposite side.
-    else if (target.classed("resize")) {
-      d3_svg_brushResize = d3.event.target.__data__;
-      d3_svg_brushOffset[0] = extent[+/w$/.test(d3_svg_brushResize)][0];
-      d3_svg_brushOffset[1] = extent[+/^n/.test(d3_svg_brushResize)][1];
+    // Also, set the point to the opposite side.
+    else if (resize = target[0][0].__data__) {
+      var ex = +/w$/.test(resize), ey = +/^n/.test(resize);
+      d3_svg_brushOffset = [extent[1 - ex][0] - d3_svg_brushPoint[0], extent[1 - ey][1] - d3_svg_brushPoint[1]];
+      d3_svg_brushPoint[0] = extent[ex][0];
+      d3_svg_brushPoint[1] = extent[ey][1];
     }
 
     // If the ALT key is down when starting a brush, the center is at the mouse.
     else if (d3.event.altKey) {
-      d3_svg_brushCenter = d3_svg_brushOffset.slice();
+      d3_svg_brushCenter = d3_svg_brushPoint.slice();
     }
 
+    // Propagate the active cursor to the body for the drag duration.
+    d3.select(this).style("pointer-events", "none").selectAll(".resize").style("display", null);
+    d3.select("body").style("cursor", target.style("cursor"));
+
     // Restrict which dimensions are resized.
-    d3_svg_brushX = !/^(n|s)$/.test(d3_svg_brushResize) && x;
-    d3_svg_brushY = !/^(e|w)$/.test(d3_svg_brushResize) && y;
+    d3_svg_brushX = !/^(n|s)$/.test(resize) && x;
+    d3_svg_brushY = !/^(e|w)$/.test(resize) && y;
 
     // Notify listeners.
     d3_svg_brushDispatch = dispatcher(this, arguments);
@@ -4244,6 +4266,8 @@ d3.svg.brush = function() {
   d3.select(window)
       .on("mousemove.brush", d3_svg_brushMove)
       .on("mouseup.brush", d3_svg_brushUp)
+      .on("touchmove.brush", d3_svg_brushMove)
+      .on("touchend.brush", d3_svg_brushUp)
       .on("keydown.brush", d3_svg_brushKeydown)
       .on("keyup.brush", d3_svg_brushKeyup);
 
@@ -4257,47 +4281,64 @@ var d3_svg_brush,
     d3_svg_brushY,
     d3_svg_brushExtent,
     d3_svg_brushDrag,
-    d3_svg_brushResize,
     d3_svg_brushCenter,
+    d3_svg_brushPoint,
     d3_svg_brushOffset;
+
+function d3_svg_brushMouse() {
+  var touches = d3.event.changedTouches;
+  return touches
+      ? d3.touches(d3_svg_brushTarget, touches)[0]
+      : d3.mouse(d3_svg_brushTarget);
+}
+
+function d3_svg_brushRedraw(g, extent) {
+  g.selectAll(".resize").attr("transform", function(d) {
+    return "translate(" + extent[+/e$/.test(d)][0] + "," + extent[+/^s/.test(d)][1] + ")";
+  });
+}
 
 function d3_svg_brushRedrawX(g, extent) {
   g.select(".extent").attr("x", extent[0][0]);
-  g.selectAll(".n,.s,.w,.nw,.sw").attr("x", extent[0][0] - 2);
-  g.selectAll(".e,.ne,.se").attr("x", extent[1][0] - 3);
-  g.selectAll(".extent,.n,.s").attr("width", extent[1][0] - extent[0][0]);
+  g.selectAll(".extent,.n>rect,.s>rect").attr("width", extent[1][0] - extent[0][0]);
 }
 
 function d3_svg_brushRedrawY(g, extent) {
   g.select(".extent").attr("y", extent[0][1]);
-  g.selectAll(".n,.e,.w,.nw,.ne").attr("y", extent[0][1] - 3);
-  g.selectAll(".s,.se,.sw").attr("y", extent[1][1] - 4);
-  g.selectAll(".extent,.e,.w").attr("height", extent[1][1] - extent[0][1]);
+  g.selectAll(".extent,.e>rect,.w>rect").attr("height", extent[1][1] - extent[0][1]);
 }
 
 function d3_svg_brushKeydown() {
-  if (d3.event.keyCode == 32 && d3_svg_brushTarget && !d3_svg_brushDrag) {
-    d3_svg_brushCenter = null;
-    d3_svg_brushOffset[0] -= d3_svg_brushExtent[1][0];
-    d3_svg_brushOffset[1] -= d3_svg_brushExtent[1][1];
-    d3_svg_brushDrag = 2;
+  if (d3.event.keyCode == 32 && d3_svg_brushTarget) {
+    if (!d3_svg_brushDrag) {
+      d3_svg_brushCenter = null;
+      d3_svg_brushPoint[0] -= d3_svg_brushExtent[1][0];
+      d3_svg_brushPoint[1] -= d3_svg_brushExtent[1][1];
+      d3_svg_brushDrag = 2;
+    }
     d3_eventCancel();
   }
 }
 
 function d3_svg_brushKeyup() {
   if (d3.event.keyCode == 32 && d3_svg_brushDrag == 2) {
-    d3_svg_brushOffset[0] += d3_svg_brushExtent[1][0];
-    d3_svg_brushOffset[1] += d3_svg_brushExtent[1][1];
+    d3_svg_brushPoint[0] += d3_svg_brushExtent[1][0];
+    d3_svg_brushPoint[1] += d3_svg_brushExtent[1][1];
     d3_svg_brushDrag = 0;
     d3_eventCancel();
   }
 }
 
 function d3_svg_brushMove() {
-  if (d3_svg_brushOffset) {
-    var mouse = d3.svg.mouse(d3_svg_brushTarget),
+  if (d3_svg_brushPoint) {
+    var mouse = d3_svg_brushMouse(),
         g = d3.select(d3_svg_brushTarget);
+
+    // Preserve the offset for thick resizers.
+    if (d3_svg_brushOffset) {
+      mouse[0] += d3_svg_brushOffset[0];
+      mouse[1] += d3_svg_brushOffset[1];
+    }
 
     if (!d3_svg_brushDrag) {
 
@@ -4310,9 +4351,9 @@ function d3_svg_brushMove() {
           ];
         }
 
-        // Update the offset, for when the ALT key is released.
-        d3_svg_brushOffset[0] = d3_svg_brushExtent[+(mouse[0] < d3_svg_brushCenter[0])][0];
-        d3_svg_brushOffset[1] = d3_svg_brushExtent[+(mouse[1] < d3_svg_brushCenter[1])][1];
+        // Update the point, for when the ALT key is released.
+        d3_svg_brushPoint[0] = d3_svg_brushExtent[+(mouse[0] < d3_svg_brushCenter[0])][0];
+        d3_svg_brushPoint[1] = d3_svg_brushExtent[+(mouse[1] < d3_svg_brushCenter[1])][1];
       }
 
       // When the ALT key is released, we clear the center.
@@ -4328,6 +4369,7 @@ function d3_svg_brushMove() {
       d3_svg_brushMove1(mouse, d3_svg_brushY, 1);
       d3_svg_brushRedrawY(g, d3_svg_brushExtent);
     }
+    d3_svg_brushRedraw(g, d3_svg_brushExtent);
 
     // Notify listeners.
     d3_svg_brushDispatch("brush");
@@ -4338,15 +4380,15 @@ function d3_svg_brushMove1(mouse, scale, i) {
   var range = d3_scaleRange(scale),
       r0 = range[0],
       r1 = range[1],
-      offset = d3_svg_brushOffset[i],
+      point = d3_svg_brushPoint[i],
       size = d3_svg_brushExtent[1][i] - d3_svg_brushExtent[0][i],
       min,
       max;
 
-  // When dragging, reduce the range by the extent size and offset.
+  // When dragging, reduce the range by the extent size and point.
   if (d3_svg_brushDrag) {
-    r0 -= offset;
-    r1 -= size + offset;
+    r0 -= point;
+    r1 -= size + point;
   }
 
   // Clamp the mouse so that the extent fits within the range extent.
@@ -4354,18 +4396,18 @@ function d3_svg_brushMove1(mouse, scale, i) {
 
   // Compute the new extent bounds.
   if (d3_svg_brushDrag) {
-    max = (min += offset) + size;
+    max = (min += point) + size;
   } else {
 
     // If the ALT key is pressed, then preserve the center of the extent.
-    if (d3_svg_brushCenter) offset = Math.max(r0, Math.min(r1, 2 * d3_svg_brushCenter[i] - min));
+    if (d3_svg_brushCenter) point = Math.max(r0, Math.min(r1, 2 * d3_svg_brushCenter[i] - min));
 
-    // Compute the min and max of the offset and mouse.
-    if (offset < min) {
+    // Compute the min and max of the point and mouse.
+    if (point < min) {
       max = min;
-      min = offset;
+      min = point;
     } else {
-      max = offset;
+      max = point;
     }
   }
 
@@ -4375,9 +4417,10 @@ function d3_svg_brushMove1(mouse, scale, i) {
 }
 
 function d3_svg_brushUp() {
-  if (d3_svg_brushOffset) {
+  if (d3_svg_brushPoint) {
     d3_svg_brushMove();
-    d3.select(d3_svg_brushTarget).selectAll(".resize").style("pointer-events", d3_svg_brush.empty() ? "none" : "all");
+    d3.select(d3_svg_brushTarget).style("pointer-events", "all").selectAll(".resize").style("display", d3_svg_brush.empty() ? "none" : null);
+    d3.select("body").style("cursor", null);
     d3_svg_brushDispatch("brushend");
     d3_svg_brush =
     d3_svg_brushDispatch =
@@ -4386,8 +4429,8 @@ function d3_svg_brushUp() {
     d3_svg_brushY =
     d3_svg_brushExtent =
     d3_svg_brushDrag =
-    d3_svg_brushResize =
     d3_svg_brushCenter =
+    d3_svg_brushPoint =
     d3_svg_brushOffset = null;
     d3_eventCancel();
   }
@@ -4489,8 +4532,8 @@ function d3_behavior_dragPoint() {
   var p = d3_behavior_dragTarget.parentNode,
       t = d3.event.changedTouches;
   return p && (t
-      ? d3.svg.touches(p, t)[0]
-      : d3.svg.mouse(p));
+      ? d3.touches(p, t)[0]
+      : d3.mouse(p));
 }
 
 function d3_behavior_dragMove() {
@@ -4529,102 +4572,175 @@ function d3_behavior_dragClick() {
     d3_behavior_dragMoved = 0;
   }
 }
-// TODO unbind zoom behavior?
 d3.behavior.zoom = function() {
-  var xyz = [0, 0, 0],
+  var translate = [0, 0],
+      translate0, // translate when we started zooming (to avoid drift)
+      scale = 1,
+      scale0, // scale when we started touching
+      scaleExtent = d3_behavior_zoomInfinity,
       event = d3.dispatch("zoom"),
-      extent = d3_behavior_zoomInfiniteExtent;
+      x0,
+      x1,
+      y0,
+      y1,
+      touchtime; // time of last touchstart (to detect double-tap)
 
   function zoom() {
     this
         .on("mousedown.zoom", mousedown)
         .on("mousewheel.zoom", mousewheel)
+        .on("mousemove.zoom", mousemove)
         .on("DOMMouseScroll.zoom", mousewheel)
         .on("dblclick.zoom", dblclick)
-        .on("touchstart.zoom", touchstart);
-
-    d3.select(window)
-        .on("mousemove.zoom", d3_behavior_zoomMousemove)
-        .on("mouseup.zoom", d3_behavior_zoomMouseup)
-        .on("touchmove.zoom", d3_behavior_zoomTouchmove)
-        .on("touchend.zoom", d3_behavior_zoomTouchup)
-        .on("click.zoom", d3_behavior_zoomClick, true);
+        .on("touchstart.zoom", touchstart)
+        .on("touchmove.zoom", touchmove)
+        .on("touchend.zoom", touchstart);
   }
 
-  // snapshot the local context for subsequent dispatch
-  function start() {
-    d3_behavior_zoomXyz = xyz;
-    d3_behavior_zoomExtent = extent;
-    d3_behavior_zoomDispatch = event.zoom;
-    d3_behavior_zoomEventTarget = d3.event.target;
-    d3_behavior_zoomTarget = this;
-    d3_behavior_zoomArguments = arguments;
+  zoom.translate = function(x) {
+    if (!arguments.length) return translate;
+    translate = x.map(Number);
+    return zoom;
+  };
+
+  zoom.scale = function(x) {
+    if (!arguments.length) return scale;
+    scale = +x;
+    return zoom;
+  };
+
+  zoom.scaleExtent = function(x) {
+    if (!arguments.length) return scaleExtent;
+    scaleExtent = x == null ? d3_behavior_zoomInfinity : x.map(Number);
+    return zoom;
+  };
+
+  zoom.x = function(z) {
+    if (!arguments.length) return x1;
+    x1 = z;
+    x0 = z.copy();
+    return zoom;
+  };
+
+  zoom.y = function(z) {
+    if (!arguments.length) return y1;
+    y1 = z;
+    y0 = z.copy();
+    return zoom;
+  };
+
+  function location(p) {
+    return [(p[0] - translate[0]) / scale, (p[1] - translate[1]) / scale];
+  }
+
+  function point(l) {
+    return [l[0] * scale + translate[0], l[1] * scale + translate[1]];
+  }
+
+  function scaleTo(s) {
+    scale = Math.max(scaleExtent[0], Math.min(scaleExtent[1], s));
+  }
+
+  function translateTo(p, l) {
+    l = point(l);
+    translate[0] += p[0] - l[0];
+    translate[1] += p[1] - l[1];
+  }
+
+  function dispatch(argumentz) {
+    var o = d3.event; // events can by reentrant (e.g., focus);
+    d3.event = {scale: scale, translate: translate, target: zoom};
+    if (x1) x1.domain(x0.range().map(function(x) { return (x - translate[0]) / scale; }).map(x0.invert));
+    if (y1) y1.domain(y0.range().map(function(y) { return (y - translate[1]) / scale; }).map(y0.invert));
+    try { event.zoom.apply(zoom, argumentz); }
+    finally { d3.event = o; }
+    o.preventDefault();
   }
 
   function mousedown() {
-    start.apply(this, arguments);
-    d3_behavior_zoomPanning = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
-    d3_behavior_zoomMoved = 0;
-    d3.event.preventDefault();
+    var moved = 0,
+        that = this,
+        argumentz = arguments,
+        target = d3.event.target,
+        w = d3.select(window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
+        l = location(d3.mouse(that));
+
     window.focus();
+    d3_eventCancel();
+
+    function mousemove() {
+      moved = 1;
+      translateTo(d3.mouse(that), l);
+      dispatch(argumentz);
+    }
+
+    function mouseup() {
+      if (moved) d3_eventCancel();
+      w.on("mousemove.zoom", null).on("mouseup.zoom", null).on("click.zoom", moved && d3.event.target === target ? click : null);
+    }
+
+    function click() {
+      d3_eventCancel();
+      w.on("click.zoom", null);
+    }
   }
 
-  // store starting mouse location
   function mousewheel() {
-    start.apply(this, arguments);
-    if (!d3_behavior_zoomZooming) d3_behavior_zoomZooming = d3_behavior_zoomLocation(d3.svg.mouse(d3_behavior_zoomTarget));
-    d3_behavior_zoomTo(d3_behavior_zoomDelta() + xyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomZooming);
+    if (!translate0) translate0 = location(d3.mouse(this));
+    scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
+    translateTo(d3.mouse(this), translate0);
+    dispatch(arguments);
+  }
+
+  function mousemove() {
+    translate0 = null;
   }
 
   function dblclick() {
-    start.apply(this, arguments);
-    var mouse = d3.svg.mouse(d3_behavior_zoomTarget);
-    d3_behavior_zoomTo(d3.event.shiftKey ? Math.ceil(xyz[2] - 1) : Math.floor(xyz[2] + 1), mouse, d3_behavior_zoomLocation(mouse));
+    var p = d3.mouse(this), l = location(p);
+    scaleTo(d3.event.shiftKey ? scale / 2 : scale * 2);
+    translateTo(p, l);
+    dispatch(arguments);
   }
 
-  // doubletap detection
   function touchstart() {
-    start.apply(this, arguments);
-    var touches = d3_behavior_zoomTouchup(),
-        touch,
+    var touches = d3.touches(this),
         now = Date.now();
-    if ((touches.length === 1) && (now - d3_behavior_zoomLast < 300)) {
-      d3_behavior_zoomTo(1 + Math.floor(xyz[2]), touch = touches[0], d3_behavior_zoomLocations[touch.identifier]);
+
+    scale0 = scale;
+    translate0 = {};
+    touches.forEach(function(t) { translate0[t.identifier] = location(t); });
+    d3_eventCancel();
+
+    if ((touches.length === 1) && (now - touchtime < 500)) { // dbltap
+      var p = touches[0], l = location(touches[0]);
+      scaleTo(scale * 2);
+      translateTo(p, l);
+      dispatch(arguments);
     }
-    d3_behavior_zoomLast = now;
+    touchtime = now;
   }
 
-  zoom.extent = function(x) {
-    if (!arguments.length) return extent;
-    extent = x == null ? d3_behavior_zoomInfiniteExtent : x;
-    return zoom;
-  };
+  function touchmove() {
+    var touches = d3.touches(this),
+        p0 = touches[0],
+        l0 = translate0[p0.identifier];
+    if (p1 = touches[1]) {
+      var p1, l1 = translate0[p1.identifier];
+      p0 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
+      l0 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2];
+      scaleTo(d3.event.scale * scale0);
+    }
+    translateTo(p0, l0);
+    dispatch(arguments);
+  }
 
   return d3.rebind(zoom, event, "on");
 };
 
-var d3_behavior_zoomDiv,
-    d3_behavior_zoomPanning,
-    d3_behavior_zoomZooming,
-    d3_behavior_zoomLocations = {}, // identifier -> location
-    d3_behavior_zoomLast = 0,
-    d3_behavior_zoomXyz,
-    d3_behavior_zoomExtent,
-    d3_behavior_zoomDispatch,
-    d3_behavior_zoomEventTarget,
-    d3_behavior_zoomTarget,
-    d3_behavior_zoomArguments,
-    d3_behavior_zoomMoved;
+var d3_behavior_zoomDiv, // for interpreting mousewheel events
+    d3_behavior_zoomInfinity = [0, Infinity]; // default scale extent
 
-function d3_behavior_zoomLocation(point) {
-  return [
-    point[0] - d3_behavior_zoomXyz[0],
-    point[1] - d3_behavior_zoomXyz[1],
-    d3_behavior_zoomXyz[2]
-  ];
-}
-
-// detect the pixels that would be scrolled by this wheel event
 function d3_behavior_zoomDelta() {
 
   // mousewheel events are totally broken!
@@ -4651,125 +4767,7 @@ function d3_behavior_zoomDelta() {
     delta = e.wheelDelta || (-e.detail * 5);
   }
 
-  return delta * .005;
-}
-
-// Note: Since we don't rotate, it's possible for the touches to become
-// slightly detached from their original positions. Thus, we recompute the
-// touch points on touchend as well as touchstart!
-function d3_behavior_zoomTouchup() {
-  var touches = d3.svg.touches(d3_behavior_zoomTarget),
-      i = -1,
-      n = touches.length,
-      touch;
-  while (++i < n) d3_behavior_zoomLocations[(touch = touches[i]).identifier] = d3_behavior_zoomLocation(touch);
-  return touches;
-}
-
-function d3_behavior_zoomTouchmove() {
-  var touches = d3.svg.touches(d3_behavior_zoomTarget);
-  switch (touches.length) {
-
-    // single-touch pan
-    case 1: {
-      var touch = touches[0];
-      d3_behavior_zoomTo(d3_behavior_zoomXyz[2], touch, d3_behavior_zoomLocations[touch.identifier]);
-      break;
-    }
-
-    // double-touch pan + zoom
-    case 2: {
-      var p0 = touches[0],
-          p1 = touches[1],
-          p2 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2],
-          l0 = d3_behavior_zoomLocations[p0.identifier],
-          l1 = d3_behavior_zoomLocations[p1.identifier],
-          l2 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2, l0[2]];
-      d3_behavior_zoomTo(Math.log(d3.event.scale) / Math.LN2 + l0[2], p2, l2);
-      break;
-    }
-  }
-}
-
-function d3_behavior_zoomMousemove() {
-  d3_behavior_zoomZooming = null;
-  if (d3_behavior_zoomPanning) {
-    d3_behavior_zoomMoved = 1;
-    d3_behavior_zoomTo(d3_behavior_zoomXyz[2], d3.svg.mouse(d3_behavior_zoomTarget), d3_behavior_zoomPanning);
-  }
-}
-
-function d3_behavior_zoomMouseup() {
-  if (d3_behavior_zoomPanning) {
-    if (d3_behavior_zoomMoved) {
-      d3_eventCancel();
-      d3_behavior_zoomMoved = d3_behavior_zoomEventTarget === d3.event.target;
-    }
-
-    d3_behavior_zoomXyz =
-    d3_behavior_zoomExtent =
-    d3_behavior_zoomDispatch =
-    d3_behavior_zoomEventTarget =
-    d3_behavior_zoomTarget =
-    d3_behavior_zoomArguments =
-    d3_behavior_zoomPanning = null;
-  }
-}
-
-function d3_behavior_zoomClick() {
-  if (d3_behavior_zoomMoved) {
-    d3_eventCancel();
-    d3_behavior_zoomMoved = 0;
-  }
-}
-
-function d3_behavior_zoomTo(z, x0, x1) {
-  z = d3_behavior_zoomExtentClamp(z, 2);
-  var j = Math.pow(2, d3_behavior_zoomXyz[2]),
-      k = Math.pow(2, z),
-      K = Math.pow(2, (d3_behavior_zoomXyz[2] = z) - x1[2]),
-      x_ = d3_behavior_zoomXyz[0],
-      y_ = d3_behavior_zoomXyz[1],
-      x = d3_behavior_zoomXyz[0] = d3_behavior_zoomExtentClamp((x0[0] - x1[0] * K), 0, k),
-      y = d3_behavior_zoomXyz[1] = d3_behavior_zoomExtentClamp((x0[1] - x1[1] * K), 1, k),
-      o = d3.event; // Events can be reentrant (e.g., focus).
-
-  d3.event = {
-    scale: k,
-    translate: [x, y],
-    transform: function(sx, sy) {
-      if (sx) transform(sx, x_, x);
-      if (sy) transform(sy, y_, y);
-    }
-  };
-
-  function transform(scale, a, b) {
-    scale.domain(scale.range().map(function(v) { return scale.invert(((v - b) * j) / k + a); }));
-  }
-
-  try {
-    d3_behavior_zoomDispatch.apply(d3_behavior_zoomTarget, d3_behavior_zoomArguments);
-  } finally {
-    d3.event = o;
-  }
-
-  o.preventDefault();
-}
-
-var d3_behavior_zoomInfiniteExtent = [
-  [-Infinity, Infinity],
-  [-Infinity, Infinity],
-  [-Infinity, Infinity]
-];
-
-function d3_behavior_zoomExtentClamp(x, i, k) {
-  var range = d3_behavior_zoomExtent[i],
-      r0 = range[0],
-      r1 = range[1];
-  return arguments.length === 3
-      ? Math.max(r1 * (r1 === Infinity ? -Infinity : 1 / k - 1),
-        Math.min(r0 === -Infinity ? Infinity : r0, x / k)) * k
-      : Math.max(r0, Math.min(r1, x));
+  return delta;
 }
 d3.layout = {};
 // Implements hierarchical edge bundling using Holten's algorithm. For each
@@ -8517,6 +8515,35 @@ function d3_geom_quadtreePoint(p) {
 d3.time = {};
 
 var d3_time = Date;
+
+function d3_time_utc() {
+  this._ = new Date(arguments.length > 1
+      ? Date.UTC.apply(this, arguments)
+      : arguments[0]);
+}
+
+d3_time_utc.prototype = {
+  getDate: function() { return this._.getUTCDate(); },
+  getDay: function() { return this._.getUTCDay(); },
+  getFullYear: function() { return this._.getUTCFullYear(); },
+  getHours: function() { return this._.getUTCHours(); },
+  getMilliseconds: function() { return this._.getUTCMilliseconds(); },
+  getMinutes: function() { return this._.getUTCMinutes(); },
+  getMonth: function() { return this._.getUTCMonth(); },
+  getSeconds: function() { return this._.getUTCSeconds(); },
+  getTime: function() { return this._.getTime(); },
+  getTimezoneOffset: function() { return 0; },
+  valueOf: function() { return this._.valueOf(); },
+  setDate: function(x) { this._.setUTCDate(x); },
+  setDay: function(x) { this._.setUTCDay(x); },
+  setFullYear: function(x) { this._.setUTCFullYear(x); },
+  setHours: function(x) { this._.setUTCHours(x); },
+  setMilliseconds: function(x) { this._.setUTCMilliseconds(x); },
+  setMinutes: function(x) { this._.setUTCMinutes(x); },
+  setMonth: function(x) { this._.setUTCMonth(x); },
+  setSeconds: function(x) { this._.setUTCSeconds(x); },
+  setTime: function(x) { this._.setTime(x); }
+};
 d3.time.format = function(template) {
   var n = template.length;
 
@@ -8593,15 +8620,15 @@ var d3_time_formats = {
   e: function(d) { return d3_time_sfill2(d.getDate()); },
   H: function(d) { return d3_time_zfill2(d.getHours()); },
   I: function(d) { return d3_time_zfill2(d.getHours() % 12 || 12); },
-  j: d3_time_dayOfYear,
+  j: function(d) { return d3_time_zfill3(1 + d3.time.dayOfYear(d)); },
   L: function(d) { return d3_time_zfill3(d.getMilliseconds()); },
   m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
   M: function(d) { return d3_time_zfill2(d.getMinutes()); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
   S: function(d) { return d3_time_zfill2(d.getSeconds()); },
-  U: d3_time_weekNumberSunday,
+  U: function(d) { return d3_time_zfill2(d3.time.sundayOfYear(d)); },
   w: function(d) { return d.getDay(); },
-  W: d3_time_weekNumberMonday,
+  W: function(d) { return d3_time_zfill2(d3.time.mondayOfYear(d)); },
   x: d3.time.format("%m/%d/%y"),
   X: d3.time.format("%H:%M:%S"),
   y: function(d) { return d3_time_zfill2(d.getFullYear() % 100); },
@@ -8814,28 +8841,6 @@ var d3_time_amPmLookup = {
   pm: 1
 };
 
-function d3_time_year(d) {
-  return new d3_time(d.getFullYear(), 0, 1);
-}
-
-function d3_time_daysElapsed(d0, d1) {
-  return ~~((d1 - d0) / 864e5 - (d1.getTimezoneOffset() - d0.getTimezoneOffset()) / 1440);
-}
-
-function d3_time_dayOfYear(d) {
-  return d3_time_zfill3(1 + d3_time_daysElapsed(d3_time_year(d), d));
-}
-
-function d3_time_weekNumberSunday(d) {
-  var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + d0.getDay()) / 7));
-}
-
-function d3_time_weekNumberMonday(d) {
-  var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + (d0.getDay() + 6) % 7) / 7));
-}
-
 // TODO table of time zone offset names?
 function d3_time_zone(d) {
   var z = d.getTimezoneOffset(),
@@ -8849,7 +8854,7 @@ d3.time.format.utc = function(template) {
 
   function format(date) {
     try {
-      d3_time = d3_time_format_utc;
+      d3_time = d3_time_utc;
       var utc = new d3_time();
       utc._ = date;
       return local(utc);
@@ -8860,7 +8865,7 @@ d3.time.format.utc = function(template) {
 
   format.parse = function(string) {
     try {
-      d3_time = d3_time_format_utc;
+      d3_time = d3_time_utc;
       var date = local.parse(string);
       return date && date._;
     } finally {
@@ -8871,31 +8876,6 @@ d3.time.format.utc = function(template) {
   format.toString = local.toString;
 
   return format;
-};
-
-function d3_time_format_utc() {
-  this._ = new Date(Date.UTC.apply(this, arguments));
-}
-
-d3_time_format_utc.prototype = {
-  getDate: function() { return this._.getUTCDate(); },
-  getDay: function() { return this._.getUTCDay(); },
-  getFullYear: function() { return this._.getUTCFullYear(); },
-  getHours: function() { return this._.getUTCHours(); },
-  getMilliseconds: function() { return this._.getUTCMilliseconds(); },
-  getMinutes: function() { return this._.getUTCMinutes(); },
-  getMonth: function() { return this._.getUTCMonth(); },
-  getSeconds: function() { return this._.getUTCSeconds(); },
-  getTimezoneOffset: function() { return 0; },
-  valueOf: function() { return this._.getTime(); },
-  setDate: function(x) { this._.setUTCDate(x); },
-  setDay: function(x) { this._.setUTCDay(x); },
-  setFullYear: function(x) { this._.setUTCFullYear(x); },
-  setHours: function(x) { this._.setUTCHours(x); },
-  setMilliseconds: function(x) { this._.setUTCMilliseconds(x); },
-  setMinutes: function(x) { this._.setUTCMinutes(x); },
-  setMonth: function(x) { this._.setUTCMonth(x); },
-  setSeconds: function(x) { this._.setUTCSeconds(x); }
 };
 var d3_time_formatIso = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
 
@@ -8910,143 +8890,168 @@ d3_time_formatIsoNative.parse = function(string) {
 };
 
 d3_time_formatIsoNative.toString = d3_time_formatIso.toString;
-function d3_time_range(floor, step, number) {
-  return function(t0, t1, dt) {
-    var time = floor(t0), times = [];
-    if (time < t0) step(time);
+function d3_time_interval(local, step, number) {
+
+  function round(date) {
+    var d0 = local(date), d1 = offset(d0, 1);
+    return date - d0 < d1 - date ? d0 : d1;
+  }
+
+  function ceil(date) {
+    step(date = local(new d3_time(date - 1)), 1);
+    return date;
+  }
+
+  function offset(date, k) {
+    step(date = new d3_time(+date), k);
+    return date;
+  }
+
+  function range(t0, t1, dt) {
+    var time = ceil(t0), times = [];
     if (dt > 1) {
       while (time < t1) {
-        var date = new Date(+time);
-        if (!(number(date) % dt)) times.push(date);
-        step(time);
+        if (!(number(time) % dt)) times.push(new Date(+time));
+        step(time, 1);
       }
     } else {
-      while (time < t1) times.push(new Date(+time)), step(time);
+      while (time < t1) times.push(new Date(+time)), step(time, 1);
     }
     return times;
+  }
+
+  function range_utc(t0, t1, dt) {
+    try {
+      d3_time = d3_time_utc;
+      var utc = new d3_time_utc();
+      utc._ = t0;
+      return range(utc, t1, dt);
+    } finally {
+      d3_time = Date;
+    }
+  }
+
+  local.floor = local;
+  local.round = round;
+  local.ceil = ceil;
+  local.offset = offset;
+  local.range = range;
+
+  var utc = local.utc = d3_time_interval_utc(local);
+  utc.floor = utc;
+  utc.round = d3_time_interval_utc(round);
+  utc.ceil = d3_time_interval_utc(ceil);
+  utc.offset = d3_time_interval_utc(offset);
+  utc.range = range_utc;
+
+  return local;
+}
+
+function d3_time_interval_utc(method) {
+  return function(date, k) {
+    try {
+      d3_time = d3_time_utc;
+      var utc = new d3_time_utc();
+      utc._ = date;
+      return method(utc, k)._;
+    } finally {
+      d3_time = Date;
+    }
   };
 }
-d3.time.second = function(date) {
-  return new Date(~~(date / 1e3) * 1e3);
-};
-
-d3.time.second.utc = d3.time.second;
-d3.time.seconds = d3_time_range(d3.time.second, function(date) {
-  date.setTime(date.getTime() + 1e3);
+d3.time.second = d3_time_interval(function(date) {
+  return new d3_time(Math.floor(date / 1e3) * 1e3);
+}, function(date, offset) {
+  date.setTime(date.getTime() + Math.floor(offset) * 1e3); // DST breaks setSeconds
 }, function(date) {
   return date.getSeconds();
 });
 
-d3.time.seconds.utc = d3.time.seconds;
-d3.time.minute = function(date) {
-  return new Date(~~(date / 6e4) * 6e4);
-};
-
-d3.time.minute.utc = d3.time.minute;d3.time.minutes = d3_time_range(d3.time.minute, d3_time_minutesStep, function(date) {
+d3.time.seconds = d3.time.second.range;
+d3.time.seconds.utc = d3.time.second.utc.range;
+d3.time.minute = d3_time_interval(function(date) {
+  return new d3_time(Math.floor(date / 6e4) * 6e4);
+}, function(date, offset) {
+  date.setTime(date.getTime() + Math.floor(offset) * 6e4); // DST breaks setMinutes
+}, function(date) {
   return date.getMinutes();
 });
 
-d3.time.minutes.utc = d3_time_range(d3.time.minute, d3_time_minutesStep, function(date) {
-  return date.getUTCMinutes();
-});
-
-function d3_time_minutesStep(date) {
-  date.setTime(date.getTime() + 6e4); // assumes no leap seconds
-}
-d3.time.hour = function(date) {
-  var offset = date.getTimezoneOffset() / 60;
-  return new Date((~~(date / 36e5 - offset) + offset) * 36e5);
-};
-
-d3.time.hour.utc = function(date) {
-  return new Date(~~(date / 36e5) * 36e5);
-};
-d3.time.hours = d3_time_range(d3.time.hour, d3_time_hoursStep, function(date) {
+d3.time.minutes = d3.time.minute.range;
+d3.time.minutes.utc = d3.time.minute.utc.range;
+d3.time.hour = d3_time_interval(function(date) {
+  var timezone = date.getTimezoneOffset() / 60;
+  return new d3_time((Math.floor(date / 36e5 - timezone) + timezone) * 36e5);
+}, function(date, offset) {
+  date.setTime(date.getTime() + Math.floor(offset) * 36e5); // DST breaks setHours
+}, function(date) {
   return date.getHours();
 });
 
-d3.time.hours.utc = d3_time_range(d3.time.hour.utc, d3_time_hoursStep, function(date) {
-  return date.getUTCHours();
-});
-
-function d3_time_hoursStep(date) {
-  date.setTime(date.getTime() + 36e5);
-}
-d3.time.day = function(date) {
-  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
-};
-
-d3.time.day.utc = function(date) {
-  return new Date(~~(date / 864e5) * 864e5);
-};
-d3.time.days = d3_time_range(d3.time.day, function(date) {
-  date.setDate(date.getDate() + 1);
+d3.time.hours = d3.time.hour.range;
+d3.time.hours.utc = d3.time.hour.utc.range;
+d3.time.day = d3_time_interval(function(date) {
+  return new d3_time(date.getFullYear(), date.getMonth(), date.getDate());
+}, function(date, offset) {
+  date.setDate(date.getDate() + offset);
 }, function(date) {
   return date.getDate() - 1;
 });
 
-d3.time.days.utc = d3_time_range(d3.time.day.utc, function(date) {
-  date.setUTCDate(date.getUTCDate() + 1);
-}, function(date) {
-  return date.getUTCDate() - 1;
-});
-d3.time.week = function(date) {
-  (date = d3.time.day(date)).setDate(date.getDate() - date.getDay());
-  return date;
-};
+d3.time.days = d3.time.day.range;
+d3.time.days.utc = d3.time.day.utc.range;
 
-d3.time.week.utc = function(date) {
-  (date = d3.time.day.utc(date)).setUTCDate(date.getUTCDate() - date.getUTCDay());
-  return date;
+d3.time.dayOfYear = function(date) {
+  var year = d3.time.year(date);
+  return Math.floor((date - year) / 864e5 - (date.getTimezoneOffset() - year.getTimezoneOffset()) / 1440);
 };
-d3.time.weeks = d3_time_range(d3.time.week, function(date) {
-  date.setDate(date.getDate() + 7);
-}, function(date) {
-  return ~~((date - new Date(date.getFullYear(), 0, 1)) / 6048e5);
+d3_time_weekdays.forEach(function(day, i) {
+  day = day.toLowerCase();
+  i = 7 - i;
+
+  var interval = d3.time[day] = d3_time_interval(function(date) {
+    (date = d3.time.day(date)).setDate(date.getDate() - (date.getDay() + i) % 7);
+    return date;
+  }, function(date, offset) {
+    date.setDate(date.getDate() + Math.floor(offset) * 7);
+  }, function(date) {
+    var day = d3.time.year(date).getDay();
+    return Math.floor((d3.time.dayOfYear(date) + (day + i) % 7) / 7) - (day !== i);
+  });
+
+  d3.time[day + "s"] = interval.range;
+  d3.time[day + "s"].utc = interval.utc.range;
+
+  d3.time[day + "OfYear"] = function(date) {
+    var day = d3.time.year(date).getDay();
+    return Math.floor((d3.time.dayOfYear(date) + (day + i) % 7) / 7);
+  };
 });
 
-d3.time.weeks.utc = d3_time_range(d3.time.week.utc, function(date) {
-  date.setUTCDate(date.getUTCDate() + 7);
-}, function(date) {
-  return ~~((date - Date.UTC(date.getUTCFullYear(), 0, 1)) / 6048e5);
-});
-d3.time.month = function(date) {
-  return new Date(date.getFullYear(), date.getMonth(), 1);
-};
-
-d3.time.month.utc = function(date) {
-  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 1));
-};
-d3.time.months = d3_time_range(d3.time.month, function(date) {
-  date.setMonth(date.getMonth() + 1);
+d3.time.week = d3.time.sunday;
+d3.time.weeks = d3.time.sunday.range;
+d3.time.weeks.utc = d3.time.sunday.utc.range;
+d3.time.weekOfYear = d3.time.sundayOfYear;
+d3.time.month = d3_time_interval(function(date) {
+  return new d3_time(date.getFullYear(), date.getMonth(), 1);
+}, function(date, offset) {
+  date.setMonth(date.getMonth() + offset);
 }, function(date) {
   return date.getMonth();
 });
 
-d3.time.months.utc = d3_time_range(d3.time.month.utc, function(date) {
-  date.setUTCMonth(date.getUTCMonth() + 1);
-}, function(date) {
-  return date.getUTCMonth();
-});
-d3.time.year = function(date) {
-  return new Date(date.getFullYear(), 0, 1);
-};
-
-d3.time.year.utc = function(date) {
-  return new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
-};
-d3.time.years = d3_time_range(d3.time.year, function(date) {
-  date.setFullYear(date.getFullYear() + 1);
+d3.time.months = d3.time.month.range;
+d3.time.months.utc = d3.time.month.utc.range;
+d3.time.year = d3_time_interval(function(date) {
+  return new d3_time(date.getFullYear(), 0, 1);
+}, function(date, offset) {
+  date.setFullYear(date.getFullYear() + offset);
 }, function(date) {
   return date.getFullYear();
 });
 
-d3.time.years.utc = d3_time_range(d3.time.year.utc, function(date) {
-  date.setUTCFullYear(date.getUTCFullYear() + 1);
-}, function(date) {
-  return date.getUTCFullYear();
-});
-// TODO nice
+d3.time.years = d3.time.year.range;
+d3.time.years.utc = d3.time.year.utc.range;
 function d3_time_scale(linear, methods, format) {
 
   function scale(x) {
@@ -9063,6 +9068,11 @@ function d3_time_scale(linear, methods, format) {
     return scale;
   };
 
+  scale.nice = function(m) {
+    var extent = d3_time_scaleExtent(scale.domain());
+    return scale.domain([m.floor(extent[0]), m.ceil(extent[1])]);
+  };
+
   scale.ticks = function(m, k) {
     var extent = d3_time_scaleExtent(scale.domain());
     if (typeof m !== "function") {
@@ -9074,7 +9084,7 @@ function d3_time_scale(linear, methods, format) {
       if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
       m = methods[i];
       k = m[1];
-      m = m[0];
+      m = m[0].range;
     }
     return m(extent[0], new Date(+extent[1] + 1), k); // inclusive upper bound
   };
@@ -9144,24 +9154,24 @@ var d3_time_scaleSteps = [
 ];
 
 var d3_time_scaleLocalMethods = [
-  [d3.time.seconds, 1],
-  [d3.time.seconds, 5],
-  [d3.time.seconds, 15],
-  [d3.time.seconds, 30],
-  [d3.time.minutes, 1],
-  [d3.time.minutes, 5],
-  [d3.time.minutes, 15],
-  [d3.time.minutes, 30],
-  [d3.time.hours, 1],
-  [d3.time.hours, 3],
-  [d3.time.hours, 6],
-  [d3.time.hours, 12],
-  [d3.time.days, 1],
-  [d3.time.days, 2],
-  [d3.time.weeks, 1],
-  [d3.time.months, 1],
-  [d3.time.months, 3],
-  [d3.time.years, 1]
+  [d3.time.second, 1],
+  [d3.time.second, 5],
+  [d3.time.second, 15],
+  [d3.time.second, 30],
+  [d3.time.minute, 1],
+  [d3.time.minute, 5],
+  [d3.time.minute, 15],
+  [d3.time.minute, 30],
+  [d3.time.hour, 1],
+  [d3.time.hour, 3],
+  [d3.time.hour, 6],
+  [d3.time.hour, 12],
+  [d3.time.day, 1],
+  [d3.time.day, 2],
+  [d3.time.week, 1],
+  [d3.time.month, 1],
+  [d3.time.month, 3],
+  [d3.time.year, 1]
 ];
 
 var d3_time_scaleLocalFormats = [
@@ -9185,26 +9195,9 @@ d3_time_scaleLocalMethods.year = function(extent, m) {
 d3.time.scale = function() {
   return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
 };
-var d3_time_scaleUTCMethods = [
-  [d3.time.seconds.utc, 1],
-  [d3.time.seconds.utc, 5],
-  [d3.time.seconds.utc, 15],
-  [d3.time.seconds.utc, 30],
-  [d3.time.minutes.utc, 1],
-  [d3.time.minutes.utc, 5],
-  [d3.time.minutes.utc, 15],
-  [d3.time.minutes.utc, 30],
-  [d3.time.hours.utc, 1],
-  [d3.time.hours.utc, 3],
-  [d3.time.hours.utc, 6],
-  [d3.time.hours.utc, 12],
-  [d3.time.days.utc, 1],
-  [d3.time.days.utc, 2],
-  [d3.time.weeks.utc, 1],
-  [d3.time.months.utc, 1],
-  [d3.time.months.utc, 3],
-  [d3.time.years.utc, 1]
-];
+var d3_time_scaleUTCMethods = d3_time_scaleLocalMethods.map(function(m) {
+  return [m[0].utc, m[1]];
+});
 
 var d3_time_scaleUTCFormats = [
   [d3.time.format.utc("%Y"), function(d) { return true; }],

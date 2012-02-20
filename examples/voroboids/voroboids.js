@@ -24,7 +24,7 @@ var svg = d3.select("#vis")
     .attr("height", h)
     .attr("class", "PiYG")
     .on("mousemove", function() {
-      var m = d3.svg.mouse(this);
+      var m = d3.mouse(this);
       mouse[0] = m[0];
       mouse[1] = m[1];
     })
