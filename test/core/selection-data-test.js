@@ -160,6 +160,15 @@ suite.addBatch({
       assert.domNull(exit[0][1]);
       assert.domEqual(exit[1][0], span[1][0]);
       assert.domNull(exit[1][1]);
+    },
+    "handles keys that are in the default object's prototype chain": function(span) {
+      // This also applies to the non-standard "watch" and "unwatch" in Mozilla Firefox.
+      var update = span.data(["hasOwnProperty", "isPrototypeOf", "toLocaleString", "toString", "valueOf"], String);
+      assert.domNull(update[0][0]);
+      assert.domNull(update[0][1]);
+      assert.domNull(update[0][2]);
+      assert.domNull(update[0][3]);
+      assert.domNull(update[0][4]);
     }
   }
 });

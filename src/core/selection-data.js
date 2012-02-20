@@ -24,7 +24,7 @@ d3_selectionPrototype.data = function(data, join) {
 
       for (i = -1; ++i < n;) {
         key = join.call(node = group[i], node.__data__, i);
-        if (key in nodeByKey) {
+        if (nodeByKey.hasOwnProperty(key)) {
           exitNodes[j++] = node; // duplicate key
         } else {
           nodeByKey[key] = node;
@@ -33,8 +33,9 @@ d3_selectionPrototype.data = function(data, join) {
       }
 
       for (i = -1; ++i < m;) {
-        node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
-        if (node) {
+        key = join.call(groupData, nodeData = groupData[i], i)
+        if (nodeByKey.hasOwnProperty(key)) {
+          node = nodeByKey[key];
           node.__data__ = nodeData;
           updateNodes[i] = node;
           enterNodes[i] = exitNodes[i] = null;
@@ -46,7 +47,7 @@ d3_selectionPrototype.data = function(data, join) {
       }
 
       for (i = -1; ++i < n;) {
-        if (keys[i] in nodeByKey) {
+        if (nodeByKey.hasOwnProperty(keys[i])) {
           exitNodes[i] = group[i];
         }
       }
