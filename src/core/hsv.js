@@ -37,35 +37,43 @@ function d3_hsv_rgb(h, s, v) {
     var q = v * (1.0 - s * f);
     var t = v * (1.0 - s * (1.0 - f));
     i = i % 6;
-    if (i === 0) {
-      r = v;
-      g = t;
-      b = p;
-    }
-    else if (i === 1) {
-      r = q;
-      g = v;
-      b = p;
-    }
-    else if (i === 2) {
-      r = p;
-      g = v;
-      b = t;
-    }
-    else if (i === 3) {
-      r = p;
-      g = q;
-      b = v;
-    }
-    else if (i === 4) {
-      r = t;
-      g = p;
-      b = v;
-    }
-    else if (i == 5) {
-      r = v;
-      g = p;
-      b = q;
+    switch (i % 6) {
+      case 0: {
+        r = v;
+        g = t;
+        b = p;
+        break;
+      }
+      case 1: {
+        r = q;
+        g = v;
+        b = p;
+        break;
+      }
+      case 2: {
+        r = p;
+        g = v;
+        b = t;
+        break;
+      }
+      case 3: {
+        r = p;
+        g = q;
+        b = v;
+        break;
+      }
+      case 4: {
+        r = t;
+        g = p;
+        b = v;
+        break;
+      }
+      case 5: {
+        r = v;
+        g = p;
+        b = q;
+        break;
+      }
     }
   }
 
