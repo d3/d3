@@ -53,7 +53,7 @@ function d3_rgb_hex(v) {
       : Math.min(255, v).toString(16);
 }
 
-function d3_rgb_parse(format, rgb, hsl) {
+function d3_rgb_parse(format, rgb, hsl, hsv) {
   var r = 0, // red channel; int in [0, 255]
       g = 0, // green channel; int in [0, 255]
       b = 0, // blue channel; int in [0, 255]
@@ -71,6 +71,13 @@ function d3_rgb_parse(format, rgb, hsl) {
           parseFloat(m2[0]), // degrees
           parseFloat(m2[1]) / 100, // percentage
           parseFloat(m2[2]) / 100 // percentage
+        );
+      }
+      case "hsv": {
+        return hsv(
+          parseFloat(m2[0]),
+          parseFloat(m2[1]) / 100,
+          parseFloat(m2[2]) / 100
         );
       }
       case "rgb": {
@@ -122,6 +129,34 @@ function d3_rgb_hsl(r, g, b) {
     s = h = 0;
   }
   return d3_hsl(h, s, l);
+}
+
+function d3_rgb_hsv(r, g, b) {
+  var min = Math.min(r /= 255, g /= 255, b /= 255),
+      max = Math.max(r, g, b),
+      h,
+      s,
+      v = max;
+  if (max == min) {
+    h = 0.0;
+    s = 0.0;
+  } else {
+    s = (max - min) / max;
+    var rc = (max - r) / (max - min);
+    var gc = (max - g) / (max - min);
+    var bc = (max - b) / (max - min);
+    if (r == max) {
+      h = bc - gc;
+    }
+    else if (g == max) {
+      h = 2.0 + rc - bc;
+    }
+    else {
+      h = 4.0 + gc - rc;
+    }
+    h = (h / 6.0) % 1.0;
+  }
+  return d3_hsv(h * 360, s, v);
 }
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
