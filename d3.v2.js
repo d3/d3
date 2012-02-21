@@ -1749,11 +1749,22 @@ d3_selectionPrototype.remove = function() {
     if (parent) parent.removeChild(this);
   });
 };
-// TODO data(null) for clearing data?
-d3_selectionPrototype.data = function(data, join) {
-  var enter = [],
-      update = [],
-      exit = [];
+d3_selectionPrototype.data = function(value, key) {
+  var i = -1,
+      n = this.length,
+      group,
+      node;
+
+  // If no value is specified, return the first value.
+  if (!arguments.length) {
+    value = new Array(n = (group = this[0]).length);
+    while (++i < n) {
+      if (node = group[i]) {
+        value[i] = node.__data__;
+      }
+    }
+    return value;
+  }
 
   function bind(group, groupData) {
     var i,
@@ -1767,37 +1778,37 @@ d3_selectionPrototype.data = function(data, join) {
         node,
         nodeData;
 
-    if (join) {
-      var nodeByKey = new d3_Map,
-          keys = [],
-          key,
+    if (key) {
+      var nodeByKeyValue = new d3_Map,
+          keyValues = [],
+          keyValue,
           j = groupData.length;
 
       for (i = -1; ++i < n;) {
-        key = join.call(node = group[i], node.__data__, i);
-        if (nodeByKey.has(key)) {
+        keyValue = key.call(node = group[i], node.__data__, i);
+        if (nodeByKeyValue.has(keyValue)) {
           exitNodes[j++] = node; // duplicate key
         } else {
-          nodeByKey.set(key, node);
+          nodeByKeyValue.set(keyValue, node);
         }
-        keys.push(key);
+        keyValues.push(keyValue);
       }
 
       for (i = -1; ++i < m;) {
-        key = join.call(groupData, nodeData = groupData[i], i)
-        if (nodeByKey.has(key)) {
-          updateNodes[i] = node = nodeByKey.get(key);
+        keyValue = key.call(groupData, nodeData = groupData[i], i)
+        if (nodeByKeyValue.has(keyValue)) {
+          updateNodes[i] = node = nodeByKeyValue.get(keyValue);
           node.__data__ = nodeData;
           enterNodes[i] = exitNodes[i] = null;
         } else {
           enterNodes[i] = d3_selection_dataNode(nodeData);
           updateNodes[i] = exitNodes[i] = null;
         }
-        nodeByKey.remove(key);
+        nodeByKeyValue.remove(keyValue);
       }
 
       for (i = -1; ++i < n;) {
-        if (nodeByKey.has(keys[i])) {
+        if (nodeByKeyValue.has(keyValues[i])) {
           exitNodes[i] = group[i];
         }
       }
@@ -1837,23 +1848,23 @@ d3_selectionPrototype.data = function(data, join) {
     exit.push(exitNodes);
   }
 
-  var i = -1,
-      n = this.length,
-      group;
-  if (typeof data === "function") {
+  var enter = d3_selection_enter([]),
+      update = d3_selection([]),
+      exit = d3_selection([]);
+
+  if (typeof value === "function") {
     while (++i < n) {
-      bind(group = this[i], data.call(group, group.parentNode.__data__, i));
+      bind(group = this[i], value.call(group, group.parentNode.__data__, i));
     }
   } else {
     while (++i < n) {
-      bind(group = this[i], data);
+      bind(group = this[i], value);
     }
   }
 
-  var selection = d3_selection(update);
-  selection.enter = function() { return d3_selection_enter(enter); };
-  selection.exit = function() { return d3_selection(exit); };
-  return selection;
+  update.enter = function() { return enter; };
+  update.exit = function() { return exit; };
+  return update;
 };
 
 function d3_selection_dataNode(data) {

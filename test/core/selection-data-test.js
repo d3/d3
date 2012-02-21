@@ -28,6 +28,16 @@ suite.addBatch({
     },
     "returns a new selection": function(body) {
       assert.isFalse(body.data([1]) === body);
+    },
+    "with no arguments, returns an array of data": function(body) {
+      var data = new Object();
+      body.data([data]);
+      assert.deepEqual(body.data(), [data]);
+      assert.strictEqual(body.data()[0], data);
+    },
+    "throws an error if data is null or undefined": function(body) {
+      assert.throws(function() { body.data(null); }, Error);
+      assert.throws(function() { body.data(function() {}); }, Error);
     }
   }
 });
@@ -58,6 +68,25 @@ suite.addBatch({
     },
     "returns a new selection": function(div) {
       assert.isFalse(div.data([0, 1]) === div);
+    },
+    "throws an error if data is null or undefined": function(div) {
+      assert.throws(function() { div.data(null); }, Error);
+      assert.throws(function() { div.data(function() {}); }, Error);
+    },
+    "with no arguments, returns an array of data": function(div) {
+      var a = new Object(), b = new Object(), actual = [];
+      div[0][0].__data__ = a;
+      div[0][1].__data__ = b;
+      assert.deepEqual(div.data(), [a, b]);
+    },
+    "with no arguments, returned array has undefined for null nodes": function(div) {
+      var b = new Object(), actual = [];
+      div[0][0] = null;
+      div[0][1].__data__ = b;
+      var data = div.data();
+      assert.isUndefined(data[0]);
+      assert.strictEqual(data[1], b);
+      assert.equal(data.length, 2);
     }
   }
 });
