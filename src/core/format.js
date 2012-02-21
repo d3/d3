@@ -30,7 +30,7 @@ d3.format = function(specifier) {
   // If no precision is specified for r, fallback to general notation.
   if (type == "r" && !precision) type = "g";
 
-  type = d3_format_types[type] || d3_format_typeDefault;
+  type = d3_format_types.get(type) || d3_format_typeDefault;
 
   return function(value) {
 
@@ -75,12 +75,12 @@ d3.format = function(specifier) {
 // [[fill]align][sign][#][0][width][,][.precision][type]
 var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
 
-var d3_format_types = {
+var d3_format_types = d3.map({
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
   f: function(x, p) { return x.toFixed(p); },
   r: function(x, p) { return d3.round(x, p = d3_format_precision(x, p)).toFixed(Math.max(0, Math.min(20, p))); }
-};
+});
 
 function d3_format_precision(x, p) {
   return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
