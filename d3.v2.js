@@ -980,6 +980,20 @@ d3.interpolateHsl = function(a, b) {
   };
 };
 
+d3.interpolateHsv = function(a, b) {
+  a = d3.hsv(a);
+  b = d3.hsv(b);
+  var h0 = a.h,
+      s0 = a.s,
+      v0 = a.v,
+      h1 = b.h - h0,
+      s1 = b.s - s0,
+      v1 = b.v - v0;
+  return function (t) {
+    return d3_hsv_rgb(h0 + h1 * t, s0 + s1 * t, v0 + v1 * t).toString();
+  };
+}
+
 d3.interpolateArray = function(a, b) {
   var x = [],
       c = [],
@@ -1030,7 +1044,7 @@ d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
   function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
-  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
+  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb|hsl\(|hsv\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl || b instanceof d3_Hsv) && d3.interpolateRgb(a, b); },
   function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
 ];
 function d3_uninterpolateNumber(a, b) {
@@ -1045,7 +1059,7 @@ function d3_uninterpolateClamp(a, b) {
 d3.rgb = function(r, g, b) {
   return arguments.length === 1
       ? (r instanceof d3_Rgb ? d3_rgb(r.r, r.g, r.b)
-      : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb))
+      : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb, d3_hsv_rgb))
       : d3_rgb(~~r, ~~g, ~~b);
 };
 
@@ -1097,7 +1111,7 @@ function d3_rgb_hex(v) {
       : Math.min(255, v).toString(16);
 }
 
-function d3_rgb_parse(format, rgb, hsl) {
+function d3_rgb_parse(format, rgb, hsl, hsv) {
   var r = 0, // red channel; int in [0, 255]
       g = 0, // green channel; int in [0, 255]
       b = 0, // blue channel; int in [0, 255]
@@ -1115,6 +1129,13 @@ function d3_rgb_parse(format, rgb, hsl) {
           parseFloat(m2[0]), // degrees
           parseFloat(m2[1]) / 100, // percentage
           parseFloat(m2[2]) / 100 // percentage
+        );
+      }
+      case "hsv": {
+        return hsv(
+          parseFloat(m2[0]),
+          parseFloat(m2[1]) / 100,
+          parseFloat(m2[2]) / 100
         );
       }
       case "rgb": {
@@ -1166,6 +1187,34 @@ function d3_rgb_hsl(r, g, b) {
     s = h = 0;
   }
   return d3_hsl(h, s, l);
+}
+
+function d3_rgb_hsv(r, g, b) {
+  var min = Math.min(r /= 255, g /= 255, b /= 255),
+      max = Math.max(r, g, b),
+      h,
+      s,
+      v = max;
+  if (max === min) {
+    h = 0.0;
+    s = 0.0;
+  } else {
+    s = (max - min) / max;
+    var rc = (max - r) / (max - min);
+    var gc = (max - g) / (max - min);
+    var bc = (max - b) / (max - min);
+    if (r === max) {
+      h = bc - gc;
+    }
+    else if (g === max) {
+      h = 2.0 + rc - bc;
+    }
+    else {
+      h = 4.0 + gc - rc;
+    }
+    h = (h / 6.0) % 1.0;
+  }
+  return d3_hsv(h * 360, s, v);
 }
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
@@ -1332,7 +1381,7 @@ for (var d3_rgb_name in d3_rgb_names) {
 d3.hsl = function(h, s, l) {
   return arguments.length === 1
       ? (h instanceof d3_Hsl ? d3_hsl(h.h, h.s, h.l)
-      : d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl))
+      : d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl, d3_hsv_hsl))
       : d3_hsl(+h, +s, +l);
 };
 
@@ -1391,6 +1440,99 @@ function d3_hsl_rgb(h, s, l) {
   }
 
   return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
+}
+
+function d3_hsl_hsv(h, s, l) {
+  return d3.hsv(d3_hsl(h, s, l));
+}
+
+d3.hsv = function(h, s, v) {
+  return arguments.length === 1
+      ? (h instanceof d3_Hsv ? d3_hsv(h.h, h.s, h.v)
+      : d3_rgb_parse("" + h, d3_rgb_hsv, d3_hsl_hsv, d3_hsv))
+      : d3_hsv(+h, +s, +v);
+};
+
+function d3_hsv(h, s, v) {
+  return new d3_Hsv(h, s, v);
+};
+
+function d3_Hsv(h, s, v) {
+  this.h = h;
+  this.s = s;
+  this.v = v;
+}
+
+d3_Hsv.prototype.rgb = function() {
+  return d3_hsv_rgb(this.h, this.s, this.v);
+};
+
+d3_Hsv.prototype.toString = function() {
+  return this.rgb().toString();
+};
+
+function d3_hsv_rgb(h, s, v) {
+  var r, g, b;
+  h /= 360;
+
+  if (s === 0.0) {
+    r = g = b = v;
+  }
+  else {
+    var i = ~~(h * 6.0);
+    var f = h * 6.0 - i;
+    var p = v * (1.0 - s);
+    var q = v * (1.0 - s * f);
+    var t = v * (1.0 - s * (1.0 - f));
+    switch (i % 6) {
+      case 0: {
+        r = v;
+        g = t;
+        b = p;
+        break;
+      }
+      case 1: {
+        r = q;
+        g = v;
+        b = p;
+        break;
+      }
+      case 2: {
+        r = p;
+        g = v;
+        b = t;
+        break;
+      }
+      case 3: {
+        r = p;
+        g = q;
+        b = v;
+        break;
+      }
+      case 4: {
+        r = t;
+        g = p;
+        b = v;
+        break;
+      }
+      case 5: {
+        r = v;
+        g = p;
+        b = q;
+        break;
+      }
+    }
+  }
+
+  function vv(h) {
+    return Math.round(h * 255);
+  }
+
+  return d3_rgb(vv(r), vv(g), vv(b));
+}
+
+function d3_hsv_hsl(h, s, v) {
+  return d3.hsl(d3_hsv(h, s, v).rgb());
 }
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);

@@ -50,6 +50,10 @@ suite.addBatch({
     "parses and converts RGB format (e.g., \"rgb(102, 102, 0)\")": function(hsl) {
       assert.hslEqual(hsl("rgb(102, 102, 0)"), 60, 1, .2);
     },
+    "parses and convert HSV format": function(hsl) {
+      var color = d3.hsv("yellow");
+      assert.hslEqual(hsl("hsv(" + color.h + ", " + color.s + "%, " + color.v + "%)").rgb(), 60, 1, .2);
+    },
     "can convert from RGB": function(hsl) {
       assert.hslEqual(hsl(d3.rgb(12, 34, 56)), 210, .647058, .133333);
     },

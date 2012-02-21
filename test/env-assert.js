@@ -30,6 +30,12 @@ assert.hslEqual = function(actual, h, s, l, message) {
   }
 };
 
+assert.hsvEqual = function(actual, h, s, v, message) {
+  if (Math.abs(actual.h - h) > 1e-6 || Math.abs(actual.s - s) > 1e-6 || Math.abs(actual.v - v) > 1e-6) {
+    assert.fail("hsv(" + actual.h + "," + (actual.s * 100) + "%," + (actual.v * 100) + "%)", "hsv(" + h + "," + (s * 100) + "%," + (v * 100) + "%)", message || "expected {expected}, got {actual}", null, assert.hsvEqual);
+  }
+}
+
 assert.pathEqual = function(actual, expected, message) {
   if (!pathEqual(actual, expected)) {
     assert.fail(formatPath(actual), formatPath(expected), message || "expected {expected}, got {actual}", null, assert.pathEqual);
