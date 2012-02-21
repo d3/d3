@@ -27,8 +27,19 @@ suite.addBatch({
     "interpolates objects": function(interpolate) {
       assert.deepEqual(interpolate({foo: 2}, {foo: 12})(.4), {foo: 6});
     },
-    "interpolates objects with default object prototype properties": function(interpolate) {
-      assert.deepEqual(interpolate({foo: 2, hasOwnProperty: 1}, {foo: 12})(1), {foo: 12, hasOwnProperty: 1});
+    "may or may not interpolate between enumerable and non-enumerable properties": function(interpolate) {
+      var a = Object.create({}, {foo: {value: 1, enumerable: true}}),
+          b = Object.create({}, {foo: {value: 2, enumerable: false}});
+      try {
+        assert.deepEqual(interpolate(a, b)(1), {});
+      } catch (e) {
+        assert.deepEqual(interpolate(a, b)(1), {foo: 2});
+      }
+      try {
+        assert.deepEqual(interpolate(b, a)(1), {});
+      } catch (e) {
+        assert.deepEqual(interpolate(b, a)(1), {foo: 1});
+      }
     },
     "interpolates inherited properties of objects": function(interpolate) {
       var a = Object.create({foo: 0}),

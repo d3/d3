@@ -1068,18 +1068,16 @@ d3.interpolateArray = function(a, b) {
 d3.interpolateObject = function(a, b) {
   var i = {},
       c = {},
-      k,
-      aMap = d3.map(a),
-      bMap = d3.map(b);
+      k;
   for (k in a) {
-    if (bMap.has(k)) {
+    if (k in b) {
       i[k] = d3_interpolateByName(k)(a[k], b[k]);
     } else {
       c[k] = a[k];
     }
   }
   for (k in b) {
-    if (!aMap.has(k)) {
+    if (!(k in a)) {
       c[k] = b[k];
     }
   }
