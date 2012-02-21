@@ -36,7 +36,6 @@ function d3_hsv_rgb(h, s, v) {
     var p = v * (1.0 - s);
     var q = v * (1.0 - s * f);
     var t = v * (1.0 - s * (1.0 - f));
-    i = i % 6;
     switch (i % 6) {
       case 0: {
         r = v;
