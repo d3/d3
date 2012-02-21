@@ -2826,7 +2826,7 @@ function d3_scale_ordinal(domain, ranger) {
       rangeBand;
 
   function scale(x) {
-    return range[((index[x] || (index[x] = domain.push(x))) - 1) % range.length];
+    return range[((index.get(x) || index.set(x, domain.push(x))) - 1) % range.length];
   }
 
   function steps(start, step) {
@@ -2836,9 +2836,9 @@ function d3_scale_ordinal(domain, ranger) {
   scale.domain = function(x) {
     if (!arguments.length) return domain;
     domain = [];
-    index = {};
+    index = new d3_Map;
     var i = -1, n = x.length, xi;
-    while (++i < n) if (!index[xi = x[i]]) index[xi] = domain.push(xi);
+    while (++i < n) if (!index.has(xi = x[i])) index.set(xi, domain.push(xi));
     return scale[ranger.t](ranger.x, ranger.p);
   };
 

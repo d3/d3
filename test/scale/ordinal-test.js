@@ -61,6 +61,12 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [0, 1]);
         assert.typeOf(x.domain()[0], "number");
         assert.typeOf(x.domain()[1], "number");
+      },
+      "does not barf on object built-ins": function(ordinal) {
+        var x = ordinal().domain(["__proto__", "hasOwnProperty"]).range([42, 43]);
+        assert.equal(x("__proto__"), 42);
+        assert.equal(x("hasOwnProperty"), 43);
+        assert.deepEqual(x.domain(), ["__proto__", "hasOwnProperty"]);
       }
     },
 
