@@ -308,23 +308,23 @@ d3.nest = function() {
         key = keys[depth++],
         keyValue,
         object,
-        o = new d3_Map,
-        l,
-        r = {};
+        valuesByKey = new d3_Map,
+        values,
+        o = {};
 
     while (++i < n) {
-      if (l = o.get(keyValue = key(object = array[i]))) {
-        l.push(object);
+      if (values = valuesByKey.get(keyValue = key(object = array[i]))) {
+        values.push(object);
       } else {
-        o.set(keyValue, [object]);
+        valuesByKey.set(keyValue, [object]);
       }
     }
 
-    o.keys().forEach(function(keyValue) {
-      r[keyValue] = map(o.get(keyValue), depth);
+    valuesByKey.keys().forEach(function(keyValue) {
+      o[keyValue] = map(valuesByKey.get(keyValue), depth);
     });
 
-    return r;
+    return o;
   }
 
   function entries(map, depth) {
