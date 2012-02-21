@@ -121,18 +121,8 @@ var d3_time_parsers = {
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekdayAbbrev(date, string, i) {
-  return d3_time_weekdayAbbrevLookup.hasOwnProperty(string.substring(i, i += 3).toLowerCase()) ? i : -1;
+  return d3_time_weekdayAbbrevRe.test(string.substring(i, i += 3)) ? i : -1;
 }
-
-var d3_time_weekdayAbbrevLookup = {
-  sun: 3,
-  mon: 3,
-  tue: 3,
-  wed: 3,
-  thu: 3,
-  fri: 3,
-  sat: 3
-};
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekday(date, string, i) {
@@ -141,17 +131,9 @@ function d3_time_parseWeekday(date, string, i) {
   return n ? i += n[0].length : -1;
 }
 
-var d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/ig;
-
-var d3_time_weekdays = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday"
-];
+var d3_time_weekdayAbbrevRe = /^(?:sun|mon|tue|wed|thu|fri|sat)/i,
+    d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/i;
+    d3_time_weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function d3_time_parseMonthAbbrev(date, string, i) {
   var n = d3_time_monthAbbrevLookup[string.substring(i, i += 3).toLowerCase()];
