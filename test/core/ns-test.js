@@ -41,20 +41,16 @@ suite.addBatch({
       assert.equal(name.space, "http://www.w3.org/2000/svg");
       assert.equal(name.local, "path");
     },
-    "unknown qualified name returns undefined and local": function() {
-      var name = d3.ns.qualify("foo:bar");
-      assert.isUndefined(name.space);
-      assert.equal(name.local, "bar");
+    "unknown qualified name returns name": function() {
+      assert.equal(d3.ns.qualify("foo:bar"), "bar");
     },
     "known local name returns space and local": function() {
       var name = d3.ns.qualify("svg");
       assert.equal(name.space, "http://www.w3.org/2000/svg");
       assert.equal(name.local, "svg");
     },
-    "built-in prototype properties are ignored": function(qualify) {
-      var name = qualify("hasOwnProperty:test");
-      assert.isUndefined(name.space);
-      assert.equal(name.local, "test");
+    "names that collide with built-ins are ignored": function(qualify) {
+      assert.equal(qualify("hasOwnProperty:test"), "test");
     }
   }
 });
