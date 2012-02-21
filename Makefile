@@ -28,6 +28,7 @@ d3.core.js: \
 	src/compat/date.js \
 	src/compat/style.js \
 	src/core/core.js \
+	src/core/class.js \
 	src/core/array.js \
 	src/core/map.js \
 	src/core/this.js \

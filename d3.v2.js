@@ -11,6 +11,18 @@ try {
   };
 }
 d3 = {version: "2.7.5"}; // semver
+function d3_class(ctor, properties) {
+  try {
+    for (var key in properties) {
+      Object.defineProperty(ctor.prototype, key, {
+        value: properties[key],
+        enumerable: false
+      });
+    }
+  } catch (e) {
+    ctor.prototype = properties;
+  }
+}
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -48,7 +60,7 @@ d3.map = function(object) {
 
 function d3_Map() {}
 
-d3_Map.prototype = {
+d3_class(d3_Map, {
   has: function(key) {
     return d3_map_prefix + key in this;
   },
@@ -58,9 +70,24 @@ d3_Map.prototype = {
   set: function(key, value) {
     this[d3_map_prefix + key] = value;
   },
-  delete: function(key) {
+  "delete": function(key) {
     key = d3_map_prefix + key;
     return key in this && delete this[key];
+  },
+  keys: function() {
+    var keys = [];
+    this.forEach(function(key) { keys.push(key); });
+    return keys;
+  },
+  values: function() {
+    var values = [];
+    this.forEach(function(key, value) { values.push(value); });
+    return values;
+  },
+  entries: function() {
+    var entries = [];
+    this.forEach(function(key, value) { entries.push({key: key, value: value}); });
+    return entries;
   },
   forEach: function(f) {
     for (var key in this) {
@@ -69,7 +96,7 @@ d3_Map.prototype = {
       }
     }
   }
-};
+});
 
 var d3_map_prefix = "\0", // prevent collision with built-ins
     d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
@@ -3831,8 +3858,8 @@ d3.svg.symbol = function() {
       size = d3_svg_symbolSize;
 
   function symbol(d, i) {
-    return (d3_svg_symbols[type.call(this, d, i)]
-        || d3_svg_symbols.circle)
+    return (d3_svg_symbols.get(type.call(this, d, i))
+        || d3_svg_symbolCircle)
         (size.call(this, d, i));
   }
 
@@ -3860,15 +3887,17 @@ function d3_svg_symbolType() {
   return "circle";
 }
 
+function d3_svg_symbolCircle(size) {
+  var r = Math.sqrt(size / Math.PI);
+  return "M0," + r
+      + "A" + r + "," + r + " 0 1,1 0," + (-r)
+      + "A" + r + "," + r + " 0 1,1 0," + r
+      + "Z";
+}
+
 // TODO cross-diagonal?
-var d3_svg_symbols = {
-  "circle": function(size) {
-    var r = Math.sqrt(size / Math.PI);
-    return "M0," + r
-        + "A" + r + "," + r + " 0 1,1 0," + (-r)
-        + "A" + r + "," + r + " 0 1,1 0," + r
-        + "Z";
-  },
+var d3_svg_symbols = d3.map({
+  "circle": d3_svg_symbolCircle,
   "cross": function(size) {
     var r = Math.sqrt(size / 5) / 2;
     return "M" + -3 * r + "," + -r
@@ -3918,9 +3947,9 @@ var d3_svg_symbols = {
         + " " + -rx + "," + ry
         + "Z";
   }
-};
+});
 
-d3.svg.symbolTypes = d3.keys(d3_svg_symbols);
+d3.svg.symbolTypes = d3_svg_symbols.keys();
 
 var d3_svg_symbolSqrt3 = Math.sqrt(3),
     d3_svg_symbolTan30 = Math.tan(30 * Math.PI / 180);
