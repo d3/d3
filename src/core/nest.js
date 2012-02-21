@@ -28,7 +28,7 @@ d3.nest = function() {
       }
     }
 
-    valuesByKey.keys().forEach(function(keyValue) {
+    valuesByKey.forEach(function(keyValue) {
       o[keyValue] = map(valuesByKey.get(keyValue), depth);
     });
 

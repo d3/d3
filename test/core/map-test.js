@@ -9,11 +9,11 @@ suite.addBatch({
   "constructor": {
     "map() returns an empty map": function() {
       var map = d3.map();
-      assert.deepEqual(map.keys(), []);
+      assert.deepEqual(keys(map), []);
     },
     "map(null) returns an empty map": function() {
       var map = d3.map(null);
-      assert.deepEqual(map.keys(), []);
+      assert.deepEqual(keys(map), []);
     },
     "map(object) copies enumerable keys": function() {
       var map = d3.map({foo: 42});
@@ -42,36 +42,36 @@ suite.addBatch({
       assert.isUndefined(map.get("foo"));
     }
   },
-  "keys": {
+  "forEach": {
     "empty maps have an empty keys array": function() {
       var map = d3.map();
-      assert.deepEqual(map.keys(), []);
+      assert.deepEqual(entries(map), []);
       map.set("foo", "bar");
-      assert.deepEqual(map.keys(), ["foo"]);
+      assert.deepEqual(entries(map), [{key: "foo", value: "bar"}]);
       map.delete("foo");
-      assert.deepEqual(map.keys(), []);
+      assert.deepEqual(entries(map), []);
     },
     "keys are returned in arbitrary order": function() {
       var map = d3.map({foo: 1, bar: "42"});
-      assert.deepEqual(map.keys().sort(), ["bar", "foo"]);
+      assert.deepEqual(entries(map).sort(ascendingByKey), [{key: "bar", value: "42"}, {key: "foo", value: 1}]);
       var map = d3.map({bar: "42", foo: 1});
-      assert.deepEqual(map.keys().sort(), ["bar", "foo"]);
+      assert.deepEqual(entries(map).sort(ascendingByKey), [{key: "bar", value: "42"}, {key: "foo", value: 1}]);
     },
     "observes changes via set and delete": function() {
       var map = d3.map({foo: 1, bar: "42"});
-      assert.deepEqual(map.keys().sort(), ["bar", "foo"]);
+      assert.deepEqual(entries(map).sort(ascendingByKey), [{key: "bar", value: "42"}, {key: "foo", value: 1}]);
       map.delete("foo");
-      assert.deepEqual(map.keys(), ["bar"]);
+      assert.deepEqual(entries(map), [{key: "bar", value: "42"}]);
       map.set("bar", "bar");
-      assert.deepEqual(map.keys(), ["bar"]);
+      assert.deepEqual(entries(map), [{key: "bar", value: "bar"}]);
       map.set("foo", "foo");
-      assert.deepEqual(map.keys().sort(), ["bar", "foo"]);
+      assert.deepEqual(entries(map).sort(ascendingByKey), [{key: "bar", value: "bar"}, {key: "foo", value: "foo"}]);
       map.delete("bar");
-      assert.deepEqual(map.keys(), ["foo"]);
+      assert.deepEqual(entries(map), [{key: "foo", value: "foo"}]);
       map.delete("foo");
-      assert.deepEqual(map.keys(), []);
+      assert.deepEqual(entries(map), []);
       map.delete("foo");
-      assert.deepEqual(map.keys(), []);
+      assert.deepEqual(entries(map), []);
     }
   },
   "has": {
@@ -165,7 +165,7 @@ suite.addBatch({
       assert.equal(map.get(null), 2);
       map.set(undefined, 3);
       assert.equal(map.get(undefined), 3);
-      assert.deepEqual(map.keys().sort(), ["42", "null", "undefined"]);
+      assert.deepEqual(keys(map).sort(), ["42", "null", "undefined"]);
     },
     "can replace values": function() {
       var map = d3.map({foo: 42});
@@ -186,5 +186,21 @@ suite.addBatch({
     }
   }
 });
+
+function keys(map) {
+  var keys = [];
+  map.forEach(function(key) { keys.push(key); });
+  return keys;
+}
+
+function entries(map) {
+  var entries = [];
+  map.forEach(function(key, value) { entries.push({key: key, value: value}); });
+  return entries;
+}
+
+function ascendingByKey(a, b) {
+  return d3.ascending(a.key, b.key);
+}
 
 suite.export(module);

@@ -20,14 +20,12 @@ d3_Map.prototype = {
     key = d3_map_prefix + key;
     return key in this && delete this[key];
   },
-  keys: function() {
-    var keys = [];
+  forEach: function(f) {
     for (var key in this) {
       if (key.charCodeAt(0) === d3_map_prefixCode) {
-        keys.push(key.substring(1));
+        f.call(this, key.substring(1), this[key]);
       }
     }
-    return keys;
   }
 };
 
