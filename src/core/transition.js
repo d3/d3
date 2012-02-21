@@ -11,7 +11,7 @@ function d3_transition(groups, id, time) {
 
   groups.tween = function(name, tween) {
     if (arguments.length < 2) return tweens.get(name);
-    if (tween == null) tweens.delete(name);
+    if (tween == null) tweens.remove(name);
     else tweens.set(name, tween);
     return groups;
   };

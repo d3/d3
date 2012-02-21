@@ -48,7 +48,7 @@ suite.addBatch({
       assert.deepEqual(map.entries(), []);
       map.set("foo", "bar");
       assert.deepEqual(map.entries(), [{key: "foo", value: "bar"}]);
-      map.delete("foo");
+      map.remove("foo");
       assert.deepEqual(map.entries(), []);
     },
     "keys are returned in arbitrary order": function() {
@@ -57,20 +57,20 @@ suite.addBatch({
       var map = d3.map({bar: "42", foo: 1});
       assert.deepEqual(map.entries().sort(ascendingByKey), [{key: "bar", value: "42"}, {key: "foo", value: 1}]);
     },
-    "observes changes via set and delete": function() {
+    "observes changes via set and remove": function() {
       var map = d3.map({foo: 1, bar: "42"});
       assert.deepEqual(map.entries().sort(ascendingByKey), [{key: "bar", value: "42"}, {key: "foo", value: 1}]);
-      map.delete("foo");
+      map.remove("foo");
       assert.deepEqual(map.entries(), [{key: "bar", value: "42"}]);
       map.set("bar", "bar");
       assert.deepEqual(map.entries(), [{key: "bar", value: "bar"}]);
       map.set("foo", "foo");
       assert.deepEqual(map.entries().sort(ascendingByKey), [{key: "bar", value: "bar"}, {key: "foo", value: "foo"}]);
-      map.delete("bar");
+      map.remove("bar");
       assert.deepEqual(map.entries(), [{key: "foo", value: "foo"}]);
-      map.delete("foo");
+      map.remove("foo");
       assert.deepEqual(map.entries(), []);
-      map.delete("foo");
+      map.remove("foo");
       assert.deepEqual(map.entries(), []);
     }
   },
@@ -123,7 +123,7 @@ suite.addBatch({
       assert.isTrue(map.has("foo"));
       map.set("foo", 43);
       assert.isTrue(map.has("foo"));
-      map.delete("foo");
+      map.remove("foo");
       assert.isFalse(map.has("foo"));
       map.set("foo", "bar");
       assert.isTrue(map.has("foo"));
@@ -155,7 +155,7 @@ suite.addBatch({
       assert.equal(map.get("foo"), 42);
       map.set("foo", 43);
       assert.equal(map.get("foo"), 43);
-      map.delete("foo");
+      map.remove("foo");
       assert.isUndefined(map.get("foo"));
       map.set("foo", "bar");
       assert.equal(map.get("foo"), "bar");

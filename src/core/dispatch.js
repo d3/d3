@@ -47,7 +47,7 @@ function d3_dispatch_event(dispatch) {
     if (l) {
       l.on = null;
       listeners = listeners.slice(0, i = listeners.indexOf(l)).concat(listeners.slice(i + 1));
-      listenerByName.delete(name);
+      listenerByName.remove(name);
     }
 
     // add the new listener, if any

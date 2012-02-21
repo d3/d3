@@ -70,7 +70,7 @@ d3_class(d3_Map, {
   set: function(key, value) {
     return this[d3_map_prefix + key] = value;
   },
-  "delete": function(key) {
+  remove: function(key) {
     key = d3_map_prefix + key;
     return key in this && delete this[key];
   },
@@ -606,7 +606,7 @@ function d3_dispatch_event(dispatch) {
     if (l) {
       l.on = null;
       listeners = listeners.slice(0, i = listeners.indexOf(l)).concat(listeners.slice(i + 1));
-      listenerByName.delete(name);
+      listenerByName.remove(name);
     }
 
     // add the new listener, if any
@@ -1792,7 +1792,7 @@ d3_selectionPrototype.data = function(data, join) {
           enterNodes[i] = d3_selection_dataNode(nodeData);
           updateNodes[i] = exitNodes[i] = null;
         }
-        nodeByKey.delete(key);
+        nodeByKey.remove(key);
       }
 
       for (i = -1; ++i < n;) {
@@ -2060,7 +2060,7 @@ function d3_transition(groups, id, time) {
 
   groups.tween = function(name, tween) {
     if (arguments.length < 2) return tweens.get(name);
-    if (tween == null) tweens.delete(name);
+    if (tween == null) tweens.remove(name);
     else tweens.set(name, tween);
     return groups;
   };

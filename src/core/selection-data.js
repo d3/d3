@@ -42,7 +42,7 @@ d3_selectionPrototype.data = function(data, join) {
           enterNodes[i] = d3_selection_dataNode(nodeData);
           updateNodes[i] = exitNodes[i] = null;
         }
-        nodeByKey.delete(key);
+        nodeByKey.remove(key);
       }
 
       for (i = -1; ++i < n;) {
