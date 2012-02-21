@@ -76,7 +76,6 @@ function d3_behavior_dragDispatch(type) {
   }
 
   o.stopPropagation();
-  o.preventDefault();
 }
 
 function d3_behavior_dragPoint() {
