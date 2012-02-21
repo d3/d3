@@ -2050,7 +2050,7 @@ d3_selection_enterPrototype.select = function(selector) {
 function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
-  var tweens = {},
+  var tweens = new d3_Map,
       event = d3.dispatch("start", "end"),
       ease = d3_transitionEase;
 
@@ -2059,9 +2059,9 @@ function d3_transition(groups, id, time) {
   groups.time = time;
 
   groups.tween = function(name, tween) {
-    if (arguments.length < 2) return tweens[name];
-    if (tween == null) delete tweens[name];
-    else tweens[name] = tween;
+    if (arguments.length < 2) return tweens.get(name);
+    if (tween == null) tweens.delete(name);
+    else tweens.set(name, tween);
     return groups;
   };
 
@@ -2093,11 +2093,11 @@ function d3_transition(groups, id, time) {
         if (lock.active > id) return stop();
         lock.active = id;
 
-        for (var tween in tweens) {
-          if (tween = tweens[tween].call(node, d, i)) {
+        tweens.forEach(function(key, value) {
+          if (tween = value.call(node, d, i)) {
             tweened.push(tween);
           }
-        }
+        });
 
         event.start.call(node, d, i);
         if (!tick(elapsed)) d3.timer(tick, 0, time);
