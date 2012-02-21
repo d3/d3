@@ -166,9 +166,9 @@ suite.addBatch({
     }
   },
   "set": {
-    "returns undefined": function() {
+    "returns the set value": function() {
       var map = d3.map();
-      assert.isUndefined(map.set("foo", 42));
+      assert.equal(map.set("foo", 42), 42);
     },
     "can set keys using built-in names": function() {
       var map = d3.map();

@@ -68,7 +68,7 @@ d3_class(d3_Map, {
     return this[d3_map_prefix + key];
   },
   set: function(key, value) {
-    this[d3_map_prefix + key] = value;
+    return this[d3_map_prefix + key] = value;
   },
   "delete": function(key) {
     key = d3_map_prefix + key;
