@@ -8780,11 +8780,11 @@ var d3_time_weekdayAbbrevRe = /^(?:sun|mon|tue|wed|thu|fri|sat)/i,
     d3_time_weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function d3_time_parseMonthAbbrev(date, string, i) {
-  var n = d3_time_monthAbbrevLookup[string.substring(i, i += 3).toLowerCase()];
+  var n = d3_time_monthAbbrevLookup.get(string.substring(i, i += 3).toLowerCase());
   return n == null ? -1 : (date.setMonth(n), i);
 }
 
-var d3_time_monthAbbrevLookup = {
+var d3_time_monthAbbrevLookup = d3.map({
   jan: 0,
   feb: 1,
   mar: 2,
@@ -8797,17 +8797,17 @@ var d3_time_monthAbbrevLookup = {
   oct: 9,
   nov: 10,
   dec: 11
-};
+});
 
 function d3_time_parseMonth(date, string, i) {
   d3_time_monthRe.lastIndex = 0;
   var n = d3_time_monthRe.exec(string.substring(i, i + 12));
-  return n ? (date.setMonth(d3_time_monthLookup[n[0].toLowerCase()]), i += n[0].length) : -1;
+  return n ? (date.setMonth(d3_time_monthLookup.get(n[0].toLowerCase())), i += n[0].length) : -1;
 }
 
 var d3_time_monthRe = /^(?:January|February|March|April|May|June|July|August|September|October|November|December)/ig;
 
-var d3_time_monthLookup = {
+var d3_time_monthLookup = d3.map({
   january: 0,
   february: 1,
   march: 2,
@@ -8820,7 +8820,7 @@ var d3_time_monthLookup = {
   october: 9,
   november: 10,
   december: 11
-};
+});
 
 var d3_time_months = [
   "January",
@@ -8912,14 +8912,14 @@ function d3_time_parseMilliseconds(date, string, i) {
 var d3_time_numberRe = /\s*\d+/;
 
 function d3_time_parseAmPm(date, string, i) {
-  var n = d3_time_amPmLookup[string.substring(i, i += 2).toLowerCase()];
+  var n = d3_time_amPmLookup.get(string.substring(i, i += 2).toLowerCase());
   return n == null ? -1 : (date.hour12pm = n, i);
 }
 
-var d3_time_amPmLookup = {
+var d3_time_amPmLookup = d3.map({
   am: 0,
   pm: 1
-};
+});
 
 // TODO table of time zone offset names?
 function d3_time_zone(d) {
