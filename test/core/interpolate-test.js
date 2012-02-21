@@ -17,6 +17,10 @@ suite.addBatch({
     "interpolates colors": function(interpolate) {
       assert.equal(interpolate("#abcdef", "#fedcba")(.4), "#ccd3da");
     },
+    "interpolate HSV colors": function(interpolate) {
+      assert.equal(interpolate("hsv(180, 50%, 60%)", "steelblue")(.2), "#4c949e");
+      assert.equal(interpolate(d3.hsv(180, .5, .6), d3.hsv("steelblue"))(.2), "#4c949e")
+    },
     "interpolates strings": function(interpolate) {
       assert.equal(interpolate("width:10px;", "width:50px;")(.2), "width:18px;");
       assert.equal(interpolate(2, "12px")(.4), "6px");
@@ -131,6 +135,33 @@ suite.addBatch({
     "outputs a hexadecimal string": function(interpolate) {
       assert.equal(interpolate("steelblue", "#f00")(.2), "#38c3a2");
     }
+  }
+});
+
+suite.addBatch({
+  "interpolateHsv": {
+    topic: function() {
+      return d3.interpolateHsv;
+    },
+    "parses string input": function(interpolate) {
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#3dc3a3");
+      assert.equal(interpolate("steelblue", "#f00")(.6), "#98e123");
+    },
+    "parses d3.hsl input": function(interpolate) {
+      assert.equal(interpolate(d3.hsl("steelblue"), "#f00")(.2), "#3dc3a3");
+      assert.equal(interpolate("steelblue", d3.hsl(0, 1, .5))(.6), "#98e123");
+    },
+    "parses d3.rgb input": function(interpolate) {
+      assert.equal(interpolate(d3.rgb("steelblue"), "#f00")(.2), "#3dc3a3");
+      assert.equal(interpolate("steelblue", d3.rgb(255, 0, 0))(.6), "#98e123");
+    },
+    "interpolates in HSL color space": function(interpolate) {
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#3dc3a3");
+    },
+    "outputs a hexadecimal string": function(interpolate) {
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#3dc3a3");
+    }
+
   }
 });
 

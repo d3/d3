@@ -53,6 +53,9 @@ suite.addBatch({
     "parses and converts HSL format (e.g., \"hsl(60, 100%, 20%)\")": function(rgb) {
       assert.rgbEqual(rgb("hsl(60, 100%, 20%)"), 102, 102, 0);
     },
+    "parses and convers HSV format": function(rgb) {
+      assert.rgbEqual(rgb("hsv(180, 50%, 60%)"), 77, 153, 153);
+    },
     "can convert from RGB": function(rgb) {
       assert.rgbEqual(rgb(d3.rgb(12, 34, 56)), 12, 34, 56);
     },

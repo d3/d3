@@ -1,7 +1,7 @@
 d3.rgb = function(r, g, b) {
   return arguments.length === 1
       ? (r instanceof d3_Rgb ? d3_rgb(r.r, r.g, r.b)
-      : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb))
+      : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb, d3_hsv_rgb))
       : d3_rgb(~~r, ~~g, ~~b);
 };
 

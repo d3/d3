@@ -175,6 +175,20 @@ d3.interpolateHsl = function(a, b) {
   };
 };
 
+d3.interpolateHsv = function(a, b) {
+  a = d3.hsv(a);
+  b = d3.hsv(b);
+  var h0 = a.h,
+      s0 = a.s,
+      v0 = a.v,
+      h1 = b.h - h0,
+      s1 = b.s - s0,
+      v1 = b.v - v0;
+  return function (t) {
+    return d3_hsv_rgb(h0 + h1 * t, s0 + s1 * t, v0 + v1 * t).toString();
+  };
+}
+
 d3.interpolateArray = function(a, b) {
   var x = [],
       c = [],
@@ -225,6 +239,6 @@ d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
   function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
-  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
+  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb|hsl\(|hsv\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl || b instanceof d3_Hsv) && d3.interpolateRgb(a, b); },
   function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
 ];
