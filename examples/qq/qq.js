@@ -54,7 +54,7 @@ d3.json("turkers.json", function(turkers) {
   chart.duration(1000);
 
   window.transition = function() {
-    g.map(randomize).call(chart);
+    g.datum(randomize).call(chart);
   };
 });
 

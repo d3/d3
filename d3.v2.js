@@ -1859,6 +1859,12 @@ d3_selectionPrototype.data = function(data, join) {
 function d3_selection_dataNode(data) {
   return {__data__: data};
 }
+d3_selectionPrototype.datum =
+d3_selectionPrototype.map = function(value) {
+  return arguments.length < 1
+      ? this.property("__data__")
+      : this.property("__data__", value);
+};
 d3_selectionPrototype.filter = function(filter) {
   var subgroups = [],
       subgroup,
@@ -1885,11 +1891,6 @@ function d3_selection_filter(selector) {
     return d3_selectMatches(this, selector);
   };
 }
-d3_selectionPrototype.map = function(map) {
-  return this.each(function() {
-    this.__data__ = map.apply(this, arguments);
-  });
-};
 d3_selectionPrototype.order = function() {
   for (var j = -1, m = this.length; ++j < m;) {
     for (var group = this[j], i = group.length - 1, next = group[i], node; --i >= 0;) {
