@@ -3159,8 +3159,8 @@ function d3_svg_arcEndAngle(d) {
 function d3_svg_line(projection) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
-      interpolate = "linear",
-      interpolator = d3_svg_lineInterpolators[interpolate],
+      interpolate = d3_svg_lineInterpolatorDefault,
+      interpolator = d3_svg_lineInterpolators.get(interpolate),
       tension = .7;
 
   function line(d) {
@@ -3181,7 +3181,8 @@ function d3_svg_line(projection) {
 
   line.interpolate = function(v) {
     if (!arguments.length) return interpolate;
-    interpolator = d3_svg_lineInterpolators[interpolate = v];
+    if (!d3_svg_lineInterpolators.has(v += "")) v = d3_svg_lineInterpolatorDefault;
+    interpolator = d3_svg_lineInterpolators.get(interpolate = v);
     return line;
   };
 
@@ -3234,8 +3235,10 @@ function d3_svg_lineY(d) {
   return d[1];
 }
 
+var d3_svg_lineInterpolatorDefault = "linear";
+
 // The various interpolators supported by the `line` class.
-var d3_svg_lineInterpolators = {
+var d3_svg_lineInterpolators = d3.map({
   "linear": d3_svg_lineLinear,
   "step-before": d3_svg_lineStepBefore,
   "step-after": d3_svg_lineStepAfter,
@@ -3247,7 +3250,7 @@ var d3_svg_lineInterpolators = {
   "cardinal-open": d3_svg_lineCardinalOpen,
   "cardinal-closed": d3_svg_lineCardinalClosed,
   "monotone": d3_svg_lineMonotone
-};
+});
 
 // Linear interpolation; generates "L" commands.
 function d3_svg_lineLinear(points) {
@@ -3650,7 +3653,8 @@ function d3_svg_area(projection) {
 
   area.interpolate = function(x) {
     if (!arguments.length) return interpolate;
-    i0 = d3_svg_lineInterpolators[interpolate = x];
+    if (!d3_svg_lineInterpolators.has(x += "")) x = d3_svg_lineInterpolatorDefault;
+    i0 = d3_svg_lineInterpolators.get(interpolate = x);
     i1 = i0.reverse || i0;
     return area;
   };
