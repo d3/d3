@@ -25,7 +25,7 @@ d3_dispatch.prototype.on = function(type, listener) {
 
 function d3_dispatch_event(dispatch) {
   var listeners = [],
-      listenerByName = {};
+      listenerByName = new d3_Map;
 
   function event() {
     var z = listeners, // defensive reference
@@ -37,22 +37,21 @@ function d3_dispatch_event(dispatch) {
   }
 
   event.on = function(name, listener) {
-    var l, i;
+    var l = listenerByName.get(name),
+        i;
 
     // return the current listener, if any
-    if (arguments.length < 2) return (l = listenerByName[name]) && l.on;
+    if (arguments.length < 2) return l && l.on;
 
     // remove the old listener, if any (with copy-on-write)
-    if (l = listenerByName[name]) {
+    if (l) {
       l.on = null;
       listeners = listeners.slice(0, i = listeners.indexOf(l)).concat(listeners.slice(i + 1));
-      delete listenerByName[name];
+      listenerByName.delete(name);
     }
 
     // add the new listener, if any
-    if (listener) {
-      listeners.push(listenerByName[name] = {on: listener});
-    }
+    if (listener) listeners.push(listenerByName.set(name, {on: listener}));
 
     return dispatch;
   };

@@ -11,6 +11,18 @@ try {
   };
 }
 d3 = {version: "2.7.5"}; // semver
+function d3_class(ctor, properties) {
+  try {
+    for (var key in properties) {
+      Object.defineProperty(ctor.prototype, key, {
+        value: properties[key],
+        enumerable: false
+      });
+    }
+  } catch (e) {
+    ctor.prototype = properties;
+  }
+}
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
@@ -40,6 +52,54 @@ function(array, prototype) {
 function(array, prototype) {
   for (var property in prototype) array[property] = prototype[property];
 };
+d3.map = function(object) {
+  var map = new d3_Map;
+  for (var key in object) map.set(key, object[key]);
+  return map;
+};
+
+function d3_Map() {}
+
+d3_class(d3_Map, {
+  has: function(key) {
+    return d3_map_prefix + key in this;
+  },
+  get: function(key) {
+    return this[d3_map_prefix + key];
+  },
+  set: function(key, value) {
+    return this[d3_map_prefix + key] = value;
+  },
+  "delete": function(key) {
+    key = d3_map_prefix + key;
+    return key in this && delete this[key];
+  },
+  keys: function() {
+    var keys = [];
+    this.forEach(function(key) { keys.push(key); });
+    return keys;
+  },
+  values: function() {
+    var values = [];
+    this.forEach(function(key, value) { values.push(value); });
+    return values;
+  },
+  entries: function() {
+    var entries = [];
+    this.forEach(function(key, value) { entries.push({key: key, value: value}); });
+    return entries;
+  },
+  forEach: function(f) {
+    for (var key in this) {
+      if (key.charCodeAt(0) === d3_map_prefixCode) {
+        f.call(this, key.substring(1), this[key]);
+      }
+    }
+  }
+});
+
+var d3_map_prefix = "\0", // prevent collision with built-ins
+    d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
 function d3_this() {
   return this;
 }
@@ -273,19 +333,21 @@ d3.nest = function() {
         key = keys[depth++],
         keyValue,
         object,
+        valuesByKey = new d3_Map,
+        values,
         o = {};
 
     while (++i < n) {
-      if ((keyValue = key(object = array[i])) in o) {
-        o[keyValue].push(object);
+      if (values = valuesByKey.get(keyValue = key(object = array[i]))) {
+        values.push(object);
       } else {
-        o[keyValue] = [object];
+        valuesByKey.set(keyValue, [object]);
       }
     }
 
-    for (keyValue in o) {
-      o[keyValue] = map(o[keyValue], depth);
-    }
+    valuesByKey.forEach(function(keyValue) {
+      o[keyValue] = map(valuesByKey.get(keyValue), depth);
+    });
 
     return o;
   }
@@ -483,9 +545,16 @@ d3.ns = {
   prefix: d3_nsPrefix,
   qualify: function(name) {
     var i = name.indexOf(":");
-    return i < 0 ? (name in d3_nsPrefix
-      ? {space: d3_nsPrefix[name], local: name} : name)
-      : {space: d3_nsPrefix[name.substring(0, i)], local: name.substring(i + 1)};
+    if (i < 0) {
+      return d3_nsPrefix.hasOwnProperty(name)
+          ? {space: d3_nsPrefix[name], local: name} : name;
+    }
+    var prefix = name.substring(0, i);
+    return {
+      space: d3_nsPrefix.hasOwnProperty(prefix)
+          ? d3_nsPrefix[prefix] : undefined,
+      local: name.substring(i + 1)
+    };
   }
 };
 d3.dispatch = function() {
@@ -515,7 +584,7 @@ d3_dispatch.prototype.on = function(type, listener) {
 
 function d3_dispatch_event(dispatch) {
   var listeners = [],
-      listenerByName = {};
+      listenerByName = new d3_Map;
 
   function event() {
     var z = listeners, // defensive reference
@@ -527,22 +596,21 @@ function d3_dispatch_event(dispatch) {
   }
 
   event.on = function(name, listener) {
-    var l, i;
+    var l = listenerByName.get(name),
+        i;
 
     // return the current listener, if any
-    if (arguments.length < 2) return (l = listenerByName[name]) && l.on;
+    if (arguments.length < 2) return l && l.on;
 
     // remove the old listener, if any (with copy-on-write)
-    if (l = listenerByName[name]) {
+    if (l) {
       l.on = null;
       listeners = listeners.slice(0, i = listeners.indexOf(l)).concat(listeners.slice(i + 1));
-      delete listenerByName[name];
+      listenerByName.delete(name);
     }
 
     // add the new listener, if any
-    if (listener) {
-      listeners.push(listenerByName[name] = {on: listener});
-    }
+    if (listener) listeners.push(listenerByName.set(name, {on: listener}));
 
     return dispatch;
   };
@@ -1030,7 +1098,7 @@ d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
   function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
-  function(a, b) { return (typeof b === "string" ? b in d3_rgb_names || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
+  function(a, b) { return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
   function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
 ];
 function d3_uninterpolateNumber(a, b) {
@@ -1128,7 +1196,7 @@ function d3_rgb_parse(format, rgb, hsl) {
   }
 
   /* Named colors. */
-  if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
+  if (name = d3_rgb_names.get(format)) return rgb(name.r, name.g, name.b);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
   if (format != null && format.charAt(0) === "#") {
@@ -1173,7 +1241,7 @@ function d3_rgb_parseNumber(c) { // either integer or percentage
   return c.charAt(c.length - 1) === "%" ? Math.round(f * 2.55) : f;
 }
 
-var d3_rgb_names = {
+var d3_rgb_names = d3.map({
   aliceblue: "#f0f8ff",
   antiquewhite: "#faebd7",
   aqua: "#00ffff",
@@ -1321,14 +1389,11 @@ var d3_rgb_names = {
   whitesmoke: "#f5f5f5",
   yellow: "#ffff00",
   yellowgreen: "#9acd32"
-};
+});
 
-for (var d3_rgb_name in d3_rgb_names) {
-  d3_rgb_names[d3_rgb_name] = d3_rgb_parse(
-      d3_rgb_names[d3_rgb_name],
-      d3_rgb,
-      d3_hsl_rgb);
-}
+d3_rgb_names.forEach(function(key, value) {
+  d3_rgb_names.set(key, d3_rgb_parse(value, d3_rgb, d3_hsl_rgb));
+});
 d3.hsl = function(h, s, l) {
   return arguments.length === 1
       ? (h instanceof d3_Hsl ? d3_hsl(h.h, h.s, h.l)
@@ -1702,36 +1767,36 @@ d3_selectionPrototype.data = function(data, join) {
         nodeData;
 
     if (join) {
-      var nodeByKey = {},
+      var nodeByKey = new d3_Map,
           keys = [],
           key,
           j = groupData.length;
 
       for (i = -1; ++i < n;) {
         key = join.call(node = group[i], node.__data__, i);
-        if (key in nodeByKey) {
+        if (nodeByKey.has(key)) {
           exitNodes[j++] = node; // duplicate key
         } else {
-          nodeByKey[key] = node;
+          nodeByKey.set(key, node);
         }
         keys.push(key);
       }
 
       for (i = -1; ++i < m;) {
-        node = nodeByKey[key = join.call(groupData, nodeData = groupData[i], i)];
-        if (node) {
+        key = join.call(groupData, nodeData = groupData[i], i)
+        if (nodeByKey.has(key)) {
+          updateNodes[i] = node = nodeByKey.get(key);
           node.__data__ = nodeData;
-          updateNodes[i] = node;
           enterNodes[i] = exitNodes[i] = null;
         } else {
           enterNodes[i] = d3_selection_dataNode(nodeData);
           updateNodes[i] = exitNodes[i] = null;
         }
-        delete nodeByKey[key];
+        nodeByKey.delete(key);
       }
 
       for (i = -1; ++i < n;) {
-        if (keys[i] in nodeByKey) {
+        if (nodeByKey.has(keys[i])) {
           exitNodes[i] = group[i];
         }
       }
@@ -1985,7 +2050,7 @@ d3_selection_enterPrototype.select = function(selector) {
 function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
-  var tweens = {},
+  var tweens = new d3_Map,
       event = d3.dispatch("start", "end"),
       ease = d3_transitionEase;
 
@@ -1994,9 +2059,9 @@ function d3_transition(groups, id, time) {
   groups.time = time;
 
   groups.tween = function(name, tween) {
-    if (arguments.length < 2) return tweens[name];
-    if (tween == null) delete tweens[name];
-    else tweens[name] = tween;
+    if (arguments.length < 2) return tweens.get(name);
+    if (tween == null) tweens.delete(name);
+    else tweens.set(name, tween);
     return groups;
   };
 
@@ -2028,11 +2093,11 @@ function d3_transition(groups, id, time) {
         if (lock.active > id) return stop();
         lock.active = id;
 
-        for (var tween in tweens) {
-          if (tween = tweens[tween].call(node, d, i)) {
+        tweens.forEach(function(key, value) {
+          if (tween = value.call(node, d, i)) {
             tweened.push(tween);
           }
-        }
+        });
 
         event.start.call(node, d, i);
         if (!tick(elapsed)) d3.timer(tick, 0, time);
@@ -2758,7 +2823,7 @@ function d3_scale_ordinal(domain, ranger) {
       rangeBand;
 
   function scale(x) {
-    return range[((index[x] || (index[x] = domain.push(x))) - 1) % range.length];
+    return range[((index.get(x) || index.set(x, domain.push(x))) - 1) % range.length];
   }
 
   function steps(start, step) {
@@ -2768,9 +2833,9 @@ function d3_scale_ordinal(domain, ranger) {
   scale.domain = function(x) {
     if (!arguments.length) return domain;
     domain = [];
-    index = {};
+    index = new d3_Map;
     var i = -1, n = x.length, xi;
-    while (++i < n) if (!index[xi = x[i]]) index[xi] = domain.push(xi);
+    while (++i < n) if (!index.has(xi = x[i])) index.set(xi, domain.push(xi));
     return scale[ranger.t](ranger.x, ranger.p);
   };
 
@@ -3790,8 +3855,8 @@ d3.svg.symbol = function() {
       size = d3_svg_symbolSize;
 
   function symbol(d, i) {
-    return (d3_svg_symbols[type.call(this, d, i)]
-        || d3_svg_symbols.circle)
+    return (d3_svg_symbols.get(type.call(this, d, i))
+        || d3_svg_symbolCircle)
         (size.call(this, d, i));
   }
 
@@ -3819,15 +3884,17 @@ function d3_svg_symbolType() {
   return "circle";
 }
 
+function d3_svg_symbolCircle(size) {
+  var r = Math.sqrt(size / Math.PI);
+  return "M0," + r
+      + "A" + r + "," + r + " 0 1,1 0," + (-r)
+      + "A" + r + "," + r + " 0 1,1 0," + r
+      + "Z";
+}
+
 // TODO cross-diagonal?
-var d3_svg_symbols = {
-  "circle": function(size) {
-    var r = Math.sqrt(size / Math.PI);
-    return "M0," + r
-        + "A" + r + "," + r + " 0 1,1 0," + (-r)
-        + "A" + r + "," + r + " 0 1,1 0," + r
-        + "Z";
-  },
+var d3_svg_symbols = d3.map({
+  "circle": d3_svg_symbolCircle,
   "cross": function(size) {
     var r = Math.sqrt(size / 5) / 2;
     return "M" + -3 * r + "," + -r
@@ -3877,9 +3944,9 @@ var d3_svg_symbols = {
         + " " + -rx + "," + ry
         + "Z";
   }
-};
+});
 
-d3.svg.symbolTypes = d3.keys(d3_svg_symbols);
+d3.svg.symbolTypes = d3_svg_symbols.keys();
 
 var d3_svg_symbolSqrt3 = Math.sqrt(3),
     d3_svg_symbolTan30 = Math.tan(30 * Math.PI / 180);
@@ -7410,7 +7477,7 @@ d3.geo.bounds = function(feature) {
 };
 
 function d3_geo_bounds(o, f) {
-  if (o.type in d3_geo_boundsTypes) d3_geo_boundsTypes[o.type](o, f);
+  if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
 }
 
 var d3_geo_boundsTypes = {
@@ -8688,18 +8755,8 @@ var d3_time_parsers = {
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekdayAbbrev(date, string, i) {
-  return string.substring(i, i += 3).toLowerCase() in d3_time_weekdayAbbrevLookup ? i : -1;
+  return d3_time_weekdayAbbrevRe.test(string.substring(i, i += 3)) ? i : -1;
 }
-
-var d3_time_weekdayAbbrevLookup = {
-  sun: 3,
-  mon: 3,
-  tue: 3,
-  wed: 3,
-  thu: 3,
-  fri: 3,
-  sat: 3
-};
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekday(date, string, i) {
@@ -8708,17 +8765,9 @@ function d3_time_parseWeekday(date, string, i) {
   return n ? i += n[0].length : -1;
 }
 
-var d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/ig;
-
-var d3_time_weekdays = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday"
-];
+var d3_time_weekdayAbbrevRe = /^(?:sun|mon|tue|wed|thu|fri|sat)/i,
+    d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/i;
+    d3_time_weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function d3_time_parseMonthAbbrev(date, string, i) {
   var n = d3_time_monthAbbrevLookup[string.substring(i, i += 3).toLowerCase()];
