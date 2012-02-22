@@ -256,7 +256,8 @@ function d3_svg_brushKeyup() {
 function d3_svg_brushMove() {
   if (d3_svg_brushPoint) {
     var mouse = d3_svg_brushMouse(),
-        g = d3.select(d3_svg_brushTarget);
+        g = d3.select(d3_svg_brushTarget),
+        moved = false;
 
     // Preserve the offset for thick resizers.
     if (d3_svg_brushOffset) {
@@ -285,18 +286,20 @@ function d3_svg_brushMove() {
     }
 
     // Update the brush extent for each dimension.
-    if (d3_svg_brushX) {
-      d3_svg_brushMove1(mouse, d3_svg_brushX, 0);
+    if (d3_svg_brushX && d3_svg_brushMove1(mouse, d3_svg_brushX, 0)) {
       d3_svg_brushRedrawX(g, d3_svg_brushExtent);
+      moved = true;
     }
-    if (d3_svg_brushY) {
-      d3_svg_brushMove1(mouse, d3_svg_brushY, 1);
+    if (d3_svg_brushY && d3_svg_brushMove1(mouse, d3_svg_brushY, 1)) {
       d3_svg_brushRedrawY(g, d3_svg_brushExtent);
+      moved = true;
     }
-    d3_svg_brushRedraw(g, d3_svg_brushExtent);
 
-    // Notify listeners.
-    d3_svg_brushDispatch("brush");
+    // Final redraw and notify listeners.
+    if (moved) {
+      d3_svg_brushRedraw(g, d3_svg_brushExtent);
+      d3_svg_brushDispatch("brush");
+    }
   }
 }
 
@@ -336,8 +339,11 @@ function d3_svg_brushMove1(mouse, scale, i) {
   }
 
   // Update the stored bounds.
-  d3_svg_brushExtent[0][i] = min;
-  d3_svg_brushExtent[1][i] = max;
+  if (d3_svg_brushExtent[0][i] !== min || d3_svg_brushExtent[1][i] !== max) {
+    d3_svg_brushExtent[0][i] = min;
+    d3_svg_brushExtent[1][i] = max;
+    return true;
+  }
 }
 
 function d3_svg_brushUp() {
