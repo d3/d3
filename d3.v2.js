@@ -2282,14 +2282,14 @@ d3_transitionPrototype.remove = function() {
 d3_transitionPrototype.delay = function(value) {
   var groups = this;
   return groups.each(typeof value === "function"
-      ? function(d, i, j) { groups[j][i].delay = +value.apply(this, arguments); }
-      : (value = +value, function(d, i, j) { groups[j][i].delay = value; }));
+      ? function(d, i, j) { groups[j][i].delay = value.apply(this, arguments) | 0; }
+      : (value = value | 0, function(d, i, j) { groups[j][i].delay = value; }));
 };
 d3_transitionPrototype.duration = function(value) {
   var groups = this;
   return groups.each(typeof value === "function"
-      ? function(d, i, j) { groups[j][i].duration = +value.apply(this, arguments); }
-      : (value = +value, function(d, i, j) { groups[j][i].duration = value; }));
+      ? function(d, i, j) { groups[j][i].duration = Math.max(1, value.apply(this, arguments) | 0); }
+      : (value = Math.max(1, value | 0), function(d, i, j) { groups[j][i].duration = value; }));
 };
 function d3_transition_each(callback) {
   for (var j = 0, m = this.length; j < m; j++) {
