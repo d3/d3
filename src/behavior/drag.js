@@ -10,9 +10,9 @@ d3.behavior.drag = function() {
   }
 
   function mousedown() {
-    var event_ = event.of(this, arguments),
+    var target = this,
+        event_ = event.of(target, arguments),
         eventTarget = d3.event.target,
-        target = this,
         offset,
         origin_ = point(),
         moved = 0;
@@ -24,7 +24,7 @@ d3.behavior.drag = function() {
         .on("touchend.drag", dragend, true);
 
     if (origin) {
-      offset = origin.apply(this, arguments);
+      offset = origin.apply(target, arguments);
       offset = [offset.x - origin_[0], offset.y - origin_[1]];
     } else {
       offset = [0, 0];

@@ -81,25 +81,26 @@ d3.behavior.zoom = function() {
   }
 
   function mousedown() {
-    var moved = 0,
-        that = this,
-        event_ = event.of(that, arguments),
-        target = d3.event.target,
+    var target = this,
+        event_ = event.of(target, arguments),
+        eventTarget = d3.event.target,
+        moved = 0,
         w = d3.select(window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
-        l = location(d3.mouse(that));
+        l = location(d3.mouse(target));
 
     window.focus();
     d3_eventCancel();
 
     function mousemove() {
       moved = 1;
-      translateTo(d3.mouse(that), l);
+      translateTo(d3.mouse(target), l);
       dispatch(event_);
     }
 
     function mouseup() {
       if (moved) d3_eventCancel();
-      w.on("mousemove.zoom", null).on("mouseup.zoom", null).on("click.zoom", moved && d3.event.target === target ? click : null);
+      w.on("mousemove.zoom", null).on("mouseup.zoom", null);
+      if (moved && d3.event.target === eventTarget) w.on("click.zoom", click);
     }
 
     function click() {
