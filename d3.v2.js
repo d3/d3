@@ -3093,13 +3093,13 @@ d3.scale.identity = function() {
 
 function d3_scale_identity(domain) {
 
-  function identity(x) { return x; }
+  function identity(x) { return +x; }
 
   identity.invert = identity;
 
   identity.domain = identity.range = function(x) {
     if (!arguments.length) return domain;
-    domain = x;
+    domain = x.map(identity);
     return identity;
   };
 
