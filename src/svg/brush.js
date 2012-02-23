@@ -262,14 +262,14 @@ d3.svg.brush = function() {
   brush.x = function(z) {
     if (!arguments.length) return x;
     x = z;
-    resizes = d3_svg_brushResizes[!!x << 1 | !!y]; // fore!
+    resizes = d3_svg_brushResizes[!x << 1 | !y]; // fore!
     return brush;
   };
 
   brush.y = function(z) {
     if (!arguments.length) return y;
     y = z;
-    resizes = d3_svg_brushResizes[!!x << 1 | !!y]; // fore!
+    resizes = d3_svg_brushResizes[!x << 1 | !y]; // fore!
     return brush;
   };
 
@@ -338,8 +338,8 @@ var d3_svg_brushCursor = {
 };
 
 var d3_svg_brushResizes = [
-  [],
-  ["n", "s"],
+  ["n", "e", "s", "w", "nw", "ne", "se", "sw"],
   ["e", "w"],
-  ["n", "e", "s", "w", "nw", "ne", "se", "sw"]
+  ["n", "s"],
+  []
 ];
