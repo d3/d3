@@ -1,5 +1,5 @@
 d3.dispatch = function() {
-  var dispatch = new d3_dispatch(),
+  var dispatch = new d3_dispatch,
       i = -1,
       n = arguments.length;
   while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);

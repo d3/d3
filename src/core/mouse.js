@@ -1,5 +1,5 @@
 d3.mouse = function(container) {
-  return d3_mousePoint(container, d3.event);
+  return d3_mousePoint(container, d3_eventSource());
 };
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083

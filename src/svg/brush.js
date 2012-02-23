@@ -1,5 +1,5 @@
 d3.svg.brush = function() {
-  var event = d3.dispatch("brushstart", "brush", "brushend"),
+  var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"),
       x, // x-scale, optional
       y, // y-scale, optional
       extent = [[0, 0], [0, 0]]; // [x0, y0], [x1, y1]
@@ -107,22 +107,10 @@ d3.svg.brush = function() {
     d3_svg_brushY = !/^(e|w)$/.test(resize) && y;
 
     // Notify listeners.
-    d3_svg_brushDispatch = dispatcher(this, arguments);
-    d3_svg_brushDispatch("brushstart");
+    d3_svg_brushEvent = event.of(this, arguments);
+    d3_svg_brushEvent({type: "brushstart"});
     d3_svg_brushMove();
     d3_eventCancel();
-  }
-
-  function dispatcher(that, argumentz) {
-    return function(type) {
-      var e = d3.event;
-      try {
-        d3.event = {type: type, target: brush};
-        event[type].apply(that, argumentz);
-      } finally {
-        d3.event = e;
-      }
-    };
   }
 
   brush.x = function(z) {
@@ -199,7 +187,7 @@ d3.svg.brush = function() {
 };
 
 var d3_svg_brush,
-    d3_svg_brushDispatch,
+    d3_svg_brushEvent,
     d3_svg_brushTarget,
     d3_svg_brushX,
     d3_svg_brushY,
@@ -298,7 +286,7 @@ function d3_svg_brushMove() {
     // Final redraw and notify listeners.
     if (moved) {
       d3_svg_brushRedraw(g, d3_svg_brushExtent);
-      d3_svg_brushDispatch("brush");
+      d3_svg_brushEvent({type: "brush"});
     }
   }
 }
@@ -351,9 +339,9 @@ function d3_svg_brushUp() {
     d3_svg_brushMove();
     d3.select(d3_svg_brushTarget).style("pointer-events", "all").selectAll(".resize").style("display", d3_svg_brush.empty() ? "none" : null);
     d3.select("body").style("cursor", null);
-    d3_svg_brushDispatch("brushend");
+    d3_svg_brushEvent({type: "brushend"});
     d3_svg_brush =
-    d3_svg_brushDispatch =
+    d3_svg_brushEvent =
     d3_svg_brushTarget =
     d3_svg_brushX =
     d3_svg_brushY =

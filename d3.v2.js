@@ -546,7 +546,7 @@ d3.ns = {
   }
 };
 d3.dispatch = function() {
-  var dispatch = new d3_dispatch(),
+  var dispatch = new d3_dispatch,
       i = -1,
       n = arguments.length;
   while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
@@ -861,6 +861,49 @@ d3.event = null;
 function d3_eventCancel() {
   d3.event.stopPropagation();
   d3.event.preventDefault();
+}
+
+function d3_eventSource() {
+  var e = d3.event, s;
+  while (s = e.sourceEvent) e = s;
+  return e;
+}
+
+// Like d3.dispatch, but for custom events abstracting native UI events. These
+// events have a target component (such as a brush), a target element (such as
+// the svg:g element containing the brush) and the standard arguments `d` (the
+// target element's data) and `i` (the selection index of the target element).
+function d3_eventDispatch(target) {
+  var dispatch = new d3_dispatch,
+      i = 0,
+      n = arguments.length;
+
+  while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
+
+  // Creates a dispatch context for the specified `thiz` (typically, the target
+  // DOM element that received the source event) and `argumentz` (typically, the
+  // data `d` and index `i` of the target element). The returned function can be
+  // used to dispatch an event to any registered listeners; the function takes a
+  // single argument as input, being the event to dispatch. The event must have
+  // a "type" attribute which corresponds to a type registered in the
+  // constructor. This context will automatically populate the "sourceEvent" and
+  // "target" attributes of the event, as well as setting the `d3.event` global
+  // for the duration of the notification.
+  dispatch.of = function(thiz, argumentz) {
+    return function(e1) {
+      try {
+        var e0 =
+        e1.sourceEvent = d3.event;
+        e1.target = target;
+        d3.event = e1;
+        dispatch[e1.type].apply(thiz, argumentz);
+      } finally {
+        d3.event = e0;
+      }
+    };
+  };
+
+  return dispatch;
 }
 d3.interpolate = function(a, b) {
   var i = d3.interpolators.length, f;
@@ -2461,7 +2504,7 @@ function d3_transformCombine(a, b, k) {
 
 var d3_transformDegrees = 180 / Math.PI;
 d3.mouse = function(container) {
-  return d3_mousePoint(container, d3.event);
+  return d3_mousePoint(container, d3_eventSource());
 };
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083
@@ -2495,8 +2538,7 @@ function d3_mousePoint(container, e) {
   return [e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop];
 };
 d3.touches = function(container, touches) {
-  if (arguments.length < 2) touches = d3.event.touches;
-
+  if (arguments.length < 2) touches = d3_eventSource().touches;
   return touches ? d3_array(touches).map(function(touch) {
     var point = d3_mousePoint(container, touch);
     point.identifier = touch.identifier;
@@ -4185,7 +4227,7 @@ function d3_svg_axisSubdivide(scale, ticks, m) {
   return subticks;
 }
 d3.svg.brush = function() {
-  var event = d3.dispatch("brushstart", "brush", "brushend"),
+  var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"),
       x, // x-scale, optional
       y, // y-scale, optional
       extent = [[0, 0], [0, 0]]; // [x0, y0], [x1, y1]
@@ -4293,22 +4335,10 @@ d3.svg.brush = function() {
     d3_svg_brushY = !/^(e|w)$/.test(resize) && y;
 
     // Notify listeners.
-    d3_svg_brushDispatch = dispatcher(this, arguments);
-    d3_svg_brushDispatch("brushstart");
+    d3_svg_brushEvent = event.of(this, arguments);
+    d3_svg_brushEvent({type: "brushstart"});
     d3_svg_brushMove();
     d3_eventCancel();
-  }
-
-  function dispatcher(that, argumentz) {
-    return function(type) {
-      var e = d3.event;
-      try {
-        d3.event = {type: type, target: brush};
-        event[type].apply(that, argumentz);
-      } finally {
-        d3.event = e;
-      }
-    };
   }
 
   brush.x = function(z) {
@@ -4385,7 +4415,7 @@ d3.svg.brush = function() {
 };
 
 var d3_svg_brush,
-    d3_svg_brushDispatch,
+    d3_svg_brushEvent,
     d3_svg_brushTarget,
     d3_svg_brushX,
     d3_svg_brushY,
@@ -4484,7 +4514,7 @@ function d3_svg_brushMove() {
     // Final redraw and notify listeners.
     if (moved) {
       d3_svg_brushRedraw(g, d3_svg_brushExtent);
-      d3_svg_brushDispatch("brush");
+      d3_svg_brushEvent({type: "brush"});
     }
   }
 }
@@ -4537,9 +4567,9 @@ function d3_svg_brushUp() {
     d3_svg_brushMove();
     d3.select(d3_svg_brushTarget).style("pointer-events", "all").selectAll(".resize").style("display", d3_svg_brush.empty() ? "none" : null);
     d3.select("body").style("cursor", null);
-    d3_svg_brushDispatch("brushend");
+    d3_svg_brushEvent({type: "brushend"});
     d3_svg_brush =
-    d3_svg_brushDispatch =
+    d3_svg_brushEvent =
     d3_svg_brushTarget =
     d3_svg_brushX =
     d3_svg_brushY =
@@ -4566,7 +4596,7 @@ d3.behavior = {};
 // TODO Track touch points by identifier.
 
 d3.behavior.drag = function() {
-  var event = d3.dispatch("drag", "dragstart", "dragend"),
+  var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
       origin = null;
 
   function drag() {
@@ -4584,13 +4614,11 @@ d3.behavior.drag = function() {
 
   // snapshot the local context for subsequent dispatch
   function start() {
-    d3_behavior_dragEvent = event;
     d3_behavior_dragEventTarget = d3.event.target;
-    d3_behavior_dragTarget = this;
-    d3_behavior_dragArguments = arguments;
+    d3_behavior_dragEvent = event.of(d3_behavior_dragTarget = this, arguments);
     d3_behavior_dragOrigin = d3_behavior_dragPoint();
     if (origin) {
-      d3_behavior_dragOffset = origin.apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
+      d3_behavior_dragOffset = origin.apply(d3_behavior_dragTarget, arguments);
       d3_behavior_dragOffset = [d3_behavior_dragOffset.x - d3_behavior_dragOrigin[0], d3_behavior_dragOffset.y - d3_behavior_dragOrigin[1]];
     } else {
       d3_behavior_dragOffset = [0, 0];
@@ -4600,7 +4628,7 @@ d3.behavior.drag = function() {
 
   function mousedown() {
     start.apply(this, arguments);
-    d3_behavior_dragDispatch("dragstart");
+    d3_behavior_dragEvent({type: "dragstart"});
   }
 
   drag.origin = function(x) {
@@ -4615,40 +4643,14 @@ d3.behavior.drag = function() {
 var d3_behavior_dragEvent,
     d3_behavior_dragEventTarget,
     d3_behavior_dragTarget,
-    d3_behavior_dragArguments,
     d3_behavior_dragOffset,
     d3_behavior_dragOrigin,
     d3_behavior_dragMoved;
 
-function d3_behavior_dragDispatch(type) {
-  var p = d3_behavior_dragPoint(),
-      o = d3.event,
-      e = d3.event = {type: type};
-
-  if (p) {
-    e.x = p[0] + d3_behavior_dragOffset[0];
-    e.y = p[1] + d3_behavior_dragOffset[1];
-    e.dx = p[0] - d3_behavior_dragOrigin[0];
-    e.dy = p[1] - d3_behavior_dragOrigin[1];
-    d3_behavior_dragMoved |= e.dx | e.dy;
-    d3_behavior_dragOrigin = p;
-  }
-
-  try {
-    d3_behavior_dragEvent[type].apply(d3_behavior_dragTarget, d3_behavior_dragArguments);
-  } finally {
-    d3.event = o;
-  }
-
-  o.stopPropagation();
-}
-
 function d3_behavior_dragPoint() {
   var p = d3_behavior_dragTarget.parentNode,
       t = d3.event.changedTouches;
-  return p && (t
-      ? d3.touches(p, t)[0]
-      : d3.mouse(p));
+  return t ? d3.touches(p, t)[0] : d3.mouse(p);
 }
 
 function d3_behavior_dragMove() {
@@ -4658,13 +4660,26 @@ function d3_behavior_dragMove() {
   // O NOES! The drag element was removed from the DOM.
   if (!parent) return d3_behavior_dragUp();
 
-  d3_behavior_dragDispatch("drag");
+  var p = d3_behavior_dragPoint(),
+      dx = p[0] - d3_behavior_dragOrigin[0],
+      dy = p[1] - d3_behavior_dragOrigin[1];
+
+  d3_behavior_dragMoved |= dx | dy;
+  d3_behavior_dragOrigin = p;
   d3_eventCancel();
+
+  d3_behavior_dragEvent({
+    type: "drag",
+    x: p[0] + d3_behavior_dragOffset[0],
+    y: p[1] + d3_behavior_dragOffset[1],
+    dx: dx,
+    dy: dy
+  });
 }
 
 function d3_behavior_dragUp() {
   if (!d3_behavior_dragTarget) return;
-  d3_behavior_dragDispatch("dragend");
+  d3_behavior_dragEvent({type: "dragend"});
 
   // If the node was moved, prevent the mouseup from propagating.
   // Also prevent the subsequent click from propagating (e.g., for anchors).
@@ -4676,7 +4691,6 @@ function d3_behavior_dragUp() {
   d3_behavior_dragEvent =
   d3_behavior_dragEventTarget =
   d3_behavior_dragTarget =
-  d3_behavior_dragArguments =
   d3_behavior_dragOffset =
   d3_behavior_dragOrigin = null;
 }
@@ -4693,7 +4707,7 @@ d3.behavior.zoom = function() {
       scale = 1,
       scale0, // scale when we started touching
       scaleExtent = d3_behavior_zoomInfinity,
-      event = d3.dispatch("zoom"),
+      event = d3_eventDispatch(zoom, "zoom"),
       x0,
       x1,
       y0,
@@ -4762,20 +4776,17 @@ d3.behavior.zoom = function() {
     translate[1] += p[1] - l[1];
   }
 
-  function dispatch(argumentz) {
-    var o = d3.event; // events can by reentrant (e.g., focus);
-    d3.event = {scale: scale, translate: translate, target: zoom};
+  function dispatch(event) {
     if (x1) x1.domain(x0.range().map(function(x) { return (x - translate[0]) / scale; }).map(x0.invert));
     if (y1) y1.domain(y0.range().map(function(y) { return (y - translate[1]) / scale; }).map(y0.invert));
-    try { event.zoom.apply(zoom, argumentz); }
-    finally { d3.event = o; }
-    o.preventDefault();
+    d3.event.preventDefault();
+    event({type: "zoom", scale: scale, translate: translate});
   }
 
   function mousedown() {
     var moved = 0,
         that = this,
-        argumentz = arguments,
+        event_ = event.of(that, arguments),
         target = d3.event.target,
         w = d3.select(window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
         l = location(d3.mouse(that));
@@ -4786,7 +4797,7 @@ d3.behavior.zoom = function() {
     function mousemove() {
       moved = 1;
       translateTo(d3.mouse(that), l);
-      dispatch(argumentz);
+      dispatch(event_);
     }
 
     function mouseup() {
@@ -4804,7 +4815,7 @@ d3.behavior.zoom = function() {
     if (!translate0) translate0 = location(d3.mouse(this));
     scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
     translateTo(d3.mouse(this), translate0);
-    dispatch(arguments);
+    dispatch(event.of(this, arguments));
   }
 
   function mousemove() {
@@ -4815,7 +4826,7 @@ d3.behavior.zoom = function() {
     var p = d3.mouse(this), l = location(p);
     scaleTo(d3.event.shiftKey ? scale / 2 : scale * 2);
     translateTo(p, l);
-    dispatch(arguments);
+    dispatch(event.of(this, arguments));
   }
 
   function touchstart() {
@@ -4831,7 +4842,7 @@ d3.behavior.zoom = function() {
       var p = touches[0], l = location(touches[0]);
       scaleTo(scale * 2);
       translateTo(p, l);
-      dispatch(arguments);
+      dispatch(event.of(this, arguments));
     }
     touchtime = now;
   }
@@ -4847,7 +4858,7 @@ d3.behavior.zoom = function() {
       scaleTo(d3.event.scale * scale0);
     }
     translateTo(p0, l0);
-    dispatch(arguments);
+    dispatch(event.of(this, arguments));
   }
 
   return d3.rebind(zoom, event, "on");
@@ -5386,7 +5397,6 @@ function d3_layout_forceDragOut(d) {
 }
 
 function d3_layout_forceDragEnd() {
-  d3_layout_forceDrag();
   d3_layout_forceDragNode.fixed &= 1;
   d3_layout_forceDragForce = d3_layout_forceDragNode = null;
 }
