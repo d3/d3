@@ -30,7 +30,18 @@ suite.addBatch({
       form.on("submit", null);
       form.append("input").attr("type", "submit").node().click();
       assert.equal(fail, 0);
+      assert.isUndefined(form.on("submit"));
     },
+    /* Regrettably, JSDOM ignores the capture flag, so we can't test this yet…
+    "removing a listener doesn't require the capture flag": function(body) {
+      var form = body.append("form"), fail = 0;
+      form.on("submit", function() { ++fail; }, true);
+      form.on("submit", null);
+      form.append("input").attr("type", "submit").node().click();
+      assert.equal(fail, 0);
+      assert.isUndefined(form.on("submit"));
+    },
+    */
     "ignores removal of non-matching event listener": function(body) {
       body.append("form").on("submit", null);
     },
@@ -42,8 +53,7 @@ suite.addBatch({
       assert.equal(foo, 1);
       assert.equal(bar, 1);
     },
-    /*
-    Not really sure how to test this one…
+    /* Not really sure how to test this one…
     "observes the specified capture flag": function(body) {
     },
     */

@@ -41,7 +41,7 @@ function grid2(x,y) {
   if (x < 0 || y < 0 || x >= dw || y >= dh) return 0;
   return data[y][x]==2;
 }
-	
+
 var data = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 2, 2, 2, 0, 0, 0, 0],
             [0, 0, 0, 2, 2, 2, 2, 0, 0, 0],
@@ -96,7 +96,7 @@ function mouseover(d,i) {
   grid = fn[d];
   if (d > 0) {
 	// map mouse to grid coords, then find left edge
-    var p = d3.svg.mouse(svg[0][0]);
+    var p = d3.mouse(svg[0][0]);
     s = [Math.floor(p[0]/sz), Math.floor(p[1]/sz)];
     while (grid(s[0]-1,s[1])) s[0]--;
   }

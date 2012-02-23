@@ -37,7 +37,7 @@ d3.csv("../data/morley.csv", function(csv) {
 
   chart.duration(1000);
   window.transition = function() {
-    vis.map(randomize).call(chart);
+    vis.datum(randomize).call(chart);
   };
 });
 

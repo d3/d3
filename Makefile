@@ -28,7 +28,9 @@ d3.core.js: \
 	src/compat/date.js \
 	src/compat/style.js \
 	src/core/core.js \
+	src/core/class.js \
 	src/core/array.js \
+	src/core/map.js \
 	src/core/this.js \
 	src/core/functor.js \
 	src/core/rebind.js \
@@ -87,8 +89,8 @@ d3.core.js: \
 	src/core/selection-insert.js \
 	src/core/selection-remove.js \
 	src/core/selection-data.js \
+	src/core/selection-datum.js \
 	src/core/selection-filter.js \
-	src/core/selection-map.js \
 	src/core/selection-order.js \
 	src/core/selection-sort.js \
 	src/core/selection-on.js \
@@ -113,6 +115,8 @@ d3.core.js: \
 	src/core/transition-transition.js \
 	src/core/timer.js \
 	src/core/transform.js \
+	src/core/mouse.js \
+	src/core/touches.js \
 	src/core/noop.js
 
 d3.scale.js: \
@@ -127,7 +131,8 @@ d3.scale.js: \
 	src/scale/ordinal.js \
 	src/scale/category.js \
 	src/scale/quantile.js \
-	src/scale/quantize.js
+	src/scale/quantize.js \
+	src/scale/identity.js
 
 d3.svg.js: \
 	src/svg/svg.js \
@@ -189,21 +194,14 @@ d3.time.js: \
 	src/time/format.js \
 	src/time/format-utc.js \
 	src/time/format-iso.js \
-	src/time/range.js \
+	src/time/interval.js \
 	src/time/second.js \
-	src/time/seconds.js \
 	src/time/minute.js \
-	src/time/minutes.js \
 	src/time/hour.js \
-	src/time/hours.js \
 	src/time/day.js \
-	src/time/days.js \
 	src/time/week.js \
-	src/time/weeks.js \
 	src/time/month.js \
-	src/time/months.js \
 	src/time/year.js \
-	src/time/years.js \
 	src/time/scale.js \
 	src/time/scale-utc.js
 

@@ -55,7 +55,8 @@ function d3_svg_area(projection) {
 
   area.interpolate = function(x) {
     if (!arguments.length) return interpolate;
-    i0 = d3_svg_lineInterpolators[interpolate = x];
+    if (!d3_svg_lineInterpolators.has(x += "")) x = d3_svg_lineInterpolatorDefault;
+    i0 = d3_svg_lineInterpolators.get(interpolate = x);
     i1 = i0.reverse || i0;
     return area;
   };

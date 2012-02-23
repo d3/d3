@@ -1,23 +1,6 @@
-var d3_time_scaleUTCMethods = [
-  [d3.time.seconds.utc, 1],
-  [d3.time.seconds.utc, 5],
-  [d3.time.seconds.utc, 15],
-  [d3.time.seconds.utc, 30],
-  [d3.time.minutes.utc, 1],
-  [d3.time.minutes.utc, 5],
-  [d3.time.minutes.utc, 15],
-  [d3.time.minutes.utc, 30],
-  [d3.time.hours.utc, 1],
-  [d3.time.hours.utc, 3],
-  [d3.time.hours.utc, 6],
-  [d3.time.hours.utc, 12],
-  [d3.time.days.utc, 1],
-  [d3.time.days.utc, 2],
-  [d3.time.weeks.utc, 1],
-  [d3.time.months.utc, 1],
-  [d3.time.months.utc, 3],
-  [d3.time.years.utc, 1]
-];
+var d3_time_scaleUTCMethods = d3_time_scaleLocalMethods.map(function(m) {
+  return [m[0].utc, m[1]];
+});
 
 var d3_time_scaleUTCFormats = [
   [d3.time.format.utc("%Y"), function(d) { return true; }],

@@ -13,7 +13,7 @@ vis.append("rect")
     .attr("width", w)
     .attr("height", h)
     .on("mousedown", function() {
-      points.push(selected = dragged = d3.svg.mouse(vis.node()));
+      points.push(selected = dragged = d3.mouse(vis.node()));
       update();
     });
 
@@ -83,7 +83,7 @@ function update() {
 
 function mousemove() {
   if (!dragged) return;
-  var m = d3.svg.mouse(vis.node());
+  var m = d3.mouse(vis.node());
   dragged[0] = Math.max(0, Math.min(w, m[0]));
   dragged[1] = Math.max(0, Math.min(h, m[1]));
   update();

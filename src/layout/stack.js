@@ -1,8 +1,8 @@
 // data is two-dimensional array of x,y; we populate y0
 d3.layout.stack = function() {
   var values = Object,
-      order = d3_layout_stackOrders["default"],
-      offset = d3_layout_stackOffsets["zero"],
+      order = d3_layout_stackOrderDefault,
+      offset = d3_layout_stackOffsetZero,
       out = d3_layout_stackOut,
       x = d3_layout_stackX,
       y = d3_layout_stackY;
@@ -53,13 +53,13 @@ d3.layout.stack = function() {
 
   stack.order = function(x) {
     if (!arguments.length) return order;
-    order = typeof x === "function" ? x : d3_layout_stackOrders[x];
+    order = typeof x === "function" ? x : d3_layout_stackOrders.get(x) || d3_layout_stackOrderDefault;
     return stack;
   };
 
   stack.offset = function(x) {
     if (!arguments.length) return offset;
-    offset = typeof x === "function" ? x : d3_layout_stackOffsets[x];
+    offset = typeof x === "function" ? x : d3_layout_stackOffsets.get(x) || d3_layout_stackOffsetZero;
     return stack;
   };
 
@@ -97,7 +97,7 @@ function d3_layout_stackOut(d, y0, y) {
   d.y = y;
 }
 
-var d3_layout_stackOrders = {
+var d3_layout_stackOrders = d3.map({
 
   "inside-out": function(data) {
     var n = data.length,
@@ -127,13 +127,11 @@ var d3_layout_stackOrders = {
     return d3.range(data.length).reverse();
   },
 
-  "default": function(data) {
-    return d3.range(data.length);
-  }
+  "default": d3_layout_stackOrderDefault
 
-};
+});
 
-var d3_layout_stackOffsets = {
+var d3_layout_stackOffsets = d3.map({
 
   "silhouette": function(data) {
     var n = data.length,
@@ -203,15 +201,21 @@ var d3_layout_stackOffsets = {
     return y0;
   },
 
-  "zero": function(data) {
-    var j = -1,
-        m = data[0].length,
-        y0 = [];
-    while (++j < m) y0[j] = 0;
-    return y0;
-  }
+  "zero": d3_layout_stackOffsetZero
 
-};
+});
+
+function d3_layout_stackOrderDefault(data) {
+  return d3.range(data.length);
+}
+
+function d3_layout_stackOffsetZero(data) {
+  var j = -1,
+      m = data[0].length,
+      y0 = [];
+  while (++j < m) y0[j] = 0;
+  return y0;
+}
 
 function d3_layout_stackMaxIndex(array) {
   var i = 1,

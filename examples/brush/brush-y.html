@@ -58,7 +58,7 @@ svg.append("g")
     .attr("class", "y axis")
     .call(d3.svg.axis().scale(y).orient("left"));
 
-var circle = svg.selectAll("circle")
+var circle = svg.append("g").selectAll("circle")
     .data(data)
   .enter().append("circle")
     .attr("transform", function(d) { return "translate(" + x() + "," + y(d) + ")"; })
@@ -68,7 +68,7 @@ svg.append("g")
     .attr("class", "brush")
     .call(d3.svg.brush().y(y)
     .on("brushstart", brushstart)
-    .on("brush", brush)
+    .on("brush", brushmove)
     .on("brushend", brushend))
   .selectAll("rect")
     .attr("width", w);
@@ -77,7 +77,7 @@ function brushstart() {
   svg.classed("selecting", true);
 }
 
-function brush() {
+function brushmove() {
   var e = d3.event.target.extent();
   circle.classed("selected", function(d) { return e[0] <= d && d <= e[1]; });
 }
