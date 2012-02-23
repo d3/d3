@@ -1,7 +1,7 @@
 // A rudimentary force layout using Gauss-Seidel.
 d3.layout.force = function() {
   var force = {},
-      event = d3.dispatch("tick"),
+      event = d3.dispatch("start", "tick", "end"),
       size = [1, 1],
       drag,
       alpha,
@@ -45,7 +45,10 @@ d3.layout.force = function() {
 
   force.tick = function() {
     // simulated annealing, basically
-    if ((alpha *= .99) < .005) return true;
+    if ((alpha *= .99) < .005) {
+      event.end({type: "end", alpha: alpha = 0});
+      return true;
+    }
 
     var n = nodes.length,
         m = links.length,
@@ -170,6 +173,20 @@ d3.layout.force = function() {
     return force;
   };
 
+  force.alpha = function(x) {
+    if (!arguments.length) return alpha;
+
+    if (alpha) { // if we're already running
+      if (x > 0) alpha = x; // we might keep it hot
+      else alpha = 0; // or, next tick will dispatch "end"
+    } else if (x > 0) { // otherwise, fire it up!
+      event.start({type: "start", alpha: alpha = x});
+      d3.timer(force.tick);
+    }
+
+    return force;
+  };
+
   force.start = function() {
     var i,
         j,
@@ -246,14 +263,11 @@ d3.layout.force = function() {
   };
 
   force.resume = function() {
-    alpha = .1;
-    d3.timer(force.tick);
-    return force;
+    return force.alpha(.1);
   };
 
   force.stop = function() {
-    alpha = 0;
-    return force;
+    return force.alpha(0);
   };
 
   // use `node.call(force.drag)` to make nodes draggable
