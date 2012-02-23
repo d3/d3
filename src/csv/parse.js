@@ -62,6 +62,7 @@ d3.csv.parseRows = function(text, f) {
   while ((t = token()) !== EOF) {
     var a = [];
     while ((t !== EOL) && (t !== EOF)) {
+      if(rows.length === 0) t = (t.charCodeAt(0) == 37) ? "_"+t : t; 
       a.push(t);
       t = token();
     }
