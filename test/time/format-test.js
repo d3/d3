@@ -368,6 +368,15 @@ suite.addBatch({
       assert.deepEqual(p("12:00:01 pm"), local(1900, 0, 1, 12, 0, 1));
       assert.deepEqual(p("11:59:59 PM"), local(1900, 0, 1, 23, 59, 59));
     },
+    "doesn't crash when given weird strings": function(format) {
+      try {
+        Object.prototype.foo = 10;
+        var p = format("%b %d, %Y").parse;
+        assert.isNull(p("foo 1, 1990"));
+      } finally {
+        delete Object.prototype.foo;
+      }
+    },
     "UTC": {
       topic: function(format) {
         return format.utc;

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var margin = {top: 10, right: 12, bottom: 20, left: 12},
+    width = 960 - margin.left - margin.right,
+    height = 80 - margin.top - margin.bottom;
+
+var x = d3.scale.sqrt()
+    .range([0, width]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickValues([.01, .02, .03, .05, .08, .13, .21, .34, .55, .89])
+    .tickFormat(d3.format(".02f")));
+
+    </script>
+  </body>
+</html>

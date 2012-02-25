@@ -1,38 +1,35 @@
-var w = 960,
-    h = 500,
-    fill = d3.scale.category20();
+var width = 960,
+    height = 500;
 
-var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+var color = d3.scale.category20();
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(30)
+    .size([width, height]);
+
+var svg = d3.select("#chart").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
 d3.json("miserables.json", function(json) {
-  var force = d3.layout.force()
-      .charge(-120)
-      .linkDistance(30)
+  force
       .nodes(json.nodes)
       .links(json.links)
-      .size([w, h])
       .start();
 
-  var link = vis.selectAll("line.link")
+  var link = svg.selectAll("line.link")
       .data(json.links)
     .enter().append("line")
       .attr("class", "link")
-      .style("stroke-width", function(d) { return Math.sqrt(d.value); })
-      .attr("x1", function(d) { return d.source.x; })
-      .attr("y1", function(d) { return d.source.y; })
-      .attr("x2", function(d) { return d.target.x; })
-      .attr("y2", function(d) { return d.target.y; });
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
-  var node = vis.selectAll("circle.node")
+  var node = svg.selectAll("circle.node")
       .data(json.nodes)
     .enter().append("circle")
       .attr("class", "node")
-      .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
       .attr("r", 5)
-      .style("fill", function(d) { return fill(d.group); })
+      .style("fill", function(d) { return color(d.group); })
       .call(force.drag);
 
   node.append("title")

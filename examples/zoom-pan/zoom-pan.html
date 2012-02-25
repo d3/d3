@@ -1,120 +1,73 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Zoom + Pan</title>
-    <script type="text/javascript" src="../../d3.v2.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Zoom + Pan</title>
+<script src="../../d3.v2.js"></script>
+<style>
 
 svg {
   font: 10px sans-serif;
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
-
-var size = [710, 500], // width height
-    padding = [4, 4, 20, 40], // top right bottom left
-    tx = function(d) { return "translate(" + x(d) + ",0)"; },
-    ty = function(d) { return "translate(0," + y(d) + ")"; },
-    stroke = function(d) { return d ? "#ccc" : "#666"; };
-
-// x-scale (1.42 = 710/500)
-var x = d3.scale.linear()
-    .domain([-1.42, +1.42])
-    .range([0, size[0]]);
-
-// y-scale (inverted domain)
-var y = d3.scale.linear()
-    .domain([+1.00, -1.00])
-    .range([0, size[1]]);
-
-var svg = d3.select("body").append("svg")
-    .attr("width", size[0] + padding[3] + padding[1])
-    .attr("height", size[1] + padding[0] + padding[2])
-    .attr("pointer-events", "all")
-  .append("g")
-    .attr("transform", "translate(" + padding[3] + "," + padding[0] + ")")
-    .call(d3.behavior.zoom()
-      .extent([[0, size[0]], [0, size[1]], [0, 3]])
-      .on("zoom", redraw));
-
-svg.append("rect")
-    .attr("width", size[0])
-    .attr("height", size[1])
-    .attr("stroke", "none")
-    .style("fill", "#fff");
-
-svg.append("a")
-    .attr("xlink:href", "http://mbostock.github.com/d3/")
-  .append("text")
-    .style("font-size", "3em")
-    .attr("transform", "translate(110.5, 110.5)")
-    .text("D3.js");
-
-redraw();
-
-function redraw() {
-  if (d3.event) d3.event.transform(x, y);
-
-  var fx = x.tickFormat(10),
-      fy = y.tickFormat(10);
-
-  // Regenerate x-ticks…
-  var gx = svg.selectAll("g.x")
-      .data(x.ticks(10), String)
-      .attr("transform", tx);
-
-  gx.select("text")
-      .text(fx);
-
-  var gxe = gx.enter().insert("g", "a")
-      .attr("class", "x")
-      .attr("transform", tx);
-
-  gxe.append("line")
-      .attr("stroke", stroke)
-      .attr("y1", 0)
-      .attr("y2", size[1]);
-
-  gxe.append("text")
-      .attr("y", size[1])
-      .attr("dy", "1em")
-      .attr("text-anchor", "middle")
-      .text(fx);
-
-  gx.exit().remove();
-
-  // Regenerate y-ticks…
-  var gy = svg.selectAll("g.y")
-      .data(y.ticks(10), String)
-      .attr("transform", ty);
-
-  gy.select("text")
-      .text(fy);
-
-  var gye = gy.enter().insert("g", "a")
-      .attr("class", "y")
-      .attr("transform", ty);
-
-  gye.append("line")
-      .attr("stroke", stroke)
-      .attr("x1", 0)
-      .attr("x2", size[0]);
-
-  gye.append("text")
-      .attr("x", -3)
-      .attr("dy", ".35em")
-      .attr("text-anchor", "end")
-      .text(fy);
-
-  gy.exit().remove();
-
+rect {
+  fill: #ddd;
 }
 
-    </script>
-  </body>
-</html>
+.axis path, .axis line {
+  fill: none;
+  stroke: #fff;
+}
+
+</style>
+<body>
+<script>
+
+var margin = {top: 0, right: 0, bottom: 12, left: 24},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .domain([-width / 2, width / 2])
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .domain([-height / 2, height / 2])
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom")
+    .tickSize(-height);
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(5)
+    .tickSize(-width);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .call(d3.behavior.zoom().x(x).y(y).scaleExtent([1, 8]).on("zoom", zoom));
+
+svg.append("rect")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+
+function zoom() {
+  svg.select(".x.axis").call(xAxis);
+  svg.select(".y.axis").call(yAxis);
+}
+
+</script>

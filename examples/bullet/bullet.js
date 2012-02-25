@@ -33,7 +33,7 @@ d3.json("bullets.json", function(data) {
 
   chart.duration(1000);
   window.transition = function() {
-    vis.map(randomize).call(chart);
+    vis.datum(randomize).call(chart);
   };
 });
 
