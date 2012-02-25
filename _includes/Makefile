@@ -74,7 +74,7 @@ INCLUDE_FILES = \
 	tree.js \
 	population.js
 
-.PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES) d3.js d3.min.js
+.PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES) ../d3.js ../d3.min.js
 
 $(SRC_FILES):
 	@rm -rf $@
