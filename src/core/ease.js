@@ -35,7 +35,7 @@
 
 var d3_ease_quad = d3_ease_poly(2),
     d3_ease_cubic = d3_ease_poly(3),
-    d3_ease_default = function() { return d3_ease_identity; };
+    d3_ease_default = function() { return d3_identity; };
 
 var d3_ease = d3.map({
   linear: d3_ease_default,
@@ -51,7 +51,7 @@ var d3_ease = d3.map({
 });
 
 var d3_ease_mode = d3.map({
-  "in": d3_ease_identity,
+  "in": d3_identity,
   "out": d3_ease_reverse,
   "in-out": d3_ease_reflect,
   "out-in": function(f) { return d3_ease_reflect(d3_ease_reverse(f)); }
@@ -62,7 +62,7 @@ d3.ease = function(name) {
       t = i >= 0 ? name.substring(0, i) : name,
       m = i >= 0 ? name.substring(i + 1) : "in";
   t = d3_ease.get(t) || d3_ease_default;
-  m = d3_ease_mode.get(m) || d3_ease_identity;
+  m = d3_ease_mode.get(m) || d3_identity;
   return d3_ease_clamp(m(t.apply(null, Array.prototype.slice.call(arguments, 1))));
 };
 
@@ -82,10 +82,6 @@ function d3_ease_reflect(f) {
   return function(t) {
     return .5 * (t < .5 ? f(2 * t) : (2 - f(2 - 2 * t)));
   };
-}
-
-function d3_ease_identity(t) {
-  return t;
 }
 
 function d3_ease_poly(e) {

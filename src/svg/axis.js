@@ -10,23 +10,8 @@ d3.svg.axis = function() {
       tickFormat_,
       tickSubdivide = 0;
 
-  function axis(selection) {
-    selection.each(function(d, i, j) {
-      var g = d3.select(this);
-
-      // If selection is a transition, create subtransitions.
-      var transition = selection.delay ? function(o) {
-        var id = d3_transitionInheritId;
-        try {
-          d3_transitionInheritId = selection.id;
-          return o.transition()
-              .delay(selection[j][i].delay)
-              .duration(selection[j][i].duration)
-              .ease(selection.ease());
-        } finally {
-          d3_transitionInheritId = id;
-        }
-      } : Object;
+  function axis(g) {
+    g.multiply(function(g, transition) {
 
       // Ticks, or domain values for ordinal scales.
       var ticks = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain()) : tickValues,

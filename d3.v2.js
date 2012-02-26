@@ -11,6 +11,9 @@ try {
   };
 }
 d3 = {version: "2.8.0"}; // semver
+function d3_identity(d) {
+  return d;
+}
 function d3_class(ctor, properties) {
   try {
     for (var key in properties) {
@@ -762,7 +765,7 @@ function d3_formatPrefix(d, i) {
 
 var d3_ease_quad = d3_ease_poly(2),
     d3_ease_cubic = d3_ease_poly(3),
-    d3_ease_default = function() { return d3_ease_identity; };
+    d3_ease_default = function() { return d3_identity; };
 
 var d3_ease = d3.map({
   linear: d3_ease_default,
@@ -778,7 +781,7 @@ var d3_ease = d3.map({
 });
 
 var d3_ease_mode = d3.map({
-  "in": d3_ease_identity,
+  "in": d3_identity,
   "out": d3_ease_reverse,
   "in-out": d3_ease_reflect,
   "out-in": function(f) { return d3_ease_reflect(d3_ease_reverse(f)); }
@@ -789,7 +792,7 @@ d3.ease = function(name) {
       t = i >= 0 ? name.substring(0, i) : name,
       m = i >= 0 ? name.substring(i + 1) : "in";
   t = d3_ease.get(t) || d3_ease_default;
-  m = d3_ease_mode.get(m) || d3_ease_identity;
+  m = d3_ease_mode.get(m) || d3_identity;
   return d3_ease_clamp(m(t.apply(null, Array.prototype.slice.call(arguments, 1))));
 };
 
@@ -809,10 +812,6 @@ function d3_ease_reflect(f) {
   return function(t) {
     return .5 * (t < .5 ? f(2 * t) : (2 - f(2 - 2 * t)));
   };
-}
-
-function d3_ease_identity(t) {
-  return t;
 }
 
 function d3_ease_poly(e) {
@@ -2047,6 +2046,11 @@ d3_selectionPrototype.transition = function() {
 
   return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId, Date.now());
 };
+d3_selectionPrototype.multiply = function(f) {
+  return this.each(function() {
+    f.call(this, d3.select(this), d3_identity);
+  });
+};
 var d3_selectionRoot = d3_selection([[document]]);
 
 d3_selectionRoot[0].parentNode = d3_selectRoot;
@@ -2345,6 +2349,23 @@ function d3_transition_each(callback) {
 }
 d3_transitionPrototype.transition = function() {
   return this.select(d3_this);
+};
+d3_transitionPrototype.multiply = function(f) {
+  var transition = this;
+  return this.each(function(d, i, j) {
+    f.call(this, d3.select(this), function(selection) {
+      var id = d3_transitionInheritId;
+      try {
+        d3_transitionInheritId = transition.id;
+        return selection.transition()
+            .delay(transition[j][i].delay)
+            .duration(transition[j][i].duration)
+            .ease(transition.ease());
+      } finally {
+        d3_transitionInheritId = id;
+      }
+    });
+  });
 };
 var d3_timer_queue = null,
     d3_timer_interval, // is an interval (or frame) active?
@@ -4026,23 +4047,8 @@ d3.svg.axis = function() {
       tickFormat_,
       tickSubdivide = 0;
 
-  function axis(selection) {
-    selection.each(function(d, i, j) {
-      var g = d3.select(this);
-
-      // If selection is a transition, create subtransitions.
-      var transition = selection.delay ? function(o) {
-        var id = d3_transitionInheritId;
-        try {
-          d3_transitionInheritId = selection.id;
-          return o.transition()
-              .delay(selection[j][i].delay)
-              .duration(selection[j][i].duration)
-              .ease(selection.ease());
-        } finally {
-          d3_transitionInheritId = id;
-        }
-      } : Object;
+  function axis(g) {
+    g.multiply(function(g, transition) {
 
       // Ticks, or domain values for ordinal scales.
       var ticks = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain()) : tickValues,
@@ -4241,9 +4247,8 @@ d3.svg.brush = function() {
       extent = [[0, 0], [0, 0]]; // [x0, y0], [x1, y1]
 
   function brush(g) {
-    g.each(function() {
-      var g = d3.select(this),
-          bg = g.selectAll(".background").data([0]),
+    g.multiply(function(g) {
+      var bg = g.selectAll(".background").data([0]),
           fg = g.selectAll(".extent").data([0]),
           tz = g.selectAll(".resize").data(resizes, String),
           e;
