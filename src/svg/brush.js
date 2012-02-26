@@ -6,9 +6,8 @@ d3.svg.brush = function() {
       extent = [[0, 0], [0, 0]]; // [x0, y0], [x1, y1]
 
   function brush(g) {
-    g.each(function() {
-      var g = d3.select(this),
-          bg = g.selectAll(".background").data([0]),
+    g.multiply(function(g) {
+      var bg = g.selectAll(".background").data([0]),
           fg = g.selectAll(".extent").data([0]),
           tz = g.selectAll(".resize").data(resizes, String),
           e;

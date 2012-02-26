@@ -28,6 +28,7 @@ d3.core.js: \
 	src/compat/date.js \
 	src/compat/style.js \
 	src/core/core.js \
+	src/core/identity.js \
 	src/core/class.js \
 	src/core/array.js \
 	src/core/map.js \
@@ -99,6 +100,7 @@ d3.core.js: \
 	src/core/selection-empty.js \
 	src/core/selection-node.js \
 	src/core/selection-transition.js \
+	src/core/selection-multiply.js \
 	src/core/selection-root.js \
 	src/core/selection-enter.js \
 	src/core/selection-enter-select.js \
@@ -113,6 +115,7 @@ d3.core.js: \
 	src/core/transition-duration.js \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
+	src/core/transition-multiply.js \
 	src/core/timer.js \
 	src/core/transform.js \
 	src/core/mouse.js \
