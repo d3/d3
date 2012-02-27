@@ -1189,6 +1189,10 @@ d3_Rgb.prototype.hsl = function() {
   return d3_rgb_hsl(this.r, this.g, this.b);
 };
 
+d3_Rgb.prototype.xyz = function() {
+  return d3_rgb_xyz(this.r, this.g, this.b);
+};
+
 d3_Rgb.prototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
 };
@@ -1268,6 +1272,22 @@ function d3_rgb_hsl(r, g, b) {
     s = h = 0;
   }
   return d3_hsl(h, s, l);
+}
+
+function d3_rgb_xyz(r, g, b) {
+  r /= 255;
+  g /= 255;
+  b /= 255;
+
+  r = (r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : r / 12.92) * 100;
+  g = (g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : g / 12.92) * 100;
+  b = (b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : b / 12.92) * 100;
+
+  var x = r * 0.4124 + g * 0.3576 + b * 0.1805;
+  var y = r * 0.2126 + g * 0.7152 + b * 0.0722;
+  var z = r * 0.0193 + g * 0.1192 + b * 0.9505;
+
+  return d3_xyz(x, y, z);
 }
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
@@ -1459,6 +1479,11 @@ d3_Hsl.prototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
 
+d3_Hsl.prototype.xyz = function() {
+  var rgb = this.rgb
+  return d3_rgb_xyz(rgb.r, rgb.g, rgb.b);
+};
+
 d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
@@ -1491,6 +1516,36 @@ function d3_hsl_rgb(h, s, l) {
 
   return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
 }
+d3.xyz = function(x, y, z) {
+  return arguments.length === 1
+      ? (x instanceof d3_Xyz ? d3_xyz(x.x, x.y, x.z)
+      : d3_rgb_parse("" + x, d3_rgb_xyz, d3_xyz))
+      : d3_xyz(+x, +y, +z);
+};
+
+function d3_xyz(x, y, z) {
+  return new d3_Xyz(x, y, z);
+}
+
+function d3_Xyz(x, y, z) {
+  this.x = x;
+  this.y = y;
+  this.z = z;
+}
+
+/* add brighter, darker */
+/*d3_Xyz.prototype.brighter = function(k) {
+
+}*/
+
+d3_Xyz.prototype.rgb = function() {
+  
+};
+
+d3_Xyz.prototype.toString = function() {
+  return this.rgb().toString();
+};
+
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);
   return groups;

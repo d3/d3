@@ -29,6 +29,11 @@ d3_Hsl.prototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
 
+d3_Hsl.prototype.xyz = function() {
+  var rgb = this.rgb
+  return d3_rgb_xyz(rgb.r, rgb.g, rgb.b);
+};
+
 d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
