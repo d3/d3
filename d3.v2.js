@@ -4235,10 +4235,11 @@ function d3_svg_axisSubdivide(scale, ticks, m) {
 }
 d3.svg.brush = function() {
   var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"),
-      x, // x-scale, optional
-      y, // y-scale, optional
+      x = null, // x-scale, optional
+      y = null, // y-scale, optional
       resizes = d3_svg_brushResizes[0],
-      extent = [[0, 0], [0, 0]]; // [x0, y0], [x1, y1]
+      extent = [[0, 0], [0, 0]], // [x0, y0], [x1, y1], in pixels (integers)
+      extentDomain; // the extent in data space, lazily created
 
   function brush(g) {
     g.each(function() {
@@ -4469,6 +4470,7 @@ d3.svg.brush = function() {
 
       // Update the stored bounds.
       if (extent[0][i] !== min || extent[1][i] !== max) {
+        extentDomain = null;
         extent[0][i] = min;
         extent[1][i] = max;
         return true;
@@ -4513,39 +4515,50 @@ d3.svg.brush = function() {
 
     // Invert the pixel extent to data-space.
     if (!arguments.length) {
+      z = extentDomain || extent;
       if (x) {
-        x0 = extent[0][0], x1 = extent[1][0];
-        if (x.invert) x0 = x.invert(x0), x1 = x.invert(x1);
-        if (x1 < x0) t = x0, x0 = x1, x1 = t;
+        x0 = z[0][0], x1 = z[1][0];
+        if (!extentDomain) {
+          x0 = extent[0][0], x1 = extent[1][0];
+          if (x.invert) x0 = x.invert(x0), x1 = x.invert(x1);
+          if (x1 < x0) t = x0, x0 = x1, x1 = t;
+        }
       }
       if (y) {
-        y0 = extent[0][1], y1 = extent[1][1];
-        if (y.invert) y0 = y.invert(y0), y1 = y.invert(y1);
-        if (y1 < y0) t = y0, y0 = y1, y1 = t;
+        y0 = z[0][1], y1 = z[1][1];
+        if (!extentDomain) {
+          y0 = extent[0][1], y1 = extent[1][1];
+          if (y.invert) y0 = y.invert(y0), y1 = y.invert(y1);
+          if (y1 < y0) t = y0, y0 = y1, y1 = t;
+        }
       }
       return x && y ? [[x0, y0], [x1, y1]] : x ? [x0, x1] : y && [y0, y1];
     }
 
     // Scale the data-space extent to pixels.
+    extentDomain = [[0, 0], [0, 0]];
     if (x) {
       x0 = z[0], x1 = z[1];
       if (y) x0 = x0[0], x1 = x1[0];
+      extentDomain[0][0] = x0, extentDomain[1][0] = x1;
       if (x.invert) x0 = x(x0), x1 = x(x1);
       if (x1 < x0) t = x0, x0 = x1, x1 = t;
-      extent[0][0] = x0, extent[1][0] = x1;
+      extent[0][0] = x0 | 0, extent[1][0] = x1 | 0;
     }
     if (y) {
       y0 = z[0], y1 = z[1];
       if (x) y0 = y0[1], y1 = y1[1];
+      extentDomain[0][1] = y0, extentDomain[1][1] = y1;
       if (y.invert) y0 = y(y0), y1 = y(y1);
       if (y1 < y0) t = y0, y0 = y1, y1 = t;
-      extent[0][1] = y0, extent[1][1] = y1;
+      extent[0][1] = y0 | 0, extent[1][1] = y1 | 0;
     }
 
     return brush;
   };
 
   brush.clear = function() {
+    extentDomain = null;
     extent[0][0] =
     extent[0][1] =
     extent[1][0] =
