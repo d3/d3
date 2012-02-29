@@ -1,7 +1,10 @@
 require("../env");
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("assert"),
+    time = require("./time"),
+    local = time.local,
+    utc = time.utc;
 
 var suite = vows.describe("d3.time.hour");
 
@@ -39,14 +42,14 @@ suite.addBatch({
         assert.deepEqual(floor(utc(2011, 10, 06, 09, 01)), utc(2011, 10, 06, 09));
       },
       "NPT": {
-        "observes 15-minute offset": tz("Asia/Kathmandu", function(floor) {
+        "observes 15-minute offset": time.zone("Asia/Kathmandu", function(floor) {
           assert.deepEqual(floor(local(2010, 11, 31, 23, 59, 59)), utc(2010, 11, 31, 17, 15));
           assert.deepEqual(floor(local(2011, 00, 01, 00, 00, 00)), utc(2010, 11, 31, 18, 15));
           assert.deepEqual(floor(local(2011, 00, 01, 00, 00, 01)), utc(2010, 11, 31, 18, 15));
         })
       },
       "IST": {
-        "observes 30-minute offset": tz("Asia/Calcutta", function(floor) {
+        "observes 30-minute offset": time.zone("Asia/Calcutta", function(floor) {
           assert.deepEqual(floor(local(2010, 11, 31, 23, 59, 59)), utc(2010, 11, 31, 17, 30));
           assert.deepEqual(floor(local(2011, 00, 01, 00, 00, 00)), utc(2010, 11, 31, 18, 30));
           assert.deepEqual(floor(local(2011, 00, 01, 00, 00, 01)), utc(2010, 11, 31, 18, 30));
@@ -79,14 +82,14 @@ suite.addBatch({
         assert.deepEqual(ceil(utc(2011, 10, 06, 09, 01)), utc(2011, 10, 06, 10));
       },
       "NPT": {
-        "observes 15-minute offset": tz("Asia/Kathmandu", function(ceil) {
+        "observes 15-minute offset": time.zone("Asia/Kathmandu", function(ceil) {
           assert.deepEqual(ceil(local(2010, 11, 31, 23, 59, 59)), utc(2010, 11, 31, 18, 15));
           assert.deepEqual(ceil(local(2011, 00, 01, 00, 00, 00)), utc(2010, 11, 31, 18, 15));
           assert.deepEqual(ceil(local(2011, 00, 01, 00, 00, 01)), utc(2010, 11, 31, 19, 15));
         })
       },
       "IST": {
-        "observes 30-minute offset": tz("Asia/Calcutta", function(ceil) {
+        "observes 30-minute offset": time.zone("Asia/Calcutta", function(ceil) {
           assert.deepEqual(ceil(local(2010, 11, 31, 23, 59, 59)), utc(2010, 11, 31, 18, 30));
           assert.deepEqual(ceil(local(2011, 00, 01, 00, 00, 00)), utc(2010, 11, 31, 18, 30));
           assert.deepEqual(ceil(local(2011, 00, 01, 00, 00, 01)), utc(2010, 11, 31, 19, 30));
@@ -211,29 +214,5 @@ suite.addBatch({
     }
   }
 });
-
-function local(year, month, day, hours, minutes, seconds) {
-  return new Date(year, month, day, hours || 00, minutes || 00, seconds || 00);
-}
-
-function utc(year, month, day, hours, minutes, seconds) {
-  return new Date(Date.UTC(year, month, day, hours || 00, minutes || 00, seconds || 00));
-}
-
-function tz(tz, scope) {
-  return function() {
-    var o = process.env.TZ;
-    try {
-      process.env.TZ = tz;
-      new Date(0).toString(); // invalidate node's dst cache
-      new Date().toString();
-      scope.apply(this, arguments);
-    } finally {
-      process.env.TZ = o;
-      new Date(0).toString(); // invalidate node's dst cache
-      new Date().toString();
-    }
-  };
-}
 
 suite.export(module);

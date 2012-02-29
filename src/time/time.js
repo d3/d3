@@ -20,13 +20,15 @@ d3_time_utc.prototype = {
   getTime: function() { return this._.getTime(); },
   getTimezoneOffset: function() { return 0; },
   valueOf: function() { return this._.valueOf(); },
-  setDate: function(x) { this._.setUTCDate(x); },
-  setDay: function(x) { this._.setUTCDay(x); },
-  setFullYear: function(x) { this._.setUTCFullYear(x); },
-  setHours: function(x) { this._.setUTCHours(x); },
-  setMilliseconds: function(x) { this._.setUTCMilliseconds(x); },
-  setMinutes: function(x) { this._.setUTCMinutes(x); },
-  setMonth: function(x) { this._.setUTCMonth(x); },
-  setSeconds: function(x) { this._.setUTCSeconds(x); },
-  setTime: function(x) { this._.setTime(x); }
+  setDate: function() { d3_time_prototype.setUTCDate.apply(this._, arguments); },
+  setDay: function() { d3_time_prototype.setUTCDay.apply(this._, arguments); },
+  setFullYear: function() { d3_time_prototype.setUTCFullYear.apply(this._, arguments); },
+  setHours: function() { d3_time_prototype.setUTCHours.apply(this._, arguments); },
+  setMilliseconds: function() { d3_time_prototype.setUTCMilliseconds.apply(this._, arguments); },
+  setMinutes: function() { d3_time_prototype.setUTCMinutes.apply(this._, arguments); },
+  setMonth: function() { d3_time_prototype.setUTCMonth.apply(this._, arguments); },
+  setSeconds: function() { d3_time_prototype.setUTCSeconds.apply(this._, arguments); },
+  setTime: function() { d3_time_prototype.setTime.apply(this._, arguments); }
 };
+
+var d3_time_prototype = Date.prototype;
