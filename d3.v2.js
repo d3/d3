@@ -2041,11 +2041,11 @@ d3_selectionPrototype.transition = function() {
   for (var j = -1, m = this.length; ++j < m;) {
     subgroups.push(subgroup = []);
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
-      subgroup.push((node = group[i]) ? {node: node, delay: 0, duration: 250} : null);
+      subgroup.push((node = group[i]) ? {node: node, delay: d3_transitionDelay, duration: d3_transitionDuration} : null);
     }
   }
 
-  return d3_transition(subgroups, d3_transitionInheritId || ++d3_transitionId, Date.now());
+  return d3_transition(subgroups, d3_transitionId || ++d3_transitionNextId, Date.now());
 };
 var d3_selectionRoot = d3_selection([[document]]);
 
@@ -2173,9 +2173,9 @@ function d3_transition(groups, id, time) {
 
         if (t >= 1) {
           stop();
-          d3_transitionInheritId = id;
+          d3_transitionId = id;
           event.end.call(node, d, i);
-          d3_transitionInheritId = 0;
+          d3_transitionId = 0;
           return 1;
         }
       }
@@ -2217,14 +2217,21 @@ function d3_transitionTween(name, b) {
 }
 
 var d3_transitionPrototype = [],
+    d3_transitionNextId = 0,
     d3_transitionId = 0,
-    d3_transitionInheritId = 0,
-    d3_transitionEase = d3.ease("cubic-in-out");
+    d3_transitionDefaultDelay = 0,
+    d3_transitionDefaultDuration = 250,
+    d3_transitionDefaultEase = d3.ease("cubic-in-out"),
+    d3_transitionDelay = d3_transitionDefaultDelay,
+    d3_transitionDuration = d3_transitionDefaultDuration,
+    d3_transitionEase = d3_transitionDefaultEase;
 
 d3_transitionPrototype.call = d3_selectionPrototype.call;
 
-d3.transition = function() {
-  return d3_selectionRoot.transition();
+d3.transition = function(selection) {
+  return arguments.length
+      ? (d3_transitionId ? selection.transition() : selection)
+      : d3_selectionRoot.transition();
 };
 
 d3.transition.prototype = d3_transitionPrototype;
@@ -2335,12 +2342,28 @@ d3_transitionPrototype.duration = function(value) {
       : (value = Math.max(1, value | 0), function(d, i, j) { groups[j][i].duration = value; }));
 };
 function d3_transition_each(callback) {
+  var id = d3_transitionId,
+      ease = d3_transitionEase,
+      delay = d3_transitionDelay,
+      duration = d3_transitionDuration;
+
+  d3_transitionId = this.id;
+  d3_transitionEase = this.ease();
   for (var j = 0, m = this.length; j < m; j++) {
     for (var group = this[j], i = 0, n = group.length; i < n; i++) {
       var node = group[i];
-      if (node) callback.call(node = node.node, node.__data__, i, j);
+      if (node) {
+        d3_transitionDelay = this[j][i].delay;
+        d3_transitionDuration = this[j][i].duration;
+        callback.call(node = node.node, node.__data__, i, j);
+      }
     }
   }
+
+  d3_transitionId = id;
+  d3_transitionEase = ease;
+  d3_transitionDelay = delay;
+  d3_transitionDuration = duration;
   return this;
 }
 d3_transitionPrototype.transition = function() {
@@ -4026,23 +4049,9 @@ d3.svg.axis = function() {
       tickFormat_,
       tickSubdivide = 0;
 
-  function axis(selection) {
-    selection.each(function(d, i, j) {
+  function axis(g) {
+    g.each(function() {
       var g = d3.select(this);
-
-      // If selection is a transition, create subtransitions.
-      var transition = selection.delay ? function(o) {
-        var id = d3_transitionInheritId;
-        try {
-          d3_transitionInheritId = selection.id;
-          return o.transition()
-              .delay(selection[j][i].delay)
-              .duration(selection[j][i].duration)
-              .ease(selection.ease());
-        } finally {
-          d3_transitionInheritId = id;
-        }
-      } : Object;
 
       // Ticks, or domain values for ordinal scales.
       var ticks = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain()) : tickValues,
@@ -4052,21 +4061,21 @@ d3.svg.axis = function() {
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
           subtick = g.selectAll(".minor").data(subticks, String),
           subtickEnter = subtick.enter().insert("line", "g").attr("class", "tick minor").style("opacity", 1e-6),
-          subtickExit = transition(subtick.exit()).style("opacity", 1e-6).remove(),
-          subtickUpdate = transition(subtick).style("opacity", 1);
+          subtickExit = d3.transition(subtick.exit()).style("opacity", 1e-6).remove(),
+          subtickUpdate = d3.transition(subtick).style("opacity", 1);
 
       // Major ticks.
       var tick = g.selectAll("g").data(ticks, String),
           tickEnter = tick.enter().insert("g", "path").style("opacity", 1e-6),
-          tickExit = transition(tick.exit()).style("opacity", 1e-6).remove(),
-          tickUpdate = transition(tick).style("opacity", 1),
+          tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(),
+          tickUpdate = d3.transition(tick).style("opacity", 1),
           tickTransform;
 
       // Domain.
       var range = d3_scaleRange(scale),
           path = g.selectAll(".domain").data([0]),
           pathEnter = path.enter().append("path").attr("class", "domain"),
-          pathUpdate = transition(path);
+          pathUpdate = d3.transition(path);
 
       // Stash a snapshot of the new scale, and retrieve the old snapshot.
       var scale1 = scale.copy(),

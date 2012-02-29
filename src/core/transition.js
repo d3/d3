@@ -68,9 +68,9 @@ function d3_transition(groups, id, time) {
 
         if (t >= 1) {
           stop();
-          d3_transitionInheritId = id;
+          d3_transitionId = id;
           event.end.call(node, d, i);
-          d3_transitionInheritId = 0;
+          d3_transitionId = 0;
           return 1;
         }
       }
@@ -112,14 +112,21 @@ function d3_transitionTween(name, b) {
 }
 
 var d3_transitionPrototype = [],
+    d3_transitionNextId = 0,
     d3_transitionId = 0,
-    d3_transitionInheritId = 0,
-    d3_transitionEase = d3.ease("cubic-in-out");
+    d3_transitionDefaultDelay = 0,
+    d3_transitionDefaultDuration = 250,
+    d3_transitionDefaultEase = d3.ease("cubic-in-out"),
+    d3_transitionDelay = d3_transitionDefaultDelay,
+    d3_transitionDuration = d3_transitionDefaultDuration,
+    d3_transitionEase = d3_transitionDefaultEase;
 
 d3_transitionPrototype.call = d3_selectionPrototype.call;
 
-d3.transition = function() {
-  return d3_selectionRoot.transition();
+d3.transition = function(selection) {
+  return arguments.length
+      ? (d3_transitionId ? selection.transition() : selection)
+      : d3_selectionRoot.transition();
 };
 
 d3.transition.prototype = d3_transitionPrototype;
