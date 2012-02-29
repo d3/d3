@@ -1,79 +1,42 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Histogram</title>
-    <script type="text/javascript" src="../../d3.v2.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<style>
 
-body {
+.bars rect {
+  fill: steelblue;
+}
+
+.axis text {
   font: 10px sans-serif;
 }
 
-rect {
-  fill: steelblue;
-  stroke: white;
-}
-
-line {
-  stroke: black;
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="d3.v2.js"></script>
+<script src="histogram-chart.js"></script>
+<script>
 
-var n = 10000, // number of trials
-    m = 10,    // number of random variables
-    data = [];
+d3.select("body")
+    .datum(irwinHallDistribution(10000, 10))
+  .call(histogramChart()
+    .bins(d3.scale.linear().ticks(20))
+    .tickFormat(d3.format(".02f")));
 
-// Generate an Irwin-Hall distribution.
-for (var i = 0; i < n; i++) {
-  for (var s = 0, j = 0; j < m; j++) {
-    s += Math.random();
+function irwinHallDistribution(n, m) {
+  var distribution = [];
+  for (var i = 0; i < n; i++) {
+    for (var s = 0, j = 0; j < m; j++) {
+      s += Math.random();
+    }
+    distribution.push(s / m);
   }
-  data.push(s);
+  return distribution;
 }
 
-var w = 400,
-    h = 400;
-
-var histogram = d3.layout.histogram()
-    (data);
-
-var x = d3.scale.ordinal()
-    .domain(histogram.map(function(d) { return d.x; }))
-    .rangeRoundBands([0, w]);
-
-var y = d3.scale.linear()
-    .domain([0, d3.max(histogram, function(d) { return d.y; })])
-    .range([0, h]);
-
-var vis = d3.select("body").append("svg")
-    .attr("width", w)
-    .attr("height", h)
-  .append("g")
-    .attr("transform", "translate(.5)");
-
-vis.selectAll("rect")
-    .data(histogram)
-  .enter().append("rect")
-    .attr("transform", function(d) { return "translate(" + x(d.x) + "," + (h - y(d.y)) + ")"; })
-    .attr("width", x.rangeBand())
-    .attr("y", function(d) { return y(d.y); })
-    .attr("height", 0)
-  .transition()
-    .duration(750)
-    .attr("y", 0)
-    .attr("height", function(d) { return y(d.y); });
-
-vis.append("line")
-    .attr("x1", 0)
-    .attr("x2", w)
-    .attr("y1", h)
-    .attr("y2", h);
-
-    </script>
-  </body>
-</html>
+</script>
