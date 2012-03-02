@@ -1537,6 +1537,10 @@ d3_Xyz.prototype.rgb = function() {
   return d3_xyz_rgb(this.x, this.y, this.z);
 }
 
+d3_Xyz.prototype.hsl = function() {
+  return this.rgb().hsl();
+}
+
 /* add brighter, darker */
 /*d3_Xyz.prototype.brighter = function(k) {
 

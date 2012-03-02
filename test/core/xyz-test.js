@@ -42,7 +42,10 @@ suite.addBatch({
     },
     "can convert to RGB": function(xyz) {
       assert.rgbEqual(xyz(d3.rgb(30, 40, 50)).rgb(), 30, 40, 50);
-    }
+    },
+    "can convert to HSL": function(xyz) {
+      assert.hslEqual(xyz(d3.rgb("red")).hsl(), 0, 1, .5);
+    },
   }
 });
 
