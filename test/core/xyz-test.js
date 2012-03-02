@@ -34,6 +34,14 @@ suite.addBatch({
     "can convert to HSL": function(xyz) {
       assert.hslEqual(xyz(d3.rgb("red")).hsl(), 0, 1, .5);
     },
+    "string coercion returns hexadecimal format": function(xyz) {
+      assert.strictEqual(xyz("#abcdef") + "", "#abcdef");
+      assert.strictEqual(xyz("moccasin") + "", "#ffe4b5");
+      assert.strictEqual(xyz("hsl(60, 100%, 20%)") + "", "#666600");
+      assert.strictEqual(xyz("rgb(12, 34, 56)") + "", "#0c2238");
+      assert.strictEqual(xyz(d3.rgb(12, 34, 56)) + "", "#0c2238");
+      assert.strictEqual(xyz(d3.hsl(60, 1, .2)) + "", "#666600");
+    }
   }
 });
 

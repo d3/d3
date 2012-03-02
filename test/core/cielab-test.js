@@ -46,6 +46,14 @@ suite.addBatch({
       var brown = lab("brown");
       assert.equal(brown.darker().l, brown.l - 18);
       assert.equal(brown.darker(2).l, brown.l - 36);
+    },
+    "string coercion returns hexadecimal format": function(lab) {
+      assert.strictEqual(lab("#abcdef") + "", "#abcdef");
+      assert.strictEqual(lab("moccasin") + "", "#ffe4b5");
+      assert.strictEqual(lab("hsl(60, 100%, 20%)") + "", "#666600");
+      assert.strictEqual(lab("rgb(12, 34, 56)") + "", "#0c2238");
+      assert.strictEqual(lab(d3.rgb(12, 34, 56)) + "", "#0c2238");
+      assert.strictEqual(lab(d3.hsl(60, 1, .2)) + "", "#666600");
     }
   }
 });
