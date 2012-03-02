@@ -27,10 +27,9 @@ d3_Xyz.prototype.cielab = function() {
   return d3_xyz_cielab(this.x, this.y, this.z);
 };
 
-/* add brighter, darker */
-/*d3_Xyz.prototype.brighter = function(k) {
-
-}*/
+d3_Xyz.prototype.cielch = function() {
+  return this.cielab().cielch();
+};
 
 d3_Xyz.prototype.toString = function() {
   return this.rgb().toString();

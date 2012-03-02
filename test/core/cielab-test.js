@@ -11,7 +11,10 @@ suite.addBatch({
       return d3.cielab;
     },
     "exposes l, a, and b properties": function(lab) {
-      assert.labEqual(lab("#048F07"), 51.480406534539185, -55.524431964471155, 52.88478430006963);
+      var color = lab("#048F07");
+      assert.equal(color.l, 51.480406534539185);
+      assert.equal(color.a, -55.524431964471155);
+      assert.equal(color.b, 52.88478430006963);
     },
     "can convert from CieLAB": function(lab) {
       assert.labEqual(lab(d3.cielab(40, 50, 60)), 40, 50, 60);

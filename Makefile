@@ -78,6 +78,7 @@ d3.core.js: \
 	src/core/hsl.js \
     src/core/xyz.js \
     src/core/cielab.js \
+    src/core/cielch.js \
 	src/core/selection.js \
 	src/core/selection-select.js \
 	src/core/selection-selectAll.js \

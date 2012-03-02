@@ -27,6 +27,10 @@ d3_Cielab.prototype.xyz = function() {
   return d3_cielab_xyz(this.l, this.a, this.b);
 };
 
+d3_Cielab.prototype.cielch = function() {
+  return d3_cielab_cielch(this.l, this.a, this.b);
+};
+
 /* 18 chosen to correspond roughly to RGB brighter/darker */
 d3_Cielab.prototype.brighter = function(k) {
   return d3_cielab(Math.min(100, this.l + 18 * (arguments.length ? k : 1)), this.a, this.b);
@@ -51,5 +55,15 @@ function d3_cielab_xyz(l, a, b) {
   }
 
   return d3_xyz(v(x) * 95.047, v(y) * 100.000, v(z) * 108.883);
+}
+
+function d3_cielab_cielch(l, a, b) {
+  var h = Math.atan2(b, a);
+
+  h = h > 0 ? (h / Math.PI) * 180 : 360 - (Math.abs(h) / Math.PI) * 180;
+
+  c = Math.sqrt(a * a + b * b);
+
+  return d3_cielch(l, c, h);
 }
 

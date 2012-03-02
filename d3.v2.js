@@ -1197,6 +1197,10 @@ d3_Rgb.prototype.cielab = function() {
   return this.xyz().cielab();
 };
 
+d3_Rgb.prototype.cielch = function() {
+  return this.cielab().cielch();
+};
+
 d3_Rgb.prototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
 };
@@ -1495,6 +1499,10 @@ d3_Hsl.prototype.cielab = function() {
   return this.xyz().cielab();
 };
 
+d3_Hsl.prototype.cielch = function() {
+  return this.cielab().cielch();
+};
+
 d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
@@ -1560,10 +1568,9 @@ d3_Xyz.prototype.cielab = function() {
   return d3_xyz_cielab(this.x, this.y, this.z);
 };
 
-/* add brighter, darker */
-/*d3_Xyz.prototype.brighter = function(k) {
-
-}*/
+d3_Xyz.prototype.cielch = function() {
+  return this.cielab().cielch();
+};
 
 d3_Xyz.prototype.toString = function() {
   return this.rgb().toString();
@@ -1642,6 +1649,10 @@ d3_Cielab.prototype.xyz = function() {
   return d3_cielab_xyz(this.l, this.a, this.b);
 };
 
+d3_Cielab.prototype.cielch = function() {
+  return d3_cielab_cielch(this.l, this.a, this.b);
+};
+
 /* 18 chosen to correspond roughly to RGB brighter/darker */
 d3_Cielab.prototype.brighter = function(k) {
   return d3_cielab(Math.min(100, this.l + 18 * (arguments.length ? k : 1)), this.a, this.b);
@@ -1667,6 +1678,58 @@ function d3_cielab_xyz(l, a, b) {
 
   return d3_xyz(v(x) * 95.047, v(y) * 100.000, v(z) * 108.883);
 }
+
+function d3_cielab_cielch(l, a, b) {
+  var h = Math.atan2(b, a);
+
+  h = h > 0 ? (h / Math.PI) * 180 : 360 - (Math.abs(h) / Math.PI) * 180;
+
+  c = Math.sqrt(a * a + b * b);
+
+  return d3_cielch(l, c, h);
+}
+
+d3.cielch = function(l, c, h) {
+  return arguments.length === 1
+      ? (l instanceof d3_Cielch ? d3_cielch(l.l, l.c, l.h)
+      : d3_rgb_parse("" + l, d3_rgb_xyz, d3_hsl_xyz).cielch())
+      : d3_cielch(+l, +c, +h);
+};
+
+function d3_cielch(l, c, h) {
+  return new d3_Cielch(l, c, h);
+}
+
+function d3_Cielch(l, c, h) {
+  this.l = l;
+  this.c = c;
+  this.h = h;
+}
+
+d3_Cielch.prototype.rgb = function() {
+  return this.cielab().rgb();
+};
+
+d3_Cielch.prototype.hsl = function() {
+  return this.cielab().hsl();
+};
+
+d3_Cielch.prototype.xyz = function() {
+  return this.cielab().xyz();
+};
+
+d3_Cielch.prototype.brighter = function(k) {
+  return d3_cielch(Math.min(100, this.l + 18 * (arguments.length ? k : 1)), this.c, this.h);
+};
+
+d3_Cielch.prototype.darker = function(k) {
+  return d3_cielch(Math.max(0, this.l - 18 * (arguments.length ? k : 1)), this.c, this.h);
+};
+
+d3_Cielch.prototype.toString = function() {
+  return this.rgb().toString();
+};
+
 
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);

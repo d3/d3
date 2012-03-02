@@ -37,6 +37,10 @@ d3_Hsl.prototype.cielab = function() {
   return this.xyz().cielab();
 };
 
+d3_Hsl.prototype.cielch = function() {
+  return this.cielab().cielch();
+};
+
 d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
