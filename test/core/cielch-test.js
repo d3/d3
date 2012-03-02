@@ -43,7 +43,7 @@ suite.addBatch({
     "can convert to XYZ": function(lch) {
       assert.xyzEqual(lch("#abc").xyz(), 45.246971009995335, 48.44632879252148, 64.09304697440157);
     },
-    "can convert to CIELab": function(lab) {
+    "can convert to CIELab": function(lch) {
       assert.labEqual(lch(d3.cielab("#048F07")), 51.480406534539185, -55.524431964471155, 52.88478430006963);
     },
     "can derive a brighter color": function(lch) {

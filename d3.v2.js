@@ -1718,6 +1718,10 @@ d3_Cielch.prototype.xyz = function() {
   return this.cielab().xyz();
 };
 
+d3_Cielch.prototype.cielab = function() {
+  return d3_cielch_cielab(this.l, this.c, this.h);
+};
+
 d3_Cielch.prototype.brighter = function(k) {
   return d3_cielch(Math.min(100, this.l + 18 * (arguments.length ? k : 1)), this.c, this.h);
 };
@@ -1730,6 +1734,12 @@ d3_Cielch.prototype.toString = function() {
   return this.rgb().toString();
 };
 
+function d3_cielch_cielab(l, c, h) {
+  var hr = h * (Math.PI / 180);
+  var a = Math.cos(hr) * c;
+  var b = Math.sin(hr) * c;
+  return d3_cielab(l, a, b);
+}
 
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);
