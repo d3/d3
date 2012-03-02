@@ -47,6 +47,10 @@ d3_Rgb.prototype.xyz = function() {
   return d3_rgb_xyz(this.r, this.g, this.b);
 };
 
+d3_Rgb.prototype.cielab = function() {
+  return this.xyz().cielab();
+};
+
 d3_Rgb.prototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
 };

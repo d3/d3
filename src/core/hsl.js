@@ -33,6 +33,10 @@ d3_Hsl.prototype.xyz = function() {
   return d3_hsl_xyz(this.h, this.s, this.l);
 };
 
+d3_Hsl.prototype.cielab = function() {
+  return this.xyz().cielab();
+};
+
 d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
