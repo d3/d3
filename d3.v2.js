@@ -1639,12 +1639,25 @@ d3_Cielab.prototype.hsl = function() {
 };
 
 d3_Cielab.prototype.xyz = function() {
-  return d3_cielab_xyz(this.h, this.s, this.l);
+  return d3_cielab_xyz(this.l, this.a, this.b);
 };
 
 d3_Cielab.prototype.toString = function() {
   return this.rgb().toString();
 };
+
+function d3_cielab_xyz(l, a, b) {
+  var y = (l + 16) / 116;
+  var x = a / 500 + y;
+  var z = y - b / 200;
+
+  function v(x) {
+    var p = x * x * x;
+    return p > 0.008856 ? p : (x - 16 / 116) / 7.787;
+  }
+
+  return d3_xyz(v(x) * 95.047, v(y) * 100.000, v(z) * 108.883);
+}
 
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);
