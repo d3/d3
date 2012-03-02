@@ -1279,9 +1279,13 @@ function d3_rgb_xyz(r, g, b) {
   g /= 255;
   b /= 255;
 
-  r = (r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : r / 12.92) * 100;
-  g = (g > 0.04045 ? Math.pow(((g + 0.055) / 1.055), 2.4) : g / 12.92) * 100;
-  b = (b > 0.04045 ? Math.pow(((b + 0.055) / 1.055), 2.4) : b / 12.92) * 100;
+  function v(r) {
+    return r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : r / 12.92;
+  }
+
+  r = v(r) * 100;
+  g = v(g) * 100;
+  b = v(b) * 100;
 
   var x = r * 0.4124 + g * 0.3576 + b * 0.1805;
   var y = r * 0.2126 + g * 0.7152 + b * 0.0722;
@@ -1558,11 +1562,15 @@ function d3_xyz_rgb(x, y, z) {
   var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
   var b = x * 0.0557 + y * -0.2040 + z * 1.0570;
 
-  r = r > 0.0031308 ? 1.055 * Math.pow(r, (1 / 2.4)) - 0.055 : 12.92 * r;
-  g = g > 0.0031308 ? 1.055 * Math.pow(g, (1 / 2.4)) - 0.055 : 12.92 * g;
-  b = b > 0.0031308 ? 1.055 * Math.pow(b, (1 / 2.4)) - 0.055 : 12.92 * b;
+  function v(r) {
+    return r > 0.0031308 ? 1.055 * Math.pow(r, (1 / 2.4)) - 0.055 : 12.92 * r;
+  }
 
-  return d3.rgb(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
+  function vv(h) {
+    return Math.round(v(h) * 255);
+  }
+
+  return d3_rgb(vv(r), vv(g), vv(b));
 }
 
 
