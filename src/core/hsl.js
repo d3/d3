@@ -30,7 +30,7 @@ d3_Hsl.prototype.rgb = function() {
 };
 
 d3_Hsl.prototype.xyz = function() {
-  var rgb = this.rgb
+  var rgb = this.rgb()
   return d3_rgb_xyz(rgb.r, rgb.g, rgb.b);
 };
 
