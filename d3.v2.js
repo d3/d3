@@ -8653,16 +8653,18 @@ d3_time_utc.prototype = {
   getTime: function() { return this._.getTime(); },
   getTimezoneOffset: function() { return 0; },
   valueOf: function() { return this._.valueOf(); },
-  setDate: function(x) { this._.setUTCDate(x); },
-  setDay: function(x) { this._.setUTCDay(x); },
-  setFullYear: function(x) { this._.setUTCFullYear(x); },
-  setHours: function(x) { this._.setUTCHours(x); },
-  setMilliseconds: function(x) { this._.setUTCMilliseconds(x); },
-  setMinutes: function(x) { this._.setUTCMinutes(x); },
-  setMonth: function(x) { this._.setUTCMonth(x); },
-  setSeconds: function(x) { this._.setUTCSeconds(x); },
-  setTime: function(x) { this._.setTime(x); }
+  setDate: function() { d3_time_prototype.setUTCDate.apply(this._, arguments); },
+  setDay: function() { d3_time_prototype.setUTCDay.apply(this._, arguments); },
+  setFullYear: function() { d3_time_prototype.setUTCFullYear.apply(this._, arguments); },
+  setHours: function() { d3_time_prototype.setUTCHours.apply(this._, arguments); },
+  setMilliseconds: function() { d3_time_prototype.setUTCMilliseconds.apply(this._, arguments); },
+  setMinutes: function() { d3_time_prototype.setUTCMinutes.apply(this._, arguments); },
+  setMonth: function() { d3_time_prototype.setUTCMonth.apply(this._, arguments); },
+  setSeconds: function() { d3_time_prototype.setUTCSeconds.apply(this._, arguments); },
+  setTime: function() { d3_time_prototype.setTime.apply(this._, arguments); }
 };
+
+var d3_time_prototype = Date.prototype;
 d3.time.format = function(template) {
   var n = template.length;
 
@@ -8686,15 +8688,16 @@ d3.time.format = function(template) {
   }
 
   format.parse = function(string) {
-    var date = new d3_time(1900, 0, 1),
-        i = d3_time_parse(date, template, string, 0);
+    var d = {y: 1900, m: 0, d: 1, H: 0, M: 0, S: 0, L: 0},
+        i = d3_time_parse(d, template, string, 0);
     if (i != string.length) return null;
-    if (date.hour12) {
-      var hours = date.getHours() % 12;
-      date.setHours(date.hour12pm ? hours + 12 : hours);
-    }
-    delete date.hour12;
-    delete date.hour12pm;
+
+    // The am-pm flag is 0 for AM, and 1 for PM.
+    if ("p" in d) d.H = d.H % 12 + d.p * 12;
+
+    var date = new d3_time();
+    date.setFullYear(d.y, d.m, d.d);
+    date.setHours(d.H, d.M, d.S, d.L);
     return date;
   };
 
@@ -8765,7 +8768,7 @@ var d3_time_parsers = {
   d: d3_time_parseDay,
   e: d3_time_parseDay,
   H: d3_time_parseHour24,
-  I: d3_time_parseHour12,
+  I: d3_time_parseHour24,
   // j: function(d, s, i) { /*TODO day of year [001,366] */ return i; },
   L: d3_time_parseMilliseconds,
   m: d3_time_parseMonthNumber,
@@ -8802,7 +8805,7 @@ var d3_time_weekdayAbbrevRe = /^(?:sun|mon|tue|wed|thu|fri|sat)/i,
 
 function d3_time_parseMonthAbbrev(date, string, i) {
   var n = d3_time_monthAbbrevLookup.get(string.substring(i, i += 3).toLowerCase());
-  return n == null ? -1 : (date.setMonth(n), i);
+  return n == null ? -1 : (date.m = n, i);
 }
 
 var d3_time_monthAbbrevLookup = d3.map({
@@ -8823,7 +8826,7 @@ var d3_time_monthAbbrevLookup = d3.map({
 function d3_time_parseMonth(date, string, i) {
   d3_time_monthRe.lastIndex = 0;
   var n = d3_time_monthRe.exec(string.substring(i, i + 12));
-  return n ? (date.setMonth(d3_time_monthLookup.get(n[0].toLowerCase())), i += n[0].length) : -1;
+  return n ? (date.m = d3_time_monthLookup.get(n[0].toLowerCase()), i += n[0].length) : -1;
 }
 
 var d3_time_monthRe = /^(?:January|February|March|April|May|June|July|August|September|October|November|December)/ig;
@@ -8873,13 +8876,13 @@ function d3_time_parseLocaleTime(date, string, i) {
 function d3_time_parseFullYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 4));
-  return n ? (date.setFullYear(n[0]), i += n[0].length) : -1;
+  return n ? (date.y = +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_parseYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setFullYear(d3_time_century() + +n[0]), i += n[0].length) : -1;
+  return n ? (date.y = d3_time_century() + +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_century() {
@@ -8889,44 +8892,38 @@ function d3_time_century() {
 function d3_time_parseMonthNumber(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setMonth(n[0] - 1), i += n[0].length) : -1;
+  return n ? (date.m = n[0] - 1, i += n[0].length) : -1;
 }
 
 function d3_time_parseDay(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setDate(+n[0]), i += n[0].length) : -1;
+  return n ? (date.d = +n[0], i += n[0].length) : -1;
 }
 
-// Note: we don't validate that the hour is in the range [0,23].
+// Note: we don't validate that the hour is in the range [0,23] or [1,12].
 function d3_time_parseHour24(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setHours(+n[0]), i += n[0].length) : -1;
-}
-
-// Note: we don't validate that the hour is in the range [1,12].
-function d3_time_parseHour12(date, string, i) {
-  date.hour12 = true;
-  return d3_time_parseHour24(date, string, i);
+  return n ? (date.H = +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_parseMinutes(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setMinutes(+n[0]), i += n[0].length) : -1;
+  return n ? (date.M = +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_parseSeconds(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setSeconds(+n[0]), i += n[0].length) : -1;
+  return n ? (date.S = +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_parseMilliseconds(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 3));
-  return n ? (date.setMilliseconds(+n[0]), i += n[0].length) : -1;
+  return n ? (date.L = +n[0], i += n[0].length) : -1;
 }
 
 // Note: we don't look at the next directive.
@@ -8934,7 +8931,7 @@ var d3_time_numberRe = /\s*\d+/;
 
 function d3_time_parseAmPm(date, string, i) {
   var n = d3_time_amPmLookup.get(string.substring(i, i += 2).toLowerCase());
-  return n == null ? -1 : (date.hour12pm = n, i);
+  return n == null ? -1 : (date.p = n, i);
 }
 
 var d3_time_amPmLookup = d3.map({
