@@ -17,15 +17,15 @@ function d3_Xyz(x, y, z) {
 
 d3_Xyz.prototype.rgb = function() {
   return d3_xyz_rgb(this.x, this.y, this.z);
-}
+};
 
 d3_Xyz.prototype.hsl = function() {
   return this.rgb().hsl();
-}
+};
 
 d3_Xyz.prototype.cielab = function() {
   return d3_xyz_cielab(this.x, this.y, this.z);
-}
+};
 
 /* add brighter, darker */
 /*d3_Xyz.prototype.brighter = function(k) {
@@ -34,7 +34,7 @@ d3_Xyz.prototype.cielab = function() {
 
 d3_Xyz.prototype.toString = function() {
   return this.rgb().toString();
-}
+};
 
 function d3_xyz_rgb(x, y, z) {
   x /= 100;

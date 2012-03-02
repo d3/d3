@@ -15,9 +15,19 @@ function d3_Cielab(l, a, b) {
   this.b = b;
 }
 
+d3_Cielab.prototype.rgb = function() {
+  return this.xyz().rgb();
+};
 
+d3_Cielab.prototype.hsl = function() {
+  return this.xyz().hsl();
+};
 
-d3_Xyz.prototype.toString = function() {
+d3_Cielab.prototype.xyz = function() {
+  return d3_cielab_xyz(this.h, this.s, this.l);
+};
+
+d3_Cielab.prototype.toString = function() {
   return this.rgb().toString();
-}
+};
 
