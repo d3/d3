@@ -1480,8 +1480,7 @@ d3_Hsl.prototype.rgb = function() {
 };
 
 d3_Hsl.prototype.xyz = function() {
-  var rgb = this.rgb()
-  return d3_rgb_xyz(rgb.r, rgb.g, rgb.b);
+  return this.rgb().xyz();
 };
 
 d3_Hsl.prototype.toString = function() {

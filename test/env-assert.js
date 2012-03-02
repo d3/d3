@@ -30,6 +30,12 @@ assert.hslEqual = function(actual, h, s, l, message) {
   }
 };
 
+assert.xyzEqual = function(actual, x, y, z, message) {
+  if (Math.abs(actual.x - x) > 1e-6 || Math.abs(actual.y - y) > 1e-6 || Math.abs(actual.z - z) > 1e-6) {
+    assert.fail("xyz(" + actual.x + "," + actual.y + "," + actual.z + ")", "xyz(" + x + "," + y + "," + z + ")", message || "expected {expected}, got {actual}", null, assert.xyzEqual);
+  }
+};
+
 assert.pathEqual = function(actual, expected, message) {
   if (!pathEqual(actual, expected)) {
     assert.fail(formatPath(actual), formatPath(expected), message || "expected {expected}, got {actual}", null, assert.pathEqual);
