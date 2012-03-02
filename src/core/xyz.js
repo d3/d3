@@ -1,7 +1,7 @@
 d3.xyz = function(x, y, z) {
   return arguments.length === 1
       ? (x instanceof d3_Xyz ? d3_xyz(x.x, x.y, x.z)
-      : d3_rgb_parse("" + x, d3_rgb_xyz, d3_xyz))
+      : d3_rgb_parse("" + x, d3_rgb_xyz, d3_hsl_xyz))
       : d3_xyz(+x, +y, +z);
 };
 
@@ -21,6 +21,10 @@ d3_Xyz.prototype.rgb = function() {
 
 d3_Xyz.prototype.hsl = function() {
   return this.rgb().hsl();
+}
+
+d3_Xyz.prototype.cielab = function() {
+  return d3_xyz_cielab(this.x, this.y, this.z);
 }
 
 /* add brighter, darker */
@@ -52,8 +56,26 @@ function d3_xyz_rgb(x, y, z) {
   return d3_rgb(vv(r), vv(g), vv(b));
 }
 
+function d3_xyz_cielab(x, y, z) {
 
+  x /= 95.047;
+  y /= 100.000;
+  z /= 108.883;
 
+  function v(x) {
+    return x > 0.008856 ? Math.pow(x, 1 / 3) : (7.787 * x) + (16 / 116);
+  }
+
+  x = v(x);
+  y = v(y);
+  z = v(z);
+
+  var l = y > 0.008856 ? (116 * y) - 16 : 903.3 * y;
+  var a = 500 * (x - y);
+  var b = 200 * (y - z);
+
+  return d3_cielab(l, a, b);
+}
 
 
 

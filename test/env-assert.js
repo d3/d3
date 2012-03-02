@@ -36,6 +36,12 @@ assert.xyzEqual = function(actual, x, y, z, message) {
   }
 };
 
+assert.labEqual = function(actual, l, a, b, message) {
+  if (Math.abs(actual.l - l) > 1e-6 || Math.abs(actual.a - a) > 1e-6 || Math.abs(actual.b - b) > 1e-6) {
+    assert.fail("lab(" + actual.l + "," + actual.a + "," + actual.b + ")", "lab(" + l + "," + a + "," + b + ")", message || "expected {expected}, got {actual}", null, assert.labEqual);
+  }
+};
+
 assert.pathEqual = function(actual, expected, message) {
   if (!pathEqual(actual, expected)) {
     assert.fail(formatPath(actual), formatPath(expected), message || "expected {expected}, got {actual}", null, assert.pathEqual);

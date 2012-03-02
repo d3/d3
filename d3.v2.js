@@ -1484,12 +1484,16 @@ d3_Hsl.prototype.rgb = function() {
 };
 
 d3_Hsl.prototype.xyz = function() {
-  return this.rgb().xyz();
+  return d3_hsl_xyz(this.h, this.s, this.l);
 };
 
 d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
+
+function d3_hsl_xyz(h, s, l) {
+  return d3_hsl_rgb(h, s, l).xyz();
+}
 
 function d3_hsl_rgb(h, s, l) {
   var m1,
@@ -1522,7 +1526,7 @@ function d3_hsl_rgb(h, s, l) {
 d3.xyz = function(x, y, z) {
   return arguments.length === 1
       ? (x instanceof d3_Xyz ? d3_xyz(x.x, x.y, x.z)
-      : d3_rgb_parse("" + x, d3_rgb_xyz, d3_xyz))
+      : d3_rgb_parse("" + x, d3_rgb_xyz, d3_hsl_xyz))
       : d3_xyz(+x, +y, +z);
 };
 
@@ -1542,6 +1546,10 @@ d3_Xyz.prototype.rgb = function() {
 
 d3_Xyz.prototype.hsl = function() {
   return this.rgb().hsl();
+}
+
+d3_Xyz.prototype.cielab = function() {
+  return d3_xyz_cielab(this.x, this.y, this.z);
 }
 
 /* add brighter, darker */
@@ -1573,11 +1581,52 @@ function d3_xyz_rgb(x, y, z) {
   return d3_rgb(vv(r), vv(g), vv(b));
 }
 
+function d3_xyz_cielab(x, y, z) {
+
+  x /= 95.047;
+  y /= 100.000;
+  z /= 108.883;
+
+  function v(x) {
+    return x > 0.008856 ? Math.pow(x, 1 / 3) : (7.787 * x) + (16 / 116);
+  }
+
+  x = v(x);
+  y = v(y);
+  z = v(z);
+
+  var l = y > 0.008856 ? (116 * y) - 16 : 903.3 * y;
+  var a = 500 * (x - y);
+  var b = 200 * (y - z);
+
+  return d3_cielab(l, a, b);
+}
 
 
 
 
+d3.cielab = function(l, a, b) {
+  return arguments.length === 1
+      ? (l instanceof d3_Cielab ? d3_cielab(l.l, l.a, l.b)
+      : d3_rgb_parse("" + l, d3_rgb_xyz, d3_hsl_xyz).cielab())
+      : d3_cielab(+l, +a, +b);
+};
 
+function d3_cielab(l, a, b) {
+  return new d3_Cielab(l, a, b);
+}
+
+function d3_Cielab(l, a, b) {
+  this.l = l;
+  this.a = a;
+  this.b = b;
+}
+
+
+
+d3_Xyz.prototype.toString = function() {
+  return this.rgb().toString();
+}
 
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);

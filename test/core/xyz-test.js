@@ -25,6 +25,9 @@ suite.addBatch({
     "can initialize with RGB": function(xyz) {
       assert.xyzEqual(xyz(d3.rgb(30, 40, 50)), 1.8699354618049604, 2.0238922484735156, 3.309705799692103);
     },
+    "can initialize with HSL": function(xyz) {
+      assert.xyzEqual(xyz("hsl(0, 100%, 50%)"), 41.24, 21.26, 1.93);
+    },
     "can convert to RGB": function(xyz) {
       assert.rgbEqual(xyz(d3.rgb(30, 40, 50)).rgb(), 30, 40, 50);
     },
