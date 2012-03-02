@@ -27,6 +27,15 @@ d3_Cielab.prototype.xyz = function() {
   return d3_cielab_xyz(this.l, this.a, this.b);
 };
 
+/* 18 chosen to correspond roughly to RGB brighter/darker */
+d3_Cielab.prototype.brighter = function(k) {
+  return d3_cielab(Math.min(100, this.l + 18 * (arguments.length ? k : 1)), this.a, this.b);
+};
+
+d3_Cielab.prototype.darker = function(k) {
+  return d3_cielab(Math.max(0, this.l - 18 * (arguments.length ? k : 1)), this.a, this.b);
+};
+
 d3_Cielab.prototype.toString = function() {
   return this.rgb().toString();
 };

@@ -36,6 +36,16 @@ suite.addBatch({
     },
     "can convert to XYZ": function(lab) {
       assert.xyzEqual(lab("#abc").xyz(), 45.246971009995335, 48.44632879252148, 64.09304697440157);
+    },
+    "can derive a brighter color": function(lab) {
+      var brown = lab("brown");
+      assert.equal(brown.brighter().l, brown.l + 18);
+      assert.equal(brown.brighter(2).l, brown.l + 36);
+    },
+    "can derive a darker color": function(lab) {
+      var brown = lab("brown");
+      assert.equal(brown.darker().l, brown.l - 18);
+      assert.equal(brown.darker(2).l, brown.l - 36);
     }
   }
 });
