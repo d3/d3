@@ -4429,7 +4429,7 @@ d3.svg.brush = function() {
       // Final redraw and notify listeners.
       if (moved) {
         redraw(g);
-        event_({type: "brush"});
+        event_({type: "brush", mode: dragging ? "move" : "resize"});
       }
     }
 
