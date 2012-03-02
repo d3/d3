@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Streamgraph</title>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
+    <link type="text/css" rel="stylesheet" href="../button.css"/>
+    <script type="text/javascript" src="stream_layers.js"></script>
+    <script type="text/javascript" src="stream-chart.js"></script>
+</head>
+<body>
+    <div id="chart">
+        <button class="first last" onclick="transition()">
+            Update
+        </button><p>
+    </div>
+    <script>
+        var n = 20, // number of layers
+            m = 200; // number of samples per layer
+
+        var data1 = stream_layers(n, m);
+        var data0 = stream_layers(n, m);
+        var colors = d3.range(n).map(function() { return d3.interpolateRgb("#aad", "#556")(Math.random()); });
+
+        var streamgraph = streamgraphChart()
+            .margin({top: 10, right: 10, bottom: 10, left: 10})
+            .color(function(d, i) { return colors[i]; }) // use same colors for both data sets
+            .transitionDuration(1500);
+
+        d3.select("#chart")
+            .datum(data0)
+            .call(streamgraph);
+
+        function transition() {
+            d3.select("#chart")
+                .datum(function() {
+                   var d = data1;
+                   data1 = data0;
+                   return data0 = d;
+                })
+                .call(streamgraph);
+        }
+
+    </script>
+</body>
+</html>
