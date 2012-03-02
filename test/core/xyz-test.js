@@ -34,8 +34,15 @@ suite.addBatch({
       assert.equal(color.y, 48.44632879252148);
       assert.equal(color.z, 64.09304697440157);
     },
-
-
+    "can initialize with RGB": function(xyz) {
+      var color = xyz(d3.rgb(30, 40, 50));
+      assert.equal(color.x, 1.8699354618049604);
+      assert.equal(color.y, 2.0238922484735156);
+      assert.equal(color.z, 3.309705799692103);
+    },
+    "can convert to RGB": function(xyz) {
+      assert.rgbEqual(xyz(d3.rgb(30, 40, 50)).rgb(), 30, 40, 50);
+    }
   }
 });
 
