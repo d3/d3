@@ -13,6 +13,11 @@ suite.addBatch({
     "floors channel values": function(rgb) {
       assert.rgbEqual(rgb(1.2, 2.6, 42.9), 1, 2, 42);
     },
+    "defaults to black for invalid inputs": function(rgb) {
+      assert.rgbEqual(rgb("invalid"), 0, 0, 0);
+      assert.rgbEqual(rgb("hasOwnProperty"), 0, 0, 0);
+      assert.rgbEqual(rgb("__proto__"), 0, 0, 0);
+    },
     "does not clamp channel values": function(rgb) {
       assert.rgbEqual(rgb(-10, -20, -30), -10, -20, -30);
       assert.rgbEqual(rgb(300, 400, 500), 300, 400, 500);

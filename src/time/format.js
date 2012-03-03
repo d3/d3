@@ -21,15 +21,16 @@ d3.time.format = function(template) {
   }
 
   format.parse = function(string) {
-    var date = new d3_time(1900, 0, 1),
-        i = d3_time_parse(date, template, string, 0);
+    var d = {y: 1900, m: 0, d: 1, H: 0, M: 0, S: 0, L: 0},
+        i = d3_time_parse(d, template, string, 0);
     if (i != string.length) return null;
-    if (date.hour12) {
-      var hours = date.getHours() % 12;
-      date.setHours(date.hour12pm ? hours + 12 : hours);
-    }
-    delete date.hour12;
-    delete date.hour12pm;
+
+    // The am-pm flag is 0 for AM, and 1 for PM.
+    if ("p" in d) d.H = d.H % 12 + d.p * 12;
+
+    var date = new d3_time();
+    date.setFullYear(d.y, d.m, d.d);
+    date.setHours(d.H, d.M, d.S, d.L);
     return date;
   };
 
@@ -90,16 +91,16 @@ var d3_time_formats = {
   e: function(d) { return d3_time_sfill2(d.getDate()); },
   H: function(d) { return d3_time_zfill2(d.getHours()); },
   I: function(d) { return d3_time_zfill2(d.getHours() % 12 || 12); },
-  j: d3_time_dayOfYear,
+  j: function(d) { return d3_time_zfill3(1 + d3.time.dayOfYear(d)); },
   L: function(d) { return d3_time_zfill3(d.getMilliseconds()); },
   m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
   M: function(d) { return d3_time_zfill2(d.getMinutes()); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
   s: function(d) { return d3_time_ordinal_suffix(d.getDate()); },
   S: function(d) { return d3_time_zfill2(d.getSeconds()); },
-  U: d3_time_weekNumberSunday,
+  U: function(d) { return d3_time_zfill2(d3.time.sundayOfYear(d)); },
   w: function(d) { return d.getDay(); },
-  W: d3_time_weekNumberMonday,
+  W: function(d) { return d3_time_zfill2(d3.time.mondayOfYear(d)); },
   x: d3.time.format("%m/%d/%y"),
   X: d3.time.format("%H:%M:%S"),
   y: function(d) { return d3_time_zfill2(d.getFullYear() % 100); },
@@ -117,7 +118,7 @@ var d3_time_parsers = {
   d: d3_time_parseDay,
   e: d3_time_parseDay,
   H: d3_time_parseHour24,
-  I: d3_time_parseHour12,
+  I: d3_time_parseHour24,
   // j: function(d, s, i) { /*TODO day of year [001,366] */ return i; },
   L: d3_time_parseMilliseconds,
   m: d3_time_parseMonthNumber,
@@ -138,18 +139,8 @@ var d3_time_parsers = {
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekdayAbbrev(date, string, i) {
-  return string.substring(i, i += 3).toLowerCase() in d3_time_weekdayAbbrevLookup ? i : -1;
+  return d3_time_weekdayAbbrevRe.test(string.substring(i, i += 3)) ? i : -1;
 }
-
-var d3_time_weekdayAbbrevLookup = {
-  sun: 3,
-  mon: 3,
-  tue: 3,
-  wed: 3,
-  thu: 3,
-  fri: 3,
-  sat: 3
-};
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekday(date, string, i) {
@@ -158,24 +149,16 @@ function d3_time_parseWeekday(date, string, i) {
   return n ? i += n[0].length : -1;
 }
 
-var d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/ig;
-
-var d3_time_weekdays = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday"
-];
+var d3_time_weekdayAbbrevRe = /^(?:sun|mon|tue|wed|thu|fri|sat)/i,
+    d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/i;
+    d3_time_weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function d3_time_parseMonthAbbrev(date, string, i) {
-  var n = d3_time_monthAbbrevLookup[string.substring(i, i += 3).toLowerCase()];
-  return n == null ? -1 : (date.setMonth(n), i);
+  var n = d3_time_monthAbbrevLookup.get(string.substring(i, i += 3).toLowerCase());
+  return n == null ? -1 : (date.m = n, i);
 }
 
-var d3_time_monthAbbrevLookup = {
+var d3_time_monthAbbrevLookup = d3.map({
   jan: 0,
   feb: 1,
   mar: 2,
@@ -188,17 +171,17 @@ var d3_time_monthAbbrevLookup = {
   oct: 9,
   nov: 10,
   dec: 11
-};
+});
 
 function d3_time_parseMonth(date, string, i) {
   d3_time_monthRe.lastIndex = 0;
   var n = d3_time_monthRe.exec(string.substring(i, i + 12));
-  return n ? (date.setMonth(d3_time_monthLookup[n[0].toLowerCase()]), i += n[0].length) : -1;
+  return n ? (date.m = d3_time_monthLookup.get(n[0].toLowerCase()), i += n[0].length) : -1;
 }
 
 var d3_time_monthRe = /^(?:January|February|March|April|May|June|July|August|September|October|November|December)/ig;
 
-var d3_time_monthLookup = {
+var d3_time_monthLookup = d3.map({
   january: 0,
   february: 1,
   march: 2,
@@ -211,7 +194,7 @@ var d3_time_monthLookup = {
   october: 9,
   november: 10,
   december: 11
-};
+});
 
 var d3_time_months = [
   "January",
@@ -243,13 +226,13 @@ function d3_time_parseLocaleTime(date, string, i) {
 function d3_time_parseFullYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 4));
-  return n ? (date.setFullYear(n[0]), i += n[0].length) : -1;
+  return n ? (date.y = +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_parseYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setFullYear(d3_time_century() + +n[0]), i += n[0].length) : -1;
+  return n ? (date.y = d3_time_century() + +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_century() {
@@ -259,80 +242,52 @@ function d3_time_century() {
 function d3_time_parseMonthNumber(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setMonth(n[0] - 1), i += n[0].length) : -1;
+  return n ? (date.m = n[0] - 1, i += n[0].length) : -1;
 }
 
 function d3_time_parseDay(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setDate(+n[0]), i += n[0].length) : -1;
+  return n ? (date.d = +n[0], i += n[0].length) : -1;
 }
 
-// Note: we don't validate that the hour is in the range [0,23].
+// Note: we don't validate that the hour is in the range [0,23] or [1,12].
 function d3_time_parseHour24(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setHours(+n[0]), i += n[0].length) : -1;
-}
-
-// Note: we don't validate that the hour is in the range [1,12].
-function d3_time_parseHour12(date, string, i) {
-  date.hour12 = true;
-  return d3_time_parseHour24(date, string, i);
+  return n ? (date.H = +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_parseMinutes(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setMinutes(+n[0]), i += n[0].length) : -1;
+  return n ? (date.M = +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_parseSeconds(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.setSeconds(+n[0]), i += n[0].length) : -1;
+  return n ? (date.S = +n[0], i += n[0].length) : -1;
 }
 
 function d3_time_parseMilliseconds(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 3));
-  return n ? (date.setMilliseconds(+n[0]), i += n[0].length) : -1;
+  return n ? (date.L = +n[0], i += n[0].length) : -1;
 }
 
 // Note: we don't look at the next directive.
 var d3_time_numberRe = /\s*\d+/;
 
 function d3_time_parseAmPm(date, string, i) {
-  var n = d3_time_amPmLookup[string.substring(i, i += 2).toLowerCase()];
-  return n == null ? -1 : (date.hour12pm = n, i);
+  var n = d3_time_amPmLookup.get(string.substring(i, i += 2).toLowerCase());
+  return n == null ? -1 : (date.p = n, i);
 }
 
-var d3_time_amPmLookup = {
+var d3_time_amPmLookup = d3.map({
   am: 0,
   pm: 1
-};
-
-function d3_time_year(d) {
-  return new d3_time(d.getFullYear(), 0, 1);
-}
-
-function d3_time_daysElapsed(d0, d1) {
-  return ~~((d1 - d0) / 864e5 - (d1.getTimezoneOffset() - d0.getTimezoneOffset()) / 1440);
-}
-
-function d3_time_dayOfYear(d) {
-  return d3_time_zfill3(1 + d3_time_daysElapsed(d3_time_year(d), d));
-}
-
-function d3_time_weekNumberSunday(d) {
-  var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + d0.getDay()) / 7));
-}
-
-function d3_time_weekNumberMonday(d) {
-  var d0 = d3_time_year(d);
-  return d3_time_zfill2(~~((d3_time_daysElapsed(d0, d) + (d0.getDay() + 6) % 7) / 7));
-}
+});
 
 // TODO table of time zone offset names?
 function d3_time_zone(d) {

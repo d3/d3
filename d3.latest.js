@@ -2241,6 +2241,8 @@ d3.timer = function(callback, delay, then) {
     then = Date.now();
   }
 
+  console.log('d3.timer', delay, then);
+  
   // See if the callback's already in the queue.
   while (t1) {
     if (t1.callback === callback) {

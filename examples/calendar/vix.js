@@ -32,7 +32,7 @@ var rect = svg.selectAll("rect.day")
     .attr("height", z)
     .attr("x", function(d) { return week(d) * z; })
     .attr("y", function(d) { return day(d) * z; })
-    .map(format);
+    .datum(format);
 
 rect.append("title")
     .text(function(d) { return d; });

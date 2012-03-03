@@ -138,6 +138,9 @@ suite.addBatch({
       assert.pathEqual(a([[0, 0], [1, 1]]), "M0,0V1H1L1,0H0V0Z");
       assert.equal(a.interpolate(), "step-before");
     },
+    "invalid interpolates fallback to linear": function(area) {
+      assert.equal(area().interpolate("__proto__").interpolate(), "linear");
+    },
 
     "tension defaults to .7": function(area) {
       assert.equal(area().tension(), .7);

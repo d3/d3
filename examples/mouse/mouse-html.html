@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HTML Mouse Test</title>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var body = d3.select("body"),
+    div = d3.select("body").append("div")
+        .style("width", "1000px")
+        .style("height", "500px")
+        .style("border", "solid black 1px")
+        .style("cursor", "crosshair"),
+    span = body.append("span");
+
+d3.select(window)
+    .on("mousemove", function() {
+      span.text(d3.mouse(div[0][0]));
+    });
+    </script>
+  </body>
+</html>

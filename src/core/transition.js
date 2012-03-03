@@ -1,7 +1,7 @@
 function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
-  var tweens = {},
+  var tweens = new d3_Map,
       event = d3.dispatch("start", "end"),
       ease = d3_transitionEase;
 
@@ -10,9 +10,9 @@ function d3_transition(groups, id, time) {
   groups.time = time;
 
   groups.tween = function(name, tween) {
-    if (arguments.length < 2) return tweens[name];
-    if (tween == null) delete tweens[name];
-    else tweens[name] = tween;
+    if (arguments.length < 2) return tweens.get(name);
+    if (tween == null) tweens.remove(name);
+    else tweens.set(name, tween);
     return groups;
   };
 
@@ -44,11 +44,11 @@ function d3_transition(groups, id, time) {
         if (lock.active > id) return stop();
         lock.active = id;
 
-        for (var tween in tweens) {
-          if (tween = tweens[tween].call(node, d, i)) {
+        tweens.forEach(function(key, value) {
+          if (tween = value.call(node, d, i)) {
             tweened.push(tween);
           }
-        }
+        });
 
         event.start.call(node, d, i);
         if (!tick(elapsed)) d3.timer(tick, 0, time);
@@ -68,9 +68,9 @@ function d3_transition(groups, id, time) {
 
         if (t >= 1) {
           stop();
-          d3_transitionInheritId = id;
+          d3_transitionId = id;
           event.end.call(node, d, i);
-          d3_transitionInheritId = 0;
+          d3_transitionId = 0;
           return 1;
         }
       }
@@ -112,14 +112,21 @@ function d3_transitionTween(name, b) {
 }
 
 var d3_transitionPrototype = [],
+    d3_transitionNextId = 0,
     d3_transitionId = 0,
-    d3_transitionInheritId = 0,
-    d3_transitionEase = d3.ease("cubic-in-out");
+    d3_transitionDefaultDelay = 0,
+    d3_transitionDefaultDuration = 250,
+    d3_transitionDefaultEase = d3.ease("cubic-in-out"),
+    d3_transitionDelay = d3_transitionDefaultDelay,
+    d3_transitionDuration = d3_transitionDefaultDuration,
+    d3_transitionEase = d3_transitionDefaultEase;
 
 d3_transitionPrototype.call = d3_selectionPrototype.call;
 
-d3.transition = function() {
-  return d3_selectionRoot.transition();
+d3.transition = function(selection) {
+  return arguments.length
+      ? (d3_transitionId ? selection.transition() : selection)
+      : d3_selectionRoot.transition();
 };
 
 d3.transition.prototype = d3_transitionPrototype;

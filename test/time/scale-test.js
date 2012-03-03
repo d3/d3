@@ -1,7 +1,10 @@
 require("../env");
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("assert"),
+    time = require("./time"),
+    local = time.local,
+    utc = time.utc;
 
 var suite = vows.describe("d3.time.scale");
 
@@ -560,17 +563,5 @@ suite.addBatch({
     }
   }
 });
-
-function local(year, month, day, hours, minutes, seconds, milliseconds) {
-  var date = new Date(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
-  date.setFullYear(year); // Y2K fail
-  return date;
-}
-
-function utc(year, month, day, hours, minutes, seconds, milliseconds) {
-  var date = new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0));
-  date.setUTCFullYear(year); // Y2K fail
-  return date;
-}
 
 suite.export(module);

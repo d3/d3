@@ -547,7 +547,7 @@ function donutTransition() {
       arc = d3.svg.arc();
 
   svg.selectAll(".symbol path")
-      .map(function(d, i) {
+      .datum(function(d, i) {
         d = pie1[i];
         d.innerRadius = r0;
         d.outerRadius = r1;

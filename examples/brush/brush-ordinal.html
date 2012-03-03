@@ -69,7 +69,7 @@ svg.append("g")
     .attr("class", "brush")
     .call(d3.svg.brush().x(x)
     .on("brushstart", brushstart)
-    .on("brush", brush)
+    .on("brush", brushmove)
     .on("brushend", brushend))
   .selectAll("rect")
     .attr("height", h);
@@ -78,7 +78,7 @@ function brushstart() {
   svg.classed("selecting", true);
 }
 
-function brush() {
+function brushmove() {
   var s = d3.event.target.extent();
   symbol.classed("selected", function(d) { return s[0] <= (d = x(d)) && d <= s[1]; });
 }
