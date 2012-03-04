@@ -86,16 +86,6 @@ function d3_lab_rgb(l, a, b) {
   return d3_rgb(w(r), w(g), w(b));
 }
 
-function d3_lab_cielch(l, a, b) {
-  var h = Math.atan2(b, a);
-
-  h = h > 0 ? (h / Math.PI) * 180 : 360 - (Math.abs(h) / Math.PI) * 180;
-
-  c = Math.sqrt(a * a + b * b);
-
-  return d3_cielch(l, c, h);
-}
-
 function d3_lab_lch(l, c, h) {
   var hr = h * (Math.PI / 180);
   var a = Math.cos(hr) * c;
