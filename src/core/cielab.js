@@ -46,27 +46,20 @@ function d3_cielab_rgb(l, a, b) {
     return p > 0.008856 ? p : (x - 16 / 116) / 7.787;
   }
 
-  var x = v(x) * 95.047;
-  var y = v(y) * 100.000;
-  var z = v(z) * 108.883;
-
-  x /= 100;
-  y /= 100;
-  z /= 100;
+  var x = v(x) * 0.95047;
+  var y = v(y);
+  var z = v(z) * 1.08883;
 
   var r = x * 3.2406 + y * -1.5372 + z * -0.4986;
   var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
   var b = x * 0.0557 + y * -0.2040 + z * 1.0570;
 
   function w(r) {
-    return r > 0.0031308 ? 1.055 * Math.pow(r, (1 / 2.4)) - 0.055 : 12.92 * r;
+    r = r > 0.0031308 ? 1.055 * Math.pow(r, (1 / 2.4)) - 0.055 : 12.92 * r;
+    return Math.round(r * 255)
   }
 
-  function ww(h) {
-    return Math.round(w(h) * 255);
-  }
-
-  return d3_rgb(ww(r), ww(g), ww(b));
+  return d3_rgb(w(r), w(g), w(b));
 }
 
 function d3_cielab_cielch(l, a, b) {
