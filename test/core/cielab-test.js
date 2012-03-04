@@ -38,6 +38,18 @@ suite.addBatch({
       assert.equal(brown.darker().l, brown.l - 18);
       assert.equal(brown.darker(2).l, brown.l - 36);
     },
+    "can get chroma value": function(lab) {
+      assert.equal(lab("#048F07").chroma(), 76.67961238453204);
+    },
+    "can get hue value": function(lab) {
+      assert.equal(lab("#048F07").hue(), 136.39481492184387);
+    },
+    "can set chroma value": function(lab) {
+      assert.equal(lab("red").chroma(14).chroma(), 14);
+    },
+    "can set hue value": function(lab) {
+      assert.equal(lab("red").hue(14).hue(), 14);
+    },
     "string coercion returns hexadecimal format": function(lab) {
       assert.strictEqual(lab("#abcdef") + "", "#abcdef");
       assert.strictEqual(lab("moccasin") + "", "#ffe4b5");

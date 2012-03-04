@@ -32,6 +32,30 @@ d3_Cielab.prototype.darker = function(k) {
   return d3_cielab(Math.max(0, this.l - 18 * (arguments.length ? k : 1)), this.a, this.b);
 };
 
+d3_Cielab.prototype.hue = function(h) {
+  var a = this.a;
+  var b = this.b;
+
+  if (arguments.length) {
+    return d3_cielab_lch(this.l, this.chroma(), h)
+  }
+
+  var h = Math.atan2(b, a);
+
+  return h > 0 ? (h / Math.PI) * 180 : 360 - (Math.abs(h) / Math.PI) * 180;
+}
+
+d3_Cielab.prototype.chroma = function(c) {
+  var a = this.a;
+  var b = this.b;
+
+  if (arguments.length) {
+    return d3_cielab_lch(this.l, c, this.hue())
+  }
+
+  return Math.sqrt(a * a + b * b);
+}
+
 d3_Cielab.prototype.toString = function() {
   return this.rgb().toString();
 };
@@ -70,5 +94,12 @@ function d3_cielab_cielch(l, a, b) {
   c = Math.sqrt(a * a + b * b);
 
   return d3_cielch(l, c, h);
+}
+
+function d3_cielab_lch(l, c, h) {
+  var hr = h * (Math.PI / 180);
+  var a = Math.cos(hr) * c;
+  var b = Math.sin(hr) * c;
+  return d3_cielab(l, a, b);
 }
 
