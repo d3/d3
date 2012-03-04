@@ -1301,9 +1301,9 @@ function d3_rgb_lab(r, g, b) {
   g = v(g) * 100;
   b = v(b) * 100;
 
-  var x = r * 0.4124 + g * 0.3576 + b * 0.1805;
-  var y = r * 0.2126 + g * 0.7152 + b * 0.0722;
-  var z = r * 0.0193 + g * 0.1192 + b * 0.9505;
+  var x = r * 0.4124 + g * 0.3576 + b * 0.1805,
+      y = r * 0.2126 + g * 0.7152 + b * 0.0722,
+      z = r * 0.0193 + g * 0.1192 + b * 0.9505;
 
   x /= 95.047;
   y /= 100.000;
@@ -1317,9 +1317,9 @@ function d3_rgb_lab(r, g, b) {
   y = w(y);
   z = w(z);
 
-  var l = y > 0.008856 ? (116 * y) - 16 : 903.3 * y;
-  var a = 500 * (x - y);
-  var b = 200 * (y - z);
+  var l = y > 0.008856 ? (116 * y) - 16 : 903.3 * y,
+      a = 500 * (x - y),
+      b = 200 * (y - z);
 
   return d3_lab(l, a, b);
 }
@@ -1580,8 +1580,8 @@ d3_Lab.prototype.darker = function(k) {
 };
 
 d3_Lab.prototype.hue = function(h) {
-  var a = this.a;
-  var b = this.b;
+  var a = this.a,
+      b = this.b;
 
   if (arguments.length) {
     return d3_lab_lch(this.l, this.chroma(), h)
@@ -1593,8 +1593,8 @@ d3_Lab.prototype.hue = function(h) {
 }
 
 d3_Lab.prototype.chroma = function(c) {
-  var a = this.a;
-  var b = this.b;
+  var a = this.a,
+      b = this.b;
 
   if (arguments.length) {
     return d3_lab_lch(this.l, c, this.hue())
@@ -1608,22 +1608,22 @@ d3_Lab.prototype.toString = function() {
 };
 
 function d3_lab_rgb(l, a, b) {
-  var y = (l + 16) / 116;
-  var x = a / 500 + y;
-  var z = y - b / 200;
+  var y = (l + 16) / 116,
+      x = a / 500 + y,
+      z = y - b / 200;
 
   function v(x) {
     var p = x * x * x;
     return p > 0.008856 ? p : (x - 16 / 116) / 7.787;
   }
 
-  var x = v(x) * 0.95047;
-  var y = v(y);
-  var z = v(z) * 1.08883;
+  var x = v(x) * 0.95047,
+      y = v(y),
+      z = v(z) * 1.08883;
 
-  var r = x * 3.2406 + y * -1.5372 + z * -0.4986;
-  var g = x * -0.9689 + y * 1.8758 + z * 0.0415;
-  var b = x * 0.0557 + y * -0.2040 + z * 1.0570;
+  var r = x * 3.2406 + y * -1.5372 + z * -0.4986,
+      g = x * -0.9689 + y * 1.8758 + z * 0.0415,
+      b = x * 0.0557 + y * -0.2040 + z * 1.0570;
 
   function w(r) {
     r = r > 0.0031308 ? 1.055 * Math.pow(r, (1 / 2.4)) - 0.055 : 12.92 * r;
@@ -1634,9 +1634,9 @@ function d3_lab_rgb(l, a, b) {
 }
 
 function d3_lab_lch(l, c, h) {
-  var hr = h * (Math.PI / 180);
-  var a = Math.cos(hr) * c;
-  var b = Math.sin(hr) * c;
+  var hr = h * (Math.PI / 180),
+      a = Math.cos(hr) * c,
+      b = Math.sin(hr) * c;
   return d3_lab(l, a, b);
 }
 
