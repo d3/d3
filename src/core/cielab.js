@@ -19,10 +19,6 @@ d3_Cielab.prototype.rgb = function() {
   return d3_cielab_rgb(this.l, this.a, this.b);
 };
 
-d3_Cielab.prototype.hsl = function() {
-  return this.rgb().hsl();
-};
-
 d3_Cielab.prototype.cielch = function() {
   return d3_cielab_cielch(this.l, this.a, this.b);
 };

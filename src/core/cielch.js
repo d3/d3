@@ -15,14 +15,6 @@ function d3_Cielch(l, c, h) {
   this.h = h;
 }
 
-d3_Cielch.prototype.rgb = function() {
-  return this.cielab().rgb();
-};
-
-d3_Cielch.prototype.hsl = function() {
-  return this.cielab().hsl();
-};
-
 d3_Cielch.prototype.cielab = function() {
   return d3_cielch_cielab(this.l, this.c, this.h);
 };
@@ -36,7 +28,7 @@ d3_Cielch.prototype.darker = function(k) {
 };
 
 d3_Cielch.prototype.toString = function() {
-  return this.rgb().toString();
+  return this.cielab().toString();
 };
 
 function d3_cielch_cielab(l, c, h) {

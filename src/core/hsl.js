@@ -29,18 +29,11 @@ d3_Hsl.prototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
 
-d3_Hsl.prototype.cielab = function() {
-  return this.rgb().cielab();
-};
-
-d3_Hsl.prototype.cielch = function() {
-  return this.cielab().cielch();
-};
-
 d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
 
+/* this is still used for initializing cielab from hsl, should be removed though */
 function d3_hsl_cielab(h, s, l) {
   return d3_hsl_rgb(h, s, l).cielab();
 }

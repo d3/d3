@@ -22,17 +22,11 @@ suite.addBatch({
     "can convert from RGB": function(lab) {
       assert.labEqual(d3.rgb("#048F07").cielab(), 51.480406534539185, -55.524431964471155, 52.88478430006963);
     },
-    "can convert from HSL": function(lab) {
-      assert.labEqual(d3.hsl("#048F07").cielab(), 51.480406534539185, -55.524431964471155, 52.88478430006963);
-    },
     "can initialize with RGB": function(lab) {
       assert.labEqual(lab(d3.rgb("#048F07")), 51.480406534539185, -55.524431964471155, 52.88478430006963);
     },
     "can convert to RGB": function(lab) {
       assert.rgbEqual(lab(d3.rgb(30, 40, 50)).rgb(), 30, 40, 50);
-    },
-    "can convert to HSL": function(lab) {
-      assert.hslEqual(lab("red").hsl(), 0, 1, .5);
     },
     "can derive a brighter color": function(lab) {
       var brown = lab("brown");

@@ -1193,10 +1193,6 @@ d3_Rgb.prototype.cielab = function() {
   return d3_rgb_cielab(this.r, this.g, this.b);
 };
 
-d3_Rgb.prototype.cielch = function() {
-  return this.cielab().cielch();
-};
-
 d3_Rgb.prototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
 };
@@ -1503,18 +1499,11 @@ d3_Hsl.prototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
 
-d3_Hsl.prototype.cielab = function() {
-  return this.rgb().cielab();
-};
-
-d3_Hsl.prototype.cielch = function() {
-  return this.cielab().cielch();
-};
-
 d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
 
+/* this is still used for initializing cielab from hsl, should be removed though */
 function d3_hsl_cielab(h, s, l) {
   return d3_hsl_rgb(h, s, l).cielab();
 }
@@ -1566,10 +1555,6 @@ function d3_Cielab(l, a, b) {
 
 d3_Cielab.prototype.rgb = function() {
   return d3_cielab_rgb(this.l, this.a, this.b);
-};
-
-d3_Cielab.prototype.hsl = function() {
-  return this.rgb().hsl();
 };
 
 d3_Cielab.prototype.cielch = function() {
@@ -1649,14 +1634,6 @@ function d3_Cielch(l, c, h) {
   this.h = h;
 }
 
-d3_Cielch.prototype.rgb = function() {
-  return this.cielab().rgb();
-};
-
-d3_Cielch.prototype.hsl = function() {
-  return this.cielab().hsl();
-};
-
 d3_Cielch.prototype.cielab = function() {
   return d3_cielch_cielab(this.l, this.c, this.h);
 };
@@ -1670,7 +1647,7 @@ d3_Cielch.prototype.darker = function(k) {
 };
 
 d3_Cielch.prototype.toString = function() {
-  return this.rgb().toString();
+  return this.cielab().toString();
 };
 
 function d3_cielch_cielab(l, c, h) {
