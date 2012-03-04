@@ -7,6 +7,7 @@ module.exports = {
     return d3.select("body").append("div").transition()
         .delay(100)
         .duration(150)
+        .attr("test", 100)
         .ease("bounce");
   },
 
@@ -28,7 +29,7 @@ module.exports = {
 
   "while transitioning": {
     topic: function(t1) {
-      var t2 = t1.transition(),
+      var t2 = t1.transition().attr("test", 200),
           cb = this.callback;
       t2.each("start", function() {
         d3.timer(function() {
@@ -38,7 +39,7 @@ module.exports = {
       });
     },
     "increments the lock's reference count": function(t2) {
-      assert.isTrue(t2[0][0].node.__transition__.count > 1);
+      assert.isTrue(t2[0][0].node.__transition__['attr.test'].count > 1);
     }
   },
 

@@ -7,7 +7,7 @@ module.exports = {
     topic: function() {
       var cb = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
-          transition = div.transition().delay(150),
+          transition = div.transition().delay(150).attr("test", 100),
           then = Date.now(),
           n = 0,
           calls = [],
@@ -68,10 +68,10 @@ module.exports = {
     "sets an exclusive lock on transitioning nodes": function(result) {
       var id = result.id;
       assert.isTrue(id > 0);
-      assert.equal(result.selection[0][0].__transition__.count, 1);
-      assert.equal(result.selection[0][1].__transition__.count, 1);
-      assert.equal(result.selection[0][0].__transition__.active, id);
-      assert.equal(result.selection[0][1].__transition__.active, id);
+      assert.equal(result.selection[0][0].__transition__["attr.test"].count, 1);
+      assert.equal(result.selection[0][1].__transition__["attr.test"].count, 1);
+      assert.equal(result.selection[0][0].__transition__["attr.test"].active, id);
+      assert.equal(result.selection[0][1].__transition__["attr.test"].active, id);
     }
   },
 

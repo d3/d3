@@ -31,22 +31,36 @@ function d3_transition(groups, id, time) {
   d3.timer(function(elapsed) {
     groups.each(function(d, i, j) {
       var tweened = [],
-          node = this,
-          delay = groups[j][i].delay,
-          duration = groups[j][i].duration,
-          lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0});
+          tweenedNames = [], // names of tweened objects to keep track of lock
+            node = this,
+            delay = groups[j][i].delay,
+            duration = groups[j][i].duration,
+            // lock is a map from tween name to { active: int, count: int }
+            lock = node.__transition__ || (node.__transition__ = {});
 
-      ++lock.count;
+      // create tween locks
+      tweens.forEach(function(key, value) {
+         if (lock[key] == undefined) {
+            lock[key] = { active: 0, count: 0 }; // lock entry per tween
+         }
+         ++lock[key].count;
+      });
 
       delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time);
 
       function start(elapsed) {
-        if (lock.active > id) return stop();
-        lock.active = id;
+        tweens.forEach(function(key, value) {
+          if (lock[key].active > id) {
+              return;
+          }
+          lock[key].active = id;
+        });
 
         tweens.forEach(function(key, value) {
-          if (tween = value.call(node, d, i)) {
+          // check if tween is enabled
+          if (!(lock[key].active > id) && (tween = value.call(node, d, i))) {
             tweened.push(tween);
+            tweenedNames.push(key);
           }
         });
 
@@ -56,14 +70,22 @@ function d3_transition(groups, id, time) {
       }
 
       function tick(elapsed) {
-        if (lock.active !== id) return stop();
-
         var t = (elapsed - delay) / duration,
             e = ease(t),
             n = tweened.length;
 
+        var tweenExecuted = false;
         while (n > 0) {
-          tweened[--n].call(node, e);
+          --n;
+          if (lock[tweenedNames[n]].active !== id) {
+              continue;
+          }
+          tweened[n].call(node, e);
+          tweenExecuted = true;
+        }
+
+        if (!tweenExecuted) {
+            return stop();
         }
 
         if (t >= 1) {
@@ -76,7 +98,19 @@ function d3_transition(groups, id, time) {
       }
 
       function stop() {
-        if (!--lock.count) delete node.__transition__;
+        // decrease all locks and delete when empty
+        tweens.forEach(function(key, value) {
+            if (!--lock[key].count) delete lock[key];
+        });
+
+        // TODO refactor size calculation, just for proof of concept
+        var size = 0, key;
+        for (key in node.__transition__) {
+          if (node.__transition__.hasOwnProperty(key)) size++;
+        }
+
+        if (size === 0) delete node.__transition__;
+
         return 1;
       }
     });
