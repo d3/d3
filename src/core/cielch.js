@@ -1,7 +1,7 @@
 d3.cielch = function(l, c, h) {
   return arguments.length === 1
       ? (l instanceof d3_Cielch ? d3_cielch(l.l, l.c, l.h)
-      : d3_rgb_parse("" + l, d3_rgb_cielab, d3_hsl_cielab).cielch())
+      : d3_rgb_parse("" + l, d3_rgb, d3_hsl_rgb).cielab().cielch())
       : d3_cielch(+l, +c, +h);
 };
 

@@ -1,7 +1,7 @@
 d3.cielab = function(l, a, b) {
   return arguments.length === 1
       ? (l instanceof d3_Cielab ? d3_cielab(l.l, l.a, l.b)
-      : d3_rgb_parse("" + l, d3_rgb_cielab, d3_hsl_cielab))
+      : d3_rgb_parse("" + l, d3_rgb, d3_hsl_rgb).cielab())
       : d3_cielab(+l, +a, +b);
 };
 

@@ -33,11 +33,6 @@ d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
 
-/* this is still used for initializing cielab from hsl, should be removed though */
-function d3_hsl_cielab(h, s, l) {
-  return d3_hsl_rgb(h, s, l).cielab();
-}
-
 function d3_hsl_rgb(h, s, l) {
   var m1,
       m2;
