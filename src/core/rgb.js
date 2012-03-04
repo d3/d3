@@ -43,10 +43,6 @@ d3_Rgb.prototype.hsl = function() {
   return d3_rgb_hsl(this.r, this.g, this.b);
 };
 
-d3_Rgb.prototype.xyz = function() {
-  return d3_rgb_xyz(this.r, this.g, this.b);
-};
-
 d3_Rgb.prototype.cielab = function() {
   return d3_rgb_cielab(this.r, this.g, this.b);
 };
@@ -136,26 +132,6 @@ function d3_rgb_hsl(r, g, b) {
   return d3_hsl(h, s, l);
 }
 
-function d3_rgb_xyz(r, g, b) {
-  r /= 255;
-  g /= 255;
-  b /= 255;
-
-  function v(r) {
-    return r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : r / 12.92;
-  }
-
-  r = v(r) * 100;
-  g = v(g) * 100;
-  b = v(b) * 100;
-
-  var x = r * 0.4124 + g * 0.3576 + b * 0.1805;
-  var y = r * 0.2126 + g * 0.7152 + b * 0.0722;
-  var z = r * 0.0193 + g * 0.1192 + b * 0.9505;
-
-  return d3_xyz(x, y, z);
-}
-
 function d3_rgb_cielab(r, g, b) {
   r /= 255;
   g /= 255;
@@ -191,7 +167,6 @@ function d3_rgb_cielab(r, g, b) {
 
   return d3_cielab(l, a, b);
 }
-
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);

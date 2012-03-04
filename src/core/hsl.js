@@ -29,12 +29,8 @@ d3_Hsl.prototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
 
-d3_Hsl.prototype.xyz = function() {
-  return d3_hsl_xyz(this.h, this.s, this.l);
-};
-
 d3_Hsl.prototype.cielab = function() {
-  return this.xyz().cielab();
+  return this.rgb().cielab();
 };
 
 d3_Hsl.prototype.cielch = function() {
@@ -45,8 +41,8 @@ d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
 
-function d3_hsl_xyz(h, s, l) {
-  return d3_hsl_rgb(h, s, l).xyz();
+function d3_hsl_cielab(h, s, l) {
+  return d3_hsl_rgb(h, s, l).cielab();
 }
 
 function d3_hsl_rgb(h, s, l) {

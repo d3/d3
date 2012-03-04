@@ -25,9 +25,6 @@ suite.addBatch({
     "can convert from HSL": function(lch) {
       assert.lchEqual(d3.hsl("#048F07").cielch(), 51.480406534539185, 76.67961238453204, 136.39481492184387);
     },
-    "can convert from XYZ": function(lch) {
-      assert.lchEqual(d3.xyz("#048F07").cielch(), 51.480406534539185, 76.67961238453204, 136.39481492184387);
-    },
     "can convert from CIELab": function(lch) {
       assert.lchEqual(d3.cielab("#048F07").cielch(), 51.480406534539185, 76.67961238453204, 136.39481492184387);
     },
@@ -39,9 +36,6 @@ suite.addBatch({
     },
     "can convert to HSL": function(lch) {
       assert.hslEqual(lch("red").hsl(), 0, 1, .5);
-    },
-    "can convert to XYZ": function(lch) {
-      assert.xyzEqual(lch("#abc").xyz(), 45.246971009995335, 48.44632879252148, 64.09304697440157);
     },
     "can convert to CIELab": function(lch) {
       assert.labEqual(lch(d3.cielab("#048F07")), 51.480406534539185, -55.524431964471155, 52.88478430006963);

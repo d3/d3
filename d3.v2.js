@@ -1189,10 +1189,6 @@ d3_Rgb.prototype.hsl = function() {
   return d3_rgb_hsl(this.r, this.g, this.b);
 };
 
-d3_Rgb.prototype.xyz = function() {
-  return d3_rgb_xyz(this.r, this.g, this.b);
-};
-
 d3_Rgb.prototype.cielab = function() {
   return d3_rgb_cielab(this.r, this.g, this.b);
 };
@@ -1282,26 +1278,6 @@ function d3_rgb_hsl(r, g, b) {
   return d3_hsl(h, s, l);
 }
 
-function d3_rgb_xyz(r, g, b) {
-  r /= 255;
-  g /= 255;
-  b /= 255;
-
-  function v(r) {
-    return r > 0.04045 ? Math.pow(((r + 0.055) / 1.055), 2.4) : r / 12.92;
-  }
-
-  r = v(r) * 100;
-  g = v(g) * 100;
-  b = v(b) * 100;
-
-  var x = r * 0.4124 + g * 0.3576 + b * 0.1805;
-  var y = r * 0.2126 + g * 0.7152 + b * 0.0722;
-  var z = r * 0.0193 + g * 0.1192 + b * 0.9505;
-
-  return d3_xyz(x, y, z);
-}
-
 function d3_rgb_cielab(r, g, b) {
   r /= 255;
   g /= 255;
@@ -1337,7 +1313,6 @@ function d3_rgb_cielab(r, g, b) {
 
   return d3_cielab(l, a, b);
 }
-
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);
@@ -1528,12 +1503,8 @@ d3_Hsl.prototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
 
-d3_Hsl.prototype.xyz = function() {
-  return d3_hsl_xyz(this.h, this.s, this.l);
-};
-
 d3_Hsl.prototype.cielab = function() {
-  return this.xyz().cielab();
+  return this.rgb().cielab();
 };
 
 d3_Hsl.prototype.cielch = function() {
@@ -1544,8 +1515,8 @@ d3_Hsl.prototype.toString = function() {
   return this.rgb().toString();
 };
 
-function d3_hsl_xyz(h, s, l) {
-  return d3_hsl_rgb(h, s, l).xyz();
+function d3_hsl_cielab(h, s, l) {
+  return d3_hsl_rgb(h, s, l).cielab();
 }
 
 function d3_hsl_rgb(h, s, l) {
@@ -1660,7 +1631,7 @@ function d3_xyz_cielab(x, y, z) {
 d3.cielab = function(l, a, b) {
   return arguments.length === 1
       ? (l instanceof d3_Cielab ? d3_cielab(l.l, l.a, l.b)
-      : d3_rgb_parse("" + l, d3_rgb_xyz, d3_hsl_xyz).cielab())
+      : d3_rgb_parse("" + l, d3_rgb_cielab, d3_hsl_cielab))
       : d3_cielab(+l, +a, +b);
 };
 
@@ -1682,10 +1653,6 @@ d3_Cielab.prototype.hsl = function() {
   return this.rgb().hsl();
 };
 
-d3_Cielab.prototype.xyz = function() {
-  return d3_cielab_xyz(this.l, this.a, this.b);
-};
-
 d3_Cielab.prototype.cielch = function() {
   return d3_cielab_cielch(this.l, this.a, this.b);
 };
@@ -1702,19 +1669,6 @@ d3_Cielab.prototype.darker = function(k) {
 d3_Cielab.prototype.toString = function() {
   return this.rgb().toString();
 };
-
-function d3_cielab_xyz(l, a, b) {
-  var y = (l + 16) / 116;
-  var x = a / 500 + y;
-  var z = y - b / 200;
-
-  function v(x) {
-    var p = x * x * x;
-    return p > 0.008856 ? p : (x - 16 / 116) / 7.787;
-  }
-
-  return d3_xyz(v(x) * 95.047, v(y) * 100.000, v(z) * 108.883);
-}
 
 function d3_cielab_rgb(l, a, b) {
   var y = (l + 16) / 116;
@@ -1762,7 +1716,7 @@ function d3_cielab_cielch(l, a, b) {
 d3.cielch = function(l, c, h) {
   return arguments.length === 1
       ? (l instanceof d3_Cielch ? d3_cielch(l.l, l.c, l.h)
-      : d3_rgb_parse("" + l, d3_rgb_xyz, d3_hsl_xyz).cielch())
+      : d3_rgb_parse("" + l, d3_rgb_cielab, d3_hsl_cielab).cielch())
       : d3_cielch(+l, +c, +h);
 };
 
@@ -1782,10 +1736,6 @@ d3_Cielch.prototype.rgb = function() {
 
 d3_Cielch.prototype.hsl = function() {
   return this.cielab().hsl();
-};
-
-d3_Cielch.prototype.xyz = function() {
-  return this.cielab().xyz();
 };
 
 d3_Cielch.prototype.cielab = function() {
