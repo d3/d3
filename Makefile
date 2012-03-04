@@ -76,7 +76,6 @@ d3.core.js: \
 	src/core/uninterpolate.js \
 	src/core/rgb.js \
 	src/core/hsl.js \
-    src/core/xyz.js \
     src/core/cielab.js \
     src/core/cielch.js \
 	src/core/selection.js \
