@@ -1082,6 +1082,20 @@ d3.interpolateHsl = function(a, b) {
   };
 };
 
+d3.interpolateLab = function(a, b) {
+  a = d3.lab(a);
+  b = d3.lab(b);
+  var l0 = a.l,
+      a0 = a.a,
+      b0 = a.b,
+      l1 = b.l - l0,
+      a1 = b.a - a0,
+      b1 = b.b - b0;
+  return function(t) {
+    return d3_lab_rgb(l0 + l1 * t, a0 + a1 * t, b0 + b1 * t).toString();
+  };
+};
+
 d3.interpolateArray = function(a, b) {
   var x = [],
       c = [],
@@ -1617,16 +1631,6 @@ function d3_lab_rgb(l, a, b) {
   }
 
   return d3_rgb(w(r), w(g), w(b));
-}
-
-function d3_lab_cielch(l, a, b) {
-  var h = Math.atan2(b, a);
-
-  h = h > 0 ? (h / Math.PI) * 180 : 360 - (Math.abs(h) / Math.PI) * 180;
-
-  c = Math.sqrt(a * a + b * b);
-
-  return d3_cielch(l, c, h);
 }
 
 function d3_lab_lch(l, c, h) {
