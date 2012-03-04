@@ -169,7 +169,7 @@ suite.addBatch({
     "interpolate(cardinal)": {
       "supports cardinal interpolation": testInterpolation("cardinal"),
       "supports cardinal-open interpolation": testInterpolation("cardinal-open"),
-      "supports cardinal-closed interpolation": testInterpolation("cardinal-open")
+      "supports cardinal-closed interpolation": testInterpolation("cardinal-closed")
     },
 
     "interpolate(monotone)": {
