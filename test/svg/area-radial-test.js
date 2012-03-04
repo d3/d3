@@ -162,12 +162,14 @@ suite.addBatch({
 
     "interpolate(basis)": {
       "supports basis interpolation": testInterpolation("basis"),
-      "supports basis-open interpolation": testInterpolation("basis-open")
+      "supports basis-open interpolation": testInterpolation("basis-open"),
+      "supports basis-closed interpolation": testInterpolation("basis-closed")
     },
 
     "interpolate(cardinal)": {
       "supports cardinal interpolation": testInterpolation("cardinal"),
-      "supports cardinal-open interpolation": testInterpolation("cardinal-open")
+      "supports cardinal-open interpolation": testInterpolation("cardinal-open"),
+      "supports cardinal-closed interpolation": testInterpolation("cardinal-open")
     },
 
     "interpolate(monotone)": {
