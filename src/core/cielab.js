@@ -20,7 +20,7 @@ d3_Cielab.prototype.rgb = function() {
 };
 
 d3_Cielab.prototype.hsl = function() {
-  return this.xyz().hsl();
+  return this.rgb().hsl();
 };
 
 d3_Cielab.prototype.xyz = function() {
