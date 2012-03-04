@@ -30,21 +30,9 @@ assert.hslEqual = function(actual, h, s, l, message) {
   }
 };
 
-assert.xyzEqual = function(actual, x, y, z, message) {
-  if (Math.abs(actual.x - x) > 1e-6 || Math.abs(actual.y - y) > 1e-6 || Math.abs(actual.z - z) > 1e-6) {
-    assert.fail("xyz(" + actual.x + "," + actual.y + "," + actual.z + ")", "xyz(" + x + "," + y + "," + z + ")", message || "expected {expected}, got {actual}", null, assert.xyzEqual);
-  }
-};
-
 assert.labEqual = function(actual, l, a, b, message) {
   if (Math.abs(actual.l - l) > 1e-6 || Math.abs(actual.a - a) > 1e-6 || Math.abs(actual.b - b) > 1e-6) {
     assert.fail("lab(" + actual.l + "," + actual.a + "," + actual.b + ")", "lab(" + l + "," + a + "," + b + ")", message || "expected {expected}, got {actual}", null, assert.labEqual);
-  }
-};
-
-assert.lchEqual = function(actual, l, c, h, message) {
-  if (Math.abs(actual.l - l) > 1e-6 || Math.abs(actual.c - c) > 1e-6 || Math.abs(actual.h - h) > 1e-6) {
-    assert.fail("lch(" + actual.l + "," + actual.c + "," + actual.h + ")", "lch(" + l + "," + c + "," + h + ")", message || "expected {expected}, got {actual}", null, assert.lchEqual);
   }
 };
 
