@@ -43,8 +43,8 @@ d3_Rgb.prototype.hsl = function() {
   return d3_rgb_hsl(this.r, this.g, this.b);
 };
 
-d3_Rgb.prototype.cielab = function() {
-  return d3_rgb_cielab(this.r, this.g, this.b);
+d3_Rgb.prototype.lab = function() {
+  return d3_rgb_lab(this.r, this.g, this.b);
 };
 
 d3_Rgb.prototype.toString = function() {
@@ -128,7 +128,7 @@ function d3_rgb_hsl(r, g, b) {
   return d3_hsl(h, s, l);
 }
 
-function d3_rgb_cielab(r, g, b) {
+function d3_rgb_lab(r, g, b) {
   r /= 255;
   g /= 255;
   b /= 255;
@@ -161,7 +161,7 @@ function d3_rgb_cielab(r, g, b) {
   var a = 500 * (x - y);
   var b = 200 * (y - z);
 
-  return d3_cielab(l, a, b);
+  return d3_lab(l, a, b);
 }
 
 function d3_rgb_parseNumber(c) { // either integer or percentage

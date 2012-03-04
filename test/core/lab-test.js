@@ -3,12 +3,12 @@ require("../env");
 var vows = require("vows"),
     assert = require("assert");
 
-var suite = vows.describe("d3.cielab");
+var suite = vows.describe("d3.lab");
 
 suite.addBatch({
-  "cielab": {
+  "lab": {
     topic: function() {
-      return d3.cielab;
+      return d3.lab;
     },
     "exposes l, a, and b properties": function(lab) {
       var color = lab("#048F07");
@@ -17,10 +17,10 @@ suite.addBatch({
       assert.equal(color.b, 52.88478430006963);
     },
     "can convert from CieLAB": function(lab) {
-      assert.labEqual(lab(d3.cielab(40, 50, 60)), 40, 50, 60);
+      assert.labEqual(lab(d3.lab(40, 50, 60)), 40, 50, 60);
     },
     "can convert from RGB": function(lab) {
-      assert.labEqual(d3.rgb("#048F07").cielab(), 51.480406534539185, -55.524431964471155, 52.88478430006963);
+      assert.labEqual(d3.rgb("#048F07").lab(), 51.480406534539185, -55.524431964471155, 52.88478430006963);
     },
     "can initialize with RGB": function(lab) {
       assert.labEqual(lab(d3.rgb("#048F07")), 51.480406534539185, -55.524431964471155, 52.88478430006963);

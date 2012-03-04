@@ -1,43 +1,43 @@
-d3.cielab = function(l, a, b) {
+d3.lab = function(l, a, b) {
   return arguments.length === 1
-      ? (l instanceof d3_Cielab ? d3_cielab(l.l, l.a, l.b)
-      : d3_rgb_parse("" + l, d3_rgb, d3_hsl_rgb).cielab())
-      : d3_cielab(+l, +a, +b);
+      ? (l instanceof d3_Lab ? d3_lab(l.l, l.a, l.b)
+      : d3_rgb_parse("" + l, d3_rgb, d3_hsl_rgb).lab())
+      : d3_lab(+l, +a, +b);
 };
 
-function d3_cielab(l, a, b) {
-  return new d3_Cielab(l, a, b);
+function d3_lab(l, a, b) {
+  return new d3_Lab(l, a, b);
 }
 
-function d3_Cielab(l, a, b) {
+function d3_Lab(l, a, b) {
   this.l = l;
   this.a = a;
   this.b = b;
 }
 
-d3_Cielab.prototype.rgb = function() {
-  return d3_cielab_rgb(this.l, this.a, this.b);
+d3_Lab.prototype.rgb = function() {
+  return d3_lab_rgb(this.l, this.a, this.b);
 };
 
-d3_Cielab.prototype.cielch = function() {
-  return d3_cielab_cielch(this.l, this.a, this.b);
+d3_Lab.prototype.cielch = function() {
+  return d3_lab_cielch(this.l, this.a, this.b);
 };
 
 /* 18 chosen to correspond roughly to RGB brighter/darker */
-d3_Cielab.prototype.brighter = function(k) {
-  return d3_cielab(Math.min(100, this.l + 18 * (arguments.length ? k : 1)), this.a, this.b);
+d3_Lab.prototype.brighter = function(k) {
+  return d3_lab(Math.min(100, this.l + 18 * (arguments.length ? k : 1)), this.a, this.b);
 };
 
-d3_Cielab.prototype.darker = function(k) {
-  return d3_cielab(Math.max(0, this.l - 18 * (arguments.length ? k : 1)), this.a, this.b);
+d3_Lab.prototype.darker = function(k) {
+  return d3_lab(Math.max(0, this.l - 18 * (arguments.length ? k : 1)), this.a, this.b);
 };
 
-d3_Cielab.prototype.hue = function(h) {
+d3_Lab.prototype.hue = function(h) {
   var a = this.a;
   var b = this.b;
 
   if (arguments.length) {
-    return d3_cielab_lch(this.l, this.chroma(), h)
+    return d3_lab_lch(this.l, this.chroma(), h)
   }
 
   var h = Math.atan2(b, a);
@@ -45,22 +45,22 @@ d3_Cielab.prototype.hue = function(h) {
   return h > 0 ? (h / Math.PI) * 180 : 360 - (Math.abs(h) / Math.PI) * 180;
 }
 
-d3_Cielab.prototype.chroma = function(c) {
+d3_Lab.prototype.chroma = function(c) {
   var a = this.a;
   var b = this.b;
 
   if (arguments.length) {
-    return d3_cielab_lch(this.l, c, this.hue())
+    return d3_lab_lch(this.l, c, this.hue())
   }
 
   return Math.sqrt(a * a + b * b);
 }
 
-d3_Cielab.prototype.toString = function() {
+d3_Lab.prototype.toString = function() {
   return this.rgb().toString();
 };
 
-function d3_cielab_rgb(l, a, b) {
+function d3_lab_rgb(l, a, b) {
   var y = (l + 16) / 116;
   var x = a / 500 + y;
   var z = y - b / 200;
@@ -86,7 +86,7 @@ function d3_cielab_rgb(l, a, b) {
   return d3_rgb(w(r), w(g), w(b));
 }
 
-function d3_cielab_cielch(l, a, b) {
+function d3_lab_cielch(l, a, b) {
   var h = Math.atan2(b, a);
 
   h = h > 0 ? (h / Math.PI) * 180 : 360 - (Math.abs(h) / Math.PI) * 180;
@@ -96,10 +96,10 @@ function d3_cielab_cielch(l, a, b) {
   return d3_cielch(l, c, h);
 }
 
-function d3_cielab_lch(l, c, h) {
+function d3_lab_lch(l, c, h) {
   var hr = h * (Math.PI / 180);
   var a = Math.cos(hr) * c;
   var b = Math.sin(hr) * c;
-  return d3_cielab(l, a, b);
+  return d3_lab(l, a, b);
 }
 
