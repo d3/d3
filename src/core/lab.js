@@ -19,10 +19,6 @@ d3_Lab.prototype.rgb = function() {
   return d3_lab_rgb(this.l, this.a, this.b);
 };
 
-d3_Lab.prototype.cielch = function() {
-  return d3_lab_cielch(this.l, this.a, this.b);
-};
-
 /* 18 chosen to correspond roughly to RGB brighter/darker */
 d3_Lab.prototype.brighter = function(k) {
   return d3_lab(Math.min(100, this.l + 18 * (arguments.length ? k : 1)), this.a, this.b);
