@@ -23,7 +23,7 @@ d3.svg.brush = function() {
       // An invisible, mouseable area for starting a new brush.
       bg.enter().append("rect")
           .attr("class", "background")
-          .style("pointer-events", "all")
+          .style("pointer-events", "all") // workaround for IE9 bug
           .style("visibility", "hidden")
           .style("cursor", "crosshair");
 
