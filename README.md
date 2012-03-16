@@ -49,3 +49,7 @@ Next, from the root directory of this repository, install D3's dependencies:
 
 You can see the list of dependencies in package.json. NPM will install the
 packages in the node_modules directory.
+
+To run the tests, use:
+
+    make test
