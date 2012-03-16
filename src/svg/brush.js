@@ -16,13 +16,13 @@ d3.svg.brush = function() {
 
       // Prepare the brush container for events.
       g
-          .style("pointer-events", "all")
           .on("mousedown.brush", brushstart)
           .on("touchstart.brush", brushstart);
 
       // An invisible, mouseable area for starting a new brush.
       bg.enter().append("rect")
           .attr("class", "background")
+          .style("pointer-events", "all")
           .style("visibility", "hidden")
           .style("cursor", "crosshair");
 
