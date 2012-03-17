@@ -1,12 +1,16 @@
 function d3_svg_line(projection) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
+      defined,
       interpolate = d3_svg_lineInterpolatorDefault,
       interpolator = d3_svg_lineInterpolators.get(interpolate),
       tension = .7;
 
   function line(d) {
-    return d.length < 1 ? null : "M" + interpolator(projection(d3_svg_linePoints(this, d, x, y)), tension);
+    var that = this;
+    d = defined ? d3.split(d, d3_svg_lineNot(defined)) : d.length ? [d] : [];
+    d = d.map(function(d) { return "M" + interpolator(projection(d3_svg_linePoints(that, d, x, y)), tension); });
+    return d.length ? d.join("") : null;
   }
 
   line.x = function(_) {
@@ -18,6 +22,12 @@ function d3_svg_line(projection) {
   line.y = function(_) {
     if (!arguments.length) return y;
     y = _;
+    return line;
+  };
+
+  line.defined  = function(_) {
+    if (!arguments.length) return defined;
+    defined = _;
     return line;
   };
 
@@ -40,6 +50,12 @@ function d3_svg_line(projection) {
 d3.svg.line = function() {
   return d3_svg_line(d3_identity);
 };
+
+function d3_svg_lineNot(f) {
+  return function() {
+    return !f.apply(this, arguments);
+  };
+}
 
 // Converts the specified array of data into an array of points
 // (x-y tuples), by evaluating the specified `x` and `y` functions on each
