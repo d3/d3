@@ -100,6 +100,9 @@ d3_class(d3_Map, {
 
 var d3_map_prefix = "\0", // prevent collision with built-ins
     d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
+function d3_identity(d) {
+  return d;
+}
 function d3_this() {
   return this;
 }
@@ -3247,28 +3250,28 @@ function d3_svg_line(projection) {
     return d.length < 1 ? null : "M" + interpolator(projection(d3_svg_linePoints(this, d, x, y)), tension);
   }
 
-  line.x = function(v) {
+  line.x = function(_) {
     if (!arguments.length) return x;
-    x = v;
+    x = _;
     return line;
   };
 
-  line.y = function(v) {
+  line.y = function(_) {
     if (!arguments.length) return y;
-    y = v;
+    y = _;
     return line;
   };
 
-  line.interpolate = function(v) {
+  line.interpolate = function(_) {
     if (!arguments.length) return interpolate;
-    if (!d3_svg_lineInterpolators.has(v += "")) v = d3_svg_lineInterpolatorDefault;
-    interpolator = d3_svg_lineInterpolators.get(interpolate = v);
+    if (!d3_svg_lineInterpolators.has(_ += "")) _ = d3_svg_lineInterpolatorDefault;
+    interpolator = d3_svg_lineInterpolators.get(interpolate = _);
     return line;
   };
 
-  line.tension = function(v) {
+  line.tension = function(_) {
     if (!arguments.length) return tension;
-    tension = v;
+    tension = _;
     return line;
   };
 
@@ -3276,7 +3279,7 @@ function d3_svg_line(projection) {
 }
 
 d3.svg.line = function() {
-  return d3_svg_line(Object);
+  return d3_svg_line(d3_identity);
 };
 
 // Converts the specified array of data into an array of points
@@ -5366,7 +5369,7 @@ d3.layout.force = function() {
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
     if (!drag) drag = d3.behavior.drag()
-        .origin(Object)
+        .origin(d3_identity)
         .on("dragstart", dragstart)
         .on("drag", d3_layout_forceDrag)
         .on("dragend", d3_layout_forceDragEnd);
@@ -5589,7 +5592,7 @@ d3.layout.pie = function() {
 var d3_layout_pieSortByValue = {};
 // data is two-dimensional array of x,y; we populate y0
 d3.layout.stack = function() {
-  var values = Object,
+  var values = d3_identity,
       order = d3_layout_stackOrderDefault,
       offset = d3_layout_stackOffsetZero,
       out = d3_layout_stackOut,
@@ -7585,7 +7588,7 @@ d3.geo.circle = function() {
   var origin = [0, 0],
       degrees = 90 - 1e-2,
       radians = degrees * d3_geo_radians,
-      arc = d3.geo.greatArc().target(Object);
+      arc = d3.geo.greatArc().target(d3_identity);
 
   function circle() {
     // TODO render a circle as a Polygon
@@ -7603,7 +7606,7 @@ d3.geo.circle = function() {
   var clipType = d3_geo_type({
 
     FeatureCollection: function(o) {
-      var features = o.features.map(clipType).filter(Object);
+      var features = o.features.map(clipType).filter(d3_identity);
       return features && (o = Object.create(o), o.features = features, o);
     },
 
@@ -7645,7 +7648,7 @@ d3.geo.circle = function() {
     },
 
     GeometryCollection: function(o) {
-      var geometries = o.geometries.map(clipType).filter(Object);
+      var geometries = o.geometries.map(clipType).filter(d3_identity);
       return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
     }
 
