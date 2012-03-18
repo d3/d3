@@ -36,6 +36,7 @@ svg {
 
 .axis text {
   text-shadow: 0 1px 0 #fff;
+  cursor: move;
 }
 
     </style>
@@ -49,7 +50,8 @@ var m = [30, 10, 10, 10],
     h = 500 - m[0] - m[2];
 
 var x = d3.scale.ordinal().rangePoints([0, w], 1),
-    y = {};
+    y = {},
+    dragging = {};
 
 var line = d3.svg.line(),
     axis = d3.svg.axis().orient("left"),
@@ -92,7 +94,32 @@ d3.csv("cars.csv", function(cars) {
       .data(dimensions)
     .enter().append("g")
       .attr("class", "dimension")
-      .attr("transform", function(d) { return "translate(" + x(d) + ")"; });
+      .attr("transform", function(d) { return "translate(" + x(d) + ")"; })
+      .call(d3.behavior.drag()
+        .on("dragstart", function(d) {
+          dragging[d] = this.__origin__ = x(d);
+          background.attr("visibility", "hidden");
+        })
+        .on("drag", function(d) {
+          dragging[d] = Math.min(w, Math.max(0, this.__origin__ += d3.event.dx));
+          foreground.attr("d", path);
+          dimensions.sort(function(a, b) { return position(a) - position(b); });
+          x.domain(dimensions);
+          g.attr("transform", function(d) { return "translate(" + position(d) + ")"; })
+        })
+        .on("dragend", function(d) {
+          delete this.__origin__;
+          delete dragging[d];
+          transition(d3.select(this)).attr("transform", "translate(" + x(d) + ")");
+          transition(foreground)
+              .attr("d", path);
+          background
+              .attr("d", path)
+              .transition()
+              .delay(500)
+              .duration(0)
+              .attr("visibility", null);
+        }));
 
   // Add an axis and title.
   g.append("g")
@@ -112,9 +139,18 @@ d3.csv("cars.csv", function(cars) {
       .attr("width", 16);
 });
 
+function position(d) {
+  var v = dragging[d];
+  return v == null ? x(d) : v;
+}
+
+function transition(g) {
+  return g.transition().duration(500);
+}
+
 // Returns the path for a given data point.
 function path(d) {
-  return line(dimensions.map(function(p) { return [x(p), y[p](d[p])]; }));
+  return line(dimensions.map(function(p) { return [position(p), y[p](d[p])]; }));
 }
 
 // Handles a brush event, toggling the display of foreground lines.
