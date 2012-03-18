@@ -14,7 +14,8 @@ function link() {
     if (t.a - s.a > Math.PI) s.a += 2 * Math.PI;
     var a1 = s.a + (t.a - s.a) / 3,
         a2 = t.a - (t.a - s.a) / 3;
-    return "M" + Math.cos(s.a) * s.r0 + "," + Math.sin(s.a) * s.r0
+    return s.r0 - s.r1 || t.r0 - t.r1
+        ? "M" + Math.cos(s.a) * s.r0 + "," + Math.sin(s.a) * s.r0
         + "L" + Math.cos(s.a) * s.r1 + "," + Math.sin(s.a) * s.r1
         + "C" + Math.cos(a1) * s.r1 + "," + Math.sin(a1) * s.r1
         + " " + Math.cos(a2) * t.r1 + "," + Math.sin(a2) * t.r1
@@ -22,7 +23,11 @@ function link() {
         + "L" + Math.cos(t.a) * t.r0 + "," + Math.sin(t.a) * t.r0
         + "C" + Math.cos(a2) * t.r0 + "," + Math.sin(a2) * t.r0
         + " " + Math.cos(a1) * s.r0 + "," + Math.sin(a1) * s.r0
-        + " " + Math.cos(s.a) * s.r0 + "," + Math.sin(s.a) * s.r0;
+        + " " + Math.cos(s.a) * s.r0 + "," + Math.sin(s.a) * s.r0
+        : "M" + Math.cos(s.a) * s.r0 + "," + Math.sin(s.a) * s.r0
+        + "C" + Math.cos(a1) * s.r1 + "," + Math.sin(a1) * s.r1
+        + " " + Math.cos(a2) * t.r1 + "," + Math.sin(a2) * t.r1
+        + " " + Math.cos(t.a) * t.r1 + "," + Math.sin(t.a) * t.r1;
   }
 
   function node(method, thiz, d, i) {
