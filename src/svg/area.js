@@ -7,6 +7,7 @@ function d3_svg_area(projection) {
       interpolate = d3_svg_lineInterpolatorDefault,
       i0 = d3_svg_lineLinear,
       i1 = d3_svg_lineLinear,
+      L = "L",
       tension = .7;
 
   function area(data) {
@@ -25,7 +26,7 @@ function d3_svg_area(projection) {
 
     function segment() {
       segments.push("M", i0(projection(points1), tension),
-          "L", i1(projection(points0.reverse()), tension),
+          L, i1(projection(points0.reverse()), tension),
           "Z");
     }
 
@@ -92,6 +93,7 @@ function d3_svg_area(projection) {
     if (!d3_svg_lineInterpolators.has(_ += "")) _ = d3_svg_lineInterpolatorDefault;
     i0 = d3_svg_lineInterpolators.get(interpolate = _);
     i1 = i0.reverse || i0;
+    L = /-closed$/.test(_) ? "M" : "L";
     return area;
   };
 
