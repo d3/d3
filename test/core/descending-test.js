@@ -23,6 +23,10 @@ suite.addBatch({
     "returns a positive number if b is NaN or undefined (> a)": function() {
       assert.isTrue(d3.descending(0, NaN) > 0);
       assert.isTrue(d3.descending(0, undefined) > 0);
+    },
+    "returns NaN if both a and b are NaN or undefined": function() {
+      assert.isTrue(isNaN(d3.descending(NaN, NaN)));
+      assert.isTrue(isNaN(d3.descending(undefined, undefined)));
     }
   }
 });

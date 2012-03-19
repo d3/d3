@@ -24,6 +24,10 @@ suite.addBatch({
       assert.isTrue(d3.ascending(0, NaN) < 0);
       assert.isTrue(d3.ascending(0, undefined) < 0);
     },
+    "returns NaN if both a and b are NaN or undefined": function() {
+      assert.isTrue(isNaN(d3.ascending(NaN, NaN)));
+      assert.isTrue(isNaN(d3.ascending(undefined, undefined)));
+    },
     "sorts an array of numbers and NaN in ascending order": function() {
       var array = [1, 5, NaN, 3, 2],
           sorted = array.slice().sort(d3.ascending);
