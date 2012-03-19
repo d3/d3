@@ -13,7 +13,7 @@ require("util").puts(JSON.stringify({
     "jsdom": "0.2.12"
   },
   "devDependencies": {
-    "uglify-js": "1.2.6",
+    "uglify-js": "1.2.3",
     "vows": "0.6.x"
   },
   "scripts": {"test": "./node_modules/vows/bin/vows"}

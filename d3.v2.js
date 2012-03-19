@@ -299,7 +299,7 @@ d3.last = function(array, f) {
       b;
   if (arguments.length === 1) f = d3.ascending;
   while (++i < n) {
-    if (f.call(array, a, b = array[i]) <= 0 && (b <= b || b >= b)) {
+    if (f.call(array, a, b = array[i]) <= 0 && (b >= b || b <= b)) {
       a = b;
     }
   }
