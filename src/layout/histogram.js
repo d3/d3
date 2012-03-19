@@ -52,7 +52,7 @@ d3.layout.histogram = function() {
   // values.
   histogram.range = function(x) {
     if (!arguments.length) return ranger;
-    ranger = d3.functor(x);
+    ranger = d3_functor(x);
     return histogram;
   };
 
@@ -69,7 +69,7 @@ d3.layout.histogram = function() {
     if (!arguments.length) return binner;
     binner = typeof x === "number"
         ? function(range) { return d3_layout_histogramBinFixed(range, x); }
-        : d3.functor(x);
+        : d3_functor(x);
     return histogram;
   };
 

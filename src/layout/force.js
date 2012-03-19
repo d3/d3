@@ -136,7 +136,7 @@ d3.layout.force = function() {
 
   force.linkDistance = function(x) {
     if (!arguments.length) return linkDistance;
-    linkDistance = d3.functor(x);
+    linkDistance = d3_functor(x);
     return force;
   };
 
@@ -145,7 +145,7 @@ d3.layout.force = function() {
 
   force.linkStrength = function(x) {
     if (!arguments.length) return linkStrength;
-    linkStrength = d3.functor(x);
+    linkStrength = d3_functor(x);
     return force;
   };
 

@@ -106,9 +106,14 @@ function d3_identity(d) {
 function d3_this() {
   return this;
 }
-d3.functor = function(v) {
+function d3_true() {
+  return true;
+}
+function d3_functor(v) {
   return typeof v === "function" ? v : function() { return v; };
-};
+}
+
+d3.functor = d3_functor;
 // Copies a variable number of methods from source to target.
 d3.rebind = function(target, source) {
   var i = 1, n = arguments.length, method;
@@ -3188,25 +3193,25 @@ d3.svg.arc = function() {
 
   arc.innerRadius = function(v) {
     if (!arguments.length) return innerRadius;
-    innerRadius = d3.functor(v);
+    innerRadius = d3_functor(v);
     return arc;
   };
 
   arc.outerRadius = function(v) {
     if (!arguments.length) return outerRadius;
-    outerRadius = d3.functor(v);
+    outerRadius = d3_functor(v);
     return arc;
   };
 
   arc.startAngle = function(v) {
     if (!arguments.length) return startAngle;
-    startAngle = d3.functor(v);
+    startAngle = d3_functor(v);
     return arc;
   };
 
   arc.endAngle = function(v) {
     if (!arguments.length) return endAngle;
-    endAngle = d3.functor(v);
+    endAngle = d3_functor(v);
     return arc;
   };
 
@@ -3242,18 +3247,36 @@ function d3_svg_arcEndAngle(d) {
 function d3_svg_line(projection) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
-      defined,
+      defined = d3_true,
       interpolate = d3_svg_lineInterpolatorDefault,
-      interpolator = d3_svg_lineInterpolators.get(interpolate),
+      interpolator = d3_svg_lineLinear,
       tension = .7;
 
-  function line(d) {
-    var that = this;
-    d = defined ? d3.split(d, d3_svg_lineNot(defined)) : d.length ? [d] : [];
-    d = d.map(function(d) {
-      return "M" + interpolator(projection(d3_svg_linePoints(that, d, x, y)), tension);
-    });
-    return d.length ? d.join("") : null;
+  function line(data) {
+    var segments = [],
+        points = [],
+        i = -1,
+        n = data.length,
+        d,
+        fx = d3_functor(x),
+        fy = d3_functor(y);
+
+    function segment() {
+      segments.push("M", interpolator(projection(points), tension));
+    }
+
+    while (++i < n) {
+      if (defined.call(this, d = data[i], i)) {
+        points.push([+fx.call(this, d, i), +fy.call(this, d, i)]);
+      } else if (points.length) {
+        segment();
+        points = [];
+      }
+    }
+
+    if (points.length) segment();
+
+    return segments.length ? segments.join("") : null;
   }
 
   line.x = function(_) {
@@ -3293,38 +3316,6 @@ function d3_svg_line(projection) {
 d3.svg.line = function() {
   return d3_svg_line(d3_identity);
 };
-
-function d3_svg_lineNot(f) {
-  return function() {
-    return !f.apply(this, arguments);
-  };
-}
-
-// Converts the specified array of data into an array of points
-// (x-y tuples), by evaluating the specified `x` and `y` functions on each
-// data point. The `this` context of the evaluated functions is the specified
-// "self" object; each function is passed the current datum and index.
-function d3_svg_linePoints(self, d, x, y) {
-  var points = [],
-      i = -1,
-      n = d.length,
-      fx = typeof x === "function",
-      fy = typeof y === "function",
-      value;
-  if (fx && fy) {
-    while (++i < n) points.push([
-      x.call(self, value = d[i], i),
-      y.call(self, value, i)
-    ]);
-  } else if (fx) {
-    while (++i < n) points.push([x.call(self, d[i], i), y]);
-  } else if (fy) {
-    while (++i < n) points.push([x, y.call(self, d[i], i)]);
-  } else {
-    while (++i < n) points.push([x, y]);
-  }
-  return points;
-}
 
 // The default `x` property, which references d[0].
 function d3_svg_lineX(d) {
@@ -3661,8 +3652,7 @@ function d3_svg_lineMonotoneTangents(points) {
   // not monotonic, it's possible that the slope will be infinite, so we protect
   // against NaN by setting the coordinate to zero.
   i = -1; while (++i <= j) {
-    s = (points[Math.min(j, i + 1)][0] - points[Math.max(0, i - 1)][0])
-      / (6 * (1 + m[i] * m[i]));
+    s = (points[Math.min(j, i + 1)][0] - points[Math.max(0, i - 1)][0]) / (6 * (1 + m[i] * m[i]));
     tangents.push([s || 0, m[i] * s || 0]);
   }
 
@@ -3672,8 +3662,7 @@ function d3_svg_lineMonotoneTangents(points) {
 function d3_svg_lineMonotone(points) {
   return points.length < 3
       ? d3_svg_lineLinear(points)
-      : points[0] +
-        d3_svg_lineHermite(points, d3_svg_lineMonotoneTangents(points));
+      : points[0] + d3_svg_lineHermite(points, d3_svg_lineMonotoneTangents(points));
 }
 d3.svg.line.radial = function() {
   var line = d3_svg_line(d3_svg_lineRadial);
@@ -3702,22 +3691,46 @@ function d3_svg_area(projection) {
       x1 = d3_svg_lineX,
       y0 = 0,
       y1 = d3_svg_lineY,
-      defined,
-      interpolate,
-      i0,
-      i1,
+      defined = d3_true,
+      interpolate = d3_svg_lineInterpolatorDefault,
+      i0 = d3_svg_lineLinear,
+      i1 = d3_svg_lineLinear,
       tension = .7;
 
-  function area(d) {
-    var that = this;
-    d = defined ? d3.split(d, d3_svg_lineNot(defined)) : d.length ? [d] : [];
-    d = d.map(function(d) {
-      var points0 = d3_svg_linePoints(that, d, x0, y0);
-      return "M" + i0(projection(d3_svg_linePoints(that, d, x0 === x1 ? d3_svg_areaX(points0) : x1, y0 === y1 ? d3_svg_areaY(points0) : y1)), tension)
-           + "L" + i1(projection(points0.reverse()), tension)
-           + "Z";
-    });
-    return d.length ? d.join("") : null;
+  function area(data) {
+    var segments = [],
+        points0 = [],
+        points1 = [],
+        i = -1,
+        n = data.length,
+        d,
+        fx0 = d3_functor(x0),
+        fy0 = d3_functor(y0),
+        fx1 = x0 === x1 ? function() { return x; } : d3_functor(x1),
+        fy1 = y0 === y1 ? function() { return y; } : d3_functor(y1),
+        x,
+        y;
+
+    function segment() {
+      segments.push("M", i0(projection(points1), tension),
+          "L", i1(projection(points0.reverse()), tension),
+          "Z");
+    }
+
+    while (++i < n) {
+      if (defined.call(this, d = data[i], i)) {
+        points0.push([x = +fx0.call(this, d, i), y = +fy0.call(this, d, i)]);
+        points1.push([+fx1.call(this, d, i), +fy1.call(this, d, i)]);
+      } else if (points0.length) {
+        segment();
+        points0 = [];
+        points1 = [];
+      }
+    }
+
+    if (points0.length) segment();
+
+    return segments.length ? segments.join("") : null;
   }
 
   area.x = function(_) {
@@ -3776,7 +3789,7 @@ function d3_svg_area(projection) {
     return area;
   };
 
-  return area.interpolate("linear");
+  return area;
 }
 
 d3_svg_lineStepBefore.reverse = d3_svg_lineStepAfter;
@@ -3785,18 +3798,6 @@ d3_svg_lineStepAfter.reverse = d3_svg_lineStepBefore;
 d3.svg.area = function() {
   return d3_svg_area(Object);
 };
-
-function d3_svg_areaX(points) {
-  return function(d, i) {
-    return points[i][0];
-  };
-}
-
-function d3_svg_areaY(points) {
-  return function(d, i) {
-    return points[i][1];
-  };
-}
 d3.svg.area.radial = function() {
   var area = d3_svg_area(d3_svg_lineRadial);
   area.radius = area.x, delete area.x;
@@ -3856,31 +3857,31 @@ d3.svg.chord = function() {
 
   chord.radius = function(v) {
     if (!arguments.length) return radius;
-    radius = d3.functor(v);
+    radius = d3_functor(v);
     return chord;
   };
 
   chord.source = function(v) {
     if (!arguments.length) return source;
-    source = d3.functor(v);
+    source = d3_functor(v);
     return chord;
   };
 
   chord.target = function(v) {
     if (!arguments.length) return target;
-    target = d3.functor(v);
+    target = d3_functor(v);
     return chord;
   };
 
   chord.startAngle = function(v) {
     if (!arguments.length) return startAngle;
-    startAngle = d3.functor(v);
+    startAngle = d3_functor(v);
     return chord;
   };
 
   chord.endAngle = function(v) {
     if (!arguments.length) return endAngle;
-    endAngle = d3.functor(v);
+    endAngle = d3_functor(v);
     return chord;
   };
 
@@ -3922,13 +3923,13 @@ d3.svg.diagonal = function() {
 
   diagonal.source = function(x) {
     if (!arguments.length) return source;
-    source = d3.functor(x);
+    source = d3_functor(x);
     return diagonal;
   };
 
   diagonal.target = function(x) {
     if (!arguments.length) return target;
-    target = d3.functor(x);
+    target = d3_functor(x);
     return diagonal;
   };
 
@@ -3980,14 +3981,14 @@ d3.svg.symbol = function() {
 
   symbol.type = function(x) {
     if (!arguments.length) return type;
-    type = d3.functor(x);
+    type = d3_functor(x);
     return symbol;
   };
 
   // size of symbol in square pixels
   symbol.size = function(x) {
     if (!arguments.length) return size;
-    size = d3.functor(x);
+    size = d3_functor(x);
     return symbol;
   };
 
@@ -5260,7 +5261,7 @@ d3.layout.force = function() {
 
   force.linkDistance = function(x) {
     if (!arguments.length) return linkDistance;
-    linkDistance = d3.functor(x);
+    linkDistance = d3_functor(x);
     return force;
   };
 
@@ -5269,7 +5270,7 @@ d3.layout.force = function() {
 
   force.linkStrength = function(x) {
     if (!arguments.length) return linkStrength;
-    linkStrength = d3.functor(x);
+    linkStrength = d3_functor(x);
     return force;
   };
 
@@ -5913,7 +5914,7 @@ d3.layout.histogram = function() {
   // values.
   histogram.range = function(x) {
     if (!arguments.length) return ranger;
-    ranger = d3.functor(x);
+    ranger = d3_functor(x);
     return histogram;
   };
 
@@ -5930,7 +5931,7 @@ d3.layout.histogram = function() {
     if (!arguments.length) return binner;
     binner = typeof x === "number"
         ? function(range) { return d3_layout_histogramBinFixed(range, x); }
-        : d3.functor(x);
+        : d3_functor(x);
     return histogram;
   };
 

@@ -3,22 +3,46 @@ function d3_svg_area(projection) {
       x1 = d3_svg_lineX,
       y0 = 0,
       y1 = d3_svg_lineY,
-      defined,
-      interpolate,
-      i0,
-      i1,
+      defined = d3_true,
+      interpolate = d3_svg_lineInterpolatorDefault,
+      i0 = d3_svg_lineLinear,
+      i1 = d3_svg_lineLinear,
       tension = .7;
 
-  function area(d) {
-    var that = this;
-    d = defined ? d3.split(d, d3_svg_lineNot(defined)) : d.length ? [d] : [];
-    d = d.map(function(d) {
-      var points0 = d3_svg_linePoints(that, d, x0, y0);
-      return "M" + i0(projection(d3_svg_linePoints(that, d, x0 === x1 ? d3_svg_areaX(points0) : x1, y0 === y1 ? d3_svg_areaY(points0) : y1)), tension)
-           + "L" + i1(projection(points0.reverse()), tension)
-           + "Z";
-    });
-    return d.length ? d.join("") : null;
+  function area(data) {
+    var segments = [],
+        points0 = [],
+        points1 = [],
+        i = -1,
+        n = data.length,
+        d,
+        fx0 = d3_functor(x0),
+        fy0 = d3_functor(y0),
+        fx1 = x0 === x1 ? function() { return x; } : d3_functor(x1),
+        fy1 = y0 === y1 ? function() { return y; } : d3_functor(y1),
+        x,
+        y;
+
+    function segment() {
+      segments.push("M", i0(projection(points1), tension),
+          "L", i1(projection(points0.reverse()), tension),
+          "Z");
+    }
+
+    while (++i < n) {
+      if (defined.call(this, d = data[i], i)) {
+        points0.push([x = +fx0.call(this, d, i), y = +fy0.call(this, d, i)]);
+        points1.push([+fx1.call(this, d, i), +fy1.call(this, d, i)]);
+      } else if (points0.length) {
+        segment();
+        points0 = [];
+        points1 = [];
+      }
+    }
+
+    if (points0.length) segment();
+
+    return segments.length ? segments.join("") : null;
   }
 
   area.x = function(_) {
@@ -77,7 +101,7 @@ function d3_svg_area(projection) {
     return area;
   };
 
-  return area.interpolate("linear");
+  return area;
 }
 
 d3_svg_lineStepBefore.reverse = d3_svg_lineStepAfter;
@@ -86,15 +110,3 @@ d3_svg_lineStepAfter.reverse = d3_svg_lineStepBefore;
 d3.svg.area = function() {
   return d3_svg_area(Object);
 };
-
-function d3_svg_areaX(points) {
-  return function(d, i) {
-    return points[i][0];
-  };
-}
-
-function d3_svg_areaY(points) {
-  return function(d, i) {
-    return points[i][1];
-  };
-}
