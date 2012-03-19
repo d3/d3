@@ -123,10 +123,10 @@ function d3_rebind(target, source, method) {
   };
 }
 d3.ascending = function(a, b) {
-  return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+  return a < b ? -1 : a > b ? 1 : a >= b ? 0 : a >= a || a <= a ? -1 : b >= b || b <= b ? 1 : NaN;
 };
 d3.descending = function(a, b) {
-  return b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN;
+  return b < a ? -1 : b > a ? 1 : b >= a ? 0 : b >= b || b <= b ? -1 : a >= a || a <= a ? 1 : NaN;
 };
 d3.mean = function(array, f) {
   var n = array.length,
@@ -286,7 +286,7 @@ d3.first = function(array, f) {
       b;
   if (arguments.length === 1) f = d3.ascending;
   while (++i < n) {
-    if (f.call(array, a, b = array[i]) > 0) {
+    if (f.call(array, a, b = array[i]) > 0 && (b >= b || b <= b)) {
       a = b;
     }
   }
@@ -299,7 +299,7 @@ d3.last = function(array, f) {
       b;
   if (arguments.length === 1) f = d3.ascending;
   while (++i < n) {
-    if (f.call(array, a, b = array[i]) <= 0) {
+    if (f.call(array, a, b = array[i]) <= 0 && (b >= b || b <= b)) {
       a = b;
     }
   }
