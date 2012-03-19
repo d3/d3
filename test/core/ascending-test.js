@@ -16,15 +16,21 @@ suite.addBatch({
     "returns zero if a == b": function() {
       assert.equal(d3.ascending(0, 0), 0);
     },
-    "returns NaN if a or b is undefined": function() {
-      assert.isNaN(d3.ascending(0, undefined));
-      assert.isNaN(d3.ascending(undefined, 0));
-      assert.isNaN(d3.ascending(undefined, undefined));
+    "returns a positive number if a is NaN or undefined (> b)": function() {
+      assert.isTrue(d3.ascending(NaN, 0) > 0);
+      assert.isTrue(d3.ascending(undefined, 0) > 0);
     },
-    "returns NaN if a or b is NaN": function() {
-      assert.isNaN(d3.ascending(0, NaN));
-      assert.isNaN(d3.ascending(NaN, 0));
-      assert.isNaN(d3.ascending(NaN, NaN));
+    "returns a negative number if b is NaN or undefined (> a)": function() {
+      assert.isTrue(d3.ascending(0, NaN) < 0);
+      assert.isTrue(d3.ascending(0, undefined) < 0);
+    },
+    "sorts an array of numbers and NaN in ascending order": function() {
+      var array = [1, 5, NaN, 3, 2],
+          sorted = array.slice().sort(d3.ascending);
+      array.sort();
+      for (var i = 0; i < 4; i++) assert.equal(array[i], sorted[i]);
+      assert.isTrue(isNaN(array[i]));
+      assert.isTrue(isNaN(sorted[i]));
     }
   }
 });
