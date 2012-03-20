@@ -30,6 +30,7 @@ d3.behavior.drag = function() {
       offset = [0, 0];
     }
 
+    d3_eventCancel();
     event_({type: "dragstart"});
 
     function point() {
