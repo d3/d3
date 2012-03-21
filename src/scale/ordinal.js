@@ -15,6 +15,11 @@ function d3_scale_ordinal(domain, ranger) {
     return d3.range(domain.length).map(function(i) { return start + step * i; });
   }
 
+  scale.invert = function(x) {
+    // TODO take into account current ranger
+    return domain[d3.bisect(range, x) - 1];
+  };
+
   scale.domain = function(x) {
     if (!arguments.length) return domain;
     domain = [];
