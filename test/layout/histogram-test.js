@@ -68,6 +68,10 @@ suite.addBatch({
         {x: 1, y: 1, dx: 1},
         {x: 2, y: 2, dx: 1}
       ]);
+    },
+    "can handle degenerate domain": function(histogram) {
+      var h = histogram().bins(d3.scale.linear().domain([0,0]).ticks(3));
+      assert.deepEqual(h([0]), []);
     }
   }
 });
