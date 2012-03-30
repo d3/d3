@@ -5014,12 +5014,12 @@ d3.layout.chord = function() {
           value: v
         };
       }
-      groups.push({
+      groups[di] = {
         index: di,
         startAngle: x0,
         endAngle: x,
         value: (x - x0) / k
-      });
+      };
       x += padding;
     }
 
