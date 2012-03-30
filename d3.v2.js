@@ -4404,6 +4404,7 @@ d3.svg.brush = function() {
 
     // Propagate the active cursor to the body for the drag duration.
     g.style("pointer-events", "none").selectAll(".resize").style("display", null);
+    g.select(".background").style("display", "none"); // workaround for IE9 bug
     d3.select("body").style("cursor", eventTarget.style("cursor"));
 
     // Notify listeners.
@@ -4528,6 +4529,7 @@ d3.svg.brush = function() {
 
       // reset the cursor styles
       g.style("pointer-events", "all").selectAll(".resize").style("display", brush.empty() ? "none" : null);
+      g.select(".background").style("display", null); // workaround for IE9 bug
       d3.select("body").style("cursor", null);
 
       w .on("mousemove.brush", null)
