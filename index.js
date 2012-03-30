@@ -11,7 +11,7 @@ window = document.createWindow();
 navigator = window.navigator;
 CSSStyleDeclaration = window.CSSStyleDeclaration;
 
-Sizzle = require('sizzle');
+Sizzle = require("sizzle");
 
 require("./d3.v2");
 
