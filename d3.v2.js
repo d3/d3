@@ -2150,8 +2150,8 @@ function d3_transition(groups, id, time) {
         lock.active = id;
 
         tweens.forEach(function(key, value) {
-          if (tween = value.call(node, d, i)) {
-            tweened.push(tween);
+          if (value = value.call(node, d, i)) {
+            tweened.push(value);
           }
         });
 
@@ -8809,7 +8809,7 @@ function d3_time_parseWeekday(date, string, i) {
 }
 
 var d3_time_weekdayAbbrevRe = /^(?:sun|mon|tue|wed|thu|fri|sat)/i,
-    d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/i;
+    d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/i,
     d3_time_weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
 function d3_time_parseMonthAbbrev(date, string, i) {
