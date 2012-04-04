@@ -1,113 +1,101 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Area Chart</title>
-    <script type="text/javascript" src="../../d3.v2.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<style>
 
 body {
   font: 10px sans-serif;
 }
 
-.rule line {
-  stroke: #eee;
-  shape-rendering: crispEdges;
-}
-
-.rule line.axis {
+.axis path, .axis line {
+  fill: none;
   stroke: #000;
+  shape-rendering: crispEdges;
 }
 
 .area {
   fill: lightsteelblue;
 }
 
-.line, circle.area {
+.line {
   fill: none;
   stroke: steelblue;
   stroke-width: 1.5px;
 }
 
-circle.area {
-  fill: #fff;
+.dot {
+  fill: white;
+  stroke: steelblue;
+  stroke-width: 1.5px;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.v2.js"></script>
+<script>
 
-var data = d3.range(20).map(function(i) {
-  return {x: i / 19, y: (Math.sin(i / 3) + 1) / 2};
+var data = d3.range(40).map(function(i) {
+  return {x: i / 39, y: (Math.sin(i / 3) + 2) / 4};
 });
 
-var w = 450,
-    h = 275,
-    p = 20,
-    x = d3.scale.linear().domain([0, 1]).range([0, w]),
-    y = d3.scale.linear().domain([0, 1]).range([h, 0]);
+var margin = {top: 10, right: 10, bottom: 20, left: 40},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
-var vis = d3.select("body")
-  .append("svg")
-    .data([data])
-    .attr("width", w + p * 2)
-    .attr("height", h + p * 2)
+var x = d3.scale.linear()
+    .domain([0, 1])
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .domain([0, 1])
+    .range([height, 0]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left");
+
+var line = d3.svg.line()
+    .x(function(d) { return x(d.x); })
+    .y(function(d) { return y(d.y); });
+
+var area = d3.svg.area()
+    .x(line.x())
+    .y1(line.y())
+    .y0(y(0));
+
+var svg = d3.select("body").append("svg")
+    .datum(data)
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + p + "," + p + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-var rules = vis.selectAll("g.rule")
-    .data(x.ticks(10))
-  .enter().append("g")
-    .attr("class", "rule");
-
-rules.append("line")
-    .attr("x1", x)
-    .attr("x2", x)
-    .attr("y1", 0)
-    .attr("y2", h - 1);
-
-rules.append("line")
-    .attr("class", function(d) { return d ? null : "axis"; })
-    .attr("y1", y)
-    .attr("y2", y)
-    .attr("x1", 0)
-    .attr("x2", w + 1);
-
-rules.append("text")
-    .attr("x", x)
-    .attr("y", h + 3)
-    .attr("dy", ".71em")
-    .attr("text-anchor", "middle")
-    .text(x.tickFormat(10));
-
-rules.append("text")
-    .attr("y", y)
-    .attr("x", -3)
-    .attr("dy", ".35em")
-    .attr("text-anchor", "end")
-    .text(y.tickFormat(10));
-
-vis.append("path")
+svg.append("path")
     .attr("class", "area")
-    .attr("d", d3.svg.area()
-    .x(function(d) { return x(d.x); })
-    .y0(h - 1)
-    .y1(function(d) { return y(d.y); }));
+    .attr("d", area);
 
-vis.append("path")
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis);
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis);
+
+svg.append("path")
     .attr("class", "line")
-    .attr("d", d3.svg.line()
-    .x(function(d) { return x(d.x); })
-    .y(function(d) { return y(d.y); }));
+    .attr("d", line);
 
-vis.selectAll("circle.area")
-    .data(data)
+svg.selectAll(".dot")
+    .data(data.filter(function(d) { return d.y; }))
   .enter().append("circle")
-    .attr("class", "area")
-    .attr("cx", function(d) { return x(d.x); })
-    .attr("cy", function(d) { return y(d.y); })
+    .attr("class", "dot")
+    .attr("cx", line.x())
+    .attr("cy", line.y())
     .attr("r", 3.5);
 
-    </script>
-  </body>
-</html>
+</script>
