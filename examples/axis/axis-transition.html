@@ -45,24 +45,32 @@ path.area {
   <body>
     <script type="text/javascript">
 
-var m = [20, 40, 20, 20],
-    w = 960 - m[1] - m[3],
-    h = 140 - m[0] - m[2],
+var margin = {top: 20, right: 40, bottom: 20, left:20},
+    innerWidth = 960 - margin.right - margin.left,
+    innerHeight = 140 - margin.top - margin.bottom,
     parse = d3.time.format("%b %Y").parse;
 
 // Scales. Note the inverted domain for the y-scale: bigger is up!
-var x = d3.time.scale().range([0, w]),
-    y = d3.scale.linear().range([h, 0]);
+var x = d3.time.scale()
+        .range([0, innerWidth]),
+    y = d3.scale.linear()
+        .range([innerHeight, 0]);
 
-// Axes.
-var xAxis = d3.svg.axis().scale(x).tickSize(-h).tickSubdivide(true),
-    yAxis = d3.svg.axis().scale(y).ticks(4).orient("right");
+// Axes
+var xAxis = d3.svg.axis()
+        .scale(x)
+        .tickSize(-innerHeight)
+        .tickSubdivide(true),
+    yAxis = d3.svg.axis()
+        .scale(y)
+        .ticks(4)
+        .orient("right");
 
 // An area generator, for the light fill.
 var area = d3.svg.area()
     .interpolate("monotone")
     .x(function(d) { return x(d.date); })
-    .y0(h)
+    .y0(innerHeight)
     .y1(function(d) { return y(d.price); });
 
 // A line generator, for the dark stroke.
@@ -90,17 +98,17 @@ d3.csv("../data/stocks.csv", function(data) {
 
   // Add an SVG element with the desired dimensions and margin.
   var svg = d3.select("body").append("svg")
-      .attr("width", w + m[1] + m[3])
-      .attr("height", h + m[0] + m[2])
+      .attr("width", innerWidth + margin.right + margin.left)
+      .attr("height", innerHeight + margin.top + margin.bottom)
     .append("g")
-      .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   // Add the clip path.
   svg.append("clipPath")
       .attr("id", "clip")
     .append("rect")
-      .attr("width", w)
-      .attr("height", h);
+      .attr("width", innerWidth)
+      .attr("height", innerHeight);
 
   // Add the area path.
   svg.append("path")
@@ -111,13 +119,13 @@ d3.csv("../data/stocks.csv", function(data) {
   // Add the x-axis.
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + h + ")")
+      .attr("transform", "translate(0," + innerHeight + ")")
       .call(xAxis);
 
   // Add the y-axis.
   svg.append("g")
       .attr("class", "y axis")
-      .attr("transform", "translate(" + w + ",0)")
+      .attr("transform", "translate(" + innerWidth + ",0)")
       .call(yAxis);
 
   // Add the line path.
@@ -128,8 +136,8 @@ d3.csv("../data/stocks.csv", function(data) {
 
   // Add a small label for the symbol name.
   svg.append("text")
-      .attr("x", w - 6)
-      .attr("y", h - 6)
+      .attr("x", innerWidth - 6)
+      .attr("y", innerHeight - 6)
       .attr("text-anchor", "end")
       .text(values[0].symbol);
 

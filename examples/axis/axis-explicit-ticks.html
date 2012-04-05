@@ -20,21 +20,21 @@ body {
     <script type="text/javascript">
 
 var margin = {top: 10, right: 12, bottom: 20, left: 12},
-    width = 960 - margin.left - margin.right,
-    height = 80 - margin.top - margin.bottom;
+    innerWidth = 960 - margin.left - margin.right,
+    innerHeight = 80 - margin.top - margin.bottom;
 
 var x = d3.scale.sqrt()
-    .range([0, width]);
+    .range([0, innerWidth]);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
+    .attr("width", innerWidth + margin.left + margin.right)
+    .attr("height", innerHeight + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + innerHeight + ")")
     .call(d3.svg.axis()
     .scale(x)
     .orient("bottom")

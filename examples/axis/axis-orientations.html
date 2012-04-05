@@ -19,11 +19,14 @@ body {
   <body>
     <script type="text/javascript">
 
-var m = [20, 40, 20, 40],
-    w = 960 - m[1] - m[3],
-    h = 500 - m[0] - m[2],
-    x = d3.time.scale().domain([new Date(2011, 07, 01), new Date(2011, 07, 08)]).range([0, w]),
-    y = d3.scale.sqrt().range([h, 0]);
+var margin = {top: 20, right: 40, bottom: 20, left: 40},
+    innerWidth = 960 - margin.right - margin.left,
+    innerHeight = 500 - margin.top - margin.bottom,
+    x = d3.time.scale()
+        .domain([new Date(2011, 07, 01), new Date(2011, 07, 08)])
+        .range([0, innerWidth]),
+    y = d3.scale.sqrt()
+        .range([innerHeight, 0]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -34,14 +37,14 @@ var yAxis = d3.svg.axis()
     .scale(y);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
+    .attr("width", innerWidth + margin.right + margin.left)
+    .attr("height", innerHeight + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("g")
     .attr("class", "bottom axis")
-    .attr("transform", "translate(0," + h + ")")
+    .attr("transform", "translate(0," + innerHeight + ")")
     .call(xAxis.orient("bottom"));
 
 svg.append("g")
@@ -54,7 +57,7 @@ svg.append("g")
 
 svg.append("g")
     .attr("class", "right axis")
-    .attr("transform", "translate(" + w + ",0)")
+    .attr("transform", "translate(" + innerWidth + ",0)")
     .call(yAxis.orient("right"));
 
     </script>
