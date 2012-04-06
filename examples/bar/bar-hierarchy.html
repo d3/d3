@@ -27,12 +27,14 @@ rect.background {
   <body>
     <script type="text/javascript">
 
-var m = [20, 20, 20, 120], // top right bottom left
-    w = 960 - m[1] - m[3], // width
-    h = 500 - m[0] - m[2], // height
-    x = d3.scale.linear().range([0, w]),
+var margin = {top: 20, right: 20, bottom: 20, left: 120},
+    innerWidth = 960 - margin.right - margin.left, // width
+    innerHeight = 500 - margin.top - margin.bottom, // height
+    x = d3.scale.linear()
+        .range([0, innerWidth]),
     y = 20, // bar height
-    z = d3.scale.ordinal().range(["steelblue", "#ccc"]), // bar color
+    z = d3.scale.ordinal()
+        .range(["steelblue", "#ccc"]), // bar color
     duration = 750,
     delay = 25;
 
@@ -44,15 +46,15 @@ var xAxis = d3.svg.axis()
     .orient("top");
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
+    .attr("width", innerWidth + margin.right + margin.left)
+    .attr("height", innerHeight + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("rect")
     .attr("class", "background")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", innerWidth)
+    .attr("height", innerHeight)
     .on("click", up);
 
 svg.append("g")
