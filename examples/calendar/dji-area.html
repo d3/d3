@@ -47,14 +47,16 @@ path.area {
   <body>
     <script type="text/javascript">
 
-var m = [10, 50, 20, 10],
-    w = 960 - m[1] - m[3],
-    h = 500 - m[0] - m[2],
+var margin = {top: 10, right: 50, bottom: 20, left: 10},
+    innerWidth = 960 - margin.right - margin.left,
+    innerHeight = 500 - margin.top - margin.bottom,
     parse = d3.time.format("%Y-%m-%d").parse;
 
-// Scales. Note the inverted domain for the y-scale: bigger is up!
-var x = d3.time.scale().range([20, w - 20]),
-    y = d3.scale.linear().range([h - 20, 20]);
+// Scales. Note the inverted range for the y-scale: bigger is up!
+var x = d3.time.scale()
+        .range([20, innerWidth - 20]),
+    y = d3.scale.linear()
+        .range([innerHeight - 20, 20]);
 
 // Axes.
 var xAxis = d3.svg.axis().scale(x).orient("bottom"),
@@ -67,14 +69,14 @@ var area = d3.svg.area()
     .y1(function(d) { return y(d.Close); });
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
+    .attr("width", innerWidth + margin.right + margin.left)
+    .attr("height", innerHeight + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("rect")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", innerWidth)
+    .attr("height", innerHeight);
 
 d3.csv("dji.csv", function(data) {
 
@@ -90,22 +92,22 @@ d3.csv("dji.csv", function(data) {
 
   svg.append("g")
       .attr("class", "x grid")
-      .attr("transform", "translate(0," + h + ")")
-      .call(xAxis.tickSubdivide(1).tickSize(-h));
+      .attr("transform", "translate(0," + innerHeight + ")")
+      .call(xAxis.tickSubdivide(1).tickSize(-innerHeight));
 
   svg.append("g")
       .attr("class", "y grid")
-      .attr("transform", "translate(" + w + ",0)")
-      .call(yAxis.tickSubdivide(1).tickSize(-w));
+      .attr("transform", "translate(" + innerWidth + ",0)")
+      .call(yAxis.tickSubdivide(1).tickSize(-innerWidth));
 
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + h + ")")
+      .attr("transform", "translate(0," + innerHeight + ")")
       .call(xAxis.tickSubdivide(0).tickSize(6));
 
   svg.append("g")
       .attr("class", "y axis")
-      .attr("transform", "translate(" + w + ",0)")
+      .attr("transform", "translate(" + innerWidth + ",0)")
       .call(yAxis.tickSubdivide(0).tickSize(6));
 
   svg.append("path")
