@@ -9,10 +9,10 @@ var chord = d3.layout.chord()
     [ 1013,   990,  940, 6907]
   ]);
 
-var w = 600,
-    h = 600,
-    r0 = Math.min(w, h) * .41,
-    r1 = r0 * 1.1;
+var width = 600,
+    height = 600,
+    innerRadius = Math.min(width, height) * .41,
+    outerRadius = innerRadius * 1.1;
 
 var fill = d3.scale.ordinal()
     .domain(d3.range(4))
@@ -20,10 +20,10 @@ var fill = d3.scale.ordinal()
 
 var svg = d3.select("#chart")
   .append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
   .append("g")
-    .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 svg.append("g")
   .selectAll("path")
@@ -31,7 +31,7 @@ svg.append("g")
   .enter().append("path")
     .style("fill", function(d) { return fill(d.index); })
     .style("stroke", function(d) { return fill(d.index); })
-    .attr("d", d3.svg.arc().innerRadius(r0).outerRadius(r1))
+    .attr("d", d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius))
     .on("mouseover", fade(.1))
     .on("mouseout", fade(1));
 
@@ -44,7 +44,7 @@ var ticks = svg.append("g")
   .enter().append("g")
     .attr("transform", function(d) {
       return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
-          + "translate(" + r1 + ",0)";
+          + "translate(" + outerRadius + ",0)";
     });
 
 ticks.append("line")
@@ -71,7 +71,7 @@ svg.append("g")
     .data(chord.chords)
   .enter().append("path")
     .style("fill", function(d) { return fill(d.target.index); })
-    .attr("d", d3.svg.chord().radius(r0))
+    .attr("d", d3.svg.chord().radius(innerRadius))
     .style("opacity", 1);
 
 /** Returns an array of tick angles and labels, given a group. */
