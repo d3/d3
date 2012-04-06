@@ -31,26 +31,27 @@ path.area {
     <script type="text/javascript">
 
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
-    innerWidth = 960 - margin.right - margin.left,
-    innerHeight = 140 - margin.top - margin.bottom,
+    width = 960 - margin.right - margin.left,
+    height = 140 - margin.top - margin.bottom,
     parse = d3.time.format("%b %Y").parse;
 
-// Scales. Note the inverted domain for the y-scale: bigger is up!
+// Scales. Note the inverted range for the y-scale: bigger is up!
 var x = d3.time.scale()
-        .range([0, innerWidth]),
-    y = d3.scale.linear()
-        .range([innerHeight, 0]);
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
 
 // X-axis.
 var xAxis = d3.svg.axis()
     .scale(x)
-    .tickSize(-innerHeight);
+    .tickSize(-height);
 
 // An area generator, for the light fill.
 var area = d3.svg.area()
     .interpolate("monotone")
     .x(function(d) { return x(d.date); })
-    .y0(innerHeight)
+    .y0(height)
     .y1(function(d) { return y(d.price); });
 
 // A line generator, for the dark stroke.
@@ -83,8 +84,8 @@ d3.csv("../data/stocks.csv", function(data) {
   var svg = d3.select("body").selectAll("svg")
       .data(symbols)
     .enter().append("svg")
-      .attr("width", innerWidth + margin.left + margin.right)
-      .attr("height", innerHeight + margin.top + margin.bottom)
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -96,7 +97,7 @@ d3.csv("../data/stocks.csv", function(data) {
   // Add the x-axis.
   svg.append("g")
       .attr("class", "x axis")
-      .attr("transform", "translate(0," + innerHeight + ")")
+      .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
   // Add the line path elements. Note: the y-domain is set per element.
@@ -106,8 +107,8 @@ d3.csv("../data/stocks.csv", function(data) {
 
   // Add a small label for the symbol name.
   svg.append("text")
-      .attr("x", innerWidth - 6)
-      .attr("y", innerHeight - 6)
+      .attr("x", width - 6)
+      .attr("y", height - 6)
       .attr("text-anchor", "end")
       .text(function(d) { return d.key; });
 });

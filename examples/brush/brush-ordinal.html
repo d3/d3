@@ -43,28 +43,28 @@ path {
 var data = d3.svg.symbolTypes;
 
 var margin = {top: 10, right: 10, bottom: 20, left:10},
-    innerWidth = 960 - margin.right - margin.left,
-    innerHeight = 100 - margin.top - margin.bottom;
+    width = 960 - margin.right - margin.left,
+    height = 100 - margin.top - margin.bottom;
 
 var x = d3.scale.ordinal()
     .domain(data)
-    .rangePoints([0, innerWidth], 1);
+    .rangePoints([0, width], 1);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", innerWidth + margin.right + margin.left)
-    .attr("height", innerHeight + margin.top + margin.bottom)
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + innerHeight + ")")
+    .attr("transform", "translate(0," + height + ")")
     .call(d3.svg.axis().scale(x).orient("bottom"));
 
 var symbol = svg.append("g").selectAll("path")
     .data(data)
   .enter().append("path")
-    .attr("transform", function(d) { return "translate(" + x(d) + "," + (innerHeight / 2) + ")"; })
+    .attr("transform", function(d) { return "translate(" + x(d) + "," + (height / 2) + ")"; })
     .attr("d", d3.svg.symbol().type(String).size(200));
 
 svg.append("g")
@@ -74,7 +74,7 @@ svg.append("g")
     .on("brush", brushmove)
     .on("brushend", brushend))
   .selectAll("rect")
-    .attr("height", innerHeight);
+    .attr("height", height);
 
 function brushstart() {
   svg.classed("selecting", true);

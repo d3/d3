@@ -1,10 +1,10 @@
-var innerWidth = 960,
-    innerHeight = 50,
+var width = 960,
+    height = 50,
     margin = {top: 5, right: 40, bottom: 20, left: 120};
 
 var chart = bulletChart()
-    .width(innerWidth - margin.right - margin.left)
-    .height(innerHeight - margin.top - margin.bottom);
+    .width(width - margin.right - margin.left)
+    .height(height - margin.top - margin.bottom);
 
 d3.json("bullets.json", function(data) {
 
@@ -12,15 +12,15 @@ d3.json("bullets.json", function(data) {
       .data(data)
     .enter().append("svg")
       .attr("class", "bullet")
-      .attr("width", innerWidth)
-      .attr("height", innerHeight)
+      .attr("width", width)
+      .attr("height", height)
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
       .call(chart);
 
   var title = vis.append("g")
       .attr("text-anchor", "end")
-      .attr("transform", "translate(-6," + (innerHeight - margin.top - margin.bottom) / 2 + ")");
+      .attr("transform", "translate(-6," + (height - margin.top - margin.bottom) / 2 + ")");
 
   title.append("text")
       .attr("class", "title")

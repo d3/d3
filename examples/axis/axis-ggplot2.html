@@ -38,32 +38,34 @@ path {
     <script type="text/javascript">
 
 var margin = {top: 10, right: 10, bottom: 20, left: 10},
-    innerWidth = 960 - margin.right - margin.left,
-    innerHeight = 80 - margin.top - margin.bottom,
-    x = d3.scale.linear()
-        .domain([.05, .95])
-        .range([0, innerWidth]),
-    y = d3.scale.linear()
-        .range([0, innerHeight]);
+    width = 960 - margin.right - margin.left,
+    height = 80 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .domain([.05, .95])
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([0, height]);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", innerWidth + margin.right + margin.left)
-    .attr("height", innerHeight + margin.top + margin.bottom)
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("rect")
-    .attr("width", innerWidth)
-    .attr("height", innerHeight);
+    .attr("width", width)
+    .attr("height", height);
 
 svg.append("g")
     .attr("class", "x grid")
-    .attr("transform", "translate(0," + innerHeight + ")")
-    .call(d3.svg.axis().scale(x).tickSubdivide(1).tickSize(-innerHeight));
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.svg.axis().scale(x).tickSubdivide(1).tickSize(-height));
 
 svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + innerHeight + ")")
+    .attr("transform", "translate(0," + height + ")")
     .call(d3.svg.axis().scale(x));
 
     </script>

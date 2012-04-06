@@ -40,28 +40,30 @@ body {
     <script type="text/javascript">
 
 var margin = {top: 30, right: 10, bottom: 10, left: 30},
-    innerWidth = 960 - margin.right - margin.left,
-    innerHeight = 930 - margin.top - margin.bottom;
+    width = 960 - margin.right - margin.left,
+    height = 930 - margin.top - margin.bottom;
 
 var format = d3.format(",.0f");
 
 var x = d3.scale.linear()
-        .range([0, innerWidth]),
-    y = d3.scale.ordinal()
-        .rangeRoundBands([0, innerHeight], .1);
+    .range([0, width]);
+
+var y = d3.scale.ordinal()
+    .rangeRoundBands([0, height], .1);
 
 var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("top")
-        .tickSize(-innerHeight),
-    yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left")
-        .tickSize(0);
+    .scale(x)
+    .orient("top")
+    .tickSize(-height);
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .tickSize(0);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", innerWidth + margin.right + margin.left)
-    .attr("height", innerHeight + margin.top + margin.bottom)
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 

@@ -42,16 +42,17 @@ circle {
 var data = d3.range(800).map(Math.random);
 
 var margin = {top: 10, right: 10, bottom: 10, left: 40},
-    innerWidth = 120 - margin.right - margin.left,
-    innerHeight = 960 - margin.top - margin.bottom;
+    width = 120 - margin.right - margin.left,
+    height = 960 - margin.top - margin.bottom;
 
-var x = d3.random.normal(innerWidth / 2, innerWidth / 8),
-    y = d3.scale.linear()
-        .range([innerHeight, 0]);
+var x = d3.random.normal(width / 2, width / 8);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", innerWidth + margin.right + margin.left)
-    .attr("height", innerHeight + margin.top + margin.bottom)
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
@@ -72,7 +73,7 @@ svg.append("g")
     .on("brush", brushmove)
     .on("brushend", brushend))
   .selectAll("rect")
-    .attr("width", innerWidth);
+    .attr("width", width);
 
 function brushstart() {
   svg.classed("selecting", true);

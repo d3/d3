@@ -1,6 +1,6 @@
 var margin = {top: 19, right: 20, bottom: 20, left: 19},
-    innerWidth = 960 - margin.right - margin.left, // width
-    innerHeight = 136 - margin.top - margin.bottom, // height
+    width = 960 - margin.right - margin.left, // width
+    height = 136 - margin.top - margin.bottom, // height
     cellSize = 17; // cell size
 
 var day = d3.time.format("%w"),
@@ -13,11 +13,11 @@ var color = d3.scale.quantile()
 var svg = d3.select("#chart").selectAll("svg")
     .data(d3.range(1993, 2011))
   .enter().append("svg")
-    .attr("width", innerWidth + margin.right + margin.left)
-    .attr("height", innerHeight + margin.top + margin.bottom)
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
     .attr("class", "RdYlGn")
   .append("g")
-    .attr("transform", "translate(" + (margin.left + (innerWidth - cellSize * 53) / 2) + "," + (margin.top + (innerHeight - cellSize * 7) / 2) + ")");
+    .attr("transform", "translate(" + (margin.left + (width - cellSize * 53) / 2) + "," + (margin.top + (height - cellSize * 7) / 2) + ")");
 
 svg.append("text")
     .attr("transform", "translate(-6," + cellSize * 3.5 + ")rotate(-90)")

@@ -1,7 +1,12 @@
 var width = 960,
-    height = 500,
-    fill = d3.scale.ordinal().range(colorbrewer.Greys[9].slice(1, 4)),
-    stroke = d3.scale.linear().domain([0, 1e4]).range(["brown", "steelblue"]);
+    height = 500;
+
+var fill = d3.scale.ordinal()
+    .range(colorbrewer.Greys[9].slice(1, 4));
+
+var stroke = d3.scale.linear()
+    .domain([0, 1e4])
+    .range(["brown", "steelblue"]);
 
 var treemap = d3.layout.treemap()
     .size([width, height])
