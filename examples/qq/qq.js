@@ -1,16 +1,16 @@
-var w = 280,
-    h = 280,
-    m = [10, 0, 20, 35], // top right bottom left
+var width = 280,
+    height = 280,
+    margin = {top: 10, right: 10, botom: 20, left: 35},
     n = 10000; // number of samples to generate
 
 var chart = qqChart()
-    .width(w)
-    .height(h)
+    .width(width)
+    .height(height)
     .domain([-.1, 1.1])
     .tickFormat(function(d) { return ~~(d * 100); });
 
 var vis = d3.select("#chart").append("svg").append("g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 d3.json("turkers.json", function(turkers) {
   var tm = science.stats.mean(turkers),
@@ -37,12 +37,12 @@ d3.json("turkers.json", function(turkers) {
       }])
     .enter().append("g")
       .attr("class", "qq")
-      .attr("transform", function(d, i) { return "translate(" + (w + m[1] + m[3]) * i + ")"; });
+      .attr("transform", function(d, i) { return "translate(" + (width + margin.right + margin.left) * i + ")"; });
 
   g.append("rect")
       .attr("class", "box")
-      .attr("width", w)
-      .attr("height", h);
+      .attr("width", width)
+      .attr("height", height);
 
   g.call(chart);
 
