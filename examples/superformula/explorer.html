@@ -62,8 +62,11 @@ var types = {
   triangle: {m: 3, n1: 100, n2: 200, n3: 200, a: 1, b: 1}
 };
 
-var format = d3.format(".4n"),
-    scale = d3.scale.linear().domain([-10, 20, 1000]).range([0, 800, 1000]);
+var format = d3.format(".4n");
+
+var scale = d3.scale.linear()
+    .domain([-10, 20, 1000])
+    .range([0, 800, 1000]);
 
 var svg = d3.select("body").append("svg")
     .attr("width", 960)
