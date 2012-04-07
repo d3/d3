@@ -29,28 +29,28 @@ path.link {
     <div id="chart"></div>
     <script type="text/javascript">
 
-var m = [20, 120, 20, 120],
-    w = 1280 - m[1] - m[3],
-    h = 800 - m[0] - m[2],
+var margin = {top: 20, right: 120, bottom: 20, left: 120},
+    width = 1280 - margin.right - margin.left,
+    height = 800 - margin.top - margin.bottom,
     i = 0,
     duration = 500,
     root;
 
 var tree = d3.layout.tree()
-    .size([h, w]);
+    .size([height, width]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 d3.json("../data/flare.json", function(json) {
   root = json;
-  root.x0 = h / 2;
+  root.x0 = height / 2;
   root.y0 = 0;
 
   function collapse(d) {
