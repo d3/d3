@@ -475,6 +475,7 @@ setInterval(function() {
   redraw1();
   redraw2();
   redraw3();
+  d3.timer.flush(); // avoid memory leak when in background tab
 }, 1500);
 
 </script>
