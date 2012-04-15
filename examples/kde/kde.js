@@ -1,10 +1,9 @@
 // Based on http://bl.ocks.org/900762 by John Firebaugh
 d3.json("../data/faithful.json", function(faithful) {
   data = faithful;
+
   var width = 800,
-      height = 400,
-      bins = d3.layout.histogram().frequency(false).bins(x.ticks(60))(data),
-      max = d3.max(bins, function(d) { return d.y; });
+      height = 400;
 
   var x = d3.scale.linear()
       .domain([30, 110]).range([0, width]);
@@ -13,7 +12,11 @@ d3.json("../data/faithful.json", function(faithful) {
       .domain([0, .1])
       .range([0, height]);
 
-  var kde = science.stats.kde().sample(data);
+  var bins = d3.layout.histogram().frequency(false).bins(x.ticks(60))(data),
+      max = d3.max(bins, function(d) { return d.y; });
+
+  var kde = science.stats.kde()
+      .sample(data);
 
   var vis = d3.select("body")
     .append("svg")
