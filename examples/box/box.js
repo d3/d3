@@ -1,13 +1,13 @@
-var w = 120,
-    h = 500,
-    m = [10, 50, 20, 50], // top right bottom left
+var innerWidth = 120,
+    innerHeight = 500,
+    margin = {top: 10, right: 50, bottom: 20, left: 50},
     min = Infinity,
     max = -Infinity;
 
 var chart = boxChart()
     .whiskers(iqr(1.5))
-    .width(w - m[1] - m[3])
-    .height(h - m[0] - m[2]);
+    .width(innerWidth - margin[1] - margin[3])
+    .height(innerHeight - margin.top - margin[2]);
 
 d3.csv("../data/morley.csv", function(csv) {
   var data = [];
@@ -29,10 +29,10 @@ d3.csv("../data/morley.csv", function(csv) {
       .data(data)
     .enter().append("svg")
       .attr("class", "box")
-      .attr("width", w)
-      .attr("height", h)
+      .attr("width", innerWidth)
+      .attr("height", innerHeight)
     .append("g")
-      .attr("transform", "translate(" + m[3] + "," + m[0] + ")")
+      .attr("transform", "translate(" + margin[3] + "," + margin.top + ")")
       .call(chart);
 
   chart.duration(1000);

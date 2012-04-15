@@ -22,8 +22,8 @@
   <body>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500;
+var width = 960,
+    height = 500;
 
 var projection = d3.geo.azimuthal()
     .origin([-115, 50])
@@ -35,8 +35,8 @@ var path = d3.geo.path()
 var arc = d3.geo.greatArc();
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 var states = svg.append("g")
     .attr("id", "states");

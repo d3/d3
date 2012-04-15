@@ -19,8 +19,8 @@ path.chord {
   <body>
     <script type="text/javascript">
 
-var r1 = 960 / 2,
-    r0 = r1 - 120;
+var outerRadius = 960 / 2,
+    innerRadius = outerRadius - 120;
 
 var fill = d3.scale.category20c();
 
@@ -30,14 +30,14 @@ var chord = d3.layout.chord()
     .sortChords(d3.descending);
 
 var arc = d3.svg.arc()
-    .innerRadius(r0)
-    .outerRadius(r0 + 20);
+    .innerRadius(innerRadius)
+    .outerRadius(innerRadius + 20);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", r1 * 2)
-    .attr("height", r1 * 2)
+    .attr("width", outerRadius * 2)
+    .attr("height", outerRadius * 2)
   .append("g")
-    .attr("transform", "translate(" + r1 + "," + r1 + ")");
+    .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
 
 d3.json("../data/flare-imports.json", function(imports) {
   var indexByName = {},
@@ -88,7 +88,7 @@ d3.json("../data/flare-imports.json", function(imports) {
       .attr("text-anchor", function(d) { return d.angle > Math.PI ? "end" : null; })
       .attr("transform", function(d) {
         return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")"
-            + "translate(" + (r0 + 26) + ")"
+            + "translate(" + (innerRadius + 26) + ")"
             + (d.angle > Math.PI ? "rotate(180)" : "");
       })
       .text(function(d) { return nameByIndex[d.index]; });
@@ -99,7 +99,7 @@ d3.json("../data/flare-imports.json", function(imports) {
       .attr("class", "chord")
       .style("stroke", function(d) { return d3.rgb(fill(d.source.index)).darker(); })
       .style("fill", function(d) { return fill(d.source.index); })
-      .attr("d", d3.svg.chord().radius(r0));
+      .attr("d", d3.svg.chord().radius(innerRadius));
 
 });
 

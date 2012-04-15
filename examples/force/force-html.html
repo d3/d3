@@ -29,19 +29,19 @@ div.link {
   <body>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500,
-    r = 6,
+var width = 960,
+    height = 500,
+    radius = 6,
     fill = d3.scale.category20();
 
 var force = d3.layout.force()
     .charge(-120)
     .linkDistance(30)
-    .size([w, h]);
+    .size([width, height]);
 
 var vis = d3.select("body").append("div")
-    .style("width", w + "px")
-    .style("height", h + "px");
+    .style("width", width + "px")
+    .style("height", height + "px");
 
 d3.json("miserables.json", function(json) {
   var link = vis.selectAll("div.link")
@@ -64,8 +64,8 @@ d3.json("miserables.json", function(json) {
       .start();
 
   function tick() {
-    node.style("left", function(d) { return (d.x = Math.max(r, Math.min(w - r, d.x))) + "px"; })
-        .style("top", function(d) { return (d.y = Math.max(r, Math.min(h - r, d.y))) + "px"; });
+    node.style("left", function(d) { return (d.x = Math.max(radius, Math.min(width - radius, d.x))) + "px"; })
+        .style("top", function(d) { return (d.y = Math.max(radius, Math.min(height - radius, d.y))) + "px"; });
 
     link.style("left", function(d) { return d.source.x + "px"; })
         .style("top", function(d) { return d.source.y + "px"; })

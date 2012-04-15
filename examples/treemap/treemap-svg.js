@@ -1,15 +1,15 @@
-var w = 960,
-    h = 500,
+var width = 960,
+    height = 500,
     color = d3.scale.category20c();
 
 var treemap = d3.layout.treemap()
     .padding(4)
-    .size([w, h])
+    .size([width, height])
     .value(function(d) { return d.size; });
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
   .append("g")
     .attr("transform", "translate(-.5,-.5)");
 

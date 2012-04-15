@@ -1,14 +1,14 @@
-var w = 960,
-    h = 960,
+var width = 960,
+    height = 960,
     format = d3.format(",d");
 
 var pack = d3.layout.pack()
-    .size([w - 4, h - 4])
+    .size([width - 4, height - 4])
     .value(function(d) { return d.size; });
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
     .attr("class", "pack")
   .append("g")
     .attr("transform", "translate(2, 2)");

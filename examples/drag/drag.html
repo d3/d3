@@ -14,29 +14,29 @@ svg {
     <script type="text/javascript" src="../../d3.v2.js"></script>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500,
-    r = 120;
+var width = 960,
+    height = 500,
+    radius = 120;
 
 var drag = d3.behavior.drag()
     .origin(Object)
     .on("drag", dragmove);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
 
 var circle = svg.append("circle")
-    .data([{x: w / 2, y: h / 2}])
-    .attr("r", r)
+    .data([{x: width / 2, y: height / 2}])
+    .attr("r", radius)
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .call(drag);
 
 function dragmove(d) {
   circle
-      .attr("cx", d.x = Math.max(r, Math.min(w - r, d3.event.x)))
-      .attr("cy", d.y = Math.max(r, Math.min(h - r, d3.event.y)));
+      .attr("cx", d.x = Math.max(radius, Math.min(width - radius, d3.event.x)))
+      .attr("cy", d.y = Math.max(radius, Math.min(height - radius, d3.event.y)));
 }
 
     </script>

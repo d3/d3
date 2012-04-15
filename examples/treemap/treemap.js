@@ -1,16 +1,16 @@
-var w = 960,
-    h = 500,
+var width = 960,
+    height = 500,
     color = d3.scale.category20c();
 
 var treemap = d3.layout.treemap()
-    .size([w, h])
+    .size([width, height])
     .sticky(true)
     .value(function(d) { return d.size; });
 
 var div = d3.select("#chart").append("div")
     .style("position", "relative")
-    .style("width", w + "px")
-    .style("height", h + "px");
+    .style("width", width + "px")
+    .style("height", height + "px");
 
 d3.json("../data/flare.json", function(json) {
   div.data([json]).selectAll("div")
