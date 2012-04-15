@@ -11,8 +11,13 @@ d3.json("flowers.json", function(flower) {
     var value = function(d) { return d[trait]; },
         domain = [d3.min(flower.values, value), d3.max(flower.values, value)],
         range = [padding / 2, size - padding / 2];
-    x[trait] = d3.scale.linear().domain(domain).range(range);
-    y[trait] = d3.scale.linear().domain(domain).range(range.slice().reverse());
+    x[trait] = d3.scale.linear()
+    .domain(domain)
+    .range(range);
+
+    y[trait] = d3.scale.linear()
+    .domain(domain)
+    .range(range.slice().reverse());
   });
 
   // Axes.

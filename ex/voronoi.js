@@ -1,14 +1,14 @@
-var w = 960,
-    h = 500;
+var width = 960,
+    height = 500;
 
 var vertices = d3.range(100).map(function(d) {
-  return [Math.random() * w, Math.random() * h];
+  return [Math.random() * width, Math.random() * height];
 });
 
 var svg = d3.select("#chart")
   .append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
     .attr("class", "PiYG")
     .on("mousemove", update);
 
