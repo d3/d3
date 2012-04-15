@@ -21,7 +21,7 @@
   },
   "main": "index.js",
   "dependencies": {
-    "jsdom": "0.2.12",
+    "jsdom": "0.2.14",
     "sizzle": "1.1.x"
   },
   "devDependencies": {
