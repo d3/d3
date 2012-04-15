@@ -27,7 +27,6 @@ suite.addBatch({
       assert.equal(document.body.textContent, "<h1>Hello, world!</h1>");
       assert.equal(document.body.firstChild.nodeType, document.TEXT_NODE);
     },
-    /* <https://github.com/tmpvar/jsdom/issues/276>
     "clears the text content as null": function(body) {
       body.text(null);
       assert.equal(document.body.textContent, "");
@@ -44,7 +43,6 @@ suite.addBatch({
       body.text(function() { return undefined; });
       assert.equal(document.body.textContent, "");
     },
-    */
     "ignores null nodes": function() {
       var body = d3.select("body");
       body[0][0] = null;
