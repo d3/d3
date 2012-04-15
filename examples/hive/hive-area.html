@@ -29,9 +29,15 @@ var width = 960,
     innerRadius = 40,
     outerRadius = 240;
 
-var angle = d3.scale.ordinal().domain(d3.range(4)).rangePoints([0, 2 * Math.PI]),
-    radius = d3.scale.linear().range([innerRadius, outerRadius]),
-    color = d3.scale.category20c().domain(d3.range(20));
+var angle = d3.scale.ordinal()
+    .domain(d3.range(4))
+    .rangePoints([0, 2 * Math.PI]);
+
+var radius = d3.scale.linear()
+    .range([innerRadius, outerRadius]);
+
+var color = d3.scale.category20c()
+    .domain(d3.range(20));
 
 var links = [
   {source: {x: 0, y0: 0.9, y1: 1.0}, target: {x: 1, y0: 0.5, y1: 1.0}, group:  0},

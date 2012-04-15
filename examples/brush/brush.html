@@ -42,22 +42,25 @@ circle {
 var random = d3.random.normal(.5, .1),
     data = d3.range(800).map(function() { return [random(), random()]; });
 
-var m = [10, 10, 20, 40],
-    w = 960 - m[1] - m[3],
-    h = 500 - m[0] - m[2];
+var margin = {top: 10, right: 10, bottom: 20, left: 40},
+    width = 960 - margin.right - margin.left,
+    height = 500 - margin.top - margin.bottom;
 
-var x = d3.scale.linear().range([0, w]),
-    y = d3.scale.linear().range([h, 0]);
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + h + ")")
+    .attr("transform", "translate(0," + height + ")")
     .call(d3.svg.axis().scale(x).orient("bottom"));
 
 svg.append("g")

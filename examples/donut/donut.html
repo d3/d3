@@ -14,10 +14,10 @@ body {
   <body>
     <script type="text/javascript">
 
-var w = 400,
-    h = 400,
-    r1 = Math.min(w, h) / 2,
-    r0 = r1 * .6,
+var width = 400,
+    height = 400,
+    outerRadius = Math.min(width, height) / 2,
+    innerRadius = outerRadius * .6,
     n = 10,
     q = 0,
     data0 = d3.range(n).map(Math.random),
@@ -29,14 +29,14 @@ var w = 400,
 
 var vis = d3.select("body")
   .append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 vis.selectAll("g.arc")
     .data(arcs(data0, data1))
   .enter().append("g")
     .attr("class", "arc")
-    .attr("transform", "translate(" + r1 + "," + r1 + ")")
+    .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")")
   .append("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
@@ -50,8 +50,8 @@ function arcs(data0, data1) {
       arc;
   while (++i < n) {
     arc = arcs0[i];
-    arc.innerRadius = r0;
-    arc.outerRadius = r1;
+    arc.innerRadius = innerRadius;
+    arc.outerRadius = outerRadius;
     arc.next = arcs1[i];
   }
   return arcs0;
@@ -68,8 +68,8 @@ function transitionSplit(d, i) {
   d3.select(this)
     .transition().duration(1000)
       .attrTween("d", tweenArc({
-        innerRadius: i & 1 ? r0 : (r0 + r1) / 2,
-        outerRadius: i & 1 ? (r0 + r1) / 2 : r1
+        innerRadius: i & 1 ? innerRadius : (innerRadius + outerRadius) / 2,
+        outerRadius: i & 1 ? (innerRadius + outerRadius) / 2 : outerRadius
       }))
       .each("end", transitionRotate);
 }
@@ -103,8 +103,8 @@ function transitionUnite(d, i) {
   d3.select(this)
     .transition().duration(1000)
       .attrTween("d", tweenArc({
-        innerRadius: r0,
-        outerRadius: r1
+        innerRadius: innerRadius,
+        outerRadius: outerRadius
       }));
 }
 

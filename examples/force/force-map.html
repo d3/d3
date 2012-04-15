@@ -21,15 +21,15 @@ line {
   <body>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500;
+var width = 960,
+    height = 500;
 
 var path = d3.geo.path(),
-    force = d3.layout.force().size([w, h]);
+    force = d3.layout.force().size([width, height]);
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 d3.json("../data/us-states.json", function(states) {
   var nodes = [],
