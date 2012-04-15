@@ -213,7 +213,7 @@ d3.interpolateObject = function(a, b) {
   };
 }
 
-var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\d*\.?\d+)(?:[eE][-+]?\d+)?/g;
+var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
 
 function d3_interpolateByName(n) {
   return n == "transform"
