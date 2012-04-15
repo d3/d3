@@ -44,12 +44,14 @@ svg {
     <script type="text/javascript" src="../../d3.v2.js"></script>
     <script type="text/javascript">
 
-var m = [30, 10, 10, 10],
-    w = 960 - m[1] - m[3],
-    h = 500 - m[0] - m[2];
+var margin = {top: 30, right: 10, bottom: 10, left: 10},
+    width = 960 - margin.right - margin.left,
+    height = 500 - margin.top - margin.bottom;
 
-var x = d3.scale.ordinal().rangePoints([0, w], 1),
-    y = {};
+var x = d3.scale.ordinal()
+    .rangePoints([0, width], 1);
+
+var y = {};
 
 var line = d3.svg.line(),
     axis = d3.svg.axis().orient("left"),
@@ -57,10 +59,10 @@ var line = d3.svg.line(),
     foreground;
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 d3.csv("cars.csv", function(cars) {
 
@@ -68,7 +70,7 @@ d3.csv("cars.csv", function(cars) {
   x.domain(dimensions = d3.keys(cars[0]).filter(function(d) {
     return d != "name" && (y[d] = d3.scale.linear()
         .domain(d3.extent(cars, function(p) { return +p[d]; }))
-        .range([h, 0]));
+        .range([height, 0]));
   }));
 
   // Add grey background lines for context.

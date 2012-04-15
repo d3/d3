@@ -52,20 +52,26 @@ var social = {
   ]
 };
 
-var w = 100,
-    h = 100,
-    p = 30,
-    x = d3.scale.ordinal().domain(social.nodes.map(fx)).range([0, w]),
-    y = d3.scale.ordinal().domain(social.nodes.map(fy)).range([0, h]);
+var width = 100,
+    height = 100,
+    margin = 30;
+
+var x = d3.scale.ordinal()
+    .domain(social.nodes.map(fx))
+    .range([0, width]);
+
+var y = d3.scale.ordinal()
+    .domain(social.nodes.map(fy))
+    .range([0, height]);
 
 function fx(d) { return d.gender; }
 function fy(d) { return d.group; }
 
 var vis = d3.select("body").append("svg")
-    .attr("w", w + 2 * p)
-    .attr("h", h + 2 * p)
+    .attr("width", width + 2 * margin)
+    .attr("height", height + 2 * margin)
   .append("g")
-    .attr("transform", "translate(" + [p, p] + ")");
+    .attr("transform", "translate(" + [margin, margin] + ")");
 
 var layout = rollup()
     .x(function(d) { return x(fx(d)); })

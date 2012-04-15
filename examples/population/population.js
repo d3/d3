@@ -1,15 +1,19 @@
-var w = 960,
-    h = 500,
-    x = d3.scale.linear().range([0, w]),
-    y = d3.scale.linear().range([0, h - 40]);
+var width = 960,
+    height = 500;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([0, height - 40]);
 
 // An SVG element with a bottom-right origin.
 var svg = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
     .style("padding-right", "30px")
   .append("g")
-    .attr("transform", "translate(" + x(1) + "," + (h - 20) + ")scale(-1,-1)");
+    .attr("transform", "translate(" + x(1) + "," + (height - 20) + ")scale(-1,-1)");
 
 // A sliding container to hold the bars.
 var body = svg.append("g")
@@ -53,7 +57,7 @@ d3.csv("population.csv", function(data) {
       .attr("transform", function(d) { return "translate(0," + y(d) + ")"; });
 
   rules.append("line")
-      .attr("x2", w);
+      .attr("x2", width);
 
   rules.append("text")
       .attr("x", 6)

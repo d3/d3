@@ -1,15 +1,15 @@
-var w = 960,
-    h = 2000;
+var width = 960,
+    height = 2000;
 
 var tree = d3.layout.tree()
-    .size([h, w - 160]);
+    .size([height, width - 160]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
   .append("g")
     .attr("transform", "translate(40, 0)");
 

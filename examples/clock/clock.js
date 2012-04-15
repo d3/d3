@@ -1,10 +1,10 @@
 // Based on http://vis.stanford.edu/protovis/ex/clock.html
 // Based on http://blog.pixelbreaker.com/polarclock
 
-var w = 960,
-    h = 700,
-    r = Math.min(w, h) / 1.8,
-    s = .09,
+var width = 960,
+    height = 700,
+    radius = Math.min(width, height) / 1.8,
+    sectorWidth = .09,
     fsec = d3.time.format("%S s"),
     fmin = d3.time.format("%M m"),
     fhou = d3.time.format("%H h"),
@@ -19,14 +19,14 @@ var fill = d3.scale.linear()
 var arc = d3.svg.arc()
     .startAngle(0)
     .endAngle(function(d) { return d.value * 2 * Math.PI; })
-    .innerRadius(function(d) { return d.index * r; })
-    .outerRadius(function(d) { return (d.index + s) * r; });
+    .innerRadius(function(d) { return d.index * radius; })
+    .outerRadius(function(d) { return (d.index + sectorWidth) * radius; });
 
 var vis = d3.select("#clock").append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
   .append("g")
-    .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 var g = vis.selectAll("g")
     .data(fields)
@@ -55,7 +55,7 @@ d3.timer(function() {
       .attr("dy", function(d) { return d.value < .5 ? "-.5em" : "1em"; })
       .attr("transform", function(d) {
         return "rotate(" + 360 * d.value + ")"
-            + "translate(0," + -(d.index + s / 2) * r + ")"
+            + "translate(0," + -(d.index + sectorWidth / 2) * radius + ")"
             + "rotate(" + (d.value < .5 ? -90 : 90) + ")"
       })
       .text(function(d) { return d.text; });
