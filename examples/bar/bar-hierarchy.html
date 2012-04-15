@@ -27,13 +27,19 @@ rect.background {
   <body>
     <script type="text/javascript">
 
-var m = [20, 20, 20, 120], // top right bottom left
-    w = 960 - m[1] - m[3], // width
-    h = 500 - m[0] - m[2], // height
-    x = d3.scale.linear().range([0, w]),
-    y = 20, // bar height
-    z = d3.scale.ordinal().range(["steelblue", "#ccc"]), // bar color
-    duration = 750,
+var margin = {top: 20, right: 20, bottom: 20, left: 120},
+    width = 960 - margin.right - margin.left,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = 20; // bar height
+
+var z = d3.scale.ordinal()
+    .range(["steelblue", "#ccc"]); // bar color
+
+var duration = 750,
     delay = 25;
 
 var hierarchy = d3.layout.partition()
@@ -44,15 +50,15 @@ var xAxis = d3.svg.axis()
     .orient("top");
 
 var svg = d3.select("body").append("svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
   .append("g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
 svg.append("rect")
     .attr("class", "background")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
     .on("click", up);
 
 svg.append("g")

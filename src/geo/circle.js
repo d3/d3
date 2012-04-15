@@ -4,7 +4,7 @@ d3.geo.circle = function() {
   var origin = [0, 0],
       degrees = 90 - 1e-2,
       radians = degrees * d3_geo_radians,
-      arc = d3.geo.greatArc().target(Object);
+      arc = d3.geo.greatArc().target(d3_identity);
 
   function circle() {
     // TODO render a circle as a Polygon
@@ -22,7 +22,7 @@ d3.geo.circle = function() {
   var clipType = d3_geo_type({
 
     FeatureCollection: function(o) {
-      var features = o.features.map(clipType).filter(Object);
+      var features = o.features.map(clipType).filter(d3_identity);
       return features && (o = Object.create(o), o.features = features, o);
     },
 
@@ -64,7 +64,7 @@ d3.geo.circle = function() {
     },
 
     GeometryCollection: function(o) {
-      var geometries = o.geometries.map(clipType).filter(Object);
+      var geometries = o.geometries.map(clipType).filter(d3_identity);
       return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
     }
 

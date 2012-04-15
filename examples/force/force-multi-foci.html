@@ -8,19 +8,19 @@
     <div id="chart"></div>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500,
+var width = 960,
+    height = 500,
     fill = d3.scale.category10(),
     nodes = d3.range(100).map(Object);
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 var force = d3.layout.force()
     .nodes(nodes)
     .links([])
-    .size([w, h])
+    .size([width, height])
     .start();
 
 var node = vis.selectAll("circle.node")

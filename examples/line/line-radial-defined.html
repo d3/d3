@@ -2,10 +2,6 @@
 <meta charset="utf-8">
 <style>
 
-.area {
-  fill: lightsteelblue;
-}
-
 .line {
   fill: none;
   stroke: steelblue;
@@ -18,7 +14,9 @@
 <script>
 
 var data = d3.range(120).map(function(i) {
-  return .8 + Math.sin(i / 3 * Math.PI) / 6;
+  return i % 10
+      ? .8 + Math.sin(i / 3 * Math.PI) / 6
+      : null;
 });
 
 var width = 960,
@@ -33,15 +31,10 @@ var angle = d3.scale.linear()
     .range([0, 2 * Math.PI]);
 
 var line = d3.svg.line.radial()
-    .interpolate("basis-closed")
+    .defined(function(d) { return d != null; })
+    .interpolate("basis")
     .radius(radius)
     .angle(function(d, i) { return angle(i); });
-
-var area = d3.svg.area.radial()
-    .interpolate(line.interpolate())
-    .innerRadius(radius(0))
-    .outerRadius(line.radius())
-    .angle(line.angle());
 
 var svg = d3.select("body").append("svg")
     .datum(data)
@@ -49,10 +42,6 @@ var svg = d3.select("body").append("svg")
     .attr("height", height)
   .append("g")
     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
-
-svg.append("path")
-    .attr("class", "area")
-    .attr("d", area);
 
 svg.append("path")
     .attr("class", "line")

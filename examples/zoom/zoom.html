@@ -36,10 +36,17 @@ var margin = {top: 10, right: 10, bottom: 100, left: 40},
 
 var formatDate = d3.time.format("%b %Y");
 
-var x = d3.time.scale().range([0, width]),
-    x2 = d3.time.scale().range([0, width]),
-    y = d3.scale.linear().range([height, 0]),
-    y2 = d3.scale.linear().range([height2, 0]);
+var x = d3.time.scale()
+    .range([0, width]);
+
+var x2 = d3.time.scale()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var y2 = d3.scale.linear()
+    .range([height2, 0]);
 
 var xAxis = d3.svg.axis().scale(x).orient("bottom"),
     xAxis2 = d3.svg.axis().scale(x2).orient("bottom"),

@@ -10,7 +10,8 @@ require("util").puts(JSON.stringify({
   "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
   "main": "index.js",
   "dependencies": {
-    "jsdom": "0.2.12"
+    "jsdom": "0.2.14",
+    "sizzle": "1.1.x"
   },
   "devDependencies": {
     "uglify-js": "1.2.3",

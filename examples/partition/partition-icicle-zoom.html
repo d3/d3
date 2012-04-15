@@ -16,15 +16,20 @@ rect {
     <div id="chart"></div>
     <script type="text/javascript">
 
-var w = 960,
-    h = 250,
-    x = d3.scale.linear().range([0, w]),
-    y = d3.scale.linear().range([0, h]),
-    color = d3.scale.category20c();
+var width = 960,
+    height = 250;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([0, height]);
+
+var color = d3.scale.category20c();
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 var partition = d3.layout.partition()
     .value(function(d) { return d.size; });
@@ -42,7 +47,7 @@ d3.json("../data/flare.json", function(json) {
 
   function click(d) {
     x.domain([d.x, d.x + d.dx]);
-    y.domain([d.y, 1]).range([d.y ? 20 : 0, h]);
+    y.domain([d.y, 1]).range([d.y ? 20 : 0, height]);
 
     rect.transition()
       .duration(750)

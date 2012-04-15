@@ -1,16 +1,16 @@
-var w = 960,
-    h = 40;
+var width = 960,
+    height = 40;
 
 var chart = horizonChart()
-    .width(w)
-    .height(h)
+    .width(width)
+    .height(height)
     .bands(5)
     .mode("offset")
     .interpolate("basis");
 
 var svg = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 d3.json("unemployment.json", function(data) {
 
@@ -55,8 +55,8 @@ function horizonChart() {
       interpolate = "linear", // or basis, monotone, step-before, etc.
       x = horizonX,
       y = horizonY,
-      w = 960,
-      h = 40,
+      width = 960,
+      height = 40,
       nextId = 0,
       area = d3.svg.area(),
       duration = 0;
@@ -89,8 +89,8 @@ function horizonChart() {
       });
 
       // Compute the new x- and y-scales.
-      var x1 = d3.scale.linear().domain([xMin, xMax]).range([0, w]),
-          y1 = d3.scale.linear().domain([0, yMax]).range([0, h * bands]);
+      var x1 = d3.scale.linear().domain([xMin, xMax]).range([0, width]),
+          y1 = d3.scale.linear().domain([0, yMax]).range([0, height * bands]);
 
       // Retrieve the old scales, if this is an update.
       if (this.__chart__) {
@@ -113,13 +113,13 @@ function horizonChart() {
       defsEnter.append("svg:clipPath")
           .attr("id", "horizon_clip" + id)
         .append("svg:rect")
-          .attr("width", w)
-          .attr("height", h);
+          .attr("width", width)
+          .attr("height", height);
 
       defs.select("rect").transition()
           .duration(duration)
-          .attr("width", w)
-          .attr("height", h);
+          .attr("width", width)
+          .attr("height", height);
 
       // The area path is rendered with our resuable d3.svg.area.
       defsEnter.append("svg:path")
@@ -127,13 +127,13 @@ function horizonChart() {
           .attr("d", area
           .interpolate(interpolate)
           .x(function(d) { return x0(d[0]); })
-          .y0(h * bands)
-          .y1(function(d) { return h * bands - y0(d[1]); }))
+          .y0(height * bands)
+          .y1(function(d) { return height * bands - y0(d[1]); }))
         .transition()
           .duration(duration)
           .attr("d", area
           .x(function(d) { return x1(d[0]); })
-          .y1(function(d) { return h * bands - y1(d[1]); }));
+          .y1(function(d) { return height * bands - y1(d[1]); }));
 
       defs.select("path").transition()
           .duration(duration)
@@ -147,8 +147,8 @@ function horizonChart() {
 
       // Define the transform function based on the mode.
       var transform = mode == "offset"
-          ? function(d) { return "translate(0," + (d + (d < 0) - bands) * h + ")"; }
-          : function(d) { return (d < 0 ? "scale(1,-1)" : "") + "translate(0," + (d - bands) * h + ")"; };
+          ? function(d) { return "translate(0," + (d + (d < 0) - bands) * height + ")"; }
+          : function(d) { return (d < 0 ? "scale(1,-1)" : "") + "translate(0," + (d - bands) * height + ")"; };
 
       // Instantiate each copy of the path with different transforms.
       var u = g.select("g").selectAll("use")
@@ -223,14 +223,14 @@ function horizonChart() {
   };
 
   horizon.width = function(x) {
-    if (!arguments.length) return w;
-    w = +x;
+    if (!arguments.length) return width;
+    width = +x;
     return horizon;
   };
 
   horizon.height = function(x) {
-    if (!arguments.length) return h;
-    h = +x;
+    if (!arguments.length) return height;
+    height = +x;
     return horizon;
   };
 

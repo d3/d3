@@ -12,6 +12,10 @@ body {
   shape-rendering: crispEdges;
 }
 
+.area {
+  fill: lightsteelblue;
+}
+
 .line {
   fill: none;
   stroke: steelblue;
@@ -30,7 +34,7 @@ body {
 <script>
 
 var data = d3.range(40).map(function(i) {
-  return {x: i / 39, y: (Math.sin(i / 3) + 2) / 4};
+  return {x: i / 39, y: i % 5 ? (Math.sin(i / 3) + 2) / 4 : null};
 });
 
 var margin = {top: 10, right: 10, bottom: 20, left: 40},
@@ -54,8 +58,15 @@ var yAxis = d3.svg.axis()
     .orient("left");
 
 var line = d3.svg.line()
+    .defined(function(d) { return d.y != null; })
     .x(function(d) { return x(d.x); })
     .y(function(d) { return y(d.y); });
+
+var area = d3.svg.area()
+    .defined(line.defined())
+    .x(line.x())
+    .y1(line.y())
+    .y0(y(0));
 
 var svg = d3.select("body").append("svg")
     .datum(data)
@@ -63,6 +74,10 @@ var svg = d3.select("body").append("svg")
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("path")
+    .attr("class", "area")
+    .attr("d", area);
 
 svg.append("g")
     .attr("class", "x axis")
@@ -78,7 +93,7 @@ svg.append("path")
     .attr("d", line);
 
 svg.selectAll(".dot")
-    .data(data)
+    .data(data.filter(function(d) { return d.y; }))
   .enter().append("circle")
     .attr("class", "dot")
     .attr("cx", line.x())
