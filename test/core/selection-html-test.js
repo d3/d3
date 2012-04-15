@@ -98,8 +98,6 @@ suite.addBatch({
       assert.equal(div[0][1].lastChild.tagName, "I");
       assert.equal(div[0][1].lastChild.textContent, "1");
     },
-    /*
-    https://github.com/tmpvar/jsdom/issues/276
     "clears the inner HTML as null": function(div) {
       div.html(null);
       assert.equal(div[0][0].innerHTML, "");
@@ -107,7 +105,6 @@ suite.addBatch({
       assert.equal(div[0][1].innerHTML, "");
       assert.isNull(div[0][1].firstChild);
     },
-    */
     "clears the inner HTML as a function": function(div) {
       div.html(function() { return ""; });
       assert.equal(div[0][0].innerHTML, "");
