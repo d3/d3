@@ -1,6 +1,6 @@
 // data is two-dimensional array of x,y; we populate y0
 d3.layout.stack = function() {
-  var values = Object,
+  var values = d3_identity,
       order = d3_layout_stackOrderDefault,
       offset = d3_layout_stackOffsetZero,
       out = d3_layout_stackOut,

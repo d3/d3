@@ -24,8 +24,8 @@ line.link {
     <div id="chart"></div>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500,
+var width = 960,
+    height = 500,
     node,
     link,
     root;
@@ -34,17 +34,17 @@ var force = d3.layout.force()
     .on("tick", tick)
     .charge(function(d) { return d._children ? -d.size / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 : 30; })
-    .size([w, h]);
+    .size([width, height]);
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 d3.json("../data/flare.json", function(json) {
   root = json;
   root.fixed = true;
-  root.x = w / 2;
-  root.y = h / 2;
+  root.x = width / 2;
+  root.y = height / 2;
   update();
 });
 

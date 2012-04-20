@@ -34,20 +34,25 @@ var data = d3.range(100).map(function(i) {
   return {x: i / 99, y: Math.random()};
 });
 
-var w = 450,
-    h = 450,
-    p = 20,
-    x = d3.scale.linear().range([0, w]),
-    y = d3.scale.linear().range([h, 0]),
-    symbol = d3.scale.ordinal().range(d3.svg.symbolTypes),
+var width = 450,
+    height = 450,
+    margin = 20;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var symbol = d3.scale.ordinal().range(d3.svg.symbolTypes),
     color = d3.scale.category10();
 
 var vis = d3.select("body")
   .append("svg")
-    .attr("width", w + p * 2)
-    .attr("height", h + p * 2)
+    .attr("width", width + margin * 2)
+    .attr("height", height + margin * 2)
   .append("g")
-    .attr("transform", "translate(" + p + "," + p + ")");
+    .attr("transform", "translate(" + margin + "," + margin + ")");
 
 var xrule = vis.selectAll("g.x")
     .data(x.ticks(10))
@@ -58,11 +63,11 @@ xrule.append("line")
     .attr("x1", x)
     .attr("x2", x)
     .attr("y1", 0)
-    .attr("y2", h);
+    .attr("y2", height);
 
 xrule.append("text")
     .attr("x", x)
-    .attr("y", h + 3)
+    .attr("y", height + 3)
     .attr("dy", ".71em")
     .attr("text-anchor", "middle")
     .text(x.tickFormat(10));
@@ -74,7 +79,7 @@ var yrule = vis.selectAll("g.y")
 
 yrule.append("line")
     .attr("x1", 0)
-    .attr("x2", w)
+    .attr("x2", width)
     .attr("y1", y)
     .attr("y2", y);
 
@@ -86,8 +91,8 @@ yrule.append("text")
     .text(y.tickFormat(10));
 
 vis.append("rect")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 vis.selectAll("path.dot")
     .data(data)

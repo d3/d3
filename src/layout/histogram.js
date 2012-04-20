@@ -24,12 +24,14 @@ d3.layout.histogram = function() {
     }
 
     // Fill the bins, ignoring values outside the range.
-    i = -1; while(++i < n) {
-      x = values[i];
-      if ((x >= range[0]) && (x <= range[1])) {
-        bin = bins[d3.bisect(thresholds, x, 1, m) - 1];
-        bin.y += k;
-        bin.push(data[i]);
+    if (m > 0) {
+      i = -1; while(++i < n) {
+        x = values[i];
+        if ((x >= range[0]) && (x <= range[1])) {
+          bin = bins[d3.bisect(thresholds, x, 1, m) - 1];
+          bin.y += k;
+          bin.push(data[i]);
+        }
       }
     }
 
@@ -52,7 +54,7 @@ d3.layout.histogram = function() {
   // values.
   histogram.range = function(x) {
     if (!arguments.length) return ranger;
-    ranger = d3.functor(x);
+    ranger = d3_functor(x);
     return histogram;
   };
 
@@ -69,7 +71,7 @@ d3.layout.histogram = function() {
     if (!arguments.length) return binner;
     binner = typeof x === "number"
         ? function(range) { return d3_layout_histogramBinFixed(range, x); }
-        : d3.functor(x);
+        : d3_functor(x);
     return histogram;
   };
 

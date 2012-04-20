@@ -14,24 +14,24 @@ body {
   <body>
     <script type="text/javascript">
 
-var w = 400,
-    h = 400,
-    r = Math.min(w, h) / 2,
+var width = 400,
+    height = 400,
+    radius = Math.min(width, height) / 2,
     data = d3.range(10).map(Math.random).sort(d3.descending),
     color = d3.scale.category20(),
-    arc = d3.svg.arc().outerRadius(r),
+    arc = d3.svg.arc().outerRadius(radius),
     donut = d3.layout.pie();
 
 var vis = d3.select("body").append("svg")
     .data([data])
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 var arcs = vis.selectAll("g.arc")
     .data(donut)
   .enter().append("g")
     .attr("class", "arc")
-    .attr("transform", "translate(" + r + "," + r + ")");
+    .attr("transform", "translate(" + radius + "," + radius + ")");
 
 var paths = arcs.append("path")
     .attr("fill", function(d, i) { return color(i); });
@@ -56,7 +56,7 @@ function tweenPie(b) {
 }
 
 function tweenDonut(b) {
-  b.innerRadius = r * .6;
+  b.innerRadius = radius * .6;
   var i = d3.interpolate({innerRadius: 0}, b);
   return function(t) {
     return arc(i(t));

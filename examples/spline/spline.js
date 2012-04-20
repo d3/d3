@@ -1,17 +1,17 @@
-var w = 960,
-    h = 500,
+var width = 960,
+    height = 500,
     line = d3.svg.line(),
-    points = d3.range(1, 5).map(function(i) { return [i * w / 5, 50 + Math.random() * (h - 100)]; }),
+    points = d3.range(1, 5).map(function(i) { return [i * width / 5, 50 + Math.random() * (height - 100)]; }),
     dragged = null,
     selected = points[0];
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 vis.append("rect")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
     .on("mousedown", function() {
       points.push(selected = dragged = d3.mouse(vis.node()));
       update();
@@ -84,8 +84,8 @@ function update() {
 function mousemove() {
   if (!dragged) return;
   var m = d3.mouse(vis.node());
-  dragged[0] = Math.max(0, Math.min(w, m[0]));
-  dragged[1] = Math.max(0, Math.min(h, m[1]));
+  dragged[0] = Math.max(0, Math.min(width, m[0]));
+  dragged[1] = Math.max(0, Math.min(height, m[1]));
   update();
 }
 

@@ -28,14 +28,18 @@ line.link {
   </head>
   <body>
     <script type="text/javascript">
-var w = 960,     // svg width
-    h = 600,     // svg height
+var width = 960,     // svg width
+    height = 600,     // svg height
     dr = 4,      // default point radius
     off = 15,    // cluster hull offset
     expand = {}, // expanded clusters
-    data, net, force, hullg, hull, linkg, link, nodeg, node,
-    curve = d3.svg.line().interpolate("cardinal-closed").tension(.85),
-    fill = d3.scale.category20();
+    data, net, force, hullg, hull, linkg, link, nodeg, node;
+
+var curve = d3.svg.line()
+    .interpolate("cardinal-closed")
+    .tension(.85);
+
+var fill = d3.scale.category20();
 
 function noop() { return false; }
 
@@ -126,14 +130,14 @@ function network(data, prev, index, expand) {
 }
 
 function convexHulls(nodes, index, offset) {
-  var h = {};
+  var hulls = {};
 
   // create point sets
   for (var k=0; k<nodes.length; ++k) {
     var n = nodes[k];
     if (n.size) continue;
     var i = index(n),
-        l = h[i] || (h[i] = []);
+        l = hulls[i] || (hulls[i] = []);
     l.push([n.x-offset, n.y-offset]);
     l.push([n.x-offset, n.y+offset]);
     l.push([n.x+offset, n.y-offset]);
@@ -142,8 +146,8 @@ function convexHulls(nodes, index, offset) {
 
   // create convex hulls
   var hulls = [];
-  for (i in h) {
-    hulls.push({group: i, path: d3.geom.hull(h[i])});
+  for (i in hulls) {
+    hulls.push({group: i, path: d3.geom.hull(hulls[i])});
   }
 
   return hulls;
@@ -158,8 +162,8 @@ function drawCluster(d) {
 var body = d3.select("body");
 
 var vis = body.append("svg")
-   .attr("width", w)
-   .attr("height", h);
+   .attr("width", width)
+   .attr("height", height);
 
 d3.json("miserables.json", function(json) {
   data = json;
@@ -189,7 +193,7 @@ function init() {
   force = d3.layout.force()
       .nodes(net.nodes)
       .links(net.links)
-      .size([w, h])
+      .size([width, height])
       .linkDistance(50)
       .start();
 

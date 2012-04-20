@@ -5,7 +5,10 @@ d3.xhr = function(url, mime, callback) {
   req.open("GET", url, true);
   if (mime) req.setRequestHeader("Accept", mime);
   req.onreadystatechange = function() {
-    if (req.readyState === 4) callback(req.status < 300 ? req : null);
+    if (req.readyState === 4) {
+      var s = req.status;
+      callback(s >= 200 && s < 300 || s === 304 ? req : null);
+    }
   };
   req.send(null);
 };
