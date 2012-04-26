@@ -228,10 +228,6 @@ d3%.js: Makefile
 	cat $(filter %.js,$^) > $@
 	@chmod a-w $@
 
-prepare: package.json
-	mkdir -p node_modules
-	npm install
-
 package.json: src/package.js
 	@rm -f $@
 	node src/package.js > $@
