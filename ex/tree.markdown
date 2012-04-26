@@ -9,12 +9,7 @@ title: Node-Link Tree
 <link type="text/css" rel="stylesheet" href="tree.css"/>
 <script type="text/javascript" src="tree.js"> </script>
 
-Implementation based on work by [Jeff Heer](http://jheer.org/) and
-[Jason Davies](http://www.jasondavies.com/) using [Buchheim et
-al.](http://www.springerlink.com/content/u73fyc4tlxp3uwt8/)'s
-linear-time variant of the Reingold-Tilford algorithm. Data shows the
-[Flare](http://flare.prefuse.org/) class hierarchy, also courtesy Jeff
-Heer.
+The `tree` layout implements the Reingold-Tilford algorithm for efficient, tidy arrangement of layered nodes. The depth of nodes is computed by distance from the root, leading to a ragged appearance. Cartesian orientations are also supported. Implementation based on work by [Jeff Heer](http://jheer.org/) and [Jason Davies](http://www.jasondavies.com/) using [Buchheim et al.](http://www.springerlink.com/content/u73fyc4tlxp3uwt8/)'s linear-time variant of the Reingold-Tilford algorithm. Data shows the [Flare](http://flare.prefuse.org/) class hierarchy, also courtesy Jeff Heer.
 
 ### Source Code
 

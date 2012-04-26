@@ -10,14 +10,7 @@ title: Voronoi Diagram
 <link type="text/css" rel="stylesheet" href="voronoi.css"/>
 <script type="text/javascript" src="voronoi.js"> </script>
 
-Colors by [Cynthia Brewer](http://colorbrewer.org/). Voronoi design
-commonly attributed to [Lejeune Dirichlet](http://en.wikipedia.org/wiki/Lejeune_Dirichlet)
-and [Georgy Voronoy](http://en.wikipedia.org/wiki/Georgy_Voronoy).
-Voronoi algorithm by [Steven Fortune](http://ect.bell-labs.com/who/sjf/);
-implementation based on work by [Nicolas Garcia
-Belmonte](http://blog.thejit.org/2010/02/12/voronoi-tessellation/).
-Mouseover interaction inspired by [Raymond
-Hill](http://www.raymondhill.net/blog/?p=9).
+The Voronoi tesselation shows the closest point on the plane for a given set of points. This example updates the Voronoi diagram in response to mouse interaction! Colors by [Cynthia Brewer](http://colorbrewer.org/). Voronoi design commonly attributed to [Lejeune Dirichlet](http://en.wikipedia.org/wiki/Lejeune_Dirichlet) and [Georgy Voronoy](http://en.wikipedia.org/wiki/Georgy_Voronoy). Voronoi algorithm by [Steven Fortune](http://ect.bell-labs.com/who/sjf/); implementation based on work by [Nicolas Garcia Belmonte](http://blog.thejit.org/2010/02/12/voronoi-tessellation/). Mouseover interaction inspired by [Raymond Hill](http://www.raymondhill.net/blog/?p=9).
 
 ### Source Code
 

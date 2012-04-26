@@ -13,9 +13,7 @@ title: Examples
   </a>
   <h4><a href="calendar.html">Calendar View</a></h4>
 
-  <p>This example demonstrates loading of CSV data, which is then quantized into
-  a diverging color scale. The values are visualized as colored cells per day.
-  Days are arranged into columns by week, then grouped by month and years.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -24,9 +22,7 @@ title: Examples
   </a>
   <h4><a href="chord.html">Chord Diagram</a></h4>
 
-  <p>Chord diagrams show directed relationships among a group of entities. This
-  example also demonstrates simple interactivity by using mouseover
-  filtering.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -35,9 +31,7 @@ title: Examples
   </a>
   <h4><a href="choropleth.html">Choropleth Map</a></h4>
 
-  <p>Choropleth maps visualize geographic distributions using a color encoding.
-  This example shows U.S. unemployment density by county, as of 2009. An Albers
-  equal-area projection preserves the accuracy of the representation.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -46,8 +40,7 @@ title: Examples
   </a>
   <h4><a href="population.html">Population Pyramid</a></h4>
 
-  <p>This diagram shows the distribution of age groups in the United States over
-  the last 150 years. Use the arrow keys to observe the changing population.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -56,10 +49,7 @@ title: Examples
   </a>
   <h4><a href="cartogram.html">Non-Contiguous Cartogram</a></h4>
 
-  <p>Unlike choropleth maps, cartograms encode data using area rather than
-  color, resulting in distorted geographic boundaries. In this example, states
-  are rescaled around their centroid, preserving local shape but not
-  topology.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -68,10 +58,7 @@ title: Examples
   </a>
   <h4><a href="force.html">Force-Directed Graph</a></h4>
 
-  <p>This simple force-directed graph shows character co-occurence in <i>Les
-  Misérables</i>. A physical simulation of charged particles and springs
-  places related characters in closer proximity, while unrelated characters are
-  farther apart.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -80,9 +67,7 @@ title: Examples
   </a>
   <h4><a href="treemap.html">Treemap</a></h4>
 
-  <p>A treemap recursively subdivides area into rectangles; the area of any node
-  in the tree corresponds to its value. This example uses color to encode
-  different packages of the Flare visualization toolkit.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -91,10 +76,7 @@ title: Examples
   </a>
   <h4><a href="sunburst.html">Sunburst</a></h4>
 
-  <p>A sunburst is similar to the treemap, except it uses a radial layout. The
-  root node of the tree is at the center, with leaves on the circumference. The
-  area (or angle, depending on implementation) of each arc corresponds to its
-  value.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -103,9 +85,7 @@ title: Examples
   </a>
   <h4><a href="splom.html">Scatterplot Matrix</a></h4>
 
-  <p>The scatterplot matrix visualizations pairwise correlations for
-  multi-dimensional data; each cell in the matrix is a scatterplot. This example
-  uses Anderson's data of iris flowers on the Gaspé Peninsula.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -114,9 +94,7 @@ title: Examples
   </a>
   <h4><a href="stack.html">Stacked Bars</a></h4>
 
-  <p>Switch between stacked and grouped layouts using sequenced transitions!
-  Animations preserve object constancy and allow the user to follow the data
-  across views.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -125,10 +103,7 @@ title: Examples
   </a>
   <h4><a href="tree.html">Node-Link Tree</a></h4>
 
-  <p>The <tt>tree</tt> layout implements the Reingold-Tilford algorithm
-  for efficient, tidy arrangement of layered nodes. The depth of nodes
-  is computed by distance from the root, leading to a ragged appearance.
-  Cartesian orientations are also supported.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -137,9 +112,7 @@ title: Examples
   </a>
   <h4><a href="stream.html">Streamgraph</a></h4>
 
-  <p>For continuous data such as time series, a streamgraph can be used in place
-  of stacked bars. This example also demonstrates path transitions to
-  interpolate between different layouts.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -148,9 +121,7 @@ title: Examples
   </a>
   <h4><a href="voronoi.html">Voronoi Diagram</a></h4>
 
-  <p>The Voronoi tesselation shows the closest point on the plane for a given
-  set of points. This example updates the Voronoi diagram in response to mouse
-  interaction!</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -159,11 +130,7 @@ title: Examples
   </a>
   <h4><a href="bullet.html">Bullet Charts</a></h4>
 
-  <p>Designed by Stephen Few, a bullet chart &ldquo;provides a rich display of
-  data in a small space.&rdquo; A variation on a bar chart, bullet charts
-  compare a given quantitative measure (such as profit or revenue)
-  against qualitative ranges (e.g., poor, satisfactory, good) and
-  related markers (e.g., the same measure a year ago).</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -172,10 +139,7 @@ title: Examples
   </a>
   <h4><a href="box.html">Box Plots</a></h4>
 
-  <p>A box-and-whisker plot uses simple glyphs that summarize a quantitative
-  distribution with five standard statistics: the smallest value, lower
-  quartile, median, upper quartile, and largest value. This summary approach
-  allows the viewer to easily recognize differences between distributions.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -184,9 +148,7 @@ title: Examples
   </a>
   <h4><a href="pack.html">Circle Packing</a></h4>
 
-  <p>Enclosure diagrams use containment to represent the hierarchy. Although
-  circle packing is not as space-efficient as a treemap, it better reveals the
-  hierarchy.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -195,9 +157,7 @@ title: Examples
   </a>
   <h4><a href="bubble.html">Bubble Chart</a></h4>
 
-  <p>Bubble charts encode data in the area of circles. Although less
-  perceptually-accurate than bar charts, they can pack hundreds of values into a
-  small space.</p>
+  <p></p>
 </div>
 
 <div class="list">
@@ -206,9 +166,7 @@ title: Examples
   </a>
   <h4><a href="cluster.html">Dendrogram</a></h4>
 
-  <p>A dendrogram is a node-link diagram that places leaf nodes of the tree at
-  the same depth. In this example, the classes (leaf nodes) are aligned on the
-  right edge, with the packages (internal nodes) to the left.</p>
+  <p></p>
 </div>
 
 </div>

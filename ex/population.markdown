@@ -9,13 +9,7 @@ title: Population Pyramid
 <link type="text/css" rel="stylesheet" href="population.css"/>
 <script type="text/javascript" src="population.js"> </script>
 
-Data from the [Minnesota Population Center](http://ipums.org/). Use the arrow
-keys to change the displayed year. The blue bars are the male population for
-each five-year age bracket, while the pink bars are the female population; the
-bars are partially transparent so that you can see how they overlap, unlike the
-traditional [side-by-side](http://en.wikipedia.org/wiki/Population_pyramid)
-display which makes it difficult to compare the relative distribution of the
-sexes.
+This diagram shows the distribution of age groups in the United States over the last 150 years. Use the arrow keys to observe the changing population. Data from the [Minnesota Population Center](http://ipums.org/). Use the arrow keys to change the displayed year. The blue bars are the male population for each five-year age bracket, while the pink bars are the female population; the bars are partially transparent so that you can see how they overlap, unlike the traditional [side-by-side](http://en.wikipedia.org/wiki/Population_pyramid) display which makes it difficult to compare the relative distribution of the sexes.
 
 ### Source Code
 
