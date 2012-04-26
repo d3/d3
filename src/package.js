@@ -1,4 +1,4 @@
-require("./core/core.js");
+require("./core/core");
 
 require("util").puts(JSON.stringify({
   "name": "d3",
