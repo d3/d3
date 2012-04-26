@@ -232,7 +232,7 @@ prepare: package.json
 	mkdir -p node_modules
 	npm install
 
-package.json: d3.v2.js src/package.js
+package.json: src/package.js
 	@rm -f $@
 	node src/package.js > $@
 	@chmod a-w $@
