@@ -216,8 +216,8 @@ d3.layout.force = function() {
 
     for (i = 0; i < n; ++i) {
       o = nodes[i];
-      if (isNaN(o.x)) o.x = position("x", w);
-      if (isNaN(o.y)) o.y = position("y", h);
+      if (isNaN(o.x)) o.x = position("x", w, i);
+      if (isNaN(o.y)) o.y = position("y", h, i);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
     }
@@ -234,18 +234,19 @@ d3.layout.force = function() {
     }
 
     // initialize node position based on first neighbor
-    function position(dimension, size) {
-      var neighbors = neighbor(i),
+    function position(dimension, size, i) {
+      var my_neighbors = neighbor(i),
           j = -1,
-          m = neighbors.length,
+          m = my_neighbors.length,
           x;
-      while (++j < m) if (!isNaN(x = neighbors[j][dimension])) return x;
+      while (++j < m) if (!isNaN(x = my_neighbors[j][dimension])) return x;
       return Math.random() * size;
     }
 
     // initialize neighbors lazily
-    function neighbor() {
+    function neighbor(i) {
       if (!neighbors) {
+	    var j;
         neighbors = [];
         for (j = 0; j < n; ++j) {
           neighbors[j] = [];
