@@ -1,5 +1,5 @@
-# D3.js
+# Data-Driven Documents
 
-**D3.js** is a small, free JavaScript library for manipulating HTML documents based on data. D3 can help you quickly visualize your data as HTML or SVG, handle interactivity, and incorporate smooth transitions and staged animations into your pages. You can use D3 as a visualization framework, or you can use it to build dynamic pages (like jQuery).
+**D3.js** is a JavaScript library for manipulating documents based on data. **D3** helps you bring data to life using HTML, SVG and CSS. D3’s emphasis on web standards gives you the full capabilities of modern browsers without tying yourself to a proprietary framework, combining powerful visualization components and a data-driven approach to DOM manipulation.
 
 Want to learn more? [See the wiki.](/mbostock/d3/wiki)
