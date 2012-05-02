@@ -1,4 +1,4 @@
-require("../index");
+require("./core/core");
 
 require("util").puts(JSON.stringify({
   "name": "d3",
