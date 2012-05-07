@@ -65,6 +65,22 @@ var d3_time_zfill2 = d3.format("02d"),
     d3_time_zfill4 = d3.format("04d"),
     d3_time_sfill2 = d3.format("2d");
 
+function d3_time_ordinal_suffix(number) {
+  var suffix = "th",
+      tail = number % 100;
+
+  if (tail < 11 || tail > 13) {
+    switch (tail % 10) {
+      case 1: suffix = "st"; break;
+      case 2: suffix = "nd"; break;
+      case 3: suffix = "rd"; break;
+      default: break;
+    }
+  }
+
+  return suffix;
+}
+
 var d3_time_formats = {
   a: function(d) { return d3_time_weekdays[d.getDay()].substring(0, 3); },
   A: function(d) { return d3_time_weekdays[d.getDay()]; },
@@ -80,6 +96,7 @@ var d3_time_formats = {
   m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
   M: function(d) { return d3_time_zfill2(d.getMinutes()); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
+  s: function(d) { return d3_time_ordinal_suffix(d.getDate()); },
   S: function(d) { return d3_time_zfill2(d.getSeconds()); },
   U: function(d) { return d3_time_zfill2(d3.time.sundayOfYear(d)); },
   w: function(d) { return d.getDay(); },

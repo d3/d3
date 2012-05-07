@@ -7,7 +7,7 @@ var d3_time_scaleUTCFormats = [
   [d3.time.format.utc("%B"), function(d) { return d.getUTCMonth(); }],
   [d3.time.format.utc("%b %d"), function(d) { return d.getUTCDate() != 1; }],
   [d3.time.format.utc("%a %d"), function(d) { return d.getUTCDay() && d.getUTCDate() != 1; }],
-  [d3.time.format.utc("%I %p"), function(d) { return d.getUTCHours(); }],
+  [d3.time.format.utc("%H"), function(d) { return d.getUTCHours(); }],  // [abh] Make the "auto-scaling" time formats use 24-hour hours instead of 12-hours and AM/PM
   [d3.time.format.utc("%I:%M"), function(d) { return d.getUTCMinutes(); }],
   [d3.time.format.utc(":%S"), function(d) { return d.getUTCSeconds(); }],
   [d3.time.format.utc(".%L"), function(d) { return d.getUTCMilliseconds(); }]
