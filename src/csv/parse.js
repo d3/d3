@@ -3,7 +3,7 @@ d3.csv.parse = function(text) {
   return d3.csv.parseRows(text, function(row, i) {
     if (i) {
       var o = {}, j = -1, m = header.length;
-      while (++j < m) o[header[j]] = row[j];
+      while (++j < m) o[header[j]] = j < row.length ? row[j] : null;
       return o;
     } else {
       header = row;
