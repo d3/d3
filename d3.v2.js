@@ -3555,6 +3555,17 @@ function d3_svg_lineBundle(points, tension) {
       i = -1,
       p,
       t;
+  if (!dx && !dy) {
+    p = points[1];
+    t = 1 - tension;
+    dx = p[0] - x0;
+    dy = p[1] - y0;
+    p[0] = x0 + tension * dx - t * dy;
+    p[1] = y0 + tension * dy + t * dx;
+    points.splice(2, 0, [x0 + tension * dx + t * dy, y0 + tension * dy - t * dx]);
+    dx = dy = 0;
+    n++;
+  }
   while (++i <= n) {
     p = points[i];
     t = i / n;
@@ -4936,7 +4947,6 @@ d3.layout.bundle = function() {
 function d3_layout_bundlePath(link) {
   var start = link.source,
       end = link.target;
-  if (start === end) return [start, end];
   var lca = d3_layout_bundleLeastCommonAncestor(start, end),
       points = [start];
   while (start !== lca) {
@@ -4964,7 +4974,7 @@ function d3_layout_bundleAncestors(node) {
 }
 
 function d3_layout_bundleLeastCommonAncestor(a, b) {
-  if (a === b) return a;
+  if (a === b) return a.parent != null ? a.parent : a;
   var aNodes = d3_layout_bundleAncestors(a),
       bNodes = d3_layout_bundleAncestors(b),
       aNode = aNodes.pop(),

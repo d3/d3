@@ -306,6 +306,17 @@ function d3_svg_lineBundle(points, tension) {
       i = -1,
       p,
       t;
+  if (!dx && !dy) {
+    p = points[1];
+    t = 1 - tension;
+    dx = p[0] - x0;
+    dy = p[1] - y0;
+    p[0] = x0 + tension * dx - t * dy;
+    p[1] = y0 + tension * dy + t * dx;
+    points.splice(2, 0, [x0 + tension * dx + t * dy, y0 + tension * dy - t * dx]);
+    dx = dy = 0;
+    n++;
+  }
   while (++i <= n) {
     p = points[i];
     t = i / n;

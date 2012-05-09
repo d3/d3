@@ -15,7 +15,6 @@ d3.layout.bundle = function() {
 function d3_layout_bundlePath(link) {
   var start = link.source,
       end = link.target;
-  if (start === end) return [start, end];
   var lca = d3_layout_bundleLeastCommonAncestor(start, end),
       points = [start];
   while (start !== lca) {
@@ -43,7 +42,7 @@ function d3_layout_bundleAncestors(node) {
 }
 
 function d3_layout_bundleLeastCommonAncestor(a, b) {
-  if (a === b) return a;
+  if (a === b) return a.parent != null ? a.parent : a;
   var aNodes = d3_layout_bundleAncestors(a),
       bNodes = d3_layout_bundleAncestors(b),
       aNode = aNodes.pop(),
