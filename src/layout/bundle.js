@@ -14,8 +14,9 @@ d3.layout.bundle = function() {
 
 function d3_layout_bundlePath(link) {
   var start = link.source,
-      end = link.target,
-      lca = d3_layout_bundleLeastCommonAncestor(start, end),
+      end = link.target;
+  if (start === end) return [start, end];
+  var lca = d3_layout_bundleLeastCommonAncestor(start, end),
       points = [start];
   while (start !== lca) {
     start = start.parent;
