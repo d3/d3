@@ -317,14 +317,10 @@ d3.nest = function() {
   var nest = {},
       keys = [],
       sortKeys = [],
-      sortValues,
-      rollup;
+      mapValues;
 
   function map(array, depth) {
-    if (depth >= keys.length) return rollup
-        ? rollup.call(nest, array) : (sortValues
-        ? array.sort(sortValues)
-        : array);
+    if (depth >= keys.length) return mapValues ? mapValues.call(nest, array) : array;
 
     var i = -1,
         n = array.length,
@@ -391,12 +387,13 @@ d3.nest = function() {
   // Specifies the order for leaf values.
   // Applies to both maps and entries array.
   nest.sortValues = function(order) {
-    sortValues = order;
+    mapValues = function(array) { return array.sort(order); };
     return nest;
   };
 
-  nest.rollup = function(f) {
-    rollup = f;
+  nest.rollup =
+  nest.mapValues = function(_) {
+    mapValues = _;
     return nest;
   };
 
