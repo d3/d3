@@ -298,30 +298,32 @@ function d3_svg_lineBasisClosed(points) {
 }
 
 function d3_svg_lineBundle(points, tension) {
-  var n = points.length - 1,
-      x0 = points[0][0],
-      y0 = points[0][1],
-      dx = points[n][0] - x0,
-      dy = points[n][1] - y0,
-      i = -1,
-      p,
-      t;
-  if (!dx && !dy && n === 2) {
-    p = points[1];
-    t = 1 - tension;
-    dx = p[0] - x0;
-    dy = p[1] - y0;
-    p[0] = x0 + tension * dx - t * dy;
-    p[1] = y0 + tension * dy + t * dx;
-    points.splice(2, 0, [x0 + tension * dx + t * dy, y0 + tension * dy - t * dx]);
-    dx = dy = 0;
-    n++;
-  }
-  while (++i <= n) {
-    p = points[i];
-    t = i / n;
-    p[0] = tension * p[0] + (1 - tension) * (x0 + t * dx);
-    p[1] = tension * p[1] + (1 - tension) * (y0 + t * dy);
+  var n = points.length - 1;
+  if (n) {
+    var x0 = points[0][0],
+        y0 = points[0][1],
+        dx = points[n][0] - x0,
+        dy = points[n][1] - y0,
+        i = -1,
+        p,
+        t;
+    if (!dx && !dy && n === 2) {
+      p = points[1];
+      t = 1 - tension;
+      dx = p[0] - x0;
+      dy = p[1] - y0;
+      p[0] = x0 + tension * dx - t * dy;
+      p[1] = y0 + tension * dy + t * dx;
+      points.splice(2, 0, [x0 + tension * dx + t * dy, y0 + tension * dy - t * dx]);
+      dx = dy = 0;
+      n++;
+    }
+    while (++i <= n) {
+      p = points[i];
+      t = i / n;
+      p[0] = tension * p[0] + (1 - tension) * (x0 + t * dx);
+      p[1] = tension * p[1] + (1 - tension) * (y0 + t * dy);
+    }
   }
   return d3_svg_lineBasis(points);
 }
