@@ -3555,7 +3555,7 @@ function d3_svg_lineBundle(points, tension) {
       i = -1,
       p,
       t;
-  if (!dx && !dy) {
+  if (!dx && !dy && n === 2) {
     p = points[1];
     t = 1 - tension;
     dx = p[0] - x0;
