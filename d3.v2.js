@@ -5564,6 +5564,7 @@ d3.layout.pie = function() {
     // They are stored in the original data's order.
     var arcs = [];
     index.forEach(function(i) {
+      var d;
       arcs[i] = {
         data: data[i],
         value: d = values[i],
@@ -5987,7 +5988,8 @@ d3.layout.hierarchy = function() {
           n,
           c = node.children = [],
           v = 0,
-          j = depth + 1;
+          j = depth + 1,
+          d;
       while (++i < n) {
         d = recurse(childs[i], j, nodes);
         d.parent = node;
