@@ -131,18 +131,44 @@ function d3_layout_packCircle(nodes) {
   // Re-center the circles and return the encompassing radius.
   var cx = (xMin + xMax) / 2,
       cy = (yMin + yMax) / 2,
-      cr = 0;
-  for (var i = 0; i < n; i++) {
-    var node = nodes[i];
+      cr = 0,
+      cv = 0, 
+      node, i;
+  
+  for (i = 0; i < n; i++) {
+    node = nodes[i];
     node.x -= cx;
     node.y -= cy;
+    cv += node.value;
     cr = Math.max(cr, node.r + Math.sqrt(node.x * node.x + node.y * node.y));
   }
 
   // Remove node links.
   nodes.forEach(d3_layout_packUnlink);
 
-  return cr;
+  // Scale to fit into parent
+  var rcr = Math.sqrt(cv);
+  var k =  rcr / cr;
+  
+  if (k < 1) {
+    for (i = 0; i < n; i++) {
+      node = nodes[i];
+      d3_layout_packScale(node, k)
+    }
+  }
+
+  return rcr;
+}
+
+function d3_layout_packScale(node, k) {
+  var children = node.children;
+  node.x *= k;
+  node.y *= k;
+  node.r *= k;
+  if (children) {
+    var i = -1, n = children.length;
+    while (++i < n) d3_layout_packScale(children[i], k);
+  }
 }
 
 function d3_layout_packLink(node) {
