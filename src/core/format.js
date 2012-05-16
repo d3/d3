@@ -43,7 +43,7 @@ d3.format = function(specifier) {
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {
       var prefix = d3.formatPrefix(value, precision);
-      value *= prefix.scale;
+      value = prefix.scale(value);
       suffix = prefix.symbol;
     } else {
       value *= scale;

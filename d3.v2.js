@@ -661,7 +661,7 @@ d3.format = function(specifier) {
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {
       var prefix = d3.formatPrefix(value, precision);
-      value *= prefix.scale;
+      value = prefix.scale(value);
       suffix = prefix.symbol;
     } else {
       value *= scale;
@@ -730,12 +730,12 @@ d3.formatPrefix = function(value, precision) {
 };
 
 function d3_formatPrefix(d, i) {
+  var k = Math.pow(10, Math.abs(8 - i) * 3)
   return {
-    scale: Math.pow(10, (8 - i) * 3),
+    scale: i > 8 ? function(d) { return d / k; } : function(d) { return d * k; },
     symbol: d
   };
 }
-
 /*
  * TERMS OF USE - EASING EQUATIONS
  *
