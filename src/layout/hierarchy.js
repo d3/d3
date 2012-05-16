@@ -15,7 +15,8 @@ d3.layout.hierarchy = function() {
           n,
           c = node.children = [],
           v = 0,
-          j = depth + 1;
+          j = depth + 1,
+          d;
       while (++i < n) {
         d = recurse(childs[i], j, nodes);
         d.parent = node;

@@ -67,7 +67,7 @@ d3.json("../data/world-countries.json", function(collection) {
 
   equator
       .attr("y1", xy([0, 0])[1])
-      .attr("y2", xy([0, 0])[1])
+      .attr("y2", xy([0, 0])[1]);
 });
 
 function refresh() {
@@ -77,7 +77,7 @@ function refresh() {
 
   equator
       .attr("y1", xy([0, 0])[1])
-      .attr("y2", xy([0, 0])[1])
+      .attr("y2", xy([0, 0])[1]);
 
   d3.select("#scale span")
       .text(xy.scale());
