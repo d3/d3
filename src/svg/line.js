@@ -310,15 +310,13 @@ function d3_svg_lineBundle(points, tension) {
     // Handle special case of [a, b, a] (self-loop).
     if (!dx && !dy && n === 2) {
       p = points[1];
+      t = 1 - tension;
       dx = p[0] - x0;
       dy = p[1] - y0;
-      t = 1 - tension;
-      points = [
-        points[0],
-        [x0 + tension * dx - t * dy, y0 + tension * dy + t * dx],
-        [x0 + tension * dx + t * dy, y0 + tension * dy - t * dx],
-        points[2]
-      ];
+      p[0] = x0 + tension * dx - t * dy;
+      p[1] = y0 + tension * dy + t * dx;
+      points = [points[0], p, [p[0] + 2 * t * dy, p[1] - 2 * t * dx],
+          points[2]];
       dx = dy = 0;
       n++;
     }
