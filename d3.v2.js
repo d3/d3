@@ -1582,8 +1582,13 @@ function d3_selection_selectorAll(selector) {
   };
 }
 d3_selectionPrototype.attr = function(name, value) {
+  if( typeof(name) == 'object'){
+	  for(var k in name){
+	  	this.attr(k,name[k]);
+	  }
+  	return;
+  }
   name = d3.ns.qualify(name);
-
   // If no value is specified, return the first value.
   if (arguments.length < 2) {
     var node = this.node();
