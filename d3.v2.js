@@ -2298,11 +2298,12 @@ d3_transitionPrototype.selectAll = function(selector) {
   return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.attr = function(name, value) {
+	var ro; 
 	if(typeof(name) == 'object'){
 		for(var k in name){
-			 this.attrTween(k, d3_transitionTween(k, name[k]));
+			ro = this.attrTween(k, d3_transitionTween(k, name[k]));
 		}
-		return;
+		return ro;
 	}
 	return this.attrTween(name, d3_transitionTween(name, value));
 };
