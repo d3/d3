@@ -1582,8 +1582,13 @@ function d3_selection_selectorAll(selector) {
   };
 }
 d3_selectionPrototype.attr = function(name, value) {
+  if( typeof(name) == 'object'){
+	  for(var k in name){
+	  	this.attr(k, name[k]);
+	  }
+  	return this;
+  }
   name = d3.ns.qualify(name);
-
   // If no value is specified, return the first value.
   if (arguments.length < 2) {
     var node = this.node();
@@ -2116,16 +2121,18 @@ d3_selection_enterPrototype.select = function(selector) {
 };
 function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
-
+	
   var tweens = new d3_Map,
       event = d3.dispatch("start", "end"),
       ease = d3_transitionEase;
+	 
 
   groups.id = id;
 
   groups.time = time;
 
   groups.tween = function(name, tween) {
+
     if (arguments.length < 2) return tweens.get(name);
     if (tween == null) tweens.remove(name);
     else tweens.set(name, tween);
@@ -2291,10 +2298,18 @@ d3_transitionPrototype.selectAll = function(selector) {
   return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.attr = function(name, value) {
-  return this.attrTween(name, d3_transitionTween(name, value));
+	var ro; 
+	if(typeof(name) == 'object'){
+		for(var k in name){
+			ro = this.attrTween(k, d3_transitionTween(k, name[k]));
+		}
+		return ro;
+	}
+	return this.attrTween(name, d3_transitionTween(name, value));
 };
 
 d3_transitionPrototype.attrTween = function(nameNS, tween) {
+	
   var name = d3.ns.qualify(nameNS);
 
   function attrTween(d, i) {
