@@ -38,7 +38,7 @@ var suite = vows.describe("transition");
 suite.addBatch({
   "select": require("./transition-test-select"),
   "selectAll": require("./transition-test-selectAll"),
-  "transition": require("./transition-test-transition"),
+  "transition": require("./transition-test-transition")
 });
 
 // Content
@@ -48,13 +48,13 @@ suite.addBatch({
   "style": require("./transition-test-style"),
   "styleTween": require("./transition-test-styleTween"),
   "text": require("./transition-test-text"),
-  "remove": require("./transition-test-remove"),
+  "remove": require("./transition-test-remove")
 });
 
 // Animation
 suite.addBatch({
   "delay": require("./transition-test-delay"),
-  "duration": require("./transition-test-duration"),
+  "duration": require("./transition-test-duration")
 });
 
 // Control
