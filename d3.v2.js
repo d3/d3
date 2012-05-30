@@ -1755,7 +1755,9 @@ d3_selectionPrototype.append = function(name) {
   name = d3.ns.qualify(name);
 
   function append() {
-    return this.appendChild(document.createElementNS(this.namespaceURI, name));
+    return this.appendChild(this.namespaceURI
+        ? document.createElementNS(this.namespaceURI, name)
+        : document.createElement(name));
   }
 
   function appendNS() {
@@ -1771,8 +1773,9 @@ d3_selectionPrototype.insert = function(name, before) {
   name = d3.ns.qualify(name);
 
   function insert() {
-    return this.insertBefore(
-        document.createElementNS(this.namespaceURI, name),
+    return this.insertBefore(this.namespaceURI
+        ? document.createElementNS(this.namespaceURI, name)
+        : document.createElement(name),
         d3_select(before, this));
   }
 
