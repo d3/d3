@@ -6,6 +6,10 @@ JS_TESTER = $(NODE_PATH)/vows/bin/vows
 
 all: \
 	d3.latest.js \
+	d3.v2.js
+
+everything: \
+	d3.latest.js \
 	d3.v2.js \
 	d3.v2.min.js \
 	package.json

@@ -9,6 +9,7 @@ require("util").puts(JSON.stringify({
   "author": {"name": "Mike Bostock", "url": "http://bost.ocks.org/mike"},
   "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
   "main": "index.js",
+  "browserify" : "index-browserify.js",
   "dependencies": {
     "jsdom": "0.2.14",
     "sizzle": "1.1.x"

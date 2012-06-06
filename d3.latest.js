@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.9.1"}; // semver
+d3 = {version: "2.9.2"}; // semver
 function d3_class(ctor, properties) {
   try {
     for (var key in properties) {
@@ -661,7 +661,7 @@ d3.format = function(specifier) {
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {
       var prefix = d3.formatPrefix(value, precision);
-      value *= prefix.scale;
+      value = prefix.scale(value);
       suffix = prefix.symbol;
     } else {
       value *= scale;
@@ -730,12 +730,12 @@ d3.formatPrefix = function(value, precision) {
 };
 
 function d3_formatPrefix(d, i) {
+  var k = Math.pow(10, Math.abs(8 - i) * 3);
   return {
-    scale: Math.pow(10, (8 - i) * 3),
+    scale: i > 8 ? function(d) { return d / k; } : function(d) { return d * k; },
     symbol: d
   };
 }
-
 /*
  * TERMS OF USE - EASING EQUATIONS
  *
@@ -5349,8 +5349,8 @@ d3.layout.force = function() {
 
     for (i = 0; i < n; ++i) {
       o = nodes[i];
-      if (isNaN(o.x)) o.x = position("x", w);
-      if (isNaN(o.y)) o.y = position("y", h);
+      if (isNaN(o.x)) o.x = position("x", w, i);
+      if (isNaN(o.y)) o.y = position("y", h, i);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
     }
@@ -5367,18 +5367,19 @@ d3.layout.force = function() {
     }
 
     // initialize node position based on first neighbor
-    function position(dimension, size) {
-      var neighbors = neighbor(i),
+    function position(dimension, size, i) {
+      var my_neighbors = neighbor(i),
           j = -1,
-          m = neighbors.length,
+          m = my_neighbors.length,
           x;
-      while (++j < m) if (!isNaN(x = neighbors[j][dimension])) return x;
+      while (++j < m) if (!isNaN(x = my_neighbors[j][dimension])) return x;
       return Math.random() * size;
     }
 
     // initialize neighbors lazily
-    function neighbor() {
+    function neighbor(i) {
       if (!neighbors) {
+	    var j;
         neighbors = [];
         for (j = 0; j < n; ++j) {
           neighbors[j] = [];
@@ -5566,6 +5567,7 @@ d3.layout.pie = function() {
     // They are stored in the original data's order.
     var arcs = [];
     index.forEach(function(i) {
+      var d;
       arcs[i] = {
         data: data[i],
         value: d = values[i],
@@ -5989,7 +5991,8 @@ d3.layout.hierarchy = function() {
           n,
           c = node.children = [],
           v = 0,
-          j = depth + 1;
+          j = depth + 1,
+          d;
       while (++i < n) {
         d = recurse(childs[i], j, nodes);
         d.parent = node;
