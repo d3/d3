@@ -179,7 +179,7 @@ suite.addBatch({
       "can generate fewer ticks, if desired": function(log) {
         var x = log();
         assert.deepEqual(x.ticks().map(x.tickFormat(5)), [
-          "1e+0", "2e+0", "3e+0", "4e+0", "", "", "", "", "",
+          "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "", "", "", "",
           "1e+1"
         ]);
         var x = log().domain([100, 1]);
@@ -187,6 +187,22 @@ suite.addBatch({
           "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "", "", "", "",
           "1e+1", "2e+1", "3e+1", "4e+1", "5e+1", "", "", "", "",
           "1e+2"
+        ]);
+      },
+      "generates powers-of-ten ticks, even for huge domains": function(log) {
+        var x = log().domain([1e10, 1]);
+        assert.deepEqual(x.ticks().map(x.tickFormat(10)), [
+          "1e+0", "", "", "", "", "", "", "", "",
+          "1e+1", "", "", "", "", "", "", "", "",
+          "1e+2", "", "", "", "", "", "", "", "",
+          "1e+3", "", "", "", "", "", "", "", "",
+          "1e+4", "", "", "", "", "", "", "", "",
+          "1e+5", "", "", "", "", "", "", "", "",
+          "1e+6", "", "", "", "", "", "", "", "",
+          "1e+7", "", "", "", "", "", "", "", "",
+          "1e+8", "", "", "", "", "", "", "", "",
+          "1e+9", "", "", "", "", "", "", "", "",
+          "1e+10"
         ]);
       },
       "can override the tick format": function(log) {
