@@ -9037,7 +9037,8 @@ function d3_time_formatIsoNative(date) {
 }
 
 d3_time_formatIsoNative.parse = function(string) {
-  return new Date(string);
+  var date = new Date(string);
+  return isNaN(date) ? null : date;
 };
 
 d3_time_formatIsoNative.toString = d3_time_formatIso.toString;
