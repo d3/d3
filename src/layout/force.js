@@ -5,6 +5,8 @@ d3.layout.force = function() {
       size = [1, 1],
       drag,
       alpha,
+      alphaRate = 0.99,
+      alphaThreshold = 0.005,
       friction = .9,
       linkDistance = d3_layout_forceLinkDistance,
       linkStrength = d3_layout_forceLinkStrength,
@@ -45,7 +47,7 @@ d3.layout.force = function() {
 
   force.tick = function() {
     // simulated annealing, basically
-    if ((alpha *= .99) < .005) {
+    if ((alpha *= alphaRate) < alphaThreshold) {
       event.end({type: "end", alpha: alpha = 0});
       return true;
     }
@@ -184,6 +186,18 @@ d3.layout.force = function() {
       d3.timer(force.tick);
     }
 
+    return force;
+  };
+
+  force.alphaRate = function(x) {
+    if (!arguments.length) return alphaRate;
+    alphaRate = x;
+    return force;
+  };
+
+  force.alphaThreshold = function(x) {
+    if (!arguments.length) return alphaThreshold;
+    alphaThreshold = x;
     return force;
   };
 
