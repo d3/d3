@@ -4940,12 +4940,12 @@ function d3_layout_bundlePath(link) {
       end = link.target,
       lca = d3_layout_bundleLeastCommonAncestor(start, end),
       points = [start];
-  while (start !== lca) {
+  while (start !== lca && start.parent != undefined) {
     start = start.parent;
     points.push(start);
   }
   var k = points.length;
-  while (end !== lca) {
+  while (end !== lca && end.parent != undefined) {
     points.splice(k, 0, end);
     end = end.parent;
   }
