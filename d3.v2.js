@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.9.3"}; // semver
+d3 = {version: "2.9.4"}; // semver
 function d3_class(ctor, properties) {
   try {
     for (var key in properties) {
@@ -494,7 +494,7 @@ d3.xhr = function(url, mime, callback) {
   req.onreadystatechange = function() {
     if (req.readyState === 4) {
       var s = req.status;
-      callback(s >= 200 && s < 300 || s === 304 ? req : null);
+      callback(!s && req.response || s >= 200 && s < 300 || s === 304 ? req : null);
     }
   };
   req.send(null);
@@ -1515,7 +1515,7 @@ var d3_select = function(s, n) { return n.querySelector(s); },
 
 // Prefer Sizzle, if available.
 if (typeof Sizzle === "function") {
-  d3_select = function(s, n) { return Sizzle(s, n)[0]; };
+  d3_select = function(s, n) { return Sizzle(s, n)[0] || null; };
   d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
   d3_selectMatches = Sizzle.matchesSelector;
 }

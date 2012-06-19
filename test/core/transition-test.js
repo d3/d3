@@ -34,32 +34,36 @@ suite.export(module);
 
 var suite = vows.describe("transition");
 
+// Subtransitions
 suite.addBatch({
-
-  // Subtransitions
   "select": require("./transition-test-select"),
   "selectAll": require("./transition-test-selectAll"),
-  "transition": require("./transition-test-transition"),
+  "transition": require("./transition-test-transition")
+});
 
-  // Content
+// Content
+suite.addBatch({
   "attr": require("./transition-test-attr"),
   "attrTween": require("./transition-test-attrTween"),
   "style": require("./transition-test-style"),
   "styleTween": require("./transition-test-styleTween"),
   "text": require("./transition-test-text"),
-  "remove": require("./transition-test-remove"),
+  "remove": require("./transition-test-remove")
+});
 
-  // Animation
+// Animation
+suite.addBatch({
   "delay": require("./transition-test-delay"),
-  "duration": require("./transition-test-duration"),
+  "duration": require("./transition-test-duration")
+});
 
-  // Control
+// Control
+suite.addBatch({
   "each": require("./transition-test-each"),
   "call": require("./transition-test-call"),
   "tween": require("./transition-test-tween"),
   "id": require("./transition-test-id"),
   "time": require("./transition-test-time")
-
 });
 
 suite.export(module);
