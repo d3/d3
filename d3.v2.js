@@ -1035,7 +1035,7 @@ d3.interpolateTransform = function(a, b) {
   }
 
   if (ra != rb) {
-    q.push({i: s.push(s.pop() + "rotate(", null, ")") - 2, x: d3.interpolateNumber(ra, rb)});
+    q.push({i: s.push(s.pop() + "rotate(", null, ")") - 2, x: d3.interpolateNumber(ra, Math.abs(ra - rb) > 180 ? rb + 360 : rb)});
   } else if (rb) {
     s.push(s.pop() + "rotate(" + rb + ")");
   }
