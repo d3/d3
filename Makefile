@@ -150,7 +150,8 @@ d3.svg.js: \
 	src/svg/touches.js \
 	src/svg/symbol.js \
 	src/svg/axis.js \
-	src/svg/brush.js
+	src/svg/brush.js \
+	src/svg/chernoff.js
 
 d3.behavior.js: \
 	src/behavior/behavior.js \
