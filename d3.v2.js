@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.9.4"}; // semver
+d3 = {version: "2.9.5"}; // semver
 function d3_class(ctor, properties) {
   try {
     for (var key in properties) {
@@ -449,7 +449,7 @@ function d3_splitter(d) {
   return d == null;
 }
 function d3_collapse(s) {
-  return s.replace(/(^\s+)|(\s+$)/g, "").replace(/\s+/g, " ");
+  return s.replace(/^\s+|\s+$/g, "").replace(/\s+/g, " ");
 }
 d3.range = function(start, stop, step) {
   if (arguments.length < 3) {
@@ -1035,6 +1035,7 @@ d3.interpolateTransform = function(a, b) {
   }
 
   if (ra != rb) {
+    if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360; // shortest path
     q.push({i: s.push(s.pop() + "rotate(", null, ")") - 2, x: d3.interpolateNumber(ra, rb)});
   } else if (rb) {
     s.push(s.pop() + "rotate(" + rb + ")");
@@ -1626,7 +1627,7 @@ d3_selectionPrototype.attr = function(name, value) {
       : (name.local ? attrConstantNS : attrConstant)));
 };
 d3_selectionPrototype.classed = function(name, value) {
-  var names = name.split(d3_selection_classedWhitespace),
+  var names = d3_collapse(name).split(" "),
       n = names.length,
       i = -1;
   if (arguments.length > 1) {
@@ -1637,8 +1638,6 @@ d3_selectionPrototype.classed = function(name, value) {
     return true;
   }
 };
-
-var d3_selection_classedWhitespace = /\s+/g;
 
 function d3_selection_classed(name, value) {
   var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
@@ -2011,14 +2010,19 @@ d3_selectionPrototype.on = function(type, listener, capture) {
   });
 };
 d3_selectionPrototype.each = function(callback) {
-  for (var j = -1, m = this.length; ++j < m;) {
-    for (var group = this[j], i = -1, n = group.length; ++i < n;) {
-      var node = group[i];
-      if (node) callback.call(node, node.__data__, i, j);
+  return d3_selection_each(this, function(node, i, j) {
+    callback.call(node, node.__data__, i, j);
+  });
+};
+
+function d3_selection_each(groups, callback) {
+  for (var j = 0, m = groups.length; j < m; j++) {
+    for (var group = groups[j], i = 0, n = group.length, node; i < n; i++) {
+      if (node = group[i]) callback(node, i, j);
     }
   }
-  return this;
-};
+  return groups;
+}
 //
 // Note: assigning to the arguments array simultaneously changes the value of
 // the corresponding argument!
@@ -2145,12 +2149,12 @@ function d3_transition(groups, id, time) {
   };
 
   d3.timer(function(elapsed) {
-    groups.each(function(d, i, j) {
+    return d3_selection_each(groups, function(node, i, j) {
       var tweened = [],
-          node = this,
-          delay = groups[j][i].delay,
-          duration = groups[j][i].duration,
-          lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0});
+          delay = node.delay,
+          duration = node.duration,
+          lock = (node = node.node).__transition__ || (node.__transition__ = {active: 0, count: 0}),
+          d = node.__data__;
 
       ++lock.count;
 
@@ -2196,7 +2200,6 @@ function d3_transition(groups, id, time) {
         return 1;
       }
     });
-    return 1;
   }, 0, time);
 
   return groups;
@@ -2341,16 +2344,14 @@ d3_transitionPrototype.remove = function() {
   });
 };
 d3_transitionPrototype.delay = function(value) {
-  var groups = this;
-  return groups.each(typeof value === "function"
-      ? function(d, i, j) { groups[j][i].delay = value.apply(this, arguments) | 0; }
-      : (value = value | 0, function(d, i, j) { groups[j][i].delay = value; }));
+  return d3_selection_each(this, typeof value === "function"
+      ? function(node, i, j) { node.delay = value.call(node = node.node, node.__data__, i, j) | 0; }
+      : (value = value | 0, function(node) { node.delay = value; }));
 };
 d3_transitionPrototype.duration = function(value) {
-  var groups = this;
-  return groups.each(typeof value === "function"
-      ? function(d, i, j) { groups[j][i].duration = Math.max(1, value.apply(this, arguments) | 0); }
-      : (value = Math.max(1, value | 0), function(d, i, j) { groups[j][i].duration = value; }));
+  return d3_selection_each(this, typeof value === "function"
+      ? function(node, i, j) { node.duration = Math.max(1, value.call(node = node.node, node.__data__, i, j) | 0); }
+      : (value = Math.max(1, value | 0), function(node) { node.duration = value; }));
 };
 function d3_transition_each(callback) {
   var id = d3_transitionId,
@@ -2360,16 +2361,11 @@ function d3_transition_each(callback) {
 
   d3_transitionId = this.id;
   d3_transitionEase = this.ease();
-  for (var j = 0, m = this.length; j < m; j++) {
-    for (var group = this[j], i = 0, n = group.length; i < n; i++) {
-      var node = group[i];
-      if (node) {
-        d3_transitionDelay = this[j][i].delay;
-        d3_transitionDuration = this[j][i].duration;
-        callback.call(node = node.node, node.__data__, i, j);
-      }
-    }
-  }
+  d3_selection_each(this, function(node, i, j) {
+    d3_transitionDelay = node.delay;
+    d3_transitionDuration = node.duration;
+    callback.call(node = node.node, node.__data__, i, j);
+  });
 
   d3_transitionId = id;
   d3_transitionEase = ease;
