@@ -449,7 +449,7 @@ function d3_splitter(d) {
   return d == null;
 }
 function d3_collapse(s) {
-  return s.replace(/(^\s+)|(\s+$)/g, "").replace(/\s+/g, " ");
+  return s.replace(/^\s+|\s+$/g, "").replace(/\s+/g, " ");
 }
 d3.range = function(start, stop, step) {
   if (arguments.length < 3) {
@@ -1626,7 +1626,7 @@ d3_selectionPrototype.attr = function(name, value) {
       : (name.local ? attrConstantNS : attrConstant)));
 };
 d3_selectionPrototype.classed = function(name, value) {
-  var names = name.split(d3_selection_classedWhitespace),
+  var names = d3_collapse(name).split(" "),
       n = names.length,
       i = -1;
   if (arguments.length > 1) {
@@ -1637,8 +1637,6 @@ d3_selectionPrototype.classed = function(name, value) {
     return true;
   }
 };
-
-var d3_selection_classedWhitespace = /\s+/g;
 
 function d3_selection_classed(name, value) {
   var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
