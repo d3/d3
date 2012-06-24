@@ -57,8 +57,6 @@ for (var tx = -10; tx <= 10; tx += 5) {
   }
 }
 
-if (d3.interpolateTransform("rotate(170)", "rotate(225)")(.5) != "rotate(197.5)") ++failures;
-
 outcome.text(failures ? failures + " failures" : "Success!");
 
 function matrix(el) {
