@@ -2011,14 +2011,19 @@ d3_selectionPrototype.on = function(type, listener, capture) {
   });
 };
 d3_selectionPrototype.each = function(callback) {
-  for (var j = -1, m = this.length; ++j < m;) {
-    for (var group = this[j], i = -1, n = group.length; ++i < n;) {
-      var node = group[i];
-      if (node) callback.call(node, node.__data__, i, j);
+  return d3_selection_each(this, function(node, i, j) {
+    callback.call(node, node.__data__, i, j);
+  });
+};
+
+function d3_selection_each(groups, callback) {
+  for (var j = 0, m = groups.length; j < m; j++) {
+    for (var group = groups[j], i = 0, n = group.length, node; i < n; i++) {
+      if (node = group[i]) callback(node, i, j);
     }
   }
-  return this;
-};
+  return groups;
+}
 //
 // Note: assigning to the arguments array simultaneously changes the value of
 // the corresponding argument!
@@ -2145,12 +2150,12 @@ function d3_transition(groups, id, time) {
   };
 
   d3.timer(function(elapsed) {
-    groups.each(function(d, i, j) {
+    return d3_selection_each(groups, function(node, i, j) {
       var tweened = [],
-          node = this,
-          delay = groups[j][i].delay,
-          duration = groups[j][i].duration,
-          lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0});
+          delay = node.delay,
+          duration = node.duration,
+          lock = (node = node.node).__transition__ || (node.__transition__ = {active: 0, count: 0}),
+          d = node.__data__;
 
       ++lock.count;
 
@@ -2196,7 +2201,6 @@ function d3_transition(groups, id, time) {
         return 1;
       }
     });
-    return 1;
   }, 0, time);
 
   return groups;
@@ -2341,16 +2345,14 @@ d3_transitionPrototype.remove = function() {
   });
 };
 d3_transitionPrototype.delay = function(value) {
-  var groups = this;
-  return groups.each(typeof value === "function"
-      ? function(d, i, j) { groups[j][i].delay = value.apply(this, arguments) | 0; }
-      : (value = value | 0, function(d, i, j) { groups[j][i].delay = value; }));
+  return d3_selection_each(this, typeof value === "function"
+      ? function(node, i, j) { node.delay = value.call(node = node.node, node.__data__, i, j) | 0; }
+      : (value = value | 0, function(node) { node.delay = value; }));
 };
 d3_transitionPrototype.duration = function(value) {
-  var groups = this;
-  return groups.each(typeof value === "function"
-      ? function(d, i, j) { groups[j][i].duration = Math.max(1, value.apply(this, arguments) | 0); }
-      : (value = Math.max(1, value | 0), function(d, i, j) { groups[j][i].duration = value; }));
+  return d3_selection_each(this, typeof value === "function"
+      ? function(node, i, j) { node.duration = Math.max(1, value.call(node = node.node, node.__data__, i, j) | 0); }
+      : (value = Math.max(1, value | 0), function(node) { node.duration = value; }));
 };
 function d3_transition_each(callback) {
   var id = d3_transitionId,
@@ -2360,16 +2362,11 @@ function d3_transition_each(callback) {
 
   d3_transitionId = this.id;
   d3_transitionEase = this.ease();
-  for (var j = 0, m = this.length; j < m; j++) {
-    for (var group = this[j], i = 0, n = group.length; i < n; i++) {
-      var node = group[i];
-      if (node) {
-        d3_transitionDelay = this[j][i].delay;
-        d3_transitionDuration = this[j][i].duration;
-        callback.call(node = node.node, node.__data__, i, j);
-      }
-    }
-  }
+  d3_selection_each(this, function(node, i, j) {
+    d3_transitionDelay = node.delay;
+    d3_transitionDuration = node.duration;
+    callback.call(node = node.node, node.__data__, i, j);
+  });
 
   d3_transitionId = id;
   d3_transitionEase = ease;
