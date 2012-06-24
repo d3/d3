@@ -117,6 +117,7 @@ d3.interpolateTransform = function(a, b) {
   }
 
   if (ra != rb) {
+    if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360; // shortest path
     q.push({i: s.push(s.pop() + "rotate(", null, ")") - 2, x: d3.interpolateNumber(ra, rb)});
   } else if (rb) {
     s.push(s.pop() + "rotate(" + rb + ")");
