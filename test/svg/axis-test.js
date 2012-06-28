@@ -391,6 +391,19 @@ suite.addBatch({
           assert.equal(t.select("text").text(), tickFormat(ticks[i]));
         });
       }
+    },
+
+    "arrange": {
+      "defaults false": function(axis) {
+        var a = axis();
+        assert.equal(a.arrange(), false);
+      },
+      "adds tickPointer": function(axis) {
+        var a = axis().arrange(true),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            tick = g.select("g:nth-child(1)");
+        assert.isFalse(tick.select("line.tickPointer").empty());
+      }
     }
   }
 });
