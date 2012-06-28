@@ -8,13 +8,15 @@
 d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_path_circle(pointRadius),
-      projection = d3.geo.albersUsa();
+      projection = d3.geo.albersUsa(),
+      buffer = [];
 
   function path(d, i) {
-    if (typeof pointRadius === "function") {
-      pointCircle = d3_path_circle(pointRadius.apply(this, arguments));
-    }
-    return pathType(d) || null;
+    if (typeof pointRadius === "function") pointCircle = d3_path_circle(pointRadius.apply(this, arguments));
+    pathType(d);
+    var result = buffer.length ? buffer.join("") : null;
+    buffer = [];
+    return result;
   }
 
   function project(coordinates) {
@@ -24,44 +26,38 @@ d3.geo.path = function() {
   var pathType = d3_geo_type({
 
     FeatureCollection: function(o) {
-      var path = [],
-          features = o.features,
+      var features = o.features,
           i = -1, // features.index
           n = features.length;
-      while (++i < n) path.push(pathType(features[i].geometry));
-      return path.join("");
+      while (++i < n) buffer.push(pathType(features[i].geometry));
     },
 
     Feature: function(o) {
-      return pathType(o.geometry);
+      pathType(o.geometry);
     },
 
     Point: function(o) {
-      return "M" + project(o.coordinates) + pointCircle;
+      buffer.push("M", project(o.coordinates), pointCircle);
     },
 
     MultiPoint: function(o) {
-      var path = [],
-          coordinates = o.coordinates,
+      var coordinates = o.coordinates,
           i = -1, // coordinates.index
           n = coordinates.length;
-      while (++i < n) path.push("M", project(coordinates[i]), pointCircle);
-      return path.join("");
+      while (++i < n) buffer.push("M", project(coordinates[i]), pointCircle);
     },
 
     LineString: function(o) {
-      var path = ["M"],
-          coordinates = o.coordinates,
+      var coordinates = o.coordinates,
           i = -1, // coordinates.index
           n = coordinates.length;
-      while (++i < n) path.push(project(coordinates[i]), "L");
-      path.pop();
-      return path.join("");
+      buffer.push("M");
+      while (++i < n) buffer.push(project(coordinates[i]), "L");
+      buffer.pop();
     },
 
     MultiLineString: function(o) {
-      var path = [],
-          coordinates = o.coordinates,
+      var coordinates = o.coordinates,
           i = -1, // coordinates.index
           n = coordinates.length,
           subcoordinates, // coordinates[i]
@@ -71,16 +67,14 @@ d3.geo.path = function() {
         subcoordinates = coordinates[i];
         j = -1;
         m = subcoordinates.length;
-        path.push("M");
-        while (++j < m) path.push(project(subcoordinates[j]), "L");
-        path.pop();
+        buffer.push("M");
+        while (++j < m) buffer.push(project(subcoordinates[j]), "L");
+        buffer.pop();
       }
-      return path.join("");
     },
 
     Polygon: function(o) {
-      var path = [],
-          coordinates = o.coordinates,
+      var coordinates = o.coordinates,
           i = -1, // coordinates.index
           n = coordinates.length,
           subcoordinates, // coordinates[i]
@@ -90,17 +84,15 @@ d3.geo.path = function() {
         subcoordinates = coordinates[i];
         j = -1;
         if ((m = subcoordinates.length - 1) > 0) {
-          path.push("M");
-          while (++j < m) path.push(project(subcoordinates[j]), "L");
-          path[path.length - 1] = "Z";
+          buffer.push("M");
+          while (++j < m) buffer.push(project(subcoordinates[j]), "L");
+          buffer[buffer.length - 1] = "Z";
         }
       }
-      return path.join("");
     },
 
     MultiPolygon: function(o) {
-      var path = [],
-          coordinates = o.coordinates,
+      var coordinates = o.coordinates,
           i = -1, // coordinates index
           n = coordinates.length,
           subcoordinates, // coordinates[i]
@@ -117,22 +109,19 @@ d3.geo.path = function() {
           subsubcoordinates = subcoordinates[j];
           k = -1;
           if ((p = subsubcoordinates.length - 1) > 0) {
-            path.push("M");
-            while (++k < p) path.push(project(subsubcoordinates[k]), "L");
-            path[path.length - 1] = "Z";
+            buffer.push("M");
+            while (++k < p) buffer.push(project(subsubcoordinates[k]), "L");
+            buffer[buffer.length - 1] = "Z";
           }
         }
       }
-      return path.join("");
     },
 
     GeometryCollection: function(o) {
-      var path = [],
-          geometries = o.geometries,
+      var geometries = o.geometries,
           i = -1, // geometries index
           n = geometries.length;
-      while (++i < n) path.push(pathType(geometries[i]));
-      return path.join("");
+      while (++i < n) buffer.push(pathType(geometries[i]));
     }
 
   });
