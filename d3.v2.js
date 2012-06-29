@@ -2899,7 +2899,7 @@ d3.scale.sqrt = function() {
   return d3.scale.pow().exponent(.5);
 };
 d3.scale.ordinal = function() {
-  return d3_scale_ordinal([], {t: "range", x: []});
+  return d3_scale_ordinal([], {t: "range", a: [[]]});
 };
 
 function d3_scale_ordinal(domain, ranger) {
@@ -2921,14 +2921,14 @@ function d3_scale_ordinal(domain, ranger) {
     index = new d3_Map;
     var i = -1, n = x.length, xi;
     while (++i < n) if (!index.has(xi = x[i])) index.set(xi, domain.push(xi));
-    return scale[ranger.t](ranger.x, ranger.p);
+    return scale[ranger.t].apply(scale, ranger.a);
   };
 
   scale.range = function(x) {
     if (!arguments.length) return range;
     range = x;
     rangeBand = 0;
-    ranger = {t: "range", x: x};
+    ranger = {t: "range", a: arguments};
     return scale;
   };
 
@@ -2939,34 +2939,36 @@ function d3_scale_ordinal(domain, ranger) {
         step = (stop - start) / (domain.length - 1 + padding);
     range = steps(domain.length < 2 ? (start + stop) / 2 : start + step * padding / 2, step);
     rangeBand = 0;
-    ranger = {t: "rangePoints", x: x, p: padding};
+    ranger = {t: "rangePoints", a: arguments};
     return scale;
   };
 
-  scale.rangeBands = function(x, padding) {
+  scale.rangeBands = function(x, padding, outerPadding) {
     if (arguments.length < 2) padding = 0;
+    if (arguments.length < 3) outerPadding = padding;
     var reverse = x[1] < x[0],
         start = x[reverse - 0],
         stop = x[1 - reverse],
-        step = (stop - start) / (domain.length + padding);
-    range = steps(start + step * padding, step);
+        step = (stop - start) / (domain.length - padding + 2 * outerPadding);
+    range = steps(start + step * outerPadding, step);
     if (reverse) range.reverse();
     rangeBand = step * (1 - padding);
-    ranger = {t: "rangeBands", x: x, p: padding};
+    ranger = {t: "rangeBands", a: arguments};
     return scale;
   };
 
-  scale.rangeRoundBands = function(x, padding) {
+  scale.rangeRoundBands = function(x, padding, outerPadding) {
     if (arguments.length < 2) padding = 0;
+    if (arguments.length < 3) outerPadding = padding;
     var reverse = x[1] < x[0],
         start = x[reverse - 0],
         stop = x[1 - reverse],
-        step = Math.floor((stop - start) / (domain.length + padding)),
+        step = Math.floor((stop - start) / (domain.length - padding + 2 * outerPadding)),
         error = stop - start - (domain.length - padding) * step;
     range = steps(start + Math.round(error / 2), step);
     if (reverse) range.reverse();
     rangeBand = Math.round(step * (1 - padding));
-    ranger = {t: "rangeRoundBands", x: x, p: padding};
+    ranger = {t: "rangeRoundBands", a: arguments};
     return scale;
   };
 
@@ -2975,7 +2977,7 @@ function d3_scale_ordinal(domain, ranger) {
   };
 
   scale.rangeExtent = function() {
-    return d3_scaleExtent(ranger.x);
+    return d3_scaleExtent(ranger.a[0]);
   };
 
   scale.copy = function() {
