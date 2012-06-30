@@ -3247,8 +3247,8 @@ function d3_svg_line(projection) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
       defined = d3_true,
-      interpolate = d3_svg_lineInterpolatorDefault,
-      interpolator = d3_svg_lineLinear,
+      interpolate = d3_svg_lineLinear,
+      interpolateKey = interpolate.key,
       tension = .7;
 
   function line(data) {
@@ -3261,7 +3261,7 @@ function d3_svg_line(projection) {
         fy = d3_functor(y);
 
     function segment() {
-      segments.push("M", interpolator(projection(points), tension));
+      segments.push("M", interpolate(projection(points), tension));
     }
 
     while (++i < n) {
@@ -3297,9 +3297,9 @@ function d3_svg_line(projection) {
   };
 
   line.interpolate = function(_) {
-    if (!arguments.length) return interpolate;
-    if (!d3_svg_lineInterpolators.has(_ += "")) _ = d3_svg_lineInterpolatorDefault;
-    interpolator = d3_svg_lineInterpolators.get(interpolate = _);
+    if (!arguments.length) return interpolateKey;
+    if (typeof _ === "function") interpolateKey = interpolate = _;
+    else interpolateKey = (interpolate = d3_svg_lineInterpolators.get(_) || d3_svg_lineLinear).key;
     return line;
   };
 
@@ -3326,8 +3326,6 @@ function d3_svg_lineY(d) {
   return d[1];
 }
 
-var d3_svg_lineInterpolatorDefault = "linear";
-
 // The various interpolators supported by the `line` class.
 var d3_svg_lineInterpolators = d3.map({
   "linear": d3_svg_lineLinear,
@@ -3343,14 +3341,14 @@ var d3_svg_lineInterpolators = d3.map({
   "monotone": d3_svg_lineMonotone
 });
 
+d3_svg_lineInterpolators.forEach(function(key, value) {
+  value.key = key;
+  value.closed = /-closed$/.test(key);
+});
+
 // Linear interpolation; generates "L" commands.
 function d3_svg_lineLinear(points) {
-  var i = 0,
-      n = points.length,
-      p = points[0],
-      path = [p[0], ",", p[1]];
-  while (++i < n) path.push("L", (p = points[i])[0], ",", p[1]);
-  return path.join("");
+  return points.join("L");
 }
 
 // Step interpolation; generates "H" and "V" commands.
@@ -3693,9 +3691,9 @@ function d3_svg_area(projection) {
       y0 = 0,
       y1 = d3_svg_lineY,
       defined = d3_true,
-      interpolate = d3_svg_lineInterpolatorDefault,
-      i0 = d3_svg_lineLinear,
-      i1 = d3_svg_lineLinear,
+      interpolate = d3_svg_lineLinear,
+      interpolateKey = interpolate.key,
+      interpolateReverse = interpolate,
       L = "L",
       tension = .7;
 
@@ -3714,8 +3712,8 @@ function d3_svg_area(projection) {
         y;
 
     function segment() {
-      segments.push("M", i0(projection(points1), tension),
-          L, i1(projection(points0.reverse()), tension),
+      segments.push("M", interpolate(projection(points1), tension),
+          L, interpolateReverse(projection(points0.reverse()), tension),
           "Z");
     }
 
@@ -3778,11 +3776,11 @@ function d3_svg_area(projection) {
   };
 
   area.interpolate = function(_) {
-    if (!arguments.length) return interpolate;
-    if (!d3_svg_lineInterpolators.has(_ += "")) _ = d3_svg_lineInterpolatorDefault;
-    i0 = d3_svg_lineInterpolators.get(interpolate = _);
-    i1 = i0.reverse || i0;
-    L = /-closed$/.test(_) ? "M" : "L";
+    if (!arguments.length) return interpolateKey;
+    if (typeof _ === "function") interpolateKey = interpolate = _;
+    else interpolateKey = (interpolate = d3_svg_lineInterpolators.get(_) || d3_svg_lineLinear).key;
+    interpolateReverse = interpolate.reverse || interpolate;
+    L = interpolate.closed ? "M" : "L";
     return area;
   };
 
@@ -3799,7 +3797,7 @@ d3_svg_lineStepBefore.reverse = d3_svg_lineStepAfter;
 d3_svg_lineStepAfter.reverse = d3_svg_lineStepBefore;
 
 d3.svg.area = function() {
-  return d3_svg_area(Object);
+  return d3_svg_area(d3_identity);
 };
 d3.svg.area.radial = function() {
   var area = d3_svg_area(d3_svg_lineRadial);
