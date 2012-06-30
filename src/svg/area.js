@@ -4,9 +4,9 @@ function d3_svg_area(projection) {
       y0 = 0,
       y1 = d3_svg_lineY,
       defined = d3_true,
-      interpolate = d3_svg_lineInterpolatorDefault,
-      i0 = d3_svg_lineLinear,
-      i1 = d3_svg_lineLinear,
+      interpolate = d3_svg_lineLinear,
+      interpolateKey = interpolate.key,
+      interpolateReverse = interpolate,
       L = "L",
       tension = .7;
 
@@ -25,8 +25,8 @@ function d3_svg_area(projection) {
         y;
 
     function segment() {
-      segments.push("M", i0(projection(points1), tension),
-          L, i1(projection(points0.reverse()), tension),
+      segments.push("M", interpolate(projection(points1), tension),
+          L, interpolateReverse(projection(points0.reverse()), tension),
           "Z");
     }
 
@@ -89,11 +89,11 @@ function d3_svg_area(projection) {
   };
 
   area.interpolate = function(_) {
-    if (!arguments.length) return interpolate;
-    if (!d3_svg_lineInterpolators.has(_ += "")) _ = d3_svg_lineInterpolatorDefault;
-    i0 = d3_svg_lineInterpolators.get(interpolate = _);
-    i1 = i0.reverse || i0;
-    L = /-closed$/.test(_) ? "M" : "L";
+    if (!arguments.length) return interpolateKey;
+    if (typeof _ === "function") interpolateKey = interpolate = _;
+    else interpolateKey = (interpolate = d3_svg_lineInterpolators.get(_) || d3_svg_lineLinear).key;
+    interpolateReverse = interpolate.reverse || interpolate;
+    L = interpolate.closed ? "M" : "L";
     return area;
   };
 
@@ -110,5 +110,5 @@ d3_svg_lineStepBefore.reverse = d3_svg_lineStepAfter;
 d3_svg_lineStepAfter.reverse = d3_svg_lineStepBefore;
 
 d3.svg.area = function() {
-  return d3_svg_area(Object);
+  return d3_svg_area(d3_identity);
 };
