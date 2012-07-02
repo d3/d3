@@ -96,8 +96,13 @@ d3.geo.circle = function() {
       d0 = d1;
     }
 
-    // Check for closed polygon
-    if (p2[0] === coordinates[0][0] && p2[1] === coordinates[0][1]) {
+    // Check for a closed input polygon, and closed the clipped polygon if it's
+    // not already closed.
+    var clipped0 = clipped[0],
+        clipped1 = clipped[clipped.length - 1],
+        coordinates0 = coordinates[0];
+    if (p2[0] === coordinates0[0] && p2[1] === coordinates0[1] &&
+        !(clipped0[0] === coordinates0[0] && clipped0[1] === coordinates0[1])) {
       clipped.push(clipped[0]);
     }
 
