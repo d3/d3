@@ -96,9 +96,9 @@ d3.geo.circle = function() {
       d0 = d1;
     }
 
-    if (p1 && clipped.length) {
-      d1 = arc.distance(p2 = clipped[0]);
-      clipped.push(d3_geo_greatArcInterpolate(p1, p2)((d0 - radians) / (d0 - d1)));
+    // Check for closed polygon
+    if (p2[0] === coordinates[0][0] && p2[1] === coordinates[0][1]) {
+      clipped.push(clipped[0]);
     }
 
     return resample(clipped);
