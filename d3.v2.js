@@ -7717,14 +7717,11 @@ d3.geo.circle = function() {
       d0 = d1;
     }
 
-    // Check for a closed input polygon, and closed the clipped polygon if it's
-    // not already closed.
-    var clipped0 = clipped[0],
-        clipped1 = clipped[clipped.length - 1],
-        coordinates0 = coordinates[0];
-    if (p2[0] === coordinates0[0] && p2[1] === coordinates0[1] &&
-        !(clipped0[0] === coordinates0[0] && clipped0[1] === coordinates0[1])) {
-      clipped.push(clipped[0]);
+    // Close the clipped polygon if necessary.
+    p0 = coordinates[0];
+    p1 = clipped[0];
+    if (p2[0] === p0[0] && p2[1] === p0[1] && !(p2[0] === p1[0] && p2[1] === p1[1])) {
+      clipped.push(p1);
     }
 
     return resample(clipped);
@@ -7761,14 +7758,7 @@ d3.geo.circle = function() {
     return circle;
   };
 
-  // Precision is specified in degrees.
-  circle.precision = function(x) {
-    if (!arguments.length) return arc.precision();
-    arc.precision(x);
-    return circle;
-  };
-
-  return circle;
+  return d3.rebind(circle, arc, "precision");
 }
 d3.geo.greatArc = function() {
   var source = d3_geo_greatArcSource,
@@ -7794,7 +7784,7 @@ d3.geo.greatArc = function() {
   greatArc.distance = function() {
     var a = typeof source === "function" ? source.apply(this, arguments) : source,
         b = typeof target === "function" ? target.apply(this, arguments) : target;
-     return d3_geo_greatArcInterpolate(a, b).d;
+    return d3_geo_greatArcInterpolate(a, b).d;
   };
 
   greatArc.source = function(x) {
