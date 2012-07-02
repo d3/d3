@@ -7625,7 +7625,7 @@ d3.geo.circle = function() {
   var origin = [0, 0],
       degrees = 90 - 1e-2,
       radians = degrees * d3_geo_radians,
-      arc = d3.geo.greatArc().target(d3_identity);
+      arc = d3.geo.greatArc().source(origin).target(d3_identity);
 
   function circle() {
     // TODO render a circle as a Polygon
@@ -7636,7 +7636,7 @@ d3.geo.circle = function() {
   }
 
   circle.clip = function(d) {
-    arc.source(typeof origin === "function" ? origin.apply(this, arguments) : origin);
+    if (typeof origin === "function") arc.source(origin.apply(this, arguments));
     return clipType(d);
   };
 
@@ -7749,6 +7749,7 @@ d3.geo.circle = function() {
   circle.origin = function(x) {
     if (!arguments.length) return origin;
     origin = x;
+    if (typeof origin !== "function") arc.source(origin);
     return circle;
   };
 
@@ -7761,48 +7762,46 @@ d3.geo.circle = function() {
   return d3.rebind(circle, arc, "precision");
 }
 d3.geo.greatArc = function() {
-  var source = d3_geo_greatArcSource,
-      target = d3_geo_greatArcTarget,
-      precision = 6 * d3_geo_radians;
+  var source = d3_geo_greatArcSource, p0,
+      target = d3_geo_greatArcTarget, p1,
+      precision = 6 * d3_geo_radians,
+      interpolate = d3_geo_greatArcInterpolator();
 
   function greatArc() {
-    var a = typeof source === "function" ? source.apply(this, arguments) : source,
-        b = typeof target === "function" ? target.apply(this, arguments) : target,
-        i = d3_geo_greatArcInterpolate(a, b),
-        dt = precision / i.d,
+    var d = greatArc.distance.apply(this, arguments), // initializes the interpolator, too
         t = 0,
-        coordinates = [a];
-    while ((t += dt) < 1) coordinates.push(i(t));
-    coordinates.push(b);
-    return {
-      type: "LineString",
-      coordinates: coordinates
-    };
+        dt = precision / d,
+        coordinates = [p0];
+    while ((t += dt) < 1) coordinates.push(interpolate(t));
+    coordinates.push(p1);
+    return {type: "LineString", coordinates: coordinates};
   }
 
   // Length returned in radians; multiply by radius for distance.
   greatArc.distance = function() {
-    var a = typeof source === "function" ? source.apply(this, arguments) : source,
-        b = typeof target === "function" ? target.apply(this, arguments) : target;
-    return d3_geo_greatArcInterpolate(a, b).d;
+    if (typeof source === "function") interpolate.source(p0 = source.apply(this, arguments));
+    if (typeof target === "function") interpolate.target(p1 = target.apply(this, arguments));
+    return interpolate.distance();
   };
 
-  greatArc.source = function(x) {
+  greatArc.source = function(_) {
     if (!arguments.length) return source;
-    source = x;
+    source = _;
+    if (typeof source !== "function") interpolate.source(p0 = source);
     return greatArc;
   };
 
-  greatArc.target = function(x) {
+  greatArc.target = function(_) {
     if (!arguments.length) return target;
-    target = x;
+    target = _;
+    if (typeof target !== "function") interpolate.target(p1 = target);
     return greatArc;
   };
 
   // Precision is specified in degrees.
-  greatArc.precision = function(x) {
+  greatArc.precision = function(_) {
     if (!arguments.length) return precision / d3_geo_radians;
-    precision = x * d3_geo_radians;
+    precision = _ * d3_geo_radians;
     return greatArc;
   };
 
@@ -7817,28 +7816,58 @@ function d3_geo_greatArcTarget(d) {
   return d.target;
 }
 
-function d3_geo_greatArcInterpolate(a, b) {
-  var x0 = a[0] * d3_geo_radians, cx0 = Math.cos(x0), sx0 = Math.sin(x0),
-      y0 = a[1] * d3_geo_radians, cy0 = Math.cos(y0), sy0 = Math.sin(y0),
-      x1 = b[0] * d3_geo_radians, cx1 = Math.cos(x1), sx1 = Math.sin(x1),
-      y1 = b[1] * d3_geo_radians, cy1 = Math.cos(y1), sy1 = Math.sin(y1),
-      d = interpolate.d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))),
-      sd = Math.sin(d);
+function d3_geo_greatArcInterpolator() {
+  var x0, y0, cy0, sy0, kx0, ky0,
+      x1, y1, cy1, sy1, kx1, ky1,
+      d,
+      k;
 
-  // From http://williams.best.vwh.net/avform.htm#Intermediate
   function interpolate(t) {
-    var A = Math.sin(d - (t *= d)) / sd,
-        B = Math.sin(t) / sd,
-        x = A * cy0 * cx0 + B * cy1 * cx1,
-        y = A * cy0 * sx0 + B * cy1 * sx1,
-        z = A * sy0       + B * sy1;
+    var B = Math.sin(t *= d) * k,
+        A = Math.sin(d - t) * k,
+        x = A * kx0 + B * kx1,
+        y = A * ky0 + B * ky1,
+        z = A * sy0 + B * sy1;
     return [
       Math.atan2(y, x) / d3_geo_radians,
       Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_geo_radians
     ];
   }
 
+  interpolate.distance = function() {
+    if (d == null) k = 1 / Math.sin(d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))));
+    return d;
+  };
+
+  interpolate.source = function(_) {
+    var cx0 = Math.cos(x0 = _[0] * d3_geo_radians),
+        sx0 = Math.sin(x0);
+    cy0 = Math.cos(y0 = _[1] * d3_geo_radians);
+    sy0 = Math.sin(y0);
+    kx0 = cy0 * cx0;
+    ky0 = cy0 * sx0;
+    d = null;
+    return interpolate;
+  };
+
+  interpolate.target = function(_) {
+    var cx1 = Math.cos(x1 = _[0] * d3_geo_radians),
+        sx1 = Math.sin(x1);
+    cy1 = Math.cos(y1 = _[1] * d3_geo_radians);
+    sy1 = Math.sin(y1);
+    kx1 = cy1 * cx1;
+    ky1 = cy1 * sx1;
+    d = null;
+    return interpolate;
+  };
+
   return interpolate;
+}
+
+function d3_geo_greatArcInterpolate(a, b) {
+  var i = d3_geo_greatArcInterpolator().source(a).target(b);
+  i.distance();
+  return i;
 }
 d3.geo.greatCircle = d3.geo.circle;
 d3.geom = {};
