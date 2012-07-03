@@ -92,7 +92,7 @@ suite.addBatch({
       },
       "can specify a custom interpolator": function(log) {
         var x = log().range(["red", "blue"]).interpolate(d3.interpolateHsl);
-        assert.equal(x(5), "#00ffcb");
+        assert.equal(x(5), "#9a00ff");
       }
     },
 
@@ -269,7 +269,7 @@ suite.addBatch({
       "changes to the interpolator are isolated": function(log) {
         var x = log().range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
-        assert.equal(x(5), "#00ffcb");
+        assert.equal(x(5), "#9a00ff");
         assert.equal(y(5), "#4d00b2");
         assert.equal(y.interpolate(), d3.interpolate);
       },
