@@ -1,3 +1,5 @@
+require("../env");
+
 var vows = require("vows"),
     assert = require("assert");
 
@@ -23,6 +25,9 @@ suite.addBatch({
           [110, -50],
           [110, -47.63539018933809]
         ], 1e-6);
+      },
+      "can completely clip a LineString": function(clip) {
+        assert.isNull(clip({type: "LineString", coordinates: [[90.0, -42.37], [95.0, -42.37], [90.0, -42.37]]}));
       },
       "doesn't insert a duplicate point": function(clip) {
         assert.inDelta(clip({type: "LineString", coordinates: [[0, 0]]}).coordinates, [[0, 0]], 1e-6);

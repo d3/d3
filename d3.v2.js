@@ -7637,7 +7637,7 @@ d3.geo.circle = function() {
 
   circle.clip = function(d) {
     if (typeof origin === "function") arc.source(origin.apply(this, arguments));
-    return clipType(d);
+    return clipType(d) || null;
   };
 
   var clipType = d3_geo_type({
@@ -7720,7 +7720,7 @@ d3.geo.circle = function() {
     // Close the clipped polygon if necessary.
     p0 = coordinates[0];
     p1 = clipped[0];
-    if (p2[0] === p0[0] && p2[1] === p0[1] && !(p2[0] === p1[0] && p2[1] === p1[1])) {
+    if (p1 && p2[0] === p0[0] && p2[1] === p0[1] && !(p2[0] === p1[0] && p2[1] === p1[1])) {
       clipped.push(p1);
     }
 
