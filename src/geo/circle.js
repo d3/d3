@@ -4,7 +4,7 @@ d3.geo.circle = function() {
   var origin = [0, 0],
       degrees = 90 - 1e-2,
       radians = degrees * d3_geo_radians,
-      arc = d3.geo.greatArc().target(d3_identity);
+      arc = d3.geo.greatArc().source(origin).target(d3_identity);
 
   function circle() {
     // TODO render a circle as a Polygon
@@ -15,8 +15,8 @@ d3.geo.circle = function() {
   }
 
   circle.clip = function(d) {
-    arc.source(typeof origin === "function" ? origin.apply(this, arguments) : origin);
-    return clipType(d);
+    if (typeof origin === "function") arc.source(origin.apply(this, arguments));
+    return clipType(d) || null;
   };
 
   var clipType = d3_geo_type({
@@ -96,9 +96,11 @@ d3.geo.circle = function() {
       d0 = d1;
     }
 
-    if (p1 && clipped.length) {
-      d1 = arc.distance(p2 = clipped[0]);
-      clipped.push(d3_geo_greatArcInterpolate(p1, p2)((d0 - radians) / (d0 - d1)));
+    // Close the clipped polygon if necessary.
+    p0 = coordinates[0];
+    p1 = clipped[0];
+    if (p1 && p2[0] === p0[0] && p2[1] === p0[1] && !(p2[0] === p1[0] && p2[1] === p1[1])) {
+      clipped.push(p1);
     }
 
     return resample(clipped);
@@ -126,6 +128,7 @@ d3.geo.circle = function() {
   circle.origin = function(x) {
     if (!arguments.length) return origin;
     origin = x;
+    if (typeof origin !== "function") arc.source(origin);
     return circle;
   };
 
@@ -135,12 +138,5 @@ d3.geo.circle = function() {
     return circle;
   };
 
-  // Precision is specified in degrees.
-  circle.precision = function(x) {
-    if (!arguments.length) return arc.precision();
-    arc.precision(x);
-    return circle;
-  };
-
-  return circle;
+  return d3.rebind(circle, arc, "precision");
 }

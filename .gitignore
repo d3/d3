@@ -1,3 +1,7 @@
 _site
 node_modules
 .DS_Store
+
+# Editor backup files
+*.bak
+*~
