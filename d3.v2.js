@@ -8027,7 +8027,7 @@ d3.geom.hull = function(vertices) {
   // do graham's scan
   for (; j<plen; ++j) {
     if (points[j].index === -1) continue; // skip tossed out points
-    while (!d3_geom_hullCCW(stack[sp-2], stack[sp-1], points[j].index, vertices)) {
+    while (sp >= 2 && !d3_geom_hullCCW(stack[sp-2], stack[sp-1], points[j].index, vertices)) {
       --sp;
     }
     stack[sp++] = points[j].index;
