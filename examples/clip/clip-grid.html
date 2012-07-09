@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+path,
+circle {
+  fill: none;
+  stroke: #333;
+}
+
+circle {
+  stroke-width: 2px;
+}
+
+</style>
+<body>
+<script src="../../d3.v2.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var xStepsBig = d3.range(-180, 180, 10),
+    yStepsBig = d3.range(-90, 90, 10),
+    xStepsSmall = d3.range(-180, 180 + 1, 5),
+    yStepsSmall = d3.range(-90, 90 + 1, 5);
+
+var origin = [-71.03, -42.37],
+    velocity = [.018, .06];
+
+var projection = d3.geo.azimuthal()
+    .mode("orthographic")
+    .origin(origin)
+    .scale(240);
+
+var circle = d3.geo.circle()
+    .origin(origin);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.selectAll(".x")
+    .data(xStepsBig)
+  .enter().append("path")
+    .attr("class", "x")
+    .datum(function(x) { return yStepsSmall.map(function(y) { return [x, y]; }); });
+
+svg.selectAll(".y")
+    .data(yStepsBig)
+  .enter().append("path")
+    .attr("class", "y")
+    .datum(function(y) { return xStepsSmall.map(function(x) { return [x, y]; }); });
+
+svg.append("circle")
+    .attr("cx", width / 2)
+    .attr("cy", height / 2)
+    .attr("r", 240);
+
+var path = svg.selectAll("path")
+    .attr("d", draw);
+
+d3.timer(function() {
+  origin[0] += velocity[0];
+  origin[1] += velocity[1];
+  projection.origin(origin);
+  circle.origin(origin);
+  path.attr("d", draw);
+});
+
+function draw(d) {
+  d = circle.clip({type: "LineString", coordinates: d});
+  return d ? d.coordinates.map(function(segment) { return "M" + segment.map(projection).join("L"); }).join("") : null;
+}
+
+</script>

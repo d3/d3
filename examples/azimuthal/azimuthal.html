@@ -1,29 +1,77 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Azimuthal Projection</title>
-    <script type="text/javascript" src="../../d3.v2.js"></script>
-    <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="azimuthal.css"/>
-  </head>
-  <body>
-    <h3>Azimuthal Projection</h3>
-    <script type="text/javascript" src="azimuthal.js"></script><p>
-    <select id="mode">
-      <option value="stereographic">stereographic</option>
-      <option value="orthographic">orthographic</option>
-      <option value="equidistant">equidistant</option>
-      <option value="gnomonic">gnomonic</option>
-      <option value="equalarea">equalarea</option>
-    </select>
-    <div id="lon">origin.longitude: <span>0</span></div>
-    <div id="lat">origin.latitude: <span>0</span></div><p>
-    <div id="scale">scale: <span>240</span></div><p>
-    <div id="translate-x">translate.x: <span>480</span></div>
-    <div id="translate-y">translate.y: <span>250</span></div>
-    <script type="text/javascript">
+<meta charset="utf-8">
+<title>Geographic Clipping</title>
+<style>
+@import url("../../lib/jquery-ui/jquery-ui.css");
+
+body, .ui-widget {
+  font: 14px Helvetica Neue;
+}
+
+svg {
+  width: 960px;
+  height: 500px;
+  border: solid 1px #ccc;
+  background: #eee;
+}
+
+path {
+  fill: #ccc;
+  stroke: #fff;
+}
+
+div {
+  width: 960px;
+}
+</style>
+<h3>Azimuthal Projection</h3>
+<div id="map"></div>
+<select id="mode">
+  <option value="stereographic">stereographic</option>
+  <option value="orthographic">orthographic</option>
+  <option value="equidistant">equidistant</option>
+  <option value="gnomonic">gnomonic</option>
+  <option value="equalarea">equalarea</option>
+</select>
+<div id="lon">origin.longitude: <span>0</span></div>
+<div id="lat">origin.latitude: <span>0</span></div><p>
+<div id="scale">scale: <span>240</span></div><p>
+<div id="translate-x">translate.x: <span>480</span></div>
+<div id="translate-y">translate.y: <span>250</span></div>
+
+<script src="../../d3.v2.js"></script>
+<script src="../../lib/jquery/jquery.min.js"></script>
+<script src="../../lib/jquery-ui/jquery-ui.min.js"></script>
+<script>
+var xy = d3.geo.azimuthal().scale(240).mode("stereographic"),
+    circle = d3.geo.circle(),
+    path = d3.geo.path().projection(xy),
+    svg = d3.select("#map").append("svg");
+
+d3.json("../data/world-countries.json", function(collection) {
+  svg.selectAll("path")
+      .data(collection.features)
+    .enter().append("path")
+      .attr("d", function(d) { return path(circle.clip(d)); })
+    .append("title")
+      .text(function(d) { return d.properties.name; });
+});
+
+function refresh(duration) {
+  var p = svg.selectAll("path");
+  if (duration) p = p.transition().duration(duration);
+  p.attr("d", function(d) { return path(circle.clip(d)); });
+  d3.select("#lon span")
+      .text(xy.origin()[0]);
+  d3.select("#lat span")
+      .text(xy.origin()[1]);
+  d3.select("#scale span")
+      .text(xy.scale());
+  d3.select("#translate-x span")
+      .text(xy.translate()[0]);
+  d3.select("#translate-y span")
+      .text(xy.translate()[1]);
+}
 
 $("#lon").slider({
   min: -180,
@@ -92,7 +140,4 @@ $("#mode").change(function() {
   xy.mode(mode);
   refresh(500);
 });
-
-    </script>
-  </body>
-</html>
+</script>

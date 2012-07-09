@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+path {
+  fill: none;
+  stroke: #000;
+}
+
+circle {
+  fill: none;
+  stroke: #000;
+  stroke-width: 3px;
+}
+
+</style>
+<body>
+<script src="../../d3.v2.js"></script>
+<script src="geodesic.js"></script>
+<script>
+
+var width = 500,
+    height = 500;
+
+var origin = [0, 0],
+    velocity = [-.01, .01],
+    t0 = Date.now();
+
+var projection = d3.geo.azimuthal()
+    .translate([width / 2, height / 2])
+    .mode("orthographic")
+    .origin(origin)
+    .scale(240);
+
+var circle = d3.geo.circle()
+    .origin(origin);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var feature = d3.geodesic.multipolygon(1);
+
+var a = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("path")
+    .datum(feature);
+
+var b = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("path")
+    .style("stroke", "blue")
+    .datum(feature);
+
+d3.timer(function() {
+  var t = Date.now() - t0,
+      o = [origin[0] + t * velocity[0], origin[1] + t * velocity[1]];
+  projection.origin(o);
+  circle.origin(o);
+  a.attr("d", function(d) { return path(circle.clip(d)); });
+  b.attr("d", path);
+});
+
+</script>
