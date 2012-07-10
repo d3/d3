@@ -317,14 +317,14 @@ suite.addBatch({
     },
     "parses numeric date": function(format) {
       var p = format("%m/%d/%y").parse;
-      assert.deepEqual(p("01/01/90"), local(2090, 0, 1));
-      assert.deepEqual(p("02/03/91"), local(2091, 1, 3));
+      assert.deepEqual(p("01/01/90"), local(1990, 0, 1));
+      assert.deepEqual(p("02/03/91"), local(1991, 1, 3));
       assert.isNull(p("03/10/2010"));
     },
     "parses locale date": function(format) {
       var p = format("%x").parse;
-      assert.deepEqual(p("01/01/90"), local(2090, 0, 1));
-      assert.deepEqual(p("02/03/91"), local(2091, 1, 3));
+      assert.deepEqual(p("01/01/90"), local(1990, 0, 1));
+      assert.deepEqual(p("02/03/91"), local(1991, 1, 3));
       assert.isNull(p("03/10/2010"));
     },
     "parses abbreviated month, date and year": function(format) {
@@ -398,14 +398,14 @@ suite.addBatch({
       },
       "parses numeric date": function(format) {
         var p = format("%m/%d/%y").parse;
-        assert.deepEqual(p("01/01/90"), utc(2090, 0, 1));
-        assert.deepEqual(p("02/03/91"), utc(2091, 1, 3));
+        assert.deepEqual(p("01/01/90"), utc(1990, 0, 1));
+        assert.deepEqual(p("02/03/91"), utc(1991, 1, 3));
         assert.isNull(p("03/10/2010"));
       },
       "parses locale date": function(format) {
         var p = format("%x").parse;
-        assert.deepEqual(p("01/01/90"), utc(2090, 0, 1));
-        assert.deepEqual(p("02/03/91"), utc(2091, 1, 3));
+        assert.deepEqual(p("01/01/90"), utc(1990, 0, 1));
+        assert.deepEqual(p("02/03/91"), utc(1991, 1, 3));
         assert.isNull(p("03/10/2010"));
       },
       "parses abbreviated month, date and year": function(format) {
