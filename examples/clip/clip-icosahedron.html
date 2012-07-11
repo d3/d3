@@ -7,12 +7,6 @@ path {
   stroke: #000;
 }
 
-circle {
-  fill: none;
-  stroke: #000;
-  stroke-width: 3px;
-}
-
 </style>
 <body>
 <script src="../../d3.v2.js"></script>
@@ -23,7 +17,7 @@ circle {
 var width = 500,
     height = 500;
 
-var origin = [295, -85],
+var origin = [0, 0],
     velocity = [-.01, .01];
 
 var projection = d3.geo.azimuthal()
@@ -54,17 +48,13 @@ var b = d3.select("body").append("svg")
     .style("stroke", "blue")
     .datum(feature);
 
-d3.selectAll("svg").append("circle")
-    .attr("transform", "translate(" + projection(origin) + ")")
-    .attr("r", projection([75, 0])[0] - projection([45, 0])[0]);
-
 d3.timer(step);
 
 function step(t) {
   var o = [origin[0] + t * velocity[0], origin[1] + t * velocity[1]];
   projection.origin(o);
   circle.origin(o);
-  a.attr("d", function(d) { return path(circle.clip(d)) || "M0,0"; });
+  a.attr("d", function(d) { return path(circle.clip(d)); });
   b.attr("d", path);
 }
 
