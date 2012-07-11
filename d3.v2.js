@@ -7646,13 +7646,13 @@ d3.geo.circle = function() {
   circle.clip = function(d) {
     if (typeof origin === "function") arc.source(origin.apply(this, arguments));
     // Cache origin in Cartesian coordinates for computing relative angles.
-    normal = cartesian(arc.source(), [0, 0, 0]);
+    normal = d3_geo_circleCartesian(arc.source(), [0, 0, 0]);
     var abs = normal.map(Math.abs),
         unit = abs[0] < abs[1] && abs[0] < abs[2] ? [1, 0, 0]
              : abs[1] < abs[0] && abs[1] < abs[2] ? [0, 1, 0]
              : [0, 0, 1];
-    center = scale(normal, cr);
-    reference = cross(normal, unit);
+    center = d3_geo_circleScale(normal, cr);
+    reference = d3_geo_circleCross(normal, unit);
     x0 = origin[0] * d3_geo_radians;
     cy0 = Math.cos(y0 = origin[1] * d3_geo_radians);
     sy0 = Math.sin(y0);
@@ -7724,13 +7724,13 @@ d3.geo.circle = function() {
             d1 = distance(point);
         if (inside) {
           // outside going in
-          tmp = intersect(point, point0, d1, d0);
+          tmp = intersect(point, point0);
         } else {
           // inside going out
           var segment = coordinates.slice(j, i);
           if (tmp) segment.unshift(tmp);
           tmp = null;
-          segment.push(intersect(point0, point, d0, d1));
+          segment.push(intersect(point0, point));
           segments.push(segment);
         }
         j = i;
@@ -7745,33 +7745,33 @@ d3.geo.circle = function() {
   }
 
   // Intersects the great circle between a and b with the clip circle.
-  function intersect(a, b, d0, d1) {
-    var pa = cartesian(a, [0, 0, 0]),
-        pb = cartesian(b, [0, 0, 0]);
+  function intersect(a, b) {
+    var pa = d3_geo_circleCartesian(a, [0, 0, 0]),
+        pb = d3_geo_circleCartesian(b, [0, 0, 0]);
     // We have two planes, n1.p = d1 and n2.p = d2.
     // Find intersection line p(t) = c1 n1 + c2 n2 + t (n1 x n2).
     var n1 = normal,
-        n2 = cross(pa, pb),
-        d1 = dot(n1, center),
+        n2 = d3_geo_circleCross(pa, pb),
+        d1 = d3_geo_circleDot(n1, center),
         d2 = 0,
-        n1n1 = dot(n1, n1),
-        n2n2 = dot(n2, n2),
-        n1n2 = dot(n1, n2),
+        n1n1 = d3_geo_circleDot(n1, n1),
+        n2n2 = d3_geo_circleDot(n2, n2),
+        n1n2 = d3_geo_circleDot(n1, n2),
         determinant = n1n1 * n2n2 - n1n2 * n1n2,
         c1 = (d1 * n2n2 - d2 * n1n2) / determinant,
         c2 = (d2 * n1n1 - d1 * n1n2) / determinant,
-        n1xn2 = cross(n1, n2),
-        A = scale(n1, c1),
-        B = scale(n2, c2);
-    add(A, B);
+        n1xn2 = d3_geo_circleCross(n1, n2),
+        A = d3_geo_circleScale(n1, c1),
+        B = d3_geo_circleScale(n2, c2);
+    d3_geo_circleAdd(A, B);
     // Now solve |p(t)|^2 = 1.
     var u = n1xn2,
-        w = dot(A, u),
-        uu = dot(u, u),
-        t = Math.sqrt(w * w - uu * (dot(A, A) - 1)),
-        q = scale(u, (-w - t) / uu);
-    add(q, A);
-    return geo.apply(null, q);
+        w = d3_geo_circleDot(A, u),
+        uu = d3_geo_circleDot(u, u),
+        t = Math.sqrt(w * w - uu * (d3_geo_circleDot(A, A) - 1)),
+        q = d3_geo_circleScale(u, (-w - t) / uu);
+    d3_geo_circleAdd(q, A);
+    return d3_geo_circleSpherical(q);
   }
 
   // Returns an array of polygons. Each polygon is an array of rings. The first
@@ -7806,8 +7806,8 @@ d3.geo.circle = function() {
       var p0 = segment[0],
           p1 = segment[segment.length - 1];
       if (p0[0] !== p1[0] || p0[1] !== p1[1]) {
-        var b = {xyz: cartesian(p1, center), points: []},
-            a = {xyz: cartesian(p0, center), points: segment, other: b};
+        var b = {xyz: d3_geo_circleCartesian(p1, center), points: []},
+            a = {xyz: d3_geo_circleCartesian(p0, center), points: segment, other: b};
         intersections.push(a, b);
         unvisited++;
       } else {
@@ -7863,69 +7863,19 @@ d3.geo.circle = function() {
     return Math.acos(Math.max(-1, Math.min(1, sy0 * Math.sin(y1) + cy0 * Math.cos(y1) * Math.cos(x1 - x0))));
   }
 
-  function dot(a, b) {
-    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-  }
-
-  function cross(a, b) {
-    return [
-        a[1] * b[2] - a[2] * b[1],
-        a[2] * b[0] - a[0] * b[2],
-        a[0] * b[1] - a[1] * b[0]];
-  }
-
-  function add(a, b) {
-    a[0] += b[0];
-    a[1] += b[1];
-    a[2] += b[2];
-  }
-
-  function scale(vector, s) {
-    return [vector[0] * s, vector[1] * s, vector[2] * s];
-  }
-
-  function magnitude(d) {
-    return Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
-  }
-
-  function normalize(d) {
-    var l = magnitude(d);
-    d[0] /= l;
-    d[1] /= l;
-    d[2] /= l;
-  }
-
-  // Signed angle of one line relative to another.
+  // Signed angle from one point to another, relative to the circle center.
   function angle(a, b) {
-    normalize(a);
-    normalize(b);
-    var c = cross(b, a),
-        angle = Math.acos(Math.max(-1, Math.min(1, dot(a, b))));
-    return ((dot(c, normal) < 0 ? -angle : angle) + 2 * Math.PI) % (2 * Math.PI);
-  }
-
-  // Convert to Cartesian 3-space, relative to circle center.
-  function cartesian(point, center) {
-    var p0 = point[0] * d3_geo_radians,
-        p1 = point[1] * d3_geo_radians,
-        c1 = Math.cos(p1),
-        x = c1 * Math.cos(p0) - center[0],
-        y = c1 * Math.sin(p0) - center[1],
-        z = Math.sin(p1) - center[2];
-    return [x, y, z];
-  }
-
-  function geo(x, y, z) {
-    return [
-      Math.atan2(y, x) / d3_geo_radians,
-      Math.asin(z) / d3_geo_radians
-    ];
+    d3_geo_circleNormalize(a);
+    d3_geo_circleNormalize(b);
+    var c = d3_geo_circleCross(b, a),
+        angle = Math.acos(Math.max(-1, Math.min(1, d3_geo_circleDot(a, b))));
+    return ((d3_geo_circleDot(c, normal) < 0 ? -angle : angle) + 2 * Math.PI) % (2 * Math.PI);
   }
 
   function interpolate(from, to) {
     if (from < to) from += 2 * Math.PI;
     var result = [],
-        v = cross(normal, reference),
+        v = d3_geo_circleCross(normal, reference),
         u0 = reference[0],
         u1 = reference[1],
         u2 = reference[2],
@@ -7935,11 +7885,11 @@ d3.geo.circle = function() {
     for (var step = precision * d3_geo_radians, t = from; t > to; t -= step) {
       var c = Math.cos(t),
           s = Math.sin(t);
-      result.push(geo(
+      result.push(d3_geo_circleSpherical([
         center[0] + sr * (c * u0 + s * v0),
         center[1] + sr * (c * u1 + s * v1),
         center[2] + sr * (c * u2 + s * v2)
-      ));
+      ]));
     }
     return result;
   }
@@ -7960,6 +7910,53 @@ d3.geo.circle = function() {
   };
 
   return d3.rebind(circle, arc, "precision");
+}
+
+// Convert spherical (degrees) to normalized Cartesian coordinates, relative to
+// a Cartesian origin.
+function d3_geo_circleCartesian(point, origin) {
+  var p0 = point[0] * d3_geo_radians,
+      p1 = point[1] * d3_geo_radians,
+      c1 = Math.cos(p1);
+  return [c1 * Math.cos(p0) - origin[0],
+          c1 * Math.sin(p0) - origin[1],
+          Math.sin(p1) - origin[2]];
+}
+
+// Convert from Cartesian to spherical coordinates (in degrees).
+function d3_geo_circleSpherical(point) {
+  return [
+    Math.atan2(point[1], point[0]) / d3_geo_radians,
+    Math.asin(point[2]) / d3_geo_radians
+  ];
+}
+
+function d3_geo_circleDot(a, b) {
+  return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+}
+
+function d3_geo_circleCross(a, b) {
+  return [
+      a[1] * b[2] - a[2] * b[1],
+      a[2] * b[0] - a[0] * b[2],
+      a[0] * b[1] - a[1] * b[0]];
+}
+
+function d3_geo_circleAdd(a, b) {
+  a[0] += b[0];
+  a[1] += b[1];
+  a[2] += b[2];
+}
+
+function d3_geo_circleScale(vector, s) {
+  return [vector[0] * s, vector[1] * s, vector[2] * s];
+}
+
+function d3_geo_circleNormalize(d) {
+  var l = Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
+  d[0] /= l;
+  d[1] /= l;
+  d[2] /= l;
 }
 d3.geo.greatArc = function() {
   var source = d3_geo_greatArcSource, p0,
