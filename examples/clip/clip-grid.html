@@ -8,10 +8,6 @@ circle {
   stroke: #333;
 }
 
-circle {
-  stroke-width: 2px;
-}
-
 </style>
 <body>
 <script src="../../d3.v2.js"></script>
@@ -25,8 +21,8 @@ var xStepsBig = d3.range(-180, 180, 10),
     xStepsSmall = d3.range(-180, 180 + 1, 5),
     yStepsSmall = d3.range(-90, 90 + 1, 5);
 
-var origin = [-71.03, -42.37],
-    velocity = [.018, .06];
+var origin = [96, 181],
+    velocity = [.1, .1];
 
 var projection = d3.geo.azimuthal()
     .mode("orthographic")
@@ -52,21 +48,18 @@ svg.selectAll(".y")
     .attr("class", "y")
     .datum(function(y) { return xStepsSmall.map(function(x) { return [x, y]; }); });
 
-svg.append("circle")
-    .attr("cx", width / 2)
-    .attr("cy", height / 2)
-    .attr("r", 240);
-
 var path = svg.selectAll("path")
     .attr("d", draw);
 
-d3.timer(function() {
+d3.timer(step);
+
+function step() {
   origin[0] += velocity[0];
   origin[1] += velocity[1];
   projection.origin(origin);
   circle.origin(origin);
   path.attr("d", draw);
-});
+}
 
 function draw(d) {
   d = circle.clip({type: "LineString", coordinates: d});

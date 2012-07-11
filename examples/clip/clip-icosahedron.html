@@ -17,14 +17,14 @@ circle {
 <body>
 <script src="../../d3.v2.js"></script>
 <script src="geodesic.js"></script>
+<script src="resample.js"></script>
 <script>
 
 var width = 500,
     height = 500;
 
-var origin = [0, 0],
-    velocity = [-.01, .01],
-    t0 = Date.now();
+var origin = [295, -85],
+    velocity = [-.01, .01];
 
 var projection = d3.geo.azimuthal()
     .translate([width / 2, height / 2])
@@ -33,6 +33,7 @@ var projection = d3.geo.azimuthal()
     .scale(240);
 
 var circle = d3.geo.circle()
+    .angle(90)
     .origin(origin);
 
 var path = d3.geo.path()
@@ -53,13 +54,18 @@ var b = d3.select("body").append("svg")
     .style("stroke", "blue")
     .datum(feature);
 
-d3.timer(function() {
-  var t = Date.now() - t0,
-      o = [origin[0] + t * velocity[0], origin[1] + t * velocity[1]];
+d3.selectAll("svg").append("circle")
+    .attr("transform", "translate(" + projection(origin) + ")")
+    .attr("r", projection([75, 0])[0] - projection([45, 0])[0]);
+
+d3.timer(step);
+
+function step(t) {
+  var o = [origin[0] + t * velocity[0], origin[1] + t * velocity[1]];
   projection.origin(o);
   circle.origin(o);
-  a.attr("d", function(d) { return path(circle.clip(d)); });
+  a.attr("d", function(d) { return path(circle.clip(d)) || "M0,0"; });
   b.attr("d", path);
-});
+}
 
 </script>

@@ -18,8 +18,7 @@ var xy = d3.geo.azimuthal().scale(200).mode("orthographic").origin([0, 0]),
     svg = d3.select("body").append("svg");
 
 var origin = [0, 0],
-    velocity = [-.01, .01],
-    t0 = Date.now();
+    velocity = [-.01, .01];
 
 var square = [d3.geo.resample([
   [  -5,  5],
@@ -32,16 +31,17 @@ var square = [d3.geo.resample([
   [  -5,  5]
 ])];
 
-var d;
 svg.append("path")
     .datum({type: "Polygon", coordinates: square})
     .style("stroke", "#f00");
 
-d3.timer(function() {
-  var t = Date.now() - t0,
-      o = [origin[0] + t * velocity[0], origin[1] + t * velocity[1]];
+d3.timer(step);
+
+function step(t) {
+  var o = [origin[0] + t * velocity[0], origin[1] + t * velocity[1]];
   xy.origin(o);
   circle.origin(o);
   svg.selectAll("path").attr("d", function(d) { return path(circle.clip(d)); });
-});
+}
+
 </script>

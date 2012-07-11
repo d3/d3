@@ -7623,7 +7623,12 @@ d3.geo.circle = function() {
       degrees = 90,
       radians = degrees * d3_geo_radians,
       arc = d3.geo.greatArc().source(origin).target(d3_identity),
-      clipOrigin,
+      clipCircle,
+      normal, // Cartesian normal to the circle origin.
+      reference, // Cartesian reference point lying on the circle.
+      center, // Cartesian center of the circle.
+      cr = 0,
+      sr = 1,
       x0 = 0,
       y0 = 0,
       sy0 = 0,
@@ -7640,8 +7645,13 @@ d3.geo.circle = function() {
   circle.clip = function(d) {
     if (typeof origin === "function") arc.source(origin.apply(this, arguments));
     // Cache origin in Cartesian coordinates for computing relative angles.
-    clipOrigin = [0, 0, 0];
-    clipOrigin = cartesian(arc.source());
+    normal = cartesian(arc.source(), [0, 0, 0]);
+    var abs = normal.map(Math.abs),
+        unit = abs[0] < abs[1] && abs[0] < abs[2] ? [1, 0, 0]
+             : abs[1] < abs[0] && abs[1] < abs[2] ? [0, 1, 0]
+             : [0, 0, 1];
+    center = scale(normal, cr);
+    reference = cross(normal, unit);
     x0 = origin[0] * d3_geo_radians;
     cy0 = Math.cos(y0 = origin[1] * d3_geo_radians);
     sy0 = Math.sin(y0);
@@ -7713,24 +7723,54 @@ d3.geo.circle = function() {
             d1 = distance(point);
         if (inside) {
           // outside going in
-          tmp = d3_geo_greatArcInterpolate(point0, point)((radians - d0) / (d1 - d0));
+          tmp = intersect(point, point0, d1, d0);
         } else {
           // inside going out
           var segment = coordinates.slice(j, i);
           if (tmp) segment.unshift(tmp);
           tmp = null;
-          segment.push(d3_geo_greatArcInterpolate(point0, point)((radians - d0) / (d1 - d0)));
+          segment.push(intersect(point0, point, d0, d1));
           segments.push(segment);
         }
         j = i;
       }
     }
-    if (inside && j < i) {
+    if (inside && (j < i || tmp)) {
       var segment = coordinates.slice(j, i);
       if (tmp) segment.unshift(tmp);
       segments.push(segment);
     }
     return segments;
+  }
+
+  // Intersects the great circle between a and b with the clip circle.
+  function intersect(a, b, d0, d1) {
+    var pa = cartesian(a, [0, 0, 0]),
+        pb = cartesian(b, [0, 0, 0]);
+    // We have two planes, n1.p = d1 and n2.p = d2.
+    // Find intersection line p(t) = c1 n1 + c2 n2 + t (n1 x n2).
+    var n1 = normal,
+        n2 = cross(pa, pb),
+        d1 = dot(n1, center),
+        d2 = 0,
+        n1n1 = dot(n1, n1),
+        n2n2 = dot(n2, n2),
+        n1n2 = dot(n1, n2),
+        determinant = n1n1 * n2n2 - n1n2 * n1n2,
+        c1 = (d1 * n2n2 - d2 * n1n2) / determinant,
+        c2 = (d2 * n1n1 - d1 * n1n2) / determinant,
+        n1xn2 = cross(n1, n2),
+        A = scale(n1, c1),
+        B = scale(n2, c2);
+    add(A, B);
+    // Now solve |p(t)|^2 = 1.
+    var u = n1xn2,
+        w = dot(A, u),
+        uu = dot(u, u),
+        t = Math.sqrt(w * w - uu * (dot(A, A) - 1)),
+        q = scale(u, (-w - t) / uu);
+    add(q, A);
+    return geo.apply(null, q);
   }
 
   // Returns an array of polygons. Each polygon is an array of rings. The first
@@ -7765,8 +7805,8 @@ d3.geo.circle = function() {
       var p0 = segment[0],
           p1 = segment[segment.length - 1];
       if (p0[0] !== p1[0] || p0[1] !== p1[1]) {
-        var b = {xyz: cartesian(p1)},
-            a = {xyz: cartesian(p0), points: segment, other: b};
+        var b = {xyz: cartesian(p1, center), points: []},
+            a = {xyz: cartesian(p0, center), points: segment, other: b};
         intersections.push(a, b);
         unvisited++;
       } else {
@@ -7779,37 +7819,38 @@ d3.geo.circle = function() {
       }
     });
     if (!unvisited) return polygons;
-    var reference = intersections[0].xyz;
+    // Sort intersection points by relative angles.
     intersections.forEach(function(intersection, i) {
       intersection.angle = angle(intersection.xyz, reference);
     });
+    var start = intersections[0];
     intersections.sort(function(a, b) {
-      return a.angle - b.angle;
+      return b.angle - a.angle;
     });
-    for (var i = 0; i < intersections.length; i++) {
-      intersections[i].next = intersections[(i + 1) % intersections.length];
+    // Construct circular linked list.
+    for (var i = 0; i < intersections.length;) {
+      intersections[i].next = intersections[++i % intersections.length];
     }
-    var start = intersections[0],
-        origin = arc.source();
     while (unvisited) {
       // Look for unvisited entering intersections.
       while (start.visited || !start.other) start = start.next;
       var intersection = start;
-      // TODO interpolate along non-great circles where necessary.
       do {
         intersection.visited = true;
-        if (ring.length) ring = ring.concat(arc.source(ring[ring.length - 1])(intersection.points[0]).coordinates);
         ring = ring.concat(intersection.points);
-        intersection = intersection.other.next;
+        intersection = intersection.other;
+        var from = intersection.angle;
+        intersection = intersection.next;
+        var to = intersection.angle;
+        ring = ring.concat(interpolate(from, to));
         unvisited--;
       } while (intersection !== start);
       if (ring.length) {
-        polygons.push([ring.concat(arc.source(ring[ring.length - 1])(ring[0]).coordinates)]);
+        polygons.push([ring]);
         ring = [];
       }
       start = start.next;
     }
-    arc.source(origin);
     return polygons;
   }
 
@@ -7832,6 +7873,16 @@ d3.geo.circle = function() {
         a[0] * b[1] - a[1] * b[0]];
   }
 
+  function add(a, b) {
+    a[0] += b[0];
+    a[1] += b[1];
+    a[2] += b[2];
+  }
+
+  function scale(vector, s) {
+    return [vector[0] * s, vector[1] * s, vector[2] * s];
+  }
+
   function magnitude(d) {
     return Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
   }
@@ -7847,20 +7898,49 @@ d3.geo.circle = function() {
   function angle(a, b) {
     normalize(a);
     normalize(b);
-    var c = cross(a, b),
-        angle = Math.atan2(magnitude(c), dot(a, b));
-    return dot(c, clipOrigin) < 0 ? -angle : angle;
+    var c = cross(b, a),
+        angle = Math.acos(Math.max(-1, Math.min(1, dot(a, b))));
+    return ((dot(c, normal) < 0 ? -angle : angle) + 2 * Math.PI) % (2 * Math.PI);
   }
 
-  // Convert to Cartesian 3-space, relative to clip origin.
-  function cartesian(point) {
+  // Convert to Cartesian 3-space, relative to circle center.
+  function cartesian(point, center) {
     var p0 = point[0] * d3_geo_radians,
         p1 = point[1] * d3_geo_radians,
         c1 = Math.cos(p1),
-        x = c1 * Math.cos(p0) - clipOrigin[0],
-        y = c1 * Math.sin(p0) - clipOrigin[1],
-        z = Math.sin(p1) - clipOrigin[2];
+        x = c1 * Math.cos(p0) - center[0],
+        y = c1 * Math.sin(p0) - center[1],
+        z = Math.sin(p1) - center[2];
     return [x, y, z];
+  }
+
+  function geo(x, y, z) {
+    return [
+      Math.atan2(y, x) / d3_geo_radians,
+      Math.asin(z) / d3_geo_radians
+    ];
+  }
+
+  function interpolate(from, to) {
+    if (from < to) from += 2 * Math.PI;
+    var result = [],
+        v = cross(normal, reference),
+        u0 = reference[0],
+        u1 = reference[1],
+        u2 = reference[2],
+        v0 = v[0],
+        v1 = v[1],
+        v2 = v[2];
+    for (var step = -6 * d3_geo_radians, t = from; t > to; t += step) {
+      var c = Math.cos(t),
+          s = Math.sin(t);
+      result.push(geo(
+        center[0] + sr * (c * u0 + s * v0),
+        center[1] + sr * (c * u1 + s * v1),
+        center[2] + sr * (c * u2 + s * v2)
+      ));
+    }
+    return result;
   }
 
   circle.origin = function(x) {
@@ -7873,6 +7953,8 @@ d3.geo.circle = function() {
   circle.angle = function(x) {
     if (!arguments.length) return degrees;
     radians = (degrees = +x) * d3_geo_radians;
+    cr = Math.cos(radians);
+    sr = Math.sin(radians);
     return circle;
   };
 

@@ -6,14 +6,13 @@
 <script>
 var xy = d3.geo.azimuthal().scale(200).mode("orthographic").origin([0, 90]),
     dy = 5,
-    circle = d3.geo.circle().origin([0, 90]),
+    circle = d3.geo.circle().angle(60).origin([0, 90]),
     path = d3.geo.path().projection(xy),
     svg = d3.select("body").append("svg"),
     n = 1000;
 
 var origin = [0, 0],
-    velocity = [.01, .01],
-    t0 = Date.now();
+    velocity = [.01, .01];
 
 var spiral = d3.range(0, 1 + 1 / n, 1 / n).map(function(t) {
   return [(360 * 10 * t) % 360 - 180, -90 + dy + (90 - dy) * 2 * t];
@@ -25,11 +24,12 @@ spiral.push(spiral[0]);
 var a = svg.append("path")
     .datum({type: "Polygon", coordinates: [spiral]});
 
-d3.timer(function() {
-  var t = Date.now() - t0,
-      o = [origin[0] + t * velocity[0], origin[1] + t * velocity[1]];
+d3.timer(step);
+
+function step(t) {
+  var o = [origin[0] + t * velocity[0], origin[1] + t * velocity[1]];
   xy.origin(o);
   circle.origin(o);
   a.attr("d", function(d) { return path(circle.clip(d)); });
-});
+}
 </script>
