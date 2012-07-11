@@ -2,6 +2,7 @@ d3.geo.circle = function() {
   var origin = [0, 0],
       degrees = 90,
       radians = degrees * d3_geo_radians,
+      precision = 1, // step size in degrees for interpolated clip edge
       arc = d3.geo.greatArc().source(origin).target(d3_identity),
       clipCircle,
       normal, // Cartesian normal to the circle origin.
@@ -311,7 +312,7 @@ d3.geo.circle = function() {
         v0 = v[0],
         v1 = v[1],
         v2 = v[2];
-    for (var step = -6 * d3_geo_radians, t = from; t > to; t += step) {
+    for (var step = precision * d3_geo_radians, t = from; t > to; t -= step) {
       var c = Math.cos(t),
           s = Math.sin(t);
       result.push(geo(
