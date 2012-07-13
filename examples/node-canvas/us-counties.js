@@ -24,7 +24,9 @@ context.lineJoin = "round";
 d3.json(__dirname + "/../data/us-counties.json", function(collection) {
   renderAll("stroke");
   renderAll("fill");
-  fs.writeFile("us-counties.png", canvas.toBuffer());
+
+  var out = fs.createWriteStream("us-counties.png");
+  canvas.createPNGStream().on("data", function(chunk) { out.write(chunk); });
 
   function renderAll(action) {
     collection.features.forEach(function(feature) {
