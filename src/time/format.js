@@ -232,13 +232,12 @@ function d3_time_parseFullYear(date, string, i) {
 function d3_time_parseYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.y = d3_time_century(+n[0]) + +n[0], i += n[0].length) : -1;
+  return n ? (date.y = d3_time_yearExpand(+n[0]), i += n[0].length) : -1;
 }
 
-function d3_time_century(two_digit_year) {
-  if (!arguments.length) return 2000; // old code: return ~~(new Date().getFullYear() / 1000) * 1000; always produced '2000' anyway, unless you'd had your clock adjusted to the years beyond 1000 A.D. or 3000 A.D.
+function d3_time_yearExpand(d) {
   // convert to 4-digit year according to POSIX/ISO rules (strptime) ~ http://docs.python.org/py3k/library/time.html
-  return ((two_digit_year >= 69) && (two_digit_year < 100)) ? 1900 : 2000;
+  return d + (((d >= 69) && (d < 100)) ? 1900 : 2000);
 }
 
 function d3_time_parseMonthNumber(date, string, i) {
