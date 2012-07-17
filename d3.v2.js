@@ -6919,6 +6919,55 @@ function d3_csv_formatValue(text) {
       ? "\"" + text.replace(/\"/g, "\"\"") + "\""
       : text;
 }
+
+d3.set_gdata = function (_gdata){d3.gdata = _gdata}
+if(typeof this.google == "undefined") this.google = {visualization:{Query:{setResponse:function(_gdata){d3.gdata = _gdata}}}};
+function parse_google_url(args) {
+  var key = (args.url.match(/http(s)*:/))?args.url.match(/key=(.*?)(&|#)/i)[1] : args.url;
+  var final_url = (args.as_feeds)?("feeds/cells/" + key + "/od6/public/basic?") : ("tq?out=json&key=" + key + "&");
+  return ( "http://spreadsheets.google.com/" + final_url + "tq=" + encodeURIComponent(args.sql) + "&alt=json-in-script&callback=d3.set_gdata");
+}
+d3.gdocs = function(args,callback) {
+  d3.gdocs.args = {as_feeds:false,sql:"select *",url:""};
+  for(arg in d3.gdocs.args) {if(typeof args[arg] != "undefined") d3.gdocs.args[arg] = args[arg]}
+  var newScript = document.createElement('script');
+  newScript.type = 'text/javascript';
+  newScript.src = parse_google_url(d3.gdocs.args);
+  document.getElementsByTagName("head")[0].appendChild(newScript);
+  safetyCounter = 0;
+  var intervalId = setInterval(function(){
+    if ((safetyCounter++ > 20) || (d3.gdata)) {
+      clearInterval(intervalId);
+      d3.gdocs.parse(d3.gdata,callback);
+    }
+  }, 200);
+};
+function is_header(entr){return ((entr.title.$t.length == 2) && (entr.title.$t.substr(1,1) == "1")); }
+function column_char(entr){return entr.title.$t.charAt(0)}
+d3.gdocs.parse = function(gdata,callback) {
+  if (gdata.status == "error"){ callback(d3.gdata.errors[0]); return false }
+  var entries = (d3.gdocs.args.as_feeds?gdata.feed.entry:gdata.table.rows), key_names = {}, parsed_data = [];
+  function append_data(line,column,value){
+    if (typeof parsed_data[line] == "undefined") parsed_data[line] = {}
+    parsed_data[line][column] = value;
+  }
+  for (var i = 0; i < entries.length; i++) { //fill objects into arrays using d3 formating
+    if (d3.gdocs.args.as_feeds) {
+      if(is_header(entries[i])){
+        key_names[column_char(entries[i])] = entries[i].content.$t
+      } else {
+        append_data(parseInt(entries[i].title.$t.substr(1)), key_names[column_char(entries[i])], entries[i].content.$t)
+      }
+    }else{
+      for (var j = 0; j < entries[i].c.length; j++) {
+        append_data(i, gdata.table.cols[j].label, (entries[i].c[j])?entries[i].c[j].v:null)
+      };
+    };
+  }
+  if(d3.gdocs.args.as_feeds) parsed_data.splice(0,2)
+  callback(parsed_data);
+};
+
 d3.geo = {};
 
 var d3_geo_radians = Math.PI / 180;
