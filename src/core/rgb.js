@@ -84,7 +84,7 @@ function d3_rgb_parse(format, rgb, hsl) {
   }
 
   /* Named colors. */
-  if (name = d3_rgb_names[format]) return rgb(name.r, name.g, name.b);
+  if (name = d3_rgb_names.get(format)) return rgb(name.r, name.g, name.b);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
   if (format != null && format.charAt(0) === "#") {
@@ -129,7 +129,7 @@ function d3_rgb_parseNumber(c) { // either integer or percentage
   return c.charAt(c.length - 1) === "%" ? Math.round(f * 2.55) : f;
 }
 
-var d3_rgb_names = {
+var d3_rgb_names = d3.map({
   aliceblue: "#f0f8ff",
   antiquewhite: "#faebd7",
   aqua: "#00ffff",
@@ -277,11 +277,8 @@ var d3_rgb_names = {
   whitesmoke: "#f5f5f5",
   yellow: "#ffff00",
   yellowgreen: "#9acd32"
-};
+});
 
-for (var d3_rgb_name in d3_rgb_names) {
-  d3_rgb_names[d3_rgb_name] = d3_rgb_parse(
-      d3_rgb_names[d3_rgb_name],
-      d3_rgb,
-      d3_hsl_rgb);
-}
+d3_rgb_names.forEach(function(key, value) {
+  d3_rgb_names.set(key, d3_rgb_parse(value, d3_rgb, d3_hsl_rgb));
+});

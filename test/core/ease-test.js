@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -50,6 +49,16 @@ suite.addBatch({
     "supports bounce easing": function(ease) {
       var e = ease("bounce");
       assert.inDelta(e(.5), 0.765625, 1e-6);
+    },
+    "invalid eases and modes default to linear-in": function(ease) {
+      var e = ease("__proto__-__proto__");
+      assert.equal(e(0), 0);
+      assert.equal(e(.5), .5);
+      assert.equal(e(1), 1);
+      var e = ease("hasOwnProperty-constructor");
+      assert.equal(e(0), 0);
+      assert.equal(e(.5), .5);
+      assert.equal(e(1), 1);
     },
     "all easing functions return exactly 0 for t = 0": function(ease) {
       assert.equal(ease("linear")(0), 0);

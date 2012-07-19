@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -28,6 +27,18 @@ suite.addBatch({
             g = d3.select("body").html("").append("svg:g").call(a),
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M2,6V0H200V6");
+      },
+      "can be an ordinal scale": function(axis) {
+        var a = axis().scale(d3.scale.ordinal().domain(["A", "B", "C"]).rangeBands([10, 90])),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            path = g.selectAll("path");
+        assert.equal(path.attr("d"), "M10,6V0H90V6");
+      },
+      "can be an ordinal scale with explicit range": function(axis) {
+        var a = axis().scale(d3.scale.ordinal().domain(["A", "B", "C"]).range([10, 50, 90])),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            path = g.selectAll("path");
+        assert.equal(path.attr("d"), "M10,6V0H90V6");
       }
     },
 
@@ -177,7 +188,7 @@ suite.addBatch({
     },
 
     "ticks": {
-      "defaults to 10": function(axis) {
+      "defaults to [10]": function(axis) {
         var a = axis();
         assert.deepEqual(a.ticks(), [10]);
       },
@@ -214,6 +225,46 @@ suite.addBatch({
         assert.equal(aa[0].length, 2);
         assert.equal(aa[0][0], b);
         assert.equal(aa[0][1], 42);
+      },
+      "affects the generated ticks": function(axis) {
+        var a = axis().ticks(20),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            t = g.selectAll("g");
+        assert.equal(t[0].length, 21);
+      }
+    },
+
+    "tickValues": {
+      "defaults to null": function(axis) {
+        var a = axis().tickValues();
+        assert.isNull(a);
+      },
+      "can be given as array of positions": function(axis) {
+        var l = [1, 2.5, 3], a = axis().tickValues(l), t = a.tickValues();
+        assert.equal(t, l);
+        assert.equal(t.length, 3);
+      },
+      "does not change the tick arguments": function(axis) {
+        var b = {}, a = axis().ticks(b, 42).tickValues([10]), t = a.ticks();
+        assert.equal(t[0], b);
+        assert.equal(t[1], 42);
+        assert.equal(t.length, 2);
+      },
+      "does not change the arguments passed to the scale's tickFormat function": function(axis) {
+        var x = d3.scale.linear(),
+            a = axis().scale(x).ticks(10).tickValues([1, 2, 3]),
+            g = d3.select("body").html("").append("svg:g"),
+            aa = [];
+
+        x.tickFormat = function() {
+          aa.push(arguments);
+          return String;
+        };
+
+        g.call(a);
+        assert.equal(aa.length, 1);
+        assert.equal(aa[0].length, 1);
+        assert.equal(aa[0][0], 10);
       },
       "affects the generated ticks": function(axis) {
         var a = axis().ticks(20),

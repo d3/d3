@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -53,6 +52,13 @@ suite.addBatch({
       var some = span.filter(function(d, i) { return d & 1; });
       assert.isTrue(some[0][0] === span[0][3]);
       assert.equal(some.length, 1);
+    },
+    "can be specified as a selector": function(span) {
+      span.classed("foo", function(d, i) { return d & 1; });
+      var some = span.filter(".foo");
+      assert.equal(some.length, 2);
+      assert.equal(some[0].length, 1);
+      assert.equal(some[1].length, 1);
     },
     "returns a new selection": function(span) {
       assert.isFalse(span.filter(function() { return 1; }) === span);

@@ -6,7 +6,7 @@ d3_selectionPrototype.insert = function(name, before) {
 
   function insert() {
     return this.insertBefore(
-        document.createElement(name),
+        document.createElementNS(this.namespaceURI, name),
         d3_select(before, this));
   }
 

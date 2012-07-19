@@ -1,9 +1,6 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Area Chart (Radial)</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<style>
 
 .area {
   fill: lightsteelblue;
@@ -15,34 +12,50 @@
   stroke-width: 1.5px;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.v2.js"></script>
+<script>
 
-var r = 960 / 2,
-    data = d3.range(361).map(function(i) { return .8 + Math.sin(i / 20 * Math.PI) / 6; });
+var data = d3.range(120).map(function(i) {
+  return .8 + Math.sin(i / 3 * Math.PI) / 6;
+});
 
-var svg = d3.select("body").append("svg:svg")
-    .data([data])
-    .attr("width", r * 2)
-    .attr("height", r * 2)
-  .append("svg:g")
-    .attr("transform", "translate(" + r + "," + r + ")");
+var width = 960,
+    height = 500;
 
-svg.append("svg:path")
+var radius = d3.scale.linear()
+    .domain([0, 1])
+    .range([height / 3, height / 2]);
+
+var angle = d3.scale.linear()
+    .domain([0, data.length])
+    .range([0, 2 * Math.PI]);
+
+var line = d3.svg.line.radial()
+    .interpolate("basis-closed")
+    .radius(radius)
+    .angle(function(d, i) { return angle(i); });
+
+var area = d3.svg.area.radial()
+    .interpolate(line.interpolate())
+    .innerRadius(radius(0))
+    .outerRadius(line.radius())
+    .angle(line.angle());
+
+var svg = d3.select("body").append("svg")
+    .datum(data)
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+svg.append("path")
     .attr("class", "area")
-    .attr("d", d3.svg.area.radial()
-    .innerRadius(r / 2)
-    .outerRadius(function(d) { return r * d; })
-    .angle(function(d, i) { return i / 180 * Math.PI; }));
+    .attr("d", area);
 
-svg.append("svg:path")
+svg.append("path")
     .attr("class", "line")
-    .attr("d", d3.svg.line.radial()
-    .radius(function(d) { return r * d; })
-    .angle(function(d, i) { return i / 180 * Math.PI; }));
+    .attr("d", line);
 
-    </script>
-  </body>
-</html>
+</script>

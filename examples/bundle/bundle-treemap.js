@@ -1,18 +1,23 @@
-var w = 960,
-    h = 500,
-    fill = d3.scale.ordinal().range(colorbrewer.Greys[9].slice(1, 4)),
-    stroke = d3.scale.linear().domain([0, 1e4]).range(["brown", "steelblue"]);
+var width = 960,
+    height = 500;
+
+var fill = d3.scale.ordinal()
+    .range(colorbrewer.Greys[9].slice(1, 4));
+
+var stroke = d3.scale.linear()
+    .domain([0, 1e4])
+    .range(["brown", "steelblue"]);
 
 var treemap = d3.layout.treemap()
-    .size([w, h])
+    .size([width, height])
     .value(function(d) { return d.size; });
 
 var bundle = d3.layout.bundle();
 
 var div = d3.select("#chart").append("div")
     .style("position", "relative")
-    .style("width", w + "px")
-    .style("height", h + "px");
+    .style("width", width + "px")
+    .style("height", height + "px");
 
 var line = d3.svg.line()
     .interpolate("bundle")
@@ -32,13 +37,13 @@ d3.json("../data/flare-imports.json", function(classes) {
       .call(cell)
       .text(function(d) { return d.children ? null : d.key; });
 
-  div.append("svg:svg")
-      .attr("width", w)
-      .attr("height", h)
+  div.append("svg")
+      .attr("width", width)
+      .attr("height", height)
       .style("position", "absolute")
     .selectAll("path.link")
       .data(bundle(links))
-    .enter().append("svg:path")
+    .enter().append("path")
       .style("stroke", function(d) { return stroke(d[0].value); })
       .attr("class", "link")
       .attr("d", line);

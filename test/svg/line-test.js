@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -57,6 +56,9 @@ suite.addBatch({
       var l = line().interpolate("step-before");
       assert.pathEqual(l([[0, 0], [1, 1]]), "M0,0V1H1");
       assert.equal(l.interpolate(), "step-before");
+    },
+    "invalid interpolates fallback to linear": function(line) {
+      assert.equal(line().interpolate("__proto__").interpolate(), "linear");
     },
 
     "tension defaults to .7": function(line) {
@@ -132,6 +134,10 @@ suite.addBatch({
       "observes the specified tension": function(line) {
         var l = line().interpolate("bundle").tension(1);
         assert.pathEqual(l([[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]]), line().interpolate("basis")([[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]]));
+      },
+      "supports a single-element array": function(line) {
+        var l = line().interpolate("bundle").tension(1);
+        assert.pathEqual(l([[0, 0]]), "M0,0");
       }
     },
 

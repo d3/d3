@@ -3,8 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Convex Hull</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.geom.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <style type="text/css">
 
 svg {
@@ -27,20 +26,20 @@ circle {
   <body>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500;
+var width = 960,
+    height = 500;
 
 var vertices = d3.range(15).map(function(d) {
   return [
-    w / 4 + Math.random() * w / 2,
-    h / 4 + Math.random() * h / 2
+    width / 4 + Math.random() * width / 2,
+    height / 4 + Math.random() * height / 2
   ];
 });
 
 var svg = d3.select("body")
-  .append("svg:svg")
-    .attr("width", w)
-    .attr("height", h)
+  .append("svg")
+    .attr("width", width)
+    .attr("height", height)
     .attr("pointer-events", "all")
     .on("mousemove", move)
     .on("click", click);
@@ -51,23 +50,23 @@ function update() {
   svg.selectAll("path")
       .data([d3.geom.hull(vertices)])
       .attr("d", function(d) { return "M" + d.join("L") + "Z"; })
-	  .enter().append("svg:path")
+	  .enter().append("path")
 	    .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
   svg.selectAll("circle")
       .data(vertices.slice(1))
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .attr("transform", function(d) { return "translate(" + d + ")"; })
       .attr("r", 3);
 }
 
 function move() {
-  vertices[0] = d3.svg.mouse(this);
+  vertices[0] = d3.mouse(this);
   update();
 }
 
 function click() {
-  vertices.push(d3.svg.mouse(this));
+  vertices.push(d3.mouse(this));
   update();
 }
     </script>

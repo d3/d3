@@ -15,7 +15,8 @@ d3.layout.hierarchy = function() {
           n,
           c = node.children = [],
           v = 0,
-          j = depth + 1;
+          j = depth + 1,
+          d;
       while (++i < n) {
         d = recurse(childs[i], j, nodes);
         d.parent = node;
@@ -81,10 +82,10 @@ d3.layout.hierarchy = function() {
 
 // A method assignment helper for hierarchy subclasses.
 function d3_layout_hierarchyRebind(object, hierarchy) {
-  object.sort = d3.rebind(object, hierarchy.sort);
-  object.children = d3.rebind(object, hierarchy.children);
+  d3.rebind(object, hierarchy, "sort", "children", "value");
+
+  // Add an alias for links, for convenience.
   object.links = d3_layout_hierarchyLinks;
-  object.value = d3.rebind(object, hierarchy.value);
 
   // If the new API is used, enabling inlining.
   object.nodes = function(d) {

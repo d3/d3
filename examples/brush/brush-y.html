@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
+    <title>Brush</title>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
+    <style type="text/css">
+
+svg {
+  font: 10px sans-serif;
+}
+
+circle {
+  -webkit-transition: fill-opacity 250ms linear;
+}
+
+.selecting circle {
+  fill-opacity: .2;
+}
+
+.selecting circle.selected {
+  stroke: #f00;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var data = d3.range(800).map(Math.random);
+
+var margin = {top: 10, right: 10, bottom: 10, left: 40},
+    width = 120 - margin.right - margin.left,
+    height = 960 - margin.top - margin.bottom;
+
+var x = d3.random.normal(width / 2, width / 8);
+
+var y = d3.scale.linear()
+    .range([height, 0]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("g")
+    .attr("class", "y axis")
+    .call(d3.svg.axis().scale(y).orient("left"));
+
+var circle = svg.append("g").selectAll("circle")
+    .data(data)
+  .enter().append("circle")
+    .attr("transform", function(d) { return "translate(" + x() + "," + y(d) + ")"; })
+    .attr("r", 3.5);
+
+svg.append("g")
+    .attr("class", "brush")
+    .call(d3.svg.brush().y(y)
+    .on("brushstart", brushstart)
+    .on("brush", brushmove)
+    .on("brushend", brushend))
+  .selectAll("rect")
+    .attr("width", width);
+
+function brushstart() {
+  svg.classed("selecting", true);
+}
+
+function brushmove() {
+  var e = d3.event.target.extent();
+  circle.classed("selected", function(d) { return e[0] <= d && d <= e[1]; });
+}
+
+function brushend() {
+  svg.classed("selecting", !d3.event.target.empty());
+}
+
+    </script>
+  </body>
+</html>

@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var assert = require("assert");
 

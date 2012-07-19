@@ -2,9 +2,7 @@
 <html>
   <head>
     <title>Force-Directed Layout (Dynamic)</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.geom.js"></script>
-    <script type="text/javascript" src="../../d3.layout.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <style type="text/css">
 
 rect {
@@ -31,27 +29,27 @@ rect {
     <div id="chart"></div>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500,
+var width = 960,
+    height = 500,
     fill = d3.scale.category20(),
     nodes = [],
     links = [];
 
-var vis = d3.select("#chart").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
+var vis = d3.select("#chart").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
-vis.append("svg:rect")
-    .attr("width", w)
-    .attr("height", h);
+vis.append("rect")
+    .attr("width", width)
+    .attr("height", height);
 
 var force = d3.layout.force()
     .distance(30)
     .nodes(nodes)
     .links(links)
-    .size([w, h]);
+    .size([width, height]);
 
-var cursor = vis.append("svg:circle")
+var cursor = vis.append("circle")
     .attr("r", 30)
     .attr("transform", "translate(-100,-100)")
     .attr("class", "cursor");
@@ -69,11 +67,11 @@ force.on("tick", function() {
 });
 
 vis.on("mousemove", function() {
-  cursor.attr("transform", "translate(" + d3.svg.mouse(this) + ")");
+  cursor.attr("transform", "translate(" + d3.mouse(this) + ")");
 });
 
 vis.on("mousedown", function() {
-  var point = d3.svg.mouse(this),
+  var point = d3.mouse(this),
       node = {x: point[0], y: point[1]},
       n = nodes.push(node);
 
@@ -96,7 +94,7 @@ function restart() {
 
   vis.selectAll("line.link")
       .data(links)
-    .enter().insert("svg:line", "circle.node")
+    .enter().insert("line", "circle.node")
       .attr("class", "link")
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
@@ -105,7 +103,7 @@ function restart() {
 
   vis.selectAll("circle.node")
       .data(nodes)
-    .enter().insert("svg:circle", "circle.cursor")
+    .enter().insert("circle", "circle.cursor")
       .attr("class", "node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })

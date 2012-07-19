@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -28,21 +27,33 @@ suite.addBatch({
       assert.equal(document.body.lastChild.tagName, "I");
       assert.equal(document.body.lastChild.textContent, "0");
     },
-    /*
-    https://github.com/tmpvar/jsdom/issues/276
     "clears the inner HTML as null": function(body) {
       body.html(null);
       assert.equal(document.body.innerHTML, "");
       assert.isNull(document.body.firstChild);
     },
-    */
+    "clears the inner HTML as undefined": function(body) {
+      body.html(undefined);
+      assert.equal(document.body.innerHTML, "");
+      assert.isNull(document.body.firstChild);
+    },
     "clears the inner HTML as the empty string": function(body) {
       body.html("");
       assert.equal(document.body.innerHTML, "");
       assert.isNull(document.body.firstChild);
     },
-    "clears the inner HTML as a function": function(body) {
+    "clears the inner HTML as a function returning the empty string": function(body) {
       body.text(function() { return ""; });
+      assert.equal(document.body.innerHTML, "");
+      assert.isNull(document.body.firstChild);
+    },
+    "clears the inner HTML as a function returning null": function(body) {
+      body.text(function() { return null; });
+      assert.equal(document.body.innerHTML, "");
+      assert.isNull(document.body.firstChild);
+    },
+    "clears the inner HTML as a function returning undefined": function(body) {
+      body.text(function() { return undefined; });
       assert.equal(document.body.innerHTML, "");
       assert.isNull(document.body.firstChild);
     },
@@ -87,8 +98,6 @@ suite.addBatch({
       assert.equal(div[0][1].lastChild.tagName, "I");
       assert.equal(div[0][1].lastChild.textContent, "1");
     },
-    /*
-    https://github.com/tmpvar/jsdom/issues/276
     "clears the inner HTML as null": function(div) {
       div.html(null);
       assert.equal(div[0][0].innerHTML, "");
@@ -96,7 +105,6 @@ suite.addBatch({
       assert.equal(div[0][1].innerHTML, "");
       assert.isNull(div[0][1].firstChild);
     },
-    */
     "clears the inner HTML as a function": function(div) {
       div.html(function() { return ""; });
       assert.equal(div[0][0].innerHTML, "");

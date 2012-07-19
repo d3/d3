@@ -15,10 +15,10 @@ var force = d3.layout.force()
     .gravity(0)
     .size([960, 500]);
 
-var svg = d3.select("#chart").append("svg:svg")
+var svg = d3.select("#chart").append("svg")
     .attr("width", 960 + 100)
     .attr("height", 500 + 100)
-  .append("svg:g")
+  .append("g")
     .attr("transform", "translate(50,50)");
 
 d3.json("../data/us-state-centroids.json", function(states) {
@@ -72,7 +72,7 @@ d3.json("../data/us-state-centroids.json", function(states) {
 
   svg.selectAll("circle")
       .data(nodes)
-    .enter().append("svg:circle")
+    .enter().append("circle")
       .style("fill", function(d) { return color(d.value); })
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; })

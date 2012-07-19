@@ -2,7 +2,7 @@
   <html>
   <head>
     <title>Superformula</title>
-    <script type="text/javascript" src="../../d3.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <script type="text/javascript" src="superformula.js"></script>
     <style type="text/css">
 
@@ -62,10 +62,13 @@ var types = {
   triangle: {m: 3, n1: 100, n2: 200, n3: 200, a: 1, b: 1}
 };
 
-var format = d3.format(".4n"),
-    scale = d3.scale.linear().domain([-10, 20, 1000]).range([0, 800, 1000]);
+var format = d3.format(".4n");
 
-var svg = d3.select("body").append("svg:svg")
+var scale = d3.scale.linear()
+    .domain([-10, 20, 1000])
+    .range([0, 800, 1000]);
+
+var svg = d3.select("body").append("svg")
     .attr("width", 960)
     .attr("height", 500);
 
@@ -74,7 +77,7 @@ var shape = superformula()
     .size(100000)
     .segments(3600);
 
-var path = svg.append("svg:path")
+var path = svg.append("path")
     .attr("class", "big")
     .attr("transform", "translate(480,250)")
     .attr("d", shape);

@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -62,6 +61,12 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [0, 1]);
         assert.typeOf(x.domain()[0], "number");
         assert.typeOf(x.domain()[1], "number");
+      },
+      "does not barf on object built-ins": function(ordinal) {
+        var x = ordinal().domain(["__proto__", "hasOwnProperty"]).range([42, 43]);
+        assert.equal(x("__proto__"), 42);
+        assert.equal(x("hasOwnProperty"), 43);
+        assert.deepEqual(x.domain(), ["__proto__", "hasOwnProperty"]);
       }
     },
 
@@ -111,6 +116,20 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 1);
         assert.deepEqual(x.range(), [20, 60, 100]);
         assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 2);
+        assert.deepEqual(x.range(), [30, 60, 90]);
+        assert.equal(x.rangeBand(), 0);
+      },
+      "can be set to a descending range": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0]);
+        assert.deepEqual(x.range(), [120, 60,0]);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0], 1);
+        assert.deepEqual(x.range(), [100, 60, 20]);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0], 2);
+        assert.deepEqual(x.range(), [90, 60, 30]);
+        assert.equal(x.rangeBand(), 0);
       }
     },
 
@@ -130,6 +149,14 @@ suite.addBatch({
         x.domain(["a", "b", "c", "d"]);
         assert.deepEqual(x.range(), [0, 25, 50, 75]);
         assert.equal(x.rangeBand(), 25);
+      },
+      "can be set to a descending range": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0]);
+        assert.deepEqual(x.range(), [80, 40, 0]);
+        assert.equal(x.rangeBand(), 40);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], .2);
+        assert.deepEqual(x.range(), [82.5, 45, 7.5]);
+        assert.equal(x.rangeBand(), 30);
       }
     },
 
@@ -141,6 +168,31 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100], .2);
         assert.deepEqual(x.range(), [7, 38, 69]);
         assert.equal(x.rangeBand(), 25);
+      },
+      "can be set to a descending range": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([100, 0]);
+        assert.deepEqual(x.range(), [67, 34, 1]);
+        assert.equal(x.rangeBand(), 33);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([100, 0], .2);
+        assert.deepEqual(x.range(), [69, 38, 7]);
+        assert.equal(x.rangeBand(), 25);
+      }
+    },
+
+    "rangeExtent": {
+      "returns the continuous range": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([20, 120]);
+        assert.deepEqual(x.rangeExtent(), [20, 120]);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([10, 110]);
+        assert.deepEqual(x.rangeExtent(), [10, 110]);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100]);
+        assert.deepEqual(x.rangeExtent(), [0, 100]);
+        var x = ordinal().domain(["a", "b", "c"]).range([0, 20, 100]);
+        assert.deepEqual(x.rangeExtent(), [0, 100]);
+      },
+      "can handle descending ranges": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([100, 0]);
+        assert.deepEqual(x.rangeExtent(), [0, 100]);
       }
     },
 

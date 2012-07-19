@@ -1,6 +1,4 @@
 require("../env");
-require("../../d3");
-require("../../d3.geom");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -8,48 +6,74 @@ var vows = require("vows"),
 var suite = vows.describe("d3.geom.polygon");
 
 suite.addBatch({
-  "counterclockwise polygon (last point equal to start point)": {
+  "closed counterclockwise unit square": {
     topic: function() {
       return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]);
     },
-    "area": function(polygon) {
+    "has area 1": function(polygon) {
       assert.equal(polygon.area(), 1);
     },
-    "centroid": function(polygon) {
+    "has centroid ⟨.5,.5⟩": function(polygon) {
       assert.deepEqual(polygon.centroid(), [.5, .5]);
     }
   },
-  "counterclockwise polygon (implicitly ending at start point)": {
-    topic: function() {
-      return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0]]);
-    },
-    "area": function(polygon) {
-      assert.equal(polygon.area(), 1);
-    },
-    "centroid": function(polygon) {
-      assert.deepEqual(polygon.centroid(), [.5, .5]);
-    }
-  },
-  "clockwise polygon (last point equal to start point)": {
+  "closed clockwise unit square": {
     topic: function() {
       return d3.geom.polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]);
     },
-    "area": function(polygon) {
+    "has area 1": function(polygon) {
       assert.equal(polygon.area(), -1);
     },
-    "centroid": function(polygon) {
+    "has centroid ⟨.5,.5⟩": function(polygon) {
       assert.deepEqual(polygon.centroid(), [.5, .5]);
     }
   },
-  "clockwise polygon (implicitly ending at start point)": {
+  "closed clockwise triangle": {
+    topic: function() {
+      return d3.geom.polygon([[1, 1], [3, 2], [2, 3], [1, 1]]);
+    },
+    "has area 1.5": function(polygon) {
+      assert.equal(polygon.area(), -1.5);
+    },
+    "has centroid ⟨2,2⟩": function(polygon) {
+      var centroid = polygon.centroid();
+      assert.inDelta(centroid[0], 2, 1e-6);
+      assert.inDelta(centroid[1], 2, 1e-6);
+    }
+  },
+  "open counterclockwise unit square": {
+    topic: function() {
+      return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0]]);
+    },
+    "has area 1": function(polygon) {
+      assert.equal(polygon.area(), 1);
+    },
+    "has centroid ⟨.5,.5⟩": function(polygon) {
+      assert.deepEqual(polygon.centroid(), [.5, .5]);
+    }
+  },
+  "open clockwise unit square": {
     topic: function() {
       return d3.geom.polygon([[0, 0], [1, 0], [1, 1], [0, 1]]);
     },
-    "area": function(polygon) {
+    "has area 1": function(polygon) {
       assert.equal(polygon.area(), -1);
     },
-    "centroid": function(polygon) {
+    "has centroid ⟨.5,.5⟩": function(polygon) {
       assert.deepEqual(polygon.centroid(), [.5, .5]);
+    }
+  },
+  "open clockwise triangle": {
+    topic: function() {
+      return d3.geom.polygon([[1, 1], [3, 2], [2, 3]]);
+    },
+    "has area 1.5": function(polygon) {
+      assert.equal(polygon.area(), -1.5);
+    },
+    "has centroid ⟨2,2⟩": function(polygon) {
+      var centroid = polygon.centroid();
+      assert.inDelta(centroid[0], 2, 1e-6);
+      assert.inDelta(centroid[1], 2, 1e-6);
     }
   }
 });

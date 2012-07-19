@@ -2,8 +2,7 @@
 <html>
   <head>
     <title>Hierarchical Bar Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.layout.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <style type="text/css">
 
 text {
@@ -28,13 +27,19 @@ rect.background {
   <body>
     <script type="text/javascript">
 
-var m = [20, 20, 20, 120], // top right bottom left
-    w = 960 - m[1] - m[3], // width
-    h = 500 - m[0] - m[2], // height
-    x = d3.scale.linear().range([0, w]),
-    y = 20, // bar height
-    z = d3.scale.ordinal().range(["steelblue", "#ccc"]), // bar color
-    duration = 750,
+var margin = {top: 20, right: 20, bottom: 20, left: 120},
+    width = 960 - margin.right - margin.left,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = 20; // bar height
+
+var z = d3.scale.ordinal()
+    .range(["steelblue", "#ccc"]); // bar color
+
+var duration = 750,
     delay = 25;
 
 var hierarchy = d3.layout.partition()
@@ -44,24 +49,24 @@ var xAxis = d3.svg.axis()
     .scale(x)
     .orient("top");
 
-var svg = d3.select("body").append("svg:svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
-  .append("svg:g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-svg.append("svg:rect")
+svg.append("rect")
     .attr("class", "background")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
     .on("click", up);
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "x axis");
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "y axis")
-  .append("svg:line")
+  .append("line")
     .attr("y1", "100%");
 
 d3.json("../data/flare.json", function(root) {
@@ -185,23 +190,23 @@ function up(d) {
 
 // Creates a set of bars for the given data node, at the specified index.
 function bar(d) {
-  var bar = svg.insert("svg:g", ".y.axis")
+  var bar = svg.insert("g", ".y.axis")
       .attr("class", "enter")
       .attr("transform", "translate(0,5)")
     .selectAll("g")
       .data(d.children)
-    .enter().append("svg:g")
+    .enter().append("g")
       .style("cursor", function(d) { return !d.children ? null : "pointer"; })
       .on("click", down);
 
-  bar.append("svg:text")
+  bar.append("text")
       .attr("x", -6)
       .attr("y", y / 2)
       .attr("dy", ".35em")
       .attr("text-anchor", "end")
       .text(function(d) { return d.name; });
 
-  bar.append("svg:rect")
+  bar.append("rect")
       .attr("width", function(d) { return x(d.value); })
       .attr("height", y);
 

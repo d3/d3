@@ -2,8 +2,7 @@
 <html>
   <head>
     <title>Quadtree</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.geom.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <style type="text/css">
 
 svg {
@@ -27,27 +26,27 @@ rect {
   <body>
     <script type="text/javascript">
 
-var w = 500;
+var width = 500;
 
 // Generate random points.
 var data = d3.range(500).map(function() {
   return {
-    x: Math.random() * w,
-    y: Math.random() * w
+    x: Math.random() * width,
+    y: Math.random() * width
   };
 });
 
 // Generate a quadtree of the specified data.
-var quadtree = d3.geom.quadtree(data, 0, w);
+var quadtree = d3.geom.quadtree(data, 0, width);
 
-var vis = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", w)
+var vis = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", width)
     .style("pointer-events", "all");
 
 vis.selectAll("rect")
     .data(nodes(quadtree))
-  .enter().append("svg:rect")
+  .enter().append("rect")
     .attr("x", function(d) { return d.x; })
     .attr("y", function(d) { return d.y; })
     .attr("width", function(d) { return d.width; })
@@ -55,23 +54,23 @@ vis.selectAll("rect")
 
 vis.selectAll("circle")
     .data(data)
-  .enter().append("svg:circle")
+  .enter().append("circle")
     .attr("cx", function(d) { return d.x; })
     .attr("cy", function(d) { return d.y; })
     .attr("r", 4.5);
 
 // Highlight selected nodes using the quadtree.
 vis.on("mousedown", function() {
-  var m0 = d3.svg.mouse(this);
+  var m0 = d3.mouse(this);
 
-  var rect = d3.select(this).append("svg:rect")
+  var rect = d3.select(this).append("rect")
       .style("fill", "#999")
       .style("fill-opacity", .5);
 
   d3.select(window).on("mousemove", function() {
-    var m1 = d3.svg.mouse(rect.node()),
-        x0 = Math.min(w, m0[0], m1[0]),
-        y0 = Math.min(w, m0[1], m1[1]),
+    var m1 = d3.mouse(rect.node()),
+        x0 = Math.min(width, m0[0], m1[0]),
+        y0 = Math.min(width, m0[1], m1[1]),
         x1 = Math.max(0, m0[0], m1[0]),
         y1 = Math.max(0, m0[1], m1[1]);
 

@@ -1,8 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.time.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <style type="text/css">
 
 body {
@@ -20,11 +19,16 @@ body {
   <body>
     <script type="text/javascript">
 
-var m = [20, 40, 20, 40],
-    w = 960 - m[1] - m[3],
-    h = 500 - m[0] - m[2],
-    x = d3.time.scale().domain([new Date(2011, 07, 01), new Date(2011, 07, 08)]).range([0, w]),
-    y = d3.scale.sqrt().range([h, 0]);
+var margin = {top: 20, right: 40, bottom: 20, left: 40},
+    width = 960 - margin.right - margin.left,
+    height = 500 - margin.top - margin.bottom;
+
+var x = d3.time.scale()
+    .domain([new Date(2011, 07, 01), new Date(2011, 07, 08)])
+    .range([0, width]);
+
+var y = d3.scale.sqrt()
+    .range([height, 0]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -34,28 +38,28 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y);
 
-var svg = d3.select("body").append("svg:svg")
-    .attr("width", w + m[1] + m[3])
-    .attr("height", h + m[0] + m[2])
-  .append("svg:g")
-    .attr("transform", "translate(" + m[3] + "," + m[0] + ")");
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "bottom axis")
-    .attr("transform", "translate(0," + h + ")")
+    .attr("transform", "translate(0," + height + ")")
     .call(xAxis.orient("bottom"));
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "top axis")
     .call(xAxis.orient("top"));
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "left axis")
     .call(yAxis.orient("left"));
 
-svg.append("svg:g")
+svg.append("g")
     .attr("class", "right axis")
-    .attr("transform", "translate(" + w + ",0)")
+    .attr("transform", "translate(" + width + ",0)")
     .call(yAxis.orient("right"));
 
     </script>

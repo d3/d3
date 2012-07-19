@@ -1,6 +1,4 @@
 require("../env");
-require("../../d3");
-require("../../d3.layout");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -25,6 +23,11 @@ suite.addBatch({
         {depth: 2, x: .375, y: 1},
         {depth: 1, x: .875, y: 0.5},
         {depth: 2, x: .875, y: 1}
+      ]);
+    },
+    "can handle a single node": function(tree) {
+      assert.deepEqual(tree.nodes({value: 0}).map(layout), [
+        {depth: 0, x: 0.5, y: 0}
       ]);
     }
   }

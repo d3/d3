@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -79,6 +78,7 @@ suite.addBatch({
       assert.strictEqual(f(999.5), "999.5");
       assert.strictEqual(f(999500), "999.5k");
       assert.strictEqual(f(1000), "1k");
+      assert.strictEqual(f(1400), "1.4k");
       assert.strictEqual(f(1500.5), "1.5005k");
       assert.strictEqual(f(.000001), "1μ");
     },

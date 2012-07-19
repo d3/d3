@@ -1,9 +1,10 @@
 require("../env");
-require("../../d3");
-require("../../d3.time");
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("assert"),
+    time = require("./time"),
+    local = time.local,
+    utc = time.utc;
 
 var suite = vows.describe("d3.time.format");
 
@@ -370,6 +371,15 @@ suite.addBatch({
       assert.deepEqual(p("12:00:01 pm"), local(1900, 0, 1, 12, 0, 1));
       assert.deepEqual(p("11:59:59 PM"), local(1900, 0, 1, 23, 59, 59));
     },
+    "doesn't crash when given weird strings": function(format) {
+      try {
+        Object.prototype.foo = 10;
+        var p = format("%b %d, %Y").parse;
+        assert.isNull(p("foo 1, 1990"));
+      } finally {
+        delete Object.prototype.foo;
+      }
+    },
     "UTC": {
       topic: function(format) {
         return format.utc;
@@ -451,17 +461,10 @@ suite.addBatch({
         var p = format.parse;
         assert.deepEqual(p("1990-01-01T00:00:00.000Z"), utc(1990, 0, 1, 0, 0, 0));
         assert.deepEqual(p("2011-12-31T23:59:59.000Z"), utc(2011, 11, 31, 23, 59, 59));
+        assert.isNull(p("1990-01-01T00:00:00.000X"));
       }
     }
   }
 });
-
-function local(year, month, day, hours, minutes, seconds, milliseconds) {
-  return new Date(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
-}
-
-function utc(year, month, day, hours, minutes, seconds, milliseconds) {
-  return new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0));
-}
 
 suite.export(module);

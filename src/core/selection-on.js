@@ -12,10 +12,20 @@ d3_selectionPrototype.on = function(type, listener, capture) {
 
   // remove the old event listener, and add the new event listener
   return this.each(function(d, i) {
-    var node = this;
+    var node = this,
+        o = node[name];
 
-    if (node[name]) node.removeEventListener(type, node[name], capture);
-    if (listener) node.addEventListener(type, node[name] = l, capture);
+    // remove the old listener, if any (using the previously-set capture)
+    if (o) {
+      node.removeEventListener(type, o, o.$);
+      delete node[name];
+    }
+
+    // add the new listener, if any (remembering the capture flag)
+    if (listener) {
+      node.addEventListener(type, node[name] = l, l.$ = capture);
+      l._ = listener; // stash the unwrapped listener for get
+    }
 
     // wrapped event listener that preserves i
     function l(e) {
@@ -27,8 +37,5 @@ d3_selectionPrototype.on = function(type, listener, capture) {
         d3.event = o;
       }
     }
-
-    // stash the unwrapped listener for retrieval
-    l._ = listener;
   });
 };

@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -13,18 +12,42 @@ suite.addBatch({
     },
     "interpolates numbers": function(interpolate) {
       assert.equal(interpolate(2, 12)(.4), 6);
+      assert.equal(interpolate("2px", 12)(.4), 6);
     },
     "interpolates colors": function(interpolate) {
       assert.equal(interpolate("#abcdef", "#fedcba")(.4), "#ccd3da");
     },
     "interpolates strings": function(interpolate) {
       assert.equal(interpolate("width:10px;", "width:50px;")(.2), "width:18px;");
+      assert.equal(interpolate(2, "12px")(.4), "6px");
     },
     "interpolates arrays": function(interpolate) {
       assert.deepEqual(interpolate([2, 4], [12, 24])(.4), [6, 12]);
     },
     "interpolates objects": function(interpolate) {
       assert.deepEqual(interpolate({foo: 2}, {foo: 12})(.4), {foo: 6});
+    },
+    "may or may not interpolate between enumerable and non-enumerable properties": function(interpolate) {
+      var a = Object.create({}, {foo: {value: 1, enumerable: true}}),
+          b = Object.create({}, {foo: {value: 2, enumerable: false}});
+      try {
+        assert.deepEqual(interpolate(a, b)(1), {});
+      } catch (e) {
+        assert.deepEqual(interpolate(a, b)(1), {foo: 2});
+      }
+      try {
+        assert.deepEqual(interpolate(b, a)(1), {});
+      } catch (e) {
+        assert.deepEqual(interpolate(b, a)(1), {foo: 1});
+      }
+    },
+    "interpolates inherited properties of objects": function(interpolate) {
+      var a = Object.create({foo: 0}),
+          b = Object.create({foo: 2});
+      assert.deepEqual(interpolate(a, b)(.5), {foo: 1});
+    },
+    "doesn't interpret properties in the default object's prototype chain as RGB": function(interpolate) {
+      assert.equal(interpolate("hasOwnProperty", "hasOwnProperty")(0), "hasOwnProperty");
     }
   }
 });
@@ -73,6 +96,17 @@ suite.addBatch({
     "preserves equal-value numbers in both strings": function(interpolate) {
       assert.equal(interpolate(" 10/20 100 20", "50/10 100, 20 ")(.2), "18/18 100, 20 ");
       assert.equal(interpolate(" 10/20 100 20", "50/10 100, 20 ")(.4), "26/16 100, 20 ");
+    },
+    "interpolates decimal notation correctly": function(interpolate) {
+      assert.equal(interpolate("1.", "2.")(.5), "1.5");
+    },
+    "interpolates exponent notation correctly": function(interpolate) {
+      assert.equal(interpolate("1e+3", "1e+4")(.5), "5500");
+      assert.equal(interpolate("1e-3", "1e-4")(.5), "0.00055");
+      assert.equal(interpolate("1.e-3", "1.e-4")(.5), "0.00055");
+      assert.equal(interpolate("-1.e-3", "-1.e-4")(.5), "-0.00055");
+      assert.equal(interpolate("+1.e-3", "+1.e-4")(.5), "0.00055");
+      assert.equal(interpolate(".1e-2", ".1e-3")(.5), "0.00055");
     }
   }
 });
@@ -109,22 +143,22 @@ suite.addBatch({
       return d3.interpolateHsl;
     },
     "parses string input": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "#38c3a2");
-      assert.equal(interpolate("steelblue", "#f00")(.6), "#96e11c");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#383dc3");
+      assert.equal(interpolate("steelblue", "#f00")(.6), "#dd1ce1");
     },
     "parses d3.hsl input": function(interpolate) {
-      assert.equal(interpolate(d3.hsl("steelblue"), "#f00")(.2), "#38c3a2");
-      assert.equal(interpolate("steelblue", d3.hsl(0, 1, .5))(.6), "#96e11c");
+      assert.equal(interpolate(d3.hsl("steelblue"), "#f00")(.2), "#383dc3");
+      assert.equal(interpolate("steelblue", d3.hsl(0, 1, .5))(.6), "#dd1ce1");
     },
     "parses d3.rgb input": function(interpolate) {
-      assert.equal(interpolate(d3.rgb("steelblue"), "#f00")(.2), "#38c3a2");
-      assert.equal(interpolate("steelblue", d3.rgb(255, 0, 0))(.6), "#96e11c");
+      assert.equal(interpolate(d3.rgb("steelblue"), "#f00")(.2), "#383dc3");
+      assert.equal(interpolate("steelblue", d3.rgb(255, 0, 0))(.6), "#dd1ce1");
     },
     "interpolates in HSL color space": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "#38c3a2");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#383dc3");
     },
     "outputs a hexadecimal string": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "#38c3a2");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#383dc3");
     }
   }
 });

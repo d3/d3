@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -33,8 +32,8 @@ suite.addBatch({
     "selects by node": function() {
       var div = d3.select(document.body.lastChild);
       assert.isTrue(div[0][0] === document.body.lastChild);
-      assert.length(div, 1);
-      assert.length(div[0], 1);
+      assert.lengthOf(div, 1);
+      assert.lengthOf(div[0], 1);
     }
   }
 });

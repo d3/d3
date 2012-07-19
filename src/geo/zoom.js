@@ -32,6 +32,5 @@ d3.geo.zoom = function() {
 };
 
 function d3_geo_zoomRebind(projection, zoom) {
-  projection.scale = d3.rebind(projection, zoom.scale);
-  projection.translate = d3.rebind(projection, zoom.translate);
+  return d3.rebind(projection, zoom, "scale", "translate");
 }

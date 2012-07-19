@@ -1,6 +1,4 @@
 require("../env");
-require("../../d3");
-require("../../d3.time");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -62,12 +60,18 @@ suite.addBatch({
   }
 });
 
-function local(year, month, day, hours, minutes, seconds) {
-  return new Date(year, month, day, hours || 0, minutes || 0, seconds || 0);
+function local(year, month, day, hours, minutes, seconds, milliseconds) {
+  var date = new Date();
+  date.setFullYear(year, month, day);
+  date.setHours(hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
+  return date;
 }
 
-function utc(year, month, day, hours, minutes, seconds) {
-  return new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0));
+function utc(year, month, day, hours, minutes, seconds, milliseconds) {
+  var date = new Date();
+  date.setUTCFullYear(year, month, day);
+  date.setUTCHours(hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
+  return date;
 }
 
 suite.export(module);

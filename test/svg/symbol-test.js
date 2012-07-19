@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -57,6 +56,7 @@ suite.addBatch({
       var a = symbol().type(String);
       assert.pathEqual(a(), "M0,4.51351666838205A4.51351666838205,4.51351666838205 0 1,1 0,-4.51351666838205A4.51351666838205,4.51351666838205 0 1,1 0,4.51351666838205Z");
       assert.pathEqual(a("invalid"), "M0,4.51351666838205A4.51351666838205,4.51351666838205 0 1,1 0,-4.51351666838205A4.51351666838205,4.51351666838205 0 1,1 0,4.51351666838205Z");
+      assert.pathEqual(a("hasOwnProperty"), "M0,4.51351666838205A4.51351666838205,4.51351666838205 0 1,1 0,-4.51351666838205A4.51351666838205,4.51351666838205 0 1,1 0,4.51351666838205Z");
     },
     "can specify type accessor as a function": function(symbol) {
       var a = symbol().type(String);

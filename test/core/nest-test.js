@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -229,6 +228,12 @@ suite.addBatch({
     "if no keys are specified, the input array is returned": function(nest) {
       var array = [new Object()];
       assert.strictEqual(nest().map(array), array);
+    },
+    "handles keys that are built-in prototype properties": function(nest) {
+      var keys = nest()
+          .key(String)
+          .map(["hasOwnProperty"]);
+      assert.deepEqual(keys, {hasOwnProperty: ["hasOwnProperty"]});
     }
   }
 });

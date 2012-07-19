@@ -14,13 +14,13 @@ d3.svg.diagonal = function() {
 
   diagonal.source = function(x) {
     if (!arguments.length) return source;
-    source = d3.functor(x);
+    source = d3_functor(x);
     return diagonal;
   };
 
   diagonal.target = function(x) {
     if (!arguments.length) return target;
-    target = d3.functor(x);
+    target = d3_functor(x);
     return diagonal;
   };
 

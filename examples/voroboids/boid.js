@@ -184,10 +184,10 @@ var boid = (function() {
   }
 
   function d3_ai_boidWrap(position) {
-    if (position[0] > w) position[0] = 0;
-    else if (position[0] < 0) position[0] = w;
-    if (position[1] > h) position[1] = 0;
-    else if (position[1] < 0) position[1] = h;
+    if (position[0] > width) position[0] = 0;
+    else if (position[0] < 0) position[0] = width;
+    if (position[1] > height) position[1] = 0;
+    else if (position[1] < 0) position[1] = height;
   }
 
   function d3_ai_boidGravity(center, position, neighborRadius) {
@@ -207,8 +207,8 @@ var boid = (function() {
   function d3_ai_boidDistance(a, b) {
     var dx = a[0] - b[0],
         dy = a[1] - b[1];
-    if (dx > w / 2) dx = w - dx;
-    if (dy > h / 2) dy = h - dy;
+    if (dx > width / 2) dx = width - dx;
+    if (dy > height / 2) dy = height - dy;
     return Math.sqrt(dx * dx + dy * dy);
   }
 

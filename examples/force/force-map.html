@@ -2,10 +2,7 @@
 <html>
   <head>
     <title>Force-Directed Map</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.geo.js"></script>
-    <script type="text/javascript" src="../../d3.geom.js"></script>
-    <script type="text/javascript" src="../../d3.layout.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <style type="text/css">
 
 path {
@@ -24,15 +21,15 @@ line {
   <body>
     <script type="text/javascript">
 
-var w = 960,
-    h = 500;
+var width = 960,
+    height = 500;
 
 var path = d3.geo.path(),
-    force = d3.layout.force().size([w, h]);
+    force = d3.layout.force().size([width, height]);
 
-var svg = d3.select("body").append("svg:svg")
-    .attr("width", w)
-    .attr("height", h);
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
 
 d3.json("../data/us-states.json", function(states) {
   var nodes = [],
@@ -63,7 +60,7 @@ d3.json("../data/us-states.json", function(states) {
 
   var link = svg.selectAll("line")
       .data(links)
-    .enter().append("svg:line")
+    .enter().append("line")
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
@@ -71,10 +68,10 @@ d3.json("../data/us-states.json", function(states) {
 
   var node = svg.selectAll("g")
       .data(nodes)
-    .enter().append("svg:g")
+    .enter().append("g")
       .attr("transform", function(d) { return "translate(" + -d.x + "," + -d.y + ")"; })
       .call(force.drag)
-    .append("svg:path")
+    .append("path")
       .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
       .attr("d", function(d) { return path(d.feature); });
 

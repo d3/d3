@@ -1,14 +1,14 @@
 var xy = d3.geo.azimuthal().scale(240).mode("stereographic"),
     circle = d3.geo.greatCircle(),
     path = d3.geo.path().projection(xy),
-    svg = d3.select("body").append("svg:svg");
+    svg = d3.select("body").append("svg");
 
 d3.json("../data/world-countries.json", function(collection) {
   svg.selectAll("path")
       .data(collection.features)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", function(d) { return path(circle.clip(d)); })
-    .append("svg:title")
+    .append("title")
       .text(function(d) { return d.properties.name; });
 });
 

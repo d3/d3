@@ -1,6 +1,6 @@
 d3_transitionPrototype.style = function(name, value, priority) {
   if (arguments.length < 3) priority = "";
-  return this.styleTween(name, d3_transitionTween(value), priority);
+  return this.styleTween(name, d3_transitionTween(name, value), priority);
 };
 
 d3_transitionPrototype.styleTween = function(name, tween, priority) {

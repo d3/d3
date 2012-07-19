@@ -3,9 +3,9 @@ var n = 4, // number of layers
     data = d3.layout.stack()(stream_layers(n, m, .1)),
     color = d3.interpolateRgb("#aad", "#556");
 
-var p = 20,
-    w = 960,
-    h = 500 - .5 - p,
+var margin = 20,
+    width = 960,
+    height = 500 - .5 - margin,
     mx = m,
     my = d3.max(data, function(d) {
       return d3.max(d, function(d) {
@@ -17,32 +17,32 @@ var p = 20,
         return d.y;
       });
     }),
-    x = function(d) { return d.x * w / mx; },
-    y0 = function(d) { return h - d.y0 * h / my; },
-    y1 = function(d) { return h - (d.y + d.y0) * h / my; },
-    y2 = function(d) { return d.y * h / mz; }; // or `my` to not rescale
+    x = function(d) { return d.x * width / mx; },
+    y0 = function(d) { return height - d.y0 * height / my; },
+    y1 = function(d) { return height - (d.y + d.y0) * height / my; },
+    y2 = function(d) { return d.y * height / mz; }; // or `my` to not rescale
 
 var vis = d3.select("#chart")
-  .append("svg:svg")
-    .attr("width", w)
-    .attr("height", h + p);
+  .append("svg")
+    .attr("width", width)
+    .attr("height", height + margin);
 
 var layers = vis.selectAll("g.layer")
     .data(data)
-  .enter().append("svg:g")
+  .enter().append("g")
     .style("fill", function(d, i) { return color(i / (n - 1)); })
     .attr("class", "layer");
 
 var bars = layers.selectAll("g.bar")
     .data(function(d) { return d; })
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "bar")
     .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 
-bars.append("svg:rect")
+bars.append("rect")
     .attr("width", x({x: .9}))
     .attr("x", 0)
-    .attr("y", h)
+    .attr("y", height)
     .attr("height", 0)
   .transition()
     .delay(function(d, i) { return i * 10; })
@@ -51,20 +51,20 @@ bars.append("svg:rect")
 
 var labels = vis.selectAll("text.label")
     .data(data[0])
-  .enter().append("svg:text")
+  .enter().append("text")
     .attr("class", "label")
     .attr("x", x)
-    .attr("y", h + 6)
+    .attr("y", height + 6)
     .attr("dx", x({x: .45}))
     .attr("dy", ".71em")
     .attr("text-anchor", "middle")
     .text(function(d, i) { return i; });
 
-vis.append("svg:line")
+vis.append("line")
     .attr("x1", 0)
-    .attr("x2", w - x({x: .1}))
-    .attr("y1", h)
-    .attr("y2", h);
+    .attr("x2", width - x({x: .1}))
+    .attr("y1", height)
+    .attr("y2", height);
 
 function transitionGroup() {
   var group = d3.selectAll("#chart");
@@ -87,7 +87,7 @@ function transitionGroup() {
     d3.select(this)
       .transition()
         .duration(500)
-        .attr("y", function(d) { return h - y2(d); })
+        .attr("y", function(d) { return height - y2(d); })
         .attr("height", y2);
   }
 }

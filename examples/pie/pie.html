@@ -2,8 +2,7 @@
 <html>
   <head>
     <title>Pie Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.layout.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <style type="text/css">
 
 body {
@@ -15,31 +14,32 @@ body {
   <body>
     <script type="text/javascript">
 
-var w = 400,
-    h = 400,
-    r = Math.min(w, h) / 2,
+var width = 400,
+    height = 400,
+    outerRadius = Math.min(width, height) / 2,
+    innerRadius = outerRadius * .6,
     data = d3.range(10).map(Math.random),
     color = d3.scale.category20(),
-    donut = d3.layout.pie().sort(d3.descending),
-    arc = d3.svg.arc().innerRadius(r * .6).outerRadius(r);
+    donut = d3.layout.pie(),
+    arc = d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius);
 
 var vis = d3.select("body")
-  .append("svg:svg")
+  .append("svg")
     .data([data])
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 var arcs = vis.selectAll("g.arc")
     .data(donut)
-  .enter().append("svg:g")
+  .enter().append("g")
     .attr("class", "arc")
-    .attr("transform", "translate(" + r + "," + r + ")");
+    .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
 
-arcs.append("svg:path")
+arcs.append("path")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
 
-arcs.append("svg:text")
+arcs.append("text")
     .attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; })
     .attr("dy", ".35em")
     .attr("text-anchor", "middle")

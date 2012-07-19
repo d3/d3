@@ -1,5 +1,4 @@
 require("../env");
-require("../../d3");
 
 var vows = require("vows"),
     assert = require("assert");
@@ -29,6 +28,16 @@ suite.addBatch({
     },
     "returns a new selection": function(body) {
       assert.isFalse(body.data([1]) === body);
+    },
+    "with no arguments, returns an array of data": function(body) {
+      var data = new Object();
+      body.data([data]);
+      assert.deepEqual(body.data(), [data]);
+      assert.strictEqual(body.data()[0], data);
+    },
+    "throws an error if data is null or undefined": function(body) {
+      assert.throws(function() { body.data(null); }, Error);
+      assert.throws(function() { body.data(function() {}); }, Error);
     }
   }
 });
@@ -59,6 +68,25 @@ suite.addBatch({
     },
     "returns a new selection": function(div) {
       assert.isFalse(div.data([0, 1]) === div);
+    },
+    "throws an error if data is null or undefined": function(div) {
+      assert.throws(function() { div.data(null); }, Error);
+      assert.throws(function() { div.data(function() {}); }, Error);
+    },
+    "with no arguments, returns an array of data": function(div) {
+      var a = new Object(), b = new Object(), actual = [];
+      div[0][0].__data__ = a;
+      div[0][1].__data__ = b;
+      assert.deepEqual(div.data(), [a, b]);
+    },
+    "with no arguments, returned array has undefined for null nodes": function(div) {
+      var b = new Object(), actual = [];
+      div[0][0] = null;
+      div[0][1].__data__ = b;
+      var data = div.data();
+      assert.isUndefined(data[0]);
+      assert.strictEqual(data[1], b);
+      assert.equal(data.length, 2);
     }
   }
 });
@@ -161,6 +189,17 @@ suite.addBatch({
       assert.domNull(exit[0][1]);
       assert.domEqual(exit[1][0], span[1][0]);
       assert.domNull(exit[1][1]);
+    },
+    "handles keys that are in the default object's prototype chain": function(span) {
+      // This also applies to the non-standard "watch" and "unwatch" in Mozilla Firefox.
+      var update = span.data(["hasOwnProperty", "isPrototypeOf", "toLocaleString", "toString", "valueOf"], String);
+      assert.domNull(update[0][0]);
+      assert.domNull(update[0][1]);
+      assert.domNull(update[0][2]);
+      assert.domNull(update[0][3]);
+      assert.domNull(update[0][4]);
+      // This throws an error if Object.hasOwnProperty isn't used.
+      span.data([0], function() { return "hasOwnProperty"; });
     }
   }
 });

@@ -1,6 +1,5 @@
 require("../env");
-require("../../d3");
-require("../../d3.geo");
+require("../../d3.v2");
 
 var vows = require("vows"),
     assert = require("assert");

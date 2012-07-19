@@ -3,8 +3,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <title>Albers Projection</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../d3.geo.js"></script>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
     <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
     <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
     <style type="text/css">
@@ -47,18 +46,18 @@ var xy = d3.geo.albers(),
     path = d3.geo.path().projection(xy);
 
 d3.select("body")
-  .append("svg:svg")
-  .append("svg:g")
+  .append("svg")
+  .append("g")
     .attr("id", "states");
 
 d3.json("../data/us-states.json", function(collection) {
   d3.select("#states")
     .selectAll("path")
       .data(collection.features)
-    .enter().append("svg:path")
+    .enter().append("path")
       .attr("d", path);
   d3.select("#states")
-    .append("svg:circle")
+    .append("circle")
       .attr("r", 10)
       .attr("transform", "translate(" + xy(xy.origin()).join(",") + ")")
 });
