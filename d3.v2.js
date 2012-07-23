@@ -1670,9 +1670,11 @@ function d3_selection_classed(name, value) {
     var c = this.className,
         cb = c.baseVal != null,
         cv = cb ? c.baseVal : c;
-    cv = d3_collapse(cv.replace(re, " "));
-    if (cb) c.baseVal = cv;
-    else this.className = cv;
+    if (cv.length) {
+      cv = d3_collapse(cv.replace(re, " "));
+      if (cb) c.baseVal = cv;
+      else this.className = cv;
+    }
   }
 
   function classedFunction() {
