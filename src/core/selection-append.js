@@ -1,15 +1,21 @@
-// TODO append(node)?
-// TODO append(function)?
-d3_selectionPrototype.append = function(name) {
-  name = d3.ns.qualify(name);
+d3_selectionPrototype.append = function(value) {
+    if (typeof value === "function") {
+     return this.each(function() {
+        var v = value.apply(this, arguments);
+        this.appendChild(v);
+     });
+    }
+    else {
+        tag_name = d3.ns.qualify(value);
 
-  function append() {
-    return this.appendChild(document.createElementNS(this.namespaceURI, name));
-  }
+        append = function() {
+            return this.appendChild(document.createElementNS(this.namespaceURI, tag_name));
+        }
 
-  function appendNS() {
-    return this.appendChild(document.createElementNS(name.space, name.local));
-  }
+        appendNS = function() {
+            return this.appendChild(document.createElementNS(tag_name.space, tag_name.local));
+        }
 
-  return this.select(name.local ? appendNS : append);
+        return this.select(tag_name.local ? appendNS : append);
+    }
 };
