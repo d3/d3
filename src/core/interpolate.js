@@ -97,16 +97,18 @@ d3.interpolateTransform = function(a, b) {
       gb = document.createElementNS(d3.ns.prefix.svg, "g");
 
   return (d3.interpolateTransform = function(a, b) {
-    a = d3_interpolateTransformList(ga, a),
-    b = d3_interpolateTransformList(gb, b);
+    ga.setAttribute("transform", a);
+    gb.setAttribute("transform", b);
+    a = ga.transform.baseVal;
+    b = gb.transform.baseVal;
 
     if (d3_interpolateTransformSameType(a, b)) {
-      return d3.interpolateString(d3_interpolateTransformString(a),
-          d3_interpolateTransformString(b));
+      return d3.interpolateString(d3_interpolateTransformListString(a),
+          d3_interpolateTransformListString(b));
     }
 
-    a = ga.transform.baseVal.consolidate();
-    b = gb.transform.baseVal.consolidate();
+    a = a.consolidate();
+    b = b.consolidate();
     var s = [], // string constants and placeholders
         q = [], // number interpolators
         n,
@@ -159,43 +161,39 @@ d3.interpolateTransform = function(a, b) {
   })(a, b);
 };
 
-function d3_interpolateTransformString(d) {
-  return d.map(function(t) {
-    var m = t.matrix;
-    switch (t.type) {
-      case SVGTransform.SVG_TRANSFORM_ROTATE: return "rotate(" + t.angle + ")";
-      case SVGTransform.SVG_TRANSFORM_SCALE: return "scale(" + m.a + " " + m.d + ")";
-      case SVGTransform.SVG_TRANSFORM_SKEWX: return "skewX(" + t.angle + ")";
-      case SVGTransform.SVG_TRANSFORM_SKEWY: return "skewY(" + t.angle + ")";
-      case SVGTransform.SVG_TRANSFORM_TRANSLATE:
-        return "translate(" + m.e + "," + m.f + ")";
-      case SVGTransform.SVG_TRANSFORM_MATRIX:
-        return "matrix(" + m.a + " " + m.b + " " + m.c + " " +
-                           m.d + " " + m.e + " " + m.f + ")";
-    }
-    return "";
-  }).join("");
+function d3_interpolateTransformListString(value) {
+  var result = [];
+  for (var i = 0, n = value.numberOfItems; i < n; i++) {
+    result.push(d3_interpolateTransformString(value.getItem(i)));
+  }
+  return result.join("");
+}
+
+function d3_interpolateTransformString(t) {
+  var m = t.matrix;
+  switch (t.type) {
+    case SVGTransform.SVG_TRANSFORM_ROTATE: return "rotate(" + t.angle + ")";
+    case SVGTransform.SVG_TRANSFORM_SCALE: return "scale(" + m.a + " " + m.d + ")";
+    case SVGTransform.SVG_TRANSFORM_SKEWX: return "skewX(" + t.angle + ")";
+    case SVGTransform.SVG_TRANSFORM_SKEWY: return "skewY(" + t.angle + ")";
+    case SVGTransform.SVG_TRANSFORM_TRANSLATE:
+      return "translate(" + m.e + "," + m.f + ")";
+    case SVGTransform.SVG_TRANSFORM_MATRIX:
+      return "matrix(" + m.a + " " + m.b + " " + m.c + " " +
+                         m.d + " " + m.e + " " + m.f + ")";
+  }
+  return "";
 }
 
 function d3_interpolateTransformSameType(a, b) {
-  var n = a.length;
-  if (n !== b.length) return false;
+  var n = a.numberOfItems;
+  if (n !== b.numberOfItems) return false;
   for (var i = 0, type; i < n; i++) {
-    if ((type = a[i].type) !== b[i].type ||
+    if ((type = a.getItem(i).type) !== b.getItem(i).type ||
         type === SVGTransform.SVG_TRANSFORM_UNKNOWN ||
         type === SVGTransform.SVG_TRANSFORM_MATRIX) return false;
   }
   return true;
-}
-
-function d3_interpolateTransformList(g, d) {
-  g.setAttribute("transform", d);
-  var value = g.transform.baseVal,
-      t = [];
-  for (var i = 0, n = value.numberOfItems; i < n; i++) {
-    t[i] = value.getItem(i);
-  }
-  return t;
 }
 
 d3.interpolateRgb = function(a, b) {
