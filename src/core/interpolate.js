@@ -93,19 +93,24 @@ d3.interpolateString = function(a, b) {
 };
 
 d3.interpolateTransform = function(a, b) {
+  var A = d3.transform(a),
+      B = d3.transform(b);
+
+  if (A.sameType(B)) return d3.interpolateString(A + "", B + "");
+
   var s = [], // string constants and placeholders
       q = [], // number interpolators
       n,
-      A = d3.transform(a),
-      B = d3.transform(b),
-      ta = A.translate,
-      tb = B.translate,
-      ra = A.rotate,
-      rb = B.rotate,
-      wa = A.skew,
-      wb = B.skew,
-      ka = A.scale,
-      kb = B.scale;
+      dA = A.decompose(),
+      dB = B.decompose(),
+      ta = dA.translate,
+      tb = dB.translate,
+      ra = dA.rotate,
+      rb = dB.rotate,
+      wa = dA.skew,
+      wb = dB.skew,
+      ka = dA.scale,
+      kb = dB.scale;
 
   if (ta[0] != tb[0] || ta[1] != tb[1]) {
     s.push("translate(", null, ",", null, ")");

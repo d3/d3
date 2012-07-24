@@ -1011,19 +1011,24 @@ d3.interpolateString = function(a, b) {
 };
 
 d3.interpolateTransform = function(a, b) {
+  var A = d3.transform(a),
+      B = d3.transform(b);
+
+  if (A.sameType(B)) return d3.interpolateString(A + "", B + "");
+
   var s = [], // string constants and placeholders
       q = [], // number interpolators
       n,
-      A = d3.transform(a),
-      B = d3.transform(b),
-      ta = A.translate,
-      tb = B.translate,
-      ra = A.rotate,
-      rb = B.rotate,
-      wa = A.skew,
-      wb = B.skew,
-      ka = A.scale,
-      kb = B.scale;
+      dA = A.decompose(),
+      dB = B.decompose(),
+      ta = dA.translate,
+      tb = dB.translate,
+      ra = dA.rotate,
+      rb = dB.rotate,
+      wa = dA.skew,
+      wb = dB.skew,
+      ka = dA.scale,
+      kb = dB.scale;
 
   if (ta[0] != tb[0] || ta[1] != tb[1]) {
     s.push("translate(", null, ",", null, ")");
@@ -2482,21 +2487,41 @@ var d3_timer_frame = window.requestAnimationFrame
     || window.msRequestAnimationFrame
     || function(callback) { setTimeout(callback, 17); };
 d3.transform = function(string) {
-  var g = document.createElementNS(d3.ns.prefix.svg, "g"),
-      identity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0};
+  var g = document.createElementNS(d3.ns.prefix.svg, "g");
   return (d3.transform = function(string) {
     g.setAttribute("transform", string);
-    var t = g.transform.baseVal.consolidate();
-    return new d3_transform(t ? t.matrix : identity);
+    return new d3_transform(g.transform.baseVal);
   })(string);
+};
+
+function d3_transform(value) {
+  var t = this.transforms = [];
+  for (var i = 0, n = value.numberOfItems; i < n; i++) {
+    t[i] = value.getItem(i);
+  }
+  this.matrix = value.consolidate() || d3_transformIdentity;
+};
+
+d3_transform.prototype.sameType = function(b) {
+  var ta = this.transforms,
+      tb = b.transforms,
+      n = ta.length;
+  if (n !== tb.length) return false;
+  for (var i = 0, type; i < n; i++) {
+    if ((type = ta[i].type) !== tb[i].type ||
+        type === SVGTransform.SVG_TRANSFORM_UNKNOWN ||
+        type === SVGTransform.SVG_TRANSFORM_MATRIX) return false;
+  }
+  return true;
 };
 
 // Compute x-scale and normalize the first row.
 // Compute shear and make second row orthogonal to first.
 // Compute y-scale and normalize the second row.
 // Finally, compute the rotation.
-function d3_transform(m) {
-  var r0 = [m.a, m.b],
+d3_transform.prototype.decompose = function() {
+  var m = this.matrix,
+      r0 = [m.a, m.b],
       r1 = [m.c, m.d],
       kx = d3_transformNormalize(r0),
       kz = d3_transformDot(r0, r1),
@@ -2507,18 +2532,29 @@ function d3_transform(m) {
     kx *= -1;
     kz *= -1;
   }
-  this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_transformDegrees;
-  this.translate = [m.e, m.f];
-  this.scale = [kx, ky];
-  this.skew = ky ? Math.atan2(kz, ky) * d3_transformDegrees : 0;
+  return {
+    rotate: (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_transformDegrees,
+    translate: [m.e, m.f],
+    scale: [kx, ky],
+    skew: ky ? Math.atan2(kz, ky) * d3_transformDegrees : 0
+  };
 };
 
 d3_transform.prototype.toString = function() {
-  return "translate(" + this.translate
-      + ")rotate(" + this.rotate
-      + ")skewX(" + this.skew
-      + ")scale(" + this.scale
-      + ")";
+  return this.transforms.map(function(t) {
+    var m = t.matrix;
+    switch (t.type) {
+      case SVGTransform.SVG_TRANSFORM_TRANSLATE: return "translate(" + m.e + "," + m.f + ")";
+      case SVGTransform.SVG_TRANSFORM_ROTATE: return "rotate(" + t.angle + ")";
+      case SVGTransform.SVG_TRANSFORM_SCALE: return "scale(" + m.a + " " + m.d + ")";
+      case SVGTransform.SVG_TRANSFORM_SKEWX: return "skewX(" + t.angle + ")";
+      case SVGTransform.SVG_TRANSFORM_SKEWY: return "skewY(" + t.angle + ")";
+      case SVGTransform.SVG_TRANSFORM_MATRIX:
+        return "matrix(" + m.a + " " + m.b + " " + m.c + " " +
+                           m.d + " " + m.e + " " + m.f + ")";
+    }
+    return "";
+  }).join("");
 };
 
 function d3_transformDot(a, b) {
@@ -2540,7 +2576,8 @@ function d3_transformCombine(a, b, k) {
   return a;
 }
 
-var d3_transformDegrees = 180 / Math.PI;
+var d3_transformDegrees = 180 / Math.PI,
+    d3_transformIdentity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0};
 d3.mouse = function(container) {
   return d3_mousePoint(container, d3_eventSource());
 };
