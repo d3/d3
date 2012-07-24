@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<script src="../../d3.v2.js"></script>
+<style>
+
+path {
+  fill: none;
+  stroke: #000;
+}
+
+</style>
+<body>
+<script>
+
+var width = 960,
+    height = 500,
+    radius = 240;
+
+var origin = [-71, 42],
+    velocity = [-.01, .01];
+
+var projection = d3.geo.azimuthal()
+    .mode("orthographic")
+    .scale(radius)
+    .translate([width / 2, height / 2]);
+
+var circle = d3.geo.circle().angle(80);
+
+var path = d3.geo.path()
+    .projection(projection);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("../data/world-countries.json", function(geometry) {
+  var feature = svg.append("path")
+      .datum(geometry)
+      .attr("d", draw);
+
+  d3.timer(step);
+
+  function step(t) {
+    var o = [origin[0] + velocity[0] * t, origin[1] + velocity[1] * t];
+    projection.origin(o);
+    circle.origin(o);
+    feature.attr("d", draw);
+  }
+
+  function draw(d) {
+    return path(circle.clip(d));
+  }
+});
+
+</script>
