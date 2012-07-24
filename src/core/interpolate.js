@@ -96,13 +96,13 @@ d3.interpolateTransform = function(a, b) {
   var A = d3.transform(a),
       B = d3.transform(b);
 
-  if (A.sameType(B)) return d3.interpolateString(A + "", B + "");
+  if (d3_transformSameType(A, B)) return d3.interpolateString(A + "", B + "");
 
   var s = [], // string constants and placeholders
       q = [], // number interpolators
       n,
-      dA = A.decompose(),
-      dB = B.decompose(),
+      dA = d3_transformDecompose(A.matrix),
+      dB = d3_transformDecompose(B.matrix),
       ta = dA.translate,
       tb = dB.translate,
       ra = dA.rotate,

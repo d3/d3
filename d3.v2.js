@@ -1014,13 +1014,13 @@ d3.interpolateTransform = function(a, b) {
   var A = d3.transform(a),
       B = d3.transform(b);
 
-  if (A.sameType(B)) return d3.interpolateString(A + "", B + "");
+  if (d3_transformSameType(A, B)) return d3.interpolateString(A + "", B + "");
 
   var s = [], // string constants and placeholders
       q = [], // number interpolators
       n,
-      dA = A.decompose(),
-      dB = B.decompose(),
+      dA = d3_transformDecompose(A.matrix),
+      dB = d3_transformDecompose(B.matrix),
       ta = dA.translate,
       tb = dB.translate,
       ra = dA.rotate,
@@ -2499,45 +2499,8 @@ function d3_transform(value) {
   for (var i = 0, n = value.numberOfItems; i < n; i++) {
     t[i] = value.getItem(i);
   }
-  this.matrix = value.consolidate() || d3_transformIdentity;
-};
-
-d3_transform.prototype.sameType = function(b) {
-  var ta = this.transforms,
-      tb = b.transforms,
-      n = ta.length;
-  if (n !== tb.length) return false;
-  for (var i = 0, type; i < n; i++) {
-    if ((type = ta[i].type) !== tb[i].type ||
-        type === SVGTransform.SVG_TRANSFORM_UNKNOWN ||
-        type === SVGTransform.SVG_TRANSFORM_MATRIX) return false;
-  }
-  return true;
-};
-
-// Compute x-scale and normalize the first row.
-// Compute shear and make second row orthogonal to first.
-// Compute y-scale and normalize the second row.
-// Finally, compute the rotation.
-d3_transform.prototype.decompose = function() {
-  var m = this.matrix,
-      r0 = [m.a, m.b],
-      r1 = [m.c, m.d],
-      kx = d3_transformNormalize(r0),
-      kz = d3_transformDot(r0, r1),
-      ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz)) || 0;
-  if (r0[0] * r1[1] < r1[0] * r0[1]) {
-    r0[0] *= -1;
-    r0[1] *= -1;
-    kx *= -1;
-    kz *= -1;
-  }
-  return {
-    rotate: (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_transformDegrees,
-    translate: [m.e, m.f],
-    scale: [kx, ky],
-    skew: ky ? Math.atan2(kz, ky) * d3_transformDegrees : 0
-  };
+  t = value.consolidate();
+  this.matrix = t ? t.matrix : d3_transformIdentity;
 };
 
 d3_transform.prototype.toString = function() {
@@ -2557,6 +2520,30 @@ d3_transform.prototype.toString = function() {
   }).join("");
 };
 
+function d3_transformDecompose(m) {
+  // Compute x-scale and normalize the first row.
+  // Compute shear and make second row orthogonal to first.
+  // Compute y-scale and normalize the second row.
+  // Finally, compute the rotation.
+  var r0 = [m.a, m.b],
+      r1 = [m.c, m.d],
+      kx = d3_transformNormalize(r0),
+      kz = d3_transformDot(r0, r1),
+      ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz)) || 0;
+  if (r0[0] * r1[1] < r1[0] * r0[1]) {
+    r0[0] *= -1;
+    r0[1] *= -1;
+    kx *= -1;
+    kz *= -1;
+  }
+  return {
+    rotate: (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_transformDegrees,
+    translate: [m.e, m.f],
+    scale: [kx, ky],
+    skew: ky ? Math.atan2(kz, ky) * d3_transformDegrees : 0
+  };
+}
+
 function d3_transformDot(a, b) {
   return a[0] * b[0] + a[1] * b[1];
 }
@@ -2574,6 +2561,19 @@ function d3_transformCombine(a, b, k) {
   a[0] += k * b[0];
   a[1] += k * b[1];
   return a;
+}
+
+function d3_transformSameType(a, b) {
+  var ta = a.transforms,
+      tb = b.transforms,
+      n = ta.length;
+  if (n !== tb.length) return false;
+  for (var i = 0, type; i < n; i++) {
+    if ((type = ta[i].type) !== tb[i].type ||
+        type === SVGTransform.SVG_TRANSFORM_UNKNOWN ||
+        type === SVGTransform.SVG_TRANSFORM_MATRIX) return false;
+  }
+  return true;
 }
 
 var d3_transformDegrees = 180 / Math.PI,
