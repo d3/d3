@@ -1921,10 +1921,6 @@ d3_selectionPrototype.map = function(value) {
       : this.property("__data__", value);
 };
 d3_selectionPrototype.filter = function(filter) {
-  return d3_selection(d3_selectionFilterSubgroups.call(this, filter));
-};
-
-function d3_selectionFilterSubgroups(filter) {
   var subgroups = [],
       subgroup,
       group,
@@ -1942,8 +1938,8 @@ function d3_selectionFilterSubgroups(filter) {
     }
   }
 
-  return subgroups;
-}
+  return d3_selection(subgroups);
+};
 
 function d3_selection_filter(selector) {
   return function() {
@@ -2299,8 +2295,23 @@ d3_transitionPrototype.selectAll = function(selector) {
   return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.filter = function(filter) {
-  return d3_transition(d3_selectionFilterSubgroups.call(this, filter),
-      this.id, this.time).ease(this.ease());
+  var subgroups = [],
+      subgroup,
+      group,
+      node;
+
+  if (typeof filter !== "function") filter = d3_selection_filter(filter);
+
+  for (var j = 0, m = this.length; j < m; j++) {
+    subgroups.push(subgroup = []);
+    for (var group = this[j], i = 0, n = group.length; i < n; i++) {
+      if ((node = group[i]) && filter.call(node.node, node.node.__data__, i)) {
+        subgroup.push(node);
+      }
+    }
+  }
+
+  return d3_transition(subgroups, this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.attr = function(name, value) {
   return this.attrTween(name, d3_transitionTween(name, value));
