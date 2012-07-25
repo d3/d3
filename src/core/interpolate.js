@@ -265,7 +265,7 @@ d3.interpolateObject = function(a, b) {
     for (k in i) c[k] = i[k](t);
     return c;
   };
-}
+};
 
 var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
 
