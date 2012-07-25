@@ -5234,7 +5234,15 @@ d3.layout.force = function() {
 
     // compute quadtree center of mass and apply charge forces
     if (charge) {
-      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes), alpha, charges);
+      q = d3.geom.quadtree(nodes);
+      // recalculate charges on every tick if need be:
+      if (typeof charge === "function") {
+        charges = [];
+        for (i = 0; i < n; ++i) {
+          charges[i] = +charge.call(this, nodes[i], i, q);
+        }
+      }
+      d3_layout_forceAccumulate(q, alpha, charges);
       i = -1; while (++i < n) {
         if (!(o = nodes[i]).fixed) {
           q.visit(repulse(o));
@@ -8974,10 +8982,10 @@ function d3_time_parseFullYear(date, string, i) {
 function d3_time_parseYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.y = d3_time_yearExpand(+n[0]), i += n[0].length) : -1;
+  return n ? (date.y = d3_time_expandYear(+n[0]), i += n[0].length) : -1;
 }
 
-function d3_time_yearExpand(d) {
+function d3_time_expandYear(d) {
   // convert to 4-digit year according to POSIX/ISO rules (strptime) ~ http://docs.python.org/py3k/library/time.html
   return d + (((d >= 69) && (d < 100)) ? 1900 : 2000);
 }
@@ -9183,7 +9191,9 @@ d3.time.hour = d3_time_interval(function(date) {
 d3.time.hours = d3.time.hour.range;
 d3.time.hours.utc = d3.time.hour.utc.range;
 d3.time.day = d3_time_interval(function(date) {
-  return new d3_time(date.getFullYear(), date.getMonth(), date.getDate());
+  var day = new d3_time(0, date.getMonth(), date.getDate());
+  day.setFullYear(date.getFullYear());
+  return day;
 }, function(date, offset) {
   date.setDate(date.getDate() + offset);
 }, function(date) {
@@ -9225,7 +9235,9 @@ d3.time.weeks = d3.time.sunday.range;
 d3.time.weeks.utc = d3.time.sunday.utc.range;
 d3.time.weekOfYear = d3.time.sundayOfYear;
 d3.time.month = d3_time_interval(function(date) {
-  return new d3_time(date.getFullYear(), date.getMonth(), 1);
+  date = d3.time.day(date);
+  date.setDate(1);
+  return date;
 }, function(date, offset) {
   date.setMonth(date.getMonth() + offset);
 }, function(date) {
@@ -9235,7 +9247,9 @@ d3.time.month = d3_time_interval(function(date) {
 d3.time.months = d3.time.month.range;
 d3.time.months.utc = d3.time.month.utc.range;
 d3.time.year = d3_time_interval(function(date) {
-  return new d3_time(date.getFullYear(), 0, 1);
+  date = d3.time.day(date);
+  date.setMonth(0, 1);
+  return date;
 }, function(date, offset) {
   date.setFullYear(date.getFullYear() + offset);
 }, function(date) {
