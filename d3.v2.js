@@ -6283,11 +6283,11 @@ function d3_layout_packPlace(a, b, c) {
       dy = b.y - a.y;
   if (db && (dx || dy)) {
     var da = b.r + c.r,
-        dc2 = dx * dx + dy * dy,
-        dc = Math.sqrt(dc2),
-        cos = (db * db + dc2 - da * da) / (2 * db * dc),
-        x = cos * (db /= dc),
-        y = Math.sqrt(Math.max(0, 1 - cos * cos)) * db;
+        dc = dx * dx + dy * dy;
+    da *= da;
+    db *= db;
+    var x = (db + dc - da) / (2 * dc),
+        y = Math.sqrt(2 * da * (db + dc) - (db - dc) * (db - dc) - da * da) / (2 * dc);
     c.x = a.x + x * dx + y * dy;
     c.y = a.y + x * dy - y * dx;
   } else {
