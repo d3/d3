@@ -2300,7 +2300,7 @@ d3_transitionPrototype.selectAll = function(selector) {
 };
 d3_transitionPrototype.filter = function(filter) {
   return d3_transition(d3_selectionFilterSubgroups.call(this, filter),
-      d3_transitionId || ++d3_transitionNextId, Date.now());
+      this.id, this.time).ease(this.ease());
 };
 d3_transitionPrototype.attr = function(name, value) {
   return this.attrTween(name, d3_transitionTween(name, value));
