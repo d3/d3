@@ -3334,6 +3334,7 @@ var d3_svg_lineInterpolatorDefault = "linear";
 // The various interpolators supported by the `line` class.
 var d3_svg_lineInterpolators = d3.map({
   "linear": d3_svg_lineLinear,
+  "linear-closed": d3_svg_lineLinearClosed,
   "step-before": d3_svg_lineStepBefore,
   "step-after": d3_svg_lineStepAfter,
   "basis": d3_svg_lineBasis,
@@ -3348,12 +3349,11 @@ var d3_svg_lineInterpolators = d3.map({
 
 // Linear interpolation; generates "L" commands.
 function d3_svg_lineLinear(points) {
-  var i = 0,
-      n = points.length,
-      p = points[0],
-      path = [p[0], ",", p[1]];
-  while (++i < n) path.push("L", (p = points[i])[0], ",", p[1]);
-  return path.join("");
+  return points.join("L");
+}
+
+function d3_svg_lineLinearClosed(points) {
+  return d3_svg_lineLinear(points) + "Z";
 }
 
 // Step interpolation; generates "H" and "V" commands.
