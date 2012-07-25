@@ -1,4 +1,8 @@
 d3_selectionPrototype.filter = function(filter) {
+  return d3_selection(d3_selectionFilterSubgroups.call(this, filter));
+};
+
+function d3_selectionFilterSubgroups(filter) {
   var subgroups = [],
       subgroup,
       group,
@@ -16,8 +20,8 @@ d3_selectionPrototype.filter = function(filter) {
     }
   }
 
-  return d3_selection(subgroups);
-};
+  return subgroups;
+}
 
 function d3_selection_filter(selector) {
   return function() {

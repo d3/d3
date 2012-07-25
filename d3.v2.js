@@ -1921,6 +1921,10 @@ d3_selectionPrototype.map = function(value) {
       : this.property("__data__", value);
 };
 d3_selectionPrototype.filter = function(filter) {
+  return d3_selection(d3_selectionFilterSubgroups.call(this, filter));
+};
+
+function d3_selectionFilterSubgroups(filter) {
   var subgroups = [],
       subgroup,
       group,
@@ -1938,8 +1942,8 @@ d3_selectionPrototype.filter = function(filter) {
     }
   }
 
-  return d3_selection(subgroups);
-};
+  return subgroups;
+}
 
 function d3_selection_filter(selector) {
   return function() {
@@ -2293,6 +2297,10 @@ d3_transitionPrototype.selectAll = function(selector) {
   }
 
   return d3_transition(subgroups, this.id, this.time).ease(this.ease());
+};
+d3_transitionPrototype.filter = function(filter) {
+  return d3_transition(d3_selectionFilterSubgroups.call(this, filter),
+      d3_transitionId || ++d3_transitionNextId, Date.now());
 };
 d3_transitionPrototype.attr = function(name, value) {
   return this.attrTween(name, d3_transitionTween(name, value));
