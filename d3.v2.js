@@ -3599,7 +3599,8 @@ function d3_svg_lineFiniteDifferences(points) {
       m = [],
       p0 = points[0],
       p1 = points[1],
-      d = m[0] = d3_svg_lineSlope(p0, p1);
+      d = m[0] = d3_svg_lineSlope(p0, p1),
+      dp;
   while (++i < j) {
     m[i] = ((dp = d) * (d = d3_svg_lineSlope(p0 = p1, p1 = points[i + 1])) >= 0) ? (dp + d)/2 : 0;
   }
