@@ -1781,8 +1781,8 @@ d3_selectionPrototype.append = function(element) {
     var result = func.apply(this, arguments)
     if (result instanceof Node) return this.appendChild(result)
     name = d3.ns.qualify(result);
-    if (name.local) return appendNS();
-    return append();
+    if (name.local) return appendNS.apply(this);
+    return append.apply(this);
   }
 
   return this.select(
