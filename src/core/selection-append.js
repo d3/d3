@@ -23,15 +23,15 @@ d3_selectionPrototype.append = function(element) {
   }
 
   function appendNode() {
-    return this.appendChild(node)
+    return this.appendChild(node);
   }
 
   function appendFunc() {
     var result = func.apply(this, arguments)
     if (result instanceof Node) return this.appendChild(result)
     name = d3.ns.qualify(result);
-    if (name.local) return appendNS()
-    return append()
+    if (name.local) return appendNS();
+    return append();
   }
 
   return this.select(
