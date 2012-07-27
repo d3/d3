@@ -1749,10 +1749,21 @@ d3_selectionPrototype.html = function(value) {
       ? function() { this.innerHTML = ""; }
       : function() { this.innerHTML = value; });
 };
-// TODO append(node)?
-// TODO append(function)?
-d3_selectionPrototype.append = function(name) {
-  name = d3.ns.qualify(name);
+d3_selectionPrototype.append = function(element) {
+  var node, func, name
+
+  switch (true) {
+    case element instanceof Function: 
+      func = element;
+      break;
+
+    case element instanceof Node:
+      node = element;
+      break;
+
+    default:
+      name = d3.ns.qualify(element);
+  }
 
   function append() {
     return this.appendChild(document.createElementNS(this.namespaceURI, name));
@@ -1762,7 +1773,24 @@ d3_selectionPrototype.append = function(name) {
     return this.appendChild(document.createElementNS(name.space, name.local));
   }
 
-  return this.select(name.local ? appendNS : append);
+  function appendNode() {
+    return this.appendChild(node);
+  }
+
+  function appendFunc() {
+    var result = func.apply(this, arguments)
+    if (result instanceof Node) return this.appendChild(result)
+    name = d3.ns.qualify(result);
+    if (name.local) return appendNS();
+    return append();
+  }
+
+  return this.select(
+      node        ? appendNode 
+    : func        ? appendFunc 
+    : name.local  ? appendNS 
+    : append
+  );
 };
 // TODO insert(node, function)?
 // TODO insert(function, string)?
