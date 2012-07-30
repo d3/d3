@@ -30,6 +30,9 @@ suite.addBatch({
       },
       "observes the end of the daylight savings time": function(floor) {
         assert.deepEqual(floor(local(2011, 10, 06, 01)), local(2011, 10, 01));
+      },
+      "correctly handles years in the first century": function(floor) {
+        assert.deepEqual(floor(local(0011, 10, 06, 07)), local(0011, 10, 01));
       }
     },
     "ceil": {
