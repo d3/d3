@@ -76,7 +76,7 @@ tr.selectAll(".actual")
       return d.expected.map(function(expected, i) {
         return {
           expected: expected,
-          actual: d3.transform(interpolate(i / 4)).rotate
+          actual: +interpolate(i / 4).replace(/[^-\d\.]+/g, "")
         };
       });
     })
