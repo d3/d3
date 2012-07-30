@@ -42,7 +42,7 @@ suite.addBatch({
       "changes to the interpolator are isolated": function(scale) {
         var x = scale().domain([local(2009, 0, 1), local(2010, 0, 1)]).range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
-        assert.equal(x(local(2009, 6, 1)), "#04ff00");
+        assert.equal(x(local(2009, 6, 1)), "#ff00fd");
         assert.equal(y(local(2009, 6, 1)), "#81007e");
         assert.equal(y.interpolate(), d3.interpolate);
       },

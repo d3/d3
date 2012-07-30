@@ -92,7 +92,7 @@ suite.addBatch({
       },
       "can specify a custom interpolator": function(log) {
         var x = log().range(["red", "blue"]).interpolate(d3.interpolateHsl);
-        assert.equal(x(5), "#00ffcb");
+        assert.equal(x(5), "#9a00ff");
       }
     },
 
@@ -179,7 +179,7 @@ suite.addBatch({
       "can generate fewer ticks, if desired": function(log) {
         var x = log();
         assert.deepEqual(x.ticks().map(x.tickFormat(5)), [
-          "1e+0", "2e+0", "3e+0", "4e+0", "", "", "", "", "",
+          "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "", "", "", "",
           "1e+1"
         ]);
         var x = log().domain([100, 1]);
@@ -187,6 +187,22 @@ suite.addBatch({
           "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "", "", "", "",
           "1e+1", "2e+1", "3e+1", "4e+1", "5e+1", "", "", "", "",
           "1e+2"
+        ]);
+      },
+      "generates powers-of-ten ticks, even for huge domains": function(log) {
+        var x = log().domain([1e10, 1]);
+        assert.deepEqual(x.ticks().map(x.tickFormat(10)), [
+          "1e+0", "", "", "", "", "", "", "", "",
+          "1e+1", "", "", "", "", "", "", "", "",
+          "1e+2", "", "", "", "", "", "", "", "",
+          "1e+3", "", "", "", "", "", "", "", "",
+          "1e+4", "", "", "", "", "", "", "", "",
+          "1e+5", "", "", "", "", "", "", "", "",
+          "1e+6", "", "", "", "", "", "", "", "",
+          "1e+7", "", "", "", "", "", "", "", "",
+          "1e+8", "", "", "", "", "", "", "", "",
+          "1e+9", "", "", "", "", "", "", "", "",
+          "1e+10"
         ]);
       },
       "can override the tick format": function(log) {
@@ -253,7 +269,7 @@ suite.addBatch({
       "changes to the interpolator are isolated": function(log) {
         var x = log().range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
-        assert.equal(x(5), "#00ffcb");
+        assert.equal(x(5), "#9a00ff");
         assert.equal(y(5), "#4d00b2");
         assert.equal(y.interpolate(), d3.interpolate);
       },

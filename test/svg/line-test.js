@@ -134,6 +134,10 @@ suite.addBatch({
       "observes the specified tension": function(line) {
         var l = line().interpolate("bundle").tension(1);
         assert.pathEqual(l([[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]]), line().interpolate("basis")([[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]]));
+      },
+      "supports a single-element array": function(line) {
+        var l = line().interpolate("bundle").tension(1);
+        assert.pathEqual(l([[0, 0]]), "M0,0");
       }
     },
 

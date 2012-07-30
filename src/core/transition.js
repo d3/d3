@@ -29,12 +29,12 @@ function d3_transition(groups, id, time) {
   };
 
   d3.timer(function(elapsed) {
-    groups.each(function(d, i, j) {
+    return d3_selection_each(groups, function(node, i, j) {
       var tweened = [],
-          node = this,
-          delay = groups[j][i].delay,
-          duration = groups[j][i].duration,
-          lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0});
+          delay = node.delay,
+          duration = node.duration,
+          lock = (node = node.node).__transition__ || (node.__transition__ = {active: 0, count: 0}),
+          d = node.__data__;
 
       ++lock.count;
 
@@ -80,7 +80,6 @@ function d3_transition(groups, id, time) {
         return 1;
       }
     });
-    return 1;
   }, 0, time);
 
   return groups;
