@@ -57,7 +57,8 @@ var tests = [
   {start: -180, end:   90, expected: [ 180.00,  157.50,  135.00,  112.50,   90.00]},
   {start:  180, end:   90, expected: [ 180.00,  157.50,  135.00,  112.50,   90.00]},
   {start: -180, end:  -90, expected: [-180.00, -157.50, -135.00, -112.50,  -90.00]},
-  {start:  180, end:  -90, expected: [ 180.00, -157.50, -135.00, -112.50,  -90.00]}
+  {start:  180, end:  -90, expected: [ 180.00, -157.50, -135.00, -112.50,  -90.00]},
+  {start:  780, end:  -90, expected: [  60.00,   22.50,  -15.00,  -52.50,  -90.00]}
 ];
 
 var tr = d3.select("tbody").selectAll("tr")
@@ -121,9 +122,8 @@ function animateExpected(d) {
       .each("end", animateExpected);
 
   function rotateTween(d) {
-    var a = d.start, b = d.end;
-    if (a - b > 180) b += 360;
-    else if (b - a > 180) a += 360;
+    var a = d.start % 360, b = d.end % 360;
+    if (a - b > 180) b += 360; else if (b - a > 180) a += 360; // shortest path
     return d3.interpolateString("rotate(" + a + ")", "rotate(" + b + ")");
   }
 }

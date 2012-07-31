@@ -179,8 +179,6 @@ var d3_interpolateTransformSimilar = function(a, b) {
       ta = a.getItem(i);
       tb = b.getItem(i);
       if ((type = ta.type) !== tb.type || type <= 1) return;
-      ra = ta.angle;
-      rb = tb.angle;
       switch (type) {
         case 2: {
           ra = ta.matrix.e + "," + ta.matrix.f;
@@ -193,7 +191,14 @@ var d3_interpolateTransformSimilar = function(a, b) {
           break;
         }
         case 4: {
+          ra = ta.angle % 360;
+          rb = tb.angle % 360;
           if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360; // shortest path
+          break;
+        }
+        default: {
+          ra = ta.angle;
+          rb = tb.angle;
           break;
         }
       }
