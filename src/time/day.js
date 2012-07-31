@@ -11,5 +11,5 @@ d3.time.days.utc = d3.time.day.utc.range;
 
 d3.time.dayOfYear = function(date) {
   var year = d3.time.year(date);
-  return Math.floor((date - year) / 864e5 - (date.getTimezoneOffset() - year.getTimezoneOffset()) / 1440);
+  return Math.floor((date - year - (date.getTimezoneOffset() - year.getTimezoneOffset()) * 6e4) / 864e5);
 };
