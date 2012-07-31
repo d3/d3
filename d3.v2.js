@@ -932,8 +932,14 @@
         ta = a.getItem(i);
         type = ta.type;
         if (m) tb = b.getItem(i); else tb.type = type;
-        if (type !== tb.type || type <= 1) return;
+        if (type !== tb.type || !type) return;
         switch (type) {
+         case 1:
+          {
+            ra = new d3_transform(ta.matrix);
+            rb = new d3_transform(tb.matrix);
+            break;
+          }
          case 2:
           {
             ra = ta.matrix.e + "," + ta.matrix.f;
@@ -952,8 +958,13 @@
             rb = tb.angle;
           }
         }
-        sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
-        sb.push(type, "(", rb, ")");
+        if (type > 1) {
+          sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
+          sb.push(type, "(", rb, ")");
+        } else {
+          sa.push(ra);
+          sb.push(rb);
+        }
       }
       if (swap) swap = sa, sa = sb, sb = swap;
       return d3.interpolateString(sa.join(""), sb.join(""));

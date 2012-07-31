@@ -190,9 +190,14 @@ var d3_interpolateTransformSimilar = function(a, b) {
       if (m) tb = b.getItem(i);
       else tb.type = type;
       // SVGTransform.SVG_TRANSFORM_UNKNOWN
-      if (type !== tb.type || type <= 1) return;
+      if (type !== tb.type || !type) return;
       switch (type) {
-        // TODO SVGTransform.SVG_TRANSFORM_MATRIX
+        case 1: {
+          // SVGTransform.SVG_TRANSFORM_MATRIX
+          ra = new d3_transform(ta.matrix);
+          rb = new d3_transform(tb.matrix);
+          break;
+        }
         case 2: {
           // SVGTransform.SVG_TRANSFORM_TRANSLATE
           ra = ta.matrix.e + "," + ta.matrix.f;
@@ -213,8 +218,13 @@ var d3_interpolateTransformSimilar = function(a, b) {
           rb = tb.angle;
         }
       }
-      sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
-      sb.push(type, "(", rb, ")");
+      if (type > 1) {
+        sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
+        sb.push(type, "(", rb, ")");
+      } else {
+        sa.push(ra);
+        sb.push(rb);
+      }
     }
     if (swap) swap = sa, sa = sb, sb = swap;
     return d3.interpolateString(sa.join(""), sb.join(""));
