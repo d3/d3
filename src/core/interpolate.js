@@ -169,34 +169,37 @@ var d3_interpolateTransformSimilar = function(a, b) {
         sb = [],
         i = -1,
         n = a.numberOfItems,
+        m = b.numberOfItems,
         ta,
         tb,
         type;
 
-    if (n !== b.numberOfItems) return;
+    if (m !== n) {
+      if (!m) b = d3_interpolateTransformListIdentity(a);
+      else if (!n) a = d3_interpolateTransformListIdentity(b), n = m;
+      else return;
+    } else if (!m) return;
 
     while (++i < n) {
       ta = a.getItem(i);
       tb = b.getItem(i);
+      // SVGTransform.SVG_TRANSFORM_UNKNOWN
+      // TODO SVGTransform.SVG_TRANSFORM_MATRIX
       if ((type = ta.type) !== tb.type || type <= 1) return;
       switch (type) {
-        case 2: {
+        case 2: { // SVGTransform.SVG_TRANSFORM_TRANSLATE
           ra = ta.matrix.e + "," + ta.matrix.f;
           rb = tb.matrix.e + "," + tb.matrix.f;
           break;
         }
-        case 3: {
+        case 3: { // SVGTransform.SVG_TRANSFORM_SCALE
           ra = ta.matrix.a + "," + ta.matrix.d;
           rb = tb.matrix.a + "," + tb.matrix.d;
           break;
         }
-        case 4: {
-          ra = ta.angle % 360;
-          rb = tb.angle % 360;
-          if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360; // shortest path
-          break;
-        }
-        default: {
+        default: { // SVGTransform.SVG_TRANSFORM_ROTATE
+                   // SVGTransform.SVG_TRANSFORM_SKEWX
+                   // SVGTransform.SVG_TRANSFORM_SKEWY
           ra = ta.angle;
           rb = tb.angle;
           break;
@@ -209,6 +212,12 @@ var d3_interpolateTransformSimilar = function(a, b) {
     return d3.interpolateString(sa.join(""), sb.join(""));
   })(a, b);
 };
+
+function d3_interpolateTransformListIdentity(d) {
+  return {getItem: function(i) {
+    return {type: d.getItem(i).type, matrix: d3_transformIdentity, angle: 0};
+  }};
+}
 
 d3.interpolateRgb = function(a, b) {
   a = d3.rgb(a);

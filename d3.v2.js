@@ -872,8 +872,10 @@
       gb.setAttribute("transform", b);
       a = ga.transform.baseVal;
       b = gb.transform.baseVal;
-      var sa = [], sb = [], i = -1, n = a.numberOfItems, ta, tb, type;
-      if (n !== b.numberOfItems) return;
+      var sa = [], sb = [], i = -1, n = a.numberOfItems, m = b.numberOfItems, ta, tb, type;
+      if (m !== n) {
+        if (!m) b = d3_interpolateTransformListIdentity(a); else if (!n) a = d3_interpolateTransformListIdentity(b), n = m; else return;
+      } else if (!m) return;
       while (++i < n) {
         ta = a.getItem(i);
         tb = b.getItem(i);
@@ -891,13 +893,6 @@
             rb = tb.matrix.a + "," + tb.matrix.d;
             break;
           }
-         case 4:
-          {
-            ra = ta.angle % 360;
-            rb = tb.angle % 360;
-            if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360;
-            break;
-          }
          default:
           {
             ra = ta.angle;
@@ -911,6 +906,17 @@
       return d3.interpolateString(sa.join(""), sb.join(""));
     })(a, b);
   };
+  function d3_interpolateTransformListIdentity(d) {
+    return {
+      getItem: function(i) {
+        return {
+          type: d.getItem(i).type,
+          matrix: d3_transformIdentity,
+          angle: 0
+        };
+      }
+    };
+  }
   d3.interpolateRgb = function(a, b) {
     a = d3.rgb(a);
     b = d3.rgb(b);
@@ -1998,18 +2004,11 @@
     setTimeout(callback, 17);
   };
   d3.transform = function(string) {
-    var g = document.createElementNS(d3.ns.prefix.svg, "g"), identity = {
-      a: 1,
-      b: 0,
-      c: 0,
-      d: 1,
-      e: 0,
-      f: 0
-    };
+    var g = document.createElementNS(d3.ns.prefix.svg, "g");
     return (d3.transform = function(string) {
       g.setAttribute("transform", string);
       var t = g.transform.baseVal.consolidate();
-      return new d3_transform(t ? t.matrix : identity);
+      return new d3_transform(t ? t.matrix : d3_transformIdentity);
     })(string);
   };
   function d3_transform(m) {
@@ -2044,7 +2043,14 @@
     a[1] += k * b[1];
     return a;
   }
-  var d3_transformDegrees = 180 / Math.PI;
+  var d3_transformDegrees = 180 / Math.PI, d3_transformIdentity = {
+    a: 1,
+    b: 0,
+    c: 0,
+    d: 1,
+    e: 0,
+    f: 0
+  };
   d3.mouse = function(container) {
     return d3_mousePoint(container, d3_eventSource());
   };
