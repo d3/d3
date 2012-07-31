@@ -20,9 +20,7 @@ exports.zone = function(tzOffset, scope) {
     try {
       // Note: assumes the dates are not in DST.
       offset = -tzOffset - new Date(0).getTimezoneOffset();
-      Date.prototype.getTimezoneOffset = function() {
-        return offset;
-      };
+      Date.prototype.getTimezoneOffset = function() { return offset; };
       scope.apply(this, arguments);
     } finally {
       offset = 0;

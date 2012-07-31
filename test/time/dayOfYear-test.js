@@ -13,9 +13,9 @@ suite.addBatch({
     topic: function() {
       return d3.time.dayOfYear;
     },
-    "no floating-point rounding error": time.zone("America/Santiago", function(dayOfYear) {
+    "no floating-point rounding error": function(dayOfYear) {
       assert.equal(dayOfYear(new Date(2011, 4, 9)), 128);
-    })
+    }
   }
 });
 
