@@ -47,17 +47,17 @@ td.success {
 var format = d3.format(",.2f");
 
 var tests = [
-  {start:  170, end:  225, expected: [ 170.00,  183.75,  197.50,  211.25,  225.00]},
-  {start:  225, end:  170, expected: [ 225.00,  211.25,  197.50,  183.75,  170.00]},
-  {start: -170, end: -225, expected: [ 190.00,  176.25,  162.50,  148.75,  135.00]},
-  {start: -225, end: -170, expected: [ 135.00,  148.75,  162.50,  176.25,  190.00]},
-  {start: -170, end:  170, expected: [ 190.00,  185.00,  180.00,  175.00,  170.00]},
+  {start:  170, end:  225, expected: [ 170.00, -176.25, -162.50, -148.75, -135.00]},
+  {start:  225, end:  170, expected: [-135.00, -148.75, -162.50, -176.25,  170.00]},
+  {start: -170, end: -225, expected: [-170.00,  176.25,  162.50,  148.75,  135.00]},
+  {start: -225, end: -170, expected: [ 135.00,  148.75,  162.50,  176.25, -170.00]},
+  {start: -170, end:  170, expected: [-170.00, -175.00,  180.00,  175.00,  170.00]},
   {start: -170, end:    0, expected: [-170.00, -127.50,  -85.00,  -42.50,    0.00]},
   {start:  170, end:    0, expected: [ 170.00,  127.50,   85.00,   42.50,    0.00]},
   {start: -180, end:   90, expected: [ 180.00,  157.50,  135.00,  112.50,   90.00]},
   {start:  180, end:   90, expected: [ 180.00,  157.50,  135.00,  112.50,   90.00]},
   {start: -180, end:  -90, expected: [-180.00, -157.50, -135.00, -112.50,  -90.00]},
-  {start:  180, end:  -90, expected: [ 180.00,  202.50,  225.00,  247.50,  270.00]}
+  {start:  180, end:  -90, expected: [ 180.00, -157.50, -135.00, -112.50,  -90.00]}
 ];
 
 var tr = d3.select("tbody").selectAll("tr")
@@ -76,7 +76,7 @@ tr.selectAll(".actual")
       return d.expected.map(function(expected, i) {
         return {
           expected: expected,
-          actual: +interpolate(i / 4).replace(/[^-\d\.]+/g, "")
+          actual: d3.transform(interpolate(i / 4)).rotate
         };
       });
     })
