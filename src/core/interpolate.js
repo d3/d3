@@ -146,55 +146,62 @@ d3.interpolateTransform = function(a, b) {
   };
 };
 
+var d3_interpolateTransformTypes = [
+  "",
+  "",
+  "translate",
+  "scale",
+  "rotate",
+  "skewX",
+  "skewY"
+];
+
 var d3_interpolateTransformSimilar = function(a, b) {
   var ga = document.createElementNS(d3.ns.prefix.svg, "g"),
       gb = document.createElementNS(d3.ns.prefix.svg, "g");
-
-  function similar(a, b) {
-    var i = -1,
-        n = a.numberOfItems,
-        type;
-
-    if (n !== b.numberOfItems) return false;
-
-    while (++i < n) {
-      if ((type = a.getItem(i).type) !== b.getItem(i).type || type <= 1) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
-  function format(l) {
-    var result = [],
-        i = -1,
-        n = l.numberOfItems,
-        m,
-        s;
-
-    while (++i < n) {
-      t = l.getItem(i);
-      m = t.matrix;
-      switch (t.type) {
-        case 1: result.push("matrix(", m.a, " ", m.b, " ", m.c, " ", m.d, " ", m.e, " ", m.f, ")"); break;
-        case 2: result.push("translate(", m.e, ",", m.f, ")"); break;
-        case 3: result.push("scale(", m.a, " ", m.d, ")"); break;
-        case 4: result.push("rotate(", t.angle, ")"); break;
-        case 5: result.push("skewX(", t.angle, ")"); break;
-        case 6: result.push("skewY(", t.angle, ")"); break;
-      }
-    }
-
-    return result.join("");
-  }
-
   return (d3_interpolateTransformSimilar = function(a, b) {
     ga.setAttribute("transform", a);
     gb.setAttribute("transform", b);
     a = ga.transform.baseVal;
     b = gb.transform.baseVal;
-    return similar(a, b) && d3.interpolateString(format(a), format(b));
+
+    var sa = [],
+        sb = [],
+        i = -1,
+        n = a.numberOfItems,
+        ta,
+        tb,
+        type;
+
+    if (n !== b.numberOfItems) return;
+
+    while (++i < n) {
+      ta = a.getItem(i);
+      tb = b.getItem(i);
+      if ((type = ta.type) !== tb.type || type <= 1) return;
+      ra = ta.angle;
+      rb = tb.angle;
+      switch (type) {
+        case 2: {
+          ra = ta.matrix.e + "," + ta.matrix.f;
+          rb = tb.matrix.e + "," + tb.matrix.f;
+          break;
+        }
+        case 3: {
+          ra = ta.matrix.a + "," + ta.matrix.d;
+          rb = tb.matrix.a + "," + tb.matrix.d;
+          break;
+        }
+        case 4: {
+          if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360; // shortest path
+          break;
+        }
+      }
+      sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
+      sb.push(type, "(", rb, ")");
+    }
+
+    return d3.interpolateString(sa.join(""), sb.join(""));
   })(a, b);
 };
 
