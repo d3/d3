@@ -1529,6 +1529,25 @@ d3.selection = function() {
 };
 
 d3.selection.prototype = d3_selectionPrototype;
+function d3_selection_nodeBuildingFunc(nameOrNode) {
+  // Nodes are not strings.
+  if (typeof nameOrNode != "string") {
+    return function() { return nameOrNode; };
+  }
+
+  // insert gets hit pretty often, so we do as much work up front as we can,
+  // without completely sacrificing readability.
+  nameOrNode = d3.ns.qualify(nameOrNode);
+  if (nameOrNode.local) {
+    return function() {
+      return document.createElementNS(nameOrNode.space, nameOrNode.local);
+    };
+  } else {
+    return function() {
+      return document.createElementNS(this.namespaceURI, nameOrNode);
+    };
+  }
+}
 d3_selectionPrototype.select = function(selector) {
   var subgroups = [],
       subgroup,
@@ -1749,40 +1768,53 @@ d3_selectionPrototype.html = function(value) {
       ? function() { this.innerHTML = ""; }
       : function() { this.innerHTML = value; });
 };
-// TODO append(node)?
-// TODO append(function)?
 d3_selectionPrototype.append = function(name) {
-  name = d3.ns.qualify(name);
-
-  function append() {
-    return this.appendChild(document.createElementNS(this.namespaceURI, name));
+  var nodeFunc;
+  if (typeof name == "function") {
+    nodeFunc = function() {
+      return d3_selection_nodeBuildingFunc(name.apply(this, arguments)).apply(this, arguments);
+    }
+  } else {
+    nodeFunc = d3_selection_nodeBuildingFunc(name);
   }
 
-  function appendNS() {
-    return this.appendChild(document.createElementNS(name.space, name.local));
-  }
-
-  return this.select(name.local ? appendNS : append);
+  return this.select(function() {
+    return this.appendChild(nodeFunc.apply(this, arguments));
+  })
 };
-// TODO insert(node, function)?
-// TODO insert(function, string)?
-// TODO insert(function, function)?
 d3_selectionPrototype.insert = function(name, before) {
-  name = d3.ns.qualify(name);
+  var nodeFunc, beforeFunc;
 
-  function insert() {
-    return this.insertBefore(
-        document.createElementNS(this.namespaceURI, name),
-        d3_select(before, this));
+  function beforeFuncForQuery(query) {
+    if (typeof query == "string") {
+      return function() { return d3_select(query, this); };
+    } else {
+      return function() { return query; };
+    }
   }
 
-  function insertNS() {
-    return this.insertBefore(
-        document.createElementNS(name.space, name.local),
-        d3_select(before, this));
+  if (typeof name == "function") {
+    nodeFunc = function() {
+      return d3_selection_nodeBuildingFunc(name.apply(this, arguments)).apply(this, arguments);
+    }
+  } else {
+    nodeFunc = d3_selection_nodeBuildingFunc(name);
   }
 
-  return this.select(name.local ? insertNS : insert);
+  if (typeof before == "function") {
+    beforeFunc = function() {
+      return beforeFuncForQuery(before.apply(this, arguments)).apply(this, arguments);
+    }
+  } else {
+    beforeFunc = beforeFuncForQuery(before);
+  }
+
+  return this.select(function() {
+    var newNode = nodeFunc.apply(this, arguments);
+    var beforeNode = beforeFunc.apply(this, arguments);
+
+    return this.insertBefore(newNode, beforeNode);
+  });
 };
 // TODO remove(selector)?
 // TODO remove(node)?

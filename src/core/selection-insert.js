@@ -1,20 +1,34 @@
-// TODO insert(node, function)?
-// TODO insert(function, string)?
-// TODO insert(function, function)?
 d3_selectionPrototype.insert = function(name, before) {
-  name = d3.ns.qualify(name);
+  var nodeFunc, beforeFunc;
 
-  function insert() {
-    return this.insertBefore(
-        document.createElementNS(this.namespaceURI, name),
-        d3_select(before, this));
+  function beforeFuncForQuery(query) {
+    if (typeof query == "string") {
+      return function() { return d3_select(query, this); };
+    } else {
+      return function() { return query; };
+    }
   }
 
-  function insertNS() {
-    return this.insertBefore(
-        document.createElementNS(name.space, name.local),
-        d3_select(before, this));
+  if (typeof name == "function") {
+    nodeFunc = function() {
+      return d3_selection_nodeBuildingFunc(name.apply(this, arguments)).apply(this, arguments);
+    }
+  } else {
+    nodeFunc = d3_selection_nodeBuildingFunc(name);
   }
 
-  return this.select(name.local ? insertNS : insert);
+  if (typeof before == "function") {
+    beforeFunc = function() {
+      return beforeFuncForQuery(before.apply(this, arguments)).apply(this, arguments);
+    }
+  } else {
+    beforeFunc = beforeFuncForQuery(before);
+  }
+
+  return this.select(function() {
+    var newNode = nodeFunc.apply(this, arguments);
+    var beforeNode = beforeFunc.apply(this, arguments);
+
+    return this.insertBefore(newNode, beforeNode);
+  });
 };
