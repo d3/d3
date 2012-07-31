@@ -17,7 +17,7 @@ d3.interpolateRound = function(a, b) {
 d3.interpolateString = function(a, b) {
   var m, // current match
       i, // current index
-      j, // current index (for coallescing)
+      j, // current index (for coalescing)
       s0 = 0, // start index of current string prefix
       s1 = 0, // end index of current string prefix
       s = [], // string constants and placeholders
@@ -40,13 +40,13 @@ d3.interpolateString = function(a, b) {
   // Find all numbers in a.
   for (i = 0, n = q.length; (m = d3_interpolate_number.exec(a)) && i < n; ++i) {
     o = q[i];
-    if (o.x == m[0]) { // The numbers match, so coallesce.
+    if (o.x == m[0]) { // The numbers match, so coalesce.
       if (o.i) {
         if (s[o.i + 1] == null) { // This match is followed by another number.
           s[o.i - 1] += o.x;
           s.splice(o.i, 1);
           for (j = i + 1; j < n; ++j) q[j].i--;
-        } else { // This match is followed by a string, so coallesce twice.
+        } else { // This match is followed by a string, so coalesce twice.
           s[o.i - 1] += o.x + s[o.i + 1];
           s.splice(o.i, 2);
           for (j = i + 1; j < n; ++j) q[j].i -= 2;
@@ -54,7 +54,7 @@ d3.interpolateString = function(a, b) {
       } else {
           if (s[o.i + 1] == null) { // This match is followed by another number.
           s[o.i] = o.x;
-        } else { // This match is followed by a string, so coallesce twice.
+        } else { // This match is followed by a string, so coalesce twice.
           s[o.i] = o.x + s[o.i + 1];
           s.splice(o.i + 1, 1);
           for (j = i + 1; j < n; ++j) q[j].i--;
@@ -73,7 +73,7 @@ d3.interpolateString = function(a, b) {
     o = q.pop();
     if (s[o.i + 1] == null) { // This match is followed by another number.
       s[o.i] = o.x;
-    } else { // This match is followed by a string, so coallesce twice.
+    } else { // This match is followed by a string, so coalesce twice.
       s[o.i] = o.x + s[o.i + 1];
       s.splice(o.i + 1, 1);
     }
@@ -93,6 +93,8 @@ d3.interpolateString = function(a, b) {
 };
 
 d3.interpolateTransform = function(a, b) {
+  if ((n = d3_interpolateTransformSimilar(a, b))) return n;
+
   var s = [], // string constants and placeholders
       q = [], // number interpolators
       n,
@@ -143,6 +145,112 @@ d3.interpolateTransform = function(a, b) {
     return s.join("");
   };
 };
+
+var d3_interpolateTransformTypes = [
+  "",
+  "",
+  "translate",
+  "scale",
+  "rotate",
+  "skewX",
+  "skewY"
+];
+
+// If both the ‘from’ and ‘to’ transforms have the same number of transform
+// functions and corresponding functions in each transform list are of the same
+// type, each transform function is animated with its corresponding destination
+// function in isolation using the rules described above. The individual values
+// are then applied as a list to produce resulting transform value.
+var d3_interpolateTransformSimilar = function(a, b) {
+  var ga = document.createElementNS(d3.ns.prefix.svg, "g"),
+      gb = document.createElementNS(d3.ns.prefix.svg, "g");
+  return (d3_interpolateTransformSimilar = function(a, b) {
+    ga.setAttribute("transform", a);
+    gb.setAttribute("transform", b);
+    a = ga.transform.baseVal;
+    b = gb.transform.baseVal;
+
+    var sa = [],
+        sb = [],
+        i = -1,
+        n = a.numberOfItems,
+        m = b.numberOfItems,
+        ta,
+        tb,
+        type;
+
+    // If one of the ‘from’ or ‘to’ transforms is "none", the ‘none’ is replaced
+    // by an equivalent identity function list for the corresponding transform
+    // function list. Otherwise, if the transform function lists do not have the
+    // same number of items, the transforms are each converted into the
+    // equivalent matrix value and animation proceeds using the rule for a
+    // single function above.
+    if (m !== n) {
+      if (!m) b = d3_interpolateTransformIdentity(a);
+      else if (!n) a = d3_interpolateTransformIdentity(b), n = m;
+      else return;
+    }
+
+    // If both the ‘from’ and ‘to’ transforms are "none", there is no
+    // interpolation necessary.
+    else if (!m) return;
+
+    while (++i < n) {
+      ta = a.getItem(i);
+      tb = b.getItem(i);
+      type = ta.type;
+
+      // If the transform functions are not the same type, or the type is
+      // unknown, fallback to the decomposed transform transition.
+      if (type !== tb.type || !type) return; // unknown
+      switch (type) {
+
+        // For matrix, the matrix is decomposed using the method described by
+        // unmatrix into separate translation, scale, rotation and skew
+        // matrices, then each decomposed matrix is interpolated numerically,
+        // and finally combined in order to produce a resulting 3x2 matrix.
+        case 1: { // matrix
+          sa.push(new d3_transform(ta.matrix));
+          sb.push(new d3_transform(tb.matrix));
+          continue;
+        }
+
+        // For translate, scale, rotate and skew functions the individual
+        // components of the function are interpolated numerically.
+        case 2: { // translate
+          ra = ta.matrix.e + "," + ta.matrix.f;
+          rb = tb.matrix.e + "," + tb.matrix.f;
+          break;
+        }
+        case 3: { // scale
+          ra = ta.matrix.a + "," + ta.matrix.d;
+          rb = tb.matrix.a + "," + tb.matrix.d;
+          break;
+        }
+        default: { // rotate, skew
+          ra = ta.angle;
+          rb = tb.angle;
+        }
+      }
+      sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
+      sb.push(type, "(", rb, ")");
+    }
+
+    return d3.interpolateString(sa.join(""), sb.join(""));
+  })(a, b);
+};
+
+function d3_interpolateTransformIdentity(a) {
+  return {
+    getItem: function(i) {
+      return {
+        type: a.getItem(i).type,
+        angle: 0,
+        matrix: d3_transformIdentity
+      };
+    }
+  };
+}
 
 d3.interpolateRgb = function(a, b) {
   a = d3.rgb(a);
@@ -213,7 +321,7 @@ d3.interpolateObject = function(a, b) {
     for (k in i) c[k] = i[k](t);
     return c;
   };
-}
+};
 
 var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
 
