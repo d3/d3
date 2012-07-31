@@ -47,18 +47,17 @@ td.success {
 var format = d3.format(",.2f");
 
 var tests = [
-  {start:  170, end:  225, expected: [ 170.00, -176.25, -162.50, -148.75, -135.00]},
-  {start:  225, end:  170, expected: [-135.00, -148.75, -162.50, -176.25,  170.00]},
-  {start: -170, end: -225, expected: [-170.00,  176.25,  162.50,  148.75,  135.00]},
-  {start: -225, end: -170, expected: [ 135.00,  148.75,  162.50,  176.25, -170.00]},
-  {start: -170, end:  170, expected: [-170.00, -175.00,  180.00,  175.00,  170.00]},
+  {start:  170, end:  225, expected: [ 170.00,  183.75,  197.50,  211.25,  225.00]},
+  {start:  225, end:  170, expected: [ 225.00,  211.25,  197.50,  183.75,  170.00]},
+  {start: -170, end: -225, expected: [-170.00, -183.75, -197.50, -211.25, -225.00]},
+  {start: -225, end: -170, expected: [-225.00, -211.25, -197.50, -183.75, -170.00]},
+  {start: -170, end:  170, expected: [-170.00,  -85.00,    0.00,   85.00,  170.00]},
   {start: -170, end:    0, expected: [-170.00, -127.50,  -85.00,  -42.50,    0.00]},
   {start:  170, end:    0, expected: [ 170.00,  127.50,   85.00,   42.50,    0.00]},
-  {start: -180, end:   90, expected: [ 180.00,  157.50,  135.00,  112.50,   90.00]},
+  {start: -180, end:   90, expected: [-180.00, -112.50,  -45.00,   22.50,   90.00]},
   {start:  180, end:   90, expected: [ 180.00,  157.50,  135.00,  112.50,   90.00]},
   {start: -180, end:  -90, expected: [-180.00, -157.50, -135.00, -112.50,  -90.00]},
-  {start:  180, end:  -90, expected: [ 180.00, -157.50, -135.00, -112.50,  -90.00]},
-  {start:  780, end:  -90, expected: [  60.00,   22.50,  -15.00,  -52.50,  -90.00]}
+  {start:  180, end:  -90, expected: [ 180.00,  112.50,   45.00,  -22.50,  -90.00]}
 ];
 
 var tr = d3.select("tbody").selectAll("tr")
@@ -77,7 +76,7 @@ tr.selectAll(".actual")
       return d.expected.map(function(expected, i) {
         return {
           expected: expected,
-          actual: d3.transform(interpolate(i / 4)).rotate
+          actual: +interpolate(i / 4).replace(/[^-\d\.]+/g, "")
         };
       });
     })
@@ -120,12 +119,10 @@ function animateExpected(d) {
       .duration(2500)
       .attrTween("transform", rotateTween)
       .each("end", animateExpected);
+}
 
-  function rotateTween(d) {
-    var a = d.start % 360, b = d.end % 360;
-    if (a - b > 180) b += 360; else if (b - a > 180) a += 360; // shortest path
-    return d3.interpolateString("rotate(" + a + ")", "rotate(" + b + ")");
-  }
+function rotateTween(d) {
+  return d3.interpolateString("rotate(" + d.start + ")", "rotate(" + d.end + ")");
 }
 
 function animateActual(d) {
