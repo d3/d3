@@ -107,6 +107,7 @@ d3.core.js: \
 	src/core/transition.js \
 	src/core/transition-select.js \
 	src/core/transition-selectAll.js \
+	src/core/transition-filter.js \
 	src/core/transition-attr.js \
 	src/core/transition-style.js \
 	src/core/transition-text.js \
