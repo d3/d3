@@ -93,56 +93,108 @@ d3.interpolateString = function(a, b) {
 };
 
 d3.interpolateTransform = function(a, b) {
-  var s = [], // string constants and placeholders
-      q = [], // number interpolators
-      n,
-      A = d3.transform(a),
-      B = d3.transform(b),
-      ta = A.translate,
-      tb = B.translate,
-      ra = A.rotate,
-      rb = B.rotate,
-      wa = A.skew,
-      wb = B.skew,
-      ka = A.scale,
-      kb = B.scale;
+  var ga = document.createElementNS(d3.ns.prefix.svg, "g"),
+      gb = document.createElementNS(d3.ns.prefix.svg, "g");
 
-  if (ta[0] != tb[0] || ta[1] != tb[1]) {
-    s.push("translate(", null, ",", null, ")");
-    q.push({i: 1, x: d3.interpolateNumber(ta[0], tb[0])}, {i: 3, x: d3.interpolateNumber(ta[1], tb[1])});
-  } else if (tb[0] || tb[1]) {
-    s.push("translate(" + tb + ")");
-  } else {
-    s.push("");
-  }
+  return (d3.interpolateTransform = function(a, b) {
+    ga.setAttribute("transform", a);
+    gb.setAttribute("transform", b);
+    a = ga.transform.baseVal;
+    b = gb.transform.baseVal;
 
-  if (ra != rb) {
-    if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360; // shortest path
-    q.push({i: s.push(s.pop() + "rotate(", null, ")") - 2, x: d3.interpolateNumber(ra, rb)});
-  } else if (rb) {
-    s.push(s.pop() + "rotate(" + rb + ")");
-  }
+    if (d3_interpolateTransformSameType(a, b)) {
+      return d3.interpolateString(d3_interpolateTransformListString(a),
+          d3_interpolateTransformListString(b));
+    }
 
-  if (wa != wb) {
-    q.push({i: s.push(s.pop() + "skewX(", null, ")") - 2, x: d3.interpolateNumber(wa, wb)});
-  } else if (wb) {
-    s.push(s.pop() + "skewX(" + wb + ")");
-  }
+    a = a.consolidate();
+    b = b.consolidate();
+    var s = [], // string constants and placeholders
+        q = [], // number interpolators
+        n,
+        A = new d3_transform(a ? a.matrix : d3_transformIdentity),
+        B = new d3_transform(b ? b.matrix : d3_transformIdentity),
+        ta = A.translate,
+        tb = B.translate,
+        ra = A.rotate,
+        rb = B.rotate,
+        wa = A.skew,
+        wb = B.skew,
+        ka = A.scale,
+        kb = B.scale;
 
-  if (ka[0] != kb[0] || ka[1] != kb[1]) {
-    n = s.push(s.pop() + "scale(", null, ",", null, ")");
-    q.push({i: n - 4, x: d3.interpolateNumber(ka[0], kb[0])}, {i: n - 2, x: d3.interpolateNumber(ka[1], kb[1])});
-  } else if (kb[0] != 1 || kb[1] != 1) {
-    s.push(s.pop() + "scale(" + kb + ")");
-  }
+    if (ta[0] != tb[0] || ta[1] != tb[1]) {
+      s.push("translate(", null, ",", null, ")");
+      q.push({i: 1, x: d3.interpolateNumber(ta[0], tb[0])}, {i: 3, x: d3.interpolateNumber(ta[1], tb[1])});
+    } else if (tb[0] || tb[1]) {
+      s.push("translate(" + tb + ")");
+    } else {
+      s.push("");
+    }
 
-  n = q.length;
-  return function(t) {
-    var i = -1, o;
-    while (++i < n) s[(o = q[i]).i] = o.x(t);
-    return s.join("");
-  };
+    if (ra != rb) {
+      if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360; // shortest path
+      q.push({i: s.push(s.pop() + "rotate(", null, ")") - 2, x: d3.interpolateNumber(ra, rb)});
+    } else if (rb) {
+      s.push(s.pop() + "rotate(" + rb + ")");
+    }
+
+    if (wa != wb) {
+      q.push({i: s.push(s.pop() + "skewX(", null, ")") - 2, x: d3.interpolateNumber(wa, wb)});
+    } else if (wb) {
+      s.push(s.pop() + "skewX(" + wb + ")");
+    }
+
+    if (ka[0] != kb[0] || ka[1] != kb[1]) {
+      n = s.push(s.pop() + "scale(", null, ",", null, ")");
+      q.push({i: n - 4, x: d3.interpolateNumber(ka[0], kb[0])}, {i: n - 2, x: d3.interpolateNumber(ka[1], kb[1])});
+    } else if (kb[0] != 1 || kb[1] != 1) {
+      s.push(s.pop() + "scale(" + kb + ")");
+    }
+
+    n = q.length;
+    return function(t) {
+      var i = -1, o;
+      while (++i < n) s[(o = q[i]).i] = o.x(t);
+      return s.join("");
+    };
+  })(a, b);
 };
+
+function d3_interpolateTransformListString(value) {
+  var result = [];
+  for (var i = 0, n = value.numberOfItems; i < n; i++) {
+    result.push(d3_interpolateTransformString(value.getItem(i)));
+  }
+  return result.join("");
+}
+
+function d3_interpolateTransformString(t) {
+  var m = t.matrix;
+  switch (t.type) {
+    case SVGTransform.SVG_TRANSFORM_ROTATE: return "rotate(" + t.angle + ")";
+    case SVGTransform.SVG_TRANSFORM_SCALE: return "scale(" + m.a + " " + m.d + ")";
+    case SVGTransform.SVG_TRANSFORM_SKEWX: return "skewX(" + t.angle + ")";
+    case SVGTransform.SVG_TRANSFORM_SKEWY: return "skewY(" + t.angle + ")";
+    case SVGTransform.SVG_TRANSFORM_TRANSLATE:
+      return "translate(" + m.e + "," + m.f + ")";
+    case SVGTransform.SVG_TRANSFORM_MATRIX:
+      return "matrix(" + m.a + " " + m.b + " " + m.c + " " +
+                         m.d + " " + m.e + " " + m.f + ")";
+  }
+  return "";
+}
+
+function d3_interpolateTransformSameType(a, b) {
+  var n = a.numberOfItems;
+  if (n !== b.numberOfItems) return false;
+  for (var i = 0, type; i < n; i++) {
+    if ((type = a.getItem(i).type) !== b.getItem(i).type ||
+        type === SVGTransform.SVG_TRANSFORM_UNKNOWN ||
+        type === SVGTransform.SVG_TRANSFORM_MATRIX) return false;
+  }
+  return true;
+}
 
 d3.interpolateRgb = function(a, b) {
   a = d3.rgb(a);
@@ -213,7 +265,7 @@ d3.interpolateObject = function(a, b) {
     for (k in i) c[k] = i[k](t);
     return c;
   };
-}
+};
 
 var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
 
