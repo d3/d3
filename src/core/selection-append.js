@@ -2,7 +2,7 @@ d3_selectionPrototype.append = function(element) {
   var node, func, name
 
   switch (true) {
-    case element instanceof Function: 
+    case element instanceof Function:
       func = element;
       break;
 
@@ -12,6 +12,7 @@ d3_selectionPrototype.append = function(element) {
 
     default:
       name = d3.ns.qualify(element);
+      break;
   }
 
   function append() {
@@ -27,7 +28,7 @@ d3_selectionPrototype.append = function(element) {
   }
 
   function appendFunc() {
-    var result = func.apply(this, arguments)
+    var result = func.apply(this, arguments);
     if (result instanceof Node) return this.appendChild(result)
     name = d3.ns.qualify(result);
     if (name.local) return appendNS.apply(this);
@@ -35,9 +36,9 @@ d3_selectionPrototype.append = function(element) {
   }
 
   return this.select(
-      node        ? appendNode 
-    : func        ? appendFunc 
-    : name.local  ? appendNS 
+      node        ? appendNode
+    : func        ? appendFunc
+    : name.local  ? appendNS
     : append
   );
 };
