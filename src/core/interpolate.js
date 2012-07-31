@@ -178,25 +178,19 @@ var d3_interpolateTransformSimilar = function(a, b) {
     while (++i < n) {
       ta = a.getItem(i);
       tb = b.getItem(i);
-      if ((type = ta.type) !== tb.type || type <= 1) return;
+      if ((type = ta.type) !== tb.type || type <= 1) return; // ignore unknown, matrix
       switch (type) {
-        case 2: {
+        case 2: { // translate
           ra = ta.matrix.e + "," + ta.matrix.f;
           rb = tb.matrix.e + "," + tb.matrix.f;
           break;
         }
-        case 3: {
+        case 3: { // scale
           ra = ta.matrix.a + "," + ta.matrix.d;
           rb = tb.matrix.a + "," + tb.matrix.d;
           break;
         }
-        case 4: {
-          ra = ta.angle % 360;
-          rb = tb.angle % 360;
-          if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360; // shortest path
-          break;
-        }
-        default: {
+        default: { // rotate, skewX, skewY
           ra = ta.angle;
           rb = tb.angle;
           break;

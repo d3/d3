@@ -891,13 +891,6 @@
             rb = tb.matrix.a + "," + tb.matrix.d;
             break;
           }
-         case 4:
-          {
-            ra = ta.angle % 360;
-            rb = tb.angle % 360;
-            if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360;
-            break;
-          }
          default:
           {
             ra = ta.angle;
