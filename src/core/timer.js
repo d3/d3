@@ -11,7 +11,7 @@ d3.timer = function(callback, delay, then) {
   if (arguments.length < 3) {
     if (arguments.length < 2) delay = 0;
     else if (!isFinite(delay)) return;
-    then = Date.now();
+    then = d3_timer_now();
   }
 
   // See if the callback's already in the queue.
@@ -44,7 +44,7 @@ d3.timer = function(callback, delay, then) {
 
 function d3_timer_step() {
   var elapsed,
-      now = Date.now(),
+      now = d3_timer_now(),
       t1 = d3_timer_queue;
 
   while (t1) {
@@ -68,7 +68,7 @@ function d3_timer_step() {
 
 d3.timer.flush = function() {
   var elapsed,
-      now = Date.now(),
+      now = d3_timer_now(),
       t1 = d3_timer_queue;
 
   while (t1) {
@@ -95,6 +95,12 @@ function d3_timer_flush() {
   }
   return then;
 }
+
+var d3_timer_now = (function(performance) {
+  return performance && performance.webkitNow
+      ? function() { return performance.webkitNow(); }
+      : function() { return Date.now(); };
+})(window.performance);
 
 var d3_timer_frame = window.requestAnimationFrame
     || window.webkitRequestAnimationFrame
