@@ -172,52 +172,59 @@ var d3_interpolateTransformSimilar = function(a, b) {
         m = b.numberOfItems,
         ta,
         tb,
-        type;
+        type,
+        swap = false;
 
     if (m !== n) {
-      if (!m) b = d3_interpolateTransformListIdentity(a);
-      else if (!n) a = d3_interpolateTransformListIdentity(b), n = m;
-      else return;
+      if (!m) tb = d3_interpolateTransformIdentity;
+      else if (!n) {
+        tb = d3_interpolateTransformIdentity;
+        n = m, m = 0;
+        swap = a, a = b, b = swap;
+      } else return;
     } else if (!m) return;
 
     while (++i < n) {
       ta = a.getItem(i);
-      tb = b.getItem(i);
+      type = ta.type;
+      if (m) tb = b.getItem(i);
+      else tb.type = type;
       // SVGTransform.SVG_TRANSFORM_UNKNOWN
-      // TODO SVGTransform.SVG_TRANSFORM_MATRIX
-      if ((type = ta.type) !== tb.type || type <= 1) return;
+      if (type !== tb.type || type <= 1) return;
       switch (type) {
-        case 2: { // SVGTransform.SVG_TRANSFORM_TRANSLATE
+        // TODO SVGTransform.SVG_TRANSFORM_MATRIX
+        case 2: {
+          // SVGTransform.SVG_TRANSFORM_TRANSLATE
           ra = ta.matrix.e + "," + ta.matrix.f;
           rb = tb.matrix.e + "," + tb.matrix.f;
           break;
         }
-        case 3: { // SVGTransform.SVG_TRANSFORM_SCALE
+        case 3: {
+          // SVGTransform.SVG_TRANSFORM_SCALE
           ra = ta.matrix.a + "," + ta.matrix.d;
           rb = tb.matrix.a + "," + tb.matrix.d;
           break;
         }
-        default: { // SVGTransform.SVG_TRANSFORM_ROTATE
-                   // SVGTransform.SVG_TRANSFORM_SKEWX
-                   // SVGTransform.SVG_TRANSFORM_SKEWY
+        default: {
+          // SVGTransform.SVG_TRANSFORM_ROTATE
+          // SVGTransform.SVG_TRANSFORM_SKEWX
+          // SVGTransform.SVG_TRANSFORM_SKEWY
           ra = ta.angle;
           rb = tb.angle;
-          break;
         }
       }
       sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
       sb.push(type, "(", rb, ")");
     }
-
+    if (swap) swap = sa, sa = sb, sb = swap;
     return d3.interpolateString(sa.join(""), sb.join(""));
   })(a, b);
 };
 
-function d3_interpolateTransformListIdentity(d) {
-  return {getItem: function(i) {
-    return {type: d.getItem(i).type, matrix: d3_transformIdentity, angle: 0};
-  }};
-}
+var d3_interpolateTransformIdentity = {
+  type: 0, angle: 0,
+  matrix: d3_transformIdentity
+};
 
 d3.interpolateRgb = function(a, b) {
   a = d3.rgb(a);

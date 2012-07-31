@@ -75,6 +75,7 @@ d3.core.js: \
 	src/core/formatPrefix.js \
 	src/core/ease.js \
 	src/core/event.js \
+	src/core/transform.js \
 	src/core/interpolate.js \
 	src/core/uninterpolate.js \
 	src/core/rgb.js \
@@ -118,7 +119,6 @@ d3.core.js: \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
 	src/core/timer.js \
-	src/core/transform.js \
 	src/core/mouse.js \
 	src/core/touches.js \
 	src/core/noop.js
