@@ -1768,20 +1768,19 @@ d3_selectionPrototype.html = function(value) {
       ? function() { this.innerHTML = ""; }
       : function() { this.innerHTML = value; });
 };
-// TODO append(node)?
-// TODO append(function)?
 d3_selectionPrototype.append = function(name) {
-  name = d3.ns.qualify(name);
-
-  function append() {
-    return this.appendChild(document.createElementNS(this.namespaceURI, name));
+  var nodeFunc;
+  if (typeof name == "function") {
+    nodeFunc = function() {
+      return d3_selection_nodeBuildingFunc(name.apply(this, arguments)).apply(this, arguments);
+    }
+  } else {
+    nodeFunc = d3_selection_nodeBuildingFunc(name);
   }
 
-  function appendNS() {
-    return this.appendChild(document.createElementNS(name.space, name.local));
-  }
-
-  return this.select(name.local ? appendNS : append);
+  return this.select(function() {
+    return this.appendChild(nodeFunc.apply(this, arguments));
+  })
 };
 d3_selectionPrototype.insert = function(name, before) {
   var nodeFunc, beforeFunc;
