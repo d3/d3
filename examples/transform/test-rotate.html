@@ -118,12 +118,8 @@ gb.append("circle")
 function animateExpected(d) {
   d3.select(this).transition()
       .duration(2500)
-      .attrTween("transform", rotateTween)
+      .attrTween("transform", function(d) { return d3.interpolateString("rotate(" + d.start + ")", "rotate(" + d.end + ")"); })
       .each("end", animateExpected);
-
-  function rotateTween(d) {
-    return d3.interpolateString("rotate(" + d.start + ")", "rotate(" + d.end + ")");
-  }
 }
 
 function animateActual(d) {

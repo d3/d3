@@ -156,6 +156,11 @@ var d3_interpolateTransformTypes = [
   "skewY"
 ];
 
+// If both the ‘from’ and ‘to’ transforms have the same number of transform
+// functions and corresponding functions in each transform list are of the same
+// type, each transform function is animated with its corresponding destination
+// function in isolation using the rules described above. The individual values
+// are then applied as a list to produce resulting transform value.
 var d3_interpolateTransformSimilar = function(a, b) {
   var ga = document.createElementNS(d3.ns.prefix.svg, "g"),
       gb = document.createElementNS(d3.ns.prefix.svg, "g");
@@ -169,17 +174,49 @@ var d3_interpolateTransformSimilar = function(a, b) {
         sb = [],
         i = -1,
         n = a.numberOfItems,
+        m = b.numberOfItems,
         ta,
         tb,
         type;
 
-    if (n !== b.numberOfItems) return;
+    // If one of the ‘from’ or ‘to’ transforms is "none", the ‘none’ is replaced
+    // by an equivalent identity function list for the corresponding transform
+    // function list. Otherwise, if the transform function lists do not have the
+    // same number of items, the transforms are each converted into the
+    // equivalent matrix value and animation proceeds using the rule for a
+    // single function above.
+    if (m !== n) {
+      if (!m) b = d3_interpolateTransformIdentity(a);
+      else if (!n) a = d3_interpolateTransformIdentity(b), n = m;
+      else return;
+    }
+
+    // If both the ‘from’ and ‘to’ transforms are "none", there is no
+    // interpolation necessary.
+    else if (!m) return;
 
     while (++i < n) {
       ta = a.getItem(i);
       tb = b.getItem(i);
-      if ((type = ta.type) !== tb.type || type <= 1) return; // ignore unknown, matrix
+      type = ta.type;
+
+      // If the transform functions are not the same type, or the type is
+      // unknown, fallback to the decomposed transform transition.
+      if (type !== tb.type || !type) return; // unknown
       switch (type) {
+
+        // For matrix, the matrix is decomposed using the method described by
+        // unmatrix into separate translation, scale, rotation and skew
+        // matrices, then each decomposed matrix is interpolated numerically,
+        // and finally combined in order to produce a resulting 3x2 matrix.
+        case 1: { // matrix
+          sa.push(new d3_transform(ta.matrix));
+          sb.push(new d3_transform(tb.matrix));
+          continue;
+        }
+
+        // For translate, scale, rotate and skew functions the individual
+        // components of the function are interpolated numerically.
         case 2: { // translate
           ra = ta.matrix.e + "," + ta.matrix.f;
           rb = tb.matrix.e + "," + tb.matrix.f;
@@ -190,10 +227,9 @@ var d3_interpolateTransformSimilar = function(a, b) {
           rb = tb.matrix.a + "," + tb.matrix.d;
           break;
         }
-        default: { // rotate, skewX, skewY
+        default: { // rotate, skew
           ra = ta.angle;
           rb = tb.angle;
-          break;
         }
       }
       sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
@@ -203,6 +239,18 @@ var d3_interpolateTransformSimilar = function(a, b) {
     return d3.interpolateString(sa.join(""), sb.join(""));
   })(a, b);
 };
+
+function d3_interpolateTransformIdentity(a) {
+  return {
+    getItem: function(i) {
+      return {
+        type: a.getItem(i).type,
+        angle: 0,
+        matrix: d3_transformIdentity
+      };
+    }
+  };
+}
 
 d3.interpolateRgb = function(a, b) {
   a = d3.rgb(a);
