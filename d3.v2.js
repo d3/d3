@@ -234,7 +234,7 @@
         if (arguments.length < 3) lo = 0;
         if (arguments.length < 4) hi = a.length;
         while (lo < hi) {
-          var mid = lo + hi >> 1;
+          var mid = lo + hi >>> 1;
           if (f.call(a, a[mid], mid) < x) lo = mid + 1; else hi = mid;
         }
         return lo;
@@ -243,7 +243,7 @@
         if (arguments.length < 3) lo = 0;
         if (arguments.length < 4) hi = a.length;
         while (lo < hi) {
-          var mid = lo + hi >> 1;
+          var mid = lo + hi >>> 1;
           if (x < f.call(a, a[mid], mid)) hi = mid; else lo = mid + 1;
         }
         return lo;
