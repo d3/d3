@@ -17,7 +17,7 @@ d3.interpolateRound = function(a, b) {
 d3.interpolateString = function(a, b) {
   var m, // current match
       i, // current index
-      j, // current index (for coallescing)
+      j, // current index (for coalescing)
       s0 = 0, // start index of current string prefix
       s1 = 0, // end index of current string prefix
       s = [], // string constants and placeholders
@@ -40,13 +40,13 @@ d3.interpolateString = function(a, b) {
   // Find all numbers in a.
   for (i = 0, n = q.length; (m = d3_interpolate_number.exec(a)) && i < n; ++i) {
     o = q[i];
-    if (o.x == m[0]) { // The numbers match, so coallesce.
+    if (o.x == m[0]) { // The numbers match, so coalesce.
       if (o.i) {
         if (s[o.i + 1] == null) { // This match is followed by another number.
           s[o.i - 1] += o.x;
           s.splice(o.i, 1);
           for (j = i + 1; j < n; ++j) q[j].i--;
-        } else { // This match is followed by a string, so coallesce twice.
+        } else { // This match is followed by a string, so coalesce twice.
           s[o.i - 1] += o.x + s[o.i + 1];
           s.splice(o.i, 2);
           for (j = i + 1; j < n; ++j) q[j].i -= 2;
@@ -54,7 +54,7 @@ d3.interpolateString = function(a, b) {
       } else {
           if (s[o.i + 1] == null) { // This match is followed by another number.
           s[o.i] = o.x;
-        } else { // This match is followed by a string, so coallesce twice.
+        } else { // This match is followed by a string, so coalesce twice.
           s[o.i] = o.x + s[o.i + 1];
           s.splice(o.i + 1, 1);
           for (j = i + 1; j < n; ++j) q[j].i--;
@@ -73,7 +73,7 @@ d3.interpolateString = function(a, b) {
     o = q.pop();
     if (s[o.i + 1] == null) { // This match is followed by another number.
       s[o.i] = o.x;
-    } else { // This match is followed by a string, so coallesce twice.
+    } else { // This match is followed by a string, so coalesce twice.
       s[o.i] = o.x + s[o.i + 1];
       s.splice(o.i + 1, 1);
     }
