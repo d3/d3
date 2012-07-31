@@ -1,5 +1,7 @@
 d3.time.month = d3_time_interval(function(date) {
-  return new d3_time(date.getFullYear(), date.getMonth(), 1);
+  date = d3.time.day(date);
+  date.setDate(1);
+  return date;
 }, function(date, offset) {
   date.setMonth(date.getMonth() + offset);
 }, function(date) {

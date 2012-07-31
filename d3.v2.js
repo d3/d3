@@ -8973,11 +8973,11 @@ function d3_time_parseFullYear(date, string, i) {
 function d3_time_parseYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
-  return n ? (date.y = d3_time_century() + +n[0], i += n[0].length) : -1;
+  return n ? (date.y = d3_time_expandYear(+n[0]), i += n[0].length) : -1;
 }
 
-function d3_time_century() {
-  return ~~(new Date().getFullYear() / 1000) * 1000;
+function d3_time_expandYear(d) {
+  return d + (d > 68 ? 1900 : 2000);
 }
 
 function d3_time_parseMonthNumber(date, string, i) {
@@ -9181,7 +9181,9 @@ d3.time.hour = d3_time_interval(function(date) {
 d3.time.hours = d3.time.hour.range;
 d3.time.hours.utc = d3.time.hour.utc.range;
 d3.time.day = d3_time_interval(function(date) {
-  return new d3_time(date.getFullYear(), date.getMonth(), date.getDate());
+  var day = new d3_time(0, date.getMonth(), date.getDate());
+  day.setFullYear(date.getFullYear());
+  return day;
 }, function(date, offset) {
   date.setDate(date.getDate() + offset);
 }, function(date) {
@@ -9223,7 +9225,9 @@ d3.time.weeks = d3.time.sunday.range;
 d3.time.weeks.utc = d3.time.sunday.utc.range;
 d3.time.weekOfYear = d3.time.sundayOfYear;
 d3.time.month = d3_time_interval(function(date) {
-  return new d3_time(date.getFullYear(), date.getMonth(), 1);
+  date = d3.time.day(date);
+  date.setDate(1);
+  return date;
 }, function(date, offset) {
   date.setMonth(date.getMonth() + offset);
 }, function(date) {
@@ -9233,7 +9237,9 @@ d3.time.month = d3_time_interval(function(date) {
 d3.time.months = d3.time.month.range;
 d3.time.months.utc = d3.time.month.utc.range;
 d3.time.year = d3_time_interval(function(date) {
-  return new d3_time(date.getFullYear(), 0, 1);
+  date = d3.time.day(date);
+  date.setMonth(0, 1);
+  return date;
 }, function(date, offset) {
   date.setFullYear(date.getFullYear() + offset);
 }, function(date) {

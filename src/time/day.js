@@ -1,5 +1,7 @@
 d3.time.day = d3_time_interval(function(date) {
-  return new d3_time(date.getFullYear(), date.getMonth(), date.getDate());
+  var day = new d3_time(0, date.getMonth(), date.getDate());
+  day.setFullYear(date.getFullYear());
+  return day;
 }, function(date, offset) {
   date.setDate(date.getDate() + offset);
 }, function(date) {
