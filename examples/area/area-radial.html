@@ -33,7 +33,7 @@ var angle = d3.scale.linear()
     .range([0, 2 * Math.PI]);
 
 var line = d3.svg.line.radial()
-    .interpolate("basis-closed")
+    .interpolate("linear-closed")
     .radius(radius)
     .angle(function(d, i) { return angle(i); });
 

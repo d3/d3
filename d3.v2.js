@@ -2608,6 +2608,7 @@
   var d3_svg_lineInterpolatorDefault = "linear";
   var d3_svg_lineInterpolators = d3.map({
     linear: d3_svg_lineLinear,
+    "linear-closed": d3_svg_lineLinearClosed,
     "step-before": d3_svg_lineStepBefore,
     "step-after": d3_svg_lineStepAfter,
     basis: d3_svg_lineBasis,
@@ -2621,6 +2622,9 @@
   });
   function d3_svg_lineLinear(points) {
     return points.join("L");
+  }
+  function d3_svg_lineLinearClosed(points) {
+    return d3_svg_lineLinear(points) + "Z";
   }
   function d3_svg_lineStepBefore(points) {
     var i = 0, n = points.length, p = points[0], path = [ p[0], ",", p[1] ];
