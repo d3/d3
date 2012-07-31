@@ -1753,7 +1753,7 @@ d3_selectionPrototype.append = function(element) {
   var node, func, name
 
   switch (true) {
-    case element instanceof Function: 
+    case element instanceof Function:
       func = element;
       break;
 
@@ -1763,6 +1763,7 @@ d3_selectionPrototype.append = function(element) {
 
     default:
       name = d3.ns.qualify(element);
+      break;
   }
 
   function append() {
@@ -1778,7 +1779,7 @@ d3_selectionPrototype.append = function(element) {
   }
 
   function appendFunc() {
-    var result = func.apply(this, arguments)
+    var result = func.apply(this, arguments);
     if (result instanceof Node) return this.appendChild(result)
     name = d3.ns.qualify(result);
     if (name.local) return appendNS.apply(this);
@@ -1786,17 +1787,30 @@ d3_selectionPrototype.append = function(element) {
   }
 
   return this.select(
-      node        ? appendNode 
-    : func        ? appendFunc 
-    : name.local  ? appendNS 
+      node        ? appendNode
+    : func        ? appendFunc
+    : name.local  ? appendNS
     : append
   );
 };
 // TODO insert(node, function)?
-// TODO insert(function, string)?
 // TODO insert(function, function)?
-d3_selectionPrototype.insert = function(name, before) {
-  name = d3.ns.qualify(name);
+d3_selectionPrototype.insert = function(element, before) {
+  var node, func, name
+
+  switch (true) {
+    case element instanceof Function:
+      func = element;
+      break;
+
+    case element instanceof Node:
+      node = element;
+      break;
+
+    default:
+      name = d3.ns.qualify(element);
+      break;
+  }
 
   function insert() {
     return this.insertBefore(
@@ -1810,7 +1824,29 @@ d3_selectionPrototype.insert = function(name, before) {
         d3_select(before, this));
   }
 
-  return this.select(name.local ? insertNS : insert);
+  function insertNode() {
+    return this.insertBefore(
+        node,
+        d3_select(before, this));
+  }
+
+  function insertFunc() {
+    var result = func.apply(this, arguments);
+    if (result instanceof Node) {
+      return this.insertBefore(result,
+          d3_select(before, this));
+    }
+    name = d3.ns.qualify(result);
+    if (name.local) return insertNS.apply(this);
+    return insert.apply(this);
+  }
+
+  return this.select(
+      node        ? insertNode
+    : func        ? insertFunc
+    : name.local  ? insertNS
+    : append
+  );
 };
 // TODO remove(selector)?
 // TODO remove(node)?
