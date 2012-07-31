@@ -67,9 +67,39 @@ suite.addBatch({
     },
     "project(invert(point)) equals point": function(bonne) {
       for (var i = -1; i < 20; ++i) {
-        var point = [Math.random() * 700 + 100, Math.random() * 400 + 50];
+        var point = [Math.random() * 200 + 380, Math.random() * 200 + 150];
         assert.inDelta(point, bonne(bonne.invert(point)), .5);
       }
+    }
+  },
+
+  "Bonne at 40° parallel with non-zero origin": {
+    topic: function() {
+      return d3.geo.bonne().parallel(40).origin([13, 17]);
+    },
+    "Arctic": function(bonne) {
+      var lonlat = [0, 85],
+          coords = bonne(lonlat);
+      assert.inDelta(coords, [380.528803, 49.218092], 1e-6);
+      assert.inDelta(bonne.invert(coords), lonlat, 1e-6);
+    },
+    "Antarctic": function(bonne) {
+      var lonlat = [0, -85],
+          coords = bonne(lonlat);
+      assert.inDelta(coords, [476.077063, 627.328061], 1e-6);
+      assert.inDelta(bonne.invert(coords), lonlat, 1e-6);
+    },
+    "Hawaii": function(bonne) {
+      var lonlat = [-180, 0],
+          coords = bonne(lonlat);
+      assert.inDelta(coords, [897.200976, 137.442637], 1e-6);
+      assert.inDelta(bonne.invert(coords), [180, 0], 1e-6);
+    },
+    "Phillipines": function(bonne) {
+      var lonlat = [180, 0],
+          coords = bonne(lonlat);
+      assert.inDelta(coords, [897.200976, 137.442637], 1e-6);
+      assert.inDelta(bonne.invert(coords), lonlat, 1e-6);
     }
   },
 
@@ -85,13 +115,13 @@ suite.addBatch({
     },
     "project(invert(point)) equals point": function(bonne) {
       for (var i = -1; i < 20; ++i) {
-        var point = [Math.random() * 700 + 100, Math.random() * 400 + 50];
+        var point = [Math.random() * 200 + 380, Math.random() * 100 + 200];
         assert.inDelta(point, bonne(bonne.invert(point)), .5);
       }
     }
   },
 
-  "Sinsuoidal": {
+  "Sinusoidal": {
     topic: function() {
       return d3.geo.bonne().parallel(0);
     },
@@ -103,7 +133,7 @@ suite.addBatch({
     },
     "project(invert(point)) equals point": function(bonne) {
       for (var i = -1; i < 20; ++i) {
-        var point = [Math.random() * 700 + 100, Math.random() * 400 + 50];
+        var point = [Math.random() * 200 + 380, Math.random() * 200 + 150];
         assert.inDelta(point, bonne(bonne.invert(point)), .5);
       }
     }

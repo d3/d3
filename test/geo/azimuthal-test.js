@@ -6,6 +6,12 @@ var vows = require("vows"),
 var suite = vows.describe("d3.geo.azimuthal");
 
 suite.addBatch({
+  "azimuthal defaults": {
+    topic: d3.geo.azimuthal,
+    "scale is 200": function(azimuthal) {
+      assert.equal(azimuthal.scale(), 200);
+    }
+  },
   "azimuthal.stereographic": {
     topic: function() {
       return d3.geo.azimuthal().mode("stereographic").translate([0, 0]).scale(100);

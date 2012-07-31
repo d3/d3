@@ -6922,12 +6922,116 @@ function d3_csv_formatValue(text) {
 d3.geo = {};
 
 var d3_geo_radians = Math.PI / 180;
+d3.geo.rotate = function(z, y, x) {
+  if (!(x = +x || 0) && !(y = +y || 0) && !(z = +z || 0)) {
+    return d3_geo_rotateIdentity;
+  }
+
+  var m = d3_geo_rotateMatrix(y, x),
+      zAngle = z;
+
+  function rotate(coordinates) {
+    var lon = (coordinates[0] + zAngle) * d3_geo_radians,
+        lat = coordinates[1] * d3_geo_radians,
+        s0 = Math.sin(lon),
+        c0 = Math.cos(lon),
+        c1 = Math.cos(lat),
+        s1 = Math.sin(lat),
+        x = c0 * c1,
+        y = s0 * c1,
+        z = s1,
+        mx = m[0],
+        my = m[1],
+        mz = m[2];
+    mx = x * mx[0] + y * mx[1] + z * mx[2];
+    my = x * my[0] + y * my[1] + z * my[2];
+    mz = x * mz[0] + y * mz[1] + z * mz[2];
+    return [
+      Math.atan2(my, mx) / d3_geo_radians,
+      Math.asin(mz) / d3_geo_radians
+    ];
+  }
+
+  rotate.invert = function(coordinates) {
+    var lon = coordinates[0] * d3_geo_radians,
+        lat = coordinates[1] * d3_geo_radians,
+        s0 = Math.sin(lon),
+        c0 = Math.cos(lon),
+        c1 = Math.cos(lat),
+        s1 = Math.sin(lat),
+        x = c0 * c1,
+        y = s0 * c1,
+        z = s1,
+        mx = m[0],
+        my = m[1],
+        mz = m[2],
+        rx = x * mx[0] + y * my[0] + z * mz[0],
+        ry = x * mx[1] + y * my[1] + z * mz[1],
+        rz = x * mx[2] + y * my[2] + z * mz[2];
+    return [
+      Math.atan2(ry, rx) / d3_geo_radians - zAngle,
+      Math.asin(rz) / d3_geo_radians
+    ];
+  };
+
+  return rotate;
+};
+
+function d3_geo_rotateMatrix(y, x) {
+  var cy = Math.cos(y *= d3_geo_radians),
+      sy = Math.sin(y),
+      cx = Math.cos(x *= d3_geo_radians),
+      sx = Math.sin(x);
+  return [
+    [ cy,       0,      -sy],
+    [-sx * sy, cx, -sx * cy],
+    [ cx * sy, sx,  cx * cy]
+  ];
+}
+
+function d3_geo_rotateIdentity(coordinates) { return coordinates; }
+d3_geo_rotateIdentity.invert = d3_geo_rotateIdentity;
+d3.geo.zoom = function() {
+  var scale = 500,
+      translate = [480, 250];
+
+  function zoom(coordinates) {
+    return [
+      scale * coordinates[0] + translate[0],
+      scale * coordinates[1] + translate[1]
+    ];
+  }
+
+  zoom.invert = function(coordinates) {
+    return [
+      (coordinates[0] - translate[0]) / scale,
+      (coordinates[1] - translate[1]) / scale
+    ];
+  };
+
+  zoom.scale = function(x) {
+    if (!arguments.length) return scale;
+    scale = +x;
+    return zoom;
+  };
+
+  zoom.translate = function(x) {
+    if (!arguments.length) return translate;
+    translate = [+x[0], +x[1]];
+    return zoom;
+  };
+
+  return zoom;
+};
+
+function d3_geo_zoomRebind(projection, zoom) {
+  return d3.rebind(projection, zoom, "scale", "translate");
+}
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
   var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
+      zoom = d3.geo.zoom().scale(200),
       origin,
-      scale = 200,
-      translate = [480, 250],
       x0,
       y0,
       cy0,
@@ -6946,18 +7050,17 @@ d3.geo.azimuthal = function() {
           : mode === "gnomonic" ? 1 / cc
           : mode === "equidistant" ? (c = Math.acos(cc), c ? c / Math.sin(c) : 0)
           : mode === "equalarea" ? Math.sqrt(2 / (1 + cc))
-          : 1,
-        x = k * cy1 * sx1,
-        y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
+          : 1;
+    return zoom([
+      k * cy1 * sx1,
+      k * (sy0 * cy1 * cx1 - cy0 * sy1)
+    ]);
   }
 
   azimuthal.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale,
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        y = coordinates[1],
         p = Math.sqrt(x * x + y * y),
         c = mode === "stereographic" ? 2 * Math.atan(p)
           : mode === "gnomonic" ? Math.atan(p)
@@ -6988,52 +7091,138 @@ d3.geo.azimuthal = function() {
     return azimuthal;
   };
 
-  azimuthal.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return azimuthal;
-  };
-
-  azimuthal.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return azimuthal;
-  };
+  d3_geo_zoomRebind(azimuthal, zoom);
 
   return azimuthal.origin([0, 0]);
 };
-// Derived from Tom Carden's Albers implementation for Protovis.
+d3.geo.bonne = function() {
+  var rotate = d3.geo.rotate(),
+      zoom = d3.geo.zoom(),
+      origin, // origin in degrees
+      y1, // parallel latitude in radians
+      c1; // cot(y1)
+
+  function bonne(coordinates) {
+    coordinates = rotate(coordinates);
+    var x = coordinates[0] * d3_geo_radians,
+        y = coordinates[1] * d3_geo_radians;
+    if (y1) {
+      var p = c1 + y1 - y,
+          E = x * Math.cos(y) / p;
+      x = p * Math.sin(E);
+      y = p * Math.cos(E) - c1;
+    } else {
+      x *= Math.cos(y);
+      y *= -1;
+    }
+    return zoom([x, y]);
+  }
+
+  bonne.invert = function(coordinates) {
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        y = coordinates[1];
+    if (y1) {
+      var c = c1 + y,
+          p = Math.sqrt(x * x + c * c);
+      y = c1 + y1 - p;
+      x = p * Math.atan2(x, c) / Math.cos(y);
+    } else {
+      y *= -1;
+      x /= Math.cos(y);
+    }
+    return rotate.invert([x / d3_geo_radians, y / d3_geo_radians]);
+  };
+
+  // 90° for Werner, 0° for Sinusoidal
+  bonne.parallel = function(x) {
+    if (!arguments.length) return y1 / d3_geo_radians;
+    y1 = x * d3_geo_radians;
+    c1 = x === 90 || x === -90 ? 0 : 1 / Math.tan(y1);
+    return bonne;
+  };
+
+  bonne.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = [+x[0], +x[1]];
+    rotate = d3.geo.rotate(-origin[0], origin[1]);
+    return bonne;
+  };
+
+  d3_geo_zoomRebind(bonne, zoom);
+
+  return bonne.origin([0, 0]).parallel(45).scale(200);
+};
+d3.geo.collignon = function() {
+  var zoom = d3.geo.zoom();
+
+  function collignon(coordinates) {
+    var y = (y = 1 - Math.sin(coordinates[1] * d3_geo_radians)) > 0
+        ? Math.sqrt(y) : 0;
+    return zoom([
+      1.12837916709551257390 * coordinates[0] * d3_geo_radians * y,
+      1.77245385090551602729 * (y - 1)
+    ]);
+  }
+
+  collignon.invert = function(coordinates) {
+    coordinates = zoom.invert(coordinates);
+    var y = -coordinates[1] / 1.77245385090551602729 - 1;
+    y = Math.abs(y = 1 - y * y) < 1 ? Math.asin(y)
+      : y < 0 ? -Math.PI / 2 : Math.PI;
+    return [
+      (x = 1 - Math.sin(y)) > 0
+        ? coordinates[0] / (1.12837916709551257390 * Math.sqrt(x) * d3_geo_radians) : 0,
+      y / d3_geo_radians
+    ];
+  };
+
+  d3_geo_zoomRebind(collignon, zoom);
+
+  return collignon;
+};
+// Albers derived from Tom Carden's implementation for Protovis.
 // http://gist.github.com/476238
 // http://mathworld.wolfram.com/AlbersEqual-AreaConicProjection.html
 
-d3.geo.albers = function() {
+d3.geo.conic = function() {
   var origin = [-98, 38],
       parallels = [29.5, 45.5],
-      scale = 1000,
-      translate = [480, 250],
       lng0, // d3_geo_radians * origin[0]
+      zoom = d3.geo.zoom().scale(1000),
       n,
       C,
-      p0;
+      p0,
+      mode = "equalarea"; // or equidistant, or conformal.
 
-  function albers(coordinates) {
-    var t = n * (d3_geo_radians * coordinates[0] - lng0),
-        p = Math.sqrt(C - 2 * n * Math.sin(d3_geo_radians * coordinates[1])) / n;
-    return [
-      scale * p * Math.sin(t) + translate[0],
-      scale * (p * Math.cos(t) - p0) + translate[1]
-    ];
+  function conic(coordinates) {
+    var t = (n || 1) * (d3_geo_radians * coordinates[0] - lng0),
+        p = mode === "equalarea" ? (n ? Math.sqrt(C - 2 * n * Math.sin(d3_geo_radians * coordinates[1])) / n : C)
+          : mode === "equidistant" ? d3_geo_radians * -coordinates[1]
+          : n ? C / Math.pow(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2), n) : C;
+    return zoom([
+      n ? p * Math.sin(t) : C * t,
+      mode === "equalarea" ? n ? (p * Math.cos(t) - p0) : -Math.sin(d3_geo_radians * coordinates[1]) / C
+      : mode === "equidistant" ? p
+      : n ? p * Math.cos(t) - p0 : -Math.log(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2))
+    ]);
   }
 
-  albers.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale,
+  conic.invert = function(coordinates) {
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        y = coordinates[1],
         p0y = p0 + y,
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);
     return [
-      (lng0 + t / n) / d3_geo_radians,
-      Math.asin((C - p * p * n * n) / (2 * n)) / d3_geo_radians
+      (lng0 + (n ? t / n : x / C)) / d3_geo_radians,
+      (mode === "equalarea" ? Math.asin(n ? (C - p * p * n * n) / (2 * n) : -y * C)
+      : mode === "equidistant" ? -y
+      : 2 * (n
+        ? Math.atan2(Math.pow(C, 1 / n), Math.pow((n < 0 ? -1 : 1) * p, 1 / n))
+        : Math.atan(Math.exp(-y))) - Math.PI / 2
+      ) / d3_geo_radians
     ];
   };
 
@@ -7041,41 +7230,58 @@ d3.geo.albers = function() {
     var phi1 = d3_geo_radians * parallels[0],
         phi2 = d3_geo_radians * parallels[1],
         lat0 = d3_geo_radians * origin[1],
-        s = Math.sin(phi1),
-        c = Math.cos(phi1);
+        c1 = Math.cos(phi1);
     lng0 = d3_geo_radians * origin[0];
-    n = .5 * (s + Math.sin(phi2));
-    C = c * c + 2 * n * s;
-    p0 = Math.sqrt(C - 2 * n * Math.sin(lat0)) / n;
-    return albers;
+    switch(mode) {
+      case "equalarea":
+        var s = Math.sin(phi1);
+        n = .5 * (s + Math.sin(phi2));
+        C = n ? c1 * c1 + 2 * n * s : c1;
+        p0 = n ? Math.sqrt(C - 2 * n * Math.sin(lat0)) / n : 0;
+        break;
+      case "equidistant":
+        n = (c1 - Math.cos(phi2)) / (phi2 - phi1);
+        C = n ? c1 / n + phi1 : c1;
+        p0 = C - lat0;
+        break;
+      case "conformal":
+        n = Math.log(Math.cos(phi1) / Math.cos(phi2))
+            / Math.log(Math.tan(Math.PI / 4 + phi2 / 2)
+              / Math.tan(Math.PI / 4 + phi1 / 2));
+        C = n ? Math.cos(phi1) * Math.pow(Math.tan(Math.PI / 4 + phi1 / 2), n) / n : 1;
+        p0 = n ? C / Math.pow(Math.tan(Math.PI / 4 + lat0 / 2), n) : 0;
+        break;
+    }
+    return conic;
   }
 
-  albers.origin = function(x) {
+  conic.mode = function(x) {
+    if (!arguments.length) return mode;
+    mode = x + "";
+    return conic;
+  };
+
+  conic.origin = function(x) {
     if (!arguments.length) return origin;
     origin = [+x[0], +x[1]];
     return reload();
   };
 
-  albers.parallels = function(x) {
+  // Cylindrical:
+  // * Equidistant: 0° for plate carrée.
+  // * Equalarea: 0° for Lambert, 30° for Behrmann, 45° for Gall–Peters.
+  // * Mercator: TODO make this set the "latitude of true scale".
+  conic.parallels = function(x) {
     if (!arguments.length) return parallels;
-    parallels = [+x[0], +x[1]];
+    parallels = typeof x === "number" ? [x, -x] : [+x[0], +x[1]];
     return reload();
   };
 
-  albers.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return albers;
-  };
-
-  albers.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return albers;
-  };
+  d3_geo_zoomRebind(conic, zoom);
 
   return reload();
 };
+d3.geo.albers = d3.geo.conic;
 
 // A composite projection for the United States, 960x500. The set of standard
 // parallels for each region comes from USGS, which is published here:
@@ -7128,147 +7334,12 @@ d3.geo.albersUsa = function() {
 
   return albersUsa.scale(lower48.scale());
 };
-d3.geo.bonne = function() {
-  var scale = 200,
-      translate = [480, 250],
-      x0, // origin longitude in radians
-      y0, // origin latitude in radians
-      y1, // parallel latitude in radians
-      c1; // cot(y1)
-
-  function bonne(coordinates) {
-    var x = coordinates[0] * d3_geo_radians - x0,
-        y = coordinates[1] * d3_geo_radians - y0;
-    if (y1) {
-      var p = c1 + y1 - y, E = x * Math.cos(y) / p;
-      x = p * Math.sin(E);
-      y = p * Math.cos(E) - c1;
-    } else {
-      x *= Math.cos(y);
-      y *= -1;
-    }
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
-  }
-
-  bonne.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
-    if (y1) {
-      var c = c1 + y, p = Math.sqrt(x * x + c * c);
-      y = c1 + y1 - p;
-      x = x0 + p * Math.atan2(x, c) / Math.cos(y);
-    } else {
-      y *= -1;
-      x /= Math.cos(y);
-    }
-    return [
-      x / d3_geo_radians,
-      y / d3_geo_radians
-    ];
-  };
-
-  // 90° for Werner, 0° for Sinusoidal
-  bonne.parallel = function(x) {
-    if (!arguments.length) return y1 / d3_geo_radians;
-    c1 = 1 / Math.tan(y1 = x * d3_geo_radians);
-    return bonne;
-  };
-
-  bonne.origin = function(x) {
-    if (!arguments.length) return [x0 / d3_geo_radians, y0 / d3_geo_radians];
-    x0 = x[0] * d3_geo_radians;
-    y0 = x[1] * d3_geo_radians;
-    return bonne;
-  };
-
-  bonne.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return bonne;
-  };
-
-  bonne.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return bonne;
-  };
-
-  return bonne.origin([0, 0]).parallel(45);
+d3.geo.cylindrical = function() {
+  return d3.geo.conic().parallels(0).origin([0, 0]);
 };
-d3.geo.equirectangular = function() {
-  var scale = 500,
-      translate = [480, 250];
-
-  function equirectangular(coordinates) {
-    var x = coordinates[0] / 360,
-        y = -coordinates[1] / 360;
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
-  }
-
-  equirectangular.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
-    return [
-      360 * x,
-      -360 * y
-    ];
-  };
-
-  equirectangular.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return equirectangular;
-  };
-
-  equirectangular.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return equirectangular;
-  };
-
-  return equirectangular;
-};
+d3.geo.equirectangular = d3.geo.cylindrical;
 d3.geo.mercator = function() {
-  var scale = 500,
-      translate = [480, 250];
-
-  function mercator(coordinates) {
-    var x = coordinates[0] / 360,
-        y = -(Math.log(Math.tan(Math.PI / 4 + coordinates[1] * d3_geo_radians / 2)) / d3_geo_radians) / 360;
-    return [
-      scale * x + translate[0],
-      scale * Math.max(-.5, Math.min(.5, y)) + translate[1]
-    ];
-  }
-
-  mercator.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale;
-    return [
-      360 * x,
-      2 * Math.atan(Math.exp(-360 * y * d3_geo_radians)) / d3_geo_radians - 90
-    ];
-  };
-
-  mercator.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return mercator;
-  };
-
-  mercator.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return mercator;
-  };
-
-  return mercator;
+  return d3.geo.conic().mode("conformal").parallels(0).origin([0, 0]);
 };
 function d3_geo_type(types, defaultValue) {
   return function(object) {

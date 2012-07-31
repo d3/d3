@@ -1,9 +1,8 @@
 // TODO clip input coordinates on opposite hemisphere
 d3.geo.azimuthal = function() {
   var mode = "orthographic", // or stereographic, gnomonic, equidistant or equalarea
+      zoom = d3.geo.zoom().scale(200),
       origin,
-      scale = 200,
-      translate = [480, 250],
       x0,
       y0,
       cy0,
@@ -22,18 +21,17 @@ d3.geo.azimuthal = function() {
           : mode === "gnomonic" ? 1 / cc
           : mode === "equidistant" ? (c = Math.acos(cc), c ? c / Math.sin(c) : 0)
           : mode === "equalarea" ? Math.sqrt(2 / (1 + cc))
-          : 1,
-        x = k * cy1 * sx1,
-        y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
-    return [
-      scale * x + translate[0],
-      scale * y + translate[1]
-    ];
+          : 1;
+    return zoom([
+      k * cy1 * sx1,
+      k * (sy0 * cy1 * cx1 - cy0 * sy1)
+    ]);
   }
 
   azimuthal.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale,
+    coordinates = zoom.invert(coordinates);
+    var x = coordinates[0],
+        y = coordinates[1],
         p = Math.sqrt(x * x + y * y),
         c = mode === "stereographic" ? 2 * Math.atan(p)
           : mode === "gnomonic" ? Math.atan(p)
@@ -64,17 +62,7 @@ d3.geo.azimuthal = function() {
     return azimuthal;
   };
 
-  azimuthal.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
-    return azimuthal;
-  };
-
-  azimuthal.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = [+x[0], +x[1]];
-    return azimuthal;
-  };
+  d3_geo_zoomRebind(azimuthal, zoom);
 
   return azimuthal.origin([0, 0]);
 };
