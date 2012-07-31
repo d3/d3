@@ -129,7 +129,7 @@ d3.behavior.zoom = function() {
 
   function touchstart() {
     var touches = d3.touches(this),
-        now = Date.now();
+        now = d3_timer_now();
 
     scale0 = scale;
     translate0 = {};

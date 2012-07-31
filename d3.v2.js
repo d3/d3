@@ -1676,7 +1676,7 @@
         } : null);
       }
     }
-    return d3_transition(subgroups, d3_transitionId || ++d3_transitionNextId, Date.now());
+    return d3_transition(subgroups, d3_transitionId || ++d3_transitionNextId, d3_timer_now());
   };
   var d3_selectionRoot = d3_selection([ [ document ] ]);
   d3_selectionRoot[0].parentNode = d3_selectRoot;
@@ -1930,7 +1930,7 @@
     var found = false, t0, t1 = d3_timer_queue;
     if (arguments.length < 3) {
       if (arguments.length < 2) delay = 0; else if (!isFinite(delay)) return;
-      then = Date.now();
+      then = d3_timer_now();
     }
     while (t1) {
       if (t1.callback === callback) {
@@ -1955,7 +1955,7 @@
     }
   };
   function d3_timer_step() {
-    var elapsed, now = Date.now(), t1 = d3_timer_queue;
+    var elapsed, now = d3_timer_now(), t1 = d3_timer_queue;
     while (t1) {
       elapsed = now - t1.then;
       if (elapsed >= t1.delay) t1.flush = t1.callback(elapsed);
@@ -1974,7 +1974,7 @@
     }
   }
   d3.timer.flush = function() {
-    var elapsed, now = Date.now(), t1 = d3_timer_queue;
+    var elapsed, now = d3_timer_now(), t1 = d3_timer_queue;
     while (t1) {
       elapsed = now - t1.then;
       if (!t1.delay) t1.flush = t1.callback(elapsed);
@@ -1994,6 +1994,13 @@
     }
     return then;
   }
+  var d3_timer_now = function(performance) {
+    return performance && performance.webkitNow ? function() {
+      return performance.webkitNow();
+    } : function() {
+      return Date.now();
+    };
+  }(window.performance);
   var d3_timer_frame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
     setTimeout(callback, 17);
   };
@@ -3616,7 +3623,7 @@
       dispatch(event.of(this, arguments));
     }
     function touchstart() {
-      var touches = d3.touches(this), now = Date.now();
+      var touches = d3.touches(this), now = d3_timer_now();
       scale0 = scale;
       translate0 = {};
       touches.forEach(function(t) {
