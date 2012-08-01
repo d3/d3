@@ -41,7 +41,7 @@ function d3_selection_classed(name, value) {
     var c = this.className,
         cb = c.baseVal != null,
         cv = cb ? c.baseVal : c;
-    if (cv.length) {
+    if (cv) {
       cv = d3_collapse(cv.replace(re, " "));
       if (cb) c.baseVal = cv;
       else this.className = cv;

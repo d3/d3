@@ -14,7 +14,7 @@ var width = 960,
 
 var fill = d3.scale.linear()
     .range(["hsl(-180, 50%, 50%)", "hsl(180, 50%, 50%)"])
-    .interpolate(d3.interpolateHsl);
+    .interpolate(d3.interpolateString);
 
 var arc = d3.svg.arc()
     .startAngle(0)

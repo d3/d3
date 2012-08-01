@@ -38,7 +38,8 @@ var suite = vows.describe("transition");
 suite.addBatch({
   "select": require("./transition-test-select"),
   "selectAll": require("./transition-test-selectAll"),
-  "transition": require("./transition-test-transition")
+  "transition": require("./transition-test-transition"),
+  "filter": require("./transition-test-filter")
 });
 
 // Content

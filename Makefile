@@ -2,6 +2,7 @@
 
 NODE_PATH ?= ./node_modules
 JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
+JS_BEAUTIFIER = $(NODE_PATH)/uglify-js/bin/uglifyjs -b -i 2 -nm -ns
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
 
 all: \
@@ -79,6 +80,7 @@ d3.core.js: \
 	src/core/formatPrefix.js \
 	src/core/ease.js \
 	src/core/event.js \
+	src/core/transform.js \
 	src/core/interpolate.js \
 	src/core/uninterpolate.js \
 	src/core/rgb.js \
@@ -112,6 +114,7 @@ d3.core.js: \
 	src/core/transition.js \
 	src/core/transition-select.js \
 	src/core/transition-selectAll.js \
+	src/core/transition-filter.js \
 	src/core/transition-attr.js \
 	src/core/transition-style.js \
 	src/core/transition-text.js \
@@ -121,7 +124,6 @@ d3.core.js: \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
 	src/core/timer.js \
-	src/core/transform.js \
 	src/core/mouse.js \
 	src/core/touches.js \
 	src/core/noop.js
@@ -226,11 +228,12 @@ test: all
 
 %.min.js: %.js Makefile
 	@rm -f $@
-	$(JS_COMPILER) < $< > $@
+	cat $< | $(JS_COMPILER) > $@
+	@chmod a-w $@
 
 d3%.js: Makefile
 	@rm -f $@
-	cat $(filter %.js,$^) > $@
+	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
 	@chmod a-w $@
 
 package.json: src/package.js
