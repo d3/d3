@@ -4,16 +4,30 @@ NODE_PATH ?= ./node_modules
 JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
 JS_BEAUTIFIER = $(NODE_PATH)/uglify-js/bin/uglifyjs -b -i 2 -nm -ns
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
+PACKAGE_JSON = package.json
+
+# when node or any of these tools has not been installed, ignore them.
+ifeq ($(wildcard $(JS_COMPILER)),)
+JS_COMPILER = cat
+NODE_PATH = 
+PACKAGE_JSON =
+endif
+ifeq ($(wildcard $(JS_BEAUTIFIER)),)
+JS_BEAUTIFIER = cat
+NODE_PATH = 
+PACKAGE_JSON =
+endif
+ifeq ($(wildcard $(JS_TESTER)),)
+JS_TESTER = echo "no test rig installed"
+NODE_PATH = 
+PACKAGE_JSON =
+endif
 
 all: \
 	d3.latest.js \
-	d3.v2.js
-
-everything: \
-	d3.latest.js \
 	d3.v2.js \
 	d3.v2.min.js \
-	package.json
+	$(PACKAGE_JSON)
 
 # Modify this rule to build your own custom release.
 
@@ -236,10 +250,10 @@ d3%.js: Makefile
 	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
 	@chmod a-w $@
 
-package.json: src/package.js
+$(PACKAGE_JSON): src/package.js
 	@rm -f $@
 	node src/package.js > $@
 	@chmod a-w $@
 
 clean:
-	rm -f d3*.js package.json
+	rm -f d3*.js $(PACKAGE_JSON)
