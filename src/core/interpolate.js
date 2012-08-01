@@ -221,7 +221,7 @@ var d3_interpolateTransformSimilar = function(a, b) {
         // For matrix and rotations with a non-zero origin, the matrix is
         // decomposed using the method described by unmatrix into separate
         // translation, scale, rotation and skew matrices, then each decomposed
-        // matrix is interpolated numerically.
+        // transform function is interpolated numerically.
         case 1: // matrix
         case 4: { // rotate
           if (type === 1 || ta.matrix.e || ta.matrix.f || tb.matrix.e || tb.matrix.f) {
