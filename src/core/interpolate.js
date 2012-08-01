@@ -205,18 +205,8 @@ var d3_interpolateTransformSimilar = function(a, b) {
       if (type !== tb.type || !type) return; // unknown
       switch (type) {
 
-        // For matrix, the matrix is decomposed using the method described by
-        // unmatrix into separate translation, scale, rotation and skew
-        // matrices, then each decomposed matrix is interpolated numerically,
-        // and finally combined in order to produce a resulting 3x2 matrix.
-        case 1: { // matrix
-          sa.push(new d3_transform(ta.matrix));
-          sb.push(new d3_transform(tb.matrix));
-          continue;
-        }
-
-        // For translate, scale, rotate and skew functions the individual
-        // components of the function are interpolated numerically.
+        // For translate, scale and skew functions the individual components of
+        // the function are interpolated numerically.
         case 2: { // translate
           ra = ta.matrix.e + "," + ta.matrix.f;
           rb = tb.matrix.e + "," + tb.matrix.f;
@@ -227,7 +217,20 @@ var d3_interpolateTransformSimilar = function(a, b) {
           rb = tb.matrix.a + "," + tb.matrix.d;
           break;
         }
-        default: { // rotate, skew
+
+        // For matrix and rotations with a non-zero origin, the matrix is
+        // decomposed using the method described by unmatrix into separate
+        // translation, scale, rotation and skew matrices, then each decomposed
+        // matrix is interpolated numerically.
+        case 1: // matrix
+        case 4: { // rotate
+          if (type === 1 || ta.matrix.e || ta.matrix.f || tb.matrix.e || tb.matrix.f) {
+            sa.push(new d3_transform(ta.matrix));
+            sb.push(new d3_transform(tb.matrix));
+            continue;
+          }
+        }
+        default: { // rotate with zero origin, skew
           ra = ta.angle;
           rb = tb.angle;
         }

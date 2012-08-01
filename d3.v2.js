@@ -930,12 +930,6 @@
         type = ta.type;
         if (type !== tb.type || !type) return;
         switch (type) {
-         case 1:
-          {
-            sa.push(new d3_transform(ta.matrix));
-            sb.push(new d3_transform(tb.matrix));
-            continue;
-          }
          case 2:
           {
             ra = ta.matrix.e + "," + ta.matrix.f;
@@ -947,6 +941,15 @@
             ra = ta.matrix.a + "," + ta.matrix.d;
             rb = tb.matrix.a + "," + tb.matrix.d;
             break;
+          }
+         case 1:
+         case 4:
+          {
+            if (type === 1 || ta.matrix.e || ta.matrix.f || tb.matrix.e || tb.matrix.f) {
+              sa.push(new d3_transform(ta.matrix));
+              sb.push(new d3_transform(tb.matrix));
+              continue;
+            }
           }
          default:
           {
