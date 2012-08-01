@@ -2107,15 +2107,10 @@
   function d3_scale_nice(domain, nice) {
     var i0 = 0, i1 = domain.length - 1, x0 = domain[i0], x1 = domain[i1], dx;
     if (x1 < x0) {
-      dx = i0;
-      i0 = i1;
-      i1 = dx;
-      dx = x0;
-      x0 = x1;
-      x1 = dx;
+      dx = i0, i0 = i1, i1 = dx;
+      dx = x0, x0 = x1, x1 = dx;
     }
-    if (dx = x1 - x0) {
-      nice = nice(dx);
+    if (nice = nice(x1 - x0)) {
       domain[i0] = nice.floor(x0);
       domain[i1] = nice.ceil(x1);
     }
@@ -2184,7 +2179,7 @@
   }
   function d3_scale_linearNice(dx) {
     dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
-    return {
+    return dx && {
       floor: function(x) {
         return Math.floor(x / dx) * dx;
       },
@@ -6787,8 +6782,9 @@
       return scale;
     };
     scale.nice = function(m) {
-      var extent = d3_time_scaleExtent(scale.domain());
-      return scale.domain([ m.floor(extent[0]), m.ceil(extent[1]) ]);
+      return scale.domain(d3_scale_nice(scale.domain(), function() {
+        return m;
+      }));
     };
     scale.ticks = function(m, k) {
       var extent = d3_time_scaleExtent(scale.domain());
