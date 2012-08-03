@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="../../d3.v2.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var cross = d3.svg.symbol()
+    .type("cross")
+    .size(10000);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+  .append("g")
+    .attr("transform", "translate(" + (width / 2) + "," + (height / 2) + ")");
+
+svg.append("path")
+    .style("fill", "steelblue")
+    .attr("d", cross);
+
+svg.append("path")
+    .style("fill", "darkgreen")
+    .attr("d", cross)
+    .attr("transform", "rotate(45 200,200)");
+
+svg.append("path")
+    .style("fill", "white")
+    .style("fill-opacity", .2)
+    .style("stroke", "steelblue")
+    .style("stroke-width", "4px")
+    .attr("d", cross)
+  .transition()
+    .duration(1000)
+    .style("stroke", "darkgreen")
+    .attr("transform", "rotate(45 200,200)");
+
+</script>

@@ -541,7 +541,7 @@
     type = d3_format_types.get(type) || d3_format_typeDefault;
     return function(value) {
       if (integer && value % 1) return "";
-      var negative = value < 0 && (value = -value) ? "−" : sign;
+      var negative = value < 0 && (value = -value) ? "-" : sign;
       if (scale < 0) {
         var prefix = d3.formatPrefix(value, precision);
         value = prefix.scale(value);
@@ -930,12 +930,6 @@
         type = ta.type;
         if (type !== tb.type || !type) return;
         switch (type) {
-         case 1:
-          {
-            sa.push(new d3_transform(ta.matrix));
-            sb.push(new d3_transform(tb.matrix));
-            continue;
-          }
          case 2:
           {
             ra = ta.matrix.e + "," + ta.matrix.f;
@@ -947,6 +941,15 @@
             ra = ta.matrix.a + "," + ta.matrix.d;
             rb = tb.matrix.a + "," + tb.matrix.d;
             break;
+          }
+         case 1:
+         case 4:
+          {
+            if (type === 1 || ta.matrix.e || ta.matrix.f || tb.matrix.e || tb.matrix.f) {
+              sa.push(new d3_transform(ta.matrix));
+              sb.push(new d3_transform(tb.matrix));
+              continue;
+            }
           }
          default:
           {
@@ -2104,15 +2107,10 @@
   function d3_scale_nice(domain, nice) {
     var i0 = 0, i1 = domain.length - 1, x0 = domain[i0], x1 = domain[i1], dx;
     if (x1 < x0) {
-      dx = i0;
-      i0 = i1;
-      i1 = dx;
-      dx = x0;
-      x0 = x1;
-      x1 = dx;
+      dx = i0, i0 = i1, i1 = dx;
+      dx = x0, x0 = x1, x1 = dx;
     }
-    if (dx = x1 - x0) {
-      nice = nice(dx);
+    if (nice = nice(x1 - x0)) {
       domain[i0] = nice.floor(x0);
       domain[i1] = nice.ceil(x1);
     }
@@ -2181,7 +2179,7 @@
   }
   function d3_scale_linearNice(dx) {
     dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
-    return {
+    return dx && {
       floor: function(x) {
         return Math.floor(x / dx) * dx;
       },
@@ -6784,8 +6782,9 @@
       return scale;
     };
     scale.nice = function(m) {
-      var extent = d3_time_scaleExtent(scale.domain());
-      return scale.domain([ m.floor(extent[0]), m.ceil(extent[1]) ]);
+      return scale.domain(d3_scale_nice(scale.domain(), function() {
+        return m;
+      }));
     };
     scale.ticks = function(m, k) {
       var extent = d3_time_scaleExtent(scale.domain());

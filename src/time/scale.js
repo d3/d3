@@ -15,8 +15,7 @@ function d3_time_scale(linear, methods, format) {
   };
 
   scale.nice = function(m) {
-    var extent = d3_time_scaleExtent(scale.domain());
-    return scale.domain([m.floor(extent[0]), m.ceil(extent[1])]);
+    return scale.domain(d3_scale_nice(scale.domain(), function() { return m; }));
   };
 
   scale.ticks = function(m, k) {
