@@ -3,21 +3,26 @@ var console = require("console");
 
 d3_selection_enterPrototype.insertInOrder = function(name) {
   var subgroups = [],
-      name = d3.ns.qualify(name),
-      nextNode, nextNodes, subgroup, subnode, group, node, insert, n, m;
+      name, nextNode, nextNodes, subgroup, subnode, group, node, insert, n, m;
 
-  if (name.local) {
-    insert = function insertNS(after) {
-      return this.insertBefore(
-        document.createElementNS(name.space, name.local), after
-      );
-    };
+  if (typeof name == "function") {
+    insert = function insertFromFunc(after, data, i) {
+      return this.insertBefore(name.call(this, data, i), after);
+    }
   } else {
-    insert = function insert(after) {
-      return this.insertBefore(
-        document.createElementNS(this.namespaceURI, name), after
-      );
-    };
+    if ((name = d3.ns.qualify(name)).local) {
+      insert = function insertNS(after) {
+        return this.insertBefore(
+          document.createElementNS(name.space, name.local), after
+        );
+      };
+    } else {
+      insert = function insert(after) {
+        return this.insertBefore(
+          document.createElementNS(this.namespaceURI, name), after
+        );
+      };
+    }
   }
 
   // Very similar behavior to select, except we need prior knowledge about our
@@ -36,7 +41,8 @@ d3_selection_enterPrototype.insertInOrder = function(name) {
 
     for (var i = -1; ++i < n;) {
       if (node = group[i]) {
-        subgroup.push(subnode = insert.call(group.parentNode, nextNodes[i]));
+        subnode = insert.call(group.parentNode, nextNodes[i], node.__data__, i);
+        subgroup.push(subnode);
         if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
       } else {
         subgroup.push(null);

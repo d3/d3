@@ -75,6 +75,24 @@ suite.addBatch({
     },
     "it is only exposed on enter() selections": function(body) {
       assert.equal(typeof body.html("").insertInOrder, "undefined");
+    },
+    "it supports functions that synthesize a new node": function(body) {
+      var div = body.html("").selectAll("div").data([12,27,2]).enter().insertInOrder(
+        function(d, i) {
+          var node = document.createElement("div");
+          node.className = "" + d + "-" + i;
+          return node;
+        }
+      );
+
+      assert.equal(div.length, 1);
+      assert.equal(div[0].length, 3);
+      assert.domEqual(div[0][0], document.body.firstChild);
+      assert.domEqual(div[0][1].previousSibling, div[0][0]);
+      assert.domEqual(div[0][2], document.body.lastChild);
+      assert.equal(div[0][0].className, "12-0");
+      assert.equal(div[0][1].className, "27-1");
+      assert.equal(div[0][2].className, "2-2");
     }
   }
 });
