@@ -1774,8 +1774,6 @@
     }
     return d3_selection(subgroups);
   };
-  var util = require("util");
-  var console = require("console");
   d3_selection_enterPrototype.insertInOrder = function(name) {
     var subgroups = [], name, nextNode, nextNodes, subgroup, subnode, group, node, insert, n, m;
     if (typeof name == "function") {
