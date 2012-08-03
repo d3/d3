@@ -21,7 +21,7 @@ suite.addBatch({
       assert.domEqual(div[0][2], document.body.lastChild);
     },
     "inserts new nodes in order": function(body) {
-      body.html("").selectAll("div").data([2,3,5], identity).enter().insertInOrder("div");
+      body.html("").selectAll("div").data([2,3,5], identity).enter().insertInOrder("div").attr("class", identity);
       body.selectAll("div").data([1,2,3,4,5,6], identity).enter().insertInOrder("div").attr("class", identity);
 
       assert.equal(document.body.childNodes.length, 6);
@@ -35,7 +35,7 @@ suite.addBatch({
     "it works properly in nested selections": function(body) {
       var table = body.html("").append("table");
       var tableNode = table[0][0];
-      var rows  = table.selectAll("tr").data([[1,3], [2], [1,2,3]]).enter().insertInOrder("tr");
+      var rows  = table.selectAll("tr").data([[1,3], [2], [1,2,3]]).enter().insertInOrder("tr").attr("class", identity);
       var cells = rows.selectAll("td").data(identity, identity).enter().insertInOrder("td").attr("class", identity);
 
       assert.equal(tableNode.childNodes.length, 3);

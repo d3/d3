@@ -4,12 +4,7 @@ var console = require("console");
 d3_selection_enterPrototype.insertInOrder = function(name) {
   var subgroups = [],
       name = d3.ns.qualify(name),
-      existingNodes,
-      subgroup,
-      subnode,
-      group,
-      node,
-      insert;
+      nextNode, nextNodes, subgroup, subnode, group, node, insert, n, m;
 
   if (name.local) {
     insert = function insertNS(after) {
@@ -30,18 +25,18 @@ d3_selection_enterPrototype.insertInOrder = function(name) {
   for (var j = -1, m = this.length; ++j < m;) {
     subgroups.push(subgroup = []);
     subgroup.parentNode = (group = this[j]).parentNode;
-    existingNodes = group.update;
+    n = group.length;
 
-    function findNextNode(i) {
-      while (++i < n) {
-        if (existingNodes[i]) return existingNodes[i];
-      }
-      return null;
+    // find all next nodes for more efficient lookup since it's the common case.
+    nextNodes = new Array(n);
+    for (var k = n; --k > 0;) {
+      nextNode = group.update[k]
+      nextNodes[k - 1] = nextNode ? nextNode : nextNodes[k];
     }
 
-    for (var i = -1, n = group.length; ++i < n;) {
+    for (var i = -1; ++i < n;) {
       if (node = group[i]) {
-        subgroup.push(subnode = insert.call(group.parentNode, findNextNode(i)));
+        subgroup.push(subnode = insert.call(group.parentNode, nextNodes[i]));
         if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
       } else {
         subgroup.push(null);
