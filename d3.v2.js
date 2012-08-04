@@ -860,7 +860,6 @@
     };
   };
   d3.interpolateTransform = function(a, b) {
-    if (n = d3_interpolateTransformSimilar(a, b)) return n;
     var s = [], q = [], n, A = d3.transform(a), B = d3.transform(b), ta = A.translate, tb = B.translate, ra = A.rotate, rb = B.rotate, wa = A.skew, wb = B.skew, ka = A.scale, kb = B.scale;
     if (ta[0] != tb[0] || ta[1] != tb[1]) {
       s.push("translate(", null, ",", null, ")");
@@ -912,65 +911,6 @@
       return s.join("");
     };
   };
-  var d3_interpolateTransformTypes = [ "", "", "translate", "scale", "rotate", "skewX", "skewY" ];
-  var d3_interpolateTransformSimilar = function(a, b) {
-    var ga = document.createElementNS(d3.ns.prefix.svg, "g"), gb = document.createElementNS(d3.ns.prefix.svg, "g");
-    return (d3_interpolateTransformSimilar = function(a, b) {
-      ga.setAttribute("transform", a);
-      gb.setAttribute("transform", b);
-      a = ga.transform.baseVal;
-      b = gb.transform.baseVal;
-      var sa = [], sb = [], i = -1, n = a.numberOfItems, m = b.numberOfItems, ta, tb, type;
-      if (m !== n) {
-        if (!m) b = d3_interpolateTransformIdentity(a); else if (!n) a = d3_interpolateTransformIdentity(b), n = m; else return;
-      } else if (!m) return;
-      while (++i < n) {
-        ta = a.getItem(i);
-        tb = b.getItem(i);
-        type = ta.type;
-        if (type !== tb.type || !type) return;
-        switch (type) {
-         case 1:
-          {
-            sa.push(new d3_transform(ta.matrix));
-            sb.push(new d3_transform(tb.matrix));
-            continue;
-          }
-         case 2:
-          {
-            ra = ta.matrix.e + "," + ta.matrix.f;
-            rb = tb.matrix.e + "," + tb.matrix.f;
-            break;
-          }
-         case 3:
-          {
-            ra = ta.matrix.a + "," + ta.matrix.d;
-            rb = tb.matrix.a + "," + tb.matrix.d;
-            break;
-          }
-         default:
-          {
-            ra = ta.angle;
-            rb = tb.angle;
-          }
-        }
-        sa.push(type = d3_interpolateTransformTypes[type], "(", ra, ")");
-        sb.push(type, "(", rb, ")");
-      }
-      return d3.interpolateString(sa.join(""), sb.join(""));
-    })(a, b);
-  };
-  function d3_interpolateTransformIdentity(a) {
-    return {
-      getItem: function(i) {
-        return {
-          type: a.getItem(i).type,
-          angle: 0,
-          matrix: d3_transformIdentity
-        };
-      }
-    };
-  }
   d3.interpolateRgb = function(a, b) {
     a = d3.rgb(a);
     b = d3.rgb(b);
