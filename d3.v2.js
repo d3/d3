@@ -1840,8 +1840,7 @@
   function d3_transitionNull(d, i, a) {
     return a != "" && d3_transitionRemove;
   }
-  function d3_transitionTween(name, b) {
-    var interpolate = d3_interpolateByName(name);
+  function d3_transitionTween(interpolate, b) {
     function transitionFunction(d, i, a) {
       var v = b.call(this, d, i);
       return v == null ? a != "" && d3_transitionRemove : a != v && interpolate(a, v);
@@ -1910,8 +1909,9 @@
     }
     return d3_transition(subgroups, this.id, this.time).ease(this.ease());
   };
-  d3_transitionPrototype.attr = function(name, value) {
-    return this.attrTween(name, d3_transitionTween(name, value));
+  d3_transitionPrototype.attr = function(name, value, interpolate) {
+    if (arguments.length < 3) interpolate = d3_interpolateByName(name);
+    return this.attrTween(name, d3_transitionTween(interpolate, value));
   };
   d3_transitionPrototype.attrTween = function(nameNS, tween) {
     var name = d3.ns.qualify(nameNS);
@@ -1929,9 +1929,10 @@
     }
     return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
   };
-  d3_transitionPrototype.style = function(name, value, priority) {
-    if (arguments.length < 3) priority = "";
-    return this.styleTween(name, d3_transitionTween(name, value), priority);
+  d3_transitionPrototype.style = function(name, value, priority, interpolate) {
+    var n = arguments.length;
+    if (n < 3) interpolate = d3_interpolateByName(name), priority = ""; else if (typeof priority === "function") interpolate = priority, priority = ""; else interpolate = d3_interpolateByName(name);
+    return this.styleTween(name, d3_transitionTween(interpolate, value), priority);
   };
   d3_transitionPrototype.styleTween = function(name, tween, priority) {
     if (arguments.length < 3) priority = "";
