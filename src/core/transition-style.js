@@ -1,6 +1,9 @@
-d3_transitionPrototype.style = function(name, value, priority) {
-  if (arguments.length < 3) priority = "";
-  return this.styleTween(name, d3_transitionTween(name, value), priority);
+d3_transitionPrototype.style = function(name, value, priority, interpolate) {
+  var n = arguments.length;
+  if (n < 3) interpolate = d3_interpolateByName(name), priority = "";
+  else if (typeof priority === "function") interpolate = priority, priority = "";
+  else interpolate = d3_interpolateByName(name);
+  return this.styleTween(name, d3_transitionTween(interpolate, value), priority);
 };
 
 d3_transitionPrototype.styleTween = function(name, tween, priority) {

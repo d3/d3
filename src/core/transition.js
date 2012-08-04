@@ -91,8 +91,7 @@ function d3_transitionNull(d, i, a) {
   return a != "" && d3_transitionRemove;
 }
 
-function d3_transitionTween(name, b) {
-  var interpolate = d3_interpolateByName(name);
+function d3_transitionTween(interpolate, b) {
 
   function transitionFunction(d, i, a) {
     var v = b.call(this, d, i);

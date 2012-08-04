@@ -2,13 +2,15 @@
 <body>
 <script src="../../d3.v2.js"></script>
 <script>
+
 var svg = d3.select("body").append("svg")
     .attr("width", 960)
     .attr("height", 500);
 
 var g = svg.append("g")
     .attr("transform", "translate(100,100)")
-  .append("g");
+  .append("g")
+    .attr("transform", "matrix(1 0 0 1 0 0)rotate(0)");
 
 var rect = g.append("rect")
     .attr("x", -25)
@@ -18,5 +20,6 @@ var rect = g.append("rect")
 
 g.transition()
     .duration(3000)
-    .attr("transform", "matrix(1 0 0 1 100 100)rotate(360)");
+    .attr("transform", "matrix(1 0 0 1 100 100)rotate(360)", d3.interpolateString);
+
 </script>
