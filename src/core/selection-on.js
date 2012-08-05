@@ -1,35 +1,48 @@
-// type can be namespaced, e.g., "click.foo"
-// listener can be null for removal
 d3_selectionPrototype.on = function(type, listener, capture) {
-  if (arguments.length < 3) capture = false;
+  var n = arguments.length;
+  if (n < 3) {
 
-  // parse the type specifier
+    // For on(object) or on(object, boolean), the object specifies the event
+    // types and listeners to add or remove. The optional boolean specifies
+    // whether the listener captures events.
+    if (typeof type !== "string") {
+      if (n < 2) listener = false;
+      for (capture in type) this.each(d3_selection_on(capture, type[capture], listener));
+      return this;
+    }
+
+    // For on(string), return the listener for the first node.
+    if (n < 2) return (n = this.node()["__on" + type]) && n._;
+
+    // For on(string, function), use the default capture.
+    capture = false;
+  }
+
+  // Otherwise, a type, listener and capture are specified, and handled as below.
+  return this.each(d3_selection_on(type, listener, capture));
+};
+
+function d3_selection_on(type, listener, capture) {
   var name = "__on" + type, i = type.indexOf(".");
   if (i > 0) type = type.substring(0, i);
 
-  // if called with only one argument, return the current listener
-  if (arguments.length < 2) return (i = this.node()[name]) && i._;
+  function onRemove() {
+    var wrapper = this[name];
+    if (wrapper) {
+      this.removeEventListener(type, wrapper, wrapper.$);
+      delete this[name];
+    }
+  }
 
-  // remove the old event listener, and add the new event listener
-  return this.each(function() {
+  function onAdd() {
     var node = this,
-        args = arguments,
-        o = node[name];
+        args = arguments;
 
-    // remove the old listener, if any (using the previously-set capture)
-    if (o) {
-      node.removeEventListener(type, o, o.$);
-      delete node[name];
-    }
+    onRemove.call(this);
+    this.addEventListener(type, this[name] = wrapper, wrapper.$ = capture);
+    wrapper._ = listener;
 
-    // add the new listener, if any (remembering the capture flag)
-    if (listener) {
-      node.addEventListener(type, node[name] = l, l.$ = capture);
-      l._ = listener; // stash the unwrapped listener for get
-    }
-
-    // wrapped event listener that propagates data changes
-    function l(e) {
+    function wrapper(e) {
       var o = d3.event; // Events can be reentrant (e.g., focus).
       d3.event = e;
       args[0] = node.__data__;
@@ -39,5 +52,7 @@ d3_selectionPrototype.on = function(type, listener, capture) {
         d3.event = o;
       }
     }
-  });
-};
+  }
+
+  return listener ? onAdd : onRemove;
+}
