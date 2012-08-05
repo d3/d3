@@ -12,7 +12,7 @@ d3_selectionPrototype.attr = function(name, value) {
 
     // For attr(object), the object specifies the names and values of the
     // attributes to set or remove. The values may be functions that are
-    // evaluated for each element, or nulls, or strings.
+    // evaluated for each element.
     for (value in name) this.each(d3_selection_attr(value, name[value]));
     return this;
   }

@@ -4,7 +4,8 @@ d3_selectionPrototype.style = function(name, value, priority) {
 
     // For style(object) or style(object, string), the object specifies the
     // names and values of the attributes to set or remove. The values may be
-    // functions that are evaluated for each element.
+    // functions that are evaluated for each element. The optional string
+    // specifies the priority.
     if (typeof name !== "string") {
       if (n < 2) value = "";
       for (priority in name) this.each(d3_selection_style(priority, name[priority], value));

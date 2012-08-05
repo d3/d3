@@ -1705,21 +1705,34 @@
     };
   }
   d3_selectionPrototype.on = function(type, listener, capture) {
-    if (arguments.length < 3) capture = false;
+    var n = arguments.length;
+    if (n < 3) {
+      if (typeof type !== "string") {
+        if (n < 2) listener = false;
+        for (capture in type) this.each(d3_selection_on(capture, type[capture], listener));
+        return this;
+      }
+      if (n < 2) return (n = this.node()["__on" + type]) && n._;
+      capture = false;
+    }
+    return this.each(d3_selection_on(type, listener, capture));
+  };
+  function d3_selection_on(type, listener, capture) {
     var name = "__on" + type, i = type.indexOf(".");
     if (i > 0) type = type.substring(0, i);
-    if (arguments.length < 2) return (i = this.node()[name]) && i._;
-    return this.each(function() {
-      var node = this, args = arguments, o = node[name];
-      if (o) {
-        node.removeEventListener(type, o, o.$);
-        delete node[name];
+    function onRemove() {
+      var wrapper = this[name];
+      if (wrapper) {
+        this.removeEventListener(type, wrapper, wrapper.$);
+        delete this[name];
       }
-      if (listener) {
-        node.addEventListener(type, node[name] = l, l.$ = capture);
-        l._ = listener;
-      }
-      function l(e) {
+    }
+    function onAdd() {
+      var node = this, args = arguments;
+      onRemove.call(this);
+      this.addEventListener(type, this[name] = wrapper, wrapper.$ = capture);
+      wrapper._ = listener;
+      function wrapper(e) {
         var o = d3.event;
         d3.event = e;
         args[0] = node.__data__;
@@ -1729,8 +1742,9 @@
           d3.event = o;
         }
       }
-    });
-  };
+    }
+    return listener ? onAdd : onRemove;
+  }
   d3_selectionPrototype.each = function(callback) {
     return d3_selection_each(this, function(node, i, j) {
       callback.call(node, node.__data__, i, j);
