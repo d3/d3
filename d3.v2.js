@@ -1505,17 +1505,15 @@
   }
   d3_selectionPrototype.property = function(name, value) {
     if (arguments.length < 2) {
-      if ((value = typeof name) === "object") {
-        for (value in name) this.property(value, name[value]);
-        return this;
-      }
-      if (value === "function") {
+      if ((value = typeof name) === "function") {
         return this.each(function() {
           var x = name.apply(this, arguments);
           for (value in x) d3_selection_property(value, x[value]).apply(this, arguments);
         });
       }
-      return this.node()[name];
+      if (value === "string") return this.node()[name];
+      for (value in name) this.each(d3_selection_property(value, name[value]));
+      return this;
     }
     return this.each(d3_selection_property(name, value));
   };
