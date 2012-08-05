@@ -97,15 +97,6 @@ suite.addBatch({
       body.classed("foo", function() { return false; });
       assert.equal(document.body.className, "bar");
     },
-    "accepts a value function returning returning an object containing true or false": function(body) {
-      body.attr("class", null);
-      body.classed(function() { return {foo: true}; });
-      assert.equal(document.body.className, "foo");
-      body.classed(function() { return {foo: true, bar: true}; });
-      assert.equal(document.body.className, "foo bar");
-      body.classed(function() { return {bar: false, foo: false}; });
-      assert.equal(document.body.className, "");
-    },
     "accepts a name object containing true or false": function(body) {
       body.attr("class", null);
       body.classed({foo: true});
@@ -133,24 +124,18 @@ suite.addBatch({
       body.classed({" foo\t": function() { return true; }});
       assert.equal(document.body.className, "foo");
       body.attr("class", null);
-      body.classed(function() { return {"\tfoo ": true}; });
-      assert.equal(document.body.className, "foo");
     },
     "keys in the name object may reference multiple classes": function(body) {
       body.attr("class", null);
       body.classed({"foo bar": function() { return true; }});
       assert.equal(document.body.className, "foo bar");
       body.attr("class", null);
-      body.classed(function() { return {"foo bar": true}; });
-      assert.equal(document.body.className, "foo bar");
     },
     "keys in the name object may contain duplicates": function(body) {
       body.attr("class", null);
       body.classed({"foo foo": function() { return true; }});
       assert.equal(document.body.className, "foo");
       body.attr("class", null);
-      body.classed(function() { return {"foo foo": true}; });
-      assert.equal(document.body.className, "foo");
     },
     "value functions are only evaluated once when used for multiple classes": function(body) {
       var count = 0;
@@ -158,10 +143,6 @@ suite.addBatch({
       body.classed({"foo bar": function() { return ++count; }});
       assert.equal(document.body.className, "foo bar");
       assert.equal(count, 1);
-      body.attr("class", null);
-      body.classed(function() { return {"foo bar": count--}; });
-      assert.equal(document.body.className, "foo bar");
-      assert.equal(count, 0);
     },
     "returns the current selection": function(body) {
       assert.isTrue(body.classed("foo", true) === body);

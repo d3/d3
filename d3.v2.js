@@ -1390,15 +1390,10 @@
   }
   d3_selectionPrototype.attr = function(name, value) {
     if (arguments.length < 2) {
-      if ((value = typeof name) === "function") {
-        return this.each(function() {
-          var x = name.apply(this, arguments);
-          for (value in x) d3_selection_attr(value, x[value]).apply(this, arguments);
-        });
-      }
-      if (value === "string") {
-        value = this.node();
-        return (name = d3.ns.qualify(name)).local ? value.getAttributeNS(name.space, name.local) : value.getAttribute(name);
+      if (typeof name === "string") {
+        var node = this.node();
+        name = d3.ns.qualify(name);
+        return name.local ? node.getAttributeNS(name.space, name.local) : node.getAttribute(name);
       }
       for (value in name) this.each(d3_selection_attr(value, name[value]));
       return this;
@@ -1431,13 +1426,7 @@
   }
   d3_selectionPrototype.classed = function(name, value) {
     if (arguments.length < 2) {
-      if ((value = typeof name) === "function") {
-        return this.each(function() {
-          var x = name.apply(this, arguments);
-          for (value in x) d3_selection_classed(value, x[value]).apply(this, arguments);
-        });
-      }
-      if (value === "string") {
+      if (typeof name === "string") {
         var node = this.node(), n = (name = name.trim().split(/^|\s+/g)).length, i = -1;
         if (value = node.classList) {
           while (++i < n) if (!value.contains(name[i])) return false;
@@ -1489,14 +1478,7 @@
   d3_selectionPrototype.style = function(name, value, priority) {
     var n = arguments.length;
     if (n < 3) {
-      if ((priority = typeof name) === "function") {
-        if (n < 2) value = "";
-        return this.each(function() {
-          var x = name.apply(this, arguments);
-          for (priority in x) d3_selection_style(priority, x[priority], value).apply(this, arguments);
-        });
-      }
-      if (priority !== "string") {
+      if (typeof name !== "string") {
         if (n < 2) value = "";
         for (priority in name) this.each(d3_selection_style(priority, name[priority], value));
         return this;
@@ -1521,13 +1503,7 @@
   }
   d3_selectionPrototype.property = function(name, value) {
     if (arguments.length < 2) {
-      if ((value = typeof name) === "function") {
-        return this.each(function() {
-          var x = name.apply(this, arguments);
-          for (value in x) d3_selection_property(value, x[value]).apply(this, arguments);
-        });
-      }
-      if (value === "string") return this.node()[name];
+      if (typeof name === "string") return this.node()[name];
       for (value in name) this.each(d3_selection_property(value, name[value]));
       return this;
     }

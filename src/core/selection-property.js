@@ -1,18 +1,8 @@
 d3_selectionPrototype.property = function(name, value) {
   if (arguments.length < 2) {
 
-    // For property(function), the function must return an object for each
-    // element, specifying the names and values of the properties to set or
-    // remove. The values must be constants, not functions.
-    if ((value = typeof name) === "function") {
-      return this.each(function() {
-        var x = name.apply(this, arguments);
-        for (value in x) d3_selection_property(value, x[value]).apply(this, arguments);
-      });
-    }
-
     // For property(string), return the property value for the first node.
-    if (value === "string") return this.node()[name];
+    if (typeof name === "string") return this.node()[name];
 
     // For property(object), the object specifies the names and values of the
     // properties to set or remove. The values may be functions that are

@@ -47,10 +47,6 @@ suite.addBatch({
       body.data(["orange"]).attr({"xlink:href": function(d, i) { return d + "-" + i + ".png"; }});
       assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0.png");
     },
-    "sets attributes as a function that returns a map": function(body) {
-      body.data(["red"]).attr(function(d, i) { return {"xlink:href": d + "-" + i + ".png"}; });
-      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "red-0.png");
-    },
     "gets an attribute value": function(body) {
       document.body.setAttribute("bgcolor", "yellow");
       assert.equal(body.attr("bgcolor"), "yellow");
@@ -86,13 +82,6 @@ suite.addBatch({
       document.body.setAttribute("bgcolor", "white");
       document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
       body.attr({bgcolor: function() {}, "xlink:href": function() {}});
-      assert.equal(document.body.getAttribute("bgcolor"), "");
-      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "");
-    },
-    "removes attributes as a function that returns a map of null": function(body) {
-      document.body.setAttribute("bgcolor", "white");
-      document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
-      body.attr(function() { return {bgcolor: null, "xlink:href": null}; });
       assert.equal(document.body.getAttribute("bgcolor"), "");
       assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "");
     },

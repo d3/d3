@@ -1,20 +1,10 @@
 d3_selectionPrototype.classed = function(name, value) {
   if (arguments.length < 2) {
 
-    // For classed(function), the function must return an object for each
-    // element, specifying the names of classes to add or remove. The values
-    // must be constants, not functions.
-    if ((value = typeof name) === "function") {
-      return this.each(function() {
-        var x = name.apply(this, arguments);
-        for (value in x) d3_selection_classed(value, x[value]).apply(this, arguments);
-      });
-    }
-
     // For classed(string), return true only if the first node has the specified
     // class or classes. Note that even if the browser supports DOMTokenList, it
     // probably doesn't support it on SVG elements (which can be animated).
-    if (value === "string") {
+    if (typeof name === "string") {
       var node = this.node(),
           n = (name = name.trim().split(/^|\s+/g)).length,
           i = -1;

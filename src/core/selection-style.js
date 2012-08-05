@@ -2,21 +2,10 @@ d3_selectionPrototype.style = function(name, value, priority) {
   var n = arguments.length;
   if (n < 3) {
 
-    // For style(function) or style(function, priority), the function must
-    // return an object for each element, specifying the names and values of the
-    // styles to set or remove. The values must be constants, not functions.
-    if ((priority = typeof name) === "function") {
-      if (n < 2) value = "";
-      return this.each(function() {
-        var x = name.apply(this, arguments);
-        for (priority in x) d3_selection_style(priority, x[priority], value).apply(this, arguments);
-      });
-    }
-
-    // For style(object) or style(object, priority), the object specifies the
+    // For style(object) or style(object, string), the object specifies the
     // names and values of the attributes to set or remove. The values may be
     // functions that are evaluated for each element.
-    if (priority !== "string") {
+    if (typeof name !== "string") {
       if (n < 2) value = "";
       for (priority in name) this.each(d3_selection_style(priority, name[priority], value));
       return this;
@@ -27,7 +16,8 @@ d3_selectionPrototype.style = function(name, value, priority) {
         .getComputedStyle(this.node(), null)
         .getPropertyValue(name);
 
-    // For style(name, value), use the default priority.
+    // For style(string, string) or style(string, function), use the default
+    // priority. The priority is ignored for style(string, null).
     priority = "";
   }
 
