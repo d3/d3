@@ -1400,7 +1400,7 @@
         value = this.node();
         return (name = d3.ns.qualify(name)).local ? value.getAttributeNS(name.space, name.local) : value.getAttribute(name);
       }
-      for (value in name) this.attr(value, name[value]);
+      for (value in name) this.each(d3_selection_attr(value, name[value]));
       return this;
     }
     return this.each(d3_selection_attr(name, value));
@@ -1471,20 +1471,21 @@
     return this.each(typeof value === "function" ? classedFunction : value ? classedAdd : classedRemove);
   }
   d3_selectionPrototype.style = function(name, value, priority) {
-    if (arguments.length < 3) {
-      if ((priority = typeof name) === "object") {
-        if (arguments.length < 2) value = "";
-        for (priority in name) this.style(priority, name[priority], value);
-        return this;
-      }
-      if (priority === "function") {
-        if (arguments.length < 2) value = "";
+    var n = arguments.length;
+    if (n < 3) {
+      if ((priority = typeof name) === "function") {
+        if (n < 2) value = "";
         return this.each(function() {
           var x = name.apply(this, arguments);
           for (priority in x) d3_selection_style(priority, x[priority], value).apply(this, arguments);
         });
       }
-      if (arguments.length < 2) return window.getComputedStyle(this.node(), null).getPropertyValue(name);
+      if (priority !== "string") {
+        if (n < 2) value = "";
+        for (priority in name) this.each(d3_selection_style(priority, name[priority], value));
+        return this;
+      }
+      if (n < 2) return window.getComputedStyle(this.node(), null).getPropertyValue(name);
       priority = "";
     }
     return this.each(d3_selection_style(name, value, priority));
