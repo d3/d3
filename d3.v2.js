@@ -1961,6 +1961,10 @@
     return d3_transition(subgroups, this.id, this.time).ease(this.ease());
   };
   d3_transitionPrototype.attr = function(name, value) {
+    if (arguments.length < 2) {
+      for (value in name) this.attrTween(value, d3_transitionTween(value, name[value]));
+      return this;
+    }
     return this.attrTween(name, d3_transitionTween(name, value));
   };
   d3_transitionPrototype.attrTween = function(nameNS, tween) {
@@ -1980,7 +1984,15 @@
     return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
   };
   d3_transitionPrototype.style = function(name, value, priority) {
-    if (arguments.length < 3) priority = "";
+    var n = arguments.length;
+    if (n < 3) {
+      if (typeof name !== "string") {
+        if (n < 2) value = "";
+        for (priority in name) this.styleTween(priority, d3_transitionTween(priority, name[priority]), value);
+        return this;
+      }
+      priority = "";
+    }
     return this.styleTween(name, d3_transitionTween(name, value), priority);
   };
   d3_transitionPrototype.styleTween = function(name, tween, priority) {

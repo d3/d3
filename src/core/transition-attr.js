@@ -1,4 +1,13 @@
 d3_transitionPrototype.attr = function(name, value) {
+  if (arguments.length < 2) {
+
+    // For attr(object), the object specifies the names and values of the
+    // attributes to transition. The values may be functions that are
+    // evaluated for each element.
+    for (value in name) this.attrTween(value, d3_transitionTween(value, name[value]));
+    return this;
+  }
+
   return this.attrTween(name, d3_transitionTween(name, value));
 };
 
