@@ -1390,18 +1390,18 @@
   }
   d3_selectionPrototype.attr = function(name, value) {
     if (arguments.length < 2) {
-      if ((value = typeof name) === "object") {
-        for (value in name) this.attr(value, name[value]);
-        return this;
-      }
-      if (value === "function") {
+      if ((value = typeof name) === "function") {
         return this.each(function() {
           var x = name.apply(this, arguments);
           for (value in x) d3_selection_attr(value, x[value]).apply(this, arguments);
         });
       }
-      value = this.node();
-      return (name = d3.ns.qualify(name)).local ? value.getAttributeNS(name.space, name.local) : value.getAttribute(name);
+      if (value === "string") {
+        value = this.node();
+        return (name = d3.ns.qualify(name)).local ? value.getAttributeNS(name.space, name.local) : value.getAttribute(name);
+      }
+      for (value in name) this.attr(value, name[value]);
+      return this;
     }
     return this.each(d3_selection_attr(name, value));
   };
