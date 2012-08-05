@@ -17,25 +17,11 @@ suite.addBatch({
       body.classed("bar", true);
       assert.equal(document.body.className, "foo bar");
     },
-    "adds a missing class as a function": function(body) {
-      body.attr("class", null);
-      body.classed("foo", function() { return true; });
-      assert.equal(document.body.className, "foo");
-      body.classed("bar", function() { return true; });
-      assert.equal(document.body.className, "foo bar");
-    },
     "removes an existing class as false": function(body) {
       body.attr("class", "bar foo");
       body.classed("foo", false);
       assert.equal(document.body.className, "bar");
       body.classed("bar", false);
-      assert.equal(document.body.className, "");
-    },
-    "removes an existing class as a function": function(body) {
-      body.attr("class", "bar foo");
-      body.classed("foo", function() { return false; });
-      assert.equal(document.body.className, "bar");
-      body.classed("bar", function() { return false; });
       assert.equal(document.body.className, "");
     },
     "preserves an existing class as true": function(body) {
@@ -45,27 +31,12 @@ suite.addBatch({
       body.classed("bar", true);
       assert.equal(document.body.className, "bar foo");
     },
-    "preserves an existing class as a function": function(body) {
-      body.attr("class", "bar foo");
-      body.classed("foo", function() { return true; });
-      assert.equal(document.body.className, "bar foo");
-      body.classed("bar", function() { return true; });
-      assert.equal(document.body.className, "bar foo");
-    },
     "preserves a missing class as false": function(body) {
       body.attr("class", "baz");
       body.classed("foo", false);
       assert.equal(document.body.className, "baz");
       body.attr("class", null);
       body.classed("bar", false);
-      assert.equal(document.body.className, "");
-    },
-    "preserves a missing class as a function": function(body) {
-      body.attr("class", "baz");
-      body.classed("foo", function() { return false; });
-      assert.equal(document.body.className, "baz");
-      body.attr("class", null);
-      body.classed("bar", function() { return false; });
       assert.equal(document.body.className, "");
     },
     "gets an existing class": function(body) {
@@ -80,27 +51,120 @@ suite.addBatch({
       assert.isFalse(body.classed("bare"));
       assert.isFalse(body.classed("rbaz"));
     },
-    "returns the current selection": function(body) {
-      assert.isTrue(body.classed("foo", true) === body);
+    "accepts a name with whitespace, collapsing it": function(body) {
+      body.attr("class", null);
+      body.classed(" foo\t", true);
+      assert.equal(document.body.className, "foo");
+      body.classed("\tfoo  ", false);
+      assert.equal(document.body.className, "");
     },
-    "adds missing classes as true": function(body) {
+    "accepts a name with multiple classes separated by whitespace": function(body) {
       body.attr("class", null);
       body.classed("foo bar", true);
       assert.equal(document.body.className, "foo bar");
-    },
-    "gets existing classes": function(body) {
-      body.attr("class", " foo\tbar  baz");
-      assert.isTrue(body.classed("foo"));
       assert.isTrue(body.classed("foo bar"));
-      assert.isTrue(body.classed("bar baz"));
-      assert.isTrue(body.classed("foo bar baz"));
-    },
-    "does not get missing classes": function(body) {
-      body.attr("class", " foo\tbar  baz");
-      assert.isFalse(body.classed("foob"));
+      assert.isTrue(body.classed("bar foo"));
+      assert.isFalse(body.classed("foo bar baz"));
       assert.isFalse(body.classed("foob bar"));
-      assert.isFalse(body.classed("bar baz blah"));
-      assert.isFalse(body.classed("foo bar baz moo"));
+      body.classed("bar foo", false);
+      assert.equal(document.body.className, "");
+    },
+    "accepts a silly class name with unsafe characters": function(body) {
+      body.attr("class", null);
+      body.classed("foo.bar", true);
+      assert.equal(document.body.className, "foo.bar");
+      assert.isTrue(body.classed("foo.bar"));
+      assert.isFalse(body.classed("foo"));
+      assert.isFalse(body.classed("bar"));
+      body.classed("bar.foo", false);
+      assert.equal(document.body.className, "foo.bar");
+      body.classed("foo.bar", false);
+      assert.equal(document.body.className, "");
+    },
+    "accepts a name with duplicate classes, ignoring them": function(body) {
+      body.attr("class", null);
+      body.classed(" foo\tfoo  ", true);
+      assert.equal(document.body.className, "foo");
+      body.classed("\tfoo  foo ", false);
+      assert.equal(document.body.className, "");
+    },
+    "accepts a value function returning true or false": function(body) {
+      body.attr("class", null);
+      body.classed("foo", function() { return true; });
+      assert.equal(document.body.className, "foo");
+      body.classed("foo bar", function() { return true; });
+      assert.equal(document.body.className, "foo bar");
+      body.classed("foo", function() { return false; });
+      assert.equal(document.body.className, "bar");
+    },
+    "accepts a value function returning returning an object containing true or false": function(body) {
+      body.attr("class", null);
+      body.classed(function() { return {foo: true}; });
+      assert.equal(document.body.className, "foo");
+      body.classed(function() { return {foo: true, bar: true}; });
+      assert.equal(document.body.className, "foo bar");
+      body.classed(function() { return {bar: false, foo: false}; });
+      assert.equal(document.body.className, "");
+    },
+    "accepts a name object containing true or false": function(body) {
+      body.attr("class", null);
+      body.classed({foo: true});
+      assert.equal(document.body.className, "foo");
+      body.classed({bar: true, foo: false});
+      assert.equal(document.body.className, "bar");
+    },
+    "accepts a name object containing a function returning true or false": function(body) {
+      body.attr("class", null);
+      body.classed({foo: function() { return true; }});
+      assert.equal(document.body.className, "foo");
+    },
+    "accepts a name object containing a mix of functions and non-functions": function(body) {
+      body.attr("class", "foo");
+      body.classed({foo: false, bar: function() { return true; }});
+      assert.equal(document.body.className, "bar");
+    },
+    "the value may be truthy or falsey": function(body) {
+      body.attr("class", "foo");
+      body.classed({foo: null, bar: function() { return 1; }});
+      assert.equal(document.body.className, "bar");
+    },
+    "keys in the name object may contain whitespace": function(body) {
+      body.attr("class", null);
+      body.classed({" foo\t": function() { return true; }});
+      assert.equal(document.body.className, "foo");
+      body.attr("class", null);
+      body.classed(function() { return {"\tfoo ": true}; });
+      assert.equal(document.body.className, "foo");
+    },
+    "keys in the name object may reference multiple classes": function(body) {
+      body.attr("class", null);
+      body.classed({"foo bar": function() { return true; }});
+      assert.equal(document.body.className, "foo bar");
+      body.attr("class", null);
+      body.classed(function() { return {"foo bar": true}; });
+      assert.equal(document.body.className, "foo bar");
+    },
+    "keys in the name object may contain duplicates": function(body) {
+      body.attr("class", null);
+      body.classed({"foo foo": function() { return true; }});
+      assert.equal(document.body.className, "foo");
+      body.attr("class", null);
+      body.classed(function() { return {"foo foo": true}; });
+      assert.equal(document.body.className, "foo");
+    },
+    "value functions are only evaluated once when used for multiple classes": function(body) {
+      var count = 0;
+      body.attr("class", null);
+      body.classed({"foo bar": function() { return ++count; }});
+      assert.equal(document.body.className, "foo bar");
+      assert.equal(count, 1);
+      body.attr("class", null);
+      body.classed(function() { return {"foo bar": count--}; });
+      assert.equal(document.body.className, "foo bar");
+      assert.equal(count, 0);
+    },
+    "returns the current selection": function(body) {
+      assert.isTrue(body.classed("foo", true) === body);
     }
   }
 });

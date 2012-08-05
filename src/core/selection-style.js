@@ -4,7 +4,7 @@ d3_selectionPrototype.style = function(name, value, priority) {
 
     // For style(function) or style(function, priority), the function must
     // return an object for each element, specifying the names and values of the
-    // styles to set or remove. The values must be constants, not function.
+    // styles to set or remove. The values must be constants, not functions.
     if ((priority = typeof name) === "function") {
       if (n < 2) value = "";
       return this.each(function() {

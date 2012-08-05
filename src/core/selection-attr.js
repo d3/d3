@@ -3,7 +3,7 @@ d3_selectionPrototype.attr = function(name, value) {
 
     // For attr(function), the function must return an object for each element,
     // specifying the names and values of the attributes to set or remove. The
-    // values must be constants, not function.
+    // values must be constants, not functions.
     if ((value = typeof name) === "function") {
       return this.each(function() {
         var x = name.apply(this, arguments);
@@ -19,8 +19,8 @@ d3_selectionPrototype.attr = function(name, value) {
           : value.getAttribute(name);
     }
 
-    // Otherwise, for attr(object), the object specifies the names and values of
-    // the attributes to set or remove. The values may be functions that are
+    // For attr(object), the object specifies the names and values of the
+    // attributes to set or remove. The values may be functions that are
     // evaluated for each element.
     for (value in name) this.each(d3_selection_attr(value, name[value]));
     return this;
