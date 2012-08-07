@@ -4,6 +4,7 @@ NODE_PATH ?= ./node_modules
 JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
 JS_BEAUTIFIER = $(NODE_PATH)/uglify-js/bin/uglifyjs -b -i 2 -nm -ns
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
+LOCALE ?= en_US
 
 all: \
 	d3.v2.js \
@@ -195,6 +196,7 @@ d3.csv.js: \
 
 d3.time.js: \
 	src/time/time.js \
+	src/time/format-$(LOCALE).js \
 	src/time/format.js \
 	src/time/format-utc.js \
 	src/time/format-iso.js \
