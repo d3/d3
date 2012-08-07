@@ -60,11 +60,30 @@ function d3_time_parse(date, template, string, j) {
   return j;
 }
 
+function d3_time_formatAbbrev(s) {
+  return s.substring(0, 3);
+}
+
+function d3_time_formatRe(names) {
+  return new RegExp("^(?:" + names.map(d3.requote).join("|") + ")", "i");
+}
+
+function d3_time_formatLookup(names) {
+  var map = new d3_Map, i = -1, n = names.length;
+  while (++i < n) map.set(names[i].toLowerCase(), i);
+  return map;
+}
+
 var d3_time_zfill2 = d3.format("02d"),
     d3_time_zfill3 = d3.format("03d"),
     d3_time_zfill4 = d3.format("04d"),
-    d3_time_sfill2 = d3.format("2d"),
-    d3_time_weekdaySymbols = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    d3_time_sfill2 = d3.format("2d");
+
+var d3_time_weekdayRe = d3_time_formatRe(d3_time_weekdays),
+    d3_time_weekdayAbbrevRe = d3_time_formatRe(d3_time_weekdays.map(d3_time_formatAbbrev)),
+    d3_time_monthRe = d3_time_formatRe(d3_time_months),
+    d3_time_monthLookup = d3_time_formatLookup(d3_time_months),
+    d3_time_monthAbbrevLookup = d3_time_formatLookup(d3_time_months.map(d3_time_formatAbbrev));
 
 var d3_time_formats = {
   a: function(d) { return d3_time_weekdays[d.getDay()].substring(0, 3); },

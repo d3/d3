@@ -6273,7 +6273,7 @@
     };
   }
   d3.time = {};
-  var d3_time = Date;
+  var d3_time = Date, d3_time_weekdaySymbols = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
   function d3_time_utc() {
     this._ = new Date(arguments.length > 1 ? Date.UTC.apply(this, arguments) : arguments[0]);
   }
@@ -6341,34 +6341,7 @@
   };
   var d3_time_prototype = Date.prototype;
   var d3_time_formatDateTime = "%a %b %e %H:%M:%S %Y", d3_time_formatDate = "%m/%d/%y", d3_time_formatTime = "%H:%M:%S";
-  var d3_time_weekdays = d3_time_weekdaySymbols, d3_time_weekdayAbbrevRe = /^(?:sun|mon|tue|wed|thu|fri|sat)/i, d3_time_weekdayRe = /^(?:Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/i;
-  var d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], d3_time_monthRe = /^(?:January|February|March|April|May|June|July|August|September|October|November|December)/ig, d3_time_monthAbbrevLookup = d3.map({
-    jan: 0,
-    feb: 1,
-    mar: 2,
-    apr: 3,
-    may: 4,
-    jun: 5,
-    jul: 6,
-    aug: 7,
-    sep: 8,
-    oct: 9,
-    nov: 10,
-    dec: 11
-  }), d3_time_monthLookup = d3.map({
-    january: 0,
-    february: 1,
-    march: 2,
-    april: 3,
-    may: 4,
-    june: 5,
-    july: 6,
-    august: 7,
-    september: 8,
-    october: 9,
-    november: 10,
-    december: 11
-  });
+  var d3_time_weekdays = d3_time_weekdaySymbols, d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
   d3.time.format = function(template) {
     var n = template.length;
     function format(date) {
@@ -6418,7 +6391,19 @@
     }
     return j;
   }
-  var d3_time_zfill2 = d3.format("02d"), d3_time_zfill3 = d3.format("03d"), d3_time_zfill4 = d3.format("04d"), d3_time_sfill2 = d3.format("2d"), d3_time_weekdaySymbols = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+  function d3_time_formatAbbrev(s) {
+    return s.substring(0, 3);
+  }
+  function d3_time_formatRe(names) {
+    return new RegExp("^(?:" + names.map(d3.requote).join("|") + ")", "i");
+  }
+  function d3_time_formatLookup(names) {
+    var map = new d3_Map, i = -1, n = names.length;
+    while (++i < n) map.set(names[i].toLowerCase(), i);
+    return map;
+  }
+  var d3_time_zfill2 = d3.format("02d"), d3_time_zfill3 = d3.format("03d"), d3_time_zfill4 = d3.format("04d"), d3_time_sfill2 = d3.format("2d");
+  var d3_time_weekdayRe = d3_time_formatRe(d3_time_weekdays), d3_time_weekdayAbbrevRe = d3_time_formatRe(d3_time_weekdays.map(d3_time_formatAbbrev)), d3_time_monthRe = d3_time_formatRe(d3_time_months), d3_time_monthLookup = d3_time_formatLookup(d3_time_months), d3_time_monthAbbrevLookup = d3_time_formatLookup(d3_time_months.map(d3_time_formatAbbrev));
   var d3_time_formats = {
     a: function(d) {
       return d3_time_weekdays[d.getDay()].substring(0, 3);
