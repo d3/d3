@@ -9,9 +9,9 @@ suite.addBatch({
   "html": {
     topic: function() {
       var cb = this.callback;
-      return d3.html("examples/data/sample.html", function(document) {
+      d3.html("examples/data/sample.html", function(document) {
         cb(null, document);
-      });
+      }).send();
     },
     "invokes the callback with the loaded html": function(document) {
       assert.equal(document.getElementsByTagName("H1")[0].textContent, "Hello & world!");
@@ -22,12 +22,13 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.html("//does/not/exist.html", function(document) {
+        d3.html("//does/not/exist.html").on('error', function(document) {
           cb(null, document);
-        });
+        }).send();
       },
-      "invokes the callback with null when an error occurs": function(document) {
-        assert.isNull(document);
+      "triggers error event on unsuccessful status": function(req) {
+        assert.isObject(req);
+        assert.equal(404, req.status);
       }
     }
   }

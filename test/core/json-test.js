@@ -9,9 +9,10 @@ suite.addBatch({
   "json": {
     topic: function() {
       var cb = this.callback;
-      return d3.json("examples/data/sample.json", function(json) {
+
+      d3.json("examples/data/sample.json", function(json) {
         cb(null, json);
-      });
+      }).send();
     },
     "invokes the callback with the loaded JSON": function(json) {
       assert.deepEqual(json, [{"Hello":42,"World":"\"fish\""}]);
@@ -22,12 +23,13 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.json("//does/not/exist.json", function(json) {
+        d3.json("//does/not/exist.json").on('error', function(json) {
           cb(null, json);
-        });
+        }).send();
       },
-      "invokes the callback with null when an error occurs": function(json) {
-        assert.isNull(json);
+      "triggers error event on unsuccessful status": function(req) {
+        assert.isObject(req);
+        assert.equal(404, req.status);
       }
     }
   }

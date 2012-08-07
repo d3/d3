@@ -9,9 +9,9 @@ suite.addBatch({
   "xml": {
     topic: function() {
       var cb = this.callback;
-      return d3.xml("examples/data/sample.xml", function(xml) {
+      d3.xml("examples/data/sample.xml", function(xml) {
         cb(null, xml);
-      });
+      }).send();
     },
     "invokes the callback with the loaded xml": function(xml) {
       assert.deepEqual(xml, {_xml: "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n<hello>\n  <world name=\"Earth\"/>\n</hello>\n"});
@@ -22,9 +22,9 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.xml("examples/data/sample.txt", "application/xml+sample", function(xml) {
+        d3.xml("examples/data/sample.txt", "application/xml+sample", function(xml) {
           cb(null, xml);
-        });
+        }).send();
       },
       "observes the optional mime type": function(xml) {
         assert.equal(XMLHttpRequest._last._info.mimeType, "application/xml+sample");
@@ -33,12 +33,13 @@ suite.addBatch({
     " ": {
       topic: function() {
         var cb = this.callback;
-        return d3.xml("//does/not/exist.xml", function(xml) {
+        d3.xml("//does/not/exist.xml").on('error', function(xml) {
           cb(null, xml);
-        });
+        }).send();
       },
-      "invokes the callback with null when an error occurs": function(xml) {
-        assert.isNull(xml);
+      "triggers error event on unsuccessful status": function(req) {
+        assert.isObject(req);
+        assert.equal(404, req.status);
       }
     }
   }

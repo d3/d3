@@ -9,9 +9,9 @@ suite.addBatch({
   "csv": {
     topic: function() {
       var cb = this.callback;
-      return d3.csv("examples/data/sample.csv", function(csv) {
+      d3.csv("examples/data/sample.csv", function(csv) {
         cb(null, csv);
-      });
+      }).send();
     },
     "invokes the callback with the parsed CSV": function(csv) {
       assert.deepEqual(csv, [{"Hello":42,"World":"\"fish\""}]);
@@ -22,12 +22,13 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.csv("//does/not/exist.csv", function(csv) {
+        d3.csv("//does/not/exist.csv").on('error', function(csv) {
           cb(null, csv);
-        });
+        }).send();
       },
-      "invokes the callback with null when an error occurs": function(csv) {
-        assert.isNull(csv);
+      "triggers error event on unsuccessful status": function(req) {
+        assert.isObject(req);
+        assert.equal(404, req.status);
       }
     }
   }
