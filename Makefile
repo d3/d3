@@ -138,6 +138,7 @@ d3.scale.js: \
 	src/scale/category.js \
 	src/scale/quantile.js \
 	src/scale/quantize.js \
+	src/scale/threshold.js \
 	src/scale/identity.js
 
 d3.svg.js: \
