@@ -2505,11 +2505,11 @@
     return d.endAngle;
   }
   function d3_svg_line(projection) {
-    var x = d3_svg_lineX, y = d3_svg_lineY, defined = d3_true, interpolate = d3_svg_lineInterpolatorDefault, interpolator = d3_svg_lineLinear, tension = .7;
+    var x = d3_svg_lineX, y = d3_svg_lineY, defined = d3_true, interpolate = d3_svg_lineLinear, interpolateKey = interpolate.key, tension = .7;
     function line(data) {
       var segments = [], points = [], i = -1, n = data.length, d, fx = d3_functor(x), fy = d3_functor(y);
       function segment() {
-        segments.push("M", interpolator(projection(points), tension));
+        segments.push("M", interpolate(projection(points), tension));
       }
       while (++i < n) {
         if (defined.call(this, d = data[i], i)) {
@@ -2538,9 +2538,8 @@
       return line;
     };
     line.interpolate = function(_) {
-      if (!arguments.length) return interpolate;
-      if (!d3_svg_lineInterpolators.has(_ += "")) _ = d3_svg_lineInterpolatorDefault;
-      interpolator = d3_svg_lineInterpolators.get(interpolate = _);
+      if (!arguments.length) return interpolateKey;
+      if (typeof _ === "function") interpolateKey = interpolate = _; else interpolateKey = (interpolate = d3_svg_lineInterpolators.get(_) || d3_svg_lineLinear).key;
       return line;
     };
     line.tension = function(_) {
@@ -2559,7 +2558,6 @@
   function d3_svg_lineY(d) {
     return d[1];
   }
-  var d3_svg_lineInterpolatorDefault = "linear";
   var d3_svg_lineInterpolators = d3.map({
     linear: d3_svg_lineLinear,
     "linear-closed": d3_svg_lineLinearClosed,
@@ -2573,6 +2571,10 @@
     "cardinal-open": d3_svg_lineCardinalOpen,
     "cardinal-closed": d3_svg_lineCardinalClosed,
     monotone: d3_svg_lineMonotone
+  });
+  d3_svg_lineInterpolators.forEach(function(key, value) {
+    value.key = key;
+    value.closed = /-closed$/.test(key);
   });
   function d3_svg_lineLinear(points) {
     return points.join("L");
@@ -2773,7 +2775,7 @@
     return points;
   }
   function d3_svg_area(projection) {
-    var x0 = d3_svg_lineX, x1 = d3_svg_lineX, y0 = 0, y1 = d3_svg_lineY, defined = d3_true, interpolate = d3_svg_lineInterpolatorDefault, i0 = d3_svg_lineLinear, i1 = d3_svg_lineLinear, L = "L", tension = .7;
+    var x0 = d3_svg_lineX, x1 = d3_svg_lineX, y0 = 0, y1 = d3_svg_lineY, defined = d3_true, interpolate = d3_svg_lineLinear, interpolateKey = interpolate.key, interpolateReverse = interpolate, L = "L", tension = .7;
     function area(data) {
       var segments = [], points0 = [], points1 = [], i = -1, n = data.length, d, fx0 = d3_functor(x0), fy0 = d3_functor(y0), fx1 = x0 === x1 ? function() {
         return x;
@@ -2781,7 +2783,7 @@
         return y;
       } : d3_functor(y1), x, y;
       function segment() {
-        segments.push("M", i0(projection(points1), tension), L, i1(projection(points0.reverse()), tension), "Z");
+        segments.push("M", interpolate(projection(points1), tension), L, interpolateReverse(projection(points0.reverse()), tension), "Z");
       }
       while (++i < n) {
         if (defined.call(this, d = data[i], i)) {
@@ -2832,11 +2834,10 @@
       return area;
     };
     area.interpolate = function(_) {
-      if (!arguments.length) return interpolate;
-      if (!d3_svg_lineInterpolators.has(_ += "")) _ = d3_svg_lineInterpolatorDefault;
-      i0 = d3_svg_lineInterpolators.get(interpolate = _);
-      i1 = i0.reverse || i0;
-      L = /-closed$/.test(_) ? "M" : "L";
+      if (!arguments.length) return interpolateKey;
+      if (typeof _ === "function") interpolateKey = interpolate = _; else interpolateKey = (interpolate = d3_svg_lineInterpolators.get(_) || d3_svg_lineLinear).key;
+      interpolateReverse = interpolate.reverse || interpolate;
+      L = interpolate.closed ? "M" : "L";
       return area;
     };
     area.tension = function(_) {
@@ -2849,7 +2850,7 @@
   d3_svg_lineStepBefore.reverse = d3_svg_lineStepAfter;
   d3_svg_lineStepAfter.reverse = d3_svg_lineStepBefore;
   d3.svg.area = function() {
-    return d3_svg_area(Object);
+    return d3_svg_area(d3_identity);
   };
   d3.svg.area.radial = function() {
     var area = d3_svg_area(d3_svg_lineRadial);
