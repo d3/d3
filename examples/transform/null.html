@@ -20,6 +20,6 @@ var rect = g.append("rect")
 
 g.transition()
     .duration(3000)
-    .attr("transform", "translate(100,100)rotate(360)", d3.interpolateString);
+    .attrTween("transform", d3.tween("translate(100,100)rotate(360)", d3.interpolateString));
 
 </script>

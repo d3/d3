@@ -1776,20 +1776,6 @@
     }, 0, time);
     return groups;
   }
-  var d3_transitionRemove = {};
-  function d3_transitionNull(d, i, a) {
-    return a != "" && d3_transitionRemove;
-  }
-  function d3_transitionTween(interpolate, b) {
-    function transitionFunction(d, i, a) {
-      var v = b.call(this, d, i);
-      return v == null ? a != "" && d3_transitionRemove : a != v && interpolate(a, v);
-    }
-    function transitionString(d, i, a) {
-      return a != b && interpolate(a, b);
-    }
-    return typeof b === "function" ? transitionFunction : b == null ? d3_transitionNull : (b += "", transitionString);
-  }
   var d3_transitionPrototype = [], d3_transitionNextId = 0, d3_transitionId = 0, d3_transitionDefaultDelay = 0, d3_transitionDefaultDuration = 250, d3_transitionDefaultEase = d3.ease("cubic-in-out"), d3_transitionDelay = d3_transitionDefaultDelay, d3_transitionDuration = d3_transitionDefaultDuration, d3_transitionEase = d3_transitionDefaultEase;
   d3_transitionPrototype.call = d3_selectionPrototype.call;
   d3.transition = function(selection) {
@@ -1849,36 +1835,34 @@
     }
     return d3_transition(subgroups, this.id, this.time).ease(this.ease());
   };
-  d3_transitionPrototype.attr = function(name, value, interpolate) {
-    if (arguments.length < 3) interpolate = d3_interpolateByName(name);
-    return this.attrTween(name, d3_transitionTween(interpolate, value));
+  d3_transitionPrototype.attr = function(name, value) {
+    return this.attrTween(name, d3.tween(value, d3_interpolateByName(name)));
   };
   d3_transitionPrototype.attrTween = function(nameNS, tween) {
     var name = d3.ns.qualify(nameNS);
     function attrTween(d, i) {
       var f = tween.call(this, d, i, this.getAttribute(name));
-      return f === d3_transitionRemove ? (this.removeAttribute(name), null) : f && function(t) {
+      return f === d3_tweenRemove ? (this.removeAttribute(name), null) : f && function(t) {
         this.setAttribute(name, f(t));
       };
     }
     function attrTweenNS(d, i) {
       var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
-      return f === d3_transitionRemove ? (this.removeAttributeNS(name.space, name.local), null) : f && function(t) {
+      return f === d3_tweenRemove ? (this.removeAttributeNS(name.space, name.local), null) : f && function(t) {
         this.setAttributeNS(name.space, name.local, f(t));
       };
     }
     return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
   };
-  d3_transitionPrototype.style = function(name, value, priority, interpolate) {
-    var n = arguments.length;
-    if (n < 3) interpolate = d3_interpolateByName(name), priority = ""; else if (typeof priority === "function") interpolate = priority, priority = ""; else interpolate = d3_interpolateByName(name);
-    return this.styleTween(name, d3_transitionTween(interpolate, value), priority);
+  d3_transitionPrototype.style = function(name, value, priority) {
+    if (arguments.length < 3) priority = "";
+    return this.styleTween(name, d3.tween(value, d3_interpolateByName(name)), priority);
   };
   d3_transitionPrototype.styleTween = function(name, tween, priority) {
     if (arguments.length < 3) priority = "";
     return this.tween("style." + name, function(d, i) {
       var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-      return f === d3_transitionRemove ? (this.style.removeProperty(name), null) : f && function(t) {
+      return f === d3_tweenRemove ? (this.style.removeProperty(name), null) : f && function(t) {
         this.style.setProperty(name, f(t), priority);
       };
     });
@@ -1926,6 +1910,20 @@
   d3_transitionPrototype.transition = function() {
     return this.select(d3_this);
   };
+  d3.tween = function(b, interpolate) {
+    function tweenFunction(d, i, a) {
+      var v = b.call(this, d, i);
+      return v == null ? a != "" && d3_tweenRemove : a != v && interpolate(a, v);
+    }
+    function tweenString(d, i, a) {
+      return a != b && interpolate(a, b);
+    }
+    return typeof b === "function" ? tweenFunction : b == null ? d3_tweenNull : (b += "", tweenString);
+  };
+  var d3_tweenRemove = {};
+  function d3_tweenNull(d, i, a) {
+    return a != "" && d3_tweenRemove;
+  }
   var d3_timer_queue = null, d3_timer_interval, d3_timer_timeout;
   d3.timer = function(callback, delay, then) {
     var found = false, t0, t1 = d3_timer_queue;
