@@ -6289,7 +6289,7 @@
     };
   }
   d3.time = {};
-  var d3_time = Date, d3_time_weekdaySymbols = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+  var d3_time = Date, d3_time_daySymbols = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
   function d3_time_utc() {
     this._ = new Date(arguments.length > 1 ? Date.UTC.apply(this, arguments) : arguments[0]);
   }
@@ -6357,7 +6357,10 @@
   };
   var d3_time_prototype = Date.prototype;
   var d3_time_formatDateTime = "%a %b %e %H:%M:%S %Y", d3_time_formatDate = "%m/%d/%y", d3_time_formatTime = "%H:%M:%S";
-  var d3_time_weekdays = d3_time_weekdaySymbols, d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+  var d3_time_days = d3_time_daySymbols, d3_time_dayAbbreviations = d3_time_days.map(d3_time_formatAbbreviate), d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], d3_time_monthAbbreviations = d3_time_months.map(d3_time_formatAbbreviate);
+  function d3_time_formatAbbreviate(name) {
+    return name.substring(0, 3);
+  }
   d3.time.format = function(template) {
     var n = template.length;
     function format(date) {
@@ -6407,9 +6410,6 @@
     }
     return j;
   }
-  function d3_time_formatAbbrev(s) {
-    return s.substring(0, 3);
-  }
   function d3_time_formatRe(names) {
     return new RegExp("^(?:" + names.map(d3.requote).join("|") + ")", "i");
   }
@@ -6419,16 +6419,16 @@
     return map;
   }
   var d3_time_zfill2 = d3.format("02d"), d3_time_zfill3 = d3.format("03d"), d3_time_zfill4 = d3.format("04d"), d3_time_sfill2 = d3.format("2d");
-  var d3_time_weekdayRe = d3_time_formatRe(d3_time_weekdays), d3_time_weekdayAbbrevRe = d3_time_formatRe(d3_time_weekdays.map(d3_time_formatAbbrev)), d3_time_monthRe = d3_time_formatRe(d3_time_months), d3_time_monthLookup = d3_time_formatLookup(d3_time_months), d3_time_monthAbbrevLookup = d3_time_formatLookup(d3_time_months.map(d3_time_formatAbbrev));
+  var d3_time_dayRe = d3_time_formatRe(d3_time_days), d3_time_dayAbbrevRe = d3_time_formatRe(d3_time_dayAbbreviations), d3_time_monthRe = d3_time_formatRe(d3_time_months), d3_time_monthLookup = d3_time_formatLookup(d3_time_months), d3_time_monthAbbrevRe = d3_time_formatRe(d3_time_monthAbbreviations), d3_time_monthAbbrevLookup = d3_time_formatLookup(d3_time_monthAbbreviations);
   var d3_time_formats = {
     a: function(d) {
-      return d3_time_weekdays[d.getDay()].substring(0, 3);
+      return d3_time_dayAbbreviations[d.getDay()];
     },
     A: function(d) {
-      return d3_time_weekdays[d.getDay()];
+      return d3_time_days[d.getDay()];
     },
     b: function(d) {
-      return d3_time_months[d.getMonth()].substring(0, 3);
+      return d3_time_monthAbbreviations[d.getMonth()];
     },
     B: function(d) {
       return d3_time_months[d.getMonth()];
@@ -6507,20 +6507,23 @@
     Y: d3_time_parseFullYear
   };
   function d3_time_parseWeekdayAbbrev(date, string, i) {
-    return d3_time_weekdayAbbrevRe.test(string.substring(i, i += 3)) ? i : -1;
+    d3_time_dayAbbrevRe.lastIndex = 0;
+    var n = d3_time_dayAbbrevRe.exec(string.substring(i));
+    return n ? i += n[0].length : -1;
   }
   function d3_time_parseWeekday(date, string, i) {
-    d3_time_weekdayRe.lastIndex = 0;
-    var n = d3_time_weekdayRe.exec(string.substring(i, i + 10));
+    d3_time_dayRe.lastIndex = 0;
+    var n = d3_time_dayRe.exec(string.substring(i));
     return n ? i += n[0].length : -1;
   }
   function d3_time_parseMonthAbbrev(date, string, i) {
-    var n = d3_time_monthAbbrevLookup.get(string.substring(i, i += 3).toLowerCase());
-    return n == null ? -1 : (date.m = n, i);
+    d3_time_monthAbbrevRe.lastIndex = 0;
+    var n = d3_time_monthAbbrevRe.exec(string.substring(i));
+    return n ? (date.m = d3_time_monthAbbrevLookup.get(n[0].toLowerCase()), i += n[0].length) : -1;
   }
   function d3_time_parseMonth(date, string, i) {
     d3_time_monthRe.lastIndex = 0;
-    var n = d3_time_monthRe.exec(string.substring(i, i + 12));
+    var n = d3_time_monthRe.exec(string.substring(i));
     return n ? (date.m = d3_time_monthLookup.get(n[0].toLowerCase()), i += n[0].length) : -1;
   }
   function d3_time_parseLocaleFull(date, string, i) {
@@ -6575,7 +6578,7 @@
     var n = d3_time_numberRe.exec(string.substring(i, i + 3));
     return n ? (date.L = +n[0], i += n[0].length) : -1;
   }
-  var d3_time_numberRe = /\s*\d+/;
+  var d3_time_numberRe = /^\s*\d+/;
   function d3_time_parseAmPm(date, string, i) {
     var n = d3_time_amPmLookup.get(string.substring(i, i += 2).toLowerCase());
     return n == null ? -1 : (date.p = n, i);
@@ -6725,7 +6728,7 @@
     var year = d3.time.year(date);
     return Math.floor((date - year - (date.getTimezoneOffset() - year.getTimezoneOffset()) * 6e4) / 864e5);
   };
-  d3_time_weekdaySymbols.forEach(function(day, i) {
+  d3_time_daySymbols.forEach(function(day, i) {
     day = day.toLowerCase();
     i = 7 - i;
     var interval = d3.time[day] = d3_time_interval(function(date) {

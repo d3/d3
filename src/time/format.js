@@ -60,10 +60,6 @@ function d3_time_parse(date, template, string, j) {
   return j;
 }
 
-function d3_time_formatAbbrev(s) {
-  return s.substring(0, 3);
-}
-
 function d3_time_formatRe(names) {
   return new RegExp("^(?:" + names.map(d3.requote).join("|") + ")", "i");
 }
@@ -79,16 +75,17 @@ var d3_time_zfill2 = d3.format("02d"),
     d3_time_zfill4 = d3.format("04d"),
     d3_time_sfill2 = d3.format("2d");
 
-var d3_time_weekdayRe = d3_time_formatRe(d3_time_weekdays),
-    d3_time_weekdayAbbrevRe = d3_time_formatRe(d3_time_weekdays.map(d3_time_formatAbbrev)),
+var d3_time_dayRe = d3_time_formatRe(d3_time_days),
+    d3_time_dayAbbrevRe = d3_time_formatRe(d3_time_dayAbbreviations),
     d3_time_monthRe = d3_time_formatRe(d3_time_months),
     d3_time_monthLookup = d3_time_formatLookup(d3_time_months),
-    d3_time_monthAbbrevLookup = d3_time_formatLookup(d3_time_months.map(d3_time_formatAbbrev));
+    d3_time_monthAbbrevRe = d3_time_formatRe(d3_time_monthAbbreviations),
+    d3_time_monthAbbrevLookup = d3_time_formatLookup(d3_time_monthAbbreviations);
 
 var d3_time_formats = {
-  a: function(d) { return d3_time_weekdays[d.getDay()].substring(0, 3); },
-  A: function(d) { return d3_time_weekdays[d.getDay()]; },
-  b: function(d) { return d3_time_months[d.getMonth()].substring(0, 3); },
+  a: function(d) { return d3_time_dayAbbreviations[d.getDay()]; },
+  A: function(d) { return d3_time_days[d.getDay()]; },
+  b: function(d) { return d3_time_monthAbbreviations[d.getMonth()]; },
   B: function(d) { return d3_time_months[d.getMonth()]; },
   c: d3.time.format(d3_time_formatDateTime),
   d: function(d) { return d3_time_zfill2(d.getDate()); },
@@ -142,24 +139,27 @@ var d3_time_parsers = {
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekdayAbbrev(date, string, i) {
-  return d3_time_weekdayAbbrevRe.test(string.substring(i, i += 3)) ? i : -1;
+  d3_time_dayAbbrevRe.lastIndex = 0;
+  var n = d3_time_dayAbbrevRe.exec(string.substring(i));
+  return n ? i += n[0].length : -1;
 }
 
 // Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekday(date, string, i) {
-  d3_time_weekdayRe.lastIndex = 0;
-  var n = d3_time_weekdayRe.exec(string.substring(i, i + 10));
+  d3_time_dayRe.lastIndex = 0;
+  var n = d3_time_dayRe.exec(string.substring(i));
   return n ? i += n[0].length : -1;
 }
 
 function d3_time_parseMonthAbbrev(date, string, i) {
-  var n = d3_time_monthAbbrevLookup.get(string.substring(i, i += 3).toLowerCase());
-  return n == null ? -1 : (date.m = n, i);
+  d3_time_monthAbbrevRe.lastIndex = 0;
+  var n = d3_time_monthAbbrevRe.exec(string.substring(i));
+  return n ? (date.m = d3_time_monthAbbrevLookup.get(n[0].toLowerCase()), i += n[0].length) : -1;
 }
 
 function d3_time_parseMonth(date, string, i) {
   d3_time_monthRe.lastIndex = 0;
-  var n = d3_time_monthRe.exec(string.substring(i, i + 12));
+  var n = d3_time_monthRe.exec(string.substring(i));
   return n ? (date.m = d3_time_monthLookup.get(n[0].toLowerCase()), i += n[0].length) : -1;
 }
 
@@ -229,7 +229,7 @@ function d3_time_parseMilliseconds(date, string, i) {
 }
 
 // Note: we don't look at the next directive.
-var d3_time_numberRe = /\s*\d+/;
+var d3_time_numberRe = /^\s*\d+/;
 
 function d3_time_parseAmPm(date, string, i) {
   var n = d3_time_amPmLookup.get(string.substring(i, i += 2).toLowerCase());
