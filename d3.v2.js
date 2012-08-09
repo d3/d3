@@ -4410,19 +4410,38 @@
   }
   var d3_layout_hierarchyInline = false;
   d3.layout.pack = function() {
-    var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), size = [ 1, 1 ];
+    var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), padding = 0, size = [ 1, 1 ];
     function pack(d, i) {
       var nodes = hierarchy.call(this, d, i), root = nodes[0];
       root.x = 0;
       root.y = 0;
-      d3_layout_packTree(root);
-      var w = size[0], h = size[1], k = 1 / Math.max(2 * root.r / w, 2 * root.r / h);
-      d3_layout_packTransform(root, w / 2, h / 2, k);
+      d3_layout_treeVisitAfter(root, function(d) {
+        d.r = Math.sqrt(d.value);
+      });
+      d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
+      var w = size[0], h = size[1], k = Math.max(2 * root.r / w, 2 * root.r / h);
+      if (padding > 0) {
+        var dr = padding * k / 2;
+        d3_layout_treeVisitAfter(root, function(d) {
+          d.r += dr;
+        });
+        d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
+        d3_layout_treeVisitAfter(root, function(d) {
+          d.r -= dr;
+        });
+        k = Math.max(2 * root.r / w, 2 * root.r / h);
+      }
+      d3_layout_packTransform(root, w / 2, h / 2, 1 / k);
       return nodes;
     }
     pack.size = function(x) {
       if (!arguments.length) return size;
       size = x;
+      return pack;
+    };
+    pack.padding = function(_) {
+      if (!arguments.length) return padding;
+      padding = +_;
       return pack;
     };
     return d3_layout_hierarchyRebind(pack, hierarchy);
@@ -4445,8 +4464,9 @@
     var dx = b.x - a.x, dy = b.y - a.y, dr = a.r + b.r;
     return dr * dr - dx * dx - dy * dy > .001;
   }
-  function d3_layout_packCircle(nodes) {
-    var xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity, n = nodes.length, a, b, c, j, k;
+  function d3_layout_packSiblings(node) {
+    if (!(nodes = node.children) || !(n = nodes.length)) return;
+    var nodes, xMin = Infinity, xMax = -Infinity, yMin = Infinity, yMax = -Infinity, a, b, c, i, j, k, n;
     function bound(node) {
       xMin = Math.min(node.x - node.r, xMin);
       xMax = Math.max(node.x + node.r, xMax);
@@ -4471,7 +4491,7 @@
         a._pack_prev = c;
         d3_layout_packInsert(c, b);
         b = a._pack_next;
-        for (var i = 3; i < n; i++) {
+        for (i = 3; i < n; i++) {
           d3_layout_packPlace(a, b, c = nodes[i]);
           var isect = 0, s1 = 1, s2 = 1;
           for (j = b._pack_next; j !== b; j = j._pack_next, s1++) {
@@ -4499,14 +4519,14 @@
       }
     }
     var cx = (xMin + xMax) / 2, cy = (yMin + yMax) / 2, cr = 0;
-    for (var i = 0; i < n; i++) {
-      var node = nodes[i];
-      node.x -= cx;
-      node.y -= cy;
-      cr = Math.max(cr, node.r + Math.sqrt(node.x * node.x + node.y * node.y));
+    for (i = 0; i < n; i++) {
+      c = nodes[i];
+      c.x -= cx;
+      c.y -= cy;
+      cr = Math.max(cr, c.r + Math.sqrt(c.x * c.x + c.y * c.y));
     }
+    node.r = cr;
     nodes.forEach(d3_layout_packUnlink);
-    return cr;
   }
   function d3_layout_packLink(node) {
     node._pack_next = node._pack_prev = node;
@@ -4514,15 +4534,6 @@
   function d3_layout_packUnlink(node) {
     delete node._pack_next;
     delete node._pack_prev;
-  }
-  function d3_layout_packTree(node) {
-    var children = node.children;
-    if (children && children.length) {
-      children.forEach(d3_layout_packTree);
-      node.r = d3_layout_packCircle(children);
-    } else {
-      node.r = Math.sqrt(node.value);
-    }
   }
   function d3_layout_packTransform(node, x, y, k) {
     var children = node.children;
