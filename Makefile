@@ -20,7 +20,7 @@ all: \
 	d3.svg.js \
 	d3.behavior.js \
 	d3.layout.js \
-	d3.csv.js \
+	d3.dsv.js \
 	d3.geo.js \
 	d3.geom.js \
 	d3.time.js \
@@ -189,10 +189,10 @@ d3.geo.js: \
 	src/geo/greatArc.js \
 	src/geo/greatCircle.js
 
-d3.csv.js: \
-	src/csv/csv.js \
-	src/csv/parse.js \
-	src/csv/format.js
+d3.dsv.js: \
+	src/dsv/dsv.js \
+	src/dsv/csv.js \
+	src/dsv/tsv.js
 
 d3.time.js: \
 	src/time/time.js \

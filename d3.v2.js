@@ -4937,80 +4937,86 @@
       dy: dy
     };
   }
-  d3.csv = function(url, callback) {
-    d3.text(url, "text/csv", function(text) {
-      callback(text && d3.csv.parse(text));
-    });
-  };
-  d3.csv.parse = function(text) {
-    var header;
-    return d3.csv.parseRows(text, function(row, i) {
-      if (i) {
-        var o = {}, j = -1, m = header.length;
-        while (++j < m) o[header[j]] = row[j];
-        return o;
-      } else {
-        header = row;
-        return null;
-      }
-    });
-  };
-  d3.csv.parseRows = function(text, f) {
-    var EOL = {}, EOF = {}, rows = [], re = /\r\n|[,\r\n]/g, n = 0, t, eol;
-    re.lastIndex = 0;
-    function token() {
-      if (re.lastIndex >= text.length) return EOF;
-      if (eol) {
-        eol = false;
-        return EOL;
-      }
-      var j = re.lastIndex;
-      if (text.charCodeAt(j) === 34) {
-        var i = j;
-        while (i++ < text.length) {
-          if (text.charCodeAt(i) === 34) {
-            if (text.charCodeAt(i + 1) !== 34) break;
-            i++;
+  function d3_dsv(delimiter, mimeType) {
+    var reParse = new RegExp("\r\n|[" + delimiter + "\r\n]", "g"), reFormat = new RegExp('["' + delimiter + "\n]"), delimiterCode = delimiter.charCodeAt(0);
+    function dsv(url, callback) {
+      d3.text(url, mimeType, function(text) {
+        callback(text && dsv.parse(text));
+      });
+    }
+    dsv.parse = function(text) {
+      var header;
+      return dsv.parseRows(text, function(row, i) {
+        if (i) {
+          var o = {}, j = -1, m = header.length;
+          while (++j < m) o[header[j]] = row[j];
+          return o;
+        } else {
+          header = row;
+          return null;
+        }
+      });
+    };
+    dsv.parseRows = function(text, f) {
+      var EOL = {}, EOF = {}, rows = [], n = 0, t, eol;
+      reParse.lastIndex = 0;
+      function token() {
+        if (reParse.lastIndex >= text.length) return EOF;
+        if (eol) {
+          eol = false;
+          return EOL;
+        }
+        var j = reParse.lastIndex;
+        if (text.charCodeAt(j) === 34) {
+          var i = j;
+          while (i++ < text.length) {
+            if (text.charCodeAt(i) === 34) {
+              if (text.charCodeAt(i + 1) !== 34) break;
+              i++;
+            }
           }
+          reParse.lastIndex = i + 2;
+          var c = text.charCodeAt(i + 1);
+          if (c === 13) {
+            eol = true;
+            if (text.charCodeAt(i + 2) === 10) reParse.lastIndex++;
+          } else if (c === 10) {
+            eol = true;
+          }
+          return text.substring(j + 1, i).replace(/""/g, '"');
         }
-        re.lastIndex = i + 2;
-        var c = text.charCodeAt(i + 1);
-        if (c === 13) {
-          eol = true;
-          if (text.charCodeAt(i + 2) === 10) re.lastIndex++;
-        } else if (c === 10) {
-          eol = true;
+        var m = reParse.exec(text);
+        if (m) {
+          eol = m[0].charCodeAt(0) !== delimiterCode;
+          return text.substring(j, m.index);
         }
-        return text.substring(j + 1, i).replace(/""/g, '"');
+        reParse.lastIndex = text.length;
+        return text.substring(j);
       }
-      var m = re.exec(text);
-      if (m) {
-        eol = m[0].charCodeAt(0) !== 44;
-        return text.substring(j, m.index);
+      while ((t = token()) !== EOF) {
+        var a = [];
+        while (t !== EOL && t !== EOF) {
+          a.push(t);
+          t = token();
+        }
+        if (f && !(a = f(a, n++))) continue;
+        rows.push(a);
       }
-      re.lastIndex = text.length;
-      return text.substring(j);
+      return rows;
+    };
+    dsv.format = function(rows) {
+      return rows.map(formatRow).join("\n");
+    };
+    function formatRow(row) {
+      return row.map(formatValue).join(delimiter);
     }
-    while ((t = token()) !== EOF) {
-      var a = [];
-      while (t !== EOL && t !== EOF) {
-        a.push(t);
-        t = token();
-      }
-      if (f && !(a = f(a, n++))) continue;
-      rows.push(a);
+    function formatValue(text) {
+      return reFormat.test(text) ? '"' + text.replace(/\"/g, '""') + '"' : text;
     }
-    return rows;
-  };
-  d3.csv.format = function(rows) {
-    return rows.map(d3_csv_formatRow).join("\n");
-  };
-  function d3_csv_formatRow(row) {
-    return row.map(d3_csv_formatValue).join(",");
+    return dsv;
   }
-  function d3_csv_formatValue(text) {
-    return /[",\n]/.test(text) ? '"' + text.replace(/\"/g, '""') + '"' : text;
-  }
+  d3.csv = d3_dsv(",", "text/csv");
+  d3.tsv = d3_dsv("\t", "text/tab-separated-values");
   d3.geo = {};
   var d3_geo_radians = Math.PI / 180;
   d3.geo.azimuthal = function() {
