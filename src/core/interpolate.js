@@ -173,7 +173,36 @@ d3.interpolateHsl = function(a, b) {
       l1 = b.l - l0;
   if (h1 > 180) h1 -= 360; else if (h1 < -180) h1 += 360; // shortest path
   return function(t) {
-    return d3_hsl_rgb(h0 + h1 * t, s0 + s1 * t, l0 + l1 * t).toString();
+    return d3_hsl_rgb(h0 + h1 * t, s0 + s1 * t, l0 + l1 * t) + "";
+  };
+};
+
+d3.interpolateLab = function(a, b) {
+  a = d3.lab(a);
+  b = d3.lab(b);
+  var al = a.l,
+      aa = a.a,
+      ab = a.b,
+      bl = b.l - al,
+      ba = b.a - aa,
+      bb = b.b - ab;
+  return function(t) {
+    return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
+  };
+};
+
+d3.interpolateHcl = function(a, b) {
+  a = d3.hcl(a);
+  b = d3.hcl(b);
+  var ah = a.h,
+      ac = a.c,
+      al = a.l,
+      bh = b.h - ah,
+      bc = b.c - ac,
+      bl = b.l - al;
+  if (bh > 180) bh -= 360; else if (bh < -180) bh += 360; // shortest path
+  return function(t) {
+    return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
   };
 };
 

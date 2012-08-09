@@ -941,7 +941,24 @@
     var h0 = a.h, s0 = a.s, l0 = a.l, h1 = b.h - h0, s1 = b.s - s0, l1 = b.l - l0;
     if (h1 > 180) h1 -= 360; else if (h1 < -180) h1 += 360;
     return function(t) {
-      return d3_hsl_rgb(h0 + h1 * t, s0 + s1 * t, l0 + l1 * t).toString();
+      return d3_hsl_rgb(h0 + h1 * t, s0 + s1 * t, l0 + l1 * t) + "";
+    };
+  };
+  d3.interpolateLab = function(a, b) {
+    a = d3.lab(a);
+    b = d3.lab(b);
+    var al = a.l, aa = a.a, ab = a.b, bl = b.l - al, ba = b.a - aa, bb = b.b - ab;
+    return function(t) {
+      return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
+    };
+  };
+  d3.interpolateHcl = function(a, b) {
+    a = d3.hcl(a);
+    b = d3.hcl(b);
+    var ah = a.h, ac = a.c, al = a.l, bh = b.h - ah, bc = b.c - ac, bl = b.l - al;
+    if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
+    return function(t) {
+      return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
     };
   };
   d3.interpolateArray = function(a, b) {
@@ -1077,6 +1094,16 @@
       s = h = 0;
     }
     return d3_hsl(h, s, l);
+  }
+  function d3_rgb_lab(r, g, b) {
+    r = d3_rgb_xyz(r);
+    g = d3_rgb_xyz(g);
+    b = d3_rgb_xyz(b);
+    var x = d3_xyz_lab((.4124564 * r + .3575761 * g + .1804375 * b) / d3_lab_X), y = d3_xyz_lab((.2126729 * r + .7151522 * g + .072175 * b) / d3_lab_Y), z = d3_xyz_lab((.0193339 * r + .119192 * g + .9503041 * b) / d3_lab_Z);
+    return d3_lab(116 * y - 16, 500 * (x - y), 200 * (y - z));
+  }
+  function d3_rgb_xyz(r) {
+    return (r /= 255) <= .04045 ? r / 12.92 : Math.pow((r + .055) / 1.055, 2.4);
   }
   function d3_rgb_parseNumber(c) {
     var f = parseFloat(c);
@@ -1278,6 +1305,76 @@
       return Math.round(v(h) * 255);
     }
     return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
+  }
+  d3.hcl = function(h, c, l) {
+    return arguments.length === 1 ? h instanceof d3_Hcl ? d3_hcl(h.h, h.c, h.l) : h instanceof d3_Lab ? d3_lab_hcl(h.l, h.a, h.b) : d3_lab_hcl((h = d3_rgb_lab((h = d3.rgb(h)).r, h.g, h.b)).l, h.a, h.b) : d3_hcl(+h, +c, +l);
+  };
+  function d3_hcl(h, c, l) {
+    return new d3_Hcl(h, c, l);
+  }
+  function d3_Hcl(h, c, l) {
+    this.h = h;
+    this.c = c;
+    this.l = l;
+  }
+  d3_Hcl.prototype.brighter = function(k) {
+    return d3_hcl(this.h, this.c, Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)));
+  };
+  d3_Hcl.prototype.darker = function(k) {
+    return d3_hcl(this.h, this.c, Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)));
+  };
+  d3_Hcl.prototype.rgb = function() {
+    return d3_hcl_lab(this.h, this.c, this.l).rgb();
+  };
+  d3_Hcl.prototype.toString = function() {
+    return this.rgb() + "";
+  };
+  function d3_hcl_lab(h, c, l) {
+    return d3_lab(l, Math.cos(h *= Math.PI / 180) * c, Math.sin(h) * c);
+  }
+  d3.lab = function(l, a, b) {
+    return arguments.length === 1 ? l instanceof d3_Lab ? d3_lab(l.l, l.a, l.b) : l instanceof d3_Hcl ? d3_hcl_lab(l.l, l.c, l.h) : d3_rgb_lab((l = d3.rgb(l)).r, l.g, l.b) : d3_lab(+l, +a, +b);
+  };
+  function d3_lab(l, a, b) {
+    return new d3_Lab(l, a, b);
+  }
+  function d3_Lab(l, a, b) {
+    this.l = l;
+    this.a = a;
+    this.b = b;
+  }
+  var d3_lab_K = 18;
+  var d3_lab_X = .95047, d3_lab_Y = 1, d3_lab_Z = 1.08883;
+  d3_Lab.prototype.brighter = function(k) {
+    return d3_lab(Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
+  };
+  d3_Lab.prototype.darker = function(k) {
+    return d3_lab(Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
+  };
+  d3_Lab.prototype.rgb = function() {
+    return d3_lab_rgb(this.l, this.a, this.b);
+  };
+  d3_Lab.prototype.toString = function() {
+    return this.rgb() + "";
+  };
+  function d3_lab_rgb(l, a, b) {
+    var y = (l + 16) / 116, x = y + a / 500, z = y - b / 200;
+    x = d3_lab_xyz(x) * d3_lab_X;
+    y = d3_lab_xyz(y) * d3_lab_Y;
+    z = d3_lab_xyz(z) * d3_lab_Z;
+    return d3_rgb(d3_xyz_rgb(3.2404542 * x - 1.5371385 * y - .4985314 * z), d3_xyz_rgb(-.969266 * x + 1.8760108 * y + .041556 * z), d3_xyz_rgb(.0556434 * x - .2040259 * y + 1.0572252 * z));
+  }
+  function d3_lab_hcl(l, a, b) {
+    return d3_hcl(Math.atan2(b, a) / Math.PI * 180, Math.sqrt(a * a + b * b), l);
+  }
+  function d3_lab_xyz(x) {
+    return x > .206893034 ? x * x * x : (x - 4 / 29) / 7.787037;
+  }
+  function d3_xyz_lab(x) {
+    return x > .008856 ? Math.pow(x, 1 / 3) : 7.787037 * x + 4 / 29;
+  }
+  function d3_xyz_rgb(r) {
+    return Math.round(255 * (r <= .00304 ? 12.92 * r : 1.055 * Math.pow(r, 1 / 2.4) - .055));
   }
   function d3_selection(groups) {
     d3_arraySubclass(groups, d3_selectionPrototype);
