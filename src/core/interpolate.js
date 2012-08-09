@@ -217,8 +217,8 @@ d3.interpolateObject = function(a, b) {
 
 var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
 
-function d3_interpolateByName(n) {
-  return n == "transform"
+function d3_interpolateByName(name) {
+  return name == "transform"
       ? d3.interpolateTransform
       : d3.interpolate;
 }

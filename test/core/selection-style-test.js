@@ -22,6 +22,16 @@ suite.addBatch({
       body.style("background-color", function() { return "orange"; });
       assert.equal(document.body.style["background-color"], "orange");
     },
+    "sets properties as a map of constants": function(body) {
+      body.style({"background-color": "white", opacity: .42});
+      assert.equal(document.body.style["background-color"], "white");
+      assert.equal(document.body.style["opacity"], "0.42");
+    },
+    "sets properties as a map of functions": function(body) {
+      body.data(["orange"]).style({"background-color": String, opacity: function(d, i) { return i; }});
+      assert.equal(document.body.style["background-color"], "orange");
+      assert.equal(document.body.style["opacity"], "0");
+    },
     "gets a property value": function(body) {
       document.body.style.setProperty("background-color", "yellow", "");
       assert.equal(body.style("background-color"), "yellow");
@@ -29,6 +39,10 @@ suite.addBatch({
     "observes the specified priority": function(body) {
       body.style("background-color", "green", "important");
       assert.equal(document.body.style.getPropertyPriority("background-color"), "important");
+      body.style({opacity: .52}, "important");
+      assert.equal(document.body.style.getPropertyPriority("opacity"), "important");
+      body.style({visibility: function() { return "visible"; }}, "important");
+      assert.equal(document.body.style.getPropertyPriority("visibility"), "important");
     },
     "removes a property as null": function(body) {
       body.style("background-color", "green").style("background-color", null);
@@ -36,6 +50,16 @@ suite.addBatch({
     },
     "removes a property as a function": function(body) {
       body.style("background-color", "green").style("background-color", function() { return null; });
+      assert.equal(body.style("background-color"), "");
+    },
+    "removes properties as a map of nulls": function(body) {
+      document.body.style.setProperty("background-color", "purple");
+      body.style({"background-color": null});
+      assert.equal(body.style("background-color"), "");
+    },
+    "removes properties as a map of functions that return null": function(body) {
+      document.body.style.setProperty("background-color", "purple");
+      body.style({"background-color": function() {}});
       assert.equal(body.style("background-color"), "");
     },
     "returns the current selection": function(body) {

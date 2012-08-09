@@ -373,7 +373,7 @@
     return d == null;
   }
   function d3_collapse(s) {
-    return s.replace(/^\s+|\s+$/g, "").replace(/\s+/g, " ");
+    return s.trim().replace(/\s+/g, " ");
   }
   d3.range = function(start, stop, step) {
     if (arguments.length < 3) {
@@ -958,8 +958,8 @@
     };
   };
   var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
-  function d3_interpolateByName(n) {
-    return n == "transform" ? d3.interpolateTransform : d3.interpolate;
+  function d3_interpolateByName(name) {
+    return name == "transform" ? d3.interpolateTransform : d3.interpolate;
   }
   d3.interpolators = [ d3.interpolateObject, function(a, b) {
     return b instanceof Array && d3.interpolateArray(a, b);
@@ -1329,11 +1329,19 @@
     };
   }
   d3_selectionPrototype.attr = function(name, value) {
-    name = d3.ns.qualify(name);
     if (arguments.length < 2) {
-      var node = this.node();
-      return name.local ? node.getAttributeNS(name.space, name.local) : node.getAttribute(name);
+      if (typeof name === "string") {
+        var node = this.node();
+        name = d3.ns.qualify(name);
+        return name.local ? node.getAttributeNS(name.space, name.local) : node.getAttribute(name);
+      }
+      for (value in name) this.each(d3_selection_attr(value, name[value]));
+      return this;
     }
+    return this.each(d3_selection_attr(name, value));
+  };
+  function d3_selection_attr(name, value) {
+    name = d3.ns.qualify(name);
     function attrNull() {
       this.removeAttribute(name);
     }
@@ -1354,52 +1362,73 @@
       var x = value.apply(this, arguments);
       if (x == null) this.removeAttributeNS(name.space, name.local); else this.setAttributeNS(name.space, name.local, x);
     }
-    return this.each(value == null ? name.local ? attrNullNS : attrNull : typeof value === "function" ? name.local ? attrFunctionNS : attrFunction : name.local ? attrConstantNS : attrConstant);
-  };
+    return value == null ? name.local ? attrNullNS : attrNull : typeof value === "function" ? name.local ? attrFunctionNS : attrFunction : name.local ? attrConstantNS : attrConstant;
+  }
   d3_selectionPrototype.classed = function(name, value) {
-    var names = d3_collapse(name).split(" "), n = names.length, i = -1;
-    if (arguments.length > 1) {
-      while (++i < n) d3_selection_classed.call(this, names[i], value);
-      return this;
-    } else {
-      while (++i < n) if (!d3_selection_classed.call(this, names[i])) return false;
-      return true;
-    }
-  };
-  function d3_selection_classed(name, value) {
-    var re = new RegExp("(^|\\s+)" + d3.requote(name) + "(\\s+|$)", "g");
     if (arguments.length < 2) {
-      var node = this.node();
-      if (c = node.classList) return c.contains(name);
-      var c = node.className;
-      re.lastIndex = 0;
-      return re.test(c.baseVal != null ? c.baseVal : c);
-    }
-    function classedAdd() {
-      if (c = this.classList) return c.add(name);
-      var c = this.className, cb = c.baseVal != null, cv = cb ? c.baseVal : c;
-      re.lastIndex = 0;
-      if (!re.test(cv)) {
-        cv = d3_collapse(cv + " " + name);
-        if (cb) c.baseVal = cv; else this.className = cv;
+      if (typeof name === "string") {
+        var node = this.node(), n = (name = name.trim().split(/^|\s+/g)).length, i = -1;
+        if (value = node.classList) {
+          while (++i < n) if (!value.contains(name[i])) return false;
+        } else {
+          value = node.className;
+          if (value.baseVal != null) value = value.baseVal;
+          while (++i < n) if (!d3_selection_classedRe(name[i]).test(value)) return false;
+        }
+        return true;
       }
+      for (value in name) this.each(d3_selection_classed(value, name[value]));
+      return this;
     }
-    function classedRemove() {
-      if (c = this.classList) return c.remove(name);
-      var c = this.className, cb = c.baseVal != null, cv = cb ? c.baseVal : c;
-      if (cv) {
-        cv = d3_collapse(cv.replace(re, " "));
-        if (cb) c.baseVal = cv; else this.className = cv;
-      }
+    return this.each(d3_selection_classed(name, value));
+  };
+  function d3_selection_classedRe(name) {
+    return new RegExp("(?:^|\\s+)" + d3.requote(name) + "(?:\\s+|$)", "g");
+  }
+  function d3_selection_classed(name, value) {
+    name = name.trim().split(/\s+/).map(d3_selection_classedName);
+    var n = name.length;
+    function classedConstant() {
+      var i = -1;
+      while (++i < n) name[i](this, value);
     }
     function classedFunction() {
-      (value.apply(this, arguments) ? classedAdd : classedRemove).call(this);
+      var i = -1, x = value.apply(this, arguments);
+      while (++i < n) name[i](this, x);
     }
-    return this.each(typeof value === "function" ? classedFunction : value ? classedAdd : classedRemove);
+    return typeof value === "function" ? classedFunction : classedConstant;
+  }
+  function d3_selection_classedName(name) {
+    var re = d3_selection_classedRe(name);
+    return function(node, value) {
+      if (c = node.classList) return value ? c.add(name) : c.remove(name);
+      var c = node.className, cb = c.baseVal != null, cv = cb ? c.baseVal : c;
+      if (value) {
+        re.lastIndex = 0;
+        if (!re.test(cv)) {
+          cv = d3_collapse(cv + " " + name);
+          if (cb) c.baseVal = cv; else node.className = cv;
+        }
+      } else if (cv) {
+        cv = d3_collapse(cv.replace(re, " "));
+        if (cb) c.baseVal = cv; else node.className = cv;
+      }
+    };
   }
   d3_selectionPrototype.style = function(name, value, priority) {
-    if (arguments.length < 3) priority = "";
-    if (arguments.length < 2) return window.getComputedStyle(this.node(), null).getPropertyValue(name);
+    var n = arguments.length;
+    if (n < 3) {
+      if (typeof name !== "string") {
+        if (n < 2) value = "";
+        for (priority in name) this.each(d3_selection_style(priority, name[priority], value));
+        return this;
+      }
+      if (n < 2) return window.getComputedStyle(this.node(), null).getPropertyValue(name);
+      priority = "";
+    }
+    return this.each(d3_selection_style(name, value, priority));
+  };
+  function d3_selection_style(name, value, priority) {
     function styleNull() {
       this.style.removeProperty(name);
     }
@@ -1410,10 +1439,17 @@
       var x = value.apply(this, arguments);
       if (x == null) this.style.removeProperty(name); else this.style.setProperty(name, x, priority);
     }
-    return this.each(value == null ? styleNull : typeof value === "function" ? styleFunction : styleConstant);
-  };
+    return value == null ? styleNull : typeof value === "function" ? styleFunction : styleConstant;
+  }
   d3_selectionPrototype.property = function(name, value) {
-    if (arguments.length < 2) return this.node()[name];
+    if (arguments.length < 2) {
+      if (typeof name === "string") return this.node()[name];
+      for (value in name) this.each(d3_selection_property(value, name[value]));
+      return this;
+    }
+    return this.each(d3_selection_property(name, value));
+  };
+  function d3_selection_property(name, value) {
     function propertyNull() {
       delete this[name];
     }
@@ -1424,8 +1460,8 @@
       var x = value.apply(this, arguments);
       if (x == null) delete this[name]; else this[name] = x;
     }
-    return this.each(value == null ? propertyNull : typeof value === "function" ? propertyFunction : propertyConstant);
-  };
+    return value == null ? propertyNull : typeof value === "function" ? propertyFunction : propertyConstant;
+  }
   d3_selectionPrototype.text = function(value) {
     return arguments.length < 1 ? this.node().textContent : this.each(typeof value === "function" ? function() {
       var v = value.apply(this, arguments);
@@ -1609,21 +1645,34 @@
     };
   }
   d3_selectionPrototype.on = function(type, listener, capture) {
-    if (arguments.length < 3) capture = false;
+    var n = arguments.length;
+    if (n < 3) {
+      if (typeof type !== "string") {
+        if (n < 2) listener = false;
+        for (capture in type) this.each(d3_selection_on(capture, type[capture], listener));
+        return this;
+      }
+      if (n < 2) return (n = this.node()["__on" + type]) && n._;
+      capture = false;
+    }
+    return this.each(d3_selection_on(type, listener, capture));
+  };
+  function d3_selection_on(type, listener, capture) {
     var name = "__on" + type, i = type.indexOf(".");
     if (i > 0) type = type.substring(0, i);
-    if (arguments.length < 2) return (i = this.node()[name]) && i._;
-    return this.each(function() {
-      var node = this, args = arguments, o = node[name];
-      if (o) {
-        node.removeEventListener(type, o, o.$);
-        delete node[name];
+    function onRemove() {
+      var wrapper = this[name];
+      if (wrapper) {
+        this.removeEventListener(type, wrapper, wrapper.$);
+        delete this[name];
       }
-      if (listener) {
-        node.addEventListener(type, node[name] = l, l.$ = capture);
-        l._ = listener;
-      }
-      function l(e) {
+    }
+    function onAdd() {
+      var node = this, args = arguments;
+      onRemove.call(this);
+      this.addEventListener(type, this[name] = wrapper, wrapper.$ = capture);
+      wrapper._ = listener;
+      function wrapper(e) {
         var o = d3.event;
         d3.event = e;
         args[0] = node.__data__;
@@ -1633,8 +1682,9 @@
           d3.event = o;
         }
       }
-    });
-  };
+    }
+    return listener ? onAdd : onRemove;
+  }
   d3_selectionPrototype.each = function(callback) {
     return d3_selection_each(this, function(node, i, j) {
       callback.call(node, node.__data__, i, j);
@@ -1836,7 +1886,11 @@
     return d3_transition(subgroups, this.id, this.time).ease(this.ease());
   };
   d3_transitionPrototype.attr = function(name, value) {
-    return this.attrTween(name, d3.tween(value, d3_interpolateByName(name)));
+    if (arguments.length < 2) {
+      for (value in name) this.attrTween(value, d3_tweenByName(name[value], value));
+      return this;
+    }
+    return this.attrTween(name, d3_tweenByName(value, name));
   };
   d3_transitionPrototype.attrTween = function(nameNS, tween) {
     var name = d3.ns.qualify(nameNS);
@@ -1855,8 +1909,16 @@
     return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
   };
   d3_transitionPrototype.style = function(name, value, priority) {
-    if (arguments.length < 3) priority = "";
-    return this.styleTween(name, d3.tween(value, d3_interpolateByName(name)), priority);
+    var n = arguments.length;
+    if (n < 3) {
+      if (typeof name !== "string") {
+        if (n < 2) value = "";
+        for (priority in name) this.styleTween(priority, d3_tweenByName(name[priority], priority), value);
+        return this;
+      }
+      priority = "";
+    }
+    return this.styleTween(name, d3_tweenByName(value, name), priority);
   };
   d3_transitionPrototype.styleTween = function(name, tween, priority) {
     if (arguments.length < 3) priority = "";
@@ -1923,6 +1985,9 @@
   var d3_tweenRemove = {};
   function d3_tweenNull(d, i, a) {
     return a != "" && d3_tweenRemove;
+  }
+  function d3_tweenByName(b, name) {
+    return d3.tween(b, d3_interpolateByName(name));
   }
   var d3_timer_queue = null, d3_timer_interval, d3_timer_timeout;
   d3.timer = function(callback, delay, then) {
