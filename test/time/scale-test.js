@@ -14,6 +14,24 @@ suite.addBatch({
       return d3.time.scale;
     },
 
+    "nice": {
+      "rounds using the specified time interval": function(scale) {
+        var x = scale().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48)]);
+        assert.deepEqual(x.nice(d3.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
+        assert.deepEqual(x.nice(d3.time.week).domain(), [local(2008, 11, 28), local(2009, 0, 4)]);
+        assert.deepEqual(x.nice(d3.time.month).domain(), [local(2008, 11, 1), local(2009, 1, 1)]);
+        assert.deepEqual(x.nice(d3.time.year).domain(), [local(2008, 0, 1), local(2010, 0, 1)]);
+      },
+      "works on degenerate domains": function(scale) {
+        var x = scale().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 0, 12)]);
+        assert.deepEqual(x.nice(d3.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
+      },
+      "nicing a polylinear domain only affects the extent": function(linear) {
+        var x = linear().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48), local(2009, 0, 2, 23, 48)]).nice(d3.time.day);
+        assert.deepEqual(x.domain(), [local(2009, 0, 1), local(2009, 0, 1, 23, 48), local(2009, 0, 3)]);
+      }
+    },
+
     "copy": {
       "changes to the domain are isolated": function(scale) {
         var x = scale().domain([local(2009, 0, 1), local(2010, 0, 1)]), y = x.copy();
