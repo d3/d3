@@ -9,9 +9,9 @@ suite.addBatch({
   "text": {
     topic: function() {
       var cb = this.callback;
-      return d3.text("examples/data/sample.txt", function(text) {
+      d3.text("examples/data/sample.txt", function(text) {
         cb(null, text);
-      });
+      }).send();
     },
     "invokes the callback with the loaded text": function(text) {
       assert.equal(text, "Hello, world!\n");
@@ -22,9 +22,9 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.text("examples/data/sample.txt", "text/plain+sample", function(text) {
+        d3.text("examples/data/sample.txt", "text/plain+sample", function(text) {
           cb(null, text);
-        });
+        }).send();
       },
       "observes the optional mime type": function(text) {
         assert.equal(XMLHttpRequest._last._info.mimeType, "text/plain+sample");
@@ -33,12 +33,13 @@ suite.addBatch({
     " ": {
       topic: function() {
         var cb = this.callback;
-        return d3.text("//does/not/exist.txt", function(text) {
+        d3.text("//does/not/exist.txt").on('error', function(text) {
           cb(null, text);
-        });
+        }).send();
       },
-      "invokes the callback with null when an error occurs": function(text) {
-        assert.isNull(text);
+      "triggers error event on unsuccessful status": function(req) {
+        assert.isObject(req);
+        assert.equal(404, req.status);
       }
     }
   }
