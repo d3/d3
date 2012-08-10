@@ -29,14 +29,14 @@ function make_request(xhr){
   var opts = xhr.options;
   var req = xhr.request;
 
+  req.open(opts.method, opts.url, true);
+
   if (opts.mime_type){
     if (req.overrideMimeType)
       req.overrideMimeType(opts.mime_type);
 
     req.setRequestHeader('Accept', opts.mime_type);
   }
-
-  req.open(opts.method, opts.url, true);
 
   // done / fail off readyState
   req.onreadystatechange = function(){
