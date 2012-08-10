@@ -22,11 +22,10 @@ var d3_xhr_events = {
   progress: 'progress', timeout: 'timeout', error: 'error'
 };
 
-function make_request(xhr){
+function make_request(xhr, opts){
   if (xhr.sent) return;
 
   var dispatcher = xhr.dispatcher;
-  var opts = xhr.options;
   var req = xhr.request;
 
   req.open(opts.method, opts.url, true);
@@ -62,46 +61,35 @@ function make_request(xhr){
   });
 
   // finally, send the request
-  xhr.sent = true;
   req.send(opts.data);
 }
 
 function d3_xhr(url){
   var events = d3.keys(d3_xhr_events).concat('success');
-  this.options = { url: url, method: 'GET' };
+  var options = { url: url, method: 'GET' }, sent = false;
 
   this.request = new XMLHttpRequest;
   this.dispatcher = d3.dispatch.apply(null, events);
+
+  this.send = function(){
+    make_request(this, options);
+    sent = true;
+
+    return this;
+  };
+
+  ['url', 'data', 'method', 'mimeType', 'contentType'].forEach(function(method){
+    this[method] = function(value){
+      if (!sent) options[method] = value;
+
+      return this;
+    };
+  }, this);
 }
 
 d3_xhr.prototype = {
   on: function(type, listener){
     this.dispatcher.on(type, listener);
-    return this;
-  },
-
-  url:function(url){
-    this.options.url = url;
-    return this;
-  },
-
-  method:function(method){
-    this.options.method = method;
-    return this;
-  },
-
-  mimeType:function(mime){
-    this.options.mimeType = mime;
-    return this;
-  },
-
-  contentType:function(type){
-    this.options.contentType = type;
-    return this;
-  },
-
-  data:function(data){
-    this.options.data = data;
     return this;
   },
 
@@ -112,10 +100,7 @@ d3_xhr.prototype = {
     return this;
   },
 
-  send:function(data){
-    if (data) this.data(data);
-
-    make_request(this);
-    return this;
+  state:function(){
+    return this.request ? this.request.readyState : 0;
   }
 };

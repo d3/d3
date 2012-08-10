@@ -9,26 +9,38 @@ suite.addBatch({
   "xhr": {
     topic: function() {
       var cb = this.callback;
-      d3.xhr("examples/data/sample.txt", function(req){
-        cb(null, req);
+
+      d3.xhr("examples/data/sample.txt", function(req, xhr, ev){
+        cb(null, xhr);
       }).send();
     },
-    "makes an asynchronous HTTP request": function(req) {
-      assert.equal(req._info.url, "examples/data/sample.txt");
-      assert.isTrue(req._info.async);
+    "exposes state":function(xhr){
+      assert.equal(xhr.state(), 4);
     },
-    "invokes the callback with the request object": function(req) {
-      assert.equal(req.responseText, "Hello, world!\n");
-    },
-    "does not override the mime type by default": function(req) {
-      assert.isUndefined(req._info.mimeType);
-    },
-    "does not override the content type by default": function(req) {
-      assert.isUndefined(req._info.contentType);
-    },
-    "waits until the request is done": function(req) {
-      assert.equal(req.readyState, 4);
-      assert.equal(req.status, 200);
+    "req": {
+      topic: function() {
+        var cb = this.callback;
+        d3.xhr("examples/data/sample.txt", function(req){
+          cb(null, req);
+        }).send();
+      },
+      "makes an asynchronous HTTP request": function(req) {
+        assert.equal(req._info.url, "examples/data/sample.txt");
+        assert.isTrue(req._info.async);
+      },
+      "invokes the callback with the request object": function(req) {
+        assert.equal(req.responseText, "Hello, world!\n");
+      },
+      "does not override the mime type by default": function(req) {
+        assert.isUndefined(req._info.mimeType);
+      },
+      "does not override the content type by default": function(req) {
+        assert.isUndefined(req._info.contentType);
+      },
+      "waits until the request is done": function(req) {
+        assert.equal(req.readyState, 4);
+        assert.equal(req.status, 200);
+      },
     },
     "request mimeType": {
       topic: function() {
@@ -117,7 +129,6 @@ suite.addBatch({
 
         assert.isObject(res.req);
         assert.isObject(res.xhr);
-        assert.isTrue(res.xhr.sent);
       }
     }
   }
