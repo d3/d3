@@ -19,12 +19,15 @@ d3_selectionPrototype.on = function(type, listener, capture) {
     // remove the old listener, if any (using the previously-set capture)
     if (o) {
       node.removeEventListener(type, o, o.$);
+	  node.__handlers[name] = false;
       delete node[name];
     }
 
     // add the new listener, if any (remembering the capture flag)
     if (listener) {
       node.addEventListener(type, node[name] = l, l.$ = capture);
+      if (!node.__handlers) node.__handlers = {};
+      node.__handlers[name] = true;
       l._ = listener; // stash the unwrapped listener for get
     }
 
