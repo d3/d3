@@ -159,6 +159,10 @@ function d3_layout_packTree(node) {
   if (children && children.length) {
     children.forEach(d3_layout_packTree);
     node.r = d3_layout_packCircle(children);
+	// In the event the pack only has one child; make it bigger so that it isn't swallowed by its child
+    if (children.length === 1) {
+        node.r *= 1.5;
+    }
   } else {
     node.r = Math.sqrt(node.value);
   }
