@@ -18,6 +18,7 @@ XMLHttpRequest = function() {
 
   self.setRequestHeader = function(n, v) {
     if (/^Accept$/i.test(n)) info.mimeType = v;
+    else if (/^Content-Type$/i.test(n)) info.contentType = v;
   };
 
   self.onabort = nop;

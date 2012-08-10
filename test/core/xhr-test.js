@@ -23,22 +23,36 @@ suite.addBatch({
     "does not override the mime type by default": function(req) {
       assert.isUndefined(req._info.mimeType);
     },
+    "does not override the content type by default": function(req) {
+      assert.isUndefined(req._info.contentType);
+    },
     "waits until the request is done": function(req) {
       assert.equal(req.readyState, 4);
       assert.equal(req.status, 200);
     },
-    "api": {
+    "request mimeType": {
       topic: function() {
         var cb = this.callback;
         d3.xhr("examples/data/sample.txt", "text/plain", function(req) {
           cb(null, req);
         }).send();
       },
-      "observes the optional mime type": function(req) {
+      "is set": function(req) {
         assert.equal(req._info.mimeType, "text/plain");
       }
     },
-    "post": {
+    "request contentType": {
+      topic: function() {
+        var cb = this.callback;
+        d3.xhr("examples/data/sample.txt", "text/plain", function(req) {
+          cb(null, req);
+        }).contentType("application/x-www-form-urlencoded").send();
+      },
+      "is set": function(req) {
+        assert.equal(req._info.contentType, "application/x-www-form-urlencoded");
+      }
+    },
+    "request method": {
       topic:function() {
         var cb = this.callback;
 
@@ -46,7 +60,7 @@ suite.addBatch({
           cb(null, req);
         }).send();
       },
-      "sets requests method":function(req){
+      "is set":function(req){
         assert.equal(req._info.method, "POST");
       }
     },
@@ -54,7 +68,7 @@ suite.addBatch({
       topic: function() {
         var cb = this.callback;
 
-        d3.xhr("//does/not/exist.txt").on('error', function(req){
+        d3.xhr("//does/not/exist.txt").on("error", function(req){
           cb(null, req);
         }).send();
       },
@@ -67,7 +81,7 @@ suite.addBatch({
       topic:function() {
         var cb = this.callback;
 
-        d3.xhr("//does/not/exist.txt").on('cancel', function(req, xhr){
+        d3.xhr("//does/not/exist.txt").on("cancel", function(req, xhr){
           cb(null, { req: req, xhr: xhr });
         }).send().cancel();
       },
@@ -80,7 +94,7 @@ suite.addBatch({
       topic: function() {
         var cb = this.callback;
 
-        d3.xhr("examples/data/sample.txt").on('error', function(req, xhr){
+        d3.xhr("examples/data/sample.txt").on("error", function(req, xhr){
           cb(null, { req: req, xhr: xhr });
         }).send().request._error();
       },
@@ -93,7 +107,7 @@ suite.addBatch({
       topic: function() {
         var cb = this.callback;
 
-        d3.xhr("examples/data/sample.txt").on('progress', function(req, xhr, ev){
+        d3.xhr("examples/data/sample.txt").on("progress", function(req, xhr, ev){
           cb(null, { req: req, xhr: xhr, event: ev });
         }).send().request._progress({ total: 1024 });
       },

@@ -1,7 +1,7 @@
 d3.xhr = function(url, mime, callback) {
   var xhr = new d3_xhr(url);
 
-  if (callback) xhr.mime_type(mime);
+  if (callback) xhr.mimeType(mime);
   else callback = mime, mime = null;
 
   if (callback) xhr.on('success', callback);
@@ -31,12 +31,15 @@ function make_request(xhr){
 
   req.open(opts.method, opts.url, true);
 
-  if (opts.mime_type){
+  if (opts.mimeType){
     if (req.overrideMimeType)
-      req.overrideMimeType(opts.mime_type);
+      req.overrideMimeType(opts.mimeType);
 
-    req.setRequestHeader('Accept', opts.mime_type);
+    req.setRequestHeader('Accept', opts.mimeType);
   }
+
+  if (opts.contentType)
+    req.setRequestHeader('Content-Type', opts.contentType);
 
   // done / fail off readyState
   req.onreadystatechange = function(){
@@ -87,8 +90,13 @@ d3_xhr.prototype = {
     return this;
   },
 
-  mime_type:function(mime){
-    this.options.mime_type = mime;
+  mimeType:function(mime){
+    this.options.mimeType = mime;
+    return this;
+  },
+
+  contentType:function(type){
+    this.options.contentType = type;
     return this;
   },
 
