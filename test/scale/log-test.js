@@ -39,9 +39,9 @@ suite.addBatch({
       "can specify negative domain values": function(log) {
         var x = log().domain([-100, -1]);
         assert.deepEqual(x.ticks().map(x.tickFormat()), [
-          "−1e+2",
-          "−9e+1", "−8e+1", "−7e+1", "−6e+1", "−5e+1", "−4e+1", "−3e+1", "−2e+1", "−1e+1",
-          "−9e+0", "−8e+0", "−7e+0", "−6e+0", "−5e+0", "−4e+0", "−3e+0", "−2e+0", "−1e+0"
+          "-1e+2",
+          "-9e+1", "-8e+1", "-7e+1", "-6e+1", "-5e+1", "-4e+1", "-3e+1", "-2e+1", "-1e+1",
+          "-9e+0", "-8e+0", "-7e+0", "-6e+0", "-5e+0", "-4e+0", "-3e+0", "-2e+0", "-1e+0"
         ]);
         assert.inDelta(x(-50), 0.150515, 1e-6);
       },
@@ -228,10 +228,12 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [1000, 1]);
         var x = log().domain([.01, .49]).nice();
         assert.deepEqual(x.domain(), [.01, 1]);
+      },
+      "works on degenerate domains": function(log) {
         var x = log().domain([0, 0]).nice();
         assert.deepEqual(x.domain(), [0, 0]);
         var x = log().domain([.5, .5]).nice();
-        assert.inDelta(x.domain(), [.5, .5], 1e-6);
+        assert.inDelta(x.domain(), [.1, 1], 1e-6);
       },
       "nicing a polylog domain only affects the extent": function(log) {
         var x = log().domain([1.1, 1.5, 10.9]).nice();

@@ -48,10 +48,20 @@ suite.addBatch({
     "observes the specified namespace": function(body) {
       var form = body.append("form"), foo = 0, bar = 0;
       form.on("submit.foo", function() { ++foo; });
-      form.on("submit.bar", function() { ++bar; });
+      form.on({"submit.bar": function() { ++bar; }});
       form.append("input").attr("type", "submit").node().click();
       assert.equal(foo, 1);
       assert.equal(bar, 1);
+    },
+    "can register listeners as a map": function(body) {
+      var form = body.append("form"), count = 0, fail = 0;
+      form.on({submit: function() { ++fail; }});
+      form.on({submit: function() { ++count; }});
+      form.append("input").attr("type", "submit").node().click();
+      assert.equal(count, 1);
+      assert.equal(fail, 0);
+      form.on({submit: null});
+      assert.isUndefined(form.on("submit"));
     },
     /* Not really sure how to test this one…
     "observes the specified capture flag": function(body) {

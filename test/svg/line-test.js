@@ -57,6 +57,15 @@ suite.addBatch({
       assert.pathEqual(l([[0, 0], [1, 1]]), "M0,0V1H1");
       assert.equal(l.interpolate(), "step-before");
     },
+    "interpolate can be defined as a function": function(line) {
+      var l = line().interpolate(interpolate);
+      assert.pathEqual(l([[0, 0], [1, 1]]), "M0,0T1,1");
+      assert.equal(l.interpolate(), interpolate);
+
+      function interpolate(points) {
+        return points.join("T");
+      }
+    },
     "invalid interpolates fallback to linear": function(line) {
       assert.equal(line().interpolate("__proto__").interpolate(), "linear");
     },

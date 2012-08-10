@@ -124,6 +124,20 @@ function d3_rgb_hsl(r, g, b) {
   return d3_hsl(h, s, l);
 }
 
+function d3_rgb_lab(r, g, b) {
+  r = d3_rgb_xyz(r);
+  g = d3_rgb_xyz(g);
+  b = d3_rgb_xyz(b);
+  var x = d3_xyz_lab((0.4124564 * r + 0.3575761 * g + 0.1804375 * b) / d3_lab_X),
+      y = d3_xyz_lab((0.2126729 * r + 0.7151522 * g + 0.0721750 * b) / d3_lab_Y),
+      z = d3_xyz_lab((0.0193339 * r + 0.1191920 * g + 0.9503041 * b) / d3_lab_Z);
+  return d3_lab(116 * y - 16, 500 * (x - y), 200 * (y - z));
+}
+
+function d3_rgb_xyz(r) {
+  return (r /= 255) <= 0.04045 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+}
+
 function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);
   return c.charAt(c.length - 1) === "%" ? Math.round(f * 2.55) : f;

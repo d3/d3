@@ -188,7 +188,7 @@ suite.addBatch({
         var x = sqrt().domain([1.1, 1, 2, 3, 10.9]).nice(), f = d3.format(".6f");
         assert.deepEqual(x.domain().map(f), [1, 1, 2, 3, 11]);
         var x = sqrt().domain([123.1, 1, 2, 3, -.9]).nice();
-        assert.deepEqual(x.domain().map(f), [130, 1, 2, 3, "−10.000000"]);
+        assert.deepEqual(x.domain().map(f), [130, 1, 2, 3, "-10.000000"]);
       }
     },
 
