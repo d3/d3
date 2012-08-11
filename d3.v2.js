@@ -813,68 +813,78 @@
       return Math.round(a + b * t);
     };
   };
-  d3.interpolateString = function(a, b) {
-    var m, i, j, s0 = 0, s1 = 0, s = [], q = [], n, o;
-    d3_interpolate_number.lastIndex = 0;
-    for (i = 0; m = d3_interpolate_number.exec(b); ++i) {
-      if (m.index) s.push(b.substring(s0, s1 = m.index));
-      q.push({
-        i: s.length,
-        x: m[0]
-      });
-      s.push(null);
-      s0 = d3_interpolate_number.lastIndex;
-    }
-    if (s0 < b.length) s.push(b.substring(s0));
-    for (i = 0, n = q.length; (m = d3_interpolate_number.exec(a)) && i < n; ++i) {
-      o = q[i];
-      if (o.x == m[0]) {
-        if (o.i) {
-          if (s[o.i + 1] == null) {
-            s[o.i - 1] += o.x;
-            s.splice(o.i, 1);
-            for (j = i + 1; j < n; ++j) q[j].i--;
+  d3.interpolateStringMissing = function(missingValue) {
+    return function(a, b) {
+      var m, i, j, s0 = 0, s1 = 0, s = [], q = [], n, o;
+      d3_interpolate_number.lastIndex = 0;
+      for (i = 0; m = d3_interpolate_number.exec(b); ++i) {
+        if (m.index) s.push(b.substring(s0, s1 = m.index));
+        q.push({
+          i: s.length,
+          x: m[0]
+        });
+        s.push(null);
+        s0 = d3_interpolate_number.lastIndex;
+      }
+      if (s0 < b.length) s.push(b.substring(s0));
+      for (i = 0, n = q.length; (m = d3_interpolate_number.exec(a)) && i < n; ++i) {
+        o = q[i];
+        if (o.x == m[0]) {
+          if (o.i) {
+            if (s[o.i + 1] == null) {
+              s[o.i - 1] += o.x;
+              s.splice(o.i, 1);
+              for (j = i + 1; j < n; ++j) q[j].i--;
+            } else {
+              s[o.i - 1] += o.x + s[o.i + 1];
+              s.splice(o.i, 2);
+              for (j = i + 1; j < n; ++j) q[j].i -= 2;
+            }
           } else {
-            s[o.i - 1] += o.x + s[o.i + 1];
-            s.splice(o.i, 2);
-            for (j = i + 1; j < n; ++j) q[j].i -= 2;
+            if (s[o.i + 1] == null) {
+              s[o.i] = o.x;
+            } else {
+              s[o.i] = o.x + s[o.i + 1];
+              s.splice(o.i + 1, 1);
+              for (j = i + 1; j < n; ++j) q[j].i--;
+            }
           }
+          q.splice(i, 1);
+          n--;
+          i--;
         } else {
+          o.x = d3.interpolateNumber(parseFloat(m[0]), parseFloat(o.x));
+        }
+      }
+      if (missingValue == null) {
+        while (i < n) {
+          o = q.pop();
           if (s[o.i + 1] == null) {
             s[o.i] = o.x;
           } else {
             s[o.i] = o.x + s[o.i + 1];
             s.splice(o.i + 1, 1);
-            for (j = i + 1; j < n; ++j) q[j].i--;
           }
+          n--;
         }
-        q.splice(i, 1);
-        n--;
-        i--;
       } else {
-        o.x = d3.interpolateNumber(parseFloat(m[0]), parseFloat(o.x));
+        for (; i < n; ++i) {
+          o = q[i];
+          o.x = d3.interpolateNumber(missingValue, parseFloat(o.x));
+        }
       }
-    }
-    while (i < n) {
-      o = q.pop();
-      if (s[o.i + 1] == null) {
-        s[o.i] = o.x;
-      } else {
-        s[o.i] = o.x + s[o.i + 1];
-        s.splice(o.i + 1, 1);
+      if (s.length === 1) {
+        return s[0] == null ? q[0].x : function() {
+          return b;
+        };
       }
-      n--;
-    }
-    if (s.length === 1) {
-      return s[0] == null ? q[0].x : function() {
-        return b;
+      return function(t) {
+        for (i = 0; i < n; ++i) s[(o = q[i]).i] = o.x(t);
+        return s.join("");
       };
-    }
-    return function(t) {
-      for (i = 0; i < n; ++i) s[(o = q[i]).i] = o.x(t);
-      return s.join("");
     };
   };
+  d3.interpolateString = d3.interpolateStringMissing(null);
   d3.interpolateTransform = function(a, b) {
     var s = [], q = [], n, A = d3.transform(a), B = d3.transform(b), ta = A.translate, tb = B.translate, ra = A.rotate, rb = B.rotate, wa = A.skew, wb = B.skew, ka = A.scale, kb = B.scale;
     if (ta[0] != tb[0] || ta[1] != tb[1]) {
