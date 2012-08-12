@@ -201,6 +201,7 @@ d3.dsv.js: \
 
 d3.time.js: \
 	src/time/time.js \
+	src/time/format-locale.js \
 	src/time/format-$(LOCALE).js \
 	src/time/format.js \
 	src/time/format-utc.js \
@@ -234,7 +235,7 @@ test: all
 
 d3%.js: Makefile
 	@rm -f $@
-	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
+	cat $(filter %.js,$(filter-out src/time/format-locale.js,$^)) | $(JS_BEAUTIFIER) > $@
 	@chmod a-w $@
 
 package.json: src/package.js
