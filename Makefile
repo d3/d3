@@ -242,5 +242,8 @@ package.json: src/package.js
 	node src/package.js > $@
 	@chmod a-w $@
 
+src/time/format-%.js:
+	LC_TIME=$(LOCALE) locale -ck LC_TIME | node src/time/format-locale.js > $@
+
 clean:
 	rm -f d3*.js package.json
