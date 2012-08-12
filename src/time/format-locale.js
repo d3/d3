@@ -2,6 +2,7 @@ var fs = require("fs"),
     puts = require("util").puts,
     formats = {},
     kvRe = /=/,
+    valueRe = /("[^"]+")/g,
     data = [];
 
 process.stdin.resume();
@@ -13,9 +14,10 @@ function write() {
   data.join("\n").split(/\n/g).forEach(function(line) {
     var i = line.match(kvRe);
     if (i && (i = i.index)) {
-      var value = line.substring(i + 1).split(/("[^"]+")/g);
-      value = value.length > 3 ? value.map(function(d, i) { return d === "" ? i ? "]" : "[" : d === ";" ? ", " : d; }).join("") : value[1];
-      formats[line.substring(0, i)] = value;
+      var value = line.substring(i + 1).split(valueRe);
+      formats[line.substring(0, i)] = value.length > 3
+          ? value.map(function(d, i) { return d === "" ? i ? "]" : "[" : d === ";" ? ", " : d; }).join("")
+          : value[1];
     }
   });
 
