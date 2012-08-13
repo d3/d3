@@ -174,6 +174,48 @@ suite.addBatch({
         assert.deepEqual(p("Wednesday 02/03/1991"), local(1991, 1, 3));
         assert.isNull(p("Caturday 03/10/2010"));
       },
+     "parses abbreviated weekday, week number (Sunday) and year": function(format) {
+       var p = format("%a %U %Y").parse;
+       assert.deepEqual(p("Mon 00 1990"), local(1990, 0, 1));
+       assert.deepEqual(p("Sun 05 1991"), local(1991, 1, 3));
+       assert.deepEqual(p("Sun 01 1995"), local(1995, 0, 1));
+       assert.isNull(p("XXX 03 2010"));
+     },
+     "parses weekday, week number (Sunday) and year": function(format) {
+       var p = format("%A %U %Y").parse;
+       assert.deepEqual(p("Monday 00 1990"), local(1990, 0, 1));
+       assert.deepEqual(p("Sunday 05 1991"), local(1991, 1, 3));
+       assert.deepEqual(p("Sunday 01 1995"), local(1995, 0, 1));
+       assert.isNull(p("Caturday 03 2010"));
+     },
+     "parses numeric weekday, week number (Sunday) and year": function(format) {
+       var p = format("%w %U %Y").parse;
+       assert.deepEqual(p("1 00 1990"), local(1990, 0, 1));
+       assert.deepEqual(p("0 05 1991"), local(1991, 1, 3));
+       assert.deepEqual(p("0 01 1995"), local(1995, 0, 1));
+       assert.isNull(p("X 03 2010"));
+     },
+     "parses abbreviated weekday, week number (Monday) and year": function(format) {
+       var p = format("%a %W %Y").parse;
+       assert.deepEqual(p("Mon 01 1990"), local(1990, 0, 1));
+       assert.deepEqual(p("Sun 04 1991"), local(1991, 1, 3));
+       assert.deepEqual(p("Sun 00 1995"), local(1995, 0, 1));
+       assert.isNull(p("XXX 03 2010"));
+     },
+     "parses weekday, week number (Monday) and year": function(format) {
+       var p = format("%A %W %Y").parse;
+       assert.deepEqual(p("Monday 01 1990"), local(1990, 0, 1));
+       assert.deepEqual(p("Sunday 04 1991"), local(1991, 1, 3));
+       assert.deepEqual(p("Sunday 00 1995"), local(1995, 0, 1));
+       assert.isNull(p("Caturday 03 2010"));
+     },
+     "parses numeric weekday, week number (Monday) and year": function(format) {
+       var p = format("%w %W %Y").parse;
+       assert.deepEqual(p("1 01 1990"), local(1990, 0, 1));
+       assert.deepEqual(p("0 04 1991"), local(1991, 1, 3));
+       assert.deepEqual(p("0 00 1995"), local(1995, 0, 1));
+       assert.isNull(p("X 03 2010"));
+     },
       "parses numeric date": function(format) {
         var p = format("%m/%d/%y").parse;
         assert.deepEqual(p("01/01/90"), local(1990, 0, 1));
@@ -197,6 +239,12 @@ suite.addBatch({
         assert.deepEqual(p("january 01, 1990"), local(1990, 0, 1));
         assert.deepEqual(p("February  2, 2010"), local(2010, 1, 2));
         assert.isNull(p("jan 1, 1990"));
+      },
+      "parses day of year and numeric date": function(format) {
+        var p = format("%j %m/%d/%Y").parse;
+        assert.deepEqual(p("001 01/01/1990"), local(1990, 0, 1));
+        assert.deepEqual(p("034 02/03/1991"), local(1991, 1, 3));
+        assert.isNull(p("2012 03/10/2010"));
       },
       "parses locale date and time": function(format) {
         var p = format("%c").parse;
@@ -229,6 +277,12 @@ suite.addBatch({
         assert.deepEqual(p("12:00:00 pm"), local(1900, 0, 1, 12, 0, 0));
         assert.deepEqual(p("12:00:01 pm"), local(1900, 0, 1, 12, 0, 1));
         assert.deepEqual(p("11:59:59 PM"), local(1900, 0, 1, 23, 59, 59));
+      },
+      "parses literal %": function(format) {
+        var p = format("%% %m/%d/%Y").parse;
+        assert.deepEqual(p("% 01/01/1990"), local(1990, 0, 1));
+        assert.deepEqual(p("% 02/03/1991"), local(1991, 1, 3));
+        assert.isNull(p("%% 03/10/2010"));
       },
       "doesn't crash when given weird strings": function(format) {
         try {
