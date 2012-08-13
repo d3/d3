@@ -207,7 +207,7 @@ d3.geo.path = function() {
       y += d * mid[1];
       a = b;
     }
-    return [x, y, z]; // weighted centroid
+    return z ? [x, y, z] : (mid.push(0), mid); // weighted centroid
   }
 
   function pointsCentroid(coordinates) {
@@ -247,7 +247,7 @@ d3.geo.path = function() {
     if (!n) return null;
     for (var i = 0, x = 0, y = 0, z = 0, a, empty = true; i < n; i++) {
       a = f(array[i]);
-      if (a != null) {
+      if (a != null && a[2]) { // discard zero-weighted elements
         x += a[0];
         y += a[1];
         z += a[2];
@@ -299,7 +299,7 @@ d3.geo.path = function() {
 
     LineString: function(o) {
       var centroid = lineCentroid(o.coordinates);
-      return centroid && centroid[2] ? [centroid[0] / centroid[2], centroid[1] / centroid[2]] : null;
+      return centroid ? centroid[2] ? [centroid[0] / centroid[2], centroid[1] / centroid[2]] : centroid.slice(0, 2) : null;
     },
 
     MultiLineString: function(o) {
