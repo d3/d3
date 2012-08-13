@@ -98,6 +98,21 @@ suite.addBatch({
           assert.inDelta(centroid({type: "GeometryCollection", geometries: [lineString]}), [470.716091, 186.986768], 1e-6);
           assert.inDelta(centroid({type: "GeometryCollection", geometries: [lineString, lineString]}), [470.716091, 186.986768], 1e-6);
           assert.inDelta(centroid({type: "GeometryCollection", geometries: [lineString, lineString, lineString]}), [470.716091, 186.986768], 1e-6);
+        },
+        "ignores lower dimensions than one": function(centroid) {
+          assert.inDelta(centroid({type: "GeometryCollection", geometries: [
+            {type: "Point", coordinates: [-122.41964, 37.77712]},
+            {type: "MultiPoint", coordinates: [[-122.41964, 37.77712]]},
+            {type: "LineString", coordinates: [[-122.41964, 37.77712], [-74.00712, 40.71455]]}
+          ]}), [470.716091, 186.986768], 1e-6);
+        },
+        "ignores lower dimensions than two": function(centroid) {
+          assert.inDelta(centroid({type: "GeometryCollection", geometries: [
+            {type: "Point", coordinates: [-122.41964, 37.77712]},
+            {type: "MultiPoint", coordinates: [[-122.41964, 37.77712]]},
+            {type: "LineString", coordinates: [[-122.41964, 37.77712], [-74.00712, 40.71455]]},
+            {type: "Polygon", coordinates: [[[-122.41964, 37.77712], [-74.00712, 40.71455], [-71.05670, 42.358630], [-122.41964, 37.77712]]]}
+          ]}), [587.342810, 166.210688], 1e-6);
         }
       },
       "FeatureCollection": {
