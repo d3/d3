@@ -174,14 +174,15 @@ d3.geo.path = function() {
   }
 
   function polygonCentroid(coordinates) {
+    var n = coordinates.length;
+    if (!n) return null;
     var polygon = d3.geom.polygon(coordinates[0].map(projection)), // exterior ring
         area = polygon.area(),
         centroid = polygon.centroid(area < 0 ? (area *= -1, 1) : -1),
         x = centroid[0],
         y = centroid[1],
         z = area,
-        i = 0, // coordinates index
-        n = coordinates.length;
+        i = 0; // coordinates index
     while (++i < n) {
       polygon = d3.geom.polygon(coordinates[i].map(projection)); // holes
       area = polygon.area();
@@ -209,13 +210,82 @@ d3.geo.path = function() {
     return [x, y, z]; // weighted centroid
   }
 
-  var centroidType = path.centroid = d3_geo_type({
+  function pointsCentroid(coordinates) {
+    var n = coordinates.length;
+    if (!n) return null;
+    for (var z = 0, x = 0, y = 0, a; z < n; z++) {
+      a = projection(coordinates[z]);
+      x += a[0];
+      y += a[1];
+    }
+    return [x, y, z];
+  }
 
-    // TODO FeatureCollection
-    // TODO GeometryCollection
+  function geometryDimension(o) {
+    switch (o.type) {
+      case "Point":
+      case "MultiPoint":
+        return 0;
+      case "LineString":
+      case "MultiLineString":
+        return 1;
+      case "Polygon":
+      case "MultiPolygon":
+        return 2;
+      case "Feature":
+        return dimension(o.geometry);
+      case "FeatureCollection":
+        return d3.max(o.features, geometryDimension);
+      case "GeometryCollection":
+        return d3.max(o.geometries, geometryDimension);
+    }
+    return -1;
+  }
+
+  function weightedAverage(array, f) {
+    var n = array.length;
+    if (!n) return null;
+    for (var i = 0, x = 0, y = 0, z = 0, a, empty = true; i < n; i++) {
+      a = f(array[i]);
+      if (a != null) {
+        x += a[0];
+        y += a[1];
+        z += a[2];
+        empty = false;
+      }
+    }
+    return empty ? null : [x / z, y / z];
+  }
+
+  var centroidType = path.centroid = d3_geo_type({
 
     Feature: function(o) {
       return centroidType(o.geometry);
+    },
+
+    FeatureCollection: function(o) {
+      return centroidType({type: "GeometryCollection", geometries: o.features.map(function(feature) { return feature.geometry; })});
+    },
+
+    GeometryCollection: function(o) {
+      var geometries = o.geometries,
+          dimensions = geometries.map(geometryDimension),
+          dimension = d3.max(dimensions),
+          a = [];
+      for (var i = 0, n = geometries.length, geometry; i < n; i++) {
+        if (dimensions[i] !== dimension) continue;
+        geometry = geometries[i];
+        switch (geometry.type) {
+          case "Point": a.push([geometry.coordinates]); break;
+          case "MultiLineString":
+          case "MultiPolygon":
+            a = a.concat(geometry.coordinates); break;
+          default:
+            a.push(geometry.coordinates);
+        }
+      }
+      return a.length ? weightedAverage(a, dimension === 0 ? pointsCentroid
+          : dimension === 1 ? lineCentroid : polygonCentroid) : null;
     },
 
     Point: function(o) {
@@ -223,59 +293,26 @@ d3.geo.path = function() {
     },
 
     MultiPoint: function(o) {
-      var coordinates = o.coordinates,
-          n = coordinates.length;
-      if (!n) return null;
-      for (var i = 0, x = 0, y = 0, a; i < n;) {
-        a = projection(coordinates[i++]);
-        x += (a[0] - x) / i;
-        y += (a[1] - y) / i;
-      }
-      return [x, y];
+      var centroid = pointsCentroid(o.coordinates);
+      return centroid ? [centroid[0] / centroid[2], centroid[1] / centroid[2]] : null;
     },
 
     LineString: function(o) {
       var centroid = lineCentroid(o.coordinates);
-      return centroid ? [centroid[0] / centroid[2], centroid[1] / centroid[2]] : null;
+      return centroid && centroid[2] ? [centroid[0] / centroid[2], centroid[1] / centroid[2]] : null;
     },
 
     MultiLineString: function(o) {
-      var coordinates = o.coordinates,
-          n = coordinates.length;
-      if (!n) return null;
-      for (var i = 0, x = 0, y = 0, z = 0, centroid, empty = true; i < n; i++) {
-        centroid = lineCentroid(coordinates[i]);
-        if (centroid != null) {
-          empty = false;
-          x += centroid[0];
-          y += centroid[1];
-          z += centroid[2];
-        }
-      }
-      return empty ? null : [x / z, y / z];
+      return weightedAverage(o.coordinates, lineCentroid);
     },
 
     Polygon: function(o) {
       var centroid = polygonCentroid(o.coordinates);
-      return [centroid[0] / centroid[2], centroid[1] / centroid[2]];
+      return centroid ? [centroid[0] / centroid[2], centroid[1] / centroid[2]] : null;
     },
 
     MultiPolygon: function(o) {
-      var area = 0,
-          coordinates = o.coordinates,
-          centroid,
-          x = 0,
-          y = 0,
-          z = 0,
-          i = -1, // coordinates index
-          n = coordinates.length;
-      while (++i < n) {
-        centroid = polygonCentroid(coordinates[i]);
-        x += centroid[0];
-        y += centroid[1];
-        z += centroid[2];
-      }
-      return [x / z, y / z];
+      return weightedAverage(o.coordinates, polygonCentroid);
     }
 
   });
