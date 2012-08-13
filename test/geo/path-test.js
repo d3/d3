@@ -52,10 +52,8 @@ suite.addBatch({
           assert.isNull(centroid({type: "LineString", coordinates: []}));
         },
         "two points; one unique": function(centroid) {
-          assert.inDelta(centroid({type: "LineString", coordinates: [[-122.41964, 37.77712], [-122.41964, 37.77712]]}),
-              [150.064535, 211.308172], 1e-6);
-          assert.inDelta(centroid({type: "LineString", coordinates: [[ -74.00712, 40.71455], [ -74.00712, 40.71455]]}),
-              [791.367648, 162.665364], 1e-6);
+          assert.isNull(centroid({type: "LineString", coordinates: [[-122.41964, 37.77712], [-122.41964, 37.77712]]}));
+          assert.isNull(centroid({type: "LineString", coordinates: [[ -74.00712, 40.71455], [ -74.00712, 40.71455]]}));
         },
         "two points": function(centroid) {
           assert.inDelta(centroid({type: "LineString", coordinates: [[-122.41964, 37.77712], [-74.00712, 40.71455]]}),

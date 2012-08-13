@@ -5563,7 +5563,7 @@
         y += d * mid[1];
         a = b;
       }
-      return z ? [ x, y, z ] : (mid.push(0), mid);
+      return [ x, y, z ];
     }
     function pointsCentroid(coordinates) {
       var n = coordinates.length;
@@ -5600,7 +5600,7 @@
       if (!n) return null;
       for (var i = 0, x = 0, y = 0, z = 0, a, empty = true; i < n; i++) {
         a = f(array[i]);
-        if (a != null && a[2]) {
+        if (a != null) {
           x += a[0];
           y += a[1];
           z += a[2];
@@ -5649,7 +5649,7 @@
       },
       LineString: function(o) {
         var centroid = lineCentroid(o.coordinates);
-        return centroid ? centroid[2] ? [ centroid[0] / centroid[2], centroid[1] / centroid[2] ] : centroid.slice(0, 2) : null;
+        return centroid && centroid[2] ? [ centroid[0] / centroid[2], centroid[1] / centroid[2] ] : null;
       },
       MultiLineString: function(o) {
         return weightedAverage(o.coordinates, lineCentroid);
