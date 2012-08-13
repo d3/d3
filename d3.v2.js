@@ -2177,25 +2177,52 @@
   d3.mouse = function(container) {
     return d3_mousePoint(container, d3_eventSource());
   };
-  var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+  var d3_mouse_getScreenCTM;
+  if (/WebKit/.test(navigator.userAgent)) {
+    var d3_mouse_bug44083 = -1;
+    var d3_mouse_zoom_bug = -1;
+    d3_mouse_getScreenCTM = function(container, e) {
+      var ctm, test_bug44083 = d3_mouse_bug44083 < 0 && (window.pageXOffset || window.pageYOffset), test_zoom_bug = d3_mouse_zoom_bug < 0 && e.clientX && e.screenX - window.screenLeft !== e.clientX;
+      if (test_bug44083 || test_zoom_bug) {
+        var body = document.body, bodyPos = body.style.getPropertyValue("position"), html = body.parentNode, htmlPos = html.style.getPropertyValue("position"), svg = d3.select(body).append("svg").style("position", "absolute");
+        body.style.setProperty("position", "static");
+        html.style.setProperty("position", "static");
+        if (test_bug44083) {
+          svg.style("top", 0).style("left", 0);
+          ctm = svg[0][0].getScreenCTM();
+          d3_mouse_bug44083 = !(ctm.f || ctm.e);
+        }
+        if (test_zoom_bug) {
+          svg.style("left", "100px");
+          ctm = svg[0][0].getScreenCTM();
+          d3_mouse_zoom_bug = ctm.e !== 100;
+        }
+        svg.remove();
+        bodyPos ? body.style.setProperty("position", bodyPos) : body.style.removeProperty("position");
+        htmlPos ? html.style.setProperty("position", htmlPos) : html.style.removeProperty("position");
+      }
+      ctm = container.getScreenCTM();
+      if (d3_mouse_bug44083) {
+        ctm = ctm.translate(window.pageXOffset, window.pageYOffset);
+      }
+      if (d3_mouse_zoom_bug) {
+        var s = e.clientX / (e.screenX - window.screenLeft) - 1;
+        ctm = ctm.translate(ctm.e * s, ctm.f * s);
+      }
+      return ctm;
+    };
+  } else {
+    d3_mouse_getScreenCTM = function(container) {
+      return container.getScreenCTM();
+    };
+  }
   function d3_mousePoint(container, e) {
     var svg = container.ownerSVGElement || container;
     if (svg.createSVGPoint) {
       var point = svg.createSVGPoint();
-      if (d3_mouse_bug44083 < 0 && (window.scrollX || window.scrollY)) {
-        svg = d3.select(document.body).append("svg").style("position", "absolute").style("top", 0).style("left", 0);
-        var ctm = svg[0][0].getScreenCTM();
-        d3_mouse_bug44083 = !(ctm.f || ctm.e);
-        svg.remove();
-      }
-      if (d3_mouse_bug44083) {
-        point.x = e.pageX;
-        point.y = e.pageY;
-      } else {
-        point.x = e.clientX;
-        point.y = e.clientY;
-      }
-      point = point.matrixTransform(container.getScreenCTM().inverse());
+      point.x = e.clientX;
+      point.y = e.clientY;
+      point = point.matrixTransform(d3_mouse_getScreenCTM(container, e).inverse());
       return [ point.x, point.y ];
     }
     var rect = container.getBoundingClientRect();
