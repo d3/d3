@@ -1,4 +1,5 @@
 (function() {
+  var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];
   if (!Date.now) Date.now = function() {
     return +(new Date);
   };
@@ -601,10 +602,18 @@
   function d3_format_typeDefault(x) {
     return x + "";
   }
-  function d3_format_group(value) {
-    var i = value.lastIndexOf("."), f = i >= 0 ? value.substring(i) : (i = value.length, ""), t = [];
-    while (i > 0) t.push(value.substring(i -= 3, i + 3));
-    return t.reverse().join(",") + f;
+  var d3_format_group = d3_identity;
+  if (d3_format_grouping) {
+    var d3_format_groupingLength = d3_format_grouping.length;
+    d3_format_group = function(value) {
+      var i = value.lastIndexOf("."), f = i >= 0 ? d3_format_decimalPoint + value.substring(i + 1) : (i = value.length, ""), t = [];
+      j = 0, g = d3_format_grouping[0];
+      while (i > 0 && g > 0) {
+        t.unshift(value.substring(i -= g, i + g));
+        g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];
+      }
+      return t.join(d3_format_thousandsSeparator) + f;
+    };
   }
   var d3_formatPrefixes = [ "y", "z", "a", "f", "p", "n", "μ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y" ].map(d3_formatPrefix);
   d3.formatPrefix = function(value, precision) {
