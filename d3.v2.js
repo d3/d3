@@ -606,8 +606,7 @@
   if (d3_format_grouping) {
     var d3_format_groupingLength = d3_format_grouping.length;
     d3_format_group = function(value) {
-      var i = value.lastIndexOf("."), f = i >= 0 ? d3_format_decimalPoint + value.substring(i + 1) : (i = value.length, ""), t = [];
-      j = 0, g = d3_format_grouping[0];
+      var i = value.lastIndexOf("."), f = i >= 0 ? d3_format_decimalPoint + value.substring(i + 1) : (i = value.length, ""), t = [], j = 0, g = d3_format_grouping[0];
       while (i > 0 && g > 0) {
         t.unshift(value.substring(i -= g, i + g));
         g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];

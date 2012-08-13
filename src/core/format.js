@@ -97,7 +97,7 @@ if (d3_format_grouping) {
   d3_format_group = function(value) {
     var i = value.lastIndexOf("."),
         f = i >= 0 ? d3_format_decimalPoint + value.substring(i + 1) : (i = value.length, ""),
-        t = [];
+        t = [],
         j = 0,
         g = d3_format_grouping[0];
     while (i > 0 && g > 0) {
