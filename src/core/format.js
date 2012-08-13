@@ -68,7 +68,7 @@ d3.format = function(specifier) {
       if (length < width) value = new Array(width - length + 1).join(fill) + value;
     }
 
-    return value + suffix;
+    return value.replace(".", d3_format_decimalPoint) + suffix;
   };
 };
 
@@ -91,20 +91,22 @@ function d3_format_typeDefault(x) {
 }
 
 // Apply comma grouping for thousands.
-function d3_format_group(value) {
-  var i = value.lastIndexOf("."),
-      f = i >= 0 ? d3_format_decimalPoint + value.substring(i + 1) : (i = value.length, "");
-  if (d3_format_grouping) {
-    var t = [],
-        j = 0,
-        g = d3_format_grouping[0];
-    while (i > 0 && g > 0) {
-      t.unshift(value.substring(i -= g, i + g));
-      g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];
+var d3_format_group = d3_identity;
+if (d3_format_grouping) {
+  var d3_format_groupingLength = d3_format_grouping.length;
+  d3_format_group = function(value) {
+    var i = value.lastIndexOf("."),
+        f = i >= 0 ? "." + value.substring(i + 1) : (i = value.length, "");
+    if (d3_format_grouping) {
+      var t = [],
+          j = 0,
+          g = d3_format_grouping[0];
+      while (i > 0 && g > 0) {
+        t.unshift(value.substring(i -= g, i + g));
+        g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];
+      }
+      return t.join(d3_format_thousandsSeparator || "") + f;
     }
-    return t.join(d3_format_thousandsSeparator || "") + f;
-  }
-  return value.substring(0, i) + f;
+    return value.substring(0, i) + f;
+  };
 }
-
-var d3_format_groupingLength = d3_format_grouping ? d3_format_grouping.length : -1;
