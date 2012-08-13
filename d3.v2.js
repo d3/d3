@@ -1,4 +1,5 @@
 (function() {
+  var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];
   if (!Date.now) Date.now = function() {
     return +(new Date);
   };
@@ -577,7 +578,7 @@
         var length = value.length;
         if (length < width) value = (new Array(width - length + 1)).join(fill) + value;
       }
-      return value + suffix;
+      return value.replace(".", d3_format_decimalPoint) + suffix;
     };
   };
   var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
@@ -601,10 +602,17 @@
   function d3_format_typeDefault(x) {
     return x + "";
   }
-  function d3_format_group(value) {
-    var i = value.lastIndexOf("."), f = i >= 0 ? value.substring(i) : (i = value.length, ""), t = [];
-    while (i > 0) t.push(value.substring(i -= 3, i + 3));
-    return t.reverse().join(",") + f;
+  var d3_format_group = d3_identity;
+  if (d3_format_grouping) {
+    var d3_format_groupingLength = d3_format_grouping.length;
+    d3_format_group = function(value) {
+      var i = value.lastIndexOf("."), f = i >= 0 ? "." + value.substring(i + 1) : (i = value.length, ""), t = [], j = 0, g = d3_format_grouping[0];
+      while (i > 0 && g > 0) {
+        t.unshift(value.substring(i -= g, i + g));
+        g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];
+      }
+      return t.join(d3_format_thousandsSeparator || "") + f;
+    };
   }
   var d3_formatPrefixes = [ "y", "z", "a", "f", "p", "n", "μ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y" ].map(d3_formatPrefix);
   d3.formatPrefix = function(value, precision) {
@@ -6491,11 +6499,8 @@
     }
   };
   var d3_time_prototype = Date.prototype;
-  var d3_time_formatDateTime = "%a %b %e %H:%M:%S %Y", d3_time_formatDate = "%m/%d/%y", d3_time_formatTime = "%H:%M:%S";
-  var d3_time_days = d3_time_daySymbols, d3_time_dayAbbreviations = d3_time_days.map(d3_time_formatAbbreviate), d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], d3_time_monthAbbreviations = d3_time_months.map(d3_time_formatAbbreviate);
-  function d3_time_formatAbbreviate(name) {
-    return name.substring(0, 3);
-  }
+  var d3_time_formatDateTime = "%a %b %e %X %Y", d3_time_formatDate = "%m/%d/%Y", d3_time_formatTime = "%H:%M:%S";
+  var d3_time_days = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ], d3_time_dayAbbreviations = [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ], d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], d3_time_monthAbbreviations = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
   d3.time.format = function(template) {
     var n = template.length;
     function format(date) {
