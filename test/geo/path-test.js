@@ -25,6 +25,47 @@ suite.addBatch({
           coordinates: [[[-63.03, 18.02], [-63.14, 18.06], [-63.01, 18.07], [-63.03, 18.02]]]
         },
       }));
+    },
+    "centroid": {
+      topic: function(path) {
+        return path.centroid;
+      },
+      "Point": function(centroid) {
+        assert.inDelta(centroid({type: "Point", coordinates: [-122.41964, 37.77712]}), [150.064535, 211.308172], 1e-6);
+        assert.inDelta(centroid({type: "Point", coordinates: [ -74.00712, 40.71455]}), [791.367648, 162.665364], 1e-6);
+      },
+      "MultiPoint": {
+        "empty": function(centroid) {
+          assert.isNull(centroid({type: "MultiPoint", coordinates: []}));
+        },
+        "single point": function(centroid) {
+          assert.inDelta(centroid({type: "MultiPoint", coordinates: [[-122.41964, 37.77712]]}), [150.064535, 211.308172], 1e-6);
+          assert.inDelta(centroid({type: "MultiPoint", coordinates: [[ -74.00712, 40.71455]]}), [791.367648, 162.665364], 1e-6);
+        },
+        "multiple points": function(centroid) {
+          assert.inDelta(centroid({type: "MultiPoint", coordinates: [[-122.41964, 37.77712], [-74.00712, 40.71455]]}),
+              [470.716091, 186.986768], 1e-6);
+        }
+      },
+      "LineString": {
+        "empty": function(centroid) {
+          assert.isNull(centroid({type: "LineString", coordinates: []}));
+        },
+        "single point": function(centroid) {
+          assert.inDelta(centroid({type: "MultiPoint", coordinates: [[-122.41964, 37.77712]]}), [150.064535, 211.308172], 1e-6);
+          assert.inDelta(centroid({type: "MultiPoint", coordinates: [[ -74.00712, 40.71455]]}), [791.367648, 162.665364], 1e-6);
+        },
+        "two points": function(centroid) {
+          assert.inDelta(centroid({type: "LineString", coordinates: [[-122.41964, 37.77712], [-74.00712, 40.71455]]}),
+              [470.716091, 186.986768], 1e-6);
+        },
+        "three points": function(centroid) {
+          assert.inDelta(centroid({type: "LineString", coordinates: [[-122.41964, 37.77712], [-74.00712, 40.71455], [-74.00712, 40.71455]]}),
+              [470.716091, 186.986768], 1e-6);
+          assert.inDelta(centroid({type: "LineString", coordinates: [[-122.41964, 37.77712], [-74.00712, 40.71455], [-71.05670, 42.358630]]}),
+              [493.975964, 183.981004], 1e-6);
+        }
+      }
     }
   }
 });

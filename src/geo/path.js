@@ -193,17 +193,66 @@ d3.geo.path = function() {
     return [x, y, 6 * z]; // weighted centroid
   }
 
+  function lineCentroid(coordinates) {
+    var n = coordinates.length;
+    if (!n) return null;
+    var a = projection(coordinates[0]);
+    if (n === 1) return [a[0], a[1], 1];
+    for (var i = 1, x = 0, y = 0, z = 0, b, d, mid; i < n; i++) {
+      b = projection(coordinates[i]);
+      mid = midpoint(a, b);
+      z += d = distance(a, b);
+      x += d * mid[0];
+      y += d * mid[1];
+      a = b;
+    }
+    return [x, y, z]; // weighted centroid
+  }
+
   var centroidType = path.centroid = d3_geo_type({
 
     // TODO FeatureCollection
-    // TODO Point
-    // TODO MultiPoint
-    // TODO LineString
-    // TODO MultiLineString
     // TODO GeometryCollection
 
     Feature: function(o) {
       return centroidType(o.geometry);
+    },
+
+    Point: function(o) {
+      return projection(o.coordinates);
+    },
+
+    MultiPoint: function(o) {
+      var coordinates = o.coordinates,
+          n = coordinates.length;
+      if (!n) return null;
+      for (var i = 0, x = 0, y = 0, a; i < n;) {
+        a = projection(coordinates[i++]);
+        x += (a[0] - x) / i;
+        y += (a[1] - y) / i;
+      }
+      return [x, y];
+    },
+
+    LineString: function(o) {
+      var centroid = lineCentroid(o.coordinates);
+      return centroid ? [centroid[0] / centroid[2], centroid[1] / centroid[2]] : null;
+    },
+
+    MultiLineString: function(o) {
+      var coordinates = o.coordinates,
+          n = coordinates.length;
+      if (!n) return null;
+      for (var i = 0, x = 0, y = 0, z = 0, centroid, empty = true; i < n; i++) {
+        centroid = lineCentroid(coordinates[i]);
+        if (centroid != null) {
+          empty = false;
+          x += centroid[0];
+          y += centroid[1];
+          z += centroid[2];
+        }
+      }
+      return empty ? null : [x / z, y / z];
     },
 
     Polygon: function(o) {
@@ -230,6 +279,16 @@ d3.geo.path = function() {
     }
 
   });
+
+  function midpoint(a, b) {
+    return [(a[0] + b[0]) / 2, (a[1] + b[1]) / 2];
+  }
+
+  function distance(a, b) {
+    var dx = Math.abs(a[0] - b[0]),
+        dy = Math.abs(a[1] - b[1]);
+    return Math.sqrt(dx * dx + dy * dy);
+  }
 
   function area(coordinates) {
     return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
