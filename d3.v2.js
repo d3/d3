@@ -5656,70 +5656,30 @@
   function d3_path_circle(radius) {
     return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
   }
-  d3.geo.bounds = function(feature) {
-    var left = Infinity, bottom = Infinity, right = -Infinity, top = -Infinity;
-    d3_geo_bounds(feature, function(x, y) {
-      if (x < left) left = x;
-      if (x > right) right = x;
-      if (y < bottom) bottom = y;
-      if (y > top) top = y;
+  d3.geo.bounds = function() {
+    var left, bottom, right, top, recurse = d3_geo_typeRecurse({
+      Point: function(o) {
+        o = o.coordinates;
+        var x = o[0], y = o[1];
+        if (x < left) left = x;
+        if (x > right) right = x;
+        if (y < bottom) bottom = y;
+        if (y > top) top = y;
+      },
+      Polygon: function(o) {
+        recurse({
+          type: "LineString",
+          coordinates: o.coordinates[0]
+        });
+      }
     });
-    return [ [ left, bottom ], [ right, top ] ];
-  };
-  function d3_geo_bounds(o, f) {
-    if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
-  }
-  var d3_geo_boundsTypes = {
-    Feature: d3_geo_boundsFeature,
-    FeatureCollection: d3_geo_boundsFeatureCollection,
-    GeometryCollection: d3_geo_boundsGeometryCollection,
-    LineString: d3_geo_boundsLineString,
-    MultiLineString: d3_geo_boundsMultiLineString,
-    MultiPoint: d3_geo_boundsLineString,
-    MultiPolygon: d3_geo_boundsMultiPolygon,
-    Point: d3_geo_boundsPoint,
-    Polygon: d3_geo_boundsPolygon
-  };
-  function d3_geo_boundsFeature(o, f) {
-    d3_geo_bounds(o.geometry, f);
-  }
-  function d3_geo_boundsFeatureCollection(o, f) {
-    for (var a = o.features, i = 0, n = a.length; i < n; i++) {
-      d3_geo_bounds(a[i].geometry, f);
-    }
-  }
-  function d3_geo_boundsGeometryCollection(o, f) {
-    for (var a = o.geometries, i = 0, n = a.length; i < n; i++) {
-      d3_geo_bounds(a[i], f);
-    }
-  }
-  function d3_geo_boundsLineString(o, f) {
-    for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-      f.apply(null, a[i]);
-    }
-  }
-  function d3_geo_boundsMultiLineString(o, f) {
-    for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-      for (var b = a[i], j = 0, m = b.length; j < m; j++) {
-        f.apply(null, b[j]);
-      }
-    }
-  }
-  function d3_geo_boundsMultiPolygon(o, f) {
-    for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-      for (var b = a[i][0], j = 0, m = b.length; j < m; j++) {
-        f.apply(null, b[j]);
-      }
-    }
-  }
-  function d3_geo_boundsPoint(o, f) {
-    f.apply(null, o.coordinates);
-  }
-  function d3_geo_boundsPolygon(o, f) {
-    for (var a = o.coordinates[0], i = 0, n = a.length; i < n; i++) {
-      f.apply(null, a[i]);
-    }
-  }
+    return function(object) {
+      left = bottom = Infinity;
+      right = top = -Infinity;
+      recurse(object);
+      return [ [ left, bottom ], [ right, top ] ];
+    };
+  }();
   d3.geo.circle = function() {
     var origin = [ 0, 0 ], degrees = 90 - .01, radians = degrees * d3_geo_radians, arc = d3.geo.greatArc().source(origin).target(d3_identity);
     function circle() {}
