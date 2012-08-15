@@ -235,6 +235,31 @@ d3.geo.path = function() {
     return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
   }
 
+  path.bounds = (function() {
+    var x0, x1, y0, y1,
+        recurse = d3_geo_typeRecurse({
+      Point: function(o) {
+        var p = projection(o.coordinates),
+            x = p[0],
+            y = p[1];
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      },
+      Polygon: function(o) {
+        // Only check bounds of exterior ring.
+        recurse({type: "LineString", coordinates: o.coordinates[0]});
+      }
+    });
+    return function(object) {
+      x0 = y0 = Infinity;
+      x1 = y1 = -Infinity;
+      recurse(object);
+      return [[x0, y0], [x1, y1]];
+    };
+  })();
+
   path.projection = function(x) {
     projection = x;
     return path;
