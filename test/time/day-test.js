@@ -36,6 +36,9 @@ suite.addBatch({
         assert.deepEqual(floor(utc(2011, 10, 06, 08)), local(2011, 10, 06));
         assert.deepEqual(floor(utc(2011, 10, 06, 09)), local(2011, 10, 06));
         assert.deepEqual(floor(utc(2011, 10, 06, 10)), local(2011, 10, 06));
+      },
+      "correctly handles years in the first century": function(floor) {
+        assert.deepEqual(floor(local(0011, 10, 06, 07)), local(0011, 10, 06));
       }
     },
     "ceil": {

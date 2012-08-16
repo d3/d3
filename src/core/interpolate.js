@@ -17,7 +17,7 @@ d3.interpolateRound = function(a, b) {
 d3.interpolateString = function(a, b) {
   var m, // current match
       i, // current index
-      j, // current index (for coallescing)
+      j, // current index (for coalescing)
       s0 = 0, // start index of current string prefix
       s1 = 0, // end index of current string prefix
       s = [], // string constants and placeholders
@@ -40,13 +40,13 @@ d3.interpolateString = function(a, b) {
   // Find all numbers in a.
   for (i = 0, n = q.length; (m = d3_interpolate_number.exec(a)) && i < n; ++i) {
     o = q[i];
-    if (o.x == m[0]) { // The numbers match, so coallesce.
+    if (o.x == m[0]) { // The numbers match, so coalesce.
       if (o.i) {
         if (s[o.i + 1] == null) { // This match is followed by another number.
           s[o.i - 1] += o.x;
           s.splice(o.i, 1);
           for (j = i + 1; j < n; ++j) q[j].i--;
-        } else { // This match is followed by a string, so coallesce twice.
+        } else { // This match is followed by a string, so coalesce twice.
           s[o.i - 1] += o.x + s[o.i + 1];
           s.splice(o.i, 2);
           for (j = i + 1; j < n; ++j) q[j].i -= 2;
@@ -54,7 +54,7 @@ d3.interpolateString = function(a, b) {
       } else {
           if (s[o.i + 1] == null) { // This match is followed by another number.
           s[o.i] = o.x;
-        } else { // This match is followed by a string, so coallesce twice.
+        } else { // This match is followed by a string, so coalesce twice.
           s[o.i] = o.x + s[o.i + 1];
           s.splice(o.i + 1, 1);
           for (j = i + 1; j < n; ++j) q[j].i--;
@@ -73,7 +73,7 @@ d3.interpolateString = function(a, b) {
     o = q.pop();
     if (s[o.i + 1] == null) { // This match is followed by another number.
       s[o.i] = o.x;
-    } else { // This match is followed by a string, so coallesce twice.
+    } else { // This match is followed by a string, so coalesce twice.
       s[o.i] = o.x + s[o.i + 1];
       s.splice(o.i + 1, 1);
     }
@@ -173,7 +173,36 @@ d3.interpolateHsl = function(a, b) {
       l1 = b.l - l0;
   if (h1 > 180) h1 -= 360; else if (h1 < -180) h1 += 360; // shortest path
   return function(t) {
-    return d3_hsl_rgb(h0 + h1 * t, s0 + s1 * t, l0 + l1 * t).toString();
+    return d3_hsl_rgb(h0 + h1 * t, s0 + s1 * t, l0 + l1 * t) + "";
+  };
+};
+
+d3.interpolateLab = function(a, b) {
+  a = d3.lab(a);
+  b = d3.lab(b);
+  var al = a.l,
+      aa = a.a,
+      ab = a.b,
+      bl = b.l - al,
+      ba = b.a - aa,
+      bb = b.b - ab;
+  return function(t) {
+    return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
+  };
+};
+
+d3.interpolateHcl = function(a, b) {
+  a = d3.hcl(a);
+  b = d3.hcl(b);
+  var ah = a.h,
+      ac = a.c,
+      al = a.l,
+      bh = b.h - ah,
+      bc = b.c - ac,
+      bl = b.l - al;
+  if (bh > 180) bh -= 360; else if (bh < -180) bh += 360; // shortest path
+  return function(t) {
+    return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
   };
 };
 
@@ -213,12 +242,12 @@ d3.interpolateObject = function(a, b) {
     for (k in i) c[k] = i[k](t);
     return c;
   };
-}
+};
 
 var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
 
-function d3_interpolateByName(n) {
-  return n == "transform"
+function d3_interpolateByName(name) {
+  return name == "transform"
       ? d3.interpolateTransform
       : d3.interpolate;
 }

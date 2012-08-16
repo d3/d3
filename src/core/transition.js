@@ -85,31 +85,6 @@ function d3_transition(groups, id, time) {
   return groups;
 }
 
-var d3_transitionRemove = {};
-
-function d3_transitionNull(d, i, a) {
-  return a != "" && d3_transitionRemove;
-}
-
-function d3_transitionTween(name, b) {
-  var interpolate = d3_interpolateByName(name);
-
-  function transitionFunction(d, i, a) {
-    var v = b.call(this, d, i);
-    return v == null
-        ? a != "" && d3_transitionRemove
-        : a != v && interpolate(a, v);
-  }
-
-  function transitionString(d, i, a) {
-    return a != b && interpolate(a, b);
-  }
-
-  return typeof b === "function" ? transitionFunction
-      : b == null ? d3_transitionNull
-      : (b += "", transitionString);
-}
-
 var d3_transitionPrototype = [],
     d3_transitionNextId = 0,
     d3_transitionId = 0,
