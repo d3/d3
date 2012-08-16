@@ -120,6 +120,11 @@ suite.addBatch({
         assert.deepEqual(x.range(), [30, 60, 90]);
         assert.equal(x.rangeBand(), 0);
       },
+      "correctly handles singleton domains": function(ordinal) {
+        var x = ordinal().domain(["a"]).rangePoints([0, 120]);
+        assert.deepEqual(x.range(), [60]);
+        assert.equal(x.rangeBand(), 0);
+      },
       "can be set to a descending range": function(ordinal) {
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0]);
         assert.deepEqual(x.range(), [120, 60,0]);
