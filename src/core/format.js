@@ -49,7 +49,7 @@ d3.format = function(specifier) {
     if (integer && (value % 1)) return "";
 
     // Convert negative to positive, and record the sign prefix.
-    var negative = value < 0 && (value = -value) ? "-" : sign;
+    var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
 
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {

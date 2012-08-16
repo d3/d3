@@ -291,6 +291,20 @@ suite.addBatch({
       assert.strictEqual(format("=+13,d")(0), "+           0");
       assert.strictEqual(format("=+21,d")(0), "+                   0");
     },
+    "a space can denote positive numbers": function(format) {
+      assert.strictEqual(format(" 1,d")(-1), "-1");
+      assert.strictEqual(format(" 1,d")(0), " 0");
+      assert.strictEqual(format(" 2,d")(0), " 0");
+      assert.strictEqual(format(" 3,d")(0), "  0");
+      assert.strictEqual(format(" 5,d")(0), "    0");
+      assert.strictEqual(format(" 8,d")(0), "       0");
+      assert.strictEqual(format(" 13,d")(0), "            0");
+      assert.strictEqual(format(" 21,d")(0), "                    0");
+    },
+    "can format negative zero": function(format) {
+      assert.strictEqual(format("1d")(-0), "-0");
+      assert.strictEqual(format("1f")(-0), "-0");
+    },
     "supports \"n\" as an alias for \",g\"": function(format) {
       var f = format("n");
       assert.strictEqual(f(.0042), "0.0042");
