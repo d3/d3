@@ -32,7 +32,6 @@ d3.json("../data/flare.json", function(json) {
       .attr("r", 4.5);
 
   node.append("text")
-      .attr("dx", function(d) { return d.x < 180 ? 8 : -8; })
       .attr("dy", ".31em")
       .attr("text-anchor", function(d) { return d.x < 180 ? "start" : "end"; })
       .attr("transform", function(d) { return d.x < 180 ? "translate(8)" : "rotate(180)translate(-8)"; })
