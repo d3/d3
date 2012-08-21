@@ -27,7 +27,7 @@ d3.layout.histogram = function() {
     if (m > 0) {
       i = -1; while(++i < n) {
         x = values[i];
-        if ((x >= range[0]) && (x <= range[1])) {
+        if (x >= range[0] && x <= range[1]) {
           bin = bins[d3.bisect(thresholds, x, 1, m) - 1];
           bin.y += k;
           bin.push(data[i]);
