@@ -5208,7 +5208,7 @@
           a.push(t);
           t = token();
         }
-        if (f && !(a = f(a, n++, eol ? reParse.lastIndex : null))) continue;
+        if (f && !(a = f(a, n++, t === EOL || eol ? reParse.lastIndex : null))) continue;
         rows.push(a);
       }
       return rows;
