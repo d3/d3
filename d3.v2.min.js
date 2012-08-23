@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.9.7"}; // semver
+d3 = {version: "2.10.0"}; // semver
 function d3_class(ctor, properties) {
   try {
     for (var key in properties) {
@@ -7211,7 +7211,7 @@ function d3_dsv(delimiter, mimeType) {
     return dsv.parseRows(text, function(row, i) {
       if (i) {
         var o = {}, j = -1, m = header.length;
-        while (++j < m) o[header[j]] = row[j];
+        while (++j < m) o[header[j]] = j < row.length ? row[j] : null;
         return o;
       } else {
         header = row;
