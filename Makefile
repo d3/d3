@@ -4,6 +4,7 @@ NODE_PATH ?= ./node_modules
 JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
 JS_BEAUTIFIER = $(NODE_PATH)/uglify-js/bin/uglifyjs -b -i 2 -nm -ns
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
+PACKAGE_JSON = package.json
 LOCALE ?= en_US
 
 # when node or any of these tools has not been installed, ignore them.
