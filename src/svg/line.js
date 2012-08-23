@@ -2,8 +2,8 @@ function d3_svg_line(projection) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
       defined = d3_true,
-      interpolate = d3_svg_lineInterpolatorDefault,
-      interpolator = d3_svg_lineLinear,
+      interpolate = d3_svg_lineLinear,
+      interpolateKey = interpolate.key,
       tension = .7;
 
   function line(data) {
@@ -16,7 +16,7 @@ function d3_svg_line(projection) {
         fy = d3_functor(y);
 
     function segment() {
-      segments.push("M", interpolator(projection(points), tension));
+      segments.push("M", interpolate(projection(points), tension));
     }
 
     while (++i < n) {
@@ -52,9 +52,9 @@ function d3_svg_line(projection) {
   };
 
   line.interpolate = function(_) {
-    if (!arguments.length) return interpolate;
-    if (!d3_svg_lineInterpolators.has(_ += "")) _ = d3_svg_lineInterpolatorDefault;
-    interpolator = d3_svg_lineInterpolators.get(interpolate = _);
+    if (!arguments.length) return interpolateKey;
+    if (typeof _ === "function") interpolateKey = interpolate = _;
+    else interpolateKey = (interpolate = d3_svg_lineInterpolators.get(_) || d3_svg_lineLinear).key;
     return line;
   };
 
@@ -81,8 +81,6 @@ function d3_svg_lineY(d) {
   return d[1];
 }
 
-var d3_svg_lineInterpolatorDefault = "linear";
-
 // The various interpolators supported by the `line` class.
 var d3_svg_lineInterpolators = d3.map({
   "linear": d3_svg_lineLinear,
@@ -97,6 +95,11 @@ var d3_svg_lineInterpolators = d3.map({
   "cardinal-open": d3_svg_lineCardinalOpen,
   "cardinal-closed": d3_svg_lineCardinalClosed,
   "monotone": d3_svg_lineMonotone
+});
+
+d3_svg_lineInterpolators.forEach(function(key, value) {
+  value.key = key;
+  value.closed = /-closed$/.test(key);
 });
 
 // Linear interpolation; generates "L" commands.
@@ -355,7 +358,7 @@ function d3_svg_lineFiniteDifferences(points) {
       p1 = points[1],
       d = m[0] = d3_svg_lineSlope(p0, p1);
   while (++i < j) {
-    m[i] = d + (d = d3_svg_lineSlope(p0 = p1, p1 = points[i + 1]));
+    m[i] = (d + (d = d3_svg_lineSlope(p0 = p1, p1 = points[i + 1]))) / 2;
   }
   m[i] = d;
   return m;
