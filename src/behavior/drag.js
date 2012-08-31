@@ -1,5 +1,3 @@
-// TODO Track touch points by identifier.
-
 d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
       origin = null;
@@ -13,15 +11,14 @@ d3.behavior.drag = function() {
     var target = this,
         event_ = event.of(target, arguments),
         eventTarget = d3.event.target,
+        touchId = d3.event.touches && d3.event.changedTouches[0].identifier,
         offset,
         origin_ = point(),
         moved = 0;
 
     var w = d3.select(window)
-        .on("mousemove.drag", dragmove)
-        .on("touchmove.drag", dragmove)
-        .on("mouseup.drag", dragend, true)
-        .on("touchend.drag", dragend, true);
+        .on(touchId ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove)
+        .on(touchId ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
 
     if (origin) {
       offset = origin.apply(target, arguments);
@@ -30,13 +27,15 @@ d3.behavior.drag = function() {
       offset = [0, 0];
     }
 
-    d3_eventCancel();
+    // Only cancel mousedown; touchstart is needed for draggable links.
+    if (!touchId) d3_eventCancel();
     event_({type: "dragstart"});
 
     function point() {
-      var p = target.parentNode,
-          t = d3.event.changedTouches;
-      return t ? d3.touches(p, t)[0] : d3.mouse(p);
+      var p = target.parentNode;
+      return touchId
+          ? d3.touches(p).filter(function(p) { return p.identifier === touchId; })[0]
+          : d3.mouse(p);
     }
 
     function dragmove() {
@@ -62,10 +61,8 @@ d3.behavior.drag = function() {
         if (d3.event.target === eventTarget) w.on("click.drag", click, true);
       }
 
-      w .on("mousemove.drag", null)
-        .on("touchmove.drag", null)
-        .on("mouseup.drag", null)
-        .on("touchend.drag", null);
+      w .on(touchId ? "touchmove.drag-" + touchId : "mousemove.drag", null)
+        .on(touchId ? "touchend.drag-" + touchId : "mouseup.drag", null);
     }
 
     // prevent the subsequent click from propagating (e.g., for anchors)
