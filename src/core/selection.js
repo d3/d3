@@ -1,5 +1,6 @@
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);
+  groups.enter = groups.exit = function() { return d3.select(); };
   return groups;
 }
 
