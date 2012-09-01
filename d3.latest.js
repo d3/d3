@@ -1732,6 +1732,7 @@ function d3_xyz_rgb(r) {
 }
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);
+  groups.enter = groups.exit = function() { return d3.select(); };
   return groups;
 }
 
@@ -3247,7 +3248,7 @@ function d3_scale_ordinal(domain, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = (stop - start) / (domain.length - 1 + padding);
+        step = (stop - start) / (Math.max(1, domain.length - 1) + padding);
     range = steps(domain.length < 2 ? (start + stop) / 2 : start + step * padding / 2, step);
     rangeBand = 0;
     ranger = {t: "rangePoints", a: arguments};
@@ -4519,6 +4520,10 @@ d3.svg.axis = function() {
           pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
           break;
         }
+        default: {
+          // orient is supposed to be a user-defined callback function
+          
+        }
       }
 
       // For quantitative scales:
@@ -4575,12 +4580,18 @@ d3.svg.axis = function() {
     return axis;
   };
 
-  axis.tickSize = function(x, y, z) {
-    if (!arguments.length) return tickMajorSize;
-    var n = arguments.length - 1;
-    tickMajorSize = +x;
-    tickMinorSize = n > 1 ? +y : tickMajorSize;
-    tickEndSize = n > 0 ? +arguments[n] : tickMajorSize;
+  axis.tickSubFormat = function(x) {
+    if (!arguments.length) return tickSubFormat_;
+    tickSubFormat_ = x;
+    return axis;
+  };
+
+  axis.tickSize = function(major, minor, half, end) {
+    var n = arguments.length;
+    if (!n) return [tickMajorSize, tickMinorSize, tickEndSize];
+    tickMajorSize = +major;
+    tickMinorSize = n > 2 ? +minor : tickMajorSize;
+    tickEndSize = +arguments[n];
     return axis;
   };
 
@@ -4614,10 +4625,12 @@ function d3_svg_axisSubdivide(scale, ticks, m) {
         subticks,
         i = -1,
         n = ticks.length,
-        d = (ticks[1] - ticks[0]) / ++m,
+        d,
         j,
         v;
+    m++;
     while (++i < n) {
+      d = (+ticks[i] - +ticks[i - 1]) / m;
       for (j = m; --j > 0;) {
         if ((v = +ticks[i] - j * d) >= extent[0]) {
           subticks.push(v);
@@ -6079,6 +6092,7 @@ function d3_layout_stackY(d) {
 
 function d3_layout_stackOut(d, y0, y) {
   d.y0 = y0;
+  d.y1 = y0+y;
   d.y = y;
 }
 
