@@ -101,6 +101,10 @@ d3.svg.axis = function() {
           pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
           break;
         }
+        default: {
+          // orient is supposed to be a user-defined callback function
+          
+        }
       }
 
       // For quantitative scales:
@@ -157,12 +161,18 @@ d3.svg.axis = function() {
     return axis;
   };
 
-  axis.tickSize = function(x, y, z) {
-    if (!arguments.length) return tickMajorSize;
-    var n = arguments.length - 1;
-    tickMajorSize = +x;
-    tickMinorSize = n > 1 ? +y : tickMajorSize;
-    tickEndSize = n > 0 ? +arguments[n] : tickMajorSize;
+  axis.tickSubFormat = function(x) {
+    if (!arguments.length) return tickSubFormat_;
+    tickSubFormat_ = x;
+    return axis;
+  };
+
+  axis.tickSize = function(major, minor, half, end) {
+    var n = arguments.length;
+    if (!n) return [tickMajorSize, tickMinorSize, tickEndSize];
+    tickMajorSize = +major;
+    tickMinorSize = n > 2 ? +minor : tickMajorSize;
+    tickEndSize = +arguments[n];
     return axis;
   };
 
@@ -196,10 +206,12 @@ function d3_svg_axisSubdivide(scale, ticks, m) {
         subticks,
         i = -1,
         n = ticks.length,
-        d = (ticks[1] - ticks[0]) / ++m,
+        d,
         j,
         v;
+    m++;
     while (++i < n) {
+      d = (+ticks[i] - +ticks[i - 1]) / m;
       for (j = m; --j > 0;) {
         if ((v = +ticks[i] - j * d) >= extent[0]) {
           subticks.push(v);
