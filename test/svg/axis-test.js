@@ -277,11 +277,11 @@ suite.addBatch({
     "tickSubdivide": {
       "defaults to zero": function(axis) {
         var a = axis();
-        assert.equal(a.tickSubdivide(), 0);
+        assert.equal(a.tickSubdivide()[0], 0);
       },
       "coerces input value to a number": function(axis) {
         var a = axis().tickSubdivide(true);
-        assert.strictEqual(a.tickSubdivide(), 1);
+        assert.strictEqual(a.tickSubdivide()[0], 1);
       },
       "does not generate minor ticks when zero": function(axis) {
         var g = d3.select("body").html("").append("svg:g").call(axis());

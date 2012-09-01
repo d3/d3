@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	  <title>Classical Scales</title>
+    <script type="text/javascript" src="../../d3.v2.js"></script>
+    <style type="text/css">
+
+body {
+  font: 10px sans-serif;
+}
+
+line, path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+/*
+.minor :not(.minor) {
+  display: none;
+}
+*/
+
+    </style>
+  </head>
+  <body>
+    <script type="text/javascript">
+
+var margin = {top: 10, right: 10, bottom: 20, left: 10},
+    width = 960 - margin.right - margin.left,
+    height = 500 - margin.top - margin.bottom;
+		hstep = Math.floor(height / 10);
+
+var x = d3.scale.linear()
+    .domain([.05, .95])
+    .range([0, width]);
+
+var y = d3.scale.linear()
+    .range([0, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var axis_y = hstep;
+var descr = function(txt) {
+  return function() {
+		this.insert("text", "g")
+			.text(txt)
+			.attr("class", "description")
+			.attr("x", width / 2)
+			.attr("y", 0)
+			.attr("dy", "-1em")
+			.attr("text-anchor", "middle");
+	};
+};
+
+svg.append("g")
+		.attr("class", "x axis")
+		.attr("transform", "translate(0," + axis_y + ")")
+		.call(d3.svg.axis().scale(x))
+  .call(descr("regular, linear axis (range = [0.05 - 0.95])"));
+
+axis_y += hstep;
+svg.append("g")
+		.attr("class", "x minor")
+		.attr("transform", "translate(0," + axis_y + ")")
+		.call(d3.svg.axis().scale(x).tickSubdivide(9))
+  .call(descr("regular, with 10 subticks per tick"));
+
+axis_y += hstep;
+svg.append("g")
+		.attr("class", "x minor endticks")
+		.attr("transform", "translate(0," + axis_y + ")")
+		.call(d3.svg.axis().scale(x).tickSubdivide(9).tickSize(6, 3, 10))
+  .call(descr("regular, with 10 (smaller) subticks and longer start/end ticks"));
+
+axis_y += hstep;
+svg.append("g")
+		.attr("class", "x minor endticks classical")
+		.attr("transform", "translate(0," + axis_y + ")")
+		.call(d3.svg.axis().scale(x).tickSubdivide(9).tickSize(6, function(d, i) {
+		  return (d.subindex == 5 ? 5 : 3);
+		}, 10))
+  .call(descr("classical, with 10 (smaller) subticks, emphasis on the fifth, and longer start/end ticks"));
+
+    </script>
+  </body>
+</html>
