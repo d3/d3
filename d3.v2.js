@@ -4562,15 +4562,22 @@ d3.svg.axis = function() {
       });
 
       var subtick = g.selectAll(".minor");
-      subtick = subtick.data(subticks /* , function(d, i) {
-        return i; // Math.floor(100 * (d.index + d.subindex / d.modulus));
-      } */ );
+      subtick = subtick.data(subticks, function(d, i) {
+        var p = Math.min(1, 3 + Math.ceil(Math.log(d.modulus) / Math.LN10));
+        var v = d.index + d.subindex / d.modulus;
+        var s = String(d3.round(v, p));
+        s = String(d.value);
+        return s;
+      });
       var subtickEnter = subtick.enter().insert("line", "g").attr("class", "tick minor").style("opacity", 1e-6);
       var subtickExit = d3.transition(subtick.exit()).style("opacity", 1e-6).remove();
       var subtickUpdate = d3.transition(subtick).style("opacity", 1);
 
       // Major ticks.
-      var tick = g.selectAll("g.major").data(ticks, String),
+      var tick = g.selectAll("g.major").data(ticks, function(d, i) {
+            var rv = String(d.value);
+            return rv;
+          }),
           tickEnter = tick.enter().insert("g", "path").attr("class", "tick major").style("opacity", 1e-6),
           tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(),
           tickUpdate = d3.transition(tick).style("opacity", 1),
