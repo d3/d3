@@ -26,10 +26,10 @@ line, path {
   <body>
     <script type="text/javascript">
 
-var margin = {top: 10, right: 10, bottom: 20, left: 10},
+var margin = {top: 0, right: 20, bottom: 20, left: 20},
     width = 960 - margin.right - margin.left,
     height = 1500 - margin.top - margin.bottom;
-    hstep = Math.floor(height / 30);
+    hstep = Math.floor(height / 32);
 
 var x = d3.scale.linear()
     .domain([.05, .95])
@@ -52,13 +52,33 @@ var pow_x_2 = d3.scale.pow()
     .domain([.05, 9.5])
     .range([0, width]);
 
+var pow_x_2_v2 = d3.scale.pow()
+    .exponent(2)
+    .domain([.05, 9500])
+    .range([0, width]);
+
+var pow_x_2_v3 = d3.scale.pow()
+    .exponent(2)
+    .domain([0, 2])
+    .range([0, width]);
+
+var pow_x_4 = d3.scale.pow()
+    .exponent(2)
+    .domain([0, 9.5])
+    .range([0, width]);
+
+var pow_x_f5 = d3.scale.pow()
+    .exponent(1 / 5)
+    .domain([0, 9.5])
+    .range([0, width]);
+
 var pow_x_m3 = d3.scale.pow()
     .exponent(-3)
-    .domain([.05, 9.5])
+    .domain([0, 9.5])
     .range([0, width]);
 
 var sqrt_x = d3.scale.sqrt()
-    .domain([.05, 9.5])
+    .domain([0, 9.5])
     .range([0, width]);
 
 var quantile_x = d3.scale.quantile()
@@ -269,6 +289,110 @@ svg.append("g")
 									(d.modulus > 10 ? 2 : 4)));
 			}, -10))
     .call(descr("classical square power, adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_2_v2).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical square power, with 10 (smaller) subticks, etc., for larger range"));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_2_v2).tickSubdivide(example_subdiv_A(pow_x_2_v2))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical square power, adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_2_v3).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical square power, with 10 (smaller) subticks, etc., for smaller range"));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_2_v3).tickSubdivide(example_subdiv_A(pow_x_2_v3))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical square power, adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_4).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical power(4), with 10 (smaller) subticks, emphasis on the even (for modulo >= 10) and fifth, and longer start/end ticks, inverted"));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_4).tickSubdivide(example_subdiv_A(pow_x_4))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical power(4), adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_f5).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical power(1/5), with 10 (smaller) subticks, emphasis on the even (for modulo >= 10) and fifth, and longer start/end ticks, inverted"));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_f5).tickSubdivide(example_subdiv_A(pow_x_f5))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical power(1/5), adaptive subticks, etc."));
 
 
 
