@@ -28,8 +28,8 @@ line, path {
 
 var margin = {top: 10, right: 10, bottom: 20, left: 10},
     width = 960 - margin.right - margin.left,
-    height = 500 - margin.top - margin.bottom;
-    hstep = Math.floor(height / 10);
+    height = 1500 - margin.top - margin.bottom;
+    hstep = Math.floor(height / 30);
 
 var x = d3.scale.linear()
     .domain([.05, .95])
@@ -46,6 +46,36 @@ var log_x_v2 = d3.scale.log()
 var log_x_v3 = d3.scale.log()
     .domain([.05, .95])
     .range([0, width]);
+
+var pow_x_2 = d3.scale.pow()
+    .exponent(2)
+    .domain([.05, 9.5])
+    .range([0, width]);
+
+var pow_x_m3 = d3.scale.pow()
+    .exponent(-3)
+    .domain([.05, 9.5])
+    .range([0, width]);
+
+var sqrt_x = d3.scale.sqrt()
+    .domain([.05, 9.5])
+    .range([0, width]);
+
+var quantile_x = d3.scale.quantile()
+    .domain([.05, .1, .11, .12, .13, .15, .2, .25, .4, .55, .7, 1, 2, 3, 4, 4.5, 4.6, 4.7, 4.8, 4.9, 5, 5.1, 6.3, 6.7, 6.8, 7, 8.4, 8.5, 8.6, 8.7, 9.5])
+    .range([0, width / 8, width / 4, width / 2, width * 3 / 4, width]);
+
+var quantize_x = d3.scale.quantize()
+    .domain([.05, 9.5])
+    .range([0, width / 8, width / 4, width / 2, width * 3 / 4, width]);
+
+// d3.scale.threshold ASSUMPTION: domain.length == range.length - 1
+var threshold_x = d3.scale.threshold()
+    .domain([50, 140, 201, 605])
+    .range([0, width / 4, width / 2, width * 3 / 4, width]);
+
+var identity_x = d3.scale.identity()
+    .domain([0, width]);
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.right + margin.left)
@@ -90,7 +120,7 @@ axis_y += hstep;
 svg.append("g")
     .attr("class", "x minor endticks classical")
     .attr("transform", "translate(0," + axis_y + ")")
-    .call(d3.svg.axis().scale(x).tickSubdivide(9).tickSize(6, function(d, i) {
+    .call(d3.svg.axis().scale(x).tickSubdivide(9).tickSize(8, function(d, i) {
       return (d.subindex == 5 ? 5 : 3);
     }, -10))
     .call(descr("classical, with 10 (smaller) subticks, emphasis on the fifth, and longer start/end ticks, inverted"));
@@ -110,116 +140,94 @@ axis_y += hstep;
 svg.append("g")
     .attr("class", "x minor endticks classical log_x")
     .attr("transform", "translate(0," + axis_y + ")")
-    .call(d3.svg.axis().scale(log_x).tickSubdivide(9).tickSize(6, function(d, i) {
+    .call(d3.svg.axis().scale(log_x).tickSubdivide(9).tickSize(8, function(d, i) {
       return (d.subindex == 5 ? 5 : 3);
     }, -10))
     .call(descr("classical logarithmic, with 10 (smaller) subticks, emphasis on the fifth, and longer start/end ticks, inverted"));
 
-function example_subdiv_A(subticks, ticks, i, n, extent) {
-  var t0, t1, delta, s, j, v, v0, v1;
-  var min_subwidth = 4;
+// returns function suitable for axis.tickSubdivision():		
+function example_subdiv_A(scale) {
+  return function(subticks, ticks, i, n, extent) {
+		var t0, t1, s, v;
+		var min_subwidth = 4;
 
-  function nice_modulus(m) {
-    if (m >= 20) return 20;
-    if (m >= 10) return 10;
-    if (m >= 5) return 5;
-    if (m >= 2) return 2;
-    return 0;
-  }
+		function nice_modulus(m) {
+			if (m >= 20) return 20;
+			if (m >= 10) return 10;
+			if (m >= 5) return 5;
+			if (m >= 2) return 2;
+			return 0;
+		}
 
-  if (i == 0) {
-    t0 = ticks[0];
-    t1 = ticks[1];
+		function fill_subticks(base, idx, m) {
+		  var v0, v1, v05, j, modulus, delta;
+			
+			v0 = scale(t0.value);
+			v1 = scale(t1.value);
+			// test if this tick range is thresholded/quantized in any way:
+			v05 = scale((t1.value + t0.value) / 2);
+			if (v05 == v1 || v05 == v0)
+			  return;
+			modulus = nice_modulus((v1 - v0) / min_subwidth);
+			if (modulus <= 0)
+				return;
 
-    v0 = log_x(t0.value);
-    v1 = log_x(t1.value);
-    modulus = nice_modulus((v1 - v0) / min_subwidth);
-    if (modulus <= 0)
-      return subticks;
-
-    delta = (t1.value - t0.value) / modulus;
-    for (j = modulus; j-- > 1; ) {
-      v = t0.value - j * delta;
-      if (v > extent[0]) {
-        subticks.push({
-          value: v,
-          index: -1,
-          base: t0,
-          subindex: -j,
-          modulus: modulus,
-          majors: ticks
-        });
-      }
-    }
-  } else if (i == n) {
-    t0 = ticks[n - 2];
-    t1 = ticks[n - 1];
-
-    v0 = log_x(t0.value);
-    v1 = log_x(t1.value);
-    modulus = nice_modulus((v1 - v0) / min_subwidth);
-    if (modulus <= 0)
-      return subticks;
-
-    delta = (t1.value - t0.value) / modulus;
-    for (j = modulus; j-- > 1; ) {
-      v = t1.value + j * delta;
-      if (v < extent[1]) {
-        subticks.push({
-          value: v,
-          index: n - 1,
-          base: t1,
-          subindex: j,
-          modulus: modulus,
-          majors: ticks
-        });
-      }
-    }
-  } else {
-    t0 = ticks[i - 1];
-    t1 = ticks[i];
-
-    v0 = log_x(t0.value);
-    v1 = log_x(t1.value);
-    modulus = nice_modulus((v1 - v0) / min_subwidth);
-    if (modulus <= 0)
-      return subticks;
-
-    delta = (t1.value - t0.value) / modulus;
-    for (j = modulus; j-- > 1; ) {
-      v = t0.value + j * delta;
-      if (v > extent[0]) {
-        subticks.push({
-          value: v,
-          index: i - 1,
-          base: t0,
-          subindex: j,
-          modulus: modulus,
-          majors: ticks
-        });
-      }
-    }
-  }
-  return subticks;
+			delta = (t1.value - t0.value) / modulus;
+			for (j = modulus; j-- > 1; ) {
+				v = base.value + m * j * delta;
+				if (v > extent[0] && v < extent[1]) {
+					subticks.push({
+						value: v,
+						index: idx,
+						base: base,
+						subindex: m * j,
+						modulus: modulus,
+						majors: ticks
+					});
+				}
+			}
+		}
+		
+		if (i == 0) {
+			t0 = ticks[0];
+			t1 = ticks[1];
+		  fill_subticks(t0, -1, -1);
+		} else if (i == n) {
+			t0 = ticks[n - 2];
+			t1 = ticks[n - 1];
+		  fill_subticks(t1, n - 1, 1);
+		} else {
+			t0 = ticks[i - 1];
+			t1 = ticks[i];
+		  fill_subticks(t0, i - 1, 1);
+		}
+		return subticks;
+	};
 }
 
 axis_y += hstep;
 svg.append("g")
     .attr("class", "x minor endticks classical log_x")
     .attr("transform", "translate(0," + axis_y + ")")
-    .call(d3.svg.axis().scale(log_x).tickSubdivide(example_subdiv_A)
-      .tickSize(10, function(d, i) {
-        return (2 * d.subindex == d.modulus ? 7 : ((5 * d.subindex == d.modulus) && (d.modulus >= 10) ? 4 : 3));
+    .call(d3.svg.axis().scale(log_x).tickSubdivide(example_subdiv_A(log_x))
+      .tickSize(12, function(d, i) {
+        return (2 * d.subindex == d.modulus ? 8 : 
+				        ((5 * d.subindex == d.modulus) && (d.modulus >= 10) ? 6 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 5 : 
+								  (d.modulus > 10 ? 2 : 4))));
       }, -10))
-    .call(descr("classical logarithmic, with output-dependent # of subticks, emphasis on the .2 (but only when we have 10+ subticks!) and .5 subdiv, and longer start/end ticks"));
+    .call(descr("classical logarithmic, with output-dependent # of subticks, emphasis on the 2nd and other even (but only when we have 10+ subticks!) and .5 subdiv, and longer start/end ticks"));
 
 axis_y += hstep;
 svg.append("g")
     .attr("class", "x minor endticks classical log_x_v2")
     .attr("transform", "translate(0," + axis_y + ")")
-    .call(d3.svg.axis().scale(log_x_v2).tickSubdivide(example_subdiv_A)
-      .tickSize(10, function(d, i) {
-        return (2 * d.subindex == d.modulus ? 7 : ((5 * d.subindex == d.modulus) && (d.modulus >= 10) ? 4 : 3));
+    .call(d3.svg.axis().scale(log_x_v2).tickSubdivide(example_subdiv_A(log_x_v2))
+      .tickSize(12, function(d, i) {
+        return (2 * d.subindex == d.modulus ? 8 : 
+				        ((5 * d.subindex == d.modulus) && (d.modulus >= 10) ? 6 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 5 : 
+								  (d.modulus > 10 ? 2 : 4))));
       }, -10))
     .call(descr("classical logarithmic as above, but for a much larger range"));
 
@@ -227,12 +235,197 @@ axis_y += hstep;
 svg.append("g")
     .attr("class", "x minor endticks classical log_x_v2")
     .attr("transform", "translate(0," + axis_y + ")")
-    .call(d3.svg.axis().scale(log_x_v3).tickSubdivide(example_subdiv_A)
-      .tickSize(10, function(d, i) {
-        return (2 * d.subindex == d.modulus ? 7 : ((5 * d.subindex == d.modulus) && (d.modulus >= 10) ? 4 : 3));
+    .call(d3.svg.axis().scale(log_x_v3).tickSubdivide(example_subdiv_A(log_x_v3))
+      .tickSize(12, function(d, i) {
+        return (2 * d.subindex == d.modulus ? 9 : 
+				        ((5 * d.subindex == d.modulus) && (d.modulus >= 10) ? 6 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 5 : 
+								  (d.modulus > 10 ? 2 : 4))));
       }, -10))
     .call(descr("classical logarithmic as above, but for a much smaller range"));
 
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_2).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical square power, with 10 (smaller) subticks, emphasis on the even (for modulo >= 10) and fifth, and longer start/end ticks, inverted"));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_2).tickSubdivide(example_subdiv_A(pow_x_2))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical square power, adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_m3).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical power(-3), with 10 (smaller) subticks, etc."));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(pow_x_m3).tickSubdivide(example_subdiv_A(pow_x_m3))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical power(-3), adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(sqrt_x).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical square root, with 10 (smaller) subticks, etc."));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(sqrt_x).tickSubdivide(example_subdiv_A(sqrt_x))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical square root, adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(quantile_x).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical quantile, with 10 (smaller) subticks, etc."));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(quantile_x).tickSubdivide(example_subdiv_A(quantile_x))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical quantile, adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(quantize_x).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical quantized, with 10 (smaller) subticks, etc."));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(quantize_x).tickSubdivide(example_subdiv_A(quantize_x))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical quantized, adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(threshold_x).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical threshold, with 10 (smaller) subticks, etc."));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(threshold_x).tickSubdivide(example_subdiv_A(threshold_x))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical threshold, adaptive subticks, etc."));
+
+
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(identity_x).tickSubdivide(9)
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical identity, with 10 (smaller) subticks, etc."));
+		
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor endticks classical")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(identity_x).tickSubdivide(example_subdiv_A(identity_x))
+		  .tickSize(10, function(d, i) {
+				return (2 * d.subindex == d.modulus ? 7 : 
+								 ((d.subindex % 2 == 0) && (d.modulus > 10) ? 4 : 
+									(d.modulus > 10 ? 2 : 4)));
+			}, -10))
+    .call(descr("classical identity, adaptive subticks, etc."));
+		
     </script>
   </body>
 </html>

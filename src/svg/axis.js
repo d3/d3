@@ -36,8 +36,8 @@ d3.svg.axis = function() {
       var subtickUpdate = d3.transition(subtick).style("opacity", 1);
 
       // Major ticks.
-      var tick = g.selectAll("g").data(ticks, String),
-          tickEnter = tick.enter().insert("g", "path").style("opacity", 1e-6),
+      var tick = g.selectAll("g.major").data(ticks, String),
+          tickEnter = tick.enter().insert("g", "path").attr("class", "tick major").style("opacity", 1e-6),
           tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(),
           tickUpdate = d3.transition(tick).style("opacity", 1),
           tickTransform;
@@ -154,7 +154,6 @@ d3.svg.axis = function() {
         }
         default: {
           // orient is supposed to be a user-defined callback function
-
         }
       }
 

@@ -712,7 +712,7 @@ var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)
 var d3_format_types = d3.map({
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
-  E: function(x, p) { 
+  E: function(x, p) {
     var rv;
     var p1 = d3_format_precision(x, 1);
     if (p1 >= -5 && p1 <= 3)
@@ -3136,21 +3136,25 @@ function d3_scale_log(linear, log) {
     if (arguments.length < 1) return format;
     var k = Math.max(.1, n / scale.ticks().length),
         f = log === d3_scale_logn ? (e = -1e-12, Math.floor) : (e = 1e-12, Math.ceil),
-        e, 
+        e,
         h = (k >= 0.5);
-    // always try to print the .5 tick text whenever possible, f.e.: 1,2,3,5 is better than 1,2,3,4
+    // Always try to print the .5 tick text whenever possible, f.e.: 1,2,3,5 is better than 1,2,3,4.
+    // If you can do 1,2,3 you can also safely do 1,2,3,5.
+    // If you can do 1,2-and-a-bit you can also safely do 1,2,5.
+    // But 1,2 is better than 1,5 for very tight ticks in a log scale.
     if (k < 0.5) {
       if (k >= 0.4) {
         k -= 0.1;
         h = true;
-      } else if (k > 0.2) {
+      } else if (k > 0.23) {
         h = true;
-      } 
-      // else: 1,2 is better than 1,5 for very tight ticks in a log scale.
+      }
     }
     return function(d) {
-      var p = pow(f(log(d) + e));
-      if (d / p <= k || (h && Math.round(200 * d / p) == 100))
+      var r = d / pow(f(log(d) + e));
+      // round to two decimal places to uniquely pull out the half-way (.5) tick
+      // (floating point 'equals' comparisons are dangerous, so we make sure Math.round produces an integer result)
+      if (r <= k || (h && Math.round(200 * r) == 100))
         return format(d);
       return "";
     };
@@ -3416,6 +3420,10 @@ function d3_scale_quantile(domain, range) {
     return thresholds;
   };
 
+  scale.ticks = function(m) {
+    return thresholds;
+  };
+
   scale.copy = function() {
     return d3_scale_quantile(domain, range); // copy on write!
   };
@@ -3452,6 +3460,22 @@ function d3_scale_quantize(x0, x1, range) {
     return rescale();
   };
 
+  scale.ticks = function(m) {
+    if (i <= 0) return [];
+    // produce nice tick values (erase the long decimal tails due to floating point calc inaccuracy),
+    // x1 is not inclusive
+    return d3.range(x0, x1 - 0.5 / kx, 1.0 / kx).map(function(x, i) {
+      // heuristic: round to 3 extra digits to remove FP calc inaccuracy
+      var p = d3_format_precision(x, 4);
+      var v = d3.round(x, p);
+      return v;
+    });
+  };
+
+  scale.rangeBand = function() {
+    return kx;
+  }
+
   scale.copy = function() {
     return d3_scale_quantize(x0, x1, range); // copy on write
   };
@@ -3465,6 +3489,7 @@ d3.scale.threshold = function() {
 function d3_scale_threshold(domain, range) {
 
   function scale(x) {
+    // ASSUMPTION: domain.length == range.length - 1
     return range[d3.bisect(domain, x)];
   }
 
@@ -3478,6 +3503,20 @@ function d3_scale_threshold(domain, range) {
     if (!arguments.length) return range;
     range = _;
     return scale;
+  };
+
+  scale.ticks = function(m) {
+    var l = Math.min(domain.length, range.length - 1);
+    if (l > 0) {
+      var t = [], i;
+      t.push(+domain[0] - 1);
+      for (i = 1; i < l; i++) {
+        t.push((+domain[i] - +domain[i - 1]) / 2);
+      }
+      t.push(+domain[l - 1] + 1);
+      return t;
+    }
+    return [];
   };
 
   scale.copy = function() {
@@ -4521,7 +4560,7 @@ d3.svg.axis = function() {
       subticks = subticks.filter(function(d, i, a) {
         return tickFilter(d, d.index, ticks, i, a);
       });
-      
+
       var subtick = g.selectAll(".minor");
       subtick = subtick.data(subticks /* , function(d, i) {
         return i; // Math.floor(100 * (d.index + d.subindex / d.modulus));
@@ -4531,8 +4570,8 @@ d3.svg.axis = function() {
       var subtickUpdate = d3.transition(subtick).style("opacity", 1);
 
       // Major ticks.
-      var tick = g.selectAll("g").data(ticks, String),
-          tickEnter = tick.enter().insert("g", "path").style("opacity", 1e-6),
+      var tick = g.selectAll("g.major").data(ticks, String),
+          tickEnter = tick.enter().insert("g", "path").attr("class", "tick major").style("opacity", 1e-6),
           tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(),
           tickUpdate = d3.transition(tick).style("opacity", 1),
           tickTransform;
@@ -4649,7 +4688,6 @@ d3.svg.axis = function() {
         }
         default: {
           // orient is supposed to be a user-defined callback function
-
         }
       }
 
@@ -5943,7 +5981,7 @@ d3.layout.force = function() {
     // initialize neighbors lazily
     function neighbor(i) {
       if (!neighbors) {
-	    var j;
+        var j;
         neighbors = [];
         for (j = 0; j < n; ++j) {
           neighbors[j] = [];

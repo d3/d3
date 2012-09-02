@@ -5,6 +5,7 @@ d3.scale.threshold = function() {
 function d3_scale_threshold(domain, range) {
 
   function scale(x) {
+    // ASSUMPTION: domain.length == range.length - 1
     return range[d3.bisect(domain, x)];
   }
 
@@ -18,6 +19,20 @@ function d3_scale_threshold(domain, range) {
     if (!arguments.length) return range;
     range = _;
     return scale;
+  };
+
+  scale.ticks = function(m) {
+    var l = Math.min(domain.length, range.length - 1);
+    if (l > 0) {
+      var t = [], i;
+      t.push(+domain[0] - 1);
+      for (i = 1; i < l; i++) {
+        t.push((+domain[i] - +domain[i - 1]) / 2);
+      }
+      t.push(+domain[l - 1] + 1);
+      return t;
+    }
+    return [];
   };
 
   scale.copy = function() {
