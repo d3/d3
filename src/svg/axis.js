@@ -58,8 +58,8 @@ d3.svg.axis = function() {
       tickEnter.append("line").attr("class", "tick");
       tickEnter.append("text").attr("class", "tick-text");
 
-      var lineEnter = tickEnter.select("line"),
-          lineUpdate = tickUpdate.select("line"),
+      var lineEnter = tickEnter.select("line.tick"),
+          lineUpdate = tickUpdate.select("line.tick"),
           text = tick.select("text.tick-text").text(function(d, i) {
             if (tickFormatExtended_ == null)
               return tickFormat(d.value);
@@ -156,6 +156,16 @@ d3.svg.axis = function() {
         }
         default: {
           // orient is supposed to be a user-defined callback function
+          orient(ticks, subticks, range,
+                 tick, subtick, path, // the selections with the .data()
+                 tickEnter, tickExit, tickUpdate,
+                 subtickEnter, subtickExit, subtickUpdate,
+                 pathEnter, pathUpdate,
+                 lineEnter, lineUpdate,
+                 text, textEnter, textUpdate,
+                 tickMajorSize, tickMinorSize, tickEndSize,
+                 tickPadding,
+                 tickFormat, tickFormatExtended_);
         }
       }
 

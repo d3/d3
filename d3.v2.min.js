@@ -4563,11 +4563,7 @@ d3.svg.axis = function() {
 
       var subtick = g.selectAll(".minor");
       subtick = subtick.data(subticks, function(d, i) {
-        var p = Math.min(1, 3 + Math.ceil(Math.log(d.modulus) / Math.LN10));
-        var v = d.index + d.subindex / d.modulus;
-        var s = String(d3.round(v, p));
-        s = String(d.value);
-        return s;
+        return String(d.value);
       });
       var subtickEnter = subtick.enter().insert("line", "g").attr("class", "tick minor").style("opacity", 1e-6);
       var subtickExit = d3.transition(subtick.exit()).style("opacity", 1e-6).remove();
@@ -4575,8 +4571,7 @@ d3.svg.axis = function() {
 
       // Major ticks.
       var tick = g.selectAll("g.major").data(ticks, function(d, i) {
-            var rv = String(d.value);
-            return rv;
+            return String(d.value);
           }),
           tickEnter = tick.enter().insert("g", "path").attr("class", "tick major").style("opacity", 1e-6),
           tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(),
@@ -4597,8 +4592,8 @@ d3.svg.axis = function() {
       tickEnter.append("line").attr("class", "tick");
       tickEnter.append("text").attr("class", "tick-text");
 
-      var lineEnter = tickEnter.select("line"),
-          lineUpdate = tickUpdate.select("line"),
+      var lineEnter = tickEnter.select("line.tick"),
+          lineUpdate = tickUpdate.select("line.tick"),
           text = tick.select("text.tick-text").text(function(d, i) {
             if (tickFormatExtended_ == null)
               return tickFormat(d.value);
@@ -4695,6 +4690,16 @@ d3.svg.axis = function() {
         }
         default: {
           // orient is supposed to be a user-defined callback function
+          orient(ticks, subticks, range,
+                 tick, subtick, path, // the selections with the .data()
+                 tickEnter, tickExit, tickUpdate,
+                 subtickEnter, subtickExit, subtickUpdate,
+                 pathEnter, pathUpdate,
+                 lineEnter, lineUpdate,
+                 text, textEnter, textUpdate,
+                 tickMajorSize, tickMinorSize, tickEndSize,
+                 tickPadding,
+                 tickFormat, tickFormatExtended_);
         }
       }
 
