@@ -29,11 +29,7 @@ d3.svg.axis = function() {
 
       var subtick = g.selectAll(".minor");
       subtick = subtick.data(subticks, function(d, i) {
-        var p = Math.min(1, 3 + Math.ceil(Math.log(d.modulus) / Math.LN10));
-        var v = d.index + d.subindex / d.modulus;
-        var s = String(d3.round(v, p));
-        s = String(d.value);
-        return s;
+        return String(d.value);
       });
       var subtickEnter = subtick.enter().insert("line", "g").attr("class", "tick minor").style("opacity", 1e-6);
       var subtickExit = d3.transition(subtick.exit()).style("opacity", 1e-6).remove();
@@ -41,8 +37,7 @@ d3.svg.axis = function() {
 
       // Major ticks.
       var tick = g.selectAll("g.major").data(ticks, function(d, i) {
-            var rv = String(d.value);
-            return rv;
+            return String(d.value);
           }),
           tickEnter = tick.enter().insert("g", "path").attr("class", "tick major").style("opacity", 1e-6),
           tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(),
