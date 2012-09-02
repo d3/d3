@@ -53,9 +53,27 @@ function d3_scale_log(linear, log) {
     if (arguments.length < 1) return format;
     var k = Math.max(.1, n / scale.ticks().length),
         f = log === d3_scale_logn ? (e = -1e-12, Math.floor) : (e = 1e-12, Math.ceil),
-        e;
+        e,
+        h = (k >= 0.5);
+    // Always try to print the .5 tick text whenever possible, f.e.: 1,2,3,5 is better than 1,2,3,4.
+	// If you can do 1,2,3 you can also safely do 1,2,3,5.
+	// If you can do 1,2-and-a-bit you can also safely do 1,2,5.
+    // But 1,2 is better than 1,5 for very tight ticks in a log scale.
+    if (k < 0.5) {
+      if (k >= 0.4) {
+        k -= 0.1;
+        h = true;
+      } else if (k > 0.23) {
+        h = true;
+      }
+    }
     return function(d) {
-      return d / pow(f(log(d) + e)) <= k ? format(d) : "";
+      var r = d / pow(f(log(d) + e));
+	  // round to two decimal places to uniquely pull out the half-way (.5) tick
+	  // (floating point 'equals' comparisons are dangerous, so we make sure Math.round produces an integer result)
+      if (r <= k || (h && Math.round(200 * r) == 100))
+        return format(d);
+      return "";
     };
   };
 
@@ -66,7 +84,7 @@ function d3_scale_log(linear, log) {
   return d3_scale_linearRebind(scale, linear);
 }
 
-var d3_scale_logFormat = d3.format(".0e");
+var d3_scale_logFormat = d3.format(".0E");
 
 function d3_scale_logp(x) {
   return Math.log(x < 0 ? 0 : x) / Math.LN10;
