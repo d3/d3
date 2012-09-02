@@ -9,7 +9,8 @@ d3.svg.axis = function() {
       tickValues = null,
       tickFormat_ = null,
       tickFormatExtended_,
-      tickSubdivide = 0;
+      tickFilter = d3_functor(true),
+      tickSubdivide = null;
 
   function axis(g) {
     g.each(function() {
@@ -22,6 +23,10 @@ d3.svg.axis = function() {
 
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide);
+      subticks = subticks.filter(function(d, i, a) {
+        return tickFilter(d, d.index, ticks, i, a);
+      });
+      
       var subtick = g.selectAll(".minor");
       subtick = subtick.data(subticks /* , function(d, i) {
         return i; // Math.floor(100 * (d.index + d.subindex / d.modulus));
@@ -54,7 +59,7 @@ d3.svg.axis = function() {
       var lineEnter = tickEnter.select("line"),
           lineUpdate = tickUpdate.select("line"),
           text = tick.select("text.tick-text").text(function(d, i) {
-            if (!tickFormatExtended_)
+            if (tickFormatExtended_ == null)
               return tickFormat(d.value);
             else
               return tickFormatExtended_(d, i);
@@ -201,14 +206,19 @@ d3.svg.axis = function() {
     return axis;
   };
 
-  axis.tickFormat = function(x, extended) {
+  axis.tickFormat = function(x) {
     if (!arguments.length) return tickFormat_;
     tickFormat_ = x;
+    return axis;
+  };
+
+  axis.tickFormatEx = function(x) {
+    if (!arguments.length) return tickFormatExtended_;
     tickFormatExtended_ = extended;
     return axis;
   };
 
-  axis.tickSize = function(major, minor, half, end) {
+  axis.tickSize = function(major, minor, end) {
     var n = arguments.length;
     if (!n) return [tickMajorSize, tickMinorSize, tickEndSize];
     tickMajorSize = d3_functor(major);
@@ -225,7 +235,13 @@ d3.svg.axis = function() {
 
   axis.tickSubdivide = function(x) {
     if (!arguments.length) return tickSubdivide;
-    tickSubdivide = +x;
+    tickSubdivide = (x != null ? typeof x !== "function" ? d3_svg_axisTickSubDivideOneTick(+x) : x : null);
+    return axis;
+  };
+
+  axis.tickFilter = function(x) {
+    if (!arguments.length) return tickFilter;
+    tickFilter = (x != null ? d3_functor(x) : d3_functor(true));
     return axis;
   };
 
@@ -244,42 +260,79 @@ function d3_svg_axisY(selection, y) {
   });
 }
 
-function d3_svg_axisSubdivide(scale, ticks, m) {
+function d3_svg_axisSubdivide(scale, ticks, subdiv) {
   var subticks = [];
-  if (m && ticks.length > 1) {
+  if (subdiv && ticks.length > 1) {
     var extent = d3_scaleExtent(scale.domain()),
-        i = 0,
-        n = ticks.length,
-        d = (ticks[1].value - ticks[0].value) / ++m,
-        j,
-        v;
-    while (i < n) {
-      for (j = m; --j > 0;) {
-        if ((v = +ticks[i].value - j * d) > extent[0]) {
-          subticks.push({
-            value: v,
-            index: i - 1,
-            subindex: m - j,
-            modulus: m,
-            majors: [ticks[i - 1], ticks[i]]
-          });
-        }
-      }
-      ++i;
-      if (i < n)
-        d = (+ticks[i].value - +ticks[i - 1].value) / m;
-    }
-    for (--i, j = 0; ++j < m && (v = +ticks[i].value + j * d) < extent[1];) {
-      subticks.push({
-        value: v,
-        index: i,
-        subindex: m - j,
-        modulus: m,
-        majors: [ticks[i], null]
-      });
+        i,
+        n = ticks.length;
+    for (i = 0; i <= n; i++) {
+      subticks = subdiv(subticks, ticks, i, n, extent);
     }
   }
   return subticks;
+}
+
+// Return a function which produces an array of subtick objects for one tick interval:
+function d3_svg_axisTickSubDivideOneTick(modulus) {
+  modulus++;
+  return function(subticks, ticks, i, n, extent) {
+    var t0, t1, delta, s, j, v;
+
+    if (i == 0) {
+      t0 = ticks[0];
+      t1 = ticks[1];
+      delta = (t1.value - t0.value) / modulus;
+      for (j = modulus; j-- > 1; ) {
+        v = t0.value - j * delta;
+        if (v > extent[0]) {
+          subticks.push({
+            value: v,
+            index: -1,
+            base: t0,
+            subindex: -j,
+            modulus: modulus,
+            majors: ticks
+          });
+        }
+      }
+    } else if (i == n) {
+      t0 = ticks[n - 2];
+      t1 = ticks[n - 1];
+      delta = (t1.value - t0.value) / modulus;
+      for (j = modulus; j-- > 1; ) {
+        v = t1.value + j * delta;
+        if (v < extent[1]) {
+          subticks.push({
+            value: v,
+            index: n - 1,
+            base: t1,
+            subindex: j,
+            modulus: modulus,
+            majors: ticks
+          });
+        }
+      }
+    } else {
+      t0 = ticks[i - 1];
+      t1 = ticks[i];
+      delta = (t1.value - t0.value) / modulus;
+      for (j = modulus; j-- > 1; ) {
+        v = t0.value + j * delta;
+        if (v > extent[0]) {
+          subticks.push({
+            value: v,
+            index: i - 1,
+            base: t0,
+            subindex: j,
+            modulus: modulus,
+            majors: ticks
+          });
+        }
+      }
+    }
+    return subticks;
+  };
 }
 
 function d3_svg_axisMapTicks(v, i, ticks) {

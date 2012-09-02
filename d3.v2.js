@@ -712,6 +712,15 @@ var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)
 var d3_format_types = d3.map({
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
+  E: function(x, p) { 
+    var rv;
+    var p1 = d3_format_precision(x, 1);
+    if (p1 >= -5 && p1 <= 3)
+      rv = x.toFixed(Math.max(0, p, p1));
+    else
+      rv = x.toExponential(p);
+    return rv;
+  },
   f: function(x, p) { return x.toFixed(p); },
   r: function(x, p) { return d3.round(x, p = d3_format_precision(x, p)).toFixed(Math.max(0, Math.min(20, p))); }
 });
@@ -719,6 +728,10 @@ var d3_format_types = d3.map({
 function d3_format_precision(x, p) {
   return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
 }
+
+d3.formatPrecision = function(x, p) {
+  return d3_format_precision(x, p || 0);
+};
 
 function d3_format_typeDefault(x) {
   return x + "";
@@ -3123,9 +3136,23 @@ function d3_scale_log(linear, log) {
     if (arguments.length < 1) return format;
     var k = Math.max(.1, n / scale.ticks().length),
         f = log === d3_scale_logn ? (e = -1e-12, Math.floor) : (e = 1e-12, Math.ceil),
-        e;
+        e, 
+        h = (k >= 0.5);
+    // always try to print the .5 tick text whenever possible, f.e.: 1,2,3,5 is better than 1,2,3,4
+    if (k < 0.5) {
+      if (k >= 0.4) {
+        k -= 0.1;
+        h = true;
+      } else if (k > 0.2) {
+        h = true;
+      } 
+      // else: 1,2 is better than 1,5 for very tight ticks in a log scale.
+    }
     return function(d) {
-      return d / pow(f(log(d) + e)) <= k ? format(d) : "";
+      var p = pow(f(log(d) + e));
+      if (d / p <= k || (h && Math.round(200 * d / p) == 100))
+        return format(d);
+      return "";
     };
   };
 
@@ -3136,7 +3163,7 @@ function d3_scale_log(linear, log) {
   return d3_scale_linearRebind(scale, linear);
 }
 
-var d3_scale_logFormat = d3.format(".0e");
+var d3_scale_logFormat = d3.format(".0E");
 
 function d3_scale_logp(x) {
   return Math.log(x < 0 ? 0 : x) / Math.LN10;
@@ -4477,7 +4504,8 @@ d3.svg.axis = function() {
       tickValues = null,
       tickFormat_ = null,
       tickFormatExtended_,
-      tickSubdivide = 0;
+      tickFilter = d3_functor(true),
+      tickSubdivide = null;
 
   function axis(g) {
     g.each(function() {
@@ -4490,6 +4518,10 @@ d3.svg.axis = function() {
 
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide);
+      subticks = subticks.filter(function(d, i, a) {
+        return tickFilter(d, d.index, ticks, i, a);
+      });
+      
       var subtick = g.selectAll(".minor");
       subtick = subtick.data(subticks /* , function(d, i) {
         return i; // Math.floor(100 * (d.index + d.subindex / d.modulus));
@@ -4522,7 +4554,7 @@ d3.svg.axis = function() {
       var lineEnter = tickEnter.select("line"),
           lineUpdate = tickUpdate.select("line"),
           text = tick.select("text.tick-text").text(function(d, i) {
-            if (!tickFormatExtended_)
+            if (tickFormatExtended_ == null)
               return tickFormat(d.value);
             else
               return tickFormatExtended_(d, i);
@@ -4669,14 +4701,19 @@ d3.svg.axis = function() {
     return axis;
   };
 
-  axis.tickFormat = function(x, extended) {
+  axis.tickFormat = function(x) {
     if (!arguments.length) return tickFormat_;
     tickFormat_ = x;
+    return axis;
+  };
+
+  axis.tickFormatEx = function(x) {
+    if (!arguments.length) return tickFormatExtended_;
     tickFormatExtended_ = extended;
     return axis;
   };
 
-  axis.tickSize = function(major, minor, half, end) {
+  axis.tickSize = function(major, minor, end) {
     var n = arguments.length;
     if (!n) return [tickMajorSize, tickMinorSize, tickEndSize];
     tickMajorSize = d3_functor(major);
@@ -4693,7 +4730,13 @@ d3.svg.axis = function() {
 
   axis.tickSubdivide = function(x) {
     if (!arguments.length) return tickSubdivide;
-    tickSubdivide = +x;
+    tickSubdivide = (x != null ? typeof x !== "function" ? d3_svg_axisTickSubDivideOneTick(+x) : x : null);
+    return axis;
+  };
+
+  axis.tickFilter = function(x) {
+    if (!arguments.length) return tickFilter;
+    tickFilter = (x != null ? d3_functor(x) : d3_functor(true));
     return axis;
   };
 
@@ -4712,42 +4755,79 @@ function d3_svg_axisY(selection, y) {
   });
 }
 
-function d3_svg_axisSubdivide(scale, ticks, m) {
+function d3_svg_axisSubdivide(scale, ticks, subdiv) {
   var subticks = [];
-  if (m && ticks.length > 1) {
+  if (subdiv && ticks.length > 1) {
     var extent = d3_scaleExtent(scale.domain()),
-        i = 0,
-        n = ticks.length,
-        d = (ticks[1].value - ticks[0].value) / ++m,
-        j,
-        v;
-    while (i < n) {
-      for (j = m; --j > 0;) {
-        if ((v = +ticks[i].value - j * d) >= extent[0]) {
-          subticks.push({
-            value: v,
-            index: i - 1,
-            subindex: m - j,
-            modulus: m,
-            majors: [ticks[i - 1], ticks[i]]
-          });
-        }
-      }
-      ++i;
-      if (i < n)
-        d = (+ticks[i].value - +ticks[i - 1].value) / m;
-    }
-    for (--i, j = 0; ++j < m && (v = +ticks[i].value + j * d) < extent[1];) {
-      subticks.push({
-        value: v,
-        index: i,
-        subindex: m - j,
-        modulus: m,
-        majors: [ticks[i], null]
-      });
+        i,
+        n = ticks.length;
+    for (i = 0; i <= n; i++) {
+      subticks = subdiv(subticks, ticks, i, n, extent);
     }
   }
   return subticks;
+}
+
+// Return a function which produces an array of subtick objects for one tick interval:
+function d3_svg_axisTickSubDivideOneTick(modulus) {
+  modulus++;
+  return function(subticks, ticks, i, n, extent) {
+    var t0, t1, delta, s, j, v;
+
+    if (i == 0) {
+      t0 = ticks[0];
+      t1 = ticks[1];
+      delta = (t1.value - t0.value) / modulus;
+      for (j = modulus; j-- > 1; ) {
+        v = t0.value - j * delta;
+        if (v > extent[0]) {
+          subticks.push({
+            value: v,
+            index: -1,
+            base: t0,
+            subindex: -j,
+            modulus: modulus,
+            majors: ticks
+          });
+        }
+      }
+    } else if (i == n) {
+      t0 = ticks[n - 2];
+      t1 = ticks[n - 1];
+      delta = (t1.value - t0.value) / modulus;
+      for (j = modulus; j-- > 1; ) {
+        v = t1.value + j * delta;
+        if (v < extent[1]) {
+          subticks.push({
+            value: v,
+            index: n - 1,
+            base: t1,
+            subindex: j,
+            modulus: modulus,
+            majors: ticks
+          });
+        }
+      }
+    } else {
+      t0 = ticks[i - 1];
+      t1 = ticks[i];
+      delta = (t1.value - t0.value) / modulus;
+      for (j = modulus; j-- > 1; ) {
+        v = t0.value + j * delta;
+        if (v > extent[0]) {
+          subticks.push({
+            value: v,
+            index: i - 1,
+            base: t0,
+            subindex: j,
+            modulus: modulus,
+            majors: ticks
+          });
+        }
+      }
+    }
+    return subticks;
+  };
 }
 
 function d3_svg_axisMapTicks(v, i, ticks) {
