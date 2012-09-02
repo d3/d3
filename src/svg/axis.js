@@ -198,12 +198,12 @@ d3.svg.axis = function() {
       return {
         ticks: ticks,
         subticks: subticks,
-        range: range,                   // array[2]
-        tickMajorSize: tickMajorSize,   // functor(d, i)
-        tickMinorSize: tickMinorSize,   // functor(d, i)
-        tickEndSize: tickEndSize,       // functor(d, i)
-        tickPadding: tickPadding,       // Number
-        tickFormat: tickFormat,         // functor(d)
+        range: range,                            // array[2]
+        tickMajorSize: tickMajorSize,            // functor(d, i)
+        tickMinorSize: tickMinorSize,            // functor(d, i)
+        tickEndSize: tickEndSize,                // functor(d, i)
+        tickPadding: tickPadding,                // Number
+        tickFormat: tickFormat,                  // functor(d)
         tickFormatExtended: tickFormatExtended_  // functor(d, i)
       };
     }

@@ -126,8 +126,29 @@ axis_y += hstep;
 svg.append("g")
     .attr("class", "x minor")
     .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(x).tickSubdivide(false))
+    .call(descr("regular, with .tickSubdivide(false)"));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(x).tickSubdivide(true))
+    .call(descr("regular, with .tickSubdivide(true)"));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor")
+    .attr("transform", "translate(0," + axis_y + ")")
     .call(d3.svg.axis().scale(x).tickSubdivide(9))
     .call(descr("regular, with 10 subticks per tick"));
+
+axis_y += hstep;
+svg.append("g")
+    .attr("class", "x minor")
+    .attr("transform", "translate(0," + axis_y + ")")
+    .call(d3.svg.axis().scale(x).tickSubdivide("9"))
+    .call(descr('regular, with 10 subticks per tick, using non-numeric .tickSubdivide("9")'));
 
 axis_y += hstep;
 svg.append("g")

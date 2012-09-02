@@ -4559,7 +4559,7 @@ d3.svg.axis = function() {
     });
 
     var range = d3_scaleRange(scale);
-    
+
     if (g) {
       g.each(function() {
         var g = d3.select(this);
@@ -4730,17 +4730,17 @@ d3.svg.axis = function() {
     } else {
       // when using d3.axis other than in a d3.selection.call(...); produce the ticks, etc. for custom work:
       return {
-        ticks: ticks, 
+        ticks: ticks,
         subticks: subticks,
-        range: range,                   // array[2]
-        tickMajorSize: tickMajorSize,   // functor(d, i)
-        tickMinorSize: tickMinorSize,   // functor(d, i)
-        tickEndSize: tickEndSize,       // functor(d, i)
-        tickPadding: tickPadding,       // Number
-        tickFormat: tickFormat,         // functor(d)
+        range: range,                            // array[2]
+        tickMajorSize: tickMajorSize,            // functor(d, i)
+        tickMinorSize: tickMinorSize,            // functor(d, i)
+        tickEndSize: tickEndSize,                // functor(d, i)
+        tickPadding: tickPadding,                // Number
+        tickFormat: tickFormat,                  // functor(d)
         tickFormatExtended: tickFormatExtended_  // functor(d, i)
       };
-    }    
+    }
   }
 
   axis.scale = function(x) {
