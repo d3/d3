@@ -56,8 +56,8 @@ function d3_scale_log(linear, log) {
         e,
         h = (k >= 0.5);
     // Always try to print the .5 tick text whenever possible, f.e.: 1,2,3,5 is better than 1,2,3,4.
-	// If you can do 1,2,3 you can also safely do 1,2,3,5.
-	// If you can do 1,2-and-a-bit you can also safely do 1,2,5.
+    // If you can do 1,2,3 you can also safely do 1,2,3,5.
+    // If you can do 1,2-and-a-bit you can also safely do 1,2,5.
     // But 1,2 is better than 1,5 for very tight ticks in a log scale.
     if (k < 0.5) {
       if (k >= 0.4) {
@@ -69,8 +69,8 @@ function d3_scale_log(linear, log) {
     }
     return function(d) {
       var r = d / pow(f(log(d) + e));
-	  // round to two decimal places to uniquely pull out the half-way (.5) tick
-	  // (floating point 'equals' comparisons are dangerous, so we make sure Math.round produces an integer result)
+      // round to two decimal places to uniquely pull out the half-way (.5) tick
+      // (floating point 'equals' comparisons are dangerous, so we make sure Math.round produces an integer result)
       if (r <= k || (h && Math.round(200 * r) == 100))
         return format(d);
       return "";

@@ -78,7 +78,7 @@ var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)
 var d3_format_types = d3.map({
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
-  E: function(x, p) { 
+  E: function(x, p) {
     var rv;
     var p1 = d3_format_precision(x, 1);
     if (p1 >= -5 && p1 <= 3)

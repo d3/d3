@@ -26,7 +26,7 @@ d3.svg.axis = function() {
       subticks = subticks.filter(function(d, i, a) {
         return tickFilter(d, d.index, ticks, i, a);
       });
-      
+
       var subtick = g.selectAll(".minor");
       subtick = subtick.data(subticks /* , function(d, i) {
         return i; // Math.floor(100 * (d.index + d.subindex / d.modulus));

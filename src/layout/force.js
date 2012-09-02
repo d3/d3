@@ -254,7 +254,7 @@ d3.layout.force = function() {
     // initialize neighbors lazily
     function neighbor(i) {
       if (!neighbors) {
-	    var j;
+        var j;
         neighbors = [];
         for (j = 0; j < n; ++j) {
           neighbors[j] = [];
