@@ -6918,8 +6918,8 @@
   d3.time.hours = d3.time.hour.range;
   d3.time.hours.utc = d3.time.hour.utc.range;
   d3.time.day = d3_time_interval(function(date) {
-    var day = new d3_time(0, date.getMonth(), date.getDate());
-    day.setFullYear(date.getFullYear());
+    var day = new d3_time(1970, 0);
+    day.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
     return day;
   }, function(date, offset) {
     date.setDate(date.getDate() + offset);
