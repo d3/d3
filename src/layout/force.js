@@ -292,20 +292,26 @@ d3.layout.force = function() {
   return d3.rebind(force, event, "on");
 };
 
+// The fixed property has three bits:
+// Bit 1 can be set externally (e.g., d.fixed = true) and show persist.
+// Bit 2 stores the dragging state, from mousedown to mouseup.
+// Bit 3 stores the hover state, from mouseover to mouseout.
+// Dragend is a special case: it also clears the hover state.
+
 function d3_layout_forceDragstart(d) {
-  d.fixed |= 1;
+  d.fixed |= 2; // set bit 2
 }
 
 function d3_layout_forceDragend(d) {
-  d.fixed &= 2;
+  d.fixed &= 1; // unset bits 2 and 3
 }
 
 function d3_layout_forceMouseover(d) {
-  d.fixed |= 2;
+  d.fixed |= 4; // set bit 3
 }
 
 function d3_layout_forceMouseout(d) {
-  d.fixed &= 1;
+  d.fixed &= 3; // unset bit 3
 }
 
 function d3_layout_forceAccumulate(quad, alpha, charges) {

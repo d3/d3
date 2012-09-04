@@ -4177,16 +4177,16 @@
     return d3.rebind(force, event, "on");
   };
   function d3_layout_forceDragstart(d) {
-    d.fixed |= 1;
-  }
-  function d3_layout_forceDragend(d) {
-    d.fixed &= 2;
-  }
-  function d3_layout_forceMouseover(d) {
     d.fixed |= 2;
   }
-  function d3_layout_forceMouseout(d) {
+  function d3_layout_forceDragend(d) {
     d.fixed &= 1;
+  }
+  function d3_layout_forceMouseover(d) {
+    d.fixed |= 4;
+  }
+  function d3_layout_forceMouseout(d) {
+    d.fixed &= 3;
   }
   function d3_layout_forceAccumulate(quad, alpha, charges) {
     var cx = 0, cy = 0;
