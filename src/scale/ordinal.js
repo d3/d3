@@ -36,7 +36,7 @@ function d3_scale_ordinal(domain, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = (stop - start) / (domain.length - 1 + padding);
+        step = (stop - start) / (Math.max(1, domain.length - 1) + padding);
     range = steps(domain.length < 2 ? (start + stop) / 2 : start + step * padding / 2, step);
     rangeBand = 0;
     ranger = {t: "rangePoints", a: arguments};
