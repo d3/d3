@@ -274,43 +274,44 @@ d3.layout.force = function() {
   force.drag = function() {
     if (!drag) drag = d3.behavior.drag()
         .origin(d3_identity)
-        .on("dragstart", dragstart)
-        .on("drag", d3_layout_forceDrag)
-        .on("dragend", d3_layout_forceDragEnd);
+        .on("dragstart", d3_layout_forceDragstart)
+        .on("drag", dragmove)
+        .on("dragend", d3_layout_forceDragend);
 
-    this.on("mouseover.force", d3_layout_forceDragOver)
-        .on("mouseout.force", d3_layout_forceDragOut)
+    this.on("mouseover.force", d3_layout_forceMouseover)
+        .on("mouseout.force", d3_layout_forceMouseout)
         .call(drag);
   };
 
-  function dragstart(d) {
-    d3_layout_forceDragOver(d3_layout_forceDragNode = d);
-    d3_layout_forceDragForce = force;
+  function dragmove(d) {
+    d.px = d3.event.x;
+    d.py = d3.event.y;
+    force.resume(); // restart annealing
   }
 
   return d3.rebind(force, event, "on");
 };
 
-var d3_layout_forceDragForce,
-    d3_layout_forceDragNode;
+// The fixed property has three bits:
+// Bit 1 can be set externally (e.g., d.fixed = true) and show persist.
+// Bit 2 stores the dragging state, from mousedown to mouseup.
+// Bit 3 stores the hover state, from mouseover to mouseout.
+// Dragend is a special case: it also clears the hover state.
 
-function d3_layout_forceDragOver(d) {
-  d.fixed |= 2;
+function d3_layout_forceDragstart(d) {
+  d.fixed |= 2; // set bit 2
 }
 
-function d3_layout_forceDragOut(d) {
-  if (d !== d3_layout_forceDragNode) d.fixed &= 1;
+function d3_layout_forceDragend(d) {
+  d.fixed &= 1; // unset bits 2 and 3
 }
 
-function d3_layout_forceDragEnd() {
-  d3_layout_forceDragNode.fixed &= 1;
-  d3_layout_forceDragForce = d3_layout_forceDragNode = null;
+function d3_layout_forceMouseover(d) {
+  d.fixed |= 4; // set bit 3
 }
 
-function d3_layout_forceDrag() {
-  d3_layout_forceDragNode.px = d3.event.x;
-  d3_layout_forceDragNode.py = d3.event.y;
-  d3_layout_forceDragForce.resume(); // restart annealing
+function d3_layout_forceMouseout(d) {
+  d.fixed &= 3; // unset bit 3
 }
 
 function d3_layout_forceAccumulate(quad, alpha, charges) {
