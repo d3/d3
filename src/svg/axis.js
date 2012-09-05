@@ -73,14 +73,14 @@ d3.svg.axis = function() {
         switch (orient) {
           case "bottom": {
             tickTransform = d3_svg_axisX;
-            subtickEnter.attr("y2", function(d, i) {
+            subtickEnter.attr("x2", 0).attr("y2", function(d, i) {
               return +tickMinorSize(d, i);
             });
             subtickUpdate.attr("x2", 0).attr("y2", function(d, i) {
               return +tickMinorSize(d, i);
             });
-            lineEnter.attr("y2", tickMajorSize);
-            textEnter.attr("y", function(d, i) {
+            lineEnter.attr("x2", 0).attr("y2", tickMajorSize);
+            textEnter.attr("x", 0).attr("y", function(d, i) {
               return Math.max(+tickMajorSize(d, i), 0) + tickPadding;
             });
             lineUpdate.attr("x2", 0).attr("y2", tickMajorSize);
@@ -154,19 +154,6 @@ d3.svg.axis = function() {
             text.attr("dy", ".32em").attr("text-anchor", "start");
             pathUpdate.attr("d", "M" + tickEndSize(range, 0) + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize(range, 1));
             break;
-          }
-          default: {
-            // orient is supposed to be a user-defined callback function
-            orient(ticks, subticks, range,
-                   tick, subtick, path, // the selections with the .data()
-                   tickEnter, tickExit, tickUpdate,
-                   subtickEnter, subtickExit, subtickUpdate,
-                   pathEnter, pathUpdate,
-                   lineEnter, lineUpdate,
-                   text, textEnter, textUpdate,
-                   tickMajorSize, tickMinorSize, tickEndSize,
-                   tickPadding,
-                   tickFormat, tickFormatExtended_);
           }
         }
 
