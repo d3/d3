@@ -281,11 +281,13 @@ d3.layout.force = function() {
 
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
+    if (!arguments.length) return drag;
+
     if (!drag) drag = d3.behavior.drag()
         .origin(d3_identity)
-        .on("dragstart", d3_layout_forceDragstart)
-        .on("drag", dragmove)
-        .on("dragend", d3_layout_forceDragend);
+        .on("dragstart.force", d3_layout_forceDragstart)
+        .on("drag.force", dragmove)
+        .on("dragend.force", d3_layout_forceDragend);
 
     this.on("mouseover.force", d3_layout_forceMouseover)
         .on("mouseout.force", d3_layout_forceMouseout)
@@ -306,7 +308,7 @@ function d3_layout_forceDragstart(d) {
 }
 
 function d3_layout_forceDragend(d) {
-  d.fixed &= 2;
+  d.fixed &= ~1;
 }
 
 function d3_layout_forceMouseover(d) {
@@ -314,7 +316,7 @@ function d3_layout_forceMouseover(d) {
 }
 
 function d3_layout_forceMouseout(d) {
-  d.fixed &= 1;
+  d.fixed &= ~2;
 }
 
 function d3_layout_forceAccumulate(quad, alpha, charges) {
