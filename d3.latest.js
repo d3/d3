@@ -4607,14 +4607,14 @@ d3.svg.axis = function() {
         switch (orient) {
           case "bottom": {
             tickTransform = d3_svg_axisX;
-            subtickEnter.attr("y2", function(d, i) {
+            subtickEnter.attr("x2", 0).attr("y2", function(d, i) {
               return +tickMinorSize(d, i);
             });
             subtickUpdate.attr("x2", 0).attr("y2", function(d, i) {
               return +tickMinorSize(d, i);
             });
-            lineEnter.attr("y2", tickMajorSize);
-            textEnter.attr("y", function(d, i) {
+            lineEnter.attr("x2", 0).attr("y2", tickMajorSize);
+            textEnter.attr("x", 0).attr("y", function(d, i) {
               return Math.max(+tickMajorSize(d, i), 0) + tickPadding;
             });
             lineUpdate.attr("x2", 0).attr("y2", tickMajorSize);
@@ -4688,19 +4688,6 @@ d3.svg.axis = function() {
             text.attr("dy", ".32em").attr("text-anchor", "start");
             pathUpdate.attr("d", "M" + tickEndSize(range, 0) + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize(range, 1));
             break;
-          }
-          default: {
-            // orient is supposed to be a user-defined callback function
-            orient(ticks, subticks, range,
-                   tick, subtick, path, // the selections with the .data()
-                   tickEnter, tickExit, tickUpdate,
-                   subtickEnter, subtickExit, subtickUpdate,
-                   pathEnter, pathUpdate,
-                   lineEnter, lineUpdate,
-                   text, textEnter, textUpdate,
-                   tickMajorSize, tickMinorSize, tickEndSize,
-                   tickPadding,
-                   tickFormat, tickFormatExtended_);
           }
         }
 
@@ -5760,10 +5747,10 @@ d3.layout.force = function() {
       size = [1, 1],
       drag,
       alpha,
-      friction = .9,
+      friction = d3_functor(.9),
       linkDistance = d3_layout_forceLinkDistance,
       linkStrength = d3_layout_forceLinkStrength,
-      charge = -30,
+      charge = d3_functor(-30),
       gravity = .1,
       theta = .8,
       interval,
@@ -5808,6 +5795,7 @@ d3.layout.force = function() {
     var n = nodes.length,
         m = links.length,
         q,
+        f,
         i, // current index
         o, // current object
         s, // current source
@@ -5847,15 +5835,15 @@ d3.layout.force = function() {
     }
 
     // compute quadtree center of mass and apply charge forces
-    if (charge) {
-      q = d3.geom.quadtree(nodes);
-      // recalculate charges on every tick if need be:
-      if (typeof charge === "function") {
-        charges = [];
-        for (i = 0; i < n; ++i) {
-          charges[i] = +charge.call(this, nodes[i], i, q);
-        }
-      }
+    f = 0;
+    q = d3.geom.quadtree(nodes);
+    // recalculate charges on every tick if need be:
+    charges = [];
+    for (i = 0; i < n; ++i) {
+      charges[i] = k = +charge.call(this, nodes[i], i, q);
+      f += Math.abs(k);
+    }
+    if (f != 0) {
       d3_layout_forceAccumulate(q, alpha, charges);
       i = -1; while (++i < n) {
         if (!(o = nodes[i]).fixed) {
@@ -5871,8 +5859,9 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        o.x -= (o.px - (o.px = o.x)) * friction;
-        o.y -= (o.py - (o.py = o.y)) * friction;
+        f = friction.call(this, o, i);
+        o.x -= (o.px - (o.px = o.x)) * f;
+        o.y -= (o.py - (o.py = o.y)) * f;
       }
     }
 
@@ -5914,25 +5903,25 @@ d3.layout.force = function() {
 
   force.friction = function(x) {
     if (!arguments.length) return friction;
-    friction = x;
+    friction = d3_functor(x);
     return force;
   };
 
   force.charge = function(x) {
     if (!arguments.length) return charge;
-    charge = typeof x === "function" ? x : +x;
+    charge = d3_functor(x);
     return force;
   };
 
   force.gravity = function(x) {
     if (!arguments.length) return gravity;
-    gravity = x;
+    gravity = +x;
     return force;
   };
 
   force.theta = function(x) {
     if (!arguments.length) return theta;
-    theta = x;
+    theta = +x;
     return force;
   };
 
@@ -5986,14 +5975,8 @@ d3.layout.force = function() {
     }
 
     charges = [];
-    if (typeof charge === "function") {
-      for (i = 0; i < n; ++i) {
-        charges[i] = +charge.call(this, nodes[i], i);
-      }
-    } else {
-      for (i = 0; i < n; ++i) {
-        charges[i] = charge;
-      }
+    for (i = 0; i < n; ++i) {
+      charges[i] = +charge.call(this, nodes[i], i);
     }
 
     // initialize node position based on first neighbor
@@ -6036,11 +6019,13 @@ d3.layout.force = function() {
 
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
+    if (!arguments.length) return drag;
+
     if (!drag) drag = d3.behavior.drag()
         .origin(d3_identity)
-        .on("dragstart", d3_layout_forceDragstart)
-        .on("drag", dragmove)
-        .on("dragend", d3_layout_forceDragend);
+        .on("dragstart.force", d3_layout_forceDragstart)
+        .on("drag.force", dragmove)
+        .on("dragend.force", d3_layout_forceDragend);
 
     this.on("mouseover.force", d3_layout_forceMouseover)
         .on("mouseout.force", d3_layout_forceMouseout)
@@ -6061,7 +6046,7 @@ function d3_layout_forceDragstart(d) {
 }
 
 function d3_layout_forceDragend(d) {
-  d.fixed &= 2;
+  d.fixed &= ~1;
 }
 
 function d3_layout_forceMouseover(d) {
@@ -6069,7 +6054,7 @@ function d3_layout_forceMouseover(d) {
 }
 
 function d3_layout_forceMouseout(d) {
-  d.fixed &= 1;
+  d.fixed &= ~2;
 }
 
 function d3_layout_forceAccumulate(quad, alpha, charges) {
