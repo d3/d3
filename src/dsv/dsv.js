@@ -70,7 +70,7 @@ function d3_dsv(delimiter, mimeType) {
 
     while ((t = token()) !== EOF) {
       var a = [];
-      while ((t !== EOL) && (t !== EOF)) {
+      while (t !== EOL && t !== EOF) {
         a.push(t);
         t = token();
       }

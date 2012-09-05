@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.10.0"}; // semver
+d3 = {version: "2.10.1"}; // semver
 function d3_class(ctor, properties) {
   try {
     for (var key in properties) {
@@ -359,8 +359,8 @@ d3.nest = function() {
       }
     }
 
-    valuesByKey.forEach(function(keyValue) {
-      o[keyValue] = map(valuesByKey.get(keyValue), depth);
+    valuesByKey.forEach(function(keyValue, values) {
+      o[keyValue] = map(values, depth);
     });
 
     return o;
@@ -506,7 +506,7 @@ d3.xhr = function(url, mime, callback) {
   if (arguments.length < 3) callback = mime, mime = null;
   else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
   req.open("GET", url, true);
-  if (mime) req.setRequestHeader("Accept", mime);
+  if (mime) req.setRequestHeader("Accept", mime + ",*/*");
   req.onreadystatechange = function() {
     if (req.readyState === 4) {
       var s = req.status;
@@ -672,7 +672,7 @@ d3.format = function(specifier) {
     if (integer && (value % 1)) return "";
 
     // Convert negative to positive, and record the sign prefix.
-    var negative = (value < 0) && (value = -value) ? "-" : sign;
+    var negative = value < 0 && (value = -value) ? "-" : sign;
 
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {
@@ -1261,7 +1261,7 @@ function d3_interpolateByName(name) {
 
 d3.interpolators = [
   d3.interpolateObject,
-  function(a, b) { return (b instanceof Array) && d3.interpolateArray(a, b); },
+  function(a, b) { return b instanceof Array && d3.interpolateArray(a, b); },
   function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
   function(a, b) { return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
   function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
@@ -2877,7 +2877,7 @@ function d3_mousePoint(container, e) {
   var svg = container.ownerSVGElement || container;
   if (svg.createSVGPoint) {
     var point = svg.createSVGPoint();
-    if ((d3_mouse_bug44083 < 0) && (window.scrollX || window.scrollY)) {
+    if (d3_mouse_bug44083 < 0 && (window.scrollX || window.scrollY)) {
       svg = d3.select(document.body)
         .append("svg")
           .style("position", "absolute")
@@ -6041,20 +6041,26 @@ d3.layout.force = function() {
   return d3.rebind(force, event, "on");
 };
 
+// The fixed property has three bits:
+// Bit 1 can be set externally (e.g., d.fixed = true) and show persist.
+// Bit 2 stores the dragging state, from mousedown to mouseup.
+// Bit 3 stores the hover state, from mouseover to mouseout.
+// Dragend is a special case: it also clears the hover state.
+
 function d3_layout_forceDragstart(d) {
-  d.fixed |= 1;
+  d.fixed |= 2; // set bit 2
 }
 
 function d3_layout_forceDragend(d) {
-  d.fixed &= ~1;
+  d.fixed &= ~6; // unset bits 2 and 3
 }
 
 function d3_layout_forceMouseover(d) {
-  d.fixed |= 2;
+  d.fixed |= 4; // set bit 3
 }
 
 function d3_layout_forceMouseout(d) {
-  d.fixed &= ~2;
+  d.fixed &= ~4; // unset bit 3
 }
 
 function d3_layout_forceAccumulate(quad, alpha, charges) {
@@ -6510,7 +6516,7 @@ d3.layout.histogram = function() {
     if (m > 0) {
       i = -1; while(++i < n) {
         x = values[i];
-        if ((x >= range[0]) && (x <= range[1])) {
+        if (x >= range[0] && x <= range[1]) {
           bin = bins[d3.bisect(thresholds, x, 1, m) - 1];
           bin.y += k;
           bin.push(data[i]);
@@ -7516,7 +7522,7 @@ function d3_dsv(delimiter, mimeType) {
 
     while ((t = token()) !== EOF) {
       var a = [];
-      while ((t !== EOL) && (t !== EOF)) {
+      while (t !== EOL && t !== EOF) {
         a.push(t);
         t = token();
       }
@@ -9788,8 +9794,8 @@ d3.time.hour = d3_time_interval(function(date) {
 d3.time.hours = d3.time.hour.range;
 d3.time.hours.utc = d3.time.hour.utc.range;
 d3.time.day = d3_time_interval(function(date) {
-  var day = new d3_time(0, date.getMonth(), date.getDate());
-  day.setFullYear(date.getFullYear());
+  var day = new d3_time(1970, 0);
+  day.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
   return day;
 }, function(date, offset) {
   date.setDate(date.getDate() + offset);
