@@ -15,7 +15,7 @@ XMLHttpRequest = function() {
   };
 
   self.setRequestHeader = function(n, v) {
-    if (/^Accept$/i.test(n)) info.mimeType = v;
+    if (/^Accept$/i.test(n)) info.mimeType = v.split(/,/g)[0];
   };
 
   function read() {
