@@ -1,6 +1,6 @@
 d3_selectionPrototype.datum =
 d3_selectionPrototype.map = function(value) {
-  return arguments.length < 1
-      ? this.property("__data__")
-      : this.property("__data__", value);
+  return arguments.length
+      ? this.property("__data__", value)
+      : this.property("__data__");
 };

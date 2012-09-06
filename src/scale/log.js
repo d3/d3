@@ -50,7 +50,7 @@ function d3_scale_log(linear, log) {
 
   scale.tickFormat = function(n, format) {
     if (arguments.length < 2) format = d3_scale_logFormat;
-    if (arguments.length < 1) return format;
+    if (!arguments.length) return format;
     var k = Math.max(.1, n / scale.ticks().length),
         f = log === d3_scale_logn ? (e = -1e-12, Math.floor) : (e = 1e-12, Math.ceil),
         e;
