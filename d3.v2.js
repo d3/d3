@@ -137,10 +137,10 @@
   function d3_ease_elastic(a, p) {
     var s;
     if (arguments.length < 2) p = .45;
-    if (arguments.length < 1) {
+    if (arguments.length) s = p / (2 * Math.PI) * Math.asin(1 / a); else {
       a = 1;
       s = p / 4;
-    } else s = p / (2 * Math.PI) * Math.asin(1 / a);
+    }
     return function(t) {
       return 1 + a * Math.pow(2, 10 * -t) * Math.sin((t - s) * 2 * Math.PI / p);
     };
@@ -814,7 +814,7 @@
     };
     scale.tickFormat = function(n, format) {
       if (arguments.length < 2) format = d3_scale_logFormat;
-      if (arguments.length < 1) return format;
+      if (!arguments.length) return format;
       var k = Math.max(.1, n / scale.ticks().length), f = log === d3_scale_logn ? (e = -1e-12, Math.floor) : (e = 1e-12, Math.ceil), e;
       return function(d) {
         return d / pow(f(log(d) + e)) <= k ? format(d) : "";
@@ -3677,24 +3677,24 @@
     return this.each(d3_selection_property(name, value));
   };
   d3_selectionPrototype.text = function(value) {
-    return arguments.length < 1 ? this.node().textContent : this.each(typeof value === "function" ? function() {
+    return arguments.length ? this.each(typeof value === "function" ? function() {
       var v = value.apply(this, arguments);
       this.textContent = v == null ? "" : v;
     } : value == null ? function() {
       this.textContent = "";
     } : function() {
       this.textContent = value;
-    });
+    }) : this.node().textContent;
   };
   d3_selectionPrototype.html = function(value) {
-    return arguments.length < 1 ? this.node().innerHTML : this.each(typeof value === "function" ? function() {
+    return arguments.length ? this.each(typeof value === "function" ? function() {
       var v = value.apply(this, arguments);
       this.innerHTML = v == null ? "" : v;
     } : value == null ? function() {
       this.innerHTML = "";
     } : function() {
       this.innerHTML = value;
-    });
+    }) : this.node().innerHTML;
   };
   d3_selectionPrototype.append = function(name) {
     function append() {
@@ -3810,7 +3810,7 @@
     return update;
   };
   d3_selectionPrototype.datum = d3_selectionPrototype.map = function(value) {
-    return arguments.length < 1 ? this.property("__data__") : this.property("__data__", value);
+    return arguments.length ? this.property("__data__", value) : this.property("__data__");
   };
   d3_selectionPrototype.filter = function(filter) {
     var subgroups = [], subgroup, group, node;
