@@ -2871,7 +2871,7 @@ d3.mouse = function(container) {
 };
 
 var d3_mouse_getScreenCTM;
-if (/WebKit/.test(navigator.userAgent) && 0) {
+if (/WebKit/.test(navigator.userAgent)) {
   var d3_mouse_bug44083 = -1; // https://bugs.webkit.org/show_bug.cgi?id=44083
   var d3_mouse_zoom_bug = -1; // ToDo: file bug report?
   d3_mouse_getScreenCTM = function(container, e) {
@@ -5803,7 +5803,8 @@ d3.layout.force = function() {
             dy = quad.cy - node.y,
             l = dx * dx + dy * dy,
             dn = 1 / Math.max(epsilon, l),
-            k = quad.charge * alpha * dn;
+            k = quad.charge * dn,
+            th = theta(node, i, quad, l, x1, x2, k);
 
         /*
         Based on the Barnes-Hut criterion.
@@ -5825,7 +5826,8 @@ d3.layout.force = function() {
         small, we do accept the consolidated quad data; otherwise we need process the
         child nodes.
         */
-        if (l * k < theta(node, i, quad, l, x1, x2, k) && 0) {
+        if (l * k * k < th * th) {
+          k *= alpha;
           node.px -= dx * k;
           node.py -= dy * k;
           return true;

@@ -26,7 +26,8 @@ d3.layout.force = function() {
             dy = quad.cy - node.y,
             l = dx * dx + dy * dy,
             dn = 1 / Math.max(epsilon, l),
-            k = quad.charge * alpha * dn;
+            k = quad.charge * dn,
+            th = theta(node, i, quad, l, x1, x2, k);
 
         /*
         Based on the Barnes-Hut criterion.
@@ -48,7 +49,8 @@ d3.layout.force = function() {
         small, we do accept the consolidated quad data; otherwise we need process the
         child nodes.
         */
-        if (l * k < theta(node, i, quad, l, x1, x2, k)) {
+        if (l * k * k < th * th) {
+          k *= alpha;
           node.px -= dx * k;
           node.py -= dy * k;
           return true;
