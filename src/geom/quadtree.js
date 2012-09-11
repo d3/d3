@@ -77,7 +77,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 
     // Recursively insert into the child node.
     n.leaf = false;
-    n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode(n));
+    n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode());
 
     // Update the bounds as we recurse.
     if (right) x1 = sx; else x2 = sx;
@@ -86,7 +86,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
   }
 
   // Create the root node.
-  var root = d3_geom_quadtreeNode(null);
+  var root = d3_geom_quadtreeNode();
 
   root.add = function(p) {
     insert(root, p, x1, y1, x2, y2);
@@ -101,12 +101,11 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
   return root;
 };
 
-function d3_geom_quadtreeNode(parent) {
+function d3_geom_quadtreeNode() {
   return {
     leaf: true,
     nodes: [],
-    point: null,
-    parent: parent
+    point: null
   };
 }
 
