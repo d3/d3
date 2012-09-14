@@ -2572,7 +2572,7 @@
     };
   }
   d3 = {
-    version: "2.10.1"
+    version: "2.10.2"
   };
   var d3_array = d3_arraySlice;
   try {

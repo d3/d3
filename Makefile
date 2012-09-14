@@ -249,4 +249,4 @@ package.json: src/package.js
 	@chmod a-w $@
 
 clean:
-	rm -f d3*.js package.json
+	rm -f d3*.js package.json component.json
