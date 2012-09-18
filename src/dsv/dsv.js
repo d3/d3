@@ -4,7 +4,7 @@ function d3_dsv(delimiter, mimeType) {
       delimiterCode = delimiter.charCodeAt(0);
 
   function dsv(url, callback) {
-    d3.text(url, mimeType, function(text) {
+    return d3.text(url, mimeType, function(text) {
       callback(text && dsv.parse(text));
     });
   }
