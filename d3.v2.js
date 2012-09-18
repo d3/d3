@@ -2966,7 +2966,7 @@
       return xhr;
     };
     xhr.send = function(data) {
-      request.send(arguments.length ? data : null);
+      request.send(data == null ? null : data);
       return xhr;
     };
     xhr.abort = function() {

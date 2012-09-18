@@ -34,7 +34,7 @@ d3.xhr = function(url, mime, callback) {
 
   // data can be ArrayBuffer, Blob, Document, string, FormData
   xhr.send = function(data) {
-    request.send(arguments.length ? data : null);
+    request.send(data == null ? null : data);
     return xhr;
   };
 
