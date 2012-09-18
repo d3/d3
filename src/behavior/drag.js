@@ -29,7 +29,7 @@ d3.behavior.drag = function() {
 
     // Only cancel mousedown; touchstart is needed for draggable links.
     if (!touchId) d3_eventCancel();
-    event_({type: "dragstart"});
+    event_({type: "dragstart", x: origin_[0] + offset[0], y: origin_[1] + offset[1], dx: 0, dy: 0});
 
     function point() {
       var p = target.parentNode;
@@ -53,7 +53,11 @@ d3.behavior.drag = function() {
     }
 
     function dragend() {
-      event_({type: "dragend"});
+      var p = point(),
+          dx = p[0] - origin_[0],
+          dy = p[1] - origin_[1];
+
+      event_({type: "dragend", x: p[0] + offset[0], y: p[1] + offset[1], dx: dx, dy: dy});
 
       // if moved, prevent the mouseup (and possibly click) from propagating
       if (moved) {

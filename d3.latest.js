@@ -5315,7 +5315,7 @@ d3.behavior.drag = function() {
 
     // Only cancel mousedown; touchstart is needed for draggable links.
     if (!touchId) d3_eventCancel();
-    event_({type: "dragstart"});
+    event_({type: "dragstart", x: origin_[0] + offset[0], y: origin_[1] + offset[1], dx: 0, dy: 0});
 
     function point() {
       var p = target.parentNode;
@@ -5339,7 +5339,11 @@ d3.behavior.drag = function() {
     }
 
     function dragend() {
-      event_({type: "dragend"});
+      var p = point(),
+          dx = p[0] - origin_[0],
+          dy = p[1] - origin_[1];
+
+      event_({type: "dragend", x: p[0] + offset[0], y: p[1] + offset[1], dx: dx, dy: dy});
 
       // if moved, prevent the mouseup (and possibly click) from propagating
       if (moved) {
@@ -9352,7 +9356,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 
     // Recursively insert into the child node.
     n.leaf = false;
-    n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode(n));
+    n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode());
 
     // Update the bounds as we recurse.
     if (right) x1 = sx; else x2 = sx;
@@ -9361,7 +9365,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
   }
 
   // Create the root node.
-  var root = d3_geom_quadtreeNode(null);
+  var root = d3_geom_quadtreeNode();
 
   root.add = function(p) {
     insert(root, p, x1, y1, x2, y2);
@@ -9376,12 +9380,11 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
   return root;
 };
 
-function d3_geom_quadtreeNode(parent) {
+function d3_geom_quadtreeNode() {
   return {
     leaf: true,
     nodes: [],
-    point: null,
-    parent: parent
+    point: null
   };
 }
 
