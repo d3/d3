@@ -4896,12 +4896,24 @@
     var translate = [ 0, 0 ], translate0, scale = 1, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     zoom.translate = function(x) {
       if (!arguments.length) return translate;
+      if (translate0) {
+        if (Array.isArray(translate0)) translate0 = point(translate0); else for (var k in translate0) translate0[k] = point(translate0[k]);
+      }
       translate = x.map(Number);
+      if (translate0) {
+        if (Array.isArray(translate0)) translate0 = location(translate0); else for (var k in translate0) translate0[k] = location(translate0[k]);
+      }
       return zoom;
     };
     zoom.scale = function(x) {
       if (!arguments.length) return scale;
+      if (translate0) {
+        if (Array.isArray(translate0)) translate0 = point(translate0); else for (var k in translate0) translate0[k] = point(translate0);
+      }
       scale = +x;
+      if (translate0) {
+        if (Array.isArray(translate0)) translate0 = location(translate0); else for (var k in translate0) translate0[k] = location(translate0);
+      }
       return zoom;
     };
     zoom.scaleExtent = function(x) {
