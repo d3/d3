@@ -57,6 +57,20 @@
     while (x * k % 1) k *= 10;
     return k;
   }
+  function d3_xhr(adapter) {
+    return function(url, mime, callback) {
+      if (arguments.length < 3) callback = mime, mime = null;
+      callback = d3_xhr_fixCallback(callback);
+      return d3.xhr(url, mime, function(error, request) {
+        callback(error, error === null ? adapter(request) : null);
+      });
+    };
+  }
+  function d3_xhr_fixCallback(callback) {
+    return callback.length === 1 ? function(error, request) {
+      callback(error == null ? request : null);
+    } : callback;
+  }
   function d3_dispatch() {}
   function d3_dispatch_event(dispatch) {
     function event() {
@@ -1824,8 +1838,10 @@
   }
   function d3_dsv(delimiter, mimeType) {
     function dsv(url, callback) {
-      d3.text(url, mimeType, function(text) {
-        callback(text && dsv.parse(text));
+      callback = d3_xhr_fixCallback(callback);
+      return d3.text(url, mimeType, function(error, data) {
+        if (error == null) data = dsv.parse(data);
+        callback(error, data);
       });
     }
     function formatRow(row) {
@@ -2921,53 +2937,88 @@
     return n ? Math.round(x * (n = Math.pow(10, n))) / n : Math.round(x);
   };
   d3.xhr = function(url, mime, callback) {
-    var req = new XMLHttpRequest;
-    if (arguments.length < 3) callback = mime, mime = null; else if (mime && req.overrideMimeType) req.overrideMimeType(mime);
-    req.open("GET", url, true);
-    if (mime) req.setRequestHeader("Accept", mime);
-    req.onreadystatechange = function() {
-      if (req.readyState === 4) {
-        var s = req.status;
-        callback(!s && req.response || s >= 200 && s < 300 || s === 304 ? req : null);
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "abort", "error"), request = new XMLHttpRequest;
+    request.onreadystatechange = function() {
+      if (request.readyState === 4) {
+        var s = request.status;
+        dispatch[!s && request.response || s >= 200 && s < 300 || s === 304 ? "load" : "error"].call(xhr, request);
       }
     };
-    req.send(null);
-  };
-  d3.text = function(url, mime, callback) {
-    function ready(req) {
-      callback(req && req.responseText);
+    request.onprogress = function(event) {
+      var o = d3.event;
+      d3.event = event;
+      try {
+        dispatch.progress.call(xhr, request);
+      } finally {
+        d3.event = o;
+      }
+    };
+    xhr.open = function(method, url) {
+      request.open(method, url, true);
+      return xhr;
+    };
+    xhr.header = function(name, value) {
+      request.setRequestHeader(name, value);
+      return xhr;
+    };
+    xhr.mimeType = function(value) {
+      if (request.overrideMimeType) request.overrideMimeType(value);
+      return xhr;
+    };
+    xhr.send = function(data) {
+      request.send(arguments.length ? data : null);
+      return xhr;
+    };
+    xhr.abort = function() {
+      request.abort();
+      dispatch.abort.call(xhr, request);
+      return xhr;
+    };
+    d3.rebind(xhr, dispatch, "on");
+    var n = arguments.length;
+    if (n) {
+      xhr.open("GET", url);
+      if (n > 1) {
+        if (n > 2) {
+          if (mime != null) xhr.mimeType(mime).header("Accept", mime);
+        } else callback = mime;
+        callback = d3_xhr_fixCallback(callback);
+        xhr.on("load", function() {
+          callback(null, request);
+        });
+        xhr.on("abort", function() {
+          callback(request, null);
+        });
+        xhr.on("error", function() {
+          callback(request, null);
+        });
+        xhr.send(null);
+      }
     }
-    if (arguments.length < 3) {
-      callback = mime;
-      mime = null;
-    }
-    d3.xhr(url, mime, ready);
+    return xhr;
   };
+  d3.text = d3_xhr(function(request) {
+    return request.responseText;
+  });
   d3.json = function(url, callback) {
     d3.text(url, "application/json", function(text) {
       callback(text ? JSON.parse(text) : null);
     });
   };
   d3.html = function(url, callback) {
-    d3.text(url, "text/html", function(text) {
-      if (text != null) {
+    callback = d3_xhr_fixCallback(callback);
+    return d3.text(url, "text/html", function(error, data) {
+      if (error == null) {
         var range = document.createRange();
         range.selectNode(document.body);
-        text = range.createContextualFragment(text);
+        data = range.createContextualFragment(data);
       }
-      callback(text);
+      callback(error, data);
     });
   };
-  d3.xml = function(url, mime, callback) {
-    function ready(req) {
-      callback(req && req.responseXML);
-    }
-    if (arguments.length < 3) {
-      callback = mime;
-      mime = null;
-    }
-    d3.xhr(url, mime, ready);
-  };
+  d3.xml = d3_xhr(function(request) {
+    return request.responseXML;
+  });
   var d3_nsPrefix = {
     svg: "http://www.w3.org/2000/svg",
     xhtml: "http://www.w3.org/1999/xhtml",
