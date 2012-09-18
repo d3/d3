@@ -27,12 +27,12 @@ d3.behavior.zoom = function() {
     if (!arguments.length) return translate;
     if (translate0) {
       if (Array.isArray(translate0)) translate0 = point(translate0);
-      else for (var k in translate0) translate0[k] = point(translate0);
+      else for (var k in translate0) translate0[k] = point(translate0[k]);
     }
     translate = x.map(Number);
     if (translate0) {
       if (Array.isArray(translate0)) translate0 = location(translate0);
-      else for (var k in translate0) translate0[k] = location(translate0);
+      else for (var k in translate0) translate0[k] = location(translate0[k]);
     }
     return zoom;
   };
