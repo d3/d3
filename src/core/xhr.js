@@ -50,7 +50,7 @@ d3.xhr = function(url, mime, callback) {
   if (n) {
     xhr.open("GET", url);
     if (n > 1) {
-      if (n > 2) { if (mime != null) xhr.mimeType(mime).header("Accept", mime); } else callback = mime;
+      if (n > 2) { if (mime != null) xhr.mimeType(mime).header("Accept", mime + ",*/*"); } else callback = mime;
       callback = d3_xhr_fixCallback(callback);
       xhr.on("load", function() { callback(null, request); });
       xhr.on("abort", function() { callback(request, null); });

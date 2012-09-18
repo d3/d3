@@ -2980,7 +2980,7 @@
       xhr.open("GET", url);
       if (n > 1) {
         if (n > 2) {
-          if (mime != null) xhr.mimeType(mime).header("Accept", mime);
+          if (mime != null) xhr.mimeType(mime).header("Accept", mime + ",*/*");
         } else callback = mime;
         callback = d3_xhr_fixCallback(callback);
         xhr.on("load", function() {
