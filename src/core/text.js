@@ -6,5 +6,5 @@ d3.text = function(url, mime, callback) {
     callback = mime;
     mime = null;
   }
-  d3.xhr(url, mime, ready);
+  return d3.xhr(url, mime, ready);
 };
