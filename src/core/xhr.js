@@ -21,7 +21,6 @@ d3.xhr = function(url, mime, callback) {
         callback(!s && req.response || s >= 200 && s < 300 || s === 304 ? req : null);
       }
     };
-    console.log([headers,data])
     req.send(data);
   },0)
   
