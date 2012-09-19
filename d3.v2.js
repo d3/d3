@@ -2941,7 +2941,7 @@
     return n ? Math.round(x * (n = Math.pow(10, n))) / n : Math.round(x);
   };
   d3.xhr = function(url, mimeType, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "abort", "error"), method = "GET", headers = {}, data, response = d3_identity, request = new XMLHttpRequest;
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), method = "GET", headers = {}, data, response = d3_identity, request = new XMLHttpRequest;
     request.onreadystatechange = function() {
       if (request.readyState === 4) {
         var s = request.status;
@@ -2990,7 +2990,6 @@
     };
     xhr.abort = function() {
       request.abort();
-      dispatch.abort.call(xhr, request);
       return xhr;
     };
     d3.rebind(xhr, dispatch, "on");

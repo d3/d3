@@ -1,6 +1,6 @@
 d3.xhr = function(url, mimeType, callback) {
   var xhr = {},
-      dispatch = d3.dispatch("progress", "load", "abort", "error"),
+      dispatch = d3.dispatch("progress", "load", "error"),
       method = "GET",
       headers = {},
       data,
@@ -66,7 +66,6 @@ d3.xhr = function(url, mimeType, callback) {
 
   xhr.abort = function() {
     request.abort();
-    dispatch.abort.call(xhr, request);
     return xhr;
   };
 
