@@ -43,15 +43,12 @@ d3.xhr = function(url, mimeType, callback) {
     return xhr;
   };
 
-  // Convenience method for send("GET", callback).
-  xhr.get = function() {
-    return xhr.send.apply(xhr, ["GET"].concat(d3_array(arguments)));
-  };
-
-  // Convenience method for send("POST", data, callback).
-  xhr.post = function() {
-    return xhr.send.apply(xhr, ["POST"].concat(d3_array(arguments)));
-  };
+  // Convenience methods.
+  ["get", "post"].forEach(function(method) {
+    xhr[method] = function() {
+      return xhr.send.apply(xhr, [method].concat(d3_array(arguments)));
+    };
+  });
 
   // If callback is non-null, it will be used for error and load events.
   xhr.send = function(method, data, callback) {

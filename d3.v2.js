@@ -2972,12 +2972,11 @@
       response = value;
       return xhr;
     };
-    xhr.get = function() {
-      return xhr.send.apply(xhr, [ "GET" ].concat(d3_array(arguments)));
-    };
-    xhr.post = function() {
-      return xhr.send.apply(xhr, [ "POST" ].concat(d3_array(arguments)));
-    };
+    [ "get", "post" ].forEach(function(method) {
+      xhr[method] = function() {
+        return xhr.send.apply(xhr, [ method ].concat(d3_array(arguments)));
+      };
+    });
     xhr.send = function(method, data, callback) {
       if (arguments.length === 2 && typeof data === "function") callback = data, data = null;
       request.open(method, url, true);
