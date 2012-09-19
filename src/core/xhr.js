@@ -1,6 +1,7 @@
 d3.xhr = function(url, mime, callback) {
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "abort", "error"),
+      headers = {},
       response = d3_identity,
       request = new XMLHttpRequest;
 
@@ -22,11 +23,14 @@ d3.xhr = function(url, mime, callback) {
 
   xhr.open = function(method, url) {
     request.open(method, url, true);
+    for (var name in headers) request.setRequestHeader(name, headers[name]);
+    headers = null;
     return xhr;
   };
 
   xhr.header = function(name, value) {
-    request.setRequestHeader(name, value);
+    if (headers) headers[name] = value + "";
+    else request.setRequestHeader(name, value);
     return xhr;
   };
 
