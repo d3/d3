@@ -1,9 +1,5 @@
-// TODO allow mime type to be overridden?
-d3.html = function() {
-  return d3.xhr.apply(d3, arguments)
-      .mimeType("text/html")
-      .header("Accept", "text/html,*/*")
-      .response(d3_html);
+d3.html = function(url, callback) {
+  return d3.xhr(url, "text/html", callback).response(d3_html);
 };
 
 function d3_html(request) {
