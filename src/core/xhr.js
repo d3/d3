@@ -29,6 +29,7 @@ d3.xhr = function(url, mimeType, callback) {
     return xhr;
   };
 
+  // If mimeType is non-null and no Accept header is set, a default is used.
   xhr.mimeType = function(value) {
     if (!arguments.length) return mimeType;
     mimeType = value == null ? null : value + "";
@@ -52,18 +53,15 @@ d3.xhr = function(url, mimeType, callback) {
     return xhr.send.apply(xhr, ["POST"].concat(d3_array(arguments)));
   };
 
-  // If mimeType is non-null and no Accept header is set, a default is used.
-  // If data is non-null and no Content-Type header is set, a default is used.
   // If callback is non-null, it will be used for error and load events.
   xhr.send = function(method, data, callback) {
     if (arguments.length === 2 && typeof data === "function") callback = data, data = null;
     request.open(method, url, true);
     if (mimeType != null && !("accept" in headers)) headers["accept"] = mimeType + ",*/*";
-    if (data != null && !("content-type" in headers)) headers["content-type"] = "application/x-www-form-url-encoded;charset=utf-8";
     for (var name in headers) request.setRequestHeader(name, headers[name]);
     if (mimeType != null && request.overrideMimeType) request.overrideMimeType(mimeType);
     if (callback != null) xhr.on("error", callback).on("load", function(request) { callback(null, request); });
-    request.send(data);
+    request.send(data == null ? null : data);
     return xhr;
   };
 
