@@ -18,8 +18,8 @@ d3.xhr = function(url, mime, callback) {
     finally { d3.event = o; }
   };
 
-  xhr.open = function(method, url) {
-    request.open(method, url, true);
+  xhr.open = function(method, url, user, password) {
+    request.open(method, url, true, user, password);
     if (mime != null) xhr.mimeType(mime).header("Accept", mime + ",*/*");
     return xhr;
   };
