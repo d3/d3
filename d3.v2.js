@@ -2963,6 +2963,7 @@
       return xhr;
     };
     xhr.header = function(name, value) {
+      name = (name + "").toLowerCase();
       if (arguments.length < 2) return headers[name];
       if (value == null) delete headers[name]; else headers[name] = value + "";
       return xhr;
@@ -2974,6 +2975,7 @@
     };
     xhr.data = function(value) {
       if (!arguments.length) return data;
+      if (!headers["content-type"]) headers["content-type"] = d3_xhr_contentType;
       data = value == null ? null : value;
       return xhr;
     };
@@ -3000,6 +3002,7 @@
     }).send();
     return xhr;
   };
+  var d3_xhr_contentType = "application/x-www-form-url-encoded;charset=utf-8";
   d3.text = function() {
     return d3.xhr.apply(d3, arguments).response(d3_text);
   };

@@ -30,6 +30,7 @@ d3.xhr = function(url, mimeType, callback) {
   };
 
   xhr.header = function(name, value) {
+    name = (name + "").toLowerCase();
     if (arguments.length < 2) return headers[name];
     if (value == null) delete headers[name];
     else headers[name] = value + "";
@@ -45,6 +46,7 @@ d3.xhr = function(url, mimeType, callback) {
   // data can be ArrayBuffer, Blob, Document, string, FormData
   xhr.data = function(value) {
     if (!arguments.length) return data;
+    if (!headers["content-type"]) headers["content-type"] = d3_xhr_contentType;
     data = value == null ? null : value;
     return xhr;
   };
@@ -89,3 +91,5 @@ function d3_xhr_fixCallback(callback) {
       ? function(error, request) { callback(error == null ? request : null); }
       : callback;
 }
+
+var d3_xhr_contentType = "application/x-www-form-url-encoded;charset=utf-8";
