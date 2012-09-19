@@ -1,9 +1,7 @@
 d3.xhr = function(url, mimeType, callback) {
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "error"),
-      method = "GET",
       headers = {},
-      data,
       response = d3_identity,
       request = new XMLHttpRequest;
 
@@ -23,12 +21,6 @@ d3.xhr = function(url, mimeType, callback) {
     finally { d3.event = o; }
   };
 
-  xhr.method = function(value) {
-    if (!arguments.length) return method;
-    method = value + "";
-    return xhr;
-  };
-
   xhr.header = function(name, value) {
     name = (name + "").toLowerCase();
     if (arguments.length < 2) return headers[name];
@@ -43,14 +35,6 @@ d3.xhr = function(url, mimeType, callback) {
     return xhr;
   };
 
-  // data can be ArrayBuffer, Blob, Document, string, FormData
-  xhr.data = function(value) {
-    if (!arguments.length) return data;
-    if (!("content-type" in headers)) headers["content-type"] = "application/x-www-form-url-encoded;charset=utf-8";
-    data = value == null ? null : value;
-    return xhr;
-  };
-
   // Specify how to convert the response content to a specific type;
   // changes the callback value on "load" events.
   xhr.response = function(value) {
@@ -58,10 +42,27 @@ d3.xhr = function(url, mimeType, callback) {
     return xhr;
   };
 
-  xhr.send = function() {
+  // Convenience method for send("GET", callback).
+  xhr.get = function() {
+    return xhr.send.apply(xhr, ["GET"].concat(d3_array(arguments)));
+  };
+
+  // Convenience method for send("POST", data, callback).
+  xhr.post = function() {
+    return xhr.send.apply(xhr, ["POST"].concat(d3_array(arguments)));
+  };
+
+  // If mimeType is non-null and no Accept header is set, a default is used.
+  // If data is non-null and no Content-Type header is set, a default is used.
+  // If callback is non-null, it will be used for error and load events.
+  xhr.send = function(method, data, callback) {
+    if (arguments.length === 2 && typeof data === "function") callback = data, data = null;
     request.open(method, url, true);
+    if (mimeType != null && !("accept" in headers)) headers["accept"] = mimeType + ",*/*";
+    if (data != null && !("content-type" in headers)) headers["content-type"] = "application/x-www-form-url-encoded;charset=utf-8";
     for (var name in headers) request.setRequestHeader(name, headers[name]);
     if (mimeType != null && request.overrideMimeType) request.overrideMimeType(mimeType);
+    if (callback != null) xhr.on("error", callback).on("load", function(request) { callback(null, request); });
     request.send(data);
     return xhr;
   };
@@ -74,16 +75,7 @@ d3.xhr = function(url, mimeType, callback) {
   d3.rebind(xhr, dispatch, "on");
 
   if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
-
-  if (mimeType != null) xhr
-      .header("Accept", mimeType + ",*/*");
-
-  if (callback != null) xhr
-      .on("error", callback = d3_xhr_fixCallback(callback))
-      .on("load", function(result) { callback(null, result); })
-      .send();
-
-  return xhr;
+  return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
 };
 
 function d3_xhr_fixCallback(callback) {

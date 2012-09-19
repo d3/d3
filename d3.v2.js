@@ -2941,7 +2941,7 @@
     return n ? Math.round(x * (n = Math.pow(10, n))) / n : Math.round(x);
   };
   d3.xhr = function(url, mimeType, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), method = "GET", headers = {}, data, response = d3_identity, request = new XMLHttpRequest;
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new XMLHttpRequest;
     request.onreadystatechange = function() {
       if (request.readyState === 4) {
         var s = request.status;
@@ -2957,11 +2957,6 @@
         d3.event = o;
       }
     };
-    xhr.method = function(value) {
-      if (!arguments.length) return method;
-      method = value + "";
-      return xhr;
-    };
     xhr.header = function(name, value) {
       name = (name + "").toLowerCase();
       if (arguments.length < 2) return headers[name];
@@ -2973,20 +2968,26 @@
       mimeType = value == null ? null : value + "";
       return xhr;
     };
-    xhr.data = function(value) {
-      if (!arguments.length) return data;
-      if (!("content-type" in headers)) headers["content-type"] = "application/x-www-form-url-encoded;charset=utf-8";
-      data = value == null ? null : value;
-      return xhr;
-    };
     xhr.response = function(value) {
       response = value;
       return xhr;
     };
-    xhr.send = function() {
+    xhr.get = function() {
+      return xhr.send.apply(xhr, [ "GET" ].concat(d3_array(arguments)));
+    };
+    xhr.post = function() {
+      return xhr.send.apply(xhr, [ "POST" ].concat(d3_array(arguments)));
+    };
+    xhr.send = function(method, data, callback) {
+      if (arguments.length === 2 && typeof data === "function") callback = data, data = null;
       request.open(method, url, true);
+      if (mimeType != null && !("accept" in headers)) headers["accept"] = mimeType + ",*/*";
+      if (data != null && !("content-type" in headers)) headers["content-type"] = "application/x-www-form-url-encoded;charset=utf-8";
       for (var name in headers) request.setRequestHeader(name, headers[name]);
       if (mimeType != null && request.overrideMimeType) request.overrideMimeType(mimeType);
+      if (callback != null) xhr.on("error", callback).on("load", function(request) {
+        callback(null, request);
+      });
       request.send(data);
       return xhr;
     };
@@ -2996,11 +2997,7 @@
     };
     d3.rebind(xhr, dispatch, "on");
     if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
-    if (mimeType != null) xhr.header("Accept", mimeType + ",*/*");
-    if (callback != null) xhr.on("error", callback = d3_xhr_fixCallback(callback)).on("load", function(result) {
-      callback(null, result);
-    }).send();
-    return xhr;
+    return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
   };
   d3.text = function() {
     return d3.xhr.apply(d3, arguments).response(d3_text);
