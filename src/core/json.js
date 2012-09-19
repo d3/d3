@@ -1,5 +1,11 @@
-d3.json = function(url, callback) {
-  return d3.text(url, "application/json", function(text) {
-    callback(text ? JSON.parse(text) : null);
-  });
+// TODO allow mime type to be overridden?
+d3.json = function() {
+  return d3.xhr.apply(d3, arguments)
+      .mimeType("application/json")
+      .header("Accept", "application/json,*/*")
+      .content(d3_json);
 };
+
+function d3_json(request) {
+  return JSON.parse(request.responseText);
+}

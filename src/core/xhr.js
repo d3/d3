@@ -1,12 +1,15 @@
 d3.xhr = function(url, mime, callback) {
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "abort", "error"),
+      content = d3_identity,
       request = new XMLHttpRequest;
 
   request.onreadystatechange = function() {
     if (request.readyState === 4) {
       var s = request.status;
-      dispatch[!s && request.response || s >= 200 && s < 300 || s === 304 ? "load" : "error"].call(xhr, request);
+      !s && request.response || s >= 200 && s < 300 || s === 304
+          ? dispatch.load.call(xhr, content.call(xhr, request))
+          : dispatch.error.call(xhr, request);
     }
   };
 
@@ -32,6 +35,13 @@ d3.xhr = function(url, mime, callback) {
     return xhr;
   };
 
+  // Specify how to convert the response content to a specific type;
+  // changes the callback value on "load" events.
+  xhr.content = function(value) {
+    content = value;
+    return xhr;
+  };
+
   // data can be ArrayBuffer, Blob, Document, string, FormData
   xhr.send = function(data) {
     request.send(data == null ? null : data);
@@ -51,26 +61,15 @@ d3.xhr = function(url, mime, callback) {
     xhr.open("GET", url);
     if (n > 1) {
       if (n > 2) { if (mime != null) xhr.mimeType(mime).header("Accept", mime + ",*/*"); } else callback = mime;
-      callback = d3_xhr_fixCallback(callback);
-      xhr.on("load", function() { callback(null, request); });
-      xhr.on("abort", function() { callback(request, null); });
-      xhr.on("error", function() { callback(request, null); });
-      xhr.send(null);
+      xhr.on("abort", callback = d3_xhr_fixCallback(callback))
+         .on("error", callback)
+         .on("load", function(result) { callback(null, result); })
+         .send(null);
     }
   }
 
   return xhr;
 };
-
-function d3_xhr(adapter) {
-  return function(url, mime, callback) {
-    if (arguments.length < 3) callback = mime, mime = null;
-    callback = d3_xhr_fixCallback(callback);
-    return d3.xhr(url, mime, function(error, request) {
-      callback(error, error === null ? adapter(request) : null);
-    });
-  };
-}
 
 function d3_xhr_fixCallback(callback) {
   return callback.length === 1

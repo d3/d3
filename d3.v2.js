@@ -57,19 +57,24 @@
     while (x * k % 1) k *= 10;
     return k;
   }
-  function d3_xhr(adapter) {
-    return function(url, mime, callback) {
-      if (arguments.length < 3) callback = mime, mime = null;
-      callback = d3_xhr_fixCallback(callback);
-      return d3.xhr(url, mime, function(error, request) {
-        callback(error, error === null ? adapter(request) : null);
-      });
-    };
-  }
   function d3_xhr_fixCallback(callback) {
     return callback.length === 1 ? function(error, request) {
       callback(error == null ? request : null);
     } : callback;
+  }
+  function d3_text(request) {
+    return request.responseText;
+  }
+  function d3_json(request) {
+    return JSON.parse(request.responseText);
+  }
+  function d3_html(request) {
+    var range = document.createRange();
+    range.selectNode(document.body);
+    return range.createContextualFragment(request.responseText);
+  }
+  function d3_xml(request) {
+    return request.responseXML;
   }
   function d3_dispatch() {}
   function d3_dispatch_event(dispatch) {
@@ -1837,12 +1842,11 @@
     };
   }
   function d3_dsv(delimiter, mimeType) {
-    function dsv(url, callback) {
-      callback = d3_xhr_fixCallback(callback);
-      return d3.text(url, mimeType, function(error, data) {
-        if (error == null) data = dsv.parse(data);
-        callback(error, data);
-      });
+    function dsv() {
+      return d3.xhr.apply(d3, arguments).mimeType(mimeType).header("Accept", mimeType + ",*/*").content(content);
+    }
+    function content(request) {
+      return dsv.parse(request.responseText);
     }
     function formatRow(row) {
       return row.map(formatValue).join(delimiter);
@@ -2937,11 +2941,11 @@
     return n ? Math.round(x * (n = Math.pow(10, n))) / n : Math.round(x);
   };
   d3.xhr = function(url, mime, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "abort", "error"), request = new XMLHttpRequest;
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "abort", "error"), content = d3_identity, request = new XMLHttpRequest;
     request.onreadystatechange = function() {
       if (request.readyState === 4) {
         var s = request.status;
-        dispatch[!s && request.response || s >= 200 && s < 300 || s === 304 ? "load" : "error"].call(xhr, request);
+        !s && request.response || s >= 200 && s < 300 || s === 304 ? dispatch.load.call(xhr, content.call(xhr, request)) : dispatch.error.call(xhr, request);
       }
     };
     request.onprogress = function(event) {
@@ -2965,6 +2969,10 @@
       if (request.overrideMimeType) request.overrideMimeType(value);
       return xhr;
     };
+    xhr.content = function(value) {
+      content = value;
+      return xhr;
+    };
     xhr.send = function(data) {
       request.send(data == null ? null : data);
       return xhr;
@@ -2982,43 +2990,25 @@
         if (n > 2) {
           if (mime != null) xhr.mimeType(mime).header("Accept", mime + ",*/*");
         } else callback = mime;
-        callback = d3_xhr_fixCallback(callback);
-        xhr.on("load", function() {
-          callback(null, request);
-        });
-        xhr.on("abort", function() {
-          callback(request, null);
-        });
-        xhr.on("error", function() {
-          callback(request, null);
-        });
-        xhr.send(null);
+        xhr.on("abort", callback = d3_xhr_fixCallback(callback)).on("error", callback).on("load", function(result) {
+          callback(null, result);
+        }).send(null);
       }
     }
     return xhr;
   };
-  d3.text = d3_xhr(function(request) {
-    return request.responseText;
-  });
-  d3.json = function(url, callback) {
-    return d3.text(url, "application/json", function(text) {
-      callback(text ? JSON.parse(text) : null);
-    });
+  d3.text = function() {
+    return d3.xhr.apply(d3, arguments).content(d3_text);
   };
-  d3.html = function(url, callback) {
-    callback = d3_xhr_fixCallback(callback);
-    return d3.text(url, "text/html", function(error, data) {
-      if (error == null) {
-        var range = document.createRange();
-        range.selectNode(document.body);
-        data = range.createContextualFragment(data);
-      }
-      callback(error, data);
-    });
+  d3.json = function() {
+    return d3.xhr.apply(d3, arguments).mimeType("application/json").header("Accept", "application/json,*/*").content(d3_json);
   };
-  d3.xml = d3_xhr(function(request) {
-    return request.responseXML;
-  });
+  d3.html = function() {
+    return d3.xhr.apply(d3, arguments).mimeType("text/html").header("Accept", "text/html,*/*").content(d3_html);
+  };
+  d3.xml = function() {
+    return d3.xhr.apply(d3, arguments).content(d3_xml);
+  };
   var d3_nsPrefix = {
     svg: "http://www.w3.org/2000/svg",
     xhtml: "http://www.w3.org/1999/xhtml",

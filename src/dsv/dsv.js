@@ -3,12 +3,16 @@ function d3_dsv(delimiter, mimeType) {
       reFormat = new RegExp("[\"" + delimiter + "\n]"),
       delimiterCode = delimiter.charCodeAt(0);
 
-  function dsv(url, callback) {
-    callback = d3_xhr_fixCallback(callback);
-    return d3.text(url, mimeType, function(error, data) {
-      if (error == null) data = dsv.parse(data);
-      callback(error, data);
-    });
+  // TODO allow mime type to be overridden?
+  function dsv() {
+    return d3.xhr.apply(d3, arguments)
+        .mimeType(mimeType)
+        .header("Accept", mimeType + ",*/*")
+        .content(content);
+  }
+
+  function content(request) {
+    return dsv.parse(request.responseText);
   }
 
   dsv.parse = function(text) {
