@@ -1,14 +1,14 @@
 d3.xhr = function(url, mime, callback) {
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "abort", "error"),
-      content = d3_identity,
+      response = d3_identity,
       request = new XMLHttpRequest;
 
   request.onreadystatechange = function() {
     if (request.readyState === 4) {
       var s = request.status;
       !s && request.response || s >= 200 && s < 300 || s === 304
-          ? dispatch.load.call(xhr, content.call(xhr, request))
+          ? dispatch.load.call(xhr, response.call(xhr, request))
           : dispatch.error.call(xhr, request);
     }
   };
@@ -37,8 +37,8 @@ d3.xhr = function(url, mime, callback) {
 
   // Specify how to convert the response content to a specific type;
   // changes the callback value on "load" events.
-  xhr.content = function(value) {
-    content = value;
+  xhr.response = function(value) {
+    response = value;
     return xhr;
   };
 

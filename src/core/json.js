@@ -3,7 +3,7 @@ d3.json = function() {
   return d3.xhr.apply(d3, arguments)
       .mimeType("application/json")
       .header("Accept", "application/json,*/*")
-      .content(d3_json);
+      .response(d3_json);
 };
 
 function d3_json(request) {

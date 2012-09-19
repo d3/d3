@@ -3,7 +3,7 @@ d3.html = function() {
   return d3.xhr.apply(d3, arguments)
       .mimeType("text/html")
       .header("Accept", "text/html,*/*")
-      .content(d3_html);
+      .response(d3_html);
 };
 
 function d3_html(request) {

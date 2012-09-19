@@ -8,10 +8,10 @@ function d3_dsv(delimiter, mimeType) {
     return d3.xhr.apply(d3, arguments)
         .mimeType(mimeType)
         .header("Accept", mimeType + ",*/*")
-        .content(content);
+        .response(response);
   }
 
-  function content(request) {
+  function response(request) {
     return dsv.parse(request.responseText);
   }
 

@@ -1843,9 +1843,9 @@
   }
   function d3_dsv(delimiter, mimeType) {
     function dsv() {
-      return d3.xhr.apply(d3, arguments).mimeType(mimeType).header("Accept", mimeType + ",*/*").content(content);
+      return d3.xhr.apply(d3, arguments).mimeType(mimeType).header("Accept", mimeType + ",*/*").response(response);
     }
-    function content(request) {
+    function response(request) {
       return dsv.parse(request.responseText);
     }
     function formatRow(row) {
@@ -2941,11 +2941,11 @@
     return n ? Math.round(x * (n = Math.pow(10, n))) / n : Math.round(x);
   };
   d3.xhr = function(url, mime, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "abort", "error"), content = d3_identity, request = new XMLHttpRequest;
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "abort", "error"), response = d3_identity, request = new XMLHttpRequest;
     request.onreadystatechange = function() {
       if (request.readyState === 4) {
         var s = request.status;
-        !s && request.response || s >= 200 && s < 300 || s === 304 ? dispatch.load.call(xhr, content.call(xhr, request)) : dispatch.error.call(xhr, request);
+        !s && request.response || s >= 200 && s < 300 || s === 304 ? dispatch.load.call(xhr, response.call(xhr, request)) : dispatch.error.call(xhr, request);
       }
     };
     request.onprogress = function(event) {
@@ -2969,8 +2969,8 @@
       if (request.overrideMimeType) request.overrideMimeType(value);
       return xhr;
     };
-    xhr.content = function(value) {
-      content = value;
+    xhr.response = function(value) {
+      response = value;
       return xhr;
     };
     xhr.send = function(data) {
@@ -2998,16 +2998,16 @@
     return xhr;
   };
   d3.text = function() {
-    return d3.xhr.apply(d3, arguments).content(d3_text);
+    return d3.xhr.apply(d3, arguments).response(d3_text);
   };
   d3.json = function() {
-    return d3.xhr.apply(d3, arguments).mimeType("application/json").header("Accept", "application/json,*/*").content(d3_json);
+    return d3.xhr.apply(d3, arguments).mimeType("application/json").header("Accept", "application/json,*/*").response(d3_json);
   };
   d3.html = function() {
-    return d3.xhr.apply(d3, arguments).mimeType("text/html").header("Accept", "text/html,*/*").content(d3_html);
+    return d3.xhr.apply(d3, arguments).mimeType("text/html").header("Accept", "text/html,*/*").response(d3_html);
   };
   d3.xml = function() {
-    return d3.xhr.apply(d3, arguments).content(d3_xml);
+    return d3.xhr.apply(d3, arguments).response(d3_xml);
   };
   var d3_nsPrefix = {
     svg: "http://www.w3.org/2000/svg",
