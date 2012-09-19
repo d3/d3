@@ -24,17 +24,17 @@ d3.xhr = function(url, mime, callback) {
     return xhr;
   };
 
-  xhr.post = function(data,encoding) {
+  xhr.post = function(data,contentType) {
     if(arguments.length < 2) {
       if (typeof data === "string") {
-        encoding = "application/x-www-form-urlencoded";
+        contentType = "application/x-www-form-urlencoded";
       } else {
-        encoding = "application/json";
+        contentType = "application/json";
         data = JSON.stringify(data);
       }
     }
     xhr.open("POST",url);
-    xhr.header("Content-Type",encoding);
+    xhr.header("Content-Type",contentType);
     xhr.send(data);
     return xhr;
   };
