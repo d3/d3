@@ -22,6 +22,21 @@ d3.xhr = function(url, mime, callback) {
     return xhr;
   };
 
+  xhr.post = function(data,encoding) {
+    if(arguments.length < 2) {
+      if (typeof data === "string") {
+        encoding = "application/x-www-form-urlencoded";
+      } else {
+        encoding = "application/json";
+        data = JSON.stringify(data);
+      }
+    }
+    xhr.open("POST",url);
+    xhr.header("Content-Type",encoding);
+    xhr.send(data);
+    return xhr;
+  };
+
   xhr.header = function(name, value) {
     request.setRequestHeader(name, value);
     return xhr;
