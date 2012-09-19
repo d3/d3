@@ -46,7 +46,7 @@ d3.xhr = function(url, mimeType, callback) {
   // data can be ArrayBuffer, Blob, Document, string, FormData
   xhr.data = function(value) {
     if (!arguments.length) return data;
-    if (!headers["content-type"]) headers["content-type"] = d3_xhr_contentType;
+    if (!("content-type" in headers)) headers["content-type"] = d3_xhr_contentType;
     data = value == null ? null : value;
     return xhr;
   };
