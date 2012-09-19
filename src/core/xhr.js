@@ -1,7 +1,8 @@
 d3.xhr = function(url, mime, callback) {
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "abort", "error"),
-      request = new XMLHttpRequest;
+      request = new XMLHttpRequest,
+      sendTimeout;
 
   request.onreadystatechange = function() {
     if (request.readyState === 4) {
@@ -50,7 +51,8 @@ d3.xhr = function(url, mime, callback) {
 
   // data can be ArrayBuffer, Blob, Document, string, FormData
   xhr.send = function(data) {
-    request.send(data == null ? null : data);
+    clearTimeout(sendTimeout);
+    sendTimeout = setTimeout(function() { request.send(data == null ? null : data);},0);
     return xhr;
   };
 
