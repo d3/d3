@@ -19,6 +19,7 @@ d3.xhr = function(url, mime, callback) {
 
   xhr.open = function(method, url) {
     request.open(method, url, true);
+    if (mime != null) xhr.mimeType(mime).header("Accept", mime + ",*/*");
     return xhr;
   };
 
@@ -63,9 +64,9 @@ d3.xhr = function(url, mime, callback) {
 
   var n = arguments.length;
   if (n) {
+    if (n < 3) callback = mime, mime = null;
     xhr.open("GET", url);
     if (n > 1) {
-      if (n > 2) { if (mime != null) xhr.mimeType(mime).header("Accept", mime + ",*/*"); } else callback = mime;
       callback = d3_xhr_fixCallback(callback);
       xhr.on("load", function() { callback(null, request); });
       xhr.on("abort", function() { callback(request, null); });
