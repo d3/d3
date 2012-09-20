@@ -1,10 +1,7 @@
-d3.text = function(url, mime, callback) {
-  function ready(req) {
-    callback(req && req.responseText);
-  }
-  if (arguments.length < 3) {
-    callback = mime;
-    mime = null;
-  }
-  d3.xhr(url, mime, ready);
+d3.text = function() {
+  return d3.xhr.apply(d3, arguments).response(d3_text);
 };
+
+function d3_text(request) {
+  return request.responseText;
+}

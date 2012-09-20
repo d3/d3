@@ -9,7 +9,7 @@ suite.addBatch({
   "csv": {
     topic: function() {
       var cb = this.callback;
-      return d3.csv("examples/data/sample.csv", function(csv) {
+      d3.csv("examples/data/sample.csv", function(csv) {
         cb(null, csv);
       });
     },
@@ -22,7 +22,7 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.csv("//does/not/exist.csv", function(csv) {
+        d3.csv("//does/not/exist.csv", function(csv) {
           cb(null, csv);
         });
       },
