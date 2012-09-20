@@ -57,6 +57,9 @@
     while (x * k % 1) k *= 10;
     return k;
   }
+  function d3_urlencode(value) {
+    return encodeURIComponent(value).replace(/%20/g, "+");
+  }
   function d3_xhr_fixCallback(callback) {
     return callback.length === 1 ? function(error, request) {
       callback(error == null ? request : null);
@@ -2940,6 +2943,21 @@
   d3.round = function(x, n) {
     return n ? Math.round(x * (n = Math.pow(10, n))) / n : Math.round(x);
   };
+  d3.urlencode = function(name, value) {
+    var array = [];
+    d3_arraySubclass(array, d3_urlencodePrototype);
+    return arguments.length ? array.and(name, value) : array;
+  };
+  var d3_urlencodePrototype = d3.urlencode.prototype = [];
+  d3_urlencodePrototype.type = "application/x-www-form-urlencoded;charset=utf-8";
+  d3_urlencodePrototype.and = function(name, value) {
+    name = d3_urlencode(name);
+    this.push(value == null ? name : name + "=" + d3_urlencode(value));
+    return this;
+  };
+  d3_urlencodePrototype.toString = function() {
+    return this.join("&");
+  };
   d3.xhr = function(url, mimeType, callback) {
     var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new XMLHttpRequest;
     request.onreadystatechange = function() {
@@ -2981,12 +2999,13 @@
       if (arguments.length === 2 && typeof data === "function") callback = data, data = null;
       request.open(method, url, true);
       if (mimeType != null && !("accept" in headers)) headers["accept"] = mimeType + ",*/*";
+      if (data == null) data = null; else if (data.type != null && !("content-type" in headers)) headers["content-type"] = data.type;
       for (var name in headers) request.setRequestHeader(name, headers[name]);
       if (mimeType != null && request.overrideMimeType) request.overrideMimeType(mimeType);
       if (callback != null) xhr.on("error", callback).on("load", function(request) {
         callback(null, request);
       });
-      request.send(data == null ? null : data);
+      request.send(data);
       return xhr;
     };
     xhr.abort = function() {
