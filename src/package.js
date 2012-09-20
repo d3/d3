@@ -10,6 +10,12 @@ require("util").puts(JSON.stringify({
   "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
   "main": "index.js",
   "browserify" : "index-browserify.js",
+  "jam": {
+    "main": "d3.v2.js",
+    "shim": {
+      "exports": "d3"
+    }
+  },
   "dependencies": {
     "jsdom": "0.2.14",
     "sizzle": "1.1.x"
