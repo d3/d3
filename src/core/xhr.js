@@ -55,11 +55,10 @@ d3.xhr = function(url, mimeType, callback) {
     if (arguments.length === 2 && typeof data === "function") callback = data, data = null;
     request.open(method, url, true);
     if (mimeType != null && !("accept" in headers)) headers["accept"] = mimeType + ",*/*";
-    if (data == null) data = null; else if (data.type != null && !("content-type" in headers)) headers["content-type"] = data.type;
     for (var name in headers) request.setRequestHeader(name, headers[name]);
     if (mimeType != null && request.overrideMimeType) request.overrideMimeType(mimeType);
     if (callback != null) xhr.on("error", callback).on("load", function(request) { callback(null, request); });
-    request.send(data);
+    request.send(data == null ? null : data);
     return xhr;
   };
 
