@@ -26,7 +26,7 @@ d3.layout.chord = function() {
     // Compute the sum.
     k = 0, i = -1; while (++i < n) {
       x = 0, j = -1; while (++j < n) {
-        x += matrix[i][j];
+        x += Math.abs(matrix[i][j]);
       }
       groupSums.push(x);
       subgroupIndex.push(d3.range(n));
@@ -62,7 +62,7 @@ d3.layout.chord = function() {
             dj = subgroupIndex[di][j],
             v = matrix[di][dj],
             a0 = x,
-            a1 = x += v * k;
+            a1 = x += Math.abs(v) * k;
         subgroups[di + "-" + dj] = {
           index: di,
           subindex: dj,
