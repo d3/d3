@@ -8,6 +8,20 @@ var suite = vows.describe("d3.geo.path");
 suite.addBatch({
   "path": {
     topic: d3.geo.path,
+    "projection": {
+      "returns the current projection when called with no arguments": function() {
+        var path = d3.geo.path(), projection = d3.geo.albers();
+        path.projection(projection);
+        assert.strictEqual(path.projection(), projection);
+      }
+    },
+    "pointRadius": {
+      "returns the current point radius when called with no arguments": function() {
+        var path = d3.geo.path(), radius = function() { return 5; };
+        assert.strictEqual(path.pointRadius(), 4.5);
+        assert.strictEqual(path.pointRadius(radius).pointRadius(), radius);
+      }
+    },
     "Polygon": function(path) {
       assert.equal(path({
         type: "Feature",

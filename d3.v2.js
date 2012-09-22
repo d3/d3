@@ -6221,15 +6221,14 @@
         return [ x / z, y / z ];
       }
     });
-    path.projection = function(x) {
-      projection = x;
+    path.projection = function(_) {
+      if (!arguments.length) return projection;
+      projection = _;
       return path;
     };
     path.pointRadius = function(x) {
-      if (typeof x === "function") pointRadius = x; else {
-        pointRadius = +x;
-        pointCircle = d3_path_circle(pointRadius);
-      }
+      if (!arguments.length) return pointRadius;
+      if (typeof x === "function") pointRadius = x; else pointCircle = d3_path_circle(pointRadius = +x);
       return path;
     };
     return path;
