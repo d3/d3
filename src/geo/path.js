@@ -19,10 +19,6 @@ d3.geo.path = function() {
     return result;
   }
 
-  function project(coordinates) {
-    return projection(coordinates).join(",");
-  }
-
   var pathType = d3_geo_type({
 
     FeatureCollection: function(o) {
@@ -37,14 +33,14 @@ d3.geo.path = function() {
     },
 
     Point: function(o) {
-      buffer.push("M", project(o.coordinates), pointCircle);
+      buffer.push("M", projection(o.coordinates), pointCircle);
     },
 
     MultiPoint: function(o) {
       var coordinates = o.coordinates,
           i = -1, // coordinates.index
           n = coordinates.length;
-      while (++i < n) buffer.push("M", project(coordinates[i]), pointCircle);
+      while (++i < n) buffer.push("M", projection(coordinates[i]), pointCircle);
     },
 
     LineString: function(o) {
@@ -52,7 +48,7 @@ d3.geo.path = function() {
           i = -1, // coordinates.index
           n = coordinates.length;
       buffer.push("M");
-      while (++i < n) buffer.push(project(coordinates[i]), "L");
+      while (++i < n) buffer.push(projection(coordinates[i]), "L");
       buffer.pop();
     },
 
@@ -68,7 +64,7 @@ d3.geo.path = function() {
         j = -1;
         m = subcoordinates.length;
         buffer.push("M");
-        while (++j < m) buffer.push(project(subcoordinates[j]), "L");
+        while (++j < m) buffer.push(projection(subcoordinates[j]), "L");
         buffer.pop();
       }
     },
@@ -85,7 +81,7 @@ d3.geo.path = function() {
         j = -1;
         if ((m = subcoordinates.length - 1) > 0) {
           buffer.push("M");
-          while (++j < m) buffer.push(project(subcoordinates[j]), "L");
+          while (++j < m) buffer.push(projection(subcoordinates[j]), "L");
           buffer[buffer.length - 1] = "Z";
         }
       }
@@ -110,7 +106,7 @@ d3.geo.path = function() {
           k = -1;
           if ((p = subsubcoordinates.length - 1) > 0) {
             buffer.push("M");
-            while (++k < p) buffer.push(project(subsubcoordinates[k]), "L");
+            while (++k < p) buffer.push(projection(subsubcoordinates[k]), "L");
             buffer[buffer.length - 1] = "Z";
           }
         }
