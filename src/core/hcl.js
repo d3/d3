@@ -33,5 +33,5 @@ d3_Hcl.prototype.toString = function() {
 };
 
 function d3_hcl_lab(h, c, l) {
-  return d3_lab(l, Math.cos(h *= Math.PI / 180) * c, Math.sin(h) * c);
+  return d3_lab(l, Math.cos(h *= π / 180) * c, Math.sin(h) * c);
 }

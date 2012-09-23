@@ -56,5 +56,5 @@ function d3_transformCombine(a, b, k) {
   return a;
 }
 
-var d3_transformDegrees = 180 / Math.PI,
+var d3_transformDegrees = 180 / π,
     d3_transformIdentity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0};
