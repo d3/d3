@@ -7,14 +7,14 @@
  */
 d3.geo.path = function() {
   var pointRadius = 4.5,
-      pointCircle = d3_path_circle(pointRadius),
+      pointCircle = d3_geo_path_circle(pointRadius),
       projection = d3.geo.albersUsa(),
       projectLine = d3_geo_path_projectIdentity,
       projectPolygon = d3_geo_path_projectIdentity,
       buffer = [];
 
   function path(d, i) {
-    if (typeof pointRadius === "function") pointCircle = d3_path_circle(pointRadius.apply(this, arguments));
+    if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
     pathType(d);
     var result = buffer.length ? buffer.join("") : null;
     buffer = [];
@@ -233,14 +233,14 @@ d3.geo.path = function() {
   path.pointRadius = function(x) {
     if (!arguments.length) return pointRadius;
     if (typeof x === "function") pointRadius = x;
-    else pointCircle = d3_path_circle(pointRadius = +x);
+    else pointCircle = d3_geo_path_circle(pointRadius = +x);
     return path;
   };
 
   return path;
 };
 
-function d3_path_circle(radius) {
+function d3_geo_path_circle(radius) {
   return "m0," + radius
       + "a" + radius + "," + radius + " 0 1,1 0," + (-2 * radius)
       + "a" + radius + "," + radius + " 0 1,1 0," + (+2 * radius)

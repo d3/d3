@@ -2013,7 +2013,7 @@
   function d3_geo_mercator(λ, φ) {
     return [ λ / (2 * π), Math.max(-.5, Math.min(+.5, Math.log(Math.tan(π / 4 + φ / 2)) / (2 * π))) ];
   }
-  function d3_path_circle(radius) {
+  function d3_geo_path_circle(radius) {
     return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
   }
   function d3_geo_path_projectIdentity(d) {
@@ -6295,7 +6295,7 @@
   };
   d3.geo.path = function() {
     function path(d, i) {
-      if (typeof pointRadius === "function") pointCircle = d3_path_circle(pointRadius.apply(this, arguments));
+      if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
       pathType(d);
       var result = buffer.length ? buffer.join("") : null;
       buffer = [];
@@ -6349,7 +6349,7 @@
     function area(coordinates) {
       return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
     }
-    var pointRadius = 4.5, pointCircle = d3_path_circle(pointRadius), projection = d3.geo.albersUsa(), projectLine = d3_geo_path_projectIdentity, projectPolygon = d3_geo_path_projectIdentity, buffer = [];
+    var pointRadius = 4.5, pointCircle = d3_geo_path_circle(pointRadius), projection = d3.geo.albersUsa(), projectLine = d3_geo_path_projectIdentity, projectPolygon = d3_geo_path_projectIdentity, buffer = [];
     var pathType = d3_geo_type({
       FeatureCollection: function(o) {
         var features = o.features, i = -1, n = features.length;
@@ -6439,7 +6439,7 @@
     };
     path.pointRadius = function(x) {
       if (!arguments.length) return pointRadius;
-      if (typeof x === "function") pointRadius = x; else pointCircle = d3_path_circle(pointRadius = +x);
+      if (typeof x === "function") pointRadius = x; else pointCircle = d3_geo_path_circle(pointRadius = +x);
       return path;
     };
     return path;
