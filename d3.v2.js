@@ -6441,8 +6441,7 @@
     });
     path.projection = function(_) {
       if (!arguments.length) return projection;
-      projection = _;
-      projectLine = d3_geo_path_projectLine(projection);
+      projectLine = d3_geo_path_projectLine(projection = _);
       projectPolygon = d3_geo_path_projectPolygon(projection);
       return path;
     };
