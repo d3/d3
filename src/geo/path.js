@@ -9,8 +9,8 @@ d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_geo_path_circle(pointRadius),
       projection = d3.geo.albersUsa(),
-      projectLine = d3_geo_path_projectIdentity,
-      projectPolygon = d3_geo_path_projectIdentity,
+      projectLine = d3_geo_path_projectLine(projection),
+      projectPolygon = d3_geo_path_projectPolygon(projection),
       buffer = [];
 
   function path(d, i) {
@@ -225,8 +225,8 @@ d3.geo.path = function() {
   path.projection = function(_) {
     if (!arguments.length) return projection;
     projection = _;
-    projectLine = projection.line || d3_geo_path_projectIdentity;
-    projectPolygon = projection.polygon || d3_geo_path_projectIdentity;
+    projectLine = d3_geo_path_projectLine(projection);
+    projectPolygon = d3_geo_path_projectPolygon(projection);
     return path;
   };
 
@@ -247,4 +247,16 @@ function d3_geo_path_circle(radius) {
       + "z";
 }
 
-function d3_geo_path_projectIdentity(d) { return [d]; }
+function d3_geo_path_projectLine(projection) {
+  return projection.line || function(lineString) {
+    return [lineString.map(projection)];
+  };
+}
+
+function d3_geo_path_projectPolygon(projection) {
+  return projection.polygon || function(polygon) {
+    return [polygon.map(function(ring) {
+      return ring.map(projection);
+    })];
+  };
+}
