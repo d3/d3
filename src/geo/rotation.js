@@ -1,17 +1,3 @@
-d3.geo.rotation = function(δλ, δφ, δγ) {
-  var r = d3_geo_rotation(δλ, δφ, δγ);
-
-  function rotation(coordinates) {
-    return r(coordinates[0], coordinates[1]);
-  }
-
-  rotation.invert = function(coordinates) {
-    return r.invert(coordinates[0], coordinates[1]);
-  };
-
-  return r;
-};
-
 // Note: |δλ| and |δφ| must be < 2π
 function d3_geo_rotation(δλ, δφ, δγ) {
   return δλ ? (δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ))

@@ -6440,16 +6440,6 @@
     return path;
   };
   d3.geo.projection = d3_geo_projection;
-  d3.geo.rotation = function(δλ, δφ, δγ) {
-    function rotation(coordinates) {
-      return r(coordinates[0], coordinates[1]);
-    }
-    var r = d3_geo_rotation(δλ, δφ, δγ);
-    rotation.invert = function(coordinates) {
-      return r.invert(coordinates[0], coordinates[1]);
-    };
-    return r;
-  };
   var d3_geo_stereographic = d3_geo_azimuthal(function(cosλcosφ) {
     return 1 / (1 + cosλcosφ);
   }, function(ρ) {
