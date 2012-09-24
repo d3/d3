@@ -31,8 +31,7 @@ d3.geo.albers = function() {
 
   // Deprecated; use projection.rotate and projection.center instead.
   p.origin = function(_) {
-    var rotate = p.rotate(),
-        center = p.center();
+    var rotate = p.rotate(), center = p.center();
     if (!arguments.length) return [-rotate[0], center[1]];
     return p.rotate([-_[0], rotate[1]]).center([center[0], _[1]]);
   };
