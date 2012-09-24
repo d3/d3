@@ -6282,7 +6282,7 @@
     return [ 2 * π * x, 2 * Math.atan(Math.exp(2 * π * y)) - π / 2 ];
   };
   d3.geo.mercator = function() {
-    return d3_geo_projection(d3_geo_mercator);
+    return d3_geo_projection(d3_geo_mercator).scale(500);
   };
   var d3_geo_orthographic = d3_geo_azimuthal(function() {
     return 1;

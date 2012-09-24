@@ -13,5 +13,5 @@ d3_geo_mercator.invert = function(x, y) {
 };
 
 d3.geo.mercator = function() {
-  return d3_geo_projection(d3_geo_mercator);
+  return d3_geo_projection(d3_geo_mercator).scale(500);
 };
