@@ -49,8 +49,8 @@ function d3_geo_doubleParallelProjection(projectAt) {
       p = m(φ0, φ1);
 
   p.parallels = function(_) {
-    if (!arguments.length) return [φ0 / π * 180, φ1 / π * 180];
-    return m(φ0 = _[0] * π / 180, φ1 = _[1] * π / 180);
+    if (!arguments.length) return [φ0 * d3_degrees, φ1 * d3_degrees];
+    return m(φ0 = _[0] * d3_radians, φ1 = _[1] * d3_radians);
   };
 
   return p;

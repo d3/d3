@@ -97,4 +97,4 @@ var d3_svg_symbols = d3.map({
 d3.svg.symbolTypes = d3_svg_symbols.keys();
 
 var d3_svg_symbolSqrt3 = Math.sqrt(3),
-    d3_svg_symbolTan30 = Math.tan(30 * π / 180);
+    d3_svg_symbolTan30 = Math.tan(30 * d3_radians);

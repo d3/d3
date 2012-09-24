@@ -20,13 +20,13 @@ function d3_geo_projectionMutator(projectAt) {
       δy = y;
 
   function p(coordinates) {
-    coordinates = projectRotate(coordinates[0] * π / 180, coordinates[1] * π / 180);
+    coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
     return [coordinates[0] * k + δx, δy - coordinates[1] * k];
   }
 
   function i(coordinates) {
     coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
-    return [coordinates[0] * 180 / π, coordinates[1] * 180 / π];
+    return [coordinates[0] * d3_degrees, coordinates[1] * d3_degrees];
   }
 
   p.scale = function(_) {
@@ -43,17 +43,17 @@ function d3_geo_projectionMutator(projectAt) {
   };
 
   p.center = function(_) {
-    if (!arguments.length) return [λ * 180 / π, φ * 180 / π];
-    λ = _[0] % 360 * π / 180;
-    φ = _[1] % 360 * π / 180;
+    if (!arguments.length) return [λ * d3_degrees, φ * d3_degrees];
+    λ = _[0] % 360 * d3_radians;
+    φ = _[1] % 360 * d3_radians;
     return reset();
   };
 
   p.rotate = function(_) {
-    if (!arguments.length) return [δλ * 180 / π, δφ * 180 / π, δγ * 180 / π];
-    δλ = _[0] % 360 * π / 180;
-    δφ = _[1] % 360 * π / 180;
-    δγ = _.length > 2 ? _[2] % 360 * π / 180 : 0;
+    if (!arguments.length) return [δλ * d3_degrees, δφ * d3_degrees, δγ * d3_degrees];
+    δλ = _[0] % 360 * d3_radians;
+    δφ = _[1] % 360 * d3_radians;
+    δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
     return reset();
   };
 

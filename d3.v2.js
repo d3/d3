@@ -188,10 +188,10 @@
       kx *= -1;
       kz *= -1;
     }
-    this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_transformDegrees;
+    this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_degrees;
     this.translate = [ m.e, m.f ];
     this.scale = [ kx, ky ];
-    this.skew = ky ? Math.atan2(kz, ky) * d3_transformDegrees : 0;
+    this.skew = ky ? Math.atan2(kz, ky) * d3_degrees : 0;
   }
   function d3_transformDot(a, b) {
     return a[0] * b[0] + a[1] * b[1];
@@ -333,7 +333,7 @@
     this.l = l;
   }
   function d3_hcl_lab(h, c, l) {
-    return d3_lab(l, Math.cos(h *= π / 180) * c, Math.sin(h) * c);
+    return d3_lab(l, Math.cos(h *= d3_radians) * c, Math.sin(h) * c);
   }
   function d3_lab(l, a, b) {
     return new d3_Lab(l, a, b);
@@ -1915,8 +1915,8 @@
   function d3_geo_doubleParallelProjection(projectAt) {
     var φ0 = 0, φ1 = π / 3, m = d3_geo_projectionMutator(projectAt), p = m(φ0, φ1);
     p.parallels = function(_) {
-      if (!arguments.length) return [ φ0 / π * 180, φ1 / π * 180 ];
-      return m(φ0 = _[0] * π / 180, φ1 = _[1] * π / 180);
+      if (!arguments.length) return [ φ0 * d3_degrees, φ1 * d3_degrees ];
+      return m(φ0 = _[0] * d3_radians, φ1 = _[1] * d3_radians);
     };
     return p;
   }
@@ -1986,7 +1986,7 @@
   function d3_geo_greatArcInterpolator() {
     function interpolate(t) {
       var B = Math.sin(t *= d) * k, A = Math.sin(d - t) * k, x = A * kx0 + B * kx1, y = A * ky0 + B * ky1, z = A * sy0 + B * sy1;
-      return [ Math.atan2(y, x) / d3_geo_radians, Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_geo_radians ];
+      return [ Math.atan2(y, x) / d3_radians, Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians ];
     }
     var x0, y0, cy0, sy0, kx0, ky0, x1, y1, cy1, sy1, kx1, ky1, d, k;
     interpolate.distance = function() {
@@ -1994,8 +1994,8 @@
       return d;
     };
     interpolate.source = function(_) {
-      var cx0 = Math.cos(x0 = _[0] * d3_geo_radians), sx0 = Math.sin(x0);
-      cy0 = Math.cos(y0 = _[1] * d3_geo_radians);
+      var cx0 = Math.cos(x0 = _[0] * d3_radians), sx0 = Math.sin(x0);
+      cy0 = Math.cos(y0 = _[1] * d3_radians);
       sy0 = Math.sin(y0);
       kx0 = cy0 * cx0;
       ky0 = cy0 * sx0;
@@ -2003,8 +2003,8 @@
       return interpolate;
     };
     interpolate.target = function(_) {
-      var cx1 = Math.cos(x1 = _[0] * d3_geo_radians), sx1 = Math.sin(x1);
-      cy1 = Math.cos(y1 = _[1] * d3_geo_radians);
+      var cx1 = Math.cos(x1 = _[0] * d3_radians), sx1 = Math.sin(x1);
+      cy1 = Math.cos(y1 = _[1] * d3_radians);
       sy1 = Math.sin(y1);
       kx1 = cy1 * cx1;
       ky1 = cy1 * sx1;
@@ -2031,12 +2031,12 @@
   }
   function d3_geo_projectionMutator(projectAt) {
     function p(coordinates) {
-      coordinates = projectRotate(coordinates[0] * π / 180, coordinates[1] * π / 180);
+      coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
       return [ coordinates[0] * k + δx, δy - coordinates[1] * k ];
     }
     function i(coordinates) {
       coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
-      return [ coordinates[0] * 180 / π, coordinates[1] * 180 / π ];
+      return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
     function reset() {
       projectRotate = d3_geo_compose(d3_geo_rotation(δλ, δφ, δγ), project);
@@ -2058,16 +2058,16 @@
       return reset();
     };
     p.center = function(_) {
-      if (!arguments.length) return [ λ * 180 / π, φ * 180 / π ];
-      λ = _[0] % 360 * π / 180;
-      φ = _[1] % 360 * π / 180;
+      if (!arguments.length) return [ λ * d3_degrees, φ * d3_degrees ];
+      λ = _[0] % 360 * d3_radians;
+      φ = _[1] % 360 * d3_radians;
       return reset();
     };
     p.rotate = function(_) {
-      if (!arguments.length) return [ δλ * 180 / π, δφ * 180 / π, δγ * 180 / π ];
-      δλ = _[0] % 360 * π / 180;
-      δφ = _[1] % 360 * π / 180;
-      δγ = _.length > 2 ? _[2] % 360 * π / 180 : 0;
+      if (!arguments.length) return [ δλ * d3_degrees, δφ * d3_degrees, δγ * d3_degrees ];
+      δλ = _[0] % 360 * d3_radians;
+      δφ = _[1] % 360 * d3_radians;
+      δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
       return reset();
     };
     return function() {
@@ -2702,7 +2702,7 @@
   d3 = {
     version: "2.10.2"
   };
-  var π = Math.PI;
+  var π = Math.PI, d3_radians = π / 180, d3_degrees = 180 / π;
   var d3_array = d3_arraySlice;
   try {
     d3_array(document.documentElement.childNodes)[0].nodeType;
@@ -3268,7 +3268,7 @@
   d3_transform.prototype.toString = function() {
     return "translate(" + this.translate + ")rotate(" + this.rotate + ")skewX(" + this.skew + ")scale(" + this.scale + ")";
   };
-  var d3_transformDegrees = 180 / π, d3_transformIdentity = {
+  var d3_transformIdentity = {
     a: 1,
     b: 0,
     c: 0,
@@ -4509,7 +4509,7 @@
     }
   });
   d3.svg.symbolTypes = d3_svg_symbols.keys();
-  var d3_svg_symbolSqrt3 = Math.sqrt(3), d3_svg_symbolTan30 = Math.tan(30 * π / 180);
+  var d3_svg_symbolSqrt3 = Math.sqrt(3), d3_svg_symbolTan30 = Math.tan(30 * d3_radians);
   d3.svg.axis = function() {
     function axis(g) {
       g.each(function() {
@@ -6015,7 +6015,6 @@
   d3.csv = d3_dsv(",", "text/csv");
   d3.tsv = d3_dsv("	", "text/tab-separated-values");
   d3.geo = {};
-  var d3_geo_radians = π / 180;
   d3.geo.albersUsa = function() {
     function albersUsa(coordinates) {
       var lon = coordinates[0], lat = coordinates[1];
@@ -6127,7 +6126,7 @@
       arc.source(origin);
       return resampled;
     }
-    var origin = [ 0, 0 ], degrees = 90 - .01, radians = degrees * d3_geo_radians, arc = d3.geo.greatArc().source(origin).target(d3_identity);
+    var origin = [ 0, 0 ], degrees = 90 - .01, radians = degrees * d3_radians, arc = d3.geo.greatArc().source(origin).target(d3_identity);
     circle.clip = function(d) {
       if (typeof origin === "function") arc.source(origin.apply(this, arguments));
       return clipType(d) || null;
@@ -6186,7 +6185,7 @@
     };
     circle.angle = function(x) {
       if (!arguments.length) return degrees;
-      radians = (degrees = +x) * d3_geo_radians;
+      radians = (degrees = +x) * d3_radians;
       return circle;
     };
     return d3.rebind(circle, arc, "precision");
@@ -6257,7 +6256,7 @@
         coordinates: coordinates
       };
     }
-    var source = d3_geo_greatArcSource, p0, target = d3_geo_greatArcTarget, p1, precision = 6 * d3_geo_radians, interpolate = d3_geo_greatArcInterpolator();
+    var source = d3_geo_greatArcSource, p0, target = d3_geo_greatArcTarget, p1, precision = 6 * d3_radians, interpolate = d3_geo_greatArcInterpolator();
     greatArc.distance = function() {
       if (typeof source === "function") interpolate.source(p0 = source.apply(this, arguments));
       if (typeof target === "function") interpolate.target(p1 = target.apply(this, arguments));
@@ -6276,8 +6275,8 @@
       return greatArc;
     };
     greatArc.precision = function(_) {
-      if (!arguments.length) return precision / d3_geo_radians;
-      precision = _ * d3_geo_radians;
+      if (!arguments.length) return precision / d3_radians;
+      precision = _ * d3_radians;
       return greatArc;
     };
     return greatArc;

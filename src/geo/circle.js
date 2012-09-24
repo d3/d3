@@ -3,7 +3,7 @@
 d3.geo.circle = function() {
   var origin = [0, 0],
       degrees = 90 - 1e-2,
-      radians = degrees * d3_geo_radians,
+      radians = degrees * d3_radians,
       arc = d3.geo.greatArc().source(origin).target(d3_identity);
 
   function circle() {
@@ -134,7 +134,7 @@ d3.geo.circle = function() {
 
   circle.angle = function(x) {
     if (!arguments.length) return degrees;
-    radians = (degrees = +x) * d3_geo_radians;
+    radians = (degrees = +x) * d3_radians;
     return circle;
   };
 
