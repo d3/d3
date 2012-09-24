@@ -24,11 +24,10 @@ function d3_geo_albers(φ0, φ1) {
 }
 
 d3.geo.albers = function() {
-  var p = d3_geo_doubleParallelProjection(d3_geo_albers)
-      .rotate([98, 0])
-      .center([0, 38])
-      .parallels([29.5, 45.5])
-      .scale(1000);
+  var φ0 = 29.5 * d3_radians,
+      φ1 = 45.5 * d3_radians,
+      m = d3_geo_projectionMutator(d3_geo_albers),
+      p = m(φ0, φ1);
 
   // Deprecated; use projection.rotate and projection.center instead.
   p.origin = function(_) {
@@ -38,20 +37,10 @@ d3.geo.albers = function() {
     return p.rotate([-_[0], rotate[1]]).center([center[0], _[1]]);
   };
 
-  return p;
-};
-
-// TODO Expose this API? Rename conicProjection?
-function d3_geo_doubleParallelProjection(projectAt) {
-  var φ0 = 0,
-      φ1 = π / 3,
-      m = d3_geo_projectionMutator(projectAt),
-      p = m(φ0, φ1);
-
   p.parallels = function(_) {
     if (!arguments.length) return [φ0 * d3_degrees, φ1 * d3_degrees];
     return m(φ0 = _[0] * d3_radians, φ1 = _[1] * d3_radians);
   };
 
-  return p;
-}
+  return p.origin([-98, 38]).scale(1000);
+};

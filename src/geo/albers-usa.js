@@ -1,7 +1,8 @@
+// TODO composite invert
+
 // A composite projection for the United States, 960x500. The set of standard
 // parallels for each region comes from USGS, which is published here:
 // http://egsc.usgs.gov/isb/pubs/MapProjections/projections.html#albers
-// TODO allow the composite projection to be rescaled?
 d3.geo.albersUsa = function() {
   var lower48 = d3.geo.albers();
 

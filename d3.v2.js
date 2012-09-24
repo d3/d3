@@ -1912,14 +1912,6 @@
     };
     return albers;
   }
-  function d3_geo_doubleParallelProjection(projectAt) {
-    var φ0 = 0, φ1 = π / 3, m = d3_geo_projectionMutator(projectAt), p = m(φ0, φ1);
-    p.parallels = function(_) {
-      if (!arguments.length) return [ φ0 * d3_degrees, φ1 * d3_degrees ];
-      return m(φ0 = _[0] * d3_radians, φ1 = _[1] * d3_radians);
-    };
-    return p;
-  }
   function d3_geo_bounds(o, f) {
     if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
   }
@@ -6044,13 +6036,17 @@
     return albersUsa.scale(lower48.scale());
   };
   d3.geo.albers = function() {
-    var p = d3_geo_doubleParallelProjection(d3_geo_albers).rotate([ 98, 0 ]).center([ 0, 38 ]).parallels([ 29.5, 45.5 ]).scale(1e3);
+    var φ0 = 29.5 * d3_radians, φ1 = 45.5 * d3_radians, m = d3_geo_projectionMutator(d3_geo_albers), p = m(φ0, φ1);
     p.origin = function(_) {
       var rotate = p.rotate(), center = p.center();
       if (!arguments.length) return [ -rotate[0], center[1] ];
       return p.rotate([ -_[0], rotate[1] ]).center([ center[0], _[1] ]);
     };
-    return p;
+    p.parallels = function(_) {
+      if (!arguments.length) return [ φ0 * d3_degrees, φ1 * d3_degrees ];
+      return m(φ0 = _[0] * d3_radians, φ1 = _[1] * d3_radians);
+    };
+    return p.origin([ -98, 38 ]).scale(1e3);
   };
   var d3_geo_azimuthalEqualArea = d3_geo_azimuthal(function(cosλcosφ) {
     return Math.sqrt(2 / (1 + cosλcosφ));
