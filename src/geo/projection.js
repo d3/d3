@@ -54,7 +54,7 @@ function d3_geo_projectionMutator(projectAt) {
       δλ = (Math.abs(λ1 - λ0) + 2 * π) % (2 * π);
       sλ0 = λ0 > 0;
       if (sλ0 ^ (λ1 > 0) && (δλ >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
-        φ0 = intersect(λ0, φ0, λ1, φ1);
+        φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
         context.lineTo((point = projectPoint(sλ0 ? π : -π, φ0))[0], point[1]);
         context.moveTo((point = projectPoint(sλ0 ? -π : π, φ0))[0], point[1]);
       }
@@ -66,17 +66,6 @@ function d3_geo_projectionMutator(projectAt) {
     p.line(coordinates, context);
     context.closePath();
   };
-
-  function intersect(λ0, φ0, λ1, φ1) {
-    var cosφ0,
-        cosφ1,
-        sinλ0_λ1 = Math.sin(λ0 - λ1);
-    return Math.abs(sinλ0_λ1) > ε
-        ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1)
-                   - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0))
-                   / (cosφ0 * cosφ1 * sinλ0_λ1))
-        : (φ0 + φ1) / 2;
-  }
 
   // TODO remove redundant code with p(coordinates)
   function rotatePoint(coordinates) {
@@ -130,4 +119,15 @@ function d3_geo_projectionMutator(projectAt) {
     p.invert = project.invert && i;
     return reset();
   };
+}
+
+function d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1) {
+  var cosφ0,
+      cosφ1,
+      sinλ0_λ1 = Math.sin(λ0 - λ1);
+  return Math.abs(sinλ0_λ1) > ε
+      ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1)
+                 - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0))
+                 / (cosφ0 * cosφ1 * sinλ0_λ1))
+      : (φ0 + φ1) / 2;
 }
