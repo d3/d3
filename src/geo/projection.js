@@ -29,6 +29,22 @@ function d3_geo_projectionMutator(projectAt) {
     return [coordinates[0] * d3_degrees, coordinates[1] * d3_degrees];
   }
 
+  p.point = function(coordinates, context) {
+    var point = p(coordinates);
+    context.point(point[0], point[1]);
+  };
+
+  p.line = function(coordinates, context) {
+    var point = p(coordinates[0]), i = 0, n = coordinates.length;
+    context.moveTo(point[0], point[1]);
+    while (++i < n) context.lineTo((point = p(coordinates[i]))[0], point[1]);
+  };
+
+  p.ring = function(coordinates, context) {
+    p.line(coordinates, context);
+    context.closePath();
+  };
+
   p.scale = function(_) {
     if (!arguments.length) return k;
     k = +_;

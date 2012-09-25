@@ -1,218 +1,103 @@
-/**
- * Returns a function that, given a GeoJSON object (e.g., a feature), returns
- * the corresponding SVG path. The function can be customized by overriding the
- * projection. Point features are mapped to circles with a default radius of
- * 4.5px; the radius can be specified either as a constant or a function that
- * is evaluated per object.
- */
+// TODO restore path.area, path.centroid
+// TODO fallback for projections that don't implement point, line, ring? (or fix albersUsa?)
+
 d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_geo_path_circle(pointRadius),
-      projection = d3.geo.albersUsa(),
-      projectLine = d3_geo_path_projectLine(projection),
-      projectPolygon = d3_geo_path_projectPolygon(projection),
-      buffer = [];
+      projection = d3.geo.albersUsa();
 
-  function path(d, i) {
+  function path(object) {
     if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
-    pathType(d);
-    var result = buffer.length ? buffer.join("") : null;
-    buffer = [];
-    return result;
+    var buffer = [];
+    pathObject(object, {
+      point: function(x, y) { buffer.push("M", x, ",", y, pointCircle); },
+      moveTo: function(x, y) { buffer.push("M", x, ",", y); },
+      lineTo: function(x, y) { buffer.push("L", x, ",", y); },
+      closePath: function() { buffer.push("Z"); }
+    });
+    return buffer.length ? buffer.join("") : null;
   }
 
-  var pathType = d3_geo_type({
-
-    FeatureCollection: function(o) {
-      var features = o.features,
-          i = -1, // features.index
-          n = features.length;
-      while (++i < n) buffer.push(pathType(features[i].geometry));
-    },
-
-    Feature: function(o) {
-      pathType(o.geometry);
-    },
-
-    Point: function(o) {
-      buffer.push("M", projection(o.coordinates), pointCircle);
-    },
-
-    MultiPoint: function(o) {
-      var coordinates = o.coordinates,
-          i = -1, // coordinates.index
-          n = coordinates.length;
-      while (++i < n) buffer.push("M", projection(coordinates[i]), pointCircle);
-    },
-
-    LineString: function(o) {
-      multiLineString(projectLine(o.coordinates));
-    },
-
-    MultiLineString: function(o) {
-      var lineStrings = o.coordinates;
-      for (var i = 0, n = lineStrings.length; i < n; ++i) {
-        multiLineString(projectLine(lineStrings[i]));
-      }
-    },
-
-    Polygon: function(o) {
-      multiPolygon(projectPolygon(o.coordinates));
-    },
-
-    MultiPolygon: function(o) {
-      var polygons = o.coordinates;
-      for (var i = 0, n = polygons.length; i < n; ++i) {
-        multiPolygon(projectPolygon(polygons[i]));
-      }
-    },
-
-    GeometryCollection: function(o) {
-      var geometries = o.geometries,
-          i = -1, // geometries index
-          n = geometries.length;
-      while (++i < n) buffer.push(pathType(geometries[i]));
-    }
-
-  });
-
-  var areaType = path.area = d3_geo_type({
-
-    FeatureCollection: function(o) {
-      var area = 0,
-          features = o.features,
-          i = -1, // features.index
-          n = features.length;
-      while (++i < n) area += areaType(features[i]);
-      return area;
-    },
-
-    Feature: function(o) {
-      return areaType(o.geometry);
-    },
-
-    Polygon: function(o) {
-      return polygonArea(o.coordinates);
-    },
-
-    MultiPolygon: function(o) {
-      var sum = 0,
-          coordinates = o.coordinates,
-          i = -1, // coordinates index
-          n = coordinates.length;
-      while (++i < n) sum += polygonArea(coordinates[i]);
-      return sum;
-    },
-
-    GeometryCollection: function(o) {
-      var sum = 0,
-          geometries = o.geometries,
-          i = -1, // geometries index
-          n = geometries.length;
-      while (++i < n) sum += areaType(geometries[i]);
-      return sum;
-    }
-
-  }, 0);
-
-  function multiLineString(lineStrings) {
-    for (var i = 0, n = lineStrings.length; i < n; ++i) {
-      var lineString = lineStrings[i];
-      buffer.push("M");
-      for (var j = 0, m = lineString.length; j < m; ++j) buffer.push(lineString[j], "L");
-      buffer.pop();
-    }
+  function pathObject(object, context) {
+    var pathType = pathObjectByType.get(object.type);
+    if (pathType) pathType(object, context);
   }
 
-  function multiPolygon(polygons) {
-    for (var i = 0, n = polygons.length; i < n; ++i) {
-      var polygon = polygons[i];
-      for (var j = 0, m = polygon.length; j < m; ++j) {
-        var ring = polygon[j],
-            k = -1, p;
-        if ((p = ring.length - 1) > 0) {
-          buffer.push("M");
-          while (++k < p) buffer.push(ring[k], "L");
-          buffer[buffer.length - 1] = "Z";
-        }
-      }
-    }
+  function pathGeometry(geometry, context) {
+    var pathType = pathGeometryByType.get(geometry.type);
+    if (pathType) pathType(geometry, context);
   }
 
-  function polygonArea(coordinates) {
-    var sum = area(coordinates[0]), // exterior ring
-        i = 0, // coordinates.index
-        n = coordinates.length;
-    while (++i < n) sum -= area(coordinates[i]); // holes
-    return sum;
+  function pathFeature(feature, context) {
+    pathGeometry(feature.geometry, context);
   }
 
-  function polygonCentroid(coordinates) {
-    var polygon = d3.geom.polygon(coordinates[0].map(projection)), // exterior ring
-        area = polygon.area(),
-        centroid = polygon.centroid(area < 0 ? (area *= -1, 1) : -1),
-        x = centroid[0],
-        y = centroid[1],
-        z = area,
-        i = 0, // coordinates index
-        n = coordinates.length;
+  function pathFeatureCollection(collection, context) {
+    var features = collection.features, i = -1, n = features.length;
+    while (++i < n) pathFeature(features[i], context);
+  }
+
+  function pathGeometryCollection(collection, context) {
+    var geometries = collection.geometries, i = -1, n = geometries.length;
+    while (++i < n) pathGeometry(geometries[i], context);
+  }
+
+  function pathLineString(lineString, context) {
+    projection.line(lineString.coordinates, context);
+  }
+
+  function pathMultiLineString(multiLineString, context) {
+    var coordinates = multiLineString.coordinates, i = -1, n = coordinates.length;
+    while (++i < n) projection.line(coordinates[i], context);
+  }
+
+  function pathMultiPoint(multiPoint, context) {
+    var coordinates = multiPoint.coordinates, i = -1, n = coordinates.length;
+    while (++i < n) projection.point(coordinates[i], context);
+  }
+
+  function pathMultiPolygon(multiPolygon, context) {
+    var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
     while (++i < n) {
-      polygon = d3.geom.polygon(coordinates[i].map(projection)); // holes
-      area = polygon.area();
-      centroid = polygon.centroid(area < 0 ? (area *= -1, 1) : -1);
-      x -= centroid[0];
-      y -= centroid[1];
-      z -= area;
+      var subcoordinates = coordinates[i], j = -1, m = subcoordinates.length;
+      while (++j < m) projection.ring(subcoordinates[j], context);
     }
-    return [x, y, 6 * z]; // weighted centroid
   }
 
-  var centroidType = path.centroid = d3_geo_type({
+  function pathPoint(point, context) {
+    projection.point(point.coordinates, context);
+  }
 
-    // TODO FeatureCollection
-    // TODO Point
-    // TODO MultiPoint
-    // TODO LineString
-    // TODO MultiLineString
-    // TODO GeometryCollection
+  function pathPolygon(polygon, context) {
+    var coordinates = polygon.coordinates, i = -1, n = coordinates.length;
+    while (++i < n) projection.ring(coordinates[i], context);
+  }
 
-    Feature: function(o) {
-      return centroidType(o.geometry);
-    },
-
-    Polygon: function(o) {
-      var centroid = polygonCentroid(o.coordinates);
-      return [centroid[0] / centroid[2], centroid[1] / centroid[2]];
-    },
-
-    MultiPolygon: function(o) {
-      var area = 0,
-          coordinates = o.coordinates,
-          centroid,
-          x = 0,
-          y = 0,
-          z = 0,
-          i = -1, // coordinates index
-          n = coordinates.length;
-      while (++i < n) {
-        centroid = polygonCentroid(coordinates[i]);
-        x += centroid[0];
-        y += centroid[1];
-        z += centroid[2];
-      }
-      return [x / z, y / z];
-    }
-
+  var pathObjectByType = d3.map({
+    Feature: pathFeature,
+    FeatureCollection: pathFeatureCollection,
+    GeometryCollection: pathGeometryCollection,
+    LineString: pathLineString,
+    MultiLineString: pathMultiLineString,
+    MultiPoint: pathMultiPoint,
+    MultiPolygon: pathMultiPolygon,
+    Point: pathPoint,
+    Polygon: pathPolygon
   });
 
-  function area(coordinates) {
-    return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
-  }
+  var pathGeometryByType = d3.map({
+    GeometryCollection: pathGeometryCollection,
+    LineString: pathLineString,
+    MultiLineString: pathMultiLineString,
+    MultiPoint: pathMultiPoint,
+    MultiPolygon: pathMultiPolygon,
+    Point: pathPoint,
+    Polygon: pathPolygon
+  });
 
   path.projection = function(_) {
     if (!arguments.length) return projection;
-    projectLine = d3_geo_path_projectLine(projection = _);
-    projectPolygon = d3_geo_path_projectPolygon(projection);
+    projection = _;
     return path;
   };
 
@@ -233,16 +118,111 @@ function d3_geo_path_circle(radius) {
       + "z";
 }
 
-function d3_geo_path_projectLine(projection) {
-  return projection.line || function(lineString) {
-    return [lineString.map(projection)];
-  };
-}
+  // function polygonArea(coordinates) {
+  //   var sum = area(coordinates[0]), // exterior ring
+  //       i = 0, // coordinates.index
+  //       n = coordinates.length;
+  //   while (++i < n) sum -= area(coordinates[i]); // holes
+  //   return sum;
+  // }
 
-function d3_geo_path_projectPolygon(projection) {
-  return projection.polygon || function(polygon) {
-    return [polygon.map(function(ring) {
-      return ring.map(projection);
-    })];
-  };
-}
+  // function polygonCentroid(coordinates) {
+  //   var polygon = d3.geom.polygon(coordinates[0].map(projection)), // exterior ring
+  //       area = polygon.area(),
+  //       centroid = polygon.centroid(area < 0 ? (area *= -1, 1) : -1),
+  //       x = centroid[0],
+  //       y = centroid[1],
+  //       z = area,
+  //       i = 0, // coordinates index
+  //       n = coordinates.length;
+  //   while (++i < n) {
+  //     polygon = d3.geom.polygon(coordinates[i].map(projection)); // holes
+  //     area = polygon.area();
+  //     centroid = polygon.centroid(area < 0 ? (area *= -1, 1) : -1);
+  //     x -= centroid[0];
+  //     y -= centroid[1];
+  //     z -= area;
+  //   }
+  //   return [x, y, 6 * z]; // weighted centroid
+  // }
+
+  // var centroidType = path.centroid = d3_geo_type({
+
+  //   // TODO FeatureCollection
+  //   // TODO Point
+  //   // TODO MultiPoint
+  //   // TODO LineString
+  //   // TODO MultiLineString
+  //   // TODO GeometryCollection
+
+  //   Feature: function(o) {
+  //     return centroidType(o.geometry);
+  //   },
+
+  //   Polygon: function(o) {
+  //     var centroid = polygonCentroid(o.coordinates);
+  //     return [centroid[0] / centroid[2], centroid[1] / centroid[2]];
+  //   },
+
+  //   MultiPolygon: function(o) {
+  //     var area = 0,
+  //         coordinates = o.coordinates,
+  //         centroid,
+  //         x = 0,
+  //         y = 0,
+  //         z = 0,
+  //         i = -1, // coordinates index
+  //         n = coordinates.length;
+  //     while (++i < n) {
+  //       centroid = polygonCentroid(coordinates[i]);
+  //       x += centroid[0];
+  //       y += centroid[1];
+  //       z += centroid[2];
+  //     }
+  //     return [x / z, y / z];
+  //   }
+
+  // });
+
+  // function area(coordinates) {
+  //   return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
+  // }
+
+  // var areaType = path.area = d3_geo_type({
+
+  //   FeatureCollection: function(o) {
+  //     var area = 0,
+  //         features = o.features,
+  //         i = -1, // features.index
+  //         n = features.length;
+  //     while (++i < n) area += areaType(features[i]);
+  //     return area;
+  //   },
+
+  //   Feature: function(o) {
+  //     return areaType(o.geometry);
+  //   },
+
+  //   Polygon: function(o) {
+  //     return polygonArea(o.coordinates);
+  //   },
+
+  //   MultiPolygon: function(o) {
+  //     var sum = 0,
+  //         coordinates = o.coordinates,
+  //         i = -1, // coordinates index
+  //         n = coordinates.length;
+  //     while (++i < n) sum += polygonArea(coordinates[i]);
+  //     return sum;
+  //   },
+
+  //   GeometryCollection: function(o) {
+  //     var sum = 0,
+  //         geometries = o.geometries,
+  //         i = -1, // geometries index
+  //         n = geometries.length;
+  //     while (++i < n) sum += areaType(geometries[i]);
+  //     return sum;
+  //   }
+
+  // }, 0);
