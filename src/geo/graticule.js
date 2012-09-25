@@ -12,8 +12,10 @@ d3.geo.graticule = function() {
   }
 
   graticule.lines = function() {
-    var xLines = d3.range(Math.ceil(x0 / dx) * dx, y0, dx).map(function(x) { return [y0, y1].map(function(y) { return [x, y]; }); }),
-        yLines = d3.range(Math.ceil(x1 / dy) * dy, y1, dy).map(function(y) { return [x0, x1].map(function(x) { return [x, y]; }); });
+    var xSteps = d3.range(Math.ceil(x0 / dx) * dx, x1, dx).concat(x1),
+        ySteps = d3.range(Math.ceil(y0 / dy) * dy, y1, dy).concat(y1),
+        xLines = xSteps.map(function(x) { return ySteps.map(function(y) { return [x, y]; }); }),
+        yLines = ySteps.map(function(y) { return xSteps.map(function(x) { return [x, y]; }); });
     return xLines.concat(yLines).map(function(coordinates) {
       return {
         type: "LineString",

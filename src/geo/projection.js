@@ -7,6 +7,7 @@ function d3_geo_projection(project) {
 // TODO Expose this API? Not that happy with it.
 function d3_geo_projectionMutator(projectAt) {
   var project,
+      rotate,
       projectRotate,
       k = 150,
       x = 480,
@@ -35,15 +36,56 @@ function d3_geo_projectionMutator(projectAt) {
   };
 
   p.line = function(coordinates, context) {
-    var point = p(coordinates[0]), i = 0, n = coordinates.length;
+    if (!(n = coordinates.length)) return;
+    var location = rotateLocation(coordinates[0]),
+        λ0 = location[0],
+        φ0 = location[1],
+        point = transformPoint(λ0, φ0),
+        λ1,
+        φ1,
+        δλ,
+        sλ0,
+        n;
     context.moveTo(point[0], point[1]);
-    while (++i < n) context.lineTo((point = p(coordinates[i]))[0], point[1]);
+    for (var i = 0; i < n; i++) {
+      location = rotateLocation(coordinates[i]);
+      λ1 = location[0];
+      φ1 = location[1];
+      δλ = (Math.abs(λ1 - λ0) + 2 * π) % (2 * π);
+      sλ0 = λ0 > 0;
+      if (i && sλ0 ^ (λ1 > 0) && (δλ >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
+        φ0 = intersect(λ0, φ0, λ1, φ1);
+        context.lineTo((point = transformPoint(sλ0 ? π : -π, φ0))[0], point[1]);
+        context.moveTo((point = transformPoint(sλ0 ? -π : π, φ0))[0], point[1]);
+      }
+      context.lineTo((point = transformPoint(λ0 = λ1, φ0 = φ1))[0], point[1]);
+    }
   };
 
   p.ring = function(coordinates, context) {
     p.line(coordinates, context);
     context.closePath();
   };
+
+  function intersect(λ0, φ0, λ1, φ1) {
+    var cosφ0,
+        cosφ1,
+        sinλ0_λ1 = Math.sin(λ0 - λ1);
+    return Math.abs(sinλ0_λ1) > ε
+        ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1)
+                   - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0))
+                   / (cosφ0 * cosφ1 * sinλ0_λ1))
+        : (φ0 + φ1) / 2;
+  }
+
+  function rotateLocation(coordinates) {
+    return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+  }
+
+  function transformPoint(λ, φ) {
+    var point = project(λ, φ);
+    return [point[0] * k + δx, δy - point[1] * k];
+  }
 
   p.scale = function(_) {
     if (!arguments.length) return k;
@@ -74,7 +116,7 @@ function d3_geo_projectionMutator(projectAt) {
   };
 
   function reset() {
-    projectRotate = d3_geo_compose(d3_geo_rotation(δλ, δφ, δγ), project);
+    projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
     var center = project(λ, φ);
     δx = x - center[0] * k;
     δy = y + center[1] * k;
