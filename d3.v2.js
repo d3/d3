@@ -2013,8 +2013,20 @@
   function d3_geo_mercator(λ, φ) {
     return [ λ / (2 * π), Math.max(-.5, Math.min(+.5, Math.log(Math.tan(π / 4 + φ / 2)) / (2 * π))) ];
   }
-  function d3_path_circle(radius) {
+  function d3_geo_path_circle(radius) {
     return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
+  }
+  function d3_geo_path_projectLine(projection) {
+    return projection.line || function(lineString) {
+      return [ lineString.map(projection) ];
+    };
+  }
+  function d3_geo_path_projectPolygon(projection) {
+    return projection.polygon || function(polygon) {
+      return [ polygon.map(function(ring) {
+        return ring.map(projection);
+      }) ];
+    };
   }
   function d3_geo_projection(project) {
     return d3_geo_projectionMutator(function() {
@@ -6292,11 +6304,32 @@
   };
   d3.geo.path = function() {
     function path(d, i) {
-      if (typeof pointRadius === "function") pointCircle = d3_path_circle(pointRadius.apply(this, arguments));
+      if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
       pathType(d);
       var result = buffer.length ? buffer.join("") : null;
       buffer = [];
       return result;
+    }
+    function multiLineString(lineStrings) {
+      for (var i = 0, n = lineStrings.length; i < n; ++i) {
+        var lineString = lineStrings[i];
+        buffer.push("M");
+        for (var j = 0, m = lineString.length; j < m; ++j) buffer.push(lineString[j], "L");
+        buffer.pop();
+      }
+    }
+    function multiPolygon(polygons) {
+      for (var i = 0, n = polygons.length; i < n; ++i) {
+        var polygon = polygons[i];
+        for (var j = 0, m = polygon.length; j < m; ++j) {
+          var ring = polygon[j], k = -1, p;
+          if ((p = ring.length - 1) > 0) {
+            buffer.push("M");
+            while (++k < p) buffer.push(ring[k], "L");
+            buffer[buffer.length - 1] = "Z";
+          }
+        }
+      }
     }
     function polygonArea(coordinates) {
       var sum = area(coordinates[0]), i = 0, n = coordinates.length;
@@ -6318,7 +6351,7 @@
     function area(coordinates) {
       return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
     }
-    var pointRadius = 4.5, pointCircle = d3_path_circle(pointRadius), projection = d3.geo.albersUsa(), buffer = [];
+    var pointRadius = 4.5, pointCircle = d3_geo_path_circle(pointRadius), projection = d3.geo.albersUsa(), projectLine = d3_geo_path_projectLine(projection), projectPolygon = d3_geo_path_projectPolygon(projection), buffer = [];
     var pathType = d3_geo_type({
       FeatureCollection: function(o) {
         var features = o.features, i = -1, n = features.length;
@@ -6335,49 +6368,21 @@
         while (++i < n) buffer.push("M", projection(coordinates[i]), pointCircle);
       },
       LineString: function(o) {
-        var coordinates = o.coordinates, i = -1, n = coordinates.length;
-        buffer.push("M");
-        while (++i < n) buffer.push(projection(coordinates[i]), "L");
-        buffer.pop();
+        multiLineString(projectLine(o.coordinates));
       },
       MultiLineString: function(o) {
-        var coordinates = o.coordinates, i = -1, n = coordinates.length, subcoordinates, j, m;
-        while (++i < n) {
-          subcoordinates = coordinates[i];
-          j = -1;
-          m = subcoordinates.length;
-          buffer.push("M");
-          while (++j < m) buffer.push(projection(subcoordinates[j]), "L");
-          buffer.pop();
+        var lineStrings = o.coordinates;
+        for (var i = 0, n = lineStrings.length; i < n; ++i) {
+          multiLineString(projectLine(lineStrings[i]));
         }
       },
       Polygon: function(o) {
-        var coordinates = o.coordinates, i = -1, n = coordinates.length, subcoordinates, j, m;
-        while (++i < n) {
-          subcoordinates = coordinates[i];
-          j = -1;
-          if ((m = subcoordinates.length - 1) > 0) {
-            buffer.push("M");
-            while (++j < m) buffer.push(projection(subcoordinates[j]), "L");
-            buffer[buffer.length - 1] = "Z";
-          }
-        }
+        multiPolygon(projectPolygon(o.coordinates));
       },
       MultiPolygon: function(o) {
-        var coordinates = o.coordinates, i = -1, n = coordinates.length, subcoordinates, j, m, subsubcoordinates, k, p;
-        while (++i < n) {
-          subcoordinates = coordinates[i];
-          j = -1;
-          m = subcoordinates.length;
-          while (++j < m) {
-            subsubcoordinates = subcoordinates[j];
-            k = -1;
-            if ((p = subsubcoordinates.length - 1) > 0) {
-              buffer.push("M");
-              while (++k < p) buffer.push(projection(subsubcoordinates[k]), "L");
-              buffer[buffer.length - 1] = "Z";
-            }
-          }
+        var polygons = o.coordinates;
+        for (var i = 0, n = polygons.length; i < n; ++i) {
+          multiPolygon(projectPolygon(polygons[i]));
         }
       },
       GeometryCollection: function(o) {
@@ -6429,12 +6434,13 @@
     });
     path.projection = function(_) {
       if (!arguments.length) return projection;
-      projection = _;
+      projectLine = d3_geo_path_projectLine(projection = _);
+      projectPolygon = d3_geo_path_projectPolygon(projection);
       return path;
     };
     path.pointRadius = function(x) {
       if (!arguments.length) return pointRadius;
-      if (typeof x === "function") pointRadius = x; else pointCircle = d3_path_circle(pointRadius = +x);
+      if (typeof x === "function") pointRadius = x; else pointCircle = d3_geo_path_circle(pointRadius = +x);
       return path;
     };
     return path;
