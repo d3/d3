@@ -4,12 +4,13 @@
 d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_geo_path_circle(pointRadius),
-      projection = d3.geo.albersUsa();
+      projection = d3.geo.albersUsa(),
+      context;
 
   function path(object) {
     if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
     var buffer = [];
-    pathObject(object, {
+    pathObject(object, context || {
       point: function(x, y) { buffer.push("M", x, ",", y, pointCircle); },
       moveTo: function(x, y) { buffer.push("M", x, ",", y); },
       lineTo: function(x, y) { buffer.push("L", x, ",", y); },
@@ -98,6 +99,12 @@ d3.geo.path = function() {
   path.projection = function(_) {
     if (!arguments.length) return projection;
     projection = _;
+    return path;
+  };
+
+  path.context = function(_) {
+    if (!arguments.length) return context;
+    context = _;
     return path;
   };
 

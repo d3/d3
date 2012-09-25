@@ -6307,7 +6307,7 @@
     function path(object) {
       if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
       var buffer = [];
-      pathObject(object, {
+      pathObject(object, context || {
         point: function(x, y) {
           buffer.push("M", x, ",", y, pointCircle);
         },
@@ -6322,10 +6322,6 @@
         }
       });
       return buffer.length ? buffer.join("") : null;
-    }
-    function pathObject(object, context) {
-      var pathType = pathObjectByType.get(object.type);
-      if (pathType) pathType(object, context);
     }
     function pathGeometry(geometry, context) {
       var pathType = pathGeometryByType.get(geometry.type);
@@ -6367,7 +6363,11 @@
       var coordinates = polygon.coordinates, i = -1, n = coordinates.length;
       while (++i < n) projection.ring(coordinates[i], context);
     }
-    var pointRadius = 4.5, pointCircle = d3_geo_path_circle(pointRadius), projection = d3.geo.albersUsa();
+    function pathObject(object, context) {
+      var pathType = pathObjectByType.get(object.type);
+      if (pathType) pathType(object, context);
+    }
+    var pointRadius = 4.5, pointCircle = d3_geo_path_circle(pointRadius), projection, context;
     var pathObjectByType = d3.map({
       Feature: pathFeature,
       FeatureCollection: pathFeatureCollection,
@@ -6393,12 +6393,17 @@
       projection = _;
       return path;
     };
+    path.context = function(_) {
+      if (!arguments.length) return context;
+      context = _;
+      return path;
+    };
     path.pointRadius = function(x) {
       if (!arguments.length) return pointRadius;
       if (typeof x === "function") pointRadius = x; else pointCircle = d3_geo_path_circle(pointRadius = +x);
       return path;
     };
-    return path;
+    return path.projection(d3.geo.albersUsa());
   };
   d3.geo.projection = d3_geo_projection;
   var d3_geo_stereographic = d3_geo_azimuthal(function(cosλcosφ) {
