@@ -7,6 +7,7 @@ function d3_geo_projection(project) {
 // TODO Expose this API? Not that happy with it.
 function d3_geo_projectionMutator(projectAt) {
   var project,
+      rotate,
       projectRotate,
       k = 150,
       x = 480,
@@ -34,16 +35,8 @@ function d3_geo_projectionMutator(projectAt) {
     context.point(point[0], point[1]);
   };
 
-  p.line = function(coordinates, context) {
-    var point = p(coordinates[0]), i = 0, n = coordinates.length;
-    context.moveTo(point[0], point[1]);
-    while (++i < n) context.lineTo((point = p(coordinates[i]))[0], point[1]);
-  };
-
-  p.ring = function(coordinates, context) {
-    p.line(coordinates, context);
-    context.closePath();
-  };
+  p.line = d3_geo_antemeridianLine(rotateLocation, transformPoint);
+  p.ring = d3_geo_antemeridianRing(rotateLocation, transformPoint);
 
   p.scale = function(_) {
     if (!arguments.length) return k;
@@ -74,11 +67,20 @@ function d3_geo_projectionMutator(projectAt) {
   };
 
   function reset() {
-    projectRotate = d3_geo_compose(d3_geo_rotation(δλ, δφ, δγ), project);
+    projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
     var center = project(λ, φ);
     δx = x - center[0] * k;
     δy = y + center[1] * k;
     return p;
+  }
+
+  function rotateLocation(coordinates) {
+    return rotate(coordinates[0] * π / 180, coordinates[1] * π / 180);
+  }
+
+  function transformPoint(λ, φ) {
+    var point = project(λ, φ);
+    return [point[0] * k + δx, δy - point[1] * k];
   }
 
   return function() {

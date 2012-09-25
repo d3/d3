@@ -1912,6 +1912,51 @@
     };
     return albers;
   }
+  function d3_geo_antemeridianLine(rotate, p) {
+    return function(lineString, context) {
+      d3_geo_antemeridianClipLine(rotate, lineString, d3_geo_antemeridianContext(p, context));
+    };
+  }
+  function d3_geo_antemeridianRing(rotate, p) {
+    return function(ring, context) {
+      d3_geo_antemeridianClipLine(rotate, ring, d3_geo_antemeridianContext(p, context));
+      context.closePath();
+    };
+  }
+  function d3_geo_antemeridianClipLine(rotate, lineString, context) {
+    if (!(n = lineString.length)) return;
+    var point = rotate(lineString[0]);
+    context.moveTo(λ0 = point[0], φ0 = point[1]);
+    for (var λ0, φ0, i = 0, j = 0, n; j < n; j++) {
+      point = rotate(lineString[j]);
+      var λ1 = point[0], φ1 = point[1], δλ = (Math.abs(λ1 - λ0) + 2 * π) % (2 * π), sλ0 = λ0 > 0;
+      if (j > i && sλ0 ^ λ1 > 0 && (δλ >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
+        φ0 = d3_geo_antemeridianIntersect(λ0, φ0, λ1, φ1);
+        context.lineTo(sλ0 ? π : -π, φ0);
+        context.moveTo(sλ0 ? -π : π, φ0);
+      }
+      context.lineTo(λ0 = λ1, φ0 = φ1);
+    }
+  }
+  function d3_geo_antemeridianIntersect(λ0, φ0, λ1, φ1) {
+    var cosφ0, cosφ1, sinλ0_λ1 = Math.sin(λ0 - λ1);
+    return Math.abs(sinλ0_λ1) > ε ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1) - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0)) / (cosφ0 * cosφ1 * sinλ0_λ1)) : (φ0 + φ1) / 2;
+  }
+  function d3_geo_antemeridianContext(p, context) {
+    return {
+      moveTo: function(x, y) {
+        var point = p(x, y);
+        context.moveTo(point[0], point[1]);
+      },
+      lineTo: function(x, y) {
+        var point = p(x, y);
+        context.lineTo(point[0], point[1]);
+      },
+      closePath: function() {
+        context.closePath();
+      }
+    };
+  }
   function d3_geo_bounds(o, f) {
     if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
   }
@@ -2031,26 +2076,26 @@
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
     function reset() {
-      projectRotate = d3_geo_compose(d3_geo_rotation(δλ, δφ, δγ), project);
+      projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
       var center = project(λ, φ);
       δx = x - center[0] * k;
       δy = y + center[1] * k;
       return p;
     }
-    var project, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y;
+    function rotateLocation(coordinates) {
+      return rotate(coordinates[0] * π / 180, coordinates[1] * π / 180);
+    }
+    function transformPoint(λ, φ) {
+      var point = project(λ, φ);
+      return [ point[0] * k + δx, δy - point[1] * k ];
+    }
+    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y;
     p.point = function(coordinates, context) {
       var point = p(coordinates);
       context.point(point[0], point[1]);
     };
-    p.line = function(coordinates, context) {
-      var point = p(coordinates[0]), i = 0, n = coordinates.length;
-      context.moveTo(point[0], point[1]);
-      while (++i < n) context.lineTo((point = p(coordinates[i]))[0], point[1]);
-    };
-    p.ring = function(coordinates, context) {
-      p.line(coordinates, context);
-      context.closePath();
-    };
+    p.line = d3_geo_antemeridianLine(rotateLocation, transformPoint);
+    p.ring = d3_geo_antemeridianRing(rotateLocation, transformPoint);
     p.scale = function(_) {
       if (!arguments.length) return k;
       k = +_;
@@ -2707,7 +2752,7 @@
   d3 = {
     version: "2.10.2"
   };
-  var π = Math.PI, d3_radians = π / 180, d3_degrees = 180 / π;
+  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
   var d3_array = d3_arraySlice;
   try {
     d3_array(document.documentElement.childNodes)[0].nodeType;
@@ -6218,12 +6263,12 @@
     }
     var x1 = 180, x0 = -x1, y1 = 90, y0 = -y1, dx = 22.5, dy = dx;
     graticule.lines = function() {
-      var xLines = d3.range(Math.ceil(x0 / dx) * dx, y0, dx).map(function(x) {
-        return [ y0, y1 ].map(function(y) {
+      var xSteps = d3.range(Math.ceil(x0 / dx) * dx, x1, dx).concat(x1), ySteps = d3.range(Math.ceil(y0 / dy) * dy, y1, dy).concat(y1), xLines = xSteps.map(function(x) {
+        return ySteps.map(function(y) {
           return [ x, y ];
         });
-      }), yLines = d3.range(Math.ceil(x1 / dy) * dy, y1, dy).map(function(y) {
-        return [ x0, x1 ].map(function(x) {
+      }), yLines = ySteps.map(function(y) {
+        return xSteps.map(function(x) {
           return [ x, y ];
         });
       });

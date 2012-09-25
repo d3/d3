@@ -185,6 +185,7 @@ d3.geo.js: \
 	src/geo/geo.js \
 	src/geo/albers-usa.js \
 	src/geo/albers.js \
+	src/geo/antemeridian.js \
 	src/geo/azimuthal-equal-area.js \
 	src/geo/azimuthal-equidistant.js \
 	src/geo/bounds.js \
