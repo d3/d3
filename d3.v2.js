@@ -1925,21 +1925,19 @@
   }
   function d3_geo_antemeridianClipLine(rotate, project, lineString, context) {
     if (!(n = lineString.length)) return;
-    var λ0, φ0, λ1, φ1, δλ, sλ0, n, location = rotate(lineString[0]), point = project(λ0 = location[0], φ0 = location[1]), intersection;
+    var λ0, φ0, λ1, φ1, δλ, sλ0, n, location = rotate(lineString[0]), point = project(λ0 = location[0], φ0 = location[1]);
     context.moveTo(point[0], point[1]);
     for (var i = 0, j = 0; j < n; j++) {
-      location = rotate(lineString[j]);
-      point = project(λ1 = location[0], φ1 = location[1]);
+      λ1 = (location = rotate(lineString[j]))[0];
+      φ1 = location[1];
       δλ = (Math.abs(λ1 - λ0) + 2 * π) % (2 * π);
       sλ0 = λ0 > 0;
       if (j > i && sλ0 ^ λ1 > 0 && (δλ >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
         φ0 = d3_geo_antemeridianIntersect(λ0, φ0, λ1, φ1);
-        context.lineTo((intersection = project(sλ0 ? π : -π, φ0))[0], intersection[1]);
-        context.moveTo((intersection = project(sλ0 ? -π : π, φ0))[0], intersection[1]);
+        context.lineTo((point = project(sλ0 ? π : -π, φ0))[0], point[1]);
+        context.moveTo((point = project(sλ0 ? -π : π, φ0))[0], point[1]);
       }
-      context.lineTo(point[0], point[1]);
-      λ0 = λ1;
-      φ0 = φ1;
+      context.lineTo((point = project(λ0 = λ1, φ0 = φ1))[0], point[1]);
     }
   }
   function d3_geo_antemeridianIntersect(λ0, φ0, λ1, φ1) {
