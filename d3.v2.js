@@ -2068,7 +2068,26 @@
       }
     };
     p.ring = function(coordinates, context) {
-      p.line(coordinates, context);
+      if (!(n = coordinates.length)) return;
+      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point = projectPoint(λ0, φ0) ], λ1, φ1, δλ, sλ0, i = 0, first = true, n;
+      while (++i < n) {
+        point = rotatePoint(coordinates[i]);
+        λ1 = point[0];
+        φ1 = point[1];
+        δλ = Math.abs(λ1 - λ0);
+        sλ0 = λ0 > 0;
+        if (sλ0 ^ λ1 > 0 && (δλ >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
+          φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
+          point = projectPoint(sλ0 ? π : -π, φ0);
+          if (first) segment.push(point); else context.lineTo(point[0], point[1]), context.closePath();
+          context.moveTo((point = projectPoint(sλ0 ? -π : π, φ0))[0], point[1]);
+          first = false;
+        }
+        point = projectPoint(λ0 = λ1, φ0 = φ1);
+        if (first) segment.push(point); else context.lineTo(point[0], point[1]);
+      }
+      if (first) context.moveTo((point = segment[0])[0], point[1]);
+      for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
       context.closePath();
     };
     p.scale = function(_) {
