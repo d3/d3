@@ -116,33 +116,20 @@ d3.geo.path = function() {
   }, 0);
 
   function multiLineString(lineStrings) {
-    var lineString,
-        j,
-        m;
     for (var i = 0, n = lineStrings.length; i < n; ++i) {
-      lineString = lineStrings[i];
-      j = -1;
-      m = lineString.length;
+      var lineString = lineStrings[i];
       buffer.push("M");
-      while (++j < m) buffer.push(lineString[j], "L");
+      for (var j = 0, m = lineString.length; j < m; ++j) buffer.push(lineString[j], "L");
       buffer.pop();
     }
   }
 
   function multiPolygon(polygons) {
-    var polygon,
-        j,
-        m,
-        ring,
-        k,
-        p;
     for (var i = 0, n = polygons.length; i < n; ++i) {
-      polygon = polygons[i];
-      j = -1;
-      m = polygon.length;
-      while (++j < m) {
-        ring = polygon[j];
-        k = -1;
+      var polygon = polygons[i];
+      for (var j = 0, m = polygon.length; j < m; ++j) {
+        var ring = polygon[j],
+            k = -1, p;
         if ((p = ring.length - 1) > 0) {
           buffer.push("M");
           while (++k < p) buffer.push(ring[k], "L");
