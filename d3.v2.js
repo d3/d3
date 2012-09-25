@@ -2057,7 +2057,7 @@
         point = rotatePoint(coordinates[i]);
         λ1 = point[0];
         φ1 = point[1];
-        δλ = (Math.abs(λ1 - λ0) + 2 * π) % (2 * π);
+        δλ = Math.abs(λ1 - λ0);
         sλ0 = λ0 > 0;
         if (sλ0 ^ λ1 > 0 && (δλ >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
