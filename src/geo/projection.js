@@ -73,7 +73,8 @@ function d3_geo_projectionMutator(projectAt) {
         δλ,
         sλ0,
         i = 0,
-        first = true,
+        first = true, // true when no intersections have been found yet.
+        start, // the last start point (moveTo call).
         n;
     while (++i < n) {
       point = rotatePoint(coordinates[i]);
@@ -85,8 +86,12 @@ function d3_geo_projectionMutator(projectAt) {
         φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
         point = projectPoint(sλ0 ? π : -π, φ0);
         if (first) segment.push(point);
-        else context.lineTo(point[0], point[1]), context.closePath();
-        context.moveTo((point = projectPoint(sλ0 ? -π : π, φ0))[0], point[1]);
+        else {
+          // TODO interpolate along cut edge.
+          context.lineTo(point[0], point[1]);
+          context.closePath();
+        }
+        context.moveTo((start = projectPoint(sλ0 ? -π : π, φ0))[0], start[1]);
         first = false;
       }
       point = projectPoint(λ0 = λ1, φ0 = φ1);
@@ -95,6 +100,8 @@ function d3_geo_projectionMutator(projectAt) {
     }
     if (first) context.moveTo((point = segment[0])[0], point[1]);
     for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
+    // TODO interpolate along cut edge.
+    // if (start) ...
     context.closePath();
   };
 

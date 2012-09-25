@@ -2069,7 +2069,7 @@
     };
     p.ring = function(coordinates, context) {
       if (!(n = coordinates.length)) return;
-      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point = projectPoint(λ0, φ0) ], λ1, φ1, δλ, sλ0, i = 0, first = true, n;
+      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point = projectPoint(λ0, φ0) ], λ1, φ1, δλ, sλ0, i = 0, first = true, start, n;
       while (++i < n) {
         point = rotatePoint(coordinates[i]);
         λ1 = point[0];
@@ -2079,8 +2079,11 @@
         if (sλ0 ^ λ1 > 0 && (δλ >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
           point = projectPoint(sλ0 ? π : -π, φ0);
-          if (first) segment.push(point); else context.lineTo(point[0], point[1]), context.closePath();
-          context.moveTo((point = projectPoint(sλ0 ? -π : π, φ0))[0], point[1]);
+          if (first) segment.push(point); else {
+            context.lineTo(point[0], point[1]);
+            context.closePath();
+          }
+          context.moveTo((start = projectPoint(sλ0 ? -π : π, φ0))[0], start[1]);
           first = false;
         }
         point = projectPoint(λ0 = λ1, φ0 = φ1);
