@@ -6,3 +6,6 @@ var d3_geo_azimuthalEqualArea = d3_geo_azimuthal(
 d3.geo.azimuthalEqualArea = function() {
   return d3_geo_projection(d3_geo_azimuthalEqualArea);
 };
+
+// TODO Is this the right way to expose?
+d3.geo.azimuthalEqualArea.raw = d3_geo_azimuthalEqualArea;

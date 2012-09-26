@@ -6161,6 +6161,7 @@
   d3.geo.azimuthalEqualArea = function() {
     return d3_geo_projection(d3_geo_azimuthalEqualArea);
   };
+  d3.geo.azimuthalEqualArea.raw = d3_geo_azimuthalEqualArea;
   var d3_geo_azimuthalEquidistant = d3_geo_azimuthal(function(cosλcosφ) {
     var c = Math.acos(cosλcosφ);
     return c && c / Math.sin(c);
