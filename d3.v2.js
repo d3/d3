@@ -2082,14 +2082,14 @@
     p.line = function(coordinates, context) {
       if (!(n = coordinates.length)) return;
       context = resample(context);
-      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, δλ, i = 0, n;
+      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, i = 0, n;
       context.moveTo(λ0, φ0);
       while (++i < n) {
         point = rotatePoint(coordinates[i]);
         λ1 = point[0];
         φ1 = point[1];
         sλ1 = λ1 > 0 ? π : -π;
-        if (sλ0 !== sλ1 && (δλ = Math.abs(λ1 - λ0)) >= π) {
+        if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
           context.lineTo(sλ0, φ0);
           context.moveTo(sλ1, φ0);
@@ -2101,13 +2101,13 @@
     p.ring = function(coordinates, context) {
       if (!(n = coordinates.length)) return;
       context = resample(context);
-      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point ], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, segmentSide, δλ, i = 0, first = true, side, n;
+      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point ], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, segmentSide, i = 0, first = true, side, n;
       while (++i < n) {
         point = rotatePoint(coordinates[i]);
         λ1 = point[0];
         φ1 = point[1];
         sλ1 = λ1 > 0 ? π : -π;
-        if (sλ0 !== sλ1 && (δλ = Math.abs(λ1 - λ0)) >= π) {
+        if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
           if (first) segment.push([ sλ0, φ0 ]), segmentSide = sλ0; else {
             context.lineTo(sλ0, φ0);
