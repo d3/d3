@@ -2032,13 +2032,19 @@
     }
     function resample(context) {
       function lineTo(x0, y0, x, y, λ0, φ0, λ, φ, depth) {
-        var dx, dy;
+        var dx, dy, λ1, φ1;
         if (depth && (dx = x - x0) * dx + (dy = y - y0) * dy > δ2) {
-          var resamples = arc.source([ λ0 * d3_degrees, φ0 * d3_degrees ])([ λ * d3_degrees, φ * d3_degrees ]).coordinates;
-          for (var i = 0, n = resamples.length, point; ++i < n; ) {
-            point = projectPoint((point = resamples[i])[0] * d3_radians, point[1] * d3_radians);
-            context.lineTo(point[0], point[1]);
+          if (Math.abs(φ0 - φ) < ε && Math.abs(Math.abs(φ) - π / 2) < ε) {
+            λ1 = (λ0 + λ) / 2;
+            φ1 = φ;
+          } else {
+            var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ = Math.sin(φ), cosφ = Math.cos(φ), cosΩ = sinφ0 * sinφ + cosφ0 * cosφ * Math.cos(λ - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x1 = k * cosφ0 * Math.cos(λ0) + k * cosφ * Math.cos(λ), y1 = k * cosφ0 * Math.sin(λ0) + k * cosφ * Math.sin(λ), z1 = k * sinφ0 + k * sinφ;
+            λ1 = Math.atan2(y1, x1);
+            φ1 = Math.asin(Math.max(-1, Math.min(1, z1)));
           }
+          var point = projectPoint(λ1, φ1);
+          lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ1, φ1, --depth);
+          lineTo(x0, y0, x, y, λ1, φ1, λ, φ, depth);
         } else context.lineTo(x, y);
       }
       var λ0, φ0, x0, y0, δ2 = 100;
@@ -2049,7 +2055,7 @@
         },
         lineTo: function(λ, φ) {
           var point = projectPoint(λ, φ);
-          lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 2);
+          lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 10);
         },
         closePath: function() {
           context.closePath();
@@ -2130,7 +2136,6 @@
       if (!first && side !== segmentSide) interpolateTo(side, context);
       context.closePath();
     };
-    var arc = d3.geo.greatArc().target(d3_identity).precision(2);
     p.scale = function(_) {
       if (!arguments.length) return k;
       k = +_;
