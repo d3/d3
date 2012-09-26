@@ -2034,7 +2034,7 @@
       function lineTo(x0, y0, x, y, λ0, φ0, λ, φ, depth) {
         var dx, dy;
         if (depth && (dx = x - x0) * dx + (dy = y - y0) * dy > δ2) {
-          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ = Math.sin(φ), cosφ = Math.cos(φ), cosΩ = sinφ0 * sinφ + cosφ0 * cosφ * Math.cos(λ - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x1 = k * cosφ0 * Math.cos(λ0) + k * cosφ * Math.cos(λ), y1 = k * cosφ0 * Math.sin(λ0) + k * cosφ * Math.sin(λ), z1 = k * sinφ0 + k * sinφ, λ1 = Math.abs(y1) < ε ? (λ0 + λ) / 2 : Math.atan2(y1, x1), φ1 = Math.asin(Math.max(-1, Math.min(1, z1))), point = projectPoint(λ1, φ1);
+          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ = Math.sin(φ), cosφ = Math.cos(φ), cosΩ = sinφ0 * sinφ + cosφ0 * cosφ * Math.cos(λ - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x1 = k * cosφ0 * Math.cos(λ0) + k * cosφ * Math.cos(λ), y1 = k * cosφ0 * Math.sin(λ0) + k * cosφ * Math.sin(λ), z1 = k * sinφ0 + k * sinφ, λ1 = Math.abs(x1) < ε || Math.abs(y1) < ε ? (λ0 + λ) / 2 : Math.atan2(y1, x1), φ1 = Math.asin(Math.max(-1, Math.min(1, z1))), point = projectPoint(λ1, φ1);
           lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ1, φ1, --depth);
           lineTo(x0, y0, x, y, λ1, φ1, λ, φ, depth);
         } else context.lineTo(x, y);
@@ -2047,7 +2047,7 @@
         },
         lineTo: function(λ, φ) {
           var point = projectPoint(λ, φ);
-          lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 32);
+          lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 16);
         },
         closePath: function() {
           context.closePath();
