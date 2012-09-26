@@ -5,18 +5,21 @@ d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_geo_path_circle(pointRadius),
       projection = d3.geo.albersUsa(),
-      context;
+      buffer = [],
+      bufferContext = {
+        point: function(x, y) { buffer.push("M", x, ",", y, pointCircle); },
+        moveTo: function(x, y) { buffer.push("M", x, ",", y); },
+        lineTo: function(x, y) { buffer.push("L", x, ",", y); },
+        closePath: function() { buffer.push("Z"); }
+      },
+      context = bufferContext;
 
   function path(object) {
     if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
-    var buffer = [];
-    pathObject(object, context || {
-      point: function(x, y) { buffer.push("M", x, ",", y, pointCircle); },
-      moveTo: function(x, y) { buffer.push("M", x, ",", y); },
-      lineTo: function(x, y) { buffer.push("L", x, ",", y); },
-      closePath: function() { buffer.push("Z"); }
-    });
-    return buffer.length ? buffer.join("") : null;
+    pathObject(object, context);
+    var path = buffer.length ? buffer.join("") : null;
+    buffer = [];
+    return path;
   }
 
   function pathObject(object, context) {
