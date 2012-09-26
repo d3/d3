@@ -53,7 +53,7 @@ function d3_geo_projectionMutator(projectAt) {
       λ1 = point[0];
       φ1 = point[1];
       sλ1 = λ1 > 0 ? π : -π;
-      if (sλ0 !== sλ1 && ((δλ = Math.abs(λ1 - λ0)) >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
+      if (sλ0 !== sλ1 && (δλ = Math.abs(λ1 - λ0)) >= π) {
         φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
         context.lineTo((point = projectPoint(sλ0, φ0))[0], point[1]);
         context.moveTo((point = projectPoint(sλ1, φ0))[0], point[1]);
