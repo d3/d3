@@ -37,6 +37,7 @@ function d3_geo_projectionMutator(projectAt) {
 
   p.line = function(coordinates, context) {
     if (!(n = coordinates.length)) return;
+    context = resample(context);
     var point = rotatePoint(coordinates[0]),
         λ0 = point[0],
         φ0 = point[1],
@@ -47,7 +48,7 @@ function d3_geo_projectionMutator(projectAt) {
         δλ,
         i = 0,
         n;
-    context.moveTo((point = projectPoint(λ0, φ0))[0], point[1]);
+    context.moveTo(λ0, φ0);
     while (++i < n) {
       point = rotatePoint(coordinates[i]);
       λ1 = point[0];
@@ -55,20 +56,21 @@ function d3_geo_projectionMutator(projectAt) {
       sλ1 = λ1 > 0 ? π : -π;
       if (sλ0 !== sλ1 && (δλ = Math.abs(λ1 - λ0)) >= π) {
         φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-        context.lineTo((point = projectPoint(sλ0, φ0))[0], point[1]);
-        context.moveTo((point = projectPoint(sλ1, φ0))[0], point[1]);
+        context.lineTo(sλ0, φ0);
+        context.moveTo(sλ1, φ0);
       }
-      context.lineTo((point = projectPoint(λ0 = λ1, φ0 = φ1))[0], point[1]);
+      context.lineTo(λ0 = λ1, φ0 = φ1);
       sλ0 = sλ1;
     }
   };
 
   p.ring = function(coordinates, context) {
     if (!(n = coordinates.length)) return;
+    context = resample(context);
     var point = rotatePoint(coordinates[0]),
         λ0 = point[0],
         φ0 = point[1],
-        segment = [point = projectPoint(λ0, φ0)],
+        segment = [point],
         λ1,
         φ1,
         sλ0 = λ0 > 0 ? π : -π,
@@ -86,21 +88,21 @@ function d3_geo_projectionMutator(projectAt) {
       sλ1 = λ1 > 0 ? π : -π;
       if (sλ0 !== sλ1 && (δλ = Math.abs(λ1 - λ0)) >= π) {
         φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-        point = projectPoint(sλ0, φ0);
-        if (first) segment.push(point), segmentSide = sλ0;
+        if (first) segment.push([sλ0, φ0]), segmentSide = sλ0;
         else {
-          context.lineTo(point[0], point[1]);
+          context.lineTo(sλ0, φ0);
           if (sλ0 !== side) interpolateTo(side, context);
           context.closePath();
         }
-        context.moveTo((point = projectPoint(sλ1, φ0))[0], point[1]);
+        context.moveTo(sλ1, φ0);
         side = sλ1;
         first = false;
       }
-      point = projectPoint(λ0 = λ1, φ0 = φ1);
-      sλ0 = sλ1;
       if (first) segment.push(point);
-      else context.lineTo(point[0], point[1]);
+      else context.lineTo(λ1, φ1);
+      λ0 = λ1;
+      φ0 = φ1;
+      sλ0 = sλ1;
     }
     if (first) context.moveTo((point = segment[0])[0], point[1]);
     for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
@@ -108,13 +110,47 @@ function d3_geo_projectionMutator(projectAt) {
     context.closePath();
   };
 
+  function resample(context) {
+    var λ0,
+        φ0,
+        x0,
+        y0,
+        δ2 = 100; // (precision in px)².
+
+    return {
+      moveTo: function(λ, φ) {
+        var point = projectPoint(λ0 = λ, φ0 = φ);
+        context.moveTo(x0 = point[0], y0 = point[1]);
+      },
+      lineTo: function(λ, φ) {
+        var point = projectPoint(λ, φ);
+        lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 2);
+      },
+      closePath: function() {
+        context.closePath();
+      }
+    };
+
+    function lineTo(x0, y0, x, y, λ0, φ0, λ, φ, depth) {
+      var dx,
+          dy;
+      if (depth && (dx = x - x0) * dx + (dy = y - y0) * dy > δ2) {
+        var λ1 = (λ0 + λ) / 2,
+            φ1 = φ,
+            point = projectPoint(λ1, φ1);
+        lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ1, φ1, --depth);
+        lineTo(x0, y0, x, y, λ1, φ1, λ, φ, depth);
+      } else context.lineTo(x, y);
+    }
+  }
+
   function interpolateTo(s, context) {
     // TODO cache
     var point,
         φ = s / 2;
-    context.lineTo((point = projectPoint(-s, φ))[0], point[1]);
-    context.lineTo((point = projectPoint( 0, φ))[0], point[1]);
-    context.lineTo((point = projectPoint( s, φ))[0], point[1]);
+    context.lineTo(-s, φ);
+    context.lineTo( 0, φ);
+    context.lineTo( s, φ);
   }
 
   // TODO remove redundant code with p(coordinates)
