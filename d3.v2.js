@@ -6309,9 +6309,9 @@
         geometries: graticule.lines()
       };
     }
-    var x1 = 180, x0 = -x1, y1 = 90, y0 = -y1, dx = 22.5, dy = dx, δx = 2, δy = 2;
+    var x1 = 180 - ε, x0 = -x1, y1 = 90 - ε, y0 = -y1, dx = 22.5, dy = dx, δx = 2, δy = 2;
     graticule.lines = function() {
-      var xSteps = d3.range(x0, x1 - δx / 2, δx).concat(x1), ySteps = d3.range(y0, y1 - δy / 2, δy).concat(y1), xLines = d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(function(x) {
+      var xSteps = d3.range(x0, x1 - ε, δx).concat(x1), ySteps = d3.range(y0, y1 - ε, δy).concat(y1), xLines = d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(function(x) {
         return ySteps.map(function(y) {
           return [ x, y ];
         });
@@ -6328,9 +6328,10 @@
       });
     };
     graticule.outline = function() {
+      var x2 = (x0 + x1) / 2;
       return {
         type: "Polygon",
-        coordinates: [ [ [ x0, y0 ], [ x1, y0 ], [ x1, y1 ], [ x0, y1 ], [ x0, x0 ] ] ]
+        coordinates: [ [ [ x0, y1 ], [ x2, y1 ], [ x1, y1 ], [ x1, y0 ], [ x2, y0 ], [ x0, y0 ], [ x0, y1 ] ] ]
       };
     };
     graticule.extent = function(_) {
