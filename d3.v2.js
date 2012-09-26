@@ -2039,7 +2039,7 @@
             φ1 = φ;
           } else {
             var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ = Math.sin(φ), cosφ = Math.cos(φ), cosΩ = sinφ0 * sinφ + cosφ0 * cosφ * Math.cos(λ - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x1 = k * cosφ0 * Math.cos(λ0) + k * cosφ * Math.cos(λ), y1 = k * cosφ0 * Math.sin(λ0) + k * cosφ * Math.sin(λ), z1 = k * sinφ0 + k * sinφ;
-            λ1 = Math.atan2(y1, x1);
+            λ1 = Math.abs(y1) < ε ? (λ0 + λ) / 2 : Math.atan2(y1, x1);
             φ1 = Math.asin(Math.max(-1, Math.min(1, z1)));
           }
           var point = projectPoint(λ1, φ1);
