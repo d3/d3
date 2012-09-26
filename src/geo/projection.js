@@ -89,8 +89,8 @@ function d3_geo_projectionMutator(projectAt) {
         point = projectPoint(sλ0, φ0);
         if (first) segment.push(point), segmentSide = sλ0;
         else {
-          if (sλ0 !== side) interpolate(sλ0, side, context);
           context.lineTo(point[0], point[1]);
+          if (sλ0 !== side) interpolateTo(side, context);
           context.closePath();
         }
         context.moveTo((point = projectPoint(sλ1, φ0))[0], point[1]);
@@ -104,17 +104,17 @@ function d3_geo_projectionMutator(projectAt) {
     }
     if (first) context.moveTo((point = segment[0])[0], point[1]);
     for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
-    if (!first && side !== segmentSide) interpolate(segmentSide, side, context);
+    if (!first && side !== segmentSide) interpolateTo(side, context);
     context.closePath();
   };
 
-  function interpolate(s0, s1, context) {
+  function interpolateTo(s, context) {
     // TODO cache
     var point,
-        φ = s1 / 2;
-    context.lineTo((point = projectPoint(s0, φ))[0], point[1]);
+        φ = s / 2;
+    context.lineTo((point = projectPoint(-s, φ))[0], point[1]);
     context.lineTo((point = projectPoint( 0, φ))[0], point[1]);
-    context.lineTo((point = projectPoint(s1, φ))[0], point[1]);
+    context.lineTo((point = projectPoint( s, φ))[0], point[1]);
   }
 
   // TODO remove redundant code with p(coordinates)
