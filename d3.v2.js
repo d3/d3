@@ -6493,6 +6493,7 @@
     return path;
   };
   d3.geo.projection = d3_geo_projection;
+  d3.geo.projectionMutator = d3_geo_projectionMutator;
   var d3_geo_stereographic = d3_geo_azimuthal(function(cosλcosφ) {
     return 1 / (1 + cosλcosφ);
   }, function(ρ) {

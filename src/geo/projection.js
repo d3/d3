@@ -1,10 +1,10 @@
 d3.geo.projection = d3_geo_projection;
+d3.geo.projectionMutator = d3_geo_projectionMutator;
 
 function d3_geo_projection(project) {
   return d3_geo_projectionMutator(function() { return project; })();
 }
 
-// TODO Expose this API? Not that happy with it.
 function d3_geo_projectionMutator(projectAt) {
   var project,
       rotate,
