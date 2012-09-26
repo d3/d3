@@ -110,6 +110,8 @@ function d3_geo_projectionMutator(projectAt) {
     context.closePath();
   };
 
+  var arc = d3.geo.greatArc().target(d3_identity).precision(2);
+
   function resample(context) {
     var λ0,
         φ0,
@@ -135,11 +137,17 @@ function d3_geo_projectionMutator(projectAt) {
       var dx,
           dy;
       if (depth && (dx = x - x0) * dx + (dy = y - y0) * dy > δ2) {
-        var λ1 = (λ0 + λ) / 2,
-            φ1 = φ,
-            point = projectPoint(λ1, φ1);
-        lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ1, φ1, --depth);
-        lineTo(x0, y0, x, y, λ1, φ1, λ, φ, depth);
+        // TODO replace with adaptive resampling
+        var resamples = arc.source([λ0 * d3_degrees, φ0 * d3_degrees])([λ * d3_degrees, φ * d3_degrees]).coordinates;
+        for (var i = 0, n = resamples.length, point; ++i < n;) {
+          point = projectPoint((point = resamples[i])[0] * d3_radians, point[1] * d3_radians);
+          context.lineTo(point[0], point[1]);
+        }
+        //var λ1 = (λ0 + λ) / 2,
+        //    φ1 = (φ0 + φ) / 2,
+        //    point = projectPoint(λ1, φ1);
+        //lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ1, φ1, --depth);
+        //lineTo(x0, y0, x, y, λ1, φ1, λ, φ, depth);
       } else context.lineTo(x, y);
     }
   }
