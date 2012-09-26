@@ -2047,7 +2047,7 @@
         },
         lineTo: function(λ, φ) {
           var point = projectPoint(λ, φ);
-          lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 10);
+          lineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 32);
         },
         closePath: function() {
           context.closePath();
