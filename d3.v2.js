@@ -2039,7 +2039,7 @@
           lineTo(x0, y0, x, y, λ1, φ1, λ, φ, depth);
         } else context.lineTo(x, y);
       }
-      var λ0, φ0, x0, y0, δ2 = 100;
+      var λ0, φ0, x0, y0;
       return {
         moveTo: function(λ, φ) {
           var point = projectPoint(λ0 = λ, φ0 = φ);
@@ -2074,7 +2074,7 @@
       δy = y + center[1] * k;
       return p;
     }
-    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y;
+    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, δ2 = 100;
     p.point = function(coordinates, context) {
       var point = p(coordinates);
       context.point(point[0], point[1]);
@@ -2127,6 +2127,11 @@
       for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
       if (!first && side !== segmentSide) interpolateTo(side, context);
       context.closePath();
+    };
+    p.precision = function(_) {
+      if (!arguments.length) return Math.sqrt(δ2);
+      δ2 = _ * _;
+      return p;
     };
     p.scale = function(_) {
       if (!arguments.length) return k;
