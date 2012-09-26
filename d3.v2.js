@@ -2081,7 +2081,7 @@
         λ1 = point[0];
         φ1 = point[1];
         sλ1 = λ1 > 0 ? π : -π;
-        if (sλ0 !== sλ1 && ((δλ = Math.abs(λ1 - λ0)) >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
+        if (sλ0 !== sλ1 && (δλ = Math.abs(λ1 - λ0)) >= π) {
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
           point = projectPoint(sλ0, φ0);
           if (first) segment.push(point), segmentSide = sλ0; else {
