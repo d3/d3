@@ -2030,6 +2030,12 @@
       coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
+    function interpolate(s0, s1, context) {
+      var point, λ = s1 ? π : -π, φ = λ / 2;
+      context.lineTo((point = projectPoint(-λ, φ))[0], point[1]);
+      context.lineTo((point = projectPoint(0, φ))[0], point[1]);
+      context.lineTo((point = projectPoint(λ, φ))[0], point[1]);
+    }
     function rotatePoint(coordinates) {
       return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
     }
@@ -2068,27 +2074,31 @@
     };
     p.ring = function(coordinates, context) {
       if (!(n = coordinates.length)) return;
-      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point = projectPoint(λ0, φ0) ], λ1, φ1, δλ, sλ0, i = 0, first = true, start, n;
+      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point = projectPoint(λ0, φ0) ], λ1, φ1, sλ0 = λ0 > 0, sλ1, segmentSide, δλ, i = 0, first = true, side, n;
       while (++i < n) {
         point = rotatePoint(coordinates[i]);
         λ1 = point[0];
         φ1 = point[1];
-        sλ0 = λ0 > 0;
-        if (sλ0 ^ λ1 > 0 && ((δλ = Math.abs(λ1 - λ0)) >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
+        sλ1 = λ1 > 0;
+        if (sλ0 ^ sλ1 && ((δλ = Math.abs(λ1 - λ0)) >= π || δλ < ε && Math.abs(Math.abs(λ0) - π) < ε)) {
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
           point = projectPoint(sλ0 ? π : -π, φ0);
-          if (first) segment.push(point); else {
+          if (first) segment.push(point), segmentSide = sλ0; else {
+            if (sλ0 ^ side) interpolate(sλ0, side, context);
             context.lineTo(point[0], point[1]);
             context.closePath();
           }
-          context.moveTo((start = projectPoint(sλ0 ? -π : π, φ0))[0], start[1]);
+          context.moveTo((point = projectPoint(sλ0 ? -π : π, φ0))[0], point[1]);
+          side = sλ1;
           first = false;
         }
         point = projectPoint(λ0 = λ1, φ0 = φ1);
+        sλ0 = sλ1;
         if (first) segment.push(point); else context.lineTo(point[0], point[1]);
       }
       if (first) context.moveTo((point = segment[0])[0], point[1]);
       for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
+      if (!first && side ^ segmentSide) interpolate(segmentSide, side, context);
       context.closePath();
     };
     p.scale = function(_) {
