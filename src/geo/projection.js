@@ -18,7 +18,8 @@ function d3_geo_projectionMutator(projectAt) {
       δφ = 0,
       δγ = 0,
       δx = x,
-      δy = y;
+      δy = y,
+      δ2 = 100; // (precision in px)².
 
   function p(coordinates) {
     coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
@@ -110,12 +111,17 @@ function d3_geo_projectionMutator(projectAt) {
     context.closePath();
   };
 
+  p.precision = function(_) {
+    if (!arguments.length) return Math.sqrt(δ2);
+    δ2 = _ * _;
+    return p;
+  };
+
   function resample(context) {
     var λ0,
         φ0,
         x0,
-        y0,
-        δ2 = 100; // (precision in px)².
+        y0;
 
     return {
       moveTo: function(λ, φ) {
