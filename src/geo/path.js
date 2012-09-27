@@ -123,8 +123,8 @@ function d3_geo_path_circle(radius) {
 var d3_geo_pathBuffer = [];
 
 var d3_geo_pathBufferContext = {
-  moveTo: function(x, y) { d3_geo_pathBuffer.push("M", x, y); },
-  lineTo: function(x, y) { d3_geo_pathBuffer.push("L", x, y); },
+  moveTo: function(x, y) { d3_geo_pathBuffer.push("M", x, ",", y); },
+  lineTo: function(x, y) { d3_geo_pathBuffer.push("L", x, ",", y); },
   closePath: function() { d3_geo_pathBuffer.push("Z"); },
   buffer: function() {
     var _;

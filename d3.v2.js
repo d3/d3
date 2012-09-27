@@ -6487,10 +6487,10 @@
   var d3_geo_pathBuffer = [];
   var d3_geo_pathBufferContext = {
     moveTo: function(x, y) {
-      d3_geo_pathBuffer.push("M", x, y);
+      d3_geo_pathBuffer.push("M", x, ",", y);
     },
     lineTo: function(x, y) {
-      d3_geo_pathBuffer.push("L", x, y);
+      d3_geo_pathBuffer.push("L", x, ",", y);
     },
     closePath: function() {
       d3_geo_pathBuffer.push("Z");
