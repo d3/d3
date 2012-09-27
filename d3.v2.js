@@ -2081,7 +2081,7 @@
       δy = y + center[1] * k;
       return p;
     }
-    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, δ2 = 2.5;
+    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, δ2 = .5;
     p.point = function(coordinates, context) {
       var point = p(coordinates);
       context.point(point[0], point[1]);

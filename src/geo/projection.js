@@ -19,7 +19,7 @@ function d3_geo_projectionMutator(projectAt) {
       δγ = 0,
       δx = x,
       δy = y,
-      δ2 = 2.5; // (precision in px)².
+      δ2 = .5; // (precision in px)².
 
   function p(coordinates) {
     coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
