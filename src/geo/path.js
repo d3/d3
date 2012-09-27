@@ -3,15 +3,30 @@
 
 d3.geo.path = function() {
   var pointRadius = 4.5,
-      pointCircle = d3_geo_path_circle(pointRadius),
+      pointCircle = d3_geo_pathCircle(pointRadius),
       projection = d3.geo.albersUsa(),
+      buffer = [],
       context;
 
+  var bufferContext = {
+    point: function(x, y) { buffer.push("M", x, ",", y, pointCircle); },
+    moveTo: function(x, y) { buffer.push("M", x, ",", y); },
+    lineTo: function(x, y) { buffer.push("L", x, ",", y); },
+    closePath: function() { buffer.push("Z"); }
+  };
+
   function path(object) {
-    if (object == null) return null;
-    if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
-    pathObject(object, context || d3_geo_pathBufferContext);
-    return d3_geo_pathBufferContext.buffer();
+    var result = null;
+    if (object != result) {
+      if (context == result) {
+        if (typeof pointRadius === "function") pointCircle = d3_geo_pathCircle(pointRadius.apply(this, arguments));
+        pathObject(object, bufferContext);
+        if (buffer.length) result = buffer.join(""), buffer = [];
+      } else {
+        pathObject(object, context);
+      }
+    }
+    return result;
   }
 
   function pathObject(object, context) {
@@ -106,33 +121,19 @@ d3.geo.path = function() {
   path.pointRadius = function(x) {
     if (!arguments.length) return pointRadius;
     if (typeof x === "function") pointRadius = x;
-    else pointCircle = d3_geo_path_circle(pointRadius = +x);
+    else pointCircle = d3_geo_pathCircle(pointRadius = +x);
     return path;
   };
 
   return path;
 };
 
-function d3_geo_path_circle(radius) {
+function d3_geo_pathCircle(radius) {
   return "m0," + radius
       + "a" + radius + "," + radius + " 0 1,1 0," + (-2 * radius)
       + "a" + radius + "," + radius + " 0 1,1 0," + (+2 * radius)
       + "z";
 }
-
-var d3_geo_pathBuffer = [];
-
-var d3_geo_pathBufferContext = {
-  moveTo: function(x, y) { d3_geo_pathBuffer.push("M", x, ",", y); },
-  lineTo: function(x, y) { d3_geo_pathBuffer.push("L", x, ",", y); },
-  closePath: function() { d3_geo_pathBuffer.push("Z"); },
-  buffer: function() {
-    var _;
-    return d3_geo_pathBuffer.length
-        ? (_ = d3_geo_pathBuffer.join(""), d3_geo_pathBuffer = [], _)
-        : null;
-  }
-};
 
   // function polygonArea(coordinates) {
   //   var sum = area(coordinates[0]), // exterior ring
