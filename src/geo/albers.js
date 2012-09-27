@@ -23,7 +23,7 @@ function d3_geo_albers(φ0, φ1) {
   return albers;
 }
 
-d3.geo.albers = function() {
+(d3.geo.albers = function() {
   var φ0 = 29.5 * d3_radians,
       φ1 = 45.5 * d3_radians,
       m = d3_geo_projectionMutator(d3_geo_albers),
@@ -42,4 +42,4 @@ d3.geo.albers = function() {
   };
 
   return p.origin([-98, 38]).scale(1000);
-};
+}).raw = d3_geo_albers;

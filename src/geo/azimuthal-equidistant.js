@@ -3,6 +3,6 @@ var d3_geo_azimuthalEquidistant = d3_geo_azimuthal(
   d3_identity
 );
 
-d3.geo.azimuthalEquidistant = function() {
+(d3.geo.azimuthalEquidistant = function() {
   return d3_geo_projection(d3_geo_azimuthalEquidistant);
-};
+}).raw = d3_geo_azimuthalEquidistant;

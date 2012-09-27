@@ -3,6 +3,6 @@ var d3_geo_stereographic = d3_geo_azimuthal(
   function(ρ) { return 2 * Math.atan(ρ); }
 );
 
-d3.geo.stereographic = function() {
+(d3.geo.stereographic = function() {
   return d3_geo_projection(d3_geo_stereographic);
-};
+}).raw = d3_geo_stereographic;

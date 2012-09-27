@@ -6140,7 +6140,7 @@
     };
     return albersUsa.scale(lower48.scale());
   };
-  d3.geo.albers = function() {
+  (d3.geo.albers = function() {
     var φ0 = 29.5 * d3_radians, φ1 = 45.5 * d3_radians, m = d3_geo_projectionMutator(d3_geo_albers), p = m(φ0, φ1);
     p.origin = function(_) {
       var rotate = p.rotate(), center = p.center();
@@ -6152,23 +6152,22 @@
       return m(φ0 = _[0] * d3_radians, φ1 = _[1] * d3_radians);
     };
     return p.origin([ -98, 38 ]).scale(1e3);
-  };
+  }).raw = d3_geo_albers;
   var d3_geo_azimuthalEqualArea = d3_geo_azimuthal(function(cosλcosφ) {
     return Math.sqrt(2 / (1 + cosλcosφ));
   }, function(ρ) {
     return 2 * Math.asin(ρ / 2);
   });
-  d3.geo.azimuthalEqualArea = function() {
+  (d3.geo.azimuthalEqualArea = function() {
     return d3_geo_projection(d3_geo_azimuthalEqualArea);
-  };
-  d3.geo.azimuthalEqualArea.raw = d3_geo_azimuthalEqualArea;
+  }).raw = d3_geo_azimuthalEqualArea;
   var d3_geo_azimuthalEquidistant = d3_geo_azimuthal(function(cosλcosφ) {
     var c = Math.acos(cosλcosφ);
     return c && c / Math.sin(c);
   }, d3_identity);
-  d3.geo.azimuthalEquidistant = function() {
+  (d3.geo.azimuthalEquidistant = function() {
     return d3_geo_projection(d3_geo_azimuthalEquidistant);
-  };
+  }).raw = d3_geo_azimuthalEquidistant;
   d3.geo.bounds = function(feature) {
     var left = Infinity, bottom = Infinity, right = -Infinity, top = -Infinity;
     d3_geo_bounds(feature, function(x, y) {
@@ -6292,16 +6291,15 @@
     };
     return d3.rebind(circle, arc, "precision");
   };
-  d3_geo_equirectangular.invert = d3_geo_equirectangular;
-  d3.geo.equirectangular = function() {
-    return d3_geo_projection(d3_geo_equirectangular).scale(500 / 2 / π);
-  };
+  (d3.geo.equirectangular = function() {
+    return d3_geo_projection(d3_geo_equirectangular).scale(250 / π);
+  }).raw = d3_geo_equirectangular.invert = d3_geo_equirectangular;
   var d3_geo_gnomonic = d3_geo_azimuthal(function(cosλcosφ) {
     return 1 / cosλcosφ;
   }, Math.atan);
-  d3.geo.gnomonic = function() {
+  (d3.geo.gnomonic = function() {
     return d3_geo_projection(d3_geo_gnomonic);
-  };
+  }).raw = d3_geo_gnomonic;
   d3.geo.graticule = function() {
     function graticule() {
       return {
@@ -6388,15 +6386,15 @@
   d3_geo_mercator.invert = function(x, y) {
     return [ 2 * π * x, 2 * Math.atan(Math.exp(2 * π * y)) - π / 2 ];
   };
-  d3.geo.mercator = function() {
+  (d3.geo.mercator = function() {
     return d3_geo_projection(d3_geo_mercator).scale(500);
-  };
+  }).raw = d3_geo_mercator;
   var d3_geo_orthographic = d3_geo_azimuthal(function() {
     return 1;
   }, Math.asin);
-  d3.geo.orthographic = function() {
+  (d3.geo.orthographic = function() {
     return d3_geo_projection(d3_geo_orthographic);
-  };
+  }).raw = d3_geo_orthographic;
   d3.geo.path = function() {
     function path(object) {
       if (object == null) return null;
@@ -6508,9 +6506,9 @@
   }, function(ρ) {
     return 2 * Math.atan(ρ);
   });
-  d3.geo.stereographic = function() {
+  (d3.geo.stereographic = function() {
     return d3_geo_projection(d3_geo_stereographic);
-  };
+  }).raw = d3_geo_stereographic;
   d3.geo.azimuthal = function() {
     var mode = "orthographic", m = d3_geo_projectionMutator(d3_geo_azimuthalMode), p = m(mode);
     p.mode = function(_) {
