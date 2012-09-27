@@ -2041,7 +2041,7 @@
       }
       function resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ1, φ1, depth) {
         if (depth--) {
-          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * cosφ0 * Math.cos(λ0) + k * cosφ1 * Math.cos(λ1), y = k * cosφ0 * Math.sin(λ0) + k * cosφ1 * Math.sin(λ1), z = k * sinφ0 + k * sinφ1, λ2 = Math.abs(x) < ε || Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x), φ2 = Math.asin(Math.max(-1, Math.min(1, z))), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx = x1 - x0, dy = y1 - y0, dz = dx * (y1 - y2) - (x0 - x2) * (y1 - y0);
+          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * cosφ0 * Math.cos(λ0) + k * cosφ1 * Math.cos(λ1), y = k * cosφ0 * Math.sin(λ0) + k * cosφ1 * Math.sin(λ1), z = k * sinφ0 + k * sinφ1, λ2 = Math.abs(x) < ε || Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x), φ2 = Math.asin(Math.max(-1, Math.min(1, z))), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx = x1 - x0, dy = y1 - y0, dz = dx * (y0 - y2) - (x0 - x2) * (y1 - y0);
           if (dz * dz / (dx * dx + dy * dy) > δ2) {
             resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
             resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
@@ -2081,7 +2081,7 @@
       δy = y + center[1] * k;
       return p;
     }
-    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, δ2 = 1;
+    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, δ2 = 2.5;
     p.point = function(coordinates, context) {
       var point = p(coordinates);
       context.point(point[0], point[1]);

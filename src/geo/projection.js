@@ -153,7 +153,7 @@ function d3_geo_projectionMutator(projectAt) {
             y2 = p[1],
             dx = x1 - x0,
             dy = y1 - y0,
-            dz = dx * (y1 - y2) - (x0 - x2) * (y1 - y0);
+            dz = dx * (y0 - y2) - (x0 - x2) * (y1 - y0);
         if (dz * dz / (dx * dx + dy * dy) > δ2) {
           resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
           resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
