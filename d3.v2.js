@@ -2037,7 +2037,7 @@
       }
       function lineTo(λ, φ) {
         var point = projectPoint(λ, φ);
-        resampleLineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 16);
+        resampleLineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, maxDepth);
       }
       function resampleLineTo(x0, y0, x, y, λ0, φ0, λ, φ, depth) {
         var dx, dy;
@@ -2053,7 +2053,7 @@
         lineTo(λ00, φ00);
         context.closePath();
       }
-      var λ00, φ00, λ0, φ0, x0, y0;
+      var λ00, φ00, λ0, φ0, x0, y0, maxDepth = δ2 > 0 && 16;
       return {
         moveTo: moveTo,
         lineTo: lineTo,

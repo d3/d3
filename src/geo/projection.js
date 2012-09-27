@@ -115,13 +115,15 @@ function d3_geo_projectionMutator(projectAt) {
     return p;
   };
 
+  // TODO this is not just resampling but also projecting
   function resample(context) {
     var λ00,
         φ00,
         λ0,
         φ0,
         x0,
-        y0;
+        y0,
+        maxDepth = δ2 > 0 && 16;
 
     function moveTo(λ, φ) {
       var point = projectPoint(λ00 = λ0 = λ, φ00 = φ0 = φ);
@@ -130,7 +132,7 @@ function d3_geo_projectionMutator(projectAt) {
 
     function lineTo(λ, φ) {
       var point = projectPoint(λ, φ);
-      resampleLineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, 16);
+      resampleLineTo(x0, y0, x0 = point[0], y0 = point[1], λ0, φ0, λ0 = λ, φ0 = φ, maxDepth);
     }
 
     function resampleLineTo(x0, y0, x, y, λ0, φ0, λ, φ, depth) {
