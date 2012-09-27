@@ -15,6 +15,7 @@ d3.geo.path = function() {
       context = bufferContext;
 
   function path(object) {
+    if (object == null) return null;
     if (typeof pointRadius === "function") pointCircle = d3_geo_path_circle(pointRadius.apply(this, arguments));
     pathObject(object, context);
     var path = buffer.length ? buffer.join("") : null;

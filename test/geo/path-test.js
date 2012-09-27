@@ -8,6 +8,9 @@ var suite = vows.describe("d3.geo.path");
 suite.addBatch({
   "path": {
     topic: d3.geo.path,
+    "returns null when passed a null object": function(path) {
+      assert.isNull(path(null));
+    },
     "projection": {
       "returns the current projection when called with no arguments": function() {
         var path = d3.geo.path(), projection = d3.geo.albers();
