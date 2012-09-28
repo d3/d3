@@ -16,6 +16,9 @@ suite.addBatch({
     },
     "interpolates colors": function(interpolate) {
       assert.equal(interpolate("#abcdef", "#fedcba")(.4), "#ccd3da");
+      assert.equal(interpolate("#abcdef", d3.rgb("#fedcba"))(.4), "#ccd3da");
+      assert.equal(interpolate("#abcdef", d3.hsl("#fedcba"))(.4), "#ccd3da");
+      assert.equal(interpolate("#abcdef", d3.lab("#fedcba"))(.4), "#ccd3da");
     },
     "interpolates strings": function(interpolate) {
       assert.equal(interpolate("width:10px;", "width:50px;")(.2), "width:18px;");

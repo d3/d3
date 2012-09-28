@@ -3347,7 +3347,7 @@
   }, function(a, b) {
     return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + "");
   }, function(a, b) {
-    return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b);
+    return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl || b instanceof d3_Lab) && d3.interpolateRgb(a, b);
   }, function(a, b) {
     return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b);
   } ];
