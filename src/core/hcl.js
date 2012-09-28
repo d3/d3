@@ -16,20 +16,18 @@ function d3_Hcl(h, c, l) {
   this.l = l;
 }
 
-d3_Hcl.prototype.brighter = function(k) {
+var d3_hclPrototype = d3_Hcl.prototype = new d3_Color;
+
+d3_hclPrototype.brighter = function(k) {
   return d3_hcl(this.h, this.c, Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)));
 };
 
-d3_Hcl.prototype.darker = function(k) {
+d3_hclPrototype.darker = function(k) {
   return d3_hcl(this.h, this.c, Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)));
 };
 
-d3_Hcl.prototype.rgb = function() {
+d3_hclPrototype.rgb = function() {
   return d3_hcl_lab(this.h, this.c, this.l).rgb();
-};
-
-d3_Hcl.prototype.toString = function() {
-  return this.rgb() + "";
 };
 
 function d3_hcl_lab(h, c, l) {

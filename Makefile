@@ -80,6 +80,7 @@ d3.core.js: \
 	src/core/transform.js \
 	src/core/interpolate.js \
 	src/core/uninterpolate.js \
+	src/core/color.js \
 	src/core/rgb.js \
 	src/core/hsl.js \
 	src/core/hcl.js \
