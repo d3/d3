@@ -139,7 +139,7 @@ function d3_geo_projectionMutator(projectAt) {
       var dx = x1 - x0,
           dy = y1 - y0,
           distance2 = dx * dx + dy * dy;
-      if (distance2 > δ2 && depth--) {
+      if (distance2 > 4 * δ2 && depth--) {
         var sinφ0 = Math.sin(φ0),
             cosφ0 = Math.cos(φ0),
             sinφ1 = Math.sin(φ1),
