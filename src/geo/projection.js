@@ -136,7 +136,10 @@ function d3_geo_projectionMutator(projectAt) {
     }
 
     function resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ1, φ1, depth) {
-      if (depth--) {
+      var dx = x1 - x0,
+          dy = y1 - y0,
+          distance2 = dx * dx + dy * dy;
+      if (distance2 > 4 * δ2 && depth--) {
         var sinφ0 = Math.sin(φ0),
             cosφ0 = Math.cos(φ0),
             sinφ1 = Math.sin(φ1),
@@ -151,10 +154,8 @@ function d3_geo_projectionMutator(projectAt) {
             p = projectPoint(λ2, φ2),
             x2 = p[0],
             y2 = p[1],
-            dx = x1 - x0,
-            dy = y1 - y0,
-            dz = dx * (y0 - y2) - (x0 - x2) * (y1 - y0);
-        if (dz * dz / (dx * dx + dy * dy) > δ2) {
+            dz = dx * (y0 - y2) - dy * (x0 - x2);
+        if (dz * dz / distance2 > δ2) {
           resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
           resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
           return;
