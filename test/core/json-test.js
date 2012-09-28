@@ -9,7 +9,7 @@ suite.addBatch({
   "json": {
     topic: function() {
       var cb = this.callback;
-      return d3.json("examples/data/sample.json", function(json) {
+      d3.json("examples/data/sample.json", function(json) {
         cb(null, json);
       });
     },
@@ -22,7 +22,7 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.json("//does/not/exist.json", function(json) {
+        d3.json("//does/not/exist.json", function(json) {
           cb(null, json);
         });
       },

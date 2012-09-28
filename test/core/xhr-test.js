@@ -9,7 +9,7 @@ suite.addBatch({
   "xhr": {
     topic: function() {
       var cb = this.callback;
-      return d3.xhr("examples/data/sample.txt", function(req) {
+      d3.xhr("examples/data/sample.txt", function(req) {
         cb(null, req);
       });
     },
@@ -30,7 +30,7 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.xhr("examples/data/sample.txt", "text/plain", function(req) {
+        d3.xhr("examples/data/sample.txt", "text/plain", function(req) {
           cb(null, req);
         });
       },
@@ -41,7 +41,7 @@ suite.addBatch({
     " ": {
       topic: function() {
         var cb = this.callback;
-        return d3.xhr("//does/not/exist.txt", function(req) {
+        d3.xhr("//does/not/exist.txt", function(req) {
           cb(null, req);
         });
       },
