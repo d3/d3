@@ -250,7 +250,7 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
         if (first) segment.push([sλ0, φ0]), segmentSide = sλ0;
         else {
           context.lineTo(sλ0, φ0);
-          if (sλ0 !== side) interpolateTo(side, context);
+          if (sλ0 !== side) d3_geo_projectionInterpolateToAntemeridian(side, context);
           context.closePath();
         }
         context.moveTo(sλ1, φ0);
@@ -265,17 +265,14 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
     }
     if (first) context.moveTo((point = segment[0])[0], point[1]);
     for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
-    if (!first && side !== segmentSide) interpolateTo(side, context);
+    if (!first && side !== segmentSide) d3_geo_projectionInterpolateToAntemeridian(side, context);
     context.closePath();
   }
+}
 
-  // TODO extract
-  function interpolateTo(s, context) {
-    // TODO cache
-    var point,
-        φ = s / 2;
-    context.lineTo(-s, φ);
-    context.lineTo( 0, φ);
-    context.lineTo( s, φ);
-  }
+function d3_geo_projectionInterpolateToAntemeridian(s, context) {
+  var φ = s / 2;
+  context.lineTo(-s, φ);
+  context.lineTo( 0, φ);
+  context.lineTo( s, φ);
 }

@@ -2344,7 +2344,7 @@
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
           if (first) segment.push([ sλ0, φ0 ]), segmentSide = sλ0; else {
             context.lineTo(sλ0, φ0);
-            if (sλ0 !== side) interpolateTo(side, context);
+            if (sλ0 !== side) d3_geo_projectionInterpolateToAntemeridian(side, context);
             context.closePath();
           }
           context.moveTo(sλ1, φ0);
@@ -2358,14 +2358,8 @@
       }
       if (first) context.moveTo((point = segment[0])[0], point[1]);
       for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
-      if (!first && side !== segmentSide) interpolateTo(side, context);
+      if (!first && side !== segmentSide) d3_geo_projectionInterpolateToAntemeridian(side, context);
       context.closePath();
-    }
-    function interpolateTo(s, context) {
-      var point, φ = s / 2;
-      context.lineTo(-s, φ);
-      context.lineTo(0, φ);
-      context.lineTo(s, φ);
     }
     return {
       point: function(coordinates, context) {
@@ -2396,6 +2390,12 @@
         });
       }
     };
+  }
+  function d3_geo_projectionInterpolateToAntemeridian(s, context) {
+    var φ = s / 2;
+    context.lineTo(-s, φ);
+    context.lineTo(0, φ);
+    context.lineTo(s, φ);
   }
   function d3_geo_rotation(δλ, δφ, δγ) {
     return δλ ? δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ)) : d3_geo_rotationλ(δλ) : δφ || δγ ? d3_geo_rotationφγ(δφ, δγ) : d3_geo_equirectangular;
