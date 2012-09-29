@@ -247,6 +247,8 @@ function d3_geo_circleClip(degrees, rotate) {
     });
     // Create a circular linked list using the intersected segment start and
     // end points, sorted by relative angles.
+    // TODO sort by angle first, then set in/out flags to avoid
+    // self-intersection/precision problems.
     segments.forEach(function(segment) {
       var p0 = segment[0],
           p1 = segment[segment.length - 1];
@@ -336,8 +338,8 @@ function d3_geo_circleClip(degrees, rotate) {
   }
 };
 
-// Convert spherical (degrees) to normalized Cartesian coordinates, relative to
-// a Cartesian origin.
+// Convert spherical to normalized Cartesian coordinates, relative to a
+// Cartesian origin.
 function d3_geo_circleCartesian(point, origin) {
   var p0 = point[0],
       p1 = point[1],
@@ -347,7 +349,7 @@ function d3_geo_circleCartesian(point, origin) {
           Math.sin(p1) - origin[2]];
 }
 
-// Convert from Cartesian to spherical coordinates (in degrees).
+// Convert from Cartesian to spherical coordinates.
 function d3_geo_circleSpherical(point) {
   return [
     Math.atan2(point[1], point[0]),
