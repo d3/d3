@@ -1957,12 +1957,14 @@
   }
   function d3_geo_compose(a, b) {
     function compose(λ, φ) {
-      return b.apply(b, a(λ, φ));
+      var coordinates = a(λ, φ);
+      return b(coordinates[0], coordinates[1]);
     }
     if (a === d3_geo_equirectangular) return b;
     if (b === d3_geo_equirectangular) return a;
     if (a.invert && b.invert) compose.invert = function(x, y) {
-      return a.invert.apply(a, b.invert(x, y));
+      var coordinates = b.invert(x, y);
+      return a.invert(coordinates[0], coordinates[1]);
     };
     return compose;
   }
