@@ -2030,6 +2030,36 @@
       coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
+    function ring(coordinates, context) {
+      if (!(n = coordinates.length)) return;
+      context = resample(context);
+      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point ], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, segmentSide, i = 0, first = true, side, n;
+      while (++i < n) {
+        point = rotatePoint(coordinates[i]);
+        λ1 = point[0];
+        φ1 = point[1];
+        sλ1 = λ1 > 0 ? π : -π;
+        if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
+          φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
+          if (first) segment.push([ sλ0, φ0 ]), segmentSide = sλ0; else {
+            context.lineTo(sλ0, φ0);
+            if (sλ0 !== side) interpolateTo(side, context);
+            context.closePath();
+          }
+          context.moveTo(sλ1, φ0);
+          side = sλ1;
+          first = false;
+        }
+        if (first) segment.push(point); else context.lineTo(λ1, φ1);
+        λ0 = λ1;
+        φ0 = φ1;
+        sλ0 = sλ1;
+      }
+      if (first) context.moveTo((point = segment[0])[0], point[1]);
+      for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
+      if (!first && side !== segmentSide) interpolateTo(side, context);
+      context.closePath();
+    }
     function resample(context) {
       function moveTo(λ, φ) {
         var p = projectPoint(λ00 = λ0 = λ, φ00 = φ0 = φ);
@@ -2106,35 +2136,9 @@
         sλ0 = sλ1;
       }
     };
-    p.ring = function(coordinates, context) {
-      if (!(n = coordinates.length)) return;
-      context = resample(context);
-      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point ], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, segmentSide, i = 0, first = true, side, n;
-      while (++i < n) {
-        point = rotatePoint(coordinates[i]);
-        λ1 = point[0];
-        φ1 = point[1];
-        sλ1 = λ1 > 0 ? π : -π;
-        if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
-          φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-          if (first) segment.push([ sλ0, φ0 ]), segmentSide = sλ0; else {
-            context.lineTo(sλ0, φ0);
-            if (sλ0 !== side) interpolateTo(side, context);
-            context.closePath();
-          }
-          context.moveTo(sλ1, φ0);
-          side = sλ1;
-          first = false;
-        }
-        if (first) segment.push(point); else context.lineTo(λ1, φ1);
-        λ0 = λ1;
-        φ0 = φ1;
-        sλ0 = sλ1;
-      }
-      if (first) context.moveTo((point = segment[0])[0], point[1]);
-      for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
-      if (!first && side !== segmentSide) interpolateTo(side, context);
-      context.closePath();
+    p.polygon = function(coordinates, context) {
+      var i = -1, n = coordinates.length;
+      while (++i < n) ring(coordinates[i], context);
     };
     p.precision = function(_) {
       if (!arguments.length) return Math.sqrt(δ2);
@@ -6443,17 +6447,13 @@
     }
     function pathMultiPolygon(multiPolygon, context) {
       var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) {
-        var subcoordinates = coordinates[i], j = -1, m = subcoordinates.length;
-        while (++j < m) projection.ring(subcoordinates[j], context);
-      }
+      while (++i < n) projection.polygon(coordinates[i], context);
     }
     function pathPoint(point, context) {
       projection.point(point.coordinates, context);
     }
     function pathPolygon(polygon, context) {
-      var coordinates = polygon.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) projection.ring(coordinates[i], context);
+      projection.polygon(polygon.coordinates, context);
     }
     var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), buffer = [], context;
     var bufferContext = {

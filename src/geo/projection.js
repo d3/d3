@@ -64,7 +64,18 @@ function d3_geo_projectionMutator(projectAt) {
     }
   };
 
-  p.ring = function(coordinates, context) {
+  p.polygon = function(coordinates, context) {
+    var i = -1, n = coordinates.length;
+    while (++i < n) ring(coordinates[i], context);
+  };
+
+  p.precision = function(_) {
+    if (!arguments.length) return Math.sqrt(δ2);
+    δ2 = _ * _;
+    return p;
+  };
+
+  function ring(coordinates, context) {
     if (!(n = coordinates.length)) return;
     context = resample(context);
     var point = rotatePoint(coordinates[0]),
@@ -107,15 +118,10 @@ function d3_geo_projectionMutator(projectAt) {
     for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
     if (!first && side !== segmentSide) interpolateTo(side, context);
     context.closePath();
-  };
-
-  p.precision = function(_) {
-    if (!arguments.length) return Math.sqrt(δ2);
-    δ2 = _ * _;
-    return p;
-  };
+  }
 
   // TODO this is not just resampling but also projecting
+  // TODO don't create a context wrapper for every line & polygon
   function resample(context) {
     var λ00,
         φ00,
