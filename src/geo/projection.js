@@ -23,44 +23,37 @@ function d3_geo_projectionMutator(projectAt) {
       clip = d3_geo_projectionCutAntemeridian(rotatePoint),
       clipAngle = null;
 
-  function p(coordinates) {
+  function projection(coordinates) {
     coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
     return [coordinates[0] * k + δx, δy - coordinates[1] * k];
   }
 
-  function i(coordinates) {
+  function invert(coordinates) {
     coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
     return [coordinates[0] * d3_degrees, coordinates[1] * d3_degrees];
   }
 
   // TODO automate wrapping.
-  p.point =   function(coordinates, context) { clip.point(coordinates,   resample(context)); };
-  p.line =    function(coordinates, context) { clip.line(coordinates,    resample(context)); };
-  p.polygon = function(coordinates, context) { clip.polygon(coordinates, resample(context)); };
+  projection.point =   function(coordinates, context) { clip.point(coordinates,   resample(context)); };
+  projection.line =    function(coordinates, context) { clip.line(coordinates,    resample(context)); };
+  projection.polygon = function(coordinates, context) { clip.polygon(coordinates, resample(context)); };
 
-  p.precision = function(_) {
+  projection.precision = function(_) {
     if (!arguments.length) return Math.sqrt(δ2);
     δ2 = _ * _;
-    return p;
+    return projection;
   };
 
-  p.clipAngle = function(_) {
+  projection.clipAngle = function(_) {
     if (!arguments.length) return clipAngle;
     clip = _ == null
         ? (clipAngle = _, d3_geo_projectionCutAntemeridian(rotatePoint))
         : d3_geo_circleClip(clipAngle = +_, rotatePoint);
-    return p;
+    return projection;
   };
 
-  function clipAntemeridian() {
-  }
-
-  function clipCircle(angle) {
-    var clip = d3_geo_circleClip(angle, rotatePoint);
-    return p;
-  }
-
   // TODO this is not just resampling but also projecting
+  // TODO don't create a context wrapper for every line & polygon
   function resample(context) {
     var λ00,
         φ00,
@@ -85,7 +78,7 @@ function d3_geo_projectionMutator(projectAt) {
           dy = y1 - y0,
           distance2 = dx * dx + dy * dy;
       if (distance2 > 4 * δ2 && depth--) {
-        var sinφ0 = Math.sin(φ0),
+        var sinφ0 = Math.sin(φ0), // TODO some of these could be reused during recursion
             cosφ0 = Math.cos(φ0),
             sinφ1 = Math.sin(φ1),
             cosφ1 = Math.cos(φ1),
@@ -132,27 +125,27 @@ function d3_geo_projectionMutator(projectAt) {
     return [point[0] * k + δx, δy - point[1] * k];
   }
 
-  p.scale = function(_) {
+  projection.scale = function(_) {
     if (!arguments.length) return k;
     k = +_;
     return reset();
   };
 
-  p.translate = function(_) {
+  projection.translate = function(_) {
     if (!arguments.length) return [x, y];
     x = +_[0];
     y = +_[1];
     return reset();
   };
 
-  p.center = function(_) {
+  projection.center = function(_) {
     if (!arguments.length) return [λ * d3_degrees, φ * d3_degrees];
     λ = _[0] % 360 * d3_radians;
     φ = _[1] % 360 * d3_radians;
     return reset();
   };
 
-  p.rotate = function(_) {
+  projection.rotate = function(_) {
     if (!arguments.length) return [δλ * d3_degrees, δφ * d3_degrees, δγ * d3_degrees];
     δλ = _[0] % 360 * d3_radians;
     δφ = _[1] % 360 * d3_radians;
@@ -165,12 +158,12 @@ function d3_geo_projectionMutator(projectAt) {
     var center = project(λ, φ);
     δx = x - center[0] * k;
     δy = y + center[1] * k;
-    return p;
+    return projection;
   }
 
   return function() {
     project = projectAt.apply(this, arguments);
-    p.invert = project.invert && i;
+    projection.invert = project.invert && invert;
     return reset();
   };
 }

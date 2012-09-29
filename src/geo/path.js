@@ -1,5 +1,5 @@
 // TODO restore path.area, path.centroid
-// TODO fallback for projections that don't implement point, line, ring? (or fix albersUsa?)
+// TODO fallback for projections that don't implement point, polygon? (or fix albersUsa?)
 
 d3.geo.path = function() {
   var pointRadius = 4.5,
@@ -69,9 +69,7 @@ d3.geo.path = function() {
 
   function pathMultiPolygon(multiPolygon, context) {
     var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) {
-      projection.polygon(coordinates[i], context);
-    }
+    while (++i < n) projection.polygon(coordinates[i], context);
   }
 
   function pathPoint(point, context) {
