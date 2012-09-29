@@ -69,12 +69,6 @@ function d3_geo_projectionMutator(projectAt) {
     while (++i < n) ring(coordinates[i], context);
   };
 
-  projection.precision = function(_) {
-    if (!arguments.length) return Math.sqrt(δ2);
-    δ2 = _ * _;
-    return projection;
-  };
-
   function ring(coordinates, context) {
     if (!(n = coordinates.length)) return;
     context = resample(context);
@@ -227,6 +221,12 @@ function d3_geo_projectionMutator(projectAt) {
     δφ = _[1] % 360 * d3_radians;
     δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
     return reset();
+  };
+
+  projection.precision = function(_) {
+    if (!arguments.length) return Math.sqrt(δ2);
+    δ2 = _ * _;
+    return projection;
   };
 
   function reset() {

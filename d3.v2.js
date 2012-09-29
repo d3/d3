@@ -2140,11 +2140,6 @@
       var i = -1, n = coordinates.length;
       while (++i < n) ring(coordinates[i], context);
     };
-    projection.precision = function(_) {
-      if (!arguments.length) return Math.sqrt(δ2);
-      δ2 = _ * _;
-      return projection;
-    };
     projection.scale = function(_) {
       if (!arguments.length) return k;
       k = +_;
@@ -2168,6 +2163,11 @@
       δφ = _[1] % 360 * d3_radians;
       δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
       return reset();
+    };
+    projection.precision = function(_) {
+      if (!arguments.length) return Math.sqrt(δ2);
+      δ2 = _ * _;
+      return projection;
     };
     return function() {
       project = projectAt.apply(this, arguments);
