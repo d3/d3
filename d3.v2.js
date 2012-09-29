@@ -2022,22 +2022,22 @@
     })();
   }
   function d3_geo_projectionMutator(projectAt) {
-    function p(coordinates) {
+    function projection(coordinates) {
       coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
       return [ coordinates[0] * k + δx, δy - coordinates[1] * k ];
     }
-    function i(coordinates) {
+    function invert(coordinates) {
       coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
     function ring(coordinates, context) {
       if (!(n = coordinates.length)) return;
       context = resample(context);
-      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], segment = [ point ], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, segmentSide, i = 0, first = true, side, n;
+      var p = rotatePoint(coordinates[0]), λ0 = p[0], φ0 = p[1], segment = [ p ], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, segmentSide, i = 0, first = true, side, n;
       while (++i < n) {
-        point = rotatePoint(coordinates[i]);
-        λ1 = point[0];
-        φ1 = point[1];
+        p = rotatePoint(coordinates[i]);
+        λ1 = p[0];
+        φ1 = p[1];
         sλ1 = λ1 > 0 ? π : -π;
         if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
@@ -2050,13 +2050,13 @@
           side = sλ1;
           first = false;
         }
-        if (first) segment.push(point); else context.lineTo(λ1, φ1);
+        if (first) segment.push(p); else context.lineTo(λ1, φ1);
         λ0 = λ1;
         φ0 = φ1;
         sλ0 = sλ1;
       }
-      if (first) context.moveTo((point = segment[0])[0], point[1]);
-      for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
+      if (first) context.moveTo((p = segment[0])[0], p[1]);
+      for (i = 1, n = segment.length; i < n; i++) context.lineTo((p = segment[i])[0], p[1]);
       if (!first && side !== segmentSide) interpolateTo(side, context);
       context.closePath();
     }
@@ -2093,7 +2093,7 @@
       };
     }
     function interpolateTo(s, context) {
-      var point, φ = s / 2;
+      var φ = s / 2;
       context.lineTo(-s, φ);
       context.lineTo(0, φ);
       context.lineTo(s, φ);
@@ -2110,22 +2110,22 @@
       var center = project(λ, φ);
       δx = x - center[0] * k;
       δy = y + center[1] * k;
-      return p;
+      return projection;
     }
     var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, δ2 = .5;
-    p.point = function(coordinates, context) {
-      var point = p(coordinates);
-      context.point(point[0], point[1]);
+    projection.point = function(coordinates, context) {
+      var p = projection(coordinates);
+      context.point(p[0], p[1]);
     };
-    p.line = function(coordinates, context) {
+    projection.line = function(coordinates, context) {
       if (!(n = coordinates.length)) return;
       context = resample(context);
-      var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, i = 0, n;
+      var p = rotatePoint(coordinates[0]), λ0 = p[0], φ0 = p[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, i = 0, n;
       context.moveTo(λ0, φ0);
       while (++i < n) {
-        point = rotatePoint(coordinates[i]);
-        λ1 = point[0];
-        φ1 = point[1];
+        p = rotatePoint(coordinates[i]);
+        λ1 = p[0];
+        φ1 = p[1];
         sλ1 = λ1 > 0 ? π : -π;
         if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
@@ -2136,33 +2136,33 @@
         sλ0 = sλ1;
       }
     };
-    p.polygon = function(coordinates, context) {
+    projection.polygon = function(coordinates, context) {
       var i = -1, n = coordinates.length;
       while (++i < n) ring(coordinates[i], context);
     };
-    p.precision = function(_) {
+    projection.precision = function(_) {
       if (!arguments.length) return Math.sqrt(δ2);
       δ2 = _ * _;
-      return p;
+      return projection;
     };
-    p.scale = function(_) {
+    projection.scale = function(_) {
       if (!arguments.length) return k;
       k = +_;
       return reset();
     };
-    p.translate = function(_) {
+    projection.translate = function(_) {
       if (!arguments.length) return [ x, y ];
       x = +_[0];
       y = +_[1];
       return reset();
     };
-    p.center = function(_) {
+    projection.center = function(_) {
       if (!arguments.length) return [ λ * d3_degrees, φ * d3_degrees ];
       λ = _[0] % 360 * d3_radians;
       φ = _[1] % 360 * d3_radians;
       return reset();
     };
-    p.rotate = function(_) {
+    projection.rotate = function(_) {
       if (!arguments.length) return [ δλ * d3_degrees, δφ * d3_degrees, δγ * d3_degrees ];
       δλ = _[0] % 360 * d3_radians;
       δφ = _[1] % 360 * d3_radians;
@@ -2171,7 +2171,7 @@
     };
     return function() {
       project = projectAt.apply(this, arguments);
-      p.invert = project.invert && i;
+      projection.invert = project.invert && invert;
       return reset();
     };
   }
