@@ -19,7 +19,8 @@ function d3_geo_projectionMutator(projectAt) {
       δγ = 0,
       δx = x,
       δy = y,
-      δ2 = .5; // (precision in px)².
+      δ2 = .5, // (precision in px)².
+      clipAngle = null;
 
   function p(coordinates) {
     coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
@@ -114,6 +115,26 @@ function d3_geo_projectionMutator(projectAt) {
     δ2 = _ * _;
     return p;
   };
+
+  // TODO better ability to switch between antemeridian cut and circle clip.
+  p.clipAngle = function(_) {
+    if (!arguments.length) return clipAngle;
+    return clipCircle(clipAngle = +_);
+  };
+
+  function clipCircle(angle) {
+    var clip = d3_geo_circleClip(angle, rotatePoint);
+    p.point = function(d, c) {
+      clip.point(d, resample(c));
+    };
+    p.line = function(d, c) {
+      clip.line(d, resample(c));
+    };
+    p.ring = function(d, c) {
+      clip.ring(d, resample(c));
+    };
+    return p;
+  }
 
   // TODO this is not just resampling but also projecting
   function resample(context) {
