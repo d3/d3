@@ -1959,8 +1959,7 @@
     var lineString = null;
     return {
       moveTo: function(x, y) {
-        lineStrings.push(lineString = []);
-        lineString.push([ x * d3_degrees, y * d3_degrees ]);
+        lineStrings.push(lineString = [ x * d3_degrees, y * d3_degrees ]);
       },
       lineTo: function(x, y) {
         lineString.push([ x * d3_degrees, y * d3_degrees ]);

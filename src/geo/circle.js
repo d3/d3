@@ -106,12 +106,8 @@ d3.geo.circle = function() {
 
 function d3_geo_circleContext(lineStrings) {
   var lineString = null;
-
   return {
-    moveTo: function(x, y) {
-      lineStrings.push(lineString = []);
-      lineString.push([x * d3_degrees, y * d3_degrees]);
-    },
+    moveTo: function(x, y) { lineStrings.push(lineString = [x * d3_degrees, y * d3_degrees]); },
     lineTo: function(x, y) { lineString.push([x * d3_degrees, y * d3_degrees]); },
     closePath: function() {}
   };
@@ -190,6 +186,7 @@ function d3_geo_circleClip(degrees, rotate) {
   }
 
   // Intersects the great circle between a and b with the clip circle.
+  // TODO special case: clipAngle(90°); avoid conversion ↔ Cartesian 3-space.
   function intersect(a, b) {
     var pa = d3_geo_circleCartesian(a, [0, 0, 0]),
         pb = d3_geo_circleCartesian(b, [0, 0, 0]);
