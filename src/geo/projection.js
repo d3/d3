@@ -65,7 +65,13 @@ function d3_geo_projectionMutator(projectAt) {
     }
   };
 
-  p.ring = function(coordinates, context) {
+  p.polygon = function(coordinates, context) {
+    coordinates.forEach(function(coordinates) {
+      ring(coordinates, context);
+    });
+  };
+
+  function ring(coordinates, context) {
     if (!(n = coordinates.length)) return;
     context = resample(context);
     var point = rotatePoint(coordinates[0]),
@@ -108,7 +114,7 @@ function d3_geo_projectionMutator(projectAt) {
     for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
     if (!first && side !== segmentSide) interpolateTo(side, context);
     context.closePath();
-  };
+  }
 
   p.precision = function(_) {
     if (!arguments.length) return Math.sqrt(δ2);
@@ -130,8 +136,8 @@ function d3_geo_projectionMutator(projectAt) {
     p.line = function(d, c) {
       clip.line(d, resample(c));
     };
-    p.ring = function(d, c) {
-      clip.ring(d, resample(c));
+    p.polygon = function(d, c) {
+      clip.polygon(d, resample(c));
     };
     return p;
   }

@@ -70,8 +70,7 @@ d3.geo.path = function() {
   function pathMultiPolygon(multiPolygon, context) {
     var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
     while (++i < n) {
-      var subcoordinates = coordinates[i], j = -1, m = subcoordinates.length;
-      while (++j < m) projection.ring(subcoordinates[j], context);
+      projection.polygon(coordinates[i], context);
     }
   }
 
@@ -80,8 +79,7 @@ d3.geo.path = function() {
   }
 
   function pathPolygon(polygon, context) {
-    var coordinates = polygon.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) projection.ring(coordinates[i], context);
+    projection.polygon(polygon.coordinates, context);
   }
 
   var pathObjectByType = d3.map({

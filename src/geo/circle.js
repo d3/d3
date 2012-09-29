@@ -57,11 +57,8 @@ d3.geo.circle = function() {
       return lineStrings.length && (o = Object.create(o), o.coordinates = lineStrings, o);
     },
     Polygon: function(o) {
-      var lineStrings = [],
-          context = d3_geo_circleContext(lineStrings);
-      o.coordinates.forEach(function(coordinates) {
-        clip.ring(coordinates, context);
-      });
+      var lineStrings = [];
+      clip.polygon(o.coordinates, d3_geo_circleContext(lineStrings));
       var polygons = lineStrings.map(function(lineString) { return [lineString]; });
       return polygons.length && (o = Object.create(o), o.type = "MultiPolygon", o.coordinates = polygons, o);
     },
@@ -69,9 +66,7 @@ d3.geo.circle = function() {
       var lineStrings = [],
           context = d3_geo_circleContext(lineStrings);
       o.coordinates.forEach(function(coordinates) {
-        coordinates.forEach(function(coordinates) {
-          clip.ring(coordinates, context);
-        });
+        clip.polygon(coordinates, context);
       });
       var polygons = lineStrings.map(function(lineString) { return [lineString]; });
       return polygons.length && (o = Object.create(o), o.type = "MultiPolygon", o.coordinates = polygons, o);
@@ -136,8 +131,8 @@ function d3_geo_circleClip(degrees, rotate) {
         while (++i < n) context.lineTo((point = lineString[i])[0], point[1]);
       });
     },
-    ring: function(ring, context) {
-      var polygons = clipPolygon([ring.map(rotate)], context);
+    polygon: function(polygon, context) {
+      var polygons = clipPolygon(polygon.map(function(ring) { return ring.map(rotate); }), context);
       polygons.forEach(function(polygon) {
         polygon.forEach(function(ring) {
           var i = 0, n = ring.length, point = ring[0];
