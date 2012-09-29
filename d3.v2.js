@@ -2000,7 +2000,7 @@
     }
     function intersect(a, b) {
       var pa = d3_geo_circleCartesian(a, [ 0, 0, 0 ]), pb = d3_geo_circleCartesian(b, [ 0, 0, 0 ]);
-      var n1 = normal, n2 = d3_geo_circleCross(pa, pb), d1 = d3_geo_circleDot(n1, center), d2 = 0, n1n1 = d3_geo_circleDot(n1, n1), n2n2 = d3_geo_circleDot(n2, n2), n1n2 = d3_geo_circleDot(n1, n2), determinant = n1n1 * n2n2 - n1n2 * n1n2;
+      var n1 = [ 1, 0, 0 ], n2 = d3_geo_circleCross(pa, pb), d1 = center[0], d2 = 0, n1n1 = 1, n2n2 = d3_geo_circleDot(n2, n2), n1n2 = n2[0], determinant = n2n2 - n1n2 * n1n2;
       if (!determinant) return a;
       var c1 = (d1 * n2n2 - d2 * n1n2) / determinant, c2 = (d2 * n1n1 - d1 * n1n2) / determinant, n1xn2 = d3_geo_circleCross(n1, n2), A = d3_geo_circleScale(n1, c1), B = d3_geo_circleScale(n2, c2);
       d3_geo_circleAdd(A, B);
@@ -2043,7 +2043,7 @@
       });
       if (!unvisited) return polygons;
       intersections.forEach(function(intersection, i) {
-        intersection.angle = angle(intersection.xyz, reference);
+        intersection.angle = angle(intersection.xyz);
       });
       var start = intersections[0], tmp = null;
       intersections.sort(function(a, b) {
@@ -2081,11 +2081,10 @@
       }
       return polygons;
     }
-    function angle(a, b) {
+    function angle(a) {
       d3_geo_circleNormalize(a);
-      d3_geo_circleNormalize(b);
-      var c = d3_geo_circleCross(b, a), angle = Math.acos(Math.max(-1, Math.min(1, d3_geo_circleDot(a, b))));
-      return ((d3_geo_circleDot(c, normal) < 0 ? -angle : angle) + 2 * Math.PI) % (2 * Math.PI);
+      var angle = Math.acos(Math.max(-1, Math.min(1, -a[1])));
+      return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI) % (2 * Math.PI);
     }
     function interpolate(from, to) {
       if (from < to) from += 2 * Math.PI;

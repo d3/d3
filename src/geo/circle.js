@@ -195,14 +195,14 @@ function d3_geo_circleClip(degrees, rotate) {
         pb = d3_geo_circleCartesian(b, [0, 0, 0]);
     // We have two planes, n1.p = d1 and n2.p = d2.
     // Find intersection line p(t) = c1 n1 + c2 n2 + t (n1 x n2).
-    var n1 = normal,
+    var n1 = [1, 0, 0], // normal
         n2 = d3_geo_circleCross(pa, pb),
-        d1 = d3_geo_circleDot(n1, center),
+        d1 = center[0], // d3_geo_circleDot(n1, center),
         d2 = 0,
-        n1n1 = d3_geo_circleDot(n1, n1),
+        n1n1 = 1, // d3_geo_circleDot(n1, n1),
         n2n2 = d3_geo_circleDot(n2, n2),
-        n1n2 = d3_geo_circleDot(n1, n2),
-        determinant = n1n1 * n2n2 - n1n2 * n1n2;
+        n1n2 = n2[0], // d3_geo_circleDot(n1, n2),
+        determinant = n2n2 - n1n2 * n1n2;
     // Two polar points.
     if (!determinant) return a;
 
@@ -270,7 +270,7 @@ function d3_geo_circleClip(degrees, rotate) {
     if (!unvisited) return polygons;
     // Sort intersection points by relative angles.
     intersections.forEach(function(intersection, i) {
-      intersection.angle = angle(intersection.xyz, reference);
+      intersection.angle = angle(intersection.xyz);
     });
     var start = intersections[0],
         tmp = null;
@@ -310,12 +310,10 @@ function d3_geo_circleClip(degrees, rotate) {
   }
 
   // Signed angle from one point to another, relative to the circle center.
-  function angle(a, b) {
+  function angle(a) {
     d3_geo_circleNormalize(a);
-    d3_geo_circleNormalize(b);
-    var c = d3_geo_circleCross(b, a),
-        angle = Math.acos(Math.max(-1, Math.min(1, d3_geo_circleDot(a, b))));
-    return ((d3_geo_circleDot(c, normal) < 0 ? -angle : angle) + 2 * Math.PI) % (2 * Math.PI);
+    var angle = Math.acos(Math.max(-1, Math.min(1, -a[1])));
+    return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI) % (2 * Math.PI);
   }
 
   function interpolate(from, to) {
