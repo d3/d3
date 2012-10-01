@@ -1570,7 +1570,7 @@
     return [ d3.min(values), d3.max(values) ];
   }
   function d3_layout_hierarchyRebind(object, hierarchy) {
-    d3.rebind(object, hierarchy, "sort", "children", "value");
+    d3.rebind(object, hierarchy, "sort", "children", "value", "internal_value");
     object.links = d3_layout_hierarchyLinks;
     object.nodes = function(d) {
       d3_layout_hierarchyInline = true;
@@ -5525,6 +5525,7 @@
         }
         if (sort) c.sort(sort);
         if (value) node.value = v;
+        if (internal_value) node.value += internal_value.call(hierarchy, data, depth);
       } else if (value) {
         node.value = +value.call(hierarchy, data, depth) || 0;
       }
@@ -5546,7 +5547,7 @@
       recurse(d, 0, nodes);
       return nodes;
     }
-    var sort = d3_layout_hierarchySort, children = d3_layout_hierarchyChildren, value = d3_layout_hierarchyValue;
+    var sort = d3_layout_hierarchySort, children = d3_layout_hierarchyChildren, value = d3_layout_hierarchyValue, internal_value = null;
     hierarchy.sort = function(x) {
       if (!arguments.length) return sort;
       sort = x;
@@ -5560,6 +5561,11 @@
     hierarchy.value = function(x) {
       if (!arguments.length) return value;
       value = x;
+      return hierarchy;
+    };
+    hierarchy.internal_value = function(x) {
+      if (!arguments.length) return internal_value;
+      internal_value = x;
       return hierarchy;
     };
     hierarchy.revalue = function(root) {

@@ -1,7 +1,8 @@
 d3.layout.hierarchy = function() {
   var sort = d3_layout_hierarchySort,
       children = d3_layout_hierarchyChildren,
-      value = d3_layout_hierarchyValue;
+      value = d3_layout_hierarchyValue,
+      internal_value = null;
 
   // Recursively compute the node depth and value.
   // Also converts the data representation into a standard hierarchy structure.
@@ -25,6 +26,7 @@ d3.layout.hierarchy = function() {
       }
       if (sort) c.sort(sort);
       if (value) node.value = v;
+      if (internal_value) node.value += internal_value.call(hierarchy, data, depth);
     } else if (value) {
       node.value = +value.call(hierarchy, data, depth) || 0;
     }
@@ -71,6 +73,12 @@ d3.layout.hierarchy = function() {
     return hierarchy;
   };
 
+  hierarchy.internal_value = function (x) {
+    if (!arguments.length) return internal_value;
+    internal_value = x;
+    return hierarchy;
+  };
+
   // Re-evaluates the `value` property for the specified hierarchy.
   hierarchy.revalue = function(root) {
     revalue(root, 0);
@@ -82,7 +90,7 @@ d3.layout.hierarchy = function() {
 
 // A method assignment helper for hierarchy subclasses.
 function d3_layout_hierarchyRebind(object, hierarchy) {
-  d3.rebind(object, hierarchy, "sort", "children", "value");
+  d3.rebind(object, hierarchy, "sort", "children", "value", "internal_value");
 
   // Add an alias for links, for convenience.
   object.links = d3_layout_hierarchyLinks;
