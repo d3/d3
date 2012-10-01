@@ -133,6 +133,10 @@ suite.addBatch({
     },
     "outputs an RGB string": function(interpolate) {
       assert.equal(interpolate("steelblue", "#f00")(.2), "#6b6890");
+    },
+    "keeps it's hue when mixing with black or white": function(interpolate) {
+      assert.equal(interpolate("#f60", "#000")(.5), "#803300");
+      assert.equal(interpolate("#f60", "#fff")(.5), "#ffb380");
     }
   }
 });
@@ -159,6 +163,22 @@ suite.addBatch({
     },
     "outputs a hexadecimal string": function(interpolate) {
       assert.equal(interpolate("steelblue", "#f00")(.2), "#383dc3");
+    },
+    "keeps it's hue when mixing with black or white": function(interpolate) {
+      assert.equal(interpolate("#f60", "#000")(.5), "#603920");
+      assert.equal(interpolate("#f60", "#fff")(.5), "#dfb99f");
+    }
+  }
+});
+
+suite.addBatch({
+  "interpolateHcl": {
+    topic: function() {
+      return d3.interpolateHcl;
+    },
+    "keeps it's hue when mixing with black or white": function(interpolate) {
+      assert.equal(interpolate("#f60", "#000")(.5), "#7a3510");
+      assert.equal(interpolate("#f60", "#fff")(.5), "#ffb588");
     }
   }
 });

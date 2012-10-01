@@ -3289,7 +3289,7 @@
   d3.interpolateHsl = function(a, b) {
     a = d3.hsl(a);
     b = d3.hsl(b);
-    var h0 = a.h, s0 = a.s, l0 = a.l, h1 = b.h - h0, s1 = b.s - s0, l1 = b.l - l0;
+    var h0 = a.s == 0 ? b.h : a.h, s0 = a.s, l0 = a.l, h1 = (b.s == 0 ? a.h : b.h) - h0, s1 = b.s - s0, l1 = b.l - l0;
     if (h1 > 180) h1 -= 360; else if (h1 < -180) h1 += 360;
     return function(t) {
       return d3_hsl_rgb(h0 + h1 * t, s0 + s1 * t, l0 + l1 * t) + "";
@@ -3306,7 +3306,8 @@
   d3.interpolateHcl = function(a, b) {
     a = d3.hcl(a);
     b = d3.hcl(b);
-    var ah = a.h, ac = a.c, al = a.l, bh = b.h - ah, bc = b.c - ac, bl = b.l - al;
+    var aRGB = a + "", bRGB = b + "", h0 = aRGB == "#ffffff" || aRGB == "#000000" ? b.h : a.h, h1 = bRGB == "#ffffff" || bRGB == "#000000" ? a.h : b.h;
+    var ah = h0, ac = a.c, al = a.l, bh = h1 - ah, bc = b.c - ac, bl = b.l - al;
     if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
     return function(t) {
       return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
