@@ -2153,12 +2153,14 @@
   }
   function d3_geo_compose(a, b) {
     function compose(λ, φ) {
-      return b.apply(b, a(λ, φ));
+      var coordinates = a(λ, φ);
+      return b(coordinates[0], coordinates[1]);
     }
     if (a === d3_geo_equirectangular) return b;
     if (b === d3_geo_equirectangular) return a;
     if (a.invert && b.invert) compose.invert = function(x, y) {
-      return a.invert.apply(a, b.invert(x, y));
+      var coordinates = b.invert(x, y);
+      return a.invert(coordinates[0], coordinates[1]);
     };
     return compose;
   }
@@ -2226,6 +2228,36 @@
       coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
+    function ring(coordinates, context) {
+      if (!(n = coordinates.length)) return;
+      context = resample(context);
+      var p = rotatePoint(coordinates[0]), λ0 = p[0], φ0 = p[1], segment = [ p ], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, segmentSide, i = 0, first = true, side, n;
+      while (++i < n) {
+        p = rotatePoint(coordinates[i]);
+        λ1 = p[0];
+        φ1 = p[1];
+        sλ1 = λ1 > 0 ? π : -π;
+        if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
+          φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
+          if (first) segment.push([ sλ0, φ0 ]), segmentSide = sλ0; else {
+            context.lineTo(sλ0, φ0);
+            if (sλ0 !== side) interpolateTo(side, context);
+            context.closePath();
+          }
+          context.moveTo(sλ1, φ0);
+          side = sλ1;
+          first = false;
+        }
+        if (first) segment.push(p); else context.lineTo(λ1, φ1);
+        λ0 = λ1;
+        φ0 = φ1;
+        sλ0 = sλ1;
+      }
+      if (first) context.moveTo((p = segment[0])[0], p[1]);
+      for (i = 1, n = segment.length; i < n; i++) context.lineTo((p = segment[i])[0], p[1]);
+      if (!first && side !== segmentSide) interpolateTo(side, context);
+      context.closePath();
+    }
     function resample(context) {
       function moveTo(λ, φ) {
         var p = projectPoint(λ00 = λ0 = λ, φ00 = φ0 = φ);
@@ -2282,11 +2314,6 @@
     projection.polygon = function(coordinates, context) {
       clip.polygon(coordinates, resample(context));
     };
-    projection.precision = function(_) {
-      if (!arguments.length) return Math.sqrt(δ2);
-      δ2 = _ * _;
-      return projection;
-    };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;
       clip = _ == null ? (clipAngle = _, d3_geo_projectionCutAntemeridian(rotatePoint)) : d3_geo_circleClip(clipAngle = +_, rotatePoint);
@@ -2315,6 +2342,11 @@
       δφ = _[1] % 360 * d3_radians;
       δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
       return reset();
+    };
+    projection.precision = function(_) {
+      if (!arguments.length) return Math.sqrt(δ2);
+      δ2 = _ * _;
+      return projection;
     };
     return function() {
       project = projectAt.apply(this, arguments);
