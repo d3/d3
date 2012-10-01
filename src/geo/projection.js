@@ -46,51 +46,6 @@ function d3_geo_projectionMutator(projectAt) {
     return projection;
   };
 
-  function ring(coordinates, context) {
-    if (!(n = coordinates.length)) return;
-    context = resample(context);
-    var p = rotatePoint(coordinates[0]),
-        λ0 = p[0],
-        φ0 = p[1],
-        segment = [p],
-        λ1,
-        φ1,
-        sλ0 = λ0 > 0 ? π : -π,
-        sλ1,
-        segmentSide, // the side of the last point in the buffered segment.
-        i = 0,
-        first = true, // true when no intersections have been found yet.
-        side, // the side of the last start point (moveTo call).
-        n;
-    while (++i < n) {
-      p = rotatePoint(coordinates[i]);
-      λ1 = p[0];
-      φ1 = p[1];
-      sλ1 = λ1 > 0 ? π : -π;
-      if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
-        φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-        if (first) segment.push([sλ0, φ0]), segmentSide = sλ0;
-        else {
-          context.lineTo(sλ0, φ0);
-          if (sλ0 !== side) interpolateTo(side, context);
-          context.closePath();
-        }
-        context.moveTo(sλ1, φ0);
-        side = sλ1;
-        first = false;
-      }
-      if (first) segment.push(p);
-      else context.lineTo(λ1, φ1);
-      λ0 = λ1;
-      φ0 = φ1;
-      sλ0 = sλ1;
-    }
-    if (first) context.moveTo((p = segment[0])[0], p[1]);
-    for (i = 1, n = segment.length; i < n; i++) context.lineTo((p = segment[i])[0], p[1]);
-    if (!first && side !== segmentSide) interpolateTo(side, context);
-    context.closePath();
-  }
-
   // TODO this is not just resampling but also projecting
   // TODO don't create a context wrapper for every line & polygon
   function resample(context) {
@@ -224,8 +179,36 @@ function d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1) {
       : (φ0 + φ1) / 2;
 }
 
+// TODO combine with d3_geo_projectionCutAntemeridian; move to antemeridian.js.
+function d3_geo_antemeridianClipLine(rotatePoint, coordinates, context) {
+  if (!(n = coordinates.length)) return;
+  var point = rotatePoint(coordinates[0]),
+      λ0 = point[0],
+      φ0 = point[1],
+      λ1,
+      φ1,
+      sλ0 = λ0 > 0 ? π : -π,
+      sλ1,
+      i = 0,
+      n;
+  context.moveTo(λ0, φ0);
+  while (++i < n) {
+    point = rotatePoint(coordinates[i]);
+    λ1 = point[0];
+    φ1 = point[1];
+    sλ1 = λ1 > 0 ? π : -π;
+    if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
+      φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
+      context.lineTo(sλ0, φ0);
+      context.moveTo(sλ1, φ0);
+    }
+    context.lineTo(λ0 = λ1, φ0 = φ1);
+    sλ0 = sλ1;
+  }
+}
+
 function d3_geo_projectionCutAntemeridian(rotatePoint) {
-  return {
+  var clip = {
     point: function(coordinates, context) {
       var point = rotatePoint(coordinates);
       context.point(point[0], point[1]);
@@ -256,56 +239,15 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
         sλ0 = sλ1;
       }
     },
-    polygon: function(coordinates, context) {
-      coordinates.forEach(function(coordinates) {
-        ring(coordinates, context);
-      });
+    polygon: function(polygon, context) {
+      d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate, d3_geo_antemeridianAngle);
     }
   };
+  return clip;
+}
 
-  function ring(coordinates, context) {
-    if (!(n = coordinates.length)) return;
-    var point = rotatePoint(coordinates[0]),
-        λ0 = point[0],
-        φ0 = point[1],
-        segment = [point],
-        λ1,
-        φ1,
-        sλ0 = λ0 > 0 ? π : -π,
-        sλ1,
-        segmentSide, // the side of the last point in the buffered segment.
-        i = 0,
-        first = true, // true when no intersections have been found yet.
-        side, // the side of the last start point (moveTo call).
-        n;
-    while (++i < n) {
-      point = rotatePoint(coordinates[i]);
-      λ1 = point[0];
-      φ1 = point[1];
-      sλ1 = λ1 > 0 ? π : -π;
-      if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
-        φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-        if (first) segment.push([sλ0, φ0]), segmentSide = sλ0;
-        else {
-          context.lineTo(sλ0, φ0);
-          if (sλ0 !== side) d3_geo_projectionInterpolateToAntemeridian(side, context);
-          context.closePath();
-        }
-        context.moveTo(sλ1, φ0);
-        side = sλ1;
-        first = false;
-      }
-      if (first) segment.push(point);
-      else context.lineTo(λ1, φ1);
-      λ0 = λ1;
-      φ0 = φ1;
-      sλ0 = sλ1;
-    }
-    if (first) context.moveTo((point = segment[0])[0], point[1]);
-    for (i = 1, n = segment.length; i < n; i++) context.lineTo((point = segment[i])[0], point[1]);
-    if (!first && side !== segmentSide) d3_geo_projectionInterpolateToAntemeridian(side, context);
-    context.closePath();
-  }
+function d3_geo_antemeridianAngle(point) {
+  return point[0] > 0 ? point[1] + π / 2 : -π / 2 - point[1];
 }
 
 function d3_geo_projectionInterpolateToAntemeridian(s, context) {
@@ -313,4 +255,18 @@ function d3_geo_projectionInterpolateToAntemeridian(s, context) {
   context.lineTo(-s, φ);
   context.lineTo( 0, φ);
   context.lineTo( s, φ);
+}
+
+function d3_geo_antemeridianInterpolate(from, to, context) {
+  from = from.point;
+  to = to.point;
+  if (from[0] !== to[0]) {
+    var s = from[0] > to[0] ? -π : π,
+        φ = s / 2;
+    context.lineTo(-s, φ);
+    context.lineTo( 0, φ);
+    context.lineTo( s, φ);
+  } else {
+    context.lineTo(to[0], to[1]);
+  }
 }
