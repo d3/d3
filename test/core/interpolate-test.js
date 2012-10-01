@@ -97,9 +97,16 @@ suite.addBatch({
       assert.equal(interpolate(" 10/20 100 20", "50/10 100, 20 ")(.2), "18/18 100, 20 ");
       assert.equal(interpolate(" 10/20 100 20", "50/10 100, 20 ")(.4), "26/16 100, 20 ");
     },
+    "interpolates decimal notation correctly": function(interpolate) {
+      assert.equal(interpolate("1.", "2.")(.5), "1.5");
+    },
     "interpolates exponent notation correctly": function(interpolate) {
       assert.equal(interpolate("1e+3", "1e+4")(.5), "5500");
       assert.equal(interpolate("1e-3", "1e-4")(.5), "0.00055");
+      assert.equal(interpolate("1.e-3", "1.e-4")(.5), "0.00055");
+      assert.equal(interpolate("-1.e-3", "-1.e-4")(.5), "-0.00055");
+      assert.equal(interpolate("+1.e-3", "+1.e-4")(.5), "0.00055");
+      assert.equal(interpolate(".1e-2", ".1e-3")(.5), "0.00055");
     }
   }
 });
@@ -136,22 +143,22 @@ suite.addBatch({
       return d3.interpolateHsl;
     },
     "parses string input": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "#38c3a2");
-      assert.equal(interpolate("steelblue", "#f00")(.6), "#96e11c");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#383dc3");
+      assert.equal(interpolate("steelblue", "#f00")(.6), "#dd1ce1");
     },
     "parses d3.hsl input": function(interpolate) {
-      assert.equal(interpolate(d3.hsl("steelblue"), "#f00")(.2), "#38c3a2");
-      assert.equal(interpolate("steelblue", d3.hsl(0, 1, .5))(.6), "#96e11c");
+      assert.equal(interpolate(d3.hsl("steelblue"), "#f00")(.2), "#383dc3");
+      assert.equal(interpolate("steelblue", d3.hsl(0, 1, .5))(.6), "#dd1ce1");
     },
     "parses d3.rgb input": function(interpolate) {
-      assert.equal(interpolate(d3.rgb("steelblue"), "#f00")(.2), "#38c3a2");
-      assert.equal(interpolate("steelblue", d3.rgb(255, 0, 0))(.6), "#96e11c");
+      assert.equal(interpolate(d3.rgb("steelblue"), "#f00")(.2), "#383dc3");
+      assert.equal(interpolate("steelblue", d3.rgb(255, 0, 0))(.6), "#dd1ce1");
     },
     "interpolates in HSL color space": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "#38c3a2");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#383dc3");
     },
     "outputs a hexadecimal string": function(interpolate) {
-      assert.equal(interpolate("steelblue", "#f00")(.2), "#38c3a2");
+      assert.equal(interpolate("steelblue", "#f00")(.2), "#383dc3");
     }
   }
 });

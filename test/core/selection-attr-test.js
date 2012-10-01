@@ -38,6 +38,15 @@ suite.addBatch({
       body.data(["orange"]).attr("xlink:href", function(d, i) { return d + "-" + i; });
       assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0");
     },
+    "sets attributes as a map of constants": function(body) {
+      body.attr({bgcolor: "white", "xlink:href": "url.png"});
+      assert.equal(document.body.getAttribute("bgcolor"), "white");
+      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "url.png");
+    },
+    "sets attributes as a map of functions": function(body) {
+      body.data(["orange"]).attr({"xlink:href": function(d, i) { return d + "-" + i + ".png"; }});
+      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0.png");
+    },
     "gets an attribute value": function(body) {
       document.body.setAttribute("bgcolor", "yellow");
       assert.equal(body.attr("bgcolor"), "yellow");
@@ -61,6 +70,20 @@ suite.addBatch({
     "removes a namespaced attribute as a function": function(body) {
       body.attr("xlink:href", "url").attr("xlink:href", function() { return null; });
       assert.equal(body.attr("xlink:href"), "");
+    },
+    "removes attributes as a map of null": function(body) {
+      document.body.setAttribute("bgcolor", "white");
+      document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
+      body.attr({bgcolor: null, "xlink:href": null});
+      assert.equal(document.body.getAttribute("bgcolor"), "");
+      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "");
+    },
+    "removes attribtues as a map of functions that return null": function(body) {
+      document.body.setAttribute("bgcolor", "white");
+      document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
+      body.attr({bgcolor: function() {}, "xlink:href": function() {}});
+      assert.equal(document.body.getAttribute("bgcolor"), "");
+      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "");
     },
     "returns the current selection": function(body) {
       assert.isTrue(body.attr("foo", "bar") === body);

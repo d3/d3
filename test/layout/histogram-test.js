@@ -68,6 +68,12 @@ suite.addBatch({
         {x: 1, y: 1, dx: 1},
         {x: 2, y: 2, dx: 1}
       ]);
+    },
+    "returns the empty array with fewer than two bins": function(histogram) {
+      var h = histogram().bins([1]);
+      assert.deepEqual(h([0]), []);
+      var h = histogram().bins([]);
+      assert.deepEqual(h([0]), []);
     }
   }
 });

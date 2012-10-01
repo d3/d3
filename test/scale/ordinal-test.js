@@ -120,6 +120,11 @@ suite.addBatch({
         assert.deepEqual(x.range(), [30, 60, 90]);
         assert.equal(x.rangeBand(), 0);
       },
+      "correctly handles singleton domains": function(ordinal) {
+        var x = ordinal().domain(["a"]).rangePoints([0, 120]);
+        assert.deepEqual(x.range(), [60]);
+        assert.equal(x.rangeBand(), 0);
+      },
       "can be set to a descending range": function(ordinal) {
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0]);
         assert.deepEqual(x.range(), [120, 60,0]);
@@ -157,6 +162,14 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], .2);
         assert.deepEqual(x.range(), [82.5, 45, 7.5]);
         assert.equal(x.rangeBand(), 30);
+      },
+      "can specify a different outer padding": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], .2, .1);
+        assert.deepEqual(x.range(), [84, 44, 4]);
+        assert.equal(x.rangeBand(), 32);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], .2, 1);
+        assert.deepEqual(x.range(), [75, 50, 25]);
+        assert.equal(x.rangeBand(), 20);
       }
     },
 
@@ -176,6 +189,14 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([100, 0], .2);
         assert.deepEqual(x.range(), [69, 38, 7]);
         assert.equal(x.rangeBand(), 25);
+      },
+      "can specify a different outer padding": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([120, 0], .2, .1);
+        assert.deepEqual(x.range(), [84, 44, 4]);
+        assert.equal(x.rangeBand(), 32);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([120, 0], .2, 1);
+        assert.deepEqual(x.range(), [75, 50, 25]);
+        assert.equal(x.rangeBand(), 20);
       }
     },
 

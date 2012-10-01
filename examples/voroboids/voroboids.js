@@ -1,12 +1,15 @@
-var w = 960,
-    h = 500,
-    mouse = [null, null],
-    fill = d3.scale.linear().domain([0, 1e4]).range(["brown", "steelblue"]);
+var width = 960,
+    height = 500,
+    mouse = [null, null];
+
+var fill = d3.scale.linear()
+    .domain([0, 1e4])
+    .range(["brown", "steelblue"]);
 
 // Initialise boids.
 var boids = d3.range(100).map(function() {
   return boid()
-      .position([Math.random() * w, Math.random() * h])
+      .position([Math.random() * width, Math.random() * height])
       .velocity([Math.random() * 2 - 1, Math.random() * 2 - 1])
       .gravityCenter(mouse);
 });
@@ -20,8 +23,8 @@ d3.select(window).on("blur", nullGravity);
 
 var svg = d3.select("#vis")
   .append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
     .attr("class", "PiYG")
     .on("mousemove", function() {
       var m = d3.mouse(this);

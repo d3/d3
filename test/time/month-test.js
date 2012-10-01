@@ -1,7 +1,10 @@
 require("../env");
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("assert"),
+    time = require("./time"),
+    local = time.local,
+    utc = time.utc;
 
 var suite = vows.describe("d3.time.month");
 
@@ -27,6 +30,9 @@ suite.addBatch({
       },
       "observes the end of the daylight savings time": function(floor) {
         assert.deepEqual(floor(local(2011, 10, 06, 01)), local(2011, 10, 01));
+      },
+      "correctly handles years in the first century": function(floor) {
+        assert.deepEqual(floor(local(0011, 10, 06, 07)), local(0011, 10, 01));
       }
     },
     "ceil": {
@@ -143,13 +149,5 @@ suite.addBatch({
     }
   }
 });
-
-function local(year, month, day, hours, minutes, seconds) {
-  return new Date(year, month, day, hours || 00, minutes || 00, seconds || 00);
-}
-
-function utc(year, month, day, hours, minutes, seconds) {
-  return new Date(Date.UTC(year, month, day, hours || 00, minutes || 00, seconds || 00));
-}
 
 suite.export(module);

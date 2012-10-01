@@ -124,7 +124,7 @@ suite.addBatch({
       },
       "can specify a custom interpolator": function(sqrt) {
         var x = sqrt().range(["red", "blue"]).interpolate(d3.interpolateHsl);
-        assert.equal(x(.25), "#00ff00");
+        assert.equal(x(.25), "#ff00ff");
       }
     },
 
@@ -188,7 +188,7 @@ suite.addBatch({
         var x = sqrt().domain([1.1, 1, 2, 3, 10.9]).nice(), f = d3.format(".6f");
         assert.deepEqual(x.domain().map(f), [1, 1, 2, 3, 11]);
         var x = sqrt().domain([123.1, 1, 2, 3, -.9]).nice();
-        assert.deepEqual(x.domain().map(f), [130, 1, 2, 3, "−10.000000"]);
+        assert.deepEqual(x.domain().map(f), [130, 1, 2, 3, "-10.000000"]);
       }
     },
 
@@ -233,7 +233,7 @@ suite.addBatch({
       "changes to the interpolator are isolated": function(sqrt) {
         var x = sqrt().range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
-        assert.equal(x(0.5), "#00ffd3");
+        assert.equal(x(0.5), "#9500ff");
         assert.equal(y(0.5), "#4b00b4");
         assert.equal(y.interpolate(), d3.interpolate);
       },

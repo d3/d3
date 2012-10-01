@@ -97,7 +97,7 @@ suite.addBatch({
       },
       "can specify a custom interpolator": function(linear) {
         var x = linear().range(["red", "blue"]).interpolate(d3.interpolateHsl);
-        assert.equal(x(.5), "#00ff00");
+        assert.equal(x(.5), "#ff00ff");
       }
     },
 
@@ -211,6 +211,8 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [130, 0]);
         var x = linear().domain([0, .49]).nice();
         assert.deepEqual(x.domain(), [0, .5]);
+      },
+      "has no effect on degenerate domains": function(linear) {
         var x = linear().domain([0, 0]).nice();
         assert.deepEqual(x.domain(), [0, 0]);
         var x = linear().domain([.5, .5]).nice();
@@ -252,7 +254,7 @@ suite.addBatch({
       "changes to the interpolator are isolated": function(linear) {
         var x = linear().range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
-        assert.equal(x(0.5), "#00ff00");
+        assert.equal(x(0.5), "#ff00ff");
         assert.equal(y(0.5), "#800080");
         assert.equal(y.interpolate(), d3.interpolate);
       },

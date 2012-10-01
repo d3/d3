@@ -1,17 +1,24 @@
 // Based on http://vis.stanford.edu/protovis/ex/sort.html
 // Based on work by Robert Sedgewick
 
-var w = 960,
-    h = 50,
-    n = 240,
-    x = d3.scale.linear().domain([0, n]).range([h, w - h]),
-    a = d3.scale.linear().domain([0, n - 1]).range([90 + 60, 270 - 60]),
-    data = shuffle(d3.range(n)),
+var width = 960,
+    height = 50,
+    n = 240;
+
+var x = d3.scale.linear()
+    .domain([0, n])
+    .range([height, width - height]);
+
+var a = d3.scale.linear()
+    .domain([0, n - 1])
+    .range([90 + 60, 270 - 60]);
+
+var data = shuffle(d3.range(n)),
     duration = 250;
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h);
+    .attr("width", width)
+    .attr("height", height);
 
 var line = vis.selectAll("line")
     .data(data)
@@ -19,7 +26,7 @@ var line = vis.selectAll("line")
     .attr("x1", 0)
     .attr("y1", 0)
     .attr("x2", 0)
-    .attr("y2", h)
+    .attr("y2", height)
     .attr("transform", transform);
 
 start();
@@ -48,7 +55,7 @@ function start() {
 }
 
 function transform(d, i) {
-  return "translate(" + x(i) + "," + h + ")rotate(" + a(d) + ")";
+  return "translate(" + x(i) + "," + height + ")rotate(" + a(d) + ")";
 }
 
 // Fisher-Yates shuffle

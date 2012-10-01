@@ -1,17 +1,17 @@
-var w = 960,
-    h = 700,
-    r = Math.min(w, h) / 2,
+var width = 960,
+    height = 700,
+    radius = Math.min(width, height) / 2,
     color = d3.scale.category20c();
 
 var vis = d3.select("#chart").append("svg")
-    .attr("width", w)
-    .attr("height", h)
+    .attr("width", width)
+    .attr("height", height)
   .append("g")
-    .attr("transform", "translate(" + w / 2 + "," + h / 2 + ")");
+    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
 var partition = d3.layout.partition()
     .sort(null)
-    .size([2 * Math.PI, r * r])
+    .size([2 * Math.PI, radius * radius])
     .value(function(d) { return 1; });
 
 var arc = d3.svg.arc()

@@ -1,7 +1,10 @@
 require("../env");
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("assert"),
+    time = require("./time"),
+    local = time.local,
+    utc = time.utc;
 
 var suite = vows.describe("d3.time.scale");
 
@@ -9,6 +12,24 @@ suite.addBatch({
   "scale": {
     topic: function() {
       return d3.time.scale;
+    },
+
+    "nice": {
+      "rounds using the specified time interval": function(scale) {
+        var x = scale().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48)]);
+        assert.deepEqual(x.nice(d3.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
+        assert.deepEqual(x.nice(d3.time.week).domain(), [local(2008, 11, 28), local(2009, 0, 4)]);
+        assert.deepEqual(x.nice(d3.time.month).domain(), [local(2008, 11, 1), local(2009, 1, 1)]);
+        assert.deepEqual(x.nice(d3.time.year).domain(), [local(2008, 0, 1), local(2010, 0, 1)]);
+      },
+      "works on degenerate domains": function(scale) {
+        var x = scale().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 0, 12)]);
+        assert.deepEqual(x.nice(d3.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
+      },
+      "nicing a polylinear domain only affects the extent": function(linear) {
+        var x = linear().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48), local(2009, 0, 2, 23, 48)]).nice(d3.time.day);
+        assert.deepEqual(x.domain(), [local(2009, 0, 1), local(2009, 0, 1, 23, 48), local(2009, 0, 3)]);
+      }
     },
 
     "copy": {
@@ -39,7 +60,7 @@ suite.addBatch({
       "changes to the interpolator are isolated": function(scale) {
         var x = scale().domain([local(2009, 0, 1), local(2010, 0, 1)]).range(["red", "blue"]), y = x.copy();
         x.interpolate(d3.interpolateHsl);
-        assert.equal(x(local(2009, 6, 1)), "#04ff00");
+        assert.equal(x(local(2009, 6, 1)), "#ff00fd");
         assert.equal(y(local(2009, 6, 1)), "#81007e");
         assert.equal(y.interpolate(), d3.interpolate);
       },
@@ -560,17 +581,5 @@ suite.addBatch({
     }
   }
 });
-
-function local(year, month, day, hours, minutes, seconds, milliseconds) {
-  var date = new Date(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
-  date.setFullYear(year); // Y2K fail
-  return date;
-}
-
-function utc(year, month, day, hours, minutes, seconds, milliseconds) {
-  var date = new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0));
-  date.setUTCFullYear(year); // Y2K fail
-  return date;
-}
 
 suite.export(module);

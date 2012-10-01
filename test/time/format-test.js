@@ -1,7 +1,10 @@
 require("../env");
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("assert"),
+    time = require("./time"),
+    local = time.local,
+    utc = time.utc;
 
 var suite = vows.describe("d3.time.format");
 
@@ -314,14 +317,14 @@ suite.addBatch({
     },
     "parses numeric date": function(format) {
       var p = format("%m/%d/%y").parse;
-      assert.deepEqual(p("01/01/90"), local(2090, 0, 1));
-      assert.deepEqual(p("02/03/91"), local(2091, 1, 3));
+      assert.deepEqual(p("01/01/90"), local(1990, 0, 1));
+      assert.deepEqual(p("02/03/91"), local(1991, 1, 3));
       assert.isNull(p("03/10/2010"));
     },
     "parses locale date": function(format) {
       var p = format("%x").parse;
-      assert.deepEqual(p("01/01/90"), local(2090, 0, 1));
-      assert.deepEqual(p("02/03/91"), local(2091, 1, 3));
+      assert.deepEqual(p("01/01/90"), local(1990, 0, 1));
+      assert.deepEqual(p("02/03/91"), local(1991, 1, 3));
       assert.isNull(p("03/10/2010"));
     },
     "parses abbreviated month, date and year": function(format) {
@@ -395,14 +398,14 @@ suite.addBatch({
       },
       "parses numeric date": function(format) {
         var p = format("%m/%d/%y").parse;
-        assert.deepEqual(p("01/01/90"), utc(2090, 0, 1));
-        assert.deepEqual(p("02/03/91"), utc(2091, 1, 3));
+        assert.deepEqual(p("01/01/90"), utc(1990, 0, 1));
+        assert.deepEqual(p("02/03/91"), utc(1991, 1, 3));
         assert.isNull(p("03/10/2010"));
       },
       "parses locale date": function(format) {
         var p = format("%x").parse;
-        assert.deepEqual(p("01/01/90"), utc(2090, 0, 1));
-        assert.deepEqual(p("02/03/91"), utc(2091, 1, 3));
+        assert.deepEqual(p("01/01/90"), utc(1990, 0, 1));
+        assert.deepEqual(p("02/03/91"), utc(1991, 1, 3));
         assert.isNull(p("03/10/2010"));
       },
       "parses abbreviated month, date and year": function(format) {
@@ -458,17 +461,10 @@ suite.addBatch({
         var p = format.parse;
         assert.deepEqual(p("1990-01-01T00:00:00.000Z"), utc(1990, 0, 1, 0, 0, 0));
         assert.deepEqual(p("2011-12-31T23:59:59.000Z"), utc(2011, 11, 31, 23, 59, 59));
+        assert.isNull(p("1990-01-01T00:00:00.000X"));
       }
     }
   }
 });
-
-function local(year, month, day, hours, minutes, seconds, milliseconds) {
-  return new Date(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
-}
-
-function utc(year, month, day, hours, minutes, seconds, milliseconds) {
-  return new Date(Date.UTC(year, month, day, hours || 0, minutes || 0, seconds || 0, milliseconds || 0));
-}
 
 suite.export(module);

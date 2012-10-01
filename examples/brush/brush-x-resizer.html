@@ -51,8 +51,10 @@ var margin = {top: 4, right: 50, bottom: 20, left: 50},
     width = 960 - margin.left - margin.right,
     height = 120 - margin.top - margin.bottom;
 
-var x = d3.scale.linear().range([0, width]),
-    y = d3.random.normal(height / 2, height / 8);
+var x = d3.scale.linear()
+    .range([0, width]);
+
+var y = d3.random.normal(height / 2, height / 8);
 
 var brush = d3.svg.brush().x(x)
     .on("brushstart", brushstart)

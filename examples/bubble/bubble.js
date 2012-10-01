@@ -4,7 +4,8 @@ var r = 960,
 
 var bubble = d3.layout.pack()
     .sort(null)
-    .size([r, r]);
+    .size([r, r])
+    .padding(1.5);
 
 var vis = d3.select("#chart").append("svg")
     .attr("width", r)
