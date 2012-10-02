@@ -2,15 +2,16 @@ d3.geo.circle = function() {
   var origin = [0, 0],
       degrees = 90,
       clip,
-      precision; // deprecated
+      precision, // deprecated
+      rotate;
 
   function circle() {
     // TODO render a circle as a Polygon
   }
 
   circle.clip = function(d) {
-    var o = typeof origin === "function" ? origin.apply(this, arguments) : origin,
-        rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
+    var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
+    rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
     clip = d3_geo_circleClip(degrees, function(coordinates) {
       return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
     });
@@ -28,12 +29,12 @@ d3.geo.circle = function() {
     },
     Point: function(o) { // TODO check
       var d = [];
-      clip.point(o.coordinates, d3_geo_circleContext(d));
+      clip.point(o.coordinates, bufferContext(d));
       return d.length && o;
     },
     MultiPoint: function(o) { // TODO check
       var coordinates = [],
-          context = d3_geo_circleContext(coordinates);
+          context = bufferContext(coordinates);
       o.coordinates.forEach(function(coordinates) {
         clip.point(coordinates, context);
       });
@@ -42,13 +43,13 @@ d3.geo.circle = function() {
     },
     LineString: function(o) {
       var lineStrings = [],
-          context = d3_geo_circleContext(lineStrings);
+          context = bufferContext(lineStrings);
       clip.line(o.coordinates, context);
       return lineStrings.length && (o = Object.create(o), o.type = "MultiLineString", o.coordinates = lineStrings, o);
     },
     MultiLineString: function(o) {
       var lineStrings = [],
-          context = d3_geo_circleContext(lineStrings);
+          context = bufferContext(lineStrings);
       o.coordinates.forEach(function(coordinates) {
         clip.line(coordinates, context);
       });
@@ -56,13 +57,13 @@ d3.geo.circle = function() {
     },
     Polygon: function(o) {
       var lineStrings = [];
-      clip.polygon(o.coordinates, d3_geo_circleContext(lineStrings));
+      clip.polygon(o.coordinates, bufferContext(lineStrings));
       var polygons = lineStrings.map(function(lineString) { return [lineString]; });
       return polygons.length && (o = Object.create(o), o.type = "MultiPolygon", o.coordinates = polygons, o);
     },
     MultiPolygon: function(o) {
       var lineStrings = [],
-          context = d3_geo_circleContext(lineStrings);
+          context = bufferContext(lineStrings);
       o.coordinates.forEach(function(coordinates) {
         clip.polygon(coordinates, context);
       });
@@ -95,20 +96,30 @@ d3.geo.circle = function() {
   }
 
   return circle;
-};
 
-function d3_geo_circleContext(lineStrings) {
-  var lineString = null;
-  return {
-    moveTo: function(x, y) { lineStrings.push(lineString = [x * d3_degrees, y * d3_degrees]); },
-    lineTo: function(x, y) { lineString.push([x * d3_degrees, y * d3_degrees]); },
-    closePath: function() {}
-  };
-}
+  function bufferContext(lineStrings) {
+    var lineString = null;
+    return {
+      moveTo: function(λ, φ) {
+        var point = rotate.invert(λ, φ);
+        point[0] *= d3_degrees;
+        point[1] *= d3_degrees;
+        lineStrings.push(lineString = [point]);
+      },
+      lineTo: function(λ, φ) {
+        var point = rotate.invert(λ, φ);
+        point[0] *= d3_degrees;
+        point[1] *= d3_degrees;
+        lineString.push(point);
+      },
+      closePath: function() {}
+    };
+  }
+};
 
 function d3_geo_circleClip(degrees, rotate) {
   var radians = degrees * d3_radians,
-      precision = 1,
+      precision = 6 * d3_radians,
       normal = [1, 0, 0], // Cartesian normal to the circle origin.
       reference = [0, -1, 0], // Cartesian reference point lying on the circle.
       cr = Math.cos(radians),
@@ -205,7 +216,7 @@ function d3_geo_circleClip(degrees, rotate) {
         v0 = v[0],
         v1 = v[1],
         v2 = v[2];
-    for (var step = precision * d3_radians, t = from; t > to; t -= step) {
+    for (var step = precision, t = from; t > to; t -= step) {
       var c = Math.cos(t),
           s = Math.sin(t),
           point = d3_geo_circleSpherical([
@@ -261,9 +272,10 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
       // as a subpath in SVG so it doesn't matter if the holes don't match
       // their polygons. This would be done by calculating some kind of
       // winding number.
-      var point = segment[0], n = segment.length, i = 0;
+      var point = segment[0], n = segment.length - 1, i = 0;
       context.moveTo(point[0], point[1]);
       while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
+      context.closePath();
     }
   });
   if (!unvisited) return;
@@ -294,6 +306,7 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
       interpolate(intersection = intersection.other, intersection = intersection.next, context);
       unvisited--;
     } while (intersection !== start);
+    context.closePath();
     moved = false;
     tmp = start;
     start = start.next;
