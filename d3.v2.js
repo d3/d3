@@ -6285,7 +6285,7 @@
     };
     var clipType = d3_geo_type({
       FeatureCollection: function(o) {
-        var features = o.features.map(clipType.Feature).filter(d3_identity);
+        var features = o.features.map(clipType.Feature, clipType).filter(d3_identity);
         return features && (o = Object.create(o), o.features = features, o);
       },
       Feature: function(o) {
@@ -6322,7 +6322,7 @@
         return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
       },
       GeometryCollection: function(o) {
-        var geometries = o.geometries.map(clipType.geometry).filter(d3_identity);
+        var geometries = o.geometries.map(clipType.geometry, clipType).filter(d3_identity);
         return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
       }
     });
