@@ -252,13 +252,6 @@ function d3_geo_antemeridianAngle(point) {
   return point[0] > 0 ? point[1] + π / 2 : -π / 2 - point[1];
 }
 
-function d3_geo_projectionInterpolateToAntemeridian(s, context) {
-  var φ = s / 2;
-  context.lineTo(-s, φ);
-  context.lineTo( 0, φ);
-  context.lineTo( s, φ);
-}
-
 function d3_geo_antemeridianInterpolate(from, to, context) {
   from = from.point;
   to = to.point;
