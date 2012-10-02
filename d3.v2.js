@@ -1971,6 +1971,22 @@
   function d3_geo_equirectangular(λ, φ) {
     return [ λ, φ ];
   }
+  function d3_geo_graticuleX(y0, y1) {
+    var y = d3.range(y0, y1 - ε, d3_geo_graticulePrecision).concat(y1);
+    return function(x) {
+      return y.map(function(y) {
+        return [ x, y ];
+      });
+    };
+  }
+  function d3_geo_graticuleY(x0, x1) {
+    var x = d3.range(x0, x1 - ε, d3_geo_graticulePrecision).concat(x1);
+    return function(y) {
+      return x.map(function(x) {
+        return [ x, y ];
+      });
+    };
+  }
   function d3_geo_greatArcSource(d) {
     return d.source;
   }
@@ -6315,18 +6331,9 @@
         geometries: graticule.lines()
       };
     }
-    var x1 = 180 - ε, x0 = -x1, y1 = 90 - ε, y0 = -y1, dx = 22.5, dy = dx, δx = 2, δy = 2;
+    var x1, x0, y1, y0, dx = 22.5, dy = dx, x, y;
     graticule.lines = function() {
-      var xSteps = d3.range(x0, x1 - ε, δx).concat(x1), ySteps = d3.range(y0, y1 - ε, δy).concat(y1), xLines = d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(function(x) {
-        return ySteps.map(function(y) {
-          return [ x, y ];
-        });
-      }), yLines = d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(function(y) {
-        return xSteps.map(function(x) {
-          return [ x, y ];
-        });
-      });
-      return xLines.concat(yLines).map(function(coordinates) {
+      return d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(x).concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(y)).map(function(coordinates) {
         return {
           type: "LineString",
           coordinates: coordinates
@@ -6334,10 +6341,9 @@
       });
     };
     graticule.outline = function() {
-      var x2 = (x0 + x1) / 2;
       return {
         type: "Polygon",
-        coordinates: [ [ [ x0, y1 ], [ x2, y1 ], [ x1, y1 ], [ x1, y0 ], [ x2, y0 ], [ x0, y0 ], [ x0, y1 ] ] ]
+        coordinates: [ x(x0).concat(y(y1).slice(1), x(x1).reverse().slice(1), y(y0).reverse().slice(1)) ]
       };
     };
     graticule.extent = function(_) {
@@ -6346,6 +6352,8 @@
       y0 = +_[0][1], y1 = +_[1][1];
       if (x0 > x1) _ = x0, x0 = x1, x1 = _;
       if (y0 > y1) _ = y0, y0 = y1, y1 = _;
+      x = d3_geo_graticuleX(y0, y1);
+      y = d3_geo_graticuleY(x0, x1);
       return graticule;
     };
     graticule.step = function(_) {
@@ -6353,8 +6361,9 @@
       dx = +_[0], dy = +_[1];
       return graticule;
     };
-    return graticule;
+    return graticule.extent([ [ -180 + ε, -90 + ε ], [ 180 - ε, 90 - ε ] ]);
   };
+  var d3_geo_graticulePrecision = 3;
   d3.geo.greatArc = function() {
     function greatArc() {
       var d = greatArc.distance.apply(this, arguments), t = 0, dt = precision / d, coordinates = [ p0 ];
