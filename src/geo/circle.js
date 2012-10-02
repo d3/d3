@@ -68,7 +68,7 @@ d3.geo.circle = function() {
         clip.polygon(coordinates, context);
       });
       var polygons = lineStrings.map(function(lineString) { return [lineString]; });
-      return polygons.length && (o = Object.create(o), o.type = "MultiPolygon", o.coordinates = polygons, o);
+      return polygons.length && (o = Object.create(o), o.coordinates = polygons, o);
     },
     GeometryCollection: function(o) {
       var geometries = o.geometries.map(clipType.geometry, clipType).filter(d3_identity);
@@ -112,7 +112,9 @@ d3.geo.circle = function() {
         point[1] *= d3_degrees;
         lineString.push(point);
       },
-      closePath: function() {}
+      closePath: function() {
+        if (lineString.length) lineString.push(lineString[0]);
+      }
     };
   }
 };

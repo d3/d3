@@ -6431,7 +6431,9 @@
           point[1] *= d3_degrees;
           lineString.push(point);
         },
-        closePath: function() {}
+        closePath: function() {
+          if (lineString.length) lineString.push(lineString[0]);
+        }
       };
     }
     var origin = [ 0, 0 ], degrees = 90, clip, precision, rotate;
