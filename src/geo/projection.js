@@ -109,7 +109,7 @@ function d3_geo_projectionMutator(projectAt) {
       sλ0 = sλ1;
     }
     if (first) context.moveTo((p = segment[0])[0], p[1]);
-    for (i = 1, n = segment.length; i < n; i++) context.lineTo((p = segment[i])[0], p[1]);
+    for (i = 1, n = segment.length - 1; i < n; i++) context.lineTo((p = segment[i])[0], p[1]);
     if (!first && side !== segmentSide) interpolateTo(side, context);
     context.closePath();
   }
@@ -133,6 +133,7 @@ function d3_geo_projectionMutator(projectAt) {
     function lineTo(λ, φ) {
       var p = projectPoint(λ, φ);
       resampleLineTo(x0, y0, λ0, φ0, x0 = p[0], y0 = p[1], λ0 = λ, φ0 = φ, maxDepth);
+      context.lineTo(x0, y0);
     }
 
     function resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ1, φ1, depth) {
@@ -157,15 +158,16 @@ function d3_geo_projectionMutator(projectAt) {
             dz = dx * (y0 - y2) - dy * (x0 - x2);
         if (dz * dz / distance2 > δ2) {
           resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
+          context.lineTo(x2, y2);
           resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
           return;
         }
       }
-      context.lineTo(x1, y1);
     }
 
     function closePath() {
-      lineTo(λ00, φ00);
+      var p = projectPoint(λ00, φ00);
+      resampleLineTo(x0, y0, λ0, φ0, p[0], p[1], λ00, φ00, maxDepth);
       context.closePath();
     }
 

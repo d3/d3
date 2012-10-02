@@ -2039,7 +2039,7 @@
         sλ0 = sλ1;
       }
       if (first) context.moveTo((p = segment[0])[0], p[1]);
-      for (i = 1, n = segment.length; i < n; i++) context.lineTo((p = segment[i])[0], p[1]);
+      for (i = 1, n = segment.length - 1; i < n; i++) context.lineTo((p = segment[i])[0], p[1]);
       if (!first && side !== segmentSide) interpolateTo(side, context);
       context.closePath();
     }
@@ -2051,6 +2051,7 @@
       function lineTo(λ, φ) {
         var p = projectPoint(λ, φ);
         resampleLineTo(x0, y0, λ0, φ0, x0 = p[0], y0 = p[1], λ0 = λ, φ0 = φ, maxDepth);
+        context.lineTo(x0, y0);
       }
       function resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ1, φ1, depth) {
         var dx = x1 - x0, dy = y1 - y0, distance2 = dx * dx + dy * dy;
@@ -2058,14 +2059,15 @@
           var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * cosφ0 * Math.cos(λ0) + k * cosφ1 * Math.cos(λ1), y = k * cosφ0 * Math.sin(λ0) + k * cosφ1 * Math.sin(λ1), z = k * sinφ0 + k * sinφ1, λ2 = Math.abs(x) < ε || Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x), φ2 = Math.asin(Math.max(-1, Math.min(1, z))), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dz = dx * (y0 - y2) - dy * (x0 - x2);
           if (dz * dz / distance2 > δ2) {
             resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
+            context.lineTo(x2, y2);
             resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
             return;
           }
         }
-        context.lineTo(x1, y1);
       }
       function closePath() {
-        lineTo(λ00, φ00);
+        var p = projectPoint(λ00, φ00);
+        resampleLineTo(x0, y0, λ0, φ0, p[0], p[1], λ00, φ00, maxDepth);
         context.closePath();
       }
       var λ00, φ00, λ0, φ0, x0, y0, maxDepth = δ2 > 0 && 16;
@@ -2783,7 +2785,9 @@
   d3 = {
     version: "2.10.2"
   };
-  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
+  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π, d3_zero = function() {
+    return 0;
+  };
   var d3_array = d3_arraySlice;
   try {
     d3_array(document.documentElement.childNodes)[0].nodeType;
@@ -6442,6 +6446,12 @@
       }
       return result;
     }
+    function ringArea(coordinates) {
+      return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
+    }
+    function polygonArea(coordinates) {
+      return ringArea(coordinates[0]) - d3.sum(coordinates.slice(1), ringArea);
+    }
     var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), buffer = [];
     var bufferContext = {
       point: function(x, y) {
@@ -6469,6 +6479,28 @@
         projection.point(coordinates, context);
       }
     });
+    var areaType = d3_geo_type({
+      Feature: function(feature) {
+        return areaType.geometry(feature.geometry);
+      },
+      FeatureCollection: function(collection) {
+        return d3.sum(collection.features, areaType.Feature);
+      },
+      GeometryCollection: function(collection) {
+        return d3.sum(collection.geometries, areaType.geometry);
+      },
+      LineString: d3_zero,
+      MultiLineString: d3_zero,
+      MultiPoint: d3_zero,
+      MultiPolygon: function(multiPolygon) {
+        return d3.sum(multiPolygon.coordinates, polygonArea);
+      },
+      Point: d3_zero,
+      Polygon: function(polygon) {
+        return polygonArea(polygon.coordinates);
+      }
+    });
+    path.area = areaType.object;
     path.projection = function(_) {
       if (!arguments.length) return projection;
       projection = _;

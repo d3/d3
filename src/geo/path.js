@@ -32,6 +32,28 @@ d3.geo.path = function() {
     point: function(coordinates) { projection.point(coordinates, context); }
   });
 
+  var areaType = d3_geo_type({
+    Feature: function(feature) { return areaType.geometry(feature.geometry); },
+    FeatureCollection: function(collection) { return d3.sum(collection.features, areaType.Feature); },
+    GeometryCollection: function(collection) { return d3.sum(collection.geometries, areaType.geometry); },
+    LineString: d3_zero,
+    MultiLineString: d3_zero,
+    MultiPoint: d3_zero,
+    MultiPolygon: function(multiPolygon) { return d3.sum(multiPolygon.coordinates, polygonArea); },
+    Point: d3_zero,
+    Polygon: function(polygon) { return polygonArea(polygon.coordinates); }
+  });
+
+  function ringArea(coordinates) {
+    return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
+  }
+
+  function polygonArea(coordinates) {
+    return ringArea(coordinates[0]) - d3.sum(coordinates.slice(1), ringArea);
+  }
+
+  path.area = areaType.object;
+
   path.projection = function(_) {
     if (!arguments.length) return projection;
     projection = _;
@@ -61,14 +83,6 @@ function d3_geo_pathCircle(radius) {
       + "a" + radius + "," + radius + " 0 1,1 0," + (+2 * radius)
       + "z";
 }
-
-  // function polygonArea(coordinates) {
-  //   var sum = area(coordinates[0]), // exterior ring
-  //       i = 0, // coordinates.index
-  //       n = coordinates.length;
-  //   while (++i < n) sum -= area(coordinates[i]); // holes
-  //   return sum;
-  // }
 
   // function polygonCentroid(coordinates) {
   //   var polygon = d3.geom.polygon(coordinates[0].map(projection)), // exterior ring
@@ -127,46 +141,3 @@ function d3_geo_pathCircle(radius) {
   //   }
 
   // });
-
-  // function area(coordinates) {
-  //   return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
-  // }
-
-  // var areaType = path.area = d3_geo_type({
-
-  //   FeatureCollection: function(o) {
-  //     var area = 0,
-  //         features = o.features,
-  //         i = -1, // features.index
-  //         n = features.length;
-  //     while (++i < n) area += areaType(features[i]);
-  //     return area;
-  //   },
-
-  //   Feature: function(o) {
-  //     return areaType(o.geometry);
-  //   },
-
-  //   Polygon: function(o) {
-  //     return polygonArea(o.coordinates);
-  //   },
-
-  //   MultiPolygon: function(o) {
-  //     var sum = 0,
-  //         coordinates = o.coordinates,
-  //         i = -1, // coordinates index
-  //         n = coordinates.length;
-  //     while (++i < n) sum += polygonArea(coordinates[i]);
-  //     return sum;
-  //   },
-
-  //   GeometryCollection: function(o) {
-  //     var sum = 0,
-  //         geometries = o.geometries,
-  //         i = -1, // geometries index
-  //         n = geometries.length;
-  //     while (++i < n) sum += areaType(geometries[i]);
-  //     return sum;
-  //   }
-
-  // }, 0);
