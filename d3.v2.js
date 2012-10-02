@@ -2038,14 +2038,16 @@
           break;
         }
         intersection.visited = true;
-        points = intersection.points;
-        if (!moved) context.moveTo((point = points[0])[0], point[1]), moved = true;
+        point = (points = intersection.points)[0];
+        if (moved) context.lineTo(point[0], point[1]); else context.moveTo(point[0], point[1]), moved = true;
         for (var i = 1; i < points.length; i++) context.lineTo((point = points[i])[0], point[1]);
         interpolate(intersection = intersection.other, intersection = intersection.next, context);
         unvisited--;
       } while (intersection !== start);
-      context.closePath();
-      moved = false;
+      if (moved) {
+        context.closePath();
+        moved = false;
+      }
       tmp = start;
       start = start.next;
     }
