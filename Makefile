@@ -183,6 +183,7 @@ d3.layout.js: \
 
 d3.geo.js: \
 	src/geo/geo.js \
+	src/geo/type.js \
 	src/geo/albers-usa.js \
 	src/geo/albers.js \
 	src/geo/azimuthal-equal-area.js \
@@ -201,8 +202,7 @@ d3.geo.js: \
 	src/geo/projection.js \
 	src/geo/rotation.js \
 	src/geo/stereographic.js \
-	src/geo/azimuthal.js \
-	src/geo/type.js
+	src/geo/azimuthal.js
 
 d3.dsv.js: \
 	src/dsv/dsv.js \

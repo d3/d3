@@ -16,18 +16,18 @@ d3.geo.circle = function() {
 
   circle.clip = function(d) {
     if (typeof origin === "function") arc.source(origin.apply(this, arguments));
-    return clipType(d) || null;
+    return clipType.object(d) || null;
   };
 
   var clipType = d3_geo_type({
 
     FeatureCollection: function(o) {
-      var features = o.features.map(clipType).filter(d3_identity);
+      var features = o.features.map(clipType.Feature).filter(d3_identity);
       return features && (o = Object.create(o), o.features = features, o);
     },
 
     Feature: function(o) {
-      var geometry = clipType(o.geometry);
+      var geometry = clipType.geometry(o.geometry);
       return geometry && (o = Object.create(o), o.geometry = geometry, o);
     },
 
@@ -37,37 +37,33 @@ d3.geo.circle = function() {
 
     MultiPoint: function(o) {
       var coordinates = o.coordinates.filter(visible);
-      return coordinates.length && {
-        type: o.type,
-        coordinates: coordinates
-      };
+      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
     },
 
     LineString: function(o) {
-      var coordinates = clip(o.coordinates);
+      var coordinates = clipLine(o.coordinates);
       return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
     },
 
     MultiLineString: function(o) {
-      var coordinates = o.coordinates.map(clip).filter(function(d) { return d.length; });
+      var coordinates = o.coordinates.map(clipLine).filter(function(d) { return d.length; });
       return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
     },
 
     Polygon: function(o) {
-      var coordinates = o.coordinates.map(clip);
+      var coordinates = o.coordinates.map(clipRing);
       return coordinates[0].length && (o = Object.create(o), o.coordinates = coordinates, o);
     },
 
     MultiPolygon: function(o) {
-      var coordinates = o.coordinates.map(function(d) { return d.map(clip); }).filter(function(d) { return d[0].length; });
+      var coordinates = o.coordinates.map(function(d) { return d.map(clipRing); }).filter(function(d) { return d[0].length; });
       return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
     },
 
     GeometryCollection: function(o) {
-      var geometries = o.geometries.map(clipType).filter(d3_identity);
+      var geometries = o.geometries.map(clipType.geometry).filter(d3_identity);
       return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
     }
-
   });
 
   function clip(coordinates) {
@@ -96,14 +92,18 @@ d3.geo.circle = function() {
       d0 = d1;
     }
 
-    // Close the clipped polygon if necessary.
-    p0 = coordinates[0];
-    p1 = clipped[0];
-    if (p1 && p2[0] === p0[0] && p2[1] === p0[1] && !(p2[0] === p1[0] && p2[1] === p1[1])) {
-      clipped.push(p1);
-    }
+    return clipped;
+  }
 
-    return resample(clipped);
+  function clipLine(coordinates) {
+    return resample(clip(coordinates));
+  }
+
+  function clipRing(coordinates) {
+    coordinates.pop();
+    coordinates = clip(coordinates);
+    if (coordinates.length) coordinates.push(coordinates[0]);
+    return resample(coordinates);
   }
 
   // Resample coordinates, creating great arcs between each.

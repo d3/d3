@@ -5,8 +5,6 @@ var vows = require("vows"),
 
 var suite = vows.describe("d3.geo.bounds");
 
-var ε = 1e-6;
-
 suite.addBatch({
   "bounds": {
     topic: function() {

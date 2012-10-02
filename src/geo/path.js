@@ -5,8 +5,7 @@ d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_geo_pathCircle(pointRadius),
       projection = d3.geo.albersUsa(),
-      buffer = [],
-      context;
+      buffer = [];
 
   var bufferContext = {
     point: function(x, y) { buffer.push("M", x, ",", y, pointCircle); },
@@ -15,91 +14,22 @@ d3.geo.path = function() {
     closePath: function() { buffer.push("Z"); }
   };
 
+  var context = bufferContext;
+
   function path(object) {
     var result = null;
     if (object != result) {
-      if (context == result) {
-        if (typeof pointRadius === "function") pointCircle = d3_geo_pathCircle(pointRadius.apply(this, arguments));
-        pathObject(object, bufferContext);
-        if (buffer.length) result = buffer.join(""), buffer = [];
-      } else {
-        pathObject(object, context);
-      }
+      if (typeof pointRadius === "function") pointCircle = d3_geo_pathCircle(pointRadius.apply(this, arguments));
+      type.object(object);
+      if (buffer.length) result = buffer.join(""), buffer = [];
     }
     return result;
   }
 
-  function pathObject(object, context) {
-    var pathType = pathObjectByType.get(object.type);
-    if (pathType) pathType(object, context);
-  }
-
-  function pathGeometry(geometry, context) {
-    var pathType = pathGeometryByType.get(geometry.type);
-    if (pathType) pathType(geometry, context);
-  }
-
-  function pathFeature(feature, context) {
-    pathGeometry(feature.geometry, context);
-  }
-
-  function pathFeatureCollection(collection, context) {
-    var features = collection.features, i = -1, n = features.length;
-    while (++i < n) pathFeature(features[i], context);
-  }
-
-  function pathGeometryCollection(collection, context) {
-    var geometries = collection.geometries, i = -1, n = geometries.length;
-    while (++i < n) pathGeometry(geometries[i], context);
-  }
-
-  function pathLineString(lineString, context) {
-    projection.line(lineString.coordinates, context);
-  }
-
-  function pathMultiLineString(multiLineString, context) {
-    var coordinates = multiLineString.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) projection.line(coordinates[i], context);
-  }
-
-  function pathMultiPoint(multiPoint, context) {
-    var coordinates = multiPoint.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) projection.point(coordinates[i], context);
-  }
-
-  function pathMultiPolygon(multiPolygon, context) {
-    var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) projection.polygon(coordinates[i], context);
-  }
-
-  function pathPoint(point, context) {
-    projection.point(point.coordinates, context);
-  }
-
-  function pathPolygon(polygon, context) {
-    projection.polygon(polygon.coordinates, context);
-  }
-
-  var pathObjectByType = d3.map({
-    Feature: pathFeature,
-    FeatureCollection: pathFeatureCollection,
-    GeometryCollection: pathGeometryCollection,
-    LineString: pathLineString,
-    MultiLineString: pathMultiLineString,
-    MultiPoint: pathMultiPoint,
-    MultiPolygon: pathMultiPolygon,
-    Point: pathPoint,
-    Polygon: pathPolygon
-  });
-
-  var pathGeometryByType = d3.map({
-    GeometryCollection: pathGeometryCollection,
-    LineString: pathLineString,
-    MultiLineString: pathMultiLineString,
-    MultiPoint: pathMultiPoint,
-    MultiPolygon: pathMultiPolygon,
-    Point: pathPoint,
-    Polygon: pathPolygon
+  var type = d3_geo_type({
+    line: function(coordinates) { projection.line(coordinates, context); },
+    polygon: function(coordinates) { projection.polygon(coordinates, context); },
+    point: function(coordinates) { projection.point(coordinates, context); }
   });
 
   path.projection = function(_) {
@@ -109,8 +39,9 @@ d3.geo.path = function() {
   };
 
   path.context = function(_) {
-    if (!arguments.length) return context;
+    if (!arguments.length) return context === bufferContext ? null : context;
     context = _;
+    if (context == null) context = bufferContext;
     return path;
   };
 

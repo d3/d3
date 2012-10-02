@@ -1900,6 +1900,14 @@
     };
     return dsv;
   }
+  function d3_geo_type(types) {
+    for (var type in d3_geo_typeDefaults) {
+      if (!(type in types)) {
+        types[type] = d3_geo_typeDefaults[type];
+      }
+    }
+    return types;
+  }
   function d3_geo_albers(φ0, φ1) {
     function albers(λ, φ) {
       var ρ = Math.sqrt(C - 2 * n * Math.sin(φ)) / n;
@@ -1911,49 +1919,6 @@
       return [ Math.atan2(x, ρ0_y) / n, Math.asin((C - (x * x + ρ0_y * ρ0_y) * n * n) / (2 * n)) ];
     };
     return albers;
-  }
-  function d3_geo_bounds(o, f) {
-    if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
-  }
-  function d3_geo_boundsFeature(o, f) {
-    d3_geo_bounds(o.geometry, f);
-  }
-  function d3_geo_boundsFeatureCollection(o, f) {
-    for (var a = o.features, i = 0, n = a.length; i < n; i++) {
-      d3_geo_bounds(a[i].geometry, f);
-    }
-  }
-  function d3_geo_boundsGeometryCollection(o, f) {
-    for (var a = o.geometries, i = 0, n = a.length; i < n; i++) {
-      d3_geo_bounds(a[i], f);
-    }
-  }
-  function d3_geo_boundsLineString(o, f) {
-    for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-      f.apply(null, a[i]);
-    }
-  }
-  function d3_geo_boundsMultiLineString(o, f) {
-    for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-      for (var b = a[i], j = 0, m = b.length; j < m; j++) {
-        f.apply(null, b[j]);
-      }
-    }
-  }
-  function d3_geo_boundsMultiPolygon(o, f) {
-    for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-      for (var b = a[i][0], j = 0, m = b.length; j < m; j++) {
-        f.apply(null, b[j]);
-      }
-    }
-  }
-  function d3_geo_boundsPoint(o, f) {
-    f.apply(null, o.coordinates);
-  }
-  function d3_geo_boundsPolygon(o, f) {
-    for (var a = o.coordinates[0], i = 0, n = a.length; i < n; i++) {
-      f.apply(null, a[i]);
-    }
   }
   function d3_geo_compose(a, b) {
     function compose(λ, φ) {
@@ -2235,11 +2200,6 @@
   }
   function d3_geo_azimuthalMode(mode) {
     return d3_geo_azimuthalModes[mode];
-  }
-  function d3_geo_type(types, defaultValue) {
-    return function(object) {
-      return object && types.hasOwnProperty(object.type) ? types[object.type](object) : defaultValue;
-    };
   }
   function d3_geom_contourStart(grid) {
     var x = 0, y = 0;
@@ -6136,6 +6096,68 @@
   d3.csv = d3_dsv(",", "text/csv");
   d3.tsv = d3_dsv("	", "text/tab-separated-values");
   d3.geo = {};
+  var d3_geo_typeDefaults = {
+    Feature: function(feature) {
+      this.geometry(feature.geometry);
+    },
+    FeatureCollection: function(colllection) {
+      var features = colllection.features, i = -1, n = features.length;
+      while (++i < n) this.Feature(features[i]);
+    },
+    GeometryCollection: function(colllection) {
+      var geometries = colllection.geometries, i = -1, n = geometries.length;
+      while (++i < n) this.geometry(geometries[i]);
+    },
+    LineString: function(lineString) {
+      this.line(lineString.coordinates);
+    },
+    MultiLineString: function(multiLineString) {
+      var coordinates = multiLineString.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) this.line(coordinates[i]);
+    },
+    MultiPoint: function(multiPoint) {
+      var coordinates = multiPoint.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) this.point(coordinates[i]);
+    },
+    MultiPolygon: function(multiPolygon) {
+      var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) this.polygon(coordinates[i]);
+    },
+    Point: function(point) {
+      this.point(point.coordinates);
+    },
+    Polygon: function(polygon) {
+      this.polygon(polygon.coordinates);
+    },
+    object: function(object) {
+      return d3_geo_typeObjects.hasOwnProperty(object.type) ? this[object.type](object) : this.geometry(object);
+    },
+    geometry: function(geometry) {
+      return d3_geo_typeGeometries.hasOwnProperty(geometry.type) ? this[geometry.type](geometry) : null;
+    },
+    point: d3_noop,
+    line: function(coordinates) {
+      var i = -1, n = coordinates.length;
+      while (++i < n) this.point(coordinates[i]);
+    },
+    polygon: function(coordinates) {
+      var i = -1, n = coordinates.length;
+      while (++i < n) this.line(coordinates[i]);
+    }
+  };
+  var d3_geo_typeGeometries = {
+    LineString: 1,
+    MultiLineString: 1,
+    MultiPoint: 1,
+    MultiPolygon: 1,
+    Point: 1,
+    Polygon: 1
+  };
+  var d3_geo_typeObjects = {
+    Feature: 1,
+    FeatureCollection: 1,
+    GeometryCollection: 1
+  };
   d3.geo.albersUsa = function() {
     function albersUsa(coordinates) {
       var lon = coordinates[0], lat = coordinates[1];
@@ -6193,26 +6215,23 @@
     return d3_geo_projection(d3_geo_azimuthalEquidistant);
   }).raw = d3_geo_azimuthalEquidistant;
   d3.geo.bounds = function(feature) {
-    var left = Infinity, bottom = Infinity, right = -Infinity, top = -Infinity;
-    d3_geo_bounds(feature, function(x, y) {
-      if (x < left) left = x;
-      if (x > right) right = x;
-      if (y < bottom) bottom = y;
-      if (y > top) top = y;
-    });
-    return [ [ left, bottom ], [ right, top ] ];
+    d3_geo_boundsTop = d3_geo_boundsRight = -(d3_geo_boundsLeft = d3_geo_boundsBottom = Infinity);
+    d3_geo_bounds.object(feature);
+    return [ [ d3_geo_boundsLeft, d3_geo_boundsBottom ], [ d3_geo_boundsRight, d3_geo_boundsTop ] ];
   };
-  var d3_geo_boundsTypes = {
-    Feature: d3_geo_boundsFeature,
-    FeatureCollection: d3_geo_boundsFeatureCollection,
-    GeometryCollection: d3_geo_boundsGeometryCollection,
-    LineString: d3_geo_boundsLineString,
-    MultiLineString: d3_geo_boundsMultiLineString,
-    MultiPoint: d3_geo_boundsLineString,
-    MultiPolygon: d3_geo_boundsMultiPolygon,
-    Point: d3_geo_boundsPoint,
-    Polygon: d3_geo_boundsPolygon
-  };
+  var d3_geo_boundsLeft, d3_geo_boundsBottom, d3_geo_boundsRight, d3_geo_boundsTop;
+  var d3_geo_bounds = d3_geo_type({
+    point: function(point) {
+      var x = point[0], y = point[1];
+      if (x < d3_geo_boundsLeft) d3_geo_boundsLeft = x;
+      if (x > d3_geo_boundsRight) d3_geo_boundsRight = x;
+      if (y < d3_geo_boundsBottom) d3_geo_boundsBottom = y;
+      if (y > d3_geo_boundsTop) d3_geo_boundsTop = y;
+    },
+    polygon: function(coordinates) {
+      this.line(coordinates[0]);
+    }
+  });
   d3.geo.circle = function() {
     function circle() {}
     function visible(point) {
@@ -6235,12 +6254,16 @@
         }
         d0 = d1;
       }
-      p0 = coordinates[0];
-      p1 = clipped[0];
-      if (p1 && p2[0] === p0[0] && p2[1] === p0[1] && !(p2[0] === p1[0] && p2[1] === p1[1])) {
-        clipped.push(p1);
-      }
-      return resample(clipped);
+      return clipped;
+    }
+    function clipLine(coordinates) {
+      return resample(clip(coordinates));
+    }
+    function clipRing(coordinates) {
+      coordinates.pop();
+      coordinates = clip(coordinates);
+      if (coordinates.length) coordinates.push(coordinates[0]);
+      return resample(coordinates);
     }
     function resample(coordinates) {
       var i = 0, n = coordinates.length, j, m, resampled = n ? [ coordinates[0] ] : coordinates, resamples, origin = arc.source();
@@ -6254,15 +6277,15 @@
     var origin = [ 0, 0 ], degrees = 90 - .01, radians = degrees * d3_radians, arc = d3.geo.greatArc().source(origin).target(d3_identity);
     circle.clip = function(d) {
       if (typeof origin === "function") arc.source(origin.apply(this, arguments));
-      return clipType(d) || null;
+      return clipType.object(d) || null;
     };
     var clipType = d3_geo_type({
       FeatureCollection: function(o) {
-        var features = o.features.map(clipType).filter(d3_identity);
+        var features = o.features.map(clipType.Feature).filter(d3_identity);
         return features && (o = Object.create(o), o.features = features, o);
       },
       Feature: function(o) {
-        var geometry = clipType(o.geometry);
+        var geometry = clipType.geometry(o.geometry);
         return geometry && (o = Object.create(o), o.geometry = geometry, o);
       },
       Point: function(o) {
@@ -6270,35 +6293,32 @@
       },
       MultiPoint: function(o) {
         var coordinates = o.coordinates.filter(visible);
-        return coordinates.length && {
-          type: o.type,
-          coordinates: coordinates
-        };
+        return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
       },
       LineString: function(o) {
-        var coordinates = clip(o.coordinates);
+        var coordinates = clipLine(o.coordinates);
         return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
       },
       MultiLineString: function(o) {
-        var coordinates = o.coordinates.map(clip).filter(function(d) {
+        var coordinates = o.coordinates.map(clipLine).filter(function(d) {
           return d.length;
         });
         return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
       },
       Polygon: function(o) {
-        var coordinates = o.coordinates.map(clip);
+        var coordinates = o.coordinates.map(clipRing);
         return coordinates[0].length && (o = Object.create(o), o.coordinates = coordinates, o);
       },
       MultiPolygon: function(o) {
         var coordinates = o.coordinates.map(function(d) {
-          return d.map(clip);
+          return d.map(clipRing);
         }).filter(function(d) {
           return d[0].length;
         });
         return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
       },
       GeometryCollection: function(o) {
-        var geometries = o.geometries.map(clipType).filter(d3_identity);
+        var geometries = o.geometries.map(clipType.geometry).filter(d3_identity);
         return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
       }
     });
@@ -6416,57 +6436,13 @@
     function path(object) {
       var result = null;
       if (object != result) {
-        if (context == result) {
-          if (typeof pointRadius === "function") pointCircle = d3_geo_pathCircle(pointRadius.apply(this, arguments));
-          pathObject(object, bufferContext);
-          if (buffer.length) result = buffer.join(""), buffer = [];
-        } else {
-          pathObject(object, context);
-        }
+        if (typeof pointRadius === "function") pointCircle = d3_geo_pathCircle(pointRadius.apply(this, arguments));
+        type.object(object);
+        if (buffer.length) result = buffer.join(""), buffer = [];
       }
       return result;
     }
-    function pathObject(object, context) {
-      var pathType = pathObjectByType.get(object.type);
-      if (pathType) pathType(object, context);
-    }
-    function pathGeometry(geometry, context) {
-      var pathType = pathGeometryByType.get(geometry.type);
-      if (pathType) pathType(geometry, context);
-    }
-    function pathFeature(feature, context) {
-      pathGeometry(feature.geometry, context);
-    }
-    function pathFeatureCollection(collection, context) {
-      var features = collection.features, i = -1, n = features.length;
-      while (++i < n) pathFeature(features[i], context);
-    }
-    function pathGeometryCollection(collection, context) {
-      var geometries = collection.geometries, i = -1, n = geometries.length;
-      while (++i < n) pathGeometry(geometries[i], context);
-    }
-    function pathLineString(lineString, context) {
-      projection.line(lineString.coordinates, context);
-    }
-    function pathMultiLineString(multiLineString, context) {
-      var coordinates = multiLineString.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) projection.line(coordinates[i], context);
-    }
-    function pathMultiPoint(multiPoint, context) {
-      var coordinates = multiPoint.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) projection.point(coordinates[i], context);
-    }
-    function pathMultiPolygon(multiPolygon, context) {
-      var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) projection.polygon(coordinates[i], context);
-    }
-    function pathPoint(point, context) {
-      projection.point(point.coordinates, context);
-    }
-    function pathPolygon(polygon, context) {
-      projection.polygon(polygon.coordinates, context);
-    }
-    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), buffer = [], context;
+    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), buffer = [];
     var bufferContext = {
       point: function(x, y) {
         buffer.push("M", x, ",", y, pointCircle);
@@ -6481,25 +6457,17 @@
         buffer.push("Z");
       }
     };
-    var pathObjectByType = d3.map({
-      Feature: pathFeature,
-      FeatureCollection: pathFeatureCollection,
-      GeometryCollection: pathGeometryCollection,
-      LineString: pathLineString,
-      MultiLineString: pathMultiLineString,
-      MultiPoint: pathMultiPoint,
-      MultiPolygon: pathMultiPolygon,
-      Point: pathPoint,
-      Polygon: pathPolygon
-    });
-    var pathGeometryByType = d3.map({
-      GeometryCollection: pathGeometryCollection,
-      LineString: pathLineString,
-      MultiLineString: pathMultiLineString,
-      MultiPoint: pathMultiPoint,
-      MultiPolygon: pathMultiPolygon,
-      Point: pathPoint,
-      Polygon: pathPolygon
+    var context = bufferContext;
+    var type = d3_geo_type({
+      line: function(coordinates) {
+        projection.line(coordinates, context);
+      },
+      polygon: function(coordinates) {
+        projection.polygon(coordinates, context);
+      },
+      point: function(coordinates) {
+        projection.point(coordinates, context);
+      }
     });
     path.projection = function(_) {
       if (!arguments.length) return projection;
@@ -6507,8 +6475,9 @@
       return path;
     };
     path.context = function(_) {
-      if (!arguments.length) return context;
+      if (!arguments.length) return context === bufferContext ? null : context;
       context = _;
+      if (context == null) context = bufferContext;
       return path;
     };
     path.pointRadius = function(x) {
