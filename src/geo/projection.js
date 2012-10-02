@@ -181,34 +181,6 @@ function d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1) {
       : (φ0 + φ1) / 2;
 }
 
-// TODO combine with d3_geo_projectionCutAntemeridian; move to antemeridian.js.
-function d3_geo_antemeridianClipLine(rotatePoint, coordinates, context) {
-  if (!(n = coordinates.length)) return;
-  var point = rotatePoint(coordinates[0]),
-      λ0 = point[0],
-      φ0 = point[1],
-      λ1,
-      φ1,
-      sλ0 = λ0 > 0 ? π : -π,
-      sλ1,
-      i = 0,
-      n;
-  context.moveTo(λ0, φ0);
-  while (++i < n) {
-    point = rotatePoint(coordinates[i]);
-    λ1 = point[0];
-    φ1 = point[1];
-    sλ1 = λ1 > 0 ? π : -π;
-    if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
-      φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-      context.lineTo(sλ0, φ0);
-      context.moveTo(sλ1, φ0);
-    }
-    context.lineTo(λ0 = λ1, φ0 = φ1);
-    sλ0 = sλ1;
-  }
-}
-
 function d3_geo_projectionCutAntemeridian(rotatePoint) {
   var clip = {
     point: function(coordinates, context) {

@@ -256,7 +256,6 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
   // Create a circular linked list using the intersected segment start and
   // end points, sorted by relative angles.
   // TODO sort by angle first, then set in/out flags.
-  var center = [0, 0, 0];
   segments.forEach(function(segment) {
     var p0 = segment[0],
         p1 = segment[segment.length - 1];
