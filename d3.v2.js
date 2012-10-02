@@ -2208,7 +2208,7 @@
       function resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ1, φ1, depth) {
         var dx = x1 - x0, dy = y1 - y0, distance2 = dx * dx + dy * dy;
         if (distance2 > 4 * δ2 && depth--) {
-          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), x = cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1), y = cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1), z = sinφ0 + sinφ1, λ2 = x * x < ε || y * y < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x), φ2 = Math.asin(Math.max(-1, Math.min(1, z / (Math.SQRT2 * Math.sqrt(1 + cosΩ))))), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dz = dx * (y0 - y2) - dy * (x0 - x2);
+          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)), y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)), z = k * (sinφ0 + sinφ1), λ2 = Math.abs(x) < ε || Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x), φ2 = Math.asin(Math.max(-1, Math.min(1, z))), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dz = dx * (y0 - y2) - dy * (x0 - x2);
           if (dz * dz / distance2 > δ2) {
             resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
             context.lineTo(x2, y2);
