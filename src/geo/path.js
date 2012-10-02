@@ -20,13 +20,13 @@ d3.geo.path = function() {
     var result = null;
     if (object != result) {
       if (typeof pointRadius === "function") pointCircle = d3_geo_pathCircle(pointRadius.apply(this, arguments));
-      type.object(object);
+      pathType.object(object);
       if (buffer.length) result = buffer.join(""), buffer = [];
     }
     return result;
   }
 
-  var type = d3_geo_type({
+  var pathType = d3_geo_type({
     line: function(coordinates) { projection.line(coordinates, context); },
     polygon: function(coordinates) { projection.polygon(coordinates, context); },
     point: function(coordinates) { projection.point(coordinates, context); }
