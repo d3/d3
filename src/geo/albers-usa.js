@@ -1,4 +1,5 @@
 // TODO composite invert
+// TODO projection.{point,line,polygon}
 
 // A composite projection for the United States, 960x500. The set of standard
 // parallels for each region comes from USGS, which is published here:

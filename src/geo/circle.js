@@ -14,16 +14,16 @@ d3.geo.circle = function() {
     clip = d3_geo_circleClip(degrees, function(coordinates) {
       return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
     });
-    return clipType(d) || null;
+    return clipType.object(d) || null;
   };
 
   var clipType = d3_geo_type({
     FeatureCollection: function(o) {
-      var features = o.features.map(clipType).filter(d3_identity);
+      var features = o.features.map(clipType.Feature, clipType).filter(d3_identity);
       return features && (o = Object.create(o), o.features = features, o);
     },
     Feature: function(o) {
-      var geometry = clipType(o.geometry);
+      var geometry = clipType.geometry(o.geometry);
       return geometry && (o = Object.create(o), o.geometry = geometry, o);
     },
     Point: function(o) { // TODO check
@@ -37,10 +37,8 @@ d3.geo.circle = function() {
       o.coordinates.forEach(function(coordinates) {
         clip.point(coordinates, context);
       });
-      return coordinates.length && {
-        type: o.type,
-        coordinates: coordinates.map(function(lineString) { return lineString[0]; })
-      };
+      return coordinates.length && (o = Object.create(o),
+          o.coordinates = coordinates.map(function(lineString) { return lineString[0]; }), o);
     },
     LineString: function(o) {
       var lineStrings = [],
@@ -72,7 +70,7 @@ d3.geo.circle = function() {
       return polygons.length && (o = Object.create(o), o.type = "MultiPolygon", o.coordinates = polygons, o);
     },
     GeometryCollection: function(o) {
-      var geometries = o.geometries.map(clipType).filter(d3_identity);
+      var geometries = o.geometries.map(clipType.geometry, clipType).filter(d3_identity);
       return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
     }
   });
