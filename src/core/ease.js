@@ -95,7 +95,7 @@ function d3_ease_poly(e) {
 }
 
 function d3_ease_sin(t) {
-  return 1 - Math.cos(t * Math.PI / 2);
+  return 1 - Math.cos(t * π / 2);
 }
 
 function d3_ease_exp(t) {
@@ -110,9 +110,9 @@ function d3_ease_elastic(a, p) {
   var s;
   if (arguments.length < 2) p = 0.45;
   if (arguments.length < 1) { a = 1; s = p / 4; }
-  else s = p / (2 * Math.PI) * Math.asin(1 / a);
+  else s = p / (2 * π) * Math.asin(1 / a);
   return function(t) {
-    return 1 + a * Math.pow(2, 10 * -t) * Math.sin((t - s) * 2 * Math.PI / p);
+    return 1 + a * Math.pow(2, 10 * -t) * Math.sin((t - s) * 2 * π / p);
   };
 }
 

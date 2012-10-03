@@ -12,13 +12,13 @@ suite.addBatch({
     },
 
     "scale": {
-      "defaults to 500": function(projection) {
-        assert.equal(projection.scale(), 500);
+      "defaults to 500 / 2π": function(projection) {
+        assert.equal(projection.scale(), 500 / (2 * Math.PI));
       },
       "is coerced to a number": function(projection) {
         assert.strictEqual(projection.scale("400"), projection);
         assert.strictEqual(projection.scale(), 400);
-        projection.scale(500);
+        projection.scale(500 / (2 * Math.PI));
       }
     },
 

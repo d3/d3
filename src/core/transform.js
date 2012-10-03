@@ -23,10 +23,10 @@ function d3_transform(m) {
     kx *= -1;
     kz *= -1;
   }
-  this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_transformDegrees;
+  this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_degrees;
   this.translate = [m.e, m.f];
   this.scale = [kx, ky];
-  this.skew = ky ? Math.atan2(kz, ky) * d3_transformDegrees : 0;
+  this.skew = ky ? Math.atan2(kz, ky) * d3_degrees : 0;
 };
 
 d3_transform.prototype.toString = function() {
@@ -56,5 +56,4 @@ function d3_transformCombine(a, b, k) {
   return a;
 }
 
-var d3_transformDegrees = 180 / Math.PI,
-    d3_transformIdentity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0};
+var d3_transformIdentity = {a: 1, b: 0, c: 0, d: 1, e: 0, f: 0};
