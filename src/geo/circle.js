@@ -148,16 +148,18 @@ function d3_geo_circleClip(degrees, rotate) {
   }
 
   // TODO two invisible endpoints with visible intermediate segment.
-  function clipLine(coordinates, context) {
+  function clipLine(coordinates, context, winding) {
     if (!(n = coordinates.length)) return;
     var point0 = rotate(coordinates[0]),
         inside = visible(point0),
+        keepWinding = inside && winding != null,
         n;
     if (inside) context.moveTo(point0[0], point0[1]);
     for (var i = 1; i < n; i++) {
       var point1 = rotate(coordinates[i]),
           v = visible(point1);
       if (v !== inside) {
+        keepWinding = false;
         if (inside = v) {
           // outside going in
           point0 = intersect(point1, point0);
@@ -167,10 +169,13 @@ function d3_geo_circleClip(degrees, rotate) {
           point0 = intersect(point0, point1);
           context.lineTo(point0[0], point0[1]);
         }
+      } else if (keepWinding) {
+        winding += d3_geo_circleWinding(point0, point1);
       }
       if (v) context.lineTo(point1[0], point1[1]);
       point0 = point1;
     }
+    return keepWinding && winding;
   }
 
   // Intersects the great circle between a and b with the clip circle.
@@ -231,15 +236,17 @@ function d3_geo_circleClip(degrees, rotate) {
   }
 };
 
-// TODO detect subsumed clip circle using winding number or raycasting.
 function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, angle) {
   var unvisited = 0, // number of unvisited entering intersections
       intersections = [];
   // Clip each ring into segments.
   var segments = [],
-      buffer = d3_geo_circleBufferSegments(clipLine);
+      buffer = d3_geo_circleBufferSegments(clipLine),
+      winding = 0;
   coordinates.forEach(function(ring) {
-    var ringSegments = buffer(ring, context);
+    var x = buffer(ring, context),
+        ringSegments = x[1];
+    winding += x[0];
     // Since these are closed rings, we join segments if necessary.
     var n = ringSegments.length;
     if (n > 1) {
@@ -255,6 +262,13 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
     }
     segments = segments.concat(ringSegments);
   });
+  if (winding > 0) {
+    winding = [];
+    segments.push(winding = []);
+    x = {lineTo: function(x, y) { winding.push([x, y]); }};
+    for (var i = 0; i < 4; i++) interpolate({angle: -i * π / 2}, {angle: -(i + 1) * π / 2}, x);
+    winding.push(winding[0]);
+  }
   // Create a circular linked list using the intersected segment start and
   // end points, sorted by relative angles.
   // TODO sort by angle first, then set in/out flags.
@@ -377,13 +391,31 @@ function d3_geo_circleNormalize(d) {
 function d3_geo_circleBufferSegments(f) {
   return function(coordinates, context) {
     var segments = [],
-        segment;
-    f(coordinates, {
+        segment,
+        winding = f(coordinates, {
       point: function() {},
       moveTo: function(x, y) { segments.push(segment = [[x, y]]); },
       lineTo: function(x, y) { segment.push([x, y]); },
       closePath: function() {}
-    });
-    return segments;
+    }, 0);
+    return [winding, segments];
   };
+}
+
+// Based on http://softsurfer.com/Archive/algorithm_0103/algorithm_0103.htm
+// Calculates a single winding number step relative to [0, 0].
+// TODO optimise stereographic calculation using 3D coordinates.
+function d3_geo_circleWinding(p0, p) {
+  var c0 = Math.cos(p0[1]),
+      k0 = 1 + Math.cos(p0[0]) * c0,
+      c = Math.cos(p[1]),
+      k = 1 + Math.cos(p[0]) * c;
+  p0 = [c0 * Math.sin(p0[0]) / k0, Math.sin(p0[1]) / k0];
+  p = [c * Math.sin(p[0]) / k, Math.sin(p[1]) / k];
+  if (p0[1] <= 0) {
+    if (p[1] >  0 && (p0[0] - p[0]) * p0[1] + p0[0] * (p[1] - p0[1]) > 0) return 1;
+  } else {
+    if (p[1] <= 0 && (p0[0] - p[0]) * p0[1] + p0[0] * (p[1] - p0[1]) < 0) return -1;
+  }
+  return 0;
 }
