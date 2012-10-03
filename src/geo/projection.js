@@ -229,7 +229,7 @@ function d3_geo_antemeridianAngle(point) {
 function d3_geo_antemeridianInterpolate(from, to, context) {
   from = from.point;
   to = to.point;
-  if (from[0] !== to[0]) {
+  if (Math.abs(from[0] - to[0]) > ε) {
     var s = from[0] < to[0] ? π : -π,
         φ = s / 2;
     context.lineTo(-s, φ);
