@@ -1924,13 +1924,14 @@
     function visible(point) {
       return Math.cos(point[1]) * Math.cos(point[0]) > cr;
     }
-    function clipLine(coordinates, context) {
+    function clipLine(coordinates, context, winding) {
       if (!(n = coordinates.length)) return;
-      var point0 = rotate(coordinates[0]), inside = visible(point0), n;
+      var point0 = rotate(coordinates[0]), inside = visible(point0), keepWinding = inside && winding != null, n;
       if (inside) context.moveTo(point0[0], point0[1]);
       for (var i = 1; i < n; i++) {
         var point1 = rotate(coordinates[i]), v = visible(point1);
         if (v !== inside) {
+          keepWinding = false;
           if (inside = v) {
             point0 = intersect(point1, point0);
             context.moveTo(point0[0], point0[1]);
@@ -1938,10 +1939,13 @@
             point0 = intersect(point0, point1);
             context.lineTo(point0[0], point0[1]);
           }
+        } else if (keepWinding) {
+          winding += d3_geo_circleWinding(point0, point1);
         }
         if (v) context.lineTo(point1[0], point1[1]);
         point0 = point1;
       }
+      return keepWinding && winding;
     }
     function intersect(a, b) {
       var pa = d3_geo_circleCartesian(a, [ 0, 0, 0 ]), pb = d3_geo_circleCartesian(b, [ 0, 0, 0 ]);
@@ -1980,9 +1984,10 @@
   }
   function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, angle) {
     var unvisited = 0, intersections = [];
-    var segments = [], buffer = d3_geo_circleBufferSegments(clipLine);
+    var segments = [], buffer = d3_geo_circleBufferSegments(clipLine), winding = 0;
     coordinates.forEach(function(ring) {
-      var ringSegments = buffer(ring, context);
+      var x = buffer(ring, context), ringSegments = x[1];
+      winding += x[0];
       var n = ringSegments.length;
       if (n > 1) {
         var firstSegment = ringSegments[0], lastSegment = ringSegments[n - 1], p0 = firstSegment[0], p1 = lastSegment[lastSegment.length - 1];
@@ -1994,6 +1999,21 @@
       }
       segments = segments.concat(ringSegments);
     });
+    if (winding > 0) {
+      winding = [];
+      segments.push(winding = []);
+      x = {
+        lineTo: function(x, y) {
+          winding.push([ x, y ]);
+        }
+      };
+      for (var i = 0; i < 4; i++) interpolate({
+        angle: -i * π / 2
+      }, {
+        angle: -(i + 1) * π / 2
+      }, x);
+      winding.push(winding[0]);
+    }
     segments.forEach(function(segment) {
       var p0 = segment[0], p1 = segment[segment.length - 1];
       if (p0[0] !== p1[0] || p0[1] !== p1[1]) {
@@ -2088,8 +2108,7 @@
   }
   function d3_geo_circleBufferSegments(f) {
     return function(coordinates, context) {
-      var segments = [], segment;
-      f(coordinates, {
+      var segments = [], segment, winding = f(coordinates, {
         point: function() {},
         moveTo: function(x, y) {
           segments.push(segment = [ [ x, y ] ]);
@@ -2098,9 +2117,20 @@
           segment.push([ x, y ]);
         },
         closePath: function() {}
-      });
-      return segments;
+      }, 0);
+      return [ winding, segments ];
     };
+  }
+  function d3_geo_circleWinding(p0, p) {
+    var c0 = Math.cos(p0[1]), k0 = 1 + Math.cos(p0[0]) * c0, c = Math.cos(p[1]), k = 1 + Math.cos(p[0]) * c;
+    p0 = [ c0 * Math.sin(p0[0]) / k0, Math.sin(p0[1]) / k0 ];
+    p = [ c * Math.sin(p[0]) / k, Math.sin(p[1]) / k ];
+    if (p0[1] <= 0) {
+      if (p[1] > 0 && (p0[0] - p[0]) * p0[1] + p0[0] * (p[1] - p0[1]) > 0) return 1;
+    } else {
+      if (p[1] <= 0 && (p0[0] - p[0]) * p0[1] + p0[0] * (p[1] - p0[1]) < 0) return -1;
+    }
+    return 0;
   }
   function d3_geo_compose(a, b) {
     function compose(λ, φ) {
