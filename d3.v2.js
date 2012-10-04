@@ -5750,7 +5750,7 @@
       }
     }
     function squarify(node) {
-      var children = node.children;
+      var children = treemap.children().call(treemap, node);
       if (children && children.length) {
         var rect = pad(node), row = [], remaining = children.slice(), child, best = Infinity, score, u = Math.min(rect.dx, rect.dy), n;
         scale(remaining, rect.dx * rect.dy / node.value);
@@ -5777,7 +5777,7 @@
       }
     }
     function stickify(node) {
-      var children = node.children;
+      var children = treemap.children().call(treemap, node);
       if (children && children.length) {
         var rect = pad(node), remaining = children.slice(), child, row = [];
         scale(remaining, rect.dx * rect.dy / node.value);
