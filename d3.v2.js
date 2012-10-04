@@ -622,6 +622,7 @@
     var t0 = null, t1 = d3_timer_queue, then = Infinity;
     while (t1) {
       if (t1.flush) {
+        delete d3_timer_byId[t1.callback.id];
         t1 = t0 ? t0.next = t1.next : d3_timer_queue = t1.next;
       } else {
         then = Math.min(then, t1.then + t1.delay);
@@ -4063,24 +4064,17 @@
     return typeof b === "function" ? tweenFunction : b == null ? d3_tweenNull : (b += "", tweenString);
   };
   var d3_tweenRemove = {};
-  var d3_timer_queue = null, d3_timer_interval, d3_timer_timeout;
+  var d3_timer_id = 0, d3_timer_byId = {}, d3_timer_queue = null, d3_timer_interval, d3_timer_timeout;
   d3.timer = function(callback, delay, then) {
-    var found = false, t0, t1 = d3_timer_queue;
     if (arguments.length < 3) {
       if (arguments.length < 2) delay = 0; else if (!isFinite(delay)) return;
       then = Date.now();
     }
-    while (t1) {
-      if (t1.callback === callback) {
-        t1.then = then;
-        t1.delay = delay;
-        found = true;
-        break;
-      }
-      t0 = t1;
-      t1 = t1.next;
-    }
-    if (!found) d3_timer_queue = {
+    var timer = d3_timer_byId[callback.id];
+    if (timer && timer.callback === callback) {
+      timer.then = then;
+      timer.delay = delay;
+    } else d3_timer_byId[callback.id = ++d3_timer_id] = d3_timer_queue = {
       callback: callback,
       then: then,
       delay: delay,
