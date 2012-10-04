@@ -224,6 +224,7 @@
       return Math.max(0, Math.min(1, (x - a) * b));
     };
   }
+  function d3_Color() {}
   function d3_rgb(r, g, b) {
     return new d3_Rgb(r, g, b);
   }
@@ -621,6 +622,7 @@
     var t0 = null, t1 = d3_timer_queue, then = Infinity;
     while (t1) {
       if (t1.flush) {
+        delete d3_timer_byId[t1.callback.id];
         t1 = t0 ? t0.next = t1.next : d3_timer_queue = t1.next;
       } else {
         then = Math.min(then, t1.then + t1.delay);
@@ -2572,7 +2574,7 @@
     };
   }
   d3 = {
-    version: "2.10.2"
+    version: "2.10.3"
   };
   var d3_array = d3_arraySlice;
   try {
@@ -3347,14 +3349,18 @@
   }, function(a, b) {
     return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + "");
   }, function(a, b) {
-    return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b);
+    return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Color) && d3.interpolateRgb(a, b);
   }, function(a, b) {
     return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b);
   } ];
+  d3_Color.prototype.toString = function() {
+    return this.rgb() + "";
+  };
   d3.rgb = function(r, g, b) {
     return arguments.length === 1 ? r instanceof d3_Rgb ? d3_rgb(r.r, r.g, r.b) : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb) : d3_rgb(~~r, ~~g, ~~b);
   };
-  d3_Rgb.prototype.brighter = function(k) {
+  var d3_rgbPrototype = d3_Rgb.prototype = new d3_Color;
+  d3_rgbPrototype.brighter = function(k) {
     k = Math.pow(.7, arguments.length ? k : 1);
     var r = this.r, g = this.g, b = this.b, i = 30;
     if (!r && !g && !b) return d3_rgb(i, i, i);
@@ -3363,14 +3369,14 @@
     if (b && b < i) b = i;
     return d3_rgb(Math.min(255, Math.floor(r / k)), Math.min(255, Math.floor(g / k)), Math.min(255, Math.floor(b / k)));
   };
-  d3_Rgb.prototype.darker = function(k) {
+  d3_rgbPrototype.darker = function(k) {
     k = Math.pow(.7, arguments.length ? k : 1);
     return d3_rgb(Math.floor(k * this.r), Math.floor(k * this.g), Math.floor(k * this.b));
   };
-  d3_Rgb.prototype.hsl = function() {
+  d3_rgbPrototype.hsl = function() {
     return d3_rgb_hsl(this.r, this.g, this.b);
   };
-  d3_Rgb.prototype.toString = function() {
+  d3_rgbPrototype.toString = function() {
     return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
   };
   var d3_rgb_names = d3.map({
@@ -3528,51 +3534,45 @@
   d3.hsl = function(h, s, l) {
     return arguments.length === 1 ? h instanceof d3_Hsl ? d3_hsl(h.h, h.s, h.l) : d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl) : d3_hsl(+h, +s, +l);
   };
-  d3_Hsl.prototype.brighter = function(k) {
+  var d3_hslPrototype = d3_Hsl.prototype = new d3_Color;
+  d3_hslPrototype.brighter = function(k) {
     k = Math.pow(.7, arguments.length ? k : 1);
     return d3_hsl(this.h, this.s, this.l / k);
   };
-  d3_Hsl.prototype.darker = function(k) {
+  d3_hslPrototype.darker = function(k) {
     k = Math.pow(.7, arguments.length ? k : 1);
     return d3_hsl(this.h, this.s, k * this.l);
   };
-  d3_Hsl.prototype.rgb = function() {
+  d3_hslPrototype.rgb = function() {
     return d3_hsl_rgb(this.h, this.s, this.l);
-  };
-  d3_Hsl.prototype.toString = function() {
-    return this.rgb().toString();
   };
   d3.hcl = function(h, c, l) {
     return arguments.length === 1 ? h instanceof d3_Hcl ? d3_hcl(h.h, h.c, h.l) : h instanceof d3_Lab ? d3_lab_hcl(h.l, h.a, h.b) : d3_lab_hcl((h = d3_rgb_lab((h = d3.rgb(h)).r, h.g, h.b)).l, h.a, h.b) : d3_hcl(+h, +c, +l);
   };
-  d3_Hcl.prototype.brighter = function(k) {
+  var d3_hclPrototype = d3_Hcl.prototype = new d3_Color;
+  d3_hclPrototype.brighter = function(k) {
     return d3_hcl(this.h, this.c, Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)));
   };
-  d3_Hcl.prototype.darker = function(k) {
+  d3_hclPrototype.darker = function(k) {
     return d3_hcl(this.h, this.c, Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)));
   };
-  d3_Hcl.prototype.rgb = function() {
+  d3_hclPrototype.rgb = function() {
     return d3_hcl_lab(this.h, this.c, this.l).rgb();
-  };
-  d3_Hcl.prototype.toString = function() {
-    return this.rgb() + "";
   };
   d3.lab = function(l, a, b) {
     return arguments.length === 1 ? l instanceof d3_Lab ? d3_lab(l.l, l.a, l.b) : l instanceof d3_Hcl ? d3_hcl_lab(l.l, l.c, l.h) : d3_rgb_lab((l = d3.rgb(l)).r, l.g, l.b) : d3_lab(+l, +a, +b);
   };
   var d3_lab_K = 18;
   var d3_lab_X = .95047, d3_lab_Y = 1, d3_lab_Z = 1.08883;
-  d3_Lab.prototype.brighter = function(k) {
+  var d3_labPrototype = d3_Lab.prototype = new d3_Color;
+  d3_labPrototype.brighter = function(k) {
     return d3_lab(Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
   };
-  d3_Lab.prototype.darker = function(k) {
+  d3_labPrototype.darker = function(k) {
     return d3_lab(Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
   };
-  d3_Lab.prototype.rgb = function() {
+  d3_labPrototype.rgb = function() {
     return d3_lab_rgb(this.l, this.a, this.b);
-  };
-  d3_Lab.prototype.toString = function() {
-    return this.rgb() + "";
   };
   var d3_select = function(s, n) {
     return n.querySelector(s);
@@ -4056,7 +4056,7 @@
   d3.tween = function(b, interpolate) {
     function tweenFunction(d, i, a) {
       var v = b.call(this, d, i);
-      return v == null ? a != "" && d3_tweenRemove : a != v && interpolate(a, v);
+      return v == null ? a != "" && d3_tweenRemove : a != v && interpolate(a, v + "");
     }
     function tweenString(d, i, a) {
       return a != b && interpolate(a, b);
@@ -4064,24 +4064,17 @@
     return typeof b === "function" ? tweenFunction : b == null ? d3_tweenNull : (b += "", tweenString);
   };
   var d3_tweenRemove = {};
-  var d3_timer_queue = null, d3_timer_interval, d3_timer_timeout;
+  var d3_timer_id = 0, d3_timer_byId = {}, d3_timer_queue = null, d3_timer_interval, d3_timer_timeout;
   d3.timer = function(callback, delay, then) {
-    var found = false, t0, t1 = d3_timer_queue;
     if (arguments.length < 3) {
       if (arguments.length < 2) delay = 0; else if (!isFinite(delay)) return;
       then = Date.now();
     }
-    while (t1) {
-      if (t1.callback === callback) {
-        t1.then = then;
-        t1.delay = delay;
-        found = true;
-        break;
-      }
-      t0 = t1;
-      t1 = t1.next;
-    }
-    if (!found) d3_timer_queue = {
+    var timer = d3_timer_byId[callback.id];
+    if (timer && timer.callback === callback) {
+      timer.then = then;
+      timer.delay = delay;
+    } else d3_timer_byId[callback.id = ++d3_timer_id] = d3_timer_queue = {
       callback: callback,
       then: then,
       delay: delay,
