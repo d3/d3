@@ -1,4 +1,4 @@
-// TODO restore path.area, path.centroid
+// TODO restore path.centroid
 // TODO fallback for projections that don't implement point, polygon? (or fix albersUsa?)
 
 d3.geo.path = function() {
@@ -52,7 +52,7 @@ d3.geo.path = function() {
     return ringArea(coordinates[0]) - d3.sum(coordinates.slice(1), ringArea);
   }
 
-  path.area = areaType.object;
+  path.area = function(object) { return areaType.object(object); };
 
   path.projection = function(_) {
     if (!arguments.length) return projection;

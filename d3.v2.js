@@ -6715,7 +6715,9 @@
         return polygonArea(polygon.coordinates);
       }
     });
-    path.area = areaType.object;
+    path.area = function(object) {
+      return areaType.object(object);
+    };
     path.projection = function(_) {
       if (!arguments.length) return projection;
       projection = _;
