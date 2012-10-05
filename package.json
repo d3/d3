@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "2.10.2",
+  "version": "3.0.0pre",
   "description": "A small, free JavaScript library for manipulating documents based on data.",
   "keywords": [
     "dom",
@@ -22,7 +22,7 @@
   "main": "index.js",
   "browserify": "index-browserify.js",
   "jam": {
-    "main": "d3.v2.js",
+    "main": "d3.v3.js",
     "shim": {
       "exports": "d3"
     }

@@ -1,14 +1,17 @@
 d3_selectionPrototype.transition = function() {
-  var subgroups = [],
+  var id = d3_transitionId || ++d3_transitionNextId,
+      subgroups = [],
       subgroup,
-      node;
+      node,
+      transition;
 
   for (var j = -1, m = this.length; ++j < m;) {
     subgroups.push(subgroup = []);
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
-      subgroup.push((node = group[i]) ? {node: node, delay: d3_transitionDelay, duration: d3_transitionDuration} : null);
+      if (node = group[i]) d3_transitionNode(node, id, d3_transitionDelay, d3_transitionDuration);
+      subgroup.push(node);
     }
   }
 
-  return d3_transition(subgroups, d3_transitionId || ++d3_transitionNextId, Date.now());
+  return d3_transition(subgroups, id, Date.now());
 };

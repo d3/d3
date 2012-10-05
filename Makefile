@@ -7,14 +7,14 @@ JS_TESTER = $(NODE_PATH)/vows/bin/vows
 LOCALE ?= en_US
 
 all: \
-	d3.v2.js \
-	d3.v2.min.js \
+	d3.v3.js \
+	d3.v3.min.js \
 	component.json \
 	package.json
 
 # Modify this rule to build your own custom release.
 
-.INTERMEDIATE d3.v2.js: \
+.INTERMEDIATE d3.v3.js: \
 	src/start.js \
 	d3.core.js \
 	d3.scale.js \
@@ -124,6 +124,7 @@ d3.core.js: \
 	src/core/transition-duration.js \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
+	src/core/transition-tween.js \
 	src/core/tween.js \
 	src/core/timer.js \
 	src/core/mouse.js \

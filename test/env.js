@@ -12,4 +12,4 @@ require("./env-assert");
 require("./env-xhr");
 require("./env-fragment");
 
-require("../d3.v2");
+require("../d3.v3");
