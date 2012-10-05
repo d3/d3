@@ -2450,21 +2450,6 @@
   function d3_geo_azimuthalMode(mode) {
     return d3_geo_azimuthalModes[mode];
   }
-  function d3_geom_contourStart(grid) {
-    var x = 0, y = 0;
-    while (true) {
-      if (grid(x, y)) {
-        return [ x, y ];
-      }
-      if (x === 0) {
-        x = y + 1;
-        y = 0;
-      } else {
-        x = x - 1;
-        y = y + 1;
-      }
-    }
-  }
   function d3_geom_hullCCW(i1, i2, i3, v) {
     var t, a, b, c, d, e, f;
     t = v[i1];
@@ -6811,35 +6796,6 @@
     stereographic: d3_geo_stereographic
   };
   d3.geom = {};
-  d3.geom.contour = function(grid, start) {
-    var s = start || d3_geom_contourStart(grid), c = [], x = s[0], y = s[1], dx = 0, dy = 0, pdx = NaN, pdy = NaN, i = 0;
-    do {
-      i = 0;
-      if (grid(x - 1, y - 1)) i += 1;
-      if (grid(x, y - 1)) i += 2;
-      if (grid(x - 1, y)) i += 4;
-      if (grid(x, y)) i += 8;
-      if (i === 6) {
-        dx = pdy === -1 ? -1 : 1;
-        dy = 0;
-      } else if (i === 9) {
-        dx = 0;
-        dy = pdx === 1 ? -1 : 1;
-      } else {
-        dx = d3_geom_contourDx[i];
-        dy = d3_geom_contourDy[i];
-      }
-      if (dx != pdx && dy != pdy) {
-        c.push([ x, y ]);
-        pdx = dx;
-        pdy = dy;
-      }
-      x += dx;
-      y += dy;
-    } while (s[0] != x || s[1] != y);
-    return c;
-  };
-  var d3_geom_contourDx = [ 1, 0, 1, 1, -1, 0, -1, 1, 0, 0, 0, 0, -1, 0, -1, NaN ], d3_geom_contourDy = [ 0, -1, 0, 0, 0, -1, 0, 0, 1, -1, 1, 1, 0, -1, 0, NaN ];
   d3.geom.hull = function(vertices) {
     if (vertices.length < 3) return [];
     var len = vertices.length, plen = len - 1, points = [], stack = [], i, j, h = 0, x1, y1, x2, y2, u, v, a, sp;
