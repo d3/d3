@@ -84,10 +84,9 @@ var d3_transitionPrototype = [],
     d3_transitionId = 0,
     d3_transitionDefaultDelay = 0,
     d3_transitionDefaultDuration = 250,
-    d3_transitionDefaultEase = d3.ease("cubic-in-out"),
     d3_transitionDelay = d3_transitionDefaultDelay,
     d3_transitionDuration = d3_transitionDefaultDuration,
-    d3_transitionEase = d3_transitionDefaultEase;
+    d3_transitionEase = d3_ease_cubicInOut;
 
 d3_transitionPrototype.call = d3_selectionPrototype.call;
 d3_transitionPrototype.empty = d3_selectionPrototype.empty;

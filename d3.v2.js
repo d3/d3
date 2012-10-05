@@ -117,8 +117,11 @@
       return .5 * (t < .5 ? f(2 * t) : 2 - f(2 - 2 * t));
     };
   }
-  function d3_ease_identity(t) {
-    return t;
+  function d3_ease_quad(t) {
+    return t * t;
+  }
+  function d3_ease_cubic(t) {
+    return t * t * t;
   }
   function d3_ease_poly(e) {
     return function(t) {
@@ -580,6 +583,10 @@
       tween: new d3_Map
     });
     ++lock.count;
+  }
+  function d3_transitionDefaultEase(t) {
+    var t2, t3;
+    return t <= 0 ? 0 : t >= 1 ? 1 : (t2 = t * t, t3 = t2 * t, 4 * (t < .5 ? t3 : 3 * (t - t2) + t3 - .75));
   }
   function d3_transition_each(callback) {
     var id = d3_transitionId, ease = d3_transitionEase, delay = d3_transitionDelay, duration = d3_transitionDuration;
@@ -3092,8 +3099,8 @@
     }
     return d3_formatPrefixes[8 + i / 3];
   };
-  var d3_ease_quad = d3_ease_poly(2), d3_ease_cubic = d3_ease_poly(3), d3_ease_default = function() {
-    return d3_ease_identity;
+  var d3_ease_default = function() {
+    return d3_identity;
   };
   var d3_ease = d3.map({
     linear: d3_ease_default,
@@ -3120,7 +3127,7 @@
     }
   });
   var d3_ease_mode = d3.map({
-    "in": d3_ease_identity,
+    "in": d3_identity,
     out: d3_ease_reverse,
     "in-out": d3_ease_reflect,
     "out-in": function(f) {
@@ -3130,7 +3137,7 @@
   d3.ease = function(name) {
     var i = name.indexOf("-"), t = i >= 0 ? name.substring(0, i) : name, m = i >= 0 ? name.substring(i + 1) : "in";
     t = d3_ease.get(t) || d3_ease_default;
-    m = d3_ease_mode.get(m) || d3_ease_identity;
+    m = d3_ease_mode.get(m) || d3_identity;
     return d3_ease_clamp(m(t.apply(null, Array.prototype.slice.call(arguments, 1))));
   };
   d3.event = null;
@@ -3923,7 +3930,7 @@
     }
     return d3_selection(subgroups);
   };
-  var d3_transitionPrototype = [], d3_transitionNextId = 0, d3_transitionId = 0, d3_transitionDefaultDelay = 0, d3_transitionDefaultDuration = 250, d3_transitionDefaultEase = d3.ease("cubic-in-out"), d3_transitionDelay = d3_transitionDefaultDelay, d3_transitionDuration = d3_transitionDefaultDuration, d3_transitionEase = d3_transitionDefaultEase;
+  var d3_transitionPrototype = [], d3_transitionNextId = 0, d3_transitionId = 0, d3_transitionDefaultDelay = 0, d3_transitionDefaultDuration = 250, d3_transitionDelay = d3_transitionDefaultDelay, d3_transitionDuration = d3_transitionDefaultDuration, d3_transitionEase = d3_transitionDefaultEase;
   d3_transitionPrototype.call = d3_selectionPrototype.call;
   d3_transitionPrototype.empty = d3_selectionPrototype.empty;
   d3_transitionPrototype.node = d3_selectionPrototype.node;
