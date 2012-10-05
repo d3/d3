@@ -185,17 +185,26 @@ d3.layout.js: \
 
 d3.geo.js: \
 	src/geo/geo.js \
-	src/geo/azimuthal.js \
-	src/geo/albers.js \
-	src/geo/bonne.js \
-	src/geo/equirectangular.js \
-	src/geo/mercator.js \
 	src/geo/type.js \
-	src/geo/path.js \
+	src/geo/albers-usa.js \
+	src/geo/albers.js \
+	src/geo/azimuthal-equal-area.js \
+	src/geo/azimuthal-equidistant.js \
 	src/geo/bounds.js \
 	src/geo/circle.js \
+	src/geo/compose.js \
+	src/geo/equirectangular.js \
+	src/geo/gnomonic.js \
+	src/geo/graticule.js \
 	src/geo/greatArc.js \
-	src/geo/greatCircle.js
+	src/geo/greatCircle.js \
+	src/geo/mercator.js \
+	src/geo/orthographic.js \
+	src/geo/path.js \
+	src/geo/projection.js \
+	src/geo/rotation.js \
+	src/geo/stereographic.js \
+	src/geo/azimuthal.js
 
 d3.dsv.js: \
 	src/dsv/dsv.js \
