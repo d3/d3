@@ -4773,8 +4773,6 @@
     };
     return diagonal;
   };
-  d3.svg.mouse = d3.mouse;
-  d3.svg.touches = d3.touches;
   d3.svg.symbol = function() {
     function symbol(d, i) {
       return (d3_svg_symbols.get(type.call(this, d, i)) || d3_svg_symbolCircle)(size.call(this, d, i));

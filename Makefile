@@ -154,8 +154,6 @@ d3.svg.js: \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
 	src/svg/diagonal-radial.js \
-	src/svg/mouse.js \
-	src/svg/touches.js \
 	src/svg/symbol.js \
 	src/svg/axis.js \
 	src/svg/brush.js
