@@ -4418,7 +4418,7 @@
             textEnter.attr("y", Math.max(tickMajorSize, 0) + tickPadding);
             lineUpdate.attr("x2", 0).attr("y2", tickMajorSize);
             textUpdate.attr("x", 0).attr("y", Math.max(tickMajorSize, 0) + tickPadding);
-            text.attr("dy", ".71em").attr("text-anchor", "middle");
+            text.attr("dy", ".71em").style("text-anchor", "middle");
             pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[1] + "V" + tickEndSize);
             break;
           }
@@ -4431,7 +4431,7 @@
             textEnter.attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
             lineUpdate.attr("x2", 0).attr("y2", -tickMajorSize);
             textUpdate.attr("x", 0).attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
-            text.attr("dy", "0em").attr("text-anchor", "middle");
+            text.attr("dy", "0em").style("text-anchor", "middle");
             pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[1] + "V" + -tickEndSize);
             break;
           }
@@ -4444,7 +4444,7 @@
             textEnter.attr("x", -(Math.max(tickMajorSize, 0) + tickPadding));
             lineUpdate.attr("x2", -tickMajorSize).attr("y2", 0);
             textUpdate.attr("x", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("y", 0);
-            text.attr("dy", ".32em").attr("text-anchor", "end");
+            text.attr("dy", ".32em").style("text-anchor", "end");
             pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + -tickEndSize);
             break;
           }
@@ -4457,7 +4457,7 @@
             textEnter.attr("x", Math.max(tickMajorSize, 0) + tickPadding);
             lineUpdate.attr("x2", tickMajorSize).attr("y2", 0);
             textUpdate.attr("x", Math.max(tickMajorSize, 0) + tickPadding).attr("y", 0);
-            text.attr("dy", ".32em").attr("text-anchor", "start");
+            text.attr("dy", ".32em").style("text-anchor", "start");
             pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
             break;
           }
