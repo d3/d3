@@ -59,7 +59,6 @@ d3.core.js: \
 	src/core/entries.js \
 	src/core/permute.js \
 	src/core/merge.js \
-	src/core/split.js \
 	src/core/collapse.js \
 	src/core/range.js \
 	src/core/requote.js \
