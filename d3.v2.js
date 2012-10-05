@@ -117,8 +117,11 @@
       return .5 * (t < .5 ? f(2 * t) : 2 - f(2 - 2 * t));
     };
   }
-  function d3_ease_identity(t) {
-    return t;
+  function d3_ease_quad(t) {
+    return t * t;
+  }
+  function d3_ease_cubic(t) {
+    return t * t * t;
   }
   function d3_ease_poly(e) {
     return function(t) {
@@ -518,14 +521,9 @@
   }
   function d3_transition(groups, id, time) {
     d3_arraySubclass(groups, d3_transitionPrototype);
-    var tweens = new d3_Map, event = d3.dispatch("start", "end"), ease = d3_transitionEase;
+    var event = d3.dispatch("start", "end"), ease = d3_transitionEase;
     groups.id = id;
     groups.time = time;
-    groups.tween = function(name, tween) {
-      if (arguments.length < 2) return tweens.get(name);
-      if (tween == null) tweens.remove(name); else tweens.set(name, tween);
-      return groups;
-    };
     groups.ease = function(value) {
       if (!arguments.length) return ease;
       ease = typeof value === "function" ? value : d3.ease.apply(d3, arguments);
@@ -541,7 +539,7 @@
         function start(elapsed) {
           if (lock.active > id) return stop();
           lock.active = id;
-          tweens.forEach(function(key, value) {
+          transition.tween.forEach(function(key, value) {
             if (value = value.call(node, d, i)) {
               tweened.push(value);
             }
@@ -565,27 +563,40 @@
           }
         }
         function stop() {
-          if (!--lock.count) delete node.__transition__;
+          if (--lock.count) delete lock[id]; else delete node.__transition__;
           return 1;
         }
-        var tweened = [], delay = node.delay, duration = node.duration, lock = (node = node.node).__transition__ || (node.__transition__ = {
-          active: 0,
-          count: 0
-        }), d = node.__data__;
-        ++lock.count;
+        var d = node.__data__, lock = node.__transition__, transition = lock[id], delay = transition.delay, duration = transition.duration, tweened = [];
         delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time);
       });
     }, 0, time);
     return groups;
+  }
+  function d3_transitionNode(node, id, delay, duration) {
+    var lock = node.__transition__ || (node.__transition__ = {
+      active: 0,
+      count: 0
+    });
+    lock[id] || (lock[id] = {
+      delay: delay,
+      duration: duration,
+      tween: new d3_Map
+    });
+    ++lock.count;
+  }
+  function d3_transitionDefaultEase(t) {
+    var t2, t3;
+    return t <= 0 ? 0 : t >= 1 ? 1 : (t2 = t * t, t3 = t2 * t, 4 * (t < .5 ? t3 : 3 * (t - t2) + t3 - .75));
   }
   function d3_transition_each(callback) {
     var id = d3_transitionId, ease = d3_transitionEase, delay = d3_transitionDelay, duration = d3_transitionDuration;
     d3_transitionId = this.id;
     d3_transitionEase = this.ease();
     d3_selection_each(this, function(node, i, j) {
-      d3_transitionDelay = node.delay;
-      d3_transitionDuration = node.duration;
-      callback.call(node = node.node, node.__data__, i, j);
+      var transition = node.__transition__[d3_transitionId];
+      d3_transitionDelay = transition.delay;
+      d3_transitionDuration = transition.duration;
+      callback.call(node, node.__data__, i, j);
     });
     d3_transitionId = id;
     d3_transitionEase = ease;
@@ -3088,8 +3099,8 @@
     }
     return d3_formatPrefixes[8 + i / 3];
   };
-  var d3_ease_quad = d3_ease_poly(2), d3_ease_cubic = d3_ease_poly(3), d3_ease_default = function() {
-    return d3_ease_identity;
+  var d3_ease_default = function() {
+    return d3_identity;
   };
   var d3_ease = d3.map({
     linear: d3_ease_default,
@@ -3116,7 +3127,7 @@
     }
   });
   var d3_ease_mode = d3.map({
-    "in": d3_ease_identity,
+    "in": d3_identity,
     out: d3_ease_reverse,
     "in-out": d3_ease_reflect,
     "out-in": function(f) {
@@ -3126,7 +3137,7 @@
   d3.ease = function(name) {
     var i = name.indexOf("-"), t = i >= 0 ? name.substring(0, i) : name, m = i >= 0 ? name.substring(i + 1) : "in";
     t = d3_ease.get(t) || d3_ease_default;
-    m = d3_ease_mode.get(m) || d3_ease_identity;
+    m = d3_ease_mode.get(m) || d3_identity;
     return d3_ease_clamp(m(t.apply(null, Array.prototype.slice.call(arguments, 1))));
   };
   d3.event = null;
@@ -3877,18 +3888,15 @@
     return null;
   };
   d3_selectionPrototype.transition = function() {
-    var subgroups = [], subgroup, node;
+    var id = d3_transitionId || ++d3_transitionNextId, subgroups = [], subgroup, node, transition;
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
-        subgroup.push((node = group[i]) ? {
-          node: node,
-          delay: d3_transitionDelay,
-          duration: d3_transitionDuration
-        } : null);
+        if (node = group[i]) d3_transitionNode(node, id, d3_transitionDelay, d3_transitionDuration);
+        subgroup.push(node);
       }
     }
-    return d3_transition(subgroups, d3_transitionId || ++d3_transitionNextId, Date.now());
+    return d3_transition(subgroups, id, Date.now());
   };
   var d3_selectionRoot = d3_selection([ [ document ] ]);
   d3_selectionRoot[0].parentNode = d3_selectRoot;
@@ -3922,51 +3930,49 @@
     }
     return d3_selection(subgroups);
   };
-  var d3_transitionPrototype = [], d3_transitionNextId = 0, d3_transitionId = 0, d3_transitionDefaultDelay = 0, d3_transitionDefaultDuration = 250, d3_transitionDefaultEase = d3.ease("cubic-in-out"), d3_transitionDelay = d3_transitionDefaultDelay, d3_transitionDuration = d3_transitionDefaultDuration, d3_transitionEase = d3_transitionDefaultEase;
+  var d3_transitionPrototype = [], d3_transitionNextId = 0, d3_transitionId = 0, d3_transitionDefaultDelay = 0, d3_transitionDefaultDuration = 250, d3_transitionDelay = d3_transitionDefaultDelay, d3_transitionDuration = d3_transitionDefaultDuration, d3_transitionEase = d3_transitionDefaultEase;
   d3_transitionPrototype.call = d3_selectionPrototype.call;
+  d3_transitionPrototype.empty = d3_selectionPrototype.empty;
+  d3_transitionPrototype.node = d3_selectionPrototype.node;
   d3.transition = function(selection) {
     return arguments.length ? d3_transitionId ? selection.transition() : selection : d3_selectionRoot.transition();
   };
   d3.transition.prototype = d3_transitionPrototype;
   d3_transitionPrototype.select = function(selector) {
-    var subgroups = [], subgroup, subnode, node;
+    var id = this.id, subgroups = [], subgroup, subnode, node, transition;
     if (typeof selector !== "function") selector = d3_selection_selector(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
-        if ((node = group[i]) && (subnode = selector.call(node.node, node.node.__data__, i))) {
-          if ("__data__" in node.node) subnode.__data__ = node.node.__data__;
-          subgroup.push({
-            node: subnode,
-            delay: node.delay,
-            duration: node.duration
-          });
+        if ((node = group[i]) && (subnode = selector.call(node, node.__data__, i))) {
+          if ("__data__" in node) subnode.__data__ = node.__data__;
+          transition = node.__transition__[id];
+          d3_transitionNode(subnode, id, transition.delay, transition.duration);
+          subgroup.push(subnode);
         } else {
           subgroup.push(null);
         }
       }
     }
-    return d3_transition(subgroups, this.id, this.time).ease(this.ease());
+    return d3_transition(subgroups, id, this.time).ease(this.ease());
   };
   d3_transitionPrototype.selectAll = function(selector) {
-    var subgroups = [], subgroup, subnodes, node;
+    var id = this.id, subgroups = [], subgroup, subnodes, node, subnode, transition;
     if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
-          subnodes = selector.call(node.node, node.node.__data__, i);
+          transition = node.__transition__[id];
+          subnodes = selector.call(node, node.__data__, i);
           subgroups.push(subgroup = []);
           for (var k = -1, o = subnodes.length; ++k < o; ) {
-            subgroup.push({
-              node: subnodes[k],
-              delay: node.delay,
-              duration: node.duration
-            });
+            d3_transitionNode(subnode = subnodes[k], id, transition.delay, transition.duration);
+            subgroup.push(subnode);
           }
         }
       }
     }
-    return d3_transition(subgroups, this.id, this.time).ease(this.ease());
+    return d3_transition(subgroups, id, this.time).ease(this.ease());
   };
   d3_transitionPrototype.filter = function(filter) {
     var subgroups = [], subgroup, group, node;
@@ -3974,7 +3980,7 @@
     for (var j = 0, m = this.length; j < m; j++) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = 0, n = group.length; i < n; i++) {
-        if ((node = group[i]) && filter.call(node.node, node.node.__data__, i)) {
+        if ((node = group[i]) && filter.call(node, node.__data__, i)) {
           subgroup.push(node);
         }
       }
@@ -4037,21 +4043,43 @@
     });
   };
   d3_transitionPrototype.delay = function(value) {
+    var id = this.id;
     return d3_selection_each(this, typeof value === "function" ? function(node, i, j) {
-      node.delay = value.call(node = node.node, node.__data__, i, j) | 0;
-    } : (value = value | 0, function(node) {
-      node.delay = value;
+      node.__transition__[id].delay = value.call(node, node.__data__, i, j) | 0;
+    } : (value |= 0, function(node) {
+      node.__transition__[id].delay = value;
     }));
   };
   d3_transitionPrototype.duration = function(value) {
+    var id = this.id;
     return d3_selection_each(this, typeof value === "function" ? function(node, i, j) {
-      node.duration = Math.max(1, value.call(node = node.node, node.__data__, i, j) | 0);
+      node.__transition__[id].duration = Math.max(1, value.call(node, node.__data__, i, j) | 0);
     } : (value = Math.max(1, value | 0), function(node) {
-      node.duration = value;
+      node.__transition__[id].duration = value;
     }));
   };
   d3_transitionPrototype.transition = function() {
-    return this.select(d3_this);
+    var id0 = this.id, id1 = ++d3_transitionNextId, subgroups = [], subgroup, group, node, transition;
+    for (var j = 0, m = this.length; j < m; j++) {
+      subgroups.push(subgroup = []);
+      for (var group = this[j], i = 0, n = group.length; i < n; i++) {
+        if (node = group[i]) {
+          transition = node.__transition__[id0];
+          d3_transitionNode(node, id1, transition.delay + transition.duration, transition.duration);
+        }
+        subgroup.push(node);
+      }
+    }
+    return d3_transition(subgroups, id1, this.time).ease(this.ease());
+  };
+  d3_transitionPrototype.tween = function(name, tween) {
+    var id = this.id;
+    if (arguments.length < 2) return this.node().__transition__[id].tween.get(name);
+    return d3_selection_each(this, tween == null ? function(node) {
+      node.__transition__[id].tween.remove(name);
+    } : function(node) {
+      node.__transition__[id].tween.set(name, tween);
+    });
   };
   d3.tween = function(b, interpolate) {
     function tweenFunction(d, i, a) {
@@ -4397,7 +4425,7 @@
             textEnter.attr("y", Math.max(tickMajorSize, 0) + tickPadding);
             lineUpdate.attr("x2", 0).attr("y2", tickMajorSize);
             textUpdate.attr("x", 0).attr("y", Math.max(tickMajorSize, 0) + tickPadding);
-            text.attr("dy", ".71em").attr("text-anchor", "middle");
+            text.attr("dy", ".71em").style("text-anchor", "middle");
             pathUpdate.attr("d", "M" + range[0] + "," + tickEndSize + "V0H" + range[1] + "V" + tickEndSize);
             break;
           }
@@ -4410,7 +4438,7 @@
             textEnter.attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
             lineUpdate.attr("x2", 0).attr("y2", -tickMajorSize);
             textUpdate.attr("x", 0).attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
-            text.attr("dy", "0em").attr("text-anchor", "middle");
+            text.attr("dy", "0em").style("text-anchor", "middle");
             pathUpdate.attr("d", "M" + range[0] + "," + -tickEndSize + "V0H" + range[1] + "V" + -tickEndSize);
             break;
           }
@@ -4423,7 +4451,7 @@
             textEnter.attr("x", -(Math.max(tickMajorSize, 0) + tickPadding));
             lineUpdate.attr("x2", -tickMajorSize).attr("y2", 0);
             textUpdate.attr("x", -(Math.max(tickMajorSize, 0) + tickPadding)).attr("y", 0);
-            text.attr("dy", ".32em").attr("text-anchor", "end");
+            text.attr("dy", ".32em").style("text-anchor", "end");
             pathUpdate.attr("d", "M" + -tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + -tickEndSize);
             break;
           }
@@ -4436,7 +4464,7 @@
             textEnter.attr("x", Math.max(tickMajorSize, 0) + tickPadding);
             lineUpdate.attr("x2", tickMajorSize).attr("y2", 0);
             textUpdate.attr("x", Math.max(tickMajorSize, 0) + tickPadding).attr("y", 0);
-            text.attr("dy", ".32em").attr("text-anchor", "start");
+            text.attr("dy", ".32em").style("text-anchor", "start");
             pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
             break;
           }

@@ -5,25 +5,25 @@ var assert = require("assert");
 module.exports = {
   topic: function() {
     return d3.select("body").append("div").transition()
-        .delay(100)
-        .duration(150)
+        .delay(101)
+        .duration(152)
         .ease("bounce");
   },
 
-  "inherits the delay": function(t1) {
+  "starts immediately after the previous transition ends": function(t1) {
     var t2 = t1.transition();
-    assert.equal(t2[0][0].delay, 100);
+    assert.equal(t2[0][0].__transition__[t2.id].delay, 253);
   },
-  "inherits the duration": function(t1) {
+  "inherits the previous transition's duration": function(t1) {
     var t2 = t1.transition();
-    assert.equal(t2[0][0].duration, 150);
+    assert.equal(t2[0][0].__transition__[t2.id].duration, 152);
   },
   "inherits easing": function(t1) {
     // TODO how to test this?
   },
-  "inherits the transition id": function(t1) {
+  "gets a new transition id": function(t1) {
     var t2 = t1.transition();
-    assert.equal(t2.id, t1.id);
+    assert.isTrue(t2.id > t1.id);
   },
 
   "while transitioning": {
@@ -38,22 +38,23 @@ module.exports = {
       });
     },
     "increments the lock's reference count": function(t2) {
-      assert.isTrue(t2[0][0].node.__transition__.count > 1);
+      assert.isTrue(t2[0][0].__transition__.count > 1);
     }
   },
 
   "after transitioning": {
     topic: function(t1) {
       var cb = this.callback;
-      t1.each("end", function() {
+      var t2 = t1.transition();
+      t2.each("end", function() {
         d3.timer(function() {
-          cb(null, t1);
+          cb(null, t2);
           return true;
         }, 50);
       });
     },
-    "decrements the lock's reference count": function(t1) {
-      assert.isFalse("__transition__" in t1[0][0].node);
+    "decrements the lock's reference count": function(t2) {
+      assert.isFalse("__transition__" in t2[0][0]);
     }
   }
 };

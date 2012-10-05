@@ -81,15 +81,9 @@ function transitionGroup() {
       .delay(function(d, i) { return (i % m) * 10; })
       .attr("x", function(d, i) { return x({x: .9 * ~~(i / m) / n}); })
       .attr("width", x({x: .9 / n}))
-      .each("end", transitionEnd);
-
-  function transitionEnd() {
-    d3.select(this)
-      .transition()
-        .duration(500)
-        .attr("y", function(d) { return height - y2(d); })
-        .attr("height", y2);
-  }
+    .transition()
+      .attr("y", function(d) { return height - y2(d); })
+      .attr("height", y2);
 }
 
 function transitionStack() {
@@ -107,13 +101,7 @@ function transitionStack() {
       .delay(function(d, i) { return (i % m) * 10; })
       .attr("y", y1)
       .attr("height", function(d) { return y0(d) - y1(d); })
-      .each("end", transitionEnd);
-
-  function transitionEnd() {
-    d3.select(this)
-      .transition()
-        .duration(500)
-        .attr("x", 0)
-        .attr("width", x({x: .9}));
-  }
+    .transition()
+      .attr("x", 0)
+      .attr("width", x({x: .9}));
 }

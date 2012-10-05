@@ -11,7 +11,7 @@ suite.addBatch({
       return d3.transition();
     },
     "selects the document": function(transition) {
-      assert.domEqual(transition[0][0].node, document);
+      assert.domEqual(transition[0][0], document);
     },
     "is an instanceof d3.transition": function(transition) {
       assert.isTrue(transition instanceof d3.transition);
