@@ -7,7 +7,7 @@ module.exports = {
     topic: function() {
       var cb = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
-          transition = div.transition().delay(150),
+          transition = div.transition().delay(350),
           then = Date.now(),
           n = 0,
           calls = [],
@@ -42,7 +42,7 @@ module.exports = {
     },
 
     "invokes the listener after the specified delay": function(result) {
-      assert.inDelta(result.delay, [150, 150], 20);
+      assert.inDelta(result.delay, [350, 350], 20);
     },
     "invokes each listener exactly once, in order": function(result) {
       assert.deepEqual(result.count, [2, 4]);
@@ -79,7 +79,7 @@ module.exports = {
     topic: function() {
       var cb = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
-          transition = div.transition().duration(150),
+          transition = div.transition().duration(350),
           then = Date.now(),
           n = 0,
           calls = [],
@@ -114,7 +114,7 @@ module.exports = {
     },
 
     "invokes the listener after the specified delay": function(result) {
-      assert.inDelta(result.delay, [150, 150], 20);
+      assert.inDelta(result.delay, [350, 350], 20);
     },
     "invokes each listener exactly once, in order": function(result) {
       assert.deepEqual(result.count, [2, 4]);

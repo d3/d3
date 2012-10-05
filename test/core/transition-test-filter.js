@@ -31,8 +31,8 @@ module.exports = {
   },
   "preserves data": function(span) {
     var some = span.filter(function(d, i) { return d & 1; });
-    assert.equal(some[0][0].node.__data__, 1);
-    assert.equal(some[1][0].node.__data__, 3);
+    assert.equal(some[0][0].__data__, 1);
+    assert.equal(some[1][0].__data__, 3);
   },
   "preserves grouping": function(span) {
     var some = span.filter(function(d, i) { return d & 1; });
@@ -68,11 +68,11 @@ module.exports = {
   },
   "inherits the delay": function(t1) {
     var t2 = t1.filter(function() { return 1; });
-    assert.equal(t2[0][0].delay, 100);
+    assert.equal(t2[0][0].__transition__[t2.id].delay, 100); // TODO should inherit the whole transition object
   },
   "inherits the duration": function(t1) {
     var t2 = t1.filter(function() { return 1; });
-    assert.equal(t2[0][0].duration, 150);
+    assert.equal(t2[0][0].__transition__[t2.id].duration, 150);
   },
   "inherits easing": function(t1) {
     // TODO how to test this?

@@ -124,6 +124,7 @@ d3.core.js: \
 	src/core/transition-duration.js \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
+	src/core/transition-tween.js \
 	src/core/tween.js \
 	src/core/timer.js \
 	src/core/mouse.js \

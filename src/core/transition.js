@@ -1,20 +1,12 @@
 function d3_transition(groups, id, time) {
   d3_arraySubclass(groups, d3_transitionPrototype);
 
-  var tweens = new d3_Map,
-      event = d3.dispatch("start", "end"),
+  var event = d3.dispatch("start", "end"),
       ease = d3_transitionEase;
 
   groups.id = id;
 
   groups.time = time;
-
-  groups.tween = function(name, tween) {
-    if (arguments.length < 2) return tweens.get(name);
-    if (tween == null) tweens.remove(name);
-    else tweens.set(name, tween);
-    return groups;
-  };
 
   groups.ease = function(value) {
     if (!arguments.length) return ease;
@@ -28,15 +20,16 @@ function d3_transition(groups, id, time) {
     return groups;
   };
 
+  // TODO If the same node is in multiple transitions with the same id,
+  // then this could trigger redundant timers and redundant tweens.
   d3.timer(function(elapsed) {
     return d3_selection_each(groups, function(node, i, j) {
-      var tweened = [],
-          delay = node.delay,
-          duration = node.duration,
-          lock = (node = node.node).__transition__ || (node.__transition__ = {active: 0, count: 0}),
-          d = node.__data__;
-
-      ++lock.count;
+      var d = node.__data__,
+          lock = node.__transition__,
+          transition = lock[id],
+          delay = transition.delay,
+          duration = transition.duration,
+          tweened = [];
 
       delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time);
 
@@ -44,7 +37,7 @@ function d3_transition(groups, id, time) {
         if (lock.active > id) return stop();
         lock.active = id;
 
-        tweens.forEach(function(key, value) {
+        transition.tween.forEach(function(key, value) {
           if (value = value.call(node, d, i)) {
             tweened.push(value);
           }
@@ -76,7 +69,8 @@ function d3_transition(groups, id, time) {
       }
 
       function stop() {
-        if (!--lock.count) delete node.__transition__;
+        if (--lock.count) delete lock[id];
+        else delete node.__transition__;
         return 1;
       }
     });
@@ -96,6 +90,8 @@ var d3_transitionPrototype = [],
     d3_transitionEase = d3_transitionDefaultEase;
 
 d3_transitionPrototype.call = d3_selectionPrototype.call;
+d3_transitionPrototype.empty = d3_selectionPrototype.empty;
+d3_transitionPrototype.node = d3_selectionPrototype.node;
 
 d3.transition = function(selection) {
   return arguments.length
@@ -104,3 +100,9 @@ d3.transition = function(selection) {
 };
 
 d3.transition.prototype = d3_transitionPrototype;
+
+function d3_transitionNode(node, id, delay, duration) {
+  var lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0});
+  lock[id] || (lock[id] = {delay: delay, duration: duration, tween: new d3_Map});
+  ++lock.count;
+}
