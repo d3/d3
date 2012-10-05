@@ -8,15 +8,18 @@ d3.geo.albersUsa = function() {
   var lower48 = d3.geo.albers();
 
   var alaska = d3.geo.albers()
-      .origin([-160, 60])
+      .rotate([160, 0])
+      .center([0, 60])
       .parallels([55, 65]);
 
   var hawaii = d3.geo.albers()
-      .origin([-160, 20])
+      .rotate([160, 0])
+      .center([0, 20])
       .parallels([8, 18]);
 
   var puertoRico = d3.geo.albers()
-      .origin([-60, 10])
+      .rotate([60, 0])
+      .center([0, 10])
       .parallels([8, 18]);
 
   function albersUsa(coordinates) {

@@ -2447,9 +2447,6 @@
     };
     return azimuthal;
   }
-  function d3_geo_azimuthalMode(mode) {
-    return d3_geo_azimuthalModes[mode];
-  }
   function d3_geom_hullCCW(i1, i2, i3, v) {
     var t, a, b, c, d, e, f;
     t = v[i1];
@@ -6409,9 +6406,9 @@
       return (lat > 50 ? alaska : lon < -140 ? hawaii : lat < 21 ? puertoRico : lower48)(coordinates);
     }
     var lower48 = d3.geo.albers();
-    var alaska = d3.geo.albers().origin([ -160, 60 ]).parallels([ 55, 65 ]);
-    var hawaii = d3.geo.albers().origin([ -160, 20 ]).parallels([ 8, 18 ]);
-    var puertoRico = d3.geo.albers().origin([ -60, 10 ]).parallels([ 8, 18 ]);
+    var alaska = d3.geo.albers().rotate([ 160, 0 ]).center([ 0, 60 ]).parallels([ 55, 65 ]);
+    var hawaii = d3.geo.albers().rotate([ 160, 0 ]).center([ 0, 20 ]).parallels([ 8, 18 ]);
+    var puertoRico = d3.geo.albers().rotate([ 60, 0 ]).center([ 0, 10 ]).parallels([ 8, 18 ]);
     albersUsa.scale = function(x) {
       if (!arguments.length) return lower48.scale();
       lower48.scale(x);
@@ -6433,16 +6430,11 @@
   };
   (d3.geo.albers = function() {
     var φ0 = 29.5 * d3_radians, φ1 = 45.5 * d3_radians, m = d3_geo_projectionMutator(d3_geo_albers), p = m(φ0, φ1);
-    p.origin = function(_) {
-      var rotate = p.rotate(), center = p.center();
-      if (!arguments.length) return [ -rotate[0], center[1] ];
-      return p.rotate([ -_[0], rotate[1] ]).center([ center[0], _[1] ]);
-    };
     p.parallels = function(_) {
       if (!arguments.length) return [ φ0 * d3_degrees, φ1 * d3_degrees ];
       return m(φ0 = _[0] * d3_radians, φ1 = _[1] * d3_radians);
     };
-    return p.origin([ -98, 38 ]).scale(1e3);
+    return p.rotate([ 98, 0 ]).center([ 0, 38 ]).scale(1e3);
   }).raw = d3_geo_albers;
   var d3_geo_azimuthalEqualArea = d3_geo_azimuthal(function(cosλcosφ) {
     return Math.sqrt(2 / (1 + cosλcosφ));
@@ -6773,28 +6765,6 @@
   (d3.geo.stereographic = function() {
     return d3_geo_projection(d3_geo_stereographic);
   }).raw = d3_geo_stereographic;
-  d3.geo.azimuthal = function() {
-    var mode = "orthographic", m = d3_geo_projectionMutator(d3_geo_azimuthalMode), p = m(mode);
-    p.mode = function(_) {
-      if (!arguments.length) return mode;
-      return m(mode = _ + "");
-    };
-    p.origin = function(_) {
-      if (!arguments.length) {
-        var rotate = p.rotate();
-        return [ -rotate[0], -rotate[1] ];
-      }
-      return p.rotate([ -_[0], -_[1] ]);
-    };
-    return p.scale(200);
-  };
-  var d3_geo_azimuthalModes = {
-    equalarea: d3_geo_azimuthalEqualArea,
-    equidistant: d3_geo_azimuthalEquidistant,
-    gnomonic: d3_geo_gnomonic,
-    orthographic: d3_geo_orthographic,
-    stereographic: d3_geo_stereographic
-  };
   d3.geom = {};
   d3.geom.hull = function(vertices) {
     if (vertices.length < 3) return [];

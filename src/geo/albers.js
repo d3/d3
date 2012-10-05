@@ -29,17 +29,10 @@ function d3_geo_albers(φ0, φ1) {
       m = d3_geo_projectionMutator(d3_geo_albers),
       p = m(φ0, φ1);
 
-  // Deprecated; use projection.rotate and projection.center instead.
-  p.origin = function(_) {
-    var rotate = p.rotate(), center = p.center();
-    if (!arguments.length) return [-rotate[0], center[1]];
-    return p.rotate([-_[0], rotate[1]]).center([center[0], _[1]]);
-  };
-
   p.parallels = function(_) {
     if (!arguments.length) return [φ0 * d3_degrees, φ1 * d3_degrees];
     return m(φ0 = _[0] * d3_radians, φ1 = _[1] * d3_radians);
   };
 
-  return p.origin([-98, 38]).scale(1000);
+  return p.rotate([98, 0]).center([0, 38]).scale(1000);
 }).raw = d3_geo_albers;
