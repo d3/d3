@@ -3246,26 +3246,6 @@
   });
   d3.bisectLeft = d3_bisector.left;
   d3.bisect = d3.bisectRight = d3_bisector.right;
-  d3.first = function(array, f) {
-    var i = 0, n = array.length, a = array[0], b;
-    if (arguments.length === 1) f = d3.ascending;
-    while (++i < n) {
-      if (f.call(array, a, b = array[i]) > 0) {
-        a = b;
-      }
-    }
-    return a;
-  };
-  d3.last = function(array, f) {
-    var i = 0, n = array.length, a = array[0], b;
-    if (arguments.length === 1) f = d3.ascending;
-    while (++i < n) {
-      if (f.call(array, a, b = array[i]) <= 0) {
-        a = b;
-      }
-    }
-    return a;
-  };
   d3.nest = function() {
     function map(array, depth) {
       if (depth >= keys.length) return rollup ? rollup.call(nest, array) : sortValues ? array.sort(sortValues) : array;

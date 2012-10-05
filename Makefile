@@ -53,8 +53,6 @@ d3.core.js: \
 	src/core/transpose.js \
 	src/core/zip.js \
 	src/core/bisect.js \
-	src/core/first.js \
-	src/core/last.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
