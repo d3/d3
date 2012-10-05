@@ -195,7 +195,6 @@ d3.geo.js: \
 	src/geo/gnomonic.js \
 	src/geo/graticule.js \
 	src/geo/greatArc.js \
-	src/geo/greatCircle.js \
 	src/geo/mercator.js \
 	src/geo/orthographic.js \
 	src/geo/path.js \

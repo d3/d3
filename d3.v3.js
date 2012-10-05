@@ -6659,7 +6659,6 @@
     };
     return greatArc;
   };
-  d3.geo.greatCircle = d3.geo.circle;
   d3_geo_mercator.invert = function(x, y) {
     return [ 2 * π * x, 2 * Math.atan(Math.exp(2 * π * y)) - π / 2 ];
   };
