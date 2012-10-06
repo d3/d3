@@ -75,6 +75,44 @@ suite.addBatch({
         assert.strictEqual(path.pointRadius(), 4.5);
         assert.strictEqual(path.pointRadius(radius).pointRadius(), radius);
       }
+    },
+
+    "area": {
+      topic: function(path) {
+        return path.area;
+      },
+      "no holes": function(area) {
+        assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]}), 25);
+      },
+      "holes": function(area) {
+        assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]],
+                                                                [[100.2, .2], [100.8, .2], [100.8, .8], [100.2, .8], [100.2, .2]]]}), 16);
+      }
+    },
+
+    "centroid": {
+      topic: function(path) {
+        return path.centroid;
+      },
+      "Point": function(centroid) {
+        assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [480, 250]);
+      },
+      "MultiPoint": function(centroid) {
+        assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[0, 0]]}), [480, 250]);
+      },
+      "LineString": function(centroid) {
+        assert.deepEqual(centroid({type: "LineString", coordinates: [[100, 0], [0, 0]]}), [730, 250]);
+        assert.deepEqual(centroid({type: "LineString", coordinates: [[0, 0], [100, 0], [101, 0]]}), [732.5, 250]);
+      },
+      "MultiLineString": function(centroid) {
+        assert.deepEqual(centroid({type: "MultiLineString", coordinates: [[[100, 0], [0, 0]], [[-10, 0], [0, 0]]]}), [705, 250]);
+      },
+      "Polygon": function(centroid) {
+        assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]}), [982.5, 247.5]);
+      },
+      "MultiPolygon": function(centroid) {
+        assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]], [[[0, 0], [1, 0], [1, -1], [0, -1], [0, 0]]]]}), [732.5, 250]);
+      }
     }
   }
 });
