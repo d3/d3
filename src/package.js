@@ -11,7 +11,7 @@ require("util").puts(JSON.stringify({
   "main": "index.js",
   "browserify" : "index-browserify.js",
   "jam": {
-    "main": "d3.v3.js",
+    "main": "d3.js",
     "shim": {
       "exports": "d3"
     }
