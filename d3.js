@@ -2745,12 +2745,6 @@
       if (children[3]) d3_geom_quadtreeVisit(f, children[3], sx, sy, x2, y2);
     }
   }
-  function d3_geom_quadtreePoint(p) {
-    return {
-      x: p[0],
-      y: p[1]
-    };
-  }
   function d3_time_utc() {
     this._ = new Date(arguments.length > 1 ? Date.UTC.apply(this, arguments) : arguments[0]);
   }
@@ -7050,11 +7044,11 @@
       insert(n, p, x1, y1, x2, y2);
     }
     var p, i = -1, n = points.length;
-    if (n && isNaN(points[0].x)) points = points.map(d3_geom_quadtreePoint);
     if (arguments.length < 5) {
       if (arguments.length === 3) {
-        y2 = x2 = y1;
-        y1 = x1;
+        y2 = y1;
+        x2 = x1;
+        y1 = x1 = 0;
       } else {
         x1 = y1 = Infinity;
         x2 = y2 = -Infinity;
@@ -7065,10 +7059,10 @@
           if (p.x > x2) x2 = p.x;
           if (p.y > y2) y2 = p.y;
         }
-        var dx = x2 - x1, dy = y2 - y1;
-        if (dx > dy) y2 = y1 + dx; else x2 = x1 + dy;
       }
     }
+    var dx = x2 - x1, dy = y2 - y1;
+    if (dx > dy) y2 = y1 + dx; else x2 = x1 + dy;
     var root = d3_geom_quadtreeNode();
     root.add = function(p) {
       insert(root, p, x1, y1, x2, y2);
