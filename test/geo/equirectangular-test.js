@@ -34,6 +34,27 @@ suite.addBatch({
       }
     },
 
+    "geotranslate": {
+      "defaults to [0, 0]": function(projection) {
+        assert.deepEqual(projection.geotranslate(), [0, 0]);
+      },
+      "translates coordinates": function(projection) {
+        var sf = [-122.446, 37.767];
+        projection.geotranslate(sf);
+        assert.inDelta(projection(sf), [0, 0], .5);
+        projection.geotranslate([0,0]);
+      },
+      "is scale-independent": function(projection) {
+        var sf = [-122.446, 37.767], scale = projection.scale();
+        projection.geotranslate(sf);
+        assert.inDelta(projection(sf), [0, 0], .5);
+        projection.scale(2*scale);
+        assert.inDelta(projection(sf), [0, 0], .5);
+        projection.scale(scale);
+        projection.geotranslate([0,0]);
+      }
+    },
+
     "of San Francisco, CA": {
       "is at location [-122.446, 37.767]": function(projection) {
         assert.inDelta(projection.invert([310, 198]), [-122.446, 37.767], .5);

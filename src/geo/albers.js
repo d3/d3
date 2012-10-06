@@ -7,6 +7,7 @@ d3.geo.albers = function() {
       parallels = [29.5, 45.5],
       scale = 1000,
       translate = [480, 250],
+      geotranslate = geotranslate_ = [0, 0],
       lng0, // d3_geo_radians * origin[0]
       n,
       C,
@@ -16,14 +17,14 @@ d3.geo.albers = function() {
     var t = n * (d3_geo_radians * coordinates[0] - lng0),
         p = Math.sqrt(C - 2 * n * Math.sin(d3_geo_radians * coordinates[1])) / n;
     return [
-      scale * p * Math.sin(t) + translate[0],
-      scale * (p * Math.cos(t) - p0) + translate[1]
+      scale * p * Math.sin(t) + translate[0] - geotranslate_[0],
+      scale * (p * Math.cos(t) - p0) + translate[1] - geotranslate_[1]
     ];
   }
 
   albers.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale,
+    var x = (coordinates[0] - translate[0] + geotranslate_[0]) / scale,
+        y = (coordinates[1] - translate[1] + geotranslate_[1]) / scale,
         p0y = p0 + y,
         t = Math.atan2(x, p0y),
         p = Math.sqrt(x * x + p0y * p0y);
@@ -61,12 +62,26 @@ d3.geo.albers = function() {
   albers.scale = function(x) {
     if (!arguments.length) return scale;
     scale = +x;
+    geotranslate_ = [0, 0];
+    if(geotranslate[0] != 0 && geotranslate[1] != 0) {
+        geotranslate_ = this(geotranslate);
+    }
     return albers;
   };
 
   albers.translate = function(x) {
     if (!arguments.length) return translate;
     translate = [+x[0], +x[1]];
+    return albers;
+  };
+
+  albers.geotranslate = function(x) {
+    if (!arguments.length) return geotranslate;
+    geotranslate = [+x[0], +x[1]];
+    geotranslate_ = [0, 0];
+    if(geotranslate[0] != 0 && geotranslate[1] != 0) {
+        geotranslate_ = this(geotranslate);
+    }
     return albers;
   };
 

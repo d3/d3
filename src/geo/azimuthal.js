@@ -4,6 +4,7 @@ d3.geo.azimuthal = function() {
       origin,
       scale = 200,
       translate = [480, 250],
+      geotranslate = geotranslate_ = [0, 0],
       x0,
       y0,
       cy0,
@@ -26,14 +27,14 @@ d3.geo.azimuthal = function() {
         x = k * cy1 * sx1,
         y = k * (sy0 * cy1 * cx1 - cy0 * sy1);
     return [
-      scale * x + translate[0],
-      scale * y + translate[1]
+      scale * x + translate[0] - geotranslate_[0],
+      scale * y + translate[1] - geotranslate_[1]
     ];
   }
 
   azimuthal.invert = function(coordinates) {
-    var x = (coordinates[0] - translate[0]) / scale,
-        y = (coordinates[1] - translate[1]) / scale,
+    var x = (coordinates[0] - translate[0] + geotranslate_[0]) / scale,
+        y = (coordinates[1] - translate[1] + geotranslate_[1]) / scale,
         p = Math.sqrt(x * x + y * y),
         c = mode === "stereographic" ? 2 * Math.atan(p)
           : mode === "gnomonic" ? Math.atan(p)
@@ -67,12 +68,26 @@ d3.geo.azimuthal = function() {
   azimuthal.scale = function(x) {
     if (!arguments.length) return scale;
     scale = +x;
+    geotranslate_ = [0, 0];
+    if(geotranslate[0] != 0 && geotranslate[1] != 0) {
+        geotranslate_ = this(geotranslate);
+    }
     return azimuthal;
   };
 
   azimuthal.translate = function(x) {
     if (!arguments.length) return translate;
     translate = [+x[0], +x[1]];
+    return azimuthal;
+  };
+
+  azimuthal.geotranslate = function(x) {
+    if (!arguments.length) return geotranslate;
+    geotranslate = [+x[0], +x[1]];
+    geotranslate_ = [0, 0];
+    if(geotranslate[0] != 0 && geotranslate[1] != 0) {
+        geotranslate_ = this(geotranslate);
+    }
     return azimuthal;
   };
 
