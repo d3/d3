@@ -237,7 +237,7 @@ test: all
 	@rm -f $@
 	$(JS_COMPILER) < $< > $@
 
-d3%.js: Makefile
+d3%js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
 	@chmod a-w $@
