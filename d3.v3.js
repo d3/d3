@@ -6664,6 +6664,19 @@
     function polygonArea(coordinates) {
       return ringArea(coordinates[0]) - d3.sum(coordinates.slice(1), ringArea);
     }
+    function geometryDimension(o) {
+      switch (o.type) {
+       case "Point":
+       case "MultiPoint":
+        return 0;
+       case "LineString":
+       case "MultiLineString":
+        return 1;
+       case "Polygon":
+       case "MultiPolygon":
+        return 2;
+      }
+    }
     function singleCentroid(weightedCentroid) {
       return function(o) {
         var centroid = weightedCentroid(o.coordinates);
@@ -6716,26 +6729,6 @@
         z -= area;
       }
       return z ? [ x, y, 6 * z ] : null;
-    }
-    function geometryDimension(o) {
-      switch (o.type) {
-       case "Point":
-       case "MultiPoint":
-        return 0;
-       case "LineString":
-       case "MultiLineString":
-        return 1;
-       case "Polygon":
-       case "MultiPolygon":
-        return 2;
-       case "Feature":
-        return dimension(o.geometry);
-       case "FeatureCollection":
-        return d3.max(o.features, geometryDimension);
-       case "GeometryCollection":
-        return d3.max(o.geometries, geometryDimension);
-      }
-      return -1;
     }
     var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), buffer = [];
     var bufferContext = {

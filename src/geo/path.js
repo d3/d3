@@ -81,6 +81,20 @@ d3.geo.path = function() {
     Polygon: singleCentroid(polygonCentroid)
   });
 
+  function geometryDimension(o) {
+    switch (o.type) {
+      case "Point":
+      case "MultiPoint":
+        return 0;
+      case "LineString":
+      case "MultiLineString":
+        return 1;
+      case "Polygon":
+      case "MultiPolygon":
+        return 2;
+    }
+  }
+
   function singleCentroid(weightedCentroid) {
     return function(o) {
       var centroid = weightedCentroid(o.coordinates);
@@ -162,27 +176,6 @@ d3.geo.path = function() {
       z -= area;
     }
     return z ? [x, y, 6 * z] : null; // weighted centroid
-  }
-
-  function geometryDimension(o) {
-    switch (o.type) {
-      case "Point":
-      case "MultiPoint":
-        return 0;
-      case "LineString":
-      case "MultiLineString":
-        return 1;
-      case "Polygon":
-      case "MultiPolygon":
-        return 2;
-      case "Feature":
-        return dimension(o.geometry);
-      case "FeatureCollection":
-        return d3.max(o.features, geometryDimension);
-      case "GeometryCollection":
-        return d3.max(o.geometries, geometryDimension);
-    }
-    return -1;
   }
 
   path.centroid = function(object) { return centroidType.object(object); };
