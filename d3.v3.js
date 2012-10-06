@@ -54,11 +54,6 @@
     while (x * k % 1) k *= 10;
     return k;
   }
-  function d3_xhr_fixCallback(callback) {
-    return callback.length === 1 ? function(error, request) {
-      callback(error == null ? request : null);
-    } : callback;
-  }
   function d3_text(request) {
     return request.responseText;
   }
@@ -3382,7 +3377,7 @@
     };
     d3.rebind(xhr, dispatch, "on");
     if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
-    return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
+    return callback == null ? xhr : xhr.get(callback);
   };
   d3.text = function() {
     return d3.xhr.apply(d3, arguments).response(d3_text);
