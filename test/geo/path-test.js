@@ -97,21 +97,113 @@ suite.addBatch({
       "Point": function(centroid) {
         assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [480, 250]);
       },
-      "MultiPoint": function(centroid) {
-        assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[0, 0]]}), [480, 250]);
+      "MultiPoint": {
+        "empty": function(centroid) {
+          assert.isNull(centroid({type: "MultiPoint", coordinates: []}));
+        },
+        "single point": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[0, 0]]}), [480, 250]);
+        },
+        "two points": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[-122, 37], [-74, 40]]}), [-10, 57.5]);
+        }
       },
-      "LineString": function(centroid) {
-        assert.deepEqual(centroid({type: "LineString", coordinates: [[100, 0], [0, 0]]}), [730, 250]);
-        assert.deepEqual(centroid({type: "LineString", coordinates: [[0, 0], [100, 0], [101, 0]]}), [732.5, 250]);
+      "LineString": {
+        "empty": function(centroid) {
+          assert.isNull(centroid({type: "LineString", coordinates: []}));
+        },
+        "two points": function(centroid) {
+          assert.deepEqual(centroid({type: "LineString", coordinates: [[100, 0], [0, 0]]}), [730, 250]);
+          assert.deepEqual(centroid({type: "LineString", coordinates: [[0, 0], [100, 0], [101, 0]]}), [732.5, 250]);
+        },
+        "two points, one unique": function(centroid) {
+          assert.isNull(centroid({type: "LineString", coordinates: [[-122, 37], [-122, 37]]}));
+          assert.isNull(centroid({type: "LineString", coordinates: [[ -74, 40], [ -74, 40]]}));
+        },
+        "three points; two unique": function(centroid) {
+          assert.deepEqual(centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-74, 40]]}), [-10, 57.5]);
+        },
+        "three points": function(centroid) {
+          assert.inDelta(centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]}), [17.389135, 103.563545], 1e-6);
+        }
       },
       "MultiLineString": function(centroid) {
         assert.deepEqual(centroid({type: "MultiLineString", coordinates: [[[100, 0], [0, 0]], [[-10, 0], [0, 0]]]}), [705, 250]);
       },
-      "Polygon": function(centroid) {
-        assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]}), [982.5, 247.5]);
+      "Polygon": {
+        "single ring": function(centroid) {
+          assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]}), [982.5, 247.5]);
+        },
+        "zero area": function(centroid) {
+          assert.isNull(centroid({type: "Polygon", coordinates: [[[1, 0], [2, 0], [3, 0], [1, 0]]]}));
+        },
+        "two rings, one zero area": function(centroid) {
+          assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]], [[100.1, 0], [100.2, 0], [100.3, 0], [100.1, 0]]]}), [982.5, 247.5]);
+        }
       },
-      "MultiPolygon": function(centroid) {
-        assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]], [[[0, 0], [1, 0], [1, -1], [0, -1], [0, 0]]]]}), [732.5, 250]);
+      "MultiPolygon": {
+        "empty": function(centroid) {
+          assert.isNull(centroid({type: "MultiPolygon", coordinates: []}));
+        },
+        "single polygon": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]]}), [982.5, 247.5]);
+        },
+        "two polygons": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]], [[[0, 0], [1, 0], [1, -1], [0, -1], [0, 0]]]]}), [732.5, 250]);
+        },
+        "two polygons, one zero area": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]], [[[0, 0], [1, 0], [2, 0], [0, 0]]]]}), [982.5, 247.5]);
+        }
+      },
+      "GeometryCollection": {
+        "empty": function(centroid) {
+          assert.isNull(centroid({type: "GeometryCollection", geometries: []}));
+        },
+        "collection containing an empty geometry": function(centroid) {
+          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
+            {type: "MultiPoint", coordinates: []},
+            {type: "Point", coordinates: [-122, 37]}
+          ]}), [-130, 65]);
+        },
+        "ignores dimensions lower than one": function(centroid) {
+          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
+            {type: "Point", coordinates: [-122, 37]},
+            {type: "MultiPoint", coordinates: [[-122, 37]]},
+            {type: "LineString", coordinates: [[-122, 37], [-74, 40]]}
+          ]}), [-10, 57.5]);
+        },
+        "ignores dimensions lower than two": function(centroid) {
+          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
+            {type: "Point", coordinates: [-122, 37]},
+            {type: "MultiPoint", coordinates: [[-122, 37]]},
+            {type: "LineString", coordinates: [[-122, 37], [-74, 40]]},
+            {type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]}
+          ]}), [982.5, 247.5]);
+        },
+        "empty higher dimensions": function(centroid) {
+          assert.isNull(centroid({type: "GeometryCollection", geometries: [
+            {type: "Point", coordinates: [-122, 37]},
+            {type: "MultiPoint", coordinates: [[-122, 37]]},
+            {type: "MultiLineString", coordinates: []}
+          ]}));
+        }
+      },
+      "FeatureCollection": {
+        "empty": function(centroid) {
+          assert.isNull(centroid({type: "FeatureCollection", features: []}));
+        },
+        "collection containing a feature with an empty geometry": function(centroid) {
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [
+            feature({type: "MultiPoint", coordinates: []}),
+            feature({type: "Point", coordinates: [-122, 37]})
+          ]}), [-130, 65]);
+        },
+        "repeated geometries": function(centroid) {
+          var lineString = {type: "LineString", coordinates: [[-122, 37], [-74, 40]]};
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [lineString].map(feature)}), [-10, 57.5]);
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [lineString, lineString].map(feature)}), [-10, 57.5]);
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [lineString, lineString, lineString].map(feature)}), [-10, 57.5]);
+        }
       }
     }
   }
@@ -126,5 +218,9 @@ var testContext = {
   closePath: function() { testBuffer.push({type: "closePath"}); },
   buffer: function() { var result = testBuffer; testBuffer = []; return result; }
 };
+
+function feature(o) {
+  return {type: "Feature", geometry: o};
+}
 
 suite.export(module);
