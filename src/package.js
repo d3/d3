@@ -5,9 +5,9 @@ require("util").puts(JSON.stringify({
   "version": d3.version,
   "description": "A small, free JavaScript library for manipulating documents based on data.",
   "keywords": ["dom", "w3c", "visualization", "svg", "animation", "canvas"],
-  "homepage": "http://mbostock.github.com/d3/",
+  "homepage": "http://d3js.org",
   "author": {"name": "Mike Bostock", "url": "http://bost.ocks.org/mike"},
-  "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
+  "repository": {"type": "git", "url": "https://github.com/mbostock/d3.git"},
   "main": "index.js",
   "browserify" : "index-browserify.js",
   "jam": {
