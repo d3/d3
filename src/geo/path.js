@@ -101,27 +101,27 @@ d3.geo.path = function() {
         point = projection(coordinates[0]),
         x0 = point[0],
         y0 = point[1],
-        x,
-        y,
-        cx = 0,
-        cy = 0,
+        x1,
+        y1,
         dx,
         dy,
-        length = 0,
+        x = 0,
+        y = 0,
+        z = 0,
         i = 0,
         δ;
     while (++i < n) {
-      x = (point = projection(coordinates[i]))[0];
-      y = point[1];
-      dx = x - x0;
-      dy = y - y0;
-      length += δ = Math.sqrt(dx * dx + dy * dy);
-      cx += δ * (x0 + x) / 2;
-      cy += δ * (y0 + y) / 2;
-      x0 = x;
-      y0 = y;
+      x1 = (point = projection(coordinates[i]))[0];
+      y1 = point[1];
+      dx = x1 - x0;
+      dy = y1 - y0;
+      z += δ = Math.sqrt(dx * dx + dy * dy);
+      x += δ * (x0 + x1) / 2;
+      y += δ * (y0 + y1) / 2;
+      x0 = x1;
+      y0 = y1;
     }
-    return [cx, cy, length];
+    return [x, y, z]; // weighted centroid
   }
 
   function polygonCentroid(coordinates) {

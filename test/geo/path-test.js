@@ -102,6 +102,7 @@ suite.addBatch({
       },
       "LineString": function(centroid) {
         assert.deepEqual(centroid({type: "LineString", coordinates: [[100, 0], [0, 0]]}), [730, 250]);
+        assert.deepEqual(centroid({type: "LineString", coordinates: [[0, 0], [100, 0], [101, 0]]}), [732.5, 250]);
       },
       "MultiLineString": function(centroid) {
         assert.deepEqual(centroid({type: "MultiLineString", coordinates: [[[100, 0], [0, 0]], [[-10, 0], [0, 0]]]}), [705, 250]);
