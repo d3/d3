@@ -25,6 +25,7 @@ all: \
 	d3.geo.js \
 	d3.geom.js \
 	d3.time.js \
+	d3.ql.js \
 	src/end.js
 
 d3.core.js: \
@@ -226,6 +227,9 @@ d3.geom.js: \
 	src/geom/voronoi.js \
 	src/geom/delaunay.js \
 	src/geom/quadtree.js
+
+d3.ql.js: \
+	src/ql/ql.js
 
 test: all
 	@$(JS_TESTER)
