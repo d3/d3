@@ -2,20 +2,33 @@ svg {
   font: 10px sans-serif;
 }
 
-text.title {
-  font: 300 78px Helvetica Neue;
-  fill: #666;
+.y.axis path {
+  display: none;
 }
 
-.rule line {
+.y.axis line {
   stroke: #fff;
   stroke-opacity: .2;
   shape-rendering: crispEdges;
 }
 
-.rule:first-child line {
+.y.axis .major line {
   stroke: #000;
   stroke-opacity: 1;
+}
+
+.title {
+  font: 300 78px Helvetica Neue;
+  fill: #666;
+}
+
+.birthyear,
+.age {
+  text-anchor: middle;
+}
+
+.birthyear {
+  fill: #fff;
 }
 
 rect {
