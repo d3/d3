@@ -1,7 +1,3 @@
-SRC_FILES = \
-	../d3.v2.js \
-	../d3.v2.min.js
-
 EX_FILES = \
 	../ex/box.js \
 	../ex/box.css \
@@ -74,17 +70,11 @@ INCLUDE_FILES = \
 	tree.js \
 	population.js
 
-.PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES) ../d3.js ../d3.min.js
+.PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
 $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:$(subst ../,,$@) > $@
-
-../d3.js: ../d3.v2.js
-	cp $^ $@
-
-../d3.min.js: ../d3.v2.min.js
-	cp $^ $@
 
 ../ex/calendar.css:
 	@rm -rf $@
