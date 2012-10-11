@@ -7,13 +7,9 @@ function d3_transition(groups, id) {
 }
 
 var d3_transitionPrototype = [],
-    d3_transitionNextId = 0,
     d3_transitionId = 0,
-    d3_transitionDefaultDelay = 0,
-    d3_transitionDefaultDuration = 250,
-    d3_transitionDelay = d3_transitionDefaultDelay,
-    d3_transitionDuration = d3_transitionDefaultDuration,
-    d3_transitionEase = d3_ease_cubicInOut;
+    d3_transitionInheritId,
+    d3_transitionInherit = {ease: d3_ease_cubicInOut, delay: 0, duration: 250};
 
 d3_transitionPrototype.call = d3_selectionPrototype.call;
 d3_transitionPrototype.empty = d3_selectionPrototype.empty;
@@ -21,20 +17,24 @@ d3_transitionPrototype.node = d3_selectionPrototype.node;
 
 d3.transition = function(selection) {
   return arguments.length
-      ? (d3_transitionId ? selection.transition() : selection)
+      ? (d3_transitionInheritId ? selection.transition() : selection)
       : d3_selectionRoot.transition();
 };
 
 d3.transition.prototype = d3_transitionPrototype;
 
-function d3_transitionNode(node, i, id) {
+function d3_transitionNode(node, i, id, inherit) {
   var lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0}),
       transition = lock[id];
 
   if (!transition) {
     transition = lock[id] = {
       tween: new d3_Map,
-      event: d3.dispatch("start", "end") // TODO construct lazily?
+      event: d3.dispatch("start", "end"), // TODO construct lazily?
+      time: inherit.time,
+      ease: inherit.ease,
+      delay: inherit.delay,
+      duration: inherit.duration
     };
 
     ++lock.count;
@@ -80,9 +80,9 @@ function d3_transitionNode(node, i, id) {
 
         if (t >= 1) {
           stop();
-          d3_transitionId = id;
+          d3_transitionInheritId = id;
           event.end.call(node, d, i);
-          d3_transitionId = 0;
+          d3_transitionInheritId = 0;
           return 1;
         }
       }
