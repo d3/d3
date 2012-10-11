@@ -28,6 +28,7 @@ all: \
 	d3.latest.js \
 	d3.v2.js \
 	d3.v2.min.js \
+	component.json \
 	$(PACKAGE_JSON)
 
 # Modify this rule to build your own custom release.
@@ -257,10 +258,15 @@ d3%.js: Makefile
 	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
 	@chmod a-w $@
 
+component.json: src/component.js
+	@rm -f $@
+	node src/component.js > $@
+	@chmod a-w $@
+
 $(PACKAGE_JSON): src/package.js
 	@rm -f $@
 	node src/package.js > $@
 	@chmod a-w $@
 
 clean:
-	rm -f d3*.js $(PACKAGE_JSON)
+	rm -f d3*.js $(PACKAGE_JSON) component.json

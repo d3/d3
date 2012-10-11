@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.10.1"}; // semver
+d3 = {version: "2.10.2"}; // semver
 function d3_class(ctor, properties) {
   try {
     for (var key in properties) {
