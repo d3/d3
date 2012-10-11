@@ -10,7 +10,7 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "2.10.2"}; // semver
+d3 = {version: "2.10.3"}; // semver
 function d3_class(ctor, properties) {
   try {
     for (var key in properties) {
@@ -1263,7 +1263,7 @@ d3.interpolators = [
   d3.interpolateObject,
   function(a, b) { return b instanceof Array && d3.interpolateArray(a, b); },
   function(a, b) { return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + ""); },
-  function(a, b) { return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Rgb || b instanceof d3_Hsl) && d3.interpolateRgb(a, b); },
+  function(a, b) { return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Color) && d3.interpolateRgb(a, b); },
   function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3.interpolateNumber(a, b); }
 ];
 function d3_uninterpolateNumber(a, b) {
@@ -1275,6 +1275,11 @@ function d3_uninterpolateClamp(a, b) {
   b = b - (a = +a) ? 1 / (b - a) : 0;
   return function(x) { return Math.max(0, Math.min(1, (x - a) * b)); };
 }
+function d3_Color() {}
+
+d3_Color.prototype.toString = function() {
+  return this.rgb() + "";
+};
 d3.rgb = function(r, g, b) {
   return arguments.length === 1
       ? (r instanceof d3_Rgb ? d3_rgb(r.r, r.g, r.b)
@@ -1292,7 +1297,9 @@ function d3_Rgb(r, g, b) {
   this.b = b;
 }
 
-d3_Rgb.prototype.brighter = function(k) {
+var d3_rgbPrototype = d3_Rgb.prototype = new d3_Color;
+
+d3_rgbPrototype.brighter = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   var r = this.r,
       g = this.g,
@@ -1308,7 +1315,7 @@ d3_Rgb.prototype.brighter = function(k) {
       Math.min(255, Math.floor(b / k)));
 };
 
-d3_Rgb.prototype.darker = function(k) {
+d3_rgbPrototype.darker = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_rgb(
       Math.floor(k * this.r),
@@ -1316,11 +1323,11 @@ d3_Rgb.prototype.darker = function(k) {
       Math.floor(k * this.b));
 };
 
-d3_Rgb.prototype.hsl = function() {
+d3_rgbPrototype.hsl = function() {
   return d3_rgb_hsl(this.r, this.g, this.b);
 };
 
-d3_Rgb.prototype.toString = function() {
+d3_rgbPrototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
 };
 
@@ -1590,22 +1597,20 @@ function d3_Hsl(h, s, l) {
   this.l = l;
 }
 
-d3_Hsl.prototype.brighter = function(k) {
+var d3_hslPrototype = d3_Hsl.prototype = new d3_Color;
+
+d3_hslPrototype.brighter = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_hsl(this.h, this.s, this.l / k);
 };
 
-d3_Hsl.prototype.darker = function(k) {
+d3_hslPrototype.darker = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_hsl(this.h, this.s, k * this.l);
 };
 
-d3_Hsl.prototype.rgb = function() {
+d3_hslPrototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
-};
-
-d3_Hsl.prototype.toString = function() {
-  return this.rgb().toString();
 };
 
 function d3_hsl_rgb(h, s, l) {
@@ -1654,20 +1659,18 @@ function d3_Hcl(h, c, l) {
   this.l = l;
 }
 
-d3_Hcl.prototype.brighter = function(k) {
+var d3_hclPrototype = d3_Hcl.prototype = new d3_Color;
+
+d3_hclPrototype.brighter = function(k) {
   return d3_hcl(this.h, this.c, Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)));
 };
 
-d3_Hcl.prototype.darker = function(k) {
+d3_hclPrototype.darker = function(k) {
   return d3_hcl(this.h, this.c, Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)));
 };
 
-d3_Hcl.prototype.rgb = function() {
+d3_hclPrototype.rgb = function() {
   return d3_hcl_lab(this.h, this.c, this.l).rgb();
-};
-
-d3_Hcl.prototype.toString = function() {
-  return this.rgb() + "";
 };
 
 function d3_hcl_lab(h, c, l) {
@@ -1699,20 +1702,18 @@ var d3_lab_X = 0.950470,
     d3_lab_Y = 1,
     d3_lab_Z = 1.088830;
 
-d3_Lab.prototype.brighter = function(k) {
+var d3_labPrototype = d3_Lab.prototype = new d3_Color;
+
+d3_labPrototype.brighter = function(k) {
   return d3_lab(Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
 };
 
-d3_Lab.prototype.darker = function(k) {
+d3_labPrototype.darker = function(k) {
   return d3_lab(Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
 };
 
-d3_Lab.prototype.rgb = function() {
+d3_labPrototype.rgb = function() {
   return d3_lab_rgb(this.l, this.a, this.b);
-};
-
-d3_Lab.prototype.toString = function() {
-  return this.rgb() + "";
 };
 
 function d3_lab_rgb(l, a, b) {
@@ -2741,7 +2742,7 @@ d3.tween = function(b, interpolate) {
     var v = b.call(this, d, i);
     return v == null
         ? a != "" && d3_tweenRemove
-        : a != v && interpolate(a, v);
+        : a != v && interpolate(a, v + "");
   }
 
   function tweenString(d, i, a) {
@@ -2762,36 +2763,29 @@ function d3_tweenNull(d, i, a) {
 function d3_tweenByName(b, name) {
   return d3.tween(b, d3_interpolateByName(name));
 }
-var d3_timer_queue = null,
+var d3_timer_id = 0,
+    d3_timer_byId = {},
+    d3_timer_queue = null,
     d3_timer_interval, // is an interval (or frame) active?
     d3_timer_timeout; // is a timeout active?
 
 // The timer will continue to fire until callback returns true.
 d3.timer = function(callback, delay, then) {
-  var found = false,
-      t0,
-      t1 = d3_timer_queue;
-
   if (arguments.length < 3) {
     if (arguments.length < 2) delay = 0;
     else if (!isFinite(delay)) return;
     then = Date.now();
   }
 
-  // See if the callback's already in the queue.
-  while (t1) {
-    if (t1.callback === callback) {
-      t1.then = then;
-      t1.delay = delay;
-      found = true;
-      break;
-    }
-    t0 = t1;
-    t1 = t1.next;
+  // If the callback's already in the queue, update it.
+  var timer = d3_timer_byId[callback.id];
+  if (timer && timer.callback === callback) {
+    timer.then = then;
+    timer.delay = delay;
   }
 
   // Otherwise, add the callback to the queue.
-  if (!found) d3_timer_queue = {
+  else d3_timer_byId[callback.id = ++d3_timer_id] = d3_timer_queue = {
     callback: callback,
     then: then,
     delay: delay,
@@ -2804,7 +2798,7 @@ d3.timer = function(callback, delay, then) {
     d3_timer_interval = 1;
     d3_timer_frame(d3_timer_step);
   }
-}
+};
 
 function d3_timer_step() {
   var elapsed,
@@ -2844,13 +2838,14 @@ d3.timer.flush = function() {
   d3_timer_flush();
 };
 
-// Flush after callbacks, to avoid concurrent queue modification.
+// Flush after callbacks to avoid concurrent queue modification.
 function d3_timer_flush() {
   var t0 = null,
       t1 = d3_timer_queue,
       then = Infinity;
   while (t1) {
     if (t1.flush) {
+      delete d3_timer_byId[t1.callback.id];
       t1 = t0 ? t0.next = t1.next : d3_timer_queue = t1.next;
     } else {
       then = Math.min(then, t1.then + t1.delay);
