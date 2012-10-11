@@ -50,7 +50,7 @@ svg.append("rect")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("../data/world-countries.json", function(collection) {
+d3.json("../data/world-countries.json", function(error, collection) {
   feature = feature
       .data(collection.features)
     .enter().append("path")

@@ -1,4 +1,4 @@
-d3.json("flowers.json", function(flower) {
+d3.json("flowers.json", function(error, flower) {
 
   // Size parameters.
   var size = 150,

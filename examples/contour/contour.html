@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Contour</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">    <title>Contour</title>
+    <script src="../../d3.js"></script>
+<style>
 svg {
   border: solid 1px #aaa;
 }
@@ -24,10 +21,10 @@ rect.d1 {
 rect.d2 {
   fill: darkblue;
 }
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 function grid0(x,y) {
   if (x < 0 || y < 0 || x >= dw || y >= dh) return 0;
@@ -102,6 +99,4 @@ function mouseover(d,i) {
   }
   contour(grid, s);
 }
-    </script>
-  </body>
-</html>
+</script>

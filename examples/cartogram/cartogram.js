@@ -10,7 +10,7 @@ var svg = d3.select("#chart").append("svg")
     .attr("width", 960)
     .attr("height", 500);
 
-d3.json("../data/us-states.json", function(json) {
+d3.json("../data/us-states.json", function(error, json) {
   var path = d3.geo.path();
 
   // A thick black stroke for the exterior.

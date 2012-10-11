@@ -12,7 +12,7 @@ var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("unemployment.json", function(data) {
+d3.json("unemployment.json", function(error, data) {
 
   // Offset so that positive is above-average and negative is below-average.
   var mean = data.rate.reduce(function(p, v) { return p + v; }, 0) / data.rate.length;

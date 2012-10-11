@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+    <script src="../../d3.js"></script>
+<style>
 
 body {
   font: 10px sans-serif;
@@ -14,10 +14,10 @@ body {
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var margin = {top: 10, right: 12, bottom: 20, left: 12},
     width = 960 - margin.left - margin.right,
@@ -41,6 +41,4 @@ svg.append("g")
     .tickValues([.01, .02, .03, .05, .08, .13, .21, .34, .55, .89])
     .tickFormat(d3.format(".02f")));
 
-    </script>
-  </body>
-</html>
+</script>

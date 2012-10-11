@@ -12,7 +12,7 @@ var vis = d3.select("#chart").append("svg")
     .attr("height", r)
     .attr("class", "bubble");
 
-d3.json("../data/flare.json", function(json) {
+d3.json("../data/flare.json", function(error, json) {
   var node = vis.selectAll("g.node")
       .data(bubble.nodes(classes(json))
       .filter(function(d) { return !d.children; }))

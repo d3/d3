@@ -1,17 +1,14 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, data!</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-  </head>
-  <body>
-    Your lucky numbers are:<br>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <script type="text/javascript">
+<meta charset="utf-8">
+<title>Hello, data!</title>
+Your lucky numbers are:<br>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<script src="../../d3.js"></script>
+<script>
 
 var data = [4, 8, 15, 16, 23, 42];
 
@@ -32,6 +29,9 @@ d3.selectAll("span")
     .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
     .text(function(d) { return d; });
 
+d3.select(window)
+    .on("keypress", refresh);
+
 function refresh() {
   for (var i = 0; i < data.length; i++) data[i] = (data[i] + 1) % 100;
   d3.selectAll("text")
@@ -39,8 +39,4 @@ function refresh() {
       .text(function(d) { return d; });
 }
 
-window.addEventListener("keypress", refresh, false);
-
-    </script>
-  </body>
-</html>
+</script>

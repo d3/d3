@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+    <script src="../../d3.js"></script>
+<style>
 
 body {
   font: 10px sans-serif;
@@ -25,10 +25,10 @@ path.area {
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var margin = {top: 20, right: 20, bottom: 20, left: 20},
     width = 960 - margin.right - margin.left,
@@ -113,6 +113,4 @@ d3.csv("../data/stocks.csv", function(data) {
       .text(function(d) { return d.key; });
 });
 
-    </script>
-  </body>
-</html>
+</script>

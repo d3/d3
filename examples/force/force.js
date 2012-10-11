@@ -12,7 +12,7 @@ var svg = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("miserables.json", function(json) {
+d3.json("miserables.json", function(error, json) {
   force
       .nodes(json.nodes)
       .links(json.links)

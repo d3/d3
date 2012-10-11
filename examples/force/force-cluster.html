@@ -1,33 +1,38 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Clustered Network</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Clustered Network</title>
+<style>
+
 svg {
   border: 1px solid #ccc;
 }
+
 body {
   font: 10px sans-serif;
 }
+
 circle.node {
   fill: lightsteelblue;
   stroke: #fff;
   stroke-width: 1.5px;
 }
+
 path.hull {
   fill: lightsteelblue;
   fill-opacity: 0.3;
 }
+
 line.link {
   stroke: #333;
   stroke-opacity: 0.5;
   pointer-events: none;
 }
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
+
 var width = 960,     // svg width
     height = 600,     // svg height
     dr = 4,      // default point radius
@@ -145,12 +150,12 @@ function convexHulls(nodes, index, offset) {
   }
 
   // create convex hulls
-  var hulls = [];
-  for (i in hulls) {
-    hulls.push({group: i, path: d3.geom.hull(hulls[i])});
-  }
-
-  return hulls;
+  return d3.entries(hulls).map(function(entry) {
+    return {
+      group: entry.key,
+      path: d3.geom.hull(entry.value)
+    };
+  });
 }
 
 function drawCluster(d) {
@@ -165,7 +170,7 @@ var vis = body.append("svg")
    .attr("width", width)
    .attr("height", height);
 
-d3.json("miserables.json", function(json) {
+d3.json("miserables.json", function(error, json) {
   data = json;
   for (var i=0; i<data.links.length; ++i) {
     o = data.links[i];
@@ -246,6 +251,4 @@ function init() {
   });
 }
 
-    </script>
-  </body>
-</html>
+</script>

@@ -1,16 +1,13 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Azimuthal Projection</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
-    <link type="text/css" rel="stylesheet" href="azimuthal.css"/>
+<meta charset="utf-8">    <title>Azimuthal Projection</title>
+    <script src="../../d3.js"></script>
+    <script src="../../lib/jquery/jquery.min.js"></script>
+    <script src="../../lib/jquery-ui/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="azimuthal.css"/>
   </head>
   <body>
     <h3>Azimuthal Projection</h3>
-    <script type="text/javascript" src="azimuthal.js"></script><p>
+    <script src="azimuthal.js"></script><p>
     <select id="mode">
       <option value="stereographic">stereographic</option>
       <option value="orthographic">orthographic</option>
@@ -23,7 +20,7 @@
     <div id="scale">scale: <span>240</span></div><p>
     <div id="translate-x">translate.x: <span>480</span></div>
     <div id="translate-y">translate.y: <span>250</span></div>
-    <script type="text/javascript">
+    <script>
 
 $("#lon").slider({
   min: -180,
@@ -93,6 +90,4 @@ $("#mode").change(function() {
   refresh(500);
 });
 
-    </script>
-  </body>
-</html>
+</script>

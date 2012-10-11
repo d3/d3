@@ -20,7 +20,7 @@ var arc = d3.svg.arc()
     .innerRadius(function(d) { return Math.sqrt(d.y); })
     .outerRadius(function(d) { return Math.sqrt(d.y + d.dy); });
 
-d3.json("../data/flare.json", function(json) {
+d3.json("../data/flare.json", function(error, json) {
   var path = vis.data([json]).selectAll("path")
       .data(partition.nodes)
     .enter().append("path")

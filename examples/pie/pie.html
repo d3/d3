@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Pie Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Pie Chart</title>
+<style>
 
 body {
   font: 10px sans-serif;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 400,
     height = 400,
@@ -23,13 +21,12 @@ var width = 400,
     donut = d3.layout.pie(),
     arc = d3.svg.arc().innerRadius(innerRadius).outerRadius(outerRadius);
 
-var vis = d3.select("body")
-  .append("svg")
-    .data([data])
+var svg = d3.select("body").append("svg")
+    .datum(data)
     .attr("width", width)
     .attr("height", height);
 
-var arcs = vis.selectAll("g.arc")
+var arcs = svg.selectAll("g.arc")
     .data(donut)
   .enter().append("g")
     .attr("class", "arc")
@@ -46,6 +43,4 @@ arcs.append("text")
     .attr("display", function(d) { return d.value > .15 ? null : "none"; })
     .text(function(d, i) { return d.value.toFixed(2); });
 
-    </script>
-  </body>
-</html>
+</script>

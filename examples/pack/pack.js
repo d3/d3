@@ -13,7 +13,7 @@ var vis = d3.select("#chart").append("svg")
   .append("g")
     .attr("transform", "translate(2, 2)");
 
-d3.json("../data/flare.json", function(json) {
+d3.json("../data/flare.json", function(error, json) {
   var node = vis.data([json]).selectAll("g.node")
       .data(pack.nodes)
     .enter().append("g")

@@ -1,20 +1,16 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Partition - Icicle</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Partition - Icicle</title>
+<style>
 
 rect {
   stroke: #fff;
 }
 
-    </style>
-  </head>
-  <body>
-    <div id="chart"></div>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 250;
@@ -27,15 +23,15 @@ var y = d3.scale.linear()
 
 var color = d3.scale.category20c();
 
-var vis = d3.select("#chart").append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
 var partition = d3.layout.partition()
     .value(function(d) { return d.size; });
 
-d3.json("../data/flare.json", function(json) {
-  var rect = vis.data([json]).selectAll("rect")
+d3.json("../data/flare.json", function(error, json) {
+  var rect = svg.data([json]).selectAll("rect")
       .data(partition.nodes)
     .enter().append("rect")
       .attr("x", function(d) { return x(d.x); })
@@ -58,6 +54,4 @@ d3.json("../data/flare.json", function(json) {
   }
 });
 
-    </script>
-  </body>
-</html>
+</script>

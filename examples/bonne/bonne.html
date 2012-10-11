@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Bonne Projection</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript" src="../../lib/jquery/jquery.min.js"></script>
-    <script type="text/javascript" src="../../lib/jquery-ui/jquery-ui.min.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">    <title>Bonne Projection</title>
+    <script src="../../d3.js"></script>
+    <script src="../../lib/jquery/jquery.min.js"></script>
+    <script src="../../lib/jquery-ui/jquery-ui.min.js"></script>
+<style>
 
 @import url("../../lib/jquery-ui/jquery-ui.css");
 
@@ -35,11 +32,11 @@ div {
   width: 960px;
 }
 
-    </style>
+</style>
   </head>
   <body>
     <h3>Bonne Projection</h3>
-    <script type="text/javascript">
+    <script>
 
 // Our projection.
 var xy = d3.geo.bonne(),
@@ -48,7 +45,7 @@ var xy = d3.geo.bonne(),
 var countries = d3.select("body").append("svg")
     .attr("id", "countries");
 
-d3.json("../data/world-countries.json", function(collection) {
+d3.json("../data/world-countries.json", function(error, collection) {
   countries.selectAll("path")
       .data(collection.features)
     .enter().append("path")
@@ -81,7 +78,7 @@ function refresh() {
     <div id="scale">scale: <span>200</span></div><p>
     <div id="translate-x">translate.x: <span>480</span></div>
     <div id="translate-y">translate.y: <span>250</span></div>
-    <script type="text/javascript">
+    <script>
 
 $("#lon").slider({
   min: -180,
@@ -153,6 +150,4 @@ $("#translate-y").slider({
   }
 });
 
-    </script>
-  </body>
-</html>
+</script>

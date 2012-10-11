@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+    <script src="../../d3.js"></script>
+<style>
 
 body {
   font: 10px sans-serif;
@@ -14,10 +14,10 @@ body {
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var margin = {top: 20, right: 40, bottom: 20, left: 40},
     width = 960 - margin.right - margin.left,
@@ -62,6 +62,4 @@ svg.append("g")
     .attr("transform", "translate(" + width + ",0)")
     .call(yAxis.orient("right"));
 
-    </script>
-  </body>
-</html>
+</script>

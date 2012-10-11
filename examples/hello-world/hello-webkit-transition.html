@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, data!</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Hello, data!</title>
+<style>
 
 body {
   font: 14px Helvetica Neue;
@@ -33,32 +31,27 @@ body {
   -webkit-transition-timing-function: ease, linear;
 }
 
-    </style>
-  </head>
-  <body>
-    Your lucky numbers are:<br>
-    <div id="cells"></div>
-    <script type="text/javascript">
+</style>
+</head>
+Hit any key to see your lucky numbers:<br>
+<div id="cells"></div>
+<script src="../../d3.js"></script>
+<script>
 
 var n = 10;
 
-d3.select("#cells")
-  .selectAll("div")
+d3.select("#cells").selectAll("div")
     .data(d3.range(n))
   .enter().append("div")
     .attr("class", "cell")
-    .style("left", function(i) { return i * 30; });
+    .style("left", function(i) { return i * 30 + "px"; });
 
-function transform() {
+d3.select(window).on("keypress", function() {
   d3.selectAll(".cell")
       .data(d3.range(n).map(Math.random))
-      .style("top", function(d) { return (1 - d) * 300; })
-      .style("background-color", function(d) { return "rgb(" + ~~(d * 255) + ",50,100)"; })
-      .text(function(d) { return ~~(d * 100); });
-}
+      .style("top", function(d) { return (1 - d) * 300 + "px"; })
+      .style("background-color", function(d) { return "rgb(" + Math.floor(d * 255) + ",50,100)"; })
+      .text(function(d) { return Math.floor(d * 100); });
+});
 
-window.addEventListener("keypress", transform, false);
-
-    </script>
-  </body>
-</html>
+</script>

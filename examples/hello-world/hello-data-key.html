@@ -1,12 +1,9 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, data!</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-  </head>
-  <body>
-    Your lucky numbers are:<br>
-    <script type="text/javascript">
+<meta charset="utf-8">
+<title>Hello, data!</title>
+Your lucky numbers are:<br>
+<script src="../../d3.js"></script>
+<script>
 
 var i = 0, data = [
   {id: i++, value: 4},
@@ -16,6 +13,8 @@ var i = 0, data = [
   {id: i++, value: 23},
   {id: i++, value: 42}
 ];
+
+d3.select(window).on("keypress", refresh);
 
 transform();
 
@@ -53,8 +52,4 @@ function refresh() {
   transform();
 }
 
-window.addEventListener("keypress", refresh, false);
-
-    </script>
-  </body>
-</html>
+</script>

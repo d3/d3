@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Force-Directed Graph</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">    <title>Force-Directed Graph</title>
+    <script src="../../d3.js"></script>
+<style>
 
 circle.node {
   cursor: pointer;
@@ -18,11 +15,11 @@ line.link {
   stroke-width: 1.5px;
 }
 
-    </style>
+</style>
   </head>
   <body>
     <div id="chart"></div>
-    <script type="text/javascript">
+    <script>
 
 var width = 960,
     height = 500,
@@ -40,7 +37,7 @@ var vis = d3.select("#chart").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("../data/flare.json", function(json) {
+d3.json("../data/flare.json", function(error, json) {
   root = json;
   root.fixed = true;
   root.x = width / 2;
@@ -137,6 +134,4 @@ function flatten(root) {
   return nodes;
 }
 
-    </script>
-  </body>
-</html>
+</script>

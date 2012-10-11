@@ -8,7 +8,7 @@ var data = [
 
 var color = d3.scale.linear()
     .domain([d3.min(data), d3.max(data)])
-    .range(["#aad", "#556"]); 
+    .range(["#aad", "#556"]);
 
 var force = d3.layout.force()
     .charge(0)
@@ -17,7 +17,7 @@ var force = d3.layout.force()
 
 var svg = d3.select("#chart").append("svg");
 
-d3.json("../data/us-state-centroids.json", function(states) {
+d3.json("../data/us-state-centroids.json", function(error, states) {
   var project = d3.geo.albersUsa(),
       idToNode = {},
       links = [],

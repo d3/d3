@@ -1,18 +1,14 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, world!</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-  </head>
-  <body>
-    Your lucky numbers are:<br>
-    <span></span>
-    <script type="text/javascript">
+<meta charset="utf-8">
+<title>Hello, world!</title>
+Your lucky numbers are:<br>
+<span></span>
+<script src="../../d3.js"></script>
+<script>
 
 var data = [4, 8, 15, 16, 23, 42];
 
-d3.select("span")
-  .selectAll("svg")
+d3.select("span").selectAll("svg")
     .data(data)
   .enter().append("svg")
     .attr("width", 100)
@@ -48,6 +44,4 @@ function mouseout(d, i) {
       .attr("fill", "orange");
 }
 
-    </script>
-  </body>
-</html>
+</script>

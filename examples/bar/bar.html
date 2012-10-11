@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Bar Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Bar Chart</title>
+<style>
 
 body {
   font: 10px sans-serif;
@@ -34,10 +32,10 @@ body {
   stroke: black;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var margin = {top: 30, right: 10, bottom: 10, left: 30},
     width = 960 - margin.right - margin.left,
@@ -67,7 +65,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("sample-data.csv", function(data) {
+d3.csv("sample-data.csv", function(error, data) {
 
   // Parse numbers, and sort by value.
   data.forEach(function(d) { d.value = +d.value; });
@@ -105,6 +103,4 @@ d3.csv("sample-data.csv", function(data) {
       .call(yAxis);
 });
 
-    </script>
-  </body>
-</html>
+</script>

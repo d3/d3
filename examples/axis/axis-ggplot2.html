@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+    <script src="../../d3.js"></script>
+<style>
 
 body {
   font: 10px sans-serif;
@@ -32,10 +32,10 @@ path {
   display: none;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var margin = {top: 10, right: 10, bottom: 20, left: 10},
     width = 960 - margin.right - margin.left,
@@ -68,6 +68,4 @@ svg.append("g")
     .attr("transform", "translate(0," + height + ")")
     .call(d3.svg.axis().scale(x));
 
-    </script>
-  </body>
-</html>
+</script>

@@ -1,11 +1,10 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, data!</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Hello, data!</title>
+<style>
 
-body, td {
+body,
+td {
   font: 14px Helvetica Neue;
   text-rendering: optimizeLegibility;
   margin: 1em;
@@ -23,12 +22,11 @@ td {
   height: 30px;
 }
 
-    </style>
-  </head>
-  <body>
-    Your lucky numbers are:<br>
-    <table id="table"></table>
-    <script type="text/javascript">
+</style>
+Your lucky numbers are:<br>
+<table id="table"></table>
+<script src="../../d3.js"></script>
+<script>
 
 var data = [];
 
@@ -38,6 +36,8 @@ for (var i = 0; i < 10; i++) {
   }
   data.push(a);
 }
+
+d3.select(window).on("keypress", refresh);
 
 transform();
 
@@ -68,8 +68,4 @@ function refresh() {
   transform();
 }
 
-window.addEventListener("keypress", refresh, false);
-
-    </script>
-  </body>
-</html>
+</script>
