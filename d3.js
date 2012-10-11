@@ -7595,17 +7595,22 @@ function d3_dsv(delimiter, mimeType) {
 
   dsv.parse = function(text) {
     var header;
-    return dsv.parseRows(text, function(row, i) {
-      if (i) {
-        var o = {}, j = -1, m = header.length;
-        while (++j < m) o[header[j]] = j < row.length ? row[j] : null;
-        return o;
-      } else {
-        header = row;
-        return null;
-      }
-    });
-  };
+
+    function process(text) {
+      return dsv.parseRows(text, function(row, i) {
+        if (header) {
+          var o = {}, j = -1, m = header.length;
+          while (++j < m) o[header[j]] = j < row.length ? row[j] : null;
+          return o;
+        } else {
+          header = row;
+          return null;
+        }
+      });
+    }
+
+    return (arguments.length) ? process(text) : process;
+  }
 
   dsv.parseRows = function(text, f) {
     var EOL = {}, // sentinel value for end-of-line
