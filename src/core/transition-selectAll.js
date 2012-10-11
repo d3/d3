@@ -5,7 +5,8 @@ d3_transitionPrototype.selectAll = function(selector) {
       subnodes,
       node,
       subnode,
-      transition;
+      transition,
+      subtransition;
 
   if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
 
@@ -16,12 +17,17 @@ d3_transitionPrototype.selectAll = function(selector) {
         subnodes = selector.call(node, node.__data__, i);
         subgroups.push(subgroup = []);
         for (var k = -1, o = subnodes.length; ++k < o;) {
-          d3_transitionNode(subnode = subnodes[k], id, transition.delay, transition.duration);
+          if (subtransition = d3_transitionNode(subnode = subnodes[k], i, id)) {
+            subtransition.time = transition.time; // TODO inherit automatically?
+            subtransition.ease = transition.ease;
+            subtransition.delay = transition.delay;
+            subtransition.duration = transition.duration;
+          }
           subgroup.push(subnode);
         }
       }
     }
   }
 
-  return d3_transition(subgroups, id, this.time).ease(this.ease());
+  return d3_transition(subgroups, id);
 };

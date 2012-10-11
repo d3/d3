@@ -117,6 +117,7 @@ d3.core.js: \
 	src/core/transition-style.js \
 	src/core/transition-text.js \
 	src/core/transition-remove.js \
+	src/core/transition-ease.js \
 	src/core/transition-delay.js \
 	src/core/transition-duration.js \
 	src/core/transition-each.js \
