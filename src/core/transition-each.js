@@ -7,9 +7,10 @@ function d3_transition_each(callback) {
   d3_transitionId = this.id;
   d3_transitionEase = this.ease();
   d3_selection_each(this, function(node, i, j) {
-    d3_transitionDelay = node.delay;
-    d3_transitionDuration = node.duration;
-    callback.call(node = node.node, node.__data__, i, j);
+    var transition = node.__transition__[d3_transitionId];
+    d3_transitionDelay = transition.delay;
+    d3_transitionDuration = transition.duration;
+    callback.call(node, node.__data__, i, j);
   });
 
   d3_transitionId = id;

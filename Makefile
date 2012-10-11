@@ -26,14 +26,14 @@ endif
 
 all: \
 	d3.latest.js \
-	d3.v2.js \
-	d3.v2.min.js \
+	d3.js \
+	d3.min.js \
 	component.json \
 	$(PACKAGE_JSON)
 
 # Modify this rule to build your own custom release.
 
-.INTERMEDIATE d3.latest.js d3.v2.js: \
+.INTERMEDIATE d3.latest.js d3.js: \
 	src/start.js \
 	d3.core.js \
 	d3.scale.js \
@@ -72,15 +72,12 @@ d3.core.js: \
 	src/core/transpose.js \
 	src/core/zip.js \
 	src/core/bisect.js \
-	src/core/first.js \
-	src/core/last.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
 	src/core/entries.js \
 	src/core/permute.js \
 	src/core/merge.js \
-	src/core/split.js \
 	src/core/collapse.js \
 	src/core/range.js \
 	src/core/requote.js \
@@ -143,6 +140,7 @@ d3.core.js: \
 	src/core/transition-duration.js \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
+	src/core/transition-tween.js \
 	src/core/tween.js \
 	src/core/timer.js \
 	src/core/mouse.js \
@@ -175,8 +173,6 @@ d3.svg.js: \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
 	src/svg/diagonal-radial.js \
-	src/svg/mouse.js \
-	src/svg/touches.js \
 	src/svg/symbol.js \
 	src/svg/axis.js \
 	src/svg/brush.js
@@ -203,17 +199,25 @@ d3.layout.js: \
 
 d3.geo.js: \
 	src/geo/geo.js \
-	src/geo/azimuthal.js \
-	src/geo/albers.js \
-	src/geo/bonne.js \
-	src/geo/equirectangular.js \
-	src/geo/mercator.js \
 	src/geo/type.js \
-	src/geo/path.js \
+	src/geo/albers-usa.js \
+	src/geo/albers.js \
+	src/geo/azimuthal-equal-area.js \
+	src/geo/azimuthal-equidistant.js \
 	src/geo/bounds.js \
 	src/geo/circle.js \
+	src/geo/compose.js \
+	src/geo/equirectangular.js \
+	src/geo/gnomonic.js \
+	src/geo/graticule.js \
 	src/geo/greatArc.js \
-	src/geo/greatCircle.js
+	src/geo/mercator.js \
+	src/geo/orthographic.js \
+	src/geo/path.js \
+	src/geo/projection.js \
+	src/geo/rotation.js \
+	src/geo/stereographic.js \
+	src/geo/azimuthal.js
 
 d3.dsv.js: \
 	src/dsv/dsv.js \
@@ -239,7 +243,6 @@ d3.time.js: \
 
 d3.geom.js: \
 	src/geom/geom.js \
-	src/geom/contour.js \
 	src/geom/hull.js \
 	src/geom/polygon.js \
 	src/geom/voronoi.js \
@@ -254,7 +257,7 @@ test: all
 	cat $< | $(JS_COMPILER) > $@
 	@chmod a-w $@
 
-d3%.js: Makefile
+d3%js: Makefile
 	@rm -f $@
 	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
 	@chmod a-w $@

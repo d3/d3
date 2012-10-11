@@ -20,7 +20,7 @@ module.exports = {
       });
     },
     "sets the text content as a string": function(result) {
-      assert.equal(result.transition[0][0].node.textContent, "bar");
+      assert.equal(result.transition[0][0].textContent, "bar");
     },
     "does not interpolate text": function(result) {
       assert.isTrue(!result.tween);

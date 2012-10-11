@@ -1,10 +1,7 @@
-d3.xml = function(url, mime, callback) {
-  function ready(req) {
-    callback(req && req.responseXML);
-  }
-  if (arguments.length < 3) {
-    callback = mime;
-    mime = null;
-  }
-  d3.xhr(url, mime, ready);
+d3.xml = function() {
+  return d3.xhr.apply(d3, arguments).response(d3_xml);
 };
+
+function d3_xml(request) {
+  return request.responseXML;
+}

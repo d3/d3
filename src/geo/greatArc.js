@@ -1,7 +1,7 @@
 d3.geo.greatArc = function() {
   var source = d3_geo_greatArcSource, p0,
       target = d3_geo_greatArcTarget, p1,
-      precision = 6 * d3_geo_radians,
+      precision = 6 * d3_radians,
       interpolate = d3_geo_greatArcInterpolator();
 
   function greatArc() {
@@ -14,7 +14,7 @@ d3.geo.greatArc = function() {
     return {type: "LineString", coordinates: coordinates};
   }
 
-  // Length returned in radians; multiply by radius for distance.
+  // Length returned in d3_radians; multiply by radius for distance.
   greatArc.distance = function() {
     if (typeof source === "function") interpolate.source(p0 = source.apply(this, arguments));
     if (typeof target === "function") interpolate.target(p1 = target.apply(this, arguments));
@@ -35,10 +35,10 @@ d3.geo.greatArc = function() {
     return greatArc;
   };
 
-  // Precision is specified in degrees.
+  // Precision is specified in d3_degrees.
   greatArc.precision = function(_) {
-    if (!arguments.length) return precision / d3_geo_radians;
-    precision = _ * d3_geo_radians;
+    if (!arguments.length) return precision / d3_radians;
+    precision = _ * d3_radians;
     return greatArc;
   };
 
@@ -66,8 +66,8 @@ function d3_geo_greatArcInterpolator() {
         y = A * ky0 + B * ky1,
         z = A * sy0 + B * sy1;
     return [
-      Math.atan2(y, x) / d3_geo_radians,
-      Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_geo_radians
+      Math.atan2(y, x) / d3_radians,
+      Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians
     ];
   }
 
@@ -77,9 +77,9 @@ function d3_geo_greatArcInterpolator() {
   };
 
   interpolate.source = function(_) {
-    var cx0 = Math.cos(x0 = _[0] * d3_geo_radians),
+    var cx0 = Math.cos(x0 = _[0] * d3_radians),
         sx0 = Math.sin(x0);
-    cy0 = Math.cos(y0 = _[1] * d3_geo_radians);
+    cy0 = Math.cos(y0 = _[1] * d3_radians);
     sy0 = Math.sin(y0);
     kx0 = cy0 * cx0;
     ky0 = cy0 * sx0;
@@ -88,9 +88,9 @@ function d3_geo_greatArcInterpolator() {
   };
 
   interpolate.target = function(_) {
-    var cx1 = Math.cos(x1 = _[0] * d3_geo_radians),
+    var cx1 = Math.cos(x1 = _[0] * d3_radians),
         sx1 = Math.sin(x1);
-    cy1 = Math.cos(y1 = _[1] * d3_geo_radians);
+    cy1 = Math.cos(y1 = _[1] * d3_radians);
     sy1 = Math.sin(y1);
     kx1 = cy1 * cx1;
     ky1 = cy1 * sx1;
