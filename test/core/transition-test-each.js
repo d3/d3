@@ -57,12 +57,12 @@ module.exports = {
     // think the API needs to guarantee the order of callbacks.
 
     "uses the node as the context": function(result) {
-      assert.domEqual(result.context[1], result.selection[0][0]);
-      assert.domEqual(result.context[0], result.selection[0][1]);
+      assert.domEqual(result.context[0], result.selection[0][0]);
+      assert.domEqual(result.context[1], result.selection[0][1]);
     },
     "passes the data and index to the function": function(result) {
-      assert.deepEqual(result.data, ["bar", "foo"], "expected data, got {actual}");
-      assert.deepEqual(result.index, [1, 0], "expected index, got {actual}");
+      assert.deepEqual(result.data, ["foo", "bar"], "expected data, got {actual}");
+      assert.deepEqual(result.index, [0, 1], "expected index, got {actual}");
     },
 
     "sets an exclusive lock on transitioning nodes": function(result) {
@@ -129,12 +129,12 @@ module.exports = {
     // think the API needs to guarantee the order of callbacks.
 
     "uses the node as the context": function(result) {
-      assert.domEqual(result.context[1], result.selection[0][0]);
-      assert.domEqual(result.context[0], result.selection[0][1]);
+      assert.domEqual(result.context[0], result.selection[0][0]);
+      assert.domEqual(result.context[1], result.selection[0][1]);
     },
     "passes the data and index to the function": function(result) {
-      assert.deepEqual(result.data, ["bar", "foo"], "expected data, got {actual}");
-      assert.deepEqual(result.index, [1, 0], "expected index, got {actual}");
+      assert.deepEqual(result.data, ["foo", "bar"], "expected data, got {actual}");
+      assert.deepEqual(result.index, [0, 1], "expected index, got {actual}");
     },
 
     "deletes the transition lock after end": function(result) {

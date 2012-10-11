@@ -4,7 +4,8 @@ d3_transitionPrototype.select = function(selector) {
       subgroup,
       subnode,
       node,
-      transition;
+      transition,
+      subtransition;
 
   if (typeof selector !== "function") selector = d3_selection_selector(selector);
 
@@ -14,7 +15,12 @@ d3_transitionPrototype.select = function(selector) {
       if ((node = group[i]) && (subnode = selector.call(node, node.__data__, i))) {
         if ("__data__" in node) subnode.__data__ = node.__data__;
         transition = node.__transition__[id];
-        d3_transitionNode(subnode, id, transition.delay, transition.duration);
+        if (subtransition = d3_transitionNode(subnode, i, id)) {
+          subtransition.time = transition.time; // TODO inherit automatically?
+          subtransition.ease = transition.ease;
+          subtransition.delay = transition.delay;
+          subtransition.duration = transition.duration;
+        }
         subgroup.push(subnode);
       } else {
         subgroup.push(null);
@@ -22,5 +28,5 @@ d3_transitionPrototype.select = function(selector) {
     }
   }
 
-  return d3_transition(subgroups, id, this.time).ease(this.ease());
+  return d3_transition(subgroups, id);
 };

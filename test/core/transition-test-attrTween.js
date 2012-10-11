@@ -44,11 +44,11 @@ module.exports = {
     assert.typeOf(result.transition.tween("attr.color"), "function");
   },
   "invokes the tween function": function(result) {
-    assert.deepEqual(result.data, ["red", "green"], "expected data, got {actual}");
-    assert.deepEqual(result.index, [0, 1], "expected data, got {actual}");
-    assert.deepEqual(result.value, ["#ff0000", "#008000"], "expected value, got {actual}");
-    assert.domEqual(result.context[0], result.selection[0][0], "expected this, got {actual}");
-    assert.domEqual(result.context[1], result.selection[0][1], "expected this, got {actual}");
+    assert.deepEqual(result.data, ["green", "red"], "expected data, got {actual}");
+    assert.deepEqual(result.index, [1, 0], "expected data, got {actual}");
+    assert.deepEqual(result.value, ["#008000", "#ff0000"], "expected value, got {actual}");
+    assert.domEqual(result.context[0], result.selection[0][1], "expected this, got {actual}");
+    assert.domEqual(result.context[1], result.selection[0][0], "expected this, got {actual}");
   },
 
   "end": {
