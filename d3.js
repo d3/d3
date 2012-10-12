@@ -6380,13 +6380,25 @@
   };
   d3.geo.albersUsa = function() {
     function albersUsa(coordinates) {
-      var lon = coordinates[0], lat = coordinates[1];
-      return (lat > 50 ? alaska : lon < -140 ? hawaii : lat < 21 ? puertoRico : lower48)(coordinates);
+      return projection(coordinates)(coordinates);
+    }
+    function projection(point) {
+      var lon = point[0], lat = point[1];
+      return lat > 50 ? alaska : lon < -140 ? hawaii : lat < 21 ? puertoRico : lower48;
     }
     var lower48 = d3.geo.albers();
     var alaska = d3.geo.albers().rotate([ 160, 0 ]).center([ 0, 60 ]).parallels([ 55, 65 ]);
     var hawaii = d3.geo.albers().rotate([ 160, 0 ]).center([ 0, 20 ]).parallels([ 8, 18 ]);
     var puertoRico = d3.geo.albers().rotate([ 60, 0 ]).center([ 0, 10 ]).parallels([ 8, 18 ]);
+    albersUsa.point = function(coordinates, context) {
+      return projection(coordinates).point(coordinates, context);
+    };
+    albersUsa.line = function(coordinates, context) {
+      return projection(coordinates[0]).line(coordinates, context);
+    };
+    albersUsa.polygon = function(coordinates, context) {
+      return projection(coordinates[0][0]).polygon(coordinates, context);
+    };
     albersUsa.scale = function(x) {
       if (!arguments.length) return lower48.scale();
       lower48.scale(x);

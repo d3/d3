@@ -1,5 +1,4 @@
 // TODO composite invert
-// TODO projection.{point,line,polygon}
 
 // A composite projection for the United States, 960x500. The set of standard
 // parallels for each region comes from USGS, which is published here:
@@ -23,13 +22,29 @@ d3.geo.albersUsa = function() {
       .parallels([8, 18]);
 
   function albersUsa(coordinates) {
-    var lon = coordinates[0],
-        lat = coordinates[1];
-    return (lat > 50 ? alaska
+    return projection(coordinates)(coordinates);
+  }
+
+  function projection(point) {
+    var lon = point[0],
+        lat = point[1];
+    return lat > 50 ? alaska
         : lon < -140 ? hawaii
         : lat < 21 ? puertoRico
-        : lower48)(coordinates);
+        : lower48;
   }
+
+  albersUsa.point = function(coordinates, context) {
+    return projection(coordinates).point(coordinates, context);
+  };
+
+  albersUsa.line = function(coordinates, context) {
+    return projection(coordinates[0]).line(coordinates, context);
+  };
+
+  albersUsa.polygon = function(coordinates, context) {
+    return projection(coordinates[0][0]).polygon(coordinates, context);
+  };
 
   albersUsa.scale = function(x) {
     if (!arguments.length) return lower48.scale();
