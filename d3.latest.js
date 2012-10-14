@@ -2858,7 +2858,7 @@ function d3_tweenByName(b, name) {
 var d3_timer_id = 0,
     d3_timer_byId = {},
     d3_timer_queue = null,
-    d3_timer_interval, // is an interval (or frame) active?
+    d3_timer_interval, // is an interval (0) or frame (1) active?
     d3_timer_timeout; // is a timeout active?
 
 // The timer will continue to fire until callback returns true.
