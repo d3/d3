@@ -26,12 +26,14 @@ d3.behavior.zoom = function() {
   zoom.translate = function(x) {
     if (!arguments.length) return translate;
     translate = x.map(Number);
+    rescale();
     return zoom;
   };
 
   zoom.scale = function(x) {
     if (!arguments.length) return scale;
     scale = +x;
+    rescale();
     return zoom;
   };
 
@@ -45,6 +47,8 @@ d3.behavior.zoom = function() {
     if (!arguments.length) return x1;
     x1 = z;
     x0 = z.copy();
+    translate = [0, 0];
+    scale = 1;
     return zoom;
   };
 
@@ -52,6 +56,8 @@ d3.behavior.zoom = function() {
     if (!arguments.length) return y1;
     y1 = z;
     y0 = z.copy();
+    translate = [0, 0];
+    scale = 1;
     return zoom;
   };
 
@@ -73,9 +79,13 @@ d3.behavior.zoom = function() {
     translate[1] += p[1] - l[1];
   }
 
-  function dispatch(event) {
+  function rescale() {
     if (x1) x1.domain(x0.range().map(function(x) { return (x - translate[0]) / scale; }).map(x0.invert));
     if (y1) y1.domain(y0.range().map(function(y) { return (y - translate[1]) / scale; }).map(y0.invert));
+  }
+
+  function dispatch(event) {
+    rescale();
     d3.event.preventDefault();
     event({type: "zoom", scale: scale, translate: translate});
   }
