@@ -45,15 +45,17 @@ d3.behavior.zoom = function() {
 
   zoom.x = function(z) {
     if (!arguments.length) return x1;
-    x1 = z;
+    x1 = z.copy();
     x0 = z.copy();
+    transformAxes();
     return zoom;
   };
 
   zoom.y = function(z) {
     if (!arguments.length) return y1;
-    y1 = z;
+    y1 = z.copy();
     y0 = z.copy();
+    transformAxes();
     return zoom;
   };
 
@@ -79,6 +81,7 @@ d3.behavior.zoom = function() {
     if (x1) x1.domain(x0.range().map(function(x) { return (x - translate[0]) / scale; }).map(x0.invert));
     if (y1) y1.domain(y0.range().map(function(y) { return (y - translate[1]) / scale; }).map(y0.invert));
   }
+
   function dispatch(event) {
     transformAxes();
     d3.event.preventDefault();
