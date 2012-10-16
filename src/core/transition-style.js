@@ -8,7 +8,7 @@ d3_transitionPrototype.style = function(name, value, priority) {
     // specifies the priority.
     if (typeof name !== "string") {
       if (n < 2) value = "";
-      for (priority in name) this.styleTween(priority, d3_tweenByName(name[priority], priority), value);
+      for (priority in name) this.style(priority, name[priority], value);
       return this;
     }
 
@@ -18,15 +18,35 @@ d3_transitionPrototype.style = function(name, value, priority) {
   }
 
   // Otherwise, a name, value and priority are specified, and handled as below.
-  return this.styleTween(name, d3_tweenByName(value, name), priority);
+  var id = this.id;
+  return d3_selection_each(this, typeof value === "function"
+      ? function(node, i, j) { node.__transition__[id].tween.set("style." + name, d3_transition_style(name, value.call(node, node.__data__, i, j), priority)); }
+      : (value = d3_transition_style(name, value, priority), function(node) { node.__transition__[id].tween.set("style." + name, value); }));
 };
 
 d3_transitionPrototype.styleTween = function(name, tween, priority) {
   if (arguments.length < 3) priority = "";
   return this.tween("style." + name, function(d, i) {
-    var f = tween.call(this, d, i, window.getComputedStyle(this, null).getPropertyValue(name));
-    return f === d3_tweenRemove
-        ? (this.style.removeProperty(name), null)
-        : f && function(t) { this.style.setProperty(name, f(t), priority); };
+    var f = tween.call(this, d, i, getComputedStyle(this, null).getPropertyValue(name));
+    return f && function(t) { this.style.setProperty(name, f(t), priority); };
   });
 };
+
+function d3_transition_style(name, b, priority) {
+  var interpolate;
+
+  // For style(name, null) or style(name, null, priority), remove the style
+  // property with the specified name. The priority is ignored.
+  function styleNull() {
+    this.style.removeProperty(name);
+  }
+
+  // For style(name, string) or style(name, string, priority), set the style
+  // property with the specified name, using the specified priority.
+  function styleString() {
+    var a = getComputedStyle(this, null).getPropertyValue(name), i;
+    return a !== b && (i = interpolate(a, b), function(t) { this.style.setProperty(name, i(t), priority); });
+  }
+
+  return b == null ? styleNull : (b += "", interpolate = d3_interpolateByName(name), styleString);
+}
