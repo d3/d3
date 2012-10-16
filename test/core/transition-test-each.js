@@ -155,10 +155,10 @@ module.exports = {
           cb(null, {id: id, node: this});
         });
       },
-      "inherits the same transition id": function(result) {
+      "does not inherit the transition id": function(result) {
         assert.isTrue(result.id > 0);
         assert.equal(result.node.__transition__.count, 1);
-        assert.equal(result.node.__transition__.active, result.id);
+        assert.isTrue(result.node.__transition__.active > result.id);
       }
     }
   }

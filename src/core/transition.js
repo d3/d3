@@ -55,6 +55,7 @@ function d3_transitionNode(node, i, id, inherit) {
       function start(elapsed) {
         if (lock.active > id) return stop();
         lock.active = id;
+        event.start.call(node, d, i);
 
         transition.tween.forEach(function(key, value) {
           if (value = value.call(node, d, i)) {
@@ -62,7 +63,6 @@ function d3_transitionNode(node, i, id, inherit) {
           }
         });
 
-        event.start.call(node, d, i);
         if (!tick(elapsed)) d3.timer(tick, 0, time);
         return 1;
       }
@@ -80,9 +80,7 @@ function d3_transitionNode(node, i, id, inherit) {
 
         if (t >= 1) {
           stop();
-          d3_transitionInheritId = id;
           event.end.call(node, d, i);
-          d3_transitionInheritId = 0;
           return 1;
         }
       }

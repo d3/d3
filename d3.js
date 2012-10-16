@@ -560,12 +560,12 @@
         function start(elapsed) {
           if (lock.active > id) return stop();
           lock.active = id;
+          event.start.call(node, d, i);
           transition.tween.forEach(function(key, value) {
             if (value = value.call(node, d, i)) {
               tweened.push(value);
             }
           });
-          event.start.call(node, d, i);
           if (!tick(elapsed)) d3.timer(tick, 0, time);
           return 1;
         }
@@ -577,9 +577,7 @@
           }
           if (t >= 1) {
             stop();
-            d3_transitionInheritId = id;
             event.end.call(node, d, i);
-            d3_transitionInheritId = 0;
             return 1;
           }
         }
