@@ -18,10 +18,7 @@ d3_transitionPrototype.style = function(name, value, priority) {
   }
 
   // Otherwise, a name, value and priority are specified, and handled as below.
-  var id = this.id;
-  return d3_selection_each(this, typeof value === "function"
-      ? function(node, i, j) { node.__transition__[id].tween.set("style." + name, d3_transition_style(name, value.call(node, node.__data__, i, j), priority)); }
-      : (value = d3_transition_style(name, value, priority), function(node) { node.__transition__[id].tween.set("style." + name, value); }));
+  return d3_transition_tween(this, "style." + name, d3_transition_style(name, priority), value);
 };
 
 d3_transitionPrototype.styleTween = function(name, tween, priority) {
@@ -32,8 +29,8 @@ d3_transitionPrototype.styleTween = function(name, tween, priority) {
   });
 };
 
-function d3_transition_style(name, b, priority) {
-  var interpolate;
+function d3_transition_style(name, priority) {
+  var interpolate = d3_interpolateByName(name);
 
   // For style(name, null) or style(name, null, priority), remove the style
   // property with the specified name. The priority is ignored.
@@ -41,12 +38,16 @@ function d3_transition_style(name, b, priority) {
     this.style.removeProperty(name);
   }
 
-  // For style(name, string) or style(name, string, priority), set the style
-  // property with the specified name, using the specified priority.
-  function styleString() {
-    var a = getComputedStyle(this, null).getPropertyValue(name), i;
-    return a !== b && (i = interpolate(a, b), function(t) { this.style.setProperty(name, i(t), priority); });
-  }
+  return function(b) {
 
-  return b == null ? styleNull : (b += "", interpolate = d3_interpolateByName(name), styleString);
+    // For style(name, string) or style(name, string, priority), set the style
+    // property with the specified name, using the specified priority.
+    function styleString() {
+      var a = getComputedStyle(this, null).getPropertyValue(name), i;
+      return a !== b && (i = interpolate(a, b), function(t) { this.style.setProperty(name, i(t), priority); });
+    }
+
+    return b == null ? styleNull
+        : (b += "", styleString);
+  };
 }

@@ -8,10 +8,7 @@ d3_transitionPrototype.attr = function(name, value) {
     return this;
   }
 
-  var id = this.id;
-  return d3_selection_each(this, typeof value === "function"
-      ? function(node, i, j) { node.__transition__[id].tween.set("attr." + name, d3_transition_attr(name, value.call(node, node.__data__, i, j))); }
-      : (value = d3_transition_attr(name, value), function(node) { node.__transition__[id].tween.set("attr." + name, value); }));
+  return d3_transition_tween(this, "attr." + name, d3_transition_attr(name), value);
 };
 
 d3_transitionPrototype.attrTween = function(nameNS, tween) {
@@ -30,8 +27,8 @@ d3_transitionPrototype.attrTween = function(nameNS, tween) {
   return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
 };
 
-function d3_transition_attr(name, b) {
-  var interpolate;
+function d3_transition_attr(name) {
+  var interpolate = d3_interpolateByName(name);
 
   name = d3.ns.qualify(name);
 
@@ -43,17 +40,19 @@ function d3_transition_attr(name, b) {
     this.removeAttributeNS(name.space, name.local);
   }
 
-  // For attr(string, string), set the attribute with the specified name.
-  function attrString() {
-    var a = this.getAttribute(name), i;
-    return a !== b && (i = interpolate(a, b), function(t) { this.setAttribute(name, i(t)); });
-  }
-  function attrStringNS() {
-    var a = this.getAttributeNS(name.space, name.local), i;
-    return a !== b && (i = interpolate(a, b), function(t) { this.setAttributeNS(name.space, name.local, i(t)); });
-  }
+  return function(b) {
 
-  return b == null
-      ? (name.local ? attrNullNS : attrNull)
-      : (b += "", interpolate = d3_interpolateByName(name), name.local ? attrStringNS : attrString);
+    // For attr(string, string), set the attribute with the specified name.
+    function attrString() {
+      var a = this.getAttribute(name), i;
+      return a !== b && (i = interpolate(a, b), function(t) { this.setAttribute(name, i(t)); });
+    }
+    function attrStringNS() {
+      var a = this.getAttributeNS(name.space, name.local), i;
+      return a !== b && (i = interpolate(a, b), function(t) { this.setAttributeNS(name.space, name.local, i(t)); });
+    }
+
+    return b == null ? (name.local ? attrNullNS : attrNull)
+        : (b += "", name.local ? attrStringNS : attrString);
+  };
 }

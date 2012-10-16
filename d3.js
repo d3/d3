@@ -591,47 +591,59 @@
       return transition;
     }
   }
-  function d3_transition_attr(name, b) {
+  function d3_transition_attr(name) {
     function attrNull() {
       this.removeAttribute(name);
     }
     function attrNullNS() {
       this.removeAttributeNS(name.space, name.local);
     }
-    function attrString() {
-      var a = this.getAttribute(name), i;
-      return a !== b && (i = interpolate(a, b), function(t) {
-        this.setAttribute(name, i(t));
-      });
-    }
-    function attrStringNS() {
-      var a = this.getAttributeNS(name.space, name.local), i;
-      return a !== b && (i = interpolate(a, b), function(t) {
-        this.setAttributeNS(name.space, name.local, i(t));
-      });
-    }
-    var interpolate;
+    var interpolate = d3_interpolateByName(name);
     name = d3.ns.qualify(name);
-    return b == null ? name.local ? attrNullNS : attrNull : (b += "", interpolate = d3_interpolateByName(name), name.local ? attrStringNS : attrString);
+    return function(b) {
+      function attrString() {
+        var a = this.getAttribute(name), i;
+        return a !== b && (i = interpolate(a, b), function(t) {
+          this.setAttribute(name, i(t));
+        });
+      }
+      function attrStringNS() {
+        var a = this.getAttributeNS(name.space, name.local), i;
+        return a !== b && (i = interpolate(a, b), function(t) {
+          this.setAttributeNS(name.space, name.local, i(t));
+        });
+      }
+      return b == null ? name.local ? attrNullNS : attrNull : (b += "", name.local ? attrStringNS : attrString);
+    };
   }
-  function d3_transition_style(name, b, priority) {
+  function d3_transition_style(name, priority) {
     function styleNull() {
       this.style.removeProperty(name);
     }
-    function styleString() {
-      var a = getComputedStyle(this, null).getPropertyValue(name), i;
-      return a !== b && (i = interpolate(a, b), function(t) {
-        this.style.setProperty(name, i(t), priority);
-      });
-    }
-    var interpolate;
-    return b == null ? styleNull : (b += "", interpolate = d3_interpolateByName(name), styleString);
-  }
-  function d3_transition_text(value) {
-    if (value == null) value = "";
-    return function() {
-      this.textContent = value;
+    var interpolate = d3_interpolateByName(name);
+    return function(b) {
+      function styleString() {
+        var a = getComputedStyle(this, null).getPropertyValue(name), i;
+        return a !== b && (i = interpolate(a, b), function(t) {
+          this.style.setProperty(name, i(t), priority);
+        });
+      }
+      return b == null ? styleNull : (b += "", styleString);
     };
+  }
+  function d3_transition_text(b) {
+    if (b == null) b = "";
+    return function() {
+      this.textContent = b;
+    };
+  }
+  function d3_transition_tween(groups, name, tween, value) {
+    var id = groups.id;
+    return d3_selection_each(groups, typeof value === "function" ? function(node, i, j) {
+      node.__transition__[id].tween.set(name, tween(value.call(node, node.__data__, i, j)));
+    } : (value = tween(value), function(node) {
+      node.__transition__[id].tween.set(name, value);
+    }));
   }
   function d3_timer_step() {
     var elapsed, now = Date.now(), t1 = d3_timer_queue;
@@ -4410,12 +4422,7 @@
       for (value in name) this.attr(value, name[value]);
       return this;
     }
-    var id = this.id;
-    return d3_selection_each(this, typeof value === "function" ? function(node, i, j) {
-      node.__transition__[id].tween.set("attr." + name, d3_transition_attr(name, value.call(node, node.__data__, i, j)));
-    } : (value = d3_transition_attr(name, value), function(node) {
-      node.__transition__[id].tween.set("attr." + name, value);
-    }));
+    return d3_transition_tween(this, "attr." + name, d3_transition_attr(name), value);
   };
   d3_transitionPrototype.attrTween = function(nameNS, tween) {
     function attrTween(d, i) {
@@ -4443,12 +4450,7 @@
       }
       priority = "";
     }
-    var id = this.id;
-    return d3_selection_each(this, typeof value === "function" ? function(node, i, j) {
-      node.__transition__[id].tween.set("style." + name, d3_transition_style(name, value.call(node, node.__data__, i, j), priority));
-    } : (value = d3_transition_style(name, value, priority), function(node) {
-      node.__transition__[id].tween.set("style." + name, value);
-    }));
+    return d3_transition_tween(this, "style." + name, d3_transition_style(name, priority), value);
   };
   d3_transitionPrototype.styleTween = function(name, tween, priority) {
     if (arguments.length < 3) priority = "";
@@ -4460,12 +4462,7 @@
     });
   };
   d3_transitionPrototype.text = function(value) {
-    var id = this.id;
-    return d3_selection_each(this, typeof value === "function" ? function(node, i, j) {
-      node.__transition__[id].tween.set("text", d3_transition_text(value.call(node, node.__data__, i, j)));
-    } : (value = d3_transition_text(value), function(node) {
-      node.__transition__[id].tween.set("text", value);
-    }));
+    return d3_transition_tween(this, "text", d3_transition_text, value);
   };
   d3_transitionPrototype.remove = function() {
     return this.each("end.transition", function() {
