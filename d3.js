@@ -4350,7 +4350,7 @@
           subnodes = selector.call(node, node.__data__, i);
           subgroups.push(subgroup = []);
           for (var k = -1, o = subnodes.length; ++k < o; ) {
-            d3_transitionNode(subnode = subnodes[k], i, id, transition);
+            d3_transitionNode(subnode = subnodes[k], k, id, transition);
             subgroup.push(subnode);
           }
         }
