@@ -28,10 +28,12 @@ function d3_transitionNode(node, i, id, inherit) {
       transition = lock[id];
 
   if (!transition) {
+    var time = inherit.time;
+
     transition = lock[id] = {
       tween: new d3_Map,
       event: d3.dispatch("start", "end"), // TODO construct lazily?
-      time: inherit.time,
+      time: time,
       ease: inherit.ease,
       delay: inherit.delay,
       duration: inherit.duration
@@ -43,7 +45,6 @@ function d3_transitionNode(node, i, id, inherit) {
       var d = node.__data__,
           ease = transition.ease,
           event = transition.event,
-          time = transition.time,
           delay = transition.delay,
           duration = transition.duration,
           tweened = [];
@@ -90,7 +91,7 @@ function d3_transitionNode(node, i, id, inherit) {
         else delete node.__transition__;
         return 1;
       }
-    });
+    }, 0, time);
 
     return transition;
   }

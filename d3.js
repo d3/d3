@@ -547,10 +547,11 @@
       count: 0
     }), transition = lock[id];
     if (!transition) {
+      var time = inherit.time;
       transition = lock[id] = {
         tween: new d3_Map,
         event: d3.dispatch("start", "end"),
-        time: inherit.time,
+        time: time,
         ease: inherit.ease,
         delay: inherit.delay,
         duration: inherit.duration
@@ -585,9 +586,9 @@
           if (--lock.count) delete lock[id]; else delete node.__transition__;
           return 1;
         }
-        var d = node.__data__, ease = transition.ease, event = transition.event, time = transition.time, delay = transition.delay, duration = transition.duration, tweened = [];
+        var d = node.__data__, ease = transition.ease, event = transition.event, delay = transition.delay, duration = transition.duration, tweened = [];
         return delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time), 1;
-      });
+      }, 0, time);
       return transition;
     }
   }
