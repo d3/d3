@@ -17,19 +17,6 @@ d3_transitionPrototype.style = function(name, value, priority) {
     priority = "";
   }
 
-  // Otherwise, a name, value and priority are specified, and handled as below.
-  return d3_transition_tween(this, "style." + name, d3_transition_style(name, priority), value);
-};
-
-d3_transitionPrototype.styleTween = function(name, tween, priority) {
-  if (arguments.length < 3) priority = "";
-  return this.tween("style." + name, function(d, i) {
-    var f = tween.call(this, d, i, getComputedStyle(this, null).getPropertyValue(name));
-    return f && function(t) { this.style.setProperty(name, f(t), priority); };
-  });
-};
-
-function d3_transition_style(name, priority) {
   var interpolate = d3_interpolateByName(name);
 
   // For style(name, null) or style(name, null, priority), remove the style
@@ -38,7 +25,8 @@ function d3_transition_style(name, priority) {
     this.style.removeProperty(name);
   }
 
-  return function(b) {
+  // Otherwise, a name, value and priority are specified, and handled as below.
+  return d3_transition_tween(this, "style." + name, value, function(b) {
 
     // For style(name, string) or style(name, string, priority), set the style
     // property with the specified name, using the specified priority.
@@ -49,5 +37,13 @@ function d3_transition_style(name, priority) {
 
     return b == null ? styleNull
         : (b += "", styleString);
-  };
-}
+  });
+};
+
+d3_transitionPrototype.styleTween = function(name, tween, priority) {
+  if (arguments.length < 3) priority = "";
+  return this.tween("style." + name, function(d, i) {
+    var f = tween.call(this, d, i, getComputedStyle(this, null).getPropertyValue(name));
+    return f && function(t) { this.style.setProperty(name, f(t), priority); };
+  });
+};
