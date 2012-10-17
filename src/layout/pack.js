@@ -1,7 +1,8 @@
 d3.layout.pack = function() {
   var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
       padding = 0,
-      size = [1, 1];
+      size = [1, 1],
+      scale = true;
 
   function pack(d, i) {
     var nodes = hierarchy.call(this, d, i),
@@ -13,10 +14,10 @@ d3.layout.pack = function() {
     d3_layout_treeVisitAfter(root, function(d) { d.r = Math.sqrt(d.value); });
     d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
 
-    // Compute the scale factor the initial layout.
+    // Compute the scale factor the initial layout if scaling is desired.
     var w = size[0],
         h = size[1],
-        k = Math.max(2 * root.r / w, 2 * root.r / h);
+        k = scale ? Math.max(2 * root.r / w, 2 * root.r / h) : 1;
 
     // When padding, recompute the layout using scaled padding.
     if (padding > 0) {
@@ -24,7 +25,7 @@ d3.layout.pack = function() {
       d3_layout_treeVisitAfter(root, function(d) { d.r += dr; });
       d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
       d3_layout_treeVisitAfter(root, function(d) { d.r -= dr; });
-      k = Math.max(2 * root.r / w, 2 * root.r / h);
+      k = scale ? Math.max(2 * root.r / w, 2 * root.r / h) : 1;
     }
 
     // Scale the layout to fit the requested size.
@@ -42,6 +43,12 @@ d3.layout.pack = function() {
   pack.padding = function(_) {
     if (!arguments.length) return padding;
     padding = +_;
+    return pack;
+  };
+
+  pack.scale = function(_) {
+    if (!arguments.length) return scale;
+    scale = _;
     return pack;
   };
 
