@@ -1844,56 +1844,50 @@
     function formatValue(text) {
       return reFormat.test(text) ? '"' + text.replace(/\"/g, '""') + '"' : text;
     }
-    var reParse = new RegExp("\r\n|[" + delimiter + "\r\n]", "g"), reFormat = new RegExp('["' + delimiter + "\n]"), delimiterCode = delimiter.charCodeAt(0);
+    var reFormat = new RegExp('["' + delimiter + "\n]"), delimiterCode = delimiter.charCodeAt(0);
     dsv.parse = function(text) {
-      var header;
-      return dsv.parseRows(text, function(row, i) {
-        if (i) {
-          var o = {}, j = -1, m = header.length;
-          while (++j < m) o[header[j]] = row[j];
-          return o;
-        } else {
-          header = row;
-          return null;
-        }
+      var o;
+      return dsv.parseRows(text, function(row) {
+        if (o) return o(row);
+        o = new Function("d", "return {" + row.map(function(name, i) {
+          return JSON.stringify(name) + ": d[" + i + "]";
+        }).join(",") + "}");
       });
     };
     dsv.parseRows = function(text, f) {
       function token() {
-        if (reParse.lastIndex >= text.length) return EOF;
-        if (eol) {
-          eol = false;
-          return EOL;
-        }
-        var j = reParse.lastIndex;
+        if (I >= N) return EOF;
+        if (eol) return eol = false, EOL;
+        var j = I;
         if (text.charCodeAt(j) === 34) {
           var i = j;
-          while (i++ < text.length) {
+          while (i++ < N) {
             if (text.charCodeAt(i) === 34) {
               if (text.charCodeAt(i + 1) !== 34) break;
-              i++;
+              ++i;
             }
           }
-          reParse.lastIndex = i + 2;
+          I = i + 2;
           var c = text.charCodeAt(i + 1);
           if (c === 13) {
             eol = true;
-            if (text.charCodeAt(i + 2) === 10) reParse.lastIndex++;
+            if (text.charCodeAt(i + 2) === 10) ++I;
           } else if (c === 10) {
             eol = true;
           }
           return text.substring(j + 1, i).replace(/""/g, '"');
         }
-        var m = reParse.exec(text);
-        if (m) {
-          eol = m[0].charCodeAt(0) !== delimiterCode;
-          return text.substring(j, m.index);
+        while (I < N) {
+          var c = text.charCodeAt(I++), k = 1;
+          if (c === 10) eol = true; else if (c === 13) {
+            eol = true;
+            if (text.charCodeAt(I) === 10) ++I, ++k;
+          } else if (c !== delimiterCode) continue;
+          return text.substring(j, I - k);
         }
-        reParse.lastIndex = text.length;
         return text.substring(j);
       }
-      var EOL = {}, EOF = {}, rows = [], n = 0, t, eol;
-      reParse.lastIndex = 0;
+      var EOL = {}, EOF = {}, rows = [], N = text.length, I = 0, n = 0, t, eol;
       while ((t = token()) !== EOF) {
         var a = [];
         while (t !== EOL && t !== EOF) {
