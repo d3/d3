@@ -132,7 +132,7 @@ function d3_geo_circleClip(degrees, rotate) {
   return {
     point: function(coordinates, context) {
       if (visible(coordinates = rotate(coordinates))) {
-        context.moveTo(coordinates[0], coordinates[1]);
+        context.point(coordinates[0], coordinates[1]);
       }
     },
     line: function(coordinates, context) {
