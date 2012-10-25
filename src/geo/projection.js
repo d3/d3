@@ -57,6 +57,11 @@ function d3_geo_projectionMutator(projectAt) {
         y0,
         maxDepth = δ2 > 0 && 16;
 
+    function point(λ, φ) {
+      var p = projectPoint(λ, φ);
+      context.point(p[0], p[1]);
+    }
+
     function moveTo(λ, φ) {
       var p = projectPoint(λ00 = λ0 = λ, φ00 = φ0 = φ);
       context.moveTo(x0 = p[0], y0 = p[1]);
@@ -110,6 +115,7 @@ function d3_geo_projectionMutator(projectAt) {
     }
 
     return {
+      point: point,
       moveTo: moveTo,
       lineTo: lineTo,
       closePath: closePath

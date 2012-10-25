@@ -15,6 +15,28 @@ suite.addBatch({
             .precision(0));
     },
 
+    "Point": function(path) {
+      path({
+        type: "Point",
+        coordinates: [-63, 18]
+      });
+      assert.deepEqual(testContext.buffer(), [
+        {type: "point", x: 165, y: 160},
+      ]);
+    },
+
+    "MultiPoint": function(path) {
+      path({
+        type: "MultiPoint",
+        coordinates: [[-63, 18], [-62, 18], [-62, 17]]
+      });
+      assert.deepEqual(testContext.buffer(), [
+        {type: "point", x: 165, y: 160},
+        {type: "point", x: 170, y: 160},
+        {type: "point", x: 170, y: 165}
+      ]);
+    },
+
     "LineString": function(path) {
       path({
         type: "Feature",
@@ -204,6 +226,37 @@ suite.addBatch({
           assert.deepEqual(centroid({type: "FeatureCollection", features: [lineString, lineString].map(feature)}), [-10, 57.5]);
           assert.deepEqual(centroid({type: "FeatureCollection", features: [lineString, lineString, lineString].map(feature)}), [-10, 57.5]);
         }
+      }
+    },
+
+    "clipAngle(90)": {
+      topic: function() {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90));
+      },
+      "Point": function(path) {
+        path({
+          type: "Point",
+          coordinates: [-63, 18]
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "point", x: 165, y: 160},
+        ]);
+      },
+      "MultiPoint": function(path) {
+        path({
+          type: "MultiPoint",
+          coordinates: [[-63, 18], [-62, 18], [-62, 17]]
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "point", x: 165, y: 160},
+          {type: "point", x: 170, y: 160},
+          {type: "point", x: 170, y: 165}
+        ]);
       }
     }
   }

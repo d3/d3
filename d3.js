@@ -1975,7 +1975,7 @@
     return {
       point: function(coordinates, context) {
         if (visible(coordinates = rotate(coordinates))) {
-          context.moveTo(coordinates[0], coordinates[1]);
+          context.point(coordinates[0], coordinates[1]);
         }
       },
       line: function(coordinates, context) {
@@ -2230,6 +2230,10 @@
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
     function resample(context) {
+      function point(λ, φ) {
+        var p = projectPoint(λ, φ);
+        context.point(p[0], p[1]);
+      }
       function moveTo(λ, φ) {
         var p = projectPoint(λ00 = λ0 = λ, φ00 = φ0 = φ);
         context.moveTo(x0 = p[0], y0 = p[1]);
@@ -2261,6 +2265,7 @@
       }
       var λ00, φ00, λ0, φ0, x0, y0, maxDepth = δ2 > 0 && 16;
       return {
+        point: point,
         moveTo: moveTo,
         lineTo: lineTo,
         closePath: closePath
