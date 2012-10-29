@@ -24,7 +24,7 @@ function write() {
   puts(fs.readFileSync(process.argv[2], "utf8").replace(/\{([^\}]+)\}/g, function(d, k) {
     d = formats[k];
     return k === "grouping"
-        ? d === "\"127\"" ? null : d.replace(/^"/, "[").replace(/"$/, "]").replace(/;/, ", ")
+        ? d === "\"127\"" || d === "\"0\"" ? null : d.replace(/^"/, "[").replace(/"$/, "]").replace(/;/, ", ")
         : d == null ? null : d;
   }));
 }

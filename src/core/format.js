@@ -63,11 +63,19 @@ d3.format = function(specifier) {
     // Convert to the desired precision.
     value = type(value, precision);
 
+     // If the fill character is not "0", grouping is applied before padding.
     if (!zfill && comma) value = d3_format_group(value);
+
     var length = basePrefix.length + value.length + (zcomma ? 0 : negative.length),
         padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
+
+    // If the fill character is "0", grouping is applied after padding.
     if (zcomma) value = d3_format_group(padding + value);
+
+    if (d3_format_decimalPoint) value.replace(".", d3_format_decimalPoint);
+
     negative += basePrefix;
+
     return (align === "<" ? negative + value + padding
           : align === ">" ? padding + negative + value
           : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length)
