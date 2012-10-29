@@ -1921,6 +1921,26 @@
     };
     return albers;
   }
+  function d3_geo_bounds(projection) {
+    var x0, y0, x1, y1, bounds = d3_geo_type({
+      point: function(point) {
+        point = projection(point);
+        var x = point[0], y = point[1];
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      },
+      polygon: function(coordinates) {
+        this.line(coordinates[0]);
+      }
+    });
+    return function(feature) {
+      y1 = x1 = -(x0 = y0 = Infinity);
+      bounds.object(feature);
+      return [ [ x0, y0 ], [ x1, y1 ] ];
+    };
+  }
   function d3_geo_circleClip(degrees, rotate) {
     function visible(point) {
       return Math.cos(point[1]) * Math.cos(point[0]) > cr;
@@ -6473,24 +6493,7 @@
   (d3.geo.azimuthalEquidistant = function() {
     return d3_geo_projection(d3_geo_azimuthalEquidistant);
   }).raw = d3_geo_azimuthalEquidistant;
-  d3.geo.bounds = function(feature) {
-    d3_geo_boundsTop = d3_geo_boundsRight = -(d3_geo_boundsLeft = d3_geo_boundsBottom = Infinity);
-    d3_geo_bounds.object(feature);
-    return [ [ d3_geo_boundsLeft, d3_geo_boundsBottom ], [ d3_geo_boundsRight, d3_geo_boundsTop ] ];
-  };
-  var d3_geo_boundsLeft, d3_geo_boundsBottom, d3_geo_boundsRight, d3_geo_boundsTop;
-  var d3_geo_bounds = d3_geo_type({
-    point: function(point) {
-      var x = point[0], y = point[1];
-      if (x < d3_geo_boundsLeft) d3_geo_boundsLeft = x;
-      if (x > d3_geo_boundsRight) d3_geo_boundsRight = x;
-      if (y < d3_geo_boundsBottom) d3_geo_boundsBottom = y;
-      if (y > d3_geo_boundsTop) d3_geo_boundsTop = y;
-    },
-    polygon: function(coordinates) {
-      this.line(coordinates[0]);
-    }
-  });
+  d3.geo.bounds = d3_geo_bounds(d3_identity);
   d3.geo.circle = function() {
     function circle() {}
     function bufferContext(lineStrings) {
@@ -6775,7 +6778,7 @@
       }
       return z ? [ x, y, 6 * z ] : null;
     }
-    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), buffer = [];
+    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), bounds, buffer = [];
     var bufferContext = {
       point: function(x, y) {
         buffer.push("M", x, ",", y, pointCircle);
@@ -6855,12 +6858,16 @@
       Point: singleCentroid(pointCentroid),
       Polygon: singleCentroid(polygonCentroid)
     });
+    path.bounds = function(object) {
+      return (bounds || (bounds = d3_geo_bounds(projection)))(object);
+    };
     path.centroid = function(object) {
       return centroidType.object(object);
     };
     path.projection = function(_) {
       if (!arguments.length) return projection;
       projection = _;
+      bounds = null;
       return path;
     };
     path.context = function(_) {

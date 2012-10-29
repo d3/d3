@@ -4,6 +4,7 @@ d3.geo.path = function() {
   var pointRadius = 4.5,
       pointCircle = d3_geo_pathCircle(pointRadius),
       projection = d3.geo.albersUsa(),
+      bounds,
       buffer = [];
 
   var bufferContext = {
@@ -178,11 +179,18 @@ d3.geo.path = function() {
     return z ? [x, y, 6 * z] : null; // weighted centroid
   }
 
-  path.centroid = function(object) { return centroidType.object(object); };
+  path.bounds = function(object) {
+    return (bounds || (bounds = d3_geo_bounds(projection)))(object);
+  };
+
+  path.centroid = function(object) {
+    return centroidType.object(object);
+  };
 
   path.projection = function(_) {
     if (!arguments.length) return projection;
     projection = _;
+    bounds = null;
     return path;
   };
 
