@@ -3412,10 +3412,11 @@
     return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
   };
   d3.format = function(specifier) {
-    var match = d3_format_re.exec(specifier), fill = match[1] || " ", sign = match[3] || "", zfill = match[5], width = +match[6], comma = match[7], precision = match[8], type = match[9], scale = 1, suffix = "", integer = false;
+    var match = d3_format_re.exec(specifier), fill = match[1] || " ", align = match[2] || ">", sign = match[3] || "", basePrefix = match[4] || "", zfill = match[5], width = +match[6], comma = match[7], precision = match[8], type = match[9], scale = 1, suffix = "", integer = false;
     if (precision) precision = +precision.substring(1);
-    if (zfill) {
-      fill = "0";
+    if (zfill || fill === "0" && align === "=") {
+      zfill = fill = "0";
+      align = "=";
       if (comma) width -= Math.floor((width - 1) / 4);
     }
     switch (type) {
@@ -3433,6 +3434,12 @@
       suffix = "%";
       type = "r";
       break;
+     case "b":
+     case "o":
+     case "x":
+     case "X":
+      if (basePrefix) basePrefix = "0" + type.toLowerCase();
+     case "c":
      case "d":
       integer = true;
       precision = 0;
@@ -3442,11 +3449,13 @@
       type = "r";
       break;
     }
+    if (basePrefix === "#") basePrefix = "";
     if (type == "r" && !precision) type = "g";
     type = d3_format_types.get(type) || d3_format_typeDefault;
+    var zcomma = zfill && comma;
     return function(value) {
       if (integer && value % 1) return "";
-      var negative = value < 0 && (value = -value) ? "-" : sign;
+      var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
       if (scale < 0) {
         var prefix = d3.formatPrefix(value, precision);
         value = prefix.scale(value);
@@ -3455,22 +3464,30 @@
         value *= scale;
       }
       value = type(value, precision);
-      if (zfill) {
-        var length = value.length + negative.length;
-        if (length < width) value = (new Array(width - length + 1)).join(fill) + value;
-        if (comma) value = d3_format_group(value);
-        value = negative + value;
-      } else {
-        if (comma) value = d3_format_group(value);
-        value = negative + value;
-        var length = value.length;
-        if (length < width) value = (new Array(width - length + 1)).join(fill) + value;
-      }
-      return value.replace(".", d3_format_decimalPoint) + suffix;
+      if (!zfill && comma) value = d3_format_group(value);
+      var length = basePrefix.length + value.length + (zcomma ? 0 : negative.length), padding = length < width ? (new Array(length = width - length + 1)).join(fill) : "";
+      if (zcomma) value = d3_format_group(padding + value);
+      negative += basePrefix;
+      return (align === "<" ? negative + value + padding : align === ">" ? padding + negative + value : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length) : negative + (zcomma ? value : padding + value)) + suffix;
     };
   };
   var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
   var d3_format_types = d3.map({
+    b: function(x) {
+      return x.toString(2);
+    },
+    c: function(x) {
+      return String.fromCharCode(x);
+    },
+    o: function(x) {
+      return x.toString(8);
+    },
+    x: function(x) {
+      return x.toString(16);
+    },
+    X: function(x) {
+      return x.toString(16).toUpperCase();
+    },
     g: function(x, p) {
       return x.toPrecision(p);
     },
