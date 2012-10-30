@@ -2747,7 +2747,7 @@
     while (i < n) {
       if (j >= m) return -1;
       c = template.charCodeAt(i++);
-      if (c == 37) {
+      if (c === 37) {
         p = d3_time_parsers[template.charAt(i++)];
         if (!p || (j = p(date, string, j)) < 0) return -1;
       } else if (c != string.charCodeAt(j++)) {
@@ -2763,6 +2763,11 @@
     var map = new d3_Map, i = -1, n = names.length;
     while (++i < n) map.set(names[i].toLowerCase(), i);
     return map;
+  }
+  function d3_time_formatPad(value, fill, width) {
+    value += "";
+    var length = value.length;
+    return length < width ? (new Array(width - length + 1)).join(fill) + value : value;
   }
   function d3_time_parseWeekdayAbbrev(date, string, i) {
     d3_time_dayAbbrevRe.lastIndex = 0;
@@ -2842,7 +2847,7 @@
   }
   function d3_time_zone(d) {
     var z = d.getTimezoneOffset(), zs = z > 0 ? "-" : "+", zh = ~~(Math.abs(z) / 60), zm = Math.abs(z) % 60;
-    return zs + d3_time_zfill2(zh) + d3_time_zfill2(zm);
+    return zs + d3_time_formatPad(zh, "0", 2) + d3_time_formatPad(zm, "0", 2);
   }
   function d3_time_formatIsoNative(date) {
     return date.toISOString();
@@ -7250,10 +7255,13 @@
   var d3_time_days = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ], d3_time_dayAbbreviations = [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ], d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], d3_time_monthAbbreviations = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
   d3.time.format = function(template) {
     function format(date) {
-      var string = [], i = -1, j = 0, c, f;
+      var string = [], i = -1, j = 0, c, p, f;
       while (++i < n) {
-        if (template.charCodeAt(i) == 37) {
-          string.push(template.substring(j, i), (f = d3_time_formats[c = template.charAt(++i)]) ? f(date) : c);
+        if (template.charCodeAt(i) === 37) {
+          string.push(template.substring(j, i));
+          if ((p = d3_time_formatPads[c = template.charAt(++i)]) != null) c = template.charAt(++i);
+          if (f = d3_time_formats[c]) c = f(date, p == null ? c === "e" ? " " : "0" : p);
+          string.push(c);
           j = i + 1;
         }
       }
@@ -7283,8 +7291,12 @@
     };
     return format;
   };
-  var d3_time_zfill2 = d3.format("02d"), d3_time_zfill3 = d3.format("03d"), d3_time_zfill4 = d3.format("04d"), d3_time_sfill2 = d3.format("2d");
   var d3_time_dayRe = d3_time_formatRe(d3_time_days), d3_time_dayAbbrevRe = d3_time_formatRe(d3_time_dayAbbreviations), d3_time_monthRe = d3_time_formatRe(d3_time_months), d3_time_monthLookup = d3_time_formatLookup(d3_time_months), d3_time_monthAbbrevRe = d3_time_formatRe(d3_time_monthAbbreviations), d3_time_monthAbbrevLookup = d3_time_formatLookup(d3_time_monthAbbreviations);
+  var d3_time_formatPads = {
+    "-": "",
+    _: " ",
+    "0": "0"
+  };
   var d3_time_formats = {
     a: function(d) {
       return d3_time_dayAbbreviations[d.getDay()];
@@ -7299,52 +7311,52 @@
       return d3_time_months[d.getMonth()];
     },
     c: d3.time.format(d3_time_formatDateTime),
-    d: function(d) {
-      return d3_time_zfill2(d.getDate());
+    d: function(d, p) {
+      return d3_time_formatPad(d.getDate(), p, 2);
     },
-    e: function(d) {
-      return d3_time_sfill2(d.getDate());
+    e: function(d, p) {
+      return d3_time_formatPad(d.getDate(), p, 2);
     },
-    H: function(d) {
-      return d3_time_zfill2(d.getHours());
+    H: function(d, p) {
+      return d3_time_formatPad(d.getHours(), p, 2);
     },
-    I: function(d) {
-      return d3_time_zfill2(d.getHours() % 12 || 12);
+    I: function(d, p) {
+      return d3_time_formatPad(d.getHours() % 12 || 12, p, 2);
     },
-    j: function(d) {
-      return d3_time_zfill3(1 + d3.time.dayOfYear(d));
+    j: function(d, p) {
+      return d3_time_formatPad(1 + d3.time.dayOfYear(d), p, 3);
     },
-    L: function(d) {
-      return d3_time_zfill3(d.getMilliseconds());
+    L: function(d, p) {
+      return d3_time_formatPad(d.getMilliseconds(), p, 3);
     },
-    m: function(d) {
-      return d3_time_zfill2(d.getMonth() + 1);
+    m: function(d, p) {
+      return d3_time_formatPad(d.getMonth() + 1, p, 2);
     },
-    M: function(d) {
-      return d3_time_zfill2(d.getMinutes());
+    M: function(d, p) {
+      return d3_time_formatPad(d.getMinutes(), p, 2);
     },
     p: function(d) {
       return d.getHours() >= 12 ? "PM" : "AM";
     },
-    S: function(d) {
-      return d3_time_zfill2(d.getSeconds());
+    S: function(d, p) {
+      return d3_time_formatPad(d.getSeconds(), p, 2);
     },
-    U: function(d) {
-      return d3_time_zfill2(d3.time.sundayOfYear(d));
+    U: function(d, p) {
+      return d3_time_formatPad(d3.time.sundayOfYear(d), p, 2);
     },
     w: function(d) {
       return d.getDay();
     },
-    W: function(d) {
-      return d3_time_zfill2(d3.time.mondayOfYear(d));
+    W: function(d, p) {
+      return d3_time_formatPad(d3.time.mondayOfYear(d), p, 2);
     },
     x: d3.time.format(d3_time_formatDate),
     X: d3.time.format(d3_time_formatTime),
-    y: function(d) {
-      return d3_time_zfill2(d.getFullYear() % 100);
+    y: function(d, p) {
+      return d3_time_formatPad(d.getFullYear() % 100, p, 2);
     },
-    Y: function(d) {
-      return d3_time_zfill4(d.getFullYear() % 1e4);
+    Y: function(d, p) {
+      return d3_time_formatPad(d.getFullYear() % 1e4, p, 4);
     },
     Z: d3_time_zone,
     "%": function(d) {

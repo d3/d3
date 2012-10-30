@@ -100,6 +100,21 @@ suite.addBatch({
       var f = format("%S");
       assert.equal(f(local(1990, 0, 1, 0, 0, 0)), "00");
       assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
+      var f = format("%0S");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 0)), "00");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
+    },
+    "formats space-padded second": function(format) {
+      var f = format("%_S");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 0)), " 0");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 3)), " 3");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
+    },
+    "formats no-padded second": function(format) {
+      var f = format("%-S");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 0)), "0");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 3)), "3");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
     },
     "formats zero-padded millisecond": function(format) {
       var f = format("%L");
