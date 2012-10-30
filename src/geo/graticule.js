@@ -2,7 +2,8 @@ d3.geo.graticule = function() {
   var x1, x0,
       y1, y0,
       dx = 22.5, dy = dx,
-      x, y;
+      x, y,
+      precision = 2.5;
 
   function graticule() {
     return {
@@ -40,9 +41,7 @@ d3.geo.graticule = function() {
     y0 = +_[0][1], y1 = +_[1][1];
     if (x0 > x1) _ = x0, x0 = x1, x1 = _;
     if (y0 > y1) _ = y0, y0 = y1, y1 = _;
-    x = d3_geo_graticuleX(y0, y1);
-    y = d3_geo_graticuleY(x0, x1);
-    return graticule;
+    return graticule.precision(precision);
   };
 
   graticule.step = function(_) {
@@ -51,13 +50,19 @@ d3.geo.graticule = function() {
     return graticule;
   };
 
+  graticule.precision = function(_) {
+    if (!arguments.length) return precision;
+    precision = +_;
+    x = d3_geo_graticuleX(y0, y1, precision);
+    y = d3_geo_graticuleY(x0, x1, precision);
+    return graticule;
+  };
+
   return graticule.extent([[-180 + ε, -90 + ε], [180 - ε, 90 - ε]]);
 };
 
-var d3_geo_graticulePrecision = 3;
-
-function d3_geo_graticuleX(y0, y1) {
-  var y = d3.range(y0, y1 - ε, d3_geo_graticulePrecision).concat(y1);
+function d3_geo_graticuleX(y0, y1, dy) {
+  var y = d3.range(y0, y1 - ε, dy).concat(y1);
   return function(x) {
     return y.map(function(y) {
       return [x, y];
@@ -65,8 +70,8 @@ function d3_geo_graticuleX(y0, y1) {
   };
 }
 
-function d3_geo_graticuleY(x0, x1) {
-  var x = d3.range(x0, x1 - ε, d3_geo_graticulePrecision).concat(x1);
+function d3_geo_graticuleY(x0, x1, dx) {
+  var x = d3.range(x0, x1 - ε, dx).concat(x1);
   return function(y) {
     return x.map(function(x) {
       return [x, y];

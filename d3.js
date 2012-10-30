@@ -2164,16 +2164,16 @@
   function d3_geo_equirectangular(λ, φ) {
     return [ λ, φ ];
   }
-  function d3_geo_graticuleX(y0, y1) {
-    var y = d3.range(y0, y1 - ε, d3_geo_graticulePrecision).concat(y1);
+  function d3_geo_graticuleX(y0, y1, dy) {
+    var y = d3.range(y0, y1 - ε, dy).concat(y1);
     return function(x) {
       return y.map(function(y) {
         return [ x, y ];
       });
     };
   }
-  function d3_geo_graticuleY(x0, x1) {
-    var x = d3.range(x0, x1 - ε, d3_geo_graticulePrecision).concat(x1);
+  function d3_geo_graticuleY(x0, x1, dx) {
+    var x = d3.range(x0, x1 - ε, dx).concat(x1);
     return function(y) {
       return x.map(function(x) {
         return [ x, y ];
@@ -6639,7 +6639,7 @@
         geometries: graticule.lines()
       };
     }
-    var x1, x0, y1, y0, dx = 22.5, dy = dx, x, y;
+    var x1, x0, y1, y0, dx = 22.5, dy = dx, x, y, precision = 2.5;
     graticule.lines = function() {
       return d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(x).concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(y)).map(function(coordinates) {
         return {
@@ -6660,18 +6660,22 @@
       y0 = +_[0][1], y1 = +_[1][1];
       if (x0 > x1) _ = x0, x0 = x1, x1 = _;
       if (y0 > y1) _ = y0, y0 = y1, y1 = _;
-      x = d3_geo_graticuleX(y0, y1);
-      y = d3_geo_graticuleY(x0, x1);
-      return graticule;
+      return graticule.precision(precision);
     };
     graticule.step = function(_) {
       if (!arguments.length) return [ dx, dy ];
       dx = +_[0], dy = +_[1];
       return graticule;
     };
+    graticule.precision = function(_) {
+      if (!arguments.length) return precision;
+      precision = +_;
+      x = d3_geo_graticuleX(y0, y1, precision);
+      y = d3_geo_graticuleY(x0, x1, precision);
+      return graticule;
+    };
     return graticule.extent([ [ -180 + ε, -90 + ε ], [ 180 - ε, 90 - ε ] ]);
   };
-  var d3_geo_graticulePrecision = 3;
   d3.geo.greatArc = function() {
     function greatArc() {
       var d = greatArc.distance.apply(this, arguments), t = 0, dt = precision / d, coordinates = [ p0 ];
