@@ -5280,7 +5280,7 @@
       } else {
         offset = [ 0, 0 ];
       }
-      if (touchId != null) d3_eventCancel();
+      if (touchId == null) d3_eventCancel();
       event_({
         type: "dragstart"
       });

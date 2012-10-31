@@ -28,7 +28,7 @@ d3.behavior.drag = function() {
     }
 
     // Only cancel mousedown; touchstart is needed for draggable links.
-    if (touchId != null) d3_eventCancel();
+    if (touchId == null) d3_eventCancel();
     event_({type: "dragstart"});
 
     function point() {
