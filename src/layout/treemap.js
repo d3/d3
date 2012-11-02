@@ -8,6 +8,7 @@ d3.layout.treemap = function() {
       pad = d3_layout_treemapPadNull,
       sticky = false,
       stickies,
+      mode = "squarify",
       ratio = 0.5 * (1 + Math.sqrt(5)); // golden ratio
 
   // Compute the area for each child based on value & scale.
@@ -32,14 +33,16 @@ d3.layout.treemap = function() {
           child,
           best = Infinity, // the best row score so far
           score, // the current row score
-          u = Math.min(rect.dx, rect.dy), // initial orientation
+          u = mode === "squarify" ? Math.min(rect.dx, rect.dy) // initial orientation
+            : mode === "dice" || mode === "slice-dice" && node.depth & 1 ? rect.dy
+            : rect.dx,
           n;
       scale(remaining, rect.dx * rect.dy / node.value);
       row.area = 0;
       while ((n = remaining.length) > 0) {
         row.push(child = remaining[n - 1]);
         row.area += child.area;
-        if ((score = worst(row, u)) <= best) { // continue with this orientation
+        if (mode !== "squarify" || (score = worst(row, u)) <= best) { // continue with this orientation
           remaining.pop();
           best = score;
         } else { // abort, and try a different orientation
@@ -196,6 +199,12 @@ d3.layout.treemap = function() {
   treemap.ratio = function(x) {
     if (!arguments.length) return ratio;
     ratio = x;
+    return treemap;
+  };
+
+  treemap.mode = function(x) {
+    if (!arguments.length) return mode;
+    mode = x + "";
     return treemap;
   };
 
