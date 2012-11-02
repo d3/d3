@@ -1,8 +1,7 @@
 # See the README for installation instructions.
 
 NODE_PATH ?= ./node_modules
-JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
-JS_BEAUTIFIER = $(NODE_PATH)/uglify-js/bin/uglifyjs -b -i 2 -nm -ns
+JS_UGLIFY = $(NODE_PATH)/uglify-js2/bin/uglifyjs2
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
 LOCALE ?= en_US
 
@@ -236,11 +235,13 @@ test: all
 
 %.min.js: %.js Makefile
 	@rm -f $@
-	$(JS_COMPILER) < $< > $@
+	$(JS_UGLIFY) $< -c -m -o $@
 
 d3%js: Makefile
 	@rm -f $@
-	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
+	@cat $(filter %.js,$^) > $@.tmp
+	$(JS_UGLIFY) $@.tmp -b indent-level=2 -o $@
+	@rm $@.tmp
 	@chmod a-w $@
 
 component.json: src/component.js
