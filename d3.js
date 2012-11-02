@@ -1822,7 +1822,7 @@
       }
     }
     function onAdd() {
-      var node = this, args = arguments;
+      var node = this, args = d3_array(arguments);
       onRemove.call(this);
       this.addEventListener(type, this[name] = wrapper, wrapper.$ = capture);
       wrapper._ = listener;
@@ -1853,7 +1853,8 @@
     return groups;
   }
   d3_selectionPrototype.call = function(callback) {
-    callback.apply(this, (arguments[0] = this, arguments));
+    var args = d3_array(arguments);
+    callback.apply(args[0] = this, args);
     return this;
   };
   d3_selectionPrototype.empty = function() {

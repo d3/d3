@@ -36,7 +36,7 @@ function d3_selection_on(type, listener, capture) {
 
   function onAdd() {
     var node = this,
-        args = arguments;
+        args = d3_array(arguments);
 
     onRemove.call(this);
     this.addEventListener(type, this[name] = wrapper, wrapper.$ = capture);
