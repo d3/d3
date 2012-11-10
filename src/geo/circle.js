@@ -100,7 +100,7 @@ d3.geo.circle = function() {
 
   circle.precision = function(_) {
     if (!arguments.length) return precision;
-    interpolate = d3_geo_circleInterpolate(radians, precision = +_);
+    interpolate = d3_geo_circleInterpolate(radians, precision = _ * d3_radians);
     return circle;
   }
 
