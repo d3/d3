@@ -234,7 +234,7 @@ test: all
 
 test-cov:
 	rm -rf $(SRC)-cov;
-	jscoverage --exclude=start.js --exclude=end.js  $(SRC) $(SRC)-cov;
+	jscoverage --encoding=utf-8 --exclude=start.js --exclude=end.js  $(SRC) $(SRC)-cov;
 	for file in start.js end.js; do cp $(SRC)/$$file $(SRC)-cov/$$file; done
 	SRC=$(SRC)-cov JS_TESTER_OPTS="--cover-html" make test
 	open coverage.html

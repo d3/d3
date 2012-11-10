@@ -1,8 +1,8 @@
 d3.random = {
-  normal: function(mu, sigma) {
+  normal: function(µ, σ) {
     var n = arguments.length;
-    if (n < 2) sigma = 1;
-    if (n < 1) mu = 0;
+    if (n < 2) σ = 1;
+    if (n < 1) µ = 0;
     return function() {
       var x, y, r;
       do {
@@ -10,16 +10,16 @@ d3.random = {
         y = Math.random() * 2 - 1;
         r = x * x + y * y;
       } while (!r || r > 1);
-      return mu + sigma * x * Math.sqrt(-2 * Math.log(r) / r);
+      return µ + σ * x * Math.sqrt(-2 * Math.log(r) / r);
     };
   },
-  logNormal: function(mu, sigma) {
+  logNormal: function(µ, σ) {
     var n = arguments.length;
-    if (n < 2) sigma = 1;
-    if (n < 1) mu = 0;
+    if (n < 2) σ = 1;
+    if (n < 1) µ = 0;
     var random = d3.random.normal();
     return function() {
-      return Math.exp(mu + sigma * random());
+      return Math.exp(µ + σ * random());
     };
   },
   irwinHall: function(m) {
