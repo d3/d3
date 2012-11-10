@@ -5493,8 +5493,18 @@
     };
   }
   d3.geo.circle = function() {
-    var origin = [ 0, 0 ], degrees = 90, clip, precision, rotate;
-    function circle() {}
+    var origin = [ 0, 0 ], degrees = 90, clip, precision = 6 * d3_radians, rotate, interpolate;
+    function circle(d) {
+      var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
+      rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
+      var ring = [], rings = [ ring ];
+      d3_geo_circleInterpolateCircle(interpolate, bufferContext(rings));
+      ring.push(ring[0]);
+      return {
+        type: "Polygon",
+        coordinates: rings
+      };
+    }
     circle.clip = function(d) {
       var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
       rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
@@ -5571,17 +5581,17 @@
     };
     circle.angle = function(x) {
       if (!arguments.length) return degrees;
-      degrees = +x;
+      interpolate = d3_geo_circleInterpolate((degrees = +x) * d3_radians, precision);
       return circle;
     };
     circle.precision = function(_) {
       if (!arguments.length) return precision;
-      precision = +_;
+      interpolate = d3_geo_circleInterpolate(radians, precision = +_);
       return circle;
     };
     return circle;
     function bufferContext(lineStrings) {
-      var lineString = null;
+      var lineString = lineStrings[0];
       return {
         moveTo: function(λ, φ) {
           var point = rotate.invert(λ, φ);
@@ -5602,7 +5612,7 @@
     }
   };
   function d3_geo_circleClip(degrees, rotate) {
-    var radians = degrees * d3_radians, precision = 6 * d3_radians, normal = [ 1, 0, 0 ], reference = [ 0, -1, 0 ], cr = Math.cos(radians), sr = Math.sin(radians), center = d3_geo_circleScale(normal, cr), angle = d3_geo_circleAngle(center);
+    var radians = degrees * d3_radians, normal = [ 1, 0, 0 ], reference = [ 0, -1, 0 ], cr = Math.cos(radians), sr = Math.sin(radians), center = d3_geo_circleScale(normal, cr), angle = d3_geo_circleAngle(center), interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
     return {
       point: function(coordinates, context) {
         if (visible(coordinates = rotate(coordinates))) {
@@ -5652,7 +5662,10 @@
       d3_geo_circleAdd(q, A);
       return d3_geo_circleSpherical(q);
     }
-    function interpolate(from, to, context) {
+  }
+  function d3_geo_circleInterpolate(radians, precision) {
+    var normal = [ 1, 0, 0 ], reference = [ 0, -1, 0 ], cr = Math.cos(radians), sr = Math.sin(radians), center = d3_geo_circleScale(normal, cr);
+    return function(from, to, context) {
       from = from.angle;
       to = to.angle;
       if (from < to) from += 2 * Math.PI;
@@ -5661,11 +5674,10 @@
         var c = Math.cos(t), s = Math.sin(t), point = d3_geo_circleSpherical([ center[0] + sr * (c * u0 + s * v0), center[1] + sr * (c * u1 + s * v1), center[2] + sr * (c * u2 + s * v2) ]);
         context.lineTo(point[0], point[1]);
       }
-    }
+    };
   }
   function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, angle) {
-    var unvisited = 0, intersections = [];
-    var segments = [], buffer = d3_geo_circleBufferSegments(clipLine), winding = 0;
+    var unvisited = 0, intersections = [], segments = [], buffer = d3_geo_circleBufferSegments(clipLine), winding = 0;
     coordinates.forEach(function(ring) {
       var x = buffer(ring, context), ringSegments = x[1];
       winding += x[0];
@@ -5681,18 +5693,13 @@
       segments = segments.concat(ringSegments);
     });
     if (winding > 0) {
-      winding = [];
       segments.push(winding = []);
       x = {
         lineTo: function(x, y) {
           winding.push([ x, y ]);
         }
       };
-      for (var i = 0; i < 4; i++) interpolate({
-        angle: -i * π / 2
-      }, {
-        angle: -(i + 1) * π / 2
-      }, x);
+      d3_geo_circleInterpolateCircle(interpolate, x);
       winding.push(winding[0]);
     }
     segments.forEach(function(segment) {
@@ -5813,6 +5820,15 @@
       if (p[1] <= 0 && (p0[0] - p[0]) * p0[1] + p0[0] * (p[1] - p0[1]) < 0) return -1;
     }
     return 0;
+  }
+  function d3_geo_circleInterpolateCircle(interpolate, context) {
+    for (var i = 0; i < 4; i++) {
+      interpolate({
+        angle: -i * π / 2
+      }, {
+        angle: -(i + 1) * π / 2
+      }, context);
+    }
   }
   function d3_geo_compose(a, b) {
     if (a === d3_geo_equirectangular) return b;
