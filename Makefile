@@ -3,8 +3,10 @@
 NODE_PATH ?= ./node_modules
 JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
 JS_BEAUTIFIER = $(NODE_PATH)/uglify-js/bin/uglifyjs -b -i 2 -nm -ns
-JS_TESTER = $(NODE_PATH)/vows/bin/vows
+JS_TESTER_OPTS ?= ""
+JS_TESTER = $(NODE_PATH)/vows/bin/vows $(JS_TESTER_OPTS)
 LOCALE ?= en_US
+SRC ?= src
 
 all: \
 	d3.v2.js \
@@ -15,7 +17,7 @@ all: \
 # Modify this rule to build your own custom release.
 
 .INTERMEDIATE d3.v2.js: \
-	src/start.js \
+	$(SRC)/start.js \
 	d3.core.js \
 	d3.scale.js \
 	d3.svg.js \
@@ -25,210 +27,217 @@ all: \
 	d3.geo.js \
 	d3.geom.js \
 	d3.time.js \
-	src/end.js
+	$(SRC)/end.js
 
 d3.core.js: \
-	src/compat/date.js \
-	src/compat/style.js \
-	src/core/core.js \
-	src/core/class.js \
-	src/core/array.js \
-	src/core/map.js \
-	src/core/identity.js \
-	src/core/this.js \
-	src/core/true.js \
-	src/core/functor.js \
-	src/core/rebind.js \
-	src/core/ascending.js \
-	src/core/descending.js \
-	src/core/mean.js \
-	src/core/median.js \
-	src/core/min.js \
-	src/core/max.js \
-	src/core/extent.js \
-	src/core/random.js \
-	src/core/number.js \
-	src/core/sum.js \
-	src/core/quantile.js \
-	src/core/transpose.js \
-	src/core/zip.js \
-	src/core/bisect.js \
-	src/core/first.js \
-	src/core/last.js \
-	src/core/nest.js \
-	src/core/keys.js \
-	src/core/values.js \
-	src/core/entries.js \
-	src/core/permute.js \
-	src/core/merge.js \
-	src/core/split.js \
-	src/core/collapse.js \
-	src/core/range.js \
-	src/core/requote.js \
-	src/core/round.js \
-	src/core/xhr.js \
-	src/core/text.js \
-	src/core/json.js \
-	src/core/html.js \
-	src/core/xml.js \
-	src/core/ns.js \
-	src/core/dispatch.js \
-	src/core/format.js \
-	src/core/formatPrefix.js \
-	src/core/ease.js \
-	src/core/event.js \
-	src/core/transform.js \
-	src/core/interpolate.js \
-	src/core/uninterpolate.js \
-	src/core/color.js \
-	src/core/rgb.js \
-	src/core/hsl.js \
-	src/core/hcl.js \
-	src/core/lab.js \
-	src/core/xyz.js \
-	src/core/selection.js \
-	src/core/selection-select.js \
-	src/core/selection-selectAll.js \
-	src/core/selection-attr.js \
-	src/core/selection-classed.js \
-	src/core/selection-style.js \
-	src/core/selection-property.js \
-	src/core/selection-text.js \
-	src/core/selection-html.js \
-	src/core/selection-append.js \
-	src/core/selection-insert.js \
-	src/core/selection-remove.js \
-	src/core/selection-data.js \
-	src/core/selection-datum.js \
-	src/core/selection-filter.js \
-	src/core/selection-order.js \
-	src/core/selection-sort.js \
-	src/core/selection-on.js \
-	src/core/selection-each.js \
-	src/core/selection-call.js \
-	src/core/selection-empty.js \
-	src/core/selection-node.js \
-	src/core/selection-transition.js \
-	src/core/selection-root.js \
-	src/core/selection-enter.js \
-	src/core/selection-enter-select.js \
-	src/core/transition.js \
-	src/core/transition-select.js \
-	src/core/transition-selectAll.js \
-	src/core/transition-filter.js \
-	src/core/transition-attr.js \
-	src/core/transition-style.js \
-	src/core/transition-text.js \
-	src/core/transition-remove.js \
-	src/core/transition-delay.js \
-	src/core/transition-duration.js \
-	src/core/transition-each.js \
-	src/core/transition-transition.js \
-	src/core/tween.js \
-	src/core/timer.js \
-	src/core/mouse.js \
-	src/core/touches.js \
-	src/core/noop.js
+	$(SRC)/compat/date.js \
+	$(SRC)/compat/style.js \
+	$(SRC)/core/core.js \
+	$(SRC)/core/class.js \
+	$(SRC)/core/array.js \
+	$(SRC)/core/map.js \
+	$(SRC)/core/identity.js \
+	$(SRC)/core/this.js \
+	$(SRC)/core/true.js \
+	$(SRC)/core/functor.js \
+	$(SRC)/core/rebind.js \
+	$(SRC)/core/ascending.js \
+	$(SRC)/core/descending.js \
+	$(SRC)/core/mean.js \
+	$(SRC)/core/median.js \
+	$(SRC)/core/min.js \
+	$(SRC)/core/max.js \
+	$(SRC)/core/extent.js \
+	$(SRC)/core/random.js \
+	$(SRC)/core/number.js \
+	$(SRC)/core/sum.js \
+	$(SRC)/core/quantile.js \
+	$(SRC)/core/transpose.js \
+	$(SRC)/core/zip.js \
+	$(SRC)/core/bisect.js \
+	$(SRC)/core/first.js \
+	$(SRC)/core/last.js \
+	$(SRC)/core/nest.js \
+	$(SRC)/core/keys.js \
+	$(SRC)/core/values.js \
+	$(SRC)/core/entries.js \
+	$(SRC)/core/permute.js \
+	$(SRC)/core/merge.js \
+	$(SRC)/core/split.js \
+	$(SRC)/core/collapse.js \
+	$(SRC)/core/range.js \
+	$(SRC)/core/requote.js \
+	$(SRC)/core/round.js \
+	$(SRC)/core/xhr.js \
+	$(SRC)/core/text.js \
+	$(SRC)/core/json.js \
+	$(SRC)/core/html.js \
+	$(SRC)/core/xml.js \
+	$(SRC)/core/ns.js \
+	$(SRC)/core/dispatch.js \
+	$(SRC)/core/format.js \
+	$(SRC)/core/formatPrefix.js \
+	$(SRC)/core/ease.js \
+	$(SRC)/core/event.js \
+	$(SRC)/core/transform.js \
+	$(SRC)/core/interpolate.js \
+	$(SRC)/core/uninterpolate.js \
+	$(SRC)/core/color.js \
+	$(SRC)/core/rgb.js \
+	$(SRC)/core/hsl.js \
+	$(SRC)/core/hcl.js \
+	$(SRC)/core/lab.js \
+	$(SRC)/core/xyz.js \
+	$(SRC)/core/selection.js \
+	$(SRC)/core/selection-select.js \
+	$(SRC)/core/selection-selectAll.js \
+	$(SRC)/core/selection-attr.js \
+	$(SRC)/core/selection-classed.js \
+	$(SRC)/core/selection-style.js \
+	$(SRC)/core/selection-property.js \
+	$(SRC)/core/selection-text.js \
+	$(SRC)/core/selection-html.js \
+	$(SRC)/core/selection-append.js \
+	$(SRC)/core/selection-insert.js \
+	$(SRC)/core/selection-remove.js \
+	$(SRC)/core/selection-data.js \
+	$(SRC)/core/selection-datum.js \
+	$(SRC)/core/selection-filter.js \
+	$(SRC)/core/selection-order.js \
+	$(SRC)/core/selection-sort.js \
+	$(SRC)/core/selection-on.js \
+	$(SRC)/core/selection-each.js \
+	$(SRC)/core/selection-call.js \
+	$(SRC)/core/selection-empty.js \
+	$(SRC)/core/selection-node.js \
+	$(SRC)/core/selection-transition.js \
+	$(SRC)/core/selection-root.js \
+	$(SRC)/core/selection-enter.js \
+	$(SRC)/core/selection-enter-select.js \
+	$(SRC)/core/transition.js \
+	$(SRC)/core/transition-select.js \
+	$(SRC)/core/transition-selectAll.js \
+	$(SRC)/core/transition-filter.js \
+	$(SRC)/core/transition-attr.js \
+	$(SRC)/core/transition-style.js \
+	$(SRC)/core/transition-text.js \
+	$(SRC)/core/transition-remove.js \
+	$(SRC)/core/transition-delay.js \
+	$(SRC)/core/transition-duration.js \
+	$(SRC)/core/transition-each.js \
+	$(SRC)/core/transition-transition.js \
+	$(SRC)/core/tween.js \
+	$(SRC)/core/timer.js \
+	$(SRC)/core/mouse.js \
+	$(SRC)/core/touches.js \
+	$(SRC)/core/noop.js
 
 d3.scale.js: \
-	src/scale/scale.js \
-	src/scale/nice.js \
-	src/scale/linear.js \
-	src/scale/bilinear.js \
-	src/scale/polylinear.js \
-	src/scale/log.js \
-	src/scale/pow.js \
-	src/scale/sqrt.js \
-	src/scale/ordinal.js \
-	src/scale/category.js \
-	src/scale/quantile.js \
-	src/scale/quantize.js \
-	src/scale/threshold.js \
-	src/scale/identity.js
+	$(SRC)/scale/scale.js \
+	$(SRC)/scale/nice.js \
+	$(SRC)/scale/linear.js \
+	$(SRC)/scale/bilinear.js \
+	$(SRC)/scale/polylinear.js \
+	$(SRC)/scale/log.js \
+	$(SRC)/scale/pow.js \
+	$(SRC)/scale/sqrt.js \
+	$(SRC)/scale/ordinal.js \
+	$(SRC)/scale/category.js \
+	$(SRC)/scale/quantile.js \
+	$(SRC)/scale/quantize.js \
+	$(SRC)/scale/threshold.js \
+	$(SRC)/scale/identity.js
 
 d3.svg.js: \
-	src/svg/svg.js \
-	src/svg/arc.js \
-	src/svg/line.js \
-	src/svg/line-radial.js \
-	src/svg/area.js \
-	src/svg/area-radial.js \
-	src/svg/chord.js \
-	src/svg/diagonal.js \
-	src/svg/diagonal-radial.js \
-	src/svg/mouse.js \
-	src/svg/touches.js \
-	src/svg/symbol.js \
-	src/svg/axis.js \
-	src/svg/brush.js
+	$(SRC)/svg/svg.js \
+	$(SRC)/svg/arc.js \
+	$(SRC)/svg/line.js \
+	$(SRC)/svg/line-radial.js \
+	$(SRC)/svg/area.js \
+	$(SRC)/svg/area-radial.js \
+	$(SRC)/svg/chord.js \
+	$(SRC)/svg/diagonal.js \
+	$(SRC)/svg/diagonal-radial.js \
+	$(SRC)/svg/mouse.js \
+	$(SRC)/svg/touches.js \
+	$(SRC)/svg/symbol.js \
+	$(SRC)/svg/axis.js \
+	$(SRC)/svg/brush.js
 
 d3.behavior.js: \
-	src/behavior/behavior.js \
-	src/behavior/drag.js \
-	src/behavior/zoom.js
+	$(SRC)/behavior/behavior.js \
+	$(SRC)/behavior/drag.js \
+	$(SRC)/behavior/zoom.js
 
 d3.layout.js: \
-	src/layout/layout.js \
-	src/layout/bundle.js \
-	src/layout/chord.js \
-	src/layout/force.js \
-	src/layout/partition.js \
-	src/layout/pie.js \
-	src/layout/stack.js \
-	src/layout/histogram.js \
-	src/layout/hierarchy.js \
-	src/layout/pack.js \
-	src/layout/cluster.js \
-	src/layout/tree.js \
-	src/layout/treemap.js
+	$(SRC)/layout/layout.js \
+	$(SRC)/layout/bundle.js \
+	$(SRC)/layout/chord.js \
+	$(SRC)/layout/force.js \
+	$(SRC)/layout/partition.js \
+	$(SRC)/layout/pie.js \
+	$(SRC)/layout/stack.js \
+	$(SRC)/layout/histogram.js \
+	$(SRC)/layout/hierarchy.js \
+	$(SRC)/layout/pack.js \
+	$(SRC)/layout/cluster.js \
+	$(SRC)/layout/tree.js \
+	$(SRC)/layout/treemap.js
 
 d3.geo.js: \
-	src/geo/geo.js \
-	src/geo/azimuthal.js \
-	src/geo/albers.js \
-	src/geo/bonne.js \
-	src/geo/equirectangular.js \
-	src/geo/mercator.js \
-	src/geo/type.js \
-	src/geo/path.js \
-	src/geo/bounds.js \
-	src/geo/circle.js \
-	src/geo/greatArc.js \
-	src/geo/greatCircle.js
+	$(SRC)/geo/geo.js \
+	$(SRC)/geo/azimuthal.js \
+	$(SRC)/geo/albers.js \
+	$(SRC)/geo/bonne.js \
+	$(SRC)/geo/equirectangular.js \
+	$(SRC)/geo/mercator.js \
+	$(SRC)/geo/type.js \
+	$(SRC)/geo/path.js \
+	$(SRC)/geo/bounds.js \
+	$(SRC)/geo/circle.js \
+	$(SRC)/geo/greatArc.js \
+	$(SRC)/geo/greatCircle.js
 
 d3.dsv.js: \
-	src/dsv/dsv.js \
-	src/dsv/csv.js \
-	src/dsv/tsv.js
+	$(SRC)/dsv/dsv.js \
+	$(SRC)/dsv/csv.js \
+	$(SRC)/dsv/tsv.js
 
 d3.time.js: \
-	src/time/time.js \
-	src/time/format-$(LOCALE).js \
-	src/time/format.js \
-	src/time/format-utc.js \
-	src/time/format-iso.js \
-	src/time/interval.js \
-	src/time/second.js \
-	src/time/minute.js \
-	src/time/hour.js \
-	src/time/day.js \
-	src/time/week.js \
-	src/time/month.js \
-	src/time/year.js \
-	src/time/scale.js \
-	src/time/scale-utc.js
+	$(SRC)/time/time.js \
+	$(SRC)/time/format-$(LOCALE).js \
+	$(SRC)/time/format.js \
+	$(SRC)/time/format-utc.js \
+	$(SRC)/time/format-iso.js \
+	$(SRC)/time/interval.js \
+	$(SRC)/time/second.js \
+	$(SRC)/time/minute.js \
+	$(SRC)/time/hour.js \
+	$(SRC)/time/day.js \
+	$(SRC)/time/week.js \
+	$(SRC)/time/month.js \
+	$(SRC)/time/year.js \
+	$(SRC)/time/scale.js \
+	$(SRC)/time/scale-utc.js
 
 d3.geom.js: \
-	src/geom/geom.js \
-	src/geom/contour.js \
-	src/geom/hull.js \
-	src/geom/polygon.js \
-	src/geom/voronoi.js \
-	src/geom/delaunay.js \
-	src/geom/quadtree.js
+	$(SRC)/geom/geom.js \
+	$(SRC)/geom/contour.js \
+	$(SRC)/geom/hull.js \
+	$(SRC)/geom/polygon.js \
+	$(SRC)/geom/voronoi.js \
+	$(SRC)/geom/delaunay.js \
+	$(SRC)/geom/quadtree.js
 
 test: all
 	@$(JS_TESTER)
+
+test-cov:
+	rm -rf $(SRC)-cov;
+	jscoverage --encoding=utf-8 --exclude=start.js --exclude=end.js  $(SRC) $(SRC)-cov;
+	for file in start.js end.js; do cp $(SRC)/$$file $(SRC)-cov/$$file; done
+	SRC=$(SRC)-cov JS_TESTER_OPTS="--cover-html" make test
+	open coverage.html
 
 %.min.js: %.js Makefile
 	@rm -f $@
@@ -239,14 +248,14 @@ d3%.js: Makefile
 	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
 	@chmod a-w $@
 
-component.json: src/component.js
+component.json: $(SRC)/component.js
 	@rm -f $@
-	node src/component.js > $@
+	node $(SRC)/component.js > $@
 	@chmod a-w $@
 
-package.json: src/package.js
+package.json: $(SRC)/package.js
 	@rm -f $@
-	node src/package.js > $@
+	node $(SRC)/package.js > $@
 	@chmod a-w $@
 
 clean:
