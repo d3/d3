@@ -1,6 +1,6 @@
 d3.geo.circle = function() {
   var origin = [0, 0],
-      degrees = 90,
+      degrees,
       clip,
       precision = 6 * d3_radians,
       rotate,
@@ -9,10 +9,10 @@ d3.geo.circle = function() {
   function circle(d) {
     var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
     rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-    var ring = [],
-        rings = [ring];
-    d3_geo_circleInterpolateCircle(interpolate, bufferContext(rings));
-    ring.push(ring[0]);
+    var rings = [[]];
+        context = bufferContext(rings);
+    d3_geo_circleInterpolateCircle(interpolate, context);
+    context.closePath();
     return {
       type: "Polygon",
       coordinates: rings
@@ -104,7 +104,7 @@ d3.geo.circle = function() {
     return circle;
   }
 
-  return circle;
+  return circle.angle(90);
 
   function bufferContext(lineStrings) {
     var lineString = lineStrings[0];
