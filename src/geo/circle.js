@@ -2,7 +2,7 @@ d3.geo.circle = function() {
   var origin = [0, 0],
       degrees,
       clip,
-      precision = 6 * d3_radians,
+      precision = 6,
       rotate,
       interpolate;
 
@@ -94,13 +94,13 @@ d3.geo.circle = function() {
 
   circle.angle = function(x) {
     if (!arguments.length) return degrees;
-    interpolate = d3_geo_circleInterpolate((degrees = +x) * d3_radians, precision);
+    interpolate = d3_geo_circleInterpolate((degrees = +x) * d3_radians, precision * d3_radians);
     return circle;
   };
 
   circle.precision = function(_) {
     if (!arguments.length) return precision;
-    interpolate = d3_geo_circleInterpolate(radians, precision = _ * d3_radians);
+    interpolate = d3_geo_circleInterpolate(radians, (precision = +_) * d3_radians);
     return circle;
   }
 
