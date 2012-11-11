@@ -43,7 +43,7 @@ var svg = d3.select("body").append("svg")
     .call(zoom);
 
 var g = svg.append("g"),
-    feature = g.selectAll(".feature");
+    feature = g.append("path").attr("class", "feature");
 
 svg.append("rect")
     .attr("class", "frame")
@@ -51,11 +51,7 @@ svg.append("rect")
     .attr("height", height);
 
 d3.json("../data/world-countries.json", function(error, collection) {
-  feature = feature
-      .data(collection.features)
-    .enter().append("path")
-      .attr("class", "feature")
-      .attr("d", path);
+  feature.datum(collection).attr("d", path);
 });
 
 function move() {
