@@ -1,12 +1,22 @@
 d3.geo.circle = function() {
   var origin = [0, 0],
-      degrees = 90,
+      degrees,
       clip,
-      precision, // deprecated
-      rotate;
+      precision = 6,
+      rotate,
+      interpolate;
 
-  function circle() {
-    // TODO render a circle as a Polygon
+  function circle(d) {
+    var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
+    rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
+    var rings = [[]];
+        context = bufferContext(rings);
+    d3_geo_circleInterpolateCircle(interpolate, context);
+    context.closePath();
+    return {
+      type: "Polygon",
+      coordinates: rings
+    };
   }
 
   circle.clip = function(d) {
@@ -84,21 +94,20 @@ d3.geo.circle = function() {
 
   circle.angle = function(x) {
     if (!arguments.length) return degrees;
-    degrees = +x;
+    interpolate = d3_geo_circleInterpolate((degrees = +x) * d3_radians, precision * d3_radians);
     return circle;
   };
 
-  // TODO deprecate
   circle.precision = function(_) {
     if (!arguments.length) return precision;
-    precision = +_;
+    interpolate = d3_geo_circleInterpolate(radians, (precision = +_) * d3_radians);
     return circle;
   }
 
-  return circle;
+  return circle.angle(90);
 
   function bufferContext(lineStrings) {
-    var lineString = null;
+    var lineString = lineStrings[0];
     return {
       moveTo: function(λ, φ) {
         var point = rotate.invert(λ, φ);
@@ -121,13 +130,13 @@ d3.geo.circle = function() {
 
 function d3_geo_circleClip(degrees, rotate) {
   var radians = degrees * d3_radians,
-      precision = 6 * d3_radians,
       normal = [1, 0, 0], // Cartesian normal to the circle origin.
       reference = [0, -1, 0], // Cartesian reference point lying on the circle.
       cr = Math.cos(radians),
       sr = Math.sin(radians),
       center = d3_geo_circleScale(normal, cr), // Cartesian center of the circle.
-      angle = d3_geo_circleAngle(center);
+      angle = d3_geo_circleAngle(center),
+      interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
 
   return {
     point: function(coordinates, context) {
@@ -211,8 +220,15 @@ function d3_geo_circleClip(degrees, rotate) {
     d3_geo_circleAdd(q, A);
     return d3_geo_circleSpherical(q);
   }
+}
 
-  function interpolate(from, to, context) {
+function d3_geo_circleInterpolate(radians, precision) {
+  var normal = [1, 0, 0],
+      reference = [0, -1, 0],
+      cr = Math.cos(radians),
+      sr = Math.sin(radians),
+      center = d3_geo_circleScale(normal, cr); // Cartesian center of the circle.
+  return function(from, to, context) {
     from = from.angle;
     to = to.angle;
     if (from < to) from += 2 * Math.PI;
@@ -233,14 +249,13 @@ function d3_geo_circleClip(degrees, rotate) {
           ]);
       context.lineTo(point[0], point[1]);
     }
-  }
-};
+  };
+}
 
 function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, angle) {
   var unvisited = 0, // number of unvisited entering intersections
-      intersections = [];
-  // Clip each ring into segments.
-  var segments = [],
+      intersections = [],
+      segments = [],
       buffer = d3_geo_circleBufferSegments(clipLine),
       winding = 0;
   coordinates.forEach(function(ring) {
@@ -263,10 +278,9 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
     segments = segments.concat(ringSegments);
   });
   if (winding > 0) {
-    winding = [];
     segments.push(winding = []);
     x = {lineTo: function(x, y) { winding.push([x, y]); }};
-    for (var i = 0; i < 4; i++) interpolate({angle: -i * π / 2}, {angle: -(i + 1) * π / 2}, x);
+    d3_geo_circleInterpolateCircle(interpolate, x);
     winding.push(winding[0]);
   }
   // Create a circular linked list using the intersected segment start and
@@ -418,4 +432,10 @@ function d3_geo_circleWinding(p0, p) {
     if (p[1] <= 0 && (p0[0] - p[0]) * p0[1] + p0[0] * (p[1] - p0[1]) < 0) return -1;
   }
   return 0;
+}
+
+function d3_geo_circleInterpolateCircle(interpolate, context) {
+  for (var i = 0; i < 4; i++) {
+    interpolate({angle: -i * π / 2}, {angle: -(i + 1) * π / 2}, context);
+  }
 }
