@@ -42,8 +42,8 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .call(zoom);
 
-var g = svg.append("g"),
-    feature = g.append("path").attr("class", "feature");
+var feature = svg.append("path")
+    .attr("class", "feature");
 
 svg.append("rect")
     .attr("class", "frame")
