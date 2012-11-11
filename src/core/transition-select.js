@@ -3,9 +3,7 @@ d3_transitionPrototype.select = function(selector) {
       subgroups = [],
       subgroup,
       subnode,
-      node,
-      transition,
-      subtransition;
+      node;
 
   if (typeof selector !== "function") selector = d3_selection_selector(selector);
 

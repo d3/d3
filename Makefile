@@ -35,7 +35,6 @@ d3.core.js: \
 	src/core/array.js \
 	src/core/map.js \
 	src/core/identity.js \
-	src/core/this.js \
 	src/core/true.js \
 	src/core/functor.js \
 	src/core/rebind.js \

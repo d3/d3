@@ -4,7 +4,7 @@ d3.layout.pie = function() {
       startAngle = 0,
       endAngle = 2 * π;
 
-  function pie(data, i) {
+  function pie(data) {
 
     // Compute the numeric values for each data element.
     var values = data.map(function(d, i) { return +value.call(pie, d, i); });

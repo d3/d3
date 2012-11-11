@@ -6,7 +6,7 @@ d3.geo.circle = function() {
       rotate,
       interpolate;
 
-  function circle(d) {
+  function circle() {
     var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
     rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
     var rings = [[]];
@@ -131,10 +131,7 @@ d3.geo.circle = function() {
 function d3_geo_circleClip(degrees, rotate) {
   var radians = degrees * d3_radians,
       normal = [1, 0, 0], // Cartesian normal to the circle origin.
-      reference = [0, -1, 0], // Cartesian reference point lying on the circle.
-      cr = Math.cos(radians),
-      sr = Math.sin(radians),
-      center = d3_geo_circleScale(normal, cr), // Cartesian center of the circle.
+      center = d3_geo_circleScale(normal, Math.cos(radians)), // Cartesian center of the circle.
       angle = d3_geo_circleAngle(center),
       interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
 
@@ -403,16 +400,18 @@ function d3_geo_circleNormalize(d) {
 }
 
 function d3_geo_circleBufferSegments(f) {
-  return function(coordinates, context) {
+  return function(coordinates) {
     var segments = [],
-        segment,
-        winding = f(coordinates, {
-      point: function() {},
-      moveTo: function(x, y) { segments.push(segment = [[x, y]]); },
-      lineTo: function(x, y) { segment.push([x, y]); },
-      closePath: function() {}
-    }, 0);
-    return [winding, segments];
+        segment;
+    return [
+      f(coordinates, {
+          point: d3_noop,
+          moveTo: function(x, y) { segments.push(segment = [[x, y]]); },
+          lineTo: function(x, y) { segment.push([x, y]); },
+          closePath: d3_noop
+        }, 0),
+      segments
+    ];
   };
 }
 

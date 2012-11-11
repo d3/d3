@@ -15,7 +15,7 @@ d3.layout.stack = function() {
     });
 
     // Convert each series to canonical [[x,y]] representation.
-    var points = series.map(function(d, i) {
+    var points = series.map(function(d) {
       return d.map(function(v, i) {
         return [x.call(stack, v, i), y.call(stack, v, i)];
       });
@@ -157,7 +157,6 @@ var d3_layout_stackOffsets = d3.map({
     var n = data.length,
         x = data[0],
         m = x.length,
-        max = 0,
         i,
         j,
         k,

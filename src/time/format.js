@@ -114,7 +114,7 @@ var d3_time_formats = {
   y: function(d, p) { return d3_time_formatPad(d.getFullYear() % 100, p, 2); },
   Y: function(d, p) { return d3_time_formatPad(d.getFullYear() % 10000, p, 4); },
   Z: d3_time_zone,
-  "%": function(d) { return "%"; }
+  "%": function() { return "%"; }
 };
 
 var d3_time_parsers = {

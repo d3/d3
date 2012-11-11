@@ -89,11 +89,3 @@ function d3_svg_chordTarget(d) {
 function d3_svg_chordRadius(d) {
   return d.radius;
 }
-
-function d3_svg_chordStartAngle(d) {
-  return d.startAngle;
-}
-
-function d3_svg_chordEndAngle(d) {
-  return d.endAngle;
-}

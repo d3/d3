@@ -100,9 +100,3 @@ function d3_geo_greatArcInterpolator() {
 
   return interpolate;
 }
-
-function d3_geo_greatArcInterpolate(a, b) {
-  var i = d3_geo_greatArcInterpolator().source(a).target(b);
-  i.distance();
-  return i;
-}
