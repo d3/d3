@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<meta charset="utf-8">    <title>Force-Directed Graph</title>
-    <script src="../../d3.js"></script>
+<meta charset="utf-8">
+<title>Force-Directed Graph</title>
 <style>
 
 circle.node {
@@ -16,10 +16,9 @@ line.link {
 }
 
 </style>
-  </head>
-  <body>
-    <div id="chart"></div>
-    <script>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 500,
@@ -28,17 +27,17 @@ var width = 960,
     root;
 
 var force = d3.layout.force()
-    .on("tick", tick)
+    .size([width, height])
     .charge(function(d) { return d._children ? -d.size / 100 : -30; })
     .linkDistance(function(d) { return d.target._children ? 80 : 30; })
-    .size([width, height]);
+    .on("tick", tick);
 
-var vis = d3.select("#chart").append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("../data/flare.json", function(error, json) {
-  root = json;
+d3.json("../data/flare.json", function(error, flare) {
+  root = flare;
   root.fixed = true;
   root.x = width / 2;
   root.y = height / 2;
@@ -56,7 +55,7 @@ function update() {
       .start();
 
   // Update the links…
-  link = vis.selectAll("line.link")
+  link = svg.selectAll("line.link")
       .data(links, function(d) { return d.target.id; });
 
   // Enter any new links.

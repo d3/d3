@@ -1,11 +1,65 @@
 <!DOCTYPE html>
-<meta charset="utf-8">    <title>U.S. Unemployment by County</title>
-    <script src="../../d3.js"></script>
-    <link type="text/css" rel="stylesheet" href="choropleth.css"/>
-    <link type="text/css" rel="stylesheet" href="../../lib/colorbrewer/colorbrewer.css"/>
-  </head>
-  <body>
-    <div id="chart"></div>
-    <script src="choropleth.js"></script>
-  </body>
-</html>
+<meta charset="utf-8">
+<title>U.S. Unemployment by County</title>
+<style>
+
+@import url(../../lib/colorbrewer/colorbrewer.css);
+
+.counties {
+  stroke: #fff;
+  stroke-width: .5px;
+  stroke-opacity: .5;
+}
+
+.states {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script src="../../lib/queue/queue.js"></script>
+<script>
+
+var width = 960,
+    height = 500;
+
+var quantize = d3.scale.quantize()
+    .domain([0, 15])
+    .range(d3.range(9).map(function(i) { return "q" + i + "-9"; }));
+
+var path = d3.geo.path();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("class", "Blues");
+
+queue()
+    .defer(d3.json, "../data/us-counties.json")
+    .defer(d3.json, "../data/us-states.json")
+    .defer(d3.json, "unemployment.json")
+    .await(ready);
+
+function ready(error, data) {
+  var counties = data[0],
+      states = data[1],
+      unemployment = data[2];
+
+  svg.append("g")
+      .attr("class", "counties")
+    .selectAll("path")
+      .data(counties.features)
+    .enter().append("path")
+      .attr("class", function(d) { return quantize(unemployment[d.id]); })
+      .attr("d", path);
+
+  svg.append("path")
+      .datum(states)
+      .attr("class", "states")
+      .attr("d", path);
+}
+
+</script>

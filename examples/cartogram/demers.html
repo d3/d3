@@ -1,10 +1,121 @@
 <!DOCTYPE html>
-<meta charset="utf-8">    <title>Demers Cartogram</title>
-    <script src="../../d3.js"></script>
-    <link type="text/css" rel="stylesheet" href="demers.css"/>
-  </head>
-  <body>
-    <div id="chart"></div>
-    <script src="demers.js"></script>
-  </body>
-</html>
+<meta charset="utf-8">
+<title>Demers Cartogram</title>
+<style>
+
+rect {
+  fill: #eee;
+  stroke: #000;
+  stroke-width: 1.5px;
+}
+
+</style>
+<body>
+Note: This is not a true Demers cartogram; it lacks links between adjacent features.
+<script src="../../d3.js"></script>
+<script>
+
+// Ratio of Obese (BMI >= 30) in U.S. Adults, CDC 2008
+var valueById = [
+   NaN, .187, .198,  NaN, .133, .175, .151,  NaN, .100, .125,
+  .171,  NaN, .172, .133,  NaN, .108, .142, .167, .201, .175,
+  .159, .169, .177, .141, .163, .117, .182, .153, .195, .189,
+  .134, .163, .133, .151, .145, .130, .139, .169, .164, .175,
+  .135, .152, .169,  NaN, .132, .167, .139, .184, .159, .140,
+  .146, .157,  NaN, .139, .183, .160, .143
+];
+
+var margin = {top: 0, right: 0, bottom: 0, left: 0},
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom,
+    padding = 3;
+
+var projection = d3.geo.albersUsa();
+
+var radius = d3.scale.sqrt()
+    .domain([0, d3.max(valueById)])
+    .range([0, 30]);
+
+var force = d3.layout.force()
+    .charge(0)
+    .gravity(0)
+    .size([width, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+d3.json("../data/us-state-centroids.json", function(error, states) {
+  var nodes = states.features
+      .filter(function(d) { return !isNaN(valueById[+d.id]); })
+      .map(function(d) {
+        var point = projection(d.geometry.coordinates),
+            value = valueById[+d.id];
+        if (isNaN(value)) fail();
+        return {
+          x: point[0], y: point[1],
+          x0: point[0], y0: point[1],
+          r: radius(value),
+          value: value
+        };
+      });
+
+  force
+      .nodes(nodes)
+      .on("tick", tick)
+      .start();
+
+  var node = svg.selectAll("rect")
+      .data(nodes)
+    .enter().append("rect")
+      .attr("width", function(d) { return d.r * 2; })
+      .attr("height", function(d) { return d.r * 2; });
+
+  function tick(e) {
+    node.each(gravity(e.alpha * .1))
+        .each(collide(.5))
+        .attr("x", function(d) { return d.x - d.r; })
+        .attr("y", function(d) { return d.y - d.r; });
+  }
+
+  function gravity(k) {
+    return function(d) {
+      d.x += (d.x0 - d.x) * k;
+      d.y += (d.y0 - d.y) * k;
+    };
+  }
+
+  function collide(k) {
+    var q = d3.geom.quadtree(nodes);
+    return function(node) {
+      var nr = node.r + padding,
+          nx1 = node.x - nr,
+          nx2 = node.x + nr,
+          ny1 = node.y - nr,
+          ny2 = node.y + nr;
+      q.visit(function(quad, x1, y1, x2, y2) {
+        if (quad.point && (quad.point !== node)) {
+          var x = node.x - quad.point.x,
+              y = node.y - quad.point.y,
+              lx = Math.abs(x),
+              ly = Math.abs(y),
+              r = nr + quad.point.r;
+          if (lx < r && ly < r) {
+            if (lx > ly) {
+              lx = (lx - r) * k * (x < 0 ? -1 : 1);
+              node.x -= lx;
+              quad.point.x += lx;
+            } else {
+              ly = (ly - r) * k * (y < 0 ? -1 : 1);
+              node.y -= ly;
+              quad.point.y += ly;
+            }
+          }
+        }
+        return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+      });
+    };
+  }
+});
+
+</script>

@@ -1,10 +1,76 @@
 <!DOCTYPE html>
-<meta charset="utf-8">    <title>Non-Contiguous Cartogram</title>
-    <script src="../../d3.js"></script>
-    <link type="text/css" rel="stylesheet" href="cartogram.css"/>
-  </head>
-  <body>
-    <div id="chart"></div>
-    <script src="cartogram.js"></script>
-  </body>
-</html>
+<meta charset="utf-8">
+<title>Non-Contiguous Cartogram</title>
+<style>
+
+.black {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 3px;
+}
+
+.white {
+  fill: #fff;
+}
+
+.grey {
+  fill: #ccc;
+  stroke: #666;
+}
+
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
+
+// Ratio of Obese (BMI >= 30) in U.S. Adults, CDC 2008
+var valueById = [
+   NaN, .187, .198,  NaN, .133, .175, .151,  NaN, .100, .125,
+  .171,  NaN, .172, .133,  NaN, .108, .142, .167, .201, .175,
+  .159, .169, .177, .141, .163, .117, .182, .153, .195, .189,
+  .134, .163, .133, .151, .145, .130, .139, .169, .164, .175,
+  .135, .152, .169,  NaN, .132, .167, .139, .184, .159, .140,
+  .146, .157,  NaN, .139, .183, .160, .143
+];
+
+var path = d3.geo.path();
+
+var svg = d3.select("body").append("svg")
+    .attr("width", 960)
+    .attr("height", 500);
+
+d3.json("../data/us-states.json", function(error, collection) {
+
+  // A thick black stroke for the exterior.
+  svg.append("path")
+      .datum(collection)
+      .attr("class", "black")
+      .attr("d", path);
+
+  // A white overlay to hide interior black strokes.
+  svg.append("path")
+      .datum(collection)
+      .attr("class", "white")
+      .attr("d", path);
+
+  // The polygons, scaled!
+  svg.append("g")
+      .attr("class", "grey")
+    .selectAll("path")
+      .data(collection.features)
+    .enter().append("path")
+      .attr("d", path)
+      .attr("transform", function(d) {
+        var centroid = path.centroid(d),
+            x = centroid[0],
+            y = centroid[1];
+        return "translate(" + x + "," + y + ")"
+            + "scale(" + Math.sqrt(valueById[+d.id] * 5 || 0) + ")"
+            + "translate(" + -x + "," + -y + ")";
+      })
+      .style("stroke-width", function(d) {
+        return 1 / Math.sqrt(valueById[+d.id] * 5 || 1);
+      });
+});
+
+</script>
