@@ -4737,7 +4737,7 @@
     function mousedown() {
       function point() {
         var p = target.parentNode;
-        return touchId ? d3.touches(p).filter(function(p) {
+        return isTouchEvent ? d3.touches(p).filter(function(p) {
           return p.identifier === touchId;
         })[0] : d3.mouse(p);
       }
@@ -4763,21 +4763,21 @@
           d3_eventCancel();
           if (d3.event.target === eventTarget) w.on("click.drag", click, true);
         }
-        w.on(touchId ? "touchmove.drag-" + touchId : "mousemove.drag", null).on(touchId ? "touchend.drag-" + touchId : "mouseup.drag", null);
+        w.on(isTouchEvent ? "touchmove.drag-" + touchId : "mousemove.drag", null).on(isTouchEvent ? "touchend.drag-" + touchId : "mouseup.drag", null);
       }
       function click() {
         d3_eventCancel();
         w.on("click.drag", null);
       }
-      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches && d3.event.changedTouches[0].identifier, offset, origin_ = point(), moved = 0;
-      var w = d3.select(window).on(touchId ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove).on(touchId ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
+      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches && d3.event.changedTouches[0].identifier, isTouchEvent = typeof touchId !== "undefined", offset, origin_ = point(), moved = 0;
+      var w = d3.select(window).on(isTouchEvent ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove).on(isTouchEvent ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
       if (origin) {
         offset = origin.apply(target, arguments);
         offset = [ offset.x - origin_[0], offset.y - origin_[1] ];
       } else {
         offset = [ 0, 0 ];
       }
-      if (!touchId) d3_eventCancel();
+      if (!isTouchEvent) d3_eventCancel();
       event_({
         type: "dragstart"
       });
