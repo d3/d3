@@ -24,9 +24,6 @@ EX_FILES = \
 	../data/us-states.json \
 	../ex/button.css \
 	../ex/sunburst.js \
-	../ex/bullet.js \
-	../ex/bullet.css \
-	../ex/bullets.json \
 	../ex/tree.js \
 	../ex/tree.css \
 	../ex/population.js \
@@ -41,8 +38,6 @@ INCLUDE_FILES = \
 	treemap.js \
 	splom.js \
 	sunburst.js \
-	bullet.js \
-	bullets.json \
 	bubble.js \
 	pack.js \
 	tree.js \
@@ -81,18 +76,6 @@ $(SRC_FILES):
 ../ex/cluster.css:
 	@rm -rf $@
 	git cat-file blob master:examples/cluster/cluster.css > $@
-
-../ex/bullet.js bullet.js:
-	@rm -rf $@
-	git cat-file blob master:examples/bullet/bullet.js > $@
-
-../ex/bullet.css:
-	@rm -rf $@
-	git cat-file blob master:examples/bullet/bullet.css > $@
-
-../ex/bullets.json bullets.json:
-	@rm -rf $@
-	git cat-file blob master:examples/bullet/bullets.json > $@
 
 ../ex/chord.css:
 	@rm -rf $@
