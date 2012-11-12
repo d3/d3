@@ -5,12 +5,9 @@ EX_FILES = \
 	../ex/colorbrewer.css \
 	../ex/dji.csv \
 	../ex/dji.js \
-	../ex/force.css \
-	../ex/force.js \
 	../data/flare.json \
 	../ex/treemap.css \
 	../ex/treemap.js \
-	../ex/miserables.json \
 	../ex/bubble.js \
 	../ex/bubble.css \
 	../ex/pack.js \
@@ -31,7 +28,6 @@ EX_FILES = \
 INCLUDE_FILES = \
 	cluster.js \
 	dji.js \
-	force.js \
 	treemap.js \
 	splom.js \
 	sunburst.js \
@@ -93,18 +89,6 @@ $(SRC_FILES):
 ../data/us-states.json:
 	@rm -rf $@
 	git cat-file blob master:examples/data/us-states.json > $@
-
-../ex/force.js force.js:
-	@rm -rf $@
-	git cat-file blob master:examples/force/force.js > $@
-
-../ex/force.css:
-	@rm -rf $@
-	git cat-file blob master:examples/force/force.css > $@
-
-../ex/miserables.json:
-	@rm -rf $@
-	git cat-file blob master:examples/force/miserables.json > $@
 
 ../ex/treemap.js treemap.js:
 	@rm -rf $@
