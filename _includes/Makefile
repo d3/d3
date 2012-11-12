@@ -2,8 +2,6 @@ EX_FILES = \
 	../ex/cluster.js \
 	../ex/cluster.css \
 	../ex/calendar.css \
-	../ex/chord.css \
-	../ex/chord.js \
 	../ex/colorbrewer.css \
 	../ex/dji.csv \
 	../ex/dji.js \
@@ -32,7 +30,6 @@ EX_FILES = \
 
 INCLUDE_FILES = \
 	cluster.js \
-	chord.js \
 	dji.js \
 	force.js \
 	treemap.js \
@@ -76,14 +73,6 @@ $(SRC_FILES):
 ../ex/cluster.css:
 	@rm -rf $@
 	git cat-file blob master:examples/cluster/cluster.css > $@
-
-../ex/chord.css:
-	@rm -rf $@
-	git cat-file blob master:examples/chord/chord.css > $@
-
-../ex/chord.js chord.js:
-	@rm -rf $@
-	git cat-file blob master:examples/chord/chord.js > $@
 
 ../ex/colorbrewer.css:
 	@rm -rf $@
