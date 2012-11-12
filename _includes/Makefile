@@ -20,10 +20,7 @@ EX_FILES = \
 	../ex/button.css \
 	../ex/sunburst.js \
 	../ex/tree.js \
-	../ex/tree.css \
-	../ex/population.js \
-	../ex/population.csv \
-	../ex/population.css
+	../ex/tree.css
 
 INCLUDE_FILES = \
 	cluster.js \
@@ -33,8 +30,7 @@ INCLUDE_FILES = \
 	sunburst.js \
 	bubble.js \
 	pack.js \
-	tree.js \
-	population.js
+	tree.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
@@ -129,15 +125,3 @@ $(SRC_FILES):
 ../ex/sunburst.js sunburst.js:
 	@rm -rf $@
 	git cat-file blob master:examples/partition/partition-sunburst.js > $@
-
-../ex/population.css:
-	@rm -rf $@
-	git cat-file blob master:examples/population/population.css > $@
-
-../ex/population.js population.js:
-	@rm -rf $@
-	git cat-file blob master:examples/population/population.js > $@
-
-../ex/population.csv:
-	@rm -rf $@
-	git cat-file blob master:examples/population/population.csv > $@
