@@ -9,8 +9,6 @@ EX_FILES = \
 	../ex/chord.js \
 	../ex/cartogram.css \
 	../ex/cartogram.js \
-	../ex/choropleth.css \
-	../ex/choropleth.js \
 	../ex/colorbrewer.css \
 	../ex/dji.csv \
 	../ex/dji.js \
@@ -36,8 +34,6 @@ EX_FILES = \
 	../ex/stream.js \
 	../ex/stream_layers.js \
 	../ex/stack.js \
-	../ex/voronoi.css \
-	../ex/voronoi.js \
 	../ex/sunburst.js \
 	../ex/bullet.js \
 	../ex/bullet.css \
@@ -53,7 +49,6 @@ INCLUDE_FILES = \
 	cluster.js \
 	cartogram.js \
 	chord.js \
-	choropleth.js \
 	dji.js \
 	force.js \
 	treemap.js \
@@ -61,7 +56,6 @@ INCLUDE_FILES = \
 	stream.js \
 	stream_layers.js \
 	stack.js \
-	voronoi.js \
 	sunburst.js \
 	bullet.js \
 	bullets.json \
@@ -143,14 +137,6 @@ $(SRC_FILES):
 ../ex/chord.js chord.js:
 	@rm -rf $@
 	git cat-file blob master:examples/chord/chord.js > $@
-
-../ex/choropleth.css:
-	@rm -rf $@
-	git cat-file blob master:examples/choropleth/choropleth.css > $@
-
-../ex/choropleth.js choropleth.js:
-	@rm -rf $@
-	git cat-file blob master:examples/choropleth/choropleth.js > $@
 
 ../ex/colorbrewer.css:
 	@rm -rf $@
@@ -243,14 +229,6 @@ $(SRC_FILES):
 ../ex/tree.css:
 	@rm -rf $@
 	git cat-file blob master:examples/tree/tree.css > $@
-
-../ex/voronoi.css:
-	@rm -rf $@
-	git cat-file blob master:examples/voronoi/voronoi.css > $@
-
-../ex/voronoi.js voronoi.js:
-	@rm -rf $@
-	git cat-file blob master:examples/voronoi/voronoi.js > $@
 
 ../ex/sunburst.js sunburst.js:
 	@rm -rf $@
