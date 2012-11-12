@@ -25,7 +25,6 @@ EX_FILES = \
 	../ex/splom.css \
 	../ex/splom.js \
 	../ex/flowers.json \
-	../ex/unemployment.json \
 	../data/us-counties.json \
 	../data/us-states.json \
 	../ex/stream.css \
@@ -157,10 +156,6 @@ $(SRC_FILES):
 ../data/us-states.json:
 	@rm -rf $@
 	git cat-file blob master:examples/data/us-states.json > $@
-
-../ex/unemployment.json:
-	@rm -rf $@
-	git cat-file blob master:examples/choropleth/unemployment.json > $@
 
 ../ex/force.js force.js:
 	@rm -rf $@
