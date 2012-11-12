@@ -25,12 +25,7 @@ EX_FILES = \
 	../ex/flowers.json \
 	../data/us-counties.json \
 	../data/us-states.json \
-	../ex/stream.css \
 	../ex/button.css \
-	../ex/stack.css \
-	../ex/stream.js \
-	../ex/stream_layers.js \
-	../ex/stack.js \
 	../ex/sunburst.js \
 	../ex/bullet.js \
 	../ex/bullet.css \
@@ -49,9 +44,6 @@ INCLUDE_FILES = \
 	force.js \
 	treemap.js \
 	splom.js \
-	stream.js \
-	stream_layers.js \
-	stack.js \
 	sunburst.js \
 	bullet.js \
 	bullets.json \
@@ -181,26 +173,6 @@ $(SRC_FILES):
 ../ex/flowers.json:
 	@rm -rf $@
 	git cat-file blob master:examples/splom/flowers.json > $@
-
-../ex/stack.js stack.js:
-	@rm -rf $@
-	git cat-file blob master:examples/stream/stack.js > $@
-
-../ex/stream.js stream.js:
-	@rm -rf $@
-	git cat-file blob master:examples/stream/stream.js > $@
-
-../ex/stream_layers.js stream_layers.js:
-	@rm -rf $@
-	git cat-file blob master:examples/stream/stream_layers.js > $@
-
-../ex/stream.css:
-	@rm -rf $@
-	git cat-file blob master:examples/stream/stream.css > $@
-
-../ex/stack.css:
-	@rm -rf $@
-	git cat-file blob master:examples/stream/stack.css > $@
 
 ../ex/button.css:
 	@rm -rf $@
