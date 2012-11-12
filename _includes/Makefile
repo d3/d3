@@ -1,7 +1,4 @@
 EX_FILES = \
-	../ex/box.js \
-	../ex/box.css \
-	../data/morley.csv \
 	../ex/cluster.js \
 	../ex/cluster.css \
 	../ex/calendar.css \
@@ -37,7 +34,6 @@ EX_FILES = \
 	../ex/population.css
 
 INCLUDE_FILES = \
-	box.js \
 	cluster.js \
 	chord.js \
 	dji.js \
@@ -61,18 +57,6 @@ $(SRC_FILES):
 ../ex/calendar.css:
 	@rm -rf $@
 	git cat-file blob master:examples/calendar/calendar.css > $@
-
-../ex/box.js box.js:
-	@rm -rf $@
-	git cat-file blob master:examples/box/box.js > $@
-
-../data/morley.csv:
-	@rm -rf $@
-	git cat-file blob master:examples/data/morley.csv > $@
-
-../ex/box.css:
-	@rm -rf $@
-	git cat-file blob master:examples/box/box.css > $@
 
 ../ex/pack.js pack.js:
 	@rm -rf $@
