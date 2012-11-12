@@ -7,8 +7,6 @@ EX_FILES = \
 	../ex/calendar.css \
 	../ex/chord.css \
 	../ex/chord.js \
-	../ex/cartogram.css \
-	../ex/cartogram.js \
 	../ex/colorbrewer.css \
 	../ex/dji.csv \
 	../ex/dji.js \
@@ -46,7 +44,6 @@ EX_FILES = \
 INCLUDE_FILES = \
 	box.js \
 	cluster.js \
-	cartogram.js \
 	chord.js \
 	dji.js \
 	force.js \
@@ -120,14 +117,6 @@ $(SRC_FILES):
 ../ex/bullets.json bullets.json:
 	@rm -rf $@
 	git cat-file blob master:examples/bullet/bullets.json > $@
-
-../ex/cartogram.css:
-	@rm -rf $@
-	git cat-file blob master:examples/cartogram/cartogram.css > $@
-
-../ex/cartogram.js cartogram.js:
-	@rm -rf $@
-	git cat-file blob master:examples/cartogram/cartogram.js > $@
 
 ../ex/chord.css:
 	@rm -rf $@
