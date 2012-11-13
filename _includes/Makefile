@@ -1,8 +1,6 @@
 EX_FILES = \
 	../ex/colorbrewer.css \
 	../data/flare.json \
-	../ex/treemap.css \
-	../ex/treemap.js \
 	../ex/splom.css \
 	../ex/splom.js \
 	../ex/flowers.json \
@@ -11,7 +9,6 @@ EX_FILES = \
 	../ex/button.css
 
 INCLUDE_FILES = \
-	treemap.js \
 	splom.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
@@ -31,14 +28,6 @@ $(SRC_FILES):
 ../data/us-states.json:
 	@rm -rf $@
 	git cat-file blob master:examples/data/us-states.json > $@
-
-../ex/treemap.js treemap.js:
-	@rm -rf $@
-	git cat-file blob master:examples/treemap/treemap.js > $@
-
-../ex/treemap.css:
-	@rm -rf $@
-	git cat-file blob master:examples/treemap/treemap.css > $@
 
 ../data/flare.json:
 	@rm -rf $@
