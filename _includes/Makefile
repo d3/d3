@@ -1,6 +1,4 @@
 EX_FILES = \
-	../ex/cluster.js \
-	../ex/cluster.css \
 	../ex/colorbrewer.css \
 	../data/flare.json \
 	../ex/treemap.css \
@@ -13,7 +11,6 @@ EX_FILES = \
 	../ex/button.css
 
 INCLUDE_FILES = \
-	cluster.js \
 	treemap.js \
 	splom.js
 
@@ -22,14 +19,6 @@ INCLUDE_FILES = \
 $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:$(subst ../,,$@) > $@
-
-../ex/cluster.js cluster.js:
-	@rm -rf $@
-	git cat-file blob master:examples/cluster/cluster.js > $@
-
-../ex/cluster.css:
-	@rm -rf $@
-	git cat-file blob master:examples/cluster/cluster.css > $@
 
 ../ex/colorbrewer.css:
 	@rm -rf $@
