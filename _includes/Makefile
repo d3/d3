@@ -5,8 +5,6 @@ EX_FILES = \
 	../data/flare.json \
 	../ex/treemap.css \
 	../ex/treemap.js \
-	../ex/pack.js \
-	../ex/pack.css \
 	../ex/splom.css \
 	../ex/splom.js \
 	../ex/flowers.json \
@@ -20,7 +18,6 @@ INCLUDE_FILES = \
 	cluster.js \
 	treemap.js \
 	splom.js \
-	pack.js \
 	tree.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
@@ -28,14 +25,6 @@ INCLUDE_FILES = \
 $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:$(subst ../,,$@) > $@
-
-../ex/pack.js pack.js:
-	@rm -rf $@
-	git cat-file blob master:examples/pack/pack.js > $@
-
-../ex/pack.css:
-	@rm -rf $@
-	git cat-file blob master:examples/pack/pack.css > $@
 
 ../ex/cluster.js cluster.js:
 	@rm -rf $@
