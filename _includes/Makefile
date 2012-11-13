@@ -13,7 +13,6 @@ EX_FILES = \
 	../data/us-counties.json \
 	../data/us-states.json \
 	../ex/button.css \
-	../ex/sunburst.js \
 	../ex/tree.js \
 	../ex/tree.css
 
@@ -21,7 +20,6 @@ INCLUDE_FILES = \
 	cluster.js \
 	treemap.js \
 	splom.js \
-	sunburst.js \
 	pack.js \
 	tree.js
 
@@ -94,7 +92,3 @@ $(SRC_FILES):
 ../ex/tree.css:
 	@rm -rf $@
 	git cat-file blob master:examples/tree/tree.css > $@
-
-../ex/sunburst.js sunburst.js:
-	@rm -rf $@
-	git cat-file blob master:examples/partition/partition-sunburst.js > $@
