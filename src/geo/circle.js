@@ -221,29 +221,19 @@ function d3_geo_circleClip(degrees, rotate) {
 }
 
 function d3_geo_circleInterpolate(radians, precision) {
-  var normal = [1, 0, 0],
-      reference = [0, -1, 0],
-      cr = Math.cos(radians),
-      sr = Math.sin(radians),
-      center = d3_geo_circleScale(normal, cr); // Cartesian center of the circle.
+  var cr = Math.cos(radians),
+      sr = Math.sin(radians);
   return function(from, to, context) {
     from = from.angle;
     to = to.angle;
     if (from < to) from += 2 * Math.PI;
-    var v = d3_geo_circleCross(normal, reference),
-        u0 = reference[0],
-        u1 = reference[1],
-        u2 = reference[2],
-        v0 = v[0],
-        v1 = v[1],
-        v2 = v[2];
     for (var step = precision, t = from; t > to; t -= step) {
       var c = Math.cos(t),
           s = Math.sin(t),
           point = d3_geo_circleSpherical([
-            center[0] + sr * (c * u0 + s * v0),
-            center[1] + sr * (c * u1 + s * v1),
-            center[2] + sr * (c * u2 + s * v2)
+            cr + sr,
+            -sr * c,
+            -sr * s
           ]);
       context.lineTo(point[0], point[1]);
     }
