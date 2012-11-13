@@ -5610,7 +5610,7 @@
     }
   };
   function d3_geo_circleClip(degrees, rotate) {
-    var radians = degrees * d3_radians, normal = [ 1, 0, 0 ], center = d3_geo_circleScale(normal, Math.cos(radians)), angle = d3_geo_circleAngle(center), interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
+    var radians = degrees * d3_radians, normal = [ 1, 0, 0 ], center = d3_geo_circleScale(normal, Math.cos(radians)), angle = d3_geo_circleAngle(center), cr = Math.cos(radians), interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
     return {
       point: function(coordinates, context) {
         if (visible(coordinates = rotate(coordinates))) {

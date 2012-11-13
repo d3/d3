@@ -133,6 +133,7 @@ function d3_geo_circleClip(degrees, rotate) {
       normal = [1, 0, 0], // Cartesian normal to the circle origin.
       center = d3_geo_circleScale(normal, Math.cos(radians)), // Cartesian center of the circle.
       angle = d3_geo_circleAngle(center),
+      cr = Math.cos(radians),
       interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
 
   return {
