@@ -1,10 +1,7 @@
 EX_FILES = \
 	../ex/cluster.js \
 	../ex/cluster.css \
-	../ex/calendar.css \
 	../ex/colorbrewer.css \
-	../ex/dji.csv \
-	../ex/dji.js \
 	../data/flare.json \
 	../ex/treemap.css \
 	../ex/treemap.js \
@@ -22,7 +19,6 @@ EX_FILES = \
 
 INCLUDE_FILES = \
 	cluster.js \
-	dji.js \
 	treemap.js \
 	splom.js \
 	sunburst.js \
@@ -34,10 +30,6 @@ INCLUDE_FILES = \
 $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:$(subst ../,,$@) > $@
-
-../ex/calendar.css:
-	@rm -rf $@
-	git cat-file blob master:examples/calendar/calendar.css > $@
 
 ../ex/pack.js pack.js:
 	@rm -rf $@
@@ -58,14 +50,6 @@ $(SRC_FILES):
 ../ex/colorbrewer.css:
 	@rm -rf $@
 	git cat-file blob master:lib/colorbrewer/colorbrewer.css > $@
-
-../ex/dji.js dji.js:
-	@rm -rf $@
-	git cat-file blob master:examples/calendar/dji.js > $@
-
-../ex/dji.csv:
-	@rm -rf $@
-	git cat-file blob master:examples/calendar/dji.csv > $@
 
 ../data/us-counties.json:
 	@rm -rf $@
