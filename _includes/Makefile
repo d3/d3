@@ -8,8 +8,6 @@ EX_FILES = \
 	../data/flare.json \
 	../ex/treemap.css \
 	../ex/treemap.js \
-	../ex/bubble.js \
-	../ex/bubble.css \
 	../ex/pack.js \
 	../ex/pack.css \
 	../ex/splom.css \
@@ -28,7 +26,6 @@ INCLUDE_FILES = \
 	treemap.js \
 	splom.js \
 	sunburst.js \
-	bubble.js \
 	pack.js \
 	tree.js
 
@@ -49,14 +46,6 @@ $(SRC_FILES):
 ../ex/pack.css:
 	@rm -rf $@
 	git cat-file blob master:examples/pack/pack.css > $@
-
-../ex/bubble.js bubble.js:
-	@rm -rf $@
-	git cat-file blob master:examples/bubble/bubble.js > $@
-
-../ex/bubble.css:
-	@rm -rf $@
-	git cat-file blob master:examples/bubble/bubble.css > $@
 
 ../ex/cluster.js cluster.js:
 	@rm -rf $@
