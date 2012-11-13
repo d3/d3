@@ -1,12 +1,7 @@
 EX_FILES = \
-	../ex/colorbrewer.css \
-	../data/flare.json \
 	../ex/splom.css \
 	../ex/splom.js \
-	../ex/flowers.json \
-	../data/us-counties.json \
-	../data/us-states.json \
-	../ex/button.css
+	../ex/flowers.json
 
 INCLUDE_FILES = \
 	splom.js
@@ -16,22 +11,6 @@ INCLUDE_FILES = \
 $(SRC_FILES):
 	@rm -rf $@
 	git cat-file blob master:$(subst ../,,$@) > $@
-
-../ex/colorbrewer.css:
-	@rm -rf $@
-	git cat-file blob master:lib/colorbrewer/colorbrewer.css > $@
-
-../data/us-counties.json:
-	@rm -rf $@
-	git cat-file blob master:examples/data/us-counties.json > $@
-
-../data/us-states.json:
-	@rm -rf $@
-	git cat-file blob master:examples/data/us-states.json > $@
-
-../data/flare.json:
-	@rm -rf $@
-	git cat-file blob master:examples/data/flare.json > $@
 
 ../ex/splom.js splom.js:
 	@rm -rf $@
@@ -44,7 +23,3 @@ $(SRC_FILES):
 ../ex/flowers.json:
 	@rm -rf $@
 	git cat-file blob master:examples/splom/flowers.json > $@
-
-../ex/button.css:
-	@rm -rf $@
-	git cat-file blob master:examples/button.css > $@
