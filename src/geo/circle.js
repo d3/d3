@@ -231,7 +231,7 @@ function d3_geo_circleInterpolate(radians, precision) {
       var c = Math.cos(t),
           s = Math.sin(t),
           point = d3_geo_circleSpherical([
-            cr + sr,
+            cr,
             -sr * c,
             -sr * s
           ]);

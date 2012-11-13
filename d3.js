@@ -5668,7 +5668,7 @@
       to = to.angle;
       if (from < to) from += 2 * Math.PI;
       for (var step = precision, t = from; t > to; t -= step) {
-        var c = Math.cos(t), s = Math.sin(t), point = d3_geo_circleSpherical([ cr + sr, -sr * c, -sr * s ]);
+        var c = Math.cos(t), s = Math.sin(t), point = d3_geo_circleSpherical([ cr, -sr * c, -sr * s ]);
         context.lineTo(point[0], point[1]);
       }
     };
