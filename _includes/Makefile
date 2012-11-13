@@ -10,15 +10,12 @@ EX_FILES = \
 	../ex/flowers.json \
 	../data/us-counties.json \
 	../data/us-states.json \
-	../ex/button.css \
-	../ex/tree.js \
-	../ex/tree.css
+	../ex/button.css
 
 INCLUDE_FILES = \
 	cluster.js \
 	treemap.js \
-	splom.js \
-	tree.js
+	splom.js
 
 .PHONY all: $(SRC_FILES) $(EX_FILES) $(INCLUDE_FILES)
 
@@ -73,11 +70,3 @@ $(SRC_FILES):
 ../ex/button.css:
 	@rm -rf $@
 	git cat-file blob master:examples/button.css > $@
-
-../ex/tree.js tree.js:
-	@rm -rf $@
-	git cat-file blob master:examples/tree/tree-radial.js > $@
-
-../ex/tree.css:
-	@rm -rf $@
-	git cat-file blob master:examples/tree/tree.css > $@
