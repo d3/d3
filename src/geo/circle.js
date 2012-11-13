@@ -130,10 +130,9 @@ d3.geo.circle = function() {
 
 function d3_geo_circleClip(degrees, rotate) {
   var radians = degrees * d3_radians,
-      normal = [1, 0, 0], // Cartesian normal to the circle origin.
-      center = d3_geo_circleScale(normal, Math.cos(radians)), // Cartesian center of the circle.
-      angle = d3_geo_circleAngle(center),
       cr = Math.cos(radians),
+      center = [cr, 0, 0], // Cartesian center of the circle.
+      angle = d3_geo_circleAngle(center),
       interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
 
   return {
@@ -194,17 +193,14 @@ function d3_geo_circleClip(degrees, rotate) {
     // Find intersection line p(t) = c1 n1 + c2 n2 + t (n1 x n2).
     var n1 = [1, 0, 0], // normal
         n2 = d3_geo_circleCross(pa, pb),
-        d1 = center[0], // d3_geo_circleDot(n1, center),
-        d2 = 0,
-        n1n1 = 1, // d3_geo_circleDot(n1, n1),
         n2n2 = d3_geo_circleDot(n2, n2),
         n1n2 = n2[0], // d3_geo_circleDot(n1, n2),
         determinant = n2n2 - n1n2 * n1n2;
     // Two polar points.
     if (!determinant) return a;
 
-    var c1 = (d1 * n2n2 - d2 * n1n2) / determinant,
-        c2 = (d2 * n1n1 - d1 * n1n2) / determinant,
+    var c1 =  cr * n2n2 / determinant,
+        c2 = -cr * n1n2 / determinant,
         n1xn2 = d3_geo_circleCross(n1, n2),
         A = d3_geo_circleScale(n1, c1),
         B = d3_geo_circleScale(n2, c2);

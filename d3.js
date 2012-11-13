@@ -5610,7 +5610,7 @@
     }
   };
   function d3_geo_circleClip(degrees, rotate) {
-    var radians = degrees * d3_radians, normal = [ 1, 0, 0 ], center = d3_geo_circleScale(normal, Math.cos(radians)), angle = d3_geo_circleAngle(center), cr = Math.cos(radians), interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
+    var radians = degrees * d3_radians, cr = Math.cos(radians), center = [ cr, 0, 0 ], angle = d3_geo_circleAngle(center), interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
     return {
       point: function(coordinates, context) {
         if (visible(coordinates = rotate(coordinates))) {
@@ -5652,9 +5652,9 @@
     }
     function intersect(a, b) {
       var pa = d3_geo_circleCartesian(a, [ 0, 0, 0 ]), pb = d3_geo_circleCartesian(b, [ 0, 0, 0 ]);
-      var n1 = [ 1, 0, 0 ], n2 = d3_geo_circleCross(pa, pb), d1 = center[0], d2 = 0, n1n1 = 1, n2n2 = d3_geo_circleDot(n2, n2), n1n2 = n2[0], determinant = n2n2 - n1n2 * n1n2;
+      var n1 = [ 1, 0, 0 ], n2 = d3_geo_circleCross(pa, pb), n2n2 = d3_geo_circleDot(n2, n2), n1n2 = n2[0], determinant = n2n2 - n1n2 * n1n2;
       if (!determinant) return a;
-      var c1 = (d1 * n2n2 - d2 * n1n2) / determinant, c2 = (d2 * n1n1 - d1 * n1n2) / determinant, n1xn2 = d3_geo_circleCross(n1, n2), A = d3_geo_circleScale(n1, c1), B = d3_geo_circleScale(n2, c2);
+      var c1 = cr * n2n2 / determinant, c2 = -cr * n1n2 / determinant, n1xn2 = d3_geo_circleCross(n1, n2), A = d3_geo_circleScale(n1, c1), B = d3_geo_circleScale(n2, c2);
       d3_geo_circleAdd(A, B);
       var u = n1xn2, w = d3_geo_circleDot(A, u), uu = d3_geo_circleDot(u, u), t = Math.sqrt(w * w - uu * (d3_geo_circleDot(A, A) - 1)), q = d3_geo_circleScale(u, (-w - t) / uu);
       d3_geo_circleAdd(q, A);
