@@ -88,7 +88,7 @@ function d3_geo_projectionMutator(projectAt) {
             y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)),
             z = k * (sinφ0                + sinφ1),
             φ2 = Math.asin(Math.max(-1, Math.min(1, z))),
-            λ2 = Math.abs(x) < ε || Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x),
+            λ2 = Math.abs(x) < ε && Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x),
             p = projectPoint(λ2, φ2),
             x2 = p[0],
             y2 = p[1],

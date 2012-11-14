@@ -259,6 +259,29 @@ suite.addBatch({
         ]);
       }
     }
+  },
+  "path.precision(1)": {
+    topic: function() {
+      return d3.geo.path()
+          .context(testContext)
+          .projection(d3.geo.stereographic()
+            .precision(1));
+    },
+
+    "correctly resamples points on antemeridian": function(path) {
+      path({type: "LineString", coordinates: [[0, 90], [90, 0]]});
+      assert.deepEqual(testContext.buffer(), [
+        {type: "moveTo", x: 480, y: 100},
+        {type: "lineTo", x: 509, y: 103},
+        {type: "lineTo", x: 537, y: 111},
+        {type: "lineTo", x: 563, y: 125},
+        {type: "lineTo", x: 586, y: 144},
+        {type: "lineTo", x: 605, y: 167},
+        {type: "lineTo", x: 619, y: 193},
+        {type: "lineTo", x: 627, y: 221},
+        {type: "lineTo", x: 630, y: 250}
+      ]);
+    }
   }
 });
 
