@@ -170,6 +170,7 @@ function d3_geo_circleClip(degrees, rotate) {
       var point1 = rotate(coordinates[i]),
           v = visible(point1);
       if (v !== inside) {
+        keepWinding = false;
         if (inside = v) {
           // outside going in
           point0 = intersect(point1, point0);
@@ -265,7 +266,7 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
     }
     segments = segments.concat(ringSegments);
   });
-  if (winding > 0) {
+  if (segments.length ? winding > 0 : winding < 0) {
     segments.push(winding = []);
     x = {lineTo: function(x, y) { winding.push([x, y]); }};
     d3_geo_circleInterpolateCircle(interpolate, x);

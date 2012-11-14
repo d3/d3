@@ -5639,6 +5639,7 @@
       for (var i = 1; i < n; i++) {
         var point1 = rotate(coordinates[i]), v = visible(point1);
         if (v !== inside) {
+          keepWinding = false;
           if (inside = v) {
             point0 = intersect(point1, point0);
             context.moveTo(point0[0], point0[1]);
@@ -5693,7 +5694,7 @@
       }
       segments = segments.concat(ringSegments);
     });
-    if (winding > 0) {
+    if (segments.length ? winding > 0 : winding < 0) {
       segments.push(winding = []);
       x = {
         lineTo: function(x, y) {

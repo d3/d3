@@ -265,7 +265,7 @@ suite.addBatch({
           assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 2);
         },
         "inserts exterior along clip edge if polygon exterior surrounds it": function(path) {
-          path({type: "Polygon", coordinates: [[[100, -80], [100, 80], [-100, 80], [-100, -80], [100, -80]]]});
+          path({type: "Polygon", coordinates: [[[100, -80], [-100, -80], [-100, 80], [100, 80], [100, -80]]]});
           var buffer = testContext.buffer();
           assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 1);
         }
