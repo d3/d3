@@ -257,6 +257,18 @@ suite.addBatch({
           {type: "point", x: 170, y: 160},
           {type: "point", x: 170, y: 165}
         ]);
+      },
+      "Polygon": {
+        "inserts exterior along clip edge if polygon interior surrounds it": function(path) {
+          path({type: "Polygon", coordinates: [[[80, -80], [80, 80], [-80, 80], [-80, -80], [80, -80]]]});
+          var buffer = testContext.buffer();
+          assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 2);
+        },
+        "inserts exterior along clip edge if polygon exterior surrounds it": function(path) {
+          path({type: "Polygon", coordinates: [[[100, -80], [100, 80], [-100, 80], [-100, -80], [100, -80]]]});
+          var buffer = testContext.buffer();
+          assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 1);
+        }
       }
     }
   },

@@ -5634,12 +5634,11 @@
     }
     function clipLine(coordinates, context, winding) {
       if (!(n = coordinates.length)) return;
-      var point0 = rotate(coordinates[0]), inside = visible(point0), keepWinding = inside && winding != null, n;
+      var point0 = rotate(coordinates[0]), inside = visible(point0), keepWinding = winding != null, n;
       if (inside) context.moveTo(point0[0], point0[1]);
       for (var i = 1; i < n; i++) {
         var point1 = rotate(coordinates[i]), v = visible(point1);
         if (v !== inside) {
-          keepWinding = false;
           if (inside = v) {
             point0 = intersect(point1, point0);
             context.moveTo(point0[0], point0[1]);
