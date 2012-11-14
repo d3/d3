@@ -6245,12 +6245,8 @@
       function resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ1, φ1, depth) {
         var dx = x1 - x0, dy = y1 - y0, distance2 = dx * dx + dy * dy;
         if (distance2 > 4 * δ2 && depth--) {
-          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)), y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)), z = k * (sinφ0 + sinφ1), φ2 = Math.asin(Math.max(-1, Math.min(1, z))), λ2 = Math.abs(x) < ε && Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x0 - x2, dy2 = y0 - y2, dz = dx * dy2 - dy * dx2, δdistance2 = Math.abs(dx2 * dx2 + dy2 * dy2 - distance2);
-          if (δdistance2 < ε) {
-            resampleLineTo(x0, y0, λ2, φ2, x1, y1, λ1, φ1, depth);
-          } else if (δdistance2 > distance2 - ε) {
-            resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ2, φ2, depth);
-          } else if (dz * dz / distance2 > δ2) {
+          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)), y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)), z = k * (sinφ0 + sinφ1), φ2 = Math.asin(Math.max(-1, Math.min(1, z))), λ2 = Math.abs(x) < ε && Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x0 - x2, dy2 = y0 - y2, dz = dx * dy2 - dy * dx2;
+          if (dz * dz / distance2 > δ2) {
             resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
             context.lineTo(x2, y2);
             resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
@@ -6330,14 +6326,21 @@
       },
       line: function(coordinates, context) {
         if (!(n = coordinates.length)) return;
-        var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, i = 0, n;
+        var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, dλ, i = 0, n, p;
         context.moveTo(λ0, φ0);
         while (++i < n) {
           point = rotatePoint(coordinates[i]);
           λ1 = point[0];
           φ1 = point[1];
           sλ1 = λ1 > 0 ? π : -π;
-          if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
+          dλ = Math.abs(λ1 - λ0);
+          if (p = Math.abs(dλ - π) < ε ? (φ0 + φ1) / 2 > 0 ? 1 : -1 : Math.abs(Math.abs(φ1) - π / 2) < ε ? φ1 > 0 ? 1 : -1 : 0) {
+            context.lineTo(λ0, φ0 = p * π / 2);
+            context.lineTo(sλ0, φ0);
+            context.moveTo(sλ1, φ0);
+            context.lineTo(λ1, φ0);
+            context.lineTo(λ0 = λ1, φ0 = φ1);
+          } else if (sλ0 !== sλ1 && dλ >= π) {
             φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
             if (Math.abs(λ0 - sλ0) > ε) context.lineTo(sλ0, φ0);
             if (Math.abs(λ1 - sλ1) > ε) context.moveTo(sλ1, φ0), context.lineTo(λ0 = λ1, φ0 = φ1); else context.moveTo(λ0 = λ1, φ0 = φ1);
