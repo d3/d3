@@ -78,16 +78,16 @@ d3.geom.voronoi = function(vertices) {
         x2 = p2[0], y2 = p2[1],
         dx = Math.abs(x2 - x1), dy = y2 - y1;
 
-    if (Math.abs(dy) < ε) { // 0º
+    if (Math.abs(dy) < ε) { // 0°
       var y = y0 < y1 ? -Z : Z;
       polygon.push([-Z, y], [Z, y]);
-    } else if (dx < ε) { // ±90º
+    } else if (dx < ε) { // ±90°
       var x = x0 < x1 ? -Z : Z;
       polygon.push([x, -Z], [x, Z]);
     } else {
       var y = (x2 - x1) * (y1 - y0) < (x1 - x0) * (y2 - y1) ? Z : -Z,
           z = Math.abs(dy) - dx;
-      if (Math.abs(z) < ε) { // ±45º
+      if (Math.abs(z) < ε) { // ±45°
         polygon.push([dy < 0 ? y : -y, y]);
       } else {
         if (z > 0) y *= -1;
