@@ -31,6 +31,17 @@ suite.addBatch({
       },
       "doesn't insert a duplicate point": function(clip) {
         assert.inDelta(clip({type: "LineString", coordinates: [[0, 0]]}).coordinates, [[[0, 0]]], 1e-6);
+      },
+      "Point": {
+        "visible": function(clip) {
+          assert.deepEqual(clip({type: "Point", coordinates: [0, 0]}).coordinates, [0, 0]);
+        },
+        "invisible": function(clip) {
+          assert.isNull(clip({type: "Point", coordinates: [-180, 0]}));
+        }
+      },
+      "MultiPoint": function(clip) {
+        assert.inDelta(clip({type: "MultiPoint", coordinates: [[0, 0], [-180, 0]]}).coordinates, [[0, 0]], 1e-6);
       }
     }
   }

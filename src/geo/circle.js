@@ -37,19 +37,18 @@ d3.geo.circle = function() {
       var geometry = clipType.geometry(o.geometry);
       return geometry && (o = Object.create(o), o.geometry = geometry, o);
     },
-    Point: function(o) { // TODO check
+    Point: function(o) {
       var d = [];
       clip.point(o.coordinates, bufferContext(d));
       return d.length && o;
     },
-    MultiPoint: function(o) { // TODO check
+    MultiPoint: function(o) {
       var coordinates = [],
           context = bufferContext(coordinates);
       o.coordinates.forEach(function(coordinates) {
         clip.point(coordinates, context);
       });
-      return coordinates.length && (o = Object.create(o),
-          o.coordinates = coordinates.map(function(lineString) { return lineString[0]; }), o);
+      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
     },
     LineString: function(o) {
       var lineStrings = [],
@@ -109,6 +108,12 @@ d3.geo.circle = function() {
   function bufferContext(lineStrings) {
     var lineString = lineStrings[0];
     return {
+      point: function(λ, φ) {
+        var point = rotate.invert(λ, φ);
+        point[0] *= d3_degrees;
+        point[1] *= d3_degrees;
+        lineStrings.push(point);
+      },
       moveTo: function(λ, φ) {
         var point = rotate.invert(λ, φ);
         point[0] *= d3_degrees;

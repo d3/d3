@@ -5530,9 +5530,8 @@
         o.coordinates.forEach(function(coordinates) {
           clip.point(coordinates, context);
         });
-        return coordinates.length && (o = Object.create(o), o.coordinates = coordinates.map(function(lineString) {
-          return lineString[0];
-        }), o);
+        return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, 
+        o);
       },
       LineString: function(o) {
         var lineStrings = [], context = bufferContext(lineStrings);
@@ -5591,6 +5590,12 @@
     function bufferContext(lineStrings) {
       var lineString = lineStrings[0];
       return {
+        point: function(λ, φ) {
+          var point = rotate.invert(λ, φ);
+          point[0] *= d3_degrees;
+          point[1] *= d3_degrees;
+          lineStrings.push(point);
+        },
         moveTo: function(λ, φ) {
           var point = rotate.invert(λ, φ);
           point[0] *= d3_degrees;
