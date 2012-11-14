@@ -261,38 +261,49 @@ suite.addBatch({
       "Polygon": {
         "inserts exterior along clip edge if polygon interior surrounds it": function(path) {
           path({type: "Polygon", coordinates: [[[80, -80], [80, 80], [-80, 80], [-80, -80], [80, -80]]]});
-          var buffer = testContext.buffer();
-          assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 2);
+          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
         },
         "inserts exterior along clip edge if polygon exterior surrounds it": function(path) {
           path({type: "Polygon", coordinates: [[[100, -80], [-100, -80], [-100, 80], [100, 80], [100, -80]]]});
-          var buffer = testContext.buffer();
-          assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 1);
+          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
         }
       }
-    }
-  },
-  "path.precision(1)": {
-    topic: function() {
-      return d3.geo.path()
-          .context(testContext)
-          .projection(d3.geo.stereographic()
-            .precision(1));
     },
-
-    "correctly resamples points on antemeridian": function(path) {
-      path({type: "LineString", coordinates: [[0, 90], [90, 0]]});
-      assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 480, y: 100},
-        {type: "lineTo", x: 509, y: 103},
-        {type: "lineTo", x: 537, y: 111},
-        {type: "lineTo", x: 563, y: 125},
-        {type: "lineTo", x: 586, y: 144},
-        {type: "lineTo", x: 605, y: 167},
-        {type: "lineTo", x: 619, y: 193},
-        {type: "lineTo", x: 627, y: 221},
-        {type: "lineTo", x: 630, y: 250}
-      ]);
+    "stereographic.precision(1)": {
+      topic: function() {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.stereographic()
+              .precision(1));
+      },
+      "correctly resamples points on antemeridian": function(path) {
+        path({type: "LineString", coordinates: [[0, 90], [90, 0]]});
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 480, y: 100},
+          {type: "lineTo", x: 509, y: 103},
+          {type: "lineTo", x: 537, y: 111},
+          {type: "lineTo", x: 563, y: 125},
+          {type: "lineTo", x: 586, y: 144},
+          {type: "lineTo", x: 605, y: 167},
+          {type: "lineTo", x: 619, y: 193},
+          {type: "lineTo", x: 627, y: 221},
+          {type: "lineTo", x: 630, y: 250}
+        ]);
+      }
+    },
+    "albers.precision(1)": {
+      topic: function() {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.albers()
+              .scale(140)
+              .rotate([0, 0])
+              .precision(1));
+      },
+      "doesn't introduce artefacts in areas of high distortion": function(path) {
+        path({type: "LineString", coordinates: [[0, 88], [180, 89]]});
+        assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+      }
     }
   }
 });
