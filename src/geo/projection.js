@@ -88,7 +88,8 @@ function d3_geo_projectionMutator(projectAt) {
             y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)),
             z = k * (sinφ0                + sinφ1),
             φ2 = Math.asin(Math.max(-1, Math.min(1, z))),
-            λ2 = Math.abs(x) < ε && Math.abs(y) < ε || Math.abs(λ1 - λ0) < ε
+            λ2 = (z = Math.abs(Math.abs(z) - 1)) < ε
+               || z < εε && (Math.abs(cosφ0) < εε || Math.abs(cosφ1) < εε)
                ? (λ0 + λ1) / 2 : Math.atan2(y, x),
             p = projectPoint(λ2, φ2),
             x2 = p[0],
@@ -206,8 +207,7 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
           sλ1,
           dλ,
           i = 0,
-          n,
-          p;
+          n;
       context.moveTo(λ0, φ0);
       while (++i < n) {
         point = rotatePoint(coordinates[i]);
@@ -215,10 +215,8 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
         φ1 = point[1];
         sλ1 = λ1 > 0 ? π : -π;
         dλ = Math.abs(λ1 - λ0);
-        if (p = Math.abs(dλ - π) < ε ? (φ0 + φ1) / 2 > 0 ? 1 : -1    // line crosses a pole
-              : Math.abs(Math.abs(φ1) - π / 2) < ε ? φ1 > 0 ? 1 : -1 // point is a pole
-              : 0) {
-          context.lineTo(λ0, φ0 = p * π / 2);
+        if (Math.abs(dλ - π) < ε) { // line crosses a pole
+          context.lineTo(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? π / 2 : -π / 2);
           context.lineTo(sλ0, φ0);
           context.moveTo(sλ1, φ0);
           context.lineTo(λ1, φ0);
