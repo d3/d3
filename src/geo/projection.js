@@ -94,8 +94,13 @@ function d3_geo_projectionMutator(projectAt) {
             y2 = p[1],
             dx2 = x0 - x2,
             dy2 = y0 - y2,
-            dz = dx * dy2 - dy * dx2;
-        if (dz * dz / distance2 > δ2) {
+            dz = dx * dy2 - dy * dx2,
+            δdistance2 = Math.abs(dx2 * dx2 + dy2 * dy2 - distance2);
+        if (δdistance2 < ε) {
+          resampleLineTo(x0, y0, λ2, φ2, x1, y1, λ1, φ1, depth);
+        } else if (δdistance2 > distance2 - ε) {
+          resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ2, φ2, depth);
+        } else if (dz * dz / distance2 > δ2) {
           resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
           context.lineTo(x2, y2);
           resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
