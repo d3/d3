@@ -300,8 +300,10 @@ suite.addBatch({
               .rotate([0, 0])
               .precision(1));
       },
-      "doesn't introduce artefacts in areas of high distortion": function(path) {
+      "resampling near poles": function(path) {
         path({type: "LineString", coordinates: [[0, 88], [180, 89]]});
+        assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+        path({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
       }
     },
