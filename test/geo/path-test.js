@@ -300,9 +300,17 @@ suite.addBatch({
               .rotate([0, 0])
               .precision(1));
       },
-      "doesn't introduce artefacts in areas of high distortion": function(path) {
+      "resampling near poles": function(path) {
         path({type: "LineString", coordinates: [[0, 88], [180, 89]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+        path({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
+        assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+      }
+    },
+    "rotate([0, 0, 0])": {
+      "longitudes wrap at ±180°": function(path) {
+        path({type: "Point", coordinates: [180 + 1e-6, 0]});
+        assert.deepEqual(testContext.buffer(), [{type: "point", x: -420, y: 250}]);
       }
     }
   }
