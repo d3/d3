@@ -31,6 +31,18 @@ d3.geo.azimuthal = function() {
     ];
   }
 
+  azimuthal.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = x;
+    x0 = origin[0] * d3_geo_radians;
+    y0 = origin[1] * d3_geo_radians;
+    cy0 = Math.cos(y0);
+    sy0 = Math.sin(y0);
+    return azimuthal;
+  };
+
+  azimuthal = azimuthal.origin([0, 0])
+
   azimuthal.invert = function(coordinates) {
     var x = (coordinates[0] - translate[0]) / scale,
         y = (coordinates[1] - translate[1]) / scale,
@@ -54,16 +66,6 @@ d3.geo.azimuthal = function() {
     return azimuthal;
   };
 
-  azimuthal.origin = function(x) {
-    if (!arguments.length) return origin;
-    origin = x;
-    x0 = origin[0] * d3_geo_radians;
-    y0 = origin[1] * d3_geo_radians;
-    cy0 = Math.cos(y0);
-    sy0 = Math.sin(y0);
-    return azimuthal;
-  };
-
   azimuthal.scale = function(x) {
     if (!arguments.length) return scale;
     scale = +x;
@@ -76,5 +78,5 @@ d3.geo.azimuthal = function() {
     return azimuthal;
   };
 
-  return azimuthal.origin([0, 0]);
+  return azimuthal;
 };
