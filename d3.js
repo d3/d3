@@ -6228,34 +6228,37 @@
       return projection;
     };
     function resample(context) {
-      var λ00, φ00, λ0, φ0, x0, y0, maxDepth = δ2 > 0 && 16;
+      var λ00, φ00, λ0, sinφ0, cosφ0, x0, y0, maxDepth = δ2 > 0 && 16;
       function point(λ, φ) {
         var p = projectPoint(λ, φ);
         context.point(p[0], p[1]);
       }
       function moveTo(λ, φ) {
-        var p = projectPoint(λ00 = λ0 = λ, φ00 = φ0 = φ);
+        var p = projectPoint(λ00 = λ0 = λ, φ00 = φ);
+        sinφ0 = Math.sin(φ);
+        cosφ0 = Math.cos(φ);
         context.moveTo(x0 = p[0], y0 = p[1]);
       }
       function lineTo(λ, φ) {
         var p = projectPoint(λ, φ);
-        resampleLineTo(x0, y0, λ0, φ0, x0 = p[0], y0 = p[1], λ0 = λ, φ0 = φ, maxDepth);
+        resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x0 = p[0], y0 = p[1], λ0 = λ, sinφ0 = Math.sin(φ), cosφ0 = Math.cos(φ), maxDepth);
         context.lineTo(x0, y0);
       }
-      function resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ1, φ1, depth) {
+      function resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x1, y1, λ1, sinφ1, cosφ1, depth) {
         var dx = x1 - x0, dy = y1 - y0, distance2 = dx * dx + dy * dy;
         if (distance2 > 4 * δ2 && depth--) {
-          var sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)), y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)), z = k * (sinφ0 + sinφ1), φ2 = Math.asin(Math.max(-1, Math.min(1, z))), λ2 = (z = Math.abs(Math.abs(z) - 1)) < ε || z < εε && (Math.abs(cosφ0) < εε || Math.abs(cosφ1) < εε) ? (λ0 + λ1) / 2 : Math.atan2(y, x), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x0 - x2, dy2 = y0 - y2, dz = dx * dy2 - dy * dx2;
+          var cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)), y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)), z = Math.max(-1, Math.min(1, k * (sinφ0 + sinφ1))), φ2 = Math.asin(z), zε = Math.abs(Math.abs(z) - 1), λ2 = zε < ε || zε < εε && (Math.abs(cosφ0) < εε || Math.abs(cosφ1) < εε) ? (λ0 + λ1) / 2 : Math.atan2(y, x), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x0 - x2, dy2 = y0 - y2, dz = dx * dy2 - dy * dx2;
           if (dz * dz / distance2 > δ2) {
-            resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
+            var cosφ2 = Math.cos(φ2);
+            resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x2, y2, λ2, z, cosφ2, depth);
             context.lineTo(x2, y2);
-            resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
+            resampleLineTo(x2, y2, λ2, z, cosφ2, x1, y1, λ1, sinφ1, cosφ1, depth);
           }
         }
       }
       function closePath() {
         var p = projectPoint(λ00, φ00);
-        resampleLineTo(x0, y0, λ0, φ0, p[0], p[1], λ00, φ00, maxDepth);
+        resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, p[0], p[1], λ00, Math.sin(φ00), Math.cos(φ00), maxDepth);
         context.closePath();
       }
       return {
