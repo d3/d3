@@ -1,7 +1,6 @@
 d3.geo.circle = function() {
   var origin = [0, 0],
-      degrees,
-      clip,
+      angle,
       precision = 6,
       rotate,
       interpolate;
@@ -18,92 +17,6 @@ d3.geo.circle = function() {
       coordinates: rings
     };
   }
-
-  circle.clip = function(d) {
-    var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
-    rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-    clip = d3_geo_circleClip(degrees, function(coordinates) {
-      return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
-    });
-    return clipType.object(d) || null;
-  };
-
-  var clipType = d3_geo_type({
-    FeatureCollection: function(o) {
-      var features = o.features.map(clipType.Feature, clipType).filter(d3_identity);
-      return features && (o = Object.create(o), o.features = features, o);
-    },
-    Feature: function(o) {
-      var geometry = clipType.geometry(o.geometry);
-      return geometry && (o = Object.create(o), o.geometry = geometry, o);
-    },
-    Point: function(o) {
-      var d = [];
-      clip.point(o.coordinates, bufferContext(d));
-      return d.length && o;
-    },
-    MultiPoint: function(o) {
-      var coordinates = [],
-          context = bufferContext(coordinates);
-      o.coordinates.forEach(function(coordinates) {
-        clip.point(coordinates, context);
-      });
-      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
-    },
-    LineString: function(o) {
-      var lineStrings = [],
-          context = bufferContext(lineStrings);
-      clip.line(o.coordinates, context);
-      return lineStrings.length && (o = Object.create(o), o.type = "MultiLineString", o.coordinates = lineStrings, o);
-    },
-    MultiLineString: function(o) {
-      var lineStrings = [],
-          context = bufferContext(lineStrings);
-      o.coordinates.forEach(function(coordinates) {
-        clip.line(coordinates, context);
-      });
-      return lineStrings.length && (o = Object.create(o), o.coordinates = lineStrings, o);
-    },
-    Polygon: function(o) {
-      var lineStrings = [];
-      clip.polygon(o.coordinates, bufferContext(lineStrings));
-      var polygons = lineStrings.map(function(lineString) { return [lineString]; });
-      return polygons.length && (o = Object.create(o), o.type = "MultiPolygon", o.coordinates = polygons, o);
-    },
-    MultiPolygon: function(o) {
-      var lineStrings = [],
-          context = bufferContext(lineStrings);
-      o.coordinates.forEach(function(coordinates) {
-        clip.polygon(coordinates, context);
-      });
-      var polygons = lineStrings.map(function(lineString) { return [lineString]; });
-      return polygons.length && (o = Object.create(o), o.coordinates = polygons, o);
-    },
-    GeometryCollection: function(o) {
-      var geometries = o.geometries.map(clipType.geometry, clipType).filter(d3_identity);
-      return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
-    }
-  });
-
-  circle.origin = function(x) {
-    if (!arguments.length) return origin;
-    origin = x;
-    return circle;
-  };
-
-  circle.angle = function(x) {
-    if (!arguments.length) return degrees;
-    interpolate = d3_geo_circleInterpolate((degrees = +x) * d3_radians, precision * d3_radians);
-    return circle;
-  };
-
-  circle.precision = function(_) {
-    if (!arguments.length) return precision;
-    interpolate = d3_geo_circleInterpolate(radians, (precision = +_) * d3_radians);
-    return circle;
-  }
-
-  return circle.angle(90);
 
   function bufferContext(lineStrings) {
     var lineString = lineStrings[0];
@@ -131,6 +44,26 @@ d3.geo.circle = function() {
       }
     };
   }
+
+  circle.origin = function(x) {
+    if (!arguments.length) return origin;
+    origin = x;
+    return circle;
+  };
+
+  circle.angle = function(x) {
+    if (!arguments.length) return angle;
+    interpolate = d3_geo_circleInterpolate((angle = +x) * d3_radians, precision * d3_radians);
+    return circle;
+  };
+
+  circle.precision = function(_) {
+    if (!arguments.length) return precision;
+    interpolate = d3_geo_circleInterpolate(radians, (precision = +_) * d3_radians);
+    return circle;
+  };
+
+  return circle.angle(90);
 };
 
 function d3_geo_circleClip(degrees, rotate) {
