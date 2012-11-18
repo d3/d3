@@ -6082,7 +6082,7 @@
         });
       },
       GeometryCollection: function(collection) {
-        var geometries = collection.geometries, dimensions = geometries.map(geometryDimension), dimension = d3.max(dimensions), coordinates = [];
+        var geometries = collection.geometries, dimensions = geometries.map(d3_geo_pathDimension), dimension = d3.max(dimensions), coordinates = [];
         for (var i = 0, n = geometries.length, o; i < n; i++) {
           if (dimensions[i] !== dimension) continue;
           o = geometries[i];
@@ -6092,48 +6092,13 @@
           coordinates: coordinates
         }) : null;
       },
-      LineString: singleCentroid(lineCentroid),
-      MultiLineString: multiCentroid(lineCentroid),
-      MultiPoint: multiCentroid(pointCentroid),
-      MultiPolygon: multiCentroid(polygonCentroid),
-      Point: singleCentroid(pointCentroid),
-      Polygon: singleCentroid(polygonCentroid)
+      LineString: d3_geo_pathSingleCentroid(lineCentroid),
+      MultiLineString: d3_geo_pathMultiCentroid(lineCentroid),
+      MultiPoint: d3_geo_pathMultiCentroid(pointCentroid),
+      MultiPolygon: d3_geo_pathMultiCentroid(polygonCentroid),
+      Point: d3_geo_pathSingleCentroid(pointCentroid),
+      Polygon: d3_geo_pathSingleCentroid(polygonCentroid)
     });
-    function geometryDimension(o) {
-      switch (o.type) {
-       case "Point":
-       case "MultiPoint":
-        return 0;
-
-       case "LineString":
-       case "MultiLineString":
-        return 1;
-
-       case "Polygon":
-       case "MultiPolygon":
-        return 2;
-      }
-    }
-    function singleCentroid(weightedCentroid) {
-      return function(o) {
-        var centroid = weightedCentroid(o.coordinates);
-        return centroid ? [ centroid[0] / centroid[2], centroid[1] / centroid[2] ] : null;
-      };
-    }
-    function multiCentroid(weightedCentroid) {
-      return function(o) {
-        var coordinates = o.coordinates, centroid, x = 0, y = 0, z = 0, i = -1, n = coordinates.length;
-        while (++i < n) {
-          centroid = weightedCentroid(coordinates[i]);
-          if (centroid != null) {
-            x += centroid[0];
-            y += centroid[1];
-            z += centroid[2];
-          }
-        }
-        return z ? [ x / z, y / z ] : null;
-      };
-    }
     function pointCentroid(coordinates) {
       coordinates = projection(coordinates);
       coordinates.push(1);
@@ -6193,8 +6158,39 @@
     };
     return path;
   };
+  var d3_geo_pathDimensionByType = {
+    Point: 0,
+    MultiPoint: 0,
+    LineString: 1,
+    MultiLineString: 1,
+    Polygon: 2,
+    MultiPolygon: 2
+  };
+  function d3_geo_pathDimension(o) {
+    return d3_geo_pathDimensionByType[o.type];
+  }
   function d3_geo_pathCircle(radius) {
     return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
+  }
+  function d3_geo_pathSingleCentroid(weightedCentroid) {
+    return function(o) {
+      var centroid = weightedCentroid(o.coordinates);
+      return centroid ? [ centroid[0] / centroid[2], centroid[1] / centroid[2] ] : null;
+    };
+  }
+  function d3_geo_pathMultiCentroid(weightedCentroid) {
+    return function(o) {
+      var coordinates = o.coordinates, centroid, x = 0, y = 0, z = 0, i = -1, n = coordinates.length;
+      while (++i < n) {
+        centroid = weightedCentroid(coordinates[i]);
+        if (centroid != null) {
+          x += centroid[0];
+          y += centroid[1];
+          z += centroid[2];
+        }
+      }
+      return z ? [ x / z, y / z ] : null;
+    };
   }
   d3.geo.projection = d3_geo_projection;
   d3.geo.projectionMutator = d3_geo_projectionMutator;
