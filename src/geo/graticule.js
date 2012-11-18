@@ -6,29 +6,21 @@ d3.geo.graticule = function() {
       precision = 2.5;
 
   function graticule() {
-    return {
-      type: "GeometryCollection",
-      geometries: graticule.lines()
-    };
+    return {type: "GeometryCollection", geometries: graticule.lines()};
   }
 
   graticule.lines = function() {
     return d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(x)
         .concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(y))
-        .map(function(coordinates) {
-          return {
-            type: "LineString",
-            coordinates: coordinates
-          };
-        });
+        .map(function(coordinates) { return {type: "LineString", coordinates: coordinates}; });
   }
 
   graticule.outline = function() {
     return {
       type: "Polygon",
       coordinates: [
-        x(x0)
-        .concat(y(y1).slice(1),
+        x(x0).concat(
+        y(y1).slice(1),
         x(x1).reverse().slice(1),
         y(y0).reverse().slice(1))
       ]
@@ -63,18 +55,10 @@ d3.geo.graticule = function() {
 
 function d3_geo_graticuleX(y0, y1, dy) {
   var y = d3.range(y0, y1 - ε, dy).concat(y1);
-  return function(x) {
-    return y.map(function(y) {
-      return [x, y];
-    });
-  };
+  return function(x) { return y.map(function(y) { return [x, y]; }); };
 }
 
 function d3_geo_graticuleY(x0, x1, dx) {
   var x = d3.range(x0, x1 - ε, dx).concat(x1);
-  return function(y) {
-    return x.map(function(x) {
-      return [x, y];
-    });
-  };
+  return function(y) { return x.map(function(x) { return [x, y]; }); };
 }
