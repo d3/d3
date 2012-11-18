@@ -8,8 +8,7 @@ d3.geo.circle = function() {
   function circle() {
     var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
     rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-    var rings = [[]];
-        context = bufferContext(rings);
+    var rings = [[]], context = bufferContext(rings);
     d3_geo_circleInterpolateCircle(interpolate, context);
     context.closePath();
     return {
@@ -18,29 +17,29 @@ d3.geo.circle = function() {
     };
   }
 
-  function bufferContext(lineStrings) {
-    var lineString = lineStrings[0];
+  function bufferContext(rings) {
+    var ring = rings[0];
     return {
       point: function(λ, φ) {
         var point = rotate.invert(λ, φ);
         point[0] *= d3_degrees;
         point[1] *= d3_degrees;
-        lineStrings.push(point);
+        rings.push(point);
       },
       moveTo: function(λ, φ) {
         var point = rotate.invert(λ, φ);
         point[0] *= d3_degrees;
         point[1] *= d3_degrees;
-        lineStrings.push(lineString = [point]);
+        rings.push(ring = [point]);
       },
       lineTo: function(λ, φ) {
         var point = rotate.invert(λ, φ);
         point[0] *= d3_degrees;
         point[1] *= d3_degrees;
-        lineString.push(point);
+        ring.push(point);
       },
       closePath: function() {
-        if (lineString.length) lineString.push(lineString[0]);
+        if (ring.length) ring.push(ring[0]);
       }
     };
   }
