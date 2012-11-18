@@ -56,24 +56,6 @@ d3.geo.path = function() {
 
   var centroidType = d3_geo_type({
     Feature: function(feature) { return centroidType.geometry(feature.geometry); },
-    FeatureCollection: function(collection) {
-      return centroidType.GeometryCollection({geometries: collection.features.map(function(feature) { return feature.geometry; }) });
-    },
-    GeometryCollection: function(collection) {
-      var geometries = collection.geometries,
-          dimensions = geometries.map(d3_geo_pathDimension),
-          dimension = d3.max(dimensions),
-          coordinates = [];
-      for (var i = 0, n = geometries.length, o; i < n; i++) {
-        if (dimensions[i] !== dimension) continue;
-        o = geometries[i];
-        if (/^Multi/.test(o.type)) coordinates = coordinates.concat(o.coordinates);
-        else coordinates.push(o.coordinates);
-      }
-      return coordinates.length
-          ? centroidType["Multi" + (dimension === 0 ? "Point" : dimension === 1 ? "LineString" : "Polygon")]({coordinates: coordinates})
-          : null;
-    },
     LineString: d3_geo_pathCentroid1(lineCentroid),
     MultiLineString: d3_geo_pathCentroid2(lineCentroid),
     MultiPoint: d3_geo_pathCentroid2(pointCentroid),
@@ -157,19 +139,6 @@ d3.geo.path = function() {
 
   return path;
 };
-
-var d3_geo_pathDimensionByType = {
-  Point: 0,
-  MultiPoint: 0,
-  LineString: 1,
-  MultiLineString: 1,
-  Polygon: 2,
-  MultiPolygon: 2
-};
-
-function d3_geo_pathDimension(o) {
-  return d3_geo_pathDimensionByType[o.type];
-}
 
 function d3_geo_pathCircle(radius) {
   return "m0," + radius

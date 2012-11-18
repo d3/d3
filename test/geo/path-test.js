@@ -178,53 +178,13 @@ suite.addBatch({
         }
       },
       "GeometryCollection": {
-        "empty": function(centroid) {
-          assert.isNull(centroid({type: "GeometryCollection", geometries: []}));
-        },
-        "collection containing an empty geometry": function(centroid) {
-          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
-            {type: "MultiPoint", coordinates: []},
-            {type: "Point", coordinates: [-122, 37]}
-          ]}), [-130, 65]);
-        },
-        "ignores dimensions lower than one": function(centroid) {
-          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
-            {type: "Point", coordinates: [-122, 37]},
-            {type: "MultiPoint", coordinates: [[-122, 37]]},
-            {type: "LineString", coordinates: [[-122, 37], [-74, 40]]}
-          ]}), [-10, 57.5]);
-        },
-        "ignores dimensions lower than two": function(centroid) {
-          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
-            {type: "Point", coordinates: [-122, 37]},
-            {type: "MultiPoint", coordinates: [[-122, 37]]},
-            {type: "LineString", coordinates: [[-122, 37], [-74, 40]]},
-            {type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]}
-          ]}), [982.5, 247.5]);
-        },
-        "empty higher dimensions": function(centroid) {
-          assert.isNull(centroid({type: "GeometryCollection", geometries: [
-            {type: "Point", coordinates: [-122, 37]},
-            {type: "MultiPoint", coordinates: [[-122, 37]]},
-            {type: "MultiLineString", coordinates: []}
-          ]}));
+        "is undefined": function(centroid) {
+          assert.isUndefined(centroid({type: "GeometryCollection", geometries: []}));
         }
       },
       "FeatureCollection": {
-        "empty": function(centroid) {
-          assert.isNull(centroid({type: "FeatureCollection", features: []}));
-        },
-        "collection containing a feature with an empty geometry": function(centroid) {
-          assert.deepEqual(centroid({type: "FeatureCollection", features: [
-            feature({type: "MultiPoint", coordinates: []}),
-            feature({type: "Point", coordinates: [-122, 37]})
-          ]}), [-130, 65]);
-        },
-        "repeated geometries": function(centroid) {
-          var lineString = {type: "LineString", coordinates: [[-122, 37], [-74, 40]]};
-          assert.deepEqual(centroid({type: "FeatureCollection", features: [lineString].map(feature)}), [-10, 57.5]);
-          assert.deepEqual(centroid({type: "FeatureCollection", features: [lineString, lineString].map(feature)}), [-10, 57.5]);
-          assert.deepEqual(centroid({type: "FeatureCollection", features: [lineString, lineString, lineString].map(feature)}), [-10, 57.5]);
+        "is undefined": function(centroid) {
+          assert.isUndefined(centroid({type: "FeatureCollection", features: []}));
         }
       }
     },
