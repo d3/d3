@@ -14,9 +14,16 @@
   d3 = {
     version: "3.0.0pre"
   };
-  var π = Math.PI, ε = 1e-6, εε = .001, d3_radians = π / 180, d3_degrees = 180 / π, d3_zero = function() {
+  var π = Math.PI, ε = 1e-6, εε = .001, d3_radians = π / 180, d3_degrees = 180 / π;
+  function d3_zero() {
     return 0;
-  };
+  }
+  function d3_target(d) {
+    return d.target;
+  }
+  function d3_source(d) {
+    return d.source;
+  }
   function d3_class(ctor, properties) {
     try {
       for (var key in properties) {
@@ -3151,7 +3158,7 @@
     return area;
   };
   d3.svg.chord = function() {
-    var source = d3_svg_chordSource, target = d3_svg_chordTarget, radius = d3_svg_chordRadius, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
+    var source = d3_source, target = d3_target, radius = d3_svg_chordRadius, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
     function chord(d, i) {
       var s = subgroup(this, source, d, i), t = subgroup(this, target, d, i);
       return "M" + s.p0 + arc(s.r, s.p1, s.a1 - s.a0) + (equals(s, t) ? curve(s.r, s.p1, s.r, s.p0) : curve(s.r, s.p1, t.r, t.p0) + arc(t.r, t.p1, t.a1 - t.a0) + curve(t.r, t.p1, s.r, s.p0)) + "Z";
@@ -3202,17 +3209,11 @@
     };
     return chord;
   };
-  function d3_svg_chordSource(d) {
-    return d.source;
-  }
-  function d3_svg_chordTarget(d) {
-    return d.target;
-  }
   function d3_svg_chordRadius(d) {
     return d.radius;
   }
   d3.svg.diagonal = function() {
-    var source = d3_svg_chordSource, target = d3_svg_chordTarget, projection = d3_svg_diagonalProjection;
+    var source = d3_source, target = d3_target, projection = d3_svg_diagonalProjection;
     function diagonal(d, i) {
       var p0 = source.call(this, d, i), p3 = target.call(this, d, i), m = (p0.y + p3.y) / 2, p = [ p0, {
         x: p0.x,
@@ -5918,7 +5919,7 @@
     };
   }
   d3.geo.greatArc = function() {
-    var source = d3_geo_greatArcSource, p0, target = d3_geo_greatArcTarget, p1, precision = 6 * d3_radians, interpolate = d3_geo_greatArcInterpolator();
+    var source = d3_source, p0, target = d3_target, p1, precision = 6 * d3_radians, interpolate = d3_geo_greatArcInterpolator();
     function greatArc() {
       var d = greatArc.distance.apply(this, arguments), t = 0, dt = precision / d, coordinates = [ p0 ];
       while ((t += dt) < 1) coordinates.push(interpolate(t));
@@ -5952,12 +5953,6 @@
     };
     return greatArc;
   };
-  function d3_geo_greatArcSource(d) {
-    return d.source;
-  }
-  function d3_geo_greatArcTarget(d) {
-    return d.target;
-  }
   function d3_geo_greatArcInterpolator() {
     var x0, y0, cy0, sy0, kx0, ky0, x1, y1, cy1, sy1, kx1, ky1, d, k;
     function interpolate(t) {

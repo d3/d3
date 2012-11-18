@@ -1,6 +1,6 @@
 d3.geo.greatArc = function() {
-  var source = d3_geo_greatArcSource, p0,
-      target = d3_geo_greatArcTarget, p1,
+  var source = d3_source, p0,
+      target = d3_target, p1,
       precision = 6 * d3_radians,
       interpolate = d3_geo_greatArcInterpolator();
 
@@ -14,7 +14,7 @@ d3.geo.greatArc = function() {
     return {type: "LineString", coordinates: coordinates};
   }
 
-  // Length returned in d3_radians; multiply by radius for distance.
+  // Length returned in radians; multiply by radius for distance.
   greatArc.distance = function() {
     if (typeof source === "function") interpolate.source(p0 = source.apply(this, arguments));
     if (typeof target === "function") interpolate.target(p1 = target.apply(this, arguments));
@@ -35,7 +35,7 @@ d3.geo.greatArc = function() {
     return greatArc;
   };
 
-  // Precision is specified in d3_degrees.
+  // Precision is specified in degrees.
   greatArc.precision = function(_) {
     if (!arguments.length) return precision / d3_radians;
     precision = _ * d3_radians;
@@ -44,14 +44,6 @@ d3.geo.greatArc = function() {
 
   return greatArc;
 };
-
-function d3_geo_greatArcSource(d) {
-  return d.source;
-}
-
-function d3_geo_greatArcTarget(d) {
-  return d.target;
-}
 
 function d3_geo_greatArcInterpolator() {
   var x0, y0, cy0, sy0, kx0, ky0,
