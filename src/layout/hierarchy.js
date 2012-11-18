@@ -26,7 +26,7 @@ d3.layout.hierarchy = function() {
       if (sort) c.sort(sort);
       if (value) node.value = v;
     } else if (value) {
-      node.value = +value.call(hierarchy, data, depth) || 0;
+      node.value = Math.max(0, +value.call(hierarchy, data, depth) || 0);
     }
     return node;
   }
@@ -41,7 +41,7 @@ d3.layout.hierarchy = function() {
           j = depth + 1;
       while (++i < n) v += revalue(children[i], j);
     } else if (value) {
-      v = +value.call(hierarchy, d3_layout_hierarchyInline ? node : node.data, depth) || 0;
+      v = Math.max(0, +value.call(hierarchy, d3_layout_hierarchyInline ? node : node.data, depth) || 0);
     }
     if (value) node.value = v;
     return v;
