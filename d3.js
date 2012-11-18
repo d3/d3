@@ -5580,18 +5580,19 @@
   }
   function d3_geo_circleInterpolate(radians, precision) {
     var cr = Math.cos(radians), sr = Math.sin(radians);
-    return function(from, to, context) {
+    return function(from, to, direction, context) {
+      var step = direction * precision;
       from = from.angle;
       to = to.angle;
       if (from < to) from += 2 * Math.PI;
-      for (var step = precision, t = from; t > to; t -= step) {
+      for (var step = precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
         var c = Math.cos(t), s = Math.sin(t), point = d3_geo_circleSpherical([ cr, -sr * c, -sr * s ]);
         context.lineTo(point[0], point[1]);
       }
     };
   }
   function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, angle) {
-    var unvisited = 0, intersections = [], segments = [], buffer = d3_geo_circleBufferSegments(clipLine), winding = 0;
+    var subject = [], clip = [], segments = [], buffer = d3_geo_circleBufferSegments(clipLine), winding = 0;
     coordinates.forEach(function(ring) {
       var x = buffer(ring, context), ringSegments = x[1];
       winding += x[0];
@@ -5617,21 +5618,48 @@
       winding.push(winding[0]);
     }
     segments.forEach(function(segment) {
-      var p0 = segment[0], p1 = segment[segment.length - 1];
+      var p0 = segment[0], p1 = segment[segment.length - 1], a, b;
       if (p0[0] !== p1[0] || p0[1] !== p1[1]) {
-        var b = {
-          point: p1,
-          angle: angle(p1),
-          points: [],
-          other: null
-        }, a = {
+        a = {
+          point: p0,
+          points: segment,
+          other: null,
+          visited: false,
+          entry: true,
+          subject: true
+        };
+        b = {
           point: p0,
           angle: angle(p0),
-          points: segment,
-          other: b
+          points: [ p0 ],
+          other: a,
+          visited: false,
+          entry: false,
+          subject: false
         };
-        intersections.push(a, b);
-        unvisited++;
+        a.other = b;
+        subject.push(a);
+        clip.push(b);
+        a = {
+          point: p1,
+          points: [ p1 ],
+          other: null,
+          visited: false,
+          entry: false,
+          subject: true
+        };
+        b = {
+          point: p1,
+          angle: angle(p1),
+          points: [ p1 ],
+          other: a,
+          visited: false,
+          entry: true,
+          subject: false
+        };
+        a.other = b;
+        subject.push(a);
+        clip.push(b);
       } else {
         var point = segment[0], n = segment.length - 1, i = 0;
         context.moveTo(point[0], point[1]);
@@ -5639,39 +5667,45 @@
         context.closePath();
       }
     });
-    if (!unvisited) return;
-    var start = intersections[0], tmp = null;
-    intersections.sort(function(a, b) {
+    clip.sort(function(a, b) {
       return b.angle - a.angle;
     });
-    for (var i = 0; i < intersections.length; ) {
-      intersections[i].next = intersections[++i % intersections.length];
-    }
-    while (unvisited) {
-      while (start.visited || !start.other) {
-        if (start === tmp) return;
-        start = start.next;
+    [ subject, clip ].forEach(function(intersections) {
+      for (var i = 0, a = intersections[0], b; i < intersections.length; ) {
+        a.next = b = intersections[++i % intersections.length];
+        b.prev = a;
+        a = b;
       }
-      var intersection = start, moved = false, points, point;
+    });
+    if (!subject.length) return;
+    var start = subject[0], current, points, point;
+    while (1) {
+      current = start;
+      while (current.visited) if ((current = current.next) === start) return;
+      points = current.points;
+      context.moveTo((point = points.shift())[0], point[1]);
       do {
-        if (!intersection.other) {
-          unvisited--;
-          break;
+        current.visited = current.other.visited = true;
+        if (current.entry) {
+          if (current.subject) {
+            for (var i = 0; i < points.length; i++) context.lineTo((point = points[i])[0], point[1]);
+          } else {
+            interpolate(current, current.next, 1, context);
+          }
+          current = current.next;
+        } else {
+          if (current.subject) {
+            points = current.prev.points;
+            for (var i = points.length; --i >= 0; ) context.lineTo((point = points[i])[0], point[1]);
+          } else {
+            interpolate(current, current.prev, -1, context);
+          }
+          current = current.prev;
         }
-        intersection.visited = true;
-        point = (points = intersection.points)[0];
-        if (moved) context.lineTo(point[0], point[1]); else context.moveTo(point[0], point[1]), 
-        moved = true;
-        for (var i = 1; i < points.length; i++) context.lineTo((point = points[i])[0], point[1]);
-        interpolate(intersection = intersection.other, intersection = intersection.next, context);
-        unvisited--;
-      } while (intersection !== start);
-      if (moved) {
-        context.closePath();
-        moved = false;
-      }
-      tmp = start;
-      start = start.next;
+        current = current.other;
+        points = current.points;
+      } while (!current.visited);
+      context.closePath();
     }
   }
   function d3_geo_circleAngle(center) {
@@ -5741,7 +5775,7 @@
         angle: -i * π / 2
       }, {
         angle: -(i + 1) * π / 2
-      }, context);
+      }, 1, context);
     }
   }
   function d3_geo_compose(a, b) {
@@ -6235,11 +6269,11 @@
   function d3_geo_antemeridianAngle(point) {
     return -(point[0] < 0 ? point[1] - π / 2 : π / 2 - point[1]);
   }
-  function d3_geo_antemeridianInterpolate(from, to, context) {
+  function d3_geo_antemeridianInterpolate(from, to, direction, context) {
     from = from.point;
     to = to.point;
     if (Math.abs(from[0] - to[0]) > ε) {
-      var s = from[0] < to[0] ? π : -π, φ = s / 2;
+      var s = (from[0] < to[0] ? 1 : -1) * direction * π, φ = s / 2;
       context.lineTo(-s, φ);
       context.lineTo(0, φ);
       context.lineTo(s, φ);

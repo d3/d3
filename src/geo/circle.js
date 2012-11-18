@@ -135,11 +135,12 @@ function d3_geo_circleClip(degrees, rotate) {
 function d3_geo_circleInterpolate(radians, precision) {
   var cr = Math.cos(radians),
       sr = Math.sin(radians);
-  return function(from, to, context) {
+  return function(from, to, direction, context) {
+    var step = direction * precision;
     from = from.angle;
     to = to.angle;
     if (from < to) from += 2 * Math.PI;
-    for (var step = precision, t = from; t > to; t -= step) {
+    for (var step = precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
       var c = Math.cos(t),
           s = Math.sin(t),
           point = d3_geo_circleSpherical([
@@ -153,8 +154,8 @@ function d3_geo_circleInterpolate(radians, precision) {
 }
 
 function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, angle) {
-  var unvisited = 0, // number of unvisited entering intersections
-      intersections = [],
+  var subject = [],
+      clip = [],
       segments = [],
       buffer = d3_geo_circleBufferSegments(clipLine),
       winding = 0;
@@ -183,18 +184,22 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
     d3_geo_circleInterpolateCircle(interpolate, x);
     winding.push(winding[0]);
   }
-  // Create a circular linked list using the intersected segment start and
-  // end points, sorted by relative angles.
-  // TODO sort by angle first, then set in/out flags.
   segments.forEach(function(segment) {
     var p0 = segment[0],
-        p1 = segment[segment.length - 1];
+        p1 = segment[segment.length - 1],
+        a,
+        b;
     if (p0[0] !== p1[0] || p0[1] !== p1[1]) {
-      var b = {point: p1, angle: angle(p1), points: [], other: null},
-          a = {point: p0, angle: angle(p0), points: segment, other: b};
-      //b.other = a;
-      intersections.push(a, b);
-      unvisited++;
+      a = {point: p0, points: segment, other: null, visited: false, entry: true, subject: true};
+      b = {point: p0, angle: angle(p0), points: [p0], other: a, visited: false, entry: false, subject: false};
+      a.other = b;
+      subject.push(a);
+      clip.push(b);
+      a = {point: p1, points: [p1], other: null, visited: false, entry: false, subject: true};
+      b = {point: p1, angle: angle(p1), points: [p1], other: a, visited: false, entry: true, subject: false};
+      a.other = b;
+      subject.push(a);
+      clip.push(b);
     } else {
       // TODO attach subsumed holes to the correct Polygons. For now, we can
       // add these as separate Polygons, since typically we draw everything
@@ -207,41 +212,49 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
       context.closePath();
     }
   });
-  if (!unvisited) return;
   // Sort intersection points by relative angles.
-  var start = intersections[0],
-      tmp = null;
-  intersections.sort(function(a, b) { return b.angle - a.angle; });
-  // Construct circular linked list.
-  for (var i = 0; i < intersections.length;) {
-    intersections[i].next = intersections[++i % intersections.length];
-  }
-  while (unvisited) {
-    // Look for unvisited entering intersections.
-    while (start.visited || !start.other) {
-      if (start === tmp) return;
-      start = start.next;
+  clip.sort(function(a, b) { return b.angle - a.angle; });
+  // Construct circular linked lists.
+  [subject, clip].forEach(function(intersections) {
+    for (var i = 0, a = intersections[0], b; i < intersections.length;) {
+      a.next = b = intersections[++i % intersections.length];
+      b.prev = a;
+      a = b;
     }
-    var intersection = start,
-        moved = false,
-        points,
-        point;
+  });
+  if (!subject.length) return;
+  var start = subject[0],
+      current,
+      points,
+      point;
+  while (1) {
+    // Find first unvisited intersection.
+    current = start;
+    while (current.visited) if ((current = current.next) === start) return;
+    points = current.points;
+    context.moveTo((point = points.shift())[0], point[1]);
     do {
-      if (!intersection.other) { unvisited--; break; }
-      intersection.visited = true;
-      point = (points = intersection.points)[0];
-      if (moved) context.lineTo(point[0], point[1]);
-      else context.moveTo(point[0], point[1]), moved = true;
-      for (var i = 1; i < points.length; i++) context.lineTo((point = points[i])[0], point[1]);
-      interpolate(intersection = intersection.other, intersection = intersection.next, context);
-      unvisited--;
-    } while (intersection !== start);
-    if (moved) {
-      context.closePath();
-      moved = false;
-    }
-    tmp = start;
-    start = start.next;
+      current.visited = current.other.visited = true;
+      if (current.entry) {
+        if (current.subject) {
+          for (var i = 0; i < points.length; i++) context.lineTo((point = points[i])[0], point[1]);
+        } else {
+          interpolate(current, current.next, 1, context);
+        }
+        current = current.next;
+      } else {
+        if (current.subject) {
+          points = current.prev.points;
+          for (var i = points.length; --i >= 0;) context.lineTo((point = points[i])[0], point[1]);
+        } else {
+          interpolate(current, current.prev, -1, context);
+        }
+        current = current.prev;
+      }
+      current = current.other;
+      points = current.points;
+    } while (!current.visited);
+    context.closePath();
   }
 }
 
@@ -338,6 +351,6 @@ function d3_geo_circleWinding(p0, p) {
 
 function d3_geo_circleInterpolateCircle(interpolate, context) {
   for (var i = 0; i < 4; i++) {
-    interpolate({angle: -i * π / 2}, {angle: -(i + 1) * π / 2}, context);
+    interpolate({angle: -i * π / 2}, {angle: -(i + 1) * π / 2}, 1, context);
   }
 }
