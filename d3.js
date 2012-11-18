@@ -5495,38 +5495,18 @@
     function circle() {
       var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
       rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-      var rings = [ [] ], context = bufferContext(rings);
-      d3_geo_circleInterpolateCircle(interpolate, context);
-      context.closePath();
-      return {
-        type: "Polygon",
-        coordinates: rings
-      };
-    }
-    function bufferContext(rings) {
-      var ring = rings[0];
-      return {
-        point: function(λ, φ) {
-          var point = rotate.invert(λ, φ);
-          point[0] *= d3_degrees;
-          point[1] *= d3_degrees;
-          rings.push(point);
-        },
-        moveTo: function(λ, φ) {
-          var point = rotate.invert(λ, φ);
-          point[0] *= d3_degrees;
-          point[1] *= d3_degrees;
-          rings.push(ring = [ point ]);
-        },
+      var ring = [];
+      d3_geo_circleInterpolateCircle(interpolate, {
         lineTo: function(λ, φ) {
           var point = rotate.invert(λ, φ);
           point[0] *= d3_degrees;
           point[1] *= d3_degrees;
           ring.push(point);
-        },
-        closePath: function() {
-          if (ring.length) ring.push(ring[0]);
         }
+      });
+      return {
+        type: "Polygon",
+        coordinates: [ ring ]
       };
     }
     circle.origin = function(x) {
