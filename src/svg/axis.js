@@ -101,6 +101,10 @@ d3.svg.axis = function() {
           pathUpdate.attr("d", "M" + tickEndSize + "," + range[0] + "H0V" + range[1] + "H" + tickEndSize);
           break;
         }
+        default: {
+          throw new Error("'" + orient + "' is invalid value");
+          break;
+        }
       }
 
       // For quantitative scales:
