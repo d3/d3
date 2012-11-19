@@ -245,11 +245,11 @@ function d3_geo_antemeridianAngle(point) {
   return -(point[0] < 0 ? point[1] - π / 2 : π / 2 - point[1]);
 }
 
-function d3_geo_antemeridianInterpolate(from, to, context) {
+function d3_geo_antemeridianInterpolate(from, to, direction, context) {
   from = from.point;
   to = to.point;
   if (Math.abs(from[0] - to[0]) > ε) {
-    var s = from[0] < to[0] ? π : -π,
+    var s = (from[0] < to[0] ? 1 : -1) * direction * π,
         φ = s / 2;
     context.lineTo(-s, φ);
     context.lineTo( 0, φ);
