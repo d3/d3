@@ -17,6 +17,7 @@ d3.geo.circle = function() {
         ring.push(point);
       }
     });
+    ring.push(ring[0]);
     return {
       type: "Polygon",
       coordinates: [ring]

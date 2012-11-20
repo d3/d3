@@ -5504,6 +5504,7 @@
           ring.push(point);
         }
       });
+      ring.push(ring[0]);
       return {
         type: "Polygon",
         coordinates: [ ring ]
