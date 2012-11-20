@@ -139,7 +139,7 @@ function d3_geo_circleInterpolate(radians, precision) {
     var step = direction * precision;
     from = from.angle;
     to = to.angle;
-    if (from < to) from += 2 * Math.PI;
+    if (from <= to) from += direction * 2 * Math.PI;
     for (var step = precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
       var c = Math.cos(t),
           s = Math.sin(t),
@@ -158,19 +158,39 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
       clip = [],
       segments = [],
       buffer = d3_geo_circleBufferSegments(clipLine),
-      winding = 0;
+      winding = 0,
+      count = 0;
   coordinates.forEach(function(ring) {
     var x = buffer(ring, context),
         ringSegments = x[1];
     winding += x[0];
-    // Since these are closed rings, we join segments if necessary.
     var n = ringSegments.length;
+    if (!n) return;
+    count += n;
+
+    if (x[0] !== false) {
+      // TODO attach subsumed holes to the correct Polygons. For now, we can
+      // add these as separate Polygons, since typically we draw everything
+      // as a subpath in SVG so it doesn't matter if the holes don't match
+      // their polygons. This would be done by calculating some kind of
+      // winding number.
+      var segment = ringSegments[0],
+          point = segment[0],
+          n = segment.length - 1,
+          i = 0;
+      context.moveTo(point[0], point[1]);
+      while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
+      context.closePath();
+      return;
+    }
+
+    // Since these are closed rings, we join segments if necessary.
     if (n > 1) {
       var firstSegment = ringSegments[0],
           lastSegment = ringSegments[n - 1],
           p0 = firstSegment[0],
           p1 = lastSegment[lastSegment.length - 1];
-      if (p0[0] === p1[0] && p0[1] === p1[1]) {
+      if (Math.abs(p0[0] - p1[0]) < ε && Math.abs(p0[1] - p1[1]) < ε) {
         ringSegments.shift();
         ringSegments.pop();
         ringSegments.push(lastSegment.concat(firstSegment));
@@ -178,39 +198,29 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
     }
     segments = segments.concat(ringSegments);
   });
-  if (segments.length ? winding > 0 : winding < 0) {
-    segments.push(winding = []);
-    x = {lineTo: function(x, y) { winding.push([x, y]); }};
-    d3_geo_circleInterpolateCircle(interpolate, x);
-    winding.push(winding[0]);
+
+  if (count ? winding > 0 : winding < 0) {
+    var moved = false;
+    d3_geo_circleInterpolateCircle(interpolate, {
+      lineTo: function(x, y) {
+        (moved ? context.lineTo : (moved = true, context.moveTo))(x, y);
+      }
+    });
+    context.closePath();
   }
   segments.forEach(function(segment) {
     var p0 = segment[0],
         p1 = segment[segment.length - 1],
-        a,
-        b;
-    if (p0[0] !== p1[0] || p0[1] !== p1[1]) {
-      a = {point: p0, points: segment, other: null, visited: false, entry: true, subject: true};
-      b = {point: p0, angle: angle(p0), points: [p0], other: a, visited: false, entry: false, subject: false};
-      a.other = b;
-      subject.push(a);
-      clip.push(b);
-      a = {point: p1, points: [p1], other: null, visited: false, entry: false, subject: true};
-      b = {point: p1, angle: angle(p1), points: [p1], other: a, visited: false, entry: true, subject: false};
-      a.other = b;
-      subject.push(a);
-      clip.push(b);
-    } else {
-      // TODO attach subsumed holes to the correct Polygons. For now, we can
-      // add these as separate Polygons, since typically we draw everything
-      // as a subpath in SVG so it doesn't matter if the holes don't match
-      // their polygons. This would be done by calculating some kind of
-      // winding number.
-      var point = segment[0], n = segment.length - 1, i = 0;
-      context.moveTo(point[0], point[1]);
-      while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
-      context.closePath();
-    }
+        a = {point: p0, points: segment, other: null, visited: false, entry: true, subject: true},
+        b = {point: p0, angle: angle(p0), points: [p0], other: a, visited: false, entry: false, subject: false};
+    a.other = b;
+    subject.push(a);
+    clip.push(b);
+    a = {point: p1, points: [p1], other: null, visited: false, entry: false, subject: true};
+    b = {point: p1, angle: angle(p1), points: [p1], other: a, visited: false, entry: true, subject: false};
+    a.other = b;
+    subject.push(a);
+    clip.push(b);
   });
   // Sort intersection points by relative angles.
   clip.sort(function(a, b) { return b.angle - a.angle; });
