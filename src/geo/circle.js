@@ -73,31 +73,49 @@ function d3_geo_circleClip(degrees, rotate) {
   function clipLine(coordinates, context, winding) {
     if (!(n = coordinates.length)) return;
     var point0 = rotate(coordinates[0]),
+        point2,
         inside = visible(point0),
         keepWinding = winding != null,
-        n;
-    if (inside) context.moveTo(point0[0], point0[1]);
+        closed = keepWinding && inside,
+        n,
+        move0,
+        line0;
+    if (inside) context.moveTo((move0 = point0)[0], point0[1]);
     for (var i = 1; i < n; i++) {
       var point1 = rotate(coordinates[i]),
           v = visible(point1);
       if (v !== inside) {
-        keepWinding = false;
         if (inside = v) {
           // outside going in
-          point0 = intersect(point1, point0);
-          context.moveTo(point0[0], point0[1]);
+          point2 = intersect(point1, point0);
+          // avoid coincident points
+          if (!line0 || (Math.abs(line0[0] - point2[0]) > ε || Math.abs(line0[1] - point2[1]) > ε)) {
+            if (move0) keepWinding = false;
+            context.moveTo((move0 = point2)[0], point2[1]);
+          }
+          if (keepWinding) winding += d3_geo_circleWinding(point2, point1);
+          point0 = point2;
         } else {
           // inside going out
-          point0 = intersect(point0, point1);
-          context.lineTo(point0[0], point0[1]);
+          line0 = point2 = intersect(point0, point1);
+          context.lineTo(point2[0], point2[1]);
+          // check to see if this generates a closed polygon
+          if (keepWinding) {
+            if (Math.abs(move0[0] - point2[0]) > ε || Math.abs(move0[1] - point2[1]) > ε) {
+              keepWinding = false;
+            } else {
+              winding += d3_geo_circleWinding(point0, move0);
+            }
+          }
+          point0 = point2;
         }
-      } else if (keepWinding) {
-        winding += d3_geo_circleWinding(point0, point1);
       }
+      if (keepWinding) winding += d3_geo_circleWinding(point0, point1);
       if (v) context.lineTo(point1[0], point1[1]);
       point0 = point1;
     }
-    return keepWinding && winding;
+    if (closed && v) context.closePath();
+    return keepWinding && (!move0 || Math.abs(move0[0] - point0[0]) < ε && Math.abs(move0[1] - point0[1]) < ε) && winding;
   }
 
   // Intersects the great circle between a and b with the clip circle.
@@ -139,7 +157,7 @@ function d3_geo_circleInterpolate(radians, precision) {
     var step = direction * precision;
     from = from.angle;
     to = to.angle;
-    if (from < to) from += 2 * Math.PI;
+    if (from < to) from += 2 * π;
     for (var step = precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
       var c = Math.cos(t),
           s = Math.sin(t),
@@ -158,59 +176,51 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
       clip = [],
       segments = [],
       buffer = d3_geo_circleBufferSegments(clipLine),
-      winding = 0;
+      winding = 0,
+      count = 0;
   coordinates.forEach(function(ring) {
     var x = buffer(ring, context),
         ringSegments = x[1];
     winding += x[0];
-    // Since these are closed rings, we join segments if necessary.
     var n = ringSegments.length;
-    if (n > 1) {
-      var firstSegment = ringSegments[0],
-          lastSegment = ringSegments[n - 1],
-          p0 = firstSegment[0],
-          p1 = lastSegment[lastSegment.length - 1];
-      if (p0[0] === p1[0] && p0[1] === p1[1]) {
-        ringSegments.shift();
-        ringSegments.pop();
-        ringSegments.push(lastSegment.concat(firstSegment));
-      }
+    if (!n) return;
+    count += n;
+
+    if (x[0] !== false) {
+      var segment = ringSegments[0],
+          point = segment[0],
+          n = segment.length - 1,
+          i = 0;
+      context.moveTo(point[0], point[1]);
+      while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
+      context.closePath();
+      return;
     }
     segments = segments.concat(ringSegments);
   });
-  if (segments.length ? winding > 0 : winding < 0) {
-    segments.push(winding = []);
-    x = {lineTo: function(x, y) { winding.push([x, y]); }};
-    d3_geo_circleInterpolateCircle(interpolate, x);
-    winding.push(winding[0]);
+
+  if (count ? winding > 0 : winding < 0) {
+    var moved = false;
+    d3_geo_circleInterpolateCircle(interpolate, {
+      lineTo: function(x, y) {
+        (moved ? context.lineTo : (moved = true, context.moveTo))(x, y);
+      }
+    });
+    context.closePath();
   }
   segments.forEach(function(segment) {
     var p0 = segment[0],
         p1 = segment[segment.length - 1],
-        a,
-        b;
-    if (p0[0] !== p1[0] || p0[1] !== p1[1]) {
-      a = {point: p0, points: segment, other: null, visited: false, entry: true, subject: true};
-      b = {point: p0, angle: angle(p0), points: [p0], other: a, visited: false, entry: false, subject: false};
-      a.other = b;
-      subject.push(a);
-      clip.push(b);
-      a = {point: p1, points: [p1], other: null, visited: false, entry: false, subject: true};
-      b = {point: p1, angle: angle(p1), points: [p1], other: a, visited: false, entry: true, subject: false};
-      a.other = b;
-      subject.push(a);
-      clip.push(b);
-    } else {
-      // TODO attach subsumed holes to the correct Polygons. For now, we can
-      // add these as separate Polygons, since typically we draw everything
-      // as a subpath in SVG so it doesn't matter if the holes don't match
-      // their polygons. This would be done by calculating some kind of
-      // winding number.
-      var point = segment[0], n = segment.length - 1, i = 0;
-      context.moveTo(point[0], point[1]);
-      while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
-      context.closePath();
-    }
+        a = {point: p0, points: segment, other: null, visited: false, entry: true, subject: true},
+        b = {point: p0, angle: angle(p0), points: [p0], other: a, visited: false, entry: false, subject: false};
+    a.other = b;
+    subject.push(a);
+    clip.push(b);
+    a = {point: p1, points: [p1], other: null, visited: false, entry: false, subject: true};
+    b = {point: p1, angle: angle(p1), points: [p1], other: a, visited: false, entry: true, subject: false};
+    a.other = b;
+    subject.push(a);
+    clip.push(b);
   });
   // Sort intersection points by relative angles.
   clip.sort(function(a, b) { return b.angle - a.angle; });
@@ -324,7 +334,11 @@ function d3_geo_circleBufferSegments(f) {
           point: d3_noop,
           moveTo: function(x, y) { segments.push(segment = [[x, y]]); },
           lineTo: function(x, y) { segment.push([x, y]); },
-          closePath: d3_noop
+          closePath: function() {
+            if (segments.length < 2) return;
+            segments.pop();
+            segments.push(segment = segment.concat(segments.shift()));
+          }
         }, 0),
       segments
     ];

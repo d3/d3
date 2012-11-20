@@ -289,8 +289,29 @@ suite.addBatch({
           path(antarctica);
           assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
         }
+      },
+      "circle.angle(120)": {
+        "rotate([210, 1])": function(path) {
+          try {
+            path.projection().rotate([210, 1]);
+            path(d3.geo.circle().angle(120)());
+            assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
+          } finally {
+            path.projection().rotate([0, 0]);
+          }
+        },
+        "rotate([-150, 60])": function(path) {
+          try {
+            path.projection().rotate([-150, 60]);
+            path(d3.geo.circle().angle(120)());
+            assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+          } finally {
+            path.projection().rotate([0, 0]);
+          }
+        }
       }
     },
+
     "stereographic.precision(1)": {
       topic: function() {
         return d3.geo.path()
