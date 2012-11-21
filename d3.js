@@ -6133,14 +6133,17 @@
     projection.point = function(coordinates, c) {
       context = c;
       clip.point(coordinates, resample);
+      context = null;
     };
     projection.line = function(coordinates, c) {
       context = c;
       clip.line(coordinates, resample);
+      context = null;
     };
     projection.polygon = function(coordinates, c) {
       context = c;
       clip.polygon(coordinates, resample);
+      context = null;
     };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;
