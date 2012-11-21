@@ -6292,7 +6292,7 @@
     from = from.point;
     to = to.point;
     if (Math.abs(from[0] - to[0]) > ε) {
-      var s = (from[0] < to[0] ? 1 : -1) * direction * π, φ = s / 2;
+      var s = (from[0] < to[0] ? 1 : -1) * π, φ = direction * s / 2;
       context.lineTo(-s, φ);
       context.lineTo(0, φ);
       context.lineTo(s, φ);
