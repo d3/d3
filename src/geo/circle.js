@@ -186,7 +186,7 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
     if (!n) return;
     count += n;
 
-    if (x[0] !== false) {
+    if (typeof x[0] === "number") {
       var segment = ringSegments[0],
           point = segment[0],
           n = segment.length - 1,

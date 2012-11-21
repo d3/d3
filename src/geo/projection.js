@@ -198,7 +198,7 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
       var point = rotatePoint(coordinates);
       context.point(point[0], point[1]);
     },
-    line: function(coordinates, context) {
+    line: function(coordinates, context, winding) {
       if (!(n = coordinates.length)) return;
       var point = rotatePoint(coordinates[0]),
           λ0 = point[0],
@@ -233,6 +233,7 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
         }
         sλ0 = sλ1;
       }
+      if (winding != null) context.closePath();
     },
     polygon: function(polygon, context) {
       d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate, d3_geo_antemeridianAngle);
