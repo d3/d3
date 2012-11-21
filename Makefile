@@ -232,6 +232,9 @@ d3.geom.js: \
 test: all
 	@$(JS_TESTER)
 
+benchmark: all
+	@node test/geo/benchmark.js
+
 %.min.js: %.js Makefile
 	@rm -f $@
 	$(JS_UGLIFY) $< -c -m -o $@
