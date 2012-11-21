@@ -6118,7 +6118,7 @@
     })();
   }
   function d3_geo_projectionMutator(projectAt) {
-    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, δ2 = .5, clip = d3_geo_projectionCutAntemeridian(rotatePoint), clipAngle = null;
+    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, δ2 = .5, clip = d3_geo_projectionCutAntemeridian(rotatePoint), clipAngle = null, context;
     function projection(coordinates) {
       coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
       return [ coordinates[0] * k + δx, δy - coordinates[1] * k ];
@@ -6127,61 +6127,62 @@
       coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
-    projection.point = function(coordinates, context) {
-      clip.point(coordinates, resample(context));
+    projection.point = function(coordinates, c) {
+      context = c;
+      clip.point(coordinates, resample);
     };
-    projection.line = function(coordinates, context) {
-      clip.line(coordinates, resample(context));
+    projection.line = function(coordinates, c) {
+      context = c;
+      clip.line(coordinates, resample);
     };
-    projection.polygon = function(coordinates, context) {
-      clip.polygon(coordinates, resample(context));
+    projection.polygon = function(coordinates, c) {
+      context = c;
+      clip.polygon(coordinates, resample);
     };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;
       clip = _ == null ? (clipAngle = _, d3_geo_projectionCutAntemeridian(rotatePoint)) : d3_geo_circleClip(clipAngle = +_, rotatePoint);
       return projection;
     };
-    function resample(context) {
-      var λ00, φ00, λ0, sinφ0, cosφ0, x0, y0, maxDepth = δ2 > 0 && 16;
-      function point(λ, φ) {
-        var p = projectPoint(λ, φ);
-        context.point(p[0], p[1]);
-      }
-      function moveTo(λ, φ) {
-        var p = projectPoint(λ00 = λ0 = λ, φ00 = φ);
-        sinφ0 = Math.sin(φ);
-        cosφ0 = Math.cos(φ);
-        context.moveTo(x0 = p[0], y0 = p[1]);
-      }
-      function lineTo(λ, φ) {
-        var p = projectPoint(λ, φ);
-        resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x0 = p[0], y0 = p[1], λ0 = λ, sinφ0 = Math.sin(φ), cosφ0 = Math.cos(φ), maxDepth);
-        context.lineTo(x0, y0);
-      }
-      function resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x1, y1, λ1, sinφ1, cosφ1, depth) {
-        var dx = x1 - x0, dy = y1 - y0, distance2 = dx * dx + dy * dy;
-        if (distance2 > 4 * δ2 && depth--) {
-          var cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)), y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)), z = Math.max(-1, Math.min(1, k * (sinφ0 + sinφ1))), φ2 = Math.asin(z), zε = Math.abs(Math.abs(z) - 1), λ2 = zε < ε || zε < εε && (Math.abs(cosφ0) < εε || Math.abs(cosφ1) < εε) ? (λ0 + λ1) / 2 : Math.atan2(y, x), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x0 - x2, dy2 = y0 - y2, dz = dx * dy2 - dy * dx2;
-          if (dz * dz / distance2 > δ2) {
-            var cosφ2 = Math.cos(φ2);
-            resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x2, y2, λ2, z, cosφ2, depth);
-            context.lineTo(x2, y2);
-            resampleLineTo(x2, y2, λ2, z, cosφ2, x1, y1, λ1, sinφ1, cosφ1, depth);
-          }
+    var λ00, φ00, λ0, sinφ0, cosφ0, x0, y0, maxDepth = 16;
+    function point(λ, φ) {
+      var p = projectPoint(λ, φ);
+      context.point(p[0], p[1]);
+    }
+    function moveTo(λ, φ) {
+      var p = projectPoint(λ00 = λ0 = λ, φ00 = φ);
+      sinφ0 = Math.sin(φ);
+      cosφ0 = Math.cos(φ);
+      context.moveTo(x0 = p[0], y0 = p[1]);
+    }
+    function lineTo(λ, φ) {
+      var p = projectPoint(λ, φ);
+      resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x0 = p[0], y0 = p[1], λ0 = λ, sinφ0 = Math.sin(φ), cosφ0 = Math.cos(φ), maxDepth);
+      context.lineTo(x0, y0);
+    }
+    function resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x1, y1, λ1, sinφ1, cosφ1, depth) {
+      var dx = x1 - x0, dy = y1 - y0, distance2 = dx * dx + dy * dy;
+      if (distance2 > 4 * δ2 && depth--) {
+        var cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)), y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)), z = Math.max(-1, Math.min(1, k * (sinφ0 + sinφ1))), φ2 = Math.asin(z), zε = Math.abs(Math.abs(z) - 1), λ2 = zε < ε || zε < εε && (Math.abs(cosφ0) < εε || Math.abs(cosφ1) < εε) ? (λ0 + λ1) / 2 : Math.atan2(y, x), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x0 - x2, dy2 = y0 - y2, dz = dx * dy2 - dy * dx2;
+        if (dz * dz / distance2 > δ2) {
+          var cosφ2 = Math.cos(φ2);
+          resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x2, y2, λ2, z, cosφ2, depth);
+          context.lineTo(x2, y2);
+          resampleLineTo(x2, y2, λ2, z, cosφ2, x1, y1, λ1, sinφ1, cosφ1, depth);
         }
       }
-      function closePath() {
-        var p = projectPoint(λ00, φ00);
-        resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, p[0], p[1], λ00, Math.sin(φ00), Math.cos(φ00), maxDepth);
-        context.closePath();
-      }
-      return {
-        point: point,
-        moveTo: moveTo,
-        lineTo: lineTo,
-        closePath: closePath
-      };
     }
+    function closePath() {
+      var p = projectPoint(λ00, φ00);
+      resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, p[0], p[1], λ00, Math.sin(φ00), Math.cos(φ00), maxDepth);
+      context.closePath();
+    }
+    var resample = {
+      point: point,
+      moveTo: moveTo,
+      lineTo: lineTo,
+      closePath: closePath
+    };
     function rotatePoint(coordinates) {
       return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
     }
@@ -6215,7 +6216,7 @@
     };
     projection.precision = function(_) {
       if (!arguments.length) return Math.sqrt(δ2);
-      δ2 = _ * _;
+      maxDepth = (δ2 = _ * _) > 0 && 16;
       return projection;
     };
     function reset() {
