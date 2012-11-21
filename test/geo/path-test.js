@@ -348,6 +348,23 @@ suite.addBatch({
       }
     },
 
+    "antemeridian cutting": {
+      "rotate([330, 232])": {
+        topic: function() {
+          return d3.geo.path()
+              .context(testContext)
+              .projection(d3.geo.equirectangular()
+                .rotate([330, 232])
+                .scale(900 / Math.PI)
+                .precision(0));
+        },
+        "degenerate points": function(path) {
+          path(d3.geo.circle().angle(30)());
+          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
+        }
+      }
+    },
+
     "stereographic.precision(1)": {
       topic: function() {
         return d3.geo.path()

@@ -221,17 +221,17 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
           context.lineTo(sλ0, φ0);
           context.moveTo(sλ1, φ0);
           context.lineTo(λ1, φ0);
-          context.lineTo(λ0 = λ1, φ0 = φ1);
           keepWinding = false;
         } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antemeridian
+          // handle degeneracies
+          if (Math.abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
+          if (Math.abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-          if (Math.abs(λ0 - sλ0) > ε) context.lineTo(sλ0, φ0);
-          if (Math.abs(λ1 - sλ1) > ε) context.moveTo(sλ1, φ0), context.lineTo(λ0 = λ1, φ0 = φ1);
-          else context.moveTo(λ0 = λ1, φ0 = φ1);
+          context.lineTo(sλ0, φ0);
+          context.moveTo(sλ1, φ0);
           keepWinding = false;
-        } else {
-          context.lineTo(λ0 = λ1, φ0 = φ1);
         }
+        context.lineTo(λ0 = λ1, φ0 = φ1);
         sλ0 = sλ1;
       }
       if (winding != null) context.closePath();
