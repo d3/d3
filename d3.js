@@ -5670,16 +5670,9 @@
       subject.push(a);
       clip.push(b);
     });
-    clip.sort(function(a, b) {
-      return b.angle - a.angle;
-    });
-    [ subject, clip ].forEach(function(intersections) {
-      for (var i = 0, a = intersections[0], b; i < intersections.length; ) {
-        a.next = b = intersections[++i % intersections.length];
-        b.prev = a;
-        a = b;
-      }
-    });
+    clip.sort(d3_geo_circleClipSort);
+    d3_geo_circleLinkCircular(subject);
+    d3_geo_circleLinkCircular(clip);
     if (!subject.length) return;
     var start = subject[0], current, points, point;
     while (1) {
@@ -5710,6 +5703,16 @@
       } while (!current.visited);
       context.closePath();
     }
+  }
+  function d3_geo_circleLinkCircular(array) {
+    for (var i = 0, a = array[0], b, n = array.length; i < n; ) {
+      a.next = b = array[++i % n];
+      b.prev = a;
+      a = b;
+    }
+  }
+  function d3_geo_circleClipSort(a, b) {
+    return b.angle - a.angle;
   }
   function d3_geo_circleAngle(center) {
     return function(point) {
