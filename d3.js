@@ -5611,7 +5611,7 @@
       var n = ringSegments.length;
       if (!n) return;
       count += n;
-      if (x[0] !== false) {
+      if (typeof x[0] === "number") {
         var segment = ringSegments[0], point = segment[0], n = segment.length - 1, i = 0;
         context.moveTo(point[0], point[1]);
         while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
@@ -6241,9 +6241,9 @@
         var point = rotatePoint(coordinates);
         context.point(point[0], point[1]);
       },
-      line: function(coordinates, context) {
+      line: function(coordinates, context, winding) {
         if (!(n = coordinates.length)) return;
-        var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, dλ, i = 0, n;
+        var point = rotatePoint(coordinates[0]), keepWinding = true, λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, dλ, i = 0, n;
         context.moveTo(λ0, φ0);
         while (++i < n) {
           point = rotatePoint(coordinates[i]);
@@ -6257,15 +6257,19 @@
             context.moveTo(sλ1, φ0);
             context.lineTo(λ1, φ0);
             context.lineTo(λ0 = λ1, φ0 = φ1);
+            keepWinding = false;
           } else if (sλ0 !== sλ1 && dλ >= π) {
             φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
             if (Math.abs(λ0 - sλ0) > ε) context.lineTo(sλ0, φ0);
             if (Math.abs(λ1 - sλ1) > ε) context.moveTo(sλ1, φ0), context.lineTo(λ0 = λ1, φ0 = φ1); else context.moveTo(λ0 = λ1, φ0 = φ1);
+            keepWinding = false;
           } else {
             context.lineTo(λ0 = λ1, φ0 = φ1);
           }
           sλ0 = sλ1;
         }
+        if (winding != null) context.closePath();
+        return keepWinding && winding;
       },
       polygon: function(polygon, context) {
         d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate, d3_geo_antemeridianAngle);
