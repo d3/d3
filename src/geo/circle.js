@@ -223,15 +223,10 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
     clip.push(b);
   });
   // Sort intersection points by relative angles.
-  clip.sort(function(a, b) { return b.angle - a.angle; });
+  clip.sort(d3_geo_circleClipSort);
   // Construct circular linked lists.
-  [subject, clip].forEach(function(intersections) {
-    for (var i = 0, a = intersections[0], b; i < intersections.length;) {
-      a.next = b = intersections[++i % intersections.length];
-      b.prev = a;
-      a = b;
-    }
-  });
+  d3_geo_circleLinkCircular(subject);
+  d3_geo_circleLinkCircular(clip);
   if (!subject.length) return;
   var start = subject[0],
       current,
@@ -267,6 +262,16 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate, a
     context.closePath();
   }
 }
+
+function d3_geo_circleLinkCircular(array) {
+  for (var i = 0, a = array[0], b, n = array.length; i < n;) {
+    a.next = b = array[++i % n];
+    b.prev = a;
+    a = b;
+  }
+}
+
+function d3_geo_circleClipSort(a, b) { return b.angle - a.angle; }
 
 // Signed angle of a cartesian point relative to [0, 0, 0].
 function d3_geo_circleAngle(center) {
