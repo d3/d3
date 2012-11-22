@@ -7,11 +7,6 @@ PACKAGE_JSON = package.json
 LOCALE ?= en_US
 
 # when node or any of these tools has not been installed, ignore them.
-ifeq ($(wildcard $(JS_COMPILER)),)
-JS_COMPILER = cat
-NODE_PATH = 
-PACKAGE_JSON =
-endif
 ifeq ($(wildcard $(JS_TESTER)),)
 JS_TESTER = echo "no test rig installed"
 NODE_PATH = 
@@ -40,8 +35,13 @@ all: \
 	d3.time.js \
 	src/end.js
 
+CORE_LOCALE_DEPS = 
+ifneq ($(whereis node),)				# only do these when you have NodeJS installed
+CORE_LOCALE_DEPS = src/core/format-$(LOCALE).js
+endif
+
 d3.core.js: \
-	src/core/format-$(LOCALE).js \
+	$(CORE_LOCALE_DEPS) \
 	src/compat/date.js \
 	src/compat/style.js \
 	src/core/core.js \
@@ -218,9 +218,14 @@ d3.dsv.js: \
 	src/dsv/csv.js \
 	src/dsv/tsv.js
 
+TIME_LOCALE_DEPS = 
+ifneq ($(whereis node),)				# only do these when you have NodeJS installed
+TIME_LOCALE_DEPS = src/time/format-$(LOCALE).js
+endif
+
 d3.time.js: \
 	src/time/time.js \
-	src/time/format-$(LOCALE).js \
+	$(TIME_LOCALE_DEPS) \
 	src/time/format.js \
 	src/time/format-utc.js \
 	src/time/format-iso.js \
@@ -247,39 +252,60 @@ test: all
 	@$(JS_TESTER)
 
 benchmark: all
+ifneq ($(whereis node),)				# only do these when you have NodeJS installed
 	@node test/geo/benchmark.js
+endif
 
 %.min.js: %.js Makefile
 	@rm -f $@
+ifeq ($(wildcard $(JS_COMPILER)),)		# when node or any of these tools has not been installed, ignore them.
+	@cat $< > $@
+else
 	$(JS_COMPILER) $< -c -m -o $@
+endif
 	@chmod a-w $@
 
 d3%js: Makefile
 	@rm -f $@
+ifeq ($(wildcard $(JS_COMPILER)),)		# when node or any of these tools has not been installed, ignore them.
+	@cat $(filter %.js,$^) > $@
+else
 	@cat $(filter %.js,$^) > $@.tmp
 	$(JS_COMPILER) $@.tmp -b indent-level=2 -o $@
 	@rm $@.tmp
+endif
 	@chmod a-w $@
 
 component.json: src/component.js
+ifneq ($(whereis node),)				# only do these when you have NodeJS installed
 	@rm -f $@
 	node src/component.js > $@
 	@chmod a-w $@
+endif
 
 $(PACKAGE_JSON): src/package.js
+ifneq ($(whereis node),)				# only do these when you have NodeJS installed
 	@rm -f $@
 	node src/package.js > $@
 	@chmod a-w $@
+endif
 
 src/core/format-$(LOCALE).js: src/locale.js src/core/format-locale.js
+ifneq ($(whereis node),)				# only do these when you have NodeJS installed
 	LC_NUMERIC=$(LOCALE) locale -ck LC_NUMERIC | node src/locale.js src/core/format-locale.js > $@
+endif
 
 src/time/format-$(LOCALE).js: src/locale.js src/time/format-locale.js
+ifneq ($(whereis node),)				# only do these when you have NodeJS installed
 	LC_TIME=$(LOCALE) locale -ck LC_TIME | node src/locale.js src/time/format-locale.js > $@
+endif
 
 .INTERMEDIATE: \
 	src/core/format-$(LOCALE).js \
 	src/time/format-$(LOCALE).js
 
 clean:
-	rm -f d3*.js $(PACKAGE_JSON) component.json
+	rm -f d3*.js 
+ifneq ($(whereis node),)				# only do these when you have NodeJS installed
+	rm -f $(PACKAGE_JSON) component.json
+endif
