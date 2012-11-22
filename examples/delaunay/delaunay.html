@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Delaunay Triangulation</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">    <title>Delaunay Triangulation</title>
+    <script src="../../d3.js"></script>
+<style>
 
 @import url("../../lib/colorbrewer/colorbrewer.css");
 
@@ -13,10 +10,10 @@ path {
   stroke-width: .5px;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var width = 960,
     height = 500;
@@ -38,6 +35,4 @@ svg.append("g")
     .attr("class", function(d, i) { return "q" + (i % 9) + "-9"; })
     .attr("d", function(d) { return "M" + d.join("L") + "Z"; });
 
-    </script>
-  </body>
-</html>
+</script>

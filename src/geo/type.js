@@ -13,13 +13,13 @@ var d3_geo_typeDefaults = {
     this.geometry(feature.geometry);
   },
 
-  FeatureCollection: function(colllection) {
-    var features = colllection.features, i = -1, n = features.length;
+  FeatureCollection: function(collection) {
+    var features = collection.features, i = -1, n = features.length;
     while (++i < n) this.Feature(features[i]);
   },
 
-  GeometryCollection: function(colllection) {
-    var geometries = colllection.geometries, i = -1, n = geometries.length;
+  GeometryCollection: function(collection) {
+    var geometries = collection.geometries, i = -1, n = geometries.length;
     while (++i < n) this.geometry(geometries[i]);
   },
 

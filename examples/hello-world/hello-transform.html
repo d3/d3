@@ -1,20 +1,16 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, world!</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-  </head>
-  <body>
-    Your lucky numbers are:<br>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <span></span>
-    <script type="text/javascript">
+<meta charset="utf-8">
+<title>Hello, world!</title>
+Press any key:<br>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<span></span>
+<script src="../../d3.js"></script>
+<script>
 
-d3.selectAll("span")
-  .append("svg")
+d3.selectAll("span").append("svg")
     .attr("width", 100)
     .attr("height", 100)
   .append("text")
@@ -27,15 +23,13 @@ d3.selectAll("span")
     .attr("stroke-width", 1.5)
     .style("font", "36pt Comic Sans MS")
     .style("text-shadow", "3px 3px 3px rgba(0,0,0,.4)")
-    .text(function() { return ~~(Math.random() * 100); });
+    .text(function() { return Math.floor(Math.random() * 100); });
 
 function transform() {
   d3.selectAll("text")
-      .text(function() { return ~~(Math.random() * 100); });
+      .text(function() { return Math.floor(Math.random() * 100); });
 }
 
-window.addEventListener("keypress", transform, false);
+d3.select(window).on("keypress", transform);
 
-    </script>
-  </body>
-</html>
+</script>

@@ -1,25 +1,16 @@
 d3_transitionPrototype.each = function(type, listener) {
+  var id = this.id;
   if (arguments.length < 2) {
-    var id = d3_transitionId,
-        ease = d3_transitionEase,
-        delay = d3_transitionDelay,
-        duration = d3_transitionDuration;
-
-    d3_transitionId = this.id;
+    var inherit = d3_transitionInherit,
+        inheritId = d3_transitionInheritId;
+    d3_transitionInheritId = id;
     d3_selection_each(this, function(node, i, j) {
-      var transition = node.__transition__[d3_transitionId];
-      d3_transitionEase = transition.ease;
-      d3_transitionDelay = transition.delay;
-      d3_transitionDuration = transition.duration;
+      d3_transitionInherit = node.__transition__[id];
       type.call(node, node.__data__, i, j);
     });
-
-    d3_transitionId = id;
-    d3_transitionEase = ease;
-    d3_transitionDelay = delay;
-    d3_transitionDuration = duration;
+    d3_transitionInherit = inherit;
+    d3_transitionInheritId = inheritId;
   } else {
-    var id = this.id;
     d3_selection_each(this, function(node) {
       node.__transition__[id].event.on(type, listener);
     });

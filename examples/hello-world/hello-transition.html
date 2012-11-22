@@ -1,9 +1,8 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, transition!</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Hello, transition!</title>
+<script src="../../d3.js"></script>
+<style>
 
 body {
   font: 14px Helvetica Neue;
@@ -19,12 +18,11 @@ div {
   text-align: right;
 }
 
-    </style>
-  </head>
-  <body>
-    Your lucky number is:<br>
-    <div></div>
-    <script type="text/javascript">
+</style>
+Press any key:
+<div></div>
+<script src="../../d3.js"></script>
+<script>
 
 transform();
 
@@ -40,8 +38,6 @@ function transform() {
       .style("background-color", "brown");
 }
 
-window.addEventListener("keypress", transform, false);
+d3.select(window).on("keypress", transform);
 
-    </script>
-  </body>
-</html>
+</script>

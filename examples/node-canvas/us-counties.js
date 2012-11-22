@@ -21,7 +21,7 @@ context.antialias = "none";
 context.lineWidth = 8;
 context.lineJoin = "round";
 
-d3.json(__dirname + "/../data/us-counties.json", function(collection) {
+d3.json(__dirname + "/../data/us-counties.json", function(error, collection) {
   renderAll("stroke");
   renderAll("fill");
 

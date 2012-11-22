@@ -120,7 +120,7 @@ var d3_time_scaleLocalMethods = [
 ];
 
 var d3_time_scaleLocalFormats = [
-  [d3.time.format("%Y"), function(d) { return true; }],
+  [d3.time.format("%Y"), d3_true],
   [d3.time.format("%B"), function(d) { return d.getMonth(); }],
   [d3.time.format("%b %d"), function(d) { return d.getDate() != 1; }],
   [d3.time.format("%a %d"), function(d) { return d.getDay() && d.getDate() != 1; }],

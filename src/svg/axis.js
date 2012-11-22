@@ -48,7 +48,6 @@ d3.svg.axis = function() {
 
         // Domain.
         var path = g.selectAll(".domain").data([0]),
-            pathEnter = path.enter().append("path").attr("class", "domain"),
             pathUpdate = d3.transition(path);
 
         // Stash a snapshot of the new scale, and retrieve the old snapshot.
@@ -56,6 +55,7 @@ d3.svg.axis = function() {
             scale0 = this.__chart__ || scale1;
         this.__chart__ = scale1;
 
+        path.enter().append("path").attr("class", "domain");
         tickEnter.append("line").attr("class", "tick");
         tickEnter.append("text").attr("class", "tick-text");
 
@@ -232,7 +232,7 @@ d3.svg.axis = function() {
     return axis;
   };
 
-  axis.tickSize = function(major, minor, end) {
+  axis.tickSize = function(x, y) {
     var n = arguments.length;
     if (!n) return [tickMajorSize, tickMinorSize, tickEndSize];
     tickMajorSize = d3_functor(major);

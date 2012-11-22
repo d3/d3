@@ -1,19 +1,16 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Force-Directed Layout (Multiple Foci)</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-  </head>
-  <body>
-    <div id="chart"></div>
-    <script type="text/javascript">
+<meta charset="utf-8">
+<title>Force-Directed Layout (Multiple Foci)</title>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 500,
     fill = d3.scale.category10(),
     nodes = d3.range(100).map(Object);
 
-var vis = d3.select("#chart").append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -23,7 +20,7 @@ var force = d3.layout.force()
     .size([width, height])
     .start();
 
-var node = vis.selectAll("circle.node")
+var node = svg.selectAll("circle.node")
     .data(nodes)
   .enter().append("circle")
     .attr("class", "node")
@@ -35,7 +32,7 @@ var node = vis.selectAll("circle.node")
     .style("stroke-width", 1.5)
     .call(force.drag);
 
-vis.style("opacity", 1e-6)
+svg.style("opacity", 1e-6)
   .transition()
     .duration(1000)
     .style("opacity", 1);
@@ -61,6 +58,4 @@ d3.select("body").on("click", function() {
   force.resume();
 });
 
-    </script>
-  </body>
-</html>
+</script>

@@ -3,7 +3,7 @@ var d3_time_scaleUTCMethods = d3_time_scaleLocalMethods.map(function(m) {
 });
 
 var d3_time_scaleUTCFormats = [
-  [d3.time.format.utc("%Y"), function(d) { return true; }],
+  [d3.time.format.utc("%Y"), d3_true],
   [d3.time.format.utc("%B"), function(d) { return d.getUTCMonth(); }],
   [d3.time.format.utc("%b %d"), function(d) { return d.getUTCDate() != 1; }],
   [d3.time.format.utc("%a %d"), function(d) { return d.getUTCDay() && d.getUTCDate() != 1; }],

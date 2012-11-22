@@ -1,18 +1,16 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Donut Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Donut Chart</title>
+<style>
 
 body {
   font: 10px sans-serif;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 400,
     height = 400,
@@ -27,12 +25,11 @@ var width = 400,
     arc = d3.svg.arc(),
     donut = d3.layout.pie().sort(null);
 
-var vis = d3.select("body")
-  .append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-vis.selectAll("g.arc")
+svg.selectAll(".arc")
     .data(arcs(data0, data1))
   .enter().append("g")
     .attr("class", "arc")
@@ -41,7 +38,7 @@ vis.selectAll("g.arc")
     .attr("fill", function(d, i) { return color(i); })
     .attr("d", arc);
 
-window.addEventListener("keypress", swap, false);
+d3.select(window).on("keypress", swap);
 
 function arcs(data0, data1) {
   var arcs0 = donut(data0),
@@ -58,7 +55,7 @@ function arcs(data0, data1) {
 }
 
 function swap() {
-  d3.selectAll("g.arc > path")
+  d3.selectAll(".arc > path")
       .data(++q & 1 ? arcs(data0, data1) : arcs(data1, data0))
       .each(transitionSplit);
 }
@@ -118,6 +115,4 @@ function tweenArc(b) {
   };
 }
 
-    </script>
-  </body>
-</html>
+</script>

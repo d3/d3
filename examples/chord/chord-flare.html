@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+<meta charset="utf-8">
+<meta http-equiv="Content-type" content="text/html; charset=utf-8">
     <title>Chord Diagram</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+    <script src="../../d3.js"></script>
+<style>
 
 body {
   font: 10px sans-serif;
@@ -14,10 +13,10 @@ path.chord {
   fill-opacity: .67;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var outerRadius = 960 / 2,
     innerRadius = outerRadius - 120;
@@ -39,7 +38,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")");
 
-d3.json("../data/flare-imports.json", function(imports) {
+d3.json("../data/flare-imports.json", function(error, imports) {
   var indexByName = {},
       nameByIndex = {},
       matrix = [],
@@ -103,6 +102,4 @@ d3.json("../data/flare-imports.json", function(imports) {
 
 });
 
-    </script>
-  </body>
-</html>
+</script>

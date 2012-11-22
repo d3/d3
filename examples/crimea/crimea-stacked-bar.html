@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Crimean War</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Crimean War</title>
+<style>
 
 svg {
   width: 960px;
@@ -12,10 +10,10 @@ svg {
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var margin = {top: 20, right: 50, bottom: 30, left: 20},
     width = 960 - margin.right - margin.left,
@@ -39,7 +37,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + (height + margin.top) + ")");
 
-d3.csv("crimea.csv", function(crimea) {
+d3.csv("crimea.csv", function(error, crimea) {
 
   // Transpose the data into layers by cause.
   var causes = d3.layout.stack()(["wounds", "other", "disease"].map(function(cause) {
@@ -97,6 +95,4 @@ d3.csv("crimea.csv", function(crimea) {
       .text(d3.format(",d"));
 });
 
-    </script>
-  </body>
-</html>
+</script>

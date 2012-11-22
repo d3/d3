@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<style>
 
 svg {
   border: solid 1px #000;
@@ -17,10 +15,10 @@ svg {
   stroke-width: 2px;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var margin = {top: 120, right: 60, bottom: 60, left: 60},
     width = 1280 - margin.right - margin.left,
@@ -65,7 +63,7 @@ var area = d3.svg.area()
     .y0(height / 4 - 20)
     .y1(function(d) { return y(d.price); });
 
-d3.csv("../data/stocks.csv", function(data) {
+d3.csv("../data/stocks.csv", function(error, data) {
   var parse = d3.time.format("%b %Y").parse,
       filter = {AAPL: 1, AMZN: 1, MSFT: 1, IBM: 1};
 
@@ -655,6 +653,4 @@ function donutExplode() {
   }
 }
 
-    </script>
-  </body>
-</html>
+</script>

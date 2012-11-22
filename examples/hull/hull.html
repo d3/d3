@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Convex Hull</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">    <title>Convex Hull</title>
+    <script src="../../d3.js"></script>
+<style>
 
 svg {
   border: solid 1px #aaa;
@@ -21,10 +18,10 @@ circle {
   stroke: #000;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var width = 960,
     height = 500;
@@ -69,6 +66,4 @@ function click() {
   vertices.push(d3.mouse(this));
   update();
 }
-    </script>
-  </body>
-</html>
+</script>

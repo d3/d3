@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Quadtree</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Quadtree</title>
+<style>
 
 svg {
   padding: 2px;
@@ -21,10 +19,10 @@ rect {
   stroke-opacity: .3;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 500;
 
@@ -108,6 +106,4 @@ function find(quadtree, x0, y0, x3, y3) {
   return points;
 }
 
-    </script>
-  </body>
-</html>
+</script>

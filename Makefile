@@ -2,7 +2,6 @@
 
 NODE_PATH ?= ./node_modules
 JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
-JS_BEAUTIFIER = $(NODE_PATH)/uglify-js/bin/uglifyjs -b -i 2 -nm -ns
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
 PACKAGE_JSON = package.json
 LOCALE ?= en_US
@@ -10,11 +9,6 @@ LOCALE ?= en_US
 # when node or any of these tools has not been installed, ignore them.
 ifeq ($(wildcard $(JS_COMPILER)),)
 JS_COMPILER = cat
-NODE_PATH = 
-PACKAGE_JSON =
-endif
-ifeq ($(wildcard $(JS_BEAUTIFIER)),)
-JS_BEAUTIFIER = cat
 NODE_PATH = 
 PACKAGE_JSON =
 endif
@@ -47,6 +41,7 @@ all: \
 	src/end.js
 
 d3.core.js: \
+	src/core/format-$(LOCALE).js \
 	src/compat/date.js \
 	src/compat/style.js \
 	src/core/core.js \
@@ -54,7 +49,6 @@ d3.core.js: \
 	src/core/array.js \
 	src/core/map.js \
 	src/core/identity.js \
-	src/core/this.js \
 	src/core/true.js \
 	src/core/functor.js \
 	src/core/rebind.js \
@@ -142,7 +136,6 @@ d3.core.js: \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
 	src/core/transition-tween.js \
-	src/core/tween.js \
 	src/core/timer.js \
 	src/core/mouse.js \
 	src/core/touches.js \
@@ -253,14 +246,19 @@ d3.geom.js: \
 test: all
 	@$(JS_TESTER)
 
+benchmark: all
+	@node test/geo/benchmark.js
+
 %.min.js: %.js Makefile
 	@rm -f $@
-	cat $< | $(JS_COMPILER) > $@
+	$(JS_COMPILER) $< -c -m -o $@
 	@chmod a-w $@
 
 d3%js: Makefile
 	@rm -f $@
-	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
+	@cat $(filter %.js,$^) > $@.tmp
+	$(JS_COMPILER) $@.tmp -b indent-level=2 -o $@
+	@rm $@.tmp
 	@chmod a-w $@
 
 component.json: src/component.js
@@ -272,6 +270,16 @@ $(PACKAGE_JSON): src/package.js
 	@rm -f $@
 	node src/package.js > $@
 	@chmod a-w $@
+
+src/core/format-$(LOCALE).js: src/locale.js src/core/format-locale.js
+	LC_NUMERIC=$(LOCALE) locale -ck LC_NUMERIC | node src/locale.js src/core/format-locale.js > $@
+
+src/time/format-$(LOCALE).js: src/locale.js src/time/format-locale.js
+	LC_TIME=$(LOCALE) locale -ck LC_TIME | node src/locale.js src/time/format-locale.js > $@
+
+.INTERMEDIATE: \
+	src/core/format-$(LOCALE).js \
+	src/time/format-$(LOCALE).js
 
 clean:
 	rm -f d3*.js $(PACKAGE_JSON) component.json

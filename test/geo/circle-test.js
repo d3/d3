@@ -7,27 +7,11 @@ var suite = vows.describe("d3.geo.circle");
 
 suite.addBatch({
   "circle": {
-    "clip": {
-      topic: function() {
-        return d3.geo.circle().origin([-71.03, -42.37]).clip;
-      },
-      "grid component": function(clip) {
-        var yStepsBig = d3.range(-90, 90, 10);
-        assert.inDelta(clip({type: "LineString", coordinates: yStepsBig.map(function(y) { return [110, y]; })}).coordinates, [[
-          [109.538009, -90],
-          [110, -80],
-          [110, -70],
-          [110, -60],
-          [110, -50],
-          [110, -47.625390]
-        ]], 1e-6);
-      },
-      "can completely clip a LineString": function(clip) {
-        assert.isNull(clip({type: "LineString", coordinates: [[90.0, -42.37], [95.0, -42.37], [90.0, -42.37]]}));
-      },
-      "doesn't insert a duplicate point": function(clip) {
-        assert.inDelta(clip({type: "LineString", coordinates: [[0, 0]]}).coordinates, [[[0, 0]]], 1e-6);
-      }
+    topic: d3.geo.circle,
+    "generates a Polygon": function(circle) {
+      var o = circle();
+      assert.equal(o.type, "Polygon");
+      assert.inDelta(o.coordinates, [[[-90, 0], [-90, 6], [-90, 12], [-90, 18], [-90, 24], [-90, 30], [-90, 36], [-90, 42], [-90, 48], [-90, 54], [-90, 60], [-90, 66], [-90, 72], [-90, 78], [-90, 84], [-77.803070, 90], [-45, 90], [90, 84], [90, 78], [90, 72], [90, 66], [90, 60], [90, 54], [90, 48], [90, 42], [90, 36], [90, 30], [90, 24], [90, 18], [90, 12], [90, 6], [90, 0], [90, -6], [90, -12], [90, -18], [90, -24], [90, -30], [90, -36], [90, -42], [90, -48], [90, -54], [90, -60], [90, -66], [90, -72], [90, -78], [90, -84], [86.730543, -90], [71.565051, -90], [-90, -84], [-90, -78], [-90, -72], [-90, -66], [-90, -60], [-90, -54], [-90, -48], [-90, -42], [-90, -36], [-90, -30], [-90, -24], [-90, -18], [-90, -12], [-90, -6], [-90, 0]]], 1e-6);
     }
   }
 });

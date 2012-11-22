@@ -12,7 +12,8 @@ suite.addBatch({
     topic: function() {
       return d3.geo.graticule()
           .extent([[-90, -45], [90, 45]])
-          .step([45, 45]);
+          .step([45, 45])
+          .precision(3);
     },
 
     "extent": {

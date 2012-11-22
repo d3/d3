@@ -384,10 +384,10 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
   quad.cy = cy / quad.charge;
 }
 
-function d3_layout_forceLinkDistance(link) {
+function d3_layout_forceLinkDistance(/*link*/) {
   return 20;
 }
 
-function d3_layout_forceLinkStrength(link) {
+function d3_layout_forceLinkStrength(/*link*/) {
   return 1;
 }
