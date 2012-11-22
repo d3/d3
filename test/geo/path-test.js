@@ -362,6 +362,23 @@ suite.addBatch({
           path(d3.geo.circle().angle(30)());
           assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
         }
+      },
+      "rotate([34.5, 90])": {
+        topic: function() {
+          return d3.geo.path()
+              .context(testContext)
+              .projection(d3.geo.equirectangular()
+                .rotate([34.5, 90])
+                .scale(900 / Math.PI)
+                .precision(0));
+        },
+        "clip point ordering": function(path) {
+          var line = d3.range(-90,  180,  10).map(function(x) { return [x, 20]; })
+             .concat(d3.range(170, -100, -10).map(function(x) { return [x,  0]; }))
+             .concat([[-90, 20]]);
+          path({type: "Polygon", coordinates: [line]});
+          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 3);
+        }
       }
     },
 

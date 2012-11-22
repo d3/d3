@@ -6286,7 +6286,7 @@
     return clip;
   }
   function d3_geo_antemeridianAngle(point) {
-    return -(point[0] < 0 ? point[1] - π / 2 : π / 2 - point[1]);
+    return -(point[0] < 0 ? point[1] - π / 2 - ε : π / 2 - point[1]);
   }
   function d3_geo_antemeridianInterpolate(from, to, direction, context) {
     from = from.point;
