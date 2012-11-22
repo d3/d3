@@ -221,17 +221,17 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
           context.lineTo(sλ0, φ0);
           context.moveTo(sλ1, φ0);
           context.lineTo(λ1, φ0);
-          context.lineTo(λ0 = λ1, φ0 = φ1);
           keepWinding = false;
         } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antemeridian
+          // handle degeneracies
+          if (Math.abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
+          if (Math.abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-          if (Math.abs(λ0 - sλ0) > ε) context.lineTo(sλ0, φ0);
-          if (Math.abs(λ1 - sλ1) > ε) context.moveTo(sλ1, φ0), context.lineTo(λ0 = λ1, φ0 = φ1);
-          else context.moveTo(λ0 = λ1, φ0 = φ1);
+          context.lineTo(sλ0, φ0);
+          context.moveTo(sλ1, φ0);
           keepWinding = false;
-        } else {
-          context.lineTo(λ0 = λ1, φ0 = φ1);
         }
+        context.lineTo(λ0 = λ1, φ0 = φ1);
         sλ0 = sλ1;
       }
       if (winding != null) context.closePath();
@@ -245,15 +245,15 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
 }
 
 function d3_geo_antemeridianAngle(point) {
-  return -(point[0] < 0 ? point[1] - π / 2 : π / 2 - point[1]);
+  return -(point[0] < 0 ? point[1] - π / 2 - ε : π / 2 - point[1]);
 }
 
 function d3_geo_antemeridianInterpolate(from, to, direction, context) {
   from = from.point;
   to = to.point;
   if (Math.abs(from[0] - to[0]) > ε) {
-    var s = (from[0] < to[0] ? 1 : -1) * direction * π,
-        φ = s / 2;
+    var s = (from[0] < to[0] ? 1 : -1) * π,
+        φ = direction * s / 2;
     context.lineTo(-s, φ);
     context.lineTo( 0, φ);
     context.lineTo( s, φ);
