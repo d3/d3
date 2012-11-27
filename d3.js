@@ -5828,7 +5828,7 @@
     graticule.outline = function() {
       return {
         type: "Polygon",
-        coordinates: [ x(x0).concat(y(y1).slice(1), x(x1).reverse().slice(1), y(y0).reverse().slice(1)) ]
+        coordinates: []
       };
     };
     graticule.extent = function(_) {
