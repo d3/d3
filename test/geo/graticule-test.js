@@ -60,7 +60,7 @@ suite.addBatch({
       "returns a Polygon": function(graticule) {
         assert.deepEqual(graticule.outline(), {
           type: "Polygon",
-          coordinates: []
+          coordinates: [[]]
         });
       }
     },

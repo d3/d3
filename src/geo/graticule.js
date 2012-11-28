@@ -18,7 +18,7 @@ d3.geo.graticule = function() {
   graticule.outline = function() {
     return {
       type: "Polygon",
-      coordinates: []
+      coordinates: [[]]
     };
   };
 
