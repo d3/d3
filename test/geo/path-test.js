@@ -451,6 +451,42 @@ suite.addBatch({
     },
 
     "antemeridian cutting": {
+      "rotate([98, 0])": {
+        topic: function() {
+          return d3.geo.path()
+              .context(testContext)
+              .projection(d3.geo.equirectangular()
+                .scale(900 / Math.PI)
+                .rotate([98, 0])
+                .precision(0));
+        },
+        "small U.S. county polygons": {
+          "Keweenaw": function(path) {
+            path({
+              type: "Polygon",
+              coordinates: [[[-88.23013, 47.198326], [-88.514931, 47.285957], [-88.383484, 47.285957], [-88.23013, 47.198326]]]
+            });
+            assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+          },
+          "Accomack": function(path) {
+            path({
+              type: "MultiPolygon",
+              coordinates: [
+                [[[-75.397659, 38.013497], [-75.244304, 38.029928], [-75.666029, 37.465803], [-75.939876, 37.547957], [-75.671506, 37.95325], [-75.622213, 37.991589], [-75.397659, 38.013497]]],
+                [[[-76.016553, 37.95325], [-76.043938, 37.95325], [-75.994645, 37.95325], [-76.016553, 37.95325]]]
+              ]
+            });
+            assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
+          },
+          "Hopewell": function(path) {
+            path({
+              type: "Polygon",
+              coordinates: [[[-77.298157, 37.312448], [-77.298157, 37.312448], [-77.336496, 37.312448], [-77.281726, 37.312448], [-77.298157, 37.312448]]]
+            });
+            assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+          }
+        }
+      },
       "rotate([330, 232])": {
         topic: function() {
           return d3.geo.path()
