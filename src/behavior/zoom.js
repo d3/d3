@@ -81,6 +81,10 @@ d3.behavior.zoom = function() {
   }
 
   function mousedown() {
+    // Do not zoom on right click
+    if (d3.event.button === 2) {
+      return;
+    }
     var target = this,
         event_ = event.of(target, arguments),
         eventTarget = d3.event.target,
