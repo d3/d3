@@ -10,7 +10,7 @@ d3.xhr = function(url, mimeType, callback) {
 
   function xhr(d) {
     xhr.on("error", d).on("load", function(request) { d(null, request); });
-  }
+  };
 
   function respond() {
     var s = request.status;
