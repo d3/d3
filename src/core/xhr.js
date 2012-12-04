@@ -1,6 +1,5 @@
 d3.xhr = function(url, mimeType, callback) {
-  var xhr = {},
-      dispatch = d3.dispatch("progress", "load", "error"),
+  var dispatch = d3.dispatch("progress", "load", "error"),
       headers = {},
       response = d3_identity,
       request = new (window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest);
@@ -8,6 +7,10 @@ d3.xhr = function(url, mimeType, callback) {
   "onload" in request
       ? request.onload = request.onerror = respond
       : request.onreadystatechange = function() { request.readyState > 3 && respond(); };
+
+  function xhr(d) {
+    xhr.on("error", d).on("load", function(request) { d(null, request); });
+  };
 
   function respond() {
     var s = request.status;
