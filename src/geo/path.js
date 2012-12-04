@@ -101,8 +101,8 @@ d3.geo.path = function() {
 
   function ringCentroid(centroid, ring, i) {
     var polygon = d3.geom.polygon(ring.map(projection)),
-        area = polygon.area();
-    var point = polygon.centroid(area < 0 ^ i > 0 ? (area *= -1, 1) : -1);
+        area = polygon.area(),
+        point = polygon.centroid(area < 0 ^ i > 0 ? (area *= -1, 1) : -1);
     centroid[0] += point[0];
     centroid[1] += point[1];
     return area * 6;
