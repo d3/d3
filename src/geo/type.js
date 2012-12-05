@@ -50,6 +50,8 @@ var d3_geo_typeDefaults = {
     this.polygon(polygon.coordinates);
   },
 
+  Sphere: d3_noop,
+
   // dispatch for any GeoJSON object type
   object: function(object) {
     return d3_geo_typeObjects.hasOwnProperty(object.type)
@@ -86,7 +88,8 @@ var d3_geo_typeGeometries = {
   MultiPoint: 1,
   MultiPolygon: 1,
   Point: 1,
-  Polygon: 1
+  Polygon: 1,
+  Sphere: 1
 };
 
 var d3_geo_typeObjects = {

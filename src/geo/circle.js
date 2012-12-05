@@ -60,6 +60,9 @@ function d3_geo_circleClip(degrees, rotate) {
     },
     polygon: function(polygon, context) {
       d3_geo_circleClipPolygon(polygon, context, clipLine, interpolate);
+    },
+    sphere: function(context) {
+      d3_geo_projectionSphere(context, interpolate);
     }
   };
 
@@ -95,7 +98,7 @@ function d3_geo_circleClip(degrees, rotate) {
       // handle degeneracies
       if (v !== v0) {
         point2 = intersect(point0, point1);
-        if (pointsEqual(point0, point2) || pointsEqual(point1, point2)) {
+        if (d3_geo_circlePointsEqual(point0, point2) || d3_geo_circlePointsEqual(point1, point2)) {
           point1[0] += ε;
           point1[1] += ε;
           v = visible(point1);
@@ -122,7 +125,7 @@ function d3_geo_circleClip(degrees, rotate) {
         x0 = x;
         y0 = y;
       }
-      if (v && !pointsEqual(point0, point1)) context.lineTo(point1[0], point1[1]);
+      if (v && !d3_geo_circlePointsEqual(point0, point1)) context.lineTo(point1[0], point1[1]);
       point0 = point1;
     }
     return [
@@ -197,6 +200,7 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
       visibleArea = 0,
       invisibleArea = 0,
       invisible = false;
+
   coordinates.forEach(function(ring) {
     var x = buffer(ring, context),
         ringSegments = x[1],
@@ -229,14 +233,8 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
   });
 
   if (!segments.length) {
-    if (visibleArea < 0 || invisible && invisibleArea <= 0) {
-      var moved = false;
-      interpolate(null, null, 1, {
-        lineTo: function(x, y) {
-          (moved ? context.lineTo : (moved = true, context.moveTo))(x, y);
-        }
-      });
-      context.closePath();
+    if (visibleArea < 0 || invisible && invisibleArea < 0) {
+      d3_geo_projectionSphere(context, interpolate);
     }
   }
   segments.forEach(function(segment) {
@@ -378,7 +376,7 @@ function d3_geo_circleBufferSegments(f) {
   };
 }
 
-function pointsEqual(a, b) {
+function d3_geo_circlePointsEqual(a, b) {
   return Math.abs(a[0] - b[0]) < ε && Math.abs(a[1] - b[1]) < ε;
 }
 

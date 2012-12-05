@@ -38,6 +38,7 @@ function d3_geo_projectionMutator(projectAt) {
   projection.point =   function(coordinates, c) { context = c; clip.point(coordinates,   resample); context = null; };
   projection.line =    function(coordinates, c) { context = c; clip.line(coordinates,    resample); context = null; };
   projection.polygon = function(coordinates, c) { context = c; clip.polygon(coordinates, resample); context = null; };
+  projection.sphere =  function(             c) { context = c; clip.sphere(              resample); context = null; };
 
   projection.clipAngle = function(_) {
     if (!arguments.length) return clipAngle;
@@ -250,6 +251,9 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
     },
     polygon: function(polygon, context) {
       d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate);
+    },
+    sphere: function(context) {
+      d3_geo_projectionSphere(context, d3_geo_antemeridianInterpolate);
     }
   };
   return clip;
@@ -276,4 +280,14 @@ function d3_geo_antemeridianInterpolate(from, to, direction, context) {
   } else {
     context.lineTo(to[0], to[1]);
   }
+}
+
+function d3_geo_projectionSphere(context, interpolate) {
+  var moved = false;
+  interpolate(null, null, 1, {
+    lineTo: function(x, y) {
+      (moved ? context.lineTo : (moved = true, context.moveTo))(x, y);
+    }
+  });
+  context.closePath();
 }
