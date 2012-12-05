@@ -5366,9 +5366,7 @@
     Polygon: function(polygon) {
       this.polygon(polygon.coordinates);
     },
-    Sphere: function() {
-      this.sphere();
-    },
+    Sphere: d3_noop,
     object: function(object) {
       return d3_geo_typeObjects.hasOwnProperty(object.type) ? this[object.type](object) : this.geometry(object);
     },
@@ -5383,8 +5381,7 @@
     polygon: function(coordinates) {
       var i = -1, n = coordinates.length;
       while (++i < n) this.line(coordinates[i]);
-    },
-    sphere: d3_noop
+    }
   };
   var d3_geo_typeGeometries = {
     LineString: 1,
@@ -5988,7 +5985,7 @@
       point: function(coordinates) {
         projection.point(coordinates, context);
       },
-      sphere: function() {
+      Sphere: function() {
         projection.sphere(context);
       }
     });
@@ -6011,13 +6008,26 @@
       Point: d3_zero,
       Polygon: function(polygon) {
         return polygonArea(polygon.coordinates);
-      }
+      },
+      Sphere: sphereArea
     });
     function ringArea(coordinates) {
       return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
     }
     function polygonArea(coordinates) {
       return ringArea(coordinates[0]) - d3.sum(coordinates.slice(1), ringArea);
+    }
+    function sphereArea() {
+      var ring = [];
+      function lineTo(x, y) {
+        ring.push([ x, y ]);
+      }
+      projection.sphere({
+        moveTo: lineTo,
+        lineTo: lineTo,
+        closePath: d3_noop
+      });
+      return Math.abs(d3.geom.polygon(ring).area());
     }
     path.area = function(object) {
       return areaType.object(object);
@@ -6031,7 +6041,8 @@
       MultiPoint: d3_geo_pathCentroid2(pointCentroid),
       MultiPolygon: d3_geo_pathCentroid3(ringCentroid),
       Point: d3_geo_pathCentroid1(pointCentroid),
-      Polygon: d3_geo_pathCentroid2(ringCentroid)
+      Polygon: d3_geo_pathCentroid2(ringCentroid),
+      Sphere: sphereCentroid
     });
     function pointCentroid(centroid, point) {
       point = projection(point);
@@ -6062,6 +6073,18 @@
       centroid[0] += point[0];
       centroid[1] += point[1];
       return area * 6;
+    }
+    function sphereCentroid() {
+      var ring = [];
+      function lineTo(x, y) {
+        ring.push([ x, y ]);
+      }
+      projection.sphere({
+        moveTo: lineTo,
+        lineTo: lineTo,
+        closePath: d3_noop
+      });
+      return d3.geom.polygon(ring).centroid();
     }
     path.bounds = function(object) {
       return (bounds || (bounds = d3_geo_bounds(projection)))(object);

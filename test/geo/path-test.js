@@ -109,6 +109,9 @@ suite.addBatch({
       "holes": function(area) {
         assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]],
                                                                 [[100.2, .2], [100.8, .2], [100.8, .8], [100.2, .8], [100.2, .2]]]}), 16);
+      },
+      "Sphere": function(area) {
+        assert.strictEqual(area({type: "Sphere"}), 1620000);
       }
     },
 
@@ -222,6 +225,9 @@ suite.addBatch({
         "is undefined": function(centroid) {
           assert.isUndefined(centroid({type: "FeatureCollection", features: []}));
         }
+      },
+      "Sphere": function(centroid) {
+        assert.deepEqual(centroid({type: "Sphere"}), [480, 250]);
       }
     },
 

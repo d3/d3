@@ -50,9 +50,7 @@ var d3_geo_typeDefaults = {
     this.polygon(polygon.coordinates);
   },
 
-  Sphere: function() {
-    this.sphere();
-  },
+  Sphere: d3_noop,
 
   // dispatch for any GeoJSON object type
   object: function(object) {
@@ -81,9 +79,7 @@ var d3_geo_typeDefaults = {
   polygon: function(coordinates) {
     var i = -1, n = coordinates.length;
     while (++i < n) this.line(coordinates[i]);
-  },
-
-  sphere: d3_noop
+  }
 };
 
 var d3_geo_typeGeometries = {

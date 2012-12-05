@@ -30,7 +30,7 @@ d3.geo.path = function() {
     line: function(coordinates) { projection.line(coordinates, context); },
     polygon: function(coordinates) { projection.polygon(coordinates, context); },
     point: function(coordinates) { projection.point(coordinates, context); },
-    sphere: function() { projection.sphere(context); }
+    Sphere: function() { projection.sphere(context); }
   });
 
   var areaType = d3_geo_type({
@@ -42,7 +42,8 @@ d3.geo.path = function() {
     MultiPoint: d3_zero,
     MultiPolygon: function(multiPolygon) { return d3.sum(multiPolygon.coordinates, polygonArea); },
     Point: d3_zero,
-    Polygon: function(polygon) { return polygonArea(polygon.coordinates); }
+    Polygon: function(polygon) { return polygonArea(polygon.coordinates); },
+    Sphere: sphereArea
   });
 
   function ringArea(coordinates) {
@@ -51,6 +52,17 @@ d3.geo.path = function() {
 
   function polygonArea(coordinates) {
     return ringArea(coordinates[0]) - d3.sum(coordinates.slice(1), ringArea);
+  }
+
+  function sphereArea() {
+    var ring = [];
+    function lineTo(x, y) { ring.push([x, y]); }
+    projection.sphere({
+      moveTo: lineTo,
+      lineTo: lineTo,
+      closePath: d3_noop
+    });
+    return Math.abs(d3.geom.polygon(ring).area());
   }
 
   path.area = function(object) { return areaType.object(object); };
@@ -62,7 +74,8 @@ d3.geo.path = function() {
     MultiPoint: d3_geo_pathCentroid2(pointCentroid),
     MultiPolygon: d3_geo_pathCentroid3(ringCentroid),
     Point: d3_geo_pathCentroid1(pointCentroid),
-    Polygon: d3_geo_pathCentroid2(ringCentroid)
+    Polygon: d3_geo_pathCentroid2(ringCentroid),
+    Sphere: sphereCentroid
   });
 
   function pointCentroid(centroid, point) {
@@ -107,6 +120,17 @@ d3.geo.path = function() {
     centroid[0] += point[0];
     centroid[1] += point[1];
     return area * 6;
+  }
+
+  function sphereCentroid() {
+    var ring = [];
+    function lineTo(x, y) { ring.push([x, y]); }
+    projection.sphere({
+      moveTo: lineTo,
+      lineTo: lineTo,
+      closePath: d3_noop
+    });
+    return d3.geom.polygon(ring).centroid();
   }
 
   path.bounds = function(object) {
