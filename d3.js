@@ -5950,7 +5950,7 @@
     return d3_geo_projection(d3_geo_orthographic);
   }).raw = d3_geo_orthographic;
   d3.geo.path = function() {
-    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), bounds, buffer = [];
+    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), bounds, buffer = [], array, arrays = [];
     var bufferContext = {
       point: function(x, y) {
         buffer.push("M", x, ",", y, pointCircle);
@@ -5963,6 +5963,20 @@
       },
       closePath: function() {
         buffer.push("Z");
+      }
+    };
+    var arrayContext = {
+      point: function(x, y) {
+        arrays.push([ x, y ]);
+      },
+      moveTo: function(x, y) {
+        arrays.push(array = [ [ x, y ] ]);
+      },
+      lineTo: function(x, y) {
+        array.push([ x, y ]);
+      },
+      closePath: function() {
+        array.push(array[0]);
       }
     };
     var context = bufferContext;
@@ -6012,22 +6026,21 @@
       Sphere: sphereArea
     });
     function ringArea(coordinates) {
-      return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
+      return d3.geom.polygon(coordinates).area();
     }
     function polygonArea(coordinates) {
-      return ringArea(coordinates[0]) - d3.sum(coordinates.slice(1), ringArea);
+      projection.polygon(coordinates, arrayContext);
+      var area = Math.abs(d3.sum(arrays, ringArea));
+      array = null;
+      arrays = [];
+      return area;
     }
     function sphereArea() {
-      var ring = [];
-      function lineTo(x, y) {
-        ring.push([ x, y ]);
-      }
-      projection.sphere({
-        moveTo: lineTo,
-        lineTo: lineTo,
-        closePath: d3_noop
-      });
-      return Math.abs(d3.geom.polygon(ring).area());
+      projection.sphere(arrayContext);
+      var area = Math.abs(ringArea(array));
+      array = null;
+      arrays = [];
+      return area;
     }
     path.area = function(object) {
       return areaType.object(object);
@@ -6075,16 +6088,11 @@
       return area * 6;
     }
     function sphereCentroid() {
-      var ring = [];
-      function lineTo(x, y) {
-        ring.push([ x, y ]);
-      }
-      projection.sphere({
-        moveTo: lineTo,
-        lineTo: lineTo,
-        closePath: d3_noop
-      });
-      return d3.geom.polygon(ring).centroid();
+      projection.sphere(arrayContext);
+      var centroid = d3.geom.polygon(array).centroid();
+      array = null;
+      arrays = [];
+      return centroid;
     }
     path.bounds = function(object) {
       return (bounds || (bounds = d3_geo_bounds(projection)))(object);
