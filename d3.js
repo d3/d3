@@ -5638,7 +5638,7 @@
       segments = segments.concat(ringSegments.filter(d3_geo_circleSegmentLength1));
     });
     if (!segments.length) {
-      if (visibleArea < 0 || invisible && invisibleArea <= 0) {
+      if (visibleArea < 0 || invisible && invisibleArea < 0) {
         var moved = false;
         interpolate(null, null, 1, {
           lineTo: function(x, y) {
@@ -5829,7 +5829,7 @@
     graticule.outline = function() {
       return {
         type: "Polygon",
-        coordinates: [ [] ]
+        coordinates: [ x(x0).concat(y(y1).slice(1), x(x1).reverse().slice(1), y(y0).reverse().slice(1)) ]
       };
     };
     graticule.extent = function(_) {

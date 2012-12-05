@@ -229,7 +229,7 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
   });
 
   if (!segments.length) {
-    if (visibleArea < 0 || invisible && invisibleArea <= 0) {
+    if (visibleArea < 0 || invisible && invisibleArea < 0) {
       var moved = false;
       interpolate(null, null, 1, {
         lineTo: function(x, y) {
