@@ -418,6 +418,10 @@ suite.addBatch({
           }
         }
       },
+      "Sphere": function(path) {
+        path({type: "Sphere"});
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 87, y: 700}]);
+      }
     },
     "clipAngle(170)": {
       topic: function() {

@@ -5366,6 +5366,9 @@
     Polygon: function(polygon) {
       this.polygon(polygon.coordinates);
     },
+    Sphere: function() {
+      this.polygon(null);
+    },
     object: function(object) {
       return d3_geo_typeObjects.hasOwnProperty(object.type) ? this[object.type](object) : this.geometry(object);
     },
@@ -5388,7 +5391,8 @@
     MultiPoint: 1,
     MultiPolygon: 1,
     Point: 1,
-    Polygon: 1
+    Polygon: 1,
+    Sphere: 1
   };
   var d3_geo_typeObjects = {
     Feature: 1,
@@ -5618,25 +5622,29 @@
   }
   function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
     var subject = [], clip = [], segments = [], buffer = d3_geo_circleBufferSegments(clipLine), draw = [], visibleArea = 0, invisibleArea = 0, invisible = false;
-    coordinates.forEach(function(ring) {
-      var x = buffer(ring, context), ringSegments = x[1], segment, n = ringSegments.length;
-      if (!n) {
-        invisible = true;
-        invisibleArea += x[0][0];
-        return;
-      }
-      if (x[0][0] !== false) {
-        visibleArea += x[0][0];
-        draw.push(segment = ringSegments[0]);
-        var point = segment[0], n = segment.length - 1, i = 0;
-        context.moveTo(point[0], point[1]);
-        while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
-        context.closePath();
-        return;
-      }
-      if (n > 1 && x[0][1]) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
-      segments = segments.concat(ringSegments.filter(d3_geo_circleSegmentLength1));
-    });
+    if (coordinates) {
+      coordinates.forEach(function(ring) {
+        var x = buffer(ring, context), ringSegments = x[1], segment, n = ringSegments.length;
+        if (!n) {
+          invisible = true;
+          invisibleArea += x[0][0];
+          return;
+        }
+        if (x[0][0] !== false) {
+          visibleArea += x[0][0];
+          draw.push(segment = ringSegments[0]);
+          var point = segment[0], n = segment.length - 1, i = 0;
+          context.moveTo(point[0], point[1]);
+          while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
+          context.closePath();
+          return;
+        }
+        if (n > 1 && x[0][1]) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
+        segments = segments.concat(ringSegments.filter(d3_geo_circleSegmentLength1));
+      });
+    } else {
+      visibleArea = -4 * π;
+    }
     if (!segments.length) {
       if (visibleArea < 0 || invisible && invisibleArea < 0) {
         var moved = false;

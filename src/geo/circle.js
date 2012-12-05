@@ -197,36 +197,41 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
       visibleArea = 0,
       invisibleArea = 0,
       invisible = false;
-  coordinates.forEach(function(ring) {
-    var x = buffer(ring, context),
-        ringSegments = x[1],
-        segment,
-        n = ringSegments.length;
 
-    if (!n) {
-      invisible = true;
-      invisibleArea += x[0][0];
-      return;
-    }
+  if (coordinates) {
+    coordinates.forEach(function(ring) {
+      var x = buffer(ring, context),
+          ringSegments = x[1],
+          segment,
+          n = ringSegments.length;
 
-    // No intersections.
-    if (x[0][0] !== false) {
-      visibleArea += x[0][0];
-      draw.push(segment = ringSegments[0]);
-      var point = segment[0],
-          n = segment.length - 1,
-          i = 0;
-      context.moveTo(point[0], point[1]);
-      while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
-      context.closePath();
-      return;
-    }
+      if (!n) {
+        invisible = true;
+        invisibleArea += x[0][0];
+        return;
+      }
 
-    // Rejoin connected segments.
-    if (n > 1 && x[0][1]) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
+      // No intersections.
+      if (x[0][0] !== false) {
+        visibleArea += x[0][0];
+        draw.push(segment = ringSegments[0]);
+        var point = segment[0],
+            n = segment.length - 1,
+            i = 0;
+        context.moveTo(point[0], point[1]);
+        while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
+        context.closePath();
+        return;
+      }
 
-    segments = segments.concat(ringSegments.filter(d3_geo_circleSegmentLength1));
-  });
+      // Rejoin connected segments.
+      if (n > 1 && x[0][1]) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
+
+      segments = segments.concat(ringSegments.filter(d3_geo_circleSegmentLength1));
+    });
+  } else {
+    visibleArea = -4 * π; // whole sphere
+  }
 
   if (!segments.length) {
     if (visibleArea < 0 || invisible && invisibleArea < 0) {
