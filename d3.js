@@ -6052,9 +6052,9 @@
       LineString: d3_geo_pathCentroid1(lineCentroid),
       MultiLineString: d3_geo_pathCentroid2(lineCentroid),
       MultiPoint: d3_geo_pathCentroid2(pointCentroid),
-      MultiPolygon: d3_geo_pathCentroid3(ringCentroid),
+      MultiPolygon: d3_geo_pathCentroid2(polygonCentroid),
       Point: d3_geo_pathCentroid1(pointCentroid),
-      Polygon: d3_geo_pathCentroid2(ringCentroid),
+      Polygon: d3_geo_pathCentroid1(polygonCentroid),
       Sphere: sphereCentroid
     });
     function pointCentroid(centroid, point) {
@@ -6080,11 +6080,16 @@
       }
       return z;
     }
-    function ringCentroid(centroid, ring, i) {
-      var polygon = d3.geom.polygon(ring.map(projection)), area = polygon.area(), point = polygon.centroid(area < 0 ^ i > 0 ? (area *= -1, 
-      1) : -1);
-      centroid[0] += point[0];
-      centroid[1] += point[1];
+    function polygonCentroid(centroid, polygon) {
+      projection.polygon(polygon, arrayContext);
+      for (var i = 0, area = 0, n = arrays.length; i < n; ++i) {
+        var p = d3.geom.polygon(arrays[i]), a = p.area(), point = p.centroid(-1);
+        centroid[0] += point[0];
+        centroid[1] += point[1];
+        area += a;
+      }
+      array = null;
+      arrays = [];
       return area * 6;
     }
     function sphereCentroid() {
@@ -6132,16 +6137,6 @@
     return function(polygon) {
       for (var centroid = [ 0, 0 ], z = 0, rings = polygon.coordinates, i = 0, n = rings.length; i < n; ++i) {
         z += weightedCentroid(centroid, rings[i], i);
-      }
-      return z ? (centroid[0] /= z, centroid[1] /= z, centroid) : null;
-    };
-  }
-  function d3_geo_pathCentroid3(weightedCentroid) {
-    return function(multiPolygon) {
-      for (var centroid = [ 0, 0 ], z = 0, polygons = multiPolygon.coordinates, i = 0, n = polygons.length; i < n; ++i) {
-        for (var rings = polygons[i], j = 0, m = rings.length; j < m; ++j) {
-          z += weightedCentroid(centroid, rings[j], j);
-        }
       }
       return z ? (centroid[0] /= z, centroid[1] /= z, centroid) : null;
     };
