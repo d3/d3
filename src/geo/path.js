@@ -29,7 +29,8 @@ d3.geo.path = function() {
   var pathType = d3_geo_type({
     line: function(coordinates) { projection.line(coordinates, context); },
     polygon: function(coordinates) { projection.polygon(coordinates, context); },
-    point: function(coordinates) { projection.point(coordinates, context); }
+    point: function(coordinates) { projection.point(coordinates, context); },
+    sphere: function() { projection.sphere(context); }
   });
 
   var areaType = d3_geo_type({
