@@ -38,6 +38,8 @@ all: \
 CORE_LOCALE_DEPS = 
 ifneq ($(whereis node),)				# only do these when you have NodeJS installed
 CORE_LOCALE_DEPS = src/core/format-$(LOCALE).js
+else
+CORE_LOCALE_DEPS = src/core/format-locale-en_us.js
 endif
 
 d3.core.js: \
@@ -221,6 +223,8 @@ d3.dsv.js: \
 TIME_LOCALE_DEPS = 
 ifneq ($(whereis node),)				# only do these when you have NodeJS installed
 TIME_LOCALE_DEPS = src/time/format-$(LOCALE).js
+else
+TIME_LOCALE_DEPS = src/time/format-locale-en_us.js
 endif
 
 d3.time.js: \

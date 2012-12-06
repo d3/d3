@@ -114,7 +114,8 @@ d3.layout.force = function() {
     if (k = alpha * gravity) {
       x = size[0] / 2;
       y = size[1] / 2;
-      i = -1; while (++i < n) {
+      i = -1;
+	    while (++i < n) {
         o = nodes[i];
         o.x += (x - o.x) * k;
         o.y += (y - o.y) * k;

@@ -11,7 +11,10 @@
     "canvas"
   ],
   "homepage": "http://d3js.org",
-  "author": "Mike Bostock (http://bost.ocks.org/mike)",
+  "author": {
+    "name": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/mbostock/d3.git"
@@ -25,13 +28,13 @@
     }
   },
   "dependencies": {
-    "jsdom": "0.2.x",
-    "sizzle": "1.x.x"
+    "jsdom": "0.2.14",
+    "sizzle": "1.1.x"
   },
   "devDependencies": {
-    "uglify-js2": "2.x.x",
-    "vows": "0.x.x",
-    "canvas": "0.x.x"
+    "uglify-js2": "2.1.6",
+    "vows": "0.6.x",
+    "canvas": "0.13.0"
   },
   "scripts": {
     "test": "./node_modules/vows/bin/vows"

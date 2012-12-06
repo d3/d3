@@ -1,5 +1,8 @@
-(function(){if (!Date.now) Date.now = function() {
-  return +new Date;
+(function(){var d3_format_decimalPoint = ".", 
+    d3_format_thousandsSeparator = ",", 
+    d3_format_grouping = [ 3, 3 ];
+if (!Date.now) Date.now = function() {
+  return +new Date();
 };
 try {
   document.createElement("div").style.setProperty("opacity", 0, "");
@@ -10,11 +13,13 @@ try {
     d3_style_setProperty.call(this, name, value + "", priority);
   };
 }
-d3 = {version: "3.0.0pre"}; // semver
+d3 = {
+  version: "3.0.0pre" // semver
+};
 
 var π = Math.PI,
     ε = 1e-6,
-    εε = 1e-3,
+    εε = .001,
     d3_radians = π / 180,
     d3_degrees = 180 / π;
 
@@ -59,19 +64,15 @@ try {
   d3_array = d3_arrayCopy;
 }
 
-var d3_arraySubclass = [].__proto__?
-
-// Until ECMAScript supports array subclassing, prototype injection works well.
-function(array, prototype) {
+var d3_arraySubclass = [].__proto__ ? function(array, prototype) {
+  // Until ECMAScript supports array subclassing, prototype injection works well.
   array.__proto__ = prototype;
-}:
-
-// And if your browser doesn't support __proto__, we'll use direct extension.
-function(array, prototype) {
+} : function(array, prototype) {
+  // And if your browser doesn't support __proto__, we'll use direct extension.
   for (var property in prototype) array[property] = prototype[property];
 };
 d3.map = function(object) {
-  var map = new d3_Map;
+  var map = new d3_Map();
   for (var key in object) map.set(key, object[key]);
   return map;
 };
@@ -94,17 +95,26 @@ d3_class(d3_Map, {
   },
   keys: function() {
     var keys = [];
-    this.forEach(function(key) { keys.push(key); });
+    this.forEach(function(key) { 
+      keys.push(key); 
+    });
     return keys;
   },
   values: function() {
     var values = [];
-    this.forEach(function(key, value) { values.push(value); });
+    this.forEach(function(key, value) { 
+      values.push(value); 
+    });
     return values;
   },
   entries: function() {
     var entries = [];
-    this.forEach(function(key, value) { entries.push({key: key, value: value}); });
+    this.forEach(function(key, value) { 
+      entries.push({
+        key: key, 
+        value: value
+      }); 
+    });
     return entries;
   },
   forEach: function(f) {
@@ -125,7 +135,9 @@ function d3_true() {
   return true;
 }
 function d3_functor(v) {
-  return typeof v === "function" ? v : function() { return v; };
+  return typeof v === "function" ? v : function() { 
+  	return v; 
+  };
 }
 
 d3.functor = d3_functor;
@@ -279,8 +291,8 @@ d3.transpose = function(matrix) {
 };
 d3.zip = function() {
   if (!(n = arguments.length)) return [];
-  for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m;) {
-    for (var j = -1, n, zip = zips[i] = new Array(n); ++j < n;) {
+  for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m; ) {
+    for (var j = -1, n, zip = zips[i] = new Array(n); ++j < n; ) {
       zip[j] = arguments[j][i];
     }
   }
@@ -315,7 +327,9 @@ d3.bisector = function(f) {
   };
 };
 
-var d3_bisector = d3.bisector(function(d) { return d; });
+var d3_bisector = d3.bisector(function(d) { 
+  return d; 
+});
 d3.bisectLeft = d3_bisector.left;
 d3.bisect = d3.bisectRight = d3_bisector.right;
 d3.nest = function() {
@@ -363,7 +377,10 @@ d3.nest = function() {
         key;
 
     for (key in map) {
-      a.push({key: key, values: entries(map[key], depth)});
+      a.push({
+        key: key, 
+        values: entries(map[key], depth)
+      });
     }
 
     if (sortKey) a.sort(function(a, b) {
@@ -419,7 +436,12 @@ d3.values = function(map) {
 };
 d3.entries = function(map) {
   var entries = [];
-  for (var key in map) entries.push({key: key, value: map[key]});
+  for (var key in map) {
+  	entries.push({
+  	  key: key, 
+  	  value: map[key]
+  	});
+  }
   return entries;
 };
 d3.permute = function(array, indexes) {
@@ -478,7 +500,9 @@ d3.xhr = function(url, mimeType, callback) {
 
   "onload" in request
       ? request.onload = request.onerror = respond
-      : request.onreadystatechange = function() { request.readyState > 3 && respond(); };
+      : request.onreadystatechange = function() { 
+          request.readyState > 3 && respond(); 
+        };
 
   function respond() {
     var s = request.status;
@@ -490,15 +514,21 @@ d3.xhr = function(url, mimeType, callback) {
   request.onprogress = function(event) {
     var o = d3.event;
     d3.event = event;
-    try { dispatch.progress.call(xhr, request); }
-    finally { d3.event = o; }
+    try { 
+      dispatch.progress.call(xhr, request); 
+    } finally { 
+      d3.event = o; 
+    }
   };
 
   xhr.header = function(name, value) {
     name = (name + "").toLowerCase();
-    if (arguments.length < 2) return headers[name];
-    if (value == null) delete headers[name];
-    else headers[name] = value + "";
+    if (arguments.length < 2) 
+      return headers[name];
+    if (value == null) 
+      delete headers[name];
+    else 
+      headers[name] = value + "";
     return xhr;
   };
 
@@ -525,12 +555,25 @@ d3.xhr = function(url, mimeType, callback) {
 
   // If callback is non-null, it will be used for error and load events.
   xhr.send = function(method, data, callback) {
-    if (arguments.length === 2 && typeof data === "function") callback = data, data = null;
+    if (arguments.length === 2 && typeof data === "function") {
+      callback = data;
+      data = null;
+    }
     request.open(method, url, true);
-    if (mimeType != null && !("accept" in headers)) headers["accept"] = mimeType + ",*/*";
-    if (request.setRequestHeader) for (var name in headers) request.setRequestHeader(name, headers[name]);
-    if (mimeType != null && request.overrideMimeType) request.overrideMimeType(mimeType);
-    if (callback != null) xhr.on("error", callback).on("load", function(request) { callback(null, request); });
+    if (mimeType != null && !("accept" in headers)) {
+      headers["accept"] = mimeType + ",*/*";
+    }
+    if (request.setRequestHeader) {
+      for (var name in headers) 
+        request.setRequestHeader(name, headers[name]);
+    }
+    if (mimeType != null && request.overrideMimeType) 
+      request.overrideMimeType(mimeType);
+    if (callback != null) {
+      xhr.on("error", callback).on("load", function(request) { 
+        callback(null, request); 
+      });
+    }
     request.send(data == null ? null : data);
     return xhr;
   };
@@ -542,7 +585,10 @@ d3.xhr = function(url, mimeType, callback) {
 
   d3.rebind(xhr, dispatch, "on");
 
-  if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
+  if (arguments.length === 2 && typeof mimeType === "function") {
+    callback = mimeType;
+    mimeType = null;
+  }
   return callback == null ? xhr : xhr.get(callback);
 };
 d3.text = function() {
@@ -593,7 +639,10 @@ d3.ns = {
       name = name.substring(i + 1);
     }
     return d3_nsPrefix.hasOwnProperty(prefix)
-        ? {space: d3_nsPrefix[prefix], local: name}
+        ? {
+            space: d3_nsPrefix[prefix], 
+            local: name
+          }
         : name;
   }
 };
@@ -601,7 +650,9 @@ d3.dispatch = function() {
   var dispatch = new d3_dispatch,
       i = -1,
       n = arguments.length;
-  while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
+  while (++i < n) {
+    dispatch[arguments[i]] = d3_dispatch_event(dispatch);
+  }
   return dispatch;
 };
 
@@ -631,7 +682,11 @@ function d3_dispatch_event(dispatch) {
         i = -1,
         n = z.length,
         l;
-    while (++i < n) if (l = z[i].on) l.apply(this, arguments);
+    while (++i < n) {
+      if (l = z[i].on) {
+        l.apply(this, arguments);
+      }
+    }
     return dispatch;
   }
 
@@ -650,7 +705,11 @@ function d3_dispatch_event(dispatch) {
     }
 
     // add the new listener, if any
-    if (listener) listeners.push(listenerByName.set(name, {on: listener}));
+    if (listener) {
+      listeners.push(listenerByName.set(name, {
+        on: listener
+      }));
+    }
 
     return dispatch;
   };
@@ -5953,7 +6012,8 @@ d3.layout.force = function() {
     if (k = alpha * gravity) {
       x = size[0] / 2;
       y = size[1] / 2;
-      i = -1; while (++i < n) {
+      i = -1;
+	    while (++i < n) {
         o = nodes[i];
         o.x += (x - o.x) * k;
         o.y += (y - o.y) * k;
@@ -6817,8 +6877,10 @@ d3.layout.hierarchy = function() {
 // A method assignment helper for hierarchy subclasses.
 function d3_layout_hierarchyRebind(object, hierarchy) {
   d3.rebind(object, hierarchy, "sort", "children", "value");
+
+  // Add an alias for links, for convenience.
   object.links = hierarchy.links;
-  
+
   // If the new API is used, enabling inlining.
   object.nodes = function(d) {
     d3_layout_hierarchyInline = true;
@@ -9928,6 +9990,16 @@ d3_time_utc.prototype = {
 };
 
 var d3_time_prototype = Date.prototype;
+// The date and time format (%c), date format (%x) and time format (%X).
+var d3_time_formatDateTime = "%a %b %e %X %Y", 
+    d3_time_formatDate = "%m/%d/%Y", 
+    d3_time_formatTime = "%H:%M:%S";
+
+// The weekday and month names.
+var d3_time_days = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ], 
+    d3_time_dayAbbreviations = [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ], 
+    d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], 
+    d3_time_monthAbbreviations = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
 d3.time.format = function(template) {
   var n = template.length;
 
