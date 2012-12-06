@@ -186,6 +186,7 @@ d3.geo.js: \
 	src/geo/azimuthal-equal-area.js \
 	src/geo/azimuthal-equidistant.js \
 	src/geo/bounds.js \
+	src/geo/centroid.js \
 	src/geo/circle.js \
 	src/geo/compose.js \
 	src/geo/equirectangular.js \
