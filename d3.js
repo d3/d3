@@ -5950,7 +5950,7 @@
     return d3_geo_projection(d3_geo_orthographic);
   }).raw = d3_geo_orthographic;
   d3.geo.path = function() {
-    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), bounds, buffer = [], array, arrays = [];
+    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), bounds, buffer = [];
     var bufferContext = {
       point: function(x, y) {
         buffer.push("M", x, ",", y, pointCircle);
@@ -5965,36 +5965,54 @@
         buffer.push("Z");
       }
     };
-    var area = 0, x0, y0, x00, y00;
+    var area, centroidWeight, x00, y00, x0, y0, cx, cy;
     var areaContext = {
       point: d3_noop,
-      moveTo: function(x, y) {
-        x00 = x0 = x;
-        y00 = y0 = y;
-      },
+      moveTo: moveTo,
       lineTo: function(x, y) {
         area += y0 * x - x0 * y;
         x0 = x;
         y0 = y;
       },
-      closePath: function() {
-        area += y0 * x00 - x0 * y00;
-      }
+      closePath: closePath
     };
-    var arrayContext = {
+    var lineCentroidContext = {
       point: function(x, y) {
-        arrays.push([ x, y ]);
+        cx = x;
+        cy = y;
+        centroidWeight = 1;
       },
-      moveTo: function(x, y) {
-        arrays.push(array = [ [ x, y ] ]);
-      },
+      moveTo: moveTo,
       lineTo: function(x, y) {
-        array.push([ x, y ]);
+        var dx = x - x0, dy = y - y0, δ = Math.sqrt(dx * dx + dy * dy);
+        centroidWeight += δ;
+        cx += δ * (x0 + x) / 2;
+        cy += δ * (y0 + y) / 2;
+        x0 = x;
+        y0 = y;
       },
-      closePath: function() {
-        array.push(array[0]);
-      }
+      closePath: closePath
     };
+    var polygonCentroidContext = {
+      point: d3_noop,
+      moveTo: moveTo,
+      lineTo: function(x, y) {
+        var δ = y0 * x - x0 * y;
+        centroidWeight += δ;
+        cx += δ * (x0 + x);
+        cy += δ * (y0 + y);
+        x0 = x;
+        y0 = y;
+      },
+      closePath: closePath
+    };
+    function moveTo(x, y) {
+      x00 = x0 = x;
+      y00 = y0 = y;
+    }
+    function closePath() {
+      this.lineTo(x00, y00);
+    }
     var context = bufferContext;
     function path(object) {
       var result = null;
@@ -6067,56 +6085,30 @@
       Sphere: sphereCentroid
     });
     function pointCentroid(centroid, point) {
-      projection.point(point, arrayContext);
-      array = null;
-      if (arrays.length) {
-        point = arrays[0];
-        centroid[0] += point[0];
-        centroid[1] += point[1];
-        arrays = [];
-        return 1;
-      }
-      return 0;
+      centroidWeight = cx = cy = 0;
+      projection.point(point, lineCentroidContext);
+      centroid[0] += cx;
+      centroid[1] += cy;
+      return centroidWeight;
     }
     function lineCentroid(centroid, line) {
-      projection.line(line, arrayContext);
-      array = d3.merge(arrays);
-      if (!(n = array.length)) return 0;
-      var n, point = array[0], x0 = point[0], y0 = point[1], x1, y1, dx, dy, i = 0, δ, z = 0;
-      while (++i < n) {
-        point = array[i];
-        x1 = point[0];
-        y1 = point[1];
-        dx = x1 - x0;
-        dy = y1 - y0;
-        z += δ = Math.sqrt(dx * dx + dy * dy);
-        centroid[0] += δ * (x0 + x1) / 2;
-        centroid[1] += δ * (y0 + y1) / 2;
-        x0 = x1;
-        y0 = y1;
-      }
-      array = null;
-      arrays = [];
-      return z;
+      centroidWeight = cx = cy = 0;
+      projection.line(line, lineCentroidContext);
+      centroid[0] += cx;
+      centroid[1] += cy;
+      return centroidWeight;
     }
     function polygonCentroid(centroid, polygon) {
-      projection.polygon(polygon, arrayContext);
-      for (var i = 0, area = 0, n = arrays.length; i < n; ++i) {
-        var p = d3.geom.polygon(arrays[i]), a = p.area(), point = p.centroid(-1);
-        centroid[0] += point[0];
-        centroid[1] += point[1];
-        area += a;
-      }
-      array = null;
-      arrays = [];
-      return area * 6;
+      centroidWeight = cx = cy = 0;
+      projection.polygon(polygon, polygonCentroidContext);
+      centroid[0] += cx;
+      centroid[1] += cy;
+      return centroidWeight * 3;
     }
     function sphereCentroid() {
-      projection.sphere(arrayContext);
-      var centroid = d3.geom.polygon(array).centroid();
-      array = null;
-      arrays = [];
-      return centroid;
+      centroidWeight = cx = cy = 0;
+      projection.sphere(polygonCentroidContext);
+      return (centroidWeight *= 3) ? [ cx / centroidWeight, cy / centroidWeight ] : null;
     }
     path.bounds = function(object) {
       return (bounds || (bounds = d3_geo_bounds(projection)))(object);
