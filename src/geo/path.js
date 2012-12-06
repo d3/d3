@@ -16,7 +16,17 @@ d3.geo.path = function() {
     closePath: function() { buffer.push("Z"); }
   };
 
-  // TODO replace with areaContext, centroidContext to avoid buffering
+  var area = 0,
+      x0, y0,
+      x00, y00;
+
+  var areaContext = {
+    point: d3_noop,
+    moveTo: function(x, y) { x00 = x0 = x; y00 = y0 = y; },
+    lineTo: function(x, y) { area += y0 * x - x0 * y; x0 = x; y0 = y; },
+    closePath: function() { area += y0 * x00 - x0 * y00; }
+  };
+
   var arrayContext = {
     point: function(x, y) { arrays.push([x, y]); },
     moveTo: function(x, y) { arrays.push(array = [[x, y]]); },
@@ -56,24 +66,16 @@ d3.geo.path = function() {
     Sphere: sphereArea
   });
 
-  function ringArea(coordinates) {
-    return d3.geom.polygon(coordinates).area();
-  }
-
   function polygonArea(coordinates) {
-    projection.polygon(coordinates, arrayContext);
-    var area = Math.abs(d3.sum(arrays, ringArea));
-    array = null;
-    arrays = [];
-    return area;
+    area = 0;
+    projection.polygon(coordinates, areaContext);
+    return Math.abs(area) / 2;
   }
 
   function sphereArea() {
-    projection.sphere(arrayContext);
-    var area = Math.abs(ringArea(array));
-    array = null;
-    arrays = [];
-    return area;
+    area = 0;
+    projection.sphere(areaContext);
+    return Math.abs(area) / 2;
   }
 
   path.area = function(object) { return areaType.object(object); };
