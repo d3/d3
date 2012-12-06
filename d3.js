@@ -6058,16 +6058,24 @@
       Sphere: sphereCentroid
     });
     function pointCentroid(centroid, point) {
-      point = projection(point);
-      centroid[0] += point[0];
-      centroid[1] += point[1];
-      return 1;
+      projection.point(point, arrayContext);
+      array = null;
+      if (arrays.length) {
+        point = arrays[0];
+        centroid[0] += point[0];
+        centroid[1] += point[1];
+        arrays = [];
+        return 1;
+      }
+      return 0;
     }
     function lineCentroid(centroid, line) {
-      if (!(n = line.length)) return 0;
-      var n, point = projection(line[0]), x0 = point[0], y0 = point[1], x1, y1, dx, dy, i = 0, δ, z = 0;
+      projection.line(line, arrayContext);
+      array = d3.merge(arrays);
+      if (!(n = array.length)) return 0;
+      var n, point = array[0], x0 = point[0], y0 = point[1], x1, y1, dx, dy, i = 0, δ, z = 0;
       while (++i < n) {
-        point = projection(line[i]);
+        point = array[i];
         x1 = point[0];
         y1 = point[1];
         dx = x1 - x0;
@@ -6078,6 +6086,8 @@
         x0 = x1;
         y0 = y1;
       }
+      array = null;
+      arrays = [];
       return z;
     }
     function polygonCentroid(centroid, polygon) {
