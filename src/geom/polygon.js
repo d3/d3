@@ -1,4 +1,3 @@
-// Note: requires coordinates to be counterclockwise and convex!
 d3.geom.polygon = function(coordinates) {
 
   coordinates.area = function() {
@@ -33,6 +32,7 @@ d3.geom.polygon = function(coordinates) {
   };
 
   // The Sutherland-Hodgman clipping algorithm.
+  // Note: requires the clip polygon to be counterclockwise and convex.
   coordinates.clip = function(subject) {
     var input,
         i = -1,
