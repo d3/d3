@@ -104,10 +104,10 @@ suite.addBatch({
         return path.area;
       },
       "no holes": function(area) {
-        assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]}), 25);
+        assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), 25);
       },
       "holes": function(area) {
-        assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]],
+        assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]],
                                                                 [[100.2, .2], [100.8, .2], [100.8, .8], [100.2, .8], [100.2, .2]]]}), 16);
       },
       "Sphere": function(area) {
@@ -157,40 +157,16 @@ suite.addBatch({
       },
       "Polygon": {
         "single ring": function(centroid) {
-          assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]}), [982.5, 247.5]);
+          assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), [982.5, 247.5]);
         },
         "zero area": function(centroid) {
           assert.isNull(centroid({type: "Polygon", coordinates: [[[1, 0], [2, 0], [3, 0], [1, 0]]]}));
         },
         "two rings, one zero area": function(centroid) {
-          assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]], [[100.1, 0], [100.2, 0], [100.3, 0], [100.1, 0]]]}), [982.5, 247.5]);
-        },
-        "anticlockwise exterior and interior": function(centroid) {
-          assert.inDelta(centroid({
-            type: "Polygon",
-            coordinates: [
-              [[-2, -2], [2, -2], [2, 2], [-2, 2], [-2, -2]],
-              [[ 0, -1], [1, -1], [1, 1], [ 0, 1], [ 0, -1]]
-            ]
-          }), [479.642857, 250], 1e-6);
-        },
-        "clockwise exterior and interior": function(centroid) {
-          assert.inDelta(centroid({
-            type: "Polygon",
-            coordinates: [
-              [[-2, -2], [2, -2], [2, 2], [-2, 2], [-2, -2]].reverse(),
-              [[ 0, -1], [1, -1], [1, 1], [ 0, 1], [ 0, -1]].reverse()
-            ]
-          }), [479.642857, 250], 1e-6);
-        },
-        "anticlockwise exterior, clockwise interior": function(centroid) {
-          assert.inDelta(centroid({
-            type: "Polygon",
-            coordinates: [
-              [[-2, -2], [2, -2], [2, 2], [-2, 2], [-2, -2]],
-              [[ 0, -1], [1, -1], [1, 1], [ 0, 1], [ 0, -1]].reverse()
-            ]
-          }), [479.642857, 250], 1e-6);
+          assert.deepEqual(centroid({type: "Polygon", coordinates: [
+            [[100,   0], [100,   1], [101,   1], [101,   0], [100, 0]],
+            [[100.1, 0], [100.2, 0], [100.3, 0], [100.1, 0]
+          ]]}), [982.5, 247.5]);
         },
         "clockwise exterior, anticlockwise interior": function(centroid) {
           assert.inDelta(centroid({
@@ -207,13 +183,19 @@ suite.addBatch({
           assert.isNull(centroid({type: "MultiPolygon", coordinates: []}));
         },
         "single polygon": function(centroid) {
-          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]]]}), [982.5, 247.5]);
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]]}), [982.5, 247.5]);
         },
         "two polygons": function(centroid) {
-          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]], [[[0, 0], [1, 0], [1, -1], [0, -1], [0, 0]]]]}), [732.5, 250]);
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [
+            [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]],
+            [[[0, 0], [1, 0], [1, -1], [0, -1], [0, 0]]]
+          ]}), [732.5, 250]);
         },
         "two polygons, one zero area": function(centroid) {
-          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [101, 0], [101, 1], [100, 1], [100, 0]]], [[[0, 0], [1, 0], [2, 0], [0, 0]]]]}), [982.5, 247.5]);
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [
+            [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]],
+            [[[0, 0], [1, 0], [2, 0], [0, 0]]]
+          ]}), [982.5, 247.5]);
         }
       },
       "GeometryCollection": {

@@ -14,6 +14,52 @@ d3.geo.path = function() {
     closePath: function() { buffer.push("Z"); }
   };
 
+  var area,
+      centroidWeight,
+      x00, y00,
+      x0, y0,
+      cx, cy;
+
+  var areaContext = {
+    point: d3_noop,
+    moveTo: moveTo,
+    lineTo: function(x, y) { area += y0 * x - x0 * y; x0 = x; y0 = y; },
+    closePath: closePath
+  };
+
+  var lineCentroidContext = {
+    point: function(x, y) { cx += x; cy += y; ++centroidWeight; },
+    moveTo: moveTo,
+    lineTo: function(x, y) {
+      var dx = x - x0,
+          dy = y - y0,
+          δ = Math.sqrt(dx * dx + dy * dy);
+      centroidWeight += δ;
+      cx += δ * (x0 + x) / 2;
+      cy += δ * (y0 + y) / 2;
+      x0 = x;
+      y0 = y;
+    },
+    closePath: closePath
+  };
+
+  var polygonCentroidContext = {
+    point: d3_noop,
+    moveTo: moveTo,
+    lineTo: function(x, y) {
+      var δ = y0 * x - x0 * y;
+      centroidWeight += δ * 3;
+      cx += δ * (x0 + x);
+      cy += δ * (y0 + y);
+      x0 = x;
+      y0 = y;
+    },
+    closePath: closePath
+  };
+
+  function moveTo(x, y) { x00 = x0 = x; y00 = y0 = y; }
+  function closePath() { this.lineTo(x00, y00); }
+
   var context = bufferContext;
 
   function path(object) {
@@ -46,91 +92,59 @@ d3.geo.path = function() {
     Sphere: sphereArea
   });
 
-  function ringArea(coordinates) {
-    return Math.abs(d3.geom.polygon(coordinates.map(projection)).area());
-  }
-
   function polygonArea(coordinates) {
-    return ringArea(coordinates[0]) - d3.sum(coordinates.slice(1), ringArea);
+    area = 0;
+    projection.polygon(coordinates, areaContext);
+    return Math.abs(area) / 2;
   }
 
   function sphereArea() {
-    var ring = [];
-    function lineTo(x, y) { ring.push([x, y]); }
-    projection.sphere({
-      moveTo: lineTo,
-      lineTo: lineTo,
-      closePath: d3_noop
-    });
-    return Math.abs(d3.geom.polygon(ring).area());
+    area = 0;
+    projection.sphere(areaContext);
+    return Math.abs(area) / 2;
   }
 
   path.area = function(object) { return areaType.object(object); };
 
   var centroidType = d3_geo_type({
     Feature: function(feature) { return centroidType.geometry(feature.geometry); },
-    LineString: d3_geo_pathCentroid1(lineCentroid),
-    MultiLineString: d3_geo_pathCentroid2(lineCentroid),
-    MultiPoint: d3_geo_pathCentroid2(pointCentroid),
-    MultiPolygon: d3_geo_pathCentroid3(ringCentroid),
-    Point: d3_geo_pathCentroid1(pointCentroid),
-    Polygon: d3_geo_pathCentroid2(ringCentroid),
-    Sphere: sphereCentroid
+
+    LineString: weightedCentroid(function(lineString) {
+      projection.line(lineString.coordinates, lineCentroidContext);
+    }),
+
+    MultiLineString: weightedCentroid(function(multiLineString) {
+      var coordinates = multiLineString.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) projection.line(coordinates[i], lineCentroidContext);
+    }),
+
+    MultiPoint: weightedCentroid(function(multiPoint) {
+      var coordinates = multiPoint.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) projection.point(coordinates[i], lineCentroidContext);
+    }),
+
+    MultiPolygon: weightedCentroid(function(multiPolygon) {
+      var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) projection.polygon(coordinates[i], polygonCentroidContext);
+    }),
+
+    Point: weightedCentroid(function(point) {
+      projection.point(point.coordinates, lineCentroidContext);
+    }),
+
+    Polygon: weightedCentroid(function(polygon) {
+      projection.polygon(polygon.coordinates, polygonCentroidContext);
+    }),
+
+    Sphere: weightedCentroid(function() { projection.sphere(polygonCentroidContext); })
   });
 
-  function pointCentroid(centroid, point) {
-    point = projection(point);
-    centroid[0] += point[0];
-    centroid[1] += point[1];
-    return 1;
-  }
-
-  function lineCentroid(centroid, line) {
-    if (!(n = line.length)) return 0;
-    var n,
-        point = projection(line[0]),
-        x0 = point[0],
-        y0 = point[1],
-        x1,
-        y1,
-        dx,
-        dy,
-        i = 0,
-        δ,
-        z = 0;
-    while (++i < n) {
-      point = projection(line[i]);
-      x1 = point[0];
-      y1 = point[1];
-      dx = x1 - x0;
-      dy = y1 - y0;
-      z += δ = Math.sqrt(dx * dx + dy * dy);
-      centroid[0] += δ * (x0 + x1) / 2;
-      centroid[1] += δ * (y0 + y1) / 2;
-      x0 = x1;
-      y0 = y1;
-    }
-    return z;
-  }
-
-  function ringCentroid(centroid, ring, i) {
-    var polygon = d3.geom.polygon(ring.map(projection)),
-        area = polygon.area(),
-        point = polygon.centroid(area < 0 ^ i > 0 ? (area *= -1, 1) : -1);
-    centroid[0] += point[0];
-    centroid[1] += point[1];
-    return area * 6;
-  }
-
-  function sphereCentroid() {
-    var ring = [];
-    function lineTo(x, y) { ring.push([x, y]); }
-    projection.sphere({
-      moveTo: lineTo,
-      lineTo: lineTo,
-      closePath: d3_noop
-    });
-    return d3.geom.polygon(ring).centroid();
+  function weightedCentroid(f) {
+    return function() {
+      centroidWeight = cx = cy = 0;
+      f.apply(this, arguments);
+      return centroidWeight ? [cx / centroidWeight, cy / centroidWeight] : null;
+    };
   }
 
   path.bounds = function(object) {
@@ -170,31 +184,4 @@ function d3_geo_pathCircle(radius) {
       + "a" + radius + "," + radius + " 0 1,1 0," + (-2 * radius)
       + "a" + radius + "," + radius + " 0 1,1 0," + (+2 * radius)
       + "z";
-}
-
-function d3_geo_pathCentroid1(weightedCentroid) {
-  return function(line) {
-    var centroid = [0, 0], z = weightedCentroid(centroid, line.coordinates, 0);
-    return z ? (centroid[0] /= z, centroid[1] /= z, centroid) : null;
-  };
-}
-
-function d3_geo_pathCentroid2(weightedCentroid) {
-  return function(polygon) {
-    for (var centroid = [0, 0], z = 0, rings = polygon.coordinates, i = 0, n = rings.length; i < n; ++i) {
-      z += weightedCentroid(centroid, rings[i], i);
-    }
-    return z ? (centroid[0] /= z, centroid[1] /= z, centroid) : null;
-  }
-}
-
-function d3_geo_pathCentroid3(weightedCentroid) {
-  return function(multiPolygon) {
-    for (var centroid = [0, 0], z = 0, polygons = multiPolygon.coordinates, i = 0, n = polygons.length; i < n; ++i) {
-      for (var rings = polygons[i], j = 0, m = rings.length; j < m; ++j) {
-        z += weightedCentroid(centroid, rings[j], j);
-      }
-    }
-    return z ? (centroid[0] /= z, centroid[1] /= z, centroid) : null;
-  }
 }
