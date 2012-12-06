@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title>Brush</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Brush</title>
+    <script src="../../d3.js"></script>
+<style>
 
 svg {
   font: 10px sans-serif;
@@ -34,10 +32,10 @@ circle {
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var random = d3.random.normal(.5, .1),
     data = d3.range(800).map(function() { return [random(), random()]; });
@@ -96,6 +94,4 @@ function brushend() {
   svg.classed("selecting", !d3.event.target.empty());
 }
 
-    </script>
-  </body>
-</html>
+</script>

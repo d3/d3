@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Force-Directed Map</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Force-Directed Map</title>
+<style>
 
 path {
   fill: #ddd;
@@ -16,10 +14,10 @@ line {
   stroke: #999;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 500;
@@ -31,7 +29,7 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("../data/us-states.json", function(states) {
+d3.json("../data/us-states.json", function(error, states) {
   var nodes = [],
       links = [];
 
@@ -96,6 +94,4 @@ function edge(a, b) {
   };
 }
 
-    </script>
-  </body>
-</html>
+</script>

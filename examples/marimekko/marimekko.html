@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Marimekko Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Marimekko Chart</title>
+<style>
 
 body {
   font: 10px sans-serif;
@@ -17,10 +15,10 @@ svg {
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 500,
@@ -43,7 +41,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + 2 * margin + "," + margin + ")");
 
-d3.json("marimekko.json", function(data) {
+d3.json("marimekko.json", function(error, data) {
   var offset = 0;
 
   // Nest values by segment. We assume each segment+market is unique.
@@ -116,6 +114,4 @@ d3.json("marimekko.json", function(data) {
       .style("fill", function(d) { return z(d.market); });
 });
 
-    </script>
-  </body>
-</html>
+</script>

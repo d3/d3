@@ -5,6 +5,7 @@ CSSStyleDeclaration = window.CSSStyleDeclaration;
 
 require("../lib/sizzle/sizzle");
 Sizzle = window.Sizzle;
+getComputedStyle = window.getComputedStyle;
 
 process.env.TZ = "America/Los_Angeles";
 

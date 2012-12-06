@@ -1,16 +1,10 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello, sort!</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Hello, sort!</title>
+<style>
 
-html, body, svg {
+body {
   font: 14px Helvetica Neue;
-  margin: 0;
-  width: 100%;
-  height: 100%;
-  display: block;
 }
 
 circle {
@@ -25,27 +19,28 @@ div {
   left: 10px;
 }
 
-    </style>
-  </head>
-  <body>
-    <div>
-      <input id="sort" type="checkbox" checked>
-      <label for="sort">Ascending</label>
-    </div>
-    <script type="text/javascript">
+</style>
+Press any key:<p>
+<input id="sort" type="checkbox" checked>
+<label for="sort">Ascending</label>
+<script src="../../d3.js"></script>
+<script>
 
-d3.select("body")
-  .append("svg")
-    .attr("viewBox", "0 0 1000 1000");
+var svg = d3.select("body").append("svg")
+    .attr("viewBox", "0 0 1000 1000")
+    .attr("width", 960)
+    .attr("height", 500);
 
-d3.select("#sort")
+var sort = d3.select("#sort")
     .on("change", sort);
+
+d3.select(window)
+    .on("keypress", transform);
 
 transform();
 
 function transform() {
-  var circle = d3.select("svg")
-    .selectAll("circle")
+  var circle = svg.selectAll("circle")
       .data(d3.range(400).map(Math.random));
 
   circle.enter().append("circle")
@@ -53,8 +48,7 @@ function transform() {
       .attr("cy", function() { return 100 + Math.random() * 800; })
       .attr("r", function(d) { return 50 * d; });
 
-  circle
-    .transition()
+  circle.transition()
       .duration(750)
       .attr("r", function(d) { return 50 * d; });
 
@@ -63,13 +57,9 @@ function transform() {
 
 function sort() {
   d3.selectAll("circle")
-      .sort(d3.select("#sort").property("checked")
+      .sort(sort.property("checked")
       ? function(a, b) { return b - a; }
       : function(a, b) { return a - b; });
 }
 
-window.addEventListener("keypress", transform, false);
-
-    </script>
-  </body>
-</html>
+</script>

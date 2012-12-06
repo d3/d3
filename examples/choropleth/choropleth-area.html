@@ -1,9 +1,6 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">    <script src="../../d3.js"></script>
+<style>
 
 svg {
   background: #eee;
@@ -11,10 +8,10 @@ svg {
   height: 500px;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
+
 
 var svg = d3.select("body")
   .append("svg")
@@ -31,7 +28,7 @@ var fill = d3.scale.log()
     .domain([10, 500])
     .range(["brown", "steelblue"]);
 
-d3.json("../data/us-counties.json", function(json) {
+d3.json("../data/us-counties.json", function(error, json) {
   counties.selectAll("path")
       .data(json.features)
     .enter().append("path")
@@ -43,6 +40,4 @@ function redraw() {
   svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
 }
 
-    </script>
-  </body>
-</html>
+</script>

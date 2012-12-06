@@ -114,7 +114,8 @@ d3.layout.force = function() {
     if (k = alpha * gravity) {
       x = size[0] / 2;
       y = size[1] / 2;
-      i = -1; while (++i < n) {
+      i = -1;
+	    while (++i < n) {
         o = nodes[i];
         o.x += (x - o.x) * k;
         o.y += (y - o.y) * k;
@@ -384,10 +385,10 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
   quad.cy = cy / quad.charge;
 }
 
-function d3_layout_forceLinkDistance(link) {
+function d3_layout_forceLinkDistance(/*link*/) {
   return 20;
 }
 
-function d3_layout_forceLinkStrength(link) {
+function d3_layout_forceLinkStrength(/*link*/) {
   return 1;
 }

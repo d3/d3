@@ -1,6 +1,6 @@
 d3_transitionPrototype.transition = function() {
   var id0 = this.id,
-      id1 = ++d3_transitionNextId,
+      id1 = ++d3_transitionId,
       subgroups = [],
       subgroup,
       group,
@@ -11,12 +11,13 @@ d3_transitionPrototype.transition = function() {
     subgroups.push(subgroup = []);
     for (var group = this[j], i = 0, n = group.length; i < n; i++) {
       if (node = group[i]) {
-        transition = node.__transition__[id0];
-        d3_transitionNode(node, id1, transition.delay + transition.duration, transition.duration);
+        transition = Object.create(node.__transition__[id0]);
+        transition.delay += transition.duration;
+        d3_transitionNode(node, i, id1, transition);
       }
       subgroup.push(node);
     }
   }
 
-  return d3_transition(subgroups, id1, this.time).ease(this.ease());
+  return d3_transition(subgroups, id1);
 };

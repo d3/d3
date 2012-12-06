@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Dot Plot</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Dot Plot</title>
+<style>
 
 body {
   font: 10px sans-serif;
@@ -25,10 +23,10 @@ rect {
   shape-rendering: crispEdges;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var data = d3.range(100).map(function(i) {
   return {x: i / 99, y: Math.random()};
@@ -47,14 +45,13 @@ var y = d3.scale.linear()
 var symbol = d3.scale.ordinal().range(d3.svg.symbolTypes),
     color = d3.scale.category10();
 
-var vis = d3.select("body")
-  .append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", width + margin * 2)
     .attr("height", height + margin * 2)
   .append("g")
     .attr("transform", "translate(" + margin + "," + margin + ")");
 
-var xrule = vis.selectAll("g.x")
+var xrule = svg.selectAll("g.x")
     .data(x.ticks(10))
   .enter().append("g")
     .attr("class", "x");
@@ -72,7 +69,7 @@ xrule.append("text")
     .attr("text-anchor", "middle")
     .text(x.tickFormat(10));
 
-var yrule = vis.selectAll("g.y")
+var yrule = svg.selectAll("g.y")
     .data(y.ticks(10))
   .enter().append("g")
     .attr("class", "y");
@@ -90,11 +87,11 @@ yrule.append("text")
     .attr("text-anchor", "end")
     .text(y.tickFormat(10));
 
-vis.append("rect")
+svg.append("rect")
     .attr("width", width)
     .attr("height", height);
 
-vis.selectAll("path.dot")
+svg.selectAll("path.dot")
     .data(data)
   .enter().append("path")
     .attr("class", "dot")
@@ -103,6 +100,4 @@ vis.selectAll("path.dot")
     .attr("d", d3.svg.symbol()
     .type(function(d, i) { return symbol(i); }));
 
-    </script>
-  </body>
-</html>
+</script>

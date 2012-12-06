@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Force-Directed Layout</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Force-Directed Layout</title>
+<style>
 
 div.node {
   border-radius: 6px;
@@ -24,10 +22,10 @@ div.link {
   transform-origin: 0 0;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 500,
@@ -39,17 +37,17 @@ var force = d3.layout.force()
     .linkDistance(30)
     .size([width, height]);
 
-var vis = d3.select("body").append("div")
+var svg = d3.select("body").append("div")
     .style("width", width + "px")
     .style("height", height + "px");
 
-d3.json("miserables.json", function(json) {
-  var link = vis.selectAll("div.link")
+d3.json("miserables.json", function(error, json) {
+  var link = svg.selectAll("div.link")
       .data(json.links)
     .enter().append("div")
       .attr("class", "link");
 
-  var node = vis.selectAll("div.node")
+  var node = svg.selectAll("div.node")
       .data(json.nodes)
     .enter().append("div")
       .attr("class", "node")
@@ -88,6 +86,4 @@ d3.json("miserables.json", function(json) {
   }
 });
 
-    </script>
-  </body>
-</html>
+</script>

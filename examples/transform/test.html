@@ -1,15 +1,17 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title>Transform Test</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
-      th, td { border: solid #ccc 1px; }
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+<meta charset="utf-8">
+<title>Transform Test</title>
+<style>
+
+th,
+td {
+  border: solid #ccc 1px;
+}
+
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var outcome = d3.select("body").append("p");
 
@@ -20,9 +22,11 @@ var g = d3.select("body").append("svg")
 
 var results = d3.select("body").append("table")
     .style("display", "none");
+
 results.append("tr").selectAll("th")
     .data(["Expected", "Actual", "Expected matrix", "Actual matrix"])
-  .enter().append("th").text(String);
+  .enter().append("th")
+    .text(function(d) { return d; });
 
 var el = g[0][0],
     v,
@@ -48,7 +52,8 @@ for (var tx = -10; tx <= 10; tx += 5) {
                   .style("display", null)
                 .append("tr").selectAll("td")
                   .data([v, d3.transform(v), a, b])
-                .enter().append("td").text(String);
+                .enter().append("td")
+                  .text(function(d) { return d; });
             }
           }
         }
@@ -80,6 +85,4 @@ function deepEqual(actual, expected, epsilon) {
   return true;
 }
 
-    </script>
-  </body>
-</html>
+</script>

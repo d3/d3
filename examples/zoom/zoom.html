@@ -22,7 +22,6 @@ path {
   shape-rendering: crispEdges;
 }
 
-
 </style>
 <body>
 <script src="../../d3.js"></script>
@@ -84,7 +83,7 @@ var focus = svg.append("g")
 var context = svg.append("g")
     .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
 
-d3.csv("sp500.csv", function(data) {
+d3.csv("sp500.csv", function(error, data) {
 
   data.forEach(function(d) {
     d.date = formatDate.parse(d.date);

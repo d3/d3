@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Force-Directed Layout (Dynamic)</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Force-Directed Layout (Dynamic)</title>
+<style>
 
 rect {
   fill: #fff;
@@ -23,11 +21,10 @@ rect {
   stroke: #999;
 }
 
-    </style>
-  </head>
-  <body>
-    <div id="chart"></div>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 500,
@@ -35,11 +32,11 @@ var width = 960,
     nodes = [],
     links = [];
 
-var vis = d3.select("#chart").append("svg")
+var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-vis.append("rect")
+svg.append("rect")
     .attr("width", width)
     .attr("height", height);
 
@@ -49,28 +46,28 @@ var force = d3.layout.force()
     .links(links)
     .size([width, height]);
 
-var cursor = vis.append("circle")
+var cursor = svg.append("circle")
     .attr("r", 30)
     .attr("transform", "translate(-100,-100)")
     .attr("class", "cursor");
 
 force.on("tick", function() {
-  vis.selectAll("line.link")
+  svg.selectAll("line.link")
       .attr("x1", function(d) { return d.source.x; })
       .attr("y1", function(d) { return d.source.y; })
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
 
-  vis.selectAll("circle.node")
+  svg.selectAll("circle.node")
       .attr("cx", function(d) { return d.x; })
       .attr("cy", function(d) { return d.y; });
 });
 
-vis.on("mousemove", function() {
+svg.on("mousemove", function() {
   cursor.attr("transform", "translate(" + d3.mouse(this) + ")");
 });
 
-vis.on("mousedown", function() {
+svg.on("mousedown", function() {
   var point = d3.mouse(this),
       node = {x: point[0], y: point[1]},
       n = nodes.push(node);
@@ -92,7 +89,7 @@ restart();
 function restart() {
   force.start();
 
-  vis.selectAll("line.link")
+  svg.selectAll("line.link")
       .data(links)
     .enter().insert("line", "circle.node")
       .attr("class", "link")
@@ -101,7 +98,7 @@ function restart() {
       .attr("x2", function(d) { return d.target.x; })
       .attr("y2", function(d) { return d.target.y; });
 
-  vis.selectAll("circle.node")
+  svg.selectAll("circle.node")
       .data(nodes)
     .enter().insert("circle", "circle.cursor")
       .attr("class", "node")
@@ -111,6 +108,4 @@ function restart() {
       .call(force.drag);
 }
 
-    </script>
-  </body>
-</html>
+</script>

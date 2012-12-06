@@ -21,7 +21,8 @@ function d3_geo_projectionMutator(projectAt) {
       δy = y,
       δ2 = .5, // (precision in px)².
       clip = d3_geo_projectionCutAntemeridian(rotatePoint),
-      clipAngle = null;
+      clipAngle = null,
+      context;
 
   function projection(coordinates) {
     coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
@@ -34,9 +35,10 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   // TODO automate wrapping.
-  projection.point =   function(coordinates, context) { clip.point(coordinates,   resample(context)); };
-  projection.line =    function(coordinates, context) { clip.line(coordinates,    resample(context)); };
-  projection.polygon = function(coordinates, context) { clip.polygon(coordinates, resample(context)); };
+  projection.point = function(coordinates, c) { context = c; clip.point(coordinates, resample); context = null; };
+  projection.line = function(coordinates, c) { context = c; clip.line(coordinates, resample); context = null; };
+  projection.polygon = function(coordinates, c) { context = c; clip.polygon(coordinates, resample); context = null; };
+  projection.sphere = function(c) { context = c; clip.sphere(resample); context = null; };
 
   projection.clipAngle = function(_) {
     if (!arguments.length) return clipAngle;
@@ -47,74 +49,76 @@ function d3_geo_projectionMutator(projectAt) {
   };
 
   // TODO this is not just resampling but also projecting
-  // TODO don't create a context wrapper for every line & polygon
-  function resample(context) {
-    var λ00,
-        φ00,
-        λ0,
-        φ0,
-        x0,
-        y0,
-        maxDepth = δ2 > 0 && 16;
+  var λ00,
+      φ00,
+      λ0,
+      sinφ0,
+      cosφ0,
+      x0,
+      y0,
+      maxDepth = 16;
 
-    function moveTo(λ, φ) {
-      var p = projectPoint(λ00 = λ0 = λ, φ00 = φ0 = φ);
-      context.moveTo(x0 = p[0], y0 = p[1]);
-    }
+  function point(λ, φ) {
+    var p = projectPoint(λ, φ);
+    context.point(p[0], p[1]);
+  }
 
-    function lineTo(λ, φ) {
-      var p = projectPoint(λ, φ);
-      resampleLineTo(x0, y0, λ0, φ0, x0 = p[0], y0 = p[1], λ0 = λ, φ0 = φ, maxDepth);
-      context.lineTo(x0, y0);
-    }
+  function moveTo(λ, φ) {
+    var p = projectPoint(λ00 = λ0 = λ, φ00 = φ);
+    sinφ0 = Math.sin(φ);
+    cosφ0 = Math.cos(φ);
+    context.moveTo(x0 = p[0], y0 = p[1]);
+  }
 
-    function resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ1, φ1, depth) {
-      var dx = x1 - x0,
-          dy = y1 - y0,
-          distance2 = dx * dx + dy * dy;
-      if (distance2 > 4 * δ2 && depth--) {
-        var sinφ0 = Math.sin(φ0), // TODO some of these could be reused during recursion
-            cosφ0 = Math.cos(φ0),
-            sinφ1 = Math.sin(φ1),
-            cosφ1 = Math.cos(φ1),
-            cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0),
-            k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)),
-            x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)),
-            y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)),
-            z = k * (sinφ0                + sinφ1),
-            φ2 = Math.asin(Math.max(-1, Math.min(1, z))),
-            λ2 = Math.abs(x) < ε || Math.abs(y) < ε ? (λ0 + λ1) / 2 : Math.atan2(y, x),
-            p = projectPoint(λ2, φ2),
-            x2 = p[0],
-            y2 = p[1],
-            dx2 = x0 - x2,
-            dy2 = y0 - y2,
-            dz = dx * dy2 - dy * dx2,
-            δdistance2 = Math.abs(dx2 * dx2 + dy2 * dy2 - distance2);
-        if (δdistance2 < ε) {
-          resampleLineTo(x0, y0, λ2, φ2, x1, y1, λ1, φ1, depth);
-        } else if (δdistance2 > distance2 - ε) {
-          resampleLineTo(x0, y0, λ0, φ0, x1, y1, λ2, φ2, depth);
-        } else if (dz * dz / distance2 > δ2) {
-          resampleLineTo(x0, y0, λ0, φ0, x2, y2, λ2, φ2, depth);
-          context.lineTo(x2, y2);
-          resampleLineTo(x2, y2, λ2, φ2, x1, y1, λ1, φ1, depth);
-        }
+  function lineTo(λ, φ) {
+    var p = projectPoint(λ, φ);
+    resampleLineTo(x0, y0, λ0, sinφ0, cosφ0,
+                   x0 = p[0], y0 = p[1], λ0 = λ, sinφ0 = Math.sin(φ), cosφ0 = Math.cos(φ),
+                   maxDepth);
+    context.lineTo(x0, y0);
+  }
+
+  function resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x1, y1, λ1, sinφ1, cosφ1, depth) {
+    var dx = x1 - x0,
+        dy = y1 - y0,
+        distance2 = dx * dx + dy * dy;
+    if (distance2 > 4 * δ2 && depth--) {
+      var cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0),
+          k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)),
+          x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)),
+          y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)),
+          z = Math.max(-1, Math.min(1, k * (sinφ0 + sinφ1))),
+          φ2 = Math.asin(z),
+          zε = Math.abs(Math.abs(z) - 1),
+          λ2 = zε < ε || zε < εε && (Math.abs(cosφ0) < εε || Math.abs(cosφ1) < εε)
+             ? (λ0 + λ1) / 2 : Math.atan2(y, x),
+          p = projectPoint(λ2, φ2),
+          x2 = p[0],
+          y2 = p[1],
+          dx2 = x0 - x2,
+          dy2 = y0 - y2,
+          dz = dx * dy2 - dy * dx2;
+      if (dz * dz / distance2 > δ2) {
+        var cosφ2 = Math.cos(φ2);
+        resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x2, y2, λ2, z, cosφ2, depth);
+        context.lineTo(x2, y2);
+        resampleLineTo(x2, y2, λ2, z, cosφ2, x1, y1, λ1, sinφ1, cosφ1, depth);
       }
     }
-
-    function closePath() {
-      var p = projectPoint(λ00, φ00);
-      resampleLineTo(x0, y0, λ0, φ0, p[0], p[1], λ00, φ00, maxDepth);
-      context.closePath();
-    }
-
-    return {
-      moveTo: moveTo,
-      lineTo: lineTo,
-      closePath: closePath
-    };
   }
+
+  function closePath() {
+    var p = projectPoint(λ00, φ00);
+    resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, p[0], p[1], λ00, Math.sin(φ00), Math.cos(φ00), maxDepth);
+    context.closePath();
+  }
+
+  var resample = {
+    point: point,
+    moveTo: moveTo,
+    lineTo: lineTo,
+    closePath: closePath
+  };
 
   // TODO remove redundant code with p(coordinates)
   function rotatePoint(coordinates) {
@@ -157,7 +161,7 @@ function d3_geo_projectionMutator(projectAt) {
 
   projection.precision = function(_) {
     if (!arguments.length) return Math.sqrt(δ2);
-    δ2 = _ * _;
+    maxDepth = (δ2 = _ * _) > 0 && 16;
     return projection;
   };
 
@@ -193,8 +197,8 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
       var point = rotatePoint(coordinates);
       context.point(point[0], point[1]);
     },
-    line: function(coordinates, context) {
-      if (!(n = coordinates.length)) return;
+    line: function(coordinates, context, ring) {
+      if (!(n = coordinates.length)) return [ring && 0, false];
       var point = rotatePoint(coordinates[0]),
           λ0 = point[0],
           φ0 = point[1],
@@ -202,46 +206,88 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
           φ1,
           sλ0 = λ0 > 0 ? π : -π,
           sλ1,
+          dλ,
           i = 0,
-          n;
+          n,
+          clean = ring, // clean indicates no intersections
+          area = 0,
+          x0 = (point = d3_geo_stereographic(λ0, φ0))[0],
+          x,
+          y0 = point[1],
+          y;
       context.moveTo(λ0, φ0);
       while (++i < n) {
         point = rotatePoint(coordinates[i]);
         λ1 = point[0];
         φ1 = point[1];
         sλ1 = λ1 > 0 ? π : -π;
-        if (sλ0 !== sλ1 && Math.abs(λ1 - λ0) >= π) {
+        dλ = Math.abs(λ1 - λ0);
+        if (Math.abs(dλ - π) < ε) { // line crosses a pole
+          context.lineTo(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? π / 2 : -π / 2);
+          context.lineTo(sλ0, φ0);
+          context.moveTo(sλ1, φ0);
+          context.lineTo(λ1, φ0);
+          clean = false;
+        } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antemeridian
+          // handle degeneracies
+          if (Math.abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
+          if (Math.abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
           φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-          if (Math.abs(λ0 - sλ0) > ε) context.lineTo(sλ0, φ0);
-          if (Math.abs(λ1 - sλ1) > ε) context.moveTo(sλ1, φ0), context.lineTo(λ0 = λ1, φ0 = φ1);
-          else context.moveTo(λ0 = λ1, φ0 = φ1);
-        } else {
-          context.lineTo(λ0 = λ1, φ0 = φ1);
+          context.lineTo(sλ0, φ0);
+          context.moveTo(sλ1, φ0);
+          clean = false;
         }
+        if (clean) {
+          x = (point = d3_geo_stereographic(λ1, φ1))[0];
+          y = point[1];
+          area += y0 * x - x0 * y;
+          x0 = x;
+          y0 = y;
+        }
+        context.lineTo(λ0 = λ1, φ0 = φ1);
         sλ0 = sλ1;
       }
+      return [clean && area, true];
     },
     polygon: function(polygon, context) {
-      d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate, d3_geo_antemeridianAngle);
+      d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate);
+    },
+    sphere: function(context) {
+      d3_geo_projectionSphere(context, d3_geo_antemeridianInterpolate);
     }
   };
   return clip;
 }
 
-function d3_geo_antemeridianAngle(point) {
-  return -(point[0] < 0 ? point[1] - π / 2 : π / 2 - point[1]);
-}
-
-function d3_geo_antemeridianInterpolate(from, to, context) {
-  from = from.point;
-  to = to.point;
-  if (Math.abs(from[0] - to[0]) > ε) {
-    var s = from[0] < to[0] ? π : -π,
-        φ = s / 2;
+function d3_geo_antemeridianInterpolate(from, to, direction, context) {
+  var φ;
+  if (from == null) {
+    φ = direction * π / 2;
+    context.lineTo(-π,  φ);
+    context.lineTo( 0,  φ);
+    context.lineTo( π,  φ);
+    context.lineTo( π,  0);
+    context.lineTo( π, -φ);
+    context.lineTo( 0, -φ);
+    context.lineTo(-π, -φ);
+    context.lineTo(-π,  0);
+  } else if (Math.abs(from[0] - to[0]) > ε) {
+    var s = (from[0] < to[0] ? 1 : -1) * π;
+    φ = direction * s / 2;
     context.lineTo(-s, φ);
     context.lineTo( 0, φ);
     context.lineTo( s, φ);
   } else {
     context.lineTo(to[0], to[1]);
   }
+}
+
+function d3_geo_projectionSphere(context, interpolate) {
+  var moved = false;
+  interpolate(null, null, 1, {
+    lineTo: function(x, y) {
+      (moved ? context.lineTo : (moved = true, context.moveTo))(x, y);
+    }
+  });
+  context.closePath();
 }

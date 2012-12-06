@@ -1,10 +1,8 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Node-Link Tree</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Node-Link Tree</title>
+<script src="../../d3.js"></script>
+<style>
 
 .node {
   stroke: #fff;
@@ -16,10 +14,9 @@
   stroke: #000;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script>
 
 var width = 960,
     height = 500,
@@ -48,7 +45,7 @@ function update() {
   if (data.length >= 500) return clearInterval(timer);
 
   // Add a new datum to a random parent.
-  var d = {id: data.length}, parent = data[~~(Math.random() * data.length)];
+  var d = {id: data.length}, parent = data[Math.floor(Math.random() * data.length)];
   if (parent.children) parent.children.push(d); else parent.children = [d];
   data.push(d);
 
@@ -98,6 +95,4 @@ function y(d) {
   return d.y0 = d.y;
 }
 
-    </script>
-  </body>
-</html>
+</script>

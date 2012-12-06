@@ -16,12 +16,12 @@ d3_transitionPrototype.selectAll = function(selector) {
         subnodes = selector.call(node, node.__data__, i);
         subgroups.push(subgroup = []);
         for (var k = -1, o = subnodes.length; ++k < o;) {
-          d3_transitionNode(subnode = subnodes[k], id, transition.delay, transition.duration);
+          d3_transitionNode(subnode = subnodes[k], k, id, transition);
           subgroup.push(subnode);
         }
       }
     }
   }
 
-  return d3_transition(subgroups, id, this.time).ease(this.ease());
+  return d3_transition(subgroups, id);
 };

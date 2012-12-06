@@ -42,20 +42,16 @@ var svg = d3.select("body").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .call(zoom);
 
-var g = svg.append("g"),
-    feature = g.selectAll(".feature");
+var feature = svg.append("path")
+    .attr("class", "feature");
 
 svg.append("rect")
     .attr("class", "frame")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("../data/world-countries.json", function(collection) {
-  feature = feature
-      .data(collection.features)
-    .enter().append("path")
-      .attr("class", "feature")
-      .attr("d", path);
+d3.json("../data/world-countries.json", function(error, collection) {
+  feature.datum(collection).attr("d", path);
 });
 
 function move() {

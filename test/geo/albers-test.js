@@ -36,10 +36,10 @@ suite.addBatch({
     },
     "Phillipines": function(albers) {
       var coords = albers([180, 0]);
-      assert.inDelta(coords[0],   894.435228, 1e-6);
-      assert.inDelta(coords[1], -2927.636630, 1e-6);
+      assert.inDelta(coords[0],  -984.779405, 1e-6);
+      assert.inDelta(coords[1],   209.571197, 1e-6);
       var lonlat = albers.invert(coords);
-      assert.inDelta(lonlat[0], 180, 1e-6);
+      assert.inDelta(lonlat[0], -180, 1e-6);
       assert.inDelta(lonlat[1], 0, 1e-6);
     },
     "Inversion works for non-zero translation": function() {

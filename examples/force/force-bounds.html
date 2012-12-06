@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Force-Directed Layout</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Force-Directed Layout</title>
+<style>
 
 circle {
   stroke-width: 1.5px;
@@ -13,10 +11,10 @@ line {
   stroke: #999;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 500,
@@ -33,7 +31,7 @@ var svg = d3.select("body").append("svg")
     .attr("width", width)
     .attr("height", height);
 
-d3.json("miserables.json", function(json) {
+d3.json("miserables.json", function(error, json) {
   var link = svg.selectAll("line")
       .data(json.links)
     .enter().append("line");
@@ -63,6 +61,4 @@ d3.json("miserables.json", function(json) {
   }
 });
 
-    </script>
-  </body>
-</html>
+</script>

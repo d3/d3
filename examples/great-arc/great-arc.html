@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Great Arc</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Great Arc</title>
+<style>
 
 #states path {
   fill: #ddd;
@@ -17,16 +15,16 @@
   stroke-opacity: .2;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var width = 960,
     height = 500;
 
-var projection = d3.geo.azimuthal()
-    .origin([-115, 50])
+var projection = d3.geo.orthographic()
+    .rotate([115, -50])
     .scale(500);
 
 var path = d3.geo.path()
@@ -44,14 +42,14 @@ var states = svg.append("g")
 var arcs = svg.append("g")
     .attr("id", "arcs");
 
-d3.json("../data/us-states.json", function(collection) {
+d3.json("../data/us-states.json", function(error, collection) {
   states.selectAll("path")
       .data(collection.features)
     .enter().append("path")
       .attr("d", path);
 });
 
-d3.json("../data/us-state-centroids.json", function(collection) {
+d3.json("../data/us-state-centroids.json", function(error, collection) {
   var links = [];
 
   // Create a link between each state centroid.
@@ -72,6 +70,4 @@ d3.json("../data/us-state-centroids.json", function(collection) {
       .attr("d", function(d) { return path(arc(d)); });
 });
 
-    </script>
-  </body>
-</html>
+</script>

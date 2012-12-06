@@ -21,7 +21,7 @@ require("util").puts(JSON.stringify({
     "sizzle": "1.1.x"
   },
   "devDependencies": {
-    "uglify-js": "1.3.3",
+    "uglify-js2": "2.1.6",
     "vows": "0.6.x",
     "canvas": "0.13.0" // for node-canvas example
   },

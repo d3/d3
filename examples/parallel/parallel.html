@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-    <title>Parallel Coordinates</title>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Parallel Coordinates</title>
+<style>
 
 svg {
   font: 10px sans-serif;
@@ -38,11 +36,10 @@ svg {
   text-shadow: 0 1px 0 #fff;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var margin = {top: 30, right: 10, bottom: 10, left: 10},
     width = 960 - margin.right - margin.left,
@@ -64,7 +61,7 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.csv("cars.csv", function(cars) {
+d3.csv("cars.csv", function(error, cars) {
 
   // Extract the list of dimensions and create a scale for each.
   x.domain(dimensions = d3.keys(cars[0]).filter(function(d) {
@@ -130,6 +127,4 @@ function brush() {
   });
 }
 
-    </script>
-  </body>
-</html>
+</script>

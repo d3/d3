@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hierarchical Bar Chart</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Hierarchical Bar Chart</title>
+<style>
 
 text {
   font: 10px sans-serif;
@@ -22,10 +20,10 @@ rect.background {
   stroke: #000;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var margin = {top: 20, right: 20, bottom: 20, left: 120},
     width = 960 - margin.right - margin.left,
@@ -69,7 +67,7 @@ svg.append("g")
   .append("line")
     .attr("y1", "100%");
 
-d3.json("../data/flare.json", function(root) {
+d3.json("../data/flare.json", function(error, root) {
   hierarchy.nodes(root);
   x.domain([0, root.value]).nice();
   down(root, 0);
@@ -223,6 +221,4 @@ function stack(i) {
   };
 }
 
-    </script>
-  </body>
-</html>
+</script>

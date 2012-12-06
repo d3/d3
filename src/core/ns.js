@@ -16,7 +16,10 @@ d3.ns = {
       name = name.substring(i + 1);
     }
     return d3_nsPrefix.hasOwnProperty(prefix)
-        ? {space: d3_nsPrefix[prefix], local: name}
+        ? {
+            space: d3_nsPrefix[prefix], 
+            local: name
+          }
         : name;
   }
 };

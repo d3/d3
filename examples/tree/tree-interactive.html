@@ -1,10 +1,7 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
-    <title>Node-Link Tree</title>
-    <script type="text/javascript" src="../../d3.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<title>Node-Link Tree (Interactive)</title>
+<style>
 
 .node circle {
   cursor: pointer;
@@ -23,11 +20,10 @@ path.link {
   stroke-width: 1.5px;
 }
 
-    </style>
-  </head>
-  <body>
-    <div id="chart"></div>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
     width = 1280 - margin.right - margin.left,
@@ -42,13 +38,13 @@ var tree = d3.layout.tree()
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; });
 
-var vis = d3.select("#chart").append("svg")
+var vis = d3.select("body").append("svg")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("../data/flare.json", function(json) {
+d3.json("../data/flare.json", function(error, json) {
   root = json;
   root.x0 = height / 2;
   root.y0 = 0;
@@ -163,6 +159,4 @@ function click(d) {
   update(d);
 }
 
-    </script>
-  </body>
-</html>
+</script>
