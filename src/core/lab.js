@@ -24,20 +24,18 @@ var d3_lab_X = 0.950470,
     d3_lab_Y = 1,
     d3_lab_Z = 1.088830;
 
-d3_Lab.prototype.brighter = function(k) {
+var d3_labPrototype = d3_Lab.prototype = new d3_Color;
+
+d3_labPrototype.brighter = function(k) {
   return d3_lab(Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
 };
 
-d3_Lab.prototype.darker = function(k) {
+d3_labPrototype.darker = function(k) {
   return d3_lab(Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
 };
 
-d3_Lab.prototype.rgb = function() {
+d3_labPrototype.rgb = function() {
   return d3_lab_rgb(this.l, this.a, this.b);
-};
-
-d3_Lab.prototype.toString = function() {
-  return this.rgb() + "";
 };
 
 function d3_lab_rgb(l, a, b) {
@@ -55,7 +53,7 @@ function d3_lab_rgb(l, a, b) {
 }
 
 function d3_lab_hcl(l, a, b) {
-  return d3_hcl(Math.atan2(b, a) / Math.PI * 180, Math.sqrt(a * a + b * b), l);
+  return d3_hcl(Math.atan2(b, a) / π * 180, Math.sqrt(a * a + b * b), l);
 }
 
 function d3_lab_xyz(x) {

@@ -1,5 +1,7 @@
 d3.json = function(url, callback) {
-  d3.text(url, "application/json", function(text) {
-    callback(text ? JSON.parse(text) : null);
-  });
+  return d3.xhr(url, "application/json", callback).response(d3_json);
 };
+
+function d3_json(request) {
+  return JSON.parse(request.responseText);
+}

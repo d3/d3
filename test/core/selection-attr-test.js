@@ -78,7 +78,7 @@ suite.addBatch({
       assert.equal(document.body.getAttribute("bgcolor"), "");
       assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "");
     },
-    "removes attribtues as a map of functions that return null": function(body) {
+    "removes attributes as a map of functions that return null": function(body) {
       document.body.setAttribute("bgcolor", "white");
       document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
       body.attr({bgcolor: function() {}, "xlink:href": function() {}});

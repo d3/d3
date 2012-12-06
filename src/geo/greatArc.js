@@ -1,7 +1,7 @@
 d3.geo.greatArc = function() {
-  var source = d3_geo_greatArcSource, p0,
-      target = d3_geo_greatArcTarget, p1,
-      precision = 6 * d3_geo_radians,
+  var source = d3_source, p0,
+      target = d3_target, p1,
+      precision = 6 * d3_radians,
       interpolate = d3_geo_greatArcInterpolator();
 
   function greatArc() {
@@ -37,21 +37,13 @@ d3.geo.greatArc = function() {
 
   // Precision is specified in degrees.
   greatArc.precision = function(_) {
-    if (!arguments.length) return precision / d3_geo_radians;
-    precision = _ * d3_geo_radians;
+    if (!arguments.length) return precision / d3_radians;
+    precision = _ * d3_radians;
     return greatArc;
   };
 
   return greatArc;
 };
-
-function d3_geo_greatArcSource(d) {
-  return d.source;
-}
-
-function d3_geo_greatArcTarget(d) {
-  return d.target;
-}
 
 function d3_geo_greatArcInterpolator() {
   var x0, y0, cy0, sy0, kx0, ky0,
@@ -66,8 +58,8 @@ function d3_geo_greatArcInterpolator() {
         y = A * ky0 + B * ky1,
         z = A * sy0 + B * sy1;
     return [
-      Math.atan2(y, x) / d3_geo_radians,
-      Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_geo_radians
+      Math.atan2(y, x) / d3_radians,
+      Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians
     ];
   }
 
@@ -77,9 +69,9 @@ function d3_geo_greatArcInterpolator() {
   };
 
   interpolate.source = function(_) {
-    var cx0 = Math.cos(x0 = _[0] * d3_geo_radians),
+    var cx0 = Math.cos(x0 = _[0] * d3_radians),
         sx0 = Math.sin(x0);
-    cy0 = Math.cos(y0 = _[1] * d3_geo_radians);
+    cy0 = Math.cos(y0 = _[1] * d3_radians);
     sy0 = Math.sin(y0);
     kx0 = cy0 * cx0;
     ky0 = cy0 * sx0;
@@ -88,9 +80,9 @@ function d3_geo_greatArcInterpolator() {
   };
 
   interpolate.target = function(_) {
-    var cx1 = Math.cos(x1 = _[0] * d3_geo_radians),
+    var cx1 = Math.cos(x1 = _[0] * d3_radians),
         sx1 = Math.sin(x1);
-    cy1 = Math.cos(y1 = _[1] * d3_geo_radians);
+    cy1 = Math.cos(y1 = _[1] * d3_radians);
     sy1 = Math.sin(y1);
     kx1 = cy1 * cx1;
     ky1 = cy1 * sx1;
@@ -99,10 +91,4 @@ function d3_geo_greatArcInterpolator() {
   };
 
   return interpolate;
-}
-
-function d3_geo_greatArcInterpolate(a, b) {
-  var i = d3_geo_greatArcInterpolator().source(a).target(b);
-  i.distance();
-  return i;
 }

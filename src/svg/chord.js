@@ -1,6 +1,6 @@
 d3.svg.chord = function() {
-  var source = d3_svg_chordSource,
-      target = d3_svg_chordTarget,
+  var source = d3_source,
+      target = d3_target,
       radius = d3_svg_chordRadius,
       startAngle = d3_svg_arcStartAngle,
       endAngle = d3_svg_arcEndAngle;
@@ -38,7 +38,7 @@ d3.svg.chord = function() {
   }
 
   function arc(r, p, a) {
-    return "A" + r + "," + r + " 0 " + +(a > Math.PI) + ",1 " + p;
+    return "A" + r + "," + r + " 0 " + +(a > π) + ",1 " + p;
   }
 
   function curve(r0, p0, r1, p1) {
@@ -78,22 +78,6 @@ d3.svg.chord = function() {
   return chord;
 };
 
-function d3_svg_chordSource(d) {
-  return d.source;
-}
-
-function d3_svg_chordTarget(d) {
-  return d.target;
-}
-
 function d3_svg_chordRadius(d) {
   return d.radius;
-}
-
-function d3_svg_chordStartAngle(d) {
-  return d.startAngle;
-}
-
-function d3_svg_chordEndAngle(d) {
-  return d.endAngle;
 }

@@ -15,7 +15,9 @@ function d3_Rgb(r, g, b) {
   this.b = b;
 }
 
-d3_Rgb.prototype.brighter = function(k) {
+var d3_rgbPrototype = d3_Rgb.prototype = new d3_Color;
+
+d3_rgbPrototype.brighter = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   var r = this.r,
       g = this.g,
@@ -31,7 +33,7 @@ d3_Rgb.prototype.brighter = function(k) {
       Math.min(255, Math.floor(b / k)));
 };
 
-d3_Rgb.prototype.darker = function(k) {
+d3_rgbPrototype.darker = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_rgb(
       Math.floor(k * this.r),
@@ -39,11 +41,11 @@ d3_Rgb.prototype.darker = function(k) {
       Math.floor(k * this.b));
 };
 
-d3_Rgb.prototype.hsl = function() {
+d3_rgbPrototype.hsl = function() {
   return d3_rgb_hsl(this.r, this.g, this.b);
 };
 
-d3_Rgb.prototype.toString = function() {
+d3_rgbPrototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
 };
 

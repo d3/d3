@@ -7,7 +7,6 @@ function d3_scale_quantile(domain, range) {
 
   function rescale() {
     var k = 0,
-        n = domain.length,
         q = range.length;
     thresholds = [];
     while (++k < q) thresholds[k - 1] = d3.quantile(domain, k / q);
@@ -32,6 +31,10 @@ function d3_scale_quantile(domain, range) {
   };
 
   scale.quantiles = function() {
+    return thresholds;
+  };
+
+  scale.ticks = function(m) {
     return thresholds;
   };
 

@@ -15,22 +15,20 @@ function d3_Hsl(h, s, l) {
   this.l = l;
 }
 
-d3_Hsl.prototype.brighter = function(k) {
+var d3_hslPrototype = d3_Hsl.prototype = new d3_Color;
+
+d3_hslPrototype.brighter = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_hsl(this.h, this.s, this.l / k);
 };
 
-d3_Hsl.prototype.darker = function(k) {
+d3_hslPrototype.darker = function(k) {
   k = Math.pow(0.7, arguments.length ? k : 1);
   return d3_hsl(this.h, this.s, k * this.l);
 };
 
-d3_Hsl.prototype.rgb = function() {
+d3_hslPrototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
-};
-
-d3_Hsl.prototype.toString = function() {
-  return this.rgb().toString();
 };
 
 function d3_hsl_rgb(h, s, l) {

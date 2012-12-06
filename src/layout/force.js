@@ -5,41 +5,70 @@ d3.layout.force = function() {
       size = [1, 1],
       drag,
       alpha,
-      friction = .9,
+      friction = d3_functor(.9),
       linkDistance = d3_layout_forceLinkDistance,
       linkStrength = d3_layout_forceLinkStrength,
-      charge = -30,
+      charge = d3_functor(-30),
       gravity = .1,
-      theta = .8,
+      theta = d3_functor(.8),
       interval,
       nodes = [],
       links = [],
       distances,
       strengths,
+      epsilon = 0.1, // minimal distance-squared for which the approximation holds; any smaller distance is assumed to be this large to prevent instable approximations
       charges;
 
-  function repulse(node) {
+  function repulse(node, i) {
     return function(quad, x1, y1, x2, y2) {
       if (quad.point !== node) {
         var dx = quad.cx - node.x,
             dy = quad.cy - node.y,
-            dn = 1 / Math.sqrt(dx * dx + dy * dy);
+            l = dx * dx + dy * dy,
+            dn = 1 / Math.max(epsilon, l),
+            k = quad.charge * dn,
+            th = theta(node, i, quad, l, x1, x2, k);
 
-        /* Barnes-Hut criterion. */
-        if ((x2 - x1) * dn < theta) {
-          var k = quad.charge * dn * dn;
+        /*
+        Based on the Barnes-Hut criterion.
+        http://www.amara.com/papers/nbody.html#tcu
+
+        Uses ideas from A Hierarchical O(N) Force Calculation Algorithm, Dehnen, 2007:
+        http://physics.ucsd.edu/students/courses/winter2008/physics141/lecture16/2002JCP...179...27D.pdf
+        to produce an improved acceptance criterion: Similar to the paper we not only
+        collect the center of mass per quad but also the maximum distance of any
+        node from that derived center of mass by collecting the bounding box;
+        by comparing this measure with the distance of the quad's center of mass to our
+        node and apply a decision threshold  based on a (possibly) mass-dependent theta,
+        we can tweak the accuracy of our approximation more accurately for fields with
+        a very uneven charge distribution.
+
+        The basic Barnes-Hut criterion is purely distance based, while we use a criterion
+        which is similar to the potential-based criterion discussed in the latter paper:
+        when the influence of the collective force over the given distance is relatively
+        small, we do accept the consolidated quad data; otherwise we need process the
+        child nodes.
+        */
+        if (l * k * k < th * th) {
+          k *= alpha;
           node.px -= dx * k;
           node.py -= dy * k;
           return true;
         }
 
         if (quad.point && isFinite(dn)) {
-          var k = quad.pointCharge * dn * dn;
+          k = quad.pointCharge * alpha * dn;
           node.px -= dx * k;
           node.py -= dy * k;
         }
       }
-      return !quad.charge;
+      return false;
+      //return !quad.charge; -- very dangerous criterion to stop tree traversal as
+      //                        accumulated force may be zero, but close-by so the
+      //                        accumulate must not be used.
+      //                        Another issue is when the node itself coincides
+      //                        with others: those won't be visited if the sum of
+      //                        the charges, including 'node' itself, produce a zero sum.
     };
   }
 
@@ -53,6 +82,7 @@ d3.layout.force = function() {
     var n = nodes.length,
         m = links.length,
         q,
+        f,
         i, // current index
         o, // current object
         s, // current source
@@ -84,7 +114,8 @@ d3.layout.force = function() {
     if (k = alpha * gravity) {
       x = size[0] / 2;
       y = size[1] / 2;
-      i = -1; if (k) while (++i < n) {
+      i = -1;
+	    while (++i < n) {
         o = nodes[i];
         o.x += (x - o.x) * k;
         o.y += (y - o.y) * k;
@@ -92,11 +123,19 @@ d3.layout.force = function() {
     }
 
     // compute quadtree center of mass and apply charge forces
-    if (charge) {
-      d3_layout_forceAccumulate(q = d3.geom.quadtree(nodes), alpha, charges);
+    f = 0;
+    q = d3.geom.quadtree(nodes);
+    // recalculate charges on every tick if need be:
+    charges = [];
+    for (i = 0; i < n; ++i) {
+      charges[i] = k = +charge.call(this, nodes[i], i, q);
+      f += Math.abs(k);
+    }
+    if (f != 0) {
+      d3_layout_forceAccumulate(q, alpha, charges);
       i = -1; while (++i < n) {
         if (!(o = nodes[i]).fixed) {
-          q.visit(repulse(o));
+          q.visit(repulse(o, i));
         }
       }
     }
@@ -108,12 +147,13 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        o.x -= (o.px - (o.px = o.x)) * friction;
-        o.y -= (o.py - (o.py = o.y)) * friction;
+        f = friction.call(this, o, i);
+        o.x -= (o.px - (o.px = o.x)) * f;
+        o.y -= (o.py - (o.py = o.y)) * f;
       }
     }
 
-    event.tick({type: "tick", alpha: alpha});
+    event.tick({type: "tick", alpha: alpha, quadtree: q});
   };
 
   force.nodes = function(x) {
@@ -151,25 +191,25 @@ d3.layout.force = function() {
 
   force.friction = function(x) {
     if (!arguments.length) return friction;
-    friction = x;
+    friction = d3_functor(x);
     return force;
   };
 
   force.charge = function(x) {
     if (!arguments.length) return charge;
-    charge = typeof x === "function" ? x : +x;
+    charge = d3_functor(x);
     return force;
   };
 
   force.gravity = function(x) {
     if (!arguments.length) return gravity;
-    gravity = x;
+    gravity = +x;
     return force;
   };
 
   force.theta = function(x) {
     if (!arguments.length) return theta;
-    theta = x;
+    theta = +x;
     return force;
   };
 
@@ -216,36 +256,31 @@ d3.layout.force = function() {
 
     for (i = 0; i < n; ++i) {
       o = nodes[i];
-      if (isNaN(o.x)) o.x = position("x", w);
-      if (isNaN(o.y)) o.y = position("y", h);
+      if (isNaN(o.x)) o.x = position("x", w, i);
+      if (isNaN(o.y)) o.y = position("y", h, i);
       if (isNaN(o.px)) o.px = o.x;
       if (isNaN(o.py)) o.py = o.y;
     }
 
     charges = [];
-    if (typeof charge === "function") {
-      for (i = 0; i < n; ++i) {
-        charges[i] = +charge.call(this, nodes[i], i);
-      }
-    } else {
-      for (i = 0; i < n; ++i) {
-        charges[i] = charge;
-      }
+    for (i = 0; i < n; ++i) {
+      charges[i] = +charge.call(this, nodes[i], i);
     }
 
     // initialize node position based on first neighbor
-    function position(dimension, size) {
-      var neighbors = neighbor(i),
+    function position(dimension, size, i) {
+      var my_neighbors = neighbor(i),
           j = -1,
-          m = neighbors.length,
+          m = my_neighbors.length,
           x;
-      while (++j < m) if (!isNaN(x = neighbors[j][dimension])) return x;
+      while (++j < m) if (!isNaN(x = my_neighbors[j][dimension])) return x;
       return Math.random() * size;
     }
 
     // initialize neighbors lazily
-    function neighbor() {
+    function neighbor(i) {
       if (!neighbors) {
+        var j;
         neighbors = [];
         for (j = 0; j < n; ++j) {
           neighbors[j] = [];
@@ -272,11 +307,13 @@ d3.layout.force = function() {
 
   // use `node.call(force.drag)` to make nodes draggable
   force.drag = function() {
+    if (!arguments.length) return drag;
+
     if (!drag) drag = d3.behavior.drag()
         .origin(d3_identity)
-        .on("dragstart", d3_layout_forceDragstart)
-        .on("drag", dragmove)
-        .on("dragend", d3_layout_forceDragend);
+        .on("dragstart.force", d3_layout_forceDragstart)
+        .on("drag.force", dragmove)
+        .on("dragend.force", d3_layout_forceDragend);
 
     this.on("mouseover.force", d3_layout_forceMouseover)
         .on("mouseout.force", d3_layout_forceMouseout)
@@ -303,7 +340,7 @@ function d3_layout_forceDragstart(d) {
 }
 
 function d3_layout_forceDragend(d) {
-  d.fixed &= 1; // unset bits 2 and 3
+  d.fixed &= ~6; // unset bits 2 and 3
 }
 
 function d3_layout_forceMouseover(d) {
@@ -311,12 +348,13 @@ function d3_layout_forceMouseover(d) {
 }
 
 function d3_layout_forceMouseout(d) {
-  d.fixed &= 3; // unset bit 3
+  d.fixed &= ~4; // unset bit 3
 }
 
 function d3_layout_forceAccumulate(quad, alpha, charges) {
   var cx = 0,
       cy = 0;
+
   quad.charge = 0;
   if (!quad.leaf) {
     var nodes = quad.nodes,
@@ -338,7 +376,7 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
       quad.point.x += Math.random() - .5;
       quad.point.y += Math.random() - .5;
     }
-    var k = alpha * charges[quad.point.index];
+    var k = charges[quad.point.index];
     quad.charge += quad.pointCharge = k;
     cx += k * quad.point.x;
     cy += k * quad.point.y;
@@ -347,10 +385,10 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
   quad.cy = cy / quad.charge;
 }
 
-function d3_layout_forceLinkDistance(link) {
+function d3_layout_forceLinkDistance(/*link*/) {
   return 20;
 }
 
-function d3_layout_forceLinkStrength(link) {
+function d3_layout_forceLinkStrength(/*link*/) {
   return 1;
 }

@@ -1,61 +1,9 @@
-var width = 960,
-    height = 50,
-    margin = {top: 5, right: 40, bottom: 20, left: 120};
-
-var chart = bulletChart()
-    .width(width - margin.right - margin.left)
-    .height(height - margin.top - margin.bottom);
-
-d3.json("bullets.json", function(data) {
-
-  var vis = d3.select("#chart").selectAll("svg")
-      .data(data)
-    .enter().append("svg")
-      .attr("class", "bullet")
-      .attr("width", width)
-      .attr("height", height)
-    .append("g")
-      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-      .call(chart);
-
-  var title = vis.append("g")
-      .attr("text-anchor", "end")
-      .attr("transform", "translate(-6," + (height - margin.top - margin.bottom) / 2 + ")");
-
-  title.append("text")
-      .attr("class", "title")
-      .text(function(d) { return d.title; });
-
-  title.append("text")
-      .attr("class", "subtitle")
-      .attr("dy", "1em")
-      .text(function(d) { return d.subtitle; });
-
-  chart.duration(1000);
-  window.transition = function() {
-    vis.datum(randomize).call(chart);
-  };
-});
-
-function randomize(d) {
-  if (!d.randomizer) d.randomizer = randomizer(d);
-  d.ranges = d.ranges.map(d.randomizer);
-  d.markers = d.markers.map(d.randomizer);
-  d.measures = d.measures.map(d.randomizer);
-  return d;
-}
-
-function randomizer(d) {
-  var k = d3.max(d.ranges) * .2;
-  return function(d) {
-    return Math.max(0, d + k * (Math.random() - .5));
-  };
-}
+(function() {
 
 // Chart design based on the recommendations of Stephen Few. Implementation
 // based on the work of Clint Ivy, Jamie Love, and Jason Davies.
 // http://projects.instantcognition.com/protovis/bulletchart/
-function bulletChart() {
+d3.bullet = function() {
   var orient = "left", // TODO top & bottom
       reverse = false,
       duration = 0,
@@ -289,3 +237,5 @@ function bulletWidth(x) {
     return Math.abs(x(d) - x0);
   };
 }
+
+})();

@@ -7,7 +7,7 @@ module.exports = {
     topic: function() {
       var cb = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
-          transition = div.transition().delay(150),
+          transition = div.transition().delay(350),
           then = Date.now(),
           n = 0,
           calls = [],
@@ -42,7 +42,7 @@ module.exports = {
     },
 
     "invokes the listener after the specified delay": function(result) {
-      assert.inDelta(result.delay, [150, 150], 20);
+      assert.inDelta(result.delay, [350, 350], 20);
     },
     "invokes each listener exactly once, in order": function(result) {
       assert.deepEqual(result.count, [2, 4]);
@@ -57,12 +57,12 @@ module.exports = {
     // think the API needs to guarantee the order of callbacks.
 
     "uses the node as the context": function(result) {
-      assert.domEqual(result.context[1], result.selection[0][0]);
-      assert.domEqual(result.context[0], result.selection[0][1]);
+      assert.domEqual(result.context[0], result.selection[0][0]);
+      assert.domEqual(result.context[1], result.selection[0][1]);
     },
     "passes the data and index to the function": function(result) {
-      assert.deepEqual(result.data, ["bar", "foo"], "expected data, got {actual}");
-      assert.deepEqual(result.index, [1, 0], "expected index, got {actual}");
+      assert.deepEqual(result.data, ["foo", "bar"], "expected data, got {actual}");
+      assert.deepEqual(result.index, [0, 1], "expected index, got {actual}");
     },
 
     "sets an exclusive lock on transitioning nodes": function(result) {
@@ -79,7 +79,7 @@ module.exports = {
     topic: function() {
       var cb = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
-          transition = div.transition().duration(150),
+          transition = div.transition().duration(350),
           then = Date.now(),
           n = 0,
           calls = [],
@@ -114,7 +114,7 @@ module.exports = {
     },
 
     "invokes the listener after the specified delay": function(result) {
-      assert.inDelta(result.delay, [150, 150], 20);
+      assert.inDelta(result.delay, [350, 350], 20);
     },
     "invokes each listener exactly once, in order": function(result) {
       assert.deepEqual(result.count, [2, 4]);
@@ -129,12 +129,12 @@ module.exports = {
     // think the API needs to guarantee the order of callbacks.
 
     "uses the node as the context": function(result) {
-      assert.domEqual(result.context[1], result.selection[0][0]);
-      assert.domEqual(result.context[0], result.selection[0][1]);
+      assert.domEqual(result.context[0], result.selection[0][0]);
+      assert.domEqual(result.context[1], result.selection[0][1]);
     },
     "passes the data and index to the function": function(result) {
-      assert.deepEqual(result.data, ["bar", "foo"], "expected data, got {actual}");
-      assert.deepEqual(result.index, [1, 0], "expected index, got {actual}");
+      assert.deepEqual(result.data, ["foo", "bar"], "expected data, got {actual}");
+      assert.deepEqual(result.index, [0, 1], "expected index, got {actual}");
     },
 
     "deletes the transition lock after end": function(result) {
@@ -155,10 +155,10 @@ module.exports = {
           cb(null, {id: id, node: this});
         });
       },
-      "inherits the same transition id": function(result) {
+      "does not inherit the transition id": function(result) {
         assert.isTrue(result.id > 0);
         assert.equal(result.node.__transition__.count, 1);
-        assert.equal(result.node.__transition__.active, result.id);
+        assert.isTrue(result.node.__transition__.active > result.id);
       }
     }
   }

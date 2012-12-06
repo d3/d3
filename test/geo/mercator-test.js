@@ -10,42 +10,42 @@ suite.addBatch({
     topic: function() {
       return d3.geo.mercator().translate([0, 0]).scale(100);
     },
-    "Arctic": function(mercator) {
-      var coords = mercator([0, 85]);
+    "Arctic": function(projection) {
+      var coords = projection([0, 85]);
       assert.inDelta(coords[0], 0, 1e-6);
       assert.inDelta(coords[1], -49.8362085, 1e-6);
-      var lonlat = mercator.invert(coords);
+      var lonlat = projection.invert(coords);
       assert.inDelta(lonlat[0], 0, 1e-6);
       assert.inDelta(lonlat[1], 85, 1e-6);
     },
-    "Antarctic": function(mercator) {
-      var coords = mercator([0, -85]);
+    "Antarctic": function(projection) {
+      var coords = projection([0, -85]);
       assert.inDelta(coords[0], 0, 1e-6);
       assert.inDelta(coords[1], 49.8362085, 1e-6);
-      var lonlat = mercator.invert(coords);
+      var lonlat = projection.invert(coords);
       assert.inDelta(lonlat[0], 0, 1e-6);
       assert.inDelta(lonlat[1], -85, 1e-6);
     },
-    "Hawaii": function(mercator) {
-      var coords = mercator([-180, 0]);
+    "Hawaii": function(projection) {
+      var coords = projection([-180, 0]);
       assert.inDelta(coords[0], -50, 1e-6);
       assert.inDelta(coords[1], 0, 1e-6);
-      var lonlat = mercator.invert(coords);
+      var lonlat = projection.invert(coords);
       assert.inDelta(lonlat[0], -180, 1e-6);
       assert.inDelta(lonlat[1], 0, 1e-6);
     },
-    "Phillipines": function(mercator) {
-      var coords = mercator([180, 0]);
+    "Phillipines": function(projection) {
+      var coords = projection([180, 0]);
       assert.inDelta(coords[0], 50, 1e-6);
       assert.inDelta(coords[1], 0, 1e-6);
-      var lonlat = mercator.invert(coords);
+      var lonlat = projection.invert(coords);
       assert.inDelta(lonlat[0], 180, 1e-6);
       assert.inDelta(lonlat[1], 0, 1e-6);
     },
     "Inversion works for non-zero translation": function() {
-      var mercator = d3.geo.mercator().translate([123, 99]).scale(100),
-          coords = mercator([0, 85]),
-          lonlat = mercator.invert(coords);
+      var projection = d3.geo.mercator().translate([123, 99]).scale(100),
+          coords = projection([0, 85]),
+          lonlat = projection.invert(coords);
       assert.inDelta(lonlat[0], 0, 1e-6);
       assert.inDelta(lonlat[1], 85, 1e-6);
     }
