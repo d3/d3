@@ -9,7 +9,7 @@ module.exports = {
     t.each("end", function() { cb(null, t); });
   },
   "removes the selected elements": function(transition) {
-    assert.domEqual(transition[0][0].node.parentNode, null);
+    assert.domEqual(transition[0][0].parentNode, null);
   },
 
   "when the element is already removed": {
@@ -19,7 +19,7 @@ module.exports = {
       t.each("end", function() { cb(null, t); });
     },
     "does nothing": function(transition) {
-      assert.domEqual(transition[0][0].node.parentNode, null);
+      assert.domEqual(transition[0][0].parentNode, null);
     }
   },
 

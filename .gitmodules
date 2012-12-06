@@ -1,0 +1,6 @@
+[submodule "documentation/wiki-vanilla"]
+	path = documentation/wiki-vanilla
+	url = git://github.com/mbostock/d3.wiki.git
+[submodule "documentation/wiki"]
+	path = documentation/wiki
+	url = git@github.com:GerHobbelt/d3.wiki.git

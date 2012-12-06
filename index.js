@@ -13,7 +13,7 @@ CSSStyleDeclaration = window.CSSStyleDeclaration;
 
 Sizzle = require("sizzle");
 
-require("./d3.v2");
+require("./d3");
 
 module.exports = d3;
 

@@ -1,11 +1,8 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=utf-8"/>
-  </head>
-  <body>
-    <script type="text/javascript" src="../../d3.v2.js"></script>
-    <script type="text/javascript">
+<meta charset="utf-8">
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var div = d3.select("body").selectAll("div")
     .data(["a", "b", "f"])
@@ -20,6 +17,4 @@ div.enter().append("div")
 
 div.order();
 
-    </script>
-  </body>
-</html>
+</script>

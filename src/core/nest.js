@@ -43,7 +43,10 @@ d3.nest = function() {
         key;
 
     for (key in map) {
-      a.push({key: key, values: entries(map[key], depth)});
+      a.push({
+        key: key, 
+        values: entries(map[key], depth)
+      });
     }
 
     if (sortKey) a.sort(function(a, b) {

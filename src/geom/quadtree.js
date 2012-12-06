@@ -1,23 +1,14 @@
-// Constructs a new quadtree for the specified array of points. A quadtree is a
-// two-dimensional recursive spatial subdivision. This implementation uses
-// square partitions, dividing each square into four equally-sized squares. Each
-// point exists in a unique node; if multiple points are in the same position,
-// some points may be stored on internal nodes rather than leaf nodes. Quadtrees
-// can be used to accelerate various spatial operations, such as the Barnes-Hut
-// approximation for computing n-body forces, or collision detection.
 d3.geom.quadtree = function(points, x1, y1, x2, y2) {
   var p,
       i = -1,
       n = points.length;
 
-  // Type conversion for deprecated API.
-  if (n && isNaN(points[0].x)) points = points.map(d3_geom_quadtreePoint);
-
   // Allow bounds to be specified explicitly.
   if (arguments.length < 5) {
     if (arguments.length === 3) {
-      y2 = x2 = y1;
-      y1 = x1;
+      y2 = y1;
+      x2 = x1;
+      y1 = x1 = 0;
     } else {
       x1 = y1 = Infinity;
       x2 = y2 = -Infinity;
@@ -30,14 +21,14 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
         if (p.x > x2) x2 = p.x;
         if (p.y > y2) y2 = p.y;
       }
-
-      // Squarify the bounds.
-      var dx = x2 - x1,
-          dy = y2 - y1;
-      if (dx > dy) y2 = y1 + dx;
-      else x2 = x1 + dy;
     }
   }
+
+  // Squarify the bounds.
+  var dx = x2 - x1,
+      dy = y2 - y1;
+  if (dx > dy) y2 = y1 + dx;
+  else x2 = x1 + dy;
 
   // Recursively inserts the specified point p at the node n or one of its
   // descendants. The bounds are defined by [x1, x2] and [y1, y2].
@@ -119,11 +110,4 @@ function d3_geom_quadtreeVisit(f, node, x1, y1, x2, y2) {
     if (children[2]) d3_geom_quadtreeVisit(f, children[2], x1, sy, sx, y2);
     if (children[3]) d3_geom_quadtreeVisit(f, children[3], sx, sy, x2, y2);
   }
-}
-
-function d3_geom_quadtreePoint(p) {
-  return {
-    x: p[0],
-    y: p[1]
-  };
 }

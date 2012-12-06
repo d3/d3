@@ -20,9 +20,9 @@ module.exports = {
 
   "selects all matching elements": function(transition) {
     var t = transition.selectAll("span");
-    assert.domEqual(t[1][0].node.parentNode, transition[0][1].node);
-    assert.domEqual(t[2][0].node.parentNode, transition[0][2].node);
-    assert.domEqual(t[2][1].node.parentNode, transition[0][2].node);
+    assert.domEqual(t[1][0].parentNode, transition[0][1]);
+    assert.domEqual(t[2][0].parentNode, transition[0][2]);
+    assert.domEqual(t[2][1].parentNode, transition[0][2]);
   },
   "ignores null elements": function(transition) {
     var t = transition.selectAll("span");
@@ -30,15 +30,15 @@ module.exports = {
   },
   "propagates delay to the selected elements": function(transition) {
     var t = transition.selectAll("span");
-    assert.domEqual(t[1][0].delay, 13);
-    assert.domEqual(t[2][0].delay, 26);
-    assert.domEqual(t[2][1].delay, 26);
+    assert.domEqual(t[1][0].__transition__[t.id].delay, 13);
+    assert.domEqual(t[2][0].__transition__[t.id].delay, 26);
+    assert.domEqual(t[2][1].__transition__[t.id].delay, 26);
   },
   "propagates duration to the selected elements": function(transition) {
     var t = transition.selectAll("span");
-    assert.domEqual(t[1][0].duration, 21);
-    assert.domEqual(t[2][0].duration, 42);
-    assert.domEqual(t[2][1].duration, 42);
+    assert.domEqual(t[1][0].__transition__[t.id].duration, 21);
+    assert.domEqual(t[2][0].__transition__[t.id].duration, 42);
+    assert.domEqual(t[2][1].__transition__[t.id].duration, 42);
   },
   "returns empty if no match is found": function(transition) {
     var t = transition.selectAll("span");

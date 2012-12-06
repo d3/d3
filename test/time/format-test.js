@@ -96,9 +96,41 @@ suite.addBatch({
       assert.equal(f(local(1990, 0, 1, 0)), "AM");
       assert.equal(f(local(1990, 0, 1, 13)), "PM");
     },
+    "formats ordinal date suffix": function(format) {
+      var f = format("%s");
+      var i = 0;
+      assert.equal(f(local(1990, 0, 1)), "st");
+      assert.equal(f(local(1990, 0, 2)), "nd");
+      assert.equal(f(local(1990, 0, 3)), "rd");
+      for (i = 4; i <= 20; i++) {
+        assert.equal(f(local(1990, 0, i)), "th");
+      }
+      assert.equal(f(local(1990, 0, 21)), "st");
+      assert.equal(f(local(1990, 0, 22)), "nd");
+      assert.equal(f(local(1990, 0, 23)), "rd");
+      for (i = 24; i <= 30; i++) {
+        assert.equal(f(local(1990, 0, i)), "th");
+      }
+      assert.equal(f(local(1990, 0, 31)), "st");
+    },
     "formats zero-padded second": function(format) {
       var f = format("%S");
       assert.equal(f(local(1990, 0, 1, 0, 0, 0)), "00");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
+      var f = format("%0S");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 0)), "00");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
+    },
+    "formats space-padded second": function(format) {
+      var f = format("%_S");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 0)), " 0");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 3)), " 3");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
+    },
+    "formats no-padded second": function(format) {
+      var f = format("%-S");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 0)), "0");
+      assert.equal(f(local(1990, 0, 1, 0, 0, 3)), "3");
       assert.equal(f(local(1990, 0, 1, 0, 0, 32)), "32");
     },
     "formats zero-padded millisecond": function(format) {
@@ -119,8 +151,8 @@ suite.addBatch({
     },
     "formats locale date": function(format) {
       var f = format("%x");
-      assert.equal(f(local(1990, 0, 1)), "01/01/90");
-      assert.equal(f(local(2010, 5, 1)), "06/01/10");
+      assert.equal(f(local(1990, 0, 1)), "01/01/1990");
+      assert.equal(f(local(2010, 5, 1)), "06/01/2010");
     },
     "formats locale time": function(format) {
       var f = format("%X");
@@ -257,8 +289,8 @@ suite.addBatch({
       },
       "formats locale date": function(format) {
         var f = format("%x");
-        assert.equal(f(utc(1990, 0, 1)), "01/01/90");
-        assert.equal(f(utc(2010, 5, 1)), "06/01/10");
+        assert.equal(f(utc(1990, 0, 1)), "01/01/1990");
+        assert.equal(f(utc(2010, 5, 1)), "06/01/2010");
       },
       "formats locale time": function(format) {
         var f = format("%X");
@@ -323,9 +355,9 @@ suite.addBatch({
     },
     "parses locale date": function(format) {
       var p = format("%x").parse;
-      assert.deepEqual(p("01/01/90"), local(1990, 0, 1));
-      assert.deepEqual(p("02/03/91"), local(1991, 1, 3));
-      assert.isNull(p("03/10/2010"));
+      assert.deepEqual(p("01/01/1990"), local(1990, 0, 1));
+      assert.deepEqual(p("02/03/1991"), local(1991, 1, 3));
+      assert.deepEqual(p("03/10/2010"), local(2010, 2, 10));
     },
     "parses abbreviated month, date and year": function(format) {
       var p = format("%b %d, %Y").parse;
@@ -404,9 +436,9 @@ suite.addBatch({
       },
       "parses locale date": function(format) {
         var p = format("%x").parse;
-        assert.deepEqual(p("01/01/90"), utc(1990, 0, 1));
-        assert.deepEqual(p("02/03/91"), utc(1991, 1, 3));
-        assert.isNull(p("03/10/2010"));
+        assert.deepEqual(p("01/01/1990"), utc(1990, 0, 1));
+        assert.deepEqual(p("02/03/1991"), utc(1991, 1, 3));
+        assert.deepEqual(p("03/10/2010"), utc(2010, 2, 10));
       },
       "parses abbreviated month, date and year": function(format) {
         var p = format("%b %d, %Y").parse;

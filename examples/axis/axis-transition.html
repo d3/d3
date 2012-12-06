@@ -1,8 +1,6 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <script type="text/javascript" src="../../d3.v2.js"></script>
-    <style type="text/css">
+<meta charset="utf-8">
+<style>
 
 body {
   font: 10px sans-serif;
@@ -40,10 +38,10 @@ path.area {
   stroke: #000;
 }
 
-    </style>
-  </head>
-  <body>
-    <script type="text/javascript">
+</style>
+<body>
+<script src="../../d3.js"></script>
+<script>
 
 var margin = {top: 20, right: 40, bottom: 20, left:20},
     width = 960 - margin.right - margin.left,
@@ -61,7 +59,7 @@ var y = d3.scale.linear()
 var xAxis = d3.svg.axis()
     .scale(x)
     .tickSize(-height)
-    .tickSubdivide(true);
+    .tickSubdivide(1);
 
 var yAxis = d3.svg.axis()
     .scale(y)
@@ -81,7 +79,7 @@ var line = d3.svg.line()
     .x(function(d) { return x(d.date); })
     .y(function(d) { return y(d.price); });
 
-d3.csv("../data/stocks.csv", function(data) {
+d3.csv("../data/stocks.csv", function(error, data) {
 
   // Filter to one symbol; the S&P 500.
   var values = data.filter(function(d) {
@@ -156,6 +154,4 @@ d3.csv("../data/stocks.csv", function(data) {
   });
 });
 
-    </script>
-  </body>
-</html>
+</script>
