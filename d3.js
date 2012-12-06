@@ -4268,8 +4268,7 @@
       this.on("mouseover.force", d3_layout_forceMouseover).on("mouseout.force", d3_layout_forceMouseout).call(drag);
     };
     function dragmove(d) {
-      d.px = d3.event.x;
-      d.py = d3.event.y;
+      d.px = d3.event.x, d.py = d3.event.y;
       force.resume();
     }
     return d3.rebind(force, event, "on");
@@ -4282,6 +4281,7 @@
   }
   function d3_layout_forceMouseover(d) {
     d.fixed |= 4;
+    d.px = d.x, d.py = d.y;
   }
   function d3_layout_forceMouseout(d) {
     d.fixed &= 3;

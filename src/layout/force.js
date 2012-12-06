@@ -283,8 +283,7 @@ d3.layout.force = function() {
   };
 
   function dragmove(d) {
-    d.px = d3.event.x;
-    d.py = d3.event.y;
+    d.px = d3.event.x, d.py = d3.event.y;
     force.resume(); // restart annealing
   }
 
@@ -307,6 +306,7 @@ function d3_layout_forceDragend(d) {
 
 function d3_layout_forceMouseover(d) {
   d.fixed |= 4; // set bit 3
+  d.px = d.x, d.py = d.y; // set velocity to zero
 }
 
 function d3_layout_forceMouseout(d) {
