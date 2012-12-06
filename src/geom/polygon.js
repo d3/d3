@@ -3,13 +3,11 @@ d3.geom.polygon = function(coordinates) {
   coordinates.area = function() {
     var i = 0,
         n = coordinates.length,
-        a = coordinates[n - 1][0] * coordinates[0][1],
-        b = coordinates[n - 1][1] * coordinates[0][0];
+        area = coordinates[n - 1][1] * coordinates[0][0] - coordinates[n - 1][0] * coordinates[0][1];
     while (++i < n) {
-      a += coordinates[i - 1][0] * coordinates[i][1];
-      b += coordinates[i - 1][1] * coordinates[i][0];
+      area += coordinates[i - 1][1] * coordinates[i][0] - coordinates[i - 1][0] * coordinates[i][1];
     }
-    return (b - a) * .5;
+    return area * .5;
   };
 
   coordinates.centroid = function(k) {
