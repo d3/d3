@@ -185,3 +185,14 @@ function d3_geo_pathCircle(radius) {
       + "a" + radius + "," + radius + " 0 1,1 0," + (+2 * radius)
       + "z";
 }
+
+var d3_geo_pathIdentity = d3.geo.path().projection({
+  polygon: function(polygon, context) {
+    polygon.forEach(function(ring) {
+      var n = ring.length, i = 0, point;
+      context.moveTo((point = ring[0])[0], point[1]);
+      while (++i < n) context.lineTo((point = ring[i])[0], point[1]);
+      context.closePath();
+    });
+  }
+});
