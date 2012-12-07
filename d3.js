@@ -237,6 +237,14 @@
     var H = (values.length - 1) * p + 1, h = Math.floor(H), v = values[h - 1], e = H - h;
     return e ? v + e * (values[h] - v) : v;
   };
+  d3.shuffle = function(array) {
+    var m = array.length, t, i;
+    while (m) {
+      i = Math.random() * m-- | 0;
+      t = array[m], array[m] = array[i], array[i] = t;
+    }
+    return array;
+  };
   d3.transpose = function(matrix) {
     return d3.zip.apply(d3, matrix);
   };
