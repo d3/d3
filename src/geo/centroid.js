@@ -121,12 +121,9 @@ function d3_geo_centroidLine(coordinates) {
     weight += w = Math.atan2(
         Math.sqrt((w = y0 * z - z0 * y) * w + (w = z0 * x - x0 * z) * w + (w = x0 * y - y0 * x) * w),
         x0 * x + y0 * y + z0 * z);
-    x = (x0 + (x0 = x)) / 2;
-    y = (y0 + (y0 = y)) / 2;
-    z = (z0 + (z0 = z)) / 2;
-    cx += w * x;
-    cy += w * y;
-    cz += w * z;
+    cx += w * (x0 + (x0 = x));
+    cy += w * (y0 + (y0 = y));
+    cz += w * (z0 + (z0 = z));
   }
   return [cx, cy, cz, weight];
 }
