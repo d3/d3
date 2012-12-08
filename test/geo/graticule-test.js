@@ -17,7 +17,7 @@ suite.addBatch({
     },
 
     "extent": {
-      "defaults to just inside –180º, -90º to +180º, +90º": function() {
+      "defaults to just inside –180°, -90° to +180°, +90°": function() {
         assert.deepEqual(d3.geo.graticule().extent(), [[-180 + ε, -90 + ε], [180 - ε, 90 - ε]]);
       },
       "coerces input values to numbers": function() {
@@ -45,7 +45,7 @@ suite.addBatch({
     },
 
     "step": {
-      "defaults to 22.5º, 22.5º": function(graticule) {
+      "defaults to 22.5°, 22.5°": function(graticule) {
         assert.deepEqual(d3.geo.graticule().step(), [22.5, 22.5]);
       },
       "coerces input values to numbers": function() {
