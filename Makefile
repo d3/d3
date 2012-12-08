@@ -183,6 +183,7 @@ d3.geo.js: \
 	src/geo/type.js \
 	src/geo/albers-usa.js \
 	src/geo/albers.js \
+	src/geo/area.js \
 	src/geo/azimuthal-equal-area.js \
 	src/geo/azimuthal-equidistant.js \
 	src/geo/bounds.js \
