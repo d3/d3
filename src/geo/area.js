@@ -13,7 +13,7 @@ var d3_geo_areaType = d3_geo_type({
   Feature: function(feature) { return d3_geo_areaType.geometry(feature.geometry); },
   FeatureCollection: function(collection) { return d3.sum(collection.features, d3_geo_areaType.Feature); },
   GeometryCollection: function(collection) { return d3.sum(collection.geometries, d3_geo_areaType.geometry); },
-  geometry: function(geometry) { return d3_geo_areaType[geometry.type](geometry); } // TODO add 3rd argument to d3.sum?
+  geometry: function(geometry) { return d3_geo_areaType[geometry.type](geometry); }
 });
 
 function d3_geo_areaPolygon(polygon) {
@@ -58,7 +58,5 @@ function d3_geo_areaRing(ring) {
     λ0 = λ, φ0 = φ;
     cosφ0 = cosφ, sinφ0 = sinφ;
   }
-  return area > 2 * π && area <= 4 * π ? 4 * π - area
-      : area <= -2 * π && area > -4 * π ? area + 4 * π
-      : area;
+  return Math.abs(area < -ε ? 4 * π + area : area);
 }

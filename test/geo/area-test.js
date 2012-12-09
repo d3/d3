@@ -55,6 +55,32 @@ suite.addBatch({
         "semilune": function(area) {
           assert.inDelta(area(d3.geo.graticule().extent([[0, 0], [90, 90]]).outline()), π / 2, 1e-5);
         }
+      },
+      "circles": {
+        "hemisphere": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(90)()), 2 * π, 1e-5);
+        },
+        "45°": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(45).precision(.1)()), π * (2 - Math.SQRT2), 1e-5);
+        },
+        "45° North": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(45).precision(.1).origin([0, 90])()), π * (2 - Math.SQRT2), 1e-5);
+        },
+        "45° South": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(45).precision(.1).origin([0, -90])()), π * (2 - Math.SQRT2), 1e-5);
+        },
+        "135°": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(135).precision(.1)()), π * (2 + Math.SQRT2), 1e-5);
+        },
+        "135° North": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(135).precision(.1).origin([0, 90])()), π * (2 + Math.SQRT2), 1e-5);
+        },
+        "135° South": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(135).precision(.1).origin([0, -90])()), π * (2 + Math.SQRT2), 1e-5);
+        },
+        "tiny": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(1e-6)()), 0, 1e-6);
+        }
       }
     },
     "MultiPolygon": {
