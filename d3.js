@@ -5519,7 +5519,7 @@
       λ0 = λ, φ0 = φ;
       cosφ0 = cosφ, sinφ0 = sinφ;
     }
-    return Math.abs(area < -ε ? 4 * π + area : area);
+    return area < 0 ? 4 * π + area : area;
   }
   var d3_geo_azimuthalEqualArea = d3_geo_azimuthal(function(cosλcosφ) {
     return Math.sqrt(2 / (1 + cosλcosφ));

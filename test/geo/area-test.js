@@ -79,7 +79,10 @@ suite.addBatch({
           assert.inDelta(area(d3.geo.circle().angle(135).precision(.1).origin([0, -90])()), π * (2 + Math.SQRT2), 1e-5);
         },
         "tiny": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(1e-6)()), 0, 1e-6);
+          assert.inDelta(area(d3.geo.circle().angle(1e-6).precision(.1)()), 0, 1e-6);
+        },
+        "huge": function(area) {
+          assert.inDelta(area(d3.geo.circle().angle(180 - 1e-6).precision(.1)()), 4 * π, 1e-6);
         }
       }
     },

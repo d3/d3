@@ -58,5 +58,5 @@ function d3_geo_areaRing(ring) {
     λ0 = λ, φ0 = φ;
     cosφ0 = cosφ, sinφ0 = sinφ;
   }
-  return Math.abs(area < -ε ? 4 * π + area : area);
+  return area < 0 ? 4 * π + area : area;
 }
