@@ -180,6 +180,8 @@ d3.layout.js: \
 
 d3.geo.js: \
 	src/geo/geo.js \
+	src/geo/spherical.js \
+	src/geo/cartesian.js \
 	src/geo/type.js \
 	src/geo/albers-usa.js \
 	src/geo/albers.js \

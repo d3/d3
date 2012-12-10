@@ -5333,6 +5333,36 @@
   d3.csv = d3_dsv(",", "text/csv");
   d3.tsv = d3_dsv("	", "text/tab-separated-values");
   d3.geo = {};
+  function d3_geo_spherical(cartesian) {
+    return [ Math.atan2(cartesian[1], cartesian[0]), Math.asin(Math.max(-1, Math.min(1, cartesian[2]))) ];
+  }
+  function d3_geo_sphericalEqual(a, b) {
+    return Math.abs(a[0] - b[0]) < ε && Math.abs(a[1] - b[1]) < ε;
+  }
+  function d3_geo_cartesian(spherical, origin) {
+    var λ = spherical[0], φ = spherical[1], cosφ = Math.cos(φ);
+    return [ cosφ * Math.cos(λ) - origin, cosφ * Math.sin(λ), Math.sin(φ) ];
+  }
+  function d3_geo_cartesianDot(a, b) {
+    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
+  }
+  function d3_geo_cartesianCross(a, b) {
+    return [ a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0] ];
+  }
+  function d3_geo_cartesianAdd(a, b) {
+    a[0] += b[0];
+    a[1] += b[1];
+    a[2] += b[2];
+  }
+  function d3_geo_cartesianScale(vector, k) {
+    return [ vector[0] * k, vector[1] * k, vector[2] * k ];
+  }
+  function d3_geo_cartesianNormalize(d) {
+    var l = Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
+    d[0] /= l;
+    d[1] /= l;
+    d[2] /= l;
+  }
   function d3_geo_type(types) {
     for (var type in d3_geo_typeDefaults) {
       if (!(type in types)) {
@@ -5702,7 +5732,7 @@
         v = visible(point1);
         if (v !== v0) {
           point2 = intersect(point0, point1);
-          if (d3_geo_circlePointsEqual(point0, point2) || d3_geo_circlePointsEqual(point1, point2)) {
+          if (d3_geo_sphericalEqual(point0, point2) || d3_geo_sphericalEqual(point1, point2)) {
             point1[0] += ε;
             point1[1] += ε;
             v = visible(point1);
@@ -5727,20 +5757,20 @@
           x0 = x;
           y0 = y;
         }
-        if (v && !d3_geo_circlePointsEqual(point0, point1)) context.lineTo(point1[0], point1[1]);
+        if (v && !d3_geo_sphericalEqual(point0, point1)) context.lineTo(point1[0], point1[1]);
         point0 = point1;
       }
       return [ clean && area * .5, v00 && v ];
     }
     function intersect(a, b) {
-      var pa = d3_geo_circleCartesian(a, [ 0, 0, 0 ]), pb = d3_geo_circleCartesian(b, [ 0, 0, 0 ]);
-      var n1 = [ 1, 0, 0 ], n2 = d3_geo_circleCross(pa, pb), n2n2 = d3_geo_circleDot(n2, n2), n1n2 = n2[0], determinant = n2n2 - n1n2 * n1n2;
+      var pa = d3_geo_cartesian(a, 0), pb = d3_geo_cartesian(b, 0);
+      var n1 = [ 1, 0, 0 ], n2 = d3_geo_cartesianCross(pa, pb), n2n2 = d3_geo_cartesianDot(n2, n2), n1n2 = n2[0], determinant = n2n2 - n1n2 * n1n2;
       if (!determinant) return a;
-      var c1 = cr * n2n2 / determinant, c2 = -cr * n1n2 / determinant, n1xn2 = d3_geo_circleCross(n1, n2), A = d3_geo_circleScale(n1, c1), B = d3_geo_circleScale(n2, c2);
-      d3_geo_circleAdd(A, B);
-      var u = n1xn2, w = d3_geo_circleDot(A, u), uu = d3_geo_circleDot(u, u), t = Math.sqrt(w * w - uu * (d3_geo_circleDot(A, A) - 1)), q = d3_geo_circleScale(u, (-w - t) / uu);
-      d3_geo_circleAdd(q, A);
-      return d3_geo_circleSpherical(q);
+      var c1 = cr * n2n2 / determinant, c2 = -cr * n1n2 / determinant, n1xn2 = d3_geo_cartesianCross(n1, n2), A = d3_geo_cartesianScale(n1, c1), B = d3_geo_cartesianScale(n2, c2);
+      d3_geo_cartesianAdd(A, B);
+      var u = n1xn2, w = d3_geo_cartesianDot(A, u), uu = d3_geo_cartesianDot(u, u), t = Math.sqrt(w * w - uu * (d3_geo_cartesianDot(A, A) - 1)), q = d3_geo_cartesianScale(u, (-w - t) / uu);
+      d3_geo_cartesianAdd(q, A);
+      return d3_geo_spherical(q);
     }
   }
   function d3_geo_circleInterpolate(radians, precision) {
@@ -5755,7 +5785,7 @@
         to = radians;
       }
       for (var step = direction * precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
-        var c = Math.cos(t), s = Math.sin(t), point = d3_geo_circleSpherical([ cr, -sr * c, -sr * s ]);
+        var c = Math.cos(t), s = Math.sin(t), point = d3_geo_spherical([ cr, -sr * c, -sr * s ]);
         context.lineTo(point[0], point[1]);
       }
     };
@@ -5872,37 +5902,10 @@
     return ((a = a.point)[0] < 0 ? a[1] - π / 2 - ε : π / 2 - a[1]) - ((b = b.point)[0] < 0 ? b[1] - π / 2 - ε : π / 2 - b[1]);
   }
   function d3_geo_circleAngle(cr, point) {
-    var a = d3_geo_circleCartesian(point, [ cr, 0, 0 ]);
-    d3_geo_circleNormalize(a);
+    var a = d3_geo_cartesian(point, cr);
+    d3_geo_cartesianNormalize(a);
     var angle = Math.acos(Math.max(-1, Math.min(1, -a[1])));
     return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI - ε) % (2 * Math.PI);
-  }
-  function d3_geo_circleCartesian(point, origin) {
-    var p0 = point[0], p1 = point[1], c1 = Math.cos(p1);
-    return [ c1 * Math.cos(p0) - origin[0], c1 * Math.sin(p0) - origin[1], Math.sin(p1) - origin[2] ];
-  }
-  function d3_geo_circleSpherical(point) {
-    return [ Math.atan2(point[1], point[0]), Math.asin(Math.max(-1, Math.min(1, point[2]))) ];
-  }
-  function d3_geo_circleDot(a, b) {
-    return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
-  }
-  function d3_geo_circleCross(a, b) {
-    return [ a[1] * b[2] - a[2] * b[1], a[2] * b[0] - a[0] * b[2], a[0] * b[1] - a[1] * b[0] ];
-  }
-  function d3_geo_circleAdd(a, b) {
-    a[0] += b[0];
-    a[1] += b[1];
-    a[2] += b[2];
-  }
-  function d3_geo_circleScale(vector, s) {
-    return [ vector[0] * s, vector[1] * s, vector[2] * s ];
-  }
-  function d3_geo_circleNormalize(d) {
-    var l = Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
-    d[0] /= l;
-    d[1] /= l;
-    d[2] /= l;
   }
   function d3_geo_circleBufferSegments(f) {
     return function(coordinates) {
@@ -5916,9 +5919,6 @@
         }
       }, true), segments ];
     };
-  }
-  function d3_geo_circlePointsEqual(a, b) {
-    return Math.abs(a[0] - b[0]) < ε && Math.abs(a[1] - b[1]) < ε;
   }
   function d3_geo_circleSegmentLength1(segment) {
     return segment.length > 1;
