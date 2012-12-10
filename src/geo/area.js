@@ -17,7 +17,8 @@ var d3_geo_areaType = d3_geo_type({
 });
 
 function d3_geo_areaPolygon(polygon) {
-  return d3.sum(polygon, d3_geo_areaRing);
+  var area = d3.sum(polygon, d3_geo_areaRing);
+  return area < 0 ? 4 * π + area : area;
 }
 
 function d3_geo_areaRing(ring) {
@@ -58,5 +59,5 @@ function d3_geo_areaRing(ring) {
     λ0 = λ, φ0 = φ;
     cosφ0 = cosφ, sinφ0 = sinφ;
   }
-  return area < 0 ? 4 * π + area : area;
+  return area;
 }
