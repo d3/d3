@@ -5496,7 +5496,8 @@
     }
   });
   function d3_geo_areaPolygon(polygon) {
-    return d3.sum(polygon, d3_geo_areaRing);
+    var area = d3.sum(polygon, d3_geo_areaRing);
+    return area < 0 ? 4 * π + area : area;
   }
   function d3_geo_areaRing(ring) {
     var p = ring[0], λ00 = p[0] * d3_radians, λ0 = λ00, λ, φ00 = p[1] * d3_radians, φ0 = φ00, φ, dλ, cosdλ, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0), cosφ, sinφ, d, s, area = 0;
@@ -5519,7 +5520,7 @@
       λ0 = λ, φ0 = φ;
       cosφ0 = cosφ, sinφ0 = sinφ;
     }
-    return area < 0 ? 4 * π + area : area;
+    return area;
   }
   var d3_geo_azimuthalEqualArea = d3_geo_azimuthal(function(cosλcosφ) {
     return Math.sqrt(2 / (1 + cosλcosφ));
