@@ -5339,9 +5339,9 @@
   function d3_geo_sphericalEqual(a, b) {
     return Math.abs(a[0] - b[0]) < ε && Math.abs(a[1] - b[1]) < ε;
   }
-  function d3_geo_cartesian(spherical, origin) {
+  function d3_geo_cartesian(spherical) {
     var λ = spherical[0], φ = spherical[1], cosφ = Math.cos(φ);
-    return [ cosφ * Math.cos(λ) - origin, cosφ * Math.sin(λ), Math.sin(φ) ];
+    return [ cosφ * Math.cos(λ), cosφ * Math.sin(λ), Math.sin(φ) ];
   }
   function d3_geo_cartesianDot(a, b) {
     return a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
@@ -5902,7 +5902,8 @@
     return ((a = a.point)[0] < 0 ? a[1] - π / 2 - ε : π / 2 - a[1]) - ((b = b.point)[0] < 0 ? b[1] - π / 2 - ε : π / 2 - b[1]);
   }
   function d3_geo_circleAngle(cr, point) {
-    var a = d3_geo_cartesian(point, cr);
+    var a = d3_geo_cartesian(point);
+    a[0] -= cr;
     d3_geo_cartesianNormalize(a);
     var angle = Math.acos(Math.max(-1, Math.min(1, -a[1])));
     return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI - ε) % (2 * Math.PI);

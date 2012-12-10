@@ -2,12 +2,12 @@
 // cross and scale return new vectors,
 // whereas add and normalize operate in-place
 
-function d3_geo_cartesian(spherical, origin) {
+function d3_geo_cartesian(spherical) {
   var λ = spherical[0],
       φ = spherical[1],
       cosφ = Math.cos(φ);
   return [
-    cosφ * Math.cos(λ) - origin,
+    cosφ * Math.cos(λ),
     cosφ * Math.sin(λ),
     Math.sin(φ)
   ];
