@@ -14,7 +14,7 @@
   d3 = {
     version: "3.0.0pre"
   };
-  var π = Math.PI, ε = 1e-6, εε = .001, d3_radians = π / 180, d3_degrees = 180 / π;
+  var π = Math.PI, ε = 1e-6, ε2 = ε * ε, εε = .001, d3_radians = π / 180, d3_degrees = 180 / π;
   function d3_zero() {
     return 0;
   }
@@ -5526,22 +5526,28 @@
     }
   });
   function d3_geo_areaPolygon(polygon) {
-    var area = d3.sum(polygon, d3_geo_areaRing);
+    var area = d3.sum(polygon, d3_geo_areaPolygonRing);
     return area < 0 ? 4 * π + area : area;
   }
+  function d3_geo_areaPolygonRing(ring) {
+    return d3_geo_areaRing(ring.map(d3_geo_areaRadians));
+  }
+  function d3_geo_areaRadians(point) {
+    return [ point[0] * d3_radians, point[1] * d3_radians ];
+  }
   function d3_geo_areaRing(ring) {
-    var p = ring[0], λ00 = p[0] * d3_radians, λ0 = λ00, λ, φ00 = p[1] * d3_radians, φ0 = φ00, φ, dλ, cosdλ, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0), cosφ, sinφ, d, s, area = 0;
+    var p = ring[0], λ00 = p[0], λ0 = λ00, λ, φ00 = p[1], φ0 = φ00, φ, dλ, cosdλ, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0), cosφ, sinφ, d, s, area = 0;
     for (var i = 1, n = ring.length; i < n; ++i) {
       p = ring[i];
-      λ = p[0] * d3_radians;
-      φ = p[1] * d3_radians;
+      φ = p[1];
       if (Math.abs(Math.abs(φ0) - π / 2) < ε && Math.abs(Math.abs(φ) - π / 2) < ε) continue;
+      λ = p[0];
       cosφ = Math.cos(φ);
       sinφ = Math.sin(φ);
-      cosdλ = Math.cos(dλ = λ - λ0);
       if (Math.abs(φ0 - π / 2) < ε) {
         area += (λ - λ00) * 2;
       } else {
+        cosdλ = Math.cos(dλ = λ - λ0);
         d = Math.atan2(Math.sqrt((d = cosφ * Math.sin(λ - λ0)) * d + (d = cosφ0 * sinφ - sinφ0 * cosφ * cosdλ) * d), sinφ0 * sinφ + cosφ0 * cosφ * cosdλ);
         s = (d + π + φ0 + φ) / 2;
         area += (dλ < 0 && dλ > -π || dλ > π ? -4 : 4) * Math.atan(Math.sqrt(Math.abs(Math.tan(s / 2) * Math.tan((s - d) / 2) * Math.tan((s - π / 2 - φ0) / 2) * Math.tan((s - π / 2 - φ) / 2))));
@@ -5721,12 +5727,8 @@
     }
     function clipLine(coordinates, context, ring) {
       if (!(n = coordinates.length)) return [ ring && 0, false ];
-      var point0 = rotate(coordinates[0]), point1, point2, v0 = visible(point0), v00 = ring && v0, v, n, clean = ring, area = 0, p, x0, x, y0, y;
-      if (clean) {
-        x0 = (p = d3_geo_stereographic(point0[0] + (v0 ? 0 : π), point0[1]))[0];
-        y0 = p[1];
-      }
-      if (v0) context.moveTo(point0[0], point0[1]);
+      var point0 = rotate(coordinates[0]), point1, point2, v0 = visible(point0), v00 = ring && v0, v, n, clean = ring, points = [];
+      if (v0) context.moveTo(point0[0], point0[1]); else if (clean) points.push([ point0[0] + π, point0[1] ]);
       for (var i = 1; i < n; i++) {
         point1 = rotate(coordinates[i]);
         v = visible(point1);
@@ -5749,18 +5751,10 @@
           }
           point0 = point2;
         }
-        if (clean) {
-          p = d3_geo_stereographic(point1[0] + (v ? 0 : π), point1[1]);
-          x = p[0];
-          y = p[1];
-          area += y0 * x - x0 * y;
-          x0 = x;
-          y0 = y;
-        }
-        if (v && !d3_geo_sphericalEqual(point0, point1)) context.lineTo(point1[0], point1[1]);
+        if (v && !d3_geo_sphericalEqual(point0, point1)) context.lineTo(point1[0], point1[1]); else if (clean) points.push([ point1[0] + π, point1[1] ]);
         point0 = point1;
       }
-      return [ clean && area * .5, v00 && v ];
+      return [ clean && points, v00 && v ];
     }
     function intersect(a, b) {
       var pa = d3_geo_cartesian(a, 0), pb = d3_geo_cartesian(b, 0);
@@ -5790,18 +5784,23 @@
       }
     };
   }
+  var d3_geo_circleClipRotation = function() {
+    var rotate = d3_geo_rotation(0, -π / 2, 0);
+    return function(point) {
+      return rotate(point[0], point[1]);
+    };
+  }();
   function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
-    var subject = [], clip = [], segments = [], buffer = d3_geo_circleBufferSegments(clipLine), draw = [], visibleArea = 0, invisibleArea = 0, invisible = false;
+    var subject = [], clip = [], segments = [], buffer = d3_geo_circleBufferSegments(clipLine), visibleArea = 0, invisibleArea = 0, invisible = false;
     coordinates.forEach(function(ring) {
       var x = buffer(ring, context), ringSegments = x[1], segment, n = ringSegments.length;
       if (!n) {
         invisible = true;
-        invisibleArea += x[0][0];
+        invisibleArea += d3_geo_areaRing(x[0][0].map(d3_geo_circleClipRotation));
         return;
       }
-      if (x[0][0] !== false) {
-        visibleArea += x[0][0];
-        draw.push(segment = ringSegments[0]);
+      if (x[0][0]) {
+        visibleArea += d3_geo_areaRing((segment = ringSegments[0]).map(d3_geo_circleClipRotation));
         var point = segment[0], n = segment.length - 1, i = 0;
         context.moveTo(point[0], point[1]);
         while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
@@ -5811,10 +5810,8 @@
       if (n > 1 && x[0][1]) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
       segments = segments.concat(ringSegments.filter(d3_geo_circleSegmentLength1));
     });
-    if (!segments.length) {
-      if (visibleArea < 0 || invisible && invisibleArea < 0) {
-        d3_geo_projectionSphere(context, interpolate);
-      }
+    if (!segments.length && (visibleArea < -ε2 || invisible && invisibleArea < -ε2)) {
+      d3_geo_projectionSphere(context, interpolate);
     }
     segments.forEach(function(segment) {
       var n = segment.length;
@@ -6398,7 +6395,7 @@
       },
       line: function(coordinates, context, ring) {
         if (!(n = coordinates.length)) return [ ring && 0, false ];
-        var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, dλ, i = 0, n, clean = ring, area = 0, x0 = (point = d3_geo_stereographic(λ0, φ0))[0], x, y0 = point[1], y;
+        var point = rotatePoint(coordinates[0]), λ0 = point[0], φ0 = point[1], λ1, φ1, sλ0 = λ0 > 0 ? π : -π, sλ1, dλ, i = 0, n, clean = ring;
         context.moveTo(λ0, φ0);
         while (++i < n) {
           point = rotatePoint(coordinates[i]);
@@ -6420,17 +6417,10 @@
             context.moveTo(sλ1, φ0);
             clean = false;
           }
-          if (clean) {
-            x = (point = d3_geo_stereographic(λ1, φ1))[0];
-            y = point[1];
-            area += y0 * x - x0 * y;
-            x0 = x;
-            y0 = y;
-          }
           context.lineTo(λ0 = λ1, φ0 = φ1);
           sλ0 = sλ1;
         }
-        return [ clean && area, true ];
+        return [ clean, true ];
       },
       polygon: function(polygon, context) {
         d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate);

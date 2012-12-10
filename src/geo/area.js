@@ -17,16 +17,24 @@ var d3_geo_areaType = d3_geo_type({
 });
 
 function d3_geo_areaPolygon(polygon) {
-  var area = d3.sum(polygon, d3_geo_areaRing);
+  var area = d3.sum(polygon, d3_geo_areaPolygonRing);
   return area < 0 ? 4 * π + area : area;
+}
+
+function d3_geo_areaPolygonRing(ring) {
+  return d3_geo_areaRing(ring.map(d3_geo_areaRadians));
+}
+
+function d3_geo_areaRadians(point) {
+  return [point[0] * d3_radians, point[1] * d3_radians];
 }
 
 function d3_geo_areaRing(ring) {
   var p = ring[0],
-      λ00 = p[0] * d3_radians,
+      λ00 = p[0],
       λ0 = λ00,
       λ,
-      φ00 = p[1] * d3_radians,
+      φ00 = p[1],
       φ0 = φ00,
       φ,
       dλ,
@@ -40,15 +48,15 @@ function d3_geo_areaRing(ring) {
       area = 0;
   for (var i = 1, n = ring.length; i < n; ++i) {
     p = ring[i];
-    λ = p[0] * d3_radians;
-    φ = p[1] * d3_radians;
+    φ = p[1];
     if (Math.abs(Math.abs(φ0) - π / 2) < ε && Math.abs(Math.abs(φ) - π / 2) < ε) continue;
+    λ = p[0];
     cosφ = Math.cos(φ);
     sinφ = Math.sin(φ);
-    cosdλ = Math.cos(dλ = λ - λ0);
     if (Math.abs(φ0 - π / 2) < ε) {
       area += (λ - λ00) * 2;
     } else {
+      cosdλ = Math.cos(dλ = λ - λ0);
       d = Math.atan2(Math.sqrt((d = cosφ * Math.sin(λ - λ0)) * d + (d = cosφ0 * sinφ - sinφ0 * cosφ * cosdλ) * d),
           sinφ0 * sinφ + cosφ0 * cosφ * cosdλ);
       s = (d + π + φ0 + φ) / 2;
