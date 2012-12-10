@@ -2,6 +2,7 @@ d3 = {version: "3.0.0pre"}; // semver
 
 var π = Math.PI,
     ε = 1e-6,
+    ε2 = ε * ε,
     εε = 1e-3,
     d3_radians = π / 180,
     d3_degrees = 180 / π;

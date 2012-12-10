@@ -81,17 +81,9 @@ function d3_geo_circleClip(degrees, rotate) {
         v,
         n,
         clean = ring, // clean indicates no intersections
-        area = 0,
-        p,
-        x0,
-        x,
-        y0,
-        y;
-    if (clean) {
-      x0 = (p = d3_geo_stereographic(point0[0] + (v0 ? 0 : π), point0[1]))[0];
-      y0 = p[1];
-    }
+        points = [];
     if (v0) context.moveTo(point0[0], point0[1]);
+    else if (clean) points.push([point0[0] + π, point0[1]]);
     for (var i = 1; i < n; i++) {
       point1 = rotate(coordinates[i]);
       v = visible(point1);
@@ -117,19 +109,12 @@ function d3_geo_circleClip(degrees, rotate) {
         }
         point0 = point2;
       }
-      if (clean) {
-        p = d3_geo_stereographic(point1[0] + (v ? 0 : π), point1[1]);
-        x = p[0];
-        y = p[1];
-        area += y0 * x - x0 * y;
-        x0 = x;
-        y0 = y;
-      }
       if (v && !d3_geo_sphericalEqual(point0, point1)) context.lineTo(point1[0], point1[1]);
+      else if (clean) points.push([point1[0] + π, point1[1]]);
       point0 = point1;
     }
     return [
-      clean && area * .5,
+      clean && points,
       v00 && v // whether the first and last segments should be rejoined
     ];
   }
@@ -191,12 +176,19 @@ function d3_geo_circleInterpolate(radians, precision) {
   };
 }
 
+// TODO optimise.
+var d3_geo_circleClipRotation = (function() {
+  var rotate = d3_geo_rotation(0, -π / 2, 0);
+  return function(point) {
+    return rotate(point[0], point[1]);
+  };
+})();
+
 function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
   var subject = [],
       clip = [],
       segments = [],
       buffer = d3_geo_circleBufferSegments(clipLine),
-      draw = [],
       visibleArea = 0,
       invisibleArea = 0,
       invisible = false;
@@ -209,14 +201,13 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
 
     if (!n) {
       invisible = true;
-      invisibleArea += x[0][0];
+      invisibleArea += d3_geo_areaRing(x[0][0].map(d3_geo_circleClipRotation));
       return;
     }
 
     // No intersections.
-    if (x[0][0] !== false) {
-      visibleArea += x[0][0];
-      draw.push(segment = ringSegments[0]);
+    if (x[0][0]) {
+      visibleArea += d3_geo_areaRing((segment = ringSegments[0]).map(d3_geo_circleClipRotation));
       var point = segment[0],
           n = segment.length - 1,
           i = 0;
@@ -232,10 +223,8 @@ function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
     segments = segments.concat(ringSegments.filter(d3_geo_circleSegmentLength1));
   });
 
-  if (!segments.length) {
-    if (visibleArea < 0 || invisible && invisibleArea < 0) {
-      d3_geo_projectionSphere(context, interpolate);
-    }
+  if (!segments.length && (visibleArea < -ε2 || invisible && invisibleArea < -ε2)) {
+    d3_geo_projectionSphere(context, interpolate);
   }
   segments.forEach(function(segment) {
     var n = segment.length;

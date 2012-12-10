@@ -209,12 +209,7 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
           dλ,
           i = 0,
           n,
-          clean = ring, // clean indicates no intersections
-          area = 0,
-          x0 = (point = d3_geo_stereographic(λ0, φ0))[0],
-          x,
-          y0 = point[1],
-          y;
+          clean = ring; // clean indicates no intersections
       context.moveTo(λ0, φ0);
       while (++i < n) {
         point = rotatePoint(coordinates[i]);
@@ -237,17 +232,10 @@ function d3_geo_projectionCutAntemeridian(rotatePoint) {
           context.moveTo(sλ1, φ0);
           clean = false;
         }
-        if (clean) {
-          x = (point = d3_geo_stereographic(λ1, φ1))[0];
-          y = point[1];
-          area += y0 * x - x0 * y;
-          x0 = x;
-          y0 = y;
-        }
         context.lineTo(λ0 = λ1, φ0 = φ1);
         sλ0 = sλ1;
       }
-      return [clean && area, true];
+      return [clean, true];
     },
     polygon: function(polygon, context) {
       d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate);

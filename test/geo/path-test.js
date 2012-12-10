@@ -210,6 +210,17 @@ suite.addBatch({
       },
       "Sphere": function(centroid) {
         assert.deepEqual(centroid({type: "Sphere"}), [480, 250]);
+      },
+      "rotate([180, -248])": function() {
+        d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([-180, -248])
+              .scale(900 / Math.PI)
+              .precision(0))({type: "Polygon",  coordinates: [[[-175.03150315031502, 66.57410661866186], [-174.34743474347434, 66.33097912391239], [-174.5994599459946, 67.0603616081608], [-171.86318631863185, 66.90406536153614], [-169.9189918991899, 65.96628788178816], [-170.89108910891088, 65.53213164116411], [-172.54725472547256, 65.42793414341432], [-172.5832583258326, 64.45542416441643], [-172.97929792979298, 64.2470291689169], [-173.91539153915392, 64.28176166816681], [-174.67146714671466, 64.62908666066605], [-176.003600360036, 64.90694665466546], [-176.21962196219621, 65.34110289528951], [-177.22772277227722, 65.51476539153916], [-178.37983798379838, 65.37583539453945], [-178.91989198919893, 65.72316038703869], [-178.7038703870387, 66.10521787878787], [-179.8919891989199, 65.8620903840384], [-179.45994599459945, 65.3932016441644], [-180, 64.97641165316531], [-180, 68.95328281728172], [-177.55175517551754, 68.18916783378336], [-174.95949594959495, 67.19929160516051], [-175.03150315031502, 66.57410661866186]]]});
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
+          {type: "moveTo", x: 1370, y: 243}
+        ]);
       }
     },
 
@@ -251,6 +262,21 @@ suite.addBatch({
           path({type: "Polygon", coordinates: [[[100, -80], [-100, -80], [-100, 80], [100, 80], [100, -80]]]});
           assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
         }
+      },
+      "rotate([-17, -451])": function() {
+        var pole = d3.range(-180, 180, 10).map(function(x) { return [x, 70]; });
+        pole.push(pole[0]);
+        d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([-17, -451])
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90))({type: "Polygon", coordinates: [pole]});
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
+          {type: "moveTo", x: 510, y: 160},
+          {type: "moveTo", x:  87, y: 700}
+        ]);
       },
       "rotate([71.03, 42.37])": {
         topic: function() {
