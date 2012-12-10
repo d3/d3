@@ -5784,12 +5784,10 @@
       }
     };
   }
-  var d3_geo_circleClipRotation = function() {
-    var rotate = d3_geo_rotation(0, -π / 2, 0);
-    return function(point) {
-      return rotate(point[0], point[1]);
-    };
-  }();
+  function d3_geo_circleClipRotation(point) {
+    var λ = point[0], φ = point[1], cosφ = Math.cos(φ);
+    return [ Math.atan2(Math.sin(λ) * cosφ, Math.sin(φ)), Math.asin(Math.max(-1, Math.min(1, -Math.cos(λ) * cosφ))) ];
+  }
   function d3_geo_circleClipPolygon(coordinates, context, clipLine, interpolate) {
     var subject = [], clip = [], segments = [], buffer = d3_geo_circleBufferSegments(clipLine), visibleArea = 0, invisibleArea = 0, invisible = false;
     coordinates.forEach(function(ring) {
