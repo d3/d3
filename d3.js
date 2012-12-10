@@ -6008,11 +6008,23 @@
       });
     };
   }
+  d3.geo.interpolate = function(source, target) {
+    return d3_geo_interpolate(source[0] * d3_radians, source[1] * d3_radians, target[0] * d3_radians, target[1] * d3_radians);
+  };
+  function d3_geo_interpolate(x0, y0, x1, y1) {
+    var cy0 = Math.cos(y0), sy0 = Math.sin(y0), cy1 = Math.cos(y1), sy1 = Math.sin(y1), kx0 = cy0 * Math.cos(x0), ky0 = cy0 * Math.sin(x0), kx1 = cy1 * Math.cos(x1), ky1 = cy1 * Math.sin(x1), d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))), k = 1 / Math.sin(d);
+    function interpolate(t) {
+      var B = Math.sin(t *= d) * k, A = Math.sin(d - t) * k, x = A * kx0 + B * kx1, y = A * ky0 + B * ky1, z = A * sy0 + B * sy1;
+      return [ Math.atan2(y, x) / d3_radians, Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians ];
+    }
+    interpolate.distance = d;
+    return interpolate;
+  }
   d3.geo.greatArc = function() {
-    var source = d3_source, p0, target = d3_target, p1, precision = 6 * d3_radians, interpolate = d3_geo_greatArcInterpolator();
+    var source = d3_source, s, target = d3_target, t, precision = 6 * d3_radians, interpolate;
     function greatArc() {
-      var d = greatArc.distance.apply(this, arguments), t = 0, dt = precision / d, coordinates = [ p0 ];
-      while ((t += dt) < 1) coordinates.push(interpolate(t));
+      var p0 = s || source.apply(this, arguments), p1 = t || target.apply(this, arguments), i = interpolate || d3.geo.interpolate(p0, p1), t = 0, dt = precision / i.distance, coordinates = [ p0 ];
+      while ((t += dt) < 1) coordinates.push(i(t));
       coordinates.push(p1);
       return {
         type: "LineString",
@@ -6020,20 +6032,18 @@
       };
     }
     greatArc.distance = function() {
-      if (typeof source === "function") interpolate.source(p0 = source.apply(this, arguments));
-      if (typeof target === "function") interpolate.target(p1 = target.apply(this, arguments));
-      return interpolate.distance();
+      return (interpolate || d3.geo.interpolate(s || source.apply(this, arguments), t || target.apply(this, arguments))).distance;
     };
     greatArc.source = function(_) {
       if (!arguments.length) return source;
-      source = _;
-      if (typeof source !== "function") interpolate.source(p0 = source);
+      source = _, s = typeof _ === "function" ? null : _;
+      interpolate = s && t ? d3.geo.interpolate(s, t) : null;
       return greatArc;
     };
     greatArc.target = function(_) {
       if (!arguments.length) return target;
-      target = _;
-      if (typeof target !== "function") interpolate.target(p1 = target);
+      target = _, t = typeof _ === "function" ? null : _;
+      interpolate = s && t ? d3.geo.interpolate(s, t) : null;
       return greatArc;
     };
     greatArc.precision = function(_) {
@@ -6043,36 +6053,6 @@
     };
     return greatArc;
   };
-  function d3_geo_greatArcInterpolator() {
-    var x0, y0, cy0, sy0, kx0, ky0, x1, y1, cy1, sy1, kx1, ky1, d, k;
-    function interpolate(t) {
-      var B = Math.sin(t *= d) * k, A = Math.sin(d - t) * k, x = A * kx0 + B * kx1, y = A * ky0 + B * ky1, z = A * sy0 + B * sy1;
-      return [ Math.atan2(y, x) / d3_radians, Math.atan2(z, Math.sqrt(x * x + y * y)) / d3_radians ];
-    }
-    interpolate.distance = function() {
-      if (d == null) k = 1 / Math.sin(d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))));
-      return d;
-    };
-    interpolate.source = function(_) {
-      var cx0 = Math.cos(x0 = _[0] * d3_radians), sx0 = Math.sin(x0);
-      cy0 = Math.cos(y0 = _[1] * d3_radians);
-      sy0 = Math.sin(y0);
-      kx0 = cy0 * cx0;
-      ky0 = cy0 * sx0;
-      d = null;
-      return interpolate;
-    };
-    interpolate.target = function(_) {
-      var cx1 = Math.cos(x1 = _[0] * d3_radians), sx1 = Math.sin(x1);
-      cy1 = Math.cos(y1 = _[1] * d3_radians);
-      sy1 = Math.sin(y1);
-      kx1 = cy1 * cx1;
-      ky1 = cy1 * sx1;
-      d = null;
-      return interpolate;
-    };
-    return interpolate;
-  }
   function d3_geo_mercator(λ, φ) {
     return [ λ / (2 * π), Math.max(-.5, Math.min(+.5, Math.log(Math.tan(π / 4 + φ / 2)) / (2 * π))) ];
   }
