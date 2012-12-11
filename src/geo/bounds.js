@@ -17,7 +17,7 @@ function d3_geo_bounds(projection) {
 
   return function(feature) {
     y1 = x1 = -(x0 = y0 = Infinity);
-    bounds.object(feature);
+    bounds(feature);
     return [[x0, y0], [x1, y1]];
   };
 }

@@ -5576,12 +5576,10 @@
     }
   }
   function d3_geo_type(types) {
-    for (var type in d3_geo_typeDefaults) {
-      if (!(type in types)) {
-        types[type] = d3_geo_typeDefaults[type];
-      }
-    }
-    return types;
+    for (var t in d3_geo_typeDefaults) if (!(t in types)) types[t] = d3_geo_typeDefaults[t];
+    return function(o) {
+      return d3_geo_typeObjects.hasOwnProperty(o.type) ? types[o.type](o) : types.geometry(o);
+    };
   }
   var d3_geo_typeDefaults = {
     Feature: function(o) {
@@ -5626,9 +5624,6 @@
       return c && (o = Object.create(o), o.coordinates = c, o);
     },
     Sphere: d3_noop,
-    object: function(o) {
-      return d3_geo_typeObjects.hasOwnProperty(o.type) ? this[o.type](o) : this.geometry(o);
-    },
     geometry: function(o) {
       return d3_geo_typeGeometries.hasOwnProperty(o.type) ? this[o.type](o) : null;
     },
@@ -5750,14 +5745,11 @@
     });
     return function(feature) {
       y1 = x1 = -(x0 = y0 = Infinity);
-      bounds.object(feature);
+      bounds(feature);
       return [ [ x0, y0 ], [ x1, y1 ] ];
     };
   }
-  d3.geo.centroid = function(object) {
-    return d3_geo_centroidType.object(object);
-  };
-  var d3_geo_centroidType = d3_geo_type({
+  d3.geo.centroid = d3_geo_type({
     FeatureCollection: d3_noop,
     GeometryCollection: d3_noop,
     Feature: function(feature) {
@@ -6163,7 +6155,7 @@
       var result = null;
       if (object != result) {
         if (typeof pointRadius === "function") pointCircle = d3_geo_pathCircle(pointRadius.apply(this, arguments));
-        pathType.object(object);
+        pathType(object);
         if (buffer.length) result = buffer.join(""), buffer = [];
       }
       return result;
@@ -6182,15 +6174,25 @@
         projection.sphere(context);
       }
     });
-    var areaType = d3_geo_type({
+    function polygonArea(coordinates) {
+      area = 0;
+      projection.polygon(coordinates, areaContext);
+      return Math.abs(area) / 2;
+    }
+    function sphereArea() {
+      area = 0;
+      projection.sphere(areaContext);
+      return Math.abs(area) / 2;
+    }
+    path.area = d3_geo_type({
       Feature: function(feature) {
-        return areaType.geometry(feature.geometry);
+        return this.geometry(feature.geometry);
       },
       FeatureCollection: function(collection) {
-        return d3.sum(collection.features, areaType.Feature);
+        return d3.sum(collection.features, this.Feature);
       },
       GeometryCollection: function(collection) {
-        return d3.sum(collection.geometries, areaType.geometry);
+        return d3.sum(collection.geometries, this.geometry);
       },
       LineString: d3_zero,
       MultiLineString: d3_zero,
@@ -6204,24 +6206,21 @@
       },
       Sphere: sphereArea
     });
-    function polygonArea(coordinates) {
-      area = 0;
-      projection.polygon(coordinates, areaContext);
-      return Math.abs(area) / 2;
+    function weightedCentroid(f) {
+      return function() {
+        centroidWeight = cx = cy = 0;
+        f.apply(this, arguments);
+        return centroidWeight ? [ cx / centroidWeight, cy / centroidWeight ] : null;
+      };
     }
-    function sphereArea() {
-      area = 0;
-      projection.sphere(areaContext);
-      return Math.abs(area) / 2;
-    }
-    path.area = function(object) {
-      return areaType.object(object);
+    path.bounds = function(object) {
+      return (bounds || (bounds = d3_geo_bounds(projection)))(object);
     };
-    var centroidType = d3_geo_type({
+    path.centroid = d3_geo_type({
       FeatureCollection: d3_noop,
       GeometryCollection: d3_noop,
       Feature: function(feature) {
-        return centroidType.geometry(feature.geometry);
+        return this.geometry(feature.geometry);
       },
       LineString: weightedCentroid(function(lineString) {
         projection.line(lineString.coordinates, lineCentroidContext);
@@ -6248,19 +6247,6 @@
         projection.sphere(polygonCentroidContext);
       })
     });
-    function weightedCentroid(f) {
-      return function() {
-        centroidWeight = cx = cy = 0;
-        f.apply(this, arguments);
-        return centroidWeight ? [ cx / centroidWeight, cy / centroidWeight ] : null;
-      };
-    }
-    path.bounds = function(object) {
-      return (bounds || (bounds = d3_geo_bounds(projection)))(object);
-    };
-    path.centroid = function(object) {
-      return centroidType.object(object);
-    };
     path.projection = function(_) {
       if (!arguments.length) return projection;
       projection = _;
@@ -6283,34 +6269,34 @@
   function d3_geo_pathCircle(radius) {
     return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
   }
-  d3.geo.area = function(object) {
-    return d3_geo_areaType.object(object);
-  };
-  var d3_geo_areaType = d3_geo_type({
+  d3.geo.area = d3_geo_type({
     Point: d3_zero,
     MultiPoint: d3_zero,
     LineString: d3_zero,
     MultiLineString: d3_zero,
-    Polygon: function(polygon) {
-      return d3_geo_areaPolygon(polygon.coordinates);
+    Polygon: function(o) {
+      return d3_geo_areaPolygon(o.coordinates);
     },
-    MultiPolygon: function(multiPolygon) {
-      return d3.sum(multiPolygon.coordinates, d3_geo_areaPolygon);
+    MultiPolygon: function(o) {
+      return d3.sum(o.coordinates, d3_geo_areaPolygon);
     },
     Sphere: function() {
       return 4 * π;
     },
-    Feature: function(feature) {
-      return d3_geo_areaType.geometry(feature.geometry);
+    Feature: function(o) {
+      return this.geometry(o.geometry);
     },
-    FeatureCollection: function(collection) {
-      return d3.sum(collection.features, d3_geo_areaType.Feature);
+    FeatureCollection: function(o) {
+      var that = this;
+      return d3.sum(o.features, function(o) {
+        return that.Feature(o);
+      });
     },
-    GeometryCollection: function(collection) {
-      return d3.sum(collection.geometries, d3_geo_areaType.geometry);
-    },
-    geometry: function(geometry) {
-      return d3_geo_areaType[geometry.type](geometry);
+    GeometryCollection: function(o) {
+      var that = this;
+      return d3.sum(o.geometries, function(o) {
+        return that.geometry(o);
+      });
     }
   });
   function d3_geo_areaPolygon(polygon) {
@@ -6480,16 +6466,13 @@
   }
   d3.geo.rotation = function(δλ, δφ, δγ) {
     var rotate = d3_geo_rotation(δλ * d3_radians, δφ * d3_radians, δγ * d3_radians);
-    var type = d3_geo_type({
+    return d3_geo_type({
       point: function(coordinates) {
         coordinates = rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
         coordinates[0] *= d3_degrees, coordinates[1] *= d3_degrees;
         return coordinates;
       }
     });
-    return function(o) {
-      return type.object(o);
-    };
   };
   function d3_geo_rotation(δλ, δφ, δγ) {
     return δλ ? δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ)) : d3_geo_rotationλ(δλ) : δφ || δγ ? d3_geo_rotationφγ(δφ, δγ) : d3_geo_identityRotation;

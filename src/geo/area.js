@@ -1,19 +1,14 @@
-d3.geo.area = function(object) {
-  return d3_geo_areaType.object(object);
-};
-
-var d3_geo_areaType = d3_geo_type({
+d3.geo.area = d3_geo_type({
   Point: d3_zero,
   MultiPoint: d3_zero,
   LineString: d3_zero,
   MultiLineString: d3_zero,
-  Polygon: function(polygon) { return d3_geo_areaPolygon(polygon.coordinates); },
-  MultiPolygon: function(multiPolygon) { return d3.sum(multiPolygon.coordinates, d3_geo_areaPolygon); },
+  Polygon: function(o) { return d3_geo_areaPolygon(o.coordinates); },
+  MultiPolygon: function(o) { return d3.sum(o.coordinates, d3_geo_areaPolygon); },
   Sphere: function() { return 4 * π; },
-  Feature: function(feature) { return d3_geo_areaType.geometry(feature.geometry); },
-  FeatureCollection: function(collection) { return d3.sum(collection.features, d3_geo_areaType.Feature); },
-  GeometryCollection: function(collection) { return d3.sum(collection.geometries, d3_geo_areaType.geometry); },
-  geometry: function(geometry) { return d3_geo_areaType[geometry.type](geometry); }
+  Feature: function(o) { return this.geometry(o.geometry); },
+  FeatureCollection: function(o) { var that = this; return d3.sum(o.features, function(o) { return that.Feature(o); }); },
+  GeometryCollection: function(o) { var that = this; return d3.sum(o.geometries, function(o) { return that.geometry(o); }); }
 });
 
 function d3_geo_areaPolygon(polygon) {

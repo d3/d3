@@ -1,13 +1,12 @@
 // TODO optimized path when no object creation is desired?
-// TODO return bound object function, rather than a map of types?
 
 function d3_geo_type(types) {
-  for (var type in d3_geo_typeDefaults) {
-    if (!(type in types)) {
-      types[type] = d3_geo_typeDefaults[type];
-    }
-  }
-  return types;
+  for (var t in d3_geo_typeDefaults) if (!(t in types)) types[t] = d3_geo_typeDefaults[t];
+  return function(o) {
+    return d3_geo_typeObjects.hasOwnProperty(o.type)
+        ? types[o.type](o)
+        : types.geometry(o);
+  };
 }
 
 var d3_geo_typeDefaults = {
@@ -63,12 +62,6 @@ var d3_geo_typeDefaults = {
   },
 
   Sphere: d3_noop,
-
-  object: function(o) {
-    return d3_geo_typeObjects.hasOwnProperty(o.type)
-        ? this[o.type](o)
-        : this.geometry(o);
-  },
 
   geometry: function(o) {
     return d3_geo_typeGeometries.hasOwnProperty(o.type)

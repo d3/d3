@@ -1,8 +1,4 @@
-d3.geo.centroid = function(object) {
-  return d3_geo_centroidType.object(object);
-};
-
-var d3_geo_centroidType = d3_geo_type({
+d3.geo.centroid = d3_geo_type({
 
   FeatureCollection: d3_noop,
   GeometryCollection: d3_noop,
