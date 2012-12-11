@@ -34,39 +34,33 @@ function d3_geo_projectionMutator(projectAt) {
 
   var type = d3_geo_type({
     Point: function(o) {
-      o = Object.create(o);
-      o.coordinates = rotatePoint(o.coordinates);
-      return (o = clip(o)) ? (o.coordinates = resample.point(o.coordinates), o) : null;
+      o = {type: o.type, coordinates: rotatePoint(o.coordinates)};
+      return (o = clip(o)) && (o.coordinates = resample.point(o.coordinates), o);
     },
     MultiPoint: function(o) {
-      o = Object.create(o);
-      o.coordinates = o.coordinates.map(rotatePoint);
-      return (o = clip(o)) ? (o.coordinates = o.coordinates.map(resample.point), o) : null;
+      o = {type: o.type, coordinates: o.coordinates.map(rotatePoint)};
+      return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.point), o);
     },
     LineString: function(o) {
-      var o = Object.create(o);
-      o.coordinates = rotateLine(o.coordinates);
-      return (o = clip(o)) ? (o.coordinates = o.coordinates.map(resample.line), o) : null;
+      o = {type: o.type, coordinates: rotateLine(o.coordinates)};
+      return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.line), o);
     },
     MultiLineString: function(o) {
-      var o = Object.create(o);
-      o.coordinates = o.coordinates.map(rotateLine);
-      return (o = clip(o)) ? (o.coordinates = o.coordinates.map(resample.line), o) : null;
+      o = {type: o.type, coordinates: o.coordinates.map(rotateLine)};
+      return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.line), o);
     },
     Polygon: function(o) {
-      var o = Object.create(o);
-      o.coordinates = o.coordinates.map(rotateLine);
-      return (o = clip(o)) ? (o.coordinates = o.coordinates.map(resample.polygon), o) : null;
+      o = {type: o.type, coordinates: o.coordinates.map(rotateLine)};
+      return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.polygon), o);
     },
     MultiPolygon: function(o) {
-      var o = Object.create(o);
-      o.coordinates = o.coordinates.map(function(polygon) {
+      o = {type: o.type, coordinates: o.coordinates.map(function(polygon) {
         return polygon.map(rotateLine);
-      });
-      return (o = clip(o)) ? (o.coordinates = o.coordinates.map(resample.polygon), o) : null;
+      })};
+      return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.polygon), o);
     },
     Sphere: function(o) {
-      return (o = clip(Object.create(o))) ? (o.coordinates = resample.polygon(o.coordinates), o) : null;
+      return (o = clip(o)) && (o.coordinates = resample.polygon(o.coordinates), o);
     }
   });
 

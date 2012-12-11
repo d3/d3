@@ -2,30 +2,20 @@ function d3_geo_clip(clipPoint, clipLine, interpolate) {
   return d3_geo_type({
     point: clipPoint,
     LineString: function(o) {
-      o = Object.create(o);
-      o.type = "MultiLineString";
-      o.coordinates = clipLine(o.coordinates)[1];
-      return o;
+      return {type: "MultiLineString", coordinates: clipLine(o.coordinates)[1]};
     },
     MultiLineString: function(o) {
-      o = Object.create(o);
-      o.coordinates = d3.merge(o.coordinates.map(function(line) {
+      return {type: "MultiLineString", coordinates: d3.merge(o.coordinates.map(function(line) {
         return clipLine(line)[1];
-      }));
-      return o;
+      }))};
     },
     Polygon: function(o) {
-      o = Object.create(o);
-      o.type = "MultiPolygon";
-      o.coordinates = d3_geo_clipPolygon(o.coordinates, clipLine, interpolate);
-      return o;
+      return {type: "MultiPolygon", coordinates: d3_geo_clipPolygon(o.coordinates, clipLine, interpolate)};
     },
     MultiPolygon: function(o) {
-      o = Object.create(o);
-      o.coordinates = d3.merge(o.coordinates.map(function(polygon) {
+      return {type: "MultiPolygon", coordinates: d3.merge(o.coordinates.map(function(polygon) {
         return d3_geo_clipPolygon(polygon, clipLine, interpolate);
-      }));
-      return o;
+      }))};
     },
     Sphere: function() {
       return {type: "Polygon", coordinates: [interpolate(null, null, 1)]};
