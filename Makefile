@@ -182,10 +182,11 @@ d3.geo.js: \
 	src/geo/geo.js \
 	src/geo/spherical.js \
 	src/geo/cartesian.js \
+	src/geo/clip.js \
+	src/geo/cut.js \
 	src/geo/type.js \
 	src/geo/albers-usa.js \
 	src/geo/albers.js \
-	src/geo/area.js \
 	src/geo/azimuthal-equal-area.js \
 	src/geo/azimuthal-equidistant.js \
 	src/geo/bounds.js \
@@ -200,6 +201,7 @@ d3.geo.js: \
 	src/geo/mercator.js \
 	src/geo/orthographic.js \
 	src/geo/path.js \
+	src/geo/area.js \
 	src/geo/centroid.js \
 	src/geo/projection.js \
 	src/geo/rotation.js \
