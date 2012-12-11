@@ -3,10 +3,18 @@ d3.geo.centroid = function(object) {
 };
 
 var d3_geo_centroidType = d3_geo_type({
+
   FeatureCollection: d3_noop,
   GeometryCollection: d3_noop,
-  Feature: function(feature) { return this.geometry(feature.geometry); },
-  Point: function(point) { return point.coordinates; },
+
+  Feature: function(feature) {
+    return this.geometry(feature.geometry);
+  },
+
+  Point: function(point) {
+    return point.coordinates;
+  },
+
   MultiPoint: function(multiPoint) {
     var coordinates = multiPoint.coordinates,
         n = coordinates.length,
@@ -31,6 +39,7 @@ var d3_geo_centroidType = d3_geo_type({
       Math.asin(Math.max(-1, Math.min(1, z))) * d3_degrees
     ] : null;
   },
+
   LineString: function(line) {
     var centroid = d3_geo_centroidLine(line.coordinates),
         cx,
@@ -41,6 +50,7 @@ var d3_geo_centroidType = d3_geo_type({
       Math.asin(Math.max(-1, Math.min(1, (cz = centroid[2]) / Math.sqrt(cx * cx + cy * cy + cz * cz)))) * d3_degrees
     ] : null;
   },
+
   MultiLineString: function(multiLine) {
     var coordinates = multiLine.coordinates,
         n = coordinates.length,
@@ -62,12 +72,14 @@ var d3_geo_centroidType = d3_geo_type({
       Math.asin(Math.max(-1, Math.min(1, cz / Math.sqrt(cx * cx + cy * cy + cz * cz)))) * d3_degrees
     ] : null;
   },
+
+  // TODO use area weighting
   Polygon: function(polygon) {
-    // TODO use area weighting
     return this.MultiLineString(polygon);
   },
+
+  // TODO use area weighting
   MultiPolygon: function(multiPolygon) {
-    // TODO use area weighting
     var coordinates = multiPolygon.coordinates,
         n = coordinates.length,
         i = -1,
