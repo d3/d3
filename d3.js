@@ -5588,7 +5588,7 @@
       var g = this.geometry(o.geometry);
       return g && (o = Object.create(o), o.geometry = g, o);
     },
-    FeatureCollection: function foo(o) {
+    FeatureCollection: function(o) {
       var a, f, features = o.features, i = -1, n = features.length;
       while (++i < n) if (f = this.Feature(features[i])) a ? a.push(f) : a = [ f ];
       return a && (o = Object.create(o), o.features = a, o);
