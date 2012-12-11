@@ -3,6 +3,8 @@ d3.geo.centroid = function(object) {
 };
 
 var d3_geo_centroidType = d3_geo_type({
+  FeatureCollection: d3_noop,
+  GeometryCollection: d3_noop,
   Feature: function(feature) { return this.geometry(feature.geometry); },
   Point: function(point) { return point.coordinates; },
   MultiPoint: function(multiPoint) {

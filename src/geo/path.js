@@ -107,6 +107,8 @@ d3.geo.path = function() {
   path.area = function(object) { return areaType.object(object); };
 
   var centroidType = d3_geo_type({
+    FeatureCollection: d3_noop,
+    GeometryCollection: d3_noop,
     Feature: function(feature) { return centroidType.geometry(feature.geometry); },
 
     LineString: weightedCentroid(function(lineString) {

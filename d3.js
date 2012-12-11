@@ -5584,37 +5584,46 @@
     return types;
   }
   var d3_geo_typeDefaults = {
-    Feature: function(feature) {
-      this.geometry(feature.geometry);
+    Feature: function(o) {
+      var g = this.geometry(o.geometry);
+      return g && (o = Object.create(o), o.geometry = g);
     },
-    FeatureCollection: function(collection) {
-      var features = collection.features, i = -1, n = features.length;
-      while (++i < n) this.Feature(features[i]);
+    FeatureCollection: function foo(o) {
+      var a, f, features = o.features, i = -1, n = features.length;
+      while (++i < n) if (f = this.Feature(features[i])) a ? a.push(f) : a = [ f ];
+      return a && (o = Object.create(o), o.features = a);
     },
-    GeometryCollection: function(collection) {
-      var geometries = collection.geometries, i = -1, n = geometries.length;
-      while (++i < n) this.geometry(geometries[i]);
+    GeometryCollection: function(o) {
+      var a, g, geometries = o.geometries, i = -1, n = geometries.length;
+      while (++i < n) if (g = this.geometry(geometries[i])) a ? a.push(g) : a = [ g ];
+      return a && (o = Object.create(o), o.geometries = a);
     },
-    LineString: function(lineString) {
-      this.line(lineString.coordinates);
+    LineString: function(o) {
+      var c = this.line(o.coordinates);
+      return c && (o = Object.create(o), o.coordinates = c);
     },
-    MultiLineString: function(multiLineString) {
-      var coordinates = multiLineString.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) this.line(coordinates[i]);
+    MultiLineString: function(o) {
+      var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) if (c = this.line(coordinates[i])) a ? a.push(c) : a = [ c ];
+      return a && (o = Object.create(o), o.coordinates = a);
     },
-    MultiPoint: function(multiPoint) {
-      var coordinates = multiPoint.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) this.point(coordinates[i]);
+    MultiPoint: function(o) {
+      var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) if (c = this.point(coordinates[i])) a ? a.push(c) : a = [ c ];
+      return a && (o = Object.create(o), o.coordinates = a);
     },
-    MultiPolygon: function(multiPolygon) {
-      var coordinates = multiPolygon.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) this.polygon(coordinates[i]);
+    MultiPolygon: function(o) {
+      var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) if (c = this.polygon(coordinates[i])) a ? a.push(c) : a = [ c ];
+      return a && (o = Object.create(o), o.coordinates = a);
     },
-    Point: function(point) {
-      this.point(point.coordinates);
+    Point: function(o) {
+      var c = this.point(o.coordinates);
+      return c && (o = Object.create(o), o.coordinates = c);
     },
-    Polygon: function(polygon) {
-      this.polygon(polygon.coordinates);
+    Polygon: function(o) {
+      var c = this.polygon(o.coordinates);
+      return c && (o = Object.create(o), o.coordinates = c);
     },
     Sphere: d3_noop,
     object: function(object) {
@@ -5625,12 +5634,14 @@
     },
     point: d3_noop,
     line: function(coordinates) {
-      var i = -1, n = coordinates.length;
-      while (++i < n) this.point(coordinates[i]);
+      var a, c, i = -1, n = coordinates.length;
+      while (++i < n) if (c = this.point(coordinates[i])) a ? a.push(c) : a = [ c ];
+      return a;
     },
     polygon: function(coordinates) {
-      var i = -1, n = coordinates.length;
-      while (++i < n) this.line(coordinates[i]);
+      var a, c, i = -1, n = coordinates.length;
+      while (++i < n) if (c = this.line(coordinates[i])) a ? a.push(c) : a = [ c ];
+      return a;
     }
   };
   var d3_geo_typeGeometries = {
@@ -5747,6 +5758,8 @@
     return d3_geo_centroidType.object(object);
   };
   var d3_geo_centroidType = d3_geo_type({
+    FeatureCollection: d3_noop,
+    GeometryCollection: d3_noop,
     Feature: function(feature) {
       return this.geometry(feature.geometry);
     },
@@ -6205,6 +6218,8 @@
       return areaType.object(object);
     };
     var centroidType = d3_geo_type({
+      FeatureCollection: d3_noop,
+      GeometryCollection: d3_noop,
       Feature: function(feature) {
         return centroidType.geometry(feature.geometry);
       },
