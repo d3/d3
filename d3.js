@@ -5586,51 +5586,51 @@
   var d3_geo_typeDefaults = {
     Feature: function(o) {
       var g = this.geometry(o.geometry);
-      return g && (o = Object.create(o), o.geometry = g);
+      return g && (o = Object.create(o), o.geometry = g, o);
     },
     FeatureCollection: function foo(o) {
       var a, f, features = o.features, i = -1, n = features.length;
       while (++i < n) if (f = this.Feature(features[i])) a ? a.push(f) : a = [ f ];
-      return a && (o = Object.create(o), o.features = a);
+      return a && (o = Object.create(o), o.features = a, o);
     },
     GeometryCollection: function(o) {
       var a, g, geometries = o.geometries, i = -1, n = geometries.length;
       while (++i < n) if (g = this.geometry(geometries[i])) a ? a.push(g) : a = [ g ];
-      return a && (o = Object.create(o), o.geometries = a);
+      return a && (o = Object.create(o), o.geometries = a, o);
     },
     LineString: function(o) {
       var c = this.line(o.coordinates);
-      return c && (o = Object.create(o), o.coordinates = c);
+      return c && (o = Object.create(o), o.coordinates = c, o);
     },
     MultiLineString: function(o) {
       var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
       while (++i < n) if (c = this.line(coordinates[i])) a ? a.push(c) : a = [ c ];
-      return a && (o = Object.create(o), o.coordinates = a);
+      return a && (o = Object.create(o), o.coordinates = a, o);
     },
     MultiPoint: function(o) {
       var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
       while (++i < n) if (c = this.point(coordinates[i])) a ? a.push(c) : a = [ c ];
-      return a && (o = Object.create(o), o.coordinates = a);
+      return a && (o = Object.create(o), o.coordinates = a, o);
     },
     MultiPolygon: function(o) {
       var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
       while (++i < n) if (c = this.polygon(coordinates[i])) a ? a.push(c) : a = [ c ];
-      return a && (o = Object.create(o), o.coordinates = a);
+      return a && (o = Object.create(o), o.coordinates = a, o);
     },
     Point: function(o) {
       var c = this.point(o.coordinates);
-      return c && (o = Object.create(o), o.coordinates = c);
+      return c && (o = Object.create(o), o.coordinates = c, o);
     },
     Polygon: function(o) {
       var c = this.polygon(o.coordinates);
-      return c && (o = Object.create(o), o.coordinates = c);
+      return c && (o = Object.create(o), o.coordinates = c, o);
     },
     Sphere: d3_noop,
-    object: function(object) {
-      return d3_geo_typeObjects.hasOwnProperty(object.type) ? this[object.type](object) : this.geometry(object);
+    object: function(o) {
+      return d3_geo_typeObjects.hasOwnProperty(o.type) ? this[o.type](o) : this.geometry(o);
     },
-    geometry: function(geometry) {
-      return d3_geo_typeGeometries.hasOwnProperty(geometry.type) ? this[geometry.type](geometry) : null;
+    geometry: function(o) {
+      return d3_geo_typeGeometries.hasOwnProperty(o.type) ? this[o.type](o) : null;
     },
     point: d3_noop,
     line: function(coordinates) {
@@ -6478,6 +6478,19 @@
       return reset();
     };
   }
+  d3.geo.rotation = function(δλ, δφ, δγ) {
+    var rotate = d3_geo_rotation(δλ * d3_radians, δφ * d3_radians, δγ * d3_radians);
+    var type = d3_geo_type({
+      point: function(coordinates) {
+        coordinates = rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+        coordinates[0] *= d3_degrees, coordinates[1] *= d3_degrees;
+        return coordinates;
+      }
+    });
+    return function(o) {
+      return type.object(o);
+    };
+  };
   function d3_geo_rotation(δλ, δφ, δγ) {
     return δλ ? δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ)) : d3_geo_rotationλ(δλ) : δφ || δγ ? d3_geo_rotationφγ(δφ, δγ) : d3_geo_identityRotation;
   }
