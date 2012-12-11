@@ -19,10 +19,8 @@ function d3_geo_projectionMutator(projectAt) {
       δγ = 0,
       δx = x,
       δy = y,
-      δ2 = .5, // (precision in px)².
-      clip = d3_geo_projectionCutAntemeridian(rotatePoint),
-      clipAngle = null,
-      context;
+      clip = d3_geo_cut,
+      clipAngle = null;
 
   function projection(coordinates) {
     coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
@@ -35,20 +33,73 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   // TODO automate wrapping.
-  projection.point = function(coordinates, c) { context = c; clip.point(coordinates, resample); context = null; };
-  projection.line = function(coordinates, c) { context = c; clip.line(coordinates, resample); context = null; };
-  projection.polygon = function(coordinates, c) { context = c; clip.polygon(coordinates, resample); context = null; };
+  projection.point = function(coordinates, c) { context = c; clip.point(rotatePoint(coordinates), resample); context = null; };
+  projection.line = function(coordinates, c) { context = c; clip.line(coordinates.map(rotatePoint), resample); context = null; };
+  projection.polygon = function(coordinates, c) { context = c; clip.polygon(coordinates.map(function(ring) { return ring.map(rotatePoint); }), resample); context = null; };
   projection.sphere = function(c) { context = c; clip.sphere(resample); context = null; };
 
   projection.clipAngle = function(_) {
     if (!arguments.length) return clipAngle;
     clip = _ == null
-        ? (clipAngle = _, d3_geo_projectionCutAntemeridian(rotatePoint))
-        : d3_geo_circleClip(clipAngle = +_, rotatePoint);
+        ? (clipAngle = _, d3_geo_cut)
+        : d3_geo_circleClip(clipAngle = +_);
     return projection;
   };
 
-  // TODO this is not just resampling but also projecting
+  // TODO remove redundant code with p(coordinates)
+  function rotatePoint(coordinates) {
+    return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+  }
+
+  // TODO remove redundant code with p(coordinates)
+  function projectPoint(λ, φ) {
+    var point = project(λ, φ);
+    return [point[0] * k + δx, δy - point[1] * k];
+  }
+
+  projection.scale = function(_) {
+    if (!arguments.length) return k;
+    k = +_;
+    return reset();
+  };
+
+  projection.translate = function(_) {
+    if (!arguments.length) return [x, y];
+    x = +_[0];
+    y = +_[1];
+    return reset();
+  };
+
+  projection.center = function(_) {
+    if (!arguments.length) return [λ * d3_degrees, φ * d3_degrees];
+    λ = _[0] % 360 * d3_radians;
+    φ = _[1] % 360 * d3_radians;
+    return reset();
+  };
+
+  projection.rotate = function(_) {
+    if (!arguments.length) return [δλ * d3_degrees, δφ * d3_degrees, δγ * d3_degrees];
+    δλ = _[0] % 360 * d3_radians;
+    δφ = _[1] % 360 * d3_radians;
+    δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
+    return reset();
+  };
+
+  projection.precision = function(_) {
+    if (!arguments.length) return Math.sqrt(δ2);
+    maxDepth = (δ2 = _ * _) > 0 && 16;
+    return projection;
+  };
+
+  function reset() {
+    projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
+    var center = project(λ, φ);
+    δx = x - center[0] * k;
+    δy = y + center[1] * k;
+    return projection;
+  }
+
+  // Resampling.
   var λ00,
       φ00,
       λ0,
@@ -56,7 +107,16 @@ function d3_geo_projectionMutator(projectAt) {
       cosφ0,
       x0,
       y0,
+      context,
+      δ2 = .5, // (precision in px)².
       maxDepth = 16;
+
+  var resample = {
+    point: point,
+    moveTo: moveTo,
+    lineTo: lineTo,
+    closePath: closePath
+  };
 
   function point(λ, φ) {
     var p = projectPoint(λ, φ);
@@ -113,169 +173,9 @@ function d3_geo_projectionMutator(projectAt) {
     context.closePath();
   }
 
-  var resample = {
-    point: point,
-    moveTo: moveTo,
-    lineTo: lineTo,
-    closePath: closePath
-  };
-
-  // TODO remove redundant code with p(coordinates)
-  function rotatePoint(coordinates) {
-    return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
-  }
-
-  // TODO remove redundant code with p(coordinates)
-  function projectPoint(λ, φ) {
-    var point = project(λ, φ);
-    return [point[0] * k + δx, δy - point[1] * k];
-  }
-
-  projection.scale = function(_) {
-    if (!arguments.length) return k;
-    k = +_;
-    return reset();
-  };
-
-  projection.translate = function(_) {
-    if (!arguments.length) return [x, y];
-    x = +_[0];
-    y = +_[1];
-    return reset();
-  };
-
-  projection.center = function(_) {
-    if (!arguments.length) return [λ * d3_degrees, φ * d3_degrees];
-    λ = _[0] % 360 * d3_radians;
-    φ = _[1] % 360 * d3_radians;
-    return reset();
-  };
-
-  projection.rotate = function(_) {
-    if (!arguments.length) return [δλ * d3_degrees, δφ * d3_degrees, δγ * d3_degrees];
-    δλ = _[0] % 360 * d3_radians;
-    δφ = _[1] % 360 * d3_radians;
-    δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
-    return reset();
-  };
-
-  projection.precision = function(_) {
-    if (!arguments.length) return Math.sqrt(δ2);
-    maxDepth = (δ2 = _ * _) > 0 && 16;
-    return projection;
-  };
-
-  function reset() {
-    projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
-    var center = project(λ, φ);
-    δx = x - center[0] * k;
-    δy = y + center[1] * k;
-    return projection;
-  }
-
   return function() {
     project = projectAt.apply(this, arguments);
     projection.invert = project.invert && invert;
     return reset();
   };
-}
-
-function d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1) {
-  var cosφ0,
-      cosφ1,
-      sinλ0_λ1 = Math.sin(λ0 - λ1);
-  return Math.abs(sinλ0_λ1) > ε
-      ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1)
-                 - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0))
-                 / (cosφ0 * cosφ1 * sinλ0_λ1))
-      : (φ0 + φ1) / 2;
-}
-
-function d3_geo_projectionCutAntemeridian(rotatePoint) {
-  var clip = {
-    point: function(coordinates, context) {
-      var point = rotatePoint(coordinates);
-      context.point(point[0], point[1]);
-    },
-    line: function(coordinates, context, ring) {
-      if (!(n = coordinates.length)) return [ring && 0, false];
-      var point = rotatePoint(coordinates[0]),
-          λ0 = point[0],
-          φ0 = point[1],
-          λ1,
-          φ1,
-          sλ0 = λ0 > 0 ? π : -π,
-          sλ1,
-          dλ,
-          i = 0,
-          n,
-          clean = ring; // clean indicates no intersections
-      context.moveTo(λ0, φ0);
-      while (++i < n) {
-        point = rotatePoint(coordinates[i]);
-        λ1 = point[0];
-        φ1 = point[1];
-        sλ1 = λ1 > 0 ? π : -π;
-        dλ = Math.abs(λ1 - λ0);
-        if (Math.abs(dλ - π) < ε) { // line crosses a pole
-          context.lineTo(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? π / 2 : -π / 2);
-          context.lineTo(sλ0, φ0);
-          context.moveTo(sλ1, φ0);
-          context.lineTo(λ1, φ0);
-          clean = false;
-        } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antemeridian
-          // handle degeneracies
-          if (Math.abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
-          if (Math.abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
-          φ0 = d3_geo_projectionIntersectAntemeridian(λ0, φ0, λ1, φ1);
-          context.lineTo(sλ0, φ0);
-          context.moveTo(sλ1, φ0);
-          clean = false;
-        }
-        context.lineTo(λ0 = λ1, φ0 = φ1);
-        sλ0 = sλ1;
-      }
-      return [clean, true];
-    },
-    polygon: function(polygon, context) {
-      d3_geo_circleClipPolygon(polygon, context, clip.line, d3_geo_antemeridianInterpolate);
-    },
-    sphere: function(context) {
-      d3_geo_projectionSphere(context, d3_geo_antemeridianInterpolate);
-    }
-  };
-  return clip;
-}
-
-function d3_geo_antemeridianInterpolate(from, to, direction, context) {
-  var φ;
-  if (from == null) {
-    φ = direction * π / 2;
-    context.lineTo(-π,  φ);
-    context.lineTo( 0,  φ);
-    context.lineTo( π,  φ);
-    context.lineTo( π,  0);
-    context.lineTo( π, -φ);
-    context.lineTo( 0, -φ);
-    context.lineTo(-π, -φ);
-    context.lineTo(-π,  0);
-  } else if (Math.abs(from[0] - to[0]) > ε) {
-    var s = (from[0] < to[0] ? 1 : -1) * π;
-    φ = direction * s / 2;
-    context.lineTo(-s, φ);
-    context.lineTo( 0, φ);
-    context.lineTo( s, φ);
-  } else {
-    context.lineTo(to[0], to[1]);
-  }
-}
-
-function d3_geo_projectionSphere(context, interpolate) {
-  var moved = false;
-  interpolate(null, null, 1, {
-    lineTo: function(x, y) {
-      (moved ? context.lineTo : (moved = true, context.moveTo))(x, y);
-    }
-  });
-  context.closePath();
 }
