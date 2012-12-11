@@ -1,3 +1,38 @@
+function d3_geo_clip(clipPoint, clipLine, interpolate) {
+  return d3_geo_type({
+    point: clipPoint,
+    LineString: function(o) {
+      o = Object.create(o);
+      o.type = "MultiLineString";
+      o.coordinates = clipLine(o.coordinates)[1];
+      return o;
+    },
+    MultiLineString: function(o) {
+      o = Object.create(o);
+      o.coordinates = d3.merge(o.coordinates.map(function(line) {
+        return clipLine(line)[1];
+      }));
+      return o;
+    },
+    Polygon: function(o) {
+      o = Object.create(o);
+      o.type = "MultiPolygon";
+      o.coordinates = d3_geo_clipPolygon(o.coordinates, clipLine, interpolate);
+      return o;
+    },
+    MultiPolygon: function(o) {
+      o = Object.create(o);
+      o.coordinates = d3.merge(o.coordinates.map(function(polygon) {
+        return d3_geo_clipPolygon(polygon, clipLine, interpolate);
+      }));
+      return o;
+    },
+    Sphere: function() {
+      return {type: "Polygon", coordinates: [interpolate(null, null, 1)]};
+    }
+  });
+}
+
 // General spherical polygon clipping algorithm: takes a polygon, cuts it into
 // visible line segments and rejoins the segments by interpolating along the
 // clip edge.  If there are no intersections with the clip edge, the whole clip
@@ -5,17 +40,18 @@
 //
 // This is used by both d3_geo_circleClip and d3_geo_cut, each providing
 // different functions for clipRing and interpolate.
-function d3_geo_clipPolygon(polygon, context, clipRing, interpolate) {
+function d3_geo_clipPolygon(polygon, clipRing, interpolate) {
   var subject = [],
       clip = [],
       segments = [],
-      buffer = d3_geo_clipBufferSegments(clipRing),
       visibleArea = 0,
       invisibleArea = 0,
-      invisible = false;
+      invisible = false,
+      result = [],
+      polygons = [result];
 
   var segments = d3.merge(polygon.map(function(ring) {
-    var x = buffer(ring),
+    var x = clipRing(ring),
         ringSegments = x[1],
         segment,
         n = ringSegments.length;
@@ -29,12 +65,7 @@ function d3_geo_clipPolygon(polygon, context, clipRing, interpolate) {
     // No intersections.
     if (x[0] & 1) {
       visibleArea += d3_geo_areaRing((segment = ringSegments[0]).map(d3_geo_clipRotation));
-      var point = segment[0],
-          n = segment.length - 1,
-          i = 0;
-      context.moveTo(point[0], point[1]);
-      while (++i < n) context.lineTo((point = segment[i])[0], point[1]);
-      context.closePath();
+      result.push(segment);
       return [];
     }
 
@@ -45,7 +76,7 @@ function d3_geo_clipPolygon(polygon, context, clipRing, interpolate) {
   }));
 
   if (!segments.length && (visibleArea < -ε2 || invisible && invisibleArea < -ε2)) {
-    d3_geo_clipSphere(context, interpolate);
+    result.push(interpolate(null, null, 1));
   }
   segments.forEach(function(segment) {
     var n = segment.length;
@@ -66,54 +97,32 @@ function d3_geo_clipPolygon(polygon, context, clipRing, interpolate) {
   clip.sort(d3_geo_clipSort);
   d3_geo_clipLinkCircular(subject);
   d3_geo_clipLinkCircular(clip);
-  if (!subject.length) return;
+  if (!subject.length) return polygons;
   var start = subject[0],
       current,
       points,
-      point;
+      ring;
   while (1) {
     // Find first unvisited intersection.
     current = start;
-    while (current.visited) if ((current = current.next) === start) return;
+    while (current.visited) if ((current = current.next) === start) return polygons;
     points = current.points;
-    context.moveTo((point = points.shift())[0], point[1]);
+    ring = [points.shift()];
     do {
       current.visited = current.other.visited = true;
       if (current.entry) {
-        if (current.subject) {
-          for (var i = 0; i < points.length; i++) context.lineTo((point = points[i])[0], point[1]);
-        } else {
-          interpolate(current.point, current.next.point, 1, context);
-        }
+        ring = ring.concat(current.subject ? points : interpolate(current.point, current.next.point, 1));
         current = current.next;
       } else {
-        if (current.subject) {
-          points = current.prev.points;
-          for (var i = points.length; --i >= 0;) context.lineTo((point = points[i])[0], point[1]);
-        } else {
-          interpolate(current.point, current.prev.point, -1, context);
-        }
+        ring = ring.concat(current.subject ? (points = current.prev.points).reverse() : interpolate(current.point, current.prev.point, -1));
         current = current.prev;
       }
       current = current.other;
       points = current.points;
     } while (!current.visited);
-    context.closePath();
+    result.push(ring);
   }
-}
-
-function d3_geo_clipBufferSegments(f) {
-  return function(coordinates) {
-    var segments = [],
-        segment;
-    return [
-      f(coordinates, {
-        moveTo: function(x, y) { segments.push(segment = [[x, y]]); },
-        lineTo: function(x, y) { segment.push([x, y]); }
-      }),
-      segments
-    ];
-  };
+  return polygons;
 }
 
 function d3_geo_clipRotation(point) {
@@ -162,14 +171,4 @@ function d3_geo_clipSort(a, b) {
 
 function d3_geo_clipSegmentLength1(segment) {
   return segment.length > 1;
-}
-
-function d3_geo_clipSphere(context, interpolate) {
-  var moved = false;
-  interpolate(null, null, 1, {
-    lineTo: function(x, y) {
-      (moved ? context.lineTo : (moved = true, context.moveTo))(x, y);
-    }
-  });
-  context.closePath();
 }
