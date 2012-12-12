@@ -37,7 +37,7 @@ for (var i = 0, k = 0; i < n; i++, k++) {
 console.log("Spiral polygons: " + formatNumber((Date.now() - then) / k) + "ms/op.");
 
 function spiral() {
-  var n = 1e3,
+  var n = 1e4,
       dy = 5;
 
   var spiral = d3.range(0, 1 + 1 / n, 1 / n).map(function(t) {

@@ -8,14 +8,10 @@ d3.geo.circle = function() {
   function circle() {
     var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
     rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-    var ring = [];
-    interpolate(null, null, 1, {
-      lineTo: function(λ, φ) {
-        var point = rotate.invert(λ, φ);
-        point[0] *= d3_degrees;
-        point[1] *= d3_degrees;
-        ring.push(point);
-      }
+    var ring = interpolate(null, null, 1);
+    ring.forEach(function(point) {
+      point[0] *= d3_degrees;
+      point[1] *= d3_degrees;
     });
     return {
       type: "Polygon",
@@ -50,18 +46,7 @@ function d3_geo_circleClip(degrees) {
       cr = Math.cos(radians),
       interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
 
-  return {
-    point: function(point, context) {
-      if (visible(point)) context.point(point[0], point[1]);
-    },
-    line: clipLine,
-    polygon: function(polygon, context) {
-      d3_geo_clipPolygon(polygon, context, clipLine, interpolate);
-    },
-    sphere: function(context) {
-      d3_geo_clipSphere(context, interpolate);
-    }
-  };
+  return d3_geo_clip(function(point) { return visible(point) && point; }, clipLine, interpolate);
 
   function visible(point) {
     return Math.cos(point[1]) * Math.cos(point[0]) > cr;
@@ -74,8 +59,8 @@ function d3_geo_circleClip(degrees) {
   //   1: no intersections.
   //   2: there were intersections, and the first and last segments should be
   //      rejoined.
-  function clipLine(coordinates, context) {
-    if (!(n = coordinates.length)) return 0;
+  function clipLine(coordinates) {
+    if (!(n = coordinates.length)) return [0, []];
     var point0 = coordinates[0],
         point1,
         point2,
@@ -83,8 +68,10 @@ function d3_geo_circleClip(degrees) {
         v00 = v0,
         v,
         n,
-        clean = 1; // no intersections
-    if (v0) context.moveTo(point0[0], point0[1]);
+        clean = 1, // no intersections
+        line,
+        lines = [];
+    if (v0) lines.push(line = [point0]);
     for (var i = 1; i < n; i++) {
       point1 = coordinates[i];
       v = visible(point1);
@@ -101,21 +88,19 @@ function d3_geo_circleClip(degrees) {
         clean = 0;
         if (v0 = v) {
           // outside going in
-          point2 = intersect(point1, point0);
-          context.moveTo(point2[0], point2[1]);
+          lines.push(line = [point2 = intersect(point1, point0)]);
         } else {
           // inside going out
-          point2 = intersect(point0, point1);
-          context.lineTo(point2[0], point2[1]);
+          line.push(point2 = intersect(point0, point1));
         }
         point0 = point2;
       }
-      if (v && !d3_geo_sphericalEqual(point0, point1)) context.lineTo(point1[0], point1[1]);
+      if (v && !d3_geo_sphericalEqual(point0, point1)) line.push(point1);
       point0 = point1;
     }
     // Rejoin first and last segments if there were intersections and the first
     // and last points were visible.
-    return clean + ((v00 && v) << 1);
+    return [clean + ((v00 && v) << 1), lines];
   }
 
   // Intersects the great circle between a and b with the clip circle.
@@ -154,7 +139,7 @@ function d3_geo_circleClip(degrees) {
 function d3_geo_circleInterpolate(radians, precision) {
   var cr = Math.cos(radians),
       sr = Math.sin(radians);
-  return function(from, to, direction, context) {
+  return function(from, to, direction) {
     if (from != null) {
       from = d3_geo_circleAngle(cr, from);
       to = d3_geo_circleAngle(cr, to);
@@ -163,16 +148,15 @@ function d3_geo_circleInterpolate(radians, precision) {
       from = radians + direction * 2 * π;
       to = radians;
     }
+    var points = [];
     for (var step = direction * precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
-      var c = Math.cos(t),
-          s = Math.sin(t),
-          point = d3_geo_spherical([
-            cr,
-            -sr * c,
-            -sr * s
-          ]);
-      context.lineTo(point[0], point[1]);
+      points.push(d3_geo_spherical([
+        cr,
+        -sr * Math.cos(t),
+        -sr * Math.sin(t)
+      ]));
     }
+    return points;
   };
 }
 

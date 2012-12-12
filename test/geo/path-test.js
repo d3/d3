@@ -68,6 +68,26 @@ suite.addBatch({
       ]);
     },
 
+    "GeometryCollection": function(path) {
+      path({
+        type: "GeometryCollection",
+        geometries: [{type: "Point", coordinates: [0, 0]}]
+      });
+      assert.deepEqual(testContext.buffer(), [
+        {type: "point", x: 480, y: 250}
+      ]);
+    },
+
+    "FeatureCollection": function(path) {
+      path({
+        type: "FeatureCollection",
+        features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]
+      });
+      assert.deepEqual(testContext.buffer(), [
+        {type: "point", x: 480, y: 250}
+      ]);
+    },
+
     "returns null when passed null or undefined": function(path) {
       assert.isNull(path(null));
       assert.isNull(path(undefined));
@@ -200,12 +220,12 @@ suite.addBatch({
       },
       "GeometryCollection": {
         "is undefined": function(centroid) {
-          assert.isUndefined(centroid({type: "GeometryCollection", geometries: []}));
+          assert.isUndefined(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}]}));
         }
       },
       "FeatureCollection": {
         "is undefined": function(centroid) {
-          assert.isUndefined(centroid({type: "FeatureCollection", features: []}));
+          assert.isUndefined(centroid({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]}));
         }
       },
       "Sphere": function(centroid) {

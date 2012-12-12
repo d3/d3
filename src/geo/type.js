@@ -3,9 +3,9 @@
 function d3_geo_type(types) {
   for (var t in d3_geo_typeDefaults) if (!(t in types)) types[t] = d3_geo_typeDefaults[t];
   return function(o) {
-    return d3_geo_typeObjects.hasOwnProperty(o.type)
+    return o && (d3_geo_typeObjects.hasOwnProperty(o.type)
         ? types[o.type](o)
-        : types.geometry(o);
+        : types.geometry(o));
   };
 }
 

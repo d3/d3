@@ -25,7 +25,9 @@ function d3_geo_areaRadians(point) {
 }
 
 function d3_geo_areaRing(ring) {
-  var p = ring[0],
+  if (!(n = ring.length)) return 0;
+  var n,
+      p = ring[0],
       λ00 = p[0],
       λ0 = λ00,
       λ,
@@ -41,7 +43,7 @@ function d3_geo_areaRing(ring) {
       d,
       s,
       area = 0;
-  for (var i = 1, n = ring.length; i < n; ++i) {
+  for (var i = 1; i < n; ++i) {
     p = ring[i];
     φ = p[1];
     if (Math.abs(Math.abs(φ0) - π / 2) < ε && Math.abs(Math.abs(φ) - π / 2) < ε) continue;
