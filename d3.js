@@ -5397,76 +5397,71 @@
     while (++i < n) d3_geo_streamLine(coordinates[i], listener);
     listener.polygonEnd();
   }
-  function d3_geo_streamBuffer() {
-    this._buffer = [];
-    this._point = d3_geo_pathCircle(4.5);
-  }
-  d3_geo_streamBuffer.prototype = {
-    point: d3_geo_streamBufferPoint,
-    lineStart: function() {
-      this.point = d3_geo_streamBufferPointLineStart;
-    },
-    lineEnd: d3_geo_streamBufferLineEnd,
-    polygonStart: function() {
-      this.lineEnd = d3_geo_streamBufferLineEndPolygon;
-    },
-    polygonEnd: function() {
-      this.lineEnd = d3_geo_streamBufferLineEnd;
-    },
-    toString: function() {
-      var s = this._buffer.join("");
-      this._buffer = [];
-      return s;
+  function d3_geo_streamBuffer(buffer, pointRadius) {
+    var stream = {
+      point: point,
+      lineStart: function() {
+        stream.point = pointLineStart;
+      },
+      lineEnd: lineEnd,
+      polygonStart: function() {
+        stream.lineEnd = lineEndPolygon;
+      },
+      polygonEnd: function() {
+        stream.lineEnd = lineEnd;
+      }
+    };
+    function point(x, y) {
+      buffer.push("M", x, ",", y, pointRadius);
     }
-  };
-  function d3_geo_streamBufferPoint(x, y) {
-    this._buffer.push("M", x, ",", y, this._point);
-  }
-  function d3_geo_streamBufferPointLineStart(x, y) {
-    this._buffer.push("M", x, ",", y);
-    this.point = d3_geo_streamBufferPointLine;
-  }
-  function d3_geo_streamBufferPointLine(x, y) {
-    this._buffer.push("L", x, ",", y);
-  }
-  function d3_geo_streamBufferLineEnd() {
-    this.point = d3_geo_streamBufferPoint;
-  }
-  function d3_geo_streamBufferLineEndPolygon() {
-    this._buffer.push("Z");
-  }
-  function d3_geo_streamContext() {
-    this._pointRadius = 4.5;
-  }
-  d3_geo_streamContext.prototype = {
-    point: d3_geo_streamContextPoint,
-    lineStart: function() {
-      this.point = d3_geo_streamContextPointLineStart;
-    },
-    lineEnd: d3_geo_streamContextLineEnd,
-    polygonStart: function() {
-      this.lineEnd = d3_geo_streamContextLineEndPolygon;
-    },
-    polygonEnd: function() {
-      this.lineEnd = d3_geo_streamContextLineEnd;
+    function pointLineStart(x, y) {
+      buffer.push("M", x, ",", y);
+      stream.point = pointLine;
     }
-  };
-  function d3_geo_streamContextPoint(x, y) {
-    this._context.moveTo(x, y);
-    this._context.arc(x, y, this._pointRadius, 0, 2 * π);
+    function pointLine(x, y) {
+      buffer.push("L", x, ",", y);
+    }
+    function lineEnd() {
+      stream.point = point;
+    }
+    function lineEndPolygon() {
+      buffer.push("Z");
+    }
+    pointRadius = d3_geo_pathCircle(4.5);
+    return stream;
   }
-  function d3_geo_streamContextPointLineStart(x, y) {
-    this._context.moveTo(x, y);
-    this.point = d3_geo_streamContextPointLine;
-  }
-  function d3_geo_streamContextPointLine(x, y) {
-    this._context.lineTo(x, y);
-  }
-  function d3_geo_streamContextLineEnd() {
-    this.point = d3_geo_streamContextPoint;
-  }
-  function d3_geo_streamContextLineEndPolygon() {
-    this._context.closePath();
+  function d3_geo_streamContext(context, pointRadius) {
+    var stream = {
+      point: point,
+      lineStart: function() {
+        stream.point = pointLineStart;
+      },
+      lineEnd: lineEnd,
+      polygonStart: function() {
+        stream.lineEnd = lineEndPolygon;
+      },
+      polygonEnd: function() {
+        stream.lineEnd = lineEnd;
+      }
+    };
+    function point(x, y) {
+      context.moveTo(x, y);
+      context.arc(x, y, pointRadius, 0, 2 * π);
+    }
+    function pointLineStart(x, y) {
+      context.moveTo(x, y);
+      stream.point = pointLine;
+    }
+    function pointLine(x, y) {
+      context.lineTo(x, y);
+    }
+    function lineEnd() {
+      stream.point = point;
+    }
+    function lineEndPolygon() {
+      context.closePath();
+    }
+    return stream;
   }
   function d3_geo_spherical(cartesian) {
     return [ Math.atan2(cartesian[1], cartesian[0]), Math.asin(Math.max(-1, Math.min(1, cartesian[2]))) ];
