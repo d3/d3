@@ -185,6 +185,7 @@ d3.geo.js: \
 	src/geo/type.js \
 	src/geo/clip.js \
 	src/geo/cut.js \
+	src/geo/resample.js \
 	src/geo/albers-usa.js \
 	src/geo/albers.js \
 	src/geo/azimuthal-equal-area.js \

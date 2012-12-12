@@ -18,7 +18,7 @@ console.log("Dense graticule: " + formatNumber((Date.now() - then) / k) + "ms/op
 
 o = {type: "GeometryCollection", geometries: d3.range(-180, 180, 1).map(function(x) {
   return circle.origin([x, 0])();
-})}
+})};
 then = Date.now();
 
 for (var i = 0, k = 0; i < n; i++, k++) {

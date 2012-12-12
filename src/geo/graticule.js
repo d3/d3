@@ -6,13 +6,16 @@ d3.geo.graticule = function() {
       precision = 2.5;
 
   function graticule() {
-    return {type: "GeometryCollection", geometries: graticule.lines()};
+    return {type: "MultiLineString", coordinates: lines()};
+  }
+
+  function lines() {
+    return d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(x)
+        .concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(y));
   }
 
   graticule.lines = function() {
-    return d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(x)
-        .concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(y))
-        .map(function(coordinates) { return {type: "LineString", coordinates: coordinates}; });
+    return lines().map(function(coordinates) { return {type: "LineString", coordinates: coordinates}; });
   }
 
   graticule.outline = function() {
