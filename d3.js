@@ -6296,7 +6296,7 @@
     })();
   }
   function d3_geo_projectionMutator(projectAt) {
-    var project, rotate, rotation, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, clip = d3_geo_cut, clipAngle = null;
+    var project, rotate, rotation, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, δ2 = .5, maxDepth = 16, clip = d3_geo_cut, clipAngle = null;
     function projection(coordinates) {
       coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
       return [ coordinates[0] * k + δx, δy - coordinates[1] * k ];
@@ -6351,7 +6351,6 @@
       δy = y + center[1] * k;
       return projection;
     }
-    var λ00, φ00, λ0, sinφ0, cosφ0, x0, y0, δ2 = .5, maxDepth = 16;
     var resample = d3_geo_type({
       Point: function(o) {
         o.coordinates = resamplePoint(o.coordinates);
@@ -6385,6 +6384,7 @@
     function resamplePoint(point) {
       return projectPoint(point[0], point[1]);
     }
+    var λ00, φ00, λ0, sinφ0, cosφ0, x0, y0;
     function resampleLine(coordinates) {
       if (!(n = coordinates.length)) return coordinates;
       var n, i = 0, p = coordinates[0], λ, φ, line;

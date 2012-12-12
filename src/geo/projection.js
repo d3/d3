@@ -116,6 +116,7 @@ function d3_geo_projectionMutator(projectAt) {
 
   // TODO rename: this is not just rotation, it also converts to radians!
   // TODO don't create new objects for rotation? (since clipping does the same?)
+  // TODO don't call rotate when rotate is a no-op
   var rotation = d3_geo_type({
     point: function(coordinates) {
       return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
