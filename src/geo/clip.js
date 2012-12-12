@@ -97,20 +97,20 @@ function d3_geo_clipPolygon(polygon, clipRing, interpolate) {
     current = start;
     while (current.visited) if ((current = current.next) === start) return polygons;
     points = current.points;
-    ring = [points.shift()];
+    ring = [[points.shift()]];
     do {
       current.visited = current.other.visited = true;
       if (current.entry) {
-        ring = ring.concat(current.subject ? points : interpolate(current.point, current.next.point, 1));
+        ring.push(current.subject ? points : interpolate(current.point, current.next.point, 1));
         current = current.next;
       } else {
-        ring = ring.concat(current.subject ? (points = current.prev.points).reverse() : interpolate(current.point, current.prev.point, -1));
+        ring.push(current.subject ? (points = current.prev.points).reverse() : interpolate(current.point, current.prev.point, -1));
         current = current.prev;
       }
       current = current.other;
       points = current.points;
     } while (!current.visited);
-    result.push(ring);
+    result.push(d3.merge(ring));
   }
   return polygons;
 }

@@ -5366,7 +5366,7 @@
   function d3_geo_type(types) {
     for (var t in d3_geo_typeDefaults) if (!(t in types)) types[t] = d3_geo_typeDefaults[t];
     return function(o) {
-      return d3_geo_typeObjects.hasOwnProperty(o.type) ? types[o.type](o) : types.geometry(o);
+      return o && (d3_geo_typeObjects.hasOwnProperty(o.type) ? types[o.type](o) : types.geometry(o));
     };
   }
   var d3_geo_typeDefaults = {
@@ -5550,20 +5550,20 @@
       current = start;
       while (current.visited) if ((current = current.next) === start) return polygons;
       points = current.points;
-      ring = [ points.shift() ];
+      ring = [ [ points.shift() ] ];
       do {
         current.visited = current.other.visited = true;
         if (current.entry) {
-          ring = ring.concat(current.subject ? points : interpolate(current.point, current.next.point, 1));
+          ring.push(current.subject ? points : interpolate(current.point, current.next.point, 1));
           current = current.next;
         } else {
-          ring = ring.concat(current.subject ? (points = current.prev.points).reverse() : interpolate(current.point, current.prev.point, -1));
+          ring.push(current.subject ? (points = current.prev.points).reverse() : interpolate(current.point, current.prev.point, -1));
           current = current.prev;
         }
         current = current.other;
         points = current.points;
       } while (!current.visited);
-      result.push(ring);
+      result.push(d3.merge(ring));
     }
     return polygons;
   }
@@ -6296,7 +6296,7 @@
     })();
   }
   function d3_geo_projectionMutator(projectAt) {
-    var project, rotate, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, clip = d3_geo_cut, clipAngle = null;
+    var project, rotate, rotation, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx = x, δy = y, clip = d3_geo_cut, clipAngle = null;
     function projection(coordinates) {
       coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
       return [ coordinates[0] * k + δx, δy - coordinates[1] * k ];
@@ -6305,69 +6305,40 @@
       coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
-    var type = d3_geo_type({
+    var resampleType = d3_geo_type({
       Point: function(o) {
-        o = {
-          type: o.type,
-          coordinates: rotatePoint(o.coordinates)
-        };
-        return (o = clip(o)) && (o.coordinates = resample.point(o.coordinates), o);
+        return o.coordinates = resample.point(o.coordinates), o;
       },
       MultiPoint: function(o) {
-        o = {
-          type: o.type,
-          coordinates: o.coordinates.map(rotatePoint)
-        };
-        return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.point), o);
+        return o.coordinates = o.coordinates.map(resample.point), o;
       },
       LineString: function(o) {
-        o = {
-          type: o.type,
-          coordinates: rotateLine(o.coordinates)
-        };
-        return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.line), o);
+        return o.coordinates = resample.line(o.coordinates), o;
       },
       MultiLineString: function(o) {
-        o = {
-          type: o.type,
-          coordinates: o.coordinates.map(rotateLine)
-        };
-        return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.line), o);
+        return o.coordinates = o.coordinates.map(resample.line), o;
       },
       Polygon: function(o) {
-        o = {
-          type: o.type,
-          coordinates: o.coordinates.map(rotateLine)
-        };
-        return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.polygon), o);
+        return o.coordinates = resample.polygon(o.coordinates), o;
       },
       MultiPolygon: function(o) {
-        o = {
-          type: o.type,
-          coordinates: o.coordinates.map(function(polygon) {
-            return polygon.map(rotateLine);
-          })
-        };
-        return (o = clip(o)) && (o.coordinates = o.coordinates.map(resample.polygon), o);
-      },
-      Sphere: function(o) {
-        return (o = clip(o)) && (o.coordinates = resample.polygon(o.coordinates), o);
+        return o.coordinates = o.coordinates.map(resample.polygon), o;
       }
     });
-    function rotateLine(line) {
-      return line.map(rotatePoint);
-    }
     projection.object = function(object) {
-      return type(object);
+      return resampleType(clip(rotation(object)));
     };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;
       clip = _ == null ? (clipAngle = _, d3_geo_cut) : d3_geo_circleClip(clipAngle = +_);
       return projection;
     };
-    function rotatePoint(coordinates) {
-      return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
-    }
+    var rotation = d3_geo_type({
+      point: function(coordinates) {
+        return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+      },
+      Sphere: d3_identity
+    });
     function projectPoint(λ, φ) {
       var point = project(λ, φ);
       return [ point[0] * k + δx, δy - point[1] * k ];
