@@ -1,43 +1,38 @@
-function d3_geo_streamBuffer() {
-  this._buffer = [];
-  this._point = d3_geo_pathCircle(4.5);
-}
+function d3_geo_streamBuffer(buffer, pointRadius) {
+  var stream = {
+    point: point,
 
-d3_geo_streamBuffer.prototype = {
-  point: d3_geo_streamBufferPoint,
+    // While inside a line, override point to moveTo then lineTo.
+    lineStart: function() { stream.point = pointLineStart; },
+    lineEnd: lineEnd,
 
-  // While inside a line, override point to moveTo then lineTo.
-  lineStart: function() { this.point = d3_geo_streamBufferPointLineStart; },
-  lineEnd: d3_geo_streamBufferLineEnd,
+    // While inside a polygon, override lineEnd to closePath.
+    polygonStart: function() { stream.lineEnd = lineEndPolygon; },
+    polygonEnd: function() { stream.lineEnd = lineEnd; }
+  };
 
-  // While inside a polygon, override lineEnd to closePath.
-  polygonStart: function() { this.lineEnd = d3_geo_streamBufferLineEndPolygon; },
-  polygonEnd: function() { this.lineEnd = d3_geo_streamBufferLineEnd; },
-
-  toString: function() {
-    var s = this._buffer.join("");
-    this._buffer = [];
-    return s;
+  function point(x, y) {
+    buffer.push("M", x, ",", y, pointRadius);
   }
-};
 
-function d3_geo_streamBufferPoint(x, y) {
-  this._buffer.push("M", x, ",", y, this._point);
-}
+  function pointLineStart(x, y) {
+    buffer.push("M", x, ",", y);
+    stream.point = pointLine;
+  }
 
-function d3_geo_streamBufferPointLineStart(x, y) {
-  this._buffer.push("M", x, ",", y);
-  this.point = d3_geo_streamBufferPointLine;
-}
+  function pointLine(x, y) {
+    buffer.push("L", x, ",", y);
+  }
 
-function d3_geo_streamBufferPointLine(x, y) {
-  this._buffer.push("L", x, ",", y);
-}
+  function lineEnd() {
+    stream.point = point;
+  }
 
-function d3_geo_streamBufferLineEnd() {
-  this.point = d3_geo_streamBufferPoint;
-}
+  function lineEndPolygon() {
+    buffer.push("Z");
+  }
 
-function d3_geo_streamBufferLineEndPolygon() {
-  this._buffer.push("Z");
+  pointRadius = d3_geo_pathCircle(4.5);
+
+  return stream;
 }
