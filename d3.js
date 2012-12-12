@@ -5809,10 +5809,11 @@
     function circle() {
       var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
       rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-      var ring = interpolate(null, null, 1);
-      ring.forEach(function(point) {
+      var ring = interpolate(null, null, 1).map(function(point) {
+        point = rotate.invert(point[0], point[1]);
         point[0] *= d3_degrees;
         point[1] *= d3_degrees;
+        return point;
       });
       return {
         type: "Polygon",
