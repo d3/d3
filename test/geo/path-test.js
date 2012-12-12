@@ -609,7 +609,7 @@ suite.addBatch({
 var testBuffer = [];
 
 var testContext = {
-  point: function(x, y) { testBuffer.push({type: "point", x: Math.round(x), y: Math.round(y)}); },
+  arc: function(x, y, r, ra, rb) { testBuffer.push({type: "arc", x: Math.round(x), y: Math.round(y)}); },
   moveTo: function(x, y) { testBuffer.push({type: "moveTo", x: Math.round(x), y: Math.round(y)}); },
   lineTo: function(x, y) { testBuffer.push({type: "lineTo", x: Math.round(x), y: Math.round(y)}); },
   closePath: function() { testBuffer.push({type: "closePath"}); },

@@ -7,8 +7,6 @@ function d3_geo_projection(project) {
 
 function d3_geo_projectionMutator(projectAt) {
   var project,
-      rotatePoint,
-      rotateToRadians, // TODO: would rotateObjectToRadians be clearer?
       projectRotate,
       k = 150, // scale
       x = 480, // translate
@@ -36,10 +34,8 @@ function d3_geo_projectionMutator(projectAt) {
     return [coordinates[0] * d3_degrees, coordinates[1] * d3_degrees];
   }
 
-  projection.object = function(object) {
-    object = clip(rotateToRadians(object));
-    projectResample(object);
-    return object;
+  projection.stream = function(listener) {
+    return d3_geo_streamRadians(d3_geo_streamRotate(rotate, clip(projectResample(listener))));
   };
 
   projection.clipAngle = function(_) {
@@ -81,21 +77,12 @@ function d3_geo_projectionMutator(projectAt) {
   d3.rebind(projection, projectResample, "precision");
 
   function reset() {
-    projectRotate = d3_geo_compose(rotatePoint = d3_geo_rotation(δλ, δφ, δγ), project);
+    projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
     var center = project(λ, φ);
     δx = x - center[0] * k;
     δy = y + center[1] * k;
     return projection;
   }
-
-  // TODO don't create new objects for rotation? (since clipping does the same?)
-  // TODO don't call rotate when rotate is a no-op
-  var rotateToRadians = d3_geo_type({
-    point: function(coordinates) {
-      return rotatePoint(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
-    },
-    Sphere: d3_identity
-  });
 
   // TODO rename: this is not just projection, it also transforms!
   // TODO rename: how does projectPoint disambiguate this method from project?
