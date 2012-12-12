@@ -6468,7 +6468,7 @@
     },
     polygonEnd: function() {
       d3_geo_areaSum += d3_geo_areaRing < 0 ? 4 * π + d3_geo_areaRing : d3_geo_areaRing;
-      d3_geo_area.point = d3_noop;
+      d3_geo_area.point = d3_geo_area.lineStart = d3_noop;
     }
   };
   function d3_geo_areaRingStart() {
