@@ -6442,6 +6442,7 @@
   };
   function d3_geo_pathAreaRingStart() {
     var x0, y0;
+    d3_geo_areaRing = 0;
     d3_geo_pathArea.point = function(x, y) {
       d3_geo_pathArea.point = nextPoint;
       x0 = x, y0 = y;

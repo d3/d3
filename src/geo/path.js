@@ -182,6 +182,8 @@ var d3_geo_pathArea = {
 function d3_geo_pathAreaRingStart() {
   var x0, y0;
 
+  d3_geo_areaRing = 0;
+
   // For the first point, …
   d3_geo_pathArea.point = function(x, y) {
     d3_geo_pathArea.point = nextPoint;
