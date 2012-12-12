@@ -7,8 +7,8 @@ function d3_geo_projection(project) {
 
 function d3_geo_projectionMutator(projectAt) {
   var project,
-      rotate,
-      rotation, // TODO rename: rotateObject? disambiguate from rotate, which is for points
+      rotatePoint,
+      rotateToRadians, // TODO: would rotateObjectToRadians be clearer?
       projectRotate,
       k = 150, // scale
       x = 480, // translate
@@ -21,8 +21,10 @@ function d3_geo_projectionMutator(projectAt) {
       δx, // center
       δy,
       clip = d3_geo_cut, // TODO rename: it's often cutting, not clipping!
+                         // Although cutting is a special case of clipping with
+                         // an infinitesimally small "outside".
       clipAngle = null,
-      resample = d3_geo_resample(projectPoint);
+      projectResample = d3_geo_resample(projectPoint);
 
   function projection(coordinates) {
     coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
@@ -35,8 +37,8 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   projection.object = function(object) {
-    object = clip(rotation(object));
-    resample(object);
+    object = clip(rotateToRadians(object));
+    projectResample(object);
     return object;
   };
 
@@ -76,22 +78,21 @@ function d3_geo_projectionMutator(projectAt) {
     return reset();
   };
 
-  d3.rebind(projection, resample, "precision");
+  d3.rebind(projection, projectResample, "precision");
 
   function reset() {
-    projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
+    projectRotate = d3_geo_compose(rotatePoint = d3_geo_rotation(δλ, δφ, δγ), project);
     var center = project(λ, φ);
     δx = x - center[0] * k;
     δy = y + center[1] * k;
     return projection;
   }
 
-  // TODO rename: this is not just rotation, it also converts to radians!
   // TODO don't create new objects for rotation? (since clipping does the same?)
   // TODO don't call rotate when rotate is a no-op
-  var rotation = d3_geo_type({
+  var rotateToRadians = d3_geo_type({
     point: function(coordinates) {
-      return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+      return rotatePoint(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
     },
     Sphere: d3_identity
   });

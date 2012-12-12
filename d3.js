@@ -6362,7 +6362,7 @@
     })();
   }
   function d3_geo_projectionMutator(projectAt) {
-    var project, rotate, rotation, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, clip = d3_geo_cut, clipAngle = null, resample = d3_geo_resample(projectPoint);
+    var project, rotatePoint, rotateToRadians, projectRotate, k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, clip = d3_geo_cut, clipAngle = null, projectResample = d3_geo_resample(projectPoint);
     function projection(coordinates) {
       coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
       return [ coordinates[0] * k + δx, δy - coordinates[1] * k ];
@@ -6372,8 +6372,8 @@
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
     projection.object = function(object) {
-      object = clip(rotation(object));
-      resample(object);
+      object = clip(rotateToRadians(object));
+      projectResample(object);
       return object;
     };
     projection.clipAngle = function(_) {
@@ -6405,17 +6405,17 @@
       δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
       return reset();
     };
-    d3.rebind(projection, resample, "precision");
+    d3.rebind(projection, projectResample, "precision");
     function reset() {
-      projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
+      projectRotate = d3_geo_compose(rotatePoint = d3_geo_rotation(δλ, δφ, δγ), project);
       var center = project(λ, φ);
       δx = x - center[0] * k;
       δy = y + center[1] * k;
       return projection;
     }
-    var rotation = d3_geo_type({
+    var rotateToRadians = d3_geo_type({
       point: function(coordinates) {
-        return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+        return rotatePoint(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
       },
       Sphere: d3_identity
     });
