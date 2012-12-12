@@ -203,10 +203,6 @@ d3.geo.path = function() {
     };
   }
 
-  path.bounds = function(object) {
-    return (bounds || (bounds = d3_geo_bounds(projection)))(object);
-  };
-
   path.projection = function(_) {
     if (!arguments.length) return projection;
     projection = _;

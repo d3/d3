@@ -3,7 +3,7 @@ function d3_geo_streamBuffer() {
   this._point = d3_geo_pathCircle(4.5);
 }
 
-var d3_geo_streamBufferPrototype = {
+d3_geo_streamBuffer.prototype = {
   point: d3_geo_streamBufferPoint,
 
   // While inside a line, override point to moveTo then lineTo.
@@ -19,7 +19,7 @@ var d3_geo_streamBufferPrototype = {
     this._buffer = [];
     return s;
   }
-}
+};
 
 function d3_geo_streamBufferPoint(x, y) {
   this._buffer.push("M", x, ",", y, this._point);

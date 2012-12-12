@@ -5401,7 +5401,7 @@
     this._buffer = [];
     this._point = d3_geo_pathCircle(4.5);
   }
-  var d3_geo_streamBufferPrototype = {
+  d3_geo_streamBuffer.prototype = {
     point: d3_geo_streamBufferPoint,
     lineStart: function() {
       this.point = d3_geo_streamBufferPointLineStart;
@@ -5438,7 +5438,7 @@
   function d3_geo_streamContext() {
     this._pointRadius = 4.5;
   }
-  var d3_geo_streamContextPrototype = {
+  d3_geo_streamContext.prototype = {
     point: d3_geo_streamContextPoint,
     lineStart: function() {
       this.point = d3_geo_streamContextPointLineStart;
@@ -5907,22 +5907,31 @@
   }).raw = d3_geo_azimuthalEquidistant;
   d3.geo.bounds = d3_geo_bounds(d3_identity);
   function d3_geo_bounds(projection) {
-    var x0, y0, x1, y1, bounds = d3_geo_type({
-      point: function(point) {
-        point = projection(point);
-        var x = point[0], y = point[1];
-        if (x < x0) x0 = x;
-        if (x > x1) x1 = x;
-        if (y < y0) y0 = y;
-        if (y > y1) y1 = y;
+    var x0, y0, x1, y1, bound = {
+      point: boundPoint,
+      lineStart: d3_noop,
+      lineEnd: d3_noop,
+      polygonStart: function() {
+        bound.lineEnd = boundPolygonLineEnd;
       },
-      polygon: function(coordinates) {
-        this.line(coordinates[0]);
+      polygonEnd: function() {
+        bound.point = boundPoint;
       }
-    });
+    };
+    function boundPoint(x, y) {
+      var p = projection([ x, y ]);
+      x = p[0], y = p[1];
+      if (x < x0) x0 = x;
+      if (x > x1) x1 = x;
+      if (y < y0) y0 = y;
+      if (y > y1) y1 = y;
+    }
+    function boundPolygonLineEnd() {
+      bound.point = bound.lineEnd = d3_noop;
+    }
     return function(feature) {
       y1 = x1 = -(x0 = y0 = Infinity);
-      bounds(feature);
+      d3.geo.stream(feature, bound);
       return [ [ x0, y0 ], [ x1, y1 ] ];
     };
   }
@@ -6399,9 +6408,6 @@
         return z ? [ x / z, y / z ] : null;
       };
     }
-    path.bounds = function(object) {
-      return (bounds || (bounds = d3_geo_bounds(projection)))(object);
-    };
     path.projection = function(_) {
       if (!arguments.length) return projection;
       projection = _;

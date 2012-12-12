@@ -2,7 +2,7 @@ function d3_geo_streamContext() {
   this._pointRadius = 4.5;
 }
 
-var d3_geo_streamContextPrototype = {
+d3_geo_streamContext.prototype = {
   point: d3_geo_streamContextPoint,
 
   // While inside a line, override point to moveTo then lineTo.
@@ -12,7 +12,7 @@ var d3_geo_streamContextPrototype = {
   // While inside a polygon, override lineEnd to closePath.
   polygonStart: function() { this.lineEnd = d3_geo_streamContextLineEndPolygon; },
   polygonEnd: function() { this.lineEnd = d3_geo_streamContextLineEnd; }
-}
+};
 
 function d3_geo_streamContextPoint(x, y) {
   this._context.moveTo(x, y);
