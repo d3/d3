@@ -20,7 +20,7 @@ function d3_geo_projectionMutator(projectAt) {
       δγ = 0,
       δx = x,
       δy = y,
-      clip = d3_geo_cut,
+      clip = d3_geo_cut, // TODO rename: it's often cutting, not clipping!
       clipAngle = null;
 
   function projection(coordinates) {
@@ -33,7 +33,8 @@ function d3_geo_projectionMutator(projectAt) {
     return [coordinates[0] * d3_degrees, coordinates[1] * d3_degrees];
   }
 
-  // TODO extract
+  // TODO extract (extract what?)
+  // TODO rename: this is not just resampling, it also projects and transforms!
   var resample = d3_geo_type({
     Point: function(o) {
       o.coordinates = resamplePoint(o.coordinates);
@@ -69,7 +70,8 @@ function d3_geo_projectionMutator(projectAt) {
     return projection;
   };
 
-  // TODO rename: this is not just rotation; it also converts degrees to radians
+  // TODO rename: this is not just rotation, it also converts to radians!
+  // TODO don't create new objects for rotation? (since clipping does the same?)
   var rotation = d3_geo_type({
     point: function(coordinates) {
       return rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
@@ -77,7 +79,9 @@ function d3_geo_projectionMutator(projectAt) {
     Sphere: d3_identity
   });
 
-  // TODO remove redundant code with p(coordinates)
+  // TODO rename: this is not just projection, it also transforms!
+  // TODO rename: how does projectPoint disambiguate this method from project?
+  // TODO remove redundant code with p(coordinates)?
   function projectPoint(λ, φ) {
     var point = project(λ, φ);
     return [point[0] * k + δx, δy - point[1] * k];
@@ -125,6 +129,7 @@ function d3_geo_projectionMutator(projectAt) {
     return projection;
   }
 
+  // TODO move these vars up to the top?
   // Resampling.
   var λ00,
       φ00,
@@ -136,10 +141,12 @@ function d3_geo_projectionMutator(projectAt) {
       δ2 = .5, // (precision in px)².
       maxDepth = 16;
 
+  // TODO rename: this is not just resampling, it also projects and transforms!
   function resamplePoint(point) {
     return projectPoint(point[0], point[1]);
   }
 
+  // TODO rename: this is not just resampling, it also projects and transforms!
   function resampleLine(coordinates) {
     if (!(n = coordinates.length)) return coordinates;
     var n,
@@ -164,6 +171,7 @@ function d3_geo_projectionMutator(projectAt) {
     return line;
   }
 
+  // TODO rename: this is not just resampling, it also projects and transforms!
   function resamplePolygon(coordinates) {
     var n = coordinates.length,
         i = -1,
@@ -178,6 +186,7 @@ function d3_geo_projectionMutator(projectAt) {
     return polygon;
   }
 
+  // TODO rename: this is not just resampling, it also projects and transforms!
   function resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x1, y1, λ1, sinφ1, cosφ1, depth, line) {
     var dx = x1 - x0,
         dy = y1 - y0,
