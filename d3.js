@@ -6323,7 +6323,7 @@
     return d3_geo_projection(d3_geo_orthographic);
   }).raw = d3_geo_orthographic;
   d3.geo.path = function() {
-    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), bounds, context, buffer = [];
+    var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), context, buffer = [];
     function path(object) {
       var radius = typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius;
       d3.geo.stream(object, projection.stream(context != null ? new d3_geo_streamContext(context, radius) : new d3_geo_streamBuffer(buffer, radius)));
@@ -6360,7 +6360,7 @@
       return d3.geom.polygon(ring).area();
     }
     path.bounds = function(object) {
-      return (bounds || (bounds = d3_geo_bounds(projection)))(object);
+      return d3_geo_bounds(projection)(object);
     };
     path.centroid = function(object) {
       return (object = projection.object(object)) ? centroidType(object) : null;
@@ -6432,7 +6432,6 @@
     path.projection = function(_) {
       if (!arguments.length) return projection;
       projection = _;
-      bounds = null;
       return path;
     };
     path.context = function(_) {
