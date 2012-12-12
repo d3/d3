@@ -137,16 +137,6 @@ function d3_geo_projectionMutator(projectAt) {
     return projectPoint(point[0], point[1]);
   }
 
-  // Temporary state used by resampleLine & resamplePolygon.
-  // TODO find a cleaner way to encapsulate this temporary state?
-  var λ00,
-      φ00,
-      λ0,
-      sinφ0,
-      cosφ0,
-      x0,
-      y0;
-
   // TODO rename: this is not just resampling, it also projects and transforms!
   function resampleLine(coordinates) {
     if (!(n = coordinates.length)) return coordinates;
@@ -155,12 +145,12 @@ function d3_geo_projectionMutator(projectAt) {
         p = coordinates[0],
         λ,
         φ,
-        line;
-    line = [p = projectPoint(λ00 = λ0 = p[0], φ00 = φ = p[1])];
-    sinφ0 = Math.sin(φ);
-    cosφ0 = Math.cos(φ);
-    x0 = p[0];
-    y0 = p[1];
+        λ0,
+        line = [p = projectPoint(λ0 = p[0], φ = p[1])],
+        sinφ0 = Math.sin(φ),
+        cosφ0 = Math.cos(φ),
+        x0 = p[0],
+        y0 = p[1];
     while (++i < n) {
       p = coordinates[i];
       p = projectPoint(λ = p[0], φ = p[1]);
@@ -178,11 +168,18 @@ function d3_geo_projectionMutator(projectAt) {
         i = -1,
         polygon = [],
         ring,
+        resampled,
+        l,
+        m,
         p;
     while (++i < n) {
-      polygon.push(ring = resampleLine(coordinates[i]));
-      p = projectPoint(λ00, φ00); // TODO isn't this the same as ring[0]?
-      resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, p[0], p[1], λ00, Math.sin(φ00), Math.cos(φ00), maxDepth, ring);
+      polygon.push(resampled = resampleLine(ring = coordinates[i]));
+      m = ring.length - 1;
+      l = resampled.length - 1;
+      resampleLineTo(
+          (p = ring[0])[0], p[1], (p = resampled[0])[0], Math.sin(p[1]), Math.cos(p[1]),
+          (p = ring[m])[0], p[1], (p = resampled[l])[0], Math.sin(p[1]), Math.cos(p[1]),
+          maxDepth, ring);
     }
     return polygon;
   }
