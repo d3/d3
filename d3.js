@@ -5674,7 +5674,7 @@
         cartesian = d3_geo_cartesian(p);
         p = projectPoint(λ = p[0], φ = p[1]);
         resampleLineTo(x0, y0, λ0, a0, b0, c0, x0 = p[0], y0 = p[1], λ0 = λ, a0 = cartesian[0], b0 = cartesian[1], c0 = cartesian[2], maxDepth, line);
-        line.push([ x0, y0 ]);
+        line.push(p);
       }
       return line;
     }
@@ -5689,7 +5689,7 @@
           a /= m;
           b /= m;
           resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a, b, c, depth, line);
-          line.push([ x2, y2 ]);
+          line.push(p);
           resampleLineTo(x2, y2, λ2, a, b, c, x1, y1, λ1, a1, b1, c1, depth, line);
         }
       }
