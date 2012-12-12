@@ -1,5 +1,5 @@
 // Cut features along the antimeridian.
-var d3_geo_cut = d3_geo_clip(d3_identity, d3_geo_cutLine, d3_geo_cutInterpolate);
+var d3_geo_cut = d3_geo_clip(d3_true, d3_geo_cutLine, d3_geo_cutInterpolate);
 
 // Takes a line and cuts into visible segments. Return values:
 //   0: there were intersections or the line was empty.
@@ -10,13 +10,12 @@ function d3_geo_cutLine(listener) {
   var λ0 = NaN,
       φ0 = NaN,
       sλ0 = NaN,
-      clean = 1; // no intersections
-  // if there are intersections, we always rejoin the first and last segments.
-  //return 2 - clean;
+      clean; // no intersections
 
   return {
     lineStart: function() {
       listener.lineStart();
+      clean = 1;
     },
     point: function(λ1, φ1) {
       var sλ1 = λ1 > 0 ? π : -π,
@@ -44,9 +43,11 @@ function d3_geo_cutLine(listener) {
       sλ0 = sλ1;
     },
     lineEnd: function() {
-      λ0 = φ0 = NaN;
       listener.lineEnd();
-    }
+      λ0 = φ0 = NaN;
+    },
+    // if there are intersections, we always rejoin the first and last segments.
+    clean: function() { return 2 - clean; }
   };
 }
 

@@ -8,6 +8,7 @@ function d3_geo_projection(project) {
 function d3_geo_projectionMutator(projectAt) {
   var project,
       projectRotate,
+      rotate,
       k = 150, // scale
       x = 480, // translate
       y = 250,
@@ -35,7 +36,7 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   projection.stream = function(listener) {
-    return d3_geo_streamRadians(d3_geo_streamRotate(rotate, clip(projectResample(listener))));
+    return d3_geo_projectionRadiansRotate(rotate, clip(projectResample(listener)));
   };
 
   projection.clipAngle = function(_) {
@@ -96,5 +97,19 @@ function d3_geo_projectionMutator(projectAt) {
     project = projectAt.apply(this, arguments);
     projection.invert = project.invert && invert;
     return reset();
+  };
+}
+
+function d3_geo_projectionRadiansRotate(rotate, stream) {
+  return {
+    point: function(λ, φ) {
+      var p = rotate(λ * d3_radians, φ * d3_radians);
+      stream.point(p[0], p[1]);
+    },
+    sphere: function() { stream.sphere(); },
+    lineStart: function() { stream.lineStart(); },
+    lineEnd: function() { stream.lineEnd(); },
+    polygonStart: function() { stream.polygonStart(); },
+    polygonEnd: function() { stream.polygonEnd(); }
   };
 }

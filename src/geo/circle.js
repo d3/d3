@@ -50,8 +50,8 @@ function d3_geo_circleClip(degrees) {
 
   return d3_geo_clip(visible, clipLine, interpolate);
 
-  function visible(point) {
-    return Math.cos(point[1]) * Math.cos(point[0]) > cr;
+  function visible(λ, φ) {
+    return Math.cos(λ) * Math.cos(φ) > cr;
   }
 
   // TODO handle two invisible endpoints with visible intermediate segment.
@@ -63,15 +63,18 @@ function d3_geo_circleClip(degrees) {
   //      rejoined.
   function clipLine(listener) {
     var point0,
-        v0 = false,
-        v00 = false,
-        clean = 1; // no intersections
+        v0,
+        v00,
+        clean; // no intersections
     return {
-      lineStart: d3_noop,
+      lineStart: function() {
+        v00 = v0 = false;
+        clean = 1;
+      },
       point: function(λ, φ) {
         var point1 = [λ, φ],
             point2,
-            v = visible(point1);
+            v = visible(λ, φ);
         if (!point0 && (v00 = v0 = v)) listener.lineStart();
         // handle degeneracies
         if (v !== v0) {
@@ -79,7 +82,7 @@ function d3_geo_circleClip(degrees) {
           if (d3_geo_sphericalEqual(point0, point2) || d3_geo_sphericalEqual(point1, point2)) {
             point1[0] += ε;
             point1[1] += ε;
-            v = visible(point1);
+            v = visible(point1[0], point1[1]);
           }
         }
         if (v !== v0) {
@@ -97,20 +100,17 @@ function d3_geo_circleClip(degrees) {
           }
           point0 = point2;
         }
-        if (v && !d3_geo_sphericalEqual(point0, point1)) listener.point(point1[0], point1[1]);
+        if (v && (!point0 || !d3_geo_sphericalEqual(point0, point1))) listener.point(point1[0], point1[1]);
         point0 = point1;
       },
       lineEnd: function() {
         if (v0) listener.lineEnd();
-        // TODO should these be in lineStart?
-        v0 = v00 = false;
         point0 = null;
-        clean = 1;
-      }
+      },
+      // Rejoin first and last segments if there were intersections and the first
+      // and last points were visible.
+      clean: function() { return clean | ((v00 && v0) << 1); }
     };
-    // Rejoin first and last segments if there were intersections and the first
-    // and last points were visible.
-    //return clean + ((v00 && v) << 1);
   }
 
   // Intersects the great circle between a and b with the clip circle.

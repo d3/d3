@@ -8,6 +8,7 @@ d3.geo.path = function() {
       buffer = [];
 
   function path(object) {
+    if (object == null) return;
     var radius = typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius;
     d3.geo.stream(object, projection.stream(context == null
           ? new d3_geo_pathBuffer(buffer, radius)

@@ -25,7 +25,7 @@ var d3_geo_area = {
 };
 
 function d3_geo_areaRingStart() {
-  var λ00, φ00, λ1, λ0, φ0, cosφ0, sinφ0; // start point and two previous points
+  var λ00, φ00, λ1, φ1, λ0, φ0, cosφ0, sinφ0; // start point and two previous points
 
   // For the first point, …
   d3_geo_area.point = function(λ, φ) {
@@ -41,7 +41,7 @@ function d3_geo_areaRingStart() {
     if (Math.abs(Math.abs(φ0) - π / 2) < ε && Math.abs(Math.abs(φ) - π / 2) < ε) return;
     var cosφ = Math.cos(φ), sinφ = Math.sin(φ);
 
-    // If the previous point is at the south pole, something involving lunes…
+    // If the previous point is at the north pole, then compute lune area.
     if (Math.abs(φ0 - π / 2) < ε) d3_geo_areaRing += (λ - λ1) * 2;
 
     // TODO Explain this wonderous mathematics.

@@ -181,9 +181,6 @@ d3.layout.js: \
 d3.geo.js: \
 	src/geo/geo.js \
 	src/geo/stream.js \
-	src/geo/stream-radians.js \
-	src/geo/stream-rotate.js \
-	src/geo/stream-transform.js \
 	src/geo/spherical.js \
 	src/geo/cartesian.js \
 	src/geo/type.js \

@@ -57,7 +57,7 @@ function d3_geo_pathCentroidRingStart() {
 
   // For subsequent points, …
   function nextPoint(x, y) {
-    var dx = x - x0, dy = y - y0, z = y0 * x - x0 * y;
+    var z = y0 * x - x0 * y;
     d3_geo_centroidX += z * (x0 + x);
     d3_geo_centroidY += z * (y0 + y);
     d3_geo_centroidZ += z * 3;
