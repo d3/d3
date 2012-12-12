@@ -56,8 +56,8 @@ function d3_geo_clipPolygon(polygon, clipRing, interpolate) {
 
     // No intersections.
     if (x[0] & 1) {
-      visibleArea += d3_geo_areaRing((segment = ringSegments[0]).map(d3_geo_clipRotation));
-      result.push(segment);
+      result.push(segment = ringSegments[0]);
+      visibleArea += d3_geo_areaRing(segment.map(d3_geo_clipRotation));
       return [];
     }
 

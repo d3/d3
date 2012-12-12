@@ -5490,8 +5490,8 @@
         return [];
       }
       if (x[0] & 1) {
-        visibleArea += d3_geo_areaRing((segment = ringSegments[0]).map(d3_geo_clipRotation));
-        result.push(segment);
+        result.push(segment = ringSegments[0]);
+        visibleArea += d3_geo_areaRing(segment.map(d3_geo_clipRotation));
         return [];
       }
       if (n > 1 && x[0] & 2) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
@@ -5999,12 +5999,15 @@
     var x1, x0, y1, y0, dx = 22.5, dy = dx, x, y, precision = 2.5;
     function graticule() {
       return {
-        type: "GeometryCollection",
-        geometries: graticule.lines()
+        type: "MultiLineString",
+        coordinates: lines()
       };
     }
+    function lines() {
+      return d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(x).concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(y));
+    }
     graticule.lines = function() {
-      return d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(x).concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(y)).map(function(coordinates) {
+      return lines().map(function(coordinates) {
         return {
           type: "LineString",
           coordinates: coordinates
