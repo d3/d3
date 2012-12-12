@@ -1,15 +1,3 @@
-d3.geo.rotation = function(δλ, δφ, δγ) {
-  var rotate = d3_geo_rotation(δλ * d3_radians, δφ * d3_radians, δγ * d3_radians);
-
-  return d3_geo_type({
-    point: function(coordinates) {
-      coordinates = rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
-      coordinates[0] *= d3_degrees, coordinates[1] *= d3_degrees;
-      return coordinates;
-    }
-  });
-};
-
 // Note: |δλ| and |δφ| must be < 2π
 function d3_geo_rotation(δλ, δφ, δγ) {
   return δλ ? (δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ))
