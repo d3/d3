@@ -5333,6 +5333,79 @@
   d3.csv = d3_dsv(",", "text/csv");
   d3.tsv = d3_dsv("	", "text/tab-separated-values");
   d3.geo = {};
+  d3.geo.stream = function(object, listener) {
+    if (d3_geo_streamObjectType.hasOwnProperty(object.type)) {
+      d3_geo_streamObjectType[object.type](object, listener);
+    } else {
+      d3_geo_streamGeometry(object, listener);
+    }
+  };
+  function d3_geo_streamGeometry(geometry, listener) {
+    if (d3_geo_streamGeometryType.hasOwnProperty(geometry.type)) {
+      d3_geo_streamGeometryType[geometry.type](geometry, listener);
+    }
+  }
+  var d3_geo_streamObjectType = {
+    Feature: function(feature, listener) {
+      d3_geo_streamGeometry(feature.geometry, listener);
+    },
+    FeatureCollection: function(object, listener) {
+      var features = object.features, i = -1, n = features.length;
+      while (++i < n) d3_geo_streamGeometry(features[i].geometry, listener);
+    },
+    GeometryCollection: function(object, listener) {
+      var geometries = object.geometries, i = -1, n = geometries.length;
+      while (++i < n) d3_geo_streamGeometry(geometries[i], listener);
+    }
+  };
+  var d3_geo_streamGeometryType = {
+    Sphere: function(object, listener) {
+      listener.sphere();
+    },
+    Point: function(object, listener) {
+      var coordinate = object.coordinates;
+      listener.point(coordinate[0], coordinate[1]);
+    },
+    MultiPoint: function(object, listener) {
+      var coordinates = object.coordinates, i = -1, n = coordinates.length, coordinate;
+      while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
+    },
+    LineString: function(object, listener) {
+      d3_geo_streamLine(object.coordinates, listener);
+    },
+    MultiLineString: function(object, listener) {
+      var coordinates = object.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) d3_geo_streamLine(coordinates[i], listener);
+    },
+    Polygon: function(object, listener) {
+      d3_geo_streamPolygon(object.coordinates, listener);
+    },
+    MultiPolygon: function(object, listener) {
+      var coordinates = object.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) d3_geo_streamPolygon(coordinates[i], listener);
+    }
+  };
+  function d3_geo_streamLine(coordinates, listener) {
+    var i = -1, n = coordinates.length, coordinate;
+    listener.lineStart();
+    while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
+    listener.lineEnd();
+  }
+  function d3_geo_streamPolygon(coordinates, listener) {
+    var i = -1, n = coordinates.length;
+    listener.polygonStart();
+    while (++i < n) d3_geo_streamLine(coordinates[i], listener);
+    listener.polygonEnd();
+  }
+  var d3_geo_streamListener = d3.geo.streamListener = function() {};
+  d3_geo_streamListener.prototype = {
+    sphere: d3_noop,
+    point: d3_noop,
+    lineStart: d3_noop,
+    lineEnd: d3_noop,
+    polygonStart: d3_noop,
+    polygonEnd: d3_noop
+  };
   function d3_geo_spherical(cartesian) {
     return [ Math.atan2(cartesian[1], cartesian[0]), Math.asin(Math.max(-1, Math.min(1, cartesian[2]))) ];
   }
