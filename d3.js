@@ -14,7 +14,7 @@
   d3 = {
     version: "3.0.0pre"
   };
-  var π = Math.PI, ε = 1e-6, ε2 = ε * ε, εε = .001, d3_radians = π / 180, d3_degrees = 180 / π;
+  var π = Math.PI, ε = 1e-6, ε2 = ε * ε, d3_radians = π / 180, d3_degrees = 180 / π;
   function d3_zero() {
     return 0;
   }
@@ -5668,34 +5668,29 @@
     }
     function resampleLine(coordinates) {
       if (!(n = coordinates.length)) return coordinates;
-      var n, i = 0, p = coordinates[0], λ, φ, λ0, line = [ p = projectPoint(λ0 = p[0], φ = p[1]) ], sinφ0 = Math.sin(φ), cosφ0 = Math.cos(φ), x0 = p[0], y0 = p[1];
+      var n, i = 0, p = coordinates[0], λ, φ, λ0, cartesian = d3_geo_cartesian(p), line = [ p = projectPoint(λ0 = p[0], φ = p[1]) ], x0 = p[0], y0 = p[1], a0 = cartesian[0], b0 = cartesian[1], c0 = cartesian[2];
       while (++i < n) {
         p = coordinates[i];
+        cartesian = d3_geo_cartesian(p);
         p = projectPoint(λ = p[0], φ = p[1]);
-        resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x0 = p[0], y0 = p[1], λ0 = λ, sinφ0 = Math.sin(φ), cosφ0 = Math.cos(φ), maxDepth, line);
+        resampleLineTo(x0, y0, λ0, a0, b0, c0, x0 = p[0], y0 = p[1], λ0 = λ, a0 = cartesian[0], b0 = cartesian[1], c0 = cartesian[2], maxDepth, line);
         line.push([ x0, y0 ]);
       }
       return line;
     }
     function resamplePolygon(coordinates) {
-      var n = coordinates.length, i = -1, polygon = [], ring, resampled, l, m, p;
-      while (++i < n) {
-        polygon.push(resampled = resampleLine(ring = coordinates[i]));
-        m = ring.length - 1;
-        l = resampled.length - 1;
-        resampleLineTo((p = ring[0])[0], p[1], (p = resampled[0])[0], Math.sin(p[1]), Math.cos(p[1]), (p = ring[m])[0], p[1], (p = resampled[l])[0], Math.sin(p[1]), Math.cos(p[1]), maxDepth, ring);
-      }
-      return polygon;
+      return coordinates.map(resampleLine);
     }
-    function resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x1, y1, λ1, sinφ1, cosφ1, depth, line) {
+    function resampleLineTo(x0, y0, λ0, a0, b0, c0, x1, y1, λ1, a1, b1, c1, depth, line) {
       var dx = x1 - x0, dy = y1 - y0, distance2 = dx * dx + dy * dy;
       if (distance2 > 4 * δ2 && depth--) {
-        var cosΩ = sinφ0 * sinφ1 + cosφ0 * cosφ1 * Math.cos(λ1 - λ0), k = 1 / (Math.SQRT2 * Math.sqrt(1 + cosΩ)), x = k * (cosφ0 * Math.cos(λ0) + cosφ1 * Math.cos(λ1)), y = k * (cosφ0 * Math.sin(λ0) + cosφ1 * Math.sin(λ1)), z = Math.max(-1, Math.min(1, k * (sinφ0 + sinφ1))), φ2 = Math.asin(z), zε = Math.abs(Math.abs(z) - 1), λ2 = zε < ε || zε < εε && (Math.abs(cosφ0) < εε || Math.abs(cosφ1) < εε) ? (λ0 + λ1) / 2 : Math.atan2(y, x), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x0 - x2, dy2 = y0 - y2, dz = dx * dy2 - dy * dx2;
+        var a = a0 + a1, b = b0 + b1, c = c0 + c1, m = Math.sqrt(a * a + b * b + c * c), φ2 = Math.asin(c /= m), λ2 = Math.abs(Math.abs(c) - 1) < ε ? (λ0 + λ1) / 2 : Math.atan2(b, a), p = projectPoint(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x0 - x2, dy2 = y0 - y2, dz = dx * dy2 - dy * dx2;
         if (dz * dz / distance2 > δ2) {
-          var cosφ2 = Math.cos(φ2);
-          resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, x2, y2, λ2, z, cosφ2, depth, line);
+          a /= m;
+          b /= m;
+          resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a, b, c, depth, line);
           line.push([ x2, y2 ]);
-          resampleLineTo(x2, y2, λ2, z, cosφ2, x1, y1, λ1, sinφ1, cosφ1, depth, line);
+          resampleLineTo(x2, y2, λ2, a, b, c, x1, y1, λ1, a1, b1, c1, depth, line);
         }
       }
     }
