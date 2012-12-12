@@ -20,7 +20,7 @@ var d3_geo_area = {
   },
   polygonEnd: function() {
     d3_geo_areaSum += d3_geo_areaRing < 0 ? 4 * π + d3_geo_areaRing : d3_geo_areaRing;
-    d3_geo_area.point = d3_geo_area.lineStart = d3_noop;
+    d3_geo_area.lineStart = d3_geo_area.point = d3_noop;
   }
 };
 
@@ -29,8 +29,8 @@ function d3_geo_areaRingStart() {
 
   // For the first point, …
   d3_geo_area.point = function(λ, φ) {
-    λ00 = λ0 = λ * d3_radians, φ00 = φ0 = φ * d3_radians, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0);
     d3_geo_area.point = nextPoint;
+    λ00 = λ0 = λ * d3_radians, φ00 = φ0 = φ * d3_radians, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0);
   };
 
   // For subsequent points, …

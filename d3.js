@@ -6331,34 +6331,11 @@
       buffer = [];
       return result;
     }
-    path.area = d3_geo_type({
-      Feature: function(feature) {
-        return areaType.geometry(feature.geometry);
-      },
-      FeatureCollection: function(collection) {
-        return d3.sum(collection.features, areaType.Feature);
-      },
-      GeometryCollection: function(collection) {
-        return d3.sum(collection.geometries, areaType.geometry);
-      },
-      LineString: d3_zero,
-      MultiLineString: d3_zero,
-      MultiPoint: d3_zero,
-      MultiPolygon: objectArea,
-      Point: d3_zero,
-      Polygon: objectArea,
-      Sphere: objectArea
-    });
-    function objectArea(o) {
-      o = projection.object(o);
-      return o ? o.type === "Polygon" ? polygonArea(o.coordinates) : d3.sum(o.coordinates, polygonArea) : 0;
-    }
-    function polygonArea(polygon) {
-      return Math.abs(d3.sum(polygon, ringArea));
-    }
-    function ringArea(ring) {
-      return d3.geom.polygon(ring).area();
-    }
+    path.area = function(object) {
+      d3_geo_areaSum = 0;
+      d3.geo.stream(object, projection.stream(d3_geo_pathArea));
+      return d3_geo_areaSum;
+    };
     path.bounds = function(object) {
       return d3_geo_bounds(projection)(object);
     };
@@ -6449,6 +6426,35 @@
   function d3_geo_pathCircle(radius) {
     return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
   }
+  var d3_geo_pathExterior;
+  var d3_geo_pathArea = {
+    point: d3_noop,
+    lineStart: d3_noop,
+    lineEnd: d3_noop,
+    polygonStart: function() {
+      d3_geo_pathExterior = true;
+      d3_geo_pathArea.lineStart = d3_geo_pathAreaRingStart;
+      d3_geo_pathArea.lineEnd = d3_geo_pathAreaRingEnd;
+    },
+    polygonEnd: function() {
+      d3_geo_pathArea.lineStart = d3_geo_pathArea.lineEnd = d3_geo_pathArea.point = d3_noop;
+    }
+  };
+  function d3_geo_pathAreaRingStart() {
+    var x0, y0;
+    d3_geo_pathArea.point = function(x, y) {
+      d3_geo_pathArea.point = nextPoint;
+      x0 = x, y0 = y;
+    };
+    function nextPoint(x, y) {
+      d3_geo_areaRing += y0 * x - x0 * y;
+      x0 = x, y0 = y;
+    }
+  }
+  function d3_geo_pathAreaRingEnd() {
+    d3_geo_areaSum += Math.abs(d3_geo_areaRing) / (d3_geo_pathExterior ? 2 : -2);
+    d3_geo_pathExterior = false;
+  }
   d3.geo.area = function(object) {
     d3_geo_areaSum = 0;
     d3.geo.stream(object, d3_geo_area);
@@ -6468,14 +6474,14 @@
     },
     polygonEnd: function() {
       d3_geo_areaSum += d3_geo_areaRing < 0 ? 4 * π + d3_geo_areaRing : d3_geo_areaRing;
-      d3_geo_area.point = d3_geo_area.lineStart = d3_noop;
+      d3_geo_area.lineStart = d3_geo_area.point = d3_noop;
     }
   };
   function d3_geo_areaRingStart() {
     var λ00, φ00, λ0, φ0, cosφ0, sinφ0;
     d3_geo_area.point = function(λ, φ) {
-      λ00 = λ0 = λ * d3_radians, φ00 = φ0 = φ * d3_radians, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0);
       d3_geo_area.point = nextPoint;
+      λ00 = λ0 = λ * d3_radians, φ00 = φ0 = φ * d3_radians, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0);
     };
     function nextPoint(λ, φ) {
       λ *= d3_radians, φ *= d3_radians;
