@@ -1,8 +1,8 @@
-d3.geo.bounds = d3_geo_bounds(d3_identity);
+d3.geo.bounds = d3_geo_bounds();
 
 function d3_geo_bounds(projection) {
   var x0, y0, x1, y1, bound = {
-    point: boundPoint,
+    point: projection ? boundProjectedPoint : boundPoint,
     lineStart: d3_noop,
     lineEnd: d3_noop,
 
@@ -11,9 +11,12 @@ function d3_geo_bounds(projection) {
     polygonEnd: function() { bound.point = boundPoint; }
   };
 
-  function boundPoint(x, y) {
+  function boundProjectedPoint(x, y) {
     var p = projection([x, y]);
-    x = p[0], y = p[1];
+    boundPoint(p[0], p[1]);
+  }
+
+  function boundPoint(x, y) {
     if (x < x0) x0 = x;
     if (x > x1) x1 = x;
     if (y < y0) y0 = y;
