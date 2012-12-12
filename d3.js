@@ -6343,8 +6343,8 @@
       } else {
         cosdλ = Math.cos(dλ = λ - λ0);
         d = Math.atan2(Math.sqrt((d = cosφ * Math.sin(λ - λ0)) * d + (d = cosφ0 * sinφ - sinφ0 * cosφ * cosdλ) * d), sinφ0 * sinφ + cosφ0 * cosφ * cosdλ);
-        s = (d + π + φ0 + φ) / 2;
-        area += (dλ < 0 && dλ > -π || dλ > π ? -4 : 4) * Math.atan(Math.sqrt(Math.abs(Math.tan(s / 2) * Math.tan((s - d) / 2) * Math.tan((s - π / 2 - φ0) / 2) * Math.tan((s - π / 2 - φ) / 2))));
+        s = (d + π + φ0 + φ) / 4;
+        area += (dλ < 0 && dλ > -π || dλ > π ? -4 : 4) * Math.atan(Math.sqrt(Math.abs(Math.tan(s) * Math.tan(s - d / 2) * Math.tan(s - π / 4 - φ0 / 2) * Math.tan(s - π / 4 - φ / 2))));
       }
       λ00 = λ0, φ00 = φ0;
       λ0 = λ, φ0 = φ;
