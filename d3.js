@@ -6307,26 +6307,28 @@
     }
     var resample = d3_geo_type({
       Point: function(o) {
-        return o.coordinates = resamplePoint(o.coordinates), o;
+        o.coordinates = resamplePoint(o.coordinates);
       },
       MultiPoint: function(o) {
-        return o.coordinates = o.coordinates.map(resamplePoint), o;
+        o.coordinates = o.coordinates.map(resamplePoint);
       },
       LineString: function(o) {
-        return o.coordinates = resampleLine(o.coordinates), o;
+        o.coordinates = resampleLine(o.coordinates);
       },
       MultiLineString: function(o) {
-        return o.coordinates = o.coordinates.map(resampleLine), o;
+        o.coordinates = o.coordinates.map(resampleLine);
       },
       Polygon: function(o) {
-        return o.coordinates = resamplePolygon(o.coordinates), o;
+        o.coordinates = resamplePolygon(o.coordinates);
       },
       MultiPolygon: function(o) {
-        return o.coordinates = o.coordinates.map(resamplePolygon), o;
+        o.coordinates = o.coordinates.map(resamplePolygon);
       }
     });
     projection.object = function(object) {
-      return resample(clip(rotation(object)));
+      object = clip(rotation(object));
+      resample(object);
+      return object;
     };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;

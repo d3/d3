@@ -1,3 +1,5 @@
+// TOOD only create new objects when necessary
+// TODO only convert Single to Multi when necessary
 function d3_geo_clip(clipPoint, clipLine, interpolate) {
   return d3_geo_type({
     point: clipPoint,
@@ -135,7 +137,6 @@ function d3_geo_clipRotationInvisible(point) {
     Math.asin(Math.max(-1, Math.min(1, -Math.cos(λ) * cosφ)))
   ];
 }
-
 
 function d3_geo_clipLinkCircular(array) {
   if (!(n = array.length)) return;
