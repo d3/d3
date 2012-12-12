@@ -6305,28 +6305,28 @@
       coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
       return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
     }
-    var resampleType = d3_geo_type({
+    var resample = d3_geo_type({
       Point: function(o) {
-        return o.coordinates = resample.point(o.coordinates), o;
+        return o.coordinates = resamplePoint(o.coordinates), o;
       },
       MultiPoint: function(o) {
-        return o.coordinates = o.coordinates.map(resample.point), o;
+        return o.coordinates = o.coordinates.map(resamplePoint), o;
       },
       LineString: function(o) {
-        return o.coordinates = resample.line(o.coordinates), o;
+        return o.coordinates = resampleLine(o.coordinates), o;
       },
       MultiLineString: function(o) {
-        return o.coordinates = o.coordinates.map(resample.line), o;
+        return o.coordinates = o.coordinates.map(resampleLine), o;
       },
       Polygon: function(o) {
-        return o.coordinates = resample.polygon(o.coordinates), o;
+        return o.coordinates = resamplePolygon(o.coordinates), o;
       },
       MultiPolygon: function(o) {
-        return o.coordinates = o.coordinates.map(resample.polygon), o;
+        return o.coordinates = o.coordinates.map(resamplePolygon), o;
       }
     });
     projection.object = function(object) {
-      return resampleType(clip(rotation(object)));
+      return resample(clip(rotation(object)));
     };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;
@@ -6380,14 +6380,10 @@
       return projection;
     }
     var λ00, φ00, λ0, sinφ0, cosφ0, x0, y0, δ2 = .5, maxDepth = 16;
-    var resample = {
-      point: function(point) {
-        return projectPoint(point[0], point[1]);
-      },
-      line: line,
-      polygon: polygon
-    };
-    function line(coordinates) {
+    function resamplePoint(point) {
+      return projectPoint(point[0], point[1]);
+    }
+    function resampleLine(coordinates) {
       if (!(n = coordinates.length)) return coordinates;
       var n, i = 0, p = coordinates[0], λ, φ, line;
       line = [ p = projectPoint(λ00 = λ0 = p[0], φ00 = φ = p[1]) ];
@@ -6403,10 +6399,10 @@
       }
       return line;
     }
-    function polygon(coordinates) {
+    function resamplePolygon(coordinates) {
       var n = coordinates.length, i = -1, polygon = [], ring, p;
       while (++i < n) {
-        polygon.push(ring = line(coordinates[i]));
+        polygon.push(ring = resampleLine(coordinates[i]));
         p = projectPoint(λ00, φ00);
         resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, p[0], p[1], λ00, Math.sin(φ00), Math.cos(φ00), maxDepth, ring);
       }

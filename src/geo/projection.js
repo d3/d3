@@ -34,29 +34,29 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   // TODO extract
-  var resampleType = d3_geo_type({
+  var resample = d3_geo_type({
     Point: function(o) {
-      return (o.coordinates = resample.point(o.coordinates), o);
+      return (o.coordinates = resamplePoint(o.coordinates), o);
     },
     MultiPoint: function(o) {
-      return (o.coordinates = o.coordinates.map(resample.point), o);
+      return (o.coordinates = o.coordinates.map(resamplePoint), o);
     },
     LineString: function(o) {
-      return (o.coordinates = resample.line(o.coordinates), o);
+      return (o.coordinates = resampleLine(o.coordinates), o);
     },
     MultiLineString: function(o) {
-      return (o.coordinates = o.coordinates.map(resample.line), o);
+      return (o.coordinates = o.coordinates.map(resampleLine), o);
     },
     Polygon: function(o) {
-      return (o.coordinates = resample.polygon(o.coordinates), o);
+      return (o.coordinates = resamplePolygon(o.coordinates), o);
     },
     MultiPolygon: function(o) {
-      return (o.coordinates = o.coordinates.map(resample.polygon), o);
+      return (o.coordinates = o.coordinates.map(resamplePolygon), o);
     }
   });
 
   projection.object = function(object) {
-    return resampleType(clip(rotation(object)));
+    return resample(clip(rotation(object)));
   };
 
   projection.clipAngle = function(_) {
@@ -133,13 +133,11 @@ function d3_geo_projectionMutator(projectAt) {
       δ2 = .5, // (precision in px)².
       maxDepth = 16;
 
-  var resample = {
-    point: function(point) { return projectPoint(point[0], point[1]); },
-    line: line,
-    polygon: polygon
-  };
+  function resamplePoint(point) {
+    return projectPoint(point[0], point[1]);
+  }
 
-  function line(coordinates) {
+  function resampleLine(coordinates) {
     if (!(n = coordinates.length)) return coordinates;
     var n,
         i = 0,
@@ -163,14 +161,14 @@ function d3_geo_projectionMutator(projectAt) {
     return line;
   }
 
-  function polygon(coordinates) {
+  function resamplePolygon(coordinates) {
     var n = coordinates.length,
         i = -1,
         polygon = [],
         ring,
         p;
     while (++i < n) {
-      polygon.push(ring = line(coordinates[i]));
+      polygon.push(ring = resampleLine(coordinates[i]));
       p = projectPoint(λ00, φ00);
       resampleLineTo(x0, y0, λ0, sinφ0, cosφ0, p[0], p[1], λ00, Math.sin(φ00), Math.cos(φ00), maxDepth, ring);
     }
