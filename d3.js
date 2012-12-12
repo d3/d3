@@ -6144,7 +6144,7 @@
         var n = coordinates.length, i = -1, m, j, ring, point;
         while (++i < n) {
           ring = coordinates[i];
-          if (!(m = ring.length - 1)) continue;
+          if ((m = ring.length - 1) < 1) continue;
           point = ring[0];
           context.moveTo(point[0], point[1]);
           for (j = 0; ++j < m; ) {

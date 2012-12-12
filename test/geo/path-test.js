@@ -93,6 +93,7 @@ suite.addBatch({
       assert.isNull(path(undefined));
       assert.isNull(path());
     },
+
     "bogus type name": function(path) {
       assert.isNull(path({
         type: "Feature",
