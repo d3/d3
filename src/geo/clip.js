@@ -1,49 +1,56 @@
-// TOOD only create new objects when necessary
-// TODO only convert Single to Multi when necessary
-function d3_geo_clip(clipPoint, clipLine, interpolate) {
-  return d3_geo_type({
-    point: clipPoint,
-    LineString: function(o) {
-      return {type: "MultiLineString", coordinates: clipLine(o.coordinates)[1]};
-    },
-    MultiLineString: function(o) {
-      return {type: "MultiLineString", coordinates: d3.merge(o.coordinates.map(function(line) {
-        return clipLine(line)[1];
-      }))};
-    },
-    Polygon: function(o) {
-      return {type: "MultiPolygon", coordinates: d3_geo_clipPolygon(o.coordinates, clipLine, interpolate)};
-    },
-    MultiPolygon: function(o) {
-      return {type: "MultiPolygon", coordinates: d3.merge(o.coordinates.map(function(polygon) {
-        return d3_geo_clipPolygon(polygon, clipLine, interpolate);
-      }))};
-    },
-    Sphere: function() {
-      return {type: "Polygon", coordinates: [interpolate(null, null, 1)]};
-    }
-  });
-}
+function d3_geo_clip(pointVisible, clipLine, interpolate) {
+  return function(listener) {
+    var line = clipLine(listener);
 
-// General spherical polygon clipping algorithm: takes a polygon, cuts it into
-// visible line segments and rejoins the segments by interpolating along the
-// clip edge.  If there are no intersections with the clip edge, the whole clip
-// edge is inserted if appropriate.
-//
-// This is used by both d3_geo_circleClip and d3_geo_cut, each providing
-// different functions for clipRing and interpolate.
-function d3_geo_clipPolygon(polygon, clipRing, interpolate) {
+    var clip = {
+      point: point,
+      lineStart: lineStart,
+      lineEnd: lineEnd,
+      polygonStart: function() {
+        // TODO
+        clip.point = pointPolygon;
+        clip.lineStart = linePolygon; 
+        clip.lineEnd = d3_noop;
+      },
+      polygonEnd: function() {
+        return;
+        // TODO
+        clip.point = point;
+        clip.lineStart = lineStart;
+        clip.lineEnd = lineEnd;
+        d3_geo_clipPolygon(polygon, clipLine, interpolate, listener);
+        polygon = [];
+        ring = null;
+      },
+      sphere: function() {
+        listener.polygonStart();
+        listener.lineStart();
+        interpolate(null, null, 1, listener);
+        listener.lineEnd();
+        listener.polygonEnd();
+      }
+    };
+
+    return clip;
+
+    function point(λ, φ) { if (pointVisible(λ, φ)) listener.point(λ, φ); }
+    function pointLine(λ, φ) { line.point(λ, φ); }
+    function pointPolygon(λ, φ) { ring.push([λ, φ]); }
+    function lineStart() { clip.point = pointLine; line.lineStart(); }
+    function lineEnd() { clip.point = point; line.lineEnd(); }
+    function linePolygon() { polygon.push(ring = []); }
+  };
+
+  // For each polygon…
   var subject = [],
       clip = [],
       segments = [],
       visibleArea = 0,
       invisibleArea = 0,
-      invisible = false,
-      result = [],
-      polygons = [result];
+      invisible = false;
 
   var segments = d3.merge(polygon.map(function(ring) {
-    var x = clipRing(ring),
+    var x = clipRing(ring, bufferListener),
         ringSegments = x[1],
         segment,
         n = ringSegments.length;
@@ -56,8 +63,14 @@ function d3_geo_clipPolygon(polygon, clipRing, interpolate) {
 
     // No intersections.
     if (x[0] & 1) {
-      result.push(segment = ringSegments[0]);
+      segment = ringSegments[0];
       visibleArea += d3_geo_areaRing(segment.map(d3_geo_clipRotation));
+      var n = segment.length - 1,
+          i = -1,
+          point;
+      listener.lineStart();
+      while (++i < n) listener.point((point = segment[i])[0], point[1]);
+      listener.lineEnd();
       return [];
     }
 
@@ -68,7 +81,7 @@ function d3_geo_clipPolygon(polygon, clipRing, interpolate) {
   }));
 
   if (!segments.length && (visibleArea < -ε2 || invisible && invisibleArea < -ε2)) {
-    result.push(interpolate(null, null, 1));
+    interpolate(null, null, 1, listener);
   }
   segments.forEach(function(segment) {
     var n = segment.length;
@@ -89,32 +102,50 @@ function d3_geo_clipPolygon(polygon, clipRing, interpolate) {
   clip.sort(d3_geo_clipSort);
   d3_geo_clipLinkCircular(subject);
   d3_geo_clipLinkCircular(clip);
-  if (!subject.length) return polygons;
+  if (!subject.length) return;
   var start = subject[0],
       current,
-      points,
-      ring;
+      points;
   while (1) {
     // Find first unvisited intersection.
     current = start;
-    while (current.visited) if ((current = current.next) === start) return polygons;
+    while (current.visited) if ((current = current.next) === start) return listener.polygonEnd();
     points = current.points;
-    ring = [[points.shift()]];
+    listener.lineStart();
     do {
       current.visited = current.other.visited = true;
       if (current.entry) {
-        ring.push(current.subject ? points : interpolate(current.point, current.next.point, 1));
+        if (current.subject) {
+          for (var i = 0; i < points.length; i++) listener.point((point = points[i])[0], point[1]);
+        } else {
+          interpolate(current.point, current.next.point, 1, listener);
+        }
         current = current.next;
       } else {
-        ring.push(current.subject ? (points = current.prev.points).reverse() : interpolate(current.point, current.prev.point, -1));
+        if (current.subject) {
+          points = current.prev.points;
+          for (var i = points.length; --i >= 0;) listener.point((point = points[i])[0], point[1]);
+        } else {
+          interpolate(current.point, current.prev.point, -1, listener);
+        }
         current = current.prev;
       }
       current = current.other;
       points = current.points;
     } while (!current.visited);
-    result.push(d3.merge(ring));
+    listener.lineEnd();
   }
-  return polygons;
+  listener.polygonEnd();
+}
+
+// General spherical polygon clipping algorithm: takes a polygon, cuts it into
+// visible line segments and rejoins the segments by interpolating along the
+// clip edge.  If there are no intersections with the clip edge, the whole clip
+// edge is inserted if appropriate.
+//
+// This is used by both d3_geo_circleClip and d3_geo_cut, each providing
+// different functions for clipRing and interpolate.
+function d3_geo_clipPolygon(polygon, clipRing, interpolate, listener) {
 }
 
 function d3_geo_clipRotation(point) {

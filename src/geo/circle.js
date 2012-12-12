@@ -8,12 +8,13 @@ d3.geo.circle = function() {
   function circle() {
     var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
     rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-    var ring = interpolate(null, null, 1).map(function(point) {
-      point = rotate.invert(point[0], point[1]);
+    var ring = [];
+    interpolate(null, null, 1, {point: function(λ, φ) {
+      var point = rotate.invert(λ, φ);
       point[0] *= d3_degrees;
       point[1] *= d3_degrees;
-      return point;
-    });
+      ring.push(point);
+    }});
     return {
       type: "Polygon",
       coordinates: [ring]
@@ -47,7 +48,7 @@ function d3_geo_circleClip(degrees) {
       cr = Math.cos(radians),
       interpolate = d3_geo_circleInterpolate(radians, 6 * d3_radians);
 
-  return d3_geo_clip(function(point) { return visible(point) && point; }, clipLine, interpolate);
+  return d3_geo_clip(visible, clipLine, interpolate);
 
   function visible(point) {
     return Math.cos(point[1]) * Math.cos(point[0]) > cr;
@@ -60,48 +61,56 @@ function d3_geo_circleClip(degrees) {
   //   1: no intersections.
   //   2: there were intersections, and the first and last segments should be
   //      rejoined.
-  function clipLine(coordinates) {
-    if (!(n = coordinates.length)) return [0, []];
-    var point0 = coordinates[0],
-        point1,
-        point2,
-        v0 = visible(point0),
-        v00 = v0,
-        v,
-        n,
-        clean = 1, // no intersections
-        line,
-        lines = [];
-    if (v0) lines.push(line = [point0]);
-    for (var i = 1; i < n; i++) {
-      point1 = coordinates[i];
-      v = visible(point1);
-      // handle degeneracies
-      if (v !== v0) {
-        point2 = intersect(point0, point1);
-        if (d3_geo_sphericalEqual(point0, point2) || d3_geo_sphericalEqual(point1, point2)) {
-          point1[0] += ε;
-          point1[1] += ε;
-          v = visible(point1);
+  function clipLine(listener) {
+    var point0,
+        v0 = false,
+        v00 = false,
+        clean = 1; // no intersections
+    return {
+      lineStart: d3_noop,
+      point: function(λ, φ) {
+        var point1 = [λ, φ],
+            point2,
+            v = visible(point1);
+        if (!point0 && (v00 = v0 = v)) listener.lineStart();
+        // handle degeneracies
+        if (v !== v0) {
+          point2 = intersect(point0, point1);
+          if (d3_geo_sphericalEqual(point0, point2) || d3_geo_sphericalEqual(point1, point2)) {
+            point1[0] += ε;
+            point1[1] += ε;
+            v = visible(point1);
+          }
         }
-      }
-      if (v !== v0) {
-        clean = 0;
-        if (v0 = v) {
-          // outside going in
-          lines.push(line = [point2 = intersect(point1, point0)]);
-        } else {
-          // inside going out
-          line.push(point2 = intersect(point0, point1));
+        if (v !== v0) {
+          clean = 0;
+          if (v0 = v) {
+            // outside going in
+            listener.lineStart();
+            point2 = intersect(point1, point0);
+            listener.point(point2[0], point2[1]);
+          } else {
+            // inside going out
+            point2 = intersect(point0, point1);
+            listener.point(point2[0], point2[1]);
+            listener.lineEnd();
+          }
+          point0 = point2;
         }
-        point0 = point2;
+        if (v && !d3_geo_sphericalEqual(point0, point1)) listener.point(point1[0], point1[1]);
+        point0 = point1;
+      },
+      lineEnd: function() {
+        if (v0) listener.lineEnd();
+        // TODO should these be in lineStart?
+        v0 = v00 = false;
+        point0 = null;
+        clean = 1;
       }
-      if (v && !d3_geo_sphericalEqual(point0, point1)) line.push(point1);
-      point0 = point1;
-    }
+    };
     // Rejoin first and last segments if there were intersections and the first
     // and last points were visible.
-    return [clean + ((v00 && v) << 1), lines];
+    //return clean + ((v00 && v) << 1);
   }
 
   // Intersects the great circle between a and b with the clip circle.
@@ -140,7 +149,7 @@ function d3_geo_circleClip(degrees) {
 function d3_geo_circleInterpolate(radians, precision) {
   var cr = Math.cos(radians),
       sr = Math.sin(radians);
-  return function(from, to, direction) {
+  return function(from, to, direction, listener) {
     if (from != null) {
       from = d3_geo_circleAngle(cr, from);
       to = d3_geo_circleAngle(cr, to);
@@ -149,15 +158,14 @@ function d3_geo_circleInterpolate(radians, precision) {
       from = radians + direction * 2 * π;
       to = radians;
     }
-    var points = [];
+    var point;
     for (var step = direction * precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
-      points.push(d3_geo_spherical([
+      listener.point((point = d3_geo_spherical([
         cr,
         -sr * Math.cos(t),
         -sr * Math.sin(t)
-      ]));
+      ]))[0], point[1]);
     }
-    return points;
   };
 }
 

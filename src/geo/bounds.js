@@ -29,7 +29,7 @@ function d3_geo_bounds(projection) {
 
   return function(feature) {
     y1 = x1 = -(x0 = y0 = Infinity);
-    d3.geo.stream(feature, bound); // TODO projection.stream(bound)
+    d3.geo.stream(feature, projection ? projection.stream(bound) : bound);
     return [[x0, y0], [x1, y1]];
   };
 }

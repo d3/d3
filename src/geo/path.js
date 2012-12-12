@@ -5,64 +5,18 @@ d3.geo.path = function() {
       pointCircle = d3_geo_pathCircle(pointRadius),
       projection = d3.geo.albersUsa(),
       bounds,
-      buffer = [],
-      context;
+      context,
+      buffer = [];
 
   function path(object) {
-    var result = null;
-    if (object != result) {
-      if (typeof pointRadius === "function") pointCircle = d3_geo_pathCircle(pointRadius.apply(this, arguments));
-      object = projection.object(object);
-      if (object) (context ? contextType : pathType)(object);
-      if (buffer.length) result = buffer.join(""), buffer = [];
-    }
+    var radius = typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius;
+    d3.geo.stream(object, projection.stream(context != null
+        ? new d3_geo_streamContext(context, radius)
+        : new d3_geo_streamBuffer(buffer, radius)));
+    var result = buffer.join("");
+    buffer = [];
     return result;
   }
-
-  var contextType = d3_geo_type({
-    point: function(coordinates) {
-      context.point(coordinates[0], coordinates[1]);
-    },
-    line: function(coordinates) {
-      if (!(n = coordinates.length)) return;
-      var n,
-          i = 0,
-          point = coordinates[0];
-      context.moveTo(point[0], point[1]);
-      while (++i < n) context.lineTo((point = coordinates[i])[0], point[1]);
-    },
-    polygon: function(coordinates) {
-      var n = coordinates.length,
-          i = -1,
-          m,
-          j,
-          ring,
-          point;
-      while (++i < n) {
-        ring = coordinates[i];
-        if ((m = ring.length - 1) < 1) continue;
-        point = ring[0];
-        context.moveTo(point[0], point[1]);
-        for (j = 0; ++j < m;) {
-          context.lineTo((point = ring[j])[0], point[1]);
-        }
-        context.closePath();
-      }
-    }
-  });
-
-  var pathType = d3_geo_type({
-    point: function(coordinates) {
-      buffer.push("M", coordinates, pointCircle);
-    },
-    line: function(coordinates) {
-      buffer.push("M", coordinates.join("L"));
-    },
-    polygon: function(coordinates) {
-      var i = -1, n = coordinates.length;
-      while (++i < n) this.line(coordinates[i]), buffer.push("Z");
-    }
-  });
 
   path.area = d3_geo_type({
     Feature: function(feature) { return areaType.geometry(feature.geometry); },

@@ -3,26 +3,40 @@ function d3_geo_resample(projectPoint) {
       maxDepth = 16;
 
   // TODO rename: this is not just resampling, it also projects and transforms!
-  var resample = d3_geo_type({
-    Point: function(o) {
-      o.coordinates = resamplePoint(o.coordinates);
-    },
-    MultiPoint: function(o) {
-      o.coordinates = o.coordinates.map(resamplePoint);
-    },
-    LineString: function(o) {
-      o.coordinates = resampleLine(o.coordinates);
-    },
-    MultiLineString: function(o) {
-      o.coordinates = o.coordinates.map(resampleLine);
-    },
-    Polygon: function(o) {
-      o.coordinates = resamplePolygon(o.coordinates);
-    },
-    MultiPolygon: function(o) {
-      o.coordinates = o.coordinates.map(resamplePolygon);
+  function resample(listener) {
+    var resample = {
+      point: resamplePoint,
+      lineStart: function() { x0 = NaN; resample.point = resamplePointLine; listener.lineStart(); },
+      lineEnd: function() { resample.point = resamplePoint; listener.lineEnd(); },
+      polygonStart: d3_noop,
+      polygonEnd: d3_noop
+    };
+
+    // TODO rename: this is not just resampling, it also projects and transforms!
+    function resamplePoint(λ, φ) {
+      var point = projectPoint(λ, φ);
+      listener.point(point[0], point[1]);
     }
-  });
+
+    var λ0,
+        x0,
+        y0,
+        a0,
+        b0,
+        c0;
+
+    // TODO rename: this is not just resampling, it also projects and transforms!
+    function resamplePointLine(λ, φ) {
+      var cartesian = d3_geo_cartesian([λ, φ]),
+          p = projectPoint(λ, φ);
+      resampleLineTo(x0, y0, λ0, a0, b0, c0,
+                     x0 = p[0], y0 = p[1], λ0 = λ, a0 = cartesian[0], b0 = cartesian[1], c0 = cartesian[2],
+                     maxDepth, listener);
+      listener.point(x0, y0);
+    }
+
+    return resample;
+  }
 
   resample.precision = function(_) {
     if (!arguments.length) return Math.sqrt(δ2);
@@ -33,45 +47,7 @@ function d3_geo_resample(projectPoint) {
   return resample;
 
   // TODO rename: this is not just resampling, it also projects and transforms!
-  function resamplePoint(point) {
-    return projectPoint(point[0], point[1]);
-  }
-
-  // TODO rename: this is not just resampling, it also projects and transforms!
-  function resampleLine(coordinates) {
-    if (!(n = coordinates.length)) return coordinates;
-    var n,
-        i = 0,
-        p = coordinates[0],
-        λ,
-        φ,
-        λ0,
-        cartesian = d3_geo_cartesian(p),
-        line = [p = projectPoint(λ0 = p[0], φ = p[1])],
-        x0 = p[0],
-        y0 = p[1],
-        a0 = cartesian[0],
-        b0 = cartesian[1],
-        c0 = cartesian[2];
-    while (++i < n) {
-      p = coordinates[i];
-      cartesian = d3_geo_cartesian(p);
-      p = projectPoint(λ = p[0], φ = p[1]);
-      resampleLineTo(x0, y0, λ0, a0, b0, c0,
-                     x0 = p[0], y0 = p[1], λ0 = λ, a0 = cartesian[0], b0 = cartesian[1], c0 = cartesian[2],
-                     maxDepth, line);
-      line.push(p);
-    }
-    return line;
-  }
-
-  // TODO rename: this is not just resampling, it also projects and transforms!
-  function resamplePolygon(coordinates) {
-    return coordinates.map(resampleLine);
-  }
-
-  // TODO rename: this is not just resampling, it also projects and transforms!
-  function resampleLineTo(x0, y0, λ0, a0, b0, c0, x1, y1, λ1, a1, b1, c1, depth, line) {
+  function resampleLineTo(x0, y0, λ0, a0, b0, c0, x1, y1, λ1, a1, b1, c1, depth, listener) {
     var dx = x1 - x0,
         dy = y1 - y0,
         distance2 = dx * dx + dy * dy;
@@ -92,9 +68,9 @@ function d3_geo_resample(projectPoint) {
       if (dz * dz / distance2 > δ2) {
         a /= m;
         b /= m;
-        resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a, b, c, depth, line);
-        line.push(p);
-        resampleLineTo(x2, y2, λ2, a, b, c, x1, y1, λ1, a1, b1, c1, depth, line);
+        resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a, b, c, depth, listener);
+        listener.point(x2, y2);
+        resampleLineTo(x2, y2, λ2, a, b, c, x1, y1, λ1, a1, b1, c1, depth, listener);
       }
     }
   }
