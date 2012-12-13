@@ -122,6 +122,10 @@ suite.addBatch({
         var path = d3.geo.path(), radius = function() { return 5; };
         assert.strictEqual(path.pointRadius(), 4.5);
         assert.strictEqual(path.pointRadius(radius).pointRadius(), radius);
+      },
+      "coerces a constant point radius to a number": function() {
+        var path = d3.geo.path();
+        assert.strictEqual(path.pointRadius("5").pointRadius(), 5);
       }
     },
 
