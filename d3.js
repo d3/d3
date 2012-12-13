@@ -6293,7 +6293,7 @@
         stream.point = point;
       },
       pointRadius: function(_) {
-        pointCircle = d3_geo_pathCircle(+_);
+        pointCircle = d3_geo_pathCircle(_);
         return stream;
       },
       result: function() {
@@ -6338,7 +6338,7 @@
         stream.point = point;
       },
       pointRadius: function(_) {
-        pointRadius = +_;
+        pointRadius = _;
         return stream;
       },
       result: d3_noop

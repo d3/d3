@@ -13,7 +13,7 @@ function d3_geo_pathContext(context) {
     polygonEnd: function() { stream.lineEnd = lineEnd; stream.point = point; },
 
     pointRadius: function(_) {
-      pointRadius = +_;
+      pointRadius = _;
       return stream;
     },
 
