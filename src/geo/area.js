@@ -25,7 +25,7 @@ var d3_geo_area = {
 };
 
 function d3_geo_areaRingStart() {
-  var λ00, φ00, λ0,  φ0, cosφ0, sinφ0; // two previous points
+  var λ00, φ00, λ0, φ0, cosφ0, sinφ0; // two previous points
 
   // For the first point, …
   d3_geo_area.point = function(λ, φ) {

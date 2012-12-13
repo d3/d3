@@ -35,11 +35,11 @@ function d3_geo_pathCentroidLineStart() {
 }
 
 function d3_geo_pathCentroidRingStart() {
-  var x0, y0;
+  var x00, y00, x0, y0;
 
   d3_geo_pathCentroid.point = function(x, y) {
     d3_geo_pathCentroid.point = nextPoint;
-    x0 = x, y0 = y;
+    x00 = x0 = x, y00 = y0 = y;
   };
 
   function nextPoint(x, y) {

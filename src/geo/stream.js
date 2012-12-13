@@ -39,11 +39,11 @@ var d3_geo_streamGeometryType = {
     while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
   },
   LineString: function(object, listener) {
-    d3_geo_streamLine(object.coordinates, listener);
+    d3_geo_streamLine(object.coordinates, listener, 0);
   },
   MultiLineString: function(object, listener) {
     var coordinates = object.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) d3_geo_streamLine(coordinates[i], listener);
+    while (++i < n) d3_geo_streamLine(coordinates[i], listener, 0);
   },
   Polygon: function(object, listener) {
     d3_geo_streamPolygon(object.coordinates, listener);
@@ -54,8 +54,8 @@ var d3_geo_streamGeometryType = {
   }
 };
 
-function d3_geo_streamLine(coordinates, listener) {
-  var i = -1, n = coordinates.length, coordinate;
+function d3_geo_streamLine(coordinates, listener, closed) {
+  var i = -1, n = coordinates.length - closed, coordinate;
   listener.lineStart();
   while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
   listener.lineEnd();
@@ -64,6 +64,6 @@ function d3_geo_streamLine(coordinates, listener) {
 function d3_geo_streamPolygon(coordinates, listener) {
   var i = -1, n = coordinates.length;
   listener.polygonStart();
-  while (++i < n) d3_geo_streamLine(coordinates[i], listener);
+  while (++i < n) d3_geo_streamLine(coordinates[i], listener, 1);
   listener.polygonEnd();
 }

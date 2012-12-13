@@ -5371,11 +5371,11 @@
       while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
     },
     LineString: function(object, listener) {
-      d3_geo_streamLine(object.coordinates, listener);
+      d3_geo_streamLine(object.coordinates, listener, 0);
     },
     MultiLineString: function(object, listener) {
       var coordinates = object.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) d3_geo_streamLine(coordinates[i], listener);
+      while (++i < n) d3_geo_streamLine(coordinates[i], listener, 0);
     },
     Polygon: function(object, listener) {
       d3_geo_streamPolygon(object.coordinates, listener);
@@ -5385,8 +5385,8 @@
       while (++i < n) d3_geo_streamPolygon(coordinates[i], listener);
     }
   };
-  function d3_geo_streamLine(coordinates, listener) {
-    var i = -1, n = coordinates.length, coordinate;
+  function d3_geo_streamLine(coordinates, listener, closed) {
+    var i = -1, n = coordinates.length - closed, coordinate;
     listener.lineStart();
     while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
     listener.lineEnd();
@@ -5394,7 +5394,7 @@
   function d3_geo_streamPolygon(coordinates, listener) {
     var i = -1, n = coordinates.length;
     listener.polygonStart();
-    while (++i < n) d3_geo_streamLine(coordinates[i], listener);
+    while (++i < n) d3_geo_streamLine(coordinates[i], listener, 1);
     listener.polygonEnd();
   }
   function d3_geo_streamRadians(stream) {
@@ -6430,10 +6430,10 @@
     }
   }
   function d3_geo_pathCentroidRingStart() {
-    var x0, y0;
+    var x00, y00, x0, y0;
     d3_geo_pathCentroid.point = function(x, y) {
       d3_geo_pathCentroid.point = nextPoint;
-      x0 = x, y0 = y;
+      x00 = x0 = x, y00 = y0 = y;
     };
     function nextPoint(x, y) {
       var dx = x - x0, dy = y - y0, z = y0 * x - x0 * y;

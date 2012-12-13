@@ -129,7 +129,7 @@ suite.addBatch({
       });
       assert.equal(calls, 8);
     },
-    "Polygon ↦ polygonStart, lineStart, point{3,}, lineEnd, polygonEnd": function(stream) {
+    "Polygon ↦ polygonStart, lineStart, point{2,}, lineEnd, polygonEnd": function(stream) {
       var calls = 0;
       stream({type: "Polygon", coordinates: [[[1, 2], [3, 4], [1, 2]], [[5, 6], [7, 8], [5, 6]]]}, {
         polygonStart: function() {
@@ -139,22 +139,22 @@ suite.addBatch({
         },
         lineStart: function() {
           ++calls;
-          assert.isTrue(calls === 2 || calls === 7);
+          assert.isTrue(calls === 2 || calls === 6);
           assert.equal(arguments.length, 0);
         },
         point: function(x, y) {
           ++calls;
           assert.equal(arguments.length, 2);
-          if (calls === 3 || calls === 5) {
+          if (calls === 3) {
             assert.equal(x, 1);
             assert.equal(y, 2);
           } else if (calls === 4) {
             assert.equal(x, 3);
             assert.equal(y, 4);
-          } else if (calls === 8 || calls === 10) {
+          } else if (calls === 7) {
             assert.equal(x, 5);
             assert.equal(y, 6);
-          } else if (calls === 9) {
+          } else if (calls === 8) {
             assert.equal(x, 7);
             assert.equal(y, 8);
           } else {
@@ -163,43 +163,43 @@ suite.addBatch({
         },
         lineEnd: function() {
           ++calls;
-          assert.isTrue(calls === 6 || calls === 11);
+          assert.isTrue(calls === 5 || calls === 9);
           assert.equal(arguments.length, 0);
         },
         polygonEnd: function() {
           ++calls;
-          assert.isTrue(calls === 12);
+          assert.isTrue(calls === 10);
           assert.equal(arguments.length, 0);
         }
       });
-      assert.equal(calls, 12);
+      assert.equal(calls, 10);
     },
-    "MultiPolygon ↦ (polygonStart, lineStart, point{3,}, lineEnd, polygonEnd)*": function(stream) {
+    "MultiPolygon ↦ (polygonStart, lineStart, point{2,}, lineEnd, polygonEnd)*": function(stream) {
       var calls = 0;
       stream({type: "MultiPolygon", coordinates: [[[[1, 2], [3, 4], [1, 2]]], [[[5, 6], [7, 8], [5, 6]]]]}, {
         polygonStart: function() {
           ++calls;
-          assert.isTrue(calls === 1 || calls === 8);
+          assert.isTrue(calls === 1 || calls === 7);
           assert.equal(arguments.length, 0);
         },
         lineStart: function() {
           ++calls;
-          assert.isTrue(calls === 2 || calls === 9);
+          assert.isTrue(calls === 2 || calls === 8);
           assert.equal(arguments.length, 0);
         },
         point: function(x, y) {
           ++calls;
           assert.equal(arguments.length, 2);
-          if (calls === 3 || calls === 5) {
+          if (calls === 3) {
             assert.equal(x, 1);
             assert.equal(y, 2);
           } else if (calls === 4) {
             assert.equal(x, 3);
             assert.equal(y, 4);
-          } else if (calls === 10 || calls === 12) {
+          } else if (calls === 9) {
             assert.equal(x, 5);
             assert.equal(y, 6);
-          } else if (calls === 11) {
+          } else if (calls === 10) {
             assert.equal(x, 7);
             assert.equal(y, 8);
           } else {
@@ -208,16 +208,16 @@ suite.addBatch({
         },
         lineEnd: function() {
           ++calls;
-          assert.isTrue(calls === 6 || calls === 13);
+          assert.isTrue(calls === 5 || calls === 11);
           assert.equal(arguments.length, 0);
         },
         polygonEnd: function() {
           ++calls;
-          assert.isTrue(calls === 7 || calls === 14);
+          assert.isTrue(calls === 6 || calls === 12);
           assert.equal(arguments.length, 0);
         }
       });
-      assert.equal(calls, 14);
+      assert.equal(calls, 12);
     },
     "Feature ↦ .*": function(stream) {
       var calls = 0;
