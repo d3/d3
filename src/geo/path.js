@@ -49,7 +49,7 @@ d3.geo.path = function() {
 
   path.pointRadius = function(_) {
     if (!arguments.length) return pointRadius;
-    pointRadius = _;
+    pointRadius = typeof _ === "function" ? _ : +_;
     return path;
   };
 

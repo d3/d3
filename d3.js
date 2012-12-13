@@ -6269,7 +6269,7 @@
     };
     path.pointRadius = function(_) {
       if (!arguments.length) return pointRadius;
-      pointRadius = _;
+      pointRadius = typeof _ === "function" ? _ : +_;
       return path;
     };
     return path;
