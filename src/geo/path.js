@@ -5,17 +5,16 @@
 
 d3.geo.path = function() {
   var pointRadius = 4.5,
-      pointCircle = d3_geo_pathCircle(pointRadius),
       projection = d3.geo.albersUsa(),
       context,
-      buffer = [];
+      buffer = [],
+      stream = new d3_geo_pathBuffer(buffer);
 
   function path(object) {
     if (object == null) return;
-    var radius = typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius;
-    d3.geo.stream(object, projection.stream(context == null
-          ? new d3_geo_pathBuffer(buffer, radius)
-          : new d3_geo_pathContext(context, radius)));
+    d3.geo.stream(object, projection.stream(stream.pointRadius(
+      typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius
+    )));
     if (buffer.length) {
       var result = buffer.join("");
       buffer = [];
@@ -47,14 +46,13 @@ d3.geo.path = function() {
 
   path.context = function(_) {
     if (!arguments.length) return context;
-    context = _;
+    stream = new d3_geo_pathContext(context = _);
     return path;
   };
 
-  path.pointRadius = function(x) {
+  path.pointRadius = function(_) {
     if (!arguments.length) return pointRadius;
-    if (typeof x === "function") pointRadius = x;
-    else pointCircle = d3_geo_pathCircle(pointRadius = +x);
+    pointRadius = _;
     return path;
   };
 
