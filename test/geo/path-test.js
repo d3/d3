@@ -22,7 +22,7 @@ suite.addBatch({
       });
       assert.deepEqual(testContext.buffer(), [
         {type: "moveTo", x: 165, y: 160},
-        {type: "arc", x: 165, y: 160}
+        {type: "arc", x: 165, y: 160, r: 4.5}
       ]);
     },
 
@@ -32,9 +32,9 @@ suite.addBatch({
         coordinates: [[-63, 18], [-62, 18], [-62, 17]]
       });
       assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160},
-        {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 170, y: 160},
-        {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165}
+        {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5},
+        {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
+        {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
       ]);
     },
 
@@ -75,7 +75,7 @@ suite.addBatch({
         geometries: [{type: "Point", coordinates: [0, 0]}]
       });
       assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250}
+        {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
       ]);
     },
 
@@ -85,7 +85,7 @@ suite.addBatch({
         features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]
       });
       assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250}
+        {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
       ]);
     },
 
@@ -123,9 +123,20 @@ suite.addBatch({
         assert.strictEqual(path.pointRadius(), 4.5);
         assert.strictEqual(path.pointRadius(radius).pointRadius(), radius);
       },
-      "coerces a constant point radius to a number": function() {
-        var path = d3.geo.path();
-        assert.strictEqual(path.pointRadius("5").pointRadius(), 5);
+      "coerces point radius to a number": {
+        "constant": function() {
+          var path = d3.geo.path();
+          assert.strictEqual(path.pointRadius("6").pointRadius(), 6);
+        },
+        "function": function(path) {
+          var radius = path.pointRadius();
+          try {
+            path.pointRadius(function() { return "6"; })({type: "Point", coordinates: [0, 0]});
+            assert.strictEqual(testContext.buffer().filter(function(d) { return d.type === "arc"; })[0].r, 6);
+          } finally {
+            path.pointRadius(radius);
+          }
+        }
       }
     },
 
@@ -295,7 +306,7 @@ suite.addBatch({
           coordinates: [-63, 18]
         });
         assert.deepEqual(testContext.buffer(), [
-          {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160}
+          {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5}
         ]);
       },
       "MultiPoint": function(path) {
@@ -304,9 +315,9 @@ suite.addBatch({
           coordinates: [[-63, 18], [-62, 18], [-62, 17]]
         });
         assert.deepEqual(testContext.buffer(), [
-          {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160},
-          {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 170, y: 160},
-          {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165}
+          {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5},
+          {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
+          {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
         ]);
       },
       "Polygon": {
@@ -369,7 +380,7 @@ suite.addBatch({
         "Point": {
           "visible": function(path) {
             path({type: "Point", coordinates: [0, 0]});
-            assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187}]);
+            assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
           },
           "invisible": function(path) {
             path({type: "Point", coordinates: [-180, 0]});
@@ -378,7 +389,7 @@ suite.addBatch({
         },
         "MultiPoint": function(path) {
           path({type: "MultiPoint", coordinates: [[0, 0], [-180, 0]]});
-          assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187}]);
+          assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
         }
       },
       "rotate(-24, -175.5])": {
@@ -635,7 +646,7 @@ suite.addBatch({
     "rotate([0, 0, 0])": {
       "longitudes wrap at ±180°": function(path) {
         path({type: "Point", coordinates: [180 + 1e-6, 0]});
-        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: -420, y: 250}, {type: "arc", x: -420, y: 250}]);
+        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: -420, y: 250}, {type: "arc", x: -420, y: 250, r: 4.5}]);
       }
     }
   }
@@ -644,7 +655,7 @@ suite.addBatch({
 var testBuffer = [];
 
 var testContext = {
-  arc: function(x, y, r, ra, rb) { testBuffer.push({type: "arc", x: Math.round(x), y: Math.round(y)}); },
+  arc: function(x, y, r, a0, a1) { testBuffer.push({type: "arc", x: Math.round(x), y: Math.round(y), r: r}); },
   moveTo: function(x, y) { testBuffer.push({type: "moveTo", x: Math.round(x), y: Math.round(y)}); },
   lineTo: function(x, y) { testBuffer.push({type: "lineTo", x: Math.round(x), y: Math.round(y)}); },
   closePath: function() { testBuffer.push({type: "closePath"}); },
