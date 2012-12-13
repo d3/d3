@@ -11,7 +11,7 @@ d3.geo.path = function() {
   function path(object) {
     if (object) d3.geo.stream(object, projection.stream(stream.pointRadius(
       typeof pointRadius === "function"
-          ? pointRadius.apply(this, arguments)
+          ? +pointRadius.apply(this, arguments)
           : pointRadius
     )));
     return stream.result();

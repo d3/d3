@@ -6241,7 +6241,7 @@
   d3.geo.path = function() {
     var pointRadius = 4.5, projection = d3.geo.albersUsa(), context, stream = new d3_geo_pathBuffer();
     function path(object) {
-      if (object) d3.geo.stream(object, projection.stream(stream.pointRadius(typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius)));
+      if (object) d3.geo.stream(object, projection.stream(stream.pointRadius(typeof pointRadius === "function" ? +pointRadius.apply(this, arguments) : pointRadius)));
       return stream.result();
     }
     path.area = function(object) {
