@@ -208,6 +208,8 @@ d3.geo.js: \
 	src/geo/mercator.js \
 	src/geo/orthographic.js \
 	src/geo/path.js \
+	src/geo/path-area.js \
+	src/geo/path-centroid.js \
 	src/geo/area.js \
 	src/geo/centroid.js \
 	src/geo/projection.js \
