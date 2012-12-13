@@ -60,6 +60,7 @@ function d3_geo_centroidRingStart() {
   d3_geo_centroid.lineEnd = function() {
     d3_geo_centroid.point(λ00, φ00);
     d3_geo_centroidLineEnd();
+    d3_geo_centroid.lineEnd = d3_geo_centroidLineEnd;
   };
 }
 
@@ -81,7 +82,6 @@ function d3_geo_centroidLineStart() {
     z0 = Math.sin(φ);
     d3_geo_centroid.point = nextPoint;
   };
-  d3_geo_centroid.lineEnd = d3_geo_centroidLineEnd;
 
   function nextPoint(λ, φ) {
     λ *= d3_radians;

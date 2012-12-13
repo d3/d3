@@ -5939,6 +5939,7 @@
     d3_geo_centroid.lineEnd = function() {
       d3_geo_centroid.point(λ00, φ00);
       d3_geo_centroidLineEnd();
+      d3_geo_centroid.lineEnd = d3_geo_centroidLineEnd;
     };
   }
   function d3_geo_centroidLineStart() {
@@ -5957,7 +5958,6 @@
       z0 = Math.sin(φ);
       d3_geo_centroid.point = nextPoint;
     };
-    d3_geo_centroid.lineEnd = d3_geo_centroidLineEnd;
     function nextPoint(λ, φ) {
       λ *= d3_radians;
       var cosφ = Math.cos(φ *= d3_radians), x = cosφ * Math.cos(λ), y = cosφ * Math.sin(λ), z = Math.sin(φ), w = Math.atan2(Math.sqrt((w = y0 * z - z0 * y) * w + (w = z0 * x - x0 * z) * w + (w = x0 * y - y0 * x) * w), x0 * x + y0 * y + z0 * z);
