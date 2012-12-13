@@ -89,20 +89,24 @@ suite.addBatch({
       ]);
     },
 
-    "returns null when passed null or undefined": function(path) {
-      assert.isNull(path(null));
-      assert.isNull(path(undefined));
-      assert.isNull(path());
-    },
-
-    "bogus type name": function(path) {
-      assert.isNull(path({
-        type: "Feature",
-        geometry: {
-          type: "__proto__",
-          coordinates: [[[-63.03, 18.02], [-63.14, 18.06], [-63.01, 18.07], [-63.03, 18.02]]]
-        },
-      }));
+    "with no context": {
+      topic: function(path) {
+        return d3.geo.path().projection(path.projection());
+      },
+      "returns null when passed null or undefined": function(path) {
+        assert.equal(path(null), null);
+        assert.equal(path(undefined), null);
+        assert.equal(path(), null);
+      },
+      "returns null with bogus type name": function(path) {
+        assert.equal(path({
+          type: "Feature",
+          geometry: {
+            type: "__proto__",
+            coordinates: [[[-63.03, 18.02], [-63.14, 18.06], [-63.01, 18.07], [-63.03, 18.02]]]
+          },
+        }), null);
+      }
     },
 
     "projection": {
