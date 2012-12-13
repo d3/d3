@@ -5807,7 +5807,8 @@
         },
         polygonEnd: function() {
           listener.polygonEnd();
-        }
+        },
+        sphere: d3_noop
       };
       function resamplePoint(λ, φ) {
         var point = projectPoint(λ, φ);
@@ -5853,14 +5854,11 @@
       var lon = point[0], lat = point[1];
       return lat > 50 ? alaska : lon < -140 ? hawaii : lat < 21 ? puertoRico : lower48;
     }
-    albersUsa.point = function(coordinates, context) {
-      return projection(coordinates).point(coordinates, context);
-    };
-    albersUsa.line = function(coordinates, context) {
-      return projection(coordinates[0]).line(coordinates, context);
-    };
-    albersUsa.polygon = function(coordinates, context) {
-      return projection(coordinates[0][0]).polygon(coordinates, context);
+    var projectResample = d3_geo_resample(function(λ, φ) {
+      return albersUsa([ λ * d3_degrees, φ * d3_degrees ]);
+    });
+    albersUsa.stream = function(listener) {
+      return d3_geo_albersUsaRadians(projectResample(listener));
     };
     albersUsa.scale = function(x) {
       if (!arguments.length) return lower48.scale();
@@ -5881,6 +5879,28 @@
     };
     return albersUsa.scale(lower48.scale());
   };
+  function d3_geo_albersUsaRadians(stream) {
+    return {
+      point: function(λ, φ) {
+        stream.point(λ * d3_radians, φ * d3_radians);
+      },
+      sphere: function() {
+        stream.sphere();
+      },
+      lineStart: function() {
+        stream.lineStart();
+      },
+      lineEnd: function() {
+        stream.lineEnd();
+      },
+      polygonStart: function() {
+        stream.polygonStart();
+      },
+      polygonEnd: function() {
+        stream.polygonEnd();
+      }
+    };
+  }
   function d3_geo_albers(φ0, φ1) {
     var sinφ0 = Math.sin(φ0), n = (sinφ0 + Math.sin(φ1)) / 2, C = 1 + sinφ0 * (2 * n - sinφ0), ρ0 = Math.sqrt(C) / n;
     function albers(λ, φ) {

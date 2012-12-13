@@ -10,7 +10,8 @@ function d3_geo_resample(projectPoint) {
       lineEnd: function() { resample.point = resamplePoint; listener.lineEnd(); },
       // TODO resample last point to first point for polygon rings.
       polygonStart: function() { listener.polygonStart(); },
-      polygonEnd: function() { listener.polygonEnd(); }
+      polygonEnd: function() { listener.polygonEnd(); },
+      sphere: d3_noop
     };
 
     // TODO rename: this is not just resampling, it also projects and transforms!
