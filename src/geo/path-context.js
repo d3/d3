@@ -1,4 +1,6 @@
-function d3_geo_pathContext(context, pointRadius) {
+function d3_geo_pathContext(context) {
+  var pointRadius = 4.5;
+
   var stream = {
     point: point,
 
@@ -8,7 +10,12 @@ function d3_geo_pathContext(context, pointRadius) {
 
     // While inside a polygon, override lineEnd to closePath.
     polygonStart: function() { stream.lineEnd = lineEndPolygon; },
-    polygonEnd: function() { stream.lineEnd = lineEnd; stream.point = point; }
+    polygonEnd: function() { stream.lineEnd = lineEnd; stream.point = point; },
+
+    pointRadius: function(_) {
+      pointRadius = +_;
+      return stream;
+    }
   };
 
   function point(x, y) {

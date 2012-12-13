@@ -21,7 +21,7 @@ require("util").puts(JSON.stringify({
     "sizzle": "1.1.x"
   },
   "devDependencies": {
-    "uglify-js2": "2.1.6",
+    "uglify-js": "2.2.2",
     "vows": "0.6.x"
   },
   "scripts": {"test": "./node_modules/vows/bin/vows"}

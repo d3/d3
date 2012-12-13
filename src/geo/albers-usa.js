@@ -34,16 +34,12 @@ d3.geo.albersUsa = function() {
         : lower48;
   }
 
-  albersUsa.point = function(coordinates, context) {
-    return projection(coordinates).point(coordinates, context);
-  };
+  var projectResample = d3_geo_resample(function(λ, φ) {
+    return albersUsa([λ * d3_degrees, φ * d3_degrees]);
+  });
 
-  albersUsa.line = function(coordinates, context) {
-    return projection(coordinates[0]).line(coordinates, context);
-  };
-
-  albersUsa.polygon = function(coordinates, context) {
-    return projection(coordinates[0][0]).polygon(coordinates, context);
+  albersUsa.stream = function(listener) {
+    return d3_geo_albersUsaRadians(projectResample(listener));
   };
 
   albersUsa.scale = function(x) {
@@ -69,3 +65,16 @@ d3.geo.albersUsa = function() {
 
   return albersUsa.scale(lower48.scale());
 };
+
+function d3_geo_albersUsaRadians(stream) {
+  return {
+    point: function(λ, φ) {
+      stream.point(λ * d3_radians, φ * d3_radians);
+    },
+    sphere: function() { stream.sphere(); },
+    lineStart: function() { stream.lineStart(); },
+    lineEnd: function() { stream.lineEnd(); },
+    polygonStart: function() { stream.polygonStart(); },
+    polygonEnd: function() { stream.polygonEnd(); }
+  };
+}

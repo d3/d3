@@ -183,7 +183,6 @@ d3.geo.js: \
 	src/geo/stream.js \
 	src/geo/spherical.js \
 	src/geo/cartesian.js \
-	src/geo/type.js \
 	src/geo/clip.js \
 	src/geo/cut.js \
 	src/geo/resample.js \

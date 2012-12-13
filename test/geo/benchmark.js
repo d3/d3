@@ -1,14 +1,27 @@
 require("../env");
 
+var fs = require("fs");
+
 var formatNumber = d3.format(",.02r"),
     projection = d3.geo.stereographic().clipAngle(150),
     path = d3.geo.path().projection(projection),
     graticule = d3.geo.graticule().step([1, 1]),
     circle = d3.geo.circle().angle(30),
-    n = 10;
+    n = 10,
+    o,
+    then;
 
-var o = graticule(),
-    then = Date.now();
+o = JSON.parse(fs.readFileSync("./examples/data/us-counties.json"));
+then = Date.now();
+
+for (var i = 0, k = 0; i < n; i++, k++) {
+  path(o);
+}
+
+console.log("U.S. counties: " + formatNumber((Date.now() - then) / k) + "ms/op.");
+
+o = graticule();
+then = Date.now();
 
 for (var i = 0, k = 0; i < n; i++, k++) {
   path(o);
