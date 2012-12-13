@@ -6376,45 +6376,45 @@
     polygonStart: function() {
       d3_geo_pathAreaScale = .5;
       d3_geo_pathArea.lineStart = d3_geo_pathAreaRingStart;
-      d3_geo_pathArea.lineEnd = d3_geo_pathAreaRingEnd;
     },
     polygonEnd: function() {
       d3_geo_pathArea.lineStart = d3_geo_pathArea.lineEnd = d3_geo_pathArea.point = d3_noop;
     }
   };
   function d3_geo_pathAreaRingStart() {
-    var x0, y0;
-    d3_geo_areaRing = 0;
+    var x00, y00, x0, y0, area = 0;
     d3_geo_pathArea.point = function(x, y) {
       d3_geo_pathArea.point = nextPoint;
-      x0 = x, y0 = y;
+      x00 = x0 = x, y00 = y0 = y;
     };
     function nextPoint(x, y) {
-      d3_geo_areaRing += y0 * x - x0 * y;
+      area += y0 * x - x0 * y;
       x0 = x, y0 = y;
     }
-  }
-  function d3_geo_pathAreaRingEnd() {
-    d3_geo_areaSum += Math.abs(d3_geo_areaRing) * d3_geo_pathAreaScale;
-    d3_geo_pathAreaScale = -.5;
+    d3_geo_pathArea.lineEnd = function() {
+      nextPoint(x00, y00);
+      d3_geo_areaSum += Math.abs(area) * d3_geo_pathAreaScale;
+      d3_geo_pathAreaScale = -.5;
+    };
   }
   var d3_geo_pathCentroid = {
-    point: function(x, y) {
-      d3_geo_centroidX += x;
-      d3_geo_centroidY += y;
-      ++d3_geo_centroidZ;
-    },
+    point: d3_geo_pathCentroidPoint,
     lineStart: d3_geo_pathCentroidLineStart,
-    lineEnd: function() {
-      d3_geo_pathCentroid.point = d3_noop;
-    },
+    lineEnd: d3_geo_pathCentroidLineEnd,
     polygonStart: function() {
       d3_geo_pathCentroid.lineStart = d3_geo_pathCentroidRingStart;
     },
     polygonEnd: function() {
+      d3_geo_pathCentroid.point = d3_geo_pathCentroidPoint;
       d3_geo_pathCentroid.lineStart = d3_geo_pathCentroidLineStart;
+      d3_geo_pathCentroid.lineEnd = d3_geo_pathCentroidLineEnd;
     }
   };
+  function d3_geo_pathCentroidPoint(x, y) {
+    d3_geo_centroidX += x;
+    d3_geo_centroidY += y;
+    ++d3_geo_centroidZ;
+  }
   function d3_geo_pathCentroidLineStart() {
     var x0, y0;
     d3_geo_pathCentroid.point = function(x, y) {
@@ -6429,6 +6429,9 @@
       x0 = x, y0 = y;
     }
   }
+  function d3_geo_pathCentroidLineEnd() {
+    d3_geo_pathCentroid.point = d3_geo_pathCentroidPoint;
+  }
   function d3_geo_pathCentroidRingStart() {
     var x00, y00, x0, y0;
     d3_geo_pathCentroid.point = function(x, y) {
@@ -6442,6 +6445,9 @@
       d3_geo_centroidZ += z * 3;
       x0 = x, y0 = y;
     }
+    d3_geo_pathCentroid.lineEnd = function() {
+      nextPoint(x00, y00);
+    };
   }
   d3.geo.area = function(object) {
     d3_geo_areaSum = 0;
@@ -6462,25 +6468,29 @@
     },
     polygonEnd: function() {
       d3_geo_areaSum += d3_geo_areaRing < 0 ? 4 * π + d3_geo_areaRing : d3_geo_areaRing;
-      d3_geo_area.lineStart = d3_geo_area.point = d3_noop;
+      d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
     }
   };
   function d3_geo_areaRingStart() {
-    var λ00, φ00, λ0, φ0, cosφ0, sinφ0;
+    var λ00, φ00, λ1, λ0, φ0, cosφ0, sinφ0;
     d3_geo_area.point = function(λ, φ) {
       d3_geo_area.point = nextPoint;
-      λ00 = λ0 = λ * d3_radians, φ00 = φ0 = φ * d3_radians, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0);
+      λ1 = λ0 = (λ00 = λ) * d3_radians, φ0 = (φ00 = φ) * d3_radians, cosφ0 = Math.cos(φ0), 
+      sinφ0 = Math.sin(φ0);
     };
     function nextPoint(λ, φ) {
       λ *= d3_radians, φ *= d3_radians;
       if (Math.abs(Math.abs(φ0) - π / 2) < ε && Math.abs(Math.abs(φ) - π / 2) < ε) return;
       var cosφ = Math.cos(φ), sinφ = Math.sin(φ);
-      if (Math.abs(φ0 - π / 2) < ε) d3_geo_areaRing += (λ - λ00) * 2; else {
+      if (Math.abs(φ0 - π / 2) < ε) d3_geo_areaRing += (λ - λ1) * 2; else {
         var dλ = λ - λ0, cosdλ = Math.cos(dλ), d = Math.atan2(Math.sqrt((d = cosφ * Math.sin(dλ)) * d + (d = cosφ0 * sinφ - sinφ0 * cosφ * cosdλ) * d), sinφ0 * sinφ + cosφ0 * cosφ * cosdλ), s = (d + π + φ0 + φ) / 4;
         d3_geo_areaRing += (dλ < 0 && dλ > -π || dλ > π ? -4 : 4) * Math.atan(Math.sqrt(Math.abs(Math.tan(s) * Math.tan(s - d / 2) * Math.tan(s - π / 4 - φ0 / 2) * Math.tan(s - π / 4 - φ / 2))));
       }
-      λ00 = λ0, φ00 = φ0, λ0 = λ, φ0 = φ, cosφ0 = cosφ, sinφ0 = sinφ;
+      λ1 = λ0, φ1 = φ0, λ0 = λ, φ0 = φ, cosφ0 = cosφ, sinφ0 = sinφ;
     }
+    d3_geo_area.lineEnd = function() {
+      nextPoint(λ00, φ00);
+    };
   }
   d3.geo.projection = d3_geo_projection;
   d3.geo.projectionMutator = d3_geo_projectionMutator;

@@ -20,17 +20,17 @@ var d3_geo_area = {
   },
   polygonEnd: function() {
     d3_geo_areaSum += d3_geo_areaRing < 0 ? 4 * π + d3_geo_areaRing : d3_geo_areaRing;
-    d3_geo_area.lineStart = d3_geo_area.point = d3_noop;
+    d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
   }
 };
 
 function d3_geo_areaRingStart() {
-  var λ00, φ00, λ0, φ0, cosφ0, sinφ0; // two previous points
+  var λ00, φ00, λ1, λ0, φ0, cosφ0, sinφ0; // start point and two previous points
 
   // For the first point, …
   d3_geo_area.point = function(λ, φ) {
     d3_geo_area.point = nextPoint;
-    λ00 = λ0 = λ * d3_radians, φ00 = φ0 = φ * d3_radians, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0);
+    λ1 = λ0 = (λ00 = λ) * d3_radians, φ0 = (φ00 = φ) * d3_radians, cosφ0 = Math.cos(φ0), sinφ0 = Math.sin(φ0);
   };
 
   // For subsequent points, …
@@ -41,8 +41,8 @@ function d3_geo_areaRingStart() {
     if (Math.abs(Math.abs(φ0) - π / 2) < ε && Math.abs(Math.abs(φ) - π / 2) < ε) return;
     var cosφ = Math.cos(φ), sinφ = Math.sin(φ);
 
-    // If the previous point is at the south pole, something special…
-    if (Math.abs(φ0 - π / 2) < ε) d3_geo_areaRing += (λ - λ00) * 2;
+    // If the previous point is at the south pole, something involving lunes…
+    if (Math.abs(φ0 - π / 2) < ε) d3_geo_areaRing += (λ - λ1) * 2;
 
     // TODO Explain this wonderous mathematics.
     else {
@@ -54,6 +54,11 @@ function d3_geo_areaRingStart() {
     }
 
     // Advance the previous points.
-    λ00 = λ0, φ00 = φ0, λ0 = λ, φ0 = φ, cosφ0 = cosφ, sinφ0 = sinφ;
+    λ1 = λ0, φ1 = φ0, λ0 = λ, φ0 = φ, cosφ0 = cosφ, sinφ0 = sinφ;
   }
+
+  // For the last point, return to the start.
+  d3_geo_area.lineEnd = function() {
+    nextPoint(λ00, φ00);
+  };
 }
