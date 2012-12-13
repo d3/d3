@@ -181,8 +181,6 @@ d3.layout.js: \
 d3.geo.js: \
 	src/geo/geo.js \
 	src/geo/stream.js \
-	src/geo/stream-buffer.js \
-	src/geo/stream-context.js \
 	src/geo/stream-radians.js \
 	src/geo/stream-rotate.js \
 	src/geo/stream-transform.js \
@@ -208,6 +206,8 @@ d3.geo.js: \
 	src/geo/mercator.js \
 	src/geo/orthographic.js \
 	src/geo/path.js \
+	src/geo/path-buffer.js \
+	src/geo/path-context.js \
 	src/geo/path-area.js \
 	src/geo/path-centroid.js \
 	src/geo/area.js \

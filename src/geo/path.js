@@ -9,12 +9,14 @@ d3.geo.path = function() {
 
   function path(object) {
     var radius = typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius;
-    d3.geo.stream(object, projection.stream(context != null
-        ? new d3_geo_streamContext(context, radius)
-        : new d3_geo_streamBuffer(buffer, radius)));
-    var result = buffer.join("");
-    buffer = [];
-    return result;
+    d3.geo.stream(object, projection.stream(context == null
+          ? new d3_geo_pathBuffer(buffer, radius)
+          : new d3_geo_pathContext(context, radius)));
+    if (buffer.length) {
+      var result = buffer.join("");
+      buffer = [];
+      return result;
+    }
   }
 
   path.area = function(object) {

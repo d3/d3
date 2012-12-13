@@ -1,4 +1,4 @@
-function d3_geo_streamContext(context, pointRadius) {
+function d3_geo_pathBuffer(buffer, pointRadius) {
   var stream = {
     point: point,
 
@@ -8,21 +8,20 @@ function d3_geo_streamContext(context, pointRadius) {
 
     // While inside a polygon, override lineEnd to closePath.
     polygonStart: function() { stream.lineEnd = lineEndPolygon; },
-    polygonEnd: function() { stream.lineEnd = lineEnd; }
+    polygonEnd: function() { stream.lineEnd = lineEnd; stream.point = point; }
   };
 
   function point(x, y) {
-    context.moveTo(x, y);
-    context.arc(x, y, pointRadius, 0, 2 * π);
+    buffer.push("M", x, ",", y, pointRadius);
   }
 
   function pointLineStart(x, y) {
-    context.moveTo(x, y);
+    buffer.push("M", x, ",", y);
     stream.point = pointLine;
   }
 
   function pointLine(x, y) {
-    context.lineTo(x, y);
+    buffer.push("L", x, ",", y);
   }
 
   function lineEnd() {
@@ -30,8 +29,10 @@ function d3_geo_streamContext(context, pointRadius) {
   }
 
   function lineEndPolygon() {
-    context.closePath();
+    buffer.push("Z");
   }
+
+  pointRadius = d3_geo_pathCircle(4.5);
 
   return stream;
 }

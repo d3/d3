@@ -5397,72 +5397,6 @@
     while (++i < n) d3_geo_streamLine(coordinates[i], listener);
     listener.polygonEnd();
   }
-  function d3_geo_streamBuffer(buffer, pointRadius) {
-    var stream = {
-      point: point,
-      lineStart: function() {
-        stream.point = pointLineStart;
-      },
-      lineEnd: lineEnd,
-      polygonStart: function() {
-        stream.lineEnd = lineEndPolygon;
-      },
-      polygonEnd: function() {
-        stream.lineEnd = lineEnd;
-      }
-    };
-    function point(x, y) {
-      buffer.push("M", x, ",", y, pointRadius);
-    }
-    function pointLineStart(x, y) {
-      buffer.push("M", x, ",", y);
-      stream.point = pointLine;
-    }
-    function pointLine(x, y) {
-      buffer.push("L", x, ",", y);
-    }
-    function lineEnd() {
-      stream.point = point;
-    }
-    function lineEndPolygon() {
-      buffer.push("Z");
-    }
-    pointRadius = d3_geo_pathCircle(4.5);
-    return stream;
-  }
-  function d3_geo_streamContext(context, pointRadius) {
-    var stream = {
-      point: point,
-      lineStart: function() {
-        stream.point = pointLineStart;
-      },
-      lineEnd: lineEnd,
-      polygonStart: function() {
-        stream.lineEnd = lineEndPolygon;
-      },
-      polygonEnd: function() {
-        stream.lineEnd = lineEnd;
-      }
-    };
-    function point(x, y) {
-      context.moveTo(x, y);
-      context.arc(x, y, pointRadius, 0, 2 * π);
-    }
-    function pointLineStart(x, y) {
-      context.moveTo(x, y);
-      stream.point = pointLine;
-    }
-    function pointLine(x, y) {
-      context.lineTo(x, y);
-    }
-    function lineEnd() {
-      stream.point = point;
-    }
-    function lineEndPolygon() {
-      context.closePath();
-    }
-    return stream;
-  }
   function d3_geo_streamRadians(stream) {
     return d3_geo_streamTransform(stream, function(x, y) {
       stream.point(x * d3_radians, y * d3_radians);
@@ -6327,10 +6261,12 @@
     var pointRadius = 4.5, pointCircle = d3_geo_pathCircle(pointRadius), projection = d3.geo.albersUsa(), context, buffer = [];
     function path(object) {
       var radius = typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius;
-      d3.geo.stream(object, projection.stream(context != null ? new d3_geo_streamContext(context, radius) : new d3_geo_streamBuffer(buffer, radius)));
-      var result = buffer.join("");
-      buffer = [];
-      return result;
+      d3.geo.stream(object, projection.stream(context == null ? new d3_geo_pathBuffer(buffer, radius) : new d3_geo_pathContext(context, radius)));
+      if (buffer.length) {
+        var result = buffer.join("");
+        buffer = [];
+        return result;
+      }
     }
     path.area = function(object) {
       d3_geo_areaSum = 0;
@@ -6364,6 +6300,74 @@
   };
   function d3_geo_pathCircle(radius) {
     return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
+  }
+  function d3_geo_pathBuffer(buffer, pointRadius) {
+    var stream = {
+      point: point,
+      lineStart: function() {
+        stream.point = pointLineStart;
+      },
+      lineEnd: lineEnd,
+      polygonStart: function() {
+        stream.lineEnd = lineEndPolygon;
+      },
+      polygonEnd: function() {
+        stream.lineEnd = lineEnd;
+        stream.point = point;
+      }
+    };
+    function point(x, y) {
+      buffer.push("M", x, ",", y, pointRadius);
+    }
+    function pointLineStart(x, y) {
+      buffer.push("M", x, ",", y);
+      stream.point = pointLine;
+    }
+    function pointLine(x, y) {
+      buffer.push("L", x, ",", y);
+    }
+    function lineEnd() {
+      stream.point = point;
+    }
+    function lineEndPolygon() {
+      buffer.push("Z");
+    }
+    pointRadius = d3_geo_pathCircle(4.5);
+    return stream;
+  }
+  function d3_geo_pathContext(context, pointRadius) {
+    var stream = {
+      point: point,
+      lineStart: function() {
+        stream.point = pointLineStart;
+      },
+      lineEnd: lineEnd,
+      polygonStart: function() {
+        stream.lineEnd = lineEndPolygon;
+      },
+      polygonEnd: function() {
+        stream.lineEnd = lineEnd;
+        stream.point = point;
+      }
+    };
+    function point(x, y) {
+      context.moveTo(x, y);
+      context.arc(x, y, pointRadius, 0, 2 * π);
+    }
+    function pointLineStart(x, y) {
+      context.moveTo(x, y);
+      stream.point = pointLine;
+    }
+    function pointLine(x, y) {
+      context.lineTo(x, y);
+    }
+    function lineEnd() {
+      stream.point = point;
+    }
+    function lineEndPolygon() {
+      context.closePath();
+    }
+    return stream;
   }
   var d3_geo_pathAreaScale, d3_geo_pathArea = {
     point: d3_noop,
