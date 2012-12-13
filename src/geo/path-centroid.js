@@ -21,6 +21,7 @@ var d3_geo_pathCentroid = {
 };
 
 function d3_geo_pathCentroidPoint(x, y) {
+  if (d3_geo_centroidDimension) return;
   d3_geo_centroidX += x;
   d3_geo_centroidY += y;
   ++d3_geo_centroidZ;
@@ -28,6 +29,13 @@ function d3_geo_pathCentroidPoint(x, y) {
 
 function d3_geo_pathCentroidLineStart() {
   var x0, y0;
+
+  if (d3_geo_centroidDimension !== 1) {
+    if (d3_geo_centroidDimension < 1) {
+      d3_geo_centroidDimension = 1;
+      d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+    } else return;
+  }
 
   d3_geo_pathCentroid.point = function(x, y) {
     d3_geo_pathCentroid.point = nextPoint;
@@ -49,6 +57,11 @@ function d3_geo_pathCentroidLineEnd() {
 
 function d3_geo_pathCentroidRingStart() {
   var x00, y00, x0, y0;
+
+  if (d3_geo_centroidDimension < 2) {
+    d3_geo_centroidDimension = 2;
+    d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+  }
 
   // For the first point, …
   d3_geo_pathCentroid.point = function(x, y) {

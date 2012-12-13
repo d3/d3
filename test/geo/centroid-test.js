@@ -60,15 +60,24 @@ suite.addBatch({
     },
     "FeatureCollection": function(centroid) {
       assert.inDelta(centroid({type: "FeatureCollection", features: [
-        {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}},
-        {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}}
+        {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}},
+        {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}
       ]}), [179.5, 0], 1e-6);
     },
-    "GeometryCollection": function(centroid) {
-      assert.inDelta(centroid({type: "GeometryCollection", geometries: [
-        {type: "Point", coordinates: [0, 0]},
-        {type: "LineString", coordinates: [[179, 0], [180, 0]]}
-      ]}), [179.5, 0], 1e-6);
+    "GeometryCollection": {
+      "Point and LineString": function(centroid) {
+        assert.inDelta(centroid({type: "GeometryCollection", geometries: [
+          {type: "LineString", coordinates: [[179, 0], [180, 0]]},
+          {type: "Point", coordinates: [0, 0]}
+        ]}), [179.5, 0], 1e-6);
+      },
+      "Point, LineString and Polygon": function(centroid) {
+        assert.inDelta(centroid({type: "GeometryCollection", geometries: [
+          {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]},
+          {type: "LineString", coordinates: [[179, 0], [180, 0]]},
+          {type: "Point", coordinates: [0, 0]}
+        ]}), [-179.5, 0.5], 1e-6);
+      }
     }
   }
 });

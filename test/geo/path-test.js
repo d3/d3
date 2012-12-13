@@ -227,11 +227,37 @@ suite.addBatch({
       "GeometryCollection": {
         "Point": function(centroid) {
           assert.deepEqual(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}]}), [480, 250]);
+        },
+        "Point and LineString": function(centroid) {
+          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
+            {type: "LineString", coordinates: [[179, 0], [180, 0]]},
+            {type: "Point", coordinates: [0, 0]}
+          ]}), [1377.5, 250]);
+        },
+        "Point, LineString and Polygon": function(centroid) {
+          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
+            {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]},
+            {type: "LineString", coordinates: [[179, 0], [180, 0]]},
+            {type: "Point", coordinates: [0, 0]}
+          ]}), [-417.5, 247.5]);
         }
       },
       "FeatureCollection": {
         "Point": function(centroid) {
           assert.deepEqual(centroid({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]}), [480, 250]);
+        },
+        "Point and LineString": function(centroid) {
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [
+            {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}},
+            {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}
+          ]}), [1377.5, 250]);
+        },
+        "Point, LineString and Polygon": function(centroid) {
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [
+            {type: "Feature", geometry: {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]}},
+            {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}},
+            {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}
+          ]}), [-417.5, 247.5]);
         }
       },
       "Sphere": function(centroid) {

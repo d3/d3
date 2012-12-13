@@ -5925,7 +5925,9 @@
       d3_geo_centroidDimension = 2;
       d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
     }
+    d3_geo_centroidDimension = 1;
     d3_geo_centroidLineStart();
+    d3_geo_centroidDimension = 2;
     var linePoint = d3_geo_centroid.point;
     d3_geo_centroid.point = function(λ, φ) {
       linePoint(λ00 = λ, φ00 = φ);
@@ -5937,9 +5939,11 @@
   }
   function d3_geo_centroidLineStart() {
     var x0, y0, z0;
-    if (d3_geo_centroidDimension < 1) {
-      d3_geo_centroidDimension = 1;
-      d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+    if (d3_geo_centroidDimension !== 1) {
+      if (d3_geo_centroidDimension < 1) {
+        d3_geo_centroidDimension = 1;
+        d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+      } else return;
     }
     d3_geo_centroid.point = function(λ, φ) {
       λ *= d3_radians;
@@ -6248,7 +6252,7 @@
       return d3_geo_pathAreaSum;
     };
     path.centroid = function(object) {
-      d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+      d3_geo_centroidDimension = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
       d3.geo.stream(object, projection.stream(d3_geo_pathCentroid));
       return d3_geo_centroidZ ? [ d3_geo_centroidX / d3_geo_centroidZ, d3_geo_centroidY / d3_geo_centroidZ ] : undefined;
     };
@@ -6384,12 +6388,19 @@
     }
   };
   function d3_geo_pathCentroidPoint(x, y) {
+    if (d3_geo_centroidDimension) return;
     d3_geo_centroidX += x;
     d3_geo_centroidY += y;
     ++d3_geo_centroidZ;
   }
   function d3_geo_pathCentroidLineStart() {
     var x0, y0;
+    if (d3_geo_centroidDimension !== 1) {
+      if (d3_geo_centroidDimension < 1) {
+        d3_geo_centroidDimension = 1;
+        d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+      } else return;
+    }
     d3_geo_pathCentroid.point = function(x, y) {
       d3_geo_pathCentroid.point = nextPoint;
       x0 = x, y0 = y;
@@ -6407,6 +6418,10 @@
   }
   function d3_geo_pathCentroidRingStart() {
     var x00, y00, x0, y0;
+    if (d3_geo_centroidDimension < 2) {
+      d3_geo_centroidDimension = 2;
+      d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+    }
     d3_geo_pathCentroid.point = function(x, y) {
       d3_geo_pathCentroid.point = nextPoint;
       x00 = x0 = x, y00 = y0 = y;

@@ -30,7 +30,7 @@ d3.geo.path = function() {
   };
 
   path.centroid = function(object) {
-    d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+    d3_geo_centroidDimension = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
     d3.geo.stream(object, projection.stream(d3_geo_pathCentroid));
     return d3_geo_centroidZ ? [d3_geo_centroidX / d3_geo_centroidZ, d3_geo_centroidY / d3_geo_centroidZ] : undefined;
   };
