@@ -1,3 +1,9 @@
+// TODO Implement using d3.geo.stream.
+
+var d3_geo_centroidX,
+    d3_geo_centroidY,
+    d3_geo_centroidZ;
+
 d3.geo.centroid = d3_geo_type({
 
   FeatureCollection: d3_noop,

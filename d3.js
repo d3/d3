@@ -5985,6 +5985,7 @@
       return [ [ x0, y0 ], [ x1, y1 ] ];
     };
   }
+  var d3_geo_centroidX, d3_geo_centroidY, d3_geo_centroidZ;
   d3.geo.centroid = d3_geo_type({
     FeatureCollection: d3_noop,
     GeometryCollection: d3_noop,
