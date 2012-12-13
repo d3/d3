@@ -1,5 +1,5 @@
 d3.geo.centroid = function(object) {
-  d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+  d3_geo_centroidDimension = d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
   d3.geo.stream(object, d3_geo_centroid);
   // TODO mixed geometries
   var m;
@@ -12,7 +12,8 @@ d3.geo.centroid = function(object) {
   }
 };
 
-var d3_geo_centroidW,
+var d3_geo_centroidDimension,
+    d3_geo_centroidW,
     d3_geo_centroidX,
     d3_geo_centroidY,
     d3_geo_centroidZ;
@@ -23,6 +24,7 @@ var d3_geo_centroid = {
   lineStart: d3_geo_centroidLineStart,
   lineEnd: d3_geo_centroidLineEnd,
   polygonStart: function() {
+    d3_geo_centroidDimension = 2;
     d3_geo_centroid.lineStart = d3_geo_centroidRingStart;
   },
   polygonEnd: function() {
@@ -32,6 +34,7 @@ var d3_geo_centroid = {
 
 // Arithmetic mean of Cartesian vectors.
 function d3_geo_centroidPoint(λ, φ) {
+  if (d3_geo_centroidDimension) return;
   ++d3_geo_centroidW;
   λ *= d3_radians;
   var cosφ = Math.cos(φ *= d3_radians);
@@ -42,6 +45,12 @@ function d3_geo_centroidPoint(λ, φ) {
 
 function d3_geo_centroidRingStart() {
   var λ00, φ00; // first point
+
+  if (d3_geo_centroidDimension < 2) {
+    d3_geo_centroidDimension = 2;
+    d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+  }
+
   d3_geo_centroidLineStart();
   var linePoint = d3_geo_centroid.point;
   d3_geo_centroid.point = function(λ, φ) {
@@ -55,6 +64,11 @@ function d3_geo_centroidRingStart() {
 
 function d3_geo_centroidLineStart() {
   var x0, y0, z0; // previous point
+
+  if (d3_geo_centroidDimension < 1) {
+    d3_geo_centroidDimension = 1;
+    d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+  }
 
   d3_geo_centroid.point = function(λ, φ) {
     λ *= d3_radians;

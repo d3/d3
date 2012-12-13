@@ -59,10 +59,16 @@ suite.addBatch({
       assert.deepEqual(centroid({type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}), [0, 0]);
     },
     "FeatureCollection": function(centroid) {
-      assert.isUndefined(centroid({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]}));
+      assert.inDelta(centroid({type: "FeatureCollection", features: [
+        {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}},
+        {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}}
+      ]}), [179.5, 0], 1e-6);
     },
     "GeometryCollection": function(centroid) {
-      assert.isUndefined(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}]}));
+      assert.inDelta(centroid({type: "GeometryCollection", geometries: [
+        {type: "Point", coordinates: [0, 0]},
+        {type: "LineString", coordinates: [[179, 0], [180, 0]]}
+      ]}), [179.5, 0], 1e-6);
     }
   }
 });
