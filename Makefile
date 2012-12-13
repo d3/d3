@@ -1,7 +1,7 @@
 # See the README for installation instructions.
 
 NODE_PATH ?= ./node_modules
-JS_UGLIFY = $(NODE_PATH)/uglify-js2/bin/uglifyjs2
+JS_UGLIFY = $(NODE_PATH)/uglify-js/bin/uglifyjs
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
 LOCALE ?= en_US
 
