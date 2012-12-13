@@ -5427,84 +5427,6 @@
     d[1] /= l;
     d[2] /= l;
   }
-  function d3_geo_type(types) {
-    for (var t in d3_geo_typeDefaults) if (!(t in types)) types[t] = d3_geo_typeDefaults[t];
-    return function(o) {
-      return o && (d3_geo_typeObjects.hasOwnProperty(o.type) ? types[o.type](o) : types.geometry(o));
-    };
-  }
-  var d3_geo_typeDefaults = {
-    Feature: function(o) {
-      var g = this.geometry(o.geometry);
-      return g && (o = Object.create(o), o.geometry = g, o);
-    },
-    FeatureCollection: function(o) {
-      var a, f, features = o.features, i = -1, n = features.length;
-      while (++i < n) if (f = this.Feature(features[i])) a ? a.push(f) : a = [ f ];
-      return a && (o = Object.create(o), o.features = a, o);
-    },
-    GeometryCollection: function(o) {
-      var a, g, geometries = o.geometries, i = -1, n = geometries.length;
-      while (++i < n) if (g = this.geometry(geometries[i])) a ? a.push(g) : a = [ g ];
-      return a && (o = Object.create(o), o.geometries = a, o);
-    },
-    LineString: function(o) {
-      var c = this.line(o.coordinates);
-      return c && (o = Object.create(o), o.coordinates = c, o);
-    },
-    MultiLineString: function(o) {
-      var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) if (c = this.line(coordinates[i])) a ? a.push(c) : a = [ c ];
-      return a && (o = Object.create(o), o.coordinates = a, o);
-    },
-    MultiPoint: function(o) {
-      var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) if (c = this.point(coordinates[i])) a ? a.push(c) : a = [ c ];
-      return a && (o = Object.create(o), o.coordinates = a, o);
-    },
-    MultiPolygon: function(o) {
-      var a, c, coordinates = o.coordinates, i = -1, n = coordinates.length;
-      while (++i < n) if (c = this.polygon(coordinates[i])) a ? a.push(c) : a = [ c ];
-      return a && (o = Object.create(o), o.coordinates = a, o);
-    },
-    Point: function(o) {
-      var c = this.point(o.coordinates);
-      return c && (o = Object.create(o), o.coordinates = c, o);
-    },
-    Polygon: function(o) {
-      var c = this.polygon(o.coordinates);
-      return c && (o = Object.create(o), o.coordinates = c, o);
-    },
-    Sphere: d3_noop,
-    geometry: function(o) {
-      return d3_geo_typeGeometries.hasOwnProperty(o.type) ? this[o.type](o) : null;
-    },
-    point: d3_noop,
-    line: function(coordinates) {
-      var a, c, i = -1, n = coordinates.length;
-      while (++i < n) if (c = this.point(coordinates[i])) a ? a.push(c) : a = [ c ];
-      return a;
-    },
-    polygon: function(coordinates) {
-      var a, c, i = -1, n = coordinates.length;
-      while (++i < n) if (c = this.line(coordinates[i])) a ? a.push(c) : a = [ c ];
-      return a;
-    }
-  };
-  var d3_geo_typeGeometries = {
-    LineString: 1,
-    MultiLineString: 1,
-    MultiPoint: 1,
-    MultiPolygon: 1,
-    Point: 1,
-    Polygon: 1,
-    Sphere: 1
-  };
-  var d3_geo_typeObjects = {
-    Feature: 1,
-    FeatureCollection: 1,
-    GeometryCollection: 1
-  };
   function d3_geo_clip(pointVisible, clipLine, interpolate) {
     return function(listener) {
       var line = clipLine(listener), polygon = [], ring;
@@ -5966,79 +5888,66 @@
       return [ [ x0, y0 ], [ x1, y1 ] ];
     };
   }
-  var d3_geo_centroidX, d3_geo_centroidY, d3_geo_centroidZ;
-  d3.geo.centroid = d3_geo_type({
-    FeatureCollection: d3_noop,
-    GeometryCollection: d3_noop,
-    Feature: function(feature) {
-      return this.geometry(feature.geometry);
+  d3.geo.centroid = function(object) {
+    d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+    d3.geo.stream(object, d3_geo_centroid);
+    return d3_geo_centroidW ? [ Math.atan2(d3_geo_centroidY, d3_geo_centroidX) * d3_degrees, Math.asin(Math.max(-1, Math.min(1, d3_geo_centroidZ / Math.sqrt(d3_geo_centroidX * d3_geo_centroidX + d3_geo_centroidY * d3_geo_centroidY + d3_geo_centroidZ * d3_geo_centroidZ)))) * d3_degrees ] : null;
+  };
+  var d3_geo_centroidW, d3_geo_centroidX, d3_geo_centroidY, d3_geo_centroidZ;
+  var d3_geo_centroid = {
+    sphere: d3_noop,
+    point: d3_geo_centroidPoint,
+    lineStart: d3_geo_centroidLineStart,
+    lineEnd: d3_geo_centroidLineEnd,
+    polygonStart: function() {
+      d3_geo_centroid.lineStart = d3_geo_centroidRingStart;
     },
-    Point: function(point) {
-      return point.coordinates;
-    },
-    MultiPoint: function(multiPoint) {
-      var coordinates = multiPoint.coordinates, n = coordinates.length, i = 0, point, λ, φ, cosφ, x = 0, y = 0, z = 0;
-      while (i < n) {
-        point = coordinates[i++];
-        λ = point[0] * d3_radians;
-        cosφ = Math.cos(φ = point[1] * d3_radians);
-        x += (cosφ * Math.cos(λ) - x) / i;
-        y += (cosφ * Math.sin(λ) - y) / i;
-        z += (Math.sin(φ) - z) / i;
-      }
-      return n ? [ Math.atan2(y, x) * d3_degrees, Math.asin(Math.max(-1, Math.min(1, z))) * d3_degrees ] : null;
-    },
-    LineString: function(line) {
-      var centroid = d3_geo_centroidLine(line.coordinates), cx, cy, cz;
-      return centroid && centroid[3] ? [ Math.atan2(cy = centroid[1], cx = centroid[0]) * d3_degrees, Math.asin(Math.max(-1, Math.min(1, (cz = centroid[2]) / Math.sqrt(cx * cx + cy * cy + cz * cz)))) * d3_degrees ] : null;
-    },
-    MultiLineString: function(multiLine) {
-      var coordinates = multiLine.coordinates, n = coordinates.length, i = -1, cx = 0, cy = 0, cz = 0, weight = 0;
-      while (++i < n) {
-        centroid = d3_geo_centroidLine(coordinates[i]);
-        if (!centroid) continue;
-        cx += centroid[0];
-        cy += centroid[1];
-        cz += centroid[2];
-        weight += centroid[3];
-      }
-      return weight ? [ Math.atan2(cy, cx) * d3_degrees, Math.asin(Math.max(-1, Math.min(1, cz / Math.sqrt(cx * cx + cy * cy + cz * cz)))) * d3_degrees ] : null;
-    },
-    Polygon: function(polygon) {
-      return this.MultiLineString(polygon);
-    },
-    MultiPolygon: function(multiPolygon) {
-      var coordinates = multiPolygon.coordinates, n = coordinates.length, i = -1, cx = 0, cy = 0, cz = 0, weight = 0, polygon;
-      while (++i < n) {
-        polygon = coordinates[i];
-        for (var j = 0, m = polygon.length; j < m; ++j) {
-          centroid = d3_geo_centroidLine(polygon[j]);
-          if (!centroid) continue;
-          cx += centroid[0];
-          cy += centroid[1];
-          cz += centroid[2];
-          weight += centroid[3];
-        }
-      }
-      return weight ? [ Math.atan2(cy, cx) * d3_degrees, Math.asin(Math.max(-1, Math.min(1, cz / Math.sqrt(cx * cx + cy * cy + cz * cz)))) * d3_degrees ] : null;
+    polygonEnd: function() {
+      d3_geo_centroid.lineStart = d3_geo_centroidLineStart;
     }
-  });
-  function d3_geo_centroidLine(coordinates) {
-    if (!(n = coordinates.length)) return null;
-    var point = coordinates[0], i = 0, n, λ = point[0] * d3_radians, φ, cosφ = Math.cos(φ = point[1] * d3_radians), x0 = cosφ * Math.cos(λ), y0 = cosφ * Math.sin(λ), z0 = Math.sin(φ), cx = 0, cy = 0, cz = 0, x, y, z, w, weight = 0;
-    while (++i < n) {
-      point = coordinates[i];
-      λ = point[0] * d3_radians;
-      cosφ = Math.cos(φ = point[1] * d3_radians);
-      x = cosφ * Math.cos(λ);
-      y = cosφ * Math.sin(λ);
-      z = Math.sin(φ);
-      weight += w = Math.atan2(Math.sqrt((w = y0 * z - z0 * y) * w + (w = z0 * x - x0 * z) * w + (w = x0 * y - y0 * x) * w), x0 * x + y0 * y + z0 * z);
-      cx += w * (x0 + (x0 = x));
-      cy += w * (y0 + (y0 = y));
-      cz += w * (z0 + (z0 = z));
+  };
+  function d3_geo_centroidPoint(λ, φ) {
+    ++d3_geo_centroidW;
+    λ *= d3_radians;
+    var cosφ = Math.cos(φ *= d3_radians);
+    d3_geo_centroidX += (cosφ * Math.cos(λ) - d3_geo_centroidX) / d3_geo_centroidW;
+    d3_geo_centroidY += (cosφ * Math.sin(λ) - d3_geo_centroidY) / d3_geo_centroidW;
+    d3_geo_centroidZ += (Math.sin(φ) - d3_geo_centroidZ) / d3_geo_centroidW;
+  }
+  function d3_geo_centroidRingStart() {
+    var λ00, φ00;
+    d3_geo_centroidLineStart();
+    var linePoint = d3_geo_centroid.point;
+    d3_geo_centroid.point = function(λ, φ) {
+      linePoint(λ00 = λ, φ00 = φ);
+    };
+    d3_geo_centroid.lineEnd = function() {
+      d3_geo_centroid.point(λ00, φ00);
+      d3_geo_centroidLineEnd();
+    };
+  }
+  function d3_geo_centroidLineStart() {
+    var x0, y0, z0;
+    d3_geo_centroid.point = function(λ, φ) {
+      λ *= d3_radians;
+      var cosφ = Math.cos(φ *= d3_radians);
+      x0 = cosφ * Math.cos(λ);
+      y0 = cosφ * Math.sin(λ);
+      z0 = Math.sin(φ);
+      d3_geo_centroid.point = nextPoint;
+    };
+    d3_geo_centroid.lineEnd = d3_geo_centroidLineEnd;
+    function nextPoint(λ, φ) {
+      λ *= d3_radians;
+      var cosφ = Math.cos(φ *= d3_radians), x = cosφ * Math.cos(λ), y = cosφ * Math.sin(λ), z = Math.sin(φ), w = Math.atan2(Math.sqrt((w = y0 * z - z0 * y) * w + (w = z0 * x - x0 * z) * w + (w = x0 * y - y0 * x) * w), x0 * x + y0 * y + z0 * z);
+      d3_geo_centroidW += w;
+      d3_geo_centroidX += w * (x0 + (x0 = x));
+      d3_geo_centroidY += w * (y0 + (y0 = y));
+      d3_geo_centroidZ += w * (z0 + (z0 = z));
     }
-    return [ cx, cy, cz, weight ];
+  }
+  function d3_geo_centroidLineEnd() {
+    d3_geo_centroid.point = d3_geo_centroidPoint;
   }
   d3.geo.circle = function() {
     var origin = [ 0, 0 ], angle, precision = 6, rotate, interpolate;

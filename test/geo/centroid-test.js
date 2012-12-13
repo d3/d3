@@ -14,7 +14,7 @@ suite.addBatch({
       assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [0, 0]);
     },
     "MultiPoint": function(centroid) {
-      assert.inDelta(centroid({type: "MultiPoint", coordinates: [[0, 0], [1, 2]]}), [0.499847, 0.999847], 1e-6);
+      assert.inDelta(centroid({type: "MultiPoint", coordinates: [[0, 0], [1, 2]]}), [0.499847, 1.000038], 1e-6);
       assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[179, 0], [-179, 0]]}), [180, 0]);
     },
     "LineString": function(centroid) {
