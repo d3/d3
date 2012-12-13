@@ -1,6 +1,6 @@
 // TODO Unify this code with d3.geom.polygon area?
 
-var d3_geo_pathAreaPolygon, d3_geo_pathArea = {
+var d3_geo_pathAreaSum, d3_geo_pathAreaPolygon, d3_geo_pathArea = {
   point: d3_noop,
   lineStart: d3_noop,
   lineEnd: d3_noop,
@@ -12,7 +12,7 @@ var d3_geo_pathAreaPolygon, d3_geo_pathArea = {
   },
   polygonEnd: function() {
     d3_geo_pathArea.lineStart = d3_geo_pathArea.lineEnd = d3_geo_pathArea.point = d3_noop;
-    d3_geo_areaSum += Math.abs(d3_geo_pathAreaPolygon / 2);
+    d3_geo_pathAreaSum += Math.abs(d3_geo_pathAreaPolygon / 2);
   }
 };
 

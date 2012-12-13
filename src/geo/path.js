@@ -21,9 +21,9 @@ d3.geo.path = function() {
   }
 
   path.area = function(object) {
-    d3_geo_areaSum = 0;
+    d3_geo_pathAreaSum = 0;
     d3.geo.stream(object, projection.stream(d3_geo_pathArea));
-    return d3_geo_areaSum;
+    return d3_geo_pathAreaSum;
   };
 
   path.centroid = function(object) {

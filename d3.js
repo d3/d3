@@ -6301,9 +6301,9 @@
       }
     }
     path.area = function(object) {
-      d3_geo_areaSum = 0;
+      d3_geo_pathAreaSum = 0;
       d3.geo.stream(object, projection.stream(d3_geo_pathArea));
-      return d3_geo_areaSum;
+      return d3_geo_pathAreaSum;
     };
     path.centroid = function(object) {
       d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
@@ -6401,7 +6401,7 @@
     }
     return stream;
   }
-  var d3_geo_pathAreaPolygon, d3_geo_pathArea = {
+  var d3_geo_pathAreaSum, d3_geo_pathAreaPolygon, d3_geo_pathArea = {
     point: d3_noop,
     lineStart: d3_noop,
     lineEnd: d3_noop,
@@ -6411,7 +6411,7 @@
     },
     polygonEnd: function() {
       d3_geo_pathArea.lineStart = d3_geo_pathArea.lineEnd = d3_geo_pathArea.point = d3_noop;
-      d3_geo_areaSum += Math.abs(d3_geo_pathAreaPolygon / 2);
+      d3_geo_pathAreaSum += Math.abs(d3_geo_pathAreaPolygon / 2);
     }
   };
   function d3_geo_pathAreaRingStart() {
