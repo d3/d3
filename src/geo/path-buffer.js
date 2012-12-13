@@ -1,5 +1,6 @@
-function d3_geo_pathBuffer(buffer) {
-  var pointCircle = d3_geo_pathCircle(4.5);
+function d3_geo_pathBuffer() {
+  var pointCircle = d3_geo_pathCircle(4.5),
+      buffer = [];
 
   var stream = {
     point: point,
@@ -15,6 +16,14 @@ function d3_geo_pathBuffer(buffer) {
     pointRadius: function(_) {
       pointCircle = d3_geo_pathCircle(+_);
       return stream;
+    },
+
+    result: function() {
+      if (buffer.length) {
+        var result = buffer.join("");
+        buffer = [];
+        return result;
+      }
     }
   };
 

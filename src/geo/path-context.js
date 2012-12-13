@@ -15,7 +15,9 @@ function d3_geo_pathContext(context) {
     pointRadius: function(_) {
       pointRadius = +_;
       return stream;
-    }
+    },
+
+    result: d3_noop
   };
 
   function point(x, y) {

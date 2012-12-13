@@ -6239,15 +6239,10 @@
     return d3_geo_projection(d3_geo_orthographic);
   }).raw = d3_geo_orthographic;
   d3.geo.path = function() {
-    var pointRadius = 4.5, projection = d3.geo.albersUsa(), context, buffer = [], stream = new d3_geo_pathBuffer(buffer);
+    var pointRadius = 4.5, projection = d3.geo.albersUsa(), context, stream = new d3_geo_pathBuffer();
     function path(object) {
-      if (object == null) return;
-      d3.geo.stream(object, projection.stream(stream.pointRadius(typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius)));
-      if (buffer.length) {
-        var result = buffer.join("");
-        buffer = [];
-        return result;
-      }
+      if (object) d3.geo.stream(object, projection.stream(stream.pointRadius(typeof pointRadius === "function" ? pointRadius.apply(this, arguments) : pointRadius)));
+      return stream.result();
     }
     path.area = function(object) {
       d3_geo_pathAreaSum = 0;
@@ -6269,7 +6264,7 @@
     };
     path.context = function(_) {
       if (!arguments.length) return context;
-      stream = new d3_geo_pathContext(context = _);
+      stream = (context = _) == null ? new d3_geo_pathBuffer() : new d3_geo_pathContext(_);
       return path;
     };
     path.pointRadius = function(_) {
@@ -6282,8 +6277,8 @@
   function d3_geo_pathCircle(radius) {
     return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
   }
-  function d3_geo_pathBuffer(buffer) {
-    var pointCircle = d3_geo_pathCircle(4.5);
+  function d3_geo_pathBuffer() {
+    var pointCircle = d3_geo_pathCircle(4.5), buffer = [];
     var stream = {
       point: point,
       lineStart: function() {
@@ -6300,6 +6295,13 @@
       pointRadius: function(_) {
         pointCircle = d3_geo_pathCircle(+_);
         return stream;
+      },
+      result: function() {
+        if (buffer.length) {
+          var result = buffer.join("");
+          buffer = [];
+          return result;
+        }
       }
     };
     function point(x, y) {
@@ -6338,7 +6340,8 @@
       pointRadius: function(_) {
         pointRadius = +_;
         return stream;
-      }
+      },
+      result: d3_noop
     };
     function point(x, y) {
       context.moveTo(x, y);
