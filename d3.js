@@ -5429,23 +5429,34 @@
   }
   function d3_geo_clip(pointVisible, clipLine, interpolate) {
     return function(listener) {
-      var line = clipLine(listener), polygon = [], ring;
+      var line = clipLine(listener);
       var clip = {
         point: point,
         lineStart: lineStart,
         lineEnd: lineEnd,
         polygonStart: function() {
-          clip.point = pointPolygon;
-          clip.lineStart = linePolygon;
-          clip.lineEnd = lineEndPolygon;
+          clip.point = pointRing;
+          clip.lineStart = ringStart;
+          clip.lineEnd = ringEnd;
+          invisible = false;
+          invisibleArea = visibleArea = 0;
+          segments = [];
+          listener.polygonStart();
         },
         polygonEnd: function() {
           clip.point = point;
           clip.lineStart = lineStart;
           clip.lineEnd = lineEnd;
-          d3_geo_clipPolygon(polygon, clipLine, interpolate, listener);
-          polygon = [];
-          ring = null;
+          segments = d3.merge(segments);
+          if (segments.length) {
+            d3_geo_clipPolygon(segments, interpolate, listener);
+          } else if (visibleArea < -ε2 || invisible && invisibleArea < -ε2) {
+            listener.lineStart();
+            interpolate(null, null, 1, listener);
+            listener.lineEnd();
+          }
+          listener.polygonEnd();
+          segments = null;
         },
         sphere: function() {
           listener.polygonStart();
@@ -5455,15 +5466,11 @@
           listener.polygonEnd();
         }
       };
-      return clip;
       function point(λ, φ) {
         if (pointVisible(λ, φ)) listener.point(λ, φ);
       }
       function pointLine(λ, φ) {
         line.point(λ, φ);
-      }
-      function pointPolygon(λ, φ) {
-        ring.push([ λ, φ ]);
       }
       function lineStart() {
         clip.point = pointLine;
@@ -5473,46 +5480,44 @@
         clip.point = point;
         line.lineEnd();
       }
-      function linePolygon() {
-        polygon.push(ring = []);
+      var segments, visibleArea, invisibleArea, invisible;
+      var buffer = d3_geo_clipBufferListener(), ringListener = clipLine(buffer), ring;
+      function pointRing(λ, φ) {
+        ringListener.point(λ, φ);
+        ring.push([ λ, φ ]);
       }
-      function lineEndPolygon() {
-        ring.push(ring[0]);
+      function ringStart() {
+        ringListener.lineStart();
+        ring = [];
       }
+      function ringEnd() {
+        pointRing(ring[0][0], ring[0][1]);
+        ringListener.lineEnd();
+        var clean = ringListener.clean(), ringSegments = buffer.buffer(), segment, n = ringSegments.length;
+        if (!n) {
+          invisible = true;
+          invisibleArea += d3_geo_clipAreaRing(ring, d3_geo_clipRotationInvisible);
+          ring = null;
+          return;
+        }
+        ring = null;
+        if (clean & 1) {
+          segment = ringSegments[0];
+          visibleArea += d3_geo_clipAreaRing(segment, d3_geo_clipRotation);
+          var n = segment.length - 1, i = -1, point;
+          listener.lineStart();
+          while (++i < n) listener.point((point = segment[i])[0], point[1]);
+          listener.lineEnd();
+          return;
+        }
+        if (n > 1 && clean & 2) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
+        segments.push(ringSegments.filter(d3_geo_clipSegmentLength1));
+      }
+      return clip;
     };
   }
-  function d3_geo_clipPolygon(polygon, clipRing, interpolate, listener) {
-    var subject = [], clip = [], segments = [], visibleArea = 0, invisibleArea = 0, invisible = false, buffer = d3_geo_clipBufferListener(), ringListener = clipRing(buffer);
-    listener.polygonStart();
-    var segments = d3.merge(polygon.map(function(ring) {
-      ringListener.lineStart();
-      ring.forEach(function(point) {
-        ringListener.point(point[0], point[1]);
-      });
-      ringListener.lineEnd();
-      var clean = ringListener.clean(), ringSegments = buffer.buffer(), segment, n = ringSegments.length;
-      if (!n) {
-        invisible = true;
-        invisibleArea += d3_geo_clipAreaRing(ring, d3_geo_clipRotationInvisible);
-        return [];
-      }
-      if (clean & 1) {
-        segment = ringSegments[0];
-        visibleArea += d3_geo_clipAreaRing(segment, d3_geo_clipRotation);
-        var n = segment.length - 1, i = -1, point;
-        listener.lineStart();
-        while (++i < n) listener.point((point = segment[i])[0], point[1]);
-        listener.lineEnd();
-        return [];
-      }
-      if (n > 1 && clean & 2) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
-      return ringSegments.filter(d3_geo_clipSegmentLength1);
-    }));
-    if (!segments.length && (visibleArea < -ε2 || invisible && invisibleArea < -ε2)) {
-      listener.lineStart();
-      interpolate(null, null, 1, listener);
-      listener.lineEnd();
-    }
+  function d3_geo_clipPolygon(segments, interpolate, listener) {
+    var subject = [], clip = [];
     segments.forEach(function(segment) {
       var n = segment.length;
       if (n <= 1) return;
@@ -5557,11 +5562,11 @@
     clip.sort(d3_geo_clipSort);
     d3_geo_clipLinkCircular(subject);
     d3_geo_clipLinkCircular(clip);
-    if (!subject.length) return listener.polygonEnd();
+    if (!subject.length) return;
     var start = subject[0], current, points, point;
     while (1) {
       current = start;
-      while (current.visited) if ((current = current.next) === start) return listener.polygonEnd();
+      while (current.visited) if ((current = current.next) === start) return;
       points = current.points;
       listener.lineStart();
       do {
@@ -5587,7 +5592,6 @@
       } while (!current.visited);
       listener.lineEnd();
     }
-    listener.polygonEnd();
   }
   function d3_geo_clipLinkCircular(array) {
     if (!(n = array.length)) return;
