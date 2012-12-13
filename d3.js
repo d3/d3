@@ -5515,7 +5515,7 @@
         polygonStart: function() {
           clip.point = pointPolygon;
           clip.lineStart = linePolygon;
-          clip.lineEnd = d3_noop;
+          clip.lineEnd = lineEndPolygon;
         },
         polygonEnd: function() {
           clip.point = point;
@@ -5554,6 +5554,9 @@
       function linePolygon() {
         polygon.push(ring = []);
       }
+      function lineEndPolygon() {
+        ring.push(ring[0]);
+      }
     };
   }
   function d3_geo_clipPolygon(polygon, clipRing, interpolate, listener) {
@@ -5574,7 +5577,7 @@
       if (clean & 1) {
         segment = ringSegments[0];
         visibleArea += d3_geo_clipAreaRing(segment, d3_geo_clipRotation);
-        var n = segment.length, i = -1, point;
+        var n = segment.length - 1, i = -1, point;
         listener.lineStart();
         while (++i < n) listener.point((point = segment[i])[0], point[1]);
         listener.lineEnd();
