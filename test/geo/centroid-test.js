@@ -13,9 +13,21 @@ suite.addBatch({
     "Point": function(centroid) {
       assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [0, 0]);
     },
-    "MultiPoint": function(centroid) {
-      assert.inDelta(centroid({type: "MultiPoint", coordinates: [[0, 0], [1, 2]]}), [0.499847, 1.000038], 1e-6);
-      assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[179, 0], [-179, 0]]}), [180, 0]);
+    "MultiPoint": {
+      "": function(centroid) {
+        assert.inDelta(centroid({type: "MultiPoint", coordinates: [[0, 0], [1, 2]]}), [0.499847, 1.000038], 1e-6);
+      },
+      "antimeridian": function(centroid) {
+        assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[179, 0], [-179, 0]]}), [180, 0]);
+      },
+      "rings": {
+        "equator": function(centroid) {
+          assert.isUndefined(centroid({type: "MultiPoint", coordinates: [[0, 0], [90, 0], [180, 0], [-90, 0]]}));
+        },
+        "polar": function(centroid) {
+          assert.isUndefined(centroid({type: "MultiPoint", coordinates: [[0, 0], [0, 90], [180, 0], [0, -90]]}));
+        }
+      }
     },
     "LineString": function(centroid) {
       assert.inDelta(centroid({type: "LineString", coordinates: [[0, 0], [1, 0]]}), [.5, 0], 1e-6);
@@ -25,8 +37,8 @@ suite.addBatch({
       assert.inDelta(centroid({type: "LineString", coordinates: [[-60, -1], [60, 1]]}), [0, 0], 1e-6);
       assert.inDelta(centroid({type: "LineString", coordinates: [[179, -1], [-179, 1]]}), [180, 0], 1e-6);
       assert.inDelta(centroid({type: "LineString", coordinates: [[-179, 0], [0, 0], [179, 0]]}), [0, 0], 1e-6);
-      assert.inDelta(centroid({type: "LineString", coordinates: [[0, -90], [0, 90]]}), [0, 0], 1e-6);
-      assert.inDelta(centroid({type: "LineString", coordinates: [[-180, -90], [0, 90]]}), [-90, 0], 1e-6);
+      assert.inDelta(centroid({type: "LineString", coordinates: [[-180, -90], [0, 0], [0, 90]]}), [0, 0], 1e-6);
+      assert.isUndefined(centroid({type: "LineString", coordinates: [[0, -90], [0, 90]]}));
     },
     "MultiLineString": function(centroid) {
       assert.inDelta(centroid({type: "MultiLineString", coordinates: [[[0, 0], [0, 2]]]}), [0, 1], 1e-6);
