@@ -1,7 +1,6 @@
 d3.geo.centroid = function(object) {
   d3_geo_centroidDimension = d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
   d3.geo.stream(object, d3_geo_centroid);
-  // TODO mixed geometries
   var m;
   if (d3_geo_centroidW &&
       Math.abs(m = Math.sqrt(d3_geo_centroidX * d3_geo_centroidX + d3_geo_centroidY * d3_geo_centroidY + d3_geo_centroidZ * d3_geo_centroidZ)) > ε) {

@@ -1,4 +1,4 @@
-// TODO fallback for projections that don't implement stream? (or fix albersUsa?)
+// TODO fallback for projections that don't implement stream?
 // TODO cache pathBuffer / pathContext across invocations?
 // TODO better encapsulation for d3_geo_pathArea; move to area.js
 // TODO better encapsulation for d3_geo_pathCentroid; move to centroid.js

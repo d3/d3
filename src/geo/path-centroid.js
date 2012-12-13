@@ -1,6 +1,5 @@
 // TODO Unify this code with d3.geom.polygon centroid?
 // TODO Enforce positive area for exterior, negative area for interior?
-// TODO ignore lower dimensions.
 
 var d3_geo_pathCentroid = {
   point: d3_geo_pathCentroidPoint,
