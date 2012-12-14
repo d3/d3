@@ -535,7 +535,7 @@ suite.addBatch({
       }
     },
 
-    "antemeridian cutting": {
+    "antimeridian cutting": {
       "rotate([98, 0])": {
         topic: function() {
           return d3.geo.path()
@@ -612,7 +612,7 @@ suite.addBatch({
             .projection(d3.geo.stereographic()
               .precision(1));
       },
-      "correctly resamples points on antemeridian": function(path) {
+      "correctly resamples points on antimeridian": function(path) {
         path({type: "LineString", coordinates: [[0, 90], [90, 0]]});
         assert.deepEqual(testContext.buffer(), [
           {type: "moveTo", x: 480, y: 100},
