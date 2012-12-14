@@ -5719,23 +5719,40 @@
     function resample(listener) {
       var resample = {
         point: resamplePoint,
-        lineStart: function() {
-          x0 = NaN;
-          resample.point = resamplePointLine;
-          listener.lineStart();
-        },
-        lineEnd: function() {
-          resample.point = resamplePoint;
-          listener.lineEnd();
-        },
+        lineStart: lineStart,
+        lineEnd: lineEnd,
         polygonStart: function() {
           listener.polygonStart();
+          resample.lineStart = ringStart;
         },
         polygonEnd: function() {
           listener.polygonEnd();
         },
         sphere: d3_noop
       };
+      function lineStart() {
+        x0 = NaN;
+        resample.point = resamplePointLine;
+        listener.lineStart();
+      }
+      function lineEnd() {
+        resample.point = resamplePoint;
+        listener.lineEnd();
+      }
+      function ringStart() {
+        var λ00, φ00;
+        lineStart();
+        resample.point = function(λ, φ) {
+          resamplePointLine(λ00 = λ, φ00 = φ);
+          resample.point = resamplePointLine;
+        };
+        resample.lineEnd = function() {
+          var cartesian = d3_geo_cartesian([ λ00, φ00 ]), p = projectPoint(λ00, φ00);
+          resampleLineTo(x0, y0, λ0, a0, b0, c0, p[0], p[1], λ00, cartesian[0], cartesian[1], cartesian[2], maxDepth, listener);
+          resample.lineEnd = lineEnd;
+          lineEnd();
+        };
+      }
       function resamplePoint(λ, φ) {
         var point = projectPoint(λ, φ);
         listener.point(point[0], point[1]);
