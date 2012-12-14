@@ -28,7 +28,7 @@ function d3_geo_cutLine(listener) {
         listener.point(sλ1, φ0);
         listener.point( λ1, φ0);
         clean = 0;
-      } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antemeridian
+      } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antimeridian
         // handle degeneracies
         if (Math.abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
         if (Math.abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
