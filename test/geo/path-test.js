@@ -627,7 +627,7 @@ suite.addBatch({
         ]);
       }
     },
-    "albers.precision(1)": {
+    "resampling near poles": {
       topic: function() {
         return d3.geo.path()
             .context(testContext)
@@ -636,11 +636,20 @@ suite.addBatch({
               .rotate([0, 0])
               .precision(1));
       },
-      "resampling near poles": function(path) {
+      "rotate([0, 0])": function(path) {
         path({type: "LineString", coordinates: [[0, 88], [180, 89]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
         path({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+      },
+      "rotate([11.5, 285])": function(path) {
+        try {
+          path.projection().rotate([11.5, 285]);
+          path({type: "LineString", coordinates: [[170, 20], [170, 0]]});
+          assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+        } finally {
+          path.projection().rotate([0, 0]);
+        }
       }
     },
     "rotate([0, 0, 0])": {
