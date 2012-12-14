@@ -75,7 +75,7 @@ function d3_geo_resample(project) {
           dx2 = x2 - x0,
           dy2 = y2 - y0,
           dz = dy * dx2 - dx * dy2;
-      if (dz * dz / d2 > δ2 || Math.abs((dx * dx2 + dy * dy2) / d2 - .5) > .3) {
+      if (dz * dz / d2 > δ2 || Math.abs((dx * dx2 + dy * dy2) / d2 - .5) > .3 || dx2 * dx2 + dy2 * dy2 > 256 * δ2) {
         resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a /= m, b /= m, c, depth, stream);
         stream.point(x2, y2);
         resampleLineTo(x2, y2, λ2, a, b, c, x1, y1, λ1, a1, b1, c1, depth, stream);
