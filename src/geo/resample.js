@@ -10,7 +10,7 @@ function d3_geo_resample(project) {
       lineStart: lineStart,
       lineEnd: lineEnd,
       polygonStart: function() { stream.polygonStart(); resample.lineStart = polygonLineStart; },
-      polygonEnd: function() { stream.polygonEnd(); }
+      polygonEnd: function() { stream.polygonEnd(); resample.lineStart = lineStart; }
     };
 
     function point(x, y) {

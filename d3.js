@@ -5441,6 +5441,7 @@
         },
         polygonEnd: function() {
           stream.polygonEnd();
+          resample.lineStart = lineStart;
         }
       };
       function point(x, y) {
