@@ -6573,8 +6573,8 @@
   function d3_geo_projectionRadiansRotate(rotate, stream) {
     return {
       point: function(x, y) {
-        x = rotate(x * d3_radians, y * d3_radians);
-        stream.point(x[0], x[1]);
+        y = rotate(x * d3_radians, y * d3_radians), x = y[0];
+        stream.point(x > π ? x - 2 * π : x < -π ? x + 2 * π : x, y[1]);
       },
       sphere: function() {
         stream.sphere();
@@ -6594,17 +6594,11 @@
     };
   }
   function d3_geo_rotation(δλ, δφ, δγ) {
-    return δλ ? δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ)) : d3_geo_rotationλ(δλ) : δφ || δγ ? d3_geo_rotationφγ(δφ, δγ) : d3_geo_identityRotation;
+    return δλ ? δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ)) : d3_geo_rotationλ(δλ) : δφ || δγ ? d3_geo_rotationφγ(δφ, δγ) : d3_geo_equirectangular;
   }
-  function d3_geo_identityRotation(λ, φ) {
-    return [ λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ, φ ];
-  }
-  d3_geo_identityRotation.invert = function(x, y) {
-    return [ x, y ];
-  };
   function d3_geo_forwardRotationλ(δλ) {
     return function(λ, φ) {
-      return [ (λ += δλ) > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ, φ ];
+      return λ += δλ, [ λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ, φ ];
     };
   }
   function d3_geo_rotationλ(δλ) {
