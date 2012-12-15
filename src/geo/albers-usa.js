@@ -34,14 +34,6 @@ d3.geo.albersUsa = function() {
         : lower48;
   }
 
-  var projectResample = d3_geo_resample(function(λ, φ) {
-    return albersUsa([λ * d3_degrees, φ * d3_degrees]);
-  });
-
-  albersUsa.stream = function(listener) {
-    return d3_geo_albersUsaRadians(projectResample(listener));
-  };
-
   albersUsa.scale = function(x) {
     if (!arguments.length) return lower48.scale();
     lower48.scale(x);
@@ -65,16 +57,3 @@ d3.geo.albersUsa = function() {
 
   return albersUsa.scale(lower48.scale());
 };
-
-function d3_geo_albersUsaRadians(stream) {
-  return {
-    point: function(λ, φ) {
-      stream.point(λ * d3_radians, φ * d3_radians);
-    },
-    sphere: function() { stream.sphere(); },
-    lineStart: function() { stream.lineStart(); },
-    lineEnd: function() { stream.lineEnd(); },
-    polygonStart: function() { stream.polygonStart(); },
-    polygonEnd: function() { stream.polygonEnd(); }
-  };
-}
