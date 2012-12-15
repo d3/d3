@@ -2,23 +2,21 @@ d3.geo.circle = function() {
   var origin = [0, 0],
       angle,
       precision = 6,
-      rotate,
       interpolate;
 
   function circle() {
-    var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
-    rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-    var ring = [];
-    interpolate(null, null, 1, {point: function(λ, φ) {
-      var point = rotate.invert(λ, φ);
-      point[0] *= d3_degrees;
-      point[1] *= d3_degrees;
-      ring.push(point);
-    }});
-    return {
-      type: "Polygon",
-      coordinates: [ring]
-    };
+    var center = typeof origin === "function" ? origin.apply(this, arguments) : origin,
+        rotate = d3_geo_rotation(center[0] * d3_radians, center[1] * d3_radians, 0),
+        ring = [];
+
+    interpolate(null, null, 1, {
+      point: function(x, y) {
+        ring.push(x = rotate(x, y));
+        x[0] *= d3_degrees, x[1] *= d3_degrees;
+      }
+    });
+
+    return {type: "Polygon", coordinates: [ring]};
   }
 
   circle.origin = function(x) {

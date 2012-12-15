@@ -5671,17 +5671,13 @@
     d3_geo_centroid.point = d3_geo_centroidPoint;
   }
   d3.geo.circle = function() {
-    var origin = [ 0, 0 ], angle, precision = 6, rotate, interpolate;
+    var origin = [ 0, 0 ], angle, precision = 6, interpolate;
     function circle() {
-      var o = typeof origin === "function" ? origin.apply(this, arguments) : origin;
-      rotate = d3_geo_rotation(-o[0] * d3_radians, -o[1] * d3_radians, 0);
-      var ring = [];
+      var center = typeof origin === "function" ? origin.apply(this, arguments) : origin, rotate = d3_geo_rotation(center[0] * d3_radians, center[1] * d3_radians, 0), ring = [];
       interpolate(null, null, 1, {
-        point: function(λ, φ) {
-          var point = rotate.invert(λ, φ);
-          point[0] *= d3_degrees;
-          point[1] *= d3_degrees;
-          ring.push(point);
+        point: function(x, y) {
+          ring.push(x = rotate(x, y));
+          x[0] *= d3_degrees, x[1] *= d3_degrees;
         }
       });
       return {
@@ -6522,13 +6518,13 @@
       x = project(x, y);
       return [ x[0] * k + δx, δy - x[1] * k ];
     }), k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, clip = d3_geo_clipAntimeridian, clipAngle = null;
-    function projection(coordinates) {
-      coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
-      return [ coordinates[0] * k + δx, δy - coordinates[1] * k ];
+    function projection(point) {
+      point = projectRotate(point[0] * d3_radians, point[1] * d3_radians);
+      return [ point[0] * k + δx, δy - point[1] * k ];
     }
-    function invert(coordinates) {
-      coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
-      return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
+    function invert(point) {
+      point = projectRotate.invert((point[0] - δx) / k, (δy - point[1]) / k);
+      return [ point[0] * d3_degrees, point[1] * d3_degrees ];
     }
     projection.stream = function(stream) {
       return d3_geo_projectionRadiansRotate(rotate, clip(projectResample(stream)));

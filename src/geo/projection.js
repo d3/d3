@@ -11,26 +11,21 @@ function d3_geo_projectionMutator(projectAt) {
       projectRotate,
       projectResample = d3_geo_resample(function(x, y) { x = project(x, y); return [x[0] * k + δx, δy - x[1] * k]; }),
       k = 150, // scale
-      x = 480, // translate
-      y = 250,
-      λ = 0, // center
-      φ = 0,
-      δλ = 0, // rotate
-      δφ = 0,
-      δγ = 0,
-      δx, // center
-      δy,
+      x = 480, y = 250, // translate
+      λ = 0, φ = 0, // center
+      δλ = 0, δφ = 0, δγ = 0, // rotate
+      δx, δy, // center
       clip = d3_geo_clipAntimeridian,
       clipAngle = null;
 
-  function projection(coordinates) {
-    coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
-    return [coordinates[0] * k + δx, δy - coordinates[1] * k];
+  function projection(point) {
+    point = projectRotate(point[0] * d3_radians, point[1] * d3_radians);
+    return [point[0] * k + δx, δy - point[1] * k];
   }
 
-  function invert(coordinates) {
-    coordinates = projectRotate.invert((coordinates[0] - δx) / k, (δy - coordinates[1]) / k);
-    return [coordinates[0] * d3_degrees, coordinates[1] * d3_degrees];
+  function invert(point) {
+    point = projectRotate.invert((point[0] - δx) / k, (δy - point[1]) / k);
+    return [point[0] * d3_degrees, point[1] * d3_degrees];
   }
 
   projection.stream = function(stream) {
