@@ -7,8 +7,9 @@ function d3_geo_projection(project) {
 
 function d3_geo_projectionMutator(projectAt) {
   var project,
-      projectRotate,
       rotate,
+      projectRotate,
+      projectResample = d3_geo_resample(function(x, y) { x = project(x, y); return [x[0] * k + δx, δy - x[1] * k]; }),
       k = 150, // scale
       x = 480, // translate
       y = 250,
@@ -19,11 +20,8 @@ function d3_geo_projectionMutator(projectAt) {
       δγ = 0,
       δx, // center
       δy,
-      clip = d3_geo_cut, // TODO rename: it's often cutting, not clipping!
-                         // Although cutting is a special case of clipping with
-                         // an infinitesimally small "outside".
-      clipAngle = null,
-      projectResample = d3_geo_resample(projectPoint);
+      clip = d3_geo_clipAntimeridian,
+      clipAngle = null;
 
   function projection(coordinates) {
     coordinates = projectRotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
@@ -35,15 +33,13 @@ function d3_geo_projectionMutator(projectAt) {
     return [coordinates[0] * d3_degrees, coordinates[1] * d3_degrees];
   }
 
-  projection.stream = function(listener) {
-    return d3_geo_projectionRadiansRotate(rotate, clip(projectResample(listener)));
+  projection.stream = function(stream) {
+    return d3_geo_projectionRadiansRotate(rotate, clip(projectResample(stream)));
   };
 
   projection.clipAngle = function(_) {
     if (!arguments.length) return clipAngle;
-    clip = _ == null
-        ? (clipAngle = _, d3_geo_cut)
-        : d3_geo_circleClip(clipAngle = +_);
+    clip = _ == null ? (clipAngle = _, d3_geo_clipAntimeridian) : d3_geo_clipCircle(clipAngle = +_);
     return projection;
   };
 
@@ -85,14 +81,6 @@ function d3_geo_projectionMutator(projectAt) {
     return projection;
   }
 
-  // TODO rename: this is not just projection, it also transforms!
-  // TODO rename: how does projectPoint disambiguate this method from project?
-  // TODO remove redundant code with p(coordinates)?
-  function projectPoint(λ, φ) {
-    var point = project(λ, φ);
-    return [point[0] * k + δx, δy - point[1] * k];
-  }
-
   return function() {
     project = projectAt.apply(this, arguments);
     projection.invert = project.invert && invert;
@@ -102,10 +90,7 @@ function d3_geo_projectionMutator(projectAt) {
 
 function d3_geo_projectionRadiansRotate(rotate, stream) {
   return {
-    point: function(λ, φ) {
-      var p = rotate(λ * d3_radians, φ * d3_radians);
-      stream.point(p[0], p[1]);
-    },
+    point: function(x, y) { x = rotate(x * d3_radians, y * d3_radians); stream.point(x[0], x[1]); },
     sphere: function() { stream.sphere(); },
     lineStart: function() { stream.lineStart(); },
     lineEnd: function() { stream.lineEnd(); },

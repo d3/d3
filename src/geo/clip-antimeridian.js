@@ -1,12 +1,11 @@
-// Cut features along the antimeridian.
-var d3_geo_cut = d3_geo_clip(d3_true, d3_geo_cutLine, d3_geo_cutInterpolate);
+var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate);
 
 // Takes a line and cuts into visible segments. Return values:
 //   0: there were intersections or the line was empty.
 //   1: no intersections.
 //   2: there were intersections, and the first and last segments should be
 //      rejoined.
-function d3_geo_cutLine(listener) {
+function d3_geo_clipAntimeridianLine(listener) {
   var λ0 = NaN,
       φ0 = NaN,
       sλ0 = NaN,
@@ -32,7 +31,7 @@ function d3_geo_cutLine(listener) {
         // handle degeneracies
         if (Math.abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
         if (Math.abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
-        φ0 = d3_geo_cutIntersect(λ0, φ0, λ1, φ1);
+        φ0 = d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1);
         listener.point(sλ0, φ0);
         listener.lineEnd();
         listener.lineStart();
@@ -51,8 +50,7 @@ function d3_geo_cutLine(listener) {
   };
 }
 
-// Intersects a great-circle segment with the antimeridian.
-function d3_geo_cutIntersect(λ0, φ0, λ1, φ1) {
+function d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1) {
   var cosφ0,
       cosφ1,
       sinλ0_λ1 = Math.sin(λ0 - λ1);
@@ -63,8 +61,7 @@ function d3_geo_cutIntersect(λ0, φ0, λ1, φ1) {
       : (φ0 + φ1) / 2;
 }
 
-// Interpolates between two points along the antimeridian.
-function d3_geo_cutInterpolate(from, to, direction, listener) {
+function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
   var φ;
   if (from == null) {
     φ = direction * π / 2;

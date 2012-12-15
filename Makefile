@@ -183,8 +183,6 @@ d3.geo.js: \
 	src/geo/stream.js \
 	src/geo/spherical.js \
 	src/geo/cartesian.js \
-	src/geo/clip.js \
-	src/geo/cut.js \
 	src/geo/resample.js \
 	src/geo/albers-usa.js \
 	src/geo/albers.js \
@@ -193,6 +191,9 @@ d3.geo.js: \
 	src/geo/bounds.js \
 	src/geo/centroid.js \
 	src/geo/circle.js \
+	src/geo/clip.js \
+	src/geo/clip-antimeridian.js \
+	src/geo/clip-circle.js \
 	src/geo/compose.js \
 	src/geo/equirectangular.js \
 	src/geo/gnomonic.js \

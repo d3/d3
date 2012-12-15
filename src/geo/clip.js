@@ -8,7 +8,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate) {
       lineEnd: lineEnd,
       polygonStart: function() {
         clip.point = pointRing;
-        clip.lineStart = ringStart; 
+        clip.lineStart = ringStart;
         clip.lineEnd = ringEnd;
         invisible = false;
         invisibleArea = visibleArea = 0;
@@ -110,9 +110,6 @@ function d3_geo_clip(pointVisible, clipLine, interpolate) {
 // visible line segments and rejoins the segments by interpolating along the
 // clip edge.  If there are no intersections with the clip edge, the whole clip
 // edge is inserted if appropriate.
-//
-// This is used by both d3_geo_circleClip and d3_geo_cut, each providing
-// different functions for clipRing and interpolate.
 function d3_geo_clipPolygon(segments, interpolate, listener) {
   var subject = [],
       clip = [];
