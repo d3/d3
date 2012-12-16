@@ -16,7 +16,11 @@ d3.layout.force = function() {
       links = [],
       distances,
       strengths,
-      charges;
+      charges,
+			dragCoefficient = 0.0,
+			dragCoefficients,
+			userForceFunction,
+			pt = 0;
 
   function repulse(node) {
     return function(quad, x1, y1, x2, y2) {
@@ -28,22 +32,22 @@ d3.layout.force = function() {
         /* Barnes-Hut criterion. */
         if ((x2 - x1) * dn < theta) {
           var k = quad.charge * dn * dn;
-          node.px -= dx * k;
-          node.py -= dy * k;
+          node.fx += dx * k;
+          node.fy += dy * k;
           return true;
         }
 
         if (quad.point && isFinite(dn)) {
           var k = quad.pointCharge * dn * dn;
-          node.px -= dx * k;
-          node.py -= dy * k;
+          node.fx += dx * k;
+          node.fy += dy * k;
         }
       }
       return !quad.charge;
     };
   }
 
-  force.tick = function() {
+  force.tick = function(t) {
     // simulated annealing, basically
     if ((alpha *= .99) < .005) {
       event.end({type: "end", alpha: alpha = 0});
@@ -60,7 +64,11 @@ d3.layout.force = function() {
         l, // current distance
         k, // current force
         x, // x-distance
-        y; // y-distance
+        y, // y-distance
+				dt = Math.min(Math.max(0, t - pt), 300) / 50;
+		pt = t;
+
+		nodes.forEach(function (n) { n.fx = 0; n.fy = 0; });
 
     // gauss-seidel relaxation for links
     for (i = 0; i < m; ++i) {
@@ -73,10 +81,10 @@ d3.layout.force = function() {
         l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
-        t.x -= x * (k = s.weight / (t.weight + s.weight));
-        t.y -= y * k;
-        s.x += x * (k = 1 - k);
-        s.y += y * k;
+        t.fx -= x * (k = s.weight / (t.weight + s.weight));
+        t.fy -= y * k;
+        s.fx += x * (k = 1 - k);
+        s.fy += y * k;
       }
     }
 
@@ -86,8 +94,8 @@ d3.layout.force = function() {
       y = size[1] / 2;
       i = -1; if (k) while (++i < n) {
         o = nodes[i];
-        o.x += (x - o.x) * k;
-        o.y += (y - o.y) * k;
+        o.fx += (x - o.x) * k;
+        o.fy += (y - o.y) * k;
       }
     }
 
@@ -101,6 +109,14 @@ d3.layout.force = function() {
       }
     }
 
+		if (userForceFunction) {
+			i = -1; while (++i < n) {
+				var force = userForceFunction.call(this, nodes[i], i);
+				nodes[i].fx += +force.x;
+				nodes[i].fy += +force.y;
+			};
+		}
+
     // position verlet integration
     i = -1; while (++i < n) {
       o = nodes[i];
@@ -108,8 +124,24 @@ d3.layout.force = function() {
         o.x = o.px;
         o.y = o.py;
       } else {
-        o.x -= (o.px - (o.px = o.x)) * friction;
-        o.y -= (o.py - (o.py = o.y)) * friction;
+				if (!o.d) o.d = { x: 0, y: 0};
+				o.d = { 
+					x: o.fx * dt + o.d.x,
+					y: o.fy * dt + o.d.y 
+				};
+				var l = Math.sqrt(o.d.x * o.d.x + o.d.y * o.d.y),
+						dir = Math.atan2(o.d.x, o.d.y),
+						dragF = Math.min(l * 0.5, 
+								l * l * dragCoefficients[i] + l * (1 - friction));
+
+				o.d.x -= Math.sin(dir) * dragF;
+				o.d.y -= Math.cos(dir) * dragF;
+
+				var tmp = {x: o.x, y: o.y};
+				o.x += o.d.x;
+				o.y += o.d.y;
+				o.px = tmp.x;
+				o.py = tmp.y;
       }
     }
 
@@ -161,6 +193,12 @@ d3.layout.force = function() {
     return force;
   };
 
+	force.dragCoefficient = function(x) {
+		if (!arguments.length) return dragCoefficient;
+		dragCoefficient = typeof x === "function" ? x : +x;
+		return force;
+	};
+
   force.gravity = function(x) {
     if (!arguments.length) return gravity;
     gravity = x;
@@ -186,6 +224,12 @@ d3.layout.force = function() {
 
     return force;
   };
+
+	force.userForceFunction = function(x) {
+		if (!arguments.length) return userForceFunction;
+		userForceFunction = x;
+		return force;
+	}
 
   force.start = function() {
     var i,
@@ -232,6 +276,16 @@ d3.layout.force = function() {
         charges[i] = charge;
       }
     }
+		dragCoefficients = [];
+		if (typeof dragCoefficient === "function") {
+			for (i = 0; i < n; ++i) {
+				dragCoefficients[i] = +dragCoefficient.call(this, nodes[i], i);
+			}
+		} else {
+			for (i = 0; i < n; ++i) {
+				dragCoefficients[i] = dragCoefficient;
+			}
+		}
 
     // initialize node position based on first neighbor
     function position(dimension, size) {
