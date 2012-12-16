@@ -5063,7 +5063,7 @@
       d.py = d3.event.y;
       force.resume();
     }
-    var force = {}, event = d3.dispatch("start", "tick", "end"), size = [ 1, 1 ], drag, alpha, friction = .9, linkDistance = d3_layout_forceLinkDistance, linkStrength = d3_layout_forceLinkStrength, charge = -30, gravity = .1, theta = .8, interval, nodes = [], links = [], distances, strengths, charges;
+    var force = {}, event = d3.dispatch("start", "tick", "end"), size = [ 1, 1 ], drag, alpha, friction = .9, linkDistance = d3_layout_forceLinkDistance, linkStrength = d3_layout_forceLinkStrength, charge = -30, gravity = .1, theta = .8, interval, nodes = [], links = [], distances, strengths, charges, gravcenter = [ size[0] / 2.0, size[1] / 2.0 ];
     force.tick = function() {
       if ((alpha *= .99) < .005) {
         event.end({
@@ -5090,8 +5090,8 @@
         }
       }
       if (k = alpha * gravity) {
-        x = size[0] / 2;
-        y = size[1] / 2;
+        x = gravcenter[0];
+        y = gravcenter[1];
         i = -1;
         if (k) while (++i < n) {
           o = nodes[i];
@@ -5137,7 +5137,13 @@
     force.size = function(x) {
       if (!arguments.length) return size;
       size = x;
+      gravcenter = [ x[0] / 2.0, x[1] / 2.0 ];
       return force;
+    };
+    force.gravcenter = function(x) {
+      if (!arguments.length) return gravcenter;
+      gravcenter = x;
+      return gravcenter;
     };
     force.linkDistance = function(x) {
       if (!arguments.length) return linkDistance;
