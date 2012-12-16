@@ -151,6 +151,7 @@ d3.svg.js: \
 	src/svg/arc.js \
 	src/svg/line.js \
 	src/svg/line-radial.js \
+	src/svg/line-variable.js \
 	src/svg/area.js \
 	src/svg/area-radial.js \
 	src/svg/chord.js \
