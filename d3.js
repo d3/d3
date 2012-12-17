@@ -5794,14 +5794,14 @@
         var clean = ringListener.clean(), ringSegments = buffer.buffer(), segment, n = ringSegments.length;
         if (!n) {
           invisible = true;
-          invisibleArea += d3_geo_clipAreaRing(ring, d3_geo_clipRotationInvisible);
+          invisibleArea += d3_geo_clipAreaRing(ring, -1);
           ring = null;
           return;
         }
         ring = null;
         if (clean & 1) {
           segment = ringSegments[0];
-          visibleArea += d3_geo_clipAreaRing(segment, d3_geo_clipRotation);
+          visibleArea += d3_geo_clipAreaRing(segment, 1);
           var n = segment.length - 1, i = -1, point;
           listener.lineStart();
           while (++i < n) listener.point((point = segment[i])[0], point[1]);
@@ -5926,24 +5926,18 @@
       }
     };
   }
-  function d3_geo_clipAreaRing(ring, rotate) {
-    d3_geo_area.polygonStart();
-    d3_geo_area.lineStart();
-    for (var i = 0, n = ring.length, p; i < n; ++i) {
-      p = rotate(ring[i]);
-      d3_geo_area.point(p[0] * d3_degrees, p[1] * d3_degrees);
+  function d3_geo_clipAreaRing(ring, invisible) {
+    if (!(n = ring.length)) return 0;
+    var n, i = 0, area = 0, p = ring[0], λ = p[0], φ = p[1], cosφ = Math.cos(φ), x0 = Math.atan2(invisible * Math.sin(λ) * cosφ, Math.sin(φ)), y0 = 1 - invisible * Math.cos(λ) * cosφ, x, y;
+    while (++i < n) {
+      p = ring[i];
+      cosφ = Math.cos(φ = p[1]);
+      x = Math.atan2(invisible * Math.sin(λ = p[0]) * cosφ, Math.sin(φ));
+      y = 1 - invisible * Math.cos(λ) * cosφ;
+      if (Math.abs(y) < ε || Math.abs(y0) < ε) {} else if (Math.abs(y0 - 2) < ε) area += 4 * (x - x0); else area += ((3 * π + x - x0) % (2 * π) - π) * (y0 + y);
+      x0 = x, y0 = y;
     }
-    d3_geo_area.lineEnd();
-    d3_geo_area.polygonEnd();
-    return d3_geo_areaRing;
-  }
-  function d3_geo_clipRotation(point) {
-    var λ = point[0], φ = point[1], cosφ = Math.cos(φ);
-    return [ Math.atan2(Math.sin(λ) * cosφ, Math.sin(φ)), Math.asin(Math.max(-1, Math.min(1, -Math.cos(λ) * cosφ))) ];
-  }
-  function d3_geo_clipRotationInvisible(point) {
-    var λ = point[0] + π, φ = point[1], cosφ = Math.cos(φ);
-    return [ Math.atan2(Math.sin(λ) * cosφ, Math.sin(φ)), Math.asin(Math.max(-1, Math.min(1, -Math.cos(λ) * cosφ))) ];
+    return area;
   }
   var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate);
   function d3_geo_clipAntimeridianLine(listener) {

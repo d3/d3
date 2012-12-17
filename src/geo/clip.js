@@ -76,7 +76,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate) {
       // TODO compute on-the-fly?
       if (!n) {
         invisible = true;
-        invisibleArea += d3_geo_clipAreaRing(ring, d3_geo_clipRotationInvisible);
+        invisibleArea += d3_geo_clipAreaRing(ring, -1);
         ring = null;
         return;
       }
@@ -86,7 +86,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate) {
       // TODO compute on-the-fly?
       if (clean & 1) {
         segment = ringSegments[0];
-        visibleArea += d3_geo_clipAreaRing(segment, d3_geo_clipRotation);
+        visibleArea += d3_geo_clipAreaRing(segment, 1);
         var n = segment.length - 1,
             i = -1,
             point;
@@ -211,35 +211,41 @@ function d3_geo_clipBufferListener() {
   };
 }
 
-function d3_geo_clipAreaRing(ring, rotate) {
-  d3_geo_area.polygonStart();
-  d3_geo_area.lineStart();
-  for (var i = 0, n = ring.length, p; i < n; ++i) {
-    p = rotate(ring[i]);
-    d3_geo_area.point(p[0] * d3_degrees, p[1] * d3_degrees);
+// Approximate polygon ring area (×2, since we only need the sign).
+// For an invisible polygon ring, we rotate longitudinally by 180°.
+// The invisible parameter should be 1, or -1 to rotate longitudinally.
+// Based on Robert. G. Chamberlain and William H. Duquette,
+// “Some Algorithms for Polygons on a Sphere”,
+// http://trs-new.jpl.nasa.gov/dspace/handle/2014/40409
+function d3_geo_clipAreaRing(ring, invisible) {
+  if (!(n = ring.length)) return 0;
+  var n,
+      i = 0,
+      area = 0,
+      p = ring[0],
+      λ = p[0],
+      φ = p[1],
+      cosφ = Math.cos(φ),
+      x0 = Math.atan2(invisible * Math.sin(λ) * cosφ, Math.sin(φ)),
+      y0 = 1 - invisible * Math.cos(λ) * cosφ,
+      x, // λ'; λ rotated to south pole.
+      y; // φ' = 1 + sin(φ); φ rotated to south pole.
+  while (++i < n) {
+    p = ring[i];
+    cosφ = Math.cos(φ = p[1]);
+    x = Math.atan2(invisible * Math.sin(λ = p[0]) * cosφ, Math.sin(φ));
+    y = 1 - invisible * Math.cos(λ) * cosφ;
+    // If this or the previous point is at the south pole, the area is 0.
+    if (Math.abs(y) < ε || Math.abs(y0) < ε) {}
+
+    // If the previous point is at the north pole, then compute lune area.
+    else if (Math.abs(y0 - 2) < ε) area += 4 * (x - x0);
+
+    // Otherwise, the spherical triangle area is approximately
+    // δλ * (1 + sinφ0 + 1 + sinφ) / 2.
+    else area += ((3 * π + x - x0) % (2 * π) - π) * (y0 + y);
+
+    x0 = x, y0 = y;
   }
-  d3_geo_area.lineEnd();
-  d3_geo_area.polygonEnd();
-  return d3_geo_areaRing;
-}
-
-function d3_geo_clipRotation(point) {
-  var λ = point[0],
-      φ = point[1],
-      cosφ = Math.cos(φ);
-  return [
-    Math.atan2(Math.sin(λ) * cosφ, Math.sin(φ)),
-    Math.asin(Math.max(-1, Math.min(1, -Math.cos(λ) * cosφ)))
-  ];
-}
-
-// For an invisible polygon ring, we first rotate longitudinally by 180°.
-function d3_geo_clipRotationInvisible(point) {
-  var λ = point[0] + π,
-      φ = point[1],
-      cosφ = Math.cos(φ);
-  return [
-    Math.atan2(Math.sin(λ) * cosφ, Math.sin(φ)),
-    Math.asin(Math.max(-1, Math.min(1, -Math.cos(λ) * cosφ)))
-  ];
+  return area;
 }
