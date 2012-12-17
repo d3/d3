@@ -228,6 +228,7 @@ function d3_geo_clipAreaRing(ring, invisible) {
       cosφ = Math.cos(φ),
       x0 = Math.atan2(invisible * Math.sin(λ) * cosφ, Math.sin(φ)),
       y0 = 1 - invisible * Math.cos(λ) * cosφ,
+      x1 = x0,
       x, // λ'; λ rotated to south pole.
       y; // φ' = 1 + sin(φ); φ rotated to south pole.
   while (++i < n) {
@@ -235,17 +236,30 @@ function d3_geo_clipAreaRing(ring, invisible) {
     cosφ = Math.cos(φ = p[1]);
     x = Math.atan2(invisible * Math.sin(λ = p[0]) * cosφ, Math.sin(φ));
     y = 1 - invisible * Math.cos(λ) * cosφ;
-    // If this or the previous point is at the south pole, the area is 0.
+
+    // If both the current point and the previous point are at the north pole,
+    // skip this point.
+    if (Math.abs(y0 - 2) < ε && Math.abs(y - 2) < ε) continue;
+
+    // If this or the previous point is at the south pole, or if this segment
+    // goes through the south pole, the area is 0.
     if (Math.abs(y) < ε || Math.abs(y0) < ε) {}
 
+    // If this segment goes through either pole…
+    else if (Math.abs(Math.abs(x - x0) - π) < ε) {
+      // For the north pole, compute lune area.
+      if (y + y0 > 2) area += 4 * (x - x0);
+      // For the south pole, the area is zero.
+    }
+
     // If the previous point is at the north pole, then compute lune area.
-    else if (Math.abs(y0 - 2) < ε) area += 4 * (x - x0);
+    else if (Math.abs(y0 - 2) < ε) area += 4 * (x - x1);
 
     // Otherwise, the spherical triangle area is approximately
     // δλ * (1 + sinφ0 + 1 + sinφ) / 2.
     else area += ((3 * π + x - x0) % (2 * π) - π) * (y0 + y);
 
-    x0 = x, y0 = y;
+    x1 = x0, x0 = x, y0 = y;
   }
   return area;
 }
