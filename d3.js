@@ -14,7 +14,7 @@
   d3 = {
     version: "3.0.0pre"
   };
-  var π = Math.PI, ε = 1e-6, ε2 = ε * ε, d3_radians = π / 180, d3_degrees = 180 / π;
+  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
   function d3_zero() {
     return 0;
   }
@@ -5748,7 +5748,7 @@
           segments = d3.merge(segments);
           if (segments.length) {
             d3_geo_clipPolygon(segments, interpolate, listener);
-          } else if (visibleArea < -ε2 || invisible && invisibleArea < -ε2) {
+          } else if (visibleArea < -.01 || invisible && invisibleArea < -.01) {
             listener.lineStart();
             interpolate(null, null, 1, listener);
             listener.lineEnd();
