@@ -5926,18 +5926,18 @@
       }
     };
   }
-  function d3_geo_clipAreaRing(ring, invisible) {
+  function d3_geo_clipAreaRing(ring) {
     if (!(n = ring.length)) return 0;
-    var n, i = 0, area = 0, p = ring[0], λ = p[0], φ = p[1], cosφ = Math.cos(φ), x0 = Math.atan2(invisible * Math.sin(λ) * cosφ, Math.sin(φ)), y0 = 1 - invisible * Math.cos(λ) * cosφ, x, y;
+    var n, i = 0, area = 0, p = ring[0], x0 = p[0], y0 = 1 + Math.sin(p[1]), x1, x, y;
     while (++i < n) {
       p = ring[i];
-      cosφ = Math.cos(φ = p[1]);
-      x = Math.atan2(invisible * Math.sin(λ = p[0]) * cosφ, Math.sin(φ));
-      y = 1 - invisible * Math.cos(λ) * cosφ;
-      if (Math.abs(y) < ε || Math.abs(y0) < ε) {} else if (Math.abs(y0 - 2) < ε) area += 4 * (x - x0); else area += ((3 * π + x - x0) % (2 * π) - π) * (y0 + y);
-      x0 = x, y0 = y;
+      x = p[0];
+      y = 1 + Math.sin(p[1]);
+      if (Math.abs(Math.abs(y0 - 1) - 1) < ε && Math.abs(Math.abs(y - 1) - 1) < ε) continue;
+      if (Math.abs(y) < ε || Math.abs(y0) < ε) {} else if (Math.abs(y0 - 2) < ε) area += 4 * (x - x1); else area += ((3 * π + x - x0) % (2 * π) - π) * (y0 + y);
+      x1 = x0, x0 = x, y0 = y;
     }
-    return area;
+    return area > 4 * π ? area - 8 * π : area < -4 * π ? area + 8 * π : area;
   }
   var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate);
   function d3_geo_clipAntimeridianLine(listener) {
