@@ -44,12 +44,20 @@ function d3_geo_areaRingStart() {
     // If the previous point is at the north pole, then compute lune area.
     if (Math.abs(φ0 - π / 2) < ε) d3_geo_areaRing += (λ - λ1) * 2;
 
-    // TODO Explain this wonderous mathematics.
+    // Area of spherical triangle with vertices at south pole, previous point
+    // and current point = ER², where E is the spherical excess, and in our
+    // case, R = 1.
     else {
       var dλ = λ - λ0,
           cosdλ = Math.cos(dλ),
+          // Distance from previous point to current point, well-conditioned
+          // for all angles.
           d = Math.atan2(Math.sqrt((d = cosφ * Math.sin(dλ)) * d + (d = cosφ0 * sinφ - sinφ0 * cosφ * cosdλ) * d), sinφ0 * sinφ + cosφ0 * cosφ * cosdλ),
+          // Half the semiperimeter (a + b + c) / 2, where a, b and c are the
+          // lengths of the triangle sides.
           s = (d + π + φ0 + φ) / 4;
+      // Compute the spherical excess E using l’Huilier’s theorem,
+      // tan(E / 4) = √[tan(s)tan(s - a / 2)tan(s - b / 2)tan(s - c / 2)].
       d3_geo_areaRing += (dλ < 0 && dλ > -π || dλ > π ? -4 : 4) * Math.atan(Math.sqrt(Math.abs(Math.tan(s) * Math.tan(s - d / 2) * Math.tan(s - π / 4 - φ0 / 2) * Math.tan(s - π / 4 - φ / 2))));
     }
 
