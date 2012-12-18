@@ -23,7 +23,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate) {
         segments = d3.merge(segments);
         if (segments.length) {
           d3_geo_clipPolygon(segments, interpolate, listener);
-        } else if (visibleArea < -1e-2 || invisible && invisibleArea < -1e-2) {
+        } else if (visibleArea < -ε || invisible && invisibleArea < -ε) {
           listener.lineStart();
           interpolate(null, null, 1, listener);
           listener.lineEnd();

@@ -5748,7 +5748,7 @@
           segments = d3.merge(segments);
           if (segments.length) {
             d3_geo_clipPolygon(segments, interpolate, listener);
-          } else if (visibleArea < -.01 || invisible && invisibleArea < -.01) {
+          } else if (visibleArea < -ε || invisible && invisibleArea < -ε) {
             listener.lineStart();
             interpolate(null, null, 1, listener);
             listener.lineEnd();
