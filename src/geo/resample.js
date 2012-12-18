@@ -7,6 +7,7 @@ function d3_geo_resample(project) {
 
     var resample = {
       point: point,
+      sphere: function() { stream.sphere(); },
       lineStart: lineStart,
       lineEnd: lineEnd,
       polygonStart: function() { stream.polygonStart(); resample.lineStart = polygonLineStart; },

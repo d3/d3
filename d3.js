@@ -5433,6 +5433,9 @@
       var λ0, x0, y0, a0, b0, c0;
       var resample = {
         point: point,
+        sphere: function() {
+          stream.sphere();
+        },
         lineStart: lineStart,
         lineEnd: lineEnd,
         polygonStart: function() {
@@ -6284,6 +6287,7 @@
     var pointCircle = d3_geo_pathCircle(4.5), buffer = [];
     var stream = {
       point: point,
+      sphere: d3_noop,
       lineStart: function() {
         stream.point = pointLineStart;
       },
@@ -6329,6 +6333,7 @@
     var pointRadius = 4.5;
     var stream = {
       point: point,
+      sphere: d3_noop,
       lineStart: function() {
         stream.point = pointLineStart;
       },

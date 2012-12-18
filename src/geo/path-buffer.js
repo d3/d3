@@ -4,6 +4,7 @@ function d3_geo_pathBuffer() {
 
   var stream = {
     point: point,
+    sphere: d3_noop,
 
     // While inside a line, override point to moveTo then lineTo.
     lineStart: function() { stream.point = pointLineStart; },
