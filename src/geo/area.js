@@ -25,7 +25,7 @@ var d3_geo_area = {
 };
 
 function d3_geo_areaRingStart() {
-  var λ00, φ00, λ1, φ1, λ0, φ0, cosφ0, sinφ0; // start point and two previous points
+  var λ00, φ00, λ1, λ0, φ0, cosφ0, sinφ0; // start point and two previous points
 
   // For the first point, …
   d3_geo_area.point = function(λ, φ) {
@@ -62,7 +62,7 @@ function d3_geo_areaRingStart() {
     }
 
     // Advance the previous points.
-    λ1 = λ0, φ1 = φ0, λ0 = λ, φ0 = φ, cosφ0 = cosφ, sinφ0 = sinφ;
+    λ1 = λ0, λ0 = λ, φ0 = φ, cosφ0 = cosφ, sinφ0 = sinφ;
   }
 
   // For the last point, return to the start.
