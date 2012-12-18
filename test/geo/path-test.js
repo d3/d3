@@ -89,6 +89,18 @@ suite.addBatch({
       ]);
     },
 
+    "winding order": {
+      "tiny polygon": function(path) {
+        path({type: "Polygon", coordinates: [[
+          [-0.06904102953339501, 0.346043661846373],
+          [-6.725674252975136e-15, 0.3981303360336475],
+          [-6.742247658534323e-15, -0.08812465346531581],
+          [-0.17301258217724075, -0.12278150669440671],
+          [-0.06904102953339501, 0.346043661846373]]]});
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+      }
+    },
+
     "with no context": {
       topic: function(path) {
         return d3.geo.path().projection(path.projection());

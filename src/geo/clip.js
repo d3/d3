@@ -23,7 +23,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate) {
         segments = d3.merge(segments);
         if (segments.length) {
           d3_geo_clipPolygon(segments, interpolate, listener);
-        } else if (visibleArea < -1e-2 || invisible && invisibleArea < -1e-2) {
+        } else if (visibleArea < -ε || invisible && invisibleArea < -ε) {
           listener.lineStart();
           interpolate(null, null, 1, listener);
           listener.lineEnd();
@@ -217,35 +217,41 @@ function d3_geo_clipBufferListener() {
 // Based on Robert. G. Chamberlain and William H. Duquette,
 // “Some Algorithms for Polygons on a Sphere”,
 // http://trs-new.jpl.nasa.gov/dspace/handle/2014/40409
-function d3_geo_clipAreaRing(ring, invisible) {
+function d3_geo_clipAreaRing(ring) {
   if (!(n = ring.length)) return 0;
   var n,
       i = 0,
       area = 0,
       p = ring[0],
-      λ = p[0],
-      φ = p[1],
-      cosφ = Math.cos(φ),
-      x0 = Math.atan2(invisible * Math.sin(λ) * cosφ, Math.sin(φ)),
-      y0 = 1 - invisible * Math.cos(λ) * cosφ,
+      x0 = p[0],
+      y0 = 1 + Math.sin(p[1]),
+      x1,
       x, // λ'; λ rotated to south pole.
       y; // φ' = 1 + sin(φ); φ rotated to south pole.
   while (++i < n) {
     p = ring[i];
-    cosφ = Math.cos(φ = p[1]);
-    x = Math.atan2(invisible * Math.sin(λ = p[0]) * cosφ, Math.sin(φ));
-    y = 1 - invisible * Math.cos(λ) * cosφ;
+    x = p[0];
+    y = 1 + Math.sin(p[1]);
+
+    // If both the current point and the previous point are polar, skip this point.
+    if (Math.abs(Math.abs(y0 - 1) - 1) < ε && Math.abs(Math.abs(y - 1) - 1) < ε) continue;
+
     // If this or the previous point is at the south pole, the area is 0.
     if (Math.abs(y) < ε || Math.abs(y0) < ε) {}
 
     // If the previous point is at the north pole, then compute lune area.
-    else if (Math.abs(y0 - 2) < ε) area += 4 * (x - x0);
+    else if (Math.abs(y0 - 2) < ε) area += 4 * (x - x1);
 
     // Otherwise, the spherical triangle area is approximately
     // δλ * (1 + sinφ0 + 1 + sinφ) / 2.
     else area += ((3 * π + x - x0) % (2 * π) - π) * (y0 + y);
 
-    x0 = x, y0 = y;
+    x1 = x0, x0 = x, y0 = y;
   }
-  return area;
+  // Since we are checking the winding order of the smaller ring area, we need
+  // to flip the sign if we end up with an area larger than a hemisphere, which
+  // can happen for polygons that wind around poles.
+  return area > 4 * π ? area - 8 * π
+      : area < -4 * π ? area + 8 * π
+      : area;
 }
