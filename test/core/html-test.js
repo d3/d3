@@ -9,7 +9,7 @@ suite.addBatch({
   "html": {
     topic: function() {
       var cb = this.callback;
-      d3.html("examples/data/sample.html", function(error, document) {
+      d3.html("test/data/sample.html", function(error, document) {
         cb(null, document);
       });
     },
