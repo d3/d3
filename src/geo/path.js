@@ -34,7 +34,7 @@ d3.geo.path = function() {
 
   path.projection = function(_) {
     if (!arguments.length) return projection;
-    projectStream = (projection = _).stream ? projection.stream : d3_geo_pathProjectStream(projection);
+    projectStream = (projection = _) ? _.stream || d3_geo_pathProjectStream(_) : d3_identity;
     return path;
   };
 

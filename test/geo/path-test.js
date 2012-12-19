@@ -89,6 +89,27 @@ suite.addBatch({
       ]);
     },
 
+    "with a null projection": {
+      topic: function() {
+        return d3.geo.path().context(testContext).projection(null);
+      },
+      "Polygon": function(path) {
+        path({
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates: [[[-63, 18], [-62, 18], [-62, 17], [-63, 18]]]
+          },
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: -63, y: 18},
+          {type: "lineTo", x: -62, y: 18},
+          {type: "lineTo", x: -62, y: 17},
+          {type: "closePath"}
+        ]);
+      }
+    },
+
     "winding order": {
       "tiny polygon": function(path) {
         path({type: "Polygon", coordinates: [[
