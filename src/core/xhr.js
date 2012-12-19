@@ -72,5 +72,11 @@ d3.xhr = function(url, mimeType, callback) {
   d3.rebind(xhr, dispatch, "on");
 
   if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
-  return callback == null ? xhr : xhr.get(callback);
+  return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
 };
+
+function d3_xhr_fixCallback(callback) {
+  return callback.length === 1
+      ? function(error, request) { callback(error == null ? request : null); }
+      : callback;
+}
