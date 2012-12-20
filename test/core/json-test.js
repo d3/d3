@@ -9,7 +9,7 @@ suite.addBatch({
   "json": {
     topic: function() {
       var cb = this.callback;
-      d3.json("examples/data/sample.json", function(error, json) {
+      d3.json("test/data/sample.json", function(error, json) {
         cb(null, json);
       });
     },

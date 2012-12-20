@@ -9,12 +9,12 @@ suite.addBatch({
   "xhr": {
     topic: function() {
       var cb = this.callback;
-      d3.xhr("examples/data/sample.txt", function(error, req) {
+      d3.xhr("test/data/sample.txt", function(error, req) {
         cb(null, req);
       });
     },
     "makes an asynchronous HTTP request": function(req) {
-      assert.equal(req._info.url, "examples/data/sample.txt");
+      assert.equal(req._info.url, "test/data/sample.txt");
       assert.isTrue(req._info.async);
     },
     "invokes the callback with the request object": function(req) {
@@ -30,7 +30,7 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        d3.xhr("examples/data/sample.txt", "text/plain", function(error, req) {
+        d3.xhr("test/data/sample.txt", "text/plain", function(error, req) {
           cb(null, req);
         });
       },
