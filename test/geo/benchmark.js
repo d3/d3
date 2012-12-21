@@ -11,7 +11,7 @@ var formatNumber = d3.format(",.02r"),
     o,
     then;
 
-o = JSON.parse(fs.readFileSync("./examples/data/us-counties.json"));
+o = JSON.parse(fs.readFileSync("./test/data/us-counties.json"));
 then = Date.now();
 
 for (var i = 0, k = 0; i < n; i++, k++) {
