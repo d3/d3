@@ -9,7 +9,7 @@ suite.addBatch({
   "xml": {
     topic: function() {
       var cb = this.callback;
-      return d3.xml("examples/data/sample.xml", function(xml) {
+      d3.xml("test/data/sample.xml", function(error, xml) {
         cb(null, xml);
       });
     },
@@ -22,7 +22,7 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.xml("examples/data/sample.txt", "application/xml+sample", function(xml) {
+        d3.xml("test/data/sample.txt", "application/xml+sample", function(error, xml) {
           cb(null, xml);
         });
       },
@@ -33,12 +33,12 @@ suite.addBatch({
     " ": {
       topic: function() {
         var cb = this.callback;
-        return d3.xml("//does/not/exist.xml", function(xml) {
+        d3.xml("//does/not/exist.xml", function(error, xml) {
           cb(null, xml);
         });
       },
-      "invokes the callback with null when an error occurs": function(xml) {
-        assert.isNull(xml);
+      "invokes the callback with undefined when an error occurs": function(xml) {
+        assert.isUndefined(xml);
       }
     }
   }

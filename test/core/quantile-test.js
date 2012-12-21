@@ -30,18 +30,28 @@ suite.addBatch({
       assert.equal(quantile(data, .75), 14);
       assert.equal(quantile(data, 1), 20);
     },
+    "coerces values to numbers": function(quantile) {
+      var strings = ["1", "2", "3", "4"];
+      assert.strictEqual(quantile(strings, 1/3), 2);
+      assert.strictEqual(quantile(strings, 1/2), 2.5);
+      assert.strictEqual(quantile(strings, 2/3), 3);
+      var dates = [new Date(2011, 0, 1), new Date(2012, 0, 1)];
+      assert.strictEqual(quantile(dates, 0), +new Date(2011, 0, 1));
+      assert.strictEqual(quantile(dates, 1/2), +new Date(2011, 6, 2, 13));
+      assert.strictEqual(quantile(dates, 1), +new Date(2012, 0, 1));
+    },
     "returns an exact value for integer p-values": function(quantile) {
-      var a = {}, b = {}, c = {}, d = {}, data = [a, b, c, d];
-      assert.equal(quantile(data, 1/3), b);
-      assert.equal(quantile(data, 2/3), c);
+      var data = [1, 2, 3, 4];
+      assert.equal(quantile(data, 1/3), 2);
+      assert.equal(quantile(data, 2/3), 3);
     },
     "returns the first value for p = 0": function(quantile) {
-      var a = {}, b = {}, c = {}, d = {}, data = [a, b, c, d];
-      assert.equal(quantile(data, 0), a);
+      var data = [1, 2, 3, 4];
+      assert.equal(quantile(data, 0), 1);
     },
     "returns the last value for p = 1": function(quantile) {
-      var a = {}, b = {}, c = {}, d = {}, data = [a, b, c, d];
-      assert.equal(quantile(data, 1), d);
+      var data = [1, 2, 3, 4];
+      assert.equal(quantile(data, 1), 4);
     }
   }
 });

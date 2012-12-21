@@ -1,20 +1,19 @@
 # See the README for installation instructions.
 
 NODE_PATH ?= ./node_modules
-JS_COMPILER = $(NODE_PATH)/uglify-js/bin/uglifyjs
-JS_BEAUTIFIER = $(NODE_PATH)/uglify-js/bin/uglifyjs -b -i 2 -nm -ns
+JS_UGLIFY = $(NODE_PATH)/uglify-js/bin/uglifyjs
 JS_TESTER = $(NODE_PATH)/vows/bin/vows
 LOCALE ?= en_US
 
 all: \
-	d3.v2.js \
-	d3.v2.min.js \
+	d3.js \
+	d3.min.js \
 	component.json \
 	package.json
 
 # Modify this rule to build your own custom release.
 
-.INTERMEDIATE d3.v2.js: \
+.INTERMEDIATE d3.js: \
 	src/start.js \
 	d3.core.js \
 	d3.scale.js \
@@ -28,6 +27,7 @@ all: \
 	src/end.js
 
 d3.core.js: \
+	src/core/format-$(LOCALE).js \
 	src/compat/date.js \
 	src/compat/style.js \
 	src/core/core.js \
@@ -35,7 +35,6 @@ d3.core.js: \
 	src/core/array.js \
 	src/core/map.js \
 	src/core/identity.js \
-	src/core/this.js \
 	src/core/true.js \
 	src/core/functor.js \
 	src/core/rebind.js \
@@ -50,18 +49,16 @@ d3.core.js: \
 	src/core/number.js \
 	src/core/sum.js \
 	src/core/quantile.js \
+	src/core/shuffle.js \
 	src/core/transpose.js \
 	src/core/zip.js \
 	src/core/bisect.js \
-	src/core/first.js \
-	src/core/last.js \
 	src/core/nest.js \
 	src/core/keys.js \
 	src/core/values.js \
 	src/core/entries.js \
 	src/core/permute.js \
 	src/core/merge.js \
-	src/core/split.js \
 	src/core/collapse.js \
 	src/core/range.js \
 	src/core/requote.js \
@@ -120,11 +117,12 @@ d3.core.js: \
 	src/core/transition-style.js \
 	src/core/transition-text.js \
 	src/core/transition-remove.js \
+	src/core/transition-ease.js \
 	src/core/transition-delay.js \
 	src/core/transition-duration.js \
 	src/core/transition-each.js \
 	src/core/transition-transition.js \
-	src/core/tween.js \
+	src/core/transition-tween.js \
 	src/core/timer.js \
 	src/core/mouse.js \
 	src/core/touches.js \
@@ -156,8 +154,6 @@ d3.svg.js: \
 	src/svg/chord.js \
 	src/svg/diagonal.js \
 	src/svg/diagonal-radial.js \
-	src/svg/mouse.js \
-	src/svg/touches.js \
 	src/svg/symbol.js \
 	src/svg/axis.js \
 	src/svg/brush.js
@@ -184,17 +180,39 @@ d3.layout.js: \
 
 d3.geo.js: \
 	src/geo/geo.js \
-	src/geo/azimuthal.js \
+	src/geo/stream.js \
+	src/geo/spherical.js \
+	src/geo/cartesian.js \
+	src/geo/resample.js \
+	src/geo/albers-usa.js \
 	src/geo/albers.js \
-	src/geo/bonne.js \
-	src/geo/equirectangular.js \
-	src/geo/mercator.js \
-	src/geo/type.js \
-	src/geo/path.js \
+	src/geo/azimuthal-equal-area.js \
+	src/geo/azimuthal-equidistant.js \
 	src/geo/bounds.js \
+	src/geo/centroid.js \
 	src/geo/circle.js \
+	src/geo/clip.js \
+	src/geo/clip-antimeridian.js \
+	src/geo/clip-circle.js \
+	src/geo/compose.js \
+	src/geo/equirectangular.js \
+	src/geo/gnomonic.js \
+	src/geo/graticule.js \
+	src/geo/interpolate.js \
 	src/geo/greatArc.js \
-	src/geo/greatCircle.js
+	src/geo/mercator.js \
+	src/geo/orthographic.js \
+	src/geo/path.js \
+	src/geo/path-buffer.js \
+	src/geo/path-context.js \
+	src/geo/path-area.js \
+	src/geo/path-centroid.js \
+	src/geo/area.js \
+	src/geo/centroid.js \
+	src/geo/projection.js \
+	src/geo/rotation.js \
+	src/geo/stereographic.js \
+	src/geo/azimuthal.js
 
 d3.dsv.js: \
 	src/dsv/dsv.js \
@@ -220,7 +238,6 @@ d3.time.js: \
 
 d3.geom.js: \
 	src/geom/geom.js \
-	src/geom/contour.js \
 	src/geom/hull.js \
 	src/geom/polygon.js \
 	src/geom/voronoi.js \
@@ -230,13 +247,18 @@ d3.geom.js: \
 test: all
 	@$(JS_TESTER)
 
+benchmark: all
+	@node test/geo/benchmark.js
+
 %.min.js: %.js Makefile
 	@rm -f $@
-	$(JS_COMPILER) < $< > $@
+	$(JS_UGLIFY) $< -c -m -o $@
 
-d3%.js: Makefile
+d3%js: Makefile
 	@rm -f $@
-	cat $(filter %.js,$^) | $(JS_BEAUTIFIER) > $@
+	@cat $(filter %.js,$^) > $@.tmp
+	$(JS_UGLIFY) $@.tmp -b indent-level=2 -o $@
+	@rm $@.tmp
 	@chmod a-w $@
 
 component.json: src/component.js
@@ -248,6 +270,16 @@ package.json: src/package.js
 	@rm -f $@
 	node src/package.js > $@
 	@chmod a-w $@
+
+src/core/format-$(LOCALE).js: src/locale.js src/core/format-locale.js
+	LC_NUMERIC=$(LOCALE) locale -ck LC_NUMERIC | node src/locale.js src/core/format-locale.js > $@
+
+src/time/format-$(LOCALE).js: src/locale.js src/time/format-locale.js
+	LC_TIME=$(LOCALE) locale -ck LC_TIME | node src/locale.js src/time/format-locale.js > $@
+
+.INTERMEDIATE: \
+	src/core/format-$(LOCALE).js \
+	src/time/format-$(LOCALE).js
 
 clean:
 	rm -f d3*.js package.json component.json

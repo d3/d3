@@ -1,7 +1,8 @@
 d3_transitionPrototype.text = function(value) {
-  return this.tween("text", function(d, i) {
-    this.textContent = typeof value === "function"
-        ? value.call(this, d, i)
-        : value;
-  });
+  return d3_transition_tween(this, "text", value, d3_transition_text);
 };
+
+function d3_transition_text(b) {
+  if (b == null) b = "";
+  return function() { this.textContent = b; };
+}

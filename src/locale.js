@@ -1,0 +1,31 @@
+var fs = require("fs"),
+    puts = require("util").puts,
+    formats = {},
+    kvRe = /=/,
+    valueRe = /;/g,
+    quotedRe = /"([^"]+?)"/g,
+    data = [];
+
+process.stdin.resume();
+process.stdin.setEncoding("utf8");
+process.stdin.on("data", function(chunk) { data.push(chunk); });
+process.stdin.on("end", write);
+
+function write() {
+  data.join("\n").split(/\n/g).forEach(function(line) {
+    var i = line.match(kvRe);
+    if (i && (i = i.index)) {
+      var value = line.substring(i + 1).replace(quotedRe, "$1").split(valueRe);
+      formats[line.substring(0, i)] = value;
+    }
+  });
+
+  puts(fs.readFileSync(process.argv[2], "utf8").replace(/\{([^\}]+)\}/g, function(d, k) {
+    d = formats[k];
+    return k === "grouping"
+        ? d === "127" || d === "0" ? null : "[" + d.map(Number).join(", ") + "]"
+        : d == null ? null : d.length > 1 ? "[" + d.map(quote).join(", ") + "]" : quote(d[0]);
+  }));
+}
+
+function quote(d) { return '"' + d + '"'; }

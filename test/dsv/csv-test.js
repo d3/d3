@@ -9,7 +9,7 @@ suite.addBatch({
   "csv": {
     topic: function() {
       var cb = this.callback;
-      return d3.csv("examples/data/sample.csv", function(csv) {
+      d3.csv("test/data/sample.csv", function(error, csv) {
         cb(null, csv);
       });
     },
@@ -22,12 +22,12 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.csv("//does/not/exist.csv", function(csv) {
+        d3.csv("//does/not/exist.csv", function(error, csv) {
           cb(null, csv);
         });
       },
-      "invokes the callback with null when an error occurs": function(csv) {
-        assert.isNull(csv);
+      "invokes the callback with undefined when an error occurs": function(csv) {
+        assert.isUndefined(csv);
       }
     }
   },

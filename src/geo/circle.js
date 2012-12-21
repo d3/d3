@@ -1,142 +1,75 @@
-// TODO breakAtDateLine?
-
 d3.geo.circle = function() {
   var origin = [0, 0],
-      degrees = 90 - 1e-2,
-      radians = degrees * d3_geo_radians,
-      arc = d3.geo.greatArc().source(origin).target(d3_identity);
+      angle,
+      precision = 6,
+      interpolate;
 
   function circle() {
-    // TODO render a circle as a Polygon
-  }
+    var center = typeof origin === "function" ? origin.apply(this, arguments) : origin,
+        rotate = d3_geo_rotation(center[0] * d3_radians, center[1] * d3_radians, 0),
+        ring = [];
 
-  function visible(point) {
-    return arc.distance(point) < radians;
-  }
-
-  circle.clip = function(d) {
-    if (typeof origin === "function") arc.source(origin.apply(this, arguments));
-    return clipType(d) || null;
-  };
-
-  var clipType = d3_geo_type({
-
-    FeatureCollection: function(o) {
-      var features = o.features.map(clipType).filter(d3_identity);
-      return features && (o = Object.create(o), o.features = features, o);
-    },
-
-    Feature: function(o) {
-      var geometry = clipType(o.geometry);
-      return geometry && (o = Object.create(o), o.geometry = geometry, o);
-    },
-
-    Point: function(o) {
-      return visible(o.coordinates) && o;
-    },
-
-    MultiPoint: function(o) {
-      var coordinates = o.coordinates.filter(visible);
-      return coordinates.length && {
-        type: o.type,
-        coordinates: coordinates
-      };
-    },
-
-    LineString: function(o) {
-      var coordinates = clip(o.coordinates);
-      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
-    },
-
-    MultiLineString: function(o) {
-      var coordinates = o.coordinates.map(clip).filter(function(d) { return d.length; });
-      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
-    },
-
-    Polygon: function(o) {
-      var coordinates = o.coordinates.map(clip);
-      return coordinates[0].length && (o = Object.create(o), o.coordinates = coordinates, o);
-    },
-
-    MultiPolygon: function(o) {
-      var coordinates = o.coordinates.map(function(d) { return d.map(clip); }).filter(function(d) { return d[0].length; });
-      return coordinates.length && (o = Object.create(o), o.coordinates = coordinates, o);
-    },
-
-    GeometryCollection: function(o) {
-      var geometries = o.geometries.map(clipType).filter(d3_identity);
-      return geometries.length && (o = Object.create(o), o.geometries = geometries, o);
-    }
-
-  });
-
-  function clip(coordinates) {
-    var i = -1,
-        n = coordinates.length,
-        clipped = [],
-        p0,
-        p1,
-        p2,
-        d0,
-        d1;
-
-    while (++i < n) {
-      d1 = arc.distance(p2 = coordinates[i]);
-      if (d1 < radians) {
-        if (p1) clipped.push(d3_geo_greatArcInterpolate(p1, p2)((d0 - radians) / (d0 - d1)));
-        clipped.push(p2);
-        p0 = p1 = null;
-      } else {
-        p1 = p2;
-        if (!p0 && clipped.length) {
-          clipped.push(d3_geo_greatArcInterpolate(clipped[clipped.length - 1], p1)((radians - d0) / (d1 - d0)));
-          p0 = p1;
-        }
+    interpolate(null, null, 1, {
+      point: function(x, y) {
+        ring.push(x = rotate(x, y));
+        x[0] *= d3_degrees, x[1] *= d3_degrees;
       }
-      d0 = d1;
-    }
+    });
 
-    // Close the clipped polygon if necessary.
-    p0 = coordinates[0];
-    p1 = clipped[0];
-    if (p1 && p2[0] === p0[0] && p2[1] === p0[1] && !(p2[0] === p1[0] && p2[1] === p1[1])) {
-      clipped.push(p1);
-    }
-
-    return resample(clipped);
-  }
-
-  // Resample coordinates, creating great arcs between each.
-  function resample(coordinates) {
-    var i = 0,
-        n = coordinates.length,
-        j,
-        m,
-        resampled = n ? [coordinates[0]] : coordinates,
-        resamples,
-        origin = arc.source();
-
-    while (++i < n) {
-      resamples = arc.source(coordinates[i - 1])(coordinates[i]).coordinates;
-      for (j = 0, m = resamples.length; ++j < m;) resampled.push(resamples[j]);
-    }
-
-    arc.source(origin);
-    return resampled;
+    return {type: "Polygon", coordinates: [ring]};
   }
 
   circle.origin = function(x) {
     if (!arguments.length) return origin;
     origin = x;
-    if (typeof origin !== "function") arc.source(origin);
     return circle;
   };
 
   circle.angle = function(x) {
-    if (!arguments.length) return degrees;
-    radians = (degrees = +x) * d3_geo_radians;
+    if (!arguments.length) return angle;
+    interpolate = d3_geo_circleInterpolate((angle = +x) * d3_radians, precision * d3_radians);
     return circle;
   };
 
-  return d3.rebind(circle, arc, "precision");
+  circle.precision = function(_) {
+    if (!arguments.length) return precision;
+    interpolate = d3_geo_circleInterpolate(angle * d3_radians, (precision = +_) * d3_radians);
+    return circle;
+  };
+
+  return circle.angle(90);
+};
+
+// Interpolates along a circle centered at [0°, 0°], with a given radius and
+// precision.
+function d3_geo_circleInterpolate(radians, precision) {
+  var cr = Math.cos(radians),
+      sr = Math.sin(radians);
+  return function(from, to, direction, listener) {
+    if (from != null) {
+      from = d3_geo_circleAngle(cr, from);
+      to = d3_geo_circleAngle(cr, to);
+      if (direction > 0 ? from < to: from > to) from += direction * 2 * π;
+    } else {
+      from = radians + direction * 2 * π;
+      to = radians;
+    }
+    var point;
+    for (var step = direction * precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
+      listener.point((point = d3_geo_spherical([
+        cr,
+        -sr * Math.cos(t),
+        -sr * Math.sin(t)
+      ]))[0], point[1]);
+    }
+  };
+}
+
+// Signed angle of a cartesian point relative to [cr, 0, 0].
+function d3_geo_circleAngle(cr, point) {
+  var a = d3_geo_cartesian(point);
+  a[0] -= cr;
+  d3_geo_cartesianNormalize(a);
+  var angle = Math.acos(Math.max(-1, Math.min(1, -a[1])));
+  return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI - ε) % (2 * Math.PI);
 }

@@ -11,7 +11,6 @@ d3.layout.force = function() {
       charge = -30,
       gravity = .1,
       theta = .8,
-      interval,
       nodes = [],
       links = [],
       distances,
@@ -19,7 +18,7 @@ d3.layout.force = function() {
       charges;
 
   function repulse(node) {
-    return function(quad, x1, y1, x2, y2) {
+    return function(quad, x1, _, x2) {
       if (quad.point !== node) {
         var dx = quad.cx - node.x,
             dy = quad.cy - node.y,
@@ -284,8 +283,7 @@ d3.layout.force = function() {
   };
 
   function dragmove(d) {
-    d.px = d3.event.x;
-    d.py = d3.event.y;
+    d.px = d3.event.x, d.py = d3.event.y;
     force.resume(); // restart annealing
   }
 
@@ -308,6 +306,7 @@ function d3_layout_forceDragend(d) {
 
 function d3_layout_forceMouseover(d) {
   d.fixed |= 4; // set bit 3
+  d.px = d.x, d.py = d.y; // set velocity to zero
 }
 
 function d3_layout_forceMouseout(d) {
@@ -347,10 +346,10 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
   quad.cy = cy / quad.charge;
 }
 
-function d3_layout_forceLinkDistance(link) {
+function d3_layout_forceLinkDistance() {
   return 20;
 }
 
-function d3_layout_forceLinkStrength(link) {
+function d3_layout_forceLinkStrength() {
   return 1;
 }

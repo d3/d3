@@ -1,25 +1,22 @@
 function d3_dsv(delimiter, mimeType) {
-  var reParse = new RegExp("\r\n|[" + delimiter + "\r\n]", "g"), // field separator regex
-      reFormat = new RegExp("[\"" + delimiter + "\n]"),
+  var reFormat = new RegExp("[\"" + delimiter + "\n]"),
       delimiterCode = delimiter.charCodeAt(0);
 
   function dsv(url, callback) {
-    d3.text(url, mimeType, function(text) {
-      callback(text && dsv.parse(text));
-    });
+    return d3.xhr(url, mimeType, callback).response(response);
+  }
+
+  function response(request) {
+    return dsv.parse(request.responseText);
   }
 
   dsv.parse = function(text) {
-    var header;
-    return dsv.parseRows(text, function(row, i) {
-      if (i) {
-        var o = {}, j = -1, m = header.length;
-        while (++j < m) o[header[j]] = row[j];
-        return o;
-      } else {
-        header = row;
-        return null;
-      }
+    var o;
+    return dsv.parseRows(text, function(row) {
+      if (o) return o(row);
+      o = new Function("d", "return {" + row.map(function(name, i) {
+        return JSON.stringify(name) + ": d[" + i + "]";
+      }).join(",") + "}");
     });
   };
 
@@ -27,44 +24,47 @@ function d3_dsv(delimiter, mimeType) {
     var EOL = {}, // sentinel value for end-of-line
         EOF = {}, // sentinel value for end-of-file
         rows = [], // output rows
+        N = text.length,
+        I = 0, // current character index
         n = 0, // the current line number
         t, // the current token
         eol; // is the current token followed by EOL?
 
-    reParse.lastIndex = 0; // work-around bug in FF 3.6
-
     function token() {
-      if (reParse.lastIndex >= text.length) return EOF; // special case: end of file
-      if (eol) { eol = false; return EOL; } // special case: end of line
+      if (I >= N) return EOF; // special case: end of file
+      if (eol) return eol = false, EOL; // special case: end of line
 
       // special case: quotes
-      var j = reParse.lastIndex;
+      var j = I;
       if (text.charCodeAt(j) === 34) {
         var i = j;
-        while (i++ < text.length) {
+        while (i++ < N) {
           if (text.charCodeAt(i) === 34) {
             if (text.charCodeAt(i + 1) !== 34) break;
-            i++;
+            ++i;
           }
         }
-        reParse.lastIndex = i + 2;
+        I = i + 2;
         var c = text.charCodeAt(i + 1);
         if (c === 13) {
           eol = true;
-          if (text.charCodeAt(i + 2) === 10) reParse.lastIndex++;
+          if (text.charCodeAt(i + 2) === 10) ++I;
         } else if (c === 10) {
           eol = true;
         }
         return text.substring(j + 1, i).replace(/""/g, "\"");
       }
 
-      // common case
-      var m = reParse.exec(text);
-      if (m) {
-        eol = m[0].charCodeAt(0) !== delimiterCode;
-        return text.substring(j, m.index);
+      // common case: find next delimiter or newline
+      while (I < N) {
+        var c = text.charCodeAt(I++), k = 1;
+        if (c === 10) eol = true; // \n
+        else if (c === 13) { eol = true; if (text.charCodeAt(I) === 10) ++I, ++k; } // \r|\r\n
+        else if (c !== delimiterCode) continue;
+        return text.substring(j, I - k);
       }
-      reParse.lastIndex = text.length;
+
+      // special case: last token before EOF
       return text.substring(j);
     }
 

@@ -9,7 +9,7 @@ suite.addBatch({
   "json": {
     topic: function() {
       var cb = this.callback;
-      return d3.json("examples/data/sample.json", function(json) {
+      d3.json("test/data/sample.json", function(error, json) {
         cb(null, json);
       });
     },
@@ -22,12 +22,12 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.json("//does/not/exist.json", function(json) {
+        d3.json("//does/not/exist.json", function(error, json) {
           cb(null, json);
         });
       },
-      "invokes the callback with null when an error occurs": function(json) {
-        assert.isNull(json);
+      "invokes the callback with undefined when an error occurs": function(json) {
+        assert.isUndefined(json);
       }
     }
   }

@@ -19,8 +19,8 @@ module.exports = {
 
   "selects the first matching element": function(transition) {
     var t = transition.select("span");
-    assert.domEqual(t[0][1].node.parentNode, transition[0][1].node);
-    assert.domEqual(t[0][2].node.parentNode, transition[0][2].node);
+    assert.domEqual(t[0][1].parentNode, transition[0][1]);
+    assert.domEqual(t[0][2].parentNode, transition[0][2]);
   },
   "ignores null elements": function(transition) {
     var t = transition.select("span");
@@ -28,25 +28,25 @@ module.exports = {
   },
   "propagates data to the selected elements": function(transition) {
     var t = transition.select("span");
-    assert.equal(t[0][1].node.__data__, "two");
-    assert.equal(t[0][2].node.__data__, "three");
+    assert.equal(t[0][1].__data__, "two");
+    assert.equal(t[0][2].__data__, "three");
   },
   "propagates delay to the selected elements": function(transition) {
     var t = transition.select("span");
-    assert.equal(t[0][1].delay, 13);
-    assert.equal(t[0][2].delay, 26);
+    assert.equal(t[0][1].__transition__[t.id].delay, 13);
+    assert.equal(t[0][2].__transition__[t.id].delay, 26);
   },
   "propagates duration to the selected elements": function(transition) {
     var t = transition.select("span");
-    assert.equal(t[0][1].duration, 21);
-    assert.equal(t[0][2].duration, 42);
+    assert.equal(t[0][1].__transition__[t.id].duration, 21);
+    assert.equal(t[0][2].__transition__[t.id].duration, 42);
   },
   "does not propagate data if no data was specified": function(transition) {
-    delete transition[0][1].node.__data__;
-    delete transition[0][1].node.firstChild.__data__;
+    delete transition[0][1].__data__;
+    delete transition[0][1].firstChild.__data__;
     var t = transition.select("span");
-    assert.isUndefined(t[0][1].node.__data__);
-    assert.equal(t[0][2].node.__data__, "three");
+    assert.isUndefined(t[0][1].__data__);
+    assert.equal(t[0][2].__data__, "three");
   },
   "returns null if no match is found": function(transition) {
     var t = transition.select("span");

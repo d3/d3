@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+table {
+  width: 960px;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 4px;
+}
+
+th {
+  text-align: left;
+}
+
+td {
+  border: solid 1px #ccc;
+  text-align: right;
+}
+
+td.fail {
+  background: lightcoral;
+}
+
+td.success {
+  background: lightgreen;
+}
+
+</style>
+<table>
+  <thead>
+    <th>start</th>
+    <th>end</th>
+    <th colspan=5>actual intermediate values</th>
+    <th>exp.</th>
+    <th>act.</th>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+<script src="../../d3.js"></script>
+<script>
+
+var format = d3.format(",.2f");
+
+var tests = [
+  {start:  170, end:  225, expected: [ 170.00, -176.25, -162.50, -148.75, -135.00]},
+  {start:  225, end:  170, expected: [-135.00, -148.75, -162.50, -176.25,  170.00]},
+  {start: -170, end: -225, expected: [-170.00,  176.25,  162.50,  148.75,  135.00]},
+  {start: -225, end: -170, expected: [ 135.00,  148.75,  162.50,  176.25, -170.00]},
+  {start: -170, end:  170, expected: [-170.00, -175.00,  180.00,  175.00,  170.00]},
+  {start: -170, end:    0, expected: [-170.00, -127.50,  -85.00,  -42.50,    0.00]},
+  {start:  170, end:    0, expected: [ 170.00,  127.50,   85.00,   42.50,    0.00]},
+  {start: -180, end:   90, expected: [ 180.00,  157.50,  135.00,  112.50,   90.00]},
+  {start:  180, end:   90, expected: [ 180.00,  157.50,  135.00,  112.50,   90.00]},
+  {start: -180, end:  -90, expected: [-180.00, -157.50, -135.00, -112.50,  -90.00]},
+  {start:  180, end:  -90, expected: [ 180.00, -157.50, -135.00, -112.50,  -90.00]},
+  {start:  780, end:  -90, expected: [  60.00,  22.50,  -15.00,   -52.50,  -90.00]}
+];
+
+var tr = d3.select("tbody").selectAll("tr")
+    .data(tests)
+  .enter().append("tr");
+
+tr.append("td")
+    .text(function(d) { return format(d.start); });
+
+tr.append("td")
+    .text(function(d) { return format(d.end); });
+
+tr.selectAll(".actual")
+    .data(function(d) {
+      var interpolate = d3.interpolateTransform("rotate(" + d.start + ")", "rotate(" + d.end + ")");
+      return d.expected.map(function(expected, i) {
+        return {
+          expected: expected,
+          actual: d3.transform(interpolate(i / 4)).rotate
+        };
+      });
+    })
+  .enter().append("td")
+    .text(function(d, i) { return format(d.actual); })
+    .attr("class", function(d) { return Math.abs(d.actual - d.expected) < .01 ? "success" : "fail"; });
+
+var ga = tr.append("td").attr("width", 40).append("svg")
+    .attr("width", 40)
+    .attr("height", 20)
+  .append("g")
+    .attr("transform", "translate(20,10)")
+  .append("g")
+    .each(animateExpected);
+
+ga.append("path")
+    .attr("d", d3.svg.symbol().type("cross").size(120));
+
+ga.append("circle")
+    .attr("cx", 8)
+    .attr("r", 4);
+
+var gb = tr.append("td").attr("width", 40).append("svg")
+    .attr("width", 40)
+    .attr("height", 20)
+  .append("g")
+    .attr("transform", "translate(20,10)")
+  .append("g")
+    .each(animateActual);
+
+gb.append("path")
+    .attr("d", d3.svg.symbol().type("cross").size(120));
+
+gb.append("circle")
+    .attr("cx", 8)
+    .attr("r", 4);
+
+function animateExpected(d) {
+  d3.select(this).transition()
+      .duration(2500)
+      .attrTween("transform", function(d) {
+        var a = d.start % 360, b = d.end % 360;
+        if (a - b > 180) b += 360; else if (b - a > 180) a += 360; // shortest path
+        return d3.interpolateString("rotate(" + a + ")", "rotate(" + b + ")");
+      })
+      .each("end", animateExpected);
+}
+
+function animateActual(d) {
+  d3.select(this)
+      .attr("transform", "rotate(" + d.start + ")")
+    .transition()
+      .duration(2500)
+      .attr("transform", "rotate(" + d.end + ")")
+      .each("end", animateActual);
+}
+
+</script>

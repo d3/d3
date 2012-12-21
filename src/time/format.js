@@ -6,13 +6,14 @@ d3.time.format = function(template) {
         i = -1,
         j = 0,
         c,
+        p,
         f;
     while (++i < n) {
-      if (template.charCodeAt(i) == 37) {
-        string.push(
-            template.substring(j, i),
-            (f = d3_time_formats[c = template.charAt(++i)])
-            ? f(date) : c);
+      if (template.charCodeAt(i) === 37) {
+        string.push(template.substring(j, i));
+        if ((p = d3_time_formatPads[c = template.charAt(++i)]) != null) c = template.charAt(++i);
+        if (f = d3_time_formats[c]) c = f(date, p == null ? (c === "e" ? " " : "0") : p);
+        string.push(c);
         j = i + 1;
       }
     }
@@ -50,7 +51,7 @@ function d3_time_parse(date, template, string, j) {
   while (i < n) {
     if (j >= m) return -1;
     c = template.charCodeAt(i++);
-    if (c == 37) {
+    if (c === 37) {
       p = d3_time_parsers[template.charAt(i++)];
       if (!p || ((j = p(date, string, j)) < 0)) return -1;
     } else if (c != string.charCodeAt(j++)) {
@@ -70,10 +71,11 @@ function d3_time_formatLookup(names) {
   return map;
 }
 
-var d3_time_zfill2 = d3.format("02d"),
-    d3_time_zfill3 = d3.format("03d"),
-    d3_time_zfill4 = d3.format("04d"),
-    d3_time_sfill2 = d3.format("2d");
+function d3_time_formatPad(value, fill, width) {
+  value += "";
+  var length = value.length;
+  return length < width ? new Array(width - length + 1).join(fill) + value : value;
+}
 
 var d3_time_dayRe = d3_time_formatRe(d3_time_days),
     d3_time_dayAbbrevRe = d3_time_formatRe(d3_time_dayAbbreviations),
@@ -82,31 +84,37 @@ var d3_time_dayRe = d3_time_formatRe(d3_time_days),
     d3_time_monthAbbrevRe = d3_time_formatRe(d3_time_monthAbbreviations),
     d3_time_monthAbbrevLookup = d3_time_formatLookup(d3_time_monthAbbreviations);
 
+var d3_time_formatPads = {
+  "-": "",
+  "_": " ",
+  "0": "0"
+};
+
 var d3_time_formats = {
   a: function(d) { return d3_time_dayAbbreviations[d.getDay()]; },
   A: function(d) { return d3_time_days[d.getDay()]; },
   b: function(d) { return d3_time_monthAbbreviations[d.getMonth()]; },
   B: function(d) { return d3_time_months[d.getMonth()]; },
   c: d3.time.format(d3_time_formatDateTime),
-  d: function(d) { return d3_time_zfill2(d.getDate()); },
-  e: function(d) { return d3_time_sfill2(d.getDate()); },
-  H: function(d) { return d3_time_zfill2(d.getHours()); },
-  I: function(d) { return d3_time_zfill2(d.getHours() % 12 || 12); },
-  j: function(d) { return d3_time_zfill3(1 + d3.time.dayOfYear(d)); },
-  L: function(d) { return d3_time_zfill3(d.getMilliseconds()); },
-  m: function(d) { return d3_time_zfill2(d.getMonth() + 1); },
-  M: function(d) { return d3_time_zfill2(d.getMinutes()); },
+  d: function(d, p) { return d3_time_formatPad(d.getDate(), p, 2); },
+  e: function(d, p) { return d3_time_formatPad(d.getDate(), p, 2); },
+  H: function(d, p) { return d3_time_formatPad(d.getHours(), p, 2); },
+  I: function(d, p) { return d3_time_formatPad(d.getHours() % 12 || 12, p, 2); },
+  j: function(d, p) { return d3_time_formatPad(1 + d3.time.dayOfYear(d), p, 3); },
+  L: function(d, p) { return d3_time_formatPad(d.getMilliseconds(), p, 3); },
+  m: function(d, p) { return d3_time_formatPad(d.getMonth() + 1, p, 2); },
+  M: function(d, p) { return d3_time_formatPad(d.getMinutes(), p, 2); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
-  S: function(d) { return d3_time_zfill2(d.getSeconds()); },
-  U: function(d) { return d3_time_zfill2(d3.time.sundayOfYear(d)); },
+  S: function(d, p) { return d3_time_formatPad(d.getSeconds(), p, 2); },
+  U: function(d, p) { return d3_time_formatPad(d3.time.sundayOfYear(d), p, 2); },
   w: function(d) { return d.getDay(); },
-  W: function(d) { return d3_time_zfill2(d3.time.mondayOfYear(d)); },
+  W: function(d, p) { return d3_time_formatPad(d3.time.mondayOfYear(d), p, 2); },
   x: d3.time.format(d3_time_formatDate),
   X: d3.time.format(d3_time_formatTime),
-  y: function(d) { return d3_time_zfill2(d.getFullYear() % 100); },
-  Y: function(d) { return d3_time_zfill4(d.getFullYear() % 10000); },
+  y: function(d, p) { return d3_time_formatPad(d.getFullYear() % 100, p, 2); },
+  Y: function(d, p) { return d3_time_formatPad(d.getFullYear() % 10000, p, 4); },
   Z: d3_time_zone,
-  "%": function(d) { return "%"; }
+  "%": function() { return "%"; }
 };
 
 var d3_time_parsers = {
@@ -247,5 +255,5 @@ function d3_time_zone(d) {
       zs = z > 0 ? "-" : "+",
       zh = ~~(Math.abs(z) / 60),
       zm = Math.abs(z) % 60;
-  return zs + d3_time_zfill2(zh) + d3_time_zfill2(zm);
+  return zs + d3_time_formatPad(zh, "0", 2) + d3_time_formatPad(zm, "0", 2);
 }

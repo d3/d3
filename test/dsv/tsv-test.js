@@ -9,7 +9,7 @@ suite.addBatch({
   "tsv": {
     topic: function() {
       var cb = this.callback;
-      return d3.tsv("examples/data/sample.tsv", function(tsv) {
+      d3.tsv("test/data/sample.tsv", function(error, tsv) {
         cb(null, tsv);
       });
     },
@@ -22,12 +22,12 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.tsv("//does/not/exist.tsv", function(tsv) {
+        d3.tsv("//does/not/exist.tsv", function(error, tsv) {
           cb(null, tsv);
         });
       },
-      "invokes the callback with null when an error occurs": function(tsv) {
-        assert.isNull(tsv);
+      "invokes the callback with undefined when an error occurs": function(tsv) {
+        assert.isUndefined(tsv);
       }
     }
   },

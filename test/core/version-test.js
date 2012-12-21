@@ -9,7 +9,7 @@ suite.addBatch({
   "semantic versioning": {
     topic: d3.version,
     "has the form major.minor.patch": function(version) {
-      assert.match(version, /^[0-9]+\.[0-9]+\.[0-9]+$/);
+      assert.match(version, /^[0-9]+\.[0-9]+\.[0-9]+/);
     }
   }
 });

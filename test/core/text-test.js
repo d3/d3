@@ -9,7 +9,7 @@ suite.addBatch({
   "text": {
     topic: function() {
       var cb = this.callback;
-      return d3.text("examples/data/sample.txt", function(text) {
+      d3.text("test/data/sample.txt", function(error, text) {
         cb(null, text);
       });
     },
@@ -22,7 +22,7 @@ suite.addBatch({
     "": {
       topic: function() {
         var cb = this.callback;
-        return d3.text("examples/data/sample.txt", "text/plain+sample", function(text) {
+        d3.text("test/data/sample.txt", "text/plain+sample", function(error, text) {
           cb(null, text);
         });
       },
@@ -33,12 +33,12 @@ suite.addBatch({
     " ": {
       topic: function() {
         var cb = this.callback;
-        return d3.text("//does/not/exist.txt", function(text) {
+        d3.text("//does/not/exist.txt", function(error, text) {
           cb(null, text);
         });
       },
-      "invokes the callback with null when an error occurs": function(text) {
-        assert.isNull(text);
+      "invokes the callback with undefined when an error occurs": function(text) {
+        assert.isUndefined(text);
       }
     }
   }

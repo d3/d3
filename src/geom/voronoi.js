@@ -19,7 +19,8 @@
  * @returns polygons [[[x1, y1], [x2, y2], …], …]
  */
 d3.geom.voronoi = function(vertices) {
-  var polygons = vertices.map(function() { return []; });
+  var polygons = vertices.map(function() { return []; }),
+      Z = 1e6;
 
   d3_voronoi_tessellate(vertices, function(e) {
     var s1,
@@ -36,14 +37,14 @@ d3.geom.voronoi = function(vertices) {
       s2 = e.ep.r;
     }
     if (e.a === 1) {
-      y1 = s1 ? s1.y : -1e6;
+      y1 = s1 ? s1.y : -Z;
       x1 = e.c - e.b * y1;
-      y2 = s2 ? s2.y : 1e6;
+      y2 = s2 ? s2.y : Z;
       x2 = e.c - e.b * y2;
     } else {
-      x1 = s1 ? s1.x : -1e6;
+      x1 = s1 ? s1.x : -Z;
       y1 = e.c - e.a * x1;
-      x2 = s2 ? s2.x : 1e6;
+      x2 = s2 ? s2.x : Z;
       y2 = e.c - e.a * x2;
     }
     var v1 = [x1, y1],
@@ -52,22 +53,53 @@ d3.geom.voronoi = function(vertices) {
     polygons[e.region.r.index].push(v1, v2);
   });
 
-  // Reconnect the polygon segments into counterclockwise loops.
-  return polygons.map(function(polygon, i) {
+  // Connect edges into counterclockwise polygons without coincident points.
+  polygons = polygons.map(function(polygon, i) {
     var cx = vertices[i][0],
-        cy = vertices[i][1];
-    polygon.forEach(function(v) {
-      v.angle = Math.atan2(v[0] - cx, v[1] - cy);
-    });
-    return polygon.sort(function(a, b) {
-      return a.angle - b.angle;
-    }).filter(function(d, i) {
-      return !i || (d.angle - polygon[i - 1].angle > 1e-10);
-    });
+        cy = vertices[i][1],
+        angle = polygon.map(function(v) { return Math.atan2(v[0] - cx, v[1] - cy); });
+    return d3.range(polygon.length)
+        .sort(function(a, b) { return angle[a] - angle[b]; })
+        .filter(function(d, i, order) { return !i || (angle[d] - angle[order[i - 1]] > ε); })
+        .map(function(d) { return polygon[d]; });
   });
+
+  // Fix degenerate polygons.
+  polygons.forEach(function(polygon, i) {
+    var n = polygon.length;
+    if (!n) return polygon.push([-Z, -Z], [-Z, Z], [Z, Z], [Z, -Z]);
+    if (n > 2) return;
+
+    var p0 = vertices[i],
+        p1 = polygon[0],
+        p2 = polygon[1],
+        x0 = p0[0], y0 = p0[1],
+        x1 = p1[0], y1 = p1[1],
+        x2 = p2[0], y2 = p2[1],
+        dx = Math.abs(x2 - x1), dy = y2 - y1;
+
+    if (Math.abs(dy) < ε) { // 0°
+      var y = y0 < y1 ? -Z : Z;
+      polygon.push([-Z, y], [Z, y]);
+    } else if (dx < ε) { // ±90°
+      var x = x0 < x1 ? -Z : Z;
+      polygon.push([x, -Z], [x, Z]);
+    } else {
+      var y = (x2 - x1) * (y1 - y0) < (x1 - x0) * (y2 - y1) ? Z : -Z,
+          z = Math.abs(dy) - dx;
+      if (Math.abs(z) < ε) { // ±45°
+        polygon.push([dy < 0 ? y : -y, y]);
+      } else {
+        if (z > 0) y *= -1;
+        polygon.push([-Z, y], [Z, y]);
+      }
+    }
+  });
+
+  return polygons;
 };
 
-var d3_voronoi_opposite = {"l": "r", "r": "l"};
+var d3_voronoi_opposite = {l: "r", r: "l"};
 
 function d3_voronoi_tessellate(vertices, callback) {
 

@@ -5,13 +5,13 @@ require("util").puts(JSON.stringify({
   "version": d3.version,
   "description": "A small, free JavaScript library for manipulating documents based on data.",
   "keywords": ["dom", "w3c", "visualization", "svg", "animation", "canvas"],
-  "homepage": "http://mbostock.github.com/d3/",
+  "homepage": "http://d3js.org",
   "author": {"name": "Mike Bostock", "url": "http://bost.ocks.org/mike"},
-  "repository": {"type": "git", "url": "http://github.com/mbostock/d3.git"},
+  "repository": {"type": "git", "url": "https://github.com/mbostock/d3.git"},
   "main": "index.js",
   "browserify" : "index-browserify.js",
   "jam": {
-    "main": "d3.v2.js",
+    "main": "d3.js",
     "shim": {
       "exports": "d3"
     }
@@ -21,9 +21,8 @@ require("util").puts(JSON.stringify({
     "sizzle": "1.1.x"
   },
   "devDependencies": {
-    "uglify-js": "1.3.3",
-    "vows": "0.6.x",
-    "canvas": "0.13.0" // for node-canvas example
+    "uglify-js": "2.2.2",
+    "vows": "0.6.x"
   },
   "scripts": {"test": "./node_modules/vows/bin/vows"}
 }, null, 2));

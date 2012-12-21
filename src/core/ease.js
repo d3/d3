@@ -1,41 +1,4 @@
-/*
- * TERMS OF USE - EASING EQUATIONS
- *
- * Open source under the BSD License.
- *
- * Copyright 2001 Robert Penner
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *
- * - Redistributions of source code must retain the above copyright notice, this
- *   list of conditions and the following disclaimer.
- *
- * - Redistributions in binary form must reproduce the above copyright notice,
- *   this list of conditions and the following disclaimer in the documentation
- *   and/or other materials provided with the distribution.
- *
- * - Neither the name of the author nor the names of contributors may be used to
- *   endorse or promote products derived from this software without specific
- *   prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
- * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
- * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
- * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
- * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
- * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
- */
-
-var d3_ease_quad = d3_ease_poly(2),
-    d3_ease_cubic = d3_ease_poly(3),
-    d3_ease_default = function() { return d3_ease_identity; };
+var d3_ease_default = function() { return d3_identity; };
 
 var d3_ease = d3.map({
   linear: d3_ease_default,
@@ -51,7 +14,7 @@ var d3_ease = d3.map({
 });
 
 var d3_ease_mode = d3.map({
-  "in": d3_ease_identity,
+  "in": d3_identity,
   "out": d3_ease_reverse,
   "in-out": d3_ease_reflect,
   "out-in": function(f) { return d3_ease_reflect(d3_ease_reverse(f)); }
@@ -62,7 +25,7 @@ d3.ease = function(name) {
       t = i >= 0 ? name.substring(0, i) : name,
       m = i >= 0 ? name.substring(i + 1) : "in";
   t = d3_ease.get(t) || d3_ease_default;
-  m = d3_ease_mode.get(m) || d3_ease_identity;
+  m = d3_ease_mode.get(m) || d3_identity;
   return d3_ease_clamp(m(t.apply(null, Array.prototype.slice.call(arguments, 1))));
 };
 
@@ -84,8 +47,20 @@ function d3_ease_reflect(f) {
   };
 }
 
-function d3_ease_identity(t) {
-  return t;
+function d3_ease_quad(t) {
+  return t * t;
+}
+
+function d3_ease_cubic(t) {
+  return t * t * t;
+}
+
+// Optimized clamp(reflect(poly(3))).
+function d3_ease_cubicInOut(t) {
+  if (t <= 0) return 0;
+  if (t >= 1) return 1;
+  var t2 = t * t, t3 = t2 * t;
+  return 4 * (t < .5 ? t3 : 3 * (t - t2) + t3 - .75);
 }
 
 function d3_ease_poly(e) {
@@ -95,7 +70,7 @@ function d3_ease_poly(e) {
 }
 
 function d3_ease_sin(t) {
-  return 1 - Math.cos(t * Math.PI / 2);
+  return 1 - Math.cos(t * π / 2);
 }
 
 function d3_ease_exp(t) {
@@ -109,10 +84,10 @@ function d3_ease_circle(t) {
 function d3_ease_elastic(a, p) {
   var s;
   if (arguments.length < 2) p = 0.45;
-  if (arguments.length < 1) { a = 1; s = p / 4; }
-  else s = p / (2 * Math.PI) * Math.asin(1 / a);
+  if (arguments.length) s = p / (2 * π) * Math.asin(1 / a);
+  else a = 1, s = p / 4;
   return function(t) {
-    return 1 + a * Math.pow(2, 10 * -t) * Math.sin((t - s) * 2 * Math.PI / p);
+    return 1 + a * Math.pow(2, 10 * -t) * Math.sin((t - s) * 2 * π / p);
   };
 }
 

@@ -1,8 +1,9 @@
-// TODO align
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),
       fill = match[1] || " ",
+      align = match[2] || ">",
       sign = match[3] || "",
+      basePrefix = match[4] || "",
       zfill = match[5],
       width = +match[6],
       comma = match[7],
@@ -14,8 +15,9 @@ d3.format = function(specifier) {
 
   if (precision) precision = +precision.substring(1);
 
-  if (zfill) {
-    fill = "0"; // TODO align = "=";
+  if (zfill || fill === "0" && align === "=") {
+    zfill = fill = "0";
+    align = "=";
     if (comma) width -= Math.floor((width - 1) / 4);
   }
 
@@ -23,14 +25,23 @@ d3.format = function(specifier) {
     case "n": comma = true; type = "g"; break;
     case "%": scale = 100; suffix = "%"; type = "f"; break;
     case "p": scale = 100; suffix = "%"; type = "r"; break;
+    case "b":
+    case "o":
+    case "x":
+    case "X": if (basePrefix) basePrefix = "0" + type.toLowerCase();
+    case "c":
     case "d": integer = true; precision = 0; break;
     case "s": scale = -1; type = "r"; break;
   }
+
+  if (basePrefix === "#") basePrefix = "";
 
   // If no precision is specified for r, fallback to general notation.
   if (type == "r" && !precision) type = "g";
 
   type = d3_format_types.get(type) || d3_format_typeDefault;
+
+  var zcomma = zfill && comma;
 
   return function(value) {
 
@@ -38,7 +49,7 @@ d3.format = function(specifier) {
     if (integer && (value % 1)) return "";
 
     // Convert negative to positive, and record the sign prefix.
-    var negative = value < 0 && (value = -value) ? "-" : sign;
+    var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
 
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {
@@ -52,23 +63,23 @@ d3.format = function(specifier) {
     // Convert to the desired precision.
     value = type(value, precision);
 
-    // If the fill character is 0, the sign and group is applied after the fill.
-    if (zfill) {
-      var length = value.length + negative.length;
-      if (length < width) value = new Array(width - length + 1).join(fill) + value;
-      if (comma) value = d3_format_group(value);
-      value = negative + value;
-    }
+     // If the fill character is not "0", grouping is applied before padding.
+    if (!zfill && comma) value = d3_format_group(value);
 
-    // Otherwise (e.g., space-filling), the sign and group is applied before.
-    else {
-      if (comma) value = d3_format_group(value);
-      value = negative + value;
-      var length = value.length;
-      if (length < width) value = new Array(width - length + 1).join(fill) + value;
-    }
+    var length = basePrefix.length + value.length + (zcomma ? 0 : negative.length),
+        padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
 
-    return value + suffix;
+    // If the fill character is "0", grouping is applied after padding.
+    if (zcomma) value = d3_format_group(padding + value);
+
+    if (d3_format_decimalPoint) value.replace(".", d3_format_decimalPoint);
+
+    negative += basePrefix;
+
+    return (align === "<" ? negative + value + padding
+          : align === ">" ? padding + negative + value
+          : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length)
+          : negative + (zcomma ? value : padding + value)) + suffix;
   };
 };
 
@@ -76,6 +87,11 @@ d3.format = function(specifier) {
 var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
 
 var d3_format_types = d3.map({
+  b: function(x) { return x.toString(2); },
+  c: function(x) { return String.fromCharCode(x); },
+  o: function(x) { return x.toString(8); },
+  x: function(x) { return x.toString(16); },
+  X: function(x) { return x.toString(16).toUpperCase(); },
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
   f: function(x, p) { return x.toFixed(p); },
@@ -91,10 +107,19 @@ function d3_format_typeDefault(x) {
 }
 
 // Apply comma grouping for thousands.
-function d3_format_group(value) {
-  var i = value.lastIndexOf("."),
-      f = i >= 0 ? value.substring(i) : (i = value.length, ""),
-      t = [];
-  while (i > 0) t.push(value.substring(i -= 3, i + 3));
-  return t.reverse().join(",") + f;
+var d3_format_group = d3_identity;
+if (d3_format_grouping) {
+  var d3_format_groupingLength = d3_format_grouping.length;
+  d3_format_group = function(value) {
+    var i = value.lastIndexOf("."),
+        f = i >= 0 ? "." + value.substring(i + 1) : (i = value.length, ""),
+        t = [],
+        j = 0,
+        g = d3_format_grouping[0];
+    while (i > 0 && g > 0) {
+      t.push(value.substring(i -= g, i + g));
+      g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];
+    }
+    return t.reverse().join(d3_format_thousandsSeparator || "") + f;
+  };
 }

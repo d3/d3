@@ -1,83 +1,34 @@
-/**
- * Given a GeoJSON object, returns the corresponding bounding box. The bounding
- * box is represented by a two-dimensional array: [[left, bottom], [right,
- * top]], where left is the minimum longitude, bottom is the minimum latitude,
- * right is maximum longitude, and top is the maximum latitude.
- */
-d3.geo.bounds = function(feature) {
-  var left = Infinity,
-      bottom = Infinity,
-      right = -Infinity,
-      top = -Infinity;
-  d3_geo_bounds(feature, function(x, y) {
-    if (x < left) left = x;
-    if (x > right) right = x;
-    if (y < bottom) bottom = y;
-    if (y > top) top = y;
-  });
-  return [[left, bottom], [right, top]];
-};
+d3.geo.bounds = d3_geo_bounds();
 
-function d3_geo_bounds(o, f) {
-  if (d3_geo_boundsTypes.hasOwnProperty(o.type)) d3_geo_boundsTypes[o.type](o, f);
-}
+function d3_geo_bounds(projection) {
+  var x0, y0, x1, y1;
 
-var d3_geo_boundsTypes = {
-  Feature: d3_geo_boundsFeature,
-  FeatureCollection: d3_geo_boundsFeatureCollection,
-  GeometryCollection: d3_geo_boundsGeometryCollection,
-  LineString: d3_geo_boundsLineString,
-  MultiLineString: d3_geo_boundsMultiLineString,
-  MultiPoint: d3_geo_boundsLineString,
-  MultiPolygon: d3_geo_boundsMultiPolygon,
-  Point: d3_geo_boundsPoint,
-  Polygon: d3_geo_boundsPolygon
-};
+  var bound = {
+    point: boundPoint,
+    lineStart: d3_noop,
+    lineEnd: d3_noop,
 
-function d3_geo_boundsFeature(o, f) {
-  d3_geo_bounds(o.geometry, f);
-}
+    // While inside a polygon, ignore points in holes.
+    polygonStart: function() { bound.lineEnd = boundPolygonLineEnd; },
+    polygonEnd: function() { bound.point = boundPoint; }
+  };
 
-function d3_geo_boundsFeatureCollection(o, f) {
-  for (var a = o.features, i = 0, n = a.length; i < n; i++) {
-    d3_geo_bounds(a[i].geometry, f);
+  var projectBound = projection ? projection.stream(bound) : bound;
+
+  function boundPoint(x, y) {
+    if (x < x0) x0 = x;
+    if (x > x1) x1 = x;
+    if (y < y0) y0 = y;
+    if (y > y1) y1 = y;
   }
-}
 
-function d3_geo_boundsGeometryCollection(o, f) {
-  for (var a = o.geometries, i = 0, n = a.length; i < n; i++) {
-    d3_geo_bounds(a[i], f);
+  function boundPolygonLineEnd() {
+    bound.point = bound.lineEnd = d3_noop;
   }
-}
 
-function d3_geo_boundsLineString(o, f) {
-  for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-    f.apply(null, a[i]);
-  }
-}
-
-function d3_geo_boundsMultiLineString(o, f) {
-  for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-    for (var b = a[i], j = 0, m = b.length; j < m; j++) {
-      f.apply(null, b[j]);
-    }
-  }
-}
-
-function d3_geo_boundsMultiPolygon(o, f) {
-  for (var a = o.coordinates, i = 0, n = a.length; i < n; i++) {
-    for (var b = a[i][0], j = 0, m = b.length; j < m; j++) {
-      f.apply(null, b[j]);
-    }
-  }
-}
-
-function d3_geo_boundsPoint(o, f) {
-  f.apply(null, o.coordinates);
-}
-
-function d3_geo_boundsPolygon(o, f) {
-  for (var a = o.coordinates[0], i = 0, n = a.length; i < n; i++) {
-    f.apply(null, a[i]);
-  }
+  return function(feature) {
+    y1 = x1 = -(x0 = y0 = Infinity);
+    d3.geo.stream(feature, projectBound);
+    return [[x0, y0], [x1, y1]];
+  };
 }
