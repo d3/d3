@@ -1,4 +1,4 @@
-d3 = {version: "3.0.0rc1"}; // semver
+d3 = {version: "3.0.0"}; // semver
 
 var π = Math.PI,
     ε = 1e-6,
