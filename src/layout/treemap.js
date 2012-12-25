@@ -34,7 +34,8 @@ d3.layout.treemap = function() {
           best = Infinity, // the best row score so far
           score, // the current row score
           u = mode === "slice" ? rect.dx
-            : mode === "dice" || mode === "slice-dice" && node.depth & 1 ? rect.dy
+            : mode === "dice" ? rect.dy
+            : mode === "slice-dice" ? node.depth & 1 ? rect.dy : rect.dx
             : Math.min(rect.dx, rect.dy), // initial orientation
           n;
       scale(remaining, rect.dx * rect.dy / node.value);
