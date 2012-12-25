@@ -154,6 +154,20 @@ suite.addBatch({
         {x: 0, y: 0, dx: 0, dy: 1},
         {x: 0, y: 0, dx: 1, dy: 1}
       ]);
+    },
+    "slice-dice": function(treemap) {
+      assert.deepEqual(treemap().size([100, 10]).mode("slice-dice").nodes({children: [
+        {children: [{value: 1}, {value: 1}]},
+        {children: [{value: 1}, {value: 1}]}
+      ]}).map(layout), [
+        {x: 0, y: 0, dx: 100, dy: 10},
+        {x: 50, y: 0, dx: 50, dy: 10},
+        {x: 50, y: 5, dx: 50, dy: 5},
+        {x: 50, y: 0, dx: 50, dy: 5},
+        {x: 0, y: 0, dx: 50, dy: 10},
+        {x: 0, y: 5, dx: 50, dy: 5},
+        {x: 0, y: 0, dx: 50, dy: 5}
+      ]);
     }
   }
 });
