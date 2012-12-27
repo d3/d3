@@ -71,11 +71,10 @@ function d3_geo_centroidRingStart() {
 function d3_geo_centroidLineStart() {
   var x0, y0, z0; // previous point
 
-  if (d3_geo_centroidDimension !== 1) {
-    if (d3_geo_centroidDimension < 1) {
-      d3_geo_centroidDimension = 1;
-      d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
-    } else return;
+  if (d3_geo_centroidDimension > 1) return;
+  if (d3_geo_centroidDimension < 1) {
+    d3_geo_centroidDimension = 1;
+    d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
   }
 
   d3_geo_centroid.point = function(λ, φ) {
