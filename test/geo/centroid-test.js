@@ -65,18 +65,37 @@ suite.addBatch({
       ]}), [179.5, 0], 1e-6);
     },
     "GeometryCollection": {
-      "Point and LineString": function(centroid) {
+      "LineString, Point": function(centroid) {
         assert.inDelta(centroid({type: "GeometryCollection", geometries: [
           {type: "LineString", coordinates: [[179, 0], [180, 0]]},
           {type: "Point", coordinates: [0, 0]}
         ]}), [179.5, 0], 1e-6);
       },
-      "Point, LineString and Polygon": function(centroid) {
+      "Polygon, LineString, Point": function(centroid) {
         assert.inDelta(centroid({type: "GeometryCollection", geometries: [
           {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]},
           {type: "LineString", coordinates: [[179, 0], [180, 0]]},
           {type: "Point", coordinates: [0, 0]}
         ]}), [-179.5, 0.5], 1e-6);
+      },
+      "Point, LineString, Polygon": function(centroid) {
+        assert.inDelta(centroid({type: "GeometryCollection", geometries: [
+          {type: "Point", coordinates: [0, 0]},
+          {type: "LineString", coordinates: [[179, 0], [180, 0]]},
+          {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]}
+        ]}), [-179.5, 0.5], 1e-6);
+      },
+      "Sphere, Point": function(centroid) {
+        assert.isUndefined(centroid({type: "GeometryCollection", geometries: [
+          {type: "Sphere"},
+          {type: "Point", coordinates: [0, 0]}
+        ]}));
+      },
+      "Point, Sphere": function(centroid) {
+        assert.isUndefined(centroid({type: "GeometryCollection", geometries: [
+          {type: "Point", coordinates: [0, 0]},
+          {type: "Sphere"}
+        ]}));
       }
     }
   }
