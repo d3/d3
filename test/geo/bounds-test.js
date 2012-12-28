@@ -90,6 +90,29 @@ suite.addBatch({
         type: "Polygon",
         coordinates: [[[-123, 39], [-122, 39], [-122, 38], [-123, 39]], [[10, 20], [20, 20], [20, 10], [10, 10], [10, 20]]]
       }), [[-123, 38], [-122, 39]])
+    },
+    "NestedCollection": function (bounds) {
+        assert.deepEqual(bounds({
+        type: "FeatureCollection",
+        features: [
+          {
+            type: "Feature",
+            geometry: {
+              type: "GeometryCollection",
+              geometries: [
+                {
+                  type: "Point",
+                  coordinates: [-120,47]
+                },
+                {
+                  type: "Point",
+                  coordinates: [-119,46]
+                }
+              ]
+            }
+          }
+        ]
+      }), [[-120,46], [-119,47]])
     }
   }
 });
