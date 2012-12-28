@@ -12,7 +12,7 @@
     };
   }
   d3 = {
-    version: "3.0.0"
+    version: "3.0.1"
   };
   var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
   function d3_target(d) {
@@ -5092,7 +5092,7 @@
     function squarify(node) {
       var children = node.children;
       if (children && children.length) {
-        var rect = pad(node), row = [], remaining = children.slice(), child, best = Infinity, score, u = mode === "slice" ? rect.dx : mode === "dice" || mode === "slice-dice" && node.depth & 1 ? rect.dy : Math.min(rect.dx, rect.dy), n;
+        var rect = pad(node), row = [], remaining = children.slice(), child, best = Infinity, score, u = mode === "slice" ? rect.dx : mode === "dice" ? rect.dy : mode === "slice-dice" ? node.depth & 1 ? rect.dy : rect.dx : Math.min(rect.dx, rect.dy), n;
         scale(remaining, rect.dx * rect.dy / node.value);
         row.area = 0;
         while ((n = remaining.length) > 0) {
@@ -5348,10 +5348,6 @@
     FeatureCollection: function(object, listener) {
       var features = object.features, i = -1, n = features.length;
       while (++i < n) d3_geo_streamGeometry(features[i].geometry, listener);
-    },
-    GeometryCollection: function(object, listener) {
-      var geometries = object.geometries, i = -1, n = geometries.length;
-      while (++i < n) d3_geo_streamGeometry(geometries[i], listener);
     }
   };
   var d3_geo_streamGeometryType = {
@@ -5379,6 +5375,10 @@
     MultiPolygon: function(object, listener) {
       var coordinates = object.coordinates, i = -1, n = coordinates.length;
       while (++i < n) d3_geo_streamPolygon(coordinates[i], listener);
+    },
+    GeometryCollection: function(object, listener) {
+      var geometries = object.geometries, i = -1, n = geometries.length;
+      while (++i < n) d3_geo_streamGeometry(geometries[i], listener);
     }
   };
   function d3_geo_streamLine(coordinates, listener, closed) {
@@ -5597,12 +5597,20 @@
   };
   var d3_geo_centroidDimension, d3_geo_centroidW, d3_geo_centroidX, d3_geo_centroidY, d3_geo_centroidZ;
   var d3_geo_centroid = {
-    sphere: d3_noop,
+    sphere: function() {
+      if (d3_geo_centroidDimension < 2) {
+        d3_geo_centroidDimension = 2;
+        d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+      }
+    },
     point: d3_geo_centroidPoint,
     lineStart: d3_geo_centroidLineStart,
     lineEnd: d3_geo_centroidLineEnd,
     polygonStart: function() {
-      d3_geo_centroidDimension = 2;
+      if (d3_geo_centroidDimension < 2) {
+        d3_geo_centroidDimension = 2;
+        d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+      }
       d3_geo_centroid.lineStart = d3_geo_centroidRingStart;
     },
     polygonEnd: function() {
@@ -5620,10 +5628,6 @@
   }
   function d3_geo_centroidRingStart() {
     var λ00, φ00;
-    if (d3_geo_centroidDimension < 2) {
-      d3_geo_centroidDimension = 2;
-      d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
-    }
     d3_geo_centroidDimension = 1;
     d3_geo_centroidLineStart();
     d3_geo_centroidDimension = 2;
@@ -5639,11 +5643,10 @@
   }
   function d3_geo_centroidLineStart() {
     var x0, y0, z0;
-    if (d3_geo_centroidDimension !== 1) {
-      if (d3_geo_centroidDimension < 1) {
-        d3_geo_centroidDimension = 1;
-        d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
-      } else return;
+    if (d3_geo_centroidDimension > 1) return;
+    if (d3_geo_centroidDimension < 1) {
+      d3_geo_centroidDimension = 1;
+      d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
     }
     d3_geo_centroid.point = function(λ, φ) {
       λ *= d3_radians;
