@@ -19,10 +19,6 @@ var d3_geo_streamObjectType = {
   FeatureCollection: function(object, listener) {
     var features = object.features, i = -1, n = features.length;
     while (++i < n) d3_geo_streamGeometry(features[i].geometry, listener);
-  },
-  GeometryCollection: function(object, listener) {
-    var geometries = object.geometries, i = -1, n = geometries.length;
-    while (++i < n) d3_geo_streamGeometry(geometries[i], listener);
   }
 };
 
@@ -51,6 +47,10 @@ var d3_geo_streamGeometryType = {
   MultiPolygon: function(object, listener) {
     var coordinates = object.coordinates, i = -1, n = coordinates.length;
     while (++i < n) d3_geo_streamPolygon(coordinates[i], listener);
+  },
+  GeometryCollection: function(object, listener) {
+    var geometries = object.geometries, i = -1, n = geometries.length;
+    while (++i < n) d3_geo_streamGeometry(geometries[i], listener);
   }
 };
 
