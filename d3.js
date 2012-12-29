@@ -5671,7 +5671,7 @@
   d3.geo.circle = function() {
     var origin = [ 0, 0 ], angle, precision = 6, interpolate;
     function circle() {
-      var center = typeof origin === "function" ? origin.apply(this, arguments) : origin, rotate = d3_geo_rotation(center[0] * d3_radians, center[1] * d3_radians, 0), ring = [];
+      var center = typeof origin === "function" ? origin.apply(this, arguments) : origin, rotate = d3_geo_rotation(-center[0] * d3_radians, -center[1] * d3_radians, 0).invert, ring = [];
       interpolate(null, null, 1, {
         point: function(x, y) {
           ring.push(x = rotate(x, y));
