@@ -9,6 +9,7 @@ d3.behavior.zoom = function() {
       x1,
       y0,
       y1,
+      startloc, // location of the touchstart points
       touchtime; // time of last touchstart (to detect double-tap)
 
   function zoom() {
@@ -154,6 +155,9 @@ d3.behavior.zoom = function() {
         dispatch(event.of(this, arguments));
       }
       touchtime = now;
+    } else if (touches.length > 1) {
+      var loc0 = location(touches[0]), loc1 = location(touches[1]);
+      startloc = [(loc0[0] - loc1[0]), (loc0[1] - loc1[1])];
     }
   }
 
@@ -165,6 +169,10 @@ d3.behavior.zoom = function() {
       var p1, l1 = translate0[p1.identifier];
       p0 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
       l0 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2];
+      if (d3.event.scale == undefined) {
+        var loc0 = location(touches[0]), loc1 = location(touches[1]), endloc = [(loc0[0] - loc1[0]), (loc0[1] - loc1[1])];
+        d3.event.scale = Math.sqrt((endloc[0] * endloc[0]) + (endloc[1] * endloc[1])) / Math.sqrt((startloc[0] * startloc[0]) + (startloc[1] * startloc[1]));
+      }
       scaleTo(d3.event.scale * scale0);
     }
     translateTo(p0, l0);
