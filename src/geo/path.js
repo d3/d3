@@ -29,7 +29,7 @@ d3.geo.path = function() {
   };
 
   path.bounds = function(object) {
-    return d3_geo_bounds(projection)(object);
+    return d3_geo_bounds(projectStream)(object);
   };
 
   path.projection = function(_) {

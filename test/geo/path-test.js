@@ -186,6 +186,22 @@ suite.addBatch({
       },
       "Sphere": function(area) {
         assert.strictEqual(area({type: "Sphere"}), 1620000);
+      },
+      "supports fallback stream": function() {
+        var path = d3.geo.path(),
+            area = path.area({type: "Polygon", coordinates: [[[-122, 37], [-71, 42], [-80, 25], [-122, 37]]]});
+        assert.inDelta(area, 109021.503, 1e-3);
+      }
+    },
+
+    "bounds": {
+      "supports fallback stream": function() {
+        var path = d3.geo.path(),
+            bounds = path.bounds({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
+        assert.inDelta(bounds[0][0], -5.1214, 1e-3);
+        assert.inDelta(bounds[0][1], 174.825, 1e-3);
+        assert.inDelta(bounds[1][0], 794.602, 1e-3);
+        assert.inDelta(bounds[1][1], 856.501, 1e-3);
       }
     },
 
@@ -321,6 +337,12 @@ suite.addBatch({
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
           {type: "moveTo", x: 1370, y: 243}
         ]);
+      },
+      "supports fallback stream": function() {
+        var path = d3.geo.path(),
+            centroid = path.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
+        assert.inDelta(centroid[0], 434.655, 1e-3);
+        assert.inDelta(centroid[1], 397.940, 1e-3);
       }
     },
 

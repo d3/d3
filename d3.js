@@ -5557,8 +5557,8 @@
   (d3.geo.azimuthalEquidistant = function() {
     return d3_geo_projection(d3_geo_azimuthalEquidistant);
   }).raw = d3_geo_azimuthalEquidistant;
-  d3.geo.bounds = d3_geo_bounds();
-  function d3_geo_bounds(projection) {
+  d3.geo.bounds = d3_geo_bounds(d3_identity);
+  function d3_geo_bounds(projectStream) {
     var x0, y0, x1, y1;
     var bound = {
       point: boundPoint,
@@ -5571,7 +5571,6 @@
         bound.point = boundPoint;
       }
     };
-    var projectBound = projection ? projection.stream(bound) : bound;
     function boundPoint(x, y) {
       if (x < x0) x0 = x;
       if (x > x1) x1 = x;
@@ -5583,7 +5582,7 @@
     }
     return function(feature) {
       y1 = x1 = -(x0 = y0 = Infinity);
-      d3.geo.stream(feature, projectBound);
+      d3.geo.stream(feature, projectStream(bound));
       return [ [ x0, y0 ], [ x1, y1 ] ];
     };
   }
@@ -6229,7 +6228,7 @@
       return d3_geo_centroidZ ? [ d3_geo_centroidX / d3_geo_centroidZ, d3_geo_centroidY / d3_geo_centroidZ ] : undefined;
     };
     path.bounds = function(object) {
-      return d3_geo_bounds(projection)(object);
+      return d3_geo_bounds(projectStream)(object);
     };
     path.projection = function(_) {
       if (!arguments.length) return projection;
