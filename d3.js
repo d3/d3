@@ -12,7 +12,7 @@
     };
   }
   d3 = {
-    version: "3.0.1"
+    version: "3.0.2"
   };
   var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
   function d3_target(d) {
@@ -5557,8 +5557,8 @@
   (d3.geo.azimuthalEquidistant = function() {
     return d3_geo_projection(d3_geo_azimuthalEquidistant);
   }).raw = d3_geo_azimuthalEquidistant;
-  d3.geo.bounds = d3_geo_bounds();
-  function d3_geo_bounds(projection) {
+  d3.geo.bounds = d3_geo_bounds(d3_identity);
+  function d3_geo_bounds(projectStream) {
     var x0, y0, x1, y1;
     var bound = {
       point: boundPoint,
@@ -5571,7 +5571,6 @@
         bound.point = boundPoint;
       }
     };
-    var projectBound = projection ? projection.stream(bound) : bound;
     function boundPoint(x, y) {
       if (x < x0) x0 = x;
       if (x > x1) x1 = x;
@@ -5583,7 +5582,7 @@
     }
     return function(feature) {
       y1 = x1 = -(x0 = y0 = Infinity);
-      d3.geo.stream(feature, projectBound);
+      d3.geo.stream(feature, projectStream(bound));
       return [ [ x0, y0 ], [ x1, y1 ] ];
     };
   }
@@ -5671,7 +5670,7 @@
   d3.geo.circle = function() {
     var origin = [ 0, 0 ], angle, precision = 6, interpolate;
     function circle() {
-      var center = typeof origin === "function" ? origin.apply(this, arguments) : origin, rotate = d3_geo_rotation(center[0] * d3_radians, center[1] * d3_radians, 0), ring = [];
+      var center = typeof origin === "function" ? origin.apply(this, arguments) : origin, rotate = d3_geo_rotation(-center[0] * d3_radians, -center[1] * d3_radians, 0).invert, ring = [];
       interpolate(null, null, 1, {
         point: function(x, y) {
           ring.push(x = rotate(x, y));
@@ -6229,7 +6228,7 @@
       return d3_geo_centroidZ ? [ d3_geo_centroidX / d3_geo_centroidZ, d3_geo_centroidY / d3_geo_centroidZ ] : undefined;
     };
     path.bounds = function(object) {
-      return d3_geo_bounds(projection)(object);
+      return d3_geo_bounds(projectStream)(object);
     };
     path.projection = function(_) {
       if (!arguments.length) return projection;
