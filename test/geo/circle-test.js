@@ -17,6 +17,11 @@ suite.addBatch({
       var o = circle.origin([0, 90])();
       assert.equal(o.type, "Polygon");
       assert.inDelta(o.coordinates, [d3.range(360, -1, -6).map(function(x) { return [x >= 180 ? x - 360 : x, 0]; })], 1e-6);
+    },
+    "origin([45, 45])": function(circle) {
+      var o = circle.origin([45, 45]).angle(0)();
+      assert.equal(o.type, "Polygon");
+      assert.inDelta(o.coordinates[0][0], [45, 45], 1e-6);
     }
   }
 });
