@@ -3,7 +3,7 @@ var fs = require("fs"),
     formats = {},
     kvRe = /=/,
     valueRe = /;/g,
-    quotedRe = /"([^"]+?)"/g,
+    quotedRe = /"([^"]*?)"/g,
     data = [];
 
 process.stdin.resume();
