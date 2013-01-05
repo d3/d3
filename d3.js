@@ -6072,7 +6072,7 @@
       return x = a(x, y), b(x[0], x[1]);
     }
     if (a.invert && b.invert) compose.invert = function(x, y) {
-      return x = b.invert(x, y), a.invert(x[0], x[1]);
+      return x = b.invert(x, y), x && a.invert(x[0], x[1]);
     };
     return compose;
   }
@@ -6514,7 +6514,7 @@
     }
     function invert(point) {
       point = projectRotate.invert((point[0] - δx) / k, (δy - point[1]) / k);
-      return [ point[0] * d3_degrees, point[1] * d3_degrees ];
+      return point && [ point[0] * d3_degrees, point[1] * d3_degrees ];
     }
     projection.stream = function(stream) {
       return d3_geo_projectionRadiansRotate(rotate, clip(projectResample(stream)));
