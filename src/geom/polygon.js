@@ -3,9 +3,9 @@ d3.geom.polygon = function(coordinates) {
   coordinates.area = function() {
     var i = 0,
         n = coordinates.length,
-        area = coordinates[n - 1][1] * coordinates[0][0] - coordinates[n - 1][0] * coordinates[0][1];
+        area = coordinates[n - 1][0] * coordinates[0][1] - coordinates[n - 1][1] * coordinates[0][0];
     while (++i < n) {
-      area += coordinates[i - 1][1] * coordinates[i][0] - coordinates[i - 1][0] * coordinates[i][1];
+      area += coordinates[i - 1][0] * coordinates[i][1] - coordinates[i - 1][1] * coordinates[i][0];
     }
     return area * .5;
   };
@@ -18,7 +18,7 @@ d3.geom.polygon = function(coordinates) {
         a,
         b = coordinates[n - 1],
         c;
-    if (!arguments.length) k = -1 / (6 * coordinates.area());
+    if (!arguments.length) k = 1 / (6 * coordinates.area());
     while (++i < n) {
       a = b;
       b = coordinates[i];
