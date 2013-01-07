@@ -8,7 +8,7 @@ var suite = vows.describe("d3.geom.polygon");
 suite.addBatch({
   "closed counterclockwise unit square": {
     topic: function() {
-      return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]);
+      return d3.geom.polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]);
     },
     "has area 1": function(polygon) {
       assert.equal(polygon.area(), 1);
@@ -19,7 +19,7 @@ suite.addBatch({
   },
   "closed clockwise unit square": {
     topic: function() {
-      return d3.geom.polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]);
+      return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]);
     },
     "has area 1": function(polygon) {
       assert.equal(polygon.area(), -1);
@@ -30,7 +30,7 @@ suite.addBatch({
   },
   "closed clockwise triangle": {
     topic: function() {
-      return d3.geom.polygon([[1, 1], [3, 2], [2, 3], [1, 1]]);
+      return d3.geom.polygon([[1, 1], [2, 3], [3, 2], [1, 1]]);
     },
     "has area 1.5": function(polygon) {
       assert.equal(polygon.area(), -1.5);
@@ -43,7 +43,7 @@ suite.addBatch({
   },
   "open counterclockwise unit square": {
     topic: function() {
-      return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0]]);
+      return d3.geom.polygon([[0, 0], [1, 0], [1, 1], [0, 1]]);
     },
     "has area 1": function(polygon) {
       assert.equal(polygon.area(), 1);
@@ -54,7 +54,7 @@ suite.addBatch({
   },
   "open clockwise unit square": {
     topic: function() {
-      return d3.geom.polygon([[0, 0], [1, 0], [1, 1], [0, 1]]);
+      return d3.geom.polygon([[0, 0], [0, 1], [1, 1], [1, 0]]);
     },
     "has area 1": function(polygon) {
       assert.equal(polygon.area(), -1);
@@ -65,7 +65,7 @@ suite.addBatch({
   },
   "open clockwise triangle": {
     topic: function() {
-      return d3.geom.polygon([[1, 1], [3, 2], [2, 3]]);
+      return d3.geom.polygon([[1, 1], [2, 3], [3, 2]]);
     },
     "has area 1.5": function(polygon) {
       assert.equal(polygon.area(), -1.5);
@@ -87,7 +87,7 @@ suite.addBatch({
           d.map(function(x) { return [x, 0]; }).reverse()));
     },
     "has area 1e16 - 5e7": function(polygon) {
-      assert.equal(polygon.area(), 1e16 - 5e7);
+      assert.equal(polygon.area(), -(1e16 - 5e7));
     }
   },
 });
