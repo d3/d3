@@ -1689,7 +1689,7 @@
       return value;
     }
     function bind(group, groupData) {
-      var i, n = group.length, m = groupData.length, n0 = Math.min(n, m), n1 = Math.max(n, m), updateNodes = new Array(m), enterNodes = new Array(m), exitNodes = new Array(n), node, nodeData;
+      var i, n = group.length, m = groupData.length, n0 = Math.min(n, m), updateNodes = new Array(m), enterNodes = new Array(m), exitNodes = new Array(n), node, nodeData;
       if (key) {
         var nodeByKeyValue = new d3_Map(), dataByKeyValue = new d3_Map(), keyValues = [], keyValue;
         for (i = -1; ++i < n; ) {
@@ -1731,7 +1731,7 @@
         for (;i < m; ++i) {
           enterNodes[i] = d3_selection_dataNode(groupData[i]);
         }
-        for (;i < n1; ++i) {
+        for (;i < n; ++i) {
           exitNodes[i] = group[i];
         }
       }

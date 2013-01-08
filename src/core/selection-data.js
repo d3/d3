@@ -20,7 +20,6 @@ d3_selectionPrototype.data = function(value, key) {
         n = group.length,
         m = groupData.length,
         n0 = Math.min(n, m),
-        n1 = Math.max(n, m),
         updateNodes = new Array(m),
         enterNodes = new Array(m),
         exitNodes = new Array(n),
@@ -74,7 +73,7 @@ d3_selectionPrototype.data = function(value, key) {
       for (; i < m; ++i) {
         enterNodes[i] = d3_selection_dataNode(groupData[i]);
       }
-      for (; i < n1; ++i) {
+      for (; i < n; ++i) {
         exitNodes[i] = group[i];
       }
     }
