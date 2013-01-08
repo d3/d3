@@ -1689,13 +1689,13 @@
       return value;
     }
     function bind(group, groupData) {
-      var i, n = group.length, m = groupData.length, n0 = Math.min(n, m), n1 = Math.max(n, m), updateNodes = [], enterNodes = [], exitNodes = [], node, nodeData;
+      var i, n = group.length, m = groupData.length, n0 = Math.min(n, m), n1 = Math.max(n, m), updateNodes = new Array(m), enterNodes = new Array(m), exitNodes = new Array(n), node, nodeData;
       if (key) {
-        var nodeByKeyValue = new d3_Map(), keyValues = [], keyValue, j = groupData.length;
+        var nodeByKeyValue = new d3_Map(), dataByKeyValue = new d3_Map(), keyValues = [], keyValue;
         for (i = -1; ++i < n; ) {
           keyValue = key.call(node = group[i], node.__data__, i);
           if (nodeByKeyValue.has(keyValue)) {
-            exitNodes[j++] = node;
+            exitNodes[i] = node;
           } else {
             nodeByKeyValue.set(keyValue, node);
           }
@@ -1703,13 +1703,12 @@
         }
         for (i = -1; ++i < m; ) {
           keyValue = key.call(groupData, nodeData = groupData[i], i);
-          if (nodeByKeyValue.has(keyValue)) {
-            updateNodes[i] = node = nodeByKeyValue.get(keyValue);
+          if (node = nodeByKeyValue.get(keyValue)) {
+            updateNodes[i] = node;
             node.__data__ = nodeData;
-            enterNodes[i] = exitNodes[i] = null;
-          } else {
+          } else if (!dataByKeyValue.has(keyValue)) {
             enterNodes[i] = d3_selection_dataNode(nodeData);
-            updateNodes[i] = exitNodes[i] = null;
+            dataByKeyValue.set(keyValue, nodeData);
           }
           nodeByKeyValue.remove(keyValue);
         }
@@ -1725,19 +1724,15 @@
           if (node) {
             node.__data__ = nodeData;
             updateNodes[i] = node;
-            enterNodes[i] = exitNodes[i] = null;
           } else {
             enterNodes[i] = d3_selection_dataNode(nodeData);
-            updateNodes[i] = exitNodes[i] = null;
           }
         }
         for (;i < m; ++i) {
           enterNodes[i] = d3_selection_dataNode(groupData[i]);
-          updateNodes[i] = exitNodes[i] = null;
         }
         for (;i < n1; ++i) {
           exitNodes[i] = group[i];
-          enterNodes[i] = updateNodes[i] = null;
         }
       }
       enterNodes.update = updateNodes;
