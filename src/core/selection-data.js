@@ -50,8 +50,8 @@ d3_selectionPrototype.data = function(value, key) {
           node.__data__ = nodeData;
         } else if (!dataByKeyValue.has(keyValue)) { // no duplicate data key
           enterNodes[i] = d3_selection_dataNode(nodeData);
-          dataByKeyValue.set(keyValue, nodeData);
         }
+        dataByKeyValue.set(keyValue, nodeData);
         nodeByKeyValue.remove(keyValue);
       }
 

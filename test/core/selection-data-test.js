@@ -87,6 +87,41 @@ suite.addBatch({
       assert.isUndefined(data[0]);
       assert.strictEqual(data[1], b);
       assert.equal(data.length, 2);
+    },
+    "ignores duplicate keys in both data and selection": function() {
+      var div = d3.select("body").html("").selectAll("div")
+          .data(["aa", "ab", "ac", "ba", "bb", "bc"])
+        .enter().append("div")
+          .text(function(d) { return d; });
+
+      var update = div.data(["aa", "ab", "ba", "bb"], function(d) { return d.substring(0, 1); }),
+          enter = update.enter(),
+          exit = update.exit();
+
+      assert.equal(update.length, 1);
+
+      // enter     - [   null,   null,   null,   null]
+      assert.equal(enter[0].length, 4);
+      assert.equal(enter[0][0], null);
+      assert.equal(enter[0][1], null);
+      assert.equal(enter[0][2], null);
+      assert.equal(enter[0][3], null);
+
+      // update    - [ aa (a),   null, ba (b),   null]
+      assert.equal(update[0].length, 4);
+      assert.strictEqual(update[0][0], div[0][0]);
+      assert.equal(update[0][1], null);
+      assert.strictEqual(update[0][2], div[0][3]);
+      assert.equal(update[0][3], null);
+
+      // exit      - [   null, ab (a), ac (a),   null, bb (b), bc (b)]
+      assert.equal(exit[0].length, 6);
+      assert.equal(exit[0][0], null);
+      assert.strictEqual(exit[0][1], div[0][1]);
+      assert.strictEqual(exit[0][2], div[0][2]);
+      assert.equal(exit[0][3], null);
+      assert.strictEqual(exit[0][4], div[0][4]);
+      assert.strictEqual(exit[0][5], div[0][5]);
     }
   }
 });

@@ -1708,8 +1708,8 @@
             node.__data__ = nodeData;
           } else if (!dataByKeyValue.has(keyValue)) {
             enterNodes[i] = d3_selection_dataNode(nodeData);
-            dataByKeyValue.set(keyValue, nodeData);
           }
+          dataByKeyValue.set(keyValue, nodeData);
           nodeByKeyValue.remove(keyValue);
         }
         for (i = -1; ++i < n; ) {
