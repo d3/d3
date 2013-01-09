@@ -344,10 +344,10 @@ var d3_svg_brushCursor = {
   e: "ew-resize",
   s: "ns-resize",
   w: "ew-resize",
-  nw: "nwse-resize",
-  ne: "nesw-resize",
-  se: "nwse-resize",
-  sw: "nesw-resize"
+  nw: "nw-resize",
+  ne: "ne-resize",
+  se: "se-resize",
+  sw: "sw-resize"
 };
 
 var d3_svg_brushResizes = [
