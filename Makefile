@@ -156,6 +156,7 @@ d3.svg.js: \
 	src/svg/diagonal-radial.js \
 	src/svg/symbol.js \
 	src/svg/axis.js \
+	src/svg/transform.js \
 	src/svg/brush.js
 
 d3.behavior.js: \
