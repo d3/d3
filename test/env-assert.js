@@ -7,7 +7,7 @@ assert.inDelta = function(actual, expected, delta, message) {
 };
 
 assert.domNull = function(actual, message) {
-  if (actual !== null) {
+  if (actual != null) {
     assert.fail(actual+"", null, message || "expected null, got {actual}", "===", assert.domNull);
   }
 };
