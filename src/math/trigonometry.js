@@ -1,5 +1,6 @@
 var π = Math.PI,
     ε = 1e-6,
+    ε2 = ε * ε,
     d3_radians = π / 180,
     d3_degrees = 180 / π;
 
@@ -8,7 +9,7 @@ function d3_sgn(x) {
 }
 
 function d3_acos(x) {
-  return Math.acos(Math.max(-1, Math.min(1, x)));
+  return x > 1 ? 0 : x < -1 ? π : Math.acos(x);
 }
 
 function d3_asin(x) {
