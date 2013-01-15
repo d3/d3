@@ -50,22 +50,44 @@ function d3_geo_centroidPoint(λ, φ) {
   d3_geo_centroidZ += (Math.sin(φ) - d3_geo_centroidZ) / d3_geo_centroidW;
 }
 
+// See J. E. Brock, The Inertia Tensor for a Spherical Triangle,
+// J. Applied Mechanics 42, 239 (1975).
 function d3_geo_centroidRingStart() {
-  var λ00, φ00; // first point
+  var λ00, φ00, // first point
+      x0, y0, z0; // previous point
 
-  d3_geo_centroidDimension = 1;
-  d3_geo_centroidLineStart();
-  d3_geo_centroidDimension = 2;
-
-  var linePoint = d3_geo_centroid.point;
   d3_geo_centroid.point = function(λ, φ) {
-    linePoint(λ00 = λ, φ00 = φ);
+    λ00 = λ, φ00 = φ;
+    d3_geo_centroid.point = nextPoint;
+    λ *= d3_radians;
+    var cosφ = Math.cos(φ *= d3_radians);
+    x0 = cosφ * Math.cos(λ);
+    y0 = cosφ * Math.sin(λ);
+    z0 = Math.sin(φ);
   };
+
   d3_geo_centroid.lineEnd = function() {
-    d3_geo_centroid.point(λ00, φ00);
-    d3_geo_centroidLineEnd();
+    nextPoint(λ00, φ00);
+    d3_geo_centroidW = 1;
     d3_geo_centroid.lineEnd = d3_geo_centroidLineEnd;
+    d3_geo_centroid.point = d3_geo_centroidPoint;
   };
+
+  function nextPoint(λ, φ) {
+    λ *= d3_radians;
+    var cosφ = Math.cos(φ *= d3_radians),
+        x = cosφ * Math.cos(λ),
+        y = cosφ * Math.sin(λ),
+        z = Math.sin(φ),
+        cx = y0 * z - z0 * y,
+        cy = z0 * x - x0 * z,
+        cz = x0 * y - y0 * x,
+        w = -Math.acos(Math.max(-1, Math.min(1, x0 * x + y0 * y + z0 * z))) / Math.sqrt(cx * cx + cy * cy + cz * cz);
+    d3_geo_centroidX += w * cx;
+    d3_geo_centroidY += w * cy;
+    d3_geo_centroidZ += w * cz;
+    x0 = x, y0 = y, z0 = z;
+  }
 }
 
 function d3_geo_centroidLineStart() {
