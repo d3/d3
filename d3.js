@@ -12,7 +12,7 @@
     };
   }
   d3 = {
-    version: "3.0.3"
+    version: "3.0.4"
   };
   var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
   function d3_target(d) {
@@ -6159,9 +6159,9 @@
     return interpolate;
   }
   d3.geo.greatArc = function() {
-    var source = d3_source, s, target = d3_target, t, precision = 6 * d3_radians, interpolate;
+    var source = d3_source, source_, target = d3_target, target_, precision = 6 * d3_radians, interpolate;
     function greatArc() {
-      var p0 = s || source.apply(this, arguments), p1 = t || target.apply(this, arguments), i = interpolate || d3.geo.interpolate(p0, p1), t = 0, dt = precision / i.distance, coordinates = [ p0 ];
+      var p0 = source_ || source.apply(this, arguments), p1 = target_ || target.apply(this, arguments), i = interpolate || d3.geo.interpolate(p0, p1), t = 0, dt = precision / i.distance, coordinates = [ p0 ];
       while ((t += dt) < 1) coordinates.push(i(t));
       coordinates.push(p1);
       return {
@@ -6170,18 +6170,18 @@
       };
     }
     greatArc.distance = function() {
-      return (interpolate || d3.geo.interpolate(s || source.apply(this, arguments), t || target.apply(this, arguments))).distance;
+      return (interpolate || d3.geo.interpolate(source_ || source.apply(this, arguments), target_ || target.apply(this, arguments))).distance;
     };
     greatArc.source = function(_) {
       if (!arguments.length) return source;
-      source = _, s = typeof _ === "function" ? null : _;
-      interpolate = s && t ? d3.geo.interpolate(s, t) : null;
+      source = _, source_ = typeof _ === "function" ? null : _;
+      interpolate = source_ && target_ ? d3.geo.interpolate(source_, target_) : null;
       return greatArc;
     };
     greatArc.target = function(_) {
       if (!arguments.length) return target;
-      target = _, t = typeof _ === "function" ? null : _;
-      interpolate = s && t ? d3.geo.interpolate(s, t) : null;
+      target = _, target_ = typeof _ === "function" ? null : _;
+      interpolate = source_ && target_ ? d3.geo.interpolate(source_, target_) : null;
       return greatArc;
     };
     greatArc.precision = function(_) {
