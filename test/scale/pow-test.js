@@ -166,6 +166,8 @@ suite.addBatch({
         assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, .5, 1]);
         assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, .2, .4, .6, .8, 1]);
         assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]);
+        var x = pow().domain([1,1]);
+        assert.deepEqual(x.ticks(1).map(x.tickFormat(1)), [1]);
         var x = pow().domain([1, 0]);
         assert.deepEqual(x.ticks(1).map(x.tickFormat(1)), [0, 1]);
         assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, .5, 1]);

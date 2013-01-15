@@ -102,7 +102,8 @@ function d3_scale_linearTickRange(domain, m) {
 }
 
 function d3_scale_linearTicks(domain, m) {
-  return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
+  if (domain[0] === domain[domain.length - 1]) return [domain[0]];
+  else return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
 }
 
 function d3_scale_linearTickFormat(domain, m) {

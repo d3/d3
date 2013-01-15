@@ -160,6 +160,8 @@ suite.addBatch({
           "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "6e+0", "7e+0", "8e+0", "9e+0",
           "1e+1"
         ]);
+        var x = log().domain([1,1]);
+        assert.deepEqual(x.ticks().map(x.tickFormat()), ["1e+0"]);
         var x = log().domain([100, 1]);
         assert.deepEqual(x.ticks().map(x.tickFormat()), [
           "1e+0", "2e+0", "3e+0", "4e+0", "5e+0", "6e+0", "7e+0", "8e+0", "9e+0",
