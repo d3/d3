@@ -1,7 +1,7 @@
 d3.geo.graticule = function() {
   var x1, x0, X1, X0,
       y1, y0, Y1, Y0,
-      dx = 22.5, dy = dx, DX = 90, DY = DX,
+      dx = 10, dy = dx, DX = 90, DY = 360,
       x, y, X, Y,
       precision = 2.5;
 
@@ -10,11 +10,10 @@ d3.geo.graticule = function() {
   }
 
   function lines() {
-    var xMajors = d3.range(Math.ceil(X0 / DX) * DX, X1, DX),
-        xMinors = d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(function(x) { return xMajors.indexOf(x) === -1; }),
-        yMajors = d3.range(Math.ceil(Y0 / DY) * DY, Y1, DY),
-        yMinors = d3.range(Math.ceil(y0 / dy) * dy, y1, dy).filter(function(y) { return yMajors.indexOf(y) === -1; });
-    return xMajors.map(X).concat(yMajors.map(Y)).concat(xMinors.map(x)).concat(yMinors.map(y));
+    return d3.range(Math.ceil(X0 / DX) * DX, X1, DX).map(X)
+        .concat(d3.range(Math.ceil(Y0 / DY) * DY, Y1, DY).map(Y))
+        .concat(d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(function(x) { return Math.abs(x % DX) > ε; }).map(x))
+        .concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).filter(function(y) { return Math.abs(y % DY) > ε; }).map(y));
   }
 
   graticule.lines = function() {
@@ -34,7 +33,7 @@ d3.geo.graticule = function() {
   };
 
   graticule.extent = function(_) {
-    if (!arguments.length) return graticule.majorExtent();
+    if (!arguments.length) return graticule.minorExtent();
     return graticule.majorExtent(_).minorExtent(_);
   };
 
@@ -57,7 +56,7 @@ d3.geo.graticule = function() {
   };
 
   graticule.step = function(_) {
-    if (!arguments.length) return graticule.majorStep();
+    if (!arguments.length) return graticule.minorStep();
     return graticule.majorStep(_).minorStep(_);
   };
 
