@@ -20,14 +20,14 @@ d3.svg.axis = function() {
 
       // Minor ticks.
       var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
-          subtick = g.selectAll(".minor").data(subticks, String),
-          subtickEnter = subtick.enter().insert("line", "g").attr("class", "tick minor").style("opacity", 1e-6),
+          subtick = g.selectAll(".tick.minor").data(subticks, String),
+          subtickEnter = subtick.enter().insert("line", ".tick").attr("class", "tick minor").style("opacity", 1e-6),
           subtickExit = d3.transition(subtick.exit()).style("opacity", 1e-6).remove(),
           subtickUpdate = d3.transition(subtick).style("opacity", 1);
 
       // Major ticks.
-      var tick = g.selectAll("g").data(ticks, String),
-          tickEnter = tick.enter().insert("g", "path").style("opacity", 1e-6),
+      var tick = g.selectAll(".tick.major").data(ticks, String),
+          tickEnter = tick.enter().insert("g", "path").attr("class", "tick major").style("opacity", 1e-6),
           tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(),
           tickUpdate = d3.transition(tick).style("opacity", 1),
           tickTransform;
@@ -43,7 +43,7 @@ d3.svg.axis = function() {
       this.__chart__ = scale1;
 
       path.enter().append("path").attr("class", "domain");
-      tickEnter.append("line").attr("class", "tick");
+      tickEnter.append("line");
       tickEnter.append("text");
 
       var lineEnter = tickEnter.select("line"),
