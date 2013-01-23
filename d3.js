@@ -202,13 +202,10 @@
         return µ + σ * x * Math.sqrt(-2 * Math.log(r) / r);
       };
     },
-    logNormal: function(µ, σ) {
-      var n = arguments.length;
-      if (n < 2) σ = 1;
-      if (n < 1) µ = 0;
-      var random = d3.random.normal();
+    logNormal: function() {
+      var random = d3.random.normal.apply(d3, arguments);
       return function() {
-        return Math.exp(µ + σ * random());
+        return Math.exp(random());
       };
     },
     irwinHall: function(m) {
