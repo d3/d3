@@ -707,7 +707,7 @@
   });
   var d3_ease_mode = d3.map({
     "in": d3_identity,
-    out: d3_ease_reverse,
+    "out": d3_ease_reverse,
     "in-out": d3_ease_reflect,
     "out-in": function(f) {
       return d3_ease_reflect(d3_ease_reverse(f));
