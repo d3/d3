@@ -14,7 +14,7 @@ function d3_geo_interpolate(x0, y0, x1, y1) {
       ky0 = cy0 * Math.sin(x0),
       kx1 = cy1 * Math.cos(x1),
       ky1 = cy1 * Math.sin(x1),
-      d = Math.acos(Math.max(-1, Math.min(1, sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)))),
+      d = d3_acos(sy0 * sy1 + cy0 * cy1 * Math.cos(x1 - x0)),
       k = 1 / Math.sin(d);
 
   function interpolate(t) {

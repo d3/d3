@@ -75,9 +75,9 @@ d3.geo.graticule = function() {
   graticule.precision = function(_) {
     if (!arguments.length) return precision;
     precision = +_;
-    x = d3_geo_graticuleX(y0, y1, precision);
+    x = d3_geo_graticuleX(y0, y1, 90);
     y = d3_geo_graticuleY(x0, x1, precision);
-    X = d3_geo_graticuleX(Y0, Y1, precision);
+    X = d3_geo_graticuleX(Y0, Y1, 90);
     Y = d3_geo_graticuleY(X0, X1, precision);
     return graticule;
   };
