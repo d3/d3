@@ -35,14 +35,13 @@ d3.svg.axis = function() {
       // Domain.
       var range = d3_scaleRange(scale),
           path = g.selectAll(".domain").data([0]),
-          pathUpdate = d3.transition(path);
+          pathUpdate = (path.enter().append("path").attr("class", "domain"), d3.transition(path));
 
       // Stash a snapshot of the new scale, and retrieve the old snapshot.
       var scale1 = scale.copy(),
           scale0 = this.__chart__ || scale1;
       this.__chart__ = scale1;
 
-      path.enter().append("path").attr("class", "domain");
       tickEnter.append("line");
       tickEnter.append("text");
 
