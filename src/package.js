@@ -17,12 +17,11 @@ require("util").puts(JSON.stringify({
     }
   },
   "dependencies": {
-    "jsdom": "0.2.14",
-    "sizzle": "1.1.x"
+    "jsdom": "0.3.4"
   },
   "devDependencies": {
-    "uglify-js": "2.2.2",
-    "vows": "0.6.x"
+    "uglify-js": "2.2.3",
+    "vows": "0.7.0"
   },
   "scripts": {"test": "./node_modules/vows/bin/vows"}
 }, null, 2));

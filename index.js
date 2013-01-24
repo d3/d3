@@ -1,23 +1,16 @@
-var self = this,
-    globals = ["document", "window", "navigator", "CSSStyleDeclaration", "d3", "Sizzle"],
+var globals = ["document", "window", "navigator", "CSSStyleDeclaration", "getComputedStyle", "d3"],
     globalValues = {};
 
-globals.forEach(function(global) {
-  if (global in self) globalValues[global] = self[global];
+globals.forEach(function(g) {
+  if (g in global) globalValues[g] = global[g];
 });
 
-document = require("jsdom").jsdom("<html><head></head><body></body></html>");
-window = document.createWindow();
-navigator = window.navigator;
-CSSStyleDeclaration = window.CSSStyleDeclaration;
-
-Sizzle = require("sizzle");
-
+require("./globals");
 require("./d3");
 
 module.exports = d3;
 
-globals.forEach(function(global) {
-  if (global in globalValues) self[global] = globalValues[global];
-  else delete self[global];
+globals.forEach(function(g) {
+  if (g in globalValues) global[g] = globalValues[g];
+  else delete global[g];
 });
