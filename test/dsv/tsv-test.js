@@ -74,6 +74,22 @@ suite.addBatch({
         {a: "4", b: "5", c: "6"},
         {a: "7", b: "8", c: "9"}
       ]);
+    },
+    "converts object's type by position": function(parse) {
+      var format = d3.time.format("%Y-%m-%d");
+
+      assert.deepEqual(parse("a\tb\tc\n2012-12-20\t2a\t3",
+                             [format.parse, parseInt]),
+                       [{a: new Date(2012, 11, 20), b: 2, c: "3"}]
+                      );
+    },
+    "converts object's type by name": function(parse) {
+      var format = d3.time.format("%Y-%m-%d");
+
+      assert.deepEqual(parse("a\tb\tc\n2012-12-20\t2a\t3",
+                             {b: parseInt, a: format.parse}),
+                       [{a: new Date(2012, 11, 20), b: 2, c: "3"}]
+                      );
     }
   },
   "parseRows": {
