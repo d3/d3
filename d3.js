@@ -5256,12 +5256,22 @@
     function response(request) {
       return dsv.parse(request.responseText);
     }
-    dsv.parse = function(text) {
-      var o;
+    dsv.parse = function(text, types) {
+      var o, parseType;
+      if (types) {
+        parseType = function(x, name, i) {
+          var f = types[name] || types[i];
+          return f ? f(x) : x;
+        };
+      }
       return dsv.parseRows(text, function(row) {
-        if (o) return o(row);
-        o = new Function("d", "return {" + row.map(function(name, i) {
-          return JSON.stringify(name) + ": d[" + i + "]";
+        if (o) return o(row, parseType);
+        o = new Function("d", "f", "return {" + row.map(function(name, i) {
+          var n = JSON.stringify(name), d = "d[" + i + "]";
+          if (parseType) {
+            d = "f(" + d + ", " + n + ", " + i + ")";
+          }
+          return n + ":" + d;
         }).join(",") + "}");
       });
     };
