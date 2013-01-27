@@ -102,6 +102,17 @@ suite.addBatch({
       assert.domEqual(div[0][0].parentNode, document.body);
       assert.domEqual(div[0][1].parentNode, document.body);
     },
+    "appends using function": function(body){
+       var a = {type:'circle'};
+       var b = {type:'g'};
+       var div = body.html("").selectAll("div").data([a,b]).enter().append(function(d){
+          return d.type;
+       });
+       assert.equal(div.length, 1);
+       assert.equal(div[0].length, 2);
+       assert.equal(div[0][0]._tagName, a.type);
+       assert.equal(div[0][1]._tagName, b.type);
+    },
     "propagates data to new elements": function(body) {
       var a = new Object(), b = new Object(), div = body.html("").selectAll("div").data([a, b]).enter().append("div");
       assert.strictEqual(div[0][0].__data__, a);
