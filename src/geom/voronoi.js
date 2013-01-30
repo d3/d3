@@ -18,7 +18,7 @@
  * @param vertices [[x1, y1], [x2, y2], …]
  * @returns polygons [[[x1, y1], [x2, y2], …], …]
  */
-d3.geom.voronoi = function(vertices) {
+d3.geom.voronoi = function(vertices, edgeCallback) {
   var polygons = vertices.map(function() { return []; }),
       Z = 1e6;
 
@@ -49,6 +49,15 @@ d3.geom.voronoi = function(vertices) {
     }
     var v1 = [x1, y1],
         v2 = [x2, y2];
+
+    if (typeof edgeCallback === "function") {
+       edgeCallback.apply(this, [ { 
+         left: e.region.l.index, 
+         right: e.region.r.index,
+         v1: v1, v2: v2 
+       }]);
+    }
+    
     polygons[e.region.l.index].push(v1, v2);
     polygons[e.region.r.index].push(v1, v2);
   });
