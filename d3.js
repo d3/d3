@@ -1,25 +1,25 @@
 (function() {
-  var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];
-  if (!Date.now) Date.now = function() {
-    return +new Date();
-  };
-  try {
-    document.createElement("div").style.setProperty("opacity", 0, "");
-  } catch (error) {
-    var d3_style_prototype = CSSStyleDeclaration.prototype, d3_style_setProperty = d3_style_prototype.setProperty;
-    d3_style_prototype.setProperty = function(name, value, priority) {
-      d3_style_setProperty.call(this, name, value + "", priority);
-    };
-  }
   d3 = {
     version: "3.0.5"
   };
-  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
+  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π, d3_document = document, d3_window = window;
   function d3_target(d) {
     return d.target;
   }
   function d3_source(d) {
     return d.source;
+  }
+  var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];
+  if (!Date.now) Date.now = function() {
+    return +new Date();
+  };
+  try {
+    d3_document.createElement("div").style.setProperty("opacity", 0, "");
+  } catch (error) {
+    var d3_style_prototype = d3_window.CSSStyleDeclaration.prototype, d3_style_setProperty = d3_style_prototype.setProperty;
+    d3_style_prototype.setProperty = function(name, value, priority) {
+      d3_style_setProperty.call(this, name, value + "", priority);
+    };
   }
   function d3_class(ctor, properties) {
     try {
@@ -43,7 +43,7 @@
     return Array.prototype.slice.call(pseudoarray);
   }
   try {
-    d3_array(document.documentElement.childNodes)[0].nodeType;
+    d3_array(d3_document.documentElement.childNodes)[0].nodeType;
   } catch (e) {
     d3_array = d3_arrayCopy;
   }
@@ -395,7 +395,7 @@
     return n ? Math.round(x * (n = Math.pow(10, n))) / n : Math.round(x);
   };
   d3.xhr = function(url, mimeType, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new (window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
     "onload" in request ? request.onload = request.onerror = respond : request.onreadystatechange = function() {
       request.readyState > 3 && respond();
     };
@@ -474,8 +474,8 @@
     return d3.xhr(url, "text/html", callback).response(d3_html);
   };
   function d3_html(request) {
-    var range = document.createRange();
-    range.selectNode(document.body);
+    var range = d3_document.createRange();
+    range.selectNode(d3_document.body);
     return range.createContextualFragment(request.responseText);
   }
   d3.xml = function() {
@@ -805,7 +805,7 @@
     return dispatch;
   }
   d3.transform = function(string) {
-    var g = document.createElementNS(d3.ns.prefix.svg, "g");
+    var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
     return (d3.transform = function(string) {
       g.setAttribute("transform", string);
       var t = g.transform.baseVal.consolidate();
@@ -1440,7 +1440,7 @@
     return n.querySelector(s);
   }, d3_selectAll = function(s, n) {
     return n.querySelectorAll(s);
-  }, d3_selectRoot = document.documentElement, d3_selectMatcher = d3_selectRoot.matchesSelector || d3_selectRoot.webkitMatchesSelector || d3_selectRoot.mozMatchesSelector || d3_selectRoot.msMatchesSelector || d3_selectRoot.oMatchesSelector, d3_selectMatches = function(n, s) {
+  }, d3_selectRoot = d3_document.documentElement, d3_selectMatcher = d3_selectRoot.matchesSelector || d3_selectRoot.webkitMatchesSelector || d3_selectRoot.mozMatchesSelector || d3_selectRoot.msMatchesSelector || d3_selectRoot.oMatchesSelector, d3_selectMatches = function(n, s) {
     return d3_selectMatcher.call(n, s);
   };
   if (typeof Sizzle === "function") {
@@ -1592,7 +1592,7 @@
         for (priority in name) this.each(d3_selection_style(priority, name[priority], value));
         return this;
       }
-      if (n < 2) return getComputedStyle(this.node(), null).getPropertyValue(name);
+      if (n < 2) return d3_window.getComputedStyle(this.node(), null).getPropertyValue(name);
       priority = "";
     }
     return this.each(d3_selection_style(name, value, priority));
@@ -1654,20 +1654,20 @@
   d3_selectionPrototype.append = function(name) {
     name = d3.ns.qualify(name);
     function append() {
-      return this.appendChild(document.createElementNS(this.namespaceURI, name));
+      return this.appendChild(d3_document.createElementNS(this.namespaceURI, name));
     }
     function appendNS() {
-      return this.appendChild(document.createElementNS(name.space, name.local));
+      return this.appendChild(d3_document.createElementNS(name.space, name.local));
     }
     return this.select(name.local ? appendNS : append);
   };
   d3_selectionPrototype.insert = function(name, before) {
     name = d3.ns.qualify(name);
     function insert() {
-      return this.insertBefore(document.createElementNS(this.namespaceURI, name), d3_select(before, this));
+      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), d3_select(before, this));
     }
     function insertNS() {
-      return this.insertBefore(document.createElementNS(name.space, name.local), d3_select(before, this));
+      return this.insertBefore(d3_document.createElementNS(name.space, name.local), d3_select(before, this));
     }
     return this.select(name.local ? insertNS : insert);
   };
@@ -1891,7 +1891,7 @@
     }
     return d3_transition(subgroups, id);
   };
-  var d3_selectionRoot = d3_selection([ [ document ] ]);
+  var d3_selectionRoot = d3_selection([ [ d3_document ] ]);
   d3_selectionRoot[0].parentNode = d3_selectRoot;
   d3.select = function(selector) {
     return typeof selector === "string" ? d3_selectionRoot.select(selector) : d3_selection([ [ selector ] ]);
@@ -2103,7 +2103,7 @@
     }
     return d3_transition_tween(this, "style." + name, value, function(b) {
       function styleString() {
-        var a = getComputedStyle(this, null).getPropertyValue(name), i;
+        var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
         return a !== b && (i = interpolate(a, b), function(t) {
           this.style.setProperty(name, i(t), priority);
         });
@@ -2114,7 +2114,7 @@
   d3_transitionPrototype.styleTween = function(name, tween, priority) {
     if (arguments.length < 3) priority = "";
     return this.tween("style." + name, function(d, i) {
-      var f = tween.call(this, d, i, getComputedStyle(this, null).getPropertyValue(name));
+      var f = tween.call(this, d, i, d3_window.getComputedStyle(this, null).getPropertyValue(name));
       return f && function(t) {
         this.style.setProperty(name, f(t), priority);
       };
@@ -2272,19 +2272,19 @@
     }
     return then;
   }
-  var d3_timer_frame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame || window.oRequestAnimationFrame || window.msRequestAnimationFrame || function(callback) {
+  var d3_timer_frame = d3_window.requestAnimationFrame || d3_window.webkitRequestAnimationFrame || d3_window.mozRequestAnimationFrame || d3_window.oRequestAnimationFrame || d3_window.msRequestAnimationFrame || function(callback) {
     setTimeout(callback, 17);
   };
   d3.mouse = function(container) {
     return d3_mousePoint(container, d3_eventSource());
   };
-  var d3_mouse_bug44083 = /WebKit/.test(navigator.userAgent) ? -1 : 0;
+  var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator.userAgent) ? -1 : 0;
   function d3_mousePoint(container, e) {
     var svg = container.ownerSVGElement || container;
     if (svg.createSVGPoint) {
       var point = svg.createSVGPoint();
-      if (d3_mouse_bug44083 < 0 && (window.scrollX || window.scrollY)) {
-        svg = d3.select(document.body).append("svg").style("position", "absolute").style("top", 0).style("left", 0);
+      if (d3_mouse_bug44083 < 0 && (d3_window.scrollX || d3_window.scrollY)) {
+        svg = d3.select(d3_document.body).append("svg").style("position", "absolute").style("top", 0).style("left", 0);
         var ctm = svg[0][0].getScreenCTM();
         d3_mouse_bug44083 = !(ctm.f || ctm.e);
         svg.remove();
@@ -3523,7 +3523,7 @@
     }
     function brushstart() {
       var target = this, eventTarget = d3.select(d3.event.target), event_ = event.of(target, arguments), g = d3.select(target), resizing = eventTarget.datum(), resizingX = !/^(n|s)$/.test(resizing) && x, resizingY = !/^(e|w)$/.test(resizing) && y, dragging = eventTarget.classed("extent"), center, origin = mouse(), offset;
-      var w = d3.select(window).on("mousemove.brush", brushmove).on("mouseup.brush", brushend).on("touchmove.brush", brushmove).on("touchend.brush", brushend).on("keydown.brush", keydown).on("keyup.brush", keyup);
+      var w = d3.select(d3_window).on("mousemove.brush", brushmove).on("mouseup.brush", brushend).on("touchmove.brush", brushmove).on("touchend.brush", brushend).on("keydown.brush", keydown).on("keyup.brush", keyup);
       if (dragging) {
         origin[0] = extent[0][0] - origin[0];
         origin[1] = extent[0][1] - origin[1];
@@ -3710,7 +3710,7 @@
     }
     function mousedown() {
       var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null, offset, origin_ = point(), moved = 0;
-      var w = d3.select(window).on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
+      var w = d3.select(d3_window).on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
       if (origin) {
         offset = origin.apply(target, arguments);
         offset = [ offset.x - origin_[0], offset.y - origin_[1] ];
@@ -3833,8 +3833,8 @@
       });
     }
     function mousedown() {
-      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, moved = 0, w = d3.select(window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup), l = location(d3.mouse(target));
-      window.focus();
+      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, moved = 0, w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup), l = location(d3.mouse(target));
+      d3_window.focus();
       d3_eventCancel();
       function mousemove() {
         moved = 1;

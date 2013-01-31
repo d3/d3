@@ -3,7 +3,7 @@ d3.html = function(url, callback) {
 };
 
 function d3_html(request) {
-  var range = document.createRange();
-  range.selectNode(document.body);
+  var range = d3_document.createRange();
+  range.selectNode(d3_document.body);
   return range.createContextualFragment(request.responseText);
 }
