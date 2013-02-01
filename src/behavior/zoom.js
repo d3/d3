@@ -201,7 +201,7 @@ function d3_behavior_zoomDelta() {
     d3_behavior_zoomDiv.dispatchEvent(e);
     delta = 1000 - d3_behavior_zoomDiv.scrollTop;
   } catch (error) {
-    delta = e.wheelDelta || (-e.detail * 5);
+    delta = e.wheelDelta || (-e.detail * 120);
   }
 
   return delta;
