@@ -638,7 +638,7 @@
     }
   });
   function d3_format_precision(x, p) {
-    return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p - ε)) / Math.LN10) : 1);
+    return p - (x ? 1 + Math.floor(Math.log(x + .5 * Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
   }
   function d3_format_typeDefault(x) {
     return x + "";
