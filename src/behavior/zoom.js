@@ -177,6 +177,6 @@ var d3_behavior_zoomInfinity = [0, Infinity]; // default scale extent
 
 // https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/wheel
 var d3_behavior_zoomDelta, d3_behavior_zoomWheel
-    = "onwheel" in document ? (d3_behavior_zoomDelta = function() { return -d3.event.deltaY * (d3.event.deltaMode ? 40 : 1); }, "wheel")
+    = "onwheel" in document ? (d3_behavior_zoomDelta = function() { return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1); }, "wheel")
     : "onmousewheel" in document ? (d3_behavior_zoomDelta = function() { return d3.event.wheelDelta; }, "mousewheel")
     : (d3_behavior_zoomDelta = function() { return -d3.event.detail; }, "MozMousePixelScroll");
