@@ -80,7 +80,7 @@ suite.addBatch({
       assert.strictEqual(f(1000), "1k");
       assert.strictEqual(f(1400), "1.4k");
       assert.strictEqual(f(1500.5), "1.5005k");
-      assert.strictEqual(f(.000001), "1μ");
+      assert.strictEqual(f(.000001), "1µ");
     },
     "can output SI prefix notation with appropriate rounding": function(format) {
       var f = format(".3s");
@@ -95,7 +95,7 @@ suite.addBatch({
       assert.strictEqual(f(145500000), "146M");
       assert.strictEqual(f(145999999.999999347), "146M");
       assert.strictEqual(f(1e26), "100Y");
-      assert.strictEqual(f(.000001), "1.00μ");
+      assert.strictEqual(f(.000001), "1.00µ");
       assert.strictEqual(f(.009995), "0.0100");
       var f = format(".4s");
       assert.strictEqual(f(999.5), "999.5");
