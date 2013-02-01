@@ -3766,7 +3766,7 @@
   d3.behavior.zoom = function() {
     var translate = [ 0, 0 ], translate0, scale = 1, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     function zoom() {
-      this.on("mousedown.zoom", mousedown).on("mousewheel.zoom", mousewheel).on("mousemove.zoom", mousemove).on("DOMMouseScroll.zoom", mousewheel).on("dblclick.zoom", dblclick).on("touchstart.zoom", touchstart).on("touchmove.zoom", touchmove).on("touchend.zoom", touchstart);
+      this.on("mousedown.zoom", mousedown).on("mousemove.zoom", mousemove).on(d3_behavior_zoomWheel + ".zoom", mousewheel).on("dblclick.zoom", dblclick).on("touchstart.zoom", touchstart).on("touchmove.zoom", touchmove).on("touchend.zoom", touchstart);
     }
     zoom.translate = function(x) {
       if (!arguments.length) return translate;
@@ -3898,21 +3898,14 @@
     }
     return d3.rebind(zoom, event, "on");
   };
-  var d3_behavior_zoomDiv, d3_behavior_zoomInfinity = [ 0, Infinity ];
-  function d3_behavior_zoomDelta() {
-    if (!d3_behavior_zoomDiv) {
-      d3_behavior_zoomDiv = d3.select("body").append("div").style("visibility", "hidden").style("top", 0).style("height", 0).style("width", 0).style("overflow-y", "scroll").append("div").style("height", "2000px").node().parentNode;
-    }
-    var e = d3.event, delta;
-    try {
-      d3_behavior_zoomDiv.scrollTop = 1e3;
-      d3_behavior_zoomDiv.dispatchEvent(e);
-      delta = 1e3 - d3_behavior_zoomDiv.scrollTop;
-    } catch (error) {
-      delta = e.wheelDelta || -e.detail * 5;
-    }
-    return delta;
-  }
+  var d3_behavior_zoomInfinity = [ 0, Infinity ];
+  var d3_behavior_zoomDelta, d3_behavior_zoomWheel = "onwheel" in document ? (d3_behavior_zoomDelta = function() {
+    return -d3.event.deltaY * (d3.event.deltaMode ? 40 : 1);
+  }, "wheel") : "onmousewheel" in document ? (d3_behavior_zoomDelta = function() {
+    return d3.event.wheelDelta;
+  }, "mousewheel") : (d3_behavior_zoomDelta = function() {
+    return -d3.event.detail;
+  }, "MozMousePixelScroll");
   d3.layout = {};
   d3.layout.bundle = function() {
     return function(links) {
