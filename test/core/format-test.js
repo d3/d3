@@ -145,6 +145,8 @@ suite.addBatch({
       assert.strictEqual(format(".1r")(.09), "0.09");
       assert.strictEqual(format(".1r")(.949), "0.9");
       assert.strictEqual(format(".1r")(.0949), "0.09");
+      assert.strictEqual(format(".10r")(.9999999999), "0.9999999999");
+      assert.strictEqual(format(".15r")(.999999999999999), "0.999999999999999");
     },
     "can round very small numbers": function(format) {
       var f = format(".2r");
