@@ -126,7 +126,9 @@ suite.addBatch({
     "can round to significant digits": function(format) {
       assert.strictEqual(format(".2r")(0), "0.0");
       assert.strictEqual(format(".1r")(0.049), "0.05");
+      assert.strictEqual(format(".1r")(-0.049), "-0.05");
       assert.strictEqual(format(".1r")(0.49), "0.5");
+      assert.strictEqual(format(".1r")(-0.49), "-0.5");
       assert.strictEqual(format(".2r")(0.449), "0.45");
       assert.strictEqual(format(".3r")(0.4449), "0.445");
       assert.strictEqual(format(".3r")(1.00), "1.00");
@@ -139,6 +141,10 @@ suite.addBatch({
       assert.strictEqual(format(".4r")(123.45), "123.5");
       assert.strictEqual(format(".5r")(123.45), "123.45");
       assert.strictEqual(format(".6r")(123.45), "123.450");
+      assert.strictEqual(format(".1r")(.9), "0.9");
+      assert.strictEqual(format(".1r")(.09), "0.09");
+      assert.strictEqual(format(".1r")(.949), "0.9");
+      assert.strictEqual(format(".1r")(.0949), "0.09");
     },
     "can round very small numbers": function(format) {
       var f = format(".2r");
