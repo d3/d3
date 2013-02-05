@@ -1,6 +1,7 @@
 d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
-      origin = null;
+      origin = null,
+      baseNode = function(target) { return target.parentNode; };
 
   function drag() {
     this.on("mousedown.drag", mousedown)
@@ -32,14 +33,14 @@ d3.behavior.drag = function() {
     event_({type: "dragstart"});
 
     function point() {
-      var p = target.parentNode;
+      var p = baseNode(target);
       return touchId != null
           ? d3.touches(p).filter(function(p) { return p.identifier === touchId; })[0]
           : d3.mouse(p);
     }
 
     function dragmove() {
-      if (!target.parentNode) return dragend(); // target removed from DOM
+      if (!baseNode(target)) return dragend(); // target removed from DOM
 
       var p = point(),
           dx = p[0] - origin_[0],
@@ -75,6 +76,11 @@ d3.behavior.drag = function() {
   drag.origin = function(x) {
     if (!arguments.length) return origin;
     origin = x;
+    return drag;
+  };
+
+  drag.base = function(fn) {
+    baseNode = fn;
     return drag;
   };
 
