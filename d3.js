@@ -6453,7 +6453,7 @@
     d3.geo.stream(object, d3_geo_area);
     return d3_geo_areaSum;
   };
-  var d3_geo_areaSum, d3_geo_areaRing;
+  var d3_geo_areaSum, d3_geo_areaRingU, d3_geo_areaRingV;
   var d3_geo_area = {
     sphere: function() {
       d3_geo_areaSum += 4 * π;
@@ -6462,30 +6462,29 @@
     lineStart: d3_noop,
     lineEnd: d3_noop,
     polygonStart: function() {
-      d3_geo_areaRing = 0;
+      d3_geo_areaRingU = 1, d3_geo_areaRingV = 0;
       d3_geo_area.lineStart = d3_geo_areaRingStart;
     },
     polygonEnd: function() {
-      d3_geo_areaSum += d3_geo_areaRing < 0 ? 4 * π + d3_geo_areaRing : d3_geo_areaRing;
+      var area = 2 * Math.atan2(d3_geo_areaRingV, d3_geo_areaRingU);
+      d3_geo_areaSum += area < 0 ? 4 * π + area : area;
       d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
     }
   };
   function d3_geo_areaRingStart() {
-    var λ00, φ00, λ1, λ0, φ0, cosφ0, sinφ0;
+    var λ00, φ00, λ0, cosφ0, sinφ0;
     d3_geo_area.point = function(λ, φ) {
       d3_geo_area.point = nextPoint;
-      λ1 = λ0 = (λ00 = λ) * d3_radians, φ0 = (φ00 = φ) * d3_radians, cosφ0 = Math.cos(φ0), 
-      sinφ0 = Math.sin(φ0);
+      λ0 = (λ00 = λ) * d3_radians, cosφ0 = Math.cos(φ = (φ00 = φ) * d3_radians / 2 + π / 4), 
+      sinφ0 = Math.sin(φ);
     };
     function nextPoint(λ, φ) {
-      λ *= d3_radians, φ *= d3_radians;
-      if (Math.abs(Math.abs(φ0) - π / 2) < ε && Math.abs(Math.abs(φ) - π / 2) < ε) return;
-      var cosφ = Math.cos(φ), sinφ = Math.sin(φ);
-      if (Math.abs(φ0 - π / 2) < ε) d3_geo_areaRing += (λ - λ1) * 2; else {
-        var dλ = λ - λ0, cosdλ = Math.cos(dλ), d = Math.atan2(Math.sqrt((d = cosφ * Math.sin(dλ)) * d + (d = cosφ0 * sinφ - sinφ0 * cosφ * cosdλ) * d), sinφ0 * sinφ + cosφ0 * cosφ * cosdλ), s = (d + π + φ0 + φ) / 4;
-        d3_geo_areaRing += (dλ < 0 && dλ > -π || dλ > π ? -4 : 4) * Math.atan(Math.sqrt(Math.abs(Math.tan(s) * Math.tan(s - d / 2) * Math.tan(s - π / 4 - φ0 / 2) * Math.tan(s - π / 4 - φ / 2))));
-      }
-      λ1 = λ0, λ0 = λ, φ0 = φ, cosφ0 = cosφ, sinφ0 = sinφ;
+      λ *= d3_radians;
+      φ = φ * d3_radians / 2 + π / 4;
+      var dλ = λ - λ0, cosφ = Math.cos(φ), sinφ = Math.sin(φ), k = sinφ0 * sinφ, u0 = d3_geo_areaRingU, v0 = d3_geo_areaRingV, u = cosφ0 * cosφ + k * Math.cos(dλ), v = k * Math.sin(dλ);
+      d3_geo_areaRingU = u0 * u - v0 * v;
+      d3_geo_areaRingV = v0 * u + u0 * v;
+      λ0 = λ, cosφ0 = cosφ, sinφ0 = sinφ;
     }
     d3_geo_area.lineEnd = function() {
       nextPoint(λ00, φ00);
