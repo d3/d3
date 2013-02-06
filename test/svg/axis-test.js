@@ -47,6 +47,14 @@ suite.addBatch({
         var a = axis();
         assert.equal(a.orient(), "bottom");
       },
+      "defaults to bottom when an invalid orientation is specified": function(axis) {
+        var a = axis().orient("invalid");
+        assert.equal(a.orient(), "bottom");
+      },
+      "coerces to a string": function(axis) {
+        var a = axis().orient({toString: function() { return "left"; }});
+        assert.equal(a.orient(), "left");
+      },
       "supports top orientation": function(axis) {
         var a = axis().orient("top"),
             g = d3.select("body").html("").append("svg:g").call(a),

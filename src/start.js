@@ -1,1 +1,1 @@
-(function(){
+d3 = (function(){

@@ -1,4 +1,4 @@
-var globals = ["document", "window", "navigator", "CSSStyleDeclaration", "getComputedStyle", "d3"],
+var globals = ["document", "window", "d3"],
     globalValues = {};
 
 globals.forEach(function(g) {

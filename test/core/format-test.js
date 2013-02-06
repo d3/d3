@@ -80,7 +80,7 @@ suite.addBatch({
       assert.strictEqual(f(1000), "1k");
       assert.strictEqual(f(1400), "1.4k");
       assert.strictEqual(f(1500.5), "1.5005k");
-      assert.strictEqual(f(.000001), "1μ");
+      assert.strictEqual(f(.000001), "1µ");
     },
     "can output SI prefix notation with appropriate rounding": function(format) {
       var f = format(".3s");
@@ -95,7 +95,7 @@ suite.addBatch({
       assert.strictEqual(f(145500000), "146M");
       assert.strictEqual(f(145999999.999999347), "146M");
       assert.strictEqual(f(1e26), "100Y");
-      assert.strictEqual(f(.000001), "1.00μ");
+      assert.strictEqual(f(.000001), "1.00µ");
       assert.strictEqual(f(.009995), "0.0100");
       var f = format(".4s");
       assert.strictEqual(f(999.5), "999.5");
@@ -126,7 +126,9 @@ suite.addBatch({
     "can round to significant digits": function(format) {
       assert.strictEqual(format(".2r")(0), "0.0");
       assert.strictEqual(format(".1r")(0.049), "0.05");
+      assert.strictEqual(format(".1r")(-0.049), "-0.05");
       assert.strictEqual(format(".1r")(0.49), "0.5");
+      assert.strictEqual(format(".1r")(-0.49), "-0.5");
       assert.strictEqual(format(".2r")(0.449), "0.45");
       assert.strictEqual(format(".3r")(0.4449), "0.445");
       assert.strictEqual(format(".3r")(1.00), "1.00");
@@ -139,6 +141,12 @@ suite.addBatch({
       assert.strictEqual(format(".4r")(123.45), "123.5");
       assert.strictEqual(format(".5r")(123.45), "123.45");
       assert.strictEqual(format(".6r")(123.45), "123.450");
+      assert.strictEqual(format(".1r")(.9), "0.9");
+      assert.strictEqual(format(".1r")(.09), "0.09");
+      assert.strictEqual(format(".1r")(.949), "0.9");
+      assert.strictEqual(format(".1r")(.0949), "0.09");
+      assert.strictEqual(format(".10r")(.9999999999), "0.9999999999");
+      assert.strictEqual(format(".15r")(.999999999999999), "0.999999999999999");
     },
     "can round very small numbers": function(format) {
       var f = format(".2r");

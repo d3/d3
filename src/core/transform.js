@@ -1,5 +1,5 @@
 d3.transform = function(string) {
-  var g = document.createElementNS(d3.ns.prefix.svg, "g");
+  var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
   return (d3.transform = function(string) {
     g.setAttribute("transform", string);
     var t = g.transform.baseVal.consolidate();

@@ -57,10 +57,10 @@ d3.geom.voronoi = function(vertices) {
   polygons = polygons.map(function(polygon, i) {
     var cx = vertices[i][0],
         cy = vertices[i][1],
-        angle = polygon.map(function(v) { return Math.atan2(v[0] - cx, v[1] - cy); });
-    return d3.range(polygon.length)
-        .sort(function(a, b) { return angle[a] - angle[b]; })
-        .filter(function(d, i, order) { return !i || (angle[d] - angle[order[i - 1]] > ε); })
+        angle = polygon.map(function(v) { return Math.atan2(v[0] - cx, v[1] - cy); }),
+        order = d3.range(polygon.length).sort(function(a, b) { return angle[a] - angle[b]; });
+    return order
+        .filter(function(d, i) { return !i || (angle[d] - angle[order[i - 1]] > ε); })
         .map(function(d) { return polygon[d]; });
   });
 
