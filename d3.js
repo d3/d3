@@ -4269,8 +4269,8 @@
       return force.alpha(0);
     };
     force.drag = function() {
-      if (!arguments.length) return drag;
       if (!drag) drag = d3.behavior.drag().origin(d3_identity).on("dragstart.force", d3_layout_forceDragstart).on("drag.force", dragmove).on("dragend.force", d3_layout_forceDragend);
+      if (!arguments.length) return drag;
       this.on("mouseover.force", d3_layout_forceMouseover).on("mouseout.force", d3_layout_forceMouseout).call(drag);
     };
     function dragmove(d) {
