@@ -1,4 +1,4 @@
-(function() {
+var d3 = (function(d3) {
   var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -10,10 +10,7 @@
     d3_style_prototype.setProperty = function(name, value, priority) {
       d3_style_setProperty.call(this, name, value + "", priority);
     };
-  }
-  d3 = {
-    version: "3.0.5"
-  };
+  }  
   var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
   function d3_target(d) {
     return d.target;
@@ -7803,4 +7800,5 @@
   d3.time.scale.utc = function() {
     return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
   };
-})();
+  return d3;
+})({version: "3.0.5"});
