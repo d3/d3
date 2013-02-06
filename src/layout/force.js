@@ -135,7 +135,7 @@ d3.layout.force = function() {
 
   force.linkDistance = function(x) {
     if (!arguments.length) return linkDistance;
-    linkDistance = d3_functor(x);
+    linkDistance = typeof x === "function" ? x : +x;
     return force;
   };
 
@@ -144,13 +144,13 @@ d3.layout.force = function() {
 
   force.linkStrength = function(x) {
     if (!arguments.length) return linkStrength;
-    linkStrength = d3_functor(x);
+    linkStrength = typeof x === "function" ? x : +x;
     return force;
   };
 
   force.friction = function(x) {
     if (!arguments.length) return friction;
-    friction = x;
+    friction = +x;
     return force;
   };
 
@@ -162,19 +162,20 @@ d3.layout.force = function() {
 
   force.gravity = function(x) {
     if (!arguments.length) return gravity;
-    gravity = x;
+    gravity = +x;
     return force;
   };
 
   force.theta = function(x) {
     if (!arguments.length) return theta;
-    theta = x;
+    theta = +x;
     return force;
   };
 
   force.alpha = function(x) {
     if (!arguments.length) return alpha;
 
+    x = +x;
     if (alpha) { // if we're already running
       if (x > 0) alpha = x; // we might keep it hot
       else alpha = 0; // or, next tick will dispatch "end"
@@ -201,14 +202,10 @@ d3.layout.force = function() {
       o.weight = 0;
     }
 
-    distances = [];
-    strengths = [];
     for (i = 0; i < m; ++i) {
       o = links[i];
       if (typeof o.source == "number") o.source = nodes[o.source];
       if (typeof o.target == "number") o.target = nodes[o.target];
-      distances[i] = linkDistance.call(this, o, i);
-      strengths[i] = linkStrength.call(this, o, i);
       ++o.source.weight;
       ++o.target.weight;
     }
@@ -221,16 +218,17 @@ d3.layout.force = function() {
       if (isNaN(o.py)) o.py = o.y;
     }
 
+    distances = [];
+    if (typeof linkDistance === "function") for (i = 0; i < m; ++i) distances[i] = +linkDistance.call(this, links[i], i);
+    else for (i = 0; i < m; ++i) distances[i] = linkDistance;
+
+    strengths = [];
+    if (typeof linkStrength === "function") for (i = 0; i < m; ++i) strengths[i] = +linkStrength.call(this, links[i], i);
+    else for (i = 0; i < m; ++i) strengths[i] = linkStrength;
+
     charges = [];
-    if (typeof charge === "function") {
-      for (i = 0; i < n; ++i) {
-        charges[i] = +charge.call(this, nodes[i], i);
-      }
-    } else {
-      for (i = 0; i < n; ++i) {
-        charges[i] = charge;
-      }
-    }
+    if (typeof charge === "function") for (i = 0; i < n; ++i) charges[i] = +charge.call(this, nodes[i], i);
+    else for (i = 0; i < n; ++i) charges[i] = charge;
 
     // initialize node position based on first neighbor
     function position(dimension, size) {
@@ -273,9 +271,11 @@ d3.layout.force = function() {
   force.drag = function() {
     if (!drag) drag = d3.behavior.drag()
         .origin(d3_identity)
-        .on("dragstart", d3_layout_forceDragstart)
-        .on("drag", dragmove)
-        .on("dragend", d3_layout_forceDragend);
+        .on("dragstart.force", d3_layout_forceDragstart)
+        .on("drag.force", dragmove)
+        .on("dragend.force", d3_layout_forceDragend);
+
+    if (!arguments.length) return drag;
 
     this.on("mouseover.force", d3_layout_forceMouseover)
         .on("mouseout.force", d3_layout_forceMouseout)
@@ -301,7 +301,7 @@ function d3_layout_forceDragstart(d) {
 }
 
 function d3_layout_forceDragend(d) {
-  d.fixed &= 1; // unset bits 2 and 3
+  d.fixed &= ~6; // unset bits 2 and 3
 }
 
 function d3_layout_forceMouseover(d) {
@@ -310,7 +310,7 @@ function d3_layout_forceMouseover(d) {
 }
 
 function d3_layout_forceMouseout(d) {
-  d.fixed &= 3; // unset bit 3
+  d.fixed &= ~4; // unset bit 3
 }
 
 function d3_layout_forceAccumulate(quad, alpha, charges) {
@@ -346,10 +346,5 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
   quad.cy = cy / quad.charge;
 }
 
-function d3_layout_forceLinkDistance() {
-  return 20;
-}
-
-function d3_layout_forceLinkStrength() {
-  return 1;
-}
+var d3_layout_forceLinkDistance = 20,
+    d3_layout_forceLinkStrength = 1;

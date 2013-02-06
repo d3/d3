@@ -4171,18 +4171,18 @@
     };
     force.linkDistance = function(x) {
       if (!arguments.length) return linkDistance;
-      linkDistance = d3_functor(x);
+      linkDistance = typeof x === "function" ? x : +x;
       return force;
     };
     force.distance = force.linkDistance;
     force.linkStrength = function(x) {
       if (!arguments.length) return linkStrength;
-      linkStrength = d3_functor(x);
+      linkStrength = typeof x === "function" ? x : +x;
       return force;
     };
     force.friction = function(x) {
       if (!arguments.length) return friction;
-      friction = x;
+      friction = +x;
       return force;
     };
     force.charge = function(x) {
@@ -4192,16 +4192,17 @@
     };
     force.gravity = function(x) {
       if (!arguments.length) return gravity;
-      gravity = x;
+      gravity = +x;
       return force;
     };
     force.theta = function(x) {
       if (!arguments.length) return theta;
-      theta = x;
+      theta = +x;
       return force;
     };
     force.alpha = function(x) {
       if (!arguments.length) return alpha;
+      x = +x;
       if (alpha) {
         if (x > 0) alpha = x; else alpha = 0;
       } else if (x > 0) {
@@ -4219,14 +4220,10 @@
         (o = nodes[i]).index = i;
         o.weight = 0;
       }
-      distances = [];
-      strengths = [];
       for (i = 0; i < m; ++i) {
         o = links[i];
         if (typeof o.source == "number") o.source = nodes[o.source];
         if (typeof o.target == "number") o.target = nodes[o.target];
-        distances[i] = linkDistance.call(this, o, i);
-        strengths[i] = linkStrength.call(this, o, i);
         ++o.source.weight;
         ++o.target.weight;
       }
@@ -4237,16 +4234,12 @@
         if (isNaN(o.px)) o.px = o.x;
         if (isNaN(o.py)) o.py = o.y;
       }
+      distances = [];
+      if (typeof linkDistance === "function") for (i = 0; i < m; ++i) distances[i] = +linkDistance.call(this, links[i], i); else for (i = 0; i < m; ++i) distances[i] = linkDistance;
+      strengths = [];
+      if (typeof linkStrength === "function") for (i = 0; i < m; ++i) strengths[i] = +linkStrength.call(this, links[i], i); else for (i = 0; i < m; ++i) strengths[i] = linkStrength;
       charges = [];
-      if (typeof charge === "function") {
-        for (i = 0; i < n; ++i) {
-          charges[i] = +charge.call(this, nodes[i], i);
-        }
-      } else {
-        for (i = 0; i < n; ++i) {
-          charges[i] = charge;
-        }
-      }
+      if (typeof charge === "function") for (i = 0; i < n; ++i) charges[i] = +charge.call(this, nodes[i], i); else for (i = 0; i < n; ++i) charges[i] = charge;
       function position(dimension, size) {
         var neighbors = neighbor(i), j = -1, m = neighbors.length, x;
         while (++j < m) if (!isNaN(x = neighbors[j][dimension])) return x;
@@ -4275,7 +4268,8 @@
       return force.alpha(0);
     };
     force.drag = function() {
-      if (!drag) drag = d3.behavior.drag().origin(d3_identity).on("dragstart", d3_layout_forceDragstart).on("drag", dragmove).on("dragend", d3_layout_forceDragend);
+      if (!drag) drag = d3.behavior.drag().origin(d3_identity).on("dragstart.force", d3_layout_forceDragstart).on("drag.force", dragmove).on("dragend.force", d3_layout_forceDragend);
+      if (!arguments.length) return drag;
       this.on("mouseover.force", d3_layout_forceMouseover).on("mouseout.force", d3_layout_forceMouseout).call(drag);
     };
     function dragmove(d) {
@@ -4288,14 +4282,14 @@
     d.fixed |= 2;
   }
   function d3_layout_forceDragend(d) {
-    d.fixed &= 1;
+    d.fixed &= ~6;
   }
   function d3_layout_forceMouseover(d) {
     d.fixed |= 4;
     d.px = d.x, d.py = d.y;
   }
   function d3_layout_forceMouseout(d) {
-    d.fixed &= 3;
+    d.fixed &= ~4;
   }
   function d3_layout_forceAccumulate(quad, alpha, charges) {
     var cx = 0, cy = 0;
@@ -4324,12 +4318,7 @@
     quad.cx = cx / quad.charge;
     quad.cy = cy / quad.charge;
   }
-  function d3_layout_forceLinkDistance() {
-    return 20;
-  }
-  function d3_layout_forceLinkStrength() {
-    return 1;
-  }
+  var d3_layout_forceLinkDistance = 20, d3_layout_forceLinkStrength = 1;
   d3.layout.partition = function() {
     var hierarchy = d3.layout.hierarchy(), size = [ 1, 1 ];
     function position(node, x, dx, dy) {
