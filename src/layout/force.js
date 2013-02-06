@@ -282,10 +282,10 @@ d3.layout.force = function() {
         .call(drag);
   };
 
-  function dragmove(d) {
+  force.dragmove = function(d) {
     d.px = d3.event.x, d.py = d3.event.y;
     force.resume(); // restart annealing
-  }
+  };
 
   return d3.rebind(force, event, "on");
 };

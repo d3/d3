@@ -4272,10 +4272,10 @@
       if (!drag) drag = d3.behavior.drag().origin(d3_identity).on("dragstart", d3_layout_forceDragstart).on("drag", dragmove).on("dragend", d3_layout_forceDragend);
       this.on("mouseover.force", d3_layout_forceMouseover).on("mouseout.force", d3_layout_forceMouseout).call(drag);
     };
-    function dragmove(d) {
+    force.dragmove = function(d) {
       d.px = d3.event.x, d.py = d3.event.y;
       force.resume();
-    }
+    };
     return d3.rebind(force, event, "on");
   };
   function d3_layout_forceDragstart(d) {
