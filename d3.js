@@ -633,11 +633,11 @@ d3 = function() {
       return x.toFixed(p);
     },
     r: function(x, p) {
-      return d3.round(x, p = d3_format_precision(x, p)).toFixed(Math.max(0, Math.min(20, p)));
+      return (x = d3.round(x, d3_format_precision(x, p))).toFixed(Math.max(0, Math.min(20, d3_format_precision(x * (1 + 1e-15), p))));
     }
   });
   function d3_format_precision(x, p) {
-    return p - (x ? 1 + Math.floor(Math.log(x + Math.pow(10, 1 + Math.floor(Math.log(x) / Math.LN10) - p)) / Math.LN10) : 1);
+    return p - (x ? Math.ceil(Math.log(x) / Math.LN10) : 1);
   }
   function d3_format_typeDefault(x) {
     return x + "";
@@ -655,7 +655,7 @@ d3 = function() {
       return t.reverse().join(d3_format_thousandsSeparator || "") + f;
     };
   }
-  var d3_formatPrefixes = [ "y", "z", "a", "f", "p", "n", "μ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y" ].map(d3_formatPrefix);
+  var d3_formatPrefixes = [ "y", "z", "a", "f", "p", "n", "µ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y" ].map(d3_formatPrefix);
   d3.formatPrefix = function(value, precision) {
     var i = 0;
     if (value) {
