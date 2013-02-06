@@ -303,7 +303,7 @@ function d3_layout_forceDragstart(d) {
 }
 
 function d3_layout_forceDragend(d) {
-  d.fixed &= 1; // unset bits 2 and 3
+  d.fixed &= ~6; // unset bits 2 and 3
 }
 
 function d3_layout_forceMouseover(d) {
@@ -312,7 +312,7 @@ function d3_layout_forceMouseover(d) {
 }
 
 function d3_layout_forceMouseout(d) {
-  d.fixed &= 3; // unset bit 3
+  d.fixed &= ~4; // unset bit 3
 }
 
 function d3_layout_forceAccumulate(quad, alpha, charges) {

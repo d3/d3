@@ -4283,14 +4283,14 @@
     d.fixed |= 2;
   }
   function d3_layout_forceDragend(d) {
-    d.fixed &= 1;
+    d.fixed &= ~6;
   }
   function d3_layout_forceMouseover(d) {
     d.fixed |= 4;
     d.px = d.x, d.py = d.y;
   }
   function d3_layout_forceMouseout(d) {
-    d.fixed &= 3;
+    d.fixed &= ~4;
   }
   function d3_layout_forceAccumulate(quad, alpha, charges) {
     var cx = 0, cy = 0;
