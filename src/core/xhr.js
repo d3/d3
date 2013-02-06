@@ -3,7 +3,7 @@ d3.xhr = function(url, mimeType, callback) {
       dispatch = d3.dispatch("progress", "load", "error"),
       headers = {},
       response = d3_identity,
-      request = new (window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest);
+      request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest);
 
   "onload" in request
       ? request.onload = request.onerror = respond

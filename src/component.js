@@ -1,6 +1,6 @@
-require("./core/core");
+var d3 = require("../index");
 
-require("util").puts(JSON.stringify({
+console.log(JSON.stringify({
   "name": "d3",
   "version": d3.version,
   "main": "./d3.js"
