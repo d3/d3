@@ -16,7 +16,7 @@ d3.behavior.drag = function() {
         origin_ = point(),
         moved = 0;
 
-    var w = d3.select(window)
+    var w = d3.select(d3_window)
         .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove)
         .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
 

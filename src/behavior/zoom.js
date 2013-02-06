@@ -95,10 +95,10 @@ d3.behavior.zoom = function() {
         event_ = event.of(target, arguments),
         eventTarget = d3.event.target,
         moved = 0,
-        w = d3.select(window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
+        w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
         l = location(d3.mouse(target));
 
-    window.focus();
+    d3_window.focus();
     d3_eventCancel();
 
     function mousemove() {
