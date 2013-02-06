@@ -135,6 +135,12 @@ d3.svg.axis = function() {
 
   axis.orient = function(x) {
     if (!arguments.length) return orient;
+    
+    // if invalid value, set default value ("bottom")
+    if(["bottom", "top", "left", "right"].indexOf(x) == -1){
+      x = "bottom";
+    }
+
     orient = x;
     return axis;
   };
