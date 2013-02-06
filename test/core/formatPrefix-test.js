@@ -18,9 +18,9 @@ suite.addBatch({
       assert.equal(prefix(1e-03).symbol, "m");
       assert.equal(prefix(1e-04).symbol, "m");
       assert.equal(prefix(1e-05).symbol, "m");
-      assert.equal(prefix(1e-06).symbol, "μ");
-      assert.equal(prefix(1e-07).symbol, "μ");
-      assert.equal(prefix(1e-08).symbol, "μ");
+      assert.equal(prefix(1e-06).symbol, "µ");
+      assert.equal(prefix(1e-07).symbol, "µ");
+      assert.equal(prefix(1e-08).symbol, "µ");
       assert.equal(prefix(1e-09).symbol, "n");
       assert.equal(prefix(1e-10).symbol, "n");
       assert.equal(prefix(1e-11).symbol, "n");
@@ -76,7 +76,7 @@ suite.addBatch({
       assert.equal(prefix(-0).symbol, "");
       assert.equal(prefix(-1e-00).symbol, "");
       assert.equal(prefix(-1e-03).symbol, "m");
-      assert.equal(prefix(-1e-06).symbol, "μ");
+      assert.equal(prefix(-1e-06).symbol, "µ");
       assert.equal(prefix(-1e-09).symbol, "n");
       assert.equal(prefix(-1e-12).symbol, "p");
       assert.equal(prefix(-1e-15).symbol, "f");
@@ -96,10 +96,18 @@ suite.addBatch({
       assert.equal(prefix(-1e27).symbol, "Y");
     },
     "considers the effect of rounding based on precision": function(prefix) {
-      assert.equal(prefix(999.5, 3).symbol, "k");
-      assert.equal(prefix(999.5, 4).symbol, "");
-      assert.equal(prefix(.009995, 3).symbol, "");
-      assert.equal(prefix(.009995, 4).symbol, "m");
+      assert.equal(prefix(999.5000000, 4).symbol, "");
+      assert.equal(prefix(999.5000000, 3).symbol, "k");
+      assert.equal(prefix(995.0000000, 3).symbol, "");
+      assert.equal(prefix(995.0000000, 2).symbol, "k");
+      assert.equal(prefix(950.0000000, 2).symbol, "");
+      assert.equal(prefix(950.0000000, 1).symbol, "k");
+      assert.equal(prefix(0.000009995, 4).symbol, "µ");
+      assert.equal(prefix(0.000009995, 3).symbol, "m");
+      assert.equal(prefix(0.000009950, 3).symbol, "µ");
+      assert.equal(prefix(0.000009950, 2).symbol, "m");
+      assert.equal(prefix(0.000009500, 2).symbol, "µ");
+      assert.equal(prefix(0.000009500, 1).symbol, "m");
     }
   }
 });

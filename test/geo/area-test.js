@@ -25,18 +25,26 @@ suite.addBatch({
       assert.equal(area({type: "MultiLineString", coordinates: [[[0, 1], [2, 3]], [[4, 5], [6, 7]]]}), 0);
     },
     "Polygon": {
+      "tiny": function(area) {
+        assert.inDelta(area({type: "Polygon", coordinates: [[
+          [-64.66070178517852, 18.33986913231323],
+          [-64.66079715091509, 18.33994007490749],
+          [-64.66074946804680, 18.33994007490749],
+          [-64.66070178517852, 18.33986913231323]
+        ]]}), 4.890516e-13, 1e-13);
+      },
       "semilune": function(area) {
-        assert.equal(area({type: "Polygon", coordinates: [[[0, 0], [0, 90], [90, 0], [0, 0]]]}), π / 2);
+        assert.inDelta(area({type: "Polygon", coordinates: [[[0, 0], [0, 90], [90, 0], [0, 0]]]}), π / 2, 1e-6);
       },
       "lune": function(area) {
         assert.equal(area({type: "Polygon", coordinates: [[[0, 0], [0, 90], [90, 0], [0, -90], [0, 0]]]}), π);
       },
       "hemispheres": {
         "North": function(area) {
-          assert.equal(area({type: "Polygon", coordinates: [[[0, 0], [-90, 0], [180, 0], [90, 0], [0, 0]]]}), 2 * π);
+          assert.inDelta(area({type: "Polygon", coordinates: [[[0, 0], [-90, 0], [180, 0], [90, 0], [0, 0]]]}), 2 * π, 1e-6);
         },
         "South": function(area) {
-          assert.equal(area({type: "Polygon", coordinates: [[[0, 0], [90, 0], [180, 0], [-90, 0], [0, 0]]]}), 2 * π);
+          assert.inDelta(area({type: "Polygon", coordinates: [[[0, 0], [90, 0], [180, 0], [-90, 0], [0, 0]]]}), 2 * π, 1e-6);
         },
         "East": function(area) {
           assert.equal(area({type: "Polygon", coordinates: [[[0, 0], [0, 90], [180, 0], [0, -90], [0, 0]]]}), 2 * π);
