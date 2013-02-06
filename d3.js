@@ -3317,7 +3317,7 @@
   d3.svg.symbolTypes = d3_svg_symbols.keys();
   var d3_svg_symbolSqrt3 = Math.sqrt(3), d3_svg_symbolTan30 = Math.tan(30 * d3_radians);
   d3.svg.axis = function() {
-    var scale = d3.scale.linear(), orient = "bottom", tickMajorSize = 6, tickMinorSize = 6, tickEndSize = 6, tickPadding = 3, tickArguments_ = [ 10 ], tickValues = null, tickFormat_, tickSubdivide = 0;
+    var scale = d3.scale.linear(), orient = d3_svg_axisDefaultOrient, tickMajorSize = 6, tickMinorSize = 6, tickEndSize = 6, tickPadding = 3, tickArguments_ = [ 10 ], tickValues = null, tickFormat_, tickSubdivide = 0;
     function axis(g) {
       g.each(function() {
         var g = d3.select(this);
@@ -3411,7 +3411,7 @@
     };
     axis.orient = function(x) {
       if (!arguments.length) return orient;
-      orient = x;
+      orient = x in d3_svg_axisOrients ? x + "" : d3_svg_axisDefaultOrient;
       return axis;
     };
     axis.ticks = function() {
@@ -3448,6 +3448,12 @@
       return axis;
     };
     return axis;
+  };
+  var d3_svg_axisDefaultOrient = "bottom", d3_svg_axisOrients = {
+    top: 1,
+    right: 1,
+    bottom: 1,
+    left: 1
   };
   function d3_svg_axisX(selection, x) {
     selection.attr("transform", function(d) {
