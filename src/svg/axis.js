@@ -1,6 +1,6 @@
 d3.svg.axis = function() {
   var scale = d3.scale.linear(),
-      orient = "bottom",
+      orient = d3_svg_axisDefaultOrient,
       tickMajorSize = 6,
       tickMinorSize = 6,
       tickEndSize = 6,
@@ -135,7 +135,7 @@ d3.svg.axis = function() {
 
   axis.orient = function(x) {
     if (!arguments.length) return orient;
-    orient = x;
+    orient = x in d3_svg_axisOrients ? x + "" : d3_svg_axisDefaultOrient;
     return axis;
   };
 
@@ -180,6 +180,9 @@ d3.svg.axis = function() {
 
   return axis;
 };
+
+var d3_svg_axisDefaultOrient = "bottom",
+    d3_svg_axisOrients = {top: 1, right: 1, bottom: 1, left: 1};
 
 function d3_svg_axisX(selection, x) {
   selection.attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
