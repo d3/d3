@@ -3,7 +3,7 @@ d3.mouse = function(container) {
 };
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083
-var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator.userAgent) ? -1 : 0;
+var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator && d3_window.navigator.userAgent) ? -1 : 0;
 
 function d3_mousePoint(container, e) {
   var svg = container.ownerSVGElement || container;
