@@ -2,7 +2,7 @@
   d3 = {
     version: "3.0.5"
   };
-  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π, d3_document = document, d3_window = window;
+  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π, d3_document = typeof document !== "undefined" ? document : {}, d3_window = typeof window !== "undefined" ? window : {};
   function d3_target(d) {
     return d.target;
   }
@@ -16,10 +16,12 @@
   try {
     d3_document.createElement("div").style.setProperty("opacity", 0, "");
   } catch (error) {
-    var d3_style_prototype = d3_window.CSSStyleDeclaration.prototype, d3_style_setProperty = d3_style_prototype.setProperty;
-    d3_style_prototype.setProperty = function(name, value, priority) {
-      d3_style_setProperty.call(this, name, value + "", priority);
-    };
+    if (d3_window.CSSStyleDeclaration) {
+      var d3_style_prototype = d3_window.CSSStyleDeclaration.prototype, d3_style_setProperty = d3_style_prototype.setProperty;
+      d3_style_prototype.setProperty = function(name, value, priority) {
+        d3_style_setProperty.call(this, name, value + "", priority);
+      };
+    }
   }
   function d3_class(ctor, properties) {
     try {
@@ -1440,7 +1442,7 @@
     return n.querySelector(s);
   }, d3_selectAll = function(s, n) {
     return n.querySelectorAll(s);
-  }, d3_selectRoot = d3_document.documentElement, d3_selectMatcher = d3_selectRoot.matchesSelector || d3_selectRoot.webkitMatchesSelector || d3_selectRoot.mozMatchesSelector || d3_selectRoot.msMatchesSelector || d3_selectRoot.oMatchesSelector, d3_selectMatches = function(n, s) {
+  }, d3_selectRoot = d3_document.documentElement || {}, d3_selectMatcher = d3_selectRoot.matchesSelector || d3_selectRoot.webkitMatchesSelector || d3_selectRoot.mozMatchesSelector || d3_selectRoot.msMatchesSelector || d3_selectRoot.oMatchesSelector, d3_selectMatches = function(n, s) {
     return d3_selectMatcher.call(n, s);
   };
   if (typeof Sizzle === "function") {
@@ -2278,7 +2280,7 @@
   d3.mouse = function(container) {
     return d3_mousePoint(container, d3_eventSource());
   };
-  var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator.userAgent) ? -1 : 0;
+  var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator && d3_window.navigator.userAgent) ? -1 : 0;
   function d3_mousePoint(container, e) {
     var svg = container.ownerSVGElement || container;
     if (svg.createSVGPoint) {
