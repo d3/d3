@@ -1530,7 +1530,7 @@ d3 = function() {
     return value == null ? name.local ? attrNullNS : attrNull : typeof value === "function" ? name.local ? attrFunctionNS : attrFunction : name.local ? attrConstantNS : attrConstant;
   }
   d3_selectionPrototype.classed = function(name, value) {
-    if (arguments.length < 2) {
+    if (arguments.length < 2 && typeof name !== "function") {
       if (typeof name === "string") {
         var node = this.node(), n = (name = name.trim().split(/^|\s+/g)).length, i = -1;
         if (value = node.classList) {
@@ -1551,15 +1551,23 @@ d3 = function() {
     return new RegExp("(?:^|\\s+)" + d3.requote(name) + "(?:\\s+|$)", "g");
   }
   function d3_selection_classed(name, value) {
-    name = name.trim().split(/\s+/).map(d3_selection_classedName);
-    var n = name.length;
+    var classNameManipulator = function(name) {
+      return name.trim().split(/\s+/).map(d3_selection_classedName);
+    };
+    if (typeof name === "function") return function() {
+      var classname = classNameManipulator(name.apply(this, arguments));
+      var n = classname.length;
+      var i = -1;
+      while (++i < n) classname[i](this, true);
+    };
+    var className = classNameManipulator(name), n = className.length;
     function classedConstant() {
       var i = -1;
-      while (++i < n) name[i](this, value);
+      while (++i < n) className[i](this, value);
     }
     function classedFunction() {
       var i = -1, x = value.apply(this, arguments);
-      while (++i < n) name[i](this, x);
+      while (++i < n) className[i](this, x);
     }
     return typeof value === "function" ? classedFunction : classedConstant;
   }

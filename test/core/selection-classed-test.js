@@ -114,6 +114,11 @@ suite.addBatch({
       body.classed({foo: false, bar: function() { return true; }});
       assert.equal(document.body.className, "bar");
     },
+    "accepts a name function": function(body) {
+      body.attr("class", null);
+      body.classed(function() { return 'foo'; });
+      assert.equal(document.body.className, "foo");
+    },
     "the value may be truthy or falsey": function(body) {
       body.attr("class", "foo");
       body.classed({foo: null, bar: function() { return 1; }});
@@ -256,6 +261,18 @@ suite.addBatch({
     },
     "returns the current selection": function(div) {
       assert.isTrue(div.classed("foo", true) === div);
+    },
+    "adds a class by function returning data": function(div) {
+      div.data(['foo', 'bar']).attr("class", null);
+      div.classed(function(d, i) { return d; });
+      assert.equal(div[0][0].className, "foo");
+      assert.equal(div[0][1].className, "bar");
+    },
+    "adds a class by function returning index": function(div) {
+      div.data(['foo', 'bar']).attr("class", null);
+      div.classed(function(d, i) { return 'num-'+i; });
+      assert.equal(div[0][0].className, "num-0");
+      assert.equal(div[0][1].className, "num-1");
     }
   }
 });
