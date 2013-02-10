@@ -112,14 +112,14 @@ d3 = function() {
   function d3_Set() {}
   d3_class(d3_Set, {
     has: function(value) {
-      return d3_set_prefix + value in this;
+      return d3_map_prefix + value in this;
     },
     add: function(value) {
-      this[d3_set_prefix + value] = true;
+      this[d3_map_prefix + value] = true;
       return value;
     },
     remove: function(value) {
-      value = d3_set_prefix + value;
+      value = d3_map_prefix + value;
       return value in this && delete this[value];
     },
     values: function() {
@@ -131,13 +131,12 @@ d3 = function() {
     },
     forEach: function(f) {
       for (var value in this) {
-        if (value.charCodeAt(0) === d3_set_prefixCode) {
+        if (value.charCodeAt(0) === d3_map_prefixCode) {
           f.call(this, value.substring(1));
         }
       }
     }
   });
-  var d3_set_prefix = "\0", d3_set_prefixCode = d3_set_prefix.charCodeAt(0);
   function d3_identity(d) {
     return d;
   }
