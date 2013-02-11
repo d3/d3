@@ -1,5 +1,10 @@
 d3_selectionPrototype.classed = function(name, value) {
-  if (arguments.length < 2 && typeof name !== "function") {
+  if (arguments.length < 2) {
+
+    // For classed(function), evaluate the function
+    if (typeof name === "function") {
+      name = name.apply(this, this.data())
+    }
 
     // For classed(string), return true only if the first node has the specified
     // class or classes. Note that even if the browser supports DOMTokenList, it
@@ -43,7 +48,7 @@ function d3_selection_classed(name, value) {
     var classname = classNameManipulator(name.apply(this, arguments))
     var n = classname.length;
     var i = -1;
-    while (++i < n) classname[i](this, true);
+    while (++i < n) classname[i](this, value);
   }
 
   var className = classNameManipulator(name),

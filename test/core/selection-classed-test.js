@@ -45,6 +45,10 @@ suite.addBatch({
       assert.isTrue(body.classed("bar"));
       assert.isTrue(body.classed("baz"));
     },
+    "gets an existing class by function": function(body) {
+      body.attr("class", "foo");
+      assert.isTrue(body.classed(function() { return "foo" }));
+    },
     "does not get a missing class": function(body) {
       body.attr("class", " foo\tbar  baz");
       assert.isFalse(body.classed("foob"));
@@ -116,7 +120,7 @@ suite.addBatch({
     },
     "accepts a name function": function(body) {
       body.attr("class", null);
-      body.classed(function() { return 'foo'; });
+      body.classed(function() { return 'foo'; }, true);
       assert.equal(document.body.className, "foo");
     },
     "the value may be truthy or falsey": function(body) {
@@ -264,15 +268,28 @@ suite.addBatch({
     },
     "adds a class by function returning data": function(div) {
       div.data(['foo', 'bar']).attr("class", null);
-      div.classed(function(d, i) { return d; });
+      div.classed(function(d, i) { return d; }, true);
       assert.equal(div[0][0].className, "foo");
       assert.equal(div[0][1].className, "bar");
     },
     "adds a class by function returning index": function(div) {
       div.data(['foo', 'bar']).attr("class", null);
-      div.classed(function(d, i) { return 'num-'+i; });
+      div.classed(function(d, i) { return 'num-'+i; }, true);
       assert.equal(div[0][0].className, "num-0");
       assert.equal(div[0][1].className, "num-1");
+    },
+    "removes a class by function returning data": function(div) {
+      div.data(['foo']).attr("class", "foo");
+      div.classed(function(d, i) { return d; }, false);
+      assert.equal(div[0][0].className, "");
+    },
+    "gets an existing class by function returning data": function(div) {
+      div.data(['foo']).attr("class", "foo");
+      assert.isTrue(div.classed( function(d, i) { return d; } ));
+    },
+    "gets an existing class by function returning index": function(div) {
+      div.data(['foo']).attr("class", "num-0");
+      assert.isTrue(div.classed( function(d, i) { return 'num-'+i; } ));
     }
   }
 });

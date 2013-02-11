@@ -1530,7 +1530,10 @@ d3 = function() {
     return value == null ? name.local ? attrNullNS : attrNull : typeof value === "function" ? name.local ? attrFunctionNS : attrFunction : name.local ? attrConstantNS : attrConstant;
   }
   d3_selectionPrototype.classed = function(name, value) {
-    if (arguments.length < 2 && typeof name !== "function") {
+    if (arguments.length < 2) {
+      if (typeof name === "function") {
+        name = name.apply(this, this.data());
+      }
       if (typeof name === "string") {
         var node = this.node(), n = (name = name.trim().split(/^|\s+/g)).length, i = -1;
         if (value = node.classList) {
@@ -1558,7 +1561,7 @@ d3 = function() {
       var classname = classNameManipulator(name.apply(this, arguments));
       var n = classname.length;
       var i = -1;
-      while (++i < n) classname[i](this, true);
+      while (++i < n) classname[i](this, value);
     };
     var className = classNameManipulator(name), n = className.length;
     function classedConstant() {
