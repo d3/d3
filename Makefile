@@ -44,6 +44,8 @@ d3.core.js: \
 	src/core/median.js \
 	src/core/min.js \
 	src/core/max.js \
+	src/core/variance.js \
+	src/core/sd.js \
 	src/core/extent.js \
 	src/core/random.js \
 	src/core/number.js \
