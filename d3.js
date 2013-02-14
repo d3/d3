@@ -1659,22 +1659,11 @@ d3 = function() {
   };
   d3_selectionPrototype.insert = function(name, before) {
     name = d3.ns.qualify(name);
-    var insertAt;
     function insert() {
-      if (typeof before == 'function'){
-        insertAt = before.call(this);
-      } else {
-        insertAt = d3_select(before, this);
-      }
-      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), insertAt);
+      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), typeof before == 'function' ? before.call(this) : d3_select(before, this));
     }
     function insertNS() {
-      if (typeof before == 'function'){
-       insertAt = before.call(this);
-      } else {
-        insertAt = d3_select(before, this);
-      }
-      return this.insertBefore(d3_document.createElementNS(name.space, name.local), insertAt);
+      return this.insertBefore(d3_document.createElementNS(name.space, name.local), typeof before == 'function' ? before.call(this) : d3_select(before, this));
     }
     return this.select(name.local ? insertNS : insert);
   };
