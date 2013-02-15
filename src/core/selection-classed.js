@@ -1,6 +1,11 @@
 d3_selectionPrototype.classed = function(name, value) {
   if (arguments.length < 2) {
 
+    // For classed(function), evaluate the function
+    if (typeof name === "function") {
+      name = name.apply(this, this.data())
+    }
+
     // For classed(string), return true only if the first node has the specified
     // class or classes. Note that even if the browser supports DOMTokenList, it
     // probably doesn't support it on SVG elements (which can be animated).
@@ -34,19 +39,31 @@ function d3_selection_classedRe(name) {
 
 // Multiple class names are allowed (e.g., "foo bar").
 function d3_selection_classed(name, value) {
-  name = name.trim().split(/\s+/).map(d3_selection_classedName);
-  var n = name.length;
+  var classNameManipulator = function(name) {
+    return name.trim().split(/\s+/).map(d3_selection_classedName);
+  }
+
+  // If the name is a function, let's evaluate it
+  if ( typeof name === 'function' ) return function() {
+    var classname = classNameManipulator(name.apply(this, arguments))
+    var n = classname.length;
+    var i = -1;
+    while (++i < n) classname[i](this, value);
+  }
+
+  var className = classNameManipulator(name),
+      n = className.length;
 
   function classedConstant() {
     var i = -1;
-    while (++i < n) name[i](this, value);
+    while (++i < n) className[i](this, value);
   }
 
   // When the value is a function, the function is still evaluated only once per
   // element even if there are multiple class names.
   function classedFunction() {
     var i = -1, x = value.apply(this, arguments);
-    while (++i < n) name[i](this, x);
+    while (++i < n) className[i](this, x);
   }
 
   return typeof value === "function"
