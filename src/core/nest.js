@@ -5,7 +5,7 @@ d3.nest = function() {
       sortValues,
       rollup;
 
-  function map(array, depth) {
+  function map(mapType, array, depth) {
     if (depth >= keys.length) return rollup
         ? rollup.call(nest, array) : (sortValues
         ? array.sort(sortValues)
@@ -16,9 +16,9 @@ d3.nest = function() {
         key = keys[depth++],
         keyValue,
         object,
+        setter,
         valuesByKey = new d3_Map,
-        values,
-        o = {};
+        values;
 
     while (++i < n) {
       if (values = valuesByKey.get(keyValue = key(object = array[i]))) {
@@ -28,37 +28,43 @@ d3.nest = function() {
       }
     }
 
-    valuesByKey.forEach(function(keyValue, values) {
-      o[keyValue] = map(values, depth);
-    });
+    if (mapType) {
+      object = mapType();
+      setter = function(keyValue, values) {
+        object.set(keyValue, map(mapType, values, depth));
+      };
+    } else {
+      object = {};
+      setter = function(keyValue, values) {
+        object[keyValue] = map(mapType, values, depth);
+      };
+    }
 
-    return o;
+    valuesByKey.forEach(setter);
+    return object;
   }
 
   function entries(map, depth) {
     if (depth >= keys.length) return map;
 
-    var a = [],
-        sortKey = sortKeys[depth++],
-        key;
+    var array = [],
+        sortKey = sortKeys[depth++];
 
-    for (key in map) {
-      a.push({key: key, values: entries(map[key], depth)});
-    }
-
-    if (sortKey) a.sort(function(a, b) {
-      return sortKey(a.key, b.key);
+    map.forEach(function(key, keyMap) {
+      array.push({key: key, values: entries(keyMap, depth)});
     });
 
-    return a;
+    return sortKey
+        ? array.sort(function(a, b) { return sortKey(a.key, b.key); })
+        : array;
   }
 
-  nest.map = function(array) {
-    return map(array, 0);
+  nest.map = function(array, mapType) {
+    return map(mapType, array, 0);
   };
 
   nest.entries = function(array) {
-    return entries(map(array, 0), 0);
+    return entries(map(d3.map, array, 0), 0);
   };
 
   nest.key = function(d) {
