@@ -198,6 +198,7 @@ d3.geo.js: \
 	src/geo/equirectangular.js \
 	src/geo/gnomonic.js \
 	src/geo/graticule.js \
+	src/geo/haversin.js \
 	src/geo/interpolate.js \
 	src/geo/greatArc.js \
 	src/geo/mercator.js \
