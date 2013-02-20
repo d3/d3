@@ -1,9 +1,10 @@
 d3.behavior.zoom = function() {
   var translate = [0, 0],
       translate0, // translate when we started zooming (to avoid drift)
+      translateExtent = d3_behavior_zoomUnboundedTranslate,
       scale = 1,
       scale0, // scale when we started touching
-      scaleExtent = d3_behavior_zoomInfinity,
+      scaleExtent = d3_behavior_zoomUnboundedScale,
       event = d3_eventDispatch(zoom, "zoom"),
       x0,
       x1,
@@ -28,6 +29,14 @@ d3.behavior.zoom = function() {
     return zoom;
   };
 
+  zoom.translateExtent = function(x) {
+    if (!arguments.length) return translateExtent;
+    translateExtent = x == null
+        ? d3_behavior_zoomUnboundedTranslate
+        : [[+x[0][0], +x[0][1]], [+x[1][0], +x[1][1]]];
+    return zoom;
+  };
+
   zoom.scale = function(x) {
     if (!arguments.length) return scale;
     scale = +x;
@@ -37,7 +46,9 @@ d3.behavior.zoom = function() {
 
   zoom.scaleExtent = function(x) {
     if (!arguments.length) return scaleExtent;
-    scaleExtent = x == null ? d3_behavior_zoomInfinity : x.map(Number);
+    scaleExtent = x == null
+        ? d3_behavior_zoomUnboundedScale
+        : [+x[0], +x[1]];
     return zoom;
   };
 
@@ -73,8 +84,8 @@ d3.behavior.zoom = function() {
 
   function translateTo(p, l) {
     l = point(l);
-    translate[0] += p[0] - l[0];
-    translate[1] += p[1] - l[1];
+    translate[0] = Math.max(translateExtent[0][0], Math.min(translateExtent[1][0], p[0] - l[0] + translate[0]));
+    translate[1] = Math.max(translateExtent[0][1], Math.min(translateExtent[1][1], p[1] - l[1] + translate[1]));
   }
 
   function rescale() {
@@ -173,7 +184,8 @@ d3.behavior.zoom = function() {
   return d3.rebind(zoom, event, "on");
 };
 
-var d3_behavior_zoomInfinity = [0, Infinity]; // default scale extent
+var d3_behavior_zoomUnboundedScale = [0, Infinity],
+    d3_behavior_zoomUnboundedTranslate = [[-Infinity, -Infinity], [Infinity, Infinity]];
 
 // https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/wheel
 var d3_behavior_zoomDelta, d3_behavior_zoomWheel
