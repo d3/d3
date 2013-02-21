@@ -137,6 +137,23 @@ suite.addBatch({
     "if no keys are specified, the input array is returned": function(nest) {
       var array = [new Object()];
       assert.strictEqual(nest().entries(array), array);
+    },
+    "values can be counted if count is set true": function(nest) {
+      var entries = nest()
+          .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
+          .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
+          .count(true)
+          .entries([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
+      assert.deepEqual(entries, [
+        {key: "0", count: 3, values: [
+          {key: "1", count: 1, values: [[0, 1]]},
+          {key: "2", count: 2, values: [[0, 2], [0, 2]]}
+        ]},
+        {key: "1", count: 2, values: [
+          {key: "1", count: 1, values: [[1, 1]]},
+          {key: "2", count: 1, values: [[1, 2]]}
+        ]}
+      ]);
     }
   }
 });
