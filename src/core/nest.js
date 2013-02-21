@@ -3,7 +3,8 @@ d3.nest = function() {
       keys = [],
       sortKeys = [],
       sortValues,
-      rollup;
+      rollup,
+      count = false;
 
   function map(array, depth) {
     if (depth >= keys.length) return rollup
@@ -43,7 +44,11 @@ d3.nest = function() {
         key;
 
     for (key in map) {
-      a.push({key: key, values: entries(map[key], depth)});
+      var o = {key: key, values: entries(map[key], depth)};
+      if(count) o.count = o.values.reduce(function(p, c){
+        return p + (c.count || 1);
+      }, 0);
+      a.push(o);
     }
 
     if (sortKey) a.sort(function(a, b) {
@@ -52,7 +57,6 @@ d3.nest = function() {
 
     return a;
   }
-
   nest.map = function(array) {
     return map(array, 0);
   };
@@ -82,6 +86,11 @@ d3.nest = function() {
 
   nest.rollup = function(f) {
     rollup = f;
+    return nest;
+  };
+
+  nest.count = function(b) {
+    count = b;
     return nest;
   };
 
