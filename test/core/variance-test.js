@@ -25,12 +25,12 @@ suite.addBatch({
       assert.equal(variance([Number.MAX_VALUE, Number.MAX_VALUE]), 0);
       assert.equal(variance([-Number.MAX_VALUE, -Number.MAX_VALUE]), 0);
     },
-    "returns undefined for empty array": function(variance) {
+    "returns NaN for empty array": function(variance) {
       assert.isNaN(variance([]));
-      assert.isUndefined(variance([null]));
-      assert.isUndefined(variance([undefined]));
-      assert.isUndefined(variance([NaN]));
-      assert.isUndefined(variance([NaN, NaN]));
+      assert.isNaN(variance([null]));
+      assert.isNaN(variance([undefined]));
+      assert.isNaN(variance([NaN]));
+      assert.isNaN(variance([NaN, NaN]));
     },
     "applies the optional accessor function": function(variance) {
       assert.equal(d3.variance([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return d3.mean(d); }), 4.5);

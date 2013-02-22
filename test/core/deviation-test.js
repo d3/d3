@@ -27,10 +27,10 @@ suite.addBatch({
     },
     "returns undefined for empty array": function(deviation) {
       assert.isNaN(deviation([]));
-      assert.isUndefined(deviation([null]));
-      assert.isUndefined(deviation([undefined]));
-      assert.isUndefined(deviation([NaN]));
-      assert.isUndefined(deviation([NaN, NaN]));
+      assert.isNaN(deviation([null]));
+      assert.isNaN(deviation([undefined]));
+      assert.isNaN(deviation([NaN]));
+      assert.isNaN(deviation([NaN, NaN]));
     },
     "applies the optional accessor function": function(deviation) {
       assert.equal(d3.deviation([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return d3.mean(d); }), 2.1213203435596424);
