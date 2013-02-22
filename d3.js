@@ -182,7 +182,7 @@ d3 = function() {
     }
     return j ? parseFloat(sd) * 1 / (j - 1) : undefined;
   };
-  d3.sd = function(array, f) {
+  d3.deviation = function(array, f) {
     var v = f ? d3.variance(array, f) : d3.variance(array);
     return v ? Math.sqrt(v) : v;
   };
