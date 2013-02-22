@@ -26,7 +26,7 @@ suite.addBatch({
       assert.equal(variance([-Number.MAX_VALUE, -Number.MAX_VALUE]), 0);
     },
     "returns undefined for empty array": function(variance) {
-      assert.isUndefined(variance([]));
+      assert.isNaN(variance([]));
       assert.isUndefined(variance([null]));
       assert.isUndefined(variance([undefined]));
       assert.isUndefined(variance([NaN]));
