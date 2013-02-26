@@ -66,6 +66,11 @@ function d3_geo_projectionMutator(projectAt) {
     return reset();
   };
 
+  projection.rotation = function(coordinates) {
+    coordinates = rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+    return [coordinates[0] * d3_degrees, coordinates[1] * d3_degrees];
+  };
+
   d3.rebind(projection, projectResample, "precision");
 
   function reset() {
