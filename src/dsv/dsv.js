@@ -82,8 +82,29 @@ function d3_dsv(delimiter, mimeType) {
   };
 
   dsv.format = function(rows) {
-    return rows.map(formatRow).join("\n");
+    var toFormat = rows,
+        headers;
+
+    if (Object.prototype.toString.call(rows[0]) === '[object Object]') {
+      headers = extractHeaders(rows);
+
+      toFormat = [headers].concat(objectRowsToArrays(rows, headers));
+    }
+
+    return toFormat.map(formatRow).join("\n");
   };
+
+  function extractHeaders(rows) {
+    return rows.map(d3.keys).reduce(function(a, b) {
+      return a.concat(b.filter(function(e) { return a.indexOf(e) < 0; }));
+    });
+  }
+
+  function objectRowsToArrays(rows, headers) {
+    return rows.map(function(row) {
+      return headers.map(function(x) { return row[x]; });
+    });
+  }
 
   function formatRow(row) {
     return row.map(formatValue).join(delimiter);

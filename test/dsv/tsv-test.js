@@ -148,6 +148,14 @@ suite.addBatch({
     },
     "does not escape commas": function(format) {
       assert.equal(format([["oxford,comma"]]), "oxford,comma");
+    },
+    "allows an array of objects": function(format) {
+      assert.equal(format([{a: "1", b: "2"}, {b: "4", a: "2"}]),
+                   "a\tb\n1\t2\n2\t4");
+    },
+    "returns empty cells for missing and undefined values": function(format) {
+      assert.equal(format([{a: "1", b: "2"}, {c: "4"}, {b: null, a: "3"}]),
+                   "a\tb\tc\n1\t2\t\n\t\t4\n3\t\t");
     }
   }
 });
