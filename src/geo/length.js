@@ -11,14 +11,9 @@ var d3_geo_length = {
   point: d3_noop,
   lineStart: d3_geo_lengthLineStart,
   lineEnd: d3_noop,
-  polygonStart: function() {
-    d3_geo_length.lineStart = d3_noop;
-  },
-  polygonEnd: function() {
-    d3_geo_length.lineStart = d3_geo_lengthLineStart;
-  }
+  polygonStart: d3_noop,
+  polygonEnd: d3_noop
 };
-
 
 function d3_geo_lengthLineStart() {
   var λ0, sinφ0, cosφ0;
@@ -27,6 +22,7 @@ function d3_geo_lengthLineStart() {
     λ0 = λ * d3_radians, sinφ0 = Math.sin(φ *= d3_radians), cosφ0 = Math.cos(φ);
     d3_geo_length.point = nextPoint;
   };
+
   d3_geo_length.lineEnd = function() {
     d3_geo_length.point = d3_geo_length.lineEnd = d3_noop;
   };
