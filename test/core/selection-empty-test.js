@@ -1,7 +1,7 @@
 require("../env");
 
 var vows = require("vows"),
-    assert = require("assert");
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.empty");
 

@@ -1,7 +1,7 @@
 require("../env");
 
 var vows = require("vows"),
-    assert = require("assert"),
+    assert = require("../env-assert"),
     time = require("./time"),
     local = time.local,
     utc = time.utc;
