@@ -76,6 +76,27 @@ suite.addBatch({
       ]);
     }
   },
+
+  "parse with row function": {
+    "invokes the row function for every row in order": function() {
+      var rows = [];
+      d3.csv.parse("a\n1\n2\n3\n4", function(d, i) { rows.push({d: d, i: i}); });
+      assert.deepEqual(rows, [
+        {d: {a: "1"}, i: 0},
+        {d: {a: "2"}, i: 1},
+        {d: {a: "3"}, i: 2},
+        {d: {a: "4"}, i: 3}
+      ]);
+    },
+    "returns an array of the row function return values": function() {
+      assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n", function(row) { return row; }), [{a: "1", b: "2", c: "3"}]);
+    },
+    "skips rows if the row function returns null or undefined": function() {
+      assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? null : row; }), [{a: "2", b: "3", c: "4"}]);
+      assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? undefined : row; }), [{a: "2", b: "3", c: "4"}]);
+    }
+  },
+
   "parseRows": {
     topic: function() {
       return d3.csv.parseRows;
