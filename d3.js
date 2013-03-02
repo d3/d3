@@ -5234,14 +5234,15 @@ d3 = function() {
   }
   function d3_dsv(delimiter, mimeType) {
     var reFormat = new RegExp('["' + delimiter + "\n]"), delimiterCode = delimiter.charCodeAt(0);
-    function dsv(url, callback) {
-      var xhr = d3.xhr(url, mimeType, callback), row;
+    function dsv(url, row, callback) {
+      if (arguments.length < 3) callback = row, row = null;
+      var xhr = d3.xhr(url, mimeType, callback);
       xhr.row = function(_) {
         if (!arguments.length) return row;
         xhr.response((row = _) == null ? response : typedResponse(_));
         return xhr;
       };
-      return xhr.row(null);
+      return xhr.row(row);
     }
     function response(request) {
       return dsv.parse(request.responseText);

@@ -14,19 +14,33 @@ suite.addBatch({
       });
     },
     "invokes the callback with the parsed CSV": function(csv) {
-      assert.deepEqual(csv, [{"Hello":42,"World":"\"fish\""}]);
+      assert.deepEqual(csv, [{"Hello":"42","World":"\"fish\""}]);
     },
     "overrides the mime type to text/csv": function(csv) {
       assert.equal(XMLHttpRequest._last._info.mimeType, "text/csv");
     },
-    "": {
+    "specifying a row conversion function": {
+      topic: function() {
+        var cb = this.callback;
+        d3.csv("test/data/sample.csv", function(row) {
+          row.Hello = -row.Hello;
+          return row;
+        }, function(error, csv) {
+          cb(null, csv);
+        });
+      },
+      "invokes the callback with the parsed CSV": function(csv) {
+        assert.strictEqual(csv[0].Hello, -42);
+      }
+    },
+    "attempting to load a file that does not exist": {
       topic: function() {
         var cb = this.callback;
         d3.csv("//does/not/exist.csv", function(error, csv) {
           cb(null, csv);
         });
       },
-      "invokes the callback with undefined when an error occurs": function(csv) {
+      "invokes the callback with undefined": function(csv) {
         assert.isUndefined(csv);
       }
     }
