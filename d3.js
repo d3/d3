@@ -5238,9 +5238,7 @@ d3 = function() {
       if (arguments.length < 3) callback = row, row = null;
       var xhr = d3.xhr(url, mimeType, callback);
       xhr.row = function(_) {
-        if (!arguments.length) return row;
-        xhr.response((row = _) == null ? response : typedResponse(_));
-        return xhr;
+        return arguments.length ? xhr.response((row = _) == null ? response : typedResponse(_)) : row;
       };
       return xhr.row(row);
     }
