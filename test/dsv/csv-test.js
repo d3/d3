@@ -14,19 +14,33 @@ suite.addBatch({
       });
     },
     "invokes the callback with the parsed CSV": function(csv) {
-      assert.deepEqual(csv, [{"Hello":42,"World":"\"fish\""}]);
+      assert.deepEqual(csv, [{"Hello":"42","World":"\"fish\""}]);
     },
     "overrides the mime type to text/csv": function(csv) {
       assert.equal(XMLHttpRequest._last._info.mimeType, "text/csv");
     },
-    "": {
+    "specifying a row conversion function": {
+      topic: function() {
+        var cb = this.callback;
+        d3.csv("test/data/sample.csv", function(row) {
+          row.Hello = -row.Hello;
+          return row;
+        }, function(error, csv) {
+          cb(null, csv);
+        });
+      },
+      "invokes the callback with the parsed CSV": function(csv) {
+        assert.strictEqual(csv[0].Hello, -42);
+      }
+    },
+    "attempting to load a file that does not exist": {
       topic: function() {
         var cb = this.callback;
         d3.csv("//does/not/exist.csv", function(error, csv) {
           cb(null, csv);
         });
       },
-      "invokes the callback with undefined when an error occurs": function(csv) {
+      "invokes the callback with undefined": function(csv) {
         assert.isUndefined(csv);
       }
     }
@@ -76,6 +90,27 @@ suite.addBatch({
       ]);
     }
   },
+
+  "parse with row function": {
+    "invokes the row function for every row in order": function() {
+      var rows = [];
+      d3.csv.parse("a\n1\n2\n3\n4", function(d, i) { rows.push({d: d, i: i}); });
+      assert.deepEqual(rows, [
+        {d: {a: "1"}, i: 0},
+        {d: {a: "2"}, i: 1},
+        {d: {a: "3"}, i: 2},
+        {d: {a: "4"}, i: 3}
+      ]);
+    },
+    "returns an array of the row function return values": function() {
+      assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n", function(row) { return row; }), [{a: "1", b: "2", c: "3"}]);
+    },
+    "skips rows if the row function returns null or undefined": function() {
+      assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? null : row; }), [{a: "2", b: "3", c: "4"}]);
+      assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? undefined : row; }), [{a: "2", b: "3", c: "4"}]);
+    }
+  },
+
   "parseRows": {
     topic: function() {
       return d3.csv.parseRows;
