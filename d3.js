@@ -6526,10 +6526,6 @@ d3 = function() {
       δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
       return reset();
     };
-    projection.rotation = function(coordinates) {
-      coordinates = rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
-      return [ coordinates[0] * d3_degrees, coordinates[1] * d3_degrees ];
-    };
     d3.rebind(projection, projectResample, "precision");
     function reset() {
       projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
@@ -6567,6 +6563,13 @@ d3 = function() {
       }
     };
   }
+  d3.geo.rotation = function(rotate) {
+    rotate = d3_geo_rotation(rotate[0] % 360 * d3_radians, rotate[1] * d3_radians, rotate.length > 2 ? rotate[2] * d3_radians : 0);
+    return function(coordinates) {
+      coordinates = rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+      return coordinates[0] *= d3_degrees, coordinates[1] *= d3_degrees, coordinates;
+    };
+  };
   function d3_geo_rotation(δλ, δφ, δγ) {
     return δλ ? δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ)) : d3_geo_rotationλ(δλ) : δφ || δγ ? d3_geo_rotationφγ(δφ, δγ) : d3_geo_equirectangular;
   }
