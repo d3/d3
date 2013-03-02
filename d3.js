@@ -1659,11 +1659,12 @@ d3 = function() {
   };
   d3_selectionPrototype.insert = function(name, before) {
     name = d3.ns.qualify(name);
-    function insert() {
-      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), d3_select(before, this));
+    if (typeof before !== "function") before = d3_selection_selector(before);
+    function insert(d, i) {
+      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), before.call(this, d, i));
     }
-    function insertNS() {
-      return this.insertBefore(d3_document.createElementNS(name.space, name.local), d3_select(before, this));
+    function insertNS(d, i) {
+      return this.insertBefore(d3_document.createElementNS(name.space, name.local), before.call(this, d, i));
     }
     return this.select(name.local ? insertNS : insert);
   };
