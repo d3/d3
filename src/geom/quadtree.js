@@ -73,12 +73,12 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 
     // Recursively insert into the child node.
     n.leaf = false;
-    n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode(x1,y1,x2,y2));
+    n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode(x1, y1, x2, y2));
     insert(n, p, x1, y1, x2, y2);
   }
 
   // Create the root node.
-  var root = d3_geom_quadtreeNode(x1,y1,x2,y2);
+  var root = d3_geom_quadtreeNode(x1, y1, x2, y2);
 
   root.add = function(p) {
     insert(root, p, x1, y1, x2, y2);
@@ -91,7 +91,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
   return root;
 };
 
-function d3_geom_quadtreeNode(x1,y1,x2,y2) {
+function d3_geom_quadtreeNode(x1, y1, x2, y2) {
   return {
     x1 : x1,
     x2 : x2,
@@ -104,7 +104,7 @@ function d3_geom_quadtreeNode(x1,y1,x2,y2) {
 }
 
 function d3_geom_quadtreeVisit(f) {
-  if(!f(this,this.x1,this.y1,this.x2,this.y2)) {
+  if(!f(this, this.x1, this.y1, this.x2, this.y2)) {
     this.nodes.forEach(function(child) {
       d3_geom_quadtreeVisit.call(child,f);
     });
