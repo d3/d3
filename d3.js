@@ -5794,9 +5794,15 @@ d3 = function() {
   function d3_geo_clipPolygon(segments, interpolate, listener) {
     var subject = [], clip = [];
     segments.forEach(function(segment) {
-      var n = segment.length;
-      if (n <= 1) return;
-      var p0 = segment[0], p1 = segment[n - 1], a = {
+      if ((n = segment.length) <= 1) return;
+      var n, p0 = segment[0], p1 = segment[n - 1];
+      if (d3_geo_sphericalEqual(p0, p1)) {
+        listener.lineStart();
+        for (var i = 0; i < n; ++i) listener.point((p0 = segment[i])[0], p0[1]);
+        listener.lineEnd();
+        return;
+      }
+      var a = {
         point: p0,
         points: segment,
         other: null,

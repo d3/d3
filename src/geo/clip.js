@@ -115,11 +115,21 @@ function d3_geo_clipPolygon(segments, interpolate, listener) {
       clip = [];
 
   segments.forEach(function(segment) {
-    var n = segment.length;
-    if (n <= 1) return;
-    var p0 = segment[0],
-        p1 = segment[n - 1],
-        a = {point: p0, points: segment, other: null, visited: false, entry: true, subject: true},
+    if ((n = segment.length) <= 1) return;
+    var n, p0 = segment[0], p1 = segment[n - 1];
+
+    // If the first and last points of a segment are coincident, then treat as
+    // a closed ring.
+    // TODO if all rings are closed, then the winding order of the exterior
+    // ring should be checked.
+    if (d3_geo_sphericalEqual(p0, p1)) {
+      listener.lineStart();
+      for (var i = 0; i < n; ++i) listener.point((p0 = segment[i])[0], p0[1]);
+      listener.lineEnd();
+      return;
+    }
+
+    var a = {point: p0, points: segment, other: null, visited: false, entry: true, subject: true},
         b = {point: p0, points: [p0], other: a, visited: false, entry: false, subject: false};
     a.other = b;
     subject.push(a);
