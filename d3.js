@@ -1,6 +1,6 @@
 d3 = function() {
   var π = Math.PI, ε = 1e-6, d3 = {
-    version: "3.0.7"
+    version: "3.0.8"
   }, d3_radians = π / 180, d3_degrees = 180 / π, d3_document = document, d3_window = window;
   function d3_target(d) {
     return d.target;
@@ -7521,7 +7521,7 @@ d3 = function() {
     return format;
   };
   var d3_time_formatIso = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
-  d3.time.format.iso = Date.prototype.toISOString ? d3_time_formatIsoNative : d3_time_formatIso;
+  d3.time.format.iso = Date.prototype.toISOString && +new Date("2000-01-01T00:00:00.000Z") ? d3_time_formatIsoNative : d3_time_formatIso;
   function d3_time_formatIsoNative(date) {
     return date.toISOString();
   }
