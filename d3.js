@@ -124,7 +124,7 @@ d3 = function() {
   function d3_rebind(target, source, method) {
     return function() {
       var value = method.apply(source, arguments);
-      return arguments.length ? target : value;
+      return value === source ? target : value;
     };
   }
   d3.ascending = function(a, b) {

@@ -10,40 +10,42 @@ suite.addBatch({
     topic: function() {
       return d3.rebind;
     },
-    "bound function uses source as context": function(rebind) {
-      var a = {}, b = {foo: function() { that = this; }}, that;
-      rebind(a, b, "foo");
-      assert.strictEqual((a.foo(), that), b);
-      assert.strictEqual((a.foo.call({}), that), b);
+    "source function always has source as context": function(rebind) {
+      var target = {}, source = {method: function() { that = this; }}, that;
+      rebind(target, source, "method");
+      assert.strictEqual((target.method(), that), source);
+      assert.strictEqual((target.method.call({}), that), source);
     },
-    "bound function receives any arguments": function(rebind) {
-      var a = {}, b = {foo: function() { those = Array.prototype.slice.call(arguments); }}, those;
-      rebind(a, b, "foo");
-      assert.deepEqual((a.foo(), those), []);
-      assert.deepEqual((a.foo(1), those), [1]);
-      assert.deepEqual((a.foo(null), those), [null]);
-      assert.deepEqual((a.foo(b, b, 1), those), [b, b, 1]);
+    "source function receives target function's arguments": function(rebind) {
+      var target = {}, source = {method: function() { those = Array.prototype.slice.call(arguments); }}, those;
+      rebind(target, source, "method");
+      assert.deepEqual((target.method(), those), []);
+      assert.deepEqual((target.method(1), those), [1]);
+      assert.deepEqual((target.method(null), those), [null]);
+      assert.deepEqual((target.method(source, source, 1), those), [source, source, 1]);
     },
-    "bound function returns object if arguments": function(rebind) {
-      var a = {}, b = {foo: function() {}};
-      rebind(a, b, "foo");
-      assert.strictEqual(a.foo(1), a);
-      assert.strictEqual(a.foo(1, 2, 3), a);
+    "target function returns target if source function returns source": function(rebind) {
+      var target = {}, source = {method: function(value) { return value ? source : 42; }};
+      rebind(target, source, "method");
+      assert.strictEqual(target.method(true), target);
     },
-    "bound function returns return value if no arguments": function(rebind) {
-      var a = {}, b = {foo: function() { return that; }}, that = {};
-      rebind(a, b, "foo");
-      assert.strictEqual(a.foo(), that);
+    "otherwise, target function returns source function return value": function(rebind) {
+      var target = {}, source = {method: function(value) { return value ? source : 42; }};
+      rebind(target, source, "method");
+      assert.strictEqual(target.method(false), 42);
     },
     "can bind multiple methods": function(rebind) {
-      var a = {}, b = {foo: function() { return 1; }, bar: function() { return 2; }};
-      rebind(a, b, "foo", "bar");
-      assert.strictEqual(a.foo(), 1);
-      assert.strictEqual(a.bar(), 2);
+      var target = {}, source = {
+        foo: function() { return 1; },
+        bar: function() { return 2; }
+      };
+      rebind(target, source, "foo", "bar");
+      assert.strictEqual(target.foo(), 1);
+      assert.strictEqual(target.bar(), 2);
     },
     "returns the target object": function(rebind) {
-      var a = {}, b = {foo: function() { return that; }}, that = {};
-      assert.strictEqual(rebind(a, b, "foo"), a);
+      var target = {}, source = {foo: function() {}};
+      assert.strictEqual(rebind(target, source, "foo"), target);
     }
   }
 });
