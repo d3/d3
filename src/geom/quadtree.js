@@ -84,9 +84,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     insert(root, p, x1, y1, x2, y2);
   };
 
-  root.visit = function(f) {
-    d3_geom_quadtreeVisit(f, root);
-  };
+  root.visit = d3_geom_quadtreeVisit;
 
   // Insert all points.
   points.forEach(root.add);
@@ -105,10 +103,10 @@ function d3_geom_quadtreeNode(x1,y1,x2,y2) {
   };
 }
 
-function d3_geom_quadtreeVisit(f, node) {
-  if (!f(node, node.x1, node.y1, node.x2, node.y2)) {
-    node.nodes.forEach(function(child) {
-      d3_geom_quadtreeVisit(f, child);
-    });    
+function d3_geom_quadtreeVisit(f) {
+  if(!f(this,this.x1,this.y1,this.x2,this.y2)) {
+    this.nodes.forEach(function(child) {
+      d3_geom_quadtreeVisit.call(child,f);
+    });
   }
 }
