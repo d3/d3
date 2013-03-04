@@ -7,6 +7,7 @@ d3.geo.clipView = function d3_geo_clipView(coordinates) {
       lineStart: lineStart,
       lineEnd: lineEnd,
       polygonStart: function() {
+        listener.polygonStart();
         clip.lineStart = ringStart;
         clip.lineEnd = ringEnd;
         clip.point = ringPoint;
@@ -15,6 +16,7 @@ d3.geo.clipView = function d3_geo_clipView(coordinates) {
         clip.point = point;
         clip.lineEnd = lineEnd;
         clip.lineStart = lineStart;
+        listener.polygonEnd();
       }
     };
 

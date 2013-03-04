@@ -6060,6 +6060,7 @@ d3 = function() {
         lineStart: lineStart,
         lineEnd: lineEnd,
         polygonStart: function() {
+          listener.polygonStart();
           clip.lineStart = ringStart;
           clip.lineEnd = ringEnd;
           clip.point = ringPoint;
@@ -6068,6 +6069,7 @@ d3 = function() {
           clip.point = point;
           clip.lineEnd = lineEnd;
           clip.lineStart = lineStart;
+          listener.polygonEnd();
         }
       };
       function visible(x, y) {
