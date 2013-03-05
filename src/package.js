@@ -17,11 +17,11 @@ console.log(JSON.stringify({
     }
   },
   "dependencies": {
-    "jsdom": "0.3.4"
+    "jsdom": "0.3.x"
   },
   "devDependencies": {
-    "uglify-js": "2.2.3",
-    "vows": "0.7.0"
+    "uglify-js": "2.2.x",
+    "vows": "0.7.x"
   },
   "scripts": {"test": "./node_modules/vows/bin/vows"}
 }, null, 2));
