@@ -17,7 +17,3 @@ function d3_scale_nice(domain, nice) {
 
   return domain;
 }
-
-function d3_scale_niceDefault() {
-  return Math;
-}
