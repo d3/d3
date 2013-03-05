@@ -216,6 +216,28 @@ suite.addBatch({
       }
     },
 
+    "base two": {
+      topic: function(log) {
+        return log().domain([1, 32]).base(2);
+      },
+      "generates ticks at powers of two": function(x) {
+        assert.deepEqual(x.ticks().map(x.tickFormat(10, d3.format("+,d"))), [
+          "+1", "+2", "+4", "+8", "+16", "+32"
+        ]);
+      }
+    },
+
+    "base e": {
+      topic: function(log) {
+        return log().domain([1, 32]).base(Math.E);
+      },
+      "generates ticks at powers of e": function(x) {
+        assert.deepEqual(x.ticks().map(x.tickFormat(10, d3.format("+.6r"))), [
+          "+1.00000", "+2.71828", "+7.38906", "+20.0855"
+        ]);
+      }
+    },
+
     "nice": {
       "can nice the domain, extending it to powers of ten": function(log) {
         var x = log().domain([1.1, 10.9]).nice();
