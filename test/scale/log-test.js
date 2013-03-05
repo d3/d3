@@ -14,7 +14,7 @@ suite.addBatch({
     "domain": {
       "defaults to [1, 10]": function(log) {
         var x = log();
-        assert.deepEqual(x.domain(), [1, 10]);
+        assert.inDelta(x.domain(), [1, 10], 1e-6);
         assert.inDelta(x(5), 0.69897, 1e-6);
       },
       "coerces domain values to numbers": function(log) {
@@ -219,27 +219,27 @@ suite.addBatch({
     "nice": {
       "can nice the domain, extending it to powers of ten": function(log) {
         var x = log().domain([1.1, 10.9]).nice();
-        assert.deepEqual(x.domain(), [1, 100]);
+        assert.inDelta(x.domain(), [1, 100], 1e-6);
         var x = log().domain([10.9, 1.1]).nice();
-        assert.deepEqual(x.domain(), [100, 1]);
+        assert.inDelta(x.domain(), [100, 1], 1e-6);
         var x = log().domain([.7, 11.001]).nice();
-        assert.deepEqual(x.domain(), [.1, 100]);
+        assert.inDelta(x.domain(), [.1, 100], 1e-6);
         var x = log().domain([123.1, 6.7]).nice();
-        assert.deepEqual(x.domain(), [1000, 1]);
+        assert.inDelta(x.domain(), [1000, 1], 1e-6);
         var x = log().domain([.01, .49]).nice();
-        assert.deepEqual(x.domain(), [.01, 1]);
+        assert.inDelta(x.domain(), [.01, 1], 1e-6);
       },
       "works on degenerate domains": function(log) {
         var x = log().domain([0, 0]).nice();
-        assert.deepEqual(x.domain(), [0, 0]);
+        assert.inDelta(x.domain(), [0, 0], 1e-6);
         var x = log().domain([.5, .5]).nice();
         assert.inDelta(x.domain(), [.1, 1], 1e-6);
       },
       "nicing a polylog domain only affects the extent": function(log) {
         var x = log().domain([1.1, 1.5, 10.9]).nice();
-        assert.deepEqual(x.domain(), [1, 1.5, 100]);
+        assert.inDelta(x.domain(), [1, 1.5, 100], 1e-6);
         var x = log().domain([-123.1, -1.5, -.5]).nice();
-        assert.deepEqual(x.domain(), [-1000, -1.5, -.1]);
+        assert.inDelta(x.domain(), [-1000, -1.5, -.1], 1e-6);
       }
     },
 
@@ -247,24 +247,24 @@ suite.addBatch({
       "changes to the domain are isolated": function(log) {
         var x = log(), y = x.copy();
         x.domain([10, 100]);
-        assert.deepEqual(y.domain(), [1, 10]);
-        assert.equal(x(10), 0);
-        assert.equal(y(1), 0);
+        assert.inDelta(y.domain(), [1, 10], 1e-6);
+        assert.inDelta(x(10), 0, 1e-6);
+        assert.inDelta(y(1), 0, 1e-6);
         y.domain([100, 1000]);
-        assert.equal(x(100), 1);
-        assert.equal(y(100), 0);
-        assert.deepEqual(x.domain(), [10, 100]);
-        assert.deepEqual(y.domain().map(Math.round), [100, 1000]);
+        assert.inDelta(x(100), 1, 1e-6);
+        assert.inDelta(y(100), 0, 1e-6);
+        assert.inDelta(x.domain(), [10, 100], 1e-6);
+        assert.inDelta(y.domain(), [100, 1000], 1e-6);
       },
       "changes to the range are isolated": function(log) {
         var x = log(), y = x.copy();
         x.range([1, 2]);
-        assert.equal(x.invert(1), 1);
-        assert.equal(y.invert(1), 10);
+        assert.inDelta(x.invert(1), 1, 1e-6);
+        assert.inDelta(y.invert(1), 10, 1e-6);
         assert.deepEqual(y.range(), [0, 1]);
         y.range([2, 3]);
-        assert.equal(x.invert(2), 10);
-        assert.equal(y.invert(2), 1);
+        assert.inDelta(x.invert(2), 10, 1e-6);
+        assert.inDelta(y.invert(2), 1, 1e-6);
         assert.deepEqual(x.range(), [1, 2]);
         assert.deepEqual(y.range(), [2, 3]);
       },
@@ -279,7 +279,7 @@ suite.addBatch({
         var x = log().clamp(true), y = x.copy();
         x.clamp(false);
         assert.inDelta(x(.5), -0.30103, 1e-6);
-        assert.equal(y(.5), 0);
+        assert.inDelta(y(.5), 0, 1e-6);
         assert.isTrue(y.clamp());
         y.clamp(false);
         assert.inDelta(x(20), 1.30103, 1e-6);
