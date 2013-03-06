@@ -5270,19 +5270,32 @@ d3 = function() {
   }
   function d3_dsv(delimiter, mimeType) {
     var reFormat = new RegExp('["' + delimiter + "\n]"), delimiterCode = delimiter.charCodeAt(0);
-    function dsv(url, callback) {
-      return d3.xhr(url, mimeType, callback).response(response);
+    function dsv(url, row, callback) {
+      if (arguments.length < 3) callback = row, row = null;
+      var xhr = d3.xhr(url, mimeType, callback);
+      xhr.row = function(_) {
+        return arguments.length ? xhr.response((row = _) == null ? response : typedResponse(_)) : row;
+      };
+      return xhr.row(row);
     }
     function response(request) {
       return dsv.parse(request.responseText);
     }
-    dsv.parse = function(text) {
+    function typedResponse(f) {
+      return function(request) {
+        return dsv.parse(request.responseText, f);
+      };
+    }
+    dsv.parse = function(text, f) {
       var o;
-      return dsv.parseRows(text, function(row) {
-        if (o) return o(row);
-        o = new Function("d", "return {" + row.map(function(name, i) {
+      return dsv.parseRows(text, function(row, i) {
+        if (o) return o(row, i - 1);
+        var a = new Function("d", "return {" + row.map(function(name, i) {
           return JSON.stringify(name) + ": d[" + i + "]";
         }).join(",") + "}");
+        o = f ? function(row, i) {
+          return f(a(row), i);
+        } : a;
       });
     };
     dsv.parseRows = function(text, f) {
