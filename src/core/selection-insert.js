@@ -1,19 +1,18 @@
-// TODO insert(node, function)?
-// TODO insert(function, string)?
-// TODO insert(function, function)?
 d3_selectionPrototype.insert = function(name, before) {
   name = d3.ns.qualify(name);
 
-  function insert() {
+  if (typeof before !== "function") before = d3_selection_selector(before);
+
+  function insert(d, i) {
     return this.insertBefore(
         d3_document.createElementNS(this.namespaceURI, name),
-        d3_select(before, this));
+        before.call(this, d, i));
   }
 
-  function insertNS() {
+  function insertNS(d, i) {
     return this.insertBefore(
         d3_document.createElementNS(name.space, name.local),
-        d3_select(before, this));
+        before.call(this, d, i));
   }
 
   return this.select(name.local ? insertNS : insert);

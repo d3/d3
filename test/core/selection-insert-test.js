@@ -18,6 +18,14 @@ suite.addBatch({
       assert.domEqual(div[0][0], document.body.firstChild);
       assert.domEqual(div[0][0].nextSibling, span[0][0]);
     },
+    "inserts before the specified node": function(body) {
+      var span = body.html("").append("span");
+      var div = body.insert("div", function() { return span.node(); });
+      assert.equal(div[0][0].tagName, "DIV");
+      assert.isNull(div[0][0].namespaceURI);
+      assert.domEqual(div[0][0], document.body.firstChild);
+      assert.domEqual(div[0][0].nextSibling, span[0][0]);
+    },
     "appends an HTML element": function(body) {
       var div = body.insert("div");
       assert.equal(div[0][0].tagName, "DIV");
