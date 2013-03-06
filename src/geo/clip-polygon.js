@@ -1,7 +1,7 @@
 // General spherical polygon clipping algorithm: takes a polygon, cuts it into
 // visible line segments and rejoins the segments by interpolating along the
 // clip edge.
-function d3_geo_clipPolygon(segments, compare, interpolate, listener) {
+function d3_geo_clipPolygon(segments, compare, inside, interpolate, listener) {
   var subject = [],
       clip = [];
 
@@ -37,7 +37,7 @@ function d3_geo_clipPolygon(segments, compare, interpolate, listener) {
   if (!subject.length) return;
 
   // TODO first entry should be computed using point-in-polygon.
-  for (var i = 1, e = clip[0].entry, n = clip.length; i < n; ++i) {
+  if (inside) for (var i = 1, e = inside(clip[0].point), n = clip.length; i < n; ++i) {
     clip[i].entry = (e = !e);
   }
 
