@@ -1855,32 +1855,52 @@ d3 = function() {
     return this.each(d3_selection_on(type, listener, capture));
   };
   function d3_selection_on(type, listener, capture) {
-    var name = "__on" + type, i = type.indexOf(".");
+    var name = "__on" + type, i = type.indexOf("."), wrap = d3_selection_onListener;
     if (i > 0) type = type.substring(0, i);
+    var filter = d3_selection_onFilters.get(type);
+    if (filter) type = filter, wrap = d3_selection_onFilter;
     function onRemove() {
-      var wrapper = this[name];
-      if (wrapper) {
-        this.removeEventListener(type, wrapper, wrapper.$);
+      var l = this[name];
+      if (l) {
+        this.removeEventListener(type, l, l.$);
         delete this[name];
       }
     }
     function onAdd() {
-      var node = this, args = d3_array(arguments);
+      var l = wrap(listener, d3_array(arguments));
       onRemove.call(this);
-      this.addEventListener(type, this[name] = wrapper, wrapper.$ = capture);
-      wrapper._ = listener;
-      function wrapper(e) {
-        var o = d3.event;
-        d3.event = e;
-        args[0] = node.__data__;
-        try {
-          listener.apply(node, args);
-        } finally {
-          d3.event = o;
-        }
-      }
+      this.addEventListener(type, this[name] = l, l.$ = capture);
+      l._ = listener;
     }
     return listener ? onAdd : onRemove;
+  }
+  var d3_selection_onFilters = d3.map({
+    mouseenter: "mouseover",
+    mouseleave: "mouseout"
+  });
+  d3_selection_onFilters.forEach(function(k) {
+    if ("on" + k in document) d3_selection_onFilters.remove(k);
+  });
+  function d3_selection_onListener(listener, argumentz) {
+    return function(e) {
+      var o = d3.event;
+      d3.event = e;
+      argumentz[0] = this.__data__;
+      try {
+        listener.apply(this, argumentz);
+      } finally {
+        d3.event = o;
+      }
+    };
+  }
+  function d3_selection_onFilter(listener, argumentz) {
+    var l = d3_selection_onListener(listener, argumentz);
+    return function(e) {
+      var target = this, related = e.relatedTarget;
+      if (!related || related !== target && !(related.compareDocumentPosition(target) & 8)) {
+        l.call(target, e);
+      }
+    };
   }
   d3_selectionPrototype.each = function(callback) {
     return d3_selection_each(this, function(node, i, j) {
