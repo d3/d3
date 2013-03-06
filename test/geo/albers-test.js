@@ -7,9 +7,7 @@ var suite = vows.describe("d3.geo.albers");
 
 suite.addBatch({
   "albers": {
-    topic: function() {
-      return d3.geo.albers();
-    },
+    topic: d3.geo.albers,
     "Arctic": function(albers) {
       var coords = albers([0, 85]);
       assert.inDelta(coords[0], 1031.393796, 1e-6);
