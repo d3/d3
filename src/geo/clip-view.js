@@ -56,9 +56,9 @@ function d3_geo_clipView(x0, y0, x1, y1) {
     }
 
     function interpolate(from, to, direction, listener) {
-      if (Math.abs(from[0] - to[0]) > ε && Math.abs(from[1] - to[1]) > ε) {
-        var a = corner(from, direction),
-            a1 = corner(to, direction);
+      var a = corner(from, direction),
+          a1 = corner(to, direction);
+      if (a !== a1) {
         do {
           listener.point(a === 0 || a === 3 ? x0 : x1, a > 1 ? y1 : y0);
         } while ((a = (a + direction + 4) % 4) !== a1);
