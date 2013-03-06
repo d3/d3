@@ -1,4 +1,4 @@
-d3.geo.clipView = function d3_geo_clipView(x0, y0, x1, y1) {
+function d3_geo_clipView(x0, y0, x1, y1) {
 
   // TODO optimise polygon clipping.
   var clipPolygon = d3.geom.polygon([[x0, y0], [x0, y1], [x1, y1], [x1, y0]]).clip,
@@ -77,7 +77,6 @@ d3.geo.clipView = function d3_geo_clipView(x0, y0, x1, y1) {
     }
 
     function ringEnd() {
-      ring.pop();
       ring = clipPolygon(ring);
       var n = ring.length;
       if (n) {

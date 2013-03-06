@@ -6196,7 +6196,7 @@ d3 = function() {
       return d3_geo_spherical(q);
     }
   }
-  d3.geo.clipView = function d3_geo_clipView(x0, y0, x1, y1) {
+  function d3_geo_clipView(x0, y0, x1, y1) {
     var clipPolygon = d3.geom.polygon([ [ x0, y0 ], [ x0, y1 ], [ x1, y1 ], [ x1, y0 ] ]).clip, clipLine = d3_geo_clipViewLine(x0, x1, y0, y1);
     return function(listener) {
       var clip = {
@@ -6260,7 +6260,6 @@ d3 = function() {
         ring = [];
       }
       function ringEnd() {
-        ring.pop();
         ring = clipPolygon(ring);
         var n = ring.length;
         if (n) {
@@ -6277,7 +6276,7 @@ d3 = function() {
       }
       return clip;
     };
-  };
+  }
   function d3_geo_clipViewLine(xMin, xMax, yMin, yMax) {
     return function(a, b) {
       var dx = b[0] - a[0], dy = b[1] - a[1], t = [ 0, 1 ];
@@ -6801,7 +6800,7 @@ d3 = function() {
     var project, rotate, projectRotate, projectResample = d3_geo_resample(function(x, y) {
       x = project(x, y);
       return [ x[0] * k + δx, δy - x[1] * k ];
-    }), k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, clip = d3_geo_clipAntimeridian, clipAngle = null;
+    }), k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, preclip = d3_geo_clipAntimeridian, postclip = d3_identity, clipAngle = null, clipExtent = null;
     function projection(point) {
       point = projectRotate(point[0] * d3_radians, point[1] * d3_radians);
       return [ point[0] * k + δx, δy - point[1] * k ];
@@ -6811,11 +6810,17 @@ d3 = function() {
       return point && [ point[0] * d3_degrees, point[1] * d3_degrees ];
     }
     projection.stream = function(stream) {
-      return d3_geo_projectionRadiansRotate(rotate, clip(projectResample(stream)));
+      return d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(stream))));
     };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;
-      clip = _ == null ? (clipAngle = _, d3_geo_clipAntimeridian) : d3_geo_clipCircle(clipAngle = +_);
+      preclip = _ == null ? (clipAngle = _, d3_geo_clipAntimeridian) : d3_geo_clipCircle(clipAngle = +_);
+      return projection;
+    };
+    projection.clipExtent = function(_) {
+      if (!arguments.length) return clipExtent;
+      clipExtent = _;
+      postclip = _ == null ? d3_identity : d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]);
       return projection;
     };
     projection.scale = function(_) {
