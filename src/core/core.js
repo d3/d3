@@ -13,3 +13,7 @@ function d3_target(d) {
 function d3_source(d) {
   return d.source;
 }
+
+function d3_acos(x) {
+  return Math.acos(Math.max(-1, Math.min(1, x)));
+}

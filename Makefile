@@ -183,6 +183,7 @@ d3.geo.js: \
 	src/geo/stream.js \
 	src/geo/spherical.js \
 	src/geo/cartesian.js \
+	src/geo/distance.js \
 	src/geo/resample.js \
 	src/geo/albers-usa.js \
 	src/geo/albers.js \

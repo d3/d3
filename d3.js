@@ -8,6 +8,9 @@ d3 = function() {
   function d3_source(d) {
     return d.source;
   }
+  function d3_acos(x) {
+    return Math.acos(Math.max(-1, Math.min(1, x)));
+  }
   var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -5402,6 +5405,10 @@ d3 = function() {
     d[1] /= l;
     d[2] /= l;
   }
+  d3.geo.distance = function(a, b) {
+    var Δλ = (b[0] - a[0]) * d3_radians, φ0 = a[1] * d3_radians, φ1 = b[1] * d3_radians, sinΔλ = Math.sin(Δλ), cosΔλ = Math.cos(Δλ), sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0), sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1), t;
+    return Math.atan2(Math.sqrt((t = cosφ1 * sinΔλ) * t + (t = cosφ0 * sinφ1 - sinφ0 * cosφ1 * cosΔλ) * t), sinφ0 * sinφ1 + cosφ0 * cosφ1 * cosΔλ);
+  };
   function d3_geo_resample(project) {
     var δ2 = .5, maxDepth = 16;
     function resample(stream) {
@@ -5699,7 +5706,7 @@ d3 = function() {
     var a = d3_geo_cartesian(point);
     a[0] -= cr;
     d3_geo_cartesianNormalize(a);
-    var angle = Math.acos(Math.max(-1, Math.min(1, -a[1])));
+    var angle = d3_acos(-a[1]);
     return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI - ε) % (2 * Math.PI);
   }
   function d3_geo_clip(pointVisible, clipLine, interpolate) {
@@ -6042,7 +6049,7 @@ d3 = function() {
       };
     }
     function intersect(a, b) {
-      var pa = d3_geo_cartesian(a, 0), pb = d3_geo_cartesian(b, 0);
+      var pa = d3_geo_cartesian(a), pb = d3_geo_cartesian(b);
       var n1 = [ 1, 0, 0 ], n2 = d3_geo_cartesianCross(pa, pb), n2n2 = d3_geo_cartesianDot(n2, n2), n1n2 = n2[0], determinant = n2n2 - n1n2 * n1n2;
       if (!determinant) return a;
       var c1 = cr * n2n2 / determinant, c2 = -cr * n1n2 / determinant, n1xn2 = d3_geo_cartesianCross(n1, n2), A = d3_geo_cartesianScale(n1, c1), B = d3_geo_cartesianScale(n2, c2);
@@ -6074,7 +6081,7 @@ d3 = function() {
     return d3_geo_projection(d3_geo_gnomonic);
   }).raw = d3_geo_gnomonic;
   d3.geo.graticule = function() {
-    var x1, x0, y1, y0, dx = 22.5, dy = dx, x, y, precision = 2.5;
+    var x1, x0, X1, X0, y1, y0, Y1, Y0, dx = 10, dy = dx, DX = 90, DY = 360, x, y, X, Y, precision = 2.5;
     function graticule() {
       return {
         type: "MultiLineString",
@@ -6082,7 +6089,11 @@ d3 = function() {
       };
     }
     function lines() {
-      return d3.range(Math.ceil(x0 / dx) * dx, x1, dx).map(x).concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(y));
+      return d3.range(Math.ceil(X0 / DX) * DX, X1, DX).map(X).concat(d3.range(Math.ceil(Y0 / DY) * DY, Y1, DY).map(Y)).concat(d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(function(x) {
+        return Math.abs(x % DX) > ε;
+      }).map(x)).concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).filter(function(y) {
+        return Math.abs(y % DY) > ε;
+      }).map(y));
     }
     graticule.lines = function() {
       return lines().map(function(coordinates) {
@@ -6095,10 +6106,22 @@ d3 = function() {
     graticule.outline = function() {
       return {
         type: "Polygon",
-        coordinates: [ x(x0).concat(y(y1).slice(1), x(x1).reverse().slice(1), y(y0).reverse().slice(1)) ]
+        coordinates: [ X(X0).concat(Y(Y1).slice(1), X(X1).reverse().slice(1), Y(Y0).reverse().slice(1)) ]
       };
     };
     graticule.extent = function(_) {
+      if (!arguments.length) return graticule.minorExtent();
+      return graticule.majorExtent(_).minorExtent(_);
+    };
+    graticule.majorExtent = function(_) {
+      if (!arguments.length) return [ [ X0, Y0 ], [ X1, Y1 ] ];
+      X0 = +_[0][0], X1 = +_[1][0];
+      Y0 = +_[0][1], Y1 = +_[1][1];
+      if (X0 > X1) _ = X0, X0 = X1, X1 = _;
+      if (Y0 > Y1) _ = Y0, Y0 = Y1, Y1 = _;
+      return graticule.precision(precision);
+    };
+    graticule.minorExtent = function(_) {
       if (!arguments.length) return [ [ x0, y0 ], [ x1, y1 ] ];
       x0 = +_[0][0], x1 = +_[1][0];
       y0 = +_[0][1], y1 = +_[1][1];
@@ -6107,6 +6130,15 @@ d3 = function() {
       return graticule.precision(precision);
     };
     graticule.step = function(_) {
+      if (!arguments.length) return graticule.minorStep();
+      return graticule.majorStep(_).minorStep(_);
+    };
+    graticule.majorStep = function(_) {
+      if (!arguments.length) return [ DX, DY ];
+      DX = +_[0], DY = +_[1];
+      return graticule;
+    };
+    graticule.minorStep = function(_) {
       if (!arguments.length) return [ dx, dy ];
       dx = +_[0], dy = +_[1];
       return graticule;
@@ -6114,11 +6146,13 @@ d3 = function() {
     graticule.precision = function(_) {
       if (!arguments.length) return precision;
       precision = +_;
-      x = d3_geo_graticuleX(y0, y1, precision);
+      x = d3_geo_graticuleX(y0, y1, 90);
       y = d3_geo_graticuleY(x0, x1, precision);
+      X = d3_geo_graticuleX(Y0, Y1, 90);
+      Y = d3_geo_graticuleY(X0, X1, precision);
       return graticule;
     };
-    return graticule.extent([ [ -180 + ε, -90 + ε ], [ 180 - ε, 90 - ε ] ]);
+    return graticule.majorExtent([ [ -180, -90 + ε ], [ 180, 90 - ε ] ]).minorExtent([ [ -180, -80 - ε ], [ 180, 80 + ε ] ]);
   };
   function d3_geo_graticuleX(y0, y1, dy) {
     var y = d3.range(y0, y1 - ε, dy).concat(y1);
@@ -6154,35 +6188,28 @@ d3 = function() {
     return interpolate;
   }
   d3.geo.greatArc = function() {
-    var source = d3_source, source_, target = d3_target, target_, precision = 6 * d3_radians, interpolate;
+    var source = d3_source, source_, target = d3_target, target_;
     function greatArc() {
-      var p0 = source_ || source.apply(this, arguments), p1 = target_ || target.apply(this, arguments), i = interpolate || d3.geo.interpolate(p0, p1), t = 0, dt = precision / i.distance, coordinates = [ p0 ];
-      while ((t += dt) < 1) coordinates.push(i(t));
-      coordinates.push(p1);
       return {
         type: "LineString",
-        coordinates: coordinates
+        coordinates: [ source_ || source.apply(this, arguments), target_ || target.apply(this, arguments) ]
       };
     }
     greatArc.distance = function() {
-      return (interpolate || d3.geo.interpolate(source_ || source.apply(this, arguments), target_ || target.apply(this, arguments))).distance;
+      return d3.geo.distance(source_ || source.apply(this, arguments), target_ || target.apply(this, arguments));
     };
     greatArc.source = function(_) {
       if (!arguments.length) return source;
       source = _, source_ = typeof _ === "function" ? null : _;
-      interpolate = source_ && target_ ? d3.geo.interpolate(source_, target_) : null;
       return greatArc;
     };
     greatArc.target = function(_) {
       if (!arguments.length) return target;
       target = _, target_ = typeof _ === "function" ? null : _;
-      interpolate = source_ && target_ ? d3.geo.interpolate(source_, target_) : null;
       return greatArc;
     };
-    greatArc.precision = function(_) {
-      if (!arguments.length) return precision / d3_radians;
-      precision = _ * d3_radians;
-      return greatArc;
+    greatArc.precision = function() {
+      return arguments.length ? greatArc : 0;
     };
     return greatArc;
   };

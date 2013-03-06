@@ -71,8 +71,8 @@ function d3_geo_clipCircle(degrees) {
 
   // Intersects the great circle between a and b with the clip circle.
   function intersect(a, b) {
-    var pa = d3_geo_cartesian(a, 0),
-        pb = d3_geo_cartesian(b, 0);
+    var pa = d3_geo_cartesian(a),
+        pb = d3_geo_cartesian(b);
     // We have two planes, n1.p = d1 and n2.p = d2.
     // Find intersection line p(t) = c1 n1 + c2 n2 + t (n1 x n2).
     var n1 = [1, 0, 0], // normal
