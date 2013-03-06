@@ -177,7 +177,7 @@ function d3_geo_clipView(x0, y0, x1, y1) {
 }
 
 function d3_geo_clipViewT(num, denominator, t) {
-  if (Math.abs(denominator) < ε) return num > ε;
+  if (Math.abs(denominator) < ε) return num < 0;
 
   var u = num / denominator;
 
