@@ -230,10 +230,29 @@ suite.addBatch({
       assert.strictEqual(nest().map(array), array);
     },
     "handles keys that are built-in prototype properties": function(nest) {
-      var keys = nest()
+      var map = nest()
           .key(String)
-          .map(["hasOwnProperty"]);
-      assert.deepEqual(keys, {hasOwnProperty: ["hasOwnProperty"]});
+          .map(["hasOwnProperty"]); // but note __proto__ wouldn’t work!
+      assert.deepEqual(map, {hasOwnProperty: ["hasOwnProperty"]});
+    },
+    "a custom map implementation can be specified": function(nest) {
+      var map = nest()
+          .key(String)
+          .map(["hasOwnProperty", "__proto__"], d3.map);
+      assert.deepEqual(map.entries(), [
+        {key: "hasOwnProperty", value: ["hasOwnProperty"]},
+        {key: "__proto__", value: ["__proto__"]}
+      ]);
+    },
+    "the custom map implementation works on multiple levels of nesting": function(nest) {
+      var map = nest()
+          .key(function(d) { return d.foo; })
+          .key(function(d) { return d.bar; })
+          .map([{foo: 42, bar: "red"}], d3.map);
+      assert.deepEqual(map.keys(), ["42"]);
+      assert.deepEqual(map.get("42").keys(), ["red"]);
+      assert.deepEqual(map.get("42").values(), [[{foo: 42, bar: "red"}]]);
+      assert.deepEqual(map.get("42").entries(), [{key: "red", value: [{foo: 42, bar: "red"}]}]);
     }
   }
 });
