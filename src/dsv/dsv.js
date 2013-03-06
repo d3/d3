@@ -2,19 +2,18 @@ function d3_dsv(delimiter, mimeType) {
   var reFormat = new RegExp("[\"" + delimiter + "\n]"),
       delimiterCode = delimiter.charCodeAt(0);
 
-  function dsv(url, callback) {
-    return d3.xhr(url, mimeType, callback).response(response);
+  function dsv(url, callback, make) {
+    return d3.xhr(url, mimeType, callback).response(function(req) { return response(req, make); });
   }
 
-  function response(request) {
-    return dsv.parse(request.responseText);
+  function response(request, make) {
+    return dsv.parse(request.responseText, make);
   }
 
-  dsv.parse = function(text) {
-    var o;
+  dsv.parse = function(text, make) {
     return dsv.parseRows(text, function(row) {
-      if (o) return o(row);
-      o = new Function("d", "return {" + row.map(function(name, i) {
+      if (make) return make(row);
+      make = new Function("d", "return {" + row.map(function(name, i) {
         return JSON.stringify(name) + ": d[" + i + "]";
       }).join(",") + "}");
     });
