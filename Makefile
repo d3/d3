@@ -211,6 +211,7 @@ d3.geo.js: \
 	src/geo/path-centroid.js \
 	src/geo/area.js \
 	src/geo/centroid.js \
+	src/geo/length.js \
 	src/geo/projection.js \
 	src/geo/rotation.js \
 	src/geo/stereographic.js \
