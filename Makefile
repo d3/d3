@@ -33,6 +33,7 @@ d3.core.js: \
 	src/core/class.js \
 	src/core/array.js \
 	src/core/map.js \
+	src/core/set.js \
 	src/core/identity.js \
 	src/core/true.js \
 	src/core/functor.js \
