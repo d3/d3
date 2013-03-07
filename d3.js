@@ -1091,7 +1091,7 @@ d3 = function() {
     return name == "transform" ? d3.interpolateTransform : d3.interpolate;
   }
   d3.interpolators = [ d3.interpolateObject, function(a, b) {
-    return b instanceof Array && d3.interpolateArray(a, b);
+    return Array.isArray(b) && d3.interpolateArray(a, b);
   }, function(a, b) {
     return (typeof a === "string" || typeof b === "string") && d3.interpolateString(a + "", b + "");
   }, function(a, b) {
@@ -5416,6 +5416,22 @@ d3 = function() {
       return rows;
     };
     dsv.format = function(rows) {
+      if (Array.isArray(rows[0])) return dsv.formatRows(rows);
+      var fieldSet = new d3_Set(), fields = [];
+      rows.forEach(function(row) {
+        for (var field in row) {
+          if (!fieldSet.has(field)) {
+            fields.push(fieldSet.add(field));
+          }
+        }
+      });
+      return [ fields ].concat(rows.map(function(row) {
+        return fields.map(function(field) {
+          return formatValue(row[field]);
+        }).join(delimiter);
+      })).join("\n");
+    };
+    dsv.formatRows = function(rows) {
       return rows.map(formatRow).join("\n");
     };
     function formatRow(row) {

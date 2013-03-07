@@ -160,6 +160,31 @@ suite.addBatch({
     topic: function() {
       return d3.csv.format;
     },
+    "takes an array of objects as input": function(format) {
+      assert.equal(format([{a: 1, b: 2, c: 3}]), "a,b,c\n1,2,3");
+    },
+    "computes the union of all fields": function(format) {
+      assert.equal(format([
+        {a: 1},
+        {a: 1, b: 2},
+        {a: 1, b: 2, c: 3},
+        {b: 1, c: 2},
+        {c: 1}
+      ]), "a,b,c\n1,,\n1,2,\n1,2,3\n,1,2\n,,1");
+    },
+    "orders field by first-seen": function(format) {
+      assert.equal(format([
+        {a: 1, b: 2},
+        {c: 3, b: 4},
+        {c: 5, a: 1, b: 2}
+      ]), "a,b,c\n1,2,\n,4,3\n1,2,5");
+    }
+  },
+
+  "formatRows": {
+    topic: function() {
+      return d3.csv.formatRows;
+    },
     "takes an array of arrays as input": function(format) {
       assert.equal(format([["a", "b", "c"], ["1", "2", "3"]]), "a,b,c\n1,2,3");
     },
