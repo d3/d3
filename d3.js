@@ -6174,7 +6174,7 @@ d3 = function() {
     d3_geo_clipPolygonLinkCircular(subject);
     d3_geo_clipPolygonLinkCircular(clip);
     if (!subject.length) return;
-    if (inside) for (var i = 1, e = inside(clip[0].point), n = clip.length; i < n; ++i) {
+    if (inside) for (var i = 1, e = !inside(clip[0].point), n = clip.length; i < n; ++i) {
       clip[i].entry = e = !e;
     }
     var start = subject[0], current, points, point;
@@ -6232,16 +6232,20 @@ d3 = function() {
         },
         polygonEnd: function() {
           listener = listener_;
-          if (segments.length) {
+          if ((segments = d3.merge(segments)).length) {
             listener.polygonStart();
-            d3_geo_clipPolygon(d3.merge(segments), compare, inside, interpolate, listener);
+            d3_geo_clipPolygon(segments, compare, inside, interpolate, listener);
             listener.polygonEnd();
+          } else if (insidePolygon([ x0, y0 ])) {
+            listener.polygonStart(), listener.lineStart();
+            interpolate(null, null, 1, listener);
+            listener.lineEnd(), listener.polygonEnd();
           }
           segments = polygon = ring = null;
         }
       };
       function inside(point) {
-        var a = corner(point, -1), i = !insidePolygon([ a === 0 || a === 3 ? x0 : x1, a > 1 ? y1 : y0 ]);
+        var a = corner(point, -1), i = insidePolygon([ a === 0 || a === 3 ? x0 : x1, a > 1 ? y1 : y0 ]);
         return i;
       }
       function insidePolygon(p) {
@@ -6263,8 +6267,8 @@ d3 = function() {
         return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]);
       }
       function interpolate(from, to, direction, listener) {
-        var a = corner(from, direction), a1 = corner(to, direction);
-        if (a !== a1) {
+        var a = 0, a1 = 0;
+        if (from == null || (a = corner(from, direction)) !== (a1 = corner(to, direction)) || comparePoints(from, to) < 0 ^ direction > 0) {
           do {
             listener.point(a === 0 || a === 3 ? x0 : x1, a > 1 ? y1 : y0);
           } while ((a = (a + direction + 4) % 4) !== a1);
@@ -6326,7 +6330,9 @@ d3 = function() {
       return Math.abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3 : Math.abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1 : Math.abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0 : direction > 0 ? 3 : 2;
     }
     function compare(a, b) {
-      a = a.point, b = b.point;
+      return comparePoints(a.point, b.point);
+    }
+    function comparePoints(a, b) {
       var ca = corner(a, 1), cb = corner(b, 1);
       return ca !== cb ? ca - cb : ca === 0 ? b[1] - a[1] : ca === 1 ? a[0] - b[0] : ca === 2 ? a[1] - b[1] : b[0] - a[0];
     }

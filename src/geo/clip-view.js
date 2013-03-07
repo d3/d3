@@ -17,10 +17,14 @@ function d3_geo_clipView(x0, y0, x1, y1) {
       },
       polygonEnd: function() {
         listener = listener_;
-        if (segments.length) {
+        if ((segments = d3.merge(segments)).length) {
           listener.polygonStart();
-          d3_geo_clipPolygon(d3.merge(segments), compare, inside, interpolate, listener);
+          d3_geo_clipPolygon(segments, compare, inside, interpolate, listener);
           listener.polygonEnd();
+        } else if (insidePolygon([x0, y0])) {
+          listener.polygonStart(), listener.lineStart();
+          interpolate(null, null, 1, listener);
+          listener.lineEnd(), listener.polygonEnd();
         }
         segments = polygon = ring = null;
       }
@@ -28,7 +32,7 @@ function d3_geo_clipView(x0, y0, x1, y1) {
 
     function inside(point) {
       var a = corner(point, -1),
-          i = !insidePolygon([a === 0 || a === 3 ? x0 : x1, a > 1 ? y1 : y0]);
+          i = insidePolygon([a === 0 || a === 3 ? x0 : x1, a > 1 ? y1 : y0]);
       return i;
     }
 
@@ -56,9 +60,10 @@ function d3_geo_clipView(x0, y0, x1, y1) {
     }
 
     function interpolate(from, to, direction, listener) {
-      var a = corner(from, direction),
-          a1 = corner(to, direction);
-      if (a !== a1) {
+      var a = 0, a1 = 0;
+      if (from == null ||
+          (a = corner(from, direction)) !== (a1 = corner(to, direction)) ||
+          comparePoints(from, to) < 0 ^ direction > 0) {
         do {
           listener.point(a === 0 || a === 3 ? x0 : x1, a > 1 ? y1 : y0);
         } while ((a = (a + direction + 4) % 4) !== a1);
@@ -139,7 +144,10 @@ function d3_geo_clipView(x0, y0, x1, y1) {
   }
 
   function compare(a, b) {
-    a = a.point, b = b.point;
+    return comparePoints(a.point, b.point);
+  }
+
+  function comparePoints(a, b) {
     var ca = corner(a, 1),
         cb = corner(b, 1);
     return ca !== cb ? ca - cb
