@@ -36,8 +36,7 @@ function d3_geo_clipPolygon(segments, compare, inside, interpolate, listener) {
   d3_geo_clipPolygonLinkCircular(clip);
   if (!subject.length) return;
 
-  // TODO first entry should be computed using point-in-polygon.
-  if (inside) for (var i = 1, e = inside(clip[0].point), n = clip.length; i < n; ++i) {
+  if (inside) for (var i = 1, e = !inside(clip[0].point), n = clip.length; i < n; ++i) {
     clip[i].entry = (e = !e);
   }
 
