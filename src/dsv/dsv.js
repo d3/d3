@@ -110,7 +110,7 @@ function d3_dsv(delimiter, mimeType) {
       }
     });
 
-    return [fields].concat(rows.map(function(row) {
+    return [fields.map(formatValue).join(delimiter)].concat(rows.map(function(row) {
       return fields.map(function(field) {
         return formatValue(row[field]);
       }).join(delimiter);

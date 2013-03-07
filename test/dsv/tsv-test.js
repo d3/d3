@@ -125,6 +125,34 @@ suite.addBatch({
     topic: function() {
       return d3.tsv.format;
     },
+    "takes an array of objects as input": function(format) {
+      assert.equal(format([{a: 1, b: 2, c: 3}]), "a\tb\tc\n1\t2\t3");
+    },
+    "escapes field names containing special characters": function(format) {
+      assert.equal(format([{"foo\tbar": true}]), "\"foo\tbar\"\ntrue");
+    },
+    "computes the union of all fields": function(format) {
+      assert.equal(format([
+        {a: 1},
+        {a: 1, b: 2},
+        {a: 1, b: 2, c: 3},
+        {b: 1, c: 2},
+        {c: 1}
+      ]), "a\tb\tc\n1\t\t\n1\t2\t\n1\t2\t3\n\t1\t2\n\t\t1");
+    },
+    "orders field by first-seen": function(format) {
+      assert.equal(format([
+        {a: 1, b: 2},
+        {c: 3, b: 4},
+        {c: 5, a: 1, b: 2}
+      ]), "a\tb\tc\n1\t2\t\n\t4\t3\n1\t2\t5");
+    }
+  },
+
+  "formatRows": {
+    topic: function() {
+      return d3.tsv.formatRows;
+    },
     "takes an array of arrays as input": function(format) {
       assert.equal(format([["a", "b", "c"], ["1", "2", "3"]]), "a\tb\tc\n1\t2\t3");
     },

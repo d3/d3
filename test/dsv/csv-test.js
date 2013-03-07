@@ -163,6 +163,9 @@ suite.addBatch({
     "takes an array of objects as input": function(format) {
       assert.equal(format([{a: 1, b: 2, c: 3}]), "a,b,c\n1,2,3");
     },
+    "escapes field names containing special characters": function(format) {
+      assert.equal(format([{"foo,bar": true}]), "\"foo,bar\"\ntrue");
+    },
     "computes the union of all fields": function(format) {
       assert.equal(format([
         {a: 1},
