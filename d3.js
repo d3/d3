@@ -2757,11 +2757,11 @@ d3 = function() {
   d3.svg.arc = function() {
     var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_svg_arcCornerRadius, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
     function arc() {
-      var r0 = innerRadius.apply(this, arguments), r1 = outerRadius.apply(this, arguments), a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset, a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset, da = (a1 < a0 && (da = a0, 
-      a0 = a1, a1 = da), a1 - a0), df = da < π ? 0 : 1, c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1), rc = cornerRadius.apply(this, arguments), k = .5522847493, ac, cc, sc, d0, d1, r0c, r1c, x00, y00, x01, y01, df0, x10, y10, x11, y11, df1, f0, x0c, y0c, k0c, df1, f1, x1c, y1c, k1c;
+      var r0 = innerRadius.apply(this, arguments), r1 = outerRadius.apply(this, arguments), rc = cornerRadius.apply(this, arguments), a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset, a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset, da = (a1 < a0 && (da = a0, 
+      a0 = a1, a1 = da), a1 - a0), df = da < π ? 0 : 1, c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1), k = .5522847493, ac, cc, sc, d0, d1, r0c, r1c, x00, y00, x01, y01, df0, x10, y10, x11, y11, df1, f0, x0c, y0c, k0c, df1, f1, x1c, y1c, k1c;
       function _prepOuterCorners() {
         d1 = r1 / (r1 - rc);
-        if (isNaN(r1c = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc))) throw new Error(d3_svg_cr_error);
+        if (isNaN(r1c = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc)) || r1c < 0) throw new Error(d3_svg_cr_error);
         x10 = d1 * (r1c * c0 - rc * s0);
         y10 = d1 * (r1c * s0 + rc * c0);
         x11 = d1 * (r1c * c1 + rc * s1);
@@ -2769,10 +2769,10 @@ d3 = function() {
         df1 = x10 * y11 - x11 * y10;
       }
       function _outerCornerArcs() {
-        return "M" + r1c * c0 + "," + r1c * s0 + "A" + rc + "," + rc + " 0 0,1 " + x10 + "," + y10 + "A" + r1 + "," + r1 + " 0 " + (df1 > 0 ? 0 : 1) + ",1 " + x11 + "," + y11 + "A" + rc + "," + rc + " 0 0,1 " + r1c * c1 + "," + r1c * s1;
+        return "M" + r1c * c0 + "," + r1c * s0 + "A" + rc + "," + rc + " 0 0,1 " + x10 + "," + y10 + (r1c > 0 ? "A" + r1 + "," + r1 + " 0 " + (df1 > 0 ? 0 : 1) + ",1 " + x11 + "," + y11 : "") + "A" + rc + "," + rc + " 0 0,1 " + r1c * c1 + "," + r1c * s1;
       }
       function _prepInnerCorners() {
-        if (isNaN(r0c = Math.sqrt((r0 + rc) * (r0 + rc) - rc * rc))) throw new Error(d3_svg_cr_error);
+        if (isNaN(r0c = Math.sqrt((r0 + rc) * (r0 + rc) - rc * rc)) || r0c - r1c > ε) throw new Error(d3_svg_cr_error);
         d0 = r0 / (r0 + rc);
         x00 = d0 * (r0c * c0 - rc * s0);
         y00 = d0 * (r0c * s0 + rc * c0);
@@ -2784,7 +2784,9 @@ d3 = function() {
         return "L" + r0c * c1 + "," + r0c * s1 + "A" + rc + "," + rc + " 0 0,1 " + x01 + "," + y01 + "A" + r0 + "," + r0 + " 0 " + (df0 > 0 ? 0 : 1) + ",0 " + x00 + "," + y00 + "A" + rc + "," + rc + " 0 0,1 " + r0c * c0 + "," + r0c * s0;
       }
       function _prepMidSines() {
-        ac = (a0 + a1) / 2, cc = Math.cos(ac), sc = Math.sin(ac);
+        ac = (a0 + a1) / 2;
+        cc = Math.cos(ac);
+        sc = Math.sin(ac);
       }
       function _innerCornerBeziers(prepSines) {
         if (prepSines !== false) _prepMidSines();
@@ -2834,7 +2836,7 @@ d3 = function() {
     };
     return arc;
   };
-  var d3_svg_arcOffset = -π / 2, d3_svg_arcMax = 2 * π - 1e-6, d3_svg_cr_error = "arc corner radius is too large";
+  var d3_svg_arcOffset = -π / 2, d3_svg_arcMax = 2 * π - ε, d3_svg_cr_error = "arc corner radius is too large";
   function d3_svg_arcInnerRadius(d) {
     return d.innerRadius;
   }
