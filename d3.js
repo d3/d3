@@ -2761,7 +2761,7 @@ d3 = function() {
       a0 = a1, a1 = da), a1 - a0), df = da < π ? 0 : 1, c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1), k = .5522847493, ac, cc, sc, d0, d1, r0c, r1c, x00, y00, x01, y01, df0, x10, y10, x11, y11, df1, f0, x0c, y0c, k0c, df1, f1, x1c, y1c, k1c;
       function _prepOuterCorners() {
         d1 = r1 / (r1 - rc);
-        if (isNaN(r1c = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc)) || r1c < 0) throw new Error(d3_svg_cr_error);
+        if (isNaN(r1c = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc))) throw new Error(d3_svg_cr_error);
         x10 = d1 * (r1c * c0 - rc * s0);
         y10 = d1 * (r1c * s0 + rc * c0);
         x11 = d1 * (r1c * c1 + rc * s1);

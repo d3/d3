@@ -27,7 +27,7 @@ d3.svg.arc = function() {
 
     function _prepOuterCorners() {
       d1 = r1 / (r1 - rc);
-      if (isNaN(r1c = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc)) || r1c < 0)
+      if (isNaN(r1c = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc)))
         throw new Error(d3_svg_cr_error);
       x10 = d1 * (r1c * c0 - rc * s0);
       y10 = d1 * (r1c * s0 + rc * c0);
