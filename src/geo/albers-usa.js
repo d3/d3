@@ -2,19 +2,22 @@
 // parallels for each region comes from USGS, which is published here:
 // http://egsc.usgs.gov/isb/pubs/MapProjections/projections.html#albers
 d3.geo.albersUsa = function() {
-  var lower48 = d3.geo.albers();
+  var lower48 = d3.geo.conicEqualArea()
+      .rotate([98, 0])
+      .center([0, 38])
+      .parallels([29.5, 45.5]);
 
-  var alaska = d3.geo.albers()
+  var alaska = d3.geo.conicEqualArea()
       .rotate([160, 0])
       .center([0, 60])
       .parallels([55, 65]);
 
-  var hawaii = d3.geo.albers()
+  var hawaii = d3.geo.conicEqualArea()
       .rotate([160, 0])
       .center([0, 20])
       .parallels([8, 18]);
 
-  var puertoRico = d3.geo.albers()
+  var puertoRico = d3.geo.conicEqualArea()
       .rotate([60, 0])
       .center([0, 10])
       .parallels([8, 18]);
@@ -66,7 +69,7 @@ d3.geo.albersUsa = function() {
     return albersUsa;
   };
 
-  return albersUsa.scale(lower48.scale());
+  return albersUsa.scale(1000);
 };
 
 function d3_geo_albersUsaInvert(projection, extent) {

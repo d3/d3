@@ -181,16 +181,9 @@ d3.layout.js: \
 
 d3.geo.js: \
 	src/geo/geo.js \
-	src/geo/stream.js \
-	src/geo/spherical.js \
-	src/geo/cartesian.js \
-	src/geo/distance.js \
-	src/geo/resample.js \
-	src/geo/albers-usa.js \
-	src/geo/albers.js \
-	src/geo/azimuthal-equal-area.js \
-	src/geo/azimuthal-equidistant.js \
+	src/geo/area.js \
 	src/geo/bounds.js \
+	src/geo/cartesian.js \
 	src/geo/centroid.js \
 	src/geo/circle.js \
 	src/geo/clip.js \
@@ -199,27 +192,37 @@ d3.geo.js: \
 	src/geo/clip-polygon.js \
 	src/geo/clip-view.js \
 	src/geo/compose.js \
-	src/geo/equirectangular.js \
-	src/geo/gnomonic.js \
+	src/geo/distance.js \
 	src/geo/graticule.js \
 	src/geo/haversin.js \
-	src/geo/interpolate.js \
 	src/geo/greatArc.js \
-	src/geo/mercator.js \
-	src/geo/transverse-mercator.js \
-	src/geo/orthographic.js \
-	src/geo/path.js \
-	src/geo/path-buffer.js \
-	src/geo/path-context.js \
-	src/geo/path-area.js \
-	src/geo/path-centroid.js \
-	src/geo/area.js \
-	src/geo/centroid.js \
+	src/geo/interpolate.js \
 	src/geo/length.js \
+	src/geo/path-area.js \
+	src/geo/path-buffer.js \
+	src/geo/path-centroid.js \
+	src/geo/path-context.js \
+	src/geo/path.js \
 	src/geo/projection.js \
+	src/geo/resample.js \
 	src/geo/rotation.js \
+	src/geo/spherical.js \
+	src/geo/stream.js \
+	src/geo/albers.js \
+	src/geo/albers-usa.js \
+	src/geo/azimuthal.js \
+	src/geo/azimuthal-equal-area.js \
+	src/geo/azimuthal-equidistant.js \
+	src/geo/conic.js \
+	src/geo/conic-conformal.js \
+	src/geo/conic-equal-area.js \
+	src/geo/conic-equidistant.js \
+	src/geo/equirectangular.js \
+	src/geo/gnomonic.js \
+	src/geo/mercator.js \
+	src/geo/orthographic.js \
 	src/geo/stereographic.js \
-	src/geo/azimuthal.js
+	src/geo/transverse-mercator.js
 
 d3.dsv.js: \
 	src/dsv/dsv.js \

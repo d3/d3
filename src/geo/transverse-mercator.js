@@ -8,8 +8,8 @@ function d3_geo_transverseMercator(λ, φ) {
 
 d3_geo_transverseMercator.invert = function(x, y) {
   return [
-    Math.atan2(d3_geo_sinh(x), Math.cos(y)),
-    d3_geo_asin(Math.sin(y) / d3_geo_cosh(x))
+    Math.atan2(d3_sinh(x), Math.cos(y)),
+    d3_asin(Math.sin(y) / d3_cosh(x))
   ];
 };
 
