@@ -271,12 +271,12 @@ d3%js: Makefile
 	@rm $@.tmp
 	@chmod a-w $@
 
-component.json: src/component.js
+component.json: src/component.js d3.js
 	@rm -f $@
 	node src/component.js > $@
 	@chmod a-w $@
 
-package.json: src/package.js
+package.json: src/package.js d3.js
 	@rm -f $@
 	node src/package.js > $@
 	@chmod a-w $@
