@@ -43,16 +43,16 @@ module.exports = {
       assert.equal(result.selection.attr("color"), "#008000");
     },
     "removes an attribute using a constant null": function(result) {
-      assert.equal(result.selection.attr("display"), "");
+      assert.isNull(result.selection.attr("display"));
     },
     "removes an attribute using a function null": function(result) {
-      assert.equal(result.selection.attr("font-size"), "");
+      assert.isNull(result.selection.attr("font-size"));
     },
     "removes a namespaced attribute using a constant null": function(result) {
-      assert.equal(result.selection.attr("xlink:href"), "");
+      assert.isNull(result.selection.attr("xlink:href"));
     },
     "removes a namespaced attribute using a function null": function(result) {
-      assert.equal(result.selection.attr("xlink:type"), "");
+      assert.isNull(result.selection.attr("xlink:type"));
     }
   }
 };

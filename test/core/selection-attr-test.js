@@ -57,33 +57,33 @@ suite.addBatch({
     },
     "removes an attribute as null": function(body) {
       body.attr("bgcolor", "red").attr("bgcolor", null);
-      assert.equal(body.attr("bgcolor"), "");
+      assert.isNull(body.attr("bgcolor"));
     },
     "removes an attribute as a function": function(body) {
       body.attr("bgcolor", "red").attr("bgcolor", function() { return null; });
-      assert.equal(body.attr("bgcolor"), "");
+      assert.isNull(body.attr("bgcolor"));
     },
     "removes a namespaced attribute as null": function(body) {
       body.attr("xlink:href", "url").attr("xlink:href", null);
-      assert.equal(body.attr("bgcolor"), "");
+      assert.isNull(body.attr("bgcolor"));
     },
     "removes a namespaced attribute as a function": function(body) {
       body.attr("xlink:href", "url").attr("xlink:href", function() { return null; });
-      assert.equal(body.attr("xlink:href"), "");
+      assert.isNull(body.attr("xlink:href"));
     },
     "removes attributes as a map of null": function(body) {
       document.body.setAttribute("bgcolor", "white");
       document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
       body.attr({bgcolor: null, "xlink:href": null});
-      assert.equal(document.body.getAttribute("bgcolor"), "");
-      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "");
+      assert.isNull(document.body.getAttribute("bgcolor"));
+      assert.isNull(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"));
     },
     "removes attributes as a map of functions that return null": function(body) {
       document.body.setAttribute("bgcolor", "white");
       document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
       body.attr({bgcolor: function() {}, "xlink:href": function() {}});
-      assert.equal(document.body.getAttribute("bgcolor"), "");
-      assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "");
+      assert.isNull(document.body.getAttribute("bgcolor"));
+      assert.isNull(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"));
     },
     "returns the current selection": function(body) {
       assert.isTrue(body.attr("foo", "bar") === body);
@@ -141,30 +141,30 @@ suite.addBatch({
     },
     "removes an attribute as null": function(div) {
       div.attr("href", "url").attr("href", null);
-      assert.equal(div[0][0].getAttribute("href"), "");
-      assert.equal(div[0][1].getAttribute("href"), "");
+      assert.isNull(div[0][0].getAttribute("href"));
+      assert.isNull(div[0][1].getAttribute("href"));
     },
     "removes an attribute as a function": function(div) {
       div.attr("href", "url").attr("href", function() { return null; });
-      assert.equal(div[0][0].getAttribute("href"), "");
-      assert.equal(div[0][1].getAttribute("href"), "");
+      assert.isNull(div[0][0].getAttribute("href"));
+      assert.isNull(div[0][1].getAttribute("href"));
     },
     "removes a namespaced attribute as null": function(div) {
       div.attr("xlink:foo", "bar").attr("xlink:foo", null);
-      assert.equal(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
-      assert.equal(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
+      assert.isNull(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "foo"));
+      assert.isNull(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "foo"));
     },
     "removes a namespaced attribute as a function": function(div) {
       div.attr("xlink:foo", "bar").attr("xlink:foo", function() { return null; });
-      assert.equal(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
-      assert.equal(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "foo"), "");
+      assert.isNull(div[0][0].getAttributeNS("http://www.w3.org/1999/xlink", "foo"));
+      assert.isNull(div[0][1].getAttributeNS("http://www.w3.org/1999/xlink", "foo"));
     },
     "ignores null nodes": function(div) {
       var some = d3.selectAll("div");
       some[0][1] = null;
       some.attr("href", null).attr("href", "url");
       assert.equal(div[0][0].getAttribute("href"), "url");
-      assert.equal(div[0][1].getAttribute("href"), "");
+      assert.isNull(div[0][1].getAttribute("href"));
     },
     "returns the current selection": function(div) {
       assert.isTrue(div.attr("foo", "bar") === div);

@@ -30,7 +30,7 @@ console.log(JSON.stringify({
     }
   },
   "dependencies": {
-    "jsdom": "0.3.x"
+    "jsdom": "~0.5.2"
   },
   "devDependencies": {
     "uglify-js": "2.2.x",
