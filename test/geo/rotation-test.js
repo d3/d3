@@ -23,6 +23,9 @@ suite.addBatch({
     },
     "rotates longitude and latitude": function(rotation) {
       assert.inDelta(rotation([0, 0]), [-54.73561, 30], 1e-6);
+    },
+    "inverse rotation of longitude and latitude": function(rotation) {
+      assert.inDelta(rotation.invert([-54.73561, 30]), [0, 0], 1e-6);
     }
   }
 });
