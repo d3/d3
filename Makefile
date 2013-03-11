@@ -206,6 +206,7 @@ d3.geo.js: \
 	src/geo/interpolate.js \
 	src/geo/greatArc.js \
 	src/geo/mercator.js \
+	src/geo/transverse-mercator.js \
 	src/geo/orthographic.js \
 	src/geo/path.js \
 	src/geo/path-buffer.js \

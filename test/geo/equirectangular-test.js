@@ -12,8 +12,8 @@ suite.addBatch({
     },
 
     "scale": {
-      "defaults to 500 / 2π": function(projection) {
-        assert.equal(projection.scale(), 500 / (2 * Math.PI));
+      "defaults to 150": function(projection) {
+        assert.equal(projection.scale(), 150);
       },
       "is coerced to a number": function(projection) {
         assert.strictEqual(projection.scale("400"), projection);

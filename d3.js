@@ -5445,6 +5445,15 @@ d3 = function() {
   d3.csv = d3_dsv(",", "text/csv");
   d3.tsv = d3_dsv("	", "text/tab-separated-values");
   d3.geo = {};
+  function d3_geo_asin(x) {
+    return x > 1 ? π / 2 : x < -1 ? -π / 2 : Math.asin(x);
+  }
+  function d3_geo_sinh(x) {
+    return (Math.exp(x) - Math.exp(-x)) / 2;
+  }
+  function d3_geo_cosh(x) {
+    return (Math.exp(x) + Math.exp(-x)) / 2;
+  }
   d3.geo.stream = function(object, listener) {
     if (d3_geo_streamObjectType.hasOwnProperty(object.type)) {
       d3_geo_streamObjectType[object.type](object, listener);
@@ -6378,7 +6387,7 @@ d3 = function() {
     return [ λ, φ ];
   }
   (d3.geo.equirectangular = function() {
-    return d3_geo_projection(d3_geo_equirectangular).scale(250 / π);
+    return d3_geo_projection(d3_geo_equirectangular);
   }).raw = d3_geo_equirectangular.invert = d3_geo_equirectangular;
   var d3_geo_gnomonic = d3_geo_azimuthal(function(cosλcosφ) {
     return 1 / cosλcosφ;
@@ -6520,14 +6529,24 @@ d3 = function() {
     return greatArc;
   };
   function d3_geo_mercator(λ, φ) {
-    return [ λ / (2 * π), Math.max(-.5, Math.min(+.5, Math.log(Math.tan(π / 4 + φ / 2)) / (2 * π))) ];
+    return [ λ, Math.log(Math.tan(π / 4 + φ / 2)) ];
   }
   d3_geo_mercator.invert = function(x, y) {
-    return [ 2 * π * x, 2 * Math.atan(Math.exp(2 * π * y)) - π / 2 ];
+    return [ x, 2 * Math.atan(Math.exp(y)) - π / 2 ];
   };
   (d3.geo.mercator = function() {
-    return d3_geo_projection(d3_geo_mercator).scale(500);
+    return d3_geo_projection(d3_geo_mercator);
   }).raw = d3_geo_mercator;
+  function d3_geo_transverseMercator(λ, φ) {
+    var B = Math.cos(φ) * Math.sin(λ);
+    return [ Math.log((1 + B) / (1 - B)) / 2, Math.atan2(Math.tan(φ), Math.cos(λ)) ];
+  }
+  d3_geo_transverseMercator.invert = function(x, y) {
+    return [ Math.atan2(d3_geo_sinh(x), Math.cos(y)), d3_geo_asin(Math.sin(y) / d3_geo_cosh(x)) ];
+  };
+  (d3.geo.transverseMercator = function() {
+    return d3_geo_projection(d3_geo_transverseMercator);
+  }).raw = d3_geo_transverseMercator;
   var d3_geo_orthographic = d3_geo_azimuthal(function() {
     return 1;
   }, Math.asin);

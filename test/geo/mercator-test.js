@@ -8,7 +8,7 @@ var suite = vows.describe("d3.geo.mercator");
 suite.addBatch({
   "mercator": {
     topic: function() {
-      return d3.geo.mercator().translate([0, 0]).scale(100);
+      return d3.geo.mercator().translate([0, 0]).scale(50 / Math.PI);
     },
     "Arctic": function(projection) {
       var coords = projection([0, 85]);
