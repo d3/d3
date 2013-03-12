@@ -15,14 +15,21 @@ d3_dispatch.prototype.on = function(type, listener) {
       name = "";
 
   // Extract optional namespace, e.g., "click.foo"
-  if (i > 0) {
+  if (i >= 0) {
     name = type.substring(i + 1);
     type = type.substring(0, i);
   }
 
-  return arguments.length < 2
+  if (type) return arguments.length < 2
       ? this[type].on(name)
       : this[type].on(name, listener);
+
+  if (arguments.length === 2) {
+    if (listener == null) for (type in this) {
+      if (this.hasOwnProperty(type)) this[type].on(name, null);
+    }
+    return this;
+  }
 };
 
 function d3_dispatch_event(dispatch) {

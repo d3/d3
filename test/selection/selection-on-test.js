@@ -107,6 +107,25 @@ suite.addBatch({
       assert.equal(body.on("click.foo"), f);
       assert.isUndefined(body.on("click"));
       assert.isUndefined(body.on("mouseover.foo"));
+    },
+    "omitting the event type": {
+      "returns undefined when retrieving a listener": function(body) {
+        assert.isUndefined(body.on(".foo"));
+      },
+      "null removes all named event listeners": function(body) {
+        body.on("mouseover.foo", f)
+            .on("click.foo", f)
+            .on("click.foobar", f)
+            .on(".foo", null);
+        function f() {}
+        assert.isUndefined(body.on("mouseover.foo"));
+        assert.isUndefined(body.on("click.foo"));
+        assert.equal(body.on("click.foobar"), f);
+      },
+      "no-op when setting a listener": function(body) {
+        assert.isTrue(body.on(".foo", function() {}) === body);
+        assert.isUndefined(body.on(".foo"));
+      }
     }
   }
 });

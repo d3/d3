@@ -365,11 +365,17 @@ d3 = function() {
   function d3_dispatch() {}
   d3_dispatch.prototype.on = function(type, listener) {
     var i = type.indexOf("."), name = "";
-    if (i > 0) {
+    if (i >= 0) {
       name = type.substring(i + 1);
       type = type.substring(0, i);
     }
-    return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
+    if (type) return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
+    if (arguments.length === 2) {
+      if (listener == null) for (type in this) {
+        if (this.hasOwnProperty(type)) this[type].on(name, null);
+      }
+      return this;
+    }
   };
   function d3_dispatch_event(dispatch) {
     var listeners = [], listenerByName = new d3_Map();
@@ -970,7 +976,17 @@ d3 = function() {
       this.addEventListener(type, this[name] = l, l.$ = capture);
       l._ = listener;
     }
-    return listener ? onAdd : onRemove;
+    function removeAll() {
+      var re = new RegExp("^__on([^\\.]+)" + d3.requote(type) + "$"), match;
+      for (var name in this) {
+        if (match = name.match(re)) {
+          var l = this[name];
+          this.removeEventListener(match[1], l, l.$);
+          delete this[name];
+        }
+      }
+    }
+    return i ? listener ? onAdd : onRemove : listener ? d3_noop : removeAll;
   }
   var d3_selection_onFilters = d3.map({
     mouseenter: "mouseover",

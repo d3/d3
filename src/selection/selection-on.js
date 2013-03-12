@@ -49,7 +49,21 @@ function d3_selection_on(type, listener, capture) {
     l._ = listener;
   }
 
-  return listener ? onAdd : onRemove;
+  function removeAll() {
+    var re = new RegExp("^__on([^\\.]+)" + d3.requote(type) + "$"),
+        match;
+    for (var name in this) {
+      if (match = name.match(re)) {
+        var l = this[name];
+        this.removeEventListener(match[1], l, l.$);
+        delete this[name];
+      }
+    }
+  }
+
+  return i
+      ? listener ? onAdd : onRemove
+      : listener ? d3_noop : removeAll;
 }
 
 var d3_selection_onFilters = d3.map({
