@@ -23,19 +23,15 @@ d3_dispatch.prototype.on = function(type, listener) {
       : this[type].on(name, listener);
 
   if (arguments.length < 2) {
-    var listeners = [];
     for (type in this) {
-      if (!this.hasOwnProperty(type)) continue;
-      listeners.push(this[type].on(name));
+      if (this.hasOwnProperty(type)) return this[type].on(name);
     }
-    return listeners;
+  } else {
+    for (type in this) {
+      if (this.hasOwnProperty(type)) this[type].on(name, listener);
+    }
+    return this;
   }
-  
-  for (type in this) {
-    if (!this.hasOwnProperty(type)) continue;
-    this[type].on(name, listener);
-  }
-  return this;
 };
 
 function d3_dispatch_event(dispatch) {

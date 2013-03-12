@@ -138,16 +138,14 @@ suite.addBatch({
       d.on(".a", A).on("foo", B);
       d.foo();
       d.bar();
-      assert.deepEqual(d.on(".a"), [A, A]);
       assert.deepEqual(those, [a, b, a]);
     },
-    "retrieving all listeners with a particular name": function(dispatch) {
+    "retrieves the first listener with a particular name": function(dispatch) {
       var d = dispatch("foo", "bar");
       function A() {}
       function B() {}
-      function C() {}
-      d.on("foo.a", A).on("bar.a", B).on("foo", C);
-      assert.deepEqual(d.on(".a"), [A, B]);
+      d.on("foo.a", A).on("bar.a", A).on("foo", B);
+      assert.deepEqual(d.on(".a"), A);
     },
     "removing all listeners with a particular name": function(dispatch) {
       var d = dispatch("foo", "bar"), a = {}, b = {}, c = {}, those = [];

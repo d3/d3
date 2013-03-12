@@ -571,18 +571,15 @@ d3 = function() {
     }
     if (type) return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
     if (arguments.length < 2) {
-      var listeners = [];
       for (type in this) {
-        if (!this.hasOwnProperty(type)) continue;
-        listeners.push(this[type].on(name));
+        if (this.hasOwnProperty(type)) return this[type].on(name);
       }
-      return listeners;
+    } else {
+      for (type in this) {
+        if (this.hasOwnProperty(type)) this[type].on(name, listener);
+      }
+      return this;
     }
-    for (type in this) {
-      if (!this.hasOwnProperty(type)) continue;
-      this[type].on(name, listener);
-    }
-    return this;
   };
   function d3_dispatch_event(dispatch) {
     var listeners = [], listenerByName = new d3_Map();
