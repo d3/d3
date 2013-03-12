@@ -130,6 +130,34 @@ suite.addBatch({
       assert.equal(d.on("foo.a"), A);
       assert.equal(d.on("foo.b"), B);
       assert.equal(d.on("foo"), C);
+    },
+    "setting all listeners with a particular name": function(dispatch) {
+      var d = dispatch("foo", "bar"), a = {}, b = {}, those = [];
+      function A() { those.push(a); }
+      function B() { those.push(b); }
+      d.on(".a", A).on("foo", B);
+      d.foo();
+      d.bar();
+      assert.deepEqual(d.on(".a"), [A, A]);
+      assert.deepEqual(those, [a, b, a]);
+    },
+    "retrieving all listeners with a particular name": function(dispatch) {
+      var d = dispatch("foo", "bar");
+      function A() {}
+      function B() {}
+      function C() {}
+      d.on("foo.a", A).on("bar.a", B).on("foo", C);
+      assert.deepEqual(d.on(".a"), [A, B]);
+    },
+    "removing all listeners with a particular name": function(dispatch) {
+      var d = dispatch("foo", "bar"), a = {}, b = {}, c = {}, those = [];
+      function A() { those.push(a); }
+      function B() { those.push(b); }
+      function C() { those.push(c); }
+      d.on("foo.a", A).on("bar.a", B).on("foo", C).on(".a", null);
+      d.foo();
+      d.bar();
+      assert.deepEqual(those, [c]);
     }
   }
 });

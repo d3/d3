@@ -565,11 +565,24 @@ d3 = function() {
   function d3_dispatch() {}
   d3_dispatch.prototype.on = function(type, listener) {
     var i = type.indexOf("."), name = "";
-    if (i > 0) {
+    if (i >= 0) {
       name = type.substring(i + 1);
       type = type.substring(0, i);
     }
-    return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
+    if (type) return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
+    if (arguments.length < 2) {
+      var listeners = [];
+      for (type in this) {
+        if (!this.hasOwnProperty(type)) continue;
+        listeners.push(this[type].on(name));
+      }
+      return listeners;
+    }
+    for (type in this) {
+      if (!this.hasOwnProperty(type)) continue;
+      this[type].on(name, listener);
+    }
+    return this;
   };
   function d3_dispatch_event(dispatch) {
     var listeners = [], listenerByName = new d3_Map();
