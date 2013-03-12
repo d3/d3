@@ -55,8 +55,8 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
     return d3_scale_linearTicks(domain, m);
   };
 
-  scale.tickFormat = function(m) {
-    return d3_scale_linearTickFormat(domain, m);
+  scale.tickFormat = function(m, format) {
+    return d3_scale_linearTickFormat(domain, m, format);
   };
 
   scale.nice = function() {
@@ -105,6 +105,9 @@ function d3_scale_linearTicks(domain, m) {
   return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
 }
 
-function d3_scale_linearTickFormat(domain, m) {
-  return d3.format(",." + Math.max(0, -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01)) + "f");
+function d3_scale_linearTickFormat(domain, m, format) {
+  var precision = -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01);
+  return d3.format(format
+      ? format.replace(d3_format_re, function(a, b, c, d, e, f, g, h, i, j) { return [b, c, d, e, f, g, h, i || "." + (precision - (j === "%") * 2), j].join(""); })
+      : ",." + precision + "f");
 }

@@ -207,19 +207,19 @@ suite.addBatch({
         assert.equal(t.length, 2);
       },
       "passes any arguments to the scale's ticks function": function(axis) {
-        var x = d3.scale.linear(), b = {}, a = axis().ticks(b, 42).scale(x), aa = [],
+        var x = d3.scale.linear(), b = {}, a = axis().ticks(b, "%").scale(x), aa = [],
             g = d3.select("body").html("").append("svg:g");
         x.ticks = function() { aa.push(arguments); return [42]; };
         g.call(a);
         assert.equal(aa.length, 1);
         assert.equal(aa[0].length, 2);
         assert.equal(aa[0][0], b);
-        assert.equal(aa[0][1], 42);
+        assert.equal(aa[0][1], "%");
       },
       "passes any arguments to the scale's tickFormat function": function(axis) {
         var b = {},
             x = d3.scale.linear(),
-            a = axis().scale(x).ticks(b, 42),
+            a = axis().scale(x).ticks(b, "%"),
             g = d3.select("body").html("").append("svg:g"),
             aa = [];
 
@@ -232,13 +232,21 @@ suite.addBatch({
         assert.equal(aa.length, 1);
         assert.equal(aa[0].length, 2);
         assert.equal(aa[0][0], b);
-        assert.equal(aa[0][1], 42);
+        assert.equal(aa[0][1], "%");
       },
       "affects the generated ticks": function(axis) {
-        var a = axis().ticks(20),
+        var a = axis().ticks(20, "%"),
             g = d3.select("body").html("").append("svg:g").call(a),
             t = g.selectAll("g");
         assert.equal(t[0].length, 21);
+        assert.equal(t[0][0].textContent, "0%");
+      },
+      "only substitutes precision if not specified": function(axis) {
+        var a = axis().ticks(20, ".5%"),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            t = g.selectAll("g");
+        assert.equal(t[0].length, 21);
+        assert.equal(t[0][0].textContent, "0.00000%");
       }
     },
 

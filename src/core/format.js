@@ -39,6 +39,12 @@ d3.format = function(specifier) {
   // If no precision is specified for r, fallback to general notation.
   if (type == "r" && !precision) type = "g";
 
+  // Ensure that the requested precision is in the supported range.
+  if (precision != null) {
+    if (type == "g") precision = Math.max(1, Math.min(21, precision));
+    else if (type == "e" || type == "f") precision = Math.max(0, Math.min(20, precision));
+  }
+
   type = d3_format_types.get(type) || d3_format_typeDefault;
 
   var zcomma = zfill && comma;
@@ -84,7 +90,7 @@ d3.format = function(specifier) {
 };
 
 // [[fill]align][sign][#][0][width][,][.precision][type]
-var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
+var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?(\d+)?(,)?(\.-?\d+)?([a-z%])?/i;
 
 var d3_format_types = d3.map({
   b: function(x) { return x.toString(2); },

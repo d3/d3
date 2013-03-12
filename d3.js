@@ -638,6 +638,9 @@ d3 = function() {
     }
     if (basePrefix === "#") basePrefix = "";
     if (type == "r" && !precision) type = "g";
+    if (precision != null) {
+      if (type == "g") precision = Math.max(1, Math.min(21, precision)); else if (type == "e" || type == "f") precision = Math.max(0, Math.min(20, precision));
+    }
     type = d3_format_types.get(type) || d3_format_typeDefault;
     var zcomma = zfill && comma;
     return function(value) {
@@ -659,7 +662,7 @@ d3 = function() {
       return (align === "<" ? negative + value + padding : align === ">" ? padding + negative + value : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length) : negative + (zcomma ? value : padding + value)) + suffix;
     };
   };
-  var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?([0-9]+)?(,)?(\.[0-9]+)?([a-zA-Z%])?/;
+  var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?(\d+)?(,)?(\.-?\d+)?([a-z%])?/i;
   var d3_format_types = d3.map({
     b: function(x) {
       return x.toString(2);
@@ -2447,8 +2450,8 @@ d3 = function() {
     scale.ticks = function(m) {
       return d3_scale_linearTicks(domain, m);
     };
-    scale.tickFormat = function(m) {
-      return d3_scale_linearTickFormat(domain, m);
+    scale.tickFormat = function(m, format) {
+      return d3_scale_linearTickFormat(domain, m, format);
     };
     scale.nice = function() {
       d3_scale_nice(domain, d3_scale_linearNice);
@@ -2484,8 +2487,11 @@ d3 = function() {
   function d3_scale_linearTicks(domain, m) {
     return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
   }
-  function d3_scale_linearTickFormat(domain, m) {
-    return d3.format(",." + Math.max(0, -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01)) + "f");
+  function d3_scale_linearTickFormat(domain, m, format) {
+    var precision = -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01);
+    return d3.format(format ? format.replace(d3_format_re, function(a, b, c, d, e, f, g, h, i, j) {
+      return [ b, c, d, e, f, g, h, i || "." + (precision - (j === "%") * 2), j ].join("");
+    }) : ",." + precision + "f");
   }
   function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
     var u = uninterpolate(domain[0], domain[1]), i = interpolate(range[0], range[1]);
@@ -2611,8 +2617,8 @@ d3 = function() {
     scale.ticks = function(m) {
       return d3_scale_linearTicks(scale.domain(), m);
     };
-    scale.tickFormat = function(m) {
-      return d3_scale_linearTickFormat(scale.domain(), m);
+    scale.tickFormat = function(m, format) {
+      return d3_scale_linearTickFormat(scale.domain(), m, format);
     };
     scale.nice = function() {
       return scale.domain(d3_scale_nice(scale.domain(), d3_scale_linearNice));
@@ -2837,8 +2843,8 @@ d3 = function() {
     identity.ticks = function(m) {
       return d3_scale_linearTicks(domain, m);
     };
-    identity.tickFormat = function(m) {
-      return d3_scale_linearTickFormat(domain, m);
+    identity.tickFormat = function(m, format) {
+      return d3_scale_linearTickFormat(domain, m, format);
     };
     identity.copy = function() {
       return d3_scale_identity(domain);

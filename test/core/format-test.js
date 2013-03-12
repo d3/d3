@@ -325,6 +325,12 @@ suite.addBatch({
       assert.strictEqual(f(-42), "-42");
       assert.strictEqual(f(-4200000), "-4,200,000");
       assert.strictEqual(f(-42000000), "-42,000,000");
+    },
+    "unreasonable precision values are clamped to reasonable values": function(format) {
+      assert.strictEqual(format(".30f")(0), "0.00000000000000000000");
+      assert.strictEqual(format(".0g")(1), "1");
+      assert.strictEqual(format(",.-1f")(12345), "12,345");
+      assert.strictEqual(format("+,.-1%")(123.45), "+12,345%");
     }
   }
 });
