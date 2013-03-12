@@ -131,21 +131,16 @@ suite.addBatch({
       assert.equal(d.on("foo.b"), B);
       assert.equal(d.on("foo"), C);
     },
-    "setting all listeners with a particular name": function(dispatch) {
+    "omitting the event type is a no-op": function(dispatch) {
       var d = dispatch("foo", "bar"), a = {}, b = {}, those = [];
       function A() { those.push(a); }
       function B() { those.push(b); }
-      d.on(".a", A).on("foo", B);
+      d.on(".a", A);
+      d.on("foo", B);
       d.foo();
       d.bar();
-      assert.deepEqual(those, [a, b, a]);
-    },
-    "retrieves the first listener with a particular name": function(dispatch) {
-      var d = dispatch("foo", "bar");
-      function A() {}
-      function B() {}
-      d.on("foo.a", A).on("bar.a", A).on("foo", B);
-      assert.deepEqual(d.on(".a"), A);
+      assert.deepEqual(those, [b]);
+      assert.isUndefined(d.on(".a"));
     },
     "removing all listeners with a particular name": function(dispatch) {
       var d = dispatch("foo", "bar"), a = {}, b = {}, c = {}, those = [];

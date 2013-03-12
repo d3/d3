@@ -22,13 +22,9 @@ d3_dispatch.prototype.on = function(type, listener) {
       ? this[type].on(name)
       : this[type].on(name, listener);
 
-  if (arguments.length < 2) {
+  if (arguments.length === 2 && listener == null) {
     for (type in this) {
-      if (this.hasOwnProperty(type)) return this[type].on(name);
-    }
-  } else {
-    for (type in this) {
-      if (this.hasOwnProperty(type)) this[type].on(name, listener);
+      if (this.hasOwnProperty(type)) this[type].on(name, null);
     }
     return this;
   }

@@ -570,13 +570,9 @@ d3 = function() {
       type = type.substring(0, i);
     }
     if (type) return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
-    if (arguments.length < 2) {
+    if (arguments.length === 2 && listener == null) {
       for (type in this) {
-        if (this.hasOwnProperty(type)) return this[type].on(name);
-      }
-    } else {
-      for (type in this) {
-        if (this.hasOwnProperty(type)) this[type].on(name, listener);
+        if (this.hasOwnProperty(type)) this[type].on(name, null);
       }
       return this;
     }
@@ -1905,7 +1901,17 @@ d3 = function() {
       this.addEventListener(type, this[name] = l, l.$ = capture);
       l._ = listener;
     }
-    return listener ? onAdd : onRemove;
+    function removeAll() {
+      var re = new RegExp("^__on([^\\.]+)" + d3.requote(type)), match;
+      for (var name in this) {
+        if (match = name.match(re)) {
+          var l = this[name];
+          this.removeEventListener(match[1], l, l.$);
+          delete this[name];
+        }
+      }
+    }
+    return i ? listener ? onAdd : onRemove : listener ? d3_noop : removeAll;
   }
   var d3_selection_onFilters = d3.map({
     mouseenter: "mouseover",
