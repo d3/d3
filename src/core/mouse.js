@@ -1,3 +1,5 @@
+import "document";
+
 d3.mouse = function(container) {
   return d3_mousePoint(container, d3_eventSource());
 };

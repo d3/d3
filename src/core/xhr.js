@@ -1,3 +1,9 @@
+import "array";
+import "dispatch";
+import "document";
+import "identity";
+import "rebind";
+
 d3.xhr = function(url, mimeType, callback) {
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "error"),

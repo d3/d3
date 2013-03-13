@@ -1,3 +1,6 @@
+import "document";
+import "xhr";
+
 d3.html = function(url, callback) {
   return d3.xhr(url, "text/html", callback).response(d3_html);
 };

@@ -1,3 +1,5 @@
+import "map";
+
 d3.dispatch = function() {
   var dispatch = new d3_dispatch,
       i = -1,

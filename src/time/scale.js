@@ -1,3 +1,6 @@
+import "../core/rebind";
+import "../core/true";
+
 function d3_time_scale(linear, methods, format) {
 
   function scale(x) {

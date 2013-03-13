@@ -1,3 +1,5 @@
+import "../core/rebind";
+
 // A rudimentary force layout using Gauss-Seidel.
 d3.layout.force = function() {
   var force = {},

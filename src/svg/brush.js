@@ -1,3 +1,5 @@
+import "../core/rebind";
+
 d3.svg.brush = function() {
   var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"),
       x = null, // x-scale, optional

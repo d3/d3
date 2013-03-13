@@ -1,3 +1,5 @@
+import "../core/functor";
+
 d3.layout.histogram = function() {
   var frequency = true,
       valuer = Number,

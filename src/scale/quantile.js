@@ -1,3 +1,5 @@
+import "../core/ascending";
+
 d3.scale.quantile = function() {
   return d3_scale_quantile([], []);
 };

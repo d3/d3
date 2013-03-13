@@ -1,4 +1,5 @@
 import "format-localized";
+import "identity";
 
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),

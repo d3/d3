@@ -1,3 +1,5 @@
+import "../core/functor";
+
 d3.svg.chord = function() {
   var source = d3_source,
       target = d3_target,

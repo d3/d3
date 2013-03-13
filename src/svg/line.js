@@ -1,3 +1,6 @@
+import "../core/functor";
+import "../core/true";
+
 function d3_svg_line(projection) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,

@@ -1,3 +1,7 @@
+import "document";
+import "ns";
+import "selection";
+
 d3_selectionPrototype.insert = function(name, before) {
   name = d3.ns.qualify(name);
 

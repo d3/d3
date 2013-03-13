@@ -1,3 +1,5 @@
+import "../core/rebind";
+
 d3.behavior.zoom = function() {
   var translate = [0, 0],
       translate0, // translate when we started zooming (to avoid drift)

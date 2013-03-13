@@ -1,3 +1,5 @@
+import "../core/rebind";
+
 d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
       origin = null;

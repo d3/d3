@@ -1,48 +1,61 @@
 import "start";
-
 import "core/core";
+
+// Compatibility
 import "compat/date";
 import "compat/style";
-import "core/class";
-import "core/array";
-import "core/map";
-import "core/set";
-import "core/identity";
-import "core/true";
-import "core/functor";
-import "core/rebind";
+
+// Arrays
 import "core/ascending";
 import "core/descending";
-import "core/mean";
-import "core/median";
 import "core/min";
 import "core/max";
 import "core/extent";
-import "core/random";
-import "core/number";
 import "core/sum";
+import "core/mean";
+import "core/median";
 import "core/quantile";
-import "core/shuffle";
-import "core/transpose";
-import "core/zip";
 import "core/bisect";
-import "core/nest";
+import "core/shuffle";
+import "core/permute";
+import "core/zip";
+import "core/transpose";
 import "core/keys";
 import "core/values";
 import "core/entries";
-import "core/permute";
 import "core/merge";
-import "core/collapse";
 import "core/range";
+import "core/nest";
+import "core/map";
+import "core/set";
+
+// Math
+import "core/random";
+
+// String Formatting
 import "core/requote";
 import "core/round";
+
+// Loading External Resources
 import "core/xhr";
 import "core/text";
 import "core/json";
 import "core/html";
 import "core/xml";
+
+// Namespaces
 import "core/ns";
+
+// Internals
+import "core/functor";
+import "core/rebind";
 import "core/dispatch";
+
+///////////
+
+
+
+
 import "core/format";
 import "core/formatPrefix";
 import "core/ease";

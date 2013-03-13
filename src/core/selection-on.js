@@ -1,3 +1,6 @@
+import "array";
+import "selection";
+
 d3_selectionPrototype.on = function(type, listener, capture) {
   var n = arguments.length;
   if (n < 3) {

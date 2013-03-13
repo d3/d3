@@ -1,3 +1,6 @@
+import "../core/functor";
+import "../core/true";
+
 function d3_svg_area(projection) {
   var x0 = d3_svg_lineX,
       x1 = d3_svg_lineX,

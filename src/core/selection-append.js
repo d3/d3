@@ -1,3 +1,7 @@
+import "document";
+import "ns";
+import "selection";
+
 // TODO append(node)?
 // TODO append(function)?
 d3_selectionPrototype.append = function(name) {

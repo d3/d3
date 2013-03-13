@@ -1,3 +1,6 @@
+import "collapse";
+import "selection";
+
 d3_selectionPrototype.classed = function(name, value) {
   if (arguments.length < 2) {
 

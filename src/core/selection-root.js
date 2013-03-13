@@ -1,3 +1,7 @@
+import "array";
+import "document";
+import "selection";
+
 var d3_selectionRoot = d3_selection([[d3_document]]);
 
 d3_selectionRoot[0].parentNode = d3_selectRoot;

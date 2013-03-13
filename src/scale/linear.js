@@ -1,3 +1,5 @@
+import "../core/rebind";
+
 d3.scale.linear = function() {
   return d3_scale_linear([0, 1], [0, 1], d3.interpolate, false);
 };

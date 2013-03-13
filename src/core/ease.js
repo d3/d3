@@ -1,3 +1,5 @@
+import "identity";
+
 var d3_ease_default = function() { return d3_identity; };
 
 var d3_ease = d3.map({

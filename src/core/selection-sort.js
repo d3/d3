@@ -1,3 +1,6 @@
+import "ascending";
+import "selection";
+
 d3_selectionPrototype.sort = function(comparator) {
   comparator = d3_selection_sortComparator.apply(this, arguments);
   for (var j = -1, m = this.length; ++j < m;) this[j].sort(comparator);

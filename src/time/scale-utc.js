@@ -1,3 +1,5 @@
+import "../core/true";
+
 var d3_time_scaleUTCMethods = d3_time_scaleLocalMethods.map(function(m) {
   return [m[0].utc, m[1]];
 });

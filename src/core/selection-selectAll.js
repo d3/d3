@@ -1,3 +1,6 @@
+import "array";
+import "selection";
+
 d3_selectionPrototype.selectAll = function(selector) {
   var subgroups = [],
       subgroup,
