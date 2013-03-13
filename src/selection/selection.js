@@ -26,3 +26,45 @@ d3.selection = function() {
 };
 
 d3.selection.prototype = d3_selectionPrototype;
+
+import "selection-select";
+import "selection-selectAll";
+import "selection-attr";
+import "selection-classed";
+import "selection-style";
+import "selection-property";
+import "selection-text";
+import "selection-html";
+import "selection-append";
+import "selection-insert";
+import "selection-remove";
+import "selection-data";
+import "selection-datum";
+import "selection-filter";
+import "selection-order";
+import "selection-sort";
+import "selection-on";
+import "selection-each";
+import "selection-call";
+import "selection-empty";
+import "selection-node";
+import "selection-enter";
+
+var d3_selectionRoot = d3_selection([[d3_document]]);
+
+d3_selectionRoot[0].parentNode = d3_selectRoot;
+
+// TODO fast singleton implementation!
+// TODO select(function)
+d3.select = function(selector) {
+  return typeof selector === "string"
+      ? d3_selectionRoot.select(selector)
+      : d3_selection([[selector]]); // assume node
+};
+
+// TODO selectAll(function)
+d3.selectAll = function(selector) {
+  return typeof selector === "string"
+      ? d3_selectionRoot.selectAll(selector)
+      : d3_selection([d3_array(selector)]); // assume node[]
+};

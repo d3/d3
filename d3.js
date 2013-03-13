@@ -1046,14 +1046,6 @@ d3 = function() {
     }
     return null;
   };
-  var d3_selectionRoot = d3_selection([ [ d3_document ] ]);
-  d3_selectionRoot[0].parentNode = d3_selectRoot;
-  d3.select = function(selector) {
-    return typeof selector === "string" ? d3_selectionRoot.select(selector) : d3_selection([ [ selector ] ]);
-  };
-  d3.selectAll = function(selector) {
-    return typeof selector === "string" ? d3_selectionRoot.selectAll(selector) : d3_selection([ d3_array(selector) ]);
-  };
   function d3_selection_enter(selection) {
     d3_arraySubclass(selection, d3_selection_enterPrototype);
     return selection;
@@ -1081,6 +1073,14 @@ d3 = function() {
       }
     }
     return d3_selection(subgroups);
+  };
+  var d3_selectionRoot = d3_selection([ [ d3_document ] ]);
+  d3_selectionRoot[0].parentNode = d3_selectRoot;
+  d3.select = function(selector) {
+    return typeof selector === "string" ? d3_selectionRoot.select(selector) : d3_selection([ [ selector ] ]);
+  };
+  d3.selectAll = function(selector) {
+    return typeof selector === "string" ? d3_selectionRoot.selectAll(selector) : d3_selection([ d3_array(selector) ]);
   };
   d3.behavior.zoom = function() {
     var translate = [ 0, 0 ], translate0, scale = 1, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
