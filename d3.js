@@ -23,7 +23,6 @@ d3 = function() {
   function d3_cosh(x) {
     return (Math.exp(x) + Math.exp(-x)) / 2;
   }
-  var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];
   if (!Date.now) Date.now = function() {
     return +new Date();
   };
@@ -593,6 +592,7 @@ d3 = function() {
     };
     return event;
   }
+  var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];
   d3.format = function(specifier) {
     var match = d3_format_re.exec(specifier), fill = match[1] || " ", align = match[2] || ">", sign = match[3] || "", basePrefix = match[4] || "", zfill = match[5], width = +match[6], comma = match[7], precision = match[8], type = match[9], scale = 1, suffix = "", integer = false;
     if (precision) precision = +precision.substring(1);

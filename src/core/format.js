@@ -1,3 +1,5 @@
+import "format-localized";
+
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),
       fill = match[1] || " ",

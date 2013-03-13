@@ -22,9 +22,9 @@ src/core/format-localized.js: src/locale.js src/core/format-locale.js
 src/time/format-localized.js: src/locale.js src/time/format-locale.js
 	LC_TIME=$(LOCALE) locale -ck LC_TIME | node src/locale.js src/time/format-locale.js > $@
 
-d3%js: src/d3%js src/core/format-localized.js src/time/format-localized.js
+d3.js: $(shell node_modules/.bin/smash --list src/d3.js)
 	@rm -f $@
-	node_modules/.bin/smash $< > $@.tmp
+	node_modules/.bin/smash src/d3.js > $@.tmp
 	node_modules/.bin/uglifyjs $@.tmp -b indent-level=2 -o $@
 	@rm $@.tmp
 	@chmod a-w $@

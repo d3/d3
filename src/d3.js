@@ -1,7 +1,6 @@
 import "start";
 
 import "core/core";
-import "core/format-localized";
 import "compat/date";
 import "compat/style";
 import "core/class";
