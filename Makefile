@@ -54,6 +54,7 @@ d3.core.js: \
 	src/core/zip.js \
 	src/core/bisect.js \
 	src/core/nest.js \
+	src/core/unique.js \
 	src/core/keys.js \
 	src/core/values.js \
 	src/core/entries.js \
