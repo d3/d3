@@ -1,3 +1,6 @@
+import "linear";
+import "scale";
+
 d3.scale.identity = function() {
   return d3_scale_identity([0, 1]);
 };

@@ -1,3 +1,5 @@
+import "../core/trigonometry";
+
 function d3_geo_conicConformal(φ0, φ1) {
   var cosφ0 = Math.cos(φ0),
       t = function(φ) { return Math.tan(π / 4 + φ / 2); },

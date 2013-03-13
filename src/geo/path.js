@@ -1,3 +1,5 @@
+import "../core/trigonometry";
+
 // TODO better encapsulation for d3_geo_pathArea; move to area.js
 // TODO better encapsulation for d3_geo_pathCentroid; move to centroid.js
 

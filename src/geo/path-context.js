@@ -1,4 +1,5 @@
 import "../core/noop";
+import "../core/trigonometry";
 
 function d3_geo_pathContext(context) {
   var pointRadius = 4.5;

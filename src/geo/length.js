@@ -1,4 +1,5 @@
 import "../core/noop";
+import "../core/trigonometry";
 
 d3.geo.length = function(object) {
   d3_geo_lengthSum = 0;

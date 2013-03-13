@@ -1,4 +1,5 @@
 import "../core/rebind";
+import "../core/trigonometry";
 
 d3.geo.projection = d3_geo_projection;
 d3.geo.projectionMutator = d3_geo_projectionMutator;

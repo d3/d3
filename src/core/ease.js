@@ -1,5 +1,6 @@
 import "identity";
 import "map";
+import "trigonometry";
 
 var d3_ease_default = function() { return d3_identity; };
 

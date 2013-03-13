@@ -1,28 +1,7 @@
 d3 = function() {
-  var π = Math.PI, ε = 1e-6, d3 = {
+  var d3 = {
     version: "3.0.8"
-  }, d3_radians = π / 180, d3_degrees = 180 / π;
-  function d3_target(d) {
-    return d.target;
-  }
-  function d3_source(d) {
-    return d.source;
-  }
-  function d3_sgn(x) {
-    return x > 0 ? 1 : x < 0 ? -1 : 0;
-  }
-  function d3_acos(x) {
-    return Math.acos(Math.max(-1, Math.min(1, x)));
-  }
-  function d3_asin(x) {
-    return x > 1 ? π / 2 : x < -1 ? -π / 2 : Math.asin(x);
-  }
-  function d3_sinh(x) {
-    return (Math.exp(x) - Math.exp(-x)) / 2;
-  }
-  function d3_cosh(x) {
-    return (Math.exp(x) + Math.exp(-x)) / 2;
-  }
+  };
   if (!Date.now) Date.now = function() {
     return +new Date();
   };
@@ -796,6 +775,25 @@ d3 = function() {
     }
     return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
   }
+  var π = Math.PI, ε = 1e-6, d3_radians = π / 180, d3_degrees = 180 / π;
+  function d3_sgn(x) {
+    return x > 0 ? 1 : x < 0 ? -1 : 0;
+  }
+  function d3_acos(x) {
+    return Math.acos(Math.max(-1, Math.min(1, x)));
+  }
+  function d3_asin(x) {
+    return x > 1 ? π / 2 : x < -1 ? -π / 2 : Math.asin(x);
+  }
+  function d3_sinh(x) {
+    return (Math.exp(x) - Math.exp(-x)) / 2;
+  }
+  function d3_cosh(x) {
+    return (Math.exp(x) + Math.exp(-x)) / 2;
+  }
+  function d3_haversin(x) {
+    return (x = Math.sin(x / 2)) * x;
+  }
   d3.lab = function(l, a, b) {
     return arguments.length === 1 ? l instanceof d3_Lab ? d3_lab(l.l, l.a, l.b) : l instanceof d3_Hcl ? d3_hcl_lab(l.l, l.c, l.h) : d3_rgb_lab((l = d3.rgb(l)).r, l.g, l.b) : d3_lab(+l, +a, +b);
   };
@@ -827,7 +825,7 @@ d3 = function() {
     return d3_rgb(d3_xyz_rgb(3.2404542 * x - 1.5371385 * y - .4985314 * z), d3_xyz_rgb(-.969266 * x + 1.8760108 * y + .041556 * z), d3_xyz_rgb(.0556434 * x - .2040259 * y + 1.0572252 * z));
   }
   function d3_lab_hcl(l, a, b) {
-    return d3_hcl(Math.atan2(b, a) / π * 180, Math.sqrt(a * a + b * b), l);
+    return d3_hcl(Math.atan2(b, a) * d3_degrees, Math.sqrt(a * a + b * b), l);
   }
   function d3_lab_xyz(x) {
     return x > .206893034 ? x * x * x : (x - 4 / 29) / 7.787037;
@@ -2392,6 +2390,12 @@ d3 = function() {
   function d3_scaleRange(scale) {
     return scale.rangeExtent ? scale.rangeExtent() : d3_scaleExtent(scale.range());
   }
+  function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
+    var u = uninterpolate(domain[0], domain[1]), i = interpolate(range[0], range[1]);
+    return function(x) {
+      return i(u(x));
+    };
+  }
   function d3_scale_nice(domain, nice) {
     var i0 = 0, i1 = domain.length - 1, x0 = domain[i0], x1 = domain[i1], dx;
     if (x1 < x0) {
@@ -2403,6 +2407,21 @@ d3 = function() {
       domain[i1] = nice.ceil(x1);
     }
     return domain;
+  }
+  function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
+    var u = [], i = [], j = 0, k = Math.min(domain.length, range.length) - 1;
+    if (domain[k] < domain[0]) {
+      domain = domain.slice().reverse();
+      range = range.slice().reverse();
+    }
+    while (++j <= k) {
+      u.push(uninterpolate(domain[j - 1], domain[j]));
+      i.push(interpolate(range[j - 1], range[j]));
+    }
+    return function(x) {
+      var j = d3.bisect(domain, x, 1, k) - 1;
+      return i[j](u[j](x));
+    };
   }
   d3.scale.linear = function() {
     return d3_scale_linear([ 0, 1 ], [ 0, 1 ], d3.interpolate, false);
@@ -2489,27 +2508,6 @@ d3 = function() {
     return d3.format(format ? format.replace(d3_format_re, function(a, b, c, d, e, f, g, h, i, j) {
       return [ b, c, d, e, f, g, h, i || "." + (precision - (j === "%") * 2), j ].join("");
     }) : ",." + precision + "f");
-  }
-  function d3_scale_bilinear(domain, range, uninterpolate, interpolate) {
-    var u = uninterpolate(domain[0], domain[1]), i = interpolate(range[0], range[1]);
-    return function(x) {
-      return i(u(x));
-    };
-  }
-  function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
-    var u = [], i = [], j = 0, k = Math.min(domain.length, range.length) - 1;
-    if (domain[k] < domain[0]) {
-      domain = domain.slice().reverse();
-      range = range.slice().reverse();
-    }
-    while (++j <= k) {
-      u.push(uninterpolate(domain[j - 1], domain[j]));
-      i.push(interpolate(range[j - 1], range[j]));
-    }
-    return function(x) {
-      var j = d3.bisect(domain, x, 1, k) - 1;
-      return i[j](u[j](x));
-    };
   }
   d3.scale.log = function() {
     return d3_scale_log(d3.scale.linear().domain([ 0, Math.LN10 ]), 10, d3_scale_logp, d3_scale_powp);
@@ -3257,6 +3255,12 @@ d3 = function() {
     area.endAngle = area.y1, delete area.y1;
     return area;
   };
+  function d3_source(d) {
+    return d.source;
+  }
+  function d3_target(d) {
+    return d.target;
+  }
   d3.svg.chord = function() {
     var source = d3_source, target = d3_target, radius = d3_svg_chordRadius, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
     function chord(d, i) {
@@ -6262,9 +6266,6 @@ d3 = function() {
       });
     };
   }
-  function d3_geo_haversin(x) {
-    return (x = Math.sin(x / 2)) * x;
-  }
   d3.geo.greatArc = function() {
     var source = d3_source, source_, target = d3_target, target_;
     function greatArc() {
@@ -6295,7 +6296,7 @@ d3 = function() {
     return d3_geo_interpolate(source[0] * d3_radians, source[1] * d3_radians, target[0] * d3_radians, target[1] * d3_radians);
   };
   function d3_geo_interpolate(x0, y0, x1, y1) {
-    var cy0 = Math.cos(y0), sy0 = Math.sin(y0), cy1 = Math.cos(y1), sy1 = Math.sin(y1), kx0 = cy0 * Math.cos(x0), ky0 = cy0 * Math.sin(x0), kx1 = cy1 * Math.cos(x1), ky1 = cy1 * Math.sin(x1), d = 2 * Math.asin(Math.sqrt(d3_geo_haversin(y1 - y0) + cy0 * cy1 * d3_geo_haversin(x1 - x0))), k = 1 / Math.sin(d);
+    var cy0 = Math.cos(y0), sy0 = Math.sin(y0), cy1 = Math.cos(y1), sy1 = Math.sin(y1), kx0 = cy0 * Math.cos(x0), ky0 = cy0 * Math.sin(x0), kx1 = cy1 * Math.cos(x1), ky1 = cy1 * Math.sin(x1), d = 2 * Math.asin(Math.sqrt(d3_haversin(y1 - y0) + cy0 * cy1 * d3_haversin(x1 - x0))), k = 1 / Math.sin(d);
     var interpolate = d ? function(t) {
       var B = Math.sin(t *= d) * k, A = Math.sin(d - t) * k, x = A * kx0 + B * kx1, y = A * ky0 + B * ky1, z = A * sy0 + B * sy1;
       return [ Math.atan2(y, x) * d3_degrees, Math.atan2(z, Math.sqrt(x * x + y * y)) * d3_degrees ];

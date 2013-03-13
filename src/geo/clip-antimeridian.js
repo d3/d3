@@ -1,3 +1,4 @@
+import "../core/trigonometry";
 import "../core/true";
 
 var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate);

@@ -1,5 +1,8 @@
 import "../core/functor";
+import "../core/identity";
+import "../core/map";
 import "../core/true";
+import "svg";
 
 function d3_svg_line(projection) {
   var x = d3_svg_lineX,

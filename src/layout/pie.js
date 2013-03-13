@@ -1,3 +1,5 @@
+import "../core/trigonometry";
+
 d3.layout.pie = function() {
   var value = Number,
       sort = d3_layout_pieSortByValue,

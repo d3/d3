@@ -1,4 +1,5 @@
 import "../core/noop";
+import "../core/trigonometry";
 
 function d3_geo_clip(pointVisible, clipLine, interpolate) {
   return function(listener) {

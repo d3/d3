@@ -115,13 +115,9 @@ import "core/timer";
 import "core/interpolate";
 import "core/uninterpolate";
 
-///////////
-
+// Scales
 import "scale/scale";
-import "scale/nice";
 import "scale/linear";
-import "scale/bilinear";
-import "scale/polylinear";
 import "scale/log";
 import "scale/pow";
 import "scale/sqrt";
@@ -132,6 +128,9 @@ import "scale/quantize";
 import "scale/threshold";
 import "scale/identity";
 
+///////////
+
+// SVG
 import "svg/svg";
 import "svg/arc";
 import "svg/line";
@@ -178,7 +177,6 @@ import "geo/clip-view";
 import "geo/compose";
 import "geo/distance";
 import "geo/graticule";
-import "geo/haversin";
 import "geo/greatArc";
 import "geo/interpolate";
 import "geo/length";

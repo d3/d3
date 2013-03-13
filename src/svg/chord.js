@@ -1,4 +1,7 @@
 import "../core/functor";
+import "../core/source";
+import "../core/target";
+import "../core/trigonometry";
 
 d3.svg.chord = function() {
   var source = d3_source,

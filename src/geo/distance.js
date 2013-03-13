@@ -1,3 +1,5 @@
+import "../core/trigonometry";
+
 // Length returned in radians; multiply by radius for distance.
 d3.geo.distance = function(a, b) {
   var Δλ = (b[0] - a[0]) * d3_radians,

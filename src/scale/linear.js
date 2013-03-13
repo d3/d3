@@ -1,4 +1,12 @@
+import "../core/interpolate";
+import "../core/format";
+import "../core/range";
 import "../core/rebind";
+import "../core/uninterpolate";
+import "bilinear";
+import "nice";
+import "polylinear";
+import "scale";
 
 d3.scale.linear = function() {
   return d3_scale_linear([0, 1], [0, 1], d3.interpolate, false);

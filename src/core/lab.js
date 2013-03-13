@@ -1,3 +1,5 @@
+import "trigonometry";
+
 d3.lab = function(l, a, b) {
   return arguments.length === 1
       ? (l instanceof d3_Lab ? d3_lab(l.l, l.a, l.b)
@@ -53,7 +55,7 @@ function d3_lab_rgb(l, a, b) {
 }
 
 function d3_lab_hcl(l, a, b) {
-  return d3_hcl(Math.atan2(b, a) / π * 180, Math.sqrt(a * a + b * b), l);
+  return d3_hcl(Math.atan2(b, a) * d3_degrees, Math.sqrt(a * a + b * b), l);
 }
 
 function d3_lab_xyz(x) {

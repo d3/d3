@@ -1,3 +1,5 @@
+import "../core/trigonometry";
+
 function d3_geo_conicEquidistant(φ0, φ1) {
   var cosφ0 = Math.cos(φ0),
       n = φ0 === φ1 ? Math.sin(φ0) : (cosφ0 - Math.cos(φ1)) / (φ1 - φ0),

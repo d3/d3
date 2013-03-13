@@ -1,3 +1,5 @@
+import "../core/trigonometry";
+
 function d3_geo_transverseMercator(λ, φ) {
   var B = Math.cos(φ) * Math.sin(λ);
   return [

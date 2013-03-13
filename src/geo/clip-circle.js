@@ -1,3 +1,5 @@
+import "../core/trigonometry";
+
 // Clip features against a circle centered at [0°, 0°], with a given radius.
 function d3_geo_clipCircle(degrees) {
   var radians = degrees * d3_radians,

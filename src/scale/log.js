@@ -1,3 +1,8 @@
+import "../core/format";
+import "linear";
+import "nice";
+import "scale";
+
 d3.scale.log = function() {
   return d3_scale_log(d3.scale.linear().domain([0, Math.LN10]), 10, d3_scale_logp, d3_scale_powp);
 };

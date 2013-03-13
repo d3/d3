@@ -1,3 +1,5 @@
+import "../core/trigonometry";
+
 d3.layout.chord = function() {
   var chord = {},
       chords,

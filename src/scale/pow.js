@@ -1,3 +1,7 @@
+import "linear";
+import "nice";
+import "scale";
+
 d3.scale.pow = function() {
   return d3_scale_pow(d3.scale.linear(), 1);
 };
