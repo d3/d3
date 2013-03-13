@@ -107,6 +107,15 @@ suite.addBatch({
       assert.equal(body.on("click.foo"), f);
       assert.isUndefined(body.on("click"));
       assert.isUndefined(body.on("mouseover.foo"));
+    },
+    "removes the named event listeners": function(body) {
+      body.on("mouseover.foo", f).on("click.foo", f).on(".foo", null);
+      function f() {}
+      assert.isUndefined(body.on("mouseover.foo"));
+      assert.isUndefined(body.on("click.foo"));
+    },
+    "returns undefined if only a name is specified": function(body) {
+      assert.isUndefined(body.on(".foo"));
     }
   }
 });
