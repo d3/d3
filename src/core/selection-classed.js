@@ -1,4 +1,5 @@
 import "collapse";
+import "requote";
 import "selection";
 
 d3_selectionPrototype.classed = function(name, value) {

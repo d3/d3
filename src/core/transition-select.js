@@ -1,3 +1,6 @@
+import "selection-select";
+import "transition";
+
 d3_transitionPrototype.select = function(selector) {
   var id = this.id,
       subgroups = [],

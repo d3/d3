@@ -1,3 +1,6 @@
+import "selection-each";
+import "transition";
+
 d3_transitionPrototype.tween = function(name, tween) {
   var id = this.id;
   if (arguments.length < 2) return this.node().__transition__[id].tween.get(name);

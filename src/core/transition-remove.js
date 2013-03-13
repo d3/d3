@@ -1,3 +1,5 @@
+import "transition";
+
 d3_transitionPrototype.remove = function() {
   return this.each("end.transition", function() {
     var p;

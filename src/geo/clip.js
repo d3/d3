@@ -1,3 +1,5 @@
+import "../core/noop";
+
 function d3_geo_clip(pointVisible, clipLine, interpolate) {
   return function(listener) {
     var line = clipLine(listener);

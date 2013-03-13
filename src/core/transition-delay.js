@@ -1,3 +1,6 @@
+import "selection-each";
+import "transition";
+
 d3_transitionPrototype.delay = function(value) {
   var id = this.id;
   return d3_selection_each(this, typeof value === "function"

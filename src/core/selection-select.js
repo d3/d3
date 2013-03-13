@@ -1,3 +1,5 @@
+import "selection";
+
 d3_selectionPrototype.select = function(selector) {
   var subgroups = [],
       subgroup,

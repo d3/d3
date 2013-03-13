@@ -31,10 +31,7 @@ import "core/set";
 
 // Math
 import "core/random";
-
-// String Formatting
-import "core/requote";
-import "core/round";
+import "core/transform";
 
 // Loading External Resources
 import "core/xhr";
@@ -42,6 +39,22 @@ import "core/text";
 import "core/json";
 import "core/html";
 import "core/xml";
+
+// String Formatting
+import "core/format";
+import "core/formatPrefix";
+import "core/requote";
+import "core/round";
+
+// CSV Formatting
+
+// Colors
+import "core/color";
+import "core/rgb";
+import "core/hsl";
+import "core/hcl";
+import "core/lab";
+import "core/xyz";
 
 // Namespaces
 import "core/ns";
@@ -51,24 +64,7 @@ import "core/functor";
 import "core/rebind";
 import "core/dispatch";
 
-///////////
-
-
-
-
-import "core/format";
-import "core/formatPrefix";
-import "core/ease";
-import "core/event";
-import "core/transform";
-import "core/interpolate";
-import "core/uninterpolate";
-import "core/color";
-import "core/rgb";
-import "core/hsl";
-import "core/hcl";
-import "core/lab";
-import "core/xyz";
+// Selections
 import "core/selection";
 import "core/selection-select";
 import "core/selection-selectAll";
@@ -95,6 +91,11 @@ import "core/selection-transition";
 import "core/selection-root";
 import "core/selection-enter";
 import "core/selection-enter-select";
+import "core/event";
+import "core/mouse";
+import "core/touches";
+
+// Transitions
 import "core/transition";
 import "core/transition-select";
 import "core/transition-selectAll";
@@ -109,10 +110,12 @@ import "core/transition-duration";
 import "core/transition-each";
 import "core/transition-transition";
 import "core/transition-tween";
+import "core/ease";
 import "core/timer";
-import "core/mouse";
-import "core/touches";
-import "core/noop";
+import "core/interpolate";
+import "core/uninterpolate";
+
+///////////
 
 import "scale/scale";
 import "scale/nice";

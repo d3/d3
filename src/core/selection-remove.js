@@ -1,3 +1,5 @@
+import "selection";
+
 // TODO remove(selector)?
 // TODO remove(node)?
 // TODO remove(function)?

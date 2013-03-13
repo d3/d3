@@ -1,3 +1,6 @@
+import "document";
+import "selection";
+
 d3_selectionPrototype.style = function(name, value, priority) {
   var n = arguments.length;
   if (n < 3) {

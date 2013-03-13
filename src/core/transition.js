@@ -1,4 +1,8 @@
 import "array";
+import "dispatch";
+import "timer";
+import "ease";
+import "map";
 import "selection";
 
 function d3_transition(groups, id) {

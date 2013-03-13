@@ -1,3 +1,6 @@
+import "ns";
+import "selection";
+
 d3_selectionPrototype.attr = function(name, value) {
   if (arguments.length < 2) {
 

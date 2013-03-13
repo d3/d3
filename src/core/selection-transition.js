@@ -1,3 +1,6 @@
+import "selection";
+import "transition";
+
 d3_selectionPrototype.transition = function() {
   var id = d3_transitionInheritId || ++d3_transitionId,
       subgroups = [],

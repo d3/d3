@@ -1,3 +1,5 @@
+import "../core/noop";
+
 function d3_geo_pathContext(context) {
   var pointRadius = 4.5;
 

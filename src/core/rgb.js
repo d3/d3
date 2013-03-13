@@ -1,3 +1,9 @@
+import "color";
+import "hsl";
+import "lab";
+import "map";
+import "xyz";
+
 d3.rgb = function(r, g, b) {
   return arguments.length === 1
       ? (r instanceof d3_Rgb ? d3_rgb(r.r, r.g, r.b)

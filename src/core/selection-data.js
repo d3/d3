@@ -1,3 +1,6 @@
+import "selection";
+import "map";
+
 d3_selectionPrototype.data = function(value, key) {
   var i = -1,
       n = this.length,

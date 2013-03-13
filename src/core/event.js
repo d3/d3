@@ -1,3 +1,5 @@
+import "dispatch";
+
 d3.event = null;
 
 function d3_eventCancel() {

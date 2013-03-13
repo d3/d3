@@ -1,3 +1,5 @@
+import "selection";
+
 d3_selectionPrototype.html = function(value) {
   return arguments.length
       ? this.each(typeof value === "function"

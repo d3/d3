@@ -1,3 +1,5 @@
+import "document";
+
 var d3_timer_id = 0,
     d3_timer_byId = {},
     d3_timer_queue = null,

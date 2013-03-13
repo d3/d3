@@ -1,4 +1,6 @@
 import "array";
+import "event";
+import "mouse";
 
 d3.touches = function(container, touches) {
   if (arguments.length < 2) touches = d3_eventSource().touches;

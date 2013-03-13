@@ -1,3 +1,8 @@
+import "document";
+import "interpolate";
+import "transition";
+import "transition-tween";
+
 d3_transitionPrototype.style = function(name, value, priority) {
   var n = arguments.length;
   if (n < 3) {

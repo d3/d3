@@ -1,3 +1,5 @@
+import "../core/noop";
+
 d3.geo.area = function(object) {
   d3_geo_areaSum = 0;
   d3.geo.stream(object, d3_geo_area);

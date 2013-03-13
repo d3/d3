@@ -1,3 +1,8 @@
+import "interpolate";
+import "ns";
+import "transition";
+import "transition-tween";
+
 d3_transitionPrototype.attr = function(nameNS, value) {
   if (arguments.length < 2) {
 

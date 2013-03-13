@@ -1,3 +1,6 @@
+import "selection-each";
+import "transition";
+
 d3_transitionPrototype.each = function(type, listener) {
   var id = this.id;
   if (arguments.length < 2) {

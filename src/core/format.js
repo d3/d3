@@ -1,5 +1,8 @@
 import "format-localized";
+import "formatPrefix";
 import "identity";
+import "map";
+import "round";
 
 d3.format = function(specifier) {
   var match = d3_format_re.exec(specifier),

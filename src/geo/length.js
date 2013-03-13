@@ -1,3 +1,5 @@
+import "../core/noop";
+
 d3.geo.length = function(object) {
   d3_geo_lengthSum = 0;
   d3.geo.stream(object, d3_geo_length);
