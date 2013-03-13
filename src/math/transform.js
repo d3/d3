@@ -1,4 +1,5 @@
 import "../core/document";
+import "../core/ns";
 
 d3.transform = function(string) {
   var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");

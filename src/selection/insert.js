@@ -1,5 +1,5 @@
 import "../core/document";
-import "ns";
+import "../core/ns";
 import "selection";
 
 d3_selectionPrototype.insert = function(name, before) {

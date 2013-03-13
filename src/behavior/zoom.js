@@ -3,7 +3,7 @@ import "../core/rebind";
 import "../event/event";
 import "../event/mouse";
 import "../event/touches";
-import "../selection/";
+import "../selection/selection";
 
 d3.behavior.zoom = function() {
   var translate = [0, 0],

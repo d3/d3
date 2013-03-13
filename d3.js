@@ -540,27 +540,6 @@ d3 = function() {
       return point;
     }) : [];
   };
-  var d3_nsPrefix = {
-    svg: "http://www.w3.org/2000/svg",
-    xhtml: "http://www.w3.org/1999/xhtml",
-    xlink: "http://www.w3.org/1999/xlink",
-    xml: "http://www.w3.org/XML/1998/namespace",
-    xmlns: "http://www.w3.org/2000/xmlns/"
-  };
-  d3.ns = {
-    prefix: d3_nsPrefix,
-    qualify: function(name) {
-      var i = name.indexOf(":"), prefix = name;
-      if (i >= 0) {
-        prefix = name.substring(0, i);
-        name = name.substring(i + 1);
-      }
-      return d3_nsPrefix.hasOwnProperty(prefix) ? {
-        space: d3_nsPrefix[prefix],
-        local: name
-      } : name;
-    }
-  };
   function d3_selection(groups) {
     d3_arraySubclass(groups, d3_selectionPrototype);
     return groups;
@@ -626,6 +605,27 @@ d3 = function() {
       return d3_selectAll(selector, this);
     };
   }
+  var d3_nsPrefix = {
+    svg: "http://www.w3.org/2000/svg",
+    xhtml: "http://www.w3.org/1999/xhtml",
+    xlink: "http://www.w3.org/1999/xlink",
+    xml: "http://www.w3.org/XML/1998/namespace",
+    xmlns: "http://www.w3.org/2000/xmlns/"
+  };
+  d3.ns = {
+    prefix: d3_nsPrefix,
+    qualify: function(name) {
+      var i = name.indexOf(":"), prefix = name;
+      if (i >= 0) {
+        prefix = name.substring(0, i);
+        name = name.substring(i + 1);
+      }
+      return d3_nsPrefix.hasOwnProperty(prefix) ? {
+        space: d3_nsPrefix[prefix],
+        local: name
+      } : name;
+    }
+  };
   d3_selectionPrototype.attr = function(name, value) {
     if (arguments.length < 2) {
       if (typeof name === "string") {
@@ -6910,18 +6910,6 @@ d3 = function() {
   });
   d3.svg.symbolTypes = d3_svg_symbols.keys();
   var d3_svg_symbolSqrt3 = Math.sqrt(3), d3_svg_symbolTan30 = Math.tan(30 * d3_radians);
-  d3_selectionPrototype.transition = function() {
-    var id = d3_transitionInheritId || ++d3_transitionId, subgroups = [], subgroup, node, transition = Object.create(d3_transitionInherit);
-    transition.time = Date.now();
-    for (var j = -1, m = this.length; ++j < m; ) {
-      subgroups.push(subgroup = []);
-      for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
-        if (node = group[i]) d3_transitionNode(node, i, id, transition);
-        subgroup.push(node);
-      }
-    }
-    return d3_transition(subgroups, id);
-  };
   function d3_transition(groups, id) {
     d3_arraySubclass(groups, d3_transitionPrototype);
     groups.id = id;
@@ -8208,6 +8196,18 @@ d3 = function() {
   };
   d3.time.scale.utc = function() {
     return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
+  };
+  d3_selectionPrototype.transition = function() {
+    var id = d3_transitionInheritId || ++d3_transitionId, subgroups = [], subgroup, node, transition = Object.create(d3_transitionInherit);
+    transition.time = Date.now();
+    for (var j = -1, m = this.length; ++j < m; ) {
+      subgroups.push(subgroup = []);
+      for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
+        if (node = group[i]) d3_transitionNode(node, i, id, transition);
+        subgroup.push(node);
+      }
+    }
+    return d3_transition(subgroups, id);
   };
   d3.xhr = function(url, mimeType, callback) {
     var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();

@@ -1,5 +1,5 @@
+import "../core/ns";
 import "../interpolate/interpolate";
-import "../selection/ns";
 import "transition";
 import "tween";
 

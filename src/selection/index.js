@@ -1,2 +1,1 @@
-import "ns";
 import "selection";

@@ -1,4 +1,4 @@
-import "ns";
+import "../core/ns";
 import "selection";
 
 d3_selectionPrototype.attr = function(name, value) {
