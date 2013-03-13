@@ -48,17 +48,17 @@ d3.geo.circle = function() {
 
 // Interpolates along a circle centered at [0°, 0°], with a given radius and
 // precision.
-function d3_geo_circleInterpolate(radians, precision) {
-  var cr = Math.cos(radians),
-      sr = Math.sin(radians);
+function d3_geo_circleInterpolate(radius, precision) {
+  var cr = Math.cos(radius),
+      sr = Math.sin(radius);
   return function(from, to, direction, listener) {
     if (from != null) {
       from = d3_geo_circleAngle(cr, from);
       to = d3_geo_circleAngle(cr, to);
       if (direction > 0 ? from < to: from > to) from += direction * 2 * π;
     } else {
-      from = radians + direction * 2 * π;
-      to = radians;
+      from = radius + direction * 2 * π;
+      to = radius;
     }
     var point;
     for (var step = direction * precision, t = from; direction > 0 ? t > to : t < to; t -= step) {

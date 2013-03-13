@@ -48,7 +48,7 @@ function d3_geo_projectionMutator(projectAt) {
 
   projection.clipAngle = function(_) {
     if (!arguments.length) return clipAngle;
-    preclip = _ == null ? (clipAngle = _, d3_geo_clipAntimeridian) : d3_geo_clipCircle(clipAngle = +_);
+    preclip = _ == null ? (clipAngle = _, d3_geo_clipAntimeridian) : d3_geo_clipCircle((clipAngle = +_) * d3_radians);
     return projection;
   };
 

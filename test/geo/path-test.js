@@ -589,6 +589,42 @@ suite.addBatch({
         }
       }
     },
+    "clipAngle(30)": {
+      topic: function() {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(30));
+      },
+      "clips lines with two invisible endpoints and visible middle": function(path) {
+        path({type: "LineString", coordinates: [[-45, 0], [45, 0]]});
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 330, y: 250},
+          {type: "lineTo", x: 630, y: 250}
+        ]);
+      }
+    },
+    "clipAngle(150)": {
+      topic: function() {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(150));
+      },
+      "clips lines with two visible endpoints and invisible middle": function(path) {
+        path({type: "LineString", coordinates: [[135, 0], [-135, 0]]});
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 1155, y: 250},
+          {type: "lineTo", x: 1230, y: 250},
+          {type: "moveTo", x: -270, y: 250},
+          {type: "lineTo", x: -195, y: 250}
+        ]);
+      }
+    },
 
     "antimeridian cutting": {
       "rotate([98, 0])": {
