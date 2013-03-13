@@ -12,12 +12,8 @@ test: all
 benchmark: all
 	@node test/geo/benchmark.js
 
-.INTERMEDIATE: \
-	src/core/format-localized.js \
-	src/time/format-localized.js
-
-src/core/format-localized.js: src/locale.js src/core/format-locale.js
-	LC_NUMERIC=$(LOCALE) locale -ck LC_NUMERIC | node src/locale.js src/core/format-locale.js > $@
+src/format/format-localized.js: src/locale.js src/format/format-locale.js
+	LC_NUMERIC=$(LOCALE) locale -ck LC_NUMERIC | node src/locale.js src/format/format-locale.js > $@
 
 src/time/format-localized.js: src/locale.js src/time/format-locale.js
 	LC_TIME=$(LOCALE) locale -ck LC_TIME | node src/locale.js src/time/format-locale.js > $@
