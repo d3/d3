@@ -30,6 +30,20 @@ d3.transition = function(selection) {
 
 d3.transition.prototype = d3_transitionPrototype;
 
+import "select";
+import "selectAll";
+import "filter";
+import "attr";
+import "style";
+import "text";
+import "remove";
+import "ease";
+import "delay";
+import "duration";
+import "each";
+import "subtransition";
+import "tween";
+
 function d3_transitionNode(node, i, id, inherit) {
   var lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0}),
       transition = lock[id];

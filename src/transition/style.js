@@ -1,7 +1,7 @@
 import "../core/document";
 import "../interpolate/interpolate";
 import "transition";
-import "transition-tween";
+import "tween";
 
 d3_transitionPrototype.style = function(name, value, priority) {
   var n = arguments.length;

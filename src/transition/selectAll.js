@@ -1,4 +1,4 @@
-import "../selection/selection-select";
+import "../selection/select";
 import "transition";
 
 d3_transitionPrototype.selectAll = function(selector) {

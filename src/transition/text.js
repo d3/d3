@@ -1,5 +1,5 @@
 import "transition";
-import "transition-tween";
+import "tween";
 
 d3_transitionPrototype.text = function(value) {
   return d3_transition_tween(this, "text", value, d3_transition_text);

@@ -1,4 +1,4 @@
-import "../selection/selection-each";
+import "../selection/each";
 import "transition";
 
 d3_transitionPrototype.delay = function(value) {
