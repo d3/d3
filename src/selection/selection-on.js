@@ -50,7 +50,7 @@ function d3_selection_on(type, listener, capture) {
   }
 
   function removeAll() {
-    var re = new RegExp("^__on([^\\.]+)" + d3.requote(type) + "$"),
+    var re = new RegExp("^__on([^.]+)" + d3.requote(type) + "$"),
         match;
     for (var name in this) {
       if (match = name.match(re)) {

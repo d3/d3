@@ -977,7 +977,7 @@ d3 = function() {
       l._ = listener;
     }
     function removeAll() {
-      var re = new RegExp("^__on([^\\.]+)" + d3.requote(type) + "$"), match;
+      var re = new RegExp("^__on([^.]+)" + d3.requote(type) + "$"), match;
       for (var name in this) {
         if (match = name.match(re)) {
           var l = this[name];
