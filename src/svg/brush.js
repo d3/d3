@@ -5,7 +5,7 @@ import "../event/event";
 import "../event/mouse";
 import "../event/touches";
 import "../scale/scale";
-import "../selection/index";
+import "../selection/";
 import "svg";
 
 d3.svg.brush = function() {

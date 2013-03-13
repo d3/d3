@@ -3,7 +3,7 @@ import "../core/array";
 import "../event/dispatch";
 import "../event/timer";
 import "../interpolate/ease";
-import "../selection/index";
+import "../selection/";
 
 function d3_transition(groups, id) {
   d3_arraySubclass(groups, d3_transitionPrototype);

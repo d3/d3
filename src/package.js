@@ -33,7 +33,7 @@ console.log(JSON.stringify({
     "jsdom": "~0.5.2"
   },
   "devDependencies": {
-    "smash": "~0.0.4",
+    "smash": "~0.0.5",
     "uglify-js": "2.2.x",
     "vows": "0.7.x"
   },

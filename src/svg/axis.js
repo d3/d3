@@ -1,6 +1,6 @@
-import "../scale/index";
-import "../selection/index";
-import "../transition/index";
+import "../scale/";
+import "../selection/";
+import "../transition/";
 import "svg";
 
 d3.svg.axis = function() {
