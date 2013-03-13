@@ -29,7 +29,7 @@ d3.js: $(shell node_modules/.bin/smash --list src/d3.js)
 	@rm $@.tmp
 	@chmod a-w $@
 
-%.min.js: %.js
+d3.min.js: d3.js
 	@rm -f $@
 	node_modules/.bin/uglifyjs $< -c -m -o $@
 
