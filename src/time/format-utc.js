@@ -1,3 +1,6 @@
+import "format";
+import "time";
+
 d3.time.format.utc = function(template) {
   var local = d3.time.format(template);
 

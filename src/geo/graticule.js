@@ -1,3 +1,7 @@
+import "../arrays/range";
+import "../math/trigonometry";
+import "geo";
+
 d3.geo.graticule = function() {
   var x1, x0, X1, X0,
       y1, y0, Y1, Y0,

@@ -1,6 +1,6 @@
+import "../arrays/map";
 import "../core/functor";
 import "../core/identity";
-import "../core/map";
 import "../core/true";
 import "svg";
 

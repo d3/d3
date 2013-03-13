@@ -1,4 +1,6 @@
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "geo";
+import "stream";
 
 d3.geo.centroid = function(object) {
   d3_geo_centroidDimension = d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;

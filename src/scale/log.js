@@ -1,4 +1,4 @@
-import "../core/format";
+import "../format/format";
 import "linear";
 import "nice";
 import "scale";

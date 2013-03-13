@@ -1,5 +1,14 @@
+import "../core/identity";
 import "../core/rebind";
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "clip-antimeridian";
+import "clip-circle";
+import "clip-view";
+import "compose";
+import "geo";
+import "resample";
+import "rotation";
+import "stream";
 
 d3.geo.projection = d3_geo_projection;
 d3.geo.projectionMutator = d3_geo_projectionMutator;

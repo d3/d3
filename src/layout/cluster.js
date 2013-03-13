@@ -1,3 +1,8 @@
+import "../arrays/max";
+import "layout";
+import "hierarchy";
+import "tree";
+
 // Implements a hierarchical layout using the cluster (or dendrogram)
 // algorithm.
 d3.layout.cluster = function() {

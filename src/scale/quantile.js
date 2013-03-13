@@ -1,6 +1,6 @@
-import "../core/ascending";
-import "../core/bisect";
-import "../core/quantile";
+import "../arrays/ascending";
+import "../arrays/bisect";
+import "../arrays/quantile";
 import "scale";
 
 d3.scale.quantile = function() {

@@ -1,4 +1,5 @@
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "projection";
 
 function d3_geo_conic(projectAt) {
   var φ0 = 0,

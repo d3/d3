@@ -1,3 +1,8 @@
+import "day";
+import "interval";
+import "time";
+import "year";
+
 d3_time_daySymbols.forEach(function(day, i) {
   day = day.toLowerCase();
   i = 7 - i;

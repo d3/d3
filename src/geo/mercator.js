@@ -1,4 +1,6 @@
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "geo";
+import "projection";
 
 function d3_geo_mercator(λ, φ) {
   return [λ, Math.log(Math.tan(π / 4 + φ / 2))];

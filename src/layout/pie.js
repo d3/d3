@@ -1,4 +1,7 @@
-import "../core/trigonometry";
+import "../arrays/range";
+import "../arrays/sum";
+import "../math/trigonometry";
+import "layout";
 
 d3.layout.pie = function() {
   var value = Number,

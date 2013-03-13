@@ -1,3 +1,8 @@
+import "../math/trigonometry";
+import "geo";
+import "conic";
+import "projection";
+
 function d3_geo_conicEqualArea(φ0, φ1) {
   var sinφ0 = Math.sin(φ0),
       n = (sinφ0 + Math.sin(φ1)) / 2,

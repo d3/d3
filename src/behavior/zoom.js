@@ -1,4 +1,9 @@
+import "../core/document";
 import "../core/rebind";
+import "../event/event";
+import "../event/mouse";
+import "../event/touches";
+import "../selection/index";
 
 d3.behavior.zoom = function() {
   var translate = [0, 0],

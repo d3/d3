@@ -1,5 +1,5 @@
-import "../core/map";
-import "../core/range";
+import "../arrays/map";
+import "../arrays/range";
 import "scale";
 
 d3.scale.ordinal = function() {

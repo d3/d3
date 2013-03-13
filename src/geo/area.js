@@ -1,5 +1,7 @@
 import "../core/noop";
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "geo";
+import "stream";
 
 d3.geo.area = function(object) {
   d3_geo_areaSum = 0;

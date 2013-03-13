@@ -1,4 +1,4 @@
-import "../core/bisect";
+import "../arrays/bisect";
 
 function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
   var u = [],

@@ -1,4 +1,4 @@
-import "../core/bisect";
+import "../arrays/bisect";
 import "scale";
 
 d3.scale.threshold = function() {

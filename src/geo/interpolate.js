@@ -1,4 +1,5 @@
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "geo";
 
 d3.geo.interpolate = function(source, target) {
   return d3_geo_interpolate(

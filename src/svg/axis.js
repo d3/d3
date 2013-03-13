@@ -1,3 +1,8 @@
+import "../scale/index";
+import "../selection/index";
+import "../transition/index";
+import "svg";
+
 d3.svg.axis = function() {
   var scale = d3.scale.linear(),
       orient = d3_svg_axisDefaultOrient,

@@ -1,4 +1,8 @@
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "cartesian";
+import "clip";
+import "circle";
+import "spherical";
 
 // Clip features against a circle centered at [0°, 0°], with a given radius.
 function d3_geo_clipCircle(degrees) {

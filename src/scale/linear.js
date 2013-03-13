@@ -1,8 +1,8 @@
-import "../core/interpolate";
-import "../core/format";
-import "../core/range";
+import "../arrays/range";
 import "../core/rebind";
-import "../core/uninterpolate";
+import "../interpolate/interpolate";
+import "../interpolate/uninterpolate";
+import "../format/format";
 import "bilinear";
 import "nice";
 import "polylinear";

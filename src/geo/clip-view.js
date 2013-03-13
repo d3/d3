@@ -1,3 +1,7 @@
+import "../math/trigonometry";
+import "clip";
+import "clip-polygon";
+
 function d3_geo_clipView(x0, y0, x1, y1) {
   return function(listener) {
     var listener_ = listener,

@@ -1,3 +1,5 @@
+import "geom";
+
 d3.geom.quadtree = function(points, x1, y1, x2, y2) {
   var p,
       i = -1,

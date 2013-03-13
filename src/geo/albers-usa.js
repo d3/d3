@@ -1,3 +1,6 @@
+import "conic-equal-area";
+import "geo";
+
 // A composite projection for the United States, 960×500. The set of standard
 // parallels for each region comes from USGS, which is published here:
 // http://egsc.usgs.gov/isb/pubs/MapProjections/projections.html#albers

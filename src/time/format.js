@@ -1,3 +1,8 @@
+import "../arrays/map";
+import "../format/requote";
+import "time";
+import "format-localized";
+
 d3.time.format = function(template) {
   var n = template.length;
 

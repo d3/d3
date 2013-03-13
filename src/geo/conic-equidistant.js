@@ -1,4 +1,7 @@
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "conic";
+import "geo";
+import "projection";
 
 function d3_geo_conicEquidistant(φ0, φ1) {
   var cosφ0 = Math.cos(φ0),

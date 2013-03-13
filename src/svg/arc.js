@@ -1,5 +1,5 @@
 import "../core/functor";
-import "../core/trigonometry";
+import "../math/trigonometry";
 import "svg";
 
 d3.svg.arc = function() {

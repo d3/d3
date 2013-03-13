@@ -1,3 +1,5 @@
+import "geom";
+
 /**
  * Computes the 2D convex hull of a set of points using Graham's scanning
  * algorithm. The algorithm has been implemented as described in Cormen,

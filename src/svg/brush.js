@@ -1,4 +1,12 @@
+import "../core/document";
 import "../core/rebind";
+import "../event/dispatch";
+import "../event/event";
+import "../event/mouse";
+import "../event/touches";
+import "../scale/scale";
+import "../selection/index";
+import "svg";
 
 d3.svg.brush = function() {
   var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"),

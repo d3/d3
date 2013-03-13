@@ -1,4 +1,5 @@
-import "../core/trigonometry";
+import "../math/trigonometry";
+import "geo";
 
 d3.geo.rotation = function(rotate) {
   rotate = d3_geo_rotation(rotate[0] % 360 * d3_radians, rotate[1] * d3_radians, rotate.length > 2 ? rotate[2] * d3_radians : 0);

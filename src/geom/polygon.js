@@ -1,3 +1,5 @@
+import "geom";
+
 d3.geom.polygon = function(coordinates) {
 
   coordinates.area = function() {
