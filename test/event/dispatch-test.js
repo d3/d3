@@ -130,6 +130,35 @@ suite.addBatch({
       assert.equal(d.on("foo.a"), A);
       assert.equal(d.on("foo.b"), B);
       assert.equal(d.on("foo"), C);
+    },
+    "omitting the event type": {
+      "returns undefined when retrieving a listener": function(dispatch) {
+        var d = dispatch("foo");
+        assert.isUndefined(d.on(".a"));
+      },
+      "null removes all named event listeners": function(dispatch) {
+        var d = dispatch("foo", "bar"), a = {}, b = {}, c = {}, those = [];
+        function A() { those.push(a); }
+        function B() { those.push(b); }
+        function C() { those.push(c); }
+        d.on("foo.a", A).on("bar.a", B).on("foo", C).on(".a", null);
+        d.foo();
+        d.bar();
+        assert.deepEqual(those, [c]);
+      },
+      "no-op when setting a listener": function(dispatch) {
+        var d = dispatch("foo", "bar"), a = {}, b = {}, those = [];
+        function A() { those.push(a); }
+        function B() { those.push(b); }
+        d
+            .on(".a", A)
+            .on("foo.a", B)
+            .on("bar", B);
+        d.foo();
+        d.bar();
+        assert.deepEqual(those, [b, b]);
+        assert.isUndefined(d.on(".a"));
+      },
     }
   }
 });
