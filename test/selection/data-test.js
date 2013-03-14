@@ -42,10 +42,15 @@ suite.addBatch({
         assert.deepEqual(body.data(), [data]);
         assert.strictEqual(body.data()[0], data);
       },
-      // TODO not sure why Node is not catching this error:
-      "throws an error if data is null or undefined": function(body) {
-        assert.throws(function() { body.data(null); }, Error);
-        assert.throws(function() { body.data(function() {}); }, Error);
+      "throws an error if data is null": function(body) {
+        var errored;
+        try { body.data(null); } catch (e) { errored = true; }
+        assert.isTrue(errored);
+      },
+      "throws an error if data is a function that returns null": function(body) {
+        var errored;
+        try { body.data(function() {}); } catch (e) { errored = true; }
+        assert.isTrue(errored);
       }
     }
   }
@@ -83,10 +88,15 @@ suite.addBatch({
       "returns a new selection": function(div) {
         assert.isFalse(div.data([0, 1]) === div);
       },
-      // TODO not sure why Node is not catching this error:
-      "throws an error if data is null or undefined": function(div) {
-        assert.throws(function() { div.data(null); }, Error);
-        assert.throws(function() { div.data(function() {}); }, Error);
+      "throws an error if data is null": function(div) {
+        var errored;
+        try { div.data(null); } catch (e) { errored = true; }
+        assert.isTrue(errored);
+      },
+      "throws an error if data is a function that returns null": function(div) {
+        var errored;
+        try { div.data(function() {}); } catch (e) { errored = true; }
+        assert.isTrue(errored);
       },
       "with no arguments, returns an array of data": function(div) {
         var a = new Object(), b = new Object(), actual = [];
