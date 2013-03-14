@@ -1,9 +1,9 @@
 var assert = require("../assert"),
-    interpolateHsl = require("../../").interpolateHsl;
+    _ = require("../../");
 
 module.exports = {
   topic: function(d3) {
-    var cb = this.callback,
+    var callback = this.callback,
         dd = [],
         ii = [],
         tt = [],
@@ -21,7 +21,7 @@ module.exports = {
       dd.push(d);
       ii.push(i);
       vv.push(v);
-      if (tt.push(this) >= 2) cb(null, {
+      if (tt.push(this) >= 2) callback(null, {
         selection: s,
         transition: t,
         data: dd,
@@ -29,7 +29,7 @@ module.exports = {
         value: vv,
         context: tt
       });
-      return i && interpolateHsl(v, "blue");
+      return i && _.interpolateHsl(v, "blue");
     }
   },
 
@@ -52,8 +52,8 @@ module.exports = {
 
   "end": {
     topic: function(result) {
-      var cb = this.callback;
-      result.transition.each("end", function(d, i) { if (i >= 1) cb(null, result); });
+      var callback = this.callback;
+      result.transition.each("end", function(d, i) { if (i >= 1) callback(null, result); });
     },
     "uses the returned interpolator": function(result) {
       assert.equal(result.selection[0][1].getAttribute("color"), "#0000ff");

@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("assert");
 
@@ -36,19 +36,19 @@ suite.addBatch({
       },
       "values are returned in arbitrary order": function(set) {
         var s = set(["foo", "bar"]);
-        assert.deepEqual(s.values().sort(d3.ascending), ["bar", "foo"]);
+        assert.deepEqual(s.values().sort(_.ascending), ["bar", "foo"]);
         var s = set(["bar", "foo"]);
-        assert.deepEqual(s.values().sort(d3.ascending), ["bar", "foo"]);
+        assert.deepEqual(s.values().sort(_.ascending), ["bar", "foo"]);
       },
       "observes changes via add and remove": function(set) {
         var s = set(["foo", "bar"]);
-        assert.deepEqual(s.values().sort(d3.ascending), ["bar", "foo"]);
+        assert.deepEqual(s.values().sort(_.ascending), ["bar", "foo"]);
         s.remove("foo");
         assert.deepEqual(s.values(), ["bar"]);
         s.add("bar");
         assert.deepEqual(s.values(), ["bar"]);
         s.add("foo");
-        assert.deepEqual(s.values().sort(d3.ascending), ["bar", "foo"]);
+        assert.deepEqual(s.values().sort(_.ascending), ["bar", "foo"]);
         s.remove("bar");
         assert.deepEqual(s.values(), ["foo"]);
         s.remove("foo");

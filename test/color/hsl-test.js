@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -49,7 +49,7 @@ suite.addBatch({
       assert.hslEqual(hsl("rgb(102, 102, 0)"), 60, 1, .2);
     },
     "can convert from RGB": function(hsl) {
-      assert.hslEqual(hsl(d3.rgb(12, 34, 56)), 210, .647058, .133333);
+      assert.hslEqual(hsl(_.rgb(12, 34, 56)), 210, .647058, .133333);
     },
     "can convert from HSL": function(hsl) {
       assert.hslEqual(hsl(hsl(20, .8, .3)), 20, .8, .3);

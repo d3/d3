@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -108,7 +108,7 @@ suite.addBatch({
 function testInterpolation(interpolate) {
   var data = [[10, 0], [20, 1], [20, 2], [10, 3]];
 
-  var cartesian = d3.svg.line()
+  var cartesian = _.svg.line()
       .x(function(d) { return d[0] * Math.cos(d[1] - Math.PI / 2); })
       .y(function(d) { return d[0] * Math.sin(d[1] - Math.PI / 2); });
 

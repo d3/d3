@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -43,13 +43,13 @@ suite.addBatch({
     },
     "range cardinality determines the degree of quantization": function(quantize) {
       var x = quantize();
-      assert.inDelta(x.range(d3.range(0, 1.001, .001))(1/3), .333, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.01, .01))(1/3), .33, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.1, .1))(1/3), .3, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.2, .2))(1/3), .4, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.25, .25))(1/3), .25, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.5, .5))(1/3), .5, 1e-6);
-      assert.inDelta(x.range(d3.range(1))(1/3), 0, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.001, .001))(1/3), .333, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.01, .01))(1/3), .33, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.1, .1))(1/3), .3, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.2, .2))(1/3), .4, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.25, .25))(1/3), .25, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.5, .5))(1/3), .5, 1e-6);
+      assert.inDelta(x.range(_.range(1))(1/3), 0, 1e-6);
     },
     "range values are arbitrary": function(quantize) {
       var a = {}, b = {}, c = {}, x = quantize().range([a, b, c]);

@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -81,7 +81,7 @@ suite.addBatch({
     "large square": {
       topic: function(polygon) {
         var r = 1e8,
-            d = d3.range(0, r, r / 1e4);
+            d = _.range(0, r, r / 1e4);
         return polygon(
             d.map(function(y) { return [0, y]; }).concat(
             d.map(function(x) { return [x, r]; })).concat(

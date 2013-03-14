@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -60,7 +60,7 @@ suite.addBatch({
       assert.rgbEqual(rgb(rgb(12, 34, 56)), 12, 34, 56);
     },
     "can convert from HSL": function(rgb) {
-      assert.rgbEqual(rgb(d3.hsl(0, 1, .5)), 255, 0, 0);
+      assert.rgbEqual(rgb(_.hsl(0, 1, .5)), 255, 0, 0);
     },
     "can convert to HSL": function(rgb) {
       assert.hslEqual(rgb("red").hsl(), 0, 1, .5);
@@ -83,7 +83,7 @@ suite.addBatch({
       assert.strictEqual(rgb("hsl(60, 100%, 20%)") + "", "#666600");
       assert.strictEqual(rgb("rgb(12, 34, 56)") + "", "#0c2238");
       assert.strictEqual(rgb(rgb(12, 34, 56)) + "", "#0c2238");
-      assert.strictEqual(rgb(d3.hsl(60, 1, .2)) + "", "#666600");
+      assert.strictEqual(rgb(_.hsl(60, 1, .2)) + "", "#666600");
     }
   }
 });

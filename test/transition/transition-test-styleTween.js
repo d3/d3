@@ -1,5 +1,5 @@
 var assert = require("../assert"),
-    interpolateHsl = require("../../").interpolateHsl;
+    _ = require("../../");
 
 module.exports = {
   topic: function(d3) {
@@ -32,7 +32,7 @@ module.exports = {
         context: tt,
         fails: fails
       });
-      return i && interpolateHsl(v, "blue");
+      return i && _.interpolateHsl(v, "blue");
     }
   },
 

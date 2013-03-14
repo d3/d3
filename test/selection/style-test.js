@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    interpolateRgb = require("../../").interpolateRgb,
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -89,7 +89,7 @@ suite.addBatch({
         assert.equal(div[0][1].style.getPropertyValue("opacity"), "0.5");
       },
       "sets a property as a function": function(div) {
-        div.style("background-color", interpolateRgb("orange", "yellow"));
+        div.style("background-color", _.interpolateRgb("orange", "yellow"));
         assert.equal(div[0][0].style.getPropertyValue("background-color"), "#ffa500");
         assert.equal(div[0][1].style.getPropertyValue("background-color"), "#ffff00");
       },

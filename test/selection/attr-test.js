@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    interpolateRgb = require("../../").interpolateRgb,
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -117,7 +117,7 @@ suite.addBatch({
         assert.equal(div[0][1].getAttribute("bgcolor"), "coral");
       },
       "sets an attribute as a function of data": function(div) {
-        div.attr("bgcolor", interpolateRgb("brown", "steelblue"));
+        div.attr("bgcolor", _.interpolateRgb("brown", "steelblue"));
         assert.equal(div[0][0].getAttribute("bgcolor"), "#a52a2a");
         assert.equal(div[0][1].getAttribute("bgcolor"), "#4682b4");
       },

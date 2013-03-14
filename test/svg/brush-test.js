@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    linear = require("../../").scale.linear,
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -26,33 +26,33 @@ suite.addBatch({
         assert.isNull(brush().extent());
       },
       "returns a one-dimensional array if only x is defined": function(brush) {
-        var b = brush().x(linear());
+        var b = brush().x(_.scale.linear());
         assert.deepEqual(b.extent(), [0, 0]);
       },
       "takes a one-dimensional array if only x is defined": function(brush) {
-        var b = brush().x(linear()).extent([0.1, 0.4]);
+        var b = brush().x(_.scale.linear()).extent([0.1, 0.4]);
         assert.deepEqual(b.extent(), [0.1, 0.4]);
       },
       "returns a one-dimensional array if only y is defined": function(brush) {
-        var b = brush().y(linear());
+        var b = brush().y(_.scale.linear());
         assert.deepEqual(b.extent(), [0, 0]);
       },
       "takes a one-dimensional array if only y is defined": function(brush) {
-        var b = brush().y(linear()).extent([0.1, 0.4]);
+        var b = brush().y(_.scale.linear()).extent([0.1, 0.4]);
         assert.deepEqual(b.extent(), [0.1, 0.4]);
       },
       "returns a two-dimensional array if x and y are defined": function(brush) {
-        var b = brush().x(linear()).y(linear());
+        var b = brush().x(_.scale.linear()).y(_.scale.linear());
         assert.deepEqual(b.extent(), [[0, 0], [0, 0]]);
       },
       "takes a two-dimensional array if x and y are defined": function(brush) {
-        var b = brush().x(linear()).y(linear()).extent([[0.1, 0.2], [0.3, 0.4]]);
+        var b = brush().x(_.scale.linear()).y(_.scale.linear()).extent([[0.1, 0.2], [0.3, 0.4]]);
         assert.deepEqual(b.extent(), [[0.1, 0.2], [0.3, 0.4]]);
       },
       "preserves the set extent exactly": function(brush) {
         var lo = new Number(0.1),
             hi = new Number(0.3),
-            b = brush().x(linear()).extent([lo, hi]),
+            b = brush().x(_.scale.linear()).extent([lo, hi]),
             extent = b.extent();
         assert.strictEqual(extent[0], lo);
         assert.strictEqual(extent[1], hi);

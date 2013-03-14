@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -39,7 +39,7 @@ suite.addBatch({
       assert.isUndefined(max([NaN, NaN]));
     },
     "applies the optional accessor function": function(max) {
-      assert.equal(max([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return d3.min(d); }), 2);
+      assert.equal(max([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return _.min(d); }), 2);
       assert.equal(max([1, 2, 3, 4, 5], function(d, i) { return i; }), 4);
     }
   }

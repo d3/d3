@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    merge = require("../../").merge,
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -23,7 +23,7 @@ suite.addBatch({
         assert.isTrue(some[1][0] === span[1][0]);
       },
       "removes non-matching elements": function(span) {
-        var some = merge(span.filter(function(d, i) { return d & 1; }));
+        var some = _.merge(span.filter(function(d, i) { return d & 1; }));
         assert.equal(some.indexOf(span[0][0]), -1);
         assert.equal(some.indexOf(span[1][0]), -1);
       },

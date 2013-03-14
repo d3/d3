@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    ordinal = require("../../").scale.ordinal,
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -17,23 +17,23 @@ suite.addBatch({
         assert.equal(x(0.5), 0.5);
       },
       "can be defined as a scale object": function(d3) {
-        var x = d3.scale.linear(), a = d3.svg.axis().scale(x);
+        var x = _.scale.linear(), a = d3.svg.axis().scale(x);
         assert.equal(a.scale(), x);
       },
       "can be a polylinear scale": function(d3) {
-        var a = d3.svg.axis().scale(d3.scale.linear().domain([0, 1, 10]).range([2, 20, 200])),
+        var a = d3.svg.axis().scale(_.scale.linear().domain([0, 1, 10]).range([2, 20, 200])),
             g = d3.select("body").html("").append("svg:g").call(a),
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M2,6V0H200V6");
       },
       "can be an ordinal scale": function(d3) {
-        var a = d3.svg.axis().scale(ordinal().domain(["A", "B", "C"]).rangeBands([10, 90])),
+        var a = d3.svg.axis().scale(_.scale.ordinal().domain(["A", "B", "C"]).rangeBands([10, 90])),
             g = d3.select("body").html("").append("svg:g").call(a),
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M10,6V0H90V6");
       },
       "can be an ordinal scale with explicit range": function(d3) {
-        var a = d3.svg.axis().scale(ordinal().domain(["A", "B", "C"]).range([10, 50, 90])),
+        var a = d3.svg.axis().scale(_.scale.ordinal().domain(["A", "B", "C"]).range([10, 50, 90])),
             g = d3.select("body").html("").append("svg:g").call(a),
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M10,6V0H90V6");
@@ -205,7 +205,7 @@ suite.addBatch({
         assert.equal(t.length, 2);
       },
       "passes any arguments to the scale's ticks function": function(d3) {
-        var x = d3.scale.linear(), b = {}, a = d3.svg.axis().ticks(b, "%").scale(x), aa = [],
+        var x = _.scale.linear(), b = {}, a = d3.svg.axis().ticks(b, "%").scale(x), aa = [],
             g = d3.select("body").html("").append("svg:g");
         x.ticks = function() { aa.push(arguments); return [42]; };
         g.call(a);
@@ -216,7 +216,7 @@ suite.addBatch({
       },
       "passes any arguments to the scale's tickFormat function": function(d3) {
         var b = {},
-            x = d3.scale.linear(),
+            x = _.scale.linear(),
             a = d3.svg.axis().scale(x).ticks(b, "%"),
             g = d3.select("body").html("").append("svg:g"),
             aa = [];
@@ -265,7 +265,7 @@ suite.addBatch({
         assert.equal(t.length, 2);
       },
       "does not change the arguments passed to the scale's tickFormat function": function(d3) {
-        var x = d3.scale.linear(),
+        var x = _.scale.linear(),
             a = d3.svg.axis().scale(x).ticks(10).tickValues([1, 2, 3]),
             g = d3.select("body").html("").append("svg:g"),
             aa = [];
@@ -316,7 +316,7 @@ suite.addBatch({
         assert.isTrue(a.tickFormat() == null);
       },
       "when null, uses the scale's tick format": function(d3) {
-        var x = d3.scale.linear(), a = d3.svg.axis().scale(x),
+        var x = _.scale.linear(), a = d3.svg.axis().scale(x),
             g = d3.select("body").html("").append("svg:g");
 
         x.tickFormat = function() {
@@ -361,7 +361,7 @@ suite.addBatch({
       "generates new tick marks with labels": function(d3) {
         var a = d3.svg.axis(),
             g = d3.select("body").html("").append("svg:g").call(a),
-            x = d3.scale.linear(),
+            x = _.scale.linear(),
             tick = g.selectAll("g"),
             ticks = x.ticks(10),
             tickFormat = x.tickFormat(10);

@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -183,8 +183,8 @@ function testInterpolation(i0, i1) {
   return function(area) {
     var a = area().interpolate(i0),
         d = [[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]],
-        l0 = d3.svg.line().interpolate(i1).x(a.x0()).y(a.y0()),
-        l1 = d3.svg.line().interpolate(i0).x(a.x1()).y(a.y1());
+        l0 = _.svg.line().interpolate(i1).x(a.x0()).y(a.y0()),
+        l1 = _.svg.line().interpolate(i0).x(a.x1()).y(a.y1());
     assert.pathEqual(a(d), l1(d) + "L" + l0(d.reverse()).substring(1) + "Z");
   };
 }

@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -46,7 +46,7 @@ suite.addBatch({
       assertLabEqual(lab("rgb(102, 102, 0)"), 41.73251953866431, -10.998411255098816, 48.21006600604577);
     },
     "can convert from RGB": function(lab) {
-      assertLabEqual(lab(d3.rgb(12, 34, 56)), 12.65624852526134, 0.12256520883417721, -16.833209795877284);
+      assertLabEqual(lab(_.rgb(12, 34, 56)), 12.65624852526134, 0.12256520883417721, -16.833209795877284);
     },
     "can convert from HSL": function(lab) {
       assertLabEqual(lab(lab(20, .8, .3)), 20, 0.8, 0.3);
@@ -67,13 +67,13 @@ suite.addBatch({
       assert.strictEqual(lab(lab(60, -4, -32)) + "", "#5d95c8");
     },
     "roundtrip to HSL is idempotent": function(lab) {
-      assert.hslEqual(d3.hsl(lab("steelblue")), d3.hsl("steelblue"));
+      assert.hslEqual(_.hsl(lab("steelblue")), _.hsl("steelblue"));
     },
     "roundtrip to RGB is idempotent": function(lab) {
-      assert.hslEqual(d3.rgb(lab("steelblue")), d3.rgb("steelblue"));
+      assert.hslEqual(_.rgb(lab("steelblue")), _.rgb("steelblue"));
     },
     "roundtrip to HCL is idempotent": function(lab) {
-      assert.hslEqual(d3.hcl(lab("steelblue")), d3.hcl("steelblue"));
+      assert.hslEqual(_.hcl(lab("steelblue")), _.hcl("steelblue"));
     }
   }
 });

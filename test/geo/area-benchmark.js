@@ -1,5 +1,6 @@
-var d3 = require("../../"),
-    formatNumber = d3.format(",.02r"),
+var d3 = require("../../");
+
+var formatNumber = d3.format(",.02r"),
     o = d3.geo.circle().angle(30).precision(.1)(),
     n = 1e3,
     then = Date.now();

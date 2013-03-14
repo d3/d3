@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -121,7 +121,7 @@ suite.addBatch({
             .filter(function(line) { return line.coordinates[0][0] === line.coordinates[1][0]; })
             .filter(function(line) { return Math.abs(line.coordinates[0][0] % 90) > ε; });
         lines.forEach(function(line) {
-          assert.deepEqual(d3.extent(line.coordinates, function(p) { return p[1]; }), [-80 - ε, +80 + ε]);
+          assert.deepEqual(_.extent(line.coordinates, function(p) { return p[1]; }), [-80 - ε, +80 + ε]);
         });
       },
       "default major longitude lines extend from 90°S to 90°N": function(graticule) {
@@ -129,14 +129,14 @@ suite.addBatch({
             .filter(function(line) { return line.coordinates[0][0] === line.coordinates[1][0]; })
             .filter(function(line) { return Math.abs(line.coordinates[0][0] % 90) < ε; });
         lines.forEach(function(line) {
-          assert.deepEqual(d3.extent(line.coordinates, function(p) { return p[1]; }), [-90 + ε, +90 - ε]);
+          assert.deepEqual(_.extent(line.coordinates, function(p) { return p[1]; }), [-90 + ε, +90 - ε]);
         });
       },
       "default latitude lines extend from 180°W to 180°E": function(graticule) {
         var lines = graticule().lines()
             .filter(function(line) { return line.coordinates[0][1] === line.coordinates[1][1]; });
         lines.forEach(function(line) {
-          assert.deepEqual(d3.extent(line.coordinates, function(p) { return p[0]; }), [-180, +180]);
+          assert.deepEqual(_.extent(line.coordinates, function(p) { return p[0]; }), [-180, +180]);
         });
       },
       "returns an array of LineStrings": function(graticule) {

@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -27,7 +27,7 @@ function category(category, n) {
       var y = x.copy();
       assert.deepEqual(y.domain(), x.domain());
       assert.deepEqual(y.range(), x.range());
-      x.domain(d3.range(n));
+      x.domain(_.range(n));
       for (var i = 0; i < n; ++i) assert.equal(x(i + n), x(i));
       assert.equal(y(1), colors[0]);
       assert.equal(y(2), colors[1]);
@@ -56,7 +56,7 @@ function category(category, n) {
       var x = scale[category]();
       x.range().forEach(function(v) {
         assert.match(v, /#[0-9a-f]{6}/);
-        v = d3.rgb(v);
+        v = _.rgb(v);
         assert.isFalse(isNaN(v.r));
         assert.isFalse(isNaN(v.g));
         assert.isFalse(isNaN(v.b));
@@ -65,7 +65,7 @@ function category(category, n) {
     "no range values are very dark or very light": function(scale) {
       var x = scale[category]();
       x.range().forEach(function(v) {
-        var c = d3.hsl(v);
+        var c = _.hsl(v);
         assert.isTrue(c.l >= .34, "expected " + v + " to be lighter (l = " + c.l + ")");
         assert.isTrue(c.l <= .89, "expected " + v + " to be darker (l = " + c.l + ")");
       });

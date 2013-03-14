@@ -1,6 +1,6 @@
 var assert = require("../assert"),
-    d3 = require("../../"),
-    format = d3.format("13.8f");
+    _ = require("../../"),
+    format = _.format("13.8f");
 
 module.exports = function(suite, mapping) {
 

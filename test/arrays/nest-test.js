@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -13,7 +13,7 @@ suite.addBatch({
           .key(function(d) { return d.foo; })
           .entries([{foo: 1}, {foo: 1}, {foo: 2}])
           .map(function(d) { return d.key; })
-          .sort(d3.ascending);
+          .sort(_.ascending);
       assert.deepEqual(keys, ["1", "2"]);
     },
     "each entry is a key-values object, with values in input order": function(nest) {
@@ -27,7 +27,7 @@ suite.addBatch({
     },
     "keys can be sorted using an optional comparator": function(nest) {
       var keys = nest()
-          .key(function(d) { return d.foo; }).sortKeys(d3.descending)
+          .key(function(d) { return d.foo; }).sortKeys(_.descending)
           .entries([{foo: 1}, {foo: 1}, {foo: 2}])
           .map(function(d) { return d.key; });
       assert.deepEqual(keys, ["2", "1"]);
@@ -45,7 +45,7 @@ suite.addBatch({
     "values can be aggregated using an optional rollup": function(nest) {
       var entries = nest()
           .key(function(d) { return d.foo; })
-          .rollup(function(values) { return d3.sum(values, function(d) { return d.bar; }); })
+          .rollup(function(values) { return _.sum(values, function(d) { return d.bar; }); })
           .entries([{foo: 1, bar: 2}, {foo: 1, bar: 0}, {foo: 1, bar: 1}, {foo: 2}]);
       assert.deepEqual(entries, [
         {key: "1", values: 3},
@@ -54,8 +54,8 @@ suite.addBatch({
     },
     "multiple key functions can be specified": function(nest) {
       var entries = nest()
-          .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
-          .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
+          .key(function(d) { return d[0]; }).sortKeys(_.ascending)
+          .key(function(d) { return d[1]; }).sortKeys(_.ascending)
           .entries([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
       assert.deepEqual(entries, [
         {key: "0", values: [
@@ -70,8 +70,8 @@ suite.addBatch({
     },
     "the rollup function only applies to leaf values": function(nest) {
       var entries = nest()
-          .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
-          .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
+          .key(function(d) { return d[0]; }).sortKeys(_.ascending)
+          .key(function(d) { return d[1]; }).sortKeys(_.ascending)
           .rollup(function(values) { return values.length; })
           .entries([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
       assert.deepEqual(entries, [
@@ -87,8 +87,8 @@ suite.addBatch({
     },
     "the value comparator only applies to leaf values": function(nest) {
       var entries = nest()
-          .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
-          .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
+          .key(function(d) { return d[0]; }).sortKeys(_.ascending)
+          .key(function(d) { return d[1]; }).sortKeys(_.ascending)
           .sortValues(function(a, b) { return a[2] - b[2]; })
           .entries([[0, 1], [0, 2, 1], [1, 1], [1, 2], [0, 2, 0]]);
       assert.deepEqual(entries, [
@@ -104,8 +104,8 @@ suite.addBatch({
     },
     "the key comparator only applies to the last-specified key": function(nest) {
       var entries = nest()
-          .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
-          .key(function(d) { return d[1]; }).sortKeys(d3.descending)
+          .key(function(d) { return d[0]; }).sortKeys(_.ascending)
+          .key(function(d) { return d[1]; }).sortKeys(_.descending)
           .entries([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
       assert.deepEqual(entries, [
         {key: "0", values: [
@@ -118,8 +118,8 @@ suite.addBatch({
         ]}
       ]);
       var entries = nest()
-          .key(function(d) { return d[0]; }).sortKeys(d3.descending)
-          .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
+          .key(function(d) { return d[0]; }).sortKeys(_.descending)
+          .key(function(d) { return d[1]; }).sortKeys(_.ascending)
           .entries([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
       assert.deepEqual(entries, [
         {key: "1", values: [
@@ -164,7 +164,7 @@ suite.addBatch({
     "values can be aggregated using an optional rollup": function(nest) {
       var map = nest()
           .key(function(d) { return d.foo; })
-          .rollup(function(values) { return d3.sum(values, function(d) { return d.bar; }); })
+          .rollup(function(values) { return _.sum(values, function(d) { return d.bar; }); })
           .map([{foo: 1, bar: 2}, {foo: 1, bar: 0}, {foo: 1, bar: 1}, {foo: 2}]);
       assert.deepEqual(map, {
         "1": 3,
@@ -173,8 +173,8 @@ suite.addBatch({
     },
     "multiple key functions can be specified": function(nest) {
       var map = nest()
-          .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
-          .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
+          .key(function(d) { return d[0]; }).sortKeys(_.ascending)
+          .key(function(d) { return d[1]; }).sortKeys(_.ascending)
           .map([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
       assert.deepEqual(map, {
         "0": {
@@ -189,8 +189,8 @@ suite.addBatch({
     },
     "the rollup function only applies to leaf values": function(nest) {
       var map = nest()
-          .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
-          .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
+          .key(function(d) { return d[0]; }).sortKeys(_.ascending)
+          .key(function(d) { return d[1]; }).sortKeys(_.ascending)
           .rollup(function(values) { return values.length; })
           .map([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
       assert.deepEqual(map, {
@@ -206,8 +206,8 @@ suite.addBatch({
     },
     "the value comparator only applies to leaf values": function(nest) {
       var map = nest()
-          .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
-          .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
+          .key(function(d) { return d[0]; }).sortKeys(_.ascending)
+          .key(function(d) { return d[1]; }).sortKeys(_.ascending)
           .sortValues(function(a, b) { return a[2] - b[2]; })
           .map([[0, 1], [0, 2, 1], [1, 1], [1, 2], [0, 2, 0]]);
       assert.deepEqual(map, {
@@ -234,7 +234,7 @@ suite.addBatch({
     "a custom map implementation can be specified": function(nest) {
       var map = nest()
           .key(String)
-          .map(["hasOwnProperty", "__proto__"], d3.map);
+          .map(["hasOwnProperty", "__proto__"], _.map);
       assert.deepEqual(map.entries(), [
         {key: "hasOwnProperty", value: ["hasOwnProperty"]},
         {key: "__proto__", value: ["__proto__"]}
@@ -244,7 +244,7 @@ suite.addBatch({
       var map = nest()
           .key(function(d) { return d.foo; })
           .key(function(d) { return d.bar; })
-          .map([{foo: 42, bar: "red"}], d3.map);
+          .map([{foo: 42, bar: "red"}], _.map);
       assert.deepEqual(map.keys(), ["42"]);
       assert.deepEqual(map.get("42").keys(), ["red"]);
       assert.deepEqual(map.get("42").values(), [[{foo: 42, bar: "red"}]]);

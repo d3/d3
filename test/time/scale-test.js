@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert"),
     time = require("./time"),
@@ -15,17 +15,17 @@ suite.addBatch({
     "nice": {
       "rounds using the specified time interval": function(scale) {
         var x = scale().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48)]);
-        assert.deepEqual(x.nice(d3.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
-        assert.deepEqual(x.nice(d3.time.week).domain(), [local(2008, 11, 28), local(2009, 0, 4)]);
-        assert.deepEqual(x.nice(d3.time.month).domain(), [local(2008, 11, 1), local(2009, 1, 1)]);
-        assert.deepEqual(x.nice(d3.time.year).domain(), [local(2008, 0, 1), local(2010, 0, 1)]);
+        assert.deepEqual(x.nice(_.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
+        assert.deepEqual(x.nice(_.time.week).domain(), [local(2008, 11, 28), local(2009, 0, 4)]);
+        assert.deepEqual(x.nice(_.time.month).domain(), [local(2008, 11, 1), local(2009, 1, 1)]);
+        assert.deepEqual(x.nice(_.time.year).domain(), [local(2008, 0, 1), local(2010, 0, 1)]);
       },
       "works on degenerate domains": function(scale) {
         var x = scale().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 0, 12)]);
-        assert.deepEqual(x.nice(d3.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
+        assert.deepEqual(x.nice(_.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
       },
       "nicing a polylinear domain only affects the extent": function(linear) {
-        var x = linear().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48), local(2009, 0, 2, 23, 48)]).nice(d3.time.day);
+        var x = linear().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48), local(2009, 0, 2, 23, 48)]).nice(_.time.day);
         assert.deepEqual(x.domain(), [local(2009, 0, 1), local(2009, 0, 1, 23, 48), local(2009, 0, 3)]);
       }
     },
@@ -59,7 +59,7 @@ suite.addBatch({
         var x = scale().domain([local(2009, 0, 1), local(2010, 0, 1)]).range(["red", "blue"]),
             i = x.interpolate(),
             y = x.copy();
-        x.interpolate(d3.interpolateHsl);
+        x.interpolate(_.interpolateHsl);
         assert.equal(x(local(2009, 6, 1)), "#ff00fd");
         assert.equal(y(local(2009, 6, 1)), "#81007e");
         assert.equal(y.interpolate(), i);
@@ -80,7 +80,7 @@ suite.addBatch({
     "ticks": {
       "observes explicit tick interval": function(scale) {
         var x = scale().domain([local(2011, 0, 1, 12, 1, 0), local(2011, 0, 1, 12, 4, 4)]);
-        assert.deepEqual(x.ticks(d3.time.minutes), [
+        assert.deepEqual(x.ticks(_.time.minutes), [
           local(2011, 0, 1, 12, 1),
           local(2011, 0, 1, 12, 2),
           local(2011, 0, 1, 12, 3),
@@ -89,7 +89,7 @@ suite.addBatch({
       },
       "observes explicit tick interval and step": function(scale) {
         var x = scale().domain([local(2011, 0, 1, 12, 0, 0), local(2011, 0, 1, 12, 33, 4)]);
-        assert.deepEqual(x.ticks(d3.time.minutes, 10), [
+        assert.deepEqual(x.ticks(_.time.minutes, 10), [
           local(2011, 0, 1, 12, 0),
           local(2011, 0, 1, 12, 10),
           local(2011, 0, 1, 12, 20),
@@ -332,7 +332,7 @@ suite.addBatch({
     "ticks": {
       "observes explicit tick interval": function(scale) {
         var x = scale().domain([utc(2011, 0, 1, 12, 1, 0), utc(2011, 0, 1, 12, 4, 4)]);
-        assert.deepEqual(x.ticks(d3.time.minutes), [
+        assert.deepEqual(x.ticks(_.time.minutes), [
           utc(2011, 0, 1, 12, 1),
           utc(2011, 0, 1, 12, 2),
           utc(2011, 0, 1, 12, 3),
@@ -341,7 +341,7 @@ suite.addBatch({
       },
       "observes explicit tick interval and step": function(scale) {
         var x = scale().domain([utc(2011, 0, 1, 12, 0, 0), utc(2011, 0, 1, 12, 33, 4)]);
-        assert.deepEqual(x.ticks(d3.time.minutes, 10), [
+        assert.deepEqual(x.ticks(_.time.minutes, 10), [
           utc(2011, 0, 1, 12, 0),
           utc(2011, 0, 1, 12, 10),
           utc(2011, 0, 1, 12, 20),

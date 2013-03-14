@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -53,51 +53,51 @@ suite.addBatch({
       },
       "graticule outline": {
         "sphere": function(area) {
-          assert.inDelta(area(d3.geo.graticule().extent([[-180, -90], [180, 90]]).outline()), 4 * π, 1e-5);
+          assert.inDelta(area(_.geo.graticule().extent([[-180, -90], [180, 90]]).outline()), 4 * π, 1e-5);
         },
         "hemisphere": function(area) {
-          assert.inDelta(area(d3.geo.graticule().extent([[-180, 0], [180, 90]]).outline()), 2 * π, 1e-5);
+          assert.inDelta(area(_.geo.graticule().extent([[-180, 0], [180, 90]]).outline()), 2 * π, 1e-5);
         },
         "semilune": function(area) {
-          assert.inDelta(area(d3.geo.graticule().extent([[0, 0], [90, 90]]).outline()), π / 2, 1e-5);
+          assert.inDelta(area(_.geo.graticule().extent([[0, 0], [90, 90]]).outline()), π / 2, 1e-5);
         }
       },
       "circles": {
         "hemisphere": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(90)()), 2 * π, 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(90)()), 2 * π, 1e-5);
         },
         "60°": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(60).precision(.1)()), π, 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(60).precision(.1)()), π, 1e-5);
         },
         "60° North": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(60).precision(.1).origin([0, 90])()), π, 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(60).precision(.1).origin([0, 90])()), π, 1e-5);
         },
         "45°": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(45).precision(.1)()), π * (2 - Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(45).precision(.1)()), π * (2 - Math.SQRT2), 1e-5);
         },
         "45° North": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(45).precision(.1).origin([0, 90])()), π * (2 - Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(45).precision(.1).origin([0, 90])()), π * (2 - Math.SQRT2), 1e-5);
         },
         "45° South": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(45).precision(.1).origin([0, -90])()), π * (2 - Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(45).precision(.1).origin([0, -90])()), π * (2 - Math.SQRT2), 1e-5);
         },
         "135°": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(135).precision(.1)()), π * (2 + Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(135).precision(.1)()), π * (2 + Math.SQRT2), 1e-5);
         },
         "135° North": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(135).precision(.1).origin([0, 90])()), π * (2 + Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(135).precision(.1).origin([0, 90])()), π * (2 + Math.SQRT2), 1e-5);
         },
         "135° South": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(135).precision(.1).origin([0, -90])()), π * (2 + Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(135).precision(.1).origin([0, -90])()), π * (2 + Math.SQRT2), 1e-5);
         },
         "tiny": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(1e-6).precision(.1)()), 0, 1e-6);
+          assert.inDelta(area(_.geo.circle().angle(1e-6).precision(.1)()), 0, 1e-6);
         },
         "huge": function(area) {
-          assert.inDelta(area(d3.geo.circle().angle(180 - 1e-6).precision(.1)()), 4 * π, 1e-6);
+          assert.inDelta(area(_.geo.circle().angle(180 - 1e-6).precision(.1)()), 4 * π, 1e-6);
         },
         "60° with 45° hole": function(area) {
-          var circle = d3.geo.circle().precision(.1);
+          var circle = _.geo.circle().precision(.1);
           assert.inDelta(area({
             type: "Polygon",
             coordinates: [
@@ -107,7 +107,7 @@ suite.addBatch({
           }), π * (Math.SQRT2 - 1), 1e-5);
         },
         "45° holes at [0°, 0°] and [0°, 90°]": function(area) {
-          var circle = d3.geo.circle().precision(.1).angle(45);
+          var circle = _.geo.circle().precision(.1).angle(45);
           assert.inDelta(area({
             type: "Polygon",
             coordinates: [
@@ -117,7 +117,7 @@ suite.addBatch({
           }), π * 2 * Math.SQRT2, 1e-5);
         },
         "45° holes at [0°, 90°] and [0°, 0°]": function(area) {
-          var circle = d3.geo.circle().precision(.1).angle(45);
+          var circle = _.geo.circle().precision(.1).angle(45);
           assert.inDelta(area({
             type: "Polygon",
             coordinates: [
@@ -129,13 +129,13 @@ suite.addBatch({
       },
       "stripes": {
         "45°, -45°": function(area) {
-          assert.inDelta(area(stripes(d3, 45, -45)), π * 2 * Math.SQRT2, 1e-5);
+          assert.inDelta(area(stripes(45, -45)), π * 2 * Math.SQRT2, 1e-5);
         },
         "-45°, 45°": function(area) {
-          assert.inDelta(area(stripes(d3, -45, 45)), π * 2 * (2 - Math.SQRT2), 1e-5);
+          assert.inDelta(area(stripes(-45, 45)), π * 2 * (2 - Math.SQRT2), 1e-5);
         },
         "45°, 30°": function(area) {
-          assert.inDelta(area(stripes(d3, 45, 30)), π * (Math.SQRT2 - 1), 1e-5);
+          assert.inDelta(area(stripes(45, 30)), π * (Math.SQRT2 - 1), 1e-5);
         }
       }
     },
@@ -164,9 +164,9 @@ suite.addBatch({
 
 suite.export(module);
 
-function stripes(d3, a, b) {
+function stripes(a, b) {
   return {type: "Polygon", coordinates: [a, b].map(function(d, i) {
-    var stripe = d3.range(-180, 180, .1).map(function(x) { return [x, d]; });
+    var stripe = _.range(-180, 180, .1).map(function(x) { return [x, d]; });
     stripe.push(stripe[0]);
     return i ? stripe.reverse() : stripe;
   })};

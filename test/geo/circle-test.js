@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -16,7 +16,7 @@ suite.addBatch({
     "origin([0, 90])": function(circle) {
       var o = circle().origin([0, 90])();
       assert.equal(o.type, "Polygon");
-      assert.inDelta(o.coordinates, [d3.range(360, -1, -6).map(function(x) { return [x >= 180 ? x - 360 : x, 0]; })], 1e-6);
+      assert.inDelta(o.coordinates, [_.range(360, -1, -6).map(function(x) { return [x >= 180 ? x - 360 : x, 0]; })], 1e-6);
     },
     "origin([45, 45])": function(circle) {
       var o = circle().origin([45, 45]).angle(0)();
