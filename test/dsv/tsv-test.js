@@ -1,4 +1,5 @@
 var vows = require("vows"),
+    d3 = require("../../"),
     load = require("../load"),
     xhr = require("../env-xhr"),
     assert = require("../env-assert");
@@ -7,18 +8,13 @@ var suite = vows.describe("d3.tsv");
 
 suite.addBatch({
   "tsv": {
-    topic: load("dsv/tsv").sandbox({
-      XMLHttpRequest: xhr,
-      document: {},
-      window: {}
-    }),
+    topic: load("dsv/tsv")
+        .expression("d3.tsv")
+        .sandbox({XMLHttpRequest: xhr, document: {}, window: {}}),
 
     "on a sample file": {
-      topic: function(d3) {
-        var cb = this.callback;
-        d3.tsv("test/data/sample.tsv", function(error, tsv) {
-          cb(null, tsv);
-        });
+      topic: function(tsv) {
+        tsv("test/data/sample.tsv", this.callback);
       },
       "invokes the callback with the parsed tsv": function(tsv) {
         assert.deepEqual(tsv, [{"Hello":42,"World":"\"fish\""}]);
@@ -29,10 +25,10 @@ suite.addBatch({
     },
 
     "on a file that does not exist": {
-      topic: function(d3) {
-        var cb = this.callback;
-        d3.tsv("//does/not/exist.tsv", function(error, tsv) {
-          cb(null, tsv);
+      topic: function(tsv) {
+        var callback = this.callback;
+        tsv("//does/not/exist.tsv", function(error, tsv) {
+          callback(null, tsv);
         });
       },
       "invokes the callback with undefined when an error occurs": function(tsv) {
@@ -41,8 +37,8 @@ suite.addBatch({
     },
 
     "parse": {
-      topic: function(d3) {
-        return d3.tsv.parse;
+      topic: function(tsv) {
+        return tsv.parse;
       },
       "returns an array of objects": function(parse) {
         assert.deepEqual(parse("a\tb\tc\n1\t2\t3\n"), [{a: "1", b: "2", c: "3"}]);
@@ -86,8 +82,8 @@ suite.addBatch({
     },
 
     "parseRows": {
-      topic: function(d3) {
-        return d3.tsv.parseRows;
+      topic: function(tsv) {
+        return tsv.parseRows;
       },
       "returns an array of arrays": function(parse) {
         assert.deepEqual(parse("a\tb\tc\n"), [["a", "b", "c"]]);
@@ -131,8 +127,8 @@ suite.addBatch({
     },
 
     "format": {
-      topic: function(d3) {
-        return d3.tsv.format;
+      topic: function(tsv) {
+        return tsv.format;
       },
       "takes an array of objects as input": function(format) {
         assert.equal(format([{a: 1, b: 2, c: 3}]), "a\tb\tc\n1\t2\t3");
@@ -159,8 +155,8 @@ suite.addBatch({
     },
 
     "formatRows": {
-      topic: function(d3) {
-        return d3.tsv.formatRows;
+      topic: function(tsv) {
+        return tsv.formatRows;
       },
       "takes an array of arrays as input": function(format) {
         assert.equal(format([["a", "b", "c"], ["1", "2", "3"]]), "a\tb\tc\n1\t2\t3");

@@ -1,4 +1,5 @@
 var vows = require("vows"),
+    d3 = require("../../"),
     load = require("../load"),
     xhr = require("../env-xhr"),
     assert = require("../env-assert");
@@ -7,18 +8,13 @@ var suite = vows.describe("d3.csv");
 
 suite.addBatch({
   "csv": {
-    topic: load("dsv/csv").sandbox({
-      XMLHttpRequest: xhr,
-      document: {},
-      window: {}
-    }),
+    topic: load("dsv/csv")
+        .expression("d3.csv")
+        .sandbox({XMLHttpRequest: xhr, document: {}, window: {}}),
 
     "on a sample file": {
-      topic: function(d3) {
-        var cb = this.callback;
-        d3.csv("test/data/sample.csv", function(error, csv) {
-          cb(null, csv);
-        });
+      topic: function(csv) {
+        csv("test/data/sample.csv", this.callback);
       },
       "invokes the callback with the parsed CSV": function(csv) {
         assert.deepEqual(csv, [{"Hello":"42","World":"\"fish\""}]);
@@ -29,14 +25,11 @@ suite.addBatch({
     },
 
     "when specifying a row conversion function": {
-      topic: function(d3) {
-        var cb = this.callback;
-        d3.csv("test/data/sample.csv", function(row) {
+      topic: function(csv) {
+        csv("test/data/sample.csv", function(row) {
           row.Hello = -row.Hello;
           return row;
-        }, function(error, csv) {
-          cb(null, csv);
-        });
+        }, this.callback);
       },
       "invokes the callback with the parsed CSV": function(csv) {
         assert.strictEqual(csv[0].Hello, -42);
@@ -44,10 +37,10 @@ suite.addBatch({
     },
 
     "when loading a file that does not exist": {
-      topic: function(d3) {
-        var cb = this.callback;
-        d3.csv("//does/not/exist.csv", function(error, csv) {
-          cb(null, csv);
+      topic: function(csv) {
+        var callback = this.callback;
+        csv("//does/not/exist.csv", function(error, csv) {
+          callback(null, csv);
         });
       },
       "invokes the callback with undefined": function(csv) {
@@ -56,8 +49,8 @@ suite.addBatch({
     },
 
     "parse": {
-      topic: function(d3) {
-        return d3.csv.parse;
+      topic: function(csv) {
+        return csv.parse;
       },
       "returns an array of objects": function(parse) {
         assert.deepEqual(parse("a,b,c\n1,2,3\n"), [{a: "1", b: "2", c: "3"}]);
@@ -101,9 +94,9 @@ suite.addBatch({
     },
 
     "parse with row function": {
-      "invokes the row function for every row in order": function(d3) {
+      "invokes the row function for every row in order": function(csv) {
         var rows = [];
-        d3.csv.parse("a\n1\n2\n3\n4", function(d, i) { rows.push({d: d, i: i}); });
+        csv.parse("a\n1\n2\n3\n4", function(d, i) { rows.push({d: d, i: i}); });
         assert.deepEqual(rows, [
           {d: {a: "1"}, i: 0},
           {d: {a: "2"}, i: 1},
@@ -111,18 +104,18 @@ suite.addBatch({
           {d: {a: "4"}, i: 3}
         ]);
       },
-      "returns an array of the row function return values": function(d3) {
-        assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n", function(row) { return row; }), [{a: "1", b: "2", c: "3"}]);
+      "returns an array of the row function return values": function(csv) {
+        assert.deepEqual(csv.parse("a,b,c\n1,2,3\n", function(row) { return row; }), [{a: "1", b: "2", c: "3"}]);
       },
-      "skips rows if the row function returns null or undefined": function(d3) {
-        assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? null : row; }), [{a: "2", b: "3", c: "4"}]);
-        assert.deepEqual(d3.csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? undefined : row; }), [{a: "2", b: "3", c: "4"}]);
+      "skips rows if the row function returns null or undefined": function(csv) {
+        assert.deepEqual(csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? null : row; }), [{a: "2", b: "3", c: "4"}]);
+        assert.deepEqual(csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? undefined : row; }), [{a: "2", b: "3", c: "4"}]);
       }
     },
 
     "parseRows": {
-      topic: function(d3) {
-        return d3.csv.parseRows;
+      topic: function(csv) {
+        return csv.parseRows;
       },
       "returns an array of arrays": function(parse) {
         assert.deepEqual(parse("a,b,c\n"), [["a", "b", "c"]]);
@@ -166,8 +159,8 @@ suite.addBatch({
     },
 
     "format": {
-      topic: function(d3) {
-        return d3.csv.format;
+      topic: function(csv) {
+        return csv.format;
       },
       "takes an array of objects as input": function(format) {
         assert.equal(format([{a: 1, b: 2, c: 3}]), "a,b,c\n1,2,3");
@@ -194,8 +187,8 @@ suite.addBatch({
     },
 
     "formatRows": {
-      topic: function(d3) {
-        return d3.csv.formatRows;
+      topic: function(csv) {
+        return csv.formatRows;
       },
       "takes an array of arrays as input": function(format) {
         assert.equal(format([["a", "b", "c"], ["1", "2", "3"]]), "a,b,c\n1,2,3");
