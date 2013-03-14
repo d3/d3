@@ -1,99 +1,246 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.geo.path");
 
 suite.addBatch({
   "path": {
-    topic: function() {
-      return d3.geo.path()
-          .context(testContext)
-          .projection(d3.geo.equirectangular()
-            .scale(900 / Math.PI)
-            .precision(0));
-    },
+    topic: load("geo/path", "geo/equirectangular", "geo/stereographic", "geo/albers", "arrays/range"),
 
-    "Point": function(path) {
-      path({
-        type: "Point",
-        coordinates: [-63, 18]
-      });
-      assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 165, y: 160},
-        {type: "arc", x: 165, y: 160, r: 4.5}
-      ]);
-    },
-
-    "MultiPoint": function(path) {
-      path({
-        type: "MultiPoint",
-        coordinates: [[-63, 18], [-62, 18], [-62, 17]]
-      });
-      assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5},
-        {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
-        {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
-      ]);
-    },
-
-    "LineString": function(path) {
-      path({
-        type: "Feature",
-        geometry: {
-          type: "LineString",
-          coordinates: [[-63, 18], [-62, 18], [-62, 17]]
-        },
-      });
-      assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 165, y: 160},
-        {type: "lineTo", x: 170, y: 160},
-        {type: "lineTo", x: 170, y: 165}
-      ]);
-    },
-
-    "Polygon": function(path) {
-      path({
-        type: "Feature",
-        geometry: {
-          type: "Polygon",
-          coordinates: [[[-63, 18], [-62, 18], [-62, 17], [-63, 18]]]
-        },
-      });
-      assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 165, y: 160},
-        {type: "lineTo", x: 170, y: 160},
-        {type: "lineTo", x: 170, y: 165},
-        {type: "closePath"}
-      ]);
-    },
-
-    "GeometryCollection": function(path) {
-      path({
-        type: "GeometryCollection",
-        geometries: [{type: "Point", coordinates: [0, 0]}]
-      });
-      assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
-      ]);
-    },
-
-    "FeatureCollection": function(path) {
-      path({
-        type: "FeatureCollection",
-        features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]
-      });
-      assert.deepEqual(testContext.buffer(), [
-        {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
-      ]);
-    },
-
-    "with a null projection": {
-      topic: function() {
-        return d3.geo.path().context(testContext).projection(null);
+    "with an equirectangular projection": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .precision(0));
       },
-      "Polygon": function(path) {
+
+      "renders a point": function(path) {
+        path({
+          type: "Point",
+          coordinates: [-63, 18]
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 165, y: 160},
+          {type: "arc", x: 165, y: 160, r: 4.5}
+        ]);
+      },
+
+      "renders a multipoint": function(path) {
+        path({
+          type: "MultiPoint",
+          coordinates: [[-63, 18], [-62, 18], [-62, 17]]
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5},
+          {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
+          {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
+        ]);
+      },
+
+      "renders a line string": function(path) {
+        path({
+          type: "Feature",
+          geometry: {
+            type: "LineString",
+            coordinates: [[-63, 18], [-62, 18], [-62, 17]]
+          },
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 165, y: 160},
+          {type: "lineTo", x: 170, y: 160},
+          {type: "lineTo", x: 170, y: 165}
+        ]);
+      },
+
+      "renders a polygon": function(path) {
+        path({
+          type: "Feature",
+          geometry: {
+            type: "Polygon",
+            coordinates: [[[-63, 18], [-62, 18], [-62, 17], [-63, 18]]]
+          },
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 165, y: 160},
+          {type: "lineTo", x: 170, y: 160},
+          {type: "lineTo", x: 170, y: 165},
+          {type: "closePath"}
+        ]);
+      },
+
+      "renders a geometry collection": function(path) {
+        path({
+          type: "GeometryCollection",
+          geometries: [{type: "Point", coordinates: [0, 0]}]
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
+        ]);
+      },
+
+      "renders a feature collection": function(path) {
+        path({
+          type: "FeatureCollection",
+          features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]
+        });
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
+        ]);
+      },
+
+      "longitudes wrap at ±180°": function(path) {
+        path({type: "Point", coordinates: [180 + 1e-6, 0]});
+        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: -420, y: 250}, {type: "arc", x: -420, y: 250, r: 4.5}]);
+      },
+
+      "observes the correct winding order of a tiny polygon": function(path) {
+        path({type: "Polygon", coordinates: [[
+          [-0.06904102953339501, 0.346043661846373],
+          [-6.725674252975136e-15, 0.3981303360336475],
+          [-6.742247658534323e-15, -0.08812465346531581],
+          [-0.17301258217724075, -0.12278150669440671],
+          [-0.06904102953339501, 0.346043661846373]]]});
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+      },
+
+      "area": {
+        topic: function(path) {
+          return path.area;
+        },
+        "of a polygon with no holes": function(area) {
+          assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), 25);
+        },
+        "of a polygon with holes": function(area) {
+          assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]], [[100.2, .2], [100.8, .2], [100.8, .8], [100.2, .8], [100.2, .2]]]}), 16);
+        },
+        "area of a Sphere": function(area) {
+          assert.strictEqual(area({type: "Sphere"}), 1620000);
+        }
+      },
+
+      "centroid": {
+        topic: function(path) {
+          return path.centroid;
+        },
+        "of a point": function(centroid) {
+          assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [480, 250]);
+        },
+        "of an empty multipoint": function(centroid) {
+          assert.isUndefined(centroid({type: "MultiPoint", coordinates: []}));
+        },
+        "of a singleton multipoint": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[0, 0]]}), [480, 250]);
+        },
+        "of a multipoint with two points": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[-122, 37], [-74, 40]]}), [-10, 57.5]);
+        },
+        "of an empty linestring": function(centroid) {
+          assert.isUndefined(centroid({type: "LineString", coordinates: []}));
+        },
+        "of a linestring with two points": function(centroid) {
+          assert.deepEqual(centroid({type: "LineString", coordinates: [[100, 0], [0, 0]]}), [730, 250]);
+          assert.deepEqual(centroid({type: "LineString", coordinates: [[0, 0], [100, 0], [101, 0]]}), [732.5, 250]);
+        },
+        "of a linestring with two points, one unique": function(centroid) {
+          assert.isUndefined(centroid({type: "LineString", coordinates: [[-122, 37], [-122, 37]]}));
+          assert.isUndefined(centroid({type: "LineString", coordinates: [[ -74, 40], [ -74, 40]]}));
+        },
+        "of a linestring with three points; two unique": function(centroid) {
+          assert.deepEqual(centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-74, 40]]}), [-10, 57.5]);
+        },
+        "of a linestring with three points": function(centroid) {
+          assert.inDelta(centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]}), [17.389135, 103.563545], 1e-6);
+        },
+        "of a multilinestring": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiLineString", coordinates: [[[100, 0], [0, 0]], [[-10, 0], [0, 0]]]}), [705, 250]);
+        },
+        "of a single-ring polygon": function(centroid) {
+          assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), [982.5, 247.5]);
+        },
+        "of a zero-area polygon": function(centroid) {
+          assert.isUndefined(centroid({type: "Polygon", coordinates: [[[1, 0], [2, 0], [3, 0], [1, 0]]]}));
+        },
+        "of a polygon with two rings, one with zero area": function(centroid) {
+          assert.deepEqual(centroid({type: "Polygon", coordinates: [
+            [[100,   0], [100,   1], [101,   1], [101,   0], [100, 0]],
+            [[100.1, 0], [100.2, 0], [100.3, 0], [100.1, 0]
+          ]]}), [982.5, 247.5]);
+        },
+        "of a polygon with clockwise exterior and anticlockwise interior": function(centroid) {
+          assert.inDelta(centroid({
+            type: "Polygon",
+            coordinates: [
+              [[-2, -2], [2, -2], [2, 2], [-2, 2], [-2, -2]].reverse(),
+              [[ 0, -1], [1, -1], [1, 1], [ 0, 1], [ 0, -1]]
+            ]
+          }), [479.642857, 250], 1e-6);
+        },
+        "of an empty multipolygon": function(centroid) {
+          assert.isUndefined(centroid({type: "MultiPolygon", coordinates: []}));
+        },
+        "of a singleton multipolygon": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]]}), [982.5, 247.5]);
+        },
+        "of a multipolygon with two polygons": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [
+            [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]],
+            [[[0, 0], [1, 0], [1, -1], [0, -1], [0, 0]]]
+          ]}), [732.5, 250]);
+        },
+        "of a multipolygon with two polygons, one zero area": function(centroid) {
+          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [
+            [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]],
+            [[[0, 0], [1, 0], [2, 0], [0, 0]]]
+          ]}), [982.5, 247.5]);
+        },
+        "of a geometry collection with a single point": function(centroid) {
+          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}]}), [480, 250]);
+        },
+        "of a geometry collection with a point and a linestring": function(centroid) {
+          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
+            {type: "LineString", coordinates: [[179, 0], [180, 0]]},
+            {type: "Point", coordinates: [0, 0]}
+          ]}), [1377.5, 250]);
+        },
+        "of a geometry collection with a point, linestring and polygon": function(centroid) {
+          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
+            {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]},
+            {type: "LineString", coordinates: [[179, 0], [180, 0]]},
+            {type: "Point", coordinates: [0, 0]}
+          ]}), [-417.5, 247.5]);
+        },
+        "of a feature collection with a point": function(centroid) {
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]}), [480, 250]);
+        },
+        "of a feature collection with a point and a line string": function(centroid) {
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [
+            {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}},
+            {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}
+          ]}), [1377.5, 250]);
+        },
+        "of a feature collection with a point, line string and polygon": function(centroid) {
+          assert.deepEqual(centroid({type: "FeatureCollection", features: [
+            {type: "Feature", geometry: {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]}},
+            {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}},
+            {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}
+          ]}), [-417.5, 247.5]);
+        },
+        "of a sphere": function(centroid) {
+          assert.deepEqual(centroid({type: "Sphere"}), [480, 250]);
+        }
+      }
+    },
+
+    "with a null (identity) projection": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(null);
+      },
+      "renders a Polygon": function(path) {
         path({
           type: "Feature",
           geometry: {
@@ -110,21 +257,12 @@ suite.addBatch({
       }
     },
 
-    "winding order": {
-      "tiny polygon": function(path) {
-        path({type: "Polygon", coordinates: [[
-          [-0.06904102953339501, 0.346043661846373],
-          [-6.725674252975136e-15, 0.3981303360336475],
-          [-6.742247658534323e-15, -0.08812465346531581],
-          [-0.17301258217724075, -0.12278150669440671],
-          [-0.06904102953339501, 0.346043661846373]]]});
-        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
-      }
-    },
-
-    "with no context": {
-      topic: function(path) {
-        return d3.geo.path().projection(path.projection());
+    "with the default context (null) and an identity projection": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .precision(0));
       },
       "returns null when passed null or undefined": function(path) {
         assert.equal(path(null), null);
@@ -142,212 +280,74 @@ suite.addBatch({
       }
     },
 
+    "with the default context (null) and default projection (albers-usa)": {
+      topic: function(d3) {
+        return d3.geo.path();
+      },
+      "area of a polygon": function(path) {
+        var area = path.area({type: "Polygon", coordinates: [[[-122, 37], [-71, 42], [-80, 25], [-122, 37]]]});
+        assert.inDelta(area, 109021.503, 1e-3);
+      },
+      "bounds of a line string": function(path) {
+        var bounds = path.bounds({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
+        assert.inDelta(bounds[0][0], -5.1214, 1e-3);
+        assert.inDelta(bounds[0][1], 174.825, 1e-3);
+        assert.inDelta(bounds[1][0], 794.602, 1e-3);
+        assert.inDelta(bounds[1][1], 856.501, 1e-3);
+      },
+      "renders a line string": function(path) {
+        var centroid = path.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
+        assert.inDelta(centroid[0], 434.655, 1e-3);
+        assert.inDelta(centroid[1], 397.940, 1e-3);
+      }
+    },
+
+    "with an equirectangular projection rotated by [180, -248]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([-180, -248])
+              .scale(900 / Math.PI)
+              .precision(0));
+      },
+      "renders a polygon": function(path) {
+        path({type: "Polygon",  coordinates: [[[-175.03150315031502, 66.57410661866186], [-174.34743474347434, 66.33097912391239], [-174.5994599459946, 67.0603616081608], [-171.86318631863185, 66.90406536153614], [-169.9189918991899, 65.96628788178816], [-170.89108910891088, 65.53213164116411], [-172.54725472547256, 65.42793414341432], [-172.5832583258326, 64.45542416441643], [-172.97929792979298, 64.2470291689169], [-173.91539153915392, 64.28176166816681], [-174.67146714671466, 64.62908666066605], [-176.003600360036, 64.90694665466546], [-176.21962196219621, 65.34110289528951], [-177.22772277227722, 65.51476539153916], [-178.37983798379838, 65.37583539453945], [-178.91989198919893, 65.72316038703869], [-178.7038703870387, 66.10521787878787], [-179.8919891989199, 65.8620903840384], [-179.45994599459945, 65.3932016441644], [-180, 64.97641165316531], [-180, 68.95328281728172], [-177.55175517551754, 68.18916783378336], [-174.95949594959495, 67.19929160516051], [-175.03150315031502, 66.57410661866186]]]});
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 1370, y: 243}]);
+      }
+    },
+
     "projection": {
-      "returns the current projection when called with no arguments": function() {
-        var path = d3.geo.path(), projection = d3.geo.albers();
+      "returns the current projection when called with no arguments": function(d3) {
+        var path = d3.geo.path(), projection = d3.geo.equirectangular();
         path.projection(projection);
         assert.strictEqual(path.projection(), projection);
       }
     },
 
     "pointRadius": {
-      "returns the current point radius when called with no arguments": function() {
+      "returns the current point radius when called with no arguments": function(d3) {
         var path = d3.geo.path(), radius = function() { return 5; };
         assert.strictEqual(path.pointRadius(), 4.5);
         assert.strictEqual(path.pointRadius(radius).pointRadius(), radius);
       },
       "coerces point radius to a number": {
-        "constant": function() {
-          var path = d3.geo.path();
-          assert.strictEqual(path.pointRadius("6").pointRadius(), 6);
+        "when the radius is specified as a constant": function(d3) {
+          var path = d3.geo.path().context(testContext).pointRadius("6");
+          assert.strictEqual(path.pointRadius(), 6);
+          path({type: "Point", coordinates: [0, 0]});
+          assert.strictEqual(testContext.buffer().filter(function(d) { return d.type === "arc"; })[0].r, 6);
         },
-        "function": function(path) {
-          var radius = path.pointRadius();
-          try {
-            path.pointRadius(function() { return "6"; })({type: "Point", coordinates: [0, 0]});
-            assert.strictEqual(testContext.buffer().filter(function(d) { return d.type === "arc"; })[0].r, 6);
-          } finally {
-            path.pointRadius(radius);
-          }
+        "when the radius is specified as a function": function(d3) {
+          var path = d3.geo.path().context(testContext).pointRadius(function() { return "6"; });
+          path({type: "Point", coordinates: [0, 0]});
+          assert.strictEqual(testContext.buffer().filter(function(d) { return d.type === "arc"; })[0].r, 6);
         }
       }
     },
 
-    "area": {
-      topic: function(path) {
-        return path.area;
-      },
-      "no holes": function(area) {
-        assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), 25);
-      },
-      "holes": function(area) {
-        assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]],
-                                                                [[100.2, .2], [100.8, .2], [100.8, .8], [100.2, .8], [100.2, .2]]]}), 16);
-      },
-      "Sphere": function(area) {
-        assert.strictEqual(area({type: "Sphere"}), 1620000);
-      },
-      "supports fallback stream": function() {
-        var path = d3.geo.path(),
-            area = path.area({type: "Polygon", coordinates: [[[-122, 37], [-71, 42], [-80, 25], [-122, 37]]]});
-        assert.inDelta(area, 109021.503, 1e-3);
-      }
-    },
-
-    "bounds": {
-      "supports fallback stream": function() {
-        var path = d3.geo.path(),
-            bounds = path.bounds({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
-        assert.inDelta(bounds[0][0], -5.1214, 1e-3);
-        assert.inDelta(bounds[0][1], 174.825, 1e-3);
-        assert.inDelta(bounds[1][0], 794.602, 1e-3);
-        assert.inDelta(bounds[1][1], 856.501, 1e-3);
-      }
-    },
-
-    "centroid": {
-      topic: function(path) {
-        return path.centroid;
-      },
-      "Point": function(centroid) {
-        assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [480, 250]);
-      },
-      "MultiPoint": {
-        "empty": function(centroid) {
-          assert.isUndefined(centroid({type: "MultiPoint", coordinates: []}));
-        },
-        "single point": function(centroid) {
-          assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[0, 0]]}), [480, 250]);
-        },
-        "two points": function(centroid) {
-          assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[-122, 37], [-74, 40]]}), [-10, 57.5]);
-        }
-      },
-      "LineString": {
-        "empty": function(centroid) {
-          assert.isUndefined(centroid({type: "LineString", coordinates: []}));
-        },
-        "two points": function(centroid) {
-          assert.deepEqual(centroid({type: "LineString", coordinates: [[100, 0], [0, 0]]}), [730, 250]);
-          assert.deepEqual(centroid({type: "LineString", coordinates: [[0, 0], [100, 0], [101, 0]]}), [732.5, 250]);
-        },
-        "two points, one unique": function(centroid) {
-          assert.isUndefined(centroid({type: "LineString", coordinates: [[-122, 37], [-122, 37]]}));
-          assert.isUndefined(centroid({type: "LineString", coordinates: [[ -74, 40], [ -74, 40]]}));
-        },
-        "three points; two unique": function(centroid) {
-          assert.deepEqual(centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-74, 40]]}), [-10, 57.5]);
-        },
-        "three points": function(centroid) {
-          assert.inDelta(centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]}), [17.389135, 103.563545], 1e-6);
-        }
-      },
-      "MultiLineString": function(centroid) {
-        assert.deepEqual(centroid({type: "MultiLineString", coordinates: [[[100, 0], [0, 0]], [[-10, 0], [0, 0]]]}), [705, 250]);
-      },
-      "Polygon": {
-        "single ring": function(centroid) {
-          assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), [982.5, 247.5]);
-        },
-        "zero area": function(centroid) {
-          assert.isUndefined(centroid({type: "Polygon", coordinates: [[[1, 0], [2, 0], [3, 0], [1, 0]]]}));
-        },
-        "two rings, one zero area": function(centroid) {
-          assert.deepEqual(centroid({type: "Polygon", coordinates: [
-            [[100,   0], [100,   1], [101,   1], [101,   0], [100, 0]],
-            [[100.1, 0], [100.2, 0], [100.3, 0], [100.1, 0]
-          ]]}), [982.5, 247.5]);
-        },
-        "clockwise exterior, anticlockwise interior": function(centroid) {
-          assert.inDelta(centroid({
-            type: "Polygon",
-            coordinates: [
-              [[-2, -2], [2, -2], [2, 2], [-2, 2], [-2, -2]].reverse(),
-              [[ 0, -1], [1, -1], [1, 1], [ 0, 1], [ 0, -1]]
-            ]
-          }), [479.642857, 250], 1e-6);
-        }
-      },
-      "MultiPolygon": {
-        "empty": function(centroid) {
-          assert.isUndefined(centroid({type: "MultiPolygon", coordinates: []}));
-        },
-        "single polygon": function(centroid) {
-          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]]}), [982.5, 247.5]);
-        },
-        "two polygons": function(centroid) {
-          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [
-            [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]],
-            [[[0, 0], [1, 0], [1, -1], [0, -1], [0, 0]]]
-          ]}), [732.5, 250]);
-        },
-        "two polygons, one zero area": function(centroid) {
-          assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [
-            [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]],
-            [[[0, 0], [1, 0], [2, 0], [0, 0]]]
-          ]}), [982.5, 247.5]);
-        }
-      },
-      "GeometryCollection": {
-        "Point": function(centroid) {
-          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}]}), [480, 250]);
-        },
-        "Point and LineString": function(centroid) {
-          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
-            {type: "LineString", coordinates: [[179, 0], [180, 0]]},
-            {type: "Point", coordinates: [0, 0]}
-          ]}), [1377.5, 250]);
-        },
-        "Point, LineString and Polygon": function(centroid) {
-          assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
-            {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]},
-            {type: "LineString", coordinates: [[179, 0], [180, 0]]},
-            {type: "Point", coordinates: [0, 0]}
-          ]}), [-417.5, 247.5]);
-        }
-      },
-      "FeatureCollection": {
-        "Point": function(centroid) {
-          assert.deepEqual(centroid({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]}), [480, 250]);
-        },
-        "Point and LineString": function(centroid) {
-          assert.deepEqual(centroid({type: "FeatureCollection", features: [
-            {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}},
-            {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}
-          ]}), [1377.5, 250]);
-        },
-        "Point, LineString and Polygon": function(centroid) {
-          assert.deepEqual(centroid({type: "FeatureCollection", features: [
-            {type: "Feature", geometry: {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]}},
-            {type: "Feature", geometry: {type: "LineString", coordinates: [[179, 0], [180, 0]]}},
-            {type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}
-          ]}), [-417.5, 247.5]);
-        }
-      },
-      "Sphere": function(centroid) {
-        assert.deepEqual(centroid({type: "Sphere"}), [480, 250]);
-      },
-      "rotate([180, -248])": function() {
-        d3.geo.path()
-            .context(testContext)
-            .projection(d3.geo.equirectangular()
-              .rotate([-180, -248])
-              .scale(900 / Math.PI)
-              .precision(0))({type: "Polygon",  coordinates: [[[-175.03150315031502, 66.57410661866186], [-174.34743474347434, 66.33097912391239], [-174.5994599459946, 67.0603616081608], [-171.86318631863185, 66.90406536153614], [-169.9189918991899, 65.96628788178816], [-170.89108910891088, 65.53213164116411], [-172.54725472547256, 65.42793414341432], [-172.5832583258326, 64.45542416441643], [-172.97929792979298, 64.2470291689169], [-173.91539153915392, 64.28176166816681], [-174.67146714671466, 64.62908666066605], [-176.003600360036, 64.90694665466546], [-176.21962196219621, 65.34110289528951], [-177.22772277227722, 65.51476539153916], [-178.37983798379838, 65.37583539453945], [-178.91989198919893, 65.72316038703869], [-178.7038703870387, 66.10521787878787], [-179.8919891989199, 65.8620903840384], [-179.45994599459945, 65.3932016441644], [-180, 64.97641165316531], [-180, 68.95328281728172], [-177.55175517551754, 68.18916783378336], [-174.95949594959495, 67.19929160516051], [-175.03150315031502, 66.57410661866186]]]});
-        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-          {type: "moveTo", x: 1370, y: 243}
-        ]);
-      },
-      "supports fallback stream": function() {
-        var path = d3.geo.path(),
-            centroid = path.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
-        assert.inDelta(centroid[0], 434.655, 1e-3);
-        assert.inDelta(centroid[1], 397.940, 1e-3);
-      }
-    },
-
-    "clipAngle(90)": {
-      topic: function() {
+    "with an equirectangular projection clipped to 90°": {
+      topic: function(d3) {
         return d3.geo.path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
@@ -355,7 +355,7 @@ suite.addBatch({
               .precision(0)
               .clipAngle(90));
       },
-      "Point": function(path) {
+      "renders a point": function(path) {
         path({
           type: "Point",
           coordinates: [-63, 18]
@@ -364,7 +364,7 @@ suite.addBatch({
           {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5}
         ]);
       },
-      "MultiPoint": function(path) {
+      "renders a multipoint": function(path) {
         path({
           type: "MultiPoint",
           coordinates: [[-63, 18], [-62, 18], [-62, 17]]
@@ -375,17 +375,36 @@ suite.addBatch({
           {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
         ]);
       },
-      "Polygon": {
-        "inserts exterior along clip edge if polygon interior surrounds it": function(path) {
-          path({type: "Polygon", coordinates: [[[80, -80], [80, 80], [-80, 80], [-80, -80], [80, -80]]]});
-          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
+      "inserts exterior along clip edge if polygon interior surrounds it": function(path) {
+        path({type: "Polygon", coordinates: [[[80, -80], [80, 80], [-80, 80], [-80, -80], [80, -80]]]});
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
+      },
+      "inserts exterior along clip edge if polygon exterior surrounds it": function(path) {
+        path({type: "Polygon", coordinates: [[[100, -80], [-100, -80], [-100, 80], [100, 80], [100, -80]]]});
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+      },
+      "given a small circle of 60°": {
+        topic: function(path, d3) {
+          path(d3.geo.circle().angle(60)());
+          return testContext.buffer();
         },
-        "inserts exterior along clip edge if polygon exterior surrounds it": function(path) {
-          path({type: "Polygon", coordinates: [[[100, -80], [-100, -80], [-100, 80], [100, 80], [100, -80]]]});
-          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 276, y: 493}]);
         }
       },
-      "rotate([-17, -451])": function() {
+      "given a small circle of 120°": {
+        topic: function(path, d3) {
+          path(d3.geo.circle().angle(120)());
+          return testContext.buffer();
+        },
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 87, y: 700}]);
+        }
+      }
+    },
+
+    "with an equirectangular projection clipped to 90° and rotated by [-17°, -451°]": {
+      "renders a polygon": function(d3) {
         var pole = d3.range(-180, 180, 10).map(function(x) { return [x, 70]; });
         pole.push(pole[0]);
         d3.geo.path()
@@ -399,168 +418,212 @@ suite.addBatch({
           {type: "moveTo", x: 510, y: 160},
           {type: "moveTo", x:  87, y: 700}
         ]);
+      }
+    },
+
+    "with an equirectangular projection clipped to 90° and rotated by [71.03°, 42.37°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([71.03, 42.37])
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90));
       },
-      "rotate([71.03, 42.37])": {
-        topic: function() {
-          return d3.geo.path()
-              .context(testContext)
-              .projection(d3.geo.equirectangular()
-                .rotate([71.03, 42.37])
-                .scale(900 / Math.PI)
-                .precision(0)
-                .clipAngle(90));
-        },
-        /*
-        "grid component": function(path) {
-          var yStepsBig = d3.range(-90, 90, 10);
-          path({type: "LineString", coordinates: yStepsBig.map(function(y) { return [110, y]; })});
-          assert.inDelta(testContext.buffer(), [[
-            [109.538009, -90],
-            [110, -80],
-            [110, -70],
-            [110, -60],
-            [110, -50],
-            [110, -47.625390]
-          ]], 1e-6);
-        },
-        */
-        "can completely clip a LineString": function(path) {
-          path({type: "LineString", coordinates: [[90.0, -42.37], [95.0, -42.37], [90.0, -42.37]]});
-          assert.deepEqual(testContext.buffer(), []);
-        },
-        "doesn't insert a duplicate point": function(path) {
-          path({type: "LineString", coordinates: [[0, 0]]});
-          assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}]);
-        },
-        "Point": {
-          "visible": function(path) {
-            path({type: "Point", coordinates: [0, 0]});
-            assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
-          },
-          "invisible": function(path) {
-            path({type: "Point", coordinates: [-180, 0]});
-            assert.deepEqual(testContext.buffer(), []);
-          }
-        },
-        "MultiPoint": function(path) {
-          path({type: "MultiPoint", coordinates: [[0, 0], [-180, 0]]});
-          assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
-        }
+      /*
+      "grid component": function(path) {
+        var yStepsBig = d3.range(-90, 90, 10);
+        path({type: "LineString", coordinates: yStepsBig.map(function(y) { return [110, y]; })});
+        assert.inDelta(testContext.buffer(), [[
+          [109.538009, -90],
+          [110, -80],
+          [110, -70],
+          [110, -60],
+          [110, -50],
+          [110, -47.625390]
+        ]], 1e-6);
       },
-      "rotate(-24, -175.5])": {
-        topic: function() {
-          return d3.geo.path()
-              .context(testContext)
-              .projection(d3.geo.equirectangular()
-                .rotate([-24, -175.5])
-                .scale(900 / Math.PI)
-                .precision(0)
-                .clipAngle(90));
-        },
-        "Antarctica": function(path) {
-          path(antarctica);
-          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
-        }
+      */
+      "can completely clip a LineString": function(path) {
+        path({type: "LineString", coordinates: [[90.0, -42.37], [95.0, -42.37], [90.0, -42.37]]});
+        assert.deepEqual(testContext.buffer(), []);
       },
-      "circle.angle(60)": {
-        "rotate([0, 0])": function(path) {
+      "doesn't insert a duplicate point": function(path) {
+        path({type: "LineString", coordinates: [[0, 0]]});
+        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}]);
+      },
+      "renders a visible point": function(path) {
+        path({type: "Point", coordinates: [0, 0]});
+        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
+      },
+      "does not render an invisible point": function(path) {
+        path({type: "Point", coordinates: [-180, 0]});
+        assert.deepEqual(testContext.buffer(), []);
+      },
+      "renders a multipoint": function(path) {
+        path({type: "MultiPoint", coordinates: [[0, 0], [-180, 0]]});
+        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
+      }
+    },
+
+    "with an equirectangular projection clipped to 90° and rotated by [-24°, -175.5°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([-24, -175.5])
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90));
+      },
+      "renders Antarctica with no gaps": function(path) {
+        path(antarctica);
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
+      }
+    },
+
+    "with an equirectangular projection clipped to 90° and rotated by [90°, 0°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([90, 0])
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90));
+      },
+      "given a small circle of 60°": {
+        topic: function(path, d3) {
           path(d3.geo.circle().angle(60)());
-          assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-            {type: "moveTo", x: 276, y: 493}]);
+          return testContext.buffer();
         },
-        "rotate([90, 0])": function(path) {
-          try {
-            path.projection().rotate([90, 0]);
-            path(d3.geo.circle().angle(60)());
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-              {type: "moveTo", x: 930, y: 550}]);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
-        },
-        "rotate([180, 0])": function(path) {
-          try {
-            path.projection().rotate([180, 0]);
-            path(d3.geo.circle().angle(60)());
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), []);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
-        },
-        "rotate([270, 0])": function(path) {
-          try {
-            path.projection().rotate([270, 0]);
-            path(d3.geo.circle().angle(60)());
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-              {type: "moveTo", x: 30, y: -50}]);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: 550}]);
         }
       },
-      "circle.angle(120)": {
-        "rotate([0, 0])": function(path) {
+      "given a small circle of 120°": {
+        topic: function(path, d3) {
           path(d3.geo.circle().angle(120)());
-          assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-            {type: "moveTo", x: 87, y: 700}]);
+          return testContext.buffer();
         },
-        "rotate([90, 0])": function(path) {
-          try {
-            path.projection().rotate([90, 0]);
-            path(d3.geo.circle().angle(120)());
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-              {type: "moveTo", x: 30, y: 550}]);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: 550}]);
+        }
+      }
+    },
+
+    "with an equirectangular projection clipped to 90° and rotated by [180°, 0°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([180, 0])
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90));
+      },
+      "given a small circle of 60°": {
+        topic: function(path, d3) {
+          path(d3.geo.circle().angle(60)());
+          return testContext.buffer();
         },
-        "rotate([180, 0])": function(path) {
-          try {
-            path.projection().rotate([180, 0]);
-            path(d3.geo.circle().angle(120)());
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-              {type: "moveTo", x: 276, y: 493},
-              {type: "moveTo", x:  87, y: 700}]);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
-        },
-        "rotate([270, 0])": function(path) {
-          try {
-            path.projection().rotate([270, 0]);
-            path(d3.geo.circle().angle(120)());
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-              {type: "moveTo", x: 930, y: -50}]);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
-        },
-        "rotate([210, 1])": function(path) {
-          try {
-            path.projection().rotate([210, 1]);
-            path(d3.geo.circle().angle(120)());
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: 250}]);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
-        },
-        "rotate([-150, 60])": function(path) {
-          try {
-            path.projection().rotate([-150, 60]);
-            path(d3.geo.circle().angle(120)());
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: -87}]);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
+        "does not render": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), []);
         }
       },
-      "Sphere": function(path) {
+      "given a small circle of 120°": {
+        topic: function(path, d3) {
+          path(d3.geo.circle().angle(120)());
+          return testContext.buffer();
+        },
+        "renders in two parts": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [
+            {type: "moveTo", x: 276, y: 493},
+            {type: "moveTo", x:  87, y: 700}
+          ]);
+        }
+      }
+    },
+
+    "with an equirectangular projection clipped to 90° and rotated by [270°, 0°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([270, 0])
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90));
+      },
+      "given a small circle of 60°": {
+        topic: function(path, d3) {
+          path(d3.geo.circle().angle(60)());
+          return testContext.buffer();
+        },
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: -50}]);
+        }
+      },
+      "given a small circle of 120°": {
+        topic: function(path, d3) {
+          path(d3.geo.circle().angle(120)());
+          return testContext.buffer();
+        },
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: -50}]);
+        }
+      }
+    },
+
+    "with an equirectangular projection clipped to 90° and rotated by [210°, 1°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([210, 1])
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90));
+      },
+      "given a small circle of 120°": {
+        topic: function(path, d3) {
+          path(d3.geo.circle().angle(120)());
+          return testContext.buffer();
+        },
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: 250}]);
+        }
+      }
+    },
+
+    "with an equirectangular projection clipped to 90° and rotated by [-150°, 60°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .rotate([-150, 60])
+              .scale(900 / Math.PI)
+              .precision(0)
+              .clipAngle(90));
+      },
+      "given a small circle of 120°": {
+        topic: function(path, d3) {
+          path(d3.geo.circle().angle(120)());
+          return testContext.buffer();
+        },
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: -87}]);
+        }
+      },
+      "renders a sphere": function(path) {
         path({type: "Sphere"});
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 87, y: 700}]);
       }
     },
-    "clipAngle(170)": {
-      topic: function() {
+
+    "with an equirectangular projection clipped to 170°": {
+      topic: function(d3) {
         return d3.geo.path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
@@ -568,29 +631,47 @@ suite.addBatch({
               .precision(0)
               .clipAngle(170));
       },
-      "stripes": {
-        "rotate([0, 0])": function(path) {
-          path(stripes(80, -80));
-          assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
+      "given some stripes": {
+        topic: function(path, d3) {
+          path(stripes(d3, 80, -80));
+          return testContext.buffer();
+        },
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [
             {type: "moveTo", x: -420, y: -150},
             {type: "moveTo", x: -420, y:  650},
-            {type: "moveTo", x: 1331, y:  259}]);
-        },
-        "rotate([0, -90])": function(path) {
-          try {
-            path.projection().rotate([0, -90]);
-            path(stripes(80, -80));
-            assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-              {type: "moveTo", x:  480, y: 200},
-              {type: "moveTo", x: 1350, y: 210}]);
-          } finally {
-            path.projection().rotate([0, 0]);
-          }
+            {type: "moveTo", x: 1331, y:  259}
+          ]);
         }
       }
     },
-    "clipAngle(30)": {
-      topic: function() {
+
+    "with an equirectangular projection clipped to 170° and rotated by [0°, -90°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .rotate([0, -90])
+              .precision(0)
+              .clipAngle(170));
+      },
+      "given some stripes": {
+        topic: function(path, d3) {
+          path(stripes(d3, 80, -80));
+          return testContext.buffer();
+        },
+        "renders": function(buffer) {
+          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [
+            {type: "moveTo", x:  480, y: 200},
+            {type: "moveTo", x: 1350, y: 210}
+          ]);
+        }
+      }
+    },
+
+    "with an equirectangular projection clipped to 30°": {
+      topic: function(d3) {
         return d3.geo.path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
@@ -606,8 +687,9 @@ suite.addBatch({
         ]);
       }
     },
-    "clipAngle(150)": {
-      topic: function() {
+
+    "with an equirectangular projection clipped to 150°": {
+      topic: function(d3) {
         return d3.geo.path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
@@ -626,78 +708,86 @@ suite.addBatch({
       }
     },
 
-    "antimeridian cutting": {
-      "rotate([98, 0])": {
-        topic: function() {
-          return d3.geo.path()
-              .context(testContext)
-              .projection(d3.geo.equirectangular()
-                .scale(900 / Math.PI)
-                .rotate([98, 0])
-                .precision(0));
-        },
-        "small U.S. county polygons": {
-          "Keweenaw": function(path) {
-            path({
-              type: "Polygon",
-              coordinates: [[[-88.23013, 47.198326], [-88.514931, 47.285957], [-88.383484, 47.285957], [-88.23013, 47.198326]]]
-            });
-            assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
-          },
-          "Accomack": function(path) {
-            path({
-              type: "MultiPolygon",
-              coordinates: [
-                [[[-75.397659, 38.013497], [-75.244304, 38.029928], [-75.666029, 37.465803], [-75.939876, 37.547957], [-75.671506, 37.95325], [-75.622213, 37.991589], [-75.397659, 38.013497]]],
-                [[[-76.016553, 37.95325], [-76.043938, 37.95325], [-75.994645, 37.95325], [-76.016553, 37.95325]]]
-              ]
-            });
-            assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
-          },
-          "Hopewell": function(path) {
-            path({
-              type: "Polygon",
-              coordinates: [[[-77.298157, 37.312448], [-77.298157, 37.312448], [-77.336496, 37.312448], [-77.281726, 37.312448], [-77.298157, 37.312448]]]
-            });
-            assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
-          }
-        }
+    "with an equirectangular projection rotated by [98°, 0°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .rotate([98, 0])
+              .precision(0));
       },
-      "rotate([330, 232])": {
-        topic: function() {
-          return d3.geo.path()
-              .context(testContext)
-              .projection(d3.geo.equirectangular()
-                .rotate([330, 232])
-                .scale(900 / Math.PI)
-                .precision(0));
-        },
-        "degenerate points": function(path) {
+      "renders Keweenaw, a small U.S. county": function(path) {
+        path({
+          type: "Polygon",
+          coordinates: [[[-88.23013, 47.198326], [-88.514931, 47.285957], [-88.383484, 47.285957], [-88.23013, 47.198326]]]
+        });
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+      },
+      "renders Accomack, a small U.S. county": function(path) {
+        path({
+          type: "MultiPolygon",
+          coordinates: [
+            [[[-75.397659, 38.013497], [-75.244304, 38.029928], [-75.666029, 37.465803], [-75.939876, 37.547957], [-75.671506, 37.95325], [-75.622213, 37.991589], [-75.397659, 38.013497]]],
+            [[[-76.016553, 37.95325], [-76.043938, 37.95325], [-75.994645, 37.95325], [-76.016553, 37.95325]]]
+          ]
+        });
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
+      },
+      "renders Hopewell, a small U.S. county": function(path) {
+        path({
+          type: "Polygon",
+          coordinates: [[[-77.298157, 37.312448], [-77.298157, 37.312448], [-77.336496, 37.312448], [-77.281726, 37.312448], [-77.298157, 37.312448]]]
+        });
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
+      }
+    },
+
+    "with an equirectangular projection rotated by [330°, 232°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .rotate([330, 232])
+              .precision(0));
+      },
+      "given a small circle of 30°": {
+        topic: function(path, d3) {
           path(d3.geo.circle().angle(30)());
-          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
-        }
-      },
-      "rotate([34.5, 90])": {
-        topic: function() {
-          return d3.geo.path()
-              .context(testContext)
-              .projection(d3.geo.equirectangular()
-                .rotate([34.5, 90])
-                .scale(900 / Math.PI)
-                .precision(0));
+          return testContext.buffer();
         },
-        "clip point ordering": function(path) {
-          var line = d3.range(-90,  180,  10).map(function(x) { return [x, 20]; })
-             .concat(d3.range(170, -100, -10).map(function(x) { return [x,  0]; }))
-             .concat([[-90, 20]]);
-          path({type: "Polygon", coordinates: [line]});
-          assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 3);
+        "renders degenerate points": function(buffer) {
+          assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 2);
         }
       }
     },
 
-    "stereographic.precision(1)": {
-      topic: function() {
+    "with an equirectangular projection rotated by [34.5°, 90°]": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .rotate([34.5, 90])
+              .precision(0));
+      },
+      "given some lines": {
+        topic: function(path, d3) {
+          var line = d3.range(-90,  180,  10).map(function(x) { return [x, 20]; })
+             .concat(d3.range(170, -100, -10).map(function(x) { return [x,  0]; }))
+             .concat([[-90, 20]]);
+          path({type: "Polygon", coordinates: [line]});
+          return testContext.buffer();
+        },
+        "does something related to clip point ordering": function(buffer) {
+          assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 3);
+        }
+      }
+    },
+
+    "with a stereographic projection and adaptive resampling": {
+      topic: function(d3) {
         return d3.geo.path()
             .context(testContext)
             .projection(d3.geo.stereographic()
@@ -718,8 +808,9 @@ suite.addBatch({
         ]);
       }
     },
-    "resampling near poles": {
-      topic: function() {
+
+    "with an Albers projection and adaptive resampling": {
+      topic: function(d3) {
         return d3.geo.path()
             .context(testContext)
             .projection(d3.geo.albers()
@@ -727,26 +818,27 @@ suite.addBatch({
               .rotate([0, 0])
               .precision(1));
       },
-      "rotate([0, 0])": function(path) {
+      "correctly resamples near the polesa": function(path) {
         path({type: "LineString", coordinates: [[0, 88], [180, 89]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
         path({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
-      },
-      "rotate([11.5, 285])": function(path) {
-        try {
-          path.projection().rotate([11.5, 285]);
-          path({type: "LineString", coordinates: [[170, 20], [170, 0]]});
-          assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
-        } finally {
-          path.projection().rotate([0, 0]);
-        }
       }
     },
-    "rotate([0, 0, 0])": {
-      "longitudes wrap at ±180°": function(path) {
-        path({type: "Point", coordinates: [180 + 1e-6, 0]});
-        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: -420, y: 250}, {type: "arc", x: -420, y: 250, r: 4.5}]);
+
+    "with an Albers projection rotated by [11.5°, 285°] and adaptive resampling": {
+      topic: function(d3) {
+        return d3.geo.path()
+            .context(testContext)
+            .projection(d3.geo.albers()
+              .scale(140)
+              .rotate([11.5, 285])
+              .precision(1));
+      },
+      "correctly resamples near the polesa": function(path) {
+        path.projection().rotate([11.5, 285]);
+        path({type: "LineString", coordinates: [[170, 20], [170, 0]]});
+        assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
       }
     }
   }
@@ -762,11 +854,7 @@ var testContext = {
   buffer: function() { var result = testBuffer; testBuffer = []; return result; }
 };
 
-function feature(o) {
-  return {type: "Feature", geometry: o};
-}
-
-function stripes(a, b) {
+function stripes(d3, a, b) {
   return {type: "Polygon", coordinates: [a, b].map(function(d, i) {
     var stripe = d3.range(-180, 180, 1).map(function(x) { return [x, d]; });
     stripe.push(stripe[0]);

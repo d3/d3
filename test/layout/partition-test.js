@@ -1,17 +1,14 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.layout.partition");
 
 suite.addBatch({
   "partition": {
-    topic: function() {
-      return d3.layout.partition;
-    },
-    "ignores zero values": function(partition) {
-      var p = partition().size([3, 3]);
+    topic: load("layout/partition"),
+    "ignores zero values": function(d3) {
+      var p = d3.layout.partition().size([3, 3]);
       assert.deepEqual(p.nodes({children: [{value: 1}, {value: 0}, {value: 2}, {children: [{value: 0}, {value: 0}]}]}).map(metadata), [
         {x: 0, y: 0, dx: 3, dy: 1},
         {x: 2, y: 1, dx: 1, dy: 1},
@@ -22,8 +19,8 @@ suite.addBatch({
         {x: 3, y: 2, dx: 0, dy: 1}
       ]);
     },
-    "can handle an empty children array": function(partition) {
-      var p = partition();
+    "can handle an empty children array": function(d3) {
+      var p = d3.layout.partition();
       assert.deepEqual(p.nodes({children: []}).map(metadata), [
         {x: 0, y: 0, dx: 1, dy: 1}
       ]);

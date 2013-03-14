@@ -1,8 +1,6 @@
-require("../env");
-
-var assert = require("../env-assert");
-
-var format = d3.format("13.8f");
+var assert = require("../env-assert"),
+    d3 = require("../../"),
+    format = d3.format("13.8f");
 
 module.exports = function(suite, mapping) {
 

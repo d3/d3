@@ -1,28 +1,29 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.layout.pack");
 
 suite.addBatch({
   "pack": {
-    topic: d3.layout.pack,
-    "can handle an empty children array": function(pack) {
+    topic: load("layout/pack"),
+    "can handle an empty children array": function(d3) {
+      var pack = d3.layout.pack();
       assert.deepEqual(pack.nodes({children: [{children: []}, {value: 1}]}).map(layout), [
         {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5},
         {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0},
         {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5}
       ]);
     },
-    "can handle zero-valued nodes": function(pack) {
+    "can handle zero-valued nodes": function(d3) {
+      var pack = d3.layout.pack();
       assert.deepEqual(pack.nodes({children: [{value: 0}, {value: 1}]}).map(layout), [
         {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5},
         {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0},
         {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5}
       ]);
     },
-    "can handle small nodes": function() {
+    "can handle small nodes": function(d3) {
       assert.deepEqual(d3.layout.pack().sort(null).nodes({children: [
         {value: .01},
         {value: 2},
@@ -48,7 +49,8 @@ suite.addBatch({
         {y: 0.3878967195987758, x: 0.3386645534068854, value: 0.01, r: 0.01652869779539461, depth: 1}
       ]);
     },
-    "can handle residual floating point error": function(pack) {
+    "can handle residual floating point error": function(d3) {
+      var pack = d3.layout.pack();
       var result = pack.nodes({children: [
         {value: 0.005348322447389364},
         {value: 0.8065882022492588},
@@ -60,7 +62,8 @@ suite.addBatch({
       assert.isFalse(result.map(function(d) { return d.y; }).some(isNaN));
       assert.isFalse(result.map(function(d) { return d.r; }).some(isNaN));
     },
-    "avoids coincident circles": function(pack) {
+    "avoids coincident circles": function(d3) {
+      var pack = d3.layout.pack();
       var result = pack({children: [
         {children: [{value: 17010}, {value: 5842}, {value: 0}, {value: 0}]},
         {children: [

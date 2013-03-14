@@ -1,4 +1,5 @@
 import "../core/array";
+import "../core/document";
 import "selection";
 
 d3_selectionPrototype.on = function(type, listener, capture) {
@@ -72,7 +73,7 @@ var d3_selection_onFilters = d3.map({
 });
 
 d3_selection_onFilters.forEach(function(k) {
-  if ("on" + k in document) d3_selection_onFilters.remove(k);
+  if ("on" + k in d3_document) d3_selection_onFilters.remove(k);
 });
 
 function d3_selection_onListener(listener, argumentz) {

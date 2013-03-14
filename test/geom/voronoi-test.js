@@ -1,42 +1,42 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.geom.voronoi");
 
 suite.addBatch({
   "voronoi": {
+    topic: load("geom/voronoi"),
     "with zero points": {
-      "returns the empty array": function() {
+      "returns the empty array": function(d3) {
         assert.deepEqual(d3.geom.voronoi([]), []);
       }
     },
     "with one point": {
-      "returns the semi-infinite bounding box": function() {
+      "returns the semi-infinite bounding box": function(d3) {
         assert.deepEqual(d3.geom.voronoi([[50, 50]], 100, 100), [[[-1000000,-1000000],[-1000000,1000000],[1000000,1000000],[1000000,-1000000]]]);
       }
     },
     "with two points": {
-      "separated by a line at 90° (vertical)": function() {
+      "separated by a line at 90° (vertical)": function(d3) {
         assert.deepEqual(d3.geom.voronoi([[50, 25], [50, 75]], 100, 100), [[[-1000000,50],[1000000,50],[-1000000,-1000000],[1000000,-1000000]],[[-1000000,50],[1000000,50],[-1000000,1000000],[1000000,1000000]]]);
         assert.deepEqual(d3.geom.voronoi([[50, 75], [50, 25]], 100, 100), [[[-1000000,50],[1000000,50],[-1000000,1000000],[1000000,1000000]],[[-1000000,50],[1000000,50],[-1000000,-1000000],[1000000,-1000000]]]);
       },
-      "separated by a line at 0° (horizontal)": function() {
+      "separated by a line at 0° (horizontal)": function(d3) {
         assert.deepEqual(d3.geom.voronoi([[25, 50], [75, 50]], 100, 100), [[[50,1000000],[50,-1000000],[-1000000,-1000000],[-1000000,1000000]],[[50,-1000000],[50,1000000],[1000000,-1000000],[1000000,1000000]]]);
         assert.deepEqual(d3.geom.voronoi([[75, 50], [25, 50]], 100, 100), [[[50,-1000000],[50,1000000],[1000000,-1000000],[1000000,1000000]],[[50,1000000],[50,-1000000],[-1000000,-1000000],[-1000000,1000000]]]);
       },
-      "separated by a line at 45° (diagonal)": function() {
+      "separated by a line at 45° (diagonal)": function(d3) {
         assert.deepEqual(d3.geom.voronoi([[25, 25], [75, 75]], 100, 100), [[[-999900,1000000],[1000100,-1000000],[-1000000,-1000000]],[[-999900,1000000],[1000100,-1000000],[1000000,1000000]]]);
         assert.deepEqual(d3.geom.voronoi([[75, 25], [25, 75]], 100, 100), [[[-1000000,-1000000],[1000000,1000000],[1000000,-1000000]],[[-1000000,-1000000],[1000000,1000000],[-1000000,1000000]]]);
       },
-      "separated by an arbitrary diagonal": function() {
+      "separated by an arbitrary diagonal": function(d3) {
         assert.deepEqual(d3.geom.voronoi([[25, 25], [50, 75]], 100, 100), [[[-1000000,500068.75],[1000000,-499931.25],[-1000000,-1000000],[1000000,-1000000]],[[-1000000,500068.75],[1000000,-499931.25],[-1000000,1000000],[1000000,1000000]]]);
         assert.deepEqual(d3.geom.voronoi([[25, 25], [75, 50]], 100, 100), [[[-499931.25,1000000],[500068.75,-1000000],[-1000000,1000000],[1000000,1000000]], [[-499931.25,1000000],[500068.75,-1000000],[-1000000,-1000000],[1000000,-1000000]]]);
       }
     },
     "with three points": {
-      "collinear": function() {
+      "collinear": function(d3) {
         assert.deepEqual(d3.geom.voronoi([[25, 25], [50, 50], [75, 75]], 100, 100), [[[-999925,1000000],[1000075,-1000000],[-1000000,-1000000]],[[-999925,1000000],[-999875,1000000],[1000125,-1000000],[1000075,-1000000]],[[-999875,1000000],[1000125,-1000000],[1000000,1000000]]]);
       }
     }

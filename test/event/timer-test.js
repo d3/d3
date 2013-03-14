@@ -1,15 +1,18 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.timer");
 
 suite.addBatch({
   "timer": {
-    topic: function() {
-      return d3.timer;
-    },
+    topic: load("event/timer").sandbox({
+      document: {},
+      window: {},
+      setTimeout: setTimeout,
+      clearTimeout: clearTimeout
+    }),
+
     "with no delay": {
       topic: timer(),
       "first calls after 17 ms or less": function(info) {
@@ -22,6 +25,7 @@ suite.addBatch({
         assert.inDelta(info.stop - info.start, 17 * 3, 20);
       }
     },
+
     "with a specified delay": {
       topic: timer(250),
       "first calls after the delay": function(info) {
@@ -39,7 +43,7 @@ suite.addBatch({
 
 function timer(delay) {
   var args = Array.prototype.slice.call(arguments);
-  return function() {
+  return function(d3) {
     var cb = this.callback,
         info = {scheduled: Date.now(), count: 0};
 

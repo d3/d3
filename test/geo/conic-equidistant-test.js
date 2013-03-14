@@ -1,6 +1,5 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert"),
     projectionTestSuite = require("./projection-test-suite");
 
@@ -8,11 +7,9 @@ var suite = vows.describe("d3.geo.conicEquidistant");
 
 suite.addBatch({
   "conicEquidistant": {
-    topic: function() {
-      return d3.geo.conicEquidistant;
-    },
+    topic: load("geo/conic-equidistant"),
     "default": projectionTestSuite({
-      topic: function(projection) { return projection(); }
+      topic: function(d3) { return d3.geo.conicEquidistant(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 462.95768394,   32.17010277]],
@@ -24,7 +21,7 @@ suite.addBatch({
       "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   27.47052037]],
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
+      topic: function(d3) { return d3.geo.conicEquidistant().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.11361544,   -1.45219932]],

@@ -1,5 +1,6 @@
 import "../math/trigonometry";
 import "conic";
+import "equirectangular";
 import "geo";
 import "projection";
 

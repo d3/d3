@@ -1,50 +1,47 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.requote");
 
 suite.addBatch({
   "requote": {
-    topic: function() {
-      return d3.requote;
+    topic: load("format/requote"),
+    "quotes backslashes": function(d3) {
+      assert.equal(d3.requote("\\"), "\\\\");
     },
-    "quotes backslashes": function(quote) {
-      assert.equal(quote("\\"), "\\\\");
+    "quotes carets": function(d3) {
+      assert.equal(d3.requote("^"), "\\^");
     },
-    "quotes carets": function(quote) {
-      assert.equal(quote("^"), "\\^");
+    "quotes dollar signs": function(d3) {
+      assert.equal(d3.requote("$"), "\\$");
     },
-    "quotes dollar signs": function(quote) {
-      assert.equal(quote("$"), "\\$");
+    "quotes stars": function(d3) {
+      assert.equal(d3.requote("*"), "\\*");
     },
-    "quotes stars": function(quote) {
-      assert.equal(quote("*"), "\\*");
+    "quotes plusses": function(d3) {
+      assert.equal(d3.requote("+"), "\\+");
     },
-    "quotes plusses": function(quote) {
-      assert.equal(quote("+"), "\\+");
+    "quotes question marks": function(d3) {
+      assert.equal(d3.requote("?"), "\\?");
     },
-    "quotes question marks": function(quote) {
-      assert.equal(quote("?"), "\\?");
+    "quotes periods": function(d3) {
+      assert.equal(d3.requote("."), "\\.");
     },
-    "quotes periods": function(quote) {
-      assert.equal(quote("."), "\\.");
+    "quotes parentheses": function(d3) {
+      assert.equal(d3.requote("("), "\\(");
+      assert.equal(d3.requote(")"), "\\)");
     },
-    "quotes parentheses": function(quote) {
-      assert.equal(quote("("), "\\(");
-      assert.equal(quote(")"), "\\)");
+    "quotes pipes": function(d3) {
+      assert.equal(d3.requote("|"), "\\|");
     },
-    "quotes pipes": function(quote) {
-      assert.equal(quote("|"), "\\|");
+    "quotes curly braces": function(d3) {
+      assert.equal(d3.requote("{"), "\\{");
+      assert.equal(d3.requote("}"), "\\}");
     },
-    "quotes curly braces": function(quote) {
-      assert.equal(quote("{"), "\\{");
-      assert.equal(quote("}"), "\\}");
-    },
-    "quotes square brackets": function(quote) {
-      assert.equal(quote("["), "\\[");
-      assert.equal(quote("]"), "\\]");
+    "quotes square brackets": function(d3) {
+      assert.equal(d3.requote("["), "\\[");
+      assert.equal(d3.requote("]"), "\\]");
     }
   }
 });

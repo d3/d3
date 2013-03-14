@@ -1,3 +1,4 @@
+import "../arrays/merge";
 import "../core/noop";
 import "../math/trigonometry";
 import "clip-polygon";

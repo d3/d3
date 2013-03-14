@@ -1,4 +1,5 @@
 import "../arrays/range";
+import "../math/trigonometry";
 import "geom";
 
 // Adapted from Nicolas Garcia Belmonte's JIT implementation:

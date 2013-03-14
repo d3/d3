@@ -1,3 +1,6 @@
+import "../arrays/set";
+import "../xhr/xhr";
+
 function d3_dsv(delimiter, mimeType) {
   var reFormat = new RegExp("[\"" + delimiter + "\n]"),
       delimiterCode = delimiter.charCodeAt(0);

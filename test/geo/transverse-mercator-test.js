@@ -1,6 +1,5 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert"),
     projectionTestSuite = require("./projection-test-suite");
 
@@ -8,11 +7,9 @@ var suite = vows.describe("d3.geo.transverseMercator");
 
 suite.addBatch({
   "transverseMercator": {
-    topic: function() {
-      return d3.geo.transverseMercator;
-    },
+    topic: load("geo/transverse-mercator"),
     "default": projectionTestSuite({
-      topic: function(projection) { return projection(); }
+      topic: function(d3) { return d3.geo.transverseMercator(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 473.09890692,   32.39629813]],
@@ -24,7 +21,7 @@ suite.addBatch({
       "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   27.47052037]],
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
+      topic: function(d3) { return d3.geo.transverseMercator().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.04600729,   -1.45069135]],

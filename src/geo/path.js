@@ -1,9 +1,14 @@
 import "../core/identity";
 import "../math/trigonometry";
+import "albers-usa";
 import "area";
 import "bounds";
 import "centroid";
 import "geo";
+import "path-area";
+import "path-buffer";
+import "path-centroid";
+import "path-context";
 import "projection";
 import "resample";
 import "stream";

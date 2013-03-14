@@ -1,6 +1,5 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.geo.graticule");
@@ -9,31 +8,32 @@ var ε = 1e-6;
 
 suite.addBatch({
   "graticule": {
+    topic: load("geo/graticule", "arrays/extent"),
 
     "extent": {
-      "sets minorExtent and majorExtent": function() {
+      "sets minorExtent and majorExtent": function(d3) {
         var graticule = d3.geo.graticule().extent([[-90, -45], [90, 45]]);
         assert.deepEqual(graticule.minorExtent(), [[-90, -45], [90, 45]]);
         assert.deepEqual(graticule.majorExtent(), [[-90, -45], [90, 45]]);
       },
-      "gets minorExtent": function() {
+      "gets minorExtent": function(d3) {
         var graticule = d3.geo.graticule().minorExtent([[-90, -45], [90, 45]]);
         assert.deepEqual(graticule.extent(), [[-90, -45], [90, 45]]);
       }
     },
 
     "majorExtent": {
-      "default longitude ranges from 180°W (inclusive) to 180°E (exclusive)": function() {
+      "default longitude ranges from 180°W (inclusive) to 180°E (exclusive)": function(d3) {
         var extent = d3.geo.graticule().majorExtent();
         assert.equal(extent[0][0], -180);
         assert.equal(extent[1][0], +180);
       },
-      "default latitude ranges from 90°S (exclusive) to 90°N (exclusive)": function() {
+      "default latitude ranges from 90°S (exclusive) to 90°N (exclusive)": function(d3) {
         var extent = d3.geo.graticule().majorExtent();
         assert.equal(extent[0][1], -90 + ε);
         assert.equal(extent[1][1], +90 - ε);
       },
-      "coerces input values to numbers": function() {
+      "coerces input values to numbers": function(d3) {
         var graticule = d3.geo.graticule().majorExtent([["-90", "-45"], ["+90", "+45"]]),
             extent = graticule.majorExtent();
         assert.strictEqual(extent[0][0], -90);
@@ -44,17 +44,17 @@ suite.addBatch({
     },
 
     "minorExtent": {
-      "default longitude ranges from 180°W (inclusive) to 180°E (exclusive)": function() {
+      "default longitude ranges from 180°W (inclusive) to 180°E (exclusive)": function(d3) {
         var extent = d3.geo.graticule().minorExtent();
         assert.equal(extent[0][0], -180);
         assert.equal(extent[1][0], +180);
       },
-      "default latitude ranges from 80°S (inclusive) to 80°N (inclusive)": function() {
+      "default latitude ranges from 80°S (inclusive) to 80°N (inclusive)": function(d3) {
         var extent = d3.geo.graticule().minorExtent();
         assert.equal(extent[0][1], -80 - ε);
         assert.equal(extent[1][1], +80 + ε);
       },
-      "coerces input values to numbers": function() {
+      "coerces input values to numbers": function(d3) {
         var graticule = d3.geo.graticule().minorExtent([["-90", "-45"], ["+90", "+45"]]),
             extent = graticule.minorExtent();
         assert.strictEqual(extent[0][0], -90);
@@ -65,22 +65,22 @@ suite.addBatch({
     },
 
     "step": {
-      "sets minorStep and majorStep": function() {
+      "sets minorStep and majorStep": function(d3) {
         var graticule = d3.geo.graticule().step([22.5, 22.5]);
         assert.deepEqual(graticule.minorStep(), [22.5, 22.5]);
         assert.deepEqual(graticule.majorStep(), [22.5, 22.5]);
       },
-      "gets minorStep": function() {
+      "gets minorStep": function(d3) {
         var graticule = d3.geo.graticule().minorStep([22.5, 22.5]);
         assert.deepEqual(graticule.step(), [22.5, 22.5]);
       }
     },
 
     "minorStep": {
-      "defaults to 10°, 10°": function() {
+      "defaults to 10°, 10°": function(d3) {
         assert.deepEqual(d3.geo.graticule().minorStep(), [10, 10]);
       },
-      "coerces input values to numbers": function() {
+      "coerces input values to numbers": function(d3) {
         var graticule = d3.geo.graticule().minorStep(["45", "11.25"]),
             step = graticule.minorStep();
         assert.strictEqual(step[0], 45);
@@ -89,10 +89,10 @@ suite.addBatch({
     },
 
     "majorStep": {
-      "defaults to 90°, 360°": function() {
+      "defaults to 90°, 360°": function(d3) {
         assert.deepEqual(d3.geo.graticule().majorStep(), [90, 360]);
       },
-      "coerces input values to numbers": function() {
+      "coerces input values to numbers": function(d3) {
         var graticule = d3.geo.graticule().majorStep(["45", "11.25"]),
             step = graticule.majorStep();
         assert.strictEqual(step[0], 45);
@@ -101,21 +101,21 @@ suite.addBatch({
     },
 
     "lines": {
-      "default longitude ranges from 180°W (inclusive) to 180°E (exclusive)": function() {
+      "default longitude ranges from 180°W (inclusive) to 180°E (exclusive)": function(d3) {
         var lines = d3.geo.graticule().lines()
             .filter(function(line) { return line.coordinates[0][0] === line.coordinates[1][0]; })
             .sort(function(a, b) { return a.coordinates[0][0] - b.coordinates[0][0]; });
         assert.equal(lines[0].coordinates[0][0], -180);
         assert.equal(lines[lines.length - 1].coordinates[0][0], +170);
       },
-      "default latitude ranges from 90°S (exclusive) to 90°N (exclusive)": function() {
+      "default latitude ranges from 90°S (exclusive) to 90°N (exclusive)": function(d3) {
         var lines = d3.geo.graticule().lines()
             .filter(function(line) { return line.coordinates[0][1] === line.coordinates[1][1]; })
             .sort(function(a, b) { return a.coordinates[0][1] - b.coordinates[0][1]; });
         assert.equal(lines[0].coordinates[0][1], -80);
         assert.equal(lines[lines.length - 1].coordinates[0][1], +80);
       },
-      "default minor longitude lines extend from 80°S to 80°N": function() {
+      "default minor longitude lines extend from 80°S to 80°N": function(d3) {
         var lines = d3.geo.graticule().lines()
             .filter(function(line) { return line.coordinates[0][0] === line.coordinates[1][0]; })
             .filter(function(line) { return Math.abs(line.coordinates[0][0] % 90) > ε; });
@@ -123,7 +123,7 @@ suite.addBatch({
           assert.deepEqual(d3.extent(line.coordinates, function(p) { return p[1]; }), [-80 - ε, +80 + ε]);
         });
       },
-      "default major longitude lines extend from 90°S to 90°N": function() {
+      "default major longitude lines extend from 90°S to 90°N": function(d3) {
         var lines = d3.geo.graticule().lines()
             .filter(function(line) { return line.coordinates[0][0] === line.coordinates[1][0]; })
             .filter(function(line) { return Math.abs(line.coordinates[0][0] % 90) < ε; });
@@ -131,14 +131,14 @@ suite.addBatch({
           assert.deepEqual(d3.extent(line.coordinates, function(p) { return p[1]; }), [-90 + ε, +90 - ε]);
         });
       },
-      "default latitude lines extend from 180°W to 180°E": function() {
+      "default latitude lines extend from 180°W to 180°E": function(d3) {
         var lines = d3.geo.graticule().lines()
             .filter(function(line) { return line.coordinates[0][1] === line.coordinates[1][1]; });
         lines.forEach(function(line) {
           assert.deepEqual(d3.extent(line.coordinates, function(p) { return p[0]; }), [-180, +180]);
         });
       },
-      "returns an array of LineStrings": function() {
+      "returns an array of LineStrings": function(d3) {
         assert.deepEqual(d3.geo.graticule()
             .extent([[-90, -45], [90, 45]])
             .step([45, 45])
@@ -154,7 +154,7 @@ suite.addBatch({
       }
     },
 
-    "returns a MultiLineString of all lines": function() {
+    "returns a MultiLineString of all lines": function(d3) {
       var graticule = d3.geo.graticule()
           .extent([[-90, -45], [90, 45]])
           .step([45, 45])
@@ -166,7 +166,7 @@ suite.addBatch({
     },
 
     "outline": {
-      "returns a Polygon encompassing the major extent": function() {
+      "returns a Polygon encompassing the major extent": function(d3) {
         assert.deepEqual(d3.geo.graticule()
             .majorExtent([[-90, -45], [90, 45]])
             .precision(3)

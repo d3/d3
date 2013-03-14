@@ -1,6 +1,6 @@
 var fs = require("fs");
 
-XMLHttpRequest = function() {
+module.exports = function XMLHttpRequest() {
   var self = this,
       info = self._info = {},
       headers = {},

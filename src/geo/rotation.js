@@ -1,4 +1,5 @@
 import "../math/trigonometry";
+import "equirectangular";
 import "geo";
 
 d3.geo.rotation = function(rotate) {

@@ -1,6 +1,5 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert"),
     projectionTestSuite = require("./projection-test-suite");
 
@@ -8,11 +7,9 @@ var suite = vows.describe("d3.geo.albersUsa");
 
 suite.addBatch({
   "albersUsa": {
-    topic: function() {
-      return d3.geo.albersUsa;
-    },
+    topic: load("geo/albers-usa"),
     "default": projectionTestSuite({
-      topic: function(projection) { return projection(); },
+      topic: function(d3) { return d3.geo.albersUsa(); },
       "has the scale 1000": function(albers) {
         assert.inDelta(albers.scale(), 1000, 1e-6);
       }
@@ -24,7 +21,7 @@ suite.addBatch({
       "San Juan, PR":      [[ -66.07000000,   18.45000000], [ 909.15925090,  456.39482719]]
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
+      topic: function(d3) { return d3.geo.albersUsa().translate([0, 0]).scale(1); }
     }, {
       "Washington, DC":    [[-120.50000000,   47.50000000], [  -0.26452100,   -0.19802351]],
       "San Francisco, CA": [[-122.42000000,   37.78000000], [  -0.32992732,   -0.03874217]],

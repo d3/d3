@@ -1,6 +1,5 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert"),
     projectionTestSuite = require("./projection-test-suite");
 
@@ -8,11 +7,9 @@ var suite = vows.describe("d3.geo.azimuthalEqualArea");
 
 suite.addBatch({
   "azimuthalEqualArea": {
-    topic: function() {
-      return d3.geo.azimuthalEqualArea;
-    },
+    topic: load("geo/azimuthal-equal-area"),
     "default": projectionTestSuite({
-      topic: function(projection) { return projection(); }
+      topic: function(d3) { return d3.geo.azimuthalEqualArea(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 470.78325089,   51.18095336]],
@@ -24,7 +21,7 @@ suite.addBatch({
       "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   47.32293772]]
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
+      topic: function(d3) { return d3.geo.azimuthalEqualArea().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.06144499,   -1.32546031]],
