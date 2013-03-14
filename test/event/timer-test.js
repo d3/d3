@@ -6,15 +6,12 @@ var suite = vows.describe("d3.timer");
 
 suite.addBatch({
   "timer": {
-    topic: load("event/timer").sandbox({
-      document: {},
-      window: {},
-      setTimeout: setTimeout,
-      clearTimeout: clearTimeout
-    }),
+    topic: load("event/timer")
+        .expression("d3.timer")
+        .sandbox({document: {}, window: {}, setTimeout: setTimeout, clearTimeout: clearTimeout}),
 
     "with no delay": {
-      topic: timer(),
+      topic: delay(),
       "first calls after 17 ms or less": function(info) {
         assert.inDelta(info.start - info.scheduled, 17, 20);
       },
@@ -27,7 +24,7 @@ suite.addBatch({
     },
 
     "with a specified delay": {
-      topic: timer(250),
+      topic: delay(250),
       "first calls after the delay": function(info) {
         assert.inDelta(info.start - info.scheduled, 250, 20);
       },
@@ -41,9 +38,9 @@ suite.addBatch({
   }
 });
 
-function timer(delay) {
+function delay(delay) {
   var args = Array.prototype.slice.call(arguments);
-  return function(d3) {
+  return function(timer) {
     var cb = this.callback,
         info = {scheduled: Date.now(), count: 0};
 
@@ -58,7 +55,7 @@ function timer(delay) {
       }
     });
 
-    d3.timer.apply(this, args);
+    timer.apply(this, args);
   };
 }
 
