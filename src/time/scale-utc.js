@@ -1,6 +1,7 @@
 import "../core/true";
 import "../scale/linear";
 import "format";
+import "format-utc";
 import "scale";
 
 var d3_time_scaleUTCMethods = d3_time_scaleLocalMethods.map(function(m) {

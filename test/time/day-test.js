@@ -1,6 +1,5 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../assert"),
     time = require("./time"),
     local = time.local,
@@ -10,9 +9,7 @@ var suite = vows.describe("d3.time.day");
 
 suite.addBatch({
   "day": {
-    topic: function() {
-      return d3.time.day;
-    },
+    topic: load("time/day").expression("d3.time.day"),
     "defaults to floor": function(interval) {
       assert.strictEqual(interval, interval.floor);
     },

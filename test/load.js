@@ -43,3 +43,7 @@ module.exports = function() {
 
   return topic;
 };
+
+process.on("uncaughtException", function(e) {
+  console.trace(e.stack);
+});

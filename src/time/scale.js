@@ -3,13 +3,14 @@ import "../core/rebind";
 import "../core/true";
 import "../scale/linear";
 import "../scale/nice";
-import "format";
-import "second";
-import "minute";
-import "hour";
 import "day";
-import "week";
+import "format";
+import "hour";
+import "minute";
 import "month";
+import "second";
+import "time";
+import "week";
 import "year";
 
 function d3_time_scale(linear, methods, format) {
