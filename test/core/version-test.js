@@ -6,9 +6,9 @@ var suite = vows.describe("d3.version");
 
 suite.addBatch({
   "version": {
-    topic: load(),
-    "has the form major.minor.patch": function(d3) {
-      assert.match(d3.version, /^[0-9]+\.[0-9]+\.[0-9]+/);
+    topic: load().expression("d3.version"),
+    "has the form major.minor.patch": function(version) {
+      assert.match(version, /^[0-9]+\.[0-9]+\.[0-9]+/);
     }
   }
 });
