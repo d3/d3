@@ -6,9 +6,7 @@ var suite = vows.describe("d3.layout.force");
 
 suite.addBatch({
   "force": {
-    topic: load("layout/force")
-        .expression("d3.layout.force")
-        .sandbox({document: {}, window: {}, setTimeout: setTimeout, clearTimeout: clearTimeout}),
+    topic: load("layout/force").expression("d3.layout.force").document(),
 
     "default instance": {
       topic: function(force) {

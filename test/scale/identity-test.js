@@ -6,9 +6,7 @@ var suite = vows.describe("d3.scale.identity");
 
 suite.addBatch({
   "identity": {
-    topic: load("scale/identity")
-        .expression("d3.scale.identity")
-        .sandbox({document: null, window: null}),
+    topic: load("scale/identity").expression("d3.scale.identity").document(),
 
     "domain and range": {
       "are identical": function(identity) {

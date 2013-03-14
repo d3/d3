@@ -6,9 +6,7 @@ var suite = vows.describe("d3.interpolate");
 
 suite.addBatch({
   "interpolate": {
-    topic: load("interpolate/interpolate")
-        .sandbox({document: null, window: null}),
-
+    topic: load("interpolate/interpolate").document(),
     "interpolates numbers": function(d3) {
       assert.equal(d3.interpolate(2, 12)(.4), 6);
       assert.equal(d3.interpolate("2px", 12)(.4), 6);
@@ -53,9 +51,7 @@ suite.addBatch({
     }
   },
   "interpolators": {
-    topic: load("interpolate/interpolate")
-        .sandbox({document: null, window: null}),
-
+    topic: load("interpolate/interpolate").document(),
     "can register a custom interpolator": function(d3) {
       d3.interpolators.push(function(a, b) {
         return a == "one" && b == "two" && d3.interpolateNumber(1, 2);

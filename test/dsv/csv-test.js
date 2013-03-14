@@ -1,16 +1,12 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    xhr = require("../env-xhr"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.csv");
 
 suite.addBatch({
   "csv": {
-    topic: load("dsv/csv")
-        .expression("d3.csv")
-        .sandbox({XMLHttpRequest: xhr, document: {}, window: {}}),
+    topic: load("dsv/csv").expression("d3.csv").document(),
 
     "on a sample file": {
       topic: function(csv) {
@@ -20,7 +16,7 @@ suite.addBatch({
         assert.deepEqual(csv, [{"Hello":"42","World":"\"fish\""}]);
       },
       "overrides the mime type to text/csv": function(csv) {
-        assert.equal(xhr._last._info.mimeType, "text/csv");
+        assert.equal(XMLHttpRequest._last._info.mimeType, "text/csv");
       }
     },
 

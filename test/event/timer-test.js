@@ -6,9 +6,7 @@ var suite = vows.describe("d3.timer");
 
 suite.addBatch({
   "timer": {
-    topic: load("event/timer")
-        .expression("d3.timer")
-        .sandbox({document: {}, window: {}, setTimeout: setTimeout, clearTimeout: clearTimeout}),
+    topic: load("event/timer").expression("d3.timer").document(),
 
     "with no delay": {
       topic: delay(),

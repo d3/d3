@@ -6,8 +6,7 @@ var suite = vows.describe("d3.scale.log");
 
 suite.addBatch({
   "log": {
-    topic: load("scale/log", "interpolate/hsl") // beware instanceof d3_Color
-        .sandbox({document: null, window: null}),
+    topic: load("scale/log", "interpolate/hsl").document(), // beware instanceof d3_Color
 
     "domain": {
       "defaults to [1, 10]": function(d3) {

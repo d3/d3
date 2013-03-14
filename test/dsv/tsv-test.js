@@ -1,16 +1,12 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    xhr = require("../env-xhr"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.tsv");
 
 suite.addBatch({
   "tsv": {
-    topic: load("dsv/tsv")
-        .expression("d3.tsv")
-        .sandbox({XMLHttpRequest: xhr, document: {}, window: {}}),
+    topic: load("dsv/tsv").expression("d3.tsv").document(),
 
     "on a sample file": {
       topic: function(tsv) {
@@ -20,7 +16,7 @@ suite.addBatch({
         assert.deepEqual(tsv, [{"Hello":42,"World":"\"fish\""}]);
       },
       "overrides the mime type to text/tab-separated-values": function(tsv) {
-        assert.equal(xhr._last._info.mimeType, "text/tab-separated-values");
+        assert.equal(XMLHttpRequest._last._info.mimeType, "text/tab-separated-values");
       }
     },
 

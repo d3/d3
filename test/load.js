@@ -1,5 +1,6 @@
 var smash = require("smash"),
-    jsdom = require("jsdom");
+    jsdom = require("jsdom"),
+    xhr = require("./env-xhr");
 
 module.exports = function() {
   var files = [].slice.call(arguments).map(function(d) { return "src/" + d; }),
@@ -25,7 +26,22 @@ module.exports = function() {
 
   topic.document = function(_) {
     var document = jsdom.jsdom("<html><head></head><body></body></html>");
-    sandbox = {document: document, window: document.createWindow()};
+
+    // Monkey-patch createRange support to JSDOM.
+    document.createRange = function() {
+      return {
+        selectNode: function() {},
+        createContextualFragment: jsdom.jsdom
+      };
+    };
+
+    sandbox = {
+      XMLHttpRequest: XMLHttpRequest,
+      document: document,
+      window: document.createWindow(),
+      setTimeout: setTimeout,
+      clearTimeout: clearTimeout
+    };
     return topic;
   };
 

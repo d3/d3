@@ -1,24 +1,16 @@
 var vows = require("vows"),
     load = require("../load"),
-    xhr = require("../env-xhr"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.xhr");
 
 suite.addBatch({
   "xhr": {
-    topic: load("xhr/xhr").sandbox({
-      XMLHttpRequest: xhr,
-      document: {},
-      window: {}
-    }),
+    topic: load("xhr/xhr").expression("d3.xhr").document(),
 
     "on a sample text file": {
-      topic: function(d3) {
-        var cb = this.callback;
-        d3.xhr("test/data/sample.txt", function(error, req) {
-          cb(null, req);
-        });
+      topic: function(xhr) {
+        xhr("test/data/sample.txt", this.callback);
       },
       "makes an asynchronous HTTP request": function(req) {
         assert.equal(req._info.url, "test/data/sample.txt");
@@ -37,11 +29,8 @@ suite.addBatch({
     },
 
     "when a custom mime type is specified": {
-      topic: function(d3) {
-        var cb = this.callback;
-        d3.xhr("test/data/sample.txt", "text/plain", function(error, req) {
-          cb(null, req);
-        });
+      topic: function(xhr) {
+        xhr("test/data/sample.txt", "text/plain", this.callback);
       },
       "observes the optional mime type": function(req) {
         assert.equal(req._info.mimeType, "text/plain");
@@ -49,10 +38,10 @@ suite.addBatch({
     },
 
     "on a file that does not exist": {
-      topic: function(d3) {
-        var cb = this.callback;
-        d3.xhr("//does/not/exist.txt", function(error, req) {
-          cb(null, req);
+      topic: function(xhr) {
+        var callback = this.callback;
+        xhr("//does/not/exist.txt", function(error, req) {
+          callback(null, req);
         });
       },
       "invokes the callback with undefined when an error occurs": function(req) {
