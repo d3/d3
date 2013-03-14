@@ -7,7 +7,7 @@ all: \
 	package.json
 
 test: all
-	@node_modules/.bin/vows
+	@npm test
 
 benchmark: all
 	@node test/geo/benchmark.js
