@@ -6,10 +6,8 @@ var suite = vows.describe("d3.scale.linear");
 
 suite.addBatch({
   "linear": {
-    topic: load("scale/linear").sandbox({
-      document: null,
-      window: null
-    }),
+    topic: load("scale/linear", "interpolate/hsl") // beware instanceof d3_Color
+        .sandbox({document: null, window: null}),
 
     "domain": {
       "defaults to [0, 1]": function(d3) {

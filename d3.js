@@ -945,6 +945,7 @@ d3 = function() {
       return !a - !b || comparator(a.__data__, b.__data__);
     };
   }
+  function d3_noop() {}
   d3_selectionPrototype.on = function(type, listener, capture) {
     var n = arguments.length;
     if (n < 3) {
@@ -1993,7 +1994,6 @@ d3 = function() {
     };
   }
   d3.geo = {};
-  function d3_noop() {}
   d3.geo.stream = function(object, listener) {
     if (d3_geo_streamObjectType.hasOwnProperty(object.type)) {
       d3_geo_streamObjectType[object.type](object, listener);

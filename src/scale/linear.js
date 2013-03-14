@@ -1,6 +1,7 @@
 import "../arrays/range";
 import "../core/rebind";
 import "../interpolate/interpolate";
+import "../interpolate/round";
 import "../interpolate/uninterpolate";
 import "../format/format";
 import "bilinear";
