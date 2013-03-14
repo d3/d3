@@ -1,5 +1,6 @@
 import "../core/array";
 import "../core/document";
+import "../core/noop";
 import "selection";
 
 d3_selectionPrototype.on = function(type, listener, capture) {
