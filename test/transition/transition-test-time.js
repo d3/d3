@@ -1,6 +1,9 @@
 var assert = require("../assert");
 
 module.exports = {
+  topic: function(d3) {
+    return d3; // bug in vows where topic is not propagated automatically
+  },
   "on a new transition": {
     topic: function(d3) {
       return d3.select("body").append("div").transition();

@@ -36,8 +36,10 @@ module.exports = function() {
       document: document,
       window: document.createWindow(),
       setTimeout: setTimeout,
-      clearTimeout: clearTimeout
+      clearTimeout: clearTimeout,
+      Date: Date // so we can override Date.now in tests
     };
+
     return topic;
   };
 

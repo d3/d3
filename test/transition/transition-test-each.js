@@ -145,7 +145,7 @@ module.exports = {
     // different tests at the same time!
 
     "sequenced": {
-      topic: function(result) {
+      topic: function(result, d3) {
         var cb = this.callback,
             node = result.selection[0][0],
             id = result.id;
