@@ -1,10 +1,8 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
   "start": {
-    topic: function() {
+    topic: function(d3) {
       var cb = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
           transition = div.transition().delay(350),
@@ -76,7 +74,7 @@ module.exports = {
   },
 
   "end": {
-    topic: function() {
+    topic: function(d3) {
       var cb = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
           transition = div.transition().duration(350),

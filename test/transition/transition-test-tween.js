@@ -1,9 +1,7 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     var cb = this.callback,
         dd = [],
         ii = [],

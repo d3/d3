@@ -1,9 +1,7 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     var s = d3.select("body").append("div")
         .attr("display", "none")
         .attr("font-size", "20px")

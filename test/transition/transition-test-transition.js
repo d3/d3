@@ -1,9 +1,7 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     return d3.select("body").append("div").transition()
         .delay(101)
         .duration(152)
@@ -28,13 +26,14 @@ module.exports = {
 
   "while transitioning": {
     topic: function(t1) {
-      var t2 = t1.transition(),
-          cb = this.callback;
-      t2.each("start", function() {
-        d3.timer(function() {
-          cb(null, t2);
-          return true;
-        });
+      var callback = this.callback;
+      var t2 = t1.transition().tween("custom", function() {
+        return function(t) {
+          if (callback) {
+            callback(null, t2);
+            callback = null;
+          }
+        };
       });
     },
     "increments the lock's reference count": function(t2) {
@@ -47,7 +46,7 @@ module.exports = {
       var cb = this.callback;
       var t2 = t1.transition();
       t2.each("end", function() {
-        d3.timer(function() {
+        setTimeout(function() {
           cb(null, t2);
           return true;
         }, 50);

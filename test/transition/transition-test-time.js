@@ -1,16 +1,16 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
-  topic: function() {
-    return d3.select("body").append("div").transition();
+  "on a new transition": {
+    topic: function(d3) {
+      return d3.select("body").append("div").transition();
+    },
+    "is approximately equal to now": function(transition) {
+      var time = transition[0][0].__transition__[transition.id].time;
+      assert.inDelta(time, Date.now(), 20);
+    }
   },
-  "is approximately equal to now": function(transition) {
-    var time = transition[0][0].__transition__[transition.id].time;
-    assert.inDelta(time, Date.now(), 20);
-  },
-  "increases monotonically across transitions": function(transition) {
+  "increases monotonically across transitions": function(d3) {
     var now = Date.now, then = Date.now();
     try {
       Date.now = function() { return ++then; };
@@ -21,7 +21,7 @@ module.exports = {
       Date.now = now;
     }
   },
-  "is inherited by subtransitions": function(transition) {
+  "is inherited by subtransitions": function(d3) {
     var now = Date.now, then = Date.now();
     try {
       Date.now = function() { return ++then; };

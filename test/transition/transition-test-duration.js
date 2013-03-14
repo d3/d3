@@ -1,9 +1,7 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     return d3.select("body").html("").selectAll()
         .data(["foo", "bar"])
       .enter().append("div")

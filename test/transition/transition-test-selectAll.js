@@ -1,9 +1,7 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     var s = d3.select("body").append("div").selectAll("div")
         .data(["one", "two", "three", "four"])
       .enter().append("div")
@@ -51,8 +49,8 @@ module.exports = {
     assert.equal(t0.id, id);
     assert.equal(t1.id, id);
   },
-  "groups are not instances of NodeList": function(transition) {
+  "groups are arrays, not instances of NodeList": function(transition) {
     var t = transition.selectAll(function() { return this.getElementsByClassName("span"); });
-    assert.isFalse(t[0] instanceof window.NodeList);
+    assert.isTrue(Array.isArray(t[0]));
   }
 };

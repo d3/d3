@@ -1,11 +1,10 @@
-require("../env");
-
-var assert = require("../assert");
+var assert = require("../assert"),
+    merge = require("../../").merge;
 
 var datum = {};
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     return d3.select("body").html("").selectAll("div")
         .data([0, 1])
       .enter().append("div")
@@ -25,7 +24,7 @@ module.exports = {
     assert.isTrue(some[1][0] === span[1][0]);
   },
   "removes non-matching elements": function(span) {
-    var some = d3.merge(span.filter(function(d, i) { return d & 1; }));
+    var some = merge(span.filter(function(d, i) { return d & 1; }));
     assert.equal(some.indexOf(span[0][0]), -1);
     assert.equal(some.indexOf(span[1][0]), -1);
   },
@@ -50,12 +49,13 @@ module.exports = {
     span.filter(function(d, i) { return d & 1; }).each(function(d, i) { indexes.push(i); });
     assert.deepEqual(indexes, [0, 0]);
   },
-  "ignores null nodes": function() {
-    var span = d3.selectAll("span");
+  "ignores null nodes": function(span) {
+    var node = span[0][1];
     span[0][1] = null;
     var some = span.filter(function(d, i) { return d & 1; });
     assert.isTrue(some[0][0] === span[0][3]);
-    assert.equal(some.length, 1);
+    assert.equal(some.length, 2);
+    span[0][1] = node;
   },
   "can be specified as a selector": function(span) {
     var some = span.filter(".foo");

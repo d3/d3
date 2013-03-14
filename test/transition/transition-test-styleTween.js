@@ -1,9 +1,8 @@
-require("../env");
-
-var assert = require("../assert");
+var assert = require("../assert"),
+    interpolateHsl = require("../../").interpolateHsl;
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     var cb = this.callback,
         dd = [],
         ii = [],
@@ -33,7 +32,7 @@ module.exports = {
         context: tt,
         fails: fails
       });
-      return i && d3.interpolateHsl(v, "blue");
+      return i && interpolateHsl(v, "blue");
     }
   },
 

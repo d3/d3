@@ -49,6 +49,7 @@ import "call";
 import "empty";
 import "node";
 import "enter";
+import "transition";
 
 var d3_selectionRoot = d3_selection([[d3_document]]);
 

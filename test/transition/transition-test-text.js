@@ -1,9 +1,7 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     return d3.select("body").append("div").text("foo").transition().text("bar");
   },
   "sets the text tween": function(div) {

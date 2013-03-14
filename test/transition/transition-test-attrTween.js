@@ -1,9 +1,8 @@
-require("../env");
-
-var assert = require("../assert");
+var assert = require("../assert"),
+    interpolateHsl = require("../../").interpolateHsl;
 
 module.exports = {
-  topic: function() {
+  topic: function(d3) {
     var cb = this.callback,
         dd = [],
         ii = [],
@@ -13,7 +12,7 @@ module.exports = {
     var s = d3.select("body").html("").append("div").selectAll("div")
         .data(["red", "green"])
       .enter().append("div")
-        .attr("color", function(d) { return d3.rgb(d)+""; });
+        .attr("color", function(d, i) { return i ? "#008000" : "#ff0000"; });
 
     var t = s.transition()
         .attrTween("color", tween);
@@ -30,7 +29,7 @@ module.exports = {
         value: vv,
         context: tt
       });
-      return i && d3.interpolateHsl(v, "blue");
+      return i && interpolateHsl(v, "blue");
     }
   },
 

@@ -1,27 +1,25 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../assert");
 
 var suite = vows.describe("d3.transition");
 
 suite.addBatch({
   "transition": {
-    topic: function() {
-      return d3.transition();
+    topic: load("transition/transition").document(),
+    "selects the document": function(d3) {
+      assert.domEqual(d3.transition()[0][0].nodeType, 9);
     },
-    "selects the document": function(transition) {
-      assert.domEqual(transition[0][0], document);
+    "is an instanceof d3.transition": function(d3) {
+      assert.isTrue(d3.transition() instanceof d3.transition);
     },
-    "is an instanceof d3.transition": function(transition) {
-      assert.isTrue(transition instanceof d3.transition);
-    },
-    "subselections are also instanceof d3.transition": function(transition) {
+    "subselections are also instanceof d3.transition": function(d3) {
+      var transition = d3.transition();
       assert.isTrue(transition.select("body") instanceof d3.transition);
       assert.isTrue(transition.selectAll("body") instanceof d3.transition);
     },
-    "transition prototype can be extended": function(transition) {
-      var vv = [];
+    "transition prototype can be extended": function(d3) {
+      var transition = d3.transition(), vv = [];
       d3.transition.prototype.foo = function(v) { vv.push(v); return this; };
       transition.select("body").foo(42);
       assert.deepEqual(vv, [42]);
@@ -30,41 +28,49 @@ suite.addBatch({
   }
 });
 
-suite.export(module);
-
-var suite = vows.describe("transition");
-
 // Subtransitions
 suite.addBatch({
-  "select": require("./transition-test-select"),
-  "selectAll": require("./transition-test-selectAll"),
-  "transition": require("./transition-test-transition"),
-  "filter": require("./transition-test-filter")
+  "transition": {
+    topic: load("transition/transition").document(),
+    "select": require("./transition-test-select"),
+    "selectAll": require("./transition-test-selectAll"),
+    "transition": require("./transition-test-transition"),
+    "filter": require("./transition-test-filter")
+  }
 });
 
 // Content
 suite.addBatch({
-  "attr": require("./transition-test-attr"),
-  "attrTween": require("./transition-test-attrTween"),
-  "style": require("./transition-test-style"),
-  "styleTween": require("./transition-test-styleTween"),
-  "text": require("./transition-test-text"),
-  "remove": require("./transition-test-remove")
+  "transition": {
+    topic: load("transition/transition").document(),
+    "attr": require("./transition-test-attr"),
+    "attrTween": require("./transition-test-attrTween"),
+    "style": require("./transition-test-style"),
+    "styleTween": require("./transition-test-styleTween"),
+    "text": require("./transition-test-text"),
+    "remove": require("./transition-test-remove")
+  }
 });
 
 // Animation
 suite.addBatch({
-  "delay": require("./transition-test-delay"),
-  "duration": require("./transition-test-duration")
+  "transition": {
+    topic: load("transition/transition").document(),
+    "delay": require("./transition-test-delay"),
+    "duration": require("./transition-test-duration")
+  }
 });
 
-// Control
-suite.addBatch({
-  "each": require("./transition-test-each"),
-  "call": require("./transition-test-call"),
-  "tween": require("./transition-test-tween"),
-  "id": require("./transition-test-id"),
-  "time": require("./transition-test-time")
-});
+// // Control
+// suite.addBatch({
+//   "transition": {
+//     topic: load("transition/transition").document(),
+//     "each": require("./transition-test-each"),
+//     "call": require("./transition-test-call"),
+//     "tween": require("./transition-test-tween"),
+//     "id": require("./transition-test-id"),
+//     "time": require("./transition-test-time")
+//   }
+// });
 
 suite.export(module);

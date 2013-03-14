@@ -1,19 +1,19 @@
-require("../env");
-
 var assert = require("../assert");
 
 module.exports = {
-  topic: function() {
-    var cb = this.callback,
-        t = d3.select("body").append("div").transition().remove();
-    t.each("end", function() { cb(null, t); });
-  },
-  "removes the selected elements": function(transition) {
-    assert.domEqual(transition[0][0].parentNode, null);
+  "on a new transition": {
+    topic: function(d3) {
+      var cb = this.callback,
+          t = d3.select("body").append("div").transition().remove();
+      t.each("end", function() { cb(null, t); });
+    },
+    "removes the selected elements": function(transition) {
+      assert.domEqual(transition[0][0].parentNode, null);
+    }
   },
 
   "when the element is already removed": {
-    topic: function() {
+    topic: function(d3) {
       var cb = this.callback,
           t = d3.select("body").append("div").remove().transition().remove();
       t.each("end", function() { cb(null, t); });
@@ -30,7 +30,7 @@ module.exports = {
   // time, the last transition becomes the owner.
 
   "when another transition is scheduled": {
-    topic: function() {
+    topic: function(d3) {
       var cb = this.callback,
           s = d3.select("body").append("div");
       setTimeout(function() {
@@ -39,7 +39,7 @@ module.exports = {
       }, 10);
     },
     "does nothing": function(selection) {
-      assert.domEqual(selection[0][0].parentNode, document.body);
+      assert.equal(selection[0][0].parentNode.tagName, "BODY");
     }
   }
 };
