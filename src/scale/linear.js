@@ -9,7 +9,7 @@ import "polylinear";
 import "scale";
 
 d3.scale.linear = function() {
-  return d3_scale_linear([0, 1], [0, 1], d3.interpolate, false);
+  return d3_scale_linear([0, 1], [0, 1], d3_interpolate, false);
 };
 
 function d3_scale_linear(domain, range, interpolate, clamp) {
@@ -20,7 +20,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
     var linear = Math.min(domain.length, range.length) > 2 ? d3_scale_polylinear : d3_scale_bilinear,
         uninterpolate = clamp ? d3_uninterpolateClamp : d3_uninterpolateNumber;
     output = linear(domain, range, uninterpolate, interpolate);
-    input = linear(range, domain, uninterpolate, d3.interpolate);
+    input = linear(range, domain, uninterpolate, d3_interpolate);
     return scale;
   }
 
@@ -46,7 +46,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
   };
 
   scale.rangeRound = function(x) {
-    return scale.range(x).interpolate(d3.interpolateRound);
+    return scale.range(x).interpolate(d3_interpolateRound);
   };
 
   scale.clamp = function(x) {
