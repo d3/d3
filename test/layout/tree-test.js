@@ -6,13 +6,13 @@ var suite = vows.describe("d3.layout.tree");
 
 suite.addBatch({
   "tree": {
-    topic: load("layout/tree"),
-    "can handle an empty children array": function(d3) {
-      var tree = d3.layout.tree();
-      assert.deepEqual(tree.nodes({children: []}).map(layout), [
+    topic: load("layout/tree").expression("d3.layout.tree"),
+    "can handle an empty children array": function(tree) {
+      var t = tree();
+      assert.deepEqual(t.nodes({children: []}).map(layout), [
         {depth: 0, x: 0.5, y: 0}
       ]);
-      assert.deepEqual(tree.nodes({children: [
+      assert.deepEqual(t.nodes({children: [
         {children: []},
         {children: [{}]},
         {children: [{}]}
@@ -25,9 +25,9 @@ suite.addBatch({
         {depth: 2, x: .875, y: 1}
       ]);
     },
-    "can handle a single node": function(d3) {
-      var tree = d3.layout.tree();
-      assert.deepEqual(tree.nodes({value: 0}).map(layout), [
+    "can handle a single node": function(tree) {
+      var t = tree();
+      assert.deepEqual(t.nodes({value: 0}).map(layout), [
         {depth: 0, x: 0.5, y: 0}
       ]);
     }
