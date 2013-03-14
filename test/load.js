@@ -1,3 +1,5 @@
+process.env.TZ = "America/Los_Angeles";
+
 var smash = require("smash"),
     jsdom = require("jsdom");
 
