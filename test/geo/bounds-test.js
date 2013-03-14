@@ -6,9 +6,9 @@ var suite = vows.describe("d3.geo.bounds");
 
 suite.addBatch({
   "bounds": {
-    topic: load("geo/bounds"),
-    "Feature": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    topic: load("geo/bounds").expression("d3.geo.bounds"),
+    "Feature": function(bounds) {
+      assert.deepEqual(bounds({
         type: "Feature",
         geometry: {
           type: "MultiPoint",
@@ -16,8 +16,8 @@ suite.addBatch({
         }
       }), [[-123, 38], [-122, 39]])
     },
-    "FeatureCollection": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    "FeatureCollection": function(bounds) {
+      assert.deepEqual(bounds({
         type: "FeatureCollection",
         features: [
           {
@@ -37,8 +37,8 @@ suite.addBatch({
         ]
       }), [[-123, 38], [-122, 39]])
     },
-    "GeometryCollection": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    "GeometryCollection": function(bounds) {
+      assert.deepEqual(bounds({
         type: "GeometryCollection",
         geometries: [
           {
@@ -52,44 +52,44 @@ suite.addBatch({
         ]
       }), [[-123, 38], [-122, 39]])
     },
-    "LineString": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    "LineString": function(bounds) {
+      assert.deepEqual(bounds({
         type: "LineString",
         coordinates: [[-123, 39], [-122, 38]]
       }), [[-123, 38], [-122, 39]])
     },
-    "MultiLineString": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    "MultiLineString": function(bounds) {
+      assert.deepEqual(bounds({
         type: "MultiLineString",
         coordinates: [[[-123, 39], [-122, 38]]]
       }), [[-123, 38], [-122, 39]])
     },
-    "MultiPoint": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    "MultiPoint": function(bounds) {
+      assert.deepEqual(bounds({
         type: "MultiPoint",
         coordinates: [[-123, 39], [-122, 38]]
       }), [[-123, 38], [-122, 39]])
     },
-    "MultiPolygon": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    "MultiPolygon": function(bounds) {
+      assert.deepEqual(bounds({
         type: "MultiPolygon",
         coordinates: [[[[-123, 39], [-122, 39], [-122, 38], [-123, 39]], [[10, 20], [20, 20], [20, 10], [10, 10], [10, 20]]]]
       }), [[-123, 38], [-122, 39]])
     },
-    "Point": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    "Point": function(bounds) {
+      assert.deepEqual(bounds({
         type: "Point",
         coordinates: [-123, 39]
       }), [[-123, 39], [-123, 39]])
     },
-    "Polygon": function(d3) {
-      assert.deepEqual(d3.geo.bounds({
+    "Polygon": function(bounds) {
+      assert.deepEqual(bounds({
         type: "Polygon",
         coordinates: [[[-123, 39], [-122, 39], [-122, 38], [-123, 39]], [[10, 20], [20, 20], [20, 10], [10, 10], [10, 20]]]
       }), [[-123, 38], [-122, 39]])
     },
-    "NestedCollection": function(d3) {
-        assert.deepEqual(d3.geo.bounds({
+    "NestedCollection": function(bounds) {
+        assert.deepEqual(bounds({
         type: "FeatureCollection",
         features: [
           {

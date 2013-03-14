@@ -7,9 +7,9 @@ var suite = vows.describe("d3.geo.conicConformal");
 
 suite.addBatch({
   "conicConformal": {
-    topic: load("geo/conic-conformal"),
+    topic: load("geo/conic-conformal").expression("d3.geo.conicConformal"),
     "default": projectionTestSuite({
-      topic: function(d3) { return d3.geo.conicConformal(); }
+      topic: function(projection) { return projection(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 467.09545781,   31.02694219]],
@@ -21,7 +21,7 @@ suite.addBatch({
       "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   19.84318514]]
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(d3) { return d3.geo.conicConformal().translate([0, 0]).scale(1); }
+      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.08603028,   -1.45982039]],

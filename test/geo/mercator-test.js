@@ -7,9 +7,9 @@ var suite = vows.describe("d3.geo.mercator");
 
 suite.addBatch({
   "mercator": {
-    topic: load("geo/mercator"),
+    topic: load("geo/mercator").expression("d3.geo.mercator"),
     "default": projectionTestSuite({
-      topic: function(d3) { return d3.geo.mercator(); }
+      topic: function(projection) { return projection(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 424.98907000, -161.45770791]],
@@ -21,7 +21,7 @@ suite.addBatch({
       "east antimeridian": [[ 180.00000000,    0.00000000], [ 951.23889804,  250.00000000]],
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(d3) { return d3.geo.mercator().translate([0, 0]).scale(1); }
+      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262725,   82.63349099], [  -0.36673953,   -2.74305138]],

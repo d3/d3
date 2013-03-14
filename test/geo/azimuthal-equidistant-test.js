@@ -7,9 +7,9 @@ var suite = vows.describe("d3.geo.azimuthalEquidistant");
 
 suite.addBatch({
   "azimuthalEquidistant": {
-    topic: load("geo/azimuthal-equidistant"),
+    topic: load("geo/azimuthal-equidistant").expression("d3.geo.azimuthalEquidistant"),
     "default": projectionTestSuite({
-      topic: function(d3) { return d3.geo.azimuthalEquidistant(); }
+      topic: function(projection) { return projection(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 469.92237700,   32.61061747]],
@@ -21,7 +21,7 @@ suite.addBatch({
       "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   27.47052037]],
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(d3) { return d3.geo.azimuthalEquidistant().translate([0, 0]).scale(1); }
+      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.06718415,   -1.44926255]],

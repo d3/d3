@@ -7,9 +7,9 @@ var suite = vows.describe("d3.geo.gnomonic");
 
 suite.addBatch({
   "gnomonic": {
-    topic: load("geo/gnomonic"),
+    topic: load("geo/gnomonic").expression("d3.geo.gnomonic"),
     "default": projectionTestSuite({
-      topic: function(d3) { return d3.geo.gnomonic(); }
+      topic: function(projection) { return projection(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 422.38246174, -992.89637169]],
@@ -21,7 +21,7 @@ suite.addBatch({
       "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,-1464.50784541]]
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(d3) { return d3.geo.gnomonic().translate([0, 0]).scale(1); }
+      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.38411692,   -8.28597600]],

@@ -1,4 +1,5 @@
 var vows = require("vows"),
+    d3 = require("../../"),
     load = require("../load"),
     assert = require("../env-assert");
 
@@ -6,19 +7,19 @@ var suite = vows.describe("d3.geo.path");
 
 suite.addBatch({
   "path": {
-    topic: load("geo/path", "geo/equirectangular", "geo/stereographic", "geo/albers", "arrays/range"),
+    topic: load("geo/path").expression("d3.geo.path"),
 
     "with an equirectangular projection": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .precision(0));
       },
 
-      "renders a point": function(path) {
-        path({
+      "renders a point": function(p) {
+        p({
           type: "Point",
           coordinates: [-63, 18]
         });
@@ -28,8 +29,8 @@ suite.addBatch({
         ]);
       },
 
-      "renders a multipoint": function(path) {
-        path({
+      "renders a multipoint": function(p) {
+        p({
           type: "MultiPoint",
           coordinates: [[-63, 18], [-62, 18], [-62, 17]]
         });
@@ -40,8 +41,8 @@ suite.addBatch({
         ]);
       },
 
-      "renders a line string": function(path) {
-        path({
+      "renders a line string": function(p) {
+        p({
           type: "Feature",
           geometry: {
             type: "LineString",
@@ -55,8 +56,8 @@ suite.addBatch({
         ]);
       },
 
-      "renders a polygon": function(path) {
-        path({
+      "renders a polygon": function(p) {
+        p({
           type: "Feature",
           geometry: {
             type: "Polygon",
@@ -71,8 +72,8 @@ suite.addBatch({
         ]);
       },
 
-      "renders a geometry collection": function(path) {
-        path({
+      "renders a geometry collection": function(p) {
+        p({
           type: "GeometryCollection",
           geometries: [{type: "Point", coordinates: [0, 0]}]
         });
@@ -81,8 +82,8 @@ suite.addBatch({
         ]);
       },
 
-      "renders a feature collection": function(path) {
-        path({
+      "renders a feature collection": function(p) {
+        p({
           type: "FeatureCollection",
           features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]
         });
@@ -91,13 +92,13 @@ suite.addBatch({
         ]);
       },
 
-      "longitudes wrap at ±180°": function(path) {
-        path({type: "Point", coordinates: [180 + 1e-6, 0]});
+      "longitudes wrap at ±180°": function(p) {
+        p({type: "Point", coordinates: [180 + 1e-6, 0]});
         assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: -420, y: 250}, {type: "arc", x: -420, y: 250, r: 4.5}]);
       },
 
-      "observes the correct winding order of a tiny polygon": function(path) {
-        path({type: "Polygon", coordinates: [[
+      "observes the correct winding order of a tiny polygon": function(p) {
+        p({type: "Polygon", coordinates: [[
           [-0.06904102953339501, 0.346043661846373],
           [-6.725674252975136e-15, 0.3981303360336475],
           [-6.742247658534323e-15, -0.08812465346531581],
@@ -107,8 +108,8 @@ suite.addBatch({
       },
 
       "area": {
-        topic: function(path) {
-          return path.area;
+        topic: function(p) {
+          return p.area;
         },
         "of a polygon with no holes": function(area) {
           assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), 25);
@@ -122,8 +123,8 @@ suite.addBatch({
       },
 
       "centroid": {
-        topic: function(path) {
-          return path.centroid;
+        topic: function(p) {
+          return p.centroid;
         },
         "of a point": function(centroid) {
           assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [480, 250]);
@@ -235,13 +236,13 @@ suite.addBatch({
     },
 
     "with a null (identity) projection": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(null);
       },
-      "renders a Polygon": function(path) {
-        path({
+      "renders a Polygon": function(p) {
+        p({
           type: "Feature",
           geometry: {
             type: "Polygon",
@@ -258,19 +259,19 @@ suite.addBatch({
     },
 
     "with the default context (null) and an identity projection": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .precision(0));
       },
-      "returns null when passed null or undefined": function(path) {
-        assert.equal(path(null), null);
-        assert.equal(path(undefined), null);
-        assert.equal(path(), null);
+      "returns null when passed null or undefined": function(p) {
+        assert.equal(p(null), null);
+        assert.equal(p(undefined), null);
+        assert.equal(p(), null);
       },
-      "returns null with bogus type name": function(path) {
-        assert.equal(path({
+      "returns null with bogus type name": function(p) {
+        assert.equal(p({
           type: "Feature",
           geometry: {
             type: "__proto__",
@@ -281,82 +282,82 @@ suite.addBatch({
     },
 
     "with the default context (null) and default projection (albers-usa)": {
-      topic: function(d3) {
-        return d3.geo.path();
+      topic: function(path) {
+        return path();
       },
-      "area of a polygon": function(path) {
-        var area = path.area({type: "Polygon", coordinates: [[[-122, 37], [-71, 42], [-80, 25], [-122, 37]]]});
+      "area of a polygon": function(p) {
+        var area = p.area({type: "Polygon", coordinates: [[[-122, 37], [-71, 42], [-80, 25], [-122, 37]]]});
         assert.inDelta(area, 109021.503, 1e-3);
       },
-      "bounds of a line string": function(path) {
-        var bounds = path.bounds({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
+      "bounds of a line string": function(p) {
+        var bounds = p.bounds({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
         assert.inDelta(bounds[0][0], -5.1214, 1e-3);
         assert.inDelta(bounds[0][1], 174.825, 1e-3);
         assert.inDelta(bounds[1][0], 794.602, 1e-3);
         assert.inDelta(bounds[1][1], 856.501, 1e-3);
       },
-      "renders a line string": function(path) {
-        var centroid = path.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
+      "renders a line string": function(p) {
+        var centroid = p.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
         assert.inDelta(centroid[0], 434.655, 1e-3);
         assert.inDelta(centroid[1], 397.940, 1e-3);
       }
     },
 
     "with an equirectangular projection rotated by [180, -248]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([-180, -248])
               .scale(900 / Math.PI)
               .precision(0));
       },
-      "renders a polygon": function(path) {
-        path({type: "Polygon",  coordinates: [[[-175.03150315031502, 66.57410661866186], [-174.34743474347434, 66.33097912391239], [-174.5994599459946, 67.0603616081608], [-171.86318631863185, 66.90406536153614], [-169.9189918991899, 65.96628788178816], [-170.89108910891088, 65.53213164116411], [-172.54725472547256, 65.42793414341432], [-172.5832583258326, 64.45542416441643], [-172.97929792979298, 64.2470291689169], [-173.91539153915392, 64.28176166816681], [-174.67146714671466, 64.62908666066605], [-176.003600360036, 64.90694665466546], [-176.21962196219621, 65.34110289528951], [-177.22772277227722, 65.51476539153916], [-178.37983798379838, 65.37583539453945], [-178.91989198919893, 65.72316038703869], [-178.7038703870387, 66.10521787878787], [-179.8919891989199, 65.8620903840384], [-179.45994599459945, 65.3932016441644], [-180, 64.97641165316531], [-180, 68.95328281728172], [-177.55175517551754, 68.18916783378336], [-174.95949594959495, 67.19929160516051], [-175.03150315031502, 66.57410661866186]]]});
+      "renders a polygon": function(p) {
+        p({type: "Polygon",  coordinates: [[[-175.03150315031502, 66.57410661866186], [-174.34743474347434, 66.33097912391239], [-174.5994599459946, 67.0603616081608], [-171.86318631863185, 66.90406536153614], [-169.9189918991899, 65.96628788178816], [-170.89108910891088, 65.53213164116411], [-172.54725472547256, 65.42793414341432], [-172.5832583258326, 64.45542416441643], [-172.97929792979298, 64.2470291689169], [-173.91539153915392, 64.28176166816681], [-174.67146714671466, 64.62908666066605], [-176.003600360036, 64.90694665466546], [-176.21962196219621, 65.34110289528951], [-177.22772277227722, 65.51476539153916], [-178.37983798379838, 65.37583539453945], [-178.91989198919893, 65.72316038703869], [-178.7038703870387, 66.10521787878787], [-179.8919891989199, 65.8620903840384], [-179.45994599459945, 65.3932016441644], [-180, 64.97641165316531], [-180, 68.95328281728172], [-177.55175517551754, 68.18916783378336], [-174.95949594959495, 67.19929160516051], [-175.03150315031502, 66.57410661866186]]]});
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 1370, y: 243}]);
       }
     },
 
     "projection": {
-      "returns the current projection when called with no arguments": function(d3) {
-        var path = d3.geo.path(), projection = d3.geo.equirectangular();
-        path.projection(projection);
-        assert.strictEqual(path.projection(), projection);
+      "returns the current projection when called with no arguments": function(path) {
+        var p = path(), projection = d3.geo.equirectangular();
+        p.projection(projection);
+        assert.strictEqual(p.projection(), projection);
       }
     },
 
     "pointRadius": {
-      "returns the current point radius when called with no arguments": function(d3) {
-        var path = d3.geo.path(), radius = function() { return 5; };
-        assert.strictEqual(path.pointRadius(), 4.5);
-        assert.strictEqual(path.pointRadius(radius).pointRadius(), radius);
+      "returns the current point radius when called with no arguments": function(path) {
+        var p = path(), radius = function() { return 5; };
+        assert.strictEqual(p.pointRadius(), 4.5);
+        assert.strictEqual(p.pointRadius(radius).pointRadius(), radius);
       },
       "coerces point radius to a number": {
-        "when the radius is specified as a constant": function(d3) {
-          var path = d3.geo.path().context(testContext).pointRadius("6");
-          assert.strictEqual(path.pointRadius(), 6);
-          path({type: "Point", coordinates: [0, 0]});
+        "when the radius is specified as a constant": function(path) {
+          var p = path().context(testContext).pointRadius("6");
+          assert.strictEqual(p.pointRadius(), 6);
+          p({type: "Point", coordinates: [0, 0]});
           assert.strictEqual(testContext.buffer().filter(function(d) { return d.type === "arc"; })[0].r, 6);
         },
-        "when the radius is specified as a function": function(d3) {
-          var path = d3.geo.path().context(testContext).pointRadius(function() { return "6"; });
-          path({type: "Point", coordinates: [0, 0]});
+        "when the radius is specified as a function": function(path) {
+          var p = path().context(testContext).pointRadius(function() { return "6"; });
+          p({type: "Point", coordinates: [0, 0]});
           assert.strictEqual(testContext.buffer().filter(function(d) { return d.type === "arc"; })[0].r, 6);
         }
       }
     },
 
     "with an equirectangular projection clipped to 90°": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .precision(0)
               .clipAngle(90));
       },
-      "renders a point": function(path) {
-        path({
+      "renders a point": function(p) {
+        p({
           type: "Point",
           coordinates: [-63, 18]
         });
@@ -364,8 +365,8 @@ suite.addBatch({
           {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5}
         ]);
       },
-      "renders a multipoint": function(path) {
-        path({
+      "renders a multipoint": function(p) {
+        p({
           type: "MultiPoint",
           coordinates: [[-63, 18], [-62, 18], [-62, 17]]
         });
@@ -375,39 +376,29 @@ suite.addBatch({
           {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
         ]);
       },
-      "inserts exterior along clip edge if polygon interior surrounds it": function(path) {
-        path({type: "Polygon", coordinates: [[[80, -80], [80, 80], [-80, 80], [-80, -80], [80, -80]]]});
+      "inserts exterior along clip edge if polygon interior surrounds it": function(p) {
+        p({type: "Polygon", coordinates: [[[80, -80], [80, 80], [-80, 80], [-80, -80], [80, -80]]]});
         assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
       },
-      "inserts exterior along clip edge if polygon exterior surrounds it": function(path) {
-        path({type: "Polygon", coordinates: [[[100, -80], [-100, -80], [-100, 80], [100, 80], [100, -80]]]});
+      "inserts exterior along clip edge if polygon exterior surrounds it": function(p) {
+        p({type: "Polygon", coordinates: [[[100, -80], [-100, -80], [-100, 80], [100, 80], [100, -80]]]});
         assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
       },
-      "given a small circle of 60°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(60)());
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 276, y: 493}]);
-        }
+      "renders a small circle of 60°": function(p) {
+        p(d3.geo.circle().angle(60)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 276, y: 493}]);
       },
-      "given a small circle of 120°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(120)());
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 87, y: 700}]);
-        }
+      "renders a small circle of 120°": function(p) {
+        p(d3.geo.circle().angle(120)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 87, y: 700}]);
       }
     },
 
     "with an equirectangular projection clipped to 90° and rotated by [-17°, -451°]": {
-      "renders a polygon": function(d3) {
+      "renders a polygon": function(path) {
         var pole = d3.range(-180, 180, 10).map(function(x) { return [x, 70]; });
         pole.push(pole[0]);
-        d3.geo.path()
+        path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([-17, -451])
@@ -422,8 +413,8 @@ suite.addBatch({
     },
 
     "with an equirectangular projection clipped to 90° and rotated by [71.03°, 42.37°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([71.03, 42.37])
@@ -445,31 +436,31 @@ suite.addBatch({
         ]], 1e-6);
       },
       */
-      "can completely clip a LineString": function(path) {
-        path({type: "LineString", coordinates: [[90.0, -42.37], [95.0, -42.37], [90.0, -42.37]]});
+      "can completely clip a LineString": function(p) {
+        p({type: "LineString", coordinates: [[90.0, -42.37], [95.0, -42.37], [90.0, -42.37]]});
         assert.deepEqual(testContext.buffer(), []);
       },
-      "doesn't insert a duplicate point": function(path) {
-        path({type: "LineString", coordinates: [[0, 0]]});
+      "doesn't insert a duplicate point": function(p) {
+        p({type: "LineString", coordinates: [[0, 0]]});
         assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}]);
       },
-      "renders a visible point": function(path) {
-        path({type: "Point", coordinates: [0, 0]});
+      "renders a visible point": function(p) {
+        p({type: "Point", coordinates: [0, 0]});
         assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
       },
-      "does not render an invisible point": function(path) {
-        path({type: "Point", coordinates: [-180, 0]});
+      "does not render an invisible point": function(p) {
+        p({type: "Point", coordinates: [-180, 0]});
         assert.deepEqual(testContext.buffer(), []);
       },
-      "renders a multipoint": function(path) {
-        path({type: "MultiPoint", coordinates: [[0, 0], [-180, 0]]});
+      "renders a multipoint": function(p) {
+        p({type: "MultiPoint", coordinates: [[0, 0], [-180, 0]]});
         assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
       }
     },
 
     "with an equirectangular projection clipped to 90° and rotated by [-24°, -175.5°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([-24, -175.5])
@@ -477,15 +468,15 @@ suite.addBatch({
               .precision(0)
               .clipAngle(90));
       },
-      "renders Antarctica with no gaps": function(path) {
-        path(antarctica);
+      "renders Antarctica with no gaps": function(p) {
+        p(antarctica);
         assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
       }
     },
 
     "with an equirectangular projection clipped to 90° and rotated by [90°, 0°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([90, 0])
@@ -493,29 +484,19 @@ suite.addBatch({
               .precision(0)
               .clipAngle(90));
       },
-      "given a small circle of 60°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(60)());
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: 550}]);
-        }
+      "renders a small circle of 60°": function(p) {
+        p(d3.geo.circle().angle(60)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: 550}]);
       },
-      "given a small circle of 120°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(120)());
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: 550}]);
-        }
+      "renders a small circle of 120°": function(p) {
+        p(d3.geo.circle().angle(120)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: 550}]);
       }
     },
 
     "with an equirectangular projection clipped to 90° and rotated by [180°, 0°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([180, 0])
@@ -523,32 +504,22 @@ suite.addBatch({
               .precision(0)
               .clipAngle(90));
       },
-      "given a small circle of 60°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(60)());
-          return testContext.buffer();
-        },
-        "does not render": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), []);
-        }
+      "does not render a small circle of 60°": function(p) {
+        p(d3.geo.circle().angle(60)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), []);
       },
-      "given a small circle of 120°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(120)());
-          return testContext.buffer();
-        },
-        "renders in two parts": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [
-            {type: "moveTo", x: 276, y: 493},
-            {type: "moveTo", x:  87, y: 700}
-          ]);
-        }
+      "renders a small circle of 120° in two parts": function(p) {
+        p(d3.geo.circle().angle(120)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
+          {type: "moveTo", x: 276, y: 493},
+          {type: "moveTo", x:  87, y: 700}
+        ]);
       }
     },
 
     "with an equirectangular projection clipped to 90° and rotated by [270°, 0°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([270, 0])
@@ -556,29 +527,19 @@ suite.addBatch({
               .precision(0)
               .clipAngle(90));
       },
-      "given a small circle of 60°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(60)());
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: -50}]);
-        }
+      "renders a small circle of 60°": function(p) {
+        p(d3.geo.circle().angle(60)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: -50}]);
       },
-      "given a small circle of 120°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(120)());
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: -50}]);
-        }
+      "renders a small circle of 120°": function(p) {
+        p(d3.geo.circle().angle(120)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: -50}]);
       }
     },
 
     "with an equirectangular projection clipped to 90° and rotated by [210°, 1°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([210, 1])
@@ -586,20 +547,15 @@ suite.addBatch({
               .precision(0)
               .clipAngle(90));
       },
-      "given a small circle of 120°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(120)());
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: 250}]);
-        }
+      "renders a small circle of 120°": function(p) {
+        p(d3.geo.circle().angle(120)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 930, y: 250}]);
       }
     },
 
     "with an equirectangular projection clipped to 90° and rotated by [-150°, 60°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .rotate([-150, 60])
@@ -607,48 +563,38 @@ suite.addBatch({
               .precision(0)
               .clipAngle(90));
       },
-      "given a small circle of 120°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(120)());
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: -87}]);
-        }
+      "renders a small circle of 120°": function(p) {
+        p(d3.geo.circle().angle(120)());
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 30, y: -87}]);
       },
-      "renders a sphere": function(path) {
-        path({type: "Sphere"});
+      "renders a sphere": function(p) {
+        p({type: "Sphere"});
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 87, y: 700}]);
       }
     },
 
     "with an equirectangular projection clipped to 170°": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .precision(0)
               .clipAngle(170));
       },
-      "given some stripes": {
-        topic: function(path, d3) {
-          path(stripes(d3, 80, -80));
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [
-            {type: "moveTo", x: -420, y: -150},
-            {type: "moveTo", x: -420, y:  650},
-            {type: "moveTo", x: 1331, y:  259}
-          ]);
-        }
+      "renders stripes": function(p) {
+        p(stripes(80, -80));
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
+          {type: "moveTo", x: -420, y: -150},
+          {type: "moveTo", x: -420, y:  650},
+          {type: "moveTo", x: 1331, y:  259}
+        ]);
       }
     },
 
     "with an equirectangular projection clipped to 170° and rotated by [0°, -90°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
@@ -656,31 +602,26 @@ suite.addBatch({
               .precision(0)
               .clipAngle(170));
       },
-      "given some stripes": {
-        topic: function(path, d3) {
-          path(stripes(d3, 80, -80));
-          return testContext.buffer();
-        },
-        "renders": function(buffer) {
-          assert.deepEqual(buffer.filter(function(d) { return d.type === "moveTo"; }), [
-            {type: "moveTo", x:  480, y: 200},
-            {type: "moveTo", x: 1350, y: 210}
-          ]);
-        }
+      "renders stripes": function(p) {
+        p(stripes(80, -80));
+        assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
+          {type: "moveTo", x:  480, y: 200},
+          {type: "moveTo", x: 1350, y: 210}
+        ]);
       }
     },
 
     "with an equirectangular projection clipped to 30°": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .precision(0)
               .clipAngle(30));
       },
-      "clips lines with two invisible endpoints and visible middle": function(path) {
-        path({type: "LineString", coordinates: [[-45, 0], [45, 0]]});
+      "clips lines with two invisible endpoints and visible middle": function(p) {
+        p({type: "LineString", coordinates: [[-45, 0], [45, 0]]});
         assert.deepEqual(testContext.buffer(), [
           {type: "moveTo", x: 330, y: 250},
           {type: "lineTo", x: 630, y: 250}
@@ -689,16 +630,16 @@ suite.addBatch({
     },
 
     "with an equirectangular projection clipped to 150°": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .precision(0)
               .clipAngle(150));
       },
-      "clips lines with two visible endpoints and invisible middle": function(path) {
-        path({type: "LineString", coordinates: [[135, 0], [-135, 0]]});
+      "clips lines with two visible endpoints and invisible middle": function(p) {
+        p({type: "LineString", coordinates: [[135, 0], [-135, 0]]});
         assert.deepEqual(testContext.buffer(), [
           {type: "moveTo", x: 1155, y: 250},
           {type: "lineTo", x: 1230, y: 250},
@@ -709,23 +650,23 @@ suite.addBatch({
     },
 
     "with an equirectangular projection rotated by [98°, 0°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .rotate([98, 0])
               .precision(0));
       },
-      "renders Keweenaw, a small U.S. county": function(path) {
-        path({
+      "renders Keweenaw, a small U.S. county": function(p) {
+        p({
           type: "Polygon",
           coordinates: [[[-88.23013, 47.198326], [-88.514931, 47.285957], [-88.383484, 47.285957], [-88.23013, 47.198326]]]
         });
         assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 1);
       },
-      "renders Accomack, a small U.S. county": function(path) {
-        path({
+      "renders Accomack, a small U.S. county": function(p) {
+        p({
           type: "MultiPolygon",
           coordinates: [
             [[[-75.397659, 38.013497], [-75.244304, 38.029928], [-75.666029, 37.465803], [-75.939876, 37.547957], [-75.671506, 37.95325], [-75.622213, 37.991589], [-75.397659, 38.013497]]],
@@ -734,8 +675,8 @@ suite.addBatch({
         });
         assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
       },
-      "renders Hopewell, a small U.S. county": function(path) {
-        path({
+      "renders Hopewell, a small U.S. county": function(p) {
+        p({
           type: "Polygon",
           coordinates: [[[-77.298157, 37.312448], [-77.298157, 37.312448], [-77.336496, 37.312448], [-77.281726, 37.312448], [-77.298157, 37.312448]]]
         });
@@ -744,57 +685,47 @@ suite.addBatch({
     },
 
     "with an equirectangular projection rotated by [330°, 232°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .rotate([330, 232])
               .precision(0));
       },
-      "given a small circle of 30°": {
-        topic: function(path, d3) {
-          path(d3.geo.circle().angle(30)());
-          return testContext.buffer();
-        },
-        "renders degenerate points": function(buffer) {
-          assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 2);
-        }
+      "renders degenerate points for a small circle of 30°": function(p) {
+        p(d3.geo.circle().angle(30)());
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 2);
       }
     },
 
     "with an equirectangular projection rotated by [34.5°, 90°]": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.equirectangular()
               .scale(900 / Math.PI)
               .rotate([34.5, 90])
               .precision(0));
       },
-      "given some lines": {
-        topic: function(path, d3) {
-          var line = d3.range(-90,  180,  10).map(function(x) { return [x, 20]; })
-             .concat(d3.range(170, -100, -10).map(function(x) { return [x,  0]; }))
-             .concat([[-90, 20]]);
-          path({type: "Polygon", coordinates: [line]});
-          return testContext.buffer();
-        },
-        "does something related to clip point ordering": function(buffer) {
-          assert.equal(buffer.filter(function(d) { return d.type === "moveTo"; }).length, 3);
-        }
+      "observes proper clip point ordering for lines": function(p) {
+        var line = d3.range(-90,  180,  10).map(function(x) { return [x, 20]; })
+           .concat(d3.range(170, -100, -10).map(function(x) { return [x,  0]; }))
+           .concat([[-90, 20]]);
+        p({type: "Polygon", coordinates: [line]});
+        assert.equal(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }).length, 3);
       }
     },
 
     "with a stereographic projection and adaptive resampling": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.stereographic()
               .precision(1));
       },
-      "correctly resamples points on antimeridian": function(path) {
-        path({type: "LineString", coordinates: [[0, 90], [90, 0]]});
+      "correctly resamples points on antimeridian": function(p) {
+        p({type: "LineString", coordinates: [[0, 90], [90, 0]]});
         assert.deepEqual(testContext.buffer(), [
           {type: "moveTo", x: 480, y: 100},
           {type: "lineTo", x: 509, y: 103},
@@ -810,34 +741,33 @@ suite.addBatch({
     },
 
     "with an Albers projection and adaptive resampling": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.albers()
               .scale(140)
               .rotate([0, 0])
               .precision(1));
       },
-      "correctly resamples near the polesa": function(path) {
-        path({type: "LineString", coordinates: [[0, 88], [180, 89]]});
+      "correctly resamples near the polesa": function(p) {
+        p({type: "LineString", coordinates: [[0, 88], [180, 89]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
-        path({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
+        p({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
       }
     },
 
     "with an Albers projection rotated by [11.5°, 285°] and adaptive resampling": {
-      topic: function(d3) {
-        return d3.geo.path()
+      topic: function(path) {
+        return path()
             .context(testContext)
             .projection(d3.geo.albers()
               .scale(140)
               .rotate([11.5, 285])
               .precision(1));
       },
-      "correctly resamples near the polesa": function(path) {
-        path.projection().rotate([11.5, 285]);
-        path({type: "LineString", coordinates: [[170, 20], [170, 0]]});
+      "correctly resamples near the polesa": function(p) {
+        p({type: "LineString", coordinates: [[170, 20], [170, 0]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
       }
     }
@@ -854,7 +784,7 @@ var testContext = {
   buffer: function() { var result = testBuffer; testBuffer = []; return result; }
 };
 
-function stripes(d3, a, b) {
+function stripes(a, b) {
   return {type: "Polygon", coordinates: [a, b].map(function(d, i) {
     var stripe = d3.range(-180, 180, 1).map(function(x) { return [x, d]; });
     stripe.push(stripe[0]);

@@ -6,12 +6,12 @@ var suite = vows.describe("d3.geo.projection");
 
 suite.addBatch({
   "projection": {
-    topic: load("geo/projection"),
+    topic: load("geo/projection").expression("d3.geo.projection"),
     "a custom invertible projection": {
-      topic: function(d3) {
+      topic: function(projection) {
         function forward(λ, φ) { return [λ, φ]; }
         forward.invert = function(x, y) {}
-        return d3.geo.projection(forward);
+        return projection(forward);
       },
 
       "invert": {

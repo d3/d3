@@ -7,9 +7,9 @@ var suite = vows.describe("d3.geo.equirectangular");
 
 suite.addBatch({
   "equirectangular": {
-    topic: load("geo/equirectangular"),
+    topic: load("geo/equirectangular").expression("d3.geo.equirectangular"),
     "default": projectionTestSuite({
-      topic: function(d3) { return d3.geo.equirectangular(); }
+      topic: function(projection) { return projection(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 424.98907000,   33.66602637]],
@@ -21,7 +21,7 @@ suite.addBatch({
       "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   27.47052037]],
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(d3) { return d3.geo.equirectangular().translate([0, 0]).scale(1); }
+      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.36673953,   -1.44222649]],

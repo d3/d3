@@ -6,30 +6,30 @@ var suite = vows.describe("d3.geo.stream");
 
 suite.addBatch({
   "stream": {
-    topic: load("geo/stream"),
-    "does not allow null input": function(d3) {
+    topic: load("geo/stream").expression("d3.geo.stream"),
+    "does not allow null input": function(stream) {
       try {
-        d3.geo.stream(null);
+        stream(null);
         assert.fail("expected error");
       } catch (expected) {}
     },
-    "ignores unknown types": function(d3) {
-      d3.geo.stream({type: "Unknown"}, {});
-      d3.geo.stream({type: "Feature", geometry: {type: "Unknown"}}, {});
-      d3.geo.stream({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Unknown"}}]}, {});
-      d3.geo.stream({type: "GeometryCollection", geometries: [{type: "Unknown"}]}, {});
+    "ignores unknown types": function(stream) {
+      stream({type: "Unknown"}, {});
+      stream({type: "Feature", geometry: {type: "Unknown"}}, {});
+      stream({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Unknown"}}]}, {});
+      stream({type: "GeometryCollection", geometries: [{type: "Unknown"}]}, {});
     },
-    "returns void": function(d3) {
-      assert.isUndefined(d3.geo.stream({type: "Point", coordinates: [1, 2]}, {point: function() { return true; }}));
+    "returns void": function(stream) {
+      assert.isUndefined(stream({type: "Point", coordinates: [1, 2]}, {point: function() { return true; }}));
     },
-    "allows empty multi-geometries": function(d3) {
-      d3.geo.stream({type: "MultiPoint", coordinates: []}, {});
-      d3.geo.stream({type: "MultiLineString", coordinates: []}, {});
-      d3.geo.stream({type: "MultiPolygon", coordinates: []}, {});
+    "allows empty multi-geometries": function(stream) {
+      stream({type: "MultiPoint", coordinates: []}, {});
+      stream({type: "MultiLineString", coordinates: []}, {});
+      stream({type: "MultiPolygon", coordinates: []}, {});
     },
-    "Sphere ↦ sphere": function(d3) {
+    "Sphere ↦ sphere": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "Sphere"}, {
+      stream({type: "Sphere"}, {
         sphere: function() {
           ++calls;
           assert.equal(arguments.length, 0);
@@ -37,9 +37,9 @@ suite.addBatch({
       });
       assert.equal(calls, 1);
     },
-    "Point ↦ point": function(d3) {
+    "Point ↦ point": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "Point", coordinates: [1, 2]}, {
+      stream({type: "Point", coordinates: [1, 2]}, {
         point: function(x, y) {
           ++calls;
           assert.equal(arguments.length, 2);
@@ -49,9 +49,9 @@ suite.addBatch({
       });
       assert.equal(calls, 1);
     },
-    "MultiPoint ↦ point*": function(d3) {
+    "MultiPoint ↦ point*": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "MultiPoint", coordinates: [[1, 2], [3, 4]]}, {
+      stream({type: "MultiPoint", coordinates: [[1, 2], [3, 4]]}, {
         point: function(x, y) {
           assert.equal(arguments.length, 2);
           if (++calls === 1) {
@@ -65,9 +65,9 @@ suite.addBatch({
       });
       assert.equal(calls, 2);
     },
-    "LineString ↦ lineStart, point{2,}, lineEnd": function(d3) {
+    "LineString ↦ lineStart, point{2,}, lineEnd": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "LineString", coordinates: [[1, 2], [3, 4]]}, {
+      stream({type: "LineString", coordinates: [[1, 2], [3, 4]]}, {
         lineStart: function() {
           assert.equal(++calls, 1);
           assert.equal(arguments.length, 0);
@@ -91,9 +91,9 @@ suite.addBatch({
       });
       assert.equal(calls, 4);
     },
-    "MultiLineString ↦ (lineStart, point{2,}, lineEnd)*": function(d3) {
+    "MultiLineString ↦ (lineStart, point{2,}, lineEnd)*": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "MultiLineString", coordinates: [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]}, {
+      stream({type: "MultiLineString", coordinates: [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]}, {
         lineStart: function() {
           ++calls;
           assert.isTrue(calls === 1 || calls === 5);
@@ -126,9 +126,9 @@ suite.addBatch({
       });
       assert.equal(calls, 8);
     },
-    "Polygon ↦ polygonStart, lineStart, point{2,}, lineEnd, polygonEnd": function(d3) {
+    "Polygon ↦ polygonStart, lineStart, point{2,}, lineEnd, polygonEnd": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "Polygon", coordinates: [[[1, 2], [3, 4], [1, 2]], [[5, 6], [7, 8], [5, 6]]]}, {
+      stream({type: "Polygon", coordinates: [[[1, 2], [3, 4], [1, 2]], [[5, 6], [7, 8], [5, 6]]]}, {
         polygonStart: function() {
           ++calls;
           assert.isTrue(calls === 1);
@@ -171,9 +171,9 @@ suite.addBatch({
       });
       assert.equal(calls, 10);
     },
-    "MultiPolygon ↦ (polygonStart, lineStart, point{2,}, lineEnd, polygonEnd)*": function(d3) {
+    "MultiPolygon ↦ (polygonStart, lineStart, point{2,}, lineEnd, polygonEnd)*": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "MultiPolygon", coordinates: [[[[1, 2], [3, 4], [1, 2]]], [[[5, 6], [7, 8], [5, 6]]]]}, {
+      stream({type: "MultiPolygon", coordinates: [[[[1, 2], [3, 4], [1, 2]]], [[[5, 6], [7, 8], [5, 6]]]]}, {
         polygonStart: function() {
           ++calls;
           assert.isTrue(calls === 1 || calls === 7);
@@ -216,9 +216,9 @@ suite.addBatch({
       });
       assert.equal(calls, 12);
     },
-    "Feature ↦ .*": function(d3) {
+    "Feature ↦ .*": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "Feature", geometry: {type: "Point", coordinates: [1, 2]}}, {
+      stream({type: "Feature", geometry: {type: "Point", coordinates: [1, 2]}}, {
         point: function(x, y) {
           ++calls;
           assert.equal(arguments.length, 2);
@@ -228,9 +228,9 @@ suite.addBatch({
       });
       assert.equal(calls, 1);
     },
-    "FeatureCollection ↦ .*": function(d3) {
+    "FeatureCollection ↦ .*": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [1, 2]}}]}, {
+      stream({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [1, 2]}}]}, {
         point: function(x, y) {
           ++calls;
           assert.equal(arguments.length, 2);
@@ -240,9 +240,9 @@ suite.addBatch({
       });
       assert.equal(calls, 1);
     },
-    "GeometryCollection ↦ .*": function(d3) {
+    "GeometryCollection ↦ .*": function(stream) {
       var calls = 0;
-      d3.geo.stream({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [1, 2]}]}, {
+      stream({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [1, 2]}]}, {
         point: function(x, y) {
           ++calls;
           assert.equal(arguments.length, 2);

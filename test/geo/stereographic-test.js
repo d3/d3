@@ -7,9 +7,9 @@ var suite = vows.describe("d3.geo.stereographic");
 
 suite.addBatch({
   "stereographic": {
-    topic: load("geo/stereographic"),
+    topic: load("geo/stereographic").expression("d3.geo.stereographic"),
     "default": projectionTestSuite({
-      topic: function(d3) { return d3.geo.stereographic(); }
+      topic: function(projection) { return projection(); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 473.84094732,  117.14003304]],
@@ -21,7 +21,7 @@ suite.addBatch({
       "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,  112.55032390]]
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
-      topic: function(d3) { return d3.geo.stereographic().translate([0, 0]).scale(1); }
+      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
     }, {
       "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
       "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.04106035,   -0.88573312]],
