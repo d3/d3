@@ -1,10 +1,11 @@
 var vows = require("vows"),
+    jsdom = require("jsdom").jsdom,
+    d3 = require("../../"),
     load = require("../load"),
     xhr = require("../env-xhr"),
     assert = require("../env-assert"),
-    jsdom = require("jsdom").jsdom,
-    document = jsdom("<html><head></head><body></body></html>"),
-    window = document.createWindow();
+    document = d3.selection().node()._ownerDocument,
+    window = document.defaultView;
 
 // Monkey-patch createRange support to JSDOM.
 document.createRange = function() {
@@ -18,31 +19,31 @@ var suite = vows.describe("d3.html");
 
 suite.addBatch({
   "html": {
-    topic: load("xhr/html").sandbox({
+    topic: load("xhr/html").expression("d3.html").sandbox({
       XMLHttpRequest: xhr,
       document: document,
       window: window
     }),
 
     "on a sample file": {
-      topic: function(d3) {
+      topic: function(html) {
         var cb = this.callback;
-        d3.html("test/data/sample.html", function(error, document) {
+        html("test/data/sample.html", function(error, document) {
           cb(null, document);
         });
       },
       "invokes the callback with the loaded html": function(document) {
         assert.equal(document.getElementsByTagName("H1")[0].textContent, "Hello & world!");
       },
-      "override the mime type to text/html": function(xml) {
+      "override the mime type to text/html": function(document) {
         assert.equal(xhr._last._info.mimeType, "text/html");
       }
     },
 
     "on a file that does not exist": {
-      topic: function(d3) {
+      topic: function(html) {
         var cb = this.callback;
-        d3.html("//does/not/exist.html", function(error, document) {
+        html("//does/not/exist.html", function(error, document) {
           cb(null, document);
         });
       },
