@@ -2647,6 +2647,7 @@ d3 = function() {
       return code;
     }
   }
+  var d3_geo_clipViewMAX = 1e15;
   function d3_geo_clipView(x0, y0, x1, y1) {
     return function(listener) {
       var listener_ = listener, bufferListener = d3_geo_clipBufferListener(), segments, polygon, ring;
@@ -2766,6 +2767,10 @@ d3 = function() {
       return ca !== cb ? ca - cb : ca === 0 ? b[1] - a[1] : ca === 1 ? a[0] - b[0] : ca === 2 ? a[1] - b[1] : b[0] - a[0];
     }
     function clipLine(a, b) {
+      a[0] = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, a[0]));
+      a[1] = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, a[1]));
+      b[0] = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, b[0]));
+      b[1] = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, b[1]));
       var dx = b[0] - a[0], dy = b[1] - a[1], t = [ 0, 1 ];
       if (Math.abs(dx) < ε && Math.abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
       if (d3_geo_clipViewT(x0 - a[0], dx, t) && d3_geo_clipViewT(a[0] - x1, -dx, t) && d3_geo_clipViewT(y0 - a[1], dy, t) && d3_geo_clipViewT(a[1] - y1, -dy, t)) {
