@@ -1,6 +1,5 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.bisect");
@@ -9,49 +8,47 @@ var i30 = 1 << 30;
 
 suite.addBatch({
   "bisectLeft": {
-    topic: function() {
-      return d3.bisectLeft;
-    },
-    "finds the index of an exact match": function(bisect) {
+    topic: load("arrays/bisect"),
+    "finds the index of an exact match": function(d3) {
       var array = [1, 2, 3];
-      assert.equal(bisect(array, 1), 0);
-      assert.equal(bisect(array, 2), 1);
-      assert.equal(bisect(array, 3), 2);
+      assert.equal(d3.bisectLeft(array, 1), 0);
+      assert.equal(d3.bisectLeft(array, 2), 1);
+      assert.equal(d3.bisectLeft(array, 3), 2);
     },
-    "finds the index of the first match": function(bisect) {
+    "finds the index of the first match": function(d3) {
       var array = [1, 2, 2, 3];
-      assert.equal(bisect(array, 1), 0);
-      assert.equal(bisect(array, 2), 1);
-      assert.equal(bisect(array, 3), 3);
+      assert.equal(d3.bisectLeft(array, 1), 0);
+      assert.equal(d3.bisectLeft(array, 2), 1);
+      assert.equal(d3.bisectLeft(array, 3), 3);
     },
-    "finds the insertion point of a non-exact match": function(bisect) {
+    "finds the insertion point of a non-exact match": function(d3) {
       var array = [1, 2, 3];
-      assert.equal(bisect(array, 0.5), 0);
-      assert.equal(bisect(array, 1.5), 1);
-      assert.equal(bisect(array, 2.5), 2);
-      assert.equal(bisect(array, 3.5), 3);
+      assert.equal(d3.bisectLeft(array, 0.5), 0);
+      assert.equal(d3.bisectLeft(array, 1.5), 1);
+      assert.equal(d3.bisectLeft(array, 2.5), 2);
+      assert.equal(d3.bisectLeft(array, 3.5), 3);
     },
-    "observes the optional lower bound": function(bisect) {
+    "observes the optional lower bound": function(d3) {
       var array = [1, 2, 3, 4, 5];
-      assert.equal(bisect(array, 0, 2), 2);
-      assert.equal(bisect(array, 1, 2), 2);
-      assert.equal(bisect(array, 2, 2), 2);
-      assert.equal(bisect(array, 3, 2), 2);
-      assert.equal(bisect(array, 4, 2), 3);
-      assert.equal(bisect(array, 5, 2), 4);
-      assert.equal(bisect(array, 6, 2), 5);
+      assert.equal(d3.bisectLeft(array, 0, 2), 2);
+      assert.equal(d3.bisectLeft(array, 1, 2), 2);
+      assert.equal(d3.bisectLeft(array, 2, 2), 2);
+      assert.equal(d3.bisectLeft(array, 3, 2), 2);
+      assert.equal(d3.bisectLeft(array, 4, 2), 3);
+      assert.equal(d3.bisectLeft(array, 5, 2), 4);
+      assert.equal(d3.bisectLeft(array, 6, 2), 5);
     },
-    "observes the optional bounds": function(bisect) {
+    "observes the optional bounds": function(d3) {
       var array = [1, 2, 3, 4, 5];
-      assert.equal(bisect(array, 0, 2, 3), 2);
-      assert.equal(bisect(array, 1, 2, 3), 2);
-      assert.equal(bisect(array, 2, 2, 3), 2);
-      assert.equal(bisect(array, 3, 2, 3), 2);
-      assert.equal(bisect(array, 4, 2, 3), 3);
-      assert.equal(bisect(array, 5, 2, 3), 3);
-      assert.equal(bisect(array, 6, 2, 3), 3);
+      assert.equal(d3.bisectLeft(array, 0, 2, 3), 2);
+      assert.equal(d3.bisectLeft(array, 1, 2, 3), 2);
+      assert.equal(d3.bisectLeft(array, 2, 2, 3), 2);
+      assert.equal(d3.bisectLeft(array, 3, 2, 3), 2);
+      assert.equal(d3.bisectLeft(array, 4, 2, 3), 3);
+      assert.equal(d3.bisectLeft(array, 5, 2, 3), 3);
+      assert.equal(d3.bisectLeft(array, 6, 2, 3), 3);
     },
-    "large arrays": function(bisect) {
+    "large arrays": function(d3) {
       var array = [],
           i = i30;
       array[i++] = 1;
@@ -59,62 +56,57 @@ suite.addBatch({
       array[i++] = 3;
       array[i++] = 4;
       array[i++] = 5;
-      assert.equal(bisect(array, 0, i - 5, i), i - 5);
-      assert.equal(bisect(array, 1, i - 5, i), i - 5);
-      assert.equal(bisect(array, 2, i - 5, i), i - 4);
-      assert.equal(bisect(array, 3, i - 5, i), i - 3);
-      assert.equal(bisect(array, 4, i - 5, i), i - 2);
-      assert.equal(bisect(array, 5, i - 5, i), i - 1);
-      assert.equal(bisect(array, 6, i - 5, i), i - 0);
+      assert.equal(d3.bisectLeft(array, 0, i - 5, i), i - 5);
+      assert.equal(d3.bisectLeft(array, 1, i - 5, i), i - 5);
+      assert.equal(d3.bisectLeft(array, 2, i - 5, i), i - 4);
+      assert.equal(d3.bisectLeft(array, 3, i - 5, i), i - 3);
+      assert.equal(d3.bisectLeft(array, 4, i - 5, i), i - 2);
+      assert.equal(d3.bisectLeft(array, 5, i - 5, i), i - 1);
+      assert.equal(d3.bisectLeft(array, 6, i - 5, i), i - 0);
     }
-  }
-});
-
-suite.addBatch({
+  },
   "bisectRight": {
-    topic: function() {
-      return d3.bisectRight;
-    },
-    "finds the index after an exact match": function(bisect) {
+    topic: load("arrays/bisect"),
+    "finds the index after an exact match": function(d3) {
       var array = [1, 2, 3];
-      assert.equal(bisect(array, 1), 1);
-      assert.equal(bisect(array, 2), 2);
-      assert.equal(bisect(array, 3), 3);
+      assert.equal(d3.bisectRight(array, 1), 1);
+      assert.equal(d3.bisectRight(array, 2), 2);
+      assert.equal(d3.bisectRight(array, 3), 3);
     },
-    "finds the index after the last match": function(bisect) {
+    "finds the index after the last match": function(d3) {
       var array = [1, 2, 2, 3];
-      assert.equal(bisect(array, 1), 1);
-      assert.equal(bisect(array, 2), 3);
-      assert.equal(bisect(array, 3), 4);
+      assert.equal(d3.bisectRight(array, 1), 1);
+      assert.equal(d3.bisectRight(array, 2), 3);
+      assert.equal(d3.bisectRight(array, 3), 4);
     },
-    "finds the insertion point of a non-exact match": function(bisect) {
+    "finds the insertion point of a non-exact match": function(d3) {
       var array = [1, 2, 3];
-      assert.equal(bisect(array, 0.5), 0);
-      assert.equal(bisect(array, 1.5), 1);
-      assert.equal(bisect(array, 2.5), 2);
-      assert.equal(bisect(array, 3.5), 3);
+      assert.equal(d3.bisectRight(array, 0.5), 0);
+      assert.equal(d3.bisectRight(array, 1.5), 1);
+      assert.equal(d3.bisectRight(array, 2.5), 2);
+      assert.equal(d3.bisectRight(array, 3.5), 3);
     },
-    "observes the optional lower bound": function(bisect) {
+    "observes the optional lower bound": function(d3) {
       var array = [1, 2, 3, 4, 5];
-      assert.equal(bisect(array, 0, 2), 2);
-      assert.equal(bisect(array, 1, 2), 2);
-      assert.equal(bisect(array, 2, 2), 2);
-      assert.equal(bisect(array, 3, 2), 3);
-      assert.equal(bisect(array, 4, 2), 4);
-      assert.equal(bisect(array, 5, 2), 5);
-      assert.equal(bisect(array, 6, 2), 5);
+      assert.equal(d3.bisectRight(array, 0, 2), 2);
+      assert.equal(d3.bisectRight(array, 1, 2), 2);
+      assert.equal(d3.bisectRight(array, 2, 2), 2);
+      assert.equal(d3.bisectRight(array, 3, 2), 3);
+      assert.equal(d3.bisectRight(array, 4, 2), 4);
+      assert.equal(d3.bisectRight(array, 5, 2), 5);
+      assert.equal(d3.bisectRight(array, 6, 2), 5);
     },
-    "observes the optional bounds": function(bisect) {
+    "observes the optional bounds": function(d3) {
       var array = [1, 2, 3, 4, 5];
-      assert.equal(bisect(array, 0, 2, 3), 2);
-      assert.equal(bisect(array, 1, 2, 3), 2);
-      assert.equal(bisect(array, 2, 2, 3), 2);
-      assert.equal(bisect(array, 3, 2, 3), 3);
-      assert.equal(bisect(array, 4, 2, 3), 3);
-      assert.equal(bisect(array, 5, 2, 3), 3);
-      assert.equal(bisect(array, 6, 2, 3), 3);
+      assert.equal(d3.bisectRight(array, 0, 2, 3), 2);
+      assert.equal(d3.bisectRight(array, 1, 2, 3), 2);
+      assert.equal(d3.bisectRight(array, 2, 2, 3), 2);
+      assert.equal(d3.bisectRight(array, 3, 2, 3), 3);
+      assert.equal(d3.bisectRight(array, 4, 2, 3), 3);
+      assert.equal(d3.bisectRight(array, 5, 2, 3), 3);
+      assert.equal(d3.bisectRight(array, 6, 2, 3), 3);
     },
-    "large arrays": function(bisect) {
+    "large arrays": function(d3) {
       var array = [],
           i = i30;
       array[i++] = 1;
@@ -122,25 +114,20 @@ suite.addBatch({
       array[i++] = 3;
       array[i++] = 4;
       array[i++] = 5;
-      assert.equal(bisect(array, 0, i - 5, i), i - 5);
-      assert.equal(bisect(array, 1, i - 5, i), i - 4);
-      assert.equal(bisect(array, 2, i - 5, i), i - 3);
-      assert.equal(bisect(array, 3, i - 5, i), i - 2);
-      assert.equal(bisect(array, 4, i - 5, i), i - 1);
-      assert.equal(bisect(array, 5, i - 5, i), i - 0);
-      assert.equal(bisect(array, 6, i - 5, i), i - 0);
+      assert.equal(d3.bisectRight(array, 0, i - 5, i), i - 5);
+      assert.equal(d3.bisectRight(array, 1, i - 5, i), i - 4);
+      assert.equal(d3.bisectRight(array, 2, i - 5, i), i - 3);
+      assert.equal(d3.bisectRight(array, 3, i - 5, i), i - 2);
+      assert.equal(d3.bisectRight(array, 4, i - 5, i), i - 1);
+      assert.equal(d3.bisectRight(array, 5, i - 5, i), i - 0);
+      assert.equal(d3.bisectRight(array, 6, i - 5, i), i - 0);
     }
-  }
-});
-
-suite.addBatch({
+  },
   "bisector(key)": {
-    topic: function() {
-      return d3.bisector(function(d) { return d.key; });
-    },
+    topic: load("arrays/bisect"),
     "left": {
-      topic: function(bisector) {
-        return bisector.left;
+      topic: function(d3) {
+        return d3.bisector(function(d) { return d.key; }).left;
       },
       "finds the index of an exact match": function(bisect) {
         var array = [{key: 1}, {key: 2}, {key: 3}];
@@ -199,8 +186,8 @@ suite.addBatch({
       }
     },
     "right": {
-      topic: function(bisector) {
-        return bisector.right;
+      topic: function(d3) {
+        return d3.bisector(function(d) { return d.key; }).right;
       },
       "finds the index after an exact match": function(bisect) {
         var array = [{key: 1}, {key: 2}, {key: 3}];

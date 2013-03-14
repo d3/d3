@@ -1,25 +1,22 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.nest");
 
 suite.addBatch({
   "entries": {
-    topic: function() {
-      return d3.nest;
-    },
-    "returns an array of each distinct key in arbitrary order": function(nest) {
-      var keys = nest()
+    topic: load("arrays/nest", "arrays/ascending", "arrays/descending", "arrays/sum"),
+    "returns an array of each distinct key in arbitrary order": function(d3) {
+      var keys = d3.nest()
           .key(function(d) { return d.foo; })
           .entries([{foo: 1}, {foo: 1}, {foo: 2}])
           .map(function(d) { return d.key; })
           .sort(d3.ascending);
       assert.deepEqual(keys, ["1", "2"]);
     },
-    "each entry is a key-values object, with values in input order": function(nest) {
-      var entries = nest()
+    "each entry is a key-values object, with values in input order": function(d3) {
+      var entries = d3.nest()
           .key(function(d) { return d.foo; })
           .entries([{foo: 1, bar: 0}, {foo: 2}, {foo: 1, bar: 1}]);
       assert.deepEqual(entries, [
@@ -27,15 +24,15 @@ suite.addBatch({
         {key: "2", values: [{foo: 2}]}
       ]);
     },
-    "keys can be sorted using an optional comparator": function(nest) {
-      var keys = nest()
+    "keys can be sorted using an optional comparator": function(d3) {
+      var keys = d3.nest()
           .key(function(d) { return d.foo; }).sortKeys(d3.descending)
           .entries([{foo: 1}, {foo: 1}, {foo: 2}])
           .map(function(d) { return d.key; });
       assert.deepEqual(keys, ["2", "1"]);
     },
-    "values can be sorted using an optional comparator": function(nest) {
-      var entries = nest()
+    "values can be sorted using an optional comparator": function(d3) {
+      var entries = d3.nest()
           .key(function(d) { return d.foo; })
           .sortValues(function(a, b) { return a.bar - b.bar; })
           .entries([{foo: 1, bar: 2}, {foo: 1, bar: 0}, {foo: 1, bar: 1}, {foo: 2}]);
@@ -44,8 +41,8 @@ suite.addBatch({
         {key: "2", values: [{foo: 2}]}
       ]);
     },
-    "values can be aggregated using an optional rollup": function(nest) {
-      var entries = nest()
+    "values can be aggregated using an optional rollup": function(d3) {
+      var entries = d3.nest()
           .key(function(d) { return d.foo; })
           .rollup(function(values) { return d3.sum(values, function(d) { return d.bar; }); })
           .entries([{foo: 1, bar: 2}, {foo: 1, bar: 0}, {foo: 1, bar: 1}, {foo: 2}]);
@@ -54,8 +51,8 @@ suite.addBatch({
         {key: "2", values: 0}
       ]);
     },
-    "multiple key functions can be specified": function(nest) {
-      var entries = nest()
+    "multiple key functions can be specified": function(d3) {
+      var entries = d3.nest()
           .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
           .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
           .entries([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
@@ -70,8 +67,8 @@ suite.addBatch({
         ]}
       ]);
     },
-    "the rollup function only applies to leaf values": function(nest) {
-      var entries = nest()
+    "the rollup function only applies to leaf values": function(d3) {
+      var entries = d3.nest()
           .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
           .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
           .rollup(function(values) { return values.length; })
@@ -87,8 +84,8 @@ suite.addBatch({
         ]}
       ]);
     },
-    "the value comparator only applies to leaf values": function(nest) {
-      var entries = nest()
+    "the value comparator only applies to leaf values": function(d3) {
+      var entries = d3.nest()
           .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
           .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
           .sortValues(function(a, b) { return a[2] - b[2]; })
@@ -104,8 +101,8 @@ suite.addBatch({
         ]}
       ]);
     },
-    "the key comparator only applies to the last-specified key": function(nest) {
-      var entries = nest()
+    "the key comparator only applies to the last-specified key": function(d3) {
+      var entries = d3.nest()
           .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
           .key(function(d) { return d[1]; }).sortKeys(d3.descending)
           .entries([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
@@ -119,7 +116,7 @@ suite.addBatch({
           {key: "1", values: [[1, 1]]}
         ]}
       ]);
-      var entries = nest()
+      var entries = d3.nest()
           .key(function(d) { return d[0]; }).sortKeys(d3.descending)
           .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
           .entries([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
@@ -134,20 +131,18 @@ suite.addBatch({
         ]}
       ]);
     },
-    "if no keys are specified, the input array is returned": function(nest) {
+    "if no keys are specified, the input array is returned": function(d3) {
       var array = [new Object()];
-      assert.strictEqual(nest().entries(array), array);
+      assert.strictEqual(d3.nest().entries(array), array);
     }
   }
 });
 
 suite.addBatch({
   "map": {
-    topic: function() {
-      return d3.nest;
-    },
-    "returns a map of each distinct key": function(nest) {
-      var map = nest()
+    topic: load("arrays/nest", "arrays/ascending", "arrays/descending", "arrays/sum"),
+    "returns a map of each distinct key": function(d3) {
+      var map = d3.nest()
           .key(function(d) { return d.foo; })
           .map([{foo: 1, bar: 0}, {foo: 2}, {foo: 1, bar: 1}]);
       assert.deepEqual(map, {
@@ -155,8 +150,8 @@ suite.addBatch({
         "2": [{foo: 2}]
       });
     },
-    "values can be sorted using an optional comparator": function(nest) {
-      var map = nest()
+    "values can be sorted using an optional comparator": function(d3) {
+      var map = d3.nest()
           .key(function(d) { return d.foo; })
           .sortValues(function(a, b) { return a.bar - b.bar; })
           .map([{foo: 1, bar: 2}, {foo: 1, bar: 0}, {foo: 1, bar: 1}, {foo: 2}]);
@@ -165,8 +160,8 @@ suite.addBatch({
         "2": [{foo: 2}]
       });
     },
-    "values can be aggregated using an optional rollup": function(nest) {
-      var map = nest()
+    "values can be aggregated using an optional rollup": function(d3) {
+      var map = d3.nest()
           .key(function(d) { return d.foo; })
           .rollup(function(values) { return d3.sum(values, function(d) { return d.bar; }); })
           .map([{foo: 1, bar: 2}, {foo: 1, bar: 0}, {foo: 1, bar: 1}, {foo: 2}]);
@@ -175,8 +170,8 @@ suite.addBatch({
         "2": 0
       });
     },
-    "multiple key functions can be specified": function(nest) {
-      var map = nest()
+    "multiple key functions can be specified": function(d3) {
+      var map = d3.nest()
           .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
           .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
           .map([[0, 1], [0, 2], [1, 1], [1, 2], [0, 2]]);
@@ -191,8 +186,8 @@ suite.addBatch({
         }
       });
     },
-    "the rollup function only applies to leaf values": function(nest) {
-      var map = nest()
+    "the rollup function only applies to leaf values": function(d3) {
+      var map = d3.nest()
           .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
           .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
           .rollup(function(values) { return values.length; })
@@ -208,8 +203,8 @@ suite.addBatch({
         }
       });
     },
-    "the value comparator only applies to leaf values": function(nest) {
-      var map = nest()
+    "the value comparator only applies to leaf values": function(d3) {
+      var map = d3.nest()
           .key(function(d) { return d[0]; }).sortKeys(d3.ascending)
           .key(function(d) { return d[1]; }).sortKeys(d3.ascending)
           .sortValues(function(a, b) { return a[2] - b[2]; })
@@ -225,18 +220,18 @@ suite.addBatch({
         }
       });
     },
-    "if no keys are specified, the input array is returned": function(nest) {
+    "if no keys are specified, the input array is returned": function(d3) {
       var array = [new Object()];
-      assert.strictEqual(nest().map(array), array);
+      assert.strictEqual(d3.nest().map(array), array);
     },
-    "handles keys that are built-in prototype properties": function(nest) {
-      var map = nest()
+    "handles keys that are built-in prototype properties": function(d3) {
+      var map = d3.nest()
           .key(String)
           .map(["hasOwnProperty"]); // but note __proto__ wouldn’t work!
       assert.deepEqual(map, {hasOwnProperty: ["hasOwnProperty"]});
     },
-    "a custom map implementation can be specified": function(nest) {
-      var map = nest()
+    "a custom map implementation can be specified": function(d3) {
+      var map = d3.nest()
           .key(String)
           .map(["hasOwnProperty", "__proto__"], d3.map);
       assert.deepEqual(map.entries(), [
@@ -244,8 +239,8 @@ suite.addBatch({
         {key: "__proto__", value: ["__proto__"]}
       ]);
     },
-    "the custom map implementation works on multiple levels of nesting": function(nest) {
-      var map = nest()
+    "the custom map implementation works on multiple levels of nesting": function(d3) {
+      var map = d3.nest()
           .key(function(d) { return d.foo; })
           .key(function(d) { return d.bar; })
           .map([{foo: 42, bar: "red"}], d3.map);
