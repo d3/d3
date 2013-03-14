@@ -1,21 +1,15 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.on");
 
 suite.addBatch({
   "select(body)": {
-    topic: load("selection/on").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/on").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("");
+        return d3.select("body");
       },
       "registers an event listener for the specified type": function(body) {
         var form = body.append("form"), count = 0;

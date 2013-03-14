@@ -1,65 +1,60 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    interpolateRgb = require("../../").interpolateRgb,
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.attr");
 
 suite.addBatch({
   "select(body)": {
-    topic: load("selection/attr").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/attr").document(),
     "on a simple page": {
       topic: function(d3) {
         return d3.select("body");
       },
       "sets an attribute as a string": function(body) {
         body.attr("bgcolor", "red");
-        assert.equal(document.body.getAttribute("bgcolor"), "red");
+        assert.equal(body.node().getAttribute("bgcolor"), "red");
       },
       "sets an attribute as a number": function(body) {
         body.attr("opacity", 1);
-        assert.equal(document.body.getAttribute("opacity"), "1");
+        assert.equal(body.node().getAttribute("opacity"), "1");
       },
       "sets an attribute as a function": function(body) {
         body.attr("bgcolor", function() { return "orange"; });
-        assert.equal(document.body.getAttribute("bgcolor"), "orange");
+        assert.equal(body.node().getAttribute("bgcolor"), "orange");
       },
       "sets an attribute as a function of data": function(body) {
         body.data(["cyan"]).attr("bgcolor", String);
-        assert.equal(document.body.getAttribute("bgcolor"), "cyan");
+        assert.equal(body.node().getAttribute("bgcolor"), "cyan");
       },
       "sets an attribute as a function of index": function(body) {
         body.attr("bgcolor", function(d, i) { return "orange-" + i; });
-        assert.equal(document.body.getAttribute("bgcolor"), "orange-0");
+        assert.equal(body.node().getAttribute("bgcolor"), "orange-0");
       },
       "sets a namespaced attribute as a string": function(body) {
         body.attr("xlink:href", "url");
-        assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "url");
+        assert.equal(body.node().getAttributeNS("http://www.w3.org/1999/xlink", "href"), "url");
       },
       "sets a namespaced attribute as a function": function(body) {
         body.data(["orange"]).attr("xlink:href", function(d, i) { return d + "-" + i; });
-        assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0");
+        assert.equal(body.node().getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0");
       },
       "sets attributes as a map of constants": function(body) {
         body.attr({bgcolor: "white", "xlink:href": "url.png"});
-        assert.equal(document.body.getAttribute("bgcolor"), "white");
-        assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "url.png");
+        assert.equal(body.node().getAttribute("bgcolor"), "white");
+        assert.equal(body.node().getAttributeNS("http://www.w3.org/1999/xlink", "href"), "url.png");
       },
       "sets attributes as a map of functions": function(body) {
         body.data(["orange"]).attr({"xlink:href": function(d, i) { return d + "-" + i + ".png"; }});
-        assert.equal(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0.png");
+        assert.equal(body.node().getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0.png");
       },
       "gets an attribute value": function(body) {
-        document.body.setAttribute("bgcolor", "yellow");
+        body.node().setAttribute("bgcolor", "yellow");
         assert.equal(body.attr("bgcolor"), "yellow");
       },
       "gets a namespaced attribute value": function(body) {
-        document.body.setAttributeNS("http://www.w3.org/1999/xlink", "foo", "bar");
+        body.node().setAttributeNS("http://www.w3.org/1999/xlink", "foo", "bar");
         assert.equal(body.attr("xlink:foo"), "bar");
       },
       "removes an attribute as null": function(body) {
@@ -79,18 +74,18 @@ suite.addBatch({
         assert.isNull(body.attr("xlink:href"));
       },
       "removes attributes as a map of null": function(body) {
-        document.body.setAttribute("bgcolor", "white");
-        document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
+        body.node().setAttribute("bgcolor", "white");
+        body.node().setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
         body.attr({bgcolor: null, "xlink:href": null});
-        assert.isNull(document.body.getAttribute("bgcolor"));
-        assert.isNull(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"));
+        assert.isNull(body.node().getAttribute("bgcolor"));
+        assert.isNull(body.node().getAttributeNS("http://www.w3.org/1999/xlink", "href"));
       },
       "removes attributes as a map of functions that return null": function(body) {
-        document.body.setAttribute("bgcolor", "white");
-        document.body.setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
+        body.node().setAttribute("bgcolor", "white");
+        body.node().setAttributeNS("http://www.w3.org/1999/xlink", "href", "foo.png");
         body.attr({bgcolor: function() {}, "xlink:href": function() {}});
-        assert.isNull(document.body.getAttribute("bgcolor"));
-        assert.isNull(document.body.getAttributeNS("http://www.w3.org/1999/xlink", "href"));
+        assert.isNull(body.node().getAttribute("bgcolor"));
+        assert.isNull(body.node().getAttributeNS("http://www.w3.org/1999/xlink", "href"));
       },
       "returns the current selection": function(body) {
         assert.isTrue(body.attr("foo", "bar") === body);
@@ -101,13 +96,10 @@ suite.addBatch({
 
 suite.addBatch({
   "selectAll(div)": {
-    topic: load("selection/attr").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/attr").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("").selectAll("div").data([0, 1]).enter().append("div");
+        return d3.select("body").selectAll("div").data([0, 1]).enter().append("div");
       },
       "sets an attribute as a string": function(div) {
         div.attr("bgcolor", "red");
@@ -125,7 +117,7 @@ suite.addBatch({
         assert.equal(div[0][1].getAttribute("bgcolor"), "coral");
       },
       "sets an attribute as a function of data": function(div) {
-        div.attr("bgcolor", d3.interpolateRgb("brown", "steelblue"));
+        div.attr("bgcolor", interpolateRgb("brown", "steelblue"));
         assert.equal(div[0][0].getAttribute("bgcolor"), "#a52a2a");
         assert.equal(div[0][1].getAttribute("bgcolor"), "#4682b4");
       },
@@ -174,15 +166,15 @@ suite.addBatch({
       },
       "returns the current selection": function(div) {
         assert.isTrue(div.attr("foo", "bar") === div);
+      },
+      "ignores null nodes": function(div) {
+        var node = div[0][1];
+        div.attr("href", null);
+        div[0][1] = null;
+        div.attr("href", "url");
+        assert.equal(div[0][0].getAttribute("href"), "url");
+        assert.isNull(node.getAttribute("href"));
       }
-    },
-    "ignores null nodes": function(d3) {
-      var div = d3.select("body").html("").selectAll("div").data([0, 1]).enter().append("div"),
-          some = d3.selectAll("div");
-      some[0][1] = null;
-      some.attr("href", null).attr("href", "url");
-      assert.equal(div[0][0].getAttribute("href"), "url");
-      assert.isNull(div[0][1].getAttribute("href"));
     }
   }
 });

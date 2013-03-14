@@ -1,23 +1,18 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.sort");
 
 suite.addBatch({
   "selectAll(div).selectAll(span)": {
-    topic: load("selection/sort").sandbox({
-      document: document,
-      window: window
-    }),
-    "on a simple page": {
+    topic: load("selection/sort").document(),
+    "on a page with some spans": {
       topic: function(d3) {
-        return d3.select("body").html("").selectAll("div")
+        return d3.select("body").append("div").selectAll("div")
             .data([1, 2, 10, 20])
-          .enter().append("div").selectAll("span")
+          .enter().append("div")
+          .selectAll("span")
             .data(function(d) { return [20 + d, 2 + d, 10, 1]; })
           .enter().append("span");
       },
@@ -30,22 +25,25 @@ suite.addBatch({
         assert.domNull(span[0][3].nextSibling);
       },
       "sorts each group independently": function(span) {
-        span.sort(d3.descending);
+        span.sort(function(a, b) { return b - a; });
         assert.deepEqual(span[0].map(data), [21, 10, 3, 1]);
         assert.deepEqual(span[1].map(data), [22, 10, 4, 1]);
         assert.deepEqual(span[2].map(data), [30, 12, 10, 1]);
         assert.deepEqual(span[3].map(data), [40, 22, 10, 1]);
       },
       "sorts using the specified comparator": function(span) {
-        span.sort(function(a, b) { return d3.ascending(a+"", b+""); });
+        span.sort(function(a, b) { return (a + "").localeCompare(b + ""); });
         assert.deepEqual(span[0].map(data), [1, 10, 21, 3]);
         assert.deepEqual(span[1].map(data), [1, 10, 22, 4]);
         assert.deepEqual(span[2].map(data), [1, 10, 12, 30]);
         assert.deepEqual(span[3].map(data), [1, 10, 22, 40]);
       },
-      "sorts null nodes at the end of the selection": function() {
-        var span = d3.selectAll("div").selectAll("span"), nulls = 0;
-        d3.select(span[0][0]).remove();
+      "returns the current selection": function(span) {
+        assert.isTrue(span.sort() === span);
+      },
+      "sorts null nodes at the end of the selection": function(span) {
+        var nulls = 0;
+        span[0][0].parentNode.removeChild(span[0][0]);
         span[0][0] = null;
         span.sort(function(a, b) { if ((a === null) || (b === null)) ++nulls; return a - b; });
         assert.equal(nulls, 0);
@@ -69,12 +67,8 @@ suite.addBatch({
           assert.domEqual(span[i][3], span[i][2].nextSibling);
           assert.domEqual(span[i][2], span[i][3].previousSibling);
           assert.domNull(span[i][3].nextSibling);
-          assert.deepEqual(span[i].map(data), [1, 2 + d, 10, 20 + d].sort(d3.ascending));
+          assert.deepEqual(span[i].map(data), [1, 2 + d, 10, 20 + d].sort(function(a, b) { return a - b; }));
         }
-      },
-      "returns the current selection": function(span) {
-        span = d3.select("body"); // https://github.com/tmpvar/jsdom/issues/277
-        assert.isTrue(span.sort() === span);
       }
     }
   }

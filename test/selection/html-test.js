@@ -1,92 +1,83 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.html");
 
 suite.addBatch({
   "select(body)": {
-    topic: load("selection/selection").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/selection").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("");
+        return d3.select("body");
       },
       "sets the inner HTML as a string": function(body) {
         body.html("<h1>Hello, world!</h1>");
-        assert.equal(document.body.firstChild.tagName, "H1");
-        assert.equal(document.body.firstChild.textContent, "Hello, world!");
+        assert.equal(body.node().firstChild.tagName, "H1");
+        assert.equal(body.node().firstChild.textContent, "Hello, world!");
       },
       "sets the inner HTML as a number": function(body) {
         body.html(42);
-        assert.equal(document.body.innerHTML, "42");
-        assert.equal(document.body.firstChild.nodeType, document.TEXT_NODE);
+        assert.equal(body.node().innerHTML, "42");
+        assert.equal(body.node().firstChild.nodeType, 3);
       },
       "sets the inner HTML as a function": function(body) {
         body.data(["Subject"]).html(function(d, i) { return "<b>" + d + "</b><i>" + i + "</i>"; });
-        assert.equal(document.body.firstChild.tagName, "B");
-        assert.equal(document.body.firstChild.textContent, "Subject");
-        assert.equal(document.body.lastChild.tagName, "I");
-        assert.equal(document.body.lastChild.textContent, "0");
+        assert.equal(body.node().firstChild.tagName, "B");
+        assert.equal(body.node().firstChild.textContent, "Subject");
+        assert.equal(body.node().lastChild.tagName, "I");
+        assert.equal(body.node().lastChild.textContent, "0");
       },
       "clears the inner HTML as null": function(body) {
         body.html(null);
-        assert.equal(document.body.innerHTML, "");
-        assert.isNull(document.body.firstChild);
+        assert.equal(body.node().innerHTML, "");
+        assert.isNull(body.node().firstChild);
       },
       "clears the inner HTML as undefined": function(body) {
         body.html(undefined);
-        assert.equal(document.body.innerHTML, "");
-        assert.isNull(document.body.firstChild);
+        assert.equal(body.node().innerHTML, "");
+        assert.isNull(body.node().firstChild);
       },
       "clears the inner HTML as the empty string": function(body) {
         body.html("");
-        assert.equal(document.body.innerHTML, "");
-        assert.isNull(document.body.firstChild);
+        assert.equal(body.node().innerHTML, "");
+        assert.isNull(body.node().firstChild);
       },
       "clears the inner HTML as a function returning the empty string": function(body) {
         body.text(function() { return ""; });
-        assert.equal(document.body.innerHTML, "");
-        assert.isNull(document.body.firstChild);
+        assert.equal(body.node().innerHTML, "");
+        assert.isNull(body.node().firstChild);
       },
       "clears the inner HTML as a function returning null": function(body) {
         body.text(function() { return null; });
-        assert.equal(document.body.innerHTML, "");
-        assert.isNull(document.body.firstChild);
+        assert.equal(body.node().innerHTML, "");
+        assert.isNull(body.node().firstChild);
       },
       "clears the inner HTML as a function returning undefined": function(body) {
         body.text(function() { return undefined; });
-        assert.equal(document.body.innerHTML, "");
-        assert.isNull(document.body.firstChild);
+        assert.equal(body.node().innerHTML, "");
+        assert.isNull(body.node().firstChild);
       },
       "returns the current selection": function(body) {
         assert.isTrue(body.html("foo") === body);
+      },
+      "ignores null nodes": function(body) {
+        var node = body.node();
+        body[0][0] = null;
+        node.innerHTML = "<h1>foo</h1>";
+        body.html("bar");
+        assert.equal(node.textContent, "foo");
       }
-    },
-    "ignores null nodes": function(d3) {
-      var body = d3.select("body");
-      body[0][0] = null;
-      document.body.innerHTML = "<h1>foo</h1>";
-      body.html("bar");
-      assert.equal(document.body.textContent, "foo");
     }
   }
 });
 
 suite.addBatch({
   "selectAll(div)": {
-    topic: load("selection/selection").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/selection").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("").selectAll("div").data([0, 1]).enter().append("div");
+        return d3.select("body").selectAll("div").data([0, 1]).enter().append("div");
       },
       "sets the inner HTML as a string": function(div) {
         div.html("<h1>Hello, world!</h1>");
@@ -98,7 +89,7 @@ suite.addBatch({
       "sets the inner HTML as a number": function(div) {
         div.html(42);
         assert.equal(div[0][0].innerHTML, "42");
-        assert.equal(div[0][0].firstChild.nodeType, document.TEXT_NODE);
+        assert.equal(div[0][0].firstChild.nodeType, 3);
       },
       "sets the inner HTML as a function": function(div) {
         div.data(["foo", "bar"]).html(function(d, i) { return "<b>" + d + "</b><i>" + i + "</i>"; });
@@ -127,16 +118,15 @@ suite.addBatch({
       },
       "returns the current selection": function(div) {
         assert.isTrue(div.html("foo") === div);
+      },
+      "ignores null nodes": function(div) {
+        var node = div[0][0];
+        div[0][0] = null;
+        node.innerHTML = "<h1>foo</h1>";
+        div.html("bar");
+        assert.equal(node.textContent, "foo");
+        assert.equal(div[0][1].textContent, "bar");
       }
-    },
-    "ignores null nodes": function(d3) {
-      var div = d3.select("body").html("").selectAll("div").data([0, 1]).enter().append("div"),
-          some = d3.selectAll("div");
-      some[0][0] = null;
-      div[0][0].innerHTML = "<h1>foo</h1>";
-      some.html("bar");
-      assert.equal(div[0][0].textContent, "foo");
-      assert.equal(div[0][1].textContent, "bar");
     }
   }
 });

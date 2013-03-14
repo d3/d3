@@ -1,23 +1,17 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("d3.selection");
 
 suite.addBatch({
   "selection": {
-    topic: load("selection/selection").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/selection").document(),
     "selects the document": function(d3) {
       var selection = d3.selection();
       assert.equal(selection.length, 1);
       assert.equal(selection[0].length, 1);
-      assert.equal(selection[0][0], document);
+      assert.equal(selection[0][0].nodeType, 9);
     },
     "is an instanceof d3.selection": function(d3) {
       assert.instanceOf(d3.selection(), d3.selection);
@@ -28,8 +22,8 @@ suite.addBatch({
     },
     "selection prototype can be extended": function(d3) {
       d3.selection.prototype.foo = function(v) { return this.attr("foo", v); };
-      d3.selection().select("body").foo(42);
-      assert.equal(document.body.getAttribute("foo"), "42");
+      var body = d3.selection().select("body").foo(42);
+      assert.equal(body.attr("foo"), "42");
       delete d3.selection.prototype.foo;
     }
   }

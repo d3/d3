@@ -1,28 +1,22 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.insert");
 
 suite.addBatch({
   "select(body)": {
-    topic: load("selection/insert").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/insert").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("");
+        return d3.select("body");
       },
       "inserts before the specified selector": function(body) {
         var span = body.html("").append("span");
         var div = body.insert("div", "span");
         assert.equal(div[0][0].tagName, "DIV");
         assert.isNull(div[0][0].namespaceURI);
-        assert.domEqual(div[0][0], document.body.firstChild);
+        assert.domEqual(div[0][0], body.node().firstChild);
         assert.domEqual(div[0][0].nextSibling, span[0][0]);
       },
       "inserts before the specified node": function(body) {
@@ -30,21 +24,21 @@ suite.addBatch({
         var div = body.insert("div", function() { return span.node(); });
         assert.equal(div[0][0].tagName, "DIV");
         assert.isNull(div[0][0].namespaceURI);
-        assert.domEqual(div[0][0], document.body.firstChild);
+        assert.domEqual(div[0][0], body.node().firstChild);
         assert.domEqual(div[0][0].nextSibling, span[0][0]);
       },
       "appends an HTML element": function(body) {
         var div = body.insert("div");
         assert.equal(div[0][0].tagName, "DIV");
         assert.isNull(div[0][0].namespaceURI);
-        assert.domEqual(div[0][0], document.body.lastChild);
+        assert.domEqual(div[0][0], body.node().lastChild);
       },
       "appends an SVG element": function(body) {
         var svg = body.insert("svg:svg");
         assert.equal(svg[0][0].tagName, "SVG");
         assert.equal(svg[0][0].namespaceURI, "http://www.w3.org/2000/svg");
-        assert.domEqual(svg[0][0].parentNode, document.body);
-        assert.domEqual(svg[0][0], document.body.lastChild);
+        assert.domEqual(svg[0][0].parentNode, body.node());
+        assert.domEqual(svg[0][0], body.node().lastChild);
       },
       "propagates data to new element": function(body) {
         var data = new Object(), div = body.data([data]).insert("div");
@@ -63,13 +57,10 @@ suite.addBatch({
 
 suite.addBatch({
   "selectAll(div)": {
-    topic: load("selection/selection").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/selection").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("").selectAll("div").data([0, 1]).enter().insert("div");
+        return d3.select("body").selectAll("div").data([0, 1]).enter().insert("div");
       },
       "appends an HTML element": function(div) {
         var span = div.insert("span");
@@ -102,39 +93,36 @@ suite.addBatch({
       },
       "returns a new selection": function(div) {
         assert.isFalse(div.insert("div") === div);
+      },
+      "ignores null nodes": function(div) {
+        div.html("");
+        var node = div[0][1];
+        div[0][1] = null;
+        var span = div.insert("span");
+        assert.equal(span[0].length, 2);
+        assert.equal(span[0][0].tagName, "SPAN");
+        assert.domNull(span[0][1]);
+        assert.domEqual(span[0][0].parentNode, div[0][0]);
+        assert.domEqual(div[0][0].lastChild, span[0][0]);
+        assert.domNull(node.lastChild);
       }
-    },
-    "ignores null nodes": function(d3) {
-      var div = d3.select("body").html("").selectAll("div").data([0, 1]).enter().insert("div"),
-          some = d3.selectAll("div");
-      some[0][1] = null;
-      var span = some.insert("span");
-      assert.equal(span[0].length, 2);
-      assert.equal(span[0][0].tagName, "SPAN");
-      assert.domNull(span[0][1]);
-      assert.domEqual(span[0][0].parentNode, div[0][0]);
-      assert.domEqual(div[0][0].lastChild, span[0][0]);
-      assert.domNull(div[0][1].lastChild);
     }
   }
 });
 
 suite.addBatch({
   "selectAll(div).data(…).enter()": {
-    topic: load("selection/selection").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/selection").document(),
     "on a simple page": {
       topic: function(d3) {
         return d3.select("body");
       },
       "inserts before the specified selector": function(body) {
-        var span = body.html("").append("span");
+        var span = body.append("span");
         var div = body.selectAll("div").data([0, 1]).enter().insert("div", "span");
         assert.equal(div.length, 1);
         assert.equal(div[0].length, 2);
-        assert.domEqual(div[0][0], document.body.firstChild);
+        assert.domEqual(div[0][0], body.node().firstChild);
         assert.domEqual(div[0][1].previousSibling, div[0][0]);
         assert.domEqual(div[0][1].nextSibling, span[0][0]);
       },
@@ -149,8 +137,8 @@ suite.addBatch({
         assert.equal(div.length, 1);
         assert.equal(div[0].length, 3);
         assert.domNull(div[0][0]);
-        assert.domEqual(div[0][1].parentNode, document.body);
-        assert.domEqual(div[0][2].parentNode, document.body);
+        assert.domEqual(div[0][1].parentNode, body.node());
+        assert.domEqual(div[0][2].parentNode, body.node());
       },
       "returns a new selection": function(body) {
         var enter = body.html("").selectAll("div").data([0, 1]).enter();

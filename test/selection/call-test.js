@@ -1,21 +1,15 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.call");
 
 suite.addBatch({
   "select(body)": {
-    topic: load("selection/call").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/call").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("");
+        return d3.select("body");
       },
       "calls the function once": function(body) {
         var count = 0;
@@ -46,13 +40,10 @@ suite.addBatch({
 
 suite.addBatch({
   "selectAll(div)": {
-    topic: load("selection/call").sandbox({
-      document: document,
-      window: window
-    }).expression("d3.select"),
+    topic: load("selection/call").document(),
     "on a simple page": {
-      topic: function(select) {
-        return select("body").html("").selectAll("div").data(d3.range(2)).enter().append("div");
+      topic: function(d3) {
+        return d3.select("body").selectAll("div").data([0, 1]).enter().append("div");
       },
       "calls the function once": function(div) {
         var count = 0;

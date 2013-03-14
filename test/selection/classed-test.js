@@ -1,50 +1,44 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.classed");
 
 suite.addBatch({
   "select(body)": {
-    topic: load("selection/classed").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/classed").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("");
+        return d3.select("body");
       },
       "adds a missing class as true": function(body) {
         body.attr("class", null);
         body.classed("foo", true);
-        assert.equal(document.body.className, "foo");
+        assert.equal(body.node().className, "foo");
         body.classed("bar", true);
-        assert.equal(document.body.className, "foo bar");
+        assert.equal(body.node().className, "foo bar");
       },
       "removes an existing class as false": function(body) {
         body.attr("class", "bar foo");
         body.classed("foo", false);
-        assert.equal(document.body.className, "bar");
+        assert.equal(body.node().className, "bar");
         body.classed("bar", false);
-        assert.equal(document.body.className, "");
+        assert.equal(body.node().className, "");
       },
       "preserves an existing class as true": function(body) {
         body.attr("class", "bar foo");
         body.classed("foo", true);
-        assert.equal(document.body.className, "bar foo");
+        assert.equal(body.node().className, "bar foo");
         body.classed("bar", true);
-        assert.equal(document.body.className, "bar foo");
+        assert.equal(body.node().className, "bar foo");
       },
       "preserves a missing class as false": function(body) {
         body.attr("class", "baz");
         body.classed("foo", false);
-        assert.equal(document.body.className, "baz");
+        assert.equal(body.node().className, "baz");
         body.attr("class", null);
         body.classed("bar", false);
-        assert.equal(document.body.className, "");
+        assert.equal(body.node().className, "");
       },
       "gets an existing class": function(body) {
         body.attr("class", " foo\tbar  baz");
@@ -61,94 +55,94 @@ suite.addBatch({
       "accepts a name with whitespace, collapsing it": function(body) {
         body.attr("class", null);
         body.classed(" foo\t", true);
-        assert.equal(document.body.className, "foo");
+        assert.equal(body.node().className, "foo");
         body.classed("\tfoo  ", false);
-        assert.equal(document.body.className, "");
+        assert.equal(body.node().className, "");
       },
       "accepts a name with multiple classes separated by whitespace": function(body) {
         body.attr("class", null);
         body.classed("foo bar", true);
-        assert.equal(document.body.className, "foo bar");
+        assert.equal(body.node().className, "foo bar");
         assert.isTrue(body.classed("foo bar"));
         assert.isTrue(body.classed("bar foo"));
         assert.isFalse(body.classed("foo bar baz"));
         assert.isFalse(body.classed("foob bar"));
         body.classed("bar foo", false);
-        assert.equal(document.body.className, "");
+        assert.equal(body.node().className, "");
       },
       "accepts a silly class name with unsafe characters": function(body) {
         body.attr("class", null);
         body.classed("foo.bar", true);
-        assert.equal(document.body.className, "foo.bar");
+        assert.equal(body.node().className, "foo.bar");
         assert.isTrue(body.classed("foo.bar"));
         assert.isFalse(body.classed("foo"));
         assert.isFalse(body.classed("bar"));
         body.classed("bar.foo", false);
-        assert.equal(document.body.className, "foo.bar");
+        assert.equal(body.node().className, "foo.bar");
         body.classed("foo.bar", false);
-        assert.equal(document.body.className, "");
+        assert.equal(body.node().className, "");
       },
       "accepts a name with duplicate classes, ignoring them": function(body) {
         body.attr("class", null);
         body.classed(" foo\tfoo  ", true);
-        assert.equal(document.body.className, "foo");
+        assert.equal(body.node().className, "foo");
         body.classed("\tfoo  foo ", false);
-        assert.equal(document.body.className, "");
+        assert.equal(body.node().className, "");
       },
       "accepts a value function returning true or false": function(body) {
         body.attr("class", null);
         body.classed("foo", function() { return true; });
-        assert.equal(document.body.className, "foo");
+        assert.equal(body.node().className, "foo");
         body.classed("foo bar", function() { return true; });
-        assert.equal(document.body.className, "foo bar");
+        assert.equal(body.node().className, "foo bar");
         body.classed("foo", function() { return false; });
-        assert.equal(document.body.className, "bar");
+        assert.equal(body.node().className, "bar");
       },
       "accepts a name object containing true or false": function(body) {
         body.attr("class", null);
         body.classed({foo: true});
-        assert.equal(document.body.className, "foo");
+        assert.equal(body.node().className, "foo");
         body.classed({bar: true, foo: false});
-        assert.equal(document.body.className, "bar");
+        assert.equal(body.node().className, "bar");
       },
       "accepts a name object containing a function returning true or false": function(body) {
         body.attr("class", null);
         body.classed({foo: function() { return true; }});
-        assert.equal(document.body.className, "foo");
+        assert.equal(body.node().className, "foo");
       },
       "accepts a name object containing a mix of functions and non-functions": function(body) {
         body.attr("class", "foo");
         body.classed({foo: false, bar: function() { return true; }});
-        assert.equal(document.body.className, "bar");
+        assert.equal(body.node().className, "bar");
       },
       "the value may be truthy or falsey": function(body) {
         body.attr("class", "foo");
         body.classed({foo: null, bar: function() { return 1; }});
-        assert.equal(document.body.className, "bar");
+        assert.equal(body.node().className, "bar");
       },
       "keys in the name object may contain whitespace": function(body) {
         body.attr("class", null);
         body.classed({" foo\t": function() { return true; }});
-        assert.equal(document.body.className, "foo");
+        assert.equal(body.node().className, "foo");
         body.attr("class", null);
       },
       "keys in the name object may reference multiple classes": function(body) {
         body.attr("class", null);
         body.classed({"foo bar": function() { return true; }});
-        assert.equal(document.body.className, "foo bar");
+        assert.equal(body.node().className, "foo bar");
         body.attr("class", null);
       },
       "keys in the name object may contain duplicates": function(body) {
         body.attr("class", null);
         body.classed({"foo foo": function() { return true; }});
-        assert.equal(document.body.className, "foo");
+        assert.equal(body.node().className, "foo");
         body.attr("class", null);
       },
       "value functions are only evaluated once when used for multiple classes": function(body) {
         var count = 0;
         body.attr("class", null);
         body.classed({"foo bar": function() { return ++count; }});
-        assert.equal(document.body.className, "foo bar");
+        assert.equal(body.node().className, "foo bar");
         assert.equal(count, 1);
       },
       "returns the current selection": function(body) {
@@ -160,13 +154,10 @@ suite.addBatch({
 
 suite.addBatch({
   "selectAll(div)": {
-    topic: load("selection/classed").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/classed").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("").selectAll("div").data([0, 1]).enter().append("div");
+        return d3.select("body").selectAll("div").data([0, 1]).enter().append("div");
       },
       "adds a missing class as true": function(div) {
         div.attr("class", null);
@@ -262,15 +253,15 @@ suite.addBatch({
       },
       "returns the current selection": function(div) {
         assert.isTrue(div.classed("foo", true) === div);
+      },
+      "ignores null nodes": function(div) {
+        var node = div[0][1];
+        div.attr("class", null);
+        div[0][1] = null;
+        div.classed("foo", true);
+        assert.equal(div[0][0].className, "foo");
+        assert.equal(node.className, "");
       }
-    },
-    "ignores null nodes": function(d3) {
-      var div = d3.select("body").html("").selectAll("div").data([0, 1]).enter().append("div"),
-          some = d3.selectAll("div");
-      some[0][1] = null;
-      some.attr("class", null).classed("foo", true);
-      assert.equal(div[0][0].className, "foo");
-      assert.equal(div[0][1].className, "");
     }
   }
 });

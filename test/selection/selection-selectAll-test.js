@@ -1,37 +1,30 @@
 var vows = require("vows"),
-    d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.selectAll");
 
 suite.addBatch({
   "select(body)": {
-    topic: load("selection/selection").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/selection").document(),
     "on a simple page": {
       topic: function(d3) {
-        var body = d3.select("body").html("");
-        if ("__data__" in body[0][0]) delete body[0][0].__data__;
+        var body = d3.select("body");
         body.append("div").attr("class", "first");
         body.append("div").attr("class", "second");
         return body;
       },
       "selects all matching elements": function(body) {
         var div = body.selectAll("div");
-        assert.isTrue(div[0][0] === document.body.firstChild);
-        assert.isTrue(div[0][1] === document.body.lastChild);
+        assert.isTrue(div[0][0] === body.node().firstChild);
+        assert.isTrue(div[0][1] === body.node().lastChild);
         assert.equal(div.length, 1);
         assert.equal(div[0].length, 2);
       },
       "propagates parent node to the selected elements": function(body) {
         var div = body.selectAll("div");
         assert.isNotNull(div[0].parentNode);
-        assert.isTrue(div[0].parentNode === document.body);
+        assert.isTrue(div[0].parentNode === body.node());
       },
       "does not propagate data if data was specified": function(body) {
         var div = body.data([new Object()]).selectAll("div");
@@ -54,10 +47,10 @@ suite.addBatch({
             s = body.data([d]).selectAll(function(d, i) { dd.push(d); ii.push(i); tt.push(this); return this.childNodes; });
         assert.deepEqual(dd, [d], "expected data, got {actual}");
         assert.deepEqual(ii, [0], "expected index, got {actual}");
-        assert.domEqual(tt[0], document.body, "expected this, got {actual}");
-        assert.domEqual(s[0][0], document.body.firstChild);
-        assert.domEqual(s[0][1], document.body.lastChild);
-        delete document.body.__data__;
+        assert.domEqual(tt[0], body.node(), "expected this, got {actual}");
+        assert.domEqual(s[0][0], body.node().firstChild);
+        assert.domEqual(s[0][1], body.node().lastChild);
+        delete body.node().__data__;
       }
     }
   }
@@ -65,13 +58,10 @@ suite.addBatch({
 
 suite.addBatch({
   "selectAll(div)": {
-    topic: load("selection/selection").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/selection").document(),
     "on a simple page": {
       topic: function(d3) {
-        var div = d3.select("body").html("").selectAll("div").data([0, 1]).enter().append("div");
+        var div = d3.select("body").append("div").selectAll("div").data([0, 1]).enter().append("div");
         div.append("span").attr("class", "first");
         div.append("span").attr("class", "second");
         return div;
@@ -124,19 +114,16 @@ suite.addBatch({
         assert.domEqual(s[0][1], div[0][0].lastChild);
         assert.domEqual(s[1][0], div[0][1].firstChild);
         assert.domEqual(s[1][1], div[0][1].lastChild);
+      },
+      "ignores null nodes": function(div) {
+        var node = div[0][1];
+        div[0][1] = null;
+        var span = div.selectAll("span");
+        assert.equal(span.length, 1);
+        assert.equal(span[0].length, 2);
+        assert.isTrue(span[0][0].parentNode === div[0][0]);
+        assert.isTrue(span[0][1].parentNode === div[0][0]);
       }
-    },
-    "ignores null nodes": function(d3) {
-      var div = d3.select("body").html("").selectAll("div").data([0, 1]).enter().append("div");
-      div.append("span").attr("class", "first");
-      div.append("span").attr("class", "second");
-      var some = d3.selectAll("div");
-      some[0][1] = null;
-      var span = some.selectAll("span");
-      assert.equal(span.length, 1);
-      assert.equal(span[0].length, 2);
-      assert.isTrue(span[0][0].parentNode === div[0][0]);
-      assert.isTrue(span[0][1].parentNode === div[0][0]);
     }
   }
 });

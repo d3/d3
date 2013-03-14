@@ -1,21 +1,16 @@
 var vows = require("vows"),
-    d3 = require("../../"),
+    merge = require("../../").merge,
     load = require("../load"),
-    assert = require("../env-assert"),
-    document = d3.selection().node()._ownerDocument,
-    window = document.defaultView;
+    assert = require("../env-assert");
 
 var suite = vows.describe("selection.filter");
 
 suite.addBatch({
   "selectAll(div)": {
-    topic: load("selection/filter").sandbox({
-      document: document,
-      window: window
-    }),
+    topic: load("selection/filter").document(),
     "on a simple page": {
       topic: function(d3) {
-        return d3.select("body").html("").selectAll("div")
+        return d3.select("body").selectAll("div")
             .data([0, 1])
           .enter().append("div")
           .selectAll("span")
@@ -28,7 +23,7 @@ suite.addBatch({
         assert.isTrue(some[1][0] === span[1][0]);
       },
       "removes non-matching elements": function(span) {
-        var some = d3.merge(span.filter(function(d, i) { return d & 1; }));
+        var some = merge(span.filter(function(d, i) { return d & 1; }));
         assert.equal(some.indexOf(span[0][0]), -1);
         assert.equal(some.indexOf(span[1][0]), -1);
       },
@@ -62,20 +57,14 @@ suite.addBatch({
       },
       "returns a new selection": function(span) {
         assert.isFalse(span.filter(function() { return 1; }) === span);
+      },
+      "ignores null nodes": function(span) {
+        var node = span[0][1];
+        span[0][1] = null;
+        var some = span.filter(function(d, i) { return d & 1; });
+        assert.isTrue(some[0][0] === span[0][3]);
+        assert.equal(some.length, 2);
       }
-    },
-    "ignores null nodes": function(d3) {
-      d3.select("body").html("").selectAll("div")
-          .data([0, 1])
-        .enter().append("div")
-        .selectAll("span")
-          .data(function(d) { d <<= 1; return [d, d + 1]; })
-        .enter().append("span");
-      var span = d3.selectAll("span");
-      span[0][1] = null;
-      var some = span.filter(function(d, i) { return d & 1; });
-      assert.isTrue(some[0][0] === span[0][3]);
-      assert.equal(some.length, 1);
     }
   }
 });
