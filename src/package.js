@@ -22,7 +22,7 @@ console.log(JSON.stringify({
     "url": "https://github.com/mbostock/d3.git"
   },
   "main": "index.js",
-  "browserify" : "index-browserify.js",
+  "browserify": "index-browserify.js",
   "jam": {
     "main": "d3.js",
     "shim": {

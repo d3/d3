@@ -749,7 +749,7 @@ suite.addBatch({
               .rotate([0, 0])
               .precision(1));
       },
-      "correctly resamples near the polesa": function(p) {
+      "correctly resamples near the poles": function(p) {
         p({type: "LineString", coordinates: [[0, 88], [180, 89]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
         p({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
@@ -766,7 +766,7 @@ suite.addBatch({
               .rotate([11.5, 285])
               .precision(1));
       },
-      "correctly resamples near the polesa": function(p) {
+      "correctly resamples near the poles": function(p) {
         p({type: "LineString", coordinates: [[170, 20], [170, 0]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
       }
