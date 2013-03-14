@@ -1,15 +1,13 @@
-require("../env");
-
 var vows = require("vows"),
+    d3 = require("../../"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.svg.area");
 
 suite.addBatch({
   "area": {
-    topic: function() {
-      return d3.svg.area;
-    },
+    topic: load("svg/area").expression("d3.svg.area"),
 
     "x is an alias for setting x0 and x1": function(area) {
       var a = area().x(f);

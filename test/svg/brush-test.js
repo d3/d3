@@ -1,15 +1,18 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    d3 = require("../../"),
+    load = require("../load"),
+    assert = require("../env-assert"),
+    jsdom = require("jsdom").jsdom,
+    document = jsdom("<html><head></head><body></body></html>"),
+    window = document.createWindow();
 
 var suite = vows.describe("d3.svg.brush");
 
 suite.addBatch({
   "brush": {
-    topic: function() {
-      return d3.svg.brush;
-    },
+    topic: load("svg/brush")
+        .expression("d3.svg.brush")
+        .sandbox({document: document, window: window}),
 
     "x": {
       "defaults to null": function(brush) {

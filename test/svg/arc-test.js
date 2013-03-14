@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
+    load = require("../load"),
     assert = require("../env-assert");
 
 var suite = vows.describe("d3.svg.arc");
 
 suite.addBatch({
   "arc": {
-    topic: function() {
-      return d3.svg.arc;
-    },
+    topic: load("svg/arc").expression("d3.svg.arc"),
 
     "innerRadius defaults to a function accessor": function(arc) {
       var a = arc().outerRadius(100).startAngle(0).endAngle(Math.PI);

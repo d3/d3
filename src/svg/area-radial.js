@@ -1,5 +1,6 @@
-import "svg";
 import "area";
+import "svg";
+import "line-radial";
 
 d3.svg.area.radial = function() {
   var area = d3_svg_area(d3_svg_lineRadial);

@@ -1,15 +1,17 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    d3 = require("../../"),
+    load = require("../load"),
+    assert = require("../env-assert"),
+    document = d3.selection().node()._ownerDocument,
+    window = document.defaultView;
 
 var suite = vows.describe("d3.svg.axis");
 
 suite.addBatch({
   "axis": {
-    topic: function() {
-      return d3.svg.axis;
-    },
+    topic: load("svg/axis")
+        .expression("d3.svg.axis")
+        .sandbox({document: document, window: window}),
 
     "scale": {
       "defaults to a linear scale": function(axis) {

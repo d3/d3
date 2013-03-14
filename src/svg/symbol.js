@@ -1,6 +1,7 @@
 import "../arrays/map";
 import "../core/functor";
 import "../math/trigonometry";
+import "svg";
 
 d3.svg.symbol = function() {
   var type = d3_svg_symbolType,
