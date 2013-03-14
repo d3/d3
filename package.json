@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.0.8",
+  "version": "3.1.0pre",
   "description": "A small, free JavaScript library for manipulating documents based on data.",
   "keywords": [
     "dom",
