@@ -1,6 +1,6 @@
 var vows = require("vows"),
     load = require("../load"),
-    assert = require("../env-assert");
+    assert = require("../assert");
 
 var suite = vows.describe("selection.select");
 

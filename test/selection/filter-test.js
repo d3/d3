@@ -1,7 +1,7 @@
 var vows = require("vows"),
     merge = require("../../").merge,
     load = require("../load"),
-    assert = require("../env-assert");
+    assert = require("../assert");
 
 var suite = vows.describe("selection.filter");
 

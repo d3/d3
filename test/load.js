@@ -1,6 +1,7 @@
 var smash = require("smash"),
-    jsdom = require("jsdom"),
-    xhr = require("./env-xhr");
+    jsdom = require("jsdom");
+
+require("./XMLHttpRequest");
 
 module.exports = function() {
   var files = [].slice.call(arguments).map(function(d) { return "src/" + d; }),
@@ -16,11 +17,6 @@ module.exports = function() {
 
   topic.expression = function(_) {
     expression = _;
-    return topic;
-  };
-
-  topic.sandbox = function(_) {
-    sandbox = _;
     return topic;
   };
 

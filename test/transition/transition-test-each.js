@@ -1,6 +1,6 @@
 require("../env");
 
-var assert = require("../env-assert");
+var assert = require("../assert");
 
 module.exports = {
   "start": {

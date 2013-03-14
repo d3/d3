@@ -1,5 +1,5 @@
 var vows = require("vows"),
-    assert = require("../env-assert"),
+    assert = require("../assert"),
     load = require("../load"),
     projectionTestSuite = require("./projection-test-suite");
 

@@ -1,7 +1,7 @@
 var vows = require("vows"),
     ordinal = require("../../").scale.ordinal,
     load = require("../load"),
-    assert = require("../env-assert");
+    assert = require("../assert");
 
 var suite = vows.describe("d3.svg.axis");
 

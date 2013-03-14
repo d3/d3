@@ -1,6 +1,6 @@
 var vows = require("vows"),
     load = require("../load"),
-    assert = require("../env-assert"),
+    assert = require("../assert"),
     projectionTestSuite = require("./projection-test-suite");
 
 var suite = vows.describe("d3.geo.conicEqualArea");

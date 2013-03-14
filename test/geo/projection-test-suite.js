@@ -1,4 +1,4 @@
-var assert = require("../env-assert"),
+var assert = require("../assert"),
     d3 = require("../../"),
     format = d3.format("13.8f");
 

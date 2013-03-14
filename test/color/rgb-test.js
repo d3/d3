@@ -1,7 +1,7 @@
 var vows = require("vows"),
     d3 = require("../../"),
     load = require("../load"),
-    assert = require("../env-assert");
+    assert = require("../assert");
 
 var suite = vows.describe("d3.rgb");
 

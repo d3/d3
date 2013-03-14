@@ -1,7 +1,7 @@
 var vows = require("vows"),
     linear = require("../../").scale.linear,
     load = require("../load"),
-    assert = require("../env-assert");
+    assert = require("../assert");
 
 var suite = vows.describe("d3.svg.brush");
 

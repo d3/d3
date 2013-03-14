@@ -1,7 +1,7 @@
 require("../env");
 
 var vows = require("vows"),
-    assert = require("../env-assert");
+    assert = require("../assert");
 
 var suite = vows.describe("d3.transition");
 
