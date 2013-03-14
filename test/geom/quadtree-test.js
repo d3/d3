@@ -6,9 +6,9 @@ var suite = vows.describe("d3.geom.quadtree");
 
 suite.addBatch({
   "quadtree": {
-    topic: load("geom/quadtree"),
-    "can create an empty quadtree": function(d3) {
-      var q = d3.geom.quadtree([], 8, 10, 56, 47),
+    topic: load("geom/quadtree").expression("d3.geom.quadtree"),
+    "can create an empty quadtree": function(quadtree) {
+      var q = quadtree([], 8, 10, 56, 47),
           n = 0;
       q.visit(function(node, x1, y1, x2, y2) {
         assert.isNull(node.point);
@@ -21,12 +21,12 @@ suite.addBatch({
       });
       assert.strictEqual(n, 1, "number of visits");
     },
-    "squarifies the input dimensions": function(d3) {
+    "squarifies the input dimensions": function(quadtree) {
       var ox1 = 8,
           oy1 = 10,
           ox2 = 56,
           oy2 = 47,
-          q = d3.geom.quadtree([], ox1, oy1, ox2, oy2),
+          q = quadtree([], ox1, oy1, ox2, oy2),
           n = 0;
       q.visit(function(node, x1, y1, x2, y2) {
         assert.strictEqual(x1, ox1);
@@ -37,10 +37,10 @@ suite.addBatch({
       });
       assert.strictEqual(n, 1, "number of visits");
     },
-    "with three arguments, x1 and y1 are 0,0": function(d3) {
+    "with three arguments, x1 and y1 are 0,0": function(quadtree) {
       var dx = 56,
           dy = 47,
-          q = d3.geom.quadtree([], dx, dy),
+          q = quadtree([], dx, dy),
           n = 0;
       q.visit(function(node, x1, y1, x2, y2) {
         assert.strictEqual(x1, 0);
@@ -52,11 +52,11 @@ suite.addBatch({
       assert.strictEqual(n, 1, "number of visits");
     },
     "visit": {
-      "uses pre-order traversal": function(d3) {
+      "uses pre-order traversal": function(quadtree) {
         var a = {x: 100, y: 100},
             b = {x: 200, y: 200},
             c = {x: 300, y: 300},
-            q = d3.geom.quadtree([a, b, c], 960, 500),
+            q = quadtree([a, b, c], 960, 500),
             expected = [
               {point: null, x1:   0, y1:   0, x2: 960, y2: 960},
               {point: null, x1:   0, y1:   0, x2: 480, y2: 480},
@@ -71,11 +71,11 @@ suite.addBatch({
         });
         assert.isEmpty(expected);
       },
-      "does not recurse if the callback returns truthy": function(d3) {
+      "does not recurse if the callback returns truthy": function(quadtree) {
         var a = {x: 100, y: 100},
             b = {x: 700, y: 700},
             c = {x: 800, y: 800},
-            q = d3.geom.quadtree([a, b, c], 960, 500),
+            q = quadtree([a, b, c], 960, 500),
             n = 0;
         q.visit(function(node, x1, y1, x2, y2) {
           ++n;
