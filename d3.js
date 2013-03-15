@@ -426,6 +426,60 @@ d3 = function() {
     };
     return dispatch;
   }
+  d3.mouse = function(container) {
+    return d3_mousePoint(container, d3_eventSource());
+  };
+  var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator.userAgent) ? -1 : 0;
+  function d3_mousePoint(container, e) {
+    var svg = container.ownerSVGElement || container;
+    if (svg.createSVGPoint) {
+      var point = svg.createSVGPoint();
+      if (d3_mouse_bug44083 < 0 && (d3_window.scrollX || d3_window.scrollY)) {
+        svg = d3.select(d3_document.body).append("svg").style("position", "absolute").style("top", 0).style("left", 0);
+        var ctm = svg[0][0].getScreenCTM();
+        d3_mouse_bug44083 = !(ctm.f || ctm.e);
+        svg.remove();
+      }
+      if (d3_mouse_bug44083) {
+        point.x = e.pageX;
+        point.y = e.pageY;
+      } else {
+        point.x = e.clientX;
+        point.y = e.clientY;
+      }
+      point = point.matrixTransform(container.getScreenCTM().inverse());
+      return [ point.x, point.y ];
+    }
+    var rect = container.getBoundingClientRect();
+    return [ e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop ];
+  }
+  var d3_array = d3_arraySlice;
+  function d3_arrayCopy(pseudoarray) {
+    var i = -1, n = pseudoarray.length, array = [];
+    while (++i < n) array.push(pseudoarray[i]);
+    return array;
+  }
+  function d3_arraySlice(pseudoarray) {
+    return Array.prototype.slice.call(pseudoarray);
+  }
+  try {
+    d3_array(d3_document.documentElement.childNodes)[0].nodeType;
+  } catch (e) {
+    d3_array = d3_arrayCopy;
+  }
+  var d3_arraySubclass = [].__proto__ ? function(array, prototype) {
+    array.__proto__ = prototype;
+  } : function(array, prototype) {
+    for (var property in prototype) array[property] = prototype[property];
+  };
+  d3.touches = function(container, touches) {
+    if (arguments.length < 2) touches = d3_eventSource().touches;
+    return touches ? d3_array(touches).map(function(touch) {
+      var point = d3_mousePoint(container, touch);
+      point.identifier = touch.identifier;
+      return point;
+    }) : [];
+  };
   d3.behavior.drag = function() {
     var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"), origin = null;
     function drag() {
@@ -485,60 +539,6 @@ d3 = function() {
       return drag;
     };
     return d3.rebind(drag, event, "on");
-  };
-  d3.mouse = function(container) {
-    return d3_mousePoint(container, d3_eventSource());
-  };
-  var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator.userAgent) ? -1 : 0;
-  function d3_mousePoint(container, e) {
-    var svg = container.ownerSVGElement || container;
-    if (svg.createSVGPoint) {
-      var point = svg.createSVGPoint();
-      if (d3_mouse_bug44083 < 0 && (d3_window.scrollX || d3_window.scrollY)) {
-        svg = d3.select(d3_document.body).append("svg").style("position", "absolute").style("top", 0).style("left", 0);
-        var ctm = svg[0][0].getScreenCTM();
-        d3_mouse_bug44083 = !(ctm.f || ctm.e);
-        svg.remove();
-      }
-      if (d3_mouse_bug44083) {
-        point.x = e.pageX;
-        point.y = e.pageY;
-      } else {
-        point.x = e.clientX;
-        point.y = e.clientY;
-      }
-      point = point.matrixTransform(container.getScreenCTM().inverse());
-      return [ point.x, point.y ];
-    }
-    var rect = container.getBoundingClientRect();
-    return [ e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop ];
-  }
-  var d3_array = d3_arraySlice;
-  function d3_arrayCopy(pseudoarray) {
-    var i = -1, n = pseudoarray.length, array = [];
-    while (++i < n) array.push(pseudoarray[i]);
-    return array;
-  }
-  function d3_arraySlice(pseudoarray) {
-    return Array.prototype.slice.call(pseudoarray);
-  }
-  try {
-    d3_array(d3_document.documentElement.childNodes)[0].nodeType;
-  } catch (e) {
-    d3_array = d3_arrayCopy;
-  }
-  var d3_arraySubclass = [].__proto__ ? function(array, prototype) {
-    array.__proto__ = prototype;
-  } : function(array, prototype) {
-    for (var property in prototype) array[property] = prototype[property];
-  };
-  d3.touches = function(container, touches) {
-    if (arguments.length < 2) touches = d3_eventSource().touches;
-    return touches ? d3_array(touches).map(function(touch) {
-      var point = d3_mousePoint(container, touch);
-      point.identifier = touch.identifier;
-      return point;
-    }) : [];
   };
   function d3_selection(groups) {
     d3_arraySubclass(groups, d3_selectionPrototype);

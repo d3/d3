@@ -1,6 +1,8 @@
 import "../core/document";
 import "../core/rebind";
 import "../event/event";
+import "../event/mouse";
+import "../event/touches";
 import "behavior";
 
 d3.behavior.drag = function() {
