@@ -4288,7 +4288,7 @@ d3 = function() {
   }
   d3.interpolateTransform = d3_interpolateTransform;
   function d3_interpolateTransform(a, b) {
-    var s = [], q = [], n, A = d3_transform(a), B = d3_transform(b), ta = A.translate, tb = B.translate, ra = A.rotate, rb = B.rotate, wa = A.skew, wb = B.skew, ka = A.scale, kb = B.scale;
+    var s = [], q = [], n, A = d3.transform(a), B = d3.transform(b), ta = A.translate, tb = B.translate, ra = A.rotate, rb = B.rotate, wa = A.skew, wb = B.skew, ka = A.scale, kb = B.scale;
     if (ta[0] != tb[0] || ta[1] != tb[1]) {
       s.push("translate(", null, ",", null, ")");
       q.push({

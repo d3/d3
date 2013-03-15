@@ -7,8 +7,8 @@ function d3_interpolateTransform(a, b) {
   var s = [], // string constants and placeholders
       q = [], // number interpolators
       n,
-      A = d3_transform(a),
-      B = d3_transform(b),
+      A = d3.transform(a),
+      B = d3.transform(b),
       ta = A.translate,
       tb = B.translate,
       ra = A.rotate,
