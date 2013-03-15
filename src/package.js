@@ -30,11 +30,11 @@ console.log(JSON.stringify({
     }
   },
   "dependencies": {
-    "jsdom": "~0.5.2"
+    "jsdom": "git://github.com/tmpvar/jsdom.git#fbbde6bfd5b81e42cfc21c4037b11e667c881e7b"
   },
   "devDependencies": {
     "smash": "~0.0.8",
-    "uglify-js": "2.2.x",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2.git#3bd7ca9961125b39dcd54d2182cb72bd1ca6006e",
     "vows": "0.7.x"
   },
   "scripts": {

@@ -20,9 +20,7 @@ src/time/format-localized.js: src/locale.js src/time/format-locale.js
 
 d3.js: $(shell node_modules/.bin/smash --list src/d3.js)
 	@rm -f $@
-	node_modules/.bin/smash src/d3.js > $@.tmp
-	node_modules/.bin/uglifyjs $@.tmp -b indent-level=2 -o $@
-	@rm $@.tmp
+	node_modules/.bin/smash src/d3.js | node_modules/.bin/uglifyjs - -b indent-level=2 -o $@
 	@chmod a-w $@
 
 d3.min.js: d3.js
