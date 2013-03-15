@@ -26,7 +26,7 @@ d3.geom.voronoi = function(vertices) {
   var polygons = vertices.map(function() { return []; }),
       Z = 1e6;
 
-  d3_voronoi_tessellate(vertices, function(e) {
+  d3_geom_voronoiTessellate(vertices, function(e) {
     var s1,
         s2,
         x1,
@@ -103,9 +103,9 @@ d3.geom.voronoi = function(vertices) {
   return polygons;
 };
 
-var d3_voronoi_opposite = {l: "r", r: "l"};
+var d3_geom_voronoiOpposite = {l: "r", r: "l"};
 
-function d3_voronoi_tessellate(vertices, callback) {
+function d3_geom_voronoiTessellate(vertices, callback) {
 
   var Sites = {
     list: vertices
@@ -188,7 +188,7 @@ function d3_voronoi_tessellate(vertices, callback) {
     rightRegion: function(he) {
       return he.edge == null
           ? Sites.bottomSite
-          : he.edge.region[d3_voronoi_opposite[he.side]];
+          : he.edge.region[d3_geom_voronoiOpposite[he.side]];
     }
   };
 
@@ -307,7 +307,7 @@ function d3_voronoi_tessellate(vertices, callback) {
 
     endPoint: function(edge, side, site) {
       edge.ep[side] = site;
-      if (!edge.ep[d3_voronoi_opposite[side]]) return;
+      if (!edge.ep[d3_geom_voronoiOpposite[side]]) return;
       callback(edge);
     },
 
@@ -422,7 +422,7 @@ function d3_voronoi_tessellate(vertices, callback) {
       e = Geom.bisect(bot, top);
       bisector = EdgeList.createHalfEdge(e, pm);
       EdgeList.insert(llbnd, bisector);
-      Geom.endPoint(e, d3_voronoi_opposite[pm], v);
+      Geom.endPoint(e, d3_geom_voronoiOpposite[pm], v);
       p = Geom.intersect(llbnd, bisector);
       if (p) {
         EventQueue.del(llbnd);

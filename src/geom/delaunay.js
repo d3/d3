@@ -10,7 +10,7 @@ d3.geom.delaunay = function(vertices) {
       triangles = [];
 
   // Use the Voronoi tessellation to determine Delaunay edges.
-  d3_voronoi_tessellate(vertices, function(e) {
+  d3_geom_voronoiTessellate(vertices, function(e) {
     edges[e.region.l.index].push(vertices[e.region.r.index]);
   });
 

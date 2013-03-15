@@ -60,6 +60,25 @@ suite.addBatch({
         "the returned cells' data points back to the input data": function(cells) {
           assert.deepEqual(cells.map(function(cell) { return cell.data; }), [[200, 200], [760, 300]]);
         }
+      },
+      "links": {
+        "for two points": function(v) {
+          assert.deepEqual(v.links([[200, 200], [760, 300]]), [
+            {source: [200, 200], target: [760, 300]}]);
+        },
+        "for three points": function(v) {
+          assert.deepEqual(v.links([[200, 200], [500, 250], [760, 300]]), [
+            {source: [200, 200], target: [760, 300]},
+            {source: [500, 250], target: [760, 300]},
+            {source: [200, 200], target: [500, 250]}]);
+        }
+      },
+      "triangles": {
+        "for three points": function(v) {
+          assert.deepEqual(v.triangles([[200, 200], [500, 250], [760, 300]]).map(function(d) {
+            return d.map(function(d) { return d.data; });
+          }), [[ [200, 200], [760, 300], [500, 250]]]);
+        }
       }
     },
 

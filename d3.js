@@ -3794,7 +3794,7 @@ d3 = function() {
     var polygons = vertices.map(function() {
       return [];
     }), Z = 1e6;
-    d3_voronoi_tessellate(vertices, function(e) {
+    d3_geom_voronoiTessellate(vertices, function(e) {
       var s1, s2, x1, x2, y1, y2;
       if (e.a === 1 && e.b >= 0) {
         s1 = e.ep.r;
@@ -3853,11 +3853,11 @@ d3 = function() {
     });
     return polygons;
   };
-  var d3_voronoi_opposite = {
+  var d3_geom_voronoiOpposite = {
     l: "r",
     r: "l"
   };
-  function d3_voronoi_tessellate(vertices, callback) {
+  function d3_geom_voronoiTessellate(vertices, callback) {
     var Sites = {
       list: vertices.map(function(v, i) {
         return {
@@ -3919,7 +3919,7 @@ d3 = function() {
         return he.edge == null ? Sites.bottomSite : he.edge.region[he.side];
       },
       rightRegion: function(he) {
-        return he.edge == null ? Sites.bottomSite : he.edge.region[d3_voronoi_opposite[he.side]];
+        return he.edge == null ? Sites.bottomSite : he.edge.region[d3_geom_voronoiOpposite[he.side]];
       }
     };
     var Geom = {
@@ -4009,7 +4009,7 @@ d3 = function() {
       },
       endPoint: function(edge, side, site) {
         edge.ep[side] = site;
-        if (!edge.ep[d3_voronoi_opposite[side]]) return;
+        if (!edge.ep[d3_geom_voronoiOpposite[side]]) return;
         callback(edge);
       },
       distance: function(s, t) {
@@ -4109,7 +4109,7 @@ d3 = function() {
         e = Geom.bisect(bot, top);
         bisector = EdgeList.createHalfEdge(e, pm);
         EdgeList.insert(llbnd, bisector);
-        Geom.endPoint(e, d3_voronoi_opposite[pm], v);
+        Geom.endPoint(e, d3_geom_voronoiOpposite[pm], v);
         p = Geom.intersect(llbnd, bisector);
         if (p) {
           EventQueue.del(llbnd);
@@ -4131,7 +4131,7 @@ d3 = function() {
     var edges = vertices.map(function() {
       return [];
     }), triangles = [];
-    d3_voronoi_tessellate(vertices, function(e) {
+    d3_geom_voronoiTessellate(vertices, function(e) {
       edges[e.region.l.index].push(vertices[e.region.r.index]);
     });
     edges.forEach(function(edge, i) {
@@ -6203,6 +6203,30 @@ d3 = function() {
         clip = d3.geom.polygon([ [ 0, 0 ], [ 0, h ], [ w, h ], [ w, 0 ] ]).clip;
       }
       return voronoi;
+    };
+    voronoi.links = function(data) {
+      var points = [], graph = [], links = [], fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length;
+      for (i = 0; i < n; ++i) points.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]), 
+      graph.push([]);
+      d3_geom_voronoiTessellate(points, function(e) {
+        var l = e.region.l.index, r = e.region.r.index;
+        if (graph[l][r]) return;
+        graph[l][r] = graph[r][l] = true;
+        links.push({
+          source: points[l],
+          target: points[r]
+        });
+      });
+      return links;
+    };
+    voronoi.triangles = function(data) {
+      var points = [], point, fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length;
+      for (i = 0; i < n; ++i) {
+        point = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ];
+        point.data = d;
+        points.push(point);
+      }
+      return d3.geom.delaunay(points);
     };
     return voronoi;
   };
