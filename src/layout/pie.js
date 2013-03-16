@@ -17,7 +17,7 @@ d3.layout.pie = function() {
     // Compute the angular scale factor: from value to radians.
     var k = ((typeof endAngle === "function"
         ? endAngle.apply(this, arguments)
-        : endAngle) - startAngle)
+        : endAngle) - a)
         / d3.sum(values);
 
     // Optionally sort the data.
