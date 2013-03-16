@@ -47,7 +47,6 @@ d3.layout.voronoi = function() {
 
   voronoi.links = function(data) {
     var points = [],
-        point,
         graph = [],
         links = [],
         fx = d3_functor(x),

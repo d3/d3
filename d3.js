@@ -6205,10 +6205,9 @@ d3 = function() {
       return voronoi;
     };
     voronoi.links = function(data) {
-      var points = [], point, graph = [], links = [], fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length;
+      var points = [], graph = [], links = [], fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length;
       for (i = 0; i < n; ++i) {
-        point = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ];
-        points.push(point);
+        points.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]);
         graph.push([]);
       }
       d3_geom_voronoiTessellate(points, function(e) {
@@ -6216,8 +6215,8 @@ d3 = function() {
         if (graph[l][r]) return;
         graph[l][r] = graph[r][l] = true;
         links.push({
-          source: point[l],
-          target: point[r]
+          source: data[l],
+          target: data[r]
         });
       });
       return links;
@@ -6229,7 +6228,11 @@ d3 = function() {
         point.data = d;
         points.push(point);
       }
-      return d3.geom.delaunay(points);
+      return d3.geom.delaunay(points).map(function(triangle) {
+        return triangle.map(function(vertex) {
+          return vertex.data;
+        });
+      });
     };
     return voronoi;
   };
