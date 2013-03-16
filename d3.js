@@ -2788,7 +2788,7 @@ d3 = function() {
     }
   }
   function d3_geo_clipViewT(num, denominator, t) {
-    if (Math.abs(denominator) < ε) return num < 0;
+    if (Math.abs(denominator) < ε) return num <= 0;
     var u = num / denominator;
     if (denominator > 0) {
       if (u > t[1]) return false;
