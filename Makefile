@@ -6,7 +6,9 @@ all: \
 	component.json \
 	package.json
 
-test: all
+.PHONY: clean all test
+
+test:
 	@npm test
 
 benchmark: all
