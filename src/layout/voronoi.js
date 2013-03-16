@@ -47,6 +47,7 @@ d3.layout.voronoi = function() {
 
   voronoi.links = function(data) {
     var points = [],
+        point,
         graph = [],
         links = [],
         fx = d3_functor(x),
@@ -54,14 +55,20 @@ d3.layout.voronoi = function() {
         d,
         i,
         n = data.length;
-    for (i = 0; i < n; ++i) points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i)]), graph.push([]);
+
+    for (i = 0; i < n; ++i) {
+      points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i)]);
+      graph.push([]);
+    }
+
     d3_geom_voronoiTessellate(points, function(e) {
       var l = e.region.l.index,
           r = e.region.r.index;
       if (graph[l][r]) return;
       graph[l][r] = graph[r][l] = true;
-      links.push({source: points[l], target: points[r]});
+      links.push({source: data[l], target: data[r]});
     });
+
     return links;
   };
 
@@ -73,12 +80,18 @@ d3.layout.voronoi = function() {
         d,
         i,
         n = data.length;
+
     for (i = 0; i < n; ++i) {
       point = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)];
       point.data = d;
       points.push(point);
     }
-    return d3.geom.delaunay(points);
+
+    return d3.geom.delaunay(points).map(function(triangle) {
+      return triangle.map(function(vertex) {
+        return vertex.data;
+      });
+    });
   };
 
   return voronoi;

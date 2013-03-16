@@ -6205,16 +6205,19 @@ d3 = function() {
       return voronoi;
     };
     voronoi.links = function(data) {
-      var points = [], graph = [], links = [], fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length;
-      for (i = 0; i < n; ++i) points.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]), 
-      graph.push([]);
+      var points = [], point, graph = [], links = [], fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length;
+      for (i = 0; i < n; ++i) {
+        point = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ];
+        points.push(point);
+        graph.push([]);
+      }
       d3_geom_voronoiTessellate(points, function(e) {
         var l = e.region.l.index, r = e.region.r.index;
         if (graph[l][r]) return;
         graph[l][r] = graph[r][l] = true;
         links.push({
-          source: points[l],
-          target: points[r]
+          source: point[l],
+          target: point[r]
         });
       });
       return links;
