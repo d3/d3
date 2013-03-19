@@ -33,7 +33,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 
     if (compat) points = data;
     else for (points = [], i = 0; i < n; ++i) {
-      points.push({x: +fx.call(this, d = data[i]), y: +fy.call(this, d)});
+      points.push({x: +fx.call(this, d = data[i], i), y: +fy.call(this, d, i)});
     }
 
     if (x1 != null) {
@@ -108,8 +108,8 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     // Create the root node.
     var root = d3_geom_quadtreeNode();
 
-    root.add = function(d) {
-      insert(root, d, fx(d), fy(d), x1_, y1_, x2_, y2_);
+    root.add = function(d, i) {
+      insert(root, d, fx.call(this, d, i), fy.call(this, d, i), x1_, y1_, x2_, y2_);
     };
 
     root.visit = function(f) {
