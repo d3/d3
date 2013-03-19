@@ -150,7 +150,9 @@ function d3_geom_quadtreeNode() {
   return {
     leaf: true,
     nodes: [],
-    point: null
+    point: null,
+    x: null,
+    y: null
   };
 }
 
