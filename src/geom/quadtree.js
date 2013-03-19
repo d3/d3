@@ -23,25 +23,27 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     var d,
         fx = d3_functor(x),
         fy = d3_functor(y),
-        points = [],
-        i = -1,
+        points,
+        i,
         n = data.length,
         x1_,
         y1_,
         x2_,
         y2_;
 
+    if (compat) points = data;
+    else for (points = [], i = 0; i < n; ++i) {
+      points.push({x: +fx.call(this, d = data[i], i), y: +fy.call(this, d, i)});
+    }
+
     if (x1 != null) {
       x1_ = x1, y1_ = y1, x2_ = x2, y2_ = y2;
-      while (++i < n) {
-        points.push({x: +fx.call(this, d = data[i], i), y: +fy.call(this, d, i)});
-      }
     } else {
       // Compute bounds.
       x1_ = y1_ = Infinity;
       x2_ = y2_ = -Infinity;
-      while (++i < n) {
-        points.push(d = {x: +fx.call(this, d = data[i], i), y: +fy.call(this, d, i)});
+      for (i = 0; i < n; ++i) {
+        d = data[i];
         if (d.x < x1_) x1_ = d.x;
         if (d.y < y1_) y1_ = d.y;
         if (d.x > x2_) x2_ = d.x;
