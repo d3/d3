@@ -40,8 +40,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
       x1_ = x1, y1_ = y1, x2_ = x2, y2_ = y2;
     } else {
       // Compute bounds.
-      x1_ = y1_ = Infinity;
-      x2_ = y2_ = -Infinity;
+      x2_ = y2_ = -(x1_ = y1_ = Infinity);
       for (i = 0; i < n; ++i) {
         d = data[i];
         if (d.x < x1_) x1_ = d.x;
