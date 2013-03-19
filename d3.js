@@ -4528,12 +4528,13 @@ d3 = function() {
         insert(n, d, x, y, x1, y1, x2, y2);
       }
       var root = d3_geom_quadtreeNode();
-      root.add = function(d, i) {
-        insert(root, d, +fx(d, i), +fy(d, i), x1_, y1_, x2_, y2_);
+      root.add = function(d) {
+        insert(root, d, +fx(d, ++i), +fy(d, i), x1_, y1_, x2_, y2_);
       };
       root.visit = function(f) {
         d3_geom_quadtreeVisit(f, root, x1_, y1_, x2_, y2_);
       };
+      i = -1;
       points.forEach(root.add);
       return root;
     }
