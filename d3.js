@@ -4471,11 +4471,12 @@ d3 = function() {
         x2 = x1;
         y1 = x1 = 0;
       }
-      return quadtree.apply(this, arguments);
+      return quadtree(points);
     }
     function quadtree(data) {
-      var d, fx = d3_functor(x), fy = d3_functor(y), points = [], i = -1, n = data.length;
+      var d, fx = d3_functor(x), fy = d3_functor(y), points = [], i = -1, n = data.length, x1_, y1_, x2_, y2_;
       if (x1 != null) {
+        x1_ = x1, y1_ = y1, x2_ = x2, y2_ = y2;
         while (++i < n) {
           points.push({
             x: +fx.call(this, d = data[i], i),
@@ -4483,21 +4484,21 @@ d3 = function() {
           });
         }
       } else {
-        x1 = y1 = Infinity;
-        x2 = y2 = -Infinity;
+        x1_ = y1_ = Infinity;
+        x2_ = y2_ = -Infinity;
         while (++i < n) {
           points.push(d = {
             x: +fx.call(this, d = data[i], i),
             y: +fy.call(this, d, i)
           });
-          if (d.x < x1) x1 = d.x;
-          if (d.y < y1) y1 = d.y;
-          if (d.x > x2) x2 = d.x;
-          if (d.y > y2) y2 = d.y;
+          if (d.x < x1_) x1_ = d.x;
+          if (d.y < y1_) y1_ = d.y;
+          if (d.x > x2_) x2_ = d.x;
+          if (d.y > y2_) y2_ = d.y;
         }
       }
-      var dx = x2 - x1, dy = y2 - y1;
-      if (dx > dy) y2 = y1 + dx; else x2 = x1 + dy;
+      var dx = x2_ - x1_, dy = y2_ - y1_;
+      if (dx > dy) y2_ = y1_ + dx; else x2_ = x1_ + dy;
       function insert(n, p, x1, y1, x2, y2) {
         if (isNaN(p.x) || isNaN(p.y)) return;
         if (n.leaf) {
@@ -4527,10 +4528,10 @@ d3 = function() {
       }
       var root = d3_geom_quadtreeNode();
       root.add = function(p) {
-        insert(root, p, x1, y1, x2, y2);
+        insert(root, p, x1_, y1_, x2_, y2_);
       };
       root.visit = function(f) {
-        d3_geom_quadtreeVisit(f, root, x1, y1, x2, y2);
+        d3_geom_quadtreeVisit(f, root, x1_, y1_, x2_, y2_);
       };
       points.forEach(root.add);
       return root;
@@ -4542,12 +4543,9 @@ d3 = function() {
       return arguments.length ? (y = _, quadtree) : y;
     };
     quadtree.size = function(_) {
-      if (!arguments.length) return x1 == null ? null : [ [ x1, y1 ], [ x2, y2 ] ];
+      if (!arguments.length) return x1 == null ? null : [ x2, y2 ];
       if (_ == null) {
         x1 = y1 = x2 = y2 = null;
-      } else if (Array.isArray(_[0])) {
-        x1 = +_[0][0], y1 = +_[0][1];
-        x2 = +_[1][0], y2 = +_[1][1];
       } else {
         x1 = y1 = 0;
         x2 = +_[0], y2 = +_[1];
