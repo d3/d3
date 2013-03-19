@@ -15,10 +15,10 @@ suite.addBatch({
       "has no defined size": function(v) {
         assert.isNull(v.size());
       },
-      "has the default x-acessor, d[0]": function(v) {
+      "has the default x-accessor, d[0]": function(v) {
         assert.strictEqual(v.x()([42, 43]), 42);
       },
-      "has the default y-acessor, d[1]": function(v) {
+      "has the default y-accessor, d[1]": function(v) {
         assert.strictEqual(v.y()([42, 43]), 43);
       },
       "of two points": {
@@ -90,10 +90,10 @@ suite.addBatch({
             .x(function(d) { return d.x; })
             .y(43);
       },
-      "observes the specified x-acessor, a function": function(v) {
+      "observes the specified x-accessor, a function": function(v) {
         assert.strictEqual(v.x()({x: 42, y: 43}), 42);
       },
-      "observes the specified y-acessor, a constant": function(v) {
+      "observes the specified y-accessor, a constant": function(v) {
         assert.strictEqual(v.y(), 43);
       },
       "of two points": {
