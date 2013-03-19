@@ -4070,8 +4070,8 @@ d3 = function() {
     return triangles;
   };
   d3.geom.voronoi = function(points) {
-    var size = null, x = d3_svg_lineX, y = d3_svg_lineY, clip, compat;
-    if (compat = arguments.length) return voronoi(points);
+    var size = null, x = d3_svg_lineX, y = d3_svg_lineY, clip;
+    if (arguments.length) return voronoi(points);
     function voronoi(data) {
       var points = [], polygons = data.map(function() {
         return [];
@@ -4139,7 +4139,7 @@ d3 = function() {
         }
       });
       if (clip) for (i = 0; i < n; ++i) clip(polygons[i]);
-      if (!compat) for (i = 0; i < n; ++i) polygons[i].point = data[i];
+      for (i = 0; i < n; ++i) polygons[i].point = data[i];
       return polygons;
     }
     voronoi.x = function(_) {

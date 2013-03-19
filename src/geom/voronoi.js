@@ -30,11 +30,10 @@ d3.geom.voronoi = function(points) {
   var size = null,
       x = d3_svg_lineX,
       y = d3_svg_lineY,
-      clip,
-      compat;
+      clip;
 
   // For backwards-compatibility.
-  if (compat = arguments.length) return voronoi(points);
+  if (arguments.length) return voronoi(points);
 
   function voronoi(data) {
     var points = [],
@@ -127,7 +126,7 @@ d3.geom.voronoi = function(points) {
     });
 
     if (clip) for (i = 0; i < n; ++i) clip(polygons[i]);
-    if (!compat) for (i = 0; i < n; ++i) polygons[i].point = data[i];
+    for (i = 0; i < n; ++i) polygons[i].point = data[i];
 
     return polygons;
   }
