@@ -11,4 +11,3 @@ import "pack";
 import "cluster";
 import "tree";
 import "treemap";
-import "voronoi";
