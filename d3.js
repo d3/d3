@@ -3660,139 +3660,6 @@ d3 = function() {
     return d3_geo_projection(d3_geo_transverseMercator);
   }).raw = d3_geo_transverseMercator;
   d3.geom = {};
-  d3.geom.hull = function(vertices) {
-    if (vertices.length < 3) return [];
-    var len = vertices.length, plen = len - 1, points = [], stack = [], i, j, h = 0, x1, y1, x2, y2, u, v, a, sp;
-    for (i = 1; i < len; ++i) {
-      if (vertices[i][1] < vertices[h][1]) {
-        h = i;
-      } else if (vertices[i][1] == vertices[h][1]) {
-        h = vertices[i][0] < vertices[h][0] ? i : h;
-      }
-    }
-    for (i = 0; i < len; ++i) {
-      if (i === h) continue;
-      y1 = vertices[i][1] - vertices[h][1];
-      x1 = vertices[i][0] - vertices[h][0];
-      points.push({
-        angle: Math.atan2(y1, x1),
-        index: i
-      });
-    }
-    points.sort(function(a, b) {
-      return a.angle - b.angle;
-    });
-    a = points[0].angle;
-    v = points[0].index;
-    u = 0;
-    for (i = 1; i < plen; ++i) {
-      j = points[i].index;
-      if (a == points[i].angle) {
-        x1 = vertices[v][0] - vertices[h][0];
-        y1 = vertices[v][1] - vertices[h][1];
-        x2 = vertices[j][0] - vertices[h][0];
-        y2 = vertices[j][1] - vertices[h][1];
-        if (x1 * x1 + y1 * y1 >= x2 * x2 + y2 * y2) {
-          points[i].index = -1;
-        } else {
-          points[u].index = -1;
-          a = points[i].angle;
-          u = i;
-          v = j;
-        }
-      } else {
-        a = points[i].angle;
-        u = i;
-        v = j;
-      }
-    }
-    stack.push(h);
-    for (i = 0, j = 0; i < 2; ++j) {
-      if (points[j].index !== -1) {
-        stack.push(points[j].index);
-        i++;
-      }
-    }
-    sp = stack.length;
-    for (;j < plen; ++j) {
-      if (points[j].index === -1) continue;
-      while (!d3_geom_hullCCW(stack[sp - 2], stack[sp - 1], points[j].index, vertices)) {
-        --sp;
-      }
-      stack[sp++] = points[j].index;
-    }
-    var poly = [];
-    for (i = 0; i < sp; ++i) {
-      poly.push(vertices[stack[i]]);
-    }
-    return poly;
-  };
-  function d3_geom_hullCCW(i1, i2, i3, v) {
-    var t, a, b, c, d, e, f;
-    t = v[i1];
-    a = t[0];
-    b = t[1];
-    t = v[i2];
-    c = t[0];
-    d = t[1];
-    t = v[i3];
-    e = t[0];
-    f = t[1];
-    return (f - b) * (c - a) - (d - b) * (e - a) > 0;
-  }
-  d3.geom.polygon = function(coordinates) {
-    coordinates.area = function() {
-      var i = 0, n = coordinates.length, area = coordinates[n - 1][1] * coordinates[0][0] - coordinates[n - 1][0] * coordinates[0][1];
-      while (++i < n) {
-        area += coordinates[i - 1][1] * coordinates[i][0] - coordinates[i - 1][0] * coordinates[i][1];
-      }
-      return area * .5;
-    };
-    coordinates.centroid = function(k) {
-      var i = -1, n = coordinates.length, x = 0, y = 0, a, b = coordinates[n - 1], c;
-      if (!arguments.length) k = -1 / (6 * coordinates.area());
-      while (++i < n) {
-        a = b;
-        b = coordinates[i];
-        c = a[0] * b[1] - b[0] * a[1];
-        x += (a[0] + b[0]) * c;
-        y += (a[1] + b[1]) * c;
-      }
-      return [ x * k, y * k ];
-    };
-    coordinates.clip = function(subject) {
-      var input, i = -1, n = coordinates.length, j, m, a = coordinates[n - 1], b, c, d;
-      while (++i < n) {
-        input = subject.slice();
-        subject.length = 0;
-        b = coordinates[i];
-        c = input[(m = input.length) - 1];
-        j = -1;
-        while (++j < m) {
-          d = input[j];
-          if (d3_geom_polygonInside(d, a, b)) {
-            if (!d3_geom_polygonInside(c, a, b)) {
-              subject.push(d3_geom_polygonIntersect(c, d, a, b));
-            }
-            subject.push(d);
-          } else if (d3_geom_polygonInside(c, a, b)) {
-            subject.push(d3_geom_polygonIntersect(c, d, a, b));
-          }
-          c = d;
-        }
-        a = b;
-      }
-      return subject;
-    };
-    return coordinates;
-  };
-  function d3_geom_polygonInside(p, a, b) {
-    return (b[0] - a[0]) * (p[1] - a[1]) < (b[1] - a[1]) * (p[0] - a[0]);
-  }
-  function d3_geom_polygonIntersect(c, d, a, b) {
-    var x1 = c[0], x3 = a[0], x21 = d[0] - x1, x43 = b[0] - x3, y1 = c[1], y3 = a[1], y21 = d[1] - y1, y43 = b[1] - y3, ua = (x43 * (y1 - y3) - y43 * (x1 - x3)) / (y43 * x21 - x43 * y21);
-    return [ x1 + ua * x21, y1 + ua * y21 ];
-  }
   d3.svg = {};
   function d3_svg_line(projection) {
     var x = d3_svg_lineX, y = d3_svg_lineY, defined = d3_true, interpolate = d3_svg_lineLinear, interpolateKey = interpolate.key, tension = .7;
@@ -4047,6 +3914,154 @@ d3 = function() {
   }
   function d3_svg_lineMonotone(points) {
     return points.length < 3 ? d3_svg_lineLinear(points) : points[0] + d3_svg_lineHermite(points, d3_svg_lineMonotoneTangents(points));
+  }
+  d3.geom.hull = function(vertices) {
+    var x = d3_svg_lineX, y = d3_svg_lineY;
+    if (arguments.length) return hull(vertices);
+    function hull(data) {
+      if (data.length < 3) return [];
+      var fx = d3_functor(x), fy = d3_functor(y), n = data.length, vertices, plen = n - 1, points = [], stack = [], d, i, j, h = 0, x1, y1, x2, y2, u, v, a, sp;
+      if (fx === d3_svg_lineX && y === d3_svg_lineY) vertices = data; else for (i = 0, 
+      vertices = []; i < n; ++i) {
+        vertices.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]);
+      }
+      for (i = 1; i < n; ++i) {
+        if (vertices[i][1] < vertices[h][1]) {
+          h = i;
+        } else if (vertices[i][1] == vertices[h][1]) {
+          h = vertices[i][0] < vertices[h][0] ? i : h;
+        }
+      }
+      for (i = 0; i < n; ++i) {
+        if (i === h) continue;
+        y1 = vertices[i][1] - vertices[h][1];
+        x1 = vertices[i][0] - vertices[h][0];
+        points.push({
+          angle: Math.atan2(y1, x1),
+          index: i
+        });
+      }
+      points.sort(function(a, b) {
+        return a.angle - b.angle;
+      });
+      a = points[0].angle;
+      v = points[0].index;
+      u = 0;
+      for (i = 1; i < plen; ++i) {
+        j = points[i].index;
+        if (a == points[i].angle) {
+          x1 = vertices[v][0] - vertices[h][0];
+          y1 = vertices[v][1] - vertices[h][1];
+          x2 = vertices[j][0] - vertices[h][0];
+          y2 = vertices[j][1] - vertices[h][1];
+          if (x1 * x1 + y1 * y1 >= x2 * x2 + y2 * y2) {
+            points[i].index = -1;
+          } else {
+            points[u].index = -1;
+            a = points[i].angle;
+            u = i;
+            v = j;
+          }
+        } else {
+          a = points[i].angle;
+          u = i;
+          v = j;
+        }
+      }
+      stack.push(h);
+      for (i = 0, j = 0; i < 2; ++j) {
+        if (points[j].index !== -1) {
+          stack.push(points[j].index);
+          i++;
+        }
+      }
+      sp = stack.length;
+      for (;j < plen; ++j) {
+        if (points[j].index === -1) continue;
+        while (!d3_geom_hullCCW(stack[sp - 2], stack[sp - 1], points[j].index, vertices)) {
+          --sp;
+        }
+        stack[sp++] = points[j].index;
+      }
+      var poly = [];
+      for (i = 0; i < sp; ++i) {
+        poly.push(data[stack[i]]);
+      }
+      return poly;
+    }
+    hull.x = function(_) {
+      return arguments.length ? (x = _, hull) : x;
+    };
+    hull.y = function(_) {
+      return arguments.length ? (y = _, hull) : y;
+    };
+    return hull;
+  };
+  function d3_geom_hullCCW(i1, i2, i3, v) {
+    var t, a, b, c, d, e, f;
+    t = v[i1];
+    a = t[0];
+    b = t[1];
+    t = v[i2];
+    c = t[0];
+    d = t[1];
+    t = v[i3];
+    e = t[0];
+    f = t[1];
+    return (f - b) * (c - a) - (d - b) * (e - a) > 0;
+  }
+  d3.geom.polygon = function(coordinates) {
+    coordinates.area = function() {
+      var i = 0, n = coordinates.length, area = coordinates[n - 1][1] * coordinates[0][0] - coordinates[n - 1][0] * coordinates[0][1];
+      while (++i < n) {
+        area += coordinates[i - 1][1] * coordinates[i][0] - coordinates[i - 1][0] * coordinates[i][1];
+      }
+      return area * .5;
+    };
+    coordinates.centroid = function(k) {
+      var i = -1, n = coordinates.length, x = 0, y = 0, a, b = coordinates[n - 1], c;
+      if (!arguments.length) k = -1 / (6 * coordinates.area());
+      while (++i < n) {
+        a = b;
+        b = coordinates[i];
+        c = a[0] * b[1] - b[0] * a[1];
+        x += (a[0] + b[0]) * c;
+        y += (a[1] + b[1]) * c;
+      }
+      return [ x * k, y * k ];
+    };
+    coordinates.clip = function(subject) {
+      var input, i = -1, n = coordinates.length, j, m, a = coordinates[n - 1], b, c, d;
+      while (++i < n) {
+        input = subject.slice();
+        subject.length = 0;
+        b = coordinates[i];
+        c = input[(m = input.length) - 1];
+        j = -1;
+        while (++j < m) {
+          d = input[j];
+          if (d3_geom_polygonInside(d, a, b)) {
+            if (!d3_geom_polygonInside(c, a, b)) {
+              subject.push(d3_geom_polygonIntersect(c, d, a, b));
+            }
+            subject.push(d);
+          } else if (d3_geom_polygonInside(c, a, b)) {
+            subject.push(d3_geom_polygonIntersect(c, d, a, b));
+          }
+          c = d;
+        }
+        a = b;
+      }
+      return subject;
+    };
+    return coordinates;
+  };
+  function d3_geom_polygonInside(p, a, b) {
+    return (b[0] - a[0]) * (p[1] - a[1]) < (b[1] - a[1]) * (p[0] - a[0]);
+  }
+  function d3_geom_polygonIntersect(c, d, a, b) {
+    var x1 = c[0], x3 = a[0], x21 = d[0] - x1, x43 = b[0] - x3, y1 = c[1], y3 = a[1], y21 = d[1] - y1, y43 = b[1] - y3, ua = (x43 * (y1 - y3) - y43 * (x1 - x3)) / (y43 * x21 - x43 * y21);
+    return [ x1 + ua * x21, y1 + ua * y21 ];
   }
   d3.geom.delaunay = function(vertices) {
     var edges = vertices.map(function() {
