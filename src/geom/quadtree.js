@@ -23,7 +23,8 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     var d,
         fx = d3_functor(x),
         fy = d3_functor(y),
-        points,
+        xs = [],
+        ys = [],
         i,
         n = data.length,
         x1_,
@@ -31,9 +32,13 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
         x2_,
         y2_;
 
-    if (compat) points = data;
-    else for (points = [], i = 0; i < n; ++i) {
-      points.push({x: +fx(d = data[i], i), y: +fy(d, i)});
+    if (compat) for (i = 0; i < n; ++i) {
+      d = data[i];
+      xs.push(d.x);
+      ys.push(d.y);
+    } else for (i = 0; i < n; ++i) {
+      xs.push(+fx(d = data[i], i));
+      ys.push(+fy(d, i));
     }
 
     if (x1 != null) {
@@ -42,11 +47,12 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
       // Compute bounds.
       x2_ = y2_ = -(x1_ = y1_ = Infinity);
       for (i = 0; i < n; ++i) {
-        d = data[i];
-        if (d.x < x1_) x1_ = d.x;
-        if (d.y < y1_) y1_ = d.y;
-        if (d.x > x2_) x2_ = d.x;
-        if (d.y > y2_) y2_ = d.y;
+        d = xs[i];
+        if (d < x1_) x1_ = d;
+        if (d > x2_) x2_ = d;
+        d = ys[i];
+        if (d < y1_) y1_ = d;
+        if (d > y2_) y2_ = d;
       }
     }
 
@@ -116,8 +122,11 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     };
 
     // Insert all points.
-    i = -1;
-    points.forEach(root.add);
+    for (i = 0; i < n; ++i) {
+      insert(root, data[i], xs[i], ys[i], x1_, y1_, x2_, y2_);
+    }
+    --i; // index of the last insertion
+
     return root;
   }
 
