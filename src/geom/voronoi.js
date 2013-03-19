@@ -38,16 +38,18 @@ d3.geom.voronoi = function(points) {
 
   function voronoi(data) {
     var points = [],
-        polygons = [],
+        polygons = data.map(function() { return []; }),
         fx = d3_functor(x),
         fy = d3_functor(y),
         d,
         i,
         n = data.length,
         Z = 1e6;
-    for (i = 0; i < n; ++i) {
+
+    if (fx === d3_svg_lineX && fy === d3_svg_lineY) {
+      points = data;
+    } else for (points = [], i = 0; i < n; ++i) {
       points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i)]);
-      polygons.push([]);
     }
 
     d3_geom_voronoiTessellate(points, function(e) {
