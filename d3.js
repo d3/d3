@@ -4478,26 +4478,28 @@ d3 = function() {
       return quadtree(points);
     }
     function quadtree(data) {
-      var d, fx = d3_functor(x), fy = d3_functor(y), xs = [], ys = [], i, n = data.length, x1_, y1_, x2_, y2_;
-      if (compat) for (i = 0; i < n; ++i) {
-        d = data[i];
-        xs.push(d.x);
-        ys.push(d.y);
-      } else for (i = 0; i < n; ++i) {
-        xs.push(+fx(d = data[i], i));
-        ys.push(+fy(d, i));
-      }
+      var d, fx = d3_functor(x), fy = d3_functor(y), xs, ys, i, n, x1_, y1_, x2_, y2_;
       if (x1 != null) {
         x1_ = x1, y1_ = y1, x2_ = x2, y2_ = y2;
       } else {
         x2_ = y2_ = -(x1_ = y1_ = Infinity);
-        for (i = 0; i < n; ++i) {
-          d = xs[i];
-          if (d < x1_) x1_ = d;
-          if (d > x2_) x2_ = d;
-          d = ys[i];
-          if (d < y1_) y1_ = d;
-          if (d > y2_) y2_ = d;
+        n = data.length;
+        if (compat) for (i = 0; i < n; ++i) {
+          d = data[i];
+          if (d.x < x1_) x1_ = d.x;
+          if (d.y < y1_) y1_ = d.y;
+          if (d.x > x2_) x2_ = d.x;
+          if (d.y > y2_) y2_ = d.y;
+          xs.push(d.x);
+          ys.push(d.y);
+        } else for (i = 0; i < n; ++i) {
+          var x_ = +fx(d = data[i], i), y_ = +fy(d, i);
+          if (x_ < x1_) x1_ = x_;
+          if (y_ < y1_) y1_ = y_;
+          if (x_ > x2_) x2_ = x_;
+          if (y_ > y2_) y2_ = y_;
+          xs.push(x_);
+          ys.push(y_);
         }
       }
       var dx = x2_ - x1_, dy = y2_ - y1_;
@@ -4537,10 +4539,14 @@ d3 = function() {
       root.visit = function(f) {
         d3_geom_quadtreeVisit(f, root, x1_, y1_, x2_, y2_);
       };
-      for (i = 0; i < n; ++i) {
-        insert(root, data[i], xs[i], ys[i], x1_, y1_, x2_, y2_);
-      }
-      --i;
+      i = -1;
+      if (x1 == null) {
+        while (++i < n) {
+          insert(root, data[i], xs[i], ys[i], x1_, y1_, x2_, y2_);
+        }
+        --i;
+      } else data.forEach(root.add);
+      xs = ys = data = d = null;
       return root;
     }
     quadtree.x = function(_) {
