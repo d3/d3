@@ -84,7 +84,7 @@ suite.addBatch({
       },
       "triangles": {
         "for three points": function(v) {
-          assert.deepEqual(v.triangles([[200, 200], [500, 250], [760, 300]]), [
+          assert.deepEqual(asArray(v.triangles([[200, 200], [500, 250], [760, 300]])), [
             [[200, 200], [760, 300], [500, 250]]
           ]);
         }
@@ -185,7 +185,5 @@ suite.addBatch({
 suite.export(module);
 
 function asArray(array) {
-  return array.map(function(d) {
-    return Array.prototype.slice.call(d);
-  });
+  return Array.isArray(array) ? array.map(asArray) : array;
 }
