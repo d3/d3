@@ -33,7 +33,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 
     if (compat) points = data;
     else for (points = [], i = 0; i < n; ++i) {
-      points.push({x: +fx.call(this, d = data[i], i), y: +fy.call(this, d, i)});
+      points.push({x: +fx.call(this, d = data[i]), y: +fy.call(this, d)});
     }
 
     if (x1 != null) {
@@ -59,38 +59,40 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 
     // Recursively inserts the specified point p at the node n or one of its
     // descendants. The bounds are defined by [x1, x2] and [y1, y2].
-    function insert(n, p, x1, y1, x2, y2) {
-      if (isNaN(p.x) || isNaN(p.y)) return; // ignore invalid points
+    function insert(n, d, x, y, x1, y1, x2, y2) {
+      if (isNaN(x) || isNaN(y)) return; // ignore invalid points
       if (n.leaf) {
-        var v = n.point;
-        if (v) {
+        var nx = n.x,
+            ny = n.y;
+        if (nx != null) {
           // If the point at this leaf node is at the same position as the new
           // point we are adding, we leave the point associated with the
           // internal node while adding the new point to a child node. This
           // avoids infinite recursion.
-          if ((Math.abs(v.x - p.x) + Math.abs(v.y - p.y)) < .01) {
-            insertChild(n, p, x1, y1, x2, y2);
+          if ((Math.abs(nx - x) + Math.abs(ny - y)) < .01) {
+            insertChild(n, d, x, y, x1, y1, x2, y2);
           } else {
-            n.point = null;
-            insertChild(n, v, x1, y1, x2, y2);
-            insertChild(n, p, x1, y1, x2, y2);
+            var nPoint = n.point;
+            n.x = n.y = n.point = null;
+            insertChild(n, nPoint, nx, ny, x1, y1, x2, y2);
+            insertChild(n, d, x, y, x1, y1, x2, y2);
           }
         } else {
-          n.point = p;
+          n.x = x, n.y = y, n.point = d;
         }
       } else {
-        insertChild(n, p, x1, y1, x2, y2);
+        insertChild(n, d, x, y, x1, y1, x2, y2);
       }
     }
 
-    // Recursively inserts the specified point p into a descendant of node n. The
-    // bounds are defined by [x1, x2] and [y1, y2].
-    function insertChild(n, p, x1, y1, x2, y2) {
+    // Recursively inserts the specified point [x, y] into a descendant of node
+    // n. The bounds are defined by [x1, x2] and [y1, y2].
+    function insertChild(n, d, x, y, x1, y1, x2, y2) {
       // Compute the split point, and the quadrant in which to insert p.
       var sx = (x1 + x2) * .5,
           sy = (y1 + y2) * .5,
-          right = p.x >= sx,
-          bottom = p.y >= sy,
+          right = x >= sx,
+          bottom = y >= sy,
           i = (bottom << 1) + right;
 
       // Recursively insert into the child node.
@@ -100,14 +102,14 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
       // Update the bounds as we recurse.
       if (right) x1 = sx; else x2 = sx;
       if (bottom) y1 = sy; else y2 = sy;
-      insert(n, p, x1, y1, x2, y2);
+      insert(n, d, x, y, x1, y1, x2, y2);
     }
 
     // Create the root node.
     var root = d3_geom_quadtreeNode();
 
-    root.add = function(p) {
-      insert(root, p, x1_, y1_, x2_, y2_);
+    root.add = function(d) {
+      insert(root, d, fx(d), fy(d), x1_, y1_, x2_, y2_);
     };
 
     root.visit = function(f) {
