@@ -4176,18 +4176,18 @@ d3 = function() {
       return links;
     };
     voronoi.triangles = function(data) {
-      var points, point, fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length, wrap = fx !== d3_svg_lineX || fy !== d3_svg_lineY;
-      if (wrap) for (i = 0; i < n; ++i) {
+      var points, point, fx = d3_functor(x), fy = d3_functor(y), d, i, n;
+      if (fx === d3_svg_lineX && fy === d3_svg_lineY) return d3.geom.delaunay(data);
+      for (i = 0, points = [], n = data.length; i < n; ++i) {
         point = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ];
         point.data = d;
         points.push(point);
-      } else points = data;
-      var triangles = d3.geom.delaunay(points);
-      return wrap ? triangles.map(function(triangle) {
+      }
+      return d3.geom.delaunay(points).map(function(triangle) {
         return triangle.map(function(point) {
           return point.data;
         });
-      }) : triangles;
+      });
     };
     return voronoi;
   };
