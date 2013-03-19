@@ -17,16 +17,16 @@ import "polygon";
 // clip them to a particular shape you will need to do that either in SVG or by
 // post-processing with d3.geom.polygon's clip method.
 //
-// If any vertices are coincident or have NaN positions, the behavior of this
+// If any points are coincident or have NaN positions, the behavior of this
 // method is undefined. Most likely invalid polygons will be returned. You
 // should filter invalid points, and consolidate coincident points, before
 // computing the tessellation.
 
 /**
- * @param vertices [[x1, y1], [x2, y2], …]
+ * @param points [[x1, y1], [x2, y2], …]
  * @returns polygons [[[x1, y1], [x2, y2], …], …]
  */
-d3.geom.voronoi = function(vertices) {
+d3.geom.voronoi = function(points) {
   var size = null,
       x = d3_svg_lineX,
       y = d3_svg_lineY,
@@ -34,7 +34,7 @@ d3.geom.voronoi = function(vertices) {
       compat;
 
   // For backwards-compatibility.
-  if (compat = arguments.length) return voronoi(vertices);
+  if (compat = arguments.length) return voronoi(points);
 
   function voronoi(data) {
     var points = [],
@@ -202,10 +202,10 @@ d3.geom.voronoi = function(vertices) {
 
 var d3_geom_voronoiOpposite = {l: "r", r: "l"};
 
-function d3_geom_voronoiTessellate(vertices, callback) {
+function d3_geom_voronoiTessellate(points, callback) {
 
   var Sites = {
-    list: vertices
+    list: points
       .map(function(v, i) {
         return {
           index: i,
