@@ -191,8 +191,8 @@ d3.geom.voronoi = function(points) {
     }
 
     return d3.geom.delaunay(points).map(function(triangle) {
-      return triangle.map(function(vertex) {
-        return vertex.data;
+      return triangle.map(function(point) {
+        return point.data;
       });
     });
   };
