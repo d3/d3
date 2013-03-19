@@ -4069,14 +4069,17 @@ d3 = function() {
     });
     return triangles;
   };
-  d3.geom.voronoi = function(vertices) {
+  d3.geom.voronoi = function(points) {
     var size = null, x = d3_svg_lineX, y = d3_svg_lineY, clip, compat;
-    if (compat = arguments.length) return voronoi(vertices);
+    if (compat = arguments.length) return voronoi(points);
     function voronoi(data) {
-      var points = [], polygons = [], fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length, Z = 1e6;
-      for (i = 0; i < n; ++i) {
+      var points = [], polygons = data.map(function() {
+        return [];
+      }), fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length, Z = 1e6;
+      if (fx === d3_svg_lineX && fy === d3_svg_lineY) {
+        points = data;
+      } else for (points = [], i = 0; i < n; ++i) {
         points.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]);
-        polygons.push([]);
       }
       d3_geom_voronoiTessellate(points, function(e) {
         var s1, s2, x1, x2, y1, y2;
@@ -4180,8 +4183,8 @@ d3 = function() {
         points.push(point);
       }
       return d3.geom.delaunay(points).map(function(triangle) {
-        return triangle.map(function(vertex) {
-          return vertex.data;
+        return triangle.map(function(point) {
+          return point.data;
         });
       });
     };
@@ -4191,9 +4194,9 @@ d3 = function() {
     l: "r",
     r: "l"
   };
-  function d3_geom_voronoiTessellate(vertices, callback) {
+  function d3_geom_voronoiTessellate(points, callback) {
     var Sites = {
-      list: vertices.map(function(v, i) {
+      list: points.map(function(v, i) {
         return {
           index: i,
           x: v[0],
@@ -4474,23 +4477,19 @@ d3 = function() {
       return quadtree(points);
     }
     function quadtree(data) {
-      var d, fx = d3_functor(x), fy = d3_functor(y), points = [], i = -1, n = data.length, x1_, y1_, x2_, y2_;
+      var d, fx = d3_functor(x), fy = d3_functor(y), points, i, n = data.length, x1_, y1_, x2_, y2_;
+      if (compat) points = data; else for (points = [], i = 0; i < n; ++i) {
+        points.push({
+          x: +fx(d = data[i], i),
+          y: +fy(d, i)
+        });
+      }
       if (x1 != null) {
         x1_ = x1, y1_ = y1, x2_ = x2, y2_ = y2;
-        while (++i < n) {
-          points.push({
-            x: +fx.call(this, d = data[i], i),
-            y: +fy.call(this, d, i)
-          });
-        }
       } else {
-        x1_ = y1_ = Infinity;
-        x2_ = y2_ = -Infinity;
-        while (++i < n) {
-          points.push(d = {
-            x: +fx.call(this, d = data[i], i),
-            y: +fy.call(this, d, i)
-          });
+        x2_ = y2_ = -(x1_ = y1_ = Infinity);
+        for (i = 0; i < n; ++i) {
+          d = data[i];
           if (d.x < x1_) x1_ = d.x;
           if (d.y < y1_) y1_ = d.y;
           if (d.x > x2_) x2_ = d.x;
@@ -4499,36 +4498,37 @@ d3 = function() {
       }
       var dx = x2_ - x1_, dy = y2_ - y1_;
       if (dx > dy) y2_ = y1_ + dx; else x2_ = x1_ + dy;
-      function insert(n, p, x1, y1, x2, y2) {
-        if (isNaN(p.x) || isNaN(p.y)) return;
+      function insert(n, d, x, y, x1, y1, x2, y2) {
+        if (isNaN(x) || isNaN(y)) return;
         if (n.leaf) {
-          var v = n.point;
-          if (v) {
-            if (Math.abs(v.x - p.x) + Math.abs(v.y - p.y) < .01) {
-              insertChild(n, p, x1, y1, x2, y2);
+          var nx = n.x, ny = n.y;
+          if (nx != null) {
+            if (Math.abs(nx - x) + Math.abs(ny - y) < .01) {
+              insertChild(n, d, x, y, x1, y1, x2, y2);
             } else {
-              n.point = null;
-              insertChild(n, v, x1, y1, x2, y2);
-              insertChild(n, p, x1, y1, x2, y2);
+              var nPoint = n.point;
+              n.x = n.y = n.point = null;
+              insertChild(n, nPoint, nx, ny, x1, y1, x2, y2);
+              insertChild(n, d, x, y, x1, y1, x2, y2);
             }
           } else {
-            n.point = p;
+            n.x = x, n.y = y, n.point = d;
           }
         } else {
-          insertChild(n, p, x1, y1, x2, y2);
+          insertChild(n, d, x, y, x1, y1, x2, y2);
         }
       }
-      function insertChild(n, p, x1, y1, x2, y2) {
-        var sx = (x1 + x2) * .5, sy = (y1 + y2) * .5, right = p.x >= sx, bottom = p.y >= sy, i = (bottom << 1) + right;
+      function insertChild(n, d, x, y, x1, y1, x2, y2) {
+        var sx = (x1 + x2) * .5, sy = (y1 + y2) * .5, right = x >= sx, bottom = y >= sy, i = (bottom << 1) + right;
         n.leaf = false;
         n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode());
         if (right) x1 = sx; else x2 = sx;
         if (bottom) y1 = sy; else y2 = sy;
-        insert(n, p, x1, y1, x2, y2);
+        insert(n, d, x, y, x1, y1, x2, y2);
       }
       var root = d3_geom_quadtreeNode();
-      root.add = function(p) {
-        insert(root, p, x1_, y1_, x2_, y2_);
+      root.add = function(d, i) {
+        insert(root, d, +fx(d, i), +fy(d, i), x1_, y1_, x2_, y2_);
       };
       root.visit = function(f) {
         d3_geom_quadtreeVisit(f, root, x1_, y1_, x2_, y2_);
@@ -4564,7 +4564,9 @@ d3 = function() {
     return {
       leaf: true,
       nodes: [],
-      point: null
+      point: null,
+      x: null,
+      y: null
     };
   }
   function d3_geom_quadtreeVisit(f, node, x1, y1, x2, y2) {
