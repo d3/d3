@@ -15,6 +15,13 @@ suite.addBatch({
       "has no defined size": function(v) {
         assert.isNull(v.size());
       },
+      "returns the configured size": function(v) {
+        try {
+          assert.deepEqual(v.size([100, 100]).size(), [100, 100]);
+        } finally {
+          v.size(null);
+        }
+      },
       "has the default x-accessor, d[0]": function(v) {
         assert.strictEqual(v.x()([42, 43]), 42);
       },

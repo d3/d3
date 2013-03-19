@@ -143,8 +143,8 @@ d3.geom.voronoi = function(vertices) {
     if (_ == null) {
       clip = null;
     } else {
-      var w = +_[0], h = +_[1];
-      clip = d3.geom.polygon([[0, 0], [0, h], [w, h], [w, 0]]).clip;
+      size = [+_[0], +_[1]];
+      clip = d3.geom.polygon([[0, 0], [0, size[1]], size, [size[0], 0]]).clip;
     }
     return voronoi;
   };

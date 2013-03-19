@@ -4150,8 +4150,8 @@ d3 = function() {
       if (_ == null) {
         clip = null;
       } else {
-        var w = +_[0], h = +_[1];
-        clip = d3.geom.polygon([ [ 0, 0 ], [ 0, h ], [ w, h ], [ w, 0 ] ]).clip;
+        size = [ +_[0], +_[1] ];
+        clip = d3.geom.polygon([ [ 0, 0 ], [ 0, size[1] ], size, [ size[0], 0 ] ]).clip;
       }
       return voronoi;
     };
@@ -4483,6 +4483,8 @@ d3 = function() {
           });
         }
       } else {
+        x1 = y1 = Infinity;
+        x2 = y2 = -Infinity;
         while (++i < n) {
           points.push(d = {
             x: +fx.call(this, d = data[i], i),
@@ -4543,9 +4545,12 @@ d3 = function() {
       if (!arguments.length) return x1 == null ? null : [ [ x1, y1 ], [ x2, y2 ] ];
       if (_ == null) {
         x1 = y1 = x2 = y2 = null;
-      } else {
+      } else if (Array.isArray(_[0])) {
         x1 = +_[0][0], y1 = +_[0][1];
         x2 = +_[1][0], y2 = +_[1][1];
+      } else {
+        x1 = y1 = 0;
+        x2 = +_[0], y2 = +_[1];
       }
       return quadtree;
     };
