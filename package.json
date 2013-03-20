@@ -28,7 +28,7 @@
     }
   },
   "dependencies": {
-    "jsdom": "git://github.com/tmpvar/jsdom.git#fbbde6bfd5b81e42cfc21c4037b11e667c881e7b"
+    "jsdom": "~0.5.3"
   },
   "devDependencies": {
     "smash": "~0.0.8",
