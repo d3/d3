@@ -19,9 +19,39 @@ suite.addBatch({
       },
       "has the default y-accessor, d[1]": function(q) {
         assert.strictEqual(q.y()([42, 43]), 43);
+      },
+      "can create a single-node quadtree with no bounds": function(q) {
+        var point = [0, 0],
+            q = q([point]),
+            n = 0;
+        q.visit(function(node, x1, y1, x2, y2) {
+          assert.deepEqual(node.point, point);
+          assert.isUndefined(node[0]);
+          assert.isUndefined(node[1]);
+          assert.isUndefined(node[2]);
+          assert.isUndefined(node[3]);
+          assert.isTrue(node.leaf);
+          ++n;
+        });
+        assert.strictEqual(n, 1, "number of visits");
       }
     },
     "the quadtree applied directly": {
+      "can create a single-node quadtree with no bounds": function(quadtree) {
+        var point = {x: 0, y: 0},
+            q = quadtree([point]),
+            n = 0;
+        q.visit(function(node, x1, y1, x2, y2) {
+          assert.deepEqual(node.point, point);
+          assert.isUndefined(node[0]);
+          assert.isUndefined(node[1]);
+          assert.isUndefined(node[2]);
+          assert.isUndefined(node[3]);
+          assert.isTrue(node.leaf);
+          ++n;
+        });
+        assert.strictEqual(n, 1, "number of visits");
+      },
       "can create an empty quadtree": function(quadtree) {
         var q = quadtree([], 8, 10, 56, 47),
             n = 0;
