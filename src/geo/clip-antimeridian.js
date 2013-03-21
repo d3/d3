@@ -1,3 +1,7 @@
+import "../core/true";
+import "../math/trigonometry";
+import "clip";
+
 var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate);
 
 // Takes a line and cuts into visible segments. Return values:

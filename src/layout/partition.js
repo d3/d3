@@ -1,3 +1,6 @@
+import "layout";
+import "hierarchy";
+
 d3.layout.partition = function() {
   var hierarchy = d3.layout.hierarchy(),
       size = [1, 1]; // width, height

@@ -1,3 +1,10 @@
+import "../arrays/map";
+import "../format/requote";
+import "day";
+import "format-localized";
+import "time";
+import "week";
+
 d3.time.format = function(template) {
   var n = template.length;
 

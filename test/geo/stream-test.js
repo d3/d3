@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.geo.stream");
 
 suite.addBatch({
   "stream": {
-    topic: function() {
-      return d3.geo.stream;
-    },
+    topic: load("geo/stream").expression("d3.geo.stream"),
     "does not allow null input": function(stream) {
       try {
         stream(null);

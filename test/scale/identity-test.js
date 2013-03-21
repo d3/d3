@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.scale.identity");
 
 suite.addBatch({
   "identity": {
-    topic: function() {
-      return d3.scale.identity;
-    },
+    topic: load("scale/identity").expression("d3.scale.identity").document(),
 
     "domain and range": {
       "are identical": function(identity) {

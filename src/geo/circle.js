@@ -1,3 +1,9 @@
+import "../math/trigonometry";
+import "cartesian";
+import "geo";
+import "rotation";
+import "spherical";
+
 d3.geo.circle = function() {
   var origin = [0, 0],
       angle,
@@ -42,17 +48,17 @@ d3.geo.circle = function() {
 
 // Interpolates along a circle centered at [0°, 0°], with a given radius and
 // precision.
-function d3_geo_circleInterpolate(radians, precision) {
-  var cr = Math.cos(radians),
-      sr = Math.sin(radians);
+function d3_geo_circleInterpolate(radius, precision) {
+  var cr = Math.cos(radius),
+      sr = Math.sin(radius);
   return function(from, to, direction, listener) {
     if (from != null) {
       from = d3_geo_circleAngle(cr, from);
       to = d3_geo_circleAngle(cr, to);
       if (direction > 0 ? from < to: from > to) from += direction * 2 * π;
     } else {
-      from = radians + direction * 2 * π;
-      to = radians;
+      from = radius + direction * 2 * π;
+      to = radius;
     }
     var point;
     for (var step = direction * precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
@@ -70,6 +76,6 @@ function d3_geo_circleAngle(cr, point) {
   var a = d3_geo_cartesian(point);
   a[0] -= cr;
   d3_geo_cartesianNormalize(a);
-  var angle = Math.acos(Math.max(-1, Math.min(1, -a[1])));
+  var angle = d3_acos(-a[1]);
   return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI - ε) % (2 * Math.PI);
 }

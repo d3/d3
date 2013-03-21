@@ -1,3 +1,10 @@
+import "../core/functor";
+import "../core/source";
+import "../core/target";
+import "../math/trigonometry";
+import "arc";
+import "svg";
+
 d3.svg.chord = function() {
   var source = d3_source,
       target = d3_target,

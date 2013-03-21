@@ -1,25 +1,24 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.layout.hierarchy");
 
 suite.addBatch({
   "hierarchy": {
-    topic: function() {
-      return d3.layout.treemap(); // hierarchy is abstract, so test a subclass
-    },
+    topic: load("layout/treemap").expression("d3.layout.treemap"), // hierarchy is abstract, so test a subclass
     "doesn't overwrite the value of a node that has an empty children array": function(hierarchy) {
-      var nodes = hierarchy.sticky(true).nodes({value: 1, children: []});
+      var h = hierarchy(),
+          nodes = h.sticky(true).nodes({value: 1, children: []});
       assert.equal(nodes[0].value, 1);
-      hierarchy.nodes(nodes[0]);
+      h.nodes(nodes[0]);
       assert.equal(nodes[0].value, 1);
     },
     "a valueless node that has an empty children array gets a value of 0": function(hierarchy) {
-      var nodes = hierarchy.sticky(true).nodes({children: []});
+      var h = hierarchy(),
+          nodes = h.sticky(true).nodes({children: []});
       assert.equal(nodes[0].value, 0);
-      hierarchy.nodes(nodes[0]);
+      h.nodes(nodes[0]);
       assert.equal(nodes[0].value, 0);
     }
   }

@@ -1,3 +1,6 @@
+import "layout";
+import "hierarchy";
+
 // Squarified Treemaps by Mark Bruls, Kees Huizing, and Jarke J. van Wijk
 // Modified to support a target aspect ratio by Jeff Heer
 d3.layout.treemap = function() {

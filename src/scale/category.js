@@ -1,3 +1,6 @@
+import "ordinal";
+import "scale";
+
 /*
  * This product includes color specifications and designs developed by Cynthia
  * Brewer (http://colorbrewer.org/). See lib/colorbrewer for more information.

@@ -1,5 +1,5 @@
 {
   "name": "d3",
-  "version": "3.0.8",
+  "version": "3.1.0pre",
   "main": "./d3.js"
 }

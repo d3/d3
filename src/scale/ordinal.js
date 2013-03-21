@@ -1,3 +1,7 @@
+import "../arrays/map";
+import "../arrays/range";
+import "scale";
+
 d3.scale.ordinal = function() {
   return d3_scale_ordinal([], {t: "range", a: [[]]});
 };

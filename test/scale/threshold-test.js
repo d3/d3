@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.scale.threshold");
 
 suite.addBatch({
   "threshold": {
-    topic: function() {
-      return d3.scale.threshold;
-    },
+    topic: load("scale/threshold").expression("d3.scale.threshold"),
     "has the default domain [.5]": function(threshold) {
       var x = threshold();
       assert.deepEqual(x.domain(), [.5]);

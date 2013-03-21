@@ -1,3 +1,6 @@
+import "layout";
+import "hierarchy";
+
 // Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
 d3.layout.tree = function() {
   var hierarchy = d3.layout.hierarchy().sort(null).value(null),

@@ -1,15 +1,13 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    _ = require("../../"),
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.geo.centroid");
 
 suite.addBatch({
   "centroid": {
-    topic: function() {
-      return d3.geo.centroid;
-    },
+    topic: load("geo/centroid").expression("d3.geo.centroid"),
     "Point": function(centroid) {
       assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [0, 0]);
     },
@@ -45,8 +43,8 @@ suite.addBatch({
     },
     "Polygon": function(centroid) {
       assert.inDelta(centroid({type: "Polygon", coordinates: [[[0, -90], [0, 0], [0, 90], [1, 0], [0, -90]]]}), [.5, 0], 1e-6);
-      //assert.inDelta(centroid(d3.geo.circle().angle(5).origin([0, 45])()), [0, 45], 1e-6);
-      assert.equal(centroid({type: "Polygon", coordinates: [d3.range(-180, 180 + 1 / 2, 1).map(function(x) { return [x, -60]; })]})[1], -90);
+      assert.inDelta(centroid(_.geo.circle().angle(5).origin([0, 45])()), [0, 45], 1e-6);
+      assert.equal(centroid({type: "Polygon", coordinates: [_.range(-180, 180 + 1 / 2, 1).map(function(x) { return [x, -60]; })]})[1], -90);
       assert.inDelta(centroid({type: "Polygon", coordinates: [[[0, -10], [0, 10], [10, 10], [10, -10], [0, -10]]]}), [5, 0], 1e-6);
     },
     "MultiPolygon": function(centroid) {

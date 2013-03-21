@@ -1,3 +1,18 @@
+import "../arrays/bisect";
+import "../core/rebind";
+import "../core/true";
+import "../scale/linear";
+import "../scale/nice";
+import "day";
+import "format";
+import "hour";
+import "minute";
+import "month";
+import "second";
+import "time";
+import "week";
+import "year";
+
 function d3_time_scale(linear, methods, format) {
 
   function scale(x) {
