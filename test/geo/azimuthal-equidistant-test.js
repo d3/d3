@@ -18,7 +18,7 @@ suite.addBatch({
       "Tierra del Fuego":  [[ -35.62300462,  -60.29317484], [ 425.30773539,  414.57947189]],
       "Tokyo":             [[  33.38709832,   79.49539834], [ 501.59066113,   38.40245747]],
       "the South Pole":    [[   0.00000000,  -85.00000000], [ 480.00000000,  472.52947963]],
-      "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   27.47052037]],
+      "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   27.47052037]]
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
       topic: function(projection) { return projection().translate([0, 0]).scale(1); }

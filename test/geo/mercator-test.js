@@ -18,7 +18,7 @@ suite.addBatch({
       "Tierra del Fuego":  [[ -35.62300462,  -60.29317484], [ 386.73919199,  449.08559401]],
       "Tokyo":             [[  33.38709832,   79.49539834], [ 567.40721901, -108.01311493]],
       "west antimeridian": [[-180.00000000,    0.00000000], [   8.76110196,  250.00000000]],
-      "east antimeridian": [[ 180.00000000,    0.00000000], [ 951.23889804,  250.00000000]],
+      "east antimeridian": [[ 180.00000000,    0.00000000], [ 951.23889804,  250.00000000]]
     }),
     "translated to 0,0 and at scale 1": projectionTestSuite({
       topic: function(projection) { return projection().translate([0, 0]).scale(1); }

@@ -47,7 +47,7 @@ suite.addBatch({
           geometry: {
             type: "LineString",
             coordinates: [[-63, 18], [-62, 18], [-62, 17]]
-          },
+          }
         });
         assert.deepEqual(testContext.buffer(), [
           {type: "moveTo", x: 165, y: 160},
@@ -62,7 +62,7 @@ suite.addBatch({
           geometry: {
             type: "Polygon",
             coordinates: [[[-63, 18], [-62, 18], [-62, 17], [-63, 18]]]
-          },
+          }
         });
         assert.deepEqual(testContext.buffer(), [
           {type: "moveTo", x: 165, y: 160},
@@ -247,7 +247,7 @@ suite.addBatch({
           geometry: {
             type: "Polygon",
             coordinates: [[[-63, 18], [-62, 18], [-62, 17], [-63, 18]]]
-          },
+          }
         });
         assert.deepEqual(testContext.buffer(), [
           {type: "moveTo", x: -63, y: 18},
@@ -276,7 +276,7 @@ suite.addBatch({
           geometry: {
             type: "__proto__",
             coordinates: [[[-63.03, 18.02], [-63.14, 18.06], [-63.01, 18.07], [-63.03, 18.02]]]
-          },
+          }
         }), null);
       }
     },

@@ -155,7 +155,7 @@ suite.addBatch({
         d.bar();
         assert.deepEqual(those, [b, b]);
         assert.isUndefined(d.on(".a"));
-      },
+      }
     }
   }
 });

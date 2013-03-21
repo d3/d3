@@ -10,7 +10,7 @@ suite.addBatch({
     "a custom invertible projection": {
       topic: function(projection) {
         function forward(λ, φ) { return [λ, φ]; }
-        forward.invert = function(x, y) {}
+        forward.invert = function(x, y) {};
         return projection(forward);
       },
 

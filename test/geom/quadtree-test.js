@@ -19,7 +19,7 @@ suite.addBatch({
       },
       "has the default y-accessor, d[1]": function(q) {
         assert.strictEqual(q.y()([42, 43]), 43);
-      },
+      }
     },
     "the quadtree applied directly": {
       "can create an empty quadtree": function(quadtree) {

@@ -61,7 +61,7 @@ suite.addBatch({
             line = tick.select("line"),
             path = g.select("path.domain");
         assert.equal(tick.attr("transform"), "translate(0.2,0)");
-        assert.equal(text.attr("y"), -9)
+        assert.equal(text.attr("y"), -9);
         assert.equal(text.attr("dy"), "0em");
         assert.equal(text.style("text-anchor"), "middle");
         assert.equal(text.text(), "0.2");
@@ -76,7 +76,7 @@ suite.addBatch({
             line = tick.select("line"),
             path = g.select("path.domain");
         assert.equal(tick.attr("transform"), "translate(0,0.2)");
-        assert.equal(text.attr("x"), 9)
+        assert.equal(text.attr("x"), 9);
         assert.equal(text.attr("dy"), ".32em");
         assert.equal(text.style("text-anchor"), "start");
         assert.equal(text.text(), "0.2");
@@ -91,7 +91,7 @@ suite.addBatch({
             line = tick.select("line"),
             path = g.select("path.domain");
         assert.equal(tick.attr("transform"), "translate(0.2,0)");
-        assert.equal(text.attr("y"), 9)
+        assert.equal(text.attr("y"), 9);
         assert.equal(text.attr("dy"), ".71em");
         assert.equal(text.style("text-anchor"), "middle");
         assert.equal(text.text(), "0.2");
@@ -106,7 +106,7 @@ suite.addBatch({
             line = tick.select("line"),
             path = g.select("path.domain");
         assert.equal(tick.attr("transform"), "translate(0,0.2)");
-        assert.equal(text.attr("x"), -9)
+        assert.equal(text.attr("x"), -9);
         assert.equal(text.attr("dy"), ".32em");
         assert.equal(text.style("text-anchor"), "end");
         assert.equal(text.text(), "0.2");

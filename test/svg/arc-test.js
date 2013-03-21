@@ -136,7 +136,7 @@ suite.addBatch({
       var c = arc().innerRadius(100).outerRadius(200).startAngle(Math.PI).endAngle(2 * Math.PI).centroid();
       assert.inDelta(c[0], -150, 1e-6);
       assert.inDelta(c[1], 0, 1e-6);
-    },
+    }
   }
 });
 
