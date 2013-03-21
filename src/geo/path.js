@@ -13,9 +13,6 @@ import "projection";
 import "resample";
 import "stream";
 
-// TODO better encapsulation for d3_geo_pathArea; move to area.js
-// TODO better encapsulation for d3_geo_pathCentroid; move to centroid.js
-
 d3.geo.path = function() {
   var pointRadius = 4.5,
       projection,
