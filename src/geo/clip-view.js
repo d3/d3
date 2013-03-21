@@ -3,7 +3,7 @@ import "../math/trigonometry";
 import "clip";
 import "clip-polygon";
 
-var d3_geo_clipViewMAX = 1e15;
+var d3_geo_clipViewMAX = 1e9;
 
 function d3_geo_clipView(x0, y0, x1, y1) {
   return function(listener) {
@@ -113,6 +113,8 @@ function d3_geo_clipView(x0, y0, x1, y1) {
     }
 
     function linePoint(x, y) {
+      x = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, x));
+      y = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, y));
       var v = visible(x, y);
       if (polygon) ring.push([x, y]);
       if (first) {
@@ -169,11 +171,6 @@ function d3_geo_clipView(x0, y0, x1, y1) {
 
   // Liang–Barsky line clipping.
   function clipLine(a, b) {
-    a[0] = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, a[0]));
-    a[1] = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, a[1]));
-    b[0] = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, b[0]));
-    b[1] = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, b[1]));
-
     var dx = b[0] - a[0],
         dy = b[1] - a[1],
         t = [0, 1];
