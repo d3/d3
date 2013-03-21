@@ -115,7 +115,7 @@ d3.geom.hull = function(vertices) {
   };
 
   return hull;
-}
+};
 
 // are three points in counter-clockwise order?
 function d3_geom_hullCCW(i1, i2, i3, v) {

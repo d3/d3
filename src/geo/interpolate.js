@@ -6,7 +6,7 @@ d3.geo.interpolate = function(source, target) {
     source[0] * d3_radians, source[1] * d3_radians,
     target[0] * d3_radians, target[1] * d3_radians
   );
-}
+};
 
 function d3_geo_interpolate(x0, y0, x1, y1) {
   var cy0 = Math.cos(y0),

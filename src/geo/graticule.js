@@ -22,7 +22,7 @@ d3.geo.graticule = function() {
 
   graticule.lines = function() {
     return lines().map(function(coordinates) { return {type: "LineString", coordinates: coordinates}; });
-  }
+  };
 
   graticule.outline = function() {
     return {
