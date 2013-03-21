@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.layout.partition");
 
 suite.addBatch({
   "partition": {
-    topic: function() {
-      return d3.layout.partition;
-    },
+    topic: load("layout/partition").expression("d3.layout.partition"),
     "ignores zero values": function(partition) {
       var p = partition().size([3, 3]);
       assert.deepEqual(p.nodes({children: [{value: 1}, {value: 0}, {value: 2}, {children: [{value: 0}, {value: 0}]}]}).map(metadata), [

@@ -1,3 +1,5 @@
+import "../core/noop";
+
 // TODO Unify this code with d3.geom.polygon area?
 
 var d3_geo_pathAreaSum, d3_geo_pathAreaPolygon, d3_geo_pathArea = {

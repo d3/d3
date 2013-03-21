@@ -1,3 +1,8 @@
+import "../core/identity";
+import "../core/noop";
+import "geo";
+import "stream";
+
 d3.geo.bounds = d3_geo_bounds(d3_identity);
 
 function d3_geo_bounds(projectStream) {

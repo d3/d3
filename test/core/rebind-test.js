@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.rebind");
 
 suite.addBatch({
   "rebind": {
-    topic: function() {
-      return d3.rebind;
-    },
+    topic: load("core/rebind").expression("d3.rebind"),
     "source function always has source as context": function(rebind) {
       var target = {}, source = {method: function() { that = this; }}, that;
       rebind(target, source, "method");

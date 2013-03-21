@@ -1,3 +1,7 @@
+import "arc";
+import "line";
+import "svg";
+
 d3.svg.line.radial = function() {
   var line = d3_svg_line(d3_svg_lineRadial);
   line.radius = line.x, delete line.x;

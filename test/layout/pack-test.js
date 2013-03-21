@@ -1,29 +1,30 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.layout.pack");
 
 suite.addBatch({
   "pack": {
-    topic: d3.layout.pack,
+    topic: load("layout/pack").expression("d3.layout.pack"),
     "can handle an empty children array": function(pack) {
-      assert.deepEqual(pack.nodes({children: [{children: []}, {value: 1}]}).map(layout), [
+      var p = pack();
+      assert.deepEqual(p.nodes({children: [{children: []}, {value: 1}]}).map(layout), [
         {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5},
         {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0},
         {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5}
       ]);
     },
     "can handle zero-valued nodes": function(pack) {
-      assert.deepEqual(pack.nodes({children: [{value: 0}, {value: 1}]}).map(layout), [
+      var p = pack();
+      assert.deepEqual(p.nodes({children: [{value: 0}, {value: 1}]}).map(layout), [
         {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5},
         {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0},
         {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5}
       ]);
     },
-    "can handle small nodes": function() {
-      assert.deepEqual(d3.layout.pack().sort(null).nodes({children: [
+    "can handle small nodes": function(pack) {
+      assert.deepEqual(pack().sort(null).nodes({children: [
         {value: .01},
         {value: 2},
         {value: 2},
@@ -35,7 +36,7 @@ suite.addBatch({
         {y: 0.34256315498862167, x: 0.2832340573116551, value: 2, r: 0.23209360948886723, depth: 1},
         {y: 0.7254154893606051, x: 0.38524055061025186, value: 1, r: 0.16411496513964044, depth: 1}
       ]);
-      assert.deepEqual(d3.layout.pack().sort(null).nodes({children: [
+      assert.deepEqual(pack().sort(null).nodes({children: [
         {value: 2},
         {value: 2},
         {value: 1},
@@ -49,7 +50,8 @@ suite.addBatch({
       ]);
     },
     "can handle residual floating point error": function(pack) {
-      var result = pack.nodes({children: [
+      var p = pack();
+      var result = p.nodes({children: [
         {value: 0.005348322447389364},
         {value: 0.8065882022492588},
         {value: 0}
@@ -61,7 +63,8 @@ suite.addBatch({
       assert.isFalse(result.map(function(d) { return d.r; }).some(isNaN));
     },
     "avoids coincident circles": function(pack) {
-      var result = pack({children: [
+      var p = pack();
+      var result = p({children: [
         {children: [{value: 17010}, {value: 5842}, {value: 0}, {value: 0}]},
         {children: [
           {children: [{value: 721}, {value: 4294}, {value: 9800}, {value: 1314}, {value: 2220}]},

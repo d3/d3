@@ -1,6 +1,5 @@
-require("../env");
-
-var fs = require("fs");
+var fs = require("fs"),
+    d3 = require("../../");
 
 var formatNumber = d3.format(",.02r"),
     projection = d3.geo.stereographic().clipAngle(150),

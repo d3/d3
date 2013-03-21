@@ -1,3 +1,7 @@
+import "azimuthal";
+import "geo";
+import "projection";
+
 var d3_geo_orthographic = d3_geo_azimuthal(
   function() { return 1; },
   Math.asin
