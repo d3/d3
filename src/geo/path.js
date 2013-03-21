@@ -6,6 +6,7 @@ import "bounds";
 import "centroid";
 import "geo";
 import "path-area";
+import "path-bounds";
 import "path-buffer";
 import "path-centroid";
 import "path-context";
@@ -41,7 +42,9 @@ d3.geo.path = function() {
   };
 
   path.bounds = function(object) {
-    return d3_geo_bounds(projectStream)(object);
+    d3_geo_pathBoundsX1 = d3_geo_pathBoundsY1 = -(d3_geo_pathBoundsX0 = d3_geo_pathBoundsY0 = Infinity);
+    d3.geo.stream(object, projectStream(d3_geo_pathBounds));
+    return [[d3_geo_pathBoundsX0, d3_geo_pathBoundsY0], [d3_geo_pathBoundsX1, d3_geo_pathBoundsY1]];
   };
 
   path.projection = function(_) {
