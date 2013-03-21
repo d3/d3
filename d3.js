@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.1.1"
+    version: "3.1.2"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -4491,6 +4491,7 @@ d3 = function() {
         x1_ = x1, y1_ = y1, x2_ = x2, y2_ = y2;
       } else {
         x2_ = y2_ = -(x1_ = y1_ = Infinity);
+        xs = [], ys = [];
         n = data.length;
         if (compat) for (i = 0; i < n; ++i) {
           d = data[i];

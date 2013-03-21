@@ -37,6 +37,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     } else {
       // Compute bounds, and cache points temporarily.
       x2_ = y2_ = -(x1_ = y1_ = Infinity);
+      xs = [], ys = [];
       n = data.length;
       if (compat) for (i = 0; i < n; ++i) {
         d = data[i];
