@@ -1,5 +1,6 @@
 import "../math/trigonometry";
 import "geo";
+import "mercator";
 import "projection";
 
 function d3_geo_transverseMercator(λ, φ) {
@@ -18,5 +19,5 @@ d3_geo_transverseMercator.invert = function(x, y) {
 };
 
 (d3.geo.transverseMercator = function() {
-  return d3_geo_projection(d3_geo_transverseMercator);
+  return d3_geo_mercatorProjection(d3_geo_transverseMercator);
 }).raw = d3_geo_transverseMercator;

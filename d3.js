@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.1.2"
+    version: "3.1.3"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -3625,8 +3625,32 @@ d3 = function() {
   d3_geo_mercator.invert = function(x, y) {
     return [ x, 2 * Math.atan(Math.exp(y)) - π / 2 ];
   };
+  function d3_geo_mercatorProjection(project) {
+    var m = d3_geo_projection(project), scale = m.scale, translate = m.translate, clipExtent = m.clipExtent, clipAuto;
+    m.scale = function() {
+      var v = scale.apply(m, arguments);
+      return v === m ? clipAuto ? m.clipExtent(null) : m : v;
+    };
+    m.translate = function() {
+      var v = translate.apply(m, arguments);
+      return v === m ? clipAuto ? m.clipExtent(null) : m : v;
+    };
+    m.clipExtent = function(_) {
+      var v = clipExtent.apply(m, arguments);
+      if (v === m) {
+        if (clipAuto = _ == null) {
+          var k = π * scale(), t = translate();
+          clipExtent([ [ t[0] - k, t[1] - k ], [ t[0] + k, t[1] + k ] ]);
+        }
+      } else if (clipAuto) {
+        v = null;
+      }
+      return v;
+    };
+    return m.clipExtent(null);
+  }
   (d3.geo.mercator = function() {
-    return d3_geo_projection(d3_geo_mercator);
+    return d3_geo_mercatorProjection(d3_geo_mercator);
   }).raw = d3_geo_mercator;
   var d3_geo_orthographic = d3_geo_azimuthal(function() {
     return 1;
@@ -3650,7 +3674,7 @@ d3 = function() {
     return [ Math.atan2(d3_sinh(x), Math.cos(y)), d3_asin(Math.sin(y) / d3_cosh(x)) ];
   };
   (d3.geo.transverseMercator = function() {
-    return d3_geo_projection(d3_geo_transverseMercator);
+    return d3_geo_mercatorProjection(d3_geo_transverseMercator);
   }).raw = d3_geo_transverseMercator;
   d3.geom = {};
   d3.svg = {};
