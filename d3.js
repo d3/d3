@@ -2359,7 +2359,7 @@ d3 = function() {
     };
     function nextPoint(λ, φ) {
       λ *= d3_radians;
-      var cosφ = Math.cos(φ *= d3_radians), x = cosφ * Math.cos(λ), y = cosφ * Math.sin(λ), z = Math.sin(φ), cx = y0 * z - z0 * y, cy = z0 * x - x0 * z, cz = x0 * y - y0 * x, w = -Math.acos(Math.max(-1, Math.min(1, x0 * x + y0 * y + z0 * z))) / Math.sqrt(cx * cx + cy * cy + cz * cz);
+      var cosφ = Math.cos(φ *= d3_radians), x = cosφ * Math.cos(λ), y = cosφ * Math.sin(λ), z = Math.sin(φ), cx = y0 * z - z0 * y, cy = z0 * x - x0 * z, cz = x0 * y - y0 * x, m = Math.sqrt(cx * cx + cy * cy + cz * cz), w = m && -d3_acos(x0 * x + y0 * y + z0 * z) / m;
       d3_geo_centroidX += w * cx;
       d3_geo_centroidY += w * cy;
       d3_geo_centroidZ += w * cz;

@@ -89,6 +89,21 @@ suite.addBatch({
       },
       "South Pole": function(centroid) {
         assert.equal(centroid({type: "Polygon", coordinates: [_.range(-180, 180 + 1 / 2, 1).map(function(x) { return [x, -60]; })]})[1], -90);
+      },
+      "equator": function(centroid) {
+        assert.inDelta(centroid({type: "Polygon", coordinates: [[[0, -10], [0, 10], [10, 10], [10, -10], [0, -10]]]}), [5, 0], 1e-6);
+      },
+      "equator with coincident points": function(centroid) {
+        assert.inDelta(centroid({type: "Polygon", coordinates: [[[0, -10], [0, 10], [0, 10], [10, 10], [10, -10], [0, -10]]]}), [5, 0], 1e-6);
+      },
+      "other": function(centroid) {
+        assert.inDelta(centroid({type: "Polygon", coordinates: [[[-180, 0], [-180, 10], [-179, 10], [-179, 0], [-180, 0]]]}), [-179.5, 4.987448], 1e-6);
+      },
+      "concentric rings": function(centroid) {
+        var circle = _.geo.circle().origin([0, 45]),
+            coordinates = circle.angle(60)().coordinates;
+        coordinates.push(circle.angle(45)().coordinates[0].reverse());
+        assert.inDelta(centroid({type: "Polygon", coordinates: coordinates}), [0, 45], 1e-6);
       }
     },
 
