@@ -9,8 +9,8 @@ function d3_geo_clipPolygon(segments, compare, inside, interpolate, listener) {
       clip = [];
 
   segments.forEach(function(segment) {
-    if ((n = segment.length) <= 1) return;
-    var n, p0 = segment[0], p1 = segment[n - 1];
+    if ((n = segment.length - 1) <= 0) return;
+    var n, p0 = segment[0], p1 = segment[n];
 
     // If the first and last points of a segment are coincident, then treat as
     // a closed ring.
