@@ -2253,8 +2253,8 @@ d3 = function() {
   function d3_geo_clipPolygon(segments, compare, inside, interpolate, listener) {
     var subject = [], clip = [];
     segments.forEach(function(segment) {
-      if ((n = segment.length) <= 1) return;
-      var n, p0 = segment[0], p1 = segment[n - 1];
+      if ((n = segment.length - 1) <= 0) return;
+      var n, p0 = segment[0], p1 = segment[n];
       if (d3_geo_sphericalEqual(p0, p1)) {
         listener.lineStart();
         for (var i = 0; i < n; ++i) listener.point((p0 = segment[i])[0], p0[1]);
