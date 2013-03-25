@@ -717,6 +717,27 @@ suite.addBatch({
       }
     },
 
+    "with an equirectangular projection with the viewport clipped to 960×500": {
+      topic: function(path) {
+        return path()
+            .context(testContext)
+            .projection(_.geo.equirectangular()
+              .scale(900 / Math.PI)
+              .clipExtent([[0, 0], [960, 500]])
+              .precision(0));
+      },
+      "doesn't generate a redundant closing point": function(p) {
+        p({type: "Polygon", coordinates: [[[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]]});
+        assert.deepEqual(testContext.buffer(), [
+          {type: "moveTo", x: 480, y: 250},
+          {type: "lineTo", x: 480, y: 245},
+          {type: "lineTo", x: 485, y: 245},
+          {type: "lineTo", x: 485, y: 250},
+          {type: "closePath"}
+        ]);
+      }
+    },
+
     "with a stereographic projection and adaptive resampling": {
       topic: function(path) {
         return path()
