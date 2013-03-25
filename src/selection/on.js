@@ -1,6 +1,9 @@
+import "../arrays/map";
 import "../core/array";
 import "../core/document";
 import "../core/noop";
+import "../event/event";
+import "../format/requote";
 import "selection";
 
 d3_selectionPrototype.on = function(type, listener, capture) {
