@@ -93,7 +93,7 @@ suite.addBatch({
         assert.pathEqual(l([[0, 0], [1, 1]]), "M0,0V1H1");
         assert.pathEqual(l([[0, 0], [1, 1], [2, 0]]), "M0,0V1H1V0H2");
       },
-      "supports step-middle interpolation": function(line) {
+      "supports step interpolation": function(line) {
         var l = line().interpolate("step");
         assert.pathEqual(l([[0, 0]]), "M0,0");
         assert.pathEqual(l([[0, 0], [1, 1]]), "M0,0H0.5V1H1");
