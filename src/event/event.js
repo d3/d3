@@ -13,6 +13,22 @@ function d3_eventSource() {
   return e;
 }
 
+// In some cases, e.g. on dragend of behavior.zoom and behavior.drag, we need
+// to suppress an event that fires immediately.
+function d3_eventSuppress(name) {
+  var w = d3.select(d3_window);
+  function unbind() {
+    w.on(name + ".suppress", null);
+  }
+  w.on(name + ".suppress", function() {
+    // prevent the subsequent event from propagating (e.g., for anchors)
+    d3_eventCancel();
+    unbind();
+  }, true);
+  // clear the handler after a 0ms timeout in case it doesn't fire after all
+  setTimeout(unbind, 0);
+}
+
 // Like d3.dispatch, but for custom events abstracting native UI events. These
 // events have a target component (such as a brush), a target element (such as
 // the svg:g element containing the brush) and the standard arguments `d` (the
