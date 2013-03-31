@@ -49,37 +49,37 @@ suite.addBatch({
     },
     "invalid eases and modes default to linear-in": function(ease) {
       var e = ease("__proto__-__proto__");
-      assert.equal(e(0), 0);
-      assert.equal(e(.5), .5);
-      assert.equal(e(1), 1);
+      assert.strictEqual(e(0), 0);
+      assert.strictEqual(e(.5), .5);
+      assert.strictEqual(e(1), 1);
       var e = ease("hasOwnProperty-constructor");
-      assert.equal(e(0), 0);
-      assert.equal(e(.5), .5);
-      assert.equal(e(1), 1);
+      assert.strictEqual(e(0), 0);
+      assert.strictEqual(e(.5), .5);
+      assert.strictEqual(e(1), 1);
     },
     "all easing functions return exactly 0 for t = 0": function(ease) {
-      assert.equal(ease("linear")(0), 0);
-      assert.equal(ease("poly", 2)(0), 0);
-      assert.equal(ease("quad")(0), 0);
-      assert.equal(ease("cubic")(0), 0);
-      assert.equal(ease("sin")(0), 0);
-      assert.equal(ease("exp")(0), 0);
-      assert.equal(ease("circle")(0), 0);
-      assert.equal(ease("elastic")(0), 0);
-      assert.equal(ease("back")(0), 0);
-      assert.equal(ease("bounce")(0), 0);
+      assert.strictEqual(ease("linear")(0), 0);
+      assert.strictEqual(ease("poly", 2)(0), 0);
+      assert.strictEqual(ease("quad")(0), 0);
+      assert.strictEqual(ease("cubic")(0), 0);
+      assert.strictEqual(ease("sin")(0), 0);
+      assert.strictEqual(ease("exp")(0), 0);
+      assert.strictEqual(ease("circle")(0), 0);
+      assert.strictEqual(ease("elastic")(0), 0);
+      assert.strictEqual(ease("back")(0), 0);
+      assert.strictEqual(ease("bounce")(0), 0);
     },
     "all easing functions return exactly 1 for t = 1": function(ease) {
-      assert.equal(ease("linear")(1), 1);
-      assert.equal(ease("poly", 2)(1), 1);
-      assert.equal(ease("quad")(1), 1);
-      assert.equal(ease("cubic")(1), 1);
-      assert.equal(ease("sin")(1), 1);
-      assert.equal(ease("exp")(1), 1);
-      assert.equal(ease("circle")(1), 1);
-      assert.equal(ease("elastic")(1), 1);
-      assert.equal(ease("back")(1), 1);
-      assert.equal(ease("bounce")(1), 1);
+      assert.strictEqual(ease("linear")(1), 1);
+      assert.strictEqual(ease("poly", 2)(1), 1);
+      assert.strictEqual(ease("quad")(1), 1);
+      assert.strictEqual(ease("cubic")(1), 1);
+      assert.strictEqual(ease("sin")(1), 1);
+      assert.strictEqual(ease("exp")(1), 1);
+      assert.strictEqual(ease("circle")(1), 1);
+      assert.strictEqual(ease("elastic")(1), 1);
+      assert.strictEqual(ease("back")(1), 1);
+      assert.strictEqual(ease("bounce")(1), 1);
     },
     "the -in suffix returns the identity": function(ease) {
       assert.inDelta(ease("linear-in")(.25), ease("linear")(.25), 1e-6);
