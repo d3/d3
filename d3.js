@@ -7570,7 +7570,7 @@ d3 = function() {
     return subticks;
   }
   d3.svg.brush = function() {
-    var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"), x = null, y = null, resizes = d3_svg_brushResizes[0], extent = [ [ 0, 0 ], [ 0, 0 ] ], clamp = true, extentDomain;
+    var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"), x = null, y = null, resizes = d3_svg_brushResizes[0], extent = [ [ 0, 0 ], [ 0, 0 ] ], clamp = [ true, true ], extentDomain;
     function brush(g) {
       g.each(function() {
         var g = d3.select(this), bg = g.selectAll(".background").data([ 0 ]), fg = g.selectAll(".extent").data([ 0 ]), tz = g.selectAll(".resize").data(resizes, String), e;
@@ -7691,12 +7691,7 @@ d3 = function() {
           r0 -= position;
           r1 -= size + position;
         }
-        if (typeof clamp === "boolean") {
-          apply_clamp = clamp;
-        } else {
-          apply_clamp = clamp[i];
-        }
-        if (apply_clamp || !dragging) {
+        if (clamp[i] || !dragging) {
           min = Math.max(r0, Math.min(r1, point[i]));
         } else {
           min = point[i];
@@ -7743,8 +7738,12 @@ d3 = function() {
       return brush;
     };
     brush.clamp = function(z) {
-      if (!arguments.length) return clamp;
-      clamp = z;
+      if (!arguments.length) return x && y ? clamp : clamp[+!x];
+      if (x && y) {
+        clamp = [ !!z[0], !!z[1] ];
+      } else {
+        clamp[+!x] = !!z;
+      }
       return brush;
     };
     brush.extent = function(z) {

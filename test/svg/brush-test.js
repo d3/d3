@@ -22,12 +22,17 @@ suite.addBatch({
     },
 
     "clamp": {
-      "defaults to true": function(brush) {
-        assert.isTrue(brush().clamp());
+      "returns a single boolean if only x is defined": function(brush) {
+        var b = brush().x(_.scale.linear());
+        assert.isTrue(b.clamp());
       },
-      "returns one-dimensional array when clamp is defined for x and y": function(brush) {
-        var b = brush().clamp([true, false])
-        assert.deepEqual(b.clamp(), [true, false]);
+      "returns a single boolean if only y is defined": function(brush) {
+        var b = brush().y(_.scale.linear());
+        assert.isTrue(b.clamp());
+      },
+      "returns one-dimensional array if both x and y are defined": function(brush) {
+        var b = brush().x(_.scale.linear()).y(_.scale.linear());
+        assert.deepEqual(b.clamp(), [true, true]);
       }
     },
 
