@@ -21,6 +21,16 @@ suite.addBatch({
       }
     },
 
+    "clamp": {
+      "defaults to true": function(brush) {
+        assert.isTrue(brush().clamp());
+      },
+      "returns one-dimensional array when clamp is defined for x and y": function(brush) {
+        var b = brush().clamp([true, false])
+        assert.deepEqual(b.clamp(), [true, false]);
+      }
+    },
+
     "extent": {
       "returns null when no scales are attached": function(brush) {
         assert.isNull(brush().extent());
