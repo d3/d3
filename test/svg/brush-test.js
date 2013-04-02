@@ -21,6 +21,21 @@ suite.addBatch({
       }
     },
 
+    "clamp": {
+      "returns a single boolean if only x is defined": function(brush) {
+        var b = brush().x(_.scale.linear());
+        assert.isTrue(b.clamp());
+      },
+      "returns a single boolean if only y is defined": function(brush) {
+        var b = brush().y(_.scale.linear());
+        assert.isTrue(b.clamp());
+      },
+      "returns one-dimensional array if both x and y are defined": function(brush) {
+        var b = brush().x(_.scale.linear()).y(_.scale.linear());
+        assert.deepEqual(b.clamp(), [true, true]);
+      }
+    },
+
     "extent": {
       "returns null when no scales are attached": function(brush) {
         assert.isNull(brush().extent());
