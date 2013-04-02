@@ -224,13 +224,8 @@ d3.svg.brush = function() {
         r1 -= size + position;
       }
 
-      if (clamp[i] || !dragging) {
-        // Clamp the point so that the extent fits within the range extent.
-        min = Math.max(r0, Math.min(r1, point[i]));
-      } else {
-        // No clamping
-        min = point[i];
-      }
+      // Clamp the point (unless clamp set to false) so that the extent fits within the range extent.
+      min = clamp[i] ? Math.max(r0, Math.min(r1, point[i])) : point[i];
 
       // Compute the new extent bounds.
       if (dragging) {

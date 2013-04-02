@@ -7691,11 +7691,7 @@ d3 = function() {
           r0 -= position;
           r1 -= size + position;
         }
-        if (clamp[i] || !dragging) {
-          min = Math.max(r0, Math.min(r1, point[i]));
-        } else {
-          min = point[i];
-        }
+        min = clamp[i] ? Math.max(r0, Math.min(r1, point[i])) : point[i];
         if (dragging) {
           max = (min += position) + size;
         } else {
