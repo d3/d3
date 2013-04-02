@@ -4,6 +4,7 @@ import "../event/event";
 import "../event/mouse";
 import "../event/touches";
 import "../selection/selection";
+import "behavior";
 
 d3.behavior.zoom = function() {
   var translate = [0, 0],
