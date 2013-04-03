@@ -45,5 +45,11 @@ console.log(JSON.stringify({
   },
   "scripts": {
     "test": "node_modules/.bin/vows; echo"
-  }
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/mbostock/d3/blob/master/LICENSE"
+    }
+  ]
 }, null, 2));
