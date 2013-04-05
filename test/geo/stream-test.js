@@ -19,6 +19,12 @@ suite.addBatch({
       stream({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Unknown"}}]}, {});
       stream({type: "GeometryCollection", geometries: [{type: "Unknown"}]}, {});
     },
+    "ignores null geometries": function(stream) {
+      stream(null, {});
+      stream({type: "Feature", geometry: null}, {});
+      stream({type: "FeatureCollection", features: [{type: "Feature", geometry: null}]}, {});
+      stream({type: "GeometryCollection", geometries: [null]}, {});
+    },
     "returns void": function(stream) {
       assert.isUndefined(stream({type: "Point", coordinates: [1, 2]}, {point: function() { return true; }}));
     },
