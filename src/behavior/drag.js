@@ -65,7 +65,7 @@ d3.behavior.drag = function() {
       // if moved, prevent the mouseup (and possibly click) from propagating
       if (moved) {
         d3_eventCancel();
-        if (d3.event.target === eventTarget) d3_eventSuppress('click');
+        if (d3.event.target === eventTarget) d3_eventSuppress(w, "click");
       }
 
       w .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null)
