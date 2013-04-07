@@ -409,6 +409,17 @@ d3 = function() {
     while (s = e.sourceEvent) e = s;
     return e;
   }
+  function d3_eventSuppress(name) {
+    var w = d3.select(d3_window);
+    function unbind() {
+      w.on(name + ".suppress", null);
+    }
+    w.on(name + ".suppress", function() {
+      d3_eventCancel();
+      unbind();
+    }, true);
+    setTimeout(unbind, 0);
+  }
   function d3_eventDispatch(target) {
     var dispatch = new d3_dispatch(), i = 0, n = arguments.length;
     while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
@@ -524,13 +535,9 @@ d3 = function() {
         });
         if (moved) {
           d3_eventCancel();
-          if (d3.event.target === eventTarget) w.on("click.drag", click, true);
+          if (d3.event.target === eventTarget) d3_eventSuppress("click");
         }
         w.on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-      }
-      function click() {
-        d3_eventCancel();
-        w.on("click.drag", null);
       }
     }
     drag.origin = function(x) {
@@ -1171,11 +1178,7 @@ d3 = function() {
       function mouseup() {
         if (moved) d3_eventCancel();
         w.on("mousemove.zoom", null).on("mouseup.zoom", null);
-        if (moved && d3.event.target === eventTarget) w.on("click.zoom", click, true);
-      }
-      function click() {
-        d3_eventCancel();
-        w.on("click.zoom", null);
+        if (moved && d3.event.target === eventTarget) d3_eventSuppress("click");
       }
     }
     function mousewheel() {
