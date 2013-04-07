@@ -2002,14 +2002,14 @@ d3 = function() {
   }
   d3.geo = {};
   d3.geo.stream = function(object, listener) {
-    if (d3_geo_streamObjectType.hasOwnProperty(object.type)) {
+    if (object && d3_geo_streamObjectType.hasOwnProperty(object.type)) {
       d3_geo_streamObjectType[object.type](object, listener);
     } else {
       d3_geo_streamGeometry(object, listener);
     }
   };
   function d3_geo_streamGeometry(geometry, listener) {
-    if (d3_geo_streamGeometryType.hasOwnProperty(geometry.type)) {
+    if (geometry && d3_geo_streamGeometryType.hasOwnProperty(geometry.type)) {
       d3_geo_streamGeometryType[geometry.type](geometry, listener);
     }
   }
