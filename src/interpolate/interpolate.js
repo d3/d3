@@ -22,9 +22,11 @@ function d3_interpolateByName(name) {
 }
 
 d3.interpolators = [
-  d3_interpolateObject,
-  function(a, b) { return Array.isArray(b) && d3_interpolateArray(a, b); },
-  function(a, b) { return (typeof a === "string" || typeof b === "string") && d3_interpolateString(a + "", b + ""); },
-  function(a, b) { return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Color) && d3_interpolateRgb(a, b); },
-  function(a, b) { return !isNaN(a = +a) && !isNaN(b = +b) && d3_interpolateNumber(a, b); }
+  function(a, b) {
+    var t = typeof b;
+    return (t === "string" || t !== typeof a ? (d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString)
+        : b instanceof d3_Color ? d3_interpolateRgb
+        : t === "object" ? (Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject)
+        : d3_interpolateNumber)(a, b);
+  }
 ];

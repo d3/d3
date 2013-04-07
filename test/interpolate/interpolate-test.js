@@ -7,26 +7,102 @@ var suite = vows.describe("d3.interpolate");
 suite.addBatch({
   "interpolate": {
     topic: load("interpolate/interpolate").document(),
-    "interpolates numbers": function(d3) {
-      assert.equal(d3.interpolate(2, 12)(.4), 6);
-      assert.equal(d3.interpolate("2px", 12)(.4), 6);
+
+    "when a and b are numbers": {
+      "interpolates numbers": function(d3) {
+        assert.strictEqual(d3.interpolate(2, 12)(.4), 6);
+      }
     },
-    "interpolates colors": function(d3) { // beware instanceof d3_Color
-      assert.equal(d3.interpolate("#abcdef", "#fedcba")(.4), "#ccd3da");
-      assert.equal(d3.interpolate("#abcdef", d3.rgb("#fedcba"))(.4), "#ccd3da");
-      assert.equal(d3.interpolate("#abcdef", d3.hsl("#fedcba"))(.4), "#ccd3da");
-      assert.equal(d3.interpolate("#abcdef", d3.lab("#fedcba"))(.4), "#ccd3da");
+
+    "when a and b are color strings": {
+      "interpolates RGB values and returns a hexadecimal string": function(d3) {
+        assert.strictEqual(d3.interpolate("#ff0000", "#008000")(.4), "#993300");
+      },
+      "interpolates named colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("red", "green")(.4), "#993300");
+      },
+      "interpolates decimal RGB colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("rgb(255,0,0)", "rgb(0,128,0)")(.4), "#993300");
+      },
+      "interpolates decimal HSL colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("hsl(0,100%,50%)", "hsl(120,100%,25%)")(.4), "#993300");
+      }
     },
-    "interpolates strings": function(d3) {
-      assert.equal(d3.interpolate("width:10px;", "width:50px;")(.2), "width:18px;");
-      assert.equal(d3.interpolate(2, "12px")(.4), "6px");
+
+    "when a and b are color objects": {
+      "interpolates RGB values and returns a hexadecimal string": function(d3) {
+        assert.strictEqual(d3.interpolate(d3.rgb(255, 0, 0), d3.rgb(0, 128, 0))(.4), "#993300");
+      },
+      "interpolates d3.hsl in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate(d3.hsl("red"), d3.hsl("green"))(.4), "#993300");
+      },
+      "interpolates d3.lab in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate(d3.lab("red"), d3.lab("green"))(.4), "#993300");
+      },
+      "interpolates d3.hcl in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate(d3.hcl("red"), d3.hcl("green"))(.4), "#993300");
+      }
     },
-    "interpolates arrays": function(d3) {
-      assert.deepEqual(d3.interpolate([2, 4], [12, 24])(.4), [6, 12]);
+
+    "when a and b are strings": {
+      "interpolates matching numbers in both strings": function(d3) {
+        assert.strictEqual(d3.interpolate(" 10/20 30", "50/10 100 ")(.4), "26/16 58 ");
+      },
+      "if a and b are coercible to numbers, interpolates numbers rather than strings": function(d3) {
+        assert.strictEqual(d3.interpolate("1.", "2.")(.5), 1.5);
+        assert.strictEqual(d3.interpolate("1e+3", "1e+4")(.5), 5500);
+      },
+      "preserves non-numbers in string b": function(d3) {
+        assert.strictEqual(d3.interpolate(" 10/20 30", "50/10 foo ")(.4), "26/16 foo ");
+      },
+      "preserves non-matching numbers in string b": function(d3) {
+        assert.strictEqual(d3.interpolate(" 10/20 bar", "50/10 100 ")(.4), "26/16 100 ");
+      },
+      "preserves equal-value numbers in both strings": function(d3) {
+        assert.strictEqual(d3.interpolate(" 10/20 100 20", "50/10 100, 20 ")(.4), "26/16 100, 20 ");
+      }
     },
-    "interpolates objects": function(d3) {
-      assert.deepEqual(d3.interpolate({foo: 2}, {foo: 12})(.4), {foo: 6});
+
+    "when a and b are arrays": {
+      "interpolates each element in b": function(d3) {
+        assert.strictEqual(JSON.stringify(d3.interpolate([2, 4], [12, 24])(.4)), "[6,12]");
+      },
+      "interpolates arrays, even when both a and b are coercible to numbers": function(d3) {
+        assert.strictEqual(JSON.stringify(d3.interpolate([2], [12])(.4)), "[6]");
+        assert.strictEqual(JSON.stringify(d3.interpolate([[2]], [[12]])(.4)), "[[6]]");
+      },
+      "reuses the returned array during interpolation": function(d3) {
+        var i = d3.interpolate([2], [12]);
+        assert.strictEqual(i(.2), i(.4));
+      }
     },
+
+    "when a and b are objects": {
+      "interpolates each property in b": function(d3) {
+        assert.deepEqual(d3.interpolate({foo: 2, bar: 4}, {foo: 12, bar: 24})(.4), {foo: 6, bar: 12});
+      },
+      "interpolates arrays, even when both a and b are coercible to numbers": function(d3) {
+        var two = new Number(2), twelve = new Number(12);
+        two.foo = "2px";
+        twelve.foo = "12px";
+        assert.deepEqual(d3.interpolate(two, twelve)(.4), {foo: "6px"});
+      },
+      "reuses the returned object during interpolation": function(d3) {
+        var i = d3.interpolate({foo: 2, bar: 4}, {foo: 12, bar: 24});
+        assert.strictEqual(i(.2), i(.4));
+      }
+    },
+
+    "when a and b are different types": {
+      "coerces both types to strings": function(d3) {
+        assert.strictEqual(d3.interpolate("2", 12)(.4), 6);
+        assert.strictEqual(d3.interpolate("2px", 12)(.4), 6);
+        assert.strictEqual(d3.interpolate([2], 12)(.4), 6);
+        assert.strictEqual(d3.interpolate({valueOf: function() { return 2; }}, 12)(.4), 6);
+        assert.strictEqual(d3.interpolate({toString: function() { return 2; }}, 12)(.4), 6);
+      }
+    },
+
     "may or may not interpolate between enumerable and non-enumerable properties": function(d3) {
       var a = Object.create({}, {foo: {value: 1, enumerable: true}}),
           b = Object.create({}, {foo: {value: 2, enumerable: false}});
@@ -50,17 +126,20 @@ suite.addBatch({
       assert.equal(d3.interpolate("hasOwnProperty", "hasOwnProperty")(0), "hasOwnProperty");
     }
   },
+
   "interpolators": {
     topic: load("interpolate/interpolate").document(),
     "can register a custom interpolator": function(d3) {
-      d3.interpolators.push(function(a, b) {
-        return a == "one" && b == "two" && d3.interpolateNumber(1, 2);
-      });
-      assert.equal(d3.interpolate("one", "two")(-.5), .5);
-      assert.equal(d3.interpolate("one", "two")(0), 1);
-      assert.equal(d3.interpolate("one", "two")(.5), 1.5);
-      assert.equal(d3.interpolate("one", "two")(1), 2);
-      assert.equal(d3.interpolate("one", "two")(1.5), 2.5);
+      d3.interpolators.push(function(a, b) { return a == "one" && b == "two" && d3.interpolateNumber(1, 2); });
+      try {
+        assert.equal(d3.interpolate("one", "two")(-.5), .5);
+        assert.equal(d3.interpolate("one", "two")(0), 1);
+        assert.equal(d3.interpolate("one", "two")(.5), 1.5);
+        assert.equal(d3.interpolate("one", "two")(1), 2);
+        assert.equal(d3.interpolate("one", "two")(1.5), 2.5);
+      } finally {
+        d3.interpolators.pop();
+      }
     }
   }
 });

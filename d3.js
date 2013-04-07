@@ -4683,7 +4683,7 @@ d3 = function() {
   };
   d3.interpolateNumber = d3_interpolateNumber;
   function d3_interpolateNumber(a, b) {
-    b -= a;
+    b -= a = +a;
     return function(t) {
       return a + b * t;
     };
@@ -4764,6 +4764,7 @@ d3 = function() {
   d3.interpolateString = d3_interpolateString;
   function d3_interpolateString(a, b) {
     var m, i, j, s0 = 0, s1 = 0, s = [], q = [], n, o;
+    a = a + "", b = b + "";
     d3_interpolate_number.lastIndex = 0;
     for (i = 0; m = d3_interpolate_number.exec(b); ++i) {
       if (m.index) s.push(b.substring(s0, s1 = m.index));
@@ -4834,14 +4835,9 @@ d3 = function() {
   function d3_interpolateByName(name) {
     return name == "transform" ? d3_interpolateTransform : d3_interpolate;
   }
-  d3.interpolators = [ d3_interpolateObject, function(a, b) {
-    return Array.isArray(b) && d3_interpolateArray(a, b);
-  }, function(a, b) {
-    return (typeof a === "string" || typeof b === "string") && d3_interpolateString(a + "", b + "");
-  }, function(a, b) {
-    return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Color) && d3_interpolateRgb(a, b);
-  }, function(a, b) {
-    return !isNaN(a = +a) && !isNaN(b = +b) && d3_interpolateNumber(a, b);
+  d3.interpolators = [ function(a, b) {
+    var t = typeof b;
+    return (t === "string" || t !== typeof a ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString : b instanceof d3_Color ? d3_interpolateRgb : t === "object" ? Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject : d3_interpolateNumber)(a, b);
   } ];
   d3.interpolateArray = d3_interpolateArray;
   function d3_interpolateArray(a, b) {

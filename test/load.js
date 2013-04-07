@@ -34,6 +34,7 @@ module.exports = function() {
     };
 
     sandbox = {
+      console: console,
       XMLHttpRequest: XMLHttpRequest,
       document: document,
       window: document.createWindow(),
