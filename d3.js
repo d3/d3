@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.1.4"
+    version: "3.1.5"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -409,6 +409,16 @@ d3 = function() {
     while (s = e.sourceEvent) e = s;
     return e;
   }
+  function d3_eventSuppress(target, type) {
+    function off() {
+      target.on(type, null);
+    }
+    target.on(type, function() {
+      d3_eventCancel();
+      off();
+    }, true);
+    setTimeout(off, 0);
+  }
   function d3_eventDispatch(target) {
     var dispatch = new d3_dispatch(), i = 0, n = arguments.length;
     while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
@@ -524,13 +534,9 @@ d3 = function() {
         });
         if (moved) {
           d3_eventCancel();
-          if (d3.event.target === eventTarget) w.on("click.drag", click, true);
+          if (d3.event.target === eventTarget) d3_eventSuppress(w, "click");
         }
         w.on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-      }
-      function click() {
-        d3_eventCancel();
-        w.on("click.drag", null);
       }
     }
     drag.origin = function(x) {
@@ -1171,11 +1177,7 @@ d3 = function() {
       function mouseup() {
         if (moved) d3_eventCancel();
         w.on("mousemove.zoom", null).on("mouseup.zoom", null);
-        if (moved && d3.event.target === eventTarget) w.on("click.zoom", click, true);
-      }
-      function click() {
-        d3_eventCancel();
-        w.on("click.zoom", null);
+        if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
       }
     }
     function mousewheel() {
@@ -2002,14 +2004,14 @@ d3 = function() {
   }
   d3.geo = {};
   d3.geo.stream = function(object, listener) {
-    if (d3_geo_streamObjectType.hasOwnProperty(object.type)) {
+    if (object && d3_geo_streamObjectType.hasOwnProperty(object.type)) {
       d3_geo_streamObjectType[object.type](object, listener);
     } else {
       d3_geo_streamGeometry(object, listener);
     }
   };
   function d3_geo_streamGeometry(geometry, listener) {
-    if (d3_geo_streamGeometryType.hasOwnProperty(geometry.type)) {
+    if (geometry && d3_geo_streamGeometryType.hasOwnProperty(geometry.type)) {
       d3_geo_streamGeometryType[geometry.type](geometry, listener);
     }
   }
@@ -4683,7 +4685,7 @@ d3 = function() {
   };
   d3.interpolateNumber = d3_interpolateNumber;
   function d3_interpolateNumber(a, b) {
-    b -= a;
+    b -= a = +a;
     return function(t) {
       return a + b * t;
     };
@@ -4764,6 +4766,7 @@ d3 = function() {
   d3.interpolateString = d3_interpolateString;
   function d3_interpolateString(a, b) {
     var m, i, j, s0 = 0, s1 = 0, s = [], q = [], n, o;
+    a = a + "", b = b + "";
     d3_interpolate_number.lastIndex = 0;
     for (i = 0; m = d3_interpolate_number.exec(b); ++i) {
       if (m.index) s.push(b.substring(s0, s1 = m.index));
@@ -4834,14 +4837,9 @@ d3 = function() {
   function d3_interpolateByName(name) {
     return name == "transform" ? d3_interpolateTransform : d3_interpolate;
   }
-  d3.interpolators = [ d3_interpolateObject, function(a, b) {
-    return Array.isArray(b) && d3_interpolateArray(a, b);
-  }, function(a, b) {
-    return (typeof a === "string" || typeof b === "string") && d3_interpolateString(a + "", b + "");
-  }, function(a, b) {
-    return (typeof b === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) : b instanceof d3_Color) && d3_interpolateRgb(a, b);
-  }, function(a, b) {
-    return !isNaN(a = +a) && !isNaN(b = +b) && d3_interpolateNumber(a, b);
+  d3.interpolators = [ function(a, b) {
+    var t = typeof b;
+    return (t === "string" || t !== typeof a ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString : b instanceof d3_Color ? d3_interpolateRgb : t === "object" ? Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject : d3_interpolateNumber)(a, b);
   } ];
   d3.interpolateArray = d3_interpolateArray;
   function d3_interpolateArray(a, b) {

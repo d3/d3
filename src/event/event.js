@@ -13,6 +13,15 @@ function d3_eventSource() {
   return e;
 }
 
+// Registers an event listener for the specified target that cancels the next
+// event for the specified type, but only if it occurs immediately. This is
+// useful to disambiguate dragging from clicking.
+function d3_eventSuppress(target, type) {
+  function off() { target.on(type, null); }
+  target.on(type, function() { d3_eventCancel(); off(); }, true);
+  setTimeout(off, 0); // clear the handler if it doesn't fire
+}
+
 // Like d3.dispatch, but for custom events abstracting native UI events. These
 // events have a target component (such as a brush), a target element (such as
 // the svg:g element containing the brush) and the standard arguments `d` (the

@@ -13,6 +13,9 @@ function d3_interpolateString(a, b) {
       n, // q.length
       o;
 
+  // Coerce inputs to strings.
+  a = a + "", b = b + "";
+
   // Reset our regular expression!
   d3_interpolate_number.lastIndex = 0;
 
