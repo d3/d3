@@ -296,7 +296,7 @@ suite.addBatch({
         assert.inDelta(bounds[1][0], 794.602, 1e-3);
         assert.inDelta(bounds[1][1], 856.501, 1e-3);
       },
-      "renders a line string": function(p) {
+      "centroid of a line string": function(p) {
         var centroid = p.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
         assert.inDelta(centroid[0], 434.655, 1e-3);
         assert.inDelta(centroid[1], 397.940, 1e-3);
