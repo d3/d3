@@ -70,6 +70,13 @@ d3.layout.force = function() {
         x, // x-distance
         y; // y-distance
 
+    //For default alpha of 0.1, tick is iterated 298 times
+    //If the number of nodes is zero or becomes zero, no need to continue ticking
+    if (n==0) {
+      event.end({type: "end", alpha: alpha = 0});
+      return true;
+    }
+
     // gauss-seidel relaxation for links
     for (i = 0; i < m; ++i) {
       o = links[i];
