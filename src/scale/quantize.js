@@ -1,3 +1,5 @@
+import "../arrays/range";
+import "ordinal";
 import "scale";
 
 d3.scale.quantize = function() {
@@ -6,6 +8,7 @@ d3.scale.quantize = function() {
 
 function d3_scale_quantize(x0, x1, range) {
   var kx, i;
+  var rangeIndex = d3.scale.ordinal();
 
   function scale(x) {
     return range[Math.max(0, Math.min(i, Math.floor(kx * (x - x0))))];
@@ -14,6 +17,7 @@ function d3_scale_quantize(x0, x1, range) {
   function rescale() {
     kx = range.length / (x1 - x0);
     i = range.length - 1;
+    rangeIndex.domain(range).range(d3.range(range.length));
     return scale;
   }
 
@@ -32,6 +36,12 @@ function d3_scale_quantize(x0, x1, range) {
 
   scale.copy = function() {
     return d3_scale_quantize(x0, x1, range); // copy on write
+  };
+
+  scale.invert = function(y) {
+    y = rangeIndex(y);
+    return [y      / kx + x0,
+           (y + 1) / kx + x0];
   };
 
   return rescale();
