@@ -193,6 +193,10 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [1, 1, 2, 3, 11]);
         var x = d3.scale.pow().domain([123.1, 1, 2, 3, -.9]).nice();
         assert.deepEqual(x.domain(), [130, 1, 2, 3, -10]);
+      },
+      "nices to the given stepsize": function(d3) {
+        var x = d3.scale.pow().domain([2.2, 2.4]).nice(5);
+        assert.deepEqual(x.domain(), [0, 5]);
       }
     },
 

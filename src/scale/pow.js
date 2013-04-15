@@ -32,8 +32,8 @@ function d3_scale_pow(linear, exponent) {
     return d3_scale_linearTickFormat(scale.domain(), m, format);
   };
 
-  scale.nice = function() {
-    return scale.domain(d3_scale_nice(scale.domain(), d3_scale_linearNice));
+  scale.nice = function(step) {
+    return scale.domain(d3_scale_nice(scale.domain(), d3_scale_linearNice(step)));
   };
 
   scale.exponent = function(x) {
