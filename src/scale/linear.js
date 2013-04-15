@@ -70,8 +70,8 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
     return d3_scale_linearTickFormat(domain, m, format);
   };
 
-  scale.nice = function() {
-    d3_scale_nice(domain, d3_scale_linearNice);
+  scale.nice = function(step) {
+    d3_scale_nice(domain, d3_scale_linearNice(step));
     return rescale();
   };
 
@@ -86,11 +86,13 @@ function d3_scale_linearRebind(scale, linear) {
   return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
 }
 
-function d3_scale_linearNice(dx) {
-  dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
-  return dx && {
-    floor: function(x) { return Math.floor(x / dx) * dx; },
-    ceil: function(x) { return Math.ceil(x / dx) * dx; }
+function d3_scale_linearNice(step) {
+  return function (dx) {
+    dx = step || Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
+    return dx && {
+      floor: function(x) { return Math.floor(x / dx) * dx; },
+      ceil: function(x) { return Math.ceil(x / dx) * dx; }
+    };
   };
 }
 
