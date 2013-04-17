@@ -59,6 +59,13 @@ suite.addBatch({
       assert.equal(x(.6), b);
       assert.equal(x(.8), c);
       assert.equal(x(1), c);
+    },
+    "maps a value in the range to a domain extent": function(quantize) {
+      var x = quantize().range([0, 1, 2, 3]);
+      assert.deepEqual(x.invertExtent(0), [0, .25]);
+      assert.deepEqual(x.invertExtent(1), [.25, .5]);
+      assert.deepEqual(x.invertExtent(2), [.5, .75]);
+      assert.deepEqual(x.invertExtent(3), [.75, 1]);
     }
   }
 });
