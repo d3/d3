@@ -1,5 +1,3 @@
-import "../arrays/range";
-import "../arrays/map";
 import "scale";
 
 d3.scale.quantize = function() {
@@ -8,17 +6,14 @@ d3.scale.quantize = function() {
 
 function d3_scale_quantize(x0, x1, range) {
   var kx, i;
-  var rangeIndex = new d3_Map;
 
   function scale(x) {
     return range[Math.max(0, Math.min(i, Math.floor(kx * (x - x0))))];
   }
 
   function rescale() {
-    var j = range.length;
-    kx = j / (x1 - x0);
-    i = j - 1;
-    while (--j >= 0) rangeIndex.set(range[j], j);
+    kx = range.length / (x1 - x0);
+    i = range.length - 1;
     return scale;
   }
 
@@ -40,7 +35,7 @@ function d3_scale_quantize(x0, x1, range) {
   };
 
   scale.invertExtent = function(y) {
-    y = rangeIndex.get(y);
+    y = range.indexOf(y);
     return [y      / kx + x0,
            (y + 1) / kx + x0];
   };
