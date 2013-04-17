@@ -66,6 +66,11 @@ suite.addBatch({
       assert.deepEqual(x.invertExtent(1), [.25, .5]);
       assert.deepEqual(x.invertExtent(2), [.5, .75]);
       assert.deepEqual(x.invertExtent(3), [.75, 1]);
+    },
+    "invert extent with arbitrary range values": function(quantize) {
+      var a = {}, b = {}, x = quantize().range([a, b]);
+      assert.deepEqual(x.invertExtent(a), [0, .5]);
+      assert.deepEqual(x.invertExtent(b), [.5, 1]);
     }
   }
 });
