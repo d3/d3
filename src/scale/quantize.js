@@ -36,6 +36,7 @@ function d3_scale_quantize(x0, x1, range) {
 
   scale.invertExtent = function(y) {
     y = range.indexOf(y);
+    if (y === -1) return null;
     return [y      / kx + x0,
            (y + 1) / kx + x0];
   };
