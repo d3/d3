@@ -67,6 +67,18 @@ suite.addBatch({
       assert.deepEqual(x.invertExtent(2), [.5, .75]);
       assert.deepEqual(x.invertExtent(3), [.75, 1]);
     },
+    "invert extent with out-of-range values": function(quantize) {
+      var x = quantize();
+      assert.equal(x.invertExtent(-1), null);
+      assert.equal(x.invertExtent(.5), null);
+      assert.equal(x.invertExtent(2), null);
+      assert.equal(x.invertExtent('a'), null);
+    },
+    "invert extent with duplicate values in the range": function(quantize) {
+      var x = quantize().range([0, 1, 2, 0]);
+      assert.deepEqual(x.invertExtent(0), [0, .25]);
+      assert.deepEqual(x.invertExtent(1), [.25, .5]);
+    },
     "invert extent with arbitrary range values": function(quantize) {
       var a = {}, b = {}, x = quantize().range([a, b]);
       assert.deepEqual(x.invertExtent(a), [0, .5]);
