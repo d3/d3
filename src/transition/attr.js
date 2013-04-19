@@ -42,7 +42,14 @@ d3_transitionPrototype.attr = function(nameNS, value) {
 };
 
 d3_transitionPrototype.attrTween = function(nameNS, tween) {
-  var name = d3.ns.qualify(nameNS);
+  var attr,
+      name = d3.ns.qualify(nameNS),
+      nameTween = "attr." + nameNS;
+
+  if (arguments.length < 2) {
+    attr = this.tween(nameTween);
+    return attr && attr._;
+  }
 
   function attrTween(d, i) {
     var f = tween.call(this, d, i, this.getAttribute(name));
@@ -54,5 +61,10 @@ d3_transitionPrototype.attrTween = function(nameNS, tween) {
     return f && function(t) { this.setAttributeNS(name.space, name.local, f(t)); };
   }
 
-  return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
+  if (tween != null) {
+    attr = name.local ? attrTweenNS : attrTween;
+    attr._ = tween;
+  }
+
+  return this.tween(nameTween, attr);
 };

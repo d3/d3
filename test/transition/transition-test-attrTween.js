@@ -7,7 +7,8 @@ module.exports = {
         dd = [],
         ii = [],
         tt = [],
-        vv = [];
+        vv = [],
+        fails = 0;
 
     var s = d3.select("body").html("").append("div").selectAll("div")
         .data(["red", "green"])
@@ -15,9 +16,13 @@ module.exports = {
         .attr("color", function(d, i) { return i ? "#008000" : "#ff0000"; });
 
     var t = s.transition()
-        .attrTween("color", tween);
+        .attrTween("to-be-removed", function() { ++fails; })
+        .attrTween("color", function() { ++fails; })
+        .attrTween("color", customTween);
 
-    function tween(d, i, v) {
+    t.attrTween("to-be-removed", null);
+
+    function customTween(d, i, v) {
       dd.push(d);
       ii.push(i);
       vv.push(v);
@@ -27,7 +32,8 @@ module.exports = {
         data: dd,
         index: ii,
         value: vv,
-        context: tt
+        context: tt,
+        fails: fails
       });
       return i && _.interpolateHsl(v, "blue");
     }
@@ -41,6 +47,12 @@ module.exports = {
 
   "defines the corresponding attr tween": function(result) {
     assert.typeOf(result.transition.tween("attr.color"), "function");
+  },
+  "returns the defined tween when called with no arguments": function(result) {
+    assert.equal(result.transition.attrTween("color").name, "customTween");
+  },
+  "the last attr tween takes precedence": function(result) {
+    assert.equal(result.fails, 0);
   },
   "invokes the tween function": function(result) {
     assert.deepEqual(result.data, ["green", "red"], "expected data, got {actual}");
