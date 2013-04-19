@@ -4590,14 +4590,14 @@ d3 = function() {
     quadtree.y = function(_) {
       return arguments.length ? (y = _, quadtree) : y;
     };
+    quadtree.extent = function(_) {
+      if (!arguments.length) return x1 == null ? null : [ [ x1, y1 ], [ x2, y2 ] ];
+      if (_ == null) x1 = null; else x1 = +_[0][0], y1 = +_[0][1], x2 = +_[1][0], y2 = +_[1][1];
+      return quadtree;
+    };
     quadtree.size = function(_) {
-      if (!arguments.length) return x1 == null ? null : [ x2, y2 ];
-      if (_ == null) {
-        x1 = y1 = x2 = y2 = null;
-      } else {
-        x1 = y1 = 0;
-        x2 = +_[0], y2 = +_[1];
-      }
+      if (!arguments.length) return x1 == null ? null : [ x2 - x1, y2 - y1 ];
+      if (_ == null) x1 = null; else x1 = y1 = 0, x2 = +_[0], y2 = +_[1];
       return quadtree;
     };
     return quadtree;
