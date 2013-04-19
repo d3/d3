@@ -7213,21 +7213,23 @@ d3 = function() {
     function attrNullNS() {
       this.removeAttributeNS(name.space, name.local);
     }
-    return d3_transition_tween(this, "attr." + nameNS, value, function(b) {
-      function attrString() {
+    function attrTween(b) {
+      return b == null ? attrNull : (b += "", function() {
         var a = this.getAttribute(name), i;
         return a !== b && (i = interpolate(a, b), function(t) {
           this.setAttribute(name, i(t));
         });
-      }
-      function attrStringNS() {
+      });
+    }
+    function attrTweenNS(b) {
+      return b == null ? attrNullNS : (b += "", function() {
         var a = this.getAttributeNS(name.space, name.local), i;
         return a !== b && (i = interpolate(a, b), function(t) {
           this.setAttributeNS(name.space, name.local, i(t));
         });
-      }
-      return b == null ? name.local ? attrNullNS : attrNull : (b += "", name.local ? attrStringNS : attrString);
-    });
+      });
+    }
+    return d3_transition_tween(this, "attr." + nameNS, value, name.local ? attrTweenNS : attrTween);
   };
   d3_transitionPrototype.attrTween = function(nameNS, tween) {
     var name = d3.ns.qualify(nameNS);
@@ -7259,24 +7261,25 @@ d3 = function() {
     function styleNull() {
       this.style.removeProperty(name);
     }
-    return d3_transition_tween(this, "style." + name, value, function(b) {
-      function styleString() {
+    function styleString(b) {
+      return b == null ? styleNull : (b += "", function() {
         var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
         return a !== b && (i = interpolate(a, b), function(t) {
           this.style.setProperty(name, i(t), priority);
         });
-      }
-      return b == null ? styleNull : (b += "", styleString);
-    });
+      });
+    }
+    return d3_transition_tween(this, "style." + name, value, styleString);
   };
   d3_transitionPrototype.styleTween = function(name, tween, priority) {
     if (arguments.length < 3) priority = "";
-    return this.tween("style." + name, function(d, i) {
+    function styleTween(d, i) {
       var f = tween.call(this, d, i, d3_window.getComputedStyle(this, null).getPropertyValue(name));
       return f && function(t) {
         this.style.setProperty(name, f(t), priority);
       };
-    });
+    }
+    return this.tween("style." + name, styleTween);
   };
   d3_transitionPrototype.text = function(value) {
     return d3_transition_tween(this, "text", value, d3_transition_text);
