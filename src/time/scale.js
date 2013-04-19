@@ -34,7 +34,8 @@ function d3_time_scale(linear, methods, format) {
   };
 
   scale.ticks = function(m, k) {
-    var extent = d3_scaleExtent(scale.domain());
+    var extent = d3_scaleExtent(scale.domain()),
+        floor;
     if (typeof m !== "function") {
       var span = extent[1] - extent[0],
           target = span / m,
@@ -44,9 +45,11 @@ function d3_time_scale(linear, methods, format) {
       if (target / d3_time_scaleSteps[i - 1] < d3_time_scaleSteps[i] / target) --i;
       m = methods[i];
       k = m[1];
+      floor = m[0].floor;
       m = m[0].range;
     }
-    return m(extent[0], new Date(+extent[1] + 1), k); // inclusive upper bound
+    var ticks = m(extent[0], new Date(+extent[1] + 1), k); // inclusive upper bound
+    return floor ? ticks.map(floor) : ticks;
   };
 
   scale.tickFormat = function() {
@@ -66,8 +69,9 @@ function d3_time_scaleDate(t) {
 
 function d3_time_scaleFormat(formats) {
   return function(date) {
-    var i = formats.length - 1, f = formats[i];
-    while (!f[1](date)) f = formats[--i];
+    d3_time_scaleBoundaryDate.setTime(date - 1);
+    var i = 0, f = formats[i];
+    while (!f[1](date, d3_time_scaleBoundaryDate)) f = formats[++i];
     return f[0](date);
   };
 }
@@ -127,15 +131,17 @@ var d3_time_scaleLocalMethods = [
   [d3.time.year, 1]
 ];
 
+var d3_time_scaleBoundaryDate = new Date(0);
+
 var d3_time_scaleLocalFormats = [
-  [d3.time.format("%Y"), d3_true],
-  [d3.time.format("%B"), function(d) { return d.getMonth(); }],
-  [d3.time.format("%b %d"), function(d) { return d.getDate() != 1; }],
-  [d3.time.format("%a %d"), function(d) { return d.getDay() && d.getDate() != 1; }],
-  [d3.time.format("%I %p"), function(d) { return d.getHours(); }],
-  [d3.time.format("%I:%M"), function(d) { return d.getMinutes(); }],
-  [d3.time.format(":%S"), function(d) { return d.getSeconds(); }],
-  [d3.time.format(".%L"), function(d) { return d.getMilliseconds(); }]
+  [d3.time.format("%Y"), function(d, a) { return a.getFullYear() !== d.getFullYear(); }],
+  [d3.time.format("%B"), function(d, a) { return a.getMonth() !== d.getMonth() && d.getDay(); }],
+  [d3.time.format("%b %d"), function(d, a) { return a.getDate() !== d.getDate() && !d.getDay(); }],
+  [d3.time.format("%a %d"), function(d, a) { return a.getDate() !== d.getDate(); }],
+  [d3.time.format("%I %p"), function(d, a) { return a.getHours() !== d.getHours(); }],
+  [d3.time.format("%I:%M"), function(d, a) { return a.getMinutes() !== d.getMinutes(); }],
+  [d3.time.format(":%S"), function(d, a) { return a.getSeconds() !== d.getSeconds(); }],
+  [d3.time.format(".%L"), d3_true]
 ];
 
 var d3_time_scaleLinear = d3.scale.linear(),
