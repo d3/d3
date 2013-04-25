@@ -93,6 +93,9 @@ d3.csv("iris.csv", function(flowers) {
 
   // Create a scale and brush for each trait.
   traits.forEach(function(d) {
+    // Coerce values to numbers.
+    flowers.forEach(function(p) { p[d] = +p[d]; });
+
     y[d] = d3.scale.linear()
         .domain(d3.extent(flowers, function(p) { return +p[d]; }))
         .range([h, 0]);

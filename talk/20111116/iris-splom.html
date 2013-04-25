@@ -86,6 +86,9 @@ d3.csv("iris.csv", function(flowers) {
   // Position scales.
   var x = {}, y = {};
   traits.forEach(function(trait) {
+    // Coerce values to numbers.
+    flowers.forEach(function(d) { d[trait] = +d[trait]; });
+
     var value = function(d) { return d[trait]; },
         domain = [d3.min(flowers, value), d3.max(flowers, value)],
         range = [padding / 2, size - padding / 2];
