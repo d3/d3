@@ -38,4 +38,4 @@ component.json: src/component.js d3.js
 	@chmod a-w $@
 
 clean:
-	rm -f $(GENERATED_FILES)
+	rm -f -- $(GENERATED_FILES)
