@@ -97,7 +97,7 @@ d3.csv("iris.csv", function(flowers) {
     flowers.forEach(function(p) { p[d] = +p[d]; });
 
     y[d] = d3.scale.linear()
-        .domain(d3.extent(flowers, function(p) { return +p[d]; }))
+        .domain(d3.extent(flowers, function(p) { return p[d]; }))
         .range([h, 0]);
 
     y[d].brush = d3.svg.brush()
