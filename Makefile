@@ -1,10 +1,11 @@
 LOCALE ?= en_US
 
-all: \
+GENERATED_FILES = \
 	d3.js \
 	d3.min.js \
-	component.json \
-	package.json
+	component.json
+
+all: $(GENERATED_FILES)
 
 .PHONY: clean all test
 
@@ -22,7 +23,9 @@ src/time/format-localized.js: src/locale.js src/time/format-locale.js
 
 d3.js: $(shell node_modules/.bin/smash --list src/d3.js)
 	@rm -f $@
-	node_modules/.bin/smash src/d3.js | node_modules/.bin/uglifyjs - -b indent-level=2 -o $@
+	node_modules/.bin/smash src/d3.js \
+		| sed 's/[[:<:]]VERSION[[:>:]]/"$(shell ./version)"/' \
+		| node_modules/.bin/uglifyjs - -b indent-level=2 -o $@
 	@chmod a-w $@
 
 d3.min.js: d3.js
@@ -34,10 +37,5 @@ component.json: src/component.js d3.js
 	node src/component.js > $@
 	@chmod a-w $@
 
-package.json: src/package.js d3.js
-	@rm -f $@
-	node src/package.js > $@
-	@chmod a-w $@
-
 clean:
-	rm -f d3*.js package.json component.json
+	rm -f $(GENERATED_FILES)

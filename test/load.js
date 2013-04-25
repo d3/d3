@@ -1,14 +1,15 @@
 process.env.TZ = "America/Los_Angeles";
 
 var smash = require("smash"),
-    jsdom = require("jsdom");
+    jsdom = require("jsdom"),
+    version = require("../package.json").version;
 
 require("./XMLHttpRequest");
 
 module.exports = function() {
   var files = [].slice.call(arguments).map(function(d) { return "src/" + d; }),
       expression = "d3",
-      sandbox = null;
+      sandbox = {VERSION: version};
 
   files.unshift("src/start");
   files.push("src/end");
@@ -34,6 +35,7 @@ module.exports = function() {
     };
 
     sandbox = {
+      VERSION: version,
       console: console,
       XMLHttpRequest: XMLHttpRequest,
       document: document,
