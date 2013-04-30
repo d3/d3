@@ -16,10 +16,13 @@ module.exports = {
         .style("background-color", function(d) { return d3.rgb(d)+""; });
 
     var t = s.transition()
+        .styleTween("to-be-removed", function() { ++fails; })
         .styleTween("background-color", function() { ++fails; })
-        .styleTween("background-color", tween);
+        .styleTween("background-color", customTween);
 
-    function tween(d, i, v) {
+    t.styleTween("to-be-removed", null);
+
+    function customTween(d, i, v) {
       dd.push(d);
       ii.push(i);
       vv.push(v);
@@ -44,6 +47,9 @@ module.exports = {
 
   "defines the corresponding style tween": function(result) {
     assert.typeOf(result.transition.tween("style.background-color"), "function");
+  },
+  "returns the defined tween when called with no arguments": function(result) {
+    assert.equal(result.transition.styleTween("background-color").name, "customTween");
   },
   "the last style tween takes precedence": function(result) {
     assert.equal(result.fails, 0);
