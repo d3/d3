@@ -95,7 +95,7 @@ d3.geom.hull = function(vertices) {
 
     // construct the hull
     var poly = [];
-    for (i = 0; i < sp; ++i) poly.push(data[stack[i]]);
+    for (i = sp - 1; i >= 0; --i) poly.push(data[stack[i]]);
     return poly;
   }
 
