@@ -117,8 +117,8 @@ function d3_rgb_hsl(r, g, b) {
   var min = Math.min(r /= 255, g /= 255, b /= 255),
       max = Math.max(r, g, b),
       d = max - min,
-      h = NaN,
-      s = h,
+      h,
+      s,
       l = (max + min) / 2;
   if (d) {
     s = l < .5 ? d / (max + min) : d / (2 - max - min);
@@ -126,6 +126,9 @@ function d3_rgb_hsl(r, g, b) {
     else if (g == max) h = (b - r) / d + 2;
     else h = (r - g) / d + 4;
     h *= 60;
+  } else {
+    h = NaN;
+    s = l > 0 && l < 1 ? 0 : h;
   }
   return d3_hsl(h, s, l);
 }

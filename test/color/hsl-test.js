@@ -95,6 +95,10 @@ suite.addBatch({
       assert.strictEqual(hsl(0, .42, 1).s, .42);
       assert.strictEqual(hsl(0, 1, 1).s, 1);
     },
+    "s is zero for grayscale colors (but not white and black)": function(hsl) {
+      assert.strictEqual(hsl("#ccc").s, 0);
+      assert.strictEqual(hsl("#777").s, 0);
+    },
     "s is undefined when not explicitly specified for white or black": function(hsl) {
       assert.isNaN(hsl("#000").s);
       assert.isNaN(hsl("black").s);
