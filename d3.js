@@ -8305,7 +8305,7 @@ d3 = function() {
       }));
     };
     scale.ticks = function(m, k) {
-      var extent = d3_time_scaleExtent(scale.domain());
+      var extent = d3_scaleExtent(scale.domain());
       if (typeof m !== "function") {
         var span = extent[1] - extent[0], target = span / m, i = d3.bisect(d3_time_scaleSteps, target);
         if (i == d3_time_scaleSteps.length) return methods.year(extent, m);
@@ -8323,11 +8323,7 @@ d3 = function() {
     scale.copy = function() {
       return d3_time_scale(linear.copy(), methods, format);
     };
-    return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
-  }
-  function d3_time_scaleExtent(domain) {
-    var start = domain[0], stop = domain[domain.length - 1];
-    return start < stop ? [ start, stop ] : [ stop, start ];
+    return d3_scale_linearRebind(scale, linear);
   }
   function d3_time_scaleDate(t) {
     return new Date(t);
