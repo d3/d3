@@ -36,5 +36,7 @@ d3_hclPrototype.rgb = function() {
 };
 
 function d3_hcl_lab(h, c, l) {
+  if (isNaN(h)) h = 0;
+  if (isNaN(c)) c = 0;
   return d3_lab(l, Math.cos(h *= d3_radians) * c, Math.sin(h) * c);
 }

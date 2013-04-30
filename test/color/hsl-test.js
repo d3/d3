@@ -72,6 +72,44 @@ suite.addBatch({
     "string coercion returns RGB format": function(hsl) {
       assert.strictEqual(hsl("hsl(60, 100%, 20%)") + "", "#666600");
       assert.strictEqual(hsl(hsl(60, 1, .2)) + "", "#666600");
+    },
+    "h is preserved when explicitly specified, even for grayscale colors": function(hsl) {
+      assert.strictEqual(hsl(0, 0, 0).h, 0);
+      assert.strictEqual(hsl(42, 0, .5).h, 42);
+      assert.strictEqual(hsl(118, 0, 1).h, 118);
+    },
+    "h is undefined when not explicitly specified for grayscale colors": function(hsl) {
+      assert.isNaN(hsl("#000").h);
+      assert.isNaN(hsl("black").h);
+      assert.isNaN(hsl(_.rgb("black")).h);
+      assert.isNaN(hsl("#ccc").h);
+      assert.isNaN(hsl("gray").h);
+      assert.isNaN(hsl(_.rgb("gray")).h);
+      assert.isNaN(hsl("#fff").h);
+      assert.isNaN(hsl("white").h);
+      assert.isNaN(hsl(_.rgb("white")).h);
+    },
+    "s is preserved when explicitly specified, even for white or black": function(hsl) {
+      assert.strictEqual(hsl(0, 0, 0).s, 0);
+      assert.strictEqual(hsl(0, .18, 0).s, .18);
+      assert.strictEqual(hsl(0, .42, 1).s, .42);
+      assert.strictEqual(hsl(0, 1, 1).s, 1);
+    },
+    "s is undefined when not explicitly specified for white or black": function(hsl) {
+      assert.isNaN(hsl("#000").s);
+      assert.isNaN(hsl("black").s);
+      assert.isNaN(hsl(_.rgb("black")).s);
+      assert.isNaN(hsl("#fff").s);
+      assert.isNaN(hsl("white").s);
+      assert.isNaN(hsl(_.rgb("white")).s);
+    },
+    "can convert grayscale colors (with undefined hue) to RGB": function(hsl) {
+      assert.strictEqual(hsl(NaN, 0, .2) + "", "#333333");
+      assert.strictEqual(hsl(NaN, 0, .6) + "", "#999999");
+    },
+    "can convert white and black (with undefined hue and saturation) to RGB": function(hsl) {
+      assert.strictEqual(hsl(NaN, NaN, 0) + "", "#000000");
+      assert.strictEqual(hsl(NaN, NaN, 1) + "", "#ffffff");
     }
   }
 });

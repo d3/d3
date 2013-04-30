@@ -35,16 +35,14 @@ d3.geom.hull = function(vertices) {
     }
 
     // find the starting ref point: leftmost point with the minimum y coord
-    for (i=1; i<n; ++i) {
-      if (vertices[i][1] < vertices[h][1]) {
-        h = i;
-      } else if (vertices[i][1] == vertices[h][1]) {
-        h = (vertices[i][0] < vertices[h][0] ? i : h);
-      }
+    for (i = 1; i < n; ++i) {
+      if (vertices[i][1] < vertices[h][1]
+          || vertices[i][1] == vertices[h][1]
+          && vertices[i][0] < vertices[h][0]) h = i;
     }
 
     // calculate polar angles from ref point and sort
-    for (i=0; i<n; ++i) {
+    for (i = 0; i < n; ++i) {
       if (i === h) continue;
       y1 = vertices[i][1] - vertices[h][1];
       x1 = vertices[i][0] - vertices[h][0];
@@ -56,7 +54,7 @@ d3.geom.hull = function(vertices) {
     a = points[0].angle;
     v = points[0].index;
     u = 0;
-    for (i=1; i<plen; ++i) {
+    for (i = 1; i < plen; ++i) {
       j = points[i].index;
       if (a == points[i].angle) {
         // keep angle for point most distant from the reference
@@ -64,25 +62,22 @@ d3.geom.hull = function(vertices) {
         y1 = vertices[v][1] - vertices[h][1];
         x2 = vertices[j][0] - vertices[h][0];
         y2 = vertices[j][1] - vertices[h][1];
-        if ((x1*x1 + y1*y1) >= (x2*x2 + y2*y2)) {
+        if (x1 * x1 + y1 * y1 >= x2 * x2 + y2 * y2) {
           points[i].index = -1;
+          continue;
         } else {
           points[u].index = -1;
-          a = points[i].angle;
-          u = i;
-          v = j;
         }
-      } else {
-        a = points[i].angle;
-        u = i;
-        v = j;
       }
+      a = points[i].angle;
+      u = i;
+      v = j;
     }
 
     // initialize the stack
     stack.push(h);
-    for (i=0, j=0; i<2; ++j) {
-      if (points[j].index !== -1) {
+    for (i = 0, j = 0; i < 2; ++j) {
+      if (points[j].index > -1) {
         stack.push(points[j].index);
         i++;
       }
@@ -90,9 +85,9 @@ d3.geom.hull = function(vertices) {
     sp = stack.length;
 
     // do graham's scan
-    for (; j<plen; ++j) {
-      if (points[j].index === -1) continue; // skip tossed out points
-      while (!d3_geom_hullCCW(stack[sp-2], stack[sp-1], points[j].index, vertices)) {
+    for (; j < plen; ++j) {
+      if (points[j].index < 0) continue; // skip tossed out points
+      while (!d3_geom_hullCCW(stack[sp - 2], stack[sp - 1], points[j].index, vertices)) {
         --sp;
       }
       stack[sp++] = points[j].index;
@@ -100,9 +95,7 @@ d3.geom.hull = function(vertices) {
 
     // construct the hull
     var poly = [];
-    for (i=0; i<sp; ++i) {
-      poly.push(data[stack[i]]);
-    }
+    for (i = sp - 1; i >= 0; --i) poly.push(data[stack[i]]);
     return poly;
   }
 
@@ -123,5 +116,5 @@ function d3_geom_hullCCW(i1, i2, i3, v) {
   t = v[i1]; a = t[0]; b = t[1];
   t = v[i2]; c = t[0]; d = t[1];
   t = v[i3]; e = t[0]; f = t[1];
-  return ((f-b)*(c-a) - (d-b)*(e-a)) > 0;
+  return (f - b) * (c - a) - (d - b) * (e - a) > 0;
 }

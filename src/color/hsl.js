@@ -39,8 +39,8 @@ function d3_hsl_rgb(h, s, l) {
       m2;
 
   /* Some simple corrections for h, s and l. */
-  h = h % 360; if (h < 0) h += 360;
-  s = s < 0 ? 0 : s > 1 ? 1 : s;
+  h = isNaN(h) ? 0 : (h %= 360) < 0 ? h + 360 : h;
+  s = isNaN(s) ? 0 : s < 0 ? 0 : s > 1 ? 1 : s;
   l = l < 0 ? 0 : l > 1 ? 1 : l;
 
   /* From FvD 13.37, CSS Color Module Level 3 */

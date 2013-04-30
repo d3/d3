@@ -19,13 +19,11 @@ if (typeof Sizzle === "function") {
   d3_selectMatches = Sizzle.matchesSelector;
 }
 
-var d3_selectionPrototype = [];
-
 d3.selection = function() {
   return d3_selectionRoot;
 };
 
-d3.selection.prototype = d3_selectionPrototype;
+var d3_selectionPrototype = d3.selection.prototype = [];
 
 import "select";
 import "selectAll";
@@ -51,21 +49,17 @@ import "node";
 import "enter";
 import "transition";
 
-var d3_selectionRoot = d3_selection([[d3_document]]);
-
-d3_selectionRoot[0].parentNode = d3_selectRoot;
-
-// TODO fast singleton implementation!
-// TODO select(function)
-d3.select = function(selector) {
-  return typeof selector === "string"
-      ? d3_selectionRoot.select(selector)
-      : d3_selection([[selector]]); // assume node
+// TODO fast singleton implementation?
+d3.select = function(node) {
+  var group = [typeof node === "string" ? d3_select(node, d3_document) : node];
+  group.parentNode = d3_selectRoot;
+  return d3_selection([group]);
 };
 
-// TODO selectAll(function)
-d3.selectAll = function(selector) {
-  return typeof selector === "string"
-      ? d3_selectionRoot.selectAll(selector)
-      : d3_selection([d3_array(selector)]); // assume node[]
+d3.selectAll = function(nodes) {
+  var group = d3_array(typeof nodes === "string" ? d3_selectAll(nodes, d3_document) : nodes);
+  group.parentNode = d3_selectRoot;
+  return d3_selection([group]);
 };
+
+var d3_selectionRoot = d3.select(d3_selectRoot);

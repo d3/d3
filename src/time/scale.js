@@ -34,7 +34,7 @@ function d3_time_scale(linear, methods, format) {
   };
 
   scale.ticks = function(m, k) {
-    var extent = d3_time_scaleExtent(scale.domain());
+    var extent = d3_scaleExtent(scale.domain());
     if (typeof m !== "function") {
       var span = extent[1] - extent[0],
           target = span / m,
@@ -57,14 +57,7 @@ function d3_time_scale(linear, methods, format) {
     return d3_time_scale(linear.copy(), methods, format);
   };
 
-  // TOOD expose d3_scale_linear_rebind?
-  return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
-}
-
-// TODO expose d3_scaleExtent?
-function d3_time_scaleExtent(domain) {
-  var start = domain[0], stop = domain[domain.length - 1];
-  return start < stop ? [start, stop] : [stop, start];
+  return d3_scale_linearRebind(scale, linear);
 }
 
 function d3_time_scaleDate(t) {
