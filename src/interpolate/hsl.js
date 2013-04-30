@@ -7,14 +7,16 @@ d3.interpolateHsl = d3_interpolateHsl;
 function d3_interpolateHsl(a, b) {
   a = d3.hsl(a);
   b = d3.hsl(b);
-  var h0 = a.h,
-      s0 = a.s,
-      l0 = a.l,
-      h1 = b.h - h0,
-      s1 = b.s - s0,
-      l1 = b.l - l0;
-  if (h1 > 180) h1 -= 360; else if (h1 < -180) h1 += 360; // shortest path
+  var ah = a.h,
+      as = a.s,
+      al = a.l,
+      bh = b.h - ah,
+      bs = b.s - as,
+      bl = b.l - al;
+  if (isNaN(bs)) bs = 0, as = isNaN(as) ? b.s : as;
+  if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah;
+  else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360; // shortest path
   return function(t) {
-    return d3_hsl_rgb(h0 + h1 * t, s0 + s1 * t, l0 + l1 * t) + "";
+    return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
   };
 }

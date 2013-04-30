@@ -22,6 +22,22 @@ suite.addBatch({
     "interpolates in HSL color space": function(d3) {
       assert.strictEqual(d3.interpolateHsl("steelblue", "#f00")(.2), "#383dc3");
     },
+    "uses source hue when destination hue is undefined": function(d3) {
+      assert.equal(d3.interpolateHsl("#f60", "#000")(.5), "#803300");
+      assert.equal(d3.interpolateHsl("#6f0", "#fff")(.5), "#b3ff80");
+    },
+    "uses destination hue when source hue is undefined": function(d3) {
+      assert.equal(d3.interpolateHsl("#000", "#f60")(.5), "#803300");
+      assert.equal(d3.interpolateHsl("#fff", "#6f0")(.5), "#b3ff80");
+    },
+    "uses source saturation when destination saturation is undefined": function(d3) {
+      assert.equal(d3.interpolateHsl("#ccc", "#000")(.5), "#666666");
+      assert.equal(d3.interpolateHsl("#f00", "#000")(.5), "#800000");
+    },
+    "uses destination saturation when source saturation is undefined": function(d3) {
+      assert.equal(d3.interpolateHsl("#000", "#ccc")(.5), "#666666");
+      assert.equal(d3.interpolateHsl("#000", "#f00")(.5), "#800000");
+    },
     "outputs a hexadecimal string": function(d3) {
       assert.strictEqual(d3.interpolateHsl("steelblue", "#f00")(.2), "#383dc3");
     }

@@ -74,6 +74,37 @@ suite.addBatch({
     },
     "roundtrip to Lab is idempotent": function(hcl) {
       assert.hslEqual(_.lab(hcl("steelblue")), _.lab("steelblue"));
+    },
+    "h is defined for non-black grayscale colors (because of the color profile)": function(hcl) {
+      assert.inDelta(hcl("#ccc").h, 158.1986, 1e-3);
+      assert.inDelta(hcl("gray").h, 158.1986, 1e-3);
+      assert.inDelta(hcl(_.rgb("gray")).h, 158.1986, 1e-3);
+      assert.inDelta(hcl("#fff").h, 158.1986, 1e-3);
+      assert.inDelta(hcl("white").h, 158.1986, 1e-3);
+      assert.inDelta(hcl(_.rgb("white")).h, 158.1986, 1e-3);
+    },
+    "h is preserved when explicitly specified, even for black": function(hcl) {
+      assert.strictEqual(hcl(0, 0, 0).h, 0);
+      assert.strictEqual(hcl(42, 0, 0).h, 42);
+      assert.strictEqual(hcl(118, 0, 0).h, 118);
+    },
+    "h is undefined when not explicitly specified for black": function(hcl) {
+      assert.isNaN(hcl("#000").h);
+      assert.isNaN(hcl("black").h);
+      assert.isNaN(hcl(_.rgb("black")).h);
+    },
+    "c is preserved when explicitly specified, even for black": function(hcl) {
+      assert.strictEqual(hcl(0, 0, 0).c, 0);
+      assert.strictEqual(hcl(0, .42, 0).c, .42);
+      assert.strictEqual(hcl(0, 1, 0).c, 1);
+    },
+    "c is undefined when not explicitly specified for black": function(hcl) {
+      assert.isNaN(hcl("#000").c);
+      assert.isNaN(hcl("black").c);
+      assert.isNaN(hcl(_.rgb("black")).c);
+    },
+    "can convert black (with undefined hue and chroma) to RGB": function(hcl) {
+      assert.strictEqual(hcl(NaN, NaN, 0) + "", "#000000");
     }
   }
 });
