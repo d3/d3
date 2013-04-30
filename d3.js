@@ -3945,11 +3945,7 @@ d3 = function() {
         vertices.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]);
       }
       for (i = 1; i < n; ++i) {
-        if (vertices[i][1] < vertices[h][1]) {
-          h = i;
-        } else if (vertices[i][1] == vertices[h][1]) {
-          h = vertices[i][0] < vertices[h][0] ? i : h;
-        }
+        if (vertices[i][1] < vertices[h][1] || vertices[i][1] == vertices[h][1] && vertices[i][0] < vertices[h][0]) h = i;
       }
       for (i = 0; i < n; ++i) {
         if (i === h) continue;
@@ -3975,37 +3971,32 @@ d3 = function() {
           y2 = vertices[j][1] - vertices[h][1];
           if (x1 * x1 + y1 * y1 >= x2 * x2 + y2 * y2) {
             points[i].index = -1;
+            continue;
           } else {
             points[u].index = -1;
-            a = points[i].angle;
-            u = i;
-            v = j;
           }
-        } else {
-          a = points[i].angle;
-          u = i;
-          v = j;
         }
+        a = points[i].angle;
+        u = i;
+        v = j;
       }
       stack.push(h);
       for (i = 0, j = 0; i < 2; ++j) {
-        if (points[j].index !== -1) {
+        if (points[j].index > -1) {
           stack.push(points[j].index);
           i++;
         }
       }
       sp = stack.length;
       for (;j < plen; ++j) {
-        if (points[j].index === -1) continue;
+        if (points[j].index < 0) continue;
         while (!d3_geom_hullCCW(stack[sp - 2], stack[sp - 1], points[j].index, vertices)) {
           --sp;
         }
         stack[sp++] = points[j].index;
       }
       var poly = [];
-      for (i = 0; i < sp; ++i) {
-        poly.push(data[stack[i]]);
-      }
+      for (i = 0; i < sp; ++i) poly.push(data[stack[i]]);
       return poly;
     }
     hull.x = function(_) {
