@@ -7,11 +7,17 @@ var suite = vows.describe("d3.selection");
 suite.addBatch({
   "selection": {
     topic: load("selection/selection").document(),
-    "selects the document": function(d3) {
+    "selects the document element": function(d3) {
       var selection = d3.selection();
       assert.equal(selection.length, 1);
       assert.equal(selection[0].length, 1);
-      assert.equal(selection[0][0].nodeType, 9);
+      assert.equal(selection[0][0].nodeType, 1);
+      assert.equal(selection[0][0].tagName, "HTML");
+    },
+    "the parentNode is also the document element": function(d3) {
+      var parentNode = d3.selection()[0].parentNode;
+      assert.equal(parentNode.nodeType, 1);
+      assert.equal(parentNode.tagName, "HTML");
     },
     "is an instanceof d3.selection": function(d3) {
       assert.instanceOf(d3.selection(), d3.selection);
