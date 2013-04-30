@@ -36,6 +36,31 @@ suite.addBatch({
         assert.isTrue(div[0][0] === body.lastChild);
         assert.lengthOf(div, 1);
         assert.lengthOf(div[0], 1);
+      },
+      "sets the parentNode to the document element": function(d3) {
+        var selection = d3.select("body"),
+            document = d3.selection().node().ownerDocument;
+        assert.strictEqual(selection[0].parentNode, document.documentElement);
+      },
+      "does not propagate data from the document": function(d3) {
+        var document = d3.selection().node().ownerDocument;
+        document.__data__ = 42;
+        delete document.body.__data__;
+        try {
+          assert.isUndefined(d3.select("body").datum());
+        } finally {
+          delete document.__data__;
+        }
+      },
+      "does not propagate data from the document element": function(d3) {
+        var document = d3.selection().node().ownerDocument;
+        document.documentElement.__data__ = 42;
+        delete document.body.__data__;
+        try {
+          assert.isUndefined(d3.select("body").datum());
+        } finally {
+          delete document.documentElement.__data__;
+        }
       }
     }
   }

@@ -7,8 +7,12 @@ var suite = vows.describe("d3.transition");
 suite.addBatch({
   "transition": {
     topic: load("transition/transition").document(),
-    "selects the document": function(d3) {
-      assert.domEqual(d3.transition()[0][0].nodeType, 9);
+    "selects the document element": function(d3) {
+      var transition = d3.transition();
+      assert.equal(transition.length, 1);
+      assert.equal(transition[0].length, 1);
+      assert.equal(transition[0][0].nodeType, 1);
+      assert.equal(transition[0][0].tagName, "HTML");
     },
     "is an instanceof d3.transition": function(d3) {
       assert.isTrue(d3.transition() instanceof d3.transition);

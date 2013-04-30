@@ -566,11 +566,10 @@ d3 = function() {
     };
     d3_selectMatches = Sizzle.matchesSelector;
   }
-  var d3_selectionPrototype = [];
   d3.selection = function() {
     return d3_selectionRoot;
   };
-  d3.selection.prototype = d3_selectionPrototype;
+  var d3_selectionPrototype = d3.selection.prototype = [];
   d3_selectionPrototype.select = function(selector) {
     var subgroups = [], subgroup, subnode, group, node;
     if (typeof selector !== "function") selector = d3_selection_selector(selector);
@@ -1088,14 +1087,17 @@ d3 = function() {
     }
     return d3_transition(subgroups, id);
   };
-  var d3_selectionRoot = d3_selection([ [ d3_document ] ]);
-  d3_selectionRoot[0].parentNode = d3_selectRoot;
-  d3.select = function(selector) {
-    return typeof selector === "string" ? d3_selectionRoot.select(selector) : d3_selection([ [ selector ] ]);
+  d3.select = function(node) {
+    var group = [ typeof node === "string" ? d3_select(node, d3_document) : node ];
+    group.parentNode = d3_selectRoot;
+    return d3_selection([ group ]);
   };
-  d3.selectAll = function(selector) {
-    return typeof selector === "string" ? d3_selectionRoot.selectAll(selector) : d3_selection([ d3_array(selector) ]);
+  d3.selectAll = function(nodes) {
+    var group = d3_array(typeof nodes === "string" ? d3_selectAll(nodes, d3_document) : nodes);
+    group.parentNode = d3_selectRoot;
+    return d3_selection([ group ]);
   };
+  var d3_selectionRoot = d3.select(d3_selectRoot);
   d3.behavior.zoom = function() {
     var translate = [ 0, 0 ], translate0, scale = 1, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     function zoom() {
