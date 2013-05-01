@@ -4,8 +4,10 @@ import "../core/ns";
 d3.transform = function(string) {
   var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
   return (d3.transform = function(string) {
-    g.setAttribute("transform", string);
-    var t = g.transform.baseVal.consolidate();
+    if (string != null) {
+      g.setAttribute("transform", string);
+      var t = g.transform.baseVal.consolidate();
+    }
     return new d3_transform(t ? t.matrix : d3_transformIdentity);
   })(string);
 };
