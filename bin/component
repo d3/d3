@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 console.log(JSON.stringify({
   "name": "d3",
   "version": require("../package.json").version,
