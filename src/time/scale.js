@@ -131,7 +131,7 @@ var d3_time_scaleLocalMethods = [
   [d3.time.year, 1]
 ];
 
-var d3_time_scaleBoundaryDate = new Date(0);
+var d3_time_scaleBoundaryDate = new Date;
 
 var d3_time_scaleLocalFormats = [
   [d3.time.format("%Y"), function(d, a) { return a.getFullYear() !== d.getFullYear(); }],
