@@ -8,7 +8,7 @@ require("./XMLHttpRequest");
 module.exports = function() {
   var files = [].slice.call(arguments).map(function(d) { return "src/" + d; }),
       expression = "d3",
-      sandbox = null;
+      sandbox = {Date: Date}; // so we can use deepEqual in tests
 
   files.unshift("src/start");
   files.push("src/end");
@@ -40,7 +40,7 @@ module.exports = function() {
       window: document.createWindow(),
       setTimeout: setTimeout,
       clearTimeout: clearTimeout,
-      Date: Date // so we can override Date.now in tests
+      Date: Date // so we can override Date.now in tests, and use deepEqual
     };
 
     return topic;
