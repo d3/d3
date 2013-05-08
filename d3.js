@@ -8223,12 +8223,12 @@ d3 = function() {
       return date - d0 < d1 - date ? d0 : d1;
     }
     function ceil(date) {
-      date = local(new d3_time(date - 1));
-      var t = +date, d;
+      var d0 = +date, d;
+      date = local(new d3_time(d0 - 1));
       do {
         step(date, 1);
         d = local(date);
-      } while (+d === t);
+      } while (d < d0);
       return d;
     }
     function offset(date, k) {
