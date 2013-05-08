@@ -8223,8 +8223,13 @@ d3 = function() {
       return date - d0 < d1 - date ? d0 : d1;
     }
     function ceil(date) {
-      step(date = local(new d3_time(date - 1)), 1);
-      return date;
+      date = local(new d3_time(date - 1));
+      var t = +date, d;
+      do {
+        step(date, 1);
+        d = local(date);
+      } while (+d === t);
+      return d;
     }
     function offset(date, k) {
       step(date = new d3_time(+date), k);
@@ -8235,10 +8240,10 @@ d3 = function() {
       if (dt > 1) {
         while (time < t1) {
           if (!(number(time) % dt)) times.push(new Date(+time));
-          step(time, 1);
+          time = ceil(new Date(+time + 1));
         }
       } else {
-        while (time < t1) times.push(new Date(+time)), step(time, 1);
+        while (time < t1) times.push(new Date(+time)), time = ceil(new Date(+time + 1));
       }
       return times;
     }
@@ -8698,7 +8703,7 @@ d3 = function() {
       return scale.domain(d3_scale_nice(scale.domain(), m));
     };
     scale.ticks = function(m, k) {
-      var extent = d3_scaleExtent(scale.domain()), floor;
+      var extent = d3_scaleExtent(scale.domain());
       if (typeof m !== "function") {
         var span = extent[1] - extent[0], target = span / m, i = d3.bisect(d3_time_scaleSteps, target);
         if (i == d3_time_scaleSteps.length) return methods.year(extent, m);
@@ -8706,11 +8711,9 @@ d3 = function() {
         if (target / d3_time_scaleSteps[i - 1] < d3_time_scaleSteps[i] / target) --i;
         m = methods[i];
         k = m[1];
-        floor = m[0].floor;
         m = m[0].range;
       }
-      var ticks = m(extent[0], new Date(+extent[1] + 1), k);
-      return floor ? ticks.map(floor) : ticks;
+      return m(extent[0], new Date(+extent[1] + 1), k);
     };
     scale.tickFormat = function() {
       return format;

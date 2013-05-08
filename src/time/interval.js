@@ -8,8 +8,13 @@ function d3_time_interval(local, step, number) {
   }
 
   function ceil(date) {
-    step(date = local(new d3_time(date - 1)), 1);
-    return date;
+    date = local(new d3_time(date - 1));
+    var t = +date, d;
+    do {
+      step(date, 1);
+      d = local(date);
+    } while (+d === t);
+    return d;
   }
 
   function offset(date, k) {
@@ -22,10 +27,10 @@ function d3_time_interval(local, step, number) {
     if (dt > 1) {
       while (time < t1) {
         if (!(number(time) % dt)) times.push(new Date(+time));
-        step(time, 1);
+        time = ceil(new Date(+time + 1));
       }
     } else {
-      while (time < t1) times.push(new Date(+time)), step(time, 1);
+      while (time < t1) times.push(new Date(+time)), time = ceil(new Date(+time + 1));
     }
     return times;
   }

@@ -34,8 +34,7 @@ function d3_time_scale(linear, methods, format) {
   };
 
   scale.ticks = function(m, k) {
-    var extent = d3_scaleExtent(scale.domain()),
-        floor;
+    var extent = d3_scaleExtent(scale.domain());
     if (typeof m !== "function") {
       var span = extent[1] - extent[0],
           target = span / m,
@@ -45,11 +44,9 @@ function d3_time_scale(linear, methods, format) {
       if (target / d3_time_scaleSteps[i - 1] < d3_time_scaleSteps[i] / target) --i;
       m = methods[i];
       k = m[1];
-      floor = m[0].floor;
       m = m[0].range;
     }
-    var ticks = m(extent[0], new Date(+extent[1] + 1), k); // inclusive upper bound
-    return floor ? ticks.map(floor) : ticks;
+    return m(extent[0], new Date(+extent[1] + 1), k); // inclusive upper bound
   };
 
   scale.tickFormat = function() {
