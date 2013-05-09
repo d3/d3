@@ -12,5 +12,5 @@ module.exports = d3;
 
 globals.forEach(function(g) {
   if (g in globalValues) global[g] = globalValues[g];
-  else delete global[g]
+  else delete global[g];
 });
