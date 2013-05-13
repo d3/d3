@@ -38,6 +38,10 @@ suite.addBatch({
         assert.equal(x(-5), "#ff4b4b");
         assert.equal(x(50), "#4ba54b");
         assert.equal(x(75), "#229122");
+      },
+      "preserves specified domain exactly, with no floating point error": function(d3) {
+        var x = d3.scale.sqrt().domain([0, 5]);
+        assert.deepEqual(x.domain(), [0, 5]);
       }
     },
 
@@ -186,6 +190,10 @@ suite.addBatch({
         assert.deepEqual(x.domain().map(f), [1, 1, 2, 3, 11]);
         var x = d3.scale.sqrt().domain([123.1, 1, 2, 3, -.9]).nice();
         assert.deepEqual(x.domain().map(f), [130, 1, 2, 3, "-10.000000"]);
+      },
+      "preserves specified domain exactly, with no floating point error": function(d3) {
+        var x = d3.scale.sqrt().domain([0, 5]).nice();
+        assert.deepEqual(x.domain(), [0, 5]);
       }
     },
 
