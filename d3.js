@@ -5403,7 +5403,7 @@ d3 = function() {
       node.depth = depth;
       nodes.push(node);
       if (childs && (n = childs.length)) {
-        var holdChildren = node.children;
+        var holdChildren = childs;
         var i = -1, n, c = node.children = [], v = 0, j = depth + 1, d;
         while (++i < n) {
           d = recurse(childs[i], j, nodes);
