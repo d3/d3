@@ -5403,6 +5403,7 @@ d3 = function() {
       node.depth = depth;
       nodes.push(node);
       if (childs && (n = childs.length)) {
+        var holdChildren = childs;
         var i = -1, n, c = node.children = [], v = 0, j = depth + 1, d;
         while (++i < n) {
           d = recurse(childs[i], j, nodes);
@@ -5412,6 +5413,7 @@ d3 = function() {
         }
         if (sort) c.sort(sort);
         if (value) node.value = v;
+        node.children = holdChildren;
       } else if (value) {
         node.value = +value.call(hierarchy, node, depth) || 0;
       }
