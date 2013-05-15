@@ -6589,9 +6589,9 @@ d3 = function() {
     }) : ",." + precision + "f");
   }
   d3.scale.log = function() {
-    return d3_scale_log(d3.scale.linear().domain([ 0, Math.LN10 ]), 10, d3_scale_logp, d3_scale_powp);
+    return d3_scale_log(d3.scale.linear().domain([ 0, Math.LN10 ]), 10, d3_scale_logp, d3_scale_powp, [ 1, 10 ]);
   };
-  function d3_scale_log(linear, base, log, pow) {
+  function d3_scale_log(linear, base, log, pow, domain) {
     function scale(x) {
       return linear(log(x));
     }
@@ -6599,10 +6599,10 @@ d3 = function() {
       return pow(linear.invert(x));
     };
     scale.domain = function(x) {
-      if (!arguments.length) return linear.domain().map(pow);
+      if (!arguments.length) return domain;
       if (x[0] < 0) log = d3_scale_logn, pow = d3_scale_pown; else log = d3_scale_logp, 
       pow = d3_scale_powp;
-      linear.domain(x.map(log));
+      linear.domain((domain = x.map(Number)).map(log));
       return scale;
     };
     scale.base = function(_) {
@@ -6611,7 +6611,7 @@ d3 = function() {
       return scale;
     };
     scale.nice = function() {
-      linear.domain(d3_scale_nice(linear.domain(), d3_scale_logNice(base)));
+      linear.domain(d3_scale_nice(domain, nice).map(log));
       return scale;
     };
     scale.ticks = function() {
@@ -6641,8 +6641,27 @@ d3 = function() {
       };
     };
     scale.copy = function() {
-      return d3_scale_log(linear.copy(), base, log, pow);
+      return d3_scale_log(linear.copy(), base, log, pow, domain);
     };
+    function nice() {
+      return log === d3_scale_logp ? {
+        floor: floor,
+        ceil: ceil
+      } : {
+        floor: function(x) {
+          return -ceil(-x);
+        },
+        ceil: function(x) {
+          return -floor(-x);
+        }
+      };
+    }
+    function floor(x) {
+      return Math.pow(base, Math.floor(Math.log(x) / Math.log(base)));
+    }
+    function ceil(x) {
+      return Math.pow(base, Math.ceil(Math.log(x) / Math.log(base)));
+    }
     return d3_scale_linearRebind(scale, linear);
   }
   var d3_scale_logFormat = d3.format(".0e");
@@ -6658,24 +6677,10 @@ d3 = function() {
   function d3_scale_pown(x) {
     return -Math.exp(-x);
   }
-  function d3_scale_logNice(base) {
-    base = Math.log(base);
-    var nice = {
-      floor: function(x) {
-        return Math.floor(x / base) * base;
-      },
-      ceil: function(x) {
-        return Math.ceil(x / base) * base;
-      }
-    };
-    return function() {
-      return nice;
-    };
-  }
   d3.scale.pow = function() {
-    return d3_scale_pow(d3.scale.linear(), 1);
+    return d3_scale_pow(d3.scale.linear(), 1, [ 0, 1 ]);
   };
-  function d3_scale_pow(linear, exponent) {
+  function d3_scale_pow(linear, exponent, domain) {
     var powp = d3_scale_powPow(exponent), powb = d3_scale_powPow(1 / exponent);
     function scale(x) {
       return linear(powp(x));
@@ -6684,28 +6689,28 @@ d3 = function() {
       return powb(linear.invert(x));
     };
     scale.domain = function(x) {
-      if (!arguments.length) return linear.domain().map(powb);
-      linear.domain(x.map(powp));
+      if (!arguments.length) return domain;
+      linear.domain((domain = x.map(Number)).map(powp));
       return scale;
     };
     scale.ticks = function(m) {
-      return d3_scale_linearTicks(scale.domain(), m);
+      return d3_scale_linearTicks(domain, m);
     };
     scale.tickFormat = function(m, format) {
-      return d3_scale_linearTickFormat(scale.domain(), m, format);
+      return d3_scale_linearTickFormat(domain, m, format);
     };
     scale.nice = function() {
-      return scale.domain(d3_scale_nice(scale.domain(), d3_scale_linearNice));
+      return scale.domain(d3_scale_nice(domain, d3_scale_linearNice));
     };
     scale.exponent = function(x) {
       if (!arguments.length) return exponent;
-      var domain = scale.domain();
       powp = d3_scale_powPow(exponent = x);
       powb = d3_scale_powPow(1 / exponent);
-      return scale.domain(domain);
+      linear.domain(domain.map(powp));
+      return scale;
     };
     scale.copy = function() {
-      return d3_scale_pow(linear.copy(), exponent);
+      return d3_scale_pow(linear.copy(), exponent, domain);
     };
     return d3_scale_linearRebind(scale, linear);
   }
