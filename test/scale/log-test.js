@@ -9,9 +9,9 @@ suite.addBatch({
     topic: load("scale/log", "interpolate/hsl").document(), // beware instanceof d3_Color
 
     "domain": {
-      "defaults to [1, 10]": function(d3) {
+      "defaults to [1, 10], exactly": function(d3) {
         var x = d3.scale.log();
-        assert.inDelta(x.domain(), [1, 10], 1e-6);
+        assert.deepEqual(x.domain(), [1, 10]);
         assert.inDelta(x(5), 0.69897, 1e-6);
       },
       "coerces domain values to numbers": function(d3) {
@@ -47,6 +47,10 @@ suite.addBatch({
         assert.equal(x(.5), "#ffb2b2");
         assert.equal(x(50), "#269326");
         assert.equal(x(75), "#108810");
+      },
+      "preserves specified domain exactly, with no floating point error": function(d3) {
+        var x = d3.scale.log().domain([.1, 1000]);
+        assert.deepEqual(x.domain(), [.1, 1000]);
       }
     },
 

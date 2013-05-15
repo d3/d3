@@ -4,10 +4,10 @@ import "nice";
 import "scale";
 
 d3.scale.log = function() {
-  return d3_scale_log(d3.scale.linear().domain([0, Math.LN10]), 10, d3_scale_logp, d3_scale_powp);
+  return d3_scale_log(d3.scale.linear().domain([0, Math.LN10]), 10, d3_scale_logp, d3_scale_powp, [1, 10]);
 };
 
-function d3_scale_log(linear, base, log, pow) {
+function d3_scale_log(linear, base, log, pow, domain) {
 
   function scale(x) {
     return linear(log(x));
@@ -18,10 +18,10 @@ function d3_scale_log(linear, base, log, pow) {
   };
 
   scale.domain = function(x) {
-    if (!arguments.length) return linear.domain().map(pow);
+    if (!arguments.length) return domain;
     if (x[0] < 0) log = d3_scale_logn, pow = d3_scale_pown;
     else log = d3_scale_logp, pow = d3_scale_powp;
-    linear.domain(x.map(log));
+    linear.domain((domain = x.map(Number)).map(log));
     return scale;
   };
 
@@ -32,7 +32,7 @@ function d3_scale_log(linear, base, log, pow) {
   };
 
   scale.nice = function() {
-    linear.domain(d3_scale_nice(linear.domain(), d3_scale_logNice(base)));
+    linear.domain(d3_scale_nice(domain, nice).map(log));
     return scale;
   };
 
@@ -73,8 +73,22 @@ function d3_scale_log(linear, base, log, pow) {
   };
 
   scale.copy = function() {
-    return d3_scale_log(linear.copy(), base, log, pow);
+    return d3_scale_log(linear.copy(), base, log, pow, domain);
   };
+
+  function nice() {
+    return log === d3_scale_logp
+        ? {floor: floor, ceil: ceil}
+        : {floor: function(x) { return -ceil(-x); }, ceil: function(x) { return -floor(-x); }};
+  }
+
+  function floor(x) {
+    return Math.pow(base, Math.floor(Math.log(x) / Math.log(base)));
+  }
+
+  function ceil(x) {
+    return Math.pow(base, Math.ceil(Math.log(x) / Math.log(base)));
+  }
 
   return d3_scale_linearRebind(scale, linear);
 }
@@ -95,13 +109,4 @@ function d3_scale_logn(x) {
 
 function d3_scale_pown(x) {
   return -Math.exp(-x);
-}
-
-function d3_scale_logNice(base) {
-  base = Math.log(base);
-  var nice = {
-    floor: function(x) { return Math.floor(x / base) * base; },
-    ceil: function(x) { return Math.ceil(x / base) * base; }
-  };
-  return function() { return nice; };
 }
