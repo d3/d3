@@ -27,15 +27,15 @@ suite.addBatch({
       assert.strictEqual(interpolate(" 10/20 100 20", "50/10 100, 20 ")(.4), "26/16 100, 20 ");
     },
     "interpolates decimal notation correctly": function(interpolate) {
-      assert.strictEqual(interpolate("1.", "2.")(.5), 1.5);
+      assert.strictEqual(interpolate("1.", "2.")(.5), "1.5");
     },
     "interpolates exponent notation correctly": function(interpolate) {
-      assert.strictEqual(interpolate("1e+3", "1e+4")(.5), 5500);
-      assert.strictEqual(interpolate("1e-3", "1e-4")(.5), 0.00055);
-      assert.strictEqual(interpolate("1.e-3", "1.e-4")(.5), 0.00055);
-      assert.strictEqual(interpolate("-1.e-3", "-1.e-4")(.5), -0.00055);
-      assert.strictEqual(interpolate("+1.e-3", "+1.e-4")(.5), 0.00055);
-      assert.strictEqual(interpolate(".1e-2", ".1e-3")(.5), 0.00055);
+      assert.strictEqual(interpolate("1e+3", "1e+4")(.5), "5500");
+      assert.strictEqual(interpolate("1e-3", "1e-4")(.5), "0.00055");
+      assert.strictEqual(interpolate("1.e-3", "1.e-4")(.5), "0.00055");
+      assert.strictEqual(interpolate("-1.e-3", "-1.e-4")(.5), "-0.00055");
+      assert.strictEqual(interpolate("+1.e-3", "+1.e-4")(.5), "0.00055");
+      assert.strictEqual(interpolate(".1e-2", ".1e-3")(.5), "0.00055");
     }
   }
 });

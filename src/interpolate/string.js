@@ -73,7 +73,9 @@ function d3_interpolateString(a, b) {
 
   // Special optimization for only a single match.
   if (s.length === 1) {
-    return s[0] == null ? q[0].x : function() { return b; };
+    return s[0] == null
+        ? (o = q[0].x, function(t) { return o(t) + ""; })
+        : function() { return b; };
   }
 
   // Otherwise, interpolate each of the numbers and rejoin the string.
