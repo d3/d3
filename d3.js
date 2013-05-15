@@ -2847,7 +2847,7 @@ d3 = function() {
               }
               listener.point(b[0], b[1]);
               if (!v) listener.lineEnd();
-            } else {
+            } else if (v) {
               listener.lineStart();
               listener.point(x, y);
             }
