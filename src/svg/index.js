@@ -10,3 +10,4 @@ import "diagonal-radial";
 import "symbol";
 import "axis";
 import "brush";
+import "transform";
