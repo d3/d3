@@ -4,6 +4,8 @@ import "cartesian";
 import "../math/abs";
 import "../math/trigonometry";
 
+d3.geo.pointInPolygon = d3_geo_pointInPolygon;
+
 function d3_geo_pointInPolygon(point, polygon) {
   var meridian = point[0],
       parallel = point[1],

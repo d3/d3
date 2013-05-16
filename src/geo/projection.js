@@ -4,6 +4,7 @@ import "../math/trigonometry";
 import "clip-antimeridian";
 import "clip-circle";
 import "clip-extent";
+import "clip-polygon";
 import "compose";
 import "geo";
 import "path";
@@ -31,6 +32,7 @@ function d3_geo_projectionMutator(projectAt) {
       preclip = d3_geo_clipAntimeridian,
       postclip = d3_identity,
       clipAngle = null,
+      clipPolygon = null,
       clipExtent = null,
       stream;
 
@@ -93,6 +95,14 @@ function d3_geo_projectionMutator(projectAt) {
   };
 
   d3.rebind(projection, projectResample, "precision");
+
+  projection.clipPolygon = function(_) {
+    if (!arguments.length) return clipPolygon;
+    clipAngle = null;
+    clipPolygon = _;
+    preclip = _ == null ? d3_geo_clipAntimeridian : d3_geo_clipPolygon(_);
+    return reset();
+  };
 
   function reset() {
     projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);

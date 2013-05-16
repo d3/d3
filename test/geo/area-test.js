@@ -118,6 +118,16 @@ suite.addBatch({
             ]
           }), π * (Math.SQRT2 - 1), 1e-5);
         },
+        "100° with 80° hole": function(area) {
+          var circle = _.geo.circle().precision(.1);
+          assert.inDelta(area({
+            type: "Polygon",
+            coordinates: [
+              circle.angle(100)().coordinates[0],
+              circle.angle(80)().coordinates[0].reverse()
+            ]
+          }), 2.182127, 1e-6);
+        },
         "45° holes at [0°, 0°] and [0°, 90°]": function(area) {
           var circle = _.geo.circle().precision(.1).angle(45);
           assert.inDelta(area({
@@ -149,6 +159,11 @@ suite.addBatch({
         "45°, 30°": function(area) {
           assert.inDelta(area(stripes(45, 30)), π * (Math.SQRT2 - 1), 1e-5);
         }
+      },
+      "narrow strip hole, length 340°": function(area) {
+        assert.inDelta(area({type: "Polygon", coordinates: [
+          [[-170, -10], [0, -10], [170, -10], [170, 10], [0, 10], [-170, 10], [-170, -10]]
+        ]}), 3.733637, 1e-6);
       }
     },
     "MultiPolygon": {

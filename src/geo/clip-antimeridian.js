@@ -5,10 +5,11 @@ import "clip";
 import "point-in-polygon";
 
 var d3_geo_clipAntimeridian = d3_geo_clip(
-    d3_true,
+    d3_geo_clipAntimeridianVisible,
     d3_geo_clipAntimeridianLine,
     d3_geo_clipAntimeridianInterpolate,
-    [-π, -π / 2]);
+    [-π, -π / 2],
+    d3_geo_clipSort);
 
 // Takes a line and cuts into visible segments. Return values:
 //   0: there were intersections or the line was empty.
@@ -27,7 +28,7 @@ function d3_geo_clipAntimeridianLine(listener) {
       clean = 1;
     },
     point: function(λ1, φ1) {
-      var sλ1 = λ1 > 0 ? π : -π,
+      var sλ1 = λ1 > 0 ? π - ε : -π,
           dλ = abs(λ1 - λ0);
       if (abs(dλ - π) < ε) { // line crosses a pole
         listener.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? halfπ : -halfπ);
@@ -77,20 +78,27 @@ function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
     φ = direction * halfπ;
     listener.point(-π,  φ);
     listener.point( 0,  φ);
-    listener.point( π,  φ);
-    listener.point( π,  0);
-    listener.point( π, -φ);
+    listener.point( π - ε,  φ);
+    listener.point( π - ε,  0);
+    listener.point( π - ε, -φ);
     listener.point( 0, -φ);
     listener.point(-π, -φ);
     listener.point(-π,  0);
     listener.point(-π,  φ);
   } else if (abs(from[0] - to[0]) > ε) {
-    var s = from[0] < to[0] ? π : -π;
+    var s0 = -π,
+        s1 = π - ε,
+        s = (from[0] < to[0] ? 1 : -1) * π;
+    if (to[0] < from[0]) s0 = π - ε, s1 = -π;
     φ = direction * s / 2;
-    listener.point(-s, φ);
+    listener.point(s0, φ);
     listener.point( 0, φ);
-    listener.point( s, φ);
+    listener.point(s1, φ);
   } else {
     listener.point(to[0], to[1]);
   }
+}
+
+function d3_geo_clipAntimeridianVisible(λ) {
+  return abs(abs(λ) - π) > ε;
 }

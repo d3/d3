@@ -40,8 +40,15 @@ function d3_geo_cartesianScale(vector, k) {
 }
 
 function d3_geo_cartesianNormalize(d) {
-  var l = Math.sqrt(d[0] * d[0] + d[1] * d[1] + d[2] * d[2]);
+  var l = Math.sqrt(d3_geo_cartesianDot(d, d));
   d[0] /= l;
   d[1] /= l;
   d[2] /= l;
+}
+
+function d3_geo_cartesianEqual(a, b) {
+  var dx = b[0] - a[0],
+      dy = b[1] - a[1],
+      dz = b[2] - a[2];
+  return dx * dx + dy * dy + dz * dz < ε2 * ε2;
 }

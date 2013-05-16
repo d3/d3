@@ -3,7 +3,7 @@ import "../core/noop";
 import "../math/trigonometry";
 import "clip-polygon-rejoin";
 
-function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
+function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart, sort) {
   return function(rotate, listener) {
     var line = clipLine(listener),
         rotatedClipStart = rotate.invert(clipStart[0], clipStart[1]);
@@ -28,7 +28,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
         segments = d3.merge(segments);
         var clipStartInside = d3_geo_pointInPolygon(rotatedClipStart, polygon);
         if (segments.length) {
-          d3_geo_clipPolygonRejoin(segments, d3_geo_clipSort, clipStartInside, interpolate, listener);
+          d3_geo_clipPolygonRejoin(segments, sort, clipStartInside, interpolate, listener);
         } else if (clipStartInside) {
           listener.lineStart();
           interpolate(null, null, 1, listener);
@@ -57,17 +57,16 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
     function lineStart() { clip.point = pointLine; line.lineStart(); }
     function lineEnd() { clip.point = point; line.lineEnd(); }
 
-    var segments;
-
-    var buffer = d3_geo_clipBufferListener(),
+    var segments,
+        buffer = d3_geo_clipBufferListener(),
         ringListener = clipLine(buffer),
         polygon,
         ring;
 
-    function pointRing(λ, φ) {
+    function pointRing(λ, φ, close) {
       ring.push([λ, φ]);
       var point = rotate(λ, φ);
-      ringListener.point(point[0], point[1]);
+      ringListener.point(point[0], point[1], close);
     }
 
     function ringStart() {
@@ -76,7 +75,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
     }
 
     function ringEnd() {
-      pointRing(ring[0][0], ring[0][1]);
+      pointRing(ring[0][0], ring[0][1], true);
       ringListener.lineEnd();
 
       var clean = ringListener.clean(),
@@ -122,7 +121,11 @@ function d3_geo_clipBufferListener() {
       line;
   return {
     lineStart: function() { lines.push(line = []); },
-    point: function(λ, φ) { line.push([λ, φ]); },
+    point: function(λ, φ, i, t) {
+      var point = [λ, φ];
+      if (arguments.length > 2) point.index = i, point.t = t;
+      line.push(point);
+    },
     lineEnd: d3_noop,
     buffer: function() {
       var buffer = lines;
