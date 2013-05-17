@@ -1,0 +1,8 @@
+{
+  "name": "d3",
+  "version": "3.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mbostock/d3.git"
+  }
+}
