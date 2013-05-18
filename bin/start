@@ -1,3 +1,7 @@
 #!/usr/bin/env node
 
-console.log("d3 = (function(){\n  var d3 = {version: " + JSON.stringify(require("../package.json").version) + "}; // semver");
+console.log("d3 = (function environment(d3_window){\n"
+  + "  var d3 = {\n"
+  + "    version: " + JSON.stringify(require("../package.json").version) + ",\n"
+  + "    environment: environment\n"
+  + "  };");
