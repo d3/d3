@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-var version = 'version:' + JSON.stringify(require("../package.json").version)
-  , env = 'env: d3_env'
-  , keys = [version, env].join(', ')
-
-console.log("d3 = (function d3_env(d3_window){\n  var d3 = {"+ keys +"};");
+console.log("d3 = (function environment(d3_window){\n"
+  + "  var d3 = {\n"
+  + "    version: " + JSON.stringify(require("../package.json").version) + ",\n"
+  + "    environment: environment\n"
+  + "  };");

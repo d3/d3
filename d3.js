@@ -1,11 +1,12 @@
-d3 = function() {
+d3 = function environment(d3_window) {
   var d3 = {
-    version: "3.1.7"
+    version: "3.1.7",
+    environment: environment
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
   };
-  var d3_document = document, d3_window = window;
+  var d3_document = d3_window.document;
   try {
     d3_document.createElement("div").style.setProperty("opacity", 0, "");
   } catch (error) {
@@ -8549,4 +8550,4 @@ d3 = function() {
     return request.responseXML;
   }
   return d3;
-}();
+}(window);
