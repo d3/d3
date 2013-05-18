@@ -1,3 +1,10 @@
+import "../core/document";
+import "../core/rebind";
+import "../event/event";
+import "../event/mouse";
+import "../event/touches";
+import "behavior";
+
 d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
       origin = null;
@@ -58,17 +65,11 @@ d3.behavior.drag = function() {
       // if moved, prevent the mouseup (and possibly click) from propagating
       if (moved) {
         d3_eventCancel();
-        if (d3.event.target === eventTarget) w.on("click.drag", click, true);
+        if (d3.event.target === eventTarget) d3_eventSuppress(w, "click");
       }
 
       w .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null)
         .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-    }
-
-    // prevent the subsequent click from propagating (e.g., for anchors)
-    function click() {
-      d3_eventCancel();
-      w.on("click.drag", null);
     }
   }
 

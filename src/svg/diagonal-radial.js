@@ -1,3 +1,7 @@
+import "arc";
+import "diagonal";
+import "svg";
+
 d3.svg.diagonal.radial = function() {
   var diagonal = d3.svg.diagonal(),
       projection = d3_svg_diagonalProjection,

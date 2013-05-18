@@ -1,3 +1,5 @@
+import "scale";
+
 d3.scale.quantize = function() {
   return d3_scale_quantize(0, 1, [0, 1]);
 };

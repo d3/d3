@@ -1,3 +1,6 @@
+import "../arrays/range";
+import "../math/trigonometry";
+
 d3.layout.chord = function() {
   var chord = {},
       chords,

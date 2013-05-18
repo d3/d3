@@ -1,3 +1,7 @@
+import "day";
+import "interval";
+import "time";
+
 d3.time.month = d3_time_interval(function(date) {
   date = d3.time.day(date);
   date.setDate(1);

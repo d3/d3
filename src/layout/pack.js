@@ -1,3 +1,7 @@
+import "layout";
+import "hierarchy";
+import "tree";
+
 d3.layout.pack = function() {
   var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
       padding = 0,

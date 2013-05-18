@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.svg.arc");
 
 suite.addBatch({
   "arc": {
-    topic: function() {
-      return d3.svg.arc;
-    },
+    topic: load("svg/arc").expression("d3.svg.arc"),
 
     "innerRadius defaults to a function accessor": function(arc) {
       var a = arc().outerRadius(100).startAngle(0).endAngle(Math.PI);
@@ -139,7 +136,7 @@ suite.addBatch({
       var c = arc().innerRadius(100).outerRadius(200).startAngle(Math.PI).endAngle(2 * Math.PI).centroid();
       assert.inDelta(c[0], -150, 1e-6);
       assert.inDelta(c[1], 0, 1e-6);
-    },
+    }
   }
 });
 

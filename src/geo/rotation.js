@@ -1,4 +1,24 @@
-// Note: |δλ| and |δφ| must be < 2π
+import "../math/trigonometry";
+import "equirectangular";
+import "geo";
+
+d3.geo.rotation = function(rotate) {
+  rotate = d3_geo_rotation(rotate[0] % 360 * d3_radians, rotate[1] * d3_radians, rotate.length > 2 ? rotate[2] * d3_radians : 0);
+
+  function forward(coordinates) {
+    coordinates = rotate(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+    return coordinates[0] *= d3_degrees, coordinates[1] *= d3_degrees, coordinates;
+  }
+
+  forward.invert = function(coordinates) {
+    coordinates = rotate.invert(coordinates[0] * d3_radians, coordinates[1] * d3_radians);
+    return coordinates[0] *= d3_degrees, coordinates[1] *= d3_degrees, coordinates;
+  };
+
+  return forward;
+};
+
+// Note: |δλ| must be < 2π
 function d3_geo_rotation(δλ, δφ, δγ) {
   return δλ ? (δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ))
     : d3_geo_rotationλ(δλ))

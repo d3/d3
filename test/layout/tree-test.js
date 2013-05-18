@@ -1,18 +1,18 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.layout.tree");
 
 suite.addBatch({
   "tree": {
-    topic: d3.layout.tree,
+    topic: load("layout/tree").expression("d3.layout.tree"),
     "can handle an empty children array": function(tree) {
-      assert.deepEqual(tree.nodes({children: []}).map(layout), [
+      var t = tree();
+      assert.deepEqual(t.nodes({children: []}).map(layout), [
         {depth: 0, x: 0.5, y: 0}
       ]);
-      assert.deepEqual(tree.nodes({children: [
+      assert.deepEqual(t.nodes({children: [
         {children: []},
         {children: [{}]},
         {children: [{}]}
@@ -26,7 +26,8 @@ suite.addBatch({
       ]);
     },
     "can handle a single node": function(tree) {
-      assert.deepEqual(tree.nodes({value: 0}).map(layout), [
+      var t = tree();
+      assert.deepEqual(t.nodes({value: 0}).map(layout), [
         {depth: 0, x: 0.5, y: 0}
       ]);
     }

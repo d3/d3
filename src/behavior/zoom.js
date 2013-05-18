@@ -1,3 +1,11 @@
+import "../core/document";
+import "../core/rebind";
+import "../event/event";
+import "../event/mouse";
+import "../event/touches";
+import "../selection/selection";
+import "behavior";
+
 d3.behavior.zoom = function() {
   var translate = [0, 0],
       translate0, // translate when we started zooming (to avoid drift)
@@ -108,12 +116,7 @@ d3.behavior.zoom = function() {
     function mouseup() {
       if (moved) d3_eventCancel();
       w.on("mousemove.zoom", null).on("mouseup.zoom", null);
-      if (moved && d3.event.target === eventTarget) w.on("click.zoom", click, true);
-    }
-
-    function click() {
-      d3_eventCancel();
-      w.on("click.zoom", null);
+      if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
     }
   }
 
@@ -177,6 +180,6 @@ var d3_behavior_zoomInfinity = [0, Infinity]; // default scale extent
 
 // https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/wheel
 var d3_behavior_zoomDelta, d3_behavior_zoomWheel
-    = "onwheel" in document ? (d3_behavior_zoomDelta = function() { return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1); }, "wheel")
-    : "onmousewheel" in document ? (d3_behavior_zoomDelta = function() { return d3.event.wheelDelta; }, "mousewheel")
+    = "onwheel" in d3_document ? (d3_behavior_zoomDelta = function() { return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1); }, "wheel")
+    : "onmousewheel" in d3_document ? (d3_behavior_zoomDelta = function() { return d3.event.wheelDelta; }, "mousewheel")
     : (d3_behavior_zoomDelta = function() { return -d3.event.detail; }, "MozMousePixelScroll");

@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.0.8",
+  "version": "3.1.7",
   "description": "A small, free JavaScript library for manipulating documents based on data.",
   "keywords": [
     "dom",
@@ -15,6 +15,12 @@
     "name": "Mike Bostock",
     "url": "http://bost.ocks.org/mike"
   },
+  "contributors": [
+    {
+      "name": "Jason Davies",
+      "url": "http://jasondavies.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mbostock/d3.git"
@@ -28,13 +34,20 @@
     }
   },
   "dependencies": {
-    "jsdom": "0.3.x"
+    "jsdom": "~0.5.3"
   },
   "devDependencies": {
-    "uglify-js": "2.2.x",
+    "smash": "~0.0.8",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2.git#3bd7ca9961125b39dcd54d2182cb72bd1ca6006e",
     "vows": "0.7.x"
   },
   "scripts": {
-    "test": "./node_modules/vows/bin/vows"
-  }
+    "test": "node_modules/.bin/vows"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/mbostock/d3/blob/master/LICENSE"
+    }
+  ]
 }

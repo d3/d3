@@ -1,3 +1,7 @@
+import "../core/functor";
+import "../math/trigonometry";
+import "svg";
+
 d3.svg.arc = function() {
   var innerRadius = d3_svg_arcInnerRadius,
       outerRadius = d3_svg_arcOuterRadius,

@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.svg.line");
 
 suite.addBatch({
   "line": {
-    topic: function() {
-      return d3.svg.line;
-    },
+    topic: load("svg/line").expression("d3.svg.line"),
 
     "x defaults to a function accessor": function(line) {
       var l = line();

@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.geo.stream");
 
 suite.addBatch({
   "stream": {
-    topic: function() {
-      return d3.geo.stream;
-    },
+    topic: load("geo/stream").expression("d3.geo.stream"),
     "does not allow null input": function(stream) {
       try {
         stream(null);
@@ -21,6 +18,12 @@ suite.addBatch({
       stream({type: "Feature", geometry: {type: "Unknown"}}, {});
       stream({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Unknown"}}]}, {});
       stream({type: "GeometryCollection", geometries: [{type: "Unknown"}]}, {});
+    },
+    "ignores null geometries": function(stream) {
+      stream(null, {});
+      stream({type: "Feature", geometry: null}, {});
+      stream({type: "FeatureCollection", features: [{type: "Feature", geometry: null}]}, {});
+      stream({type: "GeometryCollection", geometries: [null]}, {});
     },
     "returns void": function(stream) {
       assert.isUndefined(stream({type: "Point", coordinates: [1, 2]}, {point: function() { return true; }}));

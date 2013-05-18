@@ -1,3 +1,6 @@
+import "cartesian";
+import "stream";
+
 function d3_geo_resample(project) {
   var δ2 = .5, // precision, px²
       maxDepth = 16;

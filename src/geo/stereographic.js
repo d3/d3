@@ -1,3 +1,7 @@
+import "azimuthal";
+import "geo";
+import "projection";
+
 var d3_geo_stereographic = d3_geo_azimuthal(
   function(cosλcosφ) { return 1 / (1 + cosλcosφ); },
   function(ρ) { return 2 * Math.atan(ρ); }

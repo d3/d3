@@ -1,3 +1,7 @@
+import "../arrays/merge";
+import "../core/rebind";
+import "layout";
+
 d3.layout.hierarchy = function() {
   var sort = d3_layout_hierarchySort,
       children = d3_layout_hierarchyChildren,

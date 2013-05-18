@@ -1,5 +1,9 @@
 {
   "name": "d3",
-  "version": "3.0.8",
-  "main": "./d3.js"
+  "version": "3.1.7",
+  "main": "index-browserify.js",
+  "scripts": [
+    "index-browserify.js",
+    "d3.js"
+  ]
 }

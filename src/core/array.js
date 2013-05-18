@@ -1,3 +1,5 @@
+import "document";
+
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
