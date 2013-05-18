@@ -1,2 +1,2 @@
-var d3_document = document,
-    d3_window = window;
+var d3_window = win || window,
+    d3_document = d3_window.document;
