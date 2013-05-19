@@ -3387,7 +3387,7 @@ d3 = function() {
       hawaii.translate([ x - .205 * k, y + .212 * k ]).clipExtent([ [ x - .214 * k, y + .166 * k ], [ x - .115 * k, y + .234 * k ] ]);
       return albersUsa;
     };
-    return albersUsa.scale(1056);
+    return albersUsa.scale(1070);
   };
   function d3_geo_albersUsaStream(projections) {
     return function(stream) {
@@ -3687,7 +3687,7 @@ d3 = function() {
     };
   }
   d3.geo.albers = function() {
-    return d3.geo.conicEqualArea().rotate([ 96, 0 ]).center([ -.6, 38.7 ]).parallels([ 29.5, 45.5 ]).scale(1056);
+    return d3.geo.conicEqualArea().rotate([ 96, 0 ]).center([ -.6, 38.7 ]).parallels([ 29.5, 45.5 ]).scale(1070);
   };
   function d3_geo_azimuthal(scale, angle) {
     function azimuthal(λ, φ) {

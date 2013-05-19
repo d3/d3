@@ -64,7 +64,7 @@ d3.geo.albersUsa = function() {
     return albersUsa;
   };
 
-  return albersUsa.scale(1056);
+  return albersUsa.scale(1070);
 };
 
 // A naïve multi-projection stream.
