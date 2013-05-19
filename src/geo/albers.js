@@ -1,6 +1,7 @@
 import "conic-equal-area";
 import "geo";
 
+// ESRI:102003
 d3.geo.albers = function() {
   return d3.geo.conicEqualArea()
       .rotate([96, 0])

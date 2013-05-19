@@ -1,20 +1,23 @@
 import "conic-equal-area";
 import "geo";
 
-// A composite projection for the United States, 960×500. The set of standard
-// parallels for each region comes from USGS, which is published here:
+// A composite projection for the United States, configured by default for
+// 960×500. Also works quite well at 960×600 with scale 1285. The set of
+// standard parallels for each region comes from USGS, which is published here:
 // http://egsc.usgs.gov/isb/pubs/MapProjections/projections.html#albers
 d3.geo.albersUsa = function() {
   var lower48 = d3.geo.albers();
 
+  // EPSG:3338
   var alaska = d3.geo.conicEqualArea()
-      .rotate([160, 0, -35])
-      .center([45, 44])
+      .rotate([154, 0])
+      .center([-2, 58.5])
       .parallels([55, 65]);
 
+  // ESRI:102007
   var hawaii = d3.geo.conicEqualArea()
-      .rotate([160, 0])
-      .center([0, 20])
+      .rotate([157, 0])
+      .center([-3, 19.9])
       .parallels([8, 18]);
 
   function albersUsa(coordinates) {
@@ -27,8 +30,8 @@ d3.geo.albersUsa = function() {
         t = lower48.translate(),
         x = (coordinates[0] - t[0]) / k,
         y = (coordinates[1] - t[1]) / k;
-    return (y >= .123 && y < .230 && x >= -.420 && x < -.214 ? alaska
-        : y >= .162 && y < .230 && x >= -.214 && x < -.115 ? hawaii
+    return (y >= .120 && y < .234 && x >= -.425 && x < -.214 ? alaska
+        : y >= .166 && y < .234 && x >= -.214 && x < -.115 ? hawaii
         : lower48).invert(coordinates);
   };
 
@@ -51,12 +54,12 @@ d3.geo.albersUsa = function() {
         .clipExtent([[x - .455 * k, y - .238 * k], [x + .455 * k, y + .238 * k]]);
 
     alaska
-        .translate([x - .307 * k, y + .197 * k])
-        .clipExtent([[x - .420 * k, y + .123 * k], [x - .214 * k, y + .230 * k]]);
+        .translate([x - .307 * k, y + .201 * k])
+        .clipExtent([[x - .425 * k, y + .120 * k], [x - .214 * k, y + .234 * k]]);
 
     hawaii
-        .translate([x - .205 * k, y + .208 * k])
-        .clipExtent([[x - .214 * k, y + .162 * k], [x - .115 * k, y + .230 * k]]);
+        .translate([x - .205 * k, y + .212 * k])
+        .clipExtent([[x - .214 * k, y + .166 * k], [x - .115 * k, y + .234 * k]]);
 
     return albersUsa;
   };
