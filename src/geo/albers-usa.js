@@ -5,10 +5,7 @@ import "geo";
 // parallels for each region comes from USGS, which is published here:
 // http://egsc.usgs.gov/isb/pubs/MapProjections/projections.html#albers
 d3.geo.albersUsa = function() {
-  var lower48 = d3.geo.conicEqualArea()
-      .rotate([96, 0])
-      .center([-.6, 38.7])
-      .parallels([29.5, 45.5]);
+  var lower48 = d3.geo.albers();
 
   var alaska = d3.geo.conicEqualArea()
       .rotate([160, 0, -35])

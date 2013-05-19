@@ -3360,7 +3360,7 @@ d3 = function() {
     return d3_geo_conic(d3_geo_conicEqualArea);
   }).raw = d3_geo_conicEqualArea;
   d3.geo.albersUsa = function() {
-    var lower48 = d3.geo.conicEqualArea().rotate([ 96, 0 ]).center([ -.6, 38.7 ]).parallels([ 29.5, 45.5 ]);
+    var lower48 = d3.geo.albers();
     var alaska = d3.geo.conicEqualArea().rotate([ 160, 0, -35 ]).center([ 45, 44 ]).parallels([ 55, 65 ]);
     var hawaii = d3.geo.conicEqualArea().rotate([ 160, 0 ]).center([ 0, 20 ]).parallels([ 8, 18 ]);
     function albersUsa(coordinates) {
