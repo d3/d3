@@ -334,13 +334,13 @@ suite.addBatch({
       },
       "coerces point radius to a number": {
         "when the radius is specified as a constant": function(path) {
-          var p = path().context(testContext).pointRadius("6");
+          var p = path().projection(null).context(testContext).pointRadius("6");
           assert.strictEqual(p.pointRadius(), 6);
           p({type: "Point", coordinates: [0, 0]});
           assert.strictEqual(testContext.buffer().filter(function(d) { return d.type === "arc"; })[0].r, 6);
         },
         "when the radius is specified as a function": function(path) {
-          var p = path().context(testContext).pointRadius(function() { return "6"; });
+          var p = path().projection(null).context(testContext).pointRadius(function() { return "6"; });
           p({type: "Point", coordinates: [0, 0]});
           assert.strictEqual(testContext.buffer().filter(function(d) { return d.type === "arc"; })[0].r, 6);
         }
