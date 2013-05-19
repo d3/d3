@@ -30,8 +30,8 @@ d3.geo.albersUsa = function() {
         t = lower48.translate(),
         x = (coordinates[0] - t[0]) / k,
         y = (coordinates[1] - t[1]) / k;
-    return (y >= .123 && y < .230 && x >= -.427 && x < -.215 ? alaska
-        : y >= .160 && y < .230 && x >= -.215 && x < -.115 ? hawaii
+    return (y >= .123 && y < .230 && x >= -.420 && x < -.214 ? alaska
+        : y >= .162 && y < .230 && x >= -.214 && x < -.115 ? hawaii
         : lower48).invert(coordinates);
   };
 
@@ -55,11 +55,11 @@ d3.geo.albersUsa = function() {
 
     alaska
         .translate([x - .307 * k, y + .197 * k])
-        .clipExtent([[x - .427 * k, y + .123 * k], [x - .215 * k, y + .230 * k]]);
+        .clipExtent([[x - .420 * k, y + .123 * k], [x - .214 * k, y + .230 * k]]);
 
     hawaii
-        .translate([x - .205 * k, y + .205 * k])
-        .clipExtent([[x - .215 * k, y + .160 * k], [x - .115 * k, y + .230 * k]]);
+        .translate([x - .205 * k, y + .208 * k])
+        .clipExtent([[x - .214 * k, y + .162 * k], [x - .115 * k, y + .230 * k]]);
 
     return albersUsa;
   };
@@ -74,11 +74,11 @@ function d3_geo_albersUsaStream(projections) {
     var streams = projections.map(function(p) { return p.stream(stream); });
     return {
       point: function(x, y) { streams.forEach(function(s) { s.point(x, y); }); },
-      sphere: function(x, y) { streams.forEach(function(s) { s.sphere(); }); },
-      lineStart: function(x, y) { streams.forEach(function(s) { s.lineStart(); }); },
-      lineEnd: function(x, y) { streams.forEach(function(s) { s.lineEnd(); }); },
-      polygonStart: function(x, y) { streams.forEach(function(s) { s.polygonStart(); }); },
-      polygonEnd: function(x, y) { streams.forEach(function(s) { s.polygonEnd(); }); }
+      sphere: function() { streams.forEach(function(s) { s.sphere(); }); },
+      lineStart: function() { streams.forEach(function(s) { s.lineStart(); }); },
+      lineEnd: function() { streams.forEach(function(s) { s.lineEnd(); }); },
+      polygonStart: function() { streams.forEach(function(s) { s.polygonStart(); }); },
+      polygonEnd: function() { streams.forEach(function(s) { s.polygonEnd(); }); }
     };
   };
 }

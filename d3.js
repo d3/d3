@@ -3364,12 +3364,12 @@ d3 = function() {
     var alaska = d3.geo.conicEqualArea().rotate([ 160, 0, -35 ]).center([ 45, 44 ]).parallels([ 55, 65 ]);
     var hawaii = d3.geo.conicEqualArea().rotate([ 160, 0 ]).center([ 0, 20 ]).parallels([ 8, 18 ]);
     function albersUsa(coordinates) {
-      var y = point[0], x = point[1];
+      var y = coordinates[0], x = coordinates[1];
       return (x > 50 ? alaska : y < -140 ? hawaii : lower48)(coordinates);
     }
     albersUsa.invert = function(coordinates) {
       var k = lower48.scale(), t = lower48.translate(), x = (coordinates[0] - t[0]) / k, y = (coordinates[1] - t[1]) / k;
-      return (y >= .123 && y < .23 && x >= -.427 && x < -.215 ? alaska : y >= .16 && y < .23 && x >= -.215 && x < -.115 ? hawaii : lower48).invert(coordinates);
+      return (y >= .123 && y < .23 && x >= -.42 && x < -.214 ? alaska : y >= .162 && y < .23 && x >= -.214 && x < -.115 ? hawaii : lower48).invert(coordinates);
     };
     albersUsa.stream = d3_geo_albersUsaStream([ lower48, alaska, hawaii ]);
     albersUsa.scale = function(_) {
@@ -3383,8 +3383,8 @@ d3 = function() {
       if (!arguments.length) return lower48.translate();
       var k = lower48.scale(), x = +_[0], y = +_[1];
       lower48.translate(_).clipExtent([ [ x - .455 * k, y - .238 * k ], [ x + .455 * k, y + .238 * k ] ]);
-      alaska.translate([ x - .307 * k, y + .197 * k ]).clipExtent([ [ x - .427 * k, y + .123 * k ], [ x - .215 * k, y + .23 * k ] ]);
-      hawaii.translate([ x - .205 * k, y + .205 * k ]).clipExtent([ [ x - .215 * k, y + .16 * k ], [ x - .115 * k, y + .23 * k ] ]);
+      alaska.translate([ x - .307 * k, y + .197 * k ]).clipExtent([ [ x - .42 * k, y + .123 * k ], [ x - .214 * k, y + .23 * k ] ]);
+      hawaii.translate([ x - .205 * k, y + .208 * k ]).clipExtent([ [ x - .214 * k, y + .162 * k ], [ x - .115 * k, y + .23 * k ] ]);
       return albersUsa;
     };
     return albersUsa.scale(1056);
@@ -3400,27 +3400,27 @@ d3 = function() {
             s.point(x, y);
           });
         },
-        sphere: function(x, y) {
+        sphere: function() {
           streams.forEach(function(s) {
             s.sphere();
           });
         },
-        lineStart: function(x, y) {
+        lineStart: function() {
           streams.forEach(function(s) {
             s.lineStart();
           });
         },
-        lineEnd: function(x, y) {
+        lineEnd: function() {
           streams.forEach(function(s) {
             s.lineEnd();
           });
         },
-        polygonStart: function(x, y) {
+        polygonStart: function() {
           streams.forEach(function(s) {
             s.polygonStart();
           });
         },
-        polygonEnd: function(x, y) {
+        polygonEnd: function() {
           streams.forEach(function(s) {
             s.polygonEnd();
           });
