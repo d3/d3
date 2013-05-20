@@ -3482,7 +3482,7 @@ d3 = function() {
     if (y > d3_geo_pathBoundsY1) d3_geo_pathBoundsY1 = y;
   }
   function d3_geo_pathBuffer() {
-    var pointCircle = d3_geo_pathCircle(4.5), buffer = [];
+    var pointCircle = d3_geo_pathBufferCircle(4.5), buffer = [];
     var stream = {
       point: point,
       lineStart: function() {
@@ -3497,7 +3497,7 @@ d3 = function() {
         stream.point = point;
       },
       pointRadius: function(_) {
-        pointCircle = d3_geo_pathCircle(_);
+        pointCircle = d3_geo_pathBufferCircle(_);
         return stream;
       },
       result: function() {
@@ -3525,6 +3525,9 @@ d3 = function() {
       buffer.push("Z");
     }
     return stream;
+  }
+  function d3_geo_pathBufferCircle(radius) {
+    return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + 2 * radius + "z";
   }
   var d3_geo_pathCentroid = {
     point: d3_geo_pathCentroidPoint,
@@ -3630,9 +3633,12 @@ d3 = function() {
     return stream;
   }
   d3.geo.path = function() {
-    var pointRadius = 4.5, projection, context, projectStream, contextStream;
+    var pointRadius = 4.5, projection, context, projectStream, contextStream, objectStream;
     function path(object) {
-      if (object) d3.geo.stream(object, projectStream(contextStream.pointRadius(typeof pointRadius === "function" ? +pointRadius.apply(this, arguments) : pointRadius)));
+      if (object) {
+        if (typeof pointRadius === "function") contextStream.pointRadius(+pointRadius.apply(this, arguments));
+        d3.geo.stream(object, objectStream);
+      }
       return contextStream.result();
     }
     path.area = function(object) {
@@ -3653,23 +3659,23 @@ d3 = function() {
     path.projection = function(_) {
       if (!arguments.length) return projection;
       projectStream = (projection = _) ? _.stream || d3_geo_pathProjectStream(_) : d3_identity;
+      objectStream = projectStream(contextStream);
       return path;
     };
     path.context = function(_) {
       if (!arguments.length) return context;
       contextStream = (context = _) == null ? new d3_geo_pathBuffer() : new d3_geo_pathContext(_);
+      objectStream = projectStream(contextStream);
       return path;
     };
     path.pointRadius = function(_) {
       if (!arguments.length) return pointRadius;
-      pointRadius = typeof _ === "function" ? _ : +_;
+      pointRadius = typeof _ === "function" ? _ : (_ = +_, contextStream.pointRadius(_), 
+      _);
       return path;
     };
     return path.projection(d3.geo.albersUsa()).context(null);
   };
-  function d3_geo_pathCircle(radius) {
-    return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
-  }
   function d3_geo_pathProjectStream(project) {
     var resample = d3_geo_resample(function(λ, φ) {
       return project([ λ * d3_degrees, φ * d3_degrees ]);
