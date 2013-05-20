@@ -21,7 +21,7 @@ function d3_geo_conicEqualArea(φ0, φ1) {
     var ρ0_y = ρ0 - y;
     return [
       Math.atan2(x, ρ0_y) / n,
-      Math.asin((C - (x * x + ρ0_y * ρ0_y) * n * n) / (2 * n))
+      d3_asin((C - (x * x + ρ0_y * ρ0_y) * n * n) / (2 * n))
     ];
   };
 
