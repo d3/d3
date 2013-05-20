@@ -1,9 +1,11 @@
-{
+#!/usr/bin/env node
+
+console.log(JSON.stringify({
   "name": "d3",
-  "version": "3.1.7",
+  "version": require("../package.json").version,
   "main": "index-browserify.js",
   "repository": {
     "type": "git",
     "url": "git://github.com/mbostock/d3.git"
   }
-}
+}, null, 2));
