@@ -21,9 +21,19 @@ d3.geo.albersUsa = function() {
       .center([-3, 19.9])
       .parallels([8, 18]);
 
+  var point,
+      pointStream = {point: function(x, y) { point = [x, y]; }},
+      lower48Point,
+      alaskaPoint,
+      hawaiiPoint;
+
   function albersUsa(coordinates) {
-    var y = coordinates[0], x = coordinates[1];
-    return (x > 50 ? alaska : y < -140 ? hawaii : lower48)(coordinates);
+    var x = coordinates[0], y = coordinates[1];
+    point = null;
+    (lower48Point(x, y), point)
+        || (alaskaPoint(x, y), point)
+        || hawaiiPoint(x, y);
+    return point;
   }
 
   albersUsa.invert = function(coordinates) {
@@ -97,17 +107,20 @@ d3.geo.albersUsa = function() {
     if (!arguments.length) return lower48.translate();
     var k = lower48.scale(), x = +_[0], y = +_[1];
 
-    lower48
+    lower48Point = lower48
         .translate(_)
-        .clipExtent([[x - .455 * k, y - .238 * k], [x + .455 * k, y + .238 * k]]);
+        .clipExtent([[x - .455 * k, y - .238 * k], [x + .455 * k, y + .238 * k]])
+        .stream(pointStream).point;
 
-    alaska
+    alaskaPoint = alaska
         .translate([x - .307 * k, y + .201 * k])
-        .clipExtent([[x - .425 * k + ε, y + .120 * k + ε], [x - .214 * k - ε, y + .234 * k - ε]]);
+        .clipExtent([[x - .425 * k + ε, y + .120 * k + ε], [x - .214 * k - ε, y + .234 * k - ε]])
+        .stream(pointStream).point;
 
-    hawaii
+    hawaiiPoint = hawaii
         .translate([x - .205 * k, y + .212 * k])
-        .clipExtent([[x - .214 * k + ε, y + .166 * k + ε], [x - .115 * k - ε, y + .234 * k - ε]]);
+        .clipExtent([[x - .214 * k + ε, y + .166 * k + ε], [x - .115 * k - ε, y + .234 * k - ε]])
+        .stream(pointStream).point;
 
     return albersUsa;
   };
