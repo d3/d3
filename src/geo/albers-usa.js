@@ -36,7 +36,8 @@ d3.geo.albersUsa = function() {
   };
 
   // A naïve multi-projection stream.
-  // It probably only works because clipping buffers internally.
+  // The projections must have mutually exclusive clip regions on the sphere,
+  // as this will avoid emitting interleaving lines and polygons.
   albersUsa.stream = function(stream) {
     var lower48Stream = lower48.stream(stream),
         alaskaStream = alaska.stream(stream),
