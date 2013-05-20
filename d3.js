@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.1.7"
+    version: "3.1.8"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -3352,63 +3352,94 @@ d3 = function() {
     }
     forward.invert = function(x, y) {
       var ρ0_y = ρ0 - y;
-      return [ Math.atan2(x, ρ0_y) / n, Math.asin((C - (x * x + ρ0_y * ρ0_y) * n * n) / (2 * n)) ];
+      return [ Math.atan2(x, ρ0_y) / n, d3_asin((C - (x * x + ρ0_y * ρ0_y) * n * n) / (2 * n)) ];
     };
     return forward;
   }
   (d3.geo.conicEqualArea = function() {
     return d3_geo_conic(d3_geo_conicEqualArea);
   }).raw = d3_geo_conicEqualArea;
+  d3.geo.albers = function() {
+    return d3.geo.conicEqualArea().rotate([ 96, 0 ]).center([ -.6, 38.7 ]).parallels([ 29.5, 45.5 ]).scale(1070);
+  };
   d3.geo.albersUsa = function() {
-    var lower48 = d3.geo.conicEqualArea().rotate([ 98, 0 ]).center([ 0, 38 ]).parallels([ 29.5, 45.5 ]);
-    var alaska = d3.geo.conicEqualArea().rotate([ 160, 0 ]).center([ 0, 60 ]).parallels([ 55, 65 ]);
-    var hawaii = d3.geo.conicEqualArea().rotate([ 160, 0 ]).center([ 0, 20 ]).parallels([ 8, 18 ]);
-    var puertoRico = d3.geo.conicEqualArea().rotate([ 60, 0 ]).center([ 0, 10 ]).parallels([ 8, 18 ]);
-    var alaskaInvert, hawaiiInvert, puertoRicoInvert;
+    var lower48 = d3.geo.albers();
+    var alaska = d3.geo.conicEqualArea().rotate([ 154, 0 ]).center([ -2, 58.5 ]).parallels([ 55, 65 ]);
+    var hawaii = d3.geo.conicEqualArea().rotate([ 157, 0 ]).center([ -3, 19.9 ]).parallels([ 8, 18 ]);
+    var point, pointStream = {
+      point: function(x, y) {
+        point = [ x, y ];
+      }
+    }, lower48Point, alaskaPoint, hawaiiPoint;
     function albersUsa(coordinates) {
-      return projection(coordinates)(coordinates);
-    }
-    function projection(point) {
-      var lon = point[0], lat = point[1];
-      return lat > 50 ? alaska : lon < -140 ? hawaii : lat < 21 ? puertoRico : lower48;
+      var x = coordinates[0], y = coordinates[1];
+      point = null;
+      (lower48Point(x, y), point) || (alaskaPoint(x, y), point) || hawaiiPoint(x, y);
+      return point;
     }
     albersUsa.invert = function(coordinates) {
-      return alaskaInvert(coordinates) || hawaiiInvert(coordinates) || puertoRicoInvert(coordinates) || lower48.invert(coordinates);
+      var k = lower48.scale(), t = lower48.translate(), x = (coordinates[0] - t[0]) / k, y = (coordinates[1] - t[1]) / k;
+      return (y >= .12 && y < .234 && x >= -.425 && x < -.214 ? alaska : y >= .166 && y < .234 && x >= -.214 && x < -.115 ? hawaii : lower48).invert(coordinates);
     };
-    albersUsa.scale = function(x) {
-      if (!arguments.length) return lower48.scale();
-      lower48.scale(x);
-      alaska.scale(x * .6);
-      hawaii.scale(x);
-      puertoRico.scale(x * 1.5);
-      return albersUsa.translate(lower48.translate());
+    albersUsa.stream = function(stream) {
+      var lower48Stream = lower48.stream(stream), alaskaStream = alaska.stream(stream), hawaiiStream = hawaii.stream(stream);
+      return {
+        point: function(x, y) {
+          lower48Stream.point(x, y);
+          alaskaStream.point(x, y);
+          hawaiiStream.point(x, y);
+        },
+        sphere: function() {
+          lower48Stream.sphere();
+          alaskaStream.sphere();
+          hawaiiStream.sphere();
+        },
+        lineStart: function() {
+          lower48Stream.lineStart();
+          alaskaStream.lineStart();
+          hawaiiStream.lineStart();
+        },
+        lineEnd: function() {
+          lower48Stream.lineEnd();
+          alaskaStream.lineEnd();
+          hawaiiStream.lineEnd();
+        },
+        polygonStart: function() {
+          lower48Stream.polygonStart();
+          alaskaStream.polygonStart();
+          hawaiiStream.polygonStart();
+        },
+        polygonEnd: function() {
+          lower48Stream.polygonEnd();
+          alaskaStream.polygonEnd();
+          hawaiiStream.polygonEnd();
+        }
+      };
     };
-    albersUsa.translate = function(x) {
-      if (!arguments.length) return lower48.translate();
-      var dz = lower48.scale(), dx = x[0], dy = x[1];
-      lower48.translate(x);
-      alaska.translate([ dx - .4 * dz, dy + .17 * dz ]);
-      hawaii.translate([ dx - .19 * dz, dy + .2 * dz ]);
-      puertoRico.translate([ dx + .58 * dz, dy + .43 * dz ]);
-      alaskaInvert = d3_geo_albersUsaInvert(alaska, [ [ -180, 50 ], [ -130, 72 ] ]);
-      hawaiiInvert = d3_geo_albersUsaInvert(hawaii, [ [ -164, 18 ], [ -154, 24 ] ]);
-      puertoRicoInvert = d3_geo_albersUsaInvert(puertoRico, [ [ -67.5, 17.5 ], [ -65, 19 ] ]);
+    albersUsa.precision = function(_) {
+      if (!arguments.length) return lower48.precision();
+      lower48.precision(_);
+      alaska.precision(_);
+      hawaii.precision(_);
       return albersUsa;
     };
-    return albersUsa.scale(1e3);
-  };
-  function d3_geo_albersUsaInvert(projection, extent) {
-    var a = projection(extent[0]), b = projection([ .5 * (extent[0][0] + extent[1][0]), extent[0][1] ]), c = projection([ extent[1][0], extent[0][1] ]), d = projection(extent[1]);
-    var dya = b[1] - a[1], dxa = b[0] - a[0], dyb = c[1] - b[1], dxb = c[0] - b[0];
-    var ma = dya / dxa, mb = dyb / dxb;
-    var cx = .5 * (ma * mb * (a[1] - c[1]) + mb * (a[0] + b[0]) - ma * (b[0] + c[0])) / (mb - ma), cy = (.5 * (a[0] + b[0]) - cx) / ma + .5 * (a[1] + b[1]);
-    var dx0 = d[0] - cx, dy0 = d[1] - cy, dx1 = a[0] - cx, dy1 = a[1] - cy, r0 = dx0 * dx0 + dy0 * dy0, r1 = dx1 * dx1 + dy1 * dy1;
-    var a0 = Math.atan2(dy0, dx0), a1 = Math.atan2(dy1, dx1);
-    return function(coordinates) {
-      var dx = coordinates[0] - cx, dy = coordinates[1] - cy, r = dx * dx + dy * dy, a = Math.atan2(dy, dx);
-      if (r0 < r && r < r1 && a0 < a && a < a1) return projection.invert(coordinates);
+    albersUsa.scale = function(_) {
+      if (!arguments.length) return lower48.scale();
+      lower48.scale(_);
+      alaska.scale(_ * .35);
+      hawaii.scale(_);
+      return albersUsa.translate(lower48.translate());
     };
-  }
+    albersUsa.translate = function(_) {
+      if (!arguments.length) return lower48.translate();
+      var k = lower48.scale(), x = +_[0], y = +_[1];
+      lower48Point = lower48.translate(_).clipExtent([ [ x - .455 * k, y - .238 * k ], [ x + .455 * k, y + .238 * k ] ]).stream(pointStream).point;
+      alaskaPoint = alaska.translate([ x - .307 * k, y + .201 * k ]).clipExtent([ [ x - .425 * k + ε, y + .12 * k + ε ], [ x - .214 * k - ε, y + .234 * k - ε ] ]).stream(pointStream).point;
+      hawaiiPoint = hawaii.translate([ x - .205 * k, y + .212 * k ]).clipExtent([ [ x - .214 * k + ε, y + .166 * k + ε ], [ x - .115 * k - ε, y + .234 * k - ε ] ]).stream(pointStream).point;
+      return albersUsa;
+    };
+    return albersUsa.scale(1070);
+  };
   var d3_geo_pathAreaSum, d3_geo_pathAreaPolygon, d3_geo_pathArea = {
     point: d3_noop,
     lineStart: d3_noop,
@@ -3451,7 +3482,7 @@ d3 = function() {
     if (y > d3_geo_pathBoundsY1) d3_geo_pathBoundsY1 = y;
   }
   function d3_geo_pathBuffer() {
-    var pointCircle = d3_geo_pathCircle(4.5), buffer = [];
+    var pointCircle = d3_geo_pathBufferCircle(4.5), buffer = [];
     var stream = {
       point: point,
       lineStart: function() {
@@ -3466,7 +3497,7 @@ d3 = function() {
         stream.point = point;
       },
       pointRadius: function(_) {
-        pointCircle = d3_geo_pathCircle(_);
+        pointCircle = d3_geo_pathBufferCircle(_);
         return stream;
       },
       result: function() {
@@ -3494,6 +3525,9 @@ d3 = function() {
       buffer.push("Z");
     }
     return stream;
+  }
+  function d3_geo_pathBufferCircle(radius) {
+    return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + 2 * radius + "z";
   }
   var d3_geo_pathCentroid = {
     point: d3_geo_pathCentroidPoint,
@@ -3599,9 +3633,12 @@ d3 = function() {
     return stream;
   }
   d3.geo.path = function() {
-    var pointRadius = 4.5, projection, context, projectStream, contextStream;
+    var pointRadius = 4.5, projection, context, projectStream, contextStream, objectStream;
     function path(object) {
-      if (object) d3.geo.stream(object, projectStream(contextStream.pointRadius(typeof pointRadius === "function" ? +pointRadius.apply(this, arguments) : pointRadius)));
+      if (object) {
+        if (typeof pointRadius === "function") contextStream.pointRadius(+pointRadius.apply(this, arguments));
+        d3.geo.stream(object, objectStream);
+      }
       return contextStream.result();
     }
     path.area = function(object) {
@@ -3622,23 +3659,23 @@ d3 = function() {
     path.projection = function(_) {
       if (!arguments.length) return projection;
       projectStream = (projection = _) ? _.stream || d3_geo_pathProjectStream(_) : d3_identity;
+      objectStream = projectStream(contextStream);
       return path;
     };
     path.context = function(_) {
       if (!arguments.length) return context;
       contextStream = (context = _) == null ? new d3_geo_pathBuffer() : new d3_geo_pathContext(_);
+      objectStream = projectStream(contextStream);
       return path;
     };
     path.pointRadius = function(_) {
       if (!arguments.length) return pointRadius;
-      pointRadius = typeof _ === "function" ? _ : +_;
+      pointRadius = typeof _ === "function" ? _ : (_ = +_, contextStream.pointRadius(_), 
+      _);
       return path;
     };
     return path.projection(d3.geo.albersUsa()).context(null);
   };
-  function d3_geo_pathCircle(radius) {
-    return "m0," + radius + "a" + radius + "," + radius + " 0 1,1 0," + -2 * radius + "a" + radius + "," + radius + " 0 1,1 0," + +2 * radius + "z";
-  }
   function d3_geo_pathProjectStream(project) {
     var resample = d3_geo_resample(function(λ, φ) {
       return project([ λ * d3_degrees, φ * d3_degrees ]);
@@ -3667,9 +3704,6 @@ d3 = function() {
       };
     };
   }
-  d3.geo.albers = function() {
-    return d3.geo.conicEqualArea().parallels([ 29.5, 45.5 ]).rotate([ 98, 0 ]).center([ 0, 38 ]).scale(1e3);
-  };
   function d3_geo_azimuthal(scale, angle) {
     function azimuthal(λ, φ) {
       var cosλ = Math.cos(λ), cosφ = Math.cos(φ), k = scale(cosλ * cosφ);
@@ -6762,7 +6796,7 @@ d3 = function() {
       if (arguments.length < 2) padding = 0;
       var start = x[0], stop = x[1], step = (stop - start) / (Math.max(1, domain.length - 1) + padding);
       range = steps(domain.length < 2 ? (start + stop) / 2 : start + step * padding / 2, step);
-      rangeBand = 0;
+      rangeBand = Math.abs(step);
       ranger = {
         t: "rangePoints",
         a: arguments

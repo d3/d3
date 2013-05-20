@@ -42,7 +42,7 @@ function d3_scale_ordinal(domain, ranger) {
         stop = x[1],
         step = (stop - start) / (Math.max(1, domain.length - 1) + padding);
     range = steps(domain.length < 2 ? (start + stop) / 2 : start + step * padding / 2, step);
-    rangeBand = 0;
+    rangeBand = Math.abs(step);
     ranger = {t: "rangePoints", a: arguments};
     return scale;
   };
