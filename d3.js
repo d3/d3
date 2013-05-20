@@ -3359,6 +3359,9 @@ d3 = function() {
   (d3.geo.conicEqualArea = function() {
     return d3_geo_conic(d3_geo_conicEqualArea);
   }).raw = d3_geo_conicEqualArea;
+  d3.geo.albers = function() {
+    return d3.geo.conicEqualArea().rotate([ 96, 0 ]).center([ -.6, 38.7 ]).parallels([ 29.5, 45.5 ]).scale(1070);
+  };
   d3.geo.albersUsa = function() {
     var lower48 = d3.geo.albers();
     var alaska = d3.geo.conicEqualArea().rotate([ 154, 0 ]).center([ -2, 58.5 ]).parallels([ 55, 65 ]);
@@ -3688,9 +3691,6 @@ d3 = function() {
       };
     };
   }
-  d3.geo.albers = function() {
-    return d3.geo.conicEqualArea().rotate([ 96, 0 ]).center([ -.6, 38.7 ]).parallels([ 29.5, 45.5 ]).scale(1070);
-  };
   function d3_geo_azimuthal(scale, angle) {
     function azimuthal(λ, φ) {
       var cosλ = Math.cos(λ), cosφ = Math.cos(φ), k = scale(cosλ * cosφ);
