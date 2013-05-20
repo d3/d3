@@ -19,14 +19,13 @@ d3.geo.path = function() {
       projection,
       context,
       projectStream,
-      contextStream,
-      objectStream;
+      contextStream;
 
   function path(object) {
-    if (object) {
-      if (typeof pointRadius === "function") contextStream.pointRadius(+pointRadius.apply(this, arguments));
-      d3.geo.stream(object, objectStream);
-    }
+    if (object) d3.geo.stream(object, projectStream(
+        contextStream.pointRadius(typeof pointRadius === "function"
+            ? +pointRadius.apply(this, arguments)
+            : pointRadius)));
     return contextStream.result();
   }
 
@@ -51,20 +50,18 @@ d3.geo.path = function() {
   path.projection = function(_) {
     if (!arguments.length) return projection;
     projectStream = (projection = _) ? _.stream || d3_geo_pathProjectStream(_) : d3_identity;
-    objectStream = projectStream(contextStream);
     return path;
   };
 
   path.context = function(_) {
     if (!arguments.length) return context;
     contextStream = (context = _) == null ? new d3_geo_pathBuffer : new d3_geo_pathContext(_);
-    objectStream = projectStream(contextStream);
     return path;
   };
 
   path.pointRadius = function(_) {
     if (!arguments.length) return pointRadius;
-    pointRadius = typeof _ === "function" ? _ : (_ = +_, contextStream.pointRadius(_), _);
+    pointRadius = typeof _ === "function" ? _ : +_;
     return path;
   };
 
