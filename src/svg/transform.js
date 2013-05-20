@@ -1,3 +1,4 @@
+import "../core/array";
 import "svg";
 
 d3.svg.transform = function(chain) {
@@ -9,17 +10,13 @@ d3.svg.transform = function(chain) {
 
     transforms.push(function() {
       return kind + '(' + (n == 1 && typeof args[0] == 'function'
-          ? args[0].apply(this, arr(arguments)) : args) + ')';
+          ? args[0].apply(this, arguments) : args) + ')';
     });
   };
 
-  function arr(args) {
-    return Array.prototype.slice.call(args);
-  }
-
   var my = function() {
     var that = this,
-        args = arr(arguments);
+        args = arguments;
 
     return transforms.map(function(f) {
       return f.apply(that, args);
@@ -28,7 +25,7 @@ d3.svg.transform = function(chain) {
 
   ['translate', 'rotate', 'scale', 'matrix', 'skewX', 'skewY'].forEach(function(t) {
     my[t] = function() {
-      push(t, arr(arguments));
+      push(t, d3_array(arguments));
       return my;
     };
   });
