@@ -3424,8 +3424,8 @@ d3 = function() {
       if (!arguments.length) return lower48.translate();
       var k = lower48.scale(), x = +_[0], y = +_[1];
       lower48.translate(_).clipExtent([ [ x - .455 * k, y - .238 * k ], [ x + .455 * k, y + .238 * k ] ]);
-      alaska.translate([ x - .307 * k, y + .201 * k ]).clipExtent([ [ x - .425 * k, y + .12 * k ], [ x - .214 * k, y + .234 * k ] ]);
-      hawaii.translate([ x - .205 * k, y + .212 * k ]).clipExtent([ [ x - .214 * k, y + .166 * k ], [ x - .115 * k, y + .234 * k ] ]);
+      alaska.translate([ x - .307 * k, y + .201 * k ]).clipExtent([ [ x - .425 * k + ε, y + .12 * k + ε ], [ x - .214 * k - ε, y + .234 * k - ε ] ]);
+      hawaii.translate([ x - .205 * k, y + .212 * k ]).clipExtent([ [ x - .214 * k + ε, y + .166 * k + ε ], [ x - .115 * k - ε, y + .234 * k - ε ] ]);
       return albersUsa;
     };
     return albersUsa.scale(1070);

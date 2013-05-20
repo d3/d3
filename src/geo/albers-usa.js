@@ -102,11 +102,11 @@ d3.geo.albersUsa = function() {
 
     alaska
         .translate([x - .307 * k, y + .201 * k])
-        .clipExtent([[x - .425 * k, y + .120 * k], [x - .214 * k, y + .234 * k]]);
+        .clipExtent([[x - .425 * k + ε, y + .120 * k + ε], [x - .214 * k - ε, y + .234 * k - ε]]);
 
     hawaii
         .translate([x - .205 * k, y + .212 * k])
-        .clipExtent([[x - .214 * k, y + .166 * k], [x - .115 * k, y + .234 * k]]);
+        .clipExtent([[x - .214 * k + ε, y + .166 * k + ε], [x - .115 * k - ε, y + .234 * k - ε]]);
 
     return albersUsa;
   };
