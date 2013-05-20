@@ -4,7 +4,7 @@ import "../core/identity";
 import "../core/rebind";
 import "../event/dispatch";
 
-d3.xhr = function(url, mimeType, callback) {
+d3.xhr = function(url, mimeType, callback, contentParserCallback) {
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "error"),
       headers = {},
@@ -75,6 +75,7 @@ d3.xhr = function(url, mimeType, callback) {
     return xhr;
   };
 
+  xhr.response(contentParserCallback);
   d3.rebind(xhr, dispatch, "on");
 
   if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;

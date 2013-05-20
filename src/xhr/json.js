@@ -1,7 +1,7 @@
 import "xhr";
 
 d3.json = function(url, callback) {
-  return d3.xhr(url, "application/json", callback).response(d3_json);
+  return d3.xhr(url, "application/json", callback, d3_json);
 };
 
 function d3_json(request) {
