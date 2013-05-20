@@ -109,29 +109,38 @@ suite.addBatch({
       "computes discrete points in a continuous range": function(ordinal) {
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120]);
         assert.deepEqual(x.range(), [0, 60, 120]);
-        assert.equal(x.rangeBand(), 60);
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 1);
         assert.deepEqual(x.range(), [20, 60, 100]);
-        assert.equal(x.rangeBand(), 40);
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 2);
         assert.deepEqual(x.range(), [30, 60, 90]);
-        assert.equal(x.rangeBand(), 30);
       },
       "correctly handles singleton domains": function(ordinal) {
         var x = ordinal().domain(["a"]).rangePoints([0, 120]);
         assert.deepEqual(x.range(), [60]);
-        assert.equal(x.rangeBand(), 120);
       },
       "can be set to a descending range": function(ordinal) {
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0]);
         assert.deepEqual(x.range(), [120, 60,0]);
-        assert.equal(x.rangeBand(), 60);
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0], 1);
         assert.deepEqual(x.range(), [100, 60, 20]);
-        assert.equal(x.rangeBand(), 40);
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0], 2);
         assert.deepEqual(x.range(), [90, 60, 30]);
-        assert.equal(x.rangeBand(), 30);
+      },
+      "has a rangeBand of zero": function(ordinal) {
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120]);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 1);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([0, 120], 2);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a"]).rangePoints([0, 120]);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0]);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0], 1);
+        assert.equal(x.rangeBand(), 0);
+        var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0], 2);
+        assert.equal(x.rangeBand(), 0);
       }
     },
 
@@ -244,14 +253,14 @@ suite.addBatch({
         x.rangePoints([1, 2]);
         assert.inDelta(x(0), 1, 1e-6);
         assert.inDelta(x(1), 2, 1e-6);
-        assert.inDelta(x.rangeBand(), 1, 1e-6);
+        assert.inDelta(x.rangeBand(), 0, 1e-6);
         assert.inDelta(y(0), 1/11, 1e-6);
         assert.inDelta(y(1), 6/11, 1e-6);
         assert.inDelta(y.rangeBand(), 4/11, 1e-6);
         y.rangeBands([0, 1]);
         assert.inDelta(x(0), 1, 1e-6);
         assert.inDelta(x(1), 2, 1e-6);
-        assert.inDelta(x.rangeBand(), 1, 1e-6);
+        assert.inDelta(x.rangeBand(), 0, 1e-6);
         assert.inDelta(y(0), 0, 1e-6);
         assert.inDelta(y(1), 1/2, 1e-6);
         assert.inDelta(y.rangeBand(), 1/2, 1e-6);

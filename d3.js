@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.1.8"
+    version: "3.1.9"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -6790,7 +6790,7 @@ d3 = function() {
       if (arguments.length < 2) padding = 0;
       var start = x[0], stop = x[1], step = (stop - start) / (Math.max(1, domain.length - 1) + padding);
       range = steps(domain.length < 2 ? (start + stop) / 2 : start + step * padding / 2, step);
-      rangeBand = Math.abs(step);
+      rangeBand = 0;
       ranger = {
         t: "rangePoints",
         a: arguments
