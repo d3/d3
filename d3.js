@@ -3371,7 +3371,41 @@ d3 = function() {
       var k = lower48.scale(), t = lower48.translate(), x = (coordinates[0] - t[0]) / k, y = (coordinates[1] - t[1]) / k;
       return (y >= .12 && y < .234 && x >= -.425 && x < -.214 ? alaska : y >= .166 && y < .234 && x >= -.214 && x < -.115 ? hawaii : lower48).invert(coordinates);
     };
-    albersUsa.stream = d3_geo_albersUsaStream([ lower48, alaska, hawaii ]);
+    albersUsa.stream = function(stream) {
+      var lower48Stream = lower48.stream(stream), alaskaStream = alaska.stream(stream), hawaiiStream = hawaii.stream(stream);
+      return {
+        point: function(x, y) {
+          lower48Stream.point(x, y);
+          alaskaStream.point(x, y);
+          hawaiiStream.point(x, y);
+        },
+        sphere: function() {
+          lower48Stream.sphere();
+          alaskaStream.sphere();
+          hawaiiStream.sphere();
+        },
+        lineStart: function() {
+          lower48Stream.lineStart();
+          alaskaStream.lineStart();
+          hawaiiStream.lineStart();
+        },
+        lineEnd: function() {
+          lower48Stream.lineEnd();
+          alaskaStream.lineEnd();
+          hawaiiStream.lineEnd();
+        },
+        polygonStart: function() {
+          lower48Stream.polygonStart();
+          alaskaStream.polygonStart();
+          hawaiiStream.polygonStart();
+        },
+        polygonEnd: function() {
+          lower48Stream.polygonEnd();
+          alaskaStream.polygonEnd();
+          hawaiiStream.polygonEnd();
+        }
+      };
+    };
     albersUsa.scale = function(_) {
       if (!arguments.length) return lower48.scale();
       lower48.scale(_);
@@ -3389,45 +3423,6 @@ d3 = function() {
     };
     return albersUsa.scale(1070);
   };
-  function d3_geo_albersUsaStream(projections) {
-    return function(stream) {
-      var streams = projections.map(function(p) {
-        return p.stream(stream);
-      });
-      return {
-        point: function(x, y) {
-          streams.forEach(function(s) {
-            s.point(x, y);
-          });
-        },
-        sphere: function() {
-          streams.forEach(function(s) {
-            s.sphere();
-          });
-        },
-        lineStart: function() {
-          streams.forEach(function(s) {
-            s.lineStart();
-          });
-        },
-        lineEnd: function() {
-          streams.forEach(function(s) {
-            s.lineEnd();
-          });
-        },
-        polygonStart: function() {
-          streams.forEach(function(s) {
-            s.polygonStart();
-          });
-        },
-        polygonEnd: function() {
-          streams.forEach(function(s) {
-            s.polygonEnd();
-          });
-        }
-      };
-    };
-  }
   var d3_geo_pathAreaSum, d3_geo_pathAreaPolygon, d3_geo_pathArea = {
     point: d3_noop,
     lineStart: d3_noop,

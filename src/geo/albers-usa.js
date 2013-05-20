@@ -35,7 +35,45 @@ d3.geo.albersUsa = function() {
         : lower48).invert(coordinates);
   };
 
-  albersUsa.stream = d3_geo_albersUsaStream([lower48, alaska, hawaii]);
+  // A naïve multi-projection stream.
+  // It probably only works because clipping buffers internally.
+  albersUsa.stream = function(stream) {
+    var lower48Stream = lower48.stream(stream),
+        alaskaStream = alaska.stream(stream),
+        hawaiiStream = hawaii.stream(stream);
+    return {
+      point: function(x, y) {
+        lower48Stream.point(x, y);
+        alaskaStream.point(x, y);
+        hawaiiStream.point(x, y);
+      },
+      sphere: function() {
+        lower48Stream.sphere();
+        alaskaStream.sphere();
+        hawaiiStream.sphere();
+      },
+      lineStart: function() {
+        lower48Stream.lineStart();
+        alaskaStream.lineStart();
+        hawaiiStream.lineStart();
+      },
+      lineEnd: function() {
+        lower48Stream.lineEnd();
+        alaskaStream.lineEnd();
+        hawaiiStream.lineEnd();
+      },
+      polygonStart: function() {
+        lower48Stream.polygonStart();
+        alaskaStream.polygonStart();
+        hawaiiStream.polygonStart();
+      },
+      polygonEnd: function() {
+        lower48Stream.polygonEnd();
+        alaskaStream.polygonEnd();
+        hawaiiStream.polygonEnd();
+      }
+    };
+  };
 
   albersUsa.scale = function(_) {
     if (!arguments.length) return lower48.scale();
@@ -66,19 +104,3 @@ d3.geo.albersUsa = function() {
 
   return albersUsa.scale(1070);
 };
-
-// A naïve multi-projection stream.
-// It probably only works because clipping buffers internally.
-function d3_geo_albersUsaStream(projections) {
-  return function(stream) {
-    var streams = projections.map(function(p) { return p.stream(stream); });
-    return {
-      point: function(x, y) { streams.forEach(function(s) { s.point(x, y); }); },
-      sphere: function() { streams.forEach(function(s) { s.sphere(); }); },
-      lineStart: function() { streams.forEach(function(s) { s.lineStart(); }); },
-      lineEnd: function() { streams.forEach(function(s) { s.lineEnd(); }); },
-      polygonStart: function() { streams.forEach(function(s) { s.polygonStart(); }); },
-      polygonEnd: function() { streams.forEach(function(s) { s.polygonEnd(); }); }
-    };
-  };
-}
