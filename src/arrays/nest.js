@@ -60,7 +60,7 @@ d3.nest = function() {
     });
 
     if(each) {
-        array.forEach(function(a, i) {each.call(nest,a, i, nest)})
+        array.forEach(function(a, i) {each.call(nest,a, i)})
     }
     return sortKey
         ? array.sort(function(a, b) { return sortKey(a.key, b.key); })
