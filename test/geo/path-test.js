@@ -287,19 +287,14 @@ suite.addBatch({
       },
       "area of a polygon": function(p) {
         var area = p.area({type: "Polygon", coordinates: [[[-122, 37], [-71, 42], [-80, 25], [-122, 37]]]});
-        assert.inDelta(area, 109021.503, 1e-3);
+        assert.inDelta(area, 124884.274, 1e-3);
       },
       "bounds of a line string": function(p) {
-        var bounds = p.bounds({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
-        assert.inDelta(bounds[0][0], -5.1214, 1e-3);
-        assert.inDelta(bounds[0][1], 174.825, 1e-3);
-        assert.inDelta(bounds[1][0], 794.602, 1e-3);
-        assert.inDelta(bounds[1][1], 856.501, 1e-3);
+        assert.inDelta(p.bounds({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]}),
+          [[109.378, 189.584], [797.758, 504.660]], 1e-3);
       },
       "centroid of a line string": function(p) {
-        var centroid = p.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
-        assert.inDelta(centroid[0], 434.655, 1e-3);
-        assert.inDelta(centroid[1], 397.940, 1e-3);
+        assert.inDelta(p.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]}), [545.130, 253.859], 1e-3);
       }
     },
 
