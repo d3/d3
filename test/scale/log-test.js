@@ -214,6 +214,15 @@ suite.addBatch({
           "+100", "+200", "+300", "", "", "", "", "", "",
           "+1,000"
         ]);
+      },
+      "can override the tick format as string": function(d3) {
+        var x = d3.scale.log().domain([1000.1, 1]);
+        assert.deepEqual(x.ticks().map(x.tickFormat(10, ".1s")), [
+          "1", "2", "3", "", "", "", "", "", "",
+          "10", "20", "30", "", "", "", "", "", "",
+          "100", "200", "300", "", "", "", "", "", "",
+          "1k"
+        ]);
       }
     },
 
