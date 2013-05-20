@@ -3406,6 +3406,13 @@ d3 = function() {
         }
       };
     };
+    albersUsa.precision = function(_) {
+      if (!arguments.length) return lower48.precision();
+      lower48.precision(_);
+      alaska.precision(_);
+      hawaii.precision(_);
+      return albersUsa;
+    };
     albersUsa.scale = function(_) {
       if (!arguments.length) return lower48.scale();
       lower48.scale(_);
