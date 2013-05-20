@@ -1,4 +1,5 @@
 import "albers";
+import "conic-equal-area";
 import "geo";
 
 // A composite projection for the United States, configured by default for
