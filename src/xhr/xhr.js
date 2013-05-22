@@ -4,9 +4,7 @@ import "../core/identity";
 import "../core/rebind";
 import "../event/dispatch";
 
-<<<<<<< HEAD
-d3.xhr = function(url, mimeType, callback, contentParserCallback) {
-=======
+
 d3.xhr = function(url, mimeType, callback) {
   return d3_xhr(url, mimeType, d3_identity, callback);
 };
@@ -18,7 +16,6 @@ function d3_xhr_fixCallback(callback) {
 }
 
 function d3_xhr(url, mimeType, response, callback) {
->>>>>>> Fix #1260
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "error"),
       headers = {},
@@ -89,7 +86,6 @@ function d3_xhr(url, mimeType, response, callback) {
     return xhr;
   };
 
-  xhr.response(contentParserCallback);
   d3.rebind(xhr, dispatch, "on");
 
   if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
