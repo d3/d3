@@ -9,17 +9,10 @@ d3.xhr = function(url, mimeType, callback) {
   return d3_xhr(url, mimeType, d3_identity, callback);
 };
 
-function d3_xhr_fixCallback(callback) {
-  return callback.length === 1
-      ? function(error, request) { callback(error == null ? request : null); }
-      : callback;
-}
-
 function d3_xhr(url, mimeType, response, callback) {
   var xhr = {},
       dispatch = d3.dispatch("progress", "load", "error"),
       headers = {},
-      response = response,
       request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest);
 
   "onload" in request
@@ -90,4 +83,10 @@ function d3_xhr(url, mimeType, response, callback) {
 
   if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
   return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
+}
+
+function d3_xhr_fixCallback(callback) {
+  return callback.length === 1
+      ? function(error, request) { callback(error == null ? request : null); }
+      : callback;
 }
