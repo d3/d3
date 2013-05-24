@@ -31,7 +31,7 @@ d3.js: $(shell node_modules/.bin/smash --list src/d3.js) package.json
 
 d3.min.js: d3.js
 	@rm -f $@
-	node_modules/.bin/uglifyjs $< -c -m -o $@
+	bin/uglify $< > $@
 
 component.json: bin/component d3.js package.json
 	@rm -f $@
