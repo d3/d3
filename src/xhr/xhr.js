@@ -5,6 +5,7 @@ import "../core/rebind";
 import "../event/dispatch";
 
 d3.xhr = function(url, mimeType, callback) {
+  if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
   return d3_xhr(url, mimeType, d3_identity, callback);
 };
 
@@ -79,8 +80,7 @@ function d3_xhr(url, mimeType, response, callback) {
   };
 
   d3.rebind(xhr, dispatch, "on");
-
-  if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, mimeType = null;
+  
   return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
 };
 
