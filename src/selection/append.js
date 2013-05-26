@@ -3,17 +3,33 @@ import "../core/ns";
 import "selection";
 
 // TODO append(node)?
-// TODO append(function)?
-d3_selectionPrototype.append = function(name) {
-  name = d3.ns.qualify(name);
+// Returns a function that will create element when called with datum and index arguments
+d3_selectionPrototype.append = function (nameOrFunction) {
+  function appenderByName(name) {
+    name = d3.ns.qualify(name);
+    
+    function append() {
+      return this.appendChild(d3_document.createElementNS(this.namespaceURI, name));
+    }
 
-  function append() {
-    return this.appendChild(d3_document.createElementNS(this.namespaceURI, name));
+    function appendNS() {
+      return this.appendChild(d3_document.createElementNS(name.space, name.local));
+    }
+
+    return name.local ? appendNS : append;
   }
 
-  function appendNS() {
-    return this.appendChild(d3_document.createElementNS(name.space, name.local));
+  if (typeof nameOrFunction === "function") {
+    
+    function appenderWrapper(data, index) {
+      const nameStr = nameOrFunction.call(this, data, index);
+      return appenderByName(nameStr).call(this);
+    };
+    return this.select(appenderWrapper);
+    
+  } else {
+    
+    return this.select(appenderByName(nameOrFunction))
+  
   }
-
-  return this.select(name.local ? appendNS : append);
 };
