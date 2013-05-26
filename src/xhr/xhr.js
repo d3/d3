@@ -9,7 +9,14 @@ d3.xhr = function(url, mimeType, callback) {
       dispatch = d3.dispatch("progress", "load", "error"),
       headers = {},
       response = d3_identity,
-      request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest);
+      responseType = null,
+      request = new XMLHttpRequest;
+
+  // IE compatability
+  // If XMLHttpRequest doesn't support CORS, and the url looks like a
+  // cross domain request, then where available use IE's XDomainRequest
+  d3_window.XDomainRequest && !("withCredentials" in request) && /^(http(s)?:)?\/\//.test(url)
+     && (request = new XDomainRequest)
 
   "onload" in request
       ? request.onload = request.onerror = respond
@@ -44,6 +51,14 @@ d3.xhr = function(url, mimeType, callback) {
     return xhr;
   };
 
+  // Specifies what type the response value should take;
+  // For instance, arraybuffer, blob, document, or text.
+  xhr.responseType = function(value) {
+    if (!arguments.length) return responseType;
+    responseType = value;
+    return xhr;
+  }
+
   // Specify how to convert the response content to a specific type;
   // changes the callback value on "load" events.
   xhr.response = function(value) {
@@ -65,6 +80,7 @@ d3.xhr = function(url, mimeType, callback) {
     if (mimeType != null && !("accept" in headers)) headers["accept"] = mimeType + ",*/*";
     if (request.setRequestHeader) for (var name in headers) request.setRequestHeader(name, headers[name]);
     if (mimeType != null && request.overrideMimeType) request.overrideMimeType(mimeType);
+    if (responseType != null && "responseType" in request) request.responseType = responseType;
     if (callback != null) xhr.on("error", callback).on("load", function(request) { callback(null, request); });
     request.send(data == null ? null : data);
     return xhr;
