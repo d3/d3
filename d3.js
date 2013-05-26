@@ -1629,7 +1629,8 @@ d3 = function() {
     return d;
   }
   d3.xhr = function(url, mimeType, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, responseType = null, request = new XMLHttpRequest();
+    d3_window.XDomainRequest && !("withCredentials" in request) && /^(http(s)?:)?\/\//.test(url) && (request = new XDomainRequest());
     "onload" in request ? request.onload = request.onerror = respond : request.onreadystatechange = function() {
       request.readyState > 3 && respond();
     };
@@ -1657,6 +1658,11 @@ d3 = function() {
       mimeType = value == null ? null : value + "";
       return xhr;
     };
+    xhr.responseType = function(value) {
+      if (!arguments.length) return responseType;
+      responseType = value;
+      return xhr;
+    };
     xhr.response = function(value) {
       response = value;
       return xhr;
@@ -1672,6 +1678,7 @@ d3 = function() {
       if (mimeType != null && !("accept" in headers)) headers["accept"] = mimeType + ",*/*";
       if (request.setRequestHeader) for (var name in headers) request.setRequestHeader(name, headers[name]);
       if (mimeType != null && request.overrideMimeType) request.overrideMimeType(mimeType);
+      if (responseType != null && "responseType" in request) request.responseType = responseType;
       if (callback != null) xhr.on("error", callback).on("load", function(request) {
         callback(null, request);
       });
