@@ -1628,8 +1628,16 @@ d3 = function() {
   function d3_identity(d) {
     return d;
   }
-  d3.xhr = function(url, mimeType, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
+  d3.xhr = d3_xhrType(d3_identity);
+  function d3_xhrType(response) {
+    return function(url, mimeType, callback) {
+      if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, 
+      mimeType = null;
+      return d3_xhr(url, mimeType, response, callback);
+    };
+  }
+  function d3_xhr(url, mimeType, response, callback) {
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
     "onload" in request ? request.onload = request.onerror = respond : request.onreadystatechange = function() {
       request.readyState > 3 && respond();
     };
@@ -1693,10 +1701,8 @@ d3 = function() {
       return xhr;
     };
     d3.rebind(xhr, dispatch, "on");
-    if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, 
-    mimeType = null;
     return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
-  };
+  }
   function d3_xhr_fixCallback(callback) {
     return callback.length === 1 ? function(error, request) {
       callback(error == null ? request : null);
@@ -8555,31 +8561,25 @@ d3 = function() {
   d3.time.scale.utc = function() {
     return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
   };
-  d3.text = function() {
-    return d3.xhr.apply(d3, arguments).response(d3_text);
-  };
-  function d3_text(request) {
+  d3.text = d3_xhrType(function(request) {
     return request.responseText;
-  }
+  });
   d3.json = function(url, callback) {
-    return d3.xhr(url, "application/json", callback).response(d3_json);
+    return d3_xhr(url, "application/json", d3_json, callback);
   };
   function d3_json(request) {
     return JSON.parse(request.responseText);
   }
   d3.html = function(url, callback) {
-    return d3.xhr(url, "text/html", callback).response(d3_html);
+    return d3_xhr(url, "text/html", d3_html, callback);
   };
   function d3_html(request) {
     var range = d3_document.createRange();
     range.selectNode(d3_document.body);
     return range.createContextualFragment(request.responseText);
   }
-  d3.xml = function() {
-    return d3.xhr.apply(d3, arguments).response(d3_xml);
-  };
-  function d3_xml(request) {
+  d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
-  }
+  });
   return d3;
 }();
