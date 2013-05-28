@@ -1851,7 +1851,7 @@ d3 = function() {
         delete d3_timer_byId[t1.callback.id];
         t1 = t0 ? t0.next = t1.next : d3_timer_queueHead = t1.next;
       } else {
-        time = Math.min(time, t1.time);
+        if (t1.time < time) time = t1.time;
         t1 = (t0 = t1).next;
       }
     }
