@@ -161,9 +161,9 @@ d3.geom.voronoi = function(points) {
 
     if (fx === d3_svg_lineX && fy === d3_svg_lineY) points = data;
     else {
-      points = [];
+      points = new Array(n);
       for (i = 0; i < n; ++i) {
-        points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i)]);
+        points[i] = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)];
       }
     }
 
