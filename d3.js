@@ -1796,22 +1796,20 @@ d3 = function() {
   }
   d3.csv = d3_dsv(",", "text/csv");
   d3.tsv = d3_dsv("	", "text/tab-separated-values");
-  var d3_timer_id = 0, d3_timer_byId = {}, d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout;
+  var d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout;
   d3.timer = function(callback, delay, then) {
     if (arguments.length < 3) {
       if (arguments.length < 2) delay = 0; else if (!isFinite(delay)) return;
       then = Date.now();
     }
-    var time = then + delay, timer = d3_timer_byId[callback.id];
-    if (timer && timer.callback === callback) timer.time = time; else {
-      d3_timer_byId[callback.id = ++d3_timer_id] = timer = {
-        callback: callback,
-        time: time,
-        next: null
-      };
-      if (d3_timer_queueTail) d3_timer_queueTail.next = timer; else d3_timer_queueHead = timer;
-      d3_timer_queueTail = timer;
-    }
+    var time = then + delay;
+    var timer = {
+      callback: callback,
+      time: time,
+      next: null
+    };
+    if (d3_timer_queueTail) d3_timer_queueTail.next = timer; else d3_timer_queueHead = timer;
+    d3_timer_queueTail = timer;
     if (!d3_timer_interval) {
       d3_timer_timeout = clearTimeout(d3_timer_timeout);
       d3_timer_interval = 1;
@@ -1848,7 +1846,6 @@ d3 = function() {
     var t0, t1 = d3_timer_queueHead, time = Infinity;
     while (t1) {
       if (t1.flush) {
-        delete d3_timer_byId[t1.callback.id];
         t1 = t0 ? t0.next = t1.next : d3_timer_queueHead = t1.next;
       } else {
         if (t1.time < time) time = t1.time;
