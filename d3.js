@@ -8094,7 +8094,7 @@ d3 = function() {
   d3.time.years = d3.time.year.range;
   d3.time.years.utc = d3.time.year.utc.range;
   d3.time.day = d3_time_interval(function(date) {
-    var day = new d3_time(1970, 0);
+    var day = new d3_time(2e3, 0);
     day.setFullYear(date.getFullYear(), date.getMonth(), date.getDate());
     return day;
   }, function(date, offset) {
