@@ -1796,7 +1796,7 @@ d3 = function() {
   }
   d3.csv = d3_dsv(",", "text/csv");
   d3.tsv = d3_dsv("	", "text/tab-separated-values");
-  var d3_timer_id = 0, d3_timer_byId = {}, d3_timer_queue = null, d3_timer_interval, d3_timer_timeout;
+  var d3_timer_id = 0, d3_timer_byId = {}, d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout;
   d3.timer = function(callback, delay, then) {
     if (arguments.length < 3) {
       if (arguments.length < 2) delay = 0; else if (!isFinite(delay)) return;
@@ -1806,12 +1806,16 @@ d3 = function() {
     if (timer && timer.callback === callback) {
       timer.then = then;
       timer.delay = delay;
-    } else d3_timer_byId[callback.id = ++d3_timer_id] = d3_timer_queue = {
-      callback: callback,
-      then: then,
-      delay: delay,
-      next: d3_timer_queue
-    };
+    } else {
+      d3_timer_byId[callback.id = ++d3_timer_id] = timer = {
+        callback: callback,
+        then: then,
+        delay: delay,
+        next: null
+      };
+      if (d3_timer_queueTail) d3_timer_queueTail.next = timer; else d3_timer_queueHead = timer;
+      d3_timer_queueTail = timer;
+    }
     if (!d3_timer_interval) {
       d3_timer_timeout = clearTimeout(d3_timer_timeout);
       d3_timer_interval = 1;
@@ -1819,7 +1823,7 @@ d3 = function() {
     }
   };
   function d3_timer_step() {
-    var elapsed, now = Date.now(), t1 = d3_timer_queue;
+    var elapsed, now = Date.now(), t1 = d3_timer_queueHead;
     while (t1) {
       elapsed = now - t1.then;
       if (elapsed >= t1.delay) t1.flush = t1.callback(elapsed);
@@ -1838,7 +1842,7 @@ d3 = function() {
     }
   }
   d3.timer.flush = function() {
-    var elapsed, now = Date.now(), t1 = d3_timer_queue;
+    var elapsed, now = Date.now(), t1 = d3_timer_queueHead;
     while (t1) {
       elapsed = now - t1.then;
       if (!t1.delay) t1.flush = t1.callback(elapsed);
@@ -1847,16 +1851,17 @@ d3 = function() {
     d3_timer_flush();
   };
   function d3_timer_flush() {
-    var t0 = null, t1 = d3_timer_queue, then = Infinity;
+    var t0, t1 = d3_timer_queueHead, then = Infinity;
     while (t1) {
       if (t1.flush) {
         delete d3_timer_byId[t1.callback.id];
-        t1 = t0 ? t0.next = t1.next : d3_timer_queue = t1.next;
+        t1 = t0 ? t0.next = t1.next : d3_timer_queueHead = t1.next;
       } else {
         then = Math.min(then, t1.then + t1.delay);
         t1 = (t0 = t1).next;
       }
     }
+    d3_timer_queueTail = t0;
     return then;
   }
   var d3_timer_frame = d3_window.requestAnimationFrame || d3_window.webkitRequestAnimationFrame || d3_window.mozRequestAnimationFrame || d3_window.oRequestAnimationFrame || d3_window.msRequestAnimationFrame || function(callback) {

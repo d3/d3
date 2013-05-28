@@ -2,7 +2,8 @@ import "../core/document";
 
 var d3_timer_id = 0,
     d3_timer_byId = {},
-    d3_timer_queue = null,
+    d3_timer_queueHead,
+    d3_timer_queueTail,
     d3_timer_interval, // is an interval (or frame) active?
     d3_timer_timeout; // is a timeout active?
 
@@ -21,13 +22,18 @@ d3.timer = function(callback, delay, then) {
     timer.delay = delay;
   }
 
-  // Otherwise, add the callback to the queue.
-  else d3_timer_byId[callback.id = ++d3_timer_id] = d3_timer_queue = {
-    callback: callback,
-    then: then,
-    delay: delay,
-    next: d3_timer_queue
-  };
+  // Otherwise, add the callback to the tail of the queue.
+  else {
+    d3_timer_byId[callback.id = ++d3_timer_id] = timer = {
+      callback: callback,
+      then: then,
+      delay: delay,
+      next: null
+    };
+    if (d3_timer_queueTail) d3_timer_queueTail.next = timer;
+    else d3_timer_queueHead = timer;
+    d3_timer_queueTail = timer;
+  }
 
   // Start animatin'!
   if (!d3_timer_interval) {
@@ -40,7 +46,7 @@ d3.timer = function(callback, delay, then) {
 function d3_timer_step() {
   var elapsed,
       now = Date.now(),
-      t1 = d3_timer_queue;
+      t1 = d3_timer_queueHead;
 
   while (t1) {
     elapsed = now - t1.then;
@@ -64,7 +70,7 @@ function d3_timer_step() {
 d3.timer.flush = function() {
   var elapsed,
       now = Date.now(),
-      t1 = d3_timer_queue;
+      t1 = d3_timer_queueHead;
 
   while (t1) {
     elapsed = now - t1.then;
@@ -77,18 +83,19 @@ d3.timer.flush = function() {
 
 // Flush after callbacks to avoid concurrent queue modification.
 function d3_timer_flush() {
-  var t0 = null,
-      t1 = d3_timer_queue,
+  var t0,
+      t1 = d3_timer_queueHead,
       then = Infinity;
   while (t1) {
     if (t1.flush) {
       delete d3_timer_byId[t1.callback.id];
-      t1 = t0 ? t0.next = t1.next : d3_timer_queue = t1.next;
+      t1 = t0 ? t0.next = t1.next : d3_timer_queueHead = t1.next;
     } else {
       then = Math.min(then, t1.then + t1.delay);
       t1 = (t0 = t1).next;
     }
   }
+  d3_timer_queueTail = t0;
   return then;
 }
 
