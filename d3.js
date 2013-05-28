@@ -1628,11 +1628,14 @@ d3 = function() {
   function d3_identity(d) {
     return d;
   }
-  d3.xhr = function(url, mimeType, callback) {
-    if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, 
-    mimeType = null;
-    return d3_xhr(url, mimeType, d3_identity, callback);
-  };
+  d3.xhr = d3_xhrType(d3_identity);
+  function d3_xhrType(response) {
+    return function(url, mimeType, callback) {
+      if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, 
+      mimeType = null;
+      return d3_xhr(url, mimeType, response, callback);
+    };
+  }
   function d3_xhr(url, mimeType, response, callback) {
     var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
     "onload" in request ? request.onload = request.onerror = respond : request.onreadystatechange = function() {
@@ -8553,22 +8556,9 @@ d3 = function() {
   d3.time.scale.utc = function() {
     return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
   };
-  d3.text = function() {
-    if (arguments.length === 1) {
-      return d3_xhr(arguments[0], null, d3_text);
-    } else if (arguments.length === 2) {
-      if (typeof arguments[1] === "function") {
-        return d3_xhr(arguments[0], null, d3_text, arguments[1]);
-      } else {
-        return d3_xhr(arguments[0], arguments[1], d3_text);
-      }
-    } else {
-      return d3_xhr(arguments[0], arguments[1], d3_text, arguments[2]);
-    }
-  };
-  function d3_text(request) {
+  d3.text = d3_xhrType(function(request) {
     return request.responseText;
-  }
+  });
   d3.json = function(url, callback) {
     return d3_xhr(url, "application/json", d3_json, callback);
   };
@@ -8583,21 +8573,8 @@ d3 = function() {
     range.selectNode(d3_document.body);
     return range.createContextualFragment(request.responseText);
   }
-  d3.xml = function() {
-    if (arguments.length === 1) {
-      return d3_xhr(arguments[0], null, d3_xml);
-    } else if (arguments.length === 2) {
-      if (typeof arguments[1] === "function") {
-        return d3_xhr(arguments[0], null, d3_xml, arguments[1]);
-      } else {
-        return d3_xhr(arguments[0], arguments[1], d3_xml);
-      }
-    } else {
-      return d3_xhr(arguments[0], arguments[1], d3_xml, arguments[2]);
-    }
-  };
-  function d3_xml(request) {
+  d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
-  }
+  });
   return d3;
 }();
