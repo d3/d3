@@ -1629,7 +1629,12 @@ d3 = function() {
     return d;
   }
   d3.xhr = function(url, mimeType, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
+    if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, 
+    mimeType = null;
+    return d3_xhr(url, mimeType, d3_identity, callback);
+  };
+  function d3_xhr(url, mimeType, response, callback) {
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
     "onload" in request ? request.onload = request.onerror = respond : request.onreadystatechange = function() {
       request.readyState > 3 && respond();
     };
@@ -1683,10 +1688,8 @@ d3 = function() {
       return xhr;
     };
     d3.rebind(xhr, dispatch, "on");
-    if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, 
-    mimeType = null;
     return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
-  };
+  }
   function d3_xhr_fixCallback(callback) {
     return callback.length === 1 ? function(error, request) {
       callback(error == null ? request : null);
@@ -8551,19 +8554,29 @@ d3 = function() {
     return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
   };
   d3.text = function() {
-    return d3.xhr.apply(d3, arguments).response(d3_text);
+    if (arguments.length === 1) {
+      return d3_xhr(arguments[0], null, d3_text);
+    } else if (arguments.length === 2) {
+      if (typeof arguments[1] === "function") {
+        return d3_xhr(arguments[0], null, d3_text, arguments[1]);
+      } else {
+        return d3_xhr(arguments[0], arguments[1], d3_text);
+      }
+    } else {
+      return d3_xhr(arguments[0], arguments[1], d3_text, arguments[2]);
+    }
   };
   function d3_text(request) {
     return request.responseText;
   }
   d3.json = function(url, callback) {
-    return d3.xhr(url, "application/json", callback).response(d3_json);
+    return d3_xhr(url, "application/json", d3_json, callback);
   };
   function d3_json(request) {
     return JSON.parse(request.responseText);
   }
   d3.html = function(url, callback) {
-    return d3.xhr(url, "text/html", callback).response(d3_html);
+    return d3_xhr(url, "text/html", d3_html, callback);
   };
   function d3_html(request) {
     var range = d3_document.createRange();
@@ -8571,7 +8584,17 @@ d3 = function() {
     return range.createContextualFragment(request.responseText);
   }
   d3.xml = function() {
-    return d3.xhr.apply(d3, arguments).response(d3_xml);
+    if (arguments.length === 1) {
+      return d3_xhr(arguments[0], null, d3_xml);
+    } else if (arguments.length === 2) {
+      if (typeof arguments[1] === "function") {
+        return d3_xhr(arguments[0], null, d3_xml, arguments[1]);
+      } else {
+        return d3_xhr(arguments[0], arguments[1], d3_xml);
+      }
+    } else {
+      return d3_xhr(arguments[0], arguments[1], d3_xml, arguments[2]);
+    }
   };
   function d3_xml(request) {
     return request.responseXML;
