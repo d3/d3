@@ -160,8 +160,11 @@ d3.geom.voronoi = function(points) {
         n = data.length;
 
     if (fx === d3_svg_lineX && fy === d3_svg_lineY) points = data;
-    else for (i = 0; i < n; ++i) {
-      points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i)]);
+    else {
+      points = new Array(n);
+      for (i = 0; i < n; ++i) {
+        points[i] = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)];
+      }
     }
 
     d3_geom_voronoiTessellate(points, function(e) {
