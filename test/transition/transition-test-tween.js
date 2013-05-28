@@ -34,12 +34,6 @@ module.exports = {
     }
   },
 
-  // The order here is a bit brittle: because the transition has zero delay,
-  // it's invoking the start event immediately for all nodes, rather than
-  // pushing each node onto the timer queue. The order in which tweens are
-  // invoked is undefined (see #1245), so perhaps we should sort the expected
-  // and actual values before comparing.
-
   "defines the corresponding tween": function(result) {
     assert.typeOf(result.transition.tween("text"), "function");
   },
