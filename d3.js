@@ -1834,10 +1834,10 @@ d3 = function() {
     d3_timer_sweep();
   };
   function d3_timer_mark() {
-    var now = Date.now(), t1 = d3_timer_queueHead;
-    while (t1) {
-      if (now >= t1.time) t1.flush = t1.callback(now - t1.time);
-      t1 = t1.next;
+    var now = Date.now(), timer = d3_timer_queueHead;
+    while (timer) {
+      if (now >= timer.time) timer.flush = timer.callback(now - timer.time);
+      timer = timer.next;
     }
     return now;
   }
