@@ -24,11 +24,25 @@ suite.addBatch({
       topic: function(json) {
         var callback = this.callback;
         json("//does/not/exist.json", function(error, json) {
-          callback(null, json);
+          callback(null, {error: error, value: json});
         });
       },
-      "invokes the callback with undefined when an error occurs": function(json) {
-        assert.isUndefined(json);
+      "invokes the callback with undefined when an error occurs": function(result) {
+        assert.equal(result.error.status, 404);
+        assert.isUndefined(result.value);
+      }
+    },
+
+    "on a file with invalid JSON": {
+      topic: function(json) {
+        var callback = this.callback;
+        json("test/data/sample.tsv", function(error, json) {
+          callback(null, {error: error, value: json});
+        });
+      },
+      "invokes the callback with undefined when an error occurs": function(result) {
+        assert.equal(result.error.constructor.name, "SyntaxError");
+        assert.isUndefined(result.value);
       }
     }
   }

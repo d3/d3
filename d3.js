@@ -1634,8 +1634,18 @@ d3 = function() {
       request.readyState > 3 && respond();
     };
     function respond() {
-      var s = request.status;
-      !s && request.responseText || s >= 200 && s < 300 || s === 304 ? dispatch.load.call(xhr, response.call(xhr, request)) : dispatch.error.call(xhr, request);
+      var status = request.status, result;
+      if (!status && request.responseText || status >= 200 && status < 300 || status === 304) {
+        try {
+          result = response.call(xhr, request);
+        } catch (e) {
+          dispatch.error.call(xhr, e);
+          return;
+        }
+        dispatch.load.call(xhr, result);
+      } else {
+        dispatch.error.call(xhr, request);
+      }
     }
     request.onprogress = function(event) {
       var o = d3.event;
