@@ -34,12 +34,6 @@ module.exports = {
     }
   },
 
-  // The order here is a bit brittle: because the transition has zero delay,
-  // it's invoking the start event immediately for all nodes, rather than
-  // pushing each node onto the timer queue (which would reverse the order of
-  // callbacks). The order in which tweens are invoked is undefined, so perhaps
-  // we should sort the expected and actual values before comparing.
-
   "defines the corresponding tween": function(result) {
     assert.typeOf(result.transition.tween("text"), "function");
   },
@@ -47,10 +41,10 @@ module.exports = {
     assert.equal(result.fails, 0);
   },
   "invokes the tween function": function(result) {
-    assert.deepEqual(result.data, ["green", "red"], "expected data, got {actual}");
-    assert.deepEqual(result.index, [1, 0], "expected data, got {actual}");
-    assert.domEqual(result.context[0], result.selection[0][1], "expected this, got {actual}");
-    assert.domEqual(result.context[1], result.selection[0][0], "expected this, got {actual}");
+    assert.deepEqual(result.data, ["red", "green"], "expected data, got {actual}");
+    assert.deepEqual(result.index, [0, 1], "expected data, got {actual}");
+    assert.domEqual(result.context[0], result.selection[0][0], "expected this, got {actual}");
+    assert.domEqual(result.context[1], result.selection[0][1], "expected this, got {actual}");
   },
 
   "end": {
