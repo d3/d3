@@ -32,6 +32,20 @@ suite.addBatch({
       "calls every 17 ms": function(info) {
         assert.inDelta(info.stop - info.start, 17 * 3, 20);
       }
+    },
+
+    "with multiple registered tasks": {
+      topic: function(timer) {
+        var callback = this.callback,
+            results = [];
+        timer(function() { results.push("A"); return true; });
+        timer(function() { results.push("B"); return true; });
+        timer(function() { results.push("C"); return true; });
+        timer(function() { callback(null, results); return true; })
+      },
+      "invokes tasks in the order they were registered": function(results) {
+        assert.deepEqual(results, ["A", "B", "C"]);
+      }
     }
   }
 });

@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.1.9"
+    version: "3.1.10"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -1628,14 +1628,32 @@ d3 = function() {
   function d3_identity(d) {
     return d;
   }
-  d3.xhr = function(url, mimeType, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, response = d3_identity, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
+  d3.xhr = d3_xhrType(d3_identity);
+  function d3_xhrType(response) {
+    return function(url, mimeType, callback) {
+      if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, 
+      mimeType = null;
+      return d3_xhr(url, mimeType, response, callback);
+    };
+  }
+  function d3_xhr(url, mimeType, response, callback) {
+    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, request = new (d3_window.XDomainRequest && /^(http(s)?:)?\/\//.test(url) ? XDomainRequest : XMLHttpRequest)();
     "onload" in request ? request.onload = request.onerror = respond : request.onreadystatechange = function() {
       request.readyState > 3 && respond();
     };
     function respond() {
-      var s = request.status;
-      !s && request.responseText || s >= 200 && s < 300 || s === 304 ? dispatch.load.call(xhr, response.call(xhr, request)) : dispatch.error.call(xhr, request);
+      var status = request.status, result;
+      if (!status && request.responseText || status >= 200 && status < 300 || status === 304) {
+        try {
+          result = response.call(xhr, request);
+        } catch (e) {
+          dispatch.error.call(xhr, e);
+          return;
+        }
+        dispatch.load.call(xhr, result);
+      } else {
+        dispatch.error.call(xhr, request);
+      }
     }
     request.onprogress = function(event) {
       var o = d3.event;
@@ -1683,10 +1701,8 @@ d3 = function() {
       return xhr;
     };
     d3.rebind(xhr, dispatch, "on");
-    if (arguments.length === 2 && typeof mimeType === "function") callback = mimeType, 
-    mimeType = null;
     return callback == null ? xhr : xhr.get(d3_xhr_fixCallback(callback));
-  };
+  }
   function d3_xhr_fixCallback(callback) {
     return callback.length === 1 ? function(error, request) {
       callback(error == null ? request : null);
@@ -1796,22 +1812,20 @@ d3 = function() {
   }
   d3.csv = d3_dsv(",", "text/csv");
   d3.tsv = d3_dsv("	", "text/tab-separated-values");
-  var d3_timer_id = 0, d3_timer_byId = {}, d3_timer_queue = null, d3_timer_interval, d3_timer_timeout;
+  var d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout;
   d3.timer = function(callback, delay, then) {
     if (arguments.length < 3) {
       if (arguments.length < 2) delay = 0; else if (!isFinite(delay)) return;
       then = Date.now();
     }
-    var timer = d3_timer_byId[callback.id];
-    if (timer && timer.callback === callback) {
-      timer.then = then;
-      timer.delay = delay;
-    } else d3_timer_byId[callback.id = ++d3_timer_id] = d3_timer_queue = {
+    var time = then + delay;
+    var timer = {
       callback: callback,
-      then: then,
-      delay: delay,
-      next: d3_timer_queue
+      time: time,
+      next: null
     };
+    if (d3_timer_queueTail) d3_timer_queueTail.next = timer; else d3_timer_queueHead = timer;
+    d3_timer_queueTail = timer;
     if (!d3_timer_interval) {
       d3_timer_timeout = clearTimeout(d3_timer_timeout);
       d3_timer_interval = 1;
@@ -1819,13 +1833,7 @@ d3 = function() {
     }
   };
   function d3_timer_step() {
-    var elapsed, now = Date.now(), t1 = d3_timer_queue;
-    while (t1) {
-      elapsed = now - t1.then;
-      if (elapsed >= t1.delay) t1.flush = t1.callback(elapsed);
-      t1 = t1.next;
-    }
-    var delay = d3_timer_flush() - now;
+    var now = d3_timer_mark(), delay = d3_timer_sweep() - now;
     if (delay > 24) {
       if (isFinite(delay)) {
         clearTimeout(d3_timer_timeout);
@@ -1838,26 +1846,29 @@ d3 = function() {
     }
   }
   d3.timer.flush = function() {
-    var elapsed, now = Date.now(), t1 = d3_timer_queue;
-    while (t1) {
-      elapsed = now - t1.then;
-      if (!t1.delay) t1.flush = t1.callback(elapsed);
-      t1 = t1.next;
-    }
-    d3_timer_flush();
+    d3_timer_mark();
+    d3_timer_sweep();
   };
-  function d3_timer_flush() {
-    var t0 = null, t1 = d3_timer_queue, then = Infinity;
+  function d3_timer_mark() {
+    var now = Date.now(), timer = d3_timer_queueHead;
+    while (timer) {
+      if (now >= timer.time) timer.flush = timer.callback(now - timer.time);
+      timer = timer.next;
+    }
+    return now;
+  }
+  function d3_timer_sweep() {
+    var t0, t1 = d3_timer_queueHead, time = Infinity;
     while (t1) {
       if (t1.flush) {
-        delete d3_timer_byId[t1.callback.id];
-        t1 = t0 ? t0.next = t1.next : d3_timer_queue = t1.next;
+        t1 = t0 ? t0.next = t1.next : d3_timer_queueHead = t1.next;
       } else {
-        then = Math.min(then, t1.then + t1.delay);
+        if (t1.time < time) time = t1.time;
         t1 = (t0 = t1).next;
       }
     }
-    return then;
+    d3_timer_queueTail = t0;
+    return time;
   }
   var d3_timer_frame = d3_window.requestAnimationFrame || d3_window.webkitRequestAnimationFrame || d3_window.mozRequestAnimationFrame || d3_window.oRequestAnimationFrame || d3_window.msRequestAnimationFrame || function(callback) {
     setTimeout(callback, 17);
@@ -2777,7 +2788,7 @@ d3 = function() {
       function insidePolygon(p) {
         var wn = 0, n = polygon.length, y = p[1];
         for (var i = 0; i < n; ++i) {
-          for (var j = 1, v = polygon[i], m = v.length, a = v[0]; j < m; ++j) {
+          for (var j = 1, v = polygon[i], m = v.length, a = v[0], b; j < m; ++j) {
             b = v[j];
             if (a[1] <= y) {
               if (b[1] > y && isLeft(a, b, p) > 0) ++wn;
@@ -8550,31 +8561,25 @@ d3 = function() {
   d3.time.scale.utc = function() {
     return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
   };
-  d3.text = function() {
-    return d3.xhr.apply(d3, arguments).response(d3_text);
-  };
-  function d3_text(request) {
+  d3.text = d3_xhrType(function(request) {
     return request.responseText;
-  }
+  });
   d3.json = function(url, callback) {
-    return d3.xhr(url, "application/json", callback).response(d3_json);
+    return d3_xhr(url, "application/json", d3_json, callback);
   };
   function d3_json(request) {
     return JSON.parse(request.responseText);
   }
   d3.html = function(url, callback) {
-    return d3.xhr(url, "text/html", callback).response(d3_html);
+    return d3_xhr(url, "text/html", d3_html, callback);
   };
   function d3_html(request) {
     var range = d3_document.createRange();
     range.selectNode(d3_document.body);
     return range.createContextualFragment(request.responseText);
   }
-  d3.xml = function() {
-    return d3.xhr.apply(d3, arguments).response(d3_xml);
-  };
-  function d3_xml(request) {
+  d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
-  }
+  });
   return d3;
 }();
