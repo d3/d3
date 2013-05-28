@@ -16,18 +16,14 @@ d3.timer = function(callback, delay, then) {
   }
 
   // If the callback's already in the queue, update it.
-  var timer = d3_timer_byId[callback.id];
-  if (timer && timer.callback === callback) {
-    timer.then = then;
-    timer.delay = delay;
-  }
+  var time = then + delay, timer = d3_timer_byId[callback.id];
+  if (timer && timer.callback === callback) timer.time = time;
 
   // Otherwise, add the callback to the tail of the queue.
   else {
     d3_timer_byId[callback.id = ++d3_timer_id] = timer = {
       callback: callback,
-      then: then,
-      delay: delay,
+      time: time,
       next: null
     };
     if (d3_timer_queueTail) d3_timer_queueTail.next = timer;
@@ -44,17 +40,8 @@ d3.timer = function(callback, delay, then) {
 };
 
 function d3_timer_step() {
-  var elapsed,
-      now = Date.now(),
-      t1 = d3_timer_queueHead;
-
-  while (t1) {
-    elapsed = now - t1.then;
-    if (elapsed >= t1.delay) t1.flush = t1.callback(elapsed);
-    t1 = t1.next;
-  }
-
-  var delay = d3_timer_flush() - now;
+  var now = d3_timer_mark(),
+      delay = d3_timer_sweep() - now;
   if (delay > 24) {
     if (isFinite(delay)) {
       clearTimeout(d3_timer_timeout);
@@ -68,35 +55,37 @@ function d3_timer_step() {
 }
 
 d3.timer.flush = function() {
-  var elapsed,
-      now = Date.now(),
-      t1 = d3_timer_queueHead;
-
-  while (t1) {
-    elapsed = now - t1.then;
-    if (!t1.delay) t1.flush = t1.callback(elapsed);
-    t1 = t1.next;
-  }
-
-  d3_timer_flush();
+  d3_timer_mark();
+  d3_timer_sweep();
 };
 
+function d3_timer_mark() {
+  var now = Date.now();
+      t1 = d3_timer_queueHead;
+  while (t1) {
+    if (now >= t1.time) t1.flush = t1.callback(now - t1.time);
+    t1 = t1.next;
+  }
+  return now;
+}
+
 // Flush after callbacks to avoid concurrent queue modification.
-function d3_timer_flush() {
+// Returns the time of the earliest active timer, post-sweep.
+function d3_timer_sweep() {
   var t0,
       t1 = d3_timer_queueHead,
-      then = Infinity;
+      time = Infinity;
   while (t1) {
     if (t1.flush) {
       delete d3_timer_byId[t1.callback.id];
       t1 = t0 ? t0.next = t1.next : d3_timer_queueHead = t1.next;
     } else {
-      then = Math.min(then, t1.then + t1.delay);
+      time = Math.min(time, t1.time);
       t1 = (t0 = t1).next;
     }
   }
   d3_timer_queueTail = t0;
-  return then;
+  return time;
 }
 
 var d3_timer_frame = d3_window.requestAnimationFrame
