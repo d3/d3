@@ -18,6 +18,7 @@ d3.behavior.zoom = function() {
       y0,
       y1,
       touchtime; // time of last touchstart (to detect double-tap)
+	  tDistance; // square of the distance between two touches
 
   function zoom() {
     this.on("mousedown.zoom", mousedown)
@@ -147,6 +148,14 @@ d3.behavior.zoom = function() {
     touches.forEach(function(t) { translate0[t.identifier] = location(t); });
     d3_eventCancel();
 
+	// Android doesn`t set event.scale
+	if (touches.length > 1 && d3.event.scale == undefined) {
+		tDistance = (touches[0][0]-touches[1][0])*
+					(touches[0][0]-touches[1][0])+
+			        (touches[0][1]-touches[1][1])*
+					(touches[0][1]-touches[1][1]);
+	}
+ 
     if (touches.length === 1) {
       if (now - touchtime < 500) { // dbltap
         var p = touches[0], l = location(touches[0]);
@@ -162,6 +171,14 @@ d3.behavior.zoom = function() {
     var touches = d3.touches(this),
         p0 = touches[0],
         l0 = translate0[p0.identifier];
+		//so, if android does not set scale, we define scale as the new distance normalized by the old
+		if (touches.length > 1 && d3.event.scale == undefined) {
+		d3.event.scale = Math.sqrt(((touches[0][0]-touches[1][0])*
+									(touches[0][0]-touches[1][0])+
+			                        (touches[0][1]-touches[1][1])*
+									(touches[0][1]-touches[1][1]))/
+									tDistance);
+    }
     if (p1 = touches[1]) {
       var p1, l1 = translate0[p1.identifier];
       p0 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
