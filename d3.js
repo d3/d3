@@ -3285,7 +3285,7 @@ d3 = function() {
     function path(object) {
       if (object) {
         if (typeof pointRadius === "function") contextStream.pointRadius(+pointRadius.apply(this, arguments));
-        if (!cacheStream || cacheStream.invalid) cacheStream = projectStream(contextStream);
+        if (!cacheStream || !cacheStream.valid) cacheStream = projectStream(contextStream);
         d3.geo.stream(object, cacheStream);
       }
       return contextStream.result();
@@ -3375,7 +3375,9 @@ d3 = function() {
       return point && [ point[0] * d3_degrees, point[1] * d3_degrees ];
     }
     projection.stream = function(output) {
-      return stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
+      var stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
+      stream.valid = true;
+      return stream;
     };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;
@@ -3422,8 +3424,8 @@ d3 = function() {
     }
     function invalidate() {
       if (stream) {
-        stream.invalid = true;
-        delete stream;
+        stream.valid = false;
+        stream = null;
       }
       return projection;
     }

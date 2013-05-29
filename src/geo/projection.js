@@ -45,7 +45,9 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   projection.stream = function(output) {
-    return stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
+    var stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
+    stream.valid = true; // allow caching by d3.geo.path
+    return stream;
   };
 
   projection.clipAngle = function(_) {
@@ -101,8 +103,8 @@ function d3_geo_projectionMutator(projectAt) {
 
   function invalidate() {
     if (stream) {
-      stream.invalid = true;
-      delete stream;
+      stream.valid = false;
+      stream = null;
     }
     return projection;
   }

@@ -25,7 +25,7 @@ d3.geo.path = function() {
   function path(object) {
     if (object) {
       if (typeof pointRadius === "function") contextStream.pointRadius(+pointRadius.apply(this, arguments));
-      if (!cacheStream || cacheStream.invalid) cacheStream = projectStream(contextStream);
+      if (!cacheStream || !cacheStream.valid) cacheStream = projectStream(contextStream);
       d3.geo.stream(object, cacheStream);
     }
     return contextStream.result();
