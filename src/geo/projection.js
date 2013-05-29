@@ -6,6 +6,7 @@ import "clip-circle";
 import "clip-view";
 import "compose";
 import "geo";
+import "path";
 import "resample";
 import "rotation";
 import "stream";
@@ -30,7 +31,8 @@ function d3_geo_projectionMutator(projectAt) {
       preclip = d3_geo_clipAntimeridian,
       postclip = d3_identity,
       clipAngle = null,
-      clipExtent = null;
+      clipExtent = null,
+      id = -1;
 
   function projection(point) {
     point = projectRotate(point[0] * d3_radians, point[1] * d3_radians);
@@ -43,17 +45,22 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   projection.stream = function(stream) {
-    return d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(stream))));
+    if (d3_geo_pathStreamCache && d3_geo_pathStreamCache.id === id) return d3_geo_pathStreamCache.stream;
+    stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(stream))));
+    if (d3_geo_pathStreamCache) d3_geo_pathStreamCache.id = id, d3_geo_pathStreamCache.stream = stream;
+    return stream;
   };
 
   projection.clipAngle = function(_) {
     if (!arguments.length) return clipAngle;
+    ++id;
     preclip = _ == null ? (clipAngle = _, d3_geo_clipAntimeridian) : d3_geo_clipCircle((clipAngle = +_) * d3_radians);
     return projection;
   };
 
   projection.clipExtent = function(_) {
     if (!arguments.length) return clipExtent;
+    ++id;
     clipExtent = _;
     postclip = _ == null ? d3_identity : d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]);
     return projection;
@@ -90,6 +97,7 @@ function d3_geo_projectionMutator(projectAt) {
   d3.rebind(projection, projectResample, "precision");
 
   function reset() {
+    ++id;
     projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
     var center = project(λ, φ);
     δx = x - center[0] * k;

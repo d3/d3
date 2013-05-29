@@ -19,13 +19,21 @@ d3.geo.path = function() {
       projection,
       context,
       projectStream,
-      contextStream;
+      contextStream,
+      cache;
 
   function path(object) {
-    if (object) d3.geo.stream(object, projectStream(
-        contextStream.pointRadius(typeof pointRadius === "function"
-            ? +pointRadius.apply(this, arguments)
-            : pointRadius)));
+    if (object) {
+      d3_geo_pathStreamCache = cache;
+      try {
+        d3.geo.stream(object, projectStream(
+          contextStream.pointRadius(typeof pointRadius === "function"
+              ? +pointRadius.apply(this, arguments)
+              : pointRadius)));
+      } finally {
+        d3_geo_pathStreamCache = null;
+      }
+    }
     return contextStream.result();
   }
 
@@ -50,13 +58,13 @@ d3.geo.path = function() {
   path.projection = function(_) {
     if (!arguments.length) return projection;
     projectStream = (projection = _) ? _.stream || d3_geo_pathProjectStream(_) : d3_identity;
-    return path;
+    return reset();
   };
 
   path.context = function(_) {
     if (!arguments.length) return context;
     contextStream = (context = _) == null ? new d3_geo_pathBuffer : new d3_geo_pathContext(_);
-    return path;
+    return reset();
   };
 
   path.pointRadius = function(_) {
@@ -64,6 +72,11 @@ d3.geo.path = function() {
     pointRadius = typeof _ === "function" ? _ : +_;
     return path;
   };
+
+  function reset() {
+    cache = {id: -1, stream: null};
+    return path;
+  }
 
   return path.projection(d3.geo.albersUsa()).context(null);
 };
@@ -82,3 +95,5 @@ function d3_geo_pathProjectStream(project) {
     };
   };
 }
+
+var d3_geo_pathStreamCache = null;

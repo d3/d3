@@ -10,6 +10,15 @@ var formatNumber = d3.format(",.02r"),
     o,
     then;
 
+o = circle();
+then = Date.now();
+
+for (var i = 0, k = 0; i < n * 1000; i++, k++) {
+  path(o);
+}
+
+console.log("Single circle: " + formatNumber((Date.now() - then) / k) + "ms/op.");
+
 o = JSON.parse(fs.readFileSync("./test/data/us-counties.json"));
 then = Date.now();
 
