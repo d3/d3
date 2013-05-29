@@ -142,6 +142,7 @@ suite.addBatch({
       var f = format("%y");
       assert.equal(f(local(1990, 0, 1)), "90");
       assert.equal(f(local(2002, 0, 1)), "02");
+      assert.equal(f(local(-2, 0, 1)), "-02");
     },
     "formats zero-padded four-digit year": function(format) {
       var f = format("%Y");
@@ -149,6 +150,7 @@ suite.addBatch({
       assert.equal(f(local(1990, 0, 1)), "1990");
       assert.equal(f(local(2002, 0, 1)), "2002");
       assert.equal(f(local(10002, 0, 1)), "0002");
+      assert.equal(f(local(-2, 0, 1)), "-0002");
     },
     "formats time zone": function(format) {
       var f = format("%Z");
