@@ -113,6 +113,23 @@ suite.addBatch({
             [[480, -1e6], [480, 1e6], [1e6, -1e6], [1e6, 1e6]]
           ], 1e-6);
         }
+      },
+      "links": {
+        topic: function(v) {
+          return v.y(function(d) { return d.y; });
+        },
+        "for two points": function(v) {
+          assert.deepEqual(v.links([{x: 200, y: 200}, {x: 760, y: 300}]), [
+            {source: {x: 200, y: 200}, target: {x: 760, y: 300}}
+          ]);
+        },
+        "for three points": function(v) {
+          assert.deepEqual(v.links([{x: 200, y: 200}, {x: 500, y: 250}, {x: 760, y: 300}]), [
+            {source: {x: 200, y: 200}, target: {x: 760, y: 300}},
+            {source: {x: 500, y: 250}, target: {x: 760, y: 300}},
+            {source: {x: 200, y: 200}, target: {x: 500, y: 250}}
+          ]);
+        }
       }
     },
 
