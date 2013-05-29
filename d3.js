@@ -3281,15 +3281,12 @@ d3 = function() {
     return resample;
   }
   d3.geo.path = function() {
-    var pointRadius = 4.5, projection, context, projectStream, contextStream, cache;
+    var pointRadius = 4.5, projection, context, projectStream, contextStream, cacheStream;
     function path(object) {
       if (object) {
-        d3_geo_pathStreamCache = cache;
-        try {
-          d3.geo.stream(object, projectStream(contextStream.pointRadius(typeof pointRadius === "function" ? +pointRadius.apply(this, arguments) : pointRadius)));
-        } finally {
-          d3_geo_pathStreamCache = null;
-        }
+        if (typeof pointRadius === "function") contextStream.pointRadius(+pointRadius.apply(this, arguments));
+        if (!cacheStream || cacheStream.invalid) cacheStream = projectStream(contextStream);
+        d3.geo.stream(object, cacheStream);
       }
       return contextStream.result();
     }
@@ -3316,18 +3313,15 @@ d3 = function() {
     path.context = function(_) {
       if (!arguments.length) return context;
       contextStream = (context = _) == null ? new d3_geo_pathBuffer() : new d3_geo_pathContext(_);
-      return reset();
+      return path.pointRadius(pointRadius);
     };
     path.pointRadius = function(_) {
       if (!arguments.length) return pointRadius;
-      pointRadius = typeof _ === "function" ? _ : +_;
+      pointRadius = typeof _ === "function" ? _ : (contextStream.pointRadius(+_), +_);
       return path;
     };
     function reset() {
-      cache = {
-        id: -1,
-        stream: null
-      };
+      cacheStream = null;
       return path;
     }
     return path.projection(d3.geo.albersUsa()).context(null);
@@ -3360,7 +3354,6 @@ d3 = function() {
       };
     };
   }
-  var d3_geo_pathStreamCache = null;
   d3.geo.projection = d3_geo_projection;
   d3.geo.projectionMutator = d3_geo_projectionMutator;
   function d3_geo_projection(project) {
@@ -3372,7 +3365,7 @@ d3 = function() {
     var project, rotate, projectRotate, projectResample = d3_geo_resample(function(x, y) {
       x = project(x, y);
       return [ x[0] * k + δx, δy - x[1] * k ];
-    }), k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, preclip = d3_geo_clipAntimeridian, postclip = d3_identity, clipAngle = null, clipExtent = null, id = -1;
+    }), k = 150, x = 480, y = 250, λ = 0, φ = 0, δλ = 0, δφ = 0, δγ = 0, δx, δy, preclip = d3_geo_clipAntimeridian, postclip = d3_identity, clipAngle = null, clipExtent = null, stream;
     function projection(point) {
       point = projectRotate(point[0] * d3_radians, point[1] * d3_radians);
       return [ point[0] * k + δx, δy - point[1] * k ];
@@ -3381,24 +3374,19 @@ d3 = function() {
       point = projectRotate.invert((point[0] - δx) / k, (δy - point[1]) / k);
       return point && [ point[0] * d3_degrees, point[1] * d3_degrees ];
     }
-    projection.stream = function(stream) {
-      if (d3_geo_pathStreamCache && d3_geo_pathStreamCache.id === id) return d3_geo_pathStreamCache.stream;
-      stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(stream))));
-      if (d3_geo_pathStreamCache) d3_geo_pathStreamCache.id = id, d3_geo_pathStreamCache.stream = stream;
-      return stream;
+    projection.stream = function(output) {
+      return stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
     };
     projection.clipAngle = function(_) {
       if (!arguments.length) return clipAngle;
-      ++id;
       preclip = _ == null ? (clipAngle = _, d3_geo_clipAntimeridian) : d3_geo_clipCircle((clipAngle = +_) * d3_radians);
-      return projection;
+      return invalidate();
     };
     projection.clipExtent = function(_) {
       if (!arguments.length) return clipExtent;
-      ++id;
       clipExtent = _;
       postclip = _ == null ? d3_identity : d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]);
-      return projection;
+      return invalidate();
     };
     projection.scale = function(_) {
       if (!arguments.length) return k;
@@ -3426,11 +3414,17 @@ d3 = function() {
     };
     d3.rebind(projection, projectResample, "precision");
     function reset() {
-      ++id;
       projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
       var center = project(λ, φ);
       δx = x - center[0] * k;
       δy = y + center[1] * k;
+      return invalidate();
+    }
+    function invalidate() {
+      if (stream) {
+        stream.invalid = true;
+        delete stream;
+      }
       return projection;
     }
     return function() {
