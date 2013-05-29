@@ -19,6 +19,17 @@ for (var i = 0, k = 0; i < n * 1000; i++, k++) {
 
 console.log("Single circle: " + formatNumber((Date.now() - then) / k) + "ms/op.");
 
+o = JSON.parse(fs.readFileSync("./test/data/us-counties.json")).features;
+then = Date.now();
+
+for (var i = 0, k = 0; i < n; i++, k++) {
+  for (var j = 0, m = o.length; j < m; ++j) {
+    path(o[j]);
+  }
+}
+
+console.log("U.S. counties (separate): " + formatNumber((Date.now() - then) / k) + "ms/op.");
+
 o = JSON.parse(fs.readFileSync("./test/data/us-counties.json"));
 then = Date.now();
 
