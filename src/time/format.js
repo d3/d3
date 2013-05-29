@@ -79,9 +79,10 @@ function d3_time_formatLookup(names) {
 }
 
 function d3_time_formatPad(value, fill, width) {
-  value += "";
-  var length = value.length;
-  return length < width ? new Array(width - length + 1).join(fill) + value : value;
+  var sign = value < 0 ? "-" : "",
+      string = (sign ? -value : value) + "",
+      length = string.length;
+  return sign + (length < width ? new Array(width - length + 1).join(fill) + string : string);
 }
 
 var d3_time_dayRe = d3_time_formatRe(d3_time_days),
