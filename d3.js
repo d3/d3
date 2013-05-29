@@ -4357,10 +4357,9 @@ d3 = function() {
     };
     voronoi.triangles = function(data) {
       if (x === d3_svg_lineX && y === d3_svg_lineY) return d3.geom.delaunay(data);
-      var points, point, fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length;
-      for (points = new Array(n), i = 0; i < n; ++i) {
-        points[i] = point = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ];
-        point.data = d;
+      var points = new Array(n), fx = d3_functor(x), fy = d3_functor(y), d, i = -1, n = data.length;
+      while (++i < n) {
+        (points[i] = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]).data = d;
       }
       return d3.geom.delaunay(points).map(function(triangle) {
         return triangle.map(function(point) {

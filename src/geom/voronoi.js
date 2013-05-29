@@ -178,17 +178,15 @@ d3.geom.voronoi = function(points) {
   voronoi.triangles = function(data) {
     if (x === d3_svg_lineX && y === d3_svg_lineY) return d3.geom.delaunay(data);
 
-    var points,
-        point,
+    var points = new Array(n),
         fx = d3_functor(x),
         fy = d3_functor(y),
         d,
-        i,
+        i = -1,
         n = data.length;
 
-    for (points = new Array(n), i = 0; i < n; ++i) {
-      points[i] = point = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)];
-      point.data = d;
+    while (++i < n) {
+      (points[i] = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)]).data = d;
     }
 
     return d3.geom.delaunay(points).map(function(triangle) {
