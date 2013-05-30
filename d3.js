@@ -6976,6 +6976,10 @@ d3 = function() {
       range = _;
       return scale;
     };
+    scale.invertExtent = function(y) {
+      var i = range.indexOf(y);
+      return [ domain[i - 1], domain[i] ];
+    };
     scale.copy = function() {
       return d3_scale_threshold(domain, range);
     };
