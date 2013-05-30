@@ -24,8 +24,8 @@ function d3_scale_threshold(domain, range) {
   };
 
   scale.invertExtent = function(y) {
-    var i = range.indexOf(y);
-    return [domain[i - 1], domain[i]];
+    y = range.indexOf(y);
+    return [domain[y - 1], domain[y]];
   };
 
   scale.copy = function() {

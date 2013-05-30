@@ -6957,6 +6957,11 @@ d3 = function() {
     scale.copy = function() {
       return d3_scale_quantize(x0, x1, range);
     };
+    scale.invertExtent = function(y) {
+      y = range.indexOf(y);
+      y = y < 0 ? NaN : y / kx + x0;
+      return [ y, y + 1 / kx ];
+    };
     return rescale();
   }
   d3.scale.threshold = function() {
@@ -6977,8 +6982,8 @@ d3 = function() {
       return scale;
     };
     scale.invertExtent = function(y) {
-      var i = range.indexOf(y);
-      return [ domain[i - 1], domain[i] ];
+      y = range.indexOf(y);
+      return [ domain[y - 1], domain[y] ];
     };
     scale.copy = function() {
       return d3_scale_threshold(domain, range);
