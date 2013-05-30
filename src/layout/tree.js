@@ -5,7 +5,8 @@ import "hierarchy";
 d3.layout.tree = function() {
   var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
-      size = [1, 1]; // width, height
+      size = [1, 1], // width, height
+      nodeSize = false;
 
   function tree(d, i) {
     var nodes = hierarchy.call(this, d, i),
@@ -119,7 +120,11 @@ d3.layout.tree = function() {
         y1 = deep.depth || 1;
 
     // Clear temporary layout variables; transform x and y.
-    d3_layout_treeVisitAfter(root, function(node) {
+    d3_layout_treeVisitAfter(root, nodeSize ? function(node) {
+      node.x *= size[0];
+      node.y = node.depth * size[1];
+      delete node._tree;
+    } : function(node) {
       node.x = (node.x - x0) / (x1 - x0) * size[0];
       node.y = node.depth / y1 * size[1];
       delete node._tree;
@@ -135,8 +140,14 @@ d3.layout.tree = function() {
   };
 
   tree.size = function(x) {
-    if (!arguments.length) return size;
-    size = x;
+    if (!arguments.length) return nodeSize ? null : size;
+    nodeSize = (size = x) == null;
+    return tree;
+  };
+
+  tree.nodeSize = function(x) {
+    if (!arguments.length) return nodeSize ? size : null;
+    nodeSize = (size = x) != null;
     return tree;
   };
 
