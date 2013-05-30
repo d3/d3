@@ -1047,6 +1047,13 @@ d3 = function() {
     }
     return null;
   };
+  d3_selectionPrototype.size = function() {
+    var n = 0;
+    this.each(function() {
+      ++n;
+    });
+    return n;
+  };
   function d3_selection_enter(selection) {
     d3_arraySubclass(selection, d3_selection_enterPrototype);
     return selection;
@@ -1059,6 +1066,7 @@ d3 = function() {
   d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
   d3_selection_enterPrototype.node = d3_selectionPrototype.node;
   d3_selection_enterPrototype.call = d3_selectionPrototype.call;
+  d3_selection_enterPrototype.size = d3_selectionPrototype.size;
   d3_selection_enterPrototype.select = function(selector) {
     var subgroups = [], subgroup, subnode, upgroup, group, node;
     for (var j = -1, m = this.length; ++j < m; ) {

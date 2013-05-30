@@ -46,6 +46,7 @@ import "each";
 import "call";
 import "empty";
 import "node";
+import "size";
 import "enter";
 import "transition";
 
