@@ -1204,7 +1204,6 @@ d3 = function() {
       touches.forEach(function(t) {
         translate0[t.identifier] = location(t);
       });
-      d3_eventCancel();
       if (touches.length === 1) {
         if (now - touchtime < 500) {
           var p = touches[0], l = location(touches[0]);
