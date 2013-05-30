@@ -92,6 +92,7 @@ var d3_svg_lineInterpolators = d3.map({
   "linear": d3_svg_lineLinear,
   "linear-closed": d3_svg_lineLinearClosed,
   "step-before": d3_svg_lineStepBefore,
+  "step": d3_svg_lineStep,
   "step-after": d3_svg_lineStepAfter,
   "basis": d3_svg_lineBasis,
   "basis-open": d3_svg_lineBasisOpen,
@@ -124,6 +125,16 @@ function d3_svg_lineStepBefore(points) {
       p = points[0],
       path = [p[0], ",", p[1]];
   while (++i < n) path.push("V", (p = points[i])[1], "H", p[0]);
+  return path.join("");
+}
+
+// Step interpolation; generates "H" and "V" commands.
+function d3_svg_lineStep(points) {
+  var i = 0, n = points.length, p0, p1 = points[0], path = [ p1[0], ",", p1[1] ];
+  while (++i < n) {
+    p0 = p1, p1 = points[i];
+    path.push("H", (p0[0] + p1[0]) / 2, "V", p1[1], "H", p1[0]);
+  }
   return path.join("");
 }
 
