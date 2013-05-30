@@ -12,10 +12,14 @@ function d3_mousePoint(container, e) {
   if (svg.createSVGPoint) {
     var point = svg.createSVGPoint();
     if (d3_mouse_bug44083 < 0 && (d3_window.scrollX || d3_window.scrollY)) {
-      svg = d3.select(d3_document.body).append("svg")
-          .style("position", "absolute")
-          .style("top", 0)
-          .style("left", 0);
+      svg = d3.select("body").append("svg").style({
+        position: "absolute",
+        top: 0,
+        left: 0,
+        margin: 0,
+        padding: 0,
+        border: "none"
+      }, "important");
       var ctm = svg[0][0].getScreenCTM();
       d3_mouse_bug44083 = !(ctm.f || ctm.e);
       svg.remove();
