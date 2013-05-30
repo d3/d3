@@ -4271,9 +4271,9 @@ d3 = function() {
       var points, polygons = data.map(function() {
         return [];
       }), fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length, Z = 1e6;
-      if (fx === d3_svg_lineX && fy === d3_svg_lineY) points = data; else for (points = [], 
+      if (fx === d3_svg_lineX && fy === d3_svg_lineY) points = data; else for (points = new Array(n), 
       i = 0; i < n; ++i) {
-        points.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]);
+        points[i] = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ];
       }
       d3_geom_voronoiTessellate(points, function(e) {
         var s1, s2, x1, x2, y1, y2;
@@ -4356,8 +4356,9 @@ d3 = function() {
       var points, graph = data.map(function() {
         return [];
       }), links = [], fx = d3_functor(x), fy = d3_functor(y), d, i, n = data.length;
-      if (fx === d3_svg_lineX && fy === d3_svg_lineY) points = data; else for (i = 0; i < n; ++i) {
-        points.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]);
+      if (fx === d3_svg_lineX && fy === d3_svg_lineY) points = data; else for (points = new Array(n), 
+      i = 0; i < n; ++i) {
+        points[i] = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ];
       }
       d3_geom_voronoiTessellate(points, function(e) {
         var l = e.region.l.index, r = e.region.r.index;
@@ -4372,11 +4373,9 @@ d3 = function() {
     };
     voronoi.triangles = function(data) {
       if (x === d3_svg_lineX && y === d3_svg_lineY) return d3.geom.delaunay(data);
-      var points, point, fx = d3_functor(x), fy = d3_functor(y), d, i, n;
-      for (i = 0, points = [], n = data.length; i < n; ++i) {
-        point = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ];
-        point.data = d;
-        points.push(point);
+      var points = new Array(n), fx = d3_functor(x), fy = d3_functor(y), d, i = -1, n = data.length;
+      while (++i < n) {
+        (points[i] = [ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]).data = d;
       }
       return d3.geom.delaunay(points).map(function(triangle) {
         return triangle.map(function(point) {
