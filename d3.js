@@ -6691,8 +6691,8 @@ d3 = function() {
       return ticks;
     };
     scale.tickFormat = function(n, format) {
-      if (arguments.length < 2) format = d3_scale_logFormat;
-      if (!arguments.length) return format;
+      if (!arguments.length) return d3_scale_logFormat;
+      if (arguments.length < 2) format = d3_scale_logFormat; else if (typeof format !== "function") format = d3.format(format);
       var b = Math.log(base), k = Math.max(.1, n / scale.ticks().length), f = log === d3_scale_logn ? (e = -1e-12, 
       Math.floor) : (e = 1e-12, Math.ceil), e;
       return function(d) {
