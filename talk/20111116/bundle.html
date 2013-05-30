@@ -86,7 +86,8 @@ var div = d3.select("body").insert("div", "h2")
     .style("left", "-160px")
     .style("width", w + "px")
     .style("height", w + "px")
-    .style("position", "absolute");
+    .style("position", "absolute")
+    .style("-webkit-backface-visibility", "hidden");
 
 var svg = div.append("svg:svg")
     .attr("width", w)
@@ -148,7 +149,7 @@ function mousemove() {
   if (m0) {
     var m1 = mouse(d3.event),
         dm = Math.atan2(cross(m0, m1), dot(m0, m1)) * 180 / Math.PI;
-    div.style("-webkit-transform", "translate3d(0," + (ry - rx) + "px,0)rotate3d(0,0,0," + dm + "deg)translate3d(0," + (rx - ry) + "px,0)");
+    div.style("-webkit-transform", "translateY(" + (ry - rx) + "px)rotateZ(" + dm + "deg)translateY(" + (rx - ry) + "px)");
   }
 }
 
@@ -162,7 +163,7 @@ function mouseup() {
     else if (rotate < 0) rotate += 360;
     m0 = null;
 
-    div.style("-webkit-transform", "rotate3d(0,0,0,0deg)");
+    div.style("-webkit-transform", null);
 
     svg
         .attr("transform", "translate(" + rx + "," + ry + ")rotate(" + rotate + ")")
