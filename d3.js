@@ -1708,7 +1708,7 @@ d3 = function() {
       callback(error == null ? request : null);
     } : callback;
   }
-  function d3_dsv(delimiter, mimeType) {
+  d3.dsv = function(delimiter, mimeType) {
     var reFormat = new RegExp('["' + delimiter + "\n]"), delimiterCode = delimiter.charCodeAt(0);
     function dsv(url, row, callback) {
       if (arguments.length < 3) callback = row, row = null;
@@ -1809,9 +1809,9 @@ d3 = function() {
       return reFormat.test(text) ? '"' + text.replace(/\"/g, '""') + '"' : text;
     }
     return dsv;
-  }
-  d3.csv = d3_dsv(",", "text/csv");
-  d3.tsv = d3_dsv("	", "text/tab-separated-values");
+  };
+  d3.csv = d3.dsv(",", "text/csv");
+  d3.tsv = d3.dsv("	", "text/tab-separated-values");
   var d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout;
   d3.timer = function(callback, delay, then) {
     if (arguments.length < 3) {
