@@ -294,7 +294,9 @@ suite.addBatch({
           [[109.378, 189.584], [797.758, 504.660]], 1e-3);
       },
       "centroid of a line string": function(p) {
-        assert.inDelta(p.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]}), [545.130, 253.859], 1e-3);
+        var centroid = p.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]});
+        assert.inDelta(centroid[0], 545.131, 1e-3);
+        assert.inDelta(centroid[1], 253.860, 1e-3);
       }
     },
 
@@ -757,18 +759,37 @@ suite.addBatch({
     },
 
     "with an Albers projection and adaptive resampling": {
-      topic: function(path) {
-        return path()
+      "correctly resamples near the poles": function(path) {
+        var p = path()
             .context(testContext)
             .projection(_.geo.albers()
               .scale(140)
               .rotate([0, 0])
               .precision(1));
-      },
-      "correctly resamples near the poles": function(p) {
         p({type: "LineString", coordinates: [[0, 88], [180, 89]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
         p({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
+        assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+      },
+      "rotate([11.5, 285])": function(path) {
+        var p = path()
+            .context(testContext)
+            .projection(_.geo.albers()
+              .scale(140)
+              .rotate([11.5, 285])
+              .precision(1));
+        p({type: "LineString", coordinates: [[170, 20], [170, 0]]});
+        assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+      },
+      "wavy projection": function(path) {
+        var p = path()
+            .context(testContext)
+            .projection(_.geo.projection(function(λ, φ) {
+                return [λ, Math.sin(λ * 4)];
+              })
+              .scale(140)
+              .precision(1));
+        p({type: "LineString", coordinates: [[-45, 0], [45, 0]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
       }
     },
