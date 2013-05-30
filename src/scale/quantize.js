@@ -34,5 +34,12 @@ function d3_scale_quantize(x0, x1, range) {
     return d3_scale_quantize(x0, x1, range); // copy on write
   };
 
+  scale.invertExtent = function(y) {
+    y = range.indexOf(y);
+    if (y === -1) return null;
+    return [y      / kx + x0,
+           (y + 1) / kx + x0];
+  };
+
   return rescale();
 }
