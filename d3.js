@@ -1303,7 +1303,7 @@ d3 = function() {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
   }
   function d3_acos(x) {
-    return Math.acos(Math.max(-1, Math.min(1, x)));
+    return x > 1 ? 0 : x < -1 ? π : Math.acos(x);
   }
   function d3_asin(x) {
     return x > 1 ? π / 2 : x < -1 ? -π / 2 : Math.asin(x);
@@ -2170,7 +2170,7 @@ d3 = function() {
     d[2] /= l;
   }
   function d3_geo_spherical(cartesian) {
-    return [ Math.atan2(cartesian[1], cartesian[0]), Math.asin(Math.max(-1, Math.min(1, cartesian[2]))) ];
+    return [ Math.atan2(cartesian[1], cartesian[0]), d3_asin(cartesian[2]) ];
   }
   function d3_geo_sphericalEqual(a, b) {
     return Math.abs(a[0] - b[0]) < ε && Math.abs(a[1] - b[1]) < ε;
@@ -2307,7 +2307,7 @@ d3 = function() {
     d3_geo_centroidDimension = d3_geo_centroidW = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
     d3.geo.stream(object, d3_geo_centroid);
     var m;
-    return d3_geo_centroidW && Math.abs(m = Math.sqrt(d3_geo_centroidX * d3_geo_centroidX + d3_geo_centroidY * d3_geo_centroidY + d3_geo_centroidZ * d3_geo_centroidZ)) > ε ? [ Math.atan2(d3_geo_centroidY, d3_geo_centroidX) * d3_degrees, Math.asin(Math.max(-1, Math.min(1, d3_geo_centroidZ / m))) * d3_degrees ] : [ NaN, NaN ];
+    return d3_geo_centroidW && Math.abs(m = Math.sqrt(d3_geo_centroidX * d3_geo_centroidX + d3_geo_centroidY * d3_geo_centroidY + d3_geo_centroidZ * d3_geo_centroidZ)) > ε ? [ Math.atan2(d3_geo_centroidY, d3_geo_centroidX) * d3_degrees, d3_asin(d3_geo_centroidZ / m) * d3_degrees ] : [ NaN, NaN ];
   };
   var d3_geo_centroidDimension, d3_geo_centroidW, d3_geo_centroidX, d3_geo_centroidY, d3_geo_centroidZ;
   var d3_geo_centroid = {
@@ -3536,11 +3536,11 @@ d3 = function() {
     var cosδφ = Math.cos(δφ), sinδφ = Math.sin(δφ), cosδγ = Math.cos(δγ), sinδγ = Math.sin(δγ);
     function rotation(λ, φ) {
       var cosφ = Math.cos(φ), x = Math.cos(λ) * cosφ, y = Math.sin(λ) * cosφ, z = Math.sin(φ), k = z * cosδφ + x * sinδφ;
-      return [ Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ), Math.asin(Math.max(-1, Math.min(1, k * cosδγ + y * sinδγ))) ];
+      return [ Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ), d3_asin(k * cosδγ + y * sinδγ) ];
     }
     rotation.invert = function(λ, φ) {
       var cosφ = Math.cos(φ), x = Math.cos(λ) * cosφ, y = Math.sin(λ) * cosφ, z = Math.sin(φ), k = z * cosδγ - y * sinδγ;
-      return [ Math.atan2(y * cosδγ + z * sinδγ, x * cosδφ + k * sinδφ), Math.asin(Math.max(-1, Math.min(1, k * cosδφ - x * sinδφ))) ];
+      return [ Math.atan2(y * cosδγ + z * sinδγ, x * cosδφ + k * sinδφ), d3_asin(k * cosδφ - x * sinδφ) ];
     };
     return rotation;
   }

@@ -7,7 +7,7 @@ d3.geo.centroid = function(object) {
   d3.geo.stream(object, d3_geo_centroid);
   var m;
   return d3_geo_centroidW && Math.abs(m = Math.sqrt(d3_geo_centroidX * d3_geo_centroidX + d3_geo_centroidY * d3_geo_centroidY + d3_geo_centroidZ * d3_geo_centroidZ)) > ε
-      ? [Math.atan2(d3_geo_centroidY, d3_geo_centroidX) * d3_degrees, Math.asin(Math.max(-1, Math.min(1, d3_geo_centroidZ / m))) * d3_degrees]
+      ? [Math.atan2(d3_geo_centroidY, d3_geo_centroidX) * d3_degrees, d3_asin(d3_geo_centroidZ / m) * d3_degrees]
       : [NaN, NaN];
 };
 
