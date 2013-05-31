@@ -52,14 +52,19 @@ suite.addBatch({
       assert.inDelta(centroid({type: "MultiLineString", coordinates: [[[0, 0], [0, 2]]]}), [0, 1], 1e-6);
     },
 
-    "an empty line is treated as a point": function(centroid) {
-      assert.inDelta(centroid({type: "LineString", coordinates: [[1, 1], [1, 1]]}), [1, 1], 1e-6); // TODO
-      assert.inDelta(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}, {type: "LineString", coordinates: [[1, 2], [1, 2]]}]}), [0.499847, 1.000038], 1e-6);
+    "a line of zero length is treated as points": function(centroid) {
+      assert.inDelta(centroid({type: "LineString", coordinates: [[1, 1], [1, 1]]}), [1, 1], 1e-6);
+      assert.inDelta(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}, {type: "LineString", coordinates: [[1, 2], [1, 2]]}]}), [0.666534, 1.333408], 1e-6);
     },
 
-    "an empty polygon is treated as a point": function(centroid) {
-      assert.inDelta(centroid({type: "Polygon", coordinates: [[[1, 1], [1, 1], [1, 1], [1, 1]]]}), [1, 1], 1e-6); // TODO
-      assert.inDelta(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}, {type: "Polygon", coordinates: [[[1, 2], [1, 2], [1, 2], [1, 2]]]}]}), [0.499847, 1.000038], 1e-6);
+    "an empty polygon with non-zero extent is treated as a line": function(centroid) {
+      assert.inDelta(centroid({type: "Polygon", coordinates: [[[1, 1], [2, 1], [3, 1], [2, 1], [1, 1]]]}), [2, 1.000076], 1e-6); // TODO
+      assert.inDelta(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}, {type: "Polygon", coordinates: [[[1, 2], [1, 2], [1, 2], [1, 2]]]}]}), [0.799907, 1.600077], 1e-6);
+    },
+
+    "an empty polygon with zero extent is treated as a point": function(centroid) {
+      assert.inDelta(centroid({type: "Polygon", coordinates: [[[1, 1], [1, 1], [1, 1], [1, 1]]]}), [1, 1], 1e-6);
+      assert.inDelta(centroid({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [0, 0]}, {type: "Polygon", coordinates: [[[1, 2], [1, 2], [1, 2], [1, 2]]]}]}), [0.799907, 1.600077], 1e-6);
     },
 
     // TODO Don’t treat a polygon as a line string.
@@ -167,23 +172,23 @@ suite.addBatch({
         {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]},
         {type: "LineString", coordinates: [[179, 0], [180, 0]]},
         {type: "Point", coordinates: [0, 0]}
-      ]}), [-179.5, 0.5], 1e-6);
+      ]}), [-179.5, 0.500006], 1e-6);
       assert.inDelta(centroid({type: "GeometryCollection", geometries: [
         {type: "Point", coordinates: [0, 0]},
         {type: "LineString", coordinates: [[179, 0], [180, 0]]},
         {type: "Polygon", coordinates: [[[-180, 0], [-180, 1], [-179, 1], [-179, 0], [-180, 0]]]}
-      ]}), [-179.5, 0.5], 1e-6);
+      ]}), [-179.5, 0.500006], 1e-6);
     },
 
-    "the centroid of the sphere and a point only considers the sphere": function(centroid) {
-      assert.ok(centroid({type: "GeometryCollection", geometries: [
+    "the centroid of the sphere and a point is the point": function(centroid) {
+      assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
         {type: "Sphere"},
         {type: "Point", coordinates: [0, 0]}
-      ]}).every(isNaN));
-      assert.ok(centroid({type: "GeometryCollection", geometries: [
+      ]}), [0, 0]);
+      assert.deepEqual(centroid({type: "GeometryCollection", geometries: [
         {type: "Point", coordinates: [0, 0]},
         {type: "Sphere"}
-      ]}).every(isNaN));
+      ]}), [0, 0]);
     },
 
     "GeometryCollection": {
@@ -206,18 +211,6 @@ suite.addBatch({
           {type: "LineString", coordinates: [[179, 0], [180, 0]]},
           {type: "Polygon", coordinates: [[[-180, -10], [-180, 10], [-179, 10], [-179, -10], [-180, 0]]]}
         ]}), [-179.5, 0], 1e-6);
-      },
-      "Sphere, Point": function(centroid) {
-        assert.isUndefined(centroid({type: "GeometryCollection", geometries: [
-          {type: "Sphere"},
-          {type: "Point", coordinates: [0, 0]}
-        ]}));
-      },
-      "Point, Sphere": function(centroid) {
-        assert.isUndefined(centroid({type: "GeometryCollection", geometries: [
-          {type: "Point", coordinates: [0, 0]},
-          {type: "Sphere"}
-        ]}));
       }
     }
   }
