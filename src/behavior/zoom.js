@@ -145,7 +145,6 @@ d3.behavior.zoom = function() {
     scale0 = scale;
     translate0 = {};
     touches.forEach(function(t) { translate0[t.identifier] = location(t); });
-    d3_eventCancel();
 
     if (touches.length === 1) {
       if (now - touchtime < 500) { // dbltap

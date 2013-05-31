@@ -42,6 +42,14 @@ suite.addBatch({
       assert.equal(x(.6), b);
       assert.equal(x(.8), c);
       assert.equal(x(1), c);
+    },
+    "invertExtent": {
+      "returns the domain extent for the specified range value": function(threshold) {
+        var a = {}, b = {}, c = {}, x = threshold().domain([1/3, 2/3]).range([a, b, c]);
+        assert.deepEqual(x.invertExtent(a), [undefined, 1/3]);
+        assert.deepEqual(x.invertExtent(b), [1/3, 2/3]);
+        assert.deepEqual(x.invertExtent(c), [2/3, undefined]);
+      }
     }
   }
 });

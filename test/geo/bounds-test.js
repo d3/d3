@@ -228,6 +228,36 @@ suite.addBatch({
           }
         ]
       }), [[-120,46], [-119,47]]);
+    },
+    "null geometries": {
+      "Feature": function(bounds) {
+        var b = bounds({type: "Feature", geometry: null});
+        assert.isNaN(b[0][0]);
+        assert.isNaN(b[0][1]);
+        assert.isNaN(b[1][0]);
+        assert.isNaN(b[1][1]);
+      },
+      "MultiPoint": function(bounds) {
+        var b = bounds({type: "MultiPoint", coordinates: []});
+        assert.isNaN(b[0][0]);
+        assert.isNaN(b[0][1]);
+        assert.isNaN(b[1][0]);
+        assert.isNaN(b[1][1]);
+      },
+      "MultiLineString": function(bounds) {
+        var b = bounds({type: "MultiLineString", coordinates: []});
+        assert.isNaN(b[0][0]);
+        assert.isNaN(b[0][1]);
+        assert.isNaN(b[1][0]);
+        assert.isNaN(b[1][1]);
+      },
+      "MultiPolygon": function(bounds) {
+        var b = bounds({type: "MultiPolygon", coordinates: []});
+        assert.isNaN(b[0][0]);
+        assert.isNaN(b[0][1]);
+        assert.isNaN(b[1][0]);
+        assert.isNaN(b[1][1]);
+      }
     }
   }
 });

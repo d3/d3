@@ -12,14 +12,38 @@ suite.addBatch({
       topic: function(voronoi) {
         return voronoi();
       },
+      "has no defined clip extent": function(v) {
+        assert.isNull(v.clipExtent());
+      },
       "has no defined size": function(v) {
         assert.isNull(v.size());
       },
+      "returns the configured clip extent": function(v) {
+        try {
+          assert.deepEqual(v.clipExtent([[1, 2], [3, 4]]).clipExtent(), [[1, 2], [3, 4]]);
+        } finally {
+          v.clipExtent(null);
+        }
+      },
       "returns the configured size": function(v) {
         try {
-          assert.deepEqual(v.size([100, 100]).size(), [100, 100]);
+          assert.deepEqual(v.size([1, 2]).size(), [1, 2]);
         } finally {
           v.size(null);
+        }
+      },
+      "size implies a clip extent from [0, 0]": function(v) {
+        try {
+          assert.deepEqual(v.size([1, 2]).clipExtent(), [[0, 0], [1, 2]]);
+        } finally {
+          v.size(null);
+        }
+      },
+      "clip extent implies a size, assuming [0, 0]": function(v) {
+        try {
+          assert.deepEqual(v.clipExtent([[1, 2], [3, 4]]).size(), [3, 4]);
+        } finally {
+          v.clipExtent(null);
         }
       },
       "has the default x-accessor, d[0]": function(v) {
@@ -113,15 +137,32 @@ suite.addBatch({
             [[480, -1e6], [480, 1e6], [1e6, -1e6], [1e6, 1e6]]
           ], 1e-6);
         }
+      },
+      "links": {
+        topic: function(v) {
+          return v.y(function(d) { return d.y; });
+        },
+        "for two points": function(v) {
+          assert.deepEqual(v.links([{x: 200, y: 200}, {x: 760, y: 300}]), [
+            {source: {x: 200, y: 200}, target: {x: 760, y: 300}}
+          ]);
+        },
+        "for three points": function(v) {
+          assert.deepEqual(v.links([{x: 200, y: 200}, {x: 500, y: 250}, {x: 760, y: 300}]), [
+            {source: {x: 200, y: 200}, target: {x: 760, y: 300}},
+            {source: {x: 500, y: 250}, target: {x: 760, y: 300}},
+            {source: {x: 200, y: 200}, target: {x: 500, y: 250}}
+          ]);
+        }
       }
     },
 
-    "a voronoi layout with size 960x500": {
+    "a voronoi layout with clip extent [[0, 0], [960, 500]]": {
       topic: function(voronoi) {
         return voronoi()
             .x(function(d) { return d.x; })
             .y(function(d) { return d.y; })
-            .size([960, 500]);
+            .clipExtent([[0, 0], [960, 500]]);
       },
       "of two points": {
         topic: function(v) {
