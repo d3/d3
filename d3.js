@@ -5,7 +5,7 @@ d3 = function() {
   if (!Date.now) Date.now = function() {
     return +new Date();
   };
-  var d3_document = document, d3_window = window;
+  var d3_document = document, d3_documentElement = d3_document.documentElement, d3_window = window;
   try {
     d3_document.createElement("div").style.setProperty("opacity", 0, "");
   } catch (error) {
@@ -480,7 +480,7 @@ d3 = function() {
     return Array.prototype.slice.call(pseudoarray);
   }
   try {
-    d3_array(d3_document.documentElement.childNodes)[0].nodeType;
+    d3_array(d3_documentElement.childNodes)[0].nodeType;
   } catch (e) {
     d3_array = d3_arrayCopy;
   }
@@ -497,13 +497,31 @@ d3 = function() {
       return point;
     }) : [];
   };
+  var d3_vendor = function(p) {
+    var i = -1, n = p.length, s = d3_documentElement.style;
+    while (++i < n) if (p[i] + "Transform" in s) return p[i];
+    return "";
+  }([ "webkit", "ms", "Moz", "O" ]);
+  var d3_event_userSelectProperty = "userSelect" in d3_documentElement.style ? "userSelect" : d3_vendor + "UserSelect" in d3_documentElement.style ? d3_vendor + "UserSelect" : null;
+  var d3_event_userSelectSuppress = d3_event_userSelectProperty ? function() {
+    var style = d3_documentElement.style, select = style[d3_event_userSelectProperty];
+    style[d3_event_userSelectProperty] = "none";
+    return function() {
+      style[d3_event_userSelectProperty] = select;
+    };
+  } : function(type) {
+    var w = d3.select(d3_window).on("selectstart." + type, d3_eventCancel);
+    return function() {
+      w.on("selectstart." + type, null);
+    };
+  };
   d3.behavior.drag = function() {
     var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"), origin = null;
     function drag() {
       this.on("mousedown.drag", mousedown).on("touchstart.drag", mousedown);
     }
     function mousedown() {
-      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null, offset, origin_ = point(), moved = 0;
+      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null, offset, origin_ = point(), moved = 0, selectEnable = d3_event_userSelectSuppress(touchId != null ? "drag-" + touchId : "drag");
       var w = d3.select(d3_window).on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
       if (origin) {
         offset = origin.apply(target, arguments);
@@ -511,7 +529,6 @@ d3 = function() {
       } else {
         offset = [ 0, 0 ];
       }
-      if (touchId == null) d3_eventCancel();
       event_({
         type: "dragstart"
       });
@@ -544,6 +561,7 @@ d3 = function() {
           if (d3.event.target === eventTarget) d3_eventSuppress(w, "click");
         }
         w.on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
+        selectEnable();
       }
     }
     drag.origin = function(x) {
@@ -561,7 +579,7 @@ d3 = function() {
     return n.querySelector(s);
   }, d3_selectAll = function(s, n) {
     return n.querySelectorAll(s);
-  }, d3_selectRoot = d3_document.documentElement, d3_selectMatcher = d3_selectRoot.matchesSelector || d3_selectRoot.webkitMatchesSelector || d3_selectRoot.mozMatchesSelector || d3_selectRoot.msMatchesSelector || d3_selectRoot.oMatchesSelector, d3_selectMatches = function(n, s) {
+  }, d3_selectMatcher = d3_documentElement.matchesSelector || d3_documentElement[d3_vendor.toLowerCase() + "MatchesSelector"], d3_selectMatches = function(n, s) {
     return d3_selectMatcher.call(n, s);
   };
   if (typeof Sizzle === "function") {
@@ -1105,15 +1123,15 @@ d3 = function() {
   };
   d3.select = function(node) {
     var group = [ typeof node === "string" ? d3_select(node, d3_document) : node ];
-    group.parentNode = d3_selectRoot;
+    group.parentNode = d3_documentElement;
     return d3_selection([ group ]);
   };
   d3.selectAll = function(nodes) {
     var group = d3_array(typeof nodes === "string" ? d3_selectAll(nodes, d3_document) : nodes);
-    group.parentNode = d3_selectRoot;
+    group.parentNode = d3_documentElement;
     return d3_selection([ group ]);
   };
-  var d3_selectionRoot = d3.select(d3_selectRoot);
+  var d3_selectionRoot = d3.select(d3_documentElement);
   d3.behavior.zoom = function() {
     var translate = [ 0, 0 ], translate0, scale = 1, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     function zoom() {
@@ -1184,9 +1202,7 @@ d3 = function() {
       });
     }
     function mousedown() {
-      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, moved = 0, w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup), l = location(d3.mouse(target));
-      d3_window.focus();
-      d3_eventCancel();
+      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, moved = 0, w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup), l = location(d3.mouse(target)), selectEnable = d3_event_userSelectSuppress("zoom");
       function mousemove() {
         moved = 1;
         translateTo(d3.mouse(target), l);
@@ -1195,6 +1211,7 @@ d3 = function() {
       function mouseup() {
         if (moved) d3_eventCancel();
         w.on("mousemove.zoom", null).on("mouseup.zoom", null);
+        selectEnable();
         if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
       }
     }
@@ -1892,7 +1909,7 @@ d3 = function() {
     d3_timer_queueTail = t0;
     return time;
   }
-  var d3_timer_frame = d3_window.requestAnimationFrame || d3_window.webkitRequestAnimationFrame || d3_window.mozRequestAnimationFrame || d3_window.oRequestAnimationFrame || d3_window.msRequestAnimationFrame || function(callback) {
+  var d3_timer_frame = d3_window.requestAnimationFrame || d3_window[d3_vendor.toLowerCase() + "RequestAnimationFrame"] || function(callback) {
     setTimeout(callback, 17);
   };
   var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];

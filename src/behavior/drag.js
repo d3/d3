@@ -3,6 +3,7 @@ import "../core/rebind";
 import "../event/event";
 import "../event/mouse";
 import "../event/touches";
+import "../event/user-select";
 import "behavior";
 
 d3.behavior.drag = function() {
@@ -21,7 +22,8 @@ d3.behavior.drag = function() {
         touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null,
         offset,
         origin_ = point(),
-        moved = 0;
+        moved = 0,
+        selectEnable = d3_event_userSelectSuppress(touchId != null ? "drag-" + touchId : "drag");
 
     var w = d3.select(d3_window)
         .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove)
@@ -34,8 +36,6 @@ d3.behavior.drag = function() {
       offset = [0, 0];
     }
 
-    // Only cancel mousedown; touchstart is needed for draggable links.
-    if (touchId == null) d3_eventCancel();
     event_({type: "dragstart"});
 
     function point() {
@@ -70,6 +70,7 @@ d3.behavior.drag = function() {
 
       w .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null)
         .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
+      selectEnable();
     }
   }
 

@@ -1,5 +1,6 @@
 import "../core/array";
 import "../core/document";
+import "../core/vendor";
 
 function d3_selection(groups) {
   d3_arraySubclass(groups, d3_selectionPrototype);
@@ -8,8 +9,7 @@ function d3_selection(groups) {
 
 var d3_select = function(s, n) { return n.querySelector(s); },
     d3_selectAll = function(s, n) { return n.querySelectorAll(s); },
-    d3_selectRoot = d3_document.documentElement,
-    d3_selectMatcher = d3_selectRoot.matchesSelector || d3_selectRoot.webkitMatchesSelector || d3_selectRoot.mozMatchesSelector || d3_selectRoot.msMatchesSelector || d3_selectRoot.oMatchesSelector,
+    d3_selectMatcher = d3_documentElement.matchesSelector || d3_documentElement[d3_vendor.toLowerCase() + "MatchesSelector"],
     d3_selectMatches = function(n, s) { return d3_selectMatcher.call(n, s); };
 
 // Prefer Sizzle, if available.
@@ -53,14 +53,14 @@ import "transition";
 // TODO fast singleton implementation?
 d3.select = function(node) {
   var group = [typeof node === "string" ? d3_select(node, d3_document) : node];
-  group.parentNode = d3_selectRoot;
+  group.parentNode = d3_documentElement;
   return d3_selection([group]);
 };
 
 d3.selectAll = function(nodes) {
   var group = d3_array(typeof nodes === "string" ? d3_selectAll(nodes, d3_document) : nodes);
-  group.parentNode = d3_selectRoot;
+  group.parentNode = d3_documentElement;
   return d3_selection([group]);
 };
 
-var d3_selectionRoot = d3.select(d3_selectRoot);
+var d3_selectionRoot = d3.select(d3_documentElement);
