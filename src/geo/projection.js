@@ -45,7 +45,8 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   projection.stream = function(output) {
-    var stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
+    if (stream) stream.valid = false;
+    stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
     stream.valid = true; // allow caching by d3.geo.path
     return stream;
   };

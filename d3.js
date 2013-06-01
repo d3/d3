@@ -3408,7 +3408,8 @@ d3 = function() {
       return point && [ point[0] * d3_degrees, point[1] * d3_degrees ];
     }
     projection.stream = function(output) {
-      var stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
+      if (stream) stream.valid = false;
+      stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
       stream.valid = true;
       return stream;
     };
