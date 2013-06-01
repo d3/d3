@@ -58,7 +58,8 @@ d3.geo.path = function() {
   path.context = function(_) {
     if (!arguments.length) return context;
     contextStream = (context = _) == null ? new d3_geo_pathBuffer : new d3_geo_pathContext(_);
-    return path.pointRadius(pointRadius);
+    if (typeof pointRadius !== "function") contextStream.pointRadius(pointRadius);
+    return reset();
   };
 
   path.pointRadius = function(_) {

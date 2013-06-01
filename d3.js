@@ -3345,7 +3345,8 @@ d3 = function() {
     path.context = function(_) {
       if (!arguments.length) return context;
       contextStream = (context = _) == null ? new d3_geo_pathBuffer() : new d3_geo_pathContext(_);
-      return path.pointRadius(pointRadius);
+      if (typeof pointRadius !== "function") contextStream.pointRadius(pointRadius);
+      return reset();
     };
     path.pointRadius = function(_) {
       if (!arguments.length) return pointRadius;
@@ -3446,7 +3447,11 @@ d3 = function() {
       δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
       return reset();
     };
-    d3.rebind(projection, projectResample, "precision");
+    projection.precision = function(_) {
+      if (!arguments.length) return projectResample.precision();
+      projectResample.precision(_);
+      return invalidate();
+    };
     function reset() {
       projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
       var center = project(λ, φ);
