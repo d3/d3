@@ -3604,7 +3604,7 @@ d3 = function() {
     return Math.atan2(Math.sqrt((t = cosφ1 * sinΔλ) * t + (t = cosφ0 * sinφ1 - sinφ0 * cosφ1 * cosΔλ) * t), sinφ0 * sinφ1 + cosφ0 * cosφ1 * cosΔλ);
   };
   d3.geo.graticule = function() {
-    var x1, x0, X1, X0, y1, y0, Y1, Y0, dx = 10, dy = dx, DX = 90, DY = 360, x, y, X, Y, precision = 2.5;
+    var x1, x0, X1, X0, y1, y0, Y1, Y0, dx = 10, dy = dx, DX = 90, DY = 360, x, y, py, X, Y, PY, precision = 2.5;
     function graticule() {
       return {
         type: "MultiLineString",
@@ -3618,6 +3618,16 @@ d3 = function() {
         return Math.abs(y % DY) > ε;
       }).map(y));
     }
+    graticule.multipoint = function() {
+      return {
+        type: "MultiPoint",
+        coordinates: d3.merge(d3.range(Math.ceil(Y0 / DY) * DY, Y1, DY).map(PY).concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).map(py).map(function(line) {
+          return line.filter(function(p) {
+            return Math.abs(p[1] % DY) > ε || Math.abs(p[0] % DX) > ε;
+          });
+        })))
+      };
+    };
     graticule.lines = function() {
       return lines().map(function(coordinates) {
         return {
@@ -3671,8 +3681,10 @@ d3 = function() {
       precision = +_;
       x = d3_geo_graticuleX(y0, y1, 90);
       y = d3_geo_graticuleY(x0, x1, precision);
+      py = d3_geo_graticuleY(x0, (x0 + 180) % 360 === (x1 + 180) % 360 ? x1 - dx : x1, dx);
       X = d3_geo_graticuleX(Y0, Y1, 90);
       Y = d3_geo_graticuleY(X0, X1, precision);
+      PY = d3_geo_graticuleY(X0, (X0 + 180) % 360 === (X1 + 180) % 360 ? X1 - DX : X1, DX);
       return graticule;
     };
     return graticule.majorExtent([ [ -180, -90 + ε ], [ 180, 90 - ε ] ]).minorExtent([ [ -180, -80 - ε ], [ 180, 80 + ε ] ]);
