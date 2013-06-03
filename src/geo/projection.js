@@ -92,11 +92,7 @@ function d3_geo_projectionMutator(projectAt) {
     return reset();
   };
 
-  projection.precision = function(_) {
-    if (!arguments.length) return projectResample.precision();
-    projectResample.precision(_);
-    return invalidate();
-  };
+  d3.rebind(projection, projectResample, "precision");
 
   function reset() {
     projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
