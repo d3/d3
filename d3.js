@@ -1136,7 +1136,7 @@ d3 = function() {
   };
   var d3_selectionRoot = d3.select(d3_documentElement);
   d3.behavior.zoom = function() {
-    var translate = [ 0, 0 ], translate0, scale = 1, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
+    var translate = [ 0, 0 ], translate0, scale = 1, distance0, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     function zoom() {
       this.on("mousedown.zoom", mousedown).on("mousemove.zoom", mousemove).on(d3_behavior_zoomWheel + ".zoom", mousewheel).on("dblclick.zoom", dblclick).on("touchstart.zoom", touchstart).on("touchmove.zoom", touchmove).on("touchend.zoom", touchstart);
     }
@@ -1237,6 +1237,7 @@ d3 = function() {
       var touches = d3.touches(this), now = Date.now();
       scale0 = scale;
       translate0 = {};
+      distance0 = 0;
       touches.forEach(function(t) {
         translate0[t.identifier] = location(t);
       });
@@ -1248,15 +1249,22 @@ d3 = function() {
           dispatch(event.of(this, arguments));
         }
         touchtime = now;
+      } else if (touches.length > 1) {
+        var p = touches[0], q = touches[1], dx = p[0] - q[0], dy = p[1] - q[1];
+        distance0 = dx * dx + dy * dy;
       }
     }
     function touchmove() {
       var touches = d3.touches(this), p0 = touches[0], l0 = translate0[p0.identifier];
       if (p1 = touches[1]) {
-        var p1, l1 = translate0[p1.identifier];
+        var p1, l1 = translate0[p1.identifier], scale = d3.event.scale;
+        if (scale == null) {
+          var distance = (distance = p1[0] - p0[0]) * distance + (distance = p1[1] - p0[1]) * distance;
+          scale = distance0 && Math.sqrt(distance / distance0);
+        }
         p0 = [ (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 ];
         l0 = [ (l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2 ];
-        scaleTo(d3.event.scale * scale0);
+        scaleTo(scale * scale0);
       }
       translateTo(p0, l0);
       touchtime = null;
