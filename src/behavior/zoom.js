@@ -11,6 +11,7 @@ d3.behavior.zoom = function() {
   var translate = [0, 0],
       translate0, // translate when we started zooming (to avoid drift)
       scale = 1,
+      distance0, // distance² between initial touches
       scale0, // scale when we started touching
       scaleExtent = d3_behavior_zoomInfinity,
       event = d3_eventDispatch(zoom, "zoom"),
@@ -144,6 +145,7 @@ d3.behavior.zoom = function() {
 
     scale0 = scale;
     translate0 = {};
+    distance0 = 0;
     touches.forEach(function(t) { translate0[t.identifier] = location(t); });
 
     if (touches.length === 1) {
@@ -154,6 +156,10 @@ d3.behavior.zoom = function() {
         dispatch(event.of(this, arguments));
       }
       touchtime = now;
+    } else if (touches.length > 1) {
+      var p = touches[0], q = touches[1],
+          dx = p[0] - q[0], dy = p[1] - q[1];
+      distance0 = dx * dx + dy * dy;
     }
   }
 
@@ -162,10 +168,15 @@ d3.behavior.zoom = function() {
         p0 = touches[0],
         l0 = translate0[p0.identifier];
     if (p1 = touches[1]) {
-      var p1, l1 = translate0[p1.identifier];
+      var p1, l1 = translate0[p1.identifier],
+          scale = d3.event.scale;
+      if (scale == null) {
+        var distance = (distance = p1[0] - p0[0]) * distance + (distance = p1[1] - p0[1]) * distance;
+        scale = distance0 && Math.sqrt(distance / distance0);
+      }
       p0 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
       l0 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2];
-      scaleTo(d3.event.scale * scale0);
+      scaleTo(scale * scale0);
     }
     translateTo(p0, l0);
     touchtime = null;
