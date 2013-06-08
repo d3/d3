@@ -161,14 +161,12 @@ var d3_time_parsers = {
   "%": d3_time_parseLiteralPercent
 };
 
-// Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekdayAbbrev(date, string, i) {
   d3_time_dayAbbrevRe.lastIndex = 0;
   var n = d3_time_dayAbbrevRe.exec(string.substring(i));
   return n ? (date.w = d3_time_dayAbbrevLookup.get(n[0].toLowerCase()), i + n[0].length) : -1;
 }
 
-// Note: weekday is validated, but does not set the date.
 function d3_time_parseWeekday(date, string, i) {
   d3_time_dayRe.lastIndex = 0;
   var n = d3_time_dayRe.exec(string.substring(i));
