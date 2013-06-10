@@ -1,6 +1,6 @@
 import "time";
 
-function d3_time_interval(local, step, number) {
+function d3_time_interval(local, step) {
 
   function round(date) {
     var d0 = local(date), d1 = offset(d0, 1);
@@ -20,8 +20,10 @@ function d3_time_interval(local, step, number) {
   function range(t0, t1, dt) {
     var time = ceil(t0), times = [];
     if (dt > 1) {
+      var step_counter = 0;
       while (time < t1) {
-        if (!(number(time) % dt)) times.push(new Date(+time));
+        if (!(step_counter % dt)) times.push(new Date(+time));
+        step_counter++;
         step(time, 1);
       }
     } else {
