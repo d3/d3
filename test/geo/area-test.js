@@ -94,7 +94,7 @@ suite.addBatch({
           assert.inDelta(area(_.geo.circle().angle(1e-6).precision(.1)()), 0, 1e-6);
         },
         "huge": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(180 - 1e-6).precision(.1)()), 4 * π, 1e-6);
+          assert.inDelta(area(_.geo.circle().angle(180 - 1e-1).precision(.1)()), 4 * π, 1e-3);
         },
         "60° with 45° hole": function(area) {
           var circle = _.geo.circle().precision(.1);

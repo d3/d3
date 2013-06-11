@@ -25,13 +25,13 @@ var d3_geo_area = {
   },
   polygonEnd: function() {
     var area = 2 * d3_geo_areaRingSum;
-    d3_geo_areaSum += area < 0 ? 4 * π + area : area;
+    d3_geo_areaSum += area < -ε ? 4 * π + area : area;
     d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
   }
 };
 
 function d3_geo_areaRingStart() {
-  var λ00, φ00, λ0, cosφ0, sinφ0; // start point and two previous points
+  var λ00, φ00, λ0, cosφ0, sinφ0; // start point and previous point
 
   // For the first point, …
   d3_geo_area.point = function(λ, φ) {

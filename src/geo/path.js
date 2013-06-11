@@ -19,13 +19,15 @@ d3.geo.path = function() {
       projection,
       context,
       projectStream,
-      contextStream;
+      contextStream,
+      cacheStream;
 
   function path(object) {
-    if (object) d3.geo.stream(object, projectStream(
-        contextStream.pointRadius(typeof pointRadius === "function"
-            ? +pointRadius.apply(this, arguments)
-            : pointRadius)));
+    if (object) {
+      if (typeof pointRadius === "function") contextStream.pointRadius(+pointRadius.apply(this, arguments));
+      if (!cacheStream || !cacheStream.valid) cacheStream = projectStream(contextStream);
+      d3.geo.stream(object, cacheStream);
+    }
     return contextStream.result();
   }
 
@@ -36,9 +38,14 @@ d3.geo.path = function() {
   };
 
   path.centroid = function(object) {
-    d3_geo_centroidDimension = d3_geo_centroidX = d3_geo_centroidY = d3_geo_centroidZ = 0;
+    d3_geo_centroidX0 = d3_geo_centroidY0 = d3_geo_centroidZ0 =
+    d3_geo_centroidX1 = d3_geo_centroidY1 = d3_geo_centroidZ1 =
+    d3_geo_centroidX2 = d3_geo_centroidY2 = d3_geo_centroidZ2 = 0;
     d3.geo.stream(object, projectStream(d3_geo_pathCentroid));
-    return d3_geo_centroidZ ? [d3_geo_centroidX / d3_geo_centroidZ, d3_geo_centroidY / d3_geo_centroidZ] : undefined;
+    return d3_geo_centroidZ2 ? [d3_geo_centroidX2 / d3_geo_centroidZ2, d3_geo_centroidY2 / d3_geo_centroidZ2]
+        : d3_geo_centroidZ1 ? [d3_geo_centroidX1 / d3_geo_centroidZ1, d3_geo_centroidY1 / d3_geo_centroidZ1]
+        : d3_geo_centroidZ0 ? [d3_geo_centroidX0 / d3_geo_centroidZ0, d3_geo_centroidY0 / d3_geo_centroidZ0]
+        : [NaN, NaN];
   };
 
   path.bounds = function(object) {
@@ -50,20 +57,26 @@ d3.geo.path = function() {
   path.projection = function(_) {
     if (!arguments.length) return projection;
     projectStream = (projection = _) ? _.stream || d3_geo_pathProjectStream(_) : d3_identity;
-    return path;
+    return reset();
   };
 
   path.context = function(_) {
     if (!arguments.length) return context;
     contextStream = (context = _) == null ? new d3_geo_pathBuffer : new d3_geo_pathContext(_);
-    return path;
+    if (typeof pointRadius !== "function") contextStream.pointRadius(pointRadius);
+    return reset();
   };
 
   path.pointRadius = function(_) {
     if (!arguments.length) return pointRadius;
-    pointRadius = typeof _ === "function" ? _ : +_;
+    pointRadius = typeof _ === "function" ? _ : (contextStream.pointRadius(+_), +_);
     return path;
   };
+
+  function reset() {
+    cacheStream = null;
+    return path;
+  }
 
   return path.projection(d3.geo.albersUsa()).context(null);
 };

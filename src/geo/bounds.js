@@ -136,29 +136,34 @@ d3.geo.bounds = (function() {
 
     d3.geo.stream(feature, bound);
 
-    // First, sort ranges by their minimum longitudes.
-    ranges.sort(compareRanges);
+    var n = ranges.length;
+    if (n) {
+      // First, sort ranges by their minimum longitudes.
+      ranges.sort(compareRanges);
 
-    // Then, merge any ranges that overlap.
-    for (var i = 1, n = ranges.length, a = ranges[0], b, merged = [a]; i < n; ++i) {
-      b = ranges[i];
-      if (withinRange(b[0], a) || withinRange(b[1], a)) {
-        if (angle(a[0], b[1]) > angle(a[0], a[1])) a[1] = b[1];
-        if (angle(b[0], a[1]) > angle(a[0], a[1])) a[0] = b[0];
-      } else {
-        merged.push(a = b);
+      // Then, merge any ranges that overlap.
+      for (var i = 1, a = ranges[0], b, merged = [a]; i < n; ++i) {
+        b = ranges[i];
+        if (withinRange(b[0], a) || withinRange(b[1], a)) {
+          if (angle(a[0], b[1]) > angle(a[0], a[1])) a[1] = b[1];
+          if (angle(b[0], a[1]) > angle(a[0], a[1])) a[0] = b[0];
+        } else {
+          merged.push(a = b);
+        }
       }
-    }
 
-    // Finally, find the largest gap between the merged ranges.
-    // The final bounding box will be the inverse of this gap.
-    var best = -Infinity, dλ;
-    for (var n = merged.length - 1, i = 0, a = merged[n], b; i <= n; a = b, ++i) {
-      b = merged[i];
-      if ((dλ = angle(a[1], b[0])) > best) best = dλ, λ0 = b[0], λ1 = a[1];
+      // Finally, find the largest gap between the merged ranges.
+      // The final bounding box will be the inverse of this gap.
+      var best = -Infinity, dλ;
+      for (var n = merged.length - 1, i = 0, a = merged[n], b; i <= n; a = b, ++i) {
+        b = merged[i];
+        if ((dλ = angle(a[1], b[0])) > best) best = dλ, λ0 = b[0], λ1 = a[1];
+      }
     }
     ranges = range = null;
 
-    return [[λ0, φ0], [λ1, φ1]];
+    return λ0 === Infinity || φ0 === Infinity
+        ? [[NaN, NaN], [NaN, NaN]]
+        : [[λ0, φ0], [λ1, φ1]];
   };
 })();

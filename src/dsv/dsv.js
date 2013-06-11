@@ -1,7 +1,7 @@
 import "../arrays/set";
 import "../xhr/xhr";
 
-function d3_dsv(delimiter, mimeType) {
+d3.dsv = function(delimiter, mimeType) {
   var reFormat = new RegExp("[\"" + delimiter + "\n]"),
       delimiterCode = delimiter.charCodeAt(0);
 
@@ -133,4 +133,4 @@ function d3_dsv(delimiter, mimeType) {
   }
 
   return dsv;
-}
+};
