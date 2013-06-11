@@ -2123,7 +2123,7 @@ d3 = function() {
     },
     polygonEnd: function() {
       var area = 2 * d3_geo_areaRingSum;
-      d3_geo_areaSum += area < 0 ? 4 * π + area : area;
+      d3_geo_areaSum += area < -ε ? 4 * π + area : area;
       d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
     }
   };
@@ -2632,7 +2632,7 @@ d3 = function() {
       }
       if (Math.abs(polarAngle) > ε) polar = true;
     }
-    return (!southPole && !polar && area < 0 || polarAngle < -ε) ^ winding & 1;
+    return (!southPole && !polar && area < -ε || polarAngle < -ε) ^ winding & 1;
   }
   var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate, d3_geo_clipAntimeridianPolygonContains);
   function d3_geo_clipAntimeridianLine(listener) {
