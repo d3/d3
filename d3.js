@@ -2040,32 +2040,26 @@ d3 = function() {
     };
   }
   d3.geo = {};
-  function d3_geo_accumulator() {
-    this._s = this._t = 0;
-  }
+  function d3_geo_accumulator() {}
   d3_geo_accumulator.prototype = {
+    s: 0,
+    t: 0,
     add: function(y) {
-      var u = d3_geo_accumulatorSum(y, this._t), v = d3_geo_accumulatorSum(u.s, this._s);
-      u = u.t;
-      this._s = v.s;
-      this._t = v.t;
-      if (this._s == 0) this._s = u; else this._t += u;
+      d3_geo_accumulatorSum(y, this.t, d3_geo_accumulatorTemp);
+      d3_geo_accumulatorSum(d3_geo_accumulatorTemp.s, this.s, this);
+      if (this.s) this.t += d3_geo_accumulatorTemp.t; else this.s = d3_geo_accumulatorTemp.t;
     },
     reset: function() {
-      this._s = this._t = 0;
+      this.s = this.t = 0;
     },
-    sum: function() {
-      return this._s;
+    valueOf: function() {
+      return this.s;
     }
   };
-  function d3_geo_accumulatorSum(u, v) {
-    var s = u + v, up = s - v, vpp = s - up;
-    up -= u;
-    vpp -= v;
-    return {
-      s: s,
-      t: -(up + vpp)
-    };
+  var d3_geo_accumulatorTemp = new d3_geo_accumulator();
+  function d3_geo_accumulatorSum(a, b, o) {
+    var x = o.s = a + b, bv = x - a, av = x - bv, br = b - bv, ar = a - av;
+    o.t = ar + br;
   }
   d3.geo.stream = function(object, listener) {
     if (object && d3_geo_streamObjectType.hasOwnProperty(object.type)) {
@@ -2149,7 +2143,7 @@ d3 = function() {
       d3_geo_area.lineStart = d3_geo_areaRingStart;
     },
     polygonEnd: function() {
-      var area = 2 * d3_geo_areaRingSum.sum();
+      var area = 2 * d3_geo_areaRingSum;
       d3_geo_areaSum += area < 0 ? 4 * π + area : area;
       d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
     }
@@ -2220,7 +2214,7 @@ d3 = function() {
         bound.point = point;
         bound.lineStart = lineStart;
         bound.lineEnd = lineEnd;
-        if (d3_geo_areaRingSum.sum() < 0) λ0 = -(λ1 = 180), φ0 = -(φ1 = 90); else if (dλSum > ε) φ1 = 90; else if (dλSum < -ε) φ0 = -90;
+        if (d3_geo_areaRingSum < 0) λ0 = -(λ1 = 180), φ0 = -(φ1 = 90); else if (dλSum > ε) φ1 = 90; else if (dλSum < -ε) φ0 = -90;
         range[0] = λ0, range[1] = λ1;
       }
     };
@@ -2660,7 +2654,7 @@ d3 = function() {
       }
       if (Math.abs(polarAngle) > ε) polar = true;
     }
-    return (!southPole && !polar && d3_geo_areaRingSum.sum() < 0 || polarAngle < -ε) ^ winding & 1;
+    return (!southPole && !polar && d3_geo_areaRingSum < 0 || polarAngle < -ε) ^ winding & 1;
   }
   var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate, d3_geo_clipAntimeridianPolygonContains);
   function d3_geo_clipAntimeridianLine(listener) {

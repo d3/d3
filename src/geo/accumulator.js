@@ -6,33 +6,32 @@
 // http://geographiclib.sourceforge.net/
 // See lib/geographiclib/LICENSE for details.
 
-function d3_geo_accumulator() {
-  this._s = this._t = 0;
-}
+function d3_geo_accumulator() {}
 
 d3_geo_accumulator.prototype = {
+  s: 0, // rounded value
+  t: 0, // exact error
   add: function(y) {
-    var u = d3_geo_accumulatorSum(y, this._t),
-        v = d3_geo_accumulatorSum(u.s, this._s);
-    u = u.t;
-    this._s = v.s;
-    this._t = v.t;
-    if (this._s == 0) this._s = u;
-    else this._t += u;
+    d3_geo_accumulatorSum(y, this.t, d3_geo_accumulatorTemp);
+    d3_geo_accumulatorSum(d3_geo_accumulatorTemp.s, this.s, this);
+    if (this.s) this.t += d3_geo_accumulatorTemp.t;
+    else this.s = d3_geo_accumulatorTemp.t;
   },
   reset: function() {
-    this._s = this._t = 0;
+    this.s = this.t = 0;
   },
-  sum: function() {
-    return this._s;
+  valueOf: function() {
+    return this.s;
   }
 };
 
-function d3_geo_accumulatorSum(u, v) {
-  var s = u + v,
-      up = s - v,
-      vpp = s - up;
-  up -= u;
-  vpp -= v;
-  return {s: s, t: -(up + vpp)};
+var d3_geo_accumulatorTemp = new d3_geo_accumulator;
+
+function d3_geo_accumulatorSum(a, b, o) {
+  var x = o.s = a + b,
+      bv = x - a, // b_virtual
+      av = x - bv, // a_virtual
+      br = b - bv, // b_roundoff
+      ar = a - av; // a_roundoff
+  o.t = ar + br;
 }
