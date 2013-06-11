@@ -10,8 +10,8 @@ function d3_geo_pointInPolygon(point, polygon) {
       polarAngle = 0,
       polar = false,
       southPole = false,
-      winding = 0,
-      area = 0;
+      winding = 0;
+  d3_geo_areaRingSum.reset();
 
   for (var i = 0, n = polygon.length; i < n; ++i) {
     var ring = polygon[i],
@@ -34,7 +34,7 @@ function d3_geo_pointInPolygon(point, polygon) {
           dλ = λ - λ0,
           antimeridian = Math.abs(dλ) > π,
           k = sinφ0 * sinφ;
-      area += Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ));
+      d3_geo_areaRingSum.add(Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ)));
 
       if (Math.abs(φ) < ε) southPole = true;
       polarAngle += antimeridian ? dλ + (dλ >= 0 ? 2 : -2) * π : dλ;
@@ -67,5 +67,5 @@ function d3_geo_pointInPolygon(point, polygon) {
   // from the point to the South pole.  If it is zero, then the point is the
   // same side as the South pole.
 
-  return (!southPole && !polar && area < 0 || polarAngle < -ε) ^ (winding & 1);
+  return (!southPole && !polar && d3_geo_areaRingSum.sum() < 0 || polarAngle < -ε) ^ (winding & 1);
 }

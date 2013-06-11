@@ -2040,6 +2040,33 @@ d3 = function() {
     };
   }
   d3.geo = {};
+  function d3_geo_accumulator() {
+    this._s = this._t = 0;
+  }
+  d3_geo_accumulator.prototype = {
+    add: function(y) {
+      var u = d3_geo_accumulatorSum(y, this._t), v = d3_geo_accumulatorSum(u.s, this._s);
+      u = u.t;
+      this._s = v.s;
+      this._t = v.t;
+      if (this._s == 0) this._s = u; else this._t += u;
+    },
+    reset: function() {
+      this._s = this._t = 0;
+    },
+    sum: function() {
+      return this._s;
+    }
+  };
+  function d3_geo_accumulatorSum(u, v) {
+    var s = u + v, up = s - v, vpp = s - up;
+    up -= u;
+    vpp -= v;
+    return {
+      s: s,
+      t: -(up + vpp)
+    };
+  }
   d3.geo.stream = function(object, listener) {
     if (object && d3_geo_streamObjectType.hasOwnProperty(object.type)) {
       d3_geo_streamObjectType[object.type](object, listener);
@@ -2109,7 +2136,7 @@ d3 = function() {
     d3.geo.stream(object, d3_geo_area);
     return d3_geo_areaSum;
   };
-  var d3_geo_areaSum, d3_geo_areaRingSum;
+  var d3_geo_areaSum, d3_geo_areaRingSum = new d3_geo_accumulator();
   var d3_geo_area = {
     sphere: function() {
       d3_geo_areaSum += 4 * π;
@@ -2118,11 +2145,11 @@ d3 = function() {
     lineStart: d3_noop,
     lineEnd: d3_noop,
     polygonStart: function() {
-      d3_geo_areaRingSum = 0;
+      d3_geo_areaRingSum.reset();
       d3_geo_area.lineStart = d3_geo_areaRingStart;
     },
     polygonEnd: function() {
-      var area = 2 * d3_geo_areaRingSum;
+      var area = 2 * d3_geo_areaRingSum.sum();
       d3_geo_areaSum += area < 0 ? 4 * π + area : area;
       d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
     }
@@ -2138,7 +2165,7 @@ d3 = function() {
       λ *= d3_radians;
       φ = φ * d3_radians / 2 + π / 4;
       var dλ = λ - λ0, cosφ = Math.cos(φ), sinφ = Math.sin(φ), k = sinφ0 * sinφ, u = cosφ0 * cosφ + k * Math.cos(dλ), v = k * Math.sin(dλ);
-      d3_geo_areaRingSum += Math.atan2(v, u);
+      d3_geo_areaRingSum.add(Math.atan2(v, u));
       λ0 = λ, cosφ0 = cosφ, sinφ0 = sinφ;
     }
     d3_geo_area.lineEnd = function() {
@@ -2193,7 +2220,7 @@ d3 = function() {
         bound.point = point;
         bound.lineStart = lineStart;
         bound.lineEnd = lineEnd;
-        if (d3_geo_areaRingSum < 0) λ0 = -(λ1 = 180), φ0 = -(φ1 = 90); else if (dλSum > ε) φ1 = 90; else if (dλSum < -ε) φ0 = -90;
+        if (d3_geo_areaRingSum.sum() < 0) λ0 = -(λ1 = 180), φ0 = -(φ1 = 90); else if (dλSum > ε) φ1 = 90; else if (dλSum < -ε) φ0 = -90;
         range[0] = λ0, range[1] = λ1;
       }
     };
@@ -2605,7 +2632,8 @@ d3 = function() {
     return ((a = a.point)[0] < 0 ? a[1] - π / 2 - ε : π / 2 - a[1]) - ((b = b.point)[0] < 0 ? b[1] - π / 2 - ε : π / 2 - b[1]);
   }
   function d3_geo_pointInPolygon(point, polygon) {
-    var meridian = point[0], parallel = point[1], meridianNormal = [ Math.sin(meridian), -Math.cos(meridian), 0 ], polarAngle = 0, polar = false, southPole = false, winding = 0, area = 0;
+    var meridian = point[0], parallel = point[1], meridianNormal = [ Math.sin(meridian), -Math.cos(meridian), 0 ], polarAngle = 0, polar = false, southPole = false, winding = 0;
+    d3_geo_areaRingSum.reset();
     for (var i = 0, n = polygon.length; i < n; ++i) {
       var ring = polygon[i], m = ring.length;
       if (!m) continue;
@@ -2614,7 +2642,7 @@ d3 = function() {
         if (j === m) j = 0;
         point = ring[j];
         var λ = point[0], φ = point[1] / 2 + π / 4, sinφ = Math.sin(φ), cosφ = Math.cos(φ), dλ = λ - λ0, antimeridian = Math.abs(dλ) > π, k = sinφ0 * sinφ;
-        area += Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ));
+        d3_geo_areaRingSum.add(Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ)));
         if (Math.abs(φ) < ε) southPole = true;
         polarAngle += antimeridian ? dλ + (dλ >= 0 ? 2 : -2) * π : dλ;
         if (antimeridian ^ λ0 >= meridian ^ λ >= meridian) {
@@ -2632,7 +2660,7 @@ d3 = function() {
       }
       if (Math.abs(polarAngle) > ε) polar = true;
     }
-    return (!southPole && !polar && area < 0 || polarAngle < -ε) ^ winding & 1;
+    return (!southPole && !polar && d3_geo_areaRingSum.sum() < 0 || polarAngle < -ε) ^ winding & 1;
   }
   var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate, d3_geo_clipAntimeridianPolygonContains);
   function d3_geo_clipAntimeridianLine(listener) {

@@ -32,7 +32,7 @@ d3.geo.bounds = (function() {
       bound.point = point;
       bound.lineStart = lineStart;
       bound.lineEnd = lineEnd;
-      if (d3_geo_areaRingSum < 0) λ0 = -(λ1 = 180), φ0 = -(φ1 = 90);
+      if (d3_geo_areaRingSum.sum() < 0) λ0 = -(λ1 = 180), φ0 = -(φ1 = 90);
       else if (dλSum > ε) φ1 = 90;
       else if (dλSum < -ε) φ0 = -90;
       range[0] = λ0, range[1] = λ1;

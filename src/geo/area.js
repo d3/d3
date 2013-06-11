@@ -1,5 +1,6 @@
 import "../core/noop";
 import "../math/trigonometry";
+import "accumulator";
 import "geo";
 import "stream";
 
@@ -10,7 +11,7 @@ d3.geo.area = function(object) {
 };
 
 var d3_geo_areaSum,
-    d3_geo_areaRingSum;
+    d3_geo_areaRingSum = new d3_geo_accumulator;
 
 var d3_geo_area = {
   sphere: function() { d3_geo_areaSum += 4 * π; },
@@ -20,11 +21,11 @@ var d3_geo_area = {
 
   // Only count area for polygon rings.
   polygonStart: function() {
-    d3_geo_areaRingSum = 0;
+    d3_geo_areaRingSum.reset();
     d3_geo_area.lineStart = d3_geo_areaRingStart;
   },
   polygonEnd: function() {
-    var area = 2 * d3_geo_areaRingSum;
+    var area = 2 * d3_geo_areaRingSum.sum();
     d3_geo_areaSum += area < 0 ? 4 * π + area : area;
     d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
   }
@@ -53,7 +54,7 @@ function d3_geo_areaRingStart() {
         k = sinφ0 * sinφ,
         u = cosφ0 * cosφ + k * Math.cos(dλ),
         v = k * Math.sin(dλ);
-    d3_geo_areaRingSum += Math.atan2(v, u);
+    d3_geo_areaRingSum.add(Math.atan2(v, u));
 
     // Advance the previous points.
     λ0 = λ, cosφ0 = cosφ, sinφ0 = sinφ;
