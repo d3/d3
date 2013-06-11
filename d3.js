@@ -8022,7 +8022,7 @@ d3 = function() {
   var d3_time_prototype = Date.prototype;
   var d3_time_formatDateTime = "%a %b %e %X %Y", d3_time_formatDate = "%m/%d/%Y", d3_time_formatTime = "%H:%M:%S";
   var d3_time_days = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ], d3_time_dayAbbreviations = [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ], d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], d3_time_monthAbbreviations = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
-  function d3_time_interval(local, step, number) {
+  function d3_time_interval(local, step) {
     function round(date) {
       var d0 = local(date), d1 = offset(d0, 1);
       return date - d0 < d1 - date ? d0 : d1;
@@ -8038,8 +8038,10 @@ d3 = function() {
     function range(t0, t1, dt) {
       var time = ceil(t0), times = [];
       if (dt > 1) {
+        var step_counter = 0;
         while (time < t1) {
-          if (!(number(time) % dt)) times.push(new Date(+time));
+          if (!(step_counter % dt)) times.push(new Date(+time));
+          step_counter++;
           step(time, 1);
         }
       } else {
@@ -8088,8 +8090,6 @@ d3 = function() {
     return date;
   }, function(date, offset) {
     date.setFullYear(date.getFullYear() + offset);
-  }, function(date) {
-    return date.getFullYear();
   });
   d3.time.years = d3.time.year.range;
   d3.time.years.utc = d3.time.year.utc.range;
@@ -8099,8 +8099,6 @@ d3 = function() {
     return day;
   }, function(date, offset) {
     date.setDate(date.getDate() + offset);
-  }, function(date) {
-    return date.getDate() - 1;
   });
   d3.time.days = d3.time.day.range;
   d3.time.days.utc = d3.time.day.utc.range;
@@ -8116,9 +8114,6 @@ d3 = function() {
       return date;
     }, function(date, offset) {
       date.setDate(date.getDate() + Math.floor(offset) * 7);
-    }, function(date) {
-      var day = d3.time.year(date).getDay();
-      return Math.floor((d3.time.dayOfYear(date) + (day + i) % 7) / 7) - (day !== i);
     });
     d3.time[day + "s"] = interval.range;
     d3.time[day + "s"].utc = interval.utc.range;
@@ -8411,8 +8406,6 @@ d3 = function() {
     return new d3_time(Math.floor(date / 1e3) * 1e3);
   }, function(date, offset) {
     date.setTime(date.getTime() + Math.floor(offset) * 1e3);
-  }, function(date) {
-    return date.getSeconds();
   });
   d3.time.seconds = d3.time.second.range;
   d3.time.seconds.utc = d3.time.second.utc.range;
@@ -8420,8 +8413,6 @@ d3 = function() {
     return new d3_time(Math.floor(date / 6e4) * 6e4);
   }, function(date, offset) {
     date.setTime(date.getTime() + Math.floor(offset) * 6e4);
-  }, function(date) {
-    return date.getMinutes();
   });
   d3.time.minutes = d3.time.minute.range;
   d3.time.minutes.utc = d3.time.minute.utc.range;
@@ -8430,8 +8421,6 @@ d3 = function() {
     return new d3_time((Math.floor(date / 36e5 - timezone) + timezone) * 36e5);
   }, function(date, offset) {
     date.setTime(date.getTime() + Math.floor(offset) * 36e5);
-  }, function(date) {
-    return date.getHours();
   });
   d3.time.hours = d3.time.hour.range;
   d3.time.hours.utc = d3.time.hour.utc.range;
@@ -8441,8 +8430,6 @@ d3 = function() {
     return date;
   }, function(date, offset) {
     date.setMonth(date.getMonth() + offset);
-  }, function(date) {
-    return date.getMonth();
   });
   d3.time.months = d3.time.month.range;
   d3.time.months.utc = d3.time.month.utc.range;

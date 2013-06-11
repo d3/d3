@@ -12,9 +12,6 @@ d3_time_daySymbols.forEach(function(day, i) {
     return date;
   }, function(date, offset) {
     date.setDate(date.getDate() + Math.floor(offset) * 7);
-  }, function(date) {
-    var day = d3.time.year(date).getDay();
-    return Math.floor((d3.time.dayOfYear(date) + (day + i) % 7) / 7) - (day !== i);
   });
 
   d3.time[day + "s"] = interval.range;

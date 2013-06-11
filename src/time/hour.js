@@ -6,8 +6,6 @@ d3.time.hour = d3_time_interval(function(date) {
   return new d3_time((Math.floor(date / 36e5 - timezone) + timezone) * 36e5);
 }, function(date, offset) {
   date.setTime(date.getTime() + Math.floor(offset) * 36e5); // DST breaks setHours
-}, function(date) {
-  return date.getHours();
 });
 
 d3.time.hours = d3.time.hour.range;

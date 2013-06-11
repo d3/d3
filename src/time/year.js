@@ -8,8 +8,6 @@ d3.time.year = d3_time_interval(function(date) {
   return date;
 }, function(date, offset) {
   date.setFullYear(date.getFullYear() + offset);
-}, function(date) {
-  return date.getFullYear();
 });
 
 d3.time.years = d3.time.year.range;
