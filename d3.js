@@ -2058,8 +2058,8 @@ d3 = function() {
   };
   var d3_geo_accumulatorTemp = new d3_geo_accumulator();
   function d3_geo_accumulatorSum(a, b, o) {
-    var x = o.s = a + b, bv = x - a, av = x - bv, br = b - bv, ar = a - av;
-    o.t = ar + br;
+    var x = o.s = a + b, bv = x - a, av = x - bv;
+    o.t = a - av + (b - bv);
   }
   d3.geo.stream = function(object, listener) {
     if (object && d3_geo_streamObjectType.hasOwnProperty(object.type)) {

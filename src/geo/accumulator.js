@@ -28,10 +28,7 @@ d3_geo_accumulator.prototype = {
 var d3_geo_accumulatorTemp = new d3_geo_accumulator;
 
 function d3_geo_accumulatorSum(a, b, o) {
-  var x = o.s = a + b,
-      bv = x - a, // b_virtual
-      av = x - bv, // a_virtual
-      br = b - bv, // b_roundoff
-      ar = a - av; // a_roundoff
-  o.t = ar + br;
+  var x = o.s = a + b, // a + b
+      bv = x - a, av = x - bv; // b_virtual & a_virtual
+  o.t = (a - av) + (b - bv); // a_roundoff + b_roundoff
 }
