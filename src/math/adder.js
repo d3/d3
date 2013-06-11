@@ -6,16 +6,16 @@
 // http://geographiclib.sourceforge.net/
 // See lib/geographiclib/LICENSE for details.
 
-function d3_geo_accumulator() {}
+function d3_adder() {}
 
-d3_geo_accumulator.prototype = {
+d3_adder.prototype = {
   s: 0, // rounded value
   t: 0, // exact error
   add: function(y) {
-    d3_geo_accumulatorSum(y, this.t, d3_geo_accumulatorTemp);
-    d3_geo_accumulatorSum(d3_geo_accumulatorTemp.s, this.s, this);
-    if (this.s) this.t += d3_geo_accumulatorTemp.t;
-    else this.s = d3_geo_accumulatorTemp.t;
+    d3_adderSum(y, this.t, d3_adderTemp);
+    d3_adderSum(d3_adderTemp.s, this.s, this);
+    if (this.s) this.t += d3_adderTemp.t;
+    else this.s = d3_adderTemp.t;
   },
   reset: function() {
     this.s = this.t = 0;
@@ -25,9 +25,9 @@ d3_geo_accumulator.prototype = {
   }
 };
 
-var d3_geo_accumulatorTemp = new d3_geo_accumulator;
+var d3_adderTemp = new d3_adder;
 
-function d3_geo_accumulatorSum(a, b, o) {
+function d3_adderSum(a, b, o) {
   var x = o.s = a + b, // a + b
       bv = x - a, av = x - bv; // b_virtual & a_virtual
   o.t = (a - av) + (b - bv); // a_roundoff + b_roundoff

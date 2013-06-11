@@ -1,6 +1,6 @@
 import "../core/noop";
+import "../math/adder";
 import "../math/trigonometry";
-import "accumulator";
 import "geo";
 import "stream";
 
@@ -11,7 +11,7 @@ d3.geo.area = function(object) {
 };
 
 var d3_geo_areaSum,
-    d3_geo_areaRingSum = new d3_geo_accumulator;
+    d3_geo_areaRingSum = new d3_adder;
 
 var d3_geo_area = {
   sphere: function() { d3_geo_areaSum += 4 * π; },

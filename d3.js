@@ -2040,14 +2040,14 @@ d3 = function() {
     };
   }
   d3.geo = {};
-  function d3_geo_accumulator() {}
-  d3_geo_accumulator.prototype = {
+  function d3_adder() {}
+  d3_adder.prototype = {
     s: 0,
     t: 0,
     add: function(y) {
-      d3_geo_accumulatorSum(y, this.t, d3_geo_accumulatorTemp);
-      d3_geo_accumulatorSum(d3_geo_accumulatorTemp.s, this.s, this);
-      if (this.s) this.t += d3_geo_accumulatorTemp.t; else this.s = d3_geo_accumulatorTemp.t;
+      d3_adderSum(y, this.t, d3_adderTemp);
+      d3_adderSum(d3_adderTemp.s, this.s, this);
+      if (this.s) this.t += d3_adderTemp.t; else this.s = d3_adderTemp.t;
     },
     reset: function() {
       this.s = this.t = 0;
@@ -2056,8 +2056,8 @@ d3 = function() {
       return this.s;
     }
   };
-  var d3_geo_accumulatorTemp = new d3_geo_accumulator();
-  function d3_geo_accumulatorSum(a, b, o) {
+  var d3_adderTemp = new d3_adder();
+  function d3_adderSum(a, b, o) {
     var x = o.s = a + b, bv = x - a, av = x - bv;
     o.t = a - av + (b - bv);
   }
@@ -2130,7 +2130,7 @@ d3 = function() {
     d3.geo.stream(object, d3_geo_area);
     return d3_geo_areaSum;
   };
-  var d3_geo_areaSum, d3_geo_areaRingSum = new d3_geo_accumulator();
+  var d3_geo_areaSum, d3_geo_areaRingSum = new d3_adder();
   var d3_geo_area = {
     sphere: function() {
       d3_geo_areaSum += 4 * π;
