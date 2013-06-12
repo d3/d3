@@ -1,4 +1,5 @@
 import "../core/document";
+import "../core/vendor";
 
 var d3_timer_queueHead,
     d3_timer_queueTail,
@@ -78,8 +79,5 @@ function d3_timer_sweep() {
 }
 
 var d3_timer_frame = d3_window.requestAnimationFrame
-    || d3_window.webkitRequestAnimationFrame
-    || d3_window.mozRequestAnimationFrame
-    || d3_window.oRequestAnimationFrame
-    || d3_window.msRequestAnimationFrame
+    || d3_window[d3_vendor.toLowerCase() + "RequestAnimationFrame"]
     || function(callback) { setTimeout(callback, 17); };
