@@ -6212,18 +6212,16 @@ d3 = function() {
     return vim._tree.ancestor.parent == node.parent ? vim._tree.ancestor : ancestor;
   }
   d3.layout.pack = function() {
-    var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), padding = 0, size = [ 1, 1 ];
+    var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), padding = 0, size = [ 1, 1 ], radius;
     function pack(d, i) {
-      var nodes = hierarchy.call(this, d, i), root = nodes[0];
-      root.x = 0;
-      root.y = 0;
+      var nodes = hierarchy.call(this, d, i), root = nodes[0], w = size[0], h = size[1], r = radius || Math.sqrt;
+      root.x = root.y = 0;
       d3_layout_treeVisitAfter(root, function(d) {
-        d.r = Math.sqrt(d.value);
+        d.r = r(d.value);
       });
       d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
-      var w = size[0], h = size[1], k = Math.max(2 * root.r / w, 2 * root.r / h);
-      if (padding > 0) {
-        var dr = padding * k / 2;
+      if (padding) {
+        var dr = padding * (radius ? 1 : Math.max(2 * root.r / w, 2 * root.r / h)) / 2;
         d3_layout_treeVisitAfter(root, function(d) {
           d.r += dr;
         });
@@ -6231,14 +6229,18 @@ d3 = function() {
         d3_layout_treeVisitAfter(root, function(d) {
           d.r -= dr;
         });
-        k = Math.max(2 * root.r / w, 2 * root.r / h);
       }
-      d3_layout_packTransform(root, w / 2, h / 2, 1 / k);
+      d3_layout_packTransform(root, w / 2, h / 2, radius ? 1 : 1 / Math.max(2 * root.r / w, 2 * root.r / h));
       return nodes;
     }
-    pack.size = function(x) {
+    pack.size = function(_) {
       if (!arguments.length) return size;
-      size = x;
+      size = _;
+      return pack;
+    };
+    pack.radius = function(_) {
+      if (!arguments.length) return radius;
+      radius = _;
       return pack;
     };
     pack.padding = function(_) {
