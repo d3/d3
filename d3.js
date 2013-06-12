@@ -497,13 +497,16 @@ d3 = function() {
       return point;
     }) : [];
   };
-  var d3_vendor = function(p) {
-    var i = -1, n = p.length, s = d3_documentElement.style;
-    while (++i < n) if (p[i] + "Transform" in s) return p[i];
-    return "";
-  }([ "webkit", "ms", "Moz", "O" ]);
-  var d3_event_userSelectProperty = "userSelect" in d3_documentElement.style ? "userSelect" : d3_vendor + "UserSelect" in d3_documentElement.style ? d3_vendor + "UserSelect" : null;
-  var d3_event_userSelectSuppress = d3_event_userSelectProperty ? function() {
+  function d3_vendorSymbol(object, name) {
+    if (name in object) return name;
+    name = name.charAt(0).toUpperCase() + name.substring(1);
+    for (var i = 0, n = d3_vendorPrefixes.length; i < n; ++i) {
+      var prefixName = d3_vendorPrefixes[i] + name;
+      if (prefixName in object) return prefixName;
+    }
+  }
+  var d3_vendorPrefixes = [ "webkit", "ms", "moz", "Moz", "o", "O" ];
+  var d3_event_userSelectProperty = d3_vendorSymbol(d3_documentElement.style, "userSelect"), d3_event_userSelectSuppress = d3_event_userSelectProperty ? function() {
     var style = d3_documentElement.style, select = style[d3_event_userSelectProperty];
     style[d3_event_userSelectProperty] = "none";
     return function() {
@@ -579,7 +582,7 @@ d3 = function() {
     return n.querySelector(s);
   }, d3_selectAll = function(s, n) {
     return n.querySelectorAll(s);
-  }, d3_selectMatcher = d3_documentElement.matchesSelector || d3_documentElement[d3_vendor.toLowerCase() + "MatchesSelector"], d3_selectMatches = function(n, s) {
+  }, d3_selectMatcher = d3_documentElement[d3_vendorSymbol(d3_documentElement, "matchesSelector")], d3_selectMatches = function(n, s) {
     return d3_selectMatcher.call(n, s);
   };
   if (typeof Sizzle === "function") {
@@ -1909,7 +1912,7 @@ d3 = function() {
     d3_timer_queueTail = t0;
     return time;
   }
-  var d3_timer_frame = d3_window.requestAnimationFrame || d3_window[d3_vendor.toLowerCase() + "RequestAnimationFrame"] || function(callback) {
+  var d3_timer_frame = d3_window[d3_vendorSymbol(d3_window, "requestAnimationFrame")] || function(callback) {
     setTimeout(callback, 17);
   };
   var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ];

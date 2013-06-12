@@ -1,7 +1,12 @@
 import "document";
 
-var d3_vendor = (function(p) {
-  var i = -1, n = p.length, s = d3_documentElement.style;
-  while (++i < n) if (p[i] + "Transform" in s) return p[i];
-  return "";
-})(["webkit", "ms", "Moz", "O"]);
+function d3_vendorSymbol(object, name) {
+  if (name in object) return name;
+  name = name.charAt(0).toUpperCase() + name.substring(1);
+  for (var i = 0, n = d3_vendorPrefixes.length; i < n; ++i) {
+    var prefixName = d3_vendorPrefixes[i] + name;
+    if (prefixName in object) return prefixName;
+  }
+}
+
+var d3_vendorPrefixes = ["webkit", "ms", "moz", "Moz", "o", "O"];
