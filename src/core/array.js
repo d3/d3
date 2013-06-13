@@ -13,7 +13,7 @@ function d3_arraySlice(pseudoarray) {
 }
 
 try {
-  d3_array(d3_document.documentElement.childNodes)[0].nodeType;
+  d3_array(d3_documentElement.childNodes)[0].nodeType;
 } catch(e) {
   d3_array = d3_arrayCopy;
 }

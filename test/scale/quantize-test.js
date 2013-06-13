@@ -59,6 +59,32 @@ suite.addBatch({
       assert.equal(x(.6), b);
       assert.equal(x(.8), c);
       assert.equal(x(1), c);
+    },
+    "invertExtent": {
+      "maps a value in the range to a domain extent": function(quantize) {
+        var x = quantize().range([0, 1, 2, 3]);
+        assert.deepEqual(x.invertExtent(0), [0, .25]);
+        assert.deepEqual(x.invertExtent(1), [.25, .5]);
+        assert.deepEqual(x.invertExtent(2), [.5, .75]);
+        assert.deepEqual(x.invertExtent(3), [.75, 1]);
+      },
+      "allows arbitrary range values": function(quantize) {
+        var a = {}, b = {}, x = quantize().range([a, b]);
+        assert.deepEqual(x.invertExtent(a), [0, .5]);
+        assert.deepEqual(x.invertExtent(b), [.5, 1]);
+      },
+      "returns [NaN, NaN] when the given value is not in the range": function(quantize) {
+        var x = quantize();
+        assert.ok(x.invertExtent(-1).every(isNaN));
+        assert.ok(x.invertExtent(.5).every(isNaN));
+        assert.ok(x.invertExtent(2).every(isNaN));
+        assert.ok(x.invertExtent('a').every(isNaN));
+      },
+      "returns the first match if duplicate values exist in the range": function(quantize) {
+        var x = quantize().range([0, 1, 2, 0]);
+        assert.deepEqual(x.invertExtent(0), [0, .25]);
+        assert.deepEqual(x.invertExtent(1), [.25, .5]);
+      }
     }
   }
 });

@@ -130,7 +130,7 @@ suite.addBatch({
           assert.deepEqual(centroid({type: "Point", coordinates: [0, 0]}), [480, 250]);
         },
         "of an empty multipoint": function(centroid) {
-          assert.isUndefined(centroid({type: "MultiPoint", coordinates: []}));
+          assert.ok(centroid({type: "MultiPoint", coordinates: []}).every(isNaN));
         },
         "of a singleton multipoint": function(centroid) {
           assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[0, 0]]}), [480, 250]);
@@ -139,15 +139,15 @@ suite.addBatch({
           assert.deepEqual(centroid({type: "MultiPoint", coordinates: [[-122, 37], [-74, 40]]}), [-10, 57.5]);
         },
         "of an empty linestring": function(centroid) {
-          assert.isUndefined(centroid({type: "LineString", coordinates: []}));
+          assert.ok(centroid({type: "LineString", coordinates: []}).every(isNaN));
         },
         "of a linestring with two points": function(centroid) {
           assert.deepEqual(centroid({type: "LineString", coordinates: [[100, 0], [0, 0]]}), [730, 250]);
           assert.deepEqual(centroid({type: "LineString", coordinates: [[0, 0], [100, 0], [101, 0]]}), [732.5, 250]);
         },
         "of a linestring with two points, one unique": function(centroid) {
-          assert.isUndefined(centroid({type: "LineString", coordinates: [[-122, 37], [-122, 37]]}));
-          assert.isUndefined(centroid({type: "LineString", coordinates: [[ -74, 40], [ -74, 40]]}));
+          assert.deepEqual(centroid({type: "LineString", coordinates: [[-122, 37], [-122, 37]]}), [-130, 65]);
+          assert.deepEqual(centroid({type: "LineString", coordinates: [[-74, 40], [-74, 40]]}), [110, 50]);
         },
         "of a linestring with three points; two unique": function(centroid) {
           assert.deepEqual(centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-74, 40]]}), [-10, 57.5]);
@@ -162,7 +162,7 @@ suite.addBatch({
           assert.deepEqual(centroid({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), [982.5, 247.5]);
         },
         "of a zero-area polygon": function(centroid) {
-          assert.isUndefined(centroid({type: "Polygon", coordinates: [[[1, 0], [2, 0], [3, 0], [1, 0]]]}));
+          assert.deepEqual(centroid({type: "Polygon", coordinates: [[[1, 0], [2, 0], [3, 0], [1, 0]]]}), [490, 250]);
         },
         "of a polygon with two rings, one with zero area": function(centroid) {
           assert.deepEqual(centroid({type: "Polygon", coordinates: [
@@ -180,7 +180,7 @@ suite.addBatch({
           }), [479.642857, 250], 1e-6);
         },
         "of an empty multipolygon": function(centroid) {
-          assert.isUndefined(centroid({type: "MultiPolygon", coordinates: []}));
+          assert.ok(centroid({type: "MultiPolygon", coordinates: []}).every(isNaN));
         },
         "of a singleton multipolygon": function(centroid) {
           assert.deepEqual(centroid({type: "MultiPolygon", coordinates: [[[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]]}), [982.5, 247.5]);
@@ -294,7 +294,7 @@ suite.addBatch({
           [[109.378, 189.584], [797.758, 504.660]], 1e-3);
       },
       "centroid of a line string": function(p) {
-        assert.inDelta(p.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]}), [545.130, 253.859], 1e-3);
+        assert.inDelta(p.centroid({type: "LineString", coordinates: [[-122, 37], [-74, 40], [-100, 0]]}), [545.131, 253.860], 1e-3);
       }
     },
 
@@ -757,18 +757,37 @@ suite.addBatch({
     },
 
     "with an Albers projection and adaptive resampling": {
-      topic: function(path) {
-        return path()
+      "correctly resamples near the poles": function(path) {
+        var p = path()
             .context(testContext)
             .projection(_.geo.albers()
               .scale(140)
               .rotate([0, 0])
               .precision(1));
-      },
-      "correctly resamples near the poles": function(p) {
         p({type: "LineString", coordinates: [[0, 88], [180, 89]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
         p({type: "LineString", coordinates: [[180, 90], [1, 89.5]]});
+        assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+      },
+      "rotate([11.5, 285])": function(path) {
+        var p = path()
+            .context(testContext)
+            .projection(_.geo.albers()
+              .scale(140)
+              .rotate([11.5, 285])
+              .precision(1));
+        p({type: "LineString", coordinates: [[170, 20], [170, 0]]});
+        assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
+      },
+      "wavy projection": function(path) {
+        var p = path()
+            .context(testContext)
+            .projection(_.geo.projection(function(λ, φ) {
+                return [λ, Math.sin(λ * 4)];
+              })
+              .scale(140)
+              .precision(1));
+        p({type: "LineString", coordinates: [[-45, 0], [45, 0]]});
         assert.isTrue(testContext.buffer().filter(function(d) { return d.type === "lineTo"; }).length > 1);
       }
     },

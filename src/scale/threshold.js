@@ -23,6 +23,11 @@ function d3_scale_threshold(domain, range) {
     return scale;
   };
 
+  scale.invertExtent = function(y) {
+    y = range.indexOf(y);
+    return [domain[y - 1], domain[y]];
+  };
+
   scale.copy = function() {
     return d3_scale_threshold(domain, range);
   };
