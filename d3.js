@@ -6669,15 +6669,19 @@ d3 = function() {
     return domain;
   }
   function d3_scale_niceStep(step) {
-    return {
+    return step ? {
       floor: function(x) {
         return Math.floor(x / step) * step;
       },
       ceil: function(x) {
         return Math.ceil(x / step) * step;
       }
-    };
+    } : d3_scale_niceIdentity;
   }
+  var d3_scale_niceIdentity = {
+    floor: d3_identity,
+    ceil: d3_identity
+  };
   function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
     var u = [], i = [], j = 0, k = Math.min(domain.length, range.length) - 1;
     if (domain[k] < domain[0]) {
@@ -6740,7 +6744,7 @@ d3 = function() {
       return d3_scale_linearTickFormat(domain, m, format);
     };
     scale.nice = function(m) {
-      d3_scale_nice(domain, d3_scale_linearNice(domain, m));
+      d3_scale_linearNice(domain, m);
       return rescale();
     };
     scale.copy = function() {
@@ -6752,7 +6756,7 @@ d3 = function() {
     return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
   }
   function d3_scale_linearNice(domain, m) {
-    return d3_scale_niceStep(m ? d3_scale_linearTickRange(domain, m)[2] : d3_scale_linearNiceStep(domain));
+    return d3_scale_nice(domain, d3_scale_niceStep(m ? d3_scale_linearTickRange(domain, m)[2] : d3_scale_linearNiceStep(domain)));
   }
   function d3_scale_linearNiceStep(domain) {
     var extent = d3_scaleExtent(domain), span = extent[1] - extent[0];
@@ -6884,7 +6888,7 @@ d3 = function() {
       return d3_scale_linearTickFormat(domain, m, format);
     };
     scale.nice = function(m) {
-      return scale.domain(d3_scale_nice(domain, d3_scale_linearNice(domain, m)));
+      return scale.domain(d3_scale_linearNice(domain, m));
     };
     scale.exponent = function(x) {
       if (!arguments.length) return exponent;

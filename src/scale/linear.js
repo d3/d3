@@ -71,7 +71,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
   };
 
   scale.nice = function(m) {
-    d3_scale_nice(domain, d3_scale_linearNice(domain, m));
+    d3_scale_linearNice(domain, m);
     return rescale();
   };
 
@@ -87,9 +87,9 @@ function d3_scale_linearRebind(scale, linear) {
 }
 
 function d3_scale_linearNice(domain, m) {
-  return d3_scale_niceStep(m
+  return d3_scale_nice(domain, d3_scale_niceStep(m
       ? d3_scale_linearTickRange(domain, m)[2]
-      : d3_scale_linearNiceStep(domain));
+      : d3_scale_linearNiceStep(domain)));
 }
 
 function d3_scale_linearNiceStep(domain) {

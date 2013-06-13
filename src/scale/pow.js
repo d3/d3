@@ -33,7 +33,7 @@ function d3_scale_pow(linear, exponent, domain) {
   };
 
   scale.nice = function(m) {
-    return scale.domain(d3_scale_nice(domain, d3_scale_linearNice(domain, m)));
+    return scale.domain(d3_scale_linearNice(domain, m));
   };
 
   scale.exponent = function(x) {
