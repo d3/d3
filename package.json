@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.1.10",
+  "version": "3.2.0",
   "description": "A small, free JavaScript library for manipulating documents based on data.",
   "keywords": [
     "dom",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {
     "smash": "~0.0.8",
-    "uglify-js": "git://github.com/mishoo/UglifyJS2.git#3bd7ca9961125b39dcd54d2182cb72bd1ca6006e",
+    "uglify-js": "2.3.6",
     "vows": "0.7.x"
   },
   "scripts": {

@@ -52,7 +52,7 @@ function d3_geo_rotationφγ(δφ, δγ) {
         k = z * cosδφ + x * sinδφ;
     return [
       Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ),
-      Math.asin(Math.max(-1, Math.min(1, k * cosδγ + y * sinδγ)))
+      d3_asin(k * cosδγ + y * sinδγ)
     ];
   }
 
@@ -64,7 +64,7 @@ function d3_geo_rotationφγ(δφ, δγ) {
         k = z * cosδγ - y * sinδγ;
     return [
       Math.atan2(y * cosδγ + z * sinδγ, x * cosδφ + k * sinδφ),
-      Math.asin(Math.max(-1, Math.min(1, k * cosδφ - x * sinδφ)))
+      d3_asin(k * cosδφ - x * sinδφ)
     ];
   };
 

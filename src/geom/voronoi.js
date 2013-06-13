@@ -27,10 +27,9 @@ import "polygon";
  * @returns polygons [[[x1, y1], [x2, y2], …], …]
  */
 d3.geom.voronoi = function(points) {
-  var size = null,
-      x = d3_svg_lineX,
+  var x = d3_svg_lineX,
       y = d3_svg_lineY,
-      clip;
+      clipPolygon = null;
 
   // For backwards-compatibility.
   if (arguments.length) return voronoi(points);
@@ -46,8 +45,8 @@ d3.geom.voronoi = function(points) {
         Z = 1e6;
 
     if (fx === d3_svg_lineX && fy === d3_svg_lineY) points = data;
-    else for (points = [], i = 0; i < n; ++i) {
-      points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i)]);
+    else for (points = new Array(n), i = 0; i < n; ++i) {
+      points[i] = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)];
     }
 
     d3_geom_voronoiTessellate(points, function(e) {
@@ -124,7 +123,7 @@ d3.geom.voronoi = function(points) {
       }
     });
 
-    if (clip) for (i = 0; i < n; ++i) clip(polygons[i]);
+    if (clipPolygon) for (i = 0; i < n; ++i) clipPolygon.clip(polygons[i]);
     for (i = 0; i < n; ++i) polygons[i].point = data[i];
 
     return polygons;
@@ -138,15 +137,20 @@ d3.geom.voronoi = function(points) {
     return arguments.length ? (y = _, voronoi) : y;
   };
 
-  voronoi.size = function(_) {
-    if (!arguments.length) return size;
-    if (_ == null) {
-      clip = null;
-    } else {
-      size = [+_[0], +_[1]];
-      clip = d3.geom.polygon([[0, 0], [0, size[1]], size, [size[0], 0]]).clip;
+  voronoi.clipExtent = function(_) {
+    if (!arguments.length) return clipPolygon && [clipPolygon[0], clipPolygon[2]];
+    if (_ == null) clipPolygon = null;
+    else {
+      var x1 = +_[0][0], y1 = +_[0][1], x2 = +_[1][0], y2 = +_[1][1];
+      clipPolygon = d3.geom.polygon([[x1, y1], [x1, y2], [x2, y2], [x2, y1]]);
     }
     return voronoi;
+  };
+
+  // @deprecated; use clipExtent instead
+  voronoi.size = function(_) {
+    if (!arguments.length) return clipPolygon && clipPolygon[2];
+    return voronoi.clipExtent(_ && [[0, 0], _]);
   };
 
   voronoi.links = function(data) {
@@ -160,8 +164,8 @@ d3.geom.voronoi = function(points) {
         n = data.length;
 
     if (fx === d3_svg_lineX && fy === d3_svg_lineY) points = data;
-    else for (i = 0; i < n; ++i) {
-      points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i)]);
+    else for (points = new Array(n), i = 0; i < n; ++i) {
+      points[i] = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)];
     }
 
     d3_geom_voronoiTessellate(points, function(e) {
@@ -178,18 +182,15 @@ d3.geom.voronoi = function(points) {
   voronoi.triangles = function(data) {
     if (x === d3_svg_lineX && y === d3_svg_lineY) return d3.geom.delaunay(data);
 
-    var points,
-        point,
+    var points = new Array(n),
         fx = d3_functor(x),
         fy = d3_functor(y),
         d,
-        i,
-        n;
+        i = -1,
+        n = data.length;
 
-    for (i = 0, points = [], n = data.length; i < n; ++i) {
-      point = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)];
-      point.data = d;
-      points.push(point);
+    while (++i < n) {
+      (points[i] = [+fx.call(this, d = data[i], i), +fy.call(this, d, i)]).data = d;
     }
 
     return d3.geom.delaunay(points).map(function(triangle) {

@@ -1,4 +1,5 @@
 import "../core/document";
+import "../core/vendor";
 
 var d3_timer_queueHead,
     d3_timer_queueTail,
@@ -77,9 +78,5 @@ function d3_timer_sweep() {
   return time;
 }
 
-var d3_timer_frame = d3_window.requestAnimationFrame
-    || d3_window.webkitRequestAnimationFrame
-    || d3_window.mozRequestAnimationFrame
-    || d3_window.oRequestAnimationFrame
-    || d3_window.msRequestAnimationFrame
+var d3_timer_frame = d3_window[d3_vendorSymbol(d3_window, "requestAnimationFrame")]
     || function(callback) { setTimeout(callback, 17); };

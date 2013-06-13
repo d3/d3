@@ -8,7 +8,8 @@ import "tree";
 d3.layout.cluster = function() {
   var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
-      size = [1, 1]; // width, height
+      size = [1, 1], // width, height
+      nodeSize = false;
 
   function cluster(d, i) {
     var nodes = hierarchy.call(this, d, i),
@@ -36,7 +37,10 @@ d3.layout.cluster = function() {
         x1 = right.x + separation(right, left) / 2;
 
     // Second walk, normalizing x & y to the desired size.
-    d3_layout_treeVisitAfter(root, function(node) {
+    d3_layout_treeVisitAfter(root, nodeSize ? function(node) {
+      node.x = (node.x - root.x) * size[0];
+      node.y = (root.y - node.y) * size[1];
+    } : function(node) {
       node.x = (node.x - x0) / (x1 - x0) * size[0];
       node.y = (1 - (root.y ? node.y / root.y : 1)) * size[1];
     });
@@ -51,8 +55,14 @@ d3.layout.cluster = function() {
   };
 
   cluster.size = function(x) {
-    if (!arguments.length) return size;
-    size = x;
+    if (!arguments.length) return nodeSize ? null : size;
+    nodeSize = (size = x) == null;
+    return cluster;
+  };
+
+  cluster.nodeSize = function(x) {
+    if (!arguments.length) return nodeSize ? size : null;
+    nodeSize = (size = x) != null;
     return cluster;
   };
 

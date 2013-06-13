@@ -14,6 +14,9 @@ suite.addBatch({
       "has no defined size": function(q) {
         assert.isNull(q.size());
       },
+      "has no defined extent": function(q) {
+        assert.isNull(q.extent());
+      },
       "has the default x-accessor, d[0]": function(q) {
         assert.strictEqual(q.x()([42, 43]), 42);
       },

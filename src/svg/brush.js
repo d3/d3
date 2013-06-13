@@ -14,6 +14,7 @@ d3.svg.brush = function() {
       y = null, // y-scale, optional
       resizes = d3_svg_brushResizes[0],
       extent = [[0, 0], [0, 0]], // [x0, y0], [x1, y1], in pixels (integers)
+      clamp = [true, true], // whether or not to clamp the extent to the range
       extentDomain; // the extent in data space, lazily created
 
   function brush(g) {
@@ -223,8 +224,8 @@ d3.svg.brush = function() {
         r1 -= size + position;
       }
 
-      // Clamp the point so that the extent fits within the range extent.
-      min = Math.max(r0, Math.min(r1, point[i]));
+      // Clamp the point (unless clamp set to false) so that the extent fits within the range extent.
+      min = clamp[i] ? Math.max(r0, Math.min(r1, point[i])) : point[i];
 
       // Compute the new extent bounds.
       if (dragging) {
@@ -282,6 +283,13 @@ d3.svg.brush = function() {
     if (!arguments.length) return y;
     y = z;
     resizes = d3_svg_brushResizes[!x << 1 | !y]; // fore!
+    return brush;
+  };
+
+  brush.clamp = function(z) {
+    if (!arguments.length) return x && y ? clamp : clamp[+!x];
+    if (x && y) clamp = [!!z[0], !!z[1]];
+    else clamp[+!x] = !!z;
     return brush;
   };
 

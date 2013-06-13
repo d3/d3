@@ -10,10 +10,19 @@ function d3_scale_nice(domain, nice) {
     dx = x0, x0 = x1, x1 = dx;
   }
 
-  if (nice = nice(x1 - x0)) {
-    domain[i0] = nice.floor(x0);
-    domain[i1] = nice.ceil(x1);
-  }
-
+  domain[i0] = nice.floor(x0);
+  domain[i1] = nice.ceil(x1);
   return domain;
 }
+
+function d3_scale_niceStep(step) {
+  return step ? {
+    floor: function(x) { return Math.floor(x / step) * step; },
+    ceil: function(x) { return Math.ceil(x / step) * step; }
+  } : d3_scale_niceIdentity;
+}
+
+var d3_scale_niceIdentity = {
+  floor: d3_identity,
+  ceil: d3_identity
+};

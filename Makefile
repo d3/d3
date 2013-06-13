@@ -33,7 +33,7 @@ d3.min.js: d3.js
 	@rm -f $@
 	bin/uglify $< > $@
 
-component.json: bin/component d3.js package.json
+component.json: bin/component package.json
 	@rm -f $@
 	bin/component > $@
 	@chmod a-w $@

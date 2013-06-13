@@ -30,7 +30,7 @@ function d3_time_scale(linear, methods, format) {
   };
 
   scale.nice = function(m) {
-    return scale.domain(d3_scale_nice(scale.domain(), function() { return m; }));
+    return scale.domain(d3_scale_nice(scale.domain(), m));
   };
 
   scale.ticks = function(m, k) {

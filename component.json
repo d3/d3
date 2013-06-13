@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.1.10",
+  "version": "3.2.0",
   "main": "index-browserify.js",
   "scripts": [
     "index-browserify.js",

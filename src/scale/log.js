@@ -32,7 +32,19 @@ function d3_scale_log(linear, base, log, pow, domain) {
   };
 
   scale.nice = function() {
-    linear.domain(d3_scale_nice(domain, nice).map(log));
+
+    function floor(x) {
+      return Math.pow(base, Math.floor(Math.log(x) / Math.log(base)));
+    }
+
+    function ceil(x) {
+      return Math.pow(base, Math.ceil(Math.log(x) / Math.log(base)));
+    }
+
+    linear.domain(d3_scale_nice(domain, log === d3_scale_logp
+        ? {floor: floor, ceil: ceil}
+        : {floor: function(x) { return -ceil(-x); }, ceil: function(x) { return -floor(-x); }}).map(log));
+
     return scale;
   };
 
@@ -61,8 +73,9 @@ function d3_scale_log(linear, base, log, pow, domain) {
   };
 
   scale.tickFormat = function(n, format) {
+    if (!arguments.length) return d3_scale_logFormat;
     if (arguments.length < 2) format = d3_scale_logFormat;
-    if (!arguments.length) return format;
+    else if (typeof format !== "function") format = d3.format(format);
     var b = Math.log(base),
         k = Math.max(.1, n / scale.ticks().length),
         f = log === d3_scale_logn ? (e = -1e-12, Math.floor) : (e = 1e-12, Math.ceil),
@@ -75,20 +88,6 @@ function d3_scale_log(linear, base, log, pow, domain) {
   scale.copy = function() {
     return d3_scale_log(linear.copy(), base, log, pow, domain);
   };
-
-  function nice() {
-    return log === d3_scale_logp
-        ? {floor: floor, ceil: ceil}
-        : {floor: function(x) { return -ceil(-x); }, ceil: function(x) { return -floor(-x); }};
-  }
-
-  function floor(x) {
-    return Math.pow(base, Math.floor(Math.log(x) / Math.log(base)));
-  }
-
-  function ceil(x) {
-    return Math.pow(base, Math.ceil(Math.log(x) / Math.log(base)));
-  }
 
   return d3_scale_linearRebind(scale, linear);
 }
