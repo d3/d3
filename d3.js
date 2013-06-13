@@ -6664,11 +6664,19 @@ d3 = function() {
       dx = i0, i0 = i1, i1 = dx;
       dx = x0, x0 = x1, x1 = dx;
     }
-    if (nice = nice(x1 - x0)) {
-      domain[i0] = nice.floor(x0);
-      domain[i1] = nice.ceil(x1);
-    }
+    domain[i0] = nice.floor(x0);
+    domain[i1] = nice.ceil(x1);
     return domain;
+  }
+  function d3_scale_niceStep(step) {
+    return {
+      floor: function(x) {
+        return Math.floor(x / step) * step;
+      },
+      ceil: function(x) {
+        return Math.ceil(x / step) * step;
+      }
+    };
   }
   function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
     var u = [], i = [], j = 0, k = Math.min(domain.length, range.length) - 1;
@@ -6731,8 +6739,8 @@ d3 = function() {
     scale.tickFormat = function(m, format) {
       return d3_scale_linearTickFormat(domain, m, format);
     };
-    scale.nice = function() {
-      d3_scale_nice(domain, d3_scale_linearNice);
+    scale.nice = function(m) {
+      d3_scale_nice(domain, d3_scale_linearNice(domain, m));
       return rescale();
     };
     scale.copy = function() {
@@ -6743,16 +6751,12 @@ d3 = function() {
   function d3_scale_linearRebind(scale, linear) {
     return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
   }
-  function d3_scale_linearNice(dx) {
-    dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
-    return dx && {
-      floor: function(x) {
-        return Math.floor(x / dx) * dx;
-      },
-      ceil: function(x) {
-        return Math.ceil(x / dx) * dx;
-      }
-    };
+  function d3_scale_linearNice(domain, m) {
+    return d3_scale_niceStep(m ? d3_scale_linearTickRange(domain, m)[2] : d3_scale_linearNiceStep(domain));
+  }
+  function d3_scale_linearNiceStep(domain) {
+    var extent = d3_scaleExtent(domain), span = extent[1] - extent[0];
+    return Math.pow(10, Math.round(Math.log(span) / Math.LN10) - 1);
   }
   function d3_scale_linearTickRange(domain, m) {
     var extent = d3_scaleExtent(domain), span = extent[1] - extent[0], step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)), err = m / span * step;
@@ -6794,7 +6798,23 @@ d3 = function() {
       return scale;
     };
     scale.nice = function() {
-      linear.domain(d3_scale_nice(domain, nice).map(log));
+      function floor(x) {
+        return Math.pow(base, Math.floor(Math.log(x) / Math.log(base)));
+      }
+      function ceil(x) {
+        return Math.pow(base, Math.ceil(Math.log(x) / Math.log(base)));
+      }
+      linear.domain(d3_scale_nice(domain, log === d3_scale_logp ? {
+        floor: floor,
+        ceil: ceil
+      } : {
+        floor: function(x) {
+          return -ceil(-x);
+        },
+        ceil: function(x) {
+          return -floor(-x);
+        }
+      }).map(log));
       return scale;
     };
     scale.ticks = function() {
@@ -6826,25 +6846,6 @@ d3 = function() {
     scale.copy = function() {
       return d3_scale_log(linear.copy(), base, log, pow, domain);
     };
-    function nice() {
-      return log === d3_scale_logp ? {
-        floor: floor,
-        ceil: ceil
-      } : {
-        floor: function(x) {
-          return -ceil(-x);
-        },
-        ceil: function(x) {
-          return -floor(-x);
-        }
-      };
-    }
-    function floor(x) {
-      return Math.pow(base, Math.floor(Math.log(x) / Math.log(base)));
-    }
-    function ceil(x) {
-      return Math.pow(base, Math.ceil(Math.log(x) / Math.log(base)));
-    }
     return d3_scale_linearRebind(scale, linear);
   }
   var d3_scale_logFormat = d3.format(".0e");
@@ -6882,8 +6883,8 @@ d3 = function() {
     scale.tickFormat = function(m, format) {
       return d3_scale_linearTickFormat(domain, m, format);
     };
-    scale.nice = function() {
-      return scale.domain(d3_scale_nice(domain, d3_scale_linearNice));
+    scale.nice = function(m) {
+      return scale.domain(d3_scale_nice(domain, d3_scale_linearNice(domain, m)));
     };
     scale.exponent = function(x) {
       if (!arguments.length) return exponent;
@@ -8647,9 +8648,7 @@ d3 = function() {
       return scale;
     };
     scale.nice = function(m) {
-      return scale.domain(d3_scale_nice(scale.domain(), function() {
-        return m;
-      }));
+      return scale.domain(d3_scale_nice(scale.domain(), m));
     };
     scale.ticks = function(m, k) {
       var extent = d3_scaleExtent(scale.domain());
