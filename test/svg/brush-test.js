@@ -22,6 +22,9 @@ suite.addBatch({
     },
 
     "clamp": {
+      "returns null when no scales are attached": function(brush) {
+        assert.isNull(brush().clamp());
+      },
       "returns a single boolean if only x is defined": function(brush) {
         var b = brush().x(_.scale.linear());
         assert.isTrue(b.clamp());

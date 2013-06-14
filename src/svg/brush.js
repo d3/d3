@@ -287,9 +287,9 @@ d3.svg.brush = function() {
   };
 
   brush.clamp = function(z) {
-    if (!arguments.length) return x && y ? clamp : clamp[+!x];
+    if (!arguments.length) return x && y ? clamp : x || y ? clamp[+!x] : null;
     if (x && y) clamp = [!!z[0], !!z[1]];
-    else clamp[+!x] = !!z;
+    else if (x || y) clamp[+!x] = !!z;
     return brush;
   };
 
