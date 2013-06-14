@@ -8047,8 +8047,8 @@ d3 = function() {
       return brush;
     };
     brush.clamp = function(z) {
-      if (!arguments.length) return x && y ? clamp : clamp[+!x];
-      if (x && y) clamp = [ !!z[0], !!z[1] ]; else clamp[+!x] = !!z;
+      if (!arguments.length) return x && y ? clamp : x || y ? clamp[+!x] : null;
+      if (x && y) clamp = [ !!z[0], !!z[1] ]; else if (x || y) clamp[+!x] = !!z;
       return brush;
     };
     brush.extent = function(z) {
