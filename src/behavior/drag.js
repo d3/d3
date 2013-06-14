@@ -37,6 +37,7 @@ d3.behavior.drag = function() {
     }
 
     event_({type: "dragstart"});
+    d3.event.stopPropagation();
 
     function point() {
       var p = target.parentNode;

@@ -4,6 +4,7 @@ import "../event/dispatch";
 import "../event/event";
 import "../event/mouse";
 import "../event/touches";
+import "../event/user-select";
 import "../scale/scale";
 import "../selection/selection";
 import "svg";
@@ -102,15 +103,18 @@ d3.svg.brush = function() {
         dragging = eventTarget.classed("extent"),
         center,
         origin = mouse(),
-        offset;
+        offset,
+        selectEnable = d3_event_userSelectSuppress("brush");
 
     var w = d3.select(d3_window)
-        .on("mousemove.brush", brushmove)
-        .on("mouseup.brush", brushend)
-        .on("touchmove.brush", brushmove)
-        .on("touchend.brush", brushend)
         .on("keydown.brush", keydown)
         .on("keyup.brush", keyup);
+
+    if (d3.event.changedTouches) {
+      w.on("touchmove.brush", brushmove).on("touchend.brush", brushend);
+    } else {
+      w.on("mousemove.brush", brushmove).on("mouseup.brush", brushend);
+    }
 
     // If the extent was clicked on, drag rather than brush;
     // store the point between the mouse and extent origin instead.
@@ -139,7 +143,7 @@ d3.svg.brush = function() {
     // Notify listeners.
     event_({type: "brushstart"});
     brushmove();
-    d3_eventCancel();
+    d3.event.stopPropagation();
 
     function mouse() {
       var touches = d3.event.changedTouches;
@@ -206,6 +210,7 @@ d3.svg.brush = function() {
       if (moved) {
         redraw(g);
         event_({type: "brush", mode: dragging ? "move" : "resize"});
+        d3_eventCancel();
       }
     }
 
@@ -269,6 +274,7 @@ d3.svg.brush = function() {
 
       event_({type: "brushend"});
       d3_eventCancel();
+      selectEnable();
     }
   }
 

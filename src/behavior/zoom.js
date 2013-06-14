@@ -106,6 +106,8 @@ d3.behavior.zoom = function() {
         l = location(d3.mouse(target)),
         selectEnable = d3_event_userSelectSuppress("zoom");
 
+    d3.event.stopPropagation();
+
     function mousemove() {
       moved = 1;
       translateTo(d3.mouse(target), l);
@@ -155,6 +157,8 @@ d3.behavior.zoom = function() {
       }
       touchtime = now;
     }
+
+    d3.event.stopPropagation();
   }
 
   function touchmove() {
