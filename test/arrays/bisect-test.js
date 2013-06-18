@@ -28,12 +28,11 @@ suite.addBatch({
       assert.equal(bisect(array, 2.5), 2);
       assert.equal(bisect(array, 3.5), 3);
     },
-    "returns NaN if the search value is not orderable": function(bisect) {
+    "has undefined behavior if the search value is unorderable": function(bisect) {
       var array = [1, 2, 3];
-      assert.isNaN(bisect(array));
-      assert.isNaN(bisect(array, undefined));
-      assert.isNaN(bisect(array, NaN));
-      assert.equal(bisect(array, null), 0);
+      bisect(array, new Date(NaN)); // who knows what this will return!
+      bisect(array, undefined);
+      bisect(array, NaN);
     },
     "observes the optional lower bound": function(bisect) {
       var array = [1, 2, 3, 4, 5];

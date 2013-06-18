@@ -92,7 +92,6 @@ d3 = function() {
   d3.bisector = function(f) {
     return {
       left: function(a, x, lo, hi) {
-        if (!(x <= x)) return NaN;
         if (arguments.length < 3) lo = 0;
         if (arguments.length < 4) hi = a.length;
         while (lo < hi) {
@@ -102,7 +101,6 @@ d3 = function() {
         return lo;
       },
       right: function(a, x, lo, hi) {
-        if (!(x <= x)) return NaN;
         if (arguments.length < 3) lo = 0;
         if (arguments.length < 4) hi = a.length;
         while (lo < hi) {
@@ -7083,7 +7081,7 @@ d3 = function() {
   };
   function d3_scale_threshold(domain, range) {
     function scale(x) {
-      return range[d3.bisect(domain, x)];
+      if (x <= x) return range[d3.bisect(domain, x)];
     }
     scale.domain = function(_) {
       if (!arguments.length) return domain;
