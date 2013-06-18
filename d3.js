@@ -23,10 +23,10 @@ d3 = function() {
   d3.min = function(array, f) {
     var i = -1, n = array.length, a, b;
     if (arguments.length === 1) {
-      while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
+      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = array[i]) != null && a > b) a = b;
     } else {
-      while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
     }
     return a;
@@ -34,10 +34,10 @@ d3 = function() {
   d3.max = function(array, f) {
     var i = -1, n = array.length, a, b;
     if (arguments.length === 1) {
-      while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
+      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = array[i]) != null && b > a) a = b;
     } else {
-      while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
     }
     return a;
@@ -45,13 +45,13 @@ d3 = function() {
   d3.extent = function(array, f) {
     var i = -1, n = array.length, a, b, c;
     if (arguments.length === 1) {
-      while (++i < n && ((a = c = array[i]) == null || a != a)) a = c = undefined;
+      while (++i < n && !((a = c = array[i]) != null && a <= a)) a = c = undefined;
       while (++i < n) if ((b = array[i]) != null) {
         if (a > b) a = b;
         if (c < b) c = b;
       }
     } else {
-      while (++i < n && ((a = c = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+      while (++i < n && !((a = c = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = f.call(array, array[i], i)) != null) {
         if (a > b) a = b;
         if (c < b) c = b;
@@ -7020,8 +7020,7 @@ d3 = function() {
       return scale;
     }
     function scale(x) {
-      if (isNaN(x = +x)) return NaN;
-      return range[d3.bisect(thresholds, x)];
+      if (!isNaN(x = +x)) return range[d3.bisect(thresholds, x)];
     }
     scale.domain = function(x) {
       if (!arguments.length) return domain;
@@ -7082,7 +7081,7 @@ d3 = function() {
   };
   function d3_scale_threshold(domain, range) {
     function scale(x) {
-      return range[d3.bisect(domain, x)];
+      if (x <= x) return range[d3.bisect(domain, x)];
     }
     scale.domain = function(_) {
       if (!arguments.length) return domain;

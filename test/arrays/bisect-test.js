@@ -28,6 +28,12 @@ suite.addBatch({
       assert.equal(bisect(array, 2.5), 2);
       assert.equal(bisect(array, 3.5), 3);
     },
+    "has undefined behavior if the search value is unorderable": function(bisect) {
+      var array = [1, 2, 3];
+      bisect(array, new Date(NaN)); // who knows what this will return!
+      bisect(array, undefined);
+      bisect(array, NaN);
+    },
     "observes the optional lower bound": function(bisect) {
       var array = [1, 2, 3, 4, 5];
       assert.equal(bisect(array, 0, 2), 2);
