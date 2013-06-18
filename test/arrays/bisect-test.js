@@ -28,6 +28,13 @@ suite.addBatch({
       assert.equal(bisect(array, 2.5), 2);
       assert.equal(bisect(array, 3.5), 3);
     },
+    "returns NaN if the search value is not orderable": function(bisect) {
+      var array = [1, 2, 3];
+      assert.isNaN(bisect(array));
+      assert.isNaN(bisect(array, undefined));
+      assert.isNaN(bisect(array, NaN));
+      assert.equal(bisect(array, null), 0);
+    },
     "observes the optional lower bound": function(bisect) {
       var array = [1, 2, 3, 4, 5];
       assert.equal(bisect(array, 0, 2), 2);

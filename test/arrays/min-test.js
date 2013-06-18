@@ -20,9 +20,13 @@ suite.addBatch({
       assert.equal(min(["3", "20"]), "20");
     },
     "ignores null, undefined and NaN": function(min) {
+      var o = {valueOf: function() { return NaN; }};
       assert.equal(min([NaN, 1, 2, 3, 4, 5]), 1);
+      assert.equal(min([o, 1, 2, 3, 4, 5]), 1);
       assert.equal(min([1, 2, 3, 4, 5, NaN]), 1);
+      assert.equal(min([1, 2, 3, 4, 5, o]), 1);
       assert.equal(min([10, null, 3, undefined, 5, NaN]), 3);
+      assert.equal(min([-1, null, -3, undefined, -5, NaN]), -5);
     },
     "compares heterogenous types as numbers": function(min) {
       assert.strictEqual(min([20, "3"]), "3");

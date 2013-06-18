@@ -1,6 +1,7 @@
 d3.bisector = function(f) {
   return {
     left: function(a, x, lo, hi) {
+      if (!(x <= x)) return NaN;
       if (arguments.length < 3) lo = 0;
       if (arguments.length < 4) hi = a.length;
       while (lo < hi) {
@@ -11,6 +12,7 @@ d3.bisector = function(f) {
       return lo;
     },
     right: function(a, x, lo, hi) {
+      if (!(x <= x)) return NaN;
       if (arguments.length < 3) lo = 0;
       if (arguments.length < 4) hi = a.length;
       while (lo < hi) {
