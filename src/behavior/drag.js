@@ -3,7 +3,6 @@ import "../core/rebind";
 import "../event/event";
 import "../event/mouse";
 import "../event/touches";
-import "../event/user-select";
 import "behavior";
 
 d3.behavior.drag = function() {
@@ -22,8 +21,7 @@ d3.behavior.drag = function() {
         touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null,
         offset,
         origin_ = point(),
-        moved = 0,
-        selectEnable = d3_event_userSelectSuppress(touchId != null ? "drag-" + touchId : "drag");
+        moved = 0;
 
     var w = d3.select(d3_window)
         .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove)
@@ -36,6 +34,8 @@ d3.behavior.drag = function() {
       offset = [0, 0];
     }
 
+    d3_window.focus(); // TODO focus tabindex parent
+    if (touchId == null) d3_eventCancel(); // touchstart is needed to drag links
     event_({type: "dragstart"});
 
     function point() {
@@ -54,8 +54,8 @@ d3.behavior.drag = function() {
 
       moved |= dx | dy;
       origin_ = p;
-      d3_eventCancel();
 
+      d3_eventCancel();
       event_({type: "drag", x: p[0] + offset[0], y: p[1] + offset[1], dx: dx, dy: dy});
     }
 
@@ -70,7 +70,6 @@ d3.behavior.drag = function() {
 
       w .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null)
         .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-      selectEnable();
     }
   }
 
