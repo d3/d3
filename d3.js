@@ -497,34 +497,13 @@ d3 = function() {
       return point;
     }) : [];
   };
-  function d3_vendorSymbol(object, name) {
-    if (name in object) return name;
-    name = name.charAt(0).toUpperCase() + name.substring(1);
-    for (var i = 0, n = d3_vendorPrefixes.length; i < n; ++i) {
-      var prefixName = d3_vendorPrefixes[i] + name;
-      if (prefixName in object) return prefixName;
-    }
-  }
-  var d3_vendorPrefixes = [ "webkit", "ms", "moz", "Moz", "o", "O" ];
-  var d3_event_userSelectProperty = d3_vendorSymbol(d3_documentElement.style, "userSelect"), d3_event_userSelectSuppress = d3_event_userSelectProperty ? function() {
-    var style = d3_documentElement.style, select = style[d3_event_userSelectProperty];
-    style[d3_event_userSelectProperty] = "none";
-    return function() {
-      style[d3_event_userSelectProperty] = select;
-    };
-  } : function(type) {
-    var w = d3.select(d3_window).on("selectstart." + type, d3_eventCancel);
-    return function() {
-      w.on("selectstart." + type, null);
-    };
-  };
   d3.behavior.drag = function() {
     var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"), origin = null;
     function drag() {
       this.on("mousedown.drag", mousedown).on("touchstart.drag", mousedown);
     }
     function mousedown() {
-      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null, offset, origin_ = point(), moved = 0, selectEnable = d3_event_userSelectSuppress(touchId != null ? "drag-" + touchId : "drag");
+      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null, offset, origin_ = point(), moved = 0;
       var w = d3.select(d3_window).on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
       if (origin) {
         offset = origin.apply(target, arguments);
@@ -532,6 +511,8 @@ d3 = function() {
       } else {
         offset = [ 0, 0 ];
       }
+      d3_window.focus();
+      if (touchId == null) d3_eventCancel();
       event_({
         type: "dragstart"
       });
@@ -564,7 +545,6 @@ d3 = function() {
           if (d3.event.target === eventTarget) d3_eventSuppress(w, "click");
         }
         w.on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-        selectEnable();
       }
     }
     drag.origin = function(x) {
@@ -574,6 +554,15 @@ d3 = function() {
     };
     return d3.rebind(drag, event, "on");
   };
+  function d3_vendorSymbol(object, name) {
+    if (name in object) return name;
+    name = name.charAt(0).toUpperCase() + name.substring(1);
+    for (var i = 0, n = d3_vendorPrefixes.length; i < n; ++i) {
+      var prefixName = d3_vendorPrefixes[i] + name;
+      if (prefixName in object) return prefixName;
+    }
+  }
+  var d3_vendorPrefixes = [ "webkit", "ms", "moz", "Moz", "o", "O" ];
   function d3_selection(groups) {
     d3_arraySubclass(groups, d3_selectionPrototype);
     return groups;
@@ -1205,7 +1194,9 @@ d3 = function() {
       });
     }
     function mousedown() {
-      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, moved = 0, w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup), l = location(d3.mouse(target)), selectEnable = d3_event_userSelectSuppress("zoom");
+      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, moved = 0, w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup), l = location(d3.mouse(target));
+      d3_window.focus();
+      d3_eventCancel();
       function mousemove() {
         moved = 1;
         translateTo(d3.mouse(target), l);
@@ -1214,7 +1205,6 @@ d3 = function() {
       function mouseup() {
         if (moved) d3_eventCancel();
         w.on("mousemove.zoom", null).on("mouseup.zoom", null);
-        selectEnable();
         if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
       }
     }
