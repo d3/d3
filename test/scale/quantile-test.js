@@ -53,6 +53,10 @@ suite.addBatch({
       assert.deepEqual([8, 8.9].map(x), [b, b]);
       assert.deepEqual([9, 9.1, 10, 13].map(x), [c, c, c, c]);
       assert.deepEqual([14.9, 15, 15.1, 16, 20].map(x), [a, a, a, a, a]);
+    },
+    "returns undefined if the input value is NaN": function(quantile) {
+      var x = quantile().domain([3, 6, 7, 8, 8, 10, 13, 15, 16, 20]).range([0, 1, 2, 3]);
+      assert.isUndefined(x(NaN));
     }
   }
 });

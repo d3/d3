@@ -19,8 +19,11 @@ suite.addBatch({
       assert.deepEqual(extent(["3", "20"]), ["20", "3"]);
     },
     "ignores null, undefined and NaN": function(extent) {
+      var o = {valueOf: function() { return NaN; }};
       assert.deepEqual(extent([NaN, 1, 2, 3, 4, 5]), [1, 5]);
+      assert.deepEqual(extent([o, 1, 2, 3, 4, 5]), [1, 5]);
       assert.deepEqual(extent([1, 2, 3, 4, 5, NaN]), [1, 5]);
+      assert.deepEqual(extent([1, 2, 3, 4, 5, o]), [1, 5]);
       assert.deepEqual(extent([10, null, 3, undefined, 5, NaN]), [3, 10]);
       assert.deepEqual(extent([-1, null, -3, undefined, -5, NaN]), [-5, -1]);
     },

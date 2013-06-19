@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.2.0"
+    version: "3.2.1"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -23,10 +23,10 @@ d3 = function() {
   d3.min = function(array, f) {
     var i = -1, n = array.length, a, b;
     if (arguments.length === 1) {
-      while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
+      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = array[i]) != null && a > b) a = b;
     } else {
-      while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
     }
     return a;
@@ -34,10 +34,10 @@ d3 = function() {
   d3.max = function(array, f) {
     var i = -1, n = array.length, a, b;
     if (arguments.length === 1) {
-      while (++i < n && ((a = array[i]) == null || a != a)) a = undefined;
+      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = array[i]) != null && b > a) a = b;
     } else {
-      while (++i < n && ((a = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
     }
     return a;
@@ -45,13 +45,13 @@ d3 = function() {
   d3.extent = function(array, f) {
     var i = -1, n = array.length, a, b, c;
     if (arguments.length === 1) {
-      while (++i < n && ((a = c = array[i]) == null || a != a)) a = c = undefined;
+      while (++i < n && !((a = c = array[i]) != null && a <= a)) a = c = undefined;
       while (++i < n) if ((b = array[i]) != null) {
         if (a > b) a = b;
         if (c < b) c = b;
       }
     } else {
-      while (++i < n && ((a = c = f.call(array, array[i], i)) == null || a != a)) a = undefined;
+      while (++i < n && !((a = c = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
       while (++i < n) if ((b = f.call(array, array[i], i)) != null) {
         if (a > b) a = b;
         if (c < b) c = b;
@@ -1136,7 +1136,7 @@ d3 = function() {
   };
   var d3_selectionRoot = d3.select(d3_documentElement);
   d3.behavior.zoom = function() {
-    var translate = [ 0, 0 ], translate0, scale = 1, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
+    var translate = [ 0, 0 ], translate0, scale = 1, distance0, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     function zoom() {
       this.on("mousedown.zoom", mousedown).on("mousemove.zoom", mousemove).on(d3_behavior_zoomWheel + ".zoom", mousewheel).on("dblclick.zoom", dblclick).on("touchstart.zoom", touchstart).on("touchmove.zoom", touchmove).on("touchend.zoom", touchstart);
     }
@@ -1237,6 +1237,7 @@ d3 = function() {
       var touches = d3.touches(this), now = Date.now();
       scale0 = scale;
       translate0 = {};
+      distance0 = 0;
       touches.forEach(function(t) {
         translate0[t.identifier] = location(t);
       });
@@ -1248,15 +1249,22 @@ d3 = function() {
           dispatch(event.of(this, arguments));
         }
         touchtime = now;
+      } else if (touches.length > 1) {
+        var p = touches[0], q = touches[1], dx = p[0] - q[0], dy = p[1] - q[1];
+        distance0 = dx * dx + dy * dy;
       }
     }
     function touchmove() {
       var touches = d3.touches(this), p0 = touches[0], l0 = translate0[p0.identifier];
       if (p1 = touches[1]) {
-        var p1, l1 = translate0[p1.identifier];
+        var p1, l1 = translate0[p1.identifier], scale1 = d3.event.scale;
+        if (scale1 == null) {
+          var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
+          scale1 = distance0 && Math.sqrt(distance1 / distance0);
+        }
         p0 = [ (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 ];
         l0 = [ (l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2 ];
-        scaleTo(d3.event.scale * scale0);
+        scaleTo(scale1 * scale0);
       }
       translateTo(p0, l0);
       touchtime = null;
@@ -7020,8 +7028,7 @@ d3 = function() {
       return scale;
     }
     function scale(x) {
-      if (isNaN(x = +x)) return NaN;
-      return range[d3.bisect(thresholds, x)];
+      if (!isNaN(x = +x)) return range[d3.bisect(thresholds, x)];
     }
     scale.domain = function(x) {
       if (!arguments.length) return domain;
@@ -7082,7 +7089,7 @@ d3 = function() {
   };
   function d3_scale_threshold(domain, range) {
     function scale(x) {
-      return range[d3.bisect(domain, x)];
+      if (x <= x) return range[d3.bisect(domain, x)];
     }
     scale.domain = function(_) {
       if (!arguments.length) return domain;
@@ -7475,7 +7482,7 @@ d3 = function() {
           subnodes = selector.call(node, node.__data__, i);
           subgroups.push(subgroup = []);
           for (var k = -1, o = subnodes.length; ++k < o; ) {
-            d3_transitionNode(subnode = subnodes[k], k, id, transition);
+            if (subnode = subnodes[k]) d3_transitionNode(subnode, k, id, transition);
             subgroup.push(subnode);
           }
         }
@@ -8047,8 +8054,8 @@ d3 = function() {
       return brush;
     };
     brush.clamp = function(z) {
-      if (!arguments.length) return x && y ? clamp : clamp[+!x];
-      if (x && y) clamp = [ !!z[0], !!z[1] ]; else clamp[+!x] = !!z;
+      if (!arguments.length) return x && y ? clamp : x || y ? clamp[+!x] : null;
+      if (x && y) clamp = [ !!z[0], !!z[1] ]; else if (x || y) clamp[+!x] = !!z;
       return brush;
     };
     brush.extent = function(z) {
