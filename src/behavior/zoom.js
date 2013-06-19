@@ -169,14 +169,14 @@ d3.behavior.zoom = function() {
         l0 = translate0[p0.identifier];
     if (p1 = touches[1]) {
       var p1, l1 = translate0[p1.identifier],
-          scale = d3.event.scale;
-      if (scale == null) {
-        var distance = (distance = p1[0] - p0[0]) * distance + (distance = p1[1] - p0[1]) * distance;
-        scale = distance0 && Math.sqrt(distance / distance0);
+          scale1 = d3.event.scale;
+      if (scale1 == null) {
+        var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
+        scale1 = distance0 && Math.sqrt(distance1 / distance0);
       }
       p0 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
       l0 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2];
-      scaleTo(scale * scale0);
+      scaleTo(scale1 * scale0);
     }
     translateTo(p0, l0);
     touchtime = null;
