@@ -77,4 +77,13 @@ suite.addBatch({
   }
 });
 
+// Inspection
+suite.addBatch({
+  "transition": {
+    topic: load("transition/transition").document(),
+    "size": require("./transition-test-size"),
+    "node": require("./transition-test-node")
+  }
+})
+
 suite.export(module);
