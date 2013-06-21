@@ -100,28 +100,42 @@ d3.dsv = function(delimiter, mimeType) {
     return rows;
   };
 
-  dsv.format = function(rows) {
-    if (Array.isArray(rows[0])) return dsv.formatRows(rows); // deprecated; use formatRows
+  dsv.format = function(rows, f) {
+    if (Array.isArray(rows[0])) return dsv.formatRows(rows, f); // deprecated; use formatRows
     var fieldSet = new d3_Set, fields = [];
 
-    // Compute unique fields in order of discovery.
-    rows.forEach(function(row) {
+    // Convert rows if necessary, and compute unique fields in order of
+    // discovery.
+    rows = rows.map(f ? function(row, i) {
+      row = f(row, i);
+      addFields(row);
+      return row;
+    } : function(row) {
+      addFields(row);
+      return row;
+    });
+
+    function addFields(row) {
       for (var field in row) {
         if (!fieldSet.has(field)) {
           fields.push(fieldSet.add(field));
         }
       }
-    });
+    }
 
-    return [fields.map(formatValue).join(delimiter)].concat(rows.map(function(row) {
-      return fields.map(function(field) {
+    // Format rows.
+    for (var i = 0, n = rows.length; i < n; ++i) {
+      var row = rows[i];
+      rows[i] = fields.map(function(field) {
         return formatValue(row[field]);
       }).join(delimiter);
-    })).join("\n");
+    }
+
+    return [fields.map(formatValue).join(delimiter)].concat(rows).join("\n");
   };
 
-  dsv.formatRows = function(rows) {
-    return rows.map(formatRow).join("\n");
+  dsv.formatRows = function(rows, f) {
+    return rows.map(f ? function(row, i) { return formatRow(f(row, i)); } : formatRow).join("\n");
   };
 
   function formatRow(row) {
