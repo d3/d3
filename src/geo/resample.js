@@ -85,12 +85,12 @@ function d3_geo_resample(project) {
           dx2 = x2 - x0,
           dy2 = y2 - y0,
           dz = dy * dx2 - dx * dy2,
-          tooFar;
-      if (dz * dz / d2 > δ2 || (tooFar = d2 > 16384 * δ2)) {
+          curve = dz * dz / d2 > δ2;
+      if (curve || d2 > 16384 * δ2) {
         var s0 = resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a /= m, b /= m, c, depth, buffer);
         buffer.push(p);
         var s1 = resampleLineTo(x2, y2, λ2, a, b, c, x1, y1, λ1, a1, b1, c1, depth, buffer);
-        return !tooFar || s0 || s1 || (buffer.pop(), false);
+        return curve || s0 || s1 || (buffer.pop(), false);
       }
     }
   }
