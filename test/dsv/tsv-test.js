@@ -147,6 +147,9 @@ suite.addBatch({
           {c: 3, b: 4},
           {c: 5, a: 1, b: 2}
         ]), "a\tb\tc\n1\t2\t\n\t4\t3\n1\t2\t5");
+      },
+      "respects a row conversion function": function(format) {
+        assert.equal(format([{a: 1}, {a: 1, b: 2}], function(d) { return {a: d.a}; }), "a\n1\n1");
       }
     },
 
@@ -177,6 +180,9 @@ suite.addBatch({
       },
       "does not escape commas": function(format) {
         assert.equal(format([["oxford,comma"]]), "oxford,comma");
+      },
+      "respects a row conversion function": function(format) {
+        assert.equal(format([[0, 1, 2]], function(d) { return d.slice(1); }), "1\t2");
       }
     }
   }
