@@ -1,5 +1,3 @@
-
-
 var vows = require("vows"),
     load = require("../load"),
     assert = require("../assert");
