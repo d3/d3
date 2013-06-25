@@ -1,8 +1,10 @@
+import "../math/trigonometry";
 import "cartesian";
 import "stream";
 
 function d3_geo_resample(project) {
   var δ2 = .5, // precision, px²
+      cosMinDistance = Math.cos(1 * d3_radians), // cos(minimum angular distance)
       maxDepth = 16;
 
   function resample(stream) {
@@ -85,8 +87,8 @@ function d3_geo_resample(project) {
           dx2 = x2 - x0,
           dy2 = y2 - y0,
           dz = dy * dx2 - dx * dy2,
-          curve = dz * dz / d2 > δ2;
-      if (curve || d2 > 16384 * δ2) {
+          curve = dz * dz / d2 > δ2 || Math.abs((dx * dx2 + dy * dy2) / d2 - .5) > .3;
+      if (curve || a0 * a1 + b0 * b1 + c0 * c1 < cosMinDistance) {
         var s0 = resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a /= m, b /= m, c, depth, buffer);
         buffer.push(p);
         var s1 = resampleLineTo(x2, y2, λ2, a, b, c, x1, y1, λ1, a1, b1, c1, depth, buffer);
