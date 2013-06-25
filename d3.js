@@ -368,12 +368,21 @@ d3 = function() {
   var d3_vendorPrefixes = [ "webkit", "ms", "moz", "Moz", "o", "O" ];
   var d3_event_dragSelect = d3_vendorSymbol(d3_documentElement.style, "userSelect");
   function d3_event_dragSuppress(type) {
-    var w = d3.select(d3_window).on("selectstart." + type, d3_eventPreventDefault).on("dragstart." + type, d3_eventPreventDefault), style = d3_documentElement.style, select = style[d3_event_dragSelect];
+    var selectstart = "selectstart." + type, dragstart = "dragstart." + type, click = "click." + type, w = d3.select(d3_window).on(selectstart, d3_eventPreventDefault).on(dragstart, d3_eventPreventDefault), style = d3_documentElement.style, select = style[d3_event_dragSelect];
     style[d3_event_dragSelect] = "none";
     return function(suppressClick) {
-      w.on("selectstart." + type, null).on("dragstart." + type, null);
+      w.on(selectstart, null).on(dragstart, null);
       style[d3_event_dragSelect] = select;
-      if (suppressClick) d3_eventSuppress(w, "click." + type);
+      if (suppressClick) {
+        function off() {
+          w.on(click, null);
+        }
+        w.on(click, function() {
+          d3_eventPreventDefault();
+          off();
+        }, true);
+        setTimeout(off, 0);
+      }
     };
   }
   d3.dispatch = function() {
@@ -426,16 +435,6 @@ d3 = function() {
     var e = d3.event, s;
     while (s = e.sourceEvent) e = s;
     return e;
-  }
-  function d3_eventSuppress(target, type) {
-    function off() {
-      target.on(type, null);
-    }
-    target.on(type, function() {
-      d3_eventPreventDefault();
-      off();
-    }, true);
-    setTimeout(off, 0);
   }
   function d3_eventDispatch(target) {
     var dispatch = new d3_dispatch(), i = 0, n = arguments.length;
