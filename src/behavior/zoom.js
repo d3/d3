@@ -1,9 +1,9 @@
 import "../core/document";
 import "../core/rebind";
+import "../event/drag";
 import "../event/event";
 import "../event/mouse";
 import "../event/touches";
-import "../event/user-select";
 import "../selection/selection";
 import "behavior";
 
@@ -105,7 +105,7 @@ d3.behavior.zoom = function() {
         moved = 0,
         w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup),
         l = location(d3.mouse(target)),
-        selectEnable = d3_event_userSelectSuppress("zoom");
+        dragRestore = d3_event_dragSuppress("zoom");
 
     function mousemove() {
       moved = 1;
@@ -114,10 +114,8 @@ d3.behavior.zoom = function() {
     }
 
     function mouseup() {
-      if (moved) d3_eventCancel();
       w.on("mousemove.zoom", null).on("mouseup.zoom", null);
-      selectEnable();
-      if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
+      dragRestore(moved && d3.event.target === eventTarget);
     }
   }
 
