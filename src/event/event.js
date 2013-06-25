@@ -2,8 +2,7 @@ import "dispatch";
 
 d3.event = null;
 
-function d3_eventCancel() {
-  d3.event.stopPropagation();
+function d3_eventPreventDefault() {
   d3.event.preventDefault();
 }
 
@@ -18,7 +17,7 @@ function d3_eventSource() {
 // useful to disambiguate dragging from clicking.
 function d3_eventSuppress(target, type) {
   function off() { target.on(type, null); }
-  target.on(type, function() { d3_eventCancel(); off(); }, true);
+  target.on(type, function() { d3_eventPreventDefault(); off(); }, true);
   setTimeout(off, 0); // clear the handler if it doesn't fire
 }
 
