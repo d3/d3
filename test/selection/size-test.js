@@ -27,7 +27,7 @@ suite.addBatch({
 
 suite.addBatch({
   "selectAll(div)": {
-    topic: load("selection/node").document(),
+    topic: load("selection/size").document(),
     "on a simple page": {
       topic: function(d3) {
         var body = d3.select("body");
