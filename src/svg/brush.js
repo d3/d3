@@ -107,12 +107,14 @@ d3.svg.brush = function() {
         offset;
 
     var w = d3.select(d3_window)
-        .on("mousemove.brush", brushmove)
-        .on("mouseup.brush", brushend)
-        .on("touchmove.brush", brushmove)
-        .on("touchend.brush", brushend)
         .on("keydown.brush", keydown)
         .on("keyup.brush", keyup);
+
+    if (d3.event.changedTouches) {
+      w.on("touchmove.brush", brushmove).on("touchend.brush", brushend);
+    } else {
+      w.on("mousemove.brush", brushmove).on("mouseup.brush", brushend);
+    }
 
     // If the extent was clicked on, drag rather than brush;
     // store the point between the mouse and extent origin instead.
