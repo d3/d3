@@ -14,7 +14,11 @@ module.exports = function() {
   files.push("src/end");
 
   function topic() {
-    smash.load(files, expression, sandbox, this.callback);
+    var callback = this.callback;
+    smash.load(files, expression, sandbox, function(error, result) {
+      if (error) console.trace(error.stack);
+      callback(error, result);
+    });
   }
 
   topic.expression = function(_) {

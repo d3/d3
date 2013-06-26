@@ -1,9 +1,9 @@
 import "../core/document";
 import "../core/rebind";
+import "../event/drag";
 import "../event/event";
 import "../event/mouse";
 import "../event/touches";
-import "../event/user-select";
 import "behavior";
 
 d3.behavior.drag = function() {
@@ -23,7 +23,7 @@ d3.behavior.drag = function() {
         offset,
         origin_ = point(),
         moved = 0,
-        selectEnable = d3_event_userSelectSuppress(touchId != null ? "drag-" + touchId : "drag");
+        dragRestore = d3_event_dragSuppress(touchId != null ? "drag-" + touchId : "drag");
 
     var w = d3.select(d3_window)
         .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove)
@@ -54,23 +54,16 @@ d3.behavior.drag = function() {
 
       moved |= dx | dy;
       origin_ = p;
-      d3_eventCancel();
 
       event_({type: "drag", x: p[0] + offset[0], y: p[1] + offset[1], dx: dx, dy: dy});
     }
 
     function dragend() {
-      event_({type: "dragend"});
-
-      // if moved, prevent the mouseup (and possibly click) from propagating
-      if (moved) {
-        d3_eventCancel();
-        if (d3.event.target === eventTarget) d3_eventSuppress(w, "click");
-      }
-
       w .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null)
         .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-      selectEnable();
+
+      dragRestore(moved && d3.event.target === eventTarget);
+      event_({type: "dragend"});
     }
   }
 

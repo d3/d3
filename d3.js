@@ -357,6 +357,35 @@ d3 = function() {
       return value === source ? target : value;
     };
   }
+  function d3_vendorSymbol(object, name) {
+    if (name in object) return name;
+    name = name.charAt(0).toUpperCase() + name.substring(1);
+    for (var i = 0, n = d3_vendorPrefixes.length; i < n; ++i) {
+      var prefixName = d3_vendorPrefixes[i] + name;
+      if (prefixName in object) return prefixName;
+    }
+  }
+  var d3_vendorPrefixes = [ "webkit", "ms", "moz", "Moz", "o", "O" ];
+  var d3_array = d3_arraySlice;
+  function d3_arrayCopy(pseudoarray) {
+    var i = -1, n = pseudoarray.length, array = [];
+    while (++i < n) array.push(pseudoarray[i]);
+    return array;
+  }
+  function d3_arraySlice(pseudoarray) {
+    return Array.prototype.slice.call(pseudoarray);
+  }
+  try {
+    d3_array(d3_documentElement.childNodes)[0].nodeType;
+  } catch (e) {
+    d3_array = d3_arrayCopy;
+  }
+  var d3_arraySubclass = [].__proto__ ? function(array, prototype) {
+    array.__proto__ = prototype;
+  } : function(array, prototype) {
+    for (var property in prototype) array[property] = prototype[property];
+  };
+  function d3_noop() {}
   d3.dispatch = function() {
     var dispatch = new d3_dispatch(), i = -1, n = arguments.length;
     while (++i < n) dispatch[arguments[i]] = d3_dispatch_event(dispatch);
@@ -400,24 +429,13 @@ d3 = function() {
     return event;
   }
   d3.event = null;
-  function d3_eventCancel() {
-    d3.event.stopPropagation();
+  function d3_eventPreventDefault() {
     d3.event.preventDefault();
   }
   function d3_eventSource() {
     var e = d3.event, s;
     while (s = e.sourceEvent) e = s;
     return e;
-  }
-  function d3_eventSuppress(target, type) {
-    function off() {
-      target.on(type, null);
-    }
-    target.on(type, function() {
-      d3_eventCancel();
-      off();
-    }, true);
-    setTimeout(off, 0);
   }
   function d3_eventDispatch(target) {
     var dispatch = new d3_dispatch(), i = 0, n = arguments.length;
@@ -436,144 +454,10 @@ d3 = function() {
     };
     return dispatch;
   }
-  d3.mouse = function(container) {
-    return d3_mousePoint(container, d3_eventSource());
+  d3.requote = function(s) {
+    return s.replace(d3_requote_re, "\\$&");
   };
-  var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator.userAgent) ? -1 : 0;
-  function d3_mousePoint(container, e) {
-    var svg = container.ownerSVGElement || container;
-    if (svg.createSVGPoint) {
-      var point = svg.createSVGPoint();
-      if (d3_mouse_bug44083 < 0 && (d3_window.scrollX || d3_window.scrollY)) {
-        svg = d3.select("body").append("svg").style({
-          position: "absolute",
-          top: 0,
-          left: 0,
-          margin: 0,
-          padding: 0,
-          border: "none"
-        }, "important");
-        var ctm = svg[0][0].getScreenCTM();
-        d3_mouse_bug44083 = !(ctm.f || ctm.e);
-        svg.remove();
-      }
-      if (d3_mouse_bug44083) {
-        point.x = e.pageX;
-        point.y = e.pageY;
-      } else {
-        point.x = e.clientX;
-        point.y = e.clientY;
-      }
-      point = point.matrixTransform(container.getScreenCTM().inverse());
-      return [ point.x, point.y ];
-    }
-    var rect = container.getBoundingClientRect();
-    return [ e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop ];
-  }
-  var d3_array = d3_arraySlice;
-  function d3_arrayCopy(pseudoarray) {
-    var i = -1, n = pseudoarray.length, array = [];
-    while (++i < n) array.push(pseudoarray[i]);
-    return array;
-  }
-  function d3_arraySlice(pseudoarray) {
-    return Array.prototype.slice.call(pseudoarray);
-  }
-  try {
-    d3_array(d3_documentElement.childNodes)[0].nodeType;
-  } catch (e) {
-    d3_array = d3_arrayCopy;
-  }
-  var d3_arraySubclass = [].__proto__ ? function(array, prototype) {
-    array.__proto__ = prototype;
-  } : function(array, prototype) {
-    for (var property in prototype) array[property] = prototype[property];
-  };
-  d3.touches = function(container, touches) {
-    if (arguments.length < 2) touches = d3_eventSource().touches;
-    return touches ? d3_array(touches).map(function(touch) {
-      var point = d3_mousePoint(container, touch);
-      point.identifier = touch.identifier;
-      return point;
-    }) : [];
-  };
-  function d3_vendorSymbol(object, name) {
-    if (name in object) return name;
-    name = name.charAt(0).toUpperCase() + name.substring(1);
-    for (var i = 0, n = d3_vendorPrefixes.length; i < n; ++i) {
-      var prefixName = d3_vendorPrefixes[i] + name;
-      if (prefixName in object) return prefixName;
-    }
-  }
-  var d3_vendorPrefixes = [ "webkit", "ms", "moz", "Moz", "o", "O" ];
-  var d3_event_userSelectProperty = d3_vendorSymbol(d3_documentElement.style, "userSelect"), d3_event_userSelectSuppress = d3_event_userSelectProperty ? function() {
-    var style = d3_documentElement.style, select = style[d3_event_userSelectProperty];
-    style[d3_event_userSelectProperty] = "none";
-    return function() {
-      style[d3_event_userSelectProperty] = select;
-    };
-  } : function(type) {
-    var w = d3.select(d3_window).on("selectstart." + type, d3_eventCancel);
-    return function() {
-      w.on("selectstart." + type, null);
-    };
-  };
-  d3.behavior.drag = function() {
-    var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"), origin = null;
-    function drag() {
-      this.on("mousedown.drag", mousedown).on("touchstart.drag", mousedown);
-    }
-    function mousedown() {
-      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null, offset, origin_ = point(), moved = 0, selectEnable = d3_event_userSelectSuppress(touchId != null ? "drag-" + touchId : "drag");
-      var w = d3.select(d3_window).on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
-      if (origin) {
-        offset = origin.apply(target, arguments);
-        offset = [ offset.x - origin_[0], offset.y - origin_[1] ];
-      } else {
-        offset = [ 0, 0 ];
-      }
-      event_({
-        type: "dragstart"
-      });
-      function point() {
-        var p = target.parentNode;
-        return touchId != null ? d3.touches(p).filter(function(p) {
-          return p.identifier === touchId;
-        })[0] : d3.mouse(p);
-      }
-      function dragmove() {
-        if (!target.parentNode) return dragend();
-        var p = point(), dx = p[0] - origin_[0], dy = p[1] - origin_[1];
-        moved |= dx | dy;
-        origin_ = p;
-        d3_eventCancel();
-        event_({
-          type: "drag",
-          x: p[0] + offset[0],
-          y: p[1] + offset[1],
-          dx: dx,
-          dy: dy
-        });
-      }
-      function dragend() {
-        event_({
-          type: "dragend"
-        });
-        if (moved) {
-          d3_eventCancel();
-          if (d3.event.target === eventTarget) d3_eventSuppress(w, "click");
-        }
-        w.on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-        selectEnable();
-      }
-    }
-    drag.origin = function(x) {
-      if (!arguments.length) return origin;
-      origin = x;
-      return drag;
-    };
-    return d3.rebind(drag, event, "on");
-  };
+  var d3_requote_re = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
   function d3_selection(groups) {
     d3_arraySubclass(groups, d3_selectionPrototype);
     return groups;
@@ -698,10 +582,6 @@ d3 = function() {
   function d3_collapse(s) {
     return s.trim().replace(/\s+/g, " ");
   }
-  d3.requote = function(s) {
-    return s.replace(d3_requote_re, "\\$&");
-  };
-  var d3_requote_re = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
   d3_selectionPrototype.classed = function(name, value) {
     if (arguments.length < 2) {
       if (typeof name === "string") {
@@ -973,78 +853,6 @@ d3 = function() {
       return !a - !b || comparator(a.__data__, b.__data__);
     };
   }
-  function d3_noop() {}
-  d3_selectionPrototype.on = function(type, listener, capture) {
-    var n = arguments.length;
-    if (n < 3) {
-      if (typeof type !== "string") {
-        if (n < 2) listener = false;
-        for (capture in type) this.each(d3_selection_on(capture, type[capture], listener));
-        return this;
-      }
-      if (n < 2) return (n = this.node()["__on" + type]) && n._;
-      capture = false;
-    }
-    return this.each(d3_selection_on(type, listener, capture));
-  };
-  function d3_selection_on(type, listener, capture) {
-    var name = "__on" + type, i = type.indexOf("."), wrap = d3_selection_onListener;
-    if (i > 0) type = type.substring(0, i);
-    var filter = d3_selection_onFilters.get(type);
-    if (filter) type = filter, wrap = d3_selection_onFilter;
-    function onRemove() {
-      var l = this[name];
-      if (l) {
-        this.removeEventListener(type, l, l.$);
-        delete this[name];
-      }
-    }
-    function onAdd() {
-      var l = wrap(listener, d3_array(arguments));
-      onRemove.call(this);
-      this.addEventListener(type, this[name] = l, l.$ = capture);
-      l._ = listener;
-    }
-    function removeAll() {
-      var re = new RegExp("^__on([^.]+)" + d3.requote(type) + "$"), match;
-      for (var name in this) {
-        if (match = name.match(re)) {
-          var l = this[name];
-          this.removeEventListener(match[1], l, l.$);
-          delete this[name];
-        }
-      }
-    }
-    return i ? listener ? onAdd : onRemove : listener ? d3_noop : removeAll;
-  }
-  var d3_selection_onFilters = d3.map({
-    mouseenter: "mouseover",
-    mouseleave: "mouseout"
-  });
-  d3_selection_onFilters.forEach(function(k) {
-    if ("on" + k in d3_document) d3_selection_onFilters.remove(k);
-  });
-  function d3_selection_onListener(listener, argumentz) {
-    return function(e) {
-      var o = d3.event;
-      d3.event = e;
-      argumentz[0] = this.__data__;
-      try {
-        listener.apply(this, argumentz);
-      } finally {
-        d3.event = o;
-      }
-    };
-  }
-  function d3_selection_onFilter(listener, argumentz) {
-    var l = d3_selection_onListener(listener, argumentz);
-    return function(e) {
-      var target = this, related = e.relatedTarget;
-      if (!related || related !== target && !(related.compareDocumentPosition(target) & 8)) {
-        l.call(target, e);
-      }
-    };
-  }
   d3_selectionPrototype.each = function(callback) {
     return d3_selection_each(this, function(node, i, j) {
       callback.call(node, node.__data__, i, j);
@@ -1135,6 +943,189 @@ d3 = function() {
     return d3_selection([ group ]);
   };
   var d3_selectionRoot = d3.select(d3_documentElement);
+  d3_selectionPrototype.on = function(type, listener, capture) {
+    var n = arguments.length;
+    if (n < 3) {
+      if (typeof type !== "string") {
+        if (n < 2) listener = false;
+        for (capture in type) this.each(d3_selection_on(capture, type[capture], listener));
+        return this;
+      }
+      if (n < 2) return (n = this.node()["__on" + type]) && n._;
+      capture = false;
+    }
+    return this.each(d3_selection_on(type, listener, capture));
+  };
+  function d3_selection_on(type, listener, capture) {
+    var name = "__on" + type, i = type.indexOf("."), wrap = d3_selection_onListener;
+    if (i > 0) type = type.substring(0, i);
+    var filter = d3_selection_onFilters.get(type);
+    if (filter) type = filter, wrap = d3_selection_onFilter;
+    function onRemove() {
+      var l = this[name];
+      if (l) {
+        this.removeEventListener(type, l, l.$);
+        delete this[name];
+      }
+    }
+    function onAdd() {
+      var l = wrap(listener, d3_array(arguments));
+      onRemove.call(this);
+      this.addEventListener(type, this[name] = l, l.$ = capture);
+      l._ = listener;
+    }
+    function removeAll() {
+      var re = new RegExp("^__on([^.]+)" + d3.requote(type) + "$"), match;
+      for (var name in this) {
+        if (match = name.match(re)) {
+          var l = this[name];
+          this.removeEventListener(match[1], l, l.$);
+          delete this[name];
+        }
+      }
+    }
+    return i ? listener ? onAdd : onRemove : listener ? d3_noop : removeAll;
+  }
+  var d3_selection_onFilters = d3.map({
+    mouseenter: "mouseover",
+    mouseleave: "mouseout"
+  });
+  d3_selection_onFilters.forEach(function(k) {
+    if ("on" + k in d3_document) d3_selection_onFilters.remove(k);
+  });
+  function d3_selection_onListener(listener, argumentz) {
+    return function(e) {
+      var o = d3.event;
+      d3.event = e;
+      argumentz[0] = this.__data__;
+      try {
+        listener.apply(this, argumentz);
+      } finally {
+        d3.event = o;
+      }
+    };
+  }
+  function d3_selection_onFilter(listener, argumentz) {
+    var l = d3_selection_onListener(listener, argumentz);
+    return function(e) {
+      var target = this, related = e.relatedTarget;
+      if (!related || related !== target && !(related.compareDocumentPosition(target) & 8)) {
+        l.call(target, e);
+      }
+    };
+  }
+  var d3_event_dragSelect = d3_vendorSymbol(d3_documentElement.style, "userSelect");
+  function d3_event_dragSuppress(type) {
+    var selectstart = "selectstart." + type, dragstart = "dragstart." + type, click = "click." + type, w = d3.select(d3_window).on(selectstart, d3_eventPreventDefault).on(dragstart, d3_eventPreventDefault), style = d3_documentElement.style, select = style[d3_event_dragSelect];
+    style[d3_event_dragSelect] = "none";
+    return function(suppressClick) {
+      w.on(selectstart, null).on(dragstart, null);
+      style[d3_event_dragSelect] = select;
+      if (suppressClick) {
+        function off() {
+          w.on(click, null);
+        }
+        w.on(click, function() {
+          d3_eventPreventDefault();
+          off();
+        }, true);
+        setTimeout(off, 0);
+      }
+    };
+  }
+  d3.mouse = function(container) {
+    return d3_mousePoint(container, d3_eventSource());
+  };
+  var d3_mouse_bug44083 = /WebKit/.test(d3_window.navigator.userAgent) ? -1 : 0;
+  function d3_mousePoint(container, e) {
+    var svg = container.ownerSVGElement || container;
+    if (svg.createSVGPoint) {
+      var point = svg.createSVGPoint();
+      if (d3_mouse_bug44083 < 0 && (d3_window.scrollX || d3_window.scrollY)) {
+        svg = d3.select("body").append("svg").style({
+          position: "absolute",
+          top: 0,
+          left: 0,
+          margin: 0,
+          padding: 0,
+          border: "none"
+        }, "important");
+        var ctm = svg[0][0].getScreenCTM();
+        d3_mouse_bug44083 = !(ctm.f || ctm.e);
+        svg.remove();
+      }
+      if (d3_mouse_bug44083) {
+        point.x = e.pageX;
+        point.y = e.pageY;
+      } else {
+        point.x = e.clientX;
+        point.y = e.clientY;
+      }
+      point = point.matrixTransform(container.getScreenCTM().inverse());
+      return [ point.x, point.y ];
+    }
+    var rect = container.getBoundingClientRect();
+    return [ e.clientX - rect.left - container.clientLeft, e.clientY - rect.top - container.clientTop ];
+  }
+  d3.touches = function(container, touches) {
+    if (arguments.length < 2) touches = d3_eventSource().touches;
+    return touches ? d3_array(touches).map(function(touch) {
+      var point = d3_mousePoint(container, touch);
+      point.identifier = touch.identifier;
+      return point;
+    }) : [];
+  };
+  d3.behavior.drag = function() {
+    var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"), origin = null;
+    function drag() {
+      this.on("mousedown.drag", mousedown).on("touchstart.drag", mousedown);
+    }
+    function mousedown() {
+      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null, offset, origin_ = point(), moved = 0, dragRestore = d3_event_dragSuppress(touchId != null ? "drag-" + touchId : "drag");
+      var w = d3.select(d3_window).on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
+      if (origin) {
+        offset = origin.apply(target, arguments);
+        offset = [ offset.x - origin_[0], offset.y - origin_[1] ];
+      } else {
+        offset = [ 0, 0 ];
+      }
+      event_({
+        type: "dragstart"
+      });
+      function point() {
+        var p = target.parentNode;
+        return touchId != null ? d3.touches(p).filter(function(p) {
+          return p.identifier === touchId;
+        })[0] : d3.mouse(p);
+      }
+      function dragmove() {
+        if (!target.parentNode) return dragend();
+        var p = point(), dx = p[0] - origin_[0], dy = p[1] - origin_[1];
+        moved |= dx | dy;
+        origin_ = p;
+        event_({
+          type: "drag",
+          x: p[0] + offset[0],
+          y: p[1] + offset[1],
+          dx: dx,
+          dy: dy
+        });
+      }
+      function dragend() {
+        w.on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null).on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
+        dragRestore(moved && d3.event.target === eventTarget);
+        event_({
+          type: "dragend"
+        });
+      }
+    }
+    drag.origin = function(x) {
+      if (!arguments.length) return origin;
+      origin = x;
+      return drag;
+    };
+    return d3.rebind(drag, event, "on");
+  };
   d3.behavior.zoom = function() {
     var translate = [ 0, 0 ], translate0, scale = 1, distance0, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     function zoom() {
@@ -1205,17 +1196,15 @@ d3 = function() {
       });
     }
     function mousedown() {
-      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, moved = 0, w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup), l = location(d3.mouse(target)), selectEnable = d3_event_userSelectSuppress("zoom");
+      var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, moved = 0, w = d3.select(d3_window).on("mousemove.zoom", mousemove).on("mouseup.zoom", mouseup), l = location(d3.mouse(target)), dragRestore = d3_event_dragSuppress("zoom");
       function mousemove() {
         moved = 1;
         translateTo(d3.mouse(target), l);
         dispatch(event_);
       }
       function mouseup() {
-        if (moved) d3_eventCancel();
         w.on("mousemove.zoom", null).on("mouseup.zoom", null);
-        selectEnable();
-        if (moved && d3.event.target === eventTarget) d3_eventSuppress(w, "click.zoom");
+        dragRestore(moved && d3.event.target === eventTarget);
       }
     }
     function mousewheel() {
@@ -7927,7 +7916,7 @@ d3 = function() {
       g.selectAll(".extent,.e>rect,.w>rect").attr("height", extent[1][1] - extent[0][1]);
     }
     function brushstart() {
-      var target = this, eventTarget = d3.select(d3.event.target), event_ = event.of(target, arguments), g = d3.select(target), resizing = eventTarget.datum(), resizingX = !/^(n|s)$/.test(resizing) && x, resizingY = !/^(e|w)$/.test(resizing) && y, dragging = eventTarget.classed("extent"), center, origin = mouse(), offset;
+      var target = this, eventTarget = d3.select(d3.event.target), event_ = event.of(target, arguments), g = d3.select(target), resizing = eventTarget.datum(), resizingX = !/^(n|s)$/.test(resizing) && x, resizingY = !/^(e|w)$/.test(resizing) && y, dragging = eventTarget.classed("extent"), dragRestore = d3_event_dragSuppress("brush"), center, origin = mouse(), offset;
       var w = d3.select(d3_window).on("mousemove.brush", brushmove).on("mouseup.brush", brushend).on("touchmove.brush", brushmove).on("touchend.brush", brushend).on("keydown.brush", keydown).on("keyup.brush", keyup);
       if (dragging) {
         origin[0] = extent[0][0] - origin[0];
@@ -7944,7 +7933,6 @@ d3 = function() {
         type: "brushstart"
       });
       brushmove();
-      d3_eventCancel();
       function mouse() {
         var touches = d3.event.changedTouches;
         return touches ? d3.touches(target, touches)[0] : d3.mouse(target);
@@ -7957,7 +7945,7 @@ d3 = function() {
             origin[1] -= extent[1][1];
             dragging = 2;
           }
-          d3_eventCancel();
+          d3_eventPreventDefault();
         }
       }
       function keyup() {
@@ -7965,7 +7953,7 @@ d3 = function() {
           origin[0] += extent[1][0];
           origin[1] += extent[1][1];
           dragging = 0;
-          d3_eventCancel();
+          d3_eventPreventDefault();
         }
       }
       function brushmove() {
@@ -8027,10 +8015,10 @@ d3 = function() {
         g.style("pointer-events", "all").selectAll(".resize").style("display", brush.empty() ? "none" : null);
         d3.select("body").style("cursor", null);
         w.on("mousemove.brush", null).on("mouseup.brush", null).on("touchmove.brush", null).on("touchend.brush", null).on("keydown.brush", null).on("keyup.brush", null);
+        dragRestore();
         event_({
           type: "brushend"
         });
-        d3_eventCancel();
       }
     }
     brush.x = function(z) {
