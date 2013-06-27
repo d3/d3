@@ -1,6 +1,8 @@
 import "geom";
 
+// Note: removes the closing coordinate if the polygon is not already open.
 d3.geom.polygon = function(coordinates) {
+  d3_geom_polygonOpen(coordinates);
 
   coordinates.area = function() {
     var i = -1,
@@ -36,7 +38,7 @@ d3.geom.polygon = function(coordinates) {
   };
 
   // The Sutherland-Hodgman clipping algorithm.
-  // Note: requires the clip polygon to be counterclockwise and convex.
+  // Note: requires the clip polygon to be open, counterclockwise and convex.
   coordinates.clip = function(subject) {
     var input,
         i = -1,
@@ -83,4 +85,11 @@ function d3_geom_polygonIntersect(c, d, a, b) {
       y1 = c[1], y3 = a[1], y21 = d[1] - y1, y43 = b[1] - y3,
       ua = (x43 * (y1 - y3) - y43 * (x1 - x3)) / (y43 * x21 - x43 * y21);
   return [x1 + ua * x21, y1 + ua * y21];
+}
+
+// If coordinates is not open, removes the closing point.
+function d3_geom_polygonOpen(coordinates) {
+  var a = coordinates[0],
+      b = coordinates[coordinates.length - 1];
+  if (!(a[0] - b[0] || a[1] - b[1])) coordinates.pop();
 }
