@@ -3,7 +3,7 @@ LOCALE ?= en_US
 GENERATED_FILES = \
 	d3.js \
 	d3.min.js \
-	component.json
+	bower.json
 
 all: $(GENERATED_FILES)
 
@@ -33,9 +33,9 @@ d3.min.js: d3.js
 	@rm -f $@
 	bin/uglify $< > $@
 
-component.json: bin/component package.json
+bower.json: bin/bower package.json
 	@rm -f $@
-	bin/component > $@
+	bin/bower > $@
 	@chmod a-w $@
 
 clean:

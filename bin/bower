@@ -1,0 +1,18 @@
+#!/usr/bin/env node
+
+var fs = require("fs");
+
+console.log(JSON.stringify({
+  "name": "d3",
+  "version": require("../package.json").version,
+  "main": "d3.js",
+  "scripts": [
+    "d3.js"
+  ],
+  "ignore": fs.readdirSync(".").filter(function(d) {
+    return d !== "d3.js"
+        && d !== "bower.json"
+        && d !== "LICENSE"
+        && d !== "README.md";
+  })
+}, null, 2));
