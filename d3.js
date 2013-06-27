@@ -4285,9 +4285,11 @@ d3 = function() {
   }
   d3.geom.polygon = function(coordinates) {
     coordinates.area = function() {
-      var i = 0, n = coordinates.length, area = coordinates[n - 1][1] * coordinates[0][0] - coordinates[n - 1][0] * coordinates[0][1];
+      var i = -1, n = coordinates.length, a, b = coordinates[n - 1], area = 0;
       while (++i < n) {
-        area += coordinates[i - 1][1] * coordinates[i][0] - coordinates[i - 1][0] * coordinates[i][1];
+        a = b;
+        b = coordinates[i];
+        area += a[1] * b[0] - a[0] * b[1];
       }
       return area * .5;
     };
