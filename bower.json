@@ -1,0 +1,9 @@
+{
+  "name": "d3",
+  "version": "3.1.7",
+  "main": "index-browserify.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mbostock/d3.git"
+  }
+}
