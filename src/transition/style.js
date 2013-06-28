@@ -22,8 +22,6 @@ d3_transitionPrototype.style = function(name, value, priority) {
     priority = "";
   }
 
-  var interpolate = d3_interpolateByName(name);
-
   // For style(name, null) or style(name, null, priority), remove the style
   // property with the specified name. The priority is ignored.
   function styleNull() {
@@ -36,7 +34,7 @@ d3_transitionPrototype.style = function(name, value, priority) {
   function styleString(b) {
     return b == null ? styleNull : (b += "", function() {
       var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
-      return a !== b && (i = interpolate(a, b), function(t) { this.style.setProperty(name, i(t), priority); });
+      return a !== b && (i = d3_interpolate(a, b), function(t) { this.style.setProperty(name, i(t), priority); });
     });
   }
 

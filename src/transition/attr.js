@@ -1,5 +1,6 @@
 import "../core/ns";
 import "../interpolate/interpolate";
+import "../interpolate/transform";
 import "transition";
 import "tween";
 
@@ -13,7 +14,7 @@ d3_transitionPrototype.attr = function(nameNS, value) {
     return this;
   }
 
-  var interpolate = d3_interpolateByName(nameNS),
+  var interpolate = nameNS == "transform" ? d3_interpolateTransform : d3_interpolate,
       name = d3.ns.qualify(nameNS);
 
   // For attr(string, null), remove the attribute with the specified name.
