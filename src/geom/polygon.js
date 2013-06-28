@@ -1,78 +1,88 @@
+import "../core/subclass";
 import "geom";
 
-// Note: removes the closing coordinate if the polygon is not already open.
 d3.geom.polygon = function(coordinates) {
-  d3_geom_polygonOpen(coordinates);
+  d3_subclass(coordinates, d3_geom_polygonPrototype);
+  return coordinates;
+};
 
-  coordinates.area = function() {
-    var i = -1,
-        n = coordinates.length,
-        a,
-        b = coordinates[n - 1],
-        area = 0;
-    while (++i < n) {
-      a = b;
-      b = coordinates[i];
-      area += a[1] * b[0] - a[0] * b[1];
-    }
-    return area * .5;
-  };
+var d3_geom_polygonPrototype = d3.geom.polygon.prototype = [];
 
-  coordinates.centroid = function(k) {
-    var i = -1,
-        n = coordinates.length,
-        x = 0,
-        y = 0,
-        a,
-        b = coordinates[n - 1],
-        c;
-    if (!arguments.length) k = -1 / (6 * coordinates.area());
-    while (++i < n) {
-      a = b;
-      b = coordinates[i];
-      c = a[0] * b[1] - b[0] * a[1];
-      x += (a[0] + b[0]) * c;
-      y += (a[1] + b[1]) * c;
-    }
-    return [x * k, y * k];
-  };
+d3_geom_polygonPrototype.area = function() {
+  var i = -1,
+      n = this.length,
+      a,
+      b = this[n - 1],
+      area = 0;
 
-  // The Sutherland-Hodgman clipping algorithm.
-  // Note: requires the clip polygon to be open, counterclockwise and convex.
-  coordinates.clip = function(subject) {
-    var input,
-        i = -1,
-        n = coordinates.length,
-        j,
-        m,
-        a = coordinates[n - 1],
-        b,
-        c,
-        d;
-    while (++i < n) {
-      input = subject.slice();
-      subject.length = 0;
-      b = coordinates[i];
-      c = input[(m = input.length) - 1];
-      j = -1;
-      while (++j < m) {
-        d = input[j];
-        if (d3_geom_polygonInside(d, a, b)) {
-          if (!d3_geom_polygonInside(c, a, b)) {
-            subject.push(d3_geom_polygonIntersect(c, d, a, b));
-          }
-          subject.push(d);
-        } else if (d3_geom_polygonInside(c, a, b)) {
+  while (++i < n) {
+    a = b;
+    b = this[i];
+    area += a[1] * b[0] - a[0] * b[1];
+  }
+
+  return area * .5;
+};
+
+d3_geom_polygonPrototype.centroid = function(k) {
+  var i = -1,
+      n = this.length,
+      x = 0,
+      y = 0,
+      a,
+      b = this[n - 1],
+      c;
+
+  if (!arguments.length) k = -1 / (6 * this.area());
+
+  while (++i < n) {
+    a = b;
+    b = this[i];
+    c = a[0] * b[1] - b[0] * a[1];
+    x += (a[0] + b[0]) * c;
+    y += (a[1] + b[1]) * c;
+  }
+
+  return [x * k, y * k];
+};
+
+// The Sutherland-Hodgman clipping algorithm.
+// Note: requires the clip polygon to be counterclockwise and convex.
+d3_geom_polygonPrototype.clip = function(subject) {
+  var input,
+      closed = d3_geom_polygonClosed(subject),
+      i = -1,
+      n = this.length - d3_geom_polygonClosed(this),
+      j,
+      m,
+      a = this[n - 1],
+      b,
+      c,
+      d;
+
+  while (++i < n) {
+    input = subject.slice();
+    subject.length = 0;
+    b = this[i];
+    c = input[(m = input.length - closed) - 1];
+    j = -1;
+    while (++j < m) {
+      d = input[j];
+      if (d3_geom_polygonInside(d, a, b)) {
+        if (!d3_geom_polygonInside(c, a, b)) {
           subject.push(d3_geom_polygonIntersect(c, d, a, b));
         }
-        c = d;
+        subject.push(d);
+      } else if (d3_geom_polygonInside(c, a, b)) {
+        subject.push(d3_geom_polygonIntersect(c, d, a, b));
       }
-      a = b;
+      c = d;
     }
-    return subject;
-  };
+    if (closed) subject.push(subject[0]);
+    a = b;
+  }
 
-  return coordinates;
+  return subject;
 };
 
 function d3_geom_polygonInside(p, a, b) {
@@ -87,9 +97,9 @@ function d3_geom_polygonIntersect(c, d, a, b) {
   return [x1 + ua * x21, y1 + ua * y21];
 }
 
-// If coordinates is not open, removes the closing point.
-function d3_geom_polygonOpen(coordinates) {
+// Returns true if the polygon is closed.
+function d3_geom_polygonClosed(coordinates) {
   var a = coordinates[0],
       b = coordinates[coordinates.length - 1];
-  if (!(a[0] - b[0] || a[1] - b[1])) coordinates.pop();
+  return !(a[0] - b[0] || a[1] - b[1]);
 }

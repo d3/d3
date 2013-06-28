@@ -12,8 +12,8 @@ suite.addBatch({
       topic: function(polygon) {
         return polygon([[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]);
       },
-      "is converted to an open polygon": function(p) {
-        assertPolygonInDelta(p, [[0, 0], [0, 1], [1, 1], [1, 0]]);
+      "preserves input coordinates": function(p) {
+        assertPolygonInDelta(p, [[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]);
       },
       "has area 1": function(p) {
         assert.equal(p.area(), 1);
@@ -23,14 +23,17 @@ suite.addBatch({
       },
       "can clip an open counterclockwise triangle": function(p) {
         assertPolygonInDelta(p.clip([[0.9, 0.5], [2, -1], [0.5, 0.1]]), [[0.9, 0.5], [1, 0.363636], [1, 0], [0.636363, 0], [0.5, 0.1]], 1e-4);
+      },
+      "can clip a closed counterclockwise triangle": function(p) {
+        assertPolygonInDelta(p.clip([[0.9, 0.5], [2, -1], [0.5, 0.1], [0.9, 0.5]]), [[0.9, 0.5], [1, 0.363636], [1, 0], [0.636363, 0], [0.5, 0.1], [0.9, 0.5]], 1e-4);
       }
     },
     "closed clockwise unit square": {
       topic: function(polygon) {
         return polygon([[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]);
       },
-      "is converted to an open polygon": function(p) {
-        assertPolygonInDelta(p, [[0, 0], [1, 0], [1, 1], [0, 1]]);
+      "preserves input coordinates": function(p) {
+        assertPolygonInDelta(p, [[0, 0], [1, 0], [1, 1], [0, 1], [0, 0]]);
       },
       "has area 1": function(p) {
         assert.equal(p.area(), -1);
@@ -46,8 +49,8 @@ suite.addBatch({
       topic: function(polygon) {
         return polygon([[1, 1], [3, 2], [2, 3], [1, 1]]);
       },
-      "is converted to an open polygon": function(p) {
-        assertPolygonInDelta(p, [[1, 1], [3, 2], [2, 3]]);
+      "preserves input coordinates": function(p) {
+        assertPolygonInDelta(p, [[1, 1], [3, 2], [2, 3], [1, 1]]);
       },
       "has area 1.5": function(p) {
         assert.equal(p.area(), -1.5);
@@ -74,6 +77,9 @@ suite.addBatch({
       },
       "can clip an open counterclockwise triangle": function(p) {
         assertPolygonInDelta(p.clip([[0.9, 0.5], [2, -1], [0.5, 0.1]]), [[0.9, 0.5], [1, 0.363636], [1, 0], [0.636363, 0], [0.5, 0.1]], 1e-4);
+      },
+      "can clip an closed counterclockwise triangle": function(p) {
+        assertPolygonInDelta(p.clip([[0.9, 0.5], [2, -1], [0.5, 0.1], [0.9, 0.5]]), [[0.9, 0.5], [1, 0.363636], [1, 0], [0.636363, 0], [0.5, 0.1], [0.9, 0.5]], 1e-4);
       }
     },
     "open clockwise unit square": {

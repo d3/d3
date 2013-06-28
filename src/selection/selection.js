@@ -1,9 +1,10 @@
 import "../core/array";
 import "../core/document";
+import "../core/subclass";
 import "../core/vendor";
 
 function d3_selection(groups) {
-  d3_arraySubclass(groups, d3_selectionPrototype);
+  d3_subclass(groups, d3_selectionPrototype);
   return groups;
 }
 

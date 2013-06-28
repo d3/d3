@@ -1,12 +1,12 @@
 import "../arrays/map";
-import "../core/array";
+import "../core/subclass";
 import "../event/dispatch";
 import "../event/timer";
 import "../interpolate/ease";
 import "../selection/selection";
 
 function d3_transition(groups, id) {
-  d3_arraySubclass(groups, d3_transitionPrototype);
+  d3_subclass(groups, d3_transitionPrototype);
 
   groups.id = id; // Note: read-only!
 
