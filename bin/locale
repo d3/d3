@@ -22,7 +22,7 @@ function write() {
     }
   });
 
-  puts(fs.readFileSync(process.argv[2], "utf8").replace(/\{([^\}]+)\}/g, function(d, k) {
+  puts(fs.readFileSync(process.argv[2], "utf8").replace(/\{([a-z_]+)\}/g, function(d, k) {
     d = formats[k];
     return k === "grouping"
         ? d === "127" || d === "0" ? null : "[" + d.map(Number).join(", ") + "]"
