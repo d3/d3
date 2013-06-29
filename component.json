@@ -1,0 +1,10 @@
+{
+  "name": "d3",
+  "repo": "mbostock/d3",
+  "description": "A JavaScript visualization library for HTML and SVG. http://d3js.org",
+  "version": "3.2.2",
+  "keywords": ["visualization", "svg", "plot", "graph"],
+  "dependencies": {},
+  "development": {},
+  "license": "MIT"
+}
