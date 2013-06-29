@@ -11,25 +11,30 @@ d3.svg.axis = function() {
       tickMinorSize = 6,
       tickEndSize = 6,
       tickPadding = 3,
-      tickArguments_ = [10],
+      tickArguments = [10],
       tickValues = null,
       tickFormat_,
-      tickSubdivide = 0;
+      minorTickArguments = null;
 
   function axis(g) {
     g.each(function() {
       var g = d3.select(this);
 
       // Ticks, or domain values for ordinal scales.
-      var ticks = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain()) : tickValues,
-          tickFormat = tickFormat_ == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : String) : tickFormat_;
+      var ticks = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments) : scale.domain()) : tickValues,
+          tickFormat = tickFormat_ == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments) : String) : tickFormat_;
 
       // Minor ticks.
-      var subticks = d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
-          subtick = g.selectAll(".tick.minor").data(subticks, String),
-          subtickEnter = subtick.enter().insert("line", ".tick").attr("class", "tick minor").style("opacity", 1e-6),
-          subtickExit = d3.transition(subtick.exit()).style("opacity", 1e-6).remove(),
-          subtickUpdate = d3.transition(subtick).style("opacity", 1);
+      if (minorTickArguments) {
+        var major = d3.set(ticks),
+            minorTicks = scale.ticks.apply(scale, minorTickArguments).filter(function(d) { return !major.has(d); }), // d3_svg_axisSubdivide(scale, ticks, tickSubdivide),
+            minorTick = g.selectAll(".tick.minor").data(minorTicks, String),
+            minorTickEnter = minorTick.enter().insert("line", ".tick").attr("class", "tick minor").style("opacity", 1e-6),
+            minorTickExit = d3.transition(minorTick.exit()).style("opacity", 1e-6).remove(),
+            minorTickUpdate = d3.transition(minorTick).style("opacity", 1);
+      } else {
+        minorTickEnter = minorTickExit = minorTickUpdate = d3_selection([]);
+      }
 
       // Major ticks.
       var tick = g.selectAll(".tick.major").data(ticks, String),
@@ -60,8 +65,8 @@ d3.svg.axis = function() {
       switch (orient) {
         case "bottom": {
           tickTransform = d3_svg_axisX;
-          subtickEnter.attr("y2", tickMinorSize);
-          subtickUpdate.attr("x2", 0).attr("y2", tickMinorSize);
+          minorTickEnter.attr("y2", tickMinorSize);
+          minorTickUpdate.attr("x2", 0).attr("y2", tickMinorSize);
           lineEnter.attr("y2", tickMajorSize);
           textEnter.attr("y", Math.max(tickMajorSize, 0) + tickPadding);
           lineUpdate.attr("x2", 0).attr("y2", tickMajorSize);
@@ -72,8 +77,8 @@ d3.svg.axis = function() {
         }
         case "top": {
           tickTransform = d3_svg_axisX;
-          subtickEnter.attr("y2", -tickMinorSize);
-          subtickUpdate.attr("x2", 0).attr("y2", -tickMinorSize);
+          minorTickEnter.attr("y2", -tickMinorSize);
+          minorTickUpdate.attr("x2", 0).attr("y2", -tickMinorSize);
           lineEnter.attr("y2", -tickMajorSize);
           textEnter.attr("y", -(Math.max(tickMajorSize, 0) + tickPadding));
           lineUpdate.attr("x2", 0).attr("y2", -tickMajorSize);
@@ -84,8 +89,8 @@ d3.svg.axis = function() {
         }
         case "left": {
           tickTransform = d3_svg_axisY;
-          subtickEnter.attr("x2", -tickMinorSize);
-          subtickUpdate.attr("x2", -tickMinorSize).attr("y2", 0);
+          minorTickEnter.attr("x2", -tickMinorSize);
+          minorTickUpdate.attr("x2", -tickMinorSize).attr("y2", 0);
           lineEnter.attr("x2", -tickMajorSize);
           textEnter.attr("x", -(Math.max(tickMajorSize, 0) + tickPadding));
           lineUpdate.attr("x2", -tickMajorSize).attr("y2", 0);
@@ -96,8 +101,8 @@ d3.svg.axis = function() {
         }
         case "right": {
           tickTransform = d3_svg_axisY;
-          subtickEnter.attr("x2", tickMinorSize);
-          subtickUpdate.attr("x2", tickMinorSize).attr("y2", 0);
+          minorTickEnter.attr("x2", tickMinorSize);
+          minorTickUpdate.attr("x2", tickMinorSize).attr("y2", 0);
           lineEnter.attr("x2", tickMajorSize);
           textEnter.attr("x", Math.max(tickMajorSize, 0) + tickPadding);
           lineUpdate.attr("x2", tickMajorSize).attr("y2", 0);
@@ -115,9 +120,9 @@ d3.svg.axis = function() {
         tickEnter.call(tickTransform, scale0);
         tickUpdate.call(tickTransform, scale1);
         tickExit.call(tickTransform, scale1);
-        subtickEnter.call(tickTransform, scale0);
-        subtickUpdate.call(tickTransform, scale1);
-        subtickExit.call(tickTransform, scale1);
+        minorTickEnter.call(tickTransform, scale0);
+        minorTickUpdate.call(tickTransform, scale1);
+        minorTickExit.call(tickTransform, scale1);
       }
 
       // For ordinal scales:
@@ -145,8 +150,8 @@ d3.svg.axis = function() {
   };
 
   axis.ticks = function() {
-    if (!arguments.length) return tickArguments_;
-    tickArguments_ = arguments;
+    if (!arguments.length) return tickArguments;
+    tickArguments = arguments;
     return axis;
   };
 
@@ -177,10 +182,15 @@ d3.svg.axis = function() {
     return axis;
   };
 
-  axis.tickSubdivide = function(x) {
-    if (!arguments.length) return tickSubdivide;
-    tickSubdivide = +x;
+  axis.minorTicks = function() {
+    if (!arguments.length) return minorTickArguments;
+    minorTickArguments = arguments;
     return axis;
+  };
+
+  // @deprecated use axis.minorTicks
+  axis.tickSubdivide = function() {
+    return arguments.length && axis;
   };
 
   return axis;
@@ -195,28 +205,4 @@ function d3_svg_axisX(selection, x) {
 
 function d3_svg_axisY(selection, y) {
   selection.attr("transform", function(d) { return "translate(0," + y(d) + ")"; });
-}
-
-function d3_svg_axisSubdivide(scale, ticks, m) {
-  subticks = [];
-  if (m && ticks.length > 1) {
-    var extent = d3_scaleExtent(scale.domain()),
-        subticks,
-        i = -1,
-        n = ticks.length,
-        d = (ticks[1] - ticks[0]) / ++m,
-        j,
-        v;
-    while (++i < n) {
-      for (j = m; --j > 0;) {
-        if ((v = +ticks[i] - j * d) >= extent[0]) {
-          subticks.push(v);
-        }
-      }
-    }
-    for (--i, j = 0; ++j < m && (v = +ticks[i] + j * d) < extent[1];) {
-      subticks.push(v);
-    }
-  }
-  return subticks;
 }
