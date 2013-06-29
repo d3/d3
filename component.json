@@ -1,10 +1,22 @@
 {
   "name": "d3",
   "repo": "mbostock/d3",
-  "description": "A JavaScript visualization library for HTML and SVG. http://d3js.org",
+  "description": "A small, free JavaScript library for manipulating documents based on data.",
+  "keywords": [
+    "dom",
+    "w3c",
+    "visualization",
+    "svg",
+    "animation",
+    "canvas"
+  ],
   "version": "3.2.2",
-  "keywords": ["visualization", "svg", "plot", "graph"],
+  "main": "index-browserify.js",
+  "scripts": [
+    "d3.js",
+    "index-browserify.js"
+  ],
   "dependencies": {},
   "development": {},
-  "license": "MIT"
+  "license": "BSD"
 }
