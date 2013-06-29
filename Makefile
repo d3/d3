@@ -5,7 +5,8 @@ GENERATED_FILES = \
 	d3.min.js \
 	src/format/format-localized.js \
 	src/time/format-localized.js \
-	bower.json
+	bower.json \
+	component.json
 
 all: $(GENERATED_FILES)
 
@@ -35,9 +36,9 @@ d3.min.js: d3.js
 	@rm -f $@
 	bin/uglify $< > $@
 
-bower.json: bin/bower package.json
+%.json: bin/% package.json
 	@rm -f $@
-	bin/bower > $@
+	bin/$* > $@
 	@chmod a-w $@
 
 clean:
