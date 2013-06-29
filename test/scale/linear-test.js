@@ -6,7 +6,7 @@ var suite = vows.describe("d3.scale.linear");
 
 suite.addBatch({
   "linear": {
-    topic: load("scale/linear", "interpolate/hsl").document(), // beware instanceof d3_Color
+    topic: load("scale/linear", "interpolate/hsl"), // beware instanceof d3_Color
 
     "domain": {
       "defaults to [0, 1]": function(d3) {
