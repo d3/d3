@@ -195,13 +195,11 @@ suite.addBatch({
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M0,3V0H1V3");
       },
-      "with three arguments, specifies end and minor tick sizes": function(d3) {
-        var a = d3.svg.axis().tickSubdivide(3).tickSize(6, 3, 9),
-            g = d3.select("body").html("").append("g").call(a),
-            path = g.selectAll("path"),
-            line = g.select(".minor");
+      "with three arguments, specifies end tick size and ignores minor tick size": function(d3) {
+        var a = d3.svg.axis().tickSize(6, 3, 9),
+            g = d3.select("body").html("").append("svg:g").call(a),
+            path = g.selectAll("path");
         assert.equal(path.attr("d"), "M0,9V0H1V9");
-        assert.equal(line.attr("y2"), "3");
       }
     },
 
@@ -324,24 +322,11 @@ suite.addBatch({
     },
 
     "tickSubdivide": {
-      "defaults to zero": function(d3) {
+      "is deprecated and does nothing": function(d3) {
         var a = d3.svg.axis();
         assert.equal(a.tickSubdivide(), 0);
-      },
-      "coerces input value to a number": function(d3) {
-        var a = d3.svg.axis().tickSubdivide(true);
-        assert.strictEqual(a.tickSubdivide(), 1);
-      },
-      "does not generate minor ticks when zero": function(d3) {
-        var g = d3.select("body").html("").append("g").call(d3.svg.axis());
-        assert.isTrue(g.selectAll(".minor").empty());
-      },
-      "affects the generated minor ticks": function(d3) {
-        var a = d3.svg.axis().tickSubdivide(3),
-            g = d3.select("body").html("").append("g").call(a),
-            t = g.selectAll("line.tick.minor");
-        assert.equal(t[0].length, 30);
-        assert.equal(t[0][1].getAttribute("transform"), "translate(0.05,0)");
+        assert.strictEqual(a.tickSubdivide(1), a);
+        assert.equal(a.tickSubdivide(), 0);
       }
     },
 
