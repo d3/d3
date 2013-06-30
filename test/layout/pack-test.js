@@ -82,10 +82,35 @@ suite.addBatch({
       assert.equal(pack().radius(), null);
     },
     "radius can be specified using a custom function of value": function(pack) {
-      var p = pack().radius(function(value) { return Math.sqrt(value) * 10; });
+      var r = function(value) { return Math.sqrt(value) * 10; },
+          p = pack().radius(r);
+      assert.strictEqual(p.radius(), r);
       assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
         {value: 1, depth: 0, x: 0.5, y: 0.5, r: 10},
         {value: 1, depth: 1, x: 0.5, y: 0.5, r: 10}
+      ]);
+    },
+    "radius can be specified as a constant": function(pack) {
+      var p = pack().radius(5);
+      assert.equal(p.radius(), 5);
+      assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5}
+      ]);
+    },
+    "radius constant value is coerced to a number": function(pack) {
+      var p = pack().radius("5");
+      assert.equal(p.radius(), 5);
+      assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5}
+      ]);
+    },
+    "radius function value is coerced to a number": function(pack) {
+      var p = pack().radius(function() { return "5"; });
+      assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5}
       ]);
     }
   }

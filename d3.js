@@ -6222,10 +6222,12 @@ d3 = function() {
   d3.layout.pack = function() {
     var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), padding = 0, size = [ 1, 1 ], radius;
     function pack(d, i) {
-      var nodes = hierarchy.call(this, d, i), root = nodes[0], w = size[0], h = size[1], r = radius || Math.sqrt;
+      var nodes = hierarchy.call(this, d, i), root = nodes[0], w = size[0], h = size[1], r = radius == null ? Math.sqrt : typeof radius === "function" ? radius : function() {
+        return radius;
+      };
       root.x = root.y = 0;
       d3_layout_treeVisitAfter(root, function(d) {
-        d.r = r(d.value);
+        d.r = +r(d.value);
       });
       d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
       if (padding) {
@@ -6248,7 +6250,7 @@ d3 = function() {
     };
     pack.radius = function(_) {
       if (!arguments.length) return radius;
-      radius = _;
+      radius = _ == null || typeof _ === "function" ? _ : +_;
       return pack;
     };
     pack.padding = function(_) {
