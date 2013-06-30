@@ -1,4 +1,5 @@
 var fs = require("fs"),
+    path = require("path"),
     document = require("jsdom").jsdom("<html><head></head><body></body></html>"),
     window = document.createWindow();
 
@@ -10,5 +11,5 @@ CSSStyleDeclaration_prototype.setProperty = function(name, value, priority) {
 };
 
 module.exports = (new Function("window", "document",
-  "return " + fs.readFileSync("./d3.js", "utf-8"))
+  "return " + fs.readFileSync(path.join(__dirname, "d3.js"), "utf-8"))
 )(window, document);
