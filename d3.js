@@ -1127,7 +1127,7 @@ d3 = function() {
     return d3.rebind(drag, event, "on");
   };
   d3.behavior.zoom = function() {
-    var translate = [ 0, 0 ], translate0, scale = 1, distance0, scale0, scaleExtent = d3_behavior_zoomInfinity, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
+    var translate = [ 0, 0 ], translate0, scale = 1, distance0, scale0, scaleExtent = d3_behavior_zoomInfinity, center, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     function zoom() {
       this.on("mousedown.zoom", mousedown).on("mousemove.zoom", mousemove).on(d3_behavior_zoomWheel + ".zoom", mousewheel).on("dblclick.zoom", dblclick).on("touchstart.zoom", touchstart).on("touchmove.zoom", touchmove).on("touchend.zoom", touchstart);
     }
@@ -1146,6 +1146,11 @@ d3 = function() {
     zoom.scaleExtent = function(x) {
       if (!arguments.length) return scaleExtent;
       scaleExtent = x == null ? d3_behavior_zoomInfinity : x.map(Number);
+      return zoom;
+    };
+    zoom.center = function(_) {
+      if (!arguments.length) return center;
+      center = _ && _.map(Number);
       return zoom;
     };
     zoom.x = function(z) {
@@ -1208,9 +1213,10 @@ d3 = function() {
       }
     }
     function mousewheel() {
-      if (!translate0) translate0 = location(d3.mouse(this));
+      var point = center || d3.mouse(this);
+      if (!translate0) translate0 = location(point);
       scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
-      translateTo(d3.mouse(this), translate0);
+      translateTo(point, translate0);
       dispatch(event.of(this, arguments));
     }
     function mousemove() {
