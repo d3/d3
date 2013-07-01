@@ -8,7 +8,7 @@ function d3_interpolateObject(a, b) {
       k;
   for (k in a) {
     if (k in b) {
-      i[k] = d3_interpolateByName(k)(a[k], b[k]);
+      i[k] = d3_interpolate(a[k], b[k]);
     } else {
       c[k] = a[k];
     }

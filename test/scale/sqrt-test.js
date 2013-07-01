@@ -6,7 +6,7 @@ var suite = vows.describe("d3.scale.sqrt");
 
 suite.addBatch({
   "sqrt": {
-    topic: load("scale/sqrt", "interpolate/hsl").document(), // beware instanceof d3_Color
+    topic: load("scale/sqrt", "interpolate/hsl"), // beware instanceof d3_Color
 
     "domain": {
       "defaults to [0, 1]": function(d3) {

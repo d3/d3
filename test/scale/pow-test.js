@@ -6,7 +6,7 @@ var suite = vows.describe("d3.scale.pow");
 
 suite.addBatch({
   "pow": {
-    topic: load("scale/pow", "interpolate/hsl").document(), // beware instance of d3_Colorr
+    topic: load("scale/pow", "interpolate/hsl"), // beware instance of d3_Colorr
 
     "domain": {
       "defaults to [0, 1]": function(d3) {

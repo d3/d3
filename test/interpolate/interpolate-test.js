@@ -6,7 +6,7 @@ var suite = vows.describe("d3.interpolate");
 
 suite.addBatch({
   "interpolate": {
-    topic: load("interpolate/interpolate").document(),
+    topic: load("interpolate/interpolate"),
 
     "when b is a number": {
       "interpolates numbers": function(d3) {
