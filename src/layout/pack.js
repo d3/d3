@@ -13,11 +13,11 @@ d3.layout.pack = function() {
         root = nodes[0],
         w = size[0],
         h = size[1],
-        r = radius || Math.sqrt;
+        r = radius == null ? Math.sqrt : typeof radius === "function" ? radius : function() { return radius; };
 
     // Recursively compute the layout.
     root.x = root.y = 0;
-    d3_layout_treeVisitAfter(root, function(d) { d.r = r(d.value); });
+    d3_layout_treeVisitAfter(root, function(d) { d.r = +r(d.value); });
     d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
 
     // When padding, recompute the layout using scaled padding.
@@ -42,7 +42,7 @@ d3.layout.pack = function() {
 
   pack.radius = function(_) {
     if (!arguments.length) return radius;
-    radius = _;
+    radius = _ == null || typeof _ === "function" ? _ : +_;
     return pack;
   };
 
