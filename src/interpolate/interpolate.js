@@ -1,7 +1,6 @@
 import "../color/color";
 import "../color/rgb";
 import "rgb";
-import "transform";
 import "object";
 import "array";
 import "number";
@@ -13,12 +12,6 @@ function d3_interpolate(a, b) {
   var i = d3.interpolators.length, f;
   while (--i >= 0 && !(f = d3.interpolators[i](a, b)));
   return f;
-}
-
-function d3_interpolateByName(name) {
-  return name == "transform"
-      ? d3_interpolateTransform
-      : d3_interpolate;
 }
 
 d3.interpolators = [

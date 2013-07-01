@@ -6,7 +6,7 @@ var suite = vows.describe("d3.interpolateArray");
 
 suite.addBatch({
   "interpolateArray": {
-    topic: load("interpolate/array").expression("d3.interpolateArray").document(),
+    topic: load("interpolate/array").expression("d3.interpolateArray"),
     "interpolates defined elements": function(interpolate) {
       assert.deepEqual(interpolate([2, 12], [4, 24])(.5), [3, 18]);
     },

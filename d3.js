@@ -4891,122 +4891,12 @@ d3 = function() {
       return "#" + d3_rgb_hex(Math.round(ar + br * t)) + d3_rgb_hex(Math.round(ag + bg * t)) + d3_rgb_hex(Math.round(ab + bb * t));
     };
   }
-  d3.transform = function(string) {
-    var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
-    return (d3.transform = function(string) {
-      if (string != null) {
-        g.setAttribute("transform", string);
-        var t = g.transform.baseVal.consolidate();
-      }
-      return new d3_transform(t ? t.matrix : d3_transformIdentity);
-    })(string);
-  };
-  function d3_transform(m) {
-    var r0 = [ m.a, m.b ], r1 = [ m.c, m.d ], kx = d3_transformNormalize(r0), kz = d3_transformDot(r0, r1), ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz)) || 0;
-    if (r0[0] * r1[1] < r1[0] * r0[1]) {
-      r0[0] *= -1;
-      r0[1] *= -1;
-      kx *= -1;
-      kz *= -1;
-    }
-    this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_degrees;
-    this.translate = [ m.e, m.f ];
-    this.scale = [ kx, ky ];
-    this.skew = ky ? Math.atan2(kz, ky) * d3_degrees : 0;
-  }
-  d3_transform.prototype.toString = function() {
-    return "translate(" + this.translate + ")rotate(" + this.rotate + ")skewX(" + this.skew + ")scale(" + this.scale + ")";
-  };
-  function d3_transformDot(a, b) {
-    return a[0] * b[0] + a[1] * b[1];
-  }
-  function d3_transformNormalize(a) {
-    var k = Math.sqrt(d3_transformDot(a, a));
-    if (k) {
-      a[0] /= k;
-      a[1] /= k;
-    }
-    return k;
-  }
-  function d3_transformCombine(a, b, k) {
-    a[0] += k * b[0];
-    a[1] += k * b[1];
-    return a;
-  }
-  var d3_transformIdentity = {
-    a: 1,
-    b: 0,
-    c: 0,
-    d: 1,
-    e: 0,
-    f: 0
-  };
-  d3.interpolateNumber = d3_interpolateNumber;
-  function d3_interpolateNumber(a, b) {
-    b -= a = +a;
-    return function(t) {
-      return a + b * t;
-    };
-  }
-  d3.interpolateTransform = d3_interpolateTransform;
-  function d3_interpolateTransform(a, b) {
-    var s = [], q = [], n, A = d3.transform(a), B = d3.transform(b), ta = A.translate, tb = B.translate, ra = A.rotate, rb = B.rotate, wa = A.skew, wb = B.skew, ka = A.scale, kb = B.scale;
-    if (ta[0] != tb[0] || ta[1] != tb[1]) {
-      s.push("translate(", null, ",", null, ")");
-      q.push({
-        i: 1,
-        x: d3_interpolateNumber(ta[0], tb[0])
-      }, {
-        i: 3,
-        x: d3_interpolateNumber(ta[1], tb[1])
-      });
-    } else if (tb[0] || tb[1]) {
-      s.push("translate(" + tb + ")");
-    } else {
-      s.push("");
-    }
-    if (ra != rb) {
-      if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360;
-      q.push({
-        i: s.push(s.pop() + "rotate(", null, ")") - 2,
-        x: d3_interpolateNumber(ra, rb)
-      });
-    } else if (rb) {
-      s.push(s.pop() + "rotate(" + rb + ")");
-    }
-    if (wa != wb) {
-      q.push({
-        i: s.push(s.pop() + "skewX(", null, ")") - 2,
-        x: d3_interpolateNumber(wa, wb)
-      });
-    } else if (wb) {
-      s.push(s.pop() + "skewX(" + wb + ")");
-    }
-    if (ka[0] != kb[0] || ka[1] != kb[1]) {
-      n = s.push(s.pop() + "scale(", null, ",", null, ")");
-      q.push({
-        i: n - 4,
-        x: d3_interpolateNumber(ka[0], kb[0])
-      }, {
-        i: n - 2,
-        x: d3_interpolateNumber(ka[1], kb[1])
-      });
-    } else if (kb[0] != 1 || kb[1] != 1) {
-      s.push(s.pop() + "scale(" + kb + ")");
-    }
-    n = q.length;
-    return function(t) {
-      var i = -1, o;
-      while (++i < n) s[(o = q[i]).i] = o.x(t);
-      return s.join("");
-    };
-  }
   d3.interpolateObject = d3_interpolateObject;
   function d3_interpolateObject(a, b) {
     var i = {}, c = {}, k;
     for (k in a) {
       if (k in b) {
-        i[k] = d3_interpolateByName(k)(a[k], b[k]);
+        i[k] = d3_interpolate(a[k], b[k]);
       } else {
         c[k] = a[k];
       }
@@ -5019,6 +4909,13 @@ d3 = function() {
     return function(t) {
       for (k in i) c[k] = i[k](t);
       return c;
+    };
+  }
+  d3.interpolateNumber = d3_interpolateNumber;
+  function d3_interpolateNumber(a, b) {
+    b -= a = +a;
+    return function(t) {
+      return a + b * t;
     };
   }
   d3.interpolateString = d3_interpolateString;
@@ -5093,9 +4990,6 @@ d3 = function() {
     var i = d3.interpolators.length, f;
     while (--i >= 0 && !(f = d3.interpolators[i](a, b))) ;
     return f;
-  }
-  function d3_interpolateByName(name) {
-    return name == "transform" ? d3_interpolateTransform : d3_interpolate;
   }
   d3.interpolators = [ function(a, b) {
     var t = typeof b;
@@ -5247,6 +5141,109 @@ d3 = function() {
     b -= a;
     return function(t) {
       return Math.round(a + b * t);
+    };
+  }
+  d3.transform = function(string) {
+    var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
+    return (d3.transform = function(string) {
+      if (string != null) {
+        g.setAttribute("transform", string);
+        var t = g.transform.baseVal.consolidate();
+      }
+      return new d3_transform(t ? t.matrix : d3_transformIdentity);
+    })(string);
+  };
+  function d3_transform(m) {
+    var r0 = [ m.a, m.b ], r1 = [ m.c, m.d ], kx = d3_transformNormalize(r0), kz = d3_transformDot(r0, r1), ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz)) || 0;
+    if (r0[0] * r1[1] < r1[0] * r0[1]) {
+      r0[0] *= -1;
+      r0[1] *= -1;
+      kx *= -1;
+      kz *= -1;
+    }
+    this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_degrees;
+    this.translate = [ m.e, m.f ];
+    this.scale = [ kx, ky ];
+    this.skew = ky ? Math.atan2(kz, ky) * d3_degrees : 0;
+  }
+  d3_transform.prototype.toString = function() {
+    return "translate(" + this.translate + ")rotate(" + this.rotate + ")skewX(" + this.skew + ")scale(" + this.scale + ")";
+  };
+  function d3_transformDot(a, b) {
+    return a[0] * b[0] + a[1] * b[1];
+  }
+  function d3_transformNormalize(a) {
+    var k = Math.sqrt(d3_transformDot(a, a));
+    if (k) {
+      a[0] /= k;
+      a[1] /= k;
+    }
+    return k;
+  }
+  function d3_transformCombine(a, b, k) {
+    a[0] += k * b[0];
+    a[1] += k * b[1];
+    return a;
+  }
+  var d3_transformIdentity = {
+    a: 1,
+    b: 0,
+    c: 0,
+    d: 1,
+    e: 0,
+    f: 0
+  };
+  d3.interpolateTransform = d3_interpolateTransform;
+  function d3_interpolateTransform(a, b) {
+    var s = [], q = [], n, A = d3.transform(a), B = d3.transform(b), ta = A.translate, tb = B.translate, ra = A.rotate, rb = B.rotate, wa = A.skew, wb = B.skew, ka = A.scale, kb = B.scale;
+    if (ta[0] != tb[0] || ta[1] != tb[1]) {
+      s.push("translate(", null, ",", null, ")");
+      q.push({
+        i: 1,
+        x: d3_interpolateNumber(ta[0], tb[0])
+      }, {
+        i: 3,
+        x: d3_interpolateNumber(ta[1], tb[1])
+      });
+    } else if (tb[0] || tb[1]) {
+      s.push("translate(" + tb + ")");
+    } else {
+      s.push("");
+    }
+    if (ra != rb) {
+      if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360;
+      q.push({
+        i: s.push(s.pop() + "rotate(", null, ")") - 2,
+        x: d3_interpolateNumber(ra, rb)
+      });
+    } else if (rb) {
+      s.push(s.pop() + "rotate(" + rb + ")");
+    }
+    if (wa != wb) {
+      q.push({
+        i: s.push(s.pop() + "skewX(", null, ")") - 2,
+        x: d3_interpolateNumber(wa, wb)
+      });
+    } else if (wb) {
+      s.push(s.pop() + "skewX(" + wb + ")");
+    }
+    if (ka[0] != kb[0] || ka[1] != kb[1]) {
+      n = s.push(s.pop() + "scale(", null, ",", null, ")");
+      q.push({
+        i: n - 4,
+        x: d3_interpolateNumber(ka[0], kb[0])
+      }, {
+        i: n - 2,
+        x: d3_interpolateNumber(ka[1], kb[1])
+      });
+    } else if (kb[0] != 1 || kb[1] != 1) {
+      s.push(s.pop() + "scale(" + kb + ")");
+    }
+    n = q.length;
+    return function(t) {
+      var i = -1, o;
+      while (++i < n) s[(o = q[i]).i] = o.x(t);
+      return s.join("");
     };
   }
   function d3_uninterpolateNumber(a, b) {
@@ -7506,7 +7503,7 @@ d3 = function() {
       for (value in nameNS) this.attr(value, nameNS[value]);
       return this;
     }
-    var interpolate = d3_interpolateByName(nameNS), name = d3.ns.qualify(nameNS);
+    var interpolate = nameNS == "transform" ? d3_interpolateTransform : d3_interpolate, name = d3.ns.qualify(nameNS);
     function attrNull() {
       this.removeAttribute(name);
     }
@@ -7557,14 +7554,13 @@ d3 = function() {
       }
       priority = "";
     }
-    var interpolate = d3_interpolateByName(name);
     function styleNull() {
       this.style.removeProperty(name);
     }
     function styleString(b) {
       return b == null ? styleNull : (b += "", function() {
         var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
-        return a !== b && (i = interpolate(a, b), function(t) {
+        return a !== b && (i = d3_interpolate(a, b), function(t) {
           this.style.setProperty(name, i(t), priority);
         });
       });
