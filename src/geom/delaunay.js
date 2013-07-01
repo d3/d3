@@ -1,10 +1,7 @@
 import "geom";
 import "voronoi";
 
-/**
-* @param vertices [[x1, y1], [x2, y2], …]
-* @returns triangles [[[x1, y1], [x2, y2], [x3, y3]], …]
- */
+// @deprecated; use d3.geom.voronoi links instead.
 d3.geom.delaunay = function(vertices) {
   var edges = vertices.map(function() { return []; }),
       triangles = [];
