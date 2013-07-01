@@ -484,7 +484,7 @@ d3 = function() {
   var d3_selectionPrototype = d3.selection.prototype = [];
   d3_selectionPrototype.select = function(selector) {
     var subgroups = [], subgroup, subnode, group, node;
-    if (typeof selector !== "function") selector = d3_selection_selector(selector);
+    selector = d3_selection_selector(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       subgroup.parentNode = (group = this[j]).parentNode;
@@ -500,13 +500,13 @@ d3 = function() {
     return d3_selection(subgroups);
   };
   function d3_selection_selector(selector) {
-    return function() {
+    return typeof selector === "function" ? selector : function() {
       return d3_select(selector, this);
     };
   }
   d3_selectionPrototype.selectAll = function(selector) {
     var subgroups = [], subgroup, node;
-    if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
+    selector = d3_selection_selectorAll(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
@@ -518,7 +518,7 @@ d3 = function() {
     return d3_selection(subgroups);
   };
   function d3_selection_selectorAll(selector) {
-    return function() {
+    return typeof selector === "function" ? selector : function() {
       return d3_selectAll(selector, this);
     };
   }
@@ -696,25 +696,24 @@ d3 = function() {
     }) : this.node().innerHTML;
   };
   d3_selectionPrototype.append = function(name) {
-    name = d3.ns.qualify(name);
-    function append() {
-      return this.appendChild(d3_document.createElementNS(this.namespaceURI, name));
-    }
-    function appendNS() {
-      return this.appendChild(d3_document.createElementNS(name.space, name.local));
-    }
-    return this.select(name.local ? appendNS : append);
+    name = d3_selection_creator(name);
+    return this.select(function() {
+      return this.appendChild(name.apply(this, arguments));
+    });
   };
+  function d3_selection_creator(name) {
+    return typeof name === "function" ? name : (name = d3.ns.qualify(name)).local ? function() {
+      return d3_document.createElementNS(name.space, name.local);
+    } : function() {
+      return d3_document.createElementNS(this.namespaceURI, name);
+    };
+  }
   d3_selectionPrototype.insert = function(name, before) {
-    name = d3.ns.qualify(name);
-    if (typeof before !== "function") before = d3_selection_selector(before);
-    function insert(d, i) {
-      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), before.call(this, d, i));
-    }
-    function insertNS(d, i) {
-      return this.insertBefore(d3_document.createElementNS(name.space, name.local), before.call(this, d, i));
-    }
-    return this.select(name.local ? insertNS : insert);
+    name = d3_selection_creator(name);
+    before = d3_selection_selector(before);
+    return this.select(function() {
+      return this.insertBefore(name.apply(this, arguments), before.apply(this, arguments));
+    });
   };
   d3_selectionPrototype.remove = function() {
     return this.each(function() {
@@ -7444,7 +7443,7 @@ d3 = function() {
   d3.transition.prototype = d3_transitionPrototype;
   d3_transitionPrototype.select = function(selector) {
     var id = this.id, subgroups = [], subgroup, subnode, node;
-    if (typeof selector !== "function") selector = d3_selection_selector(selector);
+    selector = d3_selection_selector(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
@@ -7461,7 +7460,7 @@ d3 = function() {
   };
   d3_transitionPrototype.selectAll = function(selector) {
     var id = this.id, subgroups = [], subgroup, subnodes, node, subnode, transition;
-    if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
+    selector = d3_selection_selectorAll(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
