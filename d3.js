@@ -380,11 +380,6 @@ d3 = function() {
   } catch (e) {
     d3_array = d3_arrayCopy;
   }
-  var d3_arraySubclass = [].__proto__ ? function(array, prototype) {
-    array.__proto__ = prototype;
-  } : function(array, prototype) {
-    for (var property in prototype) array[property] = prototype[property];
-  };
   function d3_noop() {}
   d3.dispatch = function() {
     var dispatch = new d3_dispatch(), i = -1, n = arguments.length;
@@ -458,8 +453,13 @@ d3 = function() {
     return s.replace(d3_requote_re, "\\$&");
   };
   var d3_requote_re = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
+  var d3_subclass = {}.__proto__ ? function(object, prototype) {
+    object.__proto__ = prototype;
+  } : function(object, prototype) {
+    for (var property in prototype) object[property] = prototype[property];
+  };
   function d3_selection(groups) {
-    d3_arraySubclass(groups, d3_selectionPrototype);
+    d3_subclass(groups, d3_selectionPrototype);
     return groups;
   }
   var d3_select = function(s, n) {
@@ -891,7 +891,7 @@ d3 = function() {
     return n;
   };
   function d3_selection_enter(selection) {
-    d3_arraySubclass(selection, d3_selection_enterPrototype);
+    d3_subclass(selection, d3_selection_enterPrototype);
     return selection;
   }
   var d3_selection_enterPrototype = [];
@@ -4284,50 +4284,55 @@ d3 = function() {
     return (f - b) * (c - a) - (d - b) * (e - a) > 0;
   }
   d3.geom.polygon = function(coordinates) {
-    coordinates.area = function() {
-      var i = 0, n = coordinates.length, area = coordinates[n - 1][1] * coordinates[0][0] - coordinates[n - 1][0] * coordinates[0][1];
-      while (++i < n) {
-        area += coordinates[i - 1][1] * coordinates[i][0] - coordinates[i - 1][0] * coordinates[i][1];
-      }
-      return area * .5;
-    };
-    coordinates.centroid = function(k) {
-      var i = -1, n = coordinates.length, x = 0, y = 0, a, b = coordinates[n - 1], c;
-      if (!arguments.length) k = -1 / (6 * coordinates.area());
-      while (++i < n) {
-        a = b;
-        b = coordinates[i];
-        c = a[0] * b[1] - b[0] * a[1];
-        x += (a[0] + b[0]) * c;
-        y += (a[1] + b[1]) * c;
-      }
-      return [ x * k, y * k ];
-    };
-    coordinates.clip = function(subject) {
-      var input, i = -1, n = coordinates.length, j, m, a = coordinates[n - 1], b, c, d;
-      while (++i < n) {
-        input = subject.slice();
-        subject.length = 0;
-        b = coordinates[i];
-        c = input[(m = input.length) - 1];
-        j = -1;
-        while (++j < m) {
-          d = input[j];
-          if (d3_geom_polygonInside(d, a, b)) {
-            if (!d3_geom_polygonInside(c, a, b)) {
-              subject.push(d3_geom_polygonIntersect(c, d, a, b));
-            }
-            subject.push(d);
-          } else if (d3_geom_polygonInside(c, a, b)) {
+    d3_subclass(coordinates, d3_geom_polygonPrototype);
+    return coordinates;
+  };
+  var d3_geom_polygonPrototype = d3.geom.polygon.prototype = [];
+  d3_geom_polygonPrototype.area = function() {
+    var i = -1, n = this.length, a, b = this[n - 1], area = 0;
+    while (++i < n) {
+      a = b;
+      b = this[i];
+      area += a[1] * b[0] - a[0] * b[1];
+    }
+    return area * .5;
+  };
+  d3_geom_polygonPrototype.centroid = function(k) {
+    var i = -1, n = this.length, x = 0, y = 0, a, b = this[n - 1], c;
+    if (!arguments.length) k = -1 / (6 * this.area());
+    while (++i < n) {
+      a = b;
+      b = this[i];
+      c = a[0] * b[1] - b[0] * a[1];
+      x += (a[0] + b[0]) * c;
+      y += (a[1] + b[1]) * c;
+    }
+    return [ x * k, y * k ];
+  };
+  d3_geom_polygonPrototype.clip = function(subject) {
+    var input, closed = d3_geom_polygonClosed(subject), i = -1, n = this.length - d3_geom_polygonClosed(this), j, m, a = this[n - 1], b, c, d;
+    while (++i < n) {
+      input = subject.slice();
+      subject.length = 0;
+      b = this[i];
+      c = input[(m = input.length - closed) - 1];
+      j = -1;
+      while (++j < m) {
+        d = input[j];
+        if (d3_geom_polygonInside(d, a, b)) {
+          if (!d3_geom_polygonInside(c, a, b)) {
             subject.push(d3_geom_polygonIntersect(c, d, a, b));
           }
-          c = d;
+          subject.push(d);
+        } else if (d3_geom_polygonInside(c, a, b)) {
+          subject.push(d3_geom_polygonIntersect(c, d, a, b));
         }
-        a = b;
+        c = d;
       }
-      return subject;
-    };
-    return coordinates;
+      if (closed) subject.push(subject[0]);
+      a = b;
+    }
+    return subject;
   };
   function d3_geom_polygonInside(p, a, b) {
     return (b[0] - a[0]) * (p[1] - a[1]) < (b[1] - a[1]) * (p[0] - a[0]);
@@ -4335,6 +4340,10 @@ d3 = function() {
   function d3_geom_polygonIntersect(c, d, a, b) {
     var x1 = c[0], x3 = a[0], x21 = d[0] - x1, x43 = b[0] - x3, y1 = c[1], y3 = a[1], y21 = d[1] - y1, y43 = b[1] - y3, ua = (x43 * (y1 - y3) - y43 * (x1 - x3)) / (y43 * x21 - x43 * y21);
     return [ x1 + ua * x21, y1 + ua * y21 ];
+  }
+  function d3_geom_polygonClosed(coordinates) {
+    var a = coordinates[0], b = coordinates[coordinates.length - 1];
+    return !(a[0] - b[0] || a[1] - b[1]);
   }
   d3.geom.delaunay = function(vertices) {
     var edges = vertices.map(function() {
@@ -7416,7 +7425,7 @@ d3 = function() {
   d3.svg.symbolTypes = d3_svg_symbols.keys();
   var d3_svg_symbolSqrt3 = Math.sqrt(3), d3_svg_symbolTan30 = Math.tan(30 * d3_radians);
   function d3_transition(groups, id) {
-    d3_arraySubclass(groups, d3_transitionPrototype);
+    d3_subclass(groups, d3_transitionPrototype);
     groups.id = id;
     return groups;
   }
