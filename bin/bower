@@ -9,10 +9,22 @@ console.log(JSON.stringify({
   "scripts": [
     "d3.js"
   ],
-  "ignore": fs.readdirSync(".").filter(function(d) {
-    return d !== "d3.js"
-        && d !== "bower.json"
-        && d !== "LICENSE"
-        && d !== "README.md";
-  })
+  "ignore": [
+    ".DS_Store",
+    ".git",
+    ".gitignore",
+    ".npmignore",
+    ".travis.yml",
+    "Makefile",
+    "bin",
+    "component.json",
+    "d3.min.js",
+    "index-browserify.js",
+    "index.js",
+    "lib",
+    "node_modules",
+    "package.json",
+    "src",
+    "test"
+  ]
 }, null, 2));
