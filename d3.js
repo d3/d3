@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.2.2"
+    version: "3.2.3"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -380,11 +380,6 @@ d3 = function() {
   } catch (e) {
     d3_array = d3_arrayCopy;
   }
-  var d3_arraySubclass = [].__proto__ ? function(array, prototype) {
-    array.__proto__ = prototype;
-  } : function(array, prototype) {
-    for (var property in prototype) array[property] = prototype[property];
-  };
   function d3_noop() {}
   d3.dispatch = function() {
     var dispatch = new d3_dispatch(), i = -1, n = arguments.length;
@@ -458,8 +453,13 @@ d3 = function() {
     return s.replace(d3_requote_re, "\\$&");
   };
   var d3_requote_re = /[\\\^\$\*\+\?\|\[\]\(\)\.\{\}]/g;
+  var d3_subclass = {}.__proto__ ? function(object, prototype) {
+    object.__proto__ = prototype;
+  } : function(object, prototype) {
+    for (var property in prototype) object[property] = prototype[property];
+  };
   function d3_selection(groups) {
-    d3_arraySubclass(groups, d3_selectionPrototype);
+    d3_subclass(groups, d3_selectionPrototype);
     return groups;
   }
   var d3_select = function(s, n) {
@@ -484,7 +484,7 @@ d3 = function() {
   var d3_selectionPrototype = d3.selection.prototype = [];
   d3_selectionPrototype.select = function(selector) {
     var subgroups = [], subgroup, subnode, group, node;
-    if (typeof selector !== "function") selector = d3_selection_selector(selector);
+    selector = d3_selection_selector(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       subgroup.parentNode = (group = this[j]).parentNode;
@@ -500,13 +500,13 @@ d3 = function() {
     return d3_selection(subgroups);
   };
   function d3_selection_selector(selector) {
-    return function() {
+    return typeof selector === "function" ? selector : function() {
       return d3_select(selector, this);
     };
   }
   d3_selectionPrototype.selectAll = function(selector) {
     var subgroups = [], subgroup, node;
-    if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
+    selector = d3_selection_selectorAll(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
@@ -518,7 +518,7 @@ d3 = function() {
     return d3_selection(subgroups);
   };
   function d3_selection_selectorAll(selector) {
-    return function() {
+    return typeof selector === "function" ? selector : function() {
       return d3_selectAll(selector, this);
     };
   }
@@ -696,25 +696,24 @@ d3 = function() {
     }) : this.node().innerHTML;
   };
   d3_selectionPrototype.append = function(name) {
-    name = d3.ns.qualify(name);
-    function append() {
-      return this.appendChild(d3_document.createElementNS(this.namespaceURI, name));
-    }
-    function appendNS() {
-      return this.appendChild(d3_document.createElementNS(name.space, name.local));
-    }
-    return this.select(name.local ? appendNS : append);
+    name = d3_selection_creator(name);
+    return this.select(function() {
+      return this.appendChild(name.apply(this, arguments));
+    });
   };
+  function d3_selection_creator(name) {
+    return typeof name === "function" ? name : (name = d3.ns.qualify(name)).local ? function() {
+      return d3_document.createElementNS(name.space, name.local);
+    } : function() {
+      return d3_document.createElementNS(this.namespaceURI, name);
+    };
+  }
   d3_selectionPrototype.insert = function(name, before) {
-    name = d3.ns.qualify(name);
-    if (typeof before !== "function") before = d3_selection_selector(before);
-    function insert(d, i) {
-      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), before.call(this, d, i));
-    }
-    function insertNS(d, i) {
-      return this.insertBefore(d3_document.createElementNS(name.space, name.local), before.call(this, d, i));
-    }
-    return this.select(name.local ? insertNS : insert);
+    name = d3_selection_creator(name);
+    before = d3_selection_selector(before);
+    return this.select(function() {
+      return this.insertBefore(name.apply(this, arguments), before.apply(this, arguments));
+    });
   };
   d3_selectionPrototype.remove = function() {
     return this.each(function() {
@@ -891,7 +890,7 @@ d3 = function() {
     return n;
   };
   function d3_selection_enter(selection) {
-    d3_arraySubclass(selection, d3_selection_enterPrototype);
+    d3_subclass(selection, d3_selection_enterPrototype);
     return selection;
   }
   var d3_selection_enterPrototype = [];
@@ -4284,50 +4283,55 @@ d3 = function() {
     return (f - b) * (c - a) - (d - b) * (e - a) > 0;
   }
   d3.geom.polygon = function(coordinates) {
-    coordinates.area = function() {
-      var i = 0, n = coordinates.length, area = coordinates[n - 1][1] * coordinates[0][0] - coordinates[n - 1][0] * coordinates[0][1];
-      while (++i < n) {
-        area += coordinates[i - 1][1] * coordinates[i][0] - coordinates[i - 1][0] * coordinates[i][1];
-      }
-      return area * .5;
-    };
-    coordinates.centroid = function(k) {
-      var i = -1, n = coordinates.length, x = 0, y = 0, a, b = coordinates[n - 1], c;
-      if (!arguments.length) k = -1 / (6 * coordinates.area());
-      while (++i < n) {
-        a = b;
-        b = coordinates[i];
-        c = a[0] * b[1] - b[0] * a[1];
-        x += (a[0] + b[0]) * c;
-        y += (a[1] + b[1]) * c;
-      }
-      return [ x * k, y * k ];
-    };
-    coordinates.clip = function(subject) {
-      var input, i = -1, n = coordinates.length, j, m, a = coordinates[n - 1], b, c, d;
-      while (++i < n) {
-        input = subject.slice();
-        subject.length = 0;
-        b = coordinates[i];
-        c = input[(m = input.length) - 1];
-        j = -1;
-        while (++j < m) {
-          d = input[j];
-          if (d3_geom_polygonInside(d, a, b)) {
-            if (!d3_geom_polygonInside(c, a, b)) {
-              subject.push(d3_geom_polygonIntersect(c, d, a, b));
-            }
-            subject.push(d);
-          } else if (d3_geom_polygonInside(c, a, b)) {
+    d3_subclass(coordinates, d3_geom_polygonPrototype);
+    return coordinates;
+  };
+  var d3_geom_polygonPrototype = d3.geom.polygon.prototype = [];
+  d3_geom_polygonPrototype.area = function() {
+    var i = -1, n = this.length, a, b = this[n - 1], area = 0;
+    while (++i < n) {
+      a = b;
+      b = this[i];
+      area += a[1] * b[0] - a[0] * b[1];
+    }
+    return area * .5;
+  };
+  d3_geom_polygonPrototype.centroid = function(k) {
+    var i = -1, n = this.length, x = 0, y = 0, a, b = this[n - 1], c;
+    if (!arguments.length) k = -1 / (6 * this.area());
+    while (++i < n) {
+      a = b;
+      b = this[i];
+      c = a[0] * b[1] - b[0] * a[1];
+      x += (a[0] + b[0]) * c;
+      y += (a[1] + b[1]) * c;
+    }
+    return [ x * k, y * k ];
+  };
+  d3_geom_polygonPrototype.clip = function(subject) {
+    var input, closed = d3_geom_polygonClosed(subject), i = -1, n = this.length - d3_geom_polygonClosed(this), j, m, a = this[n - 1], b, c, d;
+    while (++i < n) {
+      input = subject.slice();
+      subject.length = 0;
+      b = this[i];
+      c = input[(m = input.length - closed) - 1];
+      j = -1;
+      while (++j < m) {
+        d = input[j];
+        if (d3_geom_polygonInside(d, a, b)) {
+          if (!d3_geom_polygonInside(c, a, b)) {
             subject.push(d3_geom_polygonIntersect(c, d, a, b));
           }
-          c = d;
+          subject.push(d);
+        } else if (d3_geom_polygonInside(c, a, b)) {
+          subject.push(d3_geom_polygonIntersect(c, d, a, b));
         }
-        a = b;
+        c = d;
       }
-      return subject;
-    };
-    return coordinates;
+      if (closed) subject.push(subject[0]);
+      a = b;
+    }
+    return subject;
   };
   function d3_geom_polygonInside(p, a, b) {
     return (b[0] - a[0]) * (p[1] - a[1]) < (b[1] - a[1]) * (p[0] - a[0]);
@@ -4335,6 +4339,10 @@ d3 = function() {
   function d3_geom_polygonIntersect(c, d, a, b) {
     var x1 = c[0], x3 = a[0], x21 = d[0] - x1, x43 = b[0] - x3, y1 = c[1], y3 = a[1], y21 = d[1] - y1, y43 = b[1] - y3, ua = (x43 * (y1 - y3) - y43 * (x1 - x3)) / (y43 * x21 - x43 * y21);
     return [ x1 + ua * x21, y1 + ua * y21 ];
+  }
+  function d3_geom_polygonClosed(coordinates) {
+    var a = coordinates[0], b = coordinates[coordinates.length - 1];
+    return !(a[0] - b[0] || a[1] - b[1]);
   }
   d3.geom.delaunay = function(vertices) {
     var edges = vertices.map(function() {
@@ -4891,122 +4899,12 @@ d3 = function() {
       return "#" + d3_rgb_hex(Math.round(ar + br * t)) + d3_rgb_hex(Math.round(ag + bg * t)) + d3_rgb_hex(Math.round(ab + bb * t));
     };
   }
-  d3.transform = function(string) {
-    var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
-    return (d3.transform = function(string) {
-      if (string != null) {
-        g.setAttribute("transform", string);
-        var t = g.transform.baseVal.consolidate();
-      }
-      return new d3_transform(t ? t.matrix : d3_transformIdentity);
-    })(string);
-  };
-  function d3_transform(m) {
-    var r0 = [ m.a, m.b ], r1 = [ m.c, m.d ], kx = d3_transformNormalize(r0), kz = d3_transformDot(r0, r1), ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz)) || 0;
-    if (r0[0] * r1[1] < r1[0] * r0[1]) {
-      r0[0] *= -1;
-      r0[1] *= -1;
-      kx *= -1;
-      kz *= -1;
-    }
-    this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_degrees;
-    this.translate = [ m.e, m.f ];
-    this.scale = [ kx, ky ];
-    this.skew = ky ? Math.atan2(kz, ky) * d3_degrees : 0;
-  }
-  d3_transform.prototype.toString = function() {
-    return "translate(" + this.translate + ")rotate(" + this.rotate + ")skewX(" + this.skew + ")scale(" + this.scale + ")";
-  };
-  function d3_transformDot(a, b) {
-    return a[0] * b[0] + a[1] * b[1];
-  }
-  function d3_transformNormalize(a) {
-    var k = Math.sqrt(d3_transformDot(a, a));
-    if (k) {
-      a[0] /= k;
-      a[1] /= k;
-    }
-    return k;
-  }
-  function d3_transformCombine(a, b, k) {
-    a[0] += k * b[0];
-    a[1] += k * b[1];
-    return a;
-  }
-  var d3_transformIdentity = {
-    a: 1,
-    b: 0,
-    c: 0,
-    d: 1,
-    e: 0,
-    f: 0
-  };
-  d3.interpolateNumber = d3_interpolateNumber;
-  function d3_interpolateNumber(a, b) {
-    b -= a = +a;
-    return function(t) {
-      return a + b * t;
-    };
-  }
-  d3.interpolateTransform = d3_interpolateTransform;
-  function d3_interpolateTransform(a, b) {
-    var s = [], q = [], n, A = d3.transform(a), B = d3.transform(b), ta = A.translate, tb = B.translate, ra = A.rotate, rb = B.rotate, wa = A.skew, wb = B.skew, ka = A.scale, kb = B.scale;
-    if (ta[0] != tb[0] || ta[1] != tb[1]) {
-      s.push("translate(", null, ",", null, ")");
-      q.push({
-        i: 1,
-        x: d3_interpolateNumber(ta[0], tb[0])
-      }, {
-        i: 3,
-        x: d3_interpolateNumber(ta[1], tb[1])
-      });
-    } else if (tb[0] || tb[1]) {
-      s.push("translate(" + tb + ")");
-    } else {
-      s.push("");
-    }
-    if (ra != rb) {
-      if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360;
-      q.push({
-        i: s.push(s.pop() + "rotate(", null, ")") - 2,
-        x: d3_interpolateNumber(ra, rb)
-      });
-    } else if (rb) {
-      s.push(s.pop() + "rotate(" + rb + ")");
-    }
-    if (wa != wb) {
-      q.push({
-        i: s.push(s.pop() + "skewX(", null, ")") - 2,
-        x: d3_interpolateNumber(wa, wb)
-      });
-    } else if (wb) {
-      s.push(s.pop() + "skewX(" + wb + ")");
-    }
-    if (ka[0] != kb[0] || ka[1] != kb[1]) {
-      n = s.push(s.pop() + "scale(", null, ",", null, ")");
-      q.push({
-        i: n - 4,
-        x: d3_interpolateNumber(ka[0], kb[0])
-      }, {
-        i: n - 2,
-        x: d3_interpolateNumber(ka[1], kb[1])
-      });
-    } else if (kb[0] != 1 || kb[1] != 1) {
-      s.push(s.pop() + "scale(" + kb + ")");
-    }
-    n = q.length;
-    return function(t) {
-      var i = -1, o;
-      while (++i < n) s[(o = q[i]).i] = o.x(t);
-      return s.join("");
-    };
-  }
   d3.interpolateObject = d3_interpolateObject;
   function d3_interpolateObject(a, b) {
     var i = {}, c = {}, k;
     for (k in a) {
       if (k in b) {
-        i[k] = d3_interpolateByName(k)(a[k], b[k]);
+        i[k] = d3_interpolate(a[k], b[k]);
       } else {
         c[k] = a[k];
       }
@@ -5019,6 +4917,13 @@ d3 = function() {
     return function(t) {
       for (k in i) c[k] = i[k](t);
       return c;
+    };
+  }
+  d3.interpolateNumber = d3_interpolateNumber;
+  function d3_interpolateNumber(a, b) {
+    b -= a = +a;
+    return function(t) {
+      return a + b * t;
     };
   }
   d3.interpolateString = d3_interpolateString;
@@ -5093,9 +4998,6 @@ d3 = function() {
     var i = d3.interpolators.length, f;
     while (--i >= 0 && !(f = d3.interpolators[i](a, b))) ;
     return f;
-  }
-  function d3_interpolateByName(name) {
-    return name == "transform" ? d3_interpolateTransform : d3_interpolate;
   }
   d3.interpolators = [ function(a, b) {
     var t = typeof b;
@@ -5247,6 +5149,109 @@ d3 = function() {
     b -= a;
     return function(t) {
       return Math.round(a + b * t);
+    };
+  }
+  d3.transform = function(string) {
+    var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
+    return (d3.transform = function(string) {
+      if (string != null) {
+        g.setAttribute("transform", string);
+        var t = g.transform.baseVal.consolidate();
+      }
+      return new d3_transform(t ? t.matrix : d3_transformIdentity);
+    })(string);
+  };
+  function d3_transform(m) {
+    var r0 = [ m.a, m.b ], r1 = [ m.c, m.d ], kx = d3_transformNormalize(r0), kz = d3_transformDot(r0, r1), ky = d3_transformNormalize(d3_transformCombine(r1, r0, -kz)) || 0;
+    if (r0[0] * r1[1] < r1[0] * r0[1]) {
+      r0[0] *= -1;
+      r0[1] *= -1;
+      kx *= -1;
+      kz *= -1;
+    }
+    this.rotate = (kx ? Math.atan2(r0[1], r0[0]) : Math.atan2(-r1[0], r1[1])) * d3_degrees;
+    this.translate = [ m.e, m.f ];
+    this.scale = [ kx, ky ];
+    this.skew = ky ? Math.atan2(kz, ky) * d3_degrees : 0;
+  }
+  d3_transform.prototype.toString = function() {
+    return "translate(" + this.translate + ")rotate(" + this.rotate + ")skewX(" + this.skew + ")scale(" + this.scale + ")";
+  };
+  function d3_transformDot(a, b) {
+    return a[0] * b[0] + a[1] * b[1];
+  }
+  function d3_transformNormalize(a) {
+    var k = Math.sqrt(d3_transformDot(a, a));
+    if (k) {
+      a[0] /= k;
+      a[1] /= k;
+    }
+    return k;
+  }
+  function d3_transformCombine(a, b, k) {
+    a[0] += k * b[0];
+    a[1] += k * b[1];
+    return a;
+  }
+  var d3_transformIdentity = {
+    a: 1,
+    b: 0,
+    c: 0,
+    d: 1,
+    e: 0,
+    f: 0
+  };
+  d3.interpolateTransform = d3_interpolateTransform;
+  function d3_interpolateTransform(a, b) {
+    var s = [], q = [], n, A = d3.transform(a), B = d3.transform(b), ta = A.translate, tb = B.translate, ra = A.rotate, rb = B.rotate, wa = A.skew, wb = B.skew, ka = A.scale, kb = B.scale;
+    if (ta[0] != tb[0] || ta[1] != tb[1]) {
+      s.push("translate(", null, ",", null, ")");
+      q.push({
+        i: 1,
+        x: d3_interpolateNumber(ta[0], tb[0])
+      }, {
+        i: 3,
+        x: d3_interpolateNumber(ta[1], tb[1])
+      });
+    } else if (tb[0] || tb[1]) {
+      s.push("translate(" + tb + ")");
+    } else {
+      s.push("");
+    }
+    if (ra != rb) {
+      if (ra - rb > 180) rb += 360; else if (rb - ra > 180) ra += 360;
+      q.push({
+        i: s.push(s.pop() + "rotate(", null, ")") - 2,
+        x: d3_interpolateNumber(ra, rb)
+      });
+    } else if (rb) {
+      s.push(s.pop() + "rotate(" + rb + ")");
+    }
+    if (wa != wb) {
+      q.push({
+        i: s.push(s.pop() + "skewX(", null, ")") - 2,
+        x: d3_interpolateNumber(wa, wb)
+      });
+    } else if (wb) {
+      s.push(s.pop() + "skewX(" + wb + ")");
+    }
+    if (ka[0] != kb[0] || ka[1] != kb[1]) {
+      n = s.push(s.pop() + "scale(", null, ",", null, ")");
+      q.push({
+        i: n - 4,
+        x: d3_interpolateNumber(ka[0], kb[0])
+      }, {
+        i: n - 2,
+        x: d3_interpolateNumber(ka[1], kb[1])
+      });
+    } else if (kb[0] != 1 || kb[1] != 1) {
+      s.push(s.pop() + "scale(" + kb + ")");
+    }
+    n = q.length;
+    return function(t) {
+      var i = -1, o;
+      while (++i < n) s[(o = q[i]).i] = o.x(t);
+      return s.join("");
     };
   }
   function d3_uninterpolateNumber(a, b) {
@@ -6222,10 +6227,12 @@ d3 = function() {
   d3.layout.pack = function() {
     var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), padding = 0, size = [ 1, 1 ], radius;
     function pack(d, i) {
-      var nodes = hierarchy.call(this, d, i), root = nodes[0], w = size[0], h = size[1], r = radius || Math.sqrt;
+      var nodes = hierarchy.call(this, d, i), root = nodes[0], w = size[0], h = size[1], r = radius == null ? Math.sqrt : typeof radius === "function" ? radius : function() {
+        return radius;
+      };
       root.x = root.y = 0;
       d3_layout_treeVisitAfter(root, function(d) {
-        d.r = r(d.value);
+        d.r = +r(d.value);
       });
       d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
       if (padding) {
@@ -6248,7 +6255,7 @@ d3 = function() {
     };
     pack.radius = function(_) {
       if (!arguments.length) return radius;
-      radius = _;
+      radius = _ == null || typeof _ === "function" ? _ : +_;
       return pack;
     };
     pack.padding = function(_) {
@@ -7419,7 +7426,7 @@ d3 = function() {
   d3.svg.symbolTypes = d3_svg_symbols.keys();
   var d3_svg_symbolSqrt3 = Math.sqrt(3), d3_svg_symbolTan30 = Math.tan(30 * d3_radians);
   function d3_transition(groups, id) {
-    d3_arraySubclass(groups, d3_transitionPrototype);
+    d3_subclass(groups, d3_transitionPrototype);
     groups.id = id;
     return groups;
   }
@@ -7438,7 +7445,7 @@ d3 = function() {
   d3.transition.prototype = d3_transitionPrototype;
   d3_transitionPrototype.select = function(selector) {
     var id = this.id, subgroups = [], subgroup, subnode, node;
-    if (typeof selector !== "function") selector = d3_selection_selector(selector);
+    selector = d3_selection_selector(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
@@ -7455,7 +7462,7 @@ d3 = function() {
   };
   d3_transitionPrototype.selectAll = function(selector) {
     var id = this.id, subgroups = [], subgroup, subnodes, node, subnode, transition;
-    if (typeof selector !== "function") selector = d3_selection_selectorAll(selector);
+    selector = d3_selection_selectorAll(selector);
     for (var j = -1, m = this.length; ++j < m; ) {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
@@ -7506,7 +7513,7 @@ d3 = function() {
       for (value in nameNS) this.attr(value, nameNS[value]);
       return this;
     }
-    var interpolate = d3_interpolateByName(nameNS), name = d3.ns.qualify(nameNS);
+    var interpolate = nameNS == "transform" ? d3_interpolateTransform : d3_interpolate, name = d3.ns.qualify(nameNS);
     function attrNull() {
       this.removeAttribute(name);
     }
@@ -7557,14 +7564,13 @@ d3 = function() {
       }
       priority = "";
     }
-    var interpolate = d3_interpolateByName(name);
     function styleNull() {
       this.style.removeProperty(name);
     }
     function styleString(b) {
       return b == null ? styleNull : (b += "", function() {
         var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
-        return a !== b && (i = interpolate(a, b), function(t) {
+        return a !== b && (i = d3_interpolate(a, b), function(t) {
           this.style.setProperty(name, i(t), priority);
         });
       });

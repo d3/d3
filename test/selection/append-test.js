@@ -25,6 +25,12 @@ suite.addBatch({
         assert.isTrue(svg[0][0].parentNode === body.node());
         assert.isTrue(svg[0][0] === body.node().lastChild);
       },
+      "appends an element specified as a function": function(body) {
+        var svg = body.select("svg").remove().node();
+        assert.isFalse(svg === body.node().lastChild);
+        body.append(function() { return svg; });
+        assert.isTrue(svg === body.node().lastChild);
+      },
       "propagates data to new element": function(body) {
         var data = new Object(), div = body.data([data]).append("div");
         assert.strictEqual(div[0][0].__data__, data);
