@@ -111,7 +111,7 @@ suite.addBatch({
 });
 
 suite.addBatch({
-  "enter insert": {
+  "enter-insert": {
     topic: load("selection/selection").document(),
     "on a page with existing elements": {
       topic: function(d3) {
@@ -121,7 +121,7 @@ suite.addBatch({
       },
       "inserts before the following updating sibling": function(body) {
         var data = ["peach", "apple", "banana", "orange", "apricot"];
-        body.selectAll("div").data(data).enter().insert("div");
+        body.selectAll("div").data(data, String).enter().insert("div");
         assert.deepEqual(body.selectAll("div").data(), data);
       }
     }
