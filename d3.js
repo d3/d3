@@ -490,7 +490,7 @@ d3 = function() {
       subgroup.parentNode = (group = this[j]).parentNode;
       for (var i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
-          subgroup.push(subnode = selector.call(node, node.__data__, i));
+          subgroup.push(subnode = selector.call(node, node.__data__, i, j));
           if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
         } else {
           subgroup.push(null);
@@ -510,7 +510,7 @@ d3 = function() {
     for (var j = -1, m = this.length; ++j < m; ) {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
-          subgroups.push(subgroup = d3_array(selector.call(node, node.__data__, i)));
+          subgroups.push(subgroup = d3_array(selector.call(node, node.__data__, i, j)));
           subgroup.parentNode = node;
         }
       }
@@ -708,11 +708,11 @@ d3 = function() {
   d3_selectionPrototype.insert = function(name, before) {
     name = d3.ns.qualify(name);
     if (typeof before !== "function") before = d3_selection_selector(before);
-    function insert(d, i) {
-      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), before.call(this, d, i));
+    function insert() {
+      return this.insertBefore(d3_document.createElementNS(this.namespaceURI, name), before.apply(this, arguments));
     }
-    function insertNS(d, i) {
-      return this.insertBefore(d3_document.createElementNS(name.space, name.local), before.call(this, d, i));
+    function insertNS() {
+      return this.insertBefore(d3_document.createElementNS(name.space, name.local), before.apply(this, arguments));
     }
     return this.select(name.local ? insertNS : insert);
   };
@@ -898,7 +898,6 @@ d3 = function() {
   d3.selection.enter = d3_selection_enter;
   d3.selection.enter.prototype = d3_selection_enterPrototype;
   d3_selection_enterPrototype.append = d3_selectionPrototype.append;
-  d3_selection_enterPrototype.insert = d3_selectionPrototype.insert;
   d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
   d3_selection_enterPrototype.node = d3_selectionPrototype.node;
   d3_selection_enterPrototype.call = d3_selectionPrototype.call;
@@ -911,7 +910,7 @@ d3 = function() {
       subgroup.parentNode = group.parentNode;
       for (var i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
-          subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i));
+          subgroup.push(upgroup[i] = subnode = selector.call(group.parentNode, node.__data__, i, j));
           subnode.__data__ = node.__data__;
         } else {
           subgroup.push(null);
@@ -920,6 +919,17 @@ d3 = function() {
     }
     return d3_selection(subgroups);
   };
+  d3_selection_enterPrototype.insert = function(name, before) {
+    if (arguments.length < 2) before = d3_selection_enterInsertBefore(this);
+    return d3_selectionPrototype.insert.call(this, name, before);
+  };
+  function d3_selection_enterInsertBefore(enter) {
+    return function(d, i, j) {
+      var group = enter[j].update, n = group.length, node;
+      while (++i < n && !(node = group[i])) ;
+      return node;
+    };
+  }
   d3_selectionPrototype.transition = function() {
     var id = d3_transitionInheritId || ++d3_transitionId, subgroups = [], subgroup, node, transition = Object.create(d3_transitionInherit);
     transition.time = Date.now();
@@ -7442,7 +7452,7 @@ d3 = function() {
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
-        if ((node = group[i]) && (subnode = selector.call(node, node.__data__, i))) {
+        if ((node = group[i]) && (subnode = selector.call(node, node.__data__, i, j))) {
           if ("__data__" in node) subnode.__data__ = node.__data__;
           d3_transitionNode(subnode, i, id, node.__transition__[id]);
           subgroup.push(subnode);
@@ -7460,7 +7470,7 @@ d3 = function() {
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
         if (node = group[i]) {
           transition = node.__transition__[id];
-          subnodes = selector.call(node, node.__data__, i);
+          subnodes = selector.call(node, node.__data__, i, j);
           subgroups.push(subgroup = []);
           for (var k = -1, o = subnodes.length; ++k < o; ) {
             if (subnode = subnodes[k]) d3_transitionNode(subnode, k, id, transition);

@@ -7,16 +7,16 @@ d3_selectionPrototype.insert = function(name, before) {
 
   if (typeof before !== "function") before = d3_selection_selector(before);
 
-  function insert(d, i) {
+  function insert() {
     return this.insertBefore(
         d3_document.createElementNS(this.namespaceURI, name),
-        before.call(this, d, i));
+        before.apply(this, arguments));
   }
 
-  function insertNS(d, i) {
+  function insertNS() {
     return this.insertBefore(
         d3_document.createElementNS(name.space, name.local),
-        before.call(this, d, i));
+        before.apply(this, arguments));
   }
 
   return this.select(name.local ? insertNS : insert);
