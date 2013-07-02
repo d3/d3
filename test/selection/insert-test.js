@@ -120,13 +120,9 @@ suite.addBatch({
         return body;
       },
       "inserts before the following updating sibling": function(body) {
-        body.selectAll("div").data(["peach", "apple", "banana", "orange", "apricot"]).enter().insert("div");
-        var div = body.selectAll("div");
-        assert.equal(div[0][0].__data__, "peach");
-        assert.equal(div[0][1].__data__, "apple");
-        assert.equal(div[0][2].__data__, "banana");
-        assert.equal(div[0][3].__data__, "orange");
-        assert.equal(div[0][4].__data__, "apricot");
+        var data = ["peach", "apple", "banana", "orange", "apricot"];
+        body.selectAll("div").data(data).enter().insert("div");
+        assert.deepEqual(body.selectAll("div").data(), data);
       }
     }
   }
