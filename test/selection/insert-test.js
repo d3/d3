@@ -111,6 +111,28 @@ suite.addBatch({
 });
 
 suite.addBatch({
+  "enter insert": {
+    topic: load("selection/selection").document(),
+    "on a page with existing elements": {
+      topic: function(d3) {
+        var body = d3.select("body");
+        body.selectAll("div").data(["apple", "orange"]).enter().append("div");
+        return body;
+      },
+      "inserts before the following updating sibling": function(body) {
+        body.selectAll("div").data(["peach", "apple", "banana", "orange", "apricot"]).enter().insert("div");
+        var div = body.selectAll("div");
+        assert.equal(div[0][0].__data__, "peach");
+        assert.equal(div[0][1].__data__, "apple");
+        assert.equal(div[0][2].__data__, "banana");
+        assert.equal(div[0][3].__data__, "orange");
+        assert.equal(div[0][4].__data__, "apricot");
+      }
+    }
+  }
+});
+
+suite.addBatch({
   "selectAll(div).data(…).enter()": {
     topic: load("selection/selection").document(),
     "on a simple page": {
