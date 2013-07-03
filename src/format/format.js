@@ -9,7 +9,7 @@ d3.format = function(specifier) {
       fill = match[1] || " ",
       align = match[2] || ">",
       sign = match[3] || "",
-      basePrefix = match[4] || "",
+      base = match[4] || "",
       zfill = match[5],
       width = +match[6],
       comma = match[7],
@@ -34,13 +34,14 @@ d3.format = function(specifier) {
     case "b":
     case "o":
     case "x":
-    case "X": if (basePrefix) basePrefix = "0" + type.toLowerCase();
+    case "X": if (base === "#") base = "0" + type.toLowerCase();
     case "c":
     case "d": integer = true; precision = 0; break;
     case "s": scale = -1; type = "r"; break;
   }
 
-  if (basePrefix === "#") basePrefix = "";
+  if (base === "#") base = "";
+  else if (base === "$") base = d3_format_currencySymbol;
 
   // If no precision is specified for r, fallback to general notation.
   if (type == "r" && !precision) type = "g";
@@ -78,7 +79,7 @@ d3.format = function(specifier) {
      // If the fill character is not "0", grouping is applied before padding.
     if (!zfill && comma) value = d3_format_group(value);
 
-    var length = basePrefix.length + value.length + (zcomma ? 0 : negative.length),
+    var length = base.length + value.length + (zcomma ? 0 : negative.length),
         padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
 
     // If the fill character is "0", grouping is applied after padding.
@@ -86,7 +87,7 @@ d3.format = function(specifier) {
 
     if (d3_format_decimalPoint) value.replace(".", d3_format_decimalPoint);
 
-    negative += basePrefix;
+    negative += base;
 
     return (align === "<" ? negative + value + padding
           : align === ">" ? padding + negative + value
@@ -95,8 +96,8 @@ d3.format = function(specifier) {
   };
 };
 
-// [[fill]align][sign][#][0][width][,][.precision][type]
-var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?(#)?(0)?(\d+)?(,)?(\.-?\d+)?([a-z%])?/i;
+// [[fill]align][sign][base][0][width][,][.precision][type]
+var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?([$#])?(0)?(\d+)?(,)?(\.-?\d+)?([a-z%])?/i;
 
 var d3_format_types = d3.map({
   b: function(x) { return x.toString(2); },
