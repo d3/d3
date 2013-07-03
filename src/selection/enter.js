@@ -1,8 +1,8 @@
-import "../core/array";
+import "../core/subclass";
 import "selection";
 
 function d3_selection_enter(selection) {
-  d3_arraySubclass(selection, d3_selection_enterPrototype);
+  d3_subclass(selection, d3_selection_enterPrototype);
   return selection;
 }
 

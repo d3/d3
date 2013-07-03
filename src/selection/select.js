@@ -7,7 +7,7 @@ d3_selectionPrototype.select = function(selector) {
       group,
       node;
 
-  if (typeof selector !== "function") selector = d3_selection_selector(selector);
+  selector = d3_selection_selector(selector);
 
   for (var j = -1, m = this.length; ++j < m;) {
     subgroups.push(subgroup = []);
@@ -26,7 +26,7 @@ d3_selectionPrototype.select = function(selector) {
 };
 
 function d3_selection_selector(selector) {
-  return function() {
+  return typeof selector === "function" ? selector : function() {
     return d3_select(selector, this);
   };
 }
