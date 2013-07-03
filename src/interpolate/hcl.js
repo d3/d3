@@ -15,6 +15,9 @@ function d3_interpolateHcl(a, b) {
   if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah;
   else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360; // shortest path
   return function(t) {
-    return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
+    a.h = ah + bh * t;
+    a.c = ac + bc * t;
+    a.l = al + bl * t;
+    return a;
   };
 }
