@@ -120,7 +120,7 @@ suite.addBatch({
         return body;
       },
       "inserts before the following updating sibling": function(body) {
-        var data = ["peach", "apple", "banana", "orange", "apricot"];
+        var data = ["peach", "apple", "apple2", "apple3", "banana", "orange", "apricot"];
         body.selectAll("div").data(data, String).enter().insert("div");
         assert.deepEqual(body.selectAll("div").data(), data);
       }
