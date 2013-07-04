@@ -5,9 +5,7 @@ d3_selectionPrototype.transition = function() {
       subgroups = [],
       subgroup,
       node,
-      transition = Object.create(d3_transitionInherit);
-
-  transition.time = Date.now();
+      transition = d3_transitionInherit || {time: Date.now(), ease: d3_ease_cubicInOut, delay: 0, duration: 250};
 
   for (var j = -1, m = this.length; ++j < m;) {
     subgroups.push(subgroup = []);
