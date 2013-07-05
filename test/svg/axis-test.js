@@ -11,32 +11,67 @@ suite.addBatch({
 
     "scale": {
       "defaults to a linear scale": function(d3) {
-        var a = d3.svg.axis(), x = a.scale();
+        var a = d3.svg.axis(),
+            x = a.scale();
         assert.deepEqual(x.domain(), [0, 1]);
         assert.deepEqual(x.range(), [0, 1]);
         assert.equal(x(0.5), 0.5);
       },
       "can be defined as a scale object": function(d3) {
-        var x = _.scale.linear(), a = d3.svg.axis().scale(x);
+        var x = _.scale.linear(),
+            a = d3.svg.axis().scale(x);
         assert.equal(a.scale(), x);
       },
       "can be a polylinear scale": function(d3) {
-        var a = d3.svg.axis().scale(_.scale.linear().domain([0, 1, 10]).range([2, 20, 200])),
-            g = d3.select("body").html("").append("svg:g").call(a),
+        var x = _.scale.linear().domain([0, 1, 10]).range([2, 20, 200]),
+            a = d3.svg.axis().scale(x),
+            g = d3.select("body").html("").append("g").call(a),
             path = g.selectAll("path");
+        assert.inDelta(g.selectAll(".tick").data(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 1e-4);
+        assert.inDelta(g.selectAll(".tick").data().map(x), [2, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200], 1e-4);
         assert.equal(path.attr("d"), "M2,6V0H200V6");
       },
       "can be an ordinal scale": function(d3) {
-        var a = d3.svg.axis().scale(_.scale.ordinal().domain(["A", "B", "C"]).rangeBands([10, 90])),
-            g = d3.select("body").html("").append("svg:g").call(a),
+        var x = _.scale.ordinal().domain(["A", "B", "C"]).rangeBands([10, 90]),
+            a = d3.svg.axis().scale(x),
+            g = d3.select("body").html("").append("g").call(a),
             path = g.selectAll("path");
+        assert.deepEqual(g.selectAll(".tick").data(), ["A", "B", "C"]);
+        assert.inDelta(g.selectAll(".tick").data().map(x), [10, 36.6667, 63.3333], 1e-4);
         assert.equal(path.attr("d"), "M10,6V0H90V6");
       },
       "can be an ordinal scale with explicit range": function(d3) {
-        var a = d3.svg.axis().scale(_.scale.ordinal().domain(["A", "B", "C"]).range([10, 50, 90])),
-            g = d3.select("body").html("").append("svg:g").call(a),
+        var x = _.scale.ordinal().domain(["A", "B", "C"]).range([10, 50, 90]),
+            a = d3.svg.axis().scale(x),
+            g = d3.select("body").html("").append("g").call(a),
             path = g.selectAll("path");
+        assert.deepEqual(g.selectAll(".tick").data(), ["A", "B", "C"]);
+        assert.deepEqual(g.selectAll(".tick").data().map(x), [10, 50, 90]);
         assert.equal(path.attr("d"), "M10,6V0H90V6");
+      },
+      "can be a quantize scale": function(d3) {
+        var x = _.scale.quantize().domain([0, 10]).range([10, 50, 90]),
+            a = d3.svg.axis().scale(x),
+            g = d3.select("body").html("").append("g").call(a);
+        assert.inDelta(g.selectAll(".tick").data(), [0, 10], 1e-4);
+        assert.deepEqual(g.selectAll(".tick").data().map(x), [10, 90]);
+        assert.equal(g.select("path").attr("d"), "M10,6V0H90V6");
+      },
+      "can be a quantile scale": function(d3) {
+        var x = _.scale.quantile().domain([6, 3, 5, 2, 7, 8, 4, 0, 1, 9]).range([10, 50, 90]),
+            a = d3.svg.axis().scale(x),
+            g = d3.select("body").html("").append("g").call(a);
+        assert.inDelta(g.selectAll(".tick").data(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1e-4);
+        assert.inDelta(g.selectAll(".tick").data().map(x), [10, 10, 10, 50, 50, 50, 90, 90, 90, 90], 1e-4);
+        assert.equal(g.select("path").attr("d"), "M10,6V0H90V6");
+      },
+      "can be a threshold scale": function(d3) {
+        var x = _.scale.threshold().domain([4, 5, 6]).range([0, 30, 60, 90]),
+            a = d3.svg.axis().scale(x),
+            g = d3.select("body").html("").append("g").call(a);
+        assert.inDelta(g.selectAll(".tick").data(), [4, 5, 6], 1e-4);
+        assert.inDelta(g.selectAll(".tick").data().map(x), [30, 60, 90], 1e-4);
+        assert.equal(g.select("path").attr("d"), "M0,6V0H90V6");
       }
     },
 
@@ -55,7 +90,7 @@ suite.addBatch({
       },
       "supports top orientation": function(d3) {
         var a = d3.svg.axis().orient("top"),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             tick = g.select("g:nth-child(3)"),
             text = tick.select("text"),
             line = tick.select("line"),
@@ -70,7 +105,7 @@ suite.addBatch({
       },
       "supports right orientation": function(d3) {
         var a = d3.svg.axis().orient("right"),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             tick = g.select("g:nth-child(3)"),
             text = tick.select("text"),
             line = tick.select("line"),
@@ -85,7 +120,7 @@ suite.addBatch({
       },
       "supports bottom orientation": function(d3) {
         var a = d3.svg.axis().orient("bottom"),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             tick = g.select("g:nth-child(3)"),
             text = tick.select("text"),
             line = tick.select("line"),
@@ -100,7 +135,7 @@ suite.addBatch({
       },
       "supports left orientation": function(d3) {
         var a = d3.svg.axis().orient("left"),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             tick = g.select("g:nth-child(3)"),
             text = tick.select("text"),
             line = tick.select("line"),
@@ -130,13 +165,13 @@ suite.addBatch({
       },
       "affects the generated domain path": function(d3) {
         var a = d3.svg.axis().tickSize(3),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             path = g.select("path.domain");
         assert.equal(path.attr("d"), "M0,3V0H1V3");
       },
       "affects the generated tick lines": function(d3) {
         var a = d3.svg.axis().tickSize(3),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             line = g.selectAll("g line");
         line.each(function() {
           assert.equal(d3.select(this).attr("y2"), 3);
@@ -144,7 +179,7 @@ suite.addBatch({
       },
       "if negative, labels are placed on the opposite end": function(d3) {
         var a = d3.svg.axis().tickSize(-80),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             line = g.selectAll("g line"),
             text = g.selectAll("g text");
         line.each(function() {
@@ -156,13 +191,13 @@ suite.addBatch({
       },
       "with two arguments, specifies end tick size": function(d3) {
         var a = d3.svg.axis().tickSize(6, 3),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M0,3V0H1V3");
       },
       "with three arguments, specifies end and minor tick sizes": function(d3) {
         var a = d3.svg.axis().tickSubdivide(3).tickSize(6, 3, 9),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             path = g.selectAll("path"),
             line = g.select(".minor");
         assert.equal(path.attr("d"), "M0,9V0H1V9");
@@ -185,7 +220,7 @@ suite.addBatch({
       },
       "affects the generated tick labels": function(d3) {
         var a = d3.svg.axis().tickSize(2).tickPadding(7),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             text = g.selectAll("g text");
         text.each(function() {
           assert.equal(d3.select(this).attr("y"), 9);
@@ -206,7 +241,7 @@ suite.addBatch({
       },
       "passes any arguments to the scale's ticks function": function(d3) {
         var x = _.scale.linear(), b = {}, a = d3.svg.axis().ticks(b, "%").scale(x), aa = [],
-            g = d3.select("body").html("").append("svg:g");
+            g = d3.select("body").html("").append("g");
         x.ticks = function() { aa.push(arguments); return [42]; };
         g.call(a);
         assert.equal(aa.length, 1);
@@ -218,7 +253,7 @@ suite.addBatch({
         var b = {},
             x = _.scale.linear(),
             a = d3.svg.axis().scale(x).ticks(b, "%"),
-            g = d3.select("body").html("").append("svg:g"),
+            g = d3.select("body").html("").append("g"),
             aa = [];
 
         x.tickFormat = function() {
@@ -234,14 +269,14 @@ suite.addBatch({
       },
       "affects the generated ticks": function(d3) {
         var a = d3.svg.axis().ticks(20, "%"),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             t = g.selectAll("g");
         assert.equal(t[0].length, 21);
         assert.equal(t[0][0].textContent, "0%");
       },
       "only substitutes precision if not specified": function(d3) {
         var a = d3.svg.axis().ticks(20, ".5%"),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             t = g.selectAll("g");
         assert.equal(t[0].length, 21);
         assert.equal(t[0][0].textContent, "0.00000%");
@@ -267,7 +302,7 @@ suite.addBatch({
       "does not change the arguments passed to the scale's tickFormat function": function(d3) {
         var x = _.scale.linear(),
             a = d3.svg.axis().scale(x).ticks(10).tickValues([1, 2, 3]),
-            g = d3.select("body").html("").append("svg:g"),
+            g = d3.select("body").html("").append("g"),
             aa = [];
 
         x.tickFormat = function() {
@@ -282,7 +317,7 @@ suite.addBatch({
       },
       "affects the generated ticks": function(d3) {
         var a = d3.svg.axis().ticks(20),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             t = g.selectAll("g");
         assert.equal(t[0].length, 21);
       }
@@ -298,12 +333,12 @@ suite.addBatch({
         assert.strictEqual(a.tickSubdivide(), 1);
       },
       "does not generate minor ticks when zero": function(d3) {
-        var g = d3.select("body").html("").append("svg:g").call(d3.svg.axis());
+        var g = d3.select("body").html("").append("g").call(d3.svg.axis());
         assert.isTrue(g.selectAll(".minor").empty());
       },
       "affects the generated minor ticks": function(d3) {
         var a = d3.svg.axis().tickSubdivide(3),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             t = g.selectAll("line.tick.minor");
         assert.equal(t[0].length, 30);
         assert.equal(t[0][1].getAttribute("transform"), "translate(0.05,0)");
@@ -317,7 +352,7 @@ suite.addBatch({
       },
       "when null, uses the scale's tick format": function(d3) {
         var x = _.scale.linear(), a = d3.svg.axis().scale(x),
-            g = d3.select("body").html("").append("svg:g");
+            g = d3.select("body").html("").append("g");
 
         x.tickFormat = function() {
           return function(d) {
@@ -331,19 +366,19 @@ suite.addBatch({
       },
       "affects the generated tick labels": function(d3) {
         var a = d3.svg.axis().tickFormat(d3.format("+.2%")),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             t = g.selectAll("g text");
         assert.equal(t.text(), "+0.00%");
       },
       "can be set to a constant": function(d3) {
         var a = d3.svg.axis().tickFormat("I'm a tick!"),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             t = g.selectAll("g text");
         assert.equal(t.text(), "I'm a tick!");
       },
       "can be set to a falsey constant": function(d3) {
         var a = d3.svg.axis().tickFormat(""),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             t = g.selectAll("g text");
         assert.equal(t.text(), "");
       }
@@ -352,7 +387,7 @@ suite.addBatch({
     "enter": {
       "generates a new domain path": function(d3) {
         var a = d3.svg.axis(),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             path = g.selectAll("path.domain");
         assert.equal(path[0].length, 1);
         assert.equal(path.attr("d"), "M0,6V0H1V6");
@@ -360,7 +395,7 @@ suite.addBatch({
       },
       "generates new tick marks with labels": function(d3) {
         var a = d3.svg.axis(),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             x = _.scale.linear(),
             tick = g.selectAll("g"),
             ticks = x.ticks(10),
@@ -378,7 +413,7 @@ suite.addBatch({
     "update": {
       "updates the domain path": function(d3) {
         var a = d3.svg.axis(),
-            g = d3.select("body").html("").append("svg:g").call(a);
+            g = d3.select("body").html("").append("g").call(a);
         a.scale().domain([0, 2]).range([1, 2]);
         a.tickSize(3);
         g.call(a);
@@ -389,7 +424,7 @@ suite.addBatch({
       },
       "enters, exits and updates tick marks": function(d3) {
         var a = d3.svg.axis(),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             x = d3.scale.linear().domain([1, 1.5]);
         a.scale().domain(x.domain());
         a.tickSize(3).tickPadding(9);
