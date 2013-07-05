@@ -38,6 +38,14 @@ function d3_scale_quantile(domain, range) {
     return thresholds;
   };
 
+  scale.invertExtent = function(y) {
+    y = range.indexOf(y);
+    return y < 0 ? [NaN, NaN] : [
+      y > 0 ? thresholds[y - 1] : domain[0],
+      y < thresholds.length ? thresholds[y] : domain[domain.length - 1]
+    ];
+  };
+
   scale.copy = function() {
     return d3_scale_quantile(domain, range); // copy on write!
   };

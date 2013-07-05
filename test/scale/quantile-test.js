@@ -57,6 +57,33 @@ suite.addBatch({
     "returns undefined if the input value is NaN": function(quantile) {
       var x = quantile().domain([3, 6, 7, 8, 8, 10, 13, 15, 16, 20]).range([0, 1, 2, 3]);
       assert.isUndefined(x(NaN));
+    },
+    "invertExtent": {
+      "maps a value in the range to a domain extent": function(quantile) {
+        var x = quantile().domain([3, 6, 7, 8, 8, 10, 13, 15, 16, 20]).range([0, 1, 2, 3]);
+        assert.deepEqual(x.invertExtent(0), [3, 7.25]);
+        assert.deepEqual(x.invertExtent(1), [7.25, 9]);
+        assert.deepEqual(x.invertExtent(2), [9, 14.5]);
+        assert.deepEqual(x.invertExtent(3), [14.5, 20]);
+      },
+      "allows arbitrary range values": function(quantile) {
+        var a = {}, b = {}, x = quantile().domain([3, 6, 7, 8, 8, 10, 13, 15, 16, 20]).range([a, b]);
+        assert.deepEqual(x.invertExtent(a), [3, 9]);
+        assert.deepEqual(x.invertExtent(b), [9, 20]);
+      },
+      "returns [NaN, NaN] when the given value is not in the range": function(quantile) {
+        var x = quantile().domain([3, 6, 7, 8, 8, 10, 13, 15, 16, 20]);
+        assert.ok(x.invertExtent(-1).every(isNaN));
+        assert.ok(x.invertExtent(.5).every(isNaN));
+        assert.ok(x.invertExtent(2).every(isNaN));
+        assert.ok(x.invertExtent('a').every(isNaN));
+      },
+      "returns the first match if duplicate values exist in the range": function(quantile) {
+        var x = quantile().domain([3, 6, 7, 8, 8, 10, 13, 15, 16, 20]).range([0, 1, 2, 0]);
+        assert.deepEqual(x.invertExtent(0), [3, 7.25]);
+        assert.deepEqual(x.invertExtent(1), [7.25, 9]);
+        assert.deepEqual(x.invertExtent(2), [9, 14.5]);
+      }
     }
   }
 });

@@ -7051,6 +7051,10 @@ d3 = function() {
     scale.quantiles = function() {
       return thresholds;
     };
+    scale.invertExtent = function(y) {
+      y = range.indexOf(y);
+      return y < 0 ? [ NaN, NaN ] : [ y > 0 ? thresholds[y - 1] : domain[0], y < thresholds.length ? thresholds[y] : domain[domain.length - 1] ];
+    };
     scale.copy = function() {
       return d3_scale_quantile(domain, range);
     };
@@ -7080,13 +7084,13 @@ d3 = function() {
       range = x;
       return rescale();
     };
-    scale.copy = function() {
-      return d3_scale_quantize(x0, x1, range);
-    };
     scale.invertExtent = function(y) {
       y = range.indexOf(y);
       y = y < 0 ? NaN : y / kx + x0;
       return [ y, y + 1 / kx ];
+    };
+    scale.copy = function() {
+      return d3_scale_quantize(x0, x1, range);
     };
     return rescale();
   }
@@ -7801,19 +7805,19 @@ d3 = function() {
             break;
           }
         }
-        if (scale.ticks) {
+        if (scale.rangeBand) {
+          var dx = scale1.rangeBand() / 2, x = function(d) {
+            return scale1(d) + dx;
+          };
+          tickEnter.call(tickTransform, x);
+          tickUpdate.call(tickTransform, x);
+        } else {
           tickEnter.call(tickTransform, scale0);
           tickUpdate.call(tickTransform, scale1);
           tickExit.call(tickTransform, scale1);
           subtickEnter.call(tickTransform, scale0);
           subtickUpdate.call(tickTransform, scale1);
           subtickExit.call(tickTransform, scale1);
-        } else {
-          var dx = scale1.rangeBand() / 2, x = function(d) {
-            return scale1(d) + dx;
-          };
-          tickEnter.call(tickTransform, x);
-          tickUpdate.call(tickTransform, x);
         }
       });
     }

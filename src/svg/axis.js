@@ -108,26 +108,26 @@ d3.svg.axis = function() {
         }
       }
 
+      // For ordinal scales:
+      // - any entering ticks are undefined in the old scale
+      // - any exiting ticks are undefined in the new scale
+      // Therefore, we only need to transition updating ticks.
+      if (scale.rangeBand) {
+        var dx = scale1.rangeBand() / 2, x = function(d) { return scale1(d) + dx; };
+        tickEnter.call(tickTransform, x);
+        tickUpdate.call(tickTransform, x);
+      }
+
       // For quantitative scales:
       // - enter new ticks from the old scale
       // - exit old ticks to the new scale
-      if (scale.ticks) {
+      else {
         tickEnter.call(tickTransform, scale0);
         tickUpdate.call(tickTransform, scale1);
         tickExit.call(tickTransform, scale1);
         subtickEnter.call(tickTransform, scale0);
         subtickUpdate.call(tickTransform, scale1);
         subtickExit.call(tickTransform, scale1);
-      }
-
-      // For ordinal scales:
-      // - any entering ticks are undefined in the old scale
-      // - any exiting ticks are undefined in the new scale
-      // Therefore, we only need to transition updating ticks.
-      else {
-        var dx = scale1.rangeBand() / 2, x = function(d) { return scale1(d) + dx; };
-        tickEnter.call(tickTransform, x);
-        tickUpdate.call(tickTransform, x);
       }
     });
   }
