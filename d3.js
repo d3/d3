@@ -7032,6 +7032,10 @@ d3 = function() {
     scale.quantiles = function() {
       return thresholds;
     };
+    scale.invertExtent = function(y) {
+      y = range.indexOf(y);
+      return y < 0 ? [ NaN, NaN ] : [ y > 0 ? thresholds[y - 1] : domain[0], y < thresholds.length ? thresholds[y] : domain[domain.length - 1] ];
+    };
     scale.copy = function() {
       return d3_scale_quantile(domain, range);
     };
@@ -7061,13 +7065,13 @@ d3 = function() {
       range = x;
       return rescale();
     };
-    scale.copy = function() {
-      return d3_scale_quantize(x0, x1, range);
-    };
     scale.invertExtent = function(y) {
       y = range.indexOf(y);
       y = y < 0 ? NaN : y / kx + x0;
       return [ y, y + 1 / kx ];
+    };
+    scale.copy = function() {
+      return d3_scale_quantize(x0, x1, range);
     };
     return rescale();
   }
