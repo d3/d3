@@ -7658,7 +7658,8 @@ d3 = function() {
       d3_transitionInheritId = inheritId;
     } else {
       d3_selection_each(this, function(node) {
-        node.__transition__[id].event.on(type, listener);
+        var transition = node.__transition__[id];
+        (transition.event || (transition.event = d3.dispatch("start", "end"))).on(type, listener);
       });
     }
     return this;
@@ -7687,7 +7688,6 @@ d3 = function() {
       var time = inherit.time;
       transition = lock[id] = {
         tween: new d3_Map(),
-        event: d3.dispatch("start", "end"),
         time: time,
         ease: inherit.ease,
         delay: inherit.delay,
@@ -7695,12 +7695,12 @@ d3 = function() {
       };
       ++lock.count;
       d3.timer(function(elapsed) {
-        var d = node.__data__, ease = transition.ease, event = transition.event, delay = transition.delay, duration = transition.duration, tweened = [];
+        var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, tweened = [];
         return delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time), 1;
         function start(elapsed) {
           if (lock.active > id) return stop();
           lock.active = id;
-          event.start.call(node, d, i);
+          transition.event && transition.event.start.call(node, d, i);
           transition.tween.forEach(function(key, value) {
             if (value = value.call(node, d, i)) {
               tweened.push(value);
@@ -7717,7 +7717,7 @@ d3 = function() {
           }
           if (t >= 1) {
             stop();
-            event.end.call(node, d, i);
+            transition.event && transition.event.end.call(node, d, i);
             return 1;
           }
         }
