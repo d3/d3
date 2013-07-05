@@ -101,6 +101,24 @@ suite.addBatch({
 });
 
 suite.addBatch({
+  "enter-append": {
+    topic: load("selection/selection").document(),
+    "on a page with existing elements": {
+      topic: function(d3) {
+        var body = d3.select("body");
+        body.selectAll("div").data(["apple", "orange"]).enter().append("div");
+        return body;
+      },
+      "appends to the end of the parent": function(body) {
+        var data = ["peach", "apple", "banana", "orange", "apricot"];
+        body.selectAll("div").data(data, String).enter().append("div");
+        assert.deepEqual(body.selectAll("div").data(), ["apple", "orange", "peach", "banana", "apricot"]);
+      }
+    }
+  }
+});
+
+suite.addBatch({
   "selectAll(div).data(…).enter()": {
     topic: load("selection/selection").document(),
     "on a simple page": {
