@@ -19,7 +19,7 @@ benchmark: all
 	@node test/geo/benchmark.js
 
 src/format/format-localized.js: bin/locale src/format/format-locale.js
-	LC_NUMERIC=$(LOCALE) locale -ck LC_NUMERIC LC_MONETARY | bin/locale src/format/format-locale.js > $@
+	LC_NUMERIC=$(LOCALE) LC_MONETARY=$(LOCALE) locale -ck LC_NUMERIC LC_MONETARY | bin/locale src/format/format-locale.js > $@
 
 src/time/format-localized.js: bin/locale src/time/format-locale.js
 	LC_TIME=$(LOCALE) locale -ck LC_TIME | bin/locale src/time/format-locale.js > $@
