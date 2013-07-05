@@ -7782,19 +7782,19 @@ d3 = function() {
             break;
           }
         }
-        if (scale.ticks) {
+        if (scale.rangeBand) {
+          var dx = scale1.rangeBand() / 2, x = function(d) {
+            return scale1(d) + dx;
+          };
+          tickEnter.call(tickTransform, x);
+          tickUpdate.call(tickTransform, x);
+        } else {
           tickEnter.call(tickTransform, scale0);
           tickUpdate.call(tickTransform, scale1);
           tickExit.call(tickTransform, scale1);
           subtickEnter.call(tickTransform, scale0);
           subtickUpdate.call(tickTransform, scale1);
           subtickExit.call(tickTransform, scale1);
-        } else {
-          var dx = scale1.rangeBand() / 2, x = function(d) {
-            return scale1(d) + dx;
-          };
-          tickEnter.call(tickTransform, x);
-          tickUpdate.call(tickTransform, x);
         }
       });
     }
