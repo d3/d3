@@ -12,6 +12,9 @@ function d3_interpolateLab(a, b) {
       ba = b.a - aa,
       bb = b.b - ab;
   return function(t) {
-    return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
+    a.l = al + bl * t;
+    a.a = aa + ba * t;
+    a.b = ab + bb * t;
+    return a;
   };
 }

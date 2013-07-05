@@ -19,10 +19,7 @@ suite.addBatch({
       assert.hslEqual(hsl(null, null, null), 0, 0, 0);
     },
     "exposes h, s and l properties": function(hsl) {
-      var color = hsl("hsl(180, 50%, 60%)");
-      assert.equal(color.h, 180);
-      assert.equal(color.s, .5);
-      assert.equal(color.l, .6);
+      assert.hslEqual(hsl("hsl(180, 50%, 60%)"), 180, .5, .6);
     },
     "changing h, s or l affects the string format": function(hsl) {
       var color = hsl("hsl(180, 50%, 60%)");
@@ -74,38 +71,38 @@ suite.addBatch({
       assert.strictEqual(hsl(hsl(60, 1, .2)) + "", "#666600");
     },
     "h is preserved when explicitly specified, even for grayscale colors": function(hsl) {
-      assert.strictEqual(hsl(0, 0, 0).h, 0);
-      assert.strictEqual(hsl(42, 0, .5).h, 42);
-      assert.strictEqual(hsl(118, 0, 1).h, 118);
+      assert.hslEqual(hsl(0, 0, 0), 0, 0, 0);
+      assert.hslEqual(hsl(42, 0, .5), 42, 0, .5);
+      assert.hslEqual(hsl(118, 0, 1), 118, 0, 1);
     },
     "h is undefined when not explicitly specified for grayscale colors": function(hsl) {
-      assert.isNaN(hsl("#000").h);
-      assert.isNaN(hsl("black").h);
-      assert.isNaN(hsl(_.rgb("black")).h);
-      assert.isNaN(hsl("#ccc").h);
-      assert.isNaN(hsl("gray").h);
-      assert.isNaN(hsl(_.rgb("gray")).h);
-      assert.isNaN(hsl("#fff").h);
-      assert.isNaN(hsl("white").h);
-      assert.isNaN(hsl(_.rgb("white")).h);
+      assert.hslEqual(hsl("#000"), NaN, NaN, 0);
+      assert.hslEqual(hsl("black"), NaN, NaN, 0);
+      assert.hslEqual(hsl(_.rgb("black")), NaN, NaN, 0);
+      assert.hslEqual(hsl("#ccc"), NaN, 0, .8);
+      assert.hslEqual(hsl("gray"), NaN, 0, .5);
+      assert.hslEqual(hsl(_.rgb("gray")), NaN, 0, .5);
+      assert.hslEqual(hsl("#fff"), NaN, NaN, 1);
+      assert.hslEqual(hsl("white"), NaN, NaN, 1);
+      assert.hslEqual(hsl(_.rgb("white")), NaN, NaN, 1);
     },
     "s is preserved when explicitly specified, even for white or black": function(hsl) {
-      assert.strictEqual(hsl(0, 0, 0).s, 0);
-      assert.strictEqual(hsl(0, .18, 0).s, .18);
-      assert.strictEqual(hsl(0, .42, 1).s, .42);
-      assert.strictEqual(hsl(0, 1, 1).s, 1);
+      assert.hslEqual(hsl(0, 0, 0), 0, 0, 0);
+      assert.hslEqual(hsl(0, .18, 0), 0, .18, 0);
+      assert.hslEqual(hsl(0, .42, 1), 0, .42, 1);
+      assert.hslEqual(hsl(0, 1, 1), 0, 1, 1);
     },
     "s is zero for grayscale colors (but not white and black)": function(hsl) {
-      assert.strictEqual(hsl("#ccc").s, 0);
-      assert.strictEqual(hsl("#777").s, 0);
+      assert.hslEqual(hsl("#ccc"), NaN, 0, .8);
+      assert.hslEqual(hsl("#777"), NaN, 0, .47);
     },
     "s is undefined when not explicitly specified for white or black": function(hsl) {
-      assert.isNaN(hsl("#000").s);
-      assert.isNaN(hsl("black").s);
-      assert.isNaN(hsl(_.rgb("black")).s);
-      assert.isNaN(hsl("#fff").s);
-      assert.isNaN(hsl("white").s);
-      assert.isNaN(hsl(_.rgb("white")).s);
+      assert.hslEqual(hsl("#000"), NaN, NaN, 0);
+      assert.hslEqual(hsl("black"), NaN, NaN, 0);
+      assert.hslEqual(hsl(_.rgb("black")), NaN, NaN, 0);
+      assert.hslEqual(hsl("#fff"), NaN, NaN, 1);
+      assert.hslEqual(hsl("white"), NaN, NaN, 1);
+      assert.hslEqual(hsl(_.rgb("white")), NaN, NaN, 1);
     },
     "can convert grayscale colors (with undefined hue) to RGB": function(hsl) {
       assert.strictEqual(hsl(NaN, 0, .2) + "", "#333333");
