@@ -9,7 +9,7 @@ d3.format = function(specifier) {
       fill = match[1] || " ",
       align = match[2] || ">",
       sign = match[3] || "",
-      base = match[4] || "",
+      symbol = match[4] || "",
       zfill = match[5],
       width = +match[6],
       comma = match[7],
@@ -34,14 +34,14 @@ d3.format = function(specifier) {
     case "b":
     case "o":
     case "x":
-    case "X": if (base === "#") base = "0" + type.toLowerCase();
+    case "X": if (symbol === "#") symbol = "0" + type.toLowerCase();
     case "c":
     case "d": integer = true; precision = 0; break;
     case "s": scale = -1; type = "r"; break;
   }
 
-  if (base === "#") base = "";
-  else if (base === "$") base = d3_format_currencySymbol;
+  if (symbol === "#") symbol = "";
+  else if (symbol === "$") symbol = d3_format_currencySymbol;
 
   // If no precision is specified for r, fallback to general notation.
   if (type == "r" && !precision) type = "g";
@@ -84,14 +84,14 @@ d3.format = function(specifier) {
      // If the fill character is not "0", grouping is applied before padding.
     if (!zfill && comma) before = d3_format_group(before);
 
-    var length = base.length + before.length + after.length + (zcomma ? 0 : negative.length),
+    var length = symbol.length + before.length + after.length + (zcomma ? 0 : negative.length),
         padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
 
     // If the fill character is "0", grouping is applied after padding.
     if (zcomma) before = d3_format_group(padding + before);
 
     // Apply symbol as prefix. TODO allow suffix symbols
-    negative += base;
+    negative += symbol;
 
     // Rejoin integer and decimal parts.
     value = before + after;
@@ -103,7 +103,7 @@ d3.format = function(specifier) {
   };
 };
 
-// [[fill]align][sign][base][0][width][,][.precision][type]
+// [[fill]align][sign][symbol][0][width][,][.precision][type]
 var d3_format_re = /(?:([^{])?([<>=^]))?([+\- ])?([$#])?(0)?(\d+)?(,)?(\.-?\d+)?([a-z%])?/i;
 
 var d3_format_types = d3.map({
