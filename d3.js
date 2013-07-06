@@ -939,8 +939,12 @@ d3 = function() {
     };
   }
   d3_selectionPrototype.transition = function() {
-    var id = d3_transitionInheritId || ++d3_transitionId, subgroups = [], subgroup, node, transition = Object.create(d3_transitionInherit);
-    transition.time = Date.now();
+    var id = d3_transitionInheritId || ++d3_transitionId, subgroups = [], subgroup, node, transition = d3_transitionInherit || {
+      time: Date.now(),
+      ease: d3_ease_cubicInOut,
+      delay: 0,
+      duration: 250
+    };
     for (var j = -1, m = this.length; ++j < m; ) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = -1, n = group.length; ++i < n; ) {
@@ -7459,11 +7463,7 @@ d3 = function() {
     groups.id = id;
     return groups;
   }
-  var d3_transitionPrototype = [], d3_transitionId = 0, d3_transitionInheritId, d3_transitionInherit = {
-    ease: d3_ease_cubicInOut,
-    delay: 0,
-    duration: 250
-  };
+  var d3_transitionPrototype = [], d3_transitionId = 0, d3_transitionInheritId, d3_transitionInherit;
   d3_transitionPrototype.call = d3_selectionPrototype.call;
   d3_transitionPrototype.empty = d3_selectionPrototype.empty;
   d3_transitionPrototype.node = d3_selectionPrototype.node;

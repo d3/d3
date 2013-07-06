@@ -16,7 +16,7 @@ function d3_transition(groups, id) {
 var d3_transitionPrototype = [],
     d3_transitionId = 0,
     d3_transitionInheritId,
-    d3_transitionInherit = {ease: d3_ease_cubicInOut, delay: 0, duration: 250};
+    d3_transitionInherit;
 
 d3_transitionPrototype.call = d3_selectionPrototype.call;
 d3_transitionPrototype.empty = d3_selectionPrototype.empty;
