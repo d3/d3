@@ -2021,11 +2021,12 @@ d3 = function() {
         value *= scale;
       }
       value = type(value, precision);
-      if (!zfill && comma) value = d3_format_group(value);
-      var length = base.length + value.length + (zcomma ? 0 : negative.length), padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
-      if (zcomma) value = d3_format_group(padding + value);
-      if (d3_format_decimalPoint) value.replace(".", d3_format_decimalPoint);
+      var i = value.lastIndexOf("."), before = i < 0 ? value : value.substring(0, i), after = i < 0 ? "" : d3_format_decimalPoint + value.substring(i + 1);
+      if (!zfill && comma) before = d3_format_group(before);
+      var length = base.length + before.length + after.length + (zcomma ? 0 : negative.length), padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
+      if (zcomma) before = d3_format_group(padding + before);
       negative += base;
+      value = before + after;
       return (align === "<" ? negative + value + padding : align === ">" ? padding + negative + value : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length) : negative + (zcomma ? value : padding + value)) + suffix;
     };
   };
@@ -2069,13 +2070,12 @@ d3 = function() {
   if (d3_format_grouping) {
     var d3_format_groupingLength = d3_format_grouping.length;
     d3_format_group = function(value) {
-      var i = value.lastIndexOf("."), f = i >= 0 ? "." + value.substring(i + 1) : (i = value.length, 
-      ""), t = [], j = 0, g = d3_format_grouping[0];
+      var i = value.length, t = [], j = 0, g = d3_format_grouping[0];
       while (i > 0 && g > 0) {
         t.push(value.substring(i -= g, i + g));
         g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];
       }
-      return t.reverse().join(d3_format_thousandsSeparator || "") + f;
+      return t.reverse().join(d3_format_thousandsSeparator);
     };
   }
   d3.geo = {};

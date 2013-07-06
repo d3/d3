@@ -76,18 +76,25 @@ d3.format = function(specifier) {
     // Convert to the desired precision.
     value = type(value, precision);
 
-     // If the fill character is not "0", grouping is applied before padding.
-    if (!zfill && comma) value = d3_format_group(value);
+    // Break the value into the integer part (before) and decimal part (after).
+    var i = value.lastIndexOf("."),
+        before = i < 0 ? value : value.substring(0, i),
+        after = i < 0 ? "" : d3_format_decimalPoint + value.substring(i + 1);
 
-    var length = base.length + value.length + (zcomma ? 0 : negative.length),
+     // If the fill character is not "0", grouping is applied before padding.
+    if (!zfill && comma) before = d3_format_group(before);
+
+    var length = base.length + before.length + after.length + (zcomma ? 0 : negative.length),
         padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
 
     // If the fill character is "0", grouping is applied after padding.
-    if (zcomma) value = d3_format_group(padding + value);
+    if (zcomma) before = d3_format_group(padding + before);
 
-    if (d3_format_decimalPoint) value.replace(".", d3_format_decimalPoint);
-
+    // Apply symbol as prefix. TODO allow suffix symbols
     negative += base;
+
+    // Rejoin integer and decimal parts.
+    value = before + after;
 
     return (align === "<" ? negative + value + padding
           : align === ">" ? padding + negative + value
@@ -124,8 +131,7 @@ var d3_format_group = d3_identity;
 if (d3_format_grouping) {
   var d3_format_groupingLength = d3_format_grouping.length;
   d3_format_group = function(value) {
-    var i = value.lastIndexOf("."),
-        f = i >= 0 ? "." + value.substring(i + 1) : (i = value.length, ""),
+    var i = value.length,
         t = [],
         j = 0,
         g = d3_format_grouping[0];
@@ -133,6 +139,6 @@ if (d3_format_grouping) {
       t.push(value.substring(i -= g, i + g));
       g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];
     }
-    return t.reverse().join(d3_format_thousandsSeparator || "") + f;
+    return t.reverse().join(d3_format_thousandsSeparator);
   };
 }
