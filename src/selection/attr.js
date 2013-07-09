@@ -36,10 +36,10 @@ function d3_selection_attr(name, value) {
 
   // For attr(string, string), set the attribute with the specified name.
   function attrConstant() {
-    this.setAttribute(name, value);
+    d3_attr(this, name, value);
   }
   function attrConstantNS() {
-    this.setAttributeNS(name.space, name.local, value);
+    d3_attrNS(this, name.space, name.local, value);
   }
 
   // For attr(string, function), evaluate the function for each element, and set
@@ -47,12 +47,12 @@ function d3_selection_attr(name, value) {
   function attrFunction() {
     var x = value.apply(this, arguments);
     if (x == null) this.removeAttribute(name);
-    else this.setAttribute(name, x);
+    else d3_attr(this, name, x);
   }
   function attrFunctionNS() {
     var x = value.apply(this, arguments);
     if (x == null) this.removeAttributeNS(name.space, name.local);
-    else this.setAttributeNS(name.space, name.local, x);
+    else d3_attrNS(this, name.space, name.local, x);
   }
 
   return value == null

@@ -5,7 +5,7 @@ d3.transform = function(string) {
   var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
   return (d3.transform = function(string) {
     if (string != null) {
-      g.setAttribute("transform", string);
+      d3_attr(g, "transform", string);
       var t = g.transform.baseVal.consolidate();
     }
     return new d3_transform(t ? t.matrix : d3_transformIdentity);

@@ -5,19 +5,24 @@ d3 = function() {
   if (!Date.now) Date.now = function() {
     return +new Date();
   };
-  var d3_document = document, d3_documentElement = d3_document.documentElement, d3_window = window;
+  var d3_document = document, d3_documentElement = d3_document.documentElement, d3_window = window, d3_attr = function(element, name, value) {
+    element.setAttribute(name, value);
+  }, d3_attrNS = function(element, space, local, value) {
+    element.setAttributeNS(space, local, value);
+  }, d3_style = function(element, name, value, priority) {
+    element.style.setProperty(name, value, priority);
+  };
   try {
     d3_document.createElement("div").style.setProperty("opacity", 0, "");
   } catch (error) {
-    var d3_element_prototype = d3_window.Element.prototype, d3_element_setAttribute = d3_element_prototype.setAttribute, d3_element_setAttributeNS = d3_element_prototype.setAttributeNS, d3_style_prototype = d3_window.CSSStyleDeclaration.prototype, d3_style_setProperty = d3_style_prototype.setProperty;
-    d3_element_prototype.setAttribute = function(name, value) {
-      d3_element_setAttribute.call(this, name, value + "");
+    d3_attr = function(element, name, value) {
+      element.setAttribute(name, value + "");
     };
-    d3_element_prototype.setAttributeNS = function(space, local, value) {
-      d3_element_setAttributeNS.call(this, space, local, value + "");
+    d3_attrNS = function(element, space, local, value) {
+      element.setAttributeNS(space, local, value + "");
     };
-    d3_style_prototype.setProperty = function(name, value, priority) {
-      d3_style_setProperty.call(this, name, value + "", priority);
+    d3_style = function(element, name, value, priority) {
+      element.style.setProperty(name, value + "", priority);
     };
   }
   d3.ascending = function(a, b) {
@@ -570,18 +575,18 @@ d3 = function() {
       this.removeAttributeNS(name.space, name.local);
     }
     function attrConstant() {
-      this.setAttribute(name, value);
+      d3_attr(this, name, value);
     }
     function attrConstantNS() {
-      this.setAttributeNS(name.space, name.local, value);
+      d3_attrNS(this, name.space, name.local, value);
     }
     function attrFunction() {
       var x = value.apply(this, arguments);
-      if (x == null) this.removeAttribute(name); else this.setAttribute(name, x);
+      if (x == null) this.removeAttribute(name); else d3_attr(this, name, x);
     }
     function attrFunctionNS() {
       var x = value.apply(this, arguments);
-      if (x == null) this.removeAttributeNS(name.space, name.local); else this.setAttributeNS(name.space, name.local, x);
+      if (x == null) this.removeAttributeNS(name.space, name.local); else d3_attrNS(this, name.space, name.local, x);
     }
     return value == null ? name.local ? attrNullNS : attrNull : typeof value === "function" ? name.local ? attrFunctionNS : attrFunction : name.local ? attrConstantNS : attrConstant;
   }
@@ -652,11 +657,11 @@ d3 = function() {
       this.style.removeProperty(name);
     }
     function styleConstant() {
-      this.style.setProperty(name, value, priority);
+      d3_style(this, name, value, priority);
     }
     function styleFunction() {
       var x = value.apply(this, arguments);
-      if (x == null) this.style.removeProperty(name); else this.style.setProperty(name, x, priority);
+      if (x == null) this.style.removeProperty(name); else d3_style(this, name, x, priority);
     }
     return value == null ? styleNull : typeof value === "function" ? styleFunction : styleConstant;
   }
@@ -5184,7 +5189,7 @@ d3 = function() {
     var g = d3_document.createElementNS(d3.ns.prefix.svg, "g");
     return (d3.transform = function(string) {
       if (string != null) {
-        g.setAttribute("transform", string);
+        d3_attr(g, "transform", string);
         var t = g.transform.baseVal.consolidate();
       }
       return new d3_transform(t ? t.matrix : d3_transformIdentity);
@@ -7553,7 +7558,7 @@ d3 = function() {
       return b == null ? attrNull : (b += "", function() {
         var a = this.getAttribute(name), i;
         return a !== b && (i = interpolate(a, b), function(t) {
-          this.setAttribute(name, i(t));
+          d3_attr(this, name, i(t));
         });
       });
     }
@@ -7561,7 +7566,7 @@ d3 = function() {
       return b == null ? attrNullNS : (b += "", function() {
         var a = this.getAttributeNS(name.space, name.local), i;
         return a !== b && (i = interpolate(a, b), function(t) {
-          this.setAttributeNS(name.space, name.local, i(t));
+          d3_attrNS(this, name.space, name.local, i(t));
         });
       });
     }
@@ -7572,13 +7577,13 @@ d3 = function() {
     function attrTween(d, i) {
       var f = tween.call(this, d, i, this.getAttribute(name));
       return f && function(t) {
-        this.setAttribute(name, f(t));
+        d3_attr(this, name, f(t));
       };
     }
     function attrTweenNS(d, i) {
       var f = tween.call(this, d, i, this.getAttributeNS(name.space, name.local));
       return f && function(t) {
-        this.setAttributeNS(name.space, name.local, f(t));
+        d3_attrNS(name.space, name.local, f(t));
       };
     }
     return this.tween("attr." + nameNS, name.local ? attrTweenNS : attrTween);
@@ -7600,7 +7605,7 @@ d3 = function() {
       return b == null ? styleNull : (b += "", function() {
         var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
         return a !== b && (i = d3_interpolate(a, b), function(t) {
-          this.style.setProperty(name, i(t), priority);
+          d3_style(this, name, i(t), priority);
         });
       });
     }
@@ -7611,7 +7616,7 @@ d3 = function() {
     function styleTween(d, i) {
       var f = tween.call(this, d, i, d3_window.getComputedStyle(this, null).getPropertyValue(name));
       return f && function(t) {
-        this.style.setProperty(name, f(t), priority);
+        d3_style(this, name, f(t), priority);
       };
     }
     return this.tween("style." + name, styleTween);
