@@ -480,7 +480,7 @@ d3 = function() {
       return Sizzle(s, n)[0] || null;
     };
     d3_selectAll = function(s, n) {
-      return Sizzle.uniqueSort(Sizzle(s, n));
+      return Sizzle(s, n);
     };
     d3_selectMatches = Sizzle.matchesSelector;
   }
