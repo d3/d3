@@ -34,9 +34,9 @@ d3.behavior.drag = function() {
           eventId = id(),
           drag = eventId == null ? "drag" : "drag-" + eventId,
           origin_ = position(parent, eventId),
-          moved = 0,
+          dragged = 0,
           offset,
-          w = d3.select(d3_window).on(move + "." + drag, dragmove).on(end + "." + drag, dragend, true),
+          w = d3.select(d3_window).on(move + "." + drag, moved).on(end + "." + drag, ended),
           dragRestore = d3_event_dragSuppress(drag);
 
       if (origin) {
@@ -48,22 +48,22 @@ d3.behavior.drag = function() {
 
       event_({type: "dragstart"});
 
-      function dragmove() {
-        if (!parent) return dragend(); // target removed from DOM
+      function moved() {
+        if (!parent) return ended(); // target removed from DOM
 
         var p = position(parent, eventId),
             dx = p[0] - origin_[0],
             dy = p[1] - origin_[1];
 
-        moved |= dx | dy;
+        dragged |= dx | dy;
         origin_ = p;
 
         event_({type: "drag", x: p[0] + offset[0], y: p[1] + offset[1], dx: dx, dy: dy});
       }
 
-      function dragend() {
+      function ended() {
         w.on(move + "." + drag, null).on(end + "." + drag, null);
-        dragRestore(moved && d3.event.target === eventTarget);
+        dragRestore(dragged && d3.event.target === eventTarget);
         event_({type: "dragend"});
       }
     };
