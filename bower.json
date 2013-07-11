@@ -14,7 +14,6 @@
     "Makefile",
     "bin",
     "component.json",
-    "d3.min.js",
     "index-browserify.js",
     "index.js",
     "lib",
