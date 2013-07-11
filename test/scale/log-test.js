@@ -206,6 +206,30 @@ suite.addBatch({
           "1e+10"
         ]);
       },
+      "generates ticks that cover the domain": function(d3) {
+        var x = d3.scale.log().domain([.01, 10000]);
+        assert.deepEqual(x.ticks(20).map(x.tickFormat(20)), [
+          "1e-2", "2e-2", "3e-2", "", "", "", "", "", "",
+          "1e-1", "2e-1", "3e-1", "", "", "", "", "", "",
+          "1e+0", "2e+0", "3e+0", "", "", "", "", "", "",
+          "1e+1", "2e+1", "3e+1", "", "", "", "", "", "",
+          "1e+2", "2e+2", "3e+2", "", "", "", "", "", "",
+          "1e+3", "2e+3", "3e+3", "", "", "", "", "", "",
+          "1e+4"
+        ]);
+      },
+      "generates ticks that cover the niced domain": function(d3) {
+        var x = d3.scale.log().domain([.0124123, 1230.4]).nice();
+        assert.deepEqual(x.ticks(20).map(x.tickFormat(20)), [
+          "1e-2", "2e-2", "3e-2", "", "", "", "", "", "",
+          "1e-1", "2e-1", "3e-1", "", "", "", "", "", "",
+          "1e+0", "2e+0", "3e+0", "", "", "", "", "", "",
+          "1e+1", "2e+1", "3e+1", "", "", "", "", "", "",
+          "1e+2", "2e+2", "3e+2", "", "", "", "", "", "",
+          "1e+3", "2e+3", "3e+3", "", "", "", "", "", "",
+          "1e+4"
+        ]);
+      },
       "can override the tick format": function(d3) {
         var x = d3.scale.log().domain([1000.1, 1]);
         assert.deepEqual(x.ticks().map(x.tickFormat(10, d3.format("+,d"))), [
