@@ -44,13 +44,13 @@ function d3_scale_log(linear, base, positive, domain) {
   };
 
   scale.ticks = function() {
-    var extent = d3_scaleExtent(linear.domain()),
+    var extent = d3_scaleExtent(domain),
         ticks = [];
     if (extent.every(isFinite)) {
-      var i = Math.floor(extent[0]),
-          j = Math.ceil(extent[1]),
-          u = pow(extent[0]),
-          v = pow(extent[1]),
+      var i = Math.floor(log(extent[0])),
+          j = Math.ceil(log(extent[1])),
+          u = extent[0],
+          v = extent[1],
           n = base % 1 ? 2 : base;
       if (positive) {
         for (; i < j; i++) for (var k = 1; k < n; k++) ticks.push(Math.pow(base, i) * k);
