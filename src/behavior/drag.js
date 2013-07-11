@@ -37,7 +37,7 @@ d3.behavior.drag = function() {
           dragged = 0,
           offset,
           w = d3.select(d3_window).on(move + "." + drag, moved).on(end + "." + drag, ended),
-          dragRestore = d3_event_dragSuppress(drag);
+          dragRestore = d3_event_dragSuppress();
 
       if (origin) {
         offset = origin.apply(target, arguments);
