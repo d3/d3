@@ -6837,13 +6837,13 @@ d3 = function() {
     scale.ticks = function() {
       var extent = d3_scaleExtent(domain), ticks = [];
       if (extent.every(isFinite)) {
-        var i = Math.floor(log(extent[0])), j = Math.ceil(log(extent[1])), u = extent[0], v = extent[1], n = base % 1 ? 2 : base;
+        var u = extent[0], v = extent[1], i = Math.floor(log(u)), j = Math.ceil(log(v)), n = base % 1 ? 2 : base;
         if (positive) {
-          for (;i < j; i++) for (var k = 1; k < n; k++) ticks.push(Math.pow(base, i) * k);
-          ticks.push(Math.pow(base, i));
+          for (;i < j; i++) for (var k = 1; k < n; k++) ticks.push(pow(i) * k);
+          ticks.push(pow(i));
         } else {
-          ticks.push(-Math.pow(base, -i));
-          for (;i++ < j; ) for (var k = n - 1; k > 0; k--) ticks.push(-Math.pow(base, -i) * k);
+          ticks.push(pow(i));
+          for (;i++ < j; ) for (var k = n - 1; k > 0; k--) ticks.push(pow(i) * k);
         }
         for (i = 0; ticks[i] < u; i++) {}
         for (j = ticks.length; ticks[j - 1] > v; j--) {}
