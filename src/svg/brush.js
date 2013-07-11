@@ -101,7 +101,7 @@ d3.svg.brush = function() {
         resizingX = !/^(n|s)$/.test(resizing) && x,
         resizingY = !/^(e|w)$/.test(resizing) && y,
         dragging = eventTarget.classed("extent"),
-        dragRestore = d3_event_dragSuppress("brush"),
+        dragRestore = d3_event_dragSuppress(),
         center,
         origin = mouse(),
         offset;

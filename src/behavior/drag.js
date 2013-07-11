@@ -8,63 +8,65 @@ import "behavior";
 
 d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
-      origin = null;
+      origin = null,
+      mousedown = dragstart(d3_noop, d3.mouse, "mousemove", "mouseup"),
+      touchstart = dragstart(touchid, touchposition, "touchmove", "touchend");
 
   function drag() {
     this.on("mousedown.drag", mousedown)
-        .on("touchstart.drag", mousedown);
+        .on("touchstart.drag", touchstart);
   }
 
-  function mousedown() {
-    var target = this,
-        event_ = event.of(target, arguments),
-        eventTarget = d3.event.target,
-        touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null,
-        offset,
-        origin_ = point(),
-        moved = 0,
-        dragRestore = d3_event_dragSuppress(touchId != null ? "drag-" + touchId : "drag");
+  function touchid() {
+    return d3.event.changedTouches[0].identifier;
+  }
 
-    var w = d3.select(d3_window)
-        .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove)
-        .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
+  function touchposition(parent, id) {
+    return d3.touches(parent).filter(function(p) { return p.identifier === id; })[0];
+  }
 
-    if (origin) {
-      offset = origin.apply(target, arguments);
-      offset = [offset.x - origin_[0], offset.y - origin_[1]];
-    } else {
-      offset = [0, 0];
-    }
+  function dragstart(id, position, move, end) {
+    return function() {
+      var target = this,
+          parent = target.parentNode,
+          event_ = event.of(target, arguments),
+          eventTarget = d3.event.target,
+          eventId = id(),
+          drag = eventId == null ? "drag" : "drag-" + eventId,
+          origin_ = position(parent, eventId),
+          dragged = 0,
+          offset,
+          w = d3.select(d3_window).on(move + "." + drag, moved).on(end + "." + drag, ended),
+          dragRestore = d3_event_dragSuppress();
 
-    event_({type: "dragstart"});
+      if (origin) {
+        offset = origin.apply(target, arguments);
+        offset = [offset.x - origin_[0], offset.y - origin_[1]];
+      } else {
+        offset = [0, 0];
+      }
 
-    function point() {
-      var p = target.parentNode;
-      return touchId != null
-          ? d3.touches(p).filter(function(p) { return p.identifier === touchId; })[0]
-          : d3.mouse(p);
-    }
+      event_({type: "dragstart"});
 
-    function dragmove() {
-      if (!target.parentNode) return dragend(); // target removed from DOM
+      function moved() {
+        if (!parent) return ended(); // target removed from DOM
 
-      var p = point(),
-          dx = p[0] - origin_[0],
-          dy = p[1] - origin_[1];
+        var p = position(parent, eventId),
+            dx = p[0] - origin_[0],
+            dy = p[1] - origin_[1];
 
-      moved |= dx | dy;
-      origin_ = p;
+        dragged |= dx | dy;
+        origin_ = p;
 
-      event_({type: "drag", x: p[0] + offset[0], y: p[1] + offset[1], dx: dx, dy: dy});
-    }
+        event_({type: "drag", x: p[0] + offset[0], y: p[1] + offset[1], dx: dx, dy: dy});
+      }
 
-    function dragend() {
-      w .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null)
-        .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-
-      dragRestore(moved && d3.event.target === eventTarget);
-      event_({type: "dragend"});
-    }
+      function ended() {
+        w.on(move + "." + drag, null).on(end + "." + drag, null);
+        dragRestore(dragged && d3.event.target === eventTarget);
+        event_({type: "dragend"});
+      }
+    };
   }
 
   drag.origin = function(x) {
