@@ -1244,6 +1244,7 @@ d3 = function() {
           var p = touches[0], l = location(touches[0]);
           scaleTo(scale * 2);
           translateTo(p, l);
+          d3_eventPreventDefault();
           dispatch(event_);
         }
         touchtime = now;
