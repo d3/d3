@@ -1,3 +1,4 @@
+import "../color/rgb";
 import "ordinal";
 import "scale";
 
