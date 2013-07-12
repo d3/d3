@@ -306,6 +306,12 @@ suite.addBatch({
         assert.inDelta(x.domain(), [1, 1.5, 100], 1e-6);
         var x = d3.scale.log().domain([-123.1, -1.5, -.5]).nice();
         assert.inDelta(x.domain(), [-1000, -1.5, -.1], 1e-6);
+      },
+      "the niced domain is subsequently used by the scale": function(d3) {
+        var x = d3.scale.log().domain([1.5, 50]).nice();
+        assert.inDelta(x.domain(), [1, 100], 1e-6);
+        assert.inDelta(x(1), 0, 1e-6);
+        assert.inDelta(x(100), 1, 1e-6);
       }
     },
 
@@ -351,6 +357,19 @@ suite.addBatch({
         assert.inDelta(x(20), 1.30103, 1e-6);
         assert.inDelta(y(20), 1.30103, 1e-6);
         assert.isFalse(x.clamp());
+      },
+      "changes to nicing are isolated": function(d3) {
+        var x = d3.scale.log().domain([1.5, 50]), y = x.copy().nice();
+        assert.inDelta(x.domain(), [1.5, 50], 1e-6);
+        assert.inDelta(x(1.5), 0, 1e-6);
+        assert.inDelta(x(50), 1, 1e-6);
+        assert.inDelta(x.invert(0), 1.5, 1e-6);
+        assert.inDelta(x.invert(1), 50, 1e-6);
+        assert.inDelta(y.domain(), [1, 100], 1e-6);
+        assert.inDelta(y(1), 0, 1e-6);
+        assert.inDelta(y(100), 1, 1e-6);
+        assert.inDelta(y.invert(0), 1, 1e-6);
+        assert.inDelta(y.invert(1), 100, 1e-6);
       }
     }
   }

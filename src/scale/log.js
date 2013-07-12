@@ -35,11 +35,14 @@ function d3_scale_log(linear, base, positive, domain) {
   scale.base = function(_) {
     if (!arguments.length) return base;
     base = +_;
-    return scale.domain(domain);
+    linear.domain(domain.map(log));
+    return scale;
   };
 
   scale.nice = function() {
-    domain = d3_scale_nice(linear.domain(), positive ? Math : d3_scale_logNiceNegative).map(pow);
+    var niced = d3_scale_nice(domain.map(log), positive ? Math : d3_scale_logNiceNegative);
+    linear.domain(niced); // do not modify the linear scale’s domain in-place!
+    domain = niced.map(pow);
     return scale;
   };
 

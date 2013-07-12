@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.2.5"
+    version: "3.2.6"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -6836,10 +6836,13 @@ d3 = function() {
     scale.base = function(_) {
       if (!arguments.length) return base;
       base = +_;
-      return scale.domain(domain);
+      linear.domain(domain.map(log));
+      return scale;
     };
     scale.nice = function() {
-      domain = d3_scale_nice(linear.domain(), positive ? Math : d3_scale_logNiceNegative).map(pow);
+      var niced = d3_scale_nice(domain.map(log), positive ? Math : d3_scale_logNiceNegative);
+      linear.domain(niced);
+      domain = niced.map(pow);
       return scale;
     };
     scale.ticks = function() {
