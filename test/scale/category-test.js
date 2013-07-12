@@ -52,20 +52,18 @@ function category(category, n) {
       });
       assert.equal(count, x.range().length);
     },
-    "each range value is a hexadecimal color": function(scale) {
+    "each range value is a d3.rgb instance": function(scale) {
       var x = scale[category]();
       x.range().forEach(function(v) {
-        assert.match(v, /#[0-9a-f]{6}/);
-        v = _.rgb(v);
-        assert.isFalse(isNaN(v.r));
-        assert.isFalse(isNaN(v.g));
-        assert.isFalse(isNaN(v.b));
+        assert.ok(0 <= v.r && v.r <= 255);
+        assert.ok(0 <= v.g && v.g <= 255);
+        assert.ok(0 <= v.b && v.b <= 255);
       });
     },
     "no range values are very dark or very light": function(scale) {
       var x = scale[category]();
       x.range().forEach(function(v) {
-        var c = _.hsl(v);
+        var c = v.hsl();
         assert.isTrue(c.l >= .34, "expected " + v + " to be lighter (l = " + c.l + ")");
         assert.isTrue(c.l <= .89, "expected " + v + " to be darker (l = " + c.l + ")");
       });
