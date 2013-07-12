@@ -30,9 +30,9 @@ d3_rgbPrototype.brighter = function(k) {
       b = this.b,
       i = 30;
   if (!r && !g && !b) return d3_rgb(i, i, i);
-  if (r && r < i) r = i;
-  if (g && g < i) g = i;
-  if (b && b < i) b = i;
+  if (r < i) r = i;
+  if (g < i) g = i;
+  if (b < i) b = i;
   return d3_rgb(
       Math.min(255, Math.floor(r / k)),
       Math.min(255, Math.floor(g / k)),
