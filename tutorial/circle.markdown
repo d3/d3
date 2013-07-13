@@ -189,7 +189,7 @@ circle.attr("cx", function() {
 </script>
 
 If you run this example multiple times, you'll see that the attribute is
-recomputed as a number random number each time. Unlike Protovis, D3 doesn't
+recomputed as a random number each time. Unlike Protovis, D3 doesn't
 stash these functions internally; they are run once, immediately, and then your
 code continues. So you can run them again or redefine them however you like.
 
