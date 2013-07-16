@@ -807,6 +807,12 @@ d3 = function() {
     update.exit = function() {
       return exit;
     };
+    update.update = function(_) {
+      if (!arguments.length) return update;
+      exit.remove();
+      enter.append(_);
+      return update;
+    };
     return update;
   };
   function d3_selection_dataNode(data) {
