@@ -4,20 +4,18 @@ import "../core/vendor";
 var d3_timer_queueHead,
     d3_timer_queueTail,
     d3_timer_interval, // is an interval (or frame) active?
-    d3_timer_timeout; // is a timeout active?
+    d3_timer_timeout, // is a timeout active?
+    d3_timer_active, // active timer object
+    d3_timer_frame = d3_window[d3_vendorSymbol(d3_window, "requestAnimationFrame")] || function(callback) { setTimeout(callback, 17); };
 
 // The timer will continue to fire until callback returns true.
 d3.timer = function(callback, delay, then) {
-  if (arguments.length < 3) {
-    if (arguments.length < 2) delay = 0;
-    else if (!isFinite(delay)) return;
-    then = Date.now();
-  }
-
-  var time = then + delay;
+  var n = arguments.length;
+  if (n < 2) delay = 0;
+  if (n < 3) then = Date.now();
 
   // Add the callback to the tail of the queue.
-  var timer = {callback: callback, time: time, next: null};
+  var time = then + delay, timer = {callback: callback, time: time, next: null};
   if (d3_timer_queueTail) d3_timer_queueTail.next = timer;
   else d3_timer_queueHead = timer;
   d3_timer_queueTail = timer;
@@ -50,12 +48,20 @@ d3.timer.flush = function() {
   d3_timer_sweep();
 };
 
+function d3_timer_replace(callback, delay, then) {
+  var n = arguments.length;
+  if (n < 2) delay = 0;
+  if (n < 3) then = Date.now();
+  d3_timer_active.callback = callback;
+  d3_timer_active.time = then + delay;
+}
+
 function d3_timer_mark() {
-  var now = Date.now(),
-      timer = d3_timer_queueHead;
-  while (timer) {
-    if (now >= timer.time) timer.flush = timer.callback(now - timer.time);
-    timer = timer.next;
+  var now = Date.now();
+  d3_timer_active = d3_timer_queueHead;
+  while (d3_timer_active) {
+    if (now >= d3_timer_active.time) d3_timer_active.flush = d3_timer_active.callback(now - d3_timer_active.time);
+    d3_timer_active = d3_timer_active.next;
   }
   return now;
 }
@@ -77,6 +83,3 @@ function d3_timer_sweep() {
   d3_timer_queueTail = t0;
   return time;
 }
-
-var d3_timer_frame = d3_window[d3_vendorSymbol(d3_window, "requestAnimationFrame")]
-    || function(callback) { setTimeout(callback, 17); };

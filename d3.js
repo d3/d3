@@ -1881,14 +1881,14 @@ d3 = function() {
   };
   d3.csv = d3.dsv(",", "text/csv");
   d3.tsv = d3.dsv("	", "text/tab-separated-values");
-  var d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout;
+  var d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout, d3_timer_active, d3_timer_frame = d3_window[d3_vendorSymbol(d3_window, "requestAnimationFrame")] || function(callback) {
+    setTimeout(callback, 17);
+  };
   d3.timer = function(callback, delay, then) {
-    if (arguments.length < 3) {
-      if (arguments.length < 2) delay = 0; else if (!isFinite(delay)) return;
-      then = Date.now();
-    }
-    var time = then + delay;
-    var timer = {
+    var n = arguments.length;
+    if (n < 2) delay = 0;
+    if (n < 3) then = Date.now();
+    var time = then + delay, timer = {
       callback: callback,
       time: time,
       next: null
@@ -1918,11 +1918,19 @@ d3 = function() {
     d3_timer_mark();
     d3_timer_sweep();
   };
+  function d3_timer_replace(callback, delay, then) {
+    var n = arguments.length;
+    if (n < 2) delay = 0;
+    if (n < 3) then = Date.now();
+    d3_timer_active.callback = callback;
+    d3_timer_active.time = then + delay;
+  }
   function d3_timer_mark() {
-    var now = Date.now(), timer = d3_timer_queueHead;
-    while (timer) {
-      if (now >= timer.time) timer.flush = timer.callback(now - timer.time);
-      timer = timer.next;
+    var now = Date.now();
+    d3_timer_active = d3_timer_queueHead;
+    while (d3_timer_active) {
+      if (now >= d3_timer_active.time) d3_timer_active.flush = d3_timer_active.callback(now - d3_timer_active.time);
+      d3_timer_active = d3_timer_active.next;
     }
     return now;
   }
@@ -1939,9 +1947,6 @@ d3 = function() {
     d3_timer_queueTail = t0;
     return time;
   }
-  var d3_timer_frame = d3_window[d3_vendorSymbol(d3_window, "requestAnimationFrame")] || function(callback) {
-    setTimeout(callback, 17);
-  };
   var d3_format_decimalPoint = ".", d3_format_thousandsSeparator = ",", d3_format_grouping = [ 3, 3 ], d3_format_currencySymbol = "$";
   var d3_formatPrefixes = [ "y", "z", "a", "f", "p", "n", "µ", "m", "", "k", "M", "G", "T", "P", "E", "Z", "Y" ].map(d3_formatPrefix);
   d3.formatPrefix = function(value, precision) {
@@ -7701,7 +7706,7 @@ d3 = function() {
       ++lock.count;
       d3.timer(function(elapsed) {
         var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, tweened = [];
-        return delay <= elapsed ? start(elapsed) : d3.timer(start, delay, time), 1;
+        if (delay <= elapsed) start(elapsed); else d3_timer_replace(start, delay, time);
         function start(elapsed) {
           if (lock.active > id) return stop();
           lock.active = id;
@@ -7711,8 +7716,8 @@ d3 = function() {
               tweened.push(value);
             }
           });
-          if (!tick(elapsed)) d3.timer(tick, 0, time);
-          return 1;
+          if (tick(elapsed)) return 1;
+          d3_timer_replace(tick, 0, time);
         }
         function tick(elapsed) {
           if (lock.active !== id) return stop();
@@ -7731,7 +7736,6 @@ d3 = function() {
           return 1;
         }
       }, 0, time);
-      return transition;
     }
   }
   d3.svg.axis = function() {
