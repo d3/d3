@@ -1232,12 +1232,11 @@ d3 = function() {
       }
     }
     function touchstarted() {
-      var target = this, event_ = event.of(target, arguments), touches = d3.touches(target), now = Date.now(), name = "zoom-" + d3.event.changedTouches[0].identifier, touchmove = "touchmove." + name, touchend = "touchend." + name, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended).on(mousedown, null).on(mousemove, null), dragRestore = d3_event_dragSuppress();
+      var target = this, event_ = event.of(target, arguments), touches = d3.touches(target), now = Date.now(), name = "zoom-" + d3.event.changedTouches[0].identifier, touchmove = "touchmove." + name, touchend = "touchend." + name, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended).on(mousedown, null).on(mousemove, null), dragRestore = d3_event_dragSuppress(), locations = {};
       scale0 = scale;
-      translate0 = {};
       distance0 = 0;
       touches.forEach(function(t) {
-        translate0[t.identifier] = location(t);
+        locations[t.identifier] = location(t);
       });
       if (touches.length === 1) {
         if (now - touchtime < 500) {
@@ -1253,9 +1252,9 @@ d3 = function() {
         distance0 = dx * dx + dy * dy;
       }
       function moved() {
-        var touches = d3.touches(target), p0 = touches[0], l0 = translate0[p0.identifier];
+        var touches = d3.touches(target), p0 = touches[0], l0 = locations[p0.identifier];
         if (p1 = touches[1]) {
-          var p1, l1 = translate0[p1.identifier], scale1 = d3.event.scale;
+          var p1, l1 = locations[p1.identifier], scale1 = d3.event.scale;
           if (scale1 == null) {
             var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
             scale1 = distance0 && Math.sqrt(distance1 / distance0);
