@@ -1232,7 +1232,8 @@ d3 = function() {
       }
     }
     function touchstarted() {
-      var target = this, event_ = event.of(target, arguments), touches = d3.touches(target), now = Date.now(), name = "zoom-" + d3.event.changedTouches[0].identifier, touchmove = "touchmove." + name, touchend = "touchend." + name, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended).on(mousedown, null).on(mousemove, null), dragRestore = d3_event_dragSuppress();
+      var target = this, event_ = event.of(target, arguments), touches = d3.touches(target), now = Date.now(), name = "zoom-" + d3.event.changedTouches[0].identifier, touchmove = "touchmove." + name, touchend = "touchend." + name, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), dragRestore = d3_event_dragSuppress();
+      d3.select(target).on(mousedown, null).on(mousemove, null);
       scale0 = scale;
       translate0 = {};
       distance0 = 0;

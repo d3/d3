@@ -127,8 +127,10 @@ d3.behavior.zoom = function() {
         name = "zoom-" + d3.event.changedTouches[0].identifier,
         touchmove = "touchmove." + name,
         touchend = "touchend." + name,
-        w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended).on(mousedown, null).on(mousemove, null), // prevent duplicate events
+        w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended),
         dragRestore = d3_event_dragSuppress();
+
+    d3.select(target).on(mousedown, null).on(mousemove, null); // prevent duplicate events
 
     scale0 = scale;
     translate0 = {};
