@@ -1152,7 +1152,7 @@ d3 = function() {
     return d3.rebind(drag, event, "on");
   };
   d3.behavior.zoom = function() {
-    var translate = [ 0, 0 ], translate0, scale = 1, distance0, scale0, scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
+    var translate = [ 0, 0 ], translate0, scale = 1, scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1, touchtime;
     function zoom() {
       this.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on("touchstart.zoom", touchstarted);
     }
@@ -1232,13 +1232,9 @@ d3 = function() {
       }
     }
     function touchstarted() {
-      var target = this, event_ = event.of(target, arguments), touches = d3.touches(target), now = Date.now(), name = "zoom-" + d3.event.changedTouches[0].identifier, touchmove = "touchmove." + name, touchend = "touchend." + name, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), dragRestore = d3_event_dragSuppress();
-      d3.select(target).on(mousedown, null).on(mousemove, null);
-      scale0 = scale;
-      translate0 = {};
-      distance0 = 0;
+      var target = this, event_ = event.of(target, arguments), touches = d3.touches(target), locations = {}, distance0 = 0, scale0 = scale, now = Date.now(), name = "zoom-" + d3.event.changedTouches[0].identifier, touchmove = "touchmove." + name, touchend = "touchend." + name, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), t = d3.select(target).on(mousedown, null), dragRestore = d3_event_dragSuppress();
       touches.forEach(function(t) {
-        translate0[t.identifier] = location(t);
+        locations[t.identifier] = location(t);
       });
       if (touches.length === 1) {
         if (now - touchtime < 500) {
@@ -1254,9 +1250,9 @@ d3 = function() {
         distance0 = dx * dx + dy * dy;
       }
       function moved() {
-        var touches = d3.touches(target), p0 = touches[0], l0 = translate0[p0.identifier];
+        var touches = d3.touches(target), p0 = touches[0], l0 = locations[p0.identifier];
         if (p1 = touches[1]) {
-          var p1, l1 = translate0[p1.identifier], scale1 = d3.event.scale;
+          var p1, l1 = locations[p1.identifier], scale1 = d3.event.scale;
           if (scale1 == null) {
             var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
             scale1 = distance0 && Math.sqrt(distance1 / distance0);
@@ -1271,6 +1267,7 @@ d3 = function() {
       }
       function ended() {
         w.on(touchmove, null).on(touchend, null);
+        t.on(mousedown, mousedowned);
         dragRestore();
       }
     }
