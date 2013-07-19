@@ -66,19 +66,15 @@ module.exports = {
   "returns a new selection": function(span) {
     assert.isFalse(span.filter(function() { return 1; }) === span);
   },
-  "inherits the delay": function(t1) {
-    var t2 = t1.filter(function() { return 1; });
-    assert.equal(t2[0][0].__transition__[t2.id].delay, 100); // TODO should inherit the whole transition object
+  "works on empty selections": function(span) {
+    var none = function() { return false; },
+        empty = span.filter(none);
+    assert.isTrue(empty.empty());
+    assert.isTrue(empty.filter(none).empty());
   },
-  "inherits the duration": function(t1) {
-    var t2 = t1.filter(function() { return 1; });
-    assert.equal(t2[0][0].__transition__[t2.id].duration, 150);
-  },
-  "inherits easing": function(t1) {
-    // TODO how to test this?
-  },
-  "inherits the transition id": function(t1) {
+  "inherits the transition id and, by extension, all transition parameters": function(t1) {
     var t2 = t1.filter(function() { return 1; });
     assert.equal(t2.id, t1.id);
+    assert.strictEqual(t2[0][0].__transition__[t2.id], t1[0][0].__transition__[t1.id]);
   }
 };
