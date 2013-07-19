@@ -41,7 +41,7 @@ function d3_time_scale(linear, methods, format) {
           i = d3.bisect(d3_time_scaleSteps, target);
       if (i == d3_time_scaleSteps.length) return methods.year(extent, m);
       if (!i) return linear.ticks(m).map(d3_time_scaleDate);
-      if (Math.log(target / d3_time_scaleSteps[i - 1]) < Math.log(d3_time_scaleSteps[i] / target)) --i;
+      if (target / d3_time_scaleSteps[i - 1] < d3_time_scaleSteps[i] / target) --i;
       m = methods[i];
       k = m[1];
       m = m[0].range;
