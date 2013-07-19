@@ -15,9 +15,6 @@ function d3_interpolateHsl(a, b) {
   if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah;
   else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360; // shortest path
   return function(t) {
-    a.h = ah + bh * t;
-    a.s = as + bs * t;
-    a.l = al + bl * t;
-    return a;
+    return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
   };
 }
