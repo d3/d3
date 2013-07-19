@@ -11,8 +11,6 @@ d3.behavior.zoom = function() {
   var translate = [0, 0],
       translate0, // translate when we started zooming (to avoid drift)
       scale = 1,
-      distance0, // distance² between initial touches
-      scale0, // scale when we started touching
       scaleExtent = d3_behavior_zoomInfinity,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
@@ -123,17 +121,18 @@ d3.behavior.zoom = function() {
     var target = this,
         event_ = event.of(target, arguments),
         touches = d3.touches(target),
+        locations = {},
+        distance0 = 0, // distance² between initial touches
+        scale0 = scale, // scale when we started touching
         now = Date.now(),
         name = "zoom-" + d3.event.changedTouches[0].identifier,
         touchmove = "touchmove." + name,
         touchend = "touchend." + name,
-        w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended).on(mousedown, null).on(mousemove, null), // prevent duplicate events
+        w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended),
+        t = d3.select(target).on(mousedown, null), // prevent duplicate events
         dragRestore = d3_event_dragSuppress();
 
-    scale0 = scale;
-    translate0 = {};
-    distance0 = 0;
-    touches.forEach(function(t) { translate0[t.identifier] = location(t); });
+    touches.forEach(function(t) { locations[t.identifier] = location(t); });
 
     if (touches.length === 1) {
       if (now - touchtime < 500) { // dbltap
@@ -153,10 +152,10 @@ d3.behavior.zoom = function() {
     function moved() {
       var touches = d3.touches(target),
           p0 = touches[0],
-          l0 = translate0[p0.identifier];
+          l0 = locations[p0.identifier];
 
       if (p1 = touches[1]) {
-        var p1, l1 = translate0[p1.identifier],
+        var p1, l1 = locations[p1.identifier],
             scale1 = d3.event.scale;
         if (scale1 == null) {
           var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
@@ -174,6 +173,7 @@ d3.behavior.zoom = function() {
 
     function ended() {
       w.on(touchmove, null).on(touchend, null);
+      t.on(mousedown, mousedowned);
       dragRestore();
     }
   }
