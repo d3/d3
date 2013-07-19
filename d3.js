@@ -4927,10 +4927,7 @@ d3 = function() {
     b = d3.rgb(b);
     var ar = a.r, ag = a.g, ab = a.b, br = b.r - ar, bg = b.g - ag, bb = b.b - ab;
     return function(t) {
-      a.r = Math.round(ar + br * t);
-      a.g = Math.round(ag + bg * t);
-      a.b = Math.round(ab + bb * t);
-      return a;
+      return "#" + d3_rgb_hex(Math.round(ar + br * t)) + d3_rgb_hex(Math.round(ag + bg * t)) + d3_rgb_hex(Math.round(ab + bb * t));
     };
   }
   d3.interpolateObject = d3_interpolateObject;
@@ -5155,10 +5152,7 @@ d3 = function() {
     if (isNaN(bc)) bc = 0, ac = isNaN(ac) ? b.c : ac;
     if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
     return function(t) {
-      a.h = ah + bh * t;
-      a.c = ac + bc * t;
-      a.l = al + bl * t;
-      return a;
+      return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
     };
   }
   d3.interpolateHsl = d3_interpolateHsl;
@@ -5169,10 +5163,7 @@ d3 = function() {
     if (isNaN(bs)) bs = 0, as = isNaN(as) ? b.s : as;
     if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
     return function(t) {
-      a.h = ah + bh * t;
-      a.s = as + bs * t;
-      a.l = al + bl * t;
-      return a;
+      return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
     };
   }
   d3.interpolateLab = d3_interpolateLab;
@@ -5181,10 +5172,7 @@ d3 = function() {
     b = d3.lab(b);
     var al = a.l, aa = a.a, ab = a.b, bl = b.l - al, ba = b.a - aa, bb = b.b - ab;
     return function(t) {
-      a.l = al + bl * t;
-      a.a = aa + ba * t;
-      a.b = ab + bb * t;
-      return a;
+      return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
     };
   }
   d3.interpolateRound = d3_interpolateRound;

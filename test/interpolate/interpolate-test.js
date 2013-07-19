@@ -20,44 +20,38 @@ suite.addBatch({
     },
 
     "when b is a color string": {
-      "interpolates RGB values": function(d3) {
-        assert.rgbEqual(d3.interpolate("#ff0000", "#008000")(.4), 153, 51, 0);
+      "interpolates RGB values and returns a hexadecimal string": function(d3) {
+        assert.strictEqual(d3.interpolate("#ff0000", "#008000")(.4), "#993300");
       },
       "interpolates named colors in RGB": function(d3) {
-        assert.rgbEqual(d3.interpolate("red", "green")(.4), 153, 51, 0);
+        assert.strictEqual(d3.interpolate("red", "green")(.4), "#993300");
       },
       "interpolates decimal RGB colors in RGB": function(d3) {
-        assert.rgbEqual(d3.interpolate("rgb(255,0,0)", "rgb(0,128,0)")(.4), 153, 51, 0);
+        assert.strictEqual(d3.interpolate("rgb(255,0,0)", "rgb(0,128,0)")(.4), "#993300");
       },
       "interpolates decimal HSL colors in RGB": function(d3) {
-        assert.rgbEqual(d3.interpolate("hsl(0,100%,50%)", "hsl(120,100%,25%)")(.4), 153, 51, 0);
+        assert.strictEqual(d3.interpolate("hsl(0,100%,50%)", "hsl(120,100%,25%)")(.4), "#993300");
       },
       "coerces a to a color": function(d3) {
-        assert.rgbEqual(d3.interpolate({toString: function() { return "red"; }}, "green")(.4), 153, 51, 0);
-      },
-      "returns an instanceof d3.rgb": function(d3) {
-        assert.rgbEqual(d3.interpolate("steelblue", "#f00")(.2), 107, 104, 144);
+        assert.strictEqual(d3.interpolate({toString: function() { return "red"; }}, "green")(.4), "#993300");
       }
     },
 
     "when b is a color object": {
       "interpolates RGB values and returns a hexadecimal string": function(d3) {
-        assert.rgbEqual(d3.interpolate(d3.rgb(255, 0, 0), d3.rgb(0, 128, 0))(.4), 153, 51, 0);
+        assert.strictEqual(d3.interpolate(d3.rgb(255, 0, 0), d3.rgb(0, 128, 0))(.4), "#993300");
       },
       "interpolates d3.hsl in RGB": function(d3) {
-        assert.rgbEqual(d3.interpolate(d3.hsl("red"), d3.hsl("green"))(.4), 153, 51, 0);
+        assert.strictEqual(d3.interpolate(d3.hsl("red"), d3.hsl("green"))(.4), "#993300");
       },
       "interpolates d3.lab in RGB": function(d3) {
-        assert.rgbEqual(d3.interpolate(d3.lab("red"), d3.lab("green"))(.4), 153, 51, 0);
+        assert.strictEqual(d3.interpolate(d3.lab("red"), d3.lab("green"))(.4), "#993300");
       },
       "interpolates d3.hcl in RGB": function(d3) {
-        assert.rgbEqual(d3.interpolate(d3.hcl("red"), d3.hcl("green"))(.4), 153, 51, 0);
+        assert.strictEqual(d3.interpolate(d3.hcl("red"), d3.hcl("green"))(.4), "#993300");
       },
       "coerces a to a color": function(d3) {
-        assert.rgbEqual(d3.interpolate({toString: function() { return "red"; }}, "green")(.4), 153, 51, 0);
-      },
-      "returns an instanceof d3.rgb": function(d3) {
-        assert.rgbEqual(d3.interpolate(d3.rgb("steelblue"), d3.rgb("#f00"))(.2), 107, 104, 144);
+        assert.strictEqual(d3.interpolate({toString: function() { return "red"; }}, "green")(.4), "#993300");
       }
     },
 

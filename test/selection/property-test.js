@@ -77,14 +77,13 @@ suite.addBatch({
       },
       "sets a property as a number": function(div) {
         div.property("opacity", 0.4);
-        assert.strictEqual(div[0][0].opacity, 0.4);
-        assert.strictEqual(div[0][1].opacity, 0.4);
+        assert.equal(div[0][0].opacity, "0.4");
+        assert.equal(div[0][1].opacity, "0.4");
       },
       "sets a property as a function": function(div) {
-        var i = _.interpolateRgb("brown", "steelblue");
-        div.property("_color", function(d) { return d3.rgb(i(d)); }); // make a copy
-        assert.rgbEqual(div[0][0]._color, 165, 42, 42);
-        assert.rgbEqual(div[0][1]._color, 70, 130, 180);
+        div.property("bgcolor", _.interpolateRgb("brown", "steelblue"));
+        assert.equal(div[0][0].bgcolor, "#a52a2a");
+        assert.equal(div[0][1].bgcolor, "#4682b4");
       },
       "gets a property value": function(div) {
         div[0][0].bgcolor = "purple";

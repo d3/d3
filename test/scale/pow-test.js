@@ -74,9 +74,9 @@ suite.addBatch({
       },
       "can specify range values as arrays or objects": function(d3) {
         var x = d3.scale.pow().range([{color: "red"}, {color: "blue"}]);
-        assert.deepEqual(x(.5), {color: d3.rgb(128, 0, 128)});
+        assert.deepEqual(x(.5), {color: "#800080"});
         var x = d3.scale.pow().range([["red"], ["blue"]]);
-        assert.deepEqual(x(.5), [d3.rgb(128, 0, 128)]);
+        assert.deepEqual(x(.5), ["#800080"]);
       }
     },
 
@@ -120,11 +120,11 @@ suite.addBatch({
       "defaults to d3.interpolate": function(d3) {
         var x = d3.scale.pow().range(["red", "blue"]);
         assert.equal(x.interpolate(), d3.interpolate);
-        assert.rgbEqual(x(.5), 128, 0, 128);
+        assert.equal(x(.5), "#800080");
       },
       "can specify a custom interpolator": function(d3) {
         var x = d3.scale.pow().range(["red", "blue"]).interpolate(d3.interpolateHsl);
-        assert.hslEqual(x(.5), -60, 1, .5);
+        assert.equal(x(.5), "#ff00ff");
       }
     },
 
