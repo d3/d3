@@ -69,9 +69,8 @@ function d3_transitionNode(node, i, id, inherit) {
           duration = transition.duration,
           tweened = [];
 
-      return delay <= elapsed
-          ? start(elapsed)
-          : d3.timer(start, delay, time), 1;
+      if (delay <= elapsed) start(elapsed);
+      else d3_timer_replace(start, delay, time);
 
       function start(elapsed) {
         if (lock.active > id) return stop();
@@ -84,8 +83,8 @@ function d3_transitionNode(node, i, id, inherit) {
           }
         });
 
-        if (!tick(elapsed)) d3.timer(tick, 0, time);
-        return 1;
+        if (tick(elapsed)) return 1;
+        d3_timer_replace(tick, 0, time);
       }
 
       function tick(elapsed) {
@@ -112,7 +111,5 @@ function d3_transitionNode(node, i, id, inherit) {
         return 1;
       }
     }, 0, time);
-
-    return transition;
   }
 }
