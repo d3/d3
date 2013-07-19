@@ -69,8 +69,8 @@ function d3_transitionNode(node, i, id, inherit) {
           duration = transition.duration,
           tweened = [];
 
-      if (delay <= elapsed) start(elapsed);
-      else d3_timer_replace(start, delay, time);
+      if (delay <= elapsed) return start(elapsed);
+      d3_timer_replace(start, delay, time);
 
       function start(elapsed) {
         if (lock.active > id) return stop();

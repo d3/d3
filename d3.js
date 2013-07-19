@@ -7698,7 +7698,8 @@ d3 = function() {
       ++lock.count;
       d3.timer(function(elapsed) {
         var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, tweened = [];
-        if (delay <= elapsed) start(elapsed); else d3_timer_replace(start, delay, time);
+        if (delay <= elapsed) return start(elapsed);
+        d3_timer_replace(start, delay, time);
         function start(elapsed) {
           if (lock.active > id) return stop();
           lock.active = id;
