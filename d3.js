@@ -7513,7 +7513,7 @@ d3 = function() {
         }
       }
     }
-    return d3_transition(subgroups, this.id, this.time).ease(this.ease());
+    return d3_transition(subgroups, this.id);
   };
   d3_transitionPrototype.tween = function(name, tween) {
     var id = this.id;
