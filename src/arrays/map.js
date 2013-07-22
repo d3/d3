@@ -2,7 +2,7 @@ import "../core/class";
 
 d3.map = function(object) {
   var map = new d3_Map;
-  if (object && object.forEach) object.forEach(function(key, value) { map.set(key, value); });
+  if (object instanceof d3_Map) object.forEach(function(key, value) { map.set(key, value); });
   else for (var key in object) map.set(key, object[key]);
   return map;
 };
