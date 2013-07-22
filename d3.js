@@ -8800,5 +8800,17 @@ d3 = function() {
   d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
   });
+  var attrs = ['d', 'id', 'transform', 'x', 'y', 'fill', 'stroke', 'x1', 'x2',
+      'y1', 'y2', 'cx', 'cy', 'r', 'class', 'width', 'height', 'rx', 'ry'];
+
+  d3.selection.prototype.s = function(_) {return this.select(_)};
+  d3.selection.prototype.sa = function(_) {return this.selectAll(_)};
+
+  attrs.forEach(function(a, i) {
+    d3.selection.prototype[a] = function(_) {
+      if (!arguments.length) return this.attr(a);
+      return this.attr(a, _)
+    };
+  });
   return d3;
 }();
