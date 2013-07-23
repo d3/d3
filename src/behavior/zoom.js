@@ -15,19 +15,21 @@ d3.behavior.zoom = function() {
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
+      touchstart = "touchstart.zoom",
+      touchmove = "touchmove.zoom",
+      touchend = "touchend.zoom",
       event = d3_eventDispatch(zoom, "zoom"),
       x0,
       x1,
       y0,
-      y1,
-      touchtime; // time of last touchstart (to detect double-tap)
+      y1;
 
   function zoom() {
     this.on(mousedown, mousedowned)
         .on(d3_behavior_zoomWheel + ".zoom", mousewheeled)
         .on(mousemove, mousewheelreset)
         .on("dblclick.zoom", dblclicked)
-        .on("touchstart.zoom", touchstarted);
+        .on(touchstart, touchstarted);
   }
 
   zoom.translate = function(x) {
@@ -120,32 +122,37 @@ d3.behavior.zoom = function() {
   function touchstarted() {
     var target = this,
         event_ = event.of(target, arguments),
-        touches = d3.touches(target),
-        locations = {},
+        locations,
         distance0 = 0, // distance² between initial touches
-        scale0 = scale, // scale when we started touching
-        now = Date.now(),
-        touchmove = "touchmove.zoom",
-        touchend = "touchend.zoom",
+        scale0, // scale when we started touching
         w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended),
-        t = d3.select(target).on(mousedown, null), // prevent duplicate events
-        dragRestore = d3_event_dragSuppress();
+        t = d3.select(target).on(mousedown, null).on(touchstart, started), // prevent duplicate events
+        dragRestore = d3_event_dragSuppress(),
+        touchtime; // time of last touchstart (to detect double-tap)
 
-    touches.forEach(function(t) { locations[t.identifier] = location(t); });
+    started();
 
-    if (touches.length === 1) {
-      if (now - touchtime < 500) { // dbltap
-        var p = touches[0], l = location(touches[0]);
-        scaleTo(scale * 2);
-        translateTo(p, l);
-        d3_eventPreventDefault();
-        dispatch(event_);
+    function started() {
+      var now = Date.now(),
+          touches = d3.touches(target);
+      scale0 = scale;
+      locations = {};
+      touches.forEach(function(t) { locations[t.identifier] = location(t); });
+
+      if (touches.length === 1) {
+        if (now - touchtime < 500) { // dbltap
+          var p = touches[0], l = location(touches[0]);
+          scaleTo(scale * 2);
+          translateTo(p, l);
+          d3_eventPreventDefault();
+          dispatch(event_);
+        }
+        touchtime = now;
+      } else if (touches.length > 1) {
+        var p = touches[0], q = touches[1],
+            dx = p[0] - q[0], dy = p[1] - q[1];
+        distance0 = dx * dx + dy * dy;
       }
-      touchtime = now;
-    } else if (touches.length > 1) {
-      var p = touches[0], q = touches[1],
-          dx = p[0] - q[0], dy = p[1] - q[1];
-      distance0 = dx * dx + dy * dy;
     }
 
     function moved() {
@@ -171,9 +178,13 @@ d3.behavior.zoom = function() {
     }
 
     function ended() {
-      if (d3.event.touches.length) return;
+      if (d3.event.touches.length) {
+        touchtime = null;
+        started();
+        return;
+      }
       w.on(touchmove, null).on(touchend, null);
-      t.on(mousedown, mousedowned);
+      t.on(mousedown, mousedowned).on(touchstart, touchstarted);
       dragRestore();
     }
   }
