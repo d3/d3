@@ -8803,6 +8803,7 @@ d3 = function() {
   var attrs = ['d', 'id', 'transform', 'x', 'y', 'fill', 'stroke', 'x1', 'x2',
       'y1', 'y2', 'cx', 'cy', 'r', 'class', 'width', 'height', 'rx', 'ry'];
 
+  d3.sa = function(_) {return this.selectAll(_)};
   d3.selection.prototype.s = function(_) {return this.select(_)};
   d3.selection.prototype.sa = function(_) {return this.selectAll(_)};
 
