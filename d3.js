@@ -1232,7 +1232,7 @@ d3 = function() {
       }
     }
     function touchstarted() {
-      var target = this, event_ = event.of(target, arguments), touches = d3.touches(target), locations = {}, distance0 = 0, scale0 = scale, now = Date.now(), name = "zoom-" + d3.event.changedTouches[0].identifier, touchmove = "touchmove." + name, touchend = "touchend." + name, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), t = d3.select(target).on(mousedown, null), dragRestore = d3_event_dragSuppress();
+      var target = this, event_ = event.of(target, arguments), touches = d3.touches(target), locations = {}, distance0 = 0, scale0 = scale, now = Date.now(), touchmove = "touchmove.zoom", touchend = "touchend.zoom", w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), t = d3.select(target).on(mousedown, null), dragRestore = d3_event_dragSuppress();
       touches.forEach(function(t) {
         locations[t.identifier] = location(t);
       });
@@ -1266,6 +1266,7 @@ d3 = function() {
         dispatch(event_);
       }
       function ended() {
+        if (d3.event.touches.length) return;
         w.on(touchmove, null).on(touchend, null);
         t.on(mousedown, mousedowned);
         dragRestore();

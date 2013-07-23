@@ -125,9 +125,8 @@ d3.behavior.zoom = function() {
         distance0 = 0, // distance² between initial touches
         scale0 = scale, // scale when we started touching
         now = Date.now(),
-        name = "zoom-" + d3.event.changedTouches[0].identifier,
-        touchmove = "touchmove." + name,
-        touchend = "touchend." + name,
+        touchmove = "touchmove.zoom",
+        touchend = "touchend.zoom",
         w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended),
         t = d3.select(target).on(mousedown, null), // prevent duplicate events
         dragRestore = d3_event_dragSuppress();
@@ -172,6 +171,7 @@ d3.behavior.zoom = function() {
     }
 
     function ended() {
+      if (d3.event.touches.length) return;
       w.on(touchmove, null).on(touchend, null);
       t.on(mousedown, mousedowned);
       dragRestore();
