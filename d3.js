@@ -8800,7 +8800,7 @@ d3 = function() {
   d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
   });
-  var attrs = ['d', 'id', 'transform', 'x', 'y', 'fill', 'stroke', 'x1', 'x2',
+  var attrs = ['d', 'dx', 'dy', 'id', 'transform', 'x', 'y', 'fill', 'stroke', 'x1', 'x2',
       'y1', 'y2', 'cx', 'cy', 'r', 'class', 'width', 'height', 'rx', 'ry'];
 
   d3.sa = function(_) {return this.selectAll(_)};
