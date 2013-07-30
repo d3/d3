@@ -6,7 +6,7 @@ d3 = function() {
     return +new Date();
   };
   var d3_document = document, d3_documentElement = d3_document.documentElement, d3_window = window;
-  try {
+  try {a
     d3_document.createElement("div").style.setProperty("opacity", 0, "");
   } catch (error) {
     var d3_element_prototype = d3_window.Element.prototype, d3_element_setAttribute = d3_element_prototype.setAttribute, d3_element_setAttributeNS = d3_element_prototype.setAttributeNS, d3_style_prototype = d3_window.CSSStyleDeclaration.prototype, d3_style_setProperty = d3_style_prototype.setProperty;
@@ -993,7 +993,13 @@ d3 = function() {
     function onAdd() {
       var l = wrap(listener, d3_array(arguments));
       onRemove.call(this);
-      this.addEventListener(type, this[name] = l, l.$ = capture);
+      
+      if (this.addEventListener){
+        this.addEventListener(type, this[name] = l, l.$ = capture); 
+    	} else if (this.attachEvent){
+    		this.attachEvent('on'+type, this[name] = l);
+    	}
+      
       l._ = listener;
     }
     function removeAll() {
