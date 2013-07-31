@@ -41,6 +41,14 @@ suite.addBatch({
         var m = map(Object.create(null, {foo: {value: 42, enumerable: false}}));
         assert.isFalse(m.has("foo"));
         assert.isUndefined(m.get("foo"));
+      },
+      "map(map) copies the given map": function(map) {
+        var a = map({foo: 42}),
+            b = map(a);
+        assert.isTrue(b.has("foo"));
+        assert.equal(b.get("foo"), 42);
+        a.set("bar", true);
+        assert.isFalse(b.has("bar"));
       }
     },
     "forEach": {
