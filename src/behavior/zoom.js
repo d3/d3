@@ -119,6 +119,7 @@ d3.behavior.zoom = function() {
     }
   }
 
+  // These closures persist for as long as at least one touch is active.
   function touchstarted() {
     var target = this,
         event_ = event.of(target, arguments),
@@ -132,6 +133,7 @@ d3.behavior.zoom = function() {
 
     started();
 
+    // Temporarily override touchstart while gesture is active.
     function started() {
       var now = Date.now(),
           touches = d3.touches(target);
@@ -179,13 +181,15 @@ d3.behavior.zoom = function() {
 
     function ended() {
       if (d3.event.touches.length) {
+        // Prevent spurious dbltap.
         touchtime = null;
+        // Gesture is still active; recompute positions using new scale.
         started();
-        return;
+      } else {
+        w.on(touchmove, null).on(touchend, null);
+        t.on(mousedown, mousedowned).on(touchstart, touchstarted);
+        dragRestore();
       }
-      w.on(touchmove, null).on(touchend, null);
-      t.on(mousedown, mousedowned).on(touchstart, touchstarted);
-      dragRestore();
     }
   }
 

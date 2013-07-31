@@ -1275,11 +1275,11 @@ d3 = function() {
         if (d3.event.touches.length) {
           touchtime = null;
           started();
-          return;
+        } else {
+          w.on(touchmove, null).on(touchend, null);
+          t.on(mousedown, mousedowned).on(touchstart, touchstarted);
+          dragRestore();
         }
-        w.on(touchmove, null).on(touchend, null);
-        t.on(mousedown, mousedowned).on(touchstart, touchstarted);
-        dragRestore();
       }
     }
     function mousewheeled() {
