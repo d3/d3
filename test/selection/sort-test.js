@@ -44,18 +44,18 @@ suite.addBatch({
       "sorts null nodes at the end of the selection": function(span) {
         var nulls = 0;
         span[0][0].parentNode.removeChild(span[0][0]);
-        span[0][0] = null;
+        span[0][2].parentNode.removeChild(span[0][2]);
+        span[0][0] = span[0][2] = null;
         span.sort(function(a, b) { if ((a === null) || (b === null)) ++nulls; return a - b; });
         assert.equal(nulls, 0);
 
-        assert.isNull(span[0][3]);
+        assert.domNull(span[0][2]);
+        assert.domNull(span[0][3]);
         assert.domNull(span[0][0].previousSibling);
         assert.domEqual(span[0][1], span[0][0].nextSibling);
         assert.domEqual(span[0][0], span[0][1].previousSibling);
-        assert.domEqual(span[0][2], span[0][1].nextSibling);
-        assert.domEqual(span[0][1], span[0][2].previousSibling);
-        assert.domNull(span[0][2].nextSibling);
-        assert.deepEqual(span[0].slice(0, -1).map(data), [3, 10, 21]);
+        assert.domNull(span[0][1].nextSibling);
+        assert.deepEqual(span[0].slice(0, -2).map(data), [3, 21]);
 
         for (var i = 1; i < 4; ++i) {
           var d = span[i].parentNode.__data__;
