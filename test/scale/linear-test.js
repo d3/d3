@@ -196,6 +196,16 @@ suite.addBatch({
       }
     },
 
+    "tickFormat": {
+      "applies automatic precision when not explicitly specified": function(d3) {
+        var x = d3.scale.linear();
+        assert.strictEqual(x.tickFormat(10, "f")(Math.PI), "3.1")
+        assert.strictEqual(x.tickFormat(100, "f")(Math.PI), "3.14");
+        assert.strictEqual(x.tickFormat(100, "$f")(Math.PI), "$3.14");
+        assert.strictEqual(x.domain([0, 100]).tickFormat(100, "%")(Math.PI), "314%");
+      }
+    },
+
     "nice": {
       "nices the domain, extending it to round numbers": function(d3) {
         var x = d3.scale.linear().domain([1.1, 10.9]).nice();
