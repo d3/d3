@@ -1247,7 +1247,7 @@ d3 = function() {
         var now = Date.now(), touches = relocate();
         if (touches.length === 1) {
           if (now - touchtime < 500) {
-            var p = touches[0], l = location(touches[0]);
+            var p = touches[0], l = locations0[p.identifier];
             scaleTo(scale * 2);
             translateTo(p, l);
             d3_eventPreventDefault();
