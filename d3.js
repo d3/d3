@@ -131,7 +131,7 @@ d3 = function() {
     return array;
   };
   d3.permute = function(array, indexes) {
-    var i = indexes.length, permutes = Array(i);
+    var i = indexes.length, permutes = new Array(i);
     while (i--) permutes[i] = array[indexes[i]];
     return permutes;
   };
