@@ -21,10 +21,10 @@ d3 = function() {
     };
   }
   d3.ascending = function(a, b) {
-    return a < b ? -1 : a > b ? 1 : a >= b ? 0 : NaN;
+    return a < b ? -1 : a > b ? 1 : a === b ? 0 : NaN;
   };
   d3.descending = function(a, b) {
-    return b < a ? -1 : b > a ? 1 : b >= a ? 0 : NaN;
+    return b < a ? -1 : b > a ? 1 : b === a ? 0 : NaN;
   };
   d3.min = function(array, f) {
     var i = -1, n = array.length, a, b;
@@ -75,7 +75,7 @@ d3 = function() {
     return s;
   };
   function d3_number(x) {
-    return x != null && !isNaN(x);
+    return !(x == null || isNaN(x));
   }
   d3.mean = function(array, f) {
     var n = array.length, a, m = 0, i = -1, j = 0;
@@ -131,8 +131,8 @@ d3 = function() {
     return array;
   };
   d3.permute = function(array, indexes) {
-    var permutes = [], i = -1, n = indexes.length;
-    while (++i < n) permutes[i] = array[indexes[i]];
+    var i = indexes.length, permutes = Array(i);
+    while (i--) permutes[i] = array[indexes[i]];
     return permutes;
   };
   d3.zip = function() {
@@ -320,7 +320,7 @@ d3 = function() {
   };
   d3.set = function(array) {
     var set = new d3_Set();
-    if (array) for (var i = 0; i < array.length; i++) set.add(array[i]);
+    if (array) for (var i = 0, n = array.length; i < n; ++i) set.add(array[i]);
     return set;
   };
   function d3_Set() {}
@@ -374,8 +374,8 @@ d3 = function() {
   var d3_vendorPrefixes = [ "webkit", "ms", "moz", "Moz", "o", "O" ];
   var d3_array = d3_arraySlice;
   function d3_arrayCopy(pseudoarray) {
-    var i = -1, n = pseudoarray.length, array = [];
-    while (++i < n) array.push(pseudoarray[i]);
+    var i = pseudoarray.length, array = new Array(i);
+    while (i--) array[i] = pseudoarray[i];
     return array;
   }
   function d3_arraySlice(pseudoarray) {

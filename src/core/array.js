@@ -3,7 +3,7 @@ import "document";
 var d3_array = d3_arraySlice; // conversion for NodeLists
 
 function d3_arrayCopy(pseudoarray) {
-  var i  = pseudoarray.length, array = Array(i);
+  var i = pseudoarray.length, array = new Array(i);
   while (i--) array[i] = pseudoarray[i];
   return array;
 }
