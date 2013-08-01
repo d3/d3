@@ -15,19 +15,22 @@ d3.behavior.zoom = function() {
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
+      touchstart = "touchstart.zoom",
+      touchmove = "touchmove.zoom",
+      touchend = "touchend.zoom",
+      touchtime, // time of last touchstart (to detect double-tap)
       event = d3_eventDispatch(zoom, "zoom"),
       x0,
       x1,
       y0,
-      y1,
-      touchtime; // time of last touchstart (to detect double-tap)
+      y1;
 
   function zoom() {
     this.on(mousedown, mousedowned)
         .on(d3_behavior_zoomWheel + ".zoom", mousewheeled)
         .on(mousemove, mousewheelreset)
         .on("dblclick.zoom", dblclicked)
-        .on("touchstart.zoom", touchstarted);
+        .on(touchstart, touchstarted);
   }
 
   zoom.translate = function(x) {
@@ -117,45 +120,55 @@ d3.behavior.zoom = function() {
     }
   }
 
+  // These closures persist for as long as at least one touch is active.
   function touchstarted() {
     var target = this,
         event_ = event.of(target, arguments),
-        touches = d3.touches(target),
-        locations = {},
+        locations0, // touchstart locations
         distance0 = 0, // distance² between initial touches
-        scale0 = scale, // scale when we started touching
-        now = Date.now(),
-        name = "zoom-" + d3.event.changedTouches[0].identifier,
-        touchmove = "touchmove." + name,
-        touchend = "touchend." + name,
+        scale0, // scale when we started touching
         w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended),
-        t = d3.select(target).on(mousedown, null), // prevent duplicate events
+        t = d3.select(target).on(mousedown, null).on(touchstart, started), // prevent duplicate events
         dragRestore = d3_event_dragSuppress();
 
-    touches.forEach(function(t) { locations[t.identifier] = location(t); });
+    started();
 
-    if (touches.length === 1) {
-      if (now - touchtime < 500) { // dbltap
-        var p = touches[0], l = location(touches[0]);
-        scaleTo(scale * 2);
-        translateTo(p, l);
-        d3_eventPreventDefault();
-        dispatch(event_);
+    function relocate() {
+      var touches = d3.touches(target);
+      scale0 = scale;
+      locations0 = {};
+      touches.forEach(function(t) { locations0[t.identifier] = location(t); });
+      return touches;
+    }
+
+    // Temporarily override touchstart while gesture is active.
+    function started() {
+      var now = Date.now(),
+          touches = relocate();
+
+      if (touches.length === 1) {
+        if (now - touchtime < 500) { // dbltap
+          var p = touches[0], l = locations0[p.identifier];
+          scaleTo(scale * 2);
+          translateTo(p, l);
+          d3_eventPreventDefault();
+          dispatch(event_);
+        }
+        touchtime = now;
+      } else if (touches.length > 1) {
+        var p = touches[0], q = touches[1],
+            dx = p[0] - q[0], dy = p[1] - q[1];
+        distance0 = dx * dx + dy * dy;
       }
-      touchtime = now;
-    } else if (touches.length > 1) {
-      var p = touches[0], q = touches[1],
-          dx = p[0] - q[0], dy = p[1] - q[1];
-      distance0 = dx * dx + dy * dy;
     }
 
     function moved() {
       var touches = d3.touches(target),
           p0 = touches[0],
-          l0 = locations[p0.identifier];
+          l0 = locations0[p0.identifier];
 
       if (p1 = touches[1]) {
-        var p1, l1 = locations[p1.identifier],
+        var p1, l1 = locations0[p1.identifier],
             scale1 = d3.event.scale;
         if (scale1 == null) {
           var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
@@ -172,9 +185,13 @@ d3.behavior.zoom = function() {
     }
 
     function ended() {
-      w.on(touchmove, null).on(touchend, null);
-      t.on(mousedown, mousedowned);
-      dragRestore();
+      if (d3.event.touches.length) {
+        relocate(); // locations may have detached due to rotation
+      } else {
+        w.on(touchmove, null).on(touchend, null);
+        t.on(mousedown, mousedowned).on(touchstart, touchstarted);
+        dragRestore();
+      }
     }
   }
 
