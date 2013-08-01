@@ -6843,9 +6843,8 @@ d3 = function() {
       return scale;
     };
     scale.ticks = function() {
-      var extent = d3_scaleExtent(domain), ticks = [];
-      if (extent.every(isFinite)) {
-        var u = extent[0], v = extent[1], i = Math.floor(log(u)), j = Math.ceil(log(v)), n = base % 1 ? 2 : base;
+      var extent = d3_scaleExtent(domain), ticks = [], u = extent[0], v = extent[1], i = Math.floor(log(u)), j = Math.ceil(log(v)), n = base % 1 ? 2 : base;
+      if (isFinite(j - i)) {
         if (positive) {
           for (;i < j; i++) for (var k = 1; k < n; k++) ticks.push(pow(i) * k);
           ticks.push(pow(i));

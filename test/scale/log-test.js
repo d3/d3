@@ -247,6 +247,15 @@ suite.addBatch({
           "100", "200", "300", "", "", "", "", "", "",
           "1k"
         ]);
+      },
+      "generates empty ticks when the domain is degenerate": function(d3) {
+        var x = d3.scale.log();
+        assert.deepEqual(x.domain([0, 1]).ticks(), []);
+        assert.deepEqual(x.domain([1, 0]).ticks(), []);
+        assert.deepEqual(x.domain([0, -1]).ticks(), []);
+        assert.deepEqual(x.domain([-1, 0]).ticks(), []);
+        assert.deepEqual(x.domain([-1, 1]).ticks(), []);
+        assert.deepEqual(x.domain([0, 0]).ticks(), []);
       }
     },
 
