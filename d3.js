@@ -75,7 +75,7 @@ d3 = function() {
     return s;
   };
   function d3_number(x) {
-    return !(x == null || isNaN(x));
+    return x != null && !isNaN(x);
   }
   d3.mean = function(array, f) {
     var n = array.length, a, m = 0, i = -1, j = 0;
