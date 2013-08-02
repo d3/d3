@@ -172,6 +172,16 @@ suite.addBatch({
       }
     },
 
+    "tickFormat": {
+      "if count is not specified, defaults to 10": function(d3) {
+        var x = d3.scale.sqrt();
+        assert.strictEqual(x.tickFormat()(Math.PI), "3.1");
+        assert.strictEqual(x.tickFormat(1)(Math.PI), "3");
+        assert.strictEqual(x.tickFormat(10)(Math.PI), "3.1");
+        assert.strictEqual(x.tickFormat(100)(Math.PI), "3.14");
+      }
+    },
+
     "nice": {
       "can nice the domain, extending it to round numbers": function(d3) {
         var x = d3.scale.sqrt().domain([1.1, 10.9]).nice(), f = d3.format(".6f");

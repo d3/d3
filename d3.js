@@ -6801,13 +6801,10 @@ d3 = function() {
     return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
   }
   function d3_scale_linearNice(domain, m) {
-    return d3_scale_nice(domain, d3_scale_niceStep(m ? d3_scale_linearTickRange(domain, m)[2] : d3_scale_linearNiceStep(domain)));
-  }
-  function d3_scale_linearNiceStep(domain) {
-    var extent = d3_scaleExtent(domain), span = extent[1] - extent[0];
-    return Math.pow(10, Math.round(Math.log(span) / Math.LN10) - 1);
+    return d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
   }
   function d3_scale_linearTickRange(domain, m) {
+    if (m == null) m = 10;
     var extent = d3_scaleExtent(domain), span = extent[1] - extent[0], step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)), err = m / span * step;
     if (err <= .15) step *= 10; else if (err <= .35) step *= 5; else if (err <= .75) step *= 2;
     extent[0] = Math.ceil(extent[0] / step) * step;
