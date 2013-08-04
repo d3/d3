@@ -140,7 +140,7 @@ antialiasing; the 1-pixel white stroke is centered on the given location, so a
 half-pixel offset will fill the pixel exactly. If you are not the Martha Stewart
 type, and don't care for crisp edges, you may omit this step.
 
-Add the *y*-axis last, so that it appears on top of the bars:
+Add the *x*-axis last, so that it appears on top of the bars:
 
 {% highlight js linenos %}
 chart.append("line")
