@@ -3937,8 +3937,7 @@ d3 = function() {
     function identity(x) {
       return x;
     }
-    identity.invert = identity;
-    identity.stream = identity;
+    identity.invert = identity.stream = identity;
     identity.clipExtent = function(_) {
       if (!arguments.length) return clipExtent;
       clipExtent = _;

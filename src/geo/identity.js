@@ -5,8 +5,7 @@ d3.geo.identity = function() {
     return x;
   }
 
-  identity.invert = identity;
-
+  identity.invert =
   identity.stream = identity;
 
   identity.clipExtent = function(_) {
