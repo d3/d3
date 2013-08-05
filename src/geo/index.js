@@ -26,6 +26,7 @@ import "conic-equal-area";
 import "conic-equidistant";
 import "equirectangular";
 import "gnomonic";
+import "identity";
 import "mercator";
 import "orthographic";
 import "stereographic";
