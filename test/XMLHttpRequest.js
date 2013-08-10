@@ -8,9 +8,12 @@ global.XMLHttpRequest = function XMLHttpRequest() {
 
   // TODO handle file system errors?
 
+self.readyState = 0;
+
   self.open = function(m, u, a) {
     info.url = u;
     info.async = a;
+    self.readyState = 1;
     self.send = a ? read : readSync;
   };
 
@@ -19,6 +22,7 @@ global.XMLHttpRequest = function XMLHttpRequest() {
   };
 
   function read() {
+    self.readyState = 2;
     fs.readFile(info.url, "binary", function(e, d) {
       if (e) {
         self.status = 404; // assumed
@@ -35,6 +39,7 @@ global.XMLHttpRequest = function XMLHttpRequest() {
   }
 
   function readSync() {
+    self.readyState = 2;
     try {
       var d = fs.readFileSync(info.url, "binary");
       self.status = 200;
