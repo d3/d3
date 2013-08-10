@@ -153,24 +153,66 @@ suite.addBatch({
     "tickSize": {
       "defaults to six pixels": function(d3) {
         var a = d3.svg.axis();
-        assert.equal(a.tickSize(), 6);
+        assert.strictEqual(a.tickSize(), 6);
       },
       "can be defined as a number": function(d3) {
         var a = d3.svg.axis().tickSize(3);
-        assert.equal(a.tickSize(), 3);
-      },
-      "coerces input value to a number": function(d3) {
-        var a = d3.svg.axis().tickSize("3");
         assert.strictEqual(a.tickSize(), 3);
       },
-      "affects the generated domain path": function(d3) {
-        var a = d3.svg.axis().tickSize(3),
-            g = d3.select("body").html("").append("g").call(a),
-            path = g.select("path.domain");
-        assert.equal(path.attr("d"), "M0,3V0H1V3");
+      "coerces input values to numbers": function(d3) {
+        var a = d3.svg.axis().tickSize("3");
+        assert.strictEqual(a.tickSize(), 3);
+        assert.strictEqual(a.innerTickSize(), 3);
+        assert.strictEqual(a.outerTickSize(), 3);
+        a.tickSize("4", "5");
+        assert.strictEqual(a.tickSize(), 4);
+        assert.strictEqual(a.innerTickSize(), 4);
+        assert.strictEqual(a.outerTickSize(), 5);
+      },
+      "with no arguments, returns the inner tick size": function(d3) {
+        var a = d3.svg.axis().innerTickSize(10);
+        assert.strictEqual(a.tickSize(), 10);
+      },
+      "with one argument, specifies both the inner and outer tick size": function(d3) {
+        var a = d3.svg.axis().tickSize(10);
+        assert.strictEqual(a.innerTickSize(), 10);
+        assert.strictEqual(a.outerTickSize(), 10);
+      },
+      "with two arguments, specifies inner and outer tick sizes": function(d3) {
+        var a = d3.svg.axis().tickSize(2, 4);
+        assert.strictEqual(a.innerTickSize(), 2);
+        assert.strictEqual(a.outerTickSize(), 4);
+      },
+      "with three arguments (for backwards compatibility), specifies the inner and outer tick sizes": function(d3) {
+        var a = d3.svg.axis().tickSize(1, 2, 3);
+        assert.strictEqual(a.innerTickSize(), 1);
+        assert.strictEqual(a.outerTickSize(), 3);
+      }
+    },
+
+    "innerTickSize": {
+      "defaults to six pixels": function(d3) {
+        var a = d3.svg.axis();
+        assert.strictEqual(a.innerTickSize(), 6);
+      },
+      "can be defined as a number": function(d3) {
+        var a = d3.svg.axis().innerTickSize(3);
+        assert.strictEqual(a.innerTickSize(), 3);
+      },
+      "when changed, does not affect the outer tick size": function(d3) {
+        var a = d3.svg.axis().innerTickSize(3);
+        assert.strictEqual(a.outerTickSize(), 6);
+      },
+      "coerces the specified value to a number": function(d3) {
+        var a = d3.svg.axis().innerTickSize("3");
+        assert.strictEqual(a.innerTickSize(), 3);
+      },
+      "with no arguments, returns the outer tick size": function(d3) {
+        var a = d3.svg.axis().outerTickSize(10);
+        assert.strictEqual(a.outerTickSize(), 10);
       },
       "affects the generated tick lines": function(d3) {
-        var a = d3.svg.axis().tickSize(3),
+        var a = d3.svg.axis().innerTickSize(3),
             g = d3.select("body").html("").append("g").call(a),
             line = g.selectAll("g line");
         line.each(function() {
@@ -178,7 +220,7 @@ suite.addBatch({
         });
       },
       "if negative, labels are placed on the opposite end": function(d3) {
-        var a = d3.svg.axis().tickSize(-80),
+        var a = d3.svg.axis().innerTickSize(-80),
             g = d3.select("body").html("").append("g").call(a),
             line = g.selectAll("g line"),
             text = g.selectAll("g text");
@@ -188,16 +230,39 @@ suite.addBatch({
         text.each(function() {
           assert.equal(d3.select(this).attr("y"), 3);
         });
+      }
+    },
+
+    "outerTickSize": {
+      "defaults to six pixels": function(d3) {
+        var a = d3.svg.axis();
+        assert.strictEqual(a.outerTickSize(), 6);
       },
-      "with two arguments, specifies end tick size": function(d3) {
-        var a = d3.svg.axis().tickSize(6, 3),
+      "can be defined as a number": function(d3) {
+        var a = d3.svg.axis().outerTickSize(3);
+        assert.strictEqual(a.outerTickSize(), 3);
+      },
+      "when changed, does not affect the inner tick size": function(d3) {
+        var a = d3.svg.axis().outerTickSize(3);
+        assert.strictEqual(a.innerTickSize(), 6);
+      },
+      "coerces the specified value to a number": function(d3) {
+        var a = d3.svg.axis().outerTickSize("3");
+        assert.strictEqual(a.outerTickSize(), 3);
+      },
+      "with no arguments, returns the inner tick size": function(d3) {
+        var a = d3.svg.axis().innerTickSize(10);
+        assert.strictEqual(a.innerTickSize(), 10);
+      },
+      "affects the generated domain path": function(d3) {
+        var a = d3.svg.axis().tickSize(3),
             g = d3.select("body").html("").append("g").call(a),
-            path = g.selectAll("path");
+            path = g.select("path.domain");
         assert.equal(path.attr("d"), "M0,3V0H1V3");
       },
       "with three arguments, specifies end tick size and ignores minor tick size": function(d3) {
         var a = d3.svg.axis().tickSize(6, 3, 9),
-            g = d3.select("body").html("").append("svg:g").call(a),
+            g = d3.select("body").html("").append("g").call(a),
             path = g.selectAll("path");
         assert.equal(path.attr("d"), "M0,9V0H1V9");
       }
