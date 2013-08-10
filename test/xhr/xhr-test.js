@@ -6,11 +6,11 @@ var suite = vows.describe("d3.xhr");
 
 suite.addBatch({
   "xhr": {
-    topic: load("xhr/xhr").expression("d3.xhr").document(),
+    topic: load("xhr/xhr").document(),
 
     "on a sample text file": {
-      topic: function(d3_xhr) {
-        d3_xhr("test/data/sample.txt", this.callback);
+      topic: function(d3) {
+        d3.xhr("test/data/sample.txt", this.callback);
       },
       "makes an asynchronous HTTP request": function(req) {
         assert.equal(req._info.url, "test/data/sample.txt");
@@ -29,8 +29,8 @@ suite.addBatch({
     },
 
     "when a custom mime type is specified": {
-      topic: function(d3_xhr) {
-        d3_xhr("test/data/sample.txt", "text/plain", this.callback);
+      topic: function(d3) {
+        d3.xhr("test/data/sample.txt", "text/plain", this.callback);
       },
       "observes the optional mime type": function(req) {
         assert.equal(req._info.mimeType, "text/plain");
@@ -38,9 +38,9 @@ suite.addBatch({
     },
 
     "when a beforesend listener is specified": {
-      topic: function(d3_xhr) {
+      topic: function(d3) {
         var callback = this.callback;
-        var xhr = d3_xhr("test/data/sample.txt", "text/plain").on("beforesend", function(request) {
+        var xhr = d3.xhr("test/data/sample.txt", "text/plain").on("beforesend", function(request) {
           callback(null, {
             that: this,
             xhr: xhr,
@@ -63,9 +63,9 @@ suite.addBatch({
     },
 
     "on a file that does not exist": {
-      topic: function(d3_xhr) {
+      topic: function(d3) {
         var callback = this.callback;
-        d3_xhr("//does/not/exist.txt", function(error, req) {
+        d3.xhr("//does/not/exist.txt", function(error, req) {
           callback(null, req);
         });
       },
