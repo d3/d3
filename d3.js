@@ -7923,11 +7923,13 @@ d3 = function() {
     var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"), x = null, y = null, resizes = d3_svg_brushResizes[0], extent = [ [ 0, 0 ], [ 0, 0 ] ], clamp = [ true, true ], extentDomain;
     function brush(g) {
       g.each(function() {
-        var g = d3.select(this), bg = g.selectAll(".background").data([ 0 ]), fg = g.selectAll(".extent").data([ 0 ]), tz = g.selectAll(".resize").data(resizes, String), e;
-        g.style("pointer-events", "all").on("mousedown.brush", brushstart).on("touchstart.brush", brushstart);
-        bg.enter().append("rect").attr("class", "background").style("visibility", "hidden").style("cursor", "crosshair");
-        fg.enter().append("rect").attr("class", "extent").style("cursor", "move");
-        tz.enter().append("g").attr("class", function(d) {
+        var g = d3.select(this).style("pointer-events", "all").on("mousedown.brush", brushstart).on("touchstart.brush", brushstart);
+        var background = g.selectAll(".background").data([ 0 ]);
+        background.enter().append("rect").attr("class", "background").style("visibility", "hidden").style("cursor", "crosshair");
+        g.selectAll(".extent").data([ 0 ]).enter().append("rect").attr("class", "extent").style("cursor", "move");
+        var resize = g.selectAll(".resize").data(resizes, String);
+        resize.exit().remove();
+        resize.enter().append("g").attr("class", function(d) {
           return "resize " + d;
         }).style("cursor", function(d) {
           return d3_svg_brushCursor[d];
@@ -7936,19 +7938,19 @@ d3 = function() {
         }).attr("y", function(d) {
           return /^[ns]/.test(d) ? -3 : null;
         }).attr("width", 6).attr("height", 6).style("visibility", "hidden");
-        tz.style("display", brush.empty() ? "none" : null);
-        tz.exit().remove();
+        resize.style("display", brush.empty() ? "none" : null);
+        var gUpdate = d3.transition(g), backgroundUpdate = d3.transition(background), range;
         if (x) {
-          e = d3_scaleRange(x);
-          bg.attr("x", e[0]).attr("width", e[1] - e[0]);
-          redrawX(g);
+          range = d3_scaleRange(x);
+          backgroundUpdate.attr("x", range[0]).attr("width", range[1] - range[0]);
+          redrawX(gUpdate);
         }
         if (y) {
-          e = d3_scaleRange(y);
-          bg.attr("y", e[0]).attr("height", e[1] - e[0]);
-          redrawY(g);
+          range = d3_scaleRange(y);
+          backgroundUpdate.attr("y", range[0]).attr("height", range[1] - range[0]);
+          redrawY(gUpdate);
         }
-        redraw(g);
+        redraw(gUpdate);
       });
     }
     function redraw(g) {

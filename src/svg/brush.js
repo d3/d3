@@ -20,31 +20,37 @@ d3.svg.brush = function() {
 
   function brush(g) {
     g.each(function() {
-      var g = d3.select(this),
-          bg = g.selectAll(".background").data([0]),
-          fg = g.selectAll(".extent").data([0]),
-          tz = g.selectAll(".resize").data(resizes, String),
-          e;
 
       // Prepare the brush container for events.
-      g
+      var g = d3.select(this)
           .style("pointer-events", "all")
           .on("mousedown.brush", brushstart)
           .on("touchstart.brush", brushstart);
 
       // An invisible, mouseable area for starting a new brush.
-      bg.enter().append("rect")
+      var background = g.selectAll(".background")
+          .data([0]);
+
+      background.enter().append("rect")
           .attr("class", "background")
           .style("visibility", "hidden")
           .style("cursor", "crosshair");
 
       // The visible brush extent; style this as you like!
-      fg.enter().append("rect")
+      g.selectAll(".extent")
+          .data([0])
+        .enter().append("rect")
           .attr("class", "extent")
           .style("cursor", "move");
 
       // More invisible rects for resizing the extent.
-      tz.enter().append("g")
+      var resize = g.selectAll(".resize")
+          .data(resizes, String);
+
+      // Remove any superfluous resizers.
+      resize.exit().remove();
+
+      resize.enter().append("g")
           .attr("class", function(d) { return "resize " + d; })
           .style("cursor", function(d) { return d3_svg_brushCursor[d]; })
         .append("rect")
@@ -55,24 +61,26 @@ d3.svg.brush = function() {
           .style("visibility", "hidden");
 
       // Show or hide the resizers.
-      tz.style("display", brush.empty() ? "none" : null);
+      resize.style("display", brush.empty() ? "none" : null);
 
-      // Remove any superfluous resizers.
-      tz.exit().remove();
+      // When called on a transition, use a transition to update.
+      var gUpdate = d3.transition(g),
+          backgroundUpdate = d3.transition(background),
+          range;
 
       // Initialize the background to fill the defined range.
       // If the range isn't defined, you can post-process.
       if (x) {
-        e = d3_scaleRange(x);
-        bg.attr("x", e[0]).attr("width", e[1] - e[0]);
-        redrawX(g);
+        range = d3_scaleRange(x);
+        backgroundUpdate.attr("x", range[0]).attr("width", range[1] - range[0]);
+        redrawX(gUpdate);
       }
       if (y) {
-        e = d3_scaleRange(y);
-        bg.attr("y", e[0]).attr("height", e[1] - e[0]);
-        redrawY(g);
+        range = d3_scaleRange(y);
+        backgroundUpdate.attr("y", range[0]).attr("height", range[1] - range[0]);
+        redrawY(gUpdate);
       }
-      redraw(g);
+      redraw(gUpdate);
     });
   }
 
