@@ -7920,7 +7920,7 @@ d3 = function() {
     return subticks;
   }
   d3.svg.brush = function() {
-    var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"), x = null, y = null, resizes = d3_svg_brushResizes[0], extent = [ [ 0, 0 ], [ 0, 0 ] ], clamp = [ true, true ], extentDomain;
+    var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"), x = null, y = null, resizes = d3_svg_brushResizes[0], extent = [ [ 0, 0 ], [ 0, 0 ] ], extent0 = extent, clamp = [ true, true ], extentDomain;
     function brush(g) {
       g.each(function() {
         var g = d3.select(this).style("pointer-events", "all").on("mousedown.brush", brushstart).on("touchstart.brush", brushstart);
@@ -7952,6 +7952,47 @@ d3 = function() {
         }
         redraw(gUpdate);
       });
+      if (g instanceof d3.transition) {
+        var interpolate;
+        g.each(function() {
+          var event_ = event.of(this, arguments);
+          d3.select(this).transition().each("start", function() {
+            interpolate = d3_interpolateArray(extent0, extent);
+            extent0 = extent = interpolate(0);
+            extentDomain = null;
+            event_({
+              type: "brushstart"
+            });
+          }).tween("brush:brush", function() {
+            return function(t) {
+              extent = interpolate(t);
+              event_({
+                type: "brush",
+                mode: "resize"
+              });
+            };
+          }).each("end", function() {
+            event_({
+              type: "brushend"
+            });
+          });
+        });
+      } else {
+        extent0 = extent;
+        g.each(function() {
+          var event_ = event.of(this, arguments);
+          event_({
+            type: "brushstart"
+          });
+          event_({
+            type: "brush",
+            mode: "resize"
+          });
+          event_({
+            type: "brushend"
+          });
+        });
+      }
     }
     function redraw(g) {
       g.selectAll(".resize").attr("transform", function(d) {
@@ -8123,7 +8164,6 @@ d3 = function() {
         extentDomain[0][0] = x0, extentDomain[1][0] = x1;
         if (x.invert) x0 = x(x0), x1 = x(x1);
         if (x1 < x0) t = x0, x0 = x1, x1 = t;
-        extent[0][0] = x0 | 0, extent[1][0] = x1 | 0;
       }
       if (y) {
         y0 = z[0], y1 = z[1];
@@ -8131,8 +8171,8 @@ d3 = function() {
         extentDomain[0][1] = y0, extentDomain[1][1] = y1;
         if (y.invert) y0 = y(y0), y1 = y(y1);
         if (y1 < y0) t = y0, y0 = y1, y1 = t;
-        extent[0][1] = y0 | 0, extent[1][1] = y1 | 0;
       }
+      extent = [ [ x0 | 0, y0 | 0 ], [ x1 | 0, y1 | 0 ] ];
       return brush;
     };
     brush.clear = function() {
