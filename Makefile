@@ -32,7 +32,7 @@ d3.js: $(shell node_modules/.bin/smash --list src/d3.js) package.json
 	node_modules/.bin/smash src/d3.js | node_modules/.bin/uglifyjs - -b indent-level=2 -o $@
 	@chmod a-w $@
 
-d3.min.js: d3.js
+d3.min.js: d3.js bin/uglify
 	@rm -f $@
 	bin/uglify $< > $@
 

@@ -5,7 +5,7 @@ var fs = require("fs"),
 
 var filename = process.argv[2],
     toplevel = uglify.parse(fs.readFileSync(filename, "utf8"), {filename: filename}),
-    output = uglify.OutputStream(),
+    output = uglify.OutputStream({ascii_only: true}),
     compressor = uglify.Compressor(true),
     warn = uglify.AST_Node.warn;
 
