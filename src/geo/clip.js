@@ -15,6 +15,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
         clip.point = pointRing;
         clip.lineStart = ringStart;
         clip.lineEnd = ringEnd;
+        intersections = true; // assumed by default
         segments = [];
         polygon = [];
         listener.polygonStart();
@@ -23,11 +24,10 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
         clip.point = point;
         clip.lineStart = lineStart;
         clip.lineEnd = lineEnd;
-
         segments = d3.merge(segments);
         if (segments.length) {
           d3_geo_clipPolygon(segments, d3_geo_clipSort, null, interpolate, listener);
-        } else if (polygonContains(polygon)) {
+        } else if (intersections && polygonContains(polygon)) {
           listener.lineStart();
           interpolate(null, null, 1, listener);
           listener.lineEnd();
@@ -49,7 +49,8 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
     function lineStart() { clip.point = pointLine; line.lineStart(); }
     function lineEnd() { clip.point = point; line.lineEnd(); }
 
-    var segments;
+    var segments,
+        intersections;
 
     var buffer = d3_geo_clipBufferListener(),
         ringListener = clipLine(buffer),
@@ -90,6 +91,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
         listener.lineStart();
         while (++i < n) listener.point((point = segment[i])[0], point[1]);
         listener.lineEnd();
+        intersections = false;
         return;
       }
 
