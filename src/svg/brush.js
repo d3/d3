@@ -85,12 +85,19 @@ d3.svg.brush = function() {
     });
 
     if (g instanceof d3.transition) {
-      var interpolate;
       g.each(function() {
         var event_ = event.of(this, arguments);
         d3.select(this).transition()
-            .each("start", function() { interpolate = d3_interpolateArray(extent0, extent); extent0 = extent = interpolate(0); extentDomain = null; event_({type: "brushstart"}); })
-            .tween("brush:brush", function() { return function(t) { extent = interpolate(t); event_({type: "brush", mode: "resize"}); }; })
+            .tween("brush:brush", function() {
+              var interpolate = d3_interpolateArray(extent0, extent);
+              extentDomain = null;
+              extent0 = extent = interpolate(0);
+              event_({type: "brushstart"});
+              return function(t) {
+                interpolate(t);
+                event_({type: "brush", mode: "resize"});
+              };
+            })
             .each("end", function() { event_({type: "brushend"}); });
       });
     } else {

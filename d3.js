@@ -7953,19 +7953,17 @@ d3 = function() {
         redraw(gUpdate);
       });
       if (g instanceof d3.transition) {
-        var interpolate;
         g.each(function() {
           var event_ = event.of(this, arguments);
-          d3.select(this).transition().each("start", function() {
-            interpolate = d3_interpolateArray(extent0, extent);
+          d3.select(this).transition().tween("brush:brush", function() {
+            var interpolate = d3_interpolateArray(extent0, extent);
             extent0 = extent = interpolate(0);
             extentDomain = null;
             event_({
               type: "brushstart"
             });
-          }).tween("brush:brush", function() {
             return function(t) {
-              extent = interpolate(t);
+              interpolate(t);
               event_({
                 type: "brush",
                 mode: "resize"
