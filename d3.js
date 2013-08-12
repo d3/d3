@@ -8015,6 +8015,7 @@ d3 = function() {
       } else {
         w.on("mousemove.brush", brushmove).on("mouseup.brush", brushend);
       }
+      g.interrupt().selectAll("*").interrupt();
       if (dragging) {
         origin[0] = extent[0][0] - origin[0];
         origin[1] = extent[0][1] - origin[1];

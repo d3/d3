@@ -144,6 +144,9 @@ d3.svg.brush = function() {
       w.on("mousemove.brush", brushmove).on("mouseup.brush", brushend);
     }
 
+    // Interrupt the transition, if any.
+    g.interrupt().selectAll("*").interrupt();
+
     // If the extent was clicked on, drag rather than brush;
     // store the point between the mouse and extent origin instead.
     if (dragging) {
