@@ -91,7 +91,7 @@ d3.svg.brush = function() {
         d3.select(this).transition()
             .each("start", function() { interpolate = d3_interpolateArray(extent0, extent); extent0 = extent = interpolate(0); extentDomain = null; event_({type: "brushstart"}); })
             .tween("brush:brush", function() { return function(t) { extent = interpolate(t); event_({type: "brush", mode: "resize"}); }; })
-            .each("end", function() { event_({type: "brushend"}); })
+            .each("end", function() { event_({type: "brushend"}); });
       });
     } else {
       extent0 = extent;
@@ -367,22 +367,18 @@ d3.svg.brush = function() {
     }
 
     extent = [[x0 | 0, y0 | 0], [x1 | 0, y1 | 0]]; // copy-on-write
-
     return brush;
   };
 
   brush.clear = function() {
     extentDomain = null;
-    extent[0][0] =
-    extent[0][1] =
-    extent[1][0] =
-    extent[1][1] = 0;
+    extent = [[0, 0], [0, 0]]; // copy-on-write
     return brush;
   };
 
   brush.empty = function() {
-    return (x && extent[0][0] === extent[1][0])
-        || (y && extent[0][1] === extent[1][1]);
+    return x && extent[0][0] === extent[1][0]
+        || y && extent[0][1] === extent[1][1];
   };
 
   return d3.rebind(brush, event, "on");
