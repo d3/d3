@@ -7957,8 +7957,8 @@ d3 = function() {
           var event_ = event.of(this, arguments);
           d3.select(this).transition().tween("brush:brush", function() {
             var interpolate = d3_interpolateArray(extent0, extent);
-            extent0 = extent = interpolate(0);
             extentDomain = null;
+            extent0 = extent = interpolate(0);
             event_({
               type: "brushstart"
             });
@@ -7978,16 +7978,9 @@ d3 = function() {
       } else {
         extent0 = extent;
         g.each(function() {
-          var event_ = event.of(this, arguments);
-          event_({
-            type: "brushstart"
-          });
-          event_({
+          event.of(this, arguments)({
             type: "brush",
             mode: "resize"
-          });
-          event_({
-            type: "brushend"
           });
         });
       }

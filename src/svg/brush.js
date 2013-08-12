@@ -103,10 +103,7 @@ d3.svg.brush = function() {
     } else {
       extent0 = extent;
       g.each(function() {
-        var event_ = event.of(this, arguments);
-        event_({type: "brushstart"});
-        event_({type: "brush", mode: "resize"});
-        event_({type: "brushend"});
+        event.of(this, arguments)({type: "brush", mode: "resize"});
       });
     }
   }
