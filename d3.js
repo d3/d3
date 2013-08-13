@@ -1138,7 +1138,7 @@ d3 = function() {
     return d3.rebind(drag, event, "on");
   };
   d3.behavior.zoom = function() {
-    var translate = [ 0, 0 ], translate0, scale = 1, scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
+    var translate = [ 0, 0 ], translate0, center, scale = 1, scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
     function zoom() {
       this.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
     }
@@ -1157,6 +1157,11 @@ d3 = function() {
     zoom.scaleExtent = function(x) {
       if (!arguments.length) return scaleExtent;
       scaleExtent = x == null ? d3_behavior_zoomInfinity : x.map(Number);
+      return zoom;
+    };
+    zoom.center = function(_) {
+      if (!arguments.length) return center;
+      center = _ && _.map(Number);
       return zoom;
     };
     zoom.x = function(z) {
@@ -1293,9 +1298,10 @@ d3 = function() {
         zoomended(event_);
       }, 50);
       d3_eventPreventDefault();
-      if (!translate0) translate0 = location(d3.mouse(this));
+      var point = center || d3.mouse(this);
+      if (!translate0) translate0 = location(point);
       scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
-      translateTo(d3.mouse(this), translate0);
+      translateTo(point, translate0);
       zoomed(event_);
     }
     function mousewheelreset() {

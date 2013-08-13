@@ -10,6 +10,7 @@ import "behavior";
 d3.behavior.zoom = function() {
   var translate = [0, 0],
       translate0, // translate when we started zooming (to avoid drift)
+      center, // desired position of translate0 after zooming
       scale = 1,
       scaleExtent = d3_behavior_zoomInfinity,
       mousedown = "mousedown.zoom",
@@ -51,6 +52,12 @@ d3.behavior.zoom = function() {
   zoom.scaleExtent = function(x) {
     if (!arguments.length) return scaleExtent;
     scaleExtent = x == null ? d3_behavior_zoomInfinity : x.map(Number);
+    return zoom;
+  };
+
+  zoom.center = function(_) {
+    if (!arguments.length) return center;
+    center = _ && _.map(Number);
     return zoom;
   };
 
@@ -215,9 +222,10 @@ d3.behavior.zoom = function() {
     else zoomstarted(event_);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(event_); }, 50);
     d3_eventPreventDefault();
-    if (!translate0) translate0 = location(d3.mouse(this));
+    var point = center || d3.mouse(this);
+    if (!translate0) translate0 = location(point);
     scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
-    translateTo(d3.mouse(this), translate0);
+    translateTo(point, translate0);
     zoomed(event_);
   }
 
