@@ -1725,7 +1725,7 @@ d3 = function() {
     };
   }
   function d3_xhr(url, mimeType, response, callback) {
-    var xhr = {}, dispatch = d3.dispatch("progress", "load", "error"), headers = {}, request = new XMLHttpRequest(), responseType = null;
+    var xhr = {}, dispatch = d3.dispatch("beforesend", "progress", "load", "error"), headers = {}, request = new XMLHttpRequest(), responseType = null;
     if (d3_window.XDomainRequest && !("withCredentials" in request) && /^(http(s)?:)?\/\//.test(url)) request = new XDomainRequest();
     "onload" in request ? request.onload = request.onerror = respond : request.onreadystatechange = function() {
       request.readyState > 3 && respond();
@@ -1788,6 +1788,7 @@ d3 = function() {
       if (callback != null) xhr.on("error", callback).on("load", function(request) {
         callback(null, request);
       });
+      dispatch.beforesend.call(xhr, request);
       request.send(data == null ? null : data);
       return xhr;
     };

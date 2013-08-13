@@ -6,11 +6,11 @@ var suite = vows.describe("d3.xhr");
 
 suite.addBatch({
   "xhr": {
-    topic: load("xhr/xhr").expression("d3.xhr").document(),
+    topic: load("xhr/xhr").document(),
 
     "on a sample text file": {
-      topic: function(xhr) {
-        xhr("test/data/sample.txt", this.callback);
+      topic: function(d3) {
+        d3.xhr("test/data/sample.txt", this.callback);
       },
       "makes an asynchronous HTTP request": function(req) {
         assert.equal(req._info.url, "test/data/sample.txt");
@@ -29,18 +29,43 @@ suite.addBatch({
     },
 
     "when a custom mime type is specified": {
-      topic: function(xhr) {
-        xhr("test/data/sample.txt", "text/plain", this.callback);
+      topic: function(d3) {
+        d3.xhr("test/data/sample.txt", "text/plain", this.callback);
       },
       "observes the optional mime type": function(req) {
         assert.equal(req._info.mimeType, "text/plain");
       }
     },
 
-    "on a file that does not exist": {
-      topic: function(xhr) {
+    "when a beforesend listener is specified": {
+      topic: function(d3) {
         var callback = this.callback;
-        xhr("//does/not/exist.txt", function(error, req) {
+        var xhr = d3.xhr("test/data/sample.txt", "text/plain").on("beforesend", function(request) {
+          callback(null, {
+            that: this,
+            xhr: xhr,
+            readyState: request.readyState,
+            request: request
+          });
+        });
+        xhr.get();
+      },
+      "invokes the beforesend listener with the xhr object as the context": function(result) {
+        assert.equal(result.that, result.xhr);
+        assert.ok(result.xhr.get);
+      },
+      "invokes the beforesend listener with the underlying XMLHttpRequest as an argument": function(result) {
+        assert.instanceOf(result.request, XMLHttpRequest);
+      },
+      "invokes the beforesend listener after open and before send": function(result) {
+        assert.equal(result.readyState, 1);
+      }
+    },
+
+    "on a file that does not exist": {
+      topic: function(d3) {
+        var callback = this.callback;
+        d3.xhr("//does/not/exist.txt", function(error, req) {
           callback(null, req);
         });
       },
