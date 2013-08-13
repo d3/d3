@@ -60,7 +60,7 @@ function d3_geo_projectionMutator(projectAt) {
   projection.clipExtent = function(_) {
     if (!arguments.length) return clipExtent;
     clipExtent = _;
-    postclip = _ == null ? d3_identity : d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]);
+    postclip = _ ? d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
     return invalidate();
   };
 
@@ -103,10 +103,7 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   function invalidate() {
-    if (stream) {
-      stream.valid = false;
-      stream = null;
-    }
+    if (stream) stream.valid = false, stream = null;
     return projection;
   }
 

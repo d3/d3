@@ -3540,7 +3540,7 @@ d3 = function() {
     projection.clipExtent = function(_) {
       if (!arguments.length) return clipExtent;
       clipExtent = _;
-      postclip = _ == null ? d3_identity : d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]);
+      postclip = _ ? d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
       return invalidate();
     };
     projection.scale = function(_) {
@@ -3576,10 +3576,7 @@ d3 = function() {
       return invalidate();
     }
     function invalidate() {
-      if (stream) {
-        stream.valid = false;
-        stream = null;
-      }
+      if (stream) stream.valid = false, stream = null;
       return projection;
     }
     return function() {
@@ -3946,15 +3943,22 @@ d3 = function() {
     return d3_geo_projection(d3_geo_gnomonic);
   }).raw = d3_geo_gnomonic;
   d3.geo.identity = function() {
-    var clipExtent = null;
+    var clipExtent = null, clip = d3_identity, stream;
     function identity(x) {
       return x;
     }
-    identity.invert = identity.stream = identity;
+    identity.invert = d3_identity;
+    identity.stream = function(output) {
+      if (stream) stream.valid = false;
+      stream = clip(output);
+      stream.valid = true;
+      return stream;
+    };
     identity.clipExtent = function(_) {
       if (!arguments.length) return clipExtent;
       clipExtent = _;
-      identity.stream = _ == null ? identity : d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]);
+      clip = _ ? d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
+      if (stream) stream.valid = false, stream = null;
       return identity;
     };
     return identity;
