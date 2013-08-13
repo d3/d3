@@ -7975,12 +7975,19 @@ d3 = function() {
             });
           });
         });
-      } else {
+      } else if (extent0 !== extent) {
         extent0 = extent;
         g.each(function() {
-          event.of(this, arguments)({
+          var event_ = event.of(this, arguments);
+          event_({
+            type: "brushstart"
+          });
+          event_({
             type: "brush",
             mode: "resize"
+          });
+          event_({
+            type: "brushend"
           });
         });
       }
@@ -8128,7 +8135,7 @@ d3 = function() {
       return brush;
     };
     brush.extent = function(z) {
-      var x0, x1, y0, y1, t;
+      var x0, x1, y0, y1, t, dirty;
       if (!arguments.length) {
         z = extentDomain || extent;
         if (x) {
@@ -8156,6 +8163,7 @@ d3 = function() {
         extentDomain[0][0] = x0, extentDomain[1][0] = x1;
         if (x.invert) x0 = x(x0), x1 = x(x1);
         if (x1 < x0) t = x0, x0 = x1, x1 = t;
+        dirty |= x0 ^ extent[0][0] | x1 ^ extent[1][0];
       }
       if (y) {
         y0 = z[0], y1 = z[1];
@@ -8163,13 +8171,14 @@ d3 = function() {
         extentDomain[0][1] = y0, extentDomain[1][1] = y1;
         if (y.invert) y0 = y(y0), y1 = y(y1);
         if (y1 < y0) t = y0, y0 = y1, y1 = t;
+        dirty |= y0 ^ extent[0][1] | y1 ^ extent[1][1];
       }
-      extent = [ [ x0 | 0, y0 | 0 ], [ x1 | 0, y1 | 0 ] ];
+      if (dirty) extent = [ [ x0 | 0, y0 | 0 ], [ x1 | 0, y1 | 0 ] ];
       return brush;
     };
     brush.clear = function() {
       extentDomain = null;
-      extent = [ [ 0, 0 ], [ 0, 0 ] ];
+      if (!brush.empty()) extent = [ [ 0, 0 ], [ 0, 0 ] ];
       return brush;
     };
     brush.empty = function() {
