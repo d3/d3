@@ -3939,6 +3939,20 @@ d3 = function() {
   (d3.geo.gnomonic = function() {
     return d3_geo_projection(d3_geo_gnomonic);
   }).raw = d3_geo_gnomonic;
+  d3.geo.identity = function() {
+    var clipExtent = null;
+    function identity(x) {
+      return x;
+    }
+    identity.invert = identity.stream = identity;
+    identity.clipExtent = function(_) {
+      if (!arguments.length) return clipExtent;
+      clipExtent = _;
+      identity.stream = _ == null ? identity : d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]);
+      return identity;
+    };
+    return identity;
+  };
   function d3_geo_mercator(λ, φ) {
     return [ λ, Math.log(Math.tan(π / 4 + φ / 2)) ];
   }
