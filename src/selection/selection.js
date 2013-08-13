@@ -49,7 +49,6 @@ import "empty";
 import "node";
 import "size";
 import "enter";
-import "transition";
 
 // TODO fast singleton implementation?
 d3.select = function(node) {
