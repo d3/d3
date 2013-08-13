@@ -89,6 +89,24 @@ suite.addBatch({
         assert.strictEqual(extent[0], lo);
         assert.strictEqual(extent[1], hi);
       }
+    },
+
+    "empty": {
+      "returns true if and only if any defined extent is empty": function(brush) {
+        var b = brush();
+        assert.strictEqual(b.empty(), false); // x and y are undefined
+        var b = brush().x(_.scale.linear());
+        assert.strictEqual(b.empty(), true); // x is empty, y is undefined
+        assert.strictEqual(b.extent([0, 1]).empty(), false); // x is non-empty, y is undefined
+        var b = brush().y(_.scale.linear());
+        assert.strictEqual(b.empty(), true); // x is undefined, y is empty
+        assert.strictEqual(b.extent([0, 1]).empty(), false); // x is undefined, y is non-empty
+        var b = brush().x(_.scale.linear()).y(_.scale.linear());
+        assert.strictEqual(b.empty(), true); // x is empty, y is empty
+        assert.strictEqual(b.extent([[0, 0], [1, 0]]).empty(), true); // x is non-empty, y is empty
+        assert.strictEqual(b.extent([[0, 0], [0, 1]]).empty(), true); // x is empty, y is non-empty
+        assert.strictEqual(b.extent([[0, 0], [1, 1]]).empty(), false); // x is non-empty, y is non-empty
+      }
     }
   }
 });

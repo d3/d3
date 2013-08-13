@@ -13,11 +13,15 @@ d3.svg.brush = function() {
   var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"),
       x = null, // x-scale, optional
       y = null, // y-scale, optional
-      resizes = d3_svg_brushResizes[0],
-      extent = [[0, 0], [0, 0]], // [x0, y0], [x1, y1], in pixels (integers)
-      extent0 = extent, // previously-set extent for transitions
-      clamp = [true, true], // whether or not to clamp the extent to the range
-      extentDomain; // the extent in data space, lazily created
+      xExtent = [0, 0], // [x0, x1] in integer pixels
+      yExtent = [0, 0], // [y0, y1] in integer pixels
+      xExtent0 = xExtent, // previously-set x-extent
+      yExtent0 = yExtent, // previously-set y-extent
+      xExtentDomain, // x-extent in data space
+      yExtentDomain, // y-extent in data space
+      xClamp = true, // whether to clamp the x-extent to the range
+      yClamp = true, // whether to clamp the y-extent to the range
+      resizes = d3_svg_brushResizes[0];
 
   function brush(g) {
     g.each(function() {
@@ -90,14 +94,22 @@ d3.svg.brush = function() {
         d3.select(this).transition()
             .each("start.brush", function() { event_({type: "brushstart"}); })
             .tween("brush:brush", function() {
-              var interpolate = d3_interpolateArray(extent0, extent);
-              extentDomain = null, extent0 = extent = interpolate(0);
-              return function(t) { interpolate(t); event_({type: "brush", mode: "resize"}); };
+              var xi = d3_interpolateArray(xExtent0, xExtent),
+                  yi = d3_interpolateArray(yExtent0, yExtent);
+              xExtentDomain = yExtentDomain = null;
+              xExtent0 = xExtent = xi(0);
+              yExtent0 = yExtent = yi(0);
+              return function(t) {
+                xi(t);
+                yi(t);
+                event_({type: "brush", mode: "resize"});
+              };
             })
             .each("end.brush", function() { event_({type: "brushend"}); });
       });
-    } else if (extent0 !== extent) {
-      extent0 = extent;
+    } else if (xExtent0 !== xExtent || yExtent0 !== yExtent) {
+      xExtent0 = xExtent;
+      yExtent0 = yExtent;
       g.each(function() {
         var event_ = event.of(this, arguments);
         event_({type: "brushstart"});
@@ -109,18 +121,18 @@ d3.svg.brush = function() {
 
   function redraw(g) {
     g.selectAll(".resize").attr("transform", function(d) {
-      return "translate(" + extent[+/e$/.test(d)][0] + "," + extent[+/^s/.test(d)][1] + ")";
+      return "translate(" + xExtent[+/e$/.test(d)] + "," + yExtent[+/^s/.test(d)] + ")";
     });
   }
 
   function redrawX(g) {
-    g.select(".extent").attr("x", extent[0][0]);
-    g.selectAll(".extent,.n>rect,.s>rect").attr("width", extent[1][0] - extent[0][0]);
+    g.select(".extent").attr("x", xExtent[0]);
+    g.selectAll(".extent,.n>rect,.s>rect").attr("width", xExtent[1] - xExtent[0]);
   }
 
   function redrawY(g) {
-    g.select(".extent").attr("y", extent[0][1]);
-    g.selectAll(".extent,.e>rect,.w>rect").attr("height", extent[1][1] - extent[0][1]);
+    g.select(".extent").attr("y", yExtent[0]);
+    g.selectAll(".extent,.e>rect,.w>rect").attr("height", yExtent[1] - yExtent[0]);
   }
 
   function brushstart() {
@@ -153,8 +165,8 @@ d3.svg.brush = function() {
     // If the extent was clicked on, drag rather than brush;
     // store the point between the mouse and extent origin instead.
     if (dragging) {
-      origin[0] = extent[0][0] - origin[0];
-      origin[1] = extent[0][1] - origin[1];
+      origin[0] = xExtent[0] - origin[0];
+      origin[1] = yExtent[0] - origin[1];
     }
 
     // If a resizer was clicked on, record which side is to be resized.
@@ -162,9 +174,9 @@ d3.svg.brush = function() {
     else if (resizing) {
       var ex = +/w$/.test(resizing),
           ey = +/^n/.test(resizing);
-      offset = [extent[1 - ex][0] - origin[0], extent[1 - ey][1] - origin[1]];
-      origin[0] = extent[ex][0];
-      origin[1] = extent[ey][1];
+      offset = [xExtent[1 - ex] - origin[0], yExtent[1 - ey] - origin[1]];
+      origin[0] = xExtent[ex];
+      origin[1] = yExtent[ey];
     }
 
     // If the ALT key is down when starting a brush, the center is at the mouse.
@@ -187,8 +199,8 @@ d3.svg.brush = function() {
       if (d3.event.keyCode == 32) {
         if (!dragging) {
           center = null;
-          origin[0] -= extent[1][0];
-          origin[1] -= extent[1][1];
+          origin[0] -= xExtent[1];
+          origin[1] -= yExtent[1];
           dragging = 2;
         }
         d3_eventPreventDefault();
@@ -197,8 +209,8 @@ d3.svg.brush = function() {
 
     function keyup() {
       if (d3.event.keyCode == 32 && dragging == 2) {
-        origin[0] += extent[1][0];
-        origin[1] += extent[1][1];
+        origin[0] += xExtent[1];
+        origin[1] += yExtent[1];
         dragging = 0;
         d3_eventPreventDefault();
       }
@@ -218,11 +230,11 @@ d3.svg.brush = function() {
 
         // If needed, determine the center from the current extent.
         if (d3.event.altKey) {
-          if (!center) center = [(extent[0][0] + extent[1][0]) / 2, (extent[0][1] + extent[1][1]) / 2];
+          if (!center) center = [(xExtent[0] + xExtent[1]) / 2, (yExtent[0] + yExtent[1]) / 2];
 
           // Update the origin, for when the ALT key is released.
-          origin[0] = extent[+(point[0] < center[0])][0];
-          origin[1] = extent[+(point[1] < center[1])][1];
+          origin[0] = xExtent[+(point[0] < center[0])];
+          origin[1] = yExtent[+(point[1] < center[1])];
         }
 
         // When the ALT key is released, we clear the center.
@@ -251,7 +263,8 @@ d3.svg.brush = function() {
           r0 = range[0],
           r1 = range[1],
           position = origin[i],
-          size = extent[1][i] - extent[0][i],
+          extent = i ? yExtent : xExtent,
+          size = extent[1] - extent[0],
           min,
           max;
 
@@ -262,7 +275,7 @@ d3.svg.brush = function() {
       }
 
       // Clamp the point (unless clamp set to false) so that the extent fits within the range extent.
-      min = clamp[i] ? Math.max(r0, Math.min(r1, point[i])) : point[i];
+      min = (i ? yClamp : xClamp) ? Math.max(r0, Math.min(r1, point[i])) : point[i];
 
       // Compute the new extent bounds.
       if (dragging) {
@@ -282,10 +295,11 @@ d3.svg.brush = function() {
       }
 
       // Update the stored bounds.
-      if (extent[0][i] !== min || extent[1][i] !== max) {
-        extentDomain = null;
-        extent[0][i] = min;
-        extent[1][i] = max;
+      if (extent[0] ^ min | extent[1] ^ max) {
+        if (i) yExtentDomain = null;
+        else xExtentDomain = null;
+        extent[0] = min;
+        extent[1] = max;
         return true;
       }
     }
@@ -324,30 +338,32 @@ d3.svg.brush = function() {
   };
 
   brush.clamp = function(z) {
-    if (!arguments.length) return x && y ? clamp : x || y ? clamp[+!x] : null;
-    if (x && y) clamp = [!!z[0], !!z[1]];
-    else if (x || y) clamp[+!x] = !!z;
+    if (!arguments.length) return x && y ? [xClamp, yClamp] : x ? xClamp : y ? yClamp : null;
+    if (x && y) xClamp = !!z[0], yClamp = !!z[1];
+    else if (x) xClamp = !!z;
+    else if (y) yClamp = !!z;
     return brush;
   };
 
   brush.extent = function(z) {
-    var x0, x1, y0, y1, t, dirty;
+    var x0, x1, y0, y1, t;
 
     // Invert the pixel extent to data-space.
     if (!arguments.length) {
-      z = extentDomain || extent;
       if (x) {
-        x0 = z[0][0], x1 = z[1][0];
-        if (!extentDomain) {
-          x0 = extent[0][0], x1 = extent[1][0];
+        if (xExtentDomain) {
+          x0 = xExtentDomain[0], x1 = xExtentDomain[1];
+        } else {
+          x0 = xExtent[0], x1 = xExtent[1];
           if (x.invert) x0 = x.invert(x0), x1 = x.invert(x1);
           if (x1 < x0) t = x0, x0 = x1, x1 = t;
         }
       }
       if (y) {
-        y0 = z[0][1], y1 = z[1][1];
-        if (!extentDomain) {
-          y0 = extent[0][1], y1 = extent[1][1];
+        if (yExtentDomain) {
+          y0 = yExtentDomain[0], y1 = yExtentDomain[1];
+        } else {
+          y0 = yExtent[0], y1 = yExtent[1];
           if (y.invert) y0 = y.invert(y0), y1 = y.invert(y1);
           if (y1 < y0) t = y0, y0 = y1, y1 = t;
         }
@@ -356,37 +372,37 @@ d3.svg.brush = function() {
     }
 
     // Scale the data-space extent to pixels.
-    extentDomain = [[0, 0], [0, 0]];
     if (x) {
       x0 = z[0], x1 = z[1];
       if (y) x0 = x0[0], x1 = x1[0];
-      extentDomain[0][0] = x0, extentDomain[1][0] = x1;
+      xExtentDomain = [x0, x1];
       if (x.invert) x0 = x(x0), x1 = x(x1);
       if (x1 < x0) t = x0, x0 = x1, x1 = t;
-      dirty |= x0 ^ extent[0][0] | x1 ^ extent[1][0];
+      if (x0 ^ xExtent[0] | x1 ^ xExtent[1]) xExtent = [x0 | 0, x1 | 0]; // copy-on-write
     }
     if (y) {
       y0 = z[0], y1 = z[1];
       if (x) y0 = y0[1], y1 = y1[1];
-      extentDomain[0][1] = y0, extentDomain[1][1] = y1;
+      yExtentDomain = [y0, y1];
       if (y.invert) y0 = y(y0), y1 = y(y1);
       if (y1 < y0) t = y0, y0 = y1, y1 = t;
-      dirty |= y0 ^ extent[0][1] | y1 ^ extent[1][1];
+      if (y0 ^ yExtent[0] | y1 ^ yExtent[1]) yExtent = [y0 | 0, y1 | 0]; // copy-on-write
     }
 
-    if (dirty) extent = [[x0 | 0, y0 | 0], [x1 | 0, y1 | 0]]; // copy-on-write
     return brush;
   };
 
   brush.clear = function() {
-    extentDomain = null;
-    if (!brush.empty()) extent = [[0, 0], [0, 0]]; // copy-on-write
+    if (!brush.empty()) {
+      xExtent = [0, 0], yExtent = [0, 0]; // copy-on-write
+      xExtentDomain = yExtentDomain = null;
+    }
     return brush;
   };
 
   brush.empty = function() {
-    return x && extent[0][0] === extent[1][0]
-        || y && extent[0][1] === extent[1][1];
+    return !!x && xExtent[0] === xExtent[1]
+        || !!y && yExtent[0] === yExtent[1];
   };
 
   return d3.rebind(brush, event, "on");
