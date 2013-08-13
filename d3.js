@@ -7955,13 +7955,13 @@ d3 = function() {
       if (g instanceof d3.transition) {
         g.each(function() {
           var event_ = event.of(this, arguments);
-          d3.select(this).transition().tween("brush:brush", function() {
-            var interpolate = d3_interpolateArray(extent0, extent);
-            extentDomain = null;
-            extent0 = extent = interpolate(0);
+          d3.select(this).transition().each("start.brush", function() {
             event_({
               type: "brushstart"
             });
+          }).tween("brush:brush", function() {
+            var interpolate = d3_interpolateArray(extent0, extent);
+            extentDomain = null, extent0 = extent = interpolate(0);
             return function(t) {
               interpolate(t);
               event_({
@@ -7969,7 +7969,7 @@ d3 = function() {
                 mode: "resize"
               });
             };
-          }).each("end", function() {
+          }).each("end.brush", function() {
             event_({
               type: "brushend"
             });
