@@ -203,6 +203,13 @@ suite.addBatch({
         assert.strictEqual(x.tickFormat(100, "f")(Math.PI), "3.14");
         assert.strictEqual(x.tickFormat(100, "$f")(Math.PI), "$3.14");
         assert.strictEqual(x.domain([0, 100]).tickFormat(100, "%")(Math.PI), "314%");
+      },
+      "if count is not specified, defaults to 10": function(d3) {
+        var x = d3.scale.linear();
+        assert.strictEqual(x.tickFormat()(Math.PI), "3.1");
+        assert.strictEqual(x.tickFormat(1)(Math.PI), "3");
+        assert.strictEqual(x.tickFormat(10)(Math.PI), "3.1");
+        assert.strictEqual(x.tickFormat(100)(Math.PI), "3.14");
       }
     },
 
