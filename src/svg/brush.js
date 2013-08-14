@@ -89,7 +89,7 @@ d3.svg.brush = function() {
       // Dispatch events when the brush extent is set programmatically.
       var event_ = event.of(this, arguments),
           extent1 = {x: xExtent, y: yExtent, i: xExtentDomain, j: yExtentDomain},
-          extent0 = this.__chart__ || extent1;
+          extent0 = this.__chart__ || {x: [0, 0], y: [0, 0]};
       this.__chart__ = extent1;
 
       if (d3_transitionInheritId) {

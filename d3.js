@@ -7977,7 +7977,10 @@ d3 = function() {
           y: yExtent,
           i: xExtentDomain,
           j: yExtentDomain
-        }, extent0 = this.__chart__ || extent1;
+        }, extent0 = this.__chart__ || {
+          x: [ 0, 0 ],
+          y: [ 0, 0 ]
+        };
         this.__chart__ = extent1;
         if (d3_transitionInheritId) {
           gUpdate.each("start.brush", function() {
