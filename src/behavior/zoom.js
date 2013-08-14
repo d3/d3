@@ -8,10 +8,9 @@ import "../selection/selection";
 import "behavior";
 
 d3.behavior.zoom = function() {
-  var translate = [0, 0],
+  var view = {s: 1, t: [0, 0]},
       translate0, // translate when we started zooming (to avoid drift)
       center, // desired position of translate0 after zooming
-      scale = 1,
       scaleExtent = d3_behavior_zoomInfinity,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
@@ -27,24 +26,54 @@ d3.behavior.zoom = function() {
       y0,
       y1;
 
-  function zoom() {
-    this.on(mousedown, mousedowned)
+  function zoom(g) {
+    g   .on(mousedown, mousedowned)
         .on(d3_behavior_zoomWheel + ".zoom", mousewheeled)
         .on(mousemove, mousewheelreset)
         .on("dblclick.zoom", dblclicked)
         .on(touchstart, touchstarted);
   }
 
+  zoom.event = function(g) {
+    g.each(function() {
+      var event_ = event.of(this, arguments),
+          view1 = view,
+          view0 = this.__chart__ || {s: 1, t: [0, 0]};
+      this.__chart__ = view;
+      if (d3_transitionInheritId) {
+          d3.select(this).transition()
+              .each("start.zoom", function() {
+                view = view0; // pre-transition state
+                zoomstarted(event_);
+              })
+              .tween("zoom:zoom", function() {
+                var i = d3_interpolate(view, view1);
+                return function(t) {
+                  this.__chart__ = view = i(t); // transition and post-transition state
+                  zoomed(event_);
+                };
+              })
+              .each("end.zoom", function() {
+                zoomended(event_);
+              });
+      } else {
+        zoomstarted(event_);
+        zoomed(event_);
+        zoomended(event_);
+      }
+    });
+  }
+
   zoom.translate = function(x) {
-    if (!arguments.length) return translate;
-    translate = x.map(Number);
+    if (!arguments.length) return view.t;
+    view = {s: view.s, t: x.map(Number)}; // copy-on-write
     rescale();
     return zoom;
   };
 
   zoom.scale = function(x) {
-    if (!arguments.length) return scale;
-    scale = +x;
+    if (!arguments.length) return view.s;
+    view = {s: +x, t: view.t.slice()}; // copy-on-write
     rescale();
     return zoom;
   };
@@ -65,8 +94,7 @@ d3.behavior.zoom = function() {
     if (!arguments.length) return x1;
     x1 = z;
     x0 = z.copy();
-    translate = [0, 0];
-    scale = 1;
+    view = {s: 1, t: [0, 0]}; // copy-on-write
     return zoom;
   };
 
@@ -74,32 +102,31 @@ d3.behavior.zoom = function() {
     if (!arguments.length) return y1;
     y1 = z;
     y0 = z.copy();
-    translate = [0, 0];
-    scale = 1;
+    view = {s: 1, t: [0, 0]}; // copy-on-write
     return zoom;
   };
 
   function location(p) {
-    return [(p[0] - translate[0]) / scale, (p[1] - translate[1]) / scale];
+    return [(p[0] - view.t[0]) / view.s, (p[1] - view.t[1]) / view.s];
   }
 
   function point(l) {
-    return [l[0] * scale + translate[0], l[1] * scale + translate[1]];
+    return [l[0] * view.s + view.t[0], l[1] * view.s + view.t[1]];
   }
 
   function scaleTo(s) {
-    scale = Math.max(scaleExtent[0], Math.min(scaleExtent[1], s));
+    view.s = Math.max(scaleExtent[0], Math.min(scaleExtent[1], s));
   }
 
   function translateTo(p, l) {
     l = point(l);
-    translate[0] += p[0] - l[0];
-    translate[1] += p[1] - l[1];
+    view.t[0] += p[0] - l[0];
+    view.t[1] += p[1] - l[1];
   }
 
   function rescale() {
-    if (x1) x1.domain(x0.range().map(function(x) { return (x - translate[0]) / scale; }).map(x0.invert));
-    if (y1) y1.domain(y0.range().map(function(y) { return (y - translate[1]) / scale; }).map(y0.invert));
+    if (x1) x1.domain(x0.range().map(function(x) { return (x - view.t[0]) / view.s; }).map(x0.invert));
+    if (y1) y1.domain(y0.range().map(function(y) { return (y - view.t[1]) / view.s; }).map(y0.invert));
   }
 
   function zoomstarted(event) {
@@ -108,7 +135,7 @@ d3.behavior.zoom = function() {
 
   function zoomed(event) {
     rescale();
-    event({type: "zoom", scale: scale, translate: translate});
+    event({type: "zoom", scale: view.s, translate: view.t});
   }
 
   function zoomended(event) {
@@ -155,7 +182,7 @@ d3.behavior.zoom = function() {
 
     function relocate() {
       var touches = d3.touches(target);
-      scale0 = scale;
+      scale0 = view.s;
       locations0 = {};
       touches.forEach(function(t) { locations0[t.identifier] = location(t); });
       return touches;
@@ -169,7 +196,7 @@ d3.behavior.zoom = function() {
       if (touches.length === 1) {
         if (now - touchtime < 500) { // dbltap
           var p = touches[0], l = locations0[p.identifier];
-          scaleTo(scale * 2);
+          scaleTo(view.s * 2);
           translateTo(p, l);
           d3_eventPreventDefault();
           zoomed(event_);
@@ -224,7 +251,7 @@ d3.behavior.zoom = function() {
     d3_eventPreventDefault();
     var point = center || d3.mouse(this);
     if (!translate0) translate0 = location(point);
-    scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * scale);
+    scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.s);
     translateTo(point, translate0);
     zoomed(event_);
   }
@@ -237,7 +264,7 @@ d3.behavior.zoom = function() {
     var event_ = event.of(this, arguments),
         p = d3.mouse(this),
         l = location(p),
-        k = Math.log(scale) / Math.LN2;
+        k = Math.log(view.s) / Math.LN2;
     zoomstarted(event_);
     scaleTo(Math.pow(2, d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1));
     translateTo(p, l);
