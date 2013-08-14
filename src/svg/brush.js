@@ -29,6 +29,7 @@ d3.svg.brush = function() {
       // Prepare the brush container for events.
       var g = d3.select(this)
           .style("pointer-events", "all")
+          .style("-webkit-tap-highlight-color", "rgba(0,0,0,0)")
           .on("mousedown.brush", brushstart)
           .on("touchstart.brush", brushstart);
 
