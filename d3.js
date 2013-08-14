@@ -7941,7 +7941,7 @@ d3 = function() {
     });
   }
   d3.svg.brush = function() {
-    var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"), x = null, y = null, xExtent = [ 0, 0 ], yExtent = [ 0, 0 ], xExtent0 = xExtent, yExtent0 = yExtent, xExtentDomain, yExtentDomain, xClamp = true, yClamp = true, resizes = d3_svg_brushResizes[0];
+    var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"), x = null, y = null, xExtent = [ 0, 0 ], yExtent = [ 0, 0 ], xExtentDomain, yExtentDomain, xClamp = true, yClamp = true, resizes = d3_svg_brushResizes[0];
     function brush(g) {
       g.each(function() {
         var g = d3.select(this).style("pointer-events", "all").style("-webkit-tap-highlight-color", "rgba(0,0,0,0)").on("mousedown.brush", brushstart).on("touchstart.brush", brushstart);
@@ -7972,38 +7972,45 @@ d3 = function() {
           redrawY(gUpdate);
         }
         redraw(gUpdate);
-      });
-      if (g instanceof d3.transition) {
-        g.each(function() {
-          var event_ = event.of(this, arguments);
-          d3.select(this).transition().each("start.brush", function() {
+        var event_ = event.of(this, arguments), extent1 = {
+          x: xExtent,
+          y: yExtent,
+          i: xExtentDomain,
+          j: yExtentDomain
+        }, extent0 = this.__chart__ || extent1;
+        this.__chart__ = extent1;
+        if (d3_transitionInheritId) {
+          gUpdate.each("start.brush", function() {
+            xExtentDomain = extent0.i;
+            yExtentDomain = extent0.j;
+            xExtent = extent0.x;
+            yExtent = extent0.y;
             event_({
               type: "brushstart"
             });
           }).tween("brush:brush", function() {
-            var xi = d3_interpolateArray(xExtent0, xExtent), yi = d3_interpolateArray(yExtent0, yExtent);
+            var xi = d3_interpolateArray(xExtent, extent1.x), yi = d3_interpolateArray(yExtent, extent1.y);
             xExtentDomain = yExtentDomain = null;
-            xExtent0 = xExtent = xi(0);
-            yExtent0 = yExtent = yi(0);
             return function(t) {
-              xi(t);
-              yi(t);
+              xExtent = extent1.x = xi(t);
+              yExtent = extent1.y = yi(t);
               event_({
                 type: "brush",
                 mode: "resize"
               });
             };
           }).each("end.brush", function() {
+            xExtentDomain = extent1.i;
+            yExtentDomain = extent1.j;
+            event_({
+              type: "brush",
+              mode: "resize"
+            });
             event_({
               type: "brushend"
             });
           });
-        });
-      } else if (xExtent0 !== xExtent || yExtent0 !== yExtent) {
-        xExtent0 = xExtent;
-        yExtent0 = yExtent;
-        g.each(function() {
-          var event_ = event.of(this, arguments);
+        } else if (extent0.i !== extent1.i || extent0.j !== extent1.j) {
           event_({
             type: "brushstart"
           });
@@ -8014,8 +8021,8 @@ d3 = function() {
           event_({
             type: "brushend"
           });
-        });
-      }
+        }
+      });
     }
     function redraw(g) {
       g.selectAll(".resize").attr("transform", function(d) {
