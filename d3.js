@@ -1137,11 +1137,48 @@ d3 = function() {
     };
     return d3.rebind(drag, event, "on");
   };
+  var π = Math.PI, ε = 1e-6, ε2 = ε * ε, d3_radians = π / 180, d3_degrees = 180 / π;
+  function d3_sgn(x) {
+    return x > 0 ? 1 : x < 0 ? -1 : 0;
+  }
+  function d3_acos(x) {
+    return x > 1 ? 0 : x < -1 ? π : Math.acos(x);
+  }
+  function d3_asin(x) {
+    return x > 1 ? π / 2 : x < -1 ? -π / 2 : Math.asin(x);
+  }
+  function d3_sinh(x) {
+    return (Math.exp(x) - Math.exp(-x)) / 2;
+  }
+  function d3_cosh(x) {
+    return (Math.exp(x) + Math.exp(-x)) / 2;
+  }
+  function d3_tanh(x) {
+    return d3_sinh(x) / d3_cosh(x);
+  }
+  function d3_haversin(x) {
+    return (x = Math.sin(x / 2)) * x;
+  }
+  var ρ = Math.SQRT2, ρ2 = 2, ρ4 = 4;
+  d3.interpolateZoom = function(p0, p1) {
+    var ux0 = p0[0], uy0 = p0[1], w0 = p0[2], ux1 = p1[0], uy1 = p1[1], w1 = p1[2];
+    var dx = ux1 - ux0, dy = uy1 - uy0, d2 = dx * dx + dy * dy, d1 = Math.sqrt(d2), b0 = (w1 * w1 - w0 * w0 + ρ4 * d2) / (2 * w0 * ρ2 * d1), b1 = (w1 * w1 - w0 * w0 - ρ4 * d2) / (2 * w1 * ρ2 * d1), r0 = Math.log(Math.sqrt(b0 * b0 + 1) - b0), r1 = Math.log(Math.sqrt(b1 * b1 + 1) - b1), dr = r1 - r0, S = (dr || Math.log(w1 / w0)) / ρ;
+    function interpolate(t) {
+      var s = t * S;
+      if (dr) {
+        var coshr0 = d3_cosh(r0), u = w0 / (ρ2 * d1) * (coshr0 * d3_tanh(ρ * s + r0) - d3_sinh(r0));
+        return [ ux0 + u * dx, uy0 + u * dy, w0 * coshr0 / d3_cosh(ρ * s + r0) ];
+      }
+      return [ ux0 + t * dx, uy0 + t * dy, w0 * Math.exp(ρ * s) ];
+    }
+    interpolate.duration = S * 1e3;
+    return interpolate;
+  };
   d3.behavior.zoom = function() {
     var view = {
       s: 1,
       t: [ 0, 0 ]
-    }, translate0, center, scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
+    }, translate0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
     function zoom(g) {
       g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
     }
@@ -1157,9 +1194,13 @@ d3 = function() {
             view = view0;
             zoomstarted(event_);
           }).tween("zoom:zoom", function() {
-            var i = d3_interpolate(view, view1);
+            var dx = size[0], dy = size[1], cx = dx / 2, cy = dy / 2, i = d3.interpolateZoom([ (cx - view.t[0]) / view.s, (cy - view.t[1]) / view.s, dx / view.s ], [ (cx - view1.t[0]) / view1.s, (cy - view1.t[1]) / view1.s, dx / view1.s ]);
             return function(t) {
-              this.__chart__ = view = i(t);
+              var l = i(t), k = dx / l[2];
+              this.__chart__ = view = {
+                s: k,
+                t: [ cx - l[0] * k, cy - l[1] * k ]
+              };
               zoomed(event_);
             };
           }).each("end.zoom", function() {
@@ -1172,32 +1213,37 @@ d3 = function() {
         }
       });
     };
-    zoom.translate = function(x) {
+    zoom.translate = function(_) {
       if (!arguments.length) return view.t;
       view = {
         s: view.s,
-        t: x.map(Number)
+        t: [ +_[0], +_[1] ]
       };
       rescale();
       return zoom;
     };
-    zoom.scale = function(x) {
+    zoom.scale = function(_) {
       if (!arguments.length) return view.s;
       view = {
-        s: +x,
+        s: +_,
         t: view.t.slice()
       };
       rescale();
       return zoom;
     };
-    zoom.scaleExtent = function(x) {
+    zoom.scaleExtent = function(_) {
       if (!arguments.length) return scaleExtent;
-      scaleExtent = x == null ? d3_behavior_zoomInfinity : x.map(Number);
+      scaleExtent = _ == null ? d3_behavior_zoomInfinity : [ +_[0], +_[1] ];
       return zoom;
     };
     zoom.center = function(_) {
       if (!arguments.length) return center;
-      center = _ && _.map(Number);
+      center = _ && [ +_[0], +_[1] ];
+      return zoom;
+    };
+    zoom.size = function(_) {
+      if (!arguments.length) return size;
+      size = _ && [ +_[0], +_[1] ];
       return zoom;
     };
     zoom.x = function(z) {
@@ -1410,25 +1456,6 @@ d3 = function() {
       return Math.round(v(h) * 255);
     }
     return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
-  }
-  var π = Math.PI, ε = 1e-6, ε2 = ε * ε, d3_radians = π / 180, d3_degrees = 180 / π;
-  function d3_sgn(x) {
-    return x > 0 ? 1 : x < 0 ? -1 : 0;
-  }
-  function d3_acos(x) {
-    return x > 1 ? 0 : x < -1 ? π : Math.acos(x);
-  }
-  function d3_asin(x) {
-    return x > 1 ? π / 2 : x < -1 ? -π / 2 : Math.asin(x);
-  }
-  function d3_sinh(x) {
-    return (Math.exp(x) - Math.exp(-x)) / 2;
-  }
-  function d3_cosh(x) {
-    return (Math.exp(x) + Math.exp(-x)) / 2;
-  }
-  function d3_haversin(x) {
-    return (x = Math.sin(x / 2)) * x;
   }
   d3.hcl = function(h, c, l) {
     return arguments.length === 1 ? h instanceof d3_Hcl ? d3_hcl(h.h, h.c, h.l) : h instanceof d3_Lab ? d3_lab_hcl(h.l, h.a, h.b) : d3_lab_hcl((h = d3_rgb_lab((h = d3.rgb(h)).r, h.g, h.b)).l, h.a, h.b) : d3_hcl(+h, +c, +l);

@@ -11,3 +11,4 @@ import "round";
 import "string";
 import "transform";
 import "uninterpolate";
+import "zoom";

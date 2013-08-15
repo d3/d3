@@ -5,12 +5,14 @@ import "../event/event";
 import "../event/mouse";
 import "../event/touches";
 import "../selection/selection";
+import "../interpolate/zoom";
 import "behavior";
 
 d3.behavior.zoom = function() {
   var view = {s: 1, t: [0, 0]},
       translate0, // translate when we started zooming (to avoid drift)
       center, // desired position of translate0 after zooming
+      size = [960, 500], // viewport size; required for zoom interpolation
       scaleExtent = d3_behavior_zoomInfinity,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
@@ -47,9 +49,17 @@ d3.behavior.zoom = function() {
                 zoomstarted(event_);
               })
               .tween("zoom:zoom", function() {
-                var i = d3_interpolate(view, view1);
+                var dx = size[0],
+                    dy = size[1],
+                    cx = dx / 2,
+                    cy = dy / 2,
+                    i = d3.interpolateZoom(
+                      [(cx - view.t[0]) / view.s, (cy - view.t[1]) / view.s, dx / view.s],
+                      [(cx - view1.t[0]) / view1.s, (cy - view1.t[1]) / view1.s, dx / view1.s]
+                    );
                 return function(t) {
-                  this.__chart__ = view = i(t); // transition and post-transition state
+                  var l = i(t), k = dx / l[2];
+                  this.__chart__ = view = {s: k, t: [cx - l[0] * k, cy - l[1] * k]};
                   zoomed(event_);
                 };
               })
@@ -64,29 +74,35 @@ d3.behavior.zoom = function() {
     });
   }
 
-  zoom.translate = function(x) {
+  zoom.translate = function(_) {
     if (!arguments.length) return view.t;
-    view = {s: view.s, t: x.map(Number)}; // copy-on-write
+    view = {s: view.s, t: [+_[0], +_[1]]}; // copy-on-write
     rescale();
     return zoom;
   };
 
-  zoom.scale = function(x) {
+  zoom.scale = function(_) {
     if (!arguments.length) return view.s;
-    view = {s: +x, t: view.t.slice()}; // copy-on-write
+    view = {s: +_, t: view.t.slice()}; // copy-on-write
     rescale();
     return zoom;
   };
 
-  zoom.scaleExtent = function(x) {
+  zoom.scaleExtent = function(_) {
     if (!arguments.length) return scaleExtent;
-    scaleExtent = x == null ? d3_behavior_zoomInfinity : x.map(Number);
+    scaleExtent = _ == null ? d3_behavior_zoomInfinity : [+_[0], +_[1]];
     return zoom;
   };
 
   zoom.center = function(_) {
     if (!arguments.length) return center;
-    center = _ && _.map(Number);
+    center = _ && [+_[0], +_[1]];
+    return zoom;
+  };
+
+  zoom.size = function(_) {
+    if (!arguments.length) return size;
+    size = _ && [+_[0], +_[1]];
     return zoom;
   };
 
