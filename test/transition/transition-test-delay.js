@@ -25,18 +25,18 @@ module.exports = {
     assert.strictEqual(t[0][0].__transition__[t.id].delay, -250);
     assert.strictEqual(t[0][1].__transition__[t.id].delay, -250);
   },
-  "NaN delays are treated as 0ms": function(selection) {
-    var t = selection.transition().delay(NaN);
-    assert.strictEqual(t[0][0].__transition__[t.id].delay, 0);
-    assert.strictEqual(t[0][1].__transition__[t.id].delay, 0);
+  "delay is coerced to a number": function(selection) {
+    var t = selection.transition().delay("520");
+    assert.strictEqual(t[0][0].__transition__[t.id].delay, 520);
+    assert.strictEqual(t[0][1].__transition__[t.id].delay, 520);
   },
-  "floating-point durations are floored to integers": function(selection) {
+  "floating-point durations are not floored to integers": function(selection) {
     var t = selection.transition().delay(14.6);
-    assert.strictEqual(t[0][0].__transition__[t.id].delay, 14);
-    assert.strictEqual(t[0][1].__transition__[t.id].delay, 14);
+    assert.strictEqual(t[0][0].__transition__[t.id].delay, 14.6);
+    assert.strictEqual(t[0][1].__transition__[t.id].delay, 14.6);
     var t = selection.transition().delay("16.99");
-    assert.strictEqual(t[0][0].__transition__[t.id].delay, 16);
-    assert.strictEqual(t[0][1].__transition__[t.id].delay, 16);
+    assert.strictEqual(t[0][0].__transition__[t.id].delay, 16.99);
+    assert.strictEqual(t[0][1].__transition__[t.id].delay, 16.99);
   },
   "can specify delay as a function": function(selection) {
     var dd = [], ii = [], tt = [], t = selection.transition().delay(f);

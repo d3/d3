@@ -20,11 +20,8 @@ module.exports = {
     assert.strictEqual(t[0][0].__transition__[t.id].duration, 50);
     assert.strictEqual(t[0][1].__transition__[t.id].duration, 50);
   },
-  "NaN, zero, or negative durations are treated as 1ms": function(selection) {
-    var t = selection.transition().duration(NaN);
-    assert.strictEqual(t[0][0].__transition__[t.id].duration, 1);
-    assert.strictEqual(t[0][1].__transition__[t.id].duration, 1);
-    t.duration(0);
+  "zero or negative durations are treated as 1ms": function(selection) {
+    var t = selection.transition().duration(0);
     assert.strictEqual(t[0][0].__transition__[t.id].duration, 1);
     assert.strictEqual(t[0][1].__transition__[t.id].duration, 1);
     t.duration(-10);
@@ -34,13 +31,18 @@ module.exports = {
     assert.strictEqual(t[0][0].__transition__[t.id].duration, 1);
     assert.strictEqual(t[0][1].__transition__[t.id].duration, 1);
   },
-  "floating-point durations are floored to integers": function(selection) {
+  "duration is coerced to a number": function(selection) {
+    var t = selection.transition().duration("520");
+    assert.strictEqual(t[0][0].__transition__[t.id].duration, 520);
+    assert.strictEqual(t[0][1].__transition__[t.id].duration, 520);
+  },
+  "floating-point durations are not floored to integers": function(selection) {
     var t = selection.transition().duration(14.6);
-    assert.strictEqual(t[0][0].__transition__[t.id].duration, 14);
-    assert.strictEqual(t[0][1].__transition__[t.id].duration, 14);
+    assert.strictEqual(t[0][0].__transition__[t.id].duration, 14.6);
+    assert.strictEqual(t[0][1].__transition__[t.id].duration, 14.6);
     var t = selection.transition().duration("16.99");
-    assert.strictEqual(t[0][0].__transition__[t.id].duration, 16);
-    assert.strictEqual(t[0][1].__transition__[t.id].duration, 16);
+    assert.strictEqual(t[0][0].__transition__[t.id].duration, 16.99);
+    assert.strictEqual(t[0][1].__transition__[t.id].duration, 16.99);
   },
   "can specify duration as a function": function(selection) {
     var dd = [], ii = [], tt = [], t = selection.transition().duration(f);
