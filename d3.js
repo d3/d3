@@ -1185,15 +1185,14 @@ d3 = function() {
     }
     zoom.event = function(g) {
       g.each(function() {
-        var event_ = event.of(this, arguments), view1 = view, view0 = this.__chart__ || {
-          x: 0,
-          y: 0,
-          k: 1
-        };
-        this.__chart__ = view;
+        var event_ = event.of(this, arguments), view1 = view;
         if (d3_transitionInheritId) {
           d3.select(this).transition().each("start.zoom", function() {
-            view = view0;
+            view = this.__chart__ || {
+              x: 0,
+              y: 0,
+              k: 1
+            };
             zoomstarted(event_);
           }).tween("zoom:zoom", function() {
             var dx = size[0], dy = size[1], cx = dx / 2, cy = dy / 2, i = d3.interpolateZoom([ (cx - view.x) / view.k, (cy - view.y) / view.k, dx / view.k ], [ (cx - view1.x) / view1.k, (cy - view1.y) / view1.k, dx / view1.k ]);
@@ -1210,6 +1209,7 @@ d3 = function() {
             zoomended(event_);
           });
         } else {
+          this.__chart__ = view;
           zoomstarted(event_);
           zoomed(event_);
           zoomended(event_);

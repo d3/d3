@@ -39,13 +39,11 @@ d3.behavior.zoom = function() {
   zoom.event = function(g) {
     g.each(function() {
       var event_ = event.of(this, arguments),
-          view1 = view,
-          view0 = this.__chart__ || {x: 0, y: 0, k: 1};
-      this.__chart__ = view;
+          view1 = view;
       if (d3_transitionInheritId) {
           d3.select(this).transition()
               .each("start.zoom", function() {
-                view = view0; // pre-transition state
+                view = this.__chart__ || {x: 0, y: 0, k: 1}; // pre-transition state
                 zoomstarted(event_);
               })
               .tween("zoom:zoom", function() {
@@ -67,6 +65,7 @@ d3.behavior.zoom = function() {
                 zoomended(event_);
               });
       } else {
+        this.__chart__ = view;
         zoomstarted(event_);
         zoomed(event_);
         zoomended(event_);
