@@ -16,6 +16,7 @@ import "path-context";
 import "projection";
 import "rotation";
 import "stream";
+import "simplify";
 import "albers";
 import "albers-usa";
 import "azimuthal";

@@ -29,12 +29,11 @@ var d3_geo_streamGeometryType = {
     listener.sphere();
   },
   Point: function(object, listener) {
-    var coordinate = object.coordinates;
-    listener.point(coordinate[0], coordinate[1]);
+    listener.point.apply(listener, object.coordinates);
   },
   MultiPoint: function(object, listener) {
-    var coordinates = object.coordinates, i = -1, n = coordinates.length, coordinate;
-    while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
+    var coordinates = object.coordinates, i = -1, n = coordinates.length;
+    while (++i < n) listener.point.apply(listener, coordinates[i]);
   },
   LineString: function(object, listener) {
     d3_geo_streamLine(object.coordinates, listener, 0);
@@ -57,9 +56,9 @@ var d3_geo_streamGeometryType = {
 };
 
 function d3_geo_streamLine(coordinates, listener, closed) {
-  var i = -1, n = coordinates.length - closed, coordinate;
+  var i = -1, n = coordinates.length - closed;
   listener.lineStart();
-  while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
+  while (++i < n) listener.point.apply(listener, coordinates[i]);
   listener.lineEnd();
 }
 
@@ -68,4 +67,15 @@ function d3_geo_streamPolygon(coordinates, listener) {
   listener.polygonStart();
   while (++i < n) d3_geo_streamLine(coordinates[i], listener, 1);
   listener.polygonEnd();
+}
+
+function d3_geo_streamTransform(stream, point) {
+  return {
+    point: point,
+    sphere: function() { stream.sphere(); },
+    lineStart: function() { stream.lineStart(); },
+    lineEnd: function() { stream.lineEnd(); },
+    polygonStart: function() { stream.polygonStart(); },
+    polygonEnd: function() { stream.polygonEnd(); }
+  };
 }

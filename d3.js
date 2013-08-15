@@ -2249,12 +2249,11 @@ d3 = function() {
       listener.sphere();
     },
     Point: function(object, listener) {
-      var coordinate = object.coordinates;
-      listener.point(coordinate[0], coordinate[1]);
+      listener.point.apply(listener, object.coordinates);
     },
     MultiPoint: function(object, listener) {
-      var coordinates = object.coordinates, i = -1, n = coordinates.length, coordinate;
-      while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
+      var coordinates = object.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) listener.point.apply(listener, coordinates[i]);
     },
     LineString: function(object, listener) {
       d3_geo_streamLine(object.coordinates, listener, 0);
@@ -2276,9 +2275,9 @@ d3 = function() {
     }
   };
   function d3_geo_streamLine(coordinates, listener, closed) {
-    var i = -1, n = coordinates.length - closed, coordinate;
+    var i = -1, n = coordinates.length - closed;
     listener.lineStart();
-    while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1]);
+    while (++i < n) listener.point.apply(listener, coordinates[i]);
     listener.lineEnd();
   }
   function d3_geo_streamPolygon(coordinates, listener) {
@@ -2286,6 +2285,26 @@ d3 = function() {
     listener.polygonStart();
     while (++i < n) d3_geo_streamLine(coordinates[i], listener, 1);
     listener.polygonEnd();
+  }
+  function d3_geo_streamTransform(stream, point) {
+    return {
+      point: point,
+      sphere: function() {
+        stream.sphere();
+      },
+      lineStart: function() {
+        stream.lineStart();
+      },
+      lineEnd: function() {
+        stream.lineEnd();
+      },
+      polygonStart: function() {
+        stream.polygonStart();
+      },
+      polygonEnd: function() {
+        stream.polygonEnd();
+      }
+    };
   }
   d3.geo.area = function(object) {
     d3_geo_areaSum = 0;
@@ -3556,31 +3575,13 @@ d3 = function() {
     return path.projection(d3.geo.albersUsa()).context(null);
   };
   function d3_geo_pathProjectStream(project) {
-    var resample = d3_geo_resample(function(λ, φ) {
-      return project([ λ * d3_degrees, φ * d3_degrees ]);
+    var resample = d3_geo_resample(function(x, y) {
+      return project([ x * d3_degrees, y * d3_degrees ]);
     });
     return function(stream) {
-      stream = resample(stream);
-      return {
-        point: function(λ, φ) {
-          stream.point(λ * d3_radians, φ * d3_radians);
-        },
-        sphere: function() {
-          stream.sphere();
-        },
-        lineStart: function() {
-          stream.lineStart();
-        },
-        lineEnd: function() {
-          stream.lineEnd();
-        },
-        polygonStart: function() {
-          stream.polygonStart();
-        },
-        polygonEnd: function() {
-          stream.polygonEnd();
-        }
-      };
+      return d3_geo_streamTransform(stream = resample(stream), function(x, y) {
+        stream.point(x * d3_radians, y * d3_radians);
+      });
     };
   }
   d3.geo.projection = d3_geo_projection;
@@ -3663,27 +3664,10 @@ d3 = function() {
     };
   }
   function d3_geo_projectionRadiansRotate(rotate, stream) {
-    return {
-      point: function(x, y) {
-        y = rotate(x * d3_radians, y * d3_radians), x = y[0];
-        stream.point(x > π ? x - 2 * π : x < -π ? x + 2 * π : x, y[1]);
-      },
-      sphere: function() {
-        stream.sphere();
-      },
-      lineStart: function() {
-        stream.lineStart();
-      },
-      lineEnd: function() {
-        stream.lineEnd();
-      },
-      polygonStart: function() {
-        stream.polygonStart();
-      },
-      polygonEnd: function() {
-        stream.polygonEnd();
-      }
-    };
+    return d3_geo_streamTransform(stream, function(x, y) {
+      y = rotate(x * d3_radians, y * d3_radians), x = y[0];
+      stream.point(x > π ? x - 2 * π : x < -π ? x + 2 * π : x, y[1]);
+    });
   }
   function d3_geo_equirectangular(λ, φ) {
     return [ λ, φ ];
@@ -3953,6 +3937,21 @@ d3 = function() {
       λ0 = λ, sinφ0 = sinφ, cosφ0 = cosφ;
     }
   }
+  d3.geo.simplify = function() {
+    var importance = 1, simplify = {
+      stream: function(stream) {
+        return d3_geo_streamTransform(stream, function(x, y, z) {
+          if (z >= importance) stream.point(x, y);
+        });
+      },
+      importance: function(_) {
+        if (!arguments.length) return importance;
+        importance = +_;
+        return simplify;
+      }
+    };
+    return simplify;
+  };
   function d3_geo_azimuthal(scale, angle) {
     function azimuthal(λ, φ) {
       var cosλ = Math.cos(λ), cosφ = Math.cos(φ), k = scale(cosλ * cosφ);
