@@ -16,7 +16,7 @@ d3.svg.brush = function() {
       resizes = d3_svg_brushResizes[0],
       extent = [[0, 0], [0, 0]], // [x0, y0], [x1, y1], in pixels (integers)
       clamp = [true, true], // whether or not to clamp the extent to the range
-      extentDomain; // the extent in data space, lazily created
+      extentDomain = [[NaN, NaN], [NaN, NaN]]; // the extent in data space, lazily created
 
   function brush(g) {
     g.each(function() {
@@ -249,7 +249,16 @@ d3.svg.brush = function() {
 
       // Update the stored bounds.
       if (extent[0][i] !== min || extent[1][i] !== max) {
-        extentDomain = null;
+        if (!resizing) {
+          extentDomain = [[NaN, NaN], [NaN, NaN]];
+        } else {
+          // selectively clear cached values based on what changed
+          if (/w/.test(resizing)) extentDomain[0][0] = NaN;
+          if (/s/.test(resizing)) extentDomain[0][1] = NaN;
+          if (/e/.test(resizing)) extentDomain[1][0] = NaN;
+          if (/n/.test(resizing)) extentDomain[1][1] = NaN;
+        }
+
         extent[0][i] = min;
         extent[1][i] = max;
         return true;
@@ -297,25 +306,38 @@ d3.svg.brush = function() {
   };
 
   brush.extent = function(z) {
-    var x0, x1, y0, y1, t;
+    var x0, x1, y0, y1, d0, d1, t;
 
     // Invert the pixel extent to data-space.
     if (!arguments.length) {
-      z = extentDomain || extent;
       if (x) {
-        x0 = z[0][0], x1 = z[1][0];
-        if (!extentDomain) {
-          x0 = extent[0][0], x1 = extent[1][0];
-          if (x.invert) x0 = x.invert(x0), x1 = x.invert(x1);
-          if (x1 < x0) t = x0, x0 = x1, x1 = t;
+        x0 = extentDomain[0][0];
+        x1 = extentDomain[1][0];
+        if (isNaN(x0) || isNaN(x1)) {
+          d0 = extent[0][0];
+          d1 = extent[1][0];
+          if (x.invert) {
+            d0 = x.invert(d0);
+            d1 = x.invert(d1);
+            if (d0 > d1) t = d0, d0 = d1, d1 = t;
+          }
+          if (isNaN(x0)) x0 = d0;
+          if (isNaN(x1)) x1 = d1;
         }
       }
       if (y) {
-        y0 = z[0][1], y1 = z[1][1];
-        if (!extentDomain) {
-          y0 = extent[0][1], y1 = extent[1][1];
-          if (y.invert) y0 = y.invert(y0), y1 = y.invert(y1);
-          if (y1 < y0) t = y0, y0 = y1, y1 = t;
+        y0 = extentDomain[0][1];
+        y1 = extentDomain[1][1];
+        if (isNaN(y0) || isNaN(y1)) {
+          d0 = extent[0][1];
+          d1 = extent[1][1];
+          if (y.invert) {
+            d0 = y.invert(d0);
+            d1 = y.invert(d1);
+            if (d0 > d1) t = d0, d0 = d1, d1 = t;
+          }
+          if (isNaN(y0)) y0 = d0;
+          if (isNaN(y1)) y1 = d1;
         }
       }
       return x && y ? [[x0, y0], [x1, y1]] : x ? [x0, x1] : y && [y0, y1];
@@ -344,7 +366,8 @@ d3.svg.brush = function() {
   };
 
   brush.clear = function() {
-    extentDomain = null;
+    extentDomain = [[NaN, NaN], [NaN, NaN]];
+
     extent[0][0] =
     extent[0][1] =
     extent[1][0] =
