@@ -1176,8 +1176,9 @@ d3 = function() {
   };
   d3.behavior.zoom = function() {
     var view = {
-      s: 1,
-      t: [ 0, 0 ]
+      x: 0,
+      y: 0,
+      k: 1
     }, translate0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
     function zoom(g) {
       g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
@@ -1185,8 +1186,9 @@ d3 = function() {
     zoom.event = function(g) {
       g.each(function() {
         var event_ = event.of(this, arguments), view1 = view, view0 = this.__chart__ || {
-          s: 1,
-          t: [ 0, 0 ]
+          x: 0,
+          y: 0,
+          k: 1
         };
         this.__chart__ = view;
         if (d3_transitionInheritId) {
@@ -1194,12 +1196,13 @@ d3 = function() {
             view = view0;
             zoomstarted(event_);
           }).tween("zoom:zoom", function() {
-            var dx = size[0], dy = size[1], cx = dx / 2, cy = dy / 2, i = d3.interpolateZoom([ (cx - view.t[0]) / view.s, (cy - view.t[1]) / view.s, dx / view.s ], [ (cx - view1.t[0]) / view1.s, (cy - view1.t[1]) / view1.s, dx / view1.s ]);
+            var dx = size[0], dy = size[1], cx = dx / 2, cy = dy / 2, i = d3.interpolateZoom([ (cx - view.x) / view.k, (cy - view.y) / view.k, dx / view.k ], [ (cx - view1.x) / view1.k, (cy - view1.y) / view1.k, dx / view1.k ]);
             return function(t) {
               var l = i(t), k = dx / l[2];
               this.__chart__ = view = {
-                s: k,
-                t: [ cx - l[0] * k, cy - l[1] * k ]
+                x: cx - l[0] * k,
+                y: cy - l[1] * k,
+                k: k
               };
               zoomed(event_);
             };
@@ -1216,17 +1219,19 @@ d3 = function() {
     zoom.translate = function(_) {
       if (!arguments.length) return view.t;
       view = {
-        s: view.s,
-        t: [ +_[0], +_[1] ]
+        x: +_[0],
+        y: +_[1],
+        k: view.k
       };
       rescale();
       return zoom;
     };
     zoom.scale = function(_) {
-      if (!arguments.length) return view.s;
+      if (!arguments.length) return view.k;
       view = {
-        s: +_,
-        t: view.t.slice()
+        x: view.x,
+        y: view.y,
+        k: +_
       };
       rescale();
       return zoom;
@@ -1251,8 +1256,9 @@ d3 = function() {
       x1 = z;
       x0 = z.copy();
       view = {
-        s: 1,
-        t: [ 0, 0 ]
+        x: 0,
+        y: 0,
+        k: 1
       };
       return zoom;
     };
@@ -1261,31 +1267,32 @@ d3 = function() {
       y1 = z;
       y0 = z.copy();
       view = {
-        s: 1,
-        t: [ 0, 0 ]
+        x: 0,
+        y: 0,
+        k: 1
       };
       return zoom;
     };
     function location(p) {
-      return [ (p[0] - view.t[0]) / view.s, (p[1] - view.t[1]) / view.s ];
+      return [ (p[0] - view.x) / view.k, (p[1] - view.y) / view.k ];
     }
     function point(l) {
-      return [ l[0] * view.s + view.t[0], l[1] * view.s + view.t[1] ];
+      return [ l[0] * view.k + view.x, l[1] * view.k + view.y ];
     }
     function scaleTo(s) {
-      view.s = Math.max(scaleExtent[0], Math.min(scaleExtent[1], s));
+      view.k = Math.max(scaleExtent[0], Math.min(scaleExtent[1], s));
     }
     function translateTo(p, l) {
       l = point(l);
-      view.t[0] += p[0] - l[0];
-      view.t[1] += p[1] - l[1];
+      view.x += p[0] - l[0];
+      view.y += p[1] - l[1];
     }
     function rescale() {
       if (x1) x1.domain(x0.range().map(function(x) {
-        return (x - view.t[0]) / view.s;
+        return (x - view.x) / view.k;
       }).map(x0.invert));
       if (y1) y1.domain(y0.range().map(function(y) {
-        return (y - view.t[1]) / view.s;
+        return (y - view.y) / view.k;
       }).map(y0.invert));
     }
     function zoomstarted(event) {
@@ -1297,7 +1304,7 @@ d3 = function() {
       rescale();
       event({
         type: "zoom",
-        scale: view.s,
+        scale: view.k,
         translate: view.t
       });
     }
@@ -1328,7 +1335,7 @@ d3 = function() {
       zoomstarted(event_);
       function relocate() {
         var touches = d3.touches(target);
-        scale0 = view.s;
+        scale0 = view.k;
         locations0 = {};
         touches.forEach(function(t) {
           locations0[t.identifier] = location(t);
@@ -1340,7 +1347,7 @@ d3 = function() {
         if (touches.length === 1) {
           if (now - touchtime < 500) {
             var p = touches[0], l = locations0[p.identifier];
-            scaleTo(view.s * 2);
+            scaleTo(view.k * 2);
             translateTo(p, l);
             d3_eventPreventDefault();
             zoomed(event_);
@@ -1389,7 +1396,7 @@ d3 = function() {
       d3_eventPreventDefault();
       var point = center || d3.mouse(this);
       if (!translate0) translate0 = location(point);
-      scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.s);
+      scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
       translateTo(point, translate0);
       zoomed(event_);
     }
@@ -1397,7 +1404,7 @@ d3 = function() {
       translate0 = null;
     }
     function dblclicked() {
-      var event_ = event.of(this, arguments), p = d3.mouse(this), l = location(p), k = Math.log(view.s) / Math.LN2;
+      var event_ = event.of(this, arguments), p = d3.mouse(this), l = location(p), k = Math.log(view.k) / Math.LN2;
       zoomstarted(event_);
       scaleTo(Math.pow(2, d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1));
       translateTo(p, l);
