@@ -7802,7 +7802,7 @@ d3 = function() {
     function axis(g) {
       g.each(function() {
         var g = d3.select(this);
-        var ticks = tickValues == null ? scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain() : tickValues, tickFormat = tickFormat_ == null ? scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : String : tickFormat_, tick = g.selectAll(".tick.major").data(ticks, String), tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick major").style("opacity", 1e-6), tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(), tickUpdate = d3.transition(tick).style("opacity", 1), tickTransform;
+        var ticks = tickValues == null ? scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain() : tickValues, tickFormat = tickFormat_ == null ? scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : d3_identity : tickFormat_, tick = g.selectAll(".tick.major").data(ticks, d3_identity), tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick major").style("opacity", 1e-6), tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(), tickUpdate = d3.transition(tick).style("opacity", 1), tickTransform;
         var range = d3_scaleRange(scale), path = g.selectAll(".domain").data([ 0 ]), pathUpdate = (path.enter().append("path").attr("class", "domain"), 
         d3.transition(path));
         var scale1 = scale.copy(), scale0 = this.__chart__ || scale1;
@@ -7948,7 +7948,7 @@ d3 = function() {
         var background = g.selectAll(".background").data([ 0 ]);
         background.enter().append("rect").attr("class", "background").style("visibility", "hidden").style("cursor", "crosshair");
         g.selectAll(".extent").data([ 0 ]).enter().append("rect").attr("class", "extent").style("cursor", "move");
-        var resize = g.selectAll(".resize").data(resizes, String);
+        var resize = g.selectAll(".resize").data(resizes, d3_identity);
         resize.exit().remove();
         resize.enter().append("g").attr("class", function(d) {
           return "resize " + d;
@@ -7972,18 +7972,19 @@ d3 = function() {
           redrawY(gUpdate);
         }
         redraw(gUpdate);
+      });
+    }
+    brush.event = function(g) {
+      g.each(function() {
         var event_ = event.of(this, arguments), extent1 = {
           x: xExtent,
           y: yExtent,
           i: xExtentDomain,
           j: yExtentDomain
-        }, extent0 = this.__chart__ || {
-          x: [ 0, 0 ],
-          y: [ 0, 0 ]
-        };
+        }, extent0 = this.__chart__ || extent1;
         this.__chart__ = extent1;
         if (d3_transitionInheritId) {
-          gUpdate.each("start.brush", function() {
+          d3.select(this).transition().each("start.brush", function() {
             xExtentDomain = extent0.i;
             yExtentDomain = extent0.j;
             xExtent = extent0.x;
@@ -8013,7 +8014,7 @@ d3 = function() {
               type: "brushend"
             });
           });
-        } else if (extent0.i !== extent1.i || extent0.j !== extent1.j) {
+        } else {
           event_({
             type: "brushstart"
           });
@@ -8026,7 +8027,7 @@ d3 = function() {
           });
         }
       });
-    }
+    };
     function redraw(g) {
       g.selectAll(".resize").attr("transform", function(d) {
         return "translate(" + xExtent[+/e$/.test(d)] + "," + yExtent[+/^s/.test(d)] + ")";

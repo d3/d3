@@ -49,7 +49,7 @@ d3.svg.brush = function() {
 
       // More invisible rects for resizing the extent.
       var resize = g.selectAll(".resize")
-          .data(resizes, String);
+          .data(resizes, d3_identity);
 
       // Remove any superfluous resizers.
       resize.exit().remove();
@@ -85,15 +85,17 @@ d3.svg.brush = function() {
         redrawY(gUpdate);
       }
       redraw(gUpdate);
+    });
+  }
 
-      // Dispatch events when the brush extent is set programmatically.
+  brush.event = function(g) {
+    g.each(function() {
       var event_ = event.of(this, arguments),
           extent1 = {x: xExtent, y: yExtent, i: xExtentDomain, j: yExtentDomain},
-          extent0 = this.__chart__ || {x: [0, 0], y: [0, 0]};
+          extent0 = this.__chart__ || extent1;
       this.__chart__ = extent1;
-
       if (d3_transitionInheritId) {
-        gUpdate
+        d3.select(this).transition()
             .each("start.brush", function() {
               xExtentDomain = extent0.i; // pre-transition state
               yExtentDomain = extent0.j;
@@ -117,13 +119,13 @@ d3.svg.brush = function() {
               event_({type: "brush", mode: "resize"});
               event_({type: "brushend"});
             });
-      } else if (extent0.i !== extent1.i || extent0.j !== extent1.j) {
+      } else {
         event_({type: "brushstart"});
         event_({type: "brush", mode: "resize"});
         event_({type: "brushend"});
       }
     });
-  }
+  };
 
   function redraw(g) {
     g.selectAll(".resize").attr("transform", function(d) {
