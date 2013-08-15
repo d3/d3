@@ -167,6 +167,7 @@ d3.behavior.zoom = function() {
         l = location(d3.mouse(target)),
         dragRestore = d3_event_dragSuppress();
 
+    d3_selection_interrupt.call(target);
     zoomstarted(event_);
 
     function moved() {
@@ -193,6 +194,7 @@ d3.behavior.zoom = function() {
         t = d3.select(target).on(mousedown, null).on(touchstart, started), // prevent duplicate events
         dragRestore = d3_event_dragSuppress();
 
+    d3_selection_interrupt.call(target);
     started();
     zoomstarted(event_);
 
@@ -262,7 +264,7 @@ d3.behavior.zoom = function() {
   function mousewheeled() {
     var event_ = event.of(this, arguments);
     if (mousewheelTimer) clearTimeout(mousewheelTimer);
-    else zoomstarted(event_);
+    else d3_selection_interrupt.call(this), zoomstarted(event_);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(event_); }, 50);
     d3_eventPreventDefault();
     var point = center || d3.mouse(this);

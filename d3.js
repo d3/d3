@@ -1308,6 +1308,7 @@ d3 = function() {
     }
     function mousedowned() {
       var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, dragged = 0, w = d3.select(d3_window).on(mousemove, moved).on(mouseup, ended), l = location(d3.mouse(target)), dragRestore = d3_event_dragSuppress();
+      d3_selection_interrupt.call(target);
       zoomstarted(event_);
       function moved() {
         dragged = 1;
@@ -1322,6 +1323,7 @@ d3 = function() {
     }
     function touchstarted() {
       var target = this, event_ = event.of(target, arguments), locations0, distance0 = 0, scale0, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), t = d3.select(target).on(mousedown, null).on(touchstart, started), dragRestore = d3_event_dragSuppress();
+      d3_selection_interrupt.call(target);
       started();
       zoomstarted(event_);
       function relocate() {
@@ -1378,7 +1380,8 @@ d3 = function() {
     }
     function mousewheeled() {
       var event_ = event.of(this, arguments);
-      if (mousewheelTimer) clearTimeout(mousewheelTimer); else zoomstarted(event_);
+      if (mousewheelTimer) clearTimeout(mousewheelTimer); else d3_selection_interrupt.call(this), 
+      zoomstarted(event_);
       mousewheelTimer = setTimeout(function() {
         mousewheelTimer = null;
         zoomended(event_);
