@@ -1217,7 +1217,7 @@ d3 = function() {
       });
     };
     zoom.translate = function(_) {
-      if (!arguments.length) return view.t;
+      if (!arguments.length) return [ view.x, view.y ];
       view = {
         x: +_[0],
         y: +_[1],
@@ -1305,7 +1305,7 @@ d3 = function() {
       event({
         type: "zoom",
         scale: view.k,
-        translate: view.t
+        translate: [ view.x, view.y ]
       });
     }
     function zoomended(event) {

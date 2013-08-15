@@ -75,7 +75,7 @@ d3.behavior.zoom = function() {
   }
 
   zoom.translate = function(_) {
-    if (!arguments.length) return view.t;
+    if (!arguments.length) return [view.x, view.y];
     view = {x: +_[0], y: +_[1], k: view.k}; // copy-on-write
     rescale();
     return zoom;
@@ -151,7 +151,7 @@ d3.behavior.zoom = function() {
 
   function zoomed(event) {
     rescale();
-    event({type: "zoom", scale: view.k, translate: view.t});
+    event({type: "zoom", scale: view.k, translate: [view.x, view.y]});
   }
 
   function zoomended(event) {
