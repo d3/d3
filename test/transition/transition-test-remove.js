@@ -3,9 +3,13 @@ var assert = require("../assert");
 module.exports = {
   "on a new transition": {
     topic: function(d3) {
-      var cb = this.callback,
+      var callback = this.callback,
           t = d3.select("body").append("div").transition().remove();
-      t.each("end", function() { cb(null, t); });
+      t.each("end", function() {
+        process.nextTick(function() {
+          callback(null, t);
+        });
+      });
     },
     "removes the selected elements": function(transition) {
       assert.domEqual(transition[0][0].parentNode, null);
@@ -14,9 +18,13 @@ module.exports = {
 
   "when the element is already removed": {
     topic: function(d3) {
-      var cb = this.callback,
+      var callback = this.callback,
           t = d3.select("body").append("div").remove().transition().remove();
-      t.each("end", function() { cb(null, t); });
+      t.each("end", function() {
+        process.nextTick(function() {
+          callback(null, t);
+        });
+      });
     },
     "does nothing": function(transition) {
       assert.domEqual(transition[0][0].parentNode, null);
@@ -31,10 +39,14 @@ module.exports = {
 
   "when another transition is scheduled": {
     topic: function(d3) {
-      var cb = this.callback,
+      var callback = this.callback,
           s = d3.select("body").append("div");
       setTimeout(function() {
-        s.transition().duration(150).remove().each("end", function() { cb(null, s); });
+        s.transition().duration(150).remove().each("end", function() {
+          process.nextTick(function() {
+            callback(null, s);
+          });
+        });
         s.transition().delay(250);
       }, 10);
     },

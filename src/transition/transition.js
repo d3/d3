@@ -102,9 +102,8 @@ function d3_transitionNode(node, i, id, inherit) {
         }
 
         if (t >= 1) {
-          stop();
           transition.event && transition.event.end.call(node, d, i);
-          return 1;
+          return stop();
         }
       }
 

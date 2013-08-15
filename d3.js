@@ -7763,7 +7763,7 @@ d3 = function() {
   d3_transitionPrototype.remove = function() {
     return this.each("end.transition", function() {
       var p;
-      if (!this.__transition__ && (p = this.parentNode)) p.removeChild(this);
+      if (this.__transition__.count < 2 && (p = this.parentNode)) p.removeChild(this);
     });
   };
   d3_transitionPrototype.ease = function(value) {
@@ -7862,9 +7862,8 @@ d3 = function() {
             tweened[--n].call(node, e);
           }
           if (t >= 1) {
-            stop();
             transition.event && transition.event.end.call(node, d, i);
-            return 1;
+            return stop();
           }
         }
         function stop() {

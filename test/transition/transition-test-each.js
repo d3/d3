@@ -3,7 +3,7 @@ var assert = require("../assert");
 module.exports = {
   "start": {
     topic: function(d3) {
-      var cb = this.callback,
+      var callback = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
           transition = div.transition().delay(350),
           then = Date.now(),
@@ -27,7 +27,7 @@ module.exports = {
         index.push(i);
         count.push(++n);
         delay.push(Date.now() - then);
-        if (n >= 4) cb(null, {
+        if (n >= 4) callback(null, {
           selection: div,
           delay: delay,
           context: context,
@@ -75,7 +75,7 @@ module.exports = {
 
   "end": {
     topic: function(d3) {
-      var cb = this.callback,
+      var callback = this.callback,
           div = d3.select("body").html("").selectAll().data(["foo", "bar"]).enter().append("div").attr("class", String),
           transition = div.transition().duration(350),
           then = Date.now(),
@@ -99,7 +99,7 @@ module.exports = {
         index.push(i);
         count.push(++n);
         delay.push(Date.now() - then);
-        if (n >= 4) cb(null, {
+        if (n >= 4) callback(null, {
           selection: div,
           delay: delay,
           context: context,
@@ -135,9 +135,17 @@ module.exports = {
       assert.deepEqual(result.index, [0, 1], "expected index, got {actual}");
     },
 
-    "deletes the transition lock after end": function(result) {
-      assert.isFalse("__transition__" in result.selection[0][0]);
-      assert.isFalse("__transition__" in result.selection[0][1]);
+    "after the transition ends": {
+      topic: function(result) {
+        var callback = this.callback;
+        process.nextTick(function() {
+          callback(null, result);
+        });
+      },
+      "deletes the transition lock": function(result) {
+        assert.isFalse("__transition__" in result.selection[0][0]);
+        assert.isFalse("__transition__" in result.selection[0][1]);
+      }
     },
 
     // I'd like to test d3.timer.flush here, but unfortunately there's a bug in
@@ -146,11 +154,11 @@ module.exports = {
 
     "sequenced": {
       topic: function(result, d3) {
-        var cb = this.callback,
-            node = result.selection[0][0],
+        var callback = this.callback,
+            node = d3.select("body").append("div").node(),
             id = result.id;
         d3.select(node).transition().delay(150).each("start", function() {
-          cb(null, {id: id, node: this});
+          callback(null, {id: id, node: this});
         });
       },
       "does not inherit the transition id": function(result) {
