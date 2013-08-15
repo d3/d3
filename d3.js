@@ -8211,7 +8211,7 @@ d3 = function() {
             max = position;
           }
         }
-        if (extent[0] ^ min | extent[1] ^ max) {
+        if (extent[0] != min || extent[1] != max) {
           if (i) yExtentDomain = null; else xExtentDomain = null;
           extent[0] = min;
           extent[1] = max;
@@ -8275,7 +8275,7 @@ d3 = function() {
         xExtentDomain = [ x0, x1 ];
         if (x.invert) x0 = x(x0), x1 = x(x1);
         if (x1 < x0) t = x0, x0 = x1, x1 = t;
-        if (x0 ^ xExtent[0] | x1 ^ xExtent[1]) xExtent = [ x0 | 0, x1 | 0 ];
+        if (x0 != xExtent[0] || x1 != xExtent[1]) xExtent = [ x0, x1 ];
       }
       if (y) {
         y0 = z[0], y1 = z[1];
@@ -8283,7 +8283,7 @@ d3 = function() {
         yExtentDomain = [ y0, y1 ];
         if (y.invert) y0 = y(y0), y1 = y(y1);
         if (y1 < y0) t = y0, y0 = y1, y1 = t;
-        if (y0 ^ yExtent[0] | y1 ^ yExtent[1]) yExtent = [ y0 | 0, y1 | 0 ];
+        if (y0 != yExtent[0] || y1 != yExtent[1]) yExtent = [ y0, y1 ];
       }
       return brush;
     };
@@ -8295,7 +8295,7 @@ d3 = function() {
       return brush;
     };
     brush.empty = function() {
-      return !!x && xExtent[0] === xExtent[1] || !!y && yExtent[0] === yExtent[1];
+      return !!x && xExtent[0] == xExtent[1] || !!y && yExtent[0] == yExtent[1];
     };
     return d3.rebind(brush, event, "on");
   };
