@@ -68,14 +68,3 @@ function d3_geo_streamPolygon(coordinates, listener) {
   while (++i < n) d3_geo_streamLine(coordinates[i], listener, 1);
   listener.polygonEnd();
 }
-
-function d3_geo_streamTransform(stream, point) {
-  return {
-    point: point,
-    sphere: function() { stream.sphere(); },
-    lineStart: function() { stream.lineStart(); },
-    lineEnd: function() { stream.lineEnd(); },
-    polygonStart: function() { stream.polygonStart(); },
-    polygonEnd: function() { stream.polygonEnd(); }
-  };
-}
