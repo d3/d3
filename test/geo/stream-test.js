@@ -37,223 +37,173 @@ suite.addBatch({
       var calls = 0;
       stream({type: "Sphere"}, {
         sphere: function() {
-          ++calls;
           assert.equal(arguments.length, 0);
+          assert.equal(++calls, 1);
         }
       });
       assert.equal(calls, 1);
     },
     "Point ↦ point": function(stream) {
-      var calls = 0;
-      stream({type: "Point", coordinates: [1, 2]}, {
-        point: function(x, y) {
-          ++calls;
-          assert.equal(arguments.length, 2);
-          assert.equal(x, 1);
-          assert.equal(y, 2);
+      var calls = 0, coordinates = 0;
+      stream({type: "Point", coordinates: [1, 2, 3]}, {
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.equal(++calls, 1);
         }
       });
       assert.equal(calls, 1);
     },
     "MultiPoint ↦ point*": function(stream) {
-      var calls = 0;
-      stream({type: "MultiPoint", coordinates: [[1, 2], [3, 4]]}, {
-        point: function(x, y) {
-          assert.equal(arguments.length, 2);
-          if (++calls === 1) {
-            assert.equal(x, 1);
-            assert.equal(y, 2);
-          } else {
-            assert.equal(x, 3);
-            assert.equal(y, 4);
-          }
+      var calls = 0, coordinates = 0;
+      stream({type: "MultiPoint", coordinates: [[1, 2, 3], [4, 5, 6]]}, {
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.isTrue(1 <= ++calls && calls <= 2);
         }
       });
       assert.equal(calls, 2);
     },
     "LineString ↦ lineStart, point{2,}, lineEnd": function(stream) {
-      var calls = 0;
-      stream({type: "LineString", coordinates: [[1, 2], [3, 4]]}, {
+      var calls = 0, coordinates = 0;
+      stream({type: "LineString", coordinates: [[1, 2, 3], [4, 5, 6]]}, {
         lineStart: function() {
-          assert.equal(++calls, 1);
           assert.equal(arguments.length, 0);
+          assert.equal(++calls, 1);
         },
-        point: function(x, y) {
-          assert.equal(arguments.length, 2);
-          if (++calls === 2) {
-            assert.equal(x, 1);
-            assert.equal(y, 2);
-          } else if (calls === 3) {
-            assert.equal(x, 3);
-            assert.equal(y, 4);
-          } else {
-            assert.fail("too many points");
-          }
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.isTrue(2 <= ++calls && calls <= 3);
         },
         lineEnd: function() {
-          assert.equal(++calls, 4);
           assert.equal(arguments.length, 0);
+          assert.equal(++calls, 4);
         }
       });
       assert.equal(calls, 4);
     },
     "MultiLineString ↦ (lineStart, point{2,}, lineEnd)*": function(stream) {
-      var calls = 0;
-      stream({type: "MultiLineString", coordinates: [[[1, 2], [3, 4]], [[5, 6], [7, 8]]]}, {
+      var calls = 0, coordinates = 0;
+      stream({type: "MultiLineString", coordinates: [[[1, 2, 3], [4, 5, 6]], [[7, 8, 9], [10, 11, 12]]]}, {
         lineStart: function() {
-          ++calls;
-          assert.isTrue(calls === 1 || calls === 5);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 1 || calls === 5);
         },
-        point: function(x, y) {
-          ++calls;
-          assert.equal(arguments.length, 2);
-          if (calls === 2) {
-            assert.equal(x, 1);
-            assert.equal(y, 2);
-          } else if (calls === 3) {
-            assert.equal(x, 3);
-            assert.equal(y, 4);
-          } else if (calls === 6) {
-            assert.equal(x, 5);
-            assert.equal(y, 6);
-          } else if (calls === 7) {
-            assert.equal(x, 7);
-            assert.equal(y, 8);
-          } else {
-            assert.fail("too many points");
-          }
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.isTrue(2 <= ++calls && calls <= 3 || 6 <= calls && calls <= 7);
         },
         lineEnd: function() {
-          ++calls;
-          assert.isTrue(calls === 4 || calls === 8);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 4 || calls === 8);
         }
       });
       assert.equal(calls, 8);
     },
     "Polygon ↦ polygonStart, lineStart, point{2,}, lineEnd, polygonEnd": function(stream) {
-      var calls = 0;
-      stream({type: "Polygon", coordinates: [[[1, 2], [3, 4], [1, 2]], [[5, 6], [7, 8], [5, 6]]]}, {
+      var calls = 0, coordinates = 0;
+      stream({type: "Polygon", coordinates: [[[1, 2, 3], [4, 5, 6], [1, 2, 3]], [[7, 8, 9], [10, 11, 12], [7, 8, 9]]]}, {
         polygonStart: function() {
-          ++calls;
-          assert.isTrue(calls === 1);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 1);
         },
         lineStart: function() {
-          ++calls;
-          assert.isTrue(calls === 2 || calls === 6);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 2 || calls === 6);
         },
-        point: function(x, y) {
-          ++calls;
-          assert.equal(arguments.length, 2);
-          if (calls === 3) {
-            assert.equal(x, 1);
-            assert.equal(y, 2);
-          } else if (calls === 4) {
-            assert.equal(x, 3);
-            assert.equal(y, 4);
-          } else if (calls === 7) {
-            assert.equal(x, 5);
-            assert.equal(y, 6);
-          } else if (calls === 8) {
-            assert.equal(x, 7);
-            assert.equal(y, 8);
-          } else {
-            assert.fail("too many points");
-          }
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.isTrue(3 <= ++calls && calls <= 4 || 7 <= calls && calls <= 8);
         },
         lineEnd: function() {
-          ++calls;
-          assert.isTrue(calls === 5 || calls === 9);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 5 || calls === 9);
         },
         polygonEnd: function() {
-          ++calls;
-          assert.isTrue(calls === 10);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 10);
         }
       });
       assert.equal(calls, 10);
     },
     "MultiPolygon ↦ (polygonStart, lineStart, point{2,}, lineEnd, polygonEnd)*": function(stream) {
-      var calls = 0;
-      stream({type: "MultiPolygon", coordinates: [[[[1, 2], [3, 4], [1, 2]]], [[[5, 6], [7, 8], [5, 6]]]]}, {
+      var calls = 0, coordinates = 0;
+      stream({type: "MultiPolygon", coordinates: [[[[1, 2, 3], [4, 5, 6], [1, 2, 3]]], [[[7, 8, 9], [10, 11, 12], [7, 8, 9]]]]}, {
         polygonStart: function() {
-          ++calls;
-          assert.isTrue(calls === 1 || calls === 7);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 1 || calls === 7);
         },
         lineStart: function() {
-          ++calls;
-          assert.isTrue(calls === 2 || calls === 8);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 2 || calls === 8);
         },
-        point: function(x, y) {
-          ++calls;
-          assert.equal(arguments.length, 2);
-          if (calls === 3) {
-            assert.equal(x, 1);
-            assert.equal(y, 2);
-          } else if (calls === 4) {
-            assert.equal(x, 3);
-            assert.equal(y, 4);
-          } else if (calls === 9) {
-            assert.equal(x, 5);
-            assert.equal(y, 6);
-          } else if (calls === 10) {
-            assert.equal(x, 7);
-            assert.equal(y, 8);
-          } else {
-            assert.fail("too many points");
-          }
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.isTrue(3 <= ++calls && calls <= 4 || 9 <= calls && calls <= 10);
         },
         lineEnd: function() {
-          ++calls;
-          assert.isTrue(calls === 5 || calls === 11);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 5 || calls === 11);
         },
         polygonEnd: function() {
-          ++calls;
-          assert.isTrue(calls === 6 || calls === 12);
           assert.equal(arguments.length, 0);
+          assert.isTrue(++calls === 6 || calls === 12);
         }
       });
       assert.equal(calls, 12);
     },
     "Feature ↦ .*": function(stream) {
-      var calls = 0;
-      stream({type: "Feature", geometry: {type: "Point", coordinates: [1, 2]}}, {
-        point: function(x, y) {
-          ++calls;
-          assert.equal(arguments.length, 2);
-          assert.equal(x, 1);
-          assert.equal(y, 2);
+      var calls = 0, coordinates = 0;
+      stream({type: "Feature", geometry: {type: "Point", coordinates: [1, 2, 3]}}, {
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.equal(++calls, 1);
         }
       });
       assert.equal(calls, 1);
     },
     "FeatureCollection ↦ .*": function(stream) {
-      var calls = 0;
-      stream({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [1, 2]}}]}, {
-        point: function(x, y) {
-          ++calls;
-          assert.equal(arguments.length, 2);
-          assert.equal(x, 1);
-          assert.equal(y, 2);
+      var calls = 0, coordinates = 0;
+      stream({type: "FeatureCollection", features: [{type: "Feature", geometry: {type: "Point", coordinates: [1, 2, 3]}}]}, {
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.equal(++calls, 1);
         }
       });
       assert.equal(calls, 1);
     },
     "GeometryCollection ↦ .*": function(stream) {
-      var calls = 0;
-      stream({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [1, 2]}]}, {
-        point: function(x, y) {
-          ++calls;
-          assert.equal(arguments.length, 2);
-          assert.equal(x, 1);
-          assert.equal(y, 2);
+      var calls = 0, coordinates = 0;
+      stream({type: "GeometryCollection", geometries: [{type: "Point", coordinates: [1, 2, 3]}]}, {
+        point: function(x, y, z) {
+          assert.equal(arguments.length, 3);
+          assert.equal(x, ++coordinates);
+          assert.equal(y, ++coordinates);
+          assert.equal(z, ++coordinates);
+          assert.equal(++calls, 1);
         }
       });
       assert.equal(calls, 1);
