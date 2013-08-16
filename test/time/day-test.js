@@ -36,6 +36,14 @@ suite.addBatch({
       },
       "correctly handles years in the first century": function(floor) {
         assert.deepEqual(floor(local(0011, 10, 06, 07)), local(0011, 10, 06));
+      },
+      "DST": {
+        "00:00:00 → 01:00:00": time.dst(local(2010, 00, 01), local(2010, 00, 01, 01), function(floor) {
+          assert.deepEqual(floor(local(2010, 00, 01, 23)), local(2010, 00, 01, 01));
+        }),
+        "00:00:00 → 00:30:00": time.dst(local(2010, 00, 01), local(2010, 00, 01, 00, 30), function(floor) {
+          assert.deepEqual(floor(local(2010, 00, 01, 23)), local(2010, 00, 01, 00, 30));
+        })
       }
     },
     "ceil": {
@@ -62,6 +70,14 @@ suite.addBatch({
       "handles midnight for leap years": function(ceil) {
         assert.deepEqual(ceil(utc(2012, 02, 01, 00)), local(2012, 02, 01));
         assert.deepEqual(ceil(utc(2012, 02, 01, 00)), local(2012, 02, 01));
+      },
+      "DST": {
+        "00:00:00 → 01:00:00": time.dst(local(2010, 00, 02), local(2010, 00, 02, 01), function(ceil) {
+          assert.deepEqual(ceil(local(2010, 00, 01, 23)), local(2010, 00, 02, 01));
+        }),
+        "00:00:00 → 00:30:00": time.dst(local(2010, 00, 02), local(2010, 00, 02, 00, 30), function(ceil) {
+          assert.deepEqual(ceil(local(2010, 00, 01, 01)), local(2010, 00, 02, 00, 30));
+        })
       }
     },
     "offset": {

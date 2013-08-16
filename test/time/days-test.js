@@ -47,6 +47,15 @@ suite.addBatch({
         local(2011, 10, 8)
       ]);
     },
+    "DST": time.dst(local(2014, 02, 28), local(2014, 02, 28, 01), function(range) {
+      assert.deepEqual(range(local(2014, 02, 26, 12), local(2014, 02, 31, 12)), [
+        local(2014, 02, 27),
+        local(2014, 02, 28, 01),
+        local(2014, 02, 29),
+        local(2014, 02, 30),
+        local(2014, 02, 31)
+      ]);
+    }),
     "UTC": {
       topic: function(range) {
         return range.utc;

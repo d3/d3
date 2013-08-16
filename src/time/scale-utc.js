@@ -9,14 +9,14 @@ var d3_time_scaleUTCMethods = d3_time_scaleLocalMethods.map(function(m) {
 });
 
 var d3_time_scaleUTCFormats = [
-  [d3.time.format.utc("%Y"), d3_true],
-  [d3.time.format.utc("%B"), function(d) { return d.getUTCMonth(); }],
-  [d3.time.format.utc("%b %d"), function(d) { return d.getUTCDate() != 1; }],
-  [d3.time.format.utc("%a %d"), function(d) { return d.getUTCDay() && d.getUTCDate() != 1; }],
-  [d3.time.format.utc("%I %p"), function(d) { return d.getUTCHours(); }],
-  [d3.time.format.utc("%I:%M"), function(d) { return d.getUTCMinutes(); }],
-  [d3.time.format.utc(":%S"), function(d) { return d.getUTCSeconds(); }],
-  [d3.time.format.utc(".%L"), function(d) { return d.getUTCMilliseconds(); }]
+  [d3.time.format.utc("%Y"), function(d, a) { return a.getUTCFullYear() !== d.getUTCFullYear(); }],
+  [d3.time.format.utc("%B"), function(d, a) { return a.getUTCMonth() !== d.getUTCMonth() && d.getUTCDay(); }],
+  [d3.time.format.utc("%b %d"), function(d, a) { return a.getUTCDate() !== d.getUTCDate() && !d.getUTCDay(); }],
+  [d3.time.format.utc("%a %d"), function(d, a) { return a.getUTCDate() !== d.getUTCDate(); }],
+  [d3.time.format.utc("%I %p"), function(d, a) { return a.getUTCHours() !== d.getUTCHours(); }],
+  [d3.time.format.utc("%I:%M"), function(d, a) { return a.getUTCMinutes() !== d.getUTCMinutes(); }],
+  [d3.time.format.utc(":%S"), function(d, a) { return a.getUTCSeconds() !== d.getUTCSeconds(); }],
+  [d3.time.format.utc(".%L"), d3_true]
 ];
 
 var d3_time_scaleUTCFormat = d3_time_scaleFormat(d3_time_scaleUTCFormats);
