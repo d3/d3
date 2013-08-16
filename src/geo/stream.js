@@ -29,11 +29,12 @@ var d3_geo_streamGeometryType = {
     listener.sphere();
   },
   Point: function(object, listener) {
-    listener.point.apply(listener, object.coordinates);
+    object = object.coordinates;
+    listener.point(object[0], object[1], object[2]);
   },
   MultiPoint: function(object, listener) {
     var coordinates = object.coordinates, i = -1, n = coordinates.length;
-    while (++i < n) listener.point.apply(listener, coordinates[i]);
+    while (++i < n) object = coordinates[i], listener.point(object[0], object[1], object[2]);
   },
   LineString: function(object, listener) {
     d3_geo_streamLine(object.coordinates, listener, 0);
@@ -56,9 +57,9 @@ var d3_geo_streamGeometryType = {
 };
 
 function d3_geo_streamLine(coordinates, listener, closed) {
-  var i = -1, n = coordinates.length - closed;
+  var i = -1, n = coordinates.length - closed, coordinate;
   listener.lineStart();
-  while (++i < n) listener.point.apply(listener, coordinates[i]);
+  while (++i < n) coordinate = coordinates[i], listener.point(coordinate[0], coordinate[1], coordinate[2]);
   listener.lineEnd();
 }
 

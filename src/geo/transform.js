@@ -16,7 +16,7 @@ function d3_geo_transform(stream) {
 }
 
 d3_geo_transform.prototype = {
-  point: function() { var s = this.stream; s.point.apply(s, arguments); },
+  point: function(x, y) { this.stream.point(x, y); },
   sphere: function() { this.stream.sphere(); },
   lineStart: function() { this.stream.lineStart(); },
   lineEnd: function() { this.stream.lineEnd(); },
