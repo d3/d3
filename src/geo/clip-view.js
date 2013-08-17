@@ -162,11 +162,11 @@ function d3_geo_clipView(x0, y0, x1, y1) {
   function comparePoints(a, b) {
     var ca = corner(a, 1),
         cb = corner(b, 1);
-    return ca !== cb ? ca - cb
-        : ca === 0 ? b[1] - a[1]
-        : ca === 1 ? a[0] - b[0]
-        : ca === 2 ? a[1] - b[1]
-        : b[0] - a[0];
+    return ca !== cb ? cb - ca
+        : ca === 0 ? a[1] - b[1]
+        : ca === 1 ? b[0] - a[0]
+        : ca === 2 ? b[1] - a[1]
+        : a[0] - b[0];
   }
 
   // Liang–Barsky line clipping.
