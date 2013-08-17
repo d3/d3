@@ -1156,7 +1156,16 @@ d3 = function() {
   d3.behavior.zoom = function() {
     var translate = [ 0, 0 ], translate0, scale = 1, scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoom"), x0, x1, y0, y1;
     function zoom() {
-      this.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
+        if (isTouchWinIE()) {
+            d3.ms = d3.ms ? d3.ms : {};
+            d3.ms.gesture = new MSGesture();
+            d3.ms.gesture.target = this[0][0];
+            this.on('MSPointerDown.zoom', mspointerdowned);
+            this.on('MSGestureChange.zoom', msgesturechange);
+            this.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked);
+            return;
+        }
+        this.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on("touchstart.zoom", touchstarted);
     }
     zoom.translate = function(x) {
       if (!arguments.length) return translate;
@@ -1220,6 +1229,28 @@ d3 = function() {
         scale: scale,
         translate: translate
       });
+    }
+    function isTouchWinIE() {
+        return window.navigator.msPointerEnabled && navigator.msMaxTouchPoints && navigator.msMaxTouchPoints > 1;
+    }
+    function mspointerdowned() {
+        var target = this,
+            eventTarget = d3.event;
+        if(d3.ms.gesture.target === null){
+            d3.ms.gesture.target = target;
+        }
+        d3.ms.gesture.addPointer(eventTarget.pointerId);
+    }
+    function msgesturechange() {
+        var target = this,
+            event_ = event.of(target, arguments),
+            eventTarget = d3.event,
+            p0 = [eventTarget.clientX, eventTarget.clientY],
+            l0 = location(p0);
+        scale -= (1 - d3.event.scale) * 2;
+        touchtime = null;
+        translateTo(p0,l0);
+        dispatch(event_);
     }
     function mousedowned() {
       var target = this, event_ = event.of(target, arguments), eventTarget = d3.event.target, dragged = 0, w = d3.select(d3_window).on(mousemove, moved).on(mouseup, ended), l = location(d3.mouse(target)), dragRestore = d3_event_dragSuppress();
