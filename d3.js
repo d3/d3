@@ -8808,7 +8808,7 @@ d3 = function() {
   });
   var attrs = ['d', 'dx', 'dy', 'id', 'transform', 'x', 'y', 'fill', 'stroke', 'x1', 'x2',
       'y1', 'y2', 'cx', 'cy', 'r', 'class', 'width', 'height', 'rx', 'ry', 'colspan', 'rotate',
-      'textLength', 'text-anchor'];
+      'textLength', 'text-anchor', 'value'];
 
   d3.sa = function(_) {return this.selectAll(_)};
   d3.selection.prototype.s = function(_) {return this.select(_)};
