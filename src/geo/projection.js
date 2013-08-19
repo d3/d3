@@ -3,7 +3,7 @@ import "../core/rebind";
 import "../math/trigonometry";
 import "clip-antimeridian";
 import "clip-circle";
-import "clip-view";
+import "clip-extent";
 import "compose";
 import "geo";
 import "path";
@@ -61,7 +61,7 @@ function d3_geo_projectionMutator(projectAt) {
   projection.clipExtent = function(_) {
     if (!arguments.length) return clipExtent;
     clipExtent = _;
-    postclip = _ ? d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
+    postclip = _ ? d3_geo_clipExtent(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
     return invalidate();
   };
 

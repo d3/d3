@@ -2986,8 +2986,25 @@ d3 = function() {
       return d3_geo_pointInPolygon(point, polygon);
     }
   }
-  var d3_geo_clipViewMAX = 1e9;
-  function d3_geo_clipView(x0, y0, x1, y1) {
+  var d3_geo_clipExtentMAX = 1e9;
+  d3.geo.clipExtent = function() {
+    var x0, y0, x1, y1, stream, clip, clipExtent = {
+      stream: function(output) {
+        if (stream) stream.valid = false;
+        stream = clip(output);
+        stream.valid = true;
+        return stream;
+      },
+      extent: function(_) {
+        if (!arguments.length) return [ [ x0, y0 ], [ x1, y1 ] ];
+        clip = d3_geo_clipExtent(x0 = +_[0][0], y0 = +_[0][1], x1 = +_[1][0], y1 = +_[1][1]);
+        if (stream) stream.valid = false, stream = null;
+        return clipExtent;
+      }
+    };
+    return clipExtent.extent([ [ 0, 0 ], [ 960, 500 ] ]);
+  };
+  function d3_geo_clipExtent(x0, y0, x1, y1) {
     return function(listener) {
       var listener_ = listener, bufferListener = d3_geo_clipBufferListener(), segments, polygon, ring;
       var clip = {
@@ -3069,8 +3086,8 @@ d3 = function() {
         if (v_) listener.lineEnd();
       }
       function linePoint(x, y) {
-        x = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, x));
-        y = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, y));
+        x = Math.max(-d3_geo_clipExtentMAX, Math.min(d3_geo_clipExtentMAX, x));
+        y = Math.max(-d3_geo_clipExtentMAX, Math.min(d3_geo_clipExtentMAX, y));
         var v = visible(x, y);
         if (polygon) ring.push([ x, y ]);
         if (first) {
@@ -3113,7 +3130,7 @@ d3 = function() {
     function clipLine(a, b) {
       var dx = b[0] - a[0], dy = b[1] - a[1], t = [ 0, 1 ];
       if (Math.abs(dx) < ε && Math.abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
-      if (d3_geo_clipViewT(x0 - a[0], dx, t) && d3_geo_clipViewT(a[0] - x1, -dx, t) && d3_geo_clipViewT(y0 - a[1], dy, t) && d3_geo_clipViewT(a[1] - y1, -dy, t)) {
+      if (d3_geo_clipExtentT(x0 - a[0], dx, t) && d3_geo_clipExtentT(a[0] - x1, -dx, t) && d3_geo_clipExtentT(y0 - a[1], dy, t) && d3_geo_clipExtentT(a[1] - y1, -dy, t)) {
         if (t[1] < 1) {
           b[0] = a[0] + t[1] * dx;
           b[1] = a[1] + t[1] * dy;
@@ -3127,7 +3144,7 @@ d3 = function() {
       return false;
     }
   }
-  function d3_geo_clipViewT(num, denominator, t) {
+  function d3_geo_clipExtentT(num, denominator, t) {
     if (Math.abs(denominator) < ε) return num <= 0;
     var u = num / denominator;
     if (denominator > 0) {
@@ -3631,7 +3648,7 @@ d3 = function() {
     projection.clipExtent = function(_) {
       if (!arguments.length) return clipExtent;
       clipExtent = _;
-      postclip = _ ? d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
+      postclip = _ ? d3_geo_clipExtent(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
       return invalidate();
     };
     projection.scale = function(_) {
@@ -4018,27 +4035,6 @@ d3 = function() {
   (d3.geo.gnomonic = function() {
     return d3_geo_projection(d3_geo_gnomonic);
   }).raw = d3_geo_gnomonic;
-  d3.geo.identity = function() {
-    var clipExtent = null, clip = d3_identity, stream;
-    function identity(x) {
-      return x;
-    }
-    identity.invert = d3_identity;
-    identity.stream = function(output) {
-      if (stream) stream.valid = false;
-      stream = clip(output);
-      stream.valid = true;
-      return stream;
-    };
-    identity.clipExtent = function(_) {
-      if (!arguments.length) return clipExtent;
-      clipExtent = _;
-      clip = _ ? d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
-      if (stream) stream.valid = false, stream = null;
-      return identity;
-    };
-    return identity;
-  };
   function d3_geo_mercator(λ, φ) {
     return [ λ, Math.log(Math.tan(π / 4 + φ / 2)) ];
   }
