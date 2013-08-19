@@ -147,6 +147,11 @@ d3 = function() {
     while (i--) permutes[i] = array[indexes[i]];
     return permutes;
   };
+  d3.pairs = function(array) {
+    var pairs = [], i = 0, n = array.length, p0, p1 = array[i];
+    while (++i < n) pairs.push([ p0 = p1, p1 = array[i] ]);
+    return pairs;
+  };
   d3.zip = function() {
     if (!(n = arguments.length)) return [];
     for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m; ) {

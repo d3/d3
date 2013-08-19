@@ -10,6 +10,7 @@ import "quantile";
 import "bisect";
 import "shuffle";
 import "permute";
+import "pairs";
 import "zip";
 import "transpose";
 import "keys";
