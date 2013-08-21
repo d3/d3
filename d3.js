@@ -8311,10 +8311,10 @@ d3 = function() {
   };
   var d3_svg_brushResizes = [ [ "n", "e", "s", "w", "nw", "ne", "se", "sw" ], [ "e", "w" ], [ "n", "s" ], [] ];
   var d3_time = d3.time = {}, d3_date = Date, d3_time_daySymbols = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
-  function d3_time_utc() {
+  function d3_date_utc() {
     this._ = new Date(arguments.length > 1 ? Date.UTC.apply(this, arguments) : arguments[0]);
   }
-  d3_time_utc.prototype = {
+  d3_date_utc.prototype = {
     getDate: function() {
       return this._.getUTCDate();
     },
@@ -8406,8 +8406,8 @@ d3 = function() {
     }
     function range_utc(t0, t1, dt) {
       try {
-        d3_date = d3_time_utc;
-        var utc = new d3_time_utc();
+        d3_date = d3_date_utc;
+        var utc = new d3_date_utc();
         utc._ = t0;
         return range(utc, t1, dt);
       } finally {
@@ -8430,8 +8430,8 @@ d3 = function() {
   function d3_time_interval_utc(method) {
     return function(date, k) {
       try {
-        d3_date = d3_time_utc;
-        var utc = new d3_time_utc();
+        d3_date = d3_date_utc;
+        var utc = new d3_date_utc();
         utc._ = date;
         return method(utc, k)._;
       } finally {
@@ -8768,7 +8768,7 @@ d3 = function() {
     var local = d3_time_format(template);
     function format(date) {
       try {
-        d3_date = d3_time_utc;
+        d3_date = d3_date_utc;
         var utc = new d3_date();
         utc._ = date;
         return local(utc);
@@ -8778,7 +8778,7 @@ d3 = function() {
     }
     format.parse = function(string) {
       try {
-        d3_date = d3_time_utc;
+        d3_date = d3_date_utc;
         var date = local.parse(string);
         return date && date._;
       } finally {
