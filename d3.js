@@ -8848,21 +8848,24 @@ d3 = function() {
       linear.domain(x);
       return scale;
     };
-    scale.nice = function(m) {
-      return scale.domain(d3_scale_nice(scale.domain(), m));
+    function tickMethod(extent, count) {
+      var span = extent[1] - extent[0], target = span / count, i = d3.bisect(d3_time_scaleSteps, target);
+      if (i == d3_time_scaleSteps.length) return [ methods.year, d3_scale_linearTickRange(extent.map(function(d) {
+        return d / 31536e6;
+      }), count)[2] ];
+      if (!i) return [ d3_time_scaleMilliseconds, d3_scale_linearTickRange(extent, count)[2] ];
+      if (target / d3_time_scaleSteps[i - 1] < d3_time_scaleSteps[i] / target) --i;
+      return methods[i];
+    }
+    scale.nice = function(interval) {
+      var domain = scale.domain(), extent = d3_scaleExtent(domain), method = interval == null ? tickMethod(extent, 10) : typeof interval === "number" ? tickMethod(extent, interval) : [ interval ];
+      return scale.domain(d3_scale_nice(domain, method[0]));
     };
-    scale.ticks = function(m, k) {
-      var extent = d3_scaleExtent(scale.domain());
-      if (typeof m !== "function") {
-        var span = extent[1] - extent[0], target = span / m, i = d3.bisect(d3_time_scaleSteps, target);
-        if (i == d3_time_scaleSteps.length) return methods.year(extent, m);
-        if (!i) return linear.ticks(m).map(d3_time_scaleDate);
-        if (target / d3_time_scaleSteps[i - 1] < d3_time_scaleSteps[i] / target) --i;
-        m = methods[i];
-        k = m[1];
-        m = m[0].range;
-      }
-      return m(extent[0], new Date(+extent[1] + 1), k);
+    scale.ticks = function(interval, skip) {
+      var extent = d3_scaleExtent(scale.domain()), method = interval == null ? tickMethod(extent, 10) : typeof interval === "number" ? tickMethod(extent, interval) : !interval.range ? [ {
+        range: interval
+      }, skip ] : [ interval, skip ];
+      return method[0].range(extent[0], new Date(+extent[1] + 1), method[1]);
     };
     scale.tickFormat = function() {
       return format;
@@ -8882,15 +8885,6 @@ d3 = function() {
       return f[0](date);
     };
   }
-  function d3_time_scaleSetYear(y) {
-    var d = new Date(y, 0, 1);
-    d.setFullYear(y);
-    return d;
-  }
-  function d3_time_scaleGetYear(d) {
-    var y = d.getFullYear(), d0 = d3_time_scaleSetYear(y), d1 = d3_time_scaleSetYear(y + 1);
-    return y + (d - d0) / (d1 - d0);
-  }
   var d3_time_scaleSteps = [ 1e3, 5e3, 15e3, 3e4, 6e4, 3e5, 9e5, 18e5, 36e5, 108e5, 216e5, 432e5, 864e5, 1728e5, 6048e5, 2592e6, 7776e6, 31536e6 ];
   var d3_time_scaleLocalMethods = [ [ d3.time.second, 1 ], [ d3.time.second, 5 ], [ d3.time.second, 15 ], [ d3.time.second, 30 ], [ d3.time.minute, 1 ], [ d3.time.minute, 5 ], [ d3.time.minute, 15 ], [ d3.time.minute, 30 ], [ d3.time.hour, 1 ], [ d3.time.hour, 3 ], [ d3.time.hour, 6 ], [ d3.time.hour, 12 ], [ d3.time.day, 1 ], [ d3.time.day, 2 ], [ d3.time.week, 1 ], [ d3.time.month, 1 ], [ d3.time.month, 3 ], [ d3.time.year, 1 ] ];
   var d3_time_scaleLocalFormats = [ [ d3.time.format("%Y"), d3_true ], [ d3.time.format("%B"), function(d) {
@@ -8908,12 +8902,15 @@ d3 = function() {
   } ], [ d3.time.format(".%L"), function(d) {
     return d.getMilliseconds();
   } ] ];
-  var d3_time_scaleLinear = d3.scale.linear(), d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
-  d3_time_scaleLocalMethods.year = function(extent, m) {
-    return d3_time_scaleLinear.domain(extent.map(d3_time_scaleGetYear)).ticks(m).map(d3_time_scaleSetYear);
-  };
+  var d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
+  d3_time_scaleLocalMethods.year = d3.time.year;
   d3.time.scale = function() {
     return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
+  };
+  var d3_time_scaleMilliseconds = {
+    range: function(start, stop, step) {
+      return d3.range(+start, +stop, step).map(d3_time_scaleDate);
+    }
   };
   var d3_time_scaleUTCMethods = d3_time_scaleLocalMethods.map(function(m) {
     return [ m[0].utc, m[1] ];
@@ -8934,18 +8931,7 @@ d3 = function() {
     return d.getUTCMilliseconds();
   } ] ];
   var d3_time_scaleUTCFormat = d3_time_scaleFormat(d3_time_scaleUTCFormats);
-  function d3_time_scaleUTCSetYear(y) {
-    var d = new Date(Date.UTC(y, 0, 1));
-    d.setUTCFullYear(y);
-    return d;
-  }
-  function d3_time_scaleUTCGetYear(d) {
-    var y = d.getUTCFullYear(), d0 = d3_time_scaleUTCSetYear(y), d1 = d3_time_scaleUTCSetYear(y + 1);
-    return y + (d - d0) / (d1 - d0);
-  }
-  d3_time_scaleUTCMethods.year = function(extent, m) {
-    return d3_time_scaleLinear.domain(extent.map(d3_time_scaleUTCGetYear)).ticks(m).map(d3_time_scaleUTCSetYear);
-  };
+  d3_time_scaleUTCMethods.year = d3.time.year.utc;
   d3.time.scale.utc = function() {
     return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
   };

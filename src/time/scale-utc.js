@@ -21,22 +21,7 @@ var d3_time_scaleUTCFormats = [
 
 var d3_time_scaleUTCFormat = d3_time_scaleFormat(d3_time_scaleUTCFormats);
 
-function d3_time_scaleUTCSetYear(y) {
-  var d = new Date(Date.UTC(y, 0, 1));
-  d.setUTCFullYear(y); // Y2K fail
-  return d;
-}
-
-function d3_time_scaleUTCGetYear(d) {
-  var y = d.getUTCFullYear(),
-      d0 = d3_time_scaleUTCSetYear(y),
-      d1 = d3_time_scaleUTCSetYear(y + 1);
-  return y + (d - d0) / (d1 - d0);
-}
-
-d3_time_scaleUTCMethods.year = function(extent, m) {
-  return d3_time_scaleLinear.domain(extent.map(d3_time_scaleUTCGetYear)).ticks(m).map(d3_time_scaleUTCSetYear);
-};
+d3_time_scaleUTCMethods.year = d3.time.year.utc;
 
 d3.time.scale.utc = function() {
   return d3_time_scale(d3.scale.linear(), d3_time_scaleUTCMethods, d3_time_scaleUTCFormat);
