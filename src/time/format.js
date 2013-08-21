@@ -5,7 +5,9 @@ import "format-localized";
 import "time";
 import "week";
 
-d3.time.format = function(template) {
+d3_time.format = d3_time_format;
+
+function d3_time_format(template) {
   var n = template.length;
 
   function format(date) {
@@ -36,7 +38,7 @@ d3.time.format = function(template) {
     // The am-pm flag is 0 for AM, and 1 for PM.
     if ("p" in d) d.H = d.H % 12 + d.p * 12;
 
-    var date = new d3_time;
+    var date = new d3_date;
     if ("j" in d) date.setFullYear(d.y, 0, d.j);
     else if ("w" in d && ("W" in d || "U" in d)) {
       date.setFullYear(d.y, 0, 1);
@@ -53,7 +55,7 @@ d3.time.format = function(template) {
   };
 
   return format;
-};
+}
 
 function d3_time_parse(date, template, string, j) {
   var c,
@@ -112,22 +114,22 @@ var d3_time_formats = {
   A: function(d) { return d3_time_days[d.getDay()]; },
   b: function(d) { return d3_time_monthAbbreviations[d.getMonth()]; },
   B: function(d) { return d3_time_months[d.getMonth()]; },
-  c: d3.time.format(d3_time_formatDateTime),
+  c: d3_time_format(d3_time_formatDateTime),
   d: function(d, p) { return d3_time_formatPad(d.getDate(), p, 2); },
   e: function(d, p) { return d3_time_formatPad(d.getDate(), p, 2); },
   H: function(d, p) { return d3_time_formatPad(d.getHours(), p, 2); },
   I: function(d, p) { return d3_time_formatPad(d.getHours() % 12 || 12, p, 2); },
-  j: function(d, p) { return d3_time_formatPad(1 + d3.time.dayOfYear(d), p, 3); },
+  j: function(d, p) { return d3_time_formatPad(1 + d3_time.dayOfYear(d), p, 3); },
   L: function(d, p) { return d3_time_formatPad(d.getMilliseconds(), p, 3); },
   m: function(d, p) { return d3_time_formatPad(d.getMonth() + 1, p, 2); },
   M: function(d, p) { return d3_time_formatPad(d.getMinutes(), p, 2); },
   p: function(d) { return d.getHours() >= 12 ? "PM" : "AM"; },
   S: function(d, p) { return d3_time_formatPad(d.getSeconds(), p, 2); },
-  U: function(d, p) { return d3_time_formatPad(d3.time.sundayOfYear(d), p, 2); },
+  U: function(d, p) { return d3_time_formatPad(d3_time.sundayOfYear(d), p, 2); },
   w: function(d) { return d.getDay(); },
-  W: function(d, p) { return d3_time_formatPad(d3.time.mondayOfYear(d), p, 2); },
-  x: d3.time.format(d3_time_formatDate),
-  X: d3.time.format(d3_time_formatTime),
+  W: function(d, p) { return d3_time_formatPad(d3_time.mondayOfYear(d), p, 2); },
+  x: d3_time_format(d3_time_formatDate),
+  X: d3_time_format(d3_time_formatTime),
   y: function(d, p) { return d3_time_formatPad(d.getFullYear() % 100, p, 2); },
   Y: function(d, p) { return d3_time_formatPad(d.getFullYear() % 10000, p, 4); },
   Z: d3_time_zone,

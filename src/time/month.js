@@ -2,8 +2,8 @@ import "day";
 import "interval";
 import "time";
 
-d3.time.month = d3_time_interval(function(date) {
-  date = d3.time.day(date);
+d3_time.month = d3_time_interval(function(date) {
+  date = d3_time.day(date);
   date.setDate(1);
   return date;
 }, function(date, offset) {
@@ -12,5 +12,5 @@ d3.time.month = d3_time_interval(function(date) {
   return date.getMonth();
 });
 
-d3.time.months = d3.time.month.range;
-d3.time.months.utc = d3.time.month.utc.range;
+d3_time.months = d3_time.month.range;
+d3_time.months.utc = d3_time.month.utc.range;
