@@ -1,15 +1,14 @@
-d3.time = {};
-
-var d3_time = Date,
+var d3_time = d3.time = {},
+    d3_date = Date,
     d3_time_daySymbols = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-function d3_time_utc() {
+function d3_date_utc() {
   this._ = new Date(arguments.length > 1
       ? Date.UTC.apply(this, arguments)
       : arguments[0]);
 }
 
-d3_time_utc.prototype = {
+d3_date_utc.prototype = {
   getDate: function() { return this._.getUTCDate(); },
   getDay: function() { return this._.getUTCDay(); },
   getFullYear: function() { return this._.getUTCFullYear(); },

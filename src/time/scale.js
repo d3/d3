@@ -102,42 +102,42 @@ var d3_time_scaleSteps = [
 ];
 
 var d3_time_scaleLocalMethods = [
-  [d3.time.second, 1],
-  [d3.time.second, 5],
-  [d3.time.second, 15],
-  [d3.time.second, 30],
-  [d3.time.minute, 1],
-  [d3.time.minute, 5],
-  [d3.time.minute, 15],
-  [d3.time.minute, 30],
-  [d3.time.hour, 1],
-  [d3.time.hour, 3],
-  [d3.time.hour, 6],
-  [d3.time.hour, 12],
-  [d3.time.day, 1],
-  [d3.time.day, 2],
-  [d3.time.week, 1],
-  [d3.time.month, 1],
-  [d3.time.month, 3],
-  [d3.time.year, 1]
+  [d3_time.second, 1],
+  [d3_time.second, 5],
+  [d3_time.second, 15],
+  [d3_time.second, 30],
+  [d3_time.minute, 1],
+  [d3_time.minute, 5],
+  [d3_time.minute, 15],
+  [d3_time.minute, 30],
+  [d3_time.hour, 1],
+  [d3_time.hour, 3],
+  [d3_time.hour, 6],
+  [d3_time.hour, 12],
+  [d3_time.day, 1],
+  [d3_time.day, 2],
+  [d3_time.week, 1],
+  [d3_time.month, 1],
+  [d3_time.month, 3],
+  [d3_time.year, 1]
 ];
 
 var d3_time_scaleLocalFormats = [
-  [d3.time.format("%Y"), d3_true],
-  [d3.time.format("%B"), function(d) { return d.getMonth(); }],
-  [d3.time.format("%b %d"), function(d) { return d.getDate() != 1; }],
-  [d3.time.format("%a %d"), function(d) { return d.getDay() && d.getDate() != 1; }],
-  [d3.time.format("%I %p"), function(d) { return d.getHours(); }],
-  [d3.time.format("%I:%M"), function(d) { return d.getMinutes(); }],
-  [d3.time.format(":%S"), function(d) { return d.getSeconds(); }],
-  [d3.time.format(".%L"), function(d) { return d.getMilliseconds(); }]
+  [d3_time_format("%Y"), d3_true],
+  [d3_time_format("%B"), function(d) { return d.getMonth(); }],
+  [d3_time_format("%b %d"), function(d) { return d.getDate() != 1; }],
+  [d3_time_format("%a %d"), function(d) { return d.getDay() && d.getDate() != 1; }],
+  [d3_time_format("%I %p"), function(d) { return d.getHours(); }],
+  [d3_time_format("%I:%M"), function(d) { return d.getMinutes(); }],
+  [d3_time_format(":%S"), function(d) { return d.getSeconds(); }],
+  [d3_time_format(".%L"), function(d) { return d.getMilliseconds(); }]
 ];
 
 var d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
 
-d3_time_scaleLocalMethods.year = d3.time.year;
+d3_time_scaleLocalMethods.year = d3_time.year;
 
-d3.time.scale = function() {
+d3_time.scale = function() {
   return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
 };
 
