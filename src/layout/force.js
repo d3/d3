@@ -18,6 +18,7 @@ d3.layout.force = function() {
       linkDistance = d3_layout_forceLinkDistance,
       linkStrength = d3_layout_forceLinkStrength,
       charge = -30,
+      chargeDistance = d3_layout_forceChargeDistance,
       gravity = .1,
       theta = .8,
       nodes = [],
@@ -31,18 +32,20 @@ d3.layout.force = function() {
       if (quad.point !== node) {
         var dx = quad.cx - node.x,
             dy = quad.cy - node.y,
-            dn = 1 / Math.sqrt(dx * dx + dy * dy);
+            dn = Math.sqrt(dx * dx + dy * dy);
 
         /* Barnes-Hut criterion. */
-        if ((x2 - x1) * dn < theta) {
-          var k = quad.charge * dn * dn;
-          node.px -= dx * k;
-          node.py -= dy * k;
+        if ((x2 - x1) / dn < theta) {
+          if (dn < chargeDistance) {
+            var k = quad.charge / dn / dn;
+            node.px -= dx * k;
+            node.py -= dy * k;
+          }
           return true;
         }
 
-        if (quad.point && isFinite(dn)) {
-          var k = quad.pointCharge * dn * dn;
+        if (quad.point && dn && dn < chargeDistance) {
+          var k = quad.pointCharge / dn / dn;
           node.px -= dx * k;
           node.py -= dy * k;
         }
@@ -166,6 +169,12 @@ d3.layout.force = function() {
   force.charge = function(x) {
     if (!arguments.length) return charge;
     charge = typeof x === "function" ? x : +x;
+    return force;
+  };
+
+  force.chargeDistance = function(x) {
+    if (!arguments.length) return chargeDistance;
+    chargeDistance = +x;
     return force;
   };
 
@@ -356,4 +365,5 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
 }
 
 var d3_layout_forceLinkDistance = 20,
-    d3_layout_forceLinkStrength = 1;
+    d3_layout_forceLinkStrength = 1,
+    d3_layout_forceChargeDistance = Infinity;

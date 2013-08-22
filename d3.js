@@ -5579,19 +5579,21 @@ d3 = function() {
     return chord;
   };
   d3.layout.force = function() {
-    var force = {}, event = d3.dispatch("start", "tick", "end"), size = [ 1, 1 ], drag, alpha, friction = .9, linkDistance = d3_layout_forceLinkDistance, linkStrength = d3_layout_forceLinkStrength, charge = -30, gravity = .1, theta = .8, nodes = [], links = [], distances, strengths, charges;
+    var force = {}, event = d3.dispatch("start", "tick", "end"), size = [ 1, 1 ], drag, alpha, friction = .9, linkDistance = d3_layout_forceLinkDistance, linkStrength = d3_layout_forceLinkStrength, charge = -30, chargeDistance = d3_layout_forceChargeDistance, gravity = .1, theta = .8, nodes = [], links = [], distances, strengths, charges;
     function repulse(node) {
       return function(quad, x1, _, x2) {
         if (quad.point !== node) {
-          var dx = quad.cx - node.x, dy = quad.cy - node.y, dn = 1 / Math.sqrt(dx * dx + dy * dy);
-          if ((x2 - x1) * dn < theta) {
-            var k = quad.charge * dn * dn;
-            node.px -= dx * k;
-            node.py -= dy * k;
+          var dx = quad.cx - node.x, dy = quad.cy - node.y, dn = Math.sqrt(dx * dx + dy * dy);
+          if ((x2 - x1) / dn < theta) {
+            if (dn < chargeDistance) {
+              var k = quad.charge / dn / dn;
+              node.px -= dx * k;
+              node.py -= dy * k;
+            }
             return true;
           }
-          if (quad.point && isFinite(dn)) {
-            var k = quad.pointCharge * dn * dn;
+          if (quad.point && dn && dn < chargeDistance) {
+            var k = quad.pointCharge / dn / dn;
             node.px -= dx * k;
             node.py -= dy * k;
           }
@@ -5693,6 +5695,11 @@ d3 = function() {
     force.charge = function(x) {
       if (!arguments.length) return charge;
       charge = typeof x === "function" ? x : +x;
+      return force;
+    };
+    force.chargeDistance = function(x) {
+      if (!arguments.length) return chargeDistance;
+      chargeDistance = +x;
       return force;
     };
     force.gravity = function(x) {
@@ -5823,7 +5830,7 @@ d3 = function() {
     quad.cx = cx / quad.charge;
     quad.cy = cy / quad.charge;
   }
-  var d3_layout_forceLinkDistance = 20, d3_layout_forceLinkStrength = 1;
+  var d3_layout_forceLinkDistance = 20, d3_layout_forceLinkStrength = 1, d3_layout_forceChargeDistance = Infinity;
   d3.layout.hierarchy = function() {
     var sort = d3_layout_hierarchySort, children = d3_layout_hierarchyChildren, value = d3_layout_hierarchyValue;
     function recurse(node, depth, nodes) {
