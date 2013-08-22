@@ -52,16 +52,16 @@ function d3_geo_circleInterpolate(radius, precision) {
   var cr = Math.cos(radius),
       sr = Math.sin(radius);
   return function(from, to, direction, listener) {
+    var step = direction * precision;
     if (from != null) {
       from = d3_geo_circleAngle(cr, from);
       to = d3_geo_circleAngle(cr, to);
       if (direction > 0 ? from < to: from > to) from += direction * 2 * π;
     } else {
       from = radius + direction * 2 * π;
-      to = radius;
+      to = radius - .5 * step;
     }
-    var point;
-    for (var step = direction * precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
+    for (var point, t = from; direction > 0 ? t > to : t < to; t -= step) {
       listener.point((point = d3_geo_spherical([
         cr,
         -sr * Math.cos(t),
