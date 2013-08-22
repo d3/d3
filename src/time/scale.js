@@ -48,7 +48,7 @@ function d3_time_scale(linear, methods, format) {
     if (method) interval = method[0], skip = method[1];
 
     function skipped(date) {
-      return !interval.range(date, d3_time_scaleDate(+date + 1), skip).length;
+      return !isNaN(date) && !interval.range(date, d3_time_scaleDate(+date + 1), skip).length;
     }
 
     return scale.domain(d3_scale_nice(domain, skip > 1 ? {

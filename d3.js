@@ -8859,7 +8859,7 @@ d3 = function() {
       var domain = scale.domain(), extent = d3_scaleExtent(domain), method = interval == null ? tickMethod(extent, 10) : typeof interval === "number" && tickMethod(extent, interval);
       if (method) interval = method[0], skip = method[1];
       function skipped(date) {
-        return !interval.range(date, d3_time_scaleDate(+date + 1), skip).length;
+        return !isNaN(date) && !interval.range(date, d3_time_scaleDate(+date + 1), skip).length;
       }
       return scale.domain(d3_scale_nice(domain, skip > 1 ? {
         floor: function(date) {
