@@ -39,22 +39,39 @@ function d3_time_scale(linear, methods, format) {
         : methods[target / d3_time_scaleSteps[i - 1] < d3_time_scaleSteps[i] / target ? i - 1 : i];
   }
 
-  scale.nice = function(interval) { // TODO skip
+  scale.nice = function(interval, skip) {
     var domain = scale.domain(),
         extent = d3_scaleExtent(domain),
         method = interval == null ? tickMethod(extent, 10)
-          : typeof interval === "number" ? tickMethod(extent, interval)
-          : [interval];
-    return scale.domain(d3_scale_nice(domain, method[0]));
+          : typeof interval === "number" && tickMethod(extent, interval);
+
+    if (method) interval = method[0], skip = method[1];
+
+    function skipped(date) {
+      return !interval.range(date, d3_time_scaleDate(+date + 1), skip).length;
+    }
+
+    return scale.domain(d3_scale_nice(domain, skip > 1 ? {
+      floor: function(date) {
+        while (skipped(date = interval.floor(date))) date = d3_time_scaleDate(date - 1);
+        return date;
+      },
+      ceil: function(date) {
+        while (skipped(date = interval.ceil(date))) date = d3_time_scaleDate(+date + 1);
+        return date;
+      }
+    } : interval));
   };
 
   scale.ticks = function(interval, skip) {
     var extent = d3_scaleExtent(scale.domain()),
         method = interval == null ? tickMethod(extent, 10)
           : typeof interval === "number" ? tickMethod(extent, interval)
-          : !interval.range ? [{range: interval}, skip] // assume deprecated range function
-          : [interval, skip];
-    return method[0].range(extent[0], new Date(+extent[1] + 1), method[1]); // inclusive upper bound
+          : !interval.range && [{range: interval}, skip]; // assume deprecated range function
+
+    if (method) interval = method[0], skip = method[1];
+
+    return interval.range(extent[0], d3_time_scaleDate(+extent[1] + 1), skip); // inclusive upper bound
   };
 
   scale.tickFormat = function() {
