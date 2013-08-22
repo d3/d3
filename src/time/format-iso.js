@@ -2,9 +2,9 @@ import "format";
 import "format-utc";
 import "time";
 
-var d3_time_formatIso = d3.time.format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
+var d3_time_formatIso = d3_time_formatUtc("%Y-%m-%dT%H:%M:%S.%LZ");
 
-d3.time.format.iso = Date.prototype.toISOString && +new Date("2000-01-01T00:00:00.000Z")
+d3_time_format.iso = Date.prototype.toISOString && +new Date("2000-01-01T00:00:00.000Z")
     ? d3_time_formatIsoNative
     : d3_time_formatIso;
 

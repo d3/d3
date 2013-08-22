@@ -1,11 +1,33 @@
 import "../arrays/merge";
 import "../math/trigonometry";
+import "geo";
 import "clip";
 import "clip-polygon";
 
-var d3_geo_clipViewMAX = 1e9;
+var d3_geo_clipExtentMAX = 1e9;
 
-function d3_geo_clipView(x0, y0, x1, y1) {
+d3.geo.clipExtent = function() {
+  var x0, y0, x1, y1,
+      stream,
+      clip,
+      clipExtent = {
+        stream: function(output) {
+          if (stream) stream.valid = false;
+          stream = clip(output);
+          stream.valid = true; // allow caching by d3.geo.path
+          return stream;
+        },
+        extent: function(_) {
+          if (!arguments.length) return [[x0, y0], [x1, y1]];
+          clip = d3_geo_clipExtent(x0 = +_[0][0], y0 = +_[0][1], x1 = +_[1][0], y1 = +_[1][1]);
+          if (stream) stream.valid = false, stream = null;
+          return clipExtent;
+        }
+      };
+  return clipExtent.extent([[0, 0], [960, 500]]);
+};
+
+function d3_geo_clipExtent(x0, y0, x1, y1) {
   return function(listener) {
     var listener_ = listener,
         bufferListener = d3_geo_clipBufferListener(),
@@ -113,8 +135,8 @@ function d3_geo_clipView(x0, y0, x1, y1) {
     }
 
     function linePoint(x, y) {
-      x = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, x));
-      y = Math.max(-d3_geo_clipViewMAX, Math.min(d3_geo_clipViewMAX, y));
+      x = Math.max(-d3_geo_clipExtentMAX, Math.min(d3_geo_clipExtentMAX, x));
+      y = Math.max(-d3_geo_clipExtentMAX, Math.min(d3_geo_clipExtentMAX, y));
       var v = visible(x, y);
       if (polygon) ring.push([x, y]);
       if (first) {
@@ -177,10 +199,10 @@ function d3_geo_clipView(x0, y0, x1, y1) {
 
     if (Math.abs(dx) < ε && Math.abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
 
-    if (d3_geo_clipViewT(x0 - a[0],  dx, t) &&
-        d3_geo_clipViewT(a[0] - x1, -dx, t) &&
-        d3_geo_clipViewT(y0 - a[1],  dy, t) &&
-        d3_geo_clipViewT(a[1] - y1, -dy, t)) {
+    if (d3_geo_clipExtentT(x0 - a[0],  dx, t) &&
+        d3_geo_clipExtentT(a[0] - x1, -dx, t) &&
+        d3_geo_clipExtentT(y0 - a[1],  dy, t) &&
+        d3_geo_clipExtentT(a[1] - y1, -dy, t)) {
       if (t[1] < 1) {
         b[0] = a[0] + t[1] * dx;
         b[1] = a[1] + t[1] * dy;
@@ -196,7 +218,7 @@ function d3_geo_clipView(x0, y0, x1, y1) {
   }
 }
 
-function d3_geo_clipViewT(num, denominator, t) {
+function d3_geo_clipExtentT(num, denominator, t) {
   if (Math.abs(denominator) < ε) return num <= 0;
 
   var u = num / denominator;

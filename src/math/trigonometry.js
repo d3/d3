@@ -24,6 +24,10 @@ function d3_cosh(x) {
   return (Math.exp(x) + Math.exp(-x)) / 2;
 }
 
+function d3_tanh(x) {
+  return d3_sinh(x) / d3_cosh(x);
+}
+
 function d3_haversin(x) {
   return (x = Math.sin(x / 2)) * x;
 }

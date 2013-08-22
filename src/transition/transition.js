@@ -31,6 +31,9 @@ d3.transition = function(selection) {
 
 d3.transition.prototype = d3_transitionPrototype;
 
+import "../selection/transition";
+import "../selection/interrupt";
+
 import "select";
 import "selectAll";
 import "filter";
@@ -99,9 +102,8 @@ function d3_transitionNode(node, i, id, inherit) {
         }
 
         if (t >= 1) {
-          stop();
           transition.event && transition.event.end.call(node, d, i);
-          return 1;
+          return stop();
         }
       }
 

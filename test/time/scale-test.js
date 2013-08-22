@@ -20,6 +20,22 @@ suite.addBatch({
         assert.deepEqual(x.nice(_.time.month).domain(), [local(2008, 11, 1), local(2009, 1, 1)]);
         assert.deepEqual(x.nice(_.time.year).domain(), [local(2008, 0, 1), local(2010, 0, 1)]);
       },
+      "rounds using the specified time interval and skip": function(scale) {
+        var x = scale().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48)]);
+        assert.deepEqual(x.nice(_.time.day, 3).domain(), [local(2009, 0, 1), local(2009, 0, 4)]);
+        assert.deepEqual(x.nice(_.time.week, 2).domain(), [local(2008, 11, 21), local(2009, 0, 4)]);
+        assert.deepEqual(x.nice(_.time.month, 3).domain(), [local(2008, 9, 1), local(2009, 3, 1)]);
+        assert.deepEqual(x.nice(_.time.year, 10).domain(), [local(2000, 0, 1), local(2010, 0, 1)]);
+      },
+      "rounds using the specified count": function(scale) {
+        var x = scale().domain([local(2009, 0, 1, 0, 17), local(2009, 0, 1, 23, 42)]);
+        assert.deepEqual(x.nice(100).domain(), [local(2009, 0, 1, 0, 15), local(2009, 0, 1, 23, 45)]);
+        assert.deepEqual(x.nice(10).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
+      },
+      "rounds with a default count of ten if no arguments": function(scale) {
+        var x = scale().domain([local(2009, 0, 1, 0, 17), local(2009, 0, 1, 23, 42)]);
+        assert.deepEqual(x.nice().domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
+      },
       "works on degenerate domains": function(scale) {
         var x = scale().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 0, 12)]);
         assert.deepEqual(x.nice(_.time.day).domain(), [local(2009, 0, 1), local(2009, 0, 2)]);
@@ -80,7 +96,7 @@ suite.addBatch({
     "ticks": {
       "observes explicit tick interval": function(scale) {
         var x = scale().domain([local(2011, 0, 1, 12, 1, 0), local(2011, 0, 1, 12, 4, 4)]);
-        assert.deepEqual(x.ticks(_.time.minutes), [
+        assert.deepEqual(x.ticks(_.time.minute), [
           local(2011, 0, 1, 12, 1),
           local(2011, 0, 1, 12, 2),
           local(2011, 0, 1, 12, 3),
@@ -88,6 +104,24 @@ suite.addBatch({
         ]);
       },
       "observes explicit tick interval and step": function(scale) {
+        var x = scale().domain([local(2011, 0, 1, 12, 0, 0), local(2011, 0, 1, 12, 33, 4)]);
+        assert.deepEqual(x.ticks(_.time.minute, 10), [
+          local(2011, 0, 1, 12, 0),
+          local(2011, 0, 1, 12, 10),
+          local(2011, 0, 1, 12, 20),
+          local(2011, 0, 1, 12, 30)
+        ]);
+      },
+      "(deprecated) observes explicit tick range": function(scale) {
+        var x = scale().domain([local(2011, 0, 1, 12, 1, 0), local(2011, 0, 1, 12, 4, 4)]);
+        assert.deepEqual(x.ticks(_.time.minutes), [
+          local(2011, 0, 1, 12, 1),
+          local(2011, 0, 1, 12, 2),
+          local(2011, 0, 1, 12, 3),
+          local(2011, 0, 1, 12, 4)
+        ]);
+      },
+      "(deprecated) observes explicit tick range and step": function(scale) {
         var x = scale().domain([local(2011, 0, 1, 12, 0, 0), local(2011, 0, 1, 12, 33, 4)]);
         assert.deepEqual(x.ticks(_.time.minutes, 10), [
           local(2011, 0, 1, 12, 0),
@@ -329,10 +363,44 @@ suite.addBatch({
   "scale.utc": {
     topic: load("time/scale-utc").expression("d3.time.scale.utc").document(),
 
+    "nice": {
+      "rounds using the specified time interval": function(scale) {
+        var x = scale().domain([utc(2009, 0, 1, 0, 12), utc(2009, 0, 1, 23, 48)]);
+        assert.deepEqual(x.nice(_.time.day.utc).domain(), [utc(2009, 0, 1), utc(2009, 0, 2)]);
+        assert.deepEqual(x.nice(_.time.week.utc).domain(), [utc(2008, 11, 28), utc(2009, 0, 4)]);
+        assert.deepEqual(x.nice(_.time.month.utc).domain(), [utc(2008, 11, 1), utc(2009, 1, 1)]);
+        assert.deepEqual(x.nice(_.time.year.utc).domain(), [utc(2008, 0, 1), utc(2010, 0, 1)]);
+      },
+      "rounds using the specified time interval and skip": function(scale) {
+        var x = scale().domain([utc(2009, 0, 1, 0, 12), utc(2009, 0, 1, 23, 48)]);
+        assert.deepEqual(x.nice(_.time.day.utc, 3).domain(), [utc(2009, 0, 1), utc(2009, 0, 4)]);
+        assert.deepEqual(x.nice(_.time.week.utc, 2).domain(), [utc(2008, 11, 21), utc(2009, 0, 4)]);
+        assert.deepEqual(x.nice(_.time.month.utc, 3).domain(), [utc(2008, 9, 1), utc(2009, 3, 1)]);
+        assert.deepEqual(x.nice(_.time.year.utc, 10).domain(), [utc(2000, 0, 1), utc(2010, 0, 1)]);
+      },
+      "rounds using the specified count": function(scale) {
+        var x = scale().domain([utc(2009, 0, 1, 0, 17), utc(2009, 0, 1, 23, 42)]);
+        assert.deepEqual(x.nice(100).domain(), [utc(2009, 0, 1, 0, 15), utc(2009, 0, 1, 23, 45)]);
+        assert.deepEqual(x.nice(10).domain(), [utc(2009, 0, 1), utc(2009, 0, 2)]);
+      },
+      "rounds with a default count of ten if no arguments": function(scale) {
+        var x = scale().domain([utc(2009, 0, 1, 0, 17), utc(2009, 0, 1, 23, 42)]);
+        assert.deepEqual(x.nice().domain(), [utc(2009, 0, 1), utc(2009, 0, 2)]);
+      },
+      "works on degenerate domains": function(scale) {
+        var x = scale().domain([utc(2009, 0, 1, 0, 12), utc(2009, 0, 1, 0, 12)]);
+        assert.deepEqual(x.nice(_.time.day.utc).domain(), [utc(2009, 0, 1), utc(2009, 0, 2)]);
+      },
+      "nicing a polylinear domain only affects the extent": function(linear) {
+        var x = linear().domain([utc(2009, 0, 1, 0, 12), utc(2009, 0, 1, 23, 48), utc(2009, 0, 2, 23, 48)]).nice(_.time.day.utc);
+        assert.deepEqual(x.domain(), [utc(2009, 0, 1), utc(2009, 0, 1, 23, 48), utc(2009, 0, 3)]);
+      }
+    },
+
     "ticks": {
       "observes explicit tick interval": function(scale) {
         var x = scale().domain([utc(2011, 0, 1, 12, 1, 0), utc(2011, 0, 1, 12, 4, 4)]);
-        assert.deepEqual(x.ticks(_.time.minutes), [
+        assert.deepEqual(x.ticks(_.time.minute.utc), [
           utc(2011, 0, 1, 12, 1),
           utc(2011, 0, 1, 12, 2),
           utc(2011, 0, 1, 12, 3),
@@ -341,7 +409,25 @@ suite.addBatch({
       },
       "observes explicit tick interval and step": function(scale) {
         var x = scale().domain([utc(2011, 0, 1, 12, 0, 0), utc(2011, 0, 1, 12, 33, 4)]);
-        assert.deepEqual(x.ticks(_.time.minutes, 10), [
+        assert.deepEqual(x.ticks(_.time.minute.utc, 10), [
+          utc(2011, 0, 1, 12, 0),
+          utc(2011, 0, 1, 12, 10),
+          utc(2011, 0, 1, 12, 20),
+          utc(2011, 0, 1, 12, 30)
+        ]);
+      },
+      "(deprecated) observes explicit tick range": function(scale) {
+        var x = scale().domain([utc(2011, 0, 1, 12, 1, 0), utc(2011, 0, 1, 12, 4, 4)]);
+        assert.deepEqual(x.ticks(_.time.minutes.utc), [
+          utc(2011, 0, 1, 12, 1),
+          utc(2011, 0, 1, 12, 2),
+          utc(2011, 0, 1, 12, 3),
+          utc(2011, 0, 1, 12, 4)
+        ]);
+      },
+      "(deprecated) observes explicit tick range and step": function(scale) {
+        var x = scale().domain([utc(2011, 0, 1, 12, 0, 0), utc(2011, 0, 1, 12, 33, 4)]);
+        assert.deepEqual(x.ticks(_.time.minutes.utc, 10), [
           utc(2011, 0, 1, 12, 0),
           utc(2011, 0, 1, 12, 10),
           utc(2011, 0, 1, 12, 20),

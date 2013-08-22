@@ -87,18 +87,12 @@ function d3_scale_linearRebind(scale, linear) {
 }
 
 function d3_scale_linearNice(domain, m) {
-  return d3_scale_nice(domain, d3_scale_niceStep(m
-      ? d3_scale_linearTickRange(domain, m)[2]
-      : d3_scale_linearNiceStep(domain)));
-}
-
-function d3_scale_linearNiceStep(domain) {
-  var extent = d3_scaleExtent(domain),
-      span = extent[1] - extent[0];
-  return Math.pow(10, Math.round(Math.log(span) / Math.LN10) - 1);
+  return d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
 }
 
 function d3_scale_linearTickRange(domain, m) {
+  if (m == null) m = 10;
+
   var extent = d3_scaleExtent(domain),
       span = extent[1] - extent[0],
       step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),

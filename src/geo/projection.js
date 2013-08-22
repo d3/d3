@@ -3,13 +3,14 @@ import "../core/rebind";
 import "../math/trigonometry";
 import "clip-antimeridian";
 import "clip-circle";
-import "clip-view";
+import "clip-extent";
 import "compose";
 import "geo";
 import "path";
 import "resample";
 import "rotation";
 import "stream";
+import "transform";
 
 d3.geo.projection = d3_geo_projection;
 d3.geo.projectionMutator = d3_geo_projectionMutator;
@@ -60,7 +61,7 @@ function d3_geo_projectionMutator(projectAt) {
   projection.clipExtent = function(_) {
     if (!arguments.length) return clipExtent;
     clipExtent = _;
-    postclip = _ == null ? d3_identity : d3_geo_clipView(_[0][0], _[0][1], _[1][0], _[1][1]);
+    postclip = _ ? d3_geo_clipExtent(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
     return invalidate();
   };
 
@@ -103,10 +104,7 @@ function d3_geo_projectionMutator(projectAt) {
   }
 
   function invalidate() {
-    if (stream) {
-      stream.valid = false;
-      stream = null;
-    }
+    if (stream) stream.valid = false, stream = null;
     return projection;
   }
 
@@ -118,15 +116,10 @@ function d3_geo_projectionMutator(projectAt) {
 }
 
 function d3_geo_projectionRadiansRotate(rotate, stream) {
-  return {
-    point: function(x, y) {
-      y = rotate(x * d3_radians, y * d3_radians), x = y[0];
-      stream.point(x > π ? x - 2 * π : x < -π ? x + 2 * π : x, y[1]);
-    },
-    sphere: function() { stream.sphere(); },
-    lineStart: function() { stream.lineStart(); },
-    lineEnd: function() { stream.lineEnd(); },
-    polygonStart: function() { stream.polygonStart(); },
-    polygonEnd: function() { stream.polygonEnd(); }
+  var transform = new d3_geo_transform(stream);
+  transform.point = function(x, y) {
+    y = rotate(x * d3_radians, y * d3_radians), x = y[0];
+    stream.point(x > π ? x - 2 * π : x < -π ? x + 2 * π : x, y[1]);
   };
+  return transform;
 }
