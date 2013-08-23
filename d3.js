@@ -8531,12 +8531,13 @@ d3 = function() {
     return format;
   }
   function d3_time_parse(date, template, string, j) {
-    var c, p, i = 0, n = template.length, m = string.length;
+    var c, p, t, i = 0, n = template.length, m = string.length;
     while (i < n) {
       if (j >= m) return -1;
       c = template.charCodeAt(i++);
       if (c === 37) {
-        p = d3_time_parsers[template.charAt(i++)];
+        t = template.charAt(i++);
+        p = d3_time_parsers[t in d3_time_formatPads ? template.charAt(i++) : t];
         if (!p || (j = p(date, string, j)) < 0) return -1;
       } else if (c != string.charCodeAt(j++)) {
         return -1;
