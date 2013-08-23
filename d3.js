@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.3.0"
+    version: "3.3.1"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -3784,16 +3784,16 @@ d3 = function() {
   function d3_geo_circleInterpolate(radius, precision) {
     var cr = Math.cos(radius), sr = Math.sin(radius);
     return function(from, to, direction, listener) {
+      var step = direction * precision;
       if (from != null) {
         from = d3_geo_circleAngle(cr, from);
         to = d3_geo_circleAngle(cr, to);
         if (direction > 0 ? from < to : from > to) from += direction * 2 * π;
       } else {
         from = radius + direction * 2 * π;
-        to = radius;
+        to = radius - .5 * step;
       }
-      var point;
-      for (var step = direction * precision, t = from; direction > 0 ? t > to : t < to; t -= step) {
+      for (var point, t = from; direction > 0 ? t > to : t < to; t -= step) {
         listener.point((point = d3_geo_spherical([ cr, -sr * Math.cos(t), -sr * Math.sin(t) ]))[0], point[1]);
       }
     };
@@ -7878,7 +7878,7 @@ d3 = function() {
     function axis(g) {
       g.each(function() {
         var g = d3.select(this);
-        var ticks = tickValues == null ? scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain() : tickValues, tickFormat = tickFormat_ == null ? scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : d3_identity : tickFormat_, tick = g.selectAll(".tick.major").data(ticks, d3_identity), tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick major").style("opacity", 1e-6), tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(), tickUpdate = d3.transition(tick).style("opacity", 1), tickTransform;
+        var ticks = tickValues == null ? scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain() : tickValues, tickFormat = tickFormat_ == null ? scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : d3_identity : tickFormat_, tick = g.selectAll(".tick").data(ticks, d3_identity), tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick").style("opacity", 1e-6), tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(), tickUpdate = d3.transition(tick).style("opacity", 1), tickTransform;
         var range = d3_scaleRange(scale), path = g.selectAll(".domain").data([ 0 ]), pathUpdate = (path.enter().append("path").attr("class", "domain"), 
         d3.transition(path));
         var scale1 = scale.copy(), scale0 = this.__chart__ || scale1;
@@ -8531,12 +8531,13 @@ d3 = function() {
     return format;
   }
   function d3_time_parse(date, template, string, j) {
-    var c, p, i = 0, n = template.length, m = string.length;
+    var c, p, t, i = 0, n = template.length, m = string.length;
     while (i < n) {
       if (j >= m) return -1;
       c = template.charCodeAt(i++);
       if (c === 37) {
-        p = d3_time_parsers[template.charAt(i++)];
+        t = template.charAt(i++);
+        p = d3_time_parsers[t in d3_time_formatPads ? template.charAt(i++) : t];
         if (!p || (j = p(date, string, j)) < 0) return -1;
       } else if (c != string.charCodeAt(j++)) {
         return -1;

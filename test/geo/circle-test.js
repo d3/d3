@@ -22,6 +22,10 @@ suite.addBatch({
       var o = circle().origin([45, 45]).angle(0)();
       assert.equal(o.type, "Polygon");
       assert.inDelta(o.coordinates[0][0], [45, 45], 1e-6);
+    },
+    "first and last points are coincident": function(circle) {
+      var o = circle().origin([0, 0]).angle(.02).precision(45)();
+      assert.inDelta(o.coordinates[0][0], o.coordinates[0].pop(), 1e-6);
     }
   }
 });
