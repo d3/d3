@@ -21,8 +21,8 @@ d3.svg.axis = function() {
       // Ticks, or domain values for ordinal scales.
       var ticks = tickValues == null ? (scale.ticks ? scale.ticks.apply(scale, tickArguments_) : scale.domain()) : tickValues,
           tickFormat = tickFormat_ == null ? (scale.tickFormat ? scale.tickFormat.apply(scale, tickArguments_) : d3_identity) : tickFormat_,
-          tick = g.selectAll(".tick.major").data(ticks, d3_identity),
-          tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick major").style("opacity", 1e-6),
+          tick = g.selectAll(".tick").data(ticks, d3_identity),
+          tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick").style("opacity", 1e-6),
           tickExit = d3.transition(tick.exit()).style("opacity", 1e-6).remove(),
           tickUpdate = d3.transition(tick).style("opacity", 1),
           tickTransform;
