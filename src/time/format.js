@@ -69,7 +69,7 @@ function d3_time_parse(date, template, string, j) {
     c = template.charCodeAt(i++);
     if (c === 37) {
       t = template.charAt(i++);
-      p = d3_time_parsers[t === "0" || t === "_" || t === "-" ? template.charAt(i++) : t];
+      p = d3_time_parsers[t in d3_time_formatPads ? template.charAt(i++) : t];
       if (!p || ((j = p(date, string, j)) < 0)) return -1;
     } else if (c != string.charCodeAt(j++)) {
       return -1;
