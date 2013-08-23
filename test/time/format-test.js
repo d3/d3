@@ -284,7 +284,7 @@ suite.addBatch({
         assert.deepEqual(p("% 02/03/1991"), local(1991, 1, 3));
         assert.isNull(p("%% 03/10/2010"));
       },
-      "parses padding modifier": function(format) {
+      "ignores optional padding modifier, skipping zeroes and spaces": function(format) {
         var p = format("%-m/%0d/%_Y").parse;
         assert.deepEqual(p("01/ 1/1990"), local(1990, 0, 1));
       },
