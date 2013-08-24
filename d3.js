@@ -812,6 +812,12 @@ d3 = function() {
     update.exit = function() {
       return exit;
     };
+    update.update = function(_){
+      if (!arguments.length) return update;
+      enter.append(_);
+      exit.remove();
+      return update;
+    };
     return update;
   };
   function d3_selection_dataNode(data) {
