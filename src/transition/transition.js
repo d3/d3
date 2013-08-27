@@ -31,9 +31,6 @@ d3.transition = function(selection) {
 
 d3.transition.prototype = d3_transitionPrototype;
 
-import "../selection/transition";
-import "../selection/interrupt";
-
 import "select";
 import "selectAll";
 import "filter";

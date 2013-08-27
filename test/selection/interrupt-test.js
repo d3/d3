@@ -6,7 +6,7 @@ var suite = vows.describe("selection.interrupt");
 
 suite.addBatch({
   "interrupt": {
-    topic: load("selection/interrupt").document(),
+    topic: load("transition/transition").document(),
     "returns the current selection": function(d3) {
       var selection = d3.select("body").append("div");
       assert.strictEqual(selection.interrupt(), selection);

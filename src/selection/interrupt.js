@@ -1,4 +1,4 @@
-import "../transition/transition";
+// import "../transition/transition";
 import "selection";
 
 d3_selectionPrototype.interrupt = function() {
