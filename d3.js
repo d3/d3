@@ -8513,17 +8513,18 @@ d3 = function() {
         H: 0,
         M: 0,
         S: 0,
-        L: 0
+        L: 0,
+        Z: null
       }, i = d3_time_parse(d, template, string, 0);
       if (i != string.length) return null;
       if ("p" in d) d.H = d.H % 12 + d.p * 12;
-      var date = new d3_date();
+      var utcZone = d.Z != null && d3_date !== d3_date_utc, date = new (utcZone ? d3_date_utc : d3_date)();
       if ("j" in d) date.setFullYear(d.y, 0, d.j); else if ("w" in d && ("W" in d || "U" in d)) {
         date.setFullYear(d.y, 0, 1);
         date.setFullYear(d.y, 0, "W" in d ? (d.w + 6) % 7 + d.W * 7 - (date.getDay() + 5) % 7 : d.w + d.U * 7 - (date.getDay() + 6) % 7);
       } else date.setFullYear(d.y, d.m, d.d);
-      date.setHours(d.H, d.M, d.S, d.L);
-      return date;
+      date.setHours(d.H + Math.floor(d.Z / 100), d.M + d.Z % 100, d.S, d.L);
+      return utcZone ? new d3_date(+date) : date;
     };
     format.toString = function() {
       return template;
@@ -8652,6 +8653,7 @@ d3 = function() {
     X: d3_time_parseLocaleTime,
     y: d3_time_parseYear,
     Y: d3_time_parseFullYear,
+    Z: d3_time_parseZone,
     "%": d3_time_parseLiteralPercent
   };
   function d3_time_parseWeekdayAbbrev(date, string, i) {
@@ -8707,6 +8709,10 @@ d3 = function() {
     d3_time_numberRe.lastIndex = 0;
     var n = d3_time_numberRe.exec(string.substring(i, i + 2));
     return n ? (date.y = d3_time_expandYear(+n[0]), i + n[0].length) : -1;
+  }
+  function d3_time_parseZone(date, string, i) {
+    return /^[+-]\d{4}$/.test(string = string.substring(i, i + 5)) ? (date.Z = +string, 
+    i + 5) : -1;
   }
   function d3_time_expandYear(d) {
     return d + (d > 68 ? 1900 : 2e3);

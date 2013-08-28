@@ -31,14 +31,15 @@ function d3_time_format(template) {
   }
 
   format.parse = function(string) {
-    var d = {y: 1900, m: 0, d: 1, H: 0, M: 0, S: 0, L: 0},
+    var d = {y: 1900, m: 0, d: 1, H: 0, M: 0, S: 0, L: 0, Z: null},
         i = d3_time_parse(d, template, string, 0);
     if (i != string.length) return null;
 
     // The am-pm flag is 0 for AM, and 1 for PM.
     if ("p" in d) d.H = d.H % 12 + d.p * 12;
 
-    var date = new d3_date;
+    var utcZone = d.Z != null && d3_date !== d3_date_utc,
+        date = new (utcZone ? d3_date_utc : d3_date);
     if ("j" in d) date.setFullYear(d.y, 0, d.j);
     else if ("w" in d && ("W" in d || "U" in d)) {
       date.setFullYear(d.y, 0, 1);
@@ -46,8 +47,8 @@ function d3_time_format(template) {
           ? (d.w + 6) % 7 + d.W * 7 - (date.getDay() + 5) % 7
           :  d.w          + d.U * 7 - (date.getDay() + 6) % 7);
     } else date.setFullYear(d.y, d.m, d.d);
-    date.setHours(d.H, d.M, d.S, d.L);
-    return date;
+    date.setHours(d.H + Math.floor(d.Z / 100), d.M + d.Z % 100, d.S, d.L);
+    return utcZone ? new d3_date(+date) : date;
   };
 
   format.toString = function() {
@@ -161,7 +162,7 @@ var d3_time_parsers = {
   X: d3_time_parseLocaleTime,
   y: d3_time_parseYear,
   Y: d3_time_parseFullYear,
-  // Z: function(d, s, i) { /*TODO time zone */ return i; },
+  Z: d3_time_parseZone,
   "%": d3_time_parseLiteralPercent
 };
 
@@ -229,6 +230,12 @@ function d3_time_parseYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 2));
   return n ? (date.y = d3_time_expandYear(+n[0]), i + n[0].length) : -1;
+}
+
+function d3_time_parseZone(date, string, i) {
+  return /^[+-]\d{4}$/.test(string = string.substring(i, i + 5))
+      ? (date.Z = +string, i + 5)
+      : -1;
 }
 
 function d3_time_expandYear(d) {
