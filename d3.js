@@ -1411,6 +1411,10 @@ d3 = function() {
         zoomed(event_);
       }
       function ended() {
+        var touches = d3.event.changedTouches;
+        for (var i = 0, n = touches.length; i < n; ++i) {
+          delete locations0[touches[i].identifier];
+        }
         if (d3.event.touches.length) {
           relocate();
         } else {
