@@ -189,8 +189,8 @@ d3.behavior.zoom = function() {
         locations0, // touchstart locations
         distance0 = 0, // distance² between initial touches
         scale0, // scale when we started touching
-        w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended),
-        t = d3.select(target).on(mousedown, null).on(touchstart, started), // prevent duplicate events
+        w = d3.select(d3_window).on(touchstart, started, true).on(touchmove, moved).on(touchend, ended),
+        t = d3.select(target).on(touchstart, null).on(mousedown, null), // prevent duplicate events
         dragRestore = d3_event_dragSuppress();
 
     d3_selection_interrupt.call(target);
@@ -232,7 +232,8 @@ d3.behavior.zoom = function() {
           l0 = locations0[p0.identifier];
 
       if (p1 = touches[1]) {
-        var p1, l1 = locations0[p1.identifier],
+        var p1,
+            l1 = locations0[p1.identifier],
             scale1 = d3.event.scale;
         if (scale1 == null) {
           var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
@@ -252,8 +253,8 @@ d3.behavior.zoom = function() {
       if (d3.event.touches.length) {
         relocate(); // locations may have detached due to rotation
       } else {
-        w.on(touchmove, null).on(touchend, null);
-        t.on(mousedown, mousedowned).on(touchstart, touchstarted);
+        w.on(touchstart, null).on(touchmove, null).on(touchend, null);
+        t.on(touchstart, touchstarted).on(mousedown, mousedowned);
         dragRestore();
         zoomended(event_);
       }
