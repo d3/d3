@@ -1355,7 +1355,7 @@ d3 = function() {
       }
     }
     function touchstarted() {
-      var target = this, event_ = event.of(target, arguments), locations0, distance0 = 0, scale0, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), t = d3.select(target).on(mousedown, null).on(touchstart, started), dragRestore = d3_event_dragSuppress();
+      var target = this, WTF = Math.random() * 1e6 | 0, event_ = event.of(target, arguments), locations0, distance0 = 0, scale0, w = d3.select(d3_window).on(touchstart, started, true).on(touchmove, moved).on(touchend, ended), t = d3.select(target).on(touchstart, null).on(mousedown, null), dragRestore = d3_event_dragSuppress();
       d3_selection_interrupt.call(target);
       started();
       zoomstarted(event_);
@@ -1370,6 +1370,7 @@ d3 = function() {
       }
       function started() {
         var now = Date.now(), touches = relocate();
+        console.warn("touchstart", d3.event.touches.length, WTF);
         if (touches.length === 1) {
           if (now - touchtime < 500) {
             var p = touches[0], l = locations0[p.identifier];
@@ -1386,6 +1387,7 @@ d3 = function() {
       }
       function moved() {
         var touches = d3.touches(target), p0 = touches[0], l0 = locations0[p0.identifier];
+        console.warn("touchmove", d3.event.touches.length, WTF);
         if (p1 = touches[1]) {
           var p1, l1 = locations0[p1.identifier], scale1 = d3.event.scale;
           if (scale1 == null) {
@@ -1401,11 +1403,12 @@ d3 = function() {
         zoomed(event_);
       }
       function ended() {
+        console.warn("touchend", d3.event.touches.length, WTF);
         if (d3.event.touches.length) {
           relocate();
         } else {
-          w.on(touchmove, null).on(touchend, null);
-          t.on(mousedown, mousedowned).on(touchstart, touchstarted);
+          w.on(touchstart, null).on(touchmove, null).on(touchend, null);
+          t.on(touchstart, touchstarted).on(mousedown, mousedowned);
           dragRestore();
           zoomended(event_);
         }
