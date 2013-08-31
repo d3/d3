@@ -261,11 +261,11 @@ d3.behavior.zoom = function() {
     }
 
     function ended() {
-      var touches = d3.event.changedTouches;
-      for (var i = 0, n = touches.length; i < n; ++i) {
-        delete locations0[touches[i].identifier];
-      }
       if (d3.event.touches.length) {
+        var touches = d3.event.changedTouches;
+        for (var i = 0, n = touches.length; i < n; ++i) {
+          delete locations0[touches[i].identifier];
+        }
         relocate(); // locations may have detached due to rotation
       } else {
         w.on(touchmove, null).on(touchend, null);
