@@ -262,9 +262,9 @@ d3.behavior.zoom = function() {
 
     function ended() {
       if (d3.event.touches.length) {
-        var touches = d3.event.changedTouches;
-        for (var i = 0, n = touches.length; i < n; ++i) {
-          delete locations0[touches[i].identifier];
+        var changed = d3.event.changedTouches;
+        for (var i = 0, n = changed.length; i < n; ++i) {
+          delete locations0[changed[i].identifier];
         }
         relocate(); // locations may have detached due to rotation
       } else {
