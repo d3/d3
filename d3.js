@@ -1412,13 +1412,14 @@ d3 = function() {
           for (var i = 0, n = changed.length; i < n; ++i) {
             delete locations0[changed[i].identifier];
           }
-          relocate();
-        } else {
-          w.on(touchmove, null).on(touchend, null);
-          t.on(mousedown, mousedowned).on(touchstart, touchstarted);
-          dragRestore();
-          zoomended(event_);
+          for (var identifier in locations0) {
+            return relocate();
+          }
         }
+        w.on(touchmove, null).on(touchend, null);
+        t.on(mousedown, mousedowned).on(touchstart, touchstarted);
+        dragRestore();
+        zoomended(event_);
       }
     }
     function mousewheeled() {

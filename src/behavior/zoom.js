@@ -261,18 +261,24 @@ d3.behavior.zoom = function() {
     }
 
     function ended() {
+      // If there are any globally-active touches remaining, remove the ended
+      // touches from locations0.
       if (d3.event.touches.length) {
         var changed = d3.event.changedTouches;
         for (var i = 0, n = changed.length; i < n; ++i) {
           delete locations0[changed[i].identifier];
         }
-        relocate(); // locations may have detached due to rotation
-      } else {
-        w.on(touchmove, null).on(touchend, null);
-        t.on(mousedown, mousedowned).on(touchstart, touchstarted);
-        dragRestore();
-        zoomended(event_);
+        // If locations0 is not empty, then relocate and continue listening for
+        // touchmove and touchend.
+        for (var identifier in locations0) {
+          return relocate(); // locations may have detached due to rotation
+        }
       }
+      // Otherwise, remove touchmove and touchend listeners.
+      w.on(touchmove, null).on(touchend, null);
+      t.on(mousedown, mousedowned).on(touchstart, touchstarted);
+      dragRestore();
+      zoomended(event_);
     }
   }
 
