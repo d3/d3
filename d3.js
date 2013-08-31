@@ -1413,7 +1413,7 @@ d3 = function() {
             delete locations0[changed[i].identifier];
           }
           for (var identifier in locations0) {
-            return relocate();
+            return void relocate();
           }
         }
         w.on(touchmove, null).on(touchend, null);

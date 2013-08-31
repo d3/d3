@@ -271,7 +271,7 @@ d3.behavior.zoom = function() {
         // If locations0 is not empty, then relocate and continue listening for
         // touchmove and touchend.
         for (var identifier in locations0) {
-          return relocate(); // locations may have detached due to rotation
+          return void relocate(); // locations may have detached due to rotation
         }
       }
       // Otherwise, remove touchmove and touchend listeners.
