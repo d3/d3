@@ -1397,11 +1397,7 @@ d3 = function() {
           }
         }
         if (l1) {
-          var scale1 = d3.event.scale;
-          if (scale1 == null) {
-            var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
-            scale1 = distance0 && Math.sqrt(distance1 / distance0);
-          }
+          var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1, scale1 = distance0 && Math.sqrt(distance1 / distance0);
           p0 = [ (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 ];
           l0 = [ (l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2 ];
           scaleTo(scale1 * scale0);
