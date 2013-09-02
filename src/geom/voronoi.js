@@ -94,7 +94,7 @@ d3.geom.voronoi = function(points) {
     // Fix degenerate polygons.
     polygons.forEach(function(polygon, i) {
       var n = polygon.length;
-      if (!n) return polygon.push([-Z, -Z], [-Z, Z], [Z, Z], [Z, -Z]);
+      if (n < 2) return polygon.push([-Z, -Z], [-Z, Z], [Z, Z], [Z, -Z]);
       if (n > 2) return;
 
       var p0 = points[i],
