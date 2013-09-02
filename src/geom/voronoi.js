@@ -95,7 +95,7 @@ d3.geom.voronoi = function(points) {
     polygons.forEach(function(polygon, i) {
       var n = polygon.length;
       if (!n) return polygon.push([-Z, -Z], [-Z, Z], [Z, Z], [Z, -Z]);
-      if (n > 2) return;
+      if (n == 1 || n > 2) return;
 
       var p0 = points[i],
           p1 = polygon[0],
