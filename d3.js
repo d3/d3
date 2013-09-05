@@ -1201,7 +1201,7 @@ d3 = function() {
       x: 0,
       y: 0,
       k: 1
-    }, translate0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchmove = "touchmove.zoom", touchend = "touchend.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
+    }, translate0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
     function zoom(g) {
       g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
     }
@@ -1351,21 +1351,24 @@ d3 = function() {
       }
     }
     function touchstarted() {
-      var target = this, event_ = event.of(target, arguments), locations0, distance0 = 0, scale0, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), t = d3.select(target).on(mousedown, null).on(touchstart, started), dragRestore = d3_event_dragSuppress();
+      var target = this, event_ = event.of(target, arguments), locations0 = {}, distance0 = 0, scale0, eventId = d3.event.changedTouches[0].identifier, touchmove = "touchmove.zoom-" + eventId, touchend = "touchend.zoom-" + eventId, w = d3.select(d3_window).on(touchmove, moved).on(touchend, ended), t = d3.select(target).on(mousedown, null).on(touchstart, started), dragRestore = d3_event_dragSuppress();
       d3_selection_interrupt.call(target);
       started();
       zoomstarted(event_);
       function relocate() {
         var touches = d3.touches(target);
         scale0 = view.k;
-        locations0 = {};
         touches.forEach(function(t) {
-          locations0[t.identifier] = location(t);
+          if (t.identifier in locations0) locations0[t.identifier] = location(t);
         });
         return touches;
       }
       function started() {
-        var now = Date.now(), touches = relocate();
+        var changed = d3.event.changedTouches;
+        for (var i = 0, n = changed.length; i < n; ++i) {
+          locations0[changed[i].identifier] = null;
+        }
+        var touches = relocate(), now = Date.now();
         if (touches.length === 1) {
           if (now - touchtime < 500) {
             var p = touches[0], l = locations0[p.identifier];
@@ -1381,13 +1384,16 @@ d3 = function() {
         }
       }
       function moved() {
-        var touches = d3.touches(target), p0 = touches[0], l0 = locations0[p0.identifier];
-        if (p1 = touches[1]) {
-          var p1, l1 = locations0[p1.identifier], scale1 = d3.event.scale;
-          if (scale1 == null) {
-            var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1;
-            scale1 = distance0 && Math.sqrt(distance1 / distance0);
+        var touches = d3.touches(target), p0, l0, p1, l1;
+        for (var i = 0, n = touches.length; i < n; ++i, l1 = null) {
+          p1 = touches[i];
+          if (l1 = locations0[p1.identifier]) {
+            if (l0) break;
+            p0 = p1, l0 = l1;
           }
+        }
+        if (l1) {
+          var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1, scale1 = distance0 && Math.sqrt(distance1 / distance0);
           p0 = [ (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 ];
           l0 = [ (l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2 ];
           scaleTo(scale1 * scale0);
@@ -1398,13 +1404,18 @@ d3 = function() {
       }
       function ended() {
         if (d3.event.touches.length) {
-          relocate();
-        } else {
-          w.on(touchmove, null).on(touchend, null);
-          t.on(mousedown, mousedowned).on(touchstart, touchstarted);
-          dragRestore();
-          zoomended(event_);
+          var changed = d3.event.changedTouches;
+          for (var i = 0, n = changed.length; i < n; ++i) {
+            delete locations0[changed[i].identifier];
+          }
+          for (var identifier in locations0) {
+            return void relocate();
+          }
         }
+        w.on(touchmove, null).on(touchend, null);
+        t.on(mousedown, mousedowned).on(touchstart, touchstarted);
+        dragRestore();
+        zoomended(event_);
       }
     }
     function mousewheeled() {
