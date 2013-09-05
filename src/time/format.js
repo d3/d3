@@ -38,8 +38,12 @@ function d3_time_format(template) {
     // The am-pm flag is 0 for AM, and 1 for PM.
     if ("p" in d) d.H = d.H % 12 + d.p * 12;
 
-    var utcZone = d.Z != null && d3_date !== d3_date_utc,
-        date = new (utcZone ? d3_date_utc : d3_date);
+    // If a time zone is specified, it is always relative to UTC;
+    // we need to use d3_date_utc if we aren’t already.
+    var localZ = d.Z != null && d3_date !== d3_date_utc,
+        date = new (localZ ? d3_date_utc : d3_date);
+
+    // Set year, month, date.
     if ("j" in d) date.setFullYear(d.y, 0, d.j);
     else if ("w" in d && ("W" in d || "U" in d)) {
       date.setFullYear(d.y, 0, 1);
@@ -47,8 +51,11 @@ function d3_time_format(template) {
           ? (d.w + 6) % 7 + d.W * 7 - (date.getDay() + 5) % 7
           :  d.w          + d.U * 7 - (date.getDay() + 6) % 7);
     } else date.setFullYear(d.y, d.m, d.d);
+
+    // Set hours, minutes, seconds and milliseconds.
     date.setHours(d.H + Math.floor(d.Z / 100), d.M + d.Z % 100, d.S, d.L);
-    return utcZone ? new d3_date(+date) : date;
+
+    return localZ ? date._ : date;
   };
 
   format.toString = function() {
