@@ -284,6 +284,12 @@ suite.addBatch({
         assert.deepEqual(p("% 02/03/1991"), local(1991, 1, 3));
         assert.isNull(p("%% 03/10/2010"));
       },
+      "parses timezone offset": function(format) {
+        var p = format("%m/%d/%Y %Z").parse;
+        assert.deepEqual(p("01/02/1990 +0000"), local(1990, 0, 1, 16));
+        assert.deepEqual(p("01/02/1990 +0100"), local(1990, 0, 1, 17));
+        assert.deepEqual(p("01/02/1990 -0100"), local(1990, 0, 1, 15));
+      },
       "ignores optional padding modifier, skipping zeroes and spaces": function(format) {
         var p = format("%-m/%0d/%_Y").parse;
         assert.deepEqual(p("01/ 1/1990"), local(1990, 0, 1));

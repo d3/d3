@@ -211,6 +211,12 @@ suite.addBatch({
         assert.deepEqual(p("12:00:00 pm"), utc(1900, 0, 1, 12, 0, 0));
         assert.deepEqual(p("12:00:01 pm"), utc(1900, 0, 1, 12, 0, 1));
         assert.deepEqual(p("11:59:59 PM"), utc(1900, 0, 1, 23, 59, 59));
+      },
+      "parses timezone offset": function(format) {
+        var p = format("%m/%d/%Y %Z").parse;
+        assert.deepEqual(p("01/02/1990 +0000"), utc(1990, 0, 2));
+        assert.deepEqual(p("01/02/1990 +0100"), utc(1990, 0, 2, 1));
+        assert.deepEqual(p("01/02/1990 -0100"), utc(1990, 0, 1, 23));
       }
     }
   }
