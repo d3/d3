@@ -154,7 +154,7 @@ d3.svg.brush = function() {
         dragging = eventTarget.classed("extent"),
         dragRestore = d3_event_dragSuppress(),
         center,
-        origin = mouse(),
+        origin = d3.mouse(target),
         offset;
 
     var w = d3.select(d3_window)
@@ -198,11 +198,6 @@ d3.svg.brush = function() {
     event_({type: "brushstart"});
     brushmove();
 
-    function mouse() {
-      var touches = d3.event.changedTouches;
-      return touches ? d3.touches(target, touches)[0] : d3.mouse(target);
-    }
-
     function keydown() {
       if (d3.event.keyCode == 32) {
         if (!dragging) {
@@ -225,7 +220,7 @@ d3.svg.brush = function() {
     }
 
     function brushmove() {
-      var point = mouse(),
+      var point = d3.mouse(target),
           moved = false;
 
       // Preserve the offset for thick resizers.
