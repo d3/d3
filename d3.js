@@ -1131,7 +1131,6 @@ d3 = function() {
           type: "dragstart"
         });
         function moved() {
-          if (!parent) return ended();
           var p = position(parent, eventId), dx = p[0] - origin_[0], dy = p[1] - origin_[1];
           dragged |= dx | dy;
           origin_ = p;
