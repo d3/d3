@@ -58,11 +58,11 @@ d3.format = function(specifier) {
 
   return function(value) {
 
-    // Return the empty string for floats formatted as ints.
-    if (integer && (value % 1)) return "";
-
     // Convert negative to positive, and record the sign prefix.
     var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
+
+    // Truncate floats for integer formatting.
+    if (integer) value = Math.floor(value);
 
     // Apply the scale, computing it from the value's exponent for si format.
     if (scale < 0) {

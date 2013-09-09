@@ -248,8 +248,11 @@ suite.addBatch({
     "can display integers in fixed-point notation": function(format) {
       assert.strictEqual(format("f")(42), "42");
     },
-    "will not display non-integers in integer format": function(format) {
-      assert.strictEqual(format("d")(4.2), "");
+    "truncates non-integers in integer format": function(format) {
+      assert.strictEqual(format("d")(4.2), "4");
+    },
+    "truncates large non-integers in integer format": function(format) {
+      assert.strictEqual(format("d")(1e15 - .1), "999999999999999");
     },
     "unicode character": function(format) {
       assert.strictEqual(format("c")(9731), "☃");
