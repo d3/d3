@@ -2167,8 +2167,8 @@ d3 = function() {
     type = d3_format_types.get(type) || d3_format_typeDefault;
     var zcomma = zfill && comma;
     return function(value) {
-      if (integer && value % 1) return "";
       var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
+      if (integer) value = Math.floor(value);
       if (scale < 0) {
         var prefix = d3.formatPrefix(value, precision);
         value = prefix.scale(value);
