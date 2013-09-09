@@ -95,9 +95,13 @@ function d3_scale_linearTickRange(domain, m) {
 
   var extent = d3_scaleExtent(domain),
       span = extent[1] - extent[0],
-      step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
+	  exponent = Math.floor(Math.log(span / m) / Math.LN10),
+      step = Math.pow(10, exponent),
       err = m / span * step;
 
+  //Round step to fixed length to prevent rounding issues on Windows Phone devices	  
+  if ((exponent < 0) && ( exponent > 20)) step = +(step.toFixed(-exponent));
+  
   // Filter ticks to get closer to the desired count.
   if (err <= .15) step *= 10;
   else if (err <= .35) step *= 5;
