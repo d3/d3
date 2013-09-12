@@ -152,6 +152,11 @@ d3 = function() {
     while (i < n) pairs[i] = [ p0 = p1, p1 = array[++i] ];
     return pairs;
   };
+  d3.index = function(array, f) {
+    var i = -1, n = array.length, index = {};
+    while (++i < n) index[f.call(array, array[i], i)] = array[i];
+    return index;
+  };
   d3.zip = function() {
     if (!(n = arguments.length)) return [];
     for (var i = -1, m = d3.min(arguments, d3_zipLength), zips = new Array(m); ++i < m; ) {

@@ -11,6 +11,7 @@ import "bisect";
 import "shuffle";
 import "permute";
 import "pairs";
+import "index-array";
 import "zip";
 import "transpose";
 import "keys";
