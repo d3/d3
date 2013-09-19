@@ -61,8 +61,8 @@ suite.addBatch({
         var x = _.scale.quantile().domain([6, 3, 5, 2, 7, 8, 4, 0, 1, 9]).range([10, 50, 90]),
             a = d3.svg.axis().scale(x),
             g = d3.select("body").html("").append("g").call(a);
-        assert.inDelta(g.selectAll(".tick").data(), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9], 1e-4);
-        assert.inDelta(g.selectAll(".tick").data().map(x), [10, 10, 10, 50, 50, 50, 90, 90, 90, 90], 1e-4);
+        assert.inDelta(g.selectAll(".tick").data(), [0, 3, 6], 1e-4);
+        assert.inDelta(g.selectAll(".tick").data().map(x), [10, 50, 90], 1e-4);
         assert.equal(g.select("path").attr("d"), "M10,6V0H90V6");
       },
       "can be a threshold scale": function(d3) {
