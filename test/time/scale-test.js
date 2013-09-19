@@ -313,6 +313,10 @@ suite.addBatch({
           local(1500, 0, 1, 0, 0),
           local(2000, 0, 1, 0, 0)
         ]);
+      },
+      "returns one tick for degenerate empty domain": function(scale) {
+        var x = scale().domain([local(2014, 2, 2), local(2014, 2, 2)]);
+        assert.deepEqual(x.ticks(6), [local(2014, 2, 2)]);
       }
     },
 
@@ -617,6 +621,10 @@ suite.addBatch({
           utc(1500, 0, 1, 0, 0),
           utc(2000, 0, 1, 0, 0)
         ]);
+      },
+      "returns one tick for degenerate empty domain": function(scale) {
+        var x = scale().domain([utc(2014, 2, 2), utc(2014, 2, 2)]);
+        assert.deepEqual(x.ticks(6), [utc(2014, 2, 2)]);
       }
     },
 
