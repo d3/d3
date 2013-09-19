@@ -49,8 +49,6 @@ d3.behavior.drag = function() {
       event_({type: "dragstart"});
 
       function moved() {
-        if (!parent) return ended(); // target removed from DOM
-
         var p = position(parent, eventId),
             dx = p[0] - origin_[0],
             dy = p[1] - origin_[1];

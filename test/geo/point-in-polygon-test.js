@@ -122,6 +122,36 @@ suite.addBatch({
         "inside": function(pointInPolygon) {
           assert.ok(pointInPolygon([0, 20]));
         }
+      },
+      "narrow equatorial hole": {
+        topic: function(pointInPolygon) {
+          var circle = _.geo.circle().origin([0, -90]);
+          return pointInPolygon([
+            circle.angle(90 - .01)().coordinates[0],
+            circle.angle(90 + .01)().coordinates[0].reverse()
+          ]);
+        },
+        "outside": function(pointInPolygon) {
+          assert.ok(!pointInPolygon([0, 0]));
+        },
+        "inside": function(pointInPolygon) {
+          assert.ok(pointInPolygon([0, -90]));
+        }
+      },
+      "narrow equatorial strip": {
+        topic: function(pointInPolygon) {
+          var circle = _.geo.circle().origin([0, -90]);
+          return pointInPolygon([
+            circle.angle(90 + .01)().coordinates[0],
+            circle.angle(90 - .01)().coordinates[0].reverse()
+          ]);
+        },
+        "outside": function(pointInPolygon) {
+          assert.ok(!pointInPolygon([0, -90]));
+        },
+        "inside": function(pointInPolygon) {
+          assert.ok(pointInPolygon([0, 0]));
+        }
       }
     },
     "ring": {
@@ -317,15 +347,15 @@ suite.addBatch({
           return pointInPolygon([[[180, -90], [-135, 0], [135, 0], [180, -90]]]);
         },
         "inside": function(pointInPolygon) {
-          assert.ok(pointInPolygon([180, 0]));
-          assert.ok(pointInPolygon([150, 0]));
-          assert.ok(pointInPolygon([180, -30]));
-          assert.ok(pointInPolygon([150, -80]));
+          assert.ok(pointInPolygon([0, 0]));
+          assert.ok(pointInPolygon([180, 1]));
+          assert.ok(pointInPolygon([-90, -80]));
         },
         "outside": function(pointInPolygon) {
-          assert.ok(!pointInPolygon([0, 0]));
-          assert.ok(!pointInPolygon([180, 1]));
-          assert.ok(!pointInPolygon([-90, -80]));
+          assert.ok(!pointInPolygon([180, 0]));
+          assert.ok(!pointInPolygon([150, 0]));
+          assert.ok(!pointInPolygon([180, -30]));
+          assert.ok(!pointInPolygon([150, -80]));
         }
       },
       "triangle touching the North pole": {
