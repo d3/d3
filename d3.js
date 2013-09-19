@@ -8884,7 +8884,7 @@ d3 = function() {
         range: interval
       }, skip ];
       if (method) interval = method[0], skip = method[1];
-      return interval.range(extent[0], d3_time_scaleDate(+extent[1] + 1), skip);
+      return interval.range(extent[0], d3_time_scaleDate(+extent[1] + 1), skip < 1 ? 1 : skip);
     };
     scale.tickFormat = function() {
       return format;
