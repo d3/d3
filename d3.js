@@ -1,7 +1,6 @@
 d3 = function() {
-  var d3 = {
-    version: "3.2.6"
-  };
+  var d3 = function(_){return d3.select(_);};
+  d3.version = "3.2.6";
   if (!Date.now) Date.now = function() {
     return +new Date();
   };
@@ -885,11 +884,17 @@ d3 = function() {
   d3_selectionPrototype.empty = function() {
     return !this.node();
   };
-  d3_selectionPrototype.node = function() {
+  d3_selectionPrototype.node = function(N) {
     for (var j = 0, m = this.length; j < m; j++) {
       for (var group = this[j], i = 0, n = group.length; i < n; i++) {
         var node = group[i];
-        if (node) return node;
+        if (!arguments.length || N == 0){
+          if (node) return node;
+        } else {
+          if (i == N){
+            if (node) return node;
+          }
+        }
       }
     }
     return null;
@@ -961,6 +966,7 @@ d3 = function() {
     return d3_transition(subgroups, id);
   };
   d3.select = function(node) {
+    if (node instanceof d3.selection) return node;
     var group = [ typeof node === "string" ? d3_select(node, d3_document) : node ];
     group.parentNode = d3_documentElement;
     return d3_selection([ group ]);
@@ -8799,6 +8805,20 @@ d3 = function() {
   }
   d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
+  });
+  var attrs = ['d', 'dx', 'dy', 'id', 'transform', 'x', 'y', 'fill', 'stroke', 'x1', 'x2',
+      'y1', 'y2', 'cx', 'cy', 'r', 'class', 'width', 'height', 'rx', 'ry', 'colspan', 'rotate',
+      'textLength', 'text-anchor', 'value'];
+
+  d3.sa = function(_) {return this.selectAll(_)};
+  d3.selection.prototype.s = function(_) {return this.select(_)};
+  d3.selection.prototype.sa = function(_) {return this.selectAll(_)};
+
+  attrs.forEach(function(a, i) {
+    d3.selection.prototype[a] = function(_) {
+      if (!arguments.length) return this.attr(a);
+      return this.attr(a, _)
+    };
   });
   return d3;
 }();

@@ -33,9 +33,7 @@
       "exports": "d3"
     }
   },
-  "dependencies": {
-    "jsdom": "~0.5.3"
-  },
+  "dependencies": { },
   "devDependencies": {
     "smash": "~0.0.8",
     "uglify-js": "2.3.6",
