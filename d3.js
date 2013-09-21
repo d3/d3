@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.3.4"
+    version: "3.3.5"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -7082,7 +7082,7 @@ d3 = function() {
   function d3_scale_ordinal(domain, ranger) {
     var index, range, rangeBand;
     function scale(x) {
-      return range[((index.get(x) || index.set(x, domain.push(x))) - 1) % range.length];
+      return range[((index.get(x) || ranger.t === "range" && index.set(x, domain.push(x))) - 1) % range.length];
     }
     function steps(start, step) {
       return d3.range(domain.length).map(function(i) {
