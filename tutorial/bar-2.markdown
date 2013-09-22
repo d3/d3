@@ -306,7 +306,8 @@ corresponds to the same point in time across the transition. Do this using a
 
 {% highlight js linenos %}
 function redraw() {
-
+  
+  // Do this using a optional data() parameter to bind nodes to data by timestamp rather than index
   var rect = chart.selectAll("rect")
       .data(data, function(d) { return d.time; });
 
