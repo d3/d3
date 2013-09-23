@@ -4540,8 +4540,7 @@ d3 = function() {
     this.edge = this.site = this.circle = null;
   }
   function d3_geom_voronoiCreateBeach(site) {
-    var beach = d3_geom_voronoiBeachJunkyard.pop();
-    if (!beach) beach = new d3_geom_voronoiBeach();
+    var beach = d3_geom_voronoiBeachJunkyard.pop() || new d3_geom_voronoiBeach();
     beach.site = site;
     return beach;
   }
@@ -4712,8 +4711,7 @@ d3 = function() {
     var d = 2 * (ax * cy - ay * cx);
     if (d >= -ε2) return;
     var ha = ax * ax + ay * ay, hc = cx * cx + cy * cy, x = (cy * ha - ay * hc) / d, y = (ax * hc - cx * ha) / d, cy = y + by;
-    var circle = d3_geom_voronoiCircleJunkyard.pop();
-    if (!circle) circle = new d3_geom_voronoiCircle();
+    var circle = d3_geom_voronoiCircleJunkyard.pop() || new d3_geom_voronoiCircle();
     circle.arc = arc;
     circle.site = cSite;
     circle[0] = x + bx;

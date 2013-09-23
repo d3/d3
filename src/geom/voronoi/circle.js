@@ -35,8 +35,7 @@ function d3_geom_voronoiAttachCircle(arc) {
       y = (ax * hc - cx * ha) / d,
       cy = y + by;
 
-  var circle = d3_geom_voronoiCircleJunkyard.pop();
-  if (!circle) circle = new d3_geom_voronoiCircle;
+  var circle = d3_geom_voronoiCircleJunkyard.pop() || new d3_geom_voronoiCircle;
   circle.arc = arc;
   circle.site = cSite;
   circle[0] = x + bx;

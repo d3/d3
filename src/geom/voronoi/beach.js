@@ -6,8 +6,7 @@ function d3_geom_voronoiBeach() {
 }
 
 function d3_geom_voronoiCreateBeach(site) {
-  var beach = d3_geom_voronoiBeachJunkyard.pop();
-  if (!beach) beach = new d3_geom_voronoiBeach;
+  var beach = d3_geom_voronoiBeachJunkyard.pop() || new d3_geom_voronoiBeach;
   beach.site = site;
   return beach;
 }
