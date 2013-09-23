@@ -1,12 +1,11 @@
 import "../core/functor";
 import "../svg/line";
-import "../../lib/rhill-voronoi/rhill-voronoi-core";
+import "voronoi/index";
 import "geom";
 
 d3.geom.voronoi = function(points) {
   var x = d3_svg_lineX,
       y = d3_svg_lineY,
-      impl = new Voronoi,
       clipExtent = d3_geom_voronoiClipExtent;
 
   // @deprecated; use voronoi(data) instead.
@@ -19,10 +18,10 @@ d3.geom.voronoi = function(points) {
         bbox = {xl: clipExtent[0][0], xr: clipExtent[1][0], yt: clipExtent[0][1], yb: clipExtent[1][1]},
         polygons = [];
 
-    impl.compute(sites, bbox).cells.forEach(function(cell) {
+    d3_geom_voronoi(sites, bbox).cells.forEach(function(cell) {
       var i = cell.site.i;
-      (polygons[i] = cell.halfedges.length ? cell.halfedges.map(function(halfedge) {
-        var p = halfedge.getStartpoint();
+      (polygons[i] = cell.halfEdges.length ? cell.halfEdges.map(function(halfEdge) {
+        var p = halfEdge.getStartpoint();
         return [p.x, p.y];
       }).reverse() : [
         [clipExtent[0][0], clipExtent[0][1]],
