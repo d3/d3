@@ -21,6 +21,7 @@ d3.behavior.zoom = function() {
       touchstart = "touchstart.zoom",
       touchtime, // time of last touchstart (to detect double-tap)
       event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"),
+      scrollCheck = null,
       x0,
       x1,
       y0,
@@ -69,7 +70,13 @@ d3.behavior.zoom = function() {
         zoomended(event_);
       }
     });
-  }
+  };
+
+  zoom.scrollCheck = function(cb) {
+    if (!arguments.length) return scrollCheck;
+    scrollCheck = cb;
+    return zoom;
+  };
 
   zoom.translate = function(_) {
     if (!arguments.length) return [view.x, view.y];
@@ -284,6 +291,7 @@ d3.behavior.zoom = function() {
 
   function mousewheeled() {
     var event_ = event.of(this, arguments);
+    if (scrollCheck && scrollCheck() === false) return;
     if (mousewheelTimer) clearTimeout(mousewheelTimer);
     else d3_selection_interrupt.call(this), zoomstarted(event_);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(event_); }, 50);
