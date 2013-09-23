@@ -4653,10 +4653,10 @@ d3 = function() {
   }
   function d3_geom_voronoiCell(site) {
     this.site = site;
-    this.halfEdges = [];
+    this.edges = [];
   }
   d3_geom_voronoiCell.prototype.prepare = function() {
-    var halfEdges = this.halfEdges, iHalfEdge = halfEdges.length, edge;
+    var halfEdges = this.edges, iHalfEdge = halfEdges.length, edge;
     while (iHalfEdge--) {
       edge = halfEdges[iHalfEdge].edge;
       if (!edge.b || !edge.a) halfEdges.splice(iHalfEdge, 1);
@@ -4669,7 +4669,7 @@ d3 = function() {
     while (iCell--) {
       cell = cells[iCell];
       if (!cell.prepare()) continue;
-      halfEdges = cell.halfEdges;
+      halfEdges = cell.edges;
       nHalfEdges = halfEdges.length;
       iLeft = 0;
       while (iLeft < nHalfEdges) {
@@ -4841,8 +4841,8 @@ d3 = function() {
     d3_geom_voronoiEdges.push(edge);
     if (va) d3_geom_voronoiSetEdgeStart(edge, lSite, rSite, va);
     if (vb) d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vb);
-    d3_geom_voronoiCells[lSite.i].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, lSite, rSite));
-    d3_geom_voronoiCells[rSite.i].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, rSite, lSite));
+    d3_geom_voronoiCells[lSite.i].edges.push(new d3_geom_voronoiHalfEdge(edge, lSite, rSite));
+    d3_geom_voronoiCells[rSite.i].edges.push(new d3_geom_voronoiHalfEdge(edge, rSite, lSite));
     return edge;
   }
   function d3_geom_voronoiCreateBorderEdge(lSite, va, vb) {
@@ -5122,8 +5122,8 @@ d3 = function() {
       }), polygons = [];
       d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell) {
         var i = cell.site.i;
-        (polygons[i] = cell.halfEdges.length ? cell.halfEdges.map(function(halfEdge) {
-          return halfEdge.start();
+        (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
+          return edge.start();
         }).reverse() : [ [ clipExtent[0][0], clipExtent[0][1] ], [ clipExtent[1][0], clipExtent[0][1] ], [ clipExtent[1][0], clipExtent[1][1] ], [ clipExtent[0][0], clipExtent[1][1] ] ]).point = data[i];
       });
       return polygons;

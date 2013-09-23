@@ -1,10 +1,10 @@
 function d3_geom_voronoiCell(site) {
   this.site = site;
-  this.halfEdges = [];
+  this.edges = [];
 }
 
 d3_geom_voronoiCell.prototype.prepare = function() {
-  var halfEdges = this.halfEdges,
+  var halfEdges = this.edges,
       iHalfEdge = halfEdges.length,
       edge;
 
@@ -38,7 +38,7 @@ function d3_geom_voronoiCloseCells(extent) {
   while (iCell--) {
     cell = cells[iCell];
     if (!cell.prepare()) continue;
-    halfEdges = cell.halfEdges;
+    halfEdges = cell.edges;
     nHalfEdges = halfEdges.length;
     iLeft = 0;
     while (iLeft < nHalfEdges) {

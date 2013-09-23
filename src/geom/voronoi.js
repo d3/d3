@@ -19,8 +19,8 @@ d3.geom.voronoi = function(points) {
 
     d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell) {
       var i = cell.site.i;
-      (polygons[i] = cell.halfEdges.length ? cell.halfEdges.map(function(halfEdge) {
-        return halfEdge.start();
+      (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
+        return edge.start();
       }).reverse() : [
         [clipExtent[0][0], clipExtent[0][1]],
         [clipExtent[1][0], clipExtent[0][1]],
