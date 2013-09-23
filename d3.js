@@ -5121,8 +5121,7 @@ d3 = function() {
           i: i
         };
       }), polygons = [];
-      d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell) {
-        var i = cell.site.i;
+      d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell, i) {
         (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
           return edge.start();
         }).reverse() : [ [ clipExtent[0][0], clipExtent[0][1] ], [ clipExtent[1][0], clipExtent[0][1] ], [ clipExtent[1][0], clipExtent[1][1] ], [ clipExtent[0][0], clipExtent[1][1] ] ]).point = data[i];

@@ -17,8 +17,7 @@ d3.geom.voronoi = function(points) {
         sites = data.map(function(d, i) { return {0: fx(d, i), 1: fy(d, i), i: i}; }),
         polygons = [];
 
-    d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell) {
-      var i = cell.site.i;
+    d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell, i) {
       (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
         return edge.start();
       }).reverse() : [
