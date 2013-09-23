@@ -1,14 +1,15 @@
 function d3_geom_voronoiCircleEvent() {
-  this.arc = null;
-  this.site = null;
-  this[0] = null;
-  this[1] = null;
-  this.ycenter = null;
+  d3_geom_voronoiRedBlackNode.call(this);
+  this[0] =
+  this[1] =
+  this.arc =
+  this.site =
+  this.cy = null;
 }
 
 function d3_geom_voronoiAttachCircleEvent(arc) {
-  var lArc = arc.rbPrevious,
-      rArc = arc.rbNext;
+  var lArc = arc.P,
+      rArc = arc.N;
 
   if (!lArc || !rArc) return;
 
@@ -40,32 +41,32 @@ function d3_geom_voronoiAttachCircleEvent(arc) {
   circleEvent.site = cSite;
   circleEvent[0] = x + bx;
   circleEvent[1] = ycenter + Math.sqrt(x * x + y * y); // y bottom
-  circleEvent.ycenter = ycenter;
+  circleEvent.cy = ycenter;
 
   arc.circleEvent = circleEvent;
 
   var predecessor = null,
-      node = d3_geom_voronoiCircleEvents.root;
+      node = d3_geom_voronoiCircleEvents._;
 
   while (node) {
     if (circleEvent[1] < node[1] || (circleEvent[1] === node[1] && circleEvent[0] <= node[0])) {
-      if (node.rbLeft) node = node.rbLeft;
-      else { predecessor = node.rbPrevious; break; }
+      if (node.L) node = node.L;
+      else { predecessor = node.P; break; }
     } else {
-      if (node.rbRight) node = node.rbRight;
+      if (node.R) node = node.R;
       else { predecessor = node; break; }
     }
   }
 
-  d3_geom_voronoiCircleEvents.rbInsert(predecessor, circleEvent);
+  d3_geom_voronoiCircleEvents.insert(predecessor, circleEvent);
   if (!predecessor) d3_geom_voronoiFirstCircleEvent = circleEvent;
 }
 
 function d3_geom_voronoiDetachCircleEvent(arc) {
   var circle = arc.circleEvent;
   if (circle) {
-    if (!circle.rbPrevious) d3_geom_voronoiFirstCircleEvent = circle.rbNext;
-    d3_geom_voronoiCircleEvents.rbRemove(circle);
+    if (!circle.P) d3_geom_voronoiFirstCircleEvent = circle.N;
+    d3_geom_voronoiCircleEvents.remove(circle);
     d3_geom_voronoiCircleEventJunkyard.push(circle);
     arc.circleEvent = null;
   }

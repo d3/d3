@@ -1,15 +1,8 @@
 function d3_geom_voronoiBeachSection() {
-  this.edge = null;
-  this.site = null;
+  d3_geom_voronoiRedBlackNode.call(this);
+  this.edge =
+  this.site =
   this.circleEvent = null;
-
-  // red-black tree properties
-  this.rbParent = null;
-  this.rbRed = null;
-  this.rbLeft = null;
-  this.rbRight = null;
-  this.rbPrevious = null;
-  this.rbNext = null;
 }
 
 function d3_geom_voronoiCreateBeachSection(site) {
@@ -21,17 +14,17 @@ function d3_geom_voronoiCreateBeachSection(site) {
 
 function d3_geom_voronoiDetachBeachSection(beachSection) {
   d3_geom_voronoiDetachCircleEvent(beachSection);
-  d3_geom_voronoiBeachLine.rbRemove(beachSection);
+  d3_geom_voronoiBeachLine.remove(beachSection);
   d3_geom_voronoiBeachSectionJunkyard.push(beachSection);
 }
 
 function d3_geom_voronoiRemoveBeachSection(beachSection) {
   var circle = beachSection.circleEvent,
       x = circle[0],
-      y = circle.ycenter,
+      y = circle.cy,
       vertex = [x, y],
-      previous = beachSection.rbPrevious,
-      next = beachSection.rbNext,
+      previous = beachSection.P,
+      next = beachSection.N,
       disappearingTransitions = [beachSection];
 
   d3_geom_voronoiDetachBeachSection(beachSection);
@@ -39,8 +32,8 @@ function d3_geom_voronoiRemoveBeachSection(beachSection) {
   var lArc = previous;
   while (lArc.circleEvent
       && Math.abs(x - lArc.circleEvent[0]) < ε
-      && Math.abs(y - lArc.circleEvent.ycenter) < ε) {
-    previous = lArc.rbPrevious;
+      && Math.abs(y - lArc.circleEvent.cy) < ε) {
+    previous = lArc.P;
     disappearingTransitions.unshift(lArc);
     d3_geom_voronoiDetachBeachSection(lArc);
     lArc = previous;
@@ -52,8 +45,8 @@ function d3_geom_voronoiRemoveBeachSection(beachSection) {
   var rArc = next;
   while (rArc.circleEvent
       && Math.abs(x - rArc.circleEvent[0]) < ε
-      && Math.abs(y - rArc.circleEvent.ycenter) < ε) {
-    next = rArc.rbNext;
+      && Math.abs(y - rArc.circleEvent.cy) < ε) {
+    next = rArc.N;
     disappearingTransitions.push(rArc);
     d3_geom_voronoiDetachBeachSection(rArc);
     rArc = next;
@@ -85,25 +78,25 @@ function d3_geom_voronoiAddBeachSection(site) {
       rArc,
       dxl,
       dxr,
-      node = d3_geom_voronoiBeachLine.root;
+      node = d3_geom_voronoiBeachLine._;
 
   while (node) {
     dxl = d3_geom_voronoiLeftBreakPoint(node, directrix) - x;
-    if (dxl > ε) node = node.rbLeft; else {
+    if (dxl > ε) node = node.L; else {
       dxr = x - d3_geom_voronoiRightBreakPoint(node, directrix);
       if (dxr > ε) {
-        if (!node.rbRight) {
+        if (!node.R) {
           lArc = node;
           break;
         }
-        node = node.rbRight;
+        node = node.R;
       } else {
         if (dxl > -ε) {
-          lArc = node.rbPrevious;
+          lArc = node.P;
           rArc = node;
         } else if (dxr > -ε) {
           lArc = node;
-          rArc = node.rbNext;
+          rArc = node.N;
         } else {
           lArc = rArc = node;
         }
@@ -113,14 +106,14 @@ function d3_geom_voronoiAddBeachSection(site) {
   }
 
   var newArc = d3_geom_voronoiCreateBeachSection(site);
-  d3_geom_voronoiBeachLine.rbInsert(lArc, newArc);
+  d3_geom_voronoiBeachLine.insert(lArc, newArc);
 
   if (!lArc && !rArc) return;
 
   if (lArc === rArc) {
     d3_geom_voronoiDetachCircleEvent(lArc);
     rArc = d3_geom_voronoiCreateBeachSection(lArc.site);
-    d3_geom_voronoiBeachLine.rbInsert(newArc, rArc);
+    d3_geom_voronoiBeachLine.insert(newArc, rArc);
     newArc.edge = rArc.edge = d3_geom_voronoiCreateEdge(lArc.site, newArc.site);
     d3_geom_voronoiAttachCircleEvent(lArc);
     d3_geom_voronoiAttachCircleEvent(rArc);

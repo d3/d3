@@ -15,7 +15,7 @@ import "circle-event";
 import "clip";
 import "edge";
 import "half-edge";
-import "red-black-tree";
+import "red-black";
 import "vertex";
 
 function d3_geom_voronoi(sites, bbox) {

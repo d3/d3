@@ -4535,15 +4535,8 @@ d3 = function() {
   }
   var d3_geom_voronoiEdges, d3_geom_voronoiCells, d3_geom_voronoiBeachLine, d3_geom_voronoiBeachSectionJunkyard = [], d3_geom_voronoiCircleEvents, d3_geom_voronoiCircleEventJunkyard = [], d3_geom_voronoiFirstCircleEvent;
   function d3_geom_voronoiBeachSection() {
-    this.edge = null;
-    this.site = null;
-    this.circleEvent = null;
-    this.rbParent = null;
-    this.rbRed = null;
-    this.rbLeft = null;
-    this.rbRight = null;
-    this.rbPrevious = null;
-    this.rbNext = null;
+    d3_geom_voronoiRedBlackNode.call(this);
+    this.edge = this.site = this.circleEvent = null;
   }
   function d3_geom_voronoiCreateBeachSection(site) {
     var beachSection = d3_geom_voronoiBeachSectionJunkyard.pop();
@@ -4553,15 +4546,15 @@ d3 = function() {
   }
   function d3_geom_voronoiDetachBeachSection(beachSection) {
     d3_geom_voronoiDetachCircleEvent(beachSection);
-    d3_geom_voronoiBeachLine.rbRemove(beachSection);
+    d3_geom_voronoiBeachLine.remove(beachSection);
     d3_geom_voronoiBeachSectionJunkyard.push(beachSection);
   }
   function d3_geom_voronoiRemoveBeachSection(beachSection) {
-    var circle = beachSection.circleEvent, x = circle[0], y = circle.ycenter, vertex = [ x, y ], previous = beachSection.rbPrevious, next = beachSection.rbNext, disappearingTransitions = [ beachSection ];
+    var circle = beachSection.circleEvent, x = circle[0], y = circle.cy, vertex = [ x, y ], previous = beachSection.P, next = beachSection.N, disappearingTransitions = [ beachSection ];
     d3_geom_voronoiDetachBeachSection(beachSection);
     var lArc = previous;
-    while (lArc.circleEvent && Math.abs(x - lArc.circleEvent[0]) < ε && Math.abs(y - lArc.circleEvent.ycenter) < ε) {
-      previous = lArc.rbPrevious;
+    while (lArc.circleEvent && Math.abs(x - lArc.circleEvent[0]) < ε && Math.abs(y - lArc.circleEvent.cy) < ε) {
+      previous = lArc.P;
       disappearingTransitions.unshift(lArc);
       d3_geom_voronoiDetachBeachSection(lArc);
       lArc = previous;
@@ -4569,8 +4562,8 @@ d3 = function() {
     disappearingTransitions.unshift(lArc);
     d3_geom_voronoiDetachCircleEvent(lArc);
     var rArc = next;
-    while (rArc.circleEvent && Math.abs(x - rArc.circleEvent[0]) < ε && Math.abs(y - rArc.circleEvent.ycenter) < ε) {
-      next = rArc.rbNext;
+    while (rArc.circleEvent && Math.abs(x - rArc.circleEvent[0]) < ε && Math.abs(y - rArc.circleEvent.cy) < ε) {
+      next = rArc.N;
       disappearingTransitions.push(rArc);
       d3_geom_voronoiDetachBeachSection(rArc);
       rArc = next;
@@ -4590,24 +4583,24 @@ d3 = function() {
     d3_geom_voronoiAttachCircleEvent(rArc);
   }
   function d3_geom_voronoiAddBeachSection(site) {
-    var x = site[0], directrix = site[1], lArc, rArc, dxl, dxr, node = d3_geom_voronoiBeachLine.root;
+    var x = site[0], directrix = site[1], lArc, rArc, dxl, dxr, node = d3_geom_voronoiBeachLine._;
     while (node) {
       dxl = d3_geom_voronoiLeftBreakPoint(node, directrix) - x;
-      if (dxl > ε) node = node.rbLeft; else {
+      if (dxl > ε) node = node.L; else {
         dxr = x - d3_geom_voronoiRightBreakPoint(node, directrix);
         if (dxr > ε) {
-          if (!node.rbRight) {
+          if (!node.R) {
             lArc = node;
             break;
           }
-          node = node.rbRight;
+          node = node.R;
         } else {
           if (dxl > -ε) {
-            lArc = node.rbPrevious;
+            lArc = node.P;
             rArc = node;
           } else if (dxr > -ε) {
             lArc = node;
-            rArc = node.rbNext;
+            rArc = node.N;
           } else {
             lArc = rArc = node;
           }
@@ -4616,12 +4609,12 @@ d3 = function() {
       }
     }
     var newArc = d3_geom_voronoiCreateBeachSection(site);
-    d3_geom_voronoiBeachLine.rbInsert(lArc, newArc);
+    d3_geom_voronoiBeachLine.insert(lArc, newArc);
     if (!lArc && !rArc) return;
     if (lArc === rArc) {
       d3_geom_voronoiDetachCircleEvent(lArc);
       rArc = d3_geom_voronoiCreateBeachSection(lArc.site);
-      d3_geom_voronoiBeachLine.rbInsert(newArc, rArc);
+      d3_geom_voronoiBeachLine.insert(newArc, rArc);
       newArc.edge = rArc.edge = d3_geom_voronoiCreateEdge(lArc.site, newArc.site);
       d3_geom_voronoiAttachCircleEvent(lArc);
       d3_geom_voronoiAttachCircleEvent(rArc);
@@ -4643,7 +4636,7 @@ d3 = function() {
   function d3_geom_voronoiLeftBreakPoint(arc, directrix) {
     var site = arc.site, rfocx = site[0], rfocy = site[1], pby2 = rfocy - directrix;
     if (!pby2) return rfocx;
-    var lArc = arc.rbPrevious;
+    var lArc = arc.P;
     if (!lArc) return -Infinity;
     site = lArc.site;
     var lfocx = site[0], lfocy = site[1], plby2 = lfocy - directrix;
@@ -4653,7 +4646,7 @@ d3 = function() {
     return (rfocx + lfocx) / 2;
   }
   function d3_geom_voronoiRightBreakPoint(arc, directrix) {
-    var rArc = arc.rbNext;
+    var rArc = arc.N;
     if (rArc) return d3_geom_voronoiLeftBreakPoint(rArc, directrix);
     var site = arc.site;
     return site[1] === directrix ? site[0] : Infinity;
@@ -4703,14 +4696,11 @@ d3 = function() {
     }
   }
   function d3_geom_voronoiCircleEvent() {
-    this.arc = null;
-    this.site = null;
-    this[0] = null;
-    this[1] = null;
-    this.ycenter = null;
+    d3_geom_voronoiRedBlackNode.call(this);
+    this[0] = this[1] = this.arc = this.site = this.cy = null;
   }
   function d3_geom_voronoiAttachCircleEvent(arc) {
-    var lArc = arc.rbPrevious, rArc = arc.rbNext;
+    var lArc = arc.P, rArc = arc.N;
     if (!lArc || !rArc) return;
     var lSite = lArc.site, cSite = arc.site, rSite = rArc.site;
     if (lSite === rSite) return;
@@ -4724,30 +4714,30 @@ d3 = function() {
     circleEvent.site = cSite;
     circleEvent[0] = x + bx;
     circleEvent[1] = ycenter + Math.sqrt(x * x + y * y);
-    circleEvent.ycenter = ycenter;
+    circleEvent.cy = ycenter;
     arc.circleEvent = circleEvent;
-    var predecessor = null, node = d3_geom_voronoiCircleEvents.root;
+    var predecessor = null, node = d3_geom_voronoiCircleEvents._;
     while (node) {
       if (circleEvent[1] < node[1] || circleEvent[1] === node[1] && circleEvent[0] <= node[0]) {
-        if (node.rbLeft) node = node.rbLeft; else {
-          predecessor = node.rbPrevious;
+        if (node.L) node = node.L; else {
+          predecessor = node.P;
           break;
         }
       } else {
-        if (node.rbRight) node = node.rbRight; else {
+        if (node.R) node = node.R; else {
           predecessor = node;
           break;
         }
       }
     }
-    d3_geom_voronoiCircleEvents.rbInsert(predecessor, circleEvent);
+    d3_geom_voronoiCircleEvents.insert(predecessor, circleEvent);
     if (!predecessor) d3_geom_voronoiFirstCircleEvent = circleEvent;
   }
   function d3_geom_voronoiDetachCircleEvent(arc) {
     var circle = arc.circleEvent;
     if (circle) {
-      if (!circle.rbPrevious) d3_geom_voronoiFirstCircleEvent = circle.rbNext;
-      d3_geom_voronoiCircleEvents.rbRemove(circle);
+      if (!circle.P) d3_geom_voronoiFirstCircleEvent = circle.N;
+      d3_geom_voronoiCircleEvents.remove(circle);
       d3_geom_voronoiCircleEventJunkyard.push(circle);
       arc.circleEvent = null;
     }
@@ -4889,198 +4879,201 @@ d3 = function() {
     return b.angle - a.angle;
   }
   function d3_geom_voronoiRedBlackTree() {
-    this.root = null;
+    this._ = null;
+  }
+  function d3_geom_voronoiRedBlackNode() {
+    this.U = this.C = this.L = this.R = this.P = this.N = null;
   }
   d3_geom_voronoiRedBlackTree.prototype = {
-    rbInsert: function(node, successor) {
+    insert: function(node, successor) {
       var parent, grandpa, uncle;
       if (node) {
-        successor.rbPrevious = node;
-        successor.rbNext = node.rbNext;
-        if (node.rbNext) node.rbNext.rbPrevious = successor;
-        node.rbNext = successor;
-        if (node.rbRight) {
-          node = node.rbRight;
-          while (node.rbLeft) node = node.rbLeft;
-          node.rbLeft = successor;
+        successor.P = node;
+        successor.N = node.N;
+        if (node.N) node.N.P = successor;
+        node.N = successor;
+        if (node.R) {
+          node = node.R;
+          while (node.L) node = node.L;
+          node.L = successor;
         } else {
-          node.rbRight = successor;
+          node.R = successor;
         }
         parent = node;
-      } else if (this.root) {
-        node = this.rbFirst(this.root);
-        successor.rbPrevious = null;
-        successor.rbNext = node;
-        node.rbPrevious = node.rbLeft = successor;
+      } else if (this._) {
+        node = d3_geom_voronoiRedBlackFirst(this._);
+        successor.P = null;
+        successor.N = node;
+        node.P = node.L = successor;
         parent = node;
       } else {
-        successor.rbPrevious = successor.rbNext = null;
-        this.root = successor;
+        successor.P = successor.N = null;
+        this._ = successor;
         parent = null;
       }
-      successor.rbLeft = successor.rbRight = null;
-      successor.rbParent = parent;
-      successor.rbRed = true;
+      successor.L = successor.R = null;
+      successor.U = parent;
+      successor.C = true;
       node = successor;
-      while (parent && parent.rbRed) {
-        grandpa = parent.rbParent;
-        if (parent === grandpa.rbLeft) {
-          uncle = grandpa.rbRight;
-          if (uncle && uncle.rbRed) {
-            parent.rbRed = uncle.rbRed = false;
-            grandpa.rbRed = true;
+      while (parent && parent.C) {
+        grandpa = parent.U;
+        if (parent === grandpa.L) {
+          uncle = grandpa.R;
+          if (uncle && uncle.C) {
+            parent.C = uncle.C = false;
+            grandpa.C = true;
             node = grandpa;
           } else {
-            if (node === parent.rbRight) {
-              this.rbRotateLeft(parent);
+            if (node === parent.R) {
+              d3_geom_voronoiRedBlackRotateLeft(this, parent);
               node = parent;
-              parent = node.rbParent;
+              parent = node.U;
             }
-            parent.rbRed = false;
-            grandpa.rbRed = true;
-            this.rbRotateRight(grandpa);
+            parent.C = false;
+            grandpa.C = true;
+            d3_geom_voronoiRedBlackRotateRight(this, grandpa);
           }
         } else {
-          uncle = grandpa.rbLeft;
-          if (uncle && uncle.rbRed) {
-            parent.rbRed = uncle.rbRed = false;
-            grandpa.rbRed = true;
+          uncle = grandpa.L;
+          if (uncle && uncle.C) {
+            parent.C = uncle.C = false;
+            grandpa.C = true;
             node = grandpa;
           } else {
-            if (node === parent.rbLeft) {
-              this.rbRotateRight(parent);
+            if (node === parent.L) {
+              d3_geom_voronoiRedBlackRotateRight(this, parent);
               node = parent;
-              parent = node.rbParent;
+              parent = node.U;
             }
-            parent.rbRed = false;
-            grandpa.rbRed = true;
-            this.rbRotateLeft(grandpa);
+            parent.C = false;
+            grandpa.C = true;
+            d3_geom_voronoiRedBlackRotateLeft(this, grandpa);
           }
         }
-        parent = node.rbParent;
+        parent = node.U;
       }
-      this.root.rbRed = false;
+      this._.C = false;
     },
-    rbRemove: function(node) {
-      if (node.rbNext) node.rbNext.rbPrevious = node.rbPrevious;
-      if (node.rbPrevious) node.rbPrevious.rbNext = node.rbNext;
-      node.rbNext = node.rbPrevious = null;
-      var parent = node.rbParent, sibling, left = node.rbLeft, right = node.rbRight, next, isRed;
-      if (!left) next = right; else if (!right) next = left; else next = this.rbFirst(right);
+    remove: function(node) {
+      if (node.N) node.N.P = node.P;
+      if (node.P) node.P.N = node.N;
+      node.N = node.P = null;
+      var parent = node.U, sibling, left = node.L, right = node.R, next, isRed;
+      if (!left) next = right; else if (!right) next = left; else next = d3_geom_voronoiRedBlackFirst(right);
       if (parent) {
-        if (parent.rbLeft === node) parent.rbLeft = next; else parent.rbRight = next;
+        if (parent.L === node) parent.L = next; else parent.R = next;
       } else {
-        this.root = next;
+        this._ = next;
       }
       if (left && right) {
-        isRed = next.rbRed;
-        next.rbRed = node.rbRed;
-        next.rbLeft = left;
-        left.rbParent = next;
+        isRed = next.C;
+        next.C = node.C;
+        next.L = left;
+        left.U = next;
         if (next !== right) {
-          parent = next.rbParent;
-          next.rbParent = node.rbParent;
-          node = next.rbRight;
-          parent.rbLeft = node;
-          next.rbRight = right;
-          right.rbParent = next;
+          parent = next.U;
+          next.U = node.U;
+          node = next.R;
+          parent.L = node;
+          next.R = right;
+          right.U = next;
         } else {
-          next.rbParent = parent;
+          next.U = parent;
           parent = next;
-          node = next.rbRight;
+          node = next.R;
         }
       } else {
-        isRed = node.rbRed;
+        isRed = node.C;
         node = next;
       }
-      if (node) node.rbParent = parent;
+      if (node) node.U = parent;
       if (isRed) return;
-      if (node && node.rbRed) {
-        node.rbRed = false;
+      if (node && node.C) {
+        node.C = false;
         return;
       }
       do {
-        if (node === this.root) break;
-        if (node === parent.rbLeft) {
-          sibling = parent.rbRight;
-          if (sibling.rbRed) {
-            sibling.rbRed = false;
-            parent.rbRed = true;
-            this.rbRotateLeft(parent);
-            sibling = parent.rbRight;
+        if (node === this._) break;
+        if (node === parent.L) {
+          sibling = parent.R;
+          if (sibling.C) {
+            sibling.C = false;
+            parent.C = true;
+            d3_geom_voronoiRedBlackRotateLeft(this, parent);
+            sibling = parent.R;
           }
-          if (sibling.rbLeft && sibling.rbLeft.rbRed || sibling.rbRight && sibling.rbRight.rbRed) {
-            if (!sibling.rbRight || !sibling.rbRight.rbRed) {
-              sibling.rbLeft.rbRed = false;
-              sibling.rbRed = true;
-              this.rbRotateRight(sibling);
-              sibling = parent.rbRight;
+          if (sibling.L && sibling.L.C || sibling.R && sibling.R.C) {
+            if (!sibling.R || !sibling.R.C) {
+              sibling.L.C = false;
+              sibling.C = true;
+              d3_geom_voronoiRedBlackRotateRight(this, sibling);
+              sibling = parent.R;
             }
-            sibling.rbRed = parent.rbRed;
-            parent.rbRed = sibling.rbRight.rbRed = false;
-            this.rbRotateLeft(parent);
-            node = this.root;
+            sibling.C = parent.C;
+            parent.C = sibling.R.C = false;
+            d3_geom_voronoiRedBlackRotateLeft(this, parent);
+            node = this._;
             break;
           }
         } else {
-          sibling = parent.rbLeft;
-          if (sibling.rbRed) {
-            sibling.rbRed = false;
-            parent.rbRed = true;
-            this.rbRotateRight(parent);
-            sibling = parent.rbLeft;
+          sibling = parent.L;
+          if (sibling.C) {
+            sibling.C = false;
+            parent.C = true;
+            d3_geom_voronoiRedBlackRotateRight(this, parent);
+            sibling = parent.L;
           }
-          if (sibling.rbLeft && sibling.rbLeft.rbRed || sibling.rbRight && sibling.rbRight.rbRed) {
-            if (!sibling.rbLeft || !sibling.rbLeft.rbRed) {
-              sibling.rbRight.rbRed = false;
-              sibling.rbRed = true;
-              this.rbRotateLeft(sibling);
-              sibling = parent.rbLeft;
+          if (sibling.L && sibling.L.C || sibling.R && sibling.R.C) {
+            if (!sibling.L || !sibling.L.C) {
+              sibling.R.C = false;
+              sibling.C = true;
+              d3_geom_voronoiRedBlackRotateLeft(this, sibling);
+              sibling = parent.L;
             }
-            sibling.rbRed = parent.rbRed;
-            parent.rbRed = sibling.rbLeft.rbRed = false;
-            this.rbRotateRight(parent);
-            node = this.root;
+            sibling.C = parent.C;
+            parent.C = sibling.L.C = false;
+            d3_geom_voronoiRedBlackRotateRight(this, parent);
+            node = this._;
             break;
           }
         }
-        sibling.rbRed = true;
+        sibling.C = true;
         node = parent;
-        parent = parent.rbParent;
-      } while (!node.rbRed);
-      if (node) node.rbRed = false;
-    },
-    rbRotateLeft: function(node) {
-      var p = node, q = node.rbRight, parent = p.rbParent;
-      if (parent) {
-        if (parent.rbLeft === p) parent.rbLeft = q; else parent.rbRight = q;
-      } else {
-        this.root = q;
-      }
-      q.rbParent = parent;
-      p.rbParent = q;
-      p.rbRight = q.rbLeft;
-      if (p.rbRight) p.rbRight.rbParent = p;
-      q.rbLeft = p;
-    },
-    rbRotateRight: function(node) {
-      var p = node, q = node.rbLeft, parent = p.rbParent;
-      if (parent) {
-        if (parent.rbLeft === p) parent.rbLeft = q; else parent.rbRight = q;
-      } else {
-        this.root = q;
-      }
-      q.rbParent = parent;
-      p.rbParent = q;
-      p.rbLeft = q.rbRight;
-      if (p.rbLeft) p.rbLeft.rbParent = p;
-      q.rbRight = p;
-    },
-    rbFirst: function(node) {
-      while (node.rbLeft) node = node.rbLeft;
-      return node;
+        parent = parent.U;
+      } while (!node.C);
+      if (node) node.C = false;
     }
   };
+  function d3_geom_voronoiRedBlackRotateLeft(tree, node) {
+    var p = node, q = node.R, parent = p.U;
+    if (parent) {
+      if (parent.L === p) parent.L = q; else parent.R = q;
+    } else {
+      tree._ = q;
+    }
+    q.U = parent;
+    p.U = q;
+    p.R = q.L;
+    if (p.R) p.R.U = p;
+    q.L = p;
+  }
+  function d3_geom_voronoiRedBlackRotateRight(tree, node) {
+    var p = node, q = node.L, parent = p.U;
+    if (parent) {
+      if (parent.L === p) parent.L = q; else parent.R = q;
+    } else {
+      tree._ = q;
+    }
+    q.U = parent;
+    p.U = q;
+    p.L = q.R;
+    if (p.L) p.L.U = p;
+    q.R = p;
+  }
+  function d3_geom_voronoiRedBlackFirst(node) {
+    while (node.L) node = node.L;
+    return node;
+  }
   function d3_geom_voronoiVertexOrder(a, b) {
     return b[1] - a[1] || b[0] - a[0];
   }

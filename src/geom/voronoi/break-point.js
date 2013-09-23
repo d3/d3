@@ -6,7 +6,7 @@ function d3_geom_voronoiLeftBreakPoint(arc, directrix) {
 
   if (!pby2) return rfocx;
 
-  var lArc = arc.rbPrevious;
+  var lArc = arc.P;
   if (!lArc) return -Infinity;
 
   site = lArc.site;
@@ -26,7 +26,7 @@ function d3_geom_voronoiLeftBreakPoint(arc, directrix) {
 }
 
 function d3_geom_voronoiRightBreakPoint(arc, directrix) {
-  var rArc = arc.rbNext;
+  var rArc = arc.N;
   if (rArc) return d3_geom_voronoiLeftBreakPoint(rArc, directrix);
   var site = arc.site;
   return site[1] === directrix ? site[0] : Infinity;
