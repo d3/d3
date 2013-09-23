@@ -17,11 +17,11 @@ d3_geom_voronoiCell.prototype.prepare = function() {
   return halfEdges.length;
 };
 
-function d3_geom_voronoiCloseCells(bbox) {
-  var xl = bbox.xl,
-      xr = bbox.xr,
-      yt = bbox.yt,
-      yb = bbox.yb,
+function d3_geom_voronoiCloseCells(extent) {
+  var x0 = extent[0][0],
+      x1 = extent[1][0],
+      y0 = extent[0][1],
+      y1 = extent[1][1],
       cells = d3_geom_voronoiCells,
       iCell = cells.length,
       cell,
@@ -47,14 +47,14 @@ function d3_geom_voronoiCloseCells(bbox) {
       start = halfEdges[iRight].start();
       if (Math.abs(end[0] - start[0]) > ε || Math.abs(end[1] - start[1]) > ε) {
         va = end;
-        if (Math.abs(end[0] - xl) < ε && yb - end[1] > ε) {
-          vb = [xl, Math.abs(start[0] - xl) < ε ? start[1] : yb];
-        } else if (Math.abs(end[1] - yb) < ε && xr - end[0] > ε) {
-          vb = [Math.abs(start[1] - yb) < ε ? start[0] : xr, yb];
-        } else if (Math.abs(end[0] - xr) < ε && end[1] - yt > ε) {
-          vb = [xr, Math.abs(start[0] - xr) < ε ? start[1] : yt];
-        } else if (Math.abs(end[1] - yt) < ε && end[0] - xl > ε) {
-          vb = [Math.abs(start[1] - yt) < ε ? start[0] : xl, yt];
+        if (Math.abs(end[0] - x0) < ε && y1 - end[1] > ε) {
+          vb = [x0, Math.abs(start[0] - x0) < ε ? start[1] : y1];
+        } else if (Math.abs(end[1] - y1) < ε && x1 - end[0] > ε) {
+          vb = [Math.abs(start[1] - y1) < ε ? start[0] : x1, y1];
+        } else if (Math.abs(end[0] - x1) < ε && end[1] - y0 > ε) {
+          vb = [x1, Math.abs(start[0] - x1) < ε ? start[1] : y0];
+        } else if (Math.abs(end[1] - y0) < ε && end[0] - x0 > ε) {
+          vb = [Math.abs(start[1] - y0) < ε ? start[0] : x0, y0];
         }
         edge = d3_geom_voronoiCreateBorderEdge(cell.site, va, vb);
         halfEdges.splice(iLeft + 1, 0, new d3_geom_voronoiHalfEdge(edge, cell.site, null));
