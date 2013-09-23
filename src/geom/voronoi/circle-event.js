@@ -1,8 +1,8 @@
 function d3_geom_voronoiCircleEvent() {
   this.arc = null;
   this.site = null;
-  this.x = null;
-  this.y = null;
+  this[0] = null;
+  this[1] = null;
   this.ycenter = null;
 }
 
@@ -18,12 +18,12 @@ function d3_geom_voronoiAttachCircleEvent(arc) {
 
   if (lSite === rSite) return;
 
-  var bx = cSite.x,
-      by = cSite.y,
-      ax = lSite.x - bx,
-      ay = lSite.y - by,
-      cx = rSite.x - bx,
-      cy = rSite.y - by;
+  var bx = cSite[0],
+      by = cSite[1],
+      ax = lSite[0] - bx,
+      ay = lSite[1] - by,
+      cx = rSite[0] - bx,
+      cy = rSite[1] - by;
 
   var d = 2 * (ax * cy - ay * cx);
   if (d >= -ε2) return;
@@ -38,8 +38,8 @@ function d3_geom_voronoiAttachCircleEvent(arc) {
   if (!circleEvent) circleEvent = new d3_geom_voronoiCircleEvent;
   circleEvent.arc = arc;
   circleEvent.site = cSite;
-  circleEvent.x = x + bx;
-  circleEvent.y = ycenter + Math.sqrt(x * x + y * y); // y bottom
+  circleEvent[0] = x + bx;
+  circleEvent[1] = ycenter + Math.sqrt(x * x + y * y); // y bottom
   circleEvent.ycenter = ycenter;
 
   arc.circleEvent = circleEvent;
@@ -48,7 +48,7 @@ function d3_geom_voronoiAttachCircleEvent(arc) {
       node = d3_geom_voronoiCircleEvents.root;
 
   while (node) {
-    if (circleEvent.y < node.y || (circleEvent.y === node.y && circleEvent.x <= node.x)) {
+    if (circleEvent[1] < node[1] || (circleEvent[1] === node[1] && circleEvent[0] <= node[0])) {
       if (node.rbLeft) node = node.rbLeft;
       else { predecessor = node.rbPrevious; break; }
     } else {

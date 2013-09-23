@@ -27,9 +27,9 @@ function d3_geom_voronoiDetachBeachSection(beachSection) {
 
 function d3_geom_voronoiRemoveBeachSection(beachSection) {
   var circle = beachSection.circleEvent,
-      x = circle.x,
+      x = circle[0],
       y = circle.ycenter,
-      vertex = d3_geom_voronoiCreateVertex(x, y),
+      vertex = [x, y],
       previous = beachSection.rbPrevious,
       next = beachSection.rbNext,
       disappearingTransitions = [beachSection];
@@ -38,7 +38,7 @@ function d3_geom_voronoiRemoveBeachSection(beachSection) {
 
   var lArc = previous;
   while (lArc.circleEvent
-      && Math.abs(x - lArc.circleEvent.x) < ε
+      && Math.abs(x - lArc.circleEvent[0]) < ε
       && Math.abs(y - lArc.circleEvent.ycenter) < ε) {
     previous = lArc.rbPrevious;
     disappearingTransitions.unshift(lArc);
@@ -51,7 +51,7 @@ function d3_geom_voronoiRemoveBeachSection(beachSection) {
 
   var rArc = next;
   while (rArc.circleEvent
-      && Math.abs(x - rArc.circleEvent.x) < ε
+      && Math.abs(x - rArc.circleEvent[0]) < ε
       && Math.abs(y - rArc.circleEvent.ycenter) < ε) {
     next = rArc.rbNext;
     disappearingTransitions.push(rArc);
@@ -79,8 +79,8 @@ function d3_geom_voronoiRemoveBeachSection(beachSection) {
 }
 
 function d3_geom_voronoiAddBeachSection(site) {
-  var x = site.x,
-      directrix = site.y,
+  var x = site[0],
+      directrix = site[1],
       lArc,
       rArc,
       dxl,
@@ -137,17 +137,17 @@ function d3_geom_voronoiAddBeachSection(site) {
   d3_geom_voronoiDetachCircleEvent(rArc);
 
   var lSite = lArc.site,
-      ax = lSite.x,
-      ay = lSite.y,
-      bx = site.x - ax,
-      by = site.y - ay,
+      ax = lSite[0],
+      ay = lSite[1],
+      bx = site[0] - ax,
+      by = site[1] - ay,
       rSite = rArc.site,
-      cx = rSite.x - ax,
-      cy = rSite.y - ay,
+      cx = rSite[0] - ax,
+      cy = rSite[1] - ay,
       d = 2 * (bx * cy - by * cx),
       hb = bx * bx + by * by,
       hc = cx * cx + cy * cy,
-      vertex = d3_geom_voronoiCreateVertex((cy * hb - by * hc) / d + ax, (bx * hc - cx * hb) / d + ay);
+      vertex = [(cy * hb - by * hc) / d + ax, (bx * hc - cx * hb) / d + ay];
 
   d3_geom_voronoiSetEdgeStartpoint(rArc.edge, lSite, rSite, vertex);
   newArc.edge = d3_geom_voronoiCreateEdge(lSite, site, null, vertex);

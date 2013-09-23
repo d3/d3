@@ -1,12 +1,3 @@
-function d3_geom_voronoiVertex(x, y) {
-  this.x = x;
-  this.y = y;
-}
-
-function d3_geom_voronoiCreateVertex(x, y) {
-  return new d3_geom_voronoiVertex(x, y);
-}
-
 function d3_geom_voronoiVertexOrder(a, b) {
-  return b.y - a.y || b.x - a.x;
+  return b[1] - a[1] || b[0] - a[0];
 }

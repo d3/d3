@@ -3,9 +3,9 @@ function d3_geom_voronoiHalfEdge(edge, lSite, rSite) {
       vb = edge.vb;
   this.edge = edge;
   this.site = lSite;
-  this.angle = rSite ? Math.atan2(rSite.y - lSite.y, rSite.x - lSite.x)
-      : edge.lSite === lSite ? Math.atan2(vb.x - va.x, va.y - vb.y)
-      : Math.atan2(va.x - vb.x, vb.y - va.y);
+  this.angle = rSite ? Math.atan2(rSite[1] - lSite[1], rSite[0] - lSite[0])
+      : edge.lSite === lSite ? Math.atan2(vb[0] - va[0], va[1] - vb[1])
+      : Math.atan2(va[0] - vb[0], vb[1] - va[1]);
 };
 
 d3_geom_voronoiHalfEdge.prototype.getStartpoint = function() {

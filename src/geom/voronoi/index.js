@@ -31,11 +31,11 @@ function d3_geom_voronoi(sites, bbox) {
 
   while (true) {
     circle = d3_geom_voronoiFirstCircleEvent;
-    if (site && (!circle || site.y < circle.y || (site.y === circle.y && site.x < circle.x))) {
-      if (site.x !== x0 || site.y !== y0) {
+    if (site && (!circle || site[1] < circle[1] || (site[1] === circle[1] && site[0] < circle[0]))) {
+      if (site[0] !== x0 || site[1] !== y0) {
         d3_geom_voronoiCells[site.i] = new d3_geom_voronoiCell(site);
         d3_geom_voronoiAddBeachSection(site);
-        x0 = site.x, y0 = site.y;
+        x0 = site[0], y0 = site[1];
       }
       site = sites.pop();
     } else if (circle) {

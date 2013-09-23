@@ -45,16 +45,16 @@ function d3_geom_voronoiCloseCells(bbox) {
       iRight = (iLeft + 1) % nHalfEdges;
       endpoint = halfEdges[iLeft].getEndpoint();
       startpoint = halfEdges[iRight].getStartpoint();
-      if (Math.abs(endpoint.x - startpoint.x) > ε || Math.abs(endpoint.y - startpoint.y) > ε) {
+      if (Math.abs(endpoint[0] - startpoint[0]) > ε || Math.abs(endpoint[1] - startpoint[1]) > ε) {
         va = endpoint;
-        if (Math.abs(endpoint.x - xl) < ε && yb - endpoint.y > ε) {
-          vb = d3_geom_voronoiCreateVertex(xl, Math.abs(startpoint.x - xl) < ε ? startpoint.y : yb);
-        } else if (Math.abs(endpoint.y - yb) < ε && xr - endpoint.x > ε) {
-          vb = d3_geom_voronoiCreateVertex(Math.abs(startpoint.y - yb) < ε ? startpoint.x : xr, yb);
-        } else if (Math.abs(endpoint.x - xr) < ε && endpoint.y - yt > ε) {
-          vb = d3_geom_voronoiCreateVertex(xr, Math.abs(startpoint.x - xr) < ε ? startpoint.y : yt);
-        } else if (Math.abs(endpoint.y - yt) < ε && endpoint.x - xl > ε) {
-          vb = d3_geom_voronoiCreateVertex(Math.abs(startpoint.y - yt) < ε ? startpoint.x : xl, yt);
+        if (Math.abs(endpoint[0] - xl) < ε && yb - endpoint[1] > ε) {
+          vb = [xl, Math.abs(startpoint[0] - xl) < ε ? startpoint[1] : yb];
+        } else if (Math.abs(endpoint[1] - yb) < ε && xr - endpoint[0] > ε) {
+          vb = [Math.abs(startpoint[1] - yb) < ε ? startpoint[0] : xr, yb];
+        } else if (Math.abs(endpoint[0] - xr) < ε && endpoint[1] - yt > ε) {
+          vb = [xr, Math.abs(startpoint[0] - xr) < ε ? startpoint[1] : yt];
+        } else if (Math.abs(endpoint[1] - yt) < ε && endpoint[0] - xl > ε) {
+          vb = [Math.abs(startpoint[1] - yt) < ε ? startpoint[0] : xl, yt];
         }
         edge = d3_geom_voronoiCreateBorderEdge(cell.site, va, vb);
         halfEdges.splice(iLeft + 1, 0, new d3_geom_voronoiHalfEdge(edge, cell.site, null));
