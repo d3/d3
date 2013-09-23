@@ -9,8 +9,8 @@ function d3_geom_voronoiCreateEdge(lSite, rSite, va, vb) {
   d3_geom_voronoiEdges.push(edge);
   if (va) d3_geom_voronoiSetEdgeStartpoint(edge, lSite, rSite, va);
   if (vb) d3_geom_voronoiSetEdgeEndpoint(edge, lSite, rSite, vb);
-  d3_geom_voronoiCells[lSite.id].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, lSite, rSite));
-  d3_geom_voronoiCells[rSite.id].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, rSite, lSite));
+  d3_geom_voronoiCells[lSite.i].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, lSite, rSite));
+  d3_geom_voronoiCells[rSite.i].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, rSite, lSite));
   return edge;
 }
 

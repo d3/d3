@@ -1,5 +1,4 @@
 function d3_geom_voronoiCell(site) {
-  this.id = null;
   this.site = site;
   this.halfEdges = [];
 }

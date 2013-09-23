@@ -4533,7 +4533,7 @@ d3 = function() {
     var a = coordinates[0], b = coordinates[coordinates.length - 1];
     return !(a[0] - b[0] || a[1] - b[1]);
   }
-  var d3_geom_voronoiEdges = null, d3_geom_voronoiCells = null, d3_geom_voronoiBeachSectionJunkyard = [], d3_geom_voronoiCircleEventJunkyard = [], d3_geom_voronoiBeachLine, d3_geom_voronoiCircleEvents, d3_geom_voronoiFirstCircleEvent;
+  var d3_geom_voronoiEdges, d3_geom_voronoiCells, d3_geom_voronoiBeachLine, d3_geom_voronoiBeachSectionJunkyard = [], d3_geom_voronoiCircleEvents, d3_geom_voronoiCircleEventJunkyard = [], d3_geom_voronoiFirstCircleEvent;
   function d3_geom_voronoiBeachSection() {
     this.edge = null;
     this.site = null;
@@ -4659,7 +4659,6 @@ d3 = function() {
     return site.y === directrix ? site.x : Infinity;
   }
   function d3_geom_voronoiCell(site) {
-    this.id = null;
     this.site = site;
     this.halfEdges = [];
   }
@@ -4849,8 +4848,8 @@ d3 = function() {
     d3_geom_voronoiEdges.push(edge);
     if (va) d3_geom_voronoiSetEdgeStartpoint(edge, lSite, rSite, va);
     if (vb) d3_geom_voronoiSetEdgeEndpoint(edge, lSite, rSite, vb);
-    d3_geom_voronoiCells[lSite.id].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, lSite, rSite));
-    d3_geom_voronoiCells[rSite.id].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, rSite, lSite));
+    d3_geom_voronoiCells[lSite.i].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, lSite, rSite));
+    d3_geom_voronoiCells[rSite.i].halfEdges.push(new d3_geom_voronoiHalfEdge(edge, rSite, lSite));
     return edge;
   }
   function d3_geom_voronoiCreateBorderEdge(lSite, va, vb) {
@@ -5093,21 +5092,18 @@ d3 = function() {
     return b.y - a.y || b.x - a.x;
   }
   function d3_geom_voronoi(sites, bbox) {
+    var site = sites.sort(d3_geom_voronoiVertexOrder).pop(), x0, y0, circle;
+    d3_geom_voronoiEdges = [];
+    d3_geom_voronoiCells = new Array(sites.length);
     d3_geom_voronoiBeachLine = new d3_geom_voronoiRedBlackTree();
     d3_geom_voronoiCircleEvents = new d3_geom_voronoiRedBlackTree();
-    d3_geom_voronoiEdges = [];
-    d3_geom_voronoiCells = [];
-    sites.sort(d3_geom_voronoiVertexOrder);
-    var site = sites.pop(), siteid = 0, xsitex, xsitey, circle;
     while (true) {
       circle = d3_geom_voronoiFirstCircleEvent;
       if (site && (!circle || site.y < circle.y || site.y === circle.y && site.x < circle.x)) {
-        if (site.x !== xsitex || site.y !== xsitey) {
-          d3_geom_voronoiCells[siteid] = new d3_geom_voronoiCell(site);
-          site.id = siteid++;
+        if (site.x !== x0 || site.y !== y0) {
+          d3_geom_voronoiCells[site.i] = new d3_geom_voronoiCell(site);
           d3_geom_voronoiAddBeachSection(site);
-          xsitey = site.y;
-          xsitex = site.x;
+          x0 = site.x, y0 = site.y;
         }
         site = sites.pop();
       } else if (circle) {

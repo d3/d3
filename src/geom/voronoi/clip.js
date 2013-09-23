@@ -12,7 +12,7 @@ function d3_geom_voronoiClipEdges(bbox) {
     }
   }
 }
-    
+
 function d3_geom_voronoiClipEdge(edge, bbox) {
   var ax = edge.va.x,
       ay = edge.va.y,

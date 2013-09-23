@@ -1,6 +1,6 @@
 import "../core/functor";
 import "../svg/line";
-import "voronoi/index";
+import "voronoi/";
 import "geom";
 
 d3.geom.voronoi = function(points) {

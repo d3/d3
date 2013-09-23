@@ -4,7 +4,7 @@ function d3_geom_voronoiBeachSection() {
   this.circleEvent = null;
 
   // red-black tree properties
-  this.rbParent = null;  
+  this.rbParent = null;
   this.rbRed = null;
   this.rbLeft = null;
   this.rbRight = null;
