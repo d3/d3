@@ -12,7 +12,7 @@ function d3_geo_conicConformal(φ0, φ1) {
   if (!n) return d3_geo_mercator;
 
   function forward(λ, φ) {
-    var ρ = Math.abs(Math.abs(φ) - halfπ) < ε ? 0 : F / Math.pow(t(φ), n);
+    var ρ = abs(abs(φ) - halfπ) < ε ? 0 : F / Math.pow(t(φ), n);
     return [
       ρ * Math.sin(n * λ),
       F - ρ * Math.cos(n * λ)

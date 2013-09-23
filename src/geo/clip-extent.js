@@ -176,10 +176,10 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
   };
 
   function corner(p, direction) {
-    return Math.abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3
-        : Math.abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1
-        : Math.abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0
-        : direction > 0 ? 3 : 2; // Math.abs(p[1] - y1) < ε
+    return abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3
+        : abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1
+        : abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0
+        : direction > 0 ? 3 : 2; // abs(p[1] - y1) < ε
   }
 
   function compare(a, b) {
@@ -202,7 +202,7 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
         dy = b[1] - a[1],
         t = [0, 1];
 
-    if (Math.abs(dx) < ε && Math.abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
+    if (abs(dx) < ε && abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
 
     if (d3_geo_clipExtentT(x0 - a[0],  dx, t) &&
         d3_geo_clipExtentT(a[0] - x1, -dx, t) &&
@@ -224,7 +224,7 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
 }
 
 function d3_geo_clipExtentT(num, denominator, t) {
-  if (Math.abs(denominator) < ε) return num <= 0;
+  if (abs(denominator) < ε) return num <= 0;
 
   var u = num / denominator;
 

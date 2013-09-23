@@ -6,7 +6,7 @@ function d3_geom_voronoiClipEdges(extent) {
     e = edges[i];
     if (!d3_geom_voronoiConnectEdge(e, extent)
         || !d3_geom_voronoiClipEdge(e, extent)
-        || (Math.abs(e.a[0] - e.b[0]) < ε && Math.abs(e.a[1] - e.b[1]) < ε)) {
+        || (abs(e.a[0] - e.b[0]) < ε && abs(e.a[1] - e.b[1]) < ε)) {
       e.a = e.b = null;
       edges.splice(i, 1);
     }

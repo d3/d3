@@ -1,4 +1,5 @@
 import "format";
+import "../math/abs";
 
 var d3_formatPrefixes = ["y","z","a","f","p","n","µ","m","","k","M","G","T","P","E","Z","Y"].map(d3_formatPrefix);
 
@@ -14,7 +15,7 @@ d3.formatPrefix = function(value, precision) {
 };
 
 function d3_formatPrefix(d, i) {
-  var k = Math.pow(10, Math.abs(8 - i) * 3);
+  var k = Math.pow(10, abs(8 - i) * 3);
   return {
     scale: i > 8 ? function(d) { return d / k; } : function(d) { return d * k; },
     symbol: d

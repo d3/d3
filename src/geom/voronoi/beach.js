@@ -31,8 +31,8 @@ function d3_geom_voronoiRemoveBeach(beach) {
 
   var lArc = previous;
   while (lArc.circle
-      && Math.abs(x - lArc.circle[0]) < ε
-      && Math.abs(y - lArc.circle.cy) < ε) {
+      && abs(x - lArc.circle[0]) < ε
+      && abs(y - lArc.circle.cy) < ε) {
     previous = lArc.P;
     disappearing.unshift(lArc);
     d3_geom_voronoiDetachBeach(lArc);
@@ -44,8 +44,8 @@ function d3_geom_voronoiRemoveBeach(beach) {
 
   var rArc = next;
   while (rArc.circle
-      && Math.abs(x - rArc.circle[0]) < ε
-      && Math.abs(y - rArc.circle.cy) < ε) {
+      && abs(x - rArc.circle[0]) < ε
+      && abs(y - rArc.circle.cy) < ε) {
     next = rArc.N;
     disappearing.push(rArc);
     d3_geom_voronoiDetachBeach(rArc);

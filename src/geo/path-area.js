@@ -14,7 +14,7 @@ var d3_geo_pathAreaSum, d3_geo_pathAreaPolygon, d3_geo_pathArea = {
   },
   polygonEnd: function() {
     d3_geo_pathArea.lineStart = d3_geo_pathArea.lineEnd = d3_geo_pathArea.point = d3_noop;
-    d3_geo_pathAreaSum += Math.abs(d3_geo_pathAreaPolygon / 2);
+    d3_geo_pathAreaSum += abs(d3_geo_pathAreaPolygon / 2);
   }
 };
 

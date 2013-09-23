@@ -188,6 +188,7 @@ d3 = function() {
   d3.merge = function(arrays) {
     return Array.prototype.concat.apply([], arrays);
   };
+  var abs = Math.abs;
   d3.range = function(start, stop, step) {
     if (arguments.length < 3) {
       step = 1;
@@ -197,7 +198,7 @@ d3 = function() {
       }
     }
     if ((stop - start) / step === Infinity) throw new Error("infinite range");
-    var range = [], k = d3_range_integerScale(Math.abs(step)), i = -1, j;
+    var range = [], k = d3_range_integerScale(abs(step)), i = -1, j;
     start *= k, stop *= k, step *= k;
     if (step < 0) while ((j = start + step * ++i) > stop) range.push(j / k); else while ((j = start + step * ++i) < stop) range.push(j / k);
     return range;
@@ -2102,7 +2103,7 @@ d3 = function() {
     return d3_formatPrefixes[8 + i / 3];
   };
   function d3_formatPrefix(d, i) {
-    var k = Math.pow(10, Math.abs(8 - i) * 3);
+    var k = Math.pow(10, abs(8 - i) * 3);
     return {
       scale: i > 8 ? function(d) {
         return d / k;
@@ -2388,7 +2389,7 @@ d3 = function() {
     return [ Math.atan2(cartesian[1], cartesian[0]), d3_asin(cartesian[2]) ];
   }
   function d3_geo_sphericalEqual(a, b) {
-    return Math.abs(a[0] - b[0]) < ε && Math.abs(a[1] - b[1]) < ε;
+    return abs(a[0] - b[0]) < ε && abs(a[1] - b[1]) < ε;
   }
   d3.geo.bounds = function() {
     var λ0, φ0, λ1, φ1, λ_, λ__, φ__, p0, dλSum, ranges, range;
@@ -2423,7 +2424,7 @@ d3 = function() {
         var normal = d3_geo_cartesianCross(p0, p), equatorial = [ normal[1], -normal[0], 0 ], inflection = d3_geo_cartesianCross(equatorial, normal);
         d3_geo_cartesianNormalize(inflection);
         inflection = d3_geo_spherical(inflection);
-        var dλ = λ - λ_, s = dλ > 0 ? 1 : -1, λi = inflection[0] * d3_degrees * s, antimeridian = Math.abs(dλ) > 180;
+        var dλ = λ - λ_, s = dλ > 0 ? 1 : -1, λi = inflection[0] * d3_degrees * s, antimeridian = abs(dλ) > 180;
         if (antimeridian ^ (s * λ_ < λi && λi < s * λ)) {
           var φi = inflection[1] * d3_degrees;
           if (φi > φ1) φ1 = φi;
@@ -2468,7 +2469,7 @@ d3 = function() {
     function ringPoint(λ, φ) {
       if (p0) {
         var dλ = λ - λ_;
-        dλSum += Math.abs(dλ) > 180 ? dλ + (dλ > 0 ? 360 : -360) : dλ;
+        dλSum += abs(dλ) > 180 ? dλ + (dλ > 0 ? 360 : -360) : dλ;
       } else λ__ = λ, φ__ = φ;
       d3_geo_area.point(λ, φ);
       linePoint(λ, φ);
@@ -2479,7 +2480,7 @@ d3 = function() {
     function ringEnd() {
       ringPoint(λ__, φ__);
       d3_geo_area.lineEnd();
-      if (Math.abs(dλSum) > ε) λ0 = -(λ1 = 180);
+      if (abs(dλSum) > ε) λ0 = -(λ1 = 180);
       range[0] = λ0, range[1] = λ1;
       p0 = null;
     }
@@ -2833,7 +2834,7 @@ d3 = function() {
       while (true) {
         if (j === m) j = 0;
         point = ring[j];
-        var λ = point[0], φ = point[1] / 2 + π / 4, sinφ = Math.sin(φ), cosφ = Math.cos(φ), dλ = λ - λ0, antimeridian = Math.abs(dλ) > π, k = sinφ0 * sinφ;
+        var λ = point[0], φ = point[1] / 2 + π / 4, sinφ = Math.sin(φ), cosφ = Math.cos(φ), dλ = λ - λ0, antimeridian = abs(dλ) > π, k = sinφ0 * sinφ;
         d3_geo_areaRingSum.add(Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ)));
         polarAngle += antimeridian ? dλ + (dλ >= 0 ? 2 : -2) * π : dλ;
         if (antimeridian ^ λ0 >= meridian ^ λ >= meridian) {
@@ -2861,8 +2862,8 @@ d3 = function() {
         clean = 1;
       },
       point: function(λ1, φ1) {
-        var sλ1 = λ1 > 0 ? π : -π, dλ = Math.abs(λ1 - λ0);
-        if (Math.abs(dλ - π) < ε) {
+        var sλ1 = λ1 > 0 ? π : -π, dλ = abs(λ1 - λ0);
+        if (abs(dλ - π) < ε) {
           listener.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? halfπ : -halfπ);
           listener.point(sλ0, φ0);
           listener.lineEnd();
@@ -2871,8 +2872,8 @@ d3 = function() {
           listener.point(λ1, φ0);
           clean = 0;
         } else if (sλ0 !== sλ1 && dλ >= π) {
-          if (Math.abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
-          if (Math.abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
+          if (abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
+          if (abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
           φ0 = d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1);
           listener.point(sλ0, φ0);
           listener.lineEnd();
@@ -2894,7 +2895,7 @@ d3 = function() {
   }
   function d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1) {
     var cosφ0, cosφ1, sinλ0_λ1 = Math.sin(λ0 - λ1);
-    return Math.abs(sinλ0_λ1) > ε ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1) - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0)) / (cosφ0 * cosφ1 * sinλ0_λ1)) : (φ0 + φ1) / 2;
+    return abs(sinλ0_λ1) > ε ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1) - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0)) / (cosφ0 * cosφ1 * sinλ0_λ1)) : (φ0 + φ1) / 2;
   }
   function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
     var φ;
@@ -2909,7 +2910,7 @@ d3 = function() {
       listener.point(-π, -φ);
       listener.point(-π, 0);
       listener.point(-π, φ);
-    } else if (Math.abs(from[0] - to[0]) > ε) {
+    } else if (abs(from[0] - to[0]) > ε) {
       var s = (from[0] < to[0] ? 1 : -1) * π;
       φ = direction * s / 2;
       listener.point(-s, φ);
@@ -2920,7 +2921,7 @@ d3 = function() {
     }
   }
   function d3_geo_clipCircle(radius) {
-    var cr = Math.cos(radius), smallRadius = cr > 0, notHemisphere = Math.abs(cr) > ε, interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
+    var cr = Math.cos(radius), smallRadius = cr > 0, notHemisphere = abs(cr) > ε, interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
     return d3_geo_clip(visible, clipLine, interpolate, smallRadius ? [ 0, -radius ] : [ -π, radius - π ]);
     function visible(λ, φ) {
       return Math.cos(λ) * Math.cos(φ) > cr;
@@ -3000,9 +3001,9 @@ d3 = function() {
       if (!two) return q;
       var λ0 = a[0], λ1 = b[0], φ0 = a[1], φ1 = b[1], z;
       if (λ1 < λ0) z = λ0, λ0 = λ1, λ1 = z;
-      var δλ = λ1 - λ0, polar = Math.abs(δλ - π) < ε, meridian = polar || δλ < ε;
+      var δλ = λ1 - λ0, polar = abs(δλ - π) < ε, meridian = polar || δλ < ε;
       if (!polar && φ1 < φ0) z = φ0, φ0 = φ1, φ1 = z;
-      if (meridian ? polar ? φ0 + φ1 > 0 ^ q[1] < (Math.abs(q[0] - λ0) < ε ? φ0 : φ1) : φ0 <= q[1] && q[1] <= φ1 : δλ > π ^ (λ0 <= q[0] && q[0] <= λ1)) {
+      if (meridian ? polar ? φ0 + φ1 > 0 ^ q[1] < (abs(q[0] - λ0) < ε ? φ0 : φ1) : φ0 <= q[1] && q[1] <= φ1 : δλ > π ^ (λ0 <= q[0] && q[0] <= λ1)) {
         var q1 = d3_geo_cartesianScale(u, (-w + t) / uu);
         d3_geo_cartesianAdd(q1, A);
         return [ q, d3_geo_spherical(q1) ];
@@ -3151,7 +3152,7 @@ d3 = function() {
       return clip;
     };
     function corner(p, direction) {
-      return Math.abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3 : Math.abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1 : Math.abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0 : direction > 0 ? 3 : 2;
+      return abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3 : abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1 : abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0 : direction > 0 ? 3 : 2;
     }
     function compare(a, b) {
       return comparePoints(a.point, b.point);
@@ -3162,7 +3163,7 @@ d3 = function() {
     }
     function clipLine(a, b) {
       var dx = b[0] - a[0], dy = b[1] - a[1], t = [ 0, 1 ];
-      if (Math.abs(dx) < ε && Math.abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
+      if (abs(dx) < ε && abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
       if (d3_geo_clipExtentT(x0 - a[0], dx, t) && d3_geo_clipExtentT(a[0] - x1, -dx, t) && d3_geo_clipExtentT(y0 - a[1], dy, t) && d3_geo_clipExtentT(a[1] - y1, -dy, t)) {
         if (t[1] < 1) {
           b[0] = a[0] + t[1] * dx;
@@ -3178,7 +3179,7 @@ d3 = function() {
     }
   }
   function d3_geo_clipExtentT(num, denominator, t) {
-    if (Math.abs(denominator) < ε) return num <= 0;
+    if (abs(denominator) < ε) return num <= 0;
     var u = num / denominator;
     if (denominator > 0) {
       if (u > t[1]) return false;
@@ -3312,7 +3313,7 @@ d3 = function() {
     },
     polygonEnd: function() {
       d3_geo_pathArea.lineStart = d3_geo_pathArea.lineEnd = d3_geo_pathArea.point = d3_noop;
-      d3_geo_pathAreaSum += Math.abs(d3_geo_pathAreaPolygon / 2);
+      d3_geo_pathAreaSum += abs(d3_geo_pathAreaPolygon / 2);
     }
   };
   function d3_geo_pathAreaRingStart() {
@@ -3541,8 +3542,8 @@ d3 = function() {
     function resampleLineTo(x0, y0, λ0, a0, b0, c0, x1, y1, λ1, a1, b1, c1, depth, stream) {
       var dx = x1 - x0, dy = y1 - y0, d2 = dx * dx + dy * dy;
       if (d2 > 4 * δ2 && depth--) {
-        var a = a0 + a1, b = b0 + b1, c = c0 + c1, m = Math.sqrt(a * a + b * b + c * c), φ2 = Math.asin(c /= m), λ2 = Math.abs(Math.abs(c) - 1) < ε ? (λ0 + λ1) / 2 : Math.atan2(b, a), p = project(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x2 - x0, dy2 = y2 - y0, dz = dy * dx2 - dx * dy2;
-        if (dz * dz / d2 > δ2 || Math.abs((dx * dx2 + dy * dy2) / d2 - .5) > .3 || a0 * a1 + b0 * b1 + c0 * c1 < cosMinDistance) {
+        var a = a0 + a1, b = b0 + b1, c = c0 + c1, m = Math.sqrt(a * a + b * b + c * c), φ2 = Math.asin(c /= m), λ2 = abs(abs(c) - 1) < ε ? (λ0 + λ1) / 2 : Math.atan2(b, a), p = project(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x2 - x0, dy2 = y2 - y0, dz = dy * dx2 - dx * dy2;
+        if (dz * dz / d2 > δ2 || abs((dx * dx2 + dy * dy2) / d2 - .5) > .3 || a0 * a1 + b0 * b1 + c0 * c1 < cosMinDistance) {
           resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a /= m, b /= m, c, depth, stream);
           stream.point(x2, y2);
           resampleLineTo(x2, y2, λ2, a, b, c, x1, y1, λ1, a1, b1, c1, depth, stream);
@@ -3850,9 +3851,9 @@ d3 = function() {
     }
     function lines() {
       return d3.range(Math.ceil(X0 / DX) * DX, X1, DX).map(X).concat(d3.range(Math.ceil(Y0 / DY) * DY, Y1, DY).map(Y)).concat(d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(function(x) {
-        return Math.abs(x % DX) > ε;
+        return abs(x % DX) > ε;
       }).map(x)).concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).filter(function(y) {
-        return Math.abs(y % DY) > ε;
+        return abs(y % DY) > ε;
       }).map(y));
     }
     graticule.lines = function() {
@@ -4000,7 +4001,7 @@ d3 = function() {
       d3_geo_length.point = d3_geo_length.lineEnd = d3_noop;
     };
     function nextPoint(λ, φ) {
-      var sinφ = Math.sin(φ *= d3_radians), cosφ = Math.cos(φ), t = Math.abs((λ *= d3_radians) - λ0), cosΔλ = Math.cos(t);
+      var sinφ = Math.sin(φ *= d3_radians), cosφ = Math.cos(φ), t = abs((λ *= d3_radians) - λ0), cosΔλ = Math.cos(t);
       d3_geo_lengthSum += Math.atan2(Math.sqrt((t = cosφ * Math.sin(t)) * t + (t = cosφ0 * sinφ - sinφ0 * cosφ * cosΔλ) * t), sinφ0 * sinφ + cosφ0 * cosφ * cosΔλ);
       λ0 = λ, sinφ0 = sinφ, cosφ0 = cosφ;
     }
@@ -4037,7 +4038,7 @@ d3 = function() {
     }, n = φ0 === φ1 ? Math.sin(φ0) : Math.log(cosφ0 / Math.cos(φ1)) / Math.log(t(φ1) / t(φ0)), F = cosφ0 * Math.pow(t(φ0), n) / n;
     if (!n) return d3_geo_mercator;
     function forward(λ, φ) {
-      var ρ = Math.abs(Math.abs(φ) - halfπ) < ε ? 0 : F / Math.pow(t(φ), n);
+      var ρ = abs(abs(φ) - halfπ) < ε ? 0 : F / Math.pow(t(φ), n);
       return [ ρ * Math.sin(n * λ), F - ρ * Math.cos(n * λ) ];
     }
     forward.invert = function(x, y) {
@@ -4051,7 +4052,7 @@ d3 = function() {
   }).raw = d3_geo_conicConformal;
   function d3_geo_conicEquidistant(φ0, φ1) {
     var cosφ0 = Math.cos(φ0), n = φ0 === φ1 ? Math.sin(φ0) : (cosφ0 - Math.cos(φ1)) / (φ1 - φ0), G = cosφ0 / n + φ0;
-    if (Math.abs(n) < ε) return d3_geo_equirectangular;
+    if (abs(n) < ε) return d3_geo_equirectangular;
     function forward(λ, φ) {
       var ρ = G - φ;
       return [ ρ * Math.sin(n * λ), G - ρ * Math.cos(n * λ) ];
@@ -4362,7 +4363,7 @@ d3 = function() {
     var tangents = [], d, a, b, s, m = d3_svg_lineFiniteDifferences(points), i = -1, j = points.length - 1;
     while (++i < j) {
       d = d3_svg_lineSlope(points[i], points[i + 1]);
-      if (Math.abs(d) < ε) {
+      if (abs(d) < ε) {
         m[i] = m[i + 1] = 0;
       } else {
         a = m[i] / d;
@@ -4553,7 +4554,7 @@ d3 = function() {
     var circle = beach.circle, x = circle[0], y = circle.cy, vertex = [ x, y ], previous = beach.P, next = beach.N, disappearing = [ beach ];
     d3_geom_voronoiDetachBeach(beach);
     var lArc = previous;
-    while (lArc.circle && Math.abs(x - lArc.circle[0]) < ε && Math.abs(y - lArc.circle.cy) < ε) {
+    while (lArc.circle && abs(x - lArc.circle[0]) < ε && abs(y - lArc.circle.cy) < ε) {
       previous = lArc.P;
       disappearing.unshift(lArc);
       d3_geom_voronoiDetachBeach(lArc);
@@ -4562,7 +4563,7 @@ d3 = function() {
     disappearing.unshift(lArc);
     d3_geom_voronoiDetachCircle(lArc);
     var rArc = next;
-    while (rArc.circle && Math.abs(x - rArc.circle[0]) < ε && Math.abs(y - rArc.circle.cy) < ε) {
+    while (rArc.circle && abs(x - rArc.circle[0]) < ε && abs(y - rArc.circle.cy) < ε) {
       next = rArc.N;
       disappearing.push(rArc);
       d3_geom_voronoiDetachBeach(rArc);
@@ -4676,16 +4677,16 @@ d3 = function() {
         iRight = (iLeft + 1) % nHalfEdges;
         end = halfEdges[iLeft].end();
         start = halfEdges[iRight].start();
-        if (Math.abs(end[0] - start[0]) > ε || Math.abs(end[1] - start[1]) > ε) {
+        if (abs(end[0] - start[0]) > ε || abs(end[1] - start[1]) > ε) {
           va = end;
-          if (Math.abs(end[0] - x0) < ε && y1 - end[1] > ε) {
-            vb = [ x0, Math.abs(start[0] - x0) < ε ? start[1] : y1 ];
-          } else if (Math.abs(end[1] - y1) < ε && x1 - end[0] > ε) {
-            vb = [ Math.abs(start[1] - y1) < ε ? start[0] : x1, y1 ];
-          } else if (Math.abs(end[0] - x1) < ε && end[1] - y0 > ε) {
-            vb = [ x1, Math.abs(start[0] - x1) < ε ? start[1] : y0 ];
-          } else if (Math.abs(end[1] - y0) < ε && end[0] - x0 > ε) {
-            vb = [ Math.abs(start[1] - y0) < ε ? start[0] : x0, y0 ];
+          if (abs(end[0] - x0) < ε && y1 - end[1] > ε) {
+            vb = [ x0, abs(start[0] - x0) < ε ? start[1] : y1 ];
+          } else if (abs(end[1] - y1) < ε && x1 - end[0] > ε) {
+            vb = [ abs(start[1] - y1) < ε ? start[0] : x1, y1 ];
+          } else if (abs(end[0] - x1) < ε && end[1] - y0 > ε) {
+            vb = [ x1, abs(start[0] - x1) < ε ? start[1] : y0 ];
+          } else if (abs(end[1] - y0) < ε && end[0] - x0 > ε) {
+            vb = [ abs(start[1] - y0) < ε ? start[0] : x0, y0 ];
           }
           edge = d3_geom_voronoiCreateBorderEdge(cell.site, va, vb);
           halfEdges.splice(iLeft + 1, 0, new d3_geom_voronoiHalfEdge(edge, cell.site, null));
@@ -4749,7 +4750,7 @@ d3 = function() {
     var edges = d3_geom_voronoiEdges, i = edges.length, e;
     while (i--) {
       e = edges[i];
-      if (!d3_geom_voronoiConnectEdge(e, extent) || !d3_geom_voronoiClipEdge(e, extent) || Math.abs(e.a[0] - e.b[0]) < ε && Math.abs(e.a[1] - e.b[1]) < ε) {
+      if (!d3_geom_voronoiConnectEdge(e, extent) || !d3_geom_voronoiClipEdge(e, extent) || abs(e.a[0] - e.b[0]) < ε && abs(e.a[1] - e.b[1]) < ε) {
         e.a = e.b = null;
         edges.splice(i, 1);
       }
@@ -5200,7 +5201,7 @@ d3 = function() {
         if (n.leaf) {
           var nx = n.x, ny = n.y;
           if (nx != null) {
-            if (Math.abs(nx - x) + Math.abs(ny - y) < .01) {
+            if (abs(nx - x) + abs(ny - y) < .01) {
               insertChild(n, d, x, y, x1, y1, x2, y2);
             } else {
               var nPoint = n.point;
@@ -8969,7 +8970,7 @@ d3 = function() {
     pm: 1
   });
   function d3_time_zone(d) {
-    var z = d.getTimezoneOffset(), zs = z > 0 ? "-" : "+", zh = ~~(Math.abs(z) / 60), zm = Math.abs(z) % 60;
+    var z = d.getTimezoneOffset(), zs = z > 0 ? "-" : "+", zh = ~~(abs(z) / 60), zm = abs(z) % 60;
     return zs + d3_time_formatPad(zh, "0", 2) + d3_time_formatPad(zm, "0", 2);
   }
   function d3_time_parseLiteralPercent(date, string, i) {
