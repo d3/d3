@@ -30,8 +30,8 @@ function d3_geom_voronoiCloseCells(bbox) {
       halfEdges,
       nHalfEdges,
       edge,
-      startpoint,
-      endpoint,
+      start,
+      end,
       va,
       vb;
 
@@ -43,18 +43,18 @@ function d3_geom_voronoiCloseCells(bbox) {
     iLeft = 0;
     while (iLeft < nHalfEdges) {
       iRight = (iLeft + 1) % nHalfEdges;
-      endpoint = halfEdges[iLeft].getEndpoint();
-      startpoint = halfEdges[iRight].getStartpoint();
-      if (Math.abs(endpoint[0] - startpoint[0]) > ε || Math.abs(endpoint[1] - startpoint[1]) > ε) {
-        va = endpoint;
-        if (Math.abs(endpoint[0] - xl) < ε && yb - endpoint[1] > ε) {
-          vb = [xl, Math.abs(startpoint[0] - xl) < ε ? startpoint[1] : yb];
-        } else if (Math.abs(endpoint[1] - yb) < ε && xr - endpoint[0] > ε) {
-          vb = [Math.abs(startpoint[1] - yb) < ε ? startpoint[0] : xr, yb];
-        } else if (Math.abs(endpoint[0] - xr) < ε && endpoint[1] - yt > ε) {
-          vb = [xr, Math.abs(startpoint[0] - xr) < ε ? startpoint[1] : yt];
-        } else if (Math.abs(endpoint[1] - yt) < ε && endpoint[0] - xl > ε) {
-          vb = [Math.abs(startpoint[1] - yt) < ε ? startpoint[0] : xl, yt];
+      end = halfEdges[iLeft].end();
+      start = halfEdges[iRight].start();
+      if (Math.abs(end[0] - start[0]) > ε || Math.abs(end[1] - start[1]) > ε) {
+        va = end;
+        if (Math.abs(end[0] - xl) < ε && yb - end[1] > ε) {
+          vb = [xl, Math.abs(start[0] - xl) < ε ? start[1] : yb];
+        } else if (Math.abs(end[1] - yb) < ε && xr - end[0] > ε) {
+          vb = [Math.abs(start[1] - yb) < ε ? start[0] : xr, yb];
+        } else if (Math.abs(end[0] - xr) < ε && end[1] - yt > ε) {
+          vb = [xr, Math.abs(start[0] - xr) < ε ? start[1] : yt];
+        } else if (Math.abs(end[1] - yt) < ε && end[0] - xl > ε) {
+          vb = [Math.abs(start[1] - yt) < ε ? start[0] : xl, yt];
         }
         edge = d3_geom_voronoiCreateBorderEdge(cell.site, va, vb);
         halfEdges.splice(iLeft + 1, 0, new d3_geom_voronoiHalfEdge(edge, cell.site, null));
@@ -63,4 +63,8 @@ function d3_geom_voronoiCloseCells(bbox) {
       iLeft++;
     }
   }
+}
+
+function d3_geom_voronoiHalfEdgeOrder(a, b) {
+  return b.angle - a.angle;
 }

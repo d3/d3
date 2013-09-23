@@ -15,7 +15,6 @@ import "clip";
 import "edge";
 import "half-edge";
 import "red-black";
-import "vertex";
 
 function d3_geom_voronoi(sites, bbox) {
   var site = sites.sort(d3_geom_voronoiVertexOrder).pop(),
@@ -56,3 +55,7 @@ function d3_geom_voronoi(sites, bbox) {
 
   return diagram;
 };
+
+function d3_geom_voronoiVertexOrder(a, b) {
+  return b[1] - a[1] || b[0] - a[0];
+}

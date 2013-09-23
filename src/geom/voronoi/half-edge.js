@@ -8,14 +8,7 @@ function d3_geom_voronoiHalfEdge(edge, lSite, rSite) {
       : Math.atan2(va[0] - vb[0], vb[1] - va[1]);
 };
 
-d3_geom_voronoiHalfEdge.prototype.getStartpoint = function() {
-  return this.edge.l === this.site ? this.edge.a : this.edge.b;
+d3_geom_voronoiHalfEdge.prototype = {
+  start: function() { return this.edge.l === this.site ? this.edge.a : this.edge.b; },
+  end: function() { return this.edge.l === this.site ? this.edge.b : this.edge.a; }
 };
-
-d3_geom_voronoiHalfEdge.prototype.getEndpoint = function() {
-  return this.edge.l === this.site ? this.edge.b : this.edge.a;
-};
-
-function d3_geom_voronoiHalfEdgeOrder(a, b) {
-  return b.angle - a.angle;
-}
