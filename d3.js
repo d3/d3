@@ -1200,7 +1200,7 @@ d3 = function() {
       x: 0,
       y: 0,
       k: 1
-    }, translate0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
+    }, translate0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), scrollCheck = null, x0, x1, y0, y1;
     function zoom(g) {
       g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on(mousemove, mousewheelreset).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
     }
@@ -1236,6 +1236,11 @@ d3 = function() {
           zoomended(event_);
         }
       });
+    };
+    zoom.scrollCheck = function(cb) {
+      if (!arguments.length) return scrollCheck;
+      scrollCheck = cb;
+      return zoom;
     };
     zoom.translate = function(_) {
       if (!arguments.length) return [ view.x, view.y ];
@@ -1419,6 +1424,7 @@ d3 = function() {
     }
     function mousewheeled() {
       var event_ = event.of(this, arguments);
+      if (scrollCheck && scrollCheck() === false) return;
       if (mousewheelTimer) clearTimeout(mousewheelTimer); else d3_selection_interrupt.call(this), 
       zoomstarted(event_);
       mousewheelTimer = setTimeout(function() {
