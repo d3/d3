@@ -4536,7 +4536,7 @@ d3 = function() {
   }
   var d3_geom_voronoiEdges, d3_geom_voronoiCells, d3_geom_voronoiBeaches, d3_geom_voronoiBeachJunkyard = [], d3_geom_voronoiFirstCircle, d3_geom_voronoiCircles, d3_geom_voronoiCircleJunkyard = [];
   function d3_geom_voronoiBeach() {
-    d3_geom_voronoiRedBlackNode.call(this);
+    d3_geom_voronoiRedBlackNode(this);
     this.edge = this.site = this.circle = null;
   }
   function d3_geom_voronoiCreateBeach(site) {
@@ -4548,6 +4548,7 @@ d3 = function() {
     d3_geom_voronoiDetachCircle(beach);
     d3_geom_voronoiBeaches.remove(beach);
     d3_geom_voronoiBeachJunkyard.push(beach);
+    d3_geom_voronoiRedBlackNode(beach);
   }
   function d3_geom_voronoiRemoveBeach(beach) {
     var circle = beach.circle, x = circle[0], y = circle.cy, vertex = [ x, y ], previous = beach.P, next = beach.N, disappearing = [ beach ];
@@ -4699,7 +4700,7 @@ d3 = function() {
     return b.angle - a.angle;
   }
   function d3_geom_voronoiCircle() {
-    d3_geom_voronoiRedBlackNode.call(this);
+    d3_geom_voronoiRedBlackNode(this);
     this[0] = this[1] = this.arc = this.site = this.cy = null;
   }
   function d3_geom_voronoiAttachCircle(arc) {
@@ -4741,6 +4742,7 @@ d3 = function() {
       if (!circle.P) d3_geom_voronoiFirstCircle = circle.N;
       d3_geom_voronoiCircles.remove(circle);
       d3_geom_voronoiCircleJunkyard.push(circle);
+      d3_geom_voronoiRedBlackNode(circle);
       arc.circle = null;
     }
   }
@@ -4882,40 +4884,40 @@ d3 = function() {
   function d3_geom_voronoiRedBlackTree() {
     this._ = null;
   }
-  function d3_geom_voronoiRedBlackNode() {
-    this.U = this.C = this.L = this.R = this.P = this.N = null;
+  function d3_geom_voronoiRedBlackNode(node) {
+    node.U = node.C = node.L = node.R = node.P = node.N = null;
   }
   d3_geom_voronoiRedBlackTree.prototype = {
-    insert: function(node, successor) {
+    insert: function(after, node) {
       var parent, grandpa, uncle;
-      if (node) {
-        successor.P = node;
-        successor.N = node.N;
-        if (node.N) node.N.P = successor;
-        node.N = successor;
-        if (node.R) {
-          node = node.R;
-          while (node.L) node = node.L;
-          node.L = successor;
+      if (after) {
+        node.P = after;
+        node.N = after.N;
+        if (after.N) after.N.P = node;
+        after.N = node;
+        if (after.R) {
+          after = after.R;
+          while (after.L) after = after.L;
+          after.L = node;
         } else {
-          node.R = successor;
+          after.R = node;
         }
-        parent = node;
+        parent = after;
       } else if (this._) {
-        node = d3_geom_voronoiRedBlackFirst(this._);
-        successor.P = null;
-        successor.N = node;
-        node.P = node.L = successor;
-        parent = node;
+        after = d3_geom_voronoiRedBlackFirst(this._);
+        node.P = null;
+        node.N = after;
+        after.P = after.L = node;
+        parent = after;
       } else {
-        successor.P = successor.N = null;
-        this._ = successor;
+        node.P = node.N = null;
+        this._ = node;
         parent = null;
       }
-      successor.L = successor.R = null;
-      successor.U = parent;
-      successor.C = true;
-      node = successor;
+      node.L = node.R = null;
+      node.U = parent;
+      node.C = true;
+      after = node;
       while (parent && parent.C) {
         grandpa = parent.U;
         if (parent === grandpa.L) {
@@ -4923,12 +4925,12 @@ d3 = function() {
           if (uncle && uncle.C) {
             parent.C = uncle.C = false;
             grandpa.C = true;
-            node = grandpa;
+            after = grandpa;
           } else {
-            if (node === parent.R) {
+            if (after === parent.R) {
               d3_geom_voronoiRedBlackRotateLeft(this, parent);
-              node = parent;
-              parent = node.U;
+              after = parent;
+              parent = after.U;
             }
             parent.C = false;
             grandpa.C = true;
@@ -4939,19 +4941,19 @@ d3 = function() {
           if (uncle && uncle.C) {
             parent.C = uncle.C = false;
             grandpa.C = true;
-            node = grandpa;
+            after = grandpa;
           } else {
-            if (node === parent.L) {
+            if (after === parent.L) {
               d3_geom_voronoiRedBlackRotateRight(this, parent);
-              node = parent;
-              parent = node.U;
+              after = parent;
+              parent = after.U;
             }
             parent.C = false;
             grandpa.C = true;
             d3_geom_voronoiRedBlackRotateLeft(this, grandpa);
           }
         }
-        parent = node.U;
+        parent = after.U;
       }
       this._.C = false;
     },
@@ -4959,7 +4961,7 @@ d3 = function() {
       if (node.N) node.N.P = node.P;
       if (node.P) node.P.N = node.N;
       node.N = node.P = null;
-      var parent = node.U, sibling, left = node.L, right = node.R, next, isRed;
+      var parent = node.U, sibling, left = node.L, right = node.R, next, red;
       if (!left) next = right; else if (!right) next = left; else next = d3_geom_voronoiRedBlackFirst(right);
       if (parent) {
         if (parent.L === node) parent.L = next; else parent.R = next;
@@ -4967,7 +4969,7 @@ d3 = function() {
         this._ = next;
       }
       if (left && right) {
-        isRed = next.C;
+        red = next.C;
         next.C = node.C;
         next.L = left;
         left.U = next;
@@ -4984,11 +4986,11 @@ d3 = function() {
           node = next.R;
         }
       } else {
-        isRed = node.C;
+        red = node.C;
         node = next;
       }
       if (node) node.U = parent;
-      if (isRed) return;
+      if (red) return;
       if (node && node.C) {
         node.C = false;
         return;

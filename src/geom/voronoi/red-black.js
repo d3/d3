@@ -2,49 +2,49 @@ function d3_geom_voronoiRedBlackTree() {
   this._ = null; // root node
 }
 
-function d3_geom_voronoiRedBlackNode() {
-  this.U = // parent node
-  this.C = // color - true for red, false for black
-  this.L = // left node
-  this.R = // right node
-  this.P = // previous node
-  this.N = null; // next node
+function d3_geom_voronoiRedBlackNode(node) {
+  node.U = // parent node
+  node.C = // color - true for red, false for black
+  node.L = // left node
+  node.R = // right node
+  node.P = // previous node
+  node.N = null; // next node
 }
 
 d3_geom_voronoiRedBlackTree.prototype = {
 
-  insert: function(node, successor) {
+  insert: function(after, node) {
     var parent, grandpa, uncle;
 
-    if (node) {
-      successor.P = node;
-      successor.N = node.N;
-      if (node.N) node.N.P = successor;
-      node.N = successor;
-      if (node.R) {
-        node = node.R;
-        while (node.L) node = node.L;
-        node.L = successor;
+    if (after) {
+      node.P = after;
+      node.N = after.N;
+      if (after.N) after.N.P = node;
+      after.N = node;
+      if (after.R) {
+        after = after.R;
+        while (after.L) after = after.L;
+        after.L = node;
       } else {
-        node.R = successor;
+        after.R = node;
       }
-      parent = node;
+      parent = after;
     } else if (this._) {
-      node = d3_geom_voronoiRedBlackFirst(this._);
-      successor.P = null;
-      successor.N = node;
-      node.P = node.L = successor;
-      parent = node;
+      after = d3_geom_voronoiRedBlackFirst(this._);
+      node.P = null;
+      node.N = after;
+      after.P = after.L = node;
+      parent = after;
     } else {
-      successor.P = successor.N = null;
-      this._ = successor;
+      node.P = node.N = null;
+      this._ = node;
       parent = null;
     }
-    successor.L = successor.R = null;
-    successor.U = parent;
-    successor.C = true;
+    node.L = node.R = null;
+    node.U = parent;
+    node.C = true;
 
-    node = successor;
+    after = node;
     while (parent && parent.C) {
       grandpa = parent.U;
       if (parent === grandpa.L) {
@@ -52,12 +52,12 @@ d3_geom_voronoiRedBlackTree.prototype = {
         if (uncle && uncle.C) {
           parent.C = uncle.C = false;
           grandpa.C = true;
-          node = grandpa;
+          after = grandpa;
         } else {
-          if (node === parent.R) {
+          if (after === parent.R) {
             d3_geom_voronoiRedBlackRotateLeft(this, parent);
-            node = parent;
-            parent = node.U;
+            after = parent;
+            parent = after.U;
           }
           parent.C = false;
           grandpa.C = true;
@@ -68,19 +68,19 @@ d3_geom_voronoiRedBlackTree.prototype = {
         if (uncle && uncle.C) {
           parent.C = uncle.C = false;
           grandpa.C = true;
-          node = grandpa;
+          after = grandpa;
         } else {
-          if (node === parent.L) {
+          if (after === parent.L) {
             d3_geom_voronoiRedBlackRotateRight(this, parent);
-            node = parent;
-            parent = node.U;
+            after = parent;
+            parent = after.U;
           }
           parent.C = false;
           grandpa.C = true;
           d3_geom_voronoiRedBlackRotateLeft(this, grandpa);
         }
       }
-      parent = node.U;
+      parent = after.U;
     }
     this._.C = false;
   },
@@ -95,7 +95,7 @@ d3_geom_voronoiRedBlackTree.prototype = {
         left = node.L,
         right = node.R,
         next,
-        isRed;
+        red;
 
     if (!left) next = right;
     else if (!right) next = left;
@@ -109,7 +109,7 @@ d3_geom_voronoiRedBlackTree.prototype = {
     }
 
     if (left && right) {
-      isRed = next.C;
+      red = next.C;
       next.C = node.C;
       next.L = left;
       left.U = next;
@@ -126,12 +126,12 @@ d3_geom_voronoiRedBlackTree.prototype = {
         node = next.R;
       }
     } else {
-      isRed = node.C;
+      red = node.C;
       node = next;
     }
 
     if (node) node.U = parent;
-    if (isRed) return;
+    if (red) return;
     if (node && node.C) { node.C = false; return; }
 
     do {
@@ -185,6 +185,7 @@ d3_geom_voronoiRedBlackTree.prototype = {
       node = parent;
       parent = parent.U;
     } while (!node.C);
+
     if (node) node.C = false;
   }
 

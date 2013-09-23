@@ -1,5 +1,5 @@
 function d3_geom_voronoiBeach() {
-  d3_geom_voronoiRedBlackNode.call(this);
+  d3_geom_voronoiRedBlackNode(this);
   this.edge =
   this.site =
   this.circle = null;
@@ -15,6 +15,7 @@ function d3_geom_voronoiDetachBeach(beach) {
   d3_geom_voronoiDetachCircle(beach);
   d3_geom_voronoiBeaches.remove(beach);
   d3_geom_voronoiBeachJunkyard.push(beach);
+  d3_geom_voronoiRedBlackNode(beach);
 }
 
 function d3_geom_voronoiRemoveBeach(beach) {

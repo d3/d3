@@ -1,5 +1,5 @@
 function d3_geom_voronoiCircle() {
-  d3_geom_voronoiRedBlackNode.call(this);
+  d3_geom_voronoiRedBlackNode(this);
   this[0] =
   this[1] =
   this.arc =
@@ -67,6 +67,7 @@ function d3_geom_voronoiDetachCircle(arc) {
     if (!circle.P) d3_geom_voronoiFirstCircle = circle.N;
     d3_geom_voronoiCircles.remove(circle);
     d3_geom_voronoiCircleJunkyard.push(circle);
+    d3_geom_voronoiRedBlackNode(circle);
     arc.circle = null;
   }
 }
