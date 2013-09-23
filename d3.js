@@ -4546,20 +4546,20 @@ d3 = function() {
     var a = coordinates[0], b = coordinates[coordinates.length - 1];
     return !(a[0] - b[0] || a[1] - b[1]);
   }
-  var d3_geom_voronoiEdges, d3_geom_voronoiCells, d3_geom_voronoiBeaches, d3_geom_voronoiBeachJunkyard = [], d3_geom_voronoiFirstCircle, d3_geom_voronoiCircles, d3_geom_voronoiCircleJunkyard = [];
+  var d3_geom_voronoiEdges, d3_geom_voronoiCells, d3_geom_voronoiBeaches, d3_geom_voronoiBeachPool = [], d3_geom_voronoiFirstCircle, d3_geom_voronoiCircles, d3_geom_voronoiCirclePool = [];
   function d3_geom_voronoiBeach() {
     d3_geom_voronoiRedBlackNode(this);
     this.edge = this.site = this.circle = null;
   }
   function d3_geom_voronoiCreateBeach(site) {
-    var beach = d3_geom_voronoiBeachJunkyard.pop() || new d3_geom_voronoiBeach();
+    var beach = d3_geom_voronoiBeachPool.pop() || new d3_geom_voronoiBeach();
     beach.site = site;
     return beach;
   }
   function d3_geom_voronoiDetachBeach(beach) {
     d3_geom_voronoiDetachCircle(beach);
     d3_geom_voronoiBeaches.remove(beach);
-    d3_geom_voronoiBeachJunkyard.push(beach);
+    d3_geom_voronoiBeachPool.push(beach);
     d3_geom_voronoiRedBlackNode(beach);
   }
   function d3_geom_voronoiRemoveBeach(beach) {
@@ -4724,7 +4724,7 @@ d3 = function() {
     var d = 2 * (ax * cy - ay * cx);
     if (d >= -ε2) return;
     var ha = ax * ax + ay * ay, hc = cx * cx + cy * cy, x = (cy * ha - ay * hc) / d, y = (ax * hc - cx * ha) / d, cy = y + by;
-    var circle = d3_geom_voronoiCircleJunkyard.pop() || new d3_geom_voronoiCircle();
+    var circle = d3_geom_voronoiCirclePool.pop() || new d3_geom_voronoiCircle();
     circle.arc = arc;
     circle.site = cSite;
     circle[0] = x + bx;
@@ -4753,7 +4753,7 @@ d3 = function() {
     if (circle) {
       if (!circle.P) d3_geom_voronoiFirstCircle = circle.N;
       d3_geom_voronoiCircles.remove(circle);
-      d3_geom_voronoiCircleJunkyard.push(circle);
+      d3_geom_voronoiCirclePool.push(circle);
       d3_geom_voronoiRedBlackNode(circle);
       arc.circle = null;
     }

@@ -6,7 +6,7 @@ function d3_geom_voronoiBeach() {
 }
 
 function d3_geom_voronoiCreateBeach(site) {
-  var beach = d3_geom_voronoiBeachJunkyard.pop() || new d3_geom_voronoiBeach;
+  var beach = d3_geom_voronoiBeachPool.pop() || new d3_geom_voronoiBeach;
   beach.site = site;
   return beach;
 }
@@ -14,7 +14,7 @@ function d3_geom_voronoiCreateBeach(site) {
 function d3_geom_voronoiDetachBeach(beach) {
   d3_geom_voronoiDetachCircle(beach);
   d3_geom_voronoiBeaches.remove(beach);
-  d3_geom_voronoiBeachJunkyard.push(beach);
+  d3_geom_voronoiBeachPool.push(beach);
   d3_geom_voronoiRedBlackNode(beach);
 }
 

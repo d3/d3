@@ -3,10 +3,10 @@ import "../../math/trigonometry";
 var d3_geom_voronoiEdges,
     d3_geom_voronoiCells,
     d3_geom_voronoiBeaches,
-    d3_geom_voronoiBeachJunkyard = [],
+    d3_geom_voronoiBeachPool = [],
     d3_geom_voronoiFirstCircle,
     d3_geom_voronoiCircles,
-    d3_geom_voronoiCircleJunkyard = [];
+    d3_geom_voronoiCirclePool = [];
 
 import "beach";
 import "cell";

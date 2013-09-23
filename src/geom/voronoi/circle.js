@@ -35,7 +35,7 @@ function d3_geom_voronoiAttachCircle(arc) {
       y = (ax * hc - cx * ha) / d,
       cy = y + by;
 
-  var circle = d3_geom_voronoiCircleJunkyard.pop() || new d3_geom_voronoiCircle;
+  var circle = d3_geom_voronoiCirclePool.pop() || new d3_geom_voronoiCircle;
   circle.arc = arc;
   circle.site = cSite;
   circle[0] = x + bx;
@@ -66,7 +66,7 @@ function d3_geom_voronoiDetachCircle(arc) {
   if (circle) {
     if (!circle.P) d3_geom_voronoiFirstCircle = circle.N;
     d3_geom_voronoiCircles.remove(circle);
-    d3_geom_voronoiCircleJunkyard.push(circle);
+    d3_geom_voronoiCirclePool.push(circle);
     d3_geom_voronoiRedBlackNode(circle);
     arc.circle = null;
   }
