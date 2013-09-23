@@ -37,7 +37,7 @@ function d3_geom_voronoiCloseCells(extent) {
 
   while (iCell--) {
     cell = cells[iCell];
-    if (!cell.prepare()) continue;
+    if (!cell || !cell.prepare()) continue;
     halfEdges = cell.edges;
     nHalfEdges = halfEdges.length;
     iLeft = 0;
