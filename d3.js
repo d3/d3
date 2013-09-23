@@ -4575,7 +4575,7 @@ d3 = function() {
     for (iArc = 1; iArc < nArcs; ++iArc) {
       rArc = disappearing[iArc];
       lArc = disappearing[iArc - 1];
-      d3_geom_voronoiSetEdgeStart(rArc.edge, lArc.site, rArc.site, vertex);
+      d3_geom_voronoiSetEdgeEnd(rArc.edge, lArc.site, rArc.site, vertex);
     }
     lArc = disappearing[0];
     rArc = disappearing[nArcs - 1];
@@ -4628,7 +4628,7 @@ d3 = function() {
     d3_geom_voronoiDetachCircle(lArc);
     d3_geom_voronoiDetachCircle(rArc);
     var lSite = lArc.site, ax = lSite[0], ay = lSite[1], bx = site[0] - ax, by = site[1] - ay, rSite = rArc.site, cx = rSite[0] - ax, cy = rSite[1] - ay, d = 2 * (bx * cy - by * cx), hb = bx * bx + by * by, hc = cx * cx + cy * cy, vertex = [ (cy * hb - by * hc) / d + ax, (bx * hc - cx * hb) / d + ay ];
-    d3_geom_voronoiSetEdgeStart(rArc.edge, lSite, rSite, vertex);
+    d3_geom_voronoiSetEdgeEnd(rArc.edge, lSite, rSite, vertex);
     newArc.edge = d3_geom_voronoiCreateEdge(lSite, site, null, vertex);
     rArc.edge = d3_geom_voronoiCreateEdge(site, rSite, null, vertex);
     d3_geom_voronoiAttachCircle(lArc);
@@ -4840,8 +4840,8 @@ d3 = function() {
   function d3_geom_voronoiCreateEdge(lSite, rSite, va, vb) {
     var edge = new d3_geom_voronoiEdge(lSite, rSite);
     d3_geom_voronoiEdges.push(edge);
-    if (va) d3_geom_voronoiSetEdgeStart(edge, lSite, rSite, va);
-    if (vb) d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vb);
+    if (va) d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, va);
+    if (vb) d3_geom_voronoiSetEdgeEnd(edge, rSite, lSite, vb);
     d3_geom_voronoiCells[lSite.i].edges.push(new d3_geom_voronoiHalfEdge(edge, lSite, rSite));
     d3_geom_voronoiCells[rSite.i].edges.push(new d3_geom_voronoiHalfEdge(edge, rSite, lSite));
     return edge;
@@ -4853,7 +4853,7 @@ d3 = function() {
     d3_geom_voronoiEdges.push(edge);
     return edge;
   }
-  function d3_geom_voronoiSetEdgeStart(edge, lSite, rSite, vertex) {
+  function d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vertex) {
     if (!edge.a && !edge.b) {
       edge.a = vertex;
       edge.l = lSite;
@@ -4863,9 +4863,6 @@ d3 = function() {
     } else {
       edge.a = vertex;
     }
-  }
-  function d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vertex) {
-    d3_geom_voronoiSetEdgeStart(edge, rSite, lSite, vertex);
   }
   function d3_geom_voronoiHalfEdge(edge, lSite, rSite) {
     var va = edge.a, vb = edge.b;

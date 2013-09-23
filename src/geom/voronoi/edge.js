@@ -7,8 +7,8 @@ function d3_geom_voronoiEdge(lSite, rSite) {
 function d3_geom_voronoiCreateEdge(lSite, rSite, va, vb) {
   var edge = new d3_geom_voronoiEdge(lSite, rSite);
   d3_geom_voronoiEdges.push(edge);
-  if (va) d3_geom_voronoiSetEdgeStart(edge, lSite, rSite, va);
-  if (vb) d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vb);
+  if (va) d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, va);
+  if (vb) d3_geom_voronoiSetEdgeEnd(edge, rSite, lSite, vb);
   d3_geom_voronoiCells[lSite.i].edges.push(new d3_geom_voronoiHalfEdge(edge, lSite, rSite));
   d3_geom_voronoiCells[rSite.i].edges.push(new d3_geom_voronoiHalfEdge(edge, rSite, lSite));
   return edge;
@@ -22,7 +22,7 @@ function d3_geom_voronoiCreateBorderEdge(lSite, va, vb) {
   return edge;
 }
 
-function d3_geom_voronoiSetEdgeStart(edge, lSite, rSite, vertex) {
+function d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vertex) {
   if (!edge.a && !edge.b) {
     edge.a = vertex;
     edge.l = lSite;
@@ -32,10 +32,6 @@ function d3_geom_voronoiSetEdgeStart(edge, lSite, rSite, vertex) {
   } else {
     edge.a = vertex;
   }
-}
-
-function d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vertex) {
-  d3_geom_voronoiSetEdgeStart(edge, rSite, lSite, vertex);
 }
 
 function d3_geom_voronoiHalfEdge(edge, lSite, rSite) {

@@ -60,7 +60,7 @@ function d3_geom_voronoiRemoveBeach(beach) {
   for (iArc = 1; iArc < nArcs; ++iArc) {
     rArc = disappearing[iArc];
     lArc = disappearing[iArc - 1];
-    d3_geom_voronoiSetEdgeStart(rArc.edge, lArc.site, rArc.site, vertex);
+    d3_geom_voronoiSetEdgeEnd(rArc.edge, lArc.site, rArc.site, vertex);
   }
 
   lArc = disappearing[0];
@@ -142,7 +142,7 @@ function d3_geom_voronoiAddBeach(site) {
       hc = cx * cx + cy * cy,
       vertex = [(cy * hb - by * hc) / d + ax, (bx * hc - cx * hb) / d + ay];
 
-  d3_geom_voronoiSetEdgeStart(rArc.edge, lSite, rSite, vertex);
+  d3_geom_voronoiSetEdgeEnd(rArc.edge, lSite, rSite, vertex);
   newArc.edge = d3_geom_voronoiCreateEdge(lSite, site, null, vertex);
   rArc.edge = d3_geom_voronoiCreateEdge(site, rSite, null, vertex);
   d3_geom_voronoiAttachCircle(lArc);
