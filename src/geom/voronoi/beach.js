@@ -25,7 +25,7 @@ function d3_geom_voronoiRemoveBeach(beach) {
       vertex = [x, y],
       previous = beach.P,
       next = beach.N,
-      disappearingTransitions = [beach];
+      disappearing = [beach];
 
   d3_geom_voronoiDetachBeach(beach);
 
@@ -34,12 +34,12 @@ function d3_geom_voronoiRemoveBeach(beach) {
       && Math.abs(x - lArc.circle[0]) < ε
       && Math.abs(y - lArc.circle.cy) < ε) {
     previous = lArc.P;
-    disappearingTransitions.unshift(lArc);
+    disappearing.unshift(lArc);
     d3_geom_voronoiDetachBeach(lArc);
     lArc = previous;
   }
 
-  disappearingTransitions.unshift(lArc);
+  disappearing.unshift(lArc);
   d3_geom_voronoiDetachCircle(lArc);
 
   var rArc = next;
@@ -47,24 +47,24 @@ function d3_geom_voronoiRemoveBeach(beach) {
       && Math.abs(x - rArc.circle[0]) < ε
       && Math.abs(y - rArc.circle.cy) < ε) {
     next = rArc.N;
-    disappearingTransitions.push(rArc);
+    disappearing.push(rArc);
     d3_geom_voronoiDetachBeach(rArc);
     rArc = next;
   }
 
-  disappearingTransitions.push(rArc);
+  disappearing.push(rArc);
   d3_geom_voronoiDetachCircle(rArc);
 
-  var nArcs = disappearingTransitions.length,
+  var nArcs = disappearing.length,
       iArc;
   for (iArc = 1; iArc < nArcs; ++iArc) {
-    rArc = disappearingTransitions[iArc];
-    lArc = disappearingTransitions[iArc - 1];
-    d3_geom_voronoiSetEdgeStartpoint(rArc.edge, lArc.site, rArc.site, vertex);
+    rArc = disappearing[iArc];
+    lArc = disappearing[iArc - 1];
+    d3_geom_voronoiSetEdgeStart(rArc.edge, lArc.site, rArc.site, vertex);
   }
 
-  lArc = disappearingTransitions[0];
-  rArc = disappearingTransitions[nArcs - 1];
+  lArc = disappearing[0];
+  rArc = disappearing[nArcs - 1];
   rArc.edge = d3_geom_voronoiCreateEdge(lArc.site, rArc.site, undefined, vertex);
 
   d3_geom_voronoiAttachCircle(lArc);
@@ -142,7 +142,7 @@ function d3_geom_voronoiAddBeach(site) {
       hc = cx * cx + cy * cy,
       vertex = [(cy * hb - by * hc) / d + ax, (bx * hc - cx * hb) / d + ay];
 
-  d3_geom_voronoiSetEdgeStartpoint(rArc.edge, lSite, rSite, vertex);
+  d3_geom_voronoiSetEdgeStart(rArc.edge, lSite, rSite, vertex);
   newArc.edge = d3_geom_voronoiCreateEdge(lSite, site, null, vertex);
   rArc.edge = d3_geom_voronoiCreateEdge(site, rSite, null, vertex);
   d3_geom_voronoiAttachCircle(lArc);
