@@ -1,77 +1,19 @@
+import "../clip-line";
+
 function d3_geom_voronoiClipEdges(extent) {
   var edges = d3_geom_voronoiEdges,
+      clip = d3_geom_clipLine(extent[0][0], extent[0][1], extent[1][0], extent[1][1]),
       i = edges.length,
       e;
   while (i--) {
     e = edges[i];
     if (!d3_geom_voronoiConnectEdge(e, extent)
-        || !d3_geom_voronoiClipEdge(e, extent)
+        || !clip(e.a, e.b)
         || (abs(e.a[0] - e.b[0]) < ε && abs(e.a[1] - e.b[1]) < ε)) {
       e.a = e.b = null;
       edges.splice(i, 1);
     }
   }
-}
-
-function d3_geom_voronoiClipEdge(edge, extent) {
-  var ax = edge.a[0],
-      ay = edge.a[1],
-      bx = edge.b[0],
-      by = edge.b[1],
-      t0 = 0,
-      t1 = 1,
-      dx = bx - ax,
-      dy = by - ay,
-      q,
-      r;
-
-  q = ax - extent[0][0];
-  if (!dx && q < 0) return;
-  r = -q / dx;
-  if (dx < 0) {
-    if (r < t0) return;
-    else if (r < t1) t1 = r;
-  } else if (dx > 0) {
-    if (r > t1) return;
-    else if (r > t0) t0 = r;
-  }
-
-  q = extent[1][0] - ax;
-  if (!dx && q < 0) return;
-  r = q / dx;
-  if (dx < 0) {
-    if (r > t1) return;
-    else if (r > t0) t0 = r;
-  } else if (dx > 0) {
-    if (r < t0) return;
-    else if (r < t1) t1 = r;
-  }
-
-  q = ay - extent[0][1];
-  if (!dy && q < 0) return;
-  r = -q / dy;
-  if (dy < 0) {
-    if (r < t0) return;
-    else if (r < t1) t1 = r;
-  } else if (dy > 0) {
-    if (r > t1) return;
-    else if (r > t0) t0 = r;
-  }
-
-  q = extent[1][1] - ay;
-  if (!dy && q < 0) return;
-  r = q / dy;
-  if (dy < 0) {
-    if (r > t1) return;
-    else if (r > t0) t0 = r;
-  } else if (dy > 0) {
-    if (r < t0) return;
-    else if (r < t1) t1 = r;
-  }
-
-  if (t0 > 0) edge.a = [ax + t0 * dx, ay + t0 * dy];
-  if (t1 < 1) edge.b = [ax + t1 * dx, ay + t1 * dy];
-  return true;
 }
 
 function d3_geom_voronoiConnectEdge(edge, extent) {

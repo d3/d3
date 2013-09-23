@@ -3016,6 +3016,46 @@ d3 = function() {
       return code;
     }
   }
+  function d3_geom_clipLine(x0, y0, x1, y1) {
+    return function(a, b) {
+      var ax = a[0], ay = a[1], bx = b[0], by = b[1], t0 = 0, t1 = 1, dx = bx - ax, dy = by - ay, q, r;
+      q = ax - x0;
+      if (!dx && q < 0) return;
+      r = -q / dx;
+      if (dx < 0) {
+        if (r < t0) return; else if (r < t1) t1 = r;
+      } else if (dx > 0) {
+        if (r > t1) return; else if (r > t0) t0 = r;
+      }
+      q = x1 - ax;
+      if (!dx && q < 0) return;
+      r = q / dx;
+      if (dx < 0) {
+        if (r > t1) return; else if (r > t0) t0 = r;
+      } else if (dx > 0) {
+        if (r < t0) return; else if (r < t1) t1 = r;
+      }
+      q = ay - y0;
+      if (!dy && q < 0) return;
+      r = -q / dy;
+      if (dy < 0) {
+        if (r < t0) return; else if (r < t1) t1 = r;
+      } else if (dy > 0) {
+        if (r > t1) return; else if (r > t0) t0 = r;
+      }
+      q = y1 - ay;
+      if (!dy && q < 0) return;
+      r = q / dy;
+      if (dy < 0) {
+        if (r > t1) return; else if (r > t0) t0 = r;
+      } else if (dy > 0) {
+        if (r < t0) return; else if (r < t1) t1 = r;
+      }
+      if (t0 > 0) a[0] = ax + t0 * dx, a[1] = ay + t0 * dy;
+      if (t1 < 1) b[0] = ax + t1 * dx, b[1] = ay + t1 * dy;
+      return true;
+    };
+  }
   var d3_geo_clipExtentMAX = 1e9;
   d3.geo.clipExtent = function() {
     var x0, y0, x1, y1, stream, clip, clipExtent = {
@@ -3036,7 +3076,7 @@ d3 = function() {
   };
   function d3_geo_clipExtent(x0, y0, x1, y1) {
     return function(listener) {
-      var listener_ = listener, bufferListener = d3_geo_clipBufferListener(), segments, polygon, ring;
+      var listener_ = listener, bufferListener = d3_geo_clipBufferListener(), clipLine = d3_geom_clipLine(x0, y0, x1, y1), segments, polygon, ring;
       var clip = {
         point: point,
         lineStart: lineStart,
@@ -3161,34 +3201,6 @@ d3 = function() {
       var ca = corner(a, 1), cb = corner(b, 1);
       return ca !== cb ? ca - cb : ca === 0 ? b[1] - a[1] : ca === 1 ? a[0] - b[0] : ca === 2 ? a[1] - b[1] : b[0] - a[0];
     }
-    function clipLine(a, b) {
-      var dx = b[0] - a[0], dy = b[1] - a[1], t = [ 0, 1 ];
-      if (abs(dx) < ε && abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
-      if (d3_geo_clipExtentT(x0 - a[0], dx, t) && d3_geo_clipExtentT(a[0] - x1, -dx, t) && d3_geo_clipExtentT(y0 - a[1], dy, t) && d3_geo_clipExtentT(a[1] - y1, -dy, t)) {
-        if (t[1] < 1) {
-          b[0] = a[0] + t[1] * dx;
-          b[1] = a[1] + t[1] * dy;
-        }
-        if (t[0] > 0) {
-          a[0] += t[0] * dx;
-          a[1] += t[0] * dy;
-        }
-        return true;
-      }
-      return false;
-    }
-  }
-  function d3_geo_clipExtentT(num, denominator, t) {
-    if (abs(denominator) < ε) return num <= 0;
-    var u = num / denominator;
-    if (denominator > 0) {
-      if (u > t[1]) return false;
-      if (u > t[0]) t[0] = u;
-    } else {
-      if (u < t[0]) return false;
-      if (u < t[1]) t[1] = u;
-    }
-    return true;
   }
   function d3_geo_compose(a, b) {
     function compose(x, y) {
@@ -4747,52 +4759,14 @@ d3 = function() {
     }
   }
   function d3_geom_voronoiClipEdges(extent) {
-    var edges = d3_geom_voronoiEdges, i = edges.length, e;
+    var edges = d3_geom_voronoiEdges, clip = d3_geom_clipLine(extent[0][0], extent[0][1], extent[1][0], extent[1][1]), i = edges.length, e;
     while (i--) {
       e = edges[i];
-      if (!d3_geom_voronoiConnectEdge(e, extent) || !d3_geom_voronoiClipEdge(e, extent) || abs(e.a[0] - e.b[0]) < ε && abs(e.a[1] - e.b[1]) < ε) {
+      if (!d3_geom_voronoiConnectEdge(e, extent) || !clip(e.a, e.b) || abs(e.a[0] - e.b[0]) < ε && abs(e.a[1] - e.b[1]) < ε) {
         e.a = e.b = null;
         edges.splice(i, 1);
       }
     }
-  }
-  function d3_geom_voronoiClipEdge(edge, extent) {
-    var ax = edge.a[0], ay = edge.a[1], bx = edge.b[0], by = edge.b[1], t0 = 0, t1 = 1, dx = bx - ax, dy = by - ay, q, r;
-    q = ax - extent[0][0];
-    if (!dx && q < 0) return;
-    r = -q / dx;
-    if (dx < 0) {
-      if (r < t0) return; else if (r < t1) t1 = r;
-    } else if (dx > 0) {
-      if (r > t1) return; else if (r > t0) t0 = r;
-    }
-    q = extent[1][0] - ax;
-    if (!dx && q < 0) return;
-    r = q / dx;
-    if (dx < 0) {
-      if (r > t1) return; else if (r > t0) t0 = r;
-    } else if (dx > 0) {
-      if (r < t0) return; else if (r < t1) t1 = r;
-    }
-    q = ay - extent[0][1];
-    if (!dy && q < 0) return;
-    r = -q / dy;
-    if (dy < 0) {
-      if (r < t0) return; else if (r < t1) t1 = r;
-    } else if (dy > 0) {
-      if (r > t1) return; else if (r > t0) t0 = r;
-    }
-    q = extent[1][1] - ay;
-    if (!dy && q < 0) return;
-    r = q / dy;
-    if (dy < 0) {
-      if (r > t1) return; else if (r > t0) t0 = r;
-    } else if (dy > 0) {
-      if (r < t0) return; else if (r < t1) t1 = r;
-    }
-    if (t0 > 0) edge.a = [ ax + t0 * dx, ay + t0 * dy ];
-    if (t1 < 1) edge.b = [ ax + t1 * dx, ay + t1 * dy ];
-    return true;
   }
   function d3_geom_voronoiConnectEdge(edge, extent) {
     var vb = edge.b;
