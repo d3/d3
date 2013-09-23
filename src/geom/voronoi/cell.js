@@ -10,7 +10,7 @@ d3_geom_voronoiCell.prototype.prepare = function() {
 
   while (iHalfEdge--) {
     edge = halfEdges[iHalfEdge].edge;
-    if (!edge.b || !edge.a) halfEdges.splice(iHalfEdge, 1);
+    if (!edge[1] || !edge[0]) halfEdges.splice(iHalfEdge, 1);
   }
 
   halfEdges.sort(d3_geom_voronoiHalfEdgeOrder);

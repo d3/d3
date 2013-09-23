@@ -8,19 +8,19 @@ function d3_geom_voronoiClipEdges(extent) {
   while (i--) {
     e = edges[i];
     if (!d3_geom_voronoiConnectEdge(e, extent)
-        || !clip(e.a = [e.a[0], e.a[1]], e.b = [e.b[0], e.b[1]])
-        || (abs(e.a[0] - e.b[0]) < ε && abs(e.a[1] - e.b[1]) < ε)) {
-      e.a = e.b = null;
+        || !clip(e)
+        || (abs(e[0][0] - e[1][0]) < ε && abs(e[0][1] - e[1][1]) < ε)) {
+      e[0] = e[1] = null;
       edges.splice(i, 1);
     }
   }
 }
 
 function d3_geom_voronoiConnectEdge(edge, extent) {
-  var vb = edge.b;
+  var vb = edge[1];
   if (vb) return true;
 
-  var va = edge.a,
+  var va = edge[0],
       x0 = extent[0][0],
       x1 = extent[1][0],
       y0 = extent[0][1],
@@ -74,7 +74,7 @@ function d3_geom_voronoiConnectEdge(edge, extent) {
     }
   }
 
-  edge.a = va;
-  edge.b = vb;
+  edge[0] = va;
+  edge[1] = vb;
   return true;
 }

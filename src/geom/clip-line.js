@@ -2,8 +2,10 @@ import "../math/trigonometry";
 
 // Liang–Barsky line clipping.
 function d3_geom_clipLine(x0, y0, x1, y1) {
-  return function(a, b) {
-    var ax = a[0],
+  return function(line) {
+    var a = line[0],
+        b = line[1],
+        ax = a[0],
         ay = a[1],
         bx = b[0],
         by = b[1],
@@ -58,8 +60,8 @@ function d3_geom_clipLine(x0, y0, x1, y1) {
       else if (r < t1) t1 = r;
     }
 
-    if (t0 > 0) a[0] = ax + t0 * dx, a[1] = ay + t0 * dy;
-    if (t1 < 1) b[0] = ax + t1 * dx, b[1] = ay + t1 * dy;
-    return true;
+    if (t0 > 0) line[0] = [ax + t0 * dx, ay + t0 * dy];
+    if (t1 < 1) line[1] = [ax + t1 * dx, ay + t1 * dy];
+    return line;
   };
 }
