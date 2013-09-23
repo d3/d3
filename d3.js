@@ -4579,7 +4579,7 @@ d3 = function() {
     }
     lArc = disappearing[0];
     rArc = disappearing[nArcs - 1];
-    rArc.edge = d3_geom_voronoiCreateEdge(lArc.site, rArc.site, undefined, vertex);
+    rArc.edge = d3_geom_voronoiCreateEdge(lArc.site, rArc.site, null, vertex);
     d3_geom_voronoiAttachCircle(lArc);
     d3_geom_voronoiAttachCircle(rArc);
   }
