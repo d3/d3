@@ -1,7 +1,7 @@
 function d3_geom_voronoiEdge(lSite, rSite) {
-  this.lSite = lSite;
-  this.rSite = rSite;
-  this.va = this.vb = null; // for border edges
+  this.l = lSite;
+  this.r = rSite;
+  this.a = this.b = null; // for border edges
 }
 
 function d3_geom_voronoiCreateEdge(lSite, rSite, va, vb) {
@@ -16,21 +16,21 @@ function d3_geom_voronoiCreateEdge(lSite, rSite, va, vb) {
 
 function d3_geom_voronoiCreateBorderEdge(lSite, va, vb) {
   var edge = new d3_geom_voronoiEdge(lSite, null);
-  edge.va = va;
-  edge.vb = vb;
+  edge.a = va;
+  edge.b = vb;
   d3_geom_voronoiEdges.push(edge);
   return edge;
 }
 
 function d3_geom_voronoiSetEdgeStartpoint(edge, lSite, rSite, vertex) {
-  if (!edge.va && !edge.vb) {
-    edge.va = vertex;
-    edge.lSite = lSite;
-    edge.rSite = rSite;
-  } else if (edge.lSite === rSite) {
-    edge.vb = vertex;
+  if (!edge.a && !edge.b) {
+    edge.a = vertex;
+    edge.l = lSite;
+    edge.r = rSite;
+  } else if (edge.l === rSite) {
+    edge.b = vertex;
   } else {
-    edge.va = vertex;
+    edge.a = vertex;
   }
 }
 

@@ -4666,7 +4666,7 @@ d3 = function() {
     var halfEdges = this.halfEdges, iHalfEdge = halfEdges.length, edge;
     while (iHalfEdge--) {
       edge = halfEdges[iHalfEdge].edge;
-      if (!edge.vb || !edge.va) halfEdges.splice(iHalfEdge, 1);
+      if (!edge.b || !edge.a) halfEdges.splice(iHalfEdge, 1);
     }
     halfEdges.sort(d3_geom_voronoiHalfEdgeOrder);
     return halfEdges.length;
@@ -4756,14 +4756,14 @@ d3 = function() {
     var edges = d3_geom_voronoiEdges, i = edges.length, e;
     while (i--) {
       e = edges[i];
-      if (!d3_geom_voronoiConnectEdge(e, bbox) || !d3_geom_voronoiClipEdge(e, bbox) || Math.abs(e.va[0] - e.vb[0]) < ε && Math.abs(e.va[1] - e.vb[1]) < ε) {
-        e.va = e.vb = null;
+      if (!d3_geom_voronoiConnectEdge(e, bbox) || !d3_geom_voronoiClipEdge(e, bbox) || Math.abs(e.a[0] - e.b[0]) < ε && Math.abs(e.a[1] - e.b[1]) < ε) {
+        e.a = e.b = null;
         edges.splice(i, 1);
       }
     }
   }
   function d3_geom_voronoiClipEdge(edge, bbox) {
-    var ax = edge.va[0], ay = edge.va[1], bx = edge.vb[0], by = edge.vb[1], t0 = 0, t1 = 1, dx = bx - ax, dy = by - ay, q, r;
+    var ax = edge.a[0], ay = edge.a[1], bx = edge.b[0], by = edge.b[1], t0 = 0, t1 = 1, dx = bx - ax, dy = by - ay, q, r;
     q = ax - bbox.xl;
     if (!dx && q < 0) return;
     r = -q / dx;
@@ -4796,14 +4796,14 @@ d3 = function() {
     } else if (dy > 0) {
       if (r < t0) return; else if (r < t1) t1 = r;
     }
-    if (t0 > 0) edge.va = [ ax + t0 * dx, ay + t0 * dy ];
-    if (t1 < 1) edge.vb = [ ax + t1 * dx, ay + t1 * dy ];
+    if (t0 > 0) edge.a = [ ax + t0 * dx, ay + t0 * dy ];
+    if (t1 < 1) edge.b = [ ax + t1 * dx, ay + t1 * dy ];
     return true;
   }
   function d3_geom_voronoiConnectEdge(edge, bbox) {
-    var vb = edge.vb;
+    var vb = edge.b;
     if (vb) return true;
-    var va = edge.va, xl = bbox.xl, xr = bbox.xr, yt = bbox.yt, yb = bbox.yb, lSite = edge.lSite, rSite = edge.rSite, lx = lSite[0], ly = lSite[1], rx = rSite[0], ry = rSite[1], fx = (lx + rx) / 2, fy = (ly + ry) / 2, fm, fb;
+    var va = edge.a, xl = bbox.xl, xr = bbox.xr, yt = bbox.yt, yb = bbox.yb, lSite = edge.l, rSite = edge.r, lx = lSite[0], ly = lSite[1], rx = rSite[0], ry = rSite[1], fx = (lx + rx) / 2, fy = (ly + ry) / 2, fm, fb;
     if (ry !== ly) {
       fm = (lx - rx) / (ry - ly);
       fb = fy - fm * fx;
@@ -4834,14 +4834,14 @@ d3 = function() {
         vb = [ xl, fm * xl + fb ];
       }
     }
-    edge.va = va;
-    edge.vb = vb;
+    edge.a = va;
+    edge.b = vb;
     return true;
   }
   function d3_geom_voronoiEdge(lSite, rSite) {
-    this.lSite = lSite;
-    this.rSite = rSite;
-    this.va = this.vb = null;
+    this.l = lSite;
+    this.r = rSite;
+    this.a = this.b = null;
   }
   function d3_geom_voronoiCreateEdge(lSite, rSite, va, vb) {
     var edge = new d3_geom_voronoiEdge(lSite, rSite);
@@ -4854,36 +4854,36 @@ d3 = function() {
   }
   function d3_geom_voronoiCreateBorderEdge(lSite, va, vb) {
     var edge = new d3_geom_voronoiEdge(lSite, null);
-    edge.va = va;
-    edge.vb = vb;
+    edge.a = va;
+    edge.b = vb;
     d3_geom_voronoiEdges.push(edge);
     return edge;
   }
   function d3_geom_voronoiSetEdgeStartpoint(edge, lSite, rSite, vertex) {
-    if (!edge.va && !edge.vb) {
-      edge.va = vertex;
-      edge.lSite = lSite;
-      edge.rSite = rSite;
-    } else if (edge.lSite === rSite) {
-      edge.vb = vertex;
+    if (!edge.a && !edge.b) {
+      edge.a = vertex;
+      edge.l = lSite;
+      edge.r = rSite;
+    } else if (edge.l === rSite) {
+      edge.b = vertex;
     } else {
-      edge.va = vertex;
+      edge.a = vertex;
     }
   }
   function d3_geom_voronoiSetEdgeEndpoint(edge, lSite, rSite, vertex) {
     d3_geom_voronoiSetEdgeStartpoint(edge, rSite, lSite, vertex);
   }
   function d3_geom_voronoiHalfEdge(edge, lSite, rSite) {
-    var va = edge.va, vb = edge.vb;
+    var va = edge.a, vb = edge.b;
     this.edge = edge;
     this.site = lSite;
-    this.angle = rSite ? Math.atan2(rSite[1] - lSite[1], rSite[0] - lSite[0]) : edge.lSite === lSite ? Math.atan2(vb[0] - va[0], va[1] - vb[1]) : Math.atan2(va[0] - vb[0], vb[1] - va[1]);
+    this.angle = rSite ? Math.atan2(rSite[1] - lSite[1], rSite[0] - lSite[0]) : edge.l === lSite ? Math.atan2(vb[0] - va[0], va[1] - vb[1]) : Math.atan2(va[0] - vb[0], vb[1] - va[1]);
   }
   d3_geom_voronoiHalfEdge.prototype.getStartpoint = function() {
-    return this.edge.lSite === this.site ? this.edge.va : this.edge.vb;
+    return this.edge.l === this.site ? this.edge.a : this.edge.b;
   };
   d3_geom_voronoiHalfEdge.prototype.getEndpoint = function() {
-    return this.edge.lSite === this.site ? this.edge.vb : this.edge.va;
+    return this.edge.l === this.site ? this.edge.b : this.edge.a;
   };
   function d3_geom_voronoiHalfEdgeOrder(a, b) {
     return b.angle - a.angle;

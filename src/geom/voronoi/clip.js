@@ -6,18 +6,18 @@ function d3_geom_voronoiClipEdges(bbox) {
     e = edges[i];
     if (!d3_geom_voronoiConnectEdge(e, bbox)
         || !d3_geom_voronoiClipEdge(e, bbox)
-        || (Math.abs(e.va[0] - e.vb[0]) < ε && Math.abs(e.va[1] - e.vb[1]) < ε)) {
-      e.va = e.vb = null;
+        || (Math.abs(e.a[0] - e.b[0]) < ε && Math.abs(e.a[1] - e.b[1]) < ε)) {
+      e.a = e.b = null;
       edges.splice(i, 1);
     }
   }
 }
 
 function d3_geom_voronoiClipEdge(edge, bbox) {
-  var ax = edge.va[0],
-      ay = edge.va[1],
-      bx = edge.vb[0],
-      by = edge.vb[1],
+  var ax = edge.a[0],
+      ay = edge.a[1],
+      bx = edge.b[0],
+      by = edge.b[1],
       t0 = 0,
       t1 = 1,
       dx = bx - ax,
@@ -69,22 +69,22 @@ function d3_geom_voronoiClipEdge(edge, bbox) {
     else if (r < t1) t1 = r;
   }
 
-  if (t0 > 0) edge.va = [ax + t0 * dx, ay + t0 * dy];
-  if (t1 < 1) edge.vb = [ax + t1 * dx, ay + t1 * dy];
+  if (t0 > 0) edge.a = [ax + t0 * dx, ay + t0 * dy];
+  if (t1 < 1) edge.b = [ax + t1 * dx, ay + t1 * dy];
   return true;
 }
 
 function d3_geom_voronoiConnectEdge(edge, bbox) {
-  var vb = edge.vb;
+  var vb = edge.b;
   if (vb) return true;
 
-  var va = edge.va,
+  var va = edge.a,
       xl = bbox.xl,
       xr = bbox.xr,
       yt = bbox.yt,
       yb = bbox.yb,
-      lSite = edge.lSite,
-      rSite = edge.rSite,
+      lSite = edge.l,
+      rSite = edge.r,
       lx = lSite[0],
       ly = lSite[1],
       rx = rSite[0],
@@ -132,7 +132,7 @@ function d3_geom_voronoiConnectEdge(edge, bbox) {
     }
   }
 
-  edge.va = va;
-  edge.vb = vb;
+  edge.a = va;
+  edge.b = vb;
   return true;
 }
