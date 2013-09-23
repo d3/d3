@@ -45,21 +45,21 @@ function d3_geom_voronoiAttachCircle(arc) {
 
   arc.circle = circle;
 
-  var predecessor = null,
+  var before = null,
       node = d3_geom_voronoiCircles._;
 
   while (node) {
     if (circle[1] < node[1] || (circle[1] === node[1] && circle[0] <= node[0])) {
       if (node.L) node = node.L;
-      else { predecessor = node.P; break; }
+      else { before = node.P; break; }
     } else {
       if (node.R) node = node.R;
-      else { predecessor = node; break; }
+      else { before = node; break; }
     }
   }
 
-  d3_geom_voronoiCircles.insert(predecessor, circle);
-  if (!predecessor) d3_geom_voronoiFirstCircle = circle;
+  d3_geom_voronoiCircles.insert(before, circle);
+  if (!before) d3_geom_voronoiFirstCircle = circle;
 }
 
 function d3_geom_voronoiDetachCircle(arc) {

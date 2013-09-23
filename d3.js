@@ -4716,22 +4716,22 @@ d3 = function() {
     circle[1] = cy + Math.sqrt(x * x + y * y);
     circle.cy = cy;
     arc.circle = circle;
-    var predecessor = null, node = d3_geom_voronoiCircles._;
+    var before = null, node = d3_geom_voronoiCircles._;
     while (node) {
       if (circle[1] < node[1] || circle[1] === node[1] && circle[0] <= node[0]) {
         if (node.L) node = node.L; else {
-          predecessor = node.P;
+          before = node.P;
           break;
         }
       } else {
         if (node.R) node = node.R; else {
-          predecessor = node;
+          before = node;
           break;
         }
       }
     }
-    d3_geom_voronoiCircles.insert(predecessor, circle);
-    if (!predecessor) d3_geom_voronoiFirstCircle = circle;
+    d3_geom_voronoiCircles.insert(before, circle);
+    if (!before) d3_geom_voronoiFirstCircle = circle;
   }
   function d3_geom_voronoiDetachCircle(arc) {
     var circle = arc.circle;
