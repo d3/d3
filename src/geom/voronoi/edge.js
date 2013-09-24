@@ -27,21 +27,20 @@ function d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vertex) {
     edge[0] = vertex;
     edge.l = lSite;
     edge.r = rSite;
-  } else if (edge.l === rSite) {
-    edge[1] = vertex;
   } else {
-    edge[0] = vertex;
+    edge[+(edge.l === rSite)] = vertex;
   }
 }
 
 function d3_geom_voronoiHalfEdge(edge, lSite, rSite) {
-  var va = edge[0],
-      vb = edge[1];
+  var i = +(edge.l !== lSite),
+      va = edge[1 - i],
+      vb = edge[i];
   this.edge = edge;
   this.site = lSite;
-  this.angle = rSite ? Math.atan2(rSite[1] - lSite[1], rSite[0] - lSite[0])
-      : edge.l === lSite ? Math.atan2(vb[0] - va[0], va[1] - vb[1])
-      : Math.atan2(va[0] - vb[0], vb[1] - va[1]);
+  this.angle = rSite
+      ? Math.atan2(rSite[1] - lSite[1], rSite[0] - lSite[0])
+      : Math.atan2(vb[0] - va[0], va[1] - vb[1]);
 };
 
 d3_geom_voronoiHalfEdge.prototype = {
