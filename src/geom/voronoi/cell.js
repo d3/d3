@@ -53,7 +53,7 @@ function d3_geom_voronoiCloseCells(extent) {
             : abs(y3 - y0) < ε && x3 - x0 > ε ? [abs(y2 - y0) < ε ? x2 : x0, y0]
             : null);
         halfEdges.splice(iHalfEdge, 0, new d3_geom_voronoiHalfEdge(edge, cell.site, null));
-        nHalfEdges = halfEdges.length;
+        ++nHalfEdges;
       }
     }
   }
