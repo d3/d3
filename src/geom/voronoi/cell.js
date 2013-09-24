@@ -29,8 +29,7 @@ function d3_geom_voronoiCloseCells(extent) {
       cells = d3_geom_voronoiCells,
       iCell = cells.length,
       cell,
-      iLeft,
-      iRight,
+      iHalfEdge,
       halfEdges,
       nHalfEdges,
       edge,
@@ -42,11 +41,10 @@ function d3_geom_voronoiCloseCells(extent) {
     if (!cell || !cell.prepare()) continue;
     halfEdges = cell.edges;
     nHalfEdges = halfEdges.length;
-    iLeft = 0;
-    while (iLeft < nHalfEdges) {
-      iRight = (iLeft + 1) % nHalfEdges;
-      start = halfEdges[iRight].start(), x2 = start[0], y2 = start[1];
-      end = halfEdges[iLeft].end(), x3 = end[0], y3 = end[1];
+    iHalfEdge = 0;
+    while (iHalfEdge < nHalfEdges) {
+      end = halfEdges[iHalfEdge].end(), x3 = end[0], y3 = end[1];
+      start = halfEdges[++iHalfEdge % nHalfEdges].start(), x2 = start[0], y2 = start[1];
       if (abs(x3 - x2) > ε || abs(y3 - y2) > ε) {
         edge = d3_geom_voronoiCreateBorderEdge(cell.site, end,
             abs(x3 - x0) < ε && y1 - y3 > ε ? [x0, abs(x2 - x0) < ε ? y2 : y1]
@@ -54,10 +52,9 @@ function d3_geom_voronoiCloseCells(extent) {
             : abs(x3 - x1) < ε && y3 - y0 > ε ? [x1, abs(x2 - x1) < ε ? y2 : y0]
             : abs(y3 - y0) < ε && x3 - x0 > ε ? [abs(y2 - y0) < ε ? x2 : x0, y0]
             : null);
-        halfEdges.splice(iLeft + 1, 0, new d3_geom_voronoiHalfEdge(edge, cell.site, null));
+        halfEdges.splice(iHalfEdge, 0, new d3_geom_voronoiHalfEdge(edge, cell.site, null));
         nHalfEdges = halfEdges.length;
       }
-      iLeft++;
     }
   }
 }
