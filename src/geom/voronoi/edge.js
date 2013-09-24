@@ -45,6 +45,6 @@ function d3_geom_voronoiHalfEdge(edge, lSite, rSite) {
 };
 
 d3_geom_voronoiHalfEdge.prototype = {
-  start: function() { return this.edge.l === this.site ? this.edge[0] : this.edge[1]; },
-  end: function() { return this.edge.l === this.site ? this.edge[1] : this.edge[0]; }
+  start: function() { return this.edge[+(this.edge.l !== this.site)]; },
+  end: function() { return this.edge[+(this.edge.l === this.site)]; }
 };

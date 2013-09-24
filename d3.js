@@ -4846,10 +4846,10 @@ d3 = function() {
   }
   d3_geom_voronoiHalfEdge.prototype = {
     start: function() {
-      return this.edge.l === this.site ? this.edge[0] : this.edge[1];
+      return this.edge[+(this.edge.l !== this.site)];
     },
     end: function() {
-      return this.edge.l === this.site ? this.edge[1] : this.edge[0];
+      return this.edge[+(this.edge.l === this.site)];
     }
   };
   function d3_geom_voronoiRedBlackTree() {
