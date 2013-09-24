@@ -154,13 +154,13 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
       } else {
         if (v && v_) listener.point(x, y);
         else {
-          var l = [[x_, y_], [x, y]];
+          var l = {a: {x: x_, y: y_}, b: {x: x, y: y}};
           if (clipLine(l)) {
             if (!v_) {
               listener.lineStart();
-              listener.point(l[0][0], l[0][1]);
+              listener.point(l.a.x, l.a.y);
             }
-            listener.point(l[1][0], l[1][1]);
+            listener.point(l.b.x, l.b.y);
             if (!v) listener.lineEnd();
             clean = false;
           } else if (v) {

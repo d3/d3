@@ -10,7 +10,7 @@ d3_geom_voronoiCell.prototype.prepare = function() {
 
   while (iHalfEdge--) {
     edge = halfEdges[iHalfEdge].edge;
-    if (!edge[1] || !edge[0]) halfEdges.splice(iHalfEdge, 1);
+    if (!edge.b || !edge.a) halfEdges.splice(iHalfEdge, 1);
   }
 
   halfEdges.sort(d3_geom_voronoiHalfEdgeOrder);
@@ -43,8 +43,8 @@ function d3_geom_voronoiCloseCells(extent) {
     nHalfEdges = halfEdges.length;
     iHalfEdge = 0;
     while (iHalfEdge < nHalfEdges) {
-      end = halfEdges[iHalfEdge].end(), x3 = end[0], y3 = end[1];
-      start = halfEdges[++iHalfEdge % nHalfEdges].start(), x2 = start[0], y2 = start[1];
+      end = halfEdges[iHalfEdge].end(), x3 = end.x, y3 = end.y;
+      start = halfEdges[++iHalfEdge % nHalfEdges].start(), x2 = start.x, y2 = start.y;
       if (abs(x3 - x2) > ε || abs(y3 - y2) > ε) {
         edge = d3_geom_voronoiCreateBorderEdge(cell.site, end,
             abs(x3 - x0) < ε && y1 - y3 > ε ? [x0, abs(x2 - x0) < ε ? y2 : y1]

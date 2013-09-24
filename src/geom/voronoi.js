@@ -14,12 +14,13 @@ d3.geom.voronoi = function(points) {
   function voronoi(data) {
     var fx = d3_functor(x),
         fy = d3_functor(y),
-        sites = data.map(function(d, i) { return {0: fx(d, i), 1: fy(d, i), i: i}; }),
+        sites = data.map(function(d, i) { return {x: fx(d, i), y: fy(d, i), i: i}; }),
         polygons = [];
 
     d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell, i) {
       (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
-        return edge.start();
+        var start = edge.start();
+        return [start.x, start.y];
       }).reverse() : [
         [clipExtent[0][0], clipExtent[0][1]],
         [clipExtent[1][0], clipExtent[0][1]],

@@ -20,9 +20,9 @@ function d3_geom_voronoiDetachBeach(beach) {
 
 function d3_geom_voronoiRemoveBeach(beach) {
   var circle = beach.circle,
-      x = circle[0],
+      x = circle.x,
       y = circle.cy,
-      vertex = [x, y],
+      vertex = {x: x, y: y},
       previous = beach.P,
       next = beach.N,
       disappearing = [beach];
@@ -31,7 +31,7 @@ function d3_geom_voronoiRemoveBeach(beach) {
 
   var lArc = previous;
   while (lArc.circle
-      && abs(x - lArc.circle[0]) < ε
+      && abs(x - lArc.circle.x) < ε
       && abs(y - lArc.circle.cy) < ε) {
     previous = lArc.P;
     disappearing.unshift(lArc);
@@ -44,7 +44,7 @@ function d3_geom_voronoiRemoveBeach(beach) {
 
   var rArc = next;
   while (rArc.circle
-      && abs(x - rArc.circle[0]) < ε
+      && abs(x - rArc.circle.x) < ε
       && abs(y - rArc.circle.cy) < ε) {
     next = rArc.N;
     disappearing.push(rArc);
@@ -72,8 +72,8 @@ function d3_geom_voronoiRemoveBeach(beach) {
 }
 
 function d3_geom_voronoiAddBeach(site) {
-  var x = site[0],
-      directrix = site[1],
+  var x = site.x,
+      directrix = site.y,
       lArc,
       rArc,
       dxl,
@@ -130,17 +130,17 @@ function d3_geom_voronoiAddBeach(site) {
   d3_geom_voronoiDetachCircle(rArc);
 
   var lSite = lArc.site,
-      ax = lSite[0],
-      ay = lSite[1],
-      bx = site[0] - ax,
-      by = site[1] - ay,
+      ax = lSite.x,
+      ay = lSite.y,
+      bx = site.x - ax,
+      by = site.y - ay,
       rSite = rArc.site,
-      cx = rSite[0] - ax,
-      cy = rSite[1] - ay,
+      cx = rSite.x - ax,
+      cy = rSite.y - ay,
       d = 2 * (bx * cy - by * cx),
       hb = bx * bx + by * by,
       hc = cx * cx + cy * cy,
-      vertex = [(cy * hb - by * hc) / d + ax, (bx * hc - cx * hb) / d + ay];
+      vertex = {x: (cy * hb - by * hc) / d + ax, y: (bx * hc - cx * hb) / d + ay};
 
   d3_geom_voronoiSetEdgeEnd(rArc.edge, lSite, rSite, vertex);
   newArc.edge = d3_geom_voronoiCreateEdge(lSite, site, null, vertex);
@@ -151,8 +151,8 @@ function d3_geom_voronoiAddBeach(site) {
 
 function d3_geom_voronoiLeftBreakPoint(arc, directrix) {
   var site = arc.site,
-      rfocx = site[0],
-      rfocy = site[1],
+      rfocx = site.x,
+      rfocy = site.y,
       pby2 = rfocy - directrix;
 
   if (!pby2) return rfocx;
@@ -161,8 +161,8 @@ function d3_geom_voronoiLeftBreakPoint(arc, directrix) {
   if (!lArc) return -Infinity;
 
   site = lArc.site;
-  var lfocx = site[0],
-      lfocy = site[1],
+  var lfocx = site.x,
+      lfocy = site.y,
       plby2 = lfocy - directrix;
 
   if (!plby2) return lfocx;
@@ -180,5 +180,5 @@ function d3_geom_voronoiRightBreakPoint(arc, directrix) {
   var rArc = arc.N;
   if (rArc) return d3_geom_voronoiLeftBreakPoint(rArc, directrix);
   var site = arc.site;
-  return site[1] === directrix ? site[0] : Infinity;
+  return site.y === directrix ? site.x : Infinity;
 }

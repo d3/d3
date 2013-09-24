@@ -3018,7 +3018,7 @@ d3 = function() {
   }
   function d3_geom_clipLine(x0, y0, x1, y1) {
     return function(line) {
-      var a = line[0], b = line[1], ax = a[0], ay = a[1], bx = b[0], by = b[1], t0 = 0, t1 = 1, dx = bx - ax, dy = by - ay, q, r;
+      var a = line.a, b = line.b, ax = a.x, ay = a.y, bx = b.x, by = b.y, t0 = 0, t1 = 1, dx = bx - ax, dy = by - ay, q, r;
       q = ax - x0;
       if (!dx && q < 0) return;
       r = -q / dx;
@@ -3051,8 +3051,14 @@ d3 = function() {
       } else if (dy > 0) {
         if (r < t0) return; else if (r < t1) t1 = r;
       }
-      if (t0 > 0) line[0] = [ ax + t0 * dx, ay + t0 * dy ];
-      if (t1 < 1) line[1] = [ ax + t1 * dx, ay + t1 * dy ];
+      if (t0 > 0) line.a = {
+        x: ax + t0 * dx,
+        y: ay + t0 * dy
+      };
+      if (t1 < 1) line.b = {
+        x: ax + t1 * dx,
+        y: ay + t1 * dy
+      };
       return line;
     };
   }
@@ -3171,13 +3177,22 @@ d3 = function() {
           }
         } else {
           if (v && v_) listener.point(x, y); else {
-            var l = [ [ x_, y_ ], [ x, y ] ];
+            var l = {
+              a: {
+                x: x_,
+                y: y_
+              },
+              b: {
+                x: x,
+                y: y
+              }
+            };
             if (clipLine(l)) {
               if (!v_) {
                 listener.lineStart();
-                listener.point(l[0][0], l[0][1]);
+                listener.point(l.a.x, l.a.y);
               }
-              listener.point(l[1][0], l[1][1]);
+              listener.point(l.b.x, l.b.y);
               if (!v) listener.lineEnd();
               clean = false;
             } else if (v) {
@@ -4563,10 +4578,13 @@ d3 = function() {
     d3_geom_voronoiRedBlackNode(beach);
   }
   function d3_geom_voronoiRemoveBeach(beach) {
-    var circle = beach.circle, x = circle[0], y = circle.cy, vertex = [ x, y ], previous = beach.P, next = beach.N, disappearing = [ beach ];
+    var circle = beach.circle, x = circle.x, y = circle.cy, vertex = {
+      x: x,
+      y: y
+    }, previous = beach.P, next = beach.N, disappearing = [ beach ];
     d3_geom_voronoiDetachBeach(beach);
     var lArc = previous;
-    while (lArc.circle && abs(x - lArc.circle[0]) < ε && abs(y - lArc.circle.cy) < ε) {
+    while (lArc.circle && abs(x - lArc.circle.x) < ε && abs(y - lArc.circle.cy) < ε) {
       previous = lArc.P;
       disappearing.unshift(lArc);
       d3_geom_voronoiDetachBeach(lArc);
@@ -4575,7 +4593,7 @@ d3 = function() {
     disappearing.unshift(lArc);
     d3_geom_voronoiDetachCircle(lArc);
     var rArc = next;
-    while (rArc.circle && abs(x - rArc.circle[0]) < ε && abs(y - rArc.circle.cy) < ε) {
+    while (rArc.circle && abs(x - rArc.circle.x) < ε && abs(y - rArc.circle.cy) < ε) {
       next = rArc.N;
       disappearing.push(rArc);
       d3_geom_voronoiDetachBeach(rArc);
@@ -4596,7 +4614,7 @@ d3 = function() {
     d3_geom_voronoiAttachCircle(rArc);
   }
   function d3_geom_voronoiAddBeach(site) {
-    var x = site[0], directrix = site[1], lArc, rArc, dxl, dxr, node = d3_geom_voronoiBeaches._;
+    var x = site.x, directrix = site.y, lArc, rArc, dxl, dxr, node = d3_geom_voronoiBeaches._;
     while (node) {
       dxl = d3_geom_voronoiLeftBreakPoint(node, directrix) - x;
       if (dxl > ε) node = node.L; else {
@@ -4639,7 +4657,10 @@ d3 = function() {
     }
     d3_geom_voronoiDetachCircle(lArc);
     d3_geom_voronoiDetachCircle(rArc);
-    var lSite = lArc.site, ax = lSite[0], ay = lSite[1], bx = site[0] - ax, by = site[1] - ay, rSite = rArc.site, cx = rSite[0] - ax, cy = rSite[1] - ay, d = 2 * (bx * cy - by * cx), hb = bx * bx + by * by, hc = cx * cx + cy * cy, vertex = [ (cy * hb - by * hc) / d + ax, (bx * hc - cx * hb) / d + ay ];
+    var lSite = lArc.site, ax = lSite.x, ay = lSite.y, bx = site.x - ax, by = site.y - ay, rSite = rArc.site, cx = rSite.x - ax, cy = rSite.y - ay, d = 2 * (bx * cy - by * cx), hb = bx * bx + by * by, hc = cx * cx + cy * cy, vertex = {
+      x: (cy * hb - by * hc) / d + ax,
+      y: (bx * hc - cx * hb) / d + ay
+    };
     d3_geom_voronoiSetEdgeEnd(rArc.edge, lSite, rSite, vertex);
     newArc.edge = d3_geom_voronoiCreateEdge(lSite, site, null, vertex);
     rArc.edge = d3_geom_voronoiCreateEdge(site, rSite, null, vertex);
@@ -4647,12 +4668,12 @@ d3 = function() {
     d3_geom_voronoiAttachCircle(rArc);
   }
   function d3_geom_voronoiLeftBreakPoint(arc, directrix) {
-    var site = arc.site, rfocx = site[0], rfocy = site[1], pby2 = rfocy - directrix;
+    var site = arc.site, rfocx = site.x, rfocy = site.y, pby2 = rfocy - directrix;
     if (!pby2) return rfocx;
     var lArc = arc.P;
     if (!lArc) return -Infinity;
     site = lArc.site;
-    var lfocx = site[0], lfocy = site[1], plby2 = lfocy - directrix;
+    var lfocx = site.x, lfocy = site.y, plby2 = lfocy - directrix;
     if (!plby2) return lfocx;
     var hl = lfocx - rfocx, aby2 = 1 / pby2 - 1 / plby2, b = hl / plby2;
     if (aby2) return (-b + Math.sqrt(b * b - 2 * aby2 * (hl * hl / (-2 * plby2) - lfocy + plby2 / 2 + rfocy - pby2 / 2))) / aby2 + rfocx;
@@ -4662,7 +4683,7 @@ d3 = function() {
     var rArc = arc.N;
     if (rArc) return d3_geom_voronoiLeftBreakPoint(rArc, directrix);
     var site = arc.site;
-    return site[1] === directrix ? site[0] : Infinity;
+    return site.y === directrix ? site.x : Infinity;
   }
   function d3_geom_voronoiCell(site) {
     this.site = site;
@@ -4672,7 +4693,7 @@ d3 = function() {
     var halfEdges = this.edges, iHalfEdge = halfEdges.length, edge;
     while (iHalfEdge--) {
       edge = halfEdges[iHalfEdge].edge;
-      if (!edge[1] || !edge[0]) halfEdges.splice(iHalfEdge, 1);
+      if (!edge.b || !edge.a) halfEdges.splice(iHalfEdge, 1);
     }
     halfEdges.sort(d3_geom_voronoiHalfEdgeOrder);
     return halfEdges.length;
@@ -4686,8 +4707,8 @@ d3 = function() {
       nHalfEdges = halfEdges.length;
       iHalfEdge = 0;
       while (iHalfEdge < nHalfEdges) {
-        end = halfEdges[iHalfEdge].end(), x3 = end[0], y3 = end[1];
-        start = halfEdges[++iHalfEdge % nHalfEdges].start(), x2 = start[0], y2 = start[1];
+        end = halfEdges[iHalfEdge].end(), x3 = end.x, y3 = end.y;
+        start = halfEdges[++iHalfEdge % nHalfEdges].start(), x2 = start.x, y2 = start.y;
         if (abs(x3 - x2) > ε || abs(y3 - y2) > ε) {
           edge = d3_geom_voronoiCreateBorderEdge(cell.site, end, abs(x3 - x0) < ε && y1 - y3 > ε ? [ x0, abs(x2 - x0) < ε ? y2 : y1 ] : abs(y3 - y1) < ε && x1 - x3 > ε ? [ abs(y2 - y1) < ε ? x2 : x1, y1 ] : abs(x3 - x1) < ε && y3 - y0 > ε ? [ x1, abs(x2 - x1) < ε ? y2 : y0 ] : abs(y3 - y0) < ε && x3 - x0 > ε ? [ abs(y2 - y0) < ε ? x2 : x0, y0 ] : null);
           halfEdges.splice(iHalfEdge, 0, new d3_geom_voronoiHalfEdge(edge, cell.site, null));
@@ -4701,27 +4722,27 @@ d3 = function() {
   }
   function d3_geom_voronoiCircle() {
     d3_geom_voronoiRedBlackNode(this);
-    this[0] = this[1] = this.arc = this.site = this.cy = null;
+    this.x = this.y = this.arc = this.site = this.cy = null;
   }
   function d3_geom_voronoiAttachCircle(arc) {
     var lArc = arc.P, rArc = arc.N;
     if (!lArc || !rArc) return;
     var lSite = lArc.site, cSite = arc.site, rSite = rArc.site;
     if (lSite === rSite) return;
-    var bx = cSite[0], by = cSite[1], ax = lSite[0] - bx, ay = lSite[1] - by, cx = rSite[0] - bx, cy = rSite[1] - by;
+    var bx = cSite.x, by = cSite.y, ax = lSite.x - bx, ay = lSite.y - by, cx = rSite.x - bx, cy = rSite.y - by;
     var d = 2 * (ax * cy - ay * cx);
     if (d >= -ε2) return;
     var ha = ax * ax + ay * ay, hc = cx * cx + cy * cy, x = (cy * ha - ay * hc) / d, y = (ax * hc - cx * ha) / d, cy = y + by;
     var circle = d3_geom_voronoiCirclePool.pop() || new d3_geom_voronoiCircle();
     circle.arc = arc;
     circle.site = cSite;
-    circle[0] = x + bx;
-    circle[1] = cy + Math.sqrt(x * x + y * y);
+    circle.x = x + bx;
+    circle.y = cy + Math.sqrt(x * x + y * y);
     circle.cy = cy;
     arc.circle = circle;
     var before = null, node = d3_geom_voronoiCircles._;
     while (node) {
-      if (circle[1] < node[1] || circle[1] === node[1] && circle[0] <= node[0]) {
+      if (circle.y < node.y || circle.y === node.y && circle.x <= node.x) {
         if (node.L) node = node.L; else {
           before = node.P;
           break;
@@ -4750,16 +4771,16 @@ d3 = function() {
     var edges = d3_geom_voronoiEdges, clip = d3_geom_clipLine(extent[0][0], extent[0][1], extent[1][0], extent[1][1]), i = edges.length, e;
     while (i--) {
       e = edges[i];
-      if (!d3_geom_voronoiConnectEdge(e, extent) || !clip(e) || abs(e[0][0] - e[1][0]) < ε && abs(e[0][1] - e[1][1]) < ε) {
-        e[0] = e[1] = null;
+      if (!d3_geom_voronoiConnectEdge(e, extent) || !clip(e) || abs(e.a.x - e.b.x) < ε && abs(e.a.y - e.b.y) < ε) {
+        e.a = e.b = null;
         edges.splice(i, 1);
       }
     }
   }
   function d3_geom_voronoiConnectEdge(edge, extent) {
-    var vb = edge[1];
+    var vb = edge.b;
     if (vb) return true;
-    var va = edge[0], x0 = extent[0][0], x1 = extent[1][0], y0 = extent[0][1], y1 = extent[1][1], lSite = edge.l, rSite = edge.r, lx = lSite[0], ly = lSite[1], rx = rSite[0], ry = rSite[1], fx = (lx + rx) / 2, fy = (ly + ry) / 2, fm, fb;
+    var va = edge.a, x0 = extent[0][0], x1 = extent[1][0], y0 = extent[0][1], y1 = extent[1][1], lSite = edge.l, rSite = edge.r, lx = lSite.x, ly = lSite.y, rx = rSite.x, ry = rSite.y, fx = (lx + rx) / 2, fy = (ly + ry) / 2, fm, fb;
     if (ry !== ly) {
       fm = (lx - rx) / (ry - ly);
       fb = fy - fm * fx;
@@ -4767,37 +4788,73 @@ d3 = function() {
     if (fm == null) {
       if (fx < x0 || fx >= x1) return;
       if (lx > rx) {
-        if (!va) va = [ fx, y0 ]; else if (va[1] >= y1) return;
-        vb = [ fx, y1 ];
+        if (!va) va = {
+          x: fx,
+          y: y0
+        }; else if (va.y >= y1) return;
+        vb = {
+          x: fx,
+          y: y1
+        };
       } else {
-        if (!va) va = [ fx, y1 ]; else if (va[1] < y0) return;
-        vb = [ fx, y0 ];
+        if (!va) va = {
+          x: fx,
+          y: y1
+        }; else if (va.y < y0) return;
+        vb = {
+          x: fx,
+          y: y0
+        };
       }
     } else if (fm < -1 || fm > 1) {
       if (lx > rx) {
-        if (!va) va = [ (y0 - fb) / fm, y0 ]; else if (va[1] >= y1) return;
-        vb = [ (y1 - fb) / fm, y1 ];
+        if (!va) va = {
+          x: (y0 - fb) / fm,
+          y: y0
+        }; else if (va.y >= y1) return;
+        vb = {
+          x: (y1 - fb) / fm,
+          y: y1
+        };
       } else {
-        if (!va) va = [ (y1 - fb) / fm, y1 ]; else if (va[1] < y0) return;
-        vb = [ (y0 - fb) / fm, y0 ];
+        if (!va) va = {
+          x: (y1 - fb) / fm,
+          y: y1
+        }; else if (va.y < y0) return;
+        vb = {
+          x: (y0 - fb) / fm,
+          y: y0
+        };
       }
     } else {
       if (ly < ry) {
-        if (!va) va = [ x0, fm * x0 + fb ]; else if (va[0] >= x1) return;
-        vb = [ x1, fm * x1 + fb ];
+        if (!va) va = {
+          x: x0,
+          y: fm * x0 + fb
+        }; else if (va.x >= x1) return;
+        vb = {
+          x: x1,
+          y: fm * x1 + fb
+        };
       } else {
-        if (!va) va = [ x1, fm * x1 + fb ]; else if (va[0] < x0) return;
-        vb = [ x0, fm * x0 + fb ];
+        if (!va) va = {
+          x: x1,
+          y: fm * x1 + fb
+        }; else if (va.x < x0) return;
+        vb = {
+          x: x0,
+          y: fm * x0 + fb
+        };
       }
     }
-    edge[0] = va;
-    edge[1] = vb;
+    edge.a = va;
+    edge.b = vb;
     return true;
   }
   function d3_geom_voronoiEdge(lSite, rSite) {
     this.l = lSite;
     this.r = rSite;
-    this[0] = this[1] = null;
+    this.a = this.b = null;
   }
   function d3_geom_voronoiCreateEdge(lSite, rSite, va, vb) {
     var edge = new d3_geom_voronoiEdge(lSite, rSite);
@@ -4810,32 +4867,34 @@ d3 = function() {
   }
   function d3_geom_voronoiCreateBorderEdge(lSite, va, vb) {
     var edge = new d3_geom_voronoiEdge(lSite, null);
-    edge[0] = va;
-    edge[1] = vb;
+    edge.a = va;
+    edge.b = vb;
     d3_geom_voronoiEdges.push(edge);
     return edge;
   }
   function d3_geom_voronoiSetEdgeEnd(edge, lSite, rSite, vertex) {
-    if (!edge[0] && !edge[1]) {
-      edge[0] = vertex;
+    if (!edge.a && !edge.b) {
+      edge.a = vertex;
       edge.l = lSite;
       edge.r = rSite;
+    } else if (edge.l === rSite) {
+      edge.b = vertex;
     } else {
-      edge[+(edge.l === rSite)] = vertex;
+      edge.a = vertex;
     }
   }
   function d3_geom_voronoiHalfEdge(edge, lSite, rSite) {
-    var i = +(edge.l !== lSite), va = edge[1 - i], vb = edge[i];
+    var va = edge.a, vb = edge.b;
     this.edge = edge;
     this.site = lSite;
-    this.angle = rSite ? Math.atan2(rSite[1] - lSite[1], rSite[0] - lSite[0]) : Math.atan2(vb[0] - va[0], va[1] - vb[1]);
+    this.angle = rSite ? Math.atan2(rSite.y - lSite.y, rSite.x - lSite.x) : edge.l === lSite ? Math.atan2(vb.x - va.x, va.y - vb.y) : Math.atan2(va.x - vb.x, vb.y - va.y);
   }
   d3_geom_voronoiHalfEdge.prototype = {
     start: function() {
-      return this.edge[+(this.edge.l !== this.site)];
+      return this.edge.l === this.site ? this.edge.a : this.edge.b;
     },
     end: function() {
-      return this.edge[+(this.edge.l === this.site)];
+      return this.edge.l === this.site ? this.edge.b : this.edge.a;
     }
   };
   function d3_geom_voronoiRedBlackTree() {
@@ -5042,11 +5101,11 @@ d3 = function() {
     d3_geom_voronoiCircles = new d3_geom_voronoiRedBlackTree();
     while (true) {
       circle = d3_geom_voronoiFirstCircle;
-      if (site && (!circle || site[1] < circle[1] || site[1] === circle[1] && site[0] < circle[0])) {
-        if (site[0] !== x0 || site[1] !== y0) {
+      if (site && (!circle || site.y < circle.y || site.y === circle.y && site.x < circle.x)) {
+        if (site.x !== x0 || site.y !== y0) {
           d3_geom_voronoiCells[site.i] = new d3_geom_voronoiCell(site);
           d3_geom_voronoiAddBeach(site);
-          x0 = site[0], y0 = site[1];
+          x0 = site.x, y0 = site.y;
         }
         site = sites.pop();
       } else if (circle) {
@@ -5065,7 +5124,7 @@ d3 = function() {
     return diagram;
   }
   function d3_geom_voronoiVertexOrder(a, b) {
-    return b[1] - a[1] || b[0] - a[0];
+    return b.y - a.y || b.x - a.x;
   }
   d3.geom.voronoi = function(points) {
     var x = d3_svg_lineX, y = d3_svg_lineY, clipExtent = d3_geom_voronoiClipExtent;
@@ -5073,14 +5132,15 @@ d3 = function() {
     function voronoi(data) {
       var fx = d3_functor(x), fy = d3_functor(y), sites = data.map(function(d, i) {
         return {
-          0: fx(d, i),
-          1: fy(d, i),
+          x: fx(d, i),
+          y: fy(d, i),
           i: i
         };
       }), polygons = [];
       d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell, i) {
         (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
-          return edge.start();
+          var start = edge.start();
+          return [ start.x, start.y ];
         }).reverse() : [ [ clipExtent[0][0], clipExtent[0][1] ], [ clipExtent[1][0], clipExtent[0][1] ], [ clipExtent[1][0], clipExtent[1][1] ], [ clipExtent[0][0], clipExtent[1][1] ] ]).point = data[i];
       });
       return polygons;
