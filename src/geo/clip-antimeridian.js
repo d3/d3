@@ -94,8 +94,6 @@ function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
   }
 }
 
-var d3_geo_clipAntimeridianPoint = [-π, 0];
-
-function d3_geo_clipAntimeridianPolygonContains(polygon) {
-  return d3_geo_pointInPolygon(d3_geo_clipAntimeridianPoint, polygon);
+function d3_geo_clipAntimeridianPolygonContains(rotate, polygon) {
+  return d3_geo_pointInPolygon(rotate(-π, 0), polygon);
 }

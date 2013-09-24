@@ -2709,7 +2709,7 @@ d3 = function() {
     b.prev = a;
   }
   function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
-    return function(listener) {
+    return function(rotate, listener) {
       var line = clipLine(listener);
       var clip = {
         point: point,
@@ -2730,7 +2730,7 @@ d3 = function() {
           segments = d3.merge(segments);
           if (segments.length) {
             d3_geo_clipPolygon(segments, d3_geo_clipSort, null, interpolate, listener);
-          } else if (polygonContains(polygon)) {
+          } else if (polygonContains(rotate.invert, polygon)) {
             listener.lineStart();
             interpolate(null, null, 1, listener);
             listener.lineEnd();
@@ -2747,10 +2747,12 @@ d3 = function() {
         }
       };
       function point(λ, φ) {
-        if (pointVisible(λ, φ)) listener.point(λ, φ);
+        var point = rotate(λ, φ);
+        if (pointVisible(λ = point[0], φ = point[1])) listener.point(λ, φ);
       }
       function pointLine(λ, φ) {
-        line.point(λ, φ);
+        var point = rotate(λ, φ);
+        line.point(point[0], point[1]);
       }
       function lineStart() {
         clip.point = pointLine;
@@ -2763,8 +2765,9 @@ d3 = function() {
       var segments;
       var buffer = d3_geo_clipBufferListener(), ringListener = clipLine(buffer), polygon, ring;
       function pointRing(λ, φ) {
-        ringListener.point(λ, φ);
         ring.push([ λ, φ ]);
+        var point = rotate(λ, φ);
+        ringListener.point(point[0], point[1]);
       }
       function ringStart() {
         ringListener.lineStart();
@@ -2915,9 +2918,8 @@ d3 = function() {
       listener.point(to[0], to[1]);
     }
   }
-  var d3_geo_clipAntimeridianPoint = [ -π, 0 ];
-  function d3_geo_clipAntimeridianPolygonContains(polygon) {
-    return d3_geo_pointInPolygon(d3_geo_clipAntimeridianPoint, polygon);
+  function d3_geo_clipAntimeridianPolygonContains(rotate, polygon) {
+    return d3_geo_pointInPolygon(rotate(-π, 0), polygon);
   }
   function d3_geo_clipCircle(radius) {
     var cr = Math.cos(radius), smallRadius = cr > 0, point = [ radius, 0 ], notHemisphere = Math.abs(cr) > ε, interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
@@ -3014,8 +3016,8 @@ d3 = function() {
       if (φ < -r) code |= 4; else if (φ > r) code |= 8;
       return code;
     }
-    function polygonContains(polygon) {
-      return d3_geo_pointInPolygon(point, polygon);
+    function polygonContains(rotate, polygon) {
+      return d3_geo_pointInPolygon(rotate(point[0], point[1]), polygon);
     }
   }
   var d3_geo_clipExtentMAX = 1e9;
@@ -3668,7 +3670,7 @@ d3 = function() {
     }
     projection.stream = function(output) {
       if (stream) stream.valid = false;
-      stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
+      stream = d3_geo_projectionRadians(preclip(rotatePoint, projectResample(postclip(output))));
       stream.valid = true;
       return stream;
     };
@@ -3710,6 +3712,7 @@ d3 = function() {
     d3.rebind(projection, projectResample, "precision");
     function reset() {
       projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
+      rotatePoint.invert = rotate.invert;
       var center = project(λ, φ);
       δx = x - center[0] * k;
       δy = y + center[1] * k;
@@ -3719,17 +3722,22 @@ d3 = function() {
       if (stream) stream.valid = false, stream = null;
       return projection;
     }
+    function rotatePoint(λ, φ) {
+      var point = rotate(λ, φ);
+      λ = point[0];
+      point[0] = λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ;
+      return point;
+    }
     return function() {
       project = projectAt.apply(this, arguments);
       projection.invert = project.invert && invert;
       return reset();
     };
   }
-  function d3_geo_projectionRadiansRotate(rotate, stream) {
+  function d3_geo_projectionRadians(stream) {
     var transform = new d3_geo_transform(stream);
-    transform.point = function(x, y) {
-      y = rotate(x * d3_radians, y * d3_radians), x = y[0];
-      stream.point(x > π ? x - 2 * π : x < -π ? x + 2 * π : x, y[1]);
+    transform.point = function(λ, φ) {
+      stream.point(λ * d3_radians, φ * d3_radians);
     };
     return transform;
   }

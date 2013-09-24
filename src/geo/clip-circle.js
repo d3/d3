@@ -176,7 +176,7 @@ function d3_geo_clipCircle(radius) {
     return code;
   }
 
-  function polygonContains(polygon) {
-    return d3_geo_pointInPolygon(point, polygon);
+  function polygonContains(rotate, polygon) {
+    return d3_geo_pointInPolygon(rotate(point[0], point[1]), polygon);
   }
 }
