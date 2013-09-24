@@ -3052,16 +3052,18 @@ d3 = function() {
           listener = listener_;
           segments = d3.merge(segments);
           var inside = clean && insidePolygon([ x0, y0 ]), visible = segments.length;
-          if (inside || visible) listener.polygonStart();
-          if (inside) {
-            listener.lineStart();
-            interpolate(null, null, 1, listener);
-            listener.lineEnd();
+          if (inside || visible) {
+            listener.polygonStart();
+            if (inside) {
+              listener.lineStart();
+              interpolate(null, null, 1, listener);
+              listener.lineEnd();
+            }
+            if (visible) {
+              d3_geo_clipPolygon(segments, compare, pointInside, interpolate, listener);
+            }
+            listener.polygonEnd();
           }
-          if (visible) {
-            d3_geo_clipPolygon(segments, compare, pointInside, interpolate, listener);
-          }
-          if (inside || visible) listener.polygonEnd();
           segments = polygon = ring = null;
         }
       };
