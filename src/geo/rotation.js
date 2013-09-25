@@ -22,7 +22,7 @@ function d3_geo_identityRotation(λ, φ) {
   return [λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ, φ];
 }
 
-d3_geo_identityRotation.invert = function(x, y) { return [x, y]; };
+d3_geo_identityRotation.invert = d3_geo_equirectangular;
 
 // Note: |δλ| must be < 2π
 function d3_geo_rotation(δλ, δφ, δγ) {
