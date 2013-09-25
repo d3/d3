@@ -2708,9 +2708,9 @@ d3 = function() {
     a.next = b = array[0];
     b.prev = a;
   }
-  function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
+  function d3_geo_clip(pointVisible, clipLine, interpolate, clipPoint) {
     return function(rotate, listener) {
-      var line = clipLine(listener);
+      var line = clipLine(listener), rotatedClipPoint = rotate.invert(clipPoint[0], clipPoint[1]);
       var clip = {
         point: point,
         lineStart: lineStart,
@@ -2730,7 +2730,7 @@ d3 = function() {
           segments = d3.merge(segments);
           if (segments.length) {
             d3_geo_clipPolygon(segments, d3_geo_clipSort, null, interpolate, listener);
-          } else if (polygonContains(rotate.invert, polygon)) {
+          } else if (d3_geo_pointInPolygon(rotatedClipPoint, polygon)) {
             listener.lineStart();
             interpolate(null, null, 1, listener);
             listener.lineEnd();
@@ -2851,7 +2851,7 @@ d3 = function() {
     }
     return (polarAngle < -ε || polarAngle < ε && d3_geo_areaRingSum < 0) ^ winding & 1;
   }
-  var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate, d3_geo_clipAntimeridianPolygonContains);
+  var d3_geo_clipAntimeridian = d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate, [ -π, 0 ]);
   function d3_geo_clipAntimeridianLine(listener) {
     var λ0 = NaN, φ0 = NaN, sλ0 = NaN, clean;
     return {
@@ -2918,12 +2918,9 @@ d3 = function() {
       listener.point(to[0], to[1]);
     }
   }
-  function d3_geo_clipAntimeridianPolygonContains(rotate, polygon) {
-    return d3_geo_pointInPolygon(rotate(-π, 0), polygon);
-  }
   function d3_geo_clipCircle(radius) {
-    var cr = Math.cos(radius), smallRadius = cr > 0, point = [ radius, 0 ], notHemisphere = Math.abs(cr) > ε, interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
-    return d3_geo_clip(visible, clipLine, interpolate, polygonContains);
+    var cr = Math.cos(radius), smallRadius = cr > 0, notHemisphere = Math.abs(cr) > ε, interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
+    return d3_geo_clip(visible, clipLine, interpolate, [ radius, 0 ]);
     function visible(λ, φ) {
       return Math.cos(λ) * Math.cos(φ) > cr;
     }
@@ -3015,9 +3012,6 @@ d3 = function() {
       if (λ < -r) code |= 1; else if (λ > r) code |= 2;
       if (φ < -r) code |= 4; else if (φ > r) code |= 8;
       return code;
-    }
-    function polygonContains(rotate, polygon) {
-      return d3_geo_pointInPolygon(rotate(point[0], point[1]), polygon);
     }
   }
   var d3_geo_clipExtentMAX = 1e9;

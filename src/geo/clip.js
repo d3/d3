@@ -3,9 +3,10 @@ import "../core/noop";
 import "../math/trigonometry";
 import "clip-polygon";
 
-function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
+function d3_geo_clip(pointVisible, clipLine, interpolate, clipPoint) {
   return function(rotate, listener) {
-    var line = clipLine(listener);
+    var line = clipLine(listener),
+        rotatedClipPoint = rotate.invert(clipPoint[0], clipPoint[1]);
 
     var clip = {
       point: point,
@@ -27,7 +28,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
         segments = d3.merge(segments);
         if (segments.length) {
           d3_geo_clipPolygon(segments, d3_geo_clipSort, null, interpolate, listener);
-        } else if (polygonContains(rotate.invert, polygon)) {
+        } else if (d3_geo_pointInPolygon(rotatedClipPoint, polygon)) {
           listener.lineStart();
           interpolate(null, null, 1, listener);
           listener.lineEnd();
