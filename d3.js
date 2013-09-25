@@ -7845,7 +7845,7 @@ d3 = function() {
       ++lock.count;
       d3.timer(function(elapsed) {
         var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, tweened = [];
-        if (delay <= elapsed) return start(elapsed);
+        if (delay <= elapsed) return start(elapsed - delay);
         d3_timer_replace(start, delay, time);
         function start(elapsed) {
           if (lock.active > id) return stop();
@@ -7857,11 +7857,11 @@ d3 = function() {
             }
           });
           if (tick(elapsed)) return 1;
-          d3_timer_replace(tick, 0, time);
+          d3_timer_replace(tick, delay, time);
         }
         function tick(elapsed) {
           if (lock.active !== id) return stop();
-          var t = (elapsed - delay) / duration, e = ease(t), n = tweened.length;
+          var t = elapsed / duration, e = ease(t), n = tweened.length;
           while (n > 0) {
             tweened[--n].call(node, e);
           }
