@@ -47,7 +47,7 @@ function d3_geo_projectionMutator(projectAt) {
 
   projection.stream = function(output) {
     if (stream) stream.valid = false;
-    stream = d3_geo_projectionRadians(preclip(rotatePoint, projectResample(postclip(output))));
+    stream = d3_geo_projectionRadians(preclip(rotate, projectResample(postclip(output))));
     stream.valid = true; // allow caching by d3.geo.path
     return stream;
   };
@@ -97,7 +97,6 @@ function d3_geo_projectionMutator(projectAt) {
 
   function reset() {
     projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
-    rotatePoint.invert = rotate.invert;
     var center = project(λ, φ);
     δx = x - center[0] * k;
     δy = y + center[1] * k;
@@ -107,13 +106,6 @@ function d3_geo_projectionMutator(projectAt) {
   function invalidate() {
     if (stream) stream.valid = false, stream = null;
     return projection;
-  }
-
-  function rotatePoint(λ, φ) {
-    var point = rotate(λ, φ);
-    λ = point[0];
-    point[0] = λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ;
-    return point;
   }
 
   return function() {

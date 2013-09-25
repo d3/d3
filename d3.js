@@ -3670,7 +3670,7 @@ d3 = function() {
     }
     projection.stream = function(output) {
       if (stream) stream.valid = false;
-      stream = d3_geo_projectionRadians(preclip(rotatePoint, projectResample(postclip(output))));
+      stream = d3_geo_projectionRadians(preclip(rotate, projectResample(postclip(output))));
       stream.valid = true;
       return stream;
     };
@@ -3712,7 +3712,6 @@ d3 = function() {
     d3.rebind(projection, projectResample, "precision");
     function reset() {
       projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
-      rotatePoint.invert = rotate.invert;
       var center = project(λ, φ);
       δx = x - center[0] * k;
       δy = y + center[1] * k;
@@ -3721,12 +3720,6 @@ d3 = function() {
     function invalidate() {
       if (stream) stream.valid = false, stream = null;
       return projection;
-    }
-    function rotatePoint(λ, φ) {
-      var point = rotate(λ, φ);
-      λ = point[0];
-      point[0] = λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ;
-      return point;
     }
     return function() {
       project = projectAt.apply(this, arguments);
@@ -3759,8 +3752,14 @@ d3 = function() {
     };
     return forward;
   };
+  function d3_geo_identityRotation(λ, φ) {
+    return [ λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ, φ ];
+  }
+  d3_geo_identityRotation.invert = function(x, y) {
+    return [ x, y ];
+  };
   function d3_geo_rotation(δλ, δφ, δγ) {
-    return δλ ? δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ)) : d3_geo_rotationλ(δλ) : δφ || δγ ? d3_geo_rotationφγ(δφ, δγ) : d3_geo_equirectangular;
+    return δλ ? δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ)) : d3_geo_rotationλ(δλ) : δφ || δγ ? d3_geo_rotationφγ(δφ, δγ) : d3_geo_identityRotation;
   }
   function d3_geo_forwardRotationλ(δλ) {
     return function(λ, φ) {
