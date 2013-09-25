@@ -3046,19 +3046,24 @@ d3 = function() {
         },
         polygonEnd: function() {
           listener = listener_;
-          if ((segments = d3.merge(segments)).length) {
+          segments = d3.merge(segments);
+          var inside = clean && insidePolygon([ x0, y0 ]), visible = segments.length;
+          if (inside || visible) {
             listener.polygonStart();
-            d3_geo_clipPolygon(segments, compare, inside, interpolate, listener);
+            if (inside) {
+              listener.lineStart();
+              interpolate(null, null, 1, listener);
+              listener.lineEnd();
+            }
+            if (visible) {
+              d3_geo_clipPolygon(segments, compare, pointInside, interpolate, listener);
+            }
             listener.polygonEnd();
-          } else if (insidePolygon([ x0, y0 ])) {
-            listener.polygonStart(), listener.lineStart();
-            interpolate(null, null, 1, listener);
-            listener.lineEnd(), listener.polygonEnd();
           }
           segments = polygon = ring = null;
         }
       };
-      function inside(point) {
+      function pointInside(point) {
         var a = corner(point, -1), i = insidePolygon([ a === 0 || a === 3 ? x0 : x1, a > 1 ? y1 : y0 ]);
         return i;
       }
@@ -3090,17 +3095,17 @@ d3 = function() {
           listener.point(to[0], to[1]);
         }
       }
-      function visible(x, y) {
+      function pointVisible(x, y) {
         return x0 <= x && x <= x1 && y0 <= y && y <= y1;
       }
       function point(x, y) {
-        if (visible(x, y)) listener.point(x, y);
+        if (pointVisible(x, y)) listener.point(x, y);
       }
-      var x__, y__, v__, x_, y_, v_, first;
+      var x__, y__, v__, x_, y_, v_, first, clean;
       function lineStart() {
         clip.point = linePoint;
         if (polygon) polygon.push(ring = []);
-        first = true;
+        first = clean = true;
         v_ = false;
         x_ = y_ = NaN;
       }
@@ -3116,7 +3121,7 @@ d3 = function() {
       function linePoint(x, y) {
         x = Math.max(-d3_geo_clipExtentMAX, Math.min(d3_geo_clipExtentMAX, x));
         y = Math.max(-d3_geo_clipExtentMAX, Math.min(d3_geo_clipExtentMAX, y));
-        var v = visible(x, y);
+        var v = pointVisible(x, y);
         if (polygon) ring.push([ x, y ]);
         if (first) {
           x__ = x, y__ = y, v__ = v;
@@ -3135,9 +3140,11 @@ d3 = function() {
               }
               listener.point(b[0], b[1]);
               if (!v) listener.lineEnd();
+              clean = false;
             } else if (v) {
               listener.lineStart();
               listener.point(x, y);
+              clean = false;
             }
           }
         }
