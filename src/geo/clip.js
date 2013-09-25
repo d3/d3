@@ -3,9 +3,10 @@ import "../core/noop";
 import "../math/trigonometry";
 import "clip-polygon";
 
-function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
-  return function(listener) {
-    var line = clipLine(listener);
+function d3_geo_clip(pointVisible, clipLine, interpolate, clipPoint) {
+  return function(rotate, listener) {
+    var line = clipLine(listener),
+        rotatedClipPoint = rotate.invert(clipPoint[0], clipPoint[1]);
 
     var clip = {
       point: point,
@@ -27,7 +28,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
         segments = d3.merge(segments);
         if (segments.length) {
           d3_geo_clipPolygon(segments, d3_geo_clipSort, null, interpolate, listener);
-        } else if (polygonContains(polygon)) {
+        } else if (d3_geo_pointInPolygon(rotatedClipPoint, polygon)) {
           listener.lineStart();
           interpolate(null, null, 1, listener);
           listener.lineEnd();
@@ -44,8 +45,14 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
       }
     };
 
-    function point(λ, φ) { if (pointVisible(λ, φ)) listener.point(λ, φ); }
-    function pointLine(λ, φ) { line.point(λ, φ); }
+    function point(λ, φ) {
+      var point = rotate(λ, φ);
+      if (pointVisible(λ = point[0], φ = point[1])) listener.point(λ, φ);
+    }
+    function pointLine(λ, φ) {
+      var point = rotate(λ, φ);
+      line.point(point[0], point[1]);
+    }
     function lineStart() { clip.point = pointLine; line.lineStart(); }
     function lineEnd() { clip.point = point; line.lineEnd(); }
 
@@ -57,8 +64,9 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, polygonContains) {
         ring;
 
     function pointRing(λ, φ) {
-      ringListener.point(λ, φ);
       ring.push([λ, φ]);
+      var point = rotate(λ, φ);
+      ringListener.point(point[0], point[1]);
     }
 
     function ringStart() {
@@ -130,6 +138,6 @@ function d3_geo_clipBufferListener() {
 // Intersection points are sorted along the clip edge. For both antimeridian
 // cutting and circle clipping, the same comparison is used.
 function d3_geo_clipSort(a, b) {
-  return ((a = a.point)[0] < 0 ? a[1] - π / 2 - ε : π / 2 - a[1])
-       - ((b = b.point)[0] < 0 ? b[1] - π / 2 - ε : π / 2 - b[1]);
+  return ((a = a.point)[0] < 0 ? a[1] - halfπ - ε : halfπ - a[1])
+       - ((b = b.point)[0] < 0 ? b[1] - halfπ - ε : halfπ - b[1]);
 }
