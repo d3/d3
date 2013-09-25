@@ -83,7 +83,7 @@ function d3_transitionNode(node, i, id, inherit) {
           }
         });
 
-        if (tick(elapsed)) return 1;
+        if (tick(elapsed || 1)) return 1;
         d3_timer_replace(tick, delay, time);
       }
 

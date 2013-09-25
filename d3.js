@@ -7856,7 +7856,7 @@ d3 = function() {
               tweened.push(value);
             }
           });
-          if (tick(elapsed)) return 1;
+          if (tick(elapsed || 1)) return 1;
           d3_timer_replace(tick, delay, time);
         }
         function tick(elapsed) {
