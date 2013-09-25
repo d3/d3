@@ -79,8 +79,8 @@ d3.svg.arc = function() {
   return arc;
 };
 
-var d3_svg_arcOffset = -π / 2,
-    d3_svg_arcMax = 2 * π - 1e-6;
+var d3_svg_arcOffset = -halfπ,
+    d3_svg_arcMax = τ - ε;
 
 function d3_svg_arcInnerRadius(d) {
   return d.innerRadius;

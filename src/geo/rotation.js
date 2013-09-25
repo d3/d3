@@ -19,7 +19,7 @@ d3.geo.rotation = function(rotate) {
 };
 
 function d3_geo_identityRotation(λ, φ) {
-  return [λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ, φ];
+  return [λ > π ? λ - τ : λ < -π ? λ + τ : λ, φ];
 }
 
 d3_geo_identityRotation.invert = d3_geo_equirectangular;
@@ -34,7 +34,7 @@ function d3_geo_rotation(δλ, δφ, δγ) {
 
 function d3_geo_forwardRotationλ(δλ) {
   return function(λ, φ) {
-    return λ += δλ, [λ > π ? λ - 2 * π : λ < -π ? λ + 2 * π : λ, φ];
+    return λ += δλ, [λ > π ? λ - τ : λ < -π ? λ + τ : λ, φ];
   };
 }
 
