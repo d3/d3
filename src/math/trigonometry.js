@@ -19,15 +19,15 @@ function d3_asin(x) {
 }
 
 function d3_sinh(x) {
-  return (Math.exp(x) - Math.exp(-x)) / 2;
+  return ((x = Math.exp(x)) - 1 / x) / 2;
 }
 
 function d3_cosh(x) {
-  return (Math.exp(x) + Math.exp(-x)) / 2;
+  return ((x = Math.exp(x)) + 1 / x) / 2;
 }
 
 function d3_tanh(x) {
-  return d3_sinh(x) / d3_cosh(x);
+  return ((x = Math.exp(2 * x)) - 1) / (x + 1);
 }
 
 function d3_haversin(x) {
