@@ -72,6 +72,15 @@ suite.addBatch({
         assert.inDelta(g.selectAll(".tick").data(), [4, 5, 6], 1e-4);
         assert.inDelta(g.selectAll(".tick").data().map(x), [30, 60, 90], 1e-4);
         assert.equal(g.select("path").attr("d"), "M0,6V0H90V6");
+      },
+      "when an ordinal scale, does not pollute the scale’s domain with old values": function(d3) {
+        var x = _.scale.ordinal().domain(["A", "B", "C"]).range([10, 50, 90]),
+            a = d3.svg.axis().scale(x),
+            g = d3.select("body").html("").append("g").call(a),
+            path = g.selectAll("path");
+        x.domain(["D", "E"]);
+        g.call(a);
+        assert.deepEqual(x.domain(), ["D", "E"]);
       }
     },
 
@@ -305,6 +314,7 @@ suite.addBatch({
       "passes any arguments to the scale's ticks function": function(d3) {
         var x = _.scale.linear(), b = {}, a = d3.svg.axis().ticks(b, "%").scale(x), aa = [],
             g = d3.select("body").html("").append("g");
+        x.copy = function() { return x; };
         x.ticks = function() { aa.push(arguments); return [42]; };
         g.call(a);
         assert.equal(aa.length, 1);
@@ -318,12 +328,8 @@ suite.addBatch({
             a = d3.svg.axis().scale(x).ticks(b, "%"),
             g = d3.select("body").html("").append("g"),
             aa = [];
-
-        x.tickFormat = function() {
-          aa.push(arguments);
-          return String;
-        };
-
+        x.copy = function() { return x; };
+        x.tickFormat = function() { aa.push(arguments); return String; };
         g.call(a);
         assert.equal(aa.length, 1);
         assert.equal(aa[0].length, 2);
@@ -367,12 +373,8 @@ suite.addBatch({
             a = d3.svg.axis().scale(x).ticks(10).tickValues([1, 2, 3]),
             g = d3.select("body").html("").append("g"),
             aa = [];
-
-        x.tickFormat = function() {
-          aa.push(arguments);
-          return String;
-        };
-
+        x.copy = function() { return x; };
+        x.tickFormat = function() { aa.push(arguments); return String; };
         g.call(a);
         assert.equal(aa.length, 1);
         assert.equal(aa[0].length, 1);
@@ -403,13 +405,8 @@ suite.addBatch({
       "when null, uses the scale's tick format": function(d3) {
         var x = _.scale.linear(), a = d3.svg.axis().scale(x),
             g = d3.select("body").html("").append("g");
-
-        x.tickFormat = function() {
-          return function(d) {
-            return "foo-" + d;
-          };
-        };
-
+        x.copy = function() { return x; };
+        x.tickFormat = function() { return function(d) { return "foo-" + d; }; };
         g.call(a);
         var t = g.selectAll("g text");
         assert.equal(t.text(), "foo-0");
