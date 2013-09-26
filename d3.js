@@ -273,7 +273,7 @@ d3 = function() {
       }
     }
   });
-  var d3_map_prefix = "\0", d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
+  var d3_map_prefix = "\x00", d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
   d3.nest = function() {
     var nest = {}, keys = [], sortKeys = [], sortValues, rollup;
     function map(mapType, array, depth) {
