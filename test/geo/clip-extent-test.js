@@ -109,6 +109,40 @@ suite.addBatch({
         assert.isTrue(stream.valid);
         clip.extent([[0, 0], [960, 500]]);
         assert.isFalse(stream.valid);
+      },
+      "a polygon that encloses the extent, with a hole": function(d3) {
+        var clip = d3.geo.clipExtent().extent([[1, 1], [9, 9]]),
+            stream = clip.stream(testContext);
+        stream.polygonStart();
+        stream.lineStart();
+        stream.point(0, 0);
+        stream.point(10, 0);
+        stream.point(10, 10);
+        stream.point(0, 10);
+        stream.lineEnd();
+        stream.lineStart();
+        stream.point(4, 4);
+        stream.point(4, 6);
+        stream.point(6, 6);
+        stream.point(6, 4);
+        stream.lineEnd();
+        stream.polygonEnd();
+        assert.deepEqual(testContext.buffer(), [
+          {type: "polygonStart"},
+          {type: "lineStart"},
+          {type: "point", x: 1, y: 1},
+          {type: "point", x: 9, y: 1},
+          {type: "point", x: 9, y: 9},
+          {type: "point", x: 1, y: 9},
+          {type: "lineEnd"},
+          {type: "lineStart"},
+          {type: "point", x: 4, y: 4},
+          {type: "point", x: 4, y: 6},
+          {type: "point", x: 6, y: 6},
+          {type: "point", x: 6, y: 4},
+          {type: "lineEnd"},
+          {type: "polygonEnd"}
+        ]);
       }
     }
   }
