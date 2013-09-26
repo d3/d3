@@ -1,8 +1,10 @@
+#!/usr/bin/env node
+
 var fs = require("fs"),
     d3 = require("../../");
 
 var formatNumber = d3.format(",.02r"),
-    projection = d3.geo.stereographic().clipAngle(150),
+    projection = d3.geo.stereographic().clipAngle(150).clipExtent([[0, 0], [960, 500]]),
     path = d3.geo.path().projection(projection),
     graticule = d3.geo.graticule().step([1, 1]),
     circle = d3.geo.circle().angle(30),

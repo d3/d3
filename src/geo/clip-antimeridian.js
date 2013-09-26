@@ -7,7 +7,7 @@ var d3_geo_clipAntimeridian = d3_geo_clip(
     d3_true,
     d3_geo_clipAntimeridianLine,
     d3_geo_clipAntimeridianInterpolate,
-    d3_geo_clipAntimeridianPolygonContains);
+    [-π, -π / 2]);
 
 // Takes a line and cuts into visible segments. Return values:
 //   0: there were intersections or the line was empty.
@@ -29,7 +29,7 @@ function d3_geo_clipAntimeridianLine(listener) {
       var sλ1 = λ1 > 0 ? π : -π,
           dλ = Math.abs(λ1 - λ0);
       if (Math.abs(dλ - π) < ε) { // line crosses a pole
-        listener.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? π / 2 : -π / 2);
+        listener.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? halfπ : -halfπ);
         listener.point(sλ0, φ0);
         listener.lineEnd();
         listener.lineStart();
@@ -73,7 +73,7 @@ function d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1) {
 function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
   var φ;
   if (from == null) {
-    φ = direction * π / 2;
+    φ = direction * halfπ;
     listener.point(-π,  φ);
     listener.point( 0,  φ);
     listener.point( π,  φ);
@@ -92,10 +92,4 @@ function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
   } else {
     listener.point(to[0], to[1]);
   }
-}
-
-var d3_geo_clipAntimeridianPoint = [-π, 0];
-
-function d3_geo_clipAntimeridianPolygonContains(polygon) {
-  return d3_geo_pointInPolygon(d3_geo_clipAntimeridianPoint, polygon);
 }

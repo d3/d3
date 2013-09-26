@@ -9,11 +9,10 @@ import "point-in-polygon";
 function d3_geo_clipCircle(radius) {
   var cr = Math.cos(radius),
       smallRadius = cr > 0,
-      point = [radius, 0],
       notHemisphere = Math.abs(cr) > ε, // TODO optimise for this common case
       interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
 
-  return d3_geo_clip(visible, clipLine, interpolate, polygonContains);
+  return d3_geo_clip(visible, clipLine, interpolate, smallRadius ? [0, -radius] : [-π, radius - π]);
 
   function visible(λ, φ) {
     return Math.cos(λ) * Math.cos(φ) > cr;
@@ -174,9 +173,5 @@ function d3_geo_clipCircle(radius) {
     if (φ < -r) code |= 4; // below
     else if (φ > r) code |= 8; // above
     return code;
-  }
-
-  function polygonContains(polygon) {
-    return d3_geo_pointInPolygon(point, polygon);
   }
 }

@@ -7,7 +7,7 @@ d3.layout.pie = function() {
   var value = Number,
       sort = d3_layout_pieSortByValue,
       startAngle = 0,
-      endAngle = 2 * π;
+      endAngle = τ;
 
   function pie(data) {
 

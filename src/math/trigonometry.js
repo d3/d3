@@ -1,4 +1,6 @@
 var π = Math.PI,
+    τ = 2 * π,
+    halfπ = π / 2,
     ε = 1e-6,
     ε2 = ε * ε,
     d3_radians = π / 180,
@@ -13,19 +15,19 @@ function d3_acos(x) {
 }
 
 function d3_asin(x) {
-  return x > 1 ? π / 2 : x < -1 ? -π / 2 : Math.asin(x);
+  return x > 1 ? halfπ : x < -1 ? -halfπ : Math.asin(x);
 }
 
 function d3_sinh(x) {
-  return (Math.exp(x) - Math.exp(-x)) / 2;
+  return ((x = Math.exp(x)) - 1 / x) / 2;
 }
 
 function d3_cosh(x) {
-  return (Math.exp(x) + Math.exp(-x)) / 2;
+  return ((x = Math.exp(x)) + 1 / x) / 2;
 }
 
 function d3_tanh(x) {
-  return d3_sinh(x) / d3_cosh(x);
+  return ((x = Math.exp(2 * x)) - 1) / (x + 1);
 }
 
 function d3_haversin(x) {
