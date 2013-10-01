@@ -1,4 +1,6 @@
 d3 = function() {
+  'use strict';
+
   var d3 = {
     version: "3.3.6"
   };
@@ -1055,10 +1057,10 @@ d3 = function() {
     return function(suppressClick) {
       w.on(name, null);
       style[d3_event_dragSelect] = select;
-      if (suppressClick) {
-        function off() {
+	  function off() {
           w.on(click, null);
-        }
+      }
+      if (suppressClick) {
         w.on(click, function() {
           d3_eventPreventDefault();
           off();
