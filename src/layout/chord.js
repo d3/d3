@@ -15,9 +15,9 @@ d3.layout.chord = function() {
 
   function relayout() {
     var subgroups = {},
-        groupSums = [],
+        groupSums = new Array(n),
         groupIndex = d3.range(n),
-        subgroupIndex = [],
+        subgroupIndex = new Array(n),
         k,
         x,
         x0,
@@ -28,12 +28,12 @@ d3.layout.chord = function() {
     groups = [];
 
     // Compute the sum.
-    k = 0, i = -1; while (++i < n) {
-      x = 0, j = -1; while (++j < n) {
+    k = 0, i = n; while (i--) {
+      x = 0, j = n; while (j--) {
         x += matrix[i][j];
       }
-      groupSums.push(x);
-      subgroupIndex.push(d3.range(n));
+      groupSums[i] = x;
+      subgroupIndex[i] = d3.range(n);
       k += x;
     }
 
