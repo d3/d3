@@ -8,7 +8,7 @@ d3.layout.bundle = function() {
   return function(links) {
     var i = links.length,
         paths = new Array(i);
-    while (i--) paths[i] = d3_layout_bundlePath(links[i]);
+    if(i) while (i--) paths[i] = d3_layout_bundlePath(links[i]);
     return paths;
   };
 };

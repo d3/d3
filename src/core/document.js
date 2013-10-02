@@ -10,7 +10,7 @@ try {
 } catch(e) {
   d3_array = function(list) {
     var i = list.length, array = new Array(i);
-    while (i--) array[i] = list[i];
+    if(i) while (i--) array[i] = list[i];
     return array;
   };
 }
