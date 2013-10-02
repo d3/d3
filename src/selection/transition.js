@@ -7,7 +7,7 @@ d3_selectionPrototype.transition = function() {
       subgroups = new Array(m),
       subgroup,
       group,
-      transition = d3_transitionInherit || {time: Date.now(), ease: d3_ease_cubicInOut, delay: 0, duration: 250}
+      transition = d3_transitionInherit || {time: Date.now(), ease: d3_ease_cubicInOut, delay: 0, duration: 250},
       j,
       i;
 
