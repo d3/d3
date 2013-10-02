@@ -3487,6 +3487,33 @@ d3 = function() {
     }
     return stream;
   }
+  var d3_geo_pathDistanceSum, d3_geo_pathDistancePolygon, d3_geo_pathDistance = {
+    point: d3_noop,
+    lineStart: d3_geo_pathDistanceLineStart,
+    lineEnd: d3_noop,
+    polygonStart: function() {
+      d3_geo_pathDistancePolygon = true;
+    },
+    polygonEnd: function() {
+      d3_geo_pathDistancePolygon = false;
+    }
+  };
+  function d3_geo_pathDistanceLineStart() {
+    var x00, y00, x0, y0;
+    d3_geo_pathDistance.point = function(x, y) {
+      d3_geo_pathDistance.point = nextPoint;
+      x00 = x0 = x, y00 = y0 = y;
+    };
+    d3_geo_pathDistance.lineEnd = function() {
+      if (d3_geo_pathDistancePolygon) nextPoint(x00, y00);
+      d3_geo_pathDistance.point = d3_geo_pathDistance.lineEnd = d3_noop;
+    };
+    function nextPoint(x, y) {
+      var dx = x - x0, dy = y - y0;
+      d3_geo_pathDistanceSum += Math.sqrt(dx * dx + dy * dy);
+      x0 = x, y0 = y;
+    }
+  }
   function d3_geo_resample(project) {
     var δ2 = .5, cosMinDistance = Math.cos(30 * d3_radians), maxDepth = 16;
     function resample(stream) {
@@ -3612,6 +3639,11 @@ d3 = function() {
       d3_geo_pathBoundsX1 = d3_geo_pathBoundsY1 = -(d3_geo_pathBoundsX0 = d3_geo_pathBoundsY0 = Infinity);
       d3.geo.stream(object, projectStream(d3_geo_pathBounds));
       return [ [ d3_geo_pathBoundsX0, d3_geo_pathBoundsY0 ], [ d3_geo_pathBoundsX1, d3_geo_pathBoundsY1 ] ];
+    };
+    path.distance = function(object) {
+      d3_geo_pathDistanceSum = 0;
+      d3.geo.stream(object, projectStream(d3_geo_pathDistance));
+      return d3_geo_pathDistanceSum;
     };
     path.projection = function(_) {
       if (!arguments.length) return projection;

@@ -122,6 +122,24 @@ suite.addBatch({
         }
       },
 
+      "distance": {
+        topic: function(p) {
+          return p.distance;
+        },
+        "of a point": function(distance) {
+          assert.strictEqual(distance({type: "Point", coordinates: [30, 0]}), 0);
+        },
+        "of a line with one segment": function(distance) {
+          assert.strictEqual(distance({type: "LineString", coordinates: [[30, 0], [0, 0]]}), 150);
+        },
+        "of a line with two segments": function(distance) {
+          assert.strictEqual(distance({type: "LineString", coordinates: [[30, 0], [0, 0], [30, 0]]}), 300);
+        },
+        "of a polygon": function(distance) {
+          assert.strictEqual(distance({type: "Polygon", coordinates: [[[0, 0], [0, 30], [30, 30], [30, 0], [0, 0]]]}), 600);
+        }
+      },
+
       "centroid": {
         topic: function(p) {
           return p.centroid;
