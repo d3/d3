@@ -1,15 +1,16 @@
 import "selection";
 
 d3_selectionPrototype.filter = function(filter) {
-  var subgroups = [],
+  var m = this.length,
+      subgroups = new Array(m),
       subgroup,
       group,
       node;
 
   if (typeof filter !== "function") filter = d3_selection_filter(filter);
 
-  for (var j = 0, m = this.length; j < m; j++) {
-    subgroups.push(subgroup = []);
+  for (var j = 0; j < m; j++) {
+    subgroups[j] = subgroup = [];
     subgroup.parentNode = (group = this[j]).parentNode;
     for (var i = 0, n = group.length; i < n; i++) {
       if ((node = group[i]) && filter.call(node, node.__data__, i)) {
