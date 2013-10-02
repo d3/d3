@@ -8,7 +8,8 @@ d3_selectionPrototype.select = function(selector) {
       group,
       node,
       j,
-      i;
+      i,
+      n;
 
   selector = d3_selection_selector(selector);
 

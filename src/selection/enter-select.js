@@ -10,7 +10,8 @@ d3_selection_enterPrototype.select = function(selector) {
       group,
       node,
       j,
-      i;
+      i,
+      n;
 
   for (j = -1; ++j < m;) {
     upgroup = (group = this[j]).update;

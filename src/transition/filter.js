@@ -8,7 +8,8 @@ d3_transitionPrototype.filter = function(filter) {
       group,
       node,
       j,
-      i;
+      i,
+      n;
 
   if (typeof filter !== "function") filter = d3_selection_filter(filter);
 

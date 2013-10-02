@@ -10,7 +10,8 @@ d3_transitionPrototype.select = function(selector) {
       group,
       node,
       j,
-      i;
+      i,
+      n;
 
   selector = d3_selection_selector(selector);
 

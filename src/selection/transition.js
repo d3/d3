@@ -9,7 +9,8 @@ d3_selectionPrototype.transition = function() {
       group,
       transition = d3_transitionInherit || {time: Date.now(), ease: d3_ease_cubicInOut, delay: 0, duration: 250},
       j,
-      i;
+      i,
+      n;
 
   for (var j = -1; ++j < m;) {
     subgroups[j] = subgroup = new Array(n = (group = this[j]).length);
