@@ -3,7 +3,7 @@ import "enter";
 
 d3_selection_enterPrototype.select = function(selector) {
   var m = this.length,
-      subgroups = new Array(m),      
+      subgroups = new Array(m),
       subgroup,
       subnode,
       upgroup,

@@ -1,23 +1,26 @@
 import "selection";
 
 d3_selectionPrototype.select = function(selector) {
-  var subgroups = [],
+  var m = this.length,
+      subgroups = new Array(m),
       subgroup,
       subnode,
       group,
-      node;
+      node,
+      j,
+      i;
 
   selector = d3_selection_selector(selector);
 
-  for (var j = -1, m = this.length; ++j < m;) {
-    subgroups.push(subgroup = []);
+  for (j = -1, ; ++j < m;) {
+    subgroups[i] = subgroup = new Array(n = group.length);
     subgroup.parentNode = (group = this[j]).parentNode;
-    for (var i = -1, n = group.length; ++i < n;) {
+    for (i = -1; ++i < n;) {
       if (node = group[i]) {
-        subgroup.push(subnode = selector.call(node, node.__data__, i, j));
+        subgroup[i] = subnode = selector.call(node, node.__data__, i, j);
         if (subnode && "__data__" in node) subnode.__data__ = node.__data__;
       } else {
-        subgroup.push(null);
+        subgroup[i] = null;
       }
     }
   }
