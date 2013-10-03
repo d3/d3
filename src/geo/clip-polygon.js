@@ -70,7 +70,7 @@ function d3_geo_clipPolygon(segments, compare, clipStartInside, pointInPolygon, 
         current.visited = current.other.visited = true;
         if (current.entry) {
           if (current.subject) {
-            for (var i = 0; i < points.length; i++) listener.point((point = points[i])[0], point[1]);
+            for (var i = 0, n = points.length; i < n; ++i) listener.point((point = points[i])[0], point[1]);
           } else {
             interpolate(current.point, current.next.point, 1, listener);
           }
@@ -92,15 +92,16 @@ function d3_geo_clipPolygon(segments, compare, clipStartInside, pointInPolygon, 
     }
 
     if (n = rings.length) {
-      var exteriors = listener.buffer();
+      var exteriors = listener.buffer(),
+          exteriorPolygon = [null];
       listener = listener_;
       for (var j = 0, m = exteriors.length; j < m; ++j) {
-        var exterior = exteriors[j];
+        var exterior = exteriorPolygon[0] = exteriors[j];
         listener.polygonStart();
         d3_geo_clipPolygonStreamRing(exterior, listener);
         for (var i = 0; i < n; ++i) {
           var ring = rings[i];
-          if (ring && pointInPolygon(ring[0], [exterior])) {
+          if (ring && pointInPolygon(ring[0], exteriorPolygon)) {
             d3_geo_clipPolygonStreamRing(ring, listener);
             rings[i] = null;
           }
