@@ -2622,40 +2622,12 @@ d3 = function() {
         rings.push(segment);
         continue;
       }
-      var a = {
-        point: p0,
-        points: segment,
-        other: null,
-        visited: false,
-        entry: true,
-        subject: true
-      }, b = {
-        point: p0,
-        points: [ p0 ],
-        other: a,
-        visited: false,
-        entry: false,
-        subject: false
-      };
+      var a = new d3_geo_clipPolygonIntersection(p0, segment, null, true), b = new d3_geo_clipPolygonIntersection(p0, null, a, false);
       a.other = b;
       subject.push(a);
       clip.push(b);
-      a = {
-        point: p1,
-        points: [ p1 ],
-        other: null,
-        visited: false,
-        entry: false,
-        subject: true
-      };
-      b = {
-        point: p1,
-        points: [ p1 ],
-        other: a,
-        visited: false,
-        entry: true,
-        subject: false
-      };
+      a = new d3_geo_clipPolygonIntersection(p1, segment, null, false);
+      b = new d3_geo_clipPolygonIntersection(p1, null, a, true);
       a.other = b;
       subject.push(a);
       clip.push(b);
@@ -2667,35 +2639,37 @@ d3 = function() {
       for (var i = 0, entry = clipStartInside, n = clip.length; i < n; ++i) {
         clip[i].entry = entry = !entry;
       }
-      var start = subject[0], current, points, point, listener_ = listener;
+      var start = subject[0], listener_ = listener, point;
       if (rings.length) listener = d3_geo_clipBufferListener();
       while (1) {
-        current = start;
+        var current = start, isSubject = true;
         while (current.visited) if ((current = current.next) === start) break;
         if (current.visited) break;
-        points = current.points;
         listener.polygonStart();
         listener.lineStart();
         do {
           current.visited = current.other.visited = true;
           if (current.entry) {
-            if (current.subject) {
-              for (var i = 0, n = points.length; i < n; ++i) listener.point((point = points[i])[0], point[1]);
+            if (isSubject) {
+              for (var i = 0, points = current.points, n = points.length; i < n; ++i) {
+                listener.point((point = points[i])[0], point[1]);
+              }
             } else {
               interpolate(current.point, current.next.point, 1, listener);
             }
             current = current.next;
           } else {
-            if (current.subject) {
-              points = current.prev.points;
-              for (var i = points.length; --i >= 0; ) listener.point((point = points[i])[0], point[1]);
+            if (isSubject) {
+              for (var points = current.points, i = points.length; --i >= 0; ) {
+                listener.point((point = points[i])[0], point[1]);
+              }
             } else {
               interpolate(current.point, current.prev.point, -1, listener);
             }
             current = current.prev;
           }
           current = current.other;
-          points = current.points;
+          isSubject = !isSubject;
         } while (!current.visited);
         listener.lineEnd();
         listener.polygonEnd();
@@ -2747,6 +2721,14 @@ d3 = function() {
     }
     a.next = b = array[0];
     b.prev = a;
+  }
+  function d3_geo_clipPolygonIntersection(point, points, other, entry) {
+    this.point = point;
+    this.points = points;
+    this.other = other;
+    this.entry = entry;
+    this.visited = false;
+    this.next = this.prev = null;
   }
   function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
     return function(rotate, listener) {
