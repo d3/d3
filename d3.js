@@ -2841,7 +2841,7 @@ d3 = function() {
         point = ring[j];
         var λ = point[0], φ = point[1] / 2 + π / 4, sinφ = Math.sin(φ), cosφ = Math.cos(φ), dλ = λ - λ0, antimeridian = Math.abs(dλ) > π, k = sinφ0 * sinφ;
         d3_geo_areaRingSum.add(Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ)));
-        polarAngle += antimeridian ? dλ + (dλ >= 0 ? 2 : -2) * π : dλ;
+        polarAngle += antimeridian ? dλ + (dλ >= 0 ? τ : -τ) : dλ;
         if (antimeridian ^ λ0 >= meridian ^ λ >= meridian) {
           var arc = d3_geo_cartesianCross(d3_geo_cartesian(point0), d3_geo_cartesian(point));
           d3_geo_cartesianNormalize(arc);
@@ -2916,7 +2916,7 @@ d3 = function() {
       listener.point(-π, 0);
       listener.point(-π, φ);
     } else if (Math.abs(from[0] - to[0]) > ε) {
-      var s = (from[0] < to[0] ? 1 : -1) * π;
+      var s = from[0] < to[0] ? π : -π;
       φ = direction * s / 2;
       listener.point(-s, φ);
       listener.point(0, φ);
