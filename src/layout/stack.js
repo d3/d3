@@ -143,11 +143,11 @@ var d3_layout_stackOffsets = d3.map({
         m = data[0].length,
         sums = new Array(m),
         max = 0,
-        j = m,
+        j = -1,
         i,
         o,
         y0 = [];
-    while(j--) {
+    while(++j < m) {
       for (i = 0, o = 0; i < n; i++) o += data[i][j][1];
       if (o > max) max = o;
       sums[j] = o;
