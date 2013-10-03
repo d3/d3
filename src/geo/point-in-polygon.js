@@ -34,7 +34,7 @@ function d3_geo_pointInPolygon(point, polygon) {
           k = sinφ0 * sinφ;
       d3_geo_areaRingSum.add(Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ)));
 
-      polarAngle += antimeridian ? dλ + (dλ >= 0 ? 2 : -2) * π : dλ;
+      polarAngle += antimeridian ? dλ + (dλ >= 0 ? τ : -τ): dλ;
 
       // Are the longitudes either side of the point's meridian, and are the
       // latitudes smaller than the parallel?

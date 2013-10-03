@@ -18,23 +18,14 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
         clip.lineEnd = ringEnd;
         segments = [];
         polygon = [];
-        listener.polygonStart();
       },
       polygonEnd: function() {
         clip.point = point;
         clip.lineStart = lineStart;
         clip.lineEnd = lineEnd;
 
-        segments = d3.merge(segments);
-        var clipStartInside = d3_geo_pointInPolygon(rotatedClipStart, polygon);
-        if (segments.length) {
-          d3_geo_clipPolygon(segments, d3_geo_clipSort, clipStartInside, interpolate, listener);
-        } else if (clipStartInside) {
-          listener.lineStart();
-          interpolate(null, null, 1, listener);
-          listener.lineEnd();
-        }
-        listener.polygonEnd();
+        d3_geo_clipPolygon(d3.merge(segments), d3_geo_clipSort, d3_geo_pointInPolygon(rotatedClipStart, polygon), d3_geo_pointInPolygon, interpolate, listener);
+
         segments = polygon = null;
       },
       sphere: function() {
@@ -81,7 +72,6 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
 
       var clean = ringListener.clean(),
           ringSegments = buffer.buffer(),
-          segment,
           n = ringSegments.length;
 
       ring.pop();
@@ -89,18 +79,6 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
       ring = null;
 
       if (!n) return;
-
-      // No intersections.
-      if (clean & 1) {
-        segment = ringSegments[0];
-        var n = segment.length - 1,
-            i = -1,
-            point;
-        listener.lineStart();
-        while (++i < n) listener.point((point = segment[i])[0], point[1]);
-        listener.lineEnd();
-        return;
-      }
 
       // Rejoin connected segments.
       // TODO reuse bufferListener.rejoin()?
@@ -124,6 +102,8 @@ function d3_geo_clipBufferListener() {
     lineStart: function() { lines.push(line = []); },
     point: function(λ, φ) { line.push([λ, φ]); },
     lineEnd: d3_noop,
+    polygonStart: d3_noop,
+    polygonEnd: d3_noop,
     buffer: function() {
       var buffer = lines;
       lines = [];

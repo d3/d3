@@ -1,3 +1,7 @@
 d3.merge = function(arrays) {
-  return Array.prototype.concat.apply([], arrays);
+  var n = arrays.length;
+  return n ? n > 1
+      ? Array.prototype.concat.apply([], arrays)
+      : arrays[0]
+      : [];
 };
