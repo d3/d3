@@ -5114,8 +5114,7 @@ d3 = function() {
         break;
       }
     }
-    d3_geom_voronoiClipEdges(bbox);
-    d3_geom_voronoiCloseCells(bbox);
+    if (bbox) d3_geom_voronoiClipEdges(bbox), d3_geom_voronoiCloseCells(bbox);
     var diagram = {
       cells: d3_geom_voronoiCells,
       edges: d3_geom_voronoiEdges
@@ -5127,17 +5126,11 @@ d3 = function() {
     return b.y - a.y || b.x - a.x;
   }
   d3.geom.voronoi = function(points) {
-    var x = d3_svg_lineX, y = d3_svg_lineY, clipExtent = d3_geom_voronoiClipExtent;
+    var x = d3_svg_lineX, y = d3_svg_lineY, fx = x, fy = y, clipExtent = d3_geom_voronoiClipExtent;
     if (points) return voronoi(points);
     function voronoi(data) {
-      var fx = d3_functor(x), fy = d3_functor(y), sites = data.map(function(d, i) {
-        return {
-          x: fx(d, i),
-          y: fy(d, i),
-          i: i
-        };
-      }), polygons = [];
-      d3_geom_voronoi(sites, clipExtent).cells.forEach(function(cell, i) {
+      var polygons = [];
+      d3_geom_voronoi(sites(data), clipExtent).cells.forEach(function(cell, i) {
         (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
           var start = edge.start();
           return [ start.x, start.y ];
@@ -5145,17 +5138,33 @@ d3 = function() {
       });
       return polygons;
     }
+    function sites(data) {
+      return data.map(function(d, i) {
+        return {
+          x: fx(d, i),
+          y: fy(d, i),
+          i: i
+        };
+      });
+    }
     voronoi.links = function(data) {
-      throw new Error("not yet implemented");
+      return d3_geom_voronoi(sites(data)).edges.filter(function(edge) {
+        return edge.l && edge.r;
+      }).map(function(edge) {
+        return {
+          source: data[edge.l.i],
+          target: data[edge.r.i]
+        };
+      });
     };
     voronoi.triangles = function(data) {
       throw new Error("not yet implemented");
     };
     voronoi.x = function(_) {
-      return arguments.length ? (x = _, voronoi) : x;
+      return arguments.length ? (fx = d3_functor(x = _), voronoi) : x;
     };
     voronoi.y = function(_) {
-      return arguments.length ? (y = _, voronoi) : y;
+      return arguments.length ? (fy = d3_functor(y = _), voronoi) : y;
     };
     voronoi.clipExtent = function(_) {
       if (!arguments.length) return clipExtent === d3_geom_voronoiClipExtent ? null : clipExtent;

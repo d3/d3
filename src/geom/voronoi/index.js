@@ -42,8 +42,7 @@ function d3_geom_voronoi(sites, bbox) {
     }
   }
 
-  d3_geom_voronoiClipEdges(bbox);
-  d3_geom_voronoiCloseCells(bbox);
+  if (bbox) d3_geom_voronoiClipEdges(bbox), d3_geom_voronoiCloseCells(bbox);
 
   var diagram = {cells: d3_geom_voronoiCells, edges: d3_geom_voronoiEdges};
 
