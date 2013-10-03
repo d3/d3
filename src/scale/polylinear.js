@@ -4,7 +4,7 @@ function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
   var k = Math.min(domain.length, range.length),
       u = new Array(k),
       i = new Array(k),
-      j = k;
+      j = -1;
 
   // Handle descending domains.
   if (domain[--k] < domain[0]) {
@@ -12,9 +12,9 @@ function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
     range = range.slice().reverse();
   }
 
-  while (j--) {
-    u[j] = uninterpolate(domain[j - 1], domain[j]);
-    i[j] = interpolate(range[j - 1], range[j]);
+  while (++j < k) {
+    u[j] = uninterpolate(domain[j], domain[j + 1]);
+    i[j] = interpolate(range[j], range[j + 1]);
   }
 
   return function(x) {
