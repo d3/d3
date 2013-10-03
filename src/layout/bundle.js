@@ -6,9 +6,10 @@ import "layout";
 // node. Each path is simply an array of nodes.
 d3.layout.bundle = function() {
   return function(links) {
-    var i = links.length,
-        paths = new Array(i);
-    while (i--) paths[i] = d3_layout_bundlePath(links[i]);
+    var n = links.length,
+        paths = new Array(n),
+        i = -1;
+    while (++i < n) paths[i] = d3_layout_bundlePath(links[i]);
     return paths;
   };
 };

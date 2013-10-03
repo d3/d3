@@ -7,6 +7,7 @@ d3_selectionPrototype.transition = function() {
       subgroups = new Array(m),
       subgroup,
       group,
+      node,
       transition = d3_transitionInherit || {time: Date.now(), ease: d3_ease_cubicInOut, delay: 0, duration: 250},
       j,
       i,
@@ -15,7 +16,8 @@ d3_selectionPrototype.transition = function() {
   for (var j = -1; ++j < m;) {
     subgroups[j] = subgroup = new Array(n = (group = this[j]).length);
     for (i = -1; ++i < n;) {
-      if (subgroup[i] = group[i]) d3_transitionNode(node, i, id, transition);
+      if (node = group[i]) d3_transitionNode(node, i, id, transition);
+      subgroup[i] = group[i];
     }
   }
 

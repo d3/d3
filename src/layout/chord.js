@@ -28,8 +28,8 @@ d3.layout.chord = function() {
     groups = [];
 
     // Compute the sum.
-    k = 0, i = n; while (i--) {
-      x = 0, j = n; while (j--) {
+    k = 0, i = -1; while (++i < n) {
+      x = 0, j = -1; while (++j < n) {
         x += matrix[i][j];
       }
       groupSums[i] = x;
