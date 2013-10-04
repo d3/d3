@@ -24,7 +24,7 @@ d3_transitionPrototype.selectAll = function(selector) {
         transition = node.__transition__[id];
         subnodes = selector.call(node, node.__data__, i, j);
         subgroups[subgroups.length] = subgroup = new Array(o = subnodes.length);
-        if(o) while(o--) {
+        while(o--) {
           if (subnode = subnodes[o]) d3_transitionNode(subnode, o, id, transition);
           subgroup[o] = subnode;
         }
