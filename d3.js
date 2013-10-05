@@ -5166,7 +5166,7 @@ d3 = function() {
           s0 = s1;
           e1 = edges[j].edge;
           s1 = e1.l === site ? e1.r : e1.l;
-          if (d3_geom_voronoiTriangleArea(site, s0, s1) < 0 && i < s0.i && i < s1.i) {
+          if (i < s0.i && i < s1.i && d3_geom_voronoiTriangleArea(site, s0, s1) < 0) {
             triangles.push([ data[i], data[s0.i], data[s1.i] ]);
           }
         }
