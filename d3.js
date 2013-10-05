@@ -5160,13 +5160,15 @@ d3 = function() {
     voronoi.triangles = function(data) {
       var triangles = [];
       d3_geom_voronoi(sites(data)).cells.forEach(function(cell, i) {
-        var site = cell.site, edges = cell.edges, j = -1, m = edges.length, e0, s0, e1 = edges[m - 1].edge, s1 = e1.l === site ? e1.r : e1.l;
+        var site = cell.site, edges = cell.edges.sort(d3_geom_voronoiHalfEdgeOrder), j = -1, m = edges.length, e0, h0, s0, h1 = edges[m - 1], e1 = h1.edge, s1 = e1.l === site ? e1.r : e1.l;
         while (++j < m) {
           e0 = e1;
+          h0 = h1;
           s0 = s1;
-          e1 = edges[j].edge;
+          h1 = edges[j];
+          e1 = h1.edge;
           s1 = e1.l === site ? e1.r : e1.l;
-          if (d3_geom_voronoiTriangleArea(site, s0, s1) < 0) {
+          if (h0.end() === h1.start() && d3_geom_voronoiTriangleArea(site, s0, s1) < 0) {
             triangles.push([ data[i], data[s0.i], data[s1.i] ]);
           }
         }
