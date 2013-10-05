@@ -68,10 +68,8 @@ d3.geom.voronoi = function(points) {
         h1 = edges[j];
         e1 = h1.edge;
         s1 = e1.l === site ? e1.r : e1.l;
-        if (!(e0.seen & 2) && !(e1.seen & 1) && d3_geom_voronoiTriangleArea(site, s0, s1) < 0) {
+        if (d3_geom_voronoiTriangleArea(site, s0, s1) < 0 && i < s0.i && i < s1.i) {
           triangles.push([data[i], data[s0.i], data[s1.i]]);
-          e0.seen |= 1;
-          e1.seen |= 2;
         }
       }
     });
