@@ -55,18 +55,14 @@ d3.geom.voronoi = function(points) {
           j = -1,
           m = edges.length,
           e0,
-          h0,
           s0,
-          h1 = edges[m - 1],
-          e1 = h1.edge,
+          e1 = edges[m - 1].edge,
           s1 = e1.l === site ? e1.r : e1.l;
 
       while (++j < m) {
         e0 = e1;
-        h0 = h1;
         s0 = s1;
-        h1 = edges[j];
-        e1 = h1.edge;
+        e1 = edges[j].edge;
         s1 = e1.l === site ? e1.r : e1.l;
         if (d3_geom_voronoiTriangleArea(site, s0, s1) < 0 && i < s0.i && i < s1.i) {
           triangles.push([data[i], data[s0.i], data[s1.i]]);
