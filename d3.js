@@ -5195,7 +5195,7 @@ d3 = function() {
     return (a.x - c.x) * (b.y - a.y) - (a.x - b.x) * (c.y - a.y);
   }
   d3.geom.delaunay = function(vertices) {
-    throw new Error("not yet implemented");
+    return d3.geom.voronoi().triangles(vertices);
   };
   d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     var x = d3_svg_lineX, y = d3_svg_lineY, compat;
