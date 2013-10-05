@@ -58,8 +58,8 @@ suite.addBatch({
         },
         "returns two cells with the expected geometry": function(cells) {
           assert.inDelta(cells, [
-            [[-178046.7857142857, 1e6], [179096.07142857145, -1e6], [-1e6, 1e6], [1e6, 1e6]],
-            [[-178046.7857142857, 1e6], [179096.07142857145, -1e6], [-1e6, -1e6], [1e6, -1e6]]
+            [[-1e6, 1e6], [-1e6, -1e6], [179096.07142857145, -1e6], [-178046.7857142857, 1e6]],
+            [[1e6, -1e6], [1e6, 1e6], [-178046.7857142857, 1e6], [179096.07142857145, -1e6]]
           ], 1e-6);
         },
         "the returned cells are open polygons": function(cells) {
@@ -100,9 +100,9 @@ suite.addBatch({
         },
         "for three points": function(v) {
           assert.deepEqual(v.links([[200, 200], [500, 250], [760, 300]]), [
-            {source: [200, 200], target: [760, 300]},
+            {source: [200, 200], target: [500, 250]},
             {source: [500, 250], target: [760, 300]},
-            {source: [200, 200], target: [500, 250]}
+            {source: [760, 300], target: [200, 200]}
           ]);
         }
       },
@@ -133,8 +133,8 @@ suite.addBatch({
         },
         "returns two cells with the expected geometry": function(cells) {
           assert.inDelta(cells, [
-            [[480, 1e6], [480, -1e6], [-1e6, -1e6], [-1e6, 1e6]],
-            [[480, -1e6], [480, 1e6], [1e6, -1e6], [1e6, 1e6]]
+            [[-1e6, 1e6], [-1e6, -1e6], [480, -1e6], [480, 1e6]],
+            [[1e6, -1e6], [1e6, 1e6], [480, 1e6], [480, -1e6]]
           ], 1e-6);
         }
       },
@@ -149,9 +149,9 @@ suite.addBatch({
         },
         "for three points": function(v) {
           assert.deepEqual(v.links([{x: 200, y: 200}, {x: 500, y: 250}, {x: 760, y: 300}]), [
-            {source: {x: 200, y: 200}, target: {x: 760, y: 300}},
+            {source: {x: 200, y: 200}, target: {x: 500, y: 250}},
             {source: {x: 500, y: 250}, target: {x: 760, y: 300}},
-            {source: {x: 200, y: 200}, target: {x: 500, y: 250}}
+            {source: {x: 760, y: 300}, target: {x: 200, y: 200}}
           ]);
         }
       }
@@ -170,7 +170,7 @@ suite.addBatch({
         },
         "returns two cells with the expected geometry": function(cells) {
           assert.inDelta(cells, [
-            [[435.35714285715324, 500], [524.6428571428696, 0], [0, 0], [0, 500]],
+            [[0, 500], [0, 0], [524.6428571428696, 0], [435.35714285715324, 500]],
             [[960, 0], [960, 500], [435.35714285715324, 500], [524.6428571428696, 0]]
           ], 1e-6);
         },
