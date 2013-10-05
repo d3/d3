@@ -5158,7 +5158,20 @@ d3 = function() {
       });
     };
     voronoi.triangles = function(data) {
-      throw new Error("not yet implemented");
+      var triangles = [];
+      d3_geom_voronoi(sites(data)).cells.forEach(function(cell, i) {
+        var site = cell.site, edges = cell.edges, j = -1, m = edges.length, e0, s0, e1 = edges[m - 1].edge, s1 = e1.l === site ? e1.r : e1.l;
+        while (++j < m) {
+          e0 = e1;
+          s0 = s1;
+          e1 = edges[j].edge;
+          s1 = e1.l === site ? e1.r : e1.l;
+          if (d3_geom_voronoiTriangleArea(site, s0, s1) < 0) {
+            triangles.push([ data[i], data[s0.i], data[s1.i] ]);
+          }
+        }
+      });
+      return triangles;
     };
     voronoi.x = function(_) {
       return arguments.length ? (fx = d3_functor(x = _), voronoi) : x;
@@ -5178,6 +5191,9 @@ d3 = function() {
     return voronoi;
   };
   var d3_geom_voronoiClipExtent = [ [ -1e6, -1e6 ], [ 1e6, 1e6 ] ];
+  function d3_geom_voronoiTriangleArea(a, b, c) {
+    return (a.x - c.x) * (b.y - a.y) - (a.x - b.x) * (c.y - a.y);
+  }
   d3.geom.delaunay = function(vertices) {
     throw new Error("not yet implemented");
   };
