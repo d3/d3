@@ -723,7 +723,7 @@ d3 = function() {
     name = d3_selection_creator(name);
     before = d3_selection_selector(before);
     return this.select(function() {
-      return this.insertBefore(name.apply(this, arguments), before.apply(this, arguments));
+      return this.insertBefore(name.apply(this, arguments), before.apply(this, arguments) || null);
     });
   };
   d3_selectionPrototype.remove = function() {
