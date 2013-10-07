@@ -36,12 +36,7 @@ function d3_geom_voronoiConnectEdge(edge, extent) {
       fm,
       fb;
 
-  if (ry !== ly) {
-    fm = (lx - rx) / (ry - ly);
-    fb = fy - fm * fx;
-  }
-
-  if (fm == null) {
+  if (ry === ly) {
     if (fx < x0 || fx >= x1) return;
     if (lx > rx) {
       if (!va) va = {x: fx, y: y0};
@@ -52,25 +47,29 @@ function d3_geom_voronoiConnectEdge(edge, extent) {
       else if (va.y < y0) return;
       vb = {x: fx, y: y0};
     }
-  } else if (fm < -1 || fm > 1) {
-    if (lx > rx) {
-      if (!va) va = {x: (y0 - fb) / fm, y: y0};
-      else if (va.y >= y1) return;
-      vb = {x: (y1 - fb) / fm, y: y1};
-    } else {
-      if (!va) va = {x: (y1 - fb) / fm, y: y1};
-      else if (va.y < y0) return;
-      vb = {x: (y0 - fb) / fm, y: y0};
-    }
   } else {
-    if (ly < ry) {
-      if (!va) va = {x: x0, y: fm * x0 + fb};
-      else if (va.x >= x1) return;
-      vb = {x: x1, y: fm * x1 + fb};
+    fm = (lx - rx) / (ry - ly);
+    fb = fy - fm * fx;
+    if (fm < -1 || fm > 1) {
+      if (lx > rx) {
+        if (!va) va = {x: (y0 - fb) / fm, y: y0};
+        else if (va.y >= y1) return;
+        vb = {x: (y1 - fb) / fm, y: y1};
+      } else {
+        if (!va) va = {x: (y1 - fb) / fm, y: y1};
+        else if (va.y < y0) return;
+        vb = {x: (y0 - fb) / fm, y: y0};
+      }
     } else {
-      if (!va) va = {x: x1, y: fm * x1 + fb};
-      else if (va.x < x0) return;
-      vb = {x: x0, y: fm * x0 + fb};
+      if (ly < ry) {
+        if (!va) va = {x: x0, y: fm * x0 + fb};
+        else if (va.x >= x1) return;
+        vb = {x: x1, y: fm * x1 + fb};
+      } else {
+        if (!va) va = {x: x1, y: fm * x1 + fb};
+        else if (va.x < x0) return;
+        vb = {x: x0, y: fm * x0 + fb};
+      }
     }
   }
 
