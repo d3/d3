@@ -22,7 +22,7 @@ function d3_geo_projection(project) {
 function d3_geo_projectionMutator(projectAt) {
   var project,
       rotate,
-      projectRotate,
+      projectRotate, tangentSpaceRotate,
       projectResample = d3_geo_resample(function(x, y) { x = project(x, y); return [x[0] * k + δx, δy - x[1] * k]; }),
       k = 150, // scale
       x = 480, y = 250, // translate
@@ -43,6 +43,13 @@ function d3_geo_projectionMutator(projectAt) {
   function invert(point) {
     point = projectRotate.invert((point[0] - δx) / k, (δy - point[1]) / k);
     return point && [point[0] * d3_degrees, point[1] * d3_degrees];
+  }
+
+  projection.tangentSpace = function(point) {
+    point = tangentSpaceRotate(point[0] * d3_radians, point[1] * d3_radians);
+    return [[point[0][0] * k + δx, δy - point[0][1] * k],
+            [[point[1][0][0] * k * d3_radians, point[1][0][1] * k * d3_radians],
+             [point[1][1][0] * k * d3_radians, point[1][1][1] * k * d3_radians]]];
   }
 
   projection.stream = function(output) {
@@ -97,6 +104,11 @@ function d3_geo_projectionMutator(projectAt) {
 
   function reset() {
     projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
+    if (project.tangentSpace) {
+        if (δφ != 0) console.log("δφ not supported (yet) for tangent spaces");
+        if (δγ != 0) console.log("δγ not supported (yet) for tangent spaces");
+        tangentSpaceRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project.tangentSpace);
+    }
     var center = project(λ, φ);
     δx = x - center[0] * k;
     δy = y + center[1] * k;
