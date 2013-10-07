@@ -404,7 +404,7 @@ function d3_svg_lineMonotoneTangents(points) {
     // mk = m{k + 1} = 0 as the spline connecting these points must be flat to
     // preserve monotonicity. Ignore step 4 and 5 for those k.
 
-    if (Math.abs(d) < ε) {
+    if (abs(d) < ε) {
       m[i] = m[i + 1] = 0;
     } else {
       // 4. Let ak = mk / dk and bk = m{k + 1} / dk.

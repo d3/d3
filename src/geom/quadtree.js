@@ -77,7 +77,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
           // point we are adding, we leave the point associated with the
           // internal node while adding the new point to a child node. This
           // avoids infinite recursion.
-          if ((Math.abs(nx - x) + Math.abs(ny - y)) < .01) {
+          if ((abs(nx - x) + abs(ny - y)) < .01) {
             insertChild(n, d, x, y, x1, y1, x2, y2);
           } else {
             var nPoint = n.point;

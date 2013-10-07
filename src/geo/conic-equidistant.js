@@ -9,7 +9,7 @@ function d3_geo_conicEquidistant(φ0, φ1) {
       n = φ0 === φ1 ? Math.sin(φ0) : (cosφ0 - Math.cos(φ1)) / (φ1 - φ0),
       G = cosφ0 / n + φ0;
 
-  if (Math.abs(n) < ε) return d3_geo_equirectangular;
+  if (abs(n) < ε) return d3_geo_equirectangular;
 
   function forward(λ, φ) {
     var ρ = G - φ;
