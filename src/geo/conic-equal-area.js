@@ -16,6 +16,19 @@ function d3_geo_conicEqualArea(φ0, φ1) {
       ρ0 - ρ * Math.cos(λ)
     ];
   }
+  
+  forward.tangentSpace = function(λ, φ) {
+    var ρ = Math.sqrt(C - 2 * n * Math.sin(φ)) / n;
+    var dρdφ = -2*Math.cos(φ)/(2*n*Math.sqrt(C - 2 * n * Math.sin(φ)));
+    return [
+      [ρ * Math.sin(λ *= n),
+       ρ0 - ρ * Math.cos(λ)],
+      [[ρ * Math.cos(λ) * n,
+        ρ * Math.sin(λ) * n],
+       [dρdφ * Math.sin(λ),
+        - dρdφ * Math.cos(λ)]]
+    ];
+  };
 
   forward.invert = function(x, y) {
     var ρ0_y = ρ0 - y;
