@@ -193,7 +193,7 @@ suite.addBatch({
     "interpolate(monotone)": {
       "supports monotone interpolation": function(line) {
         var l = line().interpolate("monotone");
-        assert.pathEqual(l([[0, 0], [1, 1], [2, 1], [3, 0], [4, 0]]), "M0,0C0.08333333333333333,0.08333333333333333,0.6666666666666667,1,1,1S1.6666666666666667,1,2,1S2.6666666666666665,0,3,0S3.8333333333333335,0,4,0");
+        assert.pathEqual(l([[0, 0], [1, 1], [2, 1], [3, 0], [4, 0]]), "M0,0C0.3333333333333333,0.3333333333333333,0.6666666666666667,1,1,1C1.3333333333333333,1,1.6666666666666667,1,2,1C2.3333333333333335,1,2.6666666666666665,0,3,0C3.3333333333333335,0,3.6666666666666665,0,4,0");
       },
       "monotone interpolation reverts to linear with fewer than three points": function(line) {
         var l = line().interpolate("monotone"), d = line();
