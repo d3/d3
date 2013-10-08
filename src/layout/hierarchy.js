@@ -109,7 +109,7 @@ function d3_layout_hierarchySort(a, b) {
 // Returns an array source+target objects for the specified nodes.
 function d3_layout_hierarchyLinks(nodes) {
   return d3.merge(nodes.map(function(parent) {
-    return (parent.children || []).map(function(child) {
+    return ((typeof parent.children === "function" ? parent.children() : parent.children) || []).map(function(child) {
       return {source: parent, target: child};
     });
   }));
