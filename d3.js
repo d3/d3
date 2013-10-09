@@ -3029,33 +3029,41 @@ d3 = function() {
       if (!dx && q < 0) return;
       r = -q / dx;
       if (dx < 0) {
-        if (r < t0) return; else if (r < t1) t1 = r;
+        if (r < t0) return;
+        if (r < t1) t1 = r;
       } else if (dx > 0) {
-        if (r > t1) return; else if (r > t0) t0 = r;
+        if (r > t1) return;
+        if (r > t0) t0 = r;
       }
       q = x1 - ax;
       if (!dx && q < 0) return;
       r = q / dx;
       if (dx < 0) {
-        if (r > t1) return; else if (r > t0) t0 = r;
+        if (r > t1) return;
+        if (r > t0) t0 = r;
       } else if (dx > 0) {
-        if (r < t0) return; else if (r < t1) t1 = r;
+        if (r < t0) return;
+        if (r < t1) t1 = r;
       }
       q = ay - y0;
       if (!dy && q < 0) return;
       r = -q / dy;
       if (dy < 0) {
-        if (r < t0) return; else if (r < t1) t1 = r;
+        if (r < t0) return;
+        if (r < t1) t1 = r;
       } else if (dy > 0) {
-        if (r > t1) return; else if (r > t0) t0 = r;
+        if (r > t1) return;
+        if (r > t0) t0 = r;
       }
       q = y1 - ay;
       if (!dy && q < 0) return;
       r = q / dy;
       if (dy < 0) {
-        if (r > t1) return; else if (r > t0) t0 = r;
+        if (r > t1) return;
+        if (r > t0) t0 = r;
       } else if (dy > 0) {
-        if (r < t0) return; else if (r < t1) t1 = r;
+        if (r < t0) return;
+        if (r < t1) t1 = r;
       }
       if (t0 > 0) line.a = {
         x: ax + t0 * dx,
