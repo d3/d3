@@ -71,9 +71,9 @@ function d3_transitionNode(node, i, id, inherit) {
           timer = d3_timer_active,
           tweened = [];
 
+      timer.time = delay + time;
       if (delay <= elapsed) return start(elapsed - delay);
       timer.callback = start;
-      timer.time = delay + time;
 
       function start(elapsed) {
         if (lock.active > id) return stop();
@@ -86,11 +86,8 @@ function d3_transitionNode(node, i, id, inherit) {
           }
         });
 
-        timer.callback = tick;
-        timer.time = delay + time;
-
-        d3.timer(function() { // run at end of frame to avoid forced layout
-          if (tick(elapsed || 1)) timer.callback = d3_true;
+        d3.timer(function() { // defer to end of current frame
+          timer.callback = tick(elapsed || 1) ? d3_true : tick;
           return 1;
         });
       }

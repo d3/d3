@@ -8105,9 +8105,9 @@ d3 = function() {
       ++lock.count;
       d3.timer(function(elapsed) {
         var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, timer = d3_timer_active, tweened = [];
+        timer.time = delay + time;
         if (delay <= elapsed) return start(elapsed - delay);
         timer.callback = start;
-        timer.time = delay + time;
         function start(elapsed) {
           if (lock.active > id) return stop();
           lock.active = id;
@@ -8117,10 +8117,8 @@ d3 = function() {
               tweened.push(value);
             }
           });
-          timer.callback = tick;
-          timer.time = delay + time;
           d3.timer(function() {
-            if (tick(elapsed || 1)) timer.callback = d3_true;
+            timer.callback = tick(elapsed || 1) ? d3_true : tick;
             return 1;
           });
         }
