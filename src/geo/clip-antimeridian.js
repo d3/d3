@@ -84,7 +84,7 @@ function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
     listener.point(-π,  0);
     listener.point(-π,  φ);
   } else if (abs(from[0] - to[0]) > ε) {
-    var s = (from[0] < to[0] ? 1 : -1) * π;
+    var s = from[0] < to[0] ? π : -π;
     φ = direction * s / 2;
     listener.point(-s, φ);
     listener.point( 0, φ);
