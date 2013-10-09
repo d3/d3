@@ -58,8 +58,8 @@ suite.addBatch({
         },
         "returns two cells with the expected geometry": function(cells) {
           assert.inDelta(cells, [
-            [[-1e6, 1e6], [-1e6, -1e6], [179096.07142857145, -1e6], [-178046.7857142857, 1e6]],
-            [[1e6, -1e6], [1e6, 1e6], [-178046.7857142857, 1e6], [179096.07142857145, -1e6]]
+            [[-178046.7857142857, 1e6], [179096.07142857145, -1e6], [-1e6, -1e6], [-1e6, 1e6]],
+            [[179096.07142857145, -1e6], [-178046.7857142857, 1e6], [1e6, 1e6], [1e6, -1e6]]
           ], 1e-6);
         },
         "the returned cells are open polygons": function(cells) {
@@ -90,6 +90,11 @@ suite.addBatch({
         },
         "the returned cells' point property points back to the input point": function(cells) {
           assert.deepEqual(cells.map(function(cell) { return cell.point; }), [[200, 200], [760, 300]]);
+        },
+        "the returned cells’ have positive area": function(cells) {
+          cells.forEach(function(cell) {
+            assert.ok(d3.geom.polygon(cell).area() > 0);
+          });
         }
       },
       "links": {
@@ -133,8 +138,8 @@ suite.addBatch({
         },
         "returns two cells with the expected geometry": function(cells) {
           assert.inDelta(cells, [
-            [[-1e6, 1e6], [-1e6, -1e6], [480, -1e6], [480, 1e6]],
-            [[1e6, -1e6], [1e6, 1e6], [480, 1e6], [480, -1e6]]
+            [[480, 1e6], [480, -1e6], [-1e6, -1e6], [-1e6, 1e6]],
+            [[480, -1e6], [480, 1e6], [1e6, 1e6], [1e6, -1e6]]
           ], 1e-6);
         }
       },
@@ -170,8 +175,8 @@ suite.addBatch({
         },
         "returns two cells with the expected geometry": function(cells) {
           assert.inDelta(cells, [
-            [[0, 500], [0, 0], [524.6428571428696, 0], [435.35714285715324, 500]],
-            [[960, 0], [960, 500], [435.35714285715324, 500], [524.6428571428696, 0]]
+            [[435.35714285715324, 500], [524.6428571428696, 0], [0, 0], [0, 500]],
+            [[524.6428571428696, 0], [435.35714285715324, 500], [960, 500], [960, 0]]
           ], 1e-6);
         },
         "the returned cells are clipped to the layout size": function(cells) {
@@ -192,56 +197,62 @@ suite.addBatch({
         }
       },
       "with one point": {
-        "returns the semi-infinite bounding box": function(voronoi) {
-          assert.deepEqual(polygons(voronoi([[50, 50]])), [
-            [[-1000000, -1000000], [1000000, -1000000], [1000000, 1000000], [-1000000, 1000000]]
+        topic: function(v) {
+          return v([[50, 50]]);
+        },
+        "returns the semi-infinite bounding box": function(cells) {
+          assert.deepEqual(polygons(cells), [
+            [[-1e6, 1e6], [1e6, 1e6], [1e6, -1e6], [-1e6, -1e6]]
           ]);
+        },
+        "the returned cell has positive area": function(cells) {
+          assert.ok(d3.geom.polygon(cells[0]).area() > 0);
         }
       },
       "with two points": {
         "separated by a horizontal line": function(voronoi) {
           assert.deepEqual(polygons(voronoi([[0, -100], [0, 100]])), [
-            [[-1000000, -1000000], [1000000, -1000000], [1000000, 0], [-1000000, 0]],
-            [[1000000, 1000000], [-1000000, 1000000], [-1000000, 0], [1000000, 0]],
+            [[-1e6, 0], [1e6, 0], [1e6, -1e6], [-1e6, -1e6]],
+            [[1e6, 0], [-1e6, 0], [-1e6, 1e6], [1e6, 1e6]],
           ]);
           assert.deepEqual(polygons(voronoi([[0, 100], [0, -100]])), [
-            [[1000000, 1000000], [-1000000, 1000000], [-1000000, 0], [1000000, 0]],
-            [[-1000000, -1000000], [1000000, -1000000], [1000000, 0], [-1000000, 0]]
+            [[1e6, 0], [-1e6, 0], [-1e6, 1e6], [1e6, 1e6]],
+            [[-1e6, 0], [1e6, 0], [1e6, -1e6], [-1e6, -1e6]]
           ]);
         },
         "separated by a vertical line": function(voronoi) {
           assert.deepEqual(polygons(voronoi([[100, 0], [-100, 0]])), [
-            [[1000000, -1000000], [1000000, 1000000], [0, 1000000], [0, -1000000]],
-            [[-1000000, 1000000], [-1000000, -1000000], [0, -1000000], [0, 1000000]]
+            [[0, -1e6], [0, 1e6], [1e6, 1e6], [1e6, -1e6]],
+            [[0, 1e6], [0, -1e6], [-1e6, -1e6], [-1e6, 1e6]]
           ]);
           assert.deepEqual(polygons(voronoi([[-100, 0], [100, 0]])), [
-            [[-1000000, 1000000], [-1000000, -1000000], [0, -1000000], [0, 1000000]],
-            [[1000000, -1000000], [1000000, 1000000], [0, 1000000], [0, -1000000]]
+            [[0, 1e6], [0, -1e6], [-1e6, -1e6], [-1e6, 1e6]],
+            [[0, -1e6], [0, 1e6], [1e6, 1e6], [1e6, -1e6]]
           ]);
         },
         "separated by a diagonal line": function(voronoi) {
           assert.deepEqual(polygons(voronoi([[-100, -100], [100, 100]])), [
-            [[-1000000, -1000000], [1000000, -1000000], [-1000000, 1000000]],
-            [[1000000, 1000000], [-1000000, 1000000], [1000000, -1000000]]
+            [[-1e6, 1e6], [1e6, -1e6], [-1e6, -1e6]],
+            [[1e6, -1e6], [-1e6, 1e6], [1e6, 1e6]]
           ]);
           assert.deepEqual(polygons(voronoi([[100, 100], [-100, -100]])), [
-            [[1000000, 1000000], [-1000000, 1000000], [1000000, -1000000]],
-            [[-1000000, -1000000], [1000000, -1000000], [-1000000, 1000000]]
+            [[1e6, -1e6], [-1e6, 1e6], [1e6, 1e6]],
+            [[-1e6, 1e6], [1e6, -1e6], [-1e6, -1e6]]
           ]);
         },
         "separated by an arbitrary diagonal": function(voronoi) {
           assert.deepEqual(polygons(voronoi([[-100, -100], [100, 0]])), [
-            [[-1000000, 1000000], [-1000000, -1000000], [499975, -1000000], [-500025, 1000000]], 
-            [[1000000, -1000000], [1000000, 1000000], [-500025, 1000000], [499975, -1000000]]
+            [[-500025, 1e6], [499975, -1e6], [-1e6, -1e6], [-1e6, 1e6]],
+            [ [499975, -1e6], [-500025, 1e6], [1e6, 1e6], [1e6, -1e6]]
           ]);
         }
       },
       "with three points": {
         "collinear": function(voronoi) {
           assert.deepEqual(polygons(voronoi([[-100, -100], [0, 0], [100, 100]])), [
-            [[-1000000, -1000000], [999900, -1000000], [-1000000, 999900]],
-            [[-1000000, 1000000], [-1000000, 999900], [999900, -1000000], [1000000, -1000000], [1000000, -999900], [-999900, 1000000]], 
-            [[1000000, 1000000], [-999900, 1000000], [1000000, -999900]]
+            [[-1e6, 999900], [999900, -1e6], [-1e6, -1e6]],
+            [[-999900, 1e6], [1e6, -999900], [1e6, -1e6], [999900, -1e6], [-1e6, 999900], [-1e6, 1e6]],
+            [[1e6, -999900], [-999900, 1e6], [1e6, 1e6]]
           ]);
         }
       }

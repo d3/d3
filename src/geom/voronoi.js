@@ -20,11 +20,11 @@ d3.geom.voronoi = function(points) {
       (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
         var start = edge.start();
         return [start.x, start.y];
-      }).reverse() : [
-        [clipExtent[0][0], clipExtent[0][1]],
-        [clipExtent[1][0], clipExtent[0][1]],
+      }) : [
+        [clipExtent[0][0], clipExtent[1][1]],
         [clipExtent[1][0], clipExtent[1][1]],
-        [clipExtent[0][0], clipExtent[1][1]]
+        [clipExtent[1][0], clipExtent[0][1]],
+        [clipExtent[0][0], clipExtent[0][1]]
       ]).point = data[i];
     });
 
