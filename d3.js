@@ -2071,13 +2071,6 @@ d3 = function() {
     d3_timer_mark();
     d3_timer_sweep();
   };
-  function d3_timer_replace(callback, delay, then) {
-    var n = arguments.length;
-    if (n < 2) delay = 0;
-    if (n < 3) then = Date.now();
-    d3_timer_active.callback = callback;
-    d3_timer_active.time = then + delay;
-  }
   function d3_timer_mark() {
     var now = Date.now();
     d3_timer_active = d3_timer_queueHead;
@@ -8111,9 +8104,10 @@ d3 = function() {
       };
       ++lock.count;
       d3.timer(function(elapsed) {
-        var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, tweened = [];
+        var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, timer = d3_timer_active, tweened = [];
         if (delay <= elapsed) return start(elapsed - delay);
-        d3_timer_replace(start, delay, time);
+        timer.callback = start;
+        timer.time = delay + time;
         function start(elapsed) {
           if (lock.active > id) return stop();
           lock.active = id;
@@ -8123,8 +8117,12 @@ d3 = function() {
               tweened.push(value);
             }
           });
-          if (tick(elapsed || 1)) return 1;
-          d3_timer_replace(tick, delay, time);
+          timer.callback = tick;
+          timer.time = delay + time;
+          d3.timer(function() {
+            if (tick(elapsed || 1)) timer.callback = d3_true;
+            return 1;
+          });
         }
         function tick(elapsed) {
           if (lock.active !== id) return stop();

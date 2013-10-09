@@ -1,5 +1,6 @@
 import "../arrays/map";
 import "../core/subclass";
+import "../core/true";
 import "../event/dispatch";
 import "../event/timer";
 import "../interpolate/ease";
@@ -67,10 +68,12 @@ function d3_transitionNode(node, i, id, inherit) {
           ease = transition.ease,
           delay = transition.delay,
           duration = transition.duration,
+          timer = d3_timer_active,
           tweened = [];
 
       if (delay <= elapsed) return start(elapsed - delay);
-      d3_timer_replace(start, delay, time);
+      timer.callback = start;
+      timer.time = delay + time;
 
       function start(elapsed) {
         if (lock.active > id) return stop();
@@ -83,8 +86,13 @@ function d3_transitionNode(node, i, id, inherit) {
           }
         });
 
-        if (tick(elapsed || 1)) return 1;
-        d3_timer_replace(tick, delay, time);
+        timer.callback = tick;
+        timer.time = delay + time;
+
+        d3.timer(function() { // run at end of frame to avoid forced layout
+          if (tick(elapsed || 1)) timer.callback = d3_true;
+          return 1;
+        });
       }
 
       function tick(elapsed) {
