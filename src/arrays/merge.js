@@ -1,18 +1,19 @@
 d3.merge = function(arrays) {
   var n = arrays.length,
-      m = 0,
-      i,
-      j,
-      k = -1,
+      m,
+      i = -1,
+      j = 0,
       merged,
       array;
 
-  for (i = 0; i < n; ++i) m += arrays[i].length;
-  merged = new Array(m);
+  while (++i < n) j += arrays[i].length;
+  merged = new Array(j);
 
-  for (i = 0; i < n; ++i) {
-    for (array = arrays[i], m = array.length, j = 0; j < m; ++j) {
-      merged[++k] = array[j];
+  while (--n >= 0) {
+    array = arrays[n];
+    m = array.length;
+    while (--m >= 0) {
+      merged[--j] = array[m];
     }
   }
 
