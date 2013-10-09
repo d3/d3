@@ -5506,7 +5506,7 @@ d3 = function() {
     var i = name.indexOf("-"), t = i >= 0 ? name.substring(0, i) : name, m = i >= 0 ? name.substring(i + 1) : "in";
     t = d3_ease.get(t) || d3_ease_default;
     m = d3_ease_mode.get(m) || d3_identity;
-    return d3_ease_clamp(m(t.apply(null, Array.prototype.slice.call(arguments, 1))));
+    return d3_ease_clamp(m(t.apply(null, d3_arraySlice.call(arguments, 1))));
   };
   function d3_ease_clamp(f) {
     return function(t) {
