@@ -71,9 +71,9 @@ function d3_transitionNode(node, i, id, inherit) {
           timer = d3_timer_active,
           tweened = [];
 
-      timer.time = delay + time;
+      timer.t = delay + time;
       if (delay <= elapsed) return start(elapsed - delay);
-      timer.callback = start;
+      timer.c = start;
 
       function start(elapsed) {
         if (lock.active > id) return stop();
@@ -87,7 +87,7 @@ function d3_transitionNode(node, i, id, inherit) {
         });
 
         d3.timer(function() { // defer to end of current frame
-          timer.callback = tick(elapsed || 1) ? d3_true : tick;
+          timer.c = tick(elapsed || 1) ? d3_true : tick;
           return 1;
         }, 0, time);
       }
