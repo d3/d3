@@ -8120,7 +8120,7 @@ d3 = function() {
           d3.timer(function() {
             timer.callback = tick(elapsed || 1) ? d3_true : tick;
             return 1;
-          });
+          }, 0, time);
         }
         function tick(elapsed) {
           if (lock.active !== id) return stop();

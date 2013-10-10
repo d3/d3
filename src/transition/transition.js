@@ -89,7 +89,7 @@ function d3_transitionNode(node, i, id, inherit) {
         d3.timer(function() { // defer to end of current frame
           timer.callback = tick(elapsed || 1) ? d3_true : tick;
           return 1;
-        });
+        }, 0, time);
       }
 
       function tick(elapsed) {
