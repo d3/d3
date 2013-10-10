@@ -10,7 +10,7 @@
     "animation",
     "canvas"
   ],
-  "version": "3.3.6",
+  "version": "3.3.7pre",
   "main": "index-browserify.js",
   "scripts": [
     "d3.js",

@@ -15,8 +15,8 @@ d3.timer = function(callback, delay, then) {
   if (n < 3) then = Date.now();
 
   // Add the callback to the tail of the queue.
-  var time = then + delay, timer = {callback: callback, time: time, next: null};
-  if (d3_timer_queueTail) d3_timer_queueTail.next = timer;
+  var time = then + delay, timer = {c: callback, t: time, f: false, n: null};
+  if (d3_timer_queueTail) d3_timer_queueTail.n = timer;
   else d3_timer_queueHead = timer;
   d3_timer_queueTail = timer;
 
@@ -48,20 +48,12 @@ d3.timer.flush = function() {
   d3_timer_sweep();
 };
 
-function d3_timer_replace(callback, delay, then) {
-  var n = arguments.length;
-  if (n < 2) delay = 0;
-  if (n < 3) then = Date.now();
-  d3_timer_active.callback = callback;
-  d3_timer_active.time = then + delay;
-}
-
 function d3_timer_mark() {
   var now = Date.now();
   d3_timer_active = d3_timer_queueHead;
   while (d3_timer_active) {
-    if (now >= d3_timer_active.time) d3_timer_active.flush = d3_timer_active.callback(now - d3_timer_active.time);
-    d3_timer_active = d3_timer_active.next;
+    if (now >= d3_timer_active.t) d3_timer_active.f = d3_timer_active.c(now - d3_timer_active.t);
+    d3_timer_active = d3_timer_active.n;
   }
   return now;
 }
@@ -73,11 +65,11 @@ function d3_timer_sweep() {
       t1 = d3_timer_queueHead,
       time = Infinity;
   while (t1) {
-    if (t1.flush) {
-      t1 = t0 ? t0.next = t1.next : d3_timer_queueHead = t1.next;
+    if (t1.f) {
+      t1 = t0 ? t0.n = t1.n : d3_timer_queueHead = t1.n;
     } else {
-      if (t1.time < time) time = t1.time;
-      t1 = (t0 = t1).next;
+      if (t1.t < time) time = t1.t;
+      t1 = (t0 = t1).n;
     }
   }
   d3_timer_queueTail = t0;

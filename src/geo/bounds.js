@@ -56,7 +56,7 @@ d3.geo.bounds = (function() {
       var dλ = λ - λ_,
           s = dλ > 0 ? 1 : -1,
           λi = inflection[0] * d3_degrees * s,
-          antimeridian = Math.abs(dλ) > 180;
+          antimeridian = abs(dλ) > 180;
       if (antimeridian ^ (s * λ_ < λi && λi < s * λ)) {
         var φi = inflection[1] * d3_degrees;
         if (φi > φ1) φ1 = φi;
@@ -101,7 +101,7 @@ d3.geo.bounds = (function() {
   function ringPoint(λ, φ) {
     if (p0) {
       var dλ = λ - λ_;
-      dλSum += Math.abs(dλ) > 180 ? dλ + (dλ > 0 ? 360 : -360) : dλ;
+      dλSum += abs(dλ) > 180 ? dλ + (dλ > 0 ? 360 : -360) : dλ;
     } else λ__ = λ, φ__ = φ;
     d3_geo_area.point(λ, φ);
     linePoint(λ, φ);
@@ -114,7 +114,7 @@ d3.geo.bounds = (function() {
   function ringEnd() {
     ringPoint(λ__, φ__);
     d3_geo_area.lineEnd();
-    if (Math.abs(dλSum) > ε) λ0 = -(λ1 = 180);
+    if (abs(dλSum) > ε) λ0 = -(λ1 = 180);
     range[0] = λ0, range[1] = λ1;
     p0 = null;
   }

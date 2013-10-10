@@ -71,7 +71,7 @@ function d3_geo_resample(project) {
           c = c0 + c1,
           m = Math.sqrt(a * a + b * b + c * c),
           φ2 = Math.asin(c /= m),
-          λ2 = Math.abs(Math.abs(c) - 1) < ε ? (λ0 + λ1) / 2 : Math.atan2(b, a),
+          λ2 = abs(abs(c) - 1) < ε ? (λ0 + λ1) / 2 : Math.atan2(b, a),
           p = project(λ2, φ2),
           x2 = p[0],
           y2 = p[1],
@@ -79,7 +79,7 @@ function d3_geo_resample(project) {
           dy2 = y2 - y0,
           dz = dy * dx2 - dx * dy2;
       if (dz * dz / d2 > δ2 // perpendicular projected distance
-          || Math.abs((dx * dx2 + dy * dy2) / d2 - .5) > .3 // midpoint close to an end
+          || abs((dx * dx2 + dy * dy2) / d2 - .5) > .3 // midpoint close to an end
           || a0 * a1 + b0 * b1 + c0 * c1 < cosMinDistance) { // angular distance
         resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a /= m, b /= m, c, depth, stream);
         stream.point(x2, y2);

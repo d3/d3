@@ -1,5 +1,6 @@
 import "../arrays/merge";
 import "../math/trigonometry";
+import "../geom/clip-line";
 import "geo";
 import "clip";
 import "clip-polygon";
@@ -31,6 +32,7 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
   return function(listener) {
     var listener_ = listener,
         bufferListener = d3_geo_clipBufferListener(),
+        clipLine = d3_geom_clipLine(x0, y0, x1, y1),
         segments,
         polygon,
         ring;
@@ -46,28 +48,12 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
         clean = true;
       },
       polygonEnd: function() {
-        listener = listener_;
-        segments = d3.merge(segments);
-        var clipStartInside = insidePolygon([x0, y1]),
-            inside = clean && clipStartInside,
-            visible = segments.length;
-        if (inside || visible) {
-          listener.polygonStart();
-          if (inside) {
-            listener.lineStart();
-            interpolate(null, null, 1, listener);
-            listener.lineEnd();
-          }
-          if (visible) {
-            d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, listener);
-          }
-          listener.polygonEnd();
-        }
+        d3_geo_clipPolygon(d3.merge(segments), compare, pointInPolygon([x0, y1], polygon), pointInPolygon, interpolate, listener = listener_);
         segments = polygon = ring = null;
       }
     };
 
-    function insidePolygon(p) {
+    function pointInPolygon(p, polygon) {
       var wn = 0, // the winding number counter
           n = polygon.length,
           y = p[1];
@@ -152,14 +138,13 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
       } else {
         if (v && v_) listener.point(x, y);
         else {
-          var a = [x_, y_],
-              b = [x, y];
-          if (clipLine(a, b)) {
+          var l = {a: {x: x_, y: y_}, b: {x: x, y: y}};
+          if (clipLine(l)) {
             if (!v_) {
               listener.lineStart();
-              listener.point(a[0], a[1]);
+              listener.point(l.a.x, l.a.y);
             }
-            listener.point(b[0], b[1]);
+            listener.point(l.b.x, l.b.y);
             if (!v) listener.lineEnd();
             clean = false;
           } else if (v) {
@@ -176,14 +161,14 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
   };
 
   function corner(p, direction) {
-    return Math.abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3
-        : Math.abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1
-        : Math.abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0
-        : direction > 0 ? 3 : 2; // Math.abs(p[1] - y1) < ε
+    return abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3
+        : abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1
+        : abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0
+        : direction > 0 ? 3 : 2; // abs(p[1] - y1) < ε
   }
 
   function compare(a, b) {
-    return comparePoints(a.point, b.point);
+    return comparePoints(a.x, b.x);
   }
 
   function comparePoints(a, b) {
@@ -195,45 +180,4 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
         : ca === 2 ? a[1] - b[1]
         : b[0] - a[0];
   }
-
-  // Liang–Barsky line clipping.
-  function clipLine(a, b) {
-    var dx = b[0] - a[0],
-        dy = b[1] - a[1],
-        t = [0, 1];
-
-    if (Math.abs(dx) < ε && Math.abs(dy) < ε) return x0 <= a[0] && a[0] <= x1 && y0 <= a[1] && a[1] <= y1;
-
-    if (d3_geo_clipExtentT(x0 - a[0],  dx, t) &&
-        d3_geo_clipExtentT(a[0] - x1, -dx, t) &&
-        d3_geo_clipExtentT(y0 - a[1],  dy, t) &&
-        d3_geo_clipExtentT(a[1] - y1, -dy, t)) {
-      if (t[1] < 1) {
-        b[0] = a[0] + t[1] * dx;
-        b[1] = a[1] + t[1] * dy;
-      }
-      if (t[0] > 0) {
-        a[0] += t[0] * dx;
-        a[1] += t[0] * dy;
-      }
-      return true;
-    }
-
-    return false;
-  }
-}
-
-function d3_geo_clipExtentT(num, denominator, t) {
-  if (Math.abs(denominator) < ε) return num <= 0;
-
-  var u = num / denominator;
-
-  if (denominator > 0) {
-    if (u > t[1]) return false;
-    if (u > t[0]) t[0] = u;
-  } else {
-    if (u < t[0]) return false;
-    if (u < t[1]) t[1] = u;
-  }
-  return true;
 }
