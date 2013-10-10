@@ -168,7 +168,7 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
   }
 
   function compare(a, b) {
-    return comparePoints(a.point, b.point);
+    return comparePoints(a.x, b.x);
   }
 
   function comparePoints(a, b) {

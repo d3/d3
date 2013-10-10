@@ -2626,12 +2626,12 @@ d3 = function() {
         continue;
       }
       var a = new d3_geo_clipPolygonIntersection(p0, segment, null, true), b = new d3_geo_clipPolygonIntersection(p0, null, a, false);
-      a.other = b;
+      a.o = b;
       subject.push(a);
       clip.push(b);
       a = new d3_geo_clipPolygonIntersection(p1, segment, null, false);
       b = new d3_geo_clipPolygonIntersection(p1, null, a, true);
-      a.other = b;
+      a.o = b;
       subject.push(a);
       clip.push(b);
     }
@@ -2640,40 +2640,40 @@ d3 = function() {
       d3_geo_clipPolygonLinkCircular(subject);
       d3_geo_clipPolygonLinkCircular(clip);
       for (var i = 0, entry = clipStartInside, n = clip.length; i < n; ++i) {
-        clip[i].entry = entry = !entry;
+        clip[i].e = entry = !entry;
       }
       var start = subject[0], listener_ = listener, point;
       if (rings.length) listener = d3_geo_clipBufferListener();
       while (1) {
         var current = start, isSubject = true;
-        while (current.visited) if ((current = current.next) === start) break;
-        if (current.visited) break;
+        while (current.v) if ((current = current.n) === start) break;
+        if (current.v) break;
         listener.polygonStart();
         listener.lineStart();
         do {
-          current.visited = current.other.visited = true;
-          if (current.entry) {
+          current.v = current.o.v = true;
+          if (current.e) {
             if (isSubject) {
-              for (var i = 0, points = current.points, n = points.length; i < n; ++i) {
+              for (var i = 0, points = current.z, n = points.length; i < n; ++i) {
                 listener.point((point = points[i])[0], point[1]);
               }
             } else {
-              interpolate(current.point, current.next.point, 1, listener);
+              interpolate(current.x, current.n.x, 1, listener);
             }
-            current = current.next;
+            current = current.n;
           } else {
             if (isSubject) {
-              for (var points = current.points, i = points.length; --i >= 0; ) {
+              for (var points = current.z, i = points.length; --i >= 0; ) {
                 listener.point((point = points[i])[0], point[1]);
               }
             } else {
-              interpolate(current.point, current.prev.point, -1, listener);
+              interpolate(current.x, current.p.x, -1, listener);
             }
-            current = current.prev;
+            current = current.p;
           }
-          current = current.other;
+          current = current.o;
           isSubject = !isSubject;
-        } while (!current.visited);
+        } while (!current.v);
         listener.lineEnd();
         listener.polygonEnd();
       }
@@ -2718,20 +2718,20 @@ d3 = function() {
     if (!(n = array.length)) return;
     var n, i = 0, a = array[0], b;
     while (++i < n) {
-      a.next = b = array[i];
-      b.prev = a;
+      a.n = b = array[i];
+      b.p = a;
       a = b;
     }
-    a.next = b = array[0];
-    b.prev = a;
+    a.n = b = array[0];
+    b.p = a;
   }
   function d3_geo_clipPolygonIntersection(point, points, other, entry) {
-    this.point = point;
-    this.points = points;
-    this.other = other;
-    this.entry = entry;
-    this.visited = false;
-    this.next = this.prev = null;
+    this.x = point;
+    this.z = points;
+    this.o = other;
+    this.e = entry;
+    this.v = false;
+    this.n = this.p = null;
   }
   function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
     return function(rotate, listener) {
@@ -2830,7 +2830,7 @@ d3 = function() {
     };
   }
   function d3_geo_clipSort(a, b) {
-    return ((a = a.point)[0] < 0 ? a[1] - halfπ - ε : halfπ - a[1]) - ((b = b.point)[0] < 0 ? b[1] - halfπ - ε : halfπ - b[1]);
+    return ((a = a.x)[0] < 0 ? a[1] - halfπ - ε : halfπ - a[1]) - ((b = b.x)[0] < 0 ? b[1] - halfπ - ε : halfπ - b[1]);
   }
   function d3_geo_pointInPolygon(point, polygon) {
     var meridian = point[0], parallel = point[1], meridianNormal = [ Math.sin(meridian), -Math.cos(meridian), 0 ], polarAngle = 0, winding = 0;
@@ -3212,7 +3212,7 @@ d3 = function() {
       return abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3 : abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1 : abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0 : direction > 0 ? 3 : 2;
     }
     function compare(a, b) {
-      return comparePoints(a.point, b.point);
+      return comparePoints(a.x, b.x);
     }
     function comparePoints(a, b) {
       var ca = corner(a, 1), cb = corner(b, 1);

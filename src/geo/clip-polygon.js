@@ -26,12 +26,12 @@ function d3_geo_clipPolygon(segments, compare, clipStartInside, pointInPolygon, 
 
     var a = new d3_geo_clipPolygonIntersection(p0, segment, null, true),
         b = new d3_geo_clipPolygonIntersection(p0, null, a, false);
-    a.other = b;
+    a.o = b;
     subject.push(a);
     clip.push(b);
     a = new d3_geo_clipPolygonIntersection(p1, segment, null, false);
     b = new d3_geo_clipPolygonIntersection(p1, null, a, true);
-    a.other = b;
+    a.o = b;
     subject.push(a);
     clip.push(b);
   }
@@ -45,7 +45,7 @@ function d3_geo_clipPolygon(segments, compare, clipStartInside, pointInPolygon, 
 
     // Mark intersection points as alternating between entering and exiting.
     for (var i = 0, entry = clipStartInside, n = clip.length; i < n; ++i) {
-      clip[i].entry = entry = !entry;
+      clip[i].e = entry = !entry;
     }
 
     var start = subject[0],
@@ -60,34 +60,34 @@ function d3_geo_clipPolygon(segments, compare, clipStartInside, pointInPolygon, 
       // Find first unvisited intersection.
       var current = start,
           isSubject = true;
-      while (current.visited) if ((current = current.next) === start) break;
-      if (current.visited) break;
+      while (current.v) if ((current = current.n) === start) break;
+      if (current.v) break;
       listener.polygonStart();
       listener.lineStart();
       do {
-        current.visited = current.other.visited = true;
-        if (current.entry) {
+        current.v = current.o.v = true;
+        if (current.e) {
           if (isSubject) {
-            for (var i = 0, points = current.points, n = points.length; i < n; ++i) {
+            for (var i = 0, points = current.z, n = points.length; i < n; ++i) {
               listener.point((point = points[i])[0], point[1]);
             }
           } else {
-            interpolate(current.point, current.next.point, 1, listener);
+            interpolate(current.x, current.n.x, 1, listener);
           }
-          current = current.next;
+          current = current.n;
         } else {
           if (isSubject) {
-            for (var points = current.points, i = points.length; --i >= 0;) {
+            for (var points = current.z, i = points.length; --i >= 0;) {
               listener.point((point = points[i])[0], point[1]);
             }
           } else {
-            interpolate(current.point, current.prev.point, -1, listener);
+            interpolate(current.x, current.p.x, -1, listener);
           }
-          current = current.prev;
+          current = current.p;
         }
-        current = current.other;
+        current = current.o;
         isSubject = !isSubject;
-      } while (!current.visited);
+      } while (!current.v);
       listener.lineEnd();
       listener.polygonEnd();
     }
@@ -144,19 +144,19 @@ function d3_geo_clipPolygonLinkCircular(array) {
       a = array[0],
       b;
   while (++i < n) {
-    a.next = b = array[i];
-    b.prev = a;
+    a.n = b = array[i];
+    b.p = a;
     a = b;
   }
-  a.next = b = array[0];
-  b.prev = a;
+  a.n = b = array[0];
+  b.p = a;
 }
 
 function d3_geo_clipPolygonIntersection(point, points, other, entry) {
-  this.point = point;
-  this.points = points;
-  this.other = other;
-  this.entry = entry;
-  this.visited = false;
-  this.next = this.prev = null;
+  this.x = point;
+  this.z = points;
+  this.o = other; // another intersection
+  this.e = entry; // is an entry?
+  this.v = false; // visited
+  this.n = this.p = null; // next & previous
 }
