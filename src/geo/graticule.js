@@ -16,8 +16,8 @@ d3.geo.graticule = function() {
   function lines() {
     return d3.range(Math.ceil(X0 / DX) * DX, X1, DX).map(X)
         .concat(d3.range(Math.ceil(Y0 / DY) * DY, Y1, DY).map(Y))
-        .concat(d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(function(x) { return Math.abs(x % DX) > ε; }).map(x))
-        .concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).filter(function(y) { return Math.abs(y % DY) > ε; }).map(y));
+        .concat(d3.range(Math.ceil(x0 / dx) * dx, x1, dx).filter(function(x) { return abs(x % DX) > ε; }).map(x))
+        .concat(d3.range(Math.ceil(y0 / dy) * dy, y1, dy).filter(function(y) { return abs(y % DY) > ε; }).map(y));
   }
 
   graticule.lines = function() {

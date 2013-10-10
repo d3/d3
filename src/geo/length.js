@@ -35,7 +35,7 @@ function d3_geo_lengthLineStart() {
   function nextPoint(λ, φ) {
     var sinφ = Math.sin(φ *= d3_radians),
         cosφ = Math.cos(φ),
-        t = Math.abs((λ *= d3_radians) - λ0),
+        t = abs((λ *= d3_radians) - λ0),
         cosΔλ = Math.cos(t);
     d3_geo_lengthSum += Math.atan2(Math.sqrt((t = cosφ * Math.sin(t)) * t + (t = cosφ0 * sinφ - sinφ0 * cosφ * cosΔλ) * t), sinφ0 * sinφ + cosφ0 * cosφ * cosΔλ);
     λ0 = λ, sinφ0 = sinφ, cosφ0 = cosφ;

@@ -1,4 +1,5 @@
 var vows = require("vows"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -140,6 +141,45 @@ suite.addBatch({
           {type: "point", x: 4, y: 6},
           {type: "point", x: 6, y: 6},
           {type: "point", x: 6, y: 4},
+          {type: "lineEnd"},
+          {type: "polygonEnd"}
+        ]);
+      },
+      "a polygon that should be split into two polygons, each with a hole": function(d3) {
+        var clip = d3.geo.clipExtent().extent([[240, 110], [720, 375]]),
+            stream = clip.stream(testContext);
+        _.geo.stream({type: "Polygon", coordinates: [
+          [[300, 30], [660, 30], [660, 200], [570, 200], [570, 80], [390, 80], [390, 200], [300, 200], [300, 30]],
+          [[330, 140], [330, 170], [360, 170], [360, 140], [330, 140]],
+          [[600, 140], [600, 170], [630, 170], [630, 140], [600, 140]]
+        ]}, stream);
+        assert.deepEqual(testContext.buffer(), [
+          {type: "polygonStart"},
+          {type: "lineStart"},
+          {type: "point", x: 660, y: 110},
+          {type: "point", x: 660, y: 200},
+          {type: "point", x: 570, y: 200},
+          {type: "point", x: 570, y: 110},
+          {type: "lineEnd"},
+          {type: "lineStart"},
+          {type: "point", x: 600, y: 140},
+          {type: "point", x: 600, y: 170},
+          {type: "point", x: 630, y: 170},
+          {type: "point", x: 630, y: 140},
+          {type: "lineEnd"},
+          {type: "polygonEnd"},
+          {type: "polygonStart"},
+          {type: "lineStart"},
+          {type: "point", x: 390, y: 110},
+          {type: "point", x: 390, y: 200},
+          {type: "point", x: 300, y: 200},
+          {type: "point", x: 300, y: 110},
+          {type: "lineEnd"},
+          {type: "lineStart"},
+          {type: "point", x: 330, y: 140},
+          {type: "point", x: 330, y: 170},
+          {type: "point", x: 360, y: 170},
+          {type: "point", x: 360, y: 140},
           {type: "lineEnd"},
           {type: "polygonEnd"}
         ]);

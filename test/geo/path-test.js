@@ -401,8 +401,8 @@ suite.addBatch({
               .precision(0)
               .clipAngle(90))({type: "Polygon", coordinates: [pole]});
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-          {type: "moveTo", x: 510, y: 160},
-          {type: "moveTo", x:  87, y: 700}
+          {type: "moveTo", x:  87, y: 700},
+          {type: "moveTo", x: 510, y: 160}
         ]);
       }
     },
@@ -506,8 +506,8 @@ suite.addBatch({
       "renders a small circle of 120° in two parts": function(p) {
         p(_.geo.circle().angle(120)());
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-          {type: "moveTo", x: 276, y: 493},
-          {type: "moveTo", x:  87, y: 700}
+          {type: "moveTo", x:  87, y: 700},
+          {type: "moveTo", x: 276, y: 493}
         ]);
       }
     },
@@ -580,9 +580,9 @@ suite.addBatch({
       "renders stripes": function(p) {
         p(stripes(80, -80));
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
+          {type: "moveTo", x: 1331, y:  259},
           {type: "moveTo", x: -420, y: -150},
-          {type: "moveTo", x: -420, y:  650},
-          {type: "moveTo", x: 1331, y:  259}
+          {type: "moveTo", x: -420, y:  650}
         ]);
       }
     },
@@ -600,8 +600,8 @@ suite.addBatch({
       "renders stripes": function(p) {
         p(stripes(80, -80));
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [
-          {type: "moveTo", x:  480, y: 200},
-          {type: "moveTo", x: 1350, y: 210}
+          {type: "moveTo", x: 1350, y: 210},
+          {type: "moveTo", x:  480, y: 200}
         ]);
       }
     },
