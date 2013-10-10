@@ -13,12 +13,11 @@ function d3_geom_clipLine(x0, y0, x1, y1) {
         t1 = 1,
         dx = bx - ax,
         dy = by - ay,
-        q,
         r;
 
-    q = ax - x0;
-    if (!dx && q < 0) return;
-    r = -q / dx;
+    r = x0 - ax;
+    if (!dx && r > 0) return;
+    r /= dx;
     if (dx < 0) {
       if (r < t0) return;
       if (r < t1) t1 = r;
@@ -27,9 +26,9 @@ function d3_geom_clipLine(x0, y0, x1, y1) {
       if (r > t0) t0 = r;
     }
 
-    q = x1 - ax;
-    if (!dx && q < 0) return;
-    r = q / dx;
+    r = x1 - ax;
+    if (!dx && r < 0) return;
+    r /= dx;
     if (dx < 0) {
       if (r > t1) return;
       if (r > t0) t0 = r;
@@ -38,9 +37,9 @@ function d3_geom_clipLine(x0, y0, x1, y1) {
       if (r < t1) t1 = r;
     }
 
-    q = ay - y0;
-    if (!dy && q < 0) return;
-    r = -q / dy;
+    r = y0 - ay;
+    if (!dy && r > 0) return;
+    r /= dy;
     if (dy < 0) {
       if (r < t0) return;
       if (r < t1) t1 = r;
@@ -49,9 +48,9 @@ function d3_geom_clipLine(x0, y0, x1, y1) {
       if (r > t0) t0 = r;
     }
 
-    q = y1 - ay;
-    if (!dy && q < 0) return;
-    r = q / dy;
+    r = y1 - ay;
+    if (!dy && r < 0) return;
+    r /= dy;
     if (dy < 0) {
       if (r > t1) return;
       if (r > t0) t0 = r;
