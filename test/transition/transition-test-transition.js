@@ -27,13 +27,11 @@ module.exports = {
   "while transitioning": {
     topic: function(t1) {
       var callback = this.callback;
-      var t2 = t1.transition().tween("custom", function() {
-        return function(t) {
-          if (callback) {
-            callback(null, t2);
-            callback = null;
-          }
-        };
+      var t2 = t1.transition().each("start", function() {
+        if (callback) {
+          callback(null, t2);
+          callback = null;
+        }
       });
     },
     "increments the lock's reference count": function(t2) {
