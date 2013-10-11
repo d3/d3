@@ -1,6 +1,7 @@
 import "geo";
 import "area";
 import "cartesian";
+import "../math/abs";
 import "../math/trigonometry";
 
 function d3_geo_pointInPolygon(point, polygon) {

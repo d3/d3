@@ -2,12 +2,14 @@ import "../arrays/map";
 import "../core/functor";
 import "../core/identity";
 import "../core/true";
+import "../geom/point";
+import "../math/abs";
 import "../math/trigonometry";
 import "svg";
 
 function d3_svg_line(projection) {
-  var x = d3_svg_lineX,
-      y = d3_svg_lineY,
+  var x = d3_geom_pointX,
+      y = d3_geom_pointY,
       defined = d3_true,
       interpolate = d3_svg_lineLinear,
       interpolateKey = interpolate.key,
@@ -77,16 +79,6 @@ function d3_svg_line(projection) {
 d3.svg.line = function() {
   return d3_svg_line(d3_identity);
 };
-
-// The default `x` property, which references d[0].
-function d3_svg_lineX(d) {
-  return d[0];
-}
-
-// The default `y` property, which references d[1].
-function d3_svg_lineY(d) {
-  return d[1];
-}
 
 // The various interpolators supported by the `line` class.
 var d3_svg_lineInterpolators = d3.map({

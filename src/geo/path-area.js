@@ -1,4 +1,5 @@
 import "../core/noop";
+import "../math/abs";
 
 // TODO Unify this code with d3.geom.polygon area?
 
