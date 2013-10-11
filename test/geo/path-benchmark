@@ -50,6 +50,15 @@ for (var i = 0, k = 0; i < n; i++, k++) {
 
 console.log("World countries: " + formatNumber((Date.now() - then) / k) + "ms/op.");
 
+o = JSON.parse(fs.readFileSync("./test/data/ocean.json"));
+then = Date.now();
+
+for (var i = 0, k = 0; i < n; i++, k++) {
+  path(o);
+}
+
+console.log("Ocean: " + formatNumber((Date.now() - then) / k) + "ms/op.");
+
 o = graticule();
 then = Date.now();
 
