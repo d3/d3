@@ -28,8 +28,11 @@ d3.layout.hierarchy = function() {
       }
       if (sort) c.sort(sort);
       if (value) node.value = v;
-    } else if (value) {
-      node.value = +value.call(hierarchy, node, depth) || 0;
+    } else {
+      delete node.children;
+      if (value) {
+        node.value = +value.call(hierarchy, node, depth) || 0;
+      }
     }
     return node;
   }
