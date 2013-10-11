@@ -41,6 +41,15 @@ for (var i = 0, k = 0; i < n; i++, k++) {
 
 console.log("U.S. counties: " + formatNumber((Date.now() - then) / k) + "ms/op.");
 
+o = JSON.parse(fs.readFileSync("./test/data/world-countries.json"));
+then = Date.now();
+
+for (var i = 0, k = 0; i < n; i++, k++) {
+  path(o);
+}
+
+console.log("World countries: " + formatNumber((Date.now() - then) / k) + "ms/op.");
+
 o = graticule();
 then = Date.now();
 
