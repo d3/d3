@@ -1,4 +1,5 @@
 import "../arrays/range";
+import "../math/abs";
 import "../math/trigonometry";
 import "geo";
 

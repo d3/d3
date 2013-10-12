@@ -1,3 +1,4 @@
+import "../../math/abs";
 import "../clip-line";
 
 function d3_geom_voronoiClipEdges(extent) {

@@ -1,4 +1,5 @@
 import "../core/true";
+import "../math/abs";
 import "../math/trigonometry";
 import "clip";
 import "point-in-polygon";

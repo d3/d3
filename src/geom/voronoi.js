@@ -1,11 +1,11 @@
 import "../core/functor";
-import "../svg/line";
 import "voronoi/";
 import "geom";
+import "point";
 
 d3.geom.voronoi = function(points) {
-  var x = d3_svg_lineX,
-      y = d3_svg_lineY,
+  var x = d3_geom_pointX,
+      y = d3_geom_pointY,
       fx = x,
       fy = y,
       clipExtent = d3_geom_voronoiClipExtent;
