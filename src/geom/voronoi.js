@@ -33,7 +33,13 @@ d3.geom.voronoi = function(points) {
   }
 
   function sites(data) {
-    return data.map(function(d, i) { return {x: fx(d, i), y: fy(d, i), i: i}; });
+    return data.map(function(d, i) {
+      return {
+        x: Math.round(fx(d, i) / ε) * ε,
+        y: Math.round(fy(d, i) / ε) * ε,
+        i: i
+      };
+    });
   }
 
   voronoi.links = function(data) {

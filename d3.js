@@ -5146,8 +5146,8 @@ d3 = function() {
     function sites(data) {
       return data.map(function(d, i) {
         return {
-          x: fx(d, i),
-          y: fy(d, i),
+          x: Math.round(fx(d, i) / ε) * ε,
+          y: Math.round(fy(d, i) / ε) * ε,
           i: i
         };
       });
