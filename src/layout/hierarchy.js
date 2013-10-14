@@ -16,20 +16,22 @@ d3.layout.hierarchy = function() {
     if (childs && (n = childs.length)) {
       var i = -1,
           n,
-          c = node.children = [],
+          c = node.children = new Array(n),
           v = 0,
           j = depth + 1,
           d;
       while (++i < n) {
-        d = recurse(childs[i], j, nodes);
+        d = c[i] = recurse(childs[i], j, nodes);
         d.parent = node;
-        c.push(d);
         v += d.value;
       }
       if (sort) c.sort(sort);
       if (value) node.value = v;
-    } else if (value) {
-      node.value = +value.call(hierarchy, node, depth) || 0;
+    } else {
+      delete node.children;
+      if (value) {
+        node.value = +value.call(hierarchy, node, depth) || 0;
+      }
     }
     return node;
   }
