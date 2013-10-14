@@ -1,5 +1,3 @@
-import "abs";
-
 var π = Math.PI,
     τ = 2 * π,
     halfπ = π / 2,

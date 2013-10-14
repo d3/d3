@@ -1,14 +1,15 @@
 import "../core/functor";
 import "../core/identity";
 import "../core/true";
+import "../geom/point";
 import "svg";
 import "line";
 
 function d3_svg_area(projection) {
-  var x0 = d3_svg_lineX,
-      x1 = d3_svg_lineX,
+  var x0 = d3_geom_pointX,
+      x1 = d3_geom_pointX,
       y0 = 0,
-      y1 = d3_svg_lineY,
+      y1 = d3_geom_pointY,
       defined = d3_true,
       interpolate = d3_svg_lineLinear,
       interpolateKey = interpolate.key,

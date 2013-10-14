@@ -1,10 +1,11 @@
 import "../core/functor";
-import "../svg/line";
+import "../math/abs";
 import "geom";
+import "point";
 
 d3.geom.quadtree = function(points, x1, y1, x2, y2) {
-  var x = d3_svg_lineX,
-      y = d3_svg_lineY,
+  var x = d3_geom_pointX,
+      y = d3_geom_pointY,
       compat;
 
   // For backwards-compatibility.

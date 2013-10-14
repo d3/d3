@@ -1,4 +1,5 @@
 import "../arrays/merge";
+import "../math/abs";
 import "../math/trigonometry";
 import "../geom/clip-line";
 import "geo";

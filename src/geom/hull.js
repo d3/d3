@@ -1,5 +1,6 @@
-import "../svg/line";
+import "../core/functor";
 import "geom";
+import "point";
 
 /**
  * Computes the 2D convex hull of a set of points using Graham's scanning
@@ -11,8 +12,8 @@ import "geom";
  * @returns polygon [[x1, y1], [x2, y2], …]
  */
 d3.geom.hull = function(vertices) {
-  var x = d3_svg_lineX,
-      y = d3_svg_lineY;
+  var x = d3_geom_pointX,
+      y = d3_geom_pointY;
 
   if (arguments.length) return hull(vertices);
 
@@ -29,7 +30,7 @@ d3.geom.hull = function(vertices) {
         d,
         i, j, h = 0, x1, y1, x2, y2, u, v, a, sp;
 
-    if (fx === d3_svg_lineX && y === d3_svg_lineY) vertices = data;
+    if (fx === d3_geom_pointX && y === d3_geom_pointY) vertices = data;
     else for (i = 0, vertices = []; i < n; ++i) {
       vertices.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i)]);
     }

@@ -1,3 +1,5 @@
+import "../../math/abs";
+
 function d3_geom_voronoiBeach() {
   d3_geom_voronoiRedBlackNode(this);
   this.edge =
