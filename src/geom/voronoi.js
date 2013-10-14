@@ -1,11 +1,11 @@
 import "../core/functor";
-import "../svg/line";
 import "voronoi/";
 import "geom";
+import "point";
 
 d3.geom.voronoi = function(points) {
-  var x = d3_svg_lineX,
-      y = d3_svg_lineY,
+  var x = d3_geom_pointX,
+      y = d3_geom_pointY,
       fx = x,
       fy = y,
       clipExtent = d3_geom_voronoiClipExtent;
@@ -14,25 +14,32 @@ d3.geom.voronoi = function(points) {
   if (points) return voronoi(points);
 
   function voronoi(data) {
-    var polygons = [];
+    var polygons = new Array(data.length),
+        x0 = clipExtent[0][0],
+        y0 = clipExtent[0][1],
+        x1 = clipExtent[1][0],
+        y1 = clipExtent[1][1];
 
     d3_geom_voronoi(sites(data), clipExtent).cells.forEach(function(cell, i) {
-      (polygons[i] = cell.edges.length ? cell.edges.map(function(edge) {
-        var start = edge.start();
-        return [start.x, start.y];
-      }) : [
-        [clipExtent[0][0], clipExtent[1][1]],
-        [clipExtent[1][0], clipExtent[1][1]],
-        [clipExtent[1][0], clipExtent[0][1]],
-        [clipExtent[0][0], clipExtent[0][1]]
-      ]).point = data[i];
+      var edges = cell.edges,
+          site = cell.site,
+          polygon = polygons[i] = edges.length ? edges.map(function(e) { var s = e.start(); return [s.x, s.y]; })
+              : site.x >= x0 && site.x <= x1 && site.y >= y0 && site.y <= y1 ? [[x0, y1], [x1, y1], [x1, y0], [x0, y0]]
+              : [];
+      polygon.point = data[i];
     });
 
     return polygons;
   }
 
   function sites(data) {
-    return data.map(function(d, i) { return {x: fx(d, i), y: fy(d, i), i: i}; });
+    return data.map(function(d, i) {
+      return {
+        x: Math.round(fx(d, i) / ε) * ε,
+        y: Math.round(fy(d, i) / ε) * ε,
+        i: i
+      };
+    });
   }
 
   voronoi.links = function(data) {

@@ -1,4 +1,5 @@
 import "../core/noop";
+import "../math/abs";
 import "../math/trigonometry";
 import "geo";
 import "stream";

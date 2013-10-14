@@ -20,6 +20,12 @@ suite.addBatch({
       assert.equal(nodes[0].value, 0);
       h.nodes(nodes[0]);
       assert.equal(nodes[0].value, 0);
+    },
+    "removes the children array for a node that has no children": function(hierarchy) {
+      var h = hierarchy(),
+          nodes = h.children(function() { return null; }).nodes({children: [{}]});
+      assert.equal(nodes[0].value, 0);
+      assert.isUndefined(nodes[0].children);
     }
   }
 });
