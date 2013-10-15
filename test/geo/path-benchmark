@@ -6,6 +6,8 @@ var fs = require("fs"),
 var formatNumber = d3.format(",.02r"),
     projection = d3.geo.stereographic().clipAngle(150).clipExtent([[0, 0], [960, 500]]),
     path = d3.geo.path().projection(projection),
+    projection0 = d3.geo.mercator().precision(0),
+    path0 = d3.geo.path().projection(projection0),
     graticule = d3.geo.graticule().step([1, 1]),
     circle = d3.geo.circle().angle(30),
     n = 10,
@@ -49,6 +51,14 @@ for (var i = 0, k = 0; i < n; i++, k++) {
 }
 
 console.log("World countries: " + formatNumber((Date.now() - then) / k) + "ms/op.");
+
+then = Date.now();
+
+for (var i = 0, k = 0; i < n; i++, k++) {
+  path0(o);
+}
+
+console.log("World countries precision(0): " + formatNumber((Date.now() - then) / k) + "ms/op.");
 
 o = JSON.parse(fs.readFileSync("./test/data/ocean.json"));
 then = Date.now();
