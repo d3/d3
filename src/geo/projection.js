@@ -47,9 +47,9 @@ function d3_geo_projectionMutator(projectAt) {
 
   projection.tangentSpace = function(point) {
     point = tangentSpaceRotate(point[0] * d3_radians, point[1] * d3_radians);
-    return [[point[0][0] * k + δx, δy - point[0][1] * k],
-            [[ point[1][0][0] * k * d3_radians,  point[1][0][1] * k * d3_radians],
-             [-point[1][1][0] * k * d3_radians, -point[1][1][1] * k * d3_radians]]];
+    return [[point[0][0] * k + δx, δy - point[0][1] * k], // x,y
+            [[point[1][0][0] * k * d3_radians, -point[1][0][1] * k * d3_radians], // dxdλ, dydλ
+             [point[1][1][0] * k * d3_radians, -point[1][1][1] * k * d3_radians]]] // dxdφ, dydφ
   }
 
   projection.stream = function(output) {
