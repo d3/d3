@@ -13,7 +13,6 @@ import "path-context";
 import "projection";
 import "resample";
 import "stream";
-import "transform";
 
 d3.geo.path = function() {
   var pointRadius = 4.5,
@@ -84,9 +83,5 @@ d3.geo.path = function() {
 
 function d3_geo_pathProjectStream(project) {
   var resample = d3_geo_resample(function(x, y) { return project([x * d3_degrees, y * d3_degrees]); });
-  return function(stream) {
-    var transform = new d3_geo_transform(stream = resample(stream));
-    transform.point = function(x, y) { stream.point(x * d3_radians, y * d3_radians); };
-    return transform;
-  };
+  return function(stream) { return d3_geo_projectionRadians(resample(stream)); };
 }

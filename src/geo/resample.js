@@ -12,13 +12,10 @@ function d3_geo_resample(project) {
   }
 
   function resampleNone(stream) {
-    return {
-      point: function(x, y) { x = project(x, y); stream.point(x[0], x[1]); },
-      lineStart: function() { stream.lineStart(); },
-      lineEnd: function() { stream.lineEnd(); },
-      polygonStart: function() { stream.polygonStart(); },
-      polygonEnd: function() { stream.polygonEnd(); }
-    };
+    return d3_geo_transformPoint(stream, function(x, y) {
+      x = project(x, y);
+      stream.point(x[0], x[1]);
+    });
   }
 
   function resampleRecursive(stream) {
