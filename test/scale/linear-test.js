@@ -200,6 +200,7 @@ suite.addBatch({
         assert.strictEqual(x.tickFormat(20,"e")(x.ticks(20)[0]), "1.0e-2")
         var x = d3.scale.linear().domain([1000, 1001]);
         assert.strictEqual(x.tickFormat(3)(x.ticks(3)[1]), "1,000.5");
+        assert.strictEqual(x.tickFormat(3,",g")(x.ticks(3)[1]), "1,000.5");
         assert.strictEqual(x.tickFormat(3,"g")(x.ticks(3)[1]), "1000.5");
         assert.strictEqual(x.tickFormat(3,"e")(x.ticks(3)[1]), "1.0005e+3");
         assert.strictEqual(x.tickFormat(3,"s")(x.ticks(3)[1]), "1.0005k");
