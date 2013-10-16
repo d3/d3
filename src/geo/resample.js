@@ -1,7 +1,6 @@
 import "../math/abs";
 import "../math/trigonometry";
 import "cartesian";
-import "stream";
 
 function d3_geo_resample(project) {
   var δ2 = .5, // precision, px²
@@ -9,6 +8,17 @@ function d3_geo_resample(project) {
       maxDepth = 16;
 
   function resample(stream) {
+    return (maxDepth ? resampleRecursive : resampleNone)(stream);
+  }
+
+  function resampleNone(stream) {
+    return d3_geo_transformPoint(stream, function(x, y) {
+      x = project(x, y);
+      stream.point(x[0], x[1]);
+    });
+  }
+
+  function resampleRecursive(stream) {
     var λ00, φ00, x00, y00, a00, b00, c00, // first point
         λ0, x0, y0, a0, b0, c0; // previous point
 

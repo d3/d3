@@ -3511,6 +3511,15 @@ d3 = function() {
   function d3_geo_resample(project) {
     var δ2 = .5, cosMinDistance = Math.cos(30 * d3_radians), maxDepth = 16;
     function resample(stream) {
+      return (maxDepth ? resampleRecursive : resampleNone)(stream);
+    }
+    function resampleNone(stream) {
+      return d3_geo_transformPoint(stream, function(x, y) {
+        x = project(x, y);
+        stream.point(x[0], x[1]);
+      });
+    }
+    function resampleRecursive(stream) {
       var λ00, φ00, x00, y00, a00, b00, c00, λ0, x0, y0, a0, b0, c0;
       var resample = {
         point: point,
@@ -3577,38 +3586,6 @@ d3 = function() {
     };
     return resample;
   }
-  d3.geo.transform = function(methods) {
-    return {
-      stream: function(stream) {
-        var transform = new d3_geo_transform(stream);
-        for (var k in methods) transform[k] = methods[k];
-        return transform;
-      }
-    };
-  };
-  function d3_geo_transform(stream) {
-    this.stream = stream;
-  }
-  d3_geo_transform.prototype = {
-    point: function(x, y) {
-      this.stream.point(x, y);
-    },
-    sphere: function() {
-      this.stream.sphere();
-    },
-    lineStart: function() {
-      this.stream.lineStart();
-    },
-    lineEnd: function() {
-      this.stream.lineEnd();
-    },
-    polygonStart: function() {
-      this.stream.polygonStart();
-    },
-    polygonEnd: function() {
-      this.stream.polygonEnd();
-    }
-  };
   d3.geo.path = function() {
     var pointRadius = 4.5, projection, context, projectStream, contextStream, cacheStream;
     function path(object) {
@@ -3661,11 +3638,59 @@ d3 = function() {
       return project([ x * d3_degrees, y * d3_degrees ]);
     });
     return function(stream) {
-      var transform = new d3_geo_transform(stream = resample(stream));
-      transform.point = function(x, y) {
-        stream.point(x * d3_radians, y * d3_radians);
-      };
-      return transform;
+      return d3_geo_projectionRadians(resample(stream));
+    };
+  }
+  d3.geo.transform = function(methods) {
+    return {
+      stream: function(stream) {
+        var transform = new d3_geo_transform(stream);
+        for (var k in methods) transform[k] = methods[k];
+        return transform;
+      }
+    };
+  };
+  function d3_geo_transform(stream) {
+    this.stream = stream;
+  }
+  d3_geo_transform.prototype = {
+    point: function(x, y) {
+      this.stream.point(x, y);
+    },
+    sphere: function() {
+      this.stream.sphere();
+    },
+    lineStart: function() {
+      this.stream.lineStart();
+    },
+    lineEnd: function() {
+      this.stream.lineEnd();
+    },
+    polygonStart: function() {
+      this.stream.polygonStart();
+    },
+    polygonEnd: function() {
+      this.stream.polygonEnd();
+    }
+  };
+  function d3_geo_transformPoint(stream, point) {
+    return {
+      point: point,
+      sphere: function() {
+        stream.sphere();
+      },
+      lineStart: function() {
+        stream.lineStart();
+      },
+      lineEnd: function() {
+        stream.lineEnd();
+      },
+      polygonStart: function() {
+        stream.polygonStart();
+      },
+      polygonEnd: function() {
+        stream.polygonEnd();
+      }
     };
   }
   d3.geo.projection = d3_geo_projection;
@@ -3748,11 +3773,9 @@ d3 = function() {
     };
   }
   function d3_geo_projectionRadians(stream) {
-    var transform = new d3_geo_transform(stream);
-    transform.point = function(λ, φ) {
-      stream.point(λ * d3_radians, φ * d3_radians);
-    };
-    return transform;
+    return d3_geo_transformPoint(stream, function(x, y) {
+      stream.point(x * d3_radians, y * d3_radians);
+    });
   }
   function d3_geo_equirectangular(λ, φ) {
     return [ λ, φ ];
