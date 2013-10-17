@@ -115,8 +115,28 @@ function d3_scale_linearTicks(domain, m) {
 }
 
 function d3_scale_linearTickFormat(domain, m, format) {
-  var precision = -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01);
+  var range = d3_scale_linearTickRange(domain, m);
   return d3.format(format
-      ? format.replace(d3_format_re, function(a, b, c, d, e, f, g, h, i, j) { return [b, c, d, e, f, g, h, i || "." + (precision - (j === "%") * 2), j].join(""); })
-      : ",." + precision + "f");
+      ? format.replace(d3_format_re, function(a, b, c, d, e, f, g, h, i, j) { return [b, c, d, e, f, g, h, i || "." + d3_scale_linearFormatPrecision(j, range), j].join(""); })
+      : ",." + d3_scale_linearPrecision(range[2]) + "f");
+}
+
+var d3_scale_linearFormatSignificant = {s: 1, g: 1, p: 1, r: 1, e: 1};
+
+// Returns the number of significant digits after the decimal point.
+function d3_scale_linearPrecision(value) {
+  return -Math.floor(Math.log(value) / Math.LN10 + .01);
+}
+
+// For some format types, the precision specifies the number of significant
+// digits; for others, it specifies the number of digits after the decimal
+// point. For significant format types, the desired precision equals one plus
+// the difference between the decimal precision of the range’s maximum absolute
+// value and the tick step’s decimal precision. For format "e", the digit before
+// the decimal point counts as one.
+function d3_scale_linearFormatPrecision(type, range) {
+  var p = d3_scale_linearPrecision(range[2]);
+  return type in d3_scale_linearFormatSignificant
+      ? Math.abs(p - d3_scale_linearPrecision(Math.max(Math.abs(range[0]), Math.abs(range[1])))) + +(type !== "e")
+      : p - (type === "%") * 2;
 }
