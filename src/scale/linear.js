@@ -120,25 +120,20 @@ function d3_scale_linearTickFormat(domain, m, format) {
   var formatString = format ? 
     format.replace(d3_format_re,
       function(a, b, c, d, e, f, g, h, i, j) {
-	// Compute "decimal precision" of the tick step size, i.e., the position of its last 
-	// significant digit with respect to the decimal point.
-	var decimalPrecisionStep = decimalPrecision(range[2]);
-	var precision;
-	if (j==="s" || j==="g" || j==="e") {
-	  // For these formats, "precision" specifies the number of significant digits, which equals
-	  // one plus the difference between the decimal precision of the range's maximum absolute
-	  // value (which will equal one of its bounds) and the tick step's decimal precision.
-	  var precisionMaxAbsValue = decimalPrecision(Math.max(Math.abs(range[0]), Math.abs(range[1])));
-	  precision = Math.abs(decimalPrecisionStep - precisionMaxAbsValue)+1;
-	  if (j==="e") {
-	    // The digit before the decimal point counts as one.
-	    precision -= 1;
-          }
-        } else {
-          // Formats such as "f" use decimal precision.
-          precision = decimalPrecisionStep;
+        function computePrecision() {
+  	  // Compute the "decimal precision" of the tick step size, i.e., the position of its last 
+	  // significant digit with respect to the decimal point.
+	  var decimalPrecisionStep = decimalPrecision(range[2]);
+	  return (j==="s" || j==="g" || j==="e") ?
+	    // For formats "s" and "g", "precision" specifies the number of significant digits, which
+	    // equals one plus the difference between the decimal precision of the range's maximum
+	    // absolute value (which equals one of its bounds) and the tick step's decimal precision.
+            // Format "e" is similar except that the digit before the decimal point counts as one.
+	    Math.abs(decimalPrecisionStep - decimalPrecision(Math.max(Math.abs(range[0]), Math.abs(range[1])))) + (j!=="e")*1 :
+            // Formats such as "f" and "%" depend only on step precision.
+            decimalPrecisionStep - (j==="%")*2;
         }
-        return [ b, c, d, e, f, g, h, i || "." + (precision - (j === "%") * 2), j ].join(""); 
+        return [ b, c, d, e, f, g, h, i || "." + computePrecision(), j ].join(""); 
       }) 
     : ",." + decimalPrecision(range[2]) + "f";
   return d3.format(formatString);
