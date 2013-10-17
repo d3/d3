@@ -124,11 +124,11 @@ function d3_scale_linearTickFormat(domain, m, format) {
   	  // Compute the "decimal precision" of the tick step size, i.e., the position of its last 
 	  // significant digit with respect to the decimal point.
 	  var decimalPrecisionStep = decimalPrecision(range[2]);
-	  return (j==="s" || j==="g" || j==="e") ?
-	    // For formats "s" and "g", "precision" specifies the number of significant digits, which
-	    // equals one plus the difference between the decimal precision of the range's maximum
-	    // absolute value (which equals one of its bounds) and the tick step's decimal precision.
-            // Format "e" is similar except that the digit before the decimal point counts as one.
+	  return (j==="s" || j==="g" || j==="p" || j==="r" || j==="e") ?
+	    // Precision specifies the number of significant digits, which equals one plus the
+	    // difference between the decimal precision of the range's maximum absolute value (which
+	    // equals one of its bounds) and the tick step's decimal precision. For format "e" the 
+            // digit before the decimal point counts as one.
 	    Math.abs(decimalPrecisionStep - decimalPrecision(Math.max(Math.abs(range[0]), Math.abs(range[1])))) + (j!=="e")*1 :
             // Formats such as "f" and "%" depend only on step precision.
             decimalPrecisionStep - (j==="%")*2;
