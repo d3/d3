@@ -44,6 +44,12 @@ suite.addBatch({
     "applies the optional accessor function": function(max) {
       assert.equal(max([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return _.min(d); }), 2);
       assert.equal(max([1, 2, 3, 4, 5], function(d, i) { return i; }), 4);
+    },
+    "ignores the secord argment if not a function": function(max) {
+      assert.equal(max([3, 20],0), 20);
+    },
+    "can call itself as the optional accessor": function(max) {
+      assert.equal(max([[1,2],[3,4]],max),4);
     }
   }
 });
