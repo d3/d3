@@ -6978,10 +6978,24 @@ d3 = function() {
     return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
   }
   function d3_scale_linearTickFormat(domain, m, format) {
-    var precision = -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01);
+    var range = d3_scale_linearTickRange(domain, m);
     return d3.format(format ? format.replace(d3_format_re, function(a, b, c, d, e, f, g, h, i, j) {
-      return [ b, c, d, e, f, g, h, i || "." + (precision - (j === "%") * 2), j ].join("");
-    }) : ",." + precision + "f");
+      return [ b, c, d, e, f, g, h, i || "." + d3_scale_linearFormatPrecision(j, range), j ].join("");
+    }) : ",." + d3_scale_linearPrecision(range[2]) + "f");
+  }
+  var d3_scale_linearFormatSignificant = {
+    s: 1,
+    g: 1,
+    p: 1,
+    r: 1,
+    e: 1
+  };
+  function d3_scale_linearPrecision(value) {
+    return -Math.floor(Math.log(value) / Math.LN10 + .01);
+  }
+  function d3_scale_linearFormatPrecision(type, range) {
+    var p = d3_scale_linearPrecision(range[2]);
+    return type in d3_scale_linearFormatSignificant ? Math.abs(p - d3_scale_linearPrecision(Math.max(Math.abs(range[0]), Math.abs(range[1])))) + +(type !== "e") : p - (type === "%") * 2;
   }
   d3.scale.log = function() {
     return d3_scale_log(d3.scale.linear().domain([ 0, 1 ]), 10, true, [ 1, 10 ]);
