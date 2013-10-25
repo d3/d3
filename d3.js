@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.3.8"
+    version: "3.3.9"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -1059,13 +1059,16 @@ d3 = function() {
       }
     };
   }
-  var d3_event_dragSelect = d3_vendorSymbol(d3_documentElement.style, "userSelect"), d3_event_dragId = 0;
+  var d3_event_dragSelect = "onselectstart" in d3_document ? null : d3_vendorSymbol(d3_documentElement.style, "userSelect"), d3_event_dragId = 0;
   function d3_event_dragSuppress() {
-    var name = ".dragsuppress-" + ++d3_event_dragId, touchmove = "touchmove" + name, selectstart = "selectstart" + name, dragstart = "dragstart" + name, click = "click" + name, w = d3.select(d3_window).on(touchmove, d3_eventPreventDefault).on(selectstart, d3_eventPreventDefault).on(dragstart, d3_eventPreventDefault), style = d3_documentElement.style, select = style[d3_event_dragSelect];
-    style[d3_event_dragSelect] = "none";
+    var name = ".dragsuppress-" + ++d3_event_dragId, click = "click" + name, w = d3.select(d3_window).on("touchmove" + name, d3_eventPreventDefault).on("dragstart" + name, d3_eventPreventDefault).on("selectstart" + name, d3_eventPreventDefault);
+    if (d3_event_dragSelect) {
+      var style = d3_documentElement.style, select = style[d3_event_dragSelect];
+      style[d3_event_dragSelect] = "none";
+    }
     return function(suppressClick) {
       w.on(name, null);
-      style[d3_event_dragSelect] = select;
+      if (d3_event_dragSelect) style[d3_event_dragSelect] = select;
       if (suppressClick) {
         function off() {
           w.on(click, null);
@@ -3511,6 +3514,15 @@ d3 = function() {
   function d3_geo_resample(project) {
     var δ2 = .5, cosMinDistance = Math.cos(30 * d3_radians), maxDepth = 16;
     function resample(stream) {
+      return (maxDepth ? resampleRecursive : resampleNone)(stream);
+    }
+    function resampleNone(stream) {
+      return d3_geo_transformPoint(stream, function(x, y) {
+        x = project(x, y);
+        stream.point(x[0], x[1]);
+      });
+    }
+    function resampleRecursive(stream) {
       var λ00, φ00, x00, y00, a00, b00, c00, λ0, x0, y0, a0, b0, c0;
       var resample = {
         point: point,
@@ -3577,38 +3589,6 @@ d3 = function() {
     };
     return resample;
   }
-  d3.geo.transform = function(methods) {
-    return {
-      stream: function(stream) {
-        var transform = new d3_geo_transform(stream);
-        for (var k in methods) transform[k] = methods[k];
-        return transform;
-      }
-    };
-  };
-  function d3_geo_transform(stream) {
-    this.stream = stream;
-  }
-  d3_geo_transform.prototype = {
-    point: function(x, y) {
-      this.stream.point(x, y);
-    },
-    sphere: function() {
-      this.stream.sphere();
-    },
-    lineStart: function() {
-      this.stream.lineStart();
-    },
-    lineEnd: function() {
-      this.stream.lineEnd();
-    },
-    polygonStart: function() {
-      this.stream.polygonStart();
-    },
-    polygonEnd: function() {
-      this.stream.polygonEnd();
-    }
-  };
   d3.geo.path = function() {
     var pointRadius = 4.5, projection, context, projectStream, contextStream, cacheStream;
     function path(object) {
@@ -3661,11 +3641,59 @@ d3 = function() {
       return project([ x * d3_degrees, y * d3_degrees ]);
     });
     return function(stream) {
-      var transform = new d3_geo_transform(stream = resample(stream));
-      transform.point = function(x, y) {
-        stream.point(x * d3_radians, y * d3_radians);
-      };
-      return transform;
+      return d3_geo_projectionRadians(resample(stream));
+    };
+  }
+  d3.geo.transform = function(methods) {
+    return {
+      stream: function(stream) {
+        var transform = new d3_geo_transform(stream);
+        for (var k in methods) transform[k] = methods[k];
+        return transform;
+      }
+    };
+  };
+  function d3_geo_transform(stream) {
+    this.stream = stream;
+  }
+  d3_geo_transform.prototype = {
+    point: function(x, y) {
+      this.stream.point(x, y);
+    },
+    sphere: function() {
+      this.stream.sphere();
+    },
+    lineStart: function() {
+      this.stream.lineStart();
+    },
+    lineEnd: function() {
+      this.stream.lineEnd();
+    },
+    polygonStart: function() {
+      this.stream.polygonStart();
+    },
+    polygonEnd: function() {
+      this.stream.polygonEnd();
+    }
+  };
+  function d3_geo_transformPoint(stream, point) {
+    return {
+      point: point,
+      sphere: function() {
+        stream.sphere();
+      },
+      lineStart: function() {
+        stream.lineStart();
+      },
+      lineEnd: function() {
+        stream.lineEnd();
+      },
+      polygonStart: function() {
+        stream.polygonStart();
+      },
+      polygonEnd: function() {
+        stream.polygonEnd();
+      }
     };
   }
   d3.geo.projection = d3_geo_projection;
@@ -3748,11 +3776,9 @@ d3 = function() {
     };
   }
   function d3_geo_projectionRadians(stream) {
-    var transform = new d3_geo_transform(stream);
-    transform.point = function(λ, φ) {
-      stream.point(λ * d3_radians, φ * d3_radians);
-    };
-    return transform;
+    return d3_geo_transformPoint(stream, function(x, y) {
+      stream.point(x * d3_radians, y * d3_radians);
+    });
   }
   function d3_geo_equirectangular(λ, φ) {
     return [ λ, φ ];
@@ -6955,10 +6981,24 @@ d3 = function() {
     return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
   }
   function d3_scale_linearTickFormat(domain, m, format) {
-    var precision = -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01);
+    var range = d3_scale_linearTickRange(domain, m);
     return d3.format(format ? format.replace(d3_format_re, function(a, b, c, d, e, f, g, h, i, j) {
-      return [ b, c, d, e, f, g, h, i || "." + (precision - (j === "%") * 2), j ].join("");
-    }) : ",." + precision + "f");
+      return [ b, c, d, e, f, g, h, i || "." + d3_scale_linearFormatPrecision(j, range), j ].join("");
+    }) : ",." + d3_scale_linearPrecision(range[2]) + "f");
+  }
+  var d3_scale_linearFormatSignificant = {
+    s: 1,
+    g: 1,
+    p: 1,
+    r: 1,
+    e: 1
+  };
+  function d3_scale_linearPrecision(value) {
+    return -Math.floor(Math.log(value) / Math.LN10 + .01);
+  }
+  function d3_scale_linearFormatPrecision(type, range) {
+    var p = d3_scale_linearPrecision(range[2]);
+    return type in d3_scale_linearFormatSignificant ? Math.abs(p - d3_scale_linearPrecision(Math.max(Math.abs(range[0]), Math.abs(range[1])))) + +(type !== "e") : p - (type === "%") * 2;
   }
   d3.scale.log = function() {
     return d3_scale_log(d3.scale.linear().domain([ 0, 1 ]), 10, true, [ 1, 10 ]);

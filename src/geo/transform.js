@@ -23,3 +23,14 @@ d3_geo_transform.prototype = {
   polygonStart: function() { this.stream.polygonStart(); },
   polygonEnd: function() { this.stream.polygonEnd(); }
 };
+
+function d3_geo_transformPoint(stream, point) {
+  return {
+    point: point,
+    sphere: function() { stream.sphere(); },
+    lineStart: function() { stream.lineStart(); },
+    lineEnd: function() { stream.lineEnd(); },
+    polygonStart: function() { stream.polygonStart(); },
+    polygonEnd: function() { stream.polygonEnd(); },
+  };
+}

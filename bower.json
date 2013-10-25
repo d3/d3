@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.3.8",
+  "version": "3.3.9",
   "main": "d3.js",
   "scripts": [
     "d3.js"

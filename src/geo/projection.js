@@ -9,7 +9,6 @@ import "geo";
 import "path";
 import "resample";
 import "rotation";
-import "stream";
 import "transform";
 
 d3.geo.projection = d3_geo_projection;
@@ -116,9 +115,7 @@ function d3_geo_projectionMutator(projectAt) {
 }
 
 function d3_geo_projectionRadians(stream) {
-  var transform = new d3_geo_transform(stream);
-  transform.point = function(λ, φ) {
-    stream.point(λ * d3_radians, φ * d3_radians);
-  };
-  return transform;
+  return d3_geo_transformPoint(stream, function(x, y) {
+    stream.point(x * d3_radians, y * d3_radians);
+  });
 }
