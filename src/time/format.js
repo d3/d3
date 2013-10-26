@@ -21,7 +21,7 @@ function d3_time_format(template) {
     while (++i < n) {
       if (template.charCodeAt(i) === 37) {
         string.push(template.substring(j, i));
-        if ((p = d3_time_formatPads[c = template.charAt(++i)]) != null) c = template.charAt(++i);
+        if ((p = d3_time_formatPads[c = template[++i]]) != null) c = template[++i];
         if (f = d3_time_formats[c]) c = f(date, p == null ? (c === "e" ? " " : "0") : p);
         string.push(c);
         j = i + 1;
@@ -77,8 +77,8 @@ function d3_time_parse(date, template, string, j) {
     if (j >= m) return -1;
     c = template.charCodeAt(i++);
     if (c === 37) {
-      t = template.charAt(i++);
-      p = d3_time_parsers[t in d3_time_formatPads ? template.charAt(i++) : t];
+      t = template[i++];
+      p = d3_time_parsers[t in d3_time_formatPads ? template[i++] : t];
       if (!p || ((j = p(date, string, j)) < 0)) return -1;
     } else if (c != string.charCodeAt(j++)) {
       return -1;
