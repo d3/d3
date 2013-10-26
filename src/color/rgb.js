@@ -97,11 +97,11 @@ function d3_rgb_parse(format, rgb, hsl) {
   if (name = d3_rgb_names.get(format)) return rgb(name.r, name.g, name.b);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
-  if (format != null && format.charAt(0) === "#") {
+  if (format != null && format[0] === "#") {
     if (format.length === 4) {
-      r = format.charAt(1); r += r;
-      g = format.charAt(2); g += g;
-      b = format.charAt(3); b += b;
+      r = format[1]; r += r;
+      g = format[2]; g += g;
+      b = format[3]; b += b;
     } else if (format.length === 7) {
       r = format.substring(1, 3);
       g = format.substring(3, 5);
@@ -151,7 +151,7 @@ function d3_rgb_xyz(r) {
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
   var f = parseFloat(c);
-  return c.charAt(c.length - 1) === "%" ? Math.round(f * 2.55) : f;
+  return c[c.length - 1] === "%" ? Math.round(f * 2.55) : f;
 }
 
 var d3_rgb_names = d3.map({
