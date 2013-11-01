@@ -16,13 +16,13 @@ d3.layout.stack = function() {
 
     // Convert series to canonical two-dimensional representation.
     var series = data.map(function(d, i) {
-      return values.call(stack, d, i);
+      return values.call(this, d, i);
     });
 
     // Convert each series to canonical [[x,y]] representation.
     var points = series.map(function(d) {
       return d.map(function(v, i) {
-        return [x.call(stack, v, i), y.call(stack, v, i)];
+        return [x.call(this, v, i), y.call(this, v, i)];
       });
     });
 
@@ -41,9 +41,9 @@ d3.layout.stack = function() {
         j,
         o;
     for (j = 0; j < m; ++j) {
-      out.call(stack, series[0][j], o = offsets[j], points[0][j][1]);
+      out.call(series[0], series[0][j], o = offsets[j], points[0][j][1]);
       for (i = 1; i < n; ++i) {
-        out.call(stack, series[i][j], o += points[i - 1][j][1], points[i][j][1]);
+        out.call(series[i], series[i][j], o += points[i - 1][j][1], points[i][j][1]);
       }
     }
 
