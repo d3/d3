@@ -49,6 +49,9 @@ import "empty";
 import "node";
 import "size";
 import "enter";
+import "children";
+import "parent";
+import "ancestor";
 
 import "transition";
 import "interrupt";
