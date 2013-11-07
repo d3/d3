@@ -1,20 +1,20 @@
 import "../arrays/bisect";
 
 function d3_scale_polylinear(domain, range, uninterpolate, interpolate) {
-  var u = [],
-      i = [],
-      j = 0,
-      k = Math.min(domain.length, range.length) - 1;
+  var k = Math.min(domain.length, range.length),
+      u = new Array(k),
+      i = new Array(k),
+      j = -1;
 
   // Handle descending domains.
-  if (domain[k] < domain[0]) {
+  if (domain[--k] < domain[0]) {
     domain = domain.slice().reverse();
     range = range.slice().reverse();
   }
 
-  while (++j <= k) {
-    u.push(uninterpolate(domain[j - 1], domain[j]));
-    i.push(interpolate(range[j - 1], range[j]));
+  while (++j < k) {
+    u[j] = uninterpolate(domain[j], domain[j + 1]);
+    i[j] = interpolate(range[j], range[j + 1]);
   }
 
   return function(x) {

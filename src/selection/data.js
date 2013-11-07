@@ -32,7 +32,7 @@ d3_selectionPrototype.data = function(value, key) {
     if (key) {
       var nodeByKeyValue = new d3_Map,
           dataByKeyValue = new d3_Map,
-          keyValues = [],
+          keyValues = new Array(n),
           keyValue;
 
       for (i = -1; ++i < n;) {
@@ -42,7 +42,7 @@ d3_selectionPrototype.data = function(value, key) {
         } else {
           nodeByKeyValue.set(keyValue, node);
         }
-        keyValues.push(keyValue);
+        keyValues[i] = keyValue;
       }
 
       for (i = -1; ++i < m;) {

@@ -141,16 +141,16 @@ var d3_layout_stackOffsets = d3.map({
   "silhouette": function(data) {
     var n = data.length,
         m = data[0].length,
-        sums = [],
+        sums = new Array(m),
         max = 0,
+        j = -1,
         i,
-        j,
         o,
         y0 = [];
-    for (j = 0; j < m; ++j) {
+    while(++j < m) {
       for (i = 0, o = 0; i < n; i++) o += data[i][j][1];
       if (o > max) max = o;
-      sums.push(o);
+      sums[j] = o;
     }
     for (j = 0; j < m; ++j) {
       y0[j] = (max - sums[j]) / 2;

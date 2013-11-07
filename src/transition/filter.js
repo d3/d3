@@ -2,18 +2,22 @@ import "../selection/filter";
 import "transition";
 
 d3_transitionPrototype.filter = function(filter) {
-  var subgroups = [],
+  var m = this.length,
+      subgroups = new Array(m),
       subgroup,
       group,
-      node;
+      node,
+      j,
+      i,
+      n;
 
   if (typeof filter !== "function") filter = d3_selection_filter(filter);
 
-  for (var j = 0, m = this.length; j < m; j++) {
-    subgroups.push(subgroup = []);
-    for (var group = this[j], i = 0, n = group.length; i < n; i++) {
+  for (j = 0; j < m; j++) {
+    subgroups[j]= subgroup = [];
+    for (group = this[j], i = 0, n = group.length; i < n; i++) {
       if ((node = group[i]) && filter.call(node, node.__data__, i)) {
-        subgroup.push(node);
+        subgroup[subgroup.length] = node;
       }
     }
   }
