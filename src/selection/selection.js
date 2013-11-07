@@ -20,8 +20,6 @@ if (typeof Sizzle === "function") {
   d3_selectMatches = Sizzle.matchesSelector;
 }
 
-d3.matches = d3_selectMatches;
-
 d3.selection = function() {
   return d3_selectionRoot;
 };
