@@ -954,6 +954,35 @@ d3 = function() {
       return node;
     };
   }
+  d3_selectionPrototype.children = function(selector) {
+    var children = this.selectAll(function() {
+      return [].filter.call(this.childNodes, function(node) {
+        return node.nodeType === 1;
+      });
+    });
+    return selector ? children.filter(selector) : children;
+  };
+  d3_selectionPrototype.parent = function() {
+    return this.select(function() {
+      return this.parentNode;
+    });
+  };
+  d3_selectionPrototype.ancestor = function(selector) {
+    if (!selector) return this.parent();
+    var matches = typeof selector === "function" ? selector : function() {
+      return d3_selectMatches(this, selector);
+    };
+    return this.select(function(d, i) {
+      var node = this.parentNode;
+      while (node) {
+        if (matches.call(node, node.__data__, i)) {
+          return node;
+        }
+        node = node.parentNode;
+      }
+      return null;
+    });
+  };
   d3_selectionPrototype.transition = function() {
     var id = d3_transitionInheritId || ++d3_transitionId, subgroups = [], subgroup, node, transition = d3_transitionInherit || {
       time: Date.now(),
