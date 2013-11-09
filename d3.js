@@ -8242,9 +8242,13 @@ d3 = function() {
           tickEnter.call(tickTransform, x);
           tickUpdate.call(tickTransform, x);
         } else {
-          tickEnter.call(tickTransform, scale0);
+          if (scale0.rangeBand) {
+            tickEnter.call(tickTransform, scale1);
+          } else {
+            tickEnter.call(tickTransform, scale0);
+            tickExit.call(tickTransform, scale1);
+          }
           tickUpdate.call(tickTransform, scale1);
-          tickExit.call(tickTransform, scale1);
         }
       });
     }
