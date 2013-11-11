@@ -37,7 +37,7 @@
     "jsdom": "0.5.7"
   },
   "devDependencies": {
-    "smash": "0.0.11",
+    "smash": "~0.0.12",
     "uglify-js": "2.4.0",
     "vows": "0.7.0"
   },

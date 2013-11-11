@@ -24,7 +24,7 @@ src/time/format-localized.js: bin/locale src/time/format-locale.js
 src/start.js: package.json bin/start
 	bin/start > $@
 
-d3.js: $(shell node_modules/.bin/smash --list src/d3.js) package.json
+d3.js: $(shell node_modules/.bin/smash --ignore-missing --list src/d3.js) package.json
 	@rm -f $@
 	node_modules/.bin/smash src/d3.js | node_modules/.bin/uglifyjs - -b indent-level=2 -o $@
 	@chmod a-w $@
