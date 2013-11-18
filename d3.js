@@ -1172,7 +1172,7 @@ d3 = function() {
     };
     return d3.rebind(drag, event, "on");
   };
-  var π = Math.PI, τ = 2 * π, halfπ = π / 2, ε = 1e-6, ε2 = ε * ε, d3_radians = π / 180, d3_degrees = 180 / π;
+  var π = Math.PI, τ = 2 * π, halfπ = π / 2, ε = 1e-6, ε2 = ε * ε, πε = π - ε, d3_radians = π / 180, d3_degrees = 180 / π;
   function d3_sgn(x) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
   }
@@ -2850,7 +2850,7 @@ d3 = function() {
         clean = 1;
       },
       point: function(λ1, φ1) {
-        var sλ1 = λ1 > 0 ? π : -π, dλ = abs(λ1 - λ0);
+        var sλ1 = λ1 > 0 ? π : -πε, dλ = abs(λ1 - λ0);
         if (abs(dλ - π) < ε) {
           listener.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? halfπ : -halfπ);
           listener.point(sλ0, φ0);
@@ -2889,21 +2889,27 @@ d3 = function() {
     var φ;
     if (from == null) {
       φ = direction * halfπ;
-      listener.point(-π, φ);
+      listener.point(-πε, φ);
       listener.point(0, φ);
       listener.point(π, φ);
       listener.point(π, 0);
       listener.point(π, -φ);
       listener.point(0, -φ);
-      listener.point(-π, -φ);
-      listener.point(-π, 0);
-      listener.point(-π, φ);
+      listener.point(-πε, -φ);
+      listener.point(-πε, 0);
+      listener.point(-πε, φ);
     } else if (abs(from[0] - to[0]) > ε) {
-      var s = from[0] < to[0] ? π : -π;
-      φ = direction * s / 2;
-      listener.point(-s, φ);
-      listener.point(0, φ);
-      listener.point(s, φ);
+      if (from[0] < to[0]) {
+        φ = direction * π / 2;
+        listener.point(-πε, φ);
+        listener.point(0, φ);
+        listener.point(π, φ);
+      } else {
+        φ = direction * -π / 2;
+        listener.point(π, φ);
+        listener.point(0, φ);
+        listener.point(-πε, φ);
+      }
     } else {
       listener.point(to[0], to[1]);
     }
@@ -3799,7 +3805,7 @@ d3 = function() {
     return forward;
   };
   function d3_geo_identityRotation(λ, φ) {
-    return [ λ > π ? λ - τ : λ < -π ? λ + τ : λ, φ ];
+    return [ λ > π ? λ - τ : λ < -πε ? λ + τ : λ, φ ];
   }
   d3_geo_identityRotation.invert = d3_geo_equirectangular;
   function d3_geo_rotation(δλ, δφ, δγ) {
@@ -3807,7 +3813,7 @@ d3 = function() {
   }
   function d3_geo_forwardRotationλ(δλ) {
     return function(λ, φ) {
-      return λ += δλ, [ λ > π ? λ - τ : λ < -π ? λ + τ : λ, φ ];
+      return λ += δλ, [ λ > π ? λ - τ : λ < -πε ? λ + τ : λ, φ ];
     };
   }
   function d3_geo_rotationλ(δλ) {

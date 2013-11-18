@@ -27,7 +27,7 @@ function d3_geo_clipAntimeridianLine(listener) {
       clean = 1;
     },
     point: function(λ1, φ1) {
-      var sλ1 = λ1 > 0 ? π : -π,
+      var sλ1 = λ1 > 0 ? π : -πε,
           dλ = abs(λ1 - λ0);
       if (abs(dλ - π) < ε) { // line crosses a pole
         listener.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? halfπ : -halfπ);
@@ -75,21 +75,27 @@ function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
   var φ;
   if (from == null) {
     φ = direction * halfπ;
-    listener.point(-π,  φ);
-    listener.point( 0,  φ);
-    listener.point( π,  φ);
-    listener.point( π,  0);
-    listener.point( π, -φ);
-    listener.point( 0, -φ);
-    listener.point(-π, -φ);
-    listener.point(-π,  0);
-    listener.point(-π,  φ);
+    listener.point(-πε,  φ);
+    listener.point(  0,  φ);
+    listener.point(  π,  φ);
+    listener.point(  π,  0);
+    listener.point(  π, -φ);
+    listener.point(  0, -φ);
+    listener.point(-πε, -φ);
+    listener.point(-πε,  0);
+    listener.point(-πε,  φ);
   } else if (abs(from[0] - to[0]) > ε) {
-    var s = from[0] < to[0] ? π : -π;
-    φ = direction * s / 2;
-    listener.point(-s, φ);
-    listener.point( 0, φ);
-    listener.point( s, φ);
+    if (from[0] < to[0]) {
+      φ = direction * π / 2;
+      listener.point(-πε, φ);
+      listener.point(  0, φ);
+      listener.point(  π, φ);
+    } else {
+      φ = direction * -π / 2;
+      listener.point(  π, φ);
+      listener.point(  0, φ);
+      listener.point(-πε, φ);
+    }
   } else {
     listener.point(to[0], to[1]);
   }
