@@ -3,6 +3,7 @@ var π = Math.PI,
     halfπ = π / 2,
     ε = 1e-6,
     ε2 = ε * ε,
+    πε = π - ε,
     d3_radians = π / 180,
     d3_degrees = 180 / π;
 
