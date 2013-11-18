@@ -28,10 +28,10 @@ suite.addBatch({
         assert.deepEqual(h([[200, 200], [760, 300]]), []);
       },
       "for three points": function(h) {
-        assert.deepEqual(h([[200, 200], [760, 300], [500, 500]]), [[500, 500], [760, 300], [200, 200]]);
+        assert.deepEqual(h([[200, 200], [760, 300], [500, 500]]), [[760, 300], [200, 200], [500, 500]]);
       },
       "for four points": function(h) {
-        assert.deepEqual(h([[200, 200], [760, 300], [500, 500], [400, 400]]), [[500, 500], [760, 300], [200, 200]]);
+        assert.deepEqual(h([[200, 200], [760, 300], [500, 500], [400, 400]]), [[760, 300], [200, 200], [500, 500]]);
       },
       "returns a counter-clockwise polygon": function(h) {
         assert.greater(_.geom.polygon(h([[200, 200], [760, 300], [500, 500], [400, 400]])).area(), 0);
@@ -42,7 +42,7 @@ suite.addBatch({
         return hull().x(function(d) { return d.x; }).y(function(d) { return d.y; });
       },
       "of four points": function(h) {
-        assert.deepEqual(h([{x: 200, y: 200}, {x: 760, y: 300}, {x: 500, y: 500}, {x: 400, y: 400}]), [{x: 500, y: 500}, {x: 760, y: 300}, {x: 200, y: 200}]);
+        assert.deepEqual(h([{x: 200, y: 200}, {x: 760, y: 300}, {x: 500, y: 500}, {x: 400, y: 400}]), [{x: 760, y: 300}, {x: 200, y: 200}, {x: 500, y: 500}]);
       }
     },
     "the default hull layout applied directly": {
@@ -56,10 +56,10 @@ suite.addBatch({
         return h([[200, 200], [760, 300]]);
       },
       "for three points": function(h) {
-        assert.deepEqual(h([[200, 200], [760, 300], [500, 500]]), [[500, 500], [760, 300], [200, 200]]);
+        assert.deepEqual(h([[200, 200], [760, 300], [500, 500]]), [[760, 300], [200, 200], [500, 500]]);
       },
       "for four points": function(h) {
-        assert.deepEqual(h([[200, 200], [760, 300], [500, 500], [400, 400]]), [[500, 500], [760, 300], [200, 200]]);
+        assert.deepEqual(h([[200, 200], [760, 300], [500, 500], [400, 400]]), [[760, 300], [200, 200], [500, 500]]);
       }
     }
   }
