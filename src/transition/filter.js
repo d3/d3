@@ -12,7 +12,7 @@ d3_transitionPrototype.filter = function(filter) {
   for (var j = 0, m = this.length; j < m; j++) {
     subgroups.push(subgroup = []);
     for (var group = this[j], i = 0, n = group.length; i < n; i++) {
-      if ((node = group[i]) && filter.call(node, node.__data__, i)) {
+      if ((node = group[i]) && filter.call(node, node.__data__, i, j)) {
         subgroup.push(node);
       }
     }

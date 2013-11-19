@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.3.9"
+    version: "3.3.10"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -840,7 +840,7 @@ d3 = function() {
       subgroups.push(subgroup = []);
       subgroup.parentNode = (group = this[j]).parentNode;
       for (var i = 0, n = group.length; i < n; i++) {
-        if ((node = group[i]) && filter.call(node, node.__data__, i)) {
+        if ((node = group[i]) && filter.call(node, node.__data__, i, j)) {
           subgroup.push(node);
         }
       }
@@ -3574,7 +3574,7 @@ d3 = function() {
     function resampleLineTo(x0, y0, λ0, a0, b0, c0, x1, y1, λ1, a1, b1, c1, depth, stream) {
       var dx = x1 - x0, dy = y1 - y0, d2 = dx * dx + dy * dy;
       if (d2 > 4 * δ2 && depth--) {
-        var a = a0 + a1, b = b0 + b1, c = c0 + c1, m = Math.sqrt(a * a + b * b + c * c), φ2 = Math.asin(c /= m), λ2 = abs(abs(c) - 1) < ε ? (λ0 + λ1) / 2 : Math.atan2(b, a), p = project(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x2 - x0, dy2 = y2 - y0, dz = dy * dx2 - dx * dy2;
+        var a = a0 + a1, b = b0 + b1, c = c0 + c1, m = Math.sqrt(a * a + b * b + c * c), φ2 = Math.asin(c /= m), λ2 = abs(abs(c) - 1) < ε || abs(λ0 - λ1) < ε ? (λ0 + λ1) / 2 : Math.atan2(b, a), p = project(λ2, φ2), x2 = p[0], y2 = p[1], dx2 = x2 - x0, dy2 = y2 - y0, dz = dy * dx2 - dx * dy2;
         if (dz * dz / d2 > δ2 || abs((dx * dx2 + dy * dy2) / d2 - .5) > .3 || a0 * a1 + b0 * b1 + c0 * c1 < cosMinDistance) {
           resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a /= m, b /= m, c, depth, stream);
           stream.point(x2, y2);
@@ -7946,7 +7946,7 @@ d3 = function() {
     for (var j = 0, m = this.length; j < m; j++) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = 0, n = group.length; i < n; i++) {
-        if ((node = group[i]) && filter.call(node, node.__data__, i)) {
+        if ((node = group[i]) && filter.call(node, node.__data__, i, j)) {
           subgroup.push(node);
         }
       }
@@ -8236,16 +8236,17 @@ d3 = function() {
           }
         }
         if (scale1.rangeBand) {
-          var dx = scale1.rangeBand() / 2, x = function(d) {
-            return scale1(d) + dx;
+          var x = scale1, dx = x.rangeBand() / 2;
+          scale0 = scale1 = function(d) {
+            return x(d) + dx;
           };
-          tickEnter.call(tickTransform, x);
-          tickUpdate.call(tickTransform, x);
+        } else if (scale0.rangeBand) {
+          scale0 = scale1;
         } else {
-          tickEnter.call(tickTransform, scale0);
-          tickUpdate.call(tickTransform, scale1);
           tickExit.call(tickTransform, scale1);
         }
+        tickEnter.call(tickTransform, scale0);
+        tickUpdate.call(tickTransform, scale1);
       });
     }
     axis.scale = function(x) {
