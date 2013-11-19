@@ -35,6 +35,12 @@ suite.addBatch({
       },
       "returns a counter-clockwise polygon": function(h) {
         assert.greater(_.geom.polygon(h([[200, 200], [760, 300], [500, 500], [400, 400]])).area(), 0);
+      },
+      "handles points with duplicate ordinates": function(h) {
+        assert.deepEqual(h([[-10, -10], [10, 10], [10, -10], [-10, 10]]), [[10, 10], [10, -10], [-10, -10], [-10, 10]]);
+      },
+      "handles overlapping upper and lower hulls": function(h) {
+        assert.deepEqual(h([[0, -10], [0, 10], [0, 0], [10, 0], [-10, 0]]), [[10, 0], [0, -10], [-10, 0], [0, 10]]);
       }
     },
     "the hull layout with custom accessors": {
