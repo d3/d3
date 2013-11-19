@@ -27,16 +27,14 @@ d3.geom.hull = function(vertices) {
         fy = d3_functor(y),
         n = data.length;
 
-    for (i = 0, points = []; i < n; ++i) {
+    for (i = 0, points = []; i < n; i++) {
       points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i), i]);
     }
 
     // sort ascending by x-coord first, y-coord second
-    points.sort(function(a, b) {
-      return (a[0] < b[0] || (a[0] === b[0] && a[1] < b[1])) ? -1 : 1;
-    });
+    points.sort(function(a, b) { return (a[0] - b[0]|| a[1] - b[1]); });
 
-    // we flip bottommost points across y axis so we can use the upper hull  routine on both
+    // we flip bottommost points across y axis so we can use the upper hull routine on both
     var flipped_points = [];
     for (var i = 0; i < n; i++) flipped_points.push([points[i][0], -points[i][1]]);
 
