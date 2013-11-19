@@ -35,7 +35,7 @@ function d3_geo_clipAntimeridianLine(listener) {
         listener.lineEnd();
         listener.lineStart();
         listener.point(sλ1, φ0);
-        listener.point( λ1, φ0);
+        listener.point(λ1, φ0);
         clean = 0;
       } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antimeridian
         // handle degeneracies
