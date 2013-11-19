@@ -45,10 +45,12 @@ d3.geom.hull = function(vertices) {
     var skip_l = (lhull[0] === uhull[0]),
         skip_r  = (lhull[lhull.length - 1] === uhull[uhull.length - 1]),
         poly = [];
+
     for (var i=uhull.length - 1; i >= 0; i--)
-      poly.push(data[points[uhull[i]][2]]);
+      poly.push(data[points[uhull[i]][2]]);  // add upper hull in r->l order
     for (var i = +skip_l; i < lhull.length - skip_r; i++)
-      poly.push(data[points[lhull[i]][2]]);
+      poly.push(data[points[lhull[i]][2]]);  // add lower hull in l->r order
+
     return poly;
   }
 
