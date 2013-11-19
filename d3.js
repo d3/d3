@@ -8236,20 +8236,17 @@ d3 = function() {
           }
         }
         if (scale1.rangeBand) {
-          var dx = scale1.rangeBand() / 2, x = function(d) {
-            return scale1(d) + dx;
+          var x = scale1, dx = x.rangeBand() / 2;
+          scale0 = scale1 = function(d) {
+            return x(d) + dx;
           };
-          tickEnter.call(tickTransform, x);
-          tickUpdate.call(tickTransform, x);
+        } else if (scale0.rangeBand) {
+          scale0 = scale1;
         } else {
-          if (scale0.rangeBand) {
-            tickEnter.call(tickTransform, scale1);
-          } else {
-            tickEnter.call(tickTransform, scale0);
-            tickExit.call(tickTransform, scale1);
-          }
-          tickUpdate.call(tickTransform, scale1);
+          tickExit.call(tickTransform, scale1);
         }
+        tickEnter.call(tickTransform, scale0);
+        tickUpdate.call(tickTransform, scale1);
       });
     }
     axis.scale = function(x) {
