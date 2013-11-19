@@ -25,17 +25,18 @@ d3.geom.hull = function(vertices) {
 
     var fx = d3_functor(x),
         fy = d3_functor(y),
-        n = data.length;
+        n = data.length,
+        points = [],  // of the form [[x0, y0, 0], ..., [xn, yn, n]]
+        flipped_points = [];
 
-    for (i = 0, points = []; i < n; i++) {
-      points.push([+fx.call(this, d = data[i], i), +fy.call(this, d, i), i]);
+    for (var i = 0 ; i < n; i++) {
+      points.push([+fx.call(this, data[i], i), +fy.call(this, data[i], i), i]);
     }
 
     // sort ascending by x-coord first, y-coord second
     points.sort(function(a, b) { return (a[0] - b[0]|| a[1] - b[1]); });
 
     // we flip bottommost points across y axis so we can use the upper hull routine on both
-    var flipped_points = [];
     for (var i = 0; i < n; i++) flipped_points.push([points[i][0], -points[i][1]]);
 
     var uhull = d3_geom_hull_find_upper_hull(points);
