@@ -12,8 +12,6 @@ import "point";
  *
  * @param vertices [[x1, y1], [x2, y2], …]
  * @returns polygon [[x1, y1], [x2, y2], …]
- *
- * @author Daniel Goldbach
  */
 d3.geom.hull = function(vertices) {
   var x = d3_geom_pointX,
