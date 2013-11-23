@@ -45,19 +45,19 @@ suite.addBatch({
 
       // Cases below taken from http://uva.onlinejudge.org/external/6/681.html
 
-      "for a complex 15-point polygon": function(h) {
-        var poly = [[30,30], [50,60], [60,20], [70,45], [86,39], [112,60], [200,113], [250,50], [300,200], [130,240], [76,150], [47,76], [36,40], [33,35], [30,30]];
-        var expectedHull = [[300,200], [250,50], [60,20], [30,30], [47,76], [76,150], [130,240]];
+      "for a set of 6 points with non-trivial hull": function(h) {
+        var poly = [[60,20], [250,140], [180,170], [79,140], [50,60], [60,20]];
+        var expectedHull = [[250,140], [60,20], [50,60], [79,140], [180,170]];
         assert.deepEqual(h(poly), expectedHull);
       },
-      "for a complex 12-point polygon": function(h) {
+      "for a set of 12 points with non-trivial hull": function(h) {
         var poly = [[50,60], [60,20], [70,45], [100,70], [125,90], [200,113], [250,140], [180,170], [105,140], [79,140], [60,85], [50,60]];
         var expectedHull = [[250,140], [60,20], [50,60], [79,140], [180,170]];
         assert.deepEqual(h(poly), expectedHull);
       },
-      "for a complex 6-point polygon": function(h) {
-        var poly = [[60,20], [250,140], [180,170], [79,140], [50,60], [60,20]];
-        var expectedHull = [[250,140], [60,20], [50,60], [79,140], [180,170]];
+      "for a set of 15 points with non-trivial hull": function(h) {
+        var poly = [[30,30], [50,60], [60,20], [70,45], [86,39], [112,60], [200,113], [250,50], [300,200], [130,240], [76,150], [47,76], [36,40], [33,35], [30,30]];
+        var expectedHull = [[300,200], [250,50], [60,20], [30,30], [47,76], [76,150], [130,240]];
         assert.deepEqual(h(poly), expectedHull);
       }
     },
