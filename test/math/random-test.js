@@ -15,8 +15,6 @@ var suite = vows.describe("d3.random");
  *
  * More on RNG testing here:
  * @see http://www.johndcook.com/Beautiful_Testing_ch10.pdf
- *
- * @author Daniel Goldbach
  */
 
 // Arbitrarily chosen parameters for the normal RNG
