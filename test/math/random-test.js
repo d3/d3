@@ -105,15 +105,22 @@ function logNormalCDF(mean, stddev) {
 function irwinHallCDF(n) {
   var multiplier = 1 / factorial(n);
 
-  // Precompute binom(n, k), k=0..n for efficiency. (<3 closures)
+  // Precompute binom(n, k), k=0..n for efficiency. (this array gets stored
+  // inside the closure, so it is only computed once)
   var binoms = [];
   for (var k = 0; k <= n; k++) {
     binoms.push(binom(n, k));
   }
 
+  // @see 'CDF' at http://en.wikipedia.org/wiki/Irwin%E2%80%93Hall_distribution
   return function(x) {
     var t = 0;
+
+    // What d3 calls Irwin-Hill distribution is actually a Bates distribution:
+    // the Irwin-Hall distribution divided by n. So we multiply the Bates
+    // distribution's x-value by n to get the Irwin-Hall CDF at x.
     x *= n;
+
     for (var k = 0; k < x; k++) {
       t += Math.pow(-1, k % 2) * binoms[k] * Math.pow(x - k, n);
     }
@@ -130,7 +137,7 @@ function factorial(n) {
 }
 
 function binom(n, k) {
-  if (k > n) return undefined;
+  if (k > n) return undefined;  // 0 <= k <= n
   return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
