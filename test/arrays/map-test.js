@@ -52,6 +52,18 @@ suite.addBatch({
       }
     },
     "forEach": {
+      "iterates over the key-values in map": function(map) {
+        var m = map();
+        m.set('foo', 3);
+        m.set('bar', 'barval');
+        var entries = {};
+        m.forEach(function(k, v) {
+          entries[k] = v;
+        });
+        assert.deepEqual(entries, {'foo': 3, 'bar':'barval'});
+      }
+    },
+    "keys": {
       "empty maps have an empty keys array": function(map) {
         var m = map();
         assert.deepEqual(m.entries(), []);
@@ -81,9 +93,7 @@ suite.addBatch({
         assert.deepEqual(m.entries(), []);
         m.remove("foo");
         assert.deepEqual(m.entries(), []);
-      }
-    },
-    "keys": {
+      },
       "returns an array of string keys": function(map) {
         var m = map({foo: 1, bar: "42"});
         assert.deepEqual(m.keys().sort(), ["bar", "foo"]);
@@ -140,6 +150,58 @@ suite.addBatch({
       "returns undefined for missing keys": function(map) {
         var m = map({foo: 42});
         assert.isFalse(m.has("bar"));
+      }
+    },
+    "size": {
+      "gives size of map": function(map) {
+        var m = map();
+        assert.deepEqual(m.size(), 0);
+        m.set("foo", "whatever");
+        assert.deepEqual(m.size(), 1);
+        m.set("bar", 4);
+        assert.deepEqual(m.size(), 2);
+        m.remove("foo");
+        assert.deepEqual(m.size(), 1);
+        m.remove("bar");
+        assert.deepEqual(m.size(), 0);
+      },
+      "counts each key exactly once": function(map) {
+        var m = map();
+        assert.deepEqual(m.size(), 0);
+        m.set("foo", 2);
+        assert.deepEqual(m.size(), 1);
+        m.set("foo", 3);
+        assert.deepEqual(m.size(), 1);
+        m.remove("foo");
+        assert.deepEqual(m.size(), 0);
+      },
+      "size unaffected by removing elements not in set": function(map) {
+        var m = map();
+        m.set('foo', 1);
+        assert.deepEqual(m.size(), 1);
+        m.remove('notfoo');
+        assert.deepEqual(m.size(), 1);
+        m.remove('foo');
+        assert.deepEqual(m.size(), 0);
+      },
+      "allows for set element 'size'": function(map) {
+        var m = map();
+        assert.deepEqual(m.size(), 0);
+        m.set('foo', 3);
+        m.set('size', 1);
+        assert.deepEqual(m.size(), 2);
+      }
+    },
+    "empty": {
+      "returns true iff map is empty": function(map) {
+        var m = map();
+        assert.isTrue(m.empty());
+        m.set('foo', 1);
+        assert.isFalse(m.empty());
+        m.remove('notfoo');
+        assert.isFalse(m.empty());
+        m.remove('foo');
+        assert.isTrue(m.empty());
       }
     },
     "get": {

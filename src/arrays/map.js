@@ -7,7 +7,9 @@ d3.map = function(object) {
   return map;
 };
 
-function d3_Map() {}
+function d3_Map() {
+  this._size = 0;
+}
 
 d3_class(d3_Map, {
   has: function(key) {
@@ -17,11 +19,19 @@ d3_class(d3_Map, {
     return this[d3_map_prefix + key];
   },
   set: function(key, value) {
+    if (!this.has(key)) this._size++;
     return this[d3_map_prefix + key] = value;
   },
   remove: function(key) {
     key = d3_map_prefix + key;
+    if (key in this) this._size--;
     return key in this && delete this[key];
+  },
+  size: function() {
+    return this._size;
+  },
+  empty: function() {
+    return this._size === 0;
   },
   keys: function() {
     var keys = [];
