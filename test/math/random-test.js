@@ -19,8 +19,9 @@ var suite = vows.describe("d3.random");
  * @see http://www.johndcook.com/Beautiful_Testing_ch10.pdf
  */
 
-// Arbitrarily chosen parameters for the normal RNG.
-// It's good practice to set |STDDEV| << |MEAN|.
+// Arbitrarily chosen parameters for the normal RNG. It's good practice to set
+// |STDDEV| << |MEAN| to help catch bugs involving accidental swapping of
+// stddev and mean.
 var STDDEV = 38.8;
 var MEAN = -349234;
 
@@ -51,7 +52,6 @@ suite.addBatch({
     }
   }
 });
-
 
 /**
  * A macro that that takes a RNG and performs a Kolmogorov-Smirnov test: asserts
@@ -112,7 +112,7 @@ function irwinHallCDF(n) {
     binoms.push(binom(n, k));
   }
 
-  // @see 'CDF' at http://en.wikipedia.org/wiki/Irwin%E2%80%93Hall_distribution
+  // @see CDF at http://en.wikipedia.org/wiki/Irwin%E2%80%93Hall_distribution
   return function(x) {
     var t = 0;
 
@@ -124,7 +124,7 @@ function irwinHallCDF(n) {
     for (var k = 0; k < x; k++) {
       t += Math.pow(-1, k % 2) * binoms[k] * Math.pow(x - k, n);
     }
-    return multiplier * t;
+    return t / normalisingFactor;
   }
 }
 
@@ -137,7 +137,7 @@ function factorial(n) {
 }
 
 function binom(n, k) {
-  if (k > n) return undefined;  // 0 <= k <= n
+  if (k < 0 || k > n) return undefined;  // only defined for 0 <= k <= n
   return factorial(n) / (factorial(k) * factorial(n - k));
 }
 
