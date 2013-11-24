@@ -1,6 +1,7 @@
 var vows = require("vows"),
     load = require("../load"),
-    assert = require("../assert");
+    assert = require("../assert"),
+    seedrandom = require('seedrandom');
 
 var suite = vows.describe("d3.random");
 
@@ -8,18 +9,24 @@ var suite = vows.describe("d3.random");
  * Testing a random number generator is a bit more complicated than testing
  * deterministic code, so we use different techniques.
  *
- * If the RNG is correct, each test in this suite will pass with probability at
- * least P. The tests have been designed so that P ≥ 98%. If the tests fail
- * consistently, d3's RNG is broken. Specific values of P are given above each
- * case.
+ * If the RNG is correct, each test in this suite will pass with probability
+ * at least P. The tests have been designed so that P ≥ 98%. Specific values
+ * of P are given above each case. We use the seedrandom module to get around
+ * this non-deterministic aspect -- so it is safe to assume that if the tests
+ * fail, then d3's RNG is broken.
  *
  * More on RNG testing here:
  * @see http://www.johndcook.com/Beautiful_Testing_ch10.pdf
  */
 
-// Arbitrarily chosen parameters for the normal RNG
+// Arbitrarily chosen parameters for the normal RNG.
+// It's good practice to set |STDDEV| << |MEAN|.
 var STDDEV = 38.8;
-var MEAN = 23428;
+var MEAN = -349234;
+
+// Overwrites Math.random to a seeded random function.
+// (by default Math.random is seeded with current time)
+Math.seedrandom('a random seed.');
 
 suite.addBatch({
   "random": {
