@@ -29,8 +29,15 @@
   "browserify": "index-browserify.js",
   "jspm": {
     "main": "d3.js",
+    "shim": {
+      "d3": {
+        "exports": "d3"
+      }
+    },
     "files": ["d3.js"],
-    "buildConfig": { "uglify": true }
+    "buildConfig": { 
+      "uglify": true 
+    }
   },
   "jam": {
     "main": "d3.js",
