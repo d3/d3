@@ -16,16 +16,19 @@ var d3_time_daySymbols = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"
  * Set localized strings for weekdays and month.
  * When d3 is initialized some time variables are used to calculate e. g. european and us calendar weeks.
  * As far as I know, renaming this strings later does not produce side effects.
- * @param time_days from sunday to saturday
- * @param time_dayAbbreviations 3 letters, from sun to sat
- * @param time_months from january to december
- * @param time_monthAbbreviations 3 letters, from jan to dec
+ * @param time_days full day names for sunday to saturday
+ * @param time_dayAbbreviations short day names for sunday to saturday, e.g. sun ... sat
+ * @param time_months full month names from january to december
+ * @param time_monthAbbreviations short month names from january to december,e.g. jan ... dec
  */
 d3.time.setLocalizedStrings = function(time_days, time_dayAbbreviations, time_months, time_monthAbbreviations){
     function isValidArray(array, expectedSize){
         return (array && Object.prototype.toString.apply(array) === '[object Array]' && array.length == expectedSize ? true : false);
     }
     // overwrite if valid, otherwise keep english presets
+    // check for size
+    // should we check for string?
+    // do not check for string length as it differs e.g. english vs german vs chinese
     if(isValidArray(time_days, 7)){
         d3_time_days = time_days;
         d3_time_daySymbols = time_days;
