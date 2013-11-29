@@ -8675,7 +8675,25 @@ d3 = function() {
   };
   var d3_time_prototype = Date.prototype;
   var d3_time_formatDateTime = "%a %b %e %X %Y", d3_time_formatDate = "%m/%d/%Y", d3_time_formatTime = "%H:%M:%S";
-  var d3_time_days = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ], d3_time_dayAbbreviations = [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ], d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], d3_time_monthAbbreviations = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+  var d3_time_daySymbols = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ], d3_time_days = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ], d3_time_dayAbbreviations = [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ], d3_time_months = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ], d3_time_monthAbbreviations = [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ];
+  d3.time.setLocalizedStrings = function(time_days, time_dayAbbreviations, time_months, time_monthAbbreviations) {
+    function isValidArray(array, expectedSize) {
+      return array && Object.prototype.toString.apply(array) === "[object Array]" && array.length == expectedSize ? true : false;
+    }
+    if (isValidArray(time_days, 7)) {
+      d3_time_days = time_days;
+      d3_time_daySymbols = time_days;
+    }
+    if (isValidArray(time_dayAbbreviations, 7)) {
+      d3_time_dayAbbreviations = time_dayAbbreviations;
+    }
+    if (isValidArray(time_months, 12)) {
+      d3_time_months = time_months;
+    }
+    if (isValidArray(time_monthAbbreviations, 12)) {
+      d3_time_monthAbbreviations = time_monthAbbreviations;
+    }
+  };
   function d3_time_interval(local, step, number) {
     function round(date) {
       var d0 = local(date), d1 = offset(d0, 1);
