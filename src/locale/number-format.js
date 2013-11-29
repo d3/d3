@@ -1,0 +1,121 @@
+import "../arrays/map";
+import "../core/identity";
+import "../format/formatPrefix";
+import "../format/precision";
+import "../format/round";
+
+function d3_format(specifier) {
+  var match = d3_format_re.exec(specifier),
+      fill = match[1] || " ",
+      align = match[2] || ">",
+      sign = match[3] || "",
+      symbol = match[4] || "",
+      zfill = match[5],
+      width = +match[6],
+      comma = match[7],
+      precision = match[8],
+      type = match[9],
+      scale = 1,
+      suffix = "",
+      integer = false;
+
+  if (precision) precision = +precision.substring(1);
+
+  if (zfill || fill === "0" && align === "=") {
+    zfill = fill = "0";
+    align = "=";
+    if (comma) width -= Math.floor((width - 1) / 4);
+  }
+
+  switch (type) {
+    case "n": comma = true; type = "g"; break;
+    case "%": scale = 100; suffix = "%"; type = "f"; break;
+    case "p": scale = 100; suffix = "%"; type = "r"; break;
+    case "b":
+    case "o":
+    case "x":
+    case "X": if (symbol === "#") symbol = "0" + type.toLowerCase();
+    case "c":
+    case "d": integer = true; precision = 0; break;
+    case "s": scale = -1; type = "r"; break;
+  }
+
+  if (symbol === "#") symbol = "";
+  else if (symbol === "$") symbol = d3_format_currencySymbol;
+
+  // If no precision is specified for r, fallback to general notation.
+  if (type == "r" && !precision) type = "g";
+
+  // Ensure that the requested precision is in the supported range.
+  if (precision != null) {
+    if (type == "g") precision = Math.max(1, Math.min(21, precision));
+    else if (type == "e" || type == "f") precision = Math.max(0, Math.min(20, precision));
+  }
+
+  type = d3_format_types.get(type) || d3_format_typeDefault;
+
+  var zcomma = zfill && comma;
+
+  return function(value) {
+
+    // Return the empty string for floats formatted as ints.
+    if (integer && (value % 1)) return "";
+
+    // Convert negative to positive, and record the sign prefix.
+    var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
+
+    // Apply the scale, computing it from the value's exponent for si format.
+    if (scale < 0) {
+      var prefix = d3.formatPrefix(value, precision);
+      value = prefix.scale(value);
+      suffix = prefix.symbol;
+    } else {
+      value *= scale;
+    }
+
+    // Convert to the desired precision.
+    value = type(value, precision);
+
+    // Break the value into the integer part (before) and decimal part (after).
+    var i = value.lastIndexOf("."),
+        before = i < 0 ? value : value.substring(0, i),
+        after = i < 0 ? "" : d3_format_decimalPoint + value.substring(i + 1);
+
+     // If the fill character is not "0", grouping is applied before padding.
+    if (!zfill && comma) before = d3_format_group(before);
+
+    var length = symbol.length + before.length + after.length + (zcomma ? 0 : negative.length),
+        padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
+
+    // If the fill character is "0", grouping is applied after padding.
+    if (zcomma) before = d3_format_group(padding + before);
+
+    // Apply symbol as prefix. TODO allow suffix symbols
+    negative += symbol;
+
+    // Rejoin integer and decimal parts.
+    value = before + after;
+
+    return (align === "<" ? negative + value + padding
+          : align === ">" ? padding + negative + value
+          : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length)
+          : negative + (zcomma ? value : padding + value)) + suffix;
+  };
+};
+
+// Apply comma grouping for thousands.
+var d3_format_group = d3_identity;
+if (d3_format_grouping) {
+  var d3_format_groupingLength = d3_format_grouping.length;
+  d3_format_group = function(value) {
+    var i = value.length,
+        t = [],
+        j = 0,
+        g = d3_format_grouping[0];
+    while (i > 0 && g > 0) {
+      t.push(value.substring(i -= g, i + g));
+      g = d3_format_grouping[j = (j + 1) % d3_format_groupingLength];
+    }
+    return t.reverse().join(d3_format_thousandsSeparator);
+  };
+}
