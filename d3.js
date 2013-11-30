@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.3.10"
+    version: "3.3.11"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -1937,11 +1937,11 @@ d3 = function() {
     var reFormat = new RegExp('["' + delimiter + "\n]"), delimiterCode = delimiter.charCodeAt(0);
     function dsv(url, row, callback) {
       if (arguments.length < 3) callback = row, row = null;
-      var xhr = d3.xhr(url, mimeType, callback);
+      var xhr = d3_xhr(url, mimeType, row == null ? response : typedResponse(row), callback);
       xhr.row = function(_) {
         return arguments.length ? xhr.response((row = _) == null ? response : typedResponse(_)) : row;
       };
-      return xhr.row(row);
+      return xhr;
     }
     function response(request) {
       return dsv.parse(request.responseText);

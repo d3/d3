@@ -7,7 +7,7 @@ d3.dsv = function(delimiter, mimeType) {
 
   function dsv(url, row, callback) {
     if (arguments.length < 3) callback = row, row = null;
-    var xhr = d3.xhr(url, mimeType, callback);
+    var xhr = d3_xhr(url, mimeType, row == null ? response : typedResponse(row), callback);
 
     xhr.row = function(_) {
       return arguments.length
@@ -15,7 +15,7 @@ d3.dsv = function(delimiter, mimeType) {
           : row;
     };
 
-    return xhr.row(row);
+    return xhr;
   }
 
   function response(request) {
