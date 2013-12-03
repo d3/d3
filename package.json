@@ -29,7 +29,14 @@
   "browserify": "index-browserify.js",
   "jspm": {
     "main": "d3.js",
-    "files": ["d3.js"],
+    "shim": {
+      "d3": {
+        "exports": "d3"
+      }
+    },
+    "files": [
+      "d3.js"
+    ],
     "buildConfig": {
       "uglify": true
     }
