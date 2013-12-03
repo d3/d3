@@ -4165,16 +4165,26 @@ d3 = function() {
   (d3.geo.stereographic = function() {
     return d3_geo_projection(d3_geo_stereographic);
   }).raw = d3_geo_stereographic;
-  function d3_geo_transverseMercator(λ, φ) {
-    var B = Math.cos(φ) * Math.sin(λ);
-    return [ Math.log((1 + B) / (1 - B)) / 2, Math.atan2(Math.tan(φ), Math.cos(λ)) ];
+  function d3_geo_transverse(projection) {
+    var center = projection.center, rotate = projection.rotate, stream = projection.stream;
+    projection.center = function(_) {
+      return _ ? center([ -_[1], _[0] ]) : (_ = center(), [ -_[1], _[0] ]);
+    };
+    projection.rotate = function(_) {
+      return _ ? rotate([ _[0], _[1], _.length > 2 ? _[2] + 90 : 90 ]) : (_ = rotate(), 
+      [ _[0], _[1], _[2] - 90 ]);
+    };
+    projection.stream = function(output) {
+      var t = projection.translate(), dx = t[0] + t[1], dy = t[0] - t[1];
+      return stream(d3_geo_transformPoint(output, function(x, y) {
+        output.point(dx - y, x - dy);
+      }));
+    };
+    return projection.rotate(rotate());
   }
-  d3_geo_transverseMercator.invert = function(x, y) {
-    return [ Math.atan2(d3_sinh(x), Math.cos(y)), d3_asin(Math.sin(y) / d3_cosh(x)) ];
+  d3.geo.transverseMercator = function() {
+    return d3_geo_transverse(d3.geo.mercator());
   };
-  (d3.geo.transverseMercator = function() {
-    return d3_geo_mercatorProjection(d3_geo_transverseMercator);
-  }).raw = d3_geo_transverseMercator;
   d3.geom = {};
   function d3_geom_pointX(d) {
     return d[0];
