@@ -38,12 +38,17 @@ d3_class(d3_Map, {
     this.forEach(function(key, value) { entries.push({key: key, value: value}); });
     return entries;
   },
+  size: function() {
+    var size = 0;
+    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) ++size;
+    return size;
+  },
+  empty: function() {
+    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) return false;
+    return true;
+  },
   forEach: function(f) {
-    for (var key in this) {
-      if (key.charCodeAt(0) === d3_map_prefixCode) {
-        f.call(this, key.substring(1), this[key]);
-      }
-    }
+    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) f.call(this, key.substring(1), this[key]);
   }
 });
 

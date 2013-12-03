@@ -51,6 +51,42 @@ suite.addBatch({
         assert.isFalse(b.has("bar"));
       }
     },
+    "size": {
+      "returns the number of distinct keys": function(map) {
+        var m = map();
+        assert.deepEqual(m.size(), 0);
+        m.set("foo", 1);
+        assert.deepEqual(m.size(), 1);
+        m.set("foo", 2);
+        assert.deepEqual(m.size(), 1);
+        m.set("bar", 2);
+        assert.deepEqual(m.size(), 2);
+        m.remove("foo");
+        assert.deepEqual(m.size(), 1);
+        m.remove("foo");
+        assert.deepEqual(m.size(), 1);
+        m.remove("bar");
+        assert.deepEqual(m.size(), 0);
+      }
+    },
+    "empty": {
+      "returns true only if the map is empty": function(map) {
+        var m = map();
+        assert.isTrue(m.empty());
+        m.set("foo", 1);
+        assert.isFalse(m.empty());
+        m.set("foo", 2);
+        assert.isFalse(m.empty());
+        m.set("bar", 2);
+        assert.isFalse(m.empty());
+        m.remove("foo");
+        assert.isFalse(m.empty());
+        m.remove("foo");
+        assert.isFalse(m.empty());
+        m.remove("bar");
+        assert.isTrue(m.empty());
+      }
+    },
     "forEach": {
       "empty maps have an empty keys array": function(map) {
         var m = map();

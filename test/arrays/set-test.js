@@ -25,6 +25,42 @@ suite.addBatch({
         assert.isTrue(s.has("bar"));
       }
     },
+    "size": {
+      "returns the number of distinct values": function(set) {
+        var s = set();
+        assert.deepEqual(s.size(), 0);
+        s.add("foo");
+        assert.deepEqual(s.size(), 1);
+        s.add("foo");
+        assert.deepEqual(s.size(), 1);
+        s.add("bar");
+        assert.deepEqual(s.size(), 2);
+        s.remove("foo");
+        assert.deepEqual(s.size(), 1);
+        s.remove("foo");
+        assert.deepEqual(s.size(), 1);
+        s.remove("bar");
+        assert.deepEqual(s.size(), 0);
+      }
+    },
+    "empty": {
+      "returns true only if the set is empty": function(set) {
+        var s = set();
+        assert.isTrue(s.empty());
+        s.add("foo");
+        assert.isFalse(s.empty());
+        s.add("foo");
+        assert.isFalse(s.empty());
+        s.add("bar");
+        assert.isFalse(s.empty());
+        s.remove("foo");
+        assert.isFalse(s.empty());
+        s.remove("foo");
+        assert.isFalse(s.empty());
+        s.remove("bar");
+        assert.isTrue(s.empty());
+      }
+    },
     "forEach": {
       "empty sets have an empty values array": function(set) {
         var s = set();

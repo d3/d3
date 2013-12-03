@@ -28,11 +28,16 @@ d3_class(d3_Set, {
     });
     return values;
   },
+  size: function() {
+    var size = 0;
+    for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) ++size;
+    return size;
+  },
+  empty: function() {
+    for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) return false;
+    return true;
+  },
   forEach: function(f) {
-    for (var value in this) {
-      if (value.charCodeAt(0) === d3_map_prefixCode) {
-        f.call(this, value.substring(1));
-      }
-    }
+    for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) f.call(this, value.substring(1));
   }
 });
