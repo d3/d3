@@ -66,7 +66,7 @@ suite.addBatch({
         var s = set(["foo", "bar"]),
             c = [];
         s.forEach(function(v) { c.push(v); });
-        c.sort(function(a, b) { return a.localeCompare(b); });
+        c.sort();
         assert.deepEqual(c, ["bar", "foo"]);
       },
       "uses the set as the context": function(set) {
@@ -84,8 +84,8 @@ suite.addBatch({
             c2 = [];
         s1.forEach(function(v) { c1.push(v); });
         s2.forEach(function(v) { c2.push(v); });
-        c1.sort(function(a, b) { return a.localeCompare(b); });
-        c2.sort(function(a, b) { return a.localeCompare(b); });
+        c1.sort();
+        c2.sort();
         assert.deepEqual(c1, c2);
       }
     },
