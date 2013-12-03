@@ -88,7 +88,51 @@ suite.addBatch({
       }
     },
     "forEach": {
-      "empty maps have an empty keys array": function(map) {
+      "passes key and value": function(map) {
+        var m = map({foo: 1, bar: "42"}),
+            c = [];
+        m.forEach(function(k, v) { c.push([k, v]); });
+        c.sort(function(a, b) { return a[0].localeCompare(b[0]); });
+        assert.deepEqual(c, [["bar", "42"], ["foo", 1]]);
+      },
+      "uses the map as the context": function(map) {
+        var m = map({foo: 1, bar: "42"}),
+            c = [];
+        m.forEach(function() { c.push(this); });
+        assert.strictEqual(c[0], m);
+        assert.strictEqual(c[1], m);
+        assert.equal(c.length, 2);
+      },
+      "iterates in arbitrary order": function(map) {
+        var m1 = map({foo: 1, bar: "42"}),
+            m2 = map({bar: "42", foo: 1}),
+            c1 = [],
+            c2 = [];
+        m1.forEach(function(k, v) { c1.push([k, v]); });
+        m2.forEach(function(k, v) { c2.push([k, v]); });
+        c1.sort(function(a, b) { return a[0].localeCompare(b[0]); });
+        c2.sort(function(a, b) { return a[0].localeCompare(b[0]); });
+        assert.deepEqual(c1, c2);
+      }
+    },
+    "keys": {
+      "returns an array of string keys": function(map) {
+        var m = map({foo: 1, bar: "42"});
+        assert.deepEqual(m.keys().sort(), ["bar", "foo"]);
+      }
+    },
+    "values": {
+      "returns an array of arbitrary values": function(map) {
+        var m = map({foo: 1, bar: "42"});
+        assert.deepEqual(m.values().sort(), [1, "42"]);
+      }
+    },
+    "entries": {
+      "returns an array of key-value objects": function(map) {
+        var m = map({foo: 1, bar: "42"});
+        assert.deepEqual(m.entries().sort(ascendingByKey), [{key: "bar", value: "42"}, {key: "foo", value: 1}]);
+      },
+      "empty maps have an empty entries array": function(map) {
         var m = map();
         assert.deepEqual(m.entries(), []);
         m.set("foo", "bar");
@@ -96,7 +140,7 @@ suite.addBatch({
         m.remove("foo");
         assert.deepEqual(m.entries(), []);
       },
-      "keys are returned in arbitrary order": function(map) {
+      "entries are returned in arbitrary order": function(map) {
         var m = map({foo: 1, bar: "42"});
         assert.deepEqual(m.entries().sort(ascendingByKey), [{key: "bar", value: "42"}, {key: "foo", value: 1}]);
         var m = map({bar: "42", foo: 1});
@@ -117,24 +161,6 @@ suite.addBatch({
         assert.deepEqual(m.entries(), []);
         m.remove("foo");
         assert.deepEqual(m.entries(), []);
-      }
-    },
-    "keys": {
-      "returns an array of string keys": function(map) {
-        var m = map({foo: 1, bar: "42"});
-        assert.deepEqual(m.keys().sort(), ["bar", "foo"]);
-      }
-    },
-    "values": {
-      "returns an array of arbitrary values": function(map) {
-        var m = map({foo: 1, bar: "42"});
-        assert.deepEqual(m.values().sort(), [1, "42"]);
-      }
-    },
-    "entries": {
-      "returns an array of key-value objects": function(map) {
-        var m = map({foo: 1, bar: "42"});
-        assert.deepEqual(m.entries().sort(ascendingByKey), [{key: "bar", value: "42"}, {key: "foo", value: 1}]);
       }
     },
     "has": {
