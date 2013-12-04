@@ -1,4 +1,5 @@
 import "../core/functor";
+import "../math/trigonometry";
 import "geom";
 import "point";
 
@@ -10,8 +11,8 @@ import "point";
  * The runtime of this algorithm is O(n log n), where n is the number of input
  * points. However in practice it outperforms other O(n log n) hulls.
  *
- * @param vertices [[x1, y1], [x2, y2], …]
- * @returns polygon [[x1, y1], [x2, y2], …]
+ * @param vertices [[x1, y1], [x2, y2], ...]
+ * @returns polygon [[x1, y1], [x2, y2], ...]
  */
 d3.geom.hull = function(vertices) {
   var x = d3_geom_pointX,
@@ -45,7 +46,7 @@ d3.geom.hull = function(vertices) {
 
     // construct the polygon, removing possible duplicate endpoints
     var skipLeft = lower[0] === upper[0],
-        skipRight  = lower[lower.length - 1] === upper[upper.length - 1]),
+        skipRight  = lower[lower.length - 1] === upper[upper.length - 1],
         polygon = [];
 
     for (i = upper.length - 1; i >= 0; --i)
@@ -76,19 +77,13 @@ function d3_geom_hullUpper(points) {
       hs = 2;  // hull size
 
   for (var i = 2; i < n; i++) {
-    while (hs > 1 && !d3_geom_hull_CW(points[hull[hs-2]], points[hull[hs-1]], points[i])) {
+    while (hs > 1 && !d3_isCCWTurn(points[hull[hs-2]], points[hull[hs-1]], points[i])) {
       hs --;
     }
     hull[hs++] = i;
   }
   // we slice to make sure that the points we 'popped' from hull don't stay behind
   return hull.slice(0, hs);
-}
-
-// are three points a, b, c in clockwise order?
-// i.e. is the sign of (b-a)x(c-a) positive?
-function d3_geom_hull_CW(a, b, c) {
-  return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]) > 0;
 }
 
 // comparator for ascending sort by x-coord first, y-coord second

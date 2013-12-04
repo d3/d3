@@ -79,18 +79,14 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
         for (var j = 1, v = polygon[i], m = v.length, a = v[0], b; j < m; ++j) {
           b = v[j];
           if (a[1] <= y) {
-            if (b[1] >  y && isLeft(a, b, p) > 0) ++wn;
+            if (b[1] >  y && d3_isCCWTurn(a, b, p)) ++wn;
           } else {
-            if (b[1] <= y && isLeft(a, b, p) < 0) --wn;
+            if (b[1] <= y && !d3_isCCWTurn(a, b, p)) --wn;
           }
           a = b;
         }
       }
       return wn !== 0;
-    }
-
-    function isLeft(a, b, c) {
-      return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]);
     }
 
     function interpolate(from, to, direction, listener) {

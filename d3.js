@@ -1176,6 +1176,12 @@ d3 = function() {
   function d3_sgn(x) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
   }
+  function d3_isCCWTurn(a, b, c) {
+    return d3_cross2d(a, b, c) > 0;
+  }
+  function d3_cross2d(o, a, b) {
+    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  }
   function d3_acos(x) {
     return x > 1 ? 0 : x < -1 ? π : Math.acos(x);
   }
@@ -3114,17 +3120,14 @@ d3 = function() {
           for (var j = 1, v = polygon[i], m = v.length, a = v[0], b; j < m; ++j) {
             b = v[j];
             if (a[1] <= y) {
-              if (b[1] > y && isLeft(a, b, p) > 0) ++wn;
+              if (b[1] > y && d3_isCCWTurn(a, b, p)) ++wn;
             } else {
-              if (b[1] <= y && isLeft(a, b, p) < 0) --wn;
+              if (b[1] <= y && !d3_isCCWTurn(a, b, p)) --wn;
             }
             a = b;
           }
         }
         return wn !== 0;
-      }
-      function isLeft(a, b, c) {
-        return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]);
       }
       function interpolate(from, to, direction, listener) {
         var a = 0, a1 = 0;
@@ -4187,20 +4190,17 @@ d3 = function() {
     if (arguments.length) return hull(vertices);
     function hull(data) {
       if (data.length < 3) return [];
-      var fx = d3_functor(x), fy = d3_functor(y), n = data.length, points = [], flipped_points = [];
-      for (var i = 0; i < n; i++) {
+      var fx = d3_functor(x), fy = d3_functor(y), i, n = data.length, points = [], flippedPoints = [];
+      for (i = 0; i < n; i++) {
         points.push([ +fx.call(this, data[i], i), +fy.call(this, data[i], i), i ]);
       }
-      points.sort(function(a, b) {
-        return a[0] - b[0] || a[1] - b[1];
-      });
-      for (var i = 0; i < n; i++) flipped_points.push([ points[i][0], -points[i][1] ]);
-      var uhull = d3_geom_hull_find_upper_hull(points);
-      var lhull = d3_geom_hull_find_upper_hull(flipped_points);
-      var skip_l = lhull[0] === uhull[0], skip_r = lhull[lhull.length - 1] === uhull[uhull.length - 1], poly = [];
-      for (var i = uhull.length - 1; i >= 0; i--) poly.push(data[points[uhull[i]][2]]);
-      for (var i = +skip_l; i < lhull.length - skip_r; i++) poly.push(data[points[lhull[i]][2]]);
-      return poly;
+      points.sort(d3_geom_hullOrder);
+      for (i = 0; i < n; i++) flippedPoints.push([ points[i][0], -points[i][1] ]);
+      var upper = d3_geom_hullUpper(points), lower = d3_geom_hullUpper(flippedPoints);
+      var skipLeft = lower[0] === upper[0], skipRight = lower[lower.length - 1] === upper[upper.length - 1], polygon = [];
+      for (i = upper.length - 1; i >= 0; --i) polygon.push(data[points[upper[i]][2]]);
+      for (i = +skipLeft; i < lower.length - skipRight; ++i) polygon.push(data[points[lower[i]][2]]);
+      return polygon;
     }
     hull.x = function(_) {
       return arguments.length ? (x = _, hull) : x;
@@ -4210,18 +4210,18 @@ d3 = function() {
     };
     return hull;
   };
-  function d3_geom_hull_find_upper_hull(points) {
+  function d3_geom_hullUpper(points) {
     var n = points.length, hull = [ 0, 1 ], hs = 2;
     for (var i = 2; i < n; i++) {
-      while (hs > 1 && !d3_geom_hull_CW(points[hull[hs - 2]], points[hull[hs - 1]], points[i])) {
+      while (hs > 1 && d3_isCCWTurn(points[hull[hs - 2]], points[hull[hs - 1]], points[i])) {
         hs--;
       }
       hull[hs++] = i;
     }
     return hull.slice(0, hs);
   }
-  function d3_geom_hull_CW(a, b, c) {
-    return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]) > 0;
+  function d3_geom_hullOrder(a, b) {
+    return a[0] - b[0] || a[1] - b[1];
   }
   d3.geom.polygon = function(coordinates) {
     d3_subclass(coordinates, d3_geom_polygonPrototype);
