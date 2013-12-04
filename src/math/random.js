@@ -19,10 +19,16 @@ d3.random = {
       return Math.exp(random());
     };
   },
+  bates: function(m) {
+    var random = d3.random.irwinHall(m);
+    return function() {
+      return random() / m;
+    };
+  },
   irwinHall: function(m) {
     return function() {
       for (var s = 0, j = 0; j < m; j++) s += Math.random();
-      return s / m;
+      return s;
     };
   }
 };
