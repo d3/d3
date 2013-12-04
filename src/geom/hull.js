@@ -74,7 +74,7 @@ d3.geom.hull = function(vertices) {
 function d3_geom_hullUpper(points) {
   var n = points.length,
       hull = [0, 1],
-      hs = 2;  // hull size
+      hs = 2; // hull size
 
   for (var i = 2; i < n; i++) {
     while (hs > 1 && !d3_isCCWTurn(points[hull[hs-2]], points[hull[hs-1]], points[i])) {
