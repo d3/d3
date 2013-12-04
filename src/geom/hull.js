@@ -25,34 +25,35 @@ d3.geom.hull = function(vertices) {
 
     var fx = d3_functor(x),
         fy = d3_functor(y),
+        i,
         n = data.length,
-        points = [],  // of the form [[x0, y0, 0], ..., [xn, yn, n]]
-        flipped_points = [];
+        points = [], // of the form [[x0, y0, 0], ..., [xn, yn, n]]
+        flippedPoints = [];
 
-    for (var i = 0 ; i < n; i++) {
+    for (i = 0 ; i < n; i++) {
       points.push([+fx.call(this, data[i], i), +fy.call(this, data[i], i), i]);
     }
 
     // sort ascending by x-coord first, y-coord second
-    points.sort(function(a, b) { return (a[0] - b[0]|| a[1] - b[1]); });
+    points.sort(d3_geom_hullOrder);
 
     // we flip bottommost points across y axis so we can use the upper hull routine on both
-    for (var i = 0; i < n; i++) flipped_points.push([points[i][0], -points[i][1]]);
+    for (i = 0; i < n; i++) flippedPoints.push([points[i][0], -points[i][1]]);
 
-    var uhull = d3_geom_hull_find_upper_hull(points);
-    var lhull = d3_geom_hull_find_upper_hull(flipped_points);
+    var upper = d3_geom_hullUpper(points),
+        lower = d3_geom_hullUpper(flippedPoints);
 
-    // construct the poly, removing possible duplicate endpoints
-    var skip_l = (lhull[0] === uhull[0]),
-        skip_r  = (lhull[lhull.length - 1] === uhull[uhull.length - 1]),
-        poly = [];
+    // construct the polygon, removing possible duplicate endpoints
+    var skipLeft = lower[0] === upper[0],
+        skipRight  = lower[lower.length - 1] === upper[upper.length - 1]),
+        polygon = [];
 
-    for (var i=uhull.length - 1; i >= 0; i--)
-      poly.push(data[points[uhull[i]][2]]);  // add upper hull in r->l order
-    for (var i = +skip_l; i < lhull.length - skip_r; i++)
-      poly.push(data[points[lhull[i]][2]]);  // add lower hull in l->r order
+    for (i = upper.length - 1; i >= 0; --i)
+      polygon.push(data[points[upper[i]][2]]); // add upper hull in r->l order
+    for (i = +skipLeft; i < lower.length - skipRight; ++i)
+      polygon.push(data[points[lower[i]][2]]); // add lower hull in l->r order
 
-    return poly;
+    return polygon;
   }
 
   hull.x = function(_) {
@@ -69,7 +70,7 @@ d3.geom.hull = function(vertices) {
 // finds the 'upper convex hull' (see wiki link above)
 // assumes points arg has >=3 elements, is sorted by x, unique in y
 // returns array of indices into points in left to right order
-function d3_geom_hull_find_upper_hull(points) {
+function d3_geom_hullUpper(points) {
   var n = points.length,
       hull = [0, 1],
       hs = 2;  // hull size
@@ -89,3 +90,6 @@ function d3_geom_hull_find_upper_hull(points) {
 function d3_geom_hull_CW(a, b, c) {
   return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]) > 0;
 }
+
+// comparator for ascending sort by x-coord first, y-coord second
+function d3_geom_hullOrder(a, b) { return a[0] - b[0] || a[1] - b[1]; }
