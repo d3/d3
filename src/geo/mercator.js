@@ -10,9 +10,8 @@ d3_geo_mercator.invert = function(x, y) {
   return [x, 2 * Math.atan(Math.exp(y)) - halfπ];
 };
 
-function d3_geo_mercatorProjection(project) {
-  var m = d3_geo_projection(project),
-      scale = m.scale,
+function d3_geo_mercatorProjection(m) {
+  var scale = m.scale,
       translate = m.translate,
       clipExtent = m.clipExtent,
       clipAuto;
@@ -44,5 +43,5 @@ function d3_geo_mercatorProjection(project) {
 }
 
 (d3.geo.mercator = function() {
-  return d3_geo_mercatorProjection(d3_geo_mercator);
+  return d3_geo_mercatorProjection(d3_geo_projection(d3_geo_mercator));
 }).raw = d3_geo_mercator;

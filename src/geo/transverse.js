@@ -1,9 +1,20 @@
-import "transform";
+import "projection";
 
-function d3_geo_transverse(projection) {
-  var center = projection.center,
-      rotate = projection.rotate,
-      stream = projection.stream;
+function d3_geo_transverseProjection(project) {
+
+  function transverse(x, y) {
+    x = project(x, y);
+    y = x[0], x[0] = x[1], x[1] = -y;
+    return x;
+  }
+
+  if (project.invert) transverse.invert = function(x, y) {
+    return project.invert(-y, x);
+  };
+
+  var projection = d3_geo_projection(transverse),
+      center = projection.center,
+      rotate = projection.rotate;
 
   projection.center = function(_) {
     return _
@@ -17,12 +28,5 @@ function d3_geo_transverse(projection) {
         : ((_ = rotate()), [_[0], _[1], _[2] - 90]);
   };
 
-  projection.stream = function(output) {
-    var t = projection.translate(),
-        dx = t[0] + t[1],
-        dy = t[0] - t[1];
-    return stream(d3_geo_transformPoint(output, function(x, y) { output.point(dx - y, x - dy); }));
-  };
-
-  return projection.rotate(rotate());
+  return projection.rotate([0, 0]);
 }
