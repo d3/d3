@@ -89,6 +89,18 @@ suite.addBatch({
         body.classed("\tfoo  foo ", false);
         assert.equal(body.node().className, "");
       },
+      "accepts an empty name, doing nothing or returning true": function(body) {
+        body.attr("class", null);
+        body.classed("", true);
+        assert.equal(body.node().className, "");
+        assert.isTrue(body.classed(""));
+        body.classed(" \t ", true);
+        assert.equal(body.node().className, "");
+        assert.isTrue(body.classed(""));
+        body.classed("", false);
+        assert.equal(body.node().className, "");
+        assert.isTrue(body.classed(""));
+      },
       "accepts a value function returning true or false": function(body) {
         body.attr("class", null);
         body.classed("foo", function() { return true; });
