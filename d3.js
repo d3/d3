@@ -4124,8 +4124,8 @@ d3 = function() {
   d3_geo_mercator.invert = function(x, y) {
     return [ x, 2 * Math.atan(Math.exp(y)) - halfπ ];
   };
-  function d3_geo_mercatorProjection(m) {
-    var scale = m.scale, translate = m.translate, clipExtent = m.clipExtent, clipAuto;
+  function d3_geo_mercatorProjection(project) {
+    var m = d3_geo_projection(project), scale = m.scale, translate = m.translate, clipExtent = m.clipExtent, clipAuto;
     m.scale = function() {
       var v = scale.apply(m, arguments);
       return v === m ? clipAuto ? m.clipExtent(null) : m : v;
@@ -4149,7 +4149,7 @@ d3 = function() {
     return m.clipExtent(null);
   }
   (d3.geo.mercator = function() {
-    return d3_geo_mercatorProjection(d3_geo_projection(d3_geo_mercator));
+    return d3_geo_mercatorProjection(d3_geo_mercator);
   }).raw = d3_geo_mercator;
   var d3_geo_orthographic = d3_geo_azimuthal(function() {
     return 1;
@@ -4165,16 +4165,14 @@ d3 = function() {
   (d3.geo.stereographic = function() {
     return d3_geo_projection(d3_geo_stereographic);
   }).raw = d3_geo_stereographic;
-  function d3_geo_transverseProjection(project) {
-    function transverse(x, y) {
-      x = project(x, y);
-      y = x[0], x[0] = x[1], x[1] = -y;
-      return x;
-    }
-    if (project.invert) transverse.invert = function(x, y) {
-      return project.invert(-y, x);
-    };
-    var projection = d3_geo_projection(transverse), center = projection.center, rotate = projection.rotate;
+  function d3_geo_transverseMercator(λ, φ) {
+    return [ Math.log(Math.tan(π / 4 + φ / 2)), -λ ];
+  }
+  d3_geo_transverseMercator.invert = function(x, y) {
+    return [ -y, 2 * Math.atan(Math.exp(x)) - halfπ ];
+  };
+  (d3.geo.transverseMercator = function() {
+    var projection = d3_geo_mercatorProjection(d3_geo_transverseMercator), center = projection.center, rotate = projection.rotate;
     projection.center = function(_) {
       return _ ? center([ -_[1], _[0] ]) : (_ = center(), [ -_[1], _[0] ]);
     };
@@ -4183,10 +4181,7 @@ d3 = function() {
       [ _[0], _[1], _[2] - 90 ]);
     };
     return projection.rotate([ 0, 0 ]);
-  }
-  (d3.geo.transverseMercator = function() {
-    return d3_geo_mercatorProjection(d3_geo_transverseProjection(d3_geo_mercator));
-  }).raw = d3_geo_mercator;
+  }).raw = d3_geo_transverseMercator;
   d3.geom = {};
   function d3_geom_pointX(d) {
     return d[0];
