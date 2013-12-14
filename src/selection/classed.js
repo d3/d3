@@ -10,7 +10,7 @@ d3_selectionPrototype.classed = function(name, value) {
     // probably doesn't support it on SVG elements (which can be animated).
     if (typeof name === "string") {
       var node = this.node(),
-          n = (name = name.trim().split(/^|\s+/g)).length,
+          n = (name = d3_selection_classes(name)).length,
           i = -1;
       if (value = node.classList) {
         while (++i < n) if (!value.contains(name[i])) return false;
@@ -35,9 +35,13 @@ function d3_selection_classedRe(name) {
   return new RegExp("(?:^|\\s+)" + d3.requote(name) + "(?:\\s+|$)", "g");
 }
 
+function d3_selection_classes(name) {
+  return name.trim().split(/^|\s+/);
+}
+
 // Multiple class names are allowed (e.g., "foo bar").
 function d3_selection_classed(name, value) {
-  name = name.trim().split(/\s+/).map(d3_selection_classedName);
+  name = d3_selection_classes(name).map(d3_selection_classedName);
   var n = name.length;
 
   function classedConstant() {

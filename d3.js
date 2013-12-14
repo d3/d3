@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.3.11"
+    version: "3.3.12"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -607,7 +607,7 @@ d3 = function() {
   d3_selectionPrototype.classed = function(name, value) {
     if (arguments.length < 2) {
       if (typeof name === "string") {
-        var node = this.node(), n = (name = name.trim().split(/^|\s+/g)).length, i = -1;
+        var node = this.node(), n = (name = d3_selection_classes(name)).length, i = -1;
         if (value = node.classList) {
           while (++i < n) if (!value.contains(name[i])) return false;
         } else {
@@ -624,8 +624,11 @@ d3 = function() {
   function d3_selection_classedRe(name) {
     return new RegExp("(?:^|\\s+)" + d3.requote(name) + "(?:\\s+|$)", "g");
   }
+  function d3_selection_classes(name) {
+    return name.trim().split(/^|\s+/);
+  }
   function d3_selection_classed(name, value) {
-    name = name.trim().split(/\s+/).map(d3_selection_classedName);
+    name = d3_selection_classes(name).map(d3_selection_classedName);
     var n = name.length;
     function classedConstant() {
       var i = -1;
@@ -4166,14 +4169,21 @@ d3 = function() {
     return d3_geo_projection(d3_geo_stereographic);
   }).raw = d3_geo_stereographic;
   function d3_geo_transverseMercator(λ, φ) {
-    var B = Math.cos(φ) * Math.sin(λ);
-    return [ Math.log((1 + B) / (1 - B)) / 2, Math.atan2(Math.tan(φ), Math.cos(λ)) ];
+    return [ Math.log(Math.tan(π / 4 + φ / 2)), -λ ];
   }
   d3_geo_transverseMercator.invert = function(x, y) {
-    return [ Math.atan2(d3_sinh(x), Math.cos(y)), d3_asin(Math.sin(y) / d3_cosh(x)) ];
+    return [ -y, 2 * Math.atan(Math.exp(x)) - halfπ ];
   };
   (d3.geo.transverseMercator = function() {
-    return d3_geo_mercatorProjection(d3_geo_transverseMercator);
+    var projection = d3_geo_mercatorProjection(d3_geo_transverseMercator), center = projection.center, rotate = projection.rotate;
+    projection.center = function(_) {
+      return _ ? center([ -_[1], _[0] ]) : (_ = center(), [ -_[1], _[0] ]);
+    };
+    projection.rotate = function(_) {
+      return _ ? rotate([ _[0], _[1], _.length > 2 ? _[2] + 90 : 90 ]) : (_ = rotate(), 
+      [ _[0], _[1], _[2] - 90 ]);
+    };
+    return projection.rotate([ 0, 0 ]);
   }).raw = d3_geo_transverseMercator;
   d3.geom = {};
   function d3_geom_pointX(d) {
@@ -6847,10 +6857,16 @@ d3 = function() {
         return Math.exp(random());
       };
     },
+    bates: function(m) {
+      var random = d3.random.irwinHall(m);
+      return function() {
+        return random() / m;
+      };
+    },
     irwinHall: function(m) {
       return function() {
         for (var s = 0, j = 0; j < m; j++) s += Math.random();
-        return s / m;
+        return s;
       };
     }
   };
