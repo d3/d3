@@ -1,6 +1,6 @@
 d3 = function() {
   var d3 = {
-    version: "3.3.12"
+    version: "3.3.13"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -9242,7 +9242,9 @@ d3 = function() {
   var d3_time_scaleMilliseconds = {
     range: function(start, stop, step) {
       return d3.range(+start, +stop, step).map(d3_time_scaleDate);
-    }
+    },
+    floor: d3_identity,
+    ceil: d3_identity
   };
   var d3_time_scaleUTCMethods = d3_time_scaleLocalMethods.map(function(m) {
     return [ m[0].utc, m[1] ];

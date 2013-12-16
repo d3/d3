@@ -43,6 +43,11 @@ suite.addBatch({
       "nicing a polylinear domain only affects the extent": function(linear) {
         var x = linear().domain([local(2009, 0, 1, 0, 12), local(2009, 0, 1, 23, 48), local(2009, 0, 2, 23, 48)]).nice(_.time.day);
         assert.deepEqual(x.domain(), [local(2009, 0, 1), local(2009, 0, 1, 23, 48), local(2009, 0, 3)]);
+      },
+      "nice succeeds on sub-second intervals": function(scale) {
+        var domain = [local(2013, 0, 1, 12, 0, 0), local(2013, 0, 1, 12, 0, 8)];
+        var x = scale().domain(domain);
+        assert.deepEqual(x.nice().domain(), domain);
       }
     },
 

@@ -1,5 +1,6 @@
 import "../arrays/bisect";
 import "../arrays/range";
+import "../core/identity";
 import "../core/rebind";
 import "../core/true";
 import "../scale/linear";
@@ -161,5 +162,7 @@ d3_time.scale = function() {
 var d3_time_scaleMilliseconds = {
   range: function(start, stop, step) {
     return d3.range(+start, +stop, step).map(d3_time_scaleDate);
-  }
+  },
+  floor: d3_identity,
+  ceil: d3_identity
 };
