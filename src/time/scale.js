@@ -161,5 +161,11 @@ d3_time.scale = function() {
 var d3_time_scaleMilliseconds = {
   range: function(start, stop, step) {
     return d3.range(+start, +stop, step).map(d3_time_scaleDate);
+  },
+  floor: function(date) {
+    return date;
+  },
+  ceil: function(date) {
+    return date;
   }
 };
