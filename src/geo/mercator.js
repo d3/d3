@@ -3,7 +3,7 @@ import "geo";
 import "projection";
 
 function d3_geo_mercator(λ, φ) {
-  return [λ, Math.log(Math.tan(π / 4 + φ / 2))];
+  return [λ, Math.log(Math.tan(π * 0.25 + φ * 0.5))];
 }
 
 d3_geo_mercator.invert = function(x, y) {
