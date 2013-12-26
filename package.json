@@ -47,7 +47,7 @@
       "exports": "d3"
     }
   },
-  "dependencies": {
+  "optionalDependencies": {
     "jsdom": "0.5.7"
   },
   "devDependencies": {
