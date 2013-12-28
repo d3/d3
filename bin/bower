@@ -5,9 +5,9 @@ var fs = require("fs");
 console.log(JSON.stringify({
   "name": "d3",
   "version": require("../package.json").version,
-  "main": "d3.js",
+  "main": "index-browserify.js",
   "scripts": [
-    "d3.js"
+    "index-browserify.js"
   ],
   "ignore": [
     ".DS_Store",
@@ -18,7 +18,6 @@ console.log(JSON.stringify({
     "Makefile",
     "bin",
     "component.json",
-    "index-browserify.js",
     "index.js",
     "lib",
     "node_modules",

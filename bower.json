@@ -1,9 +1,9 @@
 {
   "name": "d3",
   "version": "3.3.13",
-  "main": "d3.js",
+  "main": "index-browserify.js",
   "scripts": [
-    "d3.js"
+    "index-browserify.js"
   ],
   "ignore": [
     ".DS_Store",
@@ -14,7 +14,6 @@
     "Makefile",
     "bin",
     "component.json",
-    "index-browserify.js",
     "index.js",
     "lib",
     "node_modules",
