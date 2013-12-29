@@ -53,7 +53,8 @@
   "devDependencies": {
     "smash": "~0.0.12",
     "uglify-js": "2.4.0",
-    "vows": "0.7.0"
+    "vows": "0.7.0",
+    "seedrandom": "0.1.6"
   },
   "scripts": {
     "test": "node_modules/.bin/vows"
