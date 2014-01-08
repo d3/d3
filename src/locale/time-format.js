@@ -124,6 +124,9 @@ function d3_locale_timeFormat(locale) {
     return format;
   };
 
+  d3_time_format.multi =
+  d3_time_format.utc.multi = d3_time_formatMulti;
+
   var d3_time_periodLookup = d3.map(),
       d3_time_dayRe = d3_time_formatRe(locale_days),
       d3_time_dayLookup = d3_time_formatLookup(locale_days),
@@ -353,4 +356,14 @@ function d3_time_parseLiteralPercent(date, string, i) {
   d3_time_percentRe.lastIndex = 0;
   var n = d3_time_percentRe.exec(string.substring(i, i + 1));
   return n ? i + n[0].length : -1;
+}
+
+function d3_time_formatMulti(formats) {
+  var n = formats.length, i = -1;
+  while (++i < n) formats[i][0] = this(formats[i][0]);
+  return function(date) {
+    var i = 0, f = formats[i];
+    while (!f[1](date)) f = formats[++i];
+    return f[0](date);
+  };
 }
