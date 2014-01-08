@@ -2723,58 +2723,10 @@ d3 = function() {
     var n = d3_time_percentRe.exec(string.substring(i, i + 1));
     return n ? i + n[0].length : -1;
   }
-  function d3_true() {
-    return true;
-  }
-  function d3_locale_timeScaleFormat(localFormat) {
-    var utcFormat = localFormat.utc;
-    var localFormats = [ [ localFormat("%Y"), d3_true ], [ localFormat("%B"), function(d) {
-      return d.getMonth();
-    } ], [ localFormat("%b %d"), function(d) {
-      return d.getDate() != 1;
-    } ], [ localFormat("%a %d"), function(d) {
-      return d.getDay() && d.getDate() != 1;
-    } ], [ localFormat("%I %p"), function(d) {
-      return d.getHours();
-    } ], [ localFormat("%I:%M"), function(d) {
-      return d.getMinutes();
-    } ], [ localFormat(":%S"), function(d) {
-      return d.getSeconds();
-    } ], [ localFormat(".%L"), function(d) {
-      return d.getMilliseconds();
-    } ] ];
-    var utcFormats = [ [ utcFormat("%Y"), d3_true ], [ utcFormat("%B"), function(d) {
-      return d.getUTCMonth();
-    } ], [ utcFormat("%b %d"), function(d) {
-      return d.getUTCDate() != 1;
-    } ], [ utcFormat("%a %d"), function(d) {
-      return d.getUTCDay() && d.getUTCDate() != 1;
-    } ], [ utcFormat("%I %p"), function(d) {
-      return d.getUTCHours();
-    } ], [ utcFormat("%I:%M"), function(d) {
-      return d.getUTCMinutes();
-    } ], [ utcFormat(":%S"), function(d) {
-      return d.getUTCSeconds();
-    } ], [ utcFormat(".%L"), function(d) {
-      return d.getUTCMilliseconds();
-    } ] ];
-    var format = d3_locale_timeScaleMultiFormat(localFormats);
-    format.utc = d3_locale_timeScaleMultiFormat(utcFormats);
-    return format;
-  }
-  function d3_locale_timeScaleMultiFormat(formats) {
-    return function(date) {
-      var i = formats.length - 1, f = formats[i];
-      while (!f[1](date)) f = formats[--i];
-      return f[0](date);
-    };
-  }
   d3.locale = function(locale) {
-    var timeFormat = d3_locale_timeFormat(locale);
     return {
       numberFormat: d3_locale_numberFormat(locale),
-      timeFormat: timeFormat,
-      timeScaleFormat: d3_locale_timeScaleFormat(timeFormat)
+      timeFormat: d3_locale_timeFormat(locale)
     };
   };
   var d3_locale_enUS = d3.locale({
@@ -3166,6 +3118,9 @@ d3 = function() {
       d3_geo_centroidZ1 += w * (z0 + (z0 = z));
       d3_geo_centroidPointXYZ(x0, y0, z0);
     }
+  }
+  function d3_true() {
+    return true;
   }
   function d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, listener) {
     var subject = [], clip = [];
@@ -9169,7 +9124,8 @@ d3 = function() {
   };
   var d3_svg_brushResizes = [ [ "n", "e", "s", "w", "nw", "ne", "se", "sw" ], [ "e", "w" ], [ "n", "s" ], [] ];
   var d3_time_format = d3_time.format = d3_locale_enUS.timeFormat;
-  var d3_time_formatIso = d3_time_format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
+  var d3_time_formatUtc = d3_time_format.utc;
+  var d3_time_formatIso = d3_time_formatUtc("%Y-%m-%dT%H:%M:%S.%LZ");
   d3_time_format.iso = Date.prototype.toISOString && +new Date("2000-01-01T00:00:00.000Z") ? d3_time_formatIsoNative : d3_time_formatIso;
   function d3_time_formatIsoNative(date) {
     return date.toISOString();
@@ -9273,16 +9229,60 @@ d3 = function() {
   }
   var d3_time_scaleSteps = [ 1e3, 5e3, 15e3, 3e4, 6e4, 3e5, 9e5, 18e5, 36e5, 108e5, 216e5, 432e5, 864e5, 1728e5, 6048e5, 2592e6, 7776e6, 31536e6 ];
   var d3_time_scaleLocalMethods = [ [ d3_time.second, 1 ], [ d3_time.second, 5 ], [ d3_time.second, 15 ], [ d3_time.second, 30 ], [ d3_time.minute, 1 ], [ d3_time.minute, 5 ], [ d3_time.minute, 15 ], [ d3_time.minute, 30 ], [ d3_time.hour, 1 ], [ d3_time.hour, 3 ], [ d3_time.hour, 6 ], [ d3_time.hour, 12 ], [ d3_time.day, 1 ], [ d3_time.day, 2 ], [ d3_time.week, 1 ], [ d3_time.month, 1 ], [ d3_time.month, 3 ], [ d3_time.year, 1 ] ];
-  d3_time_scaleLocalMethods.year = d3_time.year;
-  d3_time.scale = function() {
-    return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_locale_enUS.timeScaleFormat);
-  };
+  var d3_time_scaleLocalFormat = d3_time_scaleMultiFormat([ [ d3_time_format("%Y"), d3_true ], [ d3_time_format("%B"), function(d) {
+    return d.getMonth();
+  } ], [ d3_time_format("%b %d"), function(d) {
+    return d.getDate() != 1;
+  } ], [ d3_time_format("%a %d"), function(d) {
+    return d.getDay() && d.getDate() != 1;
+  } ], [ d3_time_format("%I %p"), function(d) {
+    return d.getHours();
+  } ], [ d3_time_format("%I:%M"), function(d) {
+    return d.getMinutes();
+  } ], [ d3_time_format(":%S"), function(d) {
+    return d.getSeconds();
+  } ], [ d3_time_format(".%L"), function(d) {
+    return d.getMilliseconds();
+  } ] ]);
   var d3_time_scaleMilliseconds = {
     range: function(start, stop, step) {
       return d3.range(+start, +stop, step).map(d3_time_scaleDate);
     },
     floor: d3_identity,
     ceil: d3_identity
+  };
+  d3_time_scaleLocalMethods.year = d3_time.year;
+  d3_time.scale = function() {
+    return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
+  };
+  function d3_time_scaleMultiFormat(formats) {
+    return function(date) {
+      var i = formats.length - 1, f = formats[i];
+      while (!f[1](date)) f = formats[--i];
+      return f[0](date);
+    };
+  }
+  var d3_time_scaleUtcMethods = d3_time_scaleLocalMethods.map(function(m) {
+    return [ m[0].utc, m[1] ];
+  });
+  var d3_time_scaleUtcFormat = d3_time_scaleMultiFormat([ [ d3_time_formatUtc("%Y"), d3_true ], [ d3_time_formatUtc("%B"), function(d) {
+    return d.getUTCMonth();
+  } ], [ d3_time_formatUtc("%b %d"), function(d) {
+    return d.getUTCDate() != 1;
+  } ], [ d3_time_formatUtc("%a %d"), function(d) {
+    return d.getUTCDay() && d.getUTCDate() != 1;
+  } ], [ d3_time_formatUtc("%I %p"), function(d) {
+    return d.getUTCHours();
+  } ], [ d3_time_formatUtc("%I:%M"), function(d) {
+    return d.getUTCMinutes();
+  } ], [ d3_time_formatUtc(":%S"), function(d) {
+    return d.getUTCSeconds();
+  } ], [ d3_time_formatUtc(".%L"), function(d) {
+    return d.getUTCMilliseconds();
+  } ] ]);
+  d3_time_scaleUtcMethods.year = d3_time.year.utc;
+  d3_time.scale.utc = function() {
+    return d3_time_scale(d3.scale.linear(), d3_time_scaleUtcMethods, d3_time_scaleUtcFormat);
   };
   d3.text = d3_xhrType(function(request) {
     return request.responseText;
