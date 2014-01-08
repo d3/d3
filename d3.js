@@ -2723,6 +2723,9 @@ d3 = function() {
     var n = d3_time_percentRe.exec(string.substring(i, i + 1));
     return n ? i + n[0].length : -1;
   }
+  function d3_true() {
+    return true;
+  }
   function d3_locale_timeScaleFormat(localFormat) {
     var utcFormat = localFormat.utc;
     var localFormats = [ [ localFormat("%Y"), d3_true ], [ localFormat("%B"), function(d) {
@@ -2755,11 +2758,11 @@ d3 = function() {
     } ], [ utcFormat(".%L"), function(d) {
       return d.getUTCMilliseconds();
     } ] ];
-    var format = d3_time_scaleFormat(localFormats);
-    format.utc = d3_time_scaleFormat(utcFormats);
+    var format = d3_locale_timeScaleMultiFormat(localFormats);
+    format.utc = d3_locale_timeScaleMultiFormat(utcFormats);
     return format;
   }
-  function d3_time_scaleFormat(formats) {
+  function d3_locale_timeScaleMultiFormat(formats) {
     return function(date) {
       var i = formats.length - 1, f = formats[i];
       while (!f[1](date)) f = formats[--i];
@@ -3163,9 +3166,6 @@ d3 = function() {
       d3_geo_centroidZ1 += w * (z0 + (z0 = z));
       d3_geo_centroidPointXYZ(x0, y0, z0);
     }
-  }
-  function d3_true() {
-    return true;
   }
   function d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, listener) {
     var subject = [], clip = [];
@@ -9168,7 +9168,7 @@ d3 = function() {
     sw: "nesw-resize"
   };
   var d3_svg_brushResizes = [ [ "n", "e", "s", "w", "nw", "ne", "se", "sw" ], [ "e", "w" ], [ "n", "s" ], [] ];
-  var d3_time_format = d3.time.format = d3_locale_enUS.timeFormat;
+  var d3_time_format = d3_time.format = d3_locale_enUS.timeFormat;
   var d3_time_formatIso = d3_time_format.utc("%Y-%m-%dT%H:%M:%S.%LZ");
   d3_time_format.iso = Date.prototype.toISOString && +new Date("2000-01-01T00:00:00.000Z") ? d3_time_formatIsoNative : d3_time_formatIso;
   function d3_time_formatIsoNative(date) {
