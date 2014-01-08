@@ -5,15 +5,15 @@ import "../core/rebind";
 import "../core/true";
 import "../scale/linear";
 import "../scale/nice";
-import "day";
-import "format";
-import "hour";
-import "minute";
-import "month";
-import "second";
-import "time";
-import "week";
-import "year";
+import "../locale/en-US";
+import "../time/day";
+import "../time/hour";
+import "../time/minute";
+import "../time/month";
+import "../time/second";
+import "../time/time";
+import "../time/week";
+import "../time/year";
 
 function d3_time_scale(linear, methods, format) {
 
@@ -90,14 +90,6 @@ function d3_time_scaleDate(t) {
   return new Date(t);
 }
 
-function d3_time_scaleFormat(formats) {
-  return function(date) {
-    var i = formats.length - 1, f = formats[i];
-    while (!f[1](date)) f = formats[--i];
-    return f[0](date);
-  };
-}
-
 var d3_time_scaleSteps = [
   1e3,    // 1-second
   5e3,    // 5-second
@@ -140,23 +132,10 @@ var d3_time_scaleLocalMethods = [
   [d3_time.year, 1]
 ];
 
-var d3_time_scaleLocalFormats = [
-  [d3_time_format("%Y"), d3_true],
-  [d3_time_format("%B"), function(d) { return d.getMonth(); }],
-  [d3_time_format("%b %d"), function(d) { return d.getDate() != 1; }],
-  [d3_time_format("%a %d"), function(d) { return d.getDay() && d.getDate() != 1; }],
-  [d3_time_format("%I %p"), function(d) { return d.getHours(); }],
-  [d3_time_format("%I:%M"), function(d) { return d.getMinutes(); }],
-  [d3_time_format(":%S"), function(d) { return d.getSeconds(); }],
-  [d3_time_format(".%L"), function(d) { return d.getMilliseconds(); }]
-];
-
-var d3_time_scaleLocalFormat = d3_time_scaleFormat(d3_time_scaleLocalFormats);
-
 d3_time_scaleLocalMethods.year = d3_time.year;
 
 d3_time.scale = function() {
-  return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_time_scaleLocalFormat);
+  return d3_time_scale(d3.scale.linear(), d3_time_scaleLocalMethods, d3_locale_enUS.timeScaleFormat);
 };
 
 var d3_time_scaleMilliseconds = {
