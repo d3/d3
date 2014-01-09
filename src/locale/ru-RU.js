@@ -1,6 +1,6 @@
 import "locale";
 
-var d3_locale_ruRU = d3.locale({
+d3.locale.ru_RU = d3.locale({
   decimal: ",",
   thousands: " ",
   grouping: [3, 3],
