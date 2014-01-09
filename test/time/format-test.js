@@ -161,6 +161,32 @@ suite.addBatch({
       assert.equal(f(local(1990, 0, 1)), "%");
     },
 
+    "multi": {
+      topic: function(format) {
+        return format.multi([
+          [".%L", function(d) { return d.getMilliseconds(); }],
+          [":%S", function(d) { return d.getSeconds(); }],
+          ["%I:%M", function(d) { return d.getMinutes(); }],
+          ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
+          ["%b %d", function(d) { return d.getDate() != 1; }],
+          ["%I %p", function(d) { return d.getHours(); }],
+          ["%B", function(d) { return d.getMonth(); }],
+          ["%Y", function() { return true; }]
+        ]);
+      },
+      "returns a multi-formatter using the predicated formats": function(f) {
+        assert.equal(f(local(1990, 0, 1, 1)), "01 AM");
+      },
+      "applies the first format for which the predicate returns true": function(f) {
+        assert.equal(f(local(1990, 0, 1, 0, 0, 0, 12)), ".012");
+        assert.equal(f(local(1990, 0, 1, 0, 0, 1)), ":01");
+        assert.equal(f(local(1990, 0, 1, 0, 1)), "12:01");
+        assert.equal(f(local(1990, 0, 2)), "Tue 02");
+        assert.equal(f(local(1990, 1, 1)), "February");
+        assert.equal(f(local(1990, 0, 1)), "1990");
+      }
+    },
+
     "parse": {
       "parses abbreviated weekday and numeric date": function(format) {
         var p = format("%a %m/%d/%Y").parse;
