@@ -1179,6 +1179,12 @@ d3 = function() {
   function d3_sgn(x) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
   }
+  function d3_isCCWTurn(a, b, c) {
+    return d3_cross2d(a, b, c) > 0;
+  }
+  function d3_cross2d(o, a, b) {
+    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  }
   function d3_acos(x) {
     return x > 1 ? 0 : x < -1 ? π : Math.acos(x);
   }
@@ -3117,17 +3123,14 @@ d3 = function() {
           for (var j = 1, v = polygon[i], m = v.length, a = v[0], b; j < m; ++j) {
             b = v[j];
             if (a[1] <= y) {
-              if (b[1] > y && isLeft(a, b, p) > 0) ++wn;
+              if (b[1] > y && d3_isCCWTurn(a, b, p)) ++wn;
             } else {
-              if (b[1] <= y && isLeft(a, b, p) < 0) --wn;
+              if (b[1] <= y && !d3_isCCWTurn(a, b, p)) --wn;
             }
             a = b;
           }
         }
         return wn !== 0;
-      }
-      function isLeft(a, b, c) {
-        return (b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1]);
       }
       function interpolate(from, to, direction, listener) {
         var a = 0, a1 = 0;
@@ -4197,65 +4200,17 @@ d3 = function() {
     if (arguments.length) return hull(vertices);
     function hull(data) {
       if (data.length < 3) return [];
-      var fx = d3_functor(x), fy = d3_functor(y), n = data.length, vertices, plen = n - 1, points = [], stack = [], d, i, j, h = 0, x1, y1, x2, y2, u, v, a, sp;
-      if (fx === d3_geom_pointX && y === d3_geom_pointY) vertices = data; else for (i = 0, 
-      vertices = []; i < n; ++i) {
-        vertices.push([ +fx.call(this, d = data[i], i), +fy.call(this, d, i) ]);
+      var fx = d3_functor(x), fy = d3_functor(y), i, n = data.length, points = [], flippedPoints = [];
+      for (i = 0; i < n; i++) {
+        points.push([ +fx.call(this, data[i], i), +fy.call(this, data[i], i), i ]);
       }
-      for (i = 1; i < n; ++i) {
-        if (vertices[i][1] < vertices[h][1] || vertices[i][1] == vertices[h][1] && vertices[i][0] < vertices[h][0]) h = i;
-      }
-      for (i = 0; i < n; ++i) {
-        if (i === h) continue;
-        y1 = vertices[i][1] - vertices[h][1];
-        x1 = vertices[i][0] - vertices[h][0];
-        points.push({
-          angle: Math.atan2(y1, x1),
-          index: i
-        });
-      }
-      points.sort(function(a, b) {
-        return a.angle - b.angle;
-      });
-      a = points[0].angle;
-      v = points[0].index;
-      u = 0;
-      for (i = 1; i < plen; ++i) {
-        j = points[i].index;
-        if (a == points[i].angle) {
-          x1 = vertices[v][0] - vertices[h][0];
-          y1 = vertices[v][1] - vertices[h][1];
-          x2 = vertices[j][0] - vertices[h][0];
-          y2 = vertices[j][1] - vertices[h][1];
-          if (x1 * x1 + y1 * y1 >= x2 * x2 + y2 * y2) {
-            points[i].index = -1;
-            continue;
-          } else {
-            points[u].index = -1;
-          }
-        }
-        a = points[i].angle;
-        u = i;
-        v = j;
-      }
-      stack.push(h);
-      for (i = 0, j = 0; i < 2; ++j) {
-        if (points[j].index > -1) {
-          stack.push(points[j].index);
-          i++;
-        }
-      }
-      sp = stack.length;
-      for (;j < plen; ++j) {
-        if (points[j].index < 0) continue;
-        while (!d3_geom_hullCCW(stack[sp - 2], stack[sp - 1], points[j].index, vertices)) {
-          --sp;
-        }
-        stack[sp++] = points[j].index;
-      }
-      var poly = [];
-      for (i = sp - 1; i >= 0; --i) poly.push(data[stack[i]]);
-      return poly;
+      points.sort(d3_geom_hullOrder);
+      for (i = 0; i < n; i++) flippedPoints.push([ points[i][0], -points[i][1] ]);
+      var upper = d3_geom_hullUpper(points), lower = d3_geom_hullUpper(flippedPoints);
+      var skipLeft = lower[0] === upper[0], skipRight = lower[lower.length - 1] === upper[upper.length - 1], polygon = [];
+      for (i = upper.length - 1; i >= 0; --i) polygon.push(data[points[upper[i]][2]]);
+      for (i = +skipLeft; i < lower.length - skipRight; ++i) polygon.push(data[points[lower[i]][2]]);
+      return polygon;
     }
     hull.x = function(_) {
       return arguments.length ? (x = _, hull) : x;
@@ -4265,18 +4220,18 @@ d3 = function() {
     };
     return hull;
   };
-  function d3_geom_hullCCW(i1, i2, i3, v) {
-    var t, a, b, c, d, e, f;
-    t = v[i1];
-    a = t[0];
-    b = t[1];
-    t = v[i2];
-    c = t[0];
-    d = t[1];
-    t = v[i3];
-    e = t[0];
-    f = t[1];
-    return (f - b) * (c - a) - (d - b) * (e - a) > 0;
+  function d3_geom_hullUpper(points) {
+    var n = points.length, hull = [ 0, 1 ], hs = 2;
+    for (var i = 2; i < n; i++) {
+      while (hs > 1 && !d3_isCCWTurn(points[hull[hs - 2]], points[hull[hs - 1]], points[i])) {
+        hs--;
+      }
+      hull[hs++] = i;
+    }
+    return hull.slice(0, hs);
+  }
+  function d3_geom_hullOrder(a, b) {
+    return a[0] - b[0] || a[1] - b[1];
   }
   d3.geom.polygon = function(coordinates) {
     d3_subclass(coordinates, d3_geom_polygonPrototype);
