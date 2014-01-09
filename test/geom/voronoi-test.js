@@ -1,4 +1,5 @@
 var vows = require("vows"),
+    _ = require("../../"),
     load = require("../load"),
     assert = require("../assert");
 
@@ -93,7 +94,7 @@ suite.addBatch({
         },
         "the returned cells’ have positive area": function(cells) {
           cells.forEach(function(cell) {
-            assert.ok(d3.geom.polygon(cell).area() > 0);
+            assert.ok(_.geom.polygon(cell).area() > 0);
           });
         }
       },
@@ -206,7 +207,7 @@ suite.addBatch({
           ]);
         },
         "the returned cell has positive area": function(cells) {
-          assert.ok(d3.geom.polygon(cells[0]).area() > 0);
+          assert.ok(_.geom.polygon(cells[0]).area() > 0);
         }
       },
       "with two points": {
