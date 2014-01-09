@@ -14,7 +14,6 @@
     "Makefile",
     "bin",
     "component.json",
-    "index-browserify.js",
     "index.js",
     "lib",
     "node_modules",
