@@ -7443,11 +7443,19 @@ d3 = function() {
       tension = _;
       return line;
     };
+    line.copy = d3_svg_lineCopy(d3.svg.line);
     return line;
   }
   d3.svg.line = function() {
     return d3_svg_line(d3_identity);
   };
+  function d3_svg_lineCopy(create) {
+    return function() {
+      var copy = create();
+      for (var p in this) if (p !== "copy") copy[p](this[p]());
+      return copy;
+    };
+  }
   var d3_svg_lineInterpolators = d3.map({
     linear: d3_svg_lineLinear,
     "linear-closed": d3_svg_lineLinearClosed,
@@ -7653,6 +7661,7 @@ d3 = function() {
     var line = d3_svg_line(d3_svg_lineRadial);
     line.radius = line.x, delete line.x;
     line.angle = line.y, delete line.y;
+    line.copy = d3_svg_lineCopy(d3.svg.line.radial);
     return line;
   };
   function d3_svg_lineRadial(points) {
@@ -7737,6 +7746,7 @@ d3 = function() {
       tension = _;
       return area;
     };
+    area.copy = d3_svg_lineCopy(d3.svg.area);
     return area;
   }
   d3_svg_lineStepBefore.reverse = d3_svg_lineStepAfter;
@@ -7752,6 +7762,7 @@ d3 = function() {
     area.angle = area.y, delete area.y;
     area.startAngle = area.y0, delete area.y0;
     area.endAngle = area.y1, delete area.y1;
+    area.copy = d3_svg_lineCopy(d3.svg.area.radial);
     return area;
   };
   d3.svg.chord = function() {

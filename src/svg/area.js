@@ -110,6 +110,8 @@ function d3_svg_area(projection) {
     return area;
   };
 
+  area.copy = d3_svg_lineCopy(d3.svg.area);
+
   return area;
 }
 

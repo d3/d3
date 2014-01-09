@@ -6,6 +6,7 @@ d3.svg.line.radial = function() {
   var line = d3_svg_line(d3_svg_lineRadial);
   line.radius = line.x, delete line.x;
   line.angle = line.y, delete line.y;
+  line.copy = d3_svg_lineCopy(d3.svg.line.radial);
   return line;
 };
 

@@ -10,5 +10,6 @@ d3.svg.area.radial = function() {
   area.angle = area.y, delete area.y;
   area.startAngle = area.y0, delete area.y0;
   area.endAngle = area.y1, delete area.y1;
+  area.copy = d3_svg_lineCopy(d3.svg.area.radial);
   return area;
 };

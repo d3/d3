@@ -73,12 +73,22 @@ function d3_svg_line(projection) {
     return line;
   };
 
+  line.copy = d3_svg_lineCopy(d3.svg.line);
+
   return line;
 }
 
 d3.svg.line = function() {
   return d3_svg_line(d3_identity);
 };
+
+function d3_svg_lineCopy(create) {
+  return function() {
+    var copy = create();
+    for (var p in this) if (p !== "copy") copy[p](this[p]());
+    return copy;
+  };
+}
 
 // The various interpolators supported by the `line` class.
 var d3_svg_lineInterpolators = d3.map({
