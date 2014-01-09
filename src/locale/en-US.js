@@ -4,7 +4,7 @@ var d3_locale_enUS = d3.locale({
   decimal: ".",
   thousands: ",",
   grouping: [3, 3],
-  currency: "$",
+  currency: ["$", ""],
   dateTime: "%a %b %e %X %Y",
   date: "%m/%d/%Y",
   time: "%H:%M:%S",

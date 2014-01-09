@@ -4,7 +4,7 @@ var d3_locale_ruRU = d3.locale({
   decimal: ",",
   thousands: " ",
   grouping: [3, 3],
-  currency: "руб. ",
+  currency: ["", " руб."],
   dateTime: "%A, %e %B %Y г. %X",
   date: "%d.%m.%Y",
   time: "%H:%M:%S",

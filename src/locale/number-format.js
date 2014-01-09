@@ -33,6 +33,7 @@ function d3_locale_numberFormat(locale) {
         precision = match[8],
         type = match[9],
         scale = 1,
+        prefix = "",
         suffix = "",
         integer = false;
 
@@ -51,14 +52,13 @@ function d3_locale_numberFormat(locale) {
       case "b":
       case "o":
       case "x":
-      case "X": if (symbol === "#") symbol = "0" + type.toLowerCase();
+      case "X": if (symbol === "#") prefix = "0" + type.toLowerCase();
       case "c":
       case "d": integer = true; precision = 0; break;
       case "s": scale = -1; type = "r"; break;
     }
 
-    if (symbol === "#") symbol = "";
-    else if (symbol === "$") symbol = locale_currency;
+    if (symbol === "$") prefix = locale_currency[0], suffix = locale_currency[1];
 
     // If no precision is specified for r, fallback to general notation.
     if (type == "r" && !precision) type = "g";
@@ -83,9 +83,9 @@ function d3_locale_numberFormat(locale) {
 
       // Apply the scale, computing it from the value's exponent for si format.
       if (scale < 0) {
-        var prefix = d3.formatPrefix(value, precision);
-        value = prefix.scale(value);
-        suffix = prefix.symbol;
+        var unit = d3.formatPrefix(value, precision);
+        value = unit.scale(value);
+        suffix = unit.symbol;
       } else {
         value *= scale;
       }
@@ -101,14 +101,14 @@ function d3_locale_numberFormat(locale) {
        // If the fill character is not "0", grouping is applied before padding.
       if (!zfill && comma) before = formatGroup(before);
 
-      var length = symbol.length + before.length + after.length + (zcomma ? 0 : negative.length),
+      var length = prefix.length + before.length + after.length + (zcomma ? 0 : negative.length),
           padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
 
       // If the fill character is "0", grouping is applied after padding.
       if (zcomma) before = formatGroup(padding + before);
 
-      // Apply symbol as prefix. TODO allow suffix symbols
-      negative += symbol;
+      // Apply prefix.
+      negative += prefix;
 
       // Rejoin integer and decimal parts.
       value = before + after;

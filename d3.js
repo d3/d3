@@ -2138,7 +2138,7 @@ d3 = function() {
       return t.reverse().join(locale_thousands);
     } : d3_identity;
     return function(specifier) {
-      var match = d3_format_re.exec(specifier), fill = match[1] || " ", align = match[2] || ">", sign = match[3] || "", symbol = match[4] || "", zfill = match[5], width = +match[6], comma = match[7], precision = match[8], type = match[9], scale = 1, suffix = "", integer = false;
+      var match = d3_format_re.exec(specifier), fill = match[1] || " ", align = match[2] || ">", sign = match[3] || "", symbol = match[4] || "", zfill = match[5], width = +match[6], comma = match[7], precision = match[8], type = match[9], scale = 1, prefix = "", suffix = "", integer = false;
       if (precision) precision = +precision.substring(1);
       if (zfill || fill === "0" && align === "=") {
         zfill = fill = "0";
@@ -2167,7 +2167,7 @@ d3 = function() {
        case "o":
        case "x":
        case "X":
-        if (symbol === "#") symbol = "0" + type.toLowerCase();
+        if (symbol === "#") prefix = "0" + type.toLowerCase();
 
        case "c":
        case "d":
@@ -2180,7 +2180,7 @@ d3 = function() {
         type = "r";
         break;
       }
-      if (symbol === "#") symbol = ""; else if (symbol === "$") symbol = locale_currency;
+      if (symbol === "$") prefix = locale_currency[0], suffix = locale_currency[1];
       if (type == "r" && !precision) type = "g";
       if (precision != null) {
         if (type == "g") precision = Math.max(1, Math.min(21, precision)); else if (type == "e" || type == "f") precision = Math.max(0, Math.min(20, precision));
@@ -2191,18 +2191,18 @@ d3 = function() {
         if (integer && value % 1) return "";
         var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
         if (scale < 0) {
-          var prefix = d3.formatPrefix(value, precision);
-          value = prefix.scale(value);
-          suffix = prefix.symbol;
+          var unit = d3.formatPrefix(value, precision);
+          value = unit.scale(value);
+          suffix = unit.symbol;
         } else {
           value *= scale;
         }
         value = type(value, precision);
         var i = value.lastIndexOf("."), before = i < 0 ? value : value.substring(0, i), after = i < 0 ? "" : locale_decimal + value.substring(i + 1);
         if (!zfill && comma) before = formatGroup(before);
-        var length = symbol.length + before.length + after.length + (zcomma ? 0 : negative.length), padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
+        var length = prefix.length + before.length + after.length + (zcomma ? 0 : negative.length), padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
         if (zcomma) before = formatGroup(padding + before);
-        negative += symbol;
+        negative += prefix;
         value = before + after;
         return (align === "<" ? negative + value + padding : align === ">" ? padding + negative + value : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length) : negative + (zcomma ? value : padding + value)) + suffix;
       };
@@ -2743,7 +2743,7 @@ d3 = function() {
     decimal: ".",
     thousands: ",",
     grouping: [ 3, 3 ],
-    currency: "$",
+    currency: [ "$", "" ],
     dateTime: "%a %b %e %X %Y",
     date: "%m/%d/%Y",
     time: "%H:%M:%S",
