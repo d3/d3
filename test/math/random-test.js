@@ -1,50 +1,45 @@
 var vows = require("vows"),
     load = require("../load"),
     assert = require("../assert"),
-    seedrandom = require('seedrandom');
+    seedrandom = require("seedrandom");
 
 var suite = vows.describe("d3.random");
 
-/**
- * Testing a random number generator is a bit more complicated than testing
- * deterministic code, so we use different techniques.
- *
- * If the RNG is correct, each test in this suite will pass with probability
- * at least P. The tests have been designed so that P ≥ 98%. Specific values
- * of P are given above each case. We use the seedrandom module to get around
- * this non-deterministic aspect -- so it is safe to assume that if the tests
- * fail, then d3's RNG is broken.
- *
- * More on RNG testing here:
- * @see http://www.johndcook.com/Beautiful_Testing_ch10.pdf
- */
-
-// Overwrites Math.random to a seeded random function.
-// (by default Math.random is seeded with current time)
-Math.seedrandom('a random seed.');
+// Testing a random number generator is a bit more complicated than testing
+// deterministic code, so we use different techniques.
+//
+// If the RNG is correct, each test in this suite will pass with probability
+// at least P. The tests have been designed so that P ≥ 98%. Specific values
+// of P are given above each case. We use the seedrandom module to get around
+// this non-deterministic aspect -- so it is safe to assume that if the tests
+// fail, then d3's RNG is broken.
+//
+// See also: http://www.johndcook.com/Beautiful_Testing_ch10.pdf
 
 suite.addBatch({
   "random": {
     topic: load("math/random").expression("d3.random"),
-    "normal": {
-      "topic": function(random) { return random.normal(-43289, 38.8); },
-
-      // P = 98%
-      "has normal distribution" : KSTest(normalCDF(-43289, 38.8))
-    },
-    "logNormal": {
-      // Use reasonable values for mean here because random.logNormal() grows
-      // exponentially with the mean.
-      "topic": function(random) { return random.logNormal(10, 2.5); },
-
-      // P = 98%
-      "has log-normal distribution" : KSTest(logNormalCDF(10, 2.5))
-    },
-    "irwinHall": {
-      "topic": function(random) { return random.irwinHall(10); },
-
-      // P = 98%
-      "has Irwin-Hall distribution" : KSTest(irwinHallCDF(10))
+    "(using seedrandom)": {
+      topic: function(random) {
+        _random = Math.random;
+        Math.seedrandom("a random seed.");
+        return random;
+      },
+      "normal": {
+        "topic": function(random) { return random.normal(-43289, 38.8); },
+        "has normal distribution": KSTest(normalCDF(-43289, 38.8))
+      },
+      "logNormal": {
+        "topic": function(random) { return random.logNormal(10, 2.5); },
+        "has log-normal distribution": KSTest(logNormalCDF(10, 2.5))
+      },
+      "irwinHall": {
+        "topic": function(random) { return random.irwinHall(10); },
+        "has Irwin-Hall distribution": KSTest(irwinHallCDF(10))
+      },
+      teardown: function() {
+        Math.random = _random;
+      }
     }
   }
 });
@@ -59,9 +54,7 @@ suite.addBatch({
  *
  * @param cdf function(x) { returns CDF of the distribution evaluated at x }
  * @param n number of sample points. Higher n = better evaluation, slower test.
- * @return function(rng) {
- *   // asserts that rng produces values fitting the distribution
- * }
+ * @return a function that asserts the rng produces values fitting the distribution
  */
 function KSTest(cdf, n) {
   return function(rng) {
@@ -85,15 +78,15 @@ function KSTest(cdf, n) {
   }
 }
 
+// Logistic approximation to normal CDF around N(mean, stddev).
 function normalCDF(mean, stddev) {
-  // Logistic approximation to normal CDF around N(mean, stddev).
   return function(x) {
     return 1 / (1 + Math.exp(-0.07056 * Math.pow((x-mean)/stddev, 3) - 1.5976 * (x-mean)/stddev));
   }
 }
 
+// See http://en.wikipedia.org/wiki/Log-normal_distribution#Similar_distributions
 function logNormalCDF(mean, stddev) {
-  // @see http://en.wikipedia.org/wiki/Log-normal_distribution#Similar_distributions
   var exponent = Math.PI / (stddev * Math.sqrt(3));
   var numerator = Math.exp(mean);
   return function(x) {
@@ -111,15 +104,9 @@ function irwinHallCDF(n) {
     binoms.push(binom(n, k));
   }
 
-  // @see CDF at http://en.wikipedia.org/wiki/Irwin%E2%80%93Hall_distribution
+  // See CDF at http://en.wikipedia.org/wiki/Irwin–Hall_distribution
   return function(x) {
     var t = 0;
-
-    // What d3 calls Irwin-Hill distribution is actually a Bates distribution:
-    // the Irwin-Hall distribution divided by n. So we multiply the Bates
-    // distribution's x-value by n to get the Irwin-Hall CDF at x.
-    x *= n;
-
     for (var k = 0; k < x; k++) {
       t += Math.pow(-1, k % 2) * binoms[k] * Math.pow(x - k, n);
     }
