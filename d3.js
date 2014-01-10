@@ -1,4 +1,4 @@
-d3 = function() {
+!function() {
   var d3 = {
     version: "3.3.13"
   };
@@ -9289,5 +9289,11 @@ d3 = function() {
   d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
   });
-  return d3;
+  if (typeof define === "function" && define.amd) {
+    define(d3);
+  } else if (typeof module === "object" && module.exports) {
+    module.exports = d3;
+  } else {
+    this.d3 = d3;
+  }
 }();

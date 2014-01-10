@@ -11,10 +11,9 @@
     "canvas"
   ],
   "version": "3.3.13",
-  "main": "index-browserify.js",
+  "main": "d3.js",
   "scripts": [
-    "d3.js",
-    "index-browserify.js"
+    "d3.js"
   ],
   "dependencies": {},
   "development": {},
