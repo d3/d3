@@ -18,7 +18,7 @@ var suite = vows.describe("d3.random");
 
 suite.addBatch({
   "random": {
-    topic: load("math/random").expression("d3.random"),
+    topic: load("math/random").sandbox({Math: Math}).expression("d3.random"),
     "(using seedrandom)": {
       topic: function(random) {
         _random = Math.random;
@@ -75,14 +75,14 @@ function KSTest(cdf, n) {
     // Derivation of this interval is difficult.
     // @see K-S test in Knuth's AoCP vol.2
     assert.inDelta(K_positive, 0.723255, 0.794145);
-  }
+  };
 }
 
 // Logistic approximation to normal CDF around N(mean, stddev).
 function normalCDF(mean, stddev) {
   return function(x) {
     return 1 / (1 + Math.exp(-0.07056 * Math.pow((x-mean)/stddev, 3) - 1.5976 * (x-mean)/stddev));
-  }
+  };
 }
 
 // See http://en.wikipedia.org/wiki/Log-normal_distribution#Similar_distributions
@@ -91,7 +91,7 @@ function logNormalCDF(mean, stddev) {
   var numerator = Math.exp(mean);
   return function(x) {
     return 1 / (Math.pow(numerator / x, exponent) + 1);
-  }
+  };
 }
 
 function irwinHallCDF(n) {
@@ -111,7 +111,7 @@ function irwinHallCDF(n) {
       t += Math.pow(-1, k % 2) * binoms[k] * Math.pow(x - k, n);
     }
     return t / normalisingFactor;
-  }
+  };
 }
 
 function factorial(n) {
