@@ -26,6 +26,11 @@ module.exports = function() {
     return topic;
   };
 
+  topic.sandbox = function(_) {
+    sandbox = _;
+    return topic;
+  };
+
   topic.document = function(_) {
     var document = jsdom.jsdom("<html><head></head><body></body></html>");
 
