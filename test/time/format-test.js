@@ -44,6 +44,21 @@ suite.addBatch({
       assert.equal(f(local(1990, 10, 1)), "Nov");
       assert.equal(f(local(1990, 11, 1)), "Dec");
     },
+    "formats month": function(format) {
+      var f = format("%B");
+      assert.equal(f(local(1990, 0, 1)), "January");
+      assert.equal(f(local(1990, 1, 1)), "February");
+      assert.equal(f(local(1990, 2, 1)), "March");
+      assert.equal(f(local(1990, 3, 1)), "April");
+      assert.equal(f(local(1990, 4, 1)), "May");
+      assert.equal(f(local(1990, 5, 1)), "June");
+      assert.equal(f(local(1990, 6, 1)), "July");
+      assert.equal(f(local(1990, 7, 1)), "August");
+      assert.equal(f(local(1990, 8, 1)), "September");
+      assert.equal(f(local(1990, 9, 1)), "October");
+      assert.equal(f(local(1990, 10, 1)), "November");
+      assert.equal(f(local(1990, 11, 1)), "December");
+    },
     "formats locale date and time": function(format) {
       var f = format("%c");
       assert.equal(f(local(1990, 0, 1)), "Mon Jan  1 00:00:00 1990");
@@ -159,6 +174,32 @@ suite.addBatch({
     "formats literal percent sign": function(format) {
       var f = format("%%");
       assert.equal(f(local(1990, 0, 1)), "%");
+    },
+
+    "multi": {
+      topic: function(format) {
+        return format.multi([
+          [".%L", function(d) { return d.getMilliseconds(); }],
+          [":%S", function(d) { return d.getSeconds(); }],
+          ["%I:%M", function(d) { return d.getMinutes(); }],
+          ["%a %d", function(d) { return d.getDay() && d.getDate() != 1; }],
+          ["%b %d", function(d) { return d.getDate() != 1; }],
+          ["%I %p", function(d) { return d.getHours(); }],
+          ["%B", function(d) { return d.getMonth(); }],
+          ["%Y", function() { return true; }]
+        ]);
+      },
+      "returns a multi-formatter using the predicated formats": function(f) {
+        assert.equal(f(local(1990, 0, 1, 1)), "01 AM");
+      },
+      "applies the first format for which the predicate returns true": function(f) {
+        assert.equal(f(local(1990, 0, 1, 0, 0, 0, 12)), ".012");
+        assert.equal(f(local(1990, 0, 1, 0, 0, 1)), ":01");
+        assert.equal(f(local(1990, 0, 1, 0, 1)), "12:01");
+        assert.equal(f(local(1990, 0, 2)), "Tue 02");
+        assert.equal(f(local(1990, 1, 1)), "February");
+        assert.equal(f(local(1990, 0, 1)), "1990");
+      }
     },
 
     "parse": {

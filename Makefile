@@ -1,10 +1,6 @@
-LOCALE ?= en_US
-
 GENERATED_FILES = \
 	d3.js \
 	d3.min.js \
-	src/format/format-localized.js \
-	src/time/format-localized.js \
 	bower.json \
 	component.json
 
@@ -14,12 +10,6 @@ all: $(GENERATED_FILES)
 
 test:
 	@npm test
-
-src/format/format-localized.js: bin/locale src/format/format-locale.js
-	LC_NUMERIC=$(LOCALE) LC_MONETARY=$(LOCALE) locale -ck LC_NUMERIC LC_MONETARY | bin/locale src/format/format-locale.js > $@
-
-src/time/format-localized.js: bin/locale src/time/format-locale.js
-	LC_TIME=$(LOCALE) locale -ck LC_TIME | bin/locale src/time/format-locale.js > $@
 
 src/start.js: package.json bin/start
 	bin/start > $@

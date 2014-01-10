@@ -4,7 +4,6 @@ import "time";
 import "year";
 
 d3_time_daySymbols.forEach(function(day, i) {
-  day = day.toLowerCase();
   i = 7 - i;
 
   var interval = d3_time[day] = d3_time_interval(function(date) {

@@ -1,3 +1,4 @@
+import "../core/identity";
 import "../core/document";
 import "../core/rebind";
 import "../event/dispatch";

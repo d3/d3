@@ -1,3 +1,4 @@
+import "../core/identity";
 import "../math/trigonometry";
 import "../scale/linear";
 import "../scale/scale";
