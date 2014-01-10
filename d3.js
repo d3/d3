@@ -2247,7 +2247,7 @@
   function d3_format_typeDefault(x) {
     return x + "";
   }
-  var d3_time = d3.time = {}, d3_date = Date, d3_time_daySymbols = [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ];
+  var d3_time = d3.time = {}, d3_date = Date;
   function d3_date_utc() {
     this._ = new Date(arguments.length > 1 ? Date.UTC.apply(this, arguments) : arguments[0]);
   }
@@ -2400,7 +2400,7 @@
     var year = d3_time.year(date);
     return Math.floor((date - year - (date.getTimezoneOffset() - year.getTimezoneOffset()) * 6e4) / 864e5);
   };
-  d3_time_daySymbols.forEach(function(day, i) {
+  [ "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" ].forEach(function(day, i) {
     i = 7 - i;
     var interval = d3_time[day] = d3_time_interval(function(date) {
       (date = d3_time.day(date)).setDate(date.getDate() - (date.getDay() + i) % 7);
