@@ -16,11 +16,11 @@ suite.addBatch({
       },
       "formats numbers": function(format) {
         var f = format(",.2f");
-        assert.equal(f(12345.67), "12 345,67");
+        assert.equal(f(12345.67), "12 345,67");
       },
       "formats currencies": function(format) {
         var f = format("$,.2f");
-        assert.equal(f(12345.67), "12 345,67 руб.");
+        assert.equal(f(12345.67), "12 345,67 руб.");
       }
     },
 

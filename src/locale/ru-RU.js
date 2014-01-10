@@ -2,7 +2,7 @@ import "locale";
 
 d3.locale.ru_RU = d3.locale({
   decimal: ",",
-  thousands: " ",
+  thousands: "\xa0",
   grouping: [3, 3],
   currency: ["", " руб."],
   dateTime: "%A, %e %B %Y г. %X",
