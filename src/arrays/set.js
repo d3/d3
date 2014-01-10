@@ -10,9 +10,7 @@ d3.set = function(array) {
 function d3_Set() {}
 
 d3_class(d3_Set, {
-  has: function(value) {
-    return d3_map_prefix + value in this;
-  },
+  has: d3_map_has,
   add: function(value) {
     this[d3_map_prefix + value] = true;
     return value;
@@ -21,18 +19,10 @@ d3_class(d3_Set, {
     value = d3_map_prefix + value;
     return value in this && delete this[value];
   },
-  values: function() {
-    var values = [];
-    this.forEach(function(value) {
-      values.push(value);
-    });
-    return values;
-  },
+  values: d3_map_keys,
+  size: d3_map_size,
+  empty: d3_map_empty,
   forEach: function(f) {
-    for (var value in this) {
-      if (value.charCodeAt(0) === d3_map_prefixCode) {
-        f.call(this, value.substring(1));
-      }
-    }
+    for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) f.call(this, value.substring(1));
   }
 });

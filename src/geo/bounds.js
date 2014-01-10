@@ -1,5 +1,3 @@
-import "../core/identity";
-import "../core/noop";
 import "../math/abs";
 import "geo";
 import "stream";

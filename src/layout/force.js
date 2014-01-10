@@ -18,8 +18,9 @@ d3.layout.force = function() {
       linkDistance = d3_layout_forceLinkDistance,
       linkStrength = d3_layout_forceLinkStrength,
       charge = -30,
+      chargeDistance2 = d3_layout_forceChargeDistance2,
       gravity = .1,
-      theta = .8,
+      theta2 = .64,
       nodes = [],
       links = [],
       distances,
@@ -31,18 +32,21 @@ d3.layout.force = function() {
       if (quad.point !== node) {
         var dx = quad.cx - node.x,
             dy = quad.cy - node.y,
-            dn = 1 / Math.sqrt(dx * dx + dy * dy);
+            dw = x2 - x1,
+            dn = dx * dx + dy * dy;
 
         /* Barnes-Hut criterion. */
-        if ((x2 - x1) * dn < theta) {
-          var k = quad.charge * dn * dn;
-          node.px -= dx * k;
-          node.py -= dy * k;
+        if (dw * dw / theta2 < dn) {
+          if (dn < chargeDistance2) {
+            var k = quad.charge / dn;
+            node.px -= dx * k;
+            node.py -= dy * k;
+          }
           return true;
         }
 
-        if (quad.point && isFinite(dn)) {
-          var k = quad.pointCharge * dn * dn;
+        if (quad.point && dn && dn < chargeDistance2) {
+          var k = quad.pointCharge / dn;
           node.px -= dx * k;
           node.py -= dy * k;
         }
@@ -169,6 +173,12 @@ d3.layout.force = function() {
     return force;
   };
 
+  force.chargeDistance = function(x) {
+    if (!arguments.length) return Math.sqrt(chargeDistance2);
+    chargeDistance2 = x * x;
+    return force;
+  };
+
   force.gravity = function(x) {
     if (!arguments.length) return gravity;
     gravity = +x;
@@ -176,8 +186,8 @@ d3.layout.force = function() {
   };
 
   force.theta = function(x) {
-    if (!arguments.length) return theta;
-    theta = +x;
+    if (!arguments.length) return Math.sqrt(theta2);
+    theta2 = x * x;
     return force;
   };
 
@@ -352,4 +362,5 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
 }
 
 var d3_layout_forceLinkDistance = 20,
-    d3_layout_forceLinkStrength = 1;
+    d3_layout_forceLinkStrength = 1,
+    d3_layout_forceChargeDistance2 = Infinity;

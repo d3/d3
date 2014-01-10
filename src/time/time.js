@@ -1,6 +1,5 @@
 var d3_time = d3.time = {},
-    d3_date = Date,
-    d3_time_daySymbols = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    d3_date = Date;
 
 function d3_date_utc() {
   this._ = new Date(arguments.length > 1

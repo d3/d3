@@ -3,8 +3,7 @@ import "interval";
 import "time";
 import "year";
 
-d3_time_daySymbols.forEach(function(day, i) {
-  day = day.toLowerCase();
+["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"].forEach(function(day, i) {
   i = 7 - i;
 
   var interval = d3_time[day] = d3_time_interval(function(date) {

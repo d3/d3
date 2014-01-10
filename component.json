@@ -10,11 +10,10 @@
     "animation",
     "canvas"
   ],
-  "version": "3.3.13",
-  "main": "index-browserify.js",
+  "version": "3.4.0",
+  "main": "d3.js",
   "scripts": [
-    "d3.js",
-    "index-browserify.js"
+    "d3.js"
   ],
   "dependencies": {},
   "development": {},

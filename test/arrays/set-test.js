@@ -25,7 +25,75 @@ suite.addBatch({
         assert.isTrue(s.has("bar"));
       }
     },
+    "size": {
+      "returns the number of distinct values": function(set) {
+        var s = set();
+        assert.deepEqual(s.size(), 0);
+        s.add("foo");
+        assert.deepEqual(s.size(), 1);
+        s.add("foo");
+        assert.deepEqual(s.size(), 1);
+        s.add("bar");
+        assert.deepEqual(s.size(), 2);
+        s.remove("foo");
+        assert.deepEqual(s.size(), 1);
+        s.remove("foo");
+        assert.deepEqual(s.size(), 1);
+        s.remove("bar");
+        assert.deepEqual(s.size(), 0);
+      }
+    },
+    "empty": {
+      "returns true only if the set is empty": function(set) {
+        var s = set();
+        assert.isTrue(s.empty());
+        s.add("foo");
+        assert.isFalse(s.empty());
+        s.add("foo");
+        assert.isFalse(s.empty());
+        s.add("bar");
+        assert.isFalse(s.empty());
+        s.remove("foo");
+        assert.isFalse(s.empty());
+        s.remove("foo");
+        assert.isFalse(s.empty());
+        s.remove("bar");
+        assert.isTrue(s.empty());
+      }
+    },
     "forEach": {
+      "passes value": function(set) {
+        var s = set(["foo", "bar"]),
+            c = [];
+        s.forEach(function(v) { c.push(v); });
+        c.sort();
+        assert.deepEqual(c, ["bar", "foo"]);
+      },
+      "uses the set as the context": function(set) {
+        var s = set(["foo", "bar"]),
+            c = [];
+        s.forEach(function() { c.push(this); });
+        assert.strictEqual(c[0], s);
+        assert.strictEqual(c[1], s);
+        assert.equal(c.length, 2);
+      },
+      "iterates in arbitrary order": function(set) {
+        var s1 = set(["foo", "bar"]),
+            s2 = set(["bar", "foo"]),
+            c1 = [],
+            c2 = [];
+        s1.forEach(function(v) { c1.push(v); });
+        s2.forEach(function(v) { c2.push(v); });
+        c1.sort();
+        c2.sort();
+        assert.deepEqual(c1, c2);
+      }
+    },
+    "values": {
+      "returns an array of string values": function(set) {
+        var s = set(["foo", "bar"]);
+        assert.deepEqual(s.values().sort(), ["bar", "foo"]);
+      },
       "empty sets have an empty values array": function(set) {
         var s = set();
         assert.deepEqual(s.values(), []);
@@ -55,12 +123,6 @@ suite.addBatch({
         assert.deepEqual(s.values(), []);
         s.remove("foo");
         assert.deepEqual(s.values(), []);
-      }
-    },
-    "values": {
-      "returns an array of string values": function(set) {
-        var s = set(["foo", "bar"]);
-        assert.deepEqual(s.values().sort(), ["bar", "foo"]);
       }
     },
     "has": {

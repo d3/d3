@@ -9,10 +9,9 @@ console.log(JSON.stringify({
   "description": package.description,
   "keywords": package.keywords,
   "version": package.version,
-  "main": "index-browserify.js",
+  "main": "d3.js",
   "scripts": [
-    "d3.js",
-    "index-browserify.js"
+    "d3.js"
   ],
   "dependencies": {},
   "development": {},
