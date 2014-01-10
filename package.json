@@ -26,7 +26,7 @@
     "url": "https://github.com/mbostock/d3.git"
   },
   "main": "index.js",
-  "browserify": "index-browserify.js",
+  "browserify": "d3.js",
   "jspm": {
     "main": "d3.js",
     "shim": {
