@@ -323,6 +323,16 @@ suite.addBatch({
       assert.strictEqual(format("=+13,d")(0), "+           0");
       assert.strictEqual(format("=+21,d")(0), "+                   0");
     },
+    "pad after sign with currency": function(format) {
+      assert.strictEqual(format("=+$1,d")(0), "+$0");
+      assert.strictEqual(format("=+$1,d")(0), "+$0");
+      assert.strictEqual(format("=+$2,d")(0), "+$0");
+      assert.strictEqual(format("=+$3,d")(0), "+$0");
+      assert.strictEqual(format("=+$5,d")(0), "+$  0");
+      assert.strictEqual(format("=+$8,d")(0), "+$     0");
+      assert.strictEqual(format("=+$13,d")(0), "+$          0");
+      assert.strictEqual(format("=+$21,d")(0), "+$                  0");
+    },
     "a space can denote positive numbers": function(format) {
       assert.strictEqual(format(" 1,d")(-1), "-1");
       assert.strictEqual(format(" 1,d")(0), " 0");
