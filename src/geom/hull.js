@@ -49,10 +49,10 @@ d3.geom.hull = function(vertices) {
         skipRight  = lower[lower.length - 1] === upper[upper.length - 1],
         polygon = [];
 
-    for (i = upper.length - 1; i >= 0; --i)
-      polygon.push(data[points[upper[i]][2]]); // add upper hull in r->l order
-    for (i = +skipLeft; i < lower.length - skipRight; ++i)
-      polygon.push(data[points[lower[i]][2]]); // add lower hull in l->r order
+    // add upper hull in r->l order
+    // then add lower hull in l->r order
+    for (i = upper.length - 1; i >= 0; --i) polygon.push(data[points[upper[i]][2]]);
+    for (i = +skipLeft; i < lower.length - skipRight; ++i) polygon.push(data[points[lower[i]][2]]);
 
     return polygon;
   }
@@ -77,14 +77,15 @@ function d3_geom_hullUpper(points) {
       hs = 2; // hull size
 
   for (var i = 2; i < n; i++) {
-    while (hs > 1 && !d3_isCCWTurn(points[hull[hs-2]], points[hull[hs-1]], points[i])) {
-      hs --;
-    }
+    while (hs > 1 && d3_cross2d(points[hull[hs-2]], points[hull[hs-1]], points[i]) <= 0) --hs;
     hull[hs++] = i;
   }
+
   // we slice to make sure that the points we 'popped' from hull don't stay behind
   return hull.slice(0, hs);
 }
 
 // comparator for ascending sort by x-coord first, y-coord second
-function d3_geom_hullOrder(a, b) { return a[0] - b[0] || a[1] - b[1]; }
+function d3_geom_hullOrder(a, b) {
+  return a[0] - b[0] || a[1] - b[1];
+}

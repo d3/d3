@@ -79,9 +79,9 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
         for (var j = 1, v = polygon[i], m = v.length, a = v[0], b; j < m; ++j) {
           b = v[j];
           if (a[1] <= y) {
-            if (b[1] >  y && d3_isCCWTurn(a, b, p)) ++wn;
+            if (b[1] >  y && d3_cross2d(a, b, p) > 0) ++wn;
           } else {
-            if (b[1] <= y && !d3_isCCWTurn(a, b, p)) --wn;
+            if (b[1] <= y && d3_cross2d(a, b, p) < 0) --wn;
           }
           a = b;
         }

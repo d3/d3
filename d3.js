@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.4.0"
+    version: "3.4.1"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -1179,11 +1179,8 @@
   function d3_sgn(x) {
     return x > 0 ? 1 : x < 0 ? -1 : 0;
   }
-  function d3_isCCWTurn(a, b, c) {
-    return d3_cross2d(a, b, c) > 0;
-  }
-  function d3_cross2d(o, a, b) {
-    return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+  function d3_cross2d(a, b, c) {
+    return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
   }
   function d3_acos(x) {
     return x > 1 ? 0 : x < -1 ? π : Math.acos(x);
@@ -3633,9 +3630,9 @@
           for (var j = 1, v = polygon[i], m = v.length, a = v[0], b; j < m; ++j) {
             b = v[j];
             if (a[1] <= y) {
-              if (b[1] > y && d3_isCCWTurn(a, b, p)) ++wn;
+              if (b[1] > y && d3_cross2d(a, b, p) > 0) ++wn;
             } else {
-              if (b[1] <= y && !d3_isCCWTurn(a, b, p)) --wn;
+              if (b[1] <= y && d3_cross2d(a, b, p) < 0) --wn;
             }
             a = b;
           }
@@ -4733,9 +4730,7 @@
   function d3_geom_hullUpper(points) {
     var n = points.length, hull = [ 0, 1 ], hs = 2;
     for (var i = 2; i < n; i++) {
-      while (hs > 1 && !d3_isCCWTurn(points[hull[hs - 2]], points[hull[hs - 1]], points[i])) {
-        hs--;
-      }
+      while (hs > 1 && d3_cross2d(points[hull[hs - 2]], points[hull[hs - 1]], points[i]) <= 0) --hs;
       hull[hs++] = i;
     }
     return hull.slice(0, hs);
