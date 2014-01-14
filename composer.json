@@ -15,6 +15,5 @@
 		"wiki": "https://github.com/mbostock/d3/wiki",
 		"API": "https://github.com/mbostock/d3/wiki/API-Reference",
 		"source": "https://github.com/mbostock/d3"
-	},
-	"minimum-stability": "stable"
+	}
 }
