@@ -57,7 +57,7 @@
     "seedrandom": "2.3.1"
   },
   "scripts": {
-    "test": "node_modules/.bin/vows"
+    "test": "vows; echo"
   },
   "licenses": [
     {
