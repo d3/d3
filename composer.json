@@ -1,5 +1,5 @@
 {
-	"name": "d3",
+	"name": "mbostock/d3",
 	"description": "A small, free JavaScript library for manipulating documents based on data.",
 	"keywords": ["dom", "svg", "visualization", "js", "canvas"],
 	"homepage": "http://d3js.org/",
