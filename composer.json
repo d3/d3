@@ -1,0 +1,19 @@
+{
+	"name": "mbostock/d3",
+	"description": "A small, free JavaScript library for manipulating documents based on data.",
+	"keywords": ["dom", "svg", "visualization", "js", "canvas"],
+	"homepage": "http://d3js.org/",
+	"license": "BSD-3-Clause",
+	"authors": [
+		{
+			"name": "Mike Bostock",
+			"homepage": "http://bost.ocks.org/mike"
+		}
+	],
+	"support": {
+		"issues": "https://github.com/mbostock/d3/issues",
+		"wiki": "https://github.com/mbostock/d3/wiki",
+		"API": "https://github.com/mbostock/d3/wiki/API-Reference",
+		"source": "https://github.com/mbostock/d3"
+	}
+}
