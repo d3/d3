@@ -1,6 +1,30 @@
 {
   "name": "d3",
   "version": "3.4.1",
+  "description": "A small, free JavaScript library for manipulating documents based on data.",
+  "keywords": [
+    "dom",
+    "w3c",
+    "visualization",
+    "svg",
+    "animation",
+    "canvas"
+  ],
+  "homepage": "http://d3js.org",
+  "author": {
+    "name": "Mike Bostock",
+    "url": "http://bost.ocks.org/mike"
+  },
+  "contributors": [
+    {
+      "name": "Jason Davies",
+      "url": "http://jasondavies.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mbostock/d3.git"
+  },
   "main": "d3.js",
   "scripts": [
     "d3.js"
