@@ -2,7 +2,7 @@ var vows = require("vows"),
     load = require("../load"),
     assert = require("../assert");
 
-var suite = vows.describe("d3.mean");
+var suite = vows.describe("d3.weightedMean");
 
 suite.addBatch({
   "weightedMean": {
