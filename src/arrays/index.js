@@ -6,6 +6,7 @@ import "extent";
 import "sum";
 import "mean";
 import "median";
+import "weightedMean";
 import "quantile";
 import "bisect";
 import "shuffle";
