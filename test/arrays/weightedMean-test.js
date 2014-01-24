@@ -18,11 +18,13 @@ suite.addBatch({
       assert.equal(weightedMean([10, null, 3, undefined, 5, NaN], [1, 1, 1, 1, 1, 1]), 6);
       assert.equal(weightedMean([1, 1, 1, 1, 1, 1], [10, null, 3, undefined, 5, NaN]), 1);
     },
-    "does not fail automatically when MAX_VALUE is still 'manageable'": function(weightedMean) {
+    "can handle large array values": function(weightedMean) {
       assert.equal(weightedMean([Number.MAX_VALUE, Number.MAX_VALUE], [1, 1]), Number.MAX_VALUE);
       assert.equal(weightedMean([-Number.MAX_VALUE, -Number.MAX_VALUE], [1, 1]), -Number.MAX_VALUE);
       assert.equal(weightedMean([1, 1], [Number.MAX_VALUE, Number.MAX_VALUE]), 0);
       assert.equal(weightedMean([1, 1], [-Number.MAX_VALUE, -Number.MAX_VALUE]), 0);
+      assert.equal(weightedMean([Number.MAX_VALUE, Number.MAX_VALUE], [0.5, 34]), Number.MAX_VALUE);
+      assert.equal(weightedMean([Number.MAX_VALUE, Number.MAX_VALUE], [0.1, 0.0000001]), Number.MAX_VALUE);
     },
     "returns undefined for empty array": function(weightedMean) {
       assert.isUndefined(weightedMean([]));

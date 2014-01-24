@@ -9,7 +9,7 @@ d3.weightedMean = function(array, weights) {
     i = -1;
     if (arguments.length === 2) {
       while (++i < n) if (d3_number(a = array[i]) && d3_number(b = weights[i])) {
-        w = w * t/(t + b) + a * b/(t + b);
+        w = w * (t / (t + b)) + a * (b / (t + b));
         t += b;
       }
     }
