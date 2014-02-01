@@ -12,7 +12,15 @@ function d3_scale_ordinal(domain, ranger) {
       rangeBand;
 
   function scale(x) {
-    return range[((index.get(x) || ranger.t === "range" && index.set(x, domain.push(x))) - 1) % range.length];
+    var i = index.get(x);
+    if (!i)
+      if (ranger.t === "range")
+	i = index.set(x, domain.push(x));
+    var rangeVal;
+    if (i) {
+      rangeVal = range[(i - 1) % range.length];
+    }
+    return rangeVal;
   }
 
   function steps(start, step) {

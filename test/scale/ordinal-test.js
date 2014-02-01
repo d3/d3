@@ -117,6 +117,7 @@ suite.addBatch({
       "correctly handles singleton domains": function(ordinal) {
         var x = ordinal().domain(["a"]).rangePoints([0, 120]);
         assert.deepEqual(x.range(), [60]);
+	assert.isUndefined(x('b'));
       },
       "can be set to a descending range": function(ordinal) {
         var x = ordinal().domain(["a", "b", "c"]).rangePoints([120, 0]);
