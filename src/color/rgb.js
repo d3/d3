@@ -67,6 +67,7 @@ function d3_rgb_parse(format, rgb, hsl) {
   var r = 0, // red channel; int in [0, 255]
       g = 0, // green channel; int in [0, 255]
       b = 0, // blue channel; int in [0, 255]
+      value,
       m1, // CSS color specification match
       m2, // CSS color specification type (e.g., rgb)
       name;
@@ -98,20 +99,19 @@ function d3_rgb_parse(format, rgb, hsl) {
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
   if (format != null && format.charAt(0) === "#") {
-    if (format.length === 4) {
-      r = format.charAt(1); r += r;
-      g = format.charAt(2); g += g;
-      b = format.charAt(3); b += b;
-    } else if (format.length === 7) {
-      r = format.substring(1, 3);
-      g = format.substring(3, 5);
-      b = format.substring(5, 7);
+    value = parseInt(format.substring(1), 16);
+    if (!isNaN(value)) {
+      if (format.length === 4) {
+        r = (value & 0xf00) >> 4; r = (r >> 4) | r;
+        g = (value & 0xf0); g = (g >> 4) | g;
+        b = (value & 0xf); b = (b << 4) | b;
+      } else if (format.length === 7) {
+        r = (value & 0xff0000) >> 16;
+        g = (value & 0xff00) >> 8;
+        b = (value & 0xff);
+      }
     }
-    r = parseInt(r, 16);
-    g = parseInt(g, 16);
-    b = parseInt(b, 16);
   }
-
   return rgb(r, g, b);
 }
 
