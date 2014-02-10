@@ -24,8 +24,7 @@ d3.svg.textWrap = function() {
         line_next,
         text_y = text_selection.attr("y") || 0,
         line_dy,
-        test_tspan,
-        cy;
+        test_tspan;
         
     // only wrap if it actually overflows                              
     if (text_node_width > bounds.width) {
