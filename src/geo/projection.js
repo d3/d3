@@ -23,6 +23,7 @@ function d3_geo_projectionMutator(projectAt) {
       rotate,
       projectRotate,
       projectResample = d3_geo_resample(function(x, y) { x = project(x, y); return [x[0] * kx + δx, δy - x[1] * ky]; }),
+      setByArray = false, // scale set via array
       kx = 150, // scale x
       ky = 150, // scale y
       x = 480, y = 250, // translate
@@ -66,11 +67,13 @@ function d3_geo_projectionMutator(projectAt) {
   };
 
   projection.scale = function(_) {
-    if (!arguments.length) return kx !== ky ? [kx, ky] : kx;
+    if (!arguments.length) return setByArray ? [kx, ky] : kx;
     if (Array.isArray(_)) {
+      setByArray = true;
       kx = +_[0];
-      ky = _.length >= 2 ? +_[1] : kx;
+      ky = +_[1];
     } else {
+      setByArray = false;
       ky = kx = +_;
     }
     return reset();
