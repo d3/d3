@@ -22,8 +22,10 @@ function d3_geo_projectionMutator(projectAt) {
   var project,
       rotate,
       projectRotate,
-      projectResample = d3_geo_resample(function(x, y) { x = project(x, y); return [x[0] * k + δx, δy - x[1] * k]; }),
-      k = 150, // scale
+      projectResample = d3_geo_resample(function(x, y) { x = project(x, y); return [x[0] * kx + δx, δy - x[1] * ky]; }),
+      setByArray = false, // scale set via array
+      kx = 150, // scale x
+      ky = 150, // scale y
       x = 480, y = 250, // translate
       λ = 0, φ = 0, // center
       δλ = 0, δφ = 0, δγ = 0, // rotate
@@ -36,11 +38,11 @@ function d3_geo_projectionMutator(projectAt) {
 
   function projection(point) {
     point = projectRotate(point[0] * d3_radians, point[1] * d3_radians);
-    return [point[0] * k + δx, δy - point[1] * k];
+    return [point[0] * kx + δx, δy - point[1] * ky];
   }
 
   function invert(point) {
-    point = projectRotate.invert((point[0] - δx) / k, (δy - point[1]) / k);
+    point = projectRotate.invert((point[0] - δx) / kx, (δy - point[1]) / ky);
     return point && [point[0] * d3_degrees, point[1] * d3_degrees];
   }
 
@@ -65,8 +67,15 @@ function d3_geo_projectionMutator(projectAt) {
   };
 
   projection.scale = function(_) {
-    if (!arguments.length) return k;
-    k = +_;
+    if (!arguments.length) return setByArray ? [kx, ky] : kx;
+    if (Array.isArray(_)) {
+      setByArray = true;
+      kx = +_[0];
+      ky = +_[1];
+    } else {
+      setByArray = false;
+      ky = kx = +_;
+    }
     return reset();
   };
 
@@ -97,8 +106,8 @@ function d3_geo_projectionMutator(projectAt) {
   function reset() {
     projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
     var center = project(λ, φ);
-    δx = x - center[0] * k;
-    δy = y + center[1] * k;
+    δx = x - center[0] * kx;
+    δy = y + center[1] * ky;
     return invalidate();
   }
 

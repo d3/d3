@@ -27,6 +27,16 @@ suite.addBatch({
         "is coerced to a number": function(projection) {
           assert.strictEqual(projection.scale("400"), projection);
           assert.strictEqual(projection.scale(), 400);
+        },
+        "accepts an array for [x,y]": function(projection) {
+          assert.strictEqual(projection.scale([200, 200]), projection);
+          assert.strictEqual(projection.scale()[0], 200);
+          assert.strictEqual(projection.scale()[1], 200);
+        },
+        "array test with different sizes": function(projection) {
+          assert.strictEqual(projection.scale([200, 500]), projection);
+          assert.strictEqual(projection.scale()[0], 200);
+          assert.strictEqual(projection.scale()[1], 500);
         }
       },
 
