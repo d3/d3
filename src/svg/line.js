@@ -39,7 +39,7 @@ function d3_svg_line(projection) {
 
     if (points.length) segment();
 
-    return segments.length ? segments.join("") : null;
+    return segments.join("");
   }
 
   line.x = function(_) {

@@ -75,8 +75,8 @@ suite.addBatch({
       assert.equal(l.tension(), .5);
     },
 
-    "returns null if input points array is empty": function(line) {
-      assert.isNull(line()([]));
+    "returns '' if input points array is empty": function(line) {
+      assert.equal(line()([]), '');
     },
 
     "interpolate(linear)": {
