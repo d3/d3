@@ -7883,7 +7883,7 @@
         }
       }
       if (points.length) segment();
-      return segments.length ? segments.join("") : null;
+      return segments.join("");
     }
     line.x = function(_) {
       if (!arguments.length) return x;
@@ -8155,7 +8155,7 @@
         }
       }
       if (points0.length) segment();
-      return segments.length ? segments.join("") : null;
+      return segments.join("");
     }
     area.x = function(_) {
       if (!arguments.length) return x1;

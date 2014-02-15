@@ -50,7 +50,7 @@ function d3_svg_area(projection) {
 
     if (points0.length) segment();
 
-    return segments.length ? segments.join("") : null;
+    return segments.join("");
   }
 
   area.x = function(_) {
