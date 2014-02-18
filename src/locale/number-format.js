@@ -74,8 +74,7 @@ function d3_locale_numberFormat(locale) {
     var zcomma = zfill && comma;
 
     return function(value) {
-      // Local variable to prevent side effect
-      var localSuffix = suffix;
+      var fullSuffix = suffix;
 
       // Return the empty string for floats formatted as ints.
       if (integer && (value % 1)) return "";
@@ -84,10 +83,11 @@ function d3_locale_numberFormat(locale) {
       var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
 
       // Apply the scale, computing it from the value's exponent for si format.
+      // Preserve the existing suffix, if any, such as the currency symbol.
       if (scale < 0) {
         var unit = d3.formatPrefix(value, precision);
         value = unit.scale(value);
-        localSuffix = unit.symbol + localSuffix;
+        fullSuffix = unit.symbol + suffix;
       } else {
         value *= scale;
       }
@@ -118,7 +118,7 @@ function d3_locale_numberFormat(locale) {
       return (align === "<" ? negative + value + padding
             : align === ">" ? padding + negative + value
             : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length)
-            : negative + (zcomma ? value : padding + value)) + localSuffix;
+            : negative + (zcomma ? value : padding + value)) + fullSuffix;
     };
   };
 }
