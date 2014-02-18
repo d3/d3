@@ -21,6 +21,10 @@ suite.addBatch({
       "formats currencies": function(format) {
         var f = format("$,.2f");
         assert.equal(f(12345.67), "12 345,67 руб.");
+      },
+      "formats currencies with SI-prefix notation and currency suffix": function(format) {
+        var f = format("$,.4s");
+        assert.equal(f(12345.67), "12,35k руб.");
       }
     },
 

@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.4.1"
+    version: "3.4.2"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -2191,12 +2191,13 @@
       type = d3_format_types.get(type) || d3_format_typeDefault;
       var zcomma = zfill && comma;
       return function(value) {
+        var fullSuffix = suffix;
         if (integer && value % 1) return "";
         var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
         if (scale < 0) {
           var unit = d3.formatPrefix(value, precision);
           value = unit.scale(value);
-          suffix = unit.symbol;
+          fullSuffix = unit.symbol + suffix;
         } else {
           value *= scale;
         }
@@ -2207,7 +2208,7 @@
         if (zcomma) before = formatGroup(padding + before);
         negative += prefix;
         value = before + after;
-        return (align === "<" ? negative + value + padding : align === ">" ? padding + negative + value : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length) : negative + (zcomma ? value : padding + value)) + suffix;
+        return (align === "<" ? negative + value + padding : align === ">" ? padding + negative + value : align === "^" ? padding.substring(0, length >>= 1) + negative + value + padding.substring(length) : negative + (zcomma ? value : padding + value)) + fullSuffix;
       };
     };
   }

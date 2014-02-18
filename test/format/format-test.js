@@ -101,6 +101,26 @@ suite.addBatch({
       assert.strictEqual(f(999500), "999.5k");
       assert.strictEqual(f(.009995), "9.995m");
     },
+    "can output SI prefix notation with appropriate rounding and currency symbol": function(format) {
+      var f = format("$.3s");
+      assert.strictEqual(f(0), "$0.00");
+      assert.strictEqual(f(1), "$1.00");
+      assert.strictEqual(f(10), "$10.0");
+      assert.strictEqual(f(100), "$100");
+      assert.strictEqual(f(999.5), "$1.00k");
+      assert.strictEqual(f(999500), "$1.00M");
+      assert.strictEqual(f(1000), "$1.00k");
+      assert.strictEqual(f(1500.5), "$1.50k");
+      assert.strictEqual(f(145500000), "$146M");
+      assert.strictEqual(f(145999999.999999347), "$146M");
+      assert.strictEqual(f(1e26), "$100Y");
+      assert.strictEqual(f(.000001), "$1.00µ");
+      assert.strictEqual(f(.009995), "$0.0100");
+      var f = format("$.4s");
+      assert.strictEqual(f(999.5), "$999.5");
+      assert.strictEqual(f(999500), "$999.5k");
+      assert.strictEqual(f(.009995), "$9.995m");
+    },
     "can output a currency": function(format) {
       var f = format("$");
       assert.strictEqual(f(0), "$0");
