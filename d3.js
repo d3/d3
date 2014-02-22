@@ -7823,11 +7823,12 @@
   }
   d3.svg = {};
   d3.svg.arc = function() {
-    var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, positiveSweep = d3_svg_arcPositiveSweep, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
+    var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, negativeSweep = d3_svg_arcNegativeSweep, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
     function arc() {
-      var r0 = innerRadius.apply(this, arguments), r1 = outerRadius.apply(this, arguments), w0 = !positiveSweep.apply(this, arguments) ? 1 : 0, w1 = !w0 ? 1 : 0, a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset, a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset, da = (a1 < a0 && (da = a0, 
-      a0 = a1, a1 = da), a1 - a0), df = da < π ? "0" : "1", c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1);
-      return da >= d3_svg_arcMax ? r0 ? "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + w1 + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + w1 + " 0," + r1 + "M0," + r0 + "A" + r0 + "," + r0 + " 0 1," + w0 + " 0," + -r0 + "A" + r0 + "," + r0 + " 0 1," + w0 + " 0," + r0 + "Z" : "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + w1 + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + w1 + " 0," + r1 + "Z" : r0 ? "M" + r1 * c0 + "," + r1 * s0 + "A" + r1 + "," + r1 + " 0 " + df + "," + w1 + " " + r1 * c1 + "," + r1 * s1 + "L" + r0 * c1 + "," + r0 * s1 + "A" + r0 + "," + r0 + " 0 " + df + "," + w0 + " " + r0 * c0 + "," + r0 * s0 + "Z" : "M" + r1 * c0 + "," + r1 * s0 + "A" + r1 + "," + r1 + " 0 " + df + "," + w1 + " " + r1 * c1 + "," + r1 * s1 + "L0,0" + "Z";
+      var r0 = innerRadius.apply(this, arguments), r1 = outerRadius.apply(this, arguments), ns = negativeSweep.apply(this, arguments), a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset, a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset, da = (a1 < a0 && (da = a0, 
+      a0 = a1, a1 = da), a1 - a0), df = da < π ? "0" : "1", fs = ns ? (fs = a0, a0 = a1, 
+      a1 = fs, 0) : 1, ss = ns ? 1 : 0, c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1);
+      return da >= d3_svg_arcMax ? r0 ? "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + fs + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + fs + " 0," + r1 + "M0," + r0 + "A" + r0 + "," + r0 + " 0 1," + ss + " 0," + -r0 + "A" + r0 + "," + r0 + " 0 1," + ss + " 0," + r0 + "Z" : "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + fs + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + fs + " 0," + r1 + "Z" : r0 ? "M" + r1 * c0 + "," + r1 * s0 + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + r1 * c1 + "," + r1 * s1 + "L" + r0 * c1 + "," + r0 * s1 + "A" + r0 + "," + r0 + " 0 " + df + "," + ss + " " + r0 * c0 + "," + r0 * s0 + "Z" : "M" + r1 * c0 + "," + r1 * s0 + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + r1 * c1 + "," + r1 * s1 + "L0,0" + "Z";
     }
     arc.innerRadius = function(v) {
       if (!arguments.length) return innerRadius;
@@ -7839,9 +7840,9 @@
       outerRadius = d3_functor(v);
       return arc;
     };
-    arc.positiveSweep = function(v) {
-      if (!arguments.length) return positiveSweep;
-      positiveSweep = d3_functor(v);
+    arc.negativeSweep = function(v) {
+      if (!arguments.length) return negativeSweep;
+      negativeSweep = d3_functor(v);
       return arc;
     };
     arc.startAngle = function(v) {
@@ -7867,8 +7868,8 @@
   function d3_svg_arcOuterRadius(d) {
     return d.outerRadius;
   }
-  function d3_svg_arcPositiveSweep(d) {
-    return d.positiveSweep;
+  function d3_svg_arcNegativeSweep(d) {
+    return d ? d.negativeSweep : false;
   }
   function d3_svg_arcStartAngle(d) {
     return d.startAngle;
