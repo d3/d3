@@ -84,6 +84,26 @@ suite.addBatch({
       assert.equal(tt, t, "expected this, got {actual}");
     },
 
+    "negativeSweep defaults to a function accessor, with false fallback value": function(arc) {
+      var a = arc().innerRadius(0).outerRadius(100).startAngle(0).endAngle(Math.PI);
+      assert.pathEqual(a(), "M0,-100A100,100 0 1,1 0,100L0,0Z");
+      assert.pathEqual(a({negativeSweep: false}), "M0,-100A100,100 0 1,1 0,100L0,0Z");
+      assert.pathEqual(a({negativeSweep: true}), "M0,100A100,100 0 1,0 0,-100L0,0Z");
+    },
+    "negativeSweep can be defined as a constant": function(arc) {
+      var a = arc().innerRadius(0).outerRadius(100).startAngle(0).endAngle(Math.PI);
+      assert.pathEqual(a.negativeSweep(false)(), "M0,-100A100,100 0 1,1 0,100L0,0Z");
+      assert.pathEqual(a.negativeSweep(true)(), "M0,100A100,100 0 1,0 0,-100L0,0Z");
+    },
+    "negativeSweep can be defined as a function of data or index": function(arc) {
+      var a = arc().innerRadius(0).outerRadius(100).negativeSweep(f).startAngle(0).endAngle(Math.PI), o = {}, t = {}, dd, ii, tt;
+      function f(d, i) { dd = d; ii = i; tt = this; return false; }
+      assert.pathEqual(a.call(t, o, 2), "M0,-100A100,100 0 1,1 0,100L0,0Z");
+      assert.equal(dd, o, "expected data, got {actual}");
+      assert.equal(ii, 2, "expected index, got {actual}");
+      assert.equal(tt, t, "expected this, got {actual}");
+    },
+
     "startAngle and endAngle are swapped if endAngle is less than startAngle": function(arc) {
       var a = arc().innerRadius(50).outerRadius(100);
       assert.pathEqual(a.startAngle(2 * Math.PI).endAngle(Math.PI)(), a.startAngle(Math.PI).endAngle(2 * Math.PI)());
