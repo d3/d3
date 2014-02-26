@@ -2772,7 +2772,8 @@
       this.s = this.t = 0;
     },
     valueOf: function() {
-      return this.s;
+      var s = this.s;
+      return s > π ? s - τ : s < -π ? s + τ : s;
     }
   };
   var d3_adderTemp = new d3_adder();
@@ -2862,9 +2863,7 @@
       d3_geo_area.lineStart = d3_geo_areaRingStart;
     },
     polygonEnd: function() {
-      var area = +d3_geo_areaRingSum;
-      if (area > π) area -= τ; else if (area < -π) area += τ;
-      area *= 2;
+      var area = 2 * d3_geo_areaRingSum;
       d3_geo_areaSum += area < 0 ? 4 * π + area : area;
       d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
     }

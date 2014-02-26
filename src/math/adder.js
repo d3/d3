@@ -1,3 +1,5 @@
+import "../math/trigonometry";
+
 // Adds floating point numbers with twice the normal precision.
 // Reference: J. R. Shewchuk, Adaptive Precision Floating-Point Arithmetic and
 // Fast Robust Geometric Predicates, Discrete & Computational Geometry 18(3)
@@ -21,7 +23,8 @@ d3_adder.prototype = {
     this.s = this.t = 0;
   },
   valueOf: function() {
-    return this.s;
+    var s = this.s;
+    return s > π ? s - τ : s < -π ? s + τ : s; // restrict to [-τ, +τ]
   }
 };
 

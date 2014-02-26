@@ -25,9 +25,7 @@ var d3_geo_area = {
     d3_geo_area.lineStart = d3_geo_areaRingStart;
   },
   polygonEnd: function() {
-    var area = +d3_geo_areaRingSum;
-    if (area > π) area -= τ; else if (area < -π) area += τ; // restrict to [-τ, +τ]
-    area *= 2;
+    var area = 2 * d3_geo_areaRingSum;
     d3_geo_areaSum += area < 0 ? 4 * π + area : area;
     d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
   }
