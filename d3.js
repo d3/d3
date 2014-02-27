@@ -9214,7 +9214,7 @@
   } ], [ "%Y", d3_true ] ]);
   var d3_time_scaleMilliseconds = {
     range: function(start, stop, step) {
-      return d3.range(+start, +stop, step).map(d3_time_scaleDate);
+      return d3.range(Math.ceil(start / step) * step, +stop, step).map(d3_time_scaleDate);
     },
     floor: d3_identity,
     ceil: d3_identity
