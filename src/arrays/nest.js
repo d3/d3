@@ -5,6 +5,7 @@ d3.nest = function() {
       keys = [],
       sortKeys = [],
       sortValues,
+      eachAll = [],
       rollup;
 
   function map(mapType, array, depth) {
@@ -50,12 +51,17 @@ d3.nest = function() {
     if (depth >= keys.length) return map;
 
     var array = [],
+        each = eachAll[depth],
         sortKey = sortKeys[depth++];
+        
 
     map.forEach(function(key, keyMap) {
       array.push({key: key, values: entries(keyMap, depth)});
     });
 
+    if(each) {
+        array.forEach(function(a, i) {each.call(nest,a, i)})
+    }
     return sortKey
         ? array.sort(function(a, b) { return sortKey(a.key, b.key); })
         : array;
@@ -85,6 +91,10 @@ d3.nest = function() {
   // Applies to both maps and entries array.
   nest.sortValues = function(order) {
     sortValues = order;
+    return nest;
+  };
+  nest.each = function(f){
+    eachAll[keys.length -1] = f;
     return nest;
   };
 
