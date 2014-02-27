@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.4.2"
+    version: "3.4.3"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -2877,7 +2877,7 @@
     function nextPoint(λ, φ) {
       λ *= d3_radians;
       φ = φ * d3_radians / 2 + π / 4;
-      var dλ = λ - λ0, cosφ = Math.cos(φ), sinφ = Math.sin(φ), k = sinφ0 * sinφ, u = cosφ0 * cosφ + k * Math.cos(dλ), v = k * Math.sin(dλ);
+      var dλ = λ - λ0, sdλ = dλ >= 0 ? 1 : -1, adλ = sdλ * dλ, cosφ = Math.cos(φ), sinφ = Math.sin(φ), k = sinφ0 * sinφ, u = cosφ0 * cosφ + k * Math.cos(adλ), v = k * sdλ * Math.sin(adλ);
       d3_geo_areaRingSum.add(Math.atan2(v, u));
       λ0 = λ, cosφ0 = cosφ, sinφ0 = sinφ;
     }
@@ -3339,9 +3339,9 @@
       while (true) {
         if (j === m) j = 0;
         point = ring[j];
-        var λ = point[0], φ = point[1] / 2 + π / 4, sinφ = Math.sin(φ), cosφ = Math.cos(φ), dλ = λ - λ0, antimeridian = abs(dλ) > π, k = sinφ0 * sinφ;
-        d3_geo_areaRingSum.add(Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ)));
-        polarAngle += antimeridian ? dλ + (dλ >= 0 ? τ : -τ) : dλ;
+        var λ = point[0], φ = point[1] / 2 + π / 4, sinφ = Math.sin(φ), cosφ = Math.cos(φ), dλ = λ - λ0, sdλ = dλ >= 0 ? 1 : -1, adλ = sdλ * dλ, antimeridian = adλ > π, k = sinφ0 * sinφ;
+        d3_geo_areaRingSum.add(Math.atan2(k * sdλ * Math.sin(adλ), cosφ0 * cosφ + k * Math.cos(adλ)));
+        polarAngle += antimeridian ? dλ + sdλ * τ : dλ;
         if (antimeridian ^ λ0 >= meridian ^ λ >= meridian) {
           var arc = d3_geo_cartesianCross(d3_geo_cartesian(point0), d3_geo_cartesian(point));
           d3_geo_cartesianNormalize(arc);
