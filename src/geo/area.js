@@ -49,11 +49,13 @@ function d3_geo_areaRingStart() {
     // previous point, current point.  Uses a formula derived from Cagnoli’s
     // theorem.  See Todhunter, Spherical Trig. (1871), Sec. 103, Eq. (2).
     var dλ = λ - λ0,
+        sdλ = dλ >= 0 ? 1 : -1,
+        adλ = sdλ * dλ,
         cosφ = Math.cos(φ),
         sinφ = Math.sin(φ),
         k = sinφ0 * sinφ,
-        u = cosφ0 * cosφ + k * Math.cos(dλ),
-        v = k * Math.sin(dλ);
+        u = cosφ0 * cosφ + k * Math.cos(adλ),
+        v = k * sdλ * Math.sin(adλ);
     d3_geo_areaRingSum.add(Math.atan2(v, u));
 
     // Advance the previous points.

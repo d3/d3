@@ -31,11 +31,13 @@ function d3_geo_pointInPolygon(point, polygon) {
           sinφ = Math.sin(φ),
           cosφ = Math.cos(φ),
           dλ = λ - λ0,
-          antimeridian = abs(dλ) > π,
+          sdλ = dλ >= 0 ? 1 : -1,
+          adλ = sdλ * dλ,
+          antimeridian = adλ > π,
           k = sinφ0 * sinφ;
-      d3_geo_areaRingSum.add(Math.atan2(k * Math.sin(dλ), cosφ0 * cosφ + k * Math.cos(dλ)));
+      d3_geo_areaRingSum.add(Math.atan2(k * sdλ * Math.sin(adλ), cosφ0 * cosφ + k * Math.cos(adλ)));
 
-      polarAngle += antimeridian ? dλ + (dλ >= 0 ? τ : -τ): dλ;
+      polarAngle += antimeridian ? dλ + sdλ * τ : dλ;
 
       // Are the longitudes either side of the point's meridian, and are the
       // latitudes smaller than the parallel?
