@@ -363,7 +363,7 @@ function d3_time_formatMulti(formats) {
   while (++i < n) formats[i][0] = this(formats[i][0]);
   return function(date) {
     var i = 0, f = formats[i];
-    while (!f[1](date)) f = formats[++i];
+    while (!f[1].apply(this, arguments)) f = formats[++i];
     return f[0](date);
   };
 }

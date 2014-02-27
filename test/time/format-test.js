@@ -202,6 +202,19 @@ suite.addBatch({
       }
     },
 
+    "multi with arguments": {
+      topic: function(format) {
+        return format.multi([
+          ["one passed in", function(d, arg) { return arg === "one"; }],
+          ["two passed in", function(d, arg) { return arg === "two"; }]
+        ]);
+      },
+      "passes extra arguments to predicate": function(f) {
+        assert.equal(f(local(1990, 0, 1, 1), "one"), "one passed in");
+        assert.equal(f(local(1990, 0, 1, 1), "two"), "two passed in");
+      }
+    },
+
     "parse": {
       "parses abbreviated weekday and numeric date": function(format) {
         var p = format("%a %m/%d/%Y").parse;
