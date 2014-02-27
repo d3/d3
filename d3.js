@@ -1620,7 +1620,7 @@
     return v < 16 ? "0" + Math.max(0, v).toString(16) : Math.min(255, v).toString(16);
   }
   function d3_rgb_parse(format, rgb, hsl) {
-    var r = 0, g = 0, b = 0, m1, m2, name;
+    var r = 0, g = 0, b = 0, value, m1, m2, name;
     m1 = /([a-z]+)\((.*)\)/i.exec(format);
     if (m1) {
       m2 = m1[2].split(",");
@@ -1638,21 +1638,21 @@
     }
     if (name = d3_rgb_names.get(format)) return rgb(name.r, name.g, name.b);
     if (format != null && format.charAt(0) === "#") {
-      if (format.length === 4) {
-        r = format.charAt(1);
-        r += r;
-        g = format.charAt(2);
-        g += g;
-        b = format.charAt(3);
-        b += b;
-      } else if (format.length === 7) {
-        r = format.substring(1, 3);
-        g = format.substring(3, 5);
-        b = format.substring(5, 7);
+      value = parseInt(format.substring(1), 16);
+      if (!isNaN(value)) {
+        if (format.length === 4) {
+          r = (value & 3840) >> 4;
+          r = r >> 4 | r;
+          g = value & 240;
+          g = g >> 4 | g;
+          b = value & 15;
+          b = b << 4 | b;
+        } else if (format.length === 7) {
+          r = (value & 16711680) >> 16;
+          g = (value & 65280) >> 8;
+          b = value & 255;
+        }
       }
-      r = parseInt(r, 16);
-      g = parseInt(g, 16);
-      b = parseInt(b, 16);
     }
     return rgb(r, g, b);
   }
@@ -9219,7 +9219,7 @@
   } ], [ "%Y", d3_true ] ]);
   var d3_time_scaleMilliseconds = {
     range: function(start, stop, step) {
-      return d3.range(+start, +stop, step).map(d3_time_scaleDate);
+      return d3.range(Math.ceil(start / step) * step, +stop, step).map(d3_time_scaleDate);
     },
     floor: d3_identity,
     ceil: d3_identity
