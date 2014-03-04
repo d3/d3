@@ -1473,6 +1473,11 @@
   }, "mousewheel") : (d3_behavior_zoomDelta = function() {
     return -d3.event.detail;
   }, "MozMousePixelScroll");
+  function d3_Color() {}
+  var d3_colorPrototype = d3_Color.prototype;
+  d3_colorPrototype.toString = function() {
+    return this.rgb() + "";
+  };
   d3.hsl = function(h, s, l) {
     return arguments.length === 1 ? h instanceof d3_Hsl ? d3_hsl(h.h, h.s, h.l) : d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl) : d3_hsl(+h, +s, +l);
   };
@@ -1648,7 +1653,7 @@
   d3_rgbPrototype.toString = function() {
     return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
   };
-  d3.interpolateRgb = d3_rgbInterpolate;
+  d3_colorPrototype.interpolate = d3.interpolateRgb = d3_rgbInterpolate;
   function d3_rgbInterpolate(a, b) {
     a = d3.rgb(a);
     b = d3.rgb(b);
@@ -1875,12 +1880,6 @@
   d3_rgb_names.forEach(function(key, value) {
     d3_rgb_names.set(key, d3_rgbNumber(value));
   });
-  function d3_Color() {}
-  var d3_colorPrototype = d3_Color.prototype;
-  d3_colorPrototype.interpolate = d3_rgbInterpolate;
-  d3_colorPrototype.toString = function() {
-    return this.rgb() + "";
-  };
   function d3_functor(v) {
     return typeof v === "function" ? v : function() {
       return v;
