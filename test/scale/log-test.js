@@ -6,7 +6,7 @@ var suite = vows.describe("d3.scale.log");
 
 suite.addBatch({
   "log": {
-    topic: load("scale/log", "interpolate/hsl"), // beware instanceof d3_Color
+    topic: load("scale/log", "color/hsl"), // beware instanceof d3_Color
 
     "domain": {
       "defaults to [1, 10], exactly": function(d3) {
@@ -73,7 +73,7 @@ suite.addBatch({
         var x = d3.scale.log().range(["#f00", "#00f"]);
         assert.equal(x(5), "#4d00b2");
         var x = d3.scale.log().range([d3.rgb(255,0,0), d3.hsl(240,1,.5)]);
-        assert.equal(x(5), "#4d00b2");
+        assert.equal(x(5), "#9a00ff");
         var x = d3.scale.log().range(["hsl(0,100%,50%)", "hsl(240,100%,50%)"]);
         assert.equal(x(5), "#4d00b2");
       },

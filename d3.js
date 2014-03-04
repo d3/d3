@@ -1648,7 +1648,7 @@
   d3_rgbPrototype.toString = function() {
     return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
   };
-  d3_colorPrototype.interpolate = d3.interpolateRgb = d3_rgbInterpolate;
+  d3.interpolateRgb = d3_rgbInterpolate;
   function d3_rgbInterpolate(a, b) {
     a = d3.rgb(a);
     b = d3.rgb(b);
@@ -1877,6 +1877,7 @@
   });
   function d3_Color() {}
   var d3_colorPrototype = d3_Color.prototype;
+  d3_colorPrototype.interpolate = d3_rgbInterpolate;
   d3_colorPrototype.toString = function() {
     return this.rgb() + "";
   };
