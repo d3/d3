@@ -1,4 +1,5 @@
 import "../math/trigonometry";
+import "../interpolate/lab";
 import "color";
 import "hcl";
 import "rgb";
@@ -42,6 +43,8 @@ d3_labPrototype.darker = function(k) {
 d3_labPrototype.rgb = function() {
   return d3_lab_rgb(this.l, this.a, this.b);
 };
+
+d3_labPrototype.interpolate = d3_interpolateLab;
 
 function d3_lab_rgb(l, a, b) {
   var y = (l + 16) / 116,

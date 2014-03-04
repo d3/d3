@@ -1,4 +1,5 @@
 import "../math/trigonometry";
+import "../interpolate/hcl";
 import "color";
 import "lab";
 import "rgb";
@@ -34,6 +35,8 @@ d3_hclPrototype.darker = function(k) {
 d3_hclPrototype.rgb = function() {
   return d3_hcl_lab(this.h, this.c, this.l).rgb();
 };
+
+d3_hclPrototype.interpolate = d3_interpolateHcl;
 
 function d3_hcl_lab(h, c, l) {
   if (isNaN(h)) h = 0;

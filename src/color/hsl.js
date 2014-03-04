@@ -1,3 +1,4 @@
+import "../interpolate/hsl";
 import "color";
 import "rgb";
 
@@ -33,6 +34,8 @@ d3_hslPrototype.darker = function(k) {
 d3_hslPrototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
+
+d3_hslPrototype.interpolate = d3_interpolateHsl;
 
 function d3_hsl_rgb(h, s, l) {
   var m1,
