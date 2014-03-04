@@ -1473,17 +1473,6 @@
   }, "mousewheel") : (d3_behavior_zoomDelta = function() {
     return -d3.event.detail;
   }, "MozMousePixelScroll");
-  d3.interpolateHsl = d3_interpolateHsl;
-  function d3_interpolateHsl(a, b) {
-    a = d3.hsl(a);
-    b = d3.hsl(b);
-    var ah = a.h, as = a.s, al = a.l, bh = b.h - ah, bs = b.s - as, bl = b.l - al;
-    if (isNaN(bs)) bs = 0, as = isNaN(as) ? b.s : as;
-    if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
-    return function(t) {
-      return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
-    };
-  }
   d3.hsl = function(h, s, l) {
     return arguments.length === 1 ? h instanceof d3_Hsl ? d3_hsl(h.h, h.s, h.l) : d3_rgb_parse("" + h, d3_rgb_hsl, d3_hsl) : d3_hsl(+h, +s, +l);
   };
@@ -1507,7 +1496,17 @@
   d3_hslPrototype.rgb = function() {
     return d3_hsl_rgb(this.h, this.s, this.l);
   };
-  d3_hslPrototype.interpolate = d3_interpolateHsl;
+  d3_hslPrototype.interpolate = d3_hslInterpolate;
+  function d3_hslInterpolate(a, b) {
+    a = d3.hsl(a);
+    b = d3.hsl(b);
+    var ah = a.h, as = a.s, al = a.l, bh = b.h - ah, bs = b.s - as, bl = b.l - al;
+    if (isNaN(bs)) bs = 0, as = isNaN(as) ? b.s : as;
+    if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
+    return function(t) {
+      return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
+    };
+  }
   function d3_hsl_rgb(h, s, l) {
     var m1, m2;
     h = isNaN(h) ? 0 : (h %= 360) < 0 ? h + 360 : h;
@@ -1526,26 +1525,6 @@
       return Math.round(v(h) * 255);
     }
     return d3_rgb(vv(h + 120), vv(h), vv(h - 120));
-  }
-  d3.interpolateLab = d3_interpolateLab;
-  function d3_interpolateLab(a, b) {
-    a = d3.lab(a);
-    b = d3.lab(b);
-    var al = a.l, aa = a.a, ab = a.b, bl = b.l - al, ba = b.a - aa, bb = b.b - ab;
-    return function(t) {
-      return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
-    };
-  }
-  d3.interpolateHcl = d3_interpolateHcl;
-  function d3_interpolateHcl(a, b) {
-    a = d3.hcl(a);
-    b = d3.hcl(b);
-    var ah = a.h, ac = a.c, al = a.l, bh = b.h - ah, bc = b.c - ac, bl = b.l - al;
-    if (isNaN(bc)) bc = 0, ac = isNaN(ac) ? b.c : ac;
-    if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
-    return function(t) {
-      return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
-    };
   }
   d3.hcl = function(h, c, l) {
     return arguments.length === 1 ? h instanceof d3_Hcl ? d3_hcl(h.h, h.c, h.l) : h instanceof d3_Lab ? d3_lab_hcl(h.l, h.a, h.b) : d3_lab_hcl((h = d3_rgb_lab((h = d3.rgb(h)).r, h.g, h.b)).l, h.a, h.b) : d3_hcl(+h, +c, +l);
@@ -1568,7 +1547,17 @@
   d3_hclPrototype.rgb = function() {
     return d3_hcl_lab(this.h, this.c, this.l).rgb();
   };
-  d3_hclPrototype.interpolate = d3_interpolateHcl;
+  d3_hclPrototype.interpolate = d3_hclInterpolate;
+  function d3_hclInterpolate(a, b) {
+    a = d3.hcl(a);
+    b = d3.hcl(b);
+    var ah = a.h, ac = a.c, al = a.l, bh = b.h - ah, bc = b.c - ac, bl = b.l - al;
+    if (isNaN(bc)) bc = 0, ac = isNaN(ac) ? b.c : ac;
+    if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
+    return function(t) {
+      return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
+    };
+  }
   function d3_hcl_lab(h, c, l) {
     if (isNaN(h)) h = 0;
     if (isNaN(c)) c = 0;
@@ -1597,7 +1586,15 @@
   d3_labPrototype.rgb = function() {
     return d3_lab_rgb(this.l, this.a, this.b);
   };
-  d3_labPrototype.interpolate = d3_interpolateLab;
+  d3_labPrototype.interpolate = d3_labInterpolate;
+  function d3_labInterpolate(a, b) {
+    a = d3.lab(a);
+    b = d3.lab(b);
+    var al = a.l, aa = a.a, ab = a.b, bl = b.l - al, ba = b.a - aa, bb = b.b - ab;
+    return function(t) {
+      return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
+    };
+  }
   function d3_lab_rgb(l, a, b) {
     var y = (l + 16) / 116, x = y + a / 500, z = y - b / 200;
     x = d3_lab_xyz(x) * d3_lab_X;
@@ -1654,6 +1651,14 @@
   d3_rgbPrototype.toString = function() {
     return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
   };
+  function d3_rgbInterpolate(a, b) {
+    a = d3.rgb(a);
+    b = d3.rgb(b);
+    var ar = a.r, ag = a.g, ab = a.b, br = b.r - ar, bg = b.g - ag, bb = b.b - ab;
+    return function(t) {
+      return "#" + d3_rgb_hex(Math.round(ar + br * t)) + d3_rgb_hex(Math.round(ag + bg * t)) + d3_rgb_hex(Math.round(ab + bb * t));
+    };
+  }
   function d3_rgb_hex(v) {
     return v < 16 ? "0" + Math.max(0, v).toString(16) : Math.min(255, v).toString(16);
   }
@@ -1872,17 +1877,8 @@
   d3_rgb_names.forEach(function(key, value) {
     d3_rgb_names.set(key, d3_rgbNumber(value));
   });
-  d3.interpolateRgb = d3_interpolateRgb;
-  function d3_interpolateRgb(a, b) {
-    a = d3.rgb(a);
-    b = d3.rgb(b);
-    var ar = a.r, ag = a.g, ab = a.b, br = b.r - ar, bg = b.g - ag, bb = b.b - ab;
-    return function(t) {
-      return "#" + d3_rgb_hex(Math.round(ar + br * t)) + d3_rgb_hex(Math.round(ag + bg * t)) + d3_rgb_hex(Math.round(ab + bb * t));
-    };
-  }
   function d3_Color() {}
-  d3_Color.prototype.interpolate = d3_interpolateRgb;
+  d3_Color.prototype.interpolate = d3_rgbInterpolate;
   d3_Color.prototype.toString = function() {
     return this.rgb() + "";
   };
@@ -5723,7 +5719,7 @@
   }
   d3.interpolators = [ function(a, b) {
     var t = typeof b;
-    return (t === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString : t === "object" ? b.interpolate || (Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject) : d3_interpolateNumber)(a, b);
+    return (t === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_rgbInterpolate : d3_interpolateString : t === "object" ? b.interpolate || (Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject) : d3_interpolateNumber)(a, b);
   } ];
   d3.interpolateArray = d3_interpolateArray;
   function d3_interpolateArray(a, b) {
@@ -5835,6 +5831,10 @@
   function d3_ease_bounce(t) {
     return t < 1 / 2.75 ? 7.5625 * t * t : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + .75 : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + .9375 : 7.5625 * (t -= 2.625 / 2.75) * t + .984375;
   }
+  d3.interpolateHcl = d3_hclInterpolate;
+  d3.interpolateHsl = d3_hslInterpolate;
+  d3.interpolateLab = d3_labInterpolate;
+  d3.interpolateRgb = d3_rgbInterpolate;
   d3.interpolateRound = d3_interpolateRound;
   function d3_interpolateRound(a, b) {
     b -= a;

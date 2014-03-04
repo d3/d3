@@ -1,6 +1,4 @@
-import "../color/color";
 import "../color/rgb";
-import "rgb";
 import "object";
 import "array";
 import "number";
@@ -17,7 +15,7 @@ function d3_interpolate(a, b) {
 d3.interpolators = [
   function(a, b) {
     var t = typeof b;
-    return (t === "string" ? (d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString)
+    return (t === "string" ? (d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_rgbInterpolate : d3_interpolateString)
         : t === "object" ? b.interpolate || (Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject)
         : d3_interpolateNumber)(a, b);
   }

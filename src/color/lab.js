@@ -1,5 +1,4 @@
 import "../math/trigonometry";
-import "../interpolate/lab";
 import "color";
 import "hcl";
 import "rgb";
@@ -44,7 +43,21 @@ d3_labPrototype.rgb = function() {
   return d3_lab_rgb(this.l, this.a, this.b);
 };
 
-d3_labPrototype.interpolate = d3_interpolateLab;
+d3_labPrototype.interpolate = d3_labInterpolate;
+
+function d3_labInterpolate(a, b) {
+  a = d3.lab(a);
+  b = d3.lab(b);
+  var al = a.l,
+      aa = a.a,
+      ab = a.b,
+      bl = b.l - al,
+      ba = b.a - aa,
+      bb = b.b - ab;
+  return function(t) {
+    return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
+  };
+}
 
 function d3_lab_rgb(l, a, b) {
   var y = (l + 16) / 116,
