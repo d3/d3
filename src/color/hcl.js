@@ -35,9 +35,7 @@ d3_hclPrototype.rgb = function() {
   return d3_hcl_lab(this.h, this.c, this.l).rgb();
 };
 
-d3_hclPrototype.interpolate = d3_hclInterpolate;
-
-function d3_hclInterpolate(a, b) {
+d3_hclPrototype.interpolate = d3.interpolateHcl = function(a, b) {
   a = d3.hcl(a);
   b = d3.hcl(b);
   var ah = a.h,
@@ -52,7 +50,7 @@ function d3_hclInterpolate(a, b) {
   return function(t) {
     return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
   };
-}
+};
 
 function d3_hcl_lab(h, c, l) {
   if (isNaN(h)) h = 0;

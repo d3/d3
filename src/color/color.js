@@ -2,8 +2,8 @@ import "rgb";
 
 function d3_Color() {}
 
-d3_Color.prototype.interpolate = d3_rgbInterpolate;
+var d3_colorPrototype = d3_Color.prototype;
 
-d3_Color.prototype.toString = function() {
+d3_colorPrototype.toString = function() {
   return this.rgb() + "";
 };

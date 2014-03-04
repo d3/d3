@@ -34,9 +34,7 @@ d3_hslPrototype.rgb = function() {
   return d3_hsl_rgb(this.h, this.s, this.l);
 };
 
-d3_hslPrototype.interpolate = d3_hslInterpolate;
-
-function d3_hslInterpolate(a, b) {
+d3_hslPrototype.interpolate = d3.interpolateHsl = function(a, b) {
   a = d3.hsl(a);
   b = d3.hsl(b);
   var ah = a.h,
@@ -51,7 +49,7 @@ function d3_hslInterpolate(a, b) {
   return function(t) {
     return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
   };
-}
+};
 
 function d3_hsl_rgb(h, s, l) {
   var m1,

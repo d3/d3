@@ -1496,8 +1496,7 @@
   d3_hslPrototype.rgb = function() {
     return d3_hsl_rgb(this.h, this.s, this.l);
   };
-  d3_hslPrototype.interpolate = d3_hslInterpolate;
-  function d3_hslInterpolate(a, b) {
+  d3_hslPrototype.interpolate = d3.interpolateHsl = function(a, b) {
     a = d3.hsl(a);
     b = d3.hsl(b);
     var ah = a.h, as = a.s, al = a.l, bh = b.h - ah, bs = b.s - as, bl = b.l - al;
@@ -1506,7 +1505,7 @@
     return function(t) {
       return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
     };
-  }
+  };
   function d3_hsl_rgb(h, s, l) {
     var m1, m2;
     h = isNaN(h) ? 0 : (h %= 360) < 0 ? h + 360 : h;
@@ -1547,8 +1546,7 @@
   d3_hclPrototype.rgb = function() {
     return d3_hcl_lab(this.h, this.c, this.l).rgb();
   };
-  d3_hclPrototype.interpolate = d3_hclInterpolate;
-  function d3_hclInterpolate(a, b) {
+  d3_hclPrototype.interpolate = d3.interpolateHcl = function(a, b) {
     a = d3.hcl(a);
     b = d3.hcl(b);
     var ah = a.h, ac = a.c, al = a.l, bh = b.h - ah, bc = b.c - ac, bl = b.l - al;
@@ -1557,7 +1555,7 @@
     return function(t) {
       return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
     };
-  }
+  };
   function d3_hcl_lab(h, c, l) {
     if (isNaN(h)) h = 0;
     if (isNaN(c)) c = 0;
@@ -1586,15 +1584,14 @@
   d3_labPrototype.rgb = function() {
     return d3_lab_rgb(this.l, this.a, this.b);
   };
-  d3_labPrototype.interpolate = d3_labInterpolate;
-  function d3_labInterpolate(a, b) {
+  d3_labPrototype.interpolate = d3.interpolateLab = function(a, b) {
     a = d3.lab(a);
     b = d3.lab(b);
     var al = a.l, aa = a.a, ab = a.b, bl = b.l - al, ba = b.a - aa, bb = b.b - ab;
     return function(t) {
       return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
     };
-  }
+  };
   function d3_lab_rgb(l, a, b) {
     var y = (l + 16) / 116, x = y + a / 500, z = y - b / 200;
     x = d3_lab_xyz(x) * d3_lab_X;
@@ -1651,6 +1648,7 @@
   d3_rgbPrototype.toString = function() {
     return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
   };
+  d3_colorPrototype.interpolate = d3.interpolateRgb = d3_rgbInterpolate;
   function d3_rgbInterpolate(a, b) {
     a = d3.rgb(a);
     b = d3.rgb(b);
@@ -1878,8 +1876,8 @@
     d3_rgb_names.set(key, d3_rgbNumber(value));
   });
   function d3_Color() {}
-  d3_Color.prototype.interpolate = d3_rgbInterpolate;
-  d3_Color.prototype.toString = function() {
+  var d3_colorPrototype = d3_Color.prototype;
+  d3_colorPrototype.toString = function() {
     return this.rgb() + "";
   };
   function d3_functor(v) {
@@ -5831,10 +5829,6 @@
   function d3_ease_bounce(t) {
     return t < 1 / 2.75 ? 7.5625 * t * t : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + .75 : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + .9375 : 7.5625 * (t -= 2.625 / 2.75) * t + .984375;
   }
-  d3.interpolateHcl = d3_hclInterpolate;
-  d3.interpolateHsl = d3_hslInterpolate;
-  d3.interpolateLab = d3_labInterpolate;
-  d3.interpolateRgb = d3_rgbInterpolate;
   d3.interpolateRound = d3_interpolateRound;
   function d3_interpolateRound(a, b) {
     b -= a;

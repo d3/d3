@@ -57,6 +57,8 @@ d3_rgbPrototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
 };
 
+d3_colorPrototype.interpolate = d3.interpolateRgb = d3_rgbInterpolate;
+
 function d3_rgbInterpolate(a, b) {
   a = d3.rgb(a);
   b = d3.rgb(b);
