@@ -8,7 +8,7 @@ d3_selectionPrototype.sort = function(comparator) {
 };
 
 function d3_selection_sortComparator(comparator) {
-  if (!arguments.length) comparator = d3.ascending;
+  if (!arguments.length) comparator = d3_ascending;
   return function(a, b) {
     return a && b ? comparator(a.__data__, b.__data__) : !a - !b;
   };
