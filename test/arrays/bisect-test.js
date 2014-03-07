@@ -132,11 +132,11 @@ suite.addBatch({
     }
   },
 
-  "bisectBy(comparator)": {
-    topic: load("arrays/bisect").expression("d3.bisectBy"),
+  "bisector(comparator)": {
+    topic: load("arrays/bisect").expression("d3.bisector"),
     "left": {
-      topic: function(bisectBy) {
-        return bisectBy(function(d, x) { return _.descending(d.key, x); }).left;
+      topic: function(bisector) {
+        return bisector(function(d, x) { return _.descending(d.key, x); }).left;
       },
       "finds the index of an exact match": function(bisect) {
         var array = [{key: 3}, {key: 2}, {key: 1}];
@@ -195,8 +195,8 @@ suite.addBatch({
       }
     },
     "right": {
-      topic: function(bisectBy) {
-        return bisectBy(function(d, x) { return _.ascending(d.key, x); }).right;
+      topic: function(bisector) {
+        return bisector(function(d, x) { return _.ascending(d.key, x); }).right;
       },
       "finds the index after an exact match": function(bisect) {
         var array = [{key: 1}, {key: 2}, {key: 3}];
