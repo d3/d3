@@ -130,13 +130,13 @@
       }
     };
   }
-  var d3_bisect = (d3.bisectBy = d3_bisector)(d3_ascending);
+  var d3_bisect = d3_bisector(d3_ascending);
   d3.bisectLeft = d3_bisect.left;
   d3.bisect = d3.bisectRight = d3_bisect.right;
   d3.bisector = function(f) {
-    return d3_bisector(function(d, x) {
+    return d3_bisector(f.length === 1 ? function(d, x) {
       return d3_ascending(f(d), x);
-    });
+    } : f);
   };
   d3.shuffle = function(array) {
     var m = array.length, t, i;
