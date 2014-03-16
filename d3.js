@@ -5586,6 +5586,20 @@
       return "#" + d3_rgb_hex(Math.round(ar + br * t)) + d3_rgb_hex(Math.round(ag + bg * t)) + d3_rgb_hex(Math.round(ab + bb * t));
     };
   }
+  d3.interpolateNumber = d3_interpolateNumber;
+  function d3_interpolateNumber(a, b) {
+    b -= a = +a;
+    return function(t) {
+      return a + b * t;
+    };
+  }
+  d3.interpolateDate = d3_interpolateDate;
+  function d3_interpolateDate(a, b) {
+    var interp = d3_interpolateNumber(a.valueOf(), b.valueOf());
+    return function(t) {
+      return new Date(interp(t));
+    };
+  }
   d3.interpolateObject = d3_interpolateObject;
   function d3_interpolateObject(a, b) {
     var i = {}, c = {}, k;
@@ -5604,13 +5618,6 @@
     return function(t) {
       for (k in i) c[k] = i[k](t);
       return c;
-    };
-  }
-  d3.interpolateNumber = d3_interpolateNumber;
-  function d3_interpolateNumber(a, b) {
-    b -= a = +a;
-    return function(t) {
-      return a + b * t;
     };
   }
   d3.interpolateString = d3_interpolateString;
@@ -5688,7 +5695,7 @@
   }
   d3.interpolators = [ function(a, b) {
     var t = typeof b;
-    return (t === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString : b instanceof d3_Color ? d3_interpolateRgb : t === "object" ? Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject : d3_interpolateNumber)(a, b);
+    return (t === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString : b instanceof d3_Color ? d3_interpolateRgb : b instanceof Date ? d3_interpolateDate : t === "object" ? Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject : d3_interpolateNumber)(a, b);
   } ];
   d3.interpolateArray = d3_interpolateArray;
   function d3_interpolateArray(a, b) {
