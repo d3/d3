@@ -11,7 +11,8 @@ d3.layout.stack = function() {
       offset = d3_layout_stackOffsetZero,
       out = d3_layout_stackOut,
       x = d3_layout_stackX,
-      y = d3_layout_stackY;
+      y = d3_layout_stackY,
+      domain = [0, 1];
 
   function stack(data, index) {
 
@@ -46,11 +47,16 @@ d3.layout.stack = function() {
       for (i = 1; i < n; ++i) {
         out.call(stack, series[i][j], o += points[i - 1][j][1], points[i][j][1]);
       }
+      domain[1] = Math.max(domain[1], series[n - 1][j].y + series[n - 1][j].y0);
+      domain[0] = Math.min(domain[0], series[0][j].y0);
     }
 
     return data;
   }
 
+  stack.domain = function(){
+    return domain;
+  };
   stack.values = function(x) {
     if (!arguments.length) return values;
     values = x;
