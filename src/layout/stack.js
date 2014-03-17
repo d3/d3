@@ -44,7 +44,9 @@ d3.layout.stack = function() {
     for (j = 0; j < m; ++j) {
       out.call(stack, series[0][j], o = offsets[j], points[0][j][1]);
       for (i = 1; i < n; ++i) {
-        out.call(stack, series[i][j], o += points[i - 1][j][1], points[i][j][1]);
+        if (series[i][j] !== undefined) {
+          out.call(stack, series[i][j], o += points[i - 1][j][1], points[i][j][1]);
+        }
       }
     }
 
