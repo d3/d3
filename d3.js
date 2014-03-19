@@ -1164,6 +1164,7 @@
           });
         }
         function ended() {
+          if (position(parent, eventId)) return;
           w.on(move + "." + drag, null).on(end + "." + drag, null);
           dragRestore(dragged && d3.event.target === eventTarget);
           event_({

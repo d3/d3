@@ -60,6 +60,7 @@ d3.behavior.drag = function() {
       }
 
       function ended() {
+        if (position(parent, eventId)) return; // this touch still active
         w.on(move + "." + drag, null).on(end + "." + drag, null);
         dragRestore(dragged && d3.event.target === eventTarget);
         event_({type: "dragend"});
