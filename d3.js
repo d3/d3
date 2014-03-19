@@ -1144,7 +1144,10 @@
           type: "dragstart"
         });
         function moved() {
-          var position1 = position(parent, dragId), dx = position1[0] - position0[0], dy = position1[1] - position0[1];
+          var position1 = position(parent, dragId), dx, dy;
+          if (!position1) return;
+          dx = position1[0] - position0[0];
+          dy = position1[1] - position0[1];
           dragged |= dx | dy;
           position0 = position1;
           dispatch({
@@ -1156,7 +1159,7 @@
           });
         }
         function ended() {
-          if (dragId != null && position(parent, dragId)) return;
+          if (!position(parent, dragId)) return;
           dragSubject.on(move + dragName, null).on(end + dragName, null);
           dragRestore(dragged && d3.event.target === dragTarget);
           dispatch({
@@ -2050,7 +2053,7 @@
   d3.csv = d3.dsv(",", "text/csv");
   d3.tsv = d3.dsv("	", "text/tab-separated-values");
   d3.touch = function(container, touches, identifier) {
-    if (arguments.length < 3) identifier = touches, touches = d3_eventSource().touches;
+    if (arguments.length < 3) identifier = touches, touches = d3_eventSource().changedTouches;
     if (touches) for (var i = 0, n = touches.length, touch; i < n; ++i) {
       if ((touch = touches[i]).identifier === identifier) {
         return d3_mousePoint(container, touch);

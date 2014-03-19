@@ -41,10 +41,11 @@ d3.behavior.drag = function() {
       dispatch({type: "dragstart"});
 
       function moved() {
-        var position1 = position(parent, dragId),
-            dx = position1[0] - position0[0],
-            dy = position1[1] - position0[1];
+        var position1 = position(parent, dragId), dx, dy;
+        if (!position1) return; // this touch didn’t move
 
+        dx = position1[0] - position0[0];
+        dy = position1[1] - position0[1];
         dragged |= dx | dy;
         position0 = position1;
 
@@ -58,7 +59,7 @@ d3.behavior.drag = function() {
       }
 
       function ended() {
-        if (dragId != null && position(parent, dragId)) return; // this touch still active
+        if (!position(parent, dragId)) return; // this touch didn’t end
         dragSubject.on(move + dragName, null).on(end + dragName, null);
         dragRestore(dragged && d3.event.target === dragTarget);
         dispatch({type: "dragend"});
