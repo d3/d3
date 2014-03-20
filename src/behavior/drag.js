@@ -9,12 +9,21 @@ import "behavior";
 d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
       origin = null,
+      ptrdown = dragstart(ptrid, d3.mouse, "pointermove", "pointerup"),
       mousedown = dragstart(d3_noop, d3.mouse, "mousemove", "mouseup"),
       touchstart = dragstart(touchid, touchposition, "touchmove", "touchend");
 
   function drag() {
-    this.on("mousedown.drag", mousedown)
-        .on("touchstart.drag", touchstart);
+    if (navigator.pointerEnabled) {
+        this.style("touch-action", "none").on("pointerdown.drag", ptrdown);
+    } else {
+      this.on("mousedown.drag", mousedown)
+          .on("touchstart.drag", touchstart);
+    }
+  }
+
+  function ptrid() {
+    return d3.event.pointerId;
   }
 
   function touchid() {
@@ -49,6 +58,7 @@ d3.behavior.drag = function() {
       event_({type: "dragstart"});
 
       function moved() {
+        if (id() !== eventId) return;
         var p = position(parent, eventId),
             dx = p[0] - origin_[0],
             dy = p[1] - origin_[1];
@@ -60,6 +70,7 @@ d3.behavior.drag = function() {
       }
 
       function ended() {
+        if (id() !== eventId) return;
         w.on(move + "." + drag, null).on(end + "." + drag, null);
         dragRestore(dragged && d3.event.target === eventTarget);
         event_({type: "dragend"});
