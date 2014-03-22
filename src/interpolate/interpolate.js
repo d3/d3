@@ -1,6 +1,7 @@
 import "../color/color";
 import "../color/rgb";
 import "rgb";
+import "date";
 import "object";
 import "array";
 import "number";
@@ -19,6 +20,7 @@ d3.interpolators = [
     var t = typeof b;
     return (t === "string" ? (d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString)
         : b instanceof d3_Color ? d3_interpolateRgb
+	: b instanceof Date ? d3_interpolateDate
         : t === "object" ? (Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject)
         : d3_interpolateNumber)(a, b);
   }
