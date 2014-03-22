@@ -3378,7 +3378,7 @@
           clean = 0;
         } else if (sλ0 !== sλ1 && dλ >= π) {
           var cosφ0, cosφ1, sinλ0_λ1 = Math.sin(λ0 - λ1);
-          listener.point(sλ0, φ0 = abs(sinλ0_λ1) > ε ? Math.atan2(Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1) - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0), cosφ0 * cosφ1 * sinλ0_λ1) : (φ0 + φ1) / 2);
+          listener.point(sλ0, φ0 = abs(sinλ0_λ1) > ε ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1) - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0)) / (cosφ0 * cosφ1 * sinλ0_λ1)) : (φ0 + φ1) / 2);
           listener.lineEnd();
           listener.lineStart();
           listener.point(sλ1, φ0);
