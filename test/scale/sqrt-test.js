@@ -6,7 +6,7 @@ var suite = vows.describe("d3.scale.sqrt");
 
 suite.addBatch({
   "sqrt": {
-    topic: load("scale/sqrt", "interpolate/hsl"), // beware instanceof d3_Color
+    topic: load("scale/sqrt", "color/hsl"), // beware instanceof d3_Color
 
     "domain": {
       "defaults to [0, 1]": function(d3) {
@@ -72,7 +72,7 @@ suite.addBatch({
         var x = d3.scale.sqrt().range(["#f00", "#00f"]);
         assert.equal(x(.25), "#800080");
         var x = d3.scale.sqrt().range([d3.rgb(255,0,0), d3.hsl(240,1,.5)]);
-        assert.equal(x(.25), "#800080");
+        assert.equal(x(.25), "#ff00ff");
         var x = d3.scale.sqrt().range(["hsl(0,100%,50%)", "hsl(240,100%,50%)"]);
         assert.equal(x(.25), "#800080");
       },

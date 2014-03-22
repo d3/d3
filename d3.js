@@ -1474,7 +1474,8 @@
     return -d3.event.detail;
   }, "MozMousePixelScroll");
   function d3_Color() {}
-  d3_Color.prototype.toString = function() {
+  var d3_colorPrototype = d3_Color.prototype;
+  d3_colorPrototype.toString = function() {
     return this.rgb() + "";
   };
   d3.hsl = function(h, s, l) {
@@ -1499,6 +1500,16 @@
   };
   d3_hslPrototype.rgb = function() {
     return d3_hsl_rgb(this.h, this.s, this.l);
+  };
+  d3_hslPrototype.interpolate = d3.interpolateHsl = function(a, b) {
+    a = d3.hsl(a);
+    b = d3.hsl(b);
+    var ah = a.h, as = a.s, al = a.l, bh = b.h - ah, bs = b.s - as, bl = b.l - al;
+    if (isNaN(bs)) bs = 0, as = isNaN(as) ? b.s : as;
+    if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
+    return function(t) {
+      return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
+    };
   };
   function d3_hsl_rgb(h, s, l) {
     var m1, m2;
@@ -1540,6 +1551,16 @@
   d3_hclPrototype.rgb = function() {
     return d3_hcl_lab(this.h, this.c, this.l).rgb();
   };
+  d3_hclPrototype.interpolate = d3.interpolateHcl = function(a, b) {
+    a = d3.hcl(a);
+    b = d3.hcl(b);
+    var ah = a.h, ac = a.c, al = a.l, bh = b.h - ah, bc = b.c - ac, bl = b.l - al;
+    if (isNaN(bc)) bc = 0, ac = isNaN(ac) ? b.c : ac;
+    if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
+    return function(t) {
+      return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
+    };
+  };
   function d3_hcl_lab(h, c, l) {
     if (isNaN(h)) h = 0;
     if (isNaN(c)) c = 0;
@@ -1567,6 +1588,14 @@
   };
   d3_labPrototype.rgb = function() {
     return d3_lab_rgb(this.l, this.a, this.b);
+  };
+  d3_labPrototype.interpolate = d3.interpolateLab = function(a, b) {
+    a = d3.lab(a);
+    b = d3.lab(b);
+    var al = a.l, aa = a.a, ab = a.b, bl = b.l - al, ba = b.a - aa, bb = b.b - ab;
+    return function(t) {
+      return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
+    };
   };
   function d3_lab_rgb(l, a, b) {
     var y = (l + 16) / 116, x = y + a / 500, z = y - b / 200;
@@ -1624,6 +1653,15 @@
   d3_rgbPrototype.toString = function() {
     return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
   };
+  d3_colorPrototype.interpolate = d3.interpolateRgb = d3_rgbInterpolate;
+  function d3_rgbInterpolate(a, b) {
+    a = d3.rgb(a);
+    b = d3.rgb(b);
+    var ar = a.r, ag = a.g, ab = a.b, br = b.r - ar, bg = b.g - ag, bb = b.b - ab;
+    return function(t) {
+      return "#" + d3_rgb_hex(Math.round(ar + br * t)) + d3_rgb_hex(Math.round(ag + bg * t)) + d3_rgb_hex(Math.round(ab + bb * t));
+    };
+  }
   function d3_rgb_hex(v) {
     return v < 16 ? "0" + Math.max(0, v).toString(16) : Math.min(255, v).toString(16);
   }
@@ -5577,15 +5615,6 @@
       if (children[3]) d3_geom_quadtreeVisit(f, children[3], sx, sy, x2, y2);
     }
   }
-  d3.interpolateRgb = d3_interpolateRgb;
-  function d3_interpolateRgb(a, b) {
-    a = d3.rgb(a);
-    b = d3.rgb(b);
-    var ar = a.r, ag = a.g, ab = a.b, br = b.r - ar, bg = b.g - ag, bb = b.b - ab;
-    return function(t) {
-      return "#" + d3_rgb_hex(Math.round(ar + br * t)) + d3_rgb_hex(Math.round(ag + bg * t)) + d3_rgb_hex(Math.round(ab + bb * t));
-    };
-  }
   d3.interpolateObject = d3_interpolateObject;
   function d3_interpolateObject(a, b) {
     var i = {}, c = {}, k;
@@ -5688,7 +5717,7 @@
   }
   d3.interpolators = [ function(a, b) {
     var t = typeof b;
-    return (t === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_interpolateRgb : d3_interpolateString : b instanceof d3_Color ? d3_interpolateRgb : t === "object" ? Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject : d3_interpolateNumber)(a, b);
+    return (t === "string" ? d3_rgb_names.has(b) || /^(#|rgb\(|hsl\()/.test(b) ? d3_rgbInterpolate : d3_interpolateString : t === "object" ? b.interpolate || (Array.isArray(b) ? d3_interpolateArray : d3_interpolateObject) : d3_interpolateNumber)(a, b);
   } ];
   d3.interpolateArray = d3_interpolateArray;
   function d3_interpolateArray(a, b) {
@@ -5799,37 +5828,6 @@
   }
   function d3_ease_bounce(t) {
     return t < 1 / 2.75 ? 7.5625 * t * t : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + .75 : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + .9375 : 7.5625 * (t -= 2.625 / 2.75) * t + .984375;
-  }
-  d3.interpolateHcl = d3_interpolateHcl;
-  function d3_interpolateHcl(a, b) {
-    a = d3.hcl(a);
-    b = d3.hcl(b);
-    var ah = a.h, ac = a.c, al = a.l, bh = b.h - ah, bc = b.c - ac, bl = b.l - al;
-    if (isNaN(bc)) bc = 0, ac = isNaN(ac) ? b.c : ac;
-    if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
-    return function(t) {
-      return d3_hcl_lab(ah + bh * t, ac + bc * t, al + bl * t) + "";
-    };
-  }
-  d3.interpolateHsl = d3_interpolateHsl;
-  function d3_interpolateHsl(a, b) {
-    a = d3.hsl(a);
-    b = d3.hsl(b);
-    var ah = a.h, as = a.s, al = a.l, bh = b.h - ah, bs = b.s - as, bl = b.l - al;
-    if (isNaN(bs)) bs = 0, as = isNaN(as) ? b.s : as;
-    if (isNaN(bh)) bh = 0, ah = isNaN(ah) ? b.h : ah; else if (bh > 180) bh -= 360; else if (bh < -180) bh += 360;
-    return function(t) {
-      return d3_hsl_rgb(ah + bh * t, as + bs * t, al + bl * t) + "";
-    };
-  }
-  d3.interpolateLab = d3_interpolateLab;
-  function d3_interpolateLab(a, b) {
-    a = d3.lab(a);
-    b = d3.lab(b);
-    var al = a.l, aa = a.a, ab = a.b, bl = b.l - al, ba = b.a - aa, bb = b.b - ab;
-    return function(t) {
-      return d3_lab_rgb(al + bl * t, aa + ba * t, ab + bb * t) + "";
-    };
   }
   d3.interpolateRound = d3_interpolateRound;
   function d3_interpolateRound(a, b) {

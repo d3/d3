@@ -6,7 +6,7 @@ var suite = vows.describe("d3.scale.pow");
 
 suite.addBatch({
   "pow": {
-    topic: load("scale/pow", "interpolate/hsl"), // beware instance of d3_Colorr
+    topic: load("scale/pow", "color/hsl"), // beware instance of d3_Colorr
 
     "domain": {
       "defaults to [0, 1]": function(d3) {
@@ -68,7 +68,7 @@ suite.addBatch({
         var x = d3.scale.pow().range(["#f00", "#00f"]);
         assert.equal(x(.5), "#800080");
         var x = d3.scale.pow().range([d3.rgb(255,0,0), d3.hsl(240,1,.5)]);
-        assert.equal(x(.5), "#800080");
+        assert.equal(x(.5), "#ff00ff");
         var x = d3.scale.pow().range(["hsl(0,100%,50%)", "hsl(240,100%,50%)"]);
         assert.equal(x(.5), "#800080");
       },
