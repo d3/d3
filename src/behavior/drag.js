@@ -19,20 +19,20 @@ d3.behavior.drag = function() {
 
   function dragstart(id, position, subject, move, end) {
     return function() {
-      var element = this,
-          parent = element.parentNode,
-          dispatch = event.of(element, arguments),
+      var that = this,
+          target = d3.event.target,
+          parent = that.parentNode,
+          dispatch = event.of(that, arguments),
           dragged = 0,
           dragId = id(),
           dragName = ".drag" + (dragId == null ? "" : "-" + dragId),
           dragOffset,
-          dragTarget = d3.event.target,
           dragSubject = d3.select(subject()).on(move + dragName, moved).on(end + dragName, ended),
           dragRestore = d3_event_dragSuppress(),
           position0 = position(parent, dragId);
 
       if (origin) {
-        dragOffset = origin.apply(element, arguments);
+        dragOffset = origin.apply(that, arguments);
         dragOffset = [dragOffset.x - position0[0], dragOffset.y - position0[1]];
       } else {
         dragOffset = [0, 0];
@@ -61,7 +61,7 @@ d3.behavior.drag = function() {
       function ended() {
         if (!position(parent, dragId)) return; // this touch didn’t end
         dragSubject.on(move + dragName, null).on(end + dragName, null);
-        dragRestore(dragged && d3.event.target === dragTarget);
+        dragRestore(dragged && d3.event.target === target);
         dispatch({type: "dragend"});
       }
     };
