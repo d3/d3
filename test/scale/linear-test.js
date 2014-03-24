@@ -223,9 +223,9 @@ suite.addBatch({
       },
       "applies fixed-scale SI-prefix notation": function(d3) {
         var x = d3.scale.linear().domain([0, 1e6]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0M", "0.1M", "0.2M", "0.3M", "0.4M", "0.5M", "0.6M", "0.7M", "0.8M", "0.9M", "1M"]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, ".1s")), ["0.0M", "0.1M", "0.2M", "0.3M", "0.4M", "0.5M", "0.6M", "0.7M", "0.8M", "0.9M", "1.0M"]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "+$.1s")), ["+$0.0M", "+$0.1M", "+$0.2M", "+$0.3M", "+$0.4M", "+$0.5M", "+$0.6M", "+$0.7M", "+$0.8M", "+$0.9M", "+$1.0M"]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0.0M", "0.1M", "0.2M", "0.3M", "0.4M", "0.5M", "0.6M", "0.7M", "0.8M", "0.9M", "1.0M"]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, ".2s")), ["0.00M", "0.10M", "0.20M", "0.30M", "0.40M", "0.50M", "0.60M", "0.70M", "0.80M", "0.90M", "1.00M"]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "+$s")), ["+$0.0M", "+$0.1M", "+$0.2M", "+$0.3M", "+$0.4M", "+$0.5M", "+$0.6M", "+$0.7M", "+$0.8M", "+$0.9M", "+$1.0M"]);
         var x = d3.scale.linear().domain([0, 1e5]);
         assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0k", "10k", "20k", "30k", "40k", "50k", "60k", "70k", "80k", "90k", "100k"]);
         var x = d3.scale.linear().domain([0, 1e-4]);
