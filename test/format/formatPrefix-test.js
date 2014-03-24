@@ -10,29 +10,29 @@ suite.addBatch({
     "determines the appropriate prefix for small numbers": function(prefix) {
       assert.equal(prefix(0).symbol, "");
       assert.equal(prefix(1e-00).symbol, "");
-      assert.equal(prefix(1e-01).symbol, "");
-      assert.equal(prefix(1e-02).symbol, "");
+      assert.equal(prefix(1e-01).symbol, "m");
+      assert.equal(prefix(1e-02).symbol, "m");
       assert.equal(prefix(1e-03).symbol, "m");
-      assert.equal(prefix(1e-04).symbol, "m");
-      assert.equal(prefix(1e-05).symbol, "m");
+      assert.equal(prefix(1e-04).symbol, "µ");
+      assert.equal(prefix(1e-05).symbol, "µ");
       assert.equal(prefix(1e-06).symbol, "µ");
-      assert.equal(prefix(1e-07).symbol, "µ");
-      assert.equal(prefix(1e-08).symbol, "µ");
+      assert.equal(prefix(1e-07).symbol, "n");
+      assert.equal(prefix(1e-08).symbol, "n");
       assert.equal(prefix(1e-09).symbol, "n");
-      assert.equal(prefix(1e-10).symbol, "n");
-      assert.equal(prefix(1e-11).symbol, "n");
+      assert.equal(prefix(1e-10).symbol, "p");
+      assert.equal(prefix(1e-11).symbol, "p");
       assert.equal(prefix(1e-12).symbol, "p");
-      assert.equal(prefix(1e-13).symbol, "p");
-      assert.equal(prefix(1e-14).symbol, "p");
+      assert.equal(prefix(1e-13).symbol, "f");
+      assert.equal(prefix(1e-14).symbol, "f");
       assert.equal(prefix(1e-15).symbol, "f");
-      assert.equal(prefix(1e-16).symbol, "f");
-      assert.equal(prefix(1e-17).symbol, "f");
+      assert.equal(prefix(1e-16).symbol, "a");
+      assert.equal(prefix(1e-17).symbol, "a");
       assert.equal(prefix(1e-18).symbol, "a");
-      assert.equal(prefix(1e-19).symbol, "a");
-      assert.equal(prefix(1e-20).symbol, "a");
+      assert.equal(prefix(1e-19).symbol, "z");
+      assert.equal(prefix(1e-20).symbol, "z");
       assert.equal(prefix(1e-21).symbol, "z");
-      assert.equal(prefix(1e-22).symbol, "z");
-      assert.equal(prefix(1e-23).symbol, "z");
+      assert.equal(prefix(1e-22).symbol, "y");
+      assert.equal(prefix(1e-23).symbol, "y");
       assert.equal(prefix(1e-24).symbol, "y");
       assert.equal(prefix(1e-25).symbol, "y");
       assert.equal(prefix(1e-26).symbol, "y");
@@ -93,18 +93,18 @@ suite.addBatch({
       assert.equal(prefix(-1e27).symbol, "Y");
     },
     "considers the effect of rounding based on precision": function(prefix) {
-      assert.equal(prefix(999.5000000, 4).symbol, "");
-      assert.equal(prefix(999.5000000, 3).symbol, "k");
-      assert.equal(prefix(995.0000000, 3).symbol, "");
-      assert.equal(prefix(995.0000000, 2).symbol, "k");
-      assert.equal(prefix(950.0000000, 2).symbol, "");
-      assert.equal(prefix(950.0000000, 1).symbol, "k");
-      assert.equal(prefix(0.000009995, 4).symbol, "µ");
-      assert.equal(prefix(0.000009995, 3).symbol, "m");
-      assert.equal(prefix(0.000009950, 3).symbol, "µ");
-      assert.equal(prefix(0.000009950, 2).symbol, "m");
-      assert.equal(prefix(0.000009500, 2).symbol, "µ");
-      assert.equal(prefix(0.000009500, 1).symbol, "m");
+      assert.equal(prefix(999.50000, 4).symbol, "");
+      assert.equal(prefix(999.50000, 3).symbol, "k");
+      assert.equal(prefix(995.00000, 3).symbol, "");
+      assert.equal(prefix(995.00000, 2).symbol, "k");
+      assert.equal(prefix(950.00000, 2).symbol, "");
+      assert.equal(prefix(950.00000, 1).symbol, "k");
+      assert.equal(prefix(0.0009995, 4).symbol, "µ");
+      assert.equal(prefix(0.0009995, 3).symbol, "m");
+      assert.equal(prefix(0.0009950, 3).symbol, "µ");
+      assert.equal(prefix(0.0009950, 2).symbol, "m");
+      assert.equal(prefix(0.0009500, 2).symbol, "µ");
+      assert.equal(prefix(0.0009500, 1).symbol, "m");
     }
   }
 });
