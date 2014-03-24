@@ -225,13 +225,10 @@ suite.addBatch({
         var x = d3.scale.linear().domain([0, 1e6]);
         assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0.0M", "0.1M", "0.2M", "0.3M", "0.4M", "0.5M", "0.6M", "0.7M", "0.8M", "0.9M", "1.0M"]);
         assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "+$s")), ["+$0.0M", "+$0.1M", "+$0.2M", "+$0.3M", "+$0.4M", "+$0.5M", "+$0.6M", "+$0.7M", "+$0.8M", "+$0.9M", "+$1.0M"]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, ".1s")), ["0k", "100k", "200k", "300k", "400k", "500k", "600k", "700k", "800k", "900k", "1000k"]);
         var x = d3.scale.linear().domain([0, 1e5]);
         assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0k", "10k", "20k", "30k", "40k", "50k", "60k", "70k", "80k", "90k", "100k"]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, ".-1s")), ["0.00M", "0.01M", "0.02M", "0.03M", "0.04M", "0.05M", "0.06M", "0.07M", "0.08M", "0.09M", "0.10M"]);
         var x = d3.scale.linear().domain([0, 1e-4]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0.00m", "0.01m", "0.02m", "0.03m", "0.04m", "0.05m", "0.06m", "0.07m", "0.08m", "0.09m", "0.10m"]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, ".2s")), ["0µ", "10µ", "20µ", "30µ", "40µ", "50µ", "60µ", "70µ", "80µ", "90µ", "100µ"]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0µ", "10µ", "20µ", "30µ", "40µ", "50µ", "60µ", "70µ", "80µ", "90µ", "100µ"]);
       },
       "if count is not specified, defaults to 10": function(d3) {
         var x = d3.scale.linear();
