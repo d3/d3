@@ -7476,7 +7476,8 @@
       match.shift();
       if (match[8] === "s") {
         var prefix = d3.formatPrefix(Math.max(abs(range[0]), abs(range[1])));
-        match[8] = match[7] ? "f" : "r";
+        if (!match[7]) match[7] = "." + d3_scale_linearPrecision(prefix.scale(range[2]));
+        match[8] = "f";
         format = d3.format(match.join(""));
         return function(d) {
           return format(prefix.scale(d)) + prefix.symbol;
