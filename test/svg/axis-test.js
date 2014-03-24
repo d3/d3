@@ -486,6 +486,15 @@ suite.addBatch({
           assert.isFalse(t.select("text").empty());
           assert.equal(t.select("text").text(), tickFormat(ticks[i]));
         });
+      },
+      "maintains the order of tick marks": function(d3) {
+        var a = d3.svg.axis(),
+            g = d3.select("body").html("").append("g").call(a),
+            x = d3.scale.linear().domain([1, 1.5]);
+        a.scale().domain(x.domain());
+        g.call(a.ticks(10));
+        g.call(a.ticks(20));
+        assert.deepEqual(g.selectAll(".tick").data(), x.ticks(20));
       }
     }
   }

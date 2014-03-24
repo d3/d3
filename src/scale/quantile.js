@@ -24,7 +24,7 @@ function d3_scale_quantile(domain, range) {
 
   scale.domain = function(x) {
     if (!arguments.length) return domain;
-    domain = x.filter(function(d) { return !isNaN(d); }).sort(d3.ascending);
+    domain = x.filter(function(d) { return !isNaN(d); }).sort(d3_ascending);
     return rescale();
   };
 
