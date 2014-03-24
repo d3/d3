@@ -7475,8 +7475,8 @@
       var match = d3_format_re.exec(format);
       match.shift();
       if (match[8] === "s") {
-        var prefix = d3.formatPrefix(Math.max(abs(range[0]), abs(range[1])) * (match[7] ? Math.pow(10, -match[7].substring(1)) : 1));
-        match[7] = "." + d3_scale_linearPrecision(prefix.scale(range[2])), match[8] = "f";
+        var prefix = d3.formatPrefix(Math.max(abs(range[0]), abs(range[1])));
+        match[8] = match[7] ? "f" : "r";
         format = d3.format(match.join(""));
         return function(d) {
           return format(prefix.scale(d)) + prefix.symbol;
@@ -7501,7 +7501,7 @@
   }
   function d3_scale_linearFormatPrecision(type, range) {
     var p = d3_scale_linearPrecision(range[2]);
-    return type in d3_scale_linearFormatSignificant ? Math.abs(p - d3_scale_linearPrecision(Math.max(Math.abs(range[0]), Math.abs(range[1])))) + +(type !== "e") : p - (type === "%") * 2;
+    return type in d3_scale_linearFormatSignificant ? Math.abs(p - d3_scale_linearPrecision(Math.max(abs(range[0]), abs(range[1])))) + +(type !== "e") : p - (type === "%") * 2;
   }
   d3.scale.log = function() {
     return d3_scale_log(d3.scale.linear().domain([ 0, 1 ]), 10, true, [ 1, 10 ]);
