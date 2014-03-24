@@ -67,10 +67,9 @@ function d3_rgb_parse(format, rgb, hsl) {
   var r = 0, // red channel; int in [0, 255]
       g = 0, // green channel; int in [0, 255]
       b = 0, // blue channel; int in [0, 255]
-      value,
       m1, // CSS color specification match
       m2, // CSS color specification type (e.g., rgb)
-      name;
+      color;
 
   /* Handle hsl, rgb. */
   m1 = /([a-z]+)\((.*)\)/i.exec(format);
@@ -95,23 +94,21 @@ function d3_rgb_parse(format, rgb, hsl) {
   }
 
   /* Named colors. */
-  if (name = d3_rgb_names.get(format)) return rgb(name.r, name.g, name.b);
+  if (color = d3_rgb_names.get(format)) return rgb(color.r, color.g, color.b);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
-  if (format != null && format.charAt(0) === "#") {
-    value = parseInt(format.substring(1), 16);
-    if (!isNaN(value)) {
-      if (format.length === 4) {
-        r = (value & 0xf00) >> 4; r = (r >> 4) | r;
-        g = (value & 0xf0); g = (g >> 4) | g;
-        b = (value & 0xf); b = (b << 4) | b;
-      } else if (format.length === 7) {
-        r = (value & 0xff0000) >> 16;
-        g = (value & 0xff00) >> 8;
-        b = (value & 0xff);
-      }
+  if (format != null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.substring(1), 16))) {
+    if (format.length === 4) {
+      r = (color & 0xf00) >> 4; r = (r >> 4) | r;
+      g = (color & 0xf0); g = (g >> 4) | g;
+      b = (color & 0xf); b = (b << 4) | b;
+    } else if (format.length === 7) {
+      r = (color & 0xff0000) >> 16;
+      g = (color & 0xff00) >> 8;
+      b = (color & 0xff);
     }
   }
+
   return rgb(r, g, b);
 }
 

@@ -1620,7 +1620,7 @@
     return v < 16 ? "0" + Math.max(0, v).toString(16) : Math.min(255, v).toString(16);
   }
   function d3_rgb_parse(format, rgb, hsl) {
-    var r = 0, g = 0, b = 0, value, m1, m2, name;
+    var r = 0, g = 0, b = 0, m1, m2, color;
     m1 = /([a-z]+)\((.*)\)/i.exec(format);
     if (m1) {
       m2 = m1[2].split(",");
@@ -1636,22 +1636,19 @@
         }
       }
     }
-    if (name = d3_rgb_names.get(format)) return rgb(name.r, name.g, name.b);
-    if (format != null && format.charAt(0) === "#") {
-      value = parseInt(format.substring(1), 16);
-      if (!isNaN(value)) {
-        if (format.length === 4) {
-          r = (value & 3840) >> 4;
-          r = r >> 4 | r;
-          g = value & 240;
-          g = g >> 4 | g;
-          b = value & 15;
-          b = b << 4 | b;
-        } else if (format.length === 7) {
-          r = (value & 16711680) >> 16;
-          g = (value & 65280) >> 8;
-          b = value & 255;
-        }
+    if (color = d3_rgb_names.get(format)) return rgb(color.r, color.g, color.b);
+    if (format != null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.substring(1), 16))) {
+      if (format.length === 4) {
+        r = (color & 3840) >> 4;
+        r = r >> 4 | r;
+        g = color & 240;
+        g = g >> 4 | g;
+        b = color & 15;
+        b = b << 4 | b;
+      } else if (format.length === 7) {
+        r = (color & 16711680) >> 16;
+        g = (color & 65280) >> 8;
+        b = color & 255;
       }
     }
     return rgb(r, g, b);
