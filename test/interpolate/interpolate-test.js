@@ -95,11 +95,11 @@ suite.addBatch({
       "interpolates each property in b": function(d3) {
         assert.deepEqual(d3.interpolate({foo: 2, bar: 4}, {foo: 12, bar: 24})(.4), {foo: 6, bar: 12});
       },
-      "interpolates arrays, even when both a and b are coercible to numbers": function(d3) {
-        var two = new Number(2), twelve = new Number(12);
-        two.foo = "2px";
-        twelve.foo = "12px";
-        assert.deepEqual(d3.interpolate(two, twelve)(.4), {foo: "6px"});
+      "interpolates numbers if b is coercible to a number (!isNaN(+b))": function(d3) {
+        assert.strictEqual(d3.interpolate(new Number(2), new Number(12))(.4), 6);
+        assert.strictEqual(d3.interpolate(new Date(2012, 0, 1), new Date(2013, 0, 1))(.5), +new Date(2012, 6, 2, 1));
+        assert.strictEqual(d3.interpolate(1, null)(.4), .6); // +null = 0
+        assert.isNaN(d3.interpolate("blue", null)(.4));
       },
       "reuses the returned object during interpolation": function(d3) {
         var i = d3.interpolate({foo: 2, bar: 4}, {foo: 12, bar: 24});

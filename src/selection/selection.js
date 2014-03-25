@@ -16,7 +16,7 @@ var d3_select = function(s, n) { return n.querySelector(s); },
 // Prefer Sizzle, if available.
 if (typeof Sizzle === "function") {
   d3_select = function(s, n) { return Sizzle(s, n)[0] || null; };
-  d3_selectAll = function(s, n) { return Sizzle.uniqueSort(Sizzle(s, n)); };
+  d3_selectAll = Sizzle;
   d3_selectMatches = Sizzle.matchesSelector;
 }
 
