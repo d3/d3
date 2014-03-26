@@ -14,10 +14,10 @@ function d3_geo_conicConformal(φ0, φ1) {
 
   function forward(λ, φ) {
     var ρ = F / Math.pow(t(φ), n);
-    return [
-      ρ * Math.sin(n * λ) || 0,
-      F - (ρ * Math.cos(n * λ) || 0)
-    ];
+    return isFinite(ρ) ? [
+      ρ * Math.sin(n * λ),
+      F - ρ * Math.cos(n * λ)
+    ] : [0, -Infinity];
   }
 
   forward.invert = function(x, y) {

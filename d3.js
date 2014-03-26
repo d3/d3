@@ -4596,7 +4596,7 @@
     if (!n) return d3_geo_mercator;
     function forward(λ, φ) {
       var ρ = F / Math.pow(t(φ), n);
-      return [ ρ * Math.sin(n * λ) || 0, F - (ρ * Math.cos(n * λ) || 0) ];
+      return isFinite(ρ) ? [ ρ * Math.sin(n * λ), F - ρ * Math.cos(n * λ) ] : [ 0, -Infinity ];
     }
     forward.invert = function(x, y) {
       var ρ0_y = F - y, ρ = d3_sgn(n) * Math.sqrt(x * x + ρ0_y * ρ0_y);
