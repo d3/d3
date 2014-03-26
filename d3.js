@@ -2552,6 +2552,10 @@
       U: function(d, p) {
         return d3_time_formatPad(d3_time.sundayOfYear(d), p, 2);
       },
+      V: function(d, p) {
+        var t = d3_time_formatPad(d.getFullYear() % 1e4, p, 4);
+        return t.length === 4 ? "+" + t : t;
+      },
       w: function(d) {
         return d.getDay();
       },
@@ -2588,6 +2592,7 @@
       p: d3_time_parseAmPm,
       S: d3_time_parseSeconds,
       U: d3_time_parseWeekNumberSunday,
+      V: d3_time_parseFullYearWithSign,
       w: d3_time_parseWeekdayNumber,
       W: d3_time_parseWeekNumberMonday,
       x: d3_time_parseLocaleDate,
@@ -2636,7 +2641,7 @@
     "-": "",
     _: " ",
     "0": "0"
-  }, d3_time_numberRe = /^\s*\d+/, d3_time_percentRe = /^%/;
+  }, d3_time_numberRe = /^\s*\d+/, d3_time_percentRe = /^%/, d3_time_numberSignRe = /^\s*[\+|-]?\d+/;
   function d3_time_formatPad(value, fill, width) {
     var sign = value < 0 ? "-" : "", string = (sign ? -value : value) + "", length = string.length;
     return sign + (length < width ? new Array(width - length + 1).join(fill) + string : string);
@@ -2667,6 +2672,12 @@
   function d3_time_parseFullYear(date, string, i) {
     d3_time_numberRe.lastIndex = 0;
     var n = d3_time_numberRe.exec(string.substring(i, i + 4));
+    return n ? (date.y = +n[0], i + n[0].length) : -1;
+  }
+  function d3_time_parseFullYearWithSign(date, string, i) {
+    d3_time_numberRe.lastIndex = 0;
+    var n = d3_time_numberSignRe.exec(string.substring(i, i + 5));
+    console.log(n);
     return n ? (date.y = +n[0], i + n[0].length) : -1;
   }
   function d3_time_parseYear(date, string, i) {

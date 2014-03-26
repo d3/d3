@@ -135,6 +135,14 @@ suite.addBatch({
       assert.equal(f(utc(2002, 0, 1)), "2002");
       assert.equal(f(utc(10002, 0, 1)), "0002");
     },
+    "formats zero-padded four-digit year with +/-": function(format) {
+      var f = format("%V");
+      assert.equal(f(utc(123, 0, 1)), "+0123");
+      assert.equal(f(utc(1990, 0, 1)), "+1990");
+      assert.equal(f(utc(2002, 0, 1)), "+2002");
+      assert.equal(f(utc(10002, 0, 1)), "+0002");
+      assert.equal(f(utc(-2, 0, 1)), "-0002");
+    },
     "formats time zone": function(format) {
       var f = format("%Z");
       assert.equal(f(utc(1990, 0, 1)), "+0000");
@@ -211,6 +219,14 @@ suite.addBatch({
         assert.deepEqual(p("12:00:00 pm"), utc(1900, 0, 1, 12, 0, 0));
         assert.deepEqual(p("12:00:01 pm"), utc(1900, 0, 1, 12, 0, 1));
         assert.deepEqual(p("11:59:59 PM"), utc(1900, 0, 1, 23, 59, 59));
+      },
+      "parses 4-digit year with +/- sign": function(format) {
+        var p = format("%V").parse;
+        assert.deepEqual(p("-0002"), utc(-2, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("-1234"), utc(-1234, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("+0000"), utc(0, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("+1000"), utc(1000, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("+1990"), utc(1990, 0, 1, 0, 0, 0));
       },
       "parses timezone offset": function(format) {
         var p = format("%m/%d/%Y %Z").parse;

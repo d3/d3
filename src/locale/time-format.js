@@ -158,6 +158,7 @@ function d3_locale_timeFormat(locale) {
     p: function(d) { return locale_periods[+(d.getHours() >= 12)]; },
     S: function(d, p) { return d3_time_formatPad(d.getSeconds(), p, 2); },
     U: function(d, p) { return d3_time_formatPad(d3_time.sundayOfYear(d), p, 2); },
+    V: function(d, p) { var t = d3_time_formatPad(d.getFullYear() % 10000, p, 4); return t.length === 4 ? '+' + t : t; },
     w: function(d) { return d.getDay(); },
     W: function(d, p) { return d3_time_formatPad(d3_time.mondayOfYear(d), p, 2); },
     x: d3_time_format(locale_date),
@@ -185,6 +186,7 @@ function d3_locale_timeFormat(locale) {
     p: d3_time_parseAmPm,
     S: d3_time_parseSeconds,
     U: d3_time_parseWeekNumberSunday,
+    V: d3_time_parseFullYearWithSign,
     w: d3_time_parseWeekdayNumber,
     W: d3_time_parseWeekNumberMonday,
     x: d3_time_parseLocaleDate,
@@ -241,7 +243,8 @@ function d3_locale_timeFormat(locale) {
 
 var d3_time_formatPads = {"-": "", "_": " ", "0": "0"},
     d3_time_numberRe = /^\s*\d+/, // note: ignores next directive
-    d3_time_percentRe = /^%/;
+    d3_time_percentRe = /^%/,
+    d3_time_numberSignRe = /^\s*[\+|-]?\d+/;
 
 function d3_time_formatPad(value, fill, width) {
   var sign = value < 0 ? "-" : "",
@@ -281,6 +284,12 @@ function d3_time_parseWeekNumberMonday(date, string, i) {
 function d3_time_parseFullYear(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.substring(i, i + 4));
+  return n ? (date.y = +n[0], i + n[0].length) : -1;
+}
+
+function d3_time_parseFullYearWithSign(date, string, i) {
+  d3_time_numberRe.lastIndex = 0;
+  var n = d3_time_numberSignRe.exec(string.substring(i, i + 5));
   return n ? (date.y = +n[0], i + n[0].length) : -1;
 }
 
