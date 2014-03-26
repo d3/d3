@@ -167,6 +167,14 @@ suite.addBatch({
       assert.equal(f(local(10002, 0, 1)), "0002");
       assert.equal(f(local(-2, 0, 1)), "-0002");
     },
+    "formats zero-padded four-digit year with +/-": function(format) {
+      var f = format("%V");
+      assert.equal(f(local(123, 0, 1)), "+0123");
+      assert.equal(f(local(1990, 0, 1)), "+1990");
+      assert.equal(f(local(2002, 0, 1)), "+2002");
+      assert.equal(f(local(10002, 0, 1)), "+0002");
+      assert.equal(f(local(-2, 0, 1)), "-0002");
+    },
     "formats time zone": function(format) {
       var f = format("%Z");
       assert.equal(f(local(1990, 0, 1)), "-0800");
@@ -330,6 +338,14 @@ suite.addBatch({
         assert.deepEqual(p("01/02/1990 +0000"), local(1990, 0, 1, 16));
         assert.deepEqual(p("01/02/1990 +0100"), local(1990, 0, 1, 17));
         assert.deepEqual(p("01/02/1990 -0100"), local(1990, 0, 1, 15));
+      },
+      "parses 4-digit year with +/- sign": function(format) {
+        var p = format("%V").parse;
+        assert.deepEqual(p("-0002"), local(-2, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("-1234"), local(-1234, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("+0000"), local(0, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("+1000"), local(1000, 0, 1, 0, 0, 0));
+        assert.deepEqual(p("+1990"), local(1990, 0, 1, 0, 0, 0));
       },
       "ignores optional padding modifier, skipping zeroes and spaces": function(format) {
         var p = format("%-m/%0d/%_Y").parse;
