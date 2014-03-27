@@ -1,7 +1,7 @@
 import "../arrays/merge";
 import "../core/noop";
 import "../math/trigonometry";
-import "clip-polygon";
+import "clip-polygon-rejoin";
 
 function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
   return function(rotate, listener) {
@@ -28,7 +28,7 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
         segments = d3.merge(segments);
         var clipStartInside = d3_geo_pointInPolygon(rotatedClipStart, polygon);
         if (segments.length) {
-          d3_geo_clipPolygon(segments, d3_geo_clipSort, clipStartInside, interpolate, listener);
+          d3_geo_clipPolygonRejoin(segments, d3_geo_clipSort, clipStartInside, interpolate, listener);
         } else if (clipStartInside) {
           listener.lineStart();
           interpolate(null, null, 1, listener);

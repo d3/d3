@@ -3133,7 +3133,7 @@
   function d3_true() {
     return true;
   }
-  function d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, listener) {
+  function d3_geo_clipPolygonRejoin(segments, compare, clipStartInside, interpolate, listener) {
     var subject = [], clip = [];
     segments.forEach(function(segment) {
       if ((n = segment.length - 1) <= 0) return;
@@ -3144,19 +3144,19 @@
         listener.lineEnd();
         return;
       }
-      var a = new d3_geo_clipPolygonIntersection(p0, segment, null, true), b = new d3_geo_clipPolygonIntersection(p0, null, a, false);
+      var a = new d3_geo_clipPolygonRejoinIntersection(p0, segment, null, true), b = new d3_geo_clipPolygonRejoinIntersection(p0, null, a, false);
       a.o = b;
       subject.push(a);
       clip.push(b);
-      a = new d3_geo_clipPolygonIntersection(p1, segment, null, false);
-      b = new d3_geo_clipPolygonIntersection(p1, null, a, true);
+      a = new d3_geo_clipPolygonRejoinIntersection(p1, segment, null, false);
+      b = new d3_geo_clipPolygonRejoinIntersection(p1, null, a, true);
       a.o = b;
       subject.push(a);
       clip.push(b);
     });
     clip.sort(compare);
-    d3_geo_clipPolygonLinkCircular(subject);
-    d3_geo_clipPolygonLinkCircular(clip);
+    d3_geo_clipPolygonRejoinLinkCircular(subject);
+    d3_geo_clipPolygonRejoinLinkCircular(clip);
     if (!subject.length) return;
     for (var i = 0, entry = clipStartInside, n = clip.length; i < n; ++i) {
       clip[i].e = entry = !entry;
@@ -3192,7 +3192,7 @@
       listener.lineEnd();
     }
   }
-  function d3_geo_clipPolygonLinkCircular(array) {
+  function d3_geo_clipPolygonRejoinLinkCircular(array) {
     if (!(n = array.length)) return;
     var n, i = 0, a = array[0], b;
     while (++i < n) {
@@ -3203,7 +3203,7 @@
     a.n = b = array[0];
     b.p = a;
   }
-  function d3_geo_clipPolygonIntersection(point, points, other, entry) {
+  function d3_geo_clipPolygonRejoinIntersection(point, points, other, entry) {
     this.x = point;
     this.z = points;
     this.o = other;
@@ -3233,7 +3233,7 @@
           segments = d3.merge(segments);
           var clipStartInside = d3_geo_pointInPolygon(rotatedClipStart, polygon);
           if (segments.length) {
-            d3_geo_clipPolygon(segments, d3_geo_clipSort, clipStartInside, interpolate, listener);
+            d3_geo_clipPolygonRejoin(segments, d3_geo_clipSort, clipStartInside, interpolate, listener);
           } else if (clipStartInside) {
             listener.lineStart();
             interpolate(null, null, 1, listener);
@@ -3615,7 +3615,7 @@
               listener.lineEnd();
             }
             if (visible) {
-              d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, listener);
+              d3_geo_clipPolygonRejoin(segments, compare, clipStartInside, interpolate, listener);
             }
             listener.polygonEnd();
           }

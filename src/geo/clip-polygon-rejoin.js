@@ -4,7 +4,7 @@ import "spherical";
 // General spherical polygon clipping algorithm: takes a polygon, cuts it into
 // visible line segments and rejoins the segments by interpolating along the
 // clip edge.
-function d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, listener) {
+function d3_geo_clipPolygonRejoin(segments, compare, clipStartInside, interpolate, listener) {
   var subject = [],
       clip = [];
 
@@ -23,20 +23,20 @@ function d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, lis
       return;
     }
 
-    var a = new d3_geo_clipPolygonIntersection(p0, segment, null, true),
-        b = new d3_geo_clipPolygonIntersection(p0, null, a, false);
+    var a = new d3_geo_clipPolygonRejoinIntersection(p0, segment, null, true),
+        b = new d3_geo_clipPolygonRejoinIntersection(p0, null, a, false);
     a.o = b;
     subject.push(a);
     clip.push(b);
-    a = new d3_geo_clipPolygonIntersection(p1, segment, null, false);
-    b = new d3_geo_clipPolygonIntersection(p1, null, a, true);
+    a = new d3_geo_clipPolygonRejoinIntersection(p1, segment, null, false);
+    b = new d3_geo_clipPolygonRejoinIntersection(p1, null, a, true);
     a.o = b;
     subject.push(a);
     clip.push(b);
   });
   clip.sort(compare);
-  d3_geo_clipPolygonLinkCircular(subject);
-  d3_geo_clipPolygonLinkCircular(clip);
+  d3_geo_clipPolygonRejoinLinkCircular(subject);
+  d3_geo_clipPolygonRejoinLinkCircular(clip);
   if (!subject.length) return;
 
   for (var i = 0, entry = clipStartInside, n = clip.length; i < n; ++i) {
@@ -79,7 +79,7 @@ function d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, lis
   }
 }
 
-function d3_geo_clipPolygonLinkCircular(array) {
+function d3_geo_clipPolygonRejoinLinkCircular(array) {
   if (!(n = array.length)) return;
   var n,
       i = 0,
@@ -94,7 +94,7 @@ function d3_geo_clipPolygonLinkCircular(array) {
   b.p = a;
 }
 
-function d3_geo_clipPolygonIntersection(point, points, other, entry) {
+function d3_geo_clipPolygonRejoinIntersection(point, points, other, entry) {
   this.x = point;
   this.z = points;
   this.o = other; // another intersection
