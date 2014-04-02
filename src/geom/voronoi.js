@@ -26,6 +26,7 @@ d3.geom.voronoi = function(points) {
           polygon = polygons[i] = edges.length ? edges.map(function(e) { var s = e.start(); return [s.x, s.y]; })
               : site.x >= x0 && site.x <= x1 && site.y >= y0 && site.y <= y1 ? [[x0, y1], [x1, y1], [x1, y0], [x0, y0]]
               : [];
+      polygon.edges = edges; // TODO don’t expose this internal structure
       polygon.point = data[i];
     });
 
@@ -41,6 +42,48 @@ d3.geom.voronoi = function(points) {
       };
     });
   }
+
+  voronoi.topology = function(data) {
+    var polygons = voronoi(data),
+        arcs = [],
+        geometries,
+        arcIndex = -1,
+        arcIndexByEdge = {};
+
+    geometries = polygons.map(function(polygon, i) {
+      var arcIndexes = [];
+
+      polygon.edges.forEach(function(half) {
+        var edge = half.edge;
+        if (edge.r) {
+          var l = edge.l.i,
+              r = edge.r.i,
+              k = l + "," + r,
+              i = arcIndexByEdge[k];
+          if (i == null) arcs[i = arcIndexByEdge[k] = ++arcIndex] = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
+          arcIndexes.push(half.site === edge.l ? i : ~i);
+        } else { // TODO consolidate adjacent clip edges
+          arcs[++arcIndex] = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
+          arcIndexes.push(arcIndex);
+        }
+      });
+
+      return {
+        type: "Polygon",
+        arcs: [arcIndexes]
+      };
+    });
+
+    return {
+      objects: {
+        voronoi: {
+          type: "GeometryCollection",
+          geometries: geometries
+        }
+      },
+      arcs: arcs
+    };
+  };
 
   voronoi.links = function(data) {
     return d3_geom_voronoi(sites(data)).edges.filter(function(edge) {
