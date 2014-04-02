@@ -30,7 +30,7 @@ d3.geo.voronoi = function(U) {
   // “Let η = ζσ(q) be its inverse image and let ζn be the inversion with
   // inversion center η”
   var η = d3_geo_stereographic.invert(q[0], q[1]);
-  η = d3_geo_rotation.invert(n[0], n[1]);
+  η = d3_geo_rotation.invert(η[0], η[1]);
 
   // “Let W' = ζη(U) be the inversive image of U.”
   var W1 = U.map(function(p) { p = η(p[0], p[1]); return d3_geo_stereographic(p[0], p[1]); });
