@@ -55,8 +55,8 @@ d3.geom.voronoi = function(points) {
     d3_geom_voronoi(sites(data), clipExtent).cells.map(function(cell, i) {
       var edges = cell.edges,
           site = cell.site,
-          edgeArc,
-          arcIndexes = [];
+          arcIndexes = [],
+          clipArc;
 
       if (edges.length) {
         edges.forEach(function(half) {
@@ -68,14 +68,21 @@ d3.geom.voronoi = function(points) {
                 i = arcIndexByEdge[k];
             if (i == null) arcs[i = arcIndexByEdge[k] = ++arcIndex] = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
             arcIndexes.push(half.site === edge.l ? i : ~i);
-            edgeArc = null;
-          } else if (edgeArc) { // consolidate clip edges
-            edgeArc.push([edge.b.x, edge.b.y]);
+            clipArc = null;
+          } else if (clipArc) { // consolidate clip edges
+            clipArc.push([edge.b.x, edge.b.y]);
           } else {
-            arcs[++arcIndex] = edgeArc = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
+            arcs[++arcIndex] = clipArc = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
             arcIndexes.push(arcIndex);
           }
         });
+
+        // Ensure the last point in the polygon is identical to the first point.
+        var firstArcIndex = arcIndexes[0],
+            lastArcIndex = arcIndexes[arcIndexes.length - 1],
+            firstArc = arcs[firstArcIndex < 0 ? ~firstArcIndex : firstArcIndex],
+            lastArc = arcs[lastArcIndex < 0 ? ~lastArcIndex : lastArcIndex];
+        lastArc[lastArcIndex < 0 ? 0 : lastArc.length - 1] = (firstArcIndex < 0 ? firstArc[firstArc.length - 1] : firstArc[0]).slice();
       } else if (site.x >= x0 && site.x <= x1 && site.y >= y0 && site.y <= y1) {
         arcs[++arcIndex] = [[x0, y1], [x1, y1], [x1, y0], [x0, y0], [x0, y1]];
         arcIndexes.push(arcIndex);

@@ -5404,7 +5404,7 @@
     voronoi.topology = function(data) {
       var geometries = new Array(data.length), x0 = clipExtent[0][0], y0 = clipExtent[0][1], x1 = clipExtent[1][0], y1 = clipExtent[1][1], arcs = [], arcIndex = -1, arcIndexByEdge = {};
       d3_geom_voronoi(sites(data), clipExtent).cells.map(function(cell, i) {
-        var edges = cell.edges, site = cell.site, edgeArc, arcIndexes = [];
+        var edges = cell.edges, site = cell.site, arcIndexes = [], clipArc;
         if (edges.length) {
           edges.forEach(function(half) {
             var edge = half.edge;
@@ -5412,14 +5412,16 @@
               var l = edge.l.i, r = edge.r.i, k = l + "," + r, i = arcIndexByEdge[k];
               if (i == null) arcs[i = arcIndexByEdge[k] = ++arcIndex] = [ [ edge.a.x, edge.a.y ], [ edge.b.x, edge.b.y ] ];
               arcIndexes.push(half.site === edge.l ? i : ~i);
-              edgeArc = null;
-            } else if (edgeArc) {
-              edgeArc.push([ edge.b.x, edge.b.y ]);
+              clipArc = null;
+            } else if (clipArc) {
+              clipArc.push([ edge.b.x, edge.b.y ]);
             } else {
-              arcs[++arcIndex] = edgeArc = [ [ edge.a.x, edge.a.y ], [ edge.b.x, edge.b.y ] ];
+              arcs[++arcIndex] = clipArc = [ [ edge.a.x, edge.a.y ], [ edge.b.x, edge.b.y ] ];
               arcIndexes.push(arcIndex);
             }
           });
+          var firstArcIndex = arcIndexes[0], lastArcIndex = arcIndexes[arcIndexes.length - 1], firstArc = arcs[firstArcIndex < 0 ? ~firstArcIndex : firstArcIndex], lastArc = arcs[lastArcIndex < 0 ? ~lastArcIndex : lastArcIndex];
+          lastArc[lastArcIndex < 0 ? 0 : lastArc.length - 1] = (firstArcIndex < 0 ? firstArc[firstArc.length - 1] : firstArc[0]).slice();
         } else if (site.x >= x0 && site.x <= x1 && site.y >= y0 && site.y <= y1) {
           arcs[++arcIndex] = [ [ x0, y1 ], [ x1, y1 ], [ x1, y0 ], [ x0, y0 ], [ x0, y1 ] ];
           arcIndexes.push(arcIndex);
