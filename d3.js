@@ -5421,7 +5421,7 @@
             }
           });
           var firstArcIndex = arcIndexes[0], lastArcIndex = arcIndexes[arcIndexes.length - 1], firstArc = arcs[firstArcIndex < 0 ? ~firstArcIndex : firstArcIndex], lastArc = arcs[lastArcIndex < 0 ? ~lastArcIndex : lastArcIndex];
-          lastArc[lastArcIndex < 0 ? 0 : lastArc.length - 1] = (firstArcIndex < 0 ? firstArc[firstArc.length - 1] : firstArc[0]).slice();
+          lastArc[lastArcIndex < 0 ? 0 : lastArc.length - 1] = firstArc[firstArcIndex < 0 ? firstArc.length - 1 : 0].slice();
         } else if (site.x >= x0 && site.x <= x1 && site.y >= y0 && site.y <= y1) {
           arcs[++arcIndex] = [ [ x0, y1 ], [ x1, y1 ], [ x1, y0 ], [ x0, y0 ], [ x0, y1 ] ];
           arcIndexes.push(arcIndex);
