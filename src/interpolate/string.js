@@ -3,86 +3,52 @@ import "number";
 d3.interpolateString = d3_interpolateString;
 
 function d3_interpolateString(a, b) {
-  var m, // current match
-      i, // current index
-      j, // current index (for coalescing)
-      s0 = 0, // start index of current string prefix
-      s1 = 0, // end index of current string prefix
+  var bi = d3_interpolate_numberA.lastIndex = d3_interpolate_numberB.lastIndex = 0, // scan index for next number in b
+      am, // current match in a
+      bm, // current match in b
+      bs, // string preceding current number in b, if any
+      i = -1, // index in s
       s = [], // string constants and placeholders
-      q = [], // number interpolators
-      n, // q.length
-      o;
+      q = []; // number interpolators
 
   // Coerce inputs to strings.
   a = a + "", b = b + "";
 
-  // Reset our regular expression!
-  d3_interpolate_number.lastIndex = 0;
-
-  // Find all numbers in b.
-  for (i = 0; m = d3_interpolate_number.exec(b); ++i) {
-    if (m.index) s.push(b.substring(s0, s1 = m.index));
-    q.push({i: s.length, x: m[0]});
-    s.push(null);
-    s0 = d3_interpolate_number.lastIndex;
-  }
-  if (s0 < b.length) s.push(b.substring(s0));
-
-  // Find all numbers in a.
-  for (i = 0, n = q.length; (m = d3_interpolate_number.exec(a)) && i < n; ++i) {
-    o = q[i];
-    if (o.x == m[0]) { // The numbers match, so coalesce.
-      if (o.i) {
-        if (s[o.i + 1] == null) { // This match is followed by another number.
-          s[o.i - 1] += o.x;
-          s.splice(o.i, 1);
-          for (j = i + 1; j < n; ++j) q[j].i--;
-        } else { // This match is followed by a string, so coalesce twice.
-          s[o.i - 1] += o.x + s[o.i + 1];
-          s.splice(o.i, 2);
-          for (j = i + 1; j < n; ++j) q[j].i -= 2;
-        }
-      } else {
-          if (s[o.i + 1] == null) { // This match is followed by another number.
-          s[o.i] = o.x;
-        } else { // This match is followed by a string, so coalesce twice.
-          s[o.i] = o.x + s[o.i + 1];
-          s.splice(o.i + 1, 1);
-          for (j = i + 1; j < n; ++j) q[j].i--;
-        }
-      }
-      q.splice(i, 1);
-      n--;
-      i--;
-    } else {
-      o.x = d3_interpolateNumber(parseFloat(m[0]), parseFloat(o.x));
+  // Interpolate pairs of numbers in a & b.
+  while ((am = d3_interpolate_numberA.exec(a))
+      && (bm = d3_interpolate_numberB.exec(b))) {
+    if ((bs = bm.index) > bi) { // a string precedes the next number in b
+      bs = b.substring(bi, bs);
+      if (s[i]) s[i] += bs; // coalesce with previous string
+      else s[++i] = bs;
     }
+    if ((am = am[0]) === (bm = bm[0])) { // numbers in a & b match
+      if (s[i]) s[i] += bm; // coalesce with previous string
+      else s[++i] = bm;
+    } else { // interpolate non-matching numbers
+      s[++i] = null;
+      q.push({i: i, x: d3_interpolateNumber(am, bm)});
+    }
+    bi = d3_interpolate_numberB.lastIndex;
   }
 
-  // Remove any numbers in b not found in a.
-  while (i < n) {
-    o = q.pop();
-    if (s[o.i + 1] == null) { // This match is followed by another number.
-      s[o.i] = o.x;
-    } else { // This match is followed by a string, so coalesce twice.
-      s[o.i] = o.x + s[o.i + 1];
-      s.splice(o.i + 1, 1);
-    }
-    n--;
+  // Add remains of b.
+  if (bi < b.length) {
+    bs = b.substring(bi);
+    if (s[i]) s[i] += bs; // coalesce with previous string
+    else s[++i] = bs;
   }
 
   // Special optimization for only a single match.
-  if (s.length === 1) {
-    return s[0] == null
-        ? (o = q[0].x, function(t) { return o(t) + ""; })
-        : function() { return b; };
-  }
-
   // Otherwise, interpolate each of the numbers and rejoin the string.
-  return function(t) {
-    for (i = 0; i < n; ++i) s[(o = q[i]).i] = o.x(t);
-    return s.join("");
-  };
+  return s.length < 2
+      ? (q[0] ? (b = q[0].x, function(t) { return b(t) + ""; })
+      : function() { return b; })
+      : (b = q.length, function(t) {
+          for (var i = 0, o; i < b; ++i) s[(o = q[i]).i] = o.x(t);
+          return s.join("");
+        });
 }
 
-var d3_interpolate_number = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g;
+var d3_interpolate_numberA = /[-+]?(?:\d+\.?\d*|\.?\d+)(?:[eE][-+]?\d+)?/g,
+    d3_interpolate_numberB = new RegExp(d3_interpolate_numberA.source, "g");
