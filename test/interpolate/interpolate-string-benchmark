@@ -2,7 +2,12 @@
 
 var d3 = require("../../");
 
-var formatNumber = d3.format(".3s");
+var n = +process.argv[2],
+    p = +process.argv[3],
+    k = +process.argv[4];
+
+var formatTime = d3.format(".3s"),
+    formatNumber = d3.format(",.0f");
 
 // Returns the time required to construct a string interpolator
 // for two strings with n numbers, separated by commas,
@@ -23,19 +28,4 @@ function observeConstruction(n, p, k) {
   return sum / k;
 }
 
-console.log(formatNumber(observeConstruction(  12000, 0.00, 40)) + "s\tn=12,000\tp=0");
-console.log(formatNumber(observeConstruction(  12000, 0.50, 40)) + "s\tn=12,000\tp=.5");
-// console.log(formatNumber(observeConstruction(  12000, 0.93, 40)) + "s\tn=12,000\tp=.93");
-console.log(formatNumber(observeConstruction(  12000, 1.00, 40)) + "s\tn=12,000\tp=1");
-console.log(formatNumber(observeConstruction(  60000, 0.00, 20)) + "s\tn=60,000\tp=0");
-console.log(formatNumber(observeConstruction(  60000, 0.50, 20)) + "s\tn=60,000\tp=.5");
-// console.log(formatNumber(observeConstruction(  60000, 0.93, 20)) + "s\tn=60,000\tp=.93");
-console.log(formatNumber(observeConstruction(  60000, 1.00, 20)) + "s\tn=60,000\tp=1");
-console.log(formatNumber(observeConstruction( 300000, 0.00, 10)) + "s\tn=300,000\tp=0");
-console.log(formatNumber(observeConstruction( 300000, 0.50, 10)) + "s\tn=300,000\tp=.5");
-// console.log(formatNumber(observeConstruction( 300000, 0.93, 10)) + "s\tn=300,000\tp=.93");
-console.log(formatNumber(observeConstruction( 300000, 1.00, 10)) + "s\tn=300,000\tp=1");
-console.log(formatNumber(observeConstruction(1500000, 0.00, 4)) + "s\tn=1,500,000\tp=0");
-console.log(formatNumber(observeConstruction(1500000, 0.50, 4)) + "s\tn=1,500,000\tp=.5");
-// console.log(formatNumber(observeConstruction(1500000, 0.93, 4)) + "s\tn=1,500,000\tp=.93");
-console.log(formatNumber(observeConstruction(1500000, 1.00, 4)) + "s\tn=1,500,000\tp=1");
+console.log(formatTime(observeConstruction(n, p, k)) + "s\tn=" + formatNumber(n) + "\tp=" + p);
