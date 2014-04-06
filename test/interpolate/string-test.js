@@ -43,8 +43,9 @@ suite.addBatch({
       assert.strictEqual(interpolate("", "bar")(.5), "bar");
       assert.strictEqual(interpolate("", "")(.5), "");
     },
-    "with two numerically-equivalent numbers, returns the target format": function(interpolate) {
-      assert.strictEqual(interpolate("top: 1000px;", "top: 1e3px;")(.5), "top: 1e3px;");
+    "with two numerically-equivalent numbers, returns the default format": function(interpolate) {
+      assert.strictEqual(interpolate("top: 1000px;", "top: 1e3px;")(.5), "top: 1000px;");
+      assert.strictEqual(interpolate("top: 1e3px;", "top: 1000px;")(.5), "top: 1000px;");
     }
   }
 });

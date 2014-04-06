@@ -5624,8 +5624,8 @@
         bs = b.substring(bi, bs);
         if (s[i]) s[i] += bs; else s[++i] = bs;
       }
-      if ((am = +am[0]) === (bm = +(bs = bm[0]))) {
-        if (s[i]) s[i] += bs; else s[++i] = bs;
+      if ((am = am[0]) === (bm = bm[0])) {
+        if (s[i]) s[i] += bm; else s[++i] = bm;
       } else {
         s[++i] = null;
         q.push({

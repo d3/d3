@@ -22,9 +22,9 @@ function d3_interpolateString(a, b) {
       if (s[i]) s[i] += bs; // coalesce with previous string
       else s[++i] = bs;
     }
-    if ((am = +am[0]) === (bm = +(bs = bm[0]))) { // coalesce matching numbers
-      if (s[i]) s[i] += bs; // coalesce with previous string
-      else s[++i] = bs;
+    if ((am = am[0]) === (bm = bm[0])) { // numbers in a & b match
+      if (s[i]) s[i] += bm; // coalesce with previous string
+      else s[++i] = bm;
     } else { // interpolate non-matching numbers
       s[++i] = null;
       q.push({i: i, x: d3_interpolateNumber(am, bm)});
