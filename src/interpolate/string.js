@@ -10,7 +10,13 @@ function d3_interpolateString(a, b) {
       s1 = 0, // end index of current string prefix
       s = [], // string constants and placeholders
       q = [], // number interpolators
+      sn = [], // filtered s, using s.splice might be slow in some cases
+      qn = [], // filtered q, using q.splice might be slow in some cases
       n, // q.length
+      r0, // used while removing elements
+      rc, // total number of removed elements
+      si, // s[i] copy while removing elements
+      sl, // s.length while removing elements
       o;
 
   // Coerce inputs to strings.
@@ -21,7 +27,7 @@ function d3_interpolateString(a, b) {
 
   // Find all numbers in b.
   for (i = 0; m = d3_interpolate_number.exec(b); ++i) {
-    if (m.index) s.push(b.substring(s0, s1 = m.index));
+    if (m.index > s0) s.push(b.substring(s0, s1 = m.index));
     q.push({i: s.length, x: m[0]});
     s.push(null);
     s0 = d3_interpolate_number.lastIndex;
@@ -31,45 +37,42 @@ function d3_interpolateString(a, b) {
   // Find all numbers in a.
   for (i = 0, n = q.length; (m = d3_interpolate_number.exec(a)) && i < n; ++i) {
     o = q[i];
-    if (o.x == m[0]) { // The numbers match, so coalesce.
-      if (o.i) {
-        if (s[o.i + 1] == null) { // This match is followed by another number.
-          s[o.i - 1] += o.x;
-          s.splice(o.i, 1);
-          for (j = i + 1; j < n; ++j) q[j].i--;
-        } else { // This match is followed by a string, so coalesce twice.
-          s[o.i - 1] += o.x + s[o.i + 1];
-          s.splice(o.i, 2);
-          for (j = i + 1; j < n; ++j) q[j].i -= 2;
-        }
-      } else {
-          if (s[o.i + 1] == null) { // This match is followed by another number.
-          s[o.i] = o.x;
-        } else { // This match is followed by a string, so coalesce twice.
-          s[o.i] = o.x + s[o.i + 1];
-          s.splice(o.i + 1, 1);
-          for (j = i + 1; j < n; ++j) q[j].i--;
-        }
-      }
-      q.splice(i, 1);
-      n--;
-      i--;
+    if (o.x == m[0]) { // The numbers match, replace value with string.
+      s[o.i] = o.x;
     } else {
       o.x = d3_interpolateNumber(parseFloat(m[0]), parseFloat(o.x));
+      qn.push(o);
     }
   }
 
-  // Remove any numbers in b not found in a.
-  while (i < n) {
+  // Replace with strings any numbers in b not found in a.
+  for (; i < n; ++i) {
     o = q.pop();
-    if (s[o.i + 1] == null) { // This match is followed by another number.
-      s[o.i] = o.x;
-    } else { // This match is followed by a string, so coalesce twice.
-      s[o.i] = o.x + s[o.i + 1];
-      s.splice(o.i + 1, 1);
-    }
-    n--;
+    s[o.i] = o.x;
   }
+
+  // Switch q to the filtered array without unwanted values.
+  q = qn;
+  n = q.length;
+
+  // Coalesce consecutive strings
+  for (i = 0, j = 0, rc = 0, sl = s.length; i < sl; ++i) {
+    si = s[i];
+    if (si !== null) {
+      for (r0 = i + 1; (r0 < sl) && (s[r0] !== null); ++r0) {
+        // Still O(n) here, each element of s
+        // is taken only once either by this or the parent for.
+        si += s[r0];
+      }
+      r0 -= i + 1;
+      i += r0;
+      rc += r0;
+    } else {
+      q[j++].i -= rc;
+    }
+    sn.push(si);
+  }
+  s = sn;
 
   // Special optimization for only a single match.
   if (s.length === 1) {
