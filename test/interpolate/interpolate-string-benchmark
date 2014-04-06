@@ -1,0 +1,41 @@
+#!/usr/bin/env node
+
+var d3 = require("../../");
+
+var formatNumber = d3.format(".3s");
+
+// Returns the time required to construct a string interpolator
+// for two strings with n numbers, separated by commas,
+// with probability p that the corresponding numbers in a & b are different.
+// The test is run k times, and the mean result is returned.
+function observeConstruction(n, p, k) {
+  if (arguments.length < 3) k = 1;
+  for (var i = 0, sum = 0; i < k; ++i) {
+    var a = d3.range(n).map(function() { return Math.random() * 1000; }),
+        b = d3.range(n).map(function(i) { return Math.random() < p ? Math.random() * 1000 : a[i]; });
+    var start = process.hrtime();
+    d3.interpolateString(a, b);
+    var elapsed = process.hrtime(start);
+    sum += elapsed[0] + elapsed[1] / 1e9;
+    process.stdout.write(".");
+  }
+  console.log("");
+  return sum / k;
+}
+
+console.log(formatNumber(observeConstruction(  12000, 0.00, 40)) + "s\tn=12,000\tp=0");
+console.log(formatNumber(observeConstruction(  12000, 0.50, 40)) + "s\tn=12,000\tp=.5");
+// console.log(formatNumber(observeConstruction(  12000, 0.93, 40)) + "s\tn=12,000\tp=.93");
+console.log(formatNumber(observeConstruction(  12000, 1.00, 40)) + "s\tn=12,000\tp=1");
+console.log(formatNumber(observeConstruction(  60000, 0.00, 20)) + "s\tn=60,000\tp=0");
+console.log(formatNumber(observeConstruction(  60000, 0.50, 20)) + "s\tn=60,000\tp=.5");
+// console.log(formatNumber(observeConstruction(  60000, 0.93, 20)) + "s\tn=60,000\tp=.93");
+console.log(formatNumber(observeConstruction(  60000, 1.00, 20)) + "s\tn=60,000\tp=1");
+console.log(formatNumber(observeConstruction( 300000, 0.00, 10)) + "s\tn=300,000\tp=0");
+console.log(formatNumber(observeConstruction( 300000, 0.50, 10)) + "s\tn=300,000\tp=.5");
+// console.log(formatNumber(observeConstruction( 300000, 0.93, 10)) + "s\tn=300,000\tp=.93");
+console.log(formatNumber(observeConstruction( 300000, 1.00, 10)) + "s\tn=300,000\tp=1");
+console.log(formatNumber(observeConstruction(1500000, 0.00, 4)) + "s\tn=1,500,000\tp=0");
+console.log(formatNumber(observeConstruction(1500000, 0.50, 4)) + "s\tn=1,500,000\tp=.5");
+// console.log(formatNumber(observeConstruction(1500000, 0.93, 4)) + "s\tn=1,500,000\tp=.93");
+console.log(formatNumber(observeConstruction(1500000, 1.00, 4)) + "s\tn=1,500,000\tp=1");
