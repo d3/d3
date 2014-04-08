@@ -386,6 +386,10 @@ suite.addBatch({
       "renders a small circle of 120°": function(p) {
         p(_.geo.circle().angle(120)());
         assert.deepEqual(testContext.buffer().filter(function(d) { return d.type === "moveTo"; }), [{type: "moveTo", x: 87, y: 700}]);
+      },
+      "degenerate polygon": function(p) {
+        p({type: "Polygon", coordinates: [[[0, 0], [0, 0], [0, 0], [0, 0]]]});
+        assert.deepEqual(testContext.buffer(), []);
       }
     },
 
