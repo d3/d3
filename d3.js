@@ -5403,7 +5403,7 @@
     }
     voronoi.topology = function(data) {
       var geometries = new Array(data.length), x0 = clipExtent[0][0], y0 = clipExtent[0][1], x1 = clipExtent[1][0], y1 = clipExtent[1][1], arcs = [], arcIndex = -1, arcIndexByEdge = {};
-      d3_geom_voronoi(sites(data), clipExtent).cells.map(function(cell, i) {
+      d3_geom_voronoi(sites(data), clipExtent).cells.forEach(function(cell, i) {
         var edges = cell.edges, site = cell.site, arcIndexes = [], clipArc;
         if (edges.length) {
           edges.forEach(function(half) {

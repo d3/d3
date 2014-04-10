@@ -52,7 +52,7 @@ d3.geom.voronoi = function(points) {
         arcIndex = -1,
         arcIndexByEdge = {};
 
-    d3_geom_voronoi(sites(data), clipExtent).cells.map(function(cell, i) {
+    d3_geom_voronoi(sites(data), clipExtent).cells.forEach(function(cell, i) {
       var edges = cell.edges,
           site = cell.site,
           arcIndexes = [],
