@@ -292,7 +292,7 @@ function d3_time_parseYear(date, string, i) {
 
 function d3_time_parseZone(date, string, i) {
   return /^[+-]\d{4}$/.test(string = string.substring(i, i + 5))
-      ? (date.Z = +string, i + 5)
+      ? (date.Z = -string, i + 5) // sign differs from getTimezoneOffset!
       : -1;
 }
 
