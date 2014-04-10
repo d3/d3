@@ -39,29 +39,29 @@ d3.behavior.zoom = function() {
       var dispatch = event.of(this, arguments),
           view1 = view;
       if (d3_transitionInheritId) {
-          d3.select(this).transition()
-              .each("start.zoom", function() {
-                view = this.__chart__ || {x: 0, y: 0, k: 1}; // pre-transition state
-                zoomstarted(dispatch);
-              })
-              .tween("zoom:zoom", function() {
-                var dx = size[0],
-                    dy = size[1],
-                    cx = dx / 2,
-                    cy = dy / 2,
-                    i = d3.interpolateZoom(
-                      [(cx - view.x) / view.k, (cy - view.y) / view.k, dx / view.k],
-                      [(cx - view1.x) / view1.k, (cy - view1.y) / view1.k, dx / view1.k]
-                    );
-                return function(t) {
-                  var l = i(t), k = dx / l[2];
-                  this.__chart__ = view = {x: cx - l[0] * k, y: cy - l[1] * k, k: k};
-                  zoomed(dispatch);
-                };
-              })
-              .each("end.zoom", function() {
-                zoomended(dispatch);
-              });
+        d3.select(this).transition()
+            .each("start.zoom", function() {
+              view = this.__chart__ || {x: 0, y: 0, k: 1}; // pre-transition state
+              zoomstarted(dispatch);
+            })
+            .tween("zoom:zoom", function() {
+              var dx = size[0],
+                  dy = size[1],
+                  cx = dx / 2,
+                  cy = dy / 2,
+                  i = d3.interpolateZoom(
+                    [(cx - view.x) / view.k, (cy - view.y) / view.k, dx / view.k],
+                    [(cx - view1.x) / view1.k, (cy - view1.y) / view1.k, dx / view1.k]
+                  );
+              return function(t) {
+                var l = i(t), k = dx / l[2];
+                this.__chart__ = view = {x: cx - l[0] * k, y: cy - l[1] * k, k: k};
+                zoomed(dispatch);
+              };
+            })
+            .each("end.zoom", function() {
+              zoomended(dispatch);
+            });
       } else {
         this.__chart__ = view;
         zoomstarted(dispatch);
