@@ -18,10 +18,6 @@ suite.addBatch({
       assert.equal(mean([1, 2, 3, 4, 5, NaN]), 3);
       assert.equal(mean([10, null, 3, undefined, 5, NaN]), 6);
     },
-    "can handle large numbers without overflowing": function(mean) {
-      assert.equal(mean([Number.MAX_VALUE, Number.MAX_VALUE]), Number.MAX_VALUE);
-      assert.equal(mean([-Number.MAX_VALUE, -Number.MAX_VALUE]), -Number.MAX_VALUE);
-    },
     "returns undefined for empty array": function(mean) {
       assert.isUndefined(mean([]));
       assert.isUndefined(mean([null]));
