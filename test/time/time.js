@@ -1,14 +1,14 @@
 var offset = 0;
 
 exports.local = function(year, month, day, hours, minutes, seconds, milliseconds) {
-  var date = new Date();
+  var date = new Date;
   date.setFullYear(year, month, day);
   date.setHours(hours || 0, offset + (minutes || 0), seconds || 0, milliseconds || 0);
   return date;
 };
 
 exports.utc = function(year, month, day, hours, minutes, seconds, milliseconds) {
-  var date = new Date();
+  var date = new Date;
   date.setUTCFullYear(year, month, day);
   date.setUTCHours(hours || 0, minutes || 0, seconds || 0, milliseconds || 0);
   return date;
