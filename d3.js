@@ -7703,9 +7703,7 @@
     }
     scale.domain = function(x) {
       if (!arguments.length) return domain;
-      domain = x.filter(function(d) {
-        return !isNaN(d);
-      }).sort(d3_ascending);
+      domain = x.filter(d3_number).sort(d3_ascending);
       return rescale();
     };
     scale.range = function(x) {
