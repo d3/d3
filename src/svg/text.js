@@ -138,8 +138,8 @@ d3.svg.textWrap = function() {
     } else {
       arg_int = parseInt(arguments[0], 10);
       if (typeof arg_int == 'number') {
-        bounds.x += arg_int;
-        bounds.y += arg_int;
+        bounds.x = parseInt(bounds.x) + arg_int;
+        bounds.y = parseInt(bounds.y) + arg_int;
         bounds.width -= (arg_int * 2);
         bounds.height -= (arg_int * 2);
         bounds.padding = arg_int;
