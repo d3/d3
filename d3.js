@@ -91,13 +91,13 @@
     return x != null && !isNaN(x);
   }
   d3.mean = function(array, f) {
-    var n = array.length, a, m = 0, i = -1, j = 0;
+    var s = 0, n = array.length, a, i = -1, j = n;
     if (arguments.length === 1) {
-      while (++i < n) if (d3_number(a = array[i])) m += (a - m) / ++j;
+      while (++i < n) if (d3_number(a = array[i])) s += a; else --j;
     } else {
-      while (++i < n) if (d3_number(a = f.call(array, array[i], i))) m += (a - m) / ++j;
+      while (++i < n) if (d3_number(a = f.call(array, array[i], i))) s += a; else --j;
     }
-    return j ? m : undefined;
+    return j ? s / j : undefined;
   };
   d3.quantile = function(values, p) {
     var H = (values.length - 1) * p + 1, h = Math.floor(H), v = +values[h - 1], e = H - h;
