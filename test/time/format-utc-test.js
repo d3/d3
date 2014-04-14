@@ -215,8 +215,9 @@ suite.addBatch({
       "parses timezone offset": function(format) {
         var p = format("%m/%d/%Y %Z").parse;
         assert.deepEqual(p("01/02/1990 +0000"), utc(1990, 0, 2));
-        assert.deepEqual(p("01/02/1990 +0100"), utc(1990, 0, 2, 1));
-        assert.deepEqual(p("01/02/1990 -0100"), utc(1990, 0, 1, 23));
+        assert.deepEqual(p("01/02/1990 +0100"), utc(1990, 0, 1, 23));
+        assert.deepEqual(p("01/02/1990 -0100"), utc(1990, 0, 2, 1));
+        assert.deepEqual(p("01/02/1990 -0800"), time.local(1990, 0, 2));
       }
     }
   }
