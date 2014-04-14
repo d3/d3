@@ -30,7 +30,7 @@ suite.addBatch({
       assert.deepEqual(x.domain(), [3, 6, 7, 8, 8, 10, 13, 15, 16, 20]);
     },
     "non-numeric domain values are ignored": function(quantile) {
-      var x = quantile().domain([6, 3, NaN, undefined, 7, 8, 8, 13, 20, 15, 16, 10, NaN]);
+      var x = quantile().domain([6, 3, NaN, undefined, 7, 8, 8, 13, null, 20, 15, 16, 10, NaN]);
       assert.deepEqual(x.domain(), [3, 6, 7, 8, 8, 10, 13, 15, 16, 20]);
     },
     "quantiles returns the inner thresholds": function(quantile) {
