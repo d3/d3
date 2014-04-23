@@ -114,6 +114,25 @@ suite.addBatch({
           assert.isTrue(body.on(".foo", function() {}) === body);
           assert.isUndefined(body.on(".foo"));
         }
+      },
+      "wildcard": {
+        "returns undefined on retrieval": function(body) {
+          assert.isUndefined(body.on("*"));
+        },
+        "null removes all event listeners": function(body) {
+          body.on("mouseover.foo", f)
+              .on("click.foo", f)
+              .on("click.foobar", f)
+              .on("*", null);
+          function f() {}
+          assert.isUndefined(body.on("mouseover.foo"));
+          assert.isUndefined(body.on("click.foo"));
+          assert.isUndefined(body.on("click.foobar"));
+        },
+        "no-op when setting a listener": function(body) {
+          assert.isTrue(body.on("*", function() {}) === body);
+          assert.isUndefined(body.on("*"));
+        }
       }
     },
     "sets the current event as d3.event": function(d3) {
