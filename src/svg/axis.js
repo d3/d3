@@ -65,7 +65,7 @@ d3.svg.axis = function() {
           lineUpdate.attr("x2", 0).attr("y2", -innerTickSize);
           textUpdate.attr("x", 0).attr("y", -(Math.max(innerTickSize, 0) + tickPadding));
           text.attr("dy", "0em").style("text-anchor", "middle");
-          pathUpdate.attr("d", "M" + range[0] + "," + -outerTickSize + "V0H" + range[1] + "V" + -outerTickSize);
+          pathUpdate.attr("d", "M" + range[0] + "," + (-outerTickSize) + "V0H" + range[1] + "V" + (-outerTickSize));
           break;
         }
         case "left": {
@@ -75,7 +75,7 @@ d3.svg.axis = function() {
           lineUpdate.attr("x2", -innerTickSize).attr("y2", 0);
           textUpdate.attr("x", -(Math.max(innerTickSize, 0) + tickPadding)).attr("y", 0);
           text.attr("dy", ".32em").style("text-anchor", "end");
-          pathUpdate.attr("d", "M" + -outerTickSize + "," + range[0] + "H0V" + range[1] + "H" + -outerTickSize);
+          pathUpdate.attr("d", "M" + (-outerTickSize) + "," + range[0] + "H0V" + range[1] + "H" + (-outerTickSize));
           break;
         }
         case "right": {

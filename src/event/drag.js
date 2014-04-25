@@ -6,7 +6,7 @@ var d3_event_dragSelect = "onselectstart" in d3_document ? null : d3_vendorSymbo
     d3_event_dragId = 0;
 
 function d3_event_dragSuppress() {
-  var name = ".dragsuppress-" + ++d3_event_dragId,
+  var name = ".dragsuppress-" + (++d3_event_dragId),
       click = "click" + name,
       w = d3.select(d3_window)
           .on("touchmove" + name, d3_eventPreventDefault)
