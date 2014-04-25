@@ -50,51 +50,51 @@ var d3_svg_symbols = d3.map({
   "circle": d3_svg_symbolCircle,
   "cross": function(size) {
     var r = Math.sqrt(size / 5) / 2;
-    return "M" + -3 * r + "," + -r
-        + "H" + -r
-        + "V" + -3 * r
+    return "M" + (-3) * r + "," + (-r)
+        + "H" + (-r)
+        + "V" + (-3) * r
         + "H" + r
-        + "V" + -r
+        + "V" + (-r)
         + "H" + 3 * r
         + "V" + r
         + "H" + r
         + "V" + 3 * r
-        + "H" + -r
+        + "H" + (-r)
         + "V" + r
-        + "H" + -3 * r
+        + "H" + (-3) * r
         + "Z";
   },
   "diamond": function(size) {
     var ry = Math.sqrt(size / (2 * d3_svg_symbolTan30)),
         rx = ry * d3_svg_symbolTan30;
-    return "M0," + -ry
+    return "M0," + (-ry)
         + "L" + rx + ",0"
         + " 0," + ry
-        + " " + -rx + ",0"
+        + " " + (-rx) + ",0"
         + "Z";
   },
   "square": function(size) {
     var r = Math.sqrt(size) / 2;
-    return "M" + -r + "," + -r
-        + "L" + r + "," + -r
+    return "M" + (-r) + "," + (-r)
+        + "L" + r + "," + (-r)
         + " " + r + "," + r
-        + " " + -r + "," + r
+        + " " + (-r) + "," + r
         + "Z";
   },
   "triangle-down": function(size) {
     var rx = Math.sqrt(size / d3_svg_symbolSqrt3),
         ry = rx * d3_svg_symbolSqrt3 / 2;
     return "M0," + ry
-        + "L" + rx +"," + -ry
-        + " " + -rx + "," + -ry
+        + "L" + rx +"," + (-ry)
+        + " " + (-rx) + "," + (-ry)
         + "Z";
   },
   "triangle-up": function(size) {
     var rx = Math.sqrt(size / d3_svg_symbolSqrt3),
         ry = rx * d3_svg_symbolSqrt3 / 2;
-    return "M0," + -ry
+    return "M0," + (-ry)
         + "L" + rx +"," + ry
-        + " " + -rx + "," + ry
+        + " " + (-rx) + "," + ry
         + "Z";
   }
 });
