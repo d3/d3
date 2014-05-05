@@ -14,22 +14,19 @@ d3.geom.voronoi = function(points) {
   if (points) return voronoi(points);
 
   function voronoi(data) {
-    var polygons = new Array(data.length),
-        x0 = clipExtent[0][0],
+    var x0 = clipExtent[0][0],
         y0 = clipExtent[0][1],
         x1 = clipExtent[1][0],
         y1 = clipExtent[1][1];
-
-    d3_geom_voronoi(sites(data), clipExtent).cells.forEach(function(cell, i) {
+    return d3_geom_voronoi(sites(data), clipExtent).cells.map(function(cell, i) {
       var edges = cell.edges,
           site = cell.site,
-          polygon = polygons[i] = edges.length ? edges.map(function(e) { var s = e.start(); return [s.x, s.y]; })
+          polygon = edges.length ? edges.map(function(e) { var s = e.start(); return [s.x, s.y]; })
               : site.x >= x0 && site.x <= x1 && site.y >= y0 && site.y <= y1 ? [[x0, y1], [x1, y1], [x1, y0], [x0, y0]]
               : [];
       polygon.point = data[i];
+      return polygon;
     });
-
-    return polygons;
   }
 
   function sites(data) {
@@ -43,7 +40,7 @@ d3.geom.voronoi = function(points) {
   }
 
   voronoi.topology = function(data) {
-    var geometries = new Array(data.length),
+    var cells = d3_geom_voronoi(sites(data), clipExtent).cells,
         x0 = clipExtent[0][0],
         y0 = clipExtent[0][1],
         x1 = clipExtent[1][0],
@@ -51,54 +48,54 @@ d3.geom.voronoi = function(points) {
         arcs = [],
         arcIndex = -1,
         arcIndexByEdge = {};
-
-    d3_geom_voronoi(sites(data), clipExtent).cells.forEach(function(cell, i) {
-      var edges = cell.edges,
-          site = cell.site,
-          arcIndexes = [],
-          clipArc;
-
-      if (edges.length) {
-        edges.forEach(function(half) {
-          var edge = half.edge;
-          if (edge.r) {
-            var l = edge.l.i,
-                r = edge.r.i,
-                k = l + "," + r,
-                i = arcIndexByEdge[k];
-            if (i == null) arcs[i = arcIndexByEdge[k] = ++arcIndex] = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
-            arcIndexes.push(half.site === edge.l ? i : ~i);
-            clipArc = null;
-          } else if (clipArc) { // consolidate clip edges
-            clipArc.push([edge.b.x, edge.b.y]);
-          } else {
-            arcs[++arcIndex] = clipArc = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
-            arcIndexes.push(arcIndex);
-          }
-        });
-
-        // Ensure the last point in the polygon is identical to the first point.
-        var firstArcIndex = arcIndexes[0],
-            lastArcIndex = arcIndexes[arcIndexes.length - 1],
-            firstArc = arcs[firstArcIndex < 0 ? ~firstArcIndex : firstArcIndex],
-            lastArc = arcs[lastArcIndex < 0 ? ~lastArcIndex : lastArcIndex];
-        lastArc[lastArcIndex < 0 ? 0 : lastArc.length - 1] = firstArc[firstArcIndex < 0 ? firstArc.length - 1 : 0].slice();
-      } else if (site.x >= x0 && site.x <= x1 && site.y >= y0 && site.y <= y1) {
-        arcs[++arcIndex] = [[x0, y1], [x1, y1], [x1, y0], [x0, y0], [x0, y1]];
-        arcIndexes.push(arcIndex);
-      }
-
-      geometries[i] = {
-        type: "Polygon",
-        arcs: [arcIndexes]
-      };
-    });
-
     return {
       objects: {
         voronoi: {
           type: "GeometryCollection",
-          geometries: geometries
+          geometries: data.map(function(d, i) {
+            if (!(cell = cells[i])) return {type: null, point: d};
+            var cell,
+                edges = cell.edges,
+                site = cell.site,
+                arcIndexes = [],
+                clipArc;
+
+            if (edges.length) {
+              edges.forEach(function(half) {
+                var edge = half.edge;
+                if (edge.r) {
+                  var l = edge.l.i,
+                      r = edge.r.i,
+                      k = l + "," + r,
+                      i = arcIndexByEdge[k];
+                  if (i == null) arcs[i = arcIndexByEdge[k] = ++arcIndex] = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
+                  arcIndexes.push(half.site === edge.l ? i : ~i);
+                  clipArc = null;
+                } else if (clipArc) { // consolidate clip edges
+                  clipArc.push([edge.b.x, edge.b.y]);
+                } else {
+                  arcs[++arcIndex] = clipArc = [[edge.a.x, edge.a.y], [edge.b.x, edge.b.y]];
+                  arcIndexes.push(arcIndex);
+                }
+              });
+
+              // Ensure the last point in the polygon is identical to the first point.
+              var firstArcIndex = arcIndexes[0],
+                  lastArcIndex = arcIndexes[arcIndexes.length - 1],
+                  firstArc = arcs[firstArcIndex < 0 ? ~firstArcIndex : firstArcIndex],
+                  lastArc = arcs[lastArcIndex < 0 ? ~lastArcIndex : lastArcIndex];
+              lastArc[lastArcIndex < 0 ? 0 : lastArc.length - 1] = firstArc[firstArcIndex < 0 ? firstArc.length - 1 : 0].slice();
+            } else if (site.x >= x0 && site.x <= x1 && site.y >= y0 && site.y <= y1) {
+              arcs[++arcIndex] = [[x0, y1], [x1, y1], [x1, y0], [x0, y0], [x0, y1]];
+              arcIndexes.push(arcIndex);
+            }
+
+            return {
+              type: "Polygon",
+              point: data[i],
+              arcs: [arcIndexes]
+            };
+          })
         }
       },
       arcs: arcs
