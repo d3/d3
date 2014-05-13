@@ -42,7 +42,7 @@ d3.layout.tree = function() {
             continue;
           }
 
-          node._visitedChildren = false; // For second walk.
+          node._visitedChildren = false; // Reset for next walk.
           while (++i < n) {
             child = children[i];
             ancestor = apportion(child, previousChild, ancestor);
@@ -229,23 +229,29 @@ function d3_layout_treeDeepest(a, b) {
   return a.depth - b.depth;
 }
 
-function d3_layout_treeVisitAfter(node, callback) {
-  function visit(node, previousSibling) {
+function d3_layout_treeVisitAfter(root, callback) {
+  var stack = [root],
+      node;
+  while (stack.length) {
+    node = stack.pop();
     var children = node.children;
-    if (children && (n = children.length)) {
+    if (children &&  !node._visitedChildren && (n = children.length)) {
       var child,
-          previousChild = null,
-          i = -1,
-          n;
-      while (++i < n) {
-        child = children[i];
-        visit(child, previousChild);
-        previousChild = child;
+          previousChild,
+          n,
+          i = n;
+      node._visitedChildren = true;
+      stack.push(node);
+      while (i) {
+        child = children[--i]
+        child._previousSibling = i - 1 >= 0 ? children[i - 1] : null;
+        stack.push(child);
       }
+    } else {
+      node._visitedChildren = false; // Reset for next walk.
+      callback(node, node._previousSibling);
     }
-    callback(node, previousSibling);
   }
-  visit(node, null);
 }
 
 function d3_layout_treeShift(node) {
