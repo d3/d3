@@ -75,9 +75,9 @@ d3.layout.tree = function() {
             child,
             x = node._x + node._tree.mod;
         if (children && (n = children.length)) {
-          var i = n;
-          while (i) {
-            child = children[--i];
+          var n;
+          while (n) {
+            child = children[--n];
             child._x = x;
             stack.push(child);
           }
@@ -237,7 +237,6 @@ function d3_layout_treeVisitAfter(root, callback) {
     var children = node.children;
     if (children &&  !node._visitedChildren && (n = children.length)) {
       var child,
-          previousChild,
           n,
           i = n;
       node._visitedChildren = true;
