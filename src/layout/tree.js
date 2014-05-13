@@ -64,15 +64,23 @@ d3.layout.tree = function() {
       }
     }
 
-    function secondWalk(node, x) {
-      node.x = node._tree.prelim + x;
-      var children = node.children;
-      if (children && (n = children.length)) {
-        var i = -1,
-            n;
-        x += node._tree.mod;
-        while (++i < n) {
-          secondWalk(children[i], x);
+    function secondWalk(root, x) {
+      root._x = x;
+      var stack = [root],
+          node;
+      while (stack.length) {
+        node = stack.pop();
+        node.x = node._tree.prelim + node._x;
+        var children = node.children,
+            child,
+            x = node._x + node._tree.mod;
+        if (children && (n = children.length)) {
+          var i = n;
+          while (i) {
+            child = children[--i];
+            child._x = x;
+            stack.push(child);
+          }
         }
       }
     }
