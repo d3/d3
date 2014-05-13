@@ -12,34 +12,55 @@ d3.layout.tree = function() {
     var nodes = hierarchy.call(this, d, i),
         root = nodes[0];
 
-    function firstWalk(node, previousSibling) {
-      var children = node.children,
-          layout = node._tree;
-      if (children && (n = children.length)) {
-        var n,
-            firstChild = children[0],
-            previousChild,
-            ancestor = firstChild,
-            child,
-            i = -1;
-        while (++i < n) {
-          child = children[i];
-          firstWalk(child, previousChild);
-          ancestor = apportion(child, previousChild, ancestor);
-          previousChild = child;
-        }
-        d3_layout_treeShift(node);
-        var midpoint = .5 * (firstChild._tree.prelim + child._tree.prelim);
-        if (previousSibling) {
-          layout.prelim = previousSibling._tree.prelim + separation(node, previousSibling);
-          layout.mod = layout.prelim - midpoint;
+    function firstWalk(root) {
+      var stack = [root],
+          node;
+      while (stack.length) {
+        node = stack.pop();
+        var children = node.children,
+            layout = node._tree,
+            previousSibling = node._previousSibling;
+
+        if (children && (n = children.length)) {
+          var n,
+              i = -1,
+              firstChild = children[0],
+              lastChild = children[n-1],
+              previousChild,
+              ancestor = firstChild,
+              child;
+
+          if (!node._visitedChildren) {
+            i = n;
+            node._visitedChildren = true;
+            stack.push(node);
+            while (i) { 
+              child = children[--i]
+              child._previousSibling = i - 1 >= 0 ? children[i - 1] : null;
+              stack.push(child);
+            }
+            continue;
+          }
+
+          node._visitedChildren = false; // For second walk.
+          while (++i < n) {
+            child = children[i];
+            ancestor = apportion(child, previousChild, ancestor);
+            previousChild = child;
+          }
+          d3_layout_treeShift(node);
+          var midpoint = .5 * (firstChild._tree.prelim + lastChild._tree.prelim);
+          if (previousSibling) {
+            layout.prelim = previousSibling._tree.prelim + separation(node, previousSibling);
+            layout.mod = layout.prelim - midpoint;
+          } else {
+            layout.prelim = midpoint;
+          }
         } else {
-          layout.prelim = midpoint;
-        }
-      } else {
-        if (previousSibling) {
-          layout.prelim = previousSibling._tree.prelim + separation(node, previousSibling);
-        }
+          if (previousSibling) {
+            layout.prelim = previousSibling._tree.prelim + separation(node, previousSibling);
+          }
+        } 
       }
     }
 
