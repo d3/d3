@@ -82,6 +82,7 @@ function d3_layout_hierarchyRebind(object, hierarchy) {
   return object;
 }
 
+// Pre-order traversal.
 function d3_layout_hierarchyVisitBefore(node, callback) {
   var nodes = [node];
   while ((node = nodes.pop()) != null) {
@@ -93,6 +94,7 @@ function d3_layout_hierarchyVisitBefore(node, callback) {
   }
 }
 
+// Post-order traversal.
 function d3_layout_hierarchyVisitAfter(node, callback) {
   var nodes = [node], nodes2 = [];
   while ((node = nodes.pop()) != null) {

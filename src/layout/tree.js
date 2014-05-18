@@ -6,7 +6,7 @@ d3.layout.tree = function() {
   var hierarchy = d3.layout.hierarchy().sort(null).value(null),
       separation = d3_layout_treeSeparation,
       size = [1, 1], // width, height
-      nodeSize = false;
+      nodeSize = null;
 
   function tree(d, i) {
     var nodes = hierarchy.call(this, d, i),
@@ -14,16 +14,11 @@ d3.layout.tree = function() {
         root1 = wrapTree(root0);
 
     // Compute the layout using Buchheim et al.'s algorithm.
-    d3_layout_hierarchyVisitAfter(root1, firstWalk), root1.parent.mod = -root1.prelim;
+    d3_layout_hierarchyVisitAfter(root1, firstWalk), root1.parent.m = -root1.z;
     d3_layout_hierarchyVisitBefore(root1, secondWalk);
 
     // If a fixed node size is specified, scale x and y.
-    if (nodeSize) {
-      d3_layout_hierarchyVisitBefore(root1, function(node) {
-        node.node.x *= size[0];
-        node.node.y = node.node.depth * size[1];
-      });
-    }
+    if (nodeSize) d3_layout_hierarchyVisitBefore(root1, sizeNode);
 
     // If a fixed tree size is specified, scale x and y based on the extent.
     // Compute the left-most, right-most, and depth-most nodes for extents.
@@ -34,8 +29,8 @@ d3.layout.tree = function() {
           x1 = right.x + separation(right, left) / 2,
           y1 = d3_layout_treeSearch(root0, d3_layout_treeDeepest).depth || 1;
       d3_layout_hierarchyVisitBefore(root1, function(node) {
-        node.node.x = (node.node.x - x0) / (x1 - x0) * size[0];
-        node.node.y = node.node.depth / y1 * size[1];
+        node._.x = (node._.x - x0) / (x1 - x0) * size[0];
+        node._.y = node._.depth / y1 * size[1];
       });
     }
 
@@ -43,24 +38,25 @@ d3.layout.tree = function() {
   }
 
   function wrapTree(root0) {
-    var root1 = {defaultAncestor: null, children: [root0]},
+    var root1 = {A: null, children: [root0]},
         queue = [root1],
         node1;
 
     while ((node1 = queue.pop()) != null) {
       for (var children = node1.children, child, i = 0, n = children.length; i < n; ++i) {
         queue.push((children[i] = child = {
-          node: children[i],
+          _: children[i], // source node
           parent: node1,
           children: (child = children[i].children) && child.slice() || [],
-          defaultAncestor: null,
-          ancestor: null,
-          prelim: 0,
-          mod: 0,
-          change: 0,
-          shift: 0,
-          number: i
-        }).ancestor = child);
+          A: null, // default ancestor
+          a: null, // ancestor
+          z: 0, // prelim
+          m: 0, // mod
+          c: 0, // change
+          s: 0, // shift
+          t: null, // thread
+          i: i // number
+        }).a = child);
       }
     }
 
@@ -75,27 +71,27 @@ d3.layout.tree = function() {
   function firstWalk(v) {
     var children = v.children,
         siblings = v.parent.children,
-        w = v.number ? siblings[v.number - 1] : null;
+        w = v.i ? siblings[v.i - 1] : null;
     if (children.length) {
       d3_layout_treeShift(v);
-      var midpoint = (children[0].prelim + children[children.length - 1].prelim) / 2;
+      var midpoint = (children[0].z + children[children.length - 1].z) / 2;
       if (w) {
-        v.prelim = w.prelim + separation(v.node, w.node);
-        v.mod = v.prelim - midpoint;
+        v.z = w.z + separation(v._, w._);
+        v.m = v.z - midpoint;
       } else {
-        v.prelim = midpoint;
+        v.z = midpoint;
       }
     } else if (w) {
-      v.prelim = w.prelim + separation(v.node, w.node);
+      v.z = w.z + separation(v._, w._);
     }
-    v.parent.defaultAncestor = apportion(v, w, v.parent.defaultAncestor || siblings[0]);
+    v.parent.A = apportion(v, w, v.parent.A || siblings[0]);
   }
 
   // SECOND WALK
   // Computes all real x-coordinates by summing up the modifiers recursively.
   function secondWalk(v) {
-    v.node.x = v.prelim + v.parent.mod;
-    v.mod += v.parent.mod;
+    v._.x = v.z + v.parent.m;
+    v.m += v.parent.m;
   }
 
   // APPORTION
@@ -116,37 +112,42 @@ d3.layout.tree = function() {
           vop = v,
           vim = w,
           vom = vip.parent.children[0],
-          sip = vip.mod,
-          sop = vop.mod,
-          sim = vim.mod,
-          som = vom.mod,
+          sip = vip.m,
+          sop = vop.m,
+          sim = vim.m,
+          som = vom.m,
           shift;
       while (vim = d3_layout_treeRight(vim), vip = d3_layout_treeLeft(vip), vim && vip) {
         vom = d3_layout_treeLeft(vom);
         vop = d3_layout_treeRight(vop);
-        vop.ancestor = v;
-        shift = vim.prelim + sim - vip.prelim - sip + separation(vim.node, vip.node);
+        vop.a = v;
+        shift = vim.z + sim - vip.z - sip + separation(vim._, vip._);
         if (shift > 0) {
           d3_layout_treeMove(d3_layout_treeAncestor(vim, v, ancestor), v, shift);
           sip += shift;
           sop += shift;
         }
-        sim += vim.mod;
-        sip += vip.mod;
-        som += vom.mod;
-        sop += vop.mod;
+        sim += vim.m;
+        sip += vip.m;
+        som += vom.m;
+        sop += vop.m;
       }
       if (vim && !d3_layout_treeRight(vop)) {
-        vop.thread = vim;
-        vop.mod += sim - sop;
+        vop.t = vim;
+        vop.m += sim - sop;
       }
       if (vip && !d3_layout_treeLeft(vom)) {
-        vom.thread = vip;
-        vom.mod += sip - som;
+        vom.t = vip;
+        vom.m += sip - som;
         ancestor = v;
       }
     }
     return ancestor;
+  }
+
+  function sizeNode(node) {
+    node._.x *= size[0];
+    node._.y = node._.depth * size[1];
   }
 
   tree.separation = function(x) {
@@ -157,13 +158,13 @@ d3.layout.tree = function() {
 
   tree.size = function(x) {
     if (!arguments.length) return nodeSize ? null : size;
-    nodeSize = (size = x) == null;
+    nodeSize = (size = x) == null ? sizeNode : null;
     return tree;
   };
 
   tree.nodeSize = function(x) {
     if (!arguments.length) return nodeSize ? size : null;
-    nodeSize = (size = x) != null;
+    nodeSize = (size = x) == null ? null : sizeNode;
     return tree;
   };
 
@@ -212,26 +213,26 @@ function d3_layout_treeDeepest(a, b) {
 // returns null if and only if v is on the highest level of its subtree.
 function d3_layout_treeLeft(v) {
   var children = v.children;
-  return children.length ? children[0] : v.thread;
+  return children.length ? children[0] : v.t;
 }
 
 // NEXT RIGHT
 // This function works analogously to NEXT LEFT.
 function d3_layout_treeRight(v) {
   var children = v.children, n;
-  return (n = children.length) ? children[n - 1] : v.thread;
+  return (n = children.length) ? children[n - 1] : v.t;
 }
 
 // MOVE SUBTREE
 // Shifts the current subtree rooted at w+. This is done by increasing
 // prelim(w+) and mod(w+) by shift.
 function d3_layout_treeMove(wm, wp, shift) {
-  var change = shift / (wp.number - wm.number);
-  wp.change -= change;
-  wp.shift += shift;
-  wm.change += change;
-  wp.prelim += shift;
-  wp.mod += shift;
+  var change = shift / (wp.i - wm.i);
+  wp.c -= change;
+  wp.s += shift;
+  wm.c += change;
+  wp.z += shift;
+  wp.m += shift;
 }
 
 // EXECUTE SHIFTS
@@ -246,9 +247,9 @@ function d3_layout_treeShift(v) {
       w;
   while (--i >= 0) {
     w = children[i];
-    w.prelim += shift;
-    w.mod += shift;
-    shift += w.shift + (change += w.change);
+    w.z += shift;
+    w.m += shift;
+    shift += w.s + (change += w.c);
   }
 }
 
@@ -256,5 +257,5 @@ function d3_layout_treeShift(v) {
 // If vi-’s ancestor is a sibling of v, returns vi-’s ancestor. Otherwise,
 // returns the specified (default) ancestor.
 function d3_layout_treeAncestor(vim, v, ancestor) {
-  return vim.ancestor.parent === v.parent ? vim.ancestor : ancestor;
+  return vim.a.parent === v.parent ? vim.a : ancestor;
 }
