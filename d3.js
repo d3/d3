@@ -6715,104 +6715,91 @@
     var hierarchy = d3.layout.hierarchy().sort(null).value(null), separation = d3_layout_treeSeparation, size = [ 1, 1 ], nodeSize = false;
     function tree(d, i) {
       var nodes = hierarchy.call(this, d, i), root0 = nodes[0], root1 = wrapTree(root0);
-      firstWalk(root1);
-      secondWalk(root1, -root1.z);
+      d3_layout_treeVisitAfter(root1, firstWalk), root1.parent.mod = -root1.prelim;
+      d3_layout_treeVisitBefore(root1, secondWalk);
       if (nodeSize) {
-        d3_layout_treeVisitAfter(root0, function(node) {
-          node.x *= size[0];
-          node.y = node.depth * size[1];
+        d3_layout_treeVisitBefore(root1, function(node) {
+          node.node.x *= size[0];
+          node.node.y = node.node.depth * size[1];
         });
       } else {
         var left = d3_layout_treeSearch(root0, d3_layout_treeLeftmost), right = d3_layout_treeSearch(root0, d3_layout_treeRightmost), x0 = left.x - separation(left, right) / 2, x1 = right.x + separation(right, left) / 2, y1 = d3_layout_treeSearch(root0, d3_layout_treeDeepest).depth || 1;
-        d3_layout_treeVisitAfter(root0, function(node) {
-          node.x = (node.x - x0) / (x1 - x0) * size[0];
-          node.y = node.depth / y1 * size[1];
+        d3_layout_treeVisitBefore(root1, function(node) {
+          node.node.x = (node.node.x - x0) / (x1 - x0) * size[0];
+          node.node.y = node.node.depth / y1 * size[1];
         });
       }
       return nodes;
     }
     function wrapTree(root0) {
       var root1 = {
-        c: [ root0 ]
+        defaultAncestor: null,
+        children: [ root0 ]
       }, queue = [ root1 ], node1;
       while ((node1 = queue.pop()) != null) {
-        for (var children = node1.c, child, i = 0, n = children.length; i < n; ++i) {
+        for (var children = node1.children, child, i = 0, n = children.length; i < n; ++i) {
           queue.push((children[i] = child = {
-            _: children[i],
-            p: node1,
-            c: (child = children[i].children) && child.slice() || [],
-            a: null,
-            z: 0,
-            m: 0,
-            d: 0,
-            s: 0,
-            i: i
-          }).a = child);
+            node: children[i],
+            parent: node1,
+            children: (child = children[i].children) && child.slice() || [],
+            defaultAncestor: null,
+            ancestor: null,
+            prelim: 0,
+            mod: 0,
+            change: 0,
+            shift: 0,
+            number: i
+          }).ancestor = child);
         }
       }
-      root1 = root1.c[0];
-      root1.p = null;
-      return root1;
+      return root1.children[0];
     }
-    function firstWalk(node, previousSibling) {
-      var children = node.c;
-      if (n = children.length) {
-        var n, firstChild = children[0], previousChild, ancestor = firstChild, child, i = -1;
-        while (++i < n) {
-          child = children[i];
-          firstWalk(child, previousChild);
-          ancestor = apportion(child, previousChild, ancestor);
-          previousChild = child;
-        }
-        d3_layout_treeShift(node);
-        var midpoint = .5 * (firstChild.z + child.z);
-        if (previousSibling) {
-          node.z = previousSibling.z + separation(node._, previousSibling._);
-          node.m = node.z - midpoint;
+    function firstWalk(v) {
+      var children = v.children, siblings = v.parent.children, w = v.number ? siblings[v.number - 1] : null;
+      if (children.length) {
+        d3_layout_treeShift(v);
+        var midpoint = (children[0].prelim + children[children.length - 1].prelim) / 2;
+        if (w) {
+          v.prelim = w.prelim + separation(v.node, w.node);
+          v.mod = v.prelim - midpoint;
         } else {
-          node.z = midpoint;
+          v.prelim = midpoint;
         }
-      } else if (previousSibling) {
-        node.z = previousSibling.z + separation(node._, previousSibling._);
+      } else if (w) {
+        v.prelim = w.prelim + separation(v.node, w.node);
       }
+      v.parent.defaultAncestor = apportion(v, w, v.parent.defaultAncestor || siblings[0]);
     }
-    function secondWalk(node, x) {
-      node._.x = node.z + x;
-      var children = node.c;
-      if (n = children.length) {
-        var i = -1, n;
-        x += node.m;
-        while (++i < n) {
-          secondWalk(children[i], x);
-        }
-      }
+    function secondWalk(v) {
+      v.node.x = v.prelim + v.parent.mod;
+      v.mod += v.parent.mod;
     }
-    function apportion(node, previousSibling, ancestor) {
-      if (previousSibling) {
-        var vip = node, vop = node, vim = previousSibling, vom = node.p.c[0], sip = vip.m, sop = vop.m, sim = vim.m, som = vom.m, shift;
+    function apportion(v, w, ancestor) {
+      if (w) {
+        var vip = v, vop = v, vim = w, vom = vip.parent.children[0], sip = vip.mod, sop = vop.mod, sim = vim.mod, som = vom.mod, shift;
         while (vim = d3_layout_treeRight(vim), vip = d3_layout_treeLeft(vip), vim && vip) {
           vom = d3_layout_treeLeft(vom);
           vop = d3_layout_treeRight(vop);
-          vop.a = node;
-          shift = vim.z + sim - vip.z - sip + separation(vim._, vip._);
+          vop.ancestor = v;
+          shift = vim.prelim + sim - vip.prelim - sip + separation(vim.node, vip.node);
           if (shift > 0) {
-            d3_layout_treeMove(d3_layout_treeAncestor(vim, node, ancestor), node, shift);
+            d3_layout_treeMove(d3_layout_treeAncestor(vim, v, ancestor), v, shift);
             sip += shift;
             sop += shift;
           }
-          sim += vim.m;
-          sip += vip.m;
-          som += vom.m;
-          sop += vop.m;
+          sim += vim.mod;
+          sip += vip.mod;
+          som += vom.mod;
+          sop += vop.mod;
         }
         if (vim && !d3_layout_treeRight(vop)) {
-          vop.t = vim;
-          vop.m += sim - sop;
+          vop.thread = vim;
+          vop.mod += sim - sop;
         }
         if (vip && !d3_layout_treeLeft(vom)) {
-          vom.t = vip;
-          vom.m += sip - som;
-          ancestor = node;
+          vom.thread = vip;
+          vom.mod += sip - som;
+          ancestor = v;
         }
       }
       return ancestor;
@@ -6837,14 +6824,6 @@
   function d3_layout_treeSeparation(a, b) {
     return a.parent == b.parent ? 1 : 2;
   }
-  function d3_layout_treeLeft(node) {
-    var children = node.c;
-    return children.length ? children[0] : node.t;
-  }
-  function d3_layout_treeRight(node) {
-    var children = node.c, n;
-    return (n = children.length) ? children[n - 1] : node.t;
-  }
   function d3_layout_treeSearch(node, compare) {
     var children = node.children;
     if (children && (n = children.length)) {
@@ -6866,35 +6845,50 @@
   function d3_layout_treeDeepest(a, b) {
     return a.depth - b.depth;
   }
-  function d3_layout_treeVisitAfter(node, callback) {
-    (function visit(node) {
-      var children = node.children;
-      if (children && (n = children.length)) {
-        var i = -1, n;
-        while (++i < n) visit(children[i]);
-      }
+  function d3_layout_treeVisitBefore(node, callback) {
+    var nodes = [ node ];
+    while ((node = nodes.pop()) != null) {
       callback(node);
-    })(node);
-  }
-  function d3_layout_treeShift(node) {
-    var shift = 0, change = 0, children = node.c, i = children.length, child;
-    while (--i >= 0) {
-      child = children[i];
-      child.z += shift;
-      child.m += shift;
-      shift += child.s + (change += child.d);
+      if ((children = node.children) && (n = children.length)) {
+        var i = -1, n, children;
+        while (++i < n) nodes.push(children[i]);
+      }
     }
   }
-  function d3_layout_treeMove(ancestor, node, shift) {
-    var change = shift / (node.i - ancestor.i);
-    ancestor.d += change;
-    node.d -= change;
-    node.s += shift;
-    node.z += shift;
-    node.m += shift;
+  function d3_layout_treeVisitAfter(node, callback) {
+    var nodes = [];
+    d3_layout_treeVisitBefore(node, function(node) {
+      nodes.push(node);
+    });
+    while ((node = nodes.pop()) != null) callback(node);
   }
-  function d3_layout_treeAncestor(vim, node, ancestor) {
-    return vim.a.p === node.p ? vim.a : ancestor;
+  function d3_layout_treeLeft(v) {
+    var children = v.children;
+    return children.length ? children[0] : v.thread;
+  }
+  function d3_layout_treeRight(v) {
+    var children = v.children, n;
+    return (n = children.length) ? children[n - 1] : v.thread;
+  }
+  function d3_layout_treeMove(wm, wp, shift) {
+    var change = shift / (wp.number - wm.number);
+    wp.change -= change;
+    wp.shift += shift;
+    wm.change += change;
+    wp.prelim += shift;
+    wp.mod += shift;
+  }
+  function d3_layout_treeShift(v) {
+    var shift = 0, change = 0, children = v.children, i = children.length, w;
+    while (--i >= 0) {
+      w = children[i];
+      w.prelim += shift;
+      w.mod += shift;
+      shift += w.shift + (change += w.change);
+    }
+  }
+  function d3_layout_treeAncestor(vim, v, ancestor) {
+    return vim.ancestor.parent === v.parent ? vim.ancestor : ancestor;
   }
   d3.layout.pack = function() {
     var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), padding = 0, size = [ 1, 1 ], radius;
