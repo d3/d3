@@ -6887,11 +6887,17 @@
       var nodes = hierarchy.call(this, d, i), root0 = nodes[0], root1 = wrapTree(root0);
       d3_layout_hierarchyVisitAfter(root1, firstWalk), root1.parent.m = -root1.z;
       d3_layout_hierarchyVisitBefore(root1, secondWalk);
-      if (nodeSize) d3_layout_hierarchyVisitBefore(root1, sizeNode); else {
-        var left = d3_layout_treeSearch(root0, d3_layout_treeLeftmost), right = d3_layout_treeSearch(root0, d3_layout_treeRightmost), x0 = left.x - separation(left, right) / 2, x1 = right.x + separation(right, left) / 2, y1 = d3_layout_treeSearch(root0, d3_layout_treeDeepest).depth || 1;
-        d3_layout_hierarchyVisitBefore(root1, function(node) {
-          node._.x = (node._.x - x0) / (x1 - x0) * size[0];
-          node._.y = node._.depth / y1 * size[1];
+      if (nodeSize) d3_layout_hierarchyVisitBefore(root0, sizeNode); else {
+        var left = root0, right = root0, bottom = root0;
+        d3_layout_hierarchyVisitBefore(root0, function(node) {
+          if (node.x < left.x) left = node;
+          if (node.x > right.x) right = node;
+          if (node.depth > bottom.depth) bottom = node;
+        });
+        var tx = separation(left, right) / 2 - left.x, kx = size[0] / (right.x + separation(right, left) / 2 + tx), ky = size[1] / (bottom.depth || 1);
+        d3_layout_hierarchyVisitBefore(root0, function(node) {
+          node.x = (node.x + tx) * kx;
+          node.y = node.depth * ky;
         });
       }
       return nodes;
@@ -6971,8 +6977,8 @@
       return ancestor;
     }
     function sizeNode(node) {
-      node._.x *= size[0];
-      node._.y = node._.depth * size[1];
+      node.x *= size[0];
+      node.y = node.depth * size[1];
     }
     tree.separation = function(x) {
       if (!arguments.length) return separation;
@@ -6993,27 +6999,6 @@
   };
   function d3_layout_treeSeparation(a, b) {
     return a.parent == b.parent ? 1 : 2;
-  }
-  function d3_layout_treeSearch(node, compare) {
-    var children = node.children;
-    if (children && (n = children.length)) {
-      var child, n, i = -1;
-      while (++i < n) {
-        if (compare(child = d3_layout_treeSearch(children[i], compare), node) > 0) {
-          node = child;
-        }
-      }
-    }
-    return node;
-  }
-  function d3_layout_treeRightmost(a, b) {
-    return a.x - b.x;
-  }
-  function d3_layout_treeLeftmost(a, b) {
-    return b.x - a.x;
-  }
-  function d3_layout_treeDeepest(a, b) {
-    return a.depth - b.depth;
   }
   function d3_layout_treeLeft(v) {
     var children = v.children;
