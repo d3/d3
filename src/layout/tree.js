@@ -14,12 +14,12 @@ d3.layout.tree = function() {
         root1 = wrapTree(root0);
 
     // Compute the layout using Buchheim et al.'s algorithm.
-    d3_layout_treeVisitAfter(root1, firstWalk), root1.parent.mod = -root1.prelim;
-    d3_layout_treeVisitBefore(root1, secondWalk);
+    d3_layout_hierarchyVisitAfter(root1, firstWalk), root1.parent.mod = -root1.prelim;
+    d3_layout_hierarchyVisitBefore(root1, secondWalk);
 
     // If a fixed node size is specified, scale x and y.
     if (nodeSize) {
-      d3_layout_treeVisitBefore(root1, function(node) {
+      d3_layout_hierarchyVisitBefore(root1, function(node) {
         node.node.x *= size[0];
         node.node.y = node.node.depth * size[1];
       });
@@ -33,7 +33,7 @@ d3.layout.tree = function() {
           x0 = left.x - separation(left, right) / 2,
           x1 = right.x + separation(right, left) / 2,
           y1 = d3_layout_treeSearch(root0, d3_layout_treeDeepest).depth || 1;
-      d3_layout_treeVisitBefore(root1, function(node) {
+      d3_layout_hierarchyVisitBefore(root1, function(node) {
         node.node.x = (node.node.x - x0) / (x1 - x0) * size[0];
         node.node.y = node.node.depth / y1 * size[1];
       });
@@ -203,23 +203,6 @@ function d3_layout_treeLeftmost(a, b) {
 
 function d3_layout_treeDeepest(a, b) {
   return a.depth - b.depth;
-}
-
-function d3_layout_treeVisitBefore(node, callback) {
-  var nodes = [node];
-  while ((node = nodes.pop()) != null) {
-    callback(node);
-    if ((children = node.children) && (n = children.length)) {
-      var i = -1, n, children;
-      while (++i < n) nodes.push(children[i]);
-    }
-  }
-}
-
-function d3_layout_treeVisitAfter(node, callback) {
-  var nodes = [];
-  d3_layout_treeVisitBefore(node, function(node) { nodes.push(node); });
-  while ((node = nodes.pop()) != null) callback(node);
 }
 
 // NEXT LEFT
