@@ -32,7 +32,8 @@ d3_selectionPrototype.on = function(type, listener, capture) {
 
 function d3_selection_on(type, listener, capture) {
   var name = "__on" + type,
-      i = type.indexOf("."),
+      all = type === "*",
+      i = !all && type.indexOf("."),
       wrap = d3_selection_onListener;
 
   if (i > 0) type = type.substring(0, i);
@@ -54,21 +55,23 @@ function d3_selection_on(type, listener, capture) {
     l._ = listener;
   }
 
-  function removeAll() {
-    var re = new RegExp("^__on([^.]+)" + d3.requote(type) + "$"),
-        match;
-    for (var name in this) {
-      if (match = name.match(re)) {
-        var l = this[name];
-        this.removeEventListener(match[1], l, l.$);
-        delete this[name];
+  function removeRegExp(suffix) {
+    var re = new RegExp("^__on([^.]+)" + suffix);
+    return function() {
+      var match;
+      for (var name in this) {
+        if (match = name.match(re)) {
+          var l = this[name];
+          this.removeEventListener(match[1], l, l.$);
+          delete this[name];
+        }
       }
-    }
+    };
   }
 
   return i
       ? listener ? onAdd : onRemove
-      : listener ? d3_noop : removeAll;
+      : listener ? d3_noop : removeRegExp(all ? "" : d3.requote(type) + "$");
 }
 
 var d3_selection_onFilters = d3.map({
