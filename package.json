@@ -28,7 +28,7 @@
   "main": "index.js",
   "browserify": "d3.js",
   "jspm": {
-    "main": "d3.js",
+    "main": "d3",
     "shim": {
       "d3": {
         "exports": "d3"
