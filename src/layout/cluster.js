@@ -18,7 +18,7 @@ d3.layout.cluster = function() {
         x = 0;
 
     // First walk, computing the initial x & y values.
-    d3_layout_treeVisitAfter(root, function(node) {
+    d3_layout_hierarchyVisitAfter(root, function(node) {
       var children = node.children;
       if (children && children.length) {
         node.x = d3_layout_clusterX(children);
@@ -37,7 +37,7 @@ d3.layout.cluster = function() {
         x1 = right.x + separation(right, left) / 2;
 
     // Second walk, normalizing x & y to the desired size.
-    d3_layout_treeVisitAfter(root, nodeSize ? function(node) {
+    d3_layout_hierarchyVisitAfter(root, nodeSize ? function(node) {
       node.x = (node.x - root.x) * size[0];
       node.y = (root.y - node.y) * size[1];
     } : function(node) {
