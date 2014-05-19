@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.4.7"
+    version: "3.4.8"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -6377,11 +6377,16 @@
       return hierarchy;
     };
     hierarchy.revalue = function(root) {
-      if (value) d3_layout_hierarchyVisitAfter(root, function(node) {
-        var parent;
-        node.value = node.children ? 0 : +value.call(hierarchy, node, node.depth) || 0;
-        if (parent = node.parent) parent.value += node.value;
-      });
+      if (value) {
+        d3_layout_hierarchyVisitBefore(root, function(node) {
+          if (node.children) node.value = 0;
+        });
+        d3_layout_hierarchyVisitAfter(root, function(node) {
+          var parent;
+          if (!node.children) node.value = +value.call(hierarchy, node, node.depth) || 0;
+          if (parent = node.parent) parent.value += node.value;
+        });
+      }
       return root;
     };
     return hierarchy;
