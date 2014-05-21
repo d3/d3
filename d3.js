@@ -42,36 +42,36 @@
   d3.min = function(array, f) {
     var i = -1, n = array.length, a, b;
     if (arguments.length === 1) {
-      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
-      while (++i < n) if ((b = array[i]) != null && a > b) a = b;
+      while (++i < n && !((a = array[i]) !== null && a <= a)) a = undefined;
+      while (++i < n) if ((b = array[i]) !== null && a > b) a = b;
     } else {
-      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
-      while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
+      while (++i < n && !((a = f.call(array, array[i], i)) !== null && a <= a)) a = undefined;
+      while (++i < n) if ((b = f.call(array, array[i], i)) !== null && a > b) a = b;
     }
     return a;
   };
   d3.max = function(array, f) {
     var i = -1, n = array.length, a, b;
     if (arguments.length === 1) {
-      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
-      while (++i < n) if ((b = array[i]) != null && b > a) a = b;
+      while (++i < n && !((a = array[i]) !== null && a <= a)) a = undefined;
+      while (++i < n) if ((b = array[i]) !== null && b > a) a = b;
     } else {
-      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
-      while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
+      while (++i < n && !((a = f.call(array, array[i], i)) !== null && a <= a)) a = undefined;
+      while (++i < n) if ((b = f.call(array, array[i], i)) !== null && b > a) a = b;
     }
     return a;
   };
   d3.extent = function(array, f) {
     var i = -1, n = array.length, a, b, c;
     if (arguments.length === 1) {
-      while (++i < n && !((a = c = array[i]) != null && a <= a)) a = c = undefined;
-      while (++i < n) if ((b = array[i]) != null) {
+      while (++i < n && !((a = c = array[i]) !== null && a <= a)) a = c = undefined;
+      while (++i < n) if ((b = array[i]) !== null) {
         if (a > b) a = b;
         if (c < b) c = b;
       }
     } else {
-      while (++i < n && !((a = c = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
-      while (++i < n) if ((b = f.call(array, array[i], i)) != null) {
+      while (++i < n && !((a = c = f.call(array, array[i], i)) !== null && a <= a)) a = undefined;
+      while (++i < n) if ((b = f.call(array, array[i], i)) !== null) {
         if (a > b) a = b;
         if (c < b) c = b;
       }
@@ -88,7 +88,7 @@
     return s;
   };
   function d3_number(x) {
-    return x != null && !isNaN(x);
+    return x !== null && !isNaN(x);
   }
   d3.mean = function(array, f) {
     var s = 0, n = array.length, a, i = -1, j = n;
@@ -421,7 +421,7 @@
     }
     if (type) return arguments.length < 2 ? this[type].on(name) : this[type].on(name, listener);
     if (arguments.length === 2) {
-      if (listener == null) for (type in this) {
+      if (listener === null) for (type in this) {
         if (this.hasOwnProperty(type)) this[type].on(name, null);
       }
       return this;
@@ -595,13 +595,13 @@
     }
     function attrFunction() {
       var x = value.apply(this, arguments);
-      if (x == null) this.removeAttribute(name); else this.setAttribute(name, x);
+      if (x === null) this.removeAttribute(name); else this.setAttribute(name, x);
     }
     function attrFunctionNS() {
       var x = value.apply(this, arguments);
-      if (x == null) this.removeAttributeNS(name.space, name.local); else this.setAttributeNS(name.space, name.local, x);
+      if (x === null) this.removeAttributeNS(name.space, name.local); else this.setAttributeNS(name.space, name.local, x);
     }
-    return value == null ? name.local ? attrNullNS : attrNull : typeof value === "function" ? name.local ? attrFunctionNS : attrFunction : name.local ? attrConstantNS : attrConstant;
+    return value === null ? name.local ? attrNullNS : attrNull : typeof value === "function" ? name.local ? attrFunctionNS : attrFunction : name.local ? attrConstantNS : attrConstant;
   }
   function d3_collapse(s) {
     return s.trim().replace(/\s+/g, " ");
@@ -677,9 +677,9 @@
     }
     function styleFunction() {
       var x = value.apply(this, arguments);
-      if (x == null) this.style.removeProperty(name); else this.style.setProperty(name, x, priority);
+      if (x === null) this.style.removeProperty(name); else this.style.setProperty(name, x, priority);
     }
-    return value == null ? styleNull : typeof value === "function" ? styleFunction : styleConstant;
+    return value === null ? styleNull : typeof value === "function" ? styleFunction : styleConstant;
   }
   d3_selectionPrototype.property = function(name, value) {
     if (arguments.length < 2) {
@@ -698,15 +698,15 @@
     }
     function propertyFunction() {
       var x = value.apply(this, arguments);
-      if (x == null) delete this[name]; else this[name] = x;
+      if (x === null) delete this[name]; else this[name] = x;
     }
-    return value == null ? propertyNull : typeof value === "function" ? propertyFunction : propertyConstant;
+    return value === null ? propertyNull : typeof value === "function" ? propertyFunction : propertyConstant;
   }
   d3_selectionPrototype.text = function(value) {
     return arguments.length ? this.each(typeof value === "function" ? function() {
       var v = value.apply(this, arguments);
-      this.textContent = v == null ? "" : v;
-    } : value == null ? function() {
+      this.textContent = v === null ? "" : v;
+    } : value === null ? function() {
       this.textContent = "";
     } : function() {
       this.textContent = value;
@@ -715,8 +715,8 @@
   d3_selectionPrototype.html = function(value) {
     return arguments.length ? this.each(typeof value === "function" ? function() {
       var v = value.apply(this, arguments);
-      this.innerHTML = v == null ? "" : v;
-    } : value == null ? function() {
+      this.innerHTML = v === null ? "" : v;
+    } : value === null ? function() {
       this.innerHTML = "";
     } : function() {
       this.innerHTML = value;
@@ -1116,7 +1116,7 @@
     }
     function dragstart(id, position, subject, move, end) {
       return function() {
-        var that = this, target = d3.event.target, parent = that.parentNode, dispatch = event.of(that, arguments), dragged = 0, dragId = id(), dragName = ".drag" + (dragId == null ? "" : "-" + dragId), dragOffset, dragSubject = d3.select(subject()).on(move + dragName, moved).on(end + dragName, ended), dragRestore = d3_event_dragSuppress(), position0 = position(parent, dragId);
+        var that = this, target = d3.event.target, parent = that.parentNode, dispatch = event.of(that, arguments), dragged = 0, dragId = id(), dragName = ".drag" + (dragId === null ? "" : "-" + dragId), dragOffset, dragSubject = d3.select(subject()).on(move + dragName, moved).on(end + dragName, ended), dragRestore = d3_event_dragSuppress(), position0 = position(parent, dragId);
         if (origin) {
           dragOffset = origin.apply(that, arguments);
           dragOffset = [ dragOffset.x - position0[0], dragOffset.y - position0[1] ];
@@ -1271,7 +1271,7 @@
     };
     zoom.scaleExtent = function(_) {
       if (!arguments.length) return scaleExtent;
-      scaleExtent = _ == null ? d3_behavior_zoomInfinity : [ +_[0], +_[1] ];
+      scaleExtent = _ === null ? d3_behavior_zoomInfinity : [ +_[0], +_[1] ];
       return zoom;
     };
     zoom.center = function(_) {
@@ -1640,7 +1640,7 @@
       }
     }
     if (color = d3_rgb_names.get(format)) return rgb(color.r, color.g, color.b);
-    if (format != null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.substring(1), 16))) {
+    if (format !== null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.substring(1), 16))) {
       if (format.length === 4) {
         r = (color & 3840) >> 4;
         r = r >> 4 | r;
