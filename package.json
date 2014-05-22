@@ -47,6 +47,9 @@
       "exports": "d3"
     }
   },
+  "spm": {
+    "main": "d3.js"
+  },
   "dependencies": {
     "jsdom": "0.5.7"
   },
