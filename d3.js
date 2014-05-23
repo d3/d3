@@ -172,7 +172,7 @@ d3 = function() {
   d3.variance = function(array, f) {
     var n = array.length;
     if (n < 2) return NaN;
-    var mean = d3.mean(array), a, sd = 0, i = -1, j = 0;
+    var mean = d3.mean(array, f), a, sd = 0, i = -1, j = 0;
     if (arguments.length === 1) {
       while (++i < n) {
         if (d3_number(a = array[i])) {

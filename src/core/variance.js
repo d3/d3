@@ -2,7 +2,7 @@ d3.variance = function(array, f) {
   var n   = array.length;
   if(n < 2) return NaN;
   
-  var mean = d3.mean(array),
+  var mean = d3.mean(array, f),
       a,
       sd   = 0,
       i    = -1,
