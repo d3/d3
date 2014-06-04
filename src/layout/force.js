@@ -93,7 +93,13 @@ d3.layout.force = function() {
     }
 
     // apply gravity forces
-    if (k = alpha * gravity) {
+    if (typeof gravity === 'function') {
+      i = -1;
+      while (++i < n) {
+        o = nodes[i];
+        gravity(o, alpha);
+      }
+    } else if (k = alpha * gravity) {
       x = size[0] / 2;
       y = size[1] / 2;
       i = -1; if (k) while (++i < n) {
@@ -181,7 +187,11 @@ d3.layout.force = function() {
 
   force.gravity = function(x) {
     if (!arguments.length) return gravity;
-    gravity = +x;
+    if (typeof x === "function") {
+      gravity = x;
+    } else {
+      gravity = +x;
+    }
     return force;
   };
 
