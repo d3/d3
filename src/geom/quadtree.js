@@ -230,13 +230,15 @@ function d3_geom_quadtreeFind(root, x, y, x0, y0, x3, y3) {
 
     // visit closest cell first
     var i = below << 1 | right,
-        cx0, cy0, cx1, cy1,
         node;
-    for (var j = i + 4; i < j; ++i) {
-      if (!(node = children[i & 3])) continue;
-      if (i & 1) cx0 = xm, cx1 = x2; else cx0 = x1, cx1 = xm;
-      if (i & 2) cy0 = ym, cy1 = y2; else cy0 = y1, cy1 = ym;
-      find(node, cx0, cy0, cx1, cy1);
+    for (var j = i + 4, k; i < j; ++i) {
+      if (!(node = children[k = i & 3])) continue;
+      switch (k) {
+        case 0: find(node, x1, y1, xm, ym); break;
+        case 1: find(node, xm, y1, x2, ym); break;
+        case 2: find(node, x1, ym, xm, y2); break;
+        case 3: find(node, xm, ym, x2, y2); break;
+      }
     }
   })(root, x0, y0, x3, y3);
 
