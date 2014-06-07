@@ -5519,11 +5519,11 @@
         }
       }
       function insertChild(n, d, x, y, x1, y1, x2, y2) {
-        var sx = (x1 + x2) * .5, sy = (y1 + y2) * .5, right = x >= sx, bottom = y >= sy, i = (bottom << 1) + right;
+        var xm = (x1 + x2) * .5, ym = (y1 + y2) * .5, right = x >= xm, below = y >= ym, i = below << 1 | right;
         n.leaf = false;
         n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode());
-        if (right) x1 = sx; else x2 = sx;
-        if (bottom) y1 = sy; else y2 = sy;
+        if (right) x1 = xm; else x2 = xm;
+        if (below) y1 = ym; else y2 = ym;
         insert(n, d, x, y, x1, y1, x2, y2);
       }
       var root = d3_geom_quadtreeNode();
@@ -5603,11 +5603,14 @@
           closestPoint = point;
         }
       }
-      var children = node.nodes, xm = (x1 + x2) * .5, ym = (y1 + y2) * .5, right = x > xm, below = y > ym;
-      if (node = children[below << 1 | right]) find(node, right ? xm : x1, below ? ym : y1, right ? x2 : xm, below ? y2 : ym);
-      if (node = children[below << 1 | !right]) find(node, right ? x1 : xm, below ? ym : y1, right ? xm : x2, below ? y2 : ym);
-      if (node = children[!below << 1 | right]) find(node, right ? xm : x1, below ? y1 : ym, right ? x2 : xm, below ? ym : y2);
-      if (node = children[!below << 1 | !right]) find(node, right ? x1 : xm, below ? y1 : ym, right ? xm : x2, below ? ym : y2);
+      var children = node.nodes, xm = (x1 + x2) * .5, ym = (y1 + y2) * .5, right = x >= xm, below = y >= ym;
+      var i = below << 1 | right, cx0, cy0, cx1, cy1, node;
+      for (var j = i + 4; i < j; ++i) {
+        if (!(node = children[i & 3])) continue;
+        if (i & 1) cx0 = xm, cx1 = x2; else cx0 = x1, cx1 = xm;
+        if (i & 2) cy0 = ym, cy1 = y2; else cy0 = y1, cy1 = ym;
+        find(node, cx0, cy0, cx1, cy1);
+      }
     })(root, x0, y0, x3, y3);
     return closestPoint;
   }
