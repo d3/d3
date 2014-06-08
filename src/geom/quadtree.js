@@ -203,14 +203,14 @@ function d3_geom_quadtreeFind(root, x, y, x0, y0, x3, y3) {
       closestPoint;
 
   (function find(node, x1, y1, x2, y2) {
-    var point;
 
     // stop searching if this cell can’t contain a closer node
     if (x1 > x3 || y1 > y3 || x2 < x0 || y2 < y0) return;
 
     // visit this point
     if (point = node.point) {
-      var dx = x - point[0],
+      var point,
+          dx = x - point[0],
           dy = y - point[1],
           distance2 = dx * dx + dy * dy;
       if (distance2 < minDistance2) {
@@ -229,9 +229,7 @@ function d3_geom_quadtreeFind(root, x, y, x0, y0, x3, y3) {
         below = y >= ym;
 
     // visit closest cell first
-    var i = below << 1 | right,
-        node;
-    for (var j = i + 4, k; i < j; ++i) {
+    for (var i = below << 1 | right, j = i + 4, k; i < j; ++i) {
       if (!(node = children[k = i & 3])) continue;
       switch (k) {
         case 0: find(node, x1, y1, xm, ym); break;
