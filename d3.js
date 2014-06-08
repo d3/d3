@@ -5603,9 +5603,8 @@
         }
       }
       var children = node.nodes, xm = (x1 + x2) * .5, ym = (y1 + y2) * .5, right = x >= xm, below = y >= ym;
-      for (var i = below << 1 | right, j = i + 4, k; i < j; ++i) {
-        if (!(node = children[k = i & 3])) continue;
-        switch (k) {
+      for (var i = below << 1 | right, j = i + 4; i < j; ++i) {
+        if (node = children[i & 3]) switch (i & 3) {
          case 0:
           find(node, x1, y1, xm, ym);
           break;
