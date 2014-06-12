@@ -4,6 +4,7 @@ module.exports = {
   topic: function(d3) {
     var s = d3.select("body").append("div")
         .style("background-color", "white")
+        .style("font-weight", "bold")
         .style("color", "red")
         .style("display", "none")
         .style("font-size", "20px");
@@ -21,6 +22,15 @@ module.exports = {
   "defines the corresponding style tween": function(result) {
     assert.typeOf(result.transition.tween("style.background-color"), "function");
     assert.typeOf(result.transition.tween("style.color"), "function");
+  },
+  "getter returns the target style value for the first node": function(result) {
+    assert.isNull(result.transition.style("display"));
+    assert.isNull(result.transition.style("font-size"));
+    assert.equal(result.transition.style("background-color"), "red");
+    assert.equal(result.transition.style("color"), "green");
+  },
+  "getter returns the current computed style value of the first node if it is not being transitioned": function(result) {
+    assert.equal(result.transition.style("font-weight"), "bold");
   },
   "on end": {
     topic: function(result) {
