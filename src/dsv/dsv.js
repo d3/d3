@@ -1,5 +1,8 @@
+import "../core/identity";
 import "../arrays/set";
 import "../xhr/xhr";
+
+var d3_dsvEval;
 
 d3.dsv = function(delimiter, mimeType) {
   var reFormat = new RegExp("[\"" + delimiter + "\n]"),
@@ -28,16 +31,44 @@ d3.dsv = function(delimiter, mimeType) {
     };
   }
 
-  dsv.parse = function(text, f) {
-    var o;
-    return dsv.parseRows(text, function(row, i) {
-      if (o) return o(row, i - 1);
-      var a = new Function("d", "return {" + row.map(function(name, i) {
-        return JSON.stringify(name) + ": d[" + i + "]";
-      }).join(",") + "}");
-      o = f ? function(row, i) { return f(a(row), i); } : a;
-    });
-  };
+  dsv.parse = d3_dsvEval == null
+      ? function() {
+        try {
+          new Function("", "");
+          d3_dsvEval = true;
+        } catch (ignore) {
+          // Content-Security-Policy does not allow "unsafe-eval".
+          d3_dsvEval = false;
+        }
+        return (dsv.parse = parser()).apply(this, arguments);
+      }
+      : parser();
+
+  function parser() {
+    return d3_dsvEval
+        ? function(text, f) {
+          var o;
+          return dsv.parseRows(text, function(row, i) {
+            if (o) return o(row, i - 1);
+            var a = new Function("d", "return {" + row.map(function(name, i) {
+              return JSON.stringify(name) + ": d[" + i + "]";
+            }).join(",") + "}");
+            o = f ? function(row, i) { return f(a(row), i); } : a;
+          });
+        }
+        : function(text, f) {
+          f = f || d3_identity;
+          var header;
+          return dsv.parseRows(text, function(row, i) {
+            if (i) {
+              var o = {}, j = -1, m = header.length;
+              while (++j < m) o[header[j]] = row[j];
+              return f(o, i - 1);
+            }
+            header = row;
+          });
+        };
+  }
 
   dsv.parseRows = function(text, f) {
     var EOL = {}, // sentinel value for end-of-line
