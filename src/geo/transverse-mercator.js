@@ -18,7 +18,7 @@ d3_geo_transverseMercator.invert = function(x, y) {
   projection.center = function(_) {
     return _
         ? center([-_[1], _[0]])
-        : ((_ = center()), [-_[1], _[0]]);
+        : ((_ = center()), [_[1], -_[0]]);
   };
 
   projection.rotate = function(_) {
