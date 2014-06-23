@@ -14,7 +14,7 @@ d3_transitionPrototype.style = function(name, value, priority) {
         var node = this.node(),
             tween = node.__transition__[this.id].tween.get("style." + name);
         return tween
-            ? tween.__value__
+            ? tween.$
             : d3_window.getComputedStyle(node, null).getPropertyValue(name);
       }
     }
@@ -39,7 +39,7 @@ d3_transitionPrototype.style = function(name, value, priority) {
   function styleNull() {
     this.style.removeProperty(name);
   }
-  styleNull.__value__ = null;
+  styleNull.$ = null;
 
   // For style(name, string) or style(name, string, priority), set the style
   // property with the specified name, using the specified priority.
@@ -49,7 +49,7 @@ d3_transitionPrototype.style = function(name, value, priority) {
     return b == null ? styleNull : (f = function() {
       var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
       return a !== b && (i = d3_interpolate(a, b), function(t) { this.style.setProperty(name, i(t), priority); });
-    }, f.__value__ = b, b += "", f);
+    }, f.$ = b += "", f);
   }
 
   return d3_transition_tween(this, "style." + name, value, styleString);

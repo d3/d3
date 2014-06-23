@@ -13,7 +13,7 @@ d3_transitionPrototype.attr = function(nameNS, value) {
       var node = this.node(),
           tween = node.__transition__[this.id].tween.get("attr." + nameNS);
       return tween ?
-          tween.__value__
+          tween.$
           : (name = d3.ns.qualify(nameNS), name.local
           ? node.getAttributeNS(name.space, name.local)
           : node.getAttribute(name));
@@ -36,7 +36,7 @@ d3_transitionPrototype.attr = function(nameNS, value) {
   function attrNullNS() {
     this.removeAttributeNS(name.space, name.local);
   }
-  attrNull.__value__ = attrNullNS.__value__ = null;
+  attrNull.$ = attrNullNS.$ = null;
 
   // For attr(string, string), set the attribute with the specified name.
   function attrTween(b) {
@@ -44,14 +44,14 @@ d3_transitionPrototype.attr = function(nameNS, value) {
     return b == null ? attrNull : (f = function() {
       var a = this.getAttribute(name), i;
       return a !== b && (i = interpolate(a, b), function(t) { this.setAttribute(name, i(t)); });
-    }, f.__value__ = b, b += "", f);
+    }, f.$ = b += "", f);
   }
   function attrTweenNS(b) {
     var f;
     return b == null ? attrNullNS : (f = function() {
       var a = this.getAttributeNS(name.space, name.local), i;
       return a !== b && (i = interpolate(a, b), function(t) { this.setAttributeNS(name.space, name.local, i(t)); });
-    }, f.__value__ = b, b += "", f);
+    }, f.$ = b += "", f);
   }
 
   return d3_transition_tween(this, "attr." + nameNS, value, name.local ? attrTweenNS : attrTween);
