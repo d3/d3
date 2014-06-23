@@ -8434,6 +8434,10 @@
   }
   d3_transitionPrototype.attr = function(nameNS, value) {
     if (arguments.length < 2) {
+      if (typeof nameNS === "string") {
+        var node = this.node(), tween = node.__transition__[this.id].tween.get("attr." + nameNS);
+        return tween ? tween.$ : (name = d3.ns.qualify(nameNS), name.local ? node.getAttributeNS(name.space, name.local) : node.getAttribute(name));
+      }
       for (value in nameNS) this.attr(value, nameNS[value]);
       return this;
     }
@@ -8444,21 +8448,24 @@
     function attrNullNS() {
       this.removeAttributeNS(name.space, name.local);
     }
+    attrNull.$ = attrNullNS.$ = null;
     function attrTween(b) {
-      return b == null ? attrNull : (b += "", function() {
+      var f;
+      return b == null ? attrNull : (f = function() {
         var a = this.getAttribute(name), i;
         return a !== b && (i = interpolate(a, b), function(t) {
           this.setAttribute(name, i(t));
         });
-      });
+      }, f.$ = b += "", f);
     }
     function attrTweenNS(b) {
-      return b == null ? attrNullNS : (b += "", function() {
+      var f;
+      return b == null ? attrNullNS : (f = function() {
         var a = this.getAttributeNS(name.space, name.local), i;
         return a !== b && (i = interpolate(a, b), function(t) {
           this.setAttributeNS(name.space, name.local, i(t));
         });
-      });
+      }, f.$ = b += "", f);
     }
     return d3_transition_tween(this, "attr." + nameNS, value, name.local ? attrTweenNS : attrTween);
   };
@@ -8481,7 +8488,12 @@
   d3_transitionPrototype.style = function(name, value, priority) {
     var n = arguments.length;
     if (n < 3) {
-      if (typeof name !== "string") {
+      if (typeof name === "string") {
+        if (n < 2) {
+          var node = this.node(), tween = node.__transition__[this.id].tween.get("style." + name);
+          return tween ? tween.$ : d3_window.getComputedStyle(node, null).getPropertyValue(name);
+        }
+      } else {
         if (n < 2) value = "";
         for (priority in name) this.style(priority, name[priority], value);
         return this;
@@ -8491,13 +8503,15 @@
     function styleNull() {
       this.style.removeProperty(name);
     }
+    styleNull.$ = null;
     function styleString(b) {
-      return b == null ? styleNull : (b += "", function() {
+      var f;
+      return b == null ? styleNull : (f = function() {
         var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
         return a !== b && (i = d3_interpolate(a, b), function(t) {
           this.style.setProperty(name, i(t), priority);
         });
-      });
+      }, f.$ = b += "", f);
     }
     return d3_transition_tween(this, "style." + name, value, styleString);
   };
@@ -8512,13 +8526,17 @@
     return this.tween("style." + name, styleTween);
   };
   d3_transitionPrototype.text = function(value) {
-    return d3_transition_tween(this, "text", value, d3_transition_text);
+    if (arguments.length) return d3_transition_tween(this, "text", value, d3_transition_text);
+    var node = this.node(), tween = node.__transition__[this.id].tween.get("text");
+    return tween ? tween.$ : node.textContent;
   };
   function d3_transition_text(b) {
     if (b == null) b = "";
-    return function() {
+    f.$ = b;
+    return f;
+    function f() {
       this.textContent = b;
-    };
+    }
   }
   d3_transitionPrototype.remove = function() {
     return this.each("end.transition", function() {

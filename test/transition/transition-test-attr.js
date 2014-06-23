@@ -6,6 +6,7 @@ module.exports = {
         .attr("display", "none")
         .attr("font-size", "20px")
         .attr("width", 20)
+        .attr("background", "#ff0")
         .attr("color", "red")
         .attr("xlink:type", "simple")
         .attr("xlink:href", "http://mbostock.github.com/d3/");
@@ -25,6 +26,17 @@ module.exports = {
   "defines the corresponding attr tween": function(result) {
     assert.typeOf(result.transition.tween("attr.width"), "function");
     assert.typeOf(result.transition.tween("attr.color"), "function");
+  },
+  "getter returns the target attribute value for the first node": function(result) {
+    assert.isNull(result.transition.attr("display"));
+    assert.isNull(result.transition.attr("font-size"));
+    assert.equal(result.transition.attr("width"), 200);
+    assert.equal(result.transition.attr("color"), "green");
+    assert.isNull(result.transition.attr("xlink:href"));
+    assert.isNull(result.transition.attr("xlink:type"));
+  },
+  "getter returns the current attribute value of the first node if it is not being transitioned": function(result) {
+    assert.equal(result.transition.attr("background"), "#ff0");
   },
   "on end": {
     topic: function(result) {
