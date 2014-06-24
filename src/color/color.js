@@ -1,5 +1,7 @@
-function d3_Color() {}
+d3.color = d3_color;
 
-d3_Color.prototype.toString = function() {
+function d3_color() {}
+
+d3_color.prototype.toString = function() {
   return this.rgb() + "";
 };
