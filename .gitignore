@@ -1,3 +1,4 @@
+.DS_Store
 _site
 node_modules
-.DS_Store
+test/data/sample-big.csv

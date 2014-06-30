@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+
+var fs = require("fs"),
+    d3 = require("../../");
+
+var formatNumber = d3.format(".03s");
+
+(function() {
+  var content = fs.readFileSync("test/data/sample-big.csv", "utf8");
+  measure(function test() {
+    d3.csv.parse(content);
+  });
+})();
+
+function measure(operation) {
+  var start = Date.now();
+  operation();
+  var end = Date.now();
+  console.log(operation.name, formatNumber((end - start) / 1000) + "s");
+}

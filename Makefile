@@ -14,6 +14,10 @@ test:
 src/start.js: package.json bin/start
 	bin/start > $@
 
+test/data/sample-big.csv:
+	echo 'a,b,c,d,e,f,g,h,i,j' > $@
+	for i in {1..100000}; do echo '0,1,2,3,4,5,6,7,8,9' >> $@; done
+
 d3.js: $(shell node_modules/.bin/smash --ignore-missing --list src/d3.js) package.json
 	@rm -f $@
 	node_modules/.bin/smash src/d3.js | node_modules/.bin/uglifyjs - -b indent-level=2 -o $@
