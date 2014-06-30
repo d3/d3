@@ -10,7 +10,7 @@
     "animation",
     "canvas"
   ],
-  "version": "3.4.8",
+  "version": "3.4.9",
   "main": "d3.js",
   "scripts": [
     "d3.js"
