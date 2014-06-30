@@ -36,7 +36,7 @@ function d3_selection_classedRe(name) {
 }
 
 function d3_selection_classes(name) {
-  return name.trim().split(/^|\s+/);
+  return (name + "").trim().split(/^|\s+/);
 }
 
 // Multiple class names are allowed (e.g., "foo bar").
