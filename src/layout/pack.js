@@ -1,6 +1,5 @@
 import "layout";
 import "hierarchy";
-import "tree";
 
 d3.layout.pack = function() {
   var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
@@ -17,15 +16,15 @@ d3.layout.pack = function() {
 
     // Recursively compute the layout.
     root.x = root.y = 0;
-    d3_layout_treeVisitAfter(root, function(d) { d.r = +r(d.value); });
-    d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
+    d3_layout_hierarchyVisitAfter(root, function(d) { d.r = +r(d.value); });
+    d3_layout_hierarchyVisitAfter(root, d3_layout_packSiblings);
 
     // When padding, recompute the layout using scaled padding.
     if (padding) {
       var dr = padding * (radius ? 1 : Math.max(2 * root.r / w, 2 * root.r / h)) / 2;
-      d3_layout_treeVisitAfter(root, function(d) { d.r += dr; });
-      d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
-      d3_layout_treeVisitAfter(root, function(d) { d.r -= dr; });
+      d3_layout_hierarchyVisitAfter(root, function(d) { d.r += dr; });
+      d3_layout_hierarchyVisitAfter(root, d3_layout_packSiblings);
+      d3_layout_hierarchyVisitAfter(root, function(d) { d.r -= dr; });
     }
 
     // Translate and scale the layout to fit the requested size.
