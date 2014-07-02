@@ -29,7 +29,11 @@
       d3_element_setAttributeNS.call(this, space, local, value + "");
     };
     d3_style_prototype.setProperty = function(name, value, priority) {
-      d3_style_setProperty.call(this, name, value + "", priority);
+        try {
+         d3_style_setProperty.call(this, name, value + "", priority);
+   	} catch (e) {
+         //IE9 is throwing an error rather than ignoring as most browsers do.
+   	}
     };
   }
   d3.ascending = d3_ascending;
