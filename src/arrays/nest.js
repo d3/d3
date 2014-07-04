@@ -5,6 +5,7 @@ d3.nest = function() {
       keys = [],
       sortKeys = [],
       sortValues,
+      keyNames = [],
       rollup;
 
   function map(mapType, array, depth) {
@@ -50,14 +51,19 @@ d3.nest = function() {
     if (depth >= keys.length) return map;
 
     var array = [],
+        keyName = keyNames[depth] || 'key', 
         sortKey = sortKeys[depth++];
 
     map.forEach(function(key, keyMap) {
-      array.push({key: key, values: entries(keyMap, depth)});
+
+        var toPush = {values: entries(keyMap, depth)};
+        toPush[keyName] = key;
+        array.push(toPush);
+
     });
 
     return sortKey
-        ? array.sort(function(a, b) { return sortKey(a.key, b.key); })
+        ? array.sort(function(a, b) { return sortKey(a[keyName], b[keyName]); })
         : array;
   }
 
@@ -87,6 +93,12 @@ d3.nest = function() {
     sortValues = order;
     return nest;
   };
+
+    //give a key name for the level you're on, in case you use the entries method
+  nest.keyName = function(name) {
+    keyNames[keys.length - 1] = name;
+    return nest;
+   };
 
   nest.rollup = function(f) {
     rollup = f;

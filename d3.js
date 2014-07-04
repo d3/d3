@@ -300,7 +300,7 @@
     return true;
   }
   d3.nest = function() {
-    var nest = {}, keys = [], sortKeys = [], sortValues, rollup;
+    var nest = {}, keys = [], sortKeys = [], sortValues, keyNames = [], rollup;
     function map(mapType, array, depth) {
       if (depth >= keys.length) return rollup ? rollup.call(nest, array) : sortValues ? array.sort(sortValues) : array;
       var i = -1, n = array.length, key = keys[depth++], keyValue, object, setter, valuesByKey = new d3_Map(), values;
@@ -327,15 +327,16 @@
     }
     function entries(map, depth) {
       if (depth >= keys.length) return map;
-      var array = [], sortKey = sortKeys[depth++];
+      var array = [], keyName = keyNames[depth] || "key", sortKey = sortKeys[depth++];
       map.forEach(function(key, keyMap) {
-        array.push({
-          key: key,
+        var toPush = {
           values: entries(keyMap, depth)
-        });
+        };
+        toPush[keyName] = key;
+        array.push(toPush);
       });
       return sortKey ? array.sort(function(a, b) {
-        return sortKey(a.key, b.key);
+        return sortKey(a[keyName], b[keyName]);
       }) : array;
     }
     nest.map = function(array, mapType) {
@@ -354,6 +355,10 @@
     };
     nest.sortValues = function(order) {
       sortValues = order;
+      return nest;
+    };
+    nest.keyName = function(name) {
+      keyNames[keys.length - 1] = name;
       return nest;
     };
     nest.rollup = function(f) {
