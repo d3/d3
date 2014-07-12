@@ -10,7 +10,7 @@ d3.locale.es_ES = d3.locale({
   time: "%H:%M:%S",
   periods: ["AM", "PM"],
   days: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
-  shortDays: ["lun", "mar", "mie", "jue", "vie", "vie", "sab"],
+  shortDays: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
   months: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
   shortMonths: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
 });
