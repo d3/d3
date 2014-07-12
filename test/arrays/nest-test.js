@@ -135,6 +135,35 @@ suite.addBatch({
     "if no keys are specified, the input array is returned": function(nest) {
       var array = [new Object()];
       assert.strictEqual(nest().entries(array), array);
+    },
+    "multiple keynames can be specified": function(nest) {
+      var entries = nest()
+          .key(function(d) { return d[0]; })
+          .keyName('state')
+          .key(function(d) { return d[1]; })
+          .keyName('year')
+          .entries([['AL', 1999, 200], ['CA', 1999, 350], ['AL', 2009, 250], ['CA', 2009, 550]]);
+      assert.deepEqual(entries, [
+        {state: "AL", values: [
+          {year: "1999", values: [['AL', 1999, 200]]},
+          {year: "2009", values: [['AL', 2009, 250]]}
+        ]},
+        {state: "CA", values: [
+          {year: "1999", values: [['CA', 1999, 350]]},
+          {year: "2009", values: [['CA', 2009, 550]]}
+        ]}
+      ]);
+    },
+    "key comparator works when keyName is specified": function(nest) {
+      var entries = nest()
+          .key(function(d) { return d[0]; })
+          .keyName('state')
+          .sortKeys(_.descending)
+          .entries([['AL', 1999, 200], ['CA', 1999, 350], ['CA', 2009, 550], ['AL', 2009, 250]]);
+      assert.deepEqual(entries, [
+        {state: "CA", values:  [['CA', 1999, 350], ['CA', 2009, 550]]},
+        {state: "AL", values:  [['AL', 1999, 200], ['AL', 2009, 250]]}
+      ]);
     }
   }
 });
