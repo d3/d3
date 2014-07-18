@@ -1,5 +1,4 @@
 import "linear";
-import "nice";
 import "scale";
 
 d3.scale.pow = function() {

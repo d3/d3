@@ -1,5 +1,3 @@
-import "document";
-
 function d3_vendorSymbol(object, name) {
   if (name in object) return name;
   name = name.charAt(0).toUpperCase() + name.substring(1);
