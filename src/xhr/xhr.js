@@ -31,7 +31,8 @@ function d3_xhr(url, mimeType, response, callback) {
 
   function respond() {
     var status = request.status, result;
-    if (!status && request.responseText || status >= 200 && status < 300 || status === 304) {
+    var validResponseText = (request.responseType === "" || request.responseType === "text") && request.responseText;
+    if (!status && validResponseText || status >= 200 && status < 300 || status === 304) {
       try {
         result = response.call(xhr, request);
       } catch (e) {
