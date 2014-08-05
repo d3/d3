@@ -3,7 +3,7 @@ import "../core/rebind";
 import "../event/drag";
 import "../event/event";
 import "../event/mouse";
-import "../event/touches";
+import "../event/touch";
 import "behavior";
 
 d3.behavior.drag = function() {

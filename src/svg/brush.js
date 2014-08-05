@@ -1,11 +1,9 @@
 import "../core/identity";
 import "../core/document";
 import "../core/rebind";
-import "../event/dispatch";
 import "../event/drag";
 import "../event/event";
 import "../event/mouse";
-import "../event/touches";
 import "../scale/scale";
 import "../selection/selection";
 import "svg";

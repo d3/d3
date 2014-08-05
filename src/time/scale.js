@@ -1,7 +1,6 @@
 import "../arrays/bisect";
 import "../arrays/range";
 import "../core/identity";
-import "../core/rebind";
 import "../core/true";
 import "../scale/linear";
 import "../scale/nice";
