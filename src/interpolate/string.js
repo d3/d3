@@ -18,7 +18,7 @@ function d3_interpolateString(a, b) {
   while ((am = d3_interpolate_numberA.exec(a))
       && (bm = d3_interpolate_numberB.exec(b))) {
     if ((bs = bm.index) > bi) { // a string precedes the next number in b
-      bs = b.substring(bi, bs);
+      bs = b.slice(bi, bs);
       if (s[i]) s[i] += bs; // coalesce with previous string
       else s[++i] = bs;
     }
@@ -34,7 +34,7 @@ function d3_interpolateString(a, b) {
 
   // Add remains of b.
   if (bi < b.length) {
-    bs = b.substring(bi);
+    bs = b.slice(bi);
     if (s[i]) s[i] += bs; // coalesce with previous string
     else s[++i] = bs;
   }

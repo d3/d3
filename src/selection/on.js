@@ -35,7 +35,7 @@ function d3_selection_on(type, listener, capture) {
       i = type.indexOf("."),
       wrap = d3_selection_onListener;
 
-  if (i > 0) type = type.substring(0, i);
+  if (i > 0) type = type.slice(0, i);
   var filter = d3_selection_onFilters.get(type);
   if (filter) type = filter, wrap = d3_selection_onFilter;
 

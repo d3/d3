@@ -16,8 +16,8 @@ d3_dispatch.prototype.on = function(type, listener) {
 
   // Extract optional namespace, e.g., "click.foo"
   if (i >= 0) {
-    name = type.substring(i + 1);
-    type = type.substring(0, i);
+    name = type.slice(i + 1);
+    type = type.slice(0, i);
   }
 
   if (type) return arguments.length < 2
