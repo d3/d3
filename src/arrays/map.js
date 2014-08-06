@@ -32,7 +32,7 @@ d3_class(d3_Map, {
   size: d3_map_size,
   empty: d3_map_empty,
   forEach: function(f) {
-    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) f.call(this, key.substring(1), this[key]);
+    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) f.call(this, key.slice(1), this[key]);
   }
 });
 

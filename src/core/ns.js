@@ -12,8 +12,8 @@ d3.ns = {
     var i = name.indexOf(":"),
         prefix = name;
     if (i >= 0) {
-      prefix = name.substring(0, i);
-      name = name.substring(i + 1);
+      prefix = name.slice(0, i);
+      name = name.slice(i + 1);
     }
     return d3_nsPrefix.hasOwnProperty(prefix)
         ? {space: d3_nsPrefix[prefix], local: name}
