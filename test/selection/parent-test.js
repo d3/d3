@@ -14,13 +14,13 @@ suite.addBatch({
       "parent node of body": function(body) {
         var html = body.parent( );
         assert.equal(html[0][0].tagName, "HTML");
-        assert.equal(html[0][0].namespaceURI, "http://www.w3.org/1999/xhtml");
+        assert.isNull(html[0][0].namespaceURI);
         assert.isTrue(html[0][0] === body.node().parentNode);
       },
       "parent node of an appended SVG element": function(body) {
         var svgParent = body.append("svg:svg").parent( );
         assert.equal(svgParent[0][0].tagName, "BODY");
-        assert.equal(svgParent[0][0].namespaceURI, "http://www.w3.org/1999/xhtml");
+        assert.isNull(svgParent[0][0].namespaceURI);
         assert.isTrue(svgParent[0][0] === body.node());
       }
     }
