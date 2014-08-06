@@ -1,4 +1,4 @@
-d3.max = function(array, f) {
+d3.max = function(array, f, returnElem ) {
   var i = -1,
       ai = i,
       n = array.length,
@@ -13,7 +13,7 @@ d3.max = function(array, f) {
       a = b;
       ai = i;
     }
-    a = array[ai];
+    a = returnElem ? array[ai] : a;
   }
   return a;
 };
