@@ -34,6 +34,7 @@ import "style";
 import "property";
 import "text";
 import "html";
+import "parent";
 import "append";
 import "insert";
 import "remove";
