@@ -1,5 +1,6 @@
-d3.min = function(array, f) {
+d3.min = function(array, f, returnElem ) {
   var i = -1,
+      ai = i,
       n = array.length,
       a,
       b;
@@ -7,8 +8,12 @@ d3.min = function(array, f) {
     while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
     while (++i < n) if ((b = array[i]) != null && a > b) a = b;
   } else {
-    while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
-    while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
+    while ((ai = ++i) < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
+    while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) {
+      a = b;
+      ai = i;
+    }
+    a = returnElem ? array[ai] : a;
   }
   return a;
 };
