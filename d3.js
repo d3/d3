@@ -722,6 +722,11 @@
       this.innerHTML = value;
     }) : this.node().innerHTML;
   };
+  d3_selectionPrototype.parent = function() {
+    return this.select(function() {
+      return this.parentNode;
+    });
+  };
   d3_selectionPrototype.append = function(name) {
     name = d3_selection_creator(name);
     return this.select(function() {
@@ -923,6 +928,7 @@
   var d3_selection_enterPrototype = [];
   d3.selection.enter = d3_selection_enter;
   d3.selection.enter.prototype = d3_selection_enterPrototype;
+  d3_selection_enterPrototype.parent = d3_selectionPrototype.parent;
   d3_selection_enterPrototype.append = d3_selectionPrototype.append;
   d3_selection_enterPrototype.empty = d3_selectionPrototype.empty;
   d3_selection_enterPrototype.node = d3_selectionPrototype.node;
