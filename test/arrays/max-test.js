@@ -42,8 +42,8 @@ suite.addBatch({
       assert.isUndefined(max([NaN, NaN]));
     },
     "applies the optional accessor function": function(max) {
-      assert.equal(max([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return _.min(d); }), 2);
-      assert.equal(max([1, 2, 3, 4, 5], function(d, i) { return i; }), 4);
+      assert.deepEqual(max([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return _.min(d); }), [1, 2, 3, 4, 5]);
+      assert.equal(max([5, 4, 3, 2, 1], function(d, i) { return i; }), 1);
     }
   }
 });
