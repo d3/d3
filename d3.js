@@ -8559,7 +8559,8 @@
     for (var j = 0, m = this.length; j < m; j++) {
       subgroups.push(subgroup = []);
       for (var group = this[j], i = 0, n = group.length; i < n; i++) {
-        if (node = group[i]) {
+        if (node = group[i
+          id0 = node.__transition__.hasOwnProperty(id0) ? id0 : node.__transition__.active; 
           transition = Object.create(node.__transition__[id0]);
           transition.delay += transition.duration;
           d3_transitionNode(node, i, id1, transition);
