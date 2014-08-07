@@ -101,10 +101,10 @@ d3.svg.axis = function() {
       } else if (scale0.rangeBand) {
         scale0 = scale1;
       } else {
-        tickExit.call(tickTransform, scale1);
+        tickExit.call(tickTransform, d3_svg_axisFiniteScale(scale1, scale0));
       }
 
-      tickEnter.call(tickTransform, scale0);
+      tickEnter.call(tickTransform, d3_svg_axisFiniteScale(scale0, scale1));
       tickUpdate.call(tickTransform, scale1);
     });
   }
@@ -181,4 +181,11 @@ function d3_svg_axisX(selection, x) {
 
 function d3_svg_axisY(selection, y) {
   selection.attr("transform", function(d) { return "translate(0," + y(d) + ")"; });
+}
+
+function d3_svg_axisFiniteScale(scale, scale0) {
+  return function(d) {
+    var value = scale(d);
+    return isFinite(value) ? value : scale0(d);
+  };
 }
