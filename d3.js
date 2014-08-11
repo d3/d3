@@ -7252,6 +7252,83 @@
       dy: dy
     };
   }
+  d3.layout.translocation = function() {
+    var translocation = {}, groups, groupsEarly, groupCount, edges, edgesEarly, edgeCount, padding = 0;
+    function relayout() {
+      groups = [];
+      edges = [];
+      var k = 0;
+      for (var i = 0; i < groupCount; i++) {
+        k += groupsEarly[i];
+      }
+      k = (τ - padding * groupCount) / k;
+      for (var groupStartRad = 0, i = 0; i < groupCount; i++) {
+        var groupEndRad = groupStartRad + groupsEarly[i] * k;
+        groups[i] = {
+          index: i,
+          startAngle: groupStartRad,
+          endAngle: groupEndRad,
+          value: groupsEarly[i]
+        };
+        groupStartRad = groupEndRad + padding;
+      }
+      for (var i = 0; i < edgeCount; i++) {
+        var sourceGrp = groups[edgesEarly[i][0]];
+        var targetGrp = groups[edgesEarly[i][2]];
+        var attributes = edgesEarly[i].length > 6 ? edgesEarly[i][6] : {};
+        edges[i] = {
+          source: {
+            endAngle: sourceGrp.startAngle + (edgesEarly[i][4] + edgesEarly[i][1]) * k,
+            index: edgesEarly[i][0],
+            startAngle: sourceGrp.startAngle + edgesEarly[i][1] * k,
+            value: edgesEarly[i][1],
+            width: edgesEarly[i][4]
+          },
+          target: {
+            endAngle: targetGrp.startAngle + (edgesEarly[i][5] + edgesEarly[i][3]) * k,
+            index: edgesEarly[i][2],
+            startAngle: targetGrp.startAngle + edgesEarly[i][3] * k,
+            value: edgesEarly[i][3],
+            width: edgesEarly[i][5]
+          },
+          attributes: attributes
+        };
+      }
+    }
+    translocation.groups = function(x) {
+      if (!x) {
+        if (!groups) {
+          relayout();
+        }
+        return groups;
+      }
+      groups = null;
+      groupsEarly = x;
+      groupCount = x.length;
+      return translocation;
+    };
+    translocation.edges = function(x) {
+      if (!x) {
+        if (!edges) {
+          relayout();
+        }
+        return edges;
+      }
+      edges = null;
+      edgesEarly = x;
+      edgeCount = x.length;
+      return translocation;
+    };
+    translocation.padding = function(x) {
+      if (!x) {
+        return padding;
+      }
+      padding = x;
+      edges = groups = null;
+      return translocation;
+    };
+    return translocation;
+  };
   d3.random = {
     normal: function(µ, σ) {
       var n = arguments.length;
