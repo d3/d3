@@ -56,6 +56,7 @@ function d3_locale_numberFormat(locale) {
       case "c":
       case "d": integer = true; precision = 0; break;
       case "s": scale = -1; type = "r"; break;
+      case "e": comma = false; break;
     }
 
     if (symbol === "$") prefix = locale_currency[0], suffix = locale_currency[1];
