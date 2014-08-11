@@ -1,4 +1,3 @@
-import "../arrays/range";
 import "../math/trigonometry";
 import "layout";
 
@@ -13,6 +12,7 @@ d3.layout.translocation = function() {
   padding = 0;
 
   function relayout() {
+    var groupStartRad, groupEndRad, sourceGrp, targetGrp, attributes;
     groups = [];
     edges = [];
 
@@ -28,8 +28,8 @@ d3.layout.translocation = function() {
     k = (τ - padding * groupCount) / k;
 
     //Compute the array of group objects:
-    for(var groupStartRad = 0, i = 0; i < groupCount; i++){
-      var groupEndRad = groupStartRad + groupsEarly[i] * k; //Add radial length of group
+    for(groupStartRad = 0, i = 0; i < groupCount; i++){
+      groupEndRad = groupStartRad + groupsEarly[i] * k; //Add radial length of group
       groups[i] = {
         index: i,
         startAngle: groupStartRad,
@@ -41,9 +41,9 @@ d3.layout.translocation = function() {
 
     //Compute array of edges:
     for(var i = 0; i < edgeCount; i++) {
-      var sourceGrp = groups[edgesEarly[i][0]];
-      var targetGrp = groups[edgesEarly[i][2]];
-      var attributes = edgesEarly[i].length > 6 ? edgesEarly[i][6] : {};
+      sourceGrp = groups[edgesEarly[i][0]];
+      targetGrp = groups[edgesEarly[i][2]];
+      attributes = edgesEarly[i].length > 6 ? edgesEarly[i][6] : {};
 
       edges[i] = {
         source: {
@@ -63,6 +63,8 @@ d3.layout.translocation = function() {
         attributes : attributes
       }
     }
+
+    attributes = targetGrp = sourceGrp = null;
   }
 
   //Expects an array of sizes, where the index is group ID

@@ -7255,6 +7255,7 @@
   d3.layout.translocation = function() {
     var translocation = {}, groups, groupsEarly, groupCount, edges, edgesEarly, edgeCount, padding = 0;
     function relayout() {
+      var groupStartRad, groupEndRad, sourceGrp, targetGrp, attributes;
       groups = [];
       edges = [];
       var k = 0;
@@ -7262,8 +7263,8 @@
         k += groupsEarly[i];
       }
       k = (τ - padding * groupCount) / k;
-      for (var groupStartRad = 0, i = 0; i < groupCount; i++) {
-        var groupEndRad = groupStartRad + groupsEarly[i] * k;
+      for (groupStartRad = 0, i = 0; i < groupCount; i++) {
+        groupEndRad = groupStartRad + groupsEarly[i] * k;
         groups[i] = {
           index: i,
           startAngle: groupStartRad,
@@ -7273,9 +7274,9 @@
         groupStartRad = groupEndRad + padding;
       }
       for (var i = 0; i < edgeCount; i++) {
-        var sourceGrp = groups[edgesEarly[i][0]];
-        var targetGrp = groups[edgesEarly[i][2]];
-        var attributes = edgesEarly[i].length > 6 ? edgesEarly[i][6] : {};
+        sourceGrp = groups[edgesEarly[i][0]];
+        targetGrp = groups[edgesEarly[i][2]];
+        attributes = edgesEarly[i].length > 6 ? edgesEarly[i][6] : {};
         edges[i] = {
           source: {
             endAngle: sourceGrp.startAngle + (edgesEarly[i][4] + edgesEarly[i][1]) * k,
@@ -7294,6 +7295,7 @@
           attributes: attributes
         };
       }
+      attributes = targetGrp = sourceGrp = null;
     }
     translocation.groups = function(x) {
       if (!x) {
