@@ -8549,7 +8549,7 @@
     } else {
       d3_selection_each(this, function(node) {
         var transition = node.__transition__[id];
-        (transition.event || (transition.event = d3.dispatch("start", "end"))).on(type, listener);
+        (transition.event || (transition.event = d3.dispatch("start", "end", "interrupt"))).on(type, listener);
       });
     }
     return this;
@@ -8590,7 +8590,7 @@
         if (delay <= elapsed) return start(elapsed - delay);
         timer.c = start;
         function start(elapsed) {
-          if (lock.active > id) return stop();
+          if (lock.active > id) return stop(false);
           lock.active = id;
           transition.event && transition.event.start.call(node, d, i);
           transition.tween.forEach(function(key, value) {
@@ -8604,17 +8604,15 @@
           }, 0, time);
         }
         function tick(elapsed) {
-          if (lock.active !== id) return stop();
+          if (lock.active !== id) return stop(false);
           var t = elapsed / duration, e = ease(t), n = tweened.length;
           while (n > 0) {
             tweened[--n].call(node, e);
           }
-          if (t >= 1) {
-            transition.event && transition.event.end.call(node, d, i);
-            return stop();
-          }
+          if (t >= 1) return stop(true);
         }
-        function stop() {
+        function stop(end) {
+          if (transition.event) transition.event[end ? "end" : "interrupt"].call(node, d, i);
           if (--lock.count) delete lock[id]; else delete node.__transition__;
           return 1;
         }
