@@ -15,6 +15,7 @@ d3.behavior.zoom = function() {
       center, // explicit desired position of translate0 after zooming
       size = [960, 500], // viewport size; required for zoom interpolation
       scaleExtent = d3_behavior_zoomInfinity,
+      zooming = 0,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
@@ -58,6 +59,9 @@ d3.behavior.zoom = function() {
                 this.__chart__ = view = {x: cx - l[0] * k, y: cy - l[1] * k, k: k};
                 zoomed(dispatch);
               };
+            })
+            .each("interrupt.zoom", function() {
+              zoomended(dispatch);
             })
             .each("end.zoom", function() {
               zoomended(dispatch);
@@ -143,7 +147,7 @@ d3.behavior.zoom = function() {
   }
 
   function zoomstarted(dispatch) {
-    dispatch({type: "zoomstart"});
+    if (!zooming++) dispatch({type: "zoomstart"});
   }
 
   function zoomed(dispatch) {
@@ -152,7 +156,7 @@ d3.behavior.zoom = function() {
   }
 
   function zoomended(dispatch) {
-    dispatch({type: "zoomend"});
+    if (!--zooming) dispatch({type: "zoomend"});
   }
 
   function mousedowned() {

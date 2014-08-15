@@ -1227,7 +1227,7 @@
       x: 0,
       y: 0,
       k: 1
-    }, translate0, center0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
+    }, translate0, center0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, zooming = 0, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
     function zoom(g) {
       g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
     }
@@ -1253,6 +1253,8 @@
               };
               zoomed(dispatch);
             };
+          }).each("interrupt.zoom", function() {
+            zoomended(dispatch);
           }).each("end.zoom", function() {
             zoomended(dispatch);
           });
@@ -1344,7 +1346,7 @@
       }).map(y0.invert));
     }
     function zoomstarted(dispatch) {
-      dispatch({
+      if (!zooming++) dispatch({
         type: "zoomstart"
       });
     }
@@ -1357,7 +1359,7 @@
       });
     }
     function zoomended(dispatch) {
-      dispatch({
+      if (!--zooming) dispatch({
         type: "zoomend"
       });
     }
