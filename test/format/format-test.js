@@ -67,6 +67,10 @@ suite.addBatch({
       assert.strictEqual(f(-42000000), "-4.2e+7");
       assert.strictEqual(format(".0e")(42), "4e+1")
       assert.strictEqual(format(".3e")(42), "4.200e+1")
+      assert.strictEqual(format(",")(1e42), "1e+42");
+      assert.strictEqual(format(",")(-1e42), "-1e+42");
+      assert.strictEqual(format(",")(1e-42), "1e-42");
+      assert.strictEqual(format(",")(-1e-42), "-1e-42");
     },
     "can output SI prefix notation": function(format) {
       var f = format("s");
@@ -264,6 +268,21 @@ suite.addBatch({
       assert.strictEqual(f(-42), "-42");
       assert.strictEqual(f(-4200000), "-4,200,000");
       assert.strictEqual(f(-42000000), "-42,000,000");
+      assert.strictEqual(f(1e30), "1e+30");
+      assert.strictEqual(f(-1e30), "-1e+30");
+      assert.strictEqual(f(1e-30), "1e-30");
+      assert.strictEqual(f(-1e-30), "-1e-30");
+    },
+    "can group thousands with exponent notation": function(format) {
+      var f = format(",e");
+      assert.strictEqual(f(0), "0e+0");
+      assert.strictEqual(f(42), "4.2e+1");
+      assert.strictEqual(f(42000000), "4.2e+7");
+      assert.strictEqual(f(420000000), "4.2e+8");
+      assert.strictEqual(f(-4), "-4e+0");
+      assert.strictEqual(f(-42), "-4.2e+1");
+      assert.strictEqual(f(-4200000), "-4.2e+6");
+      assert.strictEqual(f(-42000000), "-4.2e+7");
     },
     "can group thousands, space fill, and round to significant digits": function(format) {
       assert.strictEqual(format("10,.1f")(123456.49), " 123,456.5");

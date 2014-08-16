@@ -95,6 +95,9 @@ function d3_locale_numberFormat(locale) {
       // Convert to the desired precision.
       value = type(value, precision);
 
+      // If exponent notation is detected, disable grouping.
+      if (value.toString().lastIndexOf("e") >= 0) comma = false;
+
       // Break the value into the integer part (before) and decimal part (after).
       var i = value.lastIndexOf("."),
           before = i < 0 ? value : value.substring(0, i),
