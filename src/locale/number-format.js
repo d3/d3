@@ -56,7 +56,6 @@ function d3_locale_numberFormat(locale) {
       case "c":
       case "d": integer = true; precision = 0; break;
       case "s": scale = -1; type = "r"; break;
-      case "e": comma = false; break;
     }
 
     if (symbol === "$") prefix = locale_currency[0], suffix = locale_currency[1];
@@ -95,6 +94,9 @@ function d3_locale_numberFormat(locale) {
 
       // Convert to the desired precision.
       value = type(value, precision);
+
+      // If exponent notation is detected, disable grouping.
+      if (value.toString().lastIndexOf("e") >= 0) comma = false;
 
       // Break the value into the integer part (before) and decimal part (after).
       var i = value.lastIndexOf("."),
