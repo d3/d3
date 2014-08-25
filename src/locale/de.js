@@ -5,7 +5,7 @@ d3.locale.de = d3.locale({
   thousands: ".",
   grouping: [3],
   currency: ["", " €"],
-  dateTime: "%A der %e. %B %Y, %X",
+  dateTime: "%A, der %e. %B %Y, %X",
   date: "%e.%m.%Y",
   time: "%H:%M:%S",
   periods: ["AM", "PM"], // unused
