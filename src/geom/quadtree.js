@@ -106,7 +106,7 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 
       // Recursively insert into the child node.
       n.leaf = false;
-      n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode());
+      n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode(n,i));
 
       // Update the bounds as we recurse.
       if (right) x1 = sx; else x2 = sx;
@@ -168,13 +168,15 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 function d3_geom_quadtreeCompatX(d) { return d.x; }
 function d3_geom_quadtreeCompatY(d) { return d.y; }
 
-function d3_geom_quadtreeNode() {
+function d3_geom_quadtreeNode(n,i) {
   return {
     leaf: true,
     nodes: [],
     point: null,
     x: null,
-    y: null
+    y: null,
+    parent: n,
+    parentIndex: i
   };
 }
 
