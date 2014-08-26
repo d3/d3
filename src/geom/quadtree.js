@@ -120,25 +120,25 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     root.delete = function (n) {
       //remove the node from the parent
       //assume n is a leaf node
-        n.point = null;
-        n.x = null;
-        n.y = null;
-        n.leaf = false;
-        if(!n.parent) return;
-        var empty = true;
-        n.parent.nodes[n.parentIndex] = null;
-        for  (var _i=0;_i<n.parent.nodes.length;_i++) {
-          if (n.parent.nodes[_i] != null ) {
-            empty = false;
-          }
-        }
-        if (empty) {
-          //collapse parent node
-          n.parent.leaf = true;
-          n.parent.nodes = [];
-          this.delete(n.parent);
+      n.point = null;
+      n.x = null;
+      n.y = null;
+      n.leaf = false;
+      if(!n.parent) return;
+      var empty = true;
+      n.parent.nodes[n.parentIndex] = null;
+      for  (var _i=0;_i<n.parent.nodes.length;_i++) {
+        if (n.parent.nodes[_i] != null ) {
+          empty = false;
         }
       }
+      if (empty) {
+        //collapse parent node and continue deletion
+        n.parent.leaf = true;
+        n.parent.nodes = [];
+        this.delete(n.parent);
+      }
+    }
     
     root.add = function(d) {
       insert(root, d, +fx(d, ++i), +fy(d, i), x1_, y1_, x2_, y2_);
