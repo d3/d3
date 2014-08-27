@@ -15,7 +15,7 @@ d3_selectionPrototype.on = function(type, listener, capture) {
     // whether the listener captures events.
     if (typeof type !== "string") {
       if (n < 2) listener = false;
-      for (capture in type) this.each(d3_selection_on(capture, type[capture], listener));
+      for (var i in type) this.each(d3_selection_on(type[i], listener, capture));
       return this;
     }
 

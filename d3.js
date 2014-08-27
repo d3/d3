@@ -998,7 +998,7 @@
     if (n < 3) {
       if (typeof type !== "string") {
         if (n < 2) listener = false;
-        for (capture in type) this.each(d3_selection_on(capture, type[capture], listener));
+        for (var i in type) this.each(d3_selection_on(type[i], listener, capture));
         return this;
       }
       if (n < 2) return (n = this.node()["__on" + type]) && n._;
