@@ -2153,7 +2153,10 @@
        case "o":
        case "x":
        case "X":
-        if (symbol === "#") prefix = "0" + type.toLowerCase();
+        if (symbol === "#") {
+          prefix = "0" + type.toLowerCase();
+        }
+        comma = false;
 
        case "c":
        case "d":
@@ -2171,8 +2174,9 @@
       if (precision != null) {
         if (type == "g") precision = Math.max(1, Math.min(21, precision)); else if (type == "e" || type == "f") precision = Math.max(0, Math.min(20, precision));
       }
-      type = d3_format_types.get(type) || d3_format_typeDefault;
+      var type_f = d3_format_types.get(type) || d3_format_typeDefault;
       var zcomma = zfill && comma;
+      var afterStartRe = /[^0-9-]/;
       return function(value) {
         var fullSuffix = suffix;
         if (integer && value % 1) return "";
@@ -2184,8 +2188,8 @@
         } else {
           value *= scale;
         }
-        value = type(value, precision);
-        var i = value.lastIndexOf("."), before = i < 0 ? value : value.substring(0, i), after = i < 0 ? "" : locale_decimal + value.substring(i + 1);
+        value = type_f(value, precision);
+        var i = value.lastIndexOf(".") + 1, scm = afterStartRe.exec(value), scp = scm && scm.index, before = !i ? !scm ? value : value.substring(0, scp) : value.substring(0, i - 1), after = !i ? !scm ? "" : value.substring(scp) : locale_decimal + value.substring(i);
         if (!zfill && comma) before = formatGroup(before);
         var length = prefix.length + before.length + after.length + (zcomma ? 0 : negative.length), padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
         if (zcomma) before = formatGroup(padding + before);
@@ -2211,6 +2215,9 @@
     },
     X: function(x) {
       return x.toString(16).toUpperCase();
+    },
+    n: function(x, p) {
+      return x.toPrecision(p);
     },
     g: function(x, p) {
       return x.toPrecision(p);

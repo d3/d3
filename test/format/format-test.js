@@ -275,6 +275,83 @@ suite.addBatch({
       assert.strictEqual(format("10,.3f")(12345678), "12,345,678.000");
       assert.strictEqual(format("10,.5f")(123456789), "123,456,789.00000");
     },
+    "can handle scientific notation and group thousands": function(format) {
+      var f = format(",g");
+      assert.strictEqual(f(1e3), "1,000");
+      assert.strictEqual(f(1e42), "1e+42");
+      assert.strictEqual(f(3.1415e42), "3.1415e+42");
+      f = format(",f");
+      assert.strictEqual(f(1e3), "1,000");
+      assert.strictEqual(f(1e42), "1e+42");
+      assert.strictEqual(f(3.1415e42), "3.1415e+42");
+      f = format(",r");
+      assert.strictEqual(f(1e3), "1,000");
+      assert.strictEqual(f(1e42), "1e+42");
+      assert.strictEqual(f(3.1415e42), "3.1415e+42");
+      f = format(",e");
+      assert.strictEqual(f(1e3), "1e+3");
+      assert.strictEqual(f(1e42), "1e+42");
+      assert.strictEqual(f(3.1415e42), "3.1415e+42");
+      f = format(",E");
+      assert.strictEqual(f(1e3), "1,000");
+      assert.strictEqual(f(1e42), "1e+42");
+      assert.strictEqual(f(3.1415e42), "3.1415e+42");
+    },
+    "can handle arbitrary formats mixed with group thousands": function(format) {
+      var f = format(",n");
+      assert.strictEqual(f(1e3), "1,000");
+      assert.strictEqual(f(1e42), "1e+42");
+      assert.strictEqual(f(3.1415e42), "3.1415e+42");
+      f = format(",p");
+      assert.strictEqual(f(1e3), "100,000%");
+      assert.strictEqual(f(1e42), "1e+44%");
+      assert.strictEqual(f(3.1416e42), "3.1416e+44%");
+      //assert.strictEqual(f(3.1415e42), "3.1415e+44%");  // x86: 3.1415000000000002e+44% -- floating point inaccuracy kicking in...
+      f = format(",%");
+      assert.strictEqual(f(1e3), "100,000%");
+      assert.strictEqual(f(1e42), "1e+44%");
+      assert.strictEqual(f(3.1416e42), "3.1416e+44%");
+      //assert.strictEqual(f(3.1415e42), "3.1415e+44%");
+      f = format(",b");
+      assert.strictEqual(f(1e3), "1111101000");
+      assert.strictEqual(f(1e42), "10110111101010111100011000100111000001010000001100001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+      assert.strictEqual(f(3.1415e42), "1001000001000000001001111011000000011101111100111100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+      f = format(",o");
+      assert.strictEqual(f(1e3), "1750");
+      assert.strictEqual(f(1e42), "26752743047012014100000000000000000000000000000");
+      assert.strictEqual(f(3.1415e42), "110100117300357474000000000000000000000000000000");
+      f = format(",x");
+      assert.strictEqual(f(1e4), "2710");
+      assert.strictEqual(f(1e42), "b7abc627050308000000000000000000000");
+      assert.strictEqual(f(3.1415e42), "241009ec077cf00000000000000000000000");
+      f = format(",X");
+      assert.strictEqual(f(1e4), "2710");
+      assert.strictEqual(f(1e42), "B7ABC627050308000000000000000000000");
+      assert.strictEqual(f(3.1415e42), "241009EC077CF00000000000000000000000");
+      f = format(",c");
+      assert.strictEqual(f(1.012e3), "ϴ");
+      //assert.strictEqual(f(1e42), "");
+      //assert.strictEqual(f(3.1415e42), "");
+      f = format(",d");
+      assert.strictEqual(f(1e3), "1,000");
+      assert.strictEqual(f(1e42), "1e+42");
+      assert.strictEqual(f(3.1415e42), "3.1415e+42");
+      f = format(",s");
+      assert.strictEqual(f(1e3), "1k");
+      assert.strictEqual(f(1e42), "1,000,000,000,000,000,000Y");
+      assert.strictEqual(f(3.1415e42), "3,141,500,000,000,000,000Y");
+
+      f = format(",Z");                                       // Force use of default type format.
+      assert.strictEqual(f(1e3), "1,000");
+      assert.strictEqual(f(1e42), "1e+42");
+      assert.strictEqual(f(3.1415e42), "3.1415e+42");
+
+      // Testcases custom crafted to test proper format operation at fringe cases (string input, boolean input).
+      assert.strictEqual(f("1e3"), "1,000");
+      assert.strictEqual(f("-100000e3"), "-100,000,000");     
+      assert.strictEqual(f(true), "1");
+      assert.strictEqual(f(false), "0");     
+    },
     "can display integers in fixed-point notation": function(format) {
       assert.strictEqual(format("f")(42), "42");
     },
