@@ -52,7 +52,7 @@ function d3_locale_numberFormat(locale) {
       case "b":
       case "o":
       case "x":
-      case "X": if (symbol === "#") prefix = "0" + type.toLowerCase();
+      case "X": if (symbol === "#") { prefix = "0" + type.toLowerCase(); } comma = false; // & fall through...
       case "c":
       case "d": integer = true; precision = 0; break;
       case "s": scale = -1; type = "r"; break;
@@ -69,9 +69,13 @@ function d3_locale_numberFormat(locale) {
       else if (type == "e" || type == "f") precision = Math.max(0, Math.min(20, precision));
     }
 
-    type = d3_format_types.get(type) || d3_format_typeDefault;
+    var type_f = d3_format_types.get(type) || d3_format_typeDefault;
 
     var zcomma = zfill && comma;
+
+    // This regex is meant to catch both the [eE] of a scientific notation value (e.g. 4e7)
+    // and any type='s' or other format non-decimal-integer-numeric value part (e.g. 100M).
+    var afterStartRe = /[^0-9-]/;
 
     return function(value) {
       var fullSuffix = suffix;
@@ -82,7 +86,7 @@ function d3_locale_numberFormat(locale) {
       // Convert negative to positive, and record the sign prefix.
       var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
 
-      // Apply the scale, computing it from the value's exponent for si format.
+      // Apply the scale, computing it from the value's exponent for SI format.
       // Preserve the existing suffix, if any, such as the currency symbol.
       if (scale < 0) {
         var unit = d3.formatPrefix(value, precision);
@@ -93,14 +97,23 @@ function d3_locale_numberFormat(locale) {
       }
 
       // Convert to the desired precision.
-      value = type(value, precision);
+      value = type_f(value, precision);
 
       // Break the value into the integer part (before) and decimal part (after).
-      var i = value.lastIndexOf("."),
-          before = i < 0 ? value : value.substring(0, i),
-          after = i < 0 ? "" : locale_decimal + value.substring(i + 1);
+      // Break the value into mantissa and power when this is a 'scientific notation' value string
+      // without a decimal dot, e.g. '4e+9'.
+      // 
+      // Note: It is no problem that binary/octal/hexadecimal numbers are 
+      //       broken up arbitrarily (on first 'e/alpha' in their value) 
+      //       as they skip the formatGroup action anyway. 
+      //       Hence we can use one flow for all types.
+      var i = value.lastIndexOf(".") + 1,
+          scm = afterStartRe.exec(value),
+          scp = scm && scm.index,
+          before = !i ? !scm ? value : value.substring(0, scp) : value.substring(0, i - 1),
+          after = !i ? !scm ? "" : value.substring(scp) : locale_decimal + value.substring(i);
 
-       // If the fill character is not "0", grouping is applied before padding.
+      // If the fill character is not "0", grouping is applied before padding.
       if (!zfill && comma) before = formatGroup(before);
 
       var length = prefix.length + before.length + after.length + (zcomma ? 0 : negative.length),
@@ -132,6 +145,7 @@ var d3_format_types = d3.map({
   o: function(x) { return x.toString(8); },
   x: function(x) { return x.toString(16); },
   X: function(x) { return x.toString(16).toUpperCase(); },
+  n: function(x, p) { return x.toPrecision(p); },
   g: function(x, p) { return x.toPrecision(p); },
   e: function(x, p) { return x.toExponential(p); },
   f: function(x, p) { return x.toFixed(p); },
