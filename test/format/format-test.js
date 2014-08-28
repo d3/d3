@@ -388,6 +388,17 @@ suite.addBatch({
       assert.strictEqual(f(-4200000), "-4,200,000");
       assert.strictEqual(f(-42000000), "-42,000,000");
     },
+    "\"n\" with zero padding": function(format) {
+      assert.strictEqual(format("01n")(0), "0");
+      assert.strictEqual(format("01n")(0), "0");
+      assert.strictEqual(format("02n")(0), "00");
+      assert.strictEqual(format("03n")(0), "000");
+      assert.strictEqual(format("05n")(0), "0,000");
+      assert.strictEqual(format("08n")(0), "0,000,000");
+      assert.strictEqual(format("013n")(0), "0,000,000,000");
+      assert.strictEqual(format("021n")(0), "0,000,000,000,000,000");
+      assert.strictEqual(format("013n")(-42000000), "-0,042,000,000");
+    },
     "unreasonable precision values are clamped to reasonable values": function(format) {
       assert.strictEqual(format(".30f")(0), "0.00000000000000000000");
       assert.strictEqual(format(".0g")(1), "1");
