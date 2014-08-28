@@ -43,7 +43,7 @@ suite.addBatch({
         assert.equal(g[0][0].namespaceURI, "http://www.w3.org/2000/svg");
       },
       "appends an HTML element with class": function(body) {
-        var div = body.append("div.some-class");
+        var div = body.append("div", "some-class");
         assert.equal(div[0][0].tagName, "DIV");
         assert.isNull(div[0][0].namespaceURI);
         assert.isTrue(div[0][0].parentNode === body.node());
@@ -51,7 +51,7 @@ suite.addBatch({
         assert.equal(div[0][0].className, 'some-class');
       },
       "appends an HTML element with two classes": function(body) {
-        var div = body.append("div.first-class.second-class");
+        var div = body.append("div", "first-class second-class");
         assert.equal(div[0][0].tagName, "DIV");
         assert.isNull(div[0][0].namespaceURI);
         assert.isTrue(div[0][0].parentNode === body.node());

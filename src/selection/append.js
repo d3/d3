@@ -2,13 +2,7 @@ import "../core/document";
 import "../core/ns";
 import "selection";
 
-d3_selectionPrototype.append = function(name) {
-  var classes;
-  if (typeof name == 'string' && name.indexOf('.')) {
-    classes = name.split('.');
-    name = classes[0];
-    classes = classes.slice(1).join(' ');
-  }
+d3_selectionPrototype.append = function(name, classes) {
   name = d3_selection_creator(name);
   var s = this.select(function() {
     return this.appendChild(name.apply(this, arguments));
