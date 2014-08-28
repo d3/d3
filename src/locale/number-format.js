@@ -39,6 +39,8 @@ function d3_locale_numberFormat(locale) {
 
     if (precision) precision = +precision.substring(1);
 
+    if (type === "n") comma = true, type = "g";
+
     if (zfill || fill === "0" && align === "=") {
       zfill = fill = "0";
       align = "=";
@@ -46,7 +48,6 @@ function d3_locale_numberFormat(locale) {
     }
 
     switch (type) {
-      case "n": comma = true; type = "g"; break;
       case "%": scale = 100; suffix = "%"; type = "f"; break;
       case "p": scale = 100; suffix = "%"; type = "r"; break;
       case "b":

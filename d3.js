@@ -2126,17 +2126,13 @@
     return function(specifier) {
       var match = d3_format_re.exec(specifier), fill = match[1] || " ", align = match[2] || ">", sign = match[3] || "", symbol = match[4] || "", zfill = match[5], width = +match[6], comma = match[7], precision = match[8], type = match[9], scale = 1, prefix = "", suffix = "", integer = false;
       if (precision) precision = +precision.substring(1);
+      if (type === "n") comma = true, type = "g";
       if (zfill || fill === "0" && align === "=") {
         zfill = fill = "0";
         align = "=";
         if (comma) width -= Math.floor((width - 1) / 4);
       }
       switch (type) {
-       case "n":
-        comma = true;
-        type = "g";
-        break;
-
        case "%":
         scale = 100;
         suffix = "%";
