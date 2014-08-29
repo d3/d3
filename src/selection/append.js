@@ -2,7 +2,7 @@ import "../core/document";
 import "../core/ns";
 import "selection";
 
-d3_selectionPrototype.append = function(name, classes) {
+d3_selectionPrototype.append = function(name) {
   var n = d3_parse_attributes(name);
   name = n.attr ? n.tag : name;
   name = d3_selection_creator(name);
