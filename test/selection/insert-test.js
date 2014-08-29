@@ -50,6 +50,23 @@ suite.addBatch({
       "inherits namespace from parent node": function(body) {
         var g = body.insert("svg:svg").insert("g");
         assert.equal(g[0][0].namespaceURI, "http://www.w3.org/2000/svg");
+      },
+      "inserts an HTML element with class": function(body) {
+        var div = body.insert("div.some-class");
+        assert.equal(div[0][0].className, 'some-class');
+      },
+      "inserts an HTML element with multiple classes": function(body) {
+        var div = body.insert("div.first-class.second-class");
+        assert.equal(div[0][0].className, 'first-class second-class');
+      },
+      "inserts an HTML element with an id": function(body) {
+        var div = body.insert("div#someId");
+        assert.equal(div[0][0].id, 'someId');
+      },
+      "inserts an HTML element with an id and a class": function(body) {
+        var div = body.insert("div#someId.some-class");
+        assert.equal(div[0][0].id, 'someId');
+        assert.equal(div[0][0].className, 'some-class');
       }
     }
   }

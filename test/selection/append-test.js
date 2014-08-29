@@ -43,21 +43,22 @@ suite.addBatch({
         assert.equal(g[0][0].namespaceURI, "http://www.w3.org/2000/svg");
       },
       "appends an HTML element with class": function(body) {
-        var div = body.append("div", "some-class");
-        assert.equal(div[0][0].tagName, "DIV");
-        assert.isNull(div[0][0].namespaceURI);
-        assert.isTrue(div[0][0].parentNode === body.node());
-        assert.isTrue(div[0][0] === body.node().lastChild);
+        var div = body.append("div.some-class");
         assert.equal(div[0][0].className, 'some-class');
       },
-      "appends an HTML element with two classes": function(body) {
-        var div = body.append("div", "first-class second-class");
-        assert.equal(div[0][0].tagName, "DIV");
-        assert.isNull(div[0][0].namespaceURI);
-        assert.isTrue(div[0][0].parentNode === body.node());
-        assert.isTrue(div[0][0] === body.node().lastChild);
+      "appends an HTML element with multiple classes": function(body) {
+        var div = body.append("div.first-class.second-class");
         assert.equal(div[0][0].className, 'first-class second-class');
       },
+      "appends an HTML element with an id": function(body) {
+        var div = body.append("div#someId");
+        assert.equal(div[0][0].id, 'someId');
+      },
+      "appends an HTML element with an id and a class": function(body) {
+        var div = body.append("div#someId.some-class");
+        assert.equal(div[0][0].id, 'someId');
+        assert.equal(div[0][0].className, 'some-class');
+      }
     }
   }
 });
