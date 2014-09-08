@@ -18,18 +18,18 @@ function d3_selection_creator(name) {
       : function() { return this.ownerDocument.createElementNS(this.namespaceURI, name); };
 }
 
+var d3_parse_attributes_regex = /([\.#])/g;
+
 function d3_parse_attributes(name) {
   if (typeof name === "string") {
-    var attr = {}, p;
-    if (name.indexOf('.') > 0) {
-      attr["class"] = (p = name.split('.')).slice(1).join(' ');
-      name = p[0];
+    var attr = {},
+        parts = name.split(d3_parse_attributes_regex), p;
+    name = parts.shift();
+    while (p = parts.shift()) {
+      if (p == '.') attr['class'] = attr['class'] ? attr['class'] + ' ' + parts.shift() : parts.shift();
+      else if (p == '#') attr.id = parts.shift();
     }
-    if (name.indexOf('#') > 0) {
-      attr.id = (p = name.split('#', 2))[1];
-      name = p[0];
-    }
-    return p ? { tag: name, attr: attr } : name;
+    return attr.id || attr['class'] ? { tag: name, attr: attr } : name;
   }
   return name;
 }
