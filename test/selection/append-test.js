@@ -58,6 +58,11 @@ suite.addBatch({
         var div = body.append("div#someId.some-class");
         assert.equal(div[0][0].id, 'someId');
         assert.equal(div[0][0].className, 'some-class');
+      },
+      "appends an HTML element with a class and an id": function(body) {
+        var div = body.append("div.some-class#someId");
+        assert.equal(div[0][0].id, 'someId');
+        assert.equal(div[0][0].className, 'some-class');
       }
     }
   }
