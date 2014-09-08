@@ -4013,9 +4013,9 @@
     return stream;
   }
   function d3_geo_resample(project) {
-    var δ2 = .5, cosMinDistance = Math.cos(30 * d3_radians), maxDepth = 16;
+    var δ2 = .5, cosMinDistance = Math.cos(30 * d3_radians);
     function resample(stream) {
-      return (maxDepth ? resampleRecursive : resampleNone)(stream);
+      return (δ2 > 0 ? resampleRecursive : resampleNone)(stream);
     }
     function resampleNone(stream) {
       return d3_geo_transformPoint(stream, function(x, y) {
@@ -4049,7 +4049,7 @@
       }
       function linePoint(λ, φ) {
         var c = d3_geo_cartesian([ λ, φ ]), p = project(λ, φ);
-        resampleLineTo(x0, y0, λ0, a0, b0, c0, x0 = p[0], y0 = p[1], λ0 = λ, a0 = c[0], b0 = c[1], c0 = c[2], maxDepth, stream);
+        resampleLineTo(x0, y0, λ0, a0, b0, c0, x0 = p[0], y0 = p[1], λ0 = λ, a0 = c[0], b0 = c[1], c0 = c[2], d3_geo_resampleMaxDepth, stream);
         stream.point(x0, y0);
       }
       function lineEnd() {
@@ -4066,7 +4066,7 @@
         resample.point = linePoint;
       }
       function ringEnd() {
-        resampleLineTo(x0, y0, λ0, a0, b0, c0, x00, y00, λ00, a00, b00, c00, maxDepth, stream);
+        resampleLineTo(x0, y0, λ0, a0, b0, c0, x00, y00, λ00, a00, b00, c00, d3_geo_resampleMaxDepth, stream);
         resample.lineEnd = lineEnd;
         lineEnd();
       }
@@ -4085,11 +4085,12 @@
     }
     resample.precision = function(_) {
       if (!arguments.length) return Math.sqrt(δ2);
-      maxDepth = (δ2 = _ * _) > 0 && 16;
+      δ2 = _ * _;
       return resample;
     };
     return resample;
   }
+  var d3_geo_resampleMaxDepth = 16;
   d3.geo.path = function() {
     var pointRadius = 4.5, projection, context, projectStream, contextStream, cacheStream;
     function path(object) {
@@ -4258,7 +4259,11 @@
       δγ = _.length > 2 ? _[2] % 360 * d3_radians : 0;
       return reset();
     };
-    d3.rebind(projection, projectResample, "precision");
+    projection.precision = function(_) {
+      if (!arguments.length) return projectResample.precision();
+      projectResample.precision(_);
+      return invalidate();
+    };
     function reset() {
       projectRotate = d3_geo_compose(rotate = d3_geo_rotation(δλ, δφ, δγ), project);
       var center = project(λ, φ);
