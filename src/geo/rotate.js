@@ -8,6 +8,7 @@ d3.geo.rotate = function(δλ, δφ, δγ, sink) {
       sinδγ = Math.sin(δγ);
 
   return {
+    sphere: function() { sink.sphere(); },
     polygonStart: function() { sink.polygonStart(); },
     polygonEnd: function() { sink.polygonEnd(); },
     lineStart: function() { sink.lineStart(); },
