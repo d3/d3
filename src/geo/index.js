@@ -6,3 +6,4 @@ import "project";
 import "clip-antimeridian";
 import "equirectangular";
 import "orthographic";
+import "pipeline";
