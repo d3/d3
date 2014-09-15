@@ -4,3 +4,6 @@ import "polygon";
 import "voronoi";
 import "delaunay";
 import "quadtree";
+
+import "affine";
+import "context-sink";

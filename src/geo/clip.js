@@ -4,9 +4,8 @@ import "../math/trigonometry";
 import "clip-polygon";
 
 function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
-  return function(rotate, listener) {
-    var line = clipLine(listener),
-        rotatedClipStart = rotate.invert(clipStart[0], clipStart[1]);
+  return function(sink) {
+    var line = clipLine(sink);
 
     var clip = {
       point: point,
@@ -25,63 +24,56 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
         clip.lineEnd = lineEnd;
 
         segments = d3.merge(segments);
-        var clipStartInside = d3_geo_pointInPolygon(rotatedClipStart, polygon);
+        var clipStartInside = d3_geo_pointInPolygon(clipStart, polygon);
         if (segments.length) {
-          if (!polygonStarted) listener.polygonStart(), polygonStarted = true;
-          d3_geo_clipPolygon(segments, d3_geo_clipSort, clipStartInside, interpolate, listener);
+          if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
+          d3_geo_clipPolygon(segments, d3_geo_clipSort, clipStartInside, interpolate, sink);
         } else if (clipStartInside) {
-          if (!polygonStarted) listener.polygonStart(), polygonStarted = true;
-          listener.lineStart();
-          interpolate(null, null, 1, listener);
-          listener.lineEnd();
+          if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
+          sink.lineStart();
+          interpolate(null, null, 1, sink);
+          sink.lineEnd();
         }
-        if (polygonStarted) listener.polygonEnd(), polygonStarted = false;
+        if (polygonStarted) sink.polygonEnd(), polygonStarted = false;
         segments = polygon = null;
       },
       sphere: function() {
-        listener.polygonStart();
-        listener.lineStart();
-        interpolate(null, null, 1, listener);
-        listener.lineEnd();
-        listener.polygonEnd();
+        sink.polygonStart();
+        sink.lineStart();
+        interpolate(null, null, 1, sink);
+        sink.lineEnd();
+        sink.polygonEnd();
       }
     };
 
-    function point(λ, φ) {
-      var point = rotate(λ, φ);
-      if (pointVisible(λ = point[0], φ = point[1])) listener.point(λ, φ);
-    }
-    function pointLine(λ, φ) {
-      var point = rotate(λ, φ);
-      line.point(point[0], point[1]);
-    }
+    function point(λ, φ) { if (pointVisible(λ, φ)) sink.point(λ, φ); }
+    function pointLine(λ, φ) { line.point(λ, φ); }
     function lineStart() { clip.point = pointLine; line.lineStart(); }
     function lineEnd() { clip.point = point; line.lineEnd(); }
 
     var segments;
 
-    var buffer = d3_geo_clipBufferListener(),
-        ringListener = clipLine(buffer),
+    var buffer = d3_geo_clipBufferSink(),
+        ringSink = clipLine(buffer),
         polygonStarted = false,
         polygon,
         ring;
 
     function pointRing(λ, φ) {
       ring.push([λ, φ]);
-      var point = rotate(λ, φ);
-      ringListener.point(point[0], point[1]);
+      ringSink.point(λ, φ);
     }
 
     function ringStart() {
-      ringListener.lineStart();
+      ringSink.lineStart();
       ring = [];
     }
 
     function ringEnd() {
       pointRing(ring[0][0], ring[0][1]);
-      ringListener.lineEnd();
+      ringSink.lineEnd();
 
-      var clean = ringListener.clean(),
+      var clean = ringSink.clean(),
           ringSegments = buffer.buffer(),
           segment,
           n = ringSegments.length;
@@ -99,16 +91,16 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
             i = -1,
             point;
         if (n > 0) {
-          if (!polygonStarted) listener.polygonStart(), polygonStarted = true;
-          listener.lineStart();
-          while (++i < n) listener.point((point = segment[i])[0], point[1]);
-          listener.lineEnd();
+          if (!polygonStarted) sink.polygonStart(), polygonStarted = true;
+          sink.lineStart();
+          while (++i < n) sink.point((point = segment[i])[0], point[1]);
+          sink.lineEnd();
         }
         return;
       }
 
       // Rejoin connected segments.
-      // TODO reuse bufferListener.rejoin()?
+      // TODO reuse bufferSink.rejoin()?
       if (n > 1 && clean & 2) ringSegments.push(ringSegments.pop().concat(ringSegments.shift()));
 
       segments.push(ringSegments.filter(d3_geo_clipSegmentLength1));
@@ -122,7 +114,7 @@ function d3_geo_clipSegmentLength1(segment) {
   return segment.length > 1;
 }
 
-function d3_geo_clipBufferListener() {
+function d3_geo_clipBufferSink() {
   var lines = [],
       line;
   return {
