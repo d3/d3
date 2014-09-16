@@ -15,6 +15,7 @@ d3.behavior.zoom = function() {
       center, // explicit desired position of translate0 after zooming
       size = [960, 500], // viewport size; required for zoom interpolation
       scaleExtent = d3_behavior_zoomInfinity,
+      scalefunc = d3_behavior_zoomScalefunc,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
@@ -89,6 +90,11 @@ d3.behavior.zoom = function() {
     if (!arguments.length) return scaleExtent;
     scaleExtent = _ == null ? d3_behavior_zoomInfinity : [+_[0], +_[1]];
     return zoom;
+  };
+
+  zoom.scalefunc = function(_) {
+    if (!arguments.length) return scalefunc;
+    scalefunc = (typeof(_) != 'function') ? d3_behavior_zoomScalefunc : _;
   };
 
   zoom.center = function(_) {
@@ -294,7 +300,7 @@ d3.behavior.zoom = function() {
     else translate0 = location(center0 = center || d3.mouse(this)), d3_selection_interrupt.call(this), zoomstarted(dispatch);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(dispatch); }, 50);
     d3_eventPreventDefault();
-    scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
+    scaleTo(scalefunc(d3_behavior_zoomDelta(), view.k));
     translateTo(center0, translate0);
     zoomed(dispatch);
   }
@@ -315,7 +321,9 @@ d3.behavior.zoom = function() {
 };
 
 var d3_behavior_zoomInfinity = [0, Infinity]; // default scale extent
-
+var d3_behavior_zoomScalefunc = function (delta, k) {
+  return Math.pow(2, delta * .002) * k;
+};
 // https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/wheel
 var d3_behavior_zoomDelta, d3_behavior_zoomWheel
     = "onwheel" in d3_document ? (d3_behavior_zoomDelta = function() { return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1); }, "wheel")

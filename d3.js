@@ -1227,7 +1227,7 @@
       x: 0,
       y: 0,
       k: 1
-    }, translate0, center0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
+    }, translate0, center0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, scalefunc = d3_behavior_zoomScalefunc, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
     function zoom(g) {
       g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
     }
@@ -1288,6 +1288,10 @@
       if (!arguments.length) return scaleExtent;
       scaleExtent = _ == null ? d3_behavior_zoomInfinity : [ +_[0], +_[1] ];
       return zoom;
+    };
+    zoom.scalefunc = function(_) {
+      if (!arguments.length) return scalefunc;
+      scalefunc = typeof _ != "function" ? d3_behavior_zoomScalefunc : _;
     };
     zoom.center = function(_) {
       if (!arguments.length) return center;
@@ -1456,7 +1460,7 @@
         zoomended(dispatch);
       }, 50);
       d3_eventPreventDefault();
-      scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
+      scaleTo(scalefunc(d3_behavior_zoomDelta(), view.k));
       translateTo(center0, translate0);
       zoomed(dispatch);
     }
@@ -1471,6 +1475,9 @@
     return d3.rebind(zoom, event, "on");
   };
   var d3_behavior_zoomInfinity = [ 0, Infinity ];
+  var d3_behavior_zoomScalefunc = function(delta, k) {
+    return Math.pow(2, delta * .002) * k;
+  };
   var d3_behavior_zoomDelta, d3_behavior_zoomWheel = "onwheel" in d3_document ? (d3_behavior_zoomDelta = function() {
     return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1);
   }, "wheel") : "onmousewheel" in d3_document ? (d3_behavior_zoomDelta = function() {
