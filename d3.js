@@ -4248,25 +4248,6 @@
       if (children[3]) d3_geom_quadtreeVisit(f, children[3], sx, sy, x2, y2);
     }
   }
-  d3.geom.affine = function(a, b, c, d, e, f, sink) {
-    return {
-      polygonStart: function() {
-        sink.polygonStart();
-      },
-      polygonEnd: function() {
-        sink.polygonEnd();
-      },
-      lineStart: function() {
-        sink.lineStart();
-      },
-      lineEnd: function() {
-        sink.lineEnd();
-      },
-      point: function(x, y) {
-        sink.point(a * x + b * y + e, c * x + d * y + f);
-      }
-    };
-  };
   d3.geom.contextSink = function(pointRadius, context) {
     if (arguments.length < 2) context = pointRadius, pointRadius = 4.5;
     var sink = {
@@ -4304,6 +4285,25 @@
       sink.point = point;
     }
     return sink;
+  };
+  d3.geom.matrix = function(a, b, c, d, e, f, sink) {
+    return {
+      polygonStart: function() {
+        sink.polygonStart();
+      },
+      polygonEnd: function() {
+        sink.polygonEnd();
+      },
+      lineStart: function() {
+        sink.lineStart();
+      },
+      lineEnd: function() {
+        sink.lineEnd();
+      },
+      point: function(x, y) {
+        sink.point(a * x + b * y + e, c * x + d * y + f);
+      }
+    };
   };
   d3.interpolateRgb = d3_interpolateRgb;
   function d3_interpolateRgb(a, b) {

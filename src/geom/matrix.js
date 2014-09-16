@@ -1,6 +1,6 @@
 import "geom";
 
-d3.geom.affine = function(a, b, c, d, e, f, sink) {
+d3.geom.matrix = function(a, b, c, d, e, f, sink) {
   return {
     polygonStart: function() { sink.polygonStart(); },
     polygonEnd: function() { sink.polygonEnd(); },

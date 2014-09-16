@@ -5,5 +5,5 @@ import "voronoi";
 import "delaunay";
 import "quadtree";
 
-import "affine";
 import "context-sink";
+import "matrix";
