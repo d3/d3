@@ -1,5 +1,8 @@
 import "geom";
 
+// [ a b e ]   [ x ]
+// [ c d f ] * [ y ]
+// [ 0 0 1 ]   [ 1 ]
 d3.geom.matrix = function(a, b, c, d, e, f, sink) {
   return {
     polygonStart: function() { sink.polygonStart(); },
