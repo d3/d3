@@ -15,7 +15,7 @@ d3.behavior.zoom = function() {
       center, // explicit desired position of translate0 after zooming
       size = [960, 500], // viewport size; required for zoom interpolation
       scaleExtent = d3_behavior_zoomInfinity,
-      scalefunc = d3_behavior_zoomScalefunc,
+      scaleGenerator = d3_behavior_zoomScaleGenerator,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
@@ -92,9 +92,10 @@ d3.behavior.zoom = function() {
     return zoom;
   };
 
-  zoom.scalefunc = function(_) {
-    if (!arguments.length) return scalefunc;
-    scalefunc = (typeof(_) != 'function') ? d3_behavior_zoomScalefunc : _;
+  zoom.scaleGenerator = function(g) {
+    if (!arguments.length) return scaleGenerator;
+    scaleGenerator = (typeof(g) != 'function') ? d3_behavior_zoomScaleGenerator : g;
+    return zoom;
   };
 
   zoom.center = function(_) {
@@ -234,7 +235,7 @@ d3.behavior.zoom = function() {
       if (touches.length === 1) {
         if (now - touchtime < 500) { // dbltap
           var p = touches[0], l = locations0[p.identifier];
-          scaleTo(view.k * 2);
+          scaleTo(scaleGenerator(view.k, 1, 'dbltap'));
           translateTo(p, l);
           d3_eventPreventDefault();
           zoomed(dispatch);
@@ -264,7 +265,7 @@ d3.behavior.zoom = function() {
             scale1 = distance0 && Math.sqrt(distance1 / distance0);
         p0 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
         l0 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2];
-        scaleTo(scale1 * scale0);
+        scaleTo(scaleGenerator(scale0, scale1, 'touchzoom'));
       }
 
       touchtime = null;
@@ -300,7 +301,7 @@ d3.behavior.zoom = function() {
     else translate0 = location(center0 = center || d3.mouse(this)), d3_selection_interrupt.call(this), zoomstarted(dispatch);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(dispatch); }, 50);
     d3_eventPreventDefault();
-    scaleTo(scalefunc(d3_behavior_zoomDelta(), view.k));
+    scaleTo(scaleGenerator(view.k, d3_behavior_zoomDelta(), 'mousewheel'));
     translateTo(center0, translate0);
     zoomed(dispatch);
   }
@@ -308,10 +309,9 @@ d3.behavior.zoom = function() {
   function dblclicked() {
     var dispatch = event.of(this, arguments),
         p = d3.mouse(this),
-        l = location(p),
-        k = Math.log(view.k) / Math.LN2;
+        l = location(p);
     zoomstarted(dispatch);
-    scaleTo(Math.pow(2, d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1));
+    scaleTo(scaleGenerator(view.k, d3.event.shiftKey ? -1 : 1, 'dblclick'));
     translateTo(p, l);
     zoomed(dispatch);
     zoomended(dispatch);
@@ -321,8 +321,17 @@ d3.behavior.zoom = function() {
 };
 
 var d3_behavior_zoomInfinity = [0, Infinity]; // default scale extent
-var d3_behavior_zoomScalefunc = function (delta, k) {
-  return Math.pow(2, delta * .002) * k;
+var d3_behavior_zoomScaleGenerator = function (k, delta, usecase) {
+  if (usecase === 'mousewheel') {
+    return Math.pow(2, delta * .002) * k;
+  } else if (usecase === 'dbltap') {
+    return k * 2;
+  } else if (usecase === 'dblclick') {
+    return Math.pow(2, (delta < 0) ? (Math.ceil(Math.log(k) / Math.LN2) - 1) : (Math.floor(Math.log(k) / Math.LN2) + 1));
+  } else if (usecase === 'touchzoom') {
+    return k * delta;
+  }
+  return k;
 };
 // https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/wheel
 var d3_behavior_zoomDelta, d3_behavior_zoomWheel
