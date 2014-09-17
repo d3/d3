@@ -2,18 +2,18 @@ import "../math/abs";
 import "../math/trigonometry";
 import "cartesian";
 import "clip";
-import "circle";
+import "circle-interpolate";
 import "spherical";
 import "point-in-polygon";
 
 // Clip features against a small circle centered at [0°, 0°].
-function d3_geo_clipCircle(radius) {
+d3.geo.clipCircle = function(radius, sink) {
   var cr = Math.cos(radius),
       smallRadius = cr > 0,
       notHemisphere = abs(cr) > ε, // TODO optimise for this common case
       interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
 
-  return d3_geo_clip(visible, clipLine, interpolate, smallRadius ? [0, -radius] : [-π, radius - π]);
+  return d3_geo_clip(visible, clipLine, interpolate, smallRadius ? [0, -radius] : [-π, radius - π], sink);
 
   function visible(λ, φ) {
     return Math.cos(λ) * Math.cos(φ) > cr;
@@ -25,7 +25,7 @@ function d3_geo_clipCircle(radius) {
   //   1: no intersections.
   //   2: there were intersections, and the first and last segments should be
   //      rejoined.
-  function clipLine(listener) {
+  function clipLine(sink) {
     var point0, // previous point
         c0, // code for previous point
         v0, // visibility of previous point
@@ -43,7 +43,7 @@ function d3_geo_clipCircle(radius) {
             c = smallRadius
               ? v ? 0 : code(λ, φ)
               : v ? code(λ + (λ < 0 ? π : -π), φ) : 0;
-        if (!point0 && (v00 = v0 = v)) listener.lineStart();
+        if (!point0 && (v00 = v0 = v)) sink.lineStart();
         // Handle degeneracies.
         // TODO ignore if not clipping polygons.
         if (v !== v0) {
@@ -58,14 +58,14 @@ function d3_geo_clipCircle(radius) {
           clean = 0;
           if (v) {
             // outside going in
-            listener.lineStart();
+            sink.lineStart();
             point2 = intersect(point1, point0);
-            listener.point(point2[0], point2[1]);
+            sink.point(point2[0], point2[1]);
           } else {
             // inside going out
             point2 = intersect(point0, point1);
-            listener.point(point2[0], point2[1]);
-            listener.lineEnd();
+            sink.point(point2[0], point2[1]);
+            sink.lineEnd();
           }
           point0 = point2;
         } else if (notHemisphere && point0 && smallRadius ^ v) {
@@ -75,25 +75,25 @@ function d3_geo_clipCircle(radius) {
           if (!(c & c0) && (t = intersect(point1, point0, true))) {
             clean = 0;
             if (smallRadius) {
-              listener.lineStart();
-              listener.point(t[0][0], t[0][1]);
-              listener.point(t[1][0], t[1][1]);
-              listener.lineEnd();
+              sink.lineStart();
+              sink.point(t[0][0], t[0][1]);
+              sink.point(t[1][0], t[1][1]);
+              sink.lineEnd();
             } else {
-              listener.point(t[1][0], t[1][1]);
-              listener.lineEnd();
-              listener.lineStart();
-              listener.point(t[0][0], t[0][1]);
+              sink.point(t[1][0], t[1][1]);
+              sink.lineEnd();
+              sink.lineStart();
+              sink.point(t[0][0], t[0][1]);
             }
           }
         }
         if (v && (!point0 || !d3_geo_sphericalEqual(point0, point1))) {
-          listener.point(point1[0], point1[1]);
+          sink.point(point1[0], point1[1]);
         }
         point0 = point1, v0 = v, c0 = c;
       },
       lineEnd: function() {
-        if (v0) listener.lineEnd();
+        if (v0) sink.lineEnd();
         point0 = null;
       },
       // Rejoin first and last segments if there were intersections and the first
@@ -175,4 +175,4 @@ function d3_geo_clipCircle(radius) {
     else if (φ > r) code |= 8; // above
     return code;
   }
-}
+};

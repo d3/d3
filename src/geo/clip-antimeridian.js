@@ -4,18 +4,16 @@ import "../math/trigonometry";
 import "clip";
 import "point-in-polygon";
 
-d3.geo.clipAntimeridian = d3_geo_clip(
-    d3_true,
-    d3_geo_clipAntimeridianLine,
-    d3_geo_clipAntimeridianInterpolate,
-    [-π, -π / 2]);
+d3.geo.clipAntimeridian = function(sink) {
+  return d3_geo_clip(d3_true, d3_geo_clipAntimeridianLine, d3_geo_clipAntimeridianInterpolate, [-π, -π / 2], sink);
+};
 
 // Takes a line and cuts into visible segments. Return values:
 //   0: there were intersections or the line was empty.
 //   1: no intersections.
 //   2: there were intersections, and the first and last segments should be
 //      rejoined.
-function d3_geo_clipAntimeridianLine(listener) {
+function d3_geo_clipAntimeridianLine(sink) {
   var λ0 = NaN,
       φ0 = NaN,
       sλ0 = NaN,
@@ -23,36 +21,36 @@ function d3_geo_clipAntimeridianLine(listener) {
 
   return {
     lineStart: function() {
-      listener.lineStart();
+      sink.lineStart();
       clean = 1;
     },
     point: function(λ1, φ1) {
       var sλ1 = λ1 > 0 ? π : -π,
           dλ = abs(λ1 - λ0);
       if (abs(dλ - π) < ε) { // line crosses a pole
-        listener.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? halfπ : -halfπ);
-        listener.point(sλ0, φ0);
-        listener.lineEnd();
-        listener.lineStart();
-        listener.point(sλ1, φ0);
-        listener.point(λ1, φ0);
+        sink.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? halfπ : -halfπ);
+        sink.point(sλ0, φ0);
+        sink.lineEnd();
+        sink.lineStart();
+        sink.point(sλ1, φ0);
+        sink.point(λ1, φ0);
         clean = 0;
       } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antimeridian
         // handle degeneracies
         if (abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
         if (abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
         φ0 = d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1);
-        listener.point(sλ0, φ0);
-        listener.lineEnd();
-        listener.lineStart();
-        listener.point(sλ1, φ0);
+        sink.point(sλ0, φ0);
+        sink.lineEnd();
+        sink.lineStart();
+        sink.point(sλ1, φ0);
         clean = 0;
       }
-      listener.point(λ0 = λ1, φ0 = φ1);
+      sink.point(λ0 = λ1, φ0 = φ1);
       sλ0 = sλ1;
     },
     lineEnd: function() {
-      listener.lineEnd();
+      sink.lineEnd();
       λ0 = φ0 = NaN;
     },
     // if there are intersections, we always rejoin the first and last segments.
@@ -71,26 +69,26 @@ function d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1) {
       : (φ0 + φ1) / 2;
 }
 
-function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
+function d3_geo_clipAntimeridianInterpolate(from, to, direction, sink) {
   var φ;
   if (from == null) {
     φ = direction * halfπ;
-    listener.point(-π,  φ);
-    listener.point( 0,  φ);
-    listener.point( π,  φ);
-    listener.point( π,  0);
-    listener.point( π, -φ);
-    listener.point( 0, -φ);
-    listener.point(-π, -φ);
-    listener.point(-π,  0);
-    listener.point(-π,  φ);
+    sink.point(-π,  φ);
+    sink.point( 0,  φ);
+    sink.point( π,  φ);
+    sink.point( π,  0);
+    sink.point( π, -φ);
+    sink.point( 0, -φ);
+    sink.point(-π, -φ);
+    sink.point(-π,  0);
+    sink.point(-π,  φ);
   } else if (abs(from[0] - to[0]) > ε) {
     var s = from[0] < to[0] ? π : -π;
     φ = direction * s / 2;
-    listener.point(-s, φ);
-    listener.point( 0, φ);
-    listener.point( s, φ);
+    sink.point(-s, φ);
+    sink.point( 0, φ);
+    sink.point( s, φ);
   } else {
-    listener.point(to[0], to[1]);
+    sink.point(to[0], to[1]);
   }
 }
