@@ -2855,8 +2855,29 @@
     d[2] /= l;
   }
   var d3_geo_projectCosMinDistance = Math.cos(30 * d3_radians), d3_geo_projectMaxDepth = 16;
+  function d3_geo_projectPoint(f, sink) {
+    return {
+      point: function(x, y) {
+        x = f(x, y);
+        sink.point(x[0], x[1]);
+      },
+      lineStart: function() {
+        sink.lineStart();
+      },
+      lineEnd: function() {
+        sink.lineEnd();
+      },
+      polygonStart: function() {
+        sink.polygonStart();
+      },
+      polygonEnd: function() {
+        sink.polygonEnd();
+      }
+    };
+  }
   d3.geo.project = function(f, δ, sink) {
     if (arguments.length < 3) sink = δ, δ = 0;
+    if (!(+δ > 0)) return d3_geo_projectPoint(f, sink);
     var δ2 = δ * δ, λ00, φ00, x00, y00, a00, b00, c00, λ0, x0, y0, a0, b0, c0;
     var project = {
       point: point,
