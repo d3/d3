@@ -2,6 +2,7 @@ import "../arrays/merge";
 import "../core/noop";
 import "../math/trigonometry";
 import "clip-polygon";
+import "clip-buffer-sink";
 
 function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
   return function(sink) {
@@ -112,25 +113,6 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
 
 function d3_geo_clipSegmentLength1(segment) {
   return segment.length > 1;
-}
-
-function d3_geo_clipBufferSink() {
-  var lines = [],
-      line;
-  return {
-    lineStart: function() { lines.push(line = []); },
-    point: function(λ, φ) { line.push([λ, φ]); },
-    lineEnd: d3_noop,
-    buffer: function() {
-      var buffer = lines;
-      lines = [];
-      line = null;
-      return buffer;
-    },
-    rejoin: function() {
-      if (lines.length > 1) lines.push(lines.pop().concat(lines.shift()));
-    }
-  };
 }
 
 // Intersection points are sorted along the clip edge. For both antimeridian

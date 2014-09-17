@@ -7,3 +7,4 @@ import "quadtree";
 
 import "context-sink";
 import "matrix";
+import "clip-extent";

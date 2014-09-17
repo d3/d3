@@ -4,6 +4,7 @@ import "spherical";
 // General spherical polygon clipping algorithm: takes a polygon, cuts it into
 // visible line segments and rejoins the segments by interpolating along the
 // clip edge.
+// TODO But this is used for planar clipping (clipExtent), too?
 function d3_geo_clipPolygon(segments, compare, clipStartInside, interpolate, listener) {
   var subject = [],
       clip = [];
