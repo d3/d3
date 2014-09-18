@@ -13,3 +13,4 @@ import "pipeline";
 import "equirectangular";
 import "orthographic";
 import "mercator";
+import "satellite";
