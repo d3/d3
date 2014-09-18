@@ -46,6 +46,19 @@ function d3_geo_rotateλφγ(δλ, δφ, δγ, sink) {
   };
 }
 
+function d3_geo_rotateλγ(δλ, δγ, sink) {
+  var cosδγ = Math.cos(δγ),
+      sinδγ = Math.sin(δγ);
+  return function(λ, φ) {
+    λ += δλ; if (λ > π) λ -= τ; else if (λ < -π) λ += τ;
+    var cosφ = Math.cos(φ),
+        x = Math.cos(λ) * cosφ,
+        y = Math.sin(λ) * cosφ,
+        z = Math.sin(φ);
+    sink.point(Math.atan2(y * cosδγ - z * sinδγ, x), d3_asin(z * cosδγ + y * sinδγ));
+  };
+}
+
 function d3_geo_rotateφ(δφ, sink) {
   var cosδφ = Math.cos(δφ),
       sinδφ = Math.sin(δφ);
