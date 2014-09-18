@@ -2833,8 +2833,7 @@
       }
     };
   };
-  d3.geo.rotate = function(δλ, δφ, δγ, sink) {
-    var cosδφ = Math.cos(δφ), sinδφ = Math.sin(δφ), cosδγ = Math.cos(δγ), sinδγ = Math.sin(δγ);
+  function d3_geo_pointTransformation(sink, point) {
     return {
       sphere: function() {
         sink.sphere();
@@ -2851,14 +2850,61 @@
       lineEnd: function() {
         sink.lineEnd();
       },
-      point: function(λ, φ) {
-        λ += δλ;
-        if (λ > π) λ -= τ; else if (λ < -π) λ += τ;
-        var cosφ = Math.cos(φ), x = Math.cos(λ) * cosφ, y = Math.sin(λ) * cosφ, z = Math.sin(φ), k = z * cosδφ + x * sinδφ;
-        sink.point(Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ), d3_asin(k * cosδγ + y * sinδγ));
-      }
+      point: point
     };
+  }
+  d3.geo.rotate = function(δλ, δφ, δγ, sink) {
+    δλ = +δλ, δφ = +δφ, δγ = +δγ;
+    return d3_geo_pointTransformation(sink, δλ ? δφ ? δγ ? d3_geo_rotateλφγ(δλ, δφ, δγ, sink) : d3_geo_rotateλφ(δλ, δφ, sink) : δγ ? d3_geo_rotateλγ(δλ, δγ, sink) : d3_geo_rotateλ(δλ, sink) : δφ ? δγ ? d3_geo_rotateφγ(δφ, δγ, sink) : d3_geo_rotateφ(δφ, sink) : δγ ? d3_geo_rotateγ(δγ, sink) : function(λ, φ) {
+      sink.point(λ, φ);
+    });
   };
+  function d3_geo_rotateλ(δλ, sink) {
+    return function(λ, φ) {
+      λ += δλ;
+      if (λ > π) λ -= τ; else if (λ < -π) λ += τ;
+      sink.point(λ, φ);
+    };
+  }
+  function d3_geo_rotateλφ(δλ, δφ, sink) {
+    var cosδφ = Math.cos(δφ), sinδφ = Math.sin(δφ);
+    return function(λ, φ) {
+      λ += δλ;
+      if (λ > π) λ -= τ; else if (λ < -π) λ += τ;
+      var cosφ = Math.cos(φ), x = Math.cos(λ) * cosφ, y = Math.sin(λ) * cosφ, z = Math.sin(φ);
+      sink.point(Math.atan2(y, x * cosδφ - z * sinδφ), d3_asin(z * cosδφ + x * sinδφ));
+    };
+  }
+  function d3_geo_rotateλφγ(δλ, δφ, δγ, sink) {
+    var cosδφ = Math.cos(δφ), sinδφ = Math.sin(δφ), cosδγ = Math.cos(δγ), sinδγ = Math.sin(δγ);
+    return function(λ, φ) {
+      λ += δλ;
+      if (λ > π) λ -= τ; else if (λ < -π) λ += τ;
+      var cosφ = Math.cos(φ), x = Math.cos(λ) * cosφ, y = Math.sin(λ) * cosφ, z = Math.sin(φ), k = z * cosδφ + x * sinδφ;
+      sink.point(Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ), d3_asin(k * cosδγ + y * sinδγ));
+    };
+  }
+  function d3_geo_rotateφ(δφ, sink) {
+    var cosδφ = Math.cos(δφ), sinδφ = Math.sin(δφ);
+    return function(λ, φ) {
+      var cosφ = Math.cos(φ), x = Math.cos(λ) * cosφ, y = Math.sin(λ) * cosφ, z = Math.sin(φ);
+      sink.point(Math.atan2(y, x * cosδφ - z * sinδφ), d3_asin(z * cosδφ + x * sinδφ));
+    };
+  }
+  function d3_geo_rotateφγ(δφ, δγ, sink) {
+    var cosδφ = Math.cos(δφ), sinδφ = Math.sin(δφ), cosδγ = Math.cos(δγ), sinδγ = Math.sin(δγ);
+    return function(λ, φ) {
+      var cosφ = Math.cos(φ), x = Math.cos(λ) * cosφ, y = Math.sin(λ) * cosφ, z = Math.sin(φ), k = z * cosδφ + x * sinδφ;
+      sink.point(Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ), d3_asin(k * cosδγ + y * sinδγ));
+    };
+  }
+  function d3_geo_rotateγ(δγ, sink) {
+    var cosδγ = Math.cos(δγ), sinδγ = Math.sin(δγ);
+    return function(λ, φ) {
+      var cosφ = Math.cos(φ), x = Math.cos(λ) * cosφ, y = Math.sin(λ) * cosφ, z = Math.sin(φ);
+      sink.point(Math.atan2(y * cosδγ - z * sinδγ, x), d3_asin(z * cosδγ + y * sinδγ));
+    };
+  }
   function d3_geo_cartesian(spherical) {
     var λ = spherical[0], φ = spherical[1], cosφ = Math.cos(φ);
     return [ cosφ * Math.cos(λ), cosφ * Math.sin(λ), Math.sin(φ) ];
@@ -2884,29 +2930,12 @@
     d[2] /= l;
   }
   var d3_geo_projectCosMinDistance = Math.cos(30 * d3_radians), d3_geo_projectMaxDepth = 16;
-  function d3_geo_projectPoint(f, sink) {
-    return {
-      point: function(x, y) {
-        x = f(x, y);
-        sink.point(x[0], x[1]);
-      },
-      lineStart: function() {
-        sink.lineStart();
-      },
-      lineEnd: function() {
-        sink.lineEnd();
-      },
-      polygonStart: function() {
-        sink.polygonStart();
-      },
-      polygonEnd: function() {
-        sink.polygonEnd();
-      }
-    };
-  }
   d3.geo.project = function(f, δ, sink) {
     if (arguments.length < 3) sink = δ, δ = 0;
-    if (!(+δ > 0)) return d3_geo_projectPoint(f, sink);
+    if (!(+δ > 0)) return d3_geo_pointTransformation(sink, function(x, y) {
+      x = f(x, y);
+      sink.point(x[0], x[1]);
+    });
     var δ2 = δ * δ, λ00, φ00, x00, y00, a00, b00, c00, λ0, x0, y0, a0, b0, c0;
     var project = {
       point: point,
