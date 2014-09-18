@@ -2804,6 +2804,35 @@
     while (++i < n) d3_geo_jsonSourceLine(coordinates[i], sink, 1);
     sink.polygonEnd();
   }
+  d3.geo.jsonSink = function() {
+    var value = {
+      type: "MultiPolygon",
+      coordinates: []
+    }, polygon, line;
+    return {
+      polygonStart: function() {
+        value.coordinates.push(polygon = []);
+      },
+      polygonEnd: function() {},
+      lineStart: function() {
+        polygon.push(line = []);
+      },
+      lineEnd: function() {
+        line.push(line[0]);
+      },
+      point: function(λ, φ) {
+        line.push([ λ * d3_degrees, φ * d3_degrees ]);
+      },
+      value: function() {
+        var oldValue = value;
+        value = {
+          type: "MultiPolygon",
+          coordinates: []
+        };
+        return oldValue;
+      }
+    };
+  };
   d3.geo.rotate = function(δλ, δφ, δγ, sink) {
     var cosδφ = Math.cos(δφ), sinδφ = Math.sin(δφ), cosδγ = Math.cos(δγ), sinδγ = Math.sin(δγ);
     return {
@@ -3517,13 +3546,16 @@
         return this;
       },
       sink: function() {
-        var sink = arguments[0].apply(null, [].slice.call(arguments, 1)), pipe;
+        var source = arguments[0].apply(null, [].slice.call(arguments, 1)), sink = source, pipe;
         while (pipe = pipes.pop()) {
           var args = [].slice.call(pipe, 1);
-          args.push(sink);
-          sink = pipe[0].apply(null, args);
+          args.push(source);
+          source = pipe[0].apply(null, args);
         }
-        return sink;
+        return function() {
+          source.apply(this, arguments);
+          return sink.value && sink.value();
+        };
       }
     };
   };

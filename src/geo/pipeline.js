@@ -12,13 +12,18 @@ d3.geo.pipeline = function() {
       return this;
     },
     sink: function() {
-      var sink = arguments[0].apply(null, [].slice.call(arguments, 1)), pipe;
+      var source = arguments[0].apply(null, [].slice.call(arguments, 1)),
+          sink = source,
+          pipe;
       while (pipe = pipes.pop()) {
         var args = [].slice.call(pipe, 1);
-        args.push(sink);
-        sink = pipe[0].apply(null, args);
+        args.push(source);
+        source = pipe[0].apply(null, args);
       }
-      return sink;
+      return function() {
+        source.apply(this, arguments);
+        return sink.value && sink.value();
+      };
     }
   };
 };

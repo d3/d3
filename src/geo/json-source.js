@@ -1,3 +1,4 @@
+import "../math/trigonometry";
 import "geo";
 
 d3.geo.jsonSource = function(sink) {
