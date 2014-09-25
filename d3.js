@@ -4567,6 +4567,68 @@
       if (children[3]) d3_geom_quadtreeVisit(f, children[3], sx, sy, x2, y2);
     }
   }
+  d3.geom.jsonSource = function(sink) {
+    return function(object) {
+      (object && d3_geom_jsonSourceObjectType.hasOwnProperty(object.type) ? d3_geom_jsonSourceObjectType[object.type] : d3_geom_jsonSourceGeometry)(object, sink);
+    };
+  };
+  function d3_geom_jsonSourceGeometry(geometry, sink) {
+    if (geometry && d3_geom_jsonSourceGeometryType.hasOwnProperty(geometry.type)) {
+      d3_geom_jsonSourceGeometryType[geometry.type](geometry, sink);
+    }
+  }
+  var d3_geom_jsonSourceObjectType = {
+    Feature: function(feature, sink) {
+      d3_geom_jsonSourceGeometry(feature.geometry, sink);
+    },
+    FeatureCollection: function(object, sink) {
+      var features = object.features, i = -1, n = features.length;
+      while (++i < n) d3_geom_jsonSourceGeometry(features[i].geometry, sink);
+    }
+  };
+  var d3_geom_jsonSourceGeometryType = {
+    Sphere: function(object, sink) {
+      sink.sphere();
+    },
+    Point: function(object, sink) {
+      object = object.coordinates;
+      sink.point(object[0], object[1]);
+    },
+    MultiPoint: function(object, sink) {
+      var coordinates = object.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) object = coordinates[i], sink.point(object[0], object[1]);
+    },
+    LineString: function(object, sink) {
+      d3_geom_jsonSourceLine(object.coordinates, sink, 0);
+    },
+    MultiLineString: function(object, sink) {
+      var coordinates = object.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) d3_geom_jsonSourceLine(coordinates[i], sink, 0);
+    },
+    Polygon: function(object, sink) {
+      d3_geom_jsonSourcePolygon(object.coordinates, sink);
+    },
+    MultiPolygon: function(object, sink) {
+      var coordinates = object.coordinates, i = -1, n = coordinates.length;
+      while (++i < n) d3_geom_jsonSourcePolygon(coordinates[i], sink);
+    },
+    GeometryCollection: function(object, sink) {
+      var geometries = object.geometries, i = -1, n = geometries.length;
+      while (++i < n) d3_geom_jsonSourceGeometry(geometries[i], sink);
+    }
+  };
+  function d3_geom_jsonSourceLine(coordinates, sink, closed) {
+    var i = -1, n = coordinates.length - closed, coordinate;
+    sink.lineStart();
+    while (++i < n) coordinate = coordinates[i], sink.point(coordinate[0], coordinate[1]);
+    sink.lineEnd();
+  }
+  function d3_geom_jsonSourcePolygon(coordinates, sink) {
+    var i = -1, n = coordinates.length;
+    sink.polygonStart();
+    while (++i < n) d3_geom_jsonSourceLine(coordinates[i], sink, 1);
+    sink.polygonEnd();
+  }
   d3.geom.contextSink = function(pointRadius, context) {
     if (arguments.length < 2) context = pointRadius, pointRadius = 4.5;
     var sink = {
@@ -4577,7 +4639,7 @@
       polygonEnd: polygonEnd
     };
     function point(x, y) {
-      context.moveTo(x, y);
+      context.moveTo(x + pointRadius, y);
       context.arc(x, y, pointRadius, 0, τ);
     }
     function pointLineStart(x, y) {
@@ -4604,6 +4666,71 @@
       sink.point = point;
     }
     return sink;
+  };
+  d3.geom.pathSink = function(pointRadius) {
+    var buffer = [], pointCircle = "m0," + pointRadius + "a" + pointRadius + "," + pointRadius + " 0 1,1 0," + -2 * pointRadius + "a" + pointRadius + "," + pointRadius + " 0 1,1 0," + 2 * pointRadius + "z";
+    var sink = {
+      point: point,
+      lineStart: lineStart,
+      lineEnd: lineEnd,
+      polygonStart: polygonStart,
+      polygonEnd: polygonEnd,
+      value: value
+    };
+    function point(x, y) {
+      buffer.push("M", x, ",", y, pointCircle);
+    }
+    function pointLineStart(x, y) {
+      buffer.push("M", x, ",", y);
+      sink.point = pointLine;
+    }
+    function pointLine(x, y) {
+      buffer.push("L", x, ",", y);
+    }
+    function lineStart() {
+      sink.point = pointLineStart;
+    }
+    function lineEnd() {
+      sink.point = point;
+    }
+    function lineEndPolygon() {
+      buffer.push("Z");
+    }
+    function polygonStart() {
+      sink.lineEnd = lineEndPolygon;
+    }
+    function polygonEnd() {
+      sink.lineEnd = lineEnd;
+      sink.point = point;
+    }
+    function value() {
+      if (buffer.length) {
+        var value = buffer.join("");
+        buffer = [];
+        return value;
+      }
+    }
+    return sink;
+  };
+  d3.geom.boundsSink = function() {
+    var x0 = Infinity, y0 = x0, x1 = -x0, y1 = -x0;
+    return {
+      lineStart: d3_noop,
+      lineEnd: d3_noop,
+      polygonStart: d3_noop,
+      polygonEnd: d3_noop,
+      point: function(x, y) {
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      },
+      value: function() {
+        var value = [ [ x0, y0 ], [ x1, y1 ] ];
+        x0 = Infinity, y0 = x0, x1 = -x0, y1 = -x0;
+        return value;
+      }
+    };
   };
   d3.geom.matrix = function(a, b, c, d, e, f, sink) {
     return {

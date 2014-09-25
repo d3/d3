@@ -1,29 +1,31 @@
-import "../math/trigonometry";
 import "geom";
 
-d3.geom.contextSink = function(pointRadius, context) {
-  if (arguments.length < 2) context = pointRadius, pointRadius = 4.5;
+d3.geom.pathSink = function(pointRadius) {
+  var buffer = [], pointCircle = "m0," + pointRadius
+      + "a" + pointRadius + "," + pointRadius + " 0 1,1 0," + -2 * pointRadius
+      + "a" + pointRadius + "," + pointRadius + " 0 1,1 0," + 2 * pointRadius
+      + "z";
 
   var sink = {
     point: point,
     lineStart: lineStart,
     lineEnd: lineEnd,
     polygonStart: polygonStart,
-    polygonEnd: polygonEnd
+    polygonEnd: polygonEnd,
+    value: value
   };
 
   function point(x, y) {
-    context.moveTo(x + pointRadius, y);
-    context.arc(x, y, pointRadius, 0, τ);
+    buffer.push("M", x, ",", y, pointCircle);
   }
 
   function pointLineStart(x, y) {
-    context.moveTo(x, y);
+    buffer.push("M", x, ",", y);
     sink.point = pointLine;
   }
 
   function pointLine(x, y) {
-    context.lineTo(x, y);
+    buffer.push("L", x, ",", y);
   }
 
   function lineStart() {
@@ -35,7 +37,7 @@ d3.geom.contextSink = function(pointRadius, context) {
   }
 
   function lineEndPolygon() {
-    context.closePath();
+    buffer.push("Z");
   }
 
   function polygonStart() {
@@ -45,6 +47,14 @@ d3.geom.contextSink = function(pointRadius, context) {
   function polygonEnd() {
     sink.lineEnd = lineEnd;
     sink.point = point;
+  }
+
+  function value() {
+    if (buffer.length) {
+      var value = buffer.join("");
+      buffer = [];
+      return value;
+    }
   }
 
   return sink;
