@@ -171,7 +171,7 @@ d3 = function() {
   };
   d3.variance = function(array, f) {
     var n = array.length, m = 0, a, d, s = 0, i = -1, j = 0;
-    if (n < 2) return NaN;
+    if (n < 2) return undefined;
     if (arguments.length === 1) {
       while (++i < n) {
         if (d3_number(a = array[i])) {
@@ -191,7 +191,7 @@ d3 = function() {
         }
       }
     }
-    return j ? s / (j - 1) : NaN;
+    return j ? s / (j - 1) : undefined;
   };
   d3.deviation = function(array, f) {
     var v = f ? d3.variance(array, f) : d3.variance(array);
