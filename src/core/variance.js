@@ -1,26 +1,30 @@
 d3.variance = function(array, f) {
-  var n   = array.length;
-  if(n < 2) return NaN;
-  
-  var mean = d3.mean(array, f),
-      a,
-      sd   = 0,
-      i    = -1,
-      j    = 0;
-  
-  if (arguments.length === 1) {
-    while (++i < n){
-      if (d3_number(a = array[i])){
-        sd += Math.pow(a - mean, 2); 
-        ++j;
-      }
-    }
-  } else {
-    var evaluatedArray = [];
-    while (++i < n) if (d3_number(a = f.call(array, array[i], i))) evaluatedArray.push(a);
-    return d3.variance(evaluatedArray);
-  }
-  
-  sd /= (j - 1);
-  return j ? sd : NaN;
+	var n = array.length,
+			m = 0,
+			a,
+			d,
+			s = 0,
+			i = -1,
+			j = 0;
+	if(n < 2) return NaN;
+	if (arguments.length === 1) {
+		while (++i < n){
+			if (d3_number(a = array[i])){
+				++j;
+				d = a - m;
+				m = m + (d/j);
+				s = s + d * (a -m);
+			}
+		}
+	} else {
+		while (++i < n){
+			if (d3_number(a = f.call(array, array[i], i))){
+				++j;
+				d = a - m;
+				m = m + (d/j);
+				s = s + d * (a -m);
+			}
+		}
+	}
+	return j ? (s / (j-1)) : NaN;
 };
