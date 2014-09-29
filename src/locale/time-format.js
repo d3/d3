@@ -62,7 +62,7 @@ function d3_locale_timeFormat(locale) {
       } else date.setFullYear(d.y, d.m, d.d);
 
       // Set hours, minutes, seconds and milliseconds.
-      date.setHours(d.H + Math.floor(d.Z / 100), d.M + d.Z % 100, d.S, d.L);
+      date.setHours(d.H + (d.Z / 100 | 0), d.M + d.Z % 100, d.S, d.L);
 
       return localZ ? date._ : date;
     };
@@ -347,7 +347,7 @@ function d3_time_parseMilliseconds(date, string, i) {
 function d3_time_zone(d) {
   var z = d.getTimezoneOffset(),
       zs = z > 0 ? "-" : "+",
-      zh = ~~(abs(z) / 60),
+      zh = abs(z) / 60 | 0,
       zm = abs(z) % 60;
   return zs + d3_time_formatPad(zh, "0", 2) + d3_time_formatPad(zm, "0", 2);
 }
