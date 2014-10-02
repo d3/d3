@@ -15,7 +15,7 @@ suite.addBatch({
         var span = body.html("").append("span");
         var div = body.insert("div", "span");
         assert.equal(div[0][0].tagName, "DIV");
-        assert.isNull(div[0][0].namespaceURI);
+        assert.equal(div[0][0].namespaceURI, "http://www.w3.org/1999/xhtml");
         assert.domEqual(div[0][0], body.node().firstChild);
         assert.domEqual(div[0][0].nextSibling, span[0][0]);
       },
@@ -23,14 +23,14 @@ suite.addBatch({
         var span = body.html("").append("span");
         var div = body.insert("div", function() { return span.node(); });
         assert.equal(div[0][0].tagName, "DIV");
-        assert.isNull(div[0][0].namespaceURI);
+        assert.equal(div[0][0].namespaceURI, "http://www.w3.org/1999/xhtml");
         assert.domEqual(div[0][0], body.node().firstChild);
         assert.domEqual(div[0][0].nextSibling, span[0][0]);
       },
       "appends an HTML element": function(body) {
         var div = body.insert("div");
         assert.equal(div[0][0].tagName, "DIV");
-        assert.isNull(div[0][0].namespaceURI);
+        assert.equal(div[0][0].namespaceURI, "http://www.w3.org/1999/xhtml");
         assert.domEqual(div[0][0], body.node().lastChild);
       },
       "appends an SVG element": function(body) {
@@ -67,8 +67,8 @@ suite.addBatch({
         assert.equal(span[0].length, 2);
         assert.equal(span[0][0].tagName, "SPAN");
         assert.equal(span[0][1].tagName, "SPAN");
-        assert.isNull(span[0][0].namespaceURI);
-        assert.isNull(span[0][1].namespaceURI);
+        assert.equal(span[0][0].namespaceURI, "http://www.w3.org/1999/xhtml");
+        assert.equal(span[0][1].namespaceURI, "http://www.w3.org/1999/xhtml");
         assert.domEqual(span[0][0].parentNode, div[0][0]);
         assert.domEqual(span[0][1].parentNode, div[0][1]);
         assert.domEqual(div[0][0].lastChild, span[0][0]);
