@@ -14,7 +14,7 @@ function d3_locale_numberFormat(locale) {
             t = [],
             j = 0,
             g = locale_grouping[0];
-        while (i > 0 && g > 0) {
+        while (g > 0 && i > 0) {
           t.push(value.substring(i -= g, i + g));
           g = locale_grouping[j = (j + 1) % locale_grouping.length];
         }
