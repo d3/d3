@@ -1842,7 +1842,7 @@
     };
     function respond() {
       var status = request.status, result;
-      if (!status && request.responseText || status >= 200 && status < 300 || status === 304) {
+      if (!status && d3_xhrHasResponse(request) || status >= 200 && status < 300 || status === 304) {
         try {
           result = response.call(xhr, request);
         } catch (e) {
@@ -1913,6 +1913,10 @@
     return callback.length === 1 ? function(error, request) {
       callback(error == null ? request : null);
     } : callback;
+  }
+  function d3_xhrHasResponse(request) {
+    var type = request.responseType;
+    return type && type !== "text" ? request.response : request.responseText;
   }
   d3.dsv = function(delimiter, mimeType) {
     var reFormat = new RegExp('["' + delimiter + "\n]"), delimiterCode = delimiter.charCodeAt(0);
