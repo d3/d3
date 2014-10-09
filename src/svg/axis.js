@@ -176,9 +176,13 @@ var d3_svg_axisDefaultOrient = "bottom",
     d3_svg_axisOrients = {top: 1, right: 1, bottom: 1, left: 1};
 
 function d3_svg_axisX(selection, x) {
-  selection.attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
+  selection
+    .filter(function(d) { return isFinite(x(d)); })
+      .attr("transform", function(d) { return "translate(" + x(d) + ",0)"; });
 }
 
 function d3_svg_axisY(selection, y) {
-  selection.attr("transform", function(d) { return "translate(0," + y(d) + ")"; });
+  selection
+    .filter(function(d) { return isFinite(y(d)); })
+      .attr("transform", function(d) { return "translate(0," + y(d) + ")"; });
 }
