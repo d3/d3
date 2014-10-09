@@ -8695,10 +8695,10 @@
         } else if (scale0.rangeBand) {
           scale0 = scale1;
         } else {
-          tickExit.call(tickTransform, d3_svg_axisFiniteScale(scale1, scale0));
+          tickExit.call(tickTransform, scale1, scale0);
         }
-        tickEnter.call(tickTransform, d3_svg_axisFiniteScale(scale0, scale1));
-        tickUpdate.call(tickTransform, scale1);
+        tickEnter.call(tickTransform, scale0, scale1);
+        tickUpdate.call(tickTransform, scale1, scale1);
       });
     }
     axis.scale = function(x) {
@@ -8759,21 +8759,15 @@
     bottom: 1,
     left: 1
   };
-  function d3_svg_axisX(selection, x) {
+  function d3_svg_axisX(selection, x0, x1) {
     selection.attr("transform", function(d) {
-      return "translate(" + x(d) + ",0)";
+      return "translate(" + (isFinite(x0 = x0(d)) ? x0 : x1(d)) + ",0)";
     });
   }
-  function d3_svg_axisY(selection, y) {
+  function d3_svg_axisY(selection, y0, y1) {
     selection.attr("transform", function(d) {
-      return "translate(0," + y(d) + ")";
+      return "translate(0," + (isFinite(y0 = y0(d)) ? y0 : y1(d)) + ")";
     });
-  }
-  function d3_svg_axisFiniteScale(scale, scale0) {
-    return function(d) {
-      var value = scale(d);
-      return isFinite(value) ? value : scale0(d);
-    };
   }
   d3.svg.brush = function() {
     var event = d3_eventDispatch(brush, "brushstart", "brush", "brushend"), x = null, y = null, xExtent = [ 0, 0 ], yExtent = [ 0, 0 ], xExtentDomain, yExtentDomain, xClamp = true, yClamp = true, resizes = d3_svg_brushResizes[0];
