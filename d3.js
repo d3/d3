@@ -8590,7 +8590,7 @@
       };
       ++lock.count;
       d3.timer(function(elapsed) {
-        var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, timer = d3_timer_active, tweened = [];
+        var d = node.__data__, ease, delay = transition.delay, duration, timer = d3_timer_active, tweened = [];
         timer.t = delay + time;
         if (delay <= elapsed) return start(elapsed - delay);
         timer.c = start;
@@ -8603,6 +8603,8 @@
               tweened.push(value);
             }
           });
+          ease = transition.ease;
+          duration = transition.duration;
           d3.timer(function() {
             timer.c = tick(elapsed || 1) ? d3_true : tick;
             return 1;

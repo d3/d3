@@ -64,9 +64,9 @@ function d3_transitionNode(node, i, id, inherit) {
 
     d3.timer(function(elapsed) {
       var d = node.__data__,
-          ease = transition.ease,
+          ease,
           delay = transition.delay,
-          duration = transition.duration,
+          duration,
           timer = d3_timer_active,
           tweened = [];
 
@@ -84,6 +84,9 @@ function d3_transitionNode(node, i, id, inherit) {
             tweened.push(value);
           }
         });
+
+        ease = transition.ease;
+        duration = transition.duration;
 
         d3.timer(function() { // defer to end of current frame
           timer.c = tick(elapsed || 1) ? d3_true : tick;
