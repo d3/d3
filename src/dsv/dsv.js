@@ -93,7 +93,7 @@ d3.dsv = function(delimiter, mimeType) {
         a.push(t);
         t = token();
       }
-      if (f && !(a = f(a, n++))) continue;
+      if (f && (a = f(a, n++)) == null) continue;
       rows.push(a);
     }
 
