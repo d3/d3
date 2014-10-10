@@ -5905,15 +5905,16 @@
       return s.join("");
     };
   }
+  function d3_zero() {
+    return 0;
+  }
   function d3_uninterpolateNumber(a, b) {
-    b = b - (a = +a) || Infinity;
-    return function(x) {
+    return (b -= a = +a) === 0 ? d3_zero : function(x) {
       return (x - a) / b;
     };
   }
   function d3_uninterpolateClamp(a, b) {
-    b = b - (a = +a) || Infinity;
-    return function(x) {
+    return (b -= a = +a) === 0 ? d3_zero : function(x) {
       return Math.max(0, Math.min(1, (x - a) / b));
     };
   }
