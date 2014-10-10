@@ -1,6 +1,6 @@
 import "locale";
 
-d3.locale.fr = d3.locale({
+d3.locale.fr_FR = d3.locale({
   decimal: ",",
   thousands: ".",
   grouping: [3],
