@@ -89,7 +89,7 @@ function d3_rgb_parse(format, rgb, hsl) {
   if (color = d3_rgb_names.get(format)) return rgb(color.r, color.g, color.b);
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
-  if (format != null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.substring(1), 16))) {
+  if (format != null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.slice(1), 16))) {
     if (format.length === 4) {
       r = (color & 0xf00) >> 4; r = (r >> 4) | r;
       g = (color & 0xf0); g = (g >> 4) | g;

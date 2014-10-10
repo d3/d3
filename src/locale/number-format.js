@@ -15,7 +15,7 @@ function d3_locale_numberFormat(locale) {
             j = 0,
             g = locale_grouping[0],
             length = 0;
-        while (i > 0 && g > 0) {
+        while (g > 0 && i > 0) {
           if (length + g + 1 > width) g = Math.max(1, width - length);
           t.push(value.substring(i -= g, i + g));
           if ((length += g + 1) > width) break;

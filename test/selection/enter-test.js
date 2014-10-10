@@ -17,6 +17,10 @@ suite.addBatch({
       var selection = enter.foo();
       assert.equal(d3.select("body").html(), "<foo></foo><foo></foo>");
       delete d3.selection.enter.prototype.foo;
+    },
+    "size": function(d3) {
+      var enter = d3.select("body").selectAll("div").data([0, 1]).enter();
+      assert.equal(enter.size(), 2);
     }
   }
 });
