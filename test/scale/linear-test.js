@@ -152,6 +152,9 @@ suite.addBatch({
         assert.inDelta(x.invert(new Date(1990, 6, 2, 13)), .5, 1e-6);
         var x = d3.scale.linear().range(["#000", "#fff"]);
         assert.isNaN(x.invert("#999"));
+        var x = d3.scale.linear().range([0, "#fff"]);
+        assert.isNaN(x.invert("#999"));
+        assert.isNaN(x.invert(1));
       },
       "can invert a polylinear descending domain": function(d3) {
         var x = d3.scale.linear().domain([4, 2, 1]).range([1, 2, 4]);
