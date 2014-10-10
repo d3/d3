@@ -6516,6 +6516,7 @@
   d3.layout.stack = function() {
     var values = d3_identity, order = d3_layout_stackOrderDefault, offset = d3_layout_stackOffsetZero, out = d3_layout_stackOut, x = d3_layout_stackX, y = d3_layout_stackY;
     function stack(data, index) {
+      if (!(n = data.length)) return data;
       var series = data.map(function(d, i) {
         return values.call(stack, d, i);
       });
@@ -6528,7 +6529,7 @@
       series = d3.permute(series, orders);
       points = d3.permute(points, orders);
       var offsets = offset.call(stack, points, index);
-      var n = series.length, m = series[0].length, i, j, o;
+      var m = series[0].length, n, i, j, o;
       for (j = 0; j < m; ++j) {
         out.call(stack, series[0][j], o = offsets[j], points[0][j][1]);
         for (i = 1; i < n; ++i) {
