@@ -3597,6 +3597,13 @@
       }
     };
   };
+  d3.geo.conicEqualArea = function(φ0, φ1) {
+    var sinφ0 = Math.sin(φ0), n = (sinφ0 + Math.sin(φ1)) / 2, C = 1 + sinφ0 * (2 * n - sinφ0), ρ0 = Math.sqrt(C) / n;
+    return function(λ, φ) {
+      var ρ = Math.sqrt(C - 2 * n * Math.sin(φ)) / n;
+      return [ ρ * Math.sin(λ *= n), ρ0 - ρ * Math.cos(λ) ];
+    };
+  };
   d3.geo.equirectangular = function(λ, φ) {
     return [ λ, φ ];
   };
