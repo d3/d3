@@ -245,58 +245,81 @@
   d3_class(d3_Map, {
     has: d3_map_has,
     get: function(key) {
-      return this[d3_map_prefix + key];
+      return this[d3_map_escape(key)];
     },
     set: function(key, value) {
-      return this[d3_map_prefix + key] = value;
+      return this[d3_map_escape(key)] = value;
     },
     remove: d3_map_remove,
     keys: d3_map_keys,
     values: function() {
       var values = [];
-      this.forEach(function(key, value) {
-        values.push(value);
-      });
+      for (var key in this) {
+        if (d3_map_hasOwnProperty.call(this, key)) {
+          values.push(this[key]);
+        }
+      }
       return values;
     },
     entries: function() {
       var entries = [];
-      this.forEach(function(key, value) {
-        entries.push({
-          key: key,
-          value: value
-        });
-      });
+      for (var key in this) {
+        if (d3_map_hasOwnProperty.call(this, key)) {
+          entries.push({
+            key: d3_map_unescape(key),
+            value: this[key]
+          });
+        }
+      }
       return entries;
     },
     size: d3_map_size,
     empty: d3_map_empty,
     forEach: function(f) {
-      for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) f.call(this, key.slice(1), this[key]);
+      for (var key in this) {
+        if (d3_map_hasOwnProperty.call(this, key)) {
+          f.call(this, d3_map_unescape(key), this[key]);
+        }
+      }
     }
   });
-  var d3_map_prefix = "\x00", d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
+  var d3_map_prefix = "\x00", d3_map_builtin = new d3_Map(), d3_map_hasOwnProperty = Object.prototype.hasOwnProperty;
+  function d3_map_escape(key) {
+    return (key += "") in d3_map_builtin || key[0] === d3_map_prefix ? d3_map_prefix + key : key;
+  }
+  function d3_map_unescape(key) {
+    return (key += "")[0] === d3_map_prefix ? key.slice(1) : key;
+  }
   function d3_map_has(key) {
-    return d3_map_prefix + key in this;
+    return d3_map_escape(key) in this;
   }
   function d3_map_remove(key) {
-    key = d3_map_prefix + key;
-    return key in this && delete this[key];
+    return (key = d3_map_escape(key)) in this && delete this[key];
   }
   function d3_map_keys() {
     var keys = [];
-    this.forEach(function(key) {
-      keys.push(key);
-    });
+    for (var key in this) {
+      if (d3_map_hasOwnProperty.call(this, key)) {
+        keys.push(d3_map_unescape(key));
+      }
+    }
     return keys;
   }
   function d3_map_size() {
     var size = 0;
-    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) ++size;
+    for (var key in this) {
+      if (d3_map_hasOwnProperty.call(this, key)) {
+        ++size;
+      }
+    }
     return size;
   }
   function d3_map_empty() {
-    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) return false;
+    for (var key in this) {
+      if (d3_map_hasOwnProperty.call(this, key)) {
+        return false;
+      }
+    }
     return true;
   }
   d3.nest = function() {
@@ -370,21 +393,23 @@
   function d3_Set() {}
   d3_class(d3_Set, {
     has: d3_map_has,
-    add: function(value) {
-      this[d3_map_prefix + value] = true;
-      return value;
+    add: function(key) {
+      this[d3_map_escape(key)] = true;
+      return key;
     },
-    remove: function(value) {
-      value = d3_map_prefix + value;
-      return value in this && delete this[value];
-    },
+    remove: d3_map_remove,
     values: d3_map_keys,
     size: d3_map_size,
     empty: d3_map_empty,
     forEach: function(f) {
-      for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) f.call(this, value.slice(1));
+      for (var key in this) {
+        if (d3_map_hasOwnProperty.call(this, key)) {
+          f.call(this, d3_map_unescape(key));
+        }
+      }
     }
   });
+  for (var key in new d3_Set()) d3_map_builtin[key] = true;
   d3.behavior = {};
   d3.rebind = function(target, source) {
     var i = 1, n = arguments.length, method;
@@ -762,10 +787,9 @@
     function bind(group, groupData) {
       var i, n = group.length, m = groupData.length, n0 = Math.min(n, m), updateNodes = new Array(m), enterNodes = new Array(m), exitNodes = new Array(n), node, nodeData;
       if (key) {
-        var nodeByKeyValue = new d3_Map(), dataByKeyValue = new d3_Map(), keyValues = [], keyValue;
+        var nodeByKeyValue = new d3_Map(), dataKeys = new d3_Set(), keyValues = [], keyValue;
         for (i = -1; ++i < n; ) {
-          keyValue = key.call(node = group[i], node.__data__, i);
-          if (nodeByKeyValue.has(keyValue)) {
+          if (nodeByKeyValue.has(keyValue = key.call(node = group[i], node.__data__, i))) {
             exitNodes[i] = node;
           } else {
             nodeByKeyValue.set(keyValue, node);
@@ -773,14 +797,13 @@
           keyValues.push(keyValue);
         }
         for (i = -1; ++i < m; ) {
-          keyValue = key.call(groupData, nodeData = groupData[i], i);
-          if (node = nodeByKeyValue.get(keyValue)) {
+          if (node = nodeByKeyValue.get(keyValue = key.call(groupData, nodeData = groupData[i], i))) {
             updateNodes[i] = node;
             node.__data__ = nodeData;
-          } else if (!dataByKeyValue.has(keyValue)) {
+          } else if (!dataKeys.has(keyValue)) {
             enterNodes[i] = d3_selection_dataNode(nodeData);
           }
-          dataByKeyValue.set(keyValue, nodeData);
+          dataKeys.add(keyValue);
           nodeByKeyValue.remove(keyValue);
         }
         for (i = -1; ++i < n; ) {
