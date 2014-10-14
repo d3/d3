@@ -241,64 +241,53 @@
     }); else for (var key in object) map.set(key, object[key]);
     return map;
   };
-  function d3_Map() {}
+  function d3_Map() {
+    this._ = new Map();
+  }
   d3_class(d3_Map, {
-    has: d3_map_has,
+    has: function(key) {
+      return this._.has(key + "");
+    },
     get: function(key) {
-      return this[d3_map_prefix + key];
+      return this._.get(key + "");
     },
     set: function(key, value) {
-      return this[d3_map_prefix + key] = value;
+      return this._.set(key + "", value);
     },
-    remove: d3_map_remove,
-    keys: d3_map_keys,
+    remove: function(key) {
+      return this._.delete(key + "");
+    },
+    keys: function() {
+      var i = this._.keys(), k, keys = [];
+      while (!(k = i.next()).done) keys.push(k.value);
+      return keys;
+    },
     values: function() {
-      var values = [];
-      this.forEach(function(key, value) {
-        values.push(value);
-      });
+      var i = this._.values(), v, values = [];
+      while (!(v = i.next()).done) values.push(v.value);
       return values;
     },
     entries: function() {
-      var entries = [];
-      this.forEach(function(key, value) {
-        entries.push({
-          key: key,
-          value: value
-        });
+      var i = this._.entries(), e, entries = [];
+      while (!(e = i.next()).done) entries.push({
+        key: e[0],
+        value: e[1]
       });
       return entries;
     },
-    size: d3_map_size,
-    empty: d3_map_empty,
+    size: function() {
+      return this._.size;
+    },
+    empty: function() {
+      return !!this._.size;
+    },
     forEach: function(f) {
-      for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) f.call(this, key.slice(1), this[key]);
+      var that = this;
+      this._.forEach(function(key, value) {
+        f.call(that, key, value);
+      });
     }
   });
-  var d3_map_prefix = "\x00", d3_map_prefixCode = d3_map_prefix.charCodeAt(0);
-  function d3_map_has(key) {
-    return d3_map_prefix + key in this;
-  }
-  function d3_map_remove(key) {
-    key = d3_map_prefix + key;
-    return key in this && delete this[key];
-  }
-  function d3_map_keys() {
-    var keys = [];
-    this.forEach(function(key) {
-      keys.push(key);
-    });
-    return keys;
-  }
-  function d3_map_size() {
-    var size = 0;
-    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) ++size;
-    return size;
-  }
-  function d3_map_empty() {
-    for (var key in this) if (key.charCodeAt(0) === d3_map_prefixCode) return false;
-    return true;
-  }
   d3.nest = function() {
     var nest = {}, keys = [], sortKeys = [], sortValues, rollup;
     function map(mapType, array, depth) {
@@ -367,22 +356,35 @@
     if (array) for (var i = 0, n = array.length; i < n; ++i) set.add(array[i]);
     return set;
   };
-  function d3_Set() {}
+  function d3_Set() {
+    this._ = new Set();
+  }
   d3_class(d3_Set, {
-    has: d3_map_has,
+    has: function(value) {
+      return this._.has(value + "");
+    },
     add: function(value) {
-      this[d3_map_prefix + value] = true;
-      return value;
+      return this._.add(value + "");
     },
     remove: function(value) {
-      value = d3_map_prefix + value;
-      return value in this && delete this[value];
+      return this._.delete(value + "");
     },
-    values: d3_map_keys,
-    size: d3_map_size,
-    empty: d3_map_empty,
+    values: function() {
+      var i = this._.values(), v, values = [];
+      while (!(v = i.next()).done) values.push(v.value);
+      return values;
+    },
+    size: function() {
+      return this._.size;
+    },
+    empty: function() {
+      return !!this._.size;
+    },
     forEach: function(f) {
-      for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) f.call(this, value.slice(1));
+      var that = this;
+      this._.forEach(function(value) {
+        f.call(that, value);
+      });
     }
   });
   d3.behavior = {};

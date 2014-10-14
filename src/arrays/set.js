@@ -1,5 +1,4 @@
 import "../core/class";
-import "map";
 
 d3.set = function(array) {
   var set = new d3_Set;
@@ -7,22 +6,35 @@ d3.set = function(array) {
   return set;
 };
 
-function d3_Set() {}
+function d3_Set() {
+  this._ = new Set;
+}
 
 d3_class(d3_Set, {
-  has: d3_map_has,
+  has: function(value) {
+    return this._.has(value + "");
+  },
   add: function(value) {
-    this[d3_map_prefix + value] = true;
-    return value;
+    return this._.add(value + "");
   },
   remove: function(value) {
-    value = d3_map_prefix + value;
-    return value in this && delete this[value];
+    return this._.delete(value + "");
   },
-  values: d3_map_keys,
-  size: d3_map_size,
-  empty: d3_map_empty,
+  values: function() {
+    var i = this._.values(), v, values = [];
+    while (!(v = i.next()).done) values.push(v.value);
+    return values;
+  },
+  size: function() {
+    return this._.size;
+  },
+  empty: function() {
+    return !!this._.size;
+  },
   forEach: function(f) {
-    for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) f.call(this, value.slice(1));
+    var that = this;
+    this._.forEach(function(value) {
+      f.call(that, value);
+    });
   }
 });
