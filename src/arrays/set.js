@@ -11,18 +11,22 @@ function d3_Set() {}
 
 d3_class(d3_Set, {
   has: d3_map_has,
-  add: function(value) {
-    this[d3_map_prefix + value] = true;
-    return value;
+  add: function(key) {
+    this[d3_map_escape(key)] = true;
+    return key;
   },
-  remove: function(value) {
-    value = d3_map_prefix + value;
-    return value in this && delete this[value];
-  },
+  remove: d3_map_remove,
   values: d3_map_keys,
   size: d3_map_size,
   empty: d3_map_empty,
   forEach: function(f) {
-    for (var value in this) if (value.charCodeAt(0) === d3_map_prefixCode) f.call(this, value.slice(1));
+    for (var key in this) {
+      if (d3_map_hasOwnProperty.call(this, key)) {
+        f.call(this, d3_map_unescape(key));
+      }
+    }
   }
 });
+
+// In case Object.defineProperty is not supported…
+for (var key in new d3_Set) d3_map_builtin[key] = true;
