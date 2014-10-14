@@ -31,7 +31,7 @@ d3_selectionPrototype.data = function(value, key) {
 
     if (key) {
       var nodeByKeyValue = new d3_Map,
-          dataByKeyValue = new d3_Map,
+          dataByKeyValue = new d3_Set,
           keyValues = [],
           keyValue;
 
@@ -53,7 +53,7 @@ d3_selectionPrototype.data = function(value, key) {
         } else if (!dataByKeyValue.has(keyValue)) { // no duplicate data key
           enterNodes[i] = d3_selection_dataNode(nodeData);
         }
-        dataByKeyValue.set(keyValue, nodeData);
+        dataByKeyValue.add(keyValue);
         nodeByKeyValue.remove(keyValue);
       }
 
