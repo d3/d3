@@ -31,8 +31,7 @@ d3_selectionPrototype.data = function(value, key) {
 
     if (key) {
       var nodeByKeyValue = new d3_Map,
-          dataByKeyValue = new d3_Map,
-          keyValues = [],
+          keyValues = new Array(n),
           keyValue;
 
       for (i = -1; ++i < n;) {
@@ -42,23 +41,23 @@ d3_selectionPrototype.data = function(value, key) {
         } else {
           nodeByKeyValue.set(keyValue, node);
         }
-        keyValues.push(keyValue);
+        keyValues[i] = keyValue;
       }
 
       for (i = -1; ++i < m;) {
         keyValue = key.call(groupData, nodeData = groupData[i], i);
-        if (node = nodeByKeyValue.get(keyValue)) {
+        node = nodeByKeyValue.get(keyValue);
+        if (!node) {
+          enterNodes[i] = d3_selection_dataNode(nodeData);
+        } else if (node !== true) {
           updateNodes[i] = node;
           node.__data__ = nodeData;
-        } else if (!dataByKeyValue.has(keyValue)) { // no duplicate data key
-          enterNodes[i] = d3_selection_dataNode(nodeData);
-        }
-        dataByKeyValue.set(keyValue, nodeData);
-        nodeByKeyValue.remove(keyValue);
+        } // otherwise duplicate data key
+        nodeByKeyValue.set(keyValue, true);
       }
 
       for (i = -1; ++i < n;) {
-        if (nodeByKeyValue.has(keyValues[i])) {
+        if (nodeByKeyValue.get(keyValues[i]) !== true) {
           exitNodes[i] = group[i];
         }
       }
