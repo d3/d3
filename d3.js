@@ -787,10 +787,9 @@
     function bind(group, groupData) {
       var i, n = group.length, m = groupData.length, n0 = Math.min(n, m), updateNodes = new Array(m), enterNodes = new Array(m), exitNodes = new Array(n), node, nodeData;
       if (key) {
-        var nodeByKeyValue = new d3_Map(), dataByKeyValue = new d3_Set(), keyValues = [], keyValue;
+        var nodeByKeyValue = new d3_Map(), dataKeys = new d3_Set(), keyValues = [], keyValue;
         for (i = -1; ++i < n; ) {
-          keyValue = key.call(node = group[i], node.__data__, i);
-          if (nodeByKeyValue.has(keyValue)) {
+          if (nodeByKeyValue.has(keyValue = key.call(node = group[i], node.__data__, i))) {
             exitNodes[i] = node;
           } else {
             nodeByKeyValue.set(keyValue, node);
@@ -798,14 +797,13 @@
           keyValues.push(keyValue);
         }
         for (i = -1; ++i < m; ) {
-          keyValue = key.call(groupData, nodeData = groupData[i], i);
-          if (node = nodeByKeyValue.get(keyValue)) {
+          if (node = nodeByKeyValue.get(keyValue = key.call(groupData, nodeData = groupData[i], i))) {
             updateNodes[i] = node;
             node.__data__ = nodeData;
-          } else if (!dataByKeyValue.has(keyValue)) {
+          } else if (!dataKeys.has(keyValue)) {
             enterNodes[i] = d3_selection_dataNode(nodeData);
           }
-          dataByKeyValue.add(keyValue);
+          dataKeys.add(keyValue);
           nodeByKeyValue.remove(keyValue);
         }
         for (i = -1; ++i < n; ) {

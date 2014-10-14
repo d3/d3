@@ -1,4 +1,5 @@
 import "../arrays/map";
+import "../arrays/set";
 import "selection";
 
 d3_selectionPrototype.data = function(value, key) {
@@ -31,13 +32,12 @@ d3_selectionPrototype.data = function(value, key) {
 
     if (key) {
       var nodeByKeyValue = new d3_Map,
-          dataByKeyValue = new d3_Set,
+          dataKeys = new d3_Set,
           keyValues = [],
           keyValue;
 
       for (i = -1; ++i < n;) {
-        keyValue = key.call(node = group[i], node.__data__, i);
-        if (nodeByKeyValue.has(keyValue)) {
+        if (nodeByKeyValue.has(keyValue = key.call(node = group[i], node.__data__, i))) {
           exitNodes[i] = node; // duplicate selection key
         } else {
           nodeByKeyValue.set(keyValue, node);
@@ -46,14 +46,13 @@ d3_selectionPrototype.data = function(value, key) {
       }
 
       for (i = -1; ++i < m;) {
-        keyValue = key.call(groupData, nodeData = groupData[i], i);
-        if (node = nodeByKeyValue.get(keyValue)) {
+        if (node = nodeByKeyValue.get(keyValue = key.call(groupData, nodeData = groupData[i], i))) {
           updateNodes[i] = node;
           node.__data__ = nodeData;
-        } else if (!dataByKeyValue.has(keyValue)) { // no duplicate data key
+        } else if (!dataKeys.has(keyValue)) { // no duplicate data key
           enterNodes[i] = d3_selection_dataNode(nodeData);
         }
-        dataByKeyValue.add(keyValue);
+        dataKeys.add(keyValue);
         nodeByKeyValue.remove(keyValue);
       }
 
