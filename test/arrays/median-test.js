@@ -32,6 +32,14 @@ suite.addBatch({
     "applies the optional accessor function": function(median) {
       assert.equal(median([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return median(d); }), 4.5);
       assert.equal(median([1, 2, 3, 4, 5], function(d, i) { return i; }), 2);
+    },
+    "coerces strings to numbers": function(median) {
+      assert.equal(median(["1"]), 1);
+      assert.equal(median(["5", "1", "2", "3", "4"]), 3);
+      assert.equal(median(["20", "3"]), 11.5);
+      assert.equal(median(["3", "20"]), 11.5);
+      assert.equal(median(["2", "3", "20"]), 3);
+      assert.equal(median(["20", "3", "2"]), 3);
     }
   }
 });
