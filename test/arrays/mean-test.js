@@ -28,6 +28,12 @@ suite.addBatch({
     "applies the optional accessor function": function(mean) {
       assert.equal(mean([[1, 2, 3, 4, 5], [2, 4, 6, 8, 10]], function(d) { return mean(d); }), 4.5);
       assert.equal(mean([1, 2, 3, 4, 5], function(d, i) { return i; }), 2);
+    },
+    "coerces strings to numbers": function(mean) {
+      assert.equal(mean(["1"]), 1);
+      assert.equal(mean(["5", "1", "2", "3", "4"]), 3);
+      assert.equal(mean(["20", "3"]), 11.5);
+      assert.equal(mean(["3", "20"]), 11.5);
     }
   }
 });
