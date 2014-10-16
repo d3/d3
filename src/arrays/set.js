@@ -21,8 +21,10 @@ d3_class(d3_Set, {
     return this._.delete(value + "");
   },
   values: function() {
-    var i = this._.values(), v, values = [];
-    while (!(v = i.next()).done) values.push(v.value);
+    var values = [];
+    for (var value of this._.values()) {
+      values.push(value);
+    }
     return values;
   },
   size: function() {
@@ -32,9 +34,8 @@ d3_class(d3_Set, {
     return !!this._.size;
   },
   forEach: function(f) {
-    var that = this;
-    this._.forEach(function(value) {
-      f.call(that, value);
-    });
+    for (var value of this._) {
+      f.call(this, value);
+    }
   }
 });

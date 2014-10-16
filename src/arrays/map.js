@@ -25,18 +25,24 @@ d3_class(d3_Map, {
     return this._.delete(key + "");
   },
   keys: function() {
-    var i = this._.keys(), k, keys = [];
-    while (!(k = i.next()).done) keys.push(k.value);
+    var keys = [];
+    for (var key of this._.keys()) {
+      keys.push(key);
+    }
     return keys;
   },
   values: function() {
-    var i = this._.values(), v, values = [];
-    while (!(v = i.next()).done) values.push(v.value);
+    var values = [];
+    for (var value of this._.values()) {
+      values.push(value);
+    }
     return values;
   },
   entries: function() {
-    var i = this._.entries(), e, entries = [];
-    while (!(e = i.next()).done) entries.push({key: e[0], value: e[1]});
+    var entries = [];
+    for (var entry of this._) {
+      entries.push({key: entry[0], value: entry[1]});
+    }
     return entries;
   },
   size: function() {
@@ -46,9 +52,8 @@ d3_class(d3_Map, {
     return !!this._.size;
   },
   forEach: function(f) {
-    var that = this;
-    this._.forEach(function(key, value) {
-      f.call(that, key, value);
-    });
+    for (var entry of this._) {
+      f.apply(this, entry);
+    }
   }
 });
