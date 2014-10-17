@@ -1,6 +1,7 @@
 var vows = require("vows"),
     load = require("../load"),
-    assert = require("../assert");
+    assert = require("../assert"),
+    OneTimeNumber = require("./one-time-number");
 
 var suite = vows.describe("d3.median");
 
@@ -40,6 +41,11 @@ suite.addBatch({
       assert.equal(median(["3", "20"]), 11.5);
       assert.equal(median(["2", "3", "20"]), 3);
       assert.equal(median(["20", "3", "2"]), 3);
+    },
+    "coerces values exactly once": function(median) {
+      var array = [1, new OneTimeNumber(3)];
+      assert.equal(median(array), 2);
+      assert.equal(median(array), 1);
     }
   }
 });
