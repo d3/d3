@@ -14,7 +14,7 @@ function d3_Set() {
 d3_class(d3_Set, {
   has: d3_map_has,
   add: function(key) {
-    this._[d3_map_escape(key)] = true;
+    this._[d3_map_escape(key += "")] = true;
     return key;
   },
   remove: d3_map_remove,

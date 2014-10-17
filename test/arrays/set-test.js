@@ -157,9 +157,11 @@ suite.addBatch({
       }
     },
     "add": {
-      "returns the set value": function(set) {
+      "returns the set value, coerced to a string": function(set) {
         var s = set();
         assert.equal(s.add("foo"), "foo");
+        assert.strictEqual(s.add(2), "2");
+        assert.deepEqual(s.values().sort(), ["2", "foo"]);
       },
       "can add values using built-in names": function(set) {
         var s = set();
