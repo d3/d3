@@ -1,13 +1,9 @@
-var jsdom = require("jsdom");
-
-global.document = jsdom.jsdom("<html><head></head><body></body></html>");
-
 var d3 = require("../../");
 
 var formatNumber = d3.format(",.02r"),
     values = d3.range(0, 1000),
     key = function(x) { return x; },
-    div = d3.select(document.createElement("div")),
+    div = d3.select("html").append("div"),
     selection,
     n = 1e3,
     then = Date.now();
