@@ -46,7 +46,7 @@ module.exports = function() {
       console: console,
       XMLHttpRequest: XMLHttpRequest,
       document: document,
-      window: document.createWindow(),
+      window: document.parentWindow,
       setTimeout: setTimeout,
       clearTimeout: clearTimeout,
       Date: Date // so we can override Date.now in tests, and use deepEqual
