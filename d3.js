@@ -8670,10 +8670,10 @@
         } else if (scale0.rangeBand) {
           scale0 = scale1;
         } else {
-          tickExit.call(tickTransform, scale1);
+          tickExit.call(tickTransform, scale1, scale0);
         }
-        tickEnter.call(tickTransform, scale0);
-        tickUpdate.call(tickTransform, scale1);
+        tickEnter.call(tickTransform, scale0, scale1);
+        tickUpdate.call(tickTransform, scale1, scale1);
       });
     }
     axis.scale = function(x) {
@@ -8734,14 +8734,16 @@
     bottom: 1,
     left: 1
   };
-  function d3_svg_axisX(selection, x) {
+  function d3_svg_axisX(selection, x0, x1) {
     selection.attr("transform", function(d) {
-      return "translate(" + x(d) + ",0)";
+      var v0 = x0(d);
+      return "translate(" + (isFinite(v0) ? v0 : x1(d)) + ",0)";
     });
   }
-  function d3_svg_axisY(selection, y) {
+  function d3_svg_axisY(selection, y0, y1) {
     selection.attr("transform", function(d) {
-      return "translate(0," + y(d) + ")";
+      var v0 = y0(d);
+      return "translate(0," + (isFinite(v0) ? v0 : y1(d)) + ")";
     });
   }
   d3.svg.brush = function() {
