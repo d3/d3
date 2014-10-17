@@ -88,14 +88,17 @@
     return s;
   };
   function d3_number(x) {
-    return x != null && !isNaN(x);
+    return x === null ? NaN : +x;
+  }
+  function d3_numeric(x) {
+    return !isNaN(x);
   }
   d3.mean = function(array, f) {
     var s = 0, n = array.length, a, i = -1, j = n;
     if (arguments.length === 1) {
-      while (++i < n) if (d3_number(a = array[i])) s += a; else --j;
+      while (++i < n) if (d3_numeric(a = d3_number(array[i]))) s += a; else --j;
     } else {
-      while (++i < n) if (d3_number(a = f.call(array, array[i], i))) s += a; else --j;
+      while (++i < n) if (d3_numeric(a = d3_number(f.call(array, array[i], i)))) s += a; else --j;
     }
     return j ? s / j : undefined;
   };
@@ -104,9 +107,13 @@
     return e ? v + e * (values[h] - v) : v;
   };
   d3.median = function(array, f) {
-    if (arguments.length > 1) array = array.map(f);
-    array = array.filter(d3_number);
-    return array.length ? d3.quantile(array.sort(d3_ascending), .5) : undefined;
+    var array1 = [], n = array.length, a, i = -1;
+    if (arguments.length === 1) {
+      while (++i < n) if (d3_numeric(a = d3_number(array[i]))) array1.push(a);
+    } else {
+      while (++i < n) if (d3_numeric(a = d3_number(f.call(array, array[i], i)))) array1.push(a);
+    }
+    return array1.length ? d3.quantile(array1.sort(d3_ascending), .5) : undefined;
   };
   function d3_bisector(compare) {
     return {
@@ -2122,7 +2129,7 @@
       return t.reverse().join(locale_thousands);
     } : d3_identity;
     return function(specifier) {
-      var match = d3_format_re.exec(specifier), fill = match[1] || " ", align = match[2] || ">", sign = match[3] || "", symbol = match[4] || "", zfill = match[5], width = +match[6], comma = match[7], precision = match[8], type = match[9], scale = 1, prefix = "", suffix = "", integer = false;
+      var match = d3_format_re.exec(specifier), fill = match[1] || " ", align = match[2] || ">", sign = match[3] || "-", symbol = match[4] || "", zfill = match[5], width = +match[6], comma = match[7], precision = match[8], type = match[9], scale = 1, prefix = "", suffix = "", integer = false;
       if (precision) precision = +precision.substring(1);
       if (zfill || fill === "0" && align === "=") {
         zfill = fill = "0";
@@ -2174,7 +2181,7 @@
       return function(value) {
         var fullSuffix = suffix;
         if (integer && value % 1) return "";
-        var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
+        var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign === "-" ? "" : sign;
         if (scale < 0) {
           var unit = d3.formatPrefix(value, precision);
           value = unit.scale(value);
@@ -7676,7 +7683,7 @@
     }
     scale.domain = function(x) {
       if (!arguments.length) return domain;
-      domain = x.filter(d3_number).sort(d3_ascending);
+      domain = x.map(d3_number).filter(d3_numeric).sort(d3_ascending);
       return rescale();
     };
     scale.range = function(x) {

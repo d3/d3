@@ -25,7 +25,7 @@ function d3_locale_numberFormat(locale) {
     var match = d3_format_re.exec(specifier),
         fill = match[1] || " ",
         align = match[2] || ">",
-        sign = match[3] || "",
+        sign = match[3] || "-",
         symbol = match[4] || "",
         zfill = match[5],
         width = +match[6],
@@ -80,7 +80,7 @@ function d3_locale_numberFormat(locale) {
       if (integer && (value % 1)) return "";
 
       // Convert negative to positive, and record the sign prefix.
-      var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
+      var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign === "-" ? "" : sign;
 
       // Apply the scale, computing it from the value's exponent for si format.
       // Preserve the existing suffix, if any, such as the currency symbol.

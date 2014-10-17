@@ -371,6 +371,16 @@ suite.addBatch({
       assert.strictEqual(format(" 13,d")(0), "            0");
       assert.strictEqual(format(" 21,d")(0), "                    0");
     },
+    "explicitly only use a sign for negative numbers": function(format) {
+      assert.strictEqual(format("-1,d")(-1), "-1");
+      assert.strictEqual(format("-1,d")(0), "0");
+      assert.strictEqual(format("-2,d")(0), " 0");
+      assert.strictEqual(format("-3,d")(0), "  0");
+      assert.strictEqual(format("-5,d")(0), "    0");
+      assert.strictEqual(format("-8,d")(0), "       0");
+      assert.strictEqual(format("-13,d")(0), "            0");
+      assert.strictEqual(format("-21,d")(0), "                    0");
+    },
     "can format negative zero": function(format) {
       assert.strictEqual(format("1d")(-0), "-0");
       assert.strictEqual(format("1f")(-0), "-0");
