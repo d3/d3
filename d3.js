@@ -107,13 +107,13 @@
     return e ? v + e * (values[h] - v) : v;
   };
   d3.median = function(array, f) {
-    var array1 = [], n = array.length, a, i = -1;
+    var numbers = [], n = array.length, a, i = -1;
     if (arguments.length === 1) {
-      while (++i < n) if (d3_numeric(a = d3_number(array[i]))) array1.push(a);
+      while (++i < n) if (d3_numeric(a = d3_number(array[i]))) numbers.push(a);
     } else {
-      while (++i < n) if (d3_numeric(a = d3_number(f.call(array, array[i], i)))) array1.push(a);
+      while (++i < n) if (d3_numeric(a = d3_number(f.call(array, array[i], i)))) numbers.push(a);
     }
-    return array1.length ? d3.quantile(array1.sort(d3_ascending), .5) : undefined;
+    return numbers.length ? d3.quantile(numbers.sort(d3_ascending), .5) : undefined;
   };
   function d3_bisector(compare) {
     return {
