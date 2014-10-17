@@ -27,46 +27,6 @@ var d3_map_proto = "__proto__",
       forEach: d3_map_forEach
     };
 
-if (d3_map_proto in Object.create(null)) {
-  d3_map_prototype.get = function(key) {
-    return this._[d3_map_escape(key)];
-  };
-
-  d3_map_prototype.set = function(key, value) {
-    return this._[d3_map_escape(key)] = value;
-  };
-
-  d3_map_prototype.has = function(key) {
-    return d3_map_escape(key) in this._;
-  };
-
-  d3_map_prototype.remove = function(key) {
-    return (key = d3_map_escape(key)) in this._ && delete this._[key];
-  };
-
-  d3_map_prototype.keys = function() {
-    var keys = [];
-    for (var key in this._) {
-      keys.push(d3_map_unescape(key));
-    }
-    return keys;
-  };
-
-  d3_map_prototype.entries = function() {
-    var entries = [];
-    for (var key in this._) {
-      entries.push({key: d3_map_unescape(key), value: this._[key]});
-    }
-    return entries;
-  };
-
-  d3_map_prototype.forEach = function(f) {
-    for (var key in this._) {
-      f.call(this, d3_map_unescape(key), this._[key]);
-    }
-  };
-}
-
 d3_class(d3_Map, d3_map_prototype);
 
 function d3_map_escape(key) {
@@ -78,35 +38,35 @@ function d3_map_unescape(key) {
 }
 
 function d3_map_get(key) {
-  return this._[key];
+  return this._[d3_map_escape(key)];
 }
 
 function d3_map_set(key, value) {
-  return this._[key] = value;
+  return this._[d3_map_escape(key)] = value;
 }
 
 function d3_map_has(key) {
-  return key in this._;
+  return d3_map_escape(key) in this._;
 }
 
 function d3_map_remove(key) {
-  return key in this._ && delete this._[key];
+  return (key = d3_map_escape(key)) in this._ && delete this._[key];
 }
 
 function d3_map_keys() {
   var keys = [];
   for (var key in this._) {
-    keys.push(key);
+    keys.push(d3_map_unescape(key));
   }
   return keys;
 }
 
 function d3_map_values() {
-  var values = [];
+  var entries = [];
   for (var key in this._) {
-    values.push(this._[key]);
+    entries.push({key: d3_map_unescape(key), value: this._[key]});
   }
-  return values;
+  return entries;
 }
 
 function d3_map_entries() {
@@ -134,6 +94,6 @@ function d3_map_empty() {
 
 function d3_map_forEach(f) {
   for (var key in this._) {
-    f.call(this, key, this._[key]);
+    f.call(this, d3_map_unescape(key), this._[key]);
   }
 }
