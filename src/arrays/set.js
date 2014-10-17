@@ -11,25 +11,17 @@ function d3_Set() {
   this._ = Object.create(null);
 }
 
-var d3_set_prototype = {
+d3_class(d3_Set, {
   has: d3_map_has,
-  add: d3_set_add,
+  add: function(key) {
+    this._[d3_map_escape(key)] = true;
+    return key;
+  },
   remove: d3_map_remove,
   values: d3_map_keys,
   size: d3_map_size,
   empty: d3_map_empty,
-  forEach: d3_set_forEach
-};
-
-d3_class(d3_Set, d3_set_prototype);
-
-function d3_set_add(key) {
-  this._[d3_map_escape(key)] = true;
-  return key;
-}
-
-function d3_set_forEach(f) {
-  for (var key in this._) {
-    f.call(this, d3_map_unescape(key));
+  forEach: function(f) {
+    for (var key in this._) f.call(this, d3_map_unescape(key));
   }
-}
+});
