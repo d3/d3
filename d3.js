@@ -42,10 +42,10 @@
   d3.min = function(array, f) {
     var i = -1, n = array.length, a, b;
     if (arguments.length === 1) {
-      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
+      while (++i < n && !((a = array[i]) != null && a <= a)) a = d3.undef();
       while (++i < n) if ((b = array[i]) != null && a > b) a = b;
     } else {
-      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
+      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = d3.undef();
       while (++i < n) if ((b = f.call(array, array[i], i)) != null && a > b) a = b;
     }
     return a;
@@ -53,10 +53,10 @@
   d3.max = function(array, f) {
     var i = -1, n = array.length, a, b;
     if (arguments.length === 1) {
-      while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
+      while (++i < n && !((a = array[i]) != null && a <= a)) a = d3.undef();
       while (++i < n) if ((b = array[i]) != null && b > a) a = b;
     } else {
-      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
+      while (++i < n && !((a = f.call(array, array[i], i)) != null && a <= a)) a = d3.undef();
       while (++i < n) if ((b = f.call(array, array[i], i)) != null && b > a) a = b;
     }
     return a;
@@ -64,13 +64,13 @@
   d3.extent = function(array, f) {
     var i = -1, n = array.length, a, b, c;
     if (arguments.length === 1) {
-      while (++i < n && !((a = c = array[i]) != null && a <= a)) a = c = undefined;
+      while (++i < n && !((a = c = array[i]) != null && a <= a)) a = c = d3.undef();
       while (++i < n) if ((b = array[i]) != null) {
         if (a > b) a = b;
         if (c < b) c = b;
       }
     } else {
-      while (++i < n && !((a = c = f.call(array, array[i], i)) != null && a <= a)) a = undefined;
+      while (++i < n && !((a = c = f.call(array, array[i], i)) != null && a <= a)) a = d3.undef();
       while (++i < n) if ((b = f.call(array, array[i], i)) != null) {
         if (a > b) a = b;
         if (c < b) c = b;
@@ -100,7 +100,7 @@
     } else {
       while (++i < n) if (d3_numeric(a = d3_number(f.call(array, array[i], i)))) s += a; else --j;
     }
-    return j ? s / j : undefined;
+    return j ? s / j : d3.undef();
   };
   d3.quantile = function(values, p) {
     var H = (values.length - 1) * p + 1, h = Math.floor(H), v = +values[h - 1], e = H - h;
@@ -113,7 +113,7 @@
     } else {
       while (++i < n) if (d3_numeric(a = d3_number(f.call(array, array[i], i)))) numbers.push(a);
     }
-    return numbers.length ? d3.quantile(numbers.sort(d3_ascending), .5) : undefined;
+    return numbers.length ? d3.quantile(numbers.sort(d3_ascending), .5) : d3.undef();
   };
   function d3_bisector(compare) {
     return {
@@ -9210,6 +9210,9 @@
   d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
   });
+  d3.undef = function() {
+    return;
+  };
   if (typeof define === "function" && define.amd) define(d3); else if (typeof module === "object" && module.exports) module.exports = d3;
   this.d3 = d3;
 }();
