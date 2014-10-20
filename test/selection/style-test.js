@@ -90,8 +90,8 @@ suite.addBatch({
       },
       "sets a property as a function": function(div) {
         div.style("background-color", _.interpolateRgb("orange", "yellow"));
-        assert.equal(div[0][0].style.getPropertyValue("background-color"), "#ffa500");
-        assert.equal(div[0][1].style.getPropertyValue("background-color"), "#ffff00");
+        assert.equal(div[0][0].style.getPropertyValue("background-color"), "rgb(255, 165, 0)");
+        assert.equal(div[0][1].style.getPropertyValue("background-color"), "rgb(255, 255, 0)");
       },
       "gets a property value": function(div) {
         div[0][0].style.setProperty("background-color", "green", "");

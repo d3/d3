@@ -28,13 +28,13 @@ module.exports = {
       result.transition.each("end", function() { cb(null, result); });
     },
     "the last style operator takes precedence": function(result) {
-      assert.equal(result.selection.style("background-color"), "#ff0000");
+      assert.equal(result.selection.style("background-color"), "rgb(255, 0, 0)");
     },
     "sets a property as a string": function(result) {
-      assert.equal(result.selection.style("background-color"), "#ff0000");
+      assert.equal(result.selection.style("background-color"), "rgb(255, 0, 0)");
     },
     "sets a property as a function": function(result) {
-      assert.equal(result.selection.style("color"), "#008000");
+      assert.equal(result.selection.style("color"), "rgb(0, 128, 0)");
     },
     "observes the specified priority": function(result) {
       var style = result.selection.node().style;

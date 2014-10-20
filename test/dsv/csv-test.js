@@ -106,6 +106,10 @@ suite.addBatch({
       "skips rows if the row function returns null or undefined": function(csv) {
         assert.deepEqual(csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? null : row; }), [{a: "2", b: "3", c: "4"}]);
         assert.deepEqual(csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? undefined : row; }), [{a: "2", b: "3", c: "4"}]);
+      },
+      "does not skip rows if the row function returns false or 0": function(csv) {
+        assert.deepEqual(csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? 0 : row; }), [0, {a: "2", b: "3", c: "4"}]);
+        assert.deepEqual(csv.parse("a,b,c\n1,2,3\n2,3,4", function(row) { return row.a & 1 ? false : row; }), [false, {a: "2", b: "3", c: "4"}]);
       }
     },
 

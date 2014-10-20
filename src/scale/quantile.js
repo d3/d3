@@ -25,7 +25,7 @@ function d3_scale_quantile(domain, range) {
 
   scale.domain = function(x) {
     if (!arguments.length) return domain;
-    domain = x.filter(d3_number).sort(d3_ascending);
+    domain = x.map(d3_number).filter(d3_numeric).sort(d3_ascending);
     return rescale();
   };
 

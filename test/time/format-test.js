@@ -329,7 +329,9 @@ suite.addBatch({
         var p = format("%m/%d/%Y %Z").parse;
         assert.deepEqual(p("01/02/1990 +0000"), local(1990, 0, 1, 16));
         assert.deepEqual(p("01/02/1990 +0100"), local(1990, 0, 1, 15));
+        assert.deepEqual(p("01/02/1990 +0130"), local(1990, 0, 1, 14, 30));
         assert.deepEqual(p("01/02/1990 -0100"), local(1990, 0, 1, 17));
+        assert.deepEqual(p("01/02/1990 -0130"), local(1990, 0, 1, 17, 30));
         assert.deepEqual(p("01/02/1990 -0800"), local(1990, 0, 2, 0));
       },
       "ignores optional padding modifier, skipping zeroes and spaces": function(format) {
