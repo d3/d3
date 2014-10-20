@@ -191,12 +191,16 @@ d3.behavior.zoom = function() {
         touchmove = "touchmove" + zoomName,
         touchend = "touchend" + zoomName,
         targets = [],
-        subject = d3.select(that).on(mousedown, null).on(touchstart, started), // prevent duplicate events
+        subject = d3.select(that),
         dragRestore = d3_event_dragSuppress();
 
     d3_selection_interrupt.call(that);
     started();
     zoomstarted(dispatch);
+
+    // Workaround for Chrome issue 412723: the touchstart listener must be set
+    // after the touchmove listener.
+    subject.on(mousedown, null).on(touchstart, started); // prevent duplicate events
 
     // Updates locations of any touches in locations0.
     function relocate() {

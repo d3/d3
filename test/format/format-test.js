@@ -214,17 +214,24 @@ suite.addBatch({
       assert.strictEqual(f(-42), "-42");
       assert.strictEqual(f(-4200000), "-4,200,000");
       assert.strictEqual(f(-42000000), "-42,000,000");
+      assert.strictEqual(f(1e21), "1e+21");
     },
     "can group thousands and zero fill": function(format) {
       assert.strictEqual(format("01,d")(0), "0");
       assert.strictEqual(format("01,d")(0), "0");
       assert.strictEqual(format("02,d")(0), "00");
       assert.strictEqual(format("03,d")(0), "000");
+      assert.strictEqual(format("04,d")(0), "0,000");
       assert.strictEqual(format("05,d")(0), "0,000");
+      assert.strictEqual(format("06,d")(0), "00,000");
       assert.strictEqual(format("08,d")(0), "0,000,000");
       assert.strictEqual(format("013,d")(0), "0,000,000,000");
       assert.strictEqual(format("021,d")(0), "0,000,000,000,000,000");
       assert.strictEqual(format("013,d")(-42000000), "-0,042,000,000");
+      assert.strictEqual(format("012,d")(1e21), "0,000,001e+21");
+      assert.strictEqual(format("013,d")(1e21), "0,000,001e+21");
+      assert.strictEqual(format("014,d")(1e21), "00,000,001e+21");
+      assert.strictEqual(format("015,d")(1e21), "000,000,001e+21");
     },
     "can group thousands and zero fill with overflow": function(format) {
       assert.strictEqual(format("01,d")(1), "1");
@@ -330,6 +337,8 @@ suite.addBatch({
       assert.strictEqual(format(">8,d")(0), "       0");
       assert.strictEqual(format(">13,d")(0), "            0");
       assert.strictEqual(format(">21,d")(0), "                    0");
+      assert.strictEqual(format(">21,d")(1000), "                1,000");
+      assert.strictEqual(format(">21,d")(1e21), "                1e+21");
     },
     "align center": function(format) {
       assert.strictEqual(format("^1,d")(0), "0");
@@ -340,6 +349,8 @@ suite.addBatch({
       assert.strictEqual(format("^8,d")(0), "    0   ");
       assert.strictEqual(format("^13,d")(0), "      0      ");
       assert.strictEqual(format("^21,d")(0), "          0          ");
+      assert.strictEqual(format("^21,d")(1000), "        1,000        ");
+      assert.strictEqual(format("^21,d")(1e21), "        1e+21        ");
     },
     "pad after sign": function(format) {
       assert.strictEqual(format("=+1,d")(0), "+0");
@@ -350,6 +361,7 @@ suite.addBatch({
       assert.strictEqual(format("=+8,d")(0), "+      0");
       assert.strictEqual(format("=+13,d")(0), "+           0");
       assert.strictEqual(format("=+21,d")(0), "+                   0");
+      assert.strictEqual(format("=+21,d")(1e21), "+               1e+21");
     },
     "pad after sign with currency": function(format) {
       assert.strictEqual(format("=+$1,d")(0), "+$0");
@@ -360,6 +372,7 @@ suite.addBatch({
       assert.strictEqual(format("=+$8,d")(0), "+$     0");
       assert.strictEqual(format("=+$13,d")(0), "+$          0");
       assert.strictEqual(format("=+$21,d")(0), "+$                  0");
+      assert.strictEqual(format("=+$21,d")(1e21), "+$              1e+21");
     },
     "a space can denote positive numbers": function(format) {
       assert.strictEqual(format(" 1,d")(-1), "-1");
@@ -370,6 +383,17 @@ suite.addBatch({
       assert.strictEqual(format(" 8,d")(0), "       0");
       assert.strictEqual(format(" 13,d")(0), "            0");
       assert.strictEqual(format(" 21,d")(0), "                    0");
+      assert.strictEqual(format(" 21,d")(1e21), "                1e+21");
+    },
+    "explicitly only use a sign for negative numbers": function(format) {
+      assert.strictEqual(format("-1,d")(-1), "-1");
+      assert.strictEqual(format("-1,d")(0), "0");
+      assert.strictEqual(format("-2,d")(0), " 0");
+      assert.strictEqual(format("-3,d")(0), "  0");
+      assert.strictEqual(format("-5,d")(0), "    0");
+      assert.strictEqual(format("-8,d")(0), "       0");
+      assert.strictEqual(format("-13,d")(0), "            0");
+      assert.strictEqual(format("-21,d")(0), "                    0");
     },
     "can format negative zero": function(format) {
       assert.strictEqual(format("1d")(-0), "-0");
@@ -387,6 +411,18 @@ suite.addBatch({
       assert.strictEqual(f(-42), "-42");
       assert.strictEqual(f(-4200000), "-4,200,000");
       assert.strictEqual(f(-42000000), "-42,000,000");
+      assert.strictEqual(f(1e21), "1e+21");
+    },
+    "\"n\" with zero padding": function(format) {
+      assert.strictEqual(format("01n")(0), "0");
+      assert.strictEqual(format("01n")(0), "0");
+      assert.strictEqual(format("02n")(0), "00");
+      assert.strictEqual(format("03n")(0), "000");
+      assert.strictEqual(format("05n")(0), "0,000");
+      assert.strictEqual(format("08n")(0), "0,000,000");
+      assert.strictEqual(format("013n")(0), "0,000,000,000");
+      assert.strictEqual(format("021n")(0), "0,000,000,000,000,000");
+      assert.strictEqual(format("013n")(-42000000), "-0,042,000,000");
     },
     "unreasonable precision values are clamped to reasonable values": function(format) {
       assert.strictEqual(format(".30f")(0), "0.00000000000000000000");

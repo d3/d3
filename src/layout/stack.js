@@ -14,6 +14,7 @@ d3.layout.stack = function() {
       y = d3_layout_stackY;
 
   function stack(data, index) {
+    if (!(n = data.length)) return data;
 
     // Convert series to canonical two-dimensional representation.
     var series = data.map(function(d, i) {
@@ -36,8 +37,8 @@ d3.layout.stack = function() {
     var offsets = offset.call(stack, points, index);
 
     // And propagate it to other series.
-    var n = series.length,
-        m = series[0].length,
+    var m = series[0].length,
+        n,
         i,
         j,
         o;
