@@ -12,6 +12,7 @@ import "shuffle";
 import "permute";
 import "pairs";
 import "zip";
+import "product";
 import "transpose";
 import "keys";
 import "values";
