@@ -1,6 +1,6 @@
 d3.interpolateNumber = d3_interpolateNumber;
 
 function d3_interpolateNumber(a, b) {
-  b -= a = +a;
-  return function(t) { return a + b * t; };
+  a = +a, b = +b;
+  return function(t) { return a * (1 - t) + b * t; };
 }

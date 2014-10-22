@@ -9,13 +9,16 @@ function d3_locale_numberFormat(locale) {
       locale_thousands = locale.thousands,
       locale_grouping = locale.grouping,
       locale_currency = locale.currency,
-      formatGroup = locale_grouping ? function(value) {
+      formatGroup = locale_grouping && locale_thousands ? function(value, width) {
         var i = value.length,
             t = [],
             j = 0,
-            g = locale_grouping[0];
+            g = locale_grouping[0],
+            length = 0;
         while (i > 0 && g > 0) {
+          if (length + g + 1 > width) g = Math.max(1, width - length);
           t.push(value.substring(i -= g, i + g));
+          if ((length += g + 1) > width) break;
           g = locale_grouping[j = (j + 1) % locale_grouping.length];
         }
         return t.reverse().join(locale_thousands);
@@ -25,7 +28,7 @@ function d3_locale_numberFormat(locale) {
     var match = d3_format_re.exec(specifier),
         fill = match[1] || " ",
         align = match[2] || ">",
-        sign = match[3] || "",
+        sign = match[3] || "-",
         symbol = match[4] || "",
         zfill = match[5],
         width = +match[6],
@@ -35,14 +38,14 @@ function d3_locale_numberFormat(locale) {
         scale = 1,
         prefix = "",
         suffix = "",
-        integer = false;
+        integer = false,
+        exponent = true;
 
     if (precision) precision = +precision.substring(1);
 
     if (zfill || fill === "0" && align === "=") {
       zfill = fill = "0";
       align = "=";
-      if (comma) width -= Math.floor((width - 1) / 4);
     }
 
     switch (type) {
@@ -53,7 +56,7 @@ function d3_locale_numberFormat(locale) {
       case "o":
       case "x":
       case "X": if (symbol === "#") prefix = "0" + type.toLowerCase();
-      case "c":
+      case "c": exponent = false;
       case "d": integer = true; precision = 0; break;
       case "s": scale = -1; type = "r"; break;
     }
@@ -80,7 +83,7 @@ function d3_locale_numberFormat(locale) {
       if (integer && (value % 1)) return "";
 
       // Convert negative to positive, and record the sign prefix.
-      var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign;
+      var negative = value < 0 || value === 0 && 1 / value < 0 ? (value = -value, "-") : sign === "-" ? "" : sign;
 
       // Apply the scale, computing it from the value's exponent for si format.
       // Preserve the existing suffix, if any, such as the currency symbol.
@@ -97,17 +100,26 @@ function d3_locale_numberFormat(locale) {
 
       // Break the value into the integer part (before) and decimal part (after).
       var i = value.lastIndexOf("."),
-          before = i < 0 ? value : value.substring(0, i),
-          after = i < 0 ? "" : locale_decimal + value.substring(i + 1);
+          before,
+          after;
+      if (i < 0) {
+        // If there is no decimal, break on "e" where appropriate.
+        var j = exponent ? value.lastIndexOf("e") : -1;
+        if (j < 0) before = value, after = "";
+        else before = value.substring(0, j), after = value.substring(j);
+      } else {
+        before = value.substring(0, i);
+        after = locale_decimal + value.substring(i + 1);
+      }
 
-       // If the fill character is not "0", grouping is applied before padding.
-      if (!zfill && comma) before = formatGroup(before);
+      // If the fill character is not "0", grouping is applied before padding.
+      if (!zfill && comma) before = formatGroup(before, Infinity);
 
       var length = prefix.length + before.length + after.length + (zcomma ? 0 : negative.length),
           padding = length < width ? new Array(length = width - length + 1).join(fill) : "";
 
       // If the fill character is "0", grouping is applied after padding.
-      if (zcomma) before = formatGroup(padding + before);
+      if (zcomma) before = formatGroup(padding + before, padding.length ? width - after.length : Infinity);
 
       // Apply prefix.
       negative += prefix;

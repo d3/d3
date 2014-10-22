@@ -71,7 +71,7 @@ d3.dsv = function(delimiter, mimeType) {
         } else if (c === 10) {
           eol = true;
         }
-        return text.substring(j + 1, i).replace(/""/g, "\"");
+        return text.slice(j + 1, i).replace(/""/g, "\"");
       }
 
       // common case: find next delimiter or newline
@@ -80,11 +80,11 @@ d3.dsv = function(delimiter, mimeType) {
         if (c === 10) eol = true; // \n
         else if (c === 13) { eol = true; if (text.charCodeAt(I) === 10) ++I, ++k; } // \r|\r\n
         else if (c !== delimiterCode) continue;
-        return text.substring(j, I - k);
+        return text.slice(j, I - k);
       }
 
       // special case: last token before EOF
-      return text.substring(j);
+      return text.slice(j);
     }
 
     while ((t = token()) !== EOF) {
@@ -93,7 +93,7 @@ d3.dsv = function(delimiter, mimeType) {
         a.push(t);
         t = token();
       }
-      if (f && !(a = f(a, n++))) continue;
+      if (f && (a = f(a, n++)) == null) continue;
       rows.push(a);
     }
 
