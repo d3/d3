@@ -5,10 +5,12 @@ import "../event/dispatch";
 import "../event/timer";
 import "../selection/selection";
 
-function d3_transition(groups, id) {
+function d3_transition(groups, namespace, id) {
   d3_subclass(groups, d3_transitionPrototype);
 
-  groups.id = id; // Note: read-only!
+  // Note: read-only!
+  groups.namespace = namespace;
+  groups.id = id;
 
   return groups;
 }
@@ -45,8 +47,12 @@ import "each";
 import "subtransition";
 import "tween";
 
-function d3_transitionNode(node, i, id, inherit) {
-  var lock = node.__transition__ || (node.__transition__ = {active: 0, count: 0}),
+function d3_transitionNamespace(name) {
+  return name == null ? "__transition__" : "__transition_" + name + "__";
+}
+
+function d3_transitionNode(node, i, namespace, id, inherit) {
+  var lock = node[namespace] || (node[namespace] = {active: 0, count: 0}),
       transition = lock[id];
 
   if (!transition) {
@@ -110,7 +116,7 @@ function d3_transitionNode(node, i, id, inherit) {
 
       function stop() {
         if (--lock.count) delete lock[id];
-        else delete node.__transition__;
+        else delete node[namespace];
         return 1;
       }
     }, 0, time);
