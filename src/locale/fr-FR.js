@@ -6,7 +6,7 @@ d3.locale.fr_FR = d3.locale({
   grouping: [3],
   currency: ["", " €"],
   dateTime: "%A, le %e %B %Y, %X",
-  date: "%e/%m/%Y",
+  date: "%d/%m/%Y",
   time: "%H:%M:%S",
   periods: ["AM", "PM"], // unused
   days: ["dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi"],
