@@ -6123,7 +6123,7 @@
           l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
           x *= l;
           y *= l;
-          t.x -= x * (k = s.weight / (t.weight + s.weight));
+          t.x -= x * (k = (s.weight ? s.weight : 1) / ((t.weight ? t.weight : 1) + (s.weight ? s.weight : 1)));
           t.y -= y * k;
           s.x += x * (k = 1 - k);
           s.y += y * k;
