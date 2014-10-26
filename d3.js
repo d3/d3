@@ -179,7 +179,14 @@
     return d3.zip.apply(d3, matrix);
   };
   d3.keys = function(map) {
-    return Object.keys(map).concat(Object.keys(map.__proto__));
+    var type = typeof map;
+    if (!(type === "function" || type === "object" && !!map)) return [];
+    if (!Object.keys) {
+      var keys = [];
+      for (var key in map) keys.push(key);
+      return keys;
+    }
+    return Object.keys(map).concat(Object.keys(Object.getPrototypeOf(map)));
   };
   d3.values = function(map) {
     var values = [];
