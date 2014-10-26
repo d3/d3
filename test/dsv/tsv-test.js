@@ -77,6 +77,30 @@ suite.addBatch({
       }
     },
 
+    "parse with row function": {
+      "invokes the row function for every row in order": function(tsv) {
+        var rows = [];
+        tsv.parse("a\n1\n2\n3\n4", function(d, i) { rows.push({d: d, i: i}); });
+        assert.deepEqual(rows, [
+          {d: {a: "1"}, i: 0},
+          {d: {a: "2"}, i: 1},
+          {d: {a: "3"}, i: 2},
+          {d: {a: "4"}, i: 3}
+        ]);
+      },
+      "returns an array of the row function return values": function(tsv) {
+        assert.deepEqual(tsv.parse("a\tb\tc\n1\t2\t3\n", function(row) { return row; }), [{a: "1", b: "2", c: "3"}]);
+      },
+      "skips rows if the row function returns null or undefined": function(tsv) {
+        assert.deepEqual(tsv.parse("a\tb\tc\n1\t2\t3\n2\t3\t4", function(row) { return row.a & 1 ? null : row; }), [{a: "2", b: "3", c: "4"}]);
+        assert.deepEqual(tsv.parse("a\tb\tc\n1\t2\t3\n2\t3\t4", function(row) { return row.a & 1 ? undefined : row; }), [{a: "2", b: "3", c: "4"}]);
+      },
+      "does not skip rows if the row function returns false or 0": function(tsv) {
+        assert.deepEqual(tsv.parse("a\tb\tc\n1\t2\t3\n2\t3\t4", function(row) { return row.a & 1 ? 0 : row; }), [0, {a: "2", b: "3", c: "4"}]);
+        assert.deepEqual(tsv.parse("a\tb\tc\n1\t2\t3\n2\t3\t4", function(row) { return row.a & 1 ? false : row; }), [false, {a: "2", b: "3", c: "4"}]);
+      }
+    },
+
     "parseRows": {
       topic: function(tsv) {
         return tsv.parseRows;

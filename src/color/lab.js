@@ -8,7 +8,7 @@ d3.lab = d3_lab;
 function d3_lab(l, a, b) {
   return this instanceof d3_lab ? void (this.l = +l, this.a = +a, this.b = +b)
       : arguments.length < 2 ? (l instanceof d3_lab ? new d3_lab(l.l, l.a, l.b)
-      : (l instanceof d3_hcl ? d3_hcl_lab(l.l, l.c, l.h)
+      : (l instanceof d3_hcl ? d3_hcl_lab(l.h, l.c, l.l)
       : d3_rgb_lab((l = d3_rgb(l)).r, l.g, l.b)))
       : new d3_lab(l, a, b);
 }

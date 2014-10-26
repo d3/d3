@@ -29,6 +29,14 @@ suite.addBatch({
       var x = quantile().domain([6, 3, 7, 8, 8, 13, 20, 15, 16, 10]);
       assert.deepEqual(x.domain(), [3, 6, 7, 8, 8, 10, 13, 15, 16, 20]);
     },
+    "domain values are coerced to numbers": function(quantile) {
+      var x = quantile().domain(["6", "13", "20"]);
+      assert.deepEqual(x.domain(), [6, 13, 20]);
+    },
+    "domain values are allowed to be zero": function(quantile) {
+      var x = quantile().domain([1, 2, 0, 0, null]);
+      assert.deepEqual(x.domain(), [0, 0, 1, 2]);
+    },
     "non-numeric domain values are ignored": function(quantile) {
       var x = quantile().domain([6, 3, NaN, undefined, 7, 8, 8, 13, null, 20, 15, 16, 10, NaN]);
       assert.deepEqual(x.domain(), [3, 6, 7, 8, 8, 10, 13, 15, 16, 20]);
