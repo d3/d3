@@ -179,9 +179,7 @@
     return d3.zip.apply(d3, matrix);
   };
   d3.keys = function(map) {
-    var keys = [];
-    for (var key in map) keys.push(key);
-    return keys;
+    return Object.keys(map).concat(Object.keys(map.__proto__));
   };
   d3.values = function(map) {
     var values = [];
