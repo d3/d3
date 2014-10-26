@@ -13,6 +13,12 @@ suite.addBatch({
     "returns the same array for an array size of one": function(shuffle) {
       assert.deepEqual(shuffle([0]), [0]);
     },
+    "should not return an array in the same order twice": function(shuffle) {
+      // Theoretically conceivable, but statistically impossible that this could happen randomly.
+      // (P = 1 in 100!)
+      var a = Array.apply(null, {length: 100}).map(Number.call, Number);
+      assert.notDeepEqual(shuffle(a.slice(0)),shuffle(a.slice(0)));
+    },
     "returns undefined for negative range parameters": function(shuffle) {
       assert.deepEqual(shuffle([1,2,3,4,5],-1), undefined);
       assert.deepEqual(shuffle([1,2,3,4,5],1,-1), undefined);
