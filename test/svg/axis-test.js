@@ -107,7 +107,7 @@ suite.addBatch({
         assert.equal(tick.attr("transform"), "translate(0.2,0)");
         assert.equal(text.attr("y"), -9);
         assert.equal(text.attr("dy"), "0em");
-        assert.equal(text.style("text-anchor"), "middle");
+        assert.equal(text.attr("text-anchor"), "middle");
         assert.equal(text.text(), "0.2");
         assert.equal(line.attr("y2"), -6);
         assert.equal(path.attr("d"), "M0,-6V0H1V-6");
@@ -122,7 +122,7 @@ suite.addBatch({
         assert.equal(tick.attr("transform"), "translate(0,0.2)");
         assert.equal(text.attr("x"), 9);
         assert.equal(text.attr("dy"), ".32em");
-        assert.equal(text.style("text-anchor"), "start");
+        assert.equal(text.attr("text-anchor"), "start");
         assert.equal(text.text(), "0.2");
         assert.equal(line.attr("x2"), 6);
         assert.equal(path.attr("d"), "M6,0H0V1H6");
@@ -137,7 +137,7 @@ suite.addBatch({
         assert.equal(tick.attr("transform"), "translate(0.2,0)");
         assert.equal(text.attr("y"), 9);
         assert.equal(text.attr("dy"), ".71em");
-        assert.equal(text.style("text-anchor"), "middle");
+        assert.equal(text.attr("text-anchor"), "middle");
         assert.equal(text.text(), "0.2");
         assert.equal(line.attr("y2"), 6);
         assert.equal(path.attr("d"), "M0,6V0H1V6");
@@ -152,7 +152,7 @@ suite.addBatch({
         assert.equal(tick.attr("transform"), "translate(0,0.2)");
         assert.equal(text.attr("x"), -9);
         assert.equal(text.attr("dy"), ".32em");
-        assert.equal(text.style("text-anchor"), "end");
+        assert.equal(text.attr("text-anchor"), "end");
         assert.equal(text.text(), "0.2");
         assert.equal(line.attr("x2"), -6);
         assert.equal(path.attr("d"), "M-6,0H0V1H-6");
