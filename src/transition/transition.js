@@ -75,7 +75,7 @@ function d3_transitionNode(node, i, id, inherit) {
       timer.c = start;
 
       function start(elapsed) {
-        if (lock.active > id) return stop();
+        if (lock.active > id) return stop(false);
         lock.active = id;
         transition.event && transition.event.start.call(node, d, i);
 
@@ -92,7 +92,7 @@ function d3_transitionNode(node, i, id, inherit) {
       }
 
       function tick(elapsed) {
-        if (lock.active !== id) return stop();
+        if (lock.active !== id) return stop(false);
 
         var t = elapsed / duration,
             e = ease(t),
@@ -102,13 +102,11 @@ function d3_transitionNode(node, i, id, inherit) {
           tweened[--n].call(node, e);
         }
 
-        if (t >= 1) {
-          transition.event && transition.event.end.call(node, d, i);
-          return stop();
-        }
+        if (t >= 1) return stop(true);
       }
 
-      function stop() {
+      function stop(end) {
+        if (transition.event) transition.event[end ? "end" : "interrupt"].call(node, d, i);
         if (--lock.count) delete lock[id];
         else delete node.__transition__;
         return 1;
