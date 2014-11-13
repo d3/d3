@@ -1235,7 +1235,7 @@
       x: 0,
       y: 0,
       k: 1
-    }, translate0, center0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
+    }, translate0, center0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, scaleGenerator = d3_behavior_zoomScaleGenerator, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
     function zoom(g) {
       g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
     }
@@ -1295,6 +1295,11 @@
     zoom.scaleExtent = function(_) {
       if (!arguments.length) return scaleExtent;
       scaleExtent = _ == null ? d3_behavior_zoomInfinity : [ +_[0], +_[1] ];
+      return zoom;
+    };
+    zoom.scaleGenerator = function(g) {
+      if (!arguments.length) return scaleGenerator;
+      scaleGenerator = typeof g != "function" ? d3_behavior_zoomScaleGenerator : g;
       return zoom;
     };
     zoom.center = function(_) {
@@ -1410,7 +1415,7 @@
         if (touches.length === 1) {
           if (now - touchtime < 500) {
             var p = touches[0], l = locations0[p.identifier];
-            scaleTo(view.k * 2);
+            scaleTo(scaleGenerator(view.k, 1, "dbltap"));
             translateTo(p, l);
             d3_eventPreventDefault();
             zoomed(dispatch);
@@ -1434,7 +1439,7 @@
           var distance1 = (distance1 = p1[0] - p0[0]) * distance1 + (distance1 = p1[1] - p0[1]) * distance1, scale1 = distance0 && Math.sqrt(distance1 / distance0);
           p0 = [ (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 ];
           l0 = [ (l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2 ];
-          scaleTo(scale1 * scale0);
+          scaleTo(scaleGenerator(scale0, scale1, "touchzoom"));
         }
         touchtime = null;
         translateTo(p0, l0);
@@ -1465,14 +1470,14 @@
         zoomended(dispatch);
       }, 50);
       d3_eventPreventDefault();
-      scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
+      scaleTo(scaleGenerator(view.k, d3_behavior_zoomDelta(), "mousewheel"));
       translateTo(center0, translate0);
       zoomed(dispatch);
     }
     function dblclicked() {
-      var dispatch = event.of(this, arguments), p = d3.mouse(this), l = location(p), k = Math.log(view.k) / Math.LN2;
+      var dispatch = event.of(this, arguments), p = d3.mouse(this), l = location(p);
       zoomstarted(dispatch);
-      scaleTo(Math.pow(2, d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1));
+      scaleTo(scaleGenerator(view.k, d3.event.shiftKey ? -1 : 1, "dblclick"));
       translateTo(p, l);
       zoomed(dispatch);
       zoomended(dispatch);
@@ -1480,6 +1485,18 @@
     return d3.rebind(zoom, event, "on");
   };
   var d3_behavior_zoomInfinity = [ 0, Infinity ];
+  var d3_behavior_zoomScaleGenerator = function(k, delta, usecase) {
+    if (usecase === "mousewheel") {
+      return Math.pow(2, delta * .002) * k;
+    } else if (usecase === "dbltap") {
+      return k * 2;
+    } else if (usecase === "dblclick") {
+      return Math.pow(2, delta < 0 ? Math.ceil(Math.log(k) / Math.LN2) - 1 : Math.floor(Math.log(k) / Math.LN2) + 1);
+    } else if (usecase === "touchzoom") {
+      return k * delta;
+    }
+    return k;
+  };
   var d3_behavior_zoomDelta, d3_behavior_zoomWheel = "onwheel" in d3_document ? (d3_behavior_zoomDelta = function() {
     return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1);
   }, "wheel") : "onmousewheel" in d3_document ? (d3_behavior_zoomDelta = function() {
