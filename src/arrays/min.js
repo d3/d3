@@ -3,7 +3,7 @@ d3.min = function(array, f) {
       n = array.length,
       a,
       b;
-  if (arguments.length === 1) {
+  if (typeof f !== 'function') {
     while (++i < n && !((a = array[i]) != null && a <= a)) a = undefined;
     while (++i < n) if ((b = array[i]) != null && a > b) a = b;
   } else {
