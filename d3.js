@@ -5559,8 +5559,8 @@
       root.visit = function(f) {
         d3_geom_quadtreeVisit(f, root, x1_, y1_, x2_, y2_);
       };
-      root.find = function(x, y) {
-        return d3_geom_quadtreeFind(root, x, y, x1_, y1_, x2_, y2_);
+      root.find = function(point) {
+        return d3_geom_quadtreeFind(root, point[0], point[1], x1_, y1_, x2_, y2_);
       };
       i = -1;
       if (x1 == null) {
