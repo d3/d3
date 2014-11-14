@@ -40,10 +40,21 @@ function d3_scale_ordinal(domain, ranger) {
     if (arguments.length < 2) padding = 0;
     var start = x[0],
         stop = x[1],
-        step = (stop - start) / (Math.max(1, domain.length - 1) + padding);
-    range = steps(domain.length < 2 ? (start + stop) / 2 : start + step * padding / 2, step);
+        step = domain.length < 2 ? (start = (start + stop) / 2, 0) : (stop - start) / (domain.length - 1 + padding);
+    range = steps(start + step * padding / 2, step);
     rangeBand = 0;
     ranger = {t: "rangePoints", a: arguments};
+    return scale;
+  };
+
+  scale.rangeRoundPoints = function(x, padding) {
+    if (arguments.length < 2) padding = 0;
+    var start = x[0],
+        stop = x[1],
+        step = domain.length < 2 ? (start = stop = Math.round((start + stop) / 2), 0) : (stop - start) / (domain.length - 1 + padding) | 0; // bitwise floor for symmetry
+    range = steps(start + Math.round(step * padding / 2 + (stop - start - (domain.length - 1 + padding) * step) / 2), step);
+    rangeBand = 0;
+    ranger = {t: "rangeRoundPoints", a: arguments};
     return scale;
   };
 
@@ -67,9 +78,8 @@ function d3_scale_ordinal(domain, ranger) {
     var reverse = x[1] < x[0],
         start = x[reverse - 0],
         stop = x[1 - reverse],
-        step = Math.floor((stop - start) / (domain.length - padding + 2 * outerPadding)),
-        error = stop - start - (domain.length - padding) * step;
-    range = steps(start + Math.round(error / 2), step);
+        step = Math.floor((stop - start) / (domain.length - padding + 2 * outerPadding));
+    range = steps(start + Math.round((stop - start - (domain.length - padding) * step) / 2), step);
     if (reverse) range.reverse();
     rangeBand = Math.round(step * (1 - padding));
     ranger = {t: "rangeRoundBands", a: arguments};
