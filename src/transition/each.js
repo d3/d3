@@ -16,7 +16,7 @@ d3_transitionPrototype.each = function(type, listener) {
   } else {
     d3_selection_each(this, function(node) {
       var transition = node[ns][id];
-      (transition.event || (transition.event = d3.dispatch("start", "end"))).on(type, listener);
+      (transition.event || (transition.event = d3.dispatch("start", "end", "interrupt"))).on(type, listener);
     });
   }
   return this;
