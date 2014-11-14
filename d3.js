@@ -8576,9 +8576,13 @@
       subgroups.push(subgroup = []);
       for (var group = this[j], i = 0, n = group.length; i < n; i++) {
         if (node = group[i]) {
-          transition = Object.create(node.__transition__[id0]);
-          transition.delay += transition.duration;
-          d3_transitionNode(node, i, id1, transition);
+          transition = node.__transition__[id0];
+          d3_transitionNode(node, i, id1, {
+            time: transition.time,
+            ease: transition.ease,
+            delay: transition.delay + transition.duration,
+            duration: transition.duration
+          });
         }
         subgroup.push(node);
       }
@@ -8599,6 +8603,7 @@
         delay: inherit.delay,
         duration: inherit.duration
       };
+      inherit = null;
       ++lock.count;
       d3.timer(function(elapsed) {
         var d = node.__data__, ease = transition.ease, delay = transition.delay, duration = transition.duration, timer = d3_timer_active, tweened = [];

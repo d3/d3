@@ -60,6 +60,8 @@ function d3_transitionNode(node, i, id, inherit) {
       duration: inherit.duration
     };
 
+    inherit = null; // allow gc
+
     ++lock.count;
 
     d3.timer(function(elapsed) {
