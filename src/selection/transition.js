@@ -1,8 +1,9 @@
 // import "../transition/transition";
 import "selection";
 
-d3_selectionPrototype.transition = function() {
+d3_selectionPrototype.transition = function(name) {
   var id = d3_transitionInheritId || ++d3_transitionId,
+      ns = d3_transitionNamespace(name),
       subgroups = [],
       subgroup,
       node,
@@ -11,10 +12,10 @@ d3_selectionPrototype.transition = function() {
   for (var j = -1, m = this.length; ++j < m;) {
     subgroups.push(subgroup = []);
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
-      if (node = group[i]) d3_transitionNode(node, i, id, transition);
+      if (node = group[i]) d3_transitionNode(node, i, ns, id, transition);
       subgroup.push(node);
     }
   }
 
-  return d3_transition(subgroups, id);
+  return d3_transition(subgroups, ns, id);
 };
