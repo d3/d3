@@ -1,18 +1,18 @@
-import "../core/functor";
+import "../core/property";
 import "../math/trigonometry";
 import "svg";
 
 d3.svg.arc = function() {
-  var innerRadius = d3_svg_arcInnerRadius,
-      outerRadius = d3_svg_arcOuterRadius,
-      startAngle = d3_svg_arcStartAngle,
-      endAngle = d3_svg_arcEndAngle;
+  var innerRadius = d3_property_number(arc, "innerRadius", d3_svg_arcInnerRadius),
+      outerRadius = d3_property_number(arc, "outerRadius", d3_svg_arcOuterRadius),
+      startAngle = d3_property_number(arc, "startAngle", d3_svg_arcStartAngle),
+      endAngle = d3_property_number(arc, "endAngle", d3_svg_arcEndAngle);
 
   function arc() {
-    var r0 = innerRadius.apply(this, arguments),
-        r1 = outerRadius.apply(this, arguments),
-        a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset,
-        a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset,
+    var r0 = innerRadius(this, arguments),
+        r1 = outerRadius(this, arguments),
+        a0 = startAngle(this, arguments) + d3_svg_arcOffset,
+        a1 = endAngle(this, arguments) + d3_svg_arcOffset,
         da = Math.abs(a1 - a0),
         df = da < π ? " 0 0" : " 0 1",
         fs = a1 < a0 ? ",0 " : ",1 ",
@@ -45,35 +45,9 @@ d3.svg.arc = function() {
       + "L0,0Z");
   }
 
-  arc.innerRadius = function(v) {
-    if (!arguments.length) return innerRadius;
-    innerRadius = d3_functor(v);
-    return arc;
-  };
-
-  arc.outerRadius = function(v) {
-    if (!arguments.length) return outerRadius;
-    outerRadius = d3_functor(v);
-    return arc;
-  };
-
-  arc.startAngle = function(v) {
-    if (!arguments.length) return startAngle;
-    startAngle = d3_functor(v);
-    return arc;
-  };
-
-  arc.endAngle = function(v) {
-    if (!arguments.length) return endAngle;
-    endAngle = d3_functor(v);
-    return arc;
-  };
-
   arc.centroid = function() {
-    var r = (innerRadius.apply(this, arguments)
-        + outerRadius.apply(this, arguments)) / 2,
-        a = (startAngle.apply(this, arguments)
-        + endAngle.apply(this, arguments)) / 2 + d3_svg_arcOffset;
+    var r = (innerRadius(this, arguments) + outerRadius(this, arguments)) / 2,
+        a = (startAngle(this, arguments) + endAngle(this, arguments)) / 2 + d3_svg_arcOffset;
     return [Math.cos(a) * r, Math.sin(a) * r];
   };
 
