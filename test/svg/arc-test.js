@@ -84,10 +84,13 @@ suite.addBatch({
       assert.equal(tt, t, "expected this, got {actual}");
     },
 
-    "startAngle and endAngle are swapped if endAngle is less than startAngle": function(arc) {
+    "arc is drawn counter-clockwise if endAngle is less than startAngle": function(arc) {
+      var a = arc().innerRadius(0).outerRadius(100);
+      assert.pathEqual(a.startAngle(2 * Math.PI).endAngle(Math.PI)(), "M0,-100A100,100 0 1,0 0,100L0,0Z");
+      assert.pathEqual(a.startAngle(-Math.PI).endAngle(Math.PI)(), "M0,100A100,100 0 1,1 0,-100A100,100 0 1,1 0,100Z");
       var a = arc().innerRadius(50).outerRadius(100);
-      assert.pathEqual(a.startAngle(2 * Math.PI).endAngle(Math.PI)(), a.startAngle(Math.PI).endAngle(2 * Math.PI)());
-      assert.pathEqual(a.startAngle(-Math.PI).endAngle(Math.PI)(), a.startAngle(Math.PI).endAngle(-Math.PI)());
+      assert.pathEqual(a.startAngle(2 * Math.PI).endAngle(Math.PI)(), "M0,-100A100,100 0 1,0 0,100L0,50A50,50 0 1,1 0,-50Z");
+      assert.pathEqual(a.startAngle(-Math.PI).endAngle(Math.PI)(), "M0,100A100,100 0 1,1 0,-100A100,100 0 1,1 0,100M0,50A50,50 0 1,0 0,-50A50,50 0 1,0 0,50Z");
     },
 
     "angles are defined in radians, with zero at 12 o'clock": function(arc) {
