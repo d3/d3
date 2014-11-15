@@ -73,34 +73,6 @@
     }
     return a;
   };
-  d3.variance = function(array, f) {
-    var n = array.length, m = 0, a, d, s = 0, i = -1, j = 0;
-    if (n < 2) return undefined;
-    if (arguments.length === 1) {
-      while (++i < n) {
-        if (d3_number(a = array[i])) {
-          ++j;
-          d = a - m;
-          m = m + d / j;
-          s = s + d * (a - m);
-        }
-      }
-    } else {
-      while (++i < n) {
-        if (d3_number(a = f.call(array, array[i], i))) {
-          ++j;
-          d = a - m;
-          m = m + d / j;
-          s = s + d * (a - m);
-        }
-      }
-    }
-    return j ? s / (j - 1) : undefined;
-  };
-  d3.deviation = function(array, f) {
-    var v = f ? d3.variance(array, f) : d3.variance(array);
-    return v ? Math.sqrt(v) : v;
-  };
   d3.extent = function(array, f) {
     var i = -1, n = array.length, a, b, c;
     if (arguments.length === 1) {
@@ -1036,6 +1008,10 @@
       if (lock) ++lock.active;
     });
   };
+  function d3_selection_interrupt() {
+    var lock = this.__transition__;
+    if (lock) ++lock.active;
+  }
   d3.select = function(node) {
     var group = [ typeof node === "string" ? d3_select(node, d3_document) : node ];
     group.parentNode = d3_documentElement;
@@ -1305,7 +1281,7 @@
             };
             zoomstarted(dispatch);
           }).tween("zoom:zoom", function() {
-            var dx = size[0], dy = size[1], cx = dx / 2, cy = dy / 2, i = d3.interpolateZoom([ (cx - view.x) / view.k, (cy - view.y) / view.k, dx / view.k ], [ (cx - view1.x) / view1.k, (cy - view1.y) / view1.k, dx / view1.k ]);
+            var dx = size[0], dy = size[1], cx = center0 ? center0[0] : dx / 2, cy = center0 ? center0[1] : dy / 2, i = d3.interpolateZoom([ (cx - view.x) / view.k, (cy - view.y) / view.k, dx / view.k ], [ (cx - view1.x) / view1.k, (cy - view1.y) / view1.k, dx / view1.k ]);
             return function(t) {
               var l = i(t), k = dx / l[2];
               this.__chart__ = view = {
@@ -1424,6 +1400,7 @@
       if (!--zooming) dispatch({
         type: "zoomend"
       });
+      center0 = null;
     }
     function mousedowned() {
       var that = this, target = d3.event.target, dispatch = event.of(that, arguments), dragged = 0, subject = d3.select(d3_window).on(mousemove, moved).on(mouseup, ended), location0 = location(d3.mouse(that)), dragRestore = d3_event_dragSuppress();
@@ -1526,12 +1503,15 @@
       zoomed(dispatch);
     }
     function dblclicked() {
-      var dispatch = event.of(this, arguments), p = d3.mouse(this), l = location(p), k = Math.log(view.k) / Math.LN2;
-      zoomstarted(dispatch);
+      var l = location(center0 = d3.mouse(this)), k = Math.log(view.k) / Math.LN2;
+      this.__chart__ = {
+        x: view.x,
+        y: view.y,
+        k: view.k
+      };
       scaleTo(Math.pow(2, d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1));
-      translateTo(p, l);
-      zoomed(dispatch);
-      zoomended(dispatch);
+      translateTo(center0, l);
+      d3.select(this).transition().duration(350).call(zoom.event);
     }
     return d3.rebind(zoom, event, "on");
   };

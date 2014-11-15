@@ -9,3 +9,8 @@ d3_selectionPrototype.interrupt = function(name) {
     if (lock) ++lock.active;
   });
 };
+
+function d3_selection_interrupt() {
+  var lock = this.__transition__;
+  if (lock) ++lock.active;
+}

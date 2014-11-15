@@ -48,8 +48,8 @@ d3.behavior.zoom = function() {
             .tween("zoom:zoom", function() {
               var dx = size[0],
                   dy = size[1],
-                  cx = dx / 2,
-                  cy = dy / 2,
+                  cx = center0 ? center0[0] : dx / 2,
+                  cy = center0 ? center0[1] : dy / 2,
                   i = d3.interpolateZoom(
                     [(cx - view.x) / view.k, (cy - view.y) / view.k, dx / view.k],
                     [(cx - view1.x) / view1.k, (cy - view1.y) / view1.k, dx / view1.k]
@@ -157,6 +157,7 @@ d3.behavior.zoom = function() {
 
   function zoomended(dispatch) {
     if (!--zooming) dispatch({type: "zoomend"});
+    center0 = null;
   }
 
   function mousedowned() {
@@ -308,15 +309,16 @@ d3.behavior.zoom = function() {
   }
 
   function dblclicked() {
-    var dispatch = event.of(this, arguments),
-        p = d3.mouse(this),
-        l = location(p),
+    var l = location(center0 = d3.mouse(this)),
         k = Math.log(view.k) / Math.LN2;
-    zoomstarted(dispatch);
+
+    this.__chart__ = {x: view.x, y: view.y, k: view.k};
     scaleTo(Math.pow(2, d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1));
-    translateTo(p, l);
-    zoomed(dispatch);
-    zoomended(dispatch);
+    translateTo(center0, l);
+
+    d3.select(this).transition()
+        .duration(350) // TODO allow this to be customized?
+        .call(zoom.event);
   }
 
   return d3.rebind(zoom, event, "on");
