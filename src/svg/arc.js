@@ -11,8 +11,8 @@ d3.svg.arc = function() {
   function arc() {
     var r0 = innerRadius.apply(this, arguments),
         r1 = outerRadius.apply(this, arguments),
-        a0 = startAngle.apply(this, arguments) + d3_svg_arcOffset,
-        a1 = endAngle.apply(this, arguments) + d3_svg_arcOffset,
+        a0 = startAngle.apply(this, arguments) - halfπ,
+        a1 = endAngle.apply(this, arguments) - halfπ,
         da = Math.abs(a1 - a0),
         df = da < π ? " 0 0" : " 0 1",
         fs = a1 < a0 ? ",0 " : ",1 ",
@@ -21,7 +21,7 @@ d3.svg.arc = function() {
         s0 = Math.sin(a0),
         c1 = Math.cos(a1),
         s1 = Math.sin(a1);
-    return da >= d3_svg_arcMax
+    return da >= τε
       ? (r0
       ? "M0," + r1
       + "A" + r1 + "," + r1 + " 0 1" + fs + "0," + (-r1)
@@ -73,15 +73,12 @@ d3.svg.arc = function() {
     var r = (innerRadius.apply(this, arguments)
         + outerRadius.apply(this, arguments)) / 2,
         a = (startAngle.apply(this, arguments)
-        + endAngle.apply(this, arguments)) / 2 + d3_svg_arcOffset;
+        + endAngle.apply(this, arguments)) / 2 - halfπ;
     return [Math.cos(a) * r, Math.sin(a) * r];
   };
 
   return arc;
 };
-
-var d3_svg_arcOffset = -halfπ,
-    d3_svg_arcMax = τ - ε;
 
 function d3_svg_arcInnerRadius(d) {
   return d.innerRadius;
