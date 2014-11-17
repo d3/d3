@@ -9146,17 +9146,17 @@
     return d.getMilliseconds();
   } ], [ ":%S", function(d) {
     return d.getSeconds();
-  } ], [ "%I:%M", function(d) {
+  } ], [ "%H:%M", function(d) {
     return d.getMinutes();
-  } ], [ "%I %p", function(d) {
+  } ], [ "%H時", function(d) {
     return d.getHours();
-  } ], [ "%a %d", function(d) {
+  } ], [ "%d日 (%a)", function(d) {
     return d.getDay() && d.getDate() != 1;
-  } ], [ "%b %d", function(d) {
+  } ], [ "%m月%d日", function(d) {
     return d.getDate() != 1;
-  } ], [ "%B", function(d) {
+  } ], [ "%m月", function(d) {
     return d.getMonth();
-  } ], [ "%Y", d3_true ] ]);
+  } ], [ "%Y年", d3_true ] ]);
   var d3_time_scaleMilliseconds = {
     range: function(start, stop, step) {
       return d3.range(Math.ceil(start / step) * step, +stop, step).map(d3_time_scaleDate);
