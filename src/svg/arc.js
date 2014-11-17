@@ -143,7 +143,7 @@ function d3_svg_arcEndAngle(d) {
 }
 
 function d3_svg_arcPadAngle(d) {
-  return d.padAngle;
+  return d && d.padAngle;
 }
 
 // Computes the intersection of two tangent circles.

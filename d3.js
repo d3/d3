@@ -7969,7 +7969,7 @@
     return d.endAngle;
   }
   function d3_svg_arcPadAngle(d) {
-    return d.padAngle;
+    return d && d.padAngle;
   }
   function d3_svg_arcCircleIntersect(r0, x1, y1, r1) {
     var k = (r0 * r0 - r1 * r1) / (2 * (y1 * y1 + x1 * x1)) + .5;
