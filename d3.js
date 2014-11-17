@@ -7904,8 +7904,13 @@
     function arc() {
       var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = +cornerRadius.apply(this, arguments), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), df = da < π ? "0" : "1", fs = a1 < a0 ? "0" : "1", ss = a1 < a0 ? "1" : "0", c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1);
       if (da < τε && rc) {
-        var ra = Math.min(rc, r1 / (1 / Math.sin(da / 2) + 1)), ro = Math.sqrt((r1 - ra) * (r1 - ra) - ra * ra), xt0 = ro * c0, yt0 = ro * s0, xt1 = ro * c1, yt1 = ro * s1, xt2 = xt0 - ra * s0, yt2 = yt0 + ra * c0, xt3 = xt1 + ra * s1, yt3 = yt1 - ra * c1, ai0 = Math.atan2(yt2, xt2), ai1 = Math.atan2(yt3, xt3);
-        if (ai1 < ai0 ^ a1 < a0) ai1 += τ;
+        var ra = Math.min(rc, r1 / (1 / Math.sin(da / 2) + 1)), ro = Math.sqrt((r1 - ra) * (r1 - ra) - ra * ra), xt0 = ro * c0, yt0 = ro * s0, xt1 = ro * c1, yt1 = ro * s1;
+        if (a1 < a0) {
+          var xt2 = xt0 + ra * s0, yt2 = yt0 - ra * c0, xt3 = xt1 - ra * s1, yt3 = yt1 + ra * c1, ai1 = Math.atan2(yt2, xt2), ai0 = Math.atan2(yt3, xt3);
+        } else {
+          var xt2 = xt0 - ra * s0, yt2 = yt0 + ra * c0, xt3 = xt1 + ra * s1, yt3 = yt1 - ra * c1, ai0 = Math.atan2(yt2, xt2), ai1 = Math.atan2(yt3, xt3);
+        }
+        if (ai1 < ai0) ai1 += τ;
         df = Math.abs(ai1 - ai0) < π ? "0" : "1";
         return "M" + xt0 + "," + yt0 + "A" + ra + "," + ra + " 0 0," + fs + " " + d3_svg_arcCircleIntersect(r1, xt2, yt2, ra) + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + d3_svg_arcCircleIntersect(r1, xt3, yt3, ra) + "A" + ra + "," + ra + " 0 0," + fs + " " + xt1 + "," + yt1 + "L0,0Z";
       }
