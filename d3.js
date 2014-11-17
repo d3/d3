@@ -7903,11 +7903,11 @@
     var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_zero, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
     function arc() {
       var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = +cornerRadius.apply(this, arguments), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), df = da < π ? "0" : "1", fs = a1 < a0 ? "0" : "1", ss = a1 < a0 ? "1" : "0", c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1);
-      if (rc) {
-        var ro = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc), xc0 = ro * c0, yc0 = ro * s0, xc1 = ro * c1, yc1 = ro * s1, i0 = d3_svg_arcCircleIntersect(r1, xc0 - rc * s0, yc0 + rc * c0, rc), i1 = d3_svg_arcCircleIntersect(r1, xc1 + rc * s1, yc1 - rc * c1, rc), ai0 = Math.atan2(i0[1], i0[0]), ai1 = Math.atan2(i1[1], i1[0]);
+      if (da < τε && rc) {
+        var ra = Math.min(rc, r1 / (1 / Math.sin(da / 2) + 1)), ro = Math.sqrt((r1 - ra) * (r1 - ra) - ra * ra), xt0 = ro * c0, yt0 = ro * s0, xt1 = ro * c1, yt1 = ro * s1, xt2 = xt0 - ra * s0, yt2 = yt0 + ra * c0, xt3 = xt1 + ra * s1, yt3 = yt1 - ra * c1, ai0 = Math.atan2(yt2, xt2), ai1 = Math.atan2(yt3, xt3);
         if (ai1 < ai0 ^ a1 < a0) ai1 += τ;
         df = Math.abs(ai1 - ai0) < π ? "0" : "1";
-        return "M" + xc0 + "," + yc0 + "A" + rc + "," + rc + " 0 0," + fs + " " + i0 + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + i1 + "A" + rc + "," + rc + " 0 0," + fs + " " + xc1 + "," + yc1 + "L0,0Z";
+        return "M" + xt0 + "," + yt0 + "A" + ra + "," + ra + " 0 0," + fs + " " + d3_svg_arcCircleIntersect(r1, xt2, yt2, ra) + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + d3_svg_arcCircleIntersect(r1, xt3, yt3, ra) + "A" + ra + "," + ra + " 0 0," + fs + " " + xt1 + "," + yt1 + "L0,0Z";
       }
       return da >= τε ? r0 ? "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + fs + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + fs + " 0," + r1 + "M0," + r0 + "A" + r0 + "," + r0 + " 0 1," + ss + " 0," + -r0 + "A" + r0 + "," + r0 + " 0 1," + ss + " 0," + r0 + "Z" : "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + fs + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + fs + " 0," + r1 + "Z" : r0 ? "M" + r1 * c0 + "," + r1 * s0 + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + r1 * c1 + "," + r1 * s1 + "L" + r0 * c1 + "," + r0 * s1 + "A" + r0 + "," + r0 + " 0 " + df + "," + ss + " " + r0 * c0 + "," + r0 * s0 + "Z" : "M" + r1 * c0 + "," + r1 * s0 + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + r1 * c1 + "," + r1 * s1 + "L0,0Z";
     }

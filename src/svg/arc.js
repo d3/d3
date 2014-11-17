@@ -25,22 +25,21 @@ d3.svg.arc = function() {
         c1 = Math.cos(a1),
         s1 = Math.sin(a1);
 
-    if (rc) { // TODO support corners on inner arcs
-      var ro = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc),
-          xc0 = ro * c0,
-          yc0 = ro * s0,
-          xc1 = ro * c1,
-          yc1 = ro * s1,
-          i0 = d3_svg_arcCircleIntersect(r1, xc0 - rc * s0, yc0 + rc * c0, rc),
-          i1 = d3_svg_arcCircleIntersect(r1, xc1 + rc * s1, yc1 - rc * c1, rc),
-          ai0 = Math.atan2(i0[1], i0[0]),
-          ai1 = Math.atan2(i1[1], i1[0]);
+    if (da < τε && rc) { // TODO support corners on inner arcs
+      var ra = Math.min(rc, r1 / (1 / Math.sin(da / 2) + 1)),
+          ro = Math.sqrt((r1 - ra) * (r1 - ra) - ra * ra),
+          xt0 = ro * c0, yt0 = ro * s0, // start angle side tangent
+          xt1 = ro * c1, yt1 = ro * s1, // end angle side tangent
+          xt2 = xt0 - ra * s0, yt2 = yt0 + ra * c0,
+          xt3 = xt1 + ra * s1, yt3 = yt1 - ra * c1,
+          ai0 = Math.atan2(yt2, xt2),
+          ai1 = Math.atan2(yt3, xt3);
       if (ai1 < ai0 ^ a1 < a0) ai1 += τ; // TODO this isn’t quite right?
       df = Math.abs(ai1 - ai0) < π ? "0" : "1"; // correct sweep flag for shorter angle
-      return "M" + xc0 + "," + yc0
-          + "A" + rc + "," + rc + " 0 0," + fs + " " + i0
-          + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + i1
-          + "A" + rc + "," + rc + " 0 0," + fs + " " + xc1 + "," + yc1
+      return "M" + xt0 + "," + yt0
+          + "A" + ra + "," + ra + " 0 0," + fs + " " + d3_svg_arcCircleIntersect(r1, xt2, yt2, ra)
+          + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + d3_svg_arcCircleIntersect(r1, xt3, yt3, ra)
+          + "A" + ra + "," + ra + " 0 0," + fs + " " + xt1 + "," + yt1
           + "L0,0Z";
     }
 
