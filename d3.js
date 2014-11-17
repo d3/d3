@@ -7900,7 +7900,12 @@
   d3.svg.arc = function() {
     var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_zero, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle, padAngle = d3_svg_arcPadAngle;
     function arc() {
-      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = Math.min(Math.abs(r1 - r0) / 2 - ε, +cornerRadius.apply(this, arguments)), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = p1 && r0 && Math.min(da / 2, Math.asin((r1 - rc) / (r0 + rc) * Math.sin(p1))), cw = a0 < a1 ? 1 : 0;
+      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = Math.min(Math.abs(r1 - r0) / 2 - ε, +cornerRadius.apply(this, arguments)), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = 0, cw = a0 < a1 ? 1 : 0;
+      if (p1) {
+        var rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1)), rc1 = Math.min(rc, r1 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p1) / 2) + 1));
+        r0 = Math.max(r0, r1 * p1 / Math.sin(da / 2));
+        p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
+      }
       return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw) : "M" + (r0 ? rc ? roundedArcSegment(r1, rc, a0 + p1, a1 - p1, 0) + "L" + roundedArcSegment(r0, rc, a1 - p0, a0 + p0, 1) : arcSegment(r1, a0 + p1, a1 - p1, 0) + "L" + arcSegment(r0, a1 - p0, a0 + p0, 0) : (rc ? roundedArcSegment(r1, rc, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0)) + "L0,0")) + "Z";
     }
     function circleSegment(r1, inner) {

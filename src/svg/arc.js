@@ -19,8 +19,15 @@ d3.svg.arc = function() {
         a1 = endAngle.apply(this, arguments) - halfπ,
         da = Math.abs(a1 - a0),
         p1 = (+padAngle.apply(this, arguments) || 0) / 2,
-        p0 = p1 && r0 && Math.min(da / 2, Math.asin((r1 - rc) / (r0 + rc) * Math.sin(p1))),
+        p0 = 0,
         cw = a0 < a1 ? 1 : 0;
+
+    if (p1) { // Don’t think this is quite right…
+      var rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1)),
+          rc1 = Math.min(rc, r1 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p1) / 2) + 1));
+      r0 = Math.max(r0, r1 * p1 / Math.sin(da / 2));
+      p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
+    }
 
     return (da >= τε ? r0
         ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw)
