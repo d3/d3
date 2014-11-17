@@ -24,7 +24,7 @@ d3.layout.pie = function() {
         v;
 
     // If reserved padding exceeds the available angular space, scale to zero.
-    if (da > 0 ^ k > 0) k = 0, p = da / np;
+    if (da > 0 ^ k > 0) k = 0, p = da / np; // TODO pa?
 
     // Optionally sort the data.
     if (sort != null) index.sort(sort === d3_layout_pieSortByValue
