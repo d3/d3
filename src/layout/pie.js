@@ -15,9 +15,10 @@ d3.layout.pie = function() {
         values = data.map(function(d, i) { return +value.call(pie, d, i); }),
         a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle),
         da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a,
-        p = +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle) * (da < 0 ? -1 : 1),
+        p = +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle),
+        pa = p * (da < 0 ? -1 : 1),
         np = Math.abs(da) >= τε && n > 1 ? n : n - 1,
-        k = (da - np * p) / d3.sum(values),
+        k = (da - np * pa) / d3.sum(values),
         index = d3.range(n),
         arcs = [],
         v;
@@ -36,7 +37,7 @@ d3.layout.pie = function() {
         data: data[i],
         value: v = values[i],
         startAngle: a,
-        endAngle: a += v * k + p,
+        endAngle: a += v * k + pa,
         padAngle: p
       };
     });

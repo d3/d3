@@ -6559,7 +6559,7 @@
     function pie(data) {
       var n = data.length, values = data.map(function(d, i) {
         return +value.call(pie, d, i);
-      }), a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle), da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a, p = +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle) * (da < 0 ? -1 : 1), np = Math.abs(da) >= τε && n > 1 ? n : n - 1, k = (da - np * p) / d3.sum(values), index = d3.range(n), arcs = [], v;
+      }), a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle), da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a, p = +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle), pa = p * (da < 0 ? -1 : 1), np = Math.abs(da) >= τε && n > 1 ? n : n - 1, k = (da - np * pa) / d3.sum(values), index = d3.range(n), arcs = [], v;
       if (da > 0 ^ k > 0) k = 0, p = da / np;
       if (sort != null) index.sort(sort === d3_layout_pieSortByValue ? function(i, j) {
         return values[j] - values[i];
@@ -6571,7 +6571,7 @@
           data: data[i],
           value: v = values[i],
           startAngle: a,
-          endAngle: a += v * k + p,
+          endAngle: a += v * k + pa,
           padAngle: p
         };
       });
@@ -7900,7 +7900,7 @@
   d3.svg.arc = function() {
     var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_zero, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle, padAngle = d3_svg_arcPadAngle;
     function arc() {
-      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = +cornerRadius.apply(this, arguments), rc0, rc1, a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = 0, cw = a0 > a1 ? 0 : 1, cr = r0 < r1 ^ cw ? 0 : 1;
+      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = +cornerRadius.apply(this, arguments), rc0 = 0, rc1 = 0, a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = 0, cw = a0 > a1 ? 0 : 1, cr = r0 < r1 ^ cw ? 0 : 1;
       if (rc) {
         rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
         rc0 = Math.min(rc, r0, r0 / (1 / Math.sin(da / 2 - p0) + 1));
@@ -7911,6 +7911,7 @@
         rc0 = Math.min(rc, r0 / (1 / Math.sin(da / 2 - p0) + 1));
         p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
         rc0 = Math.min(rc, r0 / (1 / Math.sin(da / 2 - p0) + 1));
+        if (!cw) p0 *= -1, p1 *= -1;
       }
       return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw) : "M" + (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, cr, cw) : arcSegment(r1, a0 + p1, a1 - p1, cw)) + "L" + (r0 ? rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, cr, 1 - cw) : arcSegment(r0, a1 - p0, a0 + p0, 1 - cw) : "0,0")) + "Z";
     }

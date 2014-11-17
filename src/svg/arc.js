@@ -15,8 +15,8 @@ d3.svg.arc = function() {
     var r0 = +innerRadius.apply(this, arguments),
         r1 = +outerRadius.apply(this, arguments),
         rc = +cornerRadius.apply(this, arguments),
-        rc0,
-        rc1,
+        rc0 = 0,
+        rc1 = 0,
         a0 = startAngle.apply(this, arguments) - halfπ,
         a1 = endAngle.apply(this, arguments) - halfπ,
         da = Math.abs(a1 - a0),
@@ -24,8 +24,6 @@ d3.svg.arc = function() {
         p0 = 0,
         cw = a0 > a1 ? 0 : 1,
         cr = r0 < r1 ^ cw ? 0 : 1;
-
-    // TODO rounded counter clockwise padded arcs don’t work in with small inner radius
 
     if (rc) {
       rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
@@ -38,6 +36,7 @@ d3.svg.arc = function() {
       rc0 = Math.min(rc, r0 / (1 / Math.sin(da / 2 - p0) + 1));
       p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
       rc0 = Math.min(rc, r0 / (1 / Math.sin(da / 2 - p0) + 1));
+      if (!cw) p0 *= -1, p1 *= -1;
     }
 
     return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw)
