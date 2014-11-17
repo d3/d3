@@ -7900,7 +7900,7 @@
   d3.svg.arc = function() {
     var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_zero, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle, padAngle = d3_svg_arcPadAngle;
     function arc() {
-      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = +cornerRadius.apply(this, arguments), rc0, rc1, a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = 0, cw = a0 < a1 ? 1 : 0;
+      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = +cornerRadius.apply(this, arguments), rc0, rc1, a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = 0, cw = a0 < a1 ? 1 : 0, cr = r0 < r1 ? 0 : 1;
       if (rc) {
         rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
         rc0 = Math.min(rc, r0, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
@@ -7912,13 +7912,13 @@
         p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
         rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
       }
-      return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw) : "M" + (r0 ? (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0)) + "L" + (rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, 1) : arcSegment(r0, a1 - p0, a0 + p0, 0)) : (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0)) + "L0,0")) + "Z";
+      return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw) : "M" + (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, cw)) + "L" + (r0 ? rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, 1) : arcSegment(r0, a1 - p0, a0 + p0, 1 - cw) : "0,0")) + "Z";
     }
-    function circleSegment(r1, inner) {
-      return "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + inner + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + inner + " 0," + r1;
+    function circleSegment(r1, cw) {
+      return "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + cw + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + cw + " 0," + r1;
     }
-    function arcSegment(r1, a0, a1, inner) {
-      return r1 * Math.cos(a0) + "," + r1 * Math.sin(a0) + "A" + r1 + "," + r1 + " 0 " + (Math.abs(a1 - a0) < π ^ inner ? "0" : "1") + "," + (a1 < a0 ^ inner ? "0" : "1") + " " + r1 * Math.cos(a1) + "," + r1 * Math.sin(a1);
+    function arcSegment(r1, a0, a1, cw) {
+      return r1 * Math.cos(a0) + "," + r1 * Math.sin(a0) + "A" + r1 + "," + r1 + " 0 " + (Math.abs(a1 - a0) < π ? 0 : 1) + "," + cw + " " + r1 * Math.cos(a1) + "," + r1 * Math.sin(a1);
     }
     function roundedArcSegment(r1, rc, a0, a1, inner) {
       var c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1), ra = (inner ? -1 : 1) * rc, ro = Math.sqrt((r1 - ra) * (r1 - ra) - ra * ra), xt0 = ro * c0, yt0 = ro * s0, xt1 = ro * c1, yt1 = ro * s1;
