@@ -6555,27 +6555,25 @@
     return d3_layout_hierarchyRebind(partition, hierarchy);
   };
   d3.layout.pie = function() {
-    var value = Number, sort = d3_layout_pieSortByValue, startAngle = 0, endAngle = τ, padding = 0;
+    var value = Number, sort = d3_layout_pieSortByValue, startAngle = 0, endAngle = τ, padAngle = 0;
     function pie(data) {
       var n = data.length, values = data.map(function(d, i) {
         return +value.call(pie, d, i);
-      }), a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle), da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a, p = +(typeof padding === "function" ? padding.apply(this, arguments) : padding) * (da < 0 ? -1 : 1), np = Math.abs(da) >= τε && n > 1 ? n : n - 1, k = (da - np * p) / d3.sum(values), index = d3.range(n);
+      }), a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle), da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a, p = +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle) * (da < 0 ? -1 : 1), np = Math.abs(da) >= τε && n > 1 ? n : n - 1, k = (da - np * p) / d3.sum(values), index = d3.range(n), arcs = [], v;
       if (da > 0 ^ k > 0) k = 0, p = da / np;
       if (sort != null) index.sort(sort === d3_layout_pieSortByValue ? function(i, j) {
         return values[j] - values[i];
       } : function(i, j) {
         return sort(data[i], data[j]);
       });
-      var arcs = [];
       index.forEach(function(i) {
-        var v;
         arcs[i] = {
           data: data[i],
           value: v = values[i],
           startAngle: a,
-          endAngle: a += v * k
+          endAngle: a += v * k + p,
+          padAngle: p
         };
-        a += p;
       });
       return arcs;
     }
@@ -6599,9 +6597,9 @@
       endAngle = _;
       return pie;
     };
-    pie.padding = function(_) {
-      if (!arguments.length) return padding;
-      padding = _;
+    pie.padAngle = function(_) {
+      if (!arguments.length) return padAngle;
+      padAngle = _;
       return pie;
     };
     return pie;
@@ -7900,10 +7898,10 @@
     return 0;
   }
   d3.svg.arc = function() {
-    var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_zero, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
+    var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_zero, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle, padAngle = d3_svg_arcPadAngle;
     function arc() {
-      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = Math.min(Math.abs(r1 - r0) / 2 - ε, +cornerRadius.apply(this, arguments)), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, cw = a0 < a1 ? 1 : 0;
-      return (Math.abs(a1 - a0) >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw) : r0 ? "M" + (rc ? roundedArcSegment(r1, rc, a0, a1, 0) + "L" + roundedArcSegment(r0, rc, a1, a0, 1) : arcSegment(r1, a0, a1, 0) + "L" + arcSegment(r0, a1, a0, 0)) : "M" + (rc ? roundedArcSegment(r1, rc, a0, a1, 0) : arcSegment(r1, a0, a1, 0)) + "L0,0") + "Z";
+      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = Math.min(Math.abs(r1 - r0) / 2 - ε, +cornerRadius.apply(this, arguments)), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = p1 && r0 && Math.min(da / 2, Math.asin((r1 - rc) / (r0 + rc) * Math.sin(p1))), cw = a0 < a1 ? 1 : 0;
+      return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw) : "M" + (r0 ? rc ? roundedArcSegment(r1, rc, a0 + p1, a1 - p1, 0) + "L" + roundedArcSegment(r0, rc, a1 - p0, a0 + p0, 1) : arcSegment(r1, a0 + p1, a1 - p1, 0) + "L" + arcSegment(r0, a1 - p0, a0 + p0, 0) : (rc ? roundedArcSegment(r1, rc, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0)) + "L0,0")) + "Z";
     }
     function circleSegment(r1, inner) {
       return "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + inner + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + inner + " 0," + r1;
@@ -7964,6 +7962,9 @@
   }
   function d3_svg_arcEndAngle(d) {
     return d.endAngle;
+  }
+  function d3_svg_arcPadAngle(d) {
+    return d.padAngle;
   }
   function d3_svg_arcCircleIntersect(r0, x1, y1, r1) {
     var k = (r0 * r0 - r1 * r1) / (2 * (y1 * y1 + x1 * x1)) + .5;

@@ -8,17 +8,19 @@ d3.layout.pie = function() {
       sort = d3_layout_pieSortByValue,
       startAngle = 0,
       endAngle = τ,
-      padding = 0;
+      padAngle = 0;
 
   function pie(data) {
     var n = data.length,
         values = data.map(function(d, i) { return +value.call(pie, d, i); }),
         a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle),
         da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a,
-        p = +(typeof padding === "function" ? padding.apply(this, arguments) : padding) * (da < 0 ? -1 : 1),
+        p = +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle) * (da < 0 ? -1 : 1),
         np = Math.abs(da) >= τε && n > 1 ? n : n - 1,
         k = (da - np * p) / d3.sum(values),
-        index = d3.range(n);
+        index = d3.range(n),
+        arcs = [],
+        v;
 
     // If reserved padding exceeds the available angular space, scale to zero.
     if (da > 0 ^ k > 0) k = 0, p = da / np;
@@ -29,17 +31,16 @@ d3.layout.pie = function() {
         : function(i, j) { return sort(data[i], data[j]); });
 
     // Compute the arcs! They are stored in the original data's order.
-    var arcs = [];
     index.forEach(function(i) {
-      var v;
       arcs[i] = {
         data: data[i],
         value: v = values[i],
         startAngle: a,
-        endAngle: a += v * k
+        endAngle: a += v * k + p,
+        padAngle: p
       };
-      a += p;
     });
+
     return arcs;
   }
 
@@ -67,9 +68,9 @@ d3.layout.pie = function() {
     return pie;
   };
 
-  pie.padding = function(_) {
-    if (!arguments.length) return padding;
-    padding = _;
+  pie.padAngle = function(_) {
+    if (!arguments.length) return padAngle;
+    padAngle = _;
     return pie;
   };
 

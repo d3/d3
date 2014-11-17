@@ -8,7 +8,8 @@ d3.svg.arc = function() {
       outerRadius = d3_svg_arcOuterRadius,
       cornerRadius = d3_zero,
       startAngle = d3_svg_arcStartAngle,
-      endAngle = d3_svg_arcEndAngle;
+      endAngle = d3_svg_arcEndAngle,
+      padAngle = d3_svg_arcPadAngle;
 
   function arc() {
     var r0 = +innerRadius.apply(this, arguments),
@@ -16,13 +17,21 @@ d3.svg.arc = function() {
         rc = Math.min(Math.abs(r1 - r0) / 2 - ε, +cornerRadius.apply(this, arguments)),
         a0 = startAngle.apply(this, arguments) - halfπ,
         a1 = endAngle.apply(this, arguments) - halfπ,
+        da = Math.abs(a1 - a0),
+        p1 = (+padAngle.apply(this, arguments) || 0) / 2,
+        p0 = p1 && r0 && Math.min(da / 2, Math.asin((r1 - rc) / (r0 + rc) * Math.sin(p1))),
         cw = a0 < a1 ? 1 : 0;
 
-    return (Math.abs(a1 - a0) >= τε
-      ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw)
-      : (r0 ? "M" + (rc ? roundedArcSegment(r1, rc, a0, a1, 0) + "L" + roundedArcSegment(r0, rc, a1, a0, 1)
-      : arcSegment(r1, a0, a1, 0) + "L" + arcSegment(r0, a1, a0, 0))
-      : "M" + (rc ? roundedArcSegment(r1, rc, a0, a1, 0) : arcSegment(r1, a0, a1, 0)) + "L0,0")) + "Z";
+    return (da >= τε ? r0
+        ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw)
+        : circleSegment(r1, cw)
+      : "M" + (r0 ? (rc
+        ? roundedArcSegment(r1, rc, a0 + p1, a1 - p1, 0) + "L" + roundedArcSegment(r0, rc, a1 - p0, a0 + p0, 1)
+        : arcSegment(r1, a0 + p1, a1 - p1, 0) + "L" + arcSegment(r0, a1 - p0, a0 + p0, 0))
+      : (rc
+        ? roundedArcSegment(r1, rc, a0 + p1, a1 - p1, 0)
+        : arcSegment(r1, a0 + p1, a1 - p1, 0))
+      + "L0,0")) + "Z";
   }
 
   function circleSegment(r1, inner) {
@@ -125,6 +134,10 @@ function d3_svg_arcStartAngle(d) {
 
 function d3_svg_arcEndAngle(d) {
   return d.endAngle;
+}
+
+function d3_svg_arcPadAngle(d) {
+  return d.padAngle;
 }
 
 // Computes the intersection of two tangent circles.
