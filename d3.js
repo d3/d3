@@ -7902,15 +7902,14 @@
   d3.svg.arc = function() {
     var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_zero, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle;
     function arc() {
-      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = Math.min(Math.abs(r1 - r0) / 2 - ε, +cornerRadius.apply(this, arguments)), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ;
-      return (Math.abs(a1 - a0) >= τε ? r0 ? circleSegment(r1, 0) + circleSegment(r0, 1) : circleSegment(r1, 0) : r0 ? "M" + (rc ? roundedArcSegment(r1, rc, a0, a1, 0) + "L" + roundedArcSegment(r0, rc, a1, a0, 1) : arcSegment(r1, a0, a1, 0) + "L" + arcSegment(r0, a1, a0, 0)) : "M" + (rc ? roundedArcSegment(r1, rc, a0, a1, 0) : arcSegment(r1, a0, a1, 0)) + "L0,0") + "Z";
+      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = Math.min(Math.abs(r1 - r0) / 2 - ε, +cornerRadius.apply(this, arguments)), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, cw = a0 < a1 ? 1 : 0;
+      return (Math.abs(a1 - a0) >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw) : r0 ? "M" + (rc ? roundedArcSegment(r1, rc, a0, a1, 0) + "L" + roundedArcSegment(r0, rc, a1, a0, 1) : arcSegment(r1, a0, a1, 0) + "L" + arcSegment(r0, a1, a0, 0)) : "M" + (rc ? roundedArcSegment(r1, rc, a0, a1, 0) : arcSegment(r1, a0, a1, 0)) + "L0,0") + "Z";
     }
     function circleSegment(r1, inner) {
       return "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + inner + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + inner + " 0," + r1;
     }
     function arcSegment(r1, a0, a1, inner) {
-      var c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1), fs = a1 < a0 ^ inner ? "0" : "1", df = Math.abs(a1 - a0) < π ^ inner ? "0" : "1";
-      return r1 * c0 + "," + r1 * s0 + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + r1 * c1 + "," + r1 * s1;
+      return r1 * Math.cos(a0) + "," + r1 * Math.sin(a0) + "A" + r1 + "," + r1 + " 0 " + (Math.abs(a1 - a0) < π ^ inner ? "0" : "1") + "," + (a1 < a0 ^ inner ? "0" : "1") + " " + r1 * Math.cos(a1) + "," + r1 * Math.sin(a1);
     }
     function roundedArcSegment(r1, rc, a0, a1, inner) {
       var c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1), ra = (inner ? -1 : 1) * Math.min(rc, r1 / (1 / Math.sin(Math.abs(a1 - a0) / 2) + 1)), ro = Math.sqrt((r1 - ra) * (r1 - ra) - ra * ra), xt0 = ro * c0, yt0 = ro * s0, xt1 = ro * c1, yt1 = ro * s1;
@@ -7920,8 +7919,8 @@
         var xt2 = xt0 - ra * s0, yt2 = yt0 + ra * c0, xt3 = xt1 + ra * s1, yt3 = yt1 - ra * c1, ai0 = Math.atan2(yt2, xt2), ai1 = Math.atan2(yt3, xt3);
       }
       if (ai1 < ai0) ai1 += τ;
-      var fs = a1 < a0 ^ inner ? "0" : "1", ss = a1 < a0 ? "0" : "1", df = Math.abs(ai1 - ai0) < π ^ inner ? "0" : "1";
-      return xt0 + "," + yt0 + "A" + ra + "," + ra + " 0 0," + fs + " " + d3_svg_arcCircleIntersect(r1, xt2, yt2, ra) + "A" + r1 + "," + r1 + " 0 " + df + "," + ss + " " + d3_svg_arcCircleIntersect(r1, xt3, yt3, ra) + "A" + ra + "," + ra + " 0 0," + fs + " " + xt1 + "," + yt1;
+      var corner = "A" + ra + "," + ra + " 0 0," + (a1 < a0 ^ inner ? "0" : "1") + " ";
+      return xt0 + "," + yt0 + corner + d3_svg_arcCircleIntersect(r1, xt2, yt2, ra) + "A" + r1 + "," + r1 + " 0 " + (Math.abs(ai1 - ai0) < π ^ inner ? "0" : "1") + "," + (a1 < a0 ? "0" : "1") + " " + d3_svg_arcCircleIntersect(r1, xt3, yt3, ra) + corner + xt1 + "," + yt1;
     }
     arc.innerRadius = function(v) {
       if (!arguments.length) return innerRadius;
