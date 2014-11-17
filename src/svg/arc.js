@@ -27,16 +27,20 @@ d3.svg.arc = function() {
 
     if (rc) { // TODO support corners on inner arcs
       var ro = Math.sqrt((r1 - rc) * (r1 - rc) - rc * rc),
-          i0 = d3_svg_arcCircleIntersect(r1, ro * c0 - rc * s0, rc * c0 + ro * s0, rc),
-          i1 = d3_svg_arcCircleIntersect(r1, rc * s1 + ro * c1, ro * s1 - rc * c1, rc),
+          xc0 = ro * c0,
+          yc0 = ro * s0,
+          xc1 = ro * c1,
+          yc1 = ro * s1,
+          i0 = d3_svg_arcCircleIntersect(r1, xc0 - rc * s0, yc0 + rc * c0, rc),
+          i1 = d3_svg_arcCircleIntersect(r1, xc1 + rc * s1, yc1 - rc * c1, rc),
           ai0 = Math.atan2(i0[1], i0[0]),
           ai1 = Math.atan2(i1[1], i1[0]);
       if (ai1 < ai0 ^ a1 < a0) ai1 += τ; // TODO this isn’t quite right?
       df = Math.abs(ai1 - ai0) < π ? "0" : "1"; // correct sweep flag for shorter angle
-      return "M" + (r1 * c0 - rc * c0) + "," + (r1 * s0 - rc * s0)
+      return "M" + xc0 + "," + yc0
           + "A" + rc + "," + rc + " 0 0," + fs + " " + i0
           + "A" + r1 + "," + r1 + " 0 " + df + "," + fs + " " + i1
-          + "A" + rc + "," + rc + " 0 0," + fs + " " + (r1 * c1 - rc * c1) + "," + (r1 * s1 - rc * s1)
+          + "A" + rc + "," + rc + " 0 0," + fs + " " + xc1 + "," + yc1
           + "L0,0Z";
     }
 
