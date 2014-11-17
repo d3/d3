@@ -25,23 +25,23 @@ d3.svg.arc = function() {
         cw = a0 < a1 ? 1 : 0;
 
     if (rc) {
-      r0 = Math.max(rc, r0);
       rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
-      rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
-      rc1 = Math.min(rc, r1 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p1) / 2) + 1));
+      rc0 = Math.min(rc, r0, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
+      rc1 = Math.min(rc, r1, r1 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p1) / 2) + 1));
     }
 
     if (p1) {
       r0 = Math.max(r0, r1 * p1 / Math.sin(da / 2));
+      rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
       p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
       rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
     }
 
     return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw)
-      : "M" + (r0 ? (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0))
-      + "L" + (rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, 1) : arcSegment(r0, a1 - p0, a0 + p0, 0))
-      : (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0))
-      + "L0,0")) + "Z";
+        : "M" + (r0 ? (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0))
+        + "L" + (rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, 1) : arcSegment(r0, a1 - p0, a0 + p0, 0))
+        : (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0))
+        + "L0,0")) + "Z";
   }
 
   function circleSegment(r1, inner) {

@@ -7902,13 +7902,13 @@
     function arc() {
       var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = +cornerRadius.apply(this, arguments), rc0, rc1, a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = 0, cw = a0 < a1 ? 1 : 0;
       if (rc) {
-        r0 = Math.max(rc, r0);
         rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
-        rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
-        rc1 = Math.min(rc, r1 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p1) / 2) + 1));
+        rc0 = Math.min(rc, r0, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
+        rc1 = Math.min(rc, r1, r1 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p1) / 2) + 1));
       }
       if (p1) {
         r0 = Math.max(r0, r1 * p1 / Math.sin(da / 2));
+        rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
         p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
         rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
       }
