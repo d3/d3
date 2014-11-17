@@ -14,7 +14,9 @@ d3.svg.arc = function() {
   function arc() {
     var r0 = +innerRadius.apply(this, arguments),
         r1 = +outerRadius.apply(this, arguments),
-        rc = Math.min(Math.abs(r1 - r0) / 2 - ε, +cornerRadius.apply(this, arguments)),
+        rc = +cornerRadius.apply(this, arguments),
+        rc0,
+        rc1,
         a0 = startAngle.apply(this, arguments) - halfπ,
         a1 = endAngle.apply(this, arguments) - halfπ,
         da = Math.abs(a1 - a0),
@@ -22,22 +24,23 @@ d3.svg.arc = function() {
         p0 = 0,
         cw = a0 < a1 ? 1 : 0;
 
-    if (p1) { // Don’t think this is quite right…
-      var rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1)),
-          rc1 = Math.min(rc, r1 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p1) / 2) + 1));
-      r0 = Math.max(r0, r1 * p1 / Math.sin(da / 2));
-      p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
+    if (rc) {
+      r0 = Math.max(rc, r0);
+      rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
+      rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
+      rc1 = Math.min(rc, r1 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p1) / 2) + 1));
     }
 
-    return (da >= τε ? r0
-        ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw)
-        : circleSegment(r1, cw)
-      : "M" + (r0 ? (rc
-        ? roundedArcSegment(r1, rc, a0 + p1, a1 - p1, 0) + "L" + roundedArcSegment(r0, rc, a1 - p0, a0 + p0, 1)
-        : arcSegment(r1, a0 + p1, a1 - p1, 0) + "L" + arcSegment(r0, a1 - p0, a0 + p0, 0))
-      : (rc
-        ? roundedArcSegment(r1, rc, a0 + p1, a1 - p1, 0)
-        : arcSegment(r1, a0 + p1, a1 - p1, 0))
+    if (p1) {
+      r0 = Math.max(r0, r1 * p1 / Math.sin(da / 2));
+      p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
+      rc0 = Math.min(rc, r0 / (1 / Math.sin(Math.abs(a1 - a0 - 2 * p0) / 2) + 1));
+    }
+
+    return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw)
+      : "M" + (r0 ? (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0))
+      + "L" + (rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, 1) : arcSegment(r0, a1 - p0, a0 + p0, 0))
+      : (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, 0) : arcSegment(r1, a0 + p1, a1 - p1, 0))
       + "L0,0")) + "Z";
   }
 
@@ -59,7 +62,7 @@ d3.svg.arc = function() {
         s0 = Math.sin(a0),
         c1 = Math.cos(a1),
         s1 = Math.sin(a1),
-        ra = (inner ? -1 : 1) * Math.min(rc, r1 / (1 / Math.sin(Math.abs(a1 - a0) / 2) + 1)),
+        ra = (inner ? -1 : 1) * rc,
         ro = Math.sqrt((r1 - ra) * (r1 - ra) - ra * ra),
         xt0 = ro * c0, yt0 = ro * s0, // start angle radial tangent
         xt1 = ro * c1, yt1 = ro * s1; // end angle radial tangent
