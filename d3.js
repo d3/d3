@@ -7900,31 +7900,49 @@
   d3.svg.arc = function() {
     var innerRadius = d3_svg_arcInnerRadius, outerRadius = d3_svg_arcOuterRadius, cornerRadius = d3_zero, startAngle = d3_svg_arcStartAngle, endAngle = d3_svg_arcEndAngle, padAngle = d3_svg_arcPadAngle;
     function arc() {
-      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), rc = +cornerRadius.apply(this, arguments), rc0 = 0, rc1 = 0, a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), p1 = (+padAngle.apply(this, arguments) || 0) / 2, p0 = 0, cw = a0 > a1 ? 0 : 1, cr = r0 < r1 ^ cw ? 0 : 1;
-      if (p1) {
-        p0 = d3_asin(r1 / r0 * Math.sin(p1));
-        if (!cw) p0 *= -1, p1 *= -1;
+      var r0 = +innerRadius.apply(this, arguments), r1 = +outerRadius.apply(this, arguments), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), cw = a0 > a1 ? 0 : 1, rc, cr, p0 = 0, p1;
+      if (da >= τε) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "");
+      if (p1 = (+padAngle.apply(this, arguments) || 0) / 2) {
+        if (!cw) p1 *= -1;
+        if (r0) p0 = d3_asin(r1 / r0 * Math.sin(p1));
       }
-      return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw) : "M" + (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, cr, cw) : arcSegment(r1, a0 + p1, a1 - p1, cw)) + "L" + (rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, cr, 1 - cw) : arcSegment(r0, a1 - p0, a0 + p0, 1 - cw))) + "Z";
-    }
-    function sweep(x0, y0, x1, y1) {
-      return (x0 - x1) * y0 - (y0 - y1) * x0 > 0 ? 0 : 1;
+      var x0 = 0, y0 = 0, x1, y1, x2 = 0, y2 = 0, x3, y3;
+      if (r1) {
+        x0 = r1 * Math.cos(a0 + p1);
+        y0 = r1 * Math.sin(a0 + p1);
+        x1 = r1 * Math.cos(a1 - p1);
+        y1 = r1 * Math.sin(a1 - p1);
+        var l1 = Math.abs(a1 - a0 - 2 * p1) <= π ? 0 : 1;
+        if (p1 && d3_svg_arcSweep(x0, y0, x1, y1) === cw ^ l1) {
+          var h1 = (a0 + a1) / 2;
+          x0 = r1 * Math.cos(h1);
+          y0 = r1 * Math.sin(h1);
+          x1 = y1 = null;
+        }
+      }
+      if (r0) {
+        x2 = r0 * Math.cos(a1 - p0);
+        y2 = r0 * Math.sin(a1 - p0);
+        x3 = r0 * Math.cos(a0 + p0);
+        y3 = r0 * Math.sin(a0 + p0);
+        var l0 = Math.abs(a0 - a1 + 2 * p0) <= π ? 0 : 1;
+        if (p0 && d3_svg_arcSweep(x2, y2, x3, y3) === 1 - cw ^ l0) {
+          var h0 = (a0 + a1) / 2;
+          x2 = r0 * Math.cos(h0);
+          y2 = r0 * Math.sin(h0);
+          x3 = y3 = null;
+        }
+      }
+      var path = [];
+      path.push("M" + x0, "," + y0);
+      if (x1 != null) path.push("A", r1, ",", r1, " 0 ", l1, ",", cw, " ", x1, ",", y1);
+      path.push("L" + x2, "," + y2);
+      if (x3 != null) path.push("A", r0, ",", r0, " 0 ", l0, ",", 1 - cw, " ", x3, ",", y3);
+      path.push("Z");
+      return path.join("");
     }
     function circleSegment(r1, cw) {
       return "M0," + r1 + "A" + r1 + "," + r1 + " 0 1," + cw + " 0," + -r1 + "A" + r1 + "," + r1 + " 0 1," + cw + " 0," + r1;
-    }
-    function arcSegment(r1, a0, a1, cw) {
-      var x0 = r1 * Math.cos(a0), y0 = r1 * Math.sin(a0), x1 = r1 * Math.cos(a1), y1 = r1 * Math.sin(a1), df = Math.abs(a1 - a0) <= π ? 0 : 1;
-      if (sweep(x0, y0, x1, y1) === cw ^ df) {
-        var ha = (a0 + a1) / 2;
-        return r1 * Math.cos(ha) + "," + r1 * Math.sin(ha);
-      }
-      return x0 + "," + y0 + "A" + r1 + "," + r1 + " 0 " + df + "," + cw + " " + x1 + "," + y1;
-    }
-    function roundedArcSegment(r1, rc, a0, a1, cr, cw) {
-      var c0 = Math.cos(a0), s0 = Math.sin(a0), c1 = Math.cos(a1), s1 = Math.sin(a1), ra = cw ? -rc : rc, rb = cr ? r1 + ra : r1 - ra, ro = Math.sqrt(rb * rb - rc * rc), xt0 = ro * c0, yt0 = ro * s0, xt1 = ro * c1, yt1 = ro * s1, xt2 = xt0 + ra * s0, yt2 = yt0 - ra * c0, xt3 = xt1 - ra * s1, yt3 = yt1 + ra * c1, ai1 = Math.atan2(yt2, xt2), ai0 = Math.atan2(yt3, xt3), corner = "A" + rc + "," + rc + " 0 0," + cr + " ";
-      if (ai1 < ai0 ^ cw) ai1 += τ;
-      return xt0 + "," + yt0 + corner + d3_svg_arcCircleIntersect(r1, xt2, yt2, rc) + "A" + r1 + "," + r1 + " 0 " + (Math.abs(ai1 - ai0) > π ? 1 : 0) + "," + cw + " " + d3_svg_arcCircleIntersect(r1, xt3, yt3, rc) + corner + xt1 + "," + yt1;
     }
     arc.innerRadius = function(v) {
       if (!arguments.length) return innerRadius;
@@ -7980,6 +7998,9 @@
   function d3_svg_arcCircleIntersect(r0, x1, y1, r1) {
     var k = (r0 * r0 - r1 * r1) / (2 * (y1 * y1 + x1 * x1)) + .5;
     return [ x1 * k, y1 * k ];
+  }
+  function d3_svg_arcSweep(x0, y0, x1, y1) {
+    return (x0 - x1) * y0 - (y0 - y1) * x0 > 0 ? 0 : 1;
   }
   function d3_svg_line(projection) {
     var x = d3_geom_pointX, y = d3_geom_pointY, defined = d3_true, interpolate = d3_svg_lineLinear, interpolateKey = interpolate.key, tension = .7;
