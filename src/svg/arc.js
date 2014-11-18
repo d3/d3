@@ -25,25 +25,39 @@ d3.svg.arc = function() {
         cw = a0 > a1 ? 0 : 1,
         cr = r0 < r1 ^ cw ? 0 : 1;
 
-    if (rc) {
-      rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
-      rc0 = Math.min(rc, r0, r0 / (1 / Math.sin(da / 2 - p0) + 1));
-      rc1 = Math.min(rc, r1, r1 / (1 / Math.sin(da / 2 - p1) + 1));
-    }
+    // The recommended minimum inner radius when using padding is outerRadius *
+    // padAngle / sin(θ), where θ is the angle of the smallest arc (without
+    // padding). For example, if the outerRadius is 200 pixels and the padAngle
+    // is 0.02 radians, a reasonable θ is 0.04 radians, and a reasonable
+    // innerRadius is 100 pixels.
 
     if (p1) {
-      r0 = Math.max(r0, r1 * p1 / Math.sin(da / 2));
-      rc0 = Math.min(rc, r0 / (1 / Math.sin(da / 2 - p0) + 1));
-      p0 = Math.asin((r1 - rc1) / (r0 + rc0) * Math.sin(p1));
-      rc0 = Math.min(rc, r0 / (1 / Math.sin(da / 2 - p0) + 1));
+      p0 = d3_asin(r1 / r0 * Math.sin(p1));
       if (!cw) p0 *= -1, p1 *= -1;
     }
 
+    // if (rc) {
+    //   rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
+    //   rc0 = Math.min(rc, r0, r0 / (1 / Math.sin(da / 2 - p0) + 1));
+    //   rc1 = Math.min(rc, r1, r1 / (1 / Math.sin(da / 2 - p1) + 1));
+    // }
+
     return (da >= τε ? r0 ? circleSegment(r1, cw) + circleSegment(r0, 1 - cw) : circleSegment(r1, cw)
         : "M" + (rc1 ? roundedArcSegment(r1, rc1, a0 + p1, a1 - p1, cr, cw) : arcSegment(r1, a0 + p1, a1 - p1, cw))
-        + "L" + (r0 ? (rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, cr, 1 - cw) : arcSegment(r0, a1 - p0, a0 + p0, 1 - cw)) : "0,0"))
+        + "L" + (rc0 ? roundedArcSegment(r0, rc0, a1 - p0, a0 + p0, cr, 1 - cw) : arcSegment(r0, a1 - p0, a0 + p0, 1 - cw)))
         + "Z";
   }
+
+  function sweep(x0, y0, x1, y1) { // d3_cross2d, d3_geom_polygonInside
+    return (x0 - x1) * y0 - (y0 - y1) * x0 > 0 ? 0 : 1;
+  }
+
+  // function intersect(c, d, a, b) { // d3_geom_polygonIntersect
+  //   var x1 = c[0], x3 = a[0], x21 = d[0] - x1, x43 = b[0] - x3,
+  //       y1 = c[1], y3 = a[1], y21 = d[1] - y1, y43 = b[1] - y3,
+  //       ua = (x43 * (y1 - y3) - y43 * (x1 - x3)) / (y43 * x21 - x43 * y21);
+  //   return [x1 + ua * x21, y1 + ua * y21];
+  // }
 
   function circleSegment(r1, cw) {
     return "M0," + r1
@@ -52,35 +66,45 @@ d3.svg.arc = function() {
   }
 
   function arcSegment(r1, a0, a1, cw) {
-    return r1 * Math.cos(a0) + "," + r1 * Math.sin(a0)
+    var x0 = r1 * Math.cos(a0),
+        y0 = r1 * Math.sin(a0),
+        x1 = r1 * Math.cos(a1),
+        y1 = r1 * Math.sin(a1),
+        df = Math.abs(a1 - a0) <= π ? 0 : 1;
+
+    if (sweep(x0, y0, x1, y1) === cw ^ df) {
+      var ha = (a0 + a1) / 2;
+      return r1 * Math.cos(ha) + "," + r1 * Math.sin(ha);
+    }
+
+    return x0 + "," + y0
         + "A" + r1 + "," + r1
-        + " 0 " + (Math.abs(a1 - a0) < π ? 0 : 1) + "," + cw
-        + " " + r1 * Math.cos(a1) + "," + r1 * Math.sin(a1);
+        + " 0 " + df + "," + cw
+        + " " + x1 + "," + y1;
   }
 
-  function roundedArcSegment(r1, rc, a0, a1, ccw, cw) {
+  function roundedArcSegment(r1, rc, a0, a1, cr, cw) {
     var c0 = Math.cos(a0),
         s0 = Math.sin(a0),
         c1 = Math.cos(a1),
         s1 = Math.sin(a1),
         ra = cw ? -rc : rc,
-        rb = ccw ? r1 + ra : r1 - ra,
+        rb = cr ? r1 + ra : r1 - ra,
         ro = Math.sqrt(rb * rb - rc * rc),
         xt0 = ro * c0, yt0 = ro * s0, // start angle radial tangent
         xt1 = ro * c1, yt1 = ro * s1, // end angle radial tangent
         xt2 = xt0 + ra * s0, yt2 = yt0 - ra * c0, // start angle outer circle tangent
         xt3 = xt1 - ra * s1, yt3 = yt1 + ra * c1, // end angle outer circle tangent
         ai1 = Math.atan2(yt2, xt2),
-        ai0 = Math.atan2(yt3, xt3);
+        ai0 = Math.atan2(yt3, xt3),
+        corner = "A" + rc + "," + rc + " 0 0," + cr + " ";
 
-    if (ai1 < ai0) ai1 += τ;
-
-    var corner = "A" + rc + "," + rc + " 0 0," + ccw + " ";
+    if (ai1 < ai0 ^ cw) ai1 += τ;
 
     return xt0 + "," + yt0
         + corner + d3_svg_arcCircleIntersect(r1, xt2, yt2, rc)
         + "A" + r1 + "," + r1
-        + " 0 " + (Math.abs(ai1 - ai0) > π ^ cw ? 1 : 0) + "," + cw
+        + " 0 " + (Math.abs(ai1 - ai0) > π ? 1 : 0) + "," + cw
         + " " + d3_svg_arcCircleIntersect(r1, xt3, yt3, rc)
         + corner + xt1 + "," + yt1;
   }
