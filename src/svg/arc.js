@@ -18,13 +18,24 @@ d3.svg.arc = function() {
         a0 = startAngle.apply(this, arguments) - halfπ,
         a1 = endAngle.apply(this, arguments) - halfπ,
         da = Math.abs(a1 - a0),
-        cw = a0 > a1 ? 0 : 1,
-        rc,
+        cw = a0 > a1 ? 0 : 1;
+
+    // Special case for an arc that spans the full circle.
+    if (da >= τε) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "");
+
+    var rc,
         cr,
         p0 = 0,
-        p1;
-
-    if (da >= τε) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "");
+        p1,
+        x0,
+        y0,
+        x1,
+        y1,
+        x2,
+        y2,
+        x3,
+        y3,
+        path = [];
 
     // The recommended minimum inner radius when using padding is outerRadius *
     // padAngle / sin(θ), where θ is the angle of the smallest arc (without
@@ -37,61 +48,64 @@ d3.svg.arc = function() {
       if (r0) p0 = d3_asin(r1 / r0 * Math.sin(p1));
     }
 
-    // Compute the four corners of the arc.
-    var x0 = 0, y0 = 0, x1, y1,
-        x2 = 0, y2 = 0, x3, y3;
-
+    // Compute the two outer corners.
     if (r1) {
       x0 = r1 * Math.cos(a0 + p1);
       y0 = r1 * Math.sin(a0 + p1);
       x1 = r1 * Math.cos(a1 - p1);
       y1 = r1 * Math.sin(a1 - p1);
 
-      var d1 = Math.abs(a1 - a0 - 2 * p1),
-          l1 = d1 <= π ? 0 : 1;
-
+      // Detect whether the outer corners are collapsed.
+      var l1 = Math.abs(a1 - a0 - 2 * p1) <= π ? 0 : 1;
       if (p1 && d3_svg_arcSweep(x0, y0, x1, y1) === cw ^ l1) {
         var h1 = (a0 + a1) / 2;
         x0 = r1 * Math.cos(h1);
         y0 = r1 * Math.sin(h1);
         x1 = y1 = null;
       }
+    } else {
+      x0 = y0 = 0;
     }
 
+    // Compute the two inner corners.
     if (r0) {
       x2 = r0 * Math.cos(a1 - p0);
       y2 = r0 * Math.sin(a1 - p0);
       x3 = r0 * Math.cos(a0 + p0);
       y3 = r0 * Math.sin(a0 + p0);
 
-      var d0 = Math.abs(a0 - a1 + 2 * p0),
-          l0 = d0 <= π ? 0 : 1;
-
+      // Detect whether the inner corners are collapsed.
+      var l0 = Math.abs(a0 - a1 + 2 * p0) <= π ? 0 : 1;
       if (p0 && d3_svg_arcSweep(x2, y2, x3, y3) === (1 - cw) ^ l0) {
         var h0 = (a0 + a1) / 2;
         x2 = r0 * Math.cos(h0);
         y2 = r0 * Math.sin(h0);
         x3 = y3 = null;
       }
+    } else {
+      x2 = y2 = 0;
     }
 
-    var path = [];
-
+    // Compute the rounded corners.
     if (rc = +cornerRadius.apply(this, arguments)) {
       rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
       cr = r0 < r1 ^ cw ? 0 : 1;
 
+      // Compute the angle of the sector formed by the two sides of the arc.
+      var oc = x3 == null ? [x2, y2] : x1 == null ? [x0, y0] : d3_geom_polygonIntersect([x0, y0], [x3, y3], [x1, y1], [x2, y2]),
+          ax = x0 - oc[0],
+          ay = y0 - oc[1],
+          bx = x1 - oc[0],
+          by = y1 - oc[1],
+          dc = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by)));
+
+      // Compute the outer corners.
       if (x1 != null) {
-
-        // Compute the angle of the sector formed by the two sides of the arc.
-        var oc = x3 == null ? [x2, y2] : d3_geom_polygonIntersect([x0, y0], [x3, y3], [x1, y1], [x2, y2]),
-            ax = x0 - oc[0], ay = y0 - oc[1], bx = x1 - oc[0], by = y1 - oc[1];
-        d1 = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by)));
-
-        var rc1 = Math.min(rc, (r1 - Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(d1 / 2) + 1)),
+        var rc1 = Math.min(rc, (r1 - Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(dc / 2) + 1)),
             t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1),
             t12 = d3_svg_arcCornerTangents([x1, y1], [x2, y2], r1, rc1);
 
+        // Detect whether the outer edge is fully circular.
         if (rc === rc1) {
           path.push(
             "M", t30[0],
@@ -101,23 +115,19 @@ d3.svg.arc = function() {
         } else {
           path.push(
             "M", t30[0],
-            "A", rc1, ",", rc1, " 0 1,", cr, " ", t12[0]); // TODO sweep flag
+            "A", rc1, ",", rc1, " 0 1,", cr, " ", t12[0]);
         }
       } else {
         path.push("M", x0, ",", y0);
       }
 
+      // Compute the inner corners.
       if (x3 != null) {
-
-        // Compute the angle of the sector formed by the two sides of the arc.
-        var oc = x1 == null ? [x0, y0] : d3_geom_polygonIntersect([x0, y0], [x3, y3], [x1, y1], [x2, y2]),
-            ax = x2 - oc[0], ay = y2 - oc[1], bx = x3 - oc[0], by = y3 - oc[1];
-        d0 = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by)));
-
-        var rc0 = Math.min(rc, (r0 - Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(d0 / 2) - 1)),
+        var rc0 = Math.min(rc, (r0 - Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(dc / 2) - 1)),
             t03 = d3_svg_arcCornerTangents([x0, y0], [x3, y3], r0, -rc0),
             t21 = d3_svg_arcCornerTangents([x2, y2], x1 == null ? [x0, y0] : [x1, y1], r0, -rc0);
 
+        // Detect whether the inner edge is fully circular.
         if (rc === rc0) {
           path.push(
             "L", t21[0],
@@ -132,7 +142,10 @@ d3.svg.arc = function() {
       } else {
         path.push("L", x2, ",", y2);
       }
-    } else {
+    }
+
+    // Compute straight corners.
+    else {
       path.push("M", x0, ",", y0);
       if (x1 != null) path.push("A", r1, ",", r1, " 0 ", l1, ",", cw, " ", x1, ",", y1);
       path.push("L", x2, ",", y2);
