@@ -21,7 +21,7 @@ d3.svg.arc = function() {
         cw = a0 > a1 ? 0 : 1;
 
     // Special case for an arc that spans the full circle.
-    if (da >= τε) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "");
+    if (da >= τε) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "") + "Z";
 
     var rc,
         cr,
