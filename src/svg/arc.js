@@ -1,6 +1,7 @@
 import "../core/functor";
 import "../core/zero";
 import "../math/trigonometry";
+import "../geom/polygon";
 import "svg";
 
 d3.svg.arc = function() {
@@ -81,30 +82,59 @@ d3.svg.arc = function() {
       cr = r0 < r1 ^ cw ? 0 : 1;
 
       if (x1 != null) {
-        var rc1 = Math.min(rc, r1 / (1 / Math.sin(d1 / 2) + 1)),
-            t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1),
-            t12 = d3_svg_arcCornerTangents(x1 == null ? [x0, y0] : [x1, y1], [x2, y2], r1, rc1);
 
-        path.push(
-          "M", t30[0],
-          "A", rc1, ",", rc1, " 0 0,", cr, " ", t30[1],
-          "A", r1, ",", r1, " 0 ", d3_svg_arcSweep(t30[1][0], t30[1][1], t12[1][0], t12[1][1]), ",", cw, " ", t12[1],
-          "A", rc1, ",", rc1, " 0 0,", cr, " ", t12[0]);
+        // Compute the angle of the sector formed by the two sides of the arc.
+        var oc = x3 == null ? [x2, y2] : d3_geom_polygonIntersect([x0, y0], [x3, y3], [x1, y1], [x2, y2]),
+            ax = x0 - oc[0], ay = y0 - oc[1], bx = x1 - oc[0], by = y1 - oc[1];
+        d1 = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by)));
+
+        var rc1 = Math.min(rc, (r1 - Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(d1 / 2) + 1)),
+            t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1),
+            t12 = d3_svg_arcCornerTangents([x1, y1], [x2, y2], r1, rc1);
+
+        if (rc === rc1) {
+          path.push(
+            "M", t30[0],
+            "A", rc1, ",", rc1, " 0 0,", cr, " ", t30[1],
+            "A", r1, ",", r1, " 0 ", d3_svg_arcSweep(t30[1][0], t30[1][1], t12[1][0], t12[1][1]), ",", cw, " ", t12[1],
+            "A", rc1, ",", rc1, " 0 0,", cr, " ", t12[0]);
+        } else {
+          path.push(
+            "M", t30[0],
+            "A", rc1, ",", rc1, " 0 1,", cr, " ", t12[0]); // TODO sweep flag
+        }
       } else {
         path.push("M", x0, ",", y0);
       }
 
       if (x3 != null) {
-        var rc0 = Math.min(rc, r0 / (1 / Math.sin(d0 / 2) + 1)),
-            t03 = d3_svg_arcCornerTangents([x0, y0], x3 == null ? [x2, y2] : [x3, y3], r0, -rc0),
+
+        // Compute the angle of the sector formed by the two sides of the arc.
+        var oc = x1 == null ? [x0, y0] : d3_geom_polygonIntersect([x0, y0], [x3, y3], [x1, y1], [x2, y2]),
+            ax = x0 - oc[0], ay = y0 - oc[1], bx = x1 - oc[0], by = y1 - oc[1];
+        d0 = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by)));
+
+        // if (d3_cross2d(oc, [x0, y0], [x1, y1]) < 0) d0 = τ - d0;
+
+        var rc0 = Math.min(rc, (r0 + Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(d0 / 2) + 1)),
+            t03 = d3_svg_arcCornerTangents([x0, y0], [x3, y3], r0, -rc0),
             t21 = d3_svg_arcCornerTangents([x2, y2], x1 == null ? [x0, y0] : [x1, y1], r0, -rc0);
 
-        path.push(
-          "L", t21[0],
-          "A", rc0, ",", rc0, " 0 0,", cr, " ", t21[1],
-          "A", r0, ",", r0, " 0 ", 1 - d3_svg_arcSweep(t21[1][0], t21[1][1], t03[1][0], t03[1][1]), ",", 1 - cw, " ", t03[1],
-          "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
+        if (rc === rc0) {
+          this.style.fill = "red";
+          path.push(
+            "L", t21[0],
+            "A", rc0, ",", rc0, " 0 0,", cr, " ", t21[1],
+            "A", r0, ",", r0, " 0 ", 1 - d3_svg_arcSweep(t21[1][0], t21[1][1], t03[1][0], t03[1][1]), ",", 1 - cw, " ", t03[1],
+            "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
+        } else {
+          this.style.fill = "blue";
+          path.push(
+            "L", t21[0],
+            "A", rc0, ",", rc0, " 0 1,", 1 - cr, " ", t03[0]);
+        }
       } else {
+        this.style.fill = "green";
         path.push("L", x2, ",", y2);
       }
     } else {
@@ -219,10 +249,10 @@ function d3_svg_arcCornerTangents(p0, p1, r1, rc) {
       cy0 = (-D * dx - Math.abs(dy) * Math.sqrt(Δ)) / (dr * dr),
       cx1 = (D * dy + (dy < 0 ? -1 : 1) * dx * Math.sqrt(Δ)) / (dr * dr),
       cy1 = (-D * dx + Math.abs(dy) * Math.sqrt(Δ)) / (dr * dr),
-      dx0 = cx0 - x1,
-      dy0 = cy0 - y1,
-      dx1 = cx1 - x1,
-      dy1 = cy1 - y1,
+      dx0 = cx0 - (x1 + x2) / 2,
+      dy0 = cy0 - (y1 + y2) / 2,
+      dx1 = cx1 - (x1 + x2) / 2,
+      dy1 = cy1 - (y1 + y2) / 2,
       cx = cx0,
       cy = cy0;
 
