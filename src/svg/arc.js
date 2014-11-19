@@ -233,46 +233,41 @@ function d3_svg_arcSweep(x0, y0, x1, y1) {
   return (x0 - x1) * y0 - (y0 - y1) * x0 > 0 ? 0 : 1;
 }
 
+// Compute perpendicular offset line of length rc.
+// http://mathworld.wolfram.com/Circle-LineIntersection.html
 function d3_svg_arcCornerTangents(p0, p1, r1, rc, cw) {
-
-  // Compute perpendicular offset line of length rc.
   var x01 = p0[0] - p1[0],
       y01 = p0[1] - p1[1],
       lo = (cw ? rc : -rc) / Math.sqrt(x01 * x01 + y01 * y01),
       ox = lo * y01,
-      oy = -lo * x01;
-
-  // http://mathworld.wolfram.com/Circle-LineIntersection.html
-  var x1 = p0[0] + ox,
+      oy = -lo * x01,
+      x1 = p0[0] + ox,
       y1 = p0[1] + oy,
       x2 = p1[0] + ox,
       y2 = p1[1] + oy,
+      x3 = (x1 + x2) / 2,
+      y3 = (y1 + y2) / 2,
       dx = x2 - x1,
       dy = y2 - y1,
-      dr = Math.sqrt(dx * dx + dy * dy),
+      d2 = dx * dx + dy * dy,
       r = r1 - rc,
       D = x1 * y2 - x2 * y1,
-      Δ = r * r * dr * dr - D * D,
-      cx0 = (D * dy - (dy < 0 ? -1 : 1) * dx * Math.sqrt(Δ)) / (dr * dr),
-      cy0 = (-D * dx - Math.abs(dy) * Math.sqrt(Δ)) / (dr * dr),
-      cx1 = (D * dy + (dy < 0 ? -1 : 1) * dx * Math.sqrt(Δ)) / (dr * dr),
-      cy1 = (-D * dx + Math.abs(dy) * Math.sqrt(Δ)) / (dr * dr),
-      dx0 = cx0 - (x1 + x2) / 2,
-      dy0 = cy0 - (y1 + y2) / 2,
-      dx1 = cx1 - (x1 + x2) / 2,
-      dy1 = cy1 - (y1 + y2) / 2,
-      cx = cx0,
-      cy = cy0;
+      d = (dy < 0 ? -1 : 1) * Math.sqrt(r * r * d2 - D * D),
+      cx0 = (D * dy - dx * d) / d2,
+      cy0 = (-D * dx - dy * d) / d2,
+      cx1 = (D * dy + dx * d) / d2,
+      cy1 = (-D * dx + dy * d) / d2,
+      dx0 = cx0 - x3,
+      dy0 = cy0 - y3,
+      dx1 = cx1 - x3,
+      dy1 = cy1 - y3;
 
   // Pick the closer of the two intersection points.
   // TODO Is there a faster way to determine which intersection to use?
-  if (dx0 * dx0 + dy0 * dy0 > dx1 * dx1 + dy1 * dy1) {
-    cx = cx1;
-    cy = cy1;
-  }
+  if (dx0 * dx0 + dy0 * dy0 > dx1 * dx1 + dy1 * dy1) cx0 = cx1, cy0 = cy1;
 
   return [
-    [cx - ox, cy - oy],
-    [cx * r1 / r, cy * r1 / r]
+    [cx0 - ox, cy0 - oy],
+    [cx0 * r1 / r, cy0 * r1 / r]
   ];
 }
