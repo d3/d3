@@ -7942,9 +7942,9 @@
         cr = r0 < r1 ^ cw ? 0 : 1;
         var oc = x3 == null ? [ x2, y2 ] : x1 == null ? [ x0, y0 ] : d3_geom_polygonIntersect([ x0, y0 ], [ x3, y3 ], [ x1, y1 ], [ x2, y2 ]), ax = x0 - oc[0], ay = y0 - oc[1], bx = x1 - oc[0], by = y1 - oc[1], dc = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by))), lc = Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1]);
         if (x1 != null) {
-          var rc1 = Math.min(rc, (r1 - lc) / (1 / Math.sin(dc / 2) + 1)), t30 = d3_svg_arcCornerTangents(x3 == null ? [ x2, y2 ] : [ x3, y3 ], [ x0, y0 ], r1, rc1), t12 = d3_svg_arcCornerTangents([ x1, y1 ], [ x2, y2 ], r1, rc1);
+          var rc1 = Math.min(rc, (r1 - lc) / (1 / Math.sin(dc / 2) + 1)), t30 = d3_svg_arcCornerTangents(x3 == null ? [ x2, y2 ] : [ x3, y3 ], [ x0, y0 ], r1, rc1, cw), t12 = d3_svg_arcCornerTangents([ x1, y1 ], [ x2, y2 ], r1, rc1, cw);
           if (rc === rc1) {
-            path.push("M", t30[0], "A", rc1, ",", rc1, " 0 0,", cr, " ", t30[1], "A", r1, ",", r1, " 0 ", d3_svg_arcSweep(t30[1][0], t30[1][1], t12[1][0], t12[1][1]), ",", cw, " ", t12[1], "A", rc1, ",", rc1, " 0 0,", cr, " ", t12[0]);
+            path.push("M", t30[0], "A", rc1, ",", rc1, " 0 0,", cr, " ", t30[1], "A", r1, ",", r1, " 0 ", 1 - cw ^ d3_svg_arcSweep(t30[1][0], t30[1][1], t12[1][0], t12[1][1]), ",", cw, " ", t12[1], "A", rc1, ",", rc1, " 0 0,", cr, " ", t12[0]);
           } else {
             path.push("M", t30[0], "A", rc1, ",", rc1, " 0 1,", cr, " ", t12[0]);
           }
@@ -7952,9 +7952,9 @@
           path.push("M", x0, ",", y0);
         }
         if (x3 != null) {
-          var rc0 = Math.min(rc, (r0 - lc) / (1 / Math.sin(dc / 2) - 1)), t03 = d3_svg_arcCornerTangents([ x0, y0 ], [ x3, y3 ], r0, -rc0), t21 = d3_svg_arcCornerTangents([ x2, y2 ], x1 == null ? [ x0, y0 ] : [ x1, y1 ], r0, -rc0);
+          var rc0 = Math.min(rc, (r0 - lc) / (1 / Math.sin(dc / 2) - 1)), t03 = d3_svg_arcCornerTangents([ x0, y0 ], [ x3, y3 ], r0, -rc0, cw), t21 = d3_svg_arcCornerTangents([ x2, y2 ], x1 == null ? [ x0, y0 ] : [ x1, y1 ], r0, -rc0, cw);
           if (rc === rc0) {
-            path.push("L", t21[0], "A", rc0, ",", rc0, " 0 0,", cr, " ", t21[1], "A", r0, ",", r0, " 0 ", 1 - d3_svg_arcSweep(t21[1][0], t21[1][1], t03[1][0], t03[1][1]), ",", 1 - cw, " ", t03[1], "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
+            path.push("L", t21[0], "A", rc0, ",", rc0, " 0 0,", cr, " ", t21[1], "A", r0, ",", r0, " 0 ", cw ^ d3_svg_arcSweep(t21[1][0], t21[1][1], t03[1][0], t03[1][1]), ",", 1 - cw, " ", t03[1], "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
           } else {
             path.push("L", t21[0], "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
           }
@@ -8027,8 +8027,8 @@
   function d3_svg_arcSweep(x0, y0, x1, y1) {
     return (x0 - x1) * y0 - (y0 - y1) * x0 > 0 ? 0 : 1;
   }
-  function d3_svg_arcCornerTangents(p0, p1, r1, rc) {
-    var x01 = p0[0] - p1[0], y01 = p0[1] - p1[1], d01 = Math.sqrt(x01 * x01 + y01 * y01), lo = rc / d01, ox = lo * y01, oy = -lo * x01;
+  function d3_svg_arcCornerTangents(p0, p1, r1, rc, cw) {
+    var x01 = p0[0] - p1[0], y01 = p0[1] - p1[1], lo = (cw ? rc : -rc) / Math.sqrt(x01 * x01 + y01 * y01), ox = lo * y01, oy = -lo * x01;
     var x1 = p0[0] + ox, y1 = p0[1] + oy, x2 = p1[0] + ox, y2 = p1[1] + oy, dx = x2 - x1, dy = y2 - y1, dr = Math.sqrt(dx * dx + dy * dy), r = r1 - rc, D = x1 * y2 - x2 * y1, Δ = r * r * dr * dr - D * D, cx0 = (D * dy - (dy < 0 ? -1 : 1) * dx * Math.sqrt(Δ)) / (dr * dr), cy0 = (-D * dx - Math.abs(dy) * Math.sqrt(Δ)) / (dr * dr), cx1 = (D * dy + (dy < 0 ? -1 : 1) * dx * Math.sqrt(Δ)) / (dr * dr), cy1 = (-D * dx + Math.abs(dy) * Math.sqrt(Δ)) / (dr * dr), dx0 = cx0 - (x1 + x2) / 2, dy0 = cy0 - (y1 + y2) / 2, dx1 = cx1 - (x1 + x2) / 2, dy1 = cy1 - (y1 + y2) / 2, cx = cx0, cy = cy0;
     if (dx0 * dx0 + dy0 * dy0 > dx1 * dx1 + dy1 * dy1) {
       cx = cx1;

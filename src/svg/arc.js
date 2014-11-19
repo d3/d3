@@ -103,15 +103,15 @@ d3.svg.arc = function() {
       // Compute the outer corners.
       if (x1 != null) {
         var rc1 = Math.min(rc, (r1 - lc) / (1 / Math.sin(dc / 2) + 1)),
-            t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1),
-            t12 = d3_svg_arcCornerTangents([x1, y1], [x2, y2], r1, rc1);
+            t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1, cw),
+            t12 = d3_svg_arcCornerTangents([x1, y1], [x2, y2], r1, rc1, cw);
 
         // Detect whether the outer edge is fully circular.
         if (rc === rc1) {
           path.push(
             "M", t30[0],
             "A", rc1, ",", rc1, " 0 0,", cr, " ", t30[1],
-            "A", r1, ",", r1, " 0 ", d3_svg_arcSweep(t30[1][0], t30[1][1], t12[1][0], t12[1][1]), ",", cw, " ", t12[1],
+            "A", r1, ",", r1, " 0 ", (1 - cw) ^ d3_svg_arcSweep(t30[1][0], t30[1][1], t12[1][0], t12[1][1]), ",", cw, " ", t12[1],
             "A", rc1, ",", rc1, " 0 0,", cr, " ", t12[0]);
         } else {
           path.push(
@@ -125,15 +125,15 @@ d3.svg.arc = function() {
       // Compute the inner corners.
       if (x3 != null) {
         var rc0 = Math.min(rc, (r0 - lc) / (1 / Math.sin(dc / 2) - 1)),
-            t03 = d3_svg_arcCornerTangents([x0, y0], [x3, y3], r0, -rc0),
-            t21 = d3_svg_arcCornerTangents([x2, y2], x1 == null ? [x0, y0] : [x1, y1], r0, -rc0);
+            t03 = d3_svg_arcCornerTangents([x0, y0], [x3, y3], r0, -rc0, cw),
+            t21 = d3_svg_arcCornerTangents([x2, y2], x1 == null ? [x0, y0] : [x1, y1], r0, -rc0, cw);
 
         // Detect whether the inner edge is fully circular.
         if (rc === rc0) {
           path.push(
             "L", t21[0],
             "A", rc0, ",", rc0, " 0 0,", cr, " ", t21[1],
-            "A", r0, ",", r0, " 0 ", 1 - d3_svg_arcSweep(t21[1][0], t21[1][1], t03[1][0], t03[1][1]), ",", 1 - cw, " ", t03[1],
+            "A", r0, ",", r0, " 0 ", cw ^ d3_svg_arcSweep(t21[1][0], t21[1][1], t03[1][0], t03[1][1]), ",", 1 - cw, " ", t03[1],
             "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
         } else {
           path.push(
@@ -233,13 +233,12 @@ function d3_svg_arcSweep(x0, y0, x1, y1) {
   return (x0 - x1) * y0 - (y0 - y1) * x0 > 0 ? 0 : 1;
 }
 
-function d3_svg_arcCornerTangents(p0, p1, r1, rc) {
+function d3_svg_arcCornerTangents(p0, p1, r1, rc, cw) {
 
   // Compute perpendicular offset line of length rc.
   var x01 = p0[0] - p1[0],
       y01 = p0[1] - p1[1],
-      d01 = Math.sqrt(x01 * x01 + y01 * y01),
-      lo = rc / d01,
+      lo = (cw ? rc : -rc) / Math.sqrt(x01 * x01 + y01 * y01),
       ox = lo * y01,
       oy = -lo * x01;
 
