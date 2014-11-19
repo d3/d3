@@ -7934,11 +7934,20 @@
         }
       }
       var path = [];
-      if (rc) {
-        if (r1) {
-          var rc1 = Math.min(rc, r1 / (1 / Math.sin(d1 / 2) + 1));
+      if (rc = +cornerRadius.apply(this, arguments)) {
+        rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
+        cr = r0 < r1 ^ cw ? 0 : 1;
+        if (x1 != null) {
+          var rc1 = Math.min(rc, r1 / (1 / Math.sin(d1 / 2) + 1)), t30 = d3_svg_arcCornerTangents(x3 == null ? [ x2, y2 ] : [ x3, y3 ], [ x0, y0 ], r1, rc1), t12 = d3_svg_arcCornerTangents(x1 == null ? [ x0, y0 ] : [ x1, y1 ], [ x2, y2 ], r1, rc1);
+          path.push("M", t30[0], "A", rc1, ",", rc1, " 0 0,", cr, " ", t30[1], "A", r1, ",", r1, " 0 ", l1, ",", cw, " ", t12[1], "A", rc1, ",", rc1, " 0 0,", cr, " ", t12[0]);
         } else {
           path.push("M", x0, ",", y0);
+        }
+        if (x3 != null) {
+          var rc0 = Math.min(rc, r0 / (1 / Math.sin(d0 / 2) + 1)), t03 = d3_svg_arcCornerTangents([ x0, y0 ], x3 == null ? [ x2, y2 ] : [ x3, y3 ], r0, -rc0), t21 = d3_svg_arcCornerTangents([ x2, y2 ], x1 == null ? [ x0, y0 ] : [ x1, y1 ], r0, -rc0);
+          path.push("L", t21[0], "A", rc0, ",", rc0, " 0 0,", cr, " ", t21[1], "A", r0, ",", r0, " 0 ", l0, ",", 1 - cw, " ", t03[1], "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
+        } else {
+          path.push("L", x2, ",", y2);
         }
       } else {
         path.push("M", x0, ",", y0);
@@ -8003,12 +8012,17 @@
   function d3_svg_arcPadAngle(d) {
     return d && d.padAngle;
   }
-  function d3_svg_arcCircleIntersect(r0, x1, y1, r1) {
-    var k = (r0 * r0 - r1 * r1) / (2 * (y1 * y1 + x1 * x1)) + .5;
-    return [ x1 * k, y1 * k ];
-  }
   function d3_svg_arcSweep(x0, y0, x1, y1) {
     return (x0 - x1) * y0 - (y0 - y1) * x0 > 0 ? 0 : 1;
+  }
+  function d3_svg_arcCornerTangents(p0, p1, r1, rc) {
+    var x01 = p0[0] - p1[0], y01 = p0[1] - p1[1], d01 = Math.sqrt(x01 * x01 + y01 * y01), lo = rc / d01, ox = lo * y01, oy = -lo * x01;
+    var x1 = p0[0] + ox, y1 = p0[1] + oy, x2 = p1[0] + ox, y2 = p1[1] + oy, dx = x2 - x1, dy = y2 - y1, dr = Math.sqrt(dx * dx + dy * dy), r = r1 - rc, D = x1 * y2 - x2 * y1, Δ = r * r * dr * dr - D * D, cx0 = (D * dy - (dy < 0 ? -1 : 1) * dx * Math.sqrt(Δ)) / (dr * dr), cy0 = (-D * dx - Math.abs(dy) * Math.sqrt(Δ)) / (dr * dr), cx1 = (D * dy + (dy < 0 ? -1 : 1) * dx * Math.sqrt(Δ)) / (dr * dr), cy1 = (-D * dx + Math.abs(dy) * Math.sqrt(Δ)) / (dr * dr), dx0 = cx0 - x1, dy0 = cy0 - y1, dx1 = cx1 - x1, dy1 = cy1 - y1, cx = cx0, cy = cy0;
+    if (dx0 * dx0 + dy0 * dy0 > dx1 * dx1 + dy1 * dy1) {
+      cx = cx1;
+      cy = cy1;
+    }
+    return [ [ cx - ox, cy - oy ], [ cx * r1 / r, cy * r1 / r ] ];
   }
   function d3_svg_line(projection) {
     var x = d3_geom_pointX, y = d3_geom_pointY, defined = d3_true, interpolate = d3_svg_lineLinear, interpolateKey = interpolate.key, tension = .7;
