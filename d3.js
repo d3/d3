@@ -6559,7 +6559,7 @@
     function pie(data) {
       var n = data.length, values = data.map(function(d, i) {
         return +value.call(pie, d, i);
-      }), a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle), da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a, p = +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle), pa = p * (da < 0 ? -1 : 1), np = Math.abs(da) >= τε && n > 1 ? n : n - 1, k = (da - np * pa) / d3.sum(values), index = d3.range(n), arcs = [], v;
+      }), a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle), da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a, np = Math.abs(da) >= τε && n > 1 ? n : n - 1, p = Math.min(da / np, +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle)), pa = p * (da < 0 ? -1 : 1), k = (da - np * pa) / d3.sum(values), index = d3.range(n), arcs = [], v;
       if (da > 0 ^ k > 0) k = 0, p = da / np;
       if (sort != null) index.sort(sort === d3_layout_pieSortByValue ? function(i, j) {
         return values[j] - values[i];
@@ -7912,7 +7912,7 @@
         y0 = r1 * Math.sin(a0 + p1);
         x1 = r1 * Math.cos(a1 - p1);
         y1 = r1 * Math.sin(a1 - p1);
-        var l1 = Math.abs(a1 - a0 - 2 * p1) <= π ? 0 : 1;
+        var d1 = Math.abs(a1 - a0 - 2 * p1), l1 = d1 <= π ? 0 : 1;
         if (p1 && d3_svg_arcSweep(x0, y0, x1, y1) === cw ^ l1) {
           var h1 = (a0 + a1) / 2;
           x0 = r1 * Math.cos(h1);
@@ -7925,7 +7925,7 @@
         y2 = r0 * Math.sin(a1 - p0);
         x3 = r0 * Math.cos(a0 + p0);
         y3 = r0 * Math.sin(a0 + p0);
-        var l0 = Math.abs(a0 - a1 + 2 * p0) <= π ? 0 : 1;
+        var d0 = Math.abs(a0 - a1 + 2 * p0), l0 = d0 <= π ? 0 : 1;
         if (p0 && d3_svg_arcSweep(x2, y2, x3, y3) === 1 - cw ^ l0) {
           var h0 = (a0 + a1) / 2;
           x2 = r0 * Math.cos(h0);
@@ -7934,10 +7934,18 @@
         }
       }
       var path = [];
-      path.push("M" + x0, "," + y0);
-      if (x1 != null) path.push("A", r1, ",", r1, " 0 ", l1, ",", cw, " ", x1, ",", y1);
-      path.push("L" + x2, "," + y2);
-      if (x3 != null) path.push("A", r0, ",", r0, " 0 ", l0, ",", 1 - cw, " ", x3, ",", y3);
+      if (rc) {
+        if (r1) {
+          var rc1 = Math.min(rc, r1 / (1 / Math.sin(d1 / 2) + 1));
+        } else {
+          path.push("M", x0, ",", y0);
+        }
+      } else {
+        path.push("M", x0, ",", y0);
+        if (x1 != null) path.push("A", r1, ",", r1, " 0 ", l1, ",", cw, " ", x1, ",", y1);
+        path.push("L", x2, ",", y2);
+        if (x3 != null) path.push("A", r0, ",", r0, " 0 ", l0, ",", 1 - cw, " ", x3, ",", y3);
+      }
       path.push("Z");
       return path.join("");
     }
