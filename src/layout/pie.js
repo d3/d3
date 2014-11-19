@@ -16,7 +16,7 @@ d3.layout.pie = function() {
         a = +(typeof startAngle === "function" ? startAngle.apply(this, arguments) : startAngle),
         da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a,
         np = Math.abs(da) >= τε && n > 1 ? n : n - 1,
-        p = Math.min(da / np, +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle)),
+        p = Math.min(Math.abs(da) / np, +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle)),
         pa = p * (da < 0 ? -1 : 1),
         k = (da - np * pa) / d3.sum(values),
         index = d3.range(n),

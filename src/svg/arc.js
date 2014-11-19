@@ -56,7 +56,7 @@ d3.svg.arc = function() {
       y1 = r1 * Math.sin(a1 - p1);
 
       // Detect whether the outer corners are collapsed.
-      var l1 = Math.abs(a1 - a0 - 2 * p1) <= π ? 0 : 1;
+      var l1 = Math.abs(a1 - a0 - 2 * p1) <= π ? 0 : 1;
       if (p1 && d3_svg_arcSweep(x0, y0, x1, y1) === cw ^ l1) {
         var h1 = (a0 + a1) / 2;
         x0 = r1 * Math.cos(h1);
@@ -75,7 +75,7 @@ d3.svg.arc = function() {
       y3 = r0 * Math.sin(a0 + p0);
 
       // Detect whether the inner corners are collapsed.
-      var l0 = Math.abs(a0 - a1 + 2 * p0) <= π ? 0 : 1;
+      var l0 = Math.abs(a0 - a1 + 2 * p0) <= π ? 0 : 1;
       if (p0 && d3_svg_arcSweep(x2, y2, x3, y3) === (1 - cw) ^ l0) {
         var h0 = (a0 + a1) / 2;
         x2 = r0 * Math.cos(h0);
@@ -88,7 +88,7 @@ d3.svg.arc = function() {
 
     // Compute the rounded corners.
     if (rc = +cornerRadius.apply(this, arguments)) {
-      rc = Math.min(Math.abs(r1 - r0) / 2 - ε, rc);
+      rc = Math.min(Math.abs(r1 - r0) / 2, rc);
       cr = r0 < r1 ^ cw ? 0 : 1;
 
       // Compute the angle of the sector formed by the two sides of the arc.
@@ -97,11 +97,12 @@ d3.svg.arc = function() {
           ay = y0 - oc[1],
           bx = x1 - oc[0],
           by = y1 - oc[1],
-          dc = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by)));
+          dc = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by))),
+          lc = Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1]);
 
       // Compute the outer corners.
       if (x1 != null) {
-        var rc1 = Math.min(rc, (r1 - Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(dc / 2) + 1)),
+        var rc1 = Math.min(rc, (r1 - lc) / (1 / Math.sin(dc / 2) + 1)),
             t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1),
             t12 = d3_svg_arcCornerTangents([x1, y1], [x2, y2], r1, rc1);
 
@@ -123,7 +124,7 @@ d3.svg.arc = function() {
 
       // Compute the inner corners.
       if (x3 != null) {
-        var rc0 = Math.min(rc, (r0 - Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(dc / 2) - 1)),
+        var rc0 = Math.min(rc, (r0 - lc) / (1 / Math.sin(dc / 2) - 1)),
             t03 = d3_svg_arcCornerTangents([x0, y0], [x3, y3], r0, -rc0),
             t21 = d3_svg_arcCornerTangents([x2, y2], x1 == null ? [x0, y0] : [x1, y1], r0, -rc0);
 
