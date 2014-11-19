@@ -7950,18 +7950,15 @@
           path.push("M", x0, ",", y0);
         }
         if (x3 != null) {
-          var oc = x1 == null ? [ x0, y0 ] : d3_geom_polygonIntersect([ x0, y0 ], [ x3, y3 ], [ x1, y1 ], [ x2, y2 ]), ax = x0 - oc[0], ay = y0 - oc[1], bx = x1 - oc[0], by = y1 - oc[1];
+          var oc = x1 == null ? [ x0, y0 ] : d3_geom_polygonIntersect([ x0, y0 ], [ x3, y3 ], [ x1, y1 ], [ x2, y2 ]), ax = x2 - oc[0], ay = y2 - oc[1], bx = x3 - oc[0], by = y3 - oc[1];
           d0 = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by)));
-          var rc0 = Math.min(rc, (r0 + Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(d0 / 2) + 1)), t03 = d3_svg_arcCornerTangents([ x0, y0 ], [ x3, y3 ], r0, -rc0), t21 = d3_svg_arcCornerTangents([ x2, y2 ], x1 == null ? [ x0, y0 ] : [ x1, y1 ], r0, -rc0);
+          var rc0 = Math.min(rc, (r0 - Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1])) / (1 / Math.sin(d0 / 2) - 1)), t03 = d3_svg_arcCornerTangents([ x0, y0 ], [ x3, y3 ], r0, -rc0), t21 = d3_svg_arcCornerTangents([ x2, y2 ], x1 == null ? [ x0, y0 ] : [ x1, y1 ], r0, -rc0);
           if (rc === rc0) {
-            this.style.fill = "red";
             path.push("L", t21[0], "A", rc0, ",", rc0, " 0 0,", cr, " ", t21[1], "A", r0, ",", r0, " 0 ", 1 - d3_svg_arcSweep(t21[1][0], t21[1][1], t03[1][0], t03[1][1]), ",", 1 - cw, " ", t03[1], "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
           } else {
-            this.style.fill = "blue";
-            path.push("L", t21[0], "A", rc0, ",", rc0, " 0 1,", 1 - cr, " ", t03[0]);
+            path.push("L", t21[0], "A", rc0, ",", rc0, " 0 0,", cr, " ", t03[0]);
           }
         } else {
-          this.style.fill = "green";
           path.push("L", x2, ",", y2);
         }
       } else {
