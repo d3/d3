@@ -7937,7 +7937,7 @@
       } else {
         x2 = y2 = 0;
       }
-      if (rc = +cornerRadius.apply(this, arguments)) {
+      if ((rc = +cornerRadius.apply(this, arguments)) > .001) {
         rc = Math.min(Math.abs(r1 - r0) / 2, rc);
         cr = r0 < r1 ^ cw ? 0 : 1;
         var oc = x3 == null ? [ x2, y2 ] : x1 == null ? [ x0, y0 ] : d3_geom_polygonIntersect([ x0, y0 ], [ x3, y3 ], [ x1, y1 ], [ x2, y2 ]), ax = x0 - oc[0], ay = y0 - oc[1], bx = x1 - oc[0], by = y1 - oc[1], dc = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by))), lc = Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1]);

@@ -87,7 +87,7 @@ d3.svg.arc = function() {
     }
 
     // Compute the rounded corners.
-    if (rc = +cornerRadius.apply(this, arguments)) {
+    if ((rc = +cornerRadius.apply(this, arguments)) > 1e-3) {
       rc = Math.min(Math.abs(r1 - r0) / 2, rc);
       cr = r0 < r1 ^ cw ? 0 : 1;
 
