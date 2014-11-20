@@ -99,12 +99,12 @@ d3.svg.arc = function() {
           ay = y0 - oc[1],
           bx = x1 - oc[0],
           by = y1 - oc[1],
-          dc = Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by))),
+          kc = 1 / Math.sin(Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by))) / 2),
           lc = Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1]);
 
       // Compute the outer corners.
       if (x1 != null) {
-        var rc1 = Math.min(rc, (r1 - lc) / (1 / Math.sin(dc / 2) + 1)),
+        var rc1 = Math.min(rc, (r1 - lc) / (kc + 1)),
             t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1, cw),
             t12 = d3_svg_arcCornerTangents([x1, y1], [x2, y2], r1, rc1, cw);
 
@@ -126,7 +126,7 @@ d3.svg.arc = function() {
 
       // Compute the inner corners.
       if (x3 != null) {
-        var rc0 = Math.min(rc, (r0 - lc) / (1 / Math.sin(dc / 2) - 1)),
+        var rc0 = Math.min(rc, (r0 - lc) / (kc - 1)),
             t03 = d3_svg_arcCornerTangents([x0, y0], [x3, y3], r0, -rc0, cw),
             t21 = d3_svg_arcCornerTangents([x2, y2], x1 == null ? [x0, y0] : [x1, y1], r0, -rc0, cw);
 
