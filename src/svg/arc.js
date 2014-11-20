@@ -13,8 +13,8 @@ d3.svg.arc = function() {
       padAngle = d3_svg_arcPadAngle;
 
   function arc() {
-    var r0 = +innerRadius.apply(this, arguments),
-        r1 = +outerRadius.apply(this, arguments),
+    var r0 = Math.max(0, +innerRadius.apply(this, arguments)),
+        r1 = Math.max(0, +outerRadius.apply(this, arguments)),
         a0 = startAngle.apply(this, arguments) - halfπ,
         a1 = endAngle.apply(this, arguments) - halfπ,
         da = Math.abs(a1 - a0),
