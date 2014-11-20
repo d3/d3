@@ -20,6 +20,9 @@ d3.svg.arc = function() {
         da = Math.abs(a1 - a0),
         cw = a0 > a1 ? 0 : 1;
 
+    // Ensure that the outer radius is always larger than the inner radius.
+    if (r1 < r0) rc = r1, r1 = r0, r0 = rc;
+
     // Special case for an arc that spans the full circle.
     if (da >= τε) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "") + "Z";
 
@@ -87,8 +90,7 @@ d3.svg.arc = function() {
     }
 
     // Compute the rounded corners.
-    if ((rc = +cornerRadius.apply(this, arguments)) > 1e-3) {
-      rc = Math.min(Math.abs(r1 - r0) / 2, rc);
+    if ((rc = Math.min(Math.abs(r1 - r0) / 2, +cornerRadius.apply(this, arguments))) > 1e-3) {
       cr = r0 < r1 ^ cw ? 0 : 1;
 
       // Compute the angle of the sector formed by the two sides of the arc.
