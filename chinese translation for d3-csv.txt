@@ -1,0 +1,136 @@
+D3提供了对利用逗号、tab或者任意自定义分隔符分离的数据的内置解析支持。这些数据分隔方式经常用于像Microsoft Excel这样的电子表格中。但很明显JSON是一种更高效读取速度更快的数据格式。
+
+# d3.csv(url[, accessor][, callback])
+
+我们来看一个利用HTTP GET请求从一个特定url获取csv文件内容的例子。假定这个文档中的内容是XXX。这个请求的MIME类型应该是“text/csv”。这个请求将是异步操作，也就是说解析请求后就会直接返回方法。当CSV中的数据可获取时，特制的回调函数就会回调这些数据。当有错误发生时，回调函数将会回调空值。一个可选的访问器函数将会被传递到d3.csv.parse中。这个访问器可以通过设计一个函数来实现，利用它来返回被访问对象的行数。比如：
+
+d3.csv("path/to/file.csv")
+    .row(function(d) { return {key: d.key, value: +d.value}; })
+    .get(function(error, rows) { console.log(rows); 
+
+我们来看一个案例中的失业率等值线：
+
+# d3.csv.parse(string[, accessor])
+
+解析某个CSV内容里特定的字符串，并且返回代表行分析对象的数组。这些字符串应该符合RFC4180兼容。不同于parseRows方法，这种方法要求CSV文件的第一行包含一个逗号分隔的列名列表，而这些列名将成为返回对象的属性。例如，考虑下面的CSV文件：
+
+Year,Make,Model,Length
+1997,Ford,E350,2.34
+2000,Mercury,Cougar,2.38
+
+由此产生的JavaScript数组：
+[
+  {"Year": "1997", "Make": "Ford", "Model": "E350", "Length": "2.34"},
+  {"Year": "2000", "Make": "Mercury", "Model": "Cougar", "Length": "2.38"}
+]
+
+注意，该值本身始终为字符串;他们将不会被自动转换为数字。 JavaScript可能会自动强制将字符串转换为数字给你（例如，使用+运算符）。通过指定一个访问功能，您可以将字符串转为数字或其他特殊类型，如日期：
+d3.csv("example.csv", function(d) {
+  return {
+    year: new Date(+d.Year, 0, 1), // convert "Year" column to Date
+    make: d.Make,
+    model: d.Model,
+    length: +d.Length // convert "Length" column to number
+  };
+}, function(error, rows) {
+  console.log(rows);
+});
+
+使用+而不是parseInt或parseFloat函数式因为"+"通常速度更快，但这也意味着会有更多的限制。例如，当使用+强制转换“30PX”时就会返回NaN，而利用parseInt和parseFloat函数则会返回30。
+
+# d3.csv.parseRows(string[, accessor])
+
+解析某个CSV文件内容中的指定字符串信息，并返回表示所解析的行数组的数组。这些字符串应该符合RFC4180兼容。不像解析方法，此方法中，会把标题行视作标准行，并应能处理CSV文件不包含标题行的特殊情况。每一行都应作为一个数组，而不是一个对象。行可能会有不同的长度。例如，我们考虑一下下面的CSV文件：
+
+1997,Ford,E350,2.34
+2000,Mercury,Cougar,2.38
+
+由此产生的JavaScript数组：
+
+[
+  ["1997", "Ford", "E350", "2.34"],
+  ["2000", "Mercury", "Cougar", "2.38"]
+]
+
+注意，该值本身始终为字符串;他们将不会被自动转换为数字。请见解析的详细信息。
+一个可选的访问函数可以被指定为第二个参数。CSV文件的每一行这个函数都会被调用，传递的是当前行和索引这两个参数。该函数的返回值替换行返回数组中的元素;如果该函数返回null，该行将从返回的数组行中被剥离。访问器函数通过解析将每一行转换成带有命名属性的对象。
+
+# d3.csv.format(rows)
+
+将特制的数据行转换成用逗号分隔的数据格式，并且返回字符串格式——这是parse解析过程的逆操作。每行由一个换行符（\ n）分隔，每一行中每列将用逗号（，）隔开。所有值包括逗号、双引号（“）或换行符都将使用双引号进行转义。
+
+各行应是一个对象，并且所有的对象属性将被转换成多个领域。为了更好地控制被转换的属性，应该将行转换成只包含应该被转换并且使用了formatRows的数组。
+
+# d3.csv.formatRows(rows)
+将特制的数据行转换成用逗号分隔的数据格式，并且返回字符串格式——这是parseRows解析行过程的逆操作。每行由一个换行符（\ n）分隔，每一行中每列将用逗号（，）隔开。所有值包括逗号、双引号（“）或换行符都将使用双引号进行转义。
+
+
+
+
+
+TSV
+
+用tab作数据分隔符相当于逗号作分隔符，除非用“tab”来作为一个自定义分隔符。
+
+# d3.tsv(url[, accessor][, callback])
+
+相当于d3.csv, 只是用tab作为数据分隔符。
+
+# d3.tsv.parse(string[, accessor])
+
+相当于csv.parse, 只是用tab作为数据分隔符。
+
+# d3.tsv.parseRows(string[, accessor])
+
+相当于csv.parseRows, 只是用tab作为数据分隔符。
+
+# d3.tsv.format(rows)
+
+相当于csv.format, 只是用tab作为数据分隔符。
+
+# d3.tsv.formatRows(rows)
+
+相当于csv.formatRows, 只是用tab作为数据分隔符。
+
+
+
+
+
+
+自定义分隔符
+
+# d3.dsv(delimiter, mimeType)
+
+为自定义的分隔符和MIME类型构建一个新的解析器，比如用"|"竖线字符作为数据分隔符，这是应该使用：
+
+var dsv = d3.dsv("|", "text/plain");
+# dsv(url[, accessor][, callback])
+
+相当于d3.csv, 只是用"|"作为数据分隔符。
+
+# dsv.parse(string[, accessor])
+
+相当于csv.parse, 只是用"|"作为数据分隔符。
+
+# dsv.parseRows(string[, accessor])
+
+相当于csv.parseRows, 只是用"|"作为数据分隔符。
+
+# dsv.format(rows)
+
+相当于csv.format, 只是用"|"作为数据分隔符。
+
+# dsv.formatRows(rows)
+
+相当于csv.formatRows, 只是用"|"作为数据分隔符。
+
+
+
+
+
+
+内容安全策略
+
+如果内容安全策略到位，注意csv.parse，tsv.parse和dsv.parse在script-src指令中需要unsafe-eval，因为需要这种动态代码生成的（安全）用法来进行快速编译。这也适用于d3.csv，d3.tsv和dsv的默认结构，这些引发了一个基于HTTP GET的请求，这个请求将获取资源并且利用csv.parse, tsv.parse or dsv.parse进行针对对象的编译。
+
+如果unsafe-eval无法使用，那么csv.parseRows，tsv.parseRows或dsv.parseRows可以作为一种变通方法，有必要的话也可结合d3.text来进行资源的检索。
