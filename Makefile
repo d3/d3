@@ -31,5 +31,8 @@ d3.min.js: d3.js bin/uglify
 	bin/$* > $@
 	@chmod a-w $@
 
+meteor: d3.js
+	meteor/publish.sh
+
 clean:
 	rm -f -- $(GENERATED_FILES)
