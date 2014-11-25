@@ -80,7 +80,8 @@ d3.behavior.zoom = function() {
 
   zoom.scale = function(_) {
     if (!arguments.length) return view.k;
-    view = {x: view.x, y: view.y, k: +_}; // copy-on-write
+    view = {x: view.x, y: view.y}; // copy-on-write
+    scaleTo(+_);
     rescale();
     return zoom;
   };

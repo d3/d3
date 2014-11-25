@@ -1286,9 +1286,9 @@
       if (!arguments.length) return view.k;
       view = {
         x: view.x,
-        y: view.y,
-        k: +_
+        y: view.y
       };
+      scaleTo(+_);
       rescale();
       return zoom;
     };
