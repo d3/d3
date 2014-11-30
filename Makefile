@@ -6,7 +6,7 @@ GENERATED_FILES = \
 
 all: $(GENERATED_FILES)
 
-.PHONY: clean all test
+.PHONY: clean all test meteor
 
 test:
 	@npm test
@@ -32,7 +32,8 @@ d3.min.js: d3.js bin/uglify
 	@chmod a-w $@
 
 meteor: d3.js
-	meteor/publish.sh
+	cp meteor/package.js .
+	spacejam --mongo-url mongodb:// test-packages ./ && meteor publish
 
 clean:
-	rm -f -- $(GENERATED_FILES)
+	rm -f -- $(GENERATED_FILES) .build.d3js:d3 versions.json package.js

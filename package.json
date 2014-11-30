@@ -57,7 +57,8 @@
     "smash": "~0.0.12",
     "uglify-js": "2.4.0",
     "vows": "0.7.0",
-    "seedrandom": "2.3.1"
+    "seedrandom": "2.3.1",
+    "spacejam": "^1.1.1"
   },
   "scripts": {
     "test": "vows; echo"

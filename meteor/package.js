@@ -14,13 +14,12 @@ Package.describe({
 });
 
 Package.onUse(function (api) {
-  api.versionsFrom('METEOR@1.0');
+  api.versionsFrom(['METEOR@0.9.0', 'METEOR@1.0']);
   api.export('d3');
   api.addFiles([
     'd3.js',
     'meteor/export.js'
-  ], where
-  );
+  ], where);
 });
 
 Package.onTest(function (api) {
