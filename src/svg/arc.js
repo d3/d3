@@ -8,6 +8,7 @@ d3.svg.arc = function() {
   var innerRadius = d3_svg_arcInnerRadius,
       outerRadius = d3_svg_arcOuterRadius,
       cornerRadius = d3_zero,
+      padRadius = d3_svg_arcAuto,
       startAngle = d3_svg_arcStartAngle,
       endAngle = d3_svg_arcEndAngle,
       padAngle = d3_svg_arcPadAngle;
@@ -28,8 +29,10 @@ d3.svg.arc = function() {
 
     var rc,
         cr,
+        rp,
+        ap,
         p0 = 0,
-        p1,
+        p1 = 0,
         x0,
         y0,
         x1,
@@ -46,9 +49,11 @@ d3.svg.arc = function() {
     // is 0.02 radians, a reasonable θ is 0.04 radians, and a reasonable
     // innerRadius is 100 pixels.
 
-    if (p1 = (+padAngle.apply(this, arguments) || 0) / 2) {
+    if (ap = (+padAngle.apply(this, arguments) || 0) / 2) {
+      rp = padRadius === d3_svg_arcAuto ? Math.sqrt(r0 * r0 + r1 * r1) : +padRadius.apply(this, arguments);
       if (!cw) p1 *= -1;
-      if (r0) p0 = d3_asin(r1 / r0 * Math.sin(p1));
+      if (r1) p1 = d3_asin(rp / r1 * Math.sin(ap));
+      if (r0) p0 = d3_asin(rp / r0 * Math.sin(ap));
     }
 
     // Compute the two outer corners.
@@ -183,6 +188,12 @@ d3.svg.arc = function() {
     return arc;
   };
 
+  arc.padRadius = function(v) {
+    if (!arguments.length) return padRadius;
+    padRadius = v == d3_svg_arcAuto ? d3_svg_arcAuto : d3_functor(v);
+    return arc;
+  };
+
   arc.startAngle = function(v) {
     if (!arguments.length) return startAngle;
     startAngle = d3_functor(v);
@@ -209,6 +220,8 @@ d3.svg.arc = function() {
 
   return arc;
 };
+
+var d3_svg_arcAuto = "auto";
 
 function d3_svg_arcInnerRadius(d) {
   return d.innerRadius;
