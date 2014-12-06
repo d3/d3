@@ -1,7 +1,7 @@
 {
   "name": "d3",
   "version": "3.4.13",
-  "description": "A small, free JavaScript library for manipulating documents based on data.",
+  "description": "HTML/SVG/CSS visualization components form manipulate documents based on data",
   "keywords": [
     "dom",
     "w3c",
