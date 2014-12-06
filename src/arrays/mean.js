@@ -11,5 +11,5 @@ d3.mean = function(array, f) {
   } else {
     while (++i < n) if (d3_numeric(a = d3_number(f.call(array, array[i], i)))) s += a; else --j;
   }
-  return j ? s / j : undefined;
+  if (j) return s / j;
 };

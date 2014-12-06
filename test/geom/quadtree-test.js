@@ -1,6 +1,7 @@
 var vows = require("vows"),
     load = require("../load"),
-    assert = require("../assert");
+    assert = require("../assert"),
+    _ = require("../../");
 
 var suite = vows.describe("d3.geom.quadtree");
 
@@ -37,6 +38,15 @@ suite.addBatch({
           ++n;
         });
         assert.strictEqual(n, 1, "number of visits");
+      },
+      "find locates the closest point to a given point": function(q) {
+        var dx = 17, dy = 17,
+            points = _.range(dx * dy).map(function(i) { return [i % dx, i / dx | 0]; });
+        q = q(points);
+        assert.deepEqual(q.find([.1, .1]), [0, 0]);
+        assert.deepEqual(q.find([7.5, 7.5]), [7, 7]);
+        assert.deepEqual(q.find([.1, 15.9]), [0, 16]);
+        assert.deepEqual(q.find([15.9, 15.9]), [16, 16]);
       }
     },
     "the quadtree applied directly": {

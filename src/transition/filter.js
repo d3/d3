@@ -18,5 +18,5 @@ d3_transitionPrototype.filter = function(filter) {
     }
   }
 
-  return d3_transition(subgroups, this.id);
+  return d3_transition(subgroups, this.namespace, this.id);
 };

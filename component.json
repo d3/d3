@@ -1,7 +1,7 @@
 {
   "name": "d3",
   "repository": "mbostock/d3",
-  "description": "A small, free JavaScript library for manipulating documents based on data.",
+  "description": "A JavaScript visualization library for HTML and SVG.",
   "keywords": [
     "dom",
     "w3c",
@@ -10,7 +10,7 @@
     "animation",
     "canvas"
   ],
-  "version": "3.4.13",
+  "version": "3.5.0",
   "main": "d3.js",
   "scripts": [
     "d3.js"

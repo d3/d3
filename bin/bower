@@ -14,10 +14,12 @@ console.log(JSON.stringify({
     ".git",
     ".gitignore",
     ".npmignore",
+    ".spmignore",
     ".travis.yml",
     "Makefile",
     "bin",
     "component.json",
+    "composer.json",
     "index.js",
     "lib",
     "node_modules",
@@ -26,3 +28,4 @@ console.log(JSON.stringify({
     "test"
   ]
 }, null, 2));
+
