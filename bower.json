@@ -19,6 +19,8 @@
     "node_modules",
     "package.json",
     "src",
-    "test"
+    "test",
+    ".spmignore",
+    "composer.json"
   ]
 }
