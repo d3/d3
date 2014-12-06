@@ -2741,21 +2741,21 @@
       timeFormat: d3_locale_timeFormat(locale)
     };
   };
-  var d3_locale_enUS = d3.locale({
+  var d3_locale_jaJP = d3.locale({
     decimal: ".",
     thousands: ",",
     grouping: [ 3 ],
-    currency: [ "$", "" ],
-    dateTime: "%a %b %e %X %Y",
-    date: "%m/%d/%Y",
+    currency: [ "￥", "" ],
+    dateTime: "%Y年%b月%e日 %X (%a)",
+    date: "%Y/%m/%d",
     time: "%H:%M:%S",
-    periods: [ "AM", "PM" ],
-    days: [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ],
-    shortDays: [ "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" ],
-    months: [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ],
-    shortMonths: [ "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" ]
+    periods: [ "午前", "午後" ],
+    days: [ "日曜日", "月曜日", "火曜日", "水曜日", "木曜日", "金曜日", "土曜日" ],
+    shortDays: [ "日", "月", "火", "水", "木", "金", "土" ],
+    months: [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ],
+    shortMonths: [ "1月", "2月", "3月", "4月", "5月", "6月", "7月", "8月", "9月", "10月", "11月", "12月" ]
   });
-  d3.format = d3_locale_enUS.numberFormat;
+  d3.format = d3_locale_jaJP.numberFormat;
   d3.geo = {};
   function d3_adder() {}
   d3_adder.prototype = {
@@ -9036,7 +9036,7 @@
     sw: "nesw-resize"
   };
   var d3_svg_brushResizes = [ [ "n", "e", "s", "w", "nw", "ne", "se", "sw" ], [ "e", "w" ], [ "n", "s" ], [] ];
-  var d3_time_format = d3_time.format = d3_locale_enUS.timeFormat;
+  var d3_time_format = d3_time.format = d3_locale_jaJP.timeFormat;
   var d3_time_formatUtc = d3_time_format.utc;
   var d3_time_formatIso = d3_time_formatUtc("%Y-%m-%dT%H:%M:%S.%LZ");
   d3_time_format.iso = Date.prototype.toISOString && +new Date("2000-01-01T00:00:00.000Z") ? d3_time_formatIsoNative : d3_time_formatIso;
@@ -9146,17 +9146,17 @@
     return d.getMilliseconds();
   } ], [ ":%S", function(d) {
     return d.getSeconds();
-  } ], [ "%I:%M", function(d) {
+  } ], [ "%H:%M", function(d) {
     return d.getMinutes();
-  } ], [ "%I %p", function(d) {
+  } ], [ "%H時", function(d) {
     return d.getHours();
-  } ], [ "%a %d", function(d) {
+  } ], [ "%d日 (%a)", function(d) {
     return d.getDay() && d.getDate() != 1;
-  } ], [ "%b %d", function(d) {
+  } ], [ "%m月%d日", function(d) {
     return d.getDate() != 1;
-  } ], [ "%B", function(d) {
+  } ], [ "%m月", function(d) {
     return d.getMonth();
-  } ], [ "%Y", d3_true ] ]);
+  } ], [ "%Y年", d3_true ] ]);
   var d3_time_scaleMilliseconds = {
     range: function(start, stop, step) {
       return d3.range(Math.ceil(start / step) * step, +stop, step).map(d3_time_scaleDate);

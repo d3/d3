@@ -1,3 +1,3 @@
-import "../locale/en-US";
+import "../locale/ja-JP";
 
-d3.format = d3_locale_enUS.numberFormat;
+d3.format = d3_locale_jaJP.numberFormat;
