@@ -15,6 +15,7 @@ d3.behavior.zoom = function() {
       center, // explicit desired position of translate0 after zooming
       size = [960, 500], // viewport size; required for zoom interpolation
       scaleExtent = d3_behavior_zoomInfinity,
+      duration = 250,
       zooming = 0,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
@@ -107,6 +108,12 @@ d3.behavior.zoom = function() {
     return zoom;
   };
 
+  zoom.duration = function(_) {
+    if (!arguments.length) return duration;
+    duration = +_; // TODO function based on interpolateZoom distance?
+    return zoom;
+  };
+
   zoom.x = function(z) {
     if (!arguments.length) return x1;
     x1 = z;
@@ -147,9 +154,9 @@ d3.behavior.zoom = function() {
     scaleTo(Math.pow(2, k));
     translateTo(center0 = p, l);
 
-    d3.select(that).transition()
-        .duration(350) // TODO allow this to be customized?
-        .call(zoom.event);
+    that = d3.select(that);
+    if (duration > 0) that = that.transition().duration(duration);
+    that.call(zoom.event);
   }
 
   function rescale() {
