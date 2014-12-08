@@ -3,14 +3,24 @@ import "selection";
 
 // TODO Interrupt transitions for all namespaces?
 d3_selectionPrototype.interrupt = function(name) {
-  var ns = d3_transitionNamespace(name);
-  return this.each(function() {
-    var lock = this[ns];
-    if (lock) ++lock.active;
-  });
+  return this.each(name == null
+      ? d3_selection_interrupt
+      : d3_selection_interruptNS(d3_transitionNamespace(name)));
 };
 
-function d3_selection_interrupt(that) {
-  var lock = that.__transition__;
-  if (lock) ++lock.active;
+var d3_selection_interrupt = d3_selection_interruptNS(d3_transitionNamespace());
+
+function d3_selection_interruptNS(ns) {
+  return function() {
+    var lock, active;
+    if ((lock = this[ns]) && (active = lock[lock.active])) {
+      if (--lock.count) {
+        delete lock[lock.active];
+        lock.active += .5;
+      } else {
+        delete this[ns];
+      }
+      active.event && active.event.interrupt.call(this, this.__data__, active.index);
+    }
+  };
 }
