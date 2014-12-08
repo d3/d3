@@ -7,6 +7,8 @@ import "sum";
 import "mean";
 import "median";
 import "quantile";
+import "variance";
+import "deviation";
 import "bisect";
 import "shuffle";
 import "permute";
