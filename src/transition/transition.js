@@ -4,12 +4,14 @@ import "../core/true";
 import "../event/dispatch";
 import "../event/timer";
 import "../selection/selection";
+import "../selection/transition";
+import "../selection/interrupt";
 
-function d3_transition(groups, namespace, id) {
+function d3_transition(groups, ns, id) {
   d3_subclass(groups, d3_transitionPrototype);
 
   // Note: read-only!
-  groups.namespace = namespace;
+  groups.namespace = ns;
   groups.id = id;
 
   return groups;
@@ -25,10 +27,10 @@ d3_transitionPrototype.empty = d3_selectionPrototype.empty;
 d3_transitionPrototype.node = d3_selectionPrototype.node;
 d3_transitionPrototype.size = d3_selectionPrototype.size;
 
-d3.transition = function(selection) {
+d3.transition = function(selection, name) {
   return arguments.length
-      ? (d3_transitionInheritId ? selection.transition() : selection)
-      : d3_selectionRoot.transition();
+      ? (d3_transitionInheritId ? selection.transition(name) : selection)
+      : d3_selectionRoot.transition(name);
 };
 
 d3.transition.prototype = d3_transitionPrototype;
@@ -51,8 +53,8 @@ function d3_transitionNamespace(name) {
   return name == null ? "__transition__" : "__transition_" + name + "__";
 }
 
-function d3_transitionNode(node, i, namespace, id, inherit) {
-  var lock = node[namespace] || (node[namespace] = {active: 0, count: 0}),
+function d3_transitionNode(node, i, ns, id, inherit) {
+  var lock = node[ns] || (node[ns] = {active: 0, count: 0}),
       transition = lock[id];
 
   if (!transition) {
@@ -63,7 +65,8 @@ function d3_transitionNode(node, i, namespace, id, inherit) {
       time: time,
       delay: inherit.delay,
       duration: inherit.duration,
-      ease: inherit.ease
+      ease: inherit.ease,
+      index: i
     };
 
     inherit = null; // allow gc
@@ -71,8 +74,7 @@ function d3_transitionNode(node, i, namespace, id, inherit) {
     ++lock.count;
 
     d3.timer(function(elapsed) {
-      var d = node.__data__,
-          delay = transition.delay,
+      var delay = transition.delay,
           duration,
           ease,
           timer = d3_timer_active,
@@ -83,12 +85,21 @@ function d3_transitionNode(node, i, namespace, id, inherit) {
       timer.c = start;
 
       function start(elapsed) {
-        if (lock.active > id) return stop(false);
+        if (lock.active > id) return stop();
+
+        var active = lock[lock.active];
+        if (active) {
+          --lock.count;
+          delete lock[lock.active];
+          active.event && active.event.interrupt.call(node, node.__data__, active.index);
+        }
+
         lock.active = id;
-        transition.event && transition.event.start.call(node, d, i);
+
+        transition.event && transition.event.start.call(node, node.__data__, i);
 
         transition.tween.forEach(function(key, value) {
-          if (value = value.call(node, d, i)) {
+          if (value = value.call(node, node.__data__, i)) {
             tweened.push(value);
           }
         });
@@ -104,7 +115,7 @@ function d3_transitionNode(node, i, namespace, id, inherit) {
       }
 
       function tick(elapsed) {
-        if (lock.active !== id) return stop(false);
+        if (lock.active !== id) return 1;
 
         var t = elapsed / duration,
             e = ease(t),
@@ -114,13 +125,15 @@ function d3_transitionNode(node, i, namespace, id, inherit) {
           tweened[--n].call(node, e);
         }
 
-        if (t >= 1) return stop(true);
+        if (t >= 1) {
+          transition.event && transition.event.end.call(node, node.__data__, i);
+          return stop();
+        }
       }
 
-      function stop(end) {
-        if (transition.event) transition.event[end ? "end" : "interrupt"].call(node, d, i);
+      function stop() {
         if (--lock.count) delete lock[id];
-        else delete node[namespace];
+        else delete node[ns];
         return 1;
       }
     }, 0, time);
