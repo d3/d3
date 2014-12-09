@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.5.2"
+    version: "3.5.2-epoitras-1.0"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -2599,6 +2599,9 @@
       U: function(d, p) {
         return d3_time_formatPad(d3_time.sundayOfYear(d), p, 2);
       },
+      V: function(d, p) {
+        return d3_time_formatPad(d3_time.mondayOfYear(d) + 1, p, 2);
+      },
       w: function(d) {
         return d.getDay();
       },
@@ -2635,6 +2638,7 @@
       p: d3_time_parseAmPm,
       S: d3_time_parseSeconds,
       U: d3_time_parseWeekNumberSunday,
+      V: d3_time_parseWeekNumberMondayOneBased,
       w: d3_time_parseWeekdayNumber,
       W: d3_time_parseWeekNumberMonday,
       x: d3_time_parseLocaleDate,
@@ -2705,6 +2709,11 @@
     d3_time_numberRe.lastIndex = 0;
     var n = d3_time_numberRe.exec(string.slice(i));
     return n ? (date.U = +n[0], i + n[0].length) : -1;
+  }
+  function d3_time_parseWeekNumberMondayOneBased(date, string, i) {
+    d3_time_numberRe.lastIndex = 0;
+    var n = d3_time_numberRe.exec(string.slice(i));
+    return n ? (date.W = +n[0] - 1, i + n[0].length) : -1;
   }
   function d3_time_parseWeekNumberMonday(date, string, i) {
     d3_time_numberRe.lastIndex = 0;
