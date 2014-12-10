@@ -1,2 +1,2 @@
 !function(){
-  var d3 = {version: "3.5.2-epoitras-1.0"}; // semver
+  var d3 = {version: "3.5.2-epoitras-2"}; // semver

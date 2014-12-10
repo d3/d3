@@ -2464,6 +2464,21 @@
   d3_time.weeks = d3_time.sunday.range;
   d3_time.weeks.utc = d3_time.sunday.utc.range;
   d3_time.weekOfYear = d3_time.sundayOfYear;
+  d3_time.isoWeekOfYear = function(d) {
+    var dow = d.getDay();
+    d = dow >= 4 || dow === 0 ? d3_time.thursday(d) : d3_time.thursday.ceil(d);
+    var weekNum = d3_time.thursdayOfYear(d);
+    if (d3_time.year(d).getDay() === 4) {
+      weekNum++;
+    }
+    return weekNum;
+  };
+  d3_time.dateFromIsoWeekOfYear = function(year, week) {
+    var d = new Date(year, 0, 1), dow = d.getDay();
+    d = dow > 4 || dow === 0 ? d3_time.monday.ceil(d) : d3_time.monday(d);
+    d = d3_time.day.offset(d, week * 7);
+    return d;
+  };
   function d3_locale_timeFormat(locale) {
     var locale_dateTime = locale.dateTime, locale_date = locale.date, locale_time = locale.time, locale_periods = locale.periods, locale_days = locale.days, locale_shortDays = locale.shortDays, locale_months = locale.months, locale_shortMonths = locale.shortMonths;
     function d3_time_format(template) {
@@ -2499,6 +2514,9 @@
         if ("j" in d) date.setFullYear(d.y, 0, d.j); else if ("w" in d && ("W" in d || "U" in d)) {
           date.setFullYear(d.y, 0, 1);
           date.setFullYear(d.y, 0, "W" in d ? (d.w + 6) % 7 + d.W * 7 - (date.getDay() + 5) % 7 : d.w + d.U * 7 - (date.getDay() + 6) % 7);
+        } else if ("w" in d && "V" in d) {
+          var isod = d3_time.dateFromIsoWeekOfYear(d.y, d.V);
+          date.setFullYear(isod.getFullYear(), isod.getMonth(), isod.getDate() + (d.w + 6) % 7);
         } else date.setFullYear(d.y, d.m, d.d);
         date.setHours(d.H + (d.Z / 100 | 0), d.M + d.Z % 100, d.S, d.L);
         return localZ ? date._ : date;
@@ -2600,7 +2618,7 @@
         return d3_time_formatPad(d3_time.sundayOfYear(d), p, 2);
       },
       V: function(d, p) {
-        return d3_time_formatPad(d3_time.mondayOfYear(d) + 1, p, 2);
+        return d3_time_formatPad(d3_time.isoWeekOfYear(d), p, 2);
       },
       w: function(d) {
         return d.getDay();
@@ -2638,7 +2656,7 @@
       p: d3_time_parseAmPm,
       S: d3_time_parseSeconds,
       U: d3_time_parseWeekNumberSunday,
-      V: d3_time_parseWeekNumberMondayOneBased,
+      V: d3_time_parseIsoWeekNumber,
       w: d3_time_parseWeekdayNumber,
       W: d3_time_parseWeekNumberMonday,
       x: d3_time_parseLocaleDate,
@@ -2710,10 +2728,10 @@
     var n = d3_time_numberRe.exec(string.slice(i));
     return n ? (date.U = +n[0], i + n[0].length) : -1;
   }
-  function d3_time_parseWeekNumberMondayOneBased(date, string, i) {
+  function d3_time_parseIsoWeekNumber(date, string, i) {
     d3_time_numberRe.lastIndex = 0;
     var n = d3_time_numberRe.exec(string.slice(i));
-    return n ? (date.W = +n[0] - 1, i + n[0].length) : -1;
+    return n ? (date.V = +n[0] - 1, i + n[0].length) : -1;
   }
   function d3_time_parseWeekNumberMonday(date, string, i) {
     d3_time_numberRe.lastIndex = 0;

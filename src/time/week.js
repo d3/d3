@@ -29,3 +29,22 @@ d3_time.week = d3_time.sunday;
 d3_time.weeks = d3_time.sunday.range;
 d3_time.weeks.utc = d3_time.sunday.utc.range;
 d3_time.weekOfYear = d3_time.sundayOfYear;
+
+d3_time.isoWeekOfYear = function( d ) {
+  var dow = d.getDay();
+  d = ( dow >= 4 || dow === 0 ) ? d3_time.thursday( d ) : d3_time.thursday.ceil( d );
+  var weekNum = d3_time.thursdayOfYear( d );
+  if ( d3_time.year( d ).getDay() === 4 ) {
+    weekNum ++;
+  }
+  return weekNum;
+};
+
+d3_time.dateFromIsoWeekOfYear = function( year, week ) {
+  var d = new Date( year, 0, 1 ), dow = d.getDay();
+  d = (dow > 4 || dow === 0 ) ? d3_time.monday.ceil( d ) : d3_time.monday( d );
+  d = d3_time.day.offset( d, week * 7 );
+  return d;
+};
+
+
