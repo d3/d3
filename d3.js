@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.5.2-epoitras-1.0"
+    version: "3.5.2-epoitras-2"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
