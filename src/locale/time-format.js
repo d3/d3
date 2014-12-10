@@ -59,6 +59,9 @@ function d3_locale_timeFormat(locale) {
         date.setFullYear(d.y, 0, "W" in d
             ? (d.w + 6) % 7 + d.W * 7 - (date.getDay() + 5) % 7
             :  d.w          + d.U * 7 - (date.getDay() + 6) % 7);
+      } else if ("w" in d && "V" in d) {
+        var isod = d3_time.dateFromIsoWeekOfYear( d.y, d.V );
+        date.setFullYear( isod.getFullYear(), isod.getMonth(), isod.getDate() + (d.w + 6) % 7 );
       } else date.setFullYear(d.y, d.m, d.d);
 
       // Set hours, minutes, seconds and milliseconds.
@@ -158,7 +161,7 @@ function d3_locale_timeFormat(locale) {
     p: function(d) { return locale_periods[+(d.getHours() >= 12)]; },
     S: function(d, p) { return d3_time_formatPad(d.getSeconds(), p, 2); },
     U: function(d, p) { return d3_time_formatPad(d3_time.sundayOfYear(d), p, 2); },
-    V: function(d, p) { return d3_time_formatPad(d3_time.mondayOfYear(d) + 1, p, 2); },
+    V: function(d, p) { return d3_time_formatPad(d3_time.isoWeekOfYear(d), p, 2); },
     w: function(d) { return d.getDay(); },
     W: function(d, p) { return d3_time_formatPad(d3_time.mondayOfYear(d), p, 2); },
     x: d3_time_format(locale_date),
@@ -186,7 +189,7 @@ function d3_locale_timeFormat(locale) {
     p: d3_time_parseAmPm,
     S: d3_time_parseSeconds,
     U: d3_time_parseWeekNumberSunday,
-    V: d3_time_parseWeekNumberMondayOneBased,
+    V: d3_time_parseIsoWeekNumber,
     w: d3_time_parseWeekdayNumber,
     W: d3_time_parseWeekNumberMonday,
     x: d3_time_parseLocaleDate,
@@ -274,10 +277,10 @@ function d3_time_parseWeekNumberSunday(date, string, i) {
   return n ? (date.U = +n[0], i + n[0].length) : -1;
 }
 
-function d3_time_parseWeekNumberMondayOneBased(date, string, i) {
+function d3_time_parseIsoWeekNumber(date, string, i) {
   d3_time_numberRe.lastIndex = 0;
   var n = d3_time_numberRe.exec(string.slice(i));
-  return n ? (date.W = +n[0] - 1, i + n[0].length) : -1;
+  return n ? (date.V = +n[0] - 1, i + n[0].length) : -1;
 }
 
 function d3_time_parseWeekNumberMonday(date, string, i) {
