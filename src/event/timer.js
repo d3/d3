@@ -22,7 +22,10 @@ d3.timer = function(callback, delay, then) {
 
   // Start animatin'!
   if (!d3_timer_interval) {
-    d3_timer_timeout = clearTimeout(d3_timer_timeout);
+    if (d3_timer_timeout) {
+      clearTimeout(d3_timer_timeout);
+      d3_timer_timeout = undefined;
+    }
     d3_timer_interval = 1;
     d3_timer_frame(d3_timer_step);
   }
@@ -33,7 +36,9 @@ function d3_timer_step() {
       delay = d3_timer_sweep() - now;
   if (delay > 24) {
     if (isFinite(delay)) {
-      clearTimeout(d3_timer_timeout);
+      if (d3_timer_timeout) {
+        clearTimeout(d3_timer_timeout);
+      }
       d3_timer_timeout = setTimeout(d3_timer_step, delay);
     }
     d3_timer_interval = 0;
