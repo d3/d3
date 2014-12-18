@@ -2098,6 +2098,17 @@
       d3_timer_frame(d3_timer_step);
     }
   };
+  d3.timer.__paused__ = false;
+  d3.timer.pause = function() {
+    if (!d3.timer.__paused__) {
+      d3.timer.__paused__ = true;
+    }
+  };
+  d3.timer.resume = function() {
+    if (d3.timer.__paused__) {
+      d3.timer.__paused__ = false;
+    }
+  };
   function d3_timer_step() {
     var now = d3_timer_mark(), delay = d3_timer_sweep() - now;
     if (delay > 24) {
@@ -8827,13 +8838,6 @@
     }
     return d3_transition(subgroups, ns, id1);
   };
-  d3.transition.__paused__ = false;
-  d3.transition.pause = function() {
-    d3.transition.__paused__ = true;
-  };
-  d3.transition.resume = function() {
-    d3.transition.__paused__ = false;
-  };
   function d3_transitionNamespace(name) {
     return name == null ? "__transition__" : "__transition_" + name + "__";
   }
@@ -8841,7 +8845,7 @@
     var lock = node[ns] || (node[ns] = {
       active: 0,
       count: 0
-    }), transition = lock[id];
+    }), pausing = 0, pausingRef = -1, transition = lock[id];
     if (!transition) {
       var time = inherit.time;
       transition = lock[id] = {
@@ -8883,10 +8887,15 @@
         }
         function tick(elapsed) {
           if (lock.active !== id) return 1;
-          if (d3.transition.__paused__) {
-            return pause();
+          if (d3.timer.__paused__) {
+            if (pausingRef < 0) {
+              pausingRef = elapsed;
+            }
+            pausing = elapsed - pausingRef;
+            return;
           }
-          var t = elapsed / duration, e = ease(t), n = tweened.length;
+          pausingRef = -1;
+          var t = (elapsed - pausing) / duration, e = ease(t), n = tweened.length;
           while (n > 0) {
             tweened[--n].call(node, e);
           }
@@ -8897,25 +8906,6 @@
         }
         function stop() {
           if (--lock.count) delete lock[id]; else delete node[ns];
-          return 1;
-        }
-        function pause() {
-          var durationRef = duration, elapsedRef = elapsed, pauseStart = Date.now();
-          d3.timer(function() {
-            var pauseElapsed = Date.now() - pauseStart;
-            duration = durationRef + pauseElapsed;
-            elapsed = elapsedRef + pauseElapsed;
-            if (!d3.transition.__paused__) {
-              return resume();
-            }
-          }, 200);
-          return 1;
-        }
-        function resume() {
-          d3.timer(function() {
-            timer.c = tick(elapsed || 1) ? d3_true : tick;
-            return 1;
-          }, 0, time);
           return 1;
         }
       }, 0, time);

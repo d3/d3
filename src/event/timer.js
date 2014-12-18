@@ -12,7 +12,7 @@ var d3_timer_queueHead,
 d3.timer = function(callback, delay, then) {
   var n = arguments.length;
   if (n < 2) delay = 0;
-  if (n < 3) then = Date.now();
+  if (n < 3) then = Date.now() ;
 
   // Add the callback to the tail of the queue.
   var time = then + delay, timer = {c: callback, t: time, f: false, n: null};
@@ -27,6 +27,20 @@ d3.timer = function(callback, delay, then) {
     d3_timer_frame(d3_timer_step);
   }
 };
+
+
+// add possiblity to pause all transitions.
+d3.timer.__paused__ = false;
+d3.timer.pause = function() {
+  if(!d3.timer.__paused__) {
+    d3.timer.__paused__ = true;
+}
+}
+d3.timer.resume = function() {
+  if(d3.timer.__paused__) {
+    d3.timer.__paused__ = false;
+}
+}
 
 function d3_timer_step() {
   var now = d3_timer_mark(),

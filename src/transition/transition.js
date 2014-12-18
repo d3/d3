@@ -48,7 +48,6 @@ import "duration";
 import "each";
 import "subtransition";
 import "tween";
-import "pause";
 
 function d3_transitionNamespace(name) {
   return name == null ? "__transition__" : "__transition_" + name + "__";
@@ -56,7 +55,8 @@ function d3_transitionNamespace(name) {
 
 function d3_transitionNode(node, i, ns, id, inherit) {
   var lock = node[ns] || (node[ns] = {active: 0, count: 0}),
-      timerFn, 
+      pausing = 0, 
+      pausingRef = -1,   
       transition = lock[id];
 
   if (!transition) {
@@ -74,7 +74,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
     inherit = null; // allow gc
 
     ++lock.count;
-    timerFn = function(elapsed) {
+    d3.timer(function(elapsed) {
       var delay = transition.delay,
           duration,
           ease,
@@ -118,11 +118,13 @@ function d3_transitionNode(node, i, ns, id, inherit) {
       function tick(elapsed) {
         
         if (lock.active !== id) return 1;
-        if(d3.transition.__paused__) {
-          return pause()
+        if (d3.timer.__paused__) {
+          if(pausingRef < 0) {pausingRef = elapsed}
+          pausing = elapsed - pausingRef
+          return 
         }
-        
-        var t = elapsed / duration,
+        pausingRef = -1
+        var t = (elapsed - pausing) / duration,
             e = ease(t),
             n = tweened.length;
 
@@ -141,27 +143,31 @@ function d3_transitionNode(node, i, ns, id, inherit) {
         else delete node[ns];
         return 1;
       }
-      function pause() {
-        var durationRef = duration, 
-            elapsedRef = elapsed,
-            pauseStart = Date.now();
-        d3.timer(function() { // defer to end of current frame
-          var pauseElapsed = Date.now() - pauseStart;
-          duration = durationRef + pauseElapsed;
-          elapsed = elapsedRef + pauseElapsed;
-          if(!d3.transition.__paused__) {return resume()}         
-        }, 200);
-        return 1
-      }
-      function resume() {
-        d3.timer(timerFn, 0, time);
-        //  d3.timer(function() { // defer to end of current frame
-        //   timer.c = tick(elapsed || 1) ? d3_true : tick;
-        //   return 1;
-        // }, 0, time);
-        return 1
-      }
-    }
-    d3.timer(timerFn, 0, time);
+      // function pause() {
+      //   // var durationRef = duration, 
+      //   //     elapsedRef = elapsed,
+      //   //     delayRef = delay,
+      //   //     pauseStart = Date.now();
+      //   d3.timer(function() { // defer to end of current frame
+      //     if(!d3.timer.__paused__) {
+      //       // var pauseElapsed = Date.now() - pauseStart;
+      //       //     duration = durationRef + pauseElapsed;
+      //       //     elapsed = elapsedRef + pauseElapsed;
+      //       //     delay = delayRef + pauseElapsed;
+      //      d3.timer(timerFn, 0, time);
+      //      return 1
+      //     }         
+      //   }, 200);
+      //   return 1
+      // }
+      // function resume() {
+      //   d3.timer(timerFn, 0, time);
+      //   //  d3.timer(function() { // defer to end of current frame
+      //   //   timer.c = tick(elapsed || 1) ? d3_true : tick;
+      //   //   return 1;
+      //   // }, 0, time);
+      //   return 1
+      // }
+    }, 0, time);
   }
 }
