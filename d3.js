@@ -8827,6 +8827,13 @@
     }
     return d3_transition(subgroups, ns, id1);
   };
+  d3.transition.__paused__ = false;
+  d3.transition.pause = function() {
+    d3.transition.__paused__ = true;
+  };
+  d3.transition.resume = function() {
+    d3.transition.__paused__ = false;
+  };
   function d3_transitionNamespace(name) {
     return name == null ? "__transition__" : "__transition_" + name + "__";
   }
@@ -8876,6 +8883,9 @@
         }
         function tick(elapsed) {
           if (lock.active !== id) return 1;
+          if (d3.transition.__paused__) {
+            return pause();
+          }
           var t = elapsed / duration, e = ease(t), n = tweened.length;
           while (n > 0) {
             tweened[--n].call(node, e);
@@ -8887,6 +8897,25 @@
         }
         function stop() {
           if (--lock.count) delete lock[id]; else delete node[ns];
+          return 1;
+        }
+        function pause() {
+          var durationRef = duration, elapsedRef = elapsed, pauseStart = Date.now();
+          d3.timer(function() {
+            var pauseElapsed = Date.now() - pauseStart;
+            duration = durationRef + pauseElapsed;
+            elapsed = elapsedRef + pauseElapsed;
+            if (!d3.transition.__paused__) {
+              return resume();
+            }
+          }, 200);
+          return 1;
+        }
+        function resume() {
+          d3.timer(function() {
+            timer.c = tick(elapsed || 1) ? d3_true : tick;
+            return 1;
+          }, 0, time);
           return 1;
         }
       }, 0, time);

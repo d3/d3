@@ -56,6 +56,7 @@ function d3_transitionNamespace(name) {
 
 function d3_transitionNode(node, i, ns, id, inherit) {
   var lock = node[ns] || (node[ns] = {active: 0, count: 0}),
+      timerFn, 
       transition = lock[id];
 
   if (!transition) {
@@ -73,8 +74,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
     inherit = null; // allow gc
 
     ++lock.count;
-
-    d3.timer(function(elapsed) {
+    timerFn = function(elapsed) {
       var delay = transition.delay,
           duration,
           ease,
@@ -146,7 +146,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
             elapsedRef = elapsed,
             pauseStart = Date.now();
         d3.timer(function() { // defer to end of current frame
-          pauseElapsed = Date.now() - pauseStart;
+          var pauseElapsed = Date.now() - pauseStart;
           duration = durationRef + pauseElapsed;
           elapsed = elapsedRef + pauseElapsed;
           if(!d3.transition.__paused__) {return resume()}         
@@ -154,12 +154,14 @@ function d3_transitionNode(node, i, ns, id, inherit) {
         return 1
       }
       function resume() {
-         d3.timer(function() { // defer to end of current frame
-          timer.c = tick(elapsed || 1) ? d3_true : tick;
-          return 1;
-        }, 0, time);
+        d3.timer(timerFn, 0, time);
+        //  d3.timer(function() { // defer to end of current frame
+        //   timer.c = tick(elapsed || 1) ? d3_true : tick;
+        //   return 1;
+        // }, 0, time);
         return 1
       }
-    }, 0, time);
+    }
+    d3.timer(timerFn, 0, time);
   }
 }
