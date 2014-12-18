@@ -144,31 +144,6 @@ function d3_transitionNode(node, i, ns, id, inherit) {
         else delete node[ns];
         return 1;
       }
-      // function pause() {
-      //   // var durationRef = duration, 
-      //   //     elapsedRef = elapsed,
-      //   //     delayRef = delay,
-      //   //     pauseStart = Date.now();
-      //   d3.timer(function() { // defer to end of current frame
-      //     if(!d3.timer.__paused__) {
-      //       // var pauseElapsed = Date.now() - pauseStart;
-      //       //     duration = durationRef + pauseElapsed;
-      //       //     elapsed = elapsedRef + pauseElapsed;
-      //       //     delay = delayRef + pauseElapsed;
-      //      d3.timer(timerFn, 0, time);
-      //      return 1
-      //     }         
-      //   }, 200);
-      //   return 1
-      // }
-      // function resume() {
-      //   d3.timer(timerFn, 0, time);
-      //   //  d3.timer(function() { // defer to end of current frame
-      //   //   timer.c = tick(elapsed || 1) ? d3_true : tick;
-      //   //   return 1;
-      //   // }, 0, time);
-      //   return 1
-      // }
     }, 0, time);
   }
 }

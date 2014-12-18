@@ -2098,17 +2098,6 @@
       d3_timer_frame(d3_timer_step);
     }
   };
-  d3.timer.__paused__ = false;
-  d3.timer.pause = function() {
-    if (!d3.timer.__paused__) {
-      d3.timer.__paused__ = true;
-    }
-  };
-  d3.timer.resume = function() {
-    if (d3.timer.__paused__) {
-      d3.timer.__paused__ = false;
-    }
-  };
   function d3_timer_step() {
     var now = d3_timer_mark(), delay = d3_timer_sweep() - now;
     if (delay > 24) {
