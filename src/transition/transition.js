@@ -48,6 +48,7 @@ import "duration";
 import "each";
 import "subtransition";
 import "tween";
+import "pause";
 
 function d3_transitionNamespace(name) {
   return name == null ? "__transition__" : "__transition_" + name + "__";
@@ -56,7 +57,7 @@ function d3_transitionNamespace(name) {
 function d3_transitionNode(node, i, ns, id, inherit) {
   var lock = node[ns] || (node[ns] = {active: 0, count: 0}),
       pausing = 0, 
-      pausingRef = -1,   
+      pausingTag = -1,   
       transition = lock[id];
 
   if (!transition) {
@@ -118,12 +119,12 @@ function d3_transitionNode(node, i, ns, id, inherit) {
       function tick(elapsed) {
         
         if (lock.active !== id) return 1;
-        if (d3.timer.__paused__) {
-          if(pausingRef < 0) {pausingRef = elapsed}
-          pausing = elapsed - pausingRef
+        if (d3_transition_pause || node.__paused__) {
+          if(pausingTag < 0) {pausingTag = elapsed}
+          pausing = elapsed - pausingTag
           return 
         }
-        pausingRef = -1
+        pausingTag = -1
         var t = (elapsed - pausing) / duration,
             e = ease(t),
             n = tweened.length;

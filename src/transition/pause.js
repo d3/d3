@@ -12,16 +12,16 @@ d3_transitionPrototype.resume = function() {
 
 
 // add possiblity to pause all transitions.
-d3.transition.__paused__ = false;
+var d3_transition_pause = false;
 
 d3.transition.pause = function() {
-  if(!d3.transition.__paused__) {
-    d3.transition.__paused__ = true;
+  if(!d3_transition_pause) {
+    d3_transition_pause = true;
 }
 }
 d3.transition.resume = function() {
-  if(d3.transition.__paused__) {
-    d3.transition.__paused__ = false;
+  if(d3_transition_pause) {
+    d3_transition_pause = false;
 }	
 }
 
