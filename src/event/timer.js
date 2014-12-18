@@ -12,7 +12,7 @@ var d3_timer_queueHead,
 d3.timer = function(callback, delay, then) {
   var n = arguments.length;
   if (n < 2) delay = 0;
-  if (n < 3) then = Date.now() ;
+  if (n < 3) then = Date.now();
 
   // Add the callback to the tail of the queue.
   var time = then + delay, timer = {c: callback, t: time, f: false, n: null};
