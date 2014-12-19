@@ -32,8 +32,8 @@ d3.min.js: d3.js bin/uglify
 	@chmod a-w $@
 
 meteor: d3.js
-	cp meteor/package.js .
-	spacejam --mongo-url mongodb:// test-packages ./ && meteor publish
+	ln -s meteor/package.js package.js 2>/dev/null
+	meteor publish
 
 clean:
 	rm -f -- $(GENERATED_FILES) .build.d3js:d3 versions.json package.js
