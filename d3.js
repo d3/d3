@@ -8827,6 +8827,31 @@
     }
     return d3_transition(subgroups, ns, id1);
   };
+  d3_transitionPrototype.pause = function() {
+    var id = this.id, ns = this.namespace;
+    return d3_selection_each(this, function(node) {
+      node[ns][id].__paused__ = true;
+    });
+  };
+  d3_transitionPrototype.resume = function() {
+    var id = this.id, ns = this.namespace;
+    return d3_selection_each(this, function(node) {
+      delete node[ns][id].__paused__;
+    });
+  };
+  var d3_transition_pause = {};
+  d3.transition.pause = function(name) {
+    name = name ? d3_transitionNamespace(name) : "__all__";
+    if (!d3_transition_pause[name]) {
+      d3_transition_pause[name] = true;
+    }
+  };
+  d3.transition.resume = function(name) {
+    name = name ? d3_transitionNamespace(name) : "__all__";
+    if (d3_transition_pause[name]) {
+      delete d3_transition_pause[name];
+    }
+  };
   function d3_transitionNamespace(name) {
     return name == null ? "__transition__" : "__transition_" + name + "__";
   }
@@ -8834,7 +8859,7 @@
     var lock = node[ns] || (node[ns] = {
       active: 0,
       count: 0
-    }), transition = lock[id];
+    }), pausing = 0, pausingTag = -1, transition = lock[id];
     if (!transition) {
       var time = inherit.time;
       transition = lock[id] = {
@@ -8876,7 +8901,15 @@
         }
         function tick(elapsed) {
           if (lock.active !== id) return 1;
-          var t = elapsed / duration, e = ease(t), n = tweened.length;
+          if (d3_transition_pause.__all__ || d3_transition_pause[ns] || transition.__paused__) {
+            if (pausingTag < 0) {
+              pausingTag = elapsed;
+            }
+            pausing = elapsed - pausingTag;
+            return;
+          }
+          pausingTag = -1;
+          var t = (elapsed - pausing) / duration, e = ease(t), n = tweened.length;
           while (n > 0) {
             tweened[--n].call(node, e);
           }

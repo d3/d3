@@ -32,4 +32,4 @@ d3.min.js: d3.js bin/uglify
 	@chmod a-w $@
 
 clean:
-	rm -f -- $(GENERATED_FILES)
+	rm -f -- $(GENERATED_FILES)	
