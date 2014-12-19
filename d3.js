@@ -8839,15 +8839,17 @@
       delete node[ns][id].__paused__;
     });
   };
-  var d3_transition_pause = false;
-  d3.transition.pause = function() {
-    if (!d3_transition_pause) {
-      d3_transition_pause = true;
+  var d3_transition_pause = {};
+  d3.transition.pause = function(name) {
+    name = name ? d3_transitionNamespace(name) : "__all__";
+    if (!d3_transition_pause[name]) {
+      d3_transition_pause[name] = true;
     }
   };
-  d3.transition.resume = function() {
-    if (d3_transition_pause) {
-      d3_transition_pause = false;
+  d3.transition.resume = function(name) {
+    name = name ? d3_transitionNamespace(name) : "__all__";
+    if (d3_transition_pause[name]) {
+      delete d3_transition_pause[name];
     }
   };
   function d3_transitionNamespace(name) {
@@ -8899,7 +8901,7 @@
         }
         function tick(elapsed) {
           if (lock.active !== id) return 1;
-          if (d3_transition_pause || node.__paused__) {
+          if (d3_transition_pause.__all__ || d3_transition_pause[ns] || transition.__paused__) {
             if (pausingTag < 0) {
               pausingTag = elapsed;
             }

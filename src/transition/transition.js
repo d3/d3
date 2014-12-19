@@ -119,7 +119,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
       function tick(elapsed) {
         
         if (lock.active !== id) return 1;
-        if (d3_transition_pause || node.__paused__) {
+        if (d3_transition_pause.__all__ || d3_transition_pause[ns] || transition.__paused__) {
           if(pausingTag < 0) {pausingTag = elapsed}
           pausing = elapsed - pausingTag
           return 
