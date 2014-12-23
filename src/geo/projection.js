@@ -45,7 +45,7 @@ function d3_geo_projectionMutator(projectAt) {
   projection.stream = function(output) {
     if (stream) stream.valid = false;
     output = projectResample(clipExtent ? d3_geo_clipExtent(clipExtent[0][0], clipExtent[0][1], clipExtent[1][0], clipExtent[1][1], output) : output);
-    stream = d3_geo_projectionRadiansRotate(rotate, clipAngle == null ? d3_geo_clipAntimeridian(output) : d3_geo_clipCircle(clipAngle * d3_radians, output));
+    stream = d3_geo_projectionRadiansRotate(δλ, δφ, δγ, clipAngle == null ? d3_geo_clipAntimeridian(output) : d3_geo_clipCircle(clipAngle * d3_radians, output));
     stream.valid = true; // allow caching by d3.geo.path
     return stream;
   };
@@ -112,9 +112,52 @@ function d3_geo_projectionMutator(projectAt) {
   };
 }
 
-function d3_geo_projectionRadiansRotate(rotate, stream) {
-  return d3_geo_transformPoint(stream, function(x, y) {
-    var point = rotate(x * d3_radians, y * d3_radians);
-    stream.point(point[0], point[1]);
-  });
+function d3_geo_projectionRadiansRotate(δλ, δφ, δγ, stream) {
+  return d3_geo_transformPoint(stream, δλ && (δφ || δγ) ? d3_geo_projectionRadiansRotateλφγ(δλ, δφ, δγ, stream)
+        : δλ ? d3_geo_projectionRadiansRotateλ(δλ, stream)
+        : δφ || δγ ? d3_geo_projectionRadiansRotateφγ(δλ, δφ, δγ, stream)
+        : function(x, y) { stream.point(x * d3_radians, y * d3_radians); });
+}
+
+function d3_geo_projectionRadiansRotateλ(δλ, stream) {
+  return function(λ, φ) {
+    λ += δλ;
+    stream.point(λ > π ? λ - τ : λ < -π ? λ + τ : λ, φ);
+  };
+}
+
+function d3_geo_projectionRadiansRotateφγ(δφ, δγ, stream) {
+  var cosδφ = Math.cos(δφ),
+      sinδφ = Math.sin(δφ),
+      cosδγ = Math.cos(δγ),
+      sinδγ = Math.sin(δγ);
+  return function(λ, φ) {
+    var cosφ = Math.cos(φ),
+        x = Math.cos(λ) * cosφ,
+        y = Math.sin(λ) * cosφ,
+        z = Math.sin(φ),
+        k = z * cosδφ + x * sinδφ;
+    stream.point(
+      Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ),
+      d3_asin(k * cosδγ + y * sinδγ)
+    );
+  };
+}
+
+function d3_geo_projectionRadiansRotateλφγ(δλ, δφ, δγ, stream) {
+  var cosδφ = Math.cos(δφ),
+      sinδφ = Math.sin(δφ),
+      cosδγ = Math.cos(δγ),
+      sinδγ = Math.sin(δγ);
+  return function(λ, φ) {
+    var cosφ = Math.cos(φ),
+        x = Math.cos(λ += δλ) * cosφ,
+        y = Math.sin(λ) * cosφ,
+        z = Math.sin(φ),
+        k = z * cosδφ + x * sinδφ;
+    stream.point(
+      Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ),
+      d3_asin(k * cosδγ + y * sinδγ)
+    );
+  };
 }
