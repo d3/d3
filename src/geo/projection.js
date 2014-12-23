@@ -28,8 +28,6 @@ function d3_geo_projectionMutator(projectAt) {
       λ = 0, φ = 0, // center
       δλ = 0, δφ = 0, δγ = 0, // rotate
       δx, δy, // center
-      preclip = d3_geo_clipAntimeridian,
-      postclip = d3_identity,
       clipAngle = null,
       clipExtent = null,
       stream;
@@ -46,21 +44,21 @@ function d3_geo_projectionMutator(projectAt) {
 
   projection.stream = function(output) {
     if (stream) stream.valid = false;
-    stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
+    output = projectResample(clipExtent ? d3_geo_clipExtent(clipExtent[0][0], clipExtent[0][1], clipExtent[1][0], clipExtent[1][1], output) : output);
+    stream = d3_geo_projectionRadiansRotate(rotate, clipAngle == null ? d3_geo_clipAntimeridian(output) : d3_geo_clipCircle(clipAngle * d3_radians, output));
     stream.valid = true; // allow caching by d3.geo.path
     return stream;
   };
 
   projection.clipAngle = function(_) {
     if (!arguments.length) return clipAngle;
-    preclip = _ == null ? (clipAngle = _, d3_geo_clipAntimeridian) : d3_geo_clipCircle((clipAngle = +_) * d3_radians);
+    clipAngle = _ == null ? _ : +_;
     return invalidate();
   };
 
   projection.clipExtent = function(_) {
     if (!arguments.length) return clipExtent;
     clipExtent = _;
-    postclip = _ ? d3_geo_clipExtent(_[0][0], _[0][1], _[1][0], _[1][1]) : d3_identity;
     return invalidate();
   };
 

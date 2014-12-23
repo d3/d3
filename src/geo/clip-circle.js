@@ -7,13 +7,13 @@ import "spherical";
 import "point-in-polygon";
 
 // Clip features against a small circle centered at [0°, 0°].
-function d3_geo_clipCircle(radius) {
+function d3_geo_clipCircle(radius, listener) {
   var cr = Math.cos(radius),
       smallRadius = cr > 0,
       notHemisphere = abs(cr) > ε, // TODO optimise for this common case
       interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
 
-  return d3_geo_clip(visible, clipLine, interpolate, smallRadius ? [0, -radius] : [-π, radius - π]);
+  return d3_geo_clip(visible, clipLine, interpolate, smallRadius ? [0, -radius] : [-π, radius - π], listener);
 
   function visible(λ, φ) {
     return Math.cos(λ) * Math.cos(φ) > cr;
