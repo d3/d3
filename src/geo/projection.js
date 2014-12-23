@@ -46,7 +46,7 @@ function d3_geo_projectionMutator(projectAt) {
 
   projection.stream = function(output) {
     if (stream) stream.valid = false;
-    stream = d3_geo_projectionRadians(preclip(rotate, projectResample(postclip(output))));
+    stream = d3_geo_projectionRadiansRotate(rotate, preclip(projectResample(postclip(output))));
     stream.valid = true; // allow caching by d3.geo.path
     return stream;
   };
@@ -114,8 +114,9 @@ function d3_geo_projectionMutator(projectAt) {
   };
 }
 
-function d3_geo_projectionRadians(stream) {
+function d3_geo_projectionRadiansRotate(rotate, stream) {
   return d3_geo_transformPoint(stream, function(x, y) {
-    stream.point(x * d3_radians, y * d3_radians);
+    var point = rotate(x * d3_radians, y * d3_radians);
+    stream.point(point[0], point[1]);
   });
 }
