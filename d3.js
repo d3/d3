@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.5.2"
+    version: "3.5.3"
   };
   if (!Date.now) Date.now = function() {
     return +new Date();
@@ -8575,12 +8575,8 @@
     return function() {
       var lock, active;
       if ((lock = this[ns]) && (active = lock[lock.active])) {
-        if (--lock.count) {
-          delete lock[lock.active];
-          lock.active += .5;
-        } else {
-          delete this[ns];
-        }
+        if (--lock.count) delete lock[lock.active]; else delete this[ns];
+        lock.active += .5;
         active.event && active.event.interrupt.call(this, this.__data__, active.index);
       }
     };

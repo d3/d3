@@ -13,12 +13,50 @@ suite.addBatch({
     },
     "interrupts the active transition": function(d3) {
       var selection = d3.select("body").append("div"),
-          transition = selection.transition();
-      assert.equal(selection.node().__transition__.active, 0); // transition hasn’t yet started
+          transition = selection.transition(),
+          lock = selection.node().__transition__;
+      assert.equal(lock.active, 0); // transition hasn’t yet started
       d3.timer.flush();
-      assert.equal(selection.node().__transition__.active, transition.id); // transition has started
+      assert.equal(lock.active, transition.id); // transition has started
       selection.interrupt();
-      assert.isUndefined(selection.node().__transition__); // transition was interrupted
+      assert.greater(lock.active, transition.id); // transition was interrupted
+      assert.lesser(lock.active, transition.id + 1); // future transitions not interrupted
+      assert.isUndefined(selection.node().__transition__); // transition was cleared
+    },
+    "the interrupted transition’s tweens do not receive any further calls": function(d3) {
+      var selection = d3.select("body").append("div"),
+          ticks = 0,
+          transition = selection.transition().tween("test", function() { return function() { ++ticks; }; });
+      d3.timer.flush();
+      var ticks0 = ticks;
+      assert.greater(ticks0, 0);
+      d3.timer.flush();
+      var ticks1 = ticks;
+      assert.greater(ticks, ticks0);
+      selection.interrupt();
+      d3.timer.flush();
+      assert.equal(ticks, ticks1);
+    },
+    "the interrupted transition does not emit an end event": {
+      topic: function(d3) {
+        var callback = this.callback,
+            selection = d3.select("body").append("div");
+
+        selection.transition()
+            .duration(250)
+            .each("end", function() { callback(null, "fail"); });
+
+        setTimeout(function() {
+          selection.interrupt();
+        }, 100);
+
+        setTimeout(function() {
+          callback(null, "success");
+        }, 750);
+      },
+      "": function(result) {
+        assert.equal(result, "success");
+      }
     },
     "does not prevent a future scheduled transition": function(d3) {
       var selection = d3.select("body").append("div"),
