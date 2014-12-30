@@ -6,8 +6,6 @@
     "d3.js"
   ],
   "ignore": [
-    ".DS_Store",
-    ".git",
     ".gitignore",
     ".npmignore",
     ".spmignore",
@@ -18,7 +16,6 @@
     "composer.json",
     "index.js",
     "lib",
-    "node_modules",
     "package.json",
     "src",
     "test"

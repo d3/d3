@@ -1,6 +1,6 @@
 # Contributing
 
-If you’re looking for ways to contribute, please [peruse open issues](https://github.com/mbostock/d3/issues?milestone=&page=1&state=open). The icebox is a good place to find ideas that are not currently in development. If you already have an idea, please check past issues to see whether your idea or a similar one was previously discussed.
+If you’re looking for ways to contribute, please [peruse open issues](https://github.com/mbostock/d3/issues/new). The icebox is a good place to find ideas that are not currently in development. If you already have an idea, please check past issues to see whether your idea or a similar one was previously discussed.
 
 Before submitting a pull request, consider implementing a live example first, say using [bl.ocks.org](http://bl.ocks.org). Real-world use cases go a long way to demonstrating the usefulness of a proposed feature. The more complex a feature’s implementation, the more usefulness it should provide. Share your demo using the #d3js tag on Twitter or by sending it to the d3-js Google group.
 

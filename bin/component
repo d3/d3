@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-var fs = require("fs"),
-    package = require("../package.json");
+var package = require("../package.json");
 
 console.log(JSON.stringify({
   "name": "d3",
