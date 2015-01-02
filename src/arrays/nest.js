@@ -1,15 +1,16 @@
 import "map";
+import "entries";
 
 d3.nest = function() {
   var nest = {},
       keys = [],
       sortKeys = [],
       sortValues,
-      rollup;
+      rollups = [];
 
   function map(mapType, array, depth) {
-    if (depth >= keys.length) return rollup
-        ? rollup.call(nest, array) : (sortValues
+    if (depth >= keys.length) return rollups.length > 0
+        ? rollup(array) : (sortValues
         ? array.sort(sortValues)
         : array);
 
@@ -61,6 +62,18 @@ d3.nest = function() {
         : array;
   }
 
+  function rollup(array) {
+    return rollups
+      .map(function(g){return g(array)})
+      .reduce(
+        function(object,result,index,results) { 
+          d3.entries(result).length>0?
+          d3.entries(result).map(function(h){ object[h.key] = h.value })
+          :results.length>1?object[index] = result:object=result;
+          return object;
+      },{})
+  }
+
   nest.map = function(array, mapType) {
     return map(mapType, array, 0);
   };
@@ -89,7 +102,7 @@ d3.nest = function() {
   };
 
   nest.rollup = function(f) {
-    rollup = f;
+    rollups.push(f);
     return nest;
   };
 
