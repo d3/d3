@@ -1,8 +1,10 @@
 # Contributing
 
+**Important:** these GitHub issues are for *bug reports and feature requests only*. Please use [StackOverflow](http://stackoverflow.com/questions/tagged/d3.js) or the [d3-js Google group](https://groups.google.com/d/forum/d3-js) for general help.
+
 If you’re looking for ways to contribute, please [peruse open issues](https://github.com/mbostock/d3/issues?milestone=&page=1&state=open). The icebox is a good place to find ideas that are not currently in development. If you already have an idea, please check past issues to see whether your idea or a similar one was previously discussed.
 
-Before submitting a pull request, consider implementing a live example first, say using [bl.ocks.org](http://bl.ocks.org). Real-world use cases go a long way to demonstrating the usefulness of a proposed feature. The more complex a feature’s implementation, the more usefulness it should provide. Share your demo using the #d3js tag on Twitter or by sending it to the d3-js Google group.
+Before submitting a pull request, consider implementing a live example first, say using [bl.ocks.org](http://bl.ocks.org). Real-world use cases go a long way to demonstrating the usefulness of a proposed feature. The more complex a feature’s implementation, the more usefulness it should provide. Share your demo using the #d3js tag on Twitter or by sending it to the [d3-js Google group](https://groups.google.com/d/forum/d3-js).
 
 If your proposed feature does not involve changing core functionality, consider submitting it instead as a [D3 plugin](https://github.com/d3/d3-plugins). New core features should be for general use, whereas plugins are suitable for more specialized use cases. When in doubt, it’s easier to start with a plugin before “graduating” to core.
 
