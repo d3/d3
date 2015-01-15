@@ -9,8 +9,8 @@ d3.locale.nl_NL = d3.locale({
   date: "%d-%m-%Y",
   time: "%H:%M:%S",
   periods: ["AM", "PM"], // unused
-  days: ["Zondag", "Maandag", "Dinsdag", "Woensdag", "Donderdag", "Vrijdag", "Zaterdag"],
-  shortDays: ["Zo", "Ma", "Di", "Wo", "Do", "Vr", "Za"],
-  months: ["Januari", "Februari", "Maart", "April", "Mei", "Juni", "Juli", "Augustus", "September", "Oktober", "November", "December"],
-  shortMonths: ["Jan", "Feb", "Mrt", "Apr", "Mei", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"]
+  days: ["zondag", "maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag"],
+  shortDays: ["zo", "ma", "di", "wo", "do", "vr", "za"],
+  months: ["januari", "februari", "maart", "april", "mei", "juni", "juli", "augustus", "september", "oktober", "november", "december"],
+  shortMonths: ["jan", "feb", "mrt", "apr", "mei", "jun", "jul", "aug", "sep", "okt", "nov", "dec"]
 });
