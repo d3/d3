@@ -1,3 +1,9 @@
 _site
 node_modules
 .DS_Store
+
+# IntelliJ files
+*.iml
+*.ipr
+*.iws
+.idea/
