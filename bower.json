@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.4.13",
+  "version": "3.5.3",
   "main": "d3.js",
   "scripts": [
     "d3.js"
@@ -10,10 +10,12 @@
     ".git",
     ".gitignore",
     ".npmignore",
+    ".spmignore",
     ".travis.yml",
     "Makefile",
     "bin",
     "component.json",
+    "composer.json",
     "index.js",
     "lib",
     "node_modules",

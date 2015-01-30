@@ -1,4 +1,5 @@
 import "../math/trigonometry";
+import "compose";
 import "equirectangular";
 import "geo";
 

@@ -24,7 +24,7 @@ suite.addBatch({
           coordinates: [-63, 18]
         });
         assert.deepEqual(testContext.buffer(), [
-          {type: "moveTo", x: 165, y: 160},
+          {type: "moveTo", x: 170, y: 160},
           {type: "arc", x: 165, y: 160, r: 4.5}
         ]);
       },
@@ -35,9 +35,9 @@ suite.addBatch({
           coordinates: [[-63, 18], [-62, 18], [-62, 17]]
         });
         assert.deepEqual(testContext.buffer(), [
-          {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5},
-          {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
-          {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
+          {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5},
+          {type: "moveTo", x: 175, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
+          {type: "moveTo", x: 175, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
         ]);
       },
 
@@ -78,7 +78,7 @@ suite.addBatch({
           geometries: [{type: "Point", coordinates: [0, 0]}]
         });
         assert.deepEqual(testContext.buffer(), [
-          {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
+          {type: "moveTo", x: 485, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
         ]);
       },
 
@@ -88,13 +88,13 @@ suite.addBatch({
           features: [{type: "Feature", geometry: {type: "Point", coordinates: [0, 0]}}]
         });
         assert.deepEqual(testContext.buffer(), [
-          {type: "moveTo", x: 480, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
+          {type: "moveTo", x: 485, y: 250}, {type: "arc", x: 480, y: 250, r: 4.5}
         ]);
       },
 
       "longitudes wrap at ±180°": function(p) {
         p({type: "Point", coordinates: [180 + 1e-6, 0]});
-        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: -420, y: 250}, {type: "arc", x: -420, y: 250, r: 4.5}]);
+        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: -415, y: 250}, {type: "arc", x: -420, y: 250, r: 4.5}]);
       },
 
       "observes the correct winding order of a tiny polygon": function(p) {
@@ -357,7 +357,7 @@ suite.addBatch({
           coordinates: [-63, 18]
         });
         assert.deepEqual(testContext.buffer(), [
-          {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5}
+          {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5}
         ]);
       },
       "renders a multipoint": function(p) {
@@ -366,9 +366,9 @@ suite.addBatch({
           coordinates: [[-63, 18], [-62, 18], [-62, 17]]
         });
         assert.deepEqual(testContext.buffer(), [
-          {type: "moveTo", x: 165, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5},
-          {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
-          {type: "moveTo", x: 170, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
+          {type: "moveTo", x: 170, y: 160}, {type: "arc", x: 165, y: 160, r: 4.5},
+          {type: "moveTo", x: 175, y: 160}, {type: "arc", x: 170, y: 160, r: 4.5},
+          {type: "moveTo", x: 175, y: 165}, {type: "arc", x: 170, y: 165, r: 4.5}
         ]);
       },
       "inserts exterior along clip edge if polygon interior surrounds it": function(p) {
@@ -445,7 +445,7 @@ suite.addBatch({
       },
       "renders a visible point": function(p) {
         p({type: "Point", coordinates: [0, 0]});
-        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
+        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 863, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
       },
       "does not render an invisible point": function(p) {
         p({type: "Point", coordinates: [-180, 0]});
@@ -453,7 +453,7 @@ suite.addBatch({
       },
       "renders a multipoint": function(p) {
         p({type: "MultiPoint", coordinates: [[0, 0], [-180, 0]]});
-        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 859, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
+        assert.deepEqual(testContext.buffer(), [{type: "moveTo", x: 863, y: 187}, {type: "arc", x: 859, y: 187, r: 4.5}]);
       }
     },
 

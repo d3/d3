@@ -98,19 +98,19 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
     // n. The bounds are defined by [x1, x2] and [y1, y2].
     function insertChild(n, d, x, y, x1, y1, x2, y2) {
       // Compute the split point, and the quadrant in which to insert p.
-      var sx = (x1 + x2) * .5,
-          sy = (y1 + y2) * .5,
-          right = x >= sx,
-          bottom = y >= sy,
-          i = (bottom << 1) + right;
+      var xm = (x1 + x2) * .5,
+          ym = (y1 + y2) * .5,
+          right = x >= xm,
+          below = y >= ym,
+          i = below << 1 | right;
 
       // Recursively insert into the child node.
       n.leaf = false;
       n = n.nodes[i] || (n.nodes[i] = d3_geom_quadtreeNode());
 
       // Update the bounds as we recurse.
-      if (right) x1 = sx; else x2 = sx;
-      if (bottom) y1 = sy; else y2 = sy;
+      if (right) x1 = xm; else x2 = xm;
+      if (below) y1 = ym; else y2 = ym;
       insert(n, d, x, y, x1, y1, x2, y2);
     }
 
@@ -123,6 +123,14 @@ d3.geom.quadtree = function(points, x1, y1, x2, y2) {
 
     root.visit = function(f) {
       d3_geom_quadtreeVisit(f, root, x1_, y1_, x2_, y2_);
+    };
+
+    // Find the closest point to the specified point.
+    // TODO allow the initial search extent to be specified?
+    // TODO allow the initial minimum distance to be specified?
+    // TODO allow searching below any node?
+    root.find = function(point) {
+      return d3_geom_quadtreeFind(root, point[0], point[1], x1_, y1_, x2_, y2_);
     };
 
     // Insert all points.
@@ -188,4 +196,48 @@ function d3_geom_quadtreeVisit(f, node, x1, y1, x2, y2) {
     if (children[2]) d3_geom_quadtreeVisit(f, children[2], x1, sy, sx, y2);
     if (children[3]) d3_geom_quadtreeVisit(f, children[3], sx, sy, x2, y2);
   }
+}
+
+function d3_geom_quadtreeFind(root, x, y, x0, y0, x3, y3) {
+  var minDistance2 = Infinity,
+      closestPoint;
+
+  (function find(node, x1, y1, x2, y2) {
+
+    // stop searching if this cell can’t contain a closer node
+    if (x1 > x3 || y1 > y3 || x2 < x0 || y2 < y0) return;
+
+    // visit this point
+    if (point = node.point) {
+      var point,
+          dx = x - point[0],
+          dy = y - point[1],
+          distance2 = dx * dx + dy * dy;
+      if (distance2 < minDistance2) {
+        var distance = Math.sqrt(minDistance2 = distance2);
+        x0 = x - distance, y0 = y - distance;
+        x3 = x + distance, y3 = y + distance;
+        closestPoint = point;
+      }
+    }
+
+    // bisect the current node
+    var children = node.nodes,
+        xm = (x1 + x2) * .5,
+        ym = (y1 + y2) * .5,
+        right = x >= xm,
+        below = y >= ym;
+
+    // visit closest cell first
+    for (var i = below << 1 | right, j = i + 4; i < j; ++i) {
+      if (node = children[i & 3]) switch (i & 3) {
+        case 0: find(node, x1, y1, xm, ym); break;
+        case 1: find(node, xm, y1, x2, ym); break;
+        case 2: find(node, x1, ym, xm, y2); break;
+        case 3: find(node, xm, ym, x2, y2); break;
+      }
+    }
+  })(root, x0, y0, x3, y3);
+
+  return closestPoint;
 }

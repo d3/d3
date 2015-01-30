@@ -21,7 +21,7 @@ function d3_event_dragSuppress() {
     w.on(name, null);
     if (d3_event_dragSelect) style[d3_event_dragSelect] = select;
     if (suppressClick) { // suppress the next click, but only if it’s immediate
-      function off() { w.on(click, null); }
+      var off = function() { w.on(click, null); };
       w.on(click, function() { d3_eventPreventDefault(); off(); }, true);
       setTimeout(off, 0);
     }

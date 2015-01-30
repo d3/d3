@@ -5,7 +5,7 @@ var fs = require("fs"),
 
 console.log(JSON.stringify({
   "name": "d3",
-  "repo": "mbostock/d3",
+  "repository": "mbostock/d3",
   "description": package.description,
   "keywords": package.keywords,
   "version": package.version,
@@ -13,7 +13,5 @@ console.log(JSON.stringify({
   "scripts": [
     "d3.js"
   ],
-  "dependencies": {},
-  "development": {},
   "license": package.licenses[0].type
 }, null, 2));
