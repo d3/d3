@@ -38,4 +38,4 @@ package.js: bin/meteor package.json
 	@chmod a-w $@
 
 clean:
-	rm -f -- $(GENERATED_FILES) .build.d3js:d3 versions.json
+	rm -f -- $(GENERATED_FILES)

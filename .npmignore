@@ -3,4 +3,3 @@ test/
 lib/
 .DS_Store
 _site
-.build*
