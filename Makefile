@@ -7,7 +7,7 @@ GENERATED_FILES = \
 
 all: $(GENERATED_FILES)
 
-.PHONY: clean all test meteor
+.PHONY: clean all test
 
 test:
 	@npm test
