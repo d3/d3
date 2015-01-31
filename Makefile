@@ -2,7 +2,8 @@ GENERATED_FILES = \
 	d3.js \
 	d3.min.js \
 	bower.json \
-	component.json
+	component.json \
+	package.js
 
 all: $(GENERATED_FILES)
 
@@ -31,9 +32,10 @@ d3.min.js: d3.js bin/uglify
 	bin/$* > $@
 	@chmod a-w $@
 
-meteor: d3.js
-	ln -s meteor/package.js package.js 2>/dev/null
-	meteor publish
+package.js: bin/meteor package.json
+	@rm -f $@
+	bin/meteor > package.js
+	@chmod a-w $@
 
 clean:
-	rm -f -- $(GENERATED_FILES) .build.d3js:d3 versions.json package.js
+	rm -f -- $(GENERATED_FILES) .build.d3js:d3 versions.json
