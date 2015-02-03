@@ -1,6 +1,11 @@
 import "layout";
 import "hierarchy";
 
+/**
+ * @see <a href="http://portal.acm.org/citation.cfm?id=1124772.1124851"
+ * >"Visualization of large hierarchical data by circle packing"</a> by W. Wang,
+ * H. Wang, G. Dai, and H. Wang, ACM CHI 2006.
+ */
 d3.layout.pack = function() {
   var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
       padding = 0,
@@ -54,10 +59,25 @@ d3.layout.pack = function() {
   return d3_layout_hierarchyRebind(pack, hierarchy);
 };
 
+/**
+ * Return the difference between a and b's value property.
+ *
+ * Default sort callback for the pack layout.
+ *
+ * @param  {object} a
+ * @param  {object} b
+ * @return {number}
+ */
 function d3_layout_packSort(a, b) {
   return a.value - b.value;
 }
 
+/**
+ * Insert node b after node a in the node chain.
+ *
+ * @param  {object} a
+ * @param  {object} b
+ */
 function d3_layout_packInsert(a, b) {
   var c = a._pack_next;
   a._pack_next = b;
@@ -71,6 +91,13 @@ function d3_layout_packSplice(a, b) {
   b._pack_prev = a;
 }
 
+/**
+ * Check if two circles intersect.
+ *
+ * @param  {object} a
+ * @param  {object} b
+ * @return {bool}
+ */
 function d3_layout_packIntersects(a, b) {
   var dx = b.x - a.x,
       dy = b.y - a.y,
@@ -78,6 +105,11 @@ function d3_layout_packIntersects(a, b) {
   return .999 * dr * dr > dx * dx + dy * dy; // relative error within epsilon
 }
 
+/**
+ * Layout nodes in the circle pack layout.
+ *
+ * @param  {object} node
+ */
 function d3_layout_packSiblings(node) {
   if (!(nodes = node.children) || !(n = nodes.length)) return;
 
@@ -88,6 +120,11 @@ function d3_layout_packSiblings(node) {
       yMax = -Infinity,
       a, b, c, i, j, k, n;
 
+  /**
+   * Given a node that's been placed, update the max and min bounds of all nodes.
+   *
+   * @param  {object} node
+   */
   function bound(node) {
     xMin = Math.min(node.x - node.r, xMin);
     xMax = Math.max(node.x + node.r, xMax);
@@ -98,41 +135,47 @@ function d3_layout_packSiblings(node) {
   // Create node links.
   nodes.forEach(d3_layout_packLink);
 
-  // Create first node.
+  // Place the first circle.
   a = nodes[0];
   a.x = -a.r;
   a.y = 0;
   bound(a);
 
-  // Create second node.
+
   if (n > 1) {
+    // Place the second circle next to the first circle.
     b = nodes[1];
     b.x = b.r;
     b.y = 0;
     bound(b);
 
-    // Create third node and build chain.
+
     if (n > 2) {
+      // Place the third circle in reference to the first two.
       c = nodes[2];
       d3_layout_packPlace(a, b, c);
       bound(c);
+      // Connect the two ends of the node chain.
       d3_layout_packInsert(a, c);
       a._pack_prev = c;
       d3_layout_packInsert(c, b);
       b = a._pack_next;
 
-      // Now iterate through the rest.
+      // Place the rest of the circles.
       for (i = 3; i < n; i++) {
         d3_layout_packPlace(a, b, c = nodes[i]);
 
-        // Search for the closest intersection.
         var isect = 0, s1 = 1, s2 = 1;
+        // Loop through circles in the existing chain,
+        // checking if the placement of c intersects any previously placed circles.
         for (j = b._pack_next; j !== b; j = j._pack_next, s1++) {
           if (d3_layout_packIntersects(j, c)) {
             isect = 1;
             break;
           }
         }
+
+        // If an intersection was found, calculate the node distance from circle a.
         if (isect == 1) {
           for (k = a._pack_prev; k !== j._pack_prev; k = k._pack_prev, s2++) {
             if (d3_layout_packIntersects(k, c)) {
@@ -141,12 +184,22 @@ function d3_layout_packSiblings(node) {
           }
         }
 
-        // Update node chain.
         if (isect) {
-          if (s1 < s2 || (s1 == s2 && b.r < a.r)) d3_layout_packSplice(a, b = j);
-          else d3_layout_packSplice(a = k, b);
+          // If an intersection was found, one of the reference circles (a or b)
+          // must be replaced with the intersecting circle.
+          //
+          // Decide which reference circle to replace by distance in the chain
+          // from the current reference circles.
+          if (s1 < s2 || (s1 == s2 && b.r < a.r)) {
+            d3_layout_packSplice(a, b = j);
+          }
+          else {
+            d3_layout_packSplice(a = k, b);
+          }
           i--;
         } else {
+          // If no intersection was found, the placement was successful, and the
+          // new circle can now take over as a reference circle.
           d3_layout_packInsert(a, c);
           b = c;
           bound(c);
@@ -171,10 +224,20 @@ function d3_layout_packSiblings(node) {
   nodes.forEach(d3_layout_packUnlink);
 }
 
+/**
+ * Initialize the previous and next links for a node.
+ *
+ * @param  {object} node
+ */
 function d3_layout_packLink(node) {
   node._pack_next = node._pack_prev = node;
 }
 
+/**
+ * Remove links from a node.
+ *
+ * @param  {object} node
+ */
 function d3_layout_packUnlink(node) {
   delete node._pack_next;
   delete node._pack_prev;
@@ -191,11 +254,19 @@ function d3_layout_packTransform(node, x, y, k) {
   }
 }
 
+/**
+ * Place circle c on tangents of reference circles a and b.
+ *
+ * @param  {object} a
+ * @param  {object} b
+ * @param  {object} c
+ */
 function d3_layout_packPlace(a, b, c) {
   var db = a.r + c.r,
       dx = b.x - a.x,
       dy = b.y - a.y;
   if (db && (dx || dy)) {
+
     var da = b.r + c.r,
         dc = dx * dx + dy * dy;
     da *= da;
