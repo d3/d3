@@ -560,8 +560,11 @@
     d3_selectMatches = Sizzle.matchesSelector;
   }
   d3.selection = function() {
-    return d3_selectionRoot;
-  };
+    var selectionRoot;
+    return function() {
+      return selectionRoot || (selectionRoot = d3.select(d3_documentElement));
+    };
+  }();
   var d3_selectionPrototype = d3.selection.prototype = [];
   d3_selectionPrototype.select = function(selector) {
     var subgroups = [], subgroup, subnode, group, node;
@@ -1024,7 +1027,6 @@
     group.parentNode = d3_documentElement;
     return d3_selection([ group ]);
   };
-  var d3_selectionRoot = d3.select(d3_documentElement);
   d3_selectionPrototype.on = function(type, listener, capture) {
     var n = arguments.length;
     if (n < 3) {
@@ -8593,7 +8595,7 @@
   d3_transitionPrototype.node = d3_selectionPrototype.node;
   d3_transitionPrototype.size = d3_selectionPrototype.size;
   d3.transition = function(selection, name) {
-    return selection && selection.transition ? d3_transitionInheritId ? selection.transition(name) : selection : d3_selectionRoot.transition(selection);
+    return selection && selection.transition ? d3_transitionInheritId ? selection.transition(name) : selection : d3.selection().transition(selection);
   };
   d3.transition.prototype = d3_transitionPrototype;
   d3_transitionPrototype.select = function(selector) {
