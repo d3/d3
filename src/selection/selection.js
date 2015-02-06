@@ -20,9 +20,13 @@ if (typeof Sizzle === "function") {
   d3_selectMatches = Sizzle.matchesSelector;
 }
 
-d3.selection = function() {
-  return d3_selectionRoot;
-};
+d3.selection = (function() {
+  var selectionRoot;
+
+  return function() {
+    return selectionRoot || (selectionRoot = d3.select(d3_documentElement));
+  };
+})();
 
 var d3_selectionPrototype = d3.selection.prototype = [];
 
@@ -62,5 +66,3 @@ d3.selectAll = function(nodes) {
   group.parentNode = d3_documentElement;
   return d3_selection([group]);
 };
-
-var d3_selectionRoot = d3.select(d3_documentElement);
