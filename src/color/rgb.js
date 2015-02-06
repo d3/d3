@@ -86,7 +86,9 @@ function d3_rgb_parse(format, rgb, hsl) {
   }
 
   /* Named colors. */
-  if (color = d3_rgb_names.get(format)) return rgb(color.r, color.g, color.b);
+  if (typeof format === "string") {
+    if (color = d3_rgb_names.get(format.toLowerCase())) return rgb(color.r, color.g, color.b);
+  }
 
   /* Hexadecimal colors: #rgb and #rrggbb. */
   if (format != null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.slice(1), 16))) {

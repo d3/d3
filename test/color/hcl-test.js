@@ -41,6 +41,9 @@ suite.addBatch({
     "parses color names (e.g., \"moccasin\")": function(d3) {
       assert.hclEqual(d3.hcl("moccasin"), 84.71288921124494, 26.472460854104156, 91.72317744746022);
     },
+    "parses color names (e.g., \"Moccasin\")": function(d3) {
+      assert.hclEqual(d3.hcl("moccasin"), 84.71288921124494, 26.472460854104156, 91.72317744746022);
+    },
     "parses and converts RGB format (e.g., \"rgb(102, 102, 0)\")": function(d3) {
       assert.hclEqual(d3.hcl("rgb(102, 102, 0)"), 102.85124420310271, 49.44871600399321, 41.73251953866431);
     },
