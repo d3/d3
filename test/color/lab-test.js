@@ -41,6 +41,9 @@ suite.addBatch({
     "parses color names (e.g., \"moccasin\")": function(d3) {
       assert.labEqual(d3.lab("moccasin"), 91.72317744746022, 2.4393469358685027, 26.359832514614844);
     },
+    "parses color names (e.g., \"Moccasin\")": function(d3) {
+      assert.labEqual(d3.lab("Moccasin"), 91.72317744746022, 2.4393469358685027, 26.359832514614844);
+    },
     "parses and converts RGB format (e.g., \"rgb(102, 102, 0)\")": function(d3) {
       assert.labEqual(d3.lab("rgb(102, 102, 0)"), 41.73251953866431, -10.998411255098816, 48.21006600604577);
     },

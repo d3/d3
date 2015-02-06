@@ -40,6 +40,9 @@ suite.addBatch({
       assert.hslEqual(d3.hsl("moccasin"), 38.108108, 1, .854902);
       assert.hslEqual(d3.hsl("aliceblue"), 208, 1, .970588);
       assert.hslEqual(d3.hsl("yellow"), 60, 1, .5);
+      assert.hslEqual(d3.hsl("Moccasin"), 38.108108, 1, .854902);
+      assert.hslEqual(d3.hsl("Aliceblue"), 208, 1, .970588);
+      assert.hslEqual(d3.hsl("Yellow"), 60, 1, .5);
     },
     "parses and converts RGB format (e.g., \"rgb(102, 102, 0)\")": function(d3) {
       assert.hslEqual(d3.hsl("rgb(102, 102, 0)"), 60, 1, .2);
