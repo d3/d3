@@ -1712,7 +1712,9 @@
         }
       }
     }
-    if (color = d3_rgb_names.get(format)) return rgb(color.r, color.g, color.b);
+    if (color = d3_rgb_names.get(format.toLowerCase())) {
+      return rgb(color.r, color.g, color.b);
+    }
     if (format != null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.slice(1), 16))) {
       if (format.length === 4) {
         r = (color & 3840) >> 4;
