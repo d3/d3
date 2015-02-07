@@ -54,7 +54,7 @@
     "jsdom": "3",
     "seedrandom": "2",
     "smash": "0.0",
-    "uglify-js": "2.4",
+    "uglify-js": "2.4.16",
     "vows": "0.8"
   },
   "scripts": {
