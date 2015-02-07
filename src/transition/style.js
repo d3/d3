@@ -33,7 +33,7 @@ d3_transitionPrototype.style = function(name, value, priority) {
   // Otherwise, a name, value and priority are specified, and handled as below.
   function styleString(b) {
     return b == null ? styleNull : (b += "", function() {
-      var a = d3_window.getComputedStyle(this, null).getPropertyValue(name), i;
+      var a = d3_window(this).getComputedStyle(this, null).getPropertyValue(name), i;
       return a !== b && (i = d3_interpolate(a, b), function(t) { this.style.setProperty(name, i(t), priority); });
     });
   }
@@ -45,7 +45,7 @@ d3_transitionPrototype.styleTween = function(name, tween, priority) {
   if (arguments.length < 3) priority = "";
 
   function styleTween(d, i) {
-    var f = tween.call(this, d, i, d3_window.getComputedStyle(this, null).getPropertyValue(name));
+    var f = tween.call(this, d, i, d3_window(this).getComputedStyle(this, null).getPropertyValue(name));
     return f && function(t) { this.style.setProperty(name, f(t), priority); };
   }
 
