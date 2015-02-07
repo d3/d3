@@ -50,14 +50,12 @@
   "spm": {
     "main": "d3.js"
   },
-  "dependencies": {
-    "jsdom": "1.0.0"
-  },
   "devDependencies": {
-    "smash": "~0.0.12",
-    "uglify-js": "2.4.0",
-    "vows": "0.7.0",
-    "seedrandom": "2.3.1"
+    "jsdom": "3",
+    "seedrandom": "2",
+    "smash": "0.0",
+    "uglify-js": "2.4",
+    "vows": "0.8"
   },
   "scripts": {
     "test": "vows; echo"
