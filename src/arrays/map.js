@@ -34,19 +34,31 @@ d3_class(d3_Map, {
   remove: d3_map_remove,
   keys: d3_map_keys,
   values: function() {
-    var values = [];
-    for (var key in this._) values.push(this._[key]);
+    var values = [],
+        has = Object.prototype.hasOwnProperty.bind(this._);
+    for (var key in this._) {
+      if (!has(key)) continue;
+      values.push(this._[key]);
+    }
     return values;
   },
   entries: function() {
-    var entries = [];
-    for (var key in this._) entries.push({key: d3_map_unescape(key), value: this._[key]});
+    var entries = [],
+        has = Object.prototype.hasOwnProperty.bind(this._);
+    for (var key in this._) {
+      if (!has(key)) continue;
+      entries.push({key: d3_map_unescape(key), value: this._[key]});
+    }
     return entries;
   },
   size: d3_map_size,
   empty: d3_map_empty,
   forEach: function(f) {
-    for (var key in this._) f.call(this, d3_map_unescape(key), this._[key]);
+    var has = Object.prototype.hasOwnProperty.bind(this._);
+    for (var key in this._) {
+      if (!has(key)) continue;
+      f.call(this, d3_map_unescape(key), this._[key]);
+    }
   }
 });
 
