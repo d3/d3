@@ -739,7 +739,7 @@
       }
       if (n < 2) {
         var node = this.node();
-        return node.ownerDocument.defaultView.getComputedStyle(node, null).getPropertyValue(name);
+        return d3_window(node).getComputedStyle(node, null).getPropertyValue(name);
       }
       priority = "";
     }
