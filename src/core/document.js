@@ -5,5 +5,5 @@ function d3_documentElement(node) {
 }
 
 function d3_window(node) {
-  return node && node.ownerDocument.defaultView;
+  return node && node.ownerDocument ? node.ownerDocument.defaultView : node;
 }

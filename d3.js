@@ -10,7 +10,7 @@
     return node && (node.ownerDocument || node.document).documentElement;
   }
   function d3_window(node) {
-    return node && node.ownerDocument.defaultView;
+    return node && node.ownerDocument ? node.ownerDocument.defaultView : node;
   }
   if (d3_document) {
     try {
