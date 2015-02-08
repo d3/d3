@@ -32,7 +32,7 @@ module.exports = function() {
   };
 
   topic.document = function(_) {
-    var document = jsdom.jsdom("<html><head></head><body></body></html>");
+    var document = jsdom.jsdom();
 
     // Monkey-patch createRange support to JSDOM.
     document.createRange = function() {
