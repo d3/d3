@@ -31,4 +31,4 @@ toplevel.compute_char_frequency(true);
 toplevel.mangle_names(true);
 toplevel.print(output);
 
-require("util").print(output.get());
+process.stdout.write(output.get());
