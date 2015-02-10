@@ -7,7 +7,7 @@ GENERATED_FILES = \
 
 all: $(GENERATED_FILES)
 
-.PHONY: clean all test
+.PHONY: clean all test publish
 
 test:
 	@npm test
@@ -36,6 +36,10 @@ package.js: bin/meteor package.json
 	@rm -f $@
 	bin/meteor > package.js
 	@chmod a-w $@
+
+publish:
+	npm publish
+	meteor publish
 
 clean:
 	rm -f -- $(GENERATED_FILES)
