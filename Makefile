@@ -39,7 +39,7 @@ package.js: bin/meteor package.json
 
 publish:
 	npm publish
-	meteor publish
+	meteor publish && rm -- .versions
 
 clean:
 	rm -f -- $(GENERATED_FILES)
