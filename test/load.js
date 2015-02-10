@@ -10,8 +10,7 @@ module.exports = function() {
       expression = "d3",
       sandbox = {console: console, Date: Date}; // so we can use deepEqual in tests
 
-  files.unshift("src/start");
-  files.push("src/end");
+  files.unshift("test/start");
 
   function topic() {
     var callback = this.callback;
