@@ -1,98 +1,91 @@
+import "../core/functor";
+import "../math/trigonometry";
+import "geom";
+import "point";
+
 /**
- * Computes the 2D convex hull of a set of points using Graham's scanning
- * algorithm. The algorithm has been implemented as described in Cormen,
- * Leiserson, and Rivest's Introduction to Algorithms. The running time of
- * this algorithm is O(n log n), where n is the number of input points.
+ * Computes the 2D convex hull of a set of points using the monotone chain
+ * algorithm:
+ * http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain)
  *
- * @param vertices [[x1, y1], [x2, y2], …]
- * @returns polygon [[x1, y1], [x2, y2], …]
+ * The runtime of this algorithm is O(n log n), where n is the number of input
+ * points. However in practice it outperforms other O(n log n) hulls.
+ *
+ * @param vertices [[x1, y1], [x2, y2], ...]
+ * @returns polygon [[x1, y1], [x2, y2], ...]
  */
 d3.geom.hull = function(vertices) {
-  if (vertices.length < 3) return [];
+  var x = d3_geom_pointX,
+      y = d3_geom_pointY;
 
-  var len = vertices.length,
-      plen = len - 1,
-      points = [],
-      stack = [],
-      i, j, h = 0, x1, y1, x2, y2, u, v, a, sp;
+  if (arguments.length) return hull(vertices);
 
-  // find the starting ref point: leftmost point with the minimum y coord
-  for (i=1; i<len; ++i) {
-    if (vertices[i][1] < vertices[h][1]) {
-      h = i;
-    } else if (vertices[i][1] == vertices[h][1]) {
-      h = (vertices[i][0] < vertices[h][0] ? i : h);
+  function hull(data) {
+    // Hull of < 3 points is not well-defined
+    if (data.length < 3) return [];
+
+    var fx = d3_functor(x),
+        fy = d3_functor(y),
+        i,
+        n = data.length,
+        points = [], // of the form [[x0, y0, 0], ..., [xn, yn, n]]
+        flippedPoints = [];
+
+    for (i = 0 ; i < n; i++) {
+      points.push([+fx.call(this, data[i], i), +fy.call(this, data[i], i), i]);
     }
+
+    // sort ascending by x-coord first, y-coord second
+    points.sort(d3_geom_hullOrder);
+
+    // we flip bottommost points across y axis so we can use the upper hull routine on both
+    for (i = 0; i < n; i++) flippedPoints.push([points[i][0], -points[i][1]]);
+
+    var upper = d3_geom_hullUpper(points),
+        lower = d3_geom_hullUpper(flippedPoints);
+
+    // construct the polygon, removing possible duplicate endpoints
+    var skipLeft = lower[0] === upper[0],
+        skipRight  = lower[lower.length - 1] === upper[upper.length - 1],
+        polygon = [];
+
+    // add upper hull in r->l order
+    // then add lower hull in l->r order
+    for (i = upper.length - 1; i >= 0; --i) polygon.push(data[points[upper[i]][2]]);
+    for (i = +skipLeft; i < lower.length - skipRight; ++i) polygon.push(data[points[lower[i]][2]]);
+
+    return polygon;
   }
 
-  // calculate polar angles from ref point and sort
-  for (i=0; i<len; ++i) {
-    if (i === h) continue;
-    y1 = vertices[i][1] - vertices[h][1];
-    x1 = vertices[i][0] - vertices[h][0];
-    points.push({angle: Math.atan2(y1, x1), index: i});
-  }
-  points.sort(function(a, b) { return a.angle - b.angle; });
+  hull.x = function(_) {
+    return arguments.length ? (x = _, hull) : x;
+  };
 
-  // toss out duplicate angles
-  a = points[0].angle;
-  v = points[0].index;
-  u = 0;
-  for (i=1; i<plen; ++i) {
-    j = points[i].index;
-    if (a == points[i].angle) {
-      // keep angle for point most distant from the reference
-      x1 = vertices[v][0] - vertices[h][0];
-      y1 = vertices[v][1] - vertices[h][1];
-      x2 = vertices[j][0] - vertices[h][0];
-      y2 = vertices[j][1] - vertices[h][1];
-      if ((x1*x1 + y1*y1) >= (x2*x2 + y2*y2)) {
-        points[i].index = -1;
-      } else {
-        points[u].index = -1;
-        a = points[i].angle;
-        u = i;
-        v = j;
-      }
-    } else {
-      a = points[i].angle;
-      u = i;
-      v = j;
-    }
+  hull.y = function(_) {
+    return arguments.length ? (y = _, hull) : y;
+  };
+
+  return hull;
+};
+
+// finds the 'upper convex hull' (see wiki link above)
+// assumes points arg has >=3 elements, is sorted by x, unique in y
+// returns array of indices into points in left to right order
+function d3_geom_hullUpper(points) {
+  var n = points.length,
+      hull = [0, 1],
+      hs = 2; // hull size
+
+  for (var i = 2; i < n; i++) {
+    while (hs > 1 && d3_cross2d(points[hull[hs-2]], points[hull[hs-1]], points[i]) <= 0) --hs;
+    hull[hs++] = i;
   }
 
-  // initialize the stack
-  stack.push(h);
-  for (i=0, j=0; i<2; ++j) {
-    if (points[j].index !== -1) {
-      stack.push(points[j].index);
-      i++;
-    }
-  }
-  sp = stack.length;
-
-  // do graham's scan
-  for (; j<plen; ++j) {
-    if (points[j].index === -1) continue; // skip tossed out points
-    while (!d3_geom_hullCCW(stack[sp-2], stack[sp-1], points[j].index, vertices)) {
-      --sp;
-    }
-    stack[sp++] = points[j].index;
-  }
-
-  // construct the hull
-  var poly = [];
-  for (i=0; i<sp; ++i) {
-    poly.push(vertices[stack[i]]);
-  }
-  return poly;
+  // we slice to make sure that the points we 'popped' from hull don't stay behind
+  return hull.slice(0, hs);
 }
 
-// are three points in counter-clockwise order?
-function d3_geom_hullCCW(i1, i2, i3, v) {
-  var t, a, b, c, d, e, f;
-  t = v[i1]; a = t[0]; b = t[1];
-  t = v[i2]; c = t[0]; d = t[1];
-  t = v[i3]; e = t[0]; f = t[1];
-  return ((f-b)*(c-a) - (d-b)*(e-a)) > 0;
+// comparator for ascending sort by x-coord first, y-coord second
+function d3_geom_hullOrder(a, b) {
+  return a[0] - b[0] || a[1] - b[1];
 }

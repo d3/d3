@@ -1,3 +1,7 @@
+import "azimuthal";
+import "geo";
+import "projection";
+
 var d3_geo_gnomonic = d3_geo_azimuthal(
   function(cosλcosφ) { return 1 / cosλcosφ; },
   Math.atan

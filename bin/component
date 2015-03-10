@@ -1,0 +1,17 @@
+#!/usr/bin/env node
+
+var fs = require("fs"),
+    package = require("../package.json");
+
+console.log(JSON.stringify({
+  "name": "d3",
+  "repository": "mbostock/d3",
+  "description": package.description,
+  "keywords": package.keywords,
+  "version": package.version,
+  "main": "d3.js",
+  "scripts": [
+    "d3.js"
+  ],
+  "license": package.licenses[0].type
+}, null, 2));

@@ -1,3 +1,10 @@
+import "../core/functor";
+import "../core/source";
+import "../core/target";
+import "../math/trigonometry";
+import "arc";
+import "svg";
+
 d3.svg.chord = function() {
   var source = d3_source,
       target = d3_target,
@@ -22,8 +29,8 @@ d3.svg.chord = function() {
   function subgroup(self, f, d, i) {
     var subgroup = f.call(self, d, i),
         r = radius.call(self, subgroup, i),
-        a0 = startAngle.call(self, subgroup, i) + d3_svg_arcOffset,
-        a1 = endAngle.call(self, subgroup, i) + d3_svg_arcOffset;
+        a0 = startAngle.call(self, subgroup, i) - halfπ,
+        a1 = endAngle.call(self, subgroup, i) - halfπ;
     return {
       r: r,
       a0: a0,

@@ -1,6 +1,15 @@
+import "../arrays/map";
+import "../core/functor";
+import "../core/identity";
+import "../core/true";
+import "../geom/point";
+import "../math/abs";
+import "../math/trigonometry";
+import "svg";
+
 function d3_svg_line(projection) {
-  var x = d3_svg_lineX,
-      y = d3_svg_lineY,
+  var x = d3_geom_pointX,
+      y = d3_geom_pointY,
       defined = d3_true,
       interpolate = d3_svg_lineLinear,
       interpolateKey = interpolate.key,
@@ -71,20 +80,11 @@ d3.svg.line = function() {
   return d3_svg_line(d3_identity);
 };
 
-// The default `x` property, which references d[0].
-function d3_svg_lineX(d) {
-  return d[0];
-}
-
-// The default `y` property, which references d[1].
-function d3_svg_lineY(d) {
-  return d[1];
-}
-
 // The various interpolators supported by the `line` class.
 var d3_svg_lineInterpolators = d3.map({
   "linear": d3_svg_lineLinear,
   "linear-closed": d3_svg_lineLinearClosed,
+  "step": d3_svg_lineStep,
   "step-before": d3_svg_lineStepBefore,
   "step-after": d3_svg_lineStepAfter,
   "basis": d3_svg_lineBasis,
@@ -112,6 +112,17 @@ function d3_svg_lineLinearClosed(points) {
 }
 
 // Step interpolation; generates "H" and "V" commands.
+function d3_svg_lineStep(points) {
+  var i = 0,
+      n = points.length,
+      p = points[0],
+      path = [p[0], ",", p[1]];
+  while (++i < n) path.push("H", (p[0] + (p = points[i])[0]) / 2, "V", p[1]);
+  if (n > 1) path.push("H", p[0]);
+  return path.join("");
+}
+
+// Step interpolation; generates "H" and "V" commands.
 function d3_svg_lineStepBefore(points) {
   var i = 0,
       n = points.length,
@@ -135,7 +146,7 @@ function d3_svg_lineStepAfter(points) {
 function d3_svg_lineCardinalOpen(points, tension) {
   return points.length < 4
       ? d3_svg_lineLinear(points)
-      : points[1] + d3_svg_lineHermite(points.slice(1, points.length - 1),
+      : points[1] + d3_svg_lineHermite(points.slice(1, -1),
         d3_svg_lineCardinalTangents(points, tension));
 }
 
@@ -231,20 +242,16 @@ function d3_svg_lineBasis(points) {
       y0 = pi[1],
       px = [x0, x0, x0, (pi = points[1])[0]],
       py = [y0, y0, y0, pi[1]],
-      path = [x0, ",", y0];
-  d3_svg_lineBasisBezier(path, px, py);
-  while (++i < n) {
+      path = [x0, ",", y0, "L", d3_svg_lineDot4(d3_svg_lineBasisBezier3, px), ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, py)];
+  points.push(points[n - 1]);
+  while (++i <= n) {
     pi = points[i];
     px.shift(); px.push(pi[0]);
     py.shift(); py.push(pi[1]);
     d3_svg_lineBasisBezier(path, px, py);
   }
-  i = -1;
-  while (++i < 2) {
-    px.shift(); px.push(pi[0]);
-    py.shift(); py.push(pi[1]);
-    d3_svg_lineBasisBezier(path, px, py);
-  }
+  points.pop();
+  path.push("L", pi);
   return path.join("");
 }
 
@@ -389,7 +396,7 @@ function d3_svg_lineMonotoneTangents(points) {
     // mk = m{k + 1} = 0 as the spline connecting these points must be flat to
     // preserve monotonicity. Ignore step 4 and 5 for those k.
 
-    if (Math.abs(d) < 1e-6) {
+    if (abs(d) < ε) {
       m[i] = m[i + 1] = 0;
     } else {
       // 4. Let ak = mk / dk and bk = m{k + 1} / dk.

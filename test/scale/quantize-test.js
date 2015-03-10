@@ -1,15 +1,13 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    _ = require("../../"),
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.scale.quantize");
 
 suite.addBatch({
   "quantize": {
-    topic: function() {
-      return d3.scale.quantize;
-    },
+    topic: load("scale/quantize").expression("d3.scale.quantize"),
     "has the default domain [0, 1]": function(quantize) {
       var x = quantize();
       assert.deepEqual(x.domain(), [0, 1]);
@@ -45,13 +43,13 @@ suite.addBatch({
     },
     "range cardinality determines the degree of quantization": function(quantize) {
       var x = quantize();
-      assert.inDelta(x.range(d3.range(0, 1.001, .001))(1/3), .333, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.01, .01))(1/3), .33, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.1, .1))(1/3), .3, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.2, .2))(1/3), .4, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.25, .25))(1/3), .25, 1e-6);
-      assert.inDelta(x.range(d3.range(0, 1.5, .5))(1/3), .5, 1e-6);
-      assert.inDelta(x.range(d3.range(1))(1/3), 0, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.001, .001))(1/3), .333, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.01, .01))(1/3), .33, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.1, .1))(1/3), .3, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.2, .2))(1/3), .4, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.25, .25))(1/3), .25, 1e-6);
+      assert.inDelta(x.range(_.range(0, 1.5, .5))(1/3), .5, 1e-6);
+      assert.inDelta(x.range(_.range(1))(1/3), 0, 1e-6);
     },
     "range values are arbitrary": function(quantize) {
       var a = {}, b = {}, c = {}, x = quantize().range([a, b, c]);
@@ -61,6 +59,32 @@ suite.addBatch({
       assert.equal(x(.6), b);
       assert.equal(x(.8), c);
       assert.equal(x(1), c);
+    },
+    "invertExtent": {
+      "maps a value in the range to a domain extent": function(quantize) {
+        var x = quantize().range([0, 1, 2, 3]);
+        assert.deepEqual(x.invertExtent(0), [0, .25]);
+        assert.deepEqual(x.invertExtent(1), [.25, .5]);
+        assert.deepEqual(x.invertExtent(2), [.5, .75]);
+        assert.deepEqual(x.invertExtent(3), [.75, 1]);
+      },
+      "allows arbitrary range values": function(quantize) {
+        var a = {}, b = {}, x = quantize().range([a, b]);
+        assert.deepEqual(x.invertExtent(a), [0, .5]);
+        assert.deepEqual(x.invertExtent(b), [.5, 1]);
+      },
+      "returns [NaN, NaN] when the given value is not in the range": function(quantize) {
+        var x = quantize();
+        assert.ok(x.invertExtent(-1).every(isNaN));
+        assert.ok(x.invertExtent(.5).every(isNaN));
+        assert.ok(x.invertExtent(2).every(isNaN));
+        assert.ok(x.invertExtent('a').every(isNaN));
+      },
+      "returns the first match if duplicate values exist in the range": function(quantize) {
+        var x = quantize().range([0, 1, 2, 0]);
+        assert.deepEqual(x.invertExtent(0), [0, .25]);
+        assert.deepEqual(x.invertExtent(1), [.25, .5]);
+      }
     }
   }
 });

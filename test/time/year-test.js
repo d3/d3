@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.time.year");
 
 suite.addBatch({
   "year": {
-    topic: function() {
-      return d3.time.year;
-    },
+    topic: load("time/year").expression("d3.time.year"),
     "defaults to floor": function(interval) {
       assert.strictEqual(interval, interval.floor);
     },

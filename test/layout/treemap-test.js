@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.layout.treemap");
 
 suite.addBatch({
   "treemap": {
-    topic: function() {
-      return d3.layout.treemap;
-    },
+    topic: load("layout/treemap").expression("d3.layout.treemap"),
     "outputs a squarified treemap": function(treemap) {
       var t = treemap().size([1000, 1000]).sort(null);
       assert.deepEqual(t.nodes({children: [{value: 1}, {value: 2}, {children: [{value: 1}, {value: 2}]}]}).map(layout), [
@@ -141,7 +138,7 @@ suite.addBatch({
     },
     "no overhanging rectangles": function(treemap) {
       var t = treemap().size([100, 100]).sort(function(a, b) { return a.value - b.value; }),
-          data = [0, 0, 81681.85, 370881.9, 0, 0, 0, 255381.59, 0, 0, 0, 0, 0, 0, 0, 125323.95, 0, 0, 0, 186975.07, 185707.05, 267370.93, 0]
+          data = [0, 0, 81681.85, 370881.9, 0, 0, 0, 255381.59, 0, 0, 0, 0, 0, 0, 0, 125323.95, 0, 0, 0, 186975.07, 185707.05, 267370.93, 0],
           nodes = t.nodes({children: data.map(function(d) { return {value: d}; })}).map(layout);
       assert.equal(nodes.filter(function(n) { return n.dx < 0 || n.dy < 0 || n.x + n.dx > 100 || n.y + n.dy > 100; }).length, 0);
     },

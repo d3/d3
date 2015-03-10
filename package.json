@@ -1,7 +1,7 @@
 {
   "name": "d3",
-  "version": "3.0.8",
-  "description": "A small, free JavaScript library for manipulating documents based on data.",
+  "version": "3.5.5",
+  "description": "A JavaScript visualization library for HTML and SVG.",
   "keywords": [
     "dom",
     "w3c",
@@ -15,26 +15,55 @@
     "name": "Mike Bostock",
     "url": "http://bost.ocks.org/mike"
   },
+  "contributors": [
+    {
+      "name": "Jason Davies",
+      "url": "http://jasondavies.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mbostock/d3.git"
   },
   "main": "index.js",
-  "browserify": "index-browserify.js",
+  "browserify": "d3.js",
+  "jspm": {
+    "main": "d3",
+    "shim": {
+      "d3": {
+        "exports": "d3"
+      }
+    },
+    "files": [
+      "d3.js"
+    ],
+    "buildConfig": {
+      "uglify": true
+    }
+  },
   "jam": {
     "main": "d3.js",
     "shim": {
       "exports": "d3"
     }
   },
-  "dependencies": {
-    "jsdom": "0.3.x"
+  "spm": {
+    "main": "d3.js"
   },
   "devDependencies": {
-    "uglify-js": "2.2.x",
-    "vows": "0.7.x"
+    "jsdom": "3",
+    "seedrandom": "2",
+    "smash": "0.0",
+    "uglify-js": "2.4.16",
+    "vows": "0.8"
   },
   "scripts": {
-    "test": "./node_modules/vows/bin/vows"
-  }
+    "test": "vows; echo"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "https://github.com/mbostock/d3/blob/master/LICENSE"
+    }
+  ]
 }

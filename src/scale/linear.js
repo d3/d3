@@ -1,5 +1,17 @@
+import "../arrays/range";
+import "../core/rebind";
+import "../interpolate/interpolate";
+import "../interpolate/round";
+import "../interpolate/uninterpolate";
+import "../format/format";
+import "../math/abs";
+import "bilinear";
+import "nice";
+import "polylinear";
+import "scale";
+
 d3.scale.linear = function() {
-  return d3_scale_linear([0, 1], [0, 1], d3.interpolate, false);
+  return d3_scale_linear([0, 1], [0, 1], d3_interpolate, false);
 };
 
 function d3_scale_linear(domain, range, interpolate, clamp) {
@@ -10,7 +22,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
     var linear = Math.min(domain.length, range.length) > 2 ? d3_scale_polylinear : d3_scale_bilinear,
         uninterpolate = clamp ? d3_uninterpolateClamp : d3_uninterpolateNumber;
     output = linear(domain, range, uninterpolate, interpolate);
-    input = linear(range, domain, uninterpolate, d3.interpolate);
+    input = linear(range, domain, uninterpolate, d3_interpolate);
     return scale;
   }
 
@@ -36,7 +48,7 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
   };
 
   scale.rangeRound = function(x) {
-    return scale.range(x).interpolate(d3.interpolateRound);
+    return scale.range(x).interpolate(d3_interpolateRound);
   };
 
   scale.clamp = function(x) {
@@ -55,12 +67,12 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
     return d3_scale_linearTicks(domain, m);
   };
 
-  scale.tickFormat = function(m) {
-    return d3_scale_linearTickFormat(domain, m);
+  scale.tickFormat = function(m, format) {
+    return d3_scale_linearTickFormat(domain, m, format);
   };
 
-  scale.nice = function() {
-    d3_scale_nice(domain, d3_scale_linearNice);
+  scale.nice = function(m) {
+    d3_scale_linearNice(domain, m);
     return rescale();
   };
 
@@ -75,15 +87,13 @@ function d3_scale_linearRebind(scale, linear) {
   return d3.rebind(scale, linear, "range", "rangeRound", "interpolate", "clamp");
 }
 
-function d3_scale_linearNice(dx) {
-  dx = Math.pow(10, Math.round(Math.log(dx) / Math.LN10) - 1);
-  return dx && {
-    floor: function(x) { return Math.floor(x / dx) * dx; },
-    ceil: function(x) { return Math.ceil(x / dx) * dx; }
-  };
+function d3_scale_linearNice(domain, m) {
+  return d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
 }
 
 function d3_scale_linearTickRange(domain, m) {
+  if (m == null) m = 10;
+
   var extent = d3_scaleExtent(domain),
       span = extent[1] - extent[0],
       step = Math.pow(10, Math.floor(Math.log(span / m) / Math.LN10)),
@@ -105,6 +115,44 @@ function d3_scale_linearTicks(domain, m) {
   return d3.range.apply(d3, d3_scale_linearTickRange(domain, m));
 }
 
-function d3_scale_linearTickFormat(domain, m) {
-  return d3.format(",." + Math.max(0, -Math.floor(Math.log(d3_scale_linearTickRange(domain, m)[2]) / Math.LN10 + .01)) + "f");
+function d3_scale_linearTickFormat(domain, m, format) {
+  var range = d3_scale_linearTickRange(domain, m);
+  if (format) {
+    var match = d3_format_re.exec(format);
+    match.shift();
+    if (match[8] === "s") {
+      var prefix = d3.formatPrefix(Math.max(abs(range[0]), abs(range[1])));
+      if (!match[7]) match[7] = "." + d3_scale_linearPrecision(prefix.scale(range[2]));
+      match[8] = "f";
+      format = d3.format(match.join(""));
+      return function(d) {
+        return format(prefix.scale(d)) + prefix.symbol;
+      };
+    }
+    if (!match[7]) match[7] = "." + d3_scale_linearFormatPrecision(match[8], range);
+    format = match.join("");
+  } else {
+    format = ",." + d3_scale_linearPrecision(range[2]) + "f";
+  }
+  return d3.format(format);
+}
+
+var d3_scale_linearFormatSignificant = {s: 1, g: 1, p: 1, r: 1, e: 1};
+
+// Returns the number of significant digits after the decimal point.
+function d3_scale_linearPrecision(value) {
+  return -Math.floor(Math.log(value) / Math.LN10 + .01);
+}
+
+// For some format types, the precision specifies the number of significant
+// digits; for others, it specifies the number of digits after the decimal
+// point. For significant format types, the desired precision equals one plus
+// the difference between the decimal precision of the range’s maximum absolute
+// value and the tick step’s decimal precision. For format "e", the digit before
+// the decimal point counts as one.
+function d3_scale_linearFormatPrecision(type, range) {
+  var p = d3_scale_linearPrecision(range[2]);
+  return type in d3_scale_linearFormatSignificant
+      ? Math.abs(p - d3_scale_linearPrecision(Math.max(abs(range[0]), abs(range[1])))) + +(type !== "e")
+      : p - (type === "%") * 2;
 }

@@ -1,7 +1,6 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert"),
+    load = require("../load"),
+    assert = require("../assert"),
     time = require("./time"),
     local = time.local,
     utc = time.utc;
@@ -10,9 +9,7 @@ var suite = vows.describe("d3.time.hours");
 
 suite.addBatch({
   "hours": {
-    topic: function() {
-      return d3.time.hours;
-    },
+    topic: load("time/hour").expression("d3.time.hours"),
     "returns hours": function(range) {
       assert.deepEqual(range(local(2010, 11, 31, 12, 30), local(2010, 11, 31, 15, 30)), [
         local(2010, 11, 31, 13),

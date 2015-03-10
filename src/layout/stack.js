@@ -1,3 +1,9 @@
+import "../arrays/map";
+import "../arrays/permute";
+import "../arrays/range";
+import "../core/identity";
+import "layout";
+
 // data is two-dimensional array of x,y; we populate y0
 d3.layout.stack = function() {
   var values = d3_identity,
@@ -8,6 +14,7 @@ d3.layout.stack = function() {
       y = d3_layout_stackY;
 
   function stack(data, index) {
+    if (!(n = data.length)) return data;
 
     // Convert series to canonical two-dimensional representation.
     var series = data.map(function(d, i) {
@@ -30,8 +37,8 @@ d3.layout.stack = function() {
     var offsets = offset.call(stack, points, index);
 
     // And propagate it to other series.
-    var n = series.length,
-        m = series[0].length,
+    var m = series[0].length,
+        n,
         i,
         j,
         o;
@@ -82,7 +89,7 @@ d3.layout.stack = function() {
   };
 
   return stack;
-}
+};
 
 function d3_layout_stackX(d) {
   return d.x;

@@ -1,15 +1,13 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    _ = require("../../"),
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.svg.area.radial");
 
 suite.addBatch({
   "area.radial": {
-    topic: function() {
-      return d3.svg.area.radial;
-    },
+    topic: load("svg/area-radial").expression("d3.svg.area.radial"),
 
     "radius is an alias for setting innerRadius and outerRadius": function(area) {
       var a = area().radius(f);
@@ -182,18 +180,18 @@ suite.addBatch({
 function testInterpolation(interpolate) {
   var data = [[10, 0], [20, 1], [20, 2], [10, 3]];
 
-  var radial = d3.svg.area.radial()
-      .innerRadius(function(d) { return d[0]; })
-      .outerRadius(function(d) { return d[0] * 2; })
-      .angle(function(d) { return d[1]; });
-
-  var cartesian = d3.svg.area()
+  var cartesian = _.svg.area()
       .x0(function(d) { return d[0] * Math.cos(d[1] - Math.PI / 2); })
       .x1(function(d) { return 2 * d[0] * Math.cos(d[1] - Math.PI / 2); })
       .y0(function(d) { return d[0] * Math.sin(d[1] - Math.PI / 2); })
       .y1(function(d) { return 2 * d[0] * Math.sin(d[1] - Math.PI / 2); });
 
-  return function() {
+  return function(area) {
+    var radial = area()
+        .innerRadius(function(d) { return d[0]; })
+        .outerRadius(function(d) { return d[0] * 2; })
+        .angle(function(d) { return d[1]; });
+
     assert.pathEqual(radial.interpolate(interpolate)(data), cartesian.interpolate(interpolate)(data));
   };
 }

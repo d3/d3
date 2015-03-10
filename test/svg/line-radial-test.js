@@ -1,15 +1,13 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    _ = require("../../"),
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.svg.line.radial");
 
 suite.addBatch({
   "line.radial": {
-    topic: function() {
-      return d3.svg.line.radial;
-    },
+    topic: load("svg/line-radial").expression("d3.svg.line.radial"),
 
     "radius defaults to a function accessor": function(line) {
       var l = line();
@@ -110,14 +108,12 @@ suite.addBatch({
 function testInterpolation(interpolate) {
   var data = [[10, 0], [20, 1], [20, 2], [10, 3]];
 
-  var radial = d3.svg.line.radial();
-
-  var cartesian = d3.svg.line()
+  var cartesian = _.svg.line()
       .x(function(d) { return d[0] * Math.cos(d[1] - Math.PI / 2); })
       .y(function(d) { return d[0] * Math.sin(d[1] - Math.PI / 2); });
 
-  return function() {
-    assert.pathEqual(radial.interpolate(interpolate)(data), cartesian.interpolate(interpolate)(data));
+  return function(radial) {
+    assert.pathEqual(radial().interpolate(interpolate)(data), cartesian.interpolate(interpolate)(data));
   };
 }
 

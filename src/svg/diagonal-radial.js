@@ -1,3 +1,8 @@
+import "../math/trigonometry";
+import "arc";
+import "diagonal";
+import "svg";
+
 d3.svg.diagonal.radial = function() {
   var diagonal = d3.svg.diagonal(),
       projection = d3_svg_diagonalProjection,
@@ -16,7 +21,7 @@ function d3_svg_diagonalRadialProjection(projection) {
   return function() {
     var d = projection.apply(this, arguments),
         r = d[0],
-        a = d[1] + d3_svg_arcOffset;
+        a = d[1] - halfπ;
     return [r * Math.cos(a), r * Math.sin(a)];
   };
 }

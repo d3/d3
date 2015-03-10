@@ -1,3 +1,8 @@
+import "../core/functor";
+import "../core/source";
+import "../core/target";
+import "svg";
+
 d3.svg.diagonal = function() {
   var source = d3_source,
       target = d3_target,

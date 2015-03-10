@@ -1,3 +1,8 @@
+import "../math/trigonometry";
+import "arc";
+import "line";
+import "svg";
+
 d3.svg.line.radial = function() {
   var line = d3_svg_line(d3_svg_lineRadial);
   line.radius = line.x, delete line.x;
@@ -14,7 +19,7 @@ function d3_svg_lineRadial(points) {
   while (++i < n) {
     point = points[i];
     r = point[0];
-    a = point[1] + d3_svg_arcOffset;
+    a = point[1] - halfπ;
     point[0] = r * Math.cos(a);
     point[1] = r * Math.sin(a);
   }

@@ -1,16 +1,9 @@
-var globals = ["document", "window", "d3"],
-    globalValues = {};
+var globals = {};
 
-globals.forEach(function(g) {
-  if (g in global) globalValues[g] = global[g];
-});
+// Stash old global.
+if ("d3" in global) globals.d3 = global.d3;
 
-require("./globals");
-require("./d3");
+module.exports = require("./d3");
 
-module.exports = d3;
-
-globals.forEach(function(g) {
-  if (g in globalValues) global[g] = globalValues[g];
-  else delete global[g];
-});
+// Restore old global.
+if ("d3" in globals) global.d3 = globals.d3; else delete global.d3;

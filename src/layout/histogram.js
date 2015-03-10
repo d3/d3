@@ -1,3 +1,9 @@
+import "../arrays/bisect";
+import "../arrays/min";
+import "../arrays/max";
+import "../core/functor";
+import "layout";
+
 d3.layout.histogram = function() {
   var frequency = true,
       valuer = Number,

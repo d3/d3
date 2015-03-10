@@ -1,75 +1,71 @@
+import "../core/document";
+import "../core/identity";
+import "../core/rebind";
+import "../event/drag";
+import "../event/event";
+import "../event/mouse";
+import "../event/touch";
+import "behavior";
+
 d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
-      origin = null;
+      origin = null,
+      mousedown = dragstart(d3_noop, d3.mouse, d3_window, "mousemove", "mouseup"),
+      touchstart = dragstart(d3_behavior_dragTouchId, d3.touch, d3_identity, "touchmove", "touchend");
 
   function drag() {
     this.on("mousedown.drag", mousedown)
-        .on("touchstart.drag", mousedown);
+        .on("touchstart.drag", touchstart);
   }
 
-  function mousedown() {
-    var target = this,
-        event_ = event.of(target, arguments),
-        eventTarget = d3.event.target,
-        touchId = d3.event.touches ? d3.event.changedTouches[0].identifier : null,
-        offset,
-        origin_ = point(),
-        moved = 0;
+  function dragstart(id, position, subject, move, end) {
+    return function() {
+      var that = this,
+          target = d3.event.target,
+          parent = that.parentNode,
+          dispatch = event.of(that, arguments),
+          dragged = 0,
+          dragId = id(),
+          dragName = ".drag" + (dragId == null ? "" : "-" + dragId),
+          dragOffset,
+          dragSubject = d3.select(subject(target)).on(move + dragName, moved).on(end + dragName, ended),
+          dragRestore = d3_event_dragSuppress(target),
+          position0 = position(parent, dragId);
 
-    var w = d3.select(d3_window)
-        .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", dragmove)
-        .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", dragend, true);
-
-    if (origin) {
-      offset = origin.apply(target, arguments);
-      offset = [offset.x - origin_[0], offset.y - origin_[1]];
-    } else {
-      offset = [0, 0];
-    }
-
-    // Only cancel mousedown; touchstart is needed for draggable links.
-    if (touchId == null) d3_eventCancel();
-    event_({type: "dragstart"});
-
-    function point() {
-      var p = target.parentNode;
-      return touchId != null
-          ? d3.touches(p).filter(function(p) { return p.identifier === touchId; })[0]
-          : d3.mouse(p);
-    }
-
-    function dragmove() {
-      if (!target.parentNode) return dragend(); // target removed from DOM
-
-      var p = point(),
-          dx = p[0] - origin_[0],
-          dy = p[1] - origin_[1];
-
-      moved |= dx | dy;
-      origin_ = p;
-      d3_eventCancel();
-
-      event_({type: "drag", x: p[0] + offset[0], y: p[1] + offset[1], dx: dx, dy: dy});
-    }
-
-    function dragend() {
-      event_({type: "dragend"});
-
-      // if moved, prevent the mouseup (and possibly click) from propagating
-      if (moved) {
-        d3_eventCancel();
-        if (d3.event.target === eventTarget) w.on("click.drag", click, true);
+      if (origin) {
+        dragOffset = origin.apply(that, arguments);
+        dragOffset = [dragOffset.x - position0[0], dragOffset.y - position0[1]];
+      } else {
+        dragOffset = [0, 0];
       }
 
-      w .on(touchId != null ? "touchmove.drag-" + touchId : "mousemove.drag", null)
-        .on(touchId != null ? "touchend.drag-" + touchId : "mouseup.drag", null);
-    }
+      dispatch({type: "dragstart"});
 
-    // prevent the subsequent click from propagating (e.g., for anchors)
-    function click() {
-      d3_eventCancel();
-      w.on("click.drag", null);
-    }
+      function moved() {
+        var position1 = position(parent, dragId), dx, dy;
+        if (!position1) return; // this touch didn’t move
+
+        dx = position1[0] - position0[0];
+        dy = position1[1] - position0[1];
+        dragged |= dx | dy;
+        position0 = position1;
+
+        dispatch({
+          type: "drag",
+          x: position1[0] + dragOffset[0],
+          y: position1[1] + dragOffset[1],
+          dx: dx,
+          dy: dy
+        });
+      }
+
+      function ended() {
+        if (!position(parent, dragId)) return; // this touch didn’t end
+        dragSubject.on(move + dragName, null).on(end + dragName, null);
+        dragRestore(dragged && d3.event.target === target);
+        dispatch({type: "dragend"});
+      }
+    };
   }
 
   drag.origin = function(x) {
@@ -80,3 +76,13 @@ d3.behavior.drag = function() {
 
   return d3.rebind(drag, event, "on");
 };
+
+// While it is possible to receive a touchstart event with more than one changed
+// touch, the event is only shared by touches on the same target; for new
+// touches targetting different elements, multiple touchstart events are
+// received even when the touches start simultaneously. Since multiple touches
+// cannot move the same target to different locations concurrently without
+// tearing the fabric of spacetime, we allow the first touch to win.
+function d3_behavior_dragTouchId() {
+  return d3.event.changedTouches[0].identifier;
+}

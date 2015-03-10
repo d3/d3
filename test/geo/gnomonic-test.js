@@ -1,62 +1,37 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert"),
+    projectionTestSuite = require("./projection-test-suite");
 
 var suite = vows.describe("d3.geo.gnomonic");
 
 suite.addBatch({
   "gnomonic": {
-    topic: function() {
-      return d3.geo.gnomonic().translate([0, 0]).scale(100);
-    },
-    "origin": function(projection) {
-      var coords = projection([0, 0]);
-      assert.inDelta(coords[0], 0, 1e-6);
-      assert.inDelta(coords[1], 0, 1e-6);
-      var lonlat = projection.invert(coords);
-      assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], 0, 1e-6);
-    },
-    "Arctic": function(projection) {
-      var coords = projection([0, 85]);
-      assert.inDelta(coords[0], 0, 1e-6);
-      assert.inDelta(coords[1], -1143.005230, 1e-6);
-      var lonlat = projection.invert(coords);
-      assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], 85, 1e-6);
-    },
-    "Antarctic": function(projection) {
-      var coords = projection([0, -85]);
-      assert.inDelta(coords[0], 0, 1e-6);
-      assert.inDelta(coords[1], 1143.005230, 1e-6);
-      var lonlat = projection.invert(coords);
-      assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], -85, 1e-6);
-    },
-    "Hawaii": function(projection) {
-      var coords = projection([-180, 0]);
-      assert.inDelta(coords[0], 0, 1e-6);
-      assert.inDelta(coords[1], 0, 1e-6);
-      var lonlat = projection.invert(coords);
-      assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], 0, 1e-6);
-    },
-    "Phillipines": function(projection) {
-      var coords = projection([180, 0]);
-      assert.inDelta(coords[0], 0, 1e-6);
-      assert.inDelta(coords[1], 0, 1e-6);
-      var lonlat = projection.invert(coords);
-      assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], 0, 1e-6);
-    },
-    "Inversion works for non-zero translation": function() {
-      var projection = d3.geo.gnomonic().translate([123, 99]).scale(100),
-          coords = projection([0, 85]),
-          lonlat = projection.invert(coords);
-      assert.inDelta(lonlat[0], 0, 1e-6);
-      assert.inDelta(lonlat[1], 85, 1e-6);
-    }
+    topic: load("geo/gnomonic").expression("d3.geo.gnomonic"),
+    "default": projectionTestSuite({
+      topic: function(projection) { return projection(); }
+    }, {
+      "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
+      "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 422.38246174, -992.89637169]],
+      "San Francisco, CA": [[ -46.16620803,   77.04946507], [ 323.76600022, -691.84169545]],
+      "Svalbard":          [[   3.13977663,   61.55241523], [ 488.22815397,  -27.28558622]],
+      "Tierra del Fuego":  [[ -35.62300462,  -60.29317484], [ 372.51942626,  573.42957804]],
+      "Tokyo":             [[  33.38709832,   79.49539834], [ 578.85832181, -718.85305295]],
+      "the South Pole":    [[   0.00000000,  -85.00000000], [ 480.00000000, 1964.50784541]],
+      "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,-1464.50784541]]
+    }),
+    "translated to 0,0 and at scale 1": projectionTestSuite({
+      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
+    }, {
+      "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
+      "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.38411692,   -8.28597600]],
+      "San Francisco, CA": [[ -46.16620803,   77.04946507], [  -1.04156000,   -6.27894464]],
+      "Svalbard":          [[   3.13977663,   61.55241523], [   0.05485436,   -1.84857057]],
+      "Tierra del Fuego":  [[ -35.62300462,  -60.29317484], [  -0.71653716,    2.15619719]],
+      "Tokyo":             [[  33.38709832,   79.49539834], [   0.65905548,   -6.45902035]],
+      "the South Pole":    [[   0.00000000,  -85.00000000], [   0.00000000,   11.43005230]],
+      "the North Pole":    [[   0.00000000,   85.00000000], [   0.00000000,  -11.43005230]]
+    })
   }
 });
 

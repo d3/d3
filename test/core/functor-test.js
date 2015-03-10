@@ -1,15 +1,12 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert");
 
 var suite = vows.describe("d3.functor");
 
 suite.addBatch({
   "functor": {
-    topic: function() {
-      return d3.functor;
-    },
+    topic: load("core/functor").expression("d3.functor"),
     "when passed a function, returns the function": function(functor) {
       function foo() {}
       assert.strictEqual(functor(foo), foo);

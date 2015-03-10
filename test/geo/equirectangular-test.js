@@ -1,47 +1,37 @@
-require("../env");
-
 var vows = require("vows"),
-    assert = require("../env-assert");
+    load = require("../load"),
+    assert = require("../assert"),
+    projectionTestSuite = require("./projection-test-suite");
 
 var suite = vows.describe("d3.geo.equirectangular");
 
 suite.addBatch({
   "equirectangular": {
-    topic: function() {
-      return d3.geo.equirectangular();
-    },
-
-    "scale": {
-      "defaults to 500 / 2π": function(projection) {
-        assert.equal(projection.scale(), 500 / (2 * Math.PI));
-      },
-      "is coerced to a number": function(projection) {
-        assert.strictEqual(projection.scale("400"), projection);
-        assert.strictEqual(projection.scale(), 400);
-        projection.scale(500 / (2 * Math.PI));
-      }
-    },
-
-    "translate": {
-      "defaults to [480, 250]": function(projection) {
-        assert.deepEqual(projection.translate(), [480, 250]);
-      },
-      "is coerced to two numbers": function(projection) {
-        assert.strictEqual(projection.translate(["23", "141"]), projection);
-        assert.strictEqual(projection.translate()[0], 23);
-        assert.strictEqual(projection.translate()[1], 141);
-        projection.translate([480, 250]);
-      }
-    },
-
-    "of San Francisco, CA": {
-      "is at location [-122.446, 37.767]": function(projection) {
-        assert.inDelta(projection.invert([310, 198]), [-122.446, 37.767], .5);
-      },
-      "is at point [310, 198]": function(projection) {
-        assert.inDelta(projection([-122.446, 37.767]), [310, 198], .5);
-      }
-    }
+    topic: load("geo/equirectangular").expression("d3.geo.equirectangular"),
+    "default": projectionTestSuite({
+      topic: function(projection) { return projection(); }
+    }, {
+      "Null Island":       [[   0.00000000,    0.00000000], [ 480.00000000,  250.00000000]],
+      "Honolulu, HI":      [[ -21.01262744,   82.63349103], [ 424.98907000,   33.66602637]],
+      "San Francisco, CA": [[ -46.16620803,   77.04946507], [ 359.13715001,   48.28497214]],
+      "Svalbard":          [[   3.13977663,   61.55241523], [ 488.21991600,   88.85615375]],
+      "Tierra del Fuego":  [[ -35.62300462,  -60.29317484], [ 386.73919199,  407.84716262]],
+      "Tokyo":             [[  33.38709832,   79.49539834], [ 567.40721901,   41.88153382]],
+      "the South Pole":    [[   0.00000000,  -85.00000000], [ 480.00000000,  472.52947963]],
+      "the North Pole":    [[   0.00000000,   85.00000000], [ 480.00000000,   27.47052037]]
+    }),
+    "translated to 0,0 and at scale 1": projectionTestSuite({
+      topic: function(projection) { return projection().translate([0, 0]).scale(1); }
+    }, {
+      "Null Island":       [[   0.00000000,    0.00000000], [   0.00000000,    0.00000000]],
+      "Honolulu, HI":      [[ -21.01262744,   82.63349120], [  -0.36673953,   -1.44222649]],
+      "San Francisco, CA": [[ -46.16620803,   77.04946507], [  -0.80575233,   -1.34476685]],
+      "Svalbard":          [[   3.13977663,   61.55241523], [   0.05479944,   -1.07429231]],
+      "Tierra del Fuego":  [[ -35.62300462,  -60.29317484], [  -0.62173872,    1.05231442]],
+      "Tokyo":             [[  33.38709832,   79.49539834], [   0.58271479,   -1.38745644]],
+      "the South Pole":    [[   0.00000000,  -85.00000000], [   0.00000000,    1.48352986]],
+      "the North Pole":    [[   0.00000000,   85.00000000], [   0.00000000,   -1.48352986]]
+    })
   }
 });
 

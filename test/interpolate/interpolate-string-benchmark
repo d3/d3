@@ -1,0 +1,31 @@
+#!/usr/bin/env node
+
+var d3 = require("../../");
+
+var n = +process.argv[2],
+    p = +process.argv[3],
+    k = +process.argv[4];
+
+var formatTime = d3.format(".3s"),
+    formatNumber = d3.format(",.0f");
+
+// Returns the time required to construct a string interpolator
+// for two strings with n numbers, separated by commas,
+// with probability p that the corresponding numbers in a & b are different.
+// The test is run k times, and the mean result is returned.
+function observeConstruction(n, p, k) {
+  if (arguments.length < 3) k = 1;
+  for (var i = 0, sum = 0; i < k; ++i) {
+    var a = d3.range(n).map(function() { return Math.random() * 1000; }),
+        b = d3.range(n).map(function(i) { return Math.random() < p ? Math.random() * 1000 : a[i]; });
+    var start = process.hrtime();
+    d3.interpolateString(a, b);
+    var elapsed = process.hrtime(start);
+    sum += elapsed[0] + elapsed[1] / 1e9;
+    process.stdout.write(".");
+  }
+  console.log("");
+  return sum / k;
+}
+
+console.log(formatTime(observeConstruction(n, p, k)) + "s\tn=" + formatNumber(n) + "\tp=" + p);

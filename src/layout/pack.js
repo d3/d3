@@ -1,41 +1,47 @@
+import "layout";
+import "hierarchy";
+
 d3.layout.pack = function() {
   var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
       padding = 0,
-      size = [1, 1];
+      size = [1, 1],
+      radius;
 
   function pack(d, i) {
     var nodes = hierarchy.call(this, d, i),
-        root = nodes[0];
+        root = nodes[0],
+        w = size[0],
+        h = size[1],
+        r = radius == null ? Math.sqrt : typeof radius === "function" ? radius : function() { return radius; };
 
     // Recursively compute the layout.
-    root.x = 0;
-    root.y = 0;
-    d3_layout_treeVisitAfter(root, function(d) { d.r = Math.sqrt(d.value); });
-    d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
-
-    // Compute the scale factor the initial layout.
-    var w = size[0],
-        h = size[1],
-        k = Math.max(2 * root.r / w, 2 * root.r / h);
+    root.x = root.y = 0;
+    d3_layout_hierarchyVisitAfter(root, function(d) { d.r = +r(d.value); });
+    d3_layout_hierarchyVisitAfter(root, d3_layout_packSiblings);
 
     // When padding, recompute the layout using scaled padding.
-    if (padding > 0) {
-      var dr = padding * k / 2;
-      d3_layout_treeVisitAfter(root, function(d) { d.r += dr; });
-      d3_layout_treeVisitAfter(root, d3_layout_packSiblings);
-      d3_layout_treeVisitAfter(root, function(d) { d.r -= dr; });
-      k = Math.max(2 * root.r / w, 2 * root.r / h);
+    if (padding) {
+      var dr = padding * (radius ? 1 : Math.max(2 * root.r / w, 2 * root.r / h)) / 2;
+      d3_layout_hierarchyVisitAfter(root, function(d) { d.r += dr; });
+      d3_layout_hierarchyVisitAfter(root, d3_layout_packSiblings);
+      d3_layout_hierarchyVisitAfter(root, function(d) { d.r -= dr; });
     }
 
-    // Scale the layout to fit the requested size.
-    d3_layout_packTransform(root, w / 2, h / 2, 1 / k);
+    // Translate and scale the layout to fit the requested size.
+    d3_layout_packTransform(root, w / 2, h / 2, radius ? 1 : 1 / Math.max(2 * root.r / w, 2 * root.r / h));
 
     return nodes;
   }
 
-  pack.size = function(x) {
+  pack.size = function(_) {
     if (!arguments.length) return size;
-    size = x;
+    size = _;
+    return pack;
+  };
+
+  pack.radius = function(_) {
+    if (!arguments.length) return radius;
+    radius = _ == null || typeof _ === "function" ? _ : +_;
     return pack;
   };
 
@@ -69,7 +75,7 @@ function d3_layout_packIntersects(a, b) {
   var dx = b.x - a.x,
       dy = b.y - a.y,
       dr = a.r + b.r;
-  return dr * dr - dx * dx - dy * dy > .001; // within epsilon
+  return .999 * dr * dr > dx * dx + dy * dy; // relative error within epsilon
 }
 
 function d3_layout_packSiblings(node) {
@@ -176,8 +182,8 @@ function d3_layout_packUnlink(node) {
 
 function d3_layout_packTransform(node, x, y, k) {
   var children = node.children;
-  node.x = (x += k * node.x);
-  node.y = (y += k * node.y);
+  node.x = x += k * node.x;
+  node.y = y += k * node.y;
   node.r *= k;
   if (children) {
     var i = -1, n = children.length;
