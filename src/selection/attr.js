@@ -36,7 +36,8 @@ function d3_selection_attr(name, value) {
 
   // For attr(string, string), set the attribute with the specified name.
   function attrConstant() {
-    this.setAttribute(name, value);
+    if(value && (String(value).indexOf("NaN") === -1))
+      this.setAttribute(name, value);
   }
   function attrConstantNS() {
     this.setAttributeNS(name.space, name.local, value);
