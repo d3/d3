@@ -46,7 +46,7 @@ function d3_selection_attr(name, value) {
   // or remove the attribute as appropriate.
   function attrFunction() {
     var x = value.apply(this, arguments);
-    if (x == null) this.removeAttribute(name);
+    if (x == null || isNaN(x)) this.removeAttribute(name);
     else this.setAttribute(name, x);
   }
   function attrFunctionNS() {
