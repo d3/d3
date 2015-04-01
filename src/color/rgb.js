@@ -56,6 +56,7 @@ function d3_rgb_hex(v) {
 }
 
 function d3_rgb_parse(format, rgb, hsl) {
+  format = format.toLowerCase();
   var r = 0, // red channel; int in [0, 255]
       g = 0, // green channel; int in [0, 255]
       b = 0, // blue channel; int in [0, 255]
@@ -64,7 +65,7 @@ function d3_rgb_parse(format, rgb, hsl) {
       color;
 
   /* Handle hsl, rgb. */
-  m1 = /([a-z]+)\((.*)\)/i.exec(format);
+  m1 = /([a-z]+)\((.*)\)/.exec(format);
   if (m1) {
     m2 = m1[2].split(",");
     switch (m1[1]) {
@@ -86,7 +87,7 @@ function d3_rgb_parse(format, rgb, hsl) {
   }
 
   /* Named colors. */
-  if (color = d3_rgb_names.get(format.toLowerCase())) {
+  if (color = d3_rgb_names.get(format)) {
     return rgb(color.r, color.g, color.b);
   }
 
