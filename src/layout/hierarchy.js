@@ -38,8 +38,6 @@ d3.layout.hierarchy = function() {
       if (childs && parentValue) node.parentValue = parentValue.call(hierarchy, node, node.depth);
       if (value && (parent = node.parent)) parent.value += (node.parentValue || node.value);
     });
-
-
     return nodes;
   }
 
