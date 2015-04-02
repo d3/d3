@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.5.5"
+    version: "3.5.6-kiln"
   };
   var d3_arraySlice = [].slice, d3_array = function(list) {
     return d3_arraySlice.call(list);
@@ -8790,8 +8790,14 @@
   d3_transitionPrototype.remove = function() {
     var ns = this.namespace;
     return this.each("end.transition", function() {
+      var lock = this[ns];
       var p;
-      if (this[ns].count < 2 && (p = this.parentNode)) p.removeChild(this);
+      if (lock.count > 1) {
+        for (var n in lock) {
+          if (n.match(/^\d+$/) && parseInt(n) > lock.active) return;
+        }
+      }
+      if (p = this.parentNode) p.removeChild(this);
     });
   };
   d3_transitionPrototype.ease = function(value) {
