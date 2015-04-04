@@ -1552,8 +1552,8 @@
     }
     function mousewheeled() {
       var dispatch = event.of(this, arguments);
-      if (mousewheelTimer) clearTimeout(mousewheelTimer); else translate0 = location(center0 = center || d3.mouse(this)), 
-      d3_selection_interrupt.call(this), zoomstarted(dispatch);
+      if (mousewheelTimer) clearTimeout(mousewheelTimer); else d3_selection_interrupt.call(this), 
+      translate0 = location(center0 = center || d3.mouse(this)), zoomstarted(dispatch);
       mousewheelTimer = setTimeout(function() {
         mousewheelTimer = null;
         zoomended(dispatch);
