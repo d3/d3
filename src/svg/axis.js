@@ -44,7 +44,7 @@ d3.svg.axis = function() {
 
       var lineEnter = tickEnter.select("line"),
           lineUpdate = tickUpdate.select("line"),
-          text = tick.select("text").text(tickFormat),
+          text = tick.select("text"),//.text(tickFormat),
           textEnter = tickEnter.select("text"),
           textUpdate = tickUpdate.select("text"),
           sign = orient === "top" || orient === "left" ? -1 : 1,
@@ -60,6 +60,7 @@ d3.svg.axis = function() {
         pathUpdate.attr("d", "M" + sign * outerTickSize + "," + range[0] + "H0V" + range[1] + "H" + sign * outerTickSize);
       }
 
+      text.text(tickFormat);
       lineEnter.attr(y2, sign * innerTickSize);
       textEnter.attr(y1, sign * tickSpacing);
       lineUpdate.attr(x2, 0).attr(y2, sign * innerTickSize);
