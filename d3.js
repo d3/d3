@@ -1157,12 +1157,15 @@
       }
     };
   }
-  d3.mouse = function(container) {
-    return d3_mousePoint(container, d3_eventSource());
+  d3.mouse = function(container, identifier) {
+    var event = d3_eventSource();
+    if (arguments.length < 2) identifier = event.pointerId;
+    return d3_mousePoint(container, event, identifier);
   };
   var d3_mouse_bug44083 = this.navigator && /WebKit/.test(this.navigator.userAgent) ? -1 : 0;
-  function d3_mousePoint(container, e) {
+  function d3_mousePoint(container, e, id) {
     if (e.changedTouches) e = e.changedTouches[0];
+    if (e.pointerId !== id) return;
     var svg = container.ownerSVGElement || container;
     if (svg.createSVGPoint) {
       var point = svg.createSVGPoint();
@@ -1199,9 +1202,16 @@
     }
   };
   d3.behavior.drag = function() {
-    var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"), origin = null, mousedown = dragstart(d3_noop, d3.mouse, d3_window, "mousemove", "mouseup"), touchstart = dragstart(d3_behavior_dragTouchId, d3.touch, d3_identity, "touchmove", "touchend");
+    var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"), origin = null, ptrdown = dragstart(d3_behavior_dragPointerId, d3.mouse, d3_window, "pointermove", "pointerup"), mousedown = dragstart(d3_noop, d3.mouse, d3_window, "mousemove", "mouseup"), touchstart = dragstart(d3_behavior_dragTouchId, d3.touch, d3_identity, "touchmove", "touchend");
     function drag() {
-      this.on("mousedown.drag", mousedown).on("touchstart.drag", touchstart);
+      if (navigator.pointerEnabled) {
+        if (this.style("touch-action") === "auto") {
+          this.style("touch-action", "none");
+        }
+        this.on("pointerdown.drag", ptrdown);
+      } else {
+        this.on("mousedown.drag", mousedown).on("touchstart.drag", touchstart);
+      }
     }
     function dragstart(id, position, subject, move, end) {
       return function() {
@@ -1249,6 +1259,9 @@
   };
   function d3_behavior_dragTouchId() {
     return d3.event.changedTouches[0].identifier;
+  }
+  function d3_behavior_dragPointerId() {
+    return d3.event.pointerId;
   }
   d3.touches = function(container, touches) {
     if (arguments.length < 2) touches = d3_eventSource().touches;
