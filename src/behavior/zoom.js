@@ -21,13 +21,14 @@ d3.behavior.zoom = function() {
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
       mousewheelTimer,
-      touchstart = "touchstart.zoom",
       touchtime, // time of last touchstart (to detect double-tap)
       event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"),
       x0,
       x1,
       y0,
-      y1;
+      y1,
+      pointers = [];
+
 
   // Lazily determine the DOM’s support for Wheel events.
   // https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/wheel
@@ -37,11 +38,24 @@ d3.behavior.zoom = function() {
         : (d3_behavior_zoomDelta = function() { return -d3.event.detail; }, "MozMousePixelScroll");
   }
 
+  if (!d3_behavior_zoomTouch) {
+      if(window.PointerEvent) {
+          d3_behavior_zoomTouch = {down: "pointerdown", move: "pointermove", up: "pointerup", cancel: "pointercancel"};
+          d3_behavior_zoomTouchHandler = pointerdowned;
+      } else if (window.MSPointerEvent) {
+          d3_behavior_zoomTouch = {down: "MSPointerDown", move: "MSPointerMove", up: "MSPointerUp", cancel: "pointercancel" };  // Найти MSPointerCancel если он есть
+          d3_behavior_zoomTouchHandler = pointerdowned;
+      } else {
+          d3_behavior_zoomTouch = {down:"touchstart"};
+          d3_behavior_zoomTouchHandler = touchstarted;
+      }
+  }
+
   function zoom(g) {
     g   .on(mousedown, mousedowned)
         .on(d3_behavior_zoomWheel + ".zoom", mousewheeled)
         .on("dblclick.zoom", dblclicked)
-        .on(touchstart, touchstarted);
+        .on(d3_behavior_zoomTouch.down + ".zoom", d3_behavior_zoomTouchHandler);
   }
 
   zoom.event = function(g) {
@@ -230,7 +244,7 @@ d3.behavior.zoom = function() {
 
     // Workaround for Chrome issue 412723: the touchstart listener must be set
     // after the touchmove listener.
-    subject.on(mousedown, null).on(touchstart, started); // prevent duplicate events
+    subject.on(mousedown, null).on(d3_behavior_zoomTouch.down + ".zoom", started); // prevent duplicate events
 
     // Updates locations of any touches in locations0.
     function relocate() {
@@ -317,10 +331,114 @@ d3.behavior.zoom = function() {
       }
       // Otherwise, remove touchmove and touchend listeners.
       d3.selectAll(targets).on(zoomName, null);
-      subject.on(mousedown, mousedowned).on(touchstart, touchstarted);
+      subject.on(mousedown, mousedowned).on(d3_behavior_zoomTouch.down + ".zoom", d3_behavior_zoomTouchHandler);
       dragRestore();
       zoomended(dispatch);
     }
+  }
+
+  function getAnotherPointer (id){
+      for (var i = 0; i < pointers.length; i++) {
+          if (pointers[i].identifier != id)
+              return pointers[i];
+      }
+  }
+
+  function addUpdatePointer(p) {
+      for (var i = 0; i < pointers.length; i++) {
+          if (pointers[i].identifier == p.identifier) {
+              if (pointers[i][0] == p[0] && pointers[i][1] == p[1])
+                  return false;
+
+              pointers[i] = p;
+              return true;
+          }
+      }
+      pointers.push(p);
+      return true;
+  }
+
+  function removePointer(id) {
+      for (var i = 0; i < pointers.length; i++) {
+          if (pointers[i].identifier == id) {
+              pointers.splice(i, 1);
+          }
+      }
+  }
+
+  function pointerdowned() {
+      var that = this,
+          e = d3_eventSource(),
+          dispatch = event.of(that, arguments),
+          locations0,
+          distance0 = 0,
+          scale0,
+          zoomName = ".zoom-" + e.pointerId,
+          subject = d3.select(that);
+
+      started();
+      zoomstarted(dispatch);
+
+      subject.on(mousedown, null);
+      subject.on(d3_behavior_zoomTouch.down + zoomName, started);
+
+      function started() {
+          var p = d3_mousePoint(that, e);
+          p.identifier = e.pointerId;
+          addUpdatePointer(p);
+
+          locations0 = location(p);
+          scale0 = view.k;
+          console.log("scale0: " + scale0);
+
+          d3_eventPreventDefault();
+          subject
+              .on(d3_behavior_zoomTouch.move + zoomName, moved)
+              .on(d3_behavior_zoomTouch.up + zoomName, ended);
+
+          if (pointers.length > 1) {
+              var p = pointers[0], q = pointers[1],
+                  dx = p[0] - q[0], dy = p[1] - q[1];
+              distance0 = dx * dx + dy * dy;
+          }
+      }
+
+      function moved() {
+          var p0, l0,
+              p1, l1,
+              ee = d3_eventSource();
+
+          p0 = d3_mousePoint(that, ee);
+          p0.identifier = ee.pointerId;
+
+          if (!addUpdatePointer(p0))
+              return;
+
+          l0 = locations0;
+
+          if (pointers.length > 1) {
+              p1 = getAnotherPointer(p0.identifier);
+              l1 = location(p1);
+
+              var dx = p1[0] - p0[0], dy = p1[1] - p0[1],
+                  distance1 = dx * dx + dy * dy;
+              var scale1 = (distance0 != 0) ? Math.sqrt(distance1 / distance0) : 0;
+
+              p0 = [(p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2];
+              l0 = [(l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2];
+
+              scaleTo(scale1 * scale0);
+          }
+
+          translateTo(p0, l0);
+          zoomed(dispatch);
+      }
+
+      function ended() {
+          removePointer(e.pointerId);
+          subject.on(zoomName, null);
+          zoomended(dispatch);
+      }
   }
 
   function mousewheeled() {
@@ -346,4 +464,6 @@ d3.behavior.zoom = function() {
 
 var d3_behavior_zoomInfinity = [0, Infinity], // default scale extent
     d3_behavior_zoomDelta, // initialized lazily
-    d3_behavior_zoomWheel;
+    d3_behavior_zoomWheel,
+    d3_behavior_zoomTouch,
+    d3_behavior_zoomTouchHandler;
