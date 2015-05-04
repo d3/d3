@@ -52,7 +52,17 @@ function d3_timer_mark() {
   var now = Date.now();
   d3_timer_active = d3_timer_queueHead;
   while (d3_timer_active) {
-    if (now >= d3_timer_active.t) d3_timer_active.f = d3_timer_active.c(now - d3_timer_active.t);
+    if (now >= d3_timer_active.t) try {
+      d3_timer_active.f = d3_timer_active.c(now - d3_timer_active.t);
+    } catch (e) {
+      // we could cancel callback if it throws up, but that ends up breaking
+      // d3_transitionNode's chaining — it is closely coupled to our code.
+      //d3_timer_active.f = true;   // [would] cancel callback
+
+      // we don't want to mask the error, but re-throw it in its own stack.
+      // [`setImmediate` might be better but not worth polyfilling just for this…]
+      setTimeout(function () { throw e; }, 0);
+    }
     d3_timer_active = d3_timer_active.n;
   }
   return now;
