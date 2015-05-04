@@ -1,0 +1,21 @@
+.axis {
+	font: 10px sans-serif;
+}
+
+.axis path, .axis line {
+	fill: none;
+	stroke: gray;/*#000;*/
+	shape-rendering: crispEdges;
+}
+
+.x.axis path {
+	display: none;
+}
+
+.x.axis, .y.axis {
+	fill:gray;
+}
+
+rect:hover {
+	fill:brown;
+}
