@@ -1,0 +1,36 @@
+<!-- Author : Keeshini and Keerthana -->
+
+<!DOCTYPE html>
+<html>
+    <head>
+    	<meta charset="utf-8">
+        <link rel="stylesheet" media="screen" href="chart.css">
+        <style>
+	        body {
+			font-family: "Helvetica Neue", Arial, sans-serif;
+		}
+        </style>
+        <title>D3 Group chart</title>
+    </head>
+    
+    <body>
+	<section>
+		<div id='countrychart'></div>
+	</section>
+		
+	<!-- D3 js -->
+    	<script src="http://d3js.org/d3.v3.min.js"></script>
+    	<script src="chart.js"></script>
+	<script>
+		var chart = new Chart(500, 300, "#countrychart");
+		
+		var chartData = [ {name: 'Alaska', value: [{"a":690}, {"b":160}, {"c":600}]}, 
+				  {name: 'BeaufortSea', value: [{"a":880}, {"b":300}, {"c":400}]}, 
+				  {name: 'GreenLand', value: [{"a":100}, {"b":680}, {"c":780}]} ];	
+		
+		Chart.render(chartData, chart);
+	
+    	</script>
+    </body>
+</html>
+
