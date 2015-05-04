@@ -20,7 +20,7 @@ d3_transitionPrototype.selectAll = function(selector) {
         subnodes = selector.call(node, node.__data__, i, j);
         subgroups.push(subgroup = []);
         for (var k = -1, o = subnodes.length; ++k < o;) {
-          if (subnode = subnodes[k]) d3_transitionNode(subnode, k, ns, id, transition);
+          if (subnode = subnodes[k]) d3_transitionNode(subnode, k, i, ns, id, transition);
           subgroup.push(subnode);
         }
       }
