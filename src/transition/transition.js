@@ -61,7 +61,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
     var time = inherit.time;
 
     transition = lock[id] = {
-      tween: new d3_Map,
+      tween: new d3_Map(),
       time: time,
       delay: inherit.delay,
       duration: inherit.duration,
