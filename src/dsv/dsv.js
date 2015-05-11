@@ -28,12 +28,12 @@ d3.dsv = function(delimiter, mimeType) {
     };
   }
 
-  dsv.parse = function(text, f) {
+  dsv.parse = function(text, f, n) {
     var o;
     return dsv.parseRows(text, function(row, i) {
       if (o) return o(row, i - 1);
       var a = new Function("d", "return {" + row.map(function(name, i) {
-        return JSON.stringify(name) + ": d[" + i + "]";
+        return JSON.stringify(n ? n(name, i) : name) + ": d[" + i + "]";
       }).join(",") + "}");
       o = f ? function(row, i) { return f(a(row), i); } : a;
     });
