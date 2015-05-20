@@ -16,8 +16,8 @@ d3.svg.arc = function() {
   function arc() {
     var r0 = Math.max(0, +innerRadius.apply(this, arguments)),
         r1 = Math.max(0, +outerRadius.apply(this, arguments)),
-        a0 = startAngle.apply(this, arguments) - halfπ,
-        a1 = endAngle.apply(this, arguments) - halfπ,
+        a0 = startAngle.apply(this, arguments) - halfpi,
+        a1 = endAngle.apply(this, arguments) - halfpi,
         da = Math.abs(a1 - a0),
         cw = a0 > a1 ? 0 : 1;
 
@@ -25,7 +25,7 @@ d3.svg.arc = function() {
     if (r1 < r0) rc = r1, r1 = r0, r0 = rc;
 
     // Special case for an arc that spans the full circle.
-    if (da >= τε) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "") + "Z";
+    if (da >= tauepsilon) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "") + "Z";
 
     var rc,
         cr,
@@ -44,9 +44,9 @@ d3.svg.arc = function() {
         path = [];
 
     // The recommended minimum inner radius when using padding is outerRadius *
-    // padAngle / sin(θ), where θ is the angle of the smallest arc (without
+    // padAngle / sin(theta), where theta is the angle of the smallest arc (without
     // padding). For example, if the outerRadius is 200 pixels and the padAngle
-    // is 0.02 radians, a reasonable θ is 0.04 radians, and a reasonable
+    // is 0.02 radians, a reasonable theta is 0.04 radians, and a reasonable
     // innerRadius is 100 pixels.
 
     if (ap = (+padAngle.apply(this, arguments) || 0) / 2) {
@@ -64,7 +64,7 @@ d3.svg.arc = function() {
       y1 = r1 * Math.sin(a1 - p1);
 
       // Detect whether the outer corners are collapsed.
-      var l1 = Math.abs(a1 - a0 - 2 * p1) <= π ? 0 : 1;
+      var l1 = Math.abs(a1 - a0 - 2 * p1) <= pi ? 0 : 1;
       if (p1 && d3_svg_arcSweep(x0, y0, x1, y1) === cw ^ l1) {
         var h1 = (a0 + a1) / 2;
         x0 = r1 * Math.cos(h1);
@@ -83,7 +83,7 @@ d3.svg.arc = function() {
       y3 = r0 * Math.sin(a0 + p0);
 
       // Detect whether the inner corners are collapsed.
-      var l0 = Math.abs(a0 - a1 + 2 * p0) <= π ? 0 : 1;
+      var l0 = Math.abs(a0 - a1 + 2 * p0) <= pi ? 0 : 1;
       if (p0 && d3_svg_arcSweep(x2, y2, x3, y3) === (1 - cw) ^ l0) {
         var h0 = (a0 + a1) / 2;
         x2 = r0 * Math.cos(h0);
@@ -214,7 +214,7 @@ d3.svg.arc = function() {
 
   arc.centroid = function() {
     var r = (+innerRadius.apply(this, arguments) + +outerRadius.apply(this, arguments)) / 2,
-        a = (+startAngle.apply(this, arguments) + +endAngle.apply(this, arguments)) / 2 - halfπ;
+        a = (+startAngle.apply(this, arguments) + +endAngle.apply(this, arguments)) / 2 - halfpi;
     return [Math.cos(a) * r, Math.sin(a) * r];
   };
 

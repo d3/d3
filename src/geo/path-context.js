@@ -25,7 +25,7 @@ function d3_geo_pathContext(context) {
 
   function point(x, y) {
     context.moveTo(x + pointRadius, y);
-    context.arc(x, y, pointRadius, 0, τ);
+    context.arc(x, y, pointRadius, 0, tau);
   }
 
   function pointLineStart(x, y) {

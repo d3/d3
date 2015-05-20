@@ -7,7 +7,7 @@ var d3_geo_clipAntimeridian = d3_geo_clip(
     d3_true,
     d3_geo_clipAntimeridianLine,
     d3_geo_clipAntimeridianInterpolate,
-    [-π, -π / 2]);
+    [-pi, -pi / 2]);
 
 // Takes a line and cuts into visible segments. Return values:
 //   0: there were intersections or the line was empty.
@@ -15,9 +15,9 @@ var d3_geo_clipAntimeridian = d3_geo_clip(
 //   2: there were intersections, and the first and last segments should be
 //      rejoined.
 function d3_geo_clipAntimeridianLine(listener) {
-  var λ0 = NaN,
-      φ0 = NaN,
-      sλ0 = NaN,
+  var lambda0 = NaN,
+      phi0 = NaN,
+      slambda0 = NaN,
       clean; // no intersections
 
   return {
@@ -25,70 +25,70 @@ function d3_geo_clipAntimeridianLine(listener) {
       listener.lineStart();
       clean = 1;
     },
-    point: function(λ1, φ1) {
-      var sλ1 = λ1 > 0 ? π : -π,
-          dλ = abs(λ1 - λ0);
-      if (abs(dλ - π) < ε) { // line crosses a pole
-        listener.point(λ0, φ0 = (φ0 + φ1) / 2 > 0 ? halfπ : -halfπ);
-        listener.point(sλ0, φ0);
+    point: function(lambda1, phi1) {
+      var slambda1 = lambda1 > 0 ? pi : -pi,
+          dlambda = abs(lambda1 - lambda0);
+      if (abs(dlambda - pi) < epsilon) { // line crosses a pole
+        listener.point(lambda0, phi0 = (phi0 + phi1) / 2 > 0 ? halfpi : -halfpi);
+        listener.point(slambda0, phi0);
         listener.lineEnd();
         listener.lineStart();
-        listener.point(sλ1, φ0);
-        listener.point(λ1, φ0);
+        listener.point(slambda1, phi0);
+        listener.point(lambda1, phi0);
         clean = 0;
-      } else if (sλ0 !== sλ1 && dλ >= π) { // line crosses antimeridian
+      } else if (slambda0 !== slambda1 && dlambda >= pi) { // line crosses antimeridian
         // handle degeneracies
-        if (abs(λ0 - sλ0) < ε) λ0 -= sλ0 * ε;
-        if (abs(λ1 - sλ1) < ε) λ1 -= sλ1 * ε;
-        φ0 = d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1);
-        listener.point(sλ0, φ0);
+        if (abs(lambda0 - slambda0) < epsilon) lambda0 -= slambda0 * epsilon;
+        if (abs(lambda1 - slambda1) < epsilon) lambda1 -= slambda1 * epsilon;
+        phi0 = d3_geo_clipAntimeridianIntersect(lambda0, phi0, lambda1, phi1);
+        listener.point(slambda0, phi0);
         listener.lineEnd();
         listener.lineStart();
-        listener.point(sλ1, φ0);
+        listener.point(slambda1, phi0);
         clean = 0;
       }
-      listener.point(λ0 = λ1, φ0 = φ1);
-      sλ0 = sλ1;
+      listener.point(lambda0 = lambda1, phi0 = phi1);
+      slambda0 = slambda1;
     },
     lineEnd: function() {
       listener.lineEnd();
-      λ0 = φ0 = NaN;
+      lambda0 = phi0 = NaN;
     },
     // if there are intersections, we always rejoin the first and last segments.
     clean: function() { return 2 - clean; }
   };
 }
 
-function d3_geo_clipAntimeridianIntersect(λ0, φ0, λ1, φ1) {
-  var cosφ0,
-      cosφ1,
-      sinλ0_λ1 = Math.sin(λ0 - λ1);
-  return abs(sinλ0_λ1) > ε
-      ? Math.atan((Math.sin(φ0) * (cosφ1 = Math.cos(φ1)) * Math.sin(λ1)
-                 - Math.sin(φ1) * (cosφ0 = Math.cos(φ0)) * Math.sin(λ0))
-                 / (cosφ0 * cosφ1 * sinλ0_λ1))
-      : (φ0 + φ1) / 2;
+function d3_geo_clipAntimeridianIntersect(lambda0, phi0, lambda1, phi1) {
+  var cosphi0,
+      cosphi1,
+      sinlambda0_lambda1 = Math.sin(lambda0 - lambda1);
+  return abs(sinlambda0_lambda1) > epsilon
+      ? Math.atan((Math.sin(phi0) * (cosphi1 = Math.cos(phi1)) * Math.sin(lambda1)
+                 - Math.sin(phi1) * (cosphi0 = Math.cos(phi0)) * Math.sin(lambda0))
+                 / (cosphi0 * cosphi1 * sinlambda0_lambda1))
+      : (phi0 + phi1) / 2;
 }
 
 function d3_geo_clipAntimeridianInterpolate(from, to, direction, listener) {
-  var φ;
+  var phi;
   if (from == null) {
-    φ = direction * halfπ;
-    listener.point(-π,  φ);
-    listener.point( 0,  φ);
-    listener.point( π,  φ);
-    listener.point( π,  0);
-    listener.point( π, -φ);
-    listener.point( 0, -φ);
-    listener.point(-π, -φ);
-    listener.point(-π,  0);
-    listener.point(-π,  φ);
-  } else if (abs(from[0] - to[0]) > ε) {
-    var s = from[0] < to[0] ? π : -π;
-    φ = direction * s / 2;
-    listener.point(-s, φ);
-    listener.point( 0, φ);
-    listener.point( s, φ);
+    phi = direction * halfpi;
+    listener.point(-pi,  phi);
+    listener.point( 0,  phi);
+    listener.point( pi,  phi);
+    listener.point( pi,  0);
+    listener.point( pi, -phi);
+    listener.point( 0, -phi);
+    listener.point(-pi, -phi);
+    listener.point(-pi,  0);
+    listener.point(-pi,  phi);
+  } else if (abs(from[0] - to[0]) > epsilon) {
+    var s = from[0] < to[0] ? pi : -pi;
+    phi = direction * s / 2;
+    listener.point(-s, phi);
+    listener.point( 0, phi);
+    listener.point( s, phi);
   } else {
     listener.point(to[0], to[1]);
   }

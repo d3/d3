@@ -38,7 +38,7 @@ function d3_svg_symbolType() {
 }
 
 function d3_svg_symbolCircle(size) {
-  var r = Math.sqrt(size / π);
+  var r = Math.sqrt(size / pi);
   return "M0," + r
       + "A" + r + "," + r + " 0 1,1 0," + (-r)
       + "A" + r + "," + r + " 0 1,1 0," + r

@@ -103,31 +103,31 @@ suite.addBatch({
       assert.pathEqual(a.innerRadius(0).outerRadius(100)(), "M0,-100A100,100 0 0,1 100,0L0,0Z");
       assert.pathEqual(a.innerRadius(100).outerRadius(200)(), "M0,-200A200,200 0 0,1 200,0L100,0A100,100 0 0,0 0,-100Z");
     },
-    "draws a circle when inner radius is zero and angle is approximately 2π": function(arc) {
+    "draws a circle when inner radius is zero and angle is approximately 2pi": function(arc) {
       var a = arc().innerRadius(0).outerRadius(100);
       assert.pathEqual(a.startAngle(0).endAngle(2 * Math.PI - 1e-9)(), "M0,100A100,100 0 1,1 0,-100A100,100 0 1,1 0,100Z");
       assert.pathEqual(a.startAngle(Math.PI + 1e-9).endAngle(3 * Math.PI - 1e-9)(), "M0,100A100,100 0 1,1 0,-100A100,100 0 1,1 0,100Z");
     },
-    "draws a circle when inner radius is zero and angle is greater than 2π": function(arc) {
+    "draws a circle when inner radius is zero and angle is greater than 2pi": function(arc) {
       var a = arc().innerRadius(0).outerRadius(100);
       assert.pathEqual(a.startAngle(0).endAngle(7)(), "M0,100A100,100 0 1,1 0,-100A100,100 0 1,1 0,100Z");
       assert.pathEqual(a.startAngle(1).endAngle(8)(), "M0,100A100,100 0 1,1 0,-100A100,100 0 1,1 0,100Z");
     },
-    "draws a circular sector when inner radius is zero and angle is less than 2π": function(arc) {
+    "draws a circular sector when inner radius is zero and angle is less than 2pi": function(arc) {
       var a = arc().innerRadius(0).outerRadius(100);
       assert.pathEqual(a.startAngle(0).endAngle(Math.PI / 2)(), "M0,-100A100,100 0 0,1 100,0L0,0Z");
     },
-    "draws an annulus when inner radius is non-zero and angle is approximately 2π": function(arc) {
+    "draws an annulus when inner radius is non-zero and angle is approximately 2pi": function(arc) {
       var a = arc().innerRadius(100).outerRadius(200);
       assert.pathEqual(a.startAngle(0).endAngle(2 * Math.PI - 1e-9)(), "M0,200A200,200 0 1,1 0,-200A200,200 0 1,1 0,200M0,100A100,100 0 1,0 0,-100A100,100 0 1,0 0,100Z");
       assert.pathEqual(a.startAngle(Math.PI + 1e-9).endAngle(3 * Math.PI - 1e-9)(), "M0,200A200,200 0 1,1 0,-200A200,200 0 1,1 0,200M0,100A100,100 0 1,0 0,-100A100,100 0 1,0 0,100Z");
     },
-    "draws an annulus when inner radius is non-zero and angle is greater than 2π": function(arc) {
+    "draws an annulus when inner radius is non-zero and angle is greater than 2pi": function(arc) {
       var a = arc().innerRadius(100).outerRadius(200);
       assert.pathEqual(a.startAngle(0).endAngle(7)(), "M0,200A200,200 0 1,1 0,-200A200,200 0 1,1 0,200M0,100A100,100 0 1,0 0,-100A100,100 0 1,0 0,100Z");
       assert.pathEqual(a.startAngle(-1).endAngle(6)(), "M0,200A200,200 0 1,1 0,-200A200,200 0 1,1 0,200M0,100A100,100 0 1,0 0,-100A100,100 0 1,0 0,100Z");
     },
-    "draws an annular sector when both radii are non-zero and angle is less than 2π": function(arc) {
+    "draws an annular sector when both radii are non-zero and angle is less than 2pi": function(arc) {
       var a = arc().innerRadius(100).outerRadius(200);
       assert.pathEqual(a.startAngle(0).endAngle(Math.PI / 2)(), "M0,-200A200,200 0 0,1 200,0L100,0A100,100 0 0,0 0,-100Z");
     },

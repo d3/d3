@@ -130,22 +130,22 @@ suite.addBatch({
   }
 });
 
-function assertPointInDelta(expected, actual, δ, message) {
-  if (!δ) δ = 0;
-  if (!pointInDelta(expected, actual, δ)) {
+function assertPointInDelta(expected, actual, delta, message) {
+  if (!delta) delta = 0;
+  if (!pointInDelta(expected, actual, delta)) {
     assert.fail(JSON.stringify(actual), JSON.stringify(expected), message || "expected {expected}, got {actual}", "===", assertPointInDelta);
   }
 }
 
-function assertPolygonInDelta(expected, actual, δ, message) {
-  if (!δ) δ = 0;
-  if (expected.length !== actual.length || expected.some(function(e, i) { return !pointInDelta(e, actual[i], δ); })) {
+function assertPolygonInDelta(expected, actual, delta, message) {
+  if (!delta) delta = 0;
+  if (expected.length !== actual.length || expected.some(function(e, i) { return !pointInDelta(e, actual[i], delta); })) {
     assert.fail(JSON.stringify(actual), JSON.stringify(expected), message || "expected {expected}, got {actual}", "===", assertPolygonInDelta);
   }
 }
 
-function pointInDelta(a, b, δ) {
-  return !(Math.abs(a[0] - b[0]) > δ || Math.abs(a[1] - b[1]) > δ);
+function pointInDelta(a, b, delta) {
+  return !(Math.abs(a[0] - b[0]) > delta || Math.abs(a[1] - b[1]) > delta);
 }
 
 suite.export(module);

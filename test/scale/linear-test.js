@@ -232,7 +232,7 @@ suite.addBatch({
         var x = d3.scale.linear().domain([0, 1e5]);
         assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0k", "10k", "20k", "30k", "40k", "50k", "60k", "70k", "80k", "90k", "100k"]);
         var x = d3.scale.linear().domain([0, 1e-4]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0µ", "10µ", "20µ", "30µ", "40µ", "50µ", "60µ", "70µ", "80µ", "90µ", "100µ"]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10, "s")), ["0mu", "10mu", "20mu", "30mu", "40mu", "50mu", "60mu", "70mu", "80mu", "90mu", "100mu"]);
       },
       "if count is not specified, defaults to 10": function(d3) {
         var x = d3.scale.linear();

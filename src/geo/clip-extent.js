@@ -174,10 +174,10 @@ function d3_geo_clipExtent(x0, y0, x1, y1) {
   };
 
   function corner(p, direction) {
-    return abs(p[0] - x0) < ε ? direction > 0 ? 0 : 3
-        : abs(p[0] - x1) < ε ? direction > 0 ? 2 : 1
-        : abs(p[1] - y0) < ε ? direction > 0 ? 1 : 0
-        : direction > 0 ? 3 : 2; // abs(p[1] - y1) < ε
+    return abs(p[0] - x0) < epsilon ? direction > 0 ? 0 : 3
+        : abs(p[0] - x1) < epsilon ? direction > 0 ? 2 : 1
+        : abs(p[1] - y0) < epsilon ? direction > 0 ? 1 : 0
+        : direction > 0 ? 3 : 2; // abs(p[1] - y1) < epsilon
   }
 
   function compare(a, b) {

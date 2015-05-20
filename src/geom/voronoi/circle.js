@@ -27,7 +27,7 @@ function d3_geom_voronoiAttachCircle(arc) {
       cy = rSite.y - by;
 
   var d = 2 * (ax * cy - ay * cx);
-  if (d >= -ε2) return;
+  if (d >= -epsilon2) return;
 
   var ha = ax * ax + ay * ay,
       hc = cx * cx + cy * cy,

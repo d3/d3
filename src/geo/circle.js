@@ -56,9 +56,9 @@ function d3_geo_circleInterpolate(radius, precision) {
     if (from != null) {
       from = d3_geo_circleAngle(cr, from);
       to = d3_geo_circleAngle(cr, to);
-      if (direction > 0 ? from < to: from > to) from += direction * τ;
+      if (direction > 0 ? from < to: from > to) from += direction * tau;
     } else {
-      from = radius + direction * τ;
+      from = radius + direction * tau;
       to = radius - .5 * step;
     }
     for (var point, t = from; direction > 0 ? t > to : t < to; t -= step) {
@@ -77,5 +77,5 @@ function d3_geo_circleAngle(cr, point) {
   a[0] -= cr;
   d3_geo_cartesianNormalize(a);
   var angle = d3_acos(-a[1]);
-  return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI - ε) % (2 * Math.PI);
+  return ((-a[2] < 0 ? -angle : angle) + 2 * Math.PI - epsilon) % (2 * Math.PI);
 }

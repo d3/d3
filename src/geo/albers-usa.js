@@ -114,12 +114,12 @@ d3.geo.albersUsa = function() {
 
     alaskaPoint = alaska
         .translate([x - .307 * k, y + .201 * k])
-        .clipExtent([[x - .425 * k + ε, y + .120 * k + ε], [x - .214 * k - ε, y + .234 * k - ε]])
+        .clipExtent([[x - .425 * k + epsilon, y + .120 * k + epsilon], [x - .214 * k - epsilon, y + .234 * k - epsilon]])
         .stream(pointStream).point;
 
     hawaiiPoint = hawaii
         .translate([x - .205 * k, y + .212 * k])
-        .clipExtent([[x - .214 * k + ε, y + .166 * k + ε], [x - .115 * k - ε, y + .234 * k - ε]])
+        .clipExtent([[x - .214 * k + epsilon, y + .166 * k + epsilon], [x - .115 * k - epsilon, y + .234 * k - epsilon]])
         .stream(pointStream).point;
 
     return albersUsa;

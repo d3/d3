@@ -2,12 +2,12 @@ import "../math/trigonometry";
 import "geo";
 import "projection";
 
-function d3_geo_mercator(λ, φ) {
-  return [λ, Math.log(Math.tan(π / 4 + φ / 2))];
+function d3_geo_mercator(lambda, phi) {
+  return [lambda, Math.log(Math.tan(pi / 4 + phi / 2))];
 }
 
 d3_geo_mercator.invert = function(x, y) {
-  return [x, 2 * Math.atan(Math.exp(y)) - halfπ];
+  return [x, 2 * Math.atan(Math.exp(y)) - halfpi];
 };
 
 function d3_geo_mercatorProjection(project) {
@@ -31,7 +31,7 @@ function d3_geo_mercatorProjection(project) {
     var v = clipExtent.apply(m, arguments);
     if (v === m) {
       if (clipAuto = _ == null) {
-        var k = π * scale(), t = translate();
+        var k = pi * scale(), t = translate();
         clipExtent([[t[0] - k, t[1] - k], [t[0] + k, t[1] + k]]);
       }
     } else if (clipAuto) {

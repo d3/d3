@@ -1,8 +1,8 @@
 import "geo";
 import "projection";
 
-function d3_geo_equirectangular(λ, φ) {
-  return [λ, φ];
+function d3_geo_equirectangular(lambda, phi) {
+  return [lambda, phi];
 }
 
 (d3.geo.equirectangular = function() {

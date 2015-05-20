@@ -786,8 +786,8 @@ suite.addBatch({
       "wavy projection": function(path) {
         var p = path()
             .context(testContext)
-            .projection(_.geo.projection(function(λ, φ) {
-                return [λ, Math.sin(λ * 4)];
+            .projection(_.geo.projection(function(lambda, phi) {
+                return [lambda, Math.sin(lambda * 4)];
               })
               .scale(140)
               .precision(1));

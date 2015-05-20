@@ -29,8 +29,8 @@ d3.svg.chord = function() {
   function subgroup(self, f, d, i) {
     var subgroup = f.call(self, d, i),
         r = radius.call(self, subgroup, i),
-        a0 = startAngle.call(self, subgroup, i) - halfπ,
-        a1 = endAngle.call(self, subgroup, i) - halfπ;
+        a0 = startAngle.call(self, subgroup, i) - halfpi,
+        a1 = endAngle.call(self, subgroup, i) - halfpi;
     return {
       r: r,
       a0: a0,
@@ -45,7 +45,7 @@ d3.svg.chord = function() {
   }
 
   function arc(r, p, a) {
-    return "A" + r + "," + r + " 0 " + +(a > π) + ",1 " + p;
+    return "A" + r + "," + r + " 0 " + +(a > pi) + ",1 " + p;
   }
 
   function curve(r0, p0, r1, p1) {

@@ -1,23 +1,23 @@
 // Abstract azimuthal projection.
 function d3_geo_azimuthal(scale, angle) {
-  function azimuthal(λ, φ) {
-    var cosλ = Math.cos(λ),
-        cosφ = Math.cos(φ),
-        k = scale(cosλ * cosφ);
+  function azimuthal(lambda, phi) {
+    var coslambda = Math.cos(lambda),
+        cosphi = Math.cos(phi),
+        k = scale(coslambda * cosphi);
     return [
-      k * cosφ * Math.sin(λ),
-      k * Math.sin(φ)
+      k * cosphi * Math.sin(lambda),
+      k * Math.sin(phi)
     ];
   }
 
   azimuthal.invert = function(x, y) {
-    var ρ = Math.sqrt(x * x + y * y),
-        c = angle(ρ),
+    var rho = Math.sqrt(x * x + y * y),
+        c = angle(rho),
         sinc = Math.sin(c),
         cosc = Math.cos(c);
     return [
-      Math.atan2(x * sinc, ρ * cosc),
-      Math.asin(ρ && y * sinc / ρ)
+      Math.atan2(x * sinc, rho * cosc),
+      Math.asin(rho && y * sinc / rho)
     ];
   };
 

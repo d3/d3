@@ -51,11 +51,11 @@
     "main": "d3.js"
   },
   "devDependencies": {
-    "jsdom": "3",
+    "jsdom": "^3.1.2",
     "seedrandom": "2",
-    "smash": "0.0",
+    "smash": "0.0.14",
     "uglify-js": "2.4.16",
-    "vows": "0.8"
+    "vows": "^0.8.1"
   },
   "scripts": {
     "test": "vows; echo"

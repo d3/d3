@@ -47,12 +47,12 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
       }
     };
 
-    function point(λ, φ) {
-      var point = rotate(λ, φ);
-      if (pointVisible(λ = point[0], φ = point[1])) listener.point(λ, φ);
+    function point(lambda, phi) {
+      var point = rotate(lambda, phi);
+      if (pointVisible(lambda = point[0], phi = point[1])) listener.point(lambda, phi);
     }
-    function pointLine(λ, φ) {
-      var point = rotate(λ, φ);
+    function pointLine(lambda, phi) {
+      var point = rotate(lambda, phi);
       line.point(point[0], point[1]);
     }
     function lineStart() { clip.point = pointLine; line.lineStart(); }
@@ -66,9 +66,9 @@ function d3_geo_clip(pointVisible, clipLine, interpolate, clipStart) {
         polygon,
         ring;
 
-    function pointRing(λ, φ) {
-      ring.push([λ, φ]);
-      var point = rotate(λ, φ);
+    function pointRing(lambda, phi) {
+      ring.push([lambda, phi]);
+      var point = rotate(lambda, phi);
       ringListener.point(point[0], point[1]);
     }
 
@@ -127,7 +127,7 @@ function d3_geo_clipBufferListener() {
       line;
   return {
     lineStart: function() { lines.push(line = []); },
-    point: function(λ, φ) { line.push([λ, φ]); },
+    point: function(lambda, phi) { line.push([lambda, phi]); },
     lineEnd: d3_noop,
     buffer: function() {
       var buffer = lines;
@@ -144,6 +144,6 @@ function d3_geo_clipBufferListener() {
 // Intersection points are sorted along the clip edge. For both antimeridian
 // cutting and circle clipping, the same comparison is used.
 function d3_geo_clipSort(a, b) {
-  return ((a = a.x)[0] < 0 ? a[1] - halfπ - ε : halfπ - a[1])
-       - ((b = b.x)[0] < 0 ? b[1] - halfπ - ε : halfπ - b[1]);
+  return ((a = a.x)[0] < 0 ? a[1] - halfpi - epsilon : halfpi - a[1])
+       - ((b = b.x)[0] < 0 ? b[1] - halfpi - epsilon : halfpi - b[1]);
 }

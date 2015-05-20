@@ -79,7 +79,7 @@ suite.addBatch({
       assert.strictEqual(f(1000), "1k");
       assert.strictEqual(f(1400), "1.4k");
       assert.strictEqual(f(1500.5), "1.5005k");
-      assert.strictEqual(f(.000001), "1µ");
+      assert.strictEqual(f(.000001), "1mu");
     },
     "can output SI prefix notation with appropriate rounding": function(format) {
       var f = format(".3s");
@@ -94,7 +94,7 @@ suite.addBatch({
       assert.strictEqual(f(145500000), "146M");
       assert.strictEqual(f(145999999.999999347), "146M");
       assert.strictEqual(f(1e26), "100Y");
-      assert.strictEqual(f(.000001), "1.00µ");
+      assert.strictEqual(f(.000001), "1.00mu");
       assert.strictEqual(f(.009995), "10.0m");
       var f = format(".4s");
       assert.strictEqual(f(999.5), "999.5");
@@ -114,7 +114,7 @@ suite.addBatch({
       assert.strictEqual(f(145500000), "$146M");
       assert.strictEqual(f(145999999.999999347), "$146M");
       assert.strictEqual(f(1e26), "$100Y");
-      assert.strictEqual(f(.000001), "$1.00µ");
+      assert.strictEqual(f(.000001), "$1.00mu");
       assert.strictEqual(f(.009995), "$10.0m");
       var f = format("$.4s");
       assert.strictEqual(f(999.5), "$999.5");
@@ -124,10 +124,10 @@ suite.addBatch({
     "SI prefix notation precision is consistent for small and large numbers": function(format) {
       assert.deepEqual(
         [    1e-5,     1e-4,     1e-3,     1e-2,     1e-1,    1e-0,     1e1,     1e2,      1e3,      1e4,      1e5].map(format("s")),
-        [    '10µ',   '100µ',    '1m',    '10m',   '100m',     '1',    '10',    '100',    '1k',    '10k',   '100k']);
+        [    '10mu',   '100mu',    '1m',    '10m',   '100m',     '1',    '10',    '100',    '1k',    '10k',   '100k']);
       assert.deepEqual(
         [    1e-5,     1e-4,     1e-3,     1e-2,     1e-1,    1e-0,     1e1,     1e2,      1e3,      1e4,      1e5].map(format(".4s")),
-        ['10.00µ', '100.0µ', '1.000m', '10.00m', '100.0m', '1.000', '10.00', '100.0', '1.000k', '10.00k', '100.0k']);
+        ['10.00mu', '100.0mu', '1.000m', '10.00m', '100.0m', '1.000', '10.00', '100.0', '1.000k', '10.00k', '100.0k']);
     },
     "can output a currency": function(format) {
       var f = format("$");

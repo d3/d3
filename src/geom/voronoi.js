@@ -35,8 +35,8 @@ d3.geom.voronoi = function(points) {
   function sites(data) {
     return data.map(function(d, i) {
       return {
-        x: Math.round(fx(d, i) / ε) * ε,
-        y: Math.round(fy(d, i) / ε) * ε,
+        x: Math.round(fx(d, i) / epsilon) * epsilon,
+        y: Math.round(fy(d, i) / epsilon) * epsilon,
         i: i
       };
     });
