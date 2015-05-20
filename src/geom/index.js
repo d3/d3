@@ -4,3 +4,4 @@ import "polygon";
 import "voronoi";
 import "delaunay";
 import "quadtree";
+import "octree";

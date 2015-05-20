@@ -2,6 +2,7 @@ import "layout";
 import "bundle";
 import "chord";
 import "force";
+import "force3d";
 import "partition";
 import "pie";
 import "stack";
