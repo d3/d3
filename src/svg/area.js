@@ -11,7 +11,7 @@ function d3_svg_area(projection) {
       y0 = 0,
       y1 = d3_geom_pointY,
       defined = d3_true,
-      interpolate = d3_svg_lineLinear,
+      interpolate = d3.svg.interpolator.linear,
       interpolateKey = interpolate.key,
       interpolateReverse = interpolate,
       L = "L",
@@ -98,7 +98,7 @@ function d3_svg_area(projection) {
   area.interpolate = function(_) {
     if (!arguments.length) return interpolateKey;
     if (typeof _ === "function") interpolateKey = interpolate = _;
-    else interpolateKey = (interpolate = d3_svg_lineInterpolators.get(_) || d3_svg_lineLinear).key;
+    else interpolateKey = (interpolate = d3_svg_lineInterpolators.get(_) || d3.svg.interpolator.linear).key;
     interpolateReverse = interpolate.reverse || interpolate;
     L = interpolate.closed ? "M" : "L";
     return area;
@@ -113,8 +113,8 @@ function d3_svg_area(projection) {
   return area;
 }
 
-d3_svg_lineStepBefore.reverse = d3_svg_lineStepAfter;
-d3_svg_lineStepAfter.reverse = d3_svg_lineStepBefore;
+d3.svg.interpolator.stepBefore.reverse = d3.svg.interpolator.stepAfter;
+d3.svg.interpolator.stepAfter.reverse = d3.svg.interpolator.stepBefore;
 
 d3.svg.area = function() {
   return d3_svg_area(d3_identity);
