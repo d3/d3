@@ -1303,7 +1303,7 @@
       x: 0,
       y: 0,
       k: 1
-    }, translate0, center0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, duration = 250, zooming = 0, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchstart = "touchstart.zoom", touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1;
+    }, translate0, center0, center, size = [ 960, 500 ], scaleExtent = d3_behavior_zoomInfinity, duration = 250, zooming = 0, mousedown = "mousedown.zoom", mousemove = "mousemove.zoom", mouseup = "mouseup.zoom", mousewheelTimer, touchtime, event = d3_eventDispatch(zoom, "zoomstart", "zoom", "zoomend"), x0, x1, y0, y1, pointers = [];
     if (!d3_behavior_zoomWheel) {
       d3_behavior_zoomWheel = "onwheel" in d3_document ? (d3_behavior_zoomDelta = function() {
         return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1);
@@ -1313,8 +1313,32 @@
         return -d3.event.detail;
       }, "MozMousePixelScroll");
     }
+    if (!d3_behavior_zoomTouch) {
+      if (window.PointerEvent) {
+        d3_behavior_zoomTouch = {
+          down: "pointerdown",
+          move: "pointermove",
+          up: "pointerup",
+          cancel: "pointercancel"
+        };
+        d3_behavior_zoomTouchHandler = pointerdowned;
+      } else if (window.MSPointerEvent) {
+        d3_behavior_zoomTouch = {
+          down: "MSPointerDown",
+          move: "MSPointerMove",
+          up: "MSPointerUp",
+          cancel: "pointercancel"
+        };
+        d3_behavior_zoomTouchHandler = pointerdowned;
+      } else {
+        d3_behavior_zoomTouch = {
+          down: "touchstart"
+        };
+        d3_behavior_zoomTouchHandler = touchstarted;
+      }
+    }
     function zoom(g) {
-      g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on("dblclick.zoom", dblclicked).on(touchstart, touchstarted);
+      g.on(mousedown, mousedowned).on(d3_behavior_zoomWheel + ".zoom", mousewheeled).on("dblclick.zoom", dblclicked).on(d3_behavior_zoomTouch.down + ".zoom", d3_behavior_zoomTouchHandler);
     }
     zoom.event = function(g) {
       g.each(function() {
@@ -1485,7 +1509,7 @@
       var that = this, dispatch = event.of(that, arguments), locations0 = {}, distance0 = 0, scale0, zoomName = ".zoom-" + d3.event.changedTouches[0].identifier, touchmove = "touchmove" + zoomName, touchend = "touchend" + zoomName, targets = [], subject = d3.select(that), dragRestore = d3_event_dragSuppress(that);
       started();
       zoomstarted(dispatch);
-      subject.on(mousedown, null).on(touchstart, started);
+      subject.on(mousedown, null).on(d3_behavior_zoomTouch.down + ".zoom", started);
       function relocate() {
         var touches = d3.touches(that);
         scale0 = view.k;
@@ -1546,8 +1570,75 @@
           }
         }
         d3.selectAll(targets).on(zoomName, null);
-        subject.on(mousedown, mousedowned).on(touchstart, touchstarted);
+        subject.on(mousedown, mousedowned).on(d3_behavior_zoomTouch.down + ".zoom", d3_behavior_zoomTouchHandler);
         dragRestore();
+        zoomended(dispatch);
+      }
+    }
+    function getAnotherPointer(id) {
+      for (var i = 0; i < pointers.length; i++) {
+        if (pointers[i].identifier != id) return pointers[i];
+      }
+    }
+    function addUpdatePointer(p) {
+      for (var i = 0; i < pointers.length; i++) {
+        if (pointers[i].identifier == p.identifier) {
+          if (pointers[i][0] == p[0] && pointers[i][1] == p[1]) return false;
+          pointers[i] = p;
+          return true;
+        }
+      }
+      pointers.push(p);
+      return true;
+    }
+    function removePointer(id) {
+      for (var i = 0; i < pointers.length; i++) {
+        if (pointers[i].identifier == id) {
+          pointers.splice(i, 1);
+        }
+      }
+    }
+    function pointerdowned() {
+      var that = this, e = d3_eventSource(), dispatch = event.of(that, arguments), locations0, distance0 = 0, scale0, zoomName = ".zoom-" + e.pointerId, subject = d3.select(that);
+      started();
+      zoomstarted(dispatch);
+      subject.on(mousedown, null);
+      subject.on(d3_behavior_zoomTouch.down + zoomName, started);
+      function started() {
+        var p = d3_mousePoint(that, e);
+        p.identifier = e.pointerId;
+        addUpdatePointer(p);
+        locations0 = location(p);
+        scale0 = view.k;
+        console.log("scale0: " + scale0);
+        d3_eventPreventDefault();
+        subject.on(d3_behavior_zoomTouch.move + zoomName, moved).on(d3_behavior_zoomTouch.up + zoomName, ended);
+        if (pointers.length > 1) {
+          var p = pointers[0], q = pointers[1], dx = p[0] - q[0], dy = p[1] - q[1];
+          distance0 = dx * dx + dy * dy;
+        }
+      }
+      function moved() {
+        var p0, l0, p1, l1, ee = d3_eventSource();
+        p0 = d3_mousePoint(that, ee);
+        p0.identifier = ee.pointerId;
+        if (!addUpdatePointer(p0)) return;
+        l0 = locations0;
+        if (pointers.length > 1) {
+          p1 = getAnotherPointer(p0.identifier);
+          l1 = location(p1);
+          var dx = p1[0] - p0[0], dy = p1[1] - p0[1], distance1 = dx * dx + dy * dy;
+          var scale1 = distance0 != 0 ? Math.sqrt(distance1 / distance0) : 0;
+          p0 = [ (p0[0] + p1[0]) / 2, (p0[1] + p1[1]) / 2 ];
+          l0 = [ (l0[0] + l1[0]) / 2, (l0[1] + l1[1]) / 2 ];
+          scaleTo(scale1 * scale0);
+        }
+        translateTo(p0, l0);
+        zoomed(dispatch);
+      }
+      function ended() {
+        removePointer(e.pointerId);
+        subject.on(zoomName, null);
         zoomended(dispatch);
       }
     }
@@ -1570,7 +1661,7 @@
     }
     return d3.rebind(zoom, event, "on");
   };
-  var d3_behavior_zoomInfinity = [ 0, Infinity ], d3_behavior_zoomDelta, d3_behavior_zoomWheel;
+  var d3_behavior_zoomInfinity = [ 0, Infinity ], d3_behavior_zoomDelta, d3_behavior_zoomWheel, d3_behavior_zoomTouch, d3_behavior_zoomTouchHandler;
   d3.color = d3_color;
   function d3_color() {}
   d3_color.prototype.toString = function() {
