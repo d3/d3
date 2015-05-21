@@ -16,7 +16,7 @@ d3.layout.pack = function() {
 
     // Recursively compute the layout.
     root.x = root.y = 0;
-    d3_layout_hierarchyVisitAfter(root, function(d) { d.r = +r(d.value); });
+    d3_layout_hierarchyVisitAfter(root, function(d) {d.r = +r(d.parentValue || d.value); });
     d3_layout_hierarchyVisitAfter(root, d3_layout_packSiblings);
 
     // When padding, recompute the layout using scaled padding.
@@ -165,7 +165,11 @@ function d3_layout_packSiblings(node) {
     c.y -= cy;
     cr = Math.max(cr, c.r + Math.sqrt(c.x * c.x + c.y * c.y));
   }
-  node.r = cr;
+  if (node.parentValue) {
+    node.r += cr;
+  } else {
+    node.r = cr;
+  }
 
   // Remove node links.
   nodes.forEach(d3_layout_packUnlink);

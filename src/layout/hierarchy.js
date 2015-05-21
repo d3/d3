@@ -5,7 +5,8 @@ import "layout";
 d3.layout.hierarchy = function() {
   var sort = d3_layout_hierarchySort,
       children = d3_layout_hierarchyChildren,
-      value = d3_layout_hierarchyValue;
+      value = d3_layout_hierarchyValue,
+      parentValue;
 
   function hierarchy(root) {
     var stack = [root],
@@ -34,9 +35,9 @@ d3.layout.hierarchy = function() {
     d3_layout_hierarchyVisitAfter(root, function(node) {
       var childs, parent;
       if (sort && (childs = node.children)) childs.sort(sort);
-      if (value && (parent = node.parent)) parent.value += node.value;
+      if (childs && parentValue) node.parentValue = parentValue.call(hierarchy, node, node.depth);
+      if (value && (parent = node.parent)) parent.value += (node.parentValue || node.value);
     });
-
     return nodes;
   }
 
@@ -58,6 +59,12 @@ d3.layout.hierarchy = function() {
     return hierarchy;
   };
 
+  hierarchy.parentValue = function(x) {
+    if (!arguments.length) return parentValue;
+    parentValue = x;
+    return hierarchy;
+  };
+
   // Re-evaluates the `value` property for the specified hierarchy.
   hierarchy.revalue = function(root) {
     if (value) {
@@ -66,7 +73,11 @@ d3.layout.hierarchy = function() {
       });
       d3_layout_hierarchyVisitAfter(root, function(node) {
         var parent;
-        if (!node.children) node.value = +value.call(hierarchy, node, node.depth) || 0;
+        if (!node.children) {
+          node.value = +value.call(hierarchy, node, node.depth) || 0;
+        } else if (parentValue) {
+          node.parentValue = parentValue.call(hierarchy, node, node.depth);
+        }
         if (parent = node.parent) parent.value += node.value;
       });
     }
@@ -78,7 +89,7 @@ d3.layout.hierarchy = function() {
 
 // A method assignment helper for hierarchy subclasses.
 function d3_layout_hierarchyRebind(object, hierarchy) {
-  d3.rebind(object, hierarchy, "sort", "children", "value");
+  d3.rebind(object, hierarchy, "sort", "children", "value", 'parentValue');
 
   // Add an alias for nodes and links, for convenience.
   object.nodes = object;

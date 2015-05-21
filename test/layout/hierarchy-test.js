@@ -33,7 +33,16 @@ suite.addBatch({
       assert.equal(nodes[0].value, 6);
       h(nodes[0]); // calls hierarchy.revalue
       assert.equal(nodes[0].value, 6);
+    },
+    "parentValue": function(hierarchy) {
+      var h = hierarchy(),
+          nodes = h.nodes({children: [{children: [{value: 1}, {value: 2}]}, {value: 3}]});
+      assert.equal(nodes[0].parentValue, undefined);
+      nodes = h.parentValue(function (d) {return d.value + 1}).nodes({children: [{children: [{value: 1}, {value: 2}]}, {value: 3}]});
+      assert.equal(nodes[0].parentValue, 8);
+      assert.equal(nodes[1].parentValue, 4);
     }
+
   }
 });
 
