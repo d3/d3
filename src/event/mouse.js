@@ -1,15 +1,18 @@
 import "../core/document";
 import "event";
 
-d3.mouse = function(container) {
-  return d3_mousePoint(container, d3_eventSource());
+d3.mouse = function(container, identifier) {
+  var event = d3_eventSource();
+  if (arguments.length < 2) identifier = event.pointerId; // ok if undefined
+  return d3_mousePoint(container, event, identifier);
 };
 
 // https://bugs.webkit.org/show_bug.cgi?id=44083
 var d3_mouse_bug44083 = this.navigator && /WebKit/.test(this.navigator.userAgent) ? -1 : 0;
 
-function d3_mousePoint(container, e) {
+function d3_mousePoint(container, e, id) {
   if (e.changedTouches) e = e.changedTouches[0];
+  if (e.pointerId !== id) return;
   var svg = container.ownerSVGElement || container;
   if (svg.createSVGPoint) {
     var point = svg.createSVGPoint();

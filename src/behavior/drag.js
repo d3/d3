@@ -10,12 +10,21 @@ import "behavior";
 d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
       origin = null,
+      ptrdown = dragstart(d3_behavior_dragPointerId, d3.mouse, d3_window, "pointermove", "pointerup"),
       mousedown = dragstart(d3_noop, d3.mouse, d3_window, "mousemove", "mouseup"),
       touchstart = dragstart(d3_behavior_dragTouchId, d3.touch, d3_identity, "touchmove", "touchend");
 
   function drag() {
-    this.on("mousedown.drag", mousedown)
-        .on("touchstart.drag", touchstart);
+    if (navigator.pointerEnabled) {
+      if (this.style("touch-action") === "auto") {
+          // disable intrisic behaviors to get events
+          this.style("touch-action", "none");
+      }
+      this.on("pointerdown.drag", ptrdown);
+    } else {
+      this.on("mousedown.drag", mousedown)
+          .on("touchstart.drag", touchstart);
+    }
   }
 
   function dragstart(id, position, subject, move, end) {
@@ -85,4 +94,8 @@ d3.behavior.drag = function() {
 // tearing the fabric of spacetime, we allow the first touch to win.
 function d3_behavior_dragTouchId() {
   return d3.event.changedTouches[0].identifier;
+}
+
+function d3_behavior_dragPointerId() {
+  return d3.event.pointerId;
 }
