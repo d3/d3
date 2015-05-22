@@ -291,9 +291,14 @@ function d3_time_parseYear(date, string, i) {
 }
 
 function d3_time_parseZone(date, string, i) {
-  return /^[+-]\d{4}$/.test(string = string.slice(i, i + 5))
-      ? (date.Z = -string, i + 5) // sign differs from getTimezoneOffset!
-      : -1;
+  var n = /^(Z)|([+-]\d\d)(?:\:?(\d\d))?/.exec(string.slice(i));
+  if (n) {
+    date.Z = n[1]
+      ? 0
+      : -(n[2] + (n[3] || "00")); // sign differs from getTimezoneOffset!
+    return i + n[0].length;
+  }
+  return -1;
 }
 
 function d3_time_expandYear(d) {
