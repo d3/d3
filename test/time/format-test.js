@@ -334,6 +334,20 @@ suite.addBatch({
         assert.deepEqual(p("01/02/1990 -0130"), local(1990, 0, 1, 17, 30));
         assert.deepEqual(p("01/02/1990 -0800"), local(1990, 0, 2, 0));
       },
+      "parses timezone offset (in the form '+-hh:mm')": function(format) {
+        var p = format("%m/%d/%Y %Z").parse;
+        assert.deepEqual(p("01/02/1990 +01:30"), local(1990, 0, 1, 14, 30));
+        assert.deepEqual(p("01/02/1990 -01:30"), local(1990, 0, 1, 17, 30));
+      },
+      "parses timezone offset (in the form '+-hh')": function(format) {
+        var p = format("%m/%d/%Y %Z").parse;
+        assert.deepEqual(p("01/02/1990 +01"), local(1990, 0, 1, 15));
+        assert.deepEqual(p("01/02/1990 -01"), local(1990, 0, 1, 17));
+      },
+      "parses timezone offset (in the form 'Z')": function(format) {
+        var p = format("%m/%d/%Y %Z").parse;
+        assert.deepEqual(p("01/02/1990 Z"), local(1990, 0, 1, 16));
+      },
       "ignores optional padding modifier, skipping zeroes and spaces": function(format) {
         var p = format("%-m/%0d/%_Y").parse;
         assert.deepEqual(p("01/ 1/1990"), local(1990, 0, 1));
