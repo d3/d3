@@ -39,6 +39,10 @@ suite.addBatch({
       "groups are arrays, not NodeLists": function(d3) {
         var div = d3.select("body").selectAll(function() { return this.getElementsByClassName("div"); });
         assert.isTrue(Array.isArray(div[0]));
+        
+        var body = d3.select("body").node(),
+            sel = d3.selectAll(body.children);
+        assert.isTrue(Array.isArray(sel[0]));
       },
       "sets the parentNode to the document element": function(d3) {
         var selection = d3.selectAll("body"),
