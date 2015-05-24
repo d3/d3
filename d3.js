@@ -7945,39 +7945,52 @@
       var r0 = Math.max(0, +innerRadius.apply(this, arguments)), r1 = Math.max(0, +outerRadius.apply(this, arguments)), a0 = startAngle.apply(this, arguments) - halfπ, a1 = endAngle.apply(this, arguments) - halfπ, da = Math.abs(a1 - a0), cw = a0 > a1 ? 0 : 1;
       if (r1 < r0) rc = r1, r1 = r0, r0 = rc;
       if (da >= τε) return circleSegment(r1, cw) + (r0 ? circleSegment(r0, 1 - cw) : "") + "Z";
-      var rc, cr, rp, ap, p0 = 0, p1 = 0, x0, y0, x1, y1, x2, y2, x3, y3, path = [];
-      if (ap = (+padAngle.apply(this, arguments) || 0) / 2) {
+      var rc, cr, rp, tap, ap, p00 = 0, p01 = 0, p10 = 0, p11 = 0, x0, y0, x1, y1, x2, y2, x3, y3, path = [];
+      tap = padAngle.apply(this, arguments);
+      if (!tap && !(typeof tap === "object" && tap.constructor === Array)) tap = 0;
+      ap = true;
+      if (typeof tap === "number") ap = tap / 2;
+      if (ap) {
         rp = padRadius === d3_svg_arcAuto ? Math.sqrt(r0 * r0 + r1 * r1) : +padRadius.apply(this, arguments);
-        if (!cw) p1 *= -1;
-        if (r1) p1 = d3_asin(rp / r1 * Math.sin(ap));
-        if (r0) p0 = d3_asin(rp / r0 * Math.sin(ap));
+        if (r1) {
+          p10 = d3_asin(rp / r1 * Math.sin(ap === true ? tap[0] / 2 : ap));
+          p11 = d3_asin(rp / r1 * Math.sin(ap === true ? tap[1] / 2 : ap));
+        }
+        if (r0) {
+          p00 = d3_asin(rp / r0 * Math.sin(ap === true ? tap[0] / 2 : ap));
+          p01 = d3_asin(rp / r0 * Math.sin(ap === true ? tap[1] / 2 : ap));
+        }
       }
       if (r1) {
-        x0 = r1 * Math.cos(a0 + p1);
-        y0 = r1 * Math.sin(a0 + p1);
-        x1 = r1 * Math.cos(a1 - p1);
-        y1 = r1 * Math.sin(a1 - p1);
-        var l1 = Math.abs(a1 - a0 - 2 * p1) <= π ? 0 : 1;
-        if (p1 && d3_svg_arcSweep(x0, y0, x1, y1) === cw ^ l1) {
-          var h1 = (a0 + a1) / 2;
-          x0 = r1 * Math.cos(h1);
-          y0 = r1 * Math.sin(h1);
-          x1 = y1 = null;
+        x0 = r1 * Math.cos(a0 + p10);
+        y0 = r1 * Math.sin(a0 + p10);
+        x1 = r1 * Math.cos(a1 - p11);
+        y1 = r1 * Math.sin(a1 - p11);
+        var l10 = Math.abs(a1 - a0 - 2 * p10) <= π ? 0 : 1, l11 = Math.abs(a1 - a0 - 2 * p11) <= π ? 0 : 1;
+        if (p10 && d3_svg_arcSweep(x0, y0, x1, y1) === cw ^ l10) {
+          x0 = r1 * Math.cos(a1);
+          y0 = r1 * Math.sin(a1);
+        }
+        if (p11 && d3_svg_arcSweep(x0, y0, x1, y1) === cw ^ l11) {
+          x1 = r1 * Math.cos(a0);
+          y1 = r1 * Math.sin(a0);
         }
       } else {
         x0 = y0 = 0;
       }
       if (r0) {
-        x2 = r0 * Math.cos(a1 - p0);
-        y2 = r0 * Math.sin(a1 - p0);
-        x3 = r0 * Math.cos(a0 + p0);
-        y3 = r0 * Math.sin(a0 + p0);
-        var l0 = Math.abs(a0 - a1 + 2 * p0) <= π ? 0 : 1;
-        if (p0 && d3_svg_arcSweep(x2, y2, x3, y3) === 1 - cw ^ l0) {
-          var h0 = (a0 + a1) / 2;
-          x2 = r0 * Math.cos(h0);
-          y2 = r0 * Math.sin(h0);
-          x3 = y3 = null;
+        x2 = r0 * Math.cos(a1 - p01);
+        y2 = r0 * Math.sin(a1 - p01);
+        x3 = r0 * Math.cos(a0 + p00);
+        y3 = r0 * Math.sin(a0 + p00);
+        var l00 = Math.abs(a0 - a1 + 2 * p00) <= π ? 0 : 1, l01 = Math.abs(a0 - a1 + 2 * p01) <= π ? 0 : 1;
+        if (p00 && d3_svg_arcSweep(x2, y2, x3, y3) === 1 - cw ^ l00) {
+          x2 = r0 * Math.cos(a1);
+          y2 = r0 * Math.sin(a1);
+        }
+        if (p01 && d3_svg_arcSweep(x2, y2, x3, y3) === 1 - cw ^ l01) {
+          x3 = r0 * Math.cos(a0);
+          y3 = r0 * Math.sin(a0);
         }
       } else {
         x2 = y2 = 0;
@@ -8007,9 +8020,9 @@
         }
       } else {
         path.push("M", x0, ",", y0);
-        if (x1 != null) path.push("A", r1, ",", r1, " 0 ", l1, ",", cw, " ", x1, ",", y1);
+        if (x1 != null) path.push("A", r1, ",", r1, " 0 ", l11, ",", cw, " ", x1, ",", y1);
         path.push("L", x2, ",", y2);
-        if (x3 != null) path.push("A", r0, ",", r0, " 0 ", l0, ",", 1 - cw, " ", x3, ",", y3);
+        if (x3 != null) path.push("A", r0, ",", r0, " 0 ", l01, ",", 1 - cw, " ", x3, ",", y3);
       }
       path.push("Z");
       return path.join("");
