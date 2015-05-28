@@ -13,5 +13,5 @@ console.log(JSON.stringify({
   "scripts": [
     "d3.js"
   ],
-  "license": package.licenses[0].type
+  "license": package.license
 }, null, 2));
