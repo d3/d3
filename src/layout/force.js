@@ -265,9 +265,9 @@ d3.layout.force = function() {
       }
       var candidates = neighbors[i],
           j = -1,
-          m = candidates.length,
+          l = candidates.length,
           x;
-      while (++j < m) if (!isNaN(x = candidates[j][dimension])) return x;
+      while (++j < l) if (!isNaN(x = candidates[j][dimension])) return x;
       return Math.random() * size;
     }
 

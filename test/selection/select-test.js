@@ -34,8 +34,33 @@ suite.addBatch({
         var body = d3.select("body").node(),
             div = d3.select(body.lastChild);
         assert.isTrue(div[0][0] === body.lastChild);
+        assert.isTrue(div[0].parentNode === body.ownerDocument.documentElement);
         assert.lengthOf(div, 1);
         assert.lengthOf(div[0], 1);
+      },
+      "selects a document": function(d3) {
+        var document = d3.selection().node().ownerDocument,
+            selection = d3.select(document);
+        assert.isTrue(selection[0][0] === document);
+        assert.isTrue(selection[0].parentNode === document.documentElement);
+        assert.lengthOf(selection, 1);
+        assert.lengthOf(selection[0], 1);
+      },
+      "selects a window": function(d3) {
+        var window = d3.selection().node().ownerDocument.defaultView,
+            selection = d3.select(window);
+        assert.isTrue(selection[0][0] === window);
+        assert.isTrue(selection[0].parentNode === window.document.documentElement);
+        assert.lengthOf(selection, 1);
+        assert.lengthOf(selection[0], 1);
+      },
+      "selects an arbitrary object": function(d3) {
+        var object = {},
+            selection = d3.select(object);
+        assert.isTrue(selection[0][0] === object);
+        assert.isTrue(selection[0].parentNode === undefined);
+        assert.lengthOf(selection, 1);
+        assert.lengthOf(selection[0], 1);
       },
       "sets the parentNode to the document element": function(d3) {
         var selection = d3.select("body"),

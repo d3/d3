@@ -35,7 +35,7 @@ suite.addBatch({
       },
       "appends an SVG element": function(body) {
         var svg = body.insert("svg:svg");
-        assert.equal(svg[0][0].tagName, "SVG");
+        assert.equal(svg[0][0].tagName, "svg");
         assert.equal(svg[0][0].namespaceURI, "http://www.w3.org/2000/svg");
         assert.domEqual(svg[0][0].parentNode, body.node());
         assert.domEqual(svg[0][0], body.node().lastChild);
@@ -77,8 +77,8 @@ suite.addBatch({
       "appends an SVG element": function(div) {
         var svg = div.insert("svg:svg");
         assert.equal(svg[0].length, 2);
-        assert.equal(svg[0][0].tagName, "SVG");
-        assert.equal(svg[0][1].tagName, "SVG");
+        assert.equal(svg[0][0].tagName, "svg");
+        assert.equal(svg[0][1].tagName, "svg");
         assert.equal(svg[0][0].namespaceURI, "http://www.w3.org/2000/svg");
         assert.equal(svg[0][1].namespaceURI, "http://www.w3.org/2000/svg");
         assert.domEqual(svg[0][0].parentNode, div[0][0]);
