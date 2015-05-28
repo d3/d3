@@ -15,5 +15,5 @@
   "scripts": [
     "d3.js"
   ],
-  "license": "BSD"
+  "license": "BSD-3-Clause"
 }
