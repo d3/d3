@@ -10,17 +10,17 @@ suite.addBatch({
     "can handle an empty children array": function(pack) {
       var p = pack();
       assert.deepEqual(p.nodes({children: [{children: []}, {value: 1}]}).map(layout), [
-        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5},
-        {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0},
-        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5}
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5, p: 0},
+        {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0, p: 0},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5, p: 0}
       ]);
     },
     "can handle zero-valued nodes": function(pack) {
       var p = pack();
       assert.deepEqual(p.nodes({children: [{value: 0}, {value: 1}]}).map(layout), [
-        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5},
-        {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0},
-        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5}
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5, p: 0},
+        {value: 0, depth: 1, x: 0.0, y: 0.5, r: 0.0, p: 0},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.5, p: 0}
       ]);
     },
     "can handle small nodes": function(pack) {
@@ -30,11 +30,11 @@ suite.addBatch({
         {value: 2},
         {value: 1}
       ]}).map(layout), [
-        {y: 0.5, x: 0.5, value: 5.01, r: 0.5, depth: 0},
-        {y: 0.5084543199854831, x: 0.4682608366855136, value: 0.01, r: 0.016411496513964046, depth: 1},
-        {y: 0.5084543199854831, x: 0.7167659426883449, value: 2, r: 0.23209360948886723, depth: 1},
-        {y: 0.34256315498862167, x: 0.2832340573116551, value: 2, r: 0.23209360948886723, depth: 1},
-        {y: 0.7254154893606051, x: 0.38524055061025186, value: 1, r: 0.16411496513964044, depth: 1}
+        {y: 0.5, x: 0.5, value: 5.01, r: 0.5, depth: 0, p: 0},
+        {y: 0.5084543199854831, x: 0.4682608366855136, value: 0.01, r: 0.016411496513964046, depth: 1, p: 0},
+        {y: 0.5084543199854831, x: 0.7167659426883449, value: 2, r: 0.23209360948886723, depth: 1, p: 0},
+        {y: 0.34256315498862167, x: 0.2832340573116551, value: 2, r: 0.23209360948886723, depth: 1, p: 0},
+        {y: 0.7254154893606051, x: 0.38524055061025186, value: 1, r: 0.16411496513964044, depth: 1, p: 0}
       ]);
       assert.deepEqual(pack().sort(null).nodes({children: [
         {value: 2},
@@ -42,11 +42,11 @@ suite.addBatch({
         {value: 1},
         {value: .01}
       ]}).map(layout), [
-        {y: 0.5, x: 0.5, value: 5.01, r: 0.5, depth: 0},
-        {y: 0.6274712284943809, x: 0.26624891409386664, value: 2, r: 0.23375108590613333, depth: 1},
-        {y: 0.6274712284943809, x: 0.7337510859061334, value: 2, r: 0.23375108590613333, depth: 1},
-        {y: 0.30406466355343187, x: 0.5, value: 1, r: 0.1652869779539461, depth: 1},
-        {y: 0.3878967195987758, x: 0.3386645534068854, value: 0.01, r: 0.01652869779539461, depth: 1}
+        {y: 0.5, x: 0.5, value: 5.01, r: 0.5, depth: 0, p: 0},
+        {y: 0.6274712284943809, x: 0.26624891409386664, value: 2, r: 0.23375108590613333, depth: 1, p: 0},
+        {y: 0.6274712284943809, x: 0.7337510859061334, value: 2, r: 0.23375108590613333, depth: 1, p: 0},
+        {y: 0.30406466355343187, x: 0.5, value: 1, r: 0.1652869779539461, depth: 1, p: 0},
+        {y: 0.3878967195987758, x: 0.3386645534068854, value: 0.01, r: 0.01652869779539461, depth: 1, p: 0}
       ]);
     },
     "can handle residual floating point error": function(pack) {
@@ -86,31 +86,76 @@ suite.addBatch({
           p = pack().radius(r);
       assert.strictEqual(p.radius(), r);
       assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
-        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 10},
-        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 10}
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 10, p: 0},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 10, p: 0}
       ]);
     },
     "radius can be specified as a constant": function(pack) {
       var p = pack().radius(5);
       assert.equal(p.radius(), 5);
       assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
-        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5},
-        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5}
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5, p: 0},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5, p: 0}
       ]);
     },
     "radius constant value is coerced to a number": function(pack) {
       var p = pack().radius("5");
       assert.equal(p.radius(), 5);
       assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
-        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5},
-        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5}
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5, p: 0},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5, p: 0}
       ]);
     },
     "radius function value is coerced to a number": function(pack) {
       var p = pack().radius(function() { return "5"; });
       assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
-        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5},
-        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5}
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 5, p: 0},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 5, p: 0}
+      ]);
+    },
+    "padding can be specified using a custom function of value": function(pack) {
+      var r = function(value) { return Math.sqrt(value) * 10; },
+          p = pack().radius(r);
+      assert.strictEqual(p.radius(), r);
+      assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 10, p: 0},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 10, p: 0}
+      ]);
+    },
+    "padding constant value is added to all nodes": function(pack) {
+      var p = pack().padding(1);
+      assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5, p: 0.25},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.25, p: 0.25}
+      ]);
+    },
+    "padding constant value is coerced to a number": function(pack) {
+      var p = pack().padding("1");
+      assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5, p: 0.25},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.25, p: 0.25}
+      ]);
+    },
+    "padding function value is added to all nodes": function(pack) {
+      var p = pack().padding(function() { return 1; });
+      assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5, p: 0.25},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.25, p: 0.25}
+      ]);
+    },
+    "padding function value is coerced to a number": function(pack) {
+      var p = pack().padding(function() { return "1"; });
+      assert.deepEqual(p.nodes({children: [{value: 1}]}).map(layout), [
+        {value: 1, depth: 0, x: 0.5, y: 0.5, r: 0.5, p: 0.25},
+        {value: 1, depth: 1, x: 0.5, y: 0.5, r: 0.25, p: 0.25}
+      ]);
+    },
+    "padding value is added to nested heirarchies": function(pack) {
+      var p = pack().padding(1);
+      assert.deepEqual(p.nodes({children: [{children: [{value: 1}]}]}).map(layout), [
+        {value: 1, depth: 0, r: 3/6, x: 0.5, y: 0.5, p: 1/6},
+        {value: 1, depth: 1, r: 2/6, x: 0.5, y: 0.5, p: 1/6},
+        {value: 1, depth: 2, r: 1/6, x: 0.5, y: 0.5, p: 1/6}
       ]);
     }
   }
@@ -122,7 +167,8 @@ function layout(node) {
     depth: node.depth,
     r: node.r,
     x: node.x,
-    y: node.y
+    y: node.y,
+    p: node.p
   };
 }
 
