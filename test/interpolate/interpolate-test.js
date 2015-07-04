@@ -26,11 +26,20 @@ suite.addBatch({
       "interpolates named colors in RGB": function(d3) {
         assert.strictEqual(d3.interpolate("red", "green")(.4), "#993300");
       },
+      "interpolates case-insensitive named colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("ReD", "GrEeN")(.4), "#993300");
+      },
       "interpolates decimal RGB colors in RGB": function(d3) {
         assert.strictEqual(d3.interpolate("rgb(255,0,0)", "rgb(0,128,0)")(.4), "#993300");
       },
+      "interpolates case-insensitive decimal RGB colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("RgB(255,0,0)", "rGb(0,128,0)")(.4), "#993300");
+      },
       "interpolates decimal HSL colors in RGB": function(d3) {
         assert.strictEqual(d3.interpolate("hsl(0,100%,50%)", "hsl(120,100%,25%)")(.4), "#993300");
+      },
+      "interpolates case-insensitive decimal HSL colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("HsL(0,100%,50%)", "hSl(120,100%,25%)")(.4), "#993300");
       },
       "coerces a to a color": function(d3) {
         assert.strictEqual(d3.interpolate({toString: function() { return "red"; }}, "green")(.4), "#993300");

@@ -10,10 +10,10 @@
     "animation",
     "canvas"
   ],
-  "version": "3.5.5",
+  "version": "3.5.6",
   "main": "d3.js",
   "scripts": [
     "d3.js"
   ],
-  "license": "BSD"
+  "license": "BSD-3-Clause"
 }
