@@ -182,8 +182,7 @@ d3.behavior.zoom = function() {
   }
 
   function zoomended(dispatch) {
-    if (!--zooming) dispatch({type: "zoomend"});
-    center0 = null;
+    if (!--zooming) dispatch({type: "zoomend"}), center0 = null;
   }
 
   function mousedowned() {
@@ -326,7 +325,7 @@ d3.behavior.zoom = function() {
   function mousewheeled() {
     var dispatch = event.of(this, arguments);
     if (mousewheelTimer) clearTimeout(mousewheelTimer);
-    else translate0 = location(center0 = center || d3.mouse(this)), d3_selection_interrupt.call(this), zoomstarted(dispatch);
+    else d3_selection_interrupt.call(this), translate0 = location(center0 = center || d3.mouse(this)), zoomstarted(dispatch);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(dispatch); }, 50);
     d3_eventPreventDefault();
     scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
