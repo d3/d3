@@ -49,6 +49,16 @@ suite.addBatch({
         body.data(["orange"]).attr({"xlink:href": function(d, i) { return d + "-" + i + ".png"; }});
         assert.equal(body.node().getAttributeNS("http://www.w3.org/1999/xlink", "href"), "orange-0.png");
       },
+      "sets attributes as a function": function(body) {
+        body.attr(function() { return {x: 0, y: 1} });
+        assert.equal(body.node().getAttribute("x"), "0");
+        assert.equal(body.node().getAttribute("y"), "1");
+      },
+      "sets attributes as a function of data": function(body) {
+        body.data([[2, 3]]).attr(function(d) { return {x: d[0], y: d[1]} });
+        assert.equal(body.node().getAttribute("x"), "2");
+        assert.equal(body.node().getAttribute("y"), "3");
+      },
       "gets an attribute value": function(body) {
         body.node().setAttribute("bgcolor", "yellow");
         assert.equal(body.attr("bgcolor"), "yellow");

@@ -13,6 +13,16 @@ d3_selectionPrototype.attr = function(name, value) {
           : node.getAttribute(name);
     }
 
+    // For attr(function), the function returns an object to be applied.
+    if (typeof name === "function") {
+        var n = name,
+            name = {};
+        this.each(function() {
+            var o = n.apply(this, arguments);
+            for (key in o) name[key] = o[key];
+        });
+    }
+
     // For attr(object), the object specifies the names and values of the
     // attributes to set or remove. The values may be functions that are
     // evaluated for each element.
