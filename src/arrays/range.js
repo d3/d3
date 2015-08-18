@@ -12,8 +12,9 @@ d3.range = function(start, stop, step) {
   var range = [],
        k = d3_range_integerScale(abs(step)),
        i = -1,
-       j;
-  start *= k, stop *= k, step *= k;
+       j,
+       eps = 1e-15;
+  start *= k, stop = stop * (1 - eps) * k, step *= k;
   if (step < 0) while ((j = start + step * ++i) > stop) range.push(j / k);
   else while ((j = start + step * ++i) < stop) range.push(j / k);
   return range;
