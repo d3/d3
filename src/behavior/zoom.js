@@ -4,6 +4,7 @@ import "../event/drag";
 import "../event/event";
 import "../event/mouse";
 import "../event/touches";
+import "../selection/interrupt";
 import "../selection/selection";
 import "../interpolate/zoom";
 import "behavior";
