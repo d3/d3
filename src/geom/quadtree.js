@@ -210,8 +210,8 @@ function d3_geom_quadtreeFind(root, x, y, x0, y0, x3, y3) {
     // visit this point
     if (point = node.point) {
       var point,
-          dx = x - point[0],
-          dy = y - point[1],
+          dx = x - node.x,
+          dy = y - node.y,
           distance2 = dx * dx + dy * dy;
       if (distance2 < minDistance2) {
         var distance = Math.sqrt(minDistance2 = distance2);

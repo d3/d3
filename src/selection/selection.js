@@ -10,8 +10,13 @@ function d3_selection(groups) {
 
 var d3_select = function(s, n) { return n.querySelector(s); },
     d3_selectAll = function(s, n) { return n.querySelectorAll(s); },
-    d3_selectMatcher = d3_documentElement.matches || d3_documentElement[d3_vendorSymbol(d3_documentElement, "matchesSelector")],
-    d3_selectMatches = function(n, s) { return d3_selectMatcher.call(n, s); };
+    d3_selectMatches = function(n, s) {
+      var d3_selectMatcher = n.matches || n[d3_vendorSymbol(n, "matchesSelector")];
+      d3_selectMatches = function(n, s) {
+        return d3_selectMatcher.call(n, s);
+      };
+      return d3_selectMatches(n, s);
+    };
 
 // Prefer Sizzle, if available.
 if (typeof Sizzle === "function") {
@@ -21,7 +26,7 @@ if (typeof Sizzle === "function") {
 }
 
 d3.selection = function() {
-  return d3_selectionRoot;
+  return d3.select(d3_document.documentElement);
 };
 
 var d3_selectionPrototype = d3.selection.prototype = [];
@@ -52,15 +57,25 @@ import "enter";
 
 // TODO fast singleton implementation?
 d3.select = function(node) {
-  var group = [typeof node === "string" ? d3_select(node, d3_document) : node];
-  group.parentNode = d3_documentElement;
+  var group;
+  if (typeof node === "string") {
+    group = [d3_select(node, d3_document)];
+    group.parentNode = d3_document.documentElement;
+  } else {
+    group = [node];
+    group.parentNode = d3_documentElement(node);
+  }
   return d3_selection([group]);
 };
 
 d3.selectAll = function(nodes) {
-  var group = d3_array(typeof nodes === "string" ? d3_selectAll(nodes, d3_document) : nodes);
-  group.parentNode = d3_documentElement;
+  var group;
+  if (typeof nodes === "string") {
+    group = d3_array(d3_selectAll(nodes, d3_document));
+    group.parentNode = d3_document.documentElement;
+  } else {
+    group = nodes;
+    group.parentNode = null;
+  }
   return d3_selection([group]);
 };
-
-var d3_selectionRoot = d3.select(d3_documentElement);

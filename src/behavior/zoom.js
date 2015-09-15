@@ -29,6 +29,14 @@ d3.behavior.zoom = function() {
       y0,
       y1;
 
+  // Lazily determine the DOM’s support for Wheel events.
+  // https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/wheel
+  if (!d3_behavior_zoomWheel) {
+    d3_behavior_zoomWheel = "onwheel" in d3_document ? (d3_behavior_zoomDelta = function() { return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1); }, "wheel")
+        : "onmousewheel" in d3_document ? (d3_behavior_zoomDelta = function() { return d3.event.wheelDelta; }, "mousewheel")
+        : (d3_behavior_zoomDelta = function() { return -d3.event.detail; }, "MozMousePixelScroll");
+  }
+
   function zoom(g) {
     g   .on(mousedown, mousedowned)
         .on(d3_behavior_zoomWheel + ".zoom", mousewheeled)
@@ -174,8 +182,7 @@ d3.behavior.zoom = function() {
   }
 
   function zoomended(dispatch) {
-    if (!--zooming) dispatch({type: "zoomend"});
-    center0 = null;
+    if (!--zooming) dispatch({type: "zoomend"}), center0 = null;
   }
 
   function mousedowned() {
@@ -183,9 +190,9 @@ d3.behavior.zoom = function() {
         target = d3.event.target,
         dispatch = event.of(that, arguments),
         dragged = 0,
-        subject = d3.select(d3_window).on(mousemove, moved).on(mouseup, ended),
+        subject = d3.select(d3_window(that)).on(mousemove, moved).on(mouseup, ended),
         location0 = location(d3.mouse(that)),
-        dragRestore = d3_event_dragSuppress();
+        dragRestore = d3_event_dragSuppress(that);
 
     d3_selection_interrupt.call(that);
     zoomstarted(dispatch);
@@ -215,7 +222,7 @@ d3.behavior.zoom = function() {
         touchend = "touchend" + zoomName,
         targets = [],
         subject = d3.select(that),
-        dragRestore = d3_event_dragSuppress();
+        dragRestore = d3_event_dragSuppress(that);
 
     started();
     zoomstarted(dispatch);
@@ -318,7 +325,7 @@ d3.behavior.zoom = function() {
   function mousewheeled() {
     var dispatch = event.of(this, arguments);
     if (mousewheelTimer) clearTimeout(mousewheelTimer);
-    else translate0 = location(center0 = center || d3.mouse(this)), d3_selection_interrupt.call(this), zoomstarted(dispatch);
+    else d3_selection_interrupt.call(this), translate0 = location(center0 = center || d3.mouse(this)), zoomstarted(dispatch);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(dispatch); }, 50);
     d3_eventPreventDefault();
     scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
@@ -336,10 +343,6 @@ d3.behavior.zoom = function() {
   return d3.rebind(zoom, event, "on");
 };
 
-var d3_behavior_zoomInfinity = [0, Infinity]; // default scale extent
-
-// https://developer.mozilla.org/en-US/docs/Mozilla_event_reference/wheel
-var d3_behavior_zoomDelta, d3_behavior_zoomWheel
-    = "onwheel" in d3_document ? (d3_behavior_zoomDelta = function() { return -d3.event.deltaY * (d3.event.deltaMode ? 120 : 1); }, "wheel")
-    : "onmousewheel" in d3_document ? (d3_behavior_zoomDelta = function() { return d3.event.wheelDelta; }, "mousewheel")
-    : (d3_behavior_zoomDelta = function() { return -d3.event.detail; }, "MozMousePixelScroll");
+var d3_behavior_zoomInfinity = [0, Infinity], // default scale extent
+    d3_behavior_zoomDelta, // initialized lazily
+    d3_behavior_zoomWheel;

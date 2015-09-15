@@ -51,6 +51,12 @@ suite.addBatch({
       assert.rgbEqual(d3.rgb("moccasin"), 255, 228, 181);
       assert.rgbEqual(d3.rgb("aliceblue"), 240, 248, 255);
       assert.rgbEqual(d3.rgb("yellow"), 255, 255, 0);
+      assert.rgbEqual(d3.rgb("Moccasin"), 255, 228, 181);
+      assert.rgbEqual(d3.rgb("Aliceblue"), 240, 248, 255);
+      assert.rgbEqual(d3.rgb("Yellow"), 255, 255, 0);
+    },
+    "parses \"rebeccapurple\"": function(d3) {
+      assert.rgbEqual(d3.rgb("rebeccapurple"), 102, 51, 153);
     },
     "parses and converts HSL format (e.g., \"hsl(60, 100%, 20%)\")": function(d3) {
       assert.rgbEqual(d3.rgb("hsl(60, 100%, 20%)"), 102, 102, 0);

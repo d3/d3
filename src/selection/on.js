@@ -76,9 +76,11 @@ var d3_selection_onFilters = d3.map({
   mouseleave: "mouseout"
 });
 
-d3_selection_onFilters.forEach(function(k) {
-  if ("on" + k in d3_document) d3_selection_onFilters.remove(k);
-});
+if (d3_document) {
+  d3_selection_onFilters.forEach(function(k) {
+    if ("on" + k in d3_document) d3_selection_onFilters.remove(k);
+  });
+}
 
 function d3_selection_onListener(listener, argumentz) {
   return function(e) {
