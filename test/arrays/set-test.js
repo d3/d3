@@ -108,6 +108,10 @@ suite.addBatch({
         var s = set(["bar", "foo"]);
         assert.deepEqual(s.values().sort(_.ascending), ["bar", "foo"]);
       },
+      "properly unescapes zero-prefixed keys": function(set) {
+        var s = set(["__proto__", "\0weird"]);
+        assert.deepEqual(s.values().sort(_.ascending), ["\0weird", "__proto__"]);
+      },
       "observes changes via add and remove": function(set) {
         var s = set(["foo", "bar"]);
         assert.deepEqual(s.values().sort(_.ascending), ["bar", "foo"]);
@@ -153,14 +157,21 @@ suite.addBatch({
       }
     },
     "add": {
-      "returns the set value": function(set) {
+      "returns the set value, coerced to a string": function(set) {
         var s = set();
         assert.equal(s.add("foo"), "foo");
+        assert.strictEqual(s.add(2), "2");
+        assert.deepEqual(s.values().sort(), ["2", "foo"]);
       },
       "can add values using built-in names": function(set) {
         var s = set();
         s.add("__proto__");
         assert.isTrue(s.has("__proto__"));
+      },
+      "can add values using zero-prefixed names": function(set) {
+        var s = set();
+        s.add("\0weird");
+        assert.isTrue(s.has("\0weird"));
       },
       "coerces values to strings": function(set) {
         var s = set();

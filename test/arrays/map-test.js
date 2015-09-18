@@ -49,6 +49,17 @@ suite.addBatch({
         assert.equal(b.get("foo"), 42);
         a.set("bar", true);
         assert.isFalse(b.has("bar"));
+      },
+      "map(array) creates a map by index": function(map) {
+        assert.deepEqual(map(["foo", "bar"]).entries(), [{key: "0", value: "foo"}, {key: "1", value: "bar"}]);
+      },
+      "map(array) indexes missing elements in sparse arrays": function(map) {
+        assert.deepEqual(map(["foo", , "bar"]).entries(), [{key: "0", value: "foo"}, {key: "1", value: undefined}, {key: "2", value: "bar"}]);
+      },
+      "map(array, f) creates a map by accessor": function(map) {
+        assert.deepEqual(map([{field: "foo"}, {field: "bar"}], function(d) { return d.field; }).entries(), [{key: "foo", value: {field: "foo"}}, {key: "bar", value: {field: "bar"}}]);
+        assert.deepEqual(map([{field: "foo"}, {field: "bar"}], function(d, i) { return i; }).entries(), [{key: "0", value: {field: "foo"}}, {key: "1", value: {field: "bar"}}]);
+        assert.deepEqual(map([{field: "foo"}, {field: "bar"}], function(d, i) { return this[i].field; }).entries(), [{key: "foo", value: {field: "foo"}}, {key: "bar", value: {field: "bar"}}]);
       }
     },
     "size": {
@@ -119,6 +130,12 @@ suite.addBatch({
       "returns an array of string keys": function(map) {
         var m = map({foo: 1, bar: "42"});
         assert.deepEqual(m.keys().sort(), ["bar", "foo"]);
+      },
+      "properly unescapes zero-prefixed keys": function(map) {
+        var m = map();
+        m.set("__proto__", 42);
+        m.set("\0weird", 42);
+        assert.deepEqual(m.keys().sort(), ["\0weird", "__proto__"]);
       }
     },
     "values": {
@@ -245,6 +262,11 @@ suite.addBatch({
         var m = map();
         m.set("__proto__", 42);
         assert.equal(m.get("__proto__"), 42);
+      },
+      "can set keys using zero-prefixed names": function(map) {
+        var m = map();
+        m.set("\0weird", 42);
+        assert.equal(m.get("\0weird"), 42);
       },
       "coerces keys to strings": function(map) {
         var m = map();

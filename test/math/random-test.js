@@ -5,6 +5,8 @@ var vows = require("vows"),
 
 var suite = vows.describe("d3.random");
 
+var _random;
+
 // Testing a random number generator is a bit more complicated than testing
 // deterministic code, so we use different techniques.
 //

@@ -1,8 +1,9 @@
-var π = Math.PI,
-    τ = 2 * π,
-    halfπ = π / 2,
-    ε = 1e-6,
+var ε = 1e-6,
     ε2 = ε * ε,
+    π = Math.PI,
+    τ = 2 * π,
+    τε = τ - ε,
+    halfπ = π / 2,
     d3_radians = π / 180,
     d3_degrees = 180 / π;
 

@@ -1,11 +1,9 @@
 import "../core/identity";
 import "../core/document";
 import "../core/rebind";
-import "../event/dispatch";
 import "../event/drag";
 import "../event/event";
 import "../event/mouse";
-import "../event/touches";
 import "../scale/scale";
 import "../selection/selection";
 import "svg";
@@ -153,12 +151,12 @@ d3.svg.brush = function() {
         resizingX = !/^(n|s)$/.test(resizing) && x,
         resizingY = !/^(e|w)$/.test(resizing) && y,
         dragging = eventTarget.classed("extent"),
-        dragRestore = d3_event_dragSuppress(),
+        dragRestore = d3_event_dragSuppress(target),
         center,
         origin = d3.mouse(target),
         offset;
 
-    var w = d3.select(d3_window)
+    var w = d3.select(d3_window(target))
         .on("keydown.brush", keydown)
         .on("keyup.brush", keyup);
 

@@ -8,6 +8,13 @@ var suite = vows.describe("d3.geo.transverseMercator");
 suite.addBatch({
   "transverseMercator": {
     topic: load("geo/transverse-mercator").expression("d3.geo.transverseMercator"),
+    "returns the expected rotation": function(projection) {
+      assert.deepEqual(projection().rotate([13, 27]).rotate(), [13, 27, 0]);
+      assert.deepEqual(projection().rotate([13, 27, 45]).rotate(), [13, 27, 45]);
+    },
+    "returns the expected center": function(projection) {
+      assert.deepEqual(projection().center([13, 27]).center(), [13, 27]);
+    },
     "default": projectionTestSuite({
       topic: function(projection) { return projection(); }
     }, {

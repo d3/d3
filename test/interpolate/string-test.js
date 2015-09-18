@@ -12,7 +12,7 @@ suite.addBatch({
       assert.strictEqual(interpolate(" 10/20 30", "50/10 100 ")(.4), "26/16 58 ");
     },
     "coerces objects to strings": function(interpolate) {
-      assert.strictEqual(interpolate({toString: function() { return "2px"; }}, {toString: function() { return "12px"; }})(.4), "6px");
+      assert.strictEqual(interpolate({toString: function() { return "2px"; }}, {toString: function() { return "12px"; }})(.25), "4.5px");
     },
     "preserves non-numbers in string b": function(interpolate) {
       assert.strictEqual(interpolate(" 10/20 30", "50/10 foo ")(.2), "18/18 foo ");

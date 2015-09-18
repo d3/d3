@@ -2,21 +2,24 @@ import "../selection/each";
 import "transition";
 
 d3_transitionPrototype.each = function(type, listener) {
-  var id = this.id;
+  var id = this.id, ns = this.namespace;
   if (arguments.length < 2) {
     var inherit = d3_transitionInherit,
         inheritId = d3_transitionInheritId;
-    d3_transitionInheritId = id;
-    d3_selection_each(this, function(node, i, j) {
-      d3_transitionInherit = node.__transition__[id];
-      type.call(node, node.__data__, i, j);
-    });
-    d3_transitionInherit = inherit;
-    d3_transitionInheritId = inheritId;
+    try {
+      d3_transitionInheritId = id;
+      d3_selection_each(this, function(node, i, j) {
+        d3_transitionInherit = node[ns][id];
+        type.call(node, node.__data__, i, j);
+      });
+    } finally {
+      d3_transitionInherit = inherit;
+      d3_transitionInheritId = inheritId;
+    }
   } else {
     d3_selection_each(this, function(node) {
-      var transition = node.__transition__[id];
-      (transition.event || (transition.event = d3.dispatch("start", "end"))).on(type, listener);
+      var transition = node[ns][id];
+      (transition.event || (transition.event = d3.dispatch("start", "end", "interrupt"))).on(type, listener);
     });
   }
   return this;

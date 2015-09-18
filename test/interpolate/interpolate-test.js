@@ -10,12 +10,12 @@ suite.addBatch({
 
     "when b is a number": {
       "interpolates numbers": function(d3) {
-        assert.strictEqual(d3.interpolate(2, 12)(.4), 6);
+        assert.strictEqual(d3.interpolate(2, 12)(.25), 4.5);
       },
       "coerces a to a number": function(d3) {
         assert.strictEqual(d3.interpolate("", 1)(.5), .5);
-        assert.strictEqual(d3.interpolate("2", 12)(.4), 6);
-        assert.strictEqual(d3.interpolate([2], 12)(.4), 6);
+        assert.strictEqual(d3.interpolate("2", 12)(.25), 4.5);
+        assert.strictEqual(d3.interpolate([2], 12)(.25), 4.5);
       }
     },
 
@@ -26,11 +26,20 @@ suite.addBatch({
       "interpolates named colors in RGB": function(d3) {
         assert.strictEqual(d3.interpolate("red", "green")(.4), "#993300");
       },
+      "interpolates case-insensitive named colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("ReD", "GrEeN")(.4), "#993300");
+      },
       "interpolates decimal RGB colors in RGB": function(d3) {
         assert.strictEqual(d3.interpolate("rgb(255,0,0)", "rgb(0,128,0)")(.4), "#993300");
       },
+      "interpolates case-insensitive decimal RGB colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("RgB(255,0,0)", "rGb(0,128,0)")(.4), "#993300");
+      },
       "interpolates decimal HSL colors in RGB": function(d3) {
         assert.strictEqual(d3.interpolate("hsl(0,100%,50%)", "hsl(120,100%,25%)")(.4), "#993300");
+      },
+      "interpolates case-insensitive decimal HSL colors in RGB": function(d3) {
+        assert.strictEqual(d3.interpolate("HsL(0,100%,50%)", "hSl(120,100%,25%)")(.4), "#993300");
       },
       "coerces a to a color": function(d3) {
         assert.strictEqual(d3.interpolate({toString: function() { return "red"; }}, "green")(.4), "#993300");
@@ -79,11 +88,11 @@ suite.addBatch({
 
     "when b is an array": {
       "interpolates each element in b": function(d3) {
-        assert.strictEqual(JSON.stringify(d3.interpolate([2, 4], [12, 24])(.4)), "[6,12]");
+        assert.strictEqual(JSON.stringify(d3.interpolate([2, 4], [12, 24])(.25)), "[4.5,9]");
       },
       "interpolates arrays, even when both a and b are coercible to numbers": function(d3) {
-        assert.strictEqual(JSON.stringify(d3.interpolate([2], [12])(.4)), "[6]");
-        assert.strictEqual(JSON.stringify(d3.interpolate([[2]], [[12]])(.4)), "[[6]]");
+        assert.strictEqual(JSON.stringify(d3.interpolate([2], [12])(.25)), "[4.5]");
+        assert.strictEqual(JSON.stringify(d3.interpolate([[2]], [[12]])(.25)), "[[4.5]]");
       },
       "reuses the returned array during interpolation": function(d3) {
         var i = d3.interpolate([2], [12]);
@@ -93,10 +102,10 @@ suite.addBatch({
 
     "when b is an object": {
       "interpolates each property in b": function(d3) {
-        assert.deepEqual(d3.interpolate({foo: 2, bar: 4}, {foo: 12, bar: 24})(.4), {foo: 6, bar: 12});
+        assert.deepEqual(d3.interpolate({foo: 2, bar: 4}, {foo: 12, bar: 24})(.25), {foo: 4.5, bar: 9});
       },
       "interpolates numbers if b is coercible to a number (!isNaN(+b))": function(d3) {
-        assert.strictEqual(d3.interpolate(new Number(2), new Number(12))(.4), 6);
+        assert.strictEqual(d3.interpolate(new Number(2), new Number(12))(.25), 4.5);
         assert.strictEqual(d3.interpolate(new Date(2012, 0, 1), new Date(2013, 0, 1))(.5), +new Date(2012, 6, 2, 1));
         assert.strictEqual(d3.interpolate(1, null)(.4), .6); // +null = 0
         assert.isNaN(d3.interpolate("blue", null)(.4));
