@@ -20,8 +20,6 @@ function d3_Map() {
   this._ = Object.create(null);
 }
 
-d3_Map.length = 0;
-
 var d3_map_proto = "__proto__",
     d3_map_zero = "\0";
 
@@ -35,9 +33,7 @@ d3_class(d3_Map, {
   },
   remove: d3_map_remove,
   delete: d3_map_remove,
-  clear: function() {
-    this._ = Object.create(null);
-  },
+  clear: d3_Map,
   keys: d3_map_keys,
   values: function() {
     var values = [];
