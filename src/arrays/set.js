@@ -11,8 +11,6 @@ function d3_Set() {
   this._ = Object.create(null);
 }
 
-d3_Set.length = 0;
-
 d3_class(d3_Set, {
   has: d3_map_has,
   add: function(key) {
@@ -21,9 +19,7 @@ d3_class(d3_Set, {
   },
   remove: d3_map_remove,
   delete: d3_map_remove,
-  clear: function() {
-    this._ = Object.create(null);
-  },
+  clear: d3_Set,
   values: d3_map_keys,
   keys: d3_map_keys,
   size: d3_map_size,
