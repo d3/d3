@@ -18,7 +18,10 @@ d3_class(d3_Set, {
     return key;
   },
   remove: d3_map_remove,
+  delete: d3_map_remove,
+  clear: d3_Set,
   values: d3_map_keys,
+  keys: d3_map_keys,
   size: d3_map_size,
   empty: d3_map_empty,
   forEach: function(f) {

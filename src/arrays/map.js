@@ -32,6 +32,8 @@ d3_class(d3_Map, {
     return this._[d3_map_escape(key)] = value;
   },
   remove: d3_map_remove,
+  delete: d3_map_remove,
+  clear: d3_Map,
   keys: d3_map_keys,
   values: function() {
     var values = [];
