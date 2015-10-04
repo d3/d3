@@ -1,240 +1,390 @@
 import "layout";
 import "hierarchy";
 
-// Node-link tree diagram using the Reingold-Tilford "tidy" algorithm
+// Node-link tree diagram using the Reingold-Tilford "tidy" algorithm,
+// as improved by A.J. van der Ploeg, 2013, "Drawing Non-layered Tidy
+// Trees in Linear Time".
 d3.layout.tree = function() {
-  var hierarchy = d3.layout.hierarchy().sort(null).value(null),
-      separation = d3_layout_treeSeparation,
-      size = [1, 1], // width, height
-      nodeSize = null;
+  var hierarchy = d3.layout.hierarchy().sort(null).value(null);
 
+  // The spacing between nodes can be specified in one of two ways:
+  // - separation - returns center-to-center distance
+  //   in units of root-node-x-size
+  // - spacing - returns edge-to-edge distance in the same units as
+  //   node sizes
+  var separation = d3_layout_treeSeparation,
+      spacing = null,
+      size = [1, 1],    // x_size, y_size
+      nodeSize = null,
+      setNodeSizes = false;
+
+  // This stores the x_size of the root node, for use with the spacing 
+  // function
+  var wroot = null;
+
+  // The main layout function:
   function tree(d, i) {
     var nodes = hierarchy.call(this, d, i),
-        root0 = nodes[0],
-        root1 = wrapTree(root0);
+        t = nodes[0],
+        wt = wrapTree(t);
 
-    // Compute the layout using Buchheim et al.'s algorithm.
-    d3_layout_hierarchyVisitAfter(root1, firstWalk), root1.parent.m = -root1.z;
-    d3_layout_hierarchyVisitBefore(root1, secondWalk);
-
-    // If a fixed node size is specified, scale x and y.
-    if (nodeSize) d3_layout_hierarchyVisitBefore(root0, sizeNode);
-
-    // If a fixed tree size is specified, scale x and y based on the extent.
-    // Compute the left-most, right-most, and depth-most nodes for extents.
-    else {
-      var left = root0,
-          right = root0,
-          bottom = root0;
-      d3_layout_hierarchyVisitBefore(root0, function(node) {
-        if (node.x < left.x) left = node;
-        if (node.x > right.x) right = node;
-        if (node.depth > bottom.depth) bottom = node;
-      });
-      var tx = separation(left, right) / 2 - left.x,
-          kx = size[0] / (right.x + separation(right, left) / 2 + tx),
-          ky = size[1] / (bottom.depth || 1);
-      d3_layout_hierarchyVisitBefore(root0, function(node) {
-        node.x = (node.x + tx) * kx;
-        node.y = node.depth * ky;
-      });
-    }
+    wroot = wt;
+    zerothWalk(wt, 0);
+    firstWalk(wt);
+    secondWalk(wt, 0);
+    renormalize(wt);
 
     return nodes;
   }
 
-  function wrapTree(root0) {
-    var root1 = {A: null, children: [root0]},
-        queue = [root1],
-        node1;
+  // Every node in the tree is wrapped in an object that holds data
+  // used during the algorithm
+  function wrapTree(t) {
+    var wt = {
+      t: t,
+      prelim: 0,
+      mod: 0, 
+      shift: 0, 
+      change: 0,
+      msel: 0,
+      mser: 0,
+    };
+    t.x = 0;
+    t.y = 0;
+    if (size) {
+      wt.x_size = 1;
+      wt.y_size = 1;
+    }
+    else if (typeof nodeSize == "object") {  // fixed array
+      wt.x_size = nodeSize[0];
+      wt.y_size = nodeSize[1];
+    }
+    else {  // use nodeSize function
+      var ns = nodeSize(t);
+      wt.x_size = ns[0];
+      wt.y_size = ns[1];
+    }
+    if (setNodeSizes) {
+      t.x_size = wt.x_size;
+      t.y_size = wt.y_size;
+    }
 
-    while ((node1 = queue.pop()) != null) {
-      for (var children = node1.children, child, i = 0, n = children.length; i < n; ++i) {
-        queue.push((children[i] = child = {
-          _: children[i], // source node
-          parent: node1,
-          children: (child = children[i].children) && child.slice() || [],
-          A: null, // default ancestor
-          a: null, // ancestor
-          z: 0, // prelim
-          m: 0, // mod
-          c: 0, // change
-          s: 0, // shift
-          t: null, // thread
-          i: i // number
-        }).a = child);
+    var children = [];
+    var num_children = t.children ? t.children.length : 0;
+    for (var i = 0; i < num_children; ++i) {
+      children.push(wrapTree(t.children[i]));
+    }
+    wt.children = children;
+    wt.num_children = num_children;
+
+    return wt;
+  }
+
+  // Recursively set the y coordinate of the children, based on
+  // the y coordinate of the parent, and its height. Also set parent 
+  // and depth.
+  function zerothWalk(wt, initial) {
+    wt.t.y = initial;
+    wt.t.depth = 0;
+    _zerothWalk(wt);
+  }
+  
+  function _zerothWalk(wt) {
+    var kid_y = wt.t.y + wt.y_size,
+        kid_depth = wt.t.depth + 1,
+        i;
+    for (i = 0; i < wt.children.length; ++i) {
+      var kid = wt.children[i];
+      kid.t.y = kid_y;
+      kid.t.parent = wt.t;
+      kid.t.depth = kid_depth;
+      _zerothWalk(wt.children[i]);
+    }
+  }
+
+  function firstWalk(wt) {
+    if (wt.num_children == 0) {
+      setExtremes(wt);
+      return;
+    }
+    firstWalk(wt.children[0]);
+
+    var ih = updateIYL(bottom(wt.children[0].el), 0, null);
+
+    for (var i = 1; i < wt.num_children; ++i) {
+      firstWalk(wt.children[i]);
+
+      // Store lowest vertical coordinate while extreme nodes still point 
+      // in current subtree.
+      var minY = bottom(wt.children[i].er);                                
+      separate(wt, i, ih);
+      ih = updateIYL(minY, i, ih);                                     
+    }
+    positionRoot(wt);
+    setExtremes(wt);
+  }
+
+  function setExtremes(wt) {
+    if (wt.num_children == 0) {
+      wt.el = wt;
+      wt.er = wt;
+      wt.msel = wt.mser = 0;
+    }
+    else {
+      wt.el = wt.children[0].el; 
+      wt.msel = wt.children[0].msel;
+      wt.er = wt.children[wt.num_children - 1].er; 
+      wt.mser = wt.children[wt.num_children - 1].mser;
+    }
+  }
+
+  function separate(wt, i, ih) {
+    // Right contour node of left siblings and its sum of modifiers.  
+    var sr = wt.children[i-1]; 
+    var mssr = sr.mod;
+   
+    // Left contour node of current subtree and its sum of modifiers.  
+    var cl = wt.children[i]; 
+    var mscl = cl.mod;
+   
+    while (sr != null && cl != null) {
+      if (bottom(sr) > ih.lowY) ih = ih.nxt;
+    
+      // How far to the left of the right side of sr is the left side 
+      // of cl? First compute the center-to-center distance, then add 
+      // the "gap" (separation or spacing)
+      var dist = (mssr + sr.prelim) - (mscl + cl.prelim);
+      if (separation != null) {
+        dist += separation(sr.t, cl.t) * wroot.x_size;
+      }
+      else if (spacing != null) {
+        dist += sr.x_size/2 + cl.x_size/2 + spacing(sr.t, cl.t);
+      }
+      if (dist > 0) {
+        mscl += dist;
+        moveSubtree(wt, i, ih.index, dist);
+      }
+      var sy = bottom(sr), 
+          cy = bottom(cl);
+    
+      // Advance highest node(s) and sum(s) of modifiers  
+      if (sy <= cy) {                                                    
+        sr = nextRightContour(sr);
+        if (sr != null) mssr += sr.mod;
+      }                                                               
+      if (sy >= cy) {                                           
+        cl = nextLeftContour(cl);
+        if (cl != null) mscl += cl.mod;
       }
     }
 
-    return root1.children[0];
+    // Set threads and update extreme nodes. In the first case, the 
+    // current subtree must be taller than the left siblings.  
+    if (sr == null && cl != null) setLeftThread(wt, i, cl, mscl);
+    
+    // In this case, the left siblings must be taller than the current 
+    // subtree.  
+    else if (sr != null && cl == null) setRightThread(wt, i, sr, mssr);
   }
 
-  // FIRST WALK
-  // Computes a preliminary x-coordinate for v. Before that, FIRST WALK is
-  // applied recursively to the children of v, as well as the function
-  // APPORTION. After spacing out the children by calling EXECUTE SHIFTS, the
-  // node v is placed to the midpoint of its outermost children.
-  function firstWalk(v) {
-    var children = v.children,
-        siblings = v.parent.children,
-        w = v.i ? siblings[v.i - 1] : null;
-    if (children.length) {
-      d3_layout_treeShift(v);
-      var midpoint = (children[0].z + children[children.length - 1].z) / 2;
-      if (w) {
-        v.z = w.z + separation(v._, w._);
-        v.m = v.z - midpoint;
-      } else {
-        v.z = midpoint;
+  function moveSubtree(wt, i, si, dist) {
+    // Move subtree by changing mod.  
+    wt.children[i].mod += dist; 
+    wt.children[i].msel += dist; 
+    wt.children[i].mser += dist;
+    distributeExtra(wt, i, si, dist);                                  
+  }
+
+  function nextLeftContour(wt) {
+    return wt.num_children == 0 ? wt.tl : wt.children[0];
+  }
+    
+  function nextRightContour(wt) {
+    return wt.num_children == 0 ? 
+      wt.tr : wt.children[wt.num_children - 1];
+  }
+    
+  function bottom(wt) { 
+    return wt.t.y + wt.y_size; 
+  }
+  
+  function setLeftThread(wt, i, cl, modsumcl) {
+    var li = wt.children[0].el;
+    li.tl = cl;
+   
+    // Change mod so that the sum of modifier after following thread 
+    // is correct.  
+    var diff = (modsumcl - cl.mod) - wt.children[0].msel;
+    li.mod += diff; 
+   
+    // Change preliminary x coordinate so that the node does not move.  
+    li.prelim -= diff;
+   
+    // Update extreme node and its sum of modifiers.  
+    wt.children[0].el = wt.children[i].el; 
+    wt.children[0].msel = wt.children[i].msel;
+  }
+    
+  // Symmetrical to setLeftThread.  
+  function setRightThread(wt, i, sr, modsumsr) {
+    var ri = wt.children[i].er;
+    ri.tr = sr;
+    var diff = (modsumsr - sr.mod) - wt.children[i].mser;
+    ri.mod += diff; 
+    ri.prelim -= diff;
+    wt.children[i].er = wt.children[i - 1].er; 
+    wt.children[i].mser = wt.children[i - 1].mser;
+  }
+
+  // Position root between children, taking into account their mod.  
+  function positionRoot(wt) {
+    wt.prelim = ( wt.children[0].prelim + 
+                  wt.children[0].mod -
+                  wt.children[0].x_size/2 +
+                  wt.children[wt.num_children - 1].mod + 
+                  wt.children[wt.num_children - 1].prelim +
+                  wt.children[wt.num_children - 1].x_size/2) / 2;
+  }
+
+  function secondWalk(wt, modsum) {
+    modsum += wt.mod;
+    // Set absolute (non-relative) horizontal coordinate.  
+    wt.t.x = wt.prelim + modsum;
+    addChildSpacing(wt);                                               
+    for (var i = 0; i < wt.num_children; i++) 
+      secondWalk(wt.children[i], modsum);
+  }
+
+  function distributeExtra(wt, i, si, dist) {
+    // Are there intermediate children?
+    if (si != i - 1) {                                                    
+      var nr = i - si;                                            
+      wt.children[si + 1].shift += dist / nr;                                     
+      wt.children[i].shift -= dist / nr;                                         
+      wt.children[i].change -= dist - dist / nr;                                 
+    }                                                                 
+  }                                                                    
+   
+  // Process change and shift to add intermediate spacing to mod.  
+  function addChildSpacing(wt) {
+    var d = 0, modsumdelta = 0;                                    
+    for (var i = 0; i < wt.num_children; i++) {                                  
+      d += wt.children[i].shift;                                               
+      modsumdelta += d + wt.children[i].change;                                
+      wt.children[i].mod += modsumdelta;                                       
+    }                                                                 
+  }                                                                    
+
+  // Make/maintain a linked list of the indexes of left siblings and their 
+  // lowest vertical coordinate.  
+  function updateIYL(minY, i, ih) {
+    // Remove siblings that are hidden by the new subtree.  
+    while (ih != null && minY >= ih.lowY) ih = ih.nxt;                 
+    // Prepend the new subtree.  
+    return {
+      lowY: minY, 
+      index: i, 
+      nxt: ih,
+    };                                       
+  }         
+
+  // Renormalize the coordinates
+  function renormalize(wt) {
+
+    // If a fixed tree size is specified, scale x and y based on the extent.
+    // Compute the left-most, right-most, and depth-most nodes for extents.
+    if (size != null) {
+      var left = wt,
+          right = wt,
+          bottom = wt;
+      var toVisit = [wt],
+          node;
+      while (node = toVisit.pop()) {
+        var t = node.t;
+        if (t.x < left.t.x) left = node;
+        if (t.x > right.t.x) right = node;
+        if (t.depth > bottom.t.depth) bottom = node;
+        if (node.children) 
+          toVisit = toVisit.concat(node.children);
       }
-    } else if (w) {
-      v.z = w.z + separation(v._, w._);
-    }
-    v.parent.A = apportion(v, w, v.parent.A || siblings[0]);
-  }
 
-  // SECOND WALK
-  // Computes all real x-coordinates by summing up the modifiers recursively.
-  function secondWalk(v) {
-    v._.x = v.z + v.parent.m;
-    v.m += v.parent.m;
-  }
+      var sep = separation == null ? 0.5 : separation(left.t, right.t)/2;
+      var tx = sep - left.t.x;
+      var kx = size[0] / (right.t.x + sep + tx);
+      var ky = size[1] / (bottom.t.depth > 0 ? bottom.t.depth : 1);
 
-  // APPORTION
-  // The core of the algorithm. Here, a new subtree is combined with the
-  // previous subtrees. Threads are used to traverse the inside and outside
-  // contours of the left and right subtree up to the highest common level. The
-  // vertices used for the traversals are vi+, vi-, vo-, and vo+, where the
-  // superscript o means outside and i means inside, the subscript - means left
-  // subtree and + means right subtree. For summing up the modifiers along the
-  // contour, we use respective variables si+, si-, so-, and so+. Whenever two
-  // nodes of the inside contours conflict, we compute the left one of the
-  // greatest uncommon ancestors using the function ANCESTOR and call MOVE
-  // SUBTREE to shift the subtree and prepare the shifts of smaller subtrees.
-  // Finally, we add a new thread (if necessary).
-  function apportion(v, w, ancestor) {
-    if (w) {
-      var vip = v,
-          vop = v,
-          vim = w,
-          vom = vip.parent.children[0],
-          sip = vip.m,
-          sop = vop.m,
-          sim = vim.m,
-          som = vom.m,
-          shift;
-      while (vim = d3_layout_treeRight(vim), vip = d3_layout_treeLeft(vip), vim && vip) {
-        vom = d3_layout_treeLeft(vom);
-        vop = d3_layout_treeRight(vop);
-        vop.a = v;
-        shift = vim.z + sim - vip.z - sip + separation(vim._, vip._);
-        if (shift > 0) {
-          d3_layout_treeMove(d3_layout_treeAncestor(vim, v, ancestor), v, shift);
-          sip += shift;
-          sop += shift;
+      toVisit = [wt];
+      while (node = toVisit.pop()) {
+        var t = node.t;
+        t.x = (t.x + tx) * kx;
+        t.y = t.depth * ky;
+        if (setNodeSizes) {
+          t.x_size *= kx;
+          t.y_size *= ky;
         }
-        sim += vim.m;
-        sip += vip.m;
-        som += vom.m;
-        sop += vop.m;
-      }
-      if (vim && !d3_layout_treeRight(vop)) {
-        vop.t = vim;
-        vop.m += sim - sop;
-      }
-      if (vip && !d3_layout_treeLeft(vom)) {
-        vom.t = vip;
-        vom.m += sip - som;
-        ancestor = v;
+        if (node.children) 
+          toVisit = toVisit.concat(node.children);
       }
     }
-    return ancestor;
+
+    // Else either a fixed node size, or node size function was specified.
+    // In this case, we translate such that the root node is at x = 0.
+    else {
+      var rootX = wt.t.x;
+      moveRight(wt, -rootX);
+    }
   }
 
-  function sizeNode(node) {
-    node.x *= size[0];
-    node.y = node.depth * size[1];
+  function moveRight(wt, move) {
+    wt.t.x += move;
+    for (var i = 0; i < wt.num_children; ++i) {
+      moveRight(wt.children[i], move);
+    }
   }
+
+  // Setter and getter methods
 
   tree.separation = function(x) {
     if (!arguments.length) return separation;
     separation = x;
+    spacing = null;
     return tree;
   };
 
+  tree.spacing = function(x) {
+    if (!arguments.length) return spacing;
+    spacing = x;
+    separation = null;
+    return tree;
+  }
+
   tree.size = function(x) {
-    if (!arguments.length) return nodeSize ? null : size;
-    nodeSize = (size = x) == null ? sizeNode : null;
+    if (!arguments.length) return size;
+    size = x;
+    nodeSize = null;
     return tree;
   };
 
   tree.nodeSize = function(x) {
-    if (!arguments.length) return nodeSize ? size : null;
-    nodeSize = (size = x) == null ? null : sizeNode;
+    if (!arguments.length) return nodeSize;
+    nodeSize = x;
+    size = null;
     return tree;
   };
+
+  tree.setNodeSizes = function(x) {
+    if (!arguments.length) return setNodeSizes;
+    setNodeSizes = x;
+    return tree;
+  };
+
+  tree.rootXSize = function() {
+    return wroot ? wroot.x_size : null;
+  }
 
   return d3_layout_hierarchyRebind(tree, hierarchy);
 };
 
 function d3_layout_treeSeparation(a, b) {
   return a.parent == b.parent ? 1 : 2;
-}
-
-// function d3_layout_treeSeparationRadial(a, b) {
-//   return (a.parent == b.parent ? 1 : 2) / a.depth;
-// }
-
-// NEXT LEFT
-// This function is used to traverse the left contour of a subtree (or
-// subforest). It returns the successor of v on this contour. This successor is
-// either given by the leftmost child of v or by the thread of v. The function
-// returns null if and only if v is on the highest level of its subtree.
-function d3_layout_treeLeft(v) {
-  var children = v.children;
-  return children.length ? children[0] : v.t;
-}
-
-// NEXT RIGHT
-// This function works analogously to NEXT LEFT.
-function d3_layout_treeRight(v) {
-  var children = v.children, n;
-  return (n = children.length) ? children[n - 1] : v.t;
-}
-
-// MOVE SUBTREE
-// Shifts the current subtree rooted at w+. This is done by increasing
-// prelim(w+) and mod(w+) by shift.
-function d3_layout_treeMove(wm, wp, shift) {
-  var change = shift / (wp.i - wm.i);
-  wp.c -= change;
-  wp.s += shift;
-  wm.c += change;
-  wp.z += shift;
-  wp.m += shift;
-}
-
-// EXECUTE SHIFTS
-// All other shifts, applied to the smaller subtrees between w- and w+, are
-// performed by this function. To prepare the shifts, we have to adjust
-// change(w+), shift(w+), and change(w-).
-function d3_layout_treeShift(v) {
-  var shift = 0,
-      change = 0,
-      children = v.children,
-      i = children.length,
-      w;
-  while (--i >= 0) {
-    w = children[i];
-    w.z += shift;
-    w.m += shift;
-    shift += w.s + (change += w.c);
-  }
-}
-
-// ANCESTOR
-// If vi-’s ancestor is a sibling of v, returns vi-’s ancestor. Otherwise,
-// returns the specified (default) ancestor.
-function d3_layout_treeAncestor(vim, v, ancestor) {
-  return vim.a.parent === v.parent ? vim.a : ancestor;
 }
