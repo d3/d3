@@ -14,7 +14,8 @@ d3.svg.axis = function() {
       tickPadding = 3,
       tickArguments_ = [10],
       tickValues = null,
-      tickFormat_;
+      tickFormat_,
+      firstTick_ = null;
 
   function axis(g) {
     g.each(function() {
@@ -27,7 +28,12 @@ d3.svg.axis = function() {
       // Ticks, or domain values for ordinal scales.
       var ticks = tickValues == null ? (scale1.ticks ? scale1.ticks.apply(scale1, tickArguments_) : scale1.domain()) : tickValues,
           tickFormat = tickFormat_ == null ? (scale1.tickFormat ? scale1.tickFormat.apply(scale1, tickArguments_) : d3_identity) : tickFormat_,
-          tick = g.selectAll(".tick").data(ticks, scale1),
+          firstTick = firstTick_;
+
+      //Alter ticks[0] if firstTick != null;
+      ticks[0] = firstTick == null ? ticks[0] : firstTick;
+
+      var tick = g.selectAll(".tick").data(ticks, scale1),
           tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick").style("opacity", ε),
           tickExit = d3.transition(tick.exit()).style("opacity", ε).remove(),
           tickUpdate = d3.transition(tick.order()).style("opacity", 1),
@@ -111,6 +117,15 @@ d3.svg.axis = function() {
   axis.tickFormat = function(x) {
     if (!arguments.length) return tickFormat_;
     tickFormat_ = x;
+    return axis;
+  };
+
+  //Define a custom first tick for cases
+  //in which there is not enough screen real
+  //estate to use a label
+  axis.firstTick = function(x) {
+    if (!arguments.length) return firstTick_;
+    firstTick_ = x;
     return axis;
   };
 
