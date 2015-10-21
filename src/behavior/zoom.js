@@ -5,6 +5,7 @@ import "../event/event";
 import "../event/mouse";
 import "../event/touches";
 import "../selection/selection";
+import "../transition/transition";
 import "../interpolate/zoom";
 import "behavior";
 
