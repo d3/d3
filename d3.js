@@ -6858,7 +6858,7 @@
     return [ d3.min(values), d3.max(values) ];
   }
   d3.layout.pack = function() {
-    var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), padding = 0, size = [ 1, 1 ], radius;
+    var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort), padding = 0, margin = 0, size = [ 1, 1 ], radius;
     function pack(d, i) {
       var nodes = hierarchy.call(this, d, i), root = nodes[0], w = size[0], h = size[1], r = radius == null ? Math.sqrt : typeof radius === "function" ? radius : function() {
         return radius;
@@ -6878,6 +6878,33 @@
           d.r -= dr;
         });
       }
+      if (margin) {
+        var dr = margin * (radius ? 1 : Math.max(2 * root.r / w, 2 * root.r / h)) / 2;
+        var levels = [];
+        function buildLevels(d, i) {
+          if (!levels[i]) levels[i] = [];
+          levels[i].push(d);
+          if (d.children && d.children.length > 0) {
+            d.children.forEach(function(e) {
+              buildLevels(e, i + 1);
+            });
+          }
+        }
+        buildLevels(root, 0);
+        for (var i = levels.length - 2; i >= 0; i--) {
+          levels[i].forEach(function(d) {
+            if (d.children && d.children.length > 0) {
+              d.children.forEach(function(e) {
+                e.r += dr;
+              });
+              d3_layout_packSiblings(d);
+              d.children.forEach(function(e) {
+                e.r -= dr;
+              });
+            }
+          });
+        }
+      }
       d3_layout_packTransform(root, w / 2, h / 2, radius ? 1 : 1 / Math.max(2 * root.r / w, 2 * root.r / h));
       return nodes;
     }
@@ -6894,6 +6921,11 @@
     pack.padding = function(_) {
       if (!arguments.length) return padding;
       padding = +_;
+      return pack;
+    };
+    pack.margin = function(_) {
+      if (!arguments.length) return margin;
+      margin = +_;
       return pack;
     };
     return d3_layout_hierarchyRebind(pack, hierarchy);

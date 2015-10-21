@@ -4,6 +4,7 @@ import "hierarchy";
 d3.layout.pack = function() {
   var hierarchy = d3.layout.hierarchy().sort(d3_layout_packSort),
       padding = 0,
+      margin = 0,
       size = [1, 1],
       radius;
 
@@ -19,12 +20,34 @@ d3.layout.pack = function() {
     d3_layout_hierarchyVisitAfter(root, function(d) { d.r = +r(d.value); });
     d3_layout_hierarchyVisitAfter(root, d3_layout_packSiblings);
 
-    // When padding, recompute the layout using scaled padding.
+    // When padding, recompute the layout using scaled radius.
     if (padding) {
       var dr = padding * (radius ? 1 : Math.max(2 * root.r / w, 2 * root.r / h)) / 2;
       d3_layout_hierarchyVisitAfter(root, function(d) { d.r += dr; });
       d3_layout_hierarchyVisitAfter(root, d3_layout_packSiblings);
       d3_layout_hierarchyVisitAfter(root, function(d) { d.r -= dr; });
+    }
+    if (margin) {
+      var dr = margin * (radius ? 1 : Math.max(2 * root.r / w, 2 * root.r / h)) / 2;
+
+      var levels = [];
+      function buildLevels(d, i) {
+        if (!levels[i]) levels[i] = [];
+        levels[i].push(d);
+        if (d.children && d.children.length > 0) {
+          d.children.forEach(function(e) { buildLevels(e, i+1); });
+        }
+      }
+      buildLevels(root, 0);
+      for (var i = levels.length - 2; i >= 0; i--) {
+        levels[i].forEach(function(d) {
+          if (d.children && d.children.length > 0) {
+            d.children.forEach(function(e) { e.r += dr; });
+            d3_layout_packSiblings(d);
+            d.children.forEach(function(e) { e.r -= dr; });
+          }
+        });
+      }
     }
 
     // Translate and scale the layout to fit the requested size.
@@ -48,6 +71,12 @@ d3.layout.pack = function() {
   pack.padding = function(_) {
     if (!arguments.length) return padding;
     padding = +_;
+    return pack;
+  };
+
+  pack.margin = function(_) {
+    if (!arguments.length) return margin;
+    margin = +_;
     return pack;
   };
 
