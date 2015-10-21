@@ -218,6 +218,20 @@ suite.addBatch({
         assert.deepEqual(p("01/02/1990 +0100"), utc(1990, 0, 1, 23));
         assert.deepEqual(p("01/02/1990 -0100"), utc(1990, 0, 2, 1));
         assert.deepEqual(p("01/02/1990 -0800"), time.local(1990, 0, 2));
+      },
+      "parses timezone offset (in the form '+-hh:mm')": function(format) {
+        var p = format("%m/%d/%Y %Z").parse;
+        assert.deepEqual(p("01/02/1990 +01:30"), utc(1990, 0, 1, 22, 30));
+        assert.deepEqual(p("01/02/1990 -01:30"), utc(1990, 0, 2, 1, 30));
+      },
+      "parses timezone offset (in the form '+-hh')": function(format) {
+        var p = format("%m/%d/%Y %Z").parse;
+        assert.deepEqual(p("01/02/1990 +01"), utc(1990, 0, 1, 23));
+        assert.deepEqual(p("01/02/1990 -01"), utc(1990, 0, 2, 1));
+      },
+      "parses timezone offset (in the form 'Z')": function(format) {
+        var p = format("%m/%d/%Y %Z").parse;
+        assert.deepEqual(p("01/02/1990 Z"), utc(1990, 0, 2));
       }
     }
   }
