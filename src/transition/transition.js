@@ -99,8 +99,12 @@ function d3_transitionNode(node, i, ns, id, inherit) {
         transition.event && transition.event.start.call(node, node.__data__, i);
 
         transition.tween.forEach(function(key, value) {
-          if (value = value.call(node, node.__data__, i)) {
-            tweened.push(value);
+          try {
+            if (value = value.call(node, node.__data__, i)) {
+              tweened.push(value);
+            }
+          } catch (e) {
+            d3_timer_throwLater(e);
           }
         });
 
@@ -121,8 +125,10 @@ function d3_transitionNode(node, i, ns, id, inherit) {
             e = ease(t),
             n = tweened.length;
 
-        while (n > 0) {
+        while (n > 0) try {
           tweened[--n].call(node, e);
+        } catch (e) {
+          d3_timer_throwLater(e);
         }
 
         if (t >= 1) {
