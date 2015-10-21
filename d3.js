@@ -6608,11 +6608,14 @@
         return sort(data[i], data[j]);
       });
       index.forEach(function(i) {
+        var endAngle = a += v * k + pa;
+        endAngle = (isNaN(endAngle) ? 0 : endAngle);
+        console.log(endAngle);
         arcs[i] = {
           data: data[i],
           value: v = values[i],
           startAngle: a,
-          endAngle: a += v * k + pa,
+          endAngle: endAngle,
           padAngle: p
         };
       });

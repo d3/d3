@@ -29,12 +29,15 @@ d3.layout.pie = function() {
 
     // Compute the arcs! They are stored in the original data's order.
     index.forEach(function(i) {
-      arcs[i] = {
-        data: data[i],
-        value: v = values[i],
-        startAngle: a,
-        endAngle: a += v * k + pa,
-        padAngle: p
+        var endAngle = a += v * k + pa;
+        endAngle = (isNaN(endAngle) ? 0 : endAngle);
+        console.log(endAngle);
+        arcs[i] = {
+          data: data[i],
+          value: v = values[i],
+          startAngle: a,
+          endAngle: endAngle,
+          padAngle: p
       };
     });
 
