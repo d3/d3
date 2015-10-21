@@ -4,7 +4,7 @@ d3.locale.ko_KR = d3.locale({
   decimal: ".",
   thousands: ",",
   grouping: [3],
-  currency: ["\\", ""],
+  currency: ["₩", ""],
   dateTime: "%Y/%m/%d %a %X",
   date: "%Y/%m/%d",
   time: "%H:%M:%S",
