@@ -2,7 +2,7 @@ import "locale";
 
 var d3_locale_svSE = d3.locale({
   decimal: ",",
-  thousands: "\0xa0",
+  thousands: "\xa0",
   grouping: [3],
   currency: ["", "SEK"],
   dateTime: "%A den %d %B %Y %X",
