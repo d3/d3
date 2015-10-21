@@ -1,6 +1,6 @@
 import "locale";
 
-d3.locale.zh_CN = d3.locale({
+var d3_locale_zhCN = d3.locale({
   decimal: ".",
   thousands: ",",
   grouping: [3],

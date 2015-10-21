@@ -1,6 +1,6 @@
 import "locale";
 
-d3.locale.mk_MK = d3.locale({
+var d3_locale_mkMK = d3.locale({
   decimal: ",",
   thousands: ".",
   grouping: [3],

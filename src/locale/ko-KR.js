@@ -1,6 +1,6 @@
 import "locale";
 
-d3.locale.ko_KR = d3.locale({
+var d3_locale_koKR = d3.locale({
   decimal: ".",
   thousands: ",",
   grouping: [3],
