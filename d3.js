@@ -1054,7 +1054,7 @@
       group = d3_array(d3_selectAll(nodes, d3_document));
       group.parentNode = d3_document.documentElement;
     } else {
-      group = nodes;
+      group = d3_array(nodes);
       group.parentNode = null;
     }
     return d3_selection([ group ]);
@@ -8976,7 +8976,7 @@
     };
     axis.ticks = function() {
       if (!arguments.length) return tickArguments_;
-      tickArguments_ = arguments;
+      tickArguments_ = d3_array(arguments);
       return axis;
     };
     axis.tickValues = function(x) {
@@ -9498,6 +9498,5 @@
   d3.xml = d3_xhrType(function(request) {
     return request.responseXML;
   });
-  if (typeof define === "function" && define.amd) define(d3); else if (typeof module === "object" && module.exports) module.exports = d3;
-  this.d3 = d3;
+  if (typeof define === "function" && define.amd) define(this.d3 = d3); else if (typeof module === "object" && module.exports) module.exports = d3; else this.d3 = d3;
 }();
