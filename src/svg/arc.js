@@ -95,7 +95,7 @@ d3.svg.arc = function() {
     }
 
     // Compute the rounded corners.
-    if ((rc = Math.min(Math.abs(r1 - r0) / 2, +cornerRadius.apply(this, arguments))) > 1e-3) {
+    if (da >= ε && (rc = Math.min(Math.abs(r1 - r0) / 2, +cornerRadius.apply(this, arguments))) > 1e-3) {
       cr = r0 < r1 ^ cw ? 0 : 1;
 
       // Compute the angle of the sector formed by the two sides of the arc.
