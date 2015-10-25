@@ -2120,7 +2120,7 @@
   };
   d3.csv = d3.dsv(",", "text/csv");
   d3.tsv = d3.dsv("	", "text/tab-separated-values");
-  var d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout, d3_timer_active, d3_timer_frame = this[d3_vendorSymbol(this, "requestAnimationFrame")] || function(callback) {
+  var d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout, d3_timer_frame = this[d3_vendorSymbol(this, "requestAnimationFrame")] || function(callback) {
     setTimeout(callback, 17);
   };
   d3.timer = function(callback, delay, then) {
@@ -2130,7 +2130,6 @@
     var time = then + delay, timer = {
       c: callback,
       t: time,
-      f: false,
       n: null
     };
     if (d3_timer_queueTail) d3_timer_queueTail.n = timer; else d3_timer_queueHead = timer;
@@ -2140,6 +2139,7 @@
       d3_timer_interval = 1;
       d3_timer_frame(d3_timer_step);
     }
+    return timer;
   };
   function d3_timer_step() {
     var now = d3_timer_mark(), delay = d3_timer_sweep() - now;
@@ -2159,22 +2159,21 @@
     d3_timer_sweep();
   };
   function d3_timer_mark() {
-    var now = Date.now();
-    d3_timer_active = d3_timer_queueHead;
-    while (d3_timer_active) {
-      if (now >= d3_timer_active.t) d3_timer_active.f = d3_timer_active.c(now - d3_timer_active.t);
-      d3_timer_active = d3_timer_active.n;
+    var now = Date.now(), timer = d3_timer_queueHead;
+    while (timer) {
+      if (now >= timer.t && timer.c(now - timer.t)) timer.c = null;
+      timer = timer.n;
     }
     return now;
   }
   function d3_timer_sweep() {
     var t0, t1 = d3_timer_queueHead, time = Infinity;
     while (t1) {
-      if (t1.f) {
-        t1 = t0 ? t0.n = t1.n : d3_timer_queueHead = t1.n;
-      } else {
+      if (t1.c) {
         if (t1.t < time) time = t1.t;
         t1 = (t0 = t1).n;
+      } else {
+        t1 = t0 ? t0.n = t1.n : d3_timer_queueHead = t1.n;
       }
     }
     d3_timer_queueTail = t0;
@@ -8635,9 +8634,11 @@
   var d3_selection_interrupt = d3_selection_interruptNS(d3_transitionNamespace());
   function d3_selection_interruptNS(ns) {
     return function() {
-      var lock, active;
-      if ((lock = this[ns]) && (active = lock[lock.active])) {
-        if (--lock.count) delete lock[lock.active]; else delete this[ns];
+      var lock, activeId, active;
+      if ((lock = this[ns]) && (active = lock[activeId = lock.active])) {
+        active.timer.c = null;
+        active.timer.t = NaN;
+        if (--lock.count) delete lock[activeId]; else delete this[ns];
         lock.active += .5;
         active.event && active.event.interrupt.call(this, this.__data__, active.index);
       }
@@ -8894,10 +8895,11 @@
       count: 0
     }), transition = lock[id];
     if (!transition) {
-      var time = inherit.time;
+      var time = inherit.time, timer = d3.timer(schedule, 0, time);
       transition = lock[id] = {
         tween: new d3_Map(),
         time: time,
+        timer: timer,
         delay: inherit.delay,
         duration: inherit.duration,
         ease: inherit.ease,
@@ -8905,18 +8907,29 @@
       };
       inherit = null;
       ++lock.count;
-      d3.timer(function(elapsed) {
-        var delay = transition.delay, duration, ease, timer = d3_timer_active, tweened = [];
+      function schedule(elapsed) {
+        var delay = transition.delay, duration, ease, tweened = [];
         timer.t = delay + time;
         if (delay <= elapsed) return start(elapsed - delay);
         timer.c = start;
         function start(elapsed) {
-          if (lock.active > id) return stop();
-          var active = lock[lock.active];
+          if (lock.active > id) throw new Error();
+          var activeId = lock.active, active = lock[activeId];
           if (active) {
+            active.timer.c = null;
+            active.timer.t = NaN;
             --lock.count;
-            delete lock[lock.active];
+            delete lock[activeId];
             active.event && active.event.interrupt.call(node, node.__data__, active.index);
+          }
+          for (var cancelId in lock) {
+            if (+cancelId < id) {
+              var cancel = lock[cancelId];
+              cancel.timer.c = null;
+              cancel.timer.t = NaN;
+              --lock.count;
+              delete lock[cancelId];
+            }
           }
           lock.active = id;
           transition.event && transition.event.start.call(node, node.__data__, i);
@@ -8927,27 +8940,28 @@
           });
           ease = transition.ease;
           duration = transition.duration;
+          timer.c = tick;
           d3.timer(function() {
-            timer.c = tick(elapsed || 1) ? d3_true : tick;
+            if (tick(elapsed || 1)) {
+              timer.c = null;
+              timer.t = NaN;
+            }
             return 1;
           }, 0, time);
         }
         function tick(elapsed) {
-          if (lock.active !== id) return 1;
+          if (lock.active !== id) throw new Error();
           var t = elapsed / duration, e = ease(t), n = tweened.length;
           while (n > 0) {
             tweened[--n].call(node, e);
           }
           if (t >= 1) {
             transition.event && transition.event.end.call(node, node.__data__, i);
-            return stop();
+            if (--lock.count) delete lock[id]; else delete node[ns];
+            return 1;
           }
         }
-        function stop() {
-          if (--lock.count) delete lock[id]; else delete node[ns];
-          return 1;
-        }
-      }, 0, time);
+      }
     }
   }
   d3.svg.axis = function() {
