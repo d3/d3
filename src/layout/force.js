@@ -11,6 +11,7 @@ import "layout";
 d3.layout.force = function() {
   var force = {},
       event = d3.dispatch("start", "tick", "end"),
+      timer,
       size = [1, 1],
       drag,
       alpha,
@@ -58,6 +59,7 @@ d3.layout.force = function() {
   force.tick = function() {
     // simulated annealing, basically
     if ((alpha *= .99) < .005) {
+      timer = null;
       event.end({type: "end", alpha: alpha = 0});
       return true;
     }
@@ -196,11 +198,15 @@ d3.layout.force = function() {
 
     x = +x;
     if (alpha) { // if we're already running
-      if (x > 0) alpha = x; // we might keep it hot
-      else alpha = 0; // or, next tick will dispatch "end"
+      if (x > 0) { // we might keep it hot
+        alpha = x;
+      } else { // or we might stop
+        timer.c = null, timer.t = NaN, timer = null;
+        event.start({type: "end", alpha: alpha = 0});
+      }
     } else if (x > 0) { // otherwise, fire it up!
       event.start({type: "start", alpha: alpha = x});
-      d3_timer(force.tick);
+      timer = d3_timer(force.tick);
     }
 
     return force;
