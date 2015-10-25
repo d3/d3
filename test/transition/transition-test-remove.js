@@ -53,5 +53,20 @@ module.exports = {
     "does nothing": function(selection) {
       assert.equal(selection[0][0].parentNode.tagName, "BODY");
     }
+  },
+
+  "when a delayed transition has been preempted": {
+    "topic": function(d3) {
+      var callback = this.callback,
+          s = d3.select("body").append("div");
+      s.transition().delay(1000);
+      s.transition().duration(50).remove();
+      setTimeout(function() {
+        callback(null, s);
+      }, 100);
+    },
+    "the element is still removed": function(selection) {
+      assert.domEqual(selection[0][0].parentNode, null);
+    }
   }
 };

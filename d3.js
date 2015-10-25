@@ -8913,7 +8913,6 @@
         if (delay <= elapsed) return start(elapsed - delay);
         timer.c = start;
         function start(elapsed) {
-          if (lock.active > id) throw new Error();
           var activeId = lock.active, active = lock[activeId];
           if (active) {
             active.timer.c = null;
@@ -8942,7 +8941,7 @@
           duration = transition.duration;
           timer.c = tick;
           d3.timer(function() {
-            if (tick(elapsed || 1)) {
+            if (timer.c && tick(elapsed || 1)) {
               timer.c = null;
               timer.t = NaN;
             }
@@ -8950,7 +8949,6 @@
           }, 0, time);
         }
         function tick(elapsed) {
-          if (lock.active !== id) throw new Error();
           var t = elapsed / duration, e = ease(t), n = tweened.length;
           while (n > 0) {
             tweened[--n].call(node, e);

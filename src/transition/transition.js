@@ -86,7 +86,6 @@ function d3_transitionNode(node, i, ns, id, inherit) {
       timer.c = start;
 
       function start(elapsed) {
-        if (lock.active > id) throw new Error; // TODO
 
         // Interrupt the active transition, if any.
         var activeId = lock.active,
@@ -127,9 +126,10 @@ function d3_transitionNode(node, i, ns, id, inherit) {
         duration = transition.duration;
 
         // Defer tween invocation to end of current frame; see mbostock/d3#1576.
+        // Note that this transition may be canceled before then!
         timer.c = tick;
         d3.timer(function() {
-          if (tick(elapsed || 1)) {
+          if (timer.c && tick(elapsed || 1)) {
             timer.c = null;
             timer.t = NaN;
           }
@@ -138,8 +138,6 @@ function d3_transitionNode(node, i, ns, id, inherit) {
       }
 
       function tick(elapsed) {
-        if (lock.active !== id) throw new Error; // TODO
-
         var t = elapsed / duration,
             e = ease(t),
             n = tweened.length;
