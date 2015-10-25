@@ -200,7 +200,7 @@ d3.layout.force = function() {
       else alpha = 0; // or, next tick will dispatch "end"
     } else if (x > 0) { // otherwise, fire it up!
       event.start({type: "start", alpha: alpha = x});
-      d3.timer(force.tick);
+      d3_timer(force.tick);
     }
 
     return force;

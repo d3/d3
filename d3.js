@@ -2123,7 +2123,10 @@
   var d3_timer_queueHead, d3_timer_queueTail, d3_timer_interval, d3_timer_timeout, d3_timer_frame = this[d3_vendorSymbol(this, "requestAnimationFrame")] || function(callback) {
     setTimeout(callback, 17);
   };
-  d3.timer = function(callback, delay, then) {
+  d3.timer = function() {
+    d3_timer.apply(this, arguments);
+  };
+  function d3_timer(callback, delay, then) {
     var n = arguments.length;
     if (n < 2) delay = 0;
     if (n < 3) then = Date.now();
@@ -2140,7 +2143,7 @@
       d3_timer_frame(d3_timer_step);
     }
     return timer;
-  };
+  }
   function d3_timer_step() {
     var now = d3_timer_mark(), delay = d3_timer_sweep() - now;
     if (delay > 24) {
@@ -6366,7 +6369,7 @@
           type: "start",
           alpha: alpha = x
         });
-        d3.timer(force.tick);
+        d3_timer(force.tick);
       }
       return force;
     };
@@ -8895,7 +8898,7 @@
       count: 0
     }), transition = lock[id];
     if (!transition) {
-      var time = inherit.time, timer = d3.timer(schedule, 0, time);
+      var time = inherit.time, timer = d3_timer(schedule, 0, time);
       transition = lock[id] = {
         tween: new d3_Map(),
         time: time,
@@ -8940,7 +8943,7 @@
           ease = transition.ease;
           duration = transition.duration;
           timer.c = tick;
-          d3.timer(function() {
+          d3_timer(function() {
             if (timer.c && tick(elapsed || 1)) {
               timer.c = null;
               timer.t = NaN;

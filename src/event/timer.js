@@ -8,7 +8,11 @@ var d3_timer_queueHead,
     d3_timer_frame = this[d3_vendorSymbol(this, "requestAnimationFrame")] || function(callback) { setTimeout(callback, 17); };
 
 // The timer will continue to fire until callback returns true.
-d3.timer = function(callback, delay, then) {
+d3.timer = function() {
+  d3_timer.apply(this, arguments);
+};
+
+function d3_timer(callback, delay, then) {
   var n = arguments.length;
   if (n < 2) delay = 0;
   if (n < 3) then = Date.now();
@@ -26,8 +30,8 @@ d3.timer = function(callback, delay, then) {
     d3_timer_frame(d3_timer_step);
   }
 
-  return timer; // TODO return a more opaque object
-};
+  return timer;
+}
 
 function d3_timer_step() {
   var now = d3_timer_mark(),

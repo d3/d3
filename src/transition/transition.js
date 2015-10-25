@@ -59,7 +59,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
 
   if (!transition) {
     var time = inherit.time,
-        timer = d3.timer(schedule, 0, time);
+        timer = d3_timer(schedule, 0, time);
 
     transition = lock[id] = {
       tween: new d3_Map,
@@ -128,7 +128,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
         // Defer tween invocation to end of current frame; see mbostock/d3#1576.
         // Note that this transition may be canceled before then!
         timer.c = tick;
-        d3.timer(function() {
+        d3_timer(function() {
           if (timer.c && tick(elapsed || 1)) {
             timer.c = null;
             timer.t = NaN;
