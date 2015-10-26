@@ -17,7 +17,8 @@ d3.layout.pie = function() {
         da = (typeof endAngle === "function" ? endAngle.apply(this, arguments) : endAngle) - a,
         p = Math.min(Math.abs(da) / n, +(typeof padAngle === "function" ? padAngle.apply(this, arguments) : padAngle)),
         pa = p * (da < 0 ? -1 : 1),
-        k = (da - n * pa) / d3.sum(values),
+        sum_values = d3.sum(values),
+        k = sum_values != 0 ? (da - n * pa) / sum_values : 0,
         index = d3.range(n),
         arcs = [],
         v;
