@@ -9,14 +9,8 @@ var d3_nsPrefix = {
 d3.ns = {
   prefix: d3_nsPrefix,
   qualify: function(name) {
-    var i = name.indexOf(":"),
-        prefix = name;
-    if (i >= 0) {
-      prefix = name.slice(0, i);
-      name = name.slice(i + 1);
-    }
-    return d3_nsPrefix.hasOwnProperty(prefix)
-        ? {space: d3_nsPrefix[prefix], local: name}
-        : name;
+    var i = name.indexOf(":"), prefix = name;
+    if (i >= 0 && (prefix = name.slice(0, i)) !== "xmlns") name = name.slice(i + 1);
+    return d3_nsPrefix.hasOwnProperty(prefix) ? {space: d3_nsPrefix[prefix], local: name} : name;
   }
 };
