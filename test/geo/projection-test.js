@@ -9,7 +9,7 @@ suite.addBatch({
     topic: load("geo/projection").expression("d3.geo.projection"),
     "a custom invertible projection": {
       topic: function(projection) {
-        function forward(λ, φ) { return [λ, φ]; }
+        function forward(lambda, phi) { return [lambda, phi]; }
         forward.invert = function(x, y) {};
         return projection(forward);
       },

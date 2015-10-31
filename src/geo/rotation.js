@@ -19,59 +19,59 @@ d3.geo.rotation = function(rotate) {
   return forward;
 };
 
-function d3_geo_identityRotation(λ, φ) {
-  return [λ > π ? λ - τ : λ < -π ? λ + τ : λ, φ];
+function d3_geo_identityRotation(lambda, phi) {
+  return [lambda > pi ? lambda - tau : lambda < -pi ? lambda + tau : lambda, phi];
 }
 
 d3_geo_identityRotation.invert = d3_geo_equirectangular;
 
-// Note: |δλ| must be < 2π
-function d3_geo_rotation(δλ, δφ, δγ) {
-  return δλ ? (δφ || δγ ? d3_geo_compose(d3_geo_rotationλ(δλ), d3_geo_rotationφγ(δφ, δγ))
-    : d3_geo_rotationλ(δλ))
-    : (δφ || δγ ? d3_geo_rotationφγ(δφ, δγ)
+// Note: |deltalambda| must be < 2pi
+function d3_geo_rotation(deltalambda, deltaphi, deltagamma) {
+  return deltalambda ? (deltaphi || deltagamma ? d3_geo_compose(d3_geo_rotationlambda(deltalambda), d3_geo_rotationphigamma(deltaphi, deltagamma))
+    : d3_geo_rotationlambda(deltalambda))
+    : (deltaphi || deltagamma ? d3_geo_rotationphigamma(deltaphi, deltagamma)
     : d3_geo_identityRotation);
 }
 
-function d3_geo_forwardRotationλ(δλ) {
-  return function(λ, φ) {
-    return λ += δλ, [λ > π ? λ - τ : λ < -π ? λ + τ : λ, φ];
+function d3_geo_forwardRotationlambda(deltalambda) {
+  return function(lambda, phi) {
+    return lambda += deltalambda, [lambda > pi ? lambda - tau : lambda < -pi ? lambda + tau : lambda, phi];
   };
 }
 
-function d3_geo_rotationλ(δλ) {
-  var rotation = d3_geo_forwardRotationλ(δλ);
-  rotation.invert = d3_geo_forwardRotationλ(-δλ);
+function d3_geo_rotationlambda(deltalambda) {
+  var rotation = d3_geo_forwardRotationlambda(deltalambda);
+  rotation.invert = d3_geo_forwardRotationlambda(-deltalambda);
   return rotation;
 }
 
-function d3_geo_rotationφγ(δφ, δγ) {
-  var cosδφ = Math.cos(δφ),
-      sinδφ = Math.sin(δφ),
-      cosδγ = Math.cos(δγ),
-      sinδγ = Math.sin(δγ);
+function d3_geo_rotationphigamma(deltaphi, deltagamma) {
+  var cosdeltaphi = Math.cos(deltaphi),
+      sindeltaphi = Math.sin(deltaphi),
+      cosdeltagamma = Math.cos(deltagamma),
+      sindeltagamma = Math.sin(deltagamma);
 
-  function rotation(λ, φ) {
-    var cosφ = Math.cos(φ),
-        x = Math.cos(λ) * cosφ,
-        y = Math.sin(λ) * cosφ,
-        z = Math.sin(φ),
-        k = z * cosδφ + x * sinδφ;
+  function rotation(lambda, phi) {
+    var cosphi = Math.cos(phi),
+        x = Math.cos(lambda) * cosphi,
+        y = Math.sin(lambda) * cosphi,
+        z = Math.sin(phi),
+        k = z * cosdeltaphi + x * sindeltaphi;
     return [
-      Math.atan2(y * cosδγ - k * sinδγ, x * cosδφ - z * sinδφ),
-      d3_asin(k * cosδγ + y * sinδγ)
+      Math.atan2(y * cosdeltagamma - k * sindeltagamma, x * cosdeltaphi - z * sindeltaphi),
+      d3_asin(k * cosdeltagamma + y * sindeltagamma)
     ];
   }
 
-  rotation.invert = function(λ, φ) {
-    var cosφ = Math.cos(φ),
-        x = Math.cos(λ) * cosφ,
-        y = Math.sin(λ) * cosφ,
-        z = Math.sin(φ),
-        k = z * cosδγ - y * sinδγ;
+  rotation.invert = function(lambda, phi) {
+    var cosphi = Math.cos(phi),
+        x = Math.cos(lambda) * cosphi,
+        y = Math.sin(lambda) * cosphi,
+        z = Math.sin(phi),
+        k = z * cosdeltagamma - y * sindeltagamma;
     return [
-      Math.atan2(y * cosδγ + z * sinδγ, x * cosδφ + k * sinδφ),
-      d3_asin(k * cosδφ - x * sinδφ)
+      Math.atan2(y * cosdeltagamma + z * sindeltagamma, x * cosdeltaphi + k * sindeltaphi),
+      d3_asin(k * cosdeltaphi - x * sindeltaphi)
     ];
   };
 

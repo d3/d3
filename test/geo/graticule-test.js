@@ -5,7 +5,7 @@ var vows = require("vows"),
 
 var suite = vows.describe("d3.geo.graticule");
 
-var ε = 1e-6;
+var epsilon = 1e-6;
 
 suite.addBatch({
   "graticule": {
@@ -31,8 +31,8 @@ suite.addBatch({
       },
       "default latitude ranges from 90°S (exclusive) to 90°N (exclusive)": function(graticule) {
         var extent = graticule().majorExtent();
-        assert.equal(extent[0][1], -90 + ε);
-        assert.equal(extent[1][1], +90 - ε);
+        assert.equal(extent[0][1], -90 + epsilon);
+        assert.equal(extent[1][1], +90 - epsilon);
       },
       "coerces input values to numbers": function(graticule) {
         var g = graticule().majorExtent([["-90", "-45"], ["+90", "+45"]]),
@@ -52,8 +52,8 @@ suite.addBatch({
       },
       "default latitude ranges from 80°S (inclusive) to 80°N (inclusive)": function(graticule) {
         var extent = graticule().minorExtent();
-        assert.equal(extent[0][1], -80 - ε);
-        assert.equal(extent[1][1], +80 + ε);
+        assert.equal(extent[0][1], -80 - epsilon);
+        assert.equal(extent[1][1], +80 + epsilon);
       },
       "coerces input values to numbers": function(graticule) {
         var g = graticule().minorExtent([["-90", "-45"], ["+90", "+45"]]),
@@ -119,17 +119,17 @@ suite.addBatch({
       "default minor longitude lines extend from 80°S to 80°N": function(graticule) {
         var lines = graticule().lines()
             .filter(function(line) { return line.coordinates[0][0] === line.coordinates[1][0]; })
-            .filter(function(line) { return Math.abs(line.coordinates[0][0] % 90) > ε; });
+            .filter(function(line) { return Math.abs(line.coordinates[0][0] % 90) > epsilon; });
         lines.forEach(function(line) {
-          assert.deepEqual(_.extent(line.coordinates, function(p) { return p[1]; }), [-80 - ε, +80 + ε]);
+          assert.deepEqual(_.extent(line.coordinates, function(p) { return p[1]; }), [-80 - epsilon, +80 + epsilon]);
         });
       },
       "default major longitude lines extend from 90°S to 90°N": function(graticule) {
         var lines = graticule().lines()
             .filter(function(line) { return line.coordinates[0][0] === line.coordinates[1][0]; })
-            .filter(function(line) { return Math.abs(line.coordinates[0][0] % 90) < ε; });
+            .filter(function(line) { return Math.abs(line.coordinates[0][0] % 90) < epsilon; });
         lines.forEach(function(line) {
-          assert.deepEqual(_.extent(line.coordinates, function(p) { return p[1]; }), [-90 + ε, +90 - ε]);
+          assert.deepEqual(_.extent(line.coordinates, function(p) { return p[1]; }), [-90 + epsilon, +90 - epsilon]);
         });
       },
       "default latitude lines extend from 180°W to 180°E": function(graticule) {

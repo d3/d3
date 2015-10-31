@@ -3,13 +3,13 @@
 // whereas add and normalize operate in-place
 
 function d3_geo_cartesian(spherical) {
-  var λ = spherical[0],
-      φ = spherical[1],
-      cosφ = Math.cos(φ);
+  var lambda = spherical[0],
+      phi = spherical[1],
+      cosphi = Math.cos(phi);
   return [
-    cosφ * Math.cos(λ),
-    cosφ * Math.sin(λ),
-    Math.sin(φ)
+    cosphi * Math.cos(lambda),
+    cosphi * Math.sin(lambda),
+    Math.sin(phi)
   ];
 }
 

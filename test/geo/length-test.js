@@ -4,7 +4,7 @@ var vows = require("vows"),
 
 var suite = vows.describe("d3.geo.length");
 
-var π = Math.PI;
+var pi = Math.PI;
 
 suite.addBatch({
   "length": {

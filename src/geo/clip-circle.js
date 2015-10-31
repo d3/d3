@@ -10,13 +10,13 @@ import "point-in-polygon";
 function d3_geo_clipCircle(radius) {
   var cr = Math.cos(radius),
       smallRadius = cr > 0,
-      notHemisphere = abs(cr) > ε, // TODO optimise for this common case
+      notHemisphere = abs(cr) > epsilon, // TODO optimise for this common case
       interpolate = d3_geo_circleInterpolate(radius, 6 * d3_radians);
 
-  return d3_geo_clip(visible, clipLine, interpolate, smallRadius ? [0, -radius] : [-π, radius - π]);
+  return d3_geo_clip(visible, clipLine, interpolate, smallRadius ? [0, -radius] : [-pi, radius - pi]);
 
-  function visible(λ, φ) {
-    return Math.cos(λ) * Math.cos(φ) > cr;
+  function visible(lambda, phi) {
+    return Math.cos(lambda) * Math.cos(phi) > cr;
   }
 
   // Takes a line and cuts into visible segments. Return values used for
@@ -36,21 +36,21 @@ function d3_geo_clipCircle(radius) {
         v00 = v0 = false;
         clean = 1;
       },
-      point: function(λ, φ) {
-        var point1 = [λ, φ],
+      point: function(lambda, phi) {
+        var point1 = [lambda, phi],
             point2,
-            v = visible(λ, φ),
+            v = visible(lambda, phi),
             c = smallRadius
-              ? v ? 0 : code(λ, φ)
-              : v ? code(λ + (λ < 0 ? π : -π), φ) : 0;
+              ? v ? 0 : code(lambda, phi)
+              : v ? code(lambda + (lambda < 0 ? pi : -pi), phi) : 0;
         if (!point0 && (v00 = v0 = v)) listener.lineStart();
         // Handle degeneracies.
         // TODO ignore if not clipping polygons.
         if (v !== v0) {
           point2 = intersect(point0, point1);
           if (d3_geo_sphericalEqual(point0, point2) || d3_geo_sphericalEqual(point1, point2)) {
-            point1[0] += ε;
-            point1[1] += ε;
+            point1[0] += epsilon;
+            point1[1] += epsilon;
             v = visible(point1[0], point1[1]);
           }
         }
@@ -140,24 +140,24 @@ function d3_geo_clipCircle(radius) {
     if (!two) return q;
 
     // Two intersection points.
-    var λ0 = a[0],
-        λ1 = b[0],
-        φ0 = a[1],
-        φ1 = b[1],
+    var lambda0 = a[0],
+        lambda1 = b[0],
+        phi0 = a[1],
+        phi1 = b[1],
         z;
-    if (λ1 < λ0) z = λ0, λ0 = λ1, λ1 = z;
-    var δλ = λ1 - λ0,
-        polar = abs(δλ - π) < ε,
-        meridian = polar || δλ < ε;
+    if (lambda1 < lambda0) z = lambda0, lambda0 = lambda1, lambda1 = z;
+    var deltalambda = lambda1 - lambda0,
+        polar = abs(deltalambda - pi) < epsilon,
+        meridian = polar || deltalambda < epsilon;
 
-    if (!polar && φ1 < φ0) z = φ0, φ0 = φ1, φ1 = z;
+    if (!polar && phi1 < phi0) z = phi0, phi0 = phi1, phi1 = z;
 
     // Check that the first point is between a and b.
     if (meridian
         ? polar
-          ? φ0 + φ1 > 0 ^ q[1] < (abs(q[0] - λ0) < ε ? φ0 : φ1)
-          : φ0 <= q[1] && q[1] <= φ1
-        : δλ > π ^ (λ0 <= q[0] && q[0] <= λ1)) {
+          ? phi0 + phi1 > 0 ^ q[1] < (abs(q[0] - lambda0) < epsilon ? phi0 : phi1)
+          : phi0 <= q[1] && q[1] <= phi1
+        : deltalambda > pi ^ (lambda0 <= q[0] && q[0] <= lambda1)) {
       var q1 = d3_geo_cartesianScale(u, (-w + t) / uu);
       d3_geo_cartesianAdd(q1, A);
       return [q, d3_geo_spherical(q1)];
@@ -166,13 +166,13 @@ function d3_geo_clipCircle(radius) {
 
   // Generates a 4-bit vector representing the location of a point relative to
   // the small circle's bounding box.
-  function code(λ, φ) {
-    var r = smallRadius ? radius : π - radius,
+  function code(lambda, phi) {
+    var r = smallRadius ? radius : pi - radius,
         code = 0;
-    if (λ < -r) code |= 1; // left
-    else if (λ > r) code |= 2; // right
-    if (φ < -r) code |= 4; // below
-    else if (φ > r) code |= 8; // above
+    if (lambda < -r) code |= 1; // left
+    else if (lambda > r) code |= 2; // right
+    if (phi < -r) code |= 4; // below
+    else if (phi > r) code |= 8; // above
     return code;
   }
 }

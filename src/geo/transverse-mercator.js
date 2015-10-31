@@ -2,12 +2,12 @@ import "../math/trigonometry";
 import "geo";
 import "mercator";
 
-function d3_geo_transverseMercator(λ, φ) {
-  return [Math.log(Math.tan(π / 4 + φ / 2)), -λ];
+function d3_geo_transverseMercator(lambda, phi) {
+  return [Math.log(Math.tan(pi / 4 + phi / 2)), -lambda];
 }
 
 d3_geo_transverseMercator.invert = function(x, y) {
-  return [-y, 2 * Math.atan(Math.exp(x)) - halfπ];
+  return [-y, 2 * Math.atan(Math.exp(x)) - halfpi];
 };
 
 (d3.geo.transverseMercator = function() {

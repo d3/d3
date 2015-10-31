@@ -17,42 +17,42 @@ function d3_geo_pointInPolygon(point, polygon) {
         m = ring.length;
     if (!m) continue;
     var point0 = ring[0],
-        λ0 = point0[0],
-        φ0 = point0[1] / 2 + π / 4,
-        sinφ0 = Math.sin(φ0),
-        cosφ0 = Math.cos(φ0),
+        lambda0 = point0[0],
+        phi0 = point0[1] / 2 + pi / 4,
+        sinphi0 = Math.sin(phi0),
+        cosphi0 = Math.cos(phi0),
         j = 1;
 
     while (true) {
       if (j === m) j = 0;
       point = ring[j];
-      var λ = point[0],
-          φ = point[1] / 2 + π / 4,
-          sinφ = Math.sin(φ),
-          cosφ = Math.cos(φ),
-          dλ = λ - λ0,
-          sdλ = dλ >= 0 ? 1 : -1,
-          adλ = sdλ * dλ,
-          antimeridian = adλ > π,
-          k = sinφ0 * sinφ;
-      d3_geo_areaRingSum.add(Math.atan2(k * sdλ * Math.sin(adλ), cosφ0 * cosφ + k * Math.cos(adλ)));
+      var lambda = point[0],
+          phi = point[1] / 2 + pi / 4,
+          sinphi = Math.sin(phi),
+          cosphi = Math.cos(phi),
+          dlambda = lambda - lambda0,
+          sdlambda = dlambda >= 0 ? 1 : -1,
+          adlambda = sdlambda * dlambda,
+          antimeridian = adlambda > pi,
+          k = sinphi0 * sinphi;
+      d3_geo_areaRingSum.add(Math.atan2(k * sdlambda * Math.sin(adlambda), cosphi0 * cosphi + k * Math.cos(adlambda)));
 
-      polarAngle += antimeridian ? dλ + sdλ * τ : dλ;
+      polarAngle += antimeridian ? dlambda + sdlambda * tau : dlambda;
 
       // Are the longitudes either side of the point's meridian, and are the
       // latitudes smaller than the parallel?
-      if (antimeridian ^ λ0 >= meridian ^ λ >= meridian) {
+      if (antimeridian ^ lambda0 >= meridian ^ lambda >= meridian) {
         var arc = d3_geo_cartesianCross(d3_geo_cartesian(point0), d3_geo_cartesian(point));
         d3_geo_cartesianNormalize(arc);
         var intersection = d3_geo_cartesianCross(meridianNormal, arc);
         d3_geo_cartesianNormalize(intersection);
-        var φarc = (antimeridian ^ dλ >= 0 ? -1 : 1) * d3_asin(intersection[2]);
-        if (parallel > φarc || parallel === φarc && (arc[0] || arc[1])) {
-          winding += antimeridian ^ dλ >= 0 ? 1 : -1;
+        var phiarc = (antimeridian ^ dlambda >= 0 ? -1 : 1) * d3_asin(intersection[2]);
+        if (parallel > phiarc || parallel === phiarc && (arc[0] || arc[1])) {
+          winding += antimeridian ^ dlambda >= 0 ? 1 : -1;
         }
       }
       if (!j++) break;
-      λ0 = λ, sinφ0 = sinφ, cosφ0 = cosφ, point0 = point;
+      lambda0 = lambda, sinphi0 = sinphi, cosphi0 = cosphi, point0 = point;
     }
   }
 
@@ -67,5 +67,5 @@ function d3_geo_pointInPolygon(point, polygon) {
   // from the point to the South pole.  If it is zero, then the point is the
   // same side as the South pole.
 
-  return (polarAngle < -ε || polarAngle < ε && d3_geo_areaRingSum < 0) ^ (winding & 1);
+  return (polarAngle < -epsilon || polarAngle < epsilon && d3_geo_areaRingSum < 0) ^ (winding & 1);
 }

@@ -6,11 +6,11 @@ import "cartesian";
 import "spherical";
 
 d3.geo.bounds = (function() {
-  var λ0, φ0, λ1, φ1, // bounds
-      λ_, // previous λ-coordinate
-      λ__, φ__, // first point
+  var lambda0, phi0, lambda1, phi1, // bounds
+      lambda_, // previous lambda-coordinate
+      lambda__, phi__, // first point
       p0, // previous 3D point
-      dλSum,
+      dlambdaSum,
       ranges,
       range;
 
@@ -23,7 +23,7 @@ d3.geo.bounds = (function() {
       bound.point = ringPoint;
       bound.lineStart = ringStart;
       bound.lineEnd = ringEnd;
-      dλSum = 0;
+      dlambdaSum = 0;
       d3_geo_area.polygonStart();
     },
     polygonEnd: function() {
@@ -31,79 +31,79 @@ d3.geo.bounds = (function() {
       bound.point = point;
       bound.lineStart = lineStart;
       bound.lineEnd = lineEnd;
-      if (d3_geo_areaRingSum < 0) λ0 = -(λ1 = 180), φ0 = -(φ1 = 90);
-      else if (dλSum > ε) φ1 = 90;
-      else if (dλSum < -ε) φ0 = -90;
-      range[0] = λ0, range[1] = λ1;
+      if (d3_geo_areaRingSum < 0) lambda0 = -(lambda1 = 180), phi0 = -(phi1 = 90);
+      else if (dlambdaSum > epsilon) phi1 = 90;
+      else if (dlambdaSum < -epsilon) phi0 = -90;
+      range[0] = lambda0, range[1] = lambda1;
     }
   };
 
-  function point(λ, φ) {
-    ranges.push(range = [λ0 = λ, λ1 = λ]);
-    if (φ < φ0) φ0 = φ;
-    if (φ > φ1) φ1 = φ;
+  function point(lambda, phi) {
+    ranges.push(range = [lambda0 = lambda, lambda1 = lambda]);
+    if (phi < phi0) phi0 = phi;
+    if (phi > phi1) phi1 = phi;
   }
 
-  function linePoint(λ, φ) {
-    var p = d3_geo_cartesian([λ * d3_radians, φ * d3_radians]);
+  function linePoint(lambda, phi) {
+    var p = d3_geo_cartesian([lambda * d3_radians, phi * d3_radians]);
     if (p0) {
       var normal = d3_geo_cartesianCross(p0, p),
           equatorial = [normal[1], -normal[0], 0],
           inflection = d3_geo_cartesianCross(equatorial, normal);
       d3_geo_cartesianNormalize(inflection);
       inflection = d3_geo_spherical(inflection);
-      var dλ = λ - λ_,
-          s = dλ > 0 ? 1 : -1,
-          λi = inflection[0] * d3_degrees * s,
-          antimeridian = abs(dλ) > 180;
-      if (antimeridian ^ (s * λ_ < λi && λi < s * λ)) {
-        var φi = inflection[1] * d3_degrees;
-        if (φi > φ1) φ1 = φi;
-      } else if (λi = (λi + 360) % 360 - 180, antimeridian ^ (s * λ_ < λi && λi < s * λ)) {
-        var φi = -inflection[1] * d3_degrees;
-        if (φi < φ0) φ0 = φi;
+      var dlambda = lambda - lambda_,
+          s = dlambda > 0 ? 1 : -1,
+          lambdai = inflection[0] * d3_degrees * s,
+          antimeridian = abs(dlambda) > 180;
+      if (antimeridian ^ (s * lambda_ < lambdai && lambdai < s * lambda)) {
+        var phii = inflection[1] * d3_degrees;
+        if (phii > phi1) phi1 = phii;
+      } else if (lambdai = (lambdai + 360) % 360 - 180, antimeridian ^ (s * lambda_ < lambdai && lambdai < s * lambda)) {
+        var phii = -inflection[1] * d3_degrees;
+        if (phii < phi0) phi0 = phii;
       } else {
-        if (φ < φ0) φ0 = φ;
-        if (φ > φ1) φ1 = φ;
+        if (phi < phi0) phi0 = phi;
+        if (phi > phi1) phi1 = phi;
       }
       if (antimeridian) {
-        if (λ < λ_) {
-          if (angle(λ0, λ) > angle(λ0, λ1)) λ1 = λ;
+        if (lambda < lambda_) {
+          if (angle(lambda0, lambda) > angle(lambda0, lambda1)) lambda1 = lambda;
         } else {
-          if (angle(λ, λ1) > angle(λ0, λ1)) λ0 = λ;
+          if (angle(lambda, lambda1) > angle(lambda0, lambda1)) lambda0 = lambda;
         }
       } else {
-        if (λ1 >= λ0) {
-          if (λ < λ0) λ0 = λ;
-          if (λ > λ1) λ1 = λ;
+        if (lambda1 >= lambda0) {
+          if (lambda < lambda0) lambda0 = lambda;
+          if (lambda > lambda1) lambda1 = lambda;
         } else {
-          if (λ > λ_) {
-            if (angle(λ0, λ) > angle(λ0, λ1)) λ1 = λ;
+          if (lambda > lambda_) {
+            if (angle(lambda0, lambda) > angle(lambda0, lambda1)) lambda1 = lambda;
           } else {
-            if (angle(λ, λ1) > angle(λ0, λ1)) λ0 = λ;
+            if (angle(lambda, lambda1) > angle(lambda0, lambda1)) lambda0 = lambda;
           }
         }
       }
     } else {
-      point(λ, φ);
+      point(lambda, phi);
     }
-    p0 = p, λ_ = λ;
+    p0 = p, lambda_ = lambda;
   }
 
   function lineStart() { bound.point = linePoint; }
   function lineEnd() {
-    range[0] = λ0, range[1] = λ1;
+    range[0] = lambda0, range[1] = lambda1;
     bound.point = point;
     p0 = null;
   }
 
-  function ringPoint(λ, φ) {
+  function ringPoint(lambda, phi) {
     if (p0) {
-      var dλ = λ - λ_;
-      dλSum += abs(dλ) > 180 ? dλ + (dλ > 0 ? 360 : -360) : dλ;
-    } else λ__ = λ, φ__ = φ;
-    d3_geo_area.point(λ, φ);
-    linePoint(λ, φ);
+      var dlambda = lambda - lambda_;
+      dlambdaSum += abs(dlambda) > 180 ? dlambda + (dlambda > 0 ? 360 : -360) : dlambda;
+    } else lambda__ = lambda, phi__ = phi;
+    d3_geo_area.point(lambda, phi);
+    linePoint(lambda, phi);
   }
 
   function ringStart() {
@@ -111,17 +111,17 @@ d3.geo.bounds = (function() {
   }
 
   function ringEnd() {
-    ringPoint(λ__, φ__);
+    ringPoint(lambda__, phi__);
     d3_geo_area.lineEnd();
-    if (abs(dλSum) > ε) λ0 = -(λ1 = 180);
-    range[0] = λ0, range[1] = λ1;
+    if (abs(dlambdaSum) > epsilon) lambda0 = -(lambda1 = 180);
+    range[0] = lambda0, range[1] = lambda1;
     p0 = null;
   }
 
   // Finds the left-right distance between two longitudes.
-  // This is almost the same as (λ1 - λ0 + 360°) % 360°, except that we want
+  // This is almost the same as (lambda1 - lambda0 + 360°) % 360°, except that we want
   // the distance between ±180° to be 360°.
-  function angle(λ0, λ1) { return (λ1 -= λ0) < 0 ? λ1 + 360 : λ1; }
+  function angle(lambda0, lambda1) { return (lambda1 -= lambda0) < 0 ? lambda1 + 360 : lambda1; }
 
   function compareRanges(a, b) { return a[0] - b[0]; }
 
@@ -130,7 +130,7 @@ d3.geo.bounds = (function() {
   }
 
   return function(feature) {
-    φ1 = λ1 = -(λ0 = φ0 = Infinity);
+    phi1 = lambda1 = -(lambda0 = phi0 = Infinity);
     ranges = [];
 
     d3.geo.stream(feature, bound);
@@ -153,16 +153,16 @@ d3.geo.bounds = (function() {
 
       // Finally, find the largest gap between the merged ranges.
       // The final bounding box will be the inverse of this gap.
-      var best = -Infinity, dλ;
+      var best = -Infinity, dlambda;
       for (var n = merged.length - 1, i = 0, a = merged[n], b; i <= n; a = b, ++i) {
         b = merged[i];
-        if ((dλ = angle(a[1], b[0])) > best) best = dλ, λ0 = b[0], λ1 = a[1];
+        if ((dlambda = angle(a[1], b[0])) > best) best = dlambda, lambda0 = b[0], lambda1 = a[1];
       }
     }
     ranges = range = null;
 
-    return λ0 === Infinity || φ0 === Infinity
+    return lambda0 === Infinity || phi0 === Infinity
         ? [[NaN, NaN], [NaN, NaN]]
-        : [[λ0, φ0], [λ1, φ1]];
+        : [[lambda0, phi0], [lambda1, phi1]];
   };
 })();

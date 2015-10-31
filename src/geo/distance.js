@@ -3,11 +3,11 @@ import "geo";
 
 // Length returned in radians; multiply by radius for distance.
 d3.geo.distance = function(a, b) {
-  var Δλ = (b[0] - a[0]) * d3_radians,
-      φ0 = a[1] * d3_radians, φ1 = b[1] * d3_radians,
-      sinΔλ = Math.sin(Δλ), cosΔλ = Math.cos(Δλ),
-      sinφ0 = Math.sin(φ0), cosφ0 = Math.cos(φ0),
-      sinφ1 = Math.sin(φ1), cosφ1 = Math.cos(φ1),
+  var Deltalambda = (b[0] - a[0]) * d3_radians,
+      phi0 = a[1] * d3_radians, phi1 = b[1] * d3_radians,
+      sinDeltalambda = Math.sin(Deltalambda), cosDeltalambda = Math.cos(Deltalambda),
+      sinphi0 = Math.sin(phi0), cosphi0 = Math.cos(phi0),
+      sinphi1 = Math.sin(phi1), cosphi1 = Math.cos(phi1),
       t;
-  return Math.atan2(Math.sqrt((t = cosφ1 * sinΔλ) * t + (t = cosφ0 * sinφ1 - sinφ0 * cosφ1 * cosΔλ) * t), sinφ0 * sinφ1 + cosφ0 * cosφ1 * cosΔλ);
+  return Math.atan2(Math.sqrt((t = cosphi1 * sinDeltalambda) * t + (t = cosphi0 * sinphi1 - sinphi0 * cosphi1 * cosDeltalambda) * t), sinphi0 * sinphi1 + cosphi0 * cosphi1 * cosDeltalambda);
 };

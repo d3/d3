@@ -9,5 +9,5 @@ function d3_geo_spherical(cartesian) {
 }
 
 function d3_geo_sphericalEqual(a, b) {
-  return abs(a[0] - b[0]) < ε && abs(a[1] - b[1]) < ε;
+  return abs(a[0] - b[0]) < epsilon && abs(a[1] - b[1]) < epsilon;
 }

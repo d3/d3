@@ -33,8 +33,8 @@ function d3_geom_voronoiRemoveBeach(beach) {
 
   var lArc = previous;
   while (lArc.circle
-      && abs(x - lArc.circle.x) < ε
-      && abs(y - lArc.circle.cy) < ε) {
+      && abs(x - lArc.circle.x) < epsilon
+      && abs(y - lArc.circle.cy) < epsilon) {
     previous = lArc.P;
     disappearing.unshift(lArc);
     d3_geom_voronoiDetachBeach(lArc);
@@ -46,8 +46,8 @@ function d3_geom_voronoiRemoveBeach(beach) {
 
   var rArc = next;
   while (rArc.circle
-      && abs(x - rArc.circle.x) < ε
-      && abs(y - rArc.circle.cy) < ε) {
+      && abs(x - rArc.circle.x) < epsilon
+      && abs(y - rArc.circle.cy) < epsilon) {
     next = rArc.N;
     disappearing.push(rArc);
     d3_geom_voronoiDetachBeach(rArc);
@@ -84,19 +84,19 @@ function d3_geom_voronoiAddBeach(site) {
 
   while (node) {
     dxl = d3_geom_voronoiLeftBreakPoint(node, directrix) - x;
-    if (dxl > ε) node = node.L; else {
+    if (dxl > epsilon) node = node.L; else {
       dxr = x - d3_geom_voronoiRightBreakPoint(node, directrix);
-      if (dxr > ε) {
+      if (dxr > epsilon) {
         if (!node.R) {
           lArc = node;
           break;
         }
         node = node.R;
       } else {
-        if (dxl > -ε) {
+        if (dxl > -epsilon) {
           lArc = node.P;
           rArc = node;
-        } else if (dxr > -ε) {
+        } else if (dxr > -epsilon) {
           lArc = node;
           rArc = node.N;
         } else {

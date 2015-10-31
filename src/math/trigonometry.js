@@ -1,11 +1,11 @@
-var ε = 1e-6,
-    ε2 = ε * ε,
-    π = Math.PI,
-    τ = 2 * π,
-    τε = τ - ε,
-    halfπ = π / 2,
-    d3_radians = π / 180,
-    d3_degrees = 180 / π;
+var epsilon = 1e-6,
+    epsilon2 = epsilon * epsilon,
+    pi = Math.PI,
+    tau = 2 * pi,
+    tauepsilon = tau - epsilon,
+    halfpi = pi / 2,
+    d3_radians = pi / 180,
+    d3_degrees = 180 / pi;
 
 function d3_sgn(x) {
   return x > 0 ? 1 : x < 0 ? -1 : 0;
@@ -20,11 +20,11 @@ function d3_cross2d(a, b, c) {
 }
 
 function d3_acos(x) {
-  return x > 1 ? 0 : x < -1 ? π : Math.acos(x);
+  return x > 1 ? 0 : x < -1 ? pi : Math.acos(x);
 }
 
 function d3_asin(x) {
-  return x > 1 ? halfπ : x < -1 ? -halfπ : Math.asin(x);
+  return x > 1 ? halfpi : x < -1 ? -halfpi : Math.asin(x);
 }
 
 function d3_sinh(x) {

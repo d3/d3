@@ -19,7 +19,7 @@ function d3_svg_lineRadial(points) {
   while (++i < n) {
     point = points[i];
     r = point[0];
-    a = point[1] - halfπ;
+    a = point[1] - halfpi;
     point[0] = r * Math.cos(a);
     point[1] = r * Math.sin(a);
   }

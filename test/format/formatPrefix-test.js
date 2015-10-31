@@ -13,9 +13,9 @@ suite.addBatch({
       assert.equal(prefix(1e-01).symbol, "m");
       assert.equal(prefix(1e-02).symbol, "m");
       assert.equal(prefix(1e-03).symbol, "m");
-      assert.equal(prefix(1e-04).symbol, "µ");
-      assert.equal(prefix(1e-05).symbol, "µ");
-      assert.equal(prefix(1e-06).symbol, "µ");
+      assert.equal(prefix(1e-04).symbol, "mu");
+      assert.equal(prefix(1e-05).symbol, "mu");
+      assert.equal(prefix(1e-06).symbol, "mu");
       assert.equal(prefix(1e-07).symbol, "n");
       assert.equal(prefix(1e-08).symbol, "n");
       assert.equal(prefix(1e-09).symbol, "n");
@@ -73,7 +73,7 @@ suite.addBatch({
       assert.equal(prefix(-0).symbol, "");
       assert.equal(prefix(-1e-00).symbol, "");
       assert.equal(prefix(-1e-03).symbol, "m");
-      assert.equal(prefix(-1e-06).symbol, "µ");
+      assert.equal(prefix(-1e-06).symbol, "mu");
       assert.equal(prefix(-1e-09).symbol, "n");
       assert.equal(prefix(-1e-12).symbol, "p");
       assert.equal(prefix(-1e-15).symbol, "f");
@@ -99,11 +99,11 @@ suite.addBatch({
       assert.equal(prefix(995.00000, 2).symbol, "k");
       assert.equal(prefix(950.00000, 2).symbol, "");
       assert.equal(prefix(950.00000, 1).symbol, "k");
-      assert.equal(prefix(0.0009995, 4).symbol, "µ");
+      assert.equal(prefix(0.0009995, 4).symbol, "mu");
       assert.equal(prefix(0.0009995, 3).symbol, "m");
-      assert.equal(prefix(0.0009950, 3).symbol, "µ");
+      assert.equal(prefix(0.0009950, 3).symbol, "mu");
       assert.equal(prefix(0.0009950, 2).symbol, "m");
-      assert.equal(prefix(0.0009500, 2).symbol, "µ");
+      assert.equal(prefix(0.0009500, 2).symbol, "mu");
       assert.equal(prefix(0.0009500, 1).symbol, "m");
     }
   }

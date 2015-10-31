@@ -14,7 +14,7 @@ var d3_geo_areaSum,
     d3_geo_areaRingSum = new d3_adder;
 
 var d3_geo_area = {
-  sphere: function() { d3_geo_areaSum += 4 * π; },
+  sphere: function() { d3_geo_areaSum += 4 * pi; },
   point: d3_noop,
   lineStart: d3_noop,
   lineEnd: d3_noop,
@@ -26,44 +26,44 @@ var d3_geo_area = {
   },
   polygonEnd: function() {
     var area = 2 * d3_geo_areaRingSum;
-    d3_geo_areaSum += area < 0 ? 4 * π + area : area;
+    d3_geo_areaSum += area < 0 ? 4 * pi + area : area;
     d3_geo_area.lineStart = d3_geo_area.lineEnd = d3_geo_area.point = d3_noop;
   }
 };
 
 function d3_geo_areaRingStart() {
-  var λ00, φ00, λ0, cosφ0, sinφ0; // start point and previous point
+  var lambda00, phi00, lambda0, cosphi0, sinphi0; // start point and previous point
 
   // For the first point, …
-  d3_geo_area.point = function(λ, φ) {
+  d3_geo_area.point = function(lambda, phi) {
     d3_geo_area.point = nextPoint;
-    λ0 = (λ00 = λ) * d3_radians, cosφ0 = Math.cos(φ = (φ00 = φ) * d3_radians / 2 + π / 4), sinφ0 = Math.sin(φ);
+    lambda0 = (lambda00 = lambda) * d3_radians, cosphi0 = Math.cos(phi = (phi00 = phi) * d3_radians / 2 + pi / 4), sinphi0 = Math.sin(phi);
   };
 
   // For subsequent points, …
-  function nextPoint(λ, φ) {
-    λ *= d3_radians;
-    φ = φ * d3_radians / 2 + π / 4; // half the angular distance from south pole
+  function nextPoint(lambda, phi) {
+    lambda *= d3_radians;
+    phi = phi * d3_radians / 2 + pi / 4; // half the angular distance from south pole
 
     // Spherical excess E for a spherical triangle with vertices: south pole,
     // previous point, current point.  Uses a formula derived from Cagnoli’s
     // theorem.  See Todhunter, Spherical Trig. (1871), Sec. 103, Eq. (2).
-    var dλ = λ - λ0,
-        sdλ = dλ >= 0 ? 1 : -1,
-        adλ = sdλ * dλ,
-        cosφ = Math.cos(φ),
-        sinφ = Math.sin(φ),
-        k = sinφ0 * sinφ,
-        u = cosφ0 * cosφ + k * Math.cos(adλ),
-        v = k * sdλ * Math.sin(adλ);
+    var dlambda = lambda - lambda0,
+        sdlambda = dlambda >= 0 ? 1 : -1,
+        adlambda = sdlambda * dlambda,
+        cosphi = Math.cos(phi),
+        sinphi = Math.sin(phi),
+        k = sinphi0 * sinphi,
+        u = cosphi0 * cosphi + k * Math.cos(adlambda),
+        v = k * sdlambda * Math.sin(adlambda);
     d3_geo_areaRingSum.add(Math.atan2(v, u));
 
     // Advance the previous points.
-    λ0 = λ, cosφ0 = cosφ, sinφ0 = sinφ;
+    lambda0 = lambda, cosphi0 = cosphi, sinphi0 = sinphi;
   }
 
   // For the last point, return to the start.
   d3_geo_area.lineEnd = function() {
-    nextPoint(λ00, φ00);
+    nextPoint(lambda00, phi00);
   };
 }

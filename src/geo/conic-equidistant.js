@@ -5,26 +5,26 @@ import "equirectangular";
 import "geo";
 import "projection";
 
-function d3_geo_conicEquidistant(φ0, φ1) {
-  var cosφ0 = Math.cos(φ0),
-      n = φ0 === φ1 ? Math.sin(φ0) : (cosφ0 - Math.cos(φ1)) / (φ1 - φ0),
-      G = cosφ0 / n + φ0;
+function d3_geo_conicEquidistant(phi0, phi1) {
+  var cosphi0 = Math.cos(phi0),
+      n = phi0 === phi1 ? Math.sin(phi0) : (cosphi0 - Math.cos(phi1)) / (phi1 - phi0),
+      G = cosphi0 / n + phi0;
 
-  if (abs(n) < ε) return d3_geo_equirectangular;
+  if (abs(n) < epsilon) return d3_geo_equirectangular;
 
-  function forward(λ, φ) {
-    var ρ = G - φ;
+  function forward(lambda, phi) {
+    var rho = G - phi;
     return [
-      ρ * Math.sin(n * λ),
-      G - ρ * Math.cos(n * λ)
+      rho * Math.sin(n * lambda),
+      G - rho * Math.cos(n * lambda)
     ];
   }
 
   forward.invert = function(x, y) {
-    var ρ0_y = G - y;
+    var rho0_y = G - y;
     return [
-      Math.atan2(x, ρ0_y) / n,
-      G - d3_sgn(n) * Math.sqrt(x * x + ρ0_y * ρ0_y)
+      Math.atan2(x, rho0_y) / n,
+      G - d3_sgn(n) * Math.sqrt(x * x + rho0_y * rho0_y)
     ];
   };
 
