@@ -12,7 +12,7 @@ d3_selectionPrototype.transition = function(name) {
   for (var j = -1, m = this.length; ++j < m;) {
     subgroups.push(subgroup = []);
     for (var group = this[j], i = -1, n = group.length; ++i < n;) {
-      if (node = group[i]) d3_transitionNode(node, i, ns, id, transition);
+      if (node = group[i]) d3_transitionNode(node, i, j, ns, id, transition);
       subgroup.push(node);
     }
   }

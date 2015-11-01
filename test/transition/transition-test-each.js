@@ -11,7 +11,8 @@ module.exports = {
           calls = [],
           context = [],
           data = [],
-          index = [],
+          nodeIndex = [],
+          groupIndex = [],
           count = [],
           delay = [];
 
@@ -21,10 +22,11 @@ module.exports = {
       });
 
       // A callback which captures arguments and context.
-      transition.each("start", function(d, i) {
+      transition.each("start", function(d, i, j) {
         context.push(this);
         data.push(d);
-        index.push(i);
+        nodeIndex.push(i);
+        groupIndex.push(j);
         count.push(++n);
         delay.push(Date.now() - then);
         if (n >= 4) callback(null, {
@@ -32,7 +34,8 @@ module.exports = {
           delay: delay,
           context: context,
           data: data,
-          index: index,
+          nodeIndex: nodeIndex,
+          groupIndex: groupIndex,
           count: count,
           id: transition.id
         });
@@ -60,7 +63,8 @@ module.exports = {
     },
     "passes the data and index to the function": function(result) {
       assert.deepEqual(result.data, ["foo", "bar"], "expected data, got {actual}");
-      assert.deepEqual(result.index, [0, 1], "expected index, got {actual}");
+      assert.deepEqual(result.nodeIndex, [0, 1], "expected node index, got {actual}");
+      assert.deepEqual(result.groupIndex, [0, 0], "expected group index, got {actual}");
     },
 
     "sets an exclusive lock on transitioning nodes": function(result) {
@@ -83,7 +87,8 @@ module.exports = {
           calls = [],
           context = [],
           data = [],
-          index = [],
+          nodeIndex = [],
+          groupIndex = [],
           count = [],
           delay = [];
 
@@ -93,10 +98,11 @@ module.exports = {
       });
 
       // A callback which captures arguments and context.
-      transition.each("end", function(d, i) {
+      transition.each("end", function(d, i, j) {
         context.push(this);
         data.push(d);
-        index.push(i);
+        nodeIndex.push(i);
+        groupIndex.push(j);
         count.push(++n);
         delay.push(Date.now() - then);
         if (n >= 4) callback(null, {
@@ -104,7 +110,8 @@ module.exports = {
           delay: delay,
           context: context,
           data: data,
-          index: index,
+          nodeIndex: nodeIndex,
+          groupIndex: groupIndex,
           count: count,
           id: transition.id
         });
@@ -132,7 +139,8 @@ module.exports = {
     },
     "passes the data and index to the function": function(result) {
       assert.deepEqual(result.data, ["foo", "bar"], "expected data, got {actual}");
-      assert.deepEqual(result.index, [0, 1], "expected index, got {actual}");
+      assert.deepEqual(result.nodeIndex, [0, 1], "expected node index, got {actual}");
+      assert.deepEqual(result.groupIndex, [0, 0], "expected group index, got {actual}");
     },
 
     "after the transition ends": {
