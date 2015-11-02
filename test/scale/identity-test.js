@@ -22,7 +22,7 @@ suite.addBatch({
         var x = identity();
         assert.deepEqual(x.domain(), [0, 1]);
         assert.deepEqual(x.range(), [0, 1]);
-        assert.strictEqual(x(.5), .5);
+        assert.strictEqual(x(0.5), 0.5);
       },
       "coerce values to numbers": function(identity) {
         var x = identity().domain([new Date(1990, 0, 1), new Date(1991, 0, 1)]);
@@ -35,11 +35,11 @@ suite.addBatch({
         var x = identity().domain(["0", "1"]);
         assert.typeOf(x.domain()[0], "number");
         assert.typeOf(x.domain()[1], "number");
-        assert.strictEqual(x(.5), .5);
+        assert.strictEqual(x(0.5), 0.5);
         var x = identity().domain([new Number(0), new Number(1)]);
         assert.typeOf(x.domain()[0], "number");
         assert.typeOf(x.domain()[1], "number");
-        assert.strictEqual(x(.5), .5);
+        assert.strictEqual(x(0.5), 0.5);
 
         var x = identity().range([new Date(1990, 0, 1), new Date(1991, 0, 1)]);
         assert.typeOf(x.range()[0], "number");
@@ -51,11 +51,11 @@ suite.addBatch({
         var x = identity().range(["0", "1"]);
         assert.typeOf(x.range()[0], "number");
         assert.typeOf(x.range()[1], "number");
-        assert.strictEqual(x(.5), .5);
+        assert.strictEqual(x(0.5), 0.5);
         var x = identity().range([new Number(0), new Number(1)]);
         assert.typeOf(x.range()[0], "number");
         assert.typeOf(x.range()[1], "number");
-        assert.strictEqual(x(.5), .5);
+        assert.strictEqual(x(0.5), 0.5);
       },
       "can specify a polyidentity domain and range": function(identity) {
         var x = identity().domain([-10, 0, 100]);
@@ -79,7 +79,7 @@ suite.addBatch({
 
     "is the identity function": function(identity) {
       var x = identity().domain([1, 2]);
-      assert.strictEqual(x(.5), .5);
+      assert.strictEqual(x(0.5), 0.5);
       assert.strictEqual(x(1), 1);
       assert.strictEqual(x(1.5), 1.5);
       assert.strictEqual(x(2), 2);
@@ -93,7 +93,7 @@ suite.addBatch({
     "invert": {
       "is the identity function": function(identity) {
         var x = identity().domain([1, 2]);
-        assert.strictEqual(x.invert(.5), .5);
+        assert.strictEqual(x.invert(0.5), 0.5);
         assert.strictEqual(x.invert(1), 1);
         assert.strictEqual(x.invert(1.5), 1.5);
         assert.strictEqual(x.invert(2), 2);
@@ -117,17 +117,17 @@ suite.addBatch({
       "generates ticks of varying degree": function(identity) {
         var x = identity();
         assert.deepEqual(x.ticks(1).map(x.tickFormat(1)), [0, 1]);
-        assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, .5, 1]);
-        assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, .2, .4, .6, .8, 1]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]);
+        assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, 0.5, 1]);
+        assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, 0.2, 0.4, 0.6, 0.8, 1]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
         var x = identity().domain([1, 0]);
         assert.deepEqual(x.ticks(1).map(x.tickFormat(1)), [0, 1]);
-        assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, .5, 1]);
-        assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, .2, .4, .6, .8, 1]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]);
+        assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, 0.5, 1]);
+        assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, 0.2, 0.4, 0.6, 0.8, 1]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
       },
       "formats ticks with the appropriate precision": function(identity) {
-        var x = identity().domain([.123456789, 1.23456789]);
+        var x = identity().domain([0.123456789, 1.23456789]);
         assert.strictEqual(x.tickFormat(1)(x.ticks(1)[0]), "1");
         assert.strictEqual(x.tickFormat(2)(x.ticks(2)[0]), "0.5");
         assert.strictEqual(x.tickFormat(4)(x.ticks(4)[0]), "0.2");

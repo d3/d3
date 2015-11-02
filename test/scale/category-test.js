@@ -66,8 +66,8 @@ function category(category, n) {
       var x = scale[category]();
       x.range().forEach(function(v) {
         var c = _.hsl(v);
-        assert.isTrue(c.l >= .34, "expected " + v + " to be lighter (l = " + c.l + ")");
-        assert.isTrue(c.l <= .89, "expected " + v + " to be darker (l = " + c.l + ")");
+        assert.isTrue(c.l >= 0.34, "expected " + v + " to be lighter (l = " + c.l + ")");
+        assert.isTrue(c.l <= 0.89, "expected " + v + " to be darker (l = " + c.l + ")");
       });
     }
   };

@@ -48,7 +48,7 @@ function d3_ease_reverse(f) {
 
 function d3_ease_reflect(f) {
   return function(t) {
-    return .5 * (t < .5 ? f(2 * t) : (2 - f(2 - 2 * t)));
+    return 0.5 * (t < 0.5 ? f(2 * t) : (2 - f(2 - 2 * t)));
   };
 }
 
@@ -65,7 +65,7 @@ function d3_ease_cubicInOut(t) {
   if (t <= 0) return 0;
   if (t >= 1) return 1;
   var t2 = t * t, t3 = t2 * t;
-  return 4 * (t < .5 ? t3 : 3 * (t - t2) + t3 - .75);
+  return 4 * (t < 0.5 ? t3 : 3 * (t - t2) + t3 - 0.75);
 }
 
 function d3_ease_poly(e) {
@@ -105,7 +105,7 @@ function d3_ease_back(s) {
 
 function d3_ease_bounce(t) {
   return t < 1 / 2.75 ? 7.5625 * t * t
-      : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + .75
-      : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + .9375
-      : 7.5625 * (t -= 2.625 / 2.75) * t + .984375;
+      : t < 2 / 2.75 ? 7.5625 * (t -= 1.5 / 2.75) * t + 0.75
+      : t < 2.5 / 2.75 ? 7.5625 * (t -= 2.25 / 2.75) * t + 0.9375
+      : 7.5625 * (t -= 2.625 / 2.75) * t + 0.984375;
 }

@@ -17,7 +17,7 @@ suite.addBatch({
         assert.equal(body.node().style.getPropertyValue("background-color"), "red");
       },
       "sets a property as a number": function(body) {
-        body.style("opacity", .3);
+        body.style("opacity", 0.3);
         assert.equal(body.node().style.getPropertyValue("opacity"), "0.3");
       },
       "sets a property as a function": function(body) {
@@ -25,7 +25,7 @@ suite.addBatch({
         assert.equal(body.node().style.getPropertyValue("background-color"), "orange");
       },
       "sets properties as a map of constants": function(body) {
-        body.style({"background-color": "white", opacity: .42});
+        body.style({"background-color": "white", opacity: 0.42});
         assert.equal(body.node().style.getPropertyValue("background-color"), "white");
         assert.equal(body.node().style.getPropertyValue("opacity"), "0.42");
       },
@@ -41,7 +41,7 @@ suite.addBatch({
       "observes the specified priority": function(body) {
         body.style("background-color", "green", "important");
         assert.equal(body.node().style.getPropertyPriority("background-color"), "important");
-        body.style({opacity: .52}, "important");
+        body.style({opacity: 0.52}, "important");
         assert.equal(body.node().style.getPropertyPriority("opacity"), "important");
         body.style({visibility: function() { return "visible"; }}, "important");
         assert.equal(body.node().style.getPropertyPriority("visibility"), "important");
@@ -84,7 +84,7 @@ suite.addBatch({
         assert.equal(div[0][1].style.getPropertyValue("background-color"), "red");
       },
       "sets a property as a number": function(div) {
-        div.style("opacity", .5);
+        div.style("opacity", 0.5);
         assert.equal(div[0][0].style.getPropertyValue("opacity"), "0.5");
         assert.equal(div[0][1].style.getPropertyValue("opacity"), "0.5");
       },

@@ -51,7 +51,7 @@ suite.addBatch({
       assert.hclEqual(d3.hcl(d3.rgb(12, 34, 56)), -89.58282792342067, 16.833655998102003, 12.65624852526134);
     },
     "can convert from HSL": function(d3) {
-      assert.hclEqual(d3.hcl(d3.hcl(20, .8, .3)), 20, 0.8, 0.3);
+      assert.hclEqual(d3.hcl(d3.hcl(20, 0.8, 0.3)), 20, 0.8, 0.3);
     },
     "can convert to RGB": function(d3) {
       assert.rgbEqual(d3.hcl("steelblue").rgb(), 70, 130, 180);
@@ -61,11 +61,11 @@ suite.addBatch({
     },
     "can derive a brighter color": function(d3) {
       assert.hclEqual(d3.hcl("steelblue").brighter(), -97.21873224090723, 32.44906314974561, 70.46551718768575);
-      assert.hclEqual(d3.hcl("steelblue").brighter(.5), -97.21873224090723, 32.44906314974561, 61.46551718768575);
+      assert.hclEqual(d3.hcl("steelblue").brighter(0.5), -97.21873224090723, 32.44906314974561, 61.46551718768575);
     },
     "can derive a darker color": function(d3) {
       assert.hclEqual(d3.hcl("lightsteelblue").darker(), -94.8160116310511, 15.26488988314746, 60.45157936968134);
-      assert.hclEqual(d3.hcl("lightsteelblue").darker(.5), -94.8160116310511, 15.26488988314746, 69.45157936968134);
+      assert.hclEqual(d3.hcl("lightsteelblue").darker(0.5), -94.8160116310511, 15.26488988314746, 69.45157936968134);
     },
     "string coercion returns RGB format": function(d3) {
       assert.strictEqual(d3.hcl("hsl(60, 100%, 20%)") + "", "#666600");
@@ -100,7 +100,7 @@ suite.addBatch({
     },
     "c is preserved when explicitly specified, even for black": function(d3) {
       assert.strictEqual(d3.hcl(0, 0, 0).c, 0);
-      assert.strictEqual(d3.hcl(0, .42, 0).c, .42);
+      assert.strictEqual(d3.hcl(0, 0.42, 0).c, 0.42);
       assert.strictEqual(d3.hcl(0, 1, 0).c, 1);
     },
     "c is undefined when not explicitly specified for black": function(d3) {

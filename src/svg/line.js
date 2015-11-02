@@ -13,7 +13,7 @@ function d3_svg_line(projection) {
       defined = d3_true,
       interpolate = d3_svg_lineLinear,
       interpolateKey = interpolate.key,
-      tension = .7;
+      tension = 0.7;
 
   function line(data) {
     var segments = [],
