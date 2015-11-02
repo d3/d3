@@ -7313,6 +7313,7 @@
     }
     function position(row, u, rect, flush) {
       var i = -1, n = row.length, x = rect.x, y = rect.y, v = u ? round(row.area / u) : 0, o;
+      console.warn(row.area, u, v);
       if (u == rect.dx) {
         if (flush || v > rect.dy) v = rect.dy;
         while (++i < n) {

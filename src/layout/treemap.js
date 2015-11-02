@@ -116,6 +116,7 @@ d3.layout.treemap = function() {
         y = rect.y,
         v = u ? round(row.area / u) : 0,
         o;
+    // console.warn(row.area, u, v);
     if (u == rect.dx) { // horizontal subdivision
       if (flush || v > rect.dy) v = rect.dy; // over+underflow
       while (++i < n) {
@@ -123,10 +124,12 @@ d3.layout.treemap = function() {
         o.x = x;
         o.y = y;
         o.dy = v;
-        x += o.dx = Math.min(rect.x + rect.dx - x, v ? round(o.area / v) : 0);
+        x += o.dx = v ? round(o.area / v) : 0;
       }
       o.z = true;
-      o.dx += rect.x + rect.dx - x; // rounding error
+      console.warn("*", rect.x + rect.dx - x);
+      // Math.min(rect.x + rect.dx - x,
+      // o.dx += rect.x + rect.dx - x; // rounding error
       rect.y += v;
       rect.dy -= v;
     } else { // vertical subdivision
@@ -136,10 +139,11 @@ d3.layout.treemap = function() {
         o.x = x;
         o.y = y;
         o.dx = v;
-        y += o.dy = Math.min(rect.y + rect.dy - y, v ? round(o.area / v) : 0);
+        y += o.dy = v ? round(o.area / v) : 0;
       }
       o.z = false;
-      o.dy += rect.y + rect.dy - y; // rounding error
+// Math.min(rect.y + rect.dy - y,
+      // o.dy += rect.y + rect.dy - y; // rounding error
       rect.x += v;
       rect.dx -= v;
     }
@@ -224,7 +228,7 @@ function d3_layout_treemapPad(node, padding) {
       y = node.y + padding[0],
       dx = node.dx - padding[1] - padding[3],
       dy = node.dy - padding[0] - padding[2];
-  if (dx < 0) { x += dx / 2; dx = 0; }
-  if (dy < 0) { y += dy / 2; dy = 0; }
+  if (dx < 0) x += dx / 2, dx = 0;
+  if (dy < 0) y += dy / 2, dy = 0;
   return {x: x, y: y, dx: dx, dy: dy};
 }
