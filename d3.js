@@ -1552,16 +1552,19 @@
     }
     function mousewheeled() {
       var dispatch = event.of(this, arguments);
+      var newScale = Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k;
       if (mousewheelTimer) clearTimeout(mousewheelTimer); else d3_selection_interrupt.call(this), 
       translate0 = location(center0 = center || d3.mouse(this)), zoomstarted(dispatch);
       mousewheelTimer = setTimeout(function() {
         mousewheelTimer = null;
         zoomended(dispatch);
       }, 50);
-      d3_eventPreventDefault();
-      scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
-      translateTo(center0, translate0);
-      zoomed(dispatch);
+      if (newScale > scaleExtent[0] && newScale < scaleExtent[1]) {
+        d3_eventPreventDefault();
+        scaleTo(newScale);
+        translateTo(center0, translate0);
+        zoomed(dispatch);
+      }
     }
     function dblclicked() {
       var p = d3.mouse(this), k = Math.log(view.k) / Math.LN2;
