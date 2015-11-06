@@ -3,7 +3,7 @@ import "../core/class";
 d3.map = function(object, f) {
   var map = new d3_Map;
   if (object instanceof d3_Map) {
-    object.forEach(function(key, value) { map.set(key, value); });
+    object.forEach(function(value, key) { map.set(key, value); });
   } else if (Array.isArray(object)) {
     var i = -1,
         n = object.length,
@@ -45,8 +45,9 @@ d3_class(d3_Map, {
   },
   size: d3_map_size,
   empty: d3_map_empty,
-  forEach: function(f) {
-    for (var key in this._) f.call(this, d3_map_unescape(key), this._[key]);
+  forEach: function(f, context) {
+    var context = context || this;
+    for (var key in this._) f.call(context, this._[key], d3_map_unescape(key), this);
   }
 });
 

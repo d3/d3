@@ -296,6 +296,6 @@ var d3_rgb_names = d3.map({
   yellowgreen: 0x9acd32
 });
 
-d3_rgb_names.forEach(function(key, value) {
+d3_rgb_names.forEach(function(value, key) {
   d3_rgb_names.set(key, d3_rgbNumber(value));
 });

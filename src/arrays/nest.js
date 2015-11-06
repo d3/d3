@@ -32,12 +32,12 @@ d3.nest = function() {
 
     if (mapType) {
       object = mapType();
-      setter = function(keyValue, values) {
+      setter = function(values, keyValue) {
         object.set(keyValue, map(mapType, values, depth));
       };
     } else {
       object = {};
-      setter = function(keyValue, values) {
+      setter = function(values, keyValue) {
         object[keyValue] = map(mapType, values, depth);
       };
     }
@@ -52,7 +52,7 @@ d3.nest = function() {
     var array = [],
         sortKey = sortKeys[depth++];
 
-    map.forEach(function(key, keyMap) {
+    map.forEach(function(keyMap, key) {
       array.push({key: key, values: entries(keyMap, depth)});
     });
 
