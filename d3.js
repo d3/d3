@@ -297,7 +297,7 @@
   d3.map = function(object, f) {
     var map = new d3_Map();
     if (object instanceof d3_Map) {
-      object.forEach(function(key, value) {
+      object.forEach(function(value, key) {
         map.set(key, value);
       });
     } else if (Array.isArray(object)) {
@@ -337,8 +337,9 @@
     },
     size: d3_map_size,
     empty: d3_map_empty,
-    forEach: function(f) {
-      for (var key in this._) f.call(this, d3_map_unescape(key), this._[key]);
+    forEach: function(f, context) {
+      var context = context || this;
+      for (var key in this._) f.call(context, this._[key], d3_map_unescape(key), this);
     }
   });
   function d3_map_escape(key) {
@@ -381,12 +382,12 @@
       }
       if (mapType) {
         object = mapType();
-        setter = function(keyValue, values) {
+        setter = function(values, keyValue) {
           object.set(keyValue, map(mapType, values, depth));
         };
       } else {
         object = {};
-        setter = function(keyValue, values) {
+        setter = function(values, keyValue) {
           object[keyValue] = map(mapType, values, depth);
         };
       }
@@ -396,7 +397,7 @@
     function entries(map, depth) {
       if (depth >= keys.length) return map;
       var array = [], sortKey = sortKeys[depth++];
-      map.forEach(function(key, keyMap) {
+      map.forEach(function(keyMap, key) {
         array.push({
           key: key,
           values: entries(keyMap, depth)
@@ -448,8 +449,9 @@
     values: d3_map_keys,
     size: d3_map_size,
     empty: d3_map_empty,
-    forEach: function(f) {
-      for (var key in this._) f.call(this, d3_map_unescape(key));
+    forEach: function(f, context) {
+      var value, context = context || this;
+      for (var key in this._) f.call(context, value = d3_map_unescape(key), value, this);
     }
   });
   d3.behavior = {};
@@ -1107,7 +1109,7 @@
     mouseleave: "mouseout"
   });
   if (d3_document) {
-    d3_selection_onFilters.forEach(function(k) {
+    d3_selection_onFilters.forEach(function(v, k) {
       if ("on" + k in d3_document) d3_selection_onFilters.remove(k);
     });
   }
@@ -1909,7 +1911,7 @@
     yellow: 16776960,
     yellowgreen: 10145074
   });
-  d3_rgb_names.forEach(function(key, value) {
+  d3_rgb_names.forEach(function(value, key) {
     d3_rgb_names.set(key, d3_rgbNumber(value));
   });
   function d3_functor(v) {
@@ -8144,7 +8146,7 @@
     "cardinal-closed": d3_svg_lineCardinalClosed,
     monotone: d3_svg_lineMonotone
   });
-  d3_svg_lineInterpolators.forEach(function(key, value) {
+  d3_svg_lineInterpolators.forEach(function(value, key) {
     value.key = key;
     value.closed = /-closed$/.test(key);
   });
@@ -8895,7 +8897,7 @@
           }
           lock.active = id;
           transition.event && transition.event.start.call(node, node.__data__, i);
-          transition.tween.forEach(function(key, value) {
+          transition.tween.forEach(function(value, key) {
             if (value = value.call(node, node.__data__, i)) {
               tweened.push(value);
             }

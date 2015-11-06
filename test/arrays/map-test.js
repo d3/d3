@@ -102,7 +102,7 @@ suite.addBatch({
       "passes key and value": function(map) {
         var m = map({foo: 1, bar: "42"}),
             c = [];
-        m.forEach(function(k, v) { c.push([k, v]); });
+        m.forEach(function(v, k) { c.push([k, v]); });
         c.sort(function(a, b) { return a[0].localeCompare(b[0]); });
         assert.deepEqual(c, [["bar", "42"], ["foo", 1]]);
       },
@@ -119,8 +119,8 @@ suite.addBatch({
             m2 = map({bar: "42", foo: 1}),
             c1 = [],
             c2 = [];
-        m1.forEach(function(k, v) { c1.push([k, v]); });
-        m2.forEach(function(k, v) { c2.push([k, v]); });
+        m1.forEach(function(v, k) { c1.push([k, v]); });
+        m2.forEach(function(v, k) { c2.push([k, v]); });
         c1.sort(function(a, b) { return a[0].localeCompare(b[0]); });
         c2.sort(function(a, b) { return a[0].localeCompare(b[0]); });
         assert.deepEqual(c1, c2);

@@ -77,7 +77,7 @@ var d3_selection_onFilters = d3.map({
 });
 
 if (d3_document) {
-  d3_selection_onFilters.forEach(function(k) {
+  d3_selection_onFilters.forEach(function(v, k) {
     if ("on" + k in d3_document) d3_selection_onFilters.remove(k);
   });
 }

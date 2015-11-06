@@ -21,7 +21,8 @@ d3_class(d3_Set, {
   values: d3_map_keys,
   size: d3_map_size,
   empty: d3_map_empty,
-  forEach: function(f) {
-    for (var key in this._) f.call(this, d3_map_unescape(key));
+  forEach: function(f, context) {
+    var value, context = context || this;
+    for (var key in this._) f.call(context, value = d3_map_unescape(key), value, this);
   }
 });

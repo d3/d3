@@ -69,6 +69,13 @@ suite.addBatch({
         c.sort();
         assert.deepEqual(c, ["bar", "foo"]);
       },
+      "passes value as both value and key": function(set) {
+        var s = set(["foo", "bar"]),
+            c = [];
+        s.forEach(function(v, k) { c.push([v, k]); });
+        c.sort();
+        assert.deepEqual(c, [["bar", "bar"], ["foo", "foo"]]);
+      },
       "uses the set as the context": function(set) {
         var s = set(["foo", "bar"]),
             c = [];

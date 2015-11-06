@@ -98,7 +98,7 @@ function d3_transitionNode(node, i, ns, id, inherit) {
 
         transition.event && transition.event.start.call(node, node.__data__, i);
 
-        transition.tween.forEach(function(key, value) {
+        transition.tween.forEach(function(value, key) {
           if (value = value.call(node, node.__data__, i)) {
             tweened.push(value);
           }
