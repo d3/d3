@@ -17,6 +17,7 @@ d3.behavior.zoom = function() {
       scaleExtent = d3_behavior_zoomInfinity,
       duration = 250,
       zooming = 0,
+      zoomFactor = 2,
       mousedown = "mousedown.zoom",
       mousemove = "mousemove.zoom",
       mouseup = "mouseup.zoom",
@@ -138,6 +139,12 @@ d3.behavior.zoom = function() {
     return zoom;
   };
 
+  zoom.zoomFactor = function(z) {
+    if (!arguments.length) return zoomFactor;
+    zoomFactor = z;
+    return zoom;
+  };
+
   function location(p) {
     return [(p[0] - view.x) / view.k, (p[1] - view.y) / view.k];
   }
@@ -159,7 +166,7 @@ d3.behavior.zoom = function() {
   function zoomTo(that, p, l, k) {
     that.__chart__ = {x: view.x, y: view.y, k: view.k};
 
-    scaleTo(Math.pow(2, k));
+    scaleTo(Math.pow(zoomFactor, k));
     translateTo(center0 = p, l);
 
     that = d3.select(that);
@@ -261,7 +268,7 @@ d3.behavior.zoom = function() {
       if (touches.length === 1) {
         if (now - touchtime < 500) { // dbltap
           var p = touches[0];
-          zoomTo(that, p, locations0[p.identifier], Math.floor(Math.log(view.k) / Math.LN2) + 1);
+          zoomTo(that, p, locations0[p.identifier], Math.floor(Math.log(view.k) / Math.log(zoomFactor)) + 1);
           d3_eventPreventDefault();
         }
         touchtime = now;
@@ -328,14 +335,14 @@ d3.behavior.zoom = function() {
     else d3_selection_interrupt.call(this), translate0 = location(center0 = center || d3.mouse(this)), zoomstarted(dispatch);
     mousewheelTimer = setTimeout(function() { mousewheelTimer = null; zoomended(dispatch); }, 50);
     d3_eventPreventDefault();
-    scaleTo(Math.pow(2, d3_behavior_zoomDelta() * .002) * view.k);
+    scaleTo(Math.pow(zoomFactor, d3_behavior_zoomDelta() * .002) * view.k);
     translateTo(center0, translate0);
     zoomed(dispatch);
   }
 
   function dblclicked() {
     var p = d3.mouse(this),
-        k = Math.log(view.k) / Math.LN2;
+        k = Math.log(view.k) / Math.log(zoomFactor);
 
     zoomTo(this, p, location(p), d3.event.shiftKey ? Math.ceil(k) - 1 : Math.floor(k) + 1);
   }
