@@ -164,6 +164,15 @@ d3.layout.tree = function() {
         mscl += dist;
         moveSubtree(wt, i, ih.index, dist);
       }
+
+      // Fix for layout bug, https://github.com/Klortho/d3-flextree/issues/1,
+      // HT @lianyi
+      else if ( i === 1 && mscl === 0 && 
+                sr.num_children === 0 && cl.num_children > 1 && dist < 0 ) {
+        mscl += dist;
+        moveSubtree(wt, i, ih.index, dist);
+      }
+
       var sy = bottom(sr), 
           cy = bottom(cl);
     
