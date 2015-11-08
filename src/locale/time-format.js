@@ -54,7 +54,8 @@ function d3_locale_timeFormat(locale) {
 
       // Set year, month, date.
       if ("j" in d) date.setFullYear(d.y, 0, d.j);
-      else if ("w" in d && ("W" in d || "U" in d)) {
+      else if ("W" in d || "U" in d) {
+        if (!("w" in d)) d.w = "W" in d ? 1 : 0;
         date.setFullYear(d.y, 0, 1);
         date.setFullYear(d.y, 0, "W" in d
             ? (d.w + 6) % 7 + d.W * 7 - (date.getDay() + 5) % 7
