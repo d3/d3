@@ -149,7 +149,7 @@ suite.addBatch({
       },
       "supports a single-element array": function(line) {
         var l = line().interpolate("bundle").tension(1);
-        assert.pathEqual(l([[0, 0]]), "M0,0");
+        assert.pathEqual(l([[0, 0]]), "M0,0Z");
       }
     },
 
