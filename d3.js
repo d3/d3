@@ -8115,7 +8115,7 @@
     return [ [ cx0 - ox, cy0 - oy ], [ cx0 * r1 / r, cy0 * r1 / r ] ];
   }
   function d3_svg_line(projection) {
-    var x = d3_geom_pointX, y = d3_geom_pointY, defined = d3_true, interpolate = d3_svg_lineLinear, interpolateKey = interpolate.key, tension = .7;
+    var x = d3_geom_pointX, y = d3_geom_pointY, defined = d3_true, interpolate = d3_svg_lineLinear, interpolateKey = interpolate.key, tension = 2 / 3;
     function line(data) {
       var segments = [], points = [], i = -1, n = data.length, d, fx = d3_functor(x), fy = d3_functor(y);
       function segment() {
@@ -8325,39 +8325,44 @@
   function d3_svg_lineBasisBezier(path, x, y) {
     path.push("C", d3_svg_lineDot4(d3_svg_lineBasisBezier1, x), ",", d3_svg_lineDot4(d3_svg_lineBasisBezier1, y), ",", d3_svg_lineDot4(d3_svg_lineBasisBezier2, x), ",", d3_svg_lineDot4(d3_svg_lineBasisBezier2, y), ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, x), ",", d3_svg_lineDot4(d3_svg_lineBasisBezier3, y));
   }
-  function d3_svg_lineSlope(p0, p1) {
-    return (p1[1] - p0[1]) / (p1[0] - p0[0]);
-  }
-  function d3_svg_lineFiniteDifferences(points) {
-    var i = 0, j = points.length - 1, m = [], p0 = points[0], p1 = points[1], d = m[0] = d3_svg_lineSlope(p0, p1);
-    while (++i < j) {
-      m[i] = (d + (d = d3_svg_lineSlope(p0 = p1, p1 = points[i + 1]))) / 2;
-    }
-    m[i] = d;
-    return m;
-  }
   function d3_svg_lineMonotoneTangents(points) {
-    var tangents = [], d, a, b, s, m = d3_svg_lineFiniteDifferences(points), i = -1, j = points.length - 1;
-    while (++i < j) {
-      d = d3_svg_lineSlope(points[i], points[i + 1]);
-      if (abs(d) < ε) {
-        m[i] = m[i + 1] = 0;
-      } else {
-        a = m[i] / d;
-        b = m[i + 1] / d;
-        s = a * a + b * b;
-        if (s > 9) {
-          s = d * 3 / Math.sqrt(s);
-          m[i] = s * a;
-          m[i + 1] = s * b;
-        }
+    var k, n = points.length, m = new Array(n), delta = new Array(n - 1), alpha_k, beta_k, beta_km1, tau_k, dx, tangents = new Array(n);
+    for (k = 0; k <= n - 2; ++k) {
+      delta[k] = (points[k + 1][1] - points[k][1]) / (points[k + 1][0] - points[k][0]);
+    }
+    for (k = 1; k <= n - 2; ++k) {
+      m[k] = delta[k] < 0 !== delta[k - 1] < 0 ? 0 : (delta[k - 1] + delta[k]) / 2;
+    }
+    m[0] = delta[0];
+    m[n - 1] = delta[n - 2];
+    for (k = 0; k <= n - 2; ++k) {
+      if (abs(delta[k]) < ε) {
+        m[k] = m[k + 1] = 0;
+        continue;
+      }
+      alpha_k = m[k] / delta[k];
+      beta_km1 = m[k] / delta[k - 1];
+      if (alpha_k < 0 || beta_km1 < 0) {
+        m[k] = 0;
       }
     }
-    i = -1;
-    while (++i <= j) {
-      s = (points[Math.min(j, i + 1)][0] - points[Math.max(0, i - 1)][0]) / (6 * (1 + m[i] * m[i]));
-      tangents.push([ s || 0, m[i] * s || 0 ]);
+    for (k = 0; k <= n - 2; ++k) {
+      alpha_k = m[k] / delta[k];
+      beta_k = m[k + 1] / delta[k];
+      if (alpha_k * alpha_k + beta_k * beta_k > 9) {
+        tau_k = 3 / Math.sqrt(alpha_k * alpha_k + beta_k * beta_k);
+        m[k] = tau_k * alpha_k * delta[k];
+        m[k + 1] = tau_k * beta_k * delta[k];
+      }
     }
+    for (k = 1; k <= n - 2; ++k) {
+      dx = Math.min(points[k][0] - points[k - 1][0], points[k + 1][0] - points[k][0]) / 3;
+      tangents[k] = [ dx, m[k] * dx ];
+    }
+    dx = (points[1][0] - points[0][0]) / 3;
+    tangents[0] = [ dx, m[0] * dx ];
+    dx = (points[n - 1][0] - points[n - 2][0]) / 3;
+    tangents[n - 1] = [ dx, m[n - 1] * dx ];
     return tangents;
   }
   function d3_svg_lineMonotone(points) {
