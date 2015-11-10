@@ -6,7 +6,7 @@ var d3_formatPrefixes = ["y","z","a","f","p","n","µ","m","","k","M","G","T","P"
 
 d3.formatPrefix = function(value, precision) {
   var i = 0;
-  if (value) {
+  if (value = +value) {
     if (value < 0) value *= -1;
     if (precision) value = d3.round(value, d3_format_precision(value, precision));
     i = 1 + Math.floor(1e-12 + Math.log(value) / Math.LN10);

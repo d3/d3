@@ -17,7 +17,7 @@ suite.addBatch({
         assert.inDelta(p.rotate(), [96, 0, 0], 1e-6);
       },
       "has the center -0.6°, 38.7°": function(p) {
-        assert.inDelta(p.center(), [-.6, 38.7], 1e-6);
+        assert.inDelta(p.center(), [-0.6, 38.7], 1e-6);
       },
       "has the scale 1070": function(p) {
         assert.inDelta(p.scale(), 1070, 1e-6);

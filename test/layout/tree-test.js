@@ -33,12 +33,12 @@ suite.addBatch({
         {children: [{}]},
         {children: [{}]}
       ]}).map(layout), [
-        {depth: 0, x: .5,   y: 0},
-        {depth: 1, x: .125, y: 0.5},
-        {depth: 1, x: .375, y: 0.5},
-        {depth: 2, x: .375, y: 1},
-        {depth: 1, x: .875, y: 0.5},
-        {depth: 2, x: .875, y: 1}
+        {depth: 0, x: 0.5,   y: 0},
+        {depth: 1, x: 0.125, y: 0.5},
+        {depth: 1, x: 0.375, y: 0.5},
+        {depth: 2, x: 0.375, y: 1},
+        {depth: 1, x: 0.875, y: 0.5},
+        {depth: 2, x: 0.875, y: 1}
       ]);
     },
     "can handle a single node": function(tree) {

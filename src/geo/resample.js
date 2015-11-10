@@ -3,7 +3,7 @@ import "../math/trigonometry";
 import "cartesian";
 
 function d3_geo_resample(project) {
-  var δ2 = .5, // precision, px²
+  var δ2 = 0.5, // precision, px²
       cosMinDistance = Math.cos(30 * d3_radians), // cos(minimum angular distance)
       maxDepth = 16;
 
@@ -90,7 +90,7 @@ function d3_geo_resample(project) {
           dy2 = y2 - y0,
           dz = dy * dx2 - dx * dy2;
       if (dz * dz / d2 > δ2 // perpendicular projected distance
-          || abs((dx * dx2 + dy * dy2) / d2 - .5) > .3 // midpoint close to an end
+          || abs((dx * dx2 + dy * dy2) / d2 - 0.5) > 0.3 // midpoint close to an end
           || a0 * a1 + b0 * b1 + c0 * c1 < cosMinDistance) { // angular distance
         resampleLineTo(x0, y0, λ0, a0, b0, c0, x2, y2, λ2, a /= m, b /= m, c, depth, stream);
         stream.point(x2, y2);

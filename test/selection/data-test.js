@@ -252,6 +252,40 @@ suite.addBatch({
         assert.domEqual(exit[1][0], span[1][0]);
         assert.domNull(exit[1][1]);
       },
+      "does not evaluate the key function on null nodes": function(span) {
+        var node = span[0][0];
+        span[0][0] = null;
+
+        var update = span.data([1, 2], Number);
+        assert.isFalse(update.empty());
+        assert.equal(update.length, 2);
+        assert.equal(update[0].length, 2);
+        assert.equal(update[1].length, 2);
+        assert.domEqual(update[0][0], span[0][1]);
+        assert.domNull(update[0][1]);
+        assert.domEqual(update[1][0], span[1][1]);
+        assert.domNull(update[1][1]);
+
+        var enter = update.enter();
+        assert.equal(enter.length, 2);
+        assert.equal(enter[0].length, 2);
+        assert.equal(enter[1].length, 2);
+        assert.domNull(enter[0][0]);
+        assert.deepEqual(enter[0][1], {__data__: 2});
+        assert.domNull(enter[1][0]);
+        assert.deepEqual(enter[1][1], {__data__: 2});
+
+        var exit = update.exit();
+        assert.equal(exit.length, 2);
+        assert.equal(exit[0].length, 2);
+        assert.equal(exit[1].length, 2);
+        assert.domNull(exit[0][0]);
+        assert.domNull(exit[0][1]);
+        assert.domEqual(exit[1][0], span[1][0]);
+        assert.domNull(exit[1][1]);
+
+        span[0][0] = node;
+      },
       "handles keys that are in the default object's prototype chain": function(span) {
         // This also applies to the non-standard "watch" and "unwatch" in Mozilla Firefox.
         var update = span.data(["hasOwnProperty", "isPrototypeOf", "toLocaleString", "toString", "valueOf"], String);

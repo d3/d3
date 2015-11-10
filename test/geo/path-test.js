@@ -115,7 +115,7 @@ suite.addBatch({
           assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]]]}), 25);
         },
         "of a polygon with holes": function(area) {
-          assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]], [[100.2, .2], [100.8, .2], [100.8, .8], [100.2, .8], [100.2, .2]]]}), 16);
+          assert.strictEqual(area({type: "Polygon", coordinates: [[[100, 0], [100, 1], [101, 1], [101, 0], [100, 0]], [[100.2, 0.2], [100.8, 0.2], [100.8, 0.8], [100.2, 0.8], [100.2, 0.2]]]}), 16);
         },
         "area of a Sphere": function(area) {
           assert.strictEqual(area({type: "Sphere"}), 1620000);

@@ -25,9 +25,9 @@ suite.addBatch({
         assert.equal(body.node().bgcolor, "orange");
       },
       "sets properties as a map of constants": function(body) {
-        body.property({bgcolor: "purple", opacity: .41});
+        body.property({bgcolor: "purple", opacity: 0.41});
         assert.equal(body.node().bgcolor, "purple");
-        assert.equal(body.node().opacity, .41);
+        assert.equal(body.node().opacity, 0.41);
       },
       "sets properties as a map of functions": function(body) {
         body.data(["cyan"]).property({bgcolor: String, opacity: function(d, i) { return i; }});

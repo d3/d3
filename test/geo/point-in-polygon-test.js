@@ -16,10 +16,10 @@ suite.addBatch({
         return pointInPolygon([[[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]]]);
       },
       "outside": function(pointInPolygon) {
-        assert.ok(!pointInPolygon([.1, 2]));
+        assert.ok(!pointInPolygon([0.1, 2]));
       },
       "inside": function(pointInPolygon) {
-        assert.ok(pointInPolygon([.1, .1]));
+        assert.ok(pointInPolygon([0.1, 0.1]));
       }
     },
     "small circle": {
@@ -67,10 +67,10 @@ suite.addBatch({
           ]);
         },
         "outside": function(pointInPolygon) {
-          assert.ok(!pointInPolygon([.1, .1]));
+          assert.ok(!pointInPolygon([0.1, 0.1]));
         },
         "inside": function(pointInPolygon) {
-          assert.ok(pointInPolygon([2, .1]));
+          assert.ok(pointInPolygon([2, 0.1]));
         }
       },
       "South pole": {
@@ -127,8 +127,8 @@ suite.addBatch({
         topic: function(pointInPolygon) {
           var circle = _.geo.circle().origin([0, -90]);
           return pointInPolygon([
-            circle.angle(90 - .01)().coordinates[0],
-            circle.angle(90 + .01)().coordinates[0].reverse()
+            circle.angle(90 - 0.01)().coordinates[0],
+            circle.angle(90 + 0.01)().coordinates[0].reverse()
           ]);
         },
         "outside": function(pointInPolygon) {
@@ -142,8 +142,8 @@ suite.addBatch({
         topic: function(pointInPolygon) {
           var circle = _.geo.circle().origin([0, -90]);
           return pointInPolygon([
-            circle.angle(90 + .01)().coordinates[0],
-            circle.angle(90 - .01)().coordinates[0].reverse()
+            circle.angle(90 + 0.01)().coordinates[0],
+            circle.angle(90 - 0.01)().coordinates[0].reverse()
           ]);
         },
         "outside": function(pointInPolygon) {
@@ -159,14 +159,14 @@ suite.addBatch({
         topic: function(pointInPolygon) {
           return pointInPolygon([
             [[0, 0], [0, 1], [1, 1], [1, 0], [0, 0]],
-            [[.4, .4], [.6, .4], [.6, .6], [.4, .6], [.4, .4]]
+            [[0.4, 0.4], [0.6, 0.4], [0.6, 0.6], [0.4, 0.6], [0.4, 0.4]]
           ]);
         },
         "outside": function(pointInPolygon) {
-          assert.ok(!pointInPolygon([.5, .5]));
+          assert.ok(!pointInPolygon([0.5, 0.5]));
         },
         "inside": function(pointInPolygon) {
-          assert.ok(pointInPolygon([.1, .5]));
+          assert.ok(pointInPolygon([0.1, 0.5]));
         }
       },
       "equatorial": {
@@ -249,7 +249,7 @@ suite.addBatch({
         },
         "inside": {
           "counter-clockwise region": function(pointInPolygon) {
-            assert.ok(pointInPolygon([.5, .5]));
+            assert.ok(pointInPolygon([0.5, 0.5]));
           },
           "clockwise region": function(pointInPolygon) {
             assert.ok(pointInPolygon([2, 2]));
@@ -257,7 +257,7 @@ suite.addBatch({
         },
         "outside": {
           "counter-clockwise region": function(pointInPolygon) {
-            assert.ok(!pointInPolygon([15, .5]));
+            assert.ok(!pointInPolygon([15, 0.5]));
           },
           "clockwise region": function(pointInPolygon) {
             assert.ok(!pointInPolygon([12, 2]));

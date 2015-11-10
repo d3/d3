@@ -105,6 +105,9 @@ suite.addBatch({
       assert.equal(prefix(0.0009950, 2).symbol, "m");
       assert.equal(prefix(0.0009500, 2).symbol, "µ");
       assert.equal(prefix(0.0009500, 1).symbol, "m");
+    },
+    "coerces input to a string": function(prefix) {
+      assert.equal(prefix("0").symbol, "");
     }
   }
 });

@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.5.6",
+  "version": "3.5.7",
   "description": "A JavaScript visualization library for HTML and SVG.",
   "keywords": [
     "dom",
@@ -25,7 +25,7 @@
     "type": "git",
     "url": "https://github.com/mbostock/d3.git"
   },
-  "main": "index.js",
+  "main": "d3.js",
   "browserify": "d3.js",
   "jspm": {
     "main": "d3",

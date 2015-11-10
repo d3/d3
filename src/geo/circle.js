@@ -59,7 +59,7 @@ function d3_geo_circleInterpolate(radius, precision) {
       if (direction > 0 ? from < to: from > to) from += direction * τ;
     } else {
       from = radius + direction * τ;
-      to = radius - .5 * step;
+      to = radius - 0.5 * step;
     }
     for (var point, t = from; direction > 0 ? t > to : t < to; t -= step) {
       listener.point((point = d3_geo_spherical([

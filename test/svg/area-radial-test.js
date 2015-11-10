@@ -137,12 +137,12 @@ suite.addBatch({
       assert.equal(a.interpolate(), "step-before");
     },
 
-    "tension defaults to .7": function(area) {
-      assert.equal(area().tension(), .7);
+    "tension defaults to 0.7": function(area) {
+      assert.equal(area().tension(), 0.7);
     },
     "tension can be specified as a constant": function(area) {
-      var a = area().tension(.5);
-      assert.equal(a.tension(), .5);
+      var a = area().tension(0.5);
+      assert.equal(a.tension(), 0.5);
     },
 
     "returns null if input points array is empty": function(area) {

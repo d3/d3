@@ -61,12 +61,12 @@ suite.addBatch({
       assert.equal(l.interpolate(), "cardinal");
     },
 
-    "tension defaults to .7": function(line) {
-      assert.equal(line().tension(), .7);
+    "tension defaults to 0.7": function(line) {
+      assert.equal(line().tension(), 0.7);
     },
     "tension can be specified as a constant": function(line) {
-      var l = line().tension(.5);
-      assert.equal(l.tension(), .5);
+      var l = line().tension(0.5);
+      assert.equal(l.tension(), 0.5);
     },
 
     "returns null if input points array is empty": function(line) {

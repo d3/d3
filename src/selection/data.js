@@ -36,12 +36,14 @@ d3_selectionPrototype.data = function(value, key) {
           keyValue;
 
       for (i = -1; ++i < n;) {
-        if (nodeByKeyValue.has(keyValue = key.call(node = group[i], node.__data__, i))) {
-          exitNodes[i] = node; // duplicate selection key
-        } else {
-          nodeByKeyValue.set(keyValue, node);
+        if (node = group[i]) {
+          if (nodeByKeyValue.has(keyValue = key.call(node, node.__data__, i))) {
+            exitNodes[i] = node; // duplicate selection key
+          } else {
+            nodeByKeyValue.set(keyValue, node);
+          }
+          keyValues[i] = keyValue;
         }
-        keyValues[i] = keyValue;
       }
 
       for (i = -1; ++i < m;) {
@@ -55,7 +57,7 @@ d3_selectionPrototype.data = function(value, key) {
       }
 
       for (i = -1; ++i < n;) {
-        if (nodeByKeyValue.get(keyValues[i]) !== true) {
+        if (i in keyValues && nodeByKeyValue.get(keyValues[i]) !== true) {
           exitNodes[i] = group[i];
         }
       }

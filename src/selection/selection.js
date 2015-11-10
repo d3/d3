@@ -74,7 +74,7 @@ d3.selectAll = function(nodes) {
     group = d3_array(d3_selectAll(nodes, d3_document));
     group.parentNode = d3_document.documentElement;
   } else {
-    group = nodes;
+    group = d3_array(nodes);
     group.parentNode = null;
   }
   return d3_selection([group]);
