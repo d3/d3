@@ -43,6 +43,14 @@ function d3_scale_pow(linear, exponent, domain) {
     return scale;
   };
 
+  scale.domainSegmented = function(x, n) {
+    var mn = x[0], d = x[1] - mn, domain = [];
+    n -= 1;
+    for (var i=0; i<=n; ++i)
+      domain.push(mn + d * Math.pow(i/n, 1/exponent));
+    return scale.domain(domain);
+  };
+
   scale.copy = function() {
     return d3_scale_pow(linear.copy(), exponent, domain);
   };
