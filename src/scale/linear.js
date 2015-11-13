@@ -80,6 +80,14 @@ function d3_scale_linear(domain, range, interpolate, clamp) {
     return d3_scale_linear(domain, range, interpolate, clamp);
   };
 
+  scale.domainSegmented = function(x, n) {
+    var mn = x[0], d = x[1] - mn, domain = [];
+    n -= 1;
+    for (var i=0; i<=n; ++i)
+      domain.push(mn + d * i / n);
+    return scale.domain(domain);
+  };
+
   return rescale();
 }
 

@@ -85,6 +85,14 @@ function d3_scale_log(linear, base, positive, domain) {
     return d3_scale_log(linear.copy(), base, positive, domain);
   };
 
+  scale.domainSegmented = function(x, n) {
+    var mn = x[0], mx = x[1], domain = [];
+    n -= 1;
+    for (var i=0; i<=n; ++i)
+      domain.push(Math.pow(mn, (n-i)/n) * Math.pow(mx, i/n));
+    return scale.domain(domain);
+  };
+
   return d3_scale_linearRebind(scale, linear);
 }
 

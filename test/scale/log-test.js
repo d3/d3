@@ -54,6 +54,29 @@ suite.addBatch({
       }
     },
 
+    "domainSegmented": {
+      "behaves like domain when n=2": function(d3) {
+        var r = [5, 10], d = [1, 5];
+        var s1 = d3.scale.log().range(r), s2 = d3.scale.log().range(r);
+        s1.domain(d);
+        s2.domainSegmented(d, 2);
+        for (var i=0; i<17; ++i) // prime number to avoid aliasing over segments
+          assert.inDelta(s1(1+4*i/17), s2(1+4*i/17), 1e-6);
+      }, "segments domain uniformly in log scales": function(d3) {
+        var s1 = d3.scale.log().domain([1,100]).range([1,2]), 
+            s2 = d3.scale.log();
+        s2.domainSegmented([1, 100], 5)
+          .range([1, 1.25, 1.5, 1.75, 2.0]);
+        for (var i=0; i<17; ++i) // prime number to avoid aliasing over segments
+          assert.inDelta(s1(1+i/17), s2(1+i/17), 1e-6);
+      }, "can be called in non-numeric scales": function(d3) {
+        var s1 = d3.scale.log();
+        s1.domainSegmented([1, 100], 5).range(["red", "green", "blue", "white", "black"]);
+        for (var i=0; i<17; ++i)
+          s1(1+99*i/17);
+      }
+    },
+
     "range": {
       "defaults to [0, 1]": function(d3) {
         var x = d3.scale.log();
