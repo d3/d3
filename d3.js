@@ -8927,6 +8927,14 @@
           delete lock[cancelId];
         }
       }
+      timer.c = tick;
+      d3_timer(function() {
+        if (timer.c && tick(elapsed || 1)) {
+          timer.c = null;
+          timer.t = NaN;
+        }
+        return 1;
+      }, 0, time);
       lock.active = id;
       transition.event && transition.event.start.call(node, node.__data__, i);
       tweens = [];
@@ -8937,14 +8945,6 @@
       });
       ease = transition.ease;
       duration = transition.duration;
-      timer.c = tick;
-      d3_timer(function() {
-        if (timer.c && tick(elapsed || 1)) {
-          timer.c = null;
-          timer.t = NaN;
-        }
-        return 1;
-      }, 0, time);
     }
     function tick(elapsed) {
       var t = elapsed / duration, e = ease(t), n = tweens.length;
