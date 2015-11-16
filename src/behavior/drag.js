@@ -62,7 +62,7 @@ d3.behavior.drag = function() {
       function ended() {
         if (!position(parent, dragId)) return; // this touch didn’t end
         dragSubject.on(move + dragName, null).on(end + dragName, null);
-        dragRestore(dragged && d3.event.target === target);
+        dragRestore(dragged);
         dispatch({type: "dragend"});
       }
     };

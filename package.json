@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.5.8",
+  "version": "3.5.9",
   "description": "A JavaScript visualization library for HTML and SVG.",
   "keywords": [
     "dom",
@@ -54,7 +54,7 @@
     "jsdom": "3",
     "seedrandom": "2",
     "smash": "0.0",
-    "uglify-js": "2.4.16",
+    "uglify-js": "2.6.1",
     "vows": "0.8"
   },
   "scripts": {
