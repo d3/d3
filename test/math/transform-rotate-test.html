@@ -83,7 +83,7 @@ tr.selectAll(".actual")
     })
   .enter().append("td")
     .text(function(d, i) { return format(d.actual); })
-    .attr("class", function(d) { return Math.abs(d.actual - d.expected) < .01 ? "success" : "fail"; });
+    .attr("class", function(d) { return Math.abs(d.actual - d.expected) < 0.01 ? "success" : "fail"; });
 
 var ga = tr.append("td").attr("width", 40).append("svg")
     .attr("width", 40)

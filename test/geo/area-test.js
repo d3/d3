@@ -79,37 +79,37 @@ suite.addBatch({
           assert.inDelta(area(_.geo.circle().angle(90)()), 2 * π, 1e-5);
         },
         "60°": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(60).precision(.1)()), π, 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(60).precision(0.1)()), π, 1e-5);
         },
         "60° North": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(60).precision(.1).origin([0, 90])()), π, 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(60).precision(0.1).origin([0, 90])()), π, 1e-5);
         },
         "45°": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(45).precision(.1)()), π * (2 - Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(45).precision(0.1)()), π * (2 - Math.SQRT2), 1e-5);
         },
         "45° North": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(45).precision(.1).origin([0, 90])()), π * (2 - Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(45).precision(0.1).origin([0, 90])()), π * (2 - Math.SQRT2), 1e-5);
         },
         "45° South": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(45).precision(.1).origin([0, -90])()), π * (2 - Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(45).precision(0.1).origin([0, -90])()), π * (2 - Math.SQRT2), 1e-5);
         },
         "135°": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(135).precision(.1)()), π * (2 + Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(135).precision(0.1)()), π * (2 + Math.SQRT2), 1e-5);
         },
         "135° North": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(135).precision(.1).origin([0, 90])()), π * (2 + Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(135).precision(0.1).origin([0, 90])()), π * (2 + Math.SQRT2), 1e-5);
         },
         "135° South": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(135).precision(.1).origin([0, -90])()), π * (2 + Math.SQRT2), 1e-5);
+          assert.inDelta(area(_.geo.circle().angle(135).precision(0.1).origin([0, -90])()), π * (2 + Math.SQRT2), 1e-5);
         },
         "tiny": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(1e-6).precision(.1)()), 0, 1e-6);
+          assert.inDelta(area(_.geo.circle().angle(1e-6).precision(0.1)()), 0, 1e-6);
         },
         "huge": function(area) {
-          assert.inDelta(area(_.geo.circle().angle(180 - 1e-6).precision(.1)()), 4 * π, 1e-6);
+          assert.inDelta(area(_.geo.circle().angle(180 - 1e-6).precision(0.1)()), 4 * π, 1e-6);
         },
         "60° with 45° hole": function(area) {
-          var circle = _.geo.circle().precision(.1);
+          var circle = _.geo.circle().precision(0.1);
           assert.inDelta(area({
             type: "Polygon",
             coordinates: [
@@ -119,7 +119,7 @@ suite.addBatch({
           }), π * (Math.SQRT2 - 1), 1e-5);
         },
         "45° holes at [0°, 0°] and [0°, 90°]": function(area) {
-          var circle = _.geo.circle().precision(.1).angle(45);
+          var circle = _.geo.circle().precision(0.1).angle(45);
           assert.inDelta(area({
             type: "Polygon",
             coordinates: [
@@ -129,7 +129,7 @@ suite.addBatch({
           }), π * 2 * Math.SQRT2, 1e-5);
         },
         "45° holes at [0°, 90°] and [0°, 0°]": function(area) {
-          var circle = _.geo.circle().precision(.1).angle(45);
+          var circle = _.geo.circle().precision(0.1).angle(45);
           assert.inDelta(area({
             type: "Polygon",
             coordinates: [
@@ -178,7 +178,7 @@ suite.export(module);
 
 function stripes(a, b) {
   return {type: "Polygon", coordinates: [a, b].map(function(d, i) {
-    var stripe = _.range(-180, 180, .1).map(function(x) { return [x, d]; });
+    var stripe = _.range(-180, 180, 0.1).map(function(x) { return [x, d]; });
     stripe.push(stripe[0]);
     return i ? stripe.reverse() : stripe;
   })};

@@ -1,6 +1,6 @@
 import "locale";
 
-d3.locale.he_IL = d3.locale({
+var d3_locale_heIL = d3.locale({
   decimal: ".",
   thousands: ",",
   grouping: [3],

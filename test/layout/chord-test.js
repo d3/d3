@@ -10,7 +10,7 @@ suite.addBatch({
     "of a simple matrix": {
       topic: function(chord) {
         return chord()
-            .padding(.05)
+            .padding(0.05)
             .sortSubgroups(function(a, b) { return b - a; })
             .matrix([
               [11975,  5871, 8916, 2868],

@@ -64,7 +64,7 @@ function d3_rgb_parse(format, rgb, hsl) {
       color;
 
   /* Handle hsl, rgb. */
-  m1 = /([a-z]+)\((.*)\)/i.exec(format);
+  m1 = /([a-z]+)\((.*)\)/.exec(format = format.toLowerCase());
   if (m1) {
     m2 = m1[2].split(",");
     switch (m1[1]) {
@@ -86,7 +86,7 @@ function d3_rgb_parse(format, rgb, hsl) {
   }
 
   /* Named colors. */
-  if (color = d3_rgb_names.get(format.toLowerCase())) {
+  if (color = d3_rgb_names.get(format)) {
     return rgb(color.r, color.g, color.b);
   }
 
@@ -114,7 +114,7 @@ function d3_rgb_hsl(r, g, b) {
       s,
       l = (max + min) / 2;
   if (d) {
-    s = l < .5 ? d / (max + min) : d / (2 - max - min);
+    s = l < 0.5 ? d / (max + min) : d / (2 - max - min);
     if (r == max) h = (g - b) / d + (g < b ? 6 : 0);
     else if (g == max) h = (b - r) / d + 2;
     else h = (r - g) / d + 4;

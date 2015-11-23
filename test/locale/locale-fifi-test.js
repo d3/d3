@@ -8,7 +8,7 @@ var suite = vows.describe("d3.locale");
 
 suite.addBatch({
   "locale": {
-    topic: load("locale/fi-FI").expression("d3.locale.fi_FI"),
+    topic: load("locale/fi-FI").expression("d3_locale_fiFI"),
 
     "numberFormat": {
       topic: function(locale) {

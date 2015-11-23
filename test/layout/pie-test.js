@@ -17,6 +17,14 @@ suite.addBatch({
       ]).map(function(d) { return d.data; }), [
         84, 90, 48, 61, 58, 8, 6, 31, 45, 18
       ]);
+    },
+    "uses start angle when all values are zero": function(pie) {
+      var p = pie().startAngle(1.2);
+      assert.deepEqual(p([0, 0, 0]), [
+        {data: 0, value: 0, startAngle: 1.2, endAngle: 1.2, padAngle: 0},
+        {data: 0, value: 0, startAngle: 1.2, endAngle: 1.2, padAngle: 0},
+        {data: 0, value: 0, startAngle: 1.2, endAngle: 1.2, padAngle: 0}
+      ]);
     }
   }
 });

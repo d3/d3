@@ -1,7 +1,6 @@
 GENERATED_FILES = \
 	d3.js \
 	d3.min.js \
-	bower.json \
 	component.json \
 	package.js
 

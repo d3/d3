@@ -21,7 +21,7 @@ d3_geom_polygonPrototype.area = function() {
     area += a[1] * b[0] - a[0] * b[1];
   }
 
-  return area * .5;
+  return area * 0.5;
 };
 
 d3_geom_polygonPrototype.centroid = function(k) {

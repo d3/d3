@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "3.5.5",
+  "version": "3.5.9",
   "description": "A JavaScript visualization library for HTML and SVG.",
   "keywords": [
     "dom",
@@ -25,7 +25,7 @@
     "type": "git",
     "url": "https://github.com/mbostock/d3.git"
   },
-  "main": "index.js",
+  "main": "d3.js",
   "browserify": "d3.js",
   "jspm": {
     "main": "d3",
@@ -54,16 +54,11 @@
     "jsdom": "3",
     "seedrandom": "2",
     "smash": "0.0",
-    "uglify-js": "2.4.16",
+    "uglify-js": "2.6.1",
     "vows": "0.8"
   },
   "scripts": {
     "test": "vows; echo"
   },
-  "licenses": [
-    {
-      "type": "BSD",
-      "url": "https://github.com/mbostock/d3/blob/master/LICENSE"
-    }
-  ]
+  "license": "BSD-3-Clause"
 }

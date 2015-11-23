@@ -1,3 +1,4 @@
+import "../core/array";
 import "../core/identity";
 import "../math/trigonometry";
 import "../scale/linear";
@@ -98,7 +99,7 @@ d3.svg.axis = function() {
 
   axis.ticks = function() {
     if (!arguments.length) return tickArguments_;
-    tickArguments_ = arguments;
+    tickArguments_ = d3_array(arguments);
     return axis;
   };
 

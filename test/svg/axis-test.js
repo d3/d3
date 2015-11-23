@@ -349,6 +349,10 @@ suite.addBatch({
             t = g.selectAll("g");
         assert.equal(t[0].length, 21);
         assert.equal(t[0][0].textContent, "0.00000%");
+      },
+      "returns an array, not arguments": function(d3) {
+        var a = d3.svg.axis().ticks(20, ".5%");
+        assert.isTrue(Array.isArray(a.ticks()));
       }
     },
 

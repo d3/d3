@@ -13,21 +13,21 @@ suite.addBatch({
       assert.inDelta(a.distance({
         source: [118 + 24 / 60, 33 + 57 / 60],
         target: [ 73 + 47 / 60, 40 + 38 / 60]
-      }), 3973 / 6371, .5);
+      }), 3973 / 6371, 0.5);
     },
     "source and target can be set as constants": function(arc) {
       var a = arc().source([5, 52]).target([-120, 37]);
       assert.inDelta(a().coordinates, [
         [   5,        52      ],
         [-120,        37      ]
-      ], .5);
+      ], 0.5);
     },
     "geodesic": function(arc) {
       var a = arc();
       assert.inDelta(a({source: [5, 52], target: [-120, 37]}).coordinates, [
         [   5,        52      ],
         [-120,        37      ]
-      ], .5);
+      ], 0.5);
     }
   }
 });

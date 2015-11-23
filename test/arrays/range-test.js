@@ -28,9 +28,9 @@ suite.addBatch({
     },
     "with three arguments, returns start + k * step": function(range) {
       assert.deepEqual(range(0, 5, 1), [0, 1, 2, 3, 4]);
-      assert.deepEqual(range(5, 9, .5), [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5]);
-      assert.deepEqual(range(5, 8.5, .5), [5, 5.5, 6, 6.5, 7, 7.5, 8]);
-      assert.deepEqual(range(2, 0, -.5), [2, 1.5, 1, .5]);
+      assert.deepEqual(range(5, 9, 0.5), [5, 5.5, 6, 6.5, 7, 7.5, 8, 8.5]);
+      assert.deepEqual(range(5, 8.5, 0.5), [5, 5.5, 6, 6.5, 7, 7.5, 8]);
+      assert.deepEqual(range(2, 0, -0.5), [2, 1.5, 1, 0.5]);
     },
     "handles fractional steps without rounding errors": function(range) {
       assert.deepEqual(range(0, 0.5, 0.1), [0, 0.1, 0.2, 0.3, 0.4]);
@@ -74,24 +74,24 @@ suite.addBatch({
       assert.isEmpty(range(10, 10));
       assert.isEmpty(range(10, 10, 1));
       assert.isEmpty(range(10, 10, -1));
-      assert.isEmpty(range(10, 10, -.5));
-      assert.isEmpty(range(10, 10, .5));
+      assert.isEmpty(range(10, 10, -0.5));
+      assert.isEmpty(range(10, 10, 0.5));
       assert.isEmpty(range(0, 0));
       assert.isEmpty(range(0, 0, 1));
       assert.isEmpty(range(0, 0, -1));
-      assert.isEmpty(range(0, 0, -.5));
-      assert.isEmpty(range(0, 0, .5));
+      assert.isEmpty(range(0, 0, -0.5));
+      assert.isEmpty(range(0, 0, 0.5));
     },
     "returns an empty range if stop is less than start and step is positive": function(range) {
       assert.isEmpty(range(20, 10));
       assert.isEmpty(range(20, 10, 2));
       assert.isEmpty(range(20, 10, 1));
-      assert.isEmpty(range(20, 10, .5));
+      assert.isEmpty(range(20, 10, 0.5));
     },
     "returns an empty range if stop is greater than start and step is negative": function(range) {
       assert.isEmpty(range(10, 20, -2));
       assert.isEmpty(range(10, 20, -1));
-      assert.isEmpty(range(10, 20, -.5));
+      assert.isEmpty(range(10, 20, -0.5));
     }
   }
 });

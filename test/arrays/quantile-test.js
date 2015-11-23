@@ -16,15 +16,15 @@ suite.addBatch({
     "uses the R-7 algorithm": function(quantile) {
       var data = [3, 6, 7, 8, 8, 10, 13, 15, 16, 20];
       assert.equal(quantile(data, 0), 3);
-      assert.equal(quantile(data, .25), 7.25);
-      assert.equal(quantile(data, .5), 9);
-      assert.equal(quantile(data, .75), 14.5);
+      assert.equal(quantile(data, 0.25), 7.25);
+      assert.equal(quantile(data, 0.5), 9);
+      assert.equal(quantile(data, 0.75), 14.5);
       assert.equal(quantile(data, 1), 20);
       var data = [3, 6, 7, 8, 8, 9, 10, 13, 15, 16, 20];
       assert.equal(quantile(data, 0), 3);
-      assert.equal(quantile(data, .25), 7.5);
-      assert.equal(quantile(data, .5), 9);
-      assert.equal(quantile(data, .75), 14);
+      assert.equal(quantile(data, 0.25), 7.5);
+      assert.equal(quantile(data, 0.5), 9);
+      assert.equal(quantile(data, 0.75), 14);
       assert.equal(quantile(data, 1), 20);
     },
     "coerces values to numbers": function(quantile) {

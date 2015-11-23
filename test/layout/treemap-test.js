@@ -144,12 +144,29 @@ suite.addBatch({
     },
     "can handle an empty children array": function(treemap) {
       assert.deepEqual(treemap().nodes({children: []}).map(layout), [
-        {x: 0, y: 0, dx: 1, dy: 1}
+        {x: 0, y: 0, dx: 0, dy: 0}
       ]);
       assert.deepEqual(treemap().nodes({children: [{children: []}, {value: 1}]}).map(layout), [
         {x: 0, y: 0, dx: 1, dy: 1},
         {x: 0, y: 0, dx: 0, dy: 1},
         {x: 0, y: 0, dx: 1, dy: 1}
+      ]);
+    },
+    "can handle a zero-value node with children": function(treemap) {
+      assert.deepEqual(treemap().nodes({children: [{value: 1}, {children: [{value: 0}, {value: 0}]}]}).map(layout), [
+        {x: 0, y: 0, dx: 1, dy: 1},
+        {x: 0, y: 0, dx: 1, dy: 1},
+        {x: 0, y: 0, dx: 0, dy: 1},
+        {x: 0, y: 0, dx: 0, dy: 1},
+        {x: 0, y: 0, dx: 0, dy: 1}
+      ]);
+    },
+    "can handle a zero-value root": function(treemap) {
+      assert.deepEqual(treemap().nodes({children: [{children: [{value: 0}, {value: 0}]}]}).map(layout), [
+        {x: 0, y: 0, dx: 0, dy: 0},
+        {x: 0, y: 0, dx: 0, dy: 0},
+        {x: 0, y: 0, dx: 0, dy: 0},
+        {x: 0, y: 0, dx: 0, dy: 0}
       ]);
     },
     "slice-dice": function(treemap) {

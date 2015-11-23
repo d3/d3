@@ -1,10 +1,10 @@
 import "locale";
 
-var d3_locale_deDE = d3.locale({
+var d3_locale_deCH = d3.locale({
   decimal: ",",
-  thousands: ".",
+  thousands: "'",
   grouping: [3],
-  currency: ["", " €"],
+  currency: ["", " CHF"],
   dateTime: "%A, der %e. %B %Y, %X",
   date: "%d.%m.%Y",
   time: "%H:%M:%S",
