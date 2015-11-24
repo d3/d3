@@ -7050,7 +7050,7 @@
       if (nodeSize) d3_layout_hierarchyVisitBefore(root0, sizeNode); else {
         var left = root0, right = root0, bottom = root0;
         d3_layout_hierarchyVisitBefore(root0, function(node) {
-          if (node.x < left.x) left = node;
+          if (node.x <= left.x) left = node;
           if (node.x > right.x) right = node;
           if (node.depth > bottom.depth) bottom = node;
         });
