@@ -6367,7 +6367,7 @@
           alpha = x;
         } else {
           timer.c = null, timer.t = NaN, timer = null;
-          event.start({
+          event.end({
             type: "end",
             alpha: alpha = 0
           });
