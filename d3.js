@@ -1,6 +1,6 @@
 !function() {
   var d3 = {
-    version: "3.5.9"
+    version: "3.5.10"
   };
   var d3_arraySlice = [].slice, d3_array = function(list) {
     return d3_arraySlice.call(list);
@@ -6367,7 +6367,7 @@
           alpha = x;
         } else {
           timer.c = null, timer.t = NaN, timer = null;
-          event.start({
+          event.end({
             type: "end",
             alpha: alpha = 0
           });
