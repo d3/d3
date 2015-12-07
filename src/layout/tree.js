@@ -28,8 +28,8 @@ d3.layout.tree = function() {
           bottom = root0;
       d3_layout_hierarchyVisitBefore(root0, function(node) {
         if (node.x < left.x) left = node;
-        if (node.x > right.x) right = node;
-        if (node.depth > bottom.depth) bottom = node;
+        if (node.x >= right.x) right = node;
+        if (node.depth >= bottom.depth) bottom = node;
       });
       var tx = separation(left, right) / 2 - left.x,
           kx = size[0] / (right.x + separation(right, left) / 2 + tx),
