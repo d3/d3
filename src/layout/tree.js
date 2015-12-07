@@ -31,9 +31,13 @@ d3.layout.tree = function() {
         if (node.x >= right.x) right = node;
         if (node.depth >= bottom.depth) bottom = node;
       });
-      var tx = separation(left, right) / 2 - left.x,
-          kx = size[0] / (right.x + separation(right, left) / 2 + tx),
-          ky = size[1] / (bottom.depth || 1);
+      var sep1 = separation(left, right), sep2 = separation(right, left), tx, kx, ky;
+      if (!isFinite(sep1) || sep1 == 0) sep1 = 1;
+      if (!isFinite(sep2) || seq2 == 0) sep2 = 1;
+      tx = sep1 / 2 - left.x, kx = size[0] / (right.x + sep2 / 2 + tx), ky = size[1] / (bottom.depth || 1);
+      if (tx == 0) tx = 1;
+      kx = size[0] / (right.x + separation(right, left) / 2 + tx),
+      ky = size[1] / (bottom.depth || 1);
       d3_layout_hierarchyVisitBefore(root0, function(node) {
         node.x = (node.x + tx) * kx;
         node.y = node.depth * ky;
