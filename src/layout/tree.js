@@ -33,7 +33,7 @@ d3.layout.tree = function() {
       });
       var sep1 = separation(left, right), sep2 = separation(right, left), tx, kx, ky;
       if (!isFinite(sep1) || sep1 == 0) sep1 = 1;
-      if (!isFinite(sep2) || seq2 == 0) sep2 = 1;
+      if (!isFinite(sep2) || sep2 == 0) sep2 = 1;
       tx = sep1 / 2 - left.x, kx = size[0] / (right.x + sep2 / 2 + tx), ky = size[1] / (bottom.depth || 1);
       if (tx == 0) tx = 1;
       kx = size[0] / (right.x + separation(right, left) / 2 + tx),
