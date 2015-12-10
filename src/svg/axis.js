@@ -31,8 +31,9 @@ d3.svg.axis = function() {
           tickFormat = tickFormat_ == null ? (scale1.tickFormat ? scale1.tickFormat.apply(scale1, tickArguments_) : d3_identity) : tickFormat_,
           firstTick = firstTick_;
 
-      //Alter ticks[0] if firstTick != null;
-      ticks[0] = firstTick == null ? ticks[0] : firstTick;
+      if (firstTick){
+         tickFormat[0] = firstTick;
+      };
 
       var tick = g.selectAll(".tick").data(ticks, scale1),
           tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick").style("opacity", ε),
