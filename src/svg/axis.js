@@ -34,6 +34,8 @@ d3.svg.axis = function() {
       //Alter tickFormat[0] if firstTick != null;
       tickFormat[0] = firstTick == null ? tickFormat[0] : firstTick;
 
+      console.log(tickFormat);
+
       var tick = g.selectAll(".tick").data(ticks, scale1),
           tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick").style("opacity", ε),
           tickExit = d3.transition(tick.exit()).style("opacity", ε).remove(),
