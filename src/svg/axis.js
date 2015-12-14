@@ -46,7 +46,6 @@ d3.svg.axis = function() {
       tickEnter.append("line");
       tickEnter.append("text");
 
-      console.log(tick);
       var lineEnter = tickEnter.select("line"),
           lineUpdate = tickUpdate.select("line"),
           text = tick.select("text").text(tickFormat),
@@ -54,6 +53,13 @@ d3.svg.axis = function() {
           textUpdate = tickUpdate.select("text"),
           sign = orient === "top" || orient === "left" ? -1 : 1,
           x1, x2, y1, y2;
+
+      //If "firstTick" arg is provided,
+      //set text of first tick in axis to
+      //"firstTick".
+      if (firstTick != null){
+         tick[0][0].select("text"}.text(firstTick};
+      };
 
       if (orient === "bottom" || orient === "top") {
         tickTransform = d3_svg_axisX, x1 = "x", y1 = "y", x2 = "x2", y2 = "y2";
