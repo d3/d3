@@ -31,11 +31,6 @@ d3.svg.axis = function() {
           tickFormat = tickFormat_ == null ? (scale1.tickFormat ? scale1.tickFormat.apply(scale1, tickArguments_) : d3_identity) : tickFormat_,
           firstTick = firstTick_;
 
-      //Alter tickFormat[0] if firstTick != null;
-      tickFormat[0] = firstTick == null ? tickFormat[0] : firstTick;
-
-      console.log(tickFormat);
-
       var tick = g.selectAll(".tick").data(ticks, scale1),
           tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick").style("opacity", ε),
           tickExit = d3.transition(tick.exit()).style("opacity", ε).remove(),
@@ -51,6 +46,7 @@ d3.svg.axis = function() {
       tickEnter.append("line");
       tickEnter.append("text");
 
+      console.log(tick);
       var lineEnter = tickEnter.select("line"),
           lineUpdate = tickUpdate.select("line"),
           text = tick.select("text").text(tickFormat),
@@ -89,7 +85,7 @@ d3.svg.axis = function() {
       }
 
       tickEnter.call(tickTransform, scale0, scale1);
-      tickUpdate.call(tickTransform, scale1, scale1);
+      tickUpdate.call(tickTransform, scale1, scale1); 
     });
   }
 
