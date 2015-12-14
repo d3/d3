@@ -15,7 +15,8 @@ d3.svg.axis = function() {
       tickPadding = 3,
       tickArguments_ = [10],
       tickValues = null,
-      tickFormat_;
+      tickFormat_,
+      firstTick_ = null;
 
   function axis(g) {
     g.each(function() {
@@ -28,7 +29,9 @@ d3.svg.axis = function() {
       // Ticks, or domain values for ordinal scales.
       var ticks = tickValues == null ? (scale1.ticks ? scale1.ticks.apply(scale1, tickArguments_) : scale1.domain()) : tickValues,
           tickFormat = tickFormat_ == null ? (scale1.tickFormat ? scale1.tickFormat.apply(scale1, tickArguments_) : d3_identity) : tickFormat_,
-          tick = g.selectAll(".tick").data(ticks, scale1),
+          firstTick = firstTick_;
+
+      var tick = g.selectAll(".tick").data(ticks, scale1),
           tickEnter = tick.enter().insert("g", ".domain").attr("class", "tick").style("opacity", ε),
           tickExit = d3.transition(tick.exit()).style("opacity", ε).remove(),
           tickUpdate = d3.transition(tick.order()).style("opacity", 1),
@@ -50,6 +53,14 @@ d3.svg.axis = function() {
           textUpdate = tickUpdate.select("text"),
           sign = orient === "top" || orient === "left" ? -1 : 1,
           x1, x2, y1, y2;
+
+      //If "firstTick" arg is provided,
+      //set text of first tick in axis to
+      //"firstTick".
+      if (firstTick != null){
+        var tickZero = g.select(".tick");
+        tickZero.select("text").text(firstTick); 
+      };
 
       if (orient === "bottom" || orient === "top") {
         tickTransform = d3_svg_axisX, x1 = "x", y1 = "y", x2 = "x2", y2 = "y2";
@@ -81,7 +92,7 @@ d3.svg.axis = function() {
       }
 
       tickEnter.call(tickTransform, scale0, scale1);
-      tickUpdate.call(tickTransform, scale1, scale1);
+      tickUpdate.call(tickTransform, scale1, scale1); 
     });
   }
 
@@ -112,6 +123,15 @@ d3.svg.axis = function() {
   axis.tickFormat = function(x) {
     if (!arguments.length) return tickFormat_;
     tickFormat_ = x;
+    return axis;
+  };
+
+  //Define a custom first tick for cases
+  //in which there is not enough screen real
+  //estate to use a label
+  axis.firstTick = function(x) {
+    if (!arguments.length) return firstTick_;
+    firstTick_ = x;
     return axis;
   };
 
