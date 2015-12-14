@@ -8987,7 +8987,7 @@
         tickEnter.append("text");
         var lineEnter = tickEnter.select("line"), lineUpdate = tickUpdate.select("line"), text = tick.select("text").text(tickFormat), textEnter = tickEnter.select("text"), textUpdate = tickUpdate.select("text"), sign = orient === "top" || orient === "left" ? -1 : 1, x1, x2, y1, y2;
         if (firstTick != null) {
-          console.log(tick[0][0]);
+          tick[0][0].select("text").text(firstTick);
         }
         if (orient === "bottom" || orient === "top") {
           tickTransform = d3_svg_axisX, x1 = "x", y1 = "y", x2 = "x2", y2 = "y2";
