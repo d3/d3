@@ -434,7 +434,21 @@ suite.addBatch({
         assert.equal(t.text(), "");
       }
     },
-
+    "firstTick": {"defaults to null": function(d3) {
+        var a = d3.svg.axis();
+        assert.isTrue(a.firstTick() == null);
+      },
+      "can be set to a string": function(d3) {
+        var a = d3.svg.axis().firstTick("myFirstTick");
+        assert.equal(a.firstTick(), "myFirstTick");
+      },
+      "changes the text content of the first tick": function(d3) {
+            var a = d3.svg.axis().firstTick("myFirstTick"),
+            g = d3.select("body").html("").append("g").call(a),
+            t = g.select("g text");
+            assert.equal(t.text(), "myFirstTick");
+      },   
+    },
     "enter": {
       "generates a new domain path": function(d3) {
         var a = d3.svg.axis(),
