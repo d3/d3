@@ -6157,7 +6157,7 @@
           index: di,
           startAngle: x0,
           endAngle: x,
-          value: (x - x0) / k
+          value: groupSums[di]
         };
         x += padding;
       }
