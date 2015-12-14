@@ -58,7 +58,7 @@ d3.svg.axis = function() {
       //set text of first tick in axis to
       //"firstTick".
       if (firstTick != null){
-         tick[0][0].attr('text', firstTick);
+        console.log(tick); 
       };
 
       if (orient === "bottom" || orient === "top") {
