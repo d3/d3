@@ -202,7 +202,7 @@ suite.addBatch({
         var x = d3.scale.pow().domain([1.1, 1, 2, 3, 10.9]).nice();
         assert.deepEqual(x.domain(), [1, 1, 2, 3, 11]);
         var x = d3.scale.pow().domain([123.1, 1, 2, 3, -0.9]).nice();
-        assert.deepEqual(x.domain(), [130, 1, 2, 3, -10]);
+        assert.deepEqual(x.domain(), [140, 1, 2, 3, -20]);
       },
       "accepts a tick count to control nicing step": function(d3) {
         var x = d3.scale.pow().domain([12, 87]).nice(5);

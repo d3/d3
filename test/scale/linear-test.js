@@ -255,6 +255,8 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [130, 0]);
         var x = d3.scale.linear().domain([0, 0.49]).nice();
         assert.deepEqual(x.domain(), [0, 0.5]);
+        var x = d3.scale.linear().domain([-0.1, 51.1]).nice(8);
+        assert.deepEqual(x.domain(), [-10, 60]);
       },
       "has no effect on degenerate domains": function(d3) {
         var x = d3.scale.linear().domain([0, 0]).nice();
@@ -266,7 +268,7 @@ suite.addBatch({
         var x = d3.scale.linear().domain([1.1, 1, 2, 3, 10.9]).nice();
         assert.deepEqual(x.domain(), [1, 1, 2, 3, 11]);
         var x = d3.scale.linear().domain([123.1, 1, 2, 3, -0.9]).nice();
-        assert.deepEqual(x.domain(), [130, 1, 2, 3, -10]);
+        assert.deepEqual(x.domain(), [140, 1, 2, 3, -20]);
       },
       "accepts a tick count to control nicing step": function(d3) {
         var x = d3.scale.linear().domain([12, 87]).nice(5);

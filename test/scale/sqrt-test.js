@@ -199,7 +199,7 @@ suite.addBatch({
         var x = d3.scale.sqrt().domain([1.1, 1, 2, 3, 10.9]).nice(), f = d3.format(".6f");
         assert.deepEqual(x.domain().map(f), [1, 1, 2, 3, 11]);
         var x = d3.scale.sqrt().domain([123.1, 1, 2, 3, -0.9]).nice();
-        assert.deepEqual(x.domain().map(f), [130, 1, 2, 3, "-10.000000"]);
+        assert.deepEqual(x.domain().map(f), [140, 1, 2, 3, -20]);
       },
       "preserves specified domain exactly, with no floating point error": function(d3) {
         var x = d3.scale.sqrt().domain([0, 5]).nice();

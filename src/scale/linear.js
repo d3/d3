@@ -88,7 +88,9 @@ function d3_scale_linearRebind(scale, linear) {
 }
 
 function d3_scale_linearNice(domain, m) {
-  return d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
+  d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
+  d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
+  return domain;
 }
 
 function d3_scale_linearTickRange(domain, m) {
