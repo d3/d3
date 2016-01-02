@@ -186,7 +186,7 @@ export {
 
 export {
   interval as timeInterval,
-  day as timeDay,
+  day as timeDay, // TODO use prefix “local” for local time, and “utc” for UTC?
   days as timeDays,
   friday as timeFriday,
   fridays as timeFridays,
