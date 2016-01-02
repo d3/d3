@@ -1,0 +1,3 @@
+*.sublime-*
+build/*.zip
+test/
