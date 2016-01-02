@@ -1,31 +1,19 @@
 export {version} from "./package.json";
 
-import {
+export {
   bisect,
   bisectRight,
   bisectLeft,
+  ascending,
+  bisector,
+  descending,
+  deviation,
+  entries,
+  extent,
   histogram,
   thresholdFreedmanDiaconis,
   thresholdScott,
-  thresholdSturges
-} from "d3-array";
-
-bisect.right = bisectRight;
-bisect.left = bisectLeft;
-
-histogram.thresholdFreedmanDiaconis = thresholdFreedmanDiaconis;
-histogram.thresholdScott = thresholdScott;
-histogram.thresholdSturges = thresholdSturges;
-
-export {
-  bisect,
-  ascending,
-  bisector,
-  descending,
-  deviation,
-  entries,
-  extent,
-  histogram,
+  thresholdSturges,
   keys,
   map,
   max,
@@ -50,38 +38,6 @@ export {
 } from "d3-array";
 
 export {
-  bisect,
-  ascending,
-  bisector,
-  descending,
-  deviation,
-  entries,
-  extent,
-  histogram,
-  keys,
-  map,
-  max,
-  mean,
-  median,
-  merge,
-  min,
-  nest,
-  pairs,
-  permute,
-  quantile,
-  range,
-  scan,
-  set,
-  shuffle,
-  sum,
-  ticks,
-  transpose,
-  values,
-  variance,
-  zip
-} from "d3-array";
-
-import {
   uniform as randomUniform,
   normal as randomNormal,
   logNormal as randomLogNormal,
@@ -90,97 +46,45 @@ import {
   exponential as randomExponential
 } from "d3-random";
 
-export var random = {
-  uniform: randomUniform,
-  normal: randomNormal,
-  logNormal: randomLogNormal,
-  bates: randomBates,
-  irwinHall: randomIrwinHall,
-  exponential: randomExponential
-};
-
-import {
-  bind as easeBind,
-  linearIn,
-  linearOut,
-  linearInOut,
-  quadIn,
-  quadOut,
-  quadInOut,
-  cubicIn,
-  cubicOut,
-  cubicInOut,
-  polyIn,
-  polyOut,
-  polyInOut,
-  sinIn,
-  sinOut,
-  sinInOut,
-  expIn,
-  expOut,
-  expInOut,
-  circleIn,
-  circleOut,
-  circleInOut,
-  bounceIn,
-  bounceOut,
-  bounceInOut,
-  backIn,
-  backOut,
-  backInOut,
-  elasticIn,
-  elasticOut,
-  elasticInOut
+export {
+  bind as easeBind, // TODO share with interpolateBind
+  linearIn as easeLinearIn,
+  linearOut as easeLinearOut,
+  linearInOut as easeLinearInOut,
+  quadIn as easeQuadIn,
+  quadOut as easeQuadOut,
+  quadInOut as easeQuadInOut,
+  cubicIn as easeCubicIn,
+  cubicOut as easeCubicOut,
+  cubicInOut as easeCubicInOut,
+  polyIn as easePolyIn,
+  polyOut as easePolyOut,
+  polyInOut as easePolyInOut,
+  sinIn as easeSinIn,
+  sinOut as easeSinOut,
+  sinInOut as easeSinInOut,
+  expIn as easeExpIn,
+  expOut as easeExpOut,
+  expInOut as easeExpInOut,
+  circleIn as easeCircleIn,
+  circleOut as easeCircleOut,
+  circleInOut as easeCircleInOut,
+  bounceIn as easeBounceIn,
+  bounceOut as easeBounceOut,
+  bounceInOut as easeBounceInOut,
+  backIn as easeBackIn,
+  backOut as easeBackOut,
+  backInOut as easeBackInOut,
+  elasticIn as easeElasticIn,
+  elasticOut as easeElasticOut,
+  elasticInOut as easeElasticInOut
 } from "d3-ease";
-
-export var ease = {
-  bind: easeBind,
-  linear: linearIn,
-  linearIn: linearIn,
-  linearOut: linearOut,
-  linearInOut: linearInOut,
-  quad: quadIn,
-  quadIn: quadIn,
-  quadOut: quadOut,
-  quadInOut: quadInOut,
-  cubic: cubicIn,
-  cubicIn: cubicIn,
-  cubicOut: cubicOut,
-  cubicInOut: cubicInOut,
-  poly: polyIn,
-  polyIn: polyIn,
-  polyOut: polyOut,
-  sin: sinIn,
-  sinIn: sinIn,
-  sinOut: sinOut,
-  sinInOut: sinInOut,
-  exp: expIn,
-  expIn: expIn,
-  expOut: expOut,
-  expInOut: expInOut,
-  circle: circleIn,
-  circleIn: circleIn,
-  circleOut: circleOut,
-  circleInOut: circleInOut,
-  bounce: bounceIn,
-  bounceIn: bounceIn,
-  bounceOut: bounceOut,
-  bounceInOut: bounceInOut,
-  back: backIn,
-  backIn: backIn,
-  backOut: backOut,
-  backInOut: backInOut,
-  elastic: elasticIn,
-  elasticIn: elasticIn,
-  elasticOut: elasticOut,
-  elasticInOut: elasticInOut
-};
 
 export {
   path
 } from "d3-path";
 
-import {
+export {
   arc,
   area,
   line,
@@ -196,60 +100,61 @@ import {
   star,
   triangle,
   wye,
-  basisClosed,
-  basisOpen,
-  basis,
-  bundle,
-  cardinalClosed,
-  cardinalOpen,
-  cardinal,
-  catmullRomClosed,
-  catmullRomOpen,
-  catmullRom,
-  linearClosed,
-  linear,
-  monotone,
-  natural,
-  step,
-  stepAfter,
-  stepBefore
+  basisClosed as curveBasisClosed,
+  basisOpen as curveBasisOpen,
+  basis as curveBasis,
+  bundle as curveBundle,
+  cardinalClosed as curveCardinalClosed,
+  cardinalOpen as curveCardinalOpen,
+  cardinal as curveCardinal,
+  catmullRomClosed as curveCatmullRomClosed,
+  catmullRomOpen as curveCatmullRomOpen,
+  catmullRom as curveCatmullRom,
+  linearClosed as curveLinearClosed,
+  linear as curveLinear,
+  monotone as curveMonotone,
+  natural as curveNatural,
+  step as curveStep,
+  stepAfter as curveStepAfter,
+  stepBefore as curveStepBefore,
+  stack,
+  offsetExpand as stackOffsetExpand,
+  offsetNone as stackOffsetNone,
+  offsetSilhouette as stackOffsetSilhouette,
+  offsetWiggle as stackOffsetWiggle,
+  orderAscending as stackOrderAscending,
+  orderDescending as stackOrderDescending,
+  orderInsideOut as stackOrderInsideOut,
+  orderNone as stackOrderNone,
+  orderReverse as stackOrderReverse
 } from "d3-shape"
 
-area.radial = radialArea;
-line.radial = radialLine;
+export {
+  color,
+  rgb,
+  hsl,
+  lab,
+  hcl,
+  cubehelix
+} from "d3-color";
 
-export var shape = {
-  arc: arc,
-  area: area,
-  line: line,
-  pie: pie,
-  symbol: symbol,
-  symbols: symbols,
-  circle: circle,
-  cross: cross,
-  diamond: diamond,
-  square: square,
-  star: star,
-  triangle: triangle,
-  wye: wye
-};
-
-export var curve = {
-  basisClosed: basisClosed,
-  basisOpen: basisOpen,
-  basis: basis,
-  bundle: bundle,
-  cardinalClosed: cardinalClosed,
-  cardinalOpen: cardinalOpen,
-  cardinal: cardinal,
-  catmullRomClosed: catmullRomClosed,
-  catmullRomOpen: catmullRomOpen,
-  catmullRom: catmullRom,
-  linearClosed: linearClosed,
-  linear: linear,
-  monotone: monotone,
-  natural: natural,
-  step: step,
-  stepAfter: stepAfter,
-  stepBefore: stepBefore
-};
+export {
+  bind as interpolateBind, // TODO share with easeBind
+  array as interpolateArray,
+  number as interpolateNumber,
+  object as interpolateObject,
+  round as interpolateRound,
+  string as interpolateString,
+  transform as interpolateTransform,
+  values as interpolateValues, // TODO interpolators?
+  value as interpolateValue, // TODO interpolate?
+  zoom as interpolateZoom,
+  rgb as interpolateRgb,
+  hsl as interpolateHsl,
+  hslLong as interpolateHslLong,
+  lab as interpolateLab,
+  hcl as interpolateHcl,
+  hclLong as interpolateHclLong,
+  cubehelix as interpolateCubehelix,
+  cubehelixLong as interpolateCubehelixLong
+} from "d3-interpolate";
