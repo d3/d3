@@ -158,3 +158,23 @@ export {
   cubehelix as interpolateCubehelix,
   cubehelixLong as interpolateCubehelixLong
 } from "d3-interpolate";
+
+export {
+  dispatch
+} from "d3-dispatch";
+
+export {
+  dsv,
+  csv,
+  tsv
+} from "d3-dsv";
+
+export {
+  request,
+  html as requestHtml,
+  json as requestJson,
+  text as requestText,
+  xml as requestXml,
+  csv as requestCsv,
+  tsv as requestTsv
+} from "d3-request";

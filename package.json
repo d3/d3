@@ -37,10 +37,13 @@
   "dependencies": {
     "d3-array": "0.6.2",
     "d3-color": "0.3.2",
+    "d3-dispatch": "0.2.5",
+    "d3-dsv": "0.1.13",
     "d3-ease": "0.3.1",
     "d3-interpolate": "0.3.0",
     "d3-path": "0.1.3",
     "d3-random": "0.1.1",
+    "d3-request": "0.2.4",
     "d3-shape": "0.3.0"
   }
 }
