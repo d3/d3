@@ -113,6 +113,24 @@ suite.addBatch({
       }
     },
 
+
+    "parse with col function": {
+      "invokes the column function for each column name": function(csv) {
+        assert.deepEqual(csv.parse("a,b,c\n1,2,3\n4,5,\"6\"\n7,8,9", null, function(name) { return name.toUpperCase(); }), [
+          {A: "1", B: "2", C: "3"},
+          {A: "4", B: "5", C: "6"},
+          {A: "7", B: "8", C: "9"}
+        ]);
+      },
+      "invokes column function with column index for each column name": function(csv) {
+        assert.deepEqual(csv.parse("a,b,c\n1,2,3\n4,5,\"6\"\n7,8,9", null, function(name,i) { return "var"+(i+1); }), [
+          {var1: "1", var2: "2", var3: "3"},
+          {var1: "4", var2: "5", var3: "6"},
+          {var1: "7", var2: "8", var3: "9"}
+        ]);
+      }
+    },
+
     "parseRows": {
       topic: function(csv) {
         return csv.parseRows;
