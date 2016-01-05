@@ -12,7 +12,8 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 
 ## API Reference
 
-* [Arrays](#arrays) ([Statistics](#statistics), [Histograms](#histograms), [Nests](#nests), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets))
+* [Arrays](#arrays) ([Statistics](#statistics), [Histograms](#histograms), [Nests](#nests), [Search](#search), [Transformations](#transformations))
+* [Collections](#collections) ([Objects](#objects), [Maps](#maps), [Sets](#sets))
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Easing Functions](#easing-functions)
@@ -102,6 +103,8 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.range](https://github.com/d3/d3-array#range) - generate a range of numeric values.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
+
+## [Collections](https://github.com/d3/d3-array)
 
 #### [Objects](https://github.com/d3/d3-array#objects)
 
