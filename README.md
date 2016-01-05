@@ -17,6 +17,10 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Easing Functions](#easing-functions)
 * [Events](#events)
+* [Paths](#paths)
+* [Random Numbers](#random-numbers)
+
+D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
 
 ## [Arrays](https://github.com/d3/d3-array)
 
@@ -196,3 +200,52 @@ Separate concerns using named callbacks.
 * [d3.dispatch](https://github.com/d3/d3-dispatch#dispatch) - create a custom event dispatcher.
 * [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) - register or unregister an event listener.
 * [*dispatch*.*type*](https://github.com/d3/d3-dispatch#dispatch_type) - dispatch an event to registered listeners.
+
+## [Interpolators](https://github.com/d3/d3-interpolate)
+
+Interpolate numbers, colors, strings, arrays, objects, whatever!
+
+* [d3.interpolateBind](https://github.com/d3/d3-interpolate#bind) - bind optional parameters to the given interpolator.
+* [d3.interpolate](https://github.com/d3/d3-interpolate#value) - interpolate arbitrary values.
+* [d3.interpolators](https://github.com/d3/d3-interpolato#values) - register a custom interpolator.
+* [d3.interpolateArray](https://github.com/d3/d3-interpolate#array) - interpolate arrays of arbitrary values.
+* [d3.interpolateNumber](https://github.com/d3/d3-interpolate#number) - interpolate numbers.
+* [d3.interpolateObject](https://github.com/d3/d3-interpolate#object) - interpolate arbitrary objects.
+* [d3.interpolateRound](https://github.com/d3/d3-interpolate#round) - interpolate integers.
+* [d3.interpolateString](https://github.com/d3/d3-interpolate#string) - interpolate strings with embedded numbers.
+* [d3.interpolateTransform](https://github.com/d3/d3-interpolate#transform) - interpolate 2D matrix transforms.
+* [d3.interpolateZoom](https://github.com/d3/d3-interpolate#zoom) - zoom and pan between two views.
+* [d3.interpolateRgb](https://github.com/d3/d3-interpolate#rgb) - interpolate RGB colors.
+* [d3.interpolateHsl](https://github.com/d3/d3-interpolate#hsl) - interpolate HSL colors.
+* [d3.interpolateHslLong](https://github.com/d3/d3-interpolate#hslLong) - interpolate HSL colors, the long way.
+* [d3.interpolateLab](https://github.com/d3/d3-interpolate#lab) - interpolate Lab colors.
+* [d3.interpolateHcl](https://github.com/d3/d3-interpolate#hcl) - interpolate HCL colors.
+* [d3.interpolateHclLong](https://github.com/d3/d3-interpolate#hclLong) - interpolate HCL colors, the long way.
+* [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#cubehelix) - interpolate Cubehelix colors.
+* [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#cubehelixLong) - interpolate Cubehelix colors, the long way.
+
+## [Paths](https://github.com/d3/d3-path)
+
+Serialize Canvas path commands to SVG.
+
+* [d3.path](https://github.com/d3/d3-path#path) - constructs a new path serializer.
+* [*path*.moveTo](https://github.com/d3/d3-path#path_moveTo) - move to the given point.
+* [*path*.closePath](https://github.com/d3/d3-path#path_closePath) - close the current subpath.
+* [*path*.lineTo](https://github.com/d3/d3-path#path_lineTo) - draw a straight line segment.
+* [*path*.quadraticCurveTo](https://github.com/d3/d3-path#path_quadraticCurveTo) - draw a quadratic Bézier segment.
+* [*path*.bezierCurveTo](https://github.com/d3/d3-path#path_bezierCurveTo) - draw a cubic Bézier segment.
+* [*path*.arcTo](https://github.com/d3/d3-path#path_arcTo) - draw a circular arc segment.
+* [*path*.arc](https://github.com/d3/d3-path#path_arc) - draw a circular arc segment.
+* [*path*.rect](https://github.com/d3/d3-path#path_rect) - draw a rectangle.
+* [*path*.toString](https://github.com/d3/d3-path#path_toString) - serialize to an SVG path data string.
+
+## [Random Numbers](https://github.com/d3/d3-random)
+
+Generate random numbers from various distributions.
+
+* [d3.randomUniform](https://github.com/d3/d3-random#uniform) - from a uniform distribution.
+* [d3.randomNormal](https://github.com/d3/d3-random#normal) - from a normal distribution.
+* [d3.randomLogNormal](https://github.com/d3/d3-random#logNormal) - from a log-normal distribution.
+* [d3.randomBates](https://github.com/d3/d3-random#bates) - from a Bates distribution.
+* [d3.randomIrwinHall](https://github.com/d3/d3-random#irwinHall) - from an Irwin–Hall distribution.
+* [d3.randomExponential](https://github.com/d3/d3-random#exponential) - from an exponential distribution.
