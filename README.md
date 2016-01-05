@@ -21,6 +21,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
 * [Time Intervals](#time-intervals)
+* [Timers](#timers)
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
 
@@ -318,3 +319,13 @@ A calculator for humanity’s peculiar conventions of time.
 * [d3.timeMonths](https://github.com/d3/d3-time#month), [d3.utcMonths](https://github.com/d3/d3-time#month) - aliases for month.range.
 * [d3.timeYear](https://github.com/d3/d3-time#year), [d3.utcYear](https://github.com/d3/d3-time#year) - the year interval.
 * [d3.timeYears](https://github.com/d3/d3-time#year), [d3.utcYears](https://github.com/d3/d3-time#year) - aliases for year.range.
+
+## [Timers](https://github.com/d3/d3-timer)
+
+An efficient queue capable of managing thousands of concurrent animations.
+
+* [d3.timer](https://github.com/d3/d3-timer#timer) - schedules a new timer.
+* [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) - resets the timer’s start time and callback.
+* [*timer*.stop](https://github.com/d3/d3-timer#timer_stop) - stops the timer.
+* [*timer*.id](https://github.com/d3/d3-timer#timer_id) - a unique, opaque identifier.
+* [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush) - immediately executes any active timers.
