@@ -74,15 +74,15 @@ Methods for converting associative arrays (objects) to arrays.
 Like ES6 Map, but with string keys and a few other differences.
 
 * [d3.map](https://github.com/d3/d3-array#map) - constructs a new, empty map.
-* [*map*.has](https://github.com/d3/d3-array#map_has) - returns true if the map contains the specified key.
-* [*map*.get](https://github.com/d3/d3-array#map_get) - returns the value for the specified key.
-* [*map*.set](https://github.com/d3/d3-array#map_set) - sets the value for the specified key.
-* [*map*.remove](https://github.com/d3/d3-array#map_remove) - removes the entry for specified key.
+* [*map*.has](https://github.com/d3/d3-array#map_has) - returns true if the map contains the given key.
+* [*map*.get](https://github.com/d3/d3-array#map_get) - returns the value for the given key.
+* [*map*.set](https://github.com/d3/d3-array#map_set) - sets the value for the given key.
+* [*map*.remove](https://github.com/d3/d3-array#map_remove) - removes the entry for given key.
 * [*map*.clear](https://github.com/d3/d3-array#map_clear) - removes all entries.
 * [*map*.keys](https://github.com/d3/d3-array#map_keys) - returns the map’s array of keys.
 * [*map*.values](https://github.com/d3/d3-array#map_values) - returns the map’s array of values.
 * [*map*.entries](https://github.com/d3/d3-array#map_entries) - returns the map’s array of entries (key-values objects).
-* [*map*.each](https://github.com/d3/d3-array#map_each) - calls the specified function for each entry in the map.
+* [*map*.each](https://github.com/d3/d3-array#map_each) - calls the given function for each entry in the map.
 * [*map*.empty](https://github.com/d3/d3-array#map_empty) - returns false if the map has at least one entry.
 * [*map*.size](https://github.com/d3/d3-array#map_size) - returns the number of entries in the map.
 
@@ -91,12 +91,12 @@ Like ES6 Map, but with string keys and a few other differences.
 Like ES6 Set, but with string keys and a few other differences.
 
 * [d3.set](https://github.com/d3/d3-array#set) - constructs a new, empty set.
-* [*set*.has](https://github.com/d3/d3-array#set_has) - returns true if the set contains the specified value.
-* [*set*.add](https://github.com/d3/d3-array#set_add) - adds the specified value.
-* [*set*.remove](https://github.com/d3/d3-array#set_remove) - removes the specified value.
+* [*set*.has](https://github.com/d3/d3-array#set_has) - returns true if the set contains the given value.
+* [*set*.add](https://github.com/d3/d3-array#set_add) - adds the given value.
+* [*set*.remove](https://github.com/d3/d3-array#set_remove) - removes the given value.
 * [*set*.clear](https://github.com/d3/d3-array#set_clear) - removes all values.
 * [*set*.values](https://github.com/d3/d3-array#set_values) - returns the set’s array of values.
-* [*set*.each](https://github.com/d3/d3-array#set_each) - calls the specified function for each value in the set.
+* [*set*.each](https://github.com/d3/d3-array#set_each) - calls the given function for each value in the set.
 * [*set*.empty](https://github.com/d3/d3-array#set_empty) - returns true if the set has at least one value.
 * [*set*.size](https://github.com/d3/d3-array#set_size) - returns the number of values in the set.
 
@@ -130,7 +130,7 @@ Bin discrete samples into continuous, non-overlapping intervals.
 
 Color manipulation and color space conversion.
 
-* [color](https://github.com/d3/d3-color#color) - parses the specified CSS color specifier.
+* [color](https://github.com/d3/d3-color#color) - parses the given CSS color specifier.
 * [*color*.rgb](https://github.com/d3/d3-color#color_rgb) - returns the RGB equivalent of this color.
 * [*color*.brighter](https://github.com/d3/d3-color#color_brighter) - returns a brighter copy of this color.
 * [*color*.darker](https://github.com/d3/d3-color#color_darker) - returns a darker copy of this color.
@@ -141,3 +141,11 @@ Color manipulation and color space conversion.
 * [lab](https://github.com/d3/d3-color#lab) - constructs a new Lab color.
 * [hcl](https://github.com/d3/d3-color#hcl) - constructs a new HCL color.
 * [cubehelix](https://github.com/d3/d3-color#cubehelix) - constructs a new Cubehelix color.
+
+## [Dispatch](https://github.com/d3/d3-dispatch)
+
+Separate concerns using named callbacks.
+
+* [d3.dispatch]() - create a custom event dispatcher.
+* [*dispatch*.on]() - register or unregister an event listener.
+* [*dispatch*.*type*]() - dispatch an event to registered listeners.
