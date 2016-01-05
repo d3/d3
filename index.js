@@ -283,8 +283,8 @@ export {
 
 export {
   format as timeFormat,
-  isoFormat as timeIsoFormat,
-  utcFormat as timeUtcFormat,
+  utcFormat,
+  isoFormat,
   locale as timeFormatLocale,
   localeCaEs as timeFormatCaEs,
   // localeCsCz as timeFormatCsCz,
