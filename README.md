@@ -323,7 +323,7 @@ A convenient alternative to asynchronous XMLHttpRequest.
 
 ## [Scales](https://github.com/d3/d3-scale)
 
-### Continuous
+### [Continuous](https://github.com/d3/d3-scale#continuous-scales)
 
 Map a continuous, quantitative domain to a continuous range.
 
@@ -356,7 +356,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*time*.nice](https://github.com/d3/d3-scale#time_nice) -
 * [d3.scaleUtc](https://github.com/d3/d3-scale#utcTime) -
 
-### Sequential
+### [Sequential](https://github.com/d3/d3-scale#sequential-color-scales)
 
 Map a continuous, quantitative domain to a continuous, fixed color ramp.
 
@@ -369,7 +369,7 @@ Map a continuous, quantitative domain to a continuous, fixed color ramp.
 * [d3.scaleRainbow](https://github.com/d3/d3-scale#rainbow) -
 * [d3.scaleCubehelix](https://github.com/d3/d3-scale#cubehelix) -
 
-### Quantize
+### [Quantize](https://github.com/d3/d3-scale#quantize-scales)
 
 Map a continuous, quantitative domain to a discrete range.
 
@@ -396,7 +396,7 @@ Map a continuous, quantitative domain to a discrete range.
 * [*threshold*.range](https://github.com/d3/d3-scale#threshold_range) -
 * [*threshold*.copy](https://github.com/d3/d3-scale#threshold_copy) -
 
-### Ordinal
+### [Ordinal](https://github.com/d3/d3-scale#ordinal-scales)
 
 Map a discrete domain to a discrete range.
 
@@ -423,7 +423,7 @@ Map a discrete domain to a discrete range.
 * [d3.scalePoint](https://github.com/d3/d3-scale#point) -
 * [*point*.padding](https://github.com/d3/d3-scale#point_padding) -
 
-### Categorical
+### [Categorical](https://github.com/d3/d3-scale#categorical-color-scales)
 
 Map a discrete domain to a discrete, fixed categorical color range.
 
