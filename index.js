@@ -310,3 +310,32 @@ export {
   localeSvSe as timeFormatSvSe,
   localeZhCn as timeFormatZhCn
 } from "d3-time-format";
+
+export {
+  band as scaleBand,
+  point as scalePoint,
+  identity as scaleIdentity,
+  linear as scaleLinear,
+  log as scaleLog,
+  ordinal as scaleOrdinal,
+  implicit as scaleImplicit,
+  pow as scalePow,
+  sqrt as scaleSqrt,
+  quantile as scaleQuantile,
+  quantize as scaleQuantize,
+  threshold as scaleThreshold,
+  time as scaleTime,
+  utcTime as scaleUtcTime,
+  category10 as scaleCategory10,
+  category20b as scaleCategory20b,
+  category20c as scaleCategory20c,
+  category20 as scaleCategory20,
+  cubehelix as scaleCubehelix,
+  rainbow as scaleRainbow,
+  warm as scaleWarm,
+  cool as scaleCool,
+  viridis as scaleViridis,
+  magma as scaleMagma,
+  inferno as scaleInferno,
+  plasma as scalePlasma
+} from "d3-scale";
