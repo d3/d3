@@ -14,11 +14,15 @@ If you use NPM, `npm install d3`. Otherwise, download the [latest release](https
 
 ## API Reference
 
-* [Arrays](#arrays)
+* [Arrays](#arrays) ([Statistics](#statistics), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests), [Histograms](#histograms))
 
 ### [Arrays](https://github.com/d3/d3-array)
 
 Array manipulation, ordering, searching, summarizing, etc.
+
+#### Statistics
+
+Methods for computing basic summary statistics.
 
 * [d3.min](https://github.com/d3/d3-array#min) - compute the minimum value in an array.
 * [d3.max](https://github.com/d3/d3-array#max) - compute the maximum value in an array.
@@ -30,6 +34,22 @@ Array manipulation, ordering, searching, summarizing, etc.
 * [d3.variance](https://github.com/d3/d3-array#variance) - compute the variance of an array of numbers.
 * [d3.deviation](https://github.com/d3/d3-array#deviation) - compute the standard deviation of an array of numbers.
 
+#### Search
+
+Methods for searching arrays for a specific element.
+
+* [d3.scan](https://github.com/d3/d3-array#scan) - linear search for an element using a comparator.
+* [d3.bisect](https://github.com/d3/d3-array#bisect) - binary search for a value in a sorted array.
+* [d3.bisectRight](https://github.com/d3/d3-array#bisectRight) - binary search for a value in a sorted array.
+* [d3.bisectLeft](https://github.com/d3/d3-array#bisectLeft) - binary search for a value in a sorted array.
+* [d3.bisector](https://github.com/d3/d3-array#bisector) - bisect using an accessor or comparator.
+* [d3.ascending](https://github.com/d3/d3-array#ascending) - compute the natural order of two values.
+* [d3.descending](https://github.com/d3/d3-array#descending) - compute the natural order of two values.
+
+#### Transformations
+
+Methods for transforming arrays and for generating new arrays.
+
 * [d3.merge](https://github.com/d3/d3-array#merge) - merge multiple arrays into one array.
 * [d3.pairs](https://github.com/d3/d3-array#pairs) - returns an array of adjacent pairs of elements.
 * [d3.permute](https://github.com/d3/d3-array#permute) - reorder an array of elements according to an array of indexes.
@@ -40,19 +60,19 @@ Array manipulation, ordering, searching, summarizing, etc.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
 
-* [d3.scan](https://github.com/d3/d3-array#scan) - linear search for an element using a comparator.
-* [d3.bisect](https://github.com/d3/d3-array#bisect) - binary search for a value in a sorted array.
-* [d3.bisectRight](https://github.com/d3/d3-array#bisectRight) - binary search for a value in a sorted array.
-* [d3.bisectLeft](https://github.com/d3/d3-array#bisectLeft) - binary search for a value in a sorted array.
-* [d3.bisector](https://github.com/d3/d3-array#bisector) - bisect using an accessor or comparator.
-* [d3.ascending](https://github.com/d3/d3-array#ascending) - compute the natural order of two values.
-* [d3.descending](https://github.com/d3/d3-array#descending) - compute the natural order of two values.
+#### Objects
+
+Methods for converting associative arrays (objects) to arrays.
 
 * [d3.keys](https://github.com/d3/d3-array#keys) - list the keys of an associative array.
 * [d3.values](https://github.com/d3/d3-array#values) - list the values of an associated array.
 * [d3.entries](https://github.com/d3/d3-array#entries) - list the key-value entries of an associative array.
 
-* [d3.map](https://github.com/d3/d3-array#map) - ES6 Map, but with string keys and a few differences.
+#### Maps
+
+Like ES6 Map, but with string keys and a few other differences.
+
+* [d3.map](https://github.com/d3/d3-array#map) - constructs a new, empty map.
 * [*map*.has](https://github.com/d3/d3-array#map_has) - returns true if the map contains the specified key.
 * [*map*.get](https://github.com/d3/d3-array#map_get) - returns the value for the specified key.
 * [*map*.set](https://github.com/d3/d3-array#map_set) - sets the value for the specified key.
@@ -65,7 +85,11 @@ Array manipulation, ordering, searching, summarizing, etc.
 * [*map*.empty](https://github.com/d3/d3-array#map_empty) - returns false if the map has at least one entry.
 * [*map*.size](https://github.com/d3/d3-array#map_size) - returns the number of entries in the map.
 
-* [d3.set](https://github.com/d3/d3-array#set) - ES6 Set, but with string keys and a few differences.
+#### Sets
+
+Like ES6 Set, but with string keys and a few other differences.
+
+* [d3.set](https://github.com/d3/d3-array#set) - constructs a new, empty set.
 * [*set*.has](https://github.com/d3/d3-array#set_has) - returns true if the set contains the specified value.
 * [*set*.add](https://github.com/d3/d3-array#set_add) - adds the specified value.
 * [*set*.remove](https://github.com/d3/d3-array#set_remove) - removes the specified value.
@@ -75,16 +99,24 @@ Array manipulation, ordering, searching, summarizing, etc.
 * [*set*.empty](https://github.com/d3/d3-array#set_empty) - returns true if the set has at least one value.
 * [*set*.size](https://github.com/d3/d3-array#set_size) - returns the number of values in the set.
 
-* [d3.nest](https://github.com/d3/d3-array#nest) - group data hierarchically.
+#### Nests
+
+Group data into arbitrary hierarchies.
+
+* [d3.nest](https://github.com/d3/d3-array#nest) - constructs a new nest generator.
 * [*nest*.key](https://github.com/d3/d3-array#nest_key) - add a level to the nest hierarchy.
 * [*nest*.sortKeys](https://github.com/d3/d3-array#nest_sortKeys) - sort the current nest level by key.
 * [*nest*.sortValues](https://github.com/d3/d3-array#nest_sortValues) - sort the leaf nest level by value.
 * [*nest*.rollup](https://github.com/d3/d3-array#nest_rollup) - specify a rollup function for leaf values.
-* [*nest*.map](https://github.com/d3/d3-array#nest_map) - evaluate the nest operator, returning a map.
-* [*nest*.object](https://github.com/d3/d3-array#nest_object) - evaluate the nest operator, returning an associative array.
-* [*nest*.entries](https://github.com/d3/d3-array#nest_entries) - evaluate the nest operator, returning an array of key-values tuples.
+* [*nest*.map](https://github.com/d3/d3-array#nest_map) - generate the nest, returning a map.
+* [*nest*.object](https://github.com/d3/d3-array#nest_object) - generate the nest, returning an associative array.
+* [*nest*.entries](https://github.com/d3/d3-array#nest_entries) - generate the nest, returning an array of key-values tuples.
 
-* [d3.histogram](https://github.com/d3/d3-array#histogram) - bin discrete samples into non-overlapping intervals.
+#### Histograms
+
+Bin discrete samples into continuous, non-overlapping intervals.
+
+* [d3.histogram](https://github.com/d3/d3-array#histogram) - constructs a new histogram generator.
 * [*histogram*](https://github.com/d3/d3-array#_histogram) - compute the histogram for the given array of samples.
 * [*histogram*.value](https://github.com/d3/d3-array#histogram_value) - specify a value accessor for each sample.
 * [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) - specify the interval of observable values.
