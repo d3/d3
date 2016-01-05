@@ -23,7 +23,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Paths](#paths)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
-* [Scales](#scales) ([Continuous](#continuous), [Sequential Color](#sequential-color), [Quantize](#quantize), [Quantile](#quantile), [Threshold](#threshold), [Ordinal](#ordinal), [Categorical Color](#categorical-color))
+* [Scales](#scales) ([Continuous](#continuous), [Sequential](#sequential), [Quantize](#quantize), [Quantile](#quantile), [Threshold](#threshold), [Ordinal](#ordinal), [Categorical](#categorical))
 * [Selections](#selections)
 * [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats)
