@@ -146,6 +146,6 @@ Color manipulation and color space conversion.
 
 Separate concerns using named callbacks.
 
-* [d3.dispatch]() - create a custom event dispatcher.
-* [*dispatch*.on]() - register or unregister an event listener.
-* [*dispatch*.*type*]() - dispatch an event to registered listeners.
+* [d3.dispatch](https://github.com/d3/d3-dispatch#dispatch) - create a custom event dispatcher.
+* [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) - register or unregister an event listener.
+* [*dispatch*.*type*](https://github.com/d3/d3-dispatch#dispatch_type) - dispatch an event to registered listeners.
