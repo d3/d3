@@ -16,6 +16,8 @@ If you use NPM, `npm install d3`. Otherwise, download the [latest release](https
 
 * [Arrays](#arrays) ([Statistics](#statistics), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests), [Histograms](#histograms))
 * [Colors](#colors)
+* [Delimiter-Separated Values](#delimiter-separated-values)
+* [Events](#events)
 
 ## [Arrays](https://github.com/d3/d3-array)
 
@@ -130,19 +132,31 @@ Bin discrete samples into continuous, non-overlapping intervals.
 
 Color manipulation and color space conversion.
 
-* [color](https://github.com/d3/d3-color#color) - parses the given CSS color specifier.
+* [d3.color](https://github.com/d3/d3-color#color) - parses the given CSS color specifier.
 * [*color*.rgb](https://github.com/d3/d3-color#color_rgb) - returns the RGB equivalent of this color.
 * [*color*.brighter](https://github.com/d3/d3-color#color_brighter) - returns a brighter copy of this color.
 * [*color*.darker](https://github.com/d3/d3-color#color_darker) - returns a darker copy of this color.
 * [*color*.displayable](https://github.com/d3/d3-color#color_displayable) - returns true if the color is displayable on standard hardware.
 * [*color*.toString](https://github.com/d3/d3-color#color_toString) - formats the color as an RGB hexadecimal string.
-* [rgb](https://github.com/d3/d3-color#rgb) - constructs a new RGB color.
-* [hsl](https://github.com/d3/d3-color#hsl) - constructs a new HSL color.
-* [lab](https://github.com/d3/d3-color#lab) - constructs a new Lab color.
-* [hcl](https://github.com/d3/d3-color#hcl) - constructs a new HCL color.
-* [cubehelix](https://github.com/d3/d3-color#cubehelix) - constructs a new Cubehelix color.
+* [d3.rgb](https://github.com/d3/d3-color#rgb) - constructs a new RGB color.
+* [d3.hsl](https://github.com/d3/d3-color#hsl) - constructs a new HSL color.
+* [d3.lab](https://github.com/d3/d3-color#lab) - constructs a new Lab color.
+* [d3.hcl](https://github.com/d3/d3-color#hcl) - constructs a new HCL color.
+* [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) - constructs a new Cubehelix color.
 
-## [Dispatch](https://github.com/d3/d3-dispatch)
+## [Delimiter-Separated Values](https://github.com/d3/d3-dsv)
+
+Parse and format delimiter-separated values, most commonly CSV and TSV.
+
+* [d3.dsv](https://github.com/d3/d3-dsv#dsv) - constructs a new parser and formatter for the given delimiter.
+* [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) - parse the given string, returning an array of objects.
+* [*dsv*.parseRows](https://github.com/d3/d3-dsv#dsv_parseRows) - parse the given string, returning an array of rows.
+* [*dsv*.format](https://github.com/d3/d3-dsv#dsv_format) - format the given array of objects.
+* [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) - format the given array of rows.
+* [d3.csv](https://github.com/d3/d3-dsv#csv) - a parser and formatter for comma-separated values (CSV).
+* [d3.tsv](https://github.com/d3/d3-dsv#tsv) - a parser and formatter for tab-separated values (TSV).
+
+## [Events](https://github.com/d3/d3-dispatch)
 
 Separate concerns using named callbacks.
 
