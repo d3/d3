@@ -16,8 +16,8 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Collections](#collections) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
+* [Dispatches](#Dispatches)
 * [Easing Functions](#easing-functions)
-* [Events](#events)
 * [Interpolators](#interpolators)
 * [Number Formats](#number-formats)
 * [Paths](#paths)
@@ -173,6 +173,14 @@ Parse and format delimiter-separated values, most commonly CSV and TSV.
 * [d3.csv](https://github.com/d3/d3-dsv#csv) - a parser and formatter for comma-separated values (CSV).
 * [d3.tsv](https://github.com/d3/d3-dsv#tsv) - a parser and formatter for tab-separated values (TSV).
 
+## [Dispatches](https://github.com/d3/d3-dispatch)
+
+Separate concerns using named callbacks.
+
+* [d3.dispatch](https://github.com/d3/d3-dispatch#dispatch) - create a custom event dispatcher.
+* [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) - register or unregister an event listener.
+* [*dispatch*.*type*](https://github.com/d3/d3-dispatch#dispatch_type) - dispatch an event to registered listeners.
+
 ## [Easing Functions](https://github.com/d3/d3-ease)
 
 * [d3.easeBind](https://github.com/d3/d3-ease#bind) - bind optional parameters to the given easing function.
@@ -206,14 +214,6 @@ Parse and format delimiter-separated values, most commonly CSV and TSV.
 * [d3.easeBounceIn](https://github.com/d3/d3-ease#bounceIn) - bounce easing, like a rubber ball.
 * [d3.easeBounceOut](https://github.com/d3/d3-ease#bounceOut) - reverse bounce easing.
 * [d3.easeBounceInOut](https://github.com/d3/d3-ease#bounceInOut) - symmetric bounce easing.
-
-## [Events](https://github.com/d3/d3-dispatch)
-
-Separate concerns using named callbacks.
-
-* [d3.dispatch](https://github.com/d3/d3-dispatch#dispatch) - create a custom event dispatcher.
-* [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) - register or unregister an event listener.
-* [*dispatch*.*type*](https://github.com/d3/d3-dispatch#dispatch_type) - dispatch an event to registered listeners.
 
 ## [Interpolators](https://github.com/d3/d3-interpolate)
 
