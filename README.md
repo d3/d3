@@ -17,6 +17,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Easing Functions](#easing-functions)
 * [Events](#events)
+* [Interpolators](#interpolators)
 * [Paths](#paths)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
