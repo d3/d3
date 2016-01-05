@@ -325,7 +325,7 @@ export {
   quantize as scaleQuantize,
   threshold as scaleThreshold,
   time as scaleTime,
-  utcTime as scaleUtcTime,
+  utcTime as scaleUtc,
   category10 as scaleCategory10,
   category20b as scaleCategory20b,
   category20c as scaleCategory20c,
