@@ -12,13 +12,14 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 
 ## API Reference
 
-* [Arrays](#arrays) ([Statistics](#statistics), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests), [Histograms](#histograms))
+* [Arrays](#arrays) ([Statistics](#statistics), [Histograms](#histograms), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Easing Functions](#easing-functions)
 * [Events](#events)
 * [Paths](#paths)
 * [Random Numbers](#random-numbers)
+* [Requests](#requests)
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
 
@@ -39,6 +40,19 @@ Methods for computing basic summary statistics.
 * [d3.quantile](https://github.com/d3/d3-array#quantile) - compute a quantile for a sorted array of numbers.
 * [d3.variance](https://github.com/d3/d3-array#variance) - compute the variance of an array of numbers.
 * [d3.deviation](https://github.com/d3/d3-array#deviation) - compute the standard deviation of an array of numbers.
+
+#### [Histograms](https://github.com/d3/d3-array#histograms)
+
+Bin discrete samples into continuous, non-overlapping intervals.
+
+* [d3.histogram](https://github.com/d3/d3-array#histogram) - constructs a new histogram generator.
+* [*histogram*](https://github.com/d3/d3-array#_histogram) - compute the histogram for the given array of samples.
+* [*histogram*.value](https://github.com/d3/d3-array#histogram_value) - specify a value accessor for each sample.
+* [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) - specify the interval of observable values.
+* [*histogram*.thresholds](https://github.com/d3/d3-array#histogram_thresholds) - specify how values are divided into bins.
+* [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
+* [d3.thresholdScott](https://github.com/d3/d3-array#thresholdScott) - Scott’s normal reference binning rule.
+* [d3.thresholdSturges](https://github.com/d3/d3-array#thresholdSturges) - Sturge’s binning formula.
 
 #### [Search](https://github.com/d3/d3-array#search)
 
@@ -117,19 +131,6 @@ Group data into arbitrary hierarchies.
 * [*nest*.map](https://github.com/d3/d3-array#nest_map) - generate the nest, returning a map.
 * [*nest*.object](https://github.com/d3/d3-array#nest_object) - generate the nest, returning an associative array.
 * [*nest*.entries](https://github.com/d3/d3-array#nest_entries) - generate the nest, returning an array of key-values tuples.
-
-#### [Histograms](https://github.com/d3/d3-array#histograms)
-
-Bin discrete samples into continuous, non-overlapping intervals.
-
-* [d3.histogram](https://github.com/d3/d3-array#histogram) - constructs a new histogram generator.
-* [*histogram*](https://github.com/d3/d3-array#_histogram) - compute the histogram for the given array of samples.
-* [*histogram*.value](https://github.com/d3/d3-array#histogram_value) - specify a value accessor for each sample.
-* [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) - specify the interval of observable values.
-* [*histogram*.thresholds](https://github.com/d3/d3-array#histogram_thresholds) - specify how values are divided into bins.
-* [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
-* [d3.thresholdScott](https://github.com/d3/d3-array#thresholdScott) - Scott’s normal reference binning rule.
-* [d3.thresholdSturges](https://github.com/d3/d3-array#thresholdSturges) - Sturge’s binning formula.
 
 ## [Colors](https://github.com/d3/d3-color)
 
@@ -249,3 +250,25 @@ Generate random numbers from various distributions.
 * [d3.randomBates](https://github.com/d3/d3-random#bates) - from a Bates distribution.
 * [d3.randomIrwinHall](https://github.com/d3/d3-random#irwinHall) - from an Irwin–Hall distribution.
 * [d3.randomExponential](https://github.com/d3/d3-random#exponential) - from an exponential distribution.
+
+## [Requests](https://github.com/d3/d3-request)
+
+A convenient alternative to asynchronous XMLHttpRequest.
+
+* [d3.request](https://github.com/d3/d3-request#request) - construct a new asynchronous request.
+* [*request*.header](https://github.com/d3/d3-request#request_header) - set a request header.
+* [*request*.mimeType](https://github.com/d3/d3-request#request_mimeType) - set the MIME type.
+* [*request*.timeout](https://github.com/d3/d3-request#request_timeout) - set the timeout in milliseconds.
+* [*request*.responseType](https://github.com/d3/d3-request#request_responseType) - set the response type.
+* [*request*.response](https://github.com/d3/d3-request#request_response) - set the response function.
+* [*request*.get](https://github.com/d3/d3-request#request_get) - send a GET request.
+* [*request*.post](https://github.com/d3/d3-request#request_post) - send a POST request.
+* [*request*.send](https://github.com/d3/d3-request#request_send) - set the request.
+* [*request*.abort](https://github.com/d3/d3-request#request_abort) - abort the request.
+* [*request*.on](https://github.com/d3/d3-request#request_on) - listen for a request event.
+* [d3.requestCsv](https://github.com/d3/d3-request#requestCsv) - request a comma-separated values (CSV) file.
+* [d3.requestHtml](https://github.com/d3/d3-request#requestHtml) - request an HTML file.
+* [d3.requestJson](https://github.com/d3/d3-request#requestJson) - request a JSON file.
+* [d3.requestText](https://github.com/d3/d3-request#requestText) - request a plain text file.
+* [d3.requestTsv](https://github.com/d3/d3-request#requestTsv) - request a tab-separated values (TSV) file.
+* [d3.requestXml](https://github.com/d3/d3-request#requestXml) - request an XML file.
