@@ -17,6 +17,7 @@ If you use NPM, `npm install d3`. Otherwise, download the [latest release](https
 * [Arrays](#arrays) ([Statistics](#statistics), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests), [Histograms](#histograms))
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
+* [Easing Functions](#easing-functions)
 * [Events](#events)
 
 ## [Arrays](https://github.com/d3/d3-array)
@@ -155,6 +156,40 @@ Parse and format delimiter-separated values, most commonly CSV and TSV.
 * [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) - format the given array of rows.
 * [d3.csv](https://github.com/d3/d3-dsv#csv) - a parser and formatter for comma-separated values (CSV).
 * [d3.tsv](https://github.com/d3/d3-dsv#tsv) - a parser and formatter for tab-separated values (TSV).
+
+## [Easing Functions](https://github.com/d3/d3-ease)
+
+* [d3.easeBind](https://github.com/d3/d3-ease#bind) - bind optional parameters to the given easing function.
+* [d3.easeLinearIn](https://github.com/d3/d3-ease#linearIn) - linear easing; the identity function.
+* [d3.easeLinearOut](https://github.com/d3/d3-ease#linearOut) - linear easing; the identity function.
+* [d3.easeLinearInOut](https://github.com/d3/d3-ease#linearInOut) - linear easing; the identity function.
+* [d3.easePolyIn](https://github.com/d3/d3-ease#polyIn) - polynomial easing; raises time to the given power.
+* [d3.easePolyOut](https://github.com/d3/d3-ease#polyOut) - reverse polynomial easing.
+* [d3.easePolyInOut](https://github.com/d3/d3-ease#polyInOut) - symmetric polynomial easing.
+* [d3.easeQuadIn](https://github.com/d3/d3-ease#quadIn) - quadratic easing; squares time.
+* [d3.easeQuadOut](https://github.com/d3/d3-ease#quadOut) - reverse quadratic easing.
+* [d3.easeQuadInOut](https://github.com/d3/d3-ease#quadInOut) - symmetric quadratic easing.
+* [d3.easeCubicIn](https://github.com/d3/d3-ease#cubicIn) - cubic easing; cubes time.
+* [d3.easeCubicOut](https://github.com/d3/d3-ease#cubicOut) - reverse cubic easing.
+* [d3.easeCubicInOut](https://github.com/d3/d3-ease#cubicInOut) - symmetric cubic easing.
+* [d3.easeSinIn](https://github.com/d3/d3-ease#sinIn) - sinusoidal easing.
+* [d3.easeSinOut](https://github.com/d3/d3-ease#sinOut) - reverse sinusoidal easing.
+* [d3.easeSinInOut](https://github.com/d3/d3-ease#sinInOut) - symmetric sinusoidal easing.
+* [d3.easeExpIn](https://github.com/d3/d3-ease#expIn) - exponential easing.
+* [d3.easeExpOut](https://github.com/d3/d3-ease#expOut) - reverse exponential easing.
+* [d3.easeExpInOut](https://github.com/d3/d3-ease#expInOut) - symmetric exponential easing.
+* [d3.easeCircleIn](https://github.com/d3/d3-ease#circleIn) - circular easing.
+* [d3.easeCircleOut](https://github.com/d3/d3-ease#circleOut) - reverse circular easing.
+* [d3.easeCircleInOut](https://github.com/d3/d3-ease#circleInOut) - symmetric circular easing.
+* [d3.easeElasticIn](https://github.com/d3/d3-ease#elasticIn) - elastic easing, like a rubber band.
+* [d3.easeElasticOut](https://github.com/d3/d3-ease#elasticOut) - reverse elastic easing.
+* [d3.easeElasticInOut](https://github.com/d3/d3-ease#elasticInOut) - symmetric elastic easing.
+* [d3.easeBackIn](https://github.com/d3/d3-ease#backIn) - anticipatory easing, like a dancer bending his knees before jumping.
+* [d3.easeBackOut](https://github.com/d3/d3-ease#backOut) - reverse anticipatory easing.
+* [d3.easeBackInOut](https://github.com/d3/d3-ease#backInOut) - symmetric anticipatory easing.
+* [d3.easeBounceIn](https://github.com/d3/d3-ease#bounceIn) - bounce easing, like a rubber ball.
+* [d3.easeBounceOut](https://github.com/d3/d3-ease#bounceOut) - reverse bounce easing.
+* [d3.easeBounceInOut](https://github.com/d3/d3-ease#bounceInOut) - symmetric bounce easing.
 
 ## [Events](https://github.com/d3/d3-dispatch)
 
