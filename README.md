@@ -23,7 +23,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Paths](#paths)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
-* [Scales](#scales) ([Continuous](#continuous), [Sequential](#sequential), [Quantize](#quantize), [Quantile](#quantile), [Threshold](#threshold), [Ordinal](#ordinal), [Categorical](#categorical))
+* [Scales](#scales) ([Continuous](#continuous), [Sequential](#sequential), [Quantize](#quantize), [Ordinal](#ordinal), [Categorical](#categorical))
 * [Selections](#selections)
 * [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats)
@@ -325,7 +325,7 @@ A convenient alternative to asynchronous XMLHttpRequest.
 
 ### Continuous
 
-Map a continuous, quantitative input domain to a continuous output range.
+Map a continuous, quantitative domain to a continuous range.
 
 * [*continuous*](https://github.com/d3/d3-scale#continuous) -
 * [*continuous*.invert](https://github.com/d3/d3-scale#continuous_invert) -
@@ -356,7 +356,9 @@ Map a continuous, quantitative input domain to a continuous output range.
 * [*time*.nice](https://github.com/d3/d3-scale#time_nice) -
 * [d3.scaleUtc](https://github.com/d3/d3-scale#utcTime) -
 
-### Sequential Color
+### Sequential
+
+Map a continuous, quantitative domain to a continuous, fixed color ramp.
 
 * [d3.scaleViridis](https://github.com/d3/d3-scale#viridis) -
 * [d3.scaleInferno](https://github.com/d3/d3-scale#inferno) -
@@ -369,6 +371,8 @@ Map a continuous, quantitative input domain to a continuous output range.
 
 ### Quantize
 
+Map a continuous, quantitative domain to a discrete range.
+
 * [d3.scaleQuantize](https://github.com/d3/d3-scale#quantize) -
 * [*quantize*](https://github.com/d3/d3-scale#_quantize) -
 * [*quantize*.invertExtent](https://github.com/d3/d3-scale#quantize_invertExtent) -
@@ -378,9 +382,6 @@ Map a continuous, quantitative input domain to a continuous output range.
 * [*quantize*.ticks](https://github.com/d3/d3-scale#quantize_ticks) -
 * [*quantize*.tickFormat](https://github.com/d3/d3-scale#quantize_tickFormat) -
 * [*quantize*.copy](https://github.com/d3/d3-scale#quantize_copy) -
-
-### Quantile
-
 * [d3.scaleQuantile](https://github.com/d3/d3-scale#quantile) -
 * [*quantile*](https://github.com/d3/d3-scale#_quantile) -
 * [*quantile*.invertExtent](https://github.com/d3/d3-scale#quantile_invertExtent) -
@@ -388,9 +389,6 @@ Map a continuous, quantitative input domain to a continuous output range.
 * [*quantile*.range](https://github.com/d3/d3-scale#quantile_range) -
 * [*quantile*.quantiles](https://github.com/d3/d3-scale#quantile_quantiles) -
 * [*quantile*.copy](https://github.com/d3/d3-scale#quantile_copy) -
-
-### Threshold
-
 * [d3.scaleThreshold](https://github.com/d3/d3-scale#threshold) -
 * [*threshold*](https://github.com/d3/d3-scale#_threshold) -
 * [*threshold*.invertExtent](https://github.com/d3/d3-scale#threshold_invertExtent) -
@@ -399,6 +397,8 @@ Map a continuous, quantitative input domain to a continuous output range.
 * [*threshold*.copy](https://github.com/d3/d3-scale#threshold_copy) -
 
 ### Ordinal
+
+Map a discrete domain to a discrete range.
 
 * [d3.scaleOrdinal](https://github.com/d3/d3-scale#ordinal) -
 * [*ordinal*](https://github.com/d3/d3-scale#_ordinal) -
@@ -423,7 +423,9 @@ Map a continuous, quantitative input domain to a continuous output range.
 * [d3.scalePoint](https://github.com/d3/d3-scale#point) -
 * [*point*.padding](https://github.com/d3/d3-scale#point_padding) -
 
-### Categorical Color
+### Categorical
+
+Map a discrete domain to a discrete, fixed categorical color range.
 
 * [d3.scaleCategory10](https://github.com/d3/d3-scale#category10) -
 * [d3.scaleCategory20](https://github.com/d3/d3-scale#category20) -
