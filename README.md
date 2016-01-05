@@ -17,7 +17,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Dispatches](#Dispatches)
-* [Easing Functions](#easing-functions)
+* [Easings](#easing-functions)
 * [Interpolators](#interpolators)
 * [Number Formats](#number-formats)
 * [Paths](#paths)
@@ -181,7 +181,7 @@ Separate concerns using named callbacks.
 * [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) - register or unregister an event listener.
 * [*dispatch*.*type*](https://github.com/d3/d3-dispatch#dispatch_type) - dispatch an event to registered listeners.
 
-## [Easing Functions](https://github.com/d3/d3-ease)
+## [Easings](https://github.com/d3/d3-ease)
 
 * [d3.easeBind](https://github.com/d3/d3-ease#bind) - bind optional parameters to the given easing function.
 * [d3.easeLinearIn](https://github.com/d3/d3-ease#linearIn) - linear easing; the identity function.
