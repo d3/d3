@@ -15,12 +15,13 @@ If you use NPM, `npm install d3`. Otherwise, download the [latest release](https
 ## API Reference
 
 * [Arrays](#arrays) ([Statistics](#statistics), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests), [Histograms](#histograms))
+* [Colors](#colors)
 
 ### [Arrays](https://github.com/d3/d3-array)
 
 Array manipulation, ordering, searching, summarizing, etc.
 
-#### Statistics
+#### [Statistics](https://github.com/d3/d3-array#statistics)
 
 Methods for computing basic summary statistics.
 
@@ -34,7 +35,7 @@ Methods for computing basic summary statistics.
 * [d3.variance](https://github.com/d3/d3-array#variance) - compute the variance of an array of numbers.
 * [d3.deviation](https://github.com/d3/d3-array#deviation) - compute the standard deviation of an array of numbers.
 
-#### Search
+#### [Search](https://github.com/d3/d3-array#search)
 
 Methods for searching arrays for a specific element.
 
@@ -46,7 +47,7 @@ Methods for searching arrays for a specific element.
 * [d3.ascending](https://github.com/d3/d3-array#ascending) - compute the natural order of two values.
 * [d3.descending](https://github.com/d3/d3-array#descending) - compute the natural order of two values.
 
-#### Transformations
+#### [Transformations](https://github.com/d3/d3-array#transformations)
 
 Methods for transforming arrays and for generating new arrays.
 
@@ -60,7 +61,7 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
 
-#### Objects
+#### [Objects](https://github.com/d3/d3-array#objects)
 
 Methods for converting associative arrays (objects) to arrays.
 
@@ -68,7 +69,7 @@ Methods for converting associative arrays (objects) to arrays.
 * [d3.values](https://github.com/d3/d3-array#values) - list the values of an associated array.
 * [d3.entries](https://github.com/d3/d3-array#entries) - list the key-value entries of an associative array.
 
-#### Maps
+#### [Maps](https://github.com/d3/d3-array#maps)
 
 Like ES6 Map, but with string keys and a few other differences.
 
@@ -85,7 +86,7 @@ Like ES6 Map, but with string keys and a few other differences.
 * [*map*.empty](https://github.com/d3/d3-array#map_empty) - returns false if the map has at least one entry.
 * [*map*.size](https://github.com/d3/d3-array#map_size) - returns the number of entries in the map.
 
-#### Sets
+#### [Sets](https://github.com/d3/d3-array#sets)
 
 Like ES6 Set, but with string keys and a few other differences.
 
@@ -99,7 +100,7 @@ Like ES6 Set, but with string keys and a few other differences.
 * [*set*.empty](https://github.com/d3/d3-array#set_empty) - returns true if the set has at least one value.
 * [*set*.size](https://github.com/d3/d3-array#set_size) - returns the number of values in the set.
 
-#### Nests
+#### [Nests](https://github.com/d3/d3-array#nests)
 
 Group data into arbitrary hierarchies.
 
@@ -112,7 +113,7 @@ Group data into arbitrary hierarchies.
 * [*nest*.object](https://github.com/d3/d3-array#nest_object) - generate the nest, returning an associative array.
 * [*nest*.entries](https://github.com/d3/d3-array#nest_entries) - generate the nest, returning an array of key-values tuples.
 
-#### Histograms
+#### [Histograms](https://github.com/d3/d3-array#histograms)
 
 Bin discrete samples into continuous, non-overlapping intervals.
 
@@ -124,3 +125,19 @@ Bin discrete samples into continuous, non-overlapping intervals.
 * [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
 * [d3.thresholdScott](https://github.com/d3/d3-array#thresholdScott) - Scott’s normal reference binning rule.
 * [d3.thresholdSturges](https://github.com/d3/d3-array#thresholdSturges) - Sturge’s binning formula.
+
+### [Colors](https://github.com/d3/d3-color)
+
+Color manipulation and color space conversion.
+
+* [color](https://github.com/d3/d3-color#color) - parses the specified CSS color specifier.
+* [*color*.rgb](https://github.com/d3/d3-color#color_rgb) - returns the RGB equivalent of this color.
+* [*color*.brighter](https://github.com/d3/d3-color#color_brighter) - returns a brighter copy of this color.
+* [*color*.darker](https://github.com/d3/d3-color#color_darker) - returns a darker copy of this color.
+* [*color*.displayable](https://github.com/d3/d3-color#color_displayable) - returns true if the color is displayable on standard hardware.
+* [*color*.toString](https://github.com/d3/d3-color#color_toString) - formats the color as an RGB hexadecimal string.
+* [rgb](https://github.com/d3/d3-color#rgb) - constructs a new RGB color.
+* [hsl](https://github.com/d3/d3-color#hsl) - constructs a new HSL color.
+* [lab](https://github.com/d3/d3-color#lab) - constructs a new Lab color.
+* [hcl](https://github.com/d3/d3-color#hcl) - constructs a new HCL color.
+* [cubehelix](https://github.com/d3/d3-color#cubehelix) - constructs a new Cubehelix color.
