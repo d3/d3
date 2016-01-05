@@ -18,10 +18,14 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Easing Functions](#easing-functions)
 * [Events](#events)
 * [Interpolators](#interpolators)
+* [Number Formats](#number-formats)
 * [Paths](#paths)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
+* [Scales](#scales)
+* [Selections](#selections)
 * [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
+* [Time Formats](#time-formats)
 * [Time Intervals](#time-intervals)
 * [Timers](#timers)
 
@@ -80,6 +84,8 @@ Methods for searching arrays for a specific element.
 * [d3.bisectRight](https://github.com/d3/d3-array#bisectRight) - binary search for a value in a sorted array.
 * [d3.bisectLeft](https://github.com/d3/d3-array#bisectLeft) - binary search for a value in a sorted array.
 * [d3.bisector](https://github.com/d3/d3-array#bisector) - bisect using an accessor or comparator.
+* [*bisector*.left](https://github.com/d3/d3-array#bisector_left) - bisectLeft, with the given comparator.
+* [*bisector*.right](https://github.com/d3/d3-array#bisector_right) - bisectRight, with the given comparator.
 * [d3.ascending](https://github.com/d3/d3-array#ascending) - compute the natural order of two values.
 * [d3.descending](https://github.com/d3/d3-array#descending) - compute the natural order of two values.
 
@@ -229,6 +235,41 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#cubehelix) - interpolate Cubehelix colors.
 * [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#cubehelixLong) - interpolate Cubehelix colors, the long way.
 
+## [Number Formats](https://github.com/d3/d3-format)
+
+* [d3.format](https://github.com/d3/d3-format#format) -
+* [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) -
+* [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) -
+* [d3.formatLocale](https://github.com/d3/d3-format#locale) -
+* [*locale*.format](https://github.com/d3/d3-format#locale_format) -
+* [*locale*.formatPrefix](https://github.com/d3/d3-format#locale_formatPrefix) -
+* [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) -
+* [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) -
+* [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) -
+* [d3.formatCaEs](https://github.com/d3/d3-format#localeCaEs) -
+* [d3.formatCsCz](https://github.com/d3/d3-format#localeCsCz) -
+* [d3.formatDeCh](https://github.com/d3/d3-format#localeDeCh) -
+* [d3.formatDeDe](https://github.com/d3/d3-format#localeDeDe) -
+* [d3.formatEnCa](https://github.com/d3/d3-format#localeEnCa) -
+* [d3.formatEnGb](https://github.com/d3/d3-format#localeEnGb) -
+* [d3.formatEnUs](https://github.com/d3/d3-format#localeEnUs) -
+* [d3.formatEsEs](https://github.com/d3/d3-format#localeEsEs) -
+* [d3.formatFiFi](https://github.com/d3/d3-format#localeFiFi) -
+* [d3.formatFrCa](https://github.com/d3/d3-format#localeFrCa) -
+* [d3.formatFrFr](https://github.com/d3/d3-format#localeFrFr) -
+* [d3.formatHeIl](https://github.com/d3/d3-format#localeHeIl) -
+* [d3.formatHuHu](https://github.com/d3/d3-format#localeHuHu) -
+* [d3.formatItIt](https://github.com/d3/d3-format#localeItIt) -
+* [d3.formatJaJp](https://github.com/d3/d3-format#localeJaJp) -
+* [d3.formatKoKr](https://github.com/d3/d3-format#localeKoKr) -
+* [d3.formatMkMk](https://github.com/d3/d3-format#localeMkMk) -
+* [d3.formatNlNl](https://github.com/d3/d3-format#localeNlNl) -
+* [d3.formatPlPl](https://github.com/d3/d3-format#localePlPl) -
+* [d3.formatPtBr](https://github.com/d3/d3-format#localePtBr) -
+* [d3.formatRuRu](https://github.com/d3/d3-format#localeRuRu) -
+* [d3.formatSvSe](https://github.com/d3/d3-format#localeSvSe) -
+* [d3.formatZhCn](https://github.com/d3/d3-format#localeZhCn) -
+
 ## [Paths](https://github.com/d3/d3-path)
 
 Serialize Canvas path commands to SVG.
@@ -276,6 +317,97 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [d3.requestText](https://github.com/d3/d3-request#requestText) - request a plain text file.
 * [d3.requestTsv](https://github.com/d3/d3-request#requestTsv) - request a tab-separated values (TSV) file.
 * [d3.requestXml](https://github.com/d3/d3-request#requestXml) - request an XML file.
+
+## [Scales](https://github.com/d3/d3-scale)
+
+* [*continuous*](https://github.com/d3/d3-scale#continuous) -
+* [*continuous*.invert](https://github.com/d3/d3-scale#continuous_invert) -
+* [*continuous*.domain](https://github.com/d3/d3-scale#continuous_domain) -
+* [*continuous*.range](https://github.com/d3/d3-scale#continuous_range) -
+* [*continuous*.rangeRound](https://github.com/d3/d3-scale#continuous_rangeRound) -
+* [*continuous*.clamp](https://github.com/d3/d3-scale#continuous_clamp) -
+* [*continuous*.interpolate](https://github.com/d3/d3-scale#continuous_interpolate) -
+* [*continuous*.ticks](https://github.com/d3/d3-scale#continuous_ticks) -
+* [*continuous*.tickFormat](https://github.com/d3/d3-scale#continuous_tickFormat) -
+* [*continuous*.nice](https://github.com/d3/d3-scale#continuous_nice) -
+* [*continuous*.copy](https://github.com/d3/d3-scale#continuous_copy) -
+* [d3.scaleLinear](https://github.com/d3/d3-scale#linear) -
+* [d3.scalePow](https://github.com/d3/d3-scale#pow) -
+* [*pow*.exponent](https://github.com/d3/d3-scale#pow_exponent) -
+* [d3.scaleSqrt](https://github.com/d3/d3-scale#sqrt) -
+* [d3.scaleLog](https://github.com/d3/d3-scale#log) -
+* [*log*.base](https://github.com/d3/d3-scale#log_base) -
+* [*log*.nice](https://github.com/d3/d3-scale#log_nice) -
+* [*log*.ticks](https://github.com/d3/d3-scale#log_ticks) -
+* [*log*.tickFormat](https://github.com/d3/d3-scale#log_tickFormat) -
+* [d3.scaleIdentity](https://github.com/d3/d3-scale#identity) -
+* [d3.scaleTime](https://github.com/d3/d3-scale#time) -
+* [*time*.ticks](https://github.com/d3/d3-scale#time_ticks) -
+* [*time*.ticks](https://github.com/d3/d3-scale#time_ticks) -
+* [*time*.tickFormat](https://github.com/d3/d3-scale#time_tickFormat) -
+* [*time*.nice](https://github.com/d3/d3-scale#time_nice) -
+* [*time*.nice](https://github.com/d3/d3-scale#time_nice) -
+* [d3.scaleUtc](https://github.com/d3/d3-scale#utcTime) -
+* [d3.scaleViridis](https://github.com/d3/d3-scale#viridis) -
+* [d3.scaleInferno](https://github.com/d3/d3-scale#inferno) -
+* [d3.scaleMagma](https://github.com/d3/d3-scale#magma) -
+* [d3.scalePlasma](https://github.com/d3/d3-scale#plasma) -
+* [d3.scaleWarm](https://github.com/d3/d3-scale#warm) -
+* [d3.scaleCool](https://github.com/d3/d3-scale#cool) -
+* [d3.scaleRainbow](https://github.com/d3/d3-scale#rainbow) -
+* [d3.scaleCubehelix](https://github.com/d3/d3-scale#cubehelix) -
+* [d3.scaleQuantize](https://github.com/d3/d3-scale#quantize) -
+* [*quantize*](https://github.com/d3/d3-scale#_quantize) -
+* [*quantize*.invertExtent](https://github.com/d3/d3-scale#quantize_invertExtent) -
+* [*quantize*.domain](https://github.com/d3/d3-scale#quantize_domain) -
+* [*quantize*.range](https://github.com/d3/d3-scale#quantize_range) -
+* [*quantize*.nice](https://github.com/d3/d3-scale#quantize_nice) -
+* [*quantize*.ticks](https://github.com/d3/d3-scale#quantize_ticks) -
+* [*quantize*.tickFormat](https://github.com/d3/d3-scale#quantize_tickFormat) -
+* [*quantize*.copy](https://github.com/d3/d3-scale#quantize_copy) -
+* [d3.scaleQuantile](https://github.com/d3/d3-scale#quantile) -
+* [*quantile*](https://github.com/d3/d3-scale#_quantile) -
+* [*quantile*.invertExtent](https://github.com/d3/d3-scale#quantile_invertExtent) -
+* [*quantile*.domain](https://github.com/d3/d3-scale#quantile_domain) -
+* [*quantile*.range](https://github.com/d3/d3-scale#quantile_range) -
+* [*quantile*.quantiles](https://github.com/d3/d3-scale#quantile_quantiles) -
+* [*quantile*.copy](https://github.com/d3/d3-scale#quantile_copy) -
+* [d3.scaleThreshold](https://github.com/d3/d3-scale#threshold) -
+* [*threshold*](https://github.com/d3/d3-scale#_threshold) -
+* [*threshold*.invertExtent](https://github.com/d3/d3-scale#threshold_invertExtent) -
+* [*threshold*.domain](https://github.com/d3/d3-scale#threshold_domain) -
+* [*threshold*.range](https://github.com/d3/d3-scale#threshold_range) -
+* [*threshold*.copy](https://github.com/d3/d3-scale#threshold_copy) -
+* [d3.scaleOrdinal](https://github.com/d3/d3-scale#ordinal) -
+* [*ordinal*](https://github.com/d3/d3-scale#_ordinal) -
+* [*ordinal*.domain](https://github.com/d3/d3-scale#ordinal_domain) -
+* [*ordinal*.range](https://github.com/d3/d3-scale#ordinal_range) -
+* [*ordinal*.unknown](https://github.com/d3/d3-scale#ordinal_unknown) -
+* [*ordinal*.copy](https://github.com/d3/d3-scale#ordinal_copy) -
+* [d3.scaleImplicit](https://github.com/d3/d3-scale#implicit) -
+* [d3.scaleBand](https://github.com/d3/d3-scale#band) -
+* [*band*](https://github.com/d3/d3-scale#_band) -
+* [*band*.domain](https://github.com/d3/d3-scale#band_domain) -
+* [*band*.range](https://github.com/d3/d3-scale#band_range) -
+* [*band*.rangeRound](https://github.com/d3/d3-scale#band_rangeRound) -
+* [*band*.round](https://github.com/d3/d3-scale#band_round) -
+* [*band*.paddingInner](https://github.com/d3/d3-scale#band_paddingInner) -
+* [*band*.paddingOuter](https://github.com/d3/d3-scale#band_paddingOuter) -
+* [*band*.padding](https://github.com/d3/d3-scale#band_padding) -
+* [*band*.align](https://github.com/d3/d3-scale#band_align) -
+* [*band*.bandwidth](https://github.com/d3/d3-scale#band_bandwidth) -
+* [*band*.step](https://github.com/d3/d3-scale#band_step) -
+* [*band*.copy](https://github.com/d3/d3-scale#band_copy) -
+* [d3.scalePoint](https://github.com/d3/d3-scale#point) -
+* [*point*.padding](https://github.com/d3/d3-scale#point_padding) -
+* [d3.scaleCategory10](https://github.com/d3/d3-scale#category10) -
+* [d3.scaleCategory20](https://github.com/d3/d3-scale#category20) -
+* [d3.scaleCategory20b](https://github.com/d3/d3-scale#category20b) -
+* [d3.scaleCategory20c](https://github.com/d3/d3-scale#category20c) -
+
+## [Selections](https://github.com/d3/d3-selection)
+
+…
 
 ## [Shapes](https://github.com/d3/d3-shape)
 
@@ -403,6 +535,40 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [d3.stackOffsetNone](https://github.com/d3/d3-shape#offsetNone) -
 * [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape#offsetSilhouette) -
 * [d3.stackOffsetWiggle](https://github.com/d3/d3-shape#offsetWiggle) -
+
+## [Time Formats](https://github.com/d3/d3-time-format)
+
+* [d3.timeFormat](https://github.com/d3/d3-time-format#format) -
+* [*format*](https://github.com/d3/d3-time-format#_format) -
+* [*format*.parse](https://github.com/d3/d3-time-format#format_parse) -
+* [*format*.toString](https://github.com/d3/d3-time-format#format_toString) -
+* [d3.utcFormat](https://github.com/d3/d3-time-format#utcFormat) -
+* [d3.isoFormat](https://github.com/d3/d3-time-format#isoFormat) -
+* [d3.timeFormatLocale](https://github.com/d3/d3-time-format#locale) -
+* [*locale*.format](https://github.com/d3/d3-time-format#locale_format) -
+* [*locale*.utcFormat](https://github.com/d3/d3-time-format#locale_utcFormat) -
+* [d3.timeFormatCaEs](https://github.com/d3/d3-time-format#localeCaEs) -
+* [d3.timeFormatDeCh](https://github.com/d3/d3-time-format#localeDeCh) -
+* [d3.timeFormatDeDe](https://github.com/d3/d3-time-format#localeDeDe) -
+* [d3.timeFormatEnCa](https://github.com/d3/d3-time-format#localeEnCa) -
+* [d3.timeFormatEnGb](https://github.com/d3/d3-time-format#localeEnGb) -
+* [d3.timeFormatEnUs](https://github.com/d3/d3-time-format#localeEnUs) -
+* [d3.timeFormatEsEs](https://github.com/d3/d3-time-format#localeEsEs) -
+* [d3.timeFormatFiFi](https://github.com/d3/d3-time-format#localeFiFi) -
+* [d3.timeFormatFrCa](https://github.com/d3/d3-time-format#localeFrCa) -
+* [d3.timeFormatFrFr](https://github.com/d3/d3-time-format#localeFrFr) -
+* [d3.timeFormatHeIl](https://github.com/d3/d3-time-format#localeHeIl) -
+* [d3.timeFormatHuHu](https://github.com/d3/d3-time-format#localeHuHu) -
+* [d3.timeFormatItIt](https://github.com/d3/d3-time-format#localeItIt) -
+* [d3.timeFormatJaJp](https://github.com/d3/d3-time-format#localeJaJp) -
+* [d3.timeFormatKoKr](https://github.com/d3/d3-time-format#localeKoKr) -
+* [d3.timeFormatMkMk](https://github.com/d3/d3-time-format#localeMkMk) -
+* [d3.timeFormatNlNl](https://github.com/d3/d3-time-format#localeNlNl) -
+* [d3.timeFormatPlPl](https://github.com/d3/d3-time-format#localePlPl) -
+* [d3.timeFormatPtBr](https://github.com/d3/d3-time-format#localePtBr) -
+* [d3.timeFormatRuRu](https://github.com/d3/d3-time-format#localeRuRu) -
+* [d3.timeFormatSvSe](https://github.com/d3/d3-time-format#localeSvSe) -
+* [d3.timeFormatZhCn](https://github.com/d3/d3-time-format#localeZhCn) -
 
 ## [Time Intervals](https://github.com/d3/d3-time)
 
