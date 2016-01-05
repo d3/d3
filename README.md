@@ -23,7 +23,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Paths](#paths)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
-* [Scales](#scales)
+* [Scales](#scales) ([Continuous](#continuous), [Sequential Color](#sequential-color), [Quantize](#quantize), [Quantile](#quantile), [Threshold](#threshold), [Ordinal](#ordinal), [Categorical Color](#categorical-color))
 * [Selections](#selections)
 * [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats)
@@ -323,6 +323,10 @@ A convenient alternative to asynchronous XMLHttpRequest.
 
 ## [Scales](https://github.com/d3/d3-scale)
 
+### Continuous
+
+Map a continuous, quantitative input domain to a continuous output range.
+
 * [*continuous*](https://github.com/d3/d3-scale#continuous) -
 * [*continuous*.invert](https://github.com/d3/d3-scale#continuous_invert) -
 * [*continuous*.domain](https://github.com/d3/d3-scale#continuous_domain) -
@@ -351,6 +355,9 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [*time*.nice](https://github.com/d3/d3-scale#time_nice) -
 * [*time*.nice](https://github.com/d3/d3-scale#time_nice) -
 * [d3.scaleUtc](https://github.com/d3/d3-scale#utcTime) -
+
+### Sequential Color
+
 * [d3.scaleViridis](https://github.com/d3/d3-scale#viridis) -
 * [d3.scaleInferno](https://github.com/d3/d3-scale#inferno) -
 * [d3.scaleMagma](https://github.com/d3/d3-scale#magma) -
@@ -359,6 +366,9 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [d3.scaleCool](https://github.com/d3/d3-scale#cool) -
 * [d3.scaleRainbow](https://github.com/d3/d3-scale#rainbow) -
 * [d3.scaleCubehelix](https://github.com/d3/d3-scale#cubehelix) -
+
+### Quantize
+
 * [d3.scaleQuantize](https://github.com/d3/d3-scale#quantize) -
 * [*quantize*](https://github.com/d3/d3-scale#_quantize) -
 * [*quantize*.invertExtent](https://github.com/d3/d3-scale#quantize_invertExtent) -
@@ -368,6 +378,9 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [*quantize*.ticks](https://github.com/d3/d3-scale#quantize_ticks) -
 * [*quantize*.tickFormat](https://github.com/d3/d3-scale#quantize_tickFormat) -
 * [*quantize*.copy](https://github.com/d3/d3-scale#quantize_copy) -
+
+### Quantile
+
 * [d3.scaleQuantile](https://github.com/d3/d3-scale#quantile) -
 * [*quantile*](https://github.com/d3/d3-scale#_quantile) -
 * [*quantile*.invertExtent](https://github.com/d3/d3-scale#quantile_invertExtent) -
@@ -375,12 +388,18 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [*quantile*.range](https://github.com/d3/d3-scale#quantile_range) -
 * [*quantile*.quantiles](https://github.com/d3/d3-scale#quantile_quantiles) -
 * [*quantile*.copy](https://github.com/d3/d3-scale#quantile_copy) -
+
+### Threshold
+
 * [d3.scaleThreshold](https://github.com/d3/d3-scale#threshold) -
 * [*threshold*](https://github.com/d3/d3-scale#_threshold) -
 * [*threshold*.invertExtent](https://github.com/d3/d3-scale#threshold_invertExtent) -
 * [*threshold*.domain](https://github.com/d3/d3-scale#threshold_domain) -
 * [*threshold*.range](https://github.com/d3/d3-scale#threshold_range) -
 * [*threshold*.copy](https://github.com/d3/d3-scale#threshold_copy) -
+
+### Ordinal
+
 * [d3.scaleOrdinal](https://github.com/d3/d3-scale#ordinal) -
 * [*ordinal*](https://github.com/d3/d3-scale#_ordinal) -
 * [*ordinal*.domain](https://github.com/d3/d3-scale#ordinal_domain) -
@@ -403,6 +422,9 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [*band*.copy](https://github.com/d3/d3-scale#band_copy) -
 * [d3.scalePoint](https://github.com/d3/d3-scale#point) -
 * [*point*.padding](https://github.com/d3/d3-scale#point_padding) -
+
+### Categorical Color
+
 * [d3.scaleCategory10](https://github.com/d3/d3-scale#category10) -
 * [d3.scaleCategory20](https://github.com/d3/d3-scale#category20) -
 * [d3.scaleCategory20b](https://github.com/d3/d3-scale#category20b) -
