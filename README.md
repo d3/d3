@@ -20,6 +20,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Paths](#paths)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
+* [Time Intervals](#time-intervals)
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
 
@@ -273,7 +274,7 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [d3.requestTsv](https://github.com/d3/d3-request#requestTsv) - request a tab-separated values (TSV) file.
 * [d3.requestXml](https://github.com/d3/d3-request#requestXml) - request an XML file.
 
-## [Time](https://github.com/d3/d3-time)
+## [Time Intervals](https://github.com/d3/d3-time)
 
 A calculator for humanity’s peculiar conventions of time.
 
