@@ -345,23 +345,23 @@ A convenient alternative to asynchronous XMLHttpRequest.
 
 ### [Curves](https://github.com/d3/d3-shape#curves)
 
-* [curveBasis](https://github.com/d3/d3-shape#basis) -
-* [curveBasisClosed](https://github.com/d3/d3-shape#basisClosed) -
-* [curveBasisOpen](https://github.com/d3/d3-shape#basisOpen) -
-* [curveBundle](https://github.com/d3/d3-shape#bundle) -
-* [curveCardinal](https://github.com/d3/d3-shape#cardinal) -
-* [curveCardinalClosed](https://github.com/d3/d3-shape#cardinalClosed) -
-* [curveCardinalOpen](https://github.com/d3/d3-shape#cardinalOpen) -
-* [curveCatmullRom](https://github.com/d3/d3-shape#catmullRom) -
-* [curveCatmullRomClosed](https://github.com/d3/d3-shape#catmullRomClosed) -
-* [curveCatmullRomOpen](https://github.com/d3/d3-shape#catmullRomOpen) -
-* [curveLinear](https://github.com/d3/d3-shape#linear) -
-* [curveLinearClosed](https://github.com/d3/d3-shape#linearClosed) -
-* [curveMonotone](https://github.com/d3/d3-shape#monotone) -
-* [curveNatural](https://github.com/d3/d3-shape#natural) -
-* [curveStep](https://github.com/d3/d3-shape#step) -
-* [curveStepAfter](https://github.com/d3/d3-shape#stepAfter) -
-* [curveStepBefore](https://github.com/d3/d3-shape#stepBefore) -
+* [d3.curveBasis](https://github.com/d3/d3-shape#basis) -
+* [d3.curveBasisClosed](https://github.com/d3/d3-shape#basisClosed) -
+* [d3.curveBasisOpen](https://github.com/d3/d3-shape#basisOpen) -
+* [d3.curveBundle](https://github.com/d3/d3-shape#bundle) -
+* [d3.curveCardinal](https://github.com/d3/d3-shape#cardinal) -
+* [d3.curveCardinalClosed](https://github.com/d3/d3-shape#cardinalClosed) -
+* [d3.curveCardinalOpen](https://github.com/d3/d3-shape#cardinalOpen) -
+* [d3.curveCatmullRom](https://github.com/d3/d3-shape#catmullRom) -
+* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#catmullRomClosed) -
+* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#catmullRomOpen) -
+* [d3.curveLinear](https://github.com/d3/d3-shape#linear) -
+* [d3.curveLinearClosed](https://github.com/d3/d3-shape#linearClosed) -
+* [d3.curveMonotone](https://github.com/d3/d3-shape#monotone) -
+* [d3.curveNatural](https://github.com/d3/d3-shape#natural) -
+* [d3.curveStep](https://github.com/d3/d3-shape#step) -
+* [d3.curveStepAfter](https://github.com/d3/d3-shape#stepAfter) -
+* [d3.curveStepBefore](https://github.com/d3/d3-shape#stepBefore) -
 * [*curve*.areaStart](https://github.com/d3/d3-shape#curve_areaStart) -
 * [*curve*.areaEnd](https://github.com/d3/d3-shape#curve_areaEnd) -
 * [*curve*.lineStart](https://github.com/d3/d3-shape#curve_lineStart) -
