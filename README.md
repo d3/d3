@@ -12,7 +12,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 
 ## API Reference
 
-* [Arrays](#arrays) ([Statistics](#statistics), [Histograms](#histograms), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
+* [Arrays](#arrays) ([Statistics](#statistics), [Histograms](#histograms), [Nests](#nests), [Search](#search), [Transformations](#transformations), [Objects](#objects), [Maps](#maps), [Sets](#sets))
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Easing Functions](#easing-functions)
@@ -53,6 +53,19 @@ Bin discrete samples into continuous, non-overlapping intervals.
 * [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
 * [d3.thresholdScott](https://github.com/d3/d3-array#thresholdScott) - Scott’s normal reference binning rule.
 * [d3.thresholdSturges](https://github.com/d3/d3-array#thresholdSturges) - Sturge’s binning formula.
+
+#### [Nests](https://github.com/d3/d3-array#nests)
+
+Group data into arbitrary hierarchies.
+
+* [d3.nest](https://github.com/d3/d3-array#nest) - constructs a new nest generator.
+* [*nest*.key](https://github.com/d3/d3-array#nest_key) - add a level to the nest hierarchy.
+* [*nest*.sortKeys](https://github.com/d3/d3-array#nest_sortKeys) - sort the current nest level by key.
+* [*nest*.sortValues](https://github.com/d3/d3-array#nest_sortValues) - sort the leaf nest level by value.
+* [*nest*.rollup](https://github.com/d3/d3-array#nest_rollup) - specify a rollup function for leaf values.
+* [*nest*.map](https://github.com/d3/d3-array#nest_map) - generate the nest, returning a map.
+* [*nest*.object](https://github.com/d3/d3-array#nest_object) - generate the nest, returning an associative array.
+* [*nest*.entries](https://github.com/d3/d3-array#nest_entries) - generate the nest, returning an array of key-values tuples.
 
 #### [Search](https://github.com/d3/d3-array#search)
 
@@ -118,19 +131,6 @@ Like ES6 Set, but with string keys and a few other differences.
 * [*set*.each](https://github.com/d3/d3-array#set_each) - calls the given function for each value in the set.
 * [*set*.empty](https://github.com/d3/d3-array#set_empty) - returns true if the set has at least one value.
 * [*set*.size](https://github.com/d3/d3-array#set_size) - returns the number of values in the set.
-
-#### [Nests](https://github.com/d3/d3-array#nests)
-
-Group data into arbitrary hierarchies.
-
-* [d3.nest](https://github.com/d3/d3-array#nest) - constructs a new nest generator.
-* [*nest*.key](https://github.com/d3/d3-array#nest_key) - add a level to the nest hierarchy.
-* [*nest*.sortKeys](https://github.com/d3/d3-array#nest_sortKeys) - sort the current nest level by key.
-* [*nest*.sortValues](https://github.com/d3/d3-array#nest_sortValues) - sort the leaf nest level by value.
-* [*nest*.rollup](https://github.com/d3/d3-array#nest_rollup) - specify a rollup function for leaf values.
-* [*nest*.map](https://github.com/d3/d3-array#nest_map) - generate the nest, returning a map.
-* [*nest*.object](https://github.com/d3/d3-array#nest_object) - generate the nest, returning an associative array.
-* [*nest*.entries](https://github.com/d3/d3-array#nest_entries) - generate the nest, returning an array of key-values tuples.
 
 ## [Colors](https://github.com/d3/d3-color)
 
