@@ -20,6 +20,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Paths](#paths)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
+* [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Intervals](#time-intervals)
 * [Timers](#timers)
 
@@ -274,6 +275,133 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [d3.requestText](https://github.com/d3/d3-request#requestText) - request a plain text file.
 * [d3.requestTsv](https://github.com/d3/d3-request#requestTsv) - request a tab-separated values (TSV) file.
 * [d3.requestXml](https://github.com/d3/d3-request#requestXml) - request an XML file.
+
+## [Shapes](https://github.com/d3/d3-shape)
+
+### [Arcs](https://github.com/d3/d3-shape#arcs)
+
+* [d3.arc](https://github.com/d3/d3-shape#arc) -
+* [*arc*](https://github.com/d3/d3-shape#_arc) -
+* [*arc*.centroid](https://github.com/d3/d3-shape#arc_centroid) -
+* [*arc*.innerRadius](https://github.com/d3/d3-shape#arc_innerRadius) -
+* [*arc*.outerRadius](https://github.com/d3/d3-shape#arc_outerRadius) -
+* [*arc*.cornerRadius](https://github.com/d3/d3-shape#arc_cornerRadius) -
+* [*arc*.startAngle](https://github.com/d3/d3-shape#arc_startAngle) -
+* [*arc*.endAngle](https://github.com/d3/d3-shape#arc_endAngle) -
+* [*arc*.padAngle](https://github.com/d3/d3-shape#arc_padAngle) -
+* [*arc*.padRadius](https://github.com/d3/d3-shape#arc_padRadius) -
+* [*arc*.context](https://github.com/d3/d3-shape#arc_context) -
+
+### [Pies](https://github.com/d3/d3-shape#pies)
+
+* [d3.pie](https://github.com/d3/d3-shape#pie) -
+* [*pie*](https://github.com/d3/d3-shape#_pie) -
+* [*pie*.value](https://github.com/d3/d3-shape#pie_value) -
+* [*pie*.sort](https://github.com/d3/d3-shape#pie_sort) -
+* [*pie*.sortValues](https://github.com/d3/d3-shape#pie_sortValues) -
+* [*pie*.startAngle](https://github.com/d3/d3-shape#pie_startAngle) -
+* [*pie*.endAngle](https://github.com/d3/d3-shape#pie_endAngle) -
+* [*pie*.padAngle](https://github.com/d3/d3-shape#pie_padAngle) -
+
+### [Lines](https://github.com/d3/d3-shape#lines)
+
+* [d3.line](https://github.com/d3/d3-shape#line) -
+* [*line*](https://github.com/d3/d3-shape#_line) -
+* [*line*.x](https://github.com/d3/d3-shape#line_x) -
+* [*line*.y](https://github.com/d3/d3-shape#line_y) -
+* [*line*.defined](https://github.com/d3/d3-shape#line_defined) -
+* [*line*.curve](https://github.com/d3/d3-shape#line_curve) -
+* [*line*.context](https://github.com/d3/d3-shape#line_context) -
+* [d3.radialLine](https://github.com/d3/d3-shape#radialLine) -
+* [*radialLine*.angle](https://github.com/d3/d3-shape#radialLine_angle) -
+* [*radialLine*.radius](https://github.com/d3/d3-shape#radialLine_radius) -
+* [*radialLine*.defined](https://github.com/d3/d3-shape#radialLine_defined) -
+* [*radialLine*.curve](https://github.com/d3/d3-shape#radialLine_curve) -
+* [*radialLine*.context](https://github.com/d3/d3-shape#radialLine_context) -
+
+### [Areas](https://github.com/d3/d3-shape#areas)
+
+* [d3.area](https://github.com/d3/d3-shape#area) -
+* [*area*](https://github.com/d3/d3-shape#_area) -
+* [*area*.x](https://github.com/d3/d3-shape#area_x) -
+* [*area*.x0](https://github.com/d3/d3-shape#area_x0) -
+* [*area*.x1](https://github.com/d3/d3-shape#area_x1) -
+* [*area*.y](https://github.com/d3/d3-shape#area_y) -
+* [*area*.y0](https://github.com/d3/d3-shape#area_y0) -
+* [*area*.y1](https://github.com/d3/d3-shape#area_y1) -
+* [*area*.defined](https://github.com/d3/d3-shape#area_defined) -
+* [*area*.curve](https://github.com/d3/d3-shape#area_curve) -
+* [*area*.context](https://github.com/d3/d3-shape#area_context) -
+* [d3.radialArea](https://github.com/d3/d3-shape#radialArea) -
+* [*radialArea*.angle](https://github.com/d3/d3-shape#radialArea_angle) -
+* [*radialArea*.startAngle](https://github.com/d3/d3-shape#radialArea_startAngle) -
+* [*radialArea*.endAngle](https://github.com/d3/d3-shape#radialArea_endAngle) -
+* [*radialArea*.radius](https://github.com/d3/d3-shape#radialArea_radius) -
+* [*radialArea*.innerRadius](https://github.com/d3/d3-shape#radialArea_innerRadius) -
+* [*radialArea*.outerRadius](https://github.com/d3/d3-shape#radialArea_outerRadius) -
+* [*radialArea*.defined](https://github.com/d3/d3-shape#radialArea_defined) -
+* [*radialArea*.curve](https://github.com/d3/d3-shape#radialArea_curve) -
+* [*radialArea*.context](https://github.com/d3/d3-shape#radialArea_context) -
+
+### [Curves](https://github.com/d3/d3-shape#curves)
+
+* [curveBasis](https://github.com/d3/d3-shape#basis) -
+* [curveBasisClosed](https://github.com/d3/d3-shape#basisClosed) -
+* [curveBasisOpen](https://github.com/d3/d3-shape#basisOpen) -
+* [curveBundle](https://github.com/d3/d3-shape#bundle) -
+* [curveCardinal](https://github.com/d3/d3-shape#cardinal) -
+* [curveCardinalClosed](https://github.com/d3/d3-shape#cardinalClosed) -
+* [curveCardinalOpen](https://github.com/d3/d3-shape#cardinalOpen) -
+* [curveCatmullRom](https://github.com/d3/d3-shape#catmullRom) -
+* [curveCatmullRomClosed](https://github.com/d3/d3-shape#catmullRomClosed) -
+* [curveCatmullRomOpen](https://github.com/d3/d3-shape#catmullRomOpen) -
+* [curveLinear](https://github.com/d3/d3-shape#linear) -
+* [curveLinearClosed](https://github.com/d3/d3-shape#linearClosed) -
+* [curveMonotone](https://github.com/d3/d3-shape#monotone) -
+* [curveNatural](https://github.com/d3/d3-shape#natural) -
+* [curveStep](https://github.com/d3/d3-shape#step) -
+* [curveStepAfter](https://github.com/d3/d3-shape#stepAfter) -
+* [curveStepBefore](https://github.com/d3/d3-shape#stepBefore) -
+* [*curve*.areaStart](https://github.com/d3/d3-shape#curve_areaStart) -
+* [*curve*.areaEnd](https://github.com/d3/d3-shape#curve_areaEnd) -
+* [*curve*.lineStart](https://github.com/d3/d3-shape#curve_lineStart) -
+* [*curve*.lineEnd](https://github.com/d3/d3-shape#curve_lineEnd) -
+* [*curve*.point](https://github.com/d3/d3-shape#curve_point) -
+
+### [Symbols](https://github.com/d3/d3-shape#symbols)
+
+* [d3.symbol](https://github.com/d3/d3-shape#symbol) -
+* [*symbol*](https://github.com/d3/d3-shape#_symbol) -
+* [*symbol*.type](https://github.com/d3/d3-shape#symbol_type) -
+* [*symbol*.size](https://github.com/d3/d3-shape#symbol_size) -
+* [*symbol*.context](https://github.com/d3/d3-shape#symbol_context) -
+* [d3.symbols](https://github.com/d3/d3-shape#symbols) -
+* [d3.symbolCircle](https://github.com/d3/d3-shape#circle) -
+* [d3.symbolCross](https://github.com/d3/d3-shape#cross) -
+* [d3.symbolDiamond](https://github.com/d3/d3-shape#diamond) -
+* [d3.symbolSquare](https://github.com/d3/d3-shape#square) -
+* [d3.symbolStar](https://github.com/d3/d3-shape#star) -
+* [d3.symbolTriangle](https://github.com/d3/d3-shape#triangle) -
+* [d3.symbolWye](https://github.com/d3/d3-shape#wye) -
+* [*symbolType*.draw](https://github.com/d3/d3-shape#symbolType_draw) -
+
+### [Stacks](https://github.com/d3/d3-shape#stacks)
+
+* [d3.stack](https://github.com/d3/d3-shape#stack) -
+* [*stack*](https://github.com/d3/d3-shape#_stack) -
+* [*stack*.keys](https://github.com/d3/d3-shape#stack_keys) -
+* [*stack*.value](https://github.com/d3/d3-shape#stack_value) -
+* [*stack*.order](https://github.com/d3/d3-shape#stack_order) -
+* [*stack*.offset](https://github.com/d3/d3-shape#stack_offset) -
+* [d3.stackOrderAscending](https://github.com/d3/d3-shape#orderAscending) -
+* [d3.stackOrderDescending](https://github.com/d3/d3-shape#orderDescending) -
+* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape#orderInsideOut) -
+* [d3.stackOrderNone](https://github.com/d3/d3-shape#orderNone) -
+* [d3.stackOrderReverse](https://github.com/d3/d3-shape#orderReverse) -
+* [d3.stackOffsetExpand](https://github.com/d3/d3-shape#offsetExpand) -
+* [d3.stackOffsetNone](https://github.com/d3/d3-shape#offsetNone) -
+* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape#offsetSilhouette) -
+* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape#offsetWiggle) -
 
 ## [Time Intervals](https://github.com/d3/d3-time)
 
