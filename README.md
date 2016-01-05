@@ -289,32 +289,32 @@ A calculator for humanity’s peculiar conventions of time.
 * [*interval*.every](https://github.com/d3/d3-time#interval_every) - create a filtered subset of this interval.
 * [*interval*.count](https://github.com/d3/d3-time#interval_count) - count interval boundaries between two dates.
 * [d3.timeMillisecond](https://github.com/d3/d3-time#millisecond), [d3.utcMillisecond](https://github.com/d3/d3-time#millisecond) - the millisecond interval.
-* [d3.timeSecond](https://github.com/d3/d3-time#second), [d3.utcSecond](https://github.com/d3/d3-time#second) - the second interval.
-* [d3.timeMinute](https://github.com/d3/d3-time#minute), [d3.utcMinute](https://github.com/d3/d3-time#minute) - the minute interval.
-* [d3.timeHour](https://github.com/d3/d3-time#hour), [d3.utcHour](https://github.com/d3/d3-time#hour) - the hour interval.
-* [d3.timeDay](https://github.com/d3/d3-time#day), [d3.utcDay](https://github.com/d3/d3-time#day) - the day interval.
-* [d3.timeWeek](https://github.com/d3/d3-time#week), [d3.utcWeek](https://github.com/d3/d3-time#week) - aliases for Sunday and UTC Sunday.
-* [d3.timeSunday](https://github.com/d3/d3-time#sunday), [d3.utcSunday](https://github.com/d3/d3-time#sunday) - the week interval, starting on Sunday.
-* [d3.timeMonday](https://github.com/d3/d3-time#monday), [d3.utcMonday](https://github.com/d3/d3-time#monday) - the week interval, starting on Monday.
-* [d3.timeTuesday](https://github.com/d3/d3-time#tuesday), [d3.utcTuesday](https://github.com/d3/d3-time#tuesday) - the week interval, starting on Tuesday.
-* [d3.timeWednesday](https://github.com/d3/d3-time#wednesday), [d3.utcWednesday](https://github.com/d3/d3-time#wednesday) - the week interval, starting on Wednesday.
-* [d3.timeThursday](https://github.com/d3/d3-time#thursday), [d3.utcThursday](https://github.com/d3/d3-time#thursday) - the week interval, starting on Thursday.
-* [d3.timeFriday](https://github.com/d3/d3-time#friday), [d3.utcFriday](https://github.com/d3/d3-time#friday) - the week interval, starting on Friday.
-* [d3.timeSaturday](https://github.com/d3/d3-time#saturday), [d3.utcSaturday](https://github.com/d3/d3-time#saturday) - the week interval, starting on Saturday.
-* [d3.timeMonth](https://github.com/d3/d3-time#month), [d3.utcMonth](https://github.com/d3/d3-time#month) - the month interval.
-* [d3.timeYear](https://github.com/d3/d3-time#year), [d3.utcYear](https://github.com/d3/d3-time#year) - the year interval.
 * [d3.timeMilliseconds](https://github.com/d3/d3-time#millisecond), [d3.utcMilliseconds](https://github.com/d3/d3-time#millisecond) - aliases for millisecond.range.
+* [d3.timeSecond](https://github.com/d3/d3-time#second), [d3.utcSecond](https://github.com/d3/d3-time#second) - the second interval.
 * [d3.timeSeconds](https://github.com/d3/d3-time#second), [d3.utcSeconds](https://github.com/d3/d3-time#second) - aliases for second.range.
+* [d3.timeMinute](https://github.com/d3/d3-time#minute), [d3.utcMinute](https://github.com/d3/d3-time#minute) - the minute interval.
 * [d3.timeMinutes](https://github.com/d3/d3-time#minute), [d3.utcMinutes](https://github.com/d3/d3-time#minute) - aliases for minute.range.
+* [d3.timeHour](https://github.com/d3/d3-time#hour), [d3.utcHour](https://github.com/d3/d3-time#hour) - the hour interval.
 * [d3.timeHours](https://github.com/d3/d3-time#hour), [d3.utcHours](https://github.com/d3/d3-time#hour) - aliases for hour.range.
+* [d3.timeDay](https://github.com/d3/d3-time#day), [d3.utcDay](https://github.com/d3/d3-time#day) - the day interval.
 * [d3.timeDays](https://github.com/d3/d3-time#day), [d3.utcDays](https://github.com/d3/d3-time#day) - aliases for day.range.
+* [d3.timeWeek](https://github.com/d3/d3-time#week), [d3.utcWeek](https://github.com/d3/d3-time#week) - aliases for Sunday and UTC Sunday.
 * [d3.timeWeeks](https://github.com/d3/d3-time#week), [d3.utcWeeks](https://github.com/d3/d3-time#week) - aliases for week.range.
+* [d3.timeSunday](https://github.com/d3/d3-time#sunday), [d3.utcSunday](https://github.com/d3/d3-time#sunday) - the week interval, starting on Sunday.
 * [d3.timeSundays](https://github.com/d3/d3-time#sunday), [d3.utcSundays](https://github.com/d3/d3-time#sunday) - aliases for sunday.range.
+* [d3.timeMonday](https://github.com/d3/d3-time#monday), [d3.utcMonday](https://github.com/d3/d3-time#monday) - the week interval, starting on Monday.
 * [d3.timeMondays](https://github.com/d3/d3-time#monday), [d3.utcMondays](https://github.com/d3/d3-time#monday) - aliases for monday.range.
+* [d3.timeTuesday](https://github.com/d3/d3-time#tuesday), [d3.utcTuesday](https://github.com/d3/d3-time#tuesday) - the week interval, starting on Tuesday.
 * [d3.timeTuesdays](https://github.com/d3/d3-time#tuesday), [d3.utcTuesdays](https://github.com/d3/d3-time#tuesday) - aliases for tuesday.range.
+* [d3.timeWednesday](https://github.com/d3/d3-time#wednesday), [d3.utcWednesday](https://github.com/d3/d3-time#wednesday) - the week interval, starting on Wednesday.
 * [d3.timeWednesdays](https://github.com/d3/d3-time#wednesday), [d3.utcWednesdays](https://github.com/d3/d3-time#wednesday) - aliases for wednesday.range.
+* [d3.timeThursday](https://github.com/d3/d3-time#thursday), [d3.utcThursday](https://github.com/d3/d3-time#thursday) - the week interval, starting on Thursday.
 * [d3.timeThursdays](https://github.com/d3/d3-time#thursday), [d3.utcThursdays](https://github.com/d3/d3-time#thursday) - aliases for thursday.range.
+* [d3.timeFriday](https://github.com/d3/d3-time#friday), [d3.utcFriday](https://github.com/d3/d3-time#friday) - the week interval, starting on Friday.
 * [d3.timeFridays](https://github.com/d3/d3-time#friday), [d3.utcFridays](https://github.com/d3/d3-time#friday) - aliases for friday.range.
+* [d3.timeSaturday](https://github.com/d3/d3-time#saturday), [d3.utcSaturday](https://github.com/d3/d3-time#saturday) - the week interval, starting on Saturday.
 * [d3.timeSaturdays](https://github.com/d3/d3-time#saturday), [d3.utcSaturdays](https://github.com/d3/d3-time#saturday) - aliases for saturday.range.
+* [d3.timeMonth](https://github.com/d3/d3-time#month), [d3.utcMonth](https://github.com/d3/d3-time#month) - the month interval.
 * [d3.timeMonths](https://github.com/d3/d3-time#month), [d3.utcMonths](https://github.com/d3/d3-time#month) - aliases for month.range.
+* [d3.timeYear](https://github.com/d3/d3-time#year), [d3.utcYear](https://github.com/d3/d3-time#year) - the year interval.
 * [d3.timeYears](https://github.com/d3/d3-time#year), [d3.utcYears](https://github.com/d3/d3-time#year) - aliases for year.range.
