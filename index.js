@@ -339,3 +339,16 @@ export {
   inferno as scaleInferno,
   plasma as scalePlasma
 } from "d3-scale";
+
+export {
+  mouse,
+  namespace,
+  namespaces,
+  requote,
+  select,
+  selectAll,
+  selection,
+  touch,
+  touches,
+  event
+} from "d3-selection";

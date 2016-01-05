@@ -46,6 +46,7 @@
     "d3-random": "0.1.1",
     "d3-request": "0.2.4",
     "d3-scale": "0.4.0",
+    "d3-selection": "0.4.12",
     "d3-shape": "0.3.0",
     "d3-time": "0.1.1",
     "d3-time-format": "0.2.1",
