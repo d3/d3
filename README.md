@@ -61,7 +61,7 @@ Bin discrete samples into continuous, non-overlapping intervals.
 * [*histogram*.thresholds](https://github.com/d3/d3-array#histogram_thresholds) - specify how values are divided into bins.
 * [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
 * [d3.thresholdScott](https://github.com/d3/d3-array#thresholdScott) - Scott’s normal reference binning rule.
-* [d3.thresholdSturges](https://github.com/d3/d3-array#thresholdSturges) - Sturge’s binning formula.
+* [d3.thresholdSturges](https://github.com/d3/d3-array#thresholdSturges) - Sturges’ binning formula.
 
 #### [Search](https://github.com/d3/d3-array#search)
 
