@@ -440,11 +440,6 @@ Map a discrete domain to a discrete, fixed categorical color range.
 
 ## [Selections](https://github.com/d3/d3-selection)
 
-d3.mouse - get the mouse position relative to a specified container.
-d3.touch - get a touch position relative to a specified container.
-d3.touches - get the touch positions relative to a specified container.
-
-
 Transform the DOM by selecting elements and joining to data.
 
 * [d3.select](https://github.com/d3/d3-selection#select) - select an element from the document.
