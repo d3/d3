@@ -303,7 +303,7 @@ Generate random numbers from various distributions.
 
 A convenient alternative to asynchronous XMLHttpRequest.
 
-* [d3.request](https://github.com/d3/d3-request#request) - construct a new asynchronous request.
+* [d3.request](https://github.com/d3/d3-request#request) - make an asynchronous request.
 * [*request*.header](https://github.com/d3/d3-request#request_header) - set a request header.
 * [*request*.mimeType](https://github.com/d3/d3-request#request_mimeType) - set the MIME type.
 * [*request*.timeout](https://github.com/d3/d3-request#request_timeout) - set the timeout in milliseconds.
@@ -314,12 +314,12 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [*request*.send](https://github.com/d3/d3-request#request_send) - set the request.
 * [*request*.abort](https://github.com/d3/d3-request#request_abort) - abort the request.
 * [*request*.on](https://github.com/d3/d3-request#request_on) - listen for a request event.
-* [d3.requestCsv](https://github.com/d3/d3-request#requestCsv) - request a comma-separated values (CSV) file.
-* [d3.requestHtml](https://github.com/d3/d3-request#requestHtml) - request an HTML file.
-* [d3.requestJson](https://github.com/d3/d3-request#requestJson) - request a JSON file.
-* [d3.requestText](https://github.com/d3/d3-request#requestText) - request a plain text file.
-* [d3.requestTsv](https://github.com/d3/d3-request#requestTsv) - request a tab-separated values (TSV) file.
-* [d3.requestXml](https://github.com/d3/d3-request#requestXml) - request an XML file.
+* [d3.requestCsv](https://github.com/d3/d3-request#requestCsv) - get a comma-separated values (CSV) file.
+* [d3.requestHtml](https://github.com/d3/d3-request#requestHtml) - get an HTML file.
+* [d3.requestJson](https://github.com/d3/d3-request#requestJson) - get a JSON file.
+* [d3.requestText](https://github.com/d3/d3-request#requestText) - get a plain text file.
+* [d3.requestTsv](https://github.com/d3/d3-request#requestTsv) - get a tab-separated values (TSV) file.
+* [d3.requestXml](https://github.com/d3/d3-request#requestXml) - get an XML file.
 
 ## [Scales](https://github.com/d3/d3-scale)
 
@@ -434,7 +434,41 @@ Map a discrete domain to a discrete, fixed categorical color range.
 
 ## [Selections](https://github.com/d3/d3-selection)
 
-…
+* [d3.mouse](https://github.com/d3/d3-selection#mouse) -
+* [d3.namespace](https://github.com/d3/d3-selection#namespace) -
+* [d3.namespaces](https://github.com/d3/d3-selection#namespaces) -
+* [d3.requote](https://github.com/d3/d3-selection#requote) -
+* [d3.select](https://github.com/d3/d3-selection#select) -
+* [d3.selectAll](https://github.com/d3/d3-selection#selectAll) -
+* [d3.selection](https://github.com/d3/d3-selection#selection) -
+* [*selection*.select](https://github.com/d3/d3-selection#selection_select) -
+* [*selection*.selectAll](https://github.com/d3/d3-selection#selection_selectAll) -
+* [*selection*.filter](https://github.com/d3/d3-selection#selection_filter) -
+* [*selection*.data](https://github.com/d3/d3-selection#selection_data) -
+* [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) -
+* [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) -
+* [*selection*.order](https://github.com/d3/d3-selection#selection_order) -
+* [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) -
+* [*selection*.call](https://github.com/d3/d3-selection#selection_call) -
+* [*selection*.nodes](https://github.com/d3/d3-selection#selection_nodes) -
+* [*selection*.node](https://github.com/d3/d3-selection#selection_node) -
+* [*selection*.size](https://github.com/d3/d3-selection#selection_size) -
+* [*selection*.empty](https://github.com/d3/d3-selection#selection_empty) -
+* [*selection*.each](https://github.com/d3/d3-selection#selection_each) -
+* [*selection*.attr](https://github.com/d3/d3-selection#selection_attr) -
+* [*selection*.style](https://github.com/d3/d3-selection#selection_style) -
+* [*selection*.property](https://github.com/d3/d3-selection#selection_property) -
+* [*selection*.classed](https://github.com/d3/d3-selection#selection_classed) -
+* [*selection*.text](https://github.com/d3/d3-selection#selection_text) -
+* [*selection*.html](https://github.com/d3/d3-selection#selection_html) -
+* [*selection*.append](https://github.com/d3/d3-selection#selection_append) -
+* [*selection*.remove](https://github.com/d3/d3-selection#selection_remove) -
+* [*selection*.datum](https://github.com/d3/d3-selection#selection_datum) -
+* [*selection*.on](https://github.com/d3/d3-selection#selection_on) -
+* [*selection*.dispatch](https://github.com/d3/d3-selection#selection_dispatch) -
+* [d3.touch](https://github.com/d3/d3-selection#touch) -
+* [d3.touches](https://github.com/d3/d3-selection#touches) -
+* [d3.event](https://github.com/d3/d3-selection#event) -
 
 ## [Shapes](https://github.com/d3/d3-shape)
 
