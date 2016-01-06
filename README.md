@@ -54,7 +54,7 @@ Methods for computing basic summary statistics.
 
 Bin discrete samples into continuous, non-overlapping intervals.
 
-* [d3.histogram](https://github.com/d3/d3-array#histogram) - constructs a new histogram generator.
+* [d3.histogram](https://github.com/d3/d3-array#histogram) - create a new histogram generator.
 * [*histogram*](https://github.com/d3/d3-array#_histogram) - compute the histogram for the given array of samples.
 * [*histogram*.value](https://github.com/d3/d3-array#histogram_value) - specify a value accessor for each sample.
 * [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) - specify the interval of observable values.
@@ -82,7 +82,7 @@ Methods for searching arrays for a specific element.
 Methods for transforming arrays and for generating new arrays.
 
 * [d3.merge](https://github.com/d3/d3-array#merge) - merge multiple arrays into one array.
-* [d3.pairs](https://github.com/d3/d3-array#pairs) - returns an array of adjacent pairs of elements.
+* [d3.pairs](https://github.com/d3/d3-array#pairs) - create an array of adjacent pairs of elements.
 * [d3.permute](https://github.com/d3/d3-array#permute) - reorder an array of elements according to an array of indexes.
 * [d3.shuffle](https://github.com/d3/d3-array#shuffle) - randomize the order of an array.
 * [d3.ticks](https://github.com/d3/d3-array#ticks) - generate representative values from a numeric interval.
@@ -105,38 +105,38 @@ Methods for converting associative arrays (objects) to arrays.
 
 Like ES6 Map, but with string keys and a few other differences.
 
-* [d3.map](https://github.com/d3/d3-array#map) - constructs a new, empty map.
+* [d3.map](https://github.com/d3/d3-array#map) - create a new, empty map.
 * [*map*.has](https://github.com/d3/d3-array#map_has) - returns true if the map contains the given key.
-* [*map*.get](https://github.com/d3/d3-array#map_get) - returns the value for the given key.
-* [*map*.set](https://github.com/d3/d3-array#map_set) - sets the value for the given key.
-* [*map*.remove](https://github.com/d3/d3-array#map_remove) - removes the entry for given key.
-* [*map*.clear](https://github.com/d3/d3-array#map_clear) - removes all entries.
-* [*map*.keys](https://github.com/d3/d3-array#map_keys) - returns the map’s array of keys.
-* [*map*.values](https://github.com/d3/d3-array#map_values) - returns the map’s array of values.
-* [*map*.entries](https://github.com/d3/d3-array#map_entries) - returns the map’s array of entries (key-values objects).
-* [*map*.each](https://github.com/d3/d3-array#map_each) - calls the given function for each entry in the map.
+* [*map*.get](https://github.com/d3/d3-array#map_get) - get the value for the given key.
+* [*map*.set](https://github.com/d3/d3-array#map_set) - set the value for the given key.
+* [*map*.remove](https://github.com/d3/d3-array#map_remove) - remove the entry for given key.
+* [*map*.clear](https://github.com/d3/d3-array#map_clear) - remove all entries.
+* [*map*.keys](https://github.com/d3/d3-array#map_keys) - get the array of keys.
+* [*map*.values](https://github.com/d3/d3-array#map_values) - get the array of values.
+* [*map*.entries](https://github.com/d3/d3-array#map_entries) - get the array of entries (key-values objects).
+* [*map*.each](https://github.com/d3/d3-array#map_each) - call a function for each entry.
 * [*map*.empty](https://github.com/d3/d3-array#map_empty) - returns false if the map has at least one entry.
-* [*map*.size](https://github.com/d3/d3-array#map_size) - returns the number of entries in the map.
+* [*map*.size](https://github.com/d3/d3-array#map_size) - compute the number of entries.
 
 #### [Sets](https://github.com/d3/d3-array#sets)
 
 Like ES6 Set, but with string keys and a few other differences.
 
-* [d3.set](https://github.com/d3/d3-array#set) - constructs a new, empty set.
+* [d3.set](https://github.com/d3/d3-array#set) - create a new, empty set.
 * [*set*.has](https://github.com/d3/d3-array#set_has) - returns true if the set contains the given value.
-* [*set*.add](https://github.com/d3/d3-array#set_add) - adds the given value.
-* [*set*.remove](https://github.com/d3/d3-array#set_remove) - removes the given value.
-* [*set*.clear](https://github.com/d3/d3-array#set_clear) - removes all values.
-* [*set*.values](https://github.com/d3/d3-array#set_values) - returns the set’s array of values.
-* [*set*.each](https://github.com/d3/d3-array#set_each) - calls the given function for each value in the set.
+* [*set*.add](https://github.com/d3/d3-array#set_add) - add the given value.
+* [*set*.remove](https://github.com/d3/d3-array#set_remove) - remove the given value.
+* [*set*.clear](https://github.com/d3/d3-array#set_clear) - remove all values.
+* [*set*.values](https://github.com/d3/d3-array#set_values) - get the array of values.
+* [*set*.each](https://github.com/d3/d3-array#set_each) - call a function for each value.
 * [*set*.empty](https://github.com/d3/d3-array#set_empty) - returns true if the set has at least one value.
-* [*set*.size](https://github.com/d3/d3-array#set_size) - returns the number of values in the set.
+* [*set*.size](https://github.com/d3/d3-array#set_size) - compute the number of values.
 
 #### [Nests](https://github.com/d3/d3-array#nests)
 
 Group data into arbitrary hierarchies.
 
-* [d3.nest](https://github.com/d3/d3-array#nest) - constructs a new nest generator.
+* [d3.nest](https://github.com/d3/d3-array#nest) - create a new nest generator.
 * [*nest*.key](https://github.com/d3/d3-array#nest_key) - add a level to the nest hierarchy.
 * [*nest*.sortKeys](https://github.com/d3/d3-array#nest_sortKeys) - sort the current nest level by key.
 * [*nest*.sortValues](https://github.com/d3/d3-array#nest_sortValues) - sort the leaf nest level by value.
@@ -149,23 +149,23 @@ Group data into arbitrary hierarchies.
 
 Color manipulation and color space conversion.
 
-* [d3.color](https://github.com/d3/d3-color#color) - parses the given CSS color specifier.
-* [*color*.rgb](https://github.com/d3/d3-color#color_rgb) - returns the RGB equivalent of this color.
-* [*color*.brighter](https://github.com/d3/d3-color#color_brighter) - returns a brighter copy of this color.
-* [*color*.darker](https://github.com/d3/d3-color#color_darker) - returns a darker copy of this color.
+* [d3.color](https://github.com/d3/d3-color#color) - parse the given CSS color specifier.
+* [*color*.rgb](https://github.com/d3/d3-color#color_rgb) - compute the RGB equivalent of this color.
+* [*color*.brighter](https://github.com/d3/d3-color#color_brighter) - create a brighter copy of this color.
+* [*color*.darker](https://github.com/d3/d3-color#color_darker) - create a darker copy of this color.
 * [*color*.displayable](https://github.com/d3/d3-color#color_displayable) - returns true if the color is displayable on standard hardware.
-* [*color*.toString](https://github.com/d3/d3-color#color_toString) - formats the color as an RGB hexadecimal string.
-* [d3.rgb](https://github.com/d3/d3-color#rgb) - constructs a new RGB color.
-* [d3.hsl](https://github.com/d3/d3-color#hsl) - constructs a new HSL color.
-* [d3.lab](https://github.com/d3/d3-color#lab) - constructs a new Lab color.
-* [d3.hcl](https://github.com/d3/d3-color#hcl) - constructs a new HCL color.
-* [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) - constructs a new Cubehelix color.
+* [*color*.toString](https://github.com/d3/d3-color#color_toString) - format the color as an RGB hexadecimal string.
+* [d3.rgb](https://github.com/d3/d3-color#rgb) - create a new RGB color.
+* [d3.hsl](https://github.com/d3/d3-color#hsl) - create a new HSL color.
+* [d3.lab](https://github.com/d3/d3-color#lab) - create a new Lab color.
+* [d3.hcl](https://github.com/d3/d3-color#hcl) - create a new HCL color.
+* [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) - create a new Cubehelix color.
 
 ## [Delimiter-Separated Values](https://github.com/d3/d3-dsv)
 
 Parse and format delimiter-separated values, most commonly CSV and TSV.
 
-* [d3.dsv](https://github.com/d3/d3-dsv#dsv) - constructs a new parser and formatter for the given delimiter.
+* [d3.dsv](https://github.com/d3/d3-dsv#dsv) - create a new parser and formatter for the given delimiter.
 * [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) - parse the given string, returning an array of objects.
 * [*dsv*.parseRows](https://github.com/d3/d3-dsv#dsv_parseRows) - parse the given string, returning an array of rows.
 * [*dsv*.format](https://github.com/d3/d3-dsv#dsv_format) - format the given array of objects.
@@ -271,15 +271,15 @@ Format numbers for human consumption.
 * [d3.formatRuRu](https://github.com/d3/d3-format#localeRuRu) - the Russian (Russia) locale.
 * [d3.formatSvSe](https://github.com/d3/d3-format#localeSvSe) - the Swedish (Sweden) locale.
 * [d3.formatZhCn](https://github.com/d3/d3-format#localeZhCn) - the Chinese (China) locale.
-* [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) - compute precision for fixed-point notation.
-* [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) - compute precision for SI-prefix notation.
+* [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) - compute decimal precision for fixed-point notation.
+* [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) - compute decimal precision for SI-prefix notation.
 * [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) - compute significant digits for rounded notation.
 
 ## [Paths](https://github.com/d3/d3-path)
 
 Serialize Canvas path commands to SVG.
 
-* [d3.path](https://github.com/d3/d3-path#path) - constructs a new path serializer.
+* [d3.path](https://github.com/d3/d3-path#path) - create a new path serializer.
 * [*path*.moveTo](https://github.com/d3/d3-path#path_moveTo) - move to the given point.
 * [*path*.closePath](https://github.com/d3/d3-path#path_closePath) - close the current subpath.
 * [*path*.lineTo](https://github.com/d3/d3-path#path_lineTo) - draw a straight line segment.
@@ -329,74 +329,72 @@ A convenient alternative to asynchronous XMLHttpRequest.
 
 Map a continuous, quantitative domain to a continuous range.
 
-* [*continuous*](https://github.com/d3/d3-scale#continuous) -
-* [*continuous*.invert](https://github.com/d3/d3-scale#continuous_invert) -
-* [*continuous*.domain](https://github.com/d3/d3-scale#continuous_domain) -
-* [*continuous*.range](https://github.com/d3/d3-scale#continuous_range) -
-* [*continuous*.rangeRound](https://github.com/d3/d3-scale#continuous_rangeRound) -
-* [*continuous*.clamp](https://github.com/d3/d3-scale#continuous_clamp) -
-* [*continuous*.interpolate](https://github.com/d3/d3-scale#continuous_interpolate) -
-* [*continuous*.ticks](https://github.com/d3/d3-scale#continuous_ticks) -
-* [*continuous*.tickFormat](https://github.com/d3/d3-scale#continuous_tickFormat) -
-* [*continuous*.nice](https://github.com/d3/d3-scale#continuous_nice) -
-* [*continuous*.copy](https://github.com/d3/d3-scale#continuous_copy) -
-* [d3.scaleLinear](https://github.com/d3/d3-scale#linear) -
-* [d3.scalePow](https://github.com/d3/d3-scale#pow) -
-* [*pow*.exponent](https://github.com/d3/d3-scale#pow_exponent) -
-* [d3.scaleSqrt](https://github.com/d3/d3-scale#sqrt) -
-* [d3.scaleLog](https://github.com/d3/d3-scale#log) -
-* [*log*.base](https://github.com/d3/d3-scale#log_base) -
-* [*log*.nice](https://github.com/d3/d3-scale#log_nice) -
-* [*log*.ticks](https://github.com/d3/d3-scale#log_ticks) -
-* [*log*.tickFormat](https://github.com/d3/d3-scale#log_tickFormat) -
-* [d3.scaleIdentity](https://github.com/d3/d3-scale#identity) -
-* [d3.scaleTime](https://github.com/d3/d3-scale#time) -
-* [*time*.ticks](https://github.com/d3/d3-scale#time_ticks) -
-* [*time*.ticks](https://github.com/d3/d3-scale#time_ticks) -
-* [*time*.tickFormat](https://github.com/d3/d3-scale#time_tickFormat) -
-* [*time*.nice](https://github.com/d3/d3-scale#time_nice) -
-* [*time*.nice](https://github.com/d3/d3-scale#time_nice) -
-* [d3.scaleUtc](https://github.com/d3/d3-scale#utcTime) -
+* [*continuous*](https://github.com/d3/d3-scale#continuous) - compute the range value corresponding to a given domain value.
+* [*continuous*.invert](https://github.com/d3/d3-scale#continuous_invert) - compute the domain value corresponding to a given range value.
+* [*continuous*.domain](https://github.com/d3/d3-scale#continuous_domain) - set the input domain.
+* [*continuous*.range](https://github.com/d3/d3-scale#continuous_range) - set the output range.
+* [*continuous*.rangeRound](https://github.com/d3/d3-scale#continuous_rangeRound) - set the output range and enable rounding.
+* [*continuous*.clamp](https://github.com/d3/d3-scale#continuous_clamp) - enable clamping to the domain or range.
+* [*continuous*.interpolate](https://github.com/d3/d3-scale#continuous_interpolate) - set the output interpolator.
+* [*continuous*.ticks](https://github.com/d3/d3-scale#continuous_ticks) - compute representative values from the domain.
+* [*continuous*.tickFormat](https://github.com/d3/d3-scale#continuous_tickFormat) - format ticks for human consumption.
+* [*continuous*.nice](https://github.com/d3/d3-scale#continuous_nice) - extend the domain to nice round numbers.
+* [*continuous*.copy](https://github.com/d3/d3-scale#continuous_copy) - create a copy of this scale.
+* [d3.scaleLinear](https://github.com/d3/d3-scale#linear) - create a quantitative linear scale.
+* [d3.scalePow](https://github.com/d3/d3-scale#pow) - create a quantitative power scale.
+* [*pow*.exponent](https://github.com/d3/d3-scale#pow_exponent) - set the power exponent.
+* [d3.scaleSqrt](https://github.com/d3/d3-scale#sqrt) - create a quantitative power scale with exponent 0.5.
+* [d3.scaleLog](https://github.com/d3/d3-scale#log) - create a quantitative logarithmic scale.
+* [*log*.base](https://github.com/d3/d3-scale#log_base) - set the logarithm base.
+* [*log*.nice](https://github.com/d3/d3-scale#log_nice) - extend the domain to nice round numbers.
+* [*log*.ticks](https://github.com/d3/d3-scale#log_ticks) - compute representative values from the domain.
+* [*log*.tickFormat](https://github.com/d3/d3-scale#log_tickFormat) - format ticks for human consumption.
+* [d3.scaleIdentity](https://github.com/d3/d3-scale#identity) - create a quantitative identity scale.
+* [d3.scaleTime](https://github.com/d3/d3-scale#time) - create a linear scale for time.
+* [d3.scaleUtc](https://github.com/d3/d3-scale#utcTime) - create a linear scale for UTC.
+* [*time*.ticks](https://github.com/d3/d3-scale#time_ticks) - compute representative values from the domain.
+* [*time*.tickFormat](https://github.com/d3/d3-scale#time_tickFormat) - format ticks for human consumption.
+* [*time*.nice](https://github.com/d3/d3-scale#time_nice) - extend the domain to nice round times.
 
 ### [Sequential](https://github.com/d3/d3-scale#sequential-color-scales)
 
 Map a continuous, quantitative domain to a continuous, fixed color ramp.
 
-* [d3.scaleViridis](https://github.com/d3/d3-scale#viridis) -
-* [d3.scaleInferno](https://github.com/d3/d3-scale#inferno) -
-* [d3.scaleMagma](https://github.com/d3/d3-scale#magma) -
-* [d3.scalePlasma](https://github.com/d3/d3-scale#plasma) -
-* [d3.scaleWarm](https://github.com/d3/d3-scale#warm) -
-* [d3.scaleCool](https://github.com/d3/d3-scale#cool) -
-* [d3.scaleRainbow](https://github.com/d3/d3-scale#rainbow) -
-* [d3.scaleCubehelix](https://github.com/d3/d3-scale#cubehelix) -
+* [d3.scaleViridis](https://github.com/d3/d3-scale#viridis) - a dark-to-light color scheme.
+* [d3.scaleInferno](https://github.com/d3/d3-scale#inferno) - a dark-to-light color scheme.
+* [d3.scaleMagma](https://github.com/d3/d3-scale#magma) - a dark-to-light color scheme.
+* [d3.scalePlasma](https://github.com/d3/d3-scale#plasma) - a dark-to-light color scheme.
+* [d3.scaleWarm](https://github.com/d3/d3-scale#warm) - a rotating-hue color scheme.
+* [d3.scaleCool](https://github.com/d3/d3-scale#cool) - a rotating-hue color scheme.
+* [d3.scaleRainbow](https://github.com/d3/d3-scale#rainbow) - a cyclical rotating-hue color scheme.
+* [d3.scaleCubehelix](https://github.com/d3/d3-scale#cubehelix) - a dark-to-light, rotating-hue color scheme.
 
 ### [Quantize](https://github.com/d3/d3-scale#quantize-scales)
 
 Map a continuous, quantitative domain to a discrete range.
 
-* [d3.scaleQuantize](https://github.com/d3/d3-scale#quantize) -
-* [*quantize*](https://github.com/d3/d3-scale#_quantize) -
-* [*quantize*.invertExtent](https://github.com/d3/d3-scale#quantize_invertExtent) -
-* [*quantize*.domain](https://github.com/d3/d3-scale#quantize_domain) -
-* [*quantize*.range](https://github.com/d3/d3-scale#quantize_range) -
-* [*quantize*.nice](https://github.com/d3/d3-scale#quantize_nice) -
-* [*quantize*.ticks](https://github.com/d3/d3-scale#quantize_ticks) -
-* [*quantize*.tickFormat](https://github.com/d3/d3-scale#quantize_tickFormat) -
-* [*quantize*.copy](https://github.com/d3/d3-scale#quantize_copy) -
-* [d3.scaleQuantile](https://github.com/d3/d3-scale#quantile) -
-* [*quantile*](https://github.com/d3/d3-scale#_quantile) -
-* [*quantile*.invertExtent](https://github.com/d3/d3-scale#quantile_invertExtent) -
-* [*quantile*.domain](https://github.com/d3/d3-scale#quantile_domain) -
-* [*quantile*.range](https://github.com/d3/d3-scale#quantile_range) -
-* [*quantile*.quantiles](https://github.com/d3/d3-scale#quantile_quantiles) -
-* [*quantile*.copy](https://github.com/d3/d3-scale#quantile_copy) -
-* [d3.scaleThreshold](https://github.com/d3/d3-scale#threshold) -
-* [*threshold*](https://github.com/d3/d3-scale#_threshold) -
-* [*threshold*.invertExtent](https://github.com/d3/d3-scale#threshold_invertExtent) -
-* [*threshold*.domain](https://github.com/d3/d3-scale#threshold_domain) -
-* [*threshold*.range](https://github.com/d3/d3-scale#threshold_range) -
-* [*threshold*.copy](https://github.com/d3/d3-scale#threshold_copy) -
+* [d3.scaleQuantize](https://github.com/d3/d3-scale#quantize) - create a uniform quantizing linear scale.
+* [*quantize*](https://github.com/d3/d3-scale#_quantize) - compute the domain value corresponding to a given range value.
+* [*quantize*.invertExtent](https://github.com/d3/d3-scale#quantize_invertExtent) - compute the domain values corresponding to a given domain value.
+* [*quantize*.domain](https://github.com/d3/d3-scale#quantize_domain) - set the input domain.
+* [*quantize*.range](https://github.com/d3/d3-scale#quantize_range) - set the output range.
+* [*quantize*.nice](https://github.com/d3/d3-scale#quantize_nice) - extend the domain to nice round numbers.
+* [*quantize*.ticks](https://github.com/d3/d3-scale#quantize_ticks) - compute representative values from the domain.
+* [*quantize*.tickFormat](https://github.com/d3/d3-scale#quantize_tickFormat) - format ticks for human consumption.
+* [*quantize*.copy](https://github.com/d3/d3-scale#quantize_copy) - create a copy of this scale.
+* [d3.scaleQuantile](https://github.com/d3/d3-scale#quantile) - create a quantile quantizing linear scale.
+* [*quantile*](https://github.com/d3/d3-scale#_quantile) - compute the domain value corresponding to a given range value.
+* [*quantile*.invertExtent](https://github.com/d3/d3-scale#quantile_invertExtent) - compute the domain values corresponding to a given domain value.
+* [*quantile*.domain](https://github.com/d3/d3-scale#quantile_domain) - set the input domain.
+* [*quantile*.range](https://github.com/d3/d3-scale#quantile_range) - set the output range.
+* [*quantile*.quantiles](https://github.com/d3/d3-scale#quantile_quantiles) - get the quantile thresholds.
+* [*quantile*.copy](https://github.com/d3/d3-scale#quantile_copy) - create a copy of this scale.
+* [d3.scaleThreshold](https://github.com/d3/d3-scale#threshold) - create an arbitrary quantizing linear scale.
+* [*threshold*](https://github.com/d3/d3-scale#_threshold) - compute the domain value corresponding to a given range value.
+* [*threshold*.invertExtent](https://github.com/d3/d3-scale#threshold_invertExtent) - compute the domain values corresponding to a given domain value.
+* [*threshold*.domain](https://github.com/d3/d3-scale#threshold_domain) - set the input domain.
+* [*threshold*.range](https://github.com/d3/d3-scale#threshold_range) - set the output range.
+* [*threshold*.copy](https://github.com/d3/d3-scale#threshold_copy) - create a copy of this scale.
 
 ### [Ordinal](https://github.com/d3/d3-scale#ordinal-scales)
 
