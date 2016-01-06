@@ -278,7 +278,7 @@ export {
   formatSpecifier,
   precisionFixed,
   precisionPrefix,
-  precisionRound,
+  precisionRound
 } from "d3-format";
 
 export {
