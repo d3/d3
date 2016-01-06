@@ -1,4 +1,4 @@
-# d3
+# D3: Data-Driven Documents
 
 This branch contains the prerelease of D3 4.0. This API is unstable and may change at any point prior to the release.
 
