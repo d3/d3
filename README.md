@@ -374,8 +374,8 @@ Map a continuous, quantitative domain to a continuous, fixed color ramp.
 Map a continuous, quantitative domain to a discrete range.
 
 * [d3.scaleQuantize](https://github.com/d3/d3-scale#quantize) - create a uniform quantizing linear scale.
-* [*quantize*](https://github.com/d3/d3-scale#_quantize) - compute the domain value corresponding to a given range value.
-* [*quantize*.invertExtent](https://github.com/d3/d3-scale#quantize_invertExtent) - compute the domain values corresponding to a given domain value.
+* [*quantize*](https://github.com/d3/d3-scale#_quantize) - compute the range value corresponding to a given domain value.
+* [*quantize*.invertExtent](https://github.com/d3/d3-scale#quantize_invertExtent) - compute the domain values corresponding to a given range value.
 * [*quantize*.domain](https://github.com/d3/d3-scale#quantize_domain) - set the input domain.
 * [*quantize*.range](https://github.com/d3/d3-scale#quantize_range) - set the output range.
 * [*quantize*.nice](https://github.com/d3/d3-scale#quantize_nice) - extend the domain to nice round numbers.
@@ -383,15 +383,15 @@ Map a continuous, quantitative domain to a discrete range.
 * [*quantize*.tickFormat](https://github.com/d3/d3-scale#quantize_tickFormat) - format ticks for human consumption.
 * [*quantize*.copy](https://github.com/d3/d3-scale#quantize_copy) - create a copy of this scale.
 * [d3.scaleQuantile](https://github.com/d3/d3-scale#quantile) - create a quantile quantizing linear scale.
-* [*quantile*](https://github.com/d3/d3-scale#_quantile) - compute the domain value corresponding to a given range value.
-* [*quantile*.invertExtent](https://github.com/d3/d3-scale#quantile_invertExtent) - compute the domain values corresponding to a given domain value.
+* [*quantile*](https://github.com/d3/d3-scale#_quantile) - compute the range value corresponding to a given domain value.
+* [*quantile*.invertExtent](https://github.com/d3/d3-scale#quantile_invertExtent) - compute the domain values corresponding to a given range value.
 * [*quantile*.domain](https://github.com/d3/d3-scale#quantile_domain) - set the input domain.
 * [*quantile*.range](https://github.com/d3/d3-scale#quantile_range) - set the output range.
 * [*quantile*.quantiles](https://github.com/d3/d3-scale#quantile_quantiles) - get the quantile thresholds.
 * [*quantile*.copy](https://github.com/d3/d3-scale#quantile_copy) - create a copy of this scale.
 * [d3.scaleThreshold](https://github.com/d3/d3-scale#threshold) - create an arbitrary quantizing linear scale.
-* [*threshold*](https://github.com/d3/d3-scale#_threshold) - compute the domain value corresponding to a given range value.
-* [*threshold*.invertExtent](https://github.com/d3/d3-scale#threshold_invertExtent) - compute the domain values corresponding to a given domain value.
+* [*threshold*](https://github.com/d3/d3-scale#_threshold) - compute the range value corresponding to a given domain value.
+* [*threshold*.invertExtent](https://github.com/d3/d3-scale#threshold_invertExtent) - compute the domain values corresponding to a given range value.
 * [*threshold*.domain](https://github.com/d3/d3-scale#threshold_domain) - set the input domain.
 * [*threshold*.range](https://github.com/d3/d3-scale#threshold_range) - set the output range.
 * [*threshold*.copy](https://github.com/d3/d3-scale#threshold_copy) - create a copy of this scale.
@@ -400,37 +400,37 @@ Map a continuous, quantitative domain to a discrete range.
 
 Map a discrete domain to a discrete range.
 
-* [d3.scaleOrdinal](https://github.com/d3/d3-scale#ordinal) -
-* [*ordinal*](https://github.com/d3/d3-scale#_ordinal) -
-* [*ordinal*.domain](https://github.com/d3/d3-scale#ordinal_domain) -
-* [*ordinal*.range](https://github.com/d3/d3-scale#ordinal_range) -
-* [*ordinal*.unknown](https://github.com/d3/d3-scale#ordinal_unknown) -
-* [*ordinal*.copy](https://github.com/d3/d3-scale#ordinal_copy) -
-* [d3.scaleImplicit](https://github.com/d3/d3-scale#implicit) -
-* [d3.scaleBand](https://github.com/d3/d3-scale#band) -
-* [*band*](https://github.com/d3/d3-scale#_band) -
-* [*band*.domain](https://github.com/d3/d3-scale#band_domain) -
-* [*band*.range](https://github.com/d3/d3-scale#band_range) -
-* [*band*.rangeRound](https://github.com/d3/d3-scale#band_rangeRound) -
-* [*band*.round](https://github.com/d3/d3-scale#band_round) -
-* [*band*.paddingInner](https://github.com/d3/d3-scale#band_paddingInner) -
-* [*band*.paddingOuter](https://github.com/d3/d3-scale#band_paddingOuter) -
-* [*band*.padding](https://github.com/d3/d3-scale#band_padding) -
-* [*band*.align](https://github.com/d3/d3-scale#band_align) -
-* [*band*.bandwidth](https://github.com/d3/d3-scale#band_bandwidth) -
-* [*band*.step](https://github.com/d3/d3-scale#band_step) -
-* [*band*.copy](https://github.com/d3/d3-scale#band_copy) -
-* [d3.scalePoint](https://github.com/d3/d3-scale#point) -
-* [*point*.padding](https://github.com/d3/d3-scale#point_padding) -
+* [d3.scaleOrdinal](https://github.com/d3/d3-scale#ordinal) - create an ordinal scale.
+* [*ordinal*](https://github.com/d3/d3-scale#_ordinal) - compute the range value corresponding to a given domain value.
+* [*ordinal*.domain](https://github.com/d3/d3-scale#ordinal_domain) - set the input domain.
+* [*ordinal*.range](https://github.com/d3/d3-scale#ordinal_range) - set the output range.
+* [*ordinal*.unknown](https://github.com/d3/d3-scale#ordinal_unknown) - set the output value for unknown inputs.
+* [*ordinal*.copy](https://github.com/d3/d3-scale#ordinal_copy) - create a copy of this scale.
+* [d3.scaleImplicit](https://github.com/d3/d3-scale#implicit) - a special unknown value for implicit domains.
+* [d3.scaleBand](https://github.com/d3/d3-scale#band) - create an ordinal band scale.
+* [*band*](https://github.com/d3/d3-scale#_band) - compute the band start corresponding to a given domain value.
+* [*band*.domain](https://github.com/d3/d3-scale#band_domain) - set the input domain.
+* [*band*.range](https://github.com/d3/d3-scale#band_range) - set the output range.
+* [*band*.rangeRound](https://github.com/d3/d3-scale#band_rangeRound) - set the output range and enable rounding.
+* [*band*.round](https://github.com/d3/d3-scale#band_round) - enable rounding.
+* [*band*.paddingInner](https://github.com/d3/d3-scale#band_paddingInner) - set padding between bands.
+* [*band*.paddingOuter](https://github.com/d3/d3-scale#band_paddingOuter) - set padding outside the first and last bands.
+* [*band*.padding](https://github.com/d3/d3-scale#band_padding) - set padding outside and between bands.
+* [*band*.align](https://github.com/d3/d3-scale#band_align) - set band alignment, if there is extra space.
+* [*band*.bandwidth](https://github.com/d3/d3-scale#band_bandwidth) - get the width of each band.
+* [*band*.step](https://github.com/d3/d3-scale#band_step) - get the distance between the starts of adjacent bands.
+* [*band*.copy](https://github.com/d3/d3-scale#band_copy) - create a copy of this scale.
+* [d3.scalePoint](https://github.com/d3/d3-scale#point) - create an ordinal point scale.
+* [*point*.padding](https://github.com/d3/d3-scale#point_padding) - set padding outside the first and last point.
 
 ### [Categorical](https://github.com/d3/d3-scale#categorical-color-scales)
 
 Map a discrete domain to a discrete, fixed categorical color range.
 
-* [d3.scaleCategory10](https://github.com/d3/d3-scale#category10) -
-* [d3.scaleCategory20](https://github.com/d3/d3-scale#category20) -
-* [d3.scaleCategory20b](https://github.com/d3/d3-scale#category20b) -
-* [d3.scaleCategory20c](https://github.com/d3/d3-scale#category20c) -
+* [d3.scaleCategory10](https://github.com/d3/d3-scale#category10) - a categorical scheme with 10 colors.
+* [d3.scaleCategory20](https://github.com/d3/d3-scale#category20) - a categorical scheme with 20 colors.
+* [d3.scaleCategory20b](https://github.com/d3/d3-scale#category20b) - a categorical scheme with 20 colors.
+* [d3.scaleCategory20c](https://github.com/d3/d3-scale#category20c) - a categorical scheme with 20 colors.
 
 ## [Selections](https://github.com/d3/d3-selection)
 
