@@ -440,43 +440,48 @@ Map a discrete domain to a discrete, fixed categorical color range.
 
 ## [Selections](https://github.com/d3/d3-selection)
 
+d3.mouse - get the mouse position relative to a specified container.
+d3.touch - get a touch position relative to a specified container.
+d3.touches - get the touch positions relative to a specified container.
+
+
 Transform the DOM by selecting elements and joining to data.
 
-* [d3.mouse](https://github.com/d3/d3-selection#mouse) -
-* [d3.namespace](https://github.com/d3/d3-selection#namespace) -
-* [d3.namespaces](https://github.com/d3/d3-selection#namespaces) -
-* [d3.requote](https://github.com/d3/d3-selection#requote) -
-* [d3.select](https://github.com/d3/d3-selection#select) -
-* [d3.selectAll](https://github.com/d3/d3-selection#selectAll) -
-* [d3.selection](https://github.com/d3/d3-selection#selection) -
-* [*selection*.select](https://github.com/d3/d3-selection#selection_select) -
-* [*selection*.selectAll](https://github.com/d3/d3-selection#selection_selectAll) -
-* [*selection*.filter](https://github.com/d3/d3-selection#selection_filter) -
-* [*selection*.data](https://github.com/d3/d3-selection#selection_data) -
-* [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) -
-* [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) -
-* [*selection*.order](https://github.com/d3/d3-selection#selection_order) -
-* [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) -
-* [*selection*.call](https://github.com/d3/d3-selection#selection_call) -
-* [*selection*.nodes](https://github.com/d3/d3-selection#selection_nodes) -
-* [*selection*.node](https://github.com/d3/d3-selection#selection_node) -
-* [*selection*.size](https://github.com/d3/d3-selection#selection_size) -
-* [*selection*.empty](https://github.com/d3/d3-selection#selection_empty) -
-* [*selection*.each](https://github.com/d3/d3-selection#selection_each) -
-* [*selection*.attr](https://github.com/d3/d3-selection#selection_attr) -
-* [*selection*.style](https://github.com/d3/d3-selection#selection_style) -
-* [*selection*.property](https://github.com/d3/d3-selection#selection_property) -
-* [*selection*.classed](https://github.com/d3/d3-selection#selection_classed) -
-* [*selection*.text](https://github.com/d3/d3-selection#selection_text) -
-* [*selection*.html](https://github.com/d3/d3-selection#selection_html) -
-* [*selection*.append](https://github.com/d3/d3-selection#selection_append) -
-* [*selection*.remove](https://github.com/d3/d3-selection#selection_remove) -
-* [*selection*.datum](https://github.com/d3/d3-selection#selection_datum) -
-* [*selection*.on](https://github.com/d3/d3-selection#selection_on) -
-* [*selection*.dispatch](https://github.com/d3/d3-selection#selection_dispatch) -
-* [d3.touch](https://github.com/d3/d3-selection#touch) -
-* [d3.touches](https://github.com/d3/d3-selection#touches) -
-* [d3.event](https://github.com/d3/d3-selection#event) -
+* [d3.select](https://github.com/d3/d3-selection#select) - select an element from the document.
+* [d3.selectAll](https://github.com/d3/d3-selection#selectAll) - select multiple elements from the document.
+* [d3.selection](https://github.com/d3/d3-selection#selection) - select the root document element.
+* [*selection*.attr](https://github.com/d3/d3-selection#selection_attr) - get or set an attribute.
+* [*selection*.classed](https://github.com/d3/d3-selection#selection_classed) - get, add or remove CSS classes.
+* [*selection*.style](https://github.com/d3/d3-selection#selection_style) - get or set a style property.
+* [*selection*.property](https://github.com/d3/d3-selection#selection_property) - get or set a (raw) property.
+* [*selection*.text](https://github.com/d3/d3-selection#selection_text) - get or set the text content.
+* [*selection*.html](https://github.com/d3/d3-selection#selection_html) - get or set the inner HTML.
+* [*selection*.append](https://github.com/d3/d3-selection#selection_append) - create, append and select new elements.
+* [*selection*.remove](https://github.com/d3/d3-selection#selection_remove) - remove elements from the document.
+* [*selection*.data](https://github.com/d3/d3-selection#selection_data) - join elements to data.
+* [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) - get the enter selection (data missing elements).
+* [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) - get the exit selection (elements missing data).
+* [*selection*.datum](https://github.com/d3/d3-selection#selection_datum) - get or set element data (without joining).
+* [*selection*.filter](https://github.com/d3/d3-selection#selection_filter) - filter elements based on data.
+* [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) - sort elements in the document based on data.
+* [*selection*.order](https://github.com/d3/d3-selection#selection_order) - reorders elements in the document to match the selection.
+* [*selection*.on](https://github.com/d3/d3-selection#selection_on) - add or remove event listeners.
+* [*selection*.each](https://github.com/d3/d3-selection#selection_each) - call a function for each element.
+* [*selection*.call](https://github.com/d3/d3-selection#selection_call) - call a function with this selection.
+* [*selection*.empty](https://github.com/d3/d3-selection#selection_empty) - returns true if this selection is empty.
+* [*selection*.nodes](https://github.com/d3/d3-selection#selection_nodes) - returns an array of all selected elements.
+* [*selection*.node](https://github.com/d3/d3-selection#selection_node) - returns the first (non-null) element.
+* [*selection*.size](https://github.com/d3/d3-selection#selection_size) - returns the count of elements.
+* [*selection*.select](https://github.com/d3/d3-selection#selection_select) - select a descendant element for each selected element.
+* [*selection*.selectAll](https://github.com/d3/d3-selection#selection_selectAll) - select multiple descendants for each selected element.
+* [*selection*.dispatch](https://github.com/d3/d3-selection#selection_dispatch) - dispatch a custom event.
+* [d3.event](https://github.com/d3/d3-selection#event) - the current user event, during interaction.
+* [d3.mouse](https://github.com/d3/d3-selection#mouse) - get the mouse position relative to a given container.
+* [d3.touch](https://github.com/d3/d3-selection#touch) - get a touch position relative to a given container.
+* [d3.touches](https://github.com/d3/d3-selection#touches) - get the touch positions relative to a given container.
+* [d3.namespace](https://github.com/d3/d3-selection#namespace) - qualify a prefixed XML name, such as “xlink:href”.
+* [d3.namespaces](https://github.com/d3/d3-selection#namespaces) - the built-in XML namespaces.
+* [d3.requote](https://github.com/d3/d3-selection#requote) - quote a string for use in a regular expression.
 
 ## [Shapes](https://github.com/d3/d3-shape)
 
