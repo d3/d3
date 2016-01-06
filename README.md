@@ -240,38 +240,40 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 
 ## [Number Formats](https://github.com/d3/d3-format)
 
-* [d3.format](https://github.com/d3/d3-format#format) -
-* [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) -
-* [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) -
-* [d3.formatLocale](https://github.com/d3/d3-format#locale) -
-* [*locale*.format](https://github.com/d3/d3-format#locale_format) -
-* [*locale*.formatPrefix](https://github.com/d3/d3-format#locale_formatPrefix) -
-* [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) -
-* [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) -
-* [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) -
-* [d3.formatCaEs](https://github.com/d3/d3-format#localeCaEs) -
-* [d3.formatCsCz](https://github.com/d3/d3-format#localeCsCz) -
-* [d3.formatDeCh](https://github.com/d3/d3-format#localeDeCh) -
-* [d3.formatDeDe](https://github.com/d3/d3-format#localeDeDe) -
-* [d3.formatEnCa](https://github.com/d3/d3-format#localeEnCa) -
-* [d3.formatEnGb](https://github.com/d3/d3-format#localeEnGb) -
-* [d3.formatEnUs](https://github.com/d3/d3-format#localeEnUs) -
-* [d3.formatEsEs](https://github.com/d3/d3-format#localeEsEs) -
-* [d3.formatFiFi](https://github.com/d3/d3-format#localeFiFi) -
-* [d3.formatFrCa](https://github.com/d3/d3-format#localeFrCa) -
-* [d3.formatFrFr](https://github.com/d3/d3-format#localeFrFr) -
-* [d3.formatHeIl](https://github.com/d3/d3-format#localeHeIl) -
-* [d3.formatHuHu](https://github.com/d3/d3-format#localeHuHu) -
-* [d3.formatItIt](https://github.com/d3/d3-format#localeItIt) -
-* [d3.formatJaJp](https://github.com/d3/d3-format#localeJaJp) -
-* [d3.formatKoKr](https://github.com/d3/d3-format#localeKoKr) -
-* [d3.formatMkMk](https://github.com/d3/d3-format#localeMkMk) -
-* [d3.formatNlNl](https://github.com/d3/d3-format#localeNlNl) -
-* [d3.formatPlPl](https://github.com/d3/d3-format#localePlPl) -
-* [d3.formatPtBr](https://github.com/d3/d3-format#localePtBr) -
-* [d3.formatRuRu](https://github.com/d3/d3-format#localeRuRu) -
-* [d3.formatSvSe](https://github.com/d3/d3-format#localeSvSe) -
-* [d3.formatZhCn](https://github.com/d3/d3-format#localeZhCn) -
+Format numbers for human consumption.
+
+* [d3.format](https://github.com/d3/d3-format#format) - alias for enUs.format.
+* [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) - alias for enUs.formatPrefix.
+* [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) - parse a number format specifier.
+* [d3.formatLocale](https://github.com/d3/d3-format#locale) - define a custom locale.
+* [*locale*.format](https://github.com/d3/d3-format#locale_format) - create a number format.
+* [*locale*.formatPrefix](https://github.com/d3/d3-format#locale_formatPrefix) - create a SI-prefix number format.
+* [d3.formatCaEs](https://github.com/d3/d3-format#localeCaEs) - the Catalan (Spain) locale.
+* [d3.formatCsCz](https://github.com/d3/d3-format#localeCsCz) - the Czech (Czech Republic) locale.
+* [d3.formatDeCh](https://github.com/d3/d3-format#localeDeCh) - the German (Switzerland) locale.
+* [d3.formatDeDe](https://github.com/d3/d3-format#localeDeDe) - the German (Germany) locale.
+* [d3.formatEnCa](https://github.com/d3/d3-format#localeEnCa) - the English (Canada) locale.
+* [d3.formatEnGb](https://github.com/d3/d3-format#localeEnGb) - the English (United Kingdom) locale.
+* [d3.formatEnUs](https://github.com/d3/d3-format#localeEnUs) - the English (United States) locale.
+* [d3.formatEsEs](https://github.com/d3/d3-format#localeEsEs) - the Spanish (Spain) locale.
+* [d3.formatFiFi](https://github.com/d3/d3-format#localeFiFi) - the Finnish (Finland) locale.
+* [d3.formatFrCa](https://github.com/d3/d3-format#localeFrCa) - the French (Canada) locale.
+* [d3.formatFrFr](https://github.com/d3/d3-format#localeFrFr) - the French (France) locale.
+* [d3.formatHeIl](https://github.com/d3/d3-format#localeHeIl) - the Hebrew (Israel) locale.
+* [d3.formatHuHu](https://github.com/d3/d3-format#localeHuHu) - the Hungarian (Hungary) locale.
+* [d3.formatItIt](https://github.com/d3/d3-format#localeItIt) - the Italian (Italy) locale.
+* [d3.formatJaJp](https://github.com/d3/d3-format#localeJaJp) - the Japanese (Japan) locale.
+* [d3.formatKoKr](https://github.com/d3/d3-format#localeKoKr) - the Korean (South Korea) locale.
+* [d3.formatMkMk](https://github.com/d3/d3-format#localeMkMk) - the Macedonian (Macedonia) locale.
+* [d3.formatNlNl](https://github.com/d3/d3-format#localeNlNl) - the Dutch (Netherlands) locale.
+* [d3.formatPlPl](https://github.com/d3/d3-format#localePlPl) - the Polish (Poland) locale.
+* [d3.formatPtBr](https://github.com/d3/d3-format#localePtBr) - the Portuguese (Brazil) locale.
+* [d3.formatRuRu](https://github.com/d3/d3-format#localeRuRu) - the Russian (Russia) locale.
+* [d3.formatSvSe](https://github.com/d3/d3-format#localeSvSe) - the Swedish (Sweden) locale.
+* [d3.formatZhCn](https://github.com/d3/d3-format#localeZhCn) - the Chinese (China) locale.
+* [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) - compute precision for fixed-point notation.
+* [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) - compute precision for SI-prefix notation.
+* [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) - compute significant digits for rounded notation.
 
 ## [Paths](https://github.com/d3/d3-path)
 
@@ -599,37 +601,39 @@ Map a discrete domain to a discrete, fixed categorical color range.
 
 ## [Time Formats](https://github.com/d3/d3-time-format)
 
-* [d3.timeFormat](https://github.com/d3/d3-time-format#format) -
-* [*format*](https://github.com/d3/d3-time-format#_format) -
-* [*format*.parse](https://github.com/d3/d3-time-format#format_parse) -
-* [*format*.toString](https://github.com/d3/d3-time-format#format_toString) -
-* [d3.utcFormat](https://github.com/d3/d3-time-format#utcFormat) -
-* [d3.isoFormat](https://github.com/d3/d3-time-format#isoFormat) -
-* [d3.timeFormatLocale](https://github.com/d3/d3-time-format#locale) -
-* [*locale*.format](https://github.com/d3/d3-time-format#locale_format) -
-* [*locale*.utcFormat](https://github.com/d3/d3-time-format#locale_utcFormat) -
-* [d3.timeFormatCaEs](https://github.com/d3/d3-time-format#localeCaEs) -
-* [d3.timeFormatDeCh](https://github.com/d3/d3-time-format#localeDeCh) -
-* [d3.timeFormatDeDe](https://github.com/d3/d3-time-format#localeDeDe) -
-* [d3.timeFormatEnCa](https://github.com/d3/d3-time-format#localeEnCa) -
-* [d3.timeFormatEnGb](https://github.com/d3/d3-time-format#localeEnGb) -
-* [d3.timeFormatEnUs](https://github.com/d3/d3-time-format#localeEnUs) -
-* [d3.timeFormatEsEs](https://github.com/d3/d3-time-format#localeEsEs) -
-* [d3.timeFormatFiFi](https://github.com/d3/d3-time-format#localeFiFi) -
-* [d3.timeFormatFrCa](https://github.com/d3/d3-time-format#localeFrCa) -
-* [d3.timeFormatFrFr](https://github.com/d3/d3-time-format#localeFrFr) -
-* [d3.timeFormatHeIl](https://github.com/d3/d3-time-format#localeHeIl) -
-* [d3.timeFormatHuHu](https://github.com/d3/d3-time-format#localeHuHu) -
-* [d3.timeFormatItIt](https://github.com/d3/d3-time-format#localeItIt) -
-* [d3.timeFormatJaJp](https://github.com/d3/d3-time-format#localeJaJp) -
-* [d3.timeFormatKoKr](https://github.com/d3/d3-time-format#localeKoKr) -
-* [d3.timeFormatMkMk](https://github.com/d3/d3-time-format#localeMkMk) -
-* [d3.timeFormatNlNl](https://github.com/d3/d3-time-format#localeNlNl) -
-* [d3.timeFormatPlPl](https://github.com/d3/d3-time-format#localePlPl) -
-* [d3.timeFormatPtBr](https://github.com/d3/d3-time-format#localePtBr) -
-* [d3.timeFormatRuRu](https://github.com/d3/d3-time-format#localeRuRu) -
-* [d3.timeFormatSvSe](https://github.com/d3/d3-time-format#localeSvSe) -
-* [d3.timeFormatZhCn](https://github.com/d3/d3-time-format#localeZhCn) -
+Parse and format times, inspired by strptime and strftime.
+
+* [d3.timeFormat](https://github.com/d3/d3-time-format#format) - alias for enUs.format.
+* [d3.utcFormat](https://github.com/d3/d3-time-format#utcFormat) -  alias for enUs.utcFormat.
+* [d3.isoFormat](https://github.com/d3/d3-time-format#isoFormat) - the full ISO 8601 UTC format.
+* [*format*](https://github.com/d3/d3-time-format#_format) - format the given date.
+* [*format*.parse](https://github.com/d3/d3-time-format#format_parse) - parse the given string.
+* [*format*.toString](https://github.com/d3/d3-time-format#format_toString) - return the format specifier.
+* [d3.timeFormatLocale](https://github.com/d3/d3-time-format#locale) - define a custom locale.
+* [*locale*.format](https://github.com/d3/d3-time-format#locale_format) - create a time format.
+* [*locale*.utcFormat](https://github.com/d3/d3-time-format#locale_utcFormat) - create a UTC format.
+* [d3.timeFormatCaEs](https://github.com/d3/d3-time-format#localeCaEs) - the Catalan (Spain) locale.
+* [d3.timeFormatDeCh](https://github.com/d3/d3-time-format#localeDeCh) - the German (Switzerland) locale.
+* [d3.timeFormatDeDe](https://github.com/d3/d3-time-format#localeDeDe) - the German (Germany) locale.
+* [d3.timeFormatEnCa](https://github.com/d3/d3-time-format#localeEnCa) - the English (Canada) locale.
+* [d3.timeFormatEnGb](https://github.com/d3/d3-time-format#localeEnGb) - the English (United Kingdom) locale.
+* [d3.timeFormatEnUs](https://github.com/d3/d3-time-format#localeEnUs) - the English (United States) locale.
+* [d3.timeFormatEsEs](https://github.com/d3/d3-time-format#localeEsEs) - the Spanish (Spain) locale.
+* [d3.timeFormatFiFi](https://github.com/d3/d3-time-format#localeFiFi) - the Finnish (Finland) locale.
+* [d3.timeFormatFrCa](https://github.com/d3/d3-time-format#localeFrCa) - the French (Canada) locale.
+* [d3.timeFormatFrFr](https://github.com/d3/d3-time-format#localeFrFr) - the French (France) locale.
+* [d3.timeFormatHeIl](https://github.com/d3/d3-time-format#localeHeIl) - the Hebrew (Israel) locale.
+* [d3.timeFormatHuHu](https://github.com/d3/d3-time-format#localeHuHu) - the Hungarian (Hungary) locale.
+* [d3.timeFormatItIt](https://github.com/d3/d3-time-format#localeItIt) - the Italian (Italy) locale.
+* [d3.timeFormatJaJp](https://github.com/d3/d3-time-format#localeJaJp) - the Japanese (Japan) locale.
+* [d3.timeFormatKoKr](https://github.com/d3/d3-time-format#localeKoKr) - the Korean (South Korea) locale.
+* [d3.timeFormatMkMk](https://github.com/d3/d3-time-format#localeMkMk) - the Macedonian (Macedonia) locale.
+* [d3.timeFormatNlNl](https://github.com/d3/d3-time-format#localeNlNl) - the Dutch (Netherlands) locale.
+* [d3.timeFormatPlPl](https://github.com/d3/d3-time-format#localePlPl) - the Polish (Poland) locale.
+* [d3.timeFormatPtBr](https://github.com/d3/d3-time-format#localePtBr) - the Portuguese (Brazil) locale.
+* [d3.timeFormatRuRu](https://github.com/d3/d3-time-format#localeRuRu) - the Russian (Russia) locale.
+* [d3.timeFormatSvSe](https://github.com/d3/d3-time-format#localeSvSe) - the Swedish (Sweden) locale.
+* [d3.timeFormatZhCn](https://github.com/d3/d3-time-format#localeZhCn) - the Chinese (China) locale.
 
 ## [Time Intervals](https://github.com/d3/d3-time)
 
@@ -655,7 +659,7 @@ A calculator for humanity’s peculiar conventions of time.
 * [d3.timeHours](https://github.com/d3/d3-time#hour), [d3.utcHours](https://github.com/d3/d3-time#hour) - aliases for hour.range.
 * [d3.timeDay](https://github.com/d3/d3-time#day), [d3.utcDay](https://github.com/d3/d3-time#day) - the day interval.
 * [d3.timeDays](https://github.com/d3/d3-time#day), [d3.utcDays](https://github.com/d3/d3-time#day) - aliases for day.range.
-* [d3.timeWeek](https://github.com/d3/d3-time#week), [d3.utcWeek](https://github.com/d3/d3-time#week) - aliases for Sunday and UTC Sunday.
+* [d3.timeWeek](https://github.com/d3/d3-time#week), [d3.utcWeek](https://github.com/d3/d3-time#week) - aliases for sunday.
 * [d3.timeWeeks](https://github.com/d3/d3-time#week), [d3.utcWeeks](https://github.com/d3/d3-time#week) - aliases for week.range.
 * [d3.timeSunday](https://github.com/d3/d3-time#sunday), [d3.utcSunday](https://github.com/d3/d3-time#sunday) - the week interval, starting on Sunday.
 * [d3.timeSundays](https://github.com/d3/d3-time#sunday), [d3.utcSundays](https://github.com/d3/d3-time#sunday) - aliases for sunday.range.
