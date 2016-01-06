@@ -487,14 +487,14 @@ Graphical primitives for visualization.
 Circular or annular sectors, as in a pie or donut chart.
 
 * [d3.arc](https://github.com/d3/d3-shape#arc) - create a new arc generator.
-* [*arc*](https://github.com/d3/d3-shape#_arc) - generate an arc for the given data.
+* [*arc*](https://github.com/d3/d3-shape#_arc) - generate an arc for the given datum.
 * [*arc*.centroid](https://github.com/d3/d3-shape#arc_centroid) - compute an arc’s midpoint.
 * [*arc*.innerRadius](https://github.com/d3/d3-shape#arc_innerRadius) - set the inner radius.
 * [*arc*.outerRadius](https://github.com/d3/d3-shape#arc_outerRadius) - set the outer radius.
 * [*arc*.cornerRadius](https://github.com/d3/d3-shape#arc_cornerRadius) - set the corner radius, for rounded corners.
 * [*arc*.startAngle](https://github.com/d3/d3-shape#arc_startAngle) - set the start angle.
 * [*arc*.endAngle](https://github.com/d3/d3-shape#arc_endAngle) - set the end angle.
-* [*arc*.padAngle](https://github.com/d3/d3-shape#arc_padAngle) - set the pad angle between adjacent arcs.
+* [*arc*.padAngle](https://github.com/d3/d3-shape#arc_padAngle) - set the angle between adjacent arcs, for padded arcs.
 * [*arc*.padRadius](https://github.com/d3/d3-shape#arc_padRadius) - set the radius at which to linearize padding.
 * [*arc*.context](https://github.com/d3/d3-shape#arc_context) - set the rendering context.
 
@@ -503,7 +503,7 @@ Circular or annular sectors, as in a pie or donut chart.
 Compute the necessary angles to represent a tabular dataset as a pie or donut chart.
 
 * [d3.pie](https://github.com/d3/d3-shape#pie) - create a new pie generator.
-* [*pie*](https://github.com/d3/d3-shape#_pie) - compute the angles for the given dataset.
+* [*pie*](https://github.com/d3/d3-shape#_pie) - compute the arc angles for the given dataset.
 * [*pie*.value](https://github.com/d3/d3-shape#pie_value) - set the value accessor.
 * [*pie*.sort](https://github.com/d3/d3-shape#pie_sort) - set the sort order comparator.
 * [*pie*.sortValues](https://github.com/d3/d3-shape#pie_sortValues) - set the sort order comparator.
@@ -588,40 +588,40 @@ Interpolate between points to produce a continuous shape.
 
 A categorical shape encoding, as in a scatterplot.
 
-* [d3.symbol](https://github.com/d3/d3-shape#symbol) -
-* [*symbol*](https://github.com/d3/d3-shape#_symbol) -
-* [*symbol*.type](https://github.com/d3/d3-shape#symbol_type) -
-* [*symbol*.size](https://github.com/d3/d3-shape#symbol_size) -
-* [*symbol*.context](https://github.com/d3/d3-shape#symbol_context) -
-* [d3.symbols](https://github.com/d3/d3-shape#symbols) -
-* [d3.symbolCircle](https://github.com/d3/d3-shape#circle) -
-* [d3.symbolCross](https://github.com/d3/d3-shape#cross) -
-* [d3.symbolDiamond](https://github.com/d3/d3-shape#diamond) -
-* [d3.symbolSquare](https://github.com/d3/d3-shape#square) -
-* [d3.symbolStar](https://github.com/d3/d3-shape#star) -
-* [d3.symbolTriangle](https://github.com/d3/d3-shape#triangle) -
-* [d3.symbolWye](https://github.com/d3/d3-shape#wye) -
-* [*symbolType*.draw](https://github.com/d3/d3-shape#symbolType_draw) -
+* [d3.symbol](https://github.com/d3/d3-shape#symbol) - create a new symbol generator.
+* [*symbol*](https://github.com/d3/d3-shape#_symbol) - generate a symbol for the given datum.
+* [*symbol*.type](https://github.com/d3/d3-shape#symbol_type) - set the symbol type.
+* [*symbol*.size](https://github.com/d3/d3-shape#symbol_size) - set the size of the symbol in square pixels.
+* [*symbol*.context](https://github.com/d3/d3-shape#symbol_context) - set the rendering context.
+* [d3.symbols](https://github.com/d3/d3-shape#symbols) - the array of built-in symbol types.
+* [d3.symbolCircle](https://github.com/d3/d3-shape#circle) - a circle.
+* [d3.symbolCross](https://github.com/d3/d3-shape#cross) - a Greek cross with arms of equal length.
+* [d3.symbolDiamond](https://github.com/d3/d3-shape#diamond) - a rhombus.
+* [d3.symbolSquare](https://github.com/d3/d3-shape#square) - a square.
+* [d3.symbolStar](https://github.com/d3/d3-shape#star) - a pentagonal star (pentagram).
+* [d3.symbolTriangle](https://github.com/d3/d3-shape#triangle) - an up-pointing triangle.
+* [d3.symbolWye](https://github.com/d3/d3-shape#wye) - an up-pointing triangle.
+* [*symbolType*.draw](https://github.com/d3/d3-shape#symbolType_draw) - draw this symbol to the given context.
 
 ### [Stacks](https://github.com/d3/d3-shape#stacks)
 
 Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 
-* [d3.stack](https://github.com/d3/d3-shape#stack) -
-* [*stack*](https://github.com/d3/d3-shape#_stack) -
-* [*stack*.keys](https://github.com/d3/d3-shape#stack_keys) -
-* [*stack*.value](https://github.com/d3/d3-shape#stack_value) -
-* [*stack*.order](https://github.com/d3/d3-shape#stack_order) -
-* [*stack*.offset](https://github.com/d3/d3-shape#stack_offset) -
-* [d3.stackOrderAscending](https://github.com/d3/d3-shape#orderAscending) -
-* [d3.stackOrderDescending](https://github.com/d3/d3-shape#orderDescending) -
-* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape#orderInsideOut) -
-* [d3.stackOrderNone](https://github.com/d3/d3-shape#orderNone) -
-* [d3.stackOrderReverse](https://github.com/d3/d3-shape#orderReverse) -
-* [d3.stackOffsetExpand](https://github.com/d3/d3-shape#offsetExpand) -
-* [d3.stackOffsetNone](https://github.com/d3/d3-shape#offsetNone) -
-* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape#offsetSilhouette) -
-* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape#offsetWiggle) -
+* [d3.stack](https://github.com/d3/d3-shape#stack) - create a new stack generator.
+* [*stack*](https://github.com/d3/d3-shape#_stack) - generate a stack for the given dataset.
+* [*stack*.keys](https://github.com/d3/d3-shape#stack_keys) - set the keys accessor.
+* [*stack*.value](https://github.com/d3/d3-shape#stack_value) - set the value accessor.
+* [*stack*.order](https://github.com/d3/d3-shape#stack_order) - set the order accessor.
+* [*stack*.offset](https://github.com/d3/d3-shape#stack_offset) - set the offset accessor.
+* [d3.stackOrderAscending](https://github.com/d3/d3-shape#orderAscending) - put the smallest series on bottom.
+* [d3.stackOrderDescending](https://github.com/d3/d3-shape#orderDescending) - put the largest series on bottom.
+* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape#orderInsideOut) - put larger series in the middle.
+* [d3.stackOrderNone](https://github.com/d3/d3-shape#orderNone) - use the given series order.
+* [d3.stackOrderReverse](https://github.com/d3/d3-shape#orderReverse) - use the reverse of the given series order.
+* [d3.stackOffsetExpand](https://github.com/d3/d3-shape#offsetExpand) - normalize the baseline to zero and topline to one.
+* [d3.stackOffsetNone](https://github.com/d3/d3-shape#offsetNone) - apply a zero baseline.
+* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape#offsetSilhouette) - center the streamgraph around zero.
+* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape#offsetWiggle) - minimize streamgraph wiggling.
 
 ## [Time Formats](https://github.com/d3/d3-time-format)
 
