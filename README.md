@@ -16,8 +16,8 @@ If you use NPM, `npm install d3@4.0.0-alpha.1`. Otherwise, download the [latest 
 * [Collections](#collections) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
-* [Dispatches](#Dispatches)
-* [Easings](#easing-functions)
+* [Dispatches](#dispatches)
+* [Easings](#easings)
 * [Interpolators](#interpolators)
 * [Number Formats](#number-formats)
 * [Paths](#paths)
@@ -92,6 +92,8 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
 
 ## [Collections](https://github.com/d3/d3-array)
+
+Useful data structures.
 
 #### [Objects](https://github.com/d3/d3-array#objects)
 
@@ -182,6 +184,8 @@ Separate concerns using named callbacks.
 * [*dispatch*.*type*](https://github.com/d3/d3-dispatch#dispatch_type) - dispatch an event to registered listeners.
 
 ## [Easings](https://github.com/d3/d3-ease)
+
+Easing functions for smooth animation.
 
 * [d3.easeBind](https://github.com/d3/d3-ease#bind) - bind optional parameters to the given easing function.
 * [d3.easeLinearIn](https://github.com/d3/d3-ease#linearIn) - linear easing; the identity function.
@@ -325,6 +329,8 @@ A convenient alternative to asynchronous XMLHttpRequest.
 
 ## [Scales](https://github.com/d3/d3-scale)
 
+Encodings that map abstract data to visual representation.
+
 ### [Continuous](https://github.com/d3/d3-scale#continuous-scales)
 
 Map a continuous, quantitative domain to a continuous range.
@@ -434,6 +440,8 @@ Map a discrete domain to a discrete, fixed categorical color range.
 
 ## [Selections](https://github.com/d3/d3-selection)
 
+Transform the DOM by selecting elements and joining to data.
+
 * [d3.mouse](https://github.com/d3/d3-selection#mouse) -
 * [d3.namespace](https://github.com/d3/d3-selection#namespace) -
 * [d3.namespaces](https://github.com/d3/d3-selection#namespaces) -
@@ -472,97 +480,113 @@ Map a discrete domain to a discrete, fixed categorical color range.
 
 ## [Shapes](https://github.com/d3/d3-shape)
 
+Graphical primitives for visualization.
+
 ### [Arcs](https://github.com/d3/d3-shape#arcs)
 
-* [d3.arc](https://github.com/d3/d3-shape#arc) -
-* [*arc*](https://github.com/d3/d3-shape#_arc) -
-* [*arc*.centroid](https://github.com/d3/d3-shape#arc_centroid) -
-* [*arc*.innerRadius](https://github.com/d3/d3-shape#arc_innerRadius) -
-* [*arc*.outerRadius](https://github.com/d3/d3-shape#arc_outerRadius) -
-* [*arc*.cornerRadius](https://github.com/d3/d3-shape#arc_cornerRadius) -
-* [*arc*.startAngle](https://github.com/d3/d3-shape#arc_startAngle) -
-* [*arc*.endAngle](https://github.com/d3/d3-shape#arc_endAngle) -
-* [*arc*.padAngle](https://github.com/d3/d3-shape#arc_padAngle) -
-* [*arc*.padRadius](https://github.com/d3/d3-shape#arc_padRadius) -
-* [*arc*.context](https://github.com/d3/d3-shape#arc_context) -
+Circular or annular sectors, as in a pie or donut chart.
+
+* [d3.arc](https://github.com/d3/d3-shape#arc) - create a new arc generator.
+* [*arc*](https://github.com/d3/d3-shape#_arc) - generate an arc for the given data.
+* [*arc*.centroid](https://github.com/d3/d3-shape#arc_centroid) - compute an arc’s midpoint.
+* [*arc*.innerRadius](https://github.com/d3/d3-shape#arc_innerRadius) - set the inner radius.
+* [*arc*.outerRadius](https://github.com/d3/d3-shape#arc_outerRadius) - set the outer radius.
+* [*arc*.cornerRadius](https://github.com/d3/d3-shape#arc_cornerRadius) - set the corner radius, for rounded corners.
+* [*arc*.startAngle](https://github.com/d3/d3-shape#arc_startAngle) - set the start angle.
+* [*arc*.endAngle](https://github.com/d3/d3-shape#arc_endAngle) - set the end angle.
+* [*arc*.padAngle](https://github.com/d3/d3-shape#arc_padAngle) - set the pad angle between adjacent arcs.
+* [*arc*.padRadius](https://github.com/d3/d3-shape#arc_padRadius) - set the radius at which to linearize padding.
+* [*arc*.context](https://github.com/d3/d3-shape#arc_context) - set the rendering context.
 
 ### [Pies](https://github.com/d3/d3-shape#pies)
 
-* [d3.pie](https://github.com/d3/d3-shape#pie) -
-* [*pie*](https://github.com/d3/d3-shape#_pie) -
-* [*pie*.value](https://github.com/d3/d3-shape#pie_value) -
-* [*pie*.sort](https://github.com/d3/d3-shape#pie_sort) -
-* [*pie*.sortValues](https://github.com/d3/d3-shape#pie_sortValues) -
-* [*pie*.startAngle](https://github.com/d3/d3-shape#pie_startAngle) -
-* [*pie*.endAngle](https://github.com/d3/d3-shape#pie_endAngle) -
-* [*pie*.padAngle](https://github.com/d3/d3-shape#pie_padAngle) -
+Compute the necessary angles to represent a tabular dataset as a pie or donut chart.
+
+* [d3.pie](https://github.com/d3/d3-shape#pie) - create a new pie generator.
+* [*pie*](https://github.com/d3/d3-shape#_pie) - compute the angles for the given dataset.
+* [*pie*.value](https://github.com/d3/d3-shape#pie_value) - set the value accessor.
+* [*pie*.sort](https://github.com/d3/d3-shape#pie_sort) - set the sort order comparator.
+* [*pie*.sortValues](https://github.com/d3/d3-shape#pie_sortValues) - set the sort order comparator.
+* [*pie*.startAngle](https://github.com/d3/d3-shape#pie_startAngle) - set the overall start angle.
+* [*pie*.endAngle](https://github.com/d3/d3-shape#pie_endAngle) - set the overall end angle.
+* [*pie*.padAngle](https://github.com/d3/d3-shape#pie_padAngle) - set the pad angle between adjacent arcs.
 
 ### [Lines](https://github.com/d3/d3-shape#lines)
 
-* [d3.line](https://github.com/d3/d3-shape#line) -
-* [*line*](https://github.com/d3/d3-shape#_line) -
-* [*line*.x](https://github.com/d3/d3-shape#line_x) -
-* [*line*.y](https://github.com/d3/d3-shape#line_y) -
-* [*line*.defined](https://github.com/d3/d3-shape#line_defined) -
-* [*line*.curve](https://github.com/d3/d3-shape#line_curve) -
-* [*line*.context](https://github.com/d3/d3-shape#line_context) -
-* [d3.radialLine](https://github.com/d3/d3-shape#radialLine) -
-* [*radialLine*.angle](https://github.com/d3/d3-shape#radialLine_angle) -
-* [*radialLine*.radius](https://github.com/d3/d3-shape#radialLine_radius) -
-* [*radialLine*.defined](https://github.com/d3/d3-shape#radialLine_defined) -
-* [*radialLine*.curve](https://github.com/d3/d3-shape#radialLine_curve) -
-* [*radialLine*.context](https://github.com/d3/d3-shape#radialLine_context) -
+A spline or polyline, as in a line chart.
+
+* [d3.line](https://github.com/d3/d3-shape#line) - create a new line generator.
+* [*line*](https://github.com/d3/d3-shape#_line) - generate a line for the given dataset.
+* [*line*.x](https://github.com/d3/d3-shape#line_x) - set the *x* accessor.
+* [*line*.y](https://github.com/d3/d3-shape#line_y) - set the *y* accessor.
+* [*line*.defined](https://github.com/d3/d3-shape#line_defined) - set the defined accessor.
+* [*line*.curve](https://github.com/d3/d3-shape#line_curve) - set the curve interpolator.
+* [*line*.context](https://github.com/d3/d3-shape#line_context) - set the rendering context.
+* [d3.radialLine](https://github.com/d3/d3-shape#radialLine) - create a new radial line generator.
+* [*radialLine*](https://github.com/d3/d3-shape#_radialLine) - generate a line for the given dataset.
+* [*radialLine*.angle](https://github.com/d3/d3-shape#radialLine_angle) - set the angle accessor.
+* [*radialLine*.radius](https://github.com/d3/d3-shape#radialLine_radius) - set the radius accessor.
+* [*radialLine*.defined](https://github.com/d3/d3-shape#radialLine_defined) - set the defined accessor.
+* [*radialLine*.curve](https://github.com/d3/d3-shape#radialLine_curve) - set the curve interpolator.
+* [*radialLine*.context](https://github.com/d3/d3-shape#radialLine_context) - set the rendering context.
 
 ### [Areas](https://github.com/d3/d3-shape#areas)
 
-* [d3.area](https://github.com/d3/d3-shape#area) -
-* [*area*](https://github.com/d3/d3-shape#_area) -
-* [*area*.x](https://github.com/d3/d3-shape#area_x) -
-* [*area*.x0](https://github.com/d3/d3-shape#area_x0) -
-* [*area*.x1](https://github.com/d3/d3-shape#area_x1) -
-* [*area*.y](https://github.com/d3/d3-shape#area_y) -
-* [*area*.y0](https://github.com/d3/d3-shape#area_y0) -
-* [*area*.y1](https://github.com/d3/d3-shape#area_y1) -
-* [*area*.defined](https://github.com/d3/d3-shape#area_defined) -
-* [*area*.curve](https://github.com/d3/d3-shape#area_curve) -
-* [*area*.context](https://github.com/d3/d3-shape#area_context) -
-* [d3.radialArea](https://github.com/d3/d3-shape#radialArea) -
-* [*radialArea*.angle](https://github.com/d3/d3-shape#radialArea_angle) -
-* [*radialArea*.startAngle](https://github.com/d3/d3-shape#radialArea_startAngle) -
-* [*radialArea*.endAngle](https://github.com/d3/d3-shape#radialArea_endAngle) -
-* [*radialArea*.radius](https://github.com/d3/d3-shape#radialArea_radius) -
-* [*radialArea*.innerRadius](https://github.com/d3/d3-shape#radialArea_innerRadius) -
-* [*radialArea*.outerRadius](https://github.com/d3/d3-shape#radialArea_outerRadius) -
-* [*radialArea*.defined](https://github.com/d3/d3-shape#radialArea_defined) -
-* [*radialArea*.curve](https://github.com/d3/d3-shape#radialArea_curve) -
-* [*radialArea*.context](https://github.com/d3/d3-shape#radialArea_context) -
+An area, defined by a bounding topline and baseline, as in an area chart.
+
+* [d3.area](https://github.com/d3/d3-shape#area) - create a new area generator.
+* [*area*](https://github.com/d3/d3-shape#_area) - generate an area for the given dataset.
+* [*area*.x](https://github.com/d3/d3-shape#area_x) - set the *x0* and *x1* accessors.
+* [*area*.x0](https://github.com/d3/d3-shape#area_x0) - set the baseline *x* accessor.
+* [*area*.x1](https://github.com/d3/d3-shape#area_x1) - set the topline *x* accessor.
+* [*area*.y](https://github.com/d3/d3-shape#area_y) - set the *y0* and *y1* accessors.
+* [*area*.y0](https://github.com/d3/d3-shape#area_y0) - set the baseline *y* accessor.
+* [*area*.y1](https://github.com/d3/d3-shape#area_y1) - set the topline *y* accessor.
+* [*area*.defined](https://github.com/d3/d3-shape#area_defined) - set the defined accessor.
+* [*area*.curve](https://github.com/d3/d3-shape#area_curve) - set the curve interpolator.
+* [*area*.context](https://github.com/d3/d3-shape#area_context) - set the rendering context.
+* [d3.radialArea](https://github.com/d3/d3-shape#radialArea) - create a new radial area generator.
+* [*radialArea*](https://github.com/d3/d3-shape#_radialArea) - generate an area for the given dataset.
+* [*radialArea*.angle](https://github.com/d3/d3-shape#radialArea_angle) - set the start and end angle accessors.
+* [*radialArea*.startAngle](https://github.com/d3/d3-shape#radialArea_startAngle) - set the start angle accessor.
+* [*radialArea*.endAngle](https://github.com/d3/d3-shape#radialArea_endAngle) - set the end angle accessor.
+* [*radialArea*.radius](https://github.com/d3/d3-shape#radialArea_radius) - set the inner and outer radius accessors.
+* [*radialArea*.innerRadius](https://github.com/d3/d3-shape#radialArea_innerRadius) - set the inner radius accessor.
+* [*radialArea*.outerRadius](https://github.com/d3/d3-shape#radialArea_outerRadius) - set the outer radius accessor.
+* [*radialArea*.defined](https://github.com/d3/d3-shape#radialArea_defined) - set the defined accessor.
+* [*radialArea*.curve](https://github.com/d3/d3-shape#radialArea_curve) - set the curve interpolator.
+* [*radialArea*.context](https://github.com/d3/d3-shape#radialArea_context) - set the rendering context.
 
 ### [Curves](https://github.com/d3/d3-shape#curves)
 
-* [d3.curveBasis](https://github.com/d3/d3-shape#basis) -
-* [d3.curveBasisClosed](https://github.com/d3/d3-shape#basisClosed) -
-* [d3.curveBasisOpen](https://github.com/d3/d3-shape#basisOpen) -
-* [d3.curveBundle](https://github.com/d3/d3-shape#bundle) -
-* [d3.curveCardinal](https://github.com/d3/d3-shape#cardinal) -
-* [d3.curveCardinalClosed](https://github.com/d3/d3-shape#cardinalClosed) -
-* [d3.curveCardinalOpen](https://github.com/d3/d3-shape#cardinalOpen) -
-* [d3.curveCatmullRom](https://github.com/d3/d3-shape#catmullRom) -
-* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#catmullRomClosed) -
-* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#catmullRomOpen) -
-* [d3.curveLinear](https://github.com/d3/d3-shape#linear) -
-* [d3.curveLinearClosed](https://github.com/d3/d3-shape#linearClosed) -
-* [d3.curveMonotone](https://github.com/d3/d3-shape#monotone) -
-* [d3.curveNatural](https://github.com/d3/d3-shape#natural) -
-* [d3.curveStep](https://github.com/d3/d3-shape#step) -
-* [d3.curveStepAfter](https://github.com/d3/d3-shape#stepAfter) -
-* [d3.curveStepBefore](https://github.com/d3/d3-shape#stepBefore) -
-* [*curve*.areaStart](https://github.com/d3/d3-shape#curve_areaStart) -
-* [*curve*.areaEnd](https://github.com/d3/d3-shape#curve_areaEnd) -
-* [*curve*.lineStart](https://github.com/d3/d3-shape#curve_lineStart) -
-* [*curve*.lineEnd](https://github.com/d3/d3-shape#curve_lineEnd) -
-* [*curve*.point](https://github.com/d3/d3-shape#curve_point) -
+Interpolate between points to produce a continuous shape.
+
+* [d3.curveBasis](https://github.com/d3/d3-shape#basis) - a cubic basis spline, repeating the end points.
+* [d3.curveBasisClosed](https://github.com/d3/d3-shape#basisClosed) - a closed cubic basis spline.
+* [d3.curveBasisOpen](https://github.com/d3/d3-shape#basisOpen) - a cubic basis spline.
+* [d3.curveBundle](https://github.com/d3/d3-shape#bundle) - a straightened cubic basis spline.
+* [d3.curveCardinal](https://github.com/d3/d3-shape#cardinal) - a cubic cardinal spline, with one-sided difference at each end.
+* [d3.curveCardinalClosed](https://github.com/d3/d3-shape#cardinalClosed) - a closed cubic cardinal spline.
+* [d3.curveCardinalOpen](https://github.com/d3/d3-shape#cardinalOpen) - a cubic cardinal spline.
+* [d3.curveCatmullRom](https://github.com/d3/d3-shape#catmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
+* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#catmullRomClosed) - a closed cubic Catmull–Rom spline.
+* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#catmullRomOpen) - a cubic Catmull–Rom spline.
+* [d3.curveLinear](https://github.com/d3/d3-shape#linear) - a polyline.
+* [d3.curveLinearClosed](https://github.com/d3/d3-shape#linearClosed) - a closed polyline.
+* [d3.curveMonotone](https://github.com/d3/d3-shape#monotone) - a cubic spline that preserves monotonicity in *y*.
+* [d3.curveNatural](https://github.com/d3/d3-shape#natural) - a natural cubic spline.
+* [d3.curveStep](https://github.com/d3/d3-shape#step) - a piecewise constant function.
+* [d3.curveStepAfter](https://github.com/d3/d3-shape#stepAfter) - a piecewise constant function.
+* [d3.curveStepBefore](https://github.com/d3/d3-shape#stepBefore) - a piecewise constant function.
+* [*curve*.areaStart](https://github.com/d3/d3-shape#curve_areaStart) - start a new area segment.
+* [*curve*.areaEnd](https://github.com/d3/d3-shape#curve_areaEnd) - end the current area segment.
+* [*curve*.lineStart](https://github.com/d3/d3-shape#curve_lineStart) - start a new line segment.
+* [*curve*.lineEnd](https://github.com/d3/d3-shape#curve_lineEnd) - end the current line segment.
+* [*curve*.point](https://github.com/d3/d3-shape#curve_point) - add a point to the current line segment.
 
 ### [Symbols](https://github.com/d3/d3-shape#symbols)
+
+A categorical shape encoding, as in a scatterplot.
 
 * [d3.symbol](https://github.com/d3/d3-shape#symbol) -
 * [*symbol*](https://github.com/d3/d3-shape#_symbol) -
@@ -580,6 +604,8 @@ Map a discrete domain to a discrete, fixed categorical color range.
 * [*symbolType*.draw](https://github.com/d3/d3-shape#symbolType_draw) -
 
 ### [Stacks](https://github.com/d3/d3-shape#stacks)
+
+Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 
 * [d3.stack](https://github.com/d3/d3-shape#stack) -
 * [*stack*](https://github.com/d3/d3-shape#_stack) -
@@ -680,7 +706,7 @@ A calculator for humanity’s peculiar conventions of time.
 
 ## [Timers](https://github.com/d3/d3-timer)
 
-An efficient queue capable of managing thousands of concurrent animations.
+An efficient queue for managing thousands of concurrent animations.
 
 * [d3.timer](https://github.com/d3/d3-timer#timer) - schedules a new timer.
 * [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) - resets the timer’s start time and callback.
