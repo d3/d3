@@ -41,12 +41,12 @@ export {
 } from "d3-collection";
 
 export {
-  uniform as randomUniform,
-  normal as randomNormal,
-  logNormal as randomLogNormal,
-  bates as randomBates,
-  irwinHall as randomIrwinHall,
-  exponential as randomExponential
+  randomUniform,
+  randomNormal,
+  randomLogNormal,
+  randomBates,
+  randomIrwinHall,
+  randomExponential
 } from "d3-random";
 
 export {

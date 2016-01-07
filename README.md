@@ -298,12 +298,12 @@ Serialize Canvas path commands to SVG.
 
 Generate random numbers from various distributions.
 
-* [d3.randomUniform](https://github.com/d3/d3-random#uniform) - from a uniform distribution.
-* [d3.randomNormal](https://github.com/d3/d3-random#normal) - from a normal distribution.
-* [d3.randomLogNormal](https://github.com/d3/d3-random#logNormal) - from a log-normal distribution.
-* [d3.randomBates](https://github.com/d3/d3-random#bates) - from a Bates distribution.
-* [d3.randomIrwinHall](https://github.com/d3/d3-random#irwinHall) - from an Irwin–Hall distribution.
-* [d3.randomExponential](https://github.com/d3/d3-random#exponential) - from an exponential distribution.
+* [d3.randomUniform](https://github.com/d3/d3-random#randomUniform) - from a uniform distribution.
+* [d3.randomNormal](https://github.com/d3/d3-random#randomNormal) - from a normal distribution.
+* [d3.randomLogNormal](https://github.com/d3/d3-random#randomLogNormal) - from a log-normal distribution.
+* [d3.randomBates](https://github.com/d3/d3-random#randomBates) - from a Bates distribution.
+* [d3.randomIrwinHall](https://github.com/d3/d3-random#randomIrwinHall) - from an Irwin–Hall distribution.
+* [d3.randomExponential](https://github.com/d3/d3-random#randomExponential) - from an exponential distribution.
 
 ## [Requests](https://github.com/d3/d3-request)
 
