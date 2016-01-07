@@ -48,7 +48,7 @@
     "d3-request": "0.2.6",
     "d3-scale": "0.5.0",
     "d3-selection": "0.5.0",
-    "d3-shape": "0.3.0",
+    "d3-shape": "0.4.0",
     "d3-time": "0.2.0",
     "d3-time-format": "0.3.0",
     "d3-timer": "0.1.0"
