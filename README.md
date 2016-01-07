@@ -187,60 +187,60 @@ Separate concerns using named callbacks.
 
 Easing functions for smooth animation.
 
-* [d3.easeBind](https://github.com/d3/d3-ease#bind) - bind optional parameters to the given easing function.
-* [d3.easeLinearIn](https://github.com/d3/d3-ease#linearIn) - linear easing; the identity function.
-* [d3.easeLinearOut](https://github.com/d3/d3-ease#linearOut) - linear easing; the identity function.
-* [d3.easeLinearInOut](https://github.com/d3/d3-ease#linearInOut) - linear easing; the identity function.
-* [d3.easePolyIn](https://github.com/d3/d3-ease#polyIn) - polynomial easing; raises time to the given power.
-* [d3.easePolyOut](https://github.com/d3/d3-ease#polyOut) - reverse polynomial easing.
-* [d3.easePolyInOut](https://github.com/d3/d3-ease#polyInOut) - symmetric polynomial easing.
-* [d3.easeQuadIn](https://github.com/d3/d3-ease#quadIn) - quadratic easing; squares time.
-* [d3.easeQuadOut](https://github.com/d3/d3-ease#quadOut) - reverse quadratic easing.
-* [d3.easeQuadInOut](https://github.com/d3/d3-ease#quadInOut) - symmetric quadratic easing.
-* [d3.easeCubicIn](https://github.com/d3/d3-ease#cubicIn) - cubic easing; cubes time.
-* [d3.easeCubicOut](https://github.com/d3/d3-ease#cubicOut) - reverse cubic easing.
-* [d3.easeCubicInOut](https://github.com/d3/d3-ease#cubicInOut) - symmetric cubic easing.
-* [d3.easeSinIn](https://github.com/d3/d3-ease#sinIn) - sinusoidal easing.
-* [d3.easeSinOut](https://github.com/d3/d3-ease#sinOut) - reverse sinusoidal easing.
-* [d3.easeSinInOut](https://github.com/d3/d3-ease#sinInOut) - symmetric sinusoidal easing.
-* [d3.easeExpIn](https://github.com/d3/d3-ease#expIn) - exponential easing.
-* [d3.easeExpOut](https://github.com/d3/d3-ease#expOut) - reverse exponential easing.
-* [d3.easeExpInOut](https://github.com/d3/d3-ease#expInOut) - symmetric exponential easing.
-* [d3.easeCircleIn](https://github.com/d3/d3-ease#circleIn) - circular easing.
-* [d3.easeCircleOut](https://github.com/d3/d3-ease#circleOut) - reverse circular easing.
-* [d3.easeCircleInOut](https://github.com/d3/d3-ease#circleInOut) - symmetric circular easing.
-* [d3.easeElasticIn](https://github.com/d3/d3-ease#elasticIn) - elastic easing, like a rubber band.
-* [d3.easeElasticOut](https://github.com/d3/d3-ease#elasticOut) - reverse elastic easing.
-* [d3.easeElasticInOut](https://github.com/d3/d3-ease#elasticInOut) - symmetric elastic easing.
-* [d3.easeBackIn](https://github.com/d3/d3-ease#backIn) - anticipatory easing, like a dancer bending his knees before jumping.
-* [d3.easeBackOut](https://github.com/d3/d3-ease#backOut) - reverse anticipatory easing.
-* [d3.easeBackInOut](https://github.com/d3/d3-ease#backInOut) - symmetric anticipatory easing.
-* [d3.easeBounceIn](https://github.com/d3/d3-ease#bounceIn) - bounce easing, like a rubber ball.
-* [d3.easeBounceOut](https://github.com/d3/d3-ease#bounceOut) - reverse bounce easing.
-* [d3.easeBounceInOut](https://github.com/d3/d3-ease#bounceInOut) - symmetric bounce easing.
+* [d3.easeBind](https://github.com/d3/d3-ease#easeBind) - bind optional parameters to the given easing function.
+* [d3.easeLinearIn](https://github.com/d3/d3-ease#easeLinearIn) - linear easing; the identity function.
+* [d3.easeLinearOut](https://github.com/d3/d3-ease#easeLinearOut) - linear easing; the identity function.
+* [d3.easeLinearInOut](https://github.com/d3/d3-ease#easeLinearInOut) - linear easing; the identity function.
+* [d3.easePolyIn](https://github.com/d3/d3-ease#easePolyIn) - polynomial easing; raises time to the given power.
+* [d3.easePolyOut](https://github.com/d3/d3-ease#easePolyOut) - reverse polynomial easing.
+* [d3.easePolyInOut](https://github.com/d3/d3-ease#easePolyInOut) - symmetric polynomial easing.
+* [d3.easeQuadIn](https://github.com/d3/d3-ease#easeQuadIn) - quadratic easing; squares time.
+* [d3.easeQuadOut](https://github.com/d3/d3-ease#easeQuadOut) - reverse quadratic easing.
+* [d3.easeQuadInOut](https://github.com/d3/d3-ease#easeQuadInOut) - symmetric quadratic easing.
+* [d3.easeCubicIn](https://github.com/d3/d3-ease#easeCubicIn) - cubic easing; cubes time.
+* [d3.easeCubicOut](https://github.com/d3/d3-ease#easeCubicOut) - reverse cubic easing.
+* [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut) - symmetric cubic easing.
+* [d3.easeSinIn](https://github.com/d3/d3-ease#easeSinIn) - sinusoidal easing.
+* [d3.easeSinOut](https://github.com/d3/d3-ease#easeSinOut) - reverse sinusoidal easing.
+* [d3.easeSinInOut](https://github.com/d3/d3-ease#easeSinInOut) - symmetric sinusoidal easing.
+* [d3.easeExpIn](https://github.com/d3/d3-ease#easeExpIn) - exponential easing.
+* [d3.easeExpOut](https://github.com/d3/d3-ease#easeExpOut) - reverse exponential easing.
+* [d3.easeExpInOut](https://github.com/d3/d3-ease#easeExpInOut) - symmetric exponential easing.
+* [d3.easeCircleIn](https://github.com/d3/d3-ease#easeCircleIn) - circular easing.
+* [d3.easeCircleOut](https://github.com/d3/d3-ease#easeCircleOut) - reverse circular easing.
+* [d3.easeCircleInOut](https://github.com/d3/d3-ease#easeCircleInOut) - symmetric circular easing.
+* [d3.easeElasticIn](https://github.com/d3/d3-ease#easeElasticIn) - elastic easing, like a rubber band.
+* [d3.easeElasticOut](https://github.com/d3/d3-ease#easeElasticOut) - reverse elastic easing.
+* [d3.easeElasticInOut](https://github.com/d3/d3-ease#easeElasticInOut) - symmetric elastic easing.
+* [d3.easeBackIn](https://github.com/d3/d3-ease#easeBackIn) - anticipatory easing, like a dancer bending his knees before jumping.
+* [d3.easeBackOut](https://github.com/d3/d3-ease#easeBackOut) - reverse anticipatory easing.
+* [d3.easeBackInOut](https://github.com/d3/d3-ease#easeBackInOut) - symmetric anticipatory easing.
+* [d3.easeBounceIn](https://github.com/d3/d3-ease#easeBounceIn) - bounce easing, like a rubber ball.
+* [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut) - reverse bounce easing.
+* [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut) - symmetric bounce easing.
 
 ## [Interpolators](https://github.com/d3/d3-interpolate)
 
 Interpolate numbers, colors, strings, arrays, objects, whatever!
 
-* [d3.interpolateBind](https://github.com/d3/d3-interpolate#bind) - bind optional parameters to the given interpolator.
-* [d3.interpolate](https://github.com/d3/d3-interpolate#value) - interpolate arbitrary values.
-* [d3.interpolators](https://github.com/d3/d3-interpolato#values) - register a custom interpolator.
-* [d3.interpolateArray](https://github.com/d3/d3-interpolate#array) - interpolate arrays of arbitrary values.
-* [d3.interpolateNumber](https://github.com/d3/d3-interpolate#number) - interpolate numbers.
-* [d3.interpolateObject](https://github.com/d3/d3-interpolate#object) - interpolate arbitrary objects.
-* [d3.interpolateRound](https://github.com/d3/d3-interpolate#round) - interpolate integers.
-* [d3.interpolateString](https://github.com/d3/d3-interpolate#string) - interpolate strings with embedded numbers.
-* [d3.interpolateTransform](https://github.com/d3/d3-interpolate#transform) - interpolate 2D matrix transforms.
-* [d3.interpolateZoom](https://github.com/d3/d3-interpolate#zoom) - zoom and pan between two views.
-* [d3.interpolateRgb](https://github.com/d3/d3-interpolate#rgb) - interpolate RGB colors.
-* [d3.interpolateHsl](https://github.com/d3/d3-interpolate#hsl) - interpolate HSL colors.
-* [d3.interpolateHslLong](https://github.com/d3/d3-interpolate#hslLong) - interpolate HSL colors, the long way.
-* [d3.interpolateLab](https://github.com/d3/d3-interpolate#lab) - interpolate Lab colors.
-* [d3.interpolateHcl](https://github.com/d3/d3-interpolate#hcl) - interpolate HCL colors.
-* [d3.interpolateHclLong](https://github.com/d3/d3-interpolate#hclLong) - interpolate HCL colors, the long way.
-* [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#cubehelix) - interpolate Cubehelix colors.
-* [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#cubehelixLong) - interpolate Cubehelix colors, the long way.
+* [d3.interpolateBind](https://github.com/d3/d3-interpolate#interpolateBind) - bind optional parameters to the given interpolator.
+* [d3.interpolate](https://github.com/d3/d3-interpolate#interpolate) - interpolate arbitrary values.
+* [d3.interpolators](https://github.com/d3/d3-interpolate#interpolators) - register a custom interpolator.
+* [d3.interpolateArray](https://github.com/d3/d3-interpolate#interpolateArray) - interpolate arrays of arbitrary values.
+* [d3.interpolateNumber](https://github.com/d3/d3-interpolate#interpolateNumber) - interpolate numbers.
+* [d3.interpolateObject](https://github.com/d3/d3-interpolate#interpolateObject) - interpolate arbitrary objects.
+* [d3.interpolateRound](https://github.com/d3/d3-interpolate#interpolateRound) - interpolate integers.
+* [d3.interpolateString](https://github.com/d3/d3-interpolate#interpolateString) - interpolate strings with embedded numbers.
+* [d3.interpolateTransform](https://github.com/d3/d3-interpolate#interpolateTransform) - interpolate 2D matrix transforms.
+* [d3.interpolateZoom](https://github.com/d3/d3-interpolate#interpolateZoom) - zoom and pan between two views.
+* [d3.interpolateRgb](https://github.com/d3/d3-interpolate#interpolateRgb) - interpolate RGB colors.
+* [d3.interpolateHsl](https://github.com/d3/d3-interpolate#interpolateHsl) - interpolate HSL colors.
+* [d3.interpolateHslLong](https://github.com/d3/d3-interpolate#interpolateHslLong) - interpolate HSL colors, the long way.
+* [d3.interpolateLab](https://github.com/d3/d3-interpolate#interpolateLab) - interpolate Lab colors.
+* [d3.interpolateHcl](https://github.com/d3/d3-interpolate#interpolateHcl) - interpolate HCL colors.
+* [d3.interpolateHclLong](https://github.com/d3/d3-interpolate#interpolateHclLong) - interpolate HCL colors, the long way.
+* [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#interpolateCubehelix) - interpolate Cubehelix colors.
+* [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
 
 ## [Number Formats](https://github.com/d3/d3-format)
 
@@ -249,32 +249,32 @@ Format numbers for human consumption.
 * [d3.format](https://github.com/d3/d3-format#format) - alias for enUs.format.
 * [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) - alias for enUs.formatPrefix.
 * [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) - parse a number format specifier.
-* [d3.formatLocale](https://github.com/d3/d3-format#locale) - define a custom locale.
+* [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) - define a custom locale.
 * [*locale*.format](https://github.com/d3/d3-format#locale_format) - create a number format.
 * [*locale*.formatPrefix](https://github.com/d3/d3-format#locale_formatPrefix) - create a SI-prefix number format.
-* [d3.formatCaEs](https://github.com/d3/d3-format#localeCaEs) - the Catalan (Spain) locale.
-* [d3.formatCsCz](https://github.com/d3/d3-format#localeCsCz) - the Czech (Czech Republic) locale.
-* [d3.formatDeCh](https://github.com/d3/d3-format#localeDeCh) - the German (Switzerland) locale.
-* [d3.formatDeDe](https://github.com/d3/d3-format#localeDeDe) - the German (Germany) locale.
-* [d3.formatEnCa](https://github.com/d3/d3-format#localeEnCa) - the English (Canada) locale.
-* [d3.formatEnGb](https://github.com/d3/d3-format#localeEnGb) - the English (United Kingdom) locale.
-* [d3.formatEnUs](https://github.com/d3/d3-format#localeEnUs) - the English (United States) locale.
-* [d3.formatEsEs](https://github.com/d3/d3-format#localeEsEs) - the Spanish (Spain) locale.
-* [d3.formatFiFi](https://github.com/d3/d3-format#localeFiFi) - the Finnish (Finland) locale.
-* [d3.formatFrCa](https://github.com/d3/d3-format#localeFrCa) - the French (Canada) locale.
-* [d3.formatFrFr](https://github.com/d3/d3-format#localeFrFr) - the French (France) locale.
-* [d3.formatHeIl](https://github.com/d3/d3-format#localeHeIl) - the Hebrew (Israel) locale.
-* [d3.formatHuHu](https://github.com/d3/d3-format#localeHuHu) - the Hungarian (Hungary) locale.
-* [d3.formatItIt](https://github.com/d3/d3-format#localeItIt) - the Italian (Italy) locale.
-* [d3.formatJaJp](https://github.com/d3/d3-format#localeJaJp) - the Japanese (Japan) locale.
-* [d3.formatKoKr](https://github.com/d3/d3-format#localeKoKr) - the Korean (South Korea) locale.
-* [d3.formatMkMk](https://github.com/d3/d3-format#localeMkMk) - the Macedonian (Macedonia) locale.
-* [d3.formatNlNl](https://github.com/d3/d3-format#localeNlNl) - the Dutch (Netherlands) locale.
-* [d3.formatPlPl](https://github.com/d3/d3-format#localePlPl) - the Polish (Poland) locale.
-* [d3.formatPtBr](https://github.com/d3/d3-format#localePtBr) - the Portuguese (Brazil) locale.
-* [d3.formatRuRu](https://github.com/d3/d3-format#localeRuRu) - the Russian (Russia) locale.
-* [d3.formatSvSe](https://github.com/d3/d3-format#localeSvSe) - the Swedish (Sweden) locale.
-* [d3.formatZhCn](https://github.com/d3/d3-format#localeZhCn) - the Chinese (China) locale.
+* [d3.formatCaEs](https://github.com/d3/d3-format#formatCaEs) - the Catalan (Spain) locale.
+* [d3.formatCsCz](https://github.com/d3/d3-format#formatCsCz) - the Czech (Czech Republic) locale.
+* [d3.formatDeCh](https://github.com/d3/d3-format#formatDeCh) - the German (Switzerland) locale.
+* [d3.formatDeDe](https://github.com/d3/d3-format#formatDeDe) - the German (Germany) locale.
+* [d3.formatEnCa](https://github.com/d3/d3-format#formatEnCa) - the English (Canada) locale.
+* [d3.formatEnGb](https://github.com/d3/d3-format#formatEnGb) - the English (United Kingdom) locale.
+* [d3.formatEnUs](https://github.com/d3/d3-format#formatEnUs) - the English (United States) locale.
+* [d3.formatEsEs](https://github.com/d3/d3-format#formatEsEs) - the Spanish (Spain) locale.
+* [d3.formatFiFi](https://github.com/d3/d3-format#formatFiFi) - the Finnish (Finland) locale.
+* [d3.formatFrCa](https://github.com/d3/d3-format#formatFrCa) - the French (Canada) locale.
+* [d3.formatFrFr](https://github.com/d3/d3-format#formatFrFr) - the French (France) locale.
+* [d3.formatHeIl](https://github.com/d3/d3-format#formatHeIl) - the Hebrew (Israel) locale.
+* [d3.formatHuHu](https://github.com/d3/d3-format#formatHuHu) - the Hungarian (Hungary) locale.
+* [d3.formatItIt](https://github.com/d3/d3-format#formatItIt) - the Italian (Italy) locale.
+* [d3.formatJaJp](https://github.com/d3/d3-format#formatJaJp) - the Japanese (Japan) locale.
+* [d3.formatKoKr](https://github.com/d3/d3-format#formatKoKr) - the Korean (South Korea) locale.
+* [d3.formatMkMk](https://github.com/d3/d3-format#formatMkMk) - the Macedonian (Macedonia) locale.
+* [d3.formatNlNl](https://github.com/d3/d3-format#formatNlNl) - the Dutch (Netherlands) locale.
+* [d3.formatPlPl](https://github.com/d3/d3-format#formatPlPl) - the Polish (Poland) locale.
+* [d3.formatPtBr](https://github.com/d3/d3-format#formatPtBr) - the Portuguese (Brazil) locale.
+* [d3.formatRuRu](https://github.com/d3/d3-format#formatRuRu) - the Russian (Russia) locale.
+* [d3.formatSvSe](https://github.com/d3/d3-format#formatSvSe) - the Swedish (Sweden) locale.
+* [d3.formatZhCn](https://github.com/d3/d3-format#formatZhCn) - the Chinese (China) locale.
 * [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) - compute decimal precision for fixed-point notation.
 * [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) - compute decimal precision for SI-prefix notation.
 * [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) - compute significant digits for rounded notation.
@@ -346,18 +346,18 @@ Map a continuous, quantitative domain to a continuous range.
 * [*continuous*.tickFormat](https://github.com/d3/d3-scale#continuous_tickFormat) - format ticks for human consumption.
 * [*continuous*.nice](https://github.com/d3/d3-scale#continuous_nice) - extend the domain to nice round numbers.
 * [*continuous*.copy](https://github.com/d3/d3-scale#continuous_copy) - create a copy of this scale.
-* [d3.scaleLinear](https://github.com/d3/d3-scale#linear) - create a quantitative linear scale.
-* [d3.scalePow](https://github.com/d3/d3-scale#pow) - create a quantitative power scale.
+* [d3.scaleLinear](https://github.com/d3/d3-scale#scaleLinear) - create a quantitative linear scale.
+* [d3.scalePow](https://github.com/d3/d3-scale#scalePow) - create a quantitative power scale.
 * [*pow*.exponent](https://github.com/d3/d3-scale#pow_exponent) - set the power exponent.
-* [d3.scaleSqrt](https://github.com/d3/d3-scale#sqrt) - create a quantitative power scale with exponent 0.5.
-* [d3.scaleLog](https://github.com/d3/d3-scale#log) - create a quantitative logarithmic scale.
+* [d3.scaleSqrt](https://github.com/d3/d3-scale#scaleSqrt) - create a quantitative power scale with exponent 0.5.
+* [d3.scaleLog](https://github.com/d3/d3-scale#scaleLog) - create a quantitative logarithmic scale.
 * [*log*.base](https://github.com/d3/d3-scale#log_base) - set the logarithm base.
 * [*log*.nice](https://github.com/d3/d3-scale#log_nice) - extend the domain to nice round numbers.
 * [*log*.ticks](https://github.com/d3/d3-scale#log_ticks) - compute representative values from the domain.
 * [*log*.tickFormat](https://github.com/d3/d3-scale#log_tickFormat) - format ticks for human consumption.
 * [d3.scaleIdentity](https://github.com/d3/d3-scale#identity) - create a quantitative identity scale.
-* [d3.scaleTime](https://github.com/d3/d3-scale#time) - create a linear scale for time.
-* [d3.scaleUtc](https://github.com/d3/d3-scale#utcTime) - create a linear scale for UTC.
+* [d3.scaleTime](https://github.com/d3/d3-scale#scaleTime) - create a linear scale for time.
+* [d3.scaleUtc](https://github.com/d3/d3-scale#scaleUtc) - create a linear scale for UTC.
 * [*time*.ticks](https://github.com/d3/d3-scale#time_ticks) - compute representative values from the domain.
 * [*time*.tickFormat](https://github.com/d3/d3-scale#time_tickFormat) - format ticks for human consumption.
 * [*time*.nice](https://github.com/d3/d3-scale#time_nice) - extend the domain to nice round times.
@@ -366,20 +366,20 @@ Map a continuous, quantitative domain to a continuous range.
 
 Map a continuous, quantitative domain to a continuous, fixed color ramp.
 
-* [d3.scaleViridis](https://github.com/d3/d3-scale#viridis) - a dark-to-light color scheme.
-* [d3.scaleInferno](https://github.com/d3/d3-scale#inferno) - a dark-to-light color scheme.
-* [d3.scaleMagma](https://github.com/d3/d3-scale#magma) - a dark-to-light color scheme.
-* [d3.scalePlasma](https://github.com/d3/d3-scale#plasma) - a dark-to-light color scheme.
-* [d3.scaleWarm](https://github.com/d3/d3-scale#warm) - a rotating-hue color scheme.
-* [d3.scaleCool](https://github.com/d3/d3-scale#cool) - a rotating-hue color scheme.
-* [d3.scaleRainbow](https://github.com/d3/d3-scale#rainbow) - a cyclical rotating-hue color scheme.
-* [d3.scaleCubehelix](https://github.com/d3/d3-scale#cubehelix) - a dark-to-light, rotating-hue color scheme.
+* [d3.scaleViridis](https://github.com/d3/d3-scale#scaleViridis) - a dark-to-light color scheme.
+* [d3.scaleInferno](https://github.com/d3/d3-scale#scaleInferno) - a dark-to-light color scheme.
+* [d3.scaleMagma](https://github.com/d3/d3-scale#scaleMagma) - a dark-to-light color scheme.
+* [d3.scalePlasma](https://github.com/d3/d3-scale#scalePlasma) - a dark-to-light color scheme.
+* [d3.scaleWarm](https://github.com/d3/d3-scale#scaleWarm) - a rotating-hue color scheme.
+* [d3.scaleCool](https://github.com/d3/d3-scale#scaleCool) - a rotating-hue color scheme.
+* [d3.scaleRainbow](https://github.com/d3/d3-scale#scaleRainbow) - a cyclical rotating-hue color scheme.
+* [d3.scaleCubehelix](https://github.com/d3/d3-scale#scaleCubehelix) - a dark-to-light, rotating-hue color scheme.
 
 ### [Quantize](https://github.com/d3/d3-scale#quantize-scales)
 
 Map a continuous, quantitative domain to a discrete range.
 
-* [d3.scaleQuantize](https://github.com/d3/d3-scale#quantize) - create a uniform quantizing linear scale.
+* [d3.scaleQuantize](https://github.com/d3/d3-scale#scaleQuantize) - create a uniform quantizing linear scale.
 * [*quantize*](https://github.com/d3/d3-scale#_quantize) - compute the range value corresponding to a given domain value.
 * [*quantize*.invertExtent](https://github.com/d3/d3-scale#quantize_invertExtent) - compute the domain values corresponding to a given range value.
 * [*quantize*.domain](https://github.com/d3/d3-scale#quantize_domain) - set the input domain.
@@ -388,14 +388,14 @@ Map a continuous, quantitative domain to a discrete range.
 * [*quantize*.ticks](https://github.com/d3/d3-scale#quantize_ticks) - compute representative values from the domain.
 * [*quantize*.tickFormat](https://github.com/d3/d3-scale#quantize_tickFormat) - format ticks for human consumption.
 * [*quantize*.copy](https://github.com/d3/d3-scale#quantize_copy) - create a copy of this scale.
-* [d3.scaleQuantile](https://github.com/d3/d3-scale#quantile) - create a quantile quantizing linear scale.
+* [d3.scaleQuantile](https://github.com/d3/d3-scale#scaleQuantile) - create a quantile quantizing linear scale.
 * [*quantile*](https://github.com/d3/d3-scale#_quantile) - compute the range value corresponding to a given domain value.
 * [*quantile*.invertExtent](https://github.com/d3/d3-scale#quantile_invertExtent) - compute the domain values corresponding to a given range value.
 * [*quantile*.domain](https://github.com/d3/d3-scale#quantile_domain) - set the input domain.
 * [*quantile*.range](https://github.com/d3/d3-scale#quantile_range) - set the output range.
 * [*quantile*.quantiles](https://github.com/d3/d3-scale#quantile_quantiles) - get the quantile thresholds.
 * [*quantile*.copy](https://github.com/d3/d3-scale#quantile_copy) - create a copy of this scale.
-* [d3.scaleThreshold](https://github.com/d3/d3-scale#threshold) - create an arbitrary quantizing linear scale.
+* [d3.scaleThreshold](https://github.com/d3/d3-scale#scaleThreshold) - create an arbitrary quantizing linear scale.
 * [*threshold*](https://github.com/d3/d3-scale#_threshold) - compute the range value corresponding to a given domain value.
 * [*threshold*.invertExtent](https://github.com/d3/d3-scale#threshold_invertExtent) - compute the domain values corresponding to a given range value.
 * [*threshold*.domain](https://github.com/d3/d3-scale#threshold_domain) - set the input domain.
@@ -406,14 +406,14 @@ Map a continuous, quantitative domain to a discrete range.
 
 Map a discrete domain to a discrete range.
 
-* [d3.scaleOrdinal](https://github.com/d3/d3-scale#ordinal) - create an ordinal scale.
+* [d3.scaleOrdinal](https://github.com/d3/d3-scale#scaleOrdinal) - create an ordinal scale.
 * [*ordinal*](https://github.com/d3/d3-scale#_ordinal) - compute the range value corresponding to a given domain value.
 * [*ordinal*.domain](https://github.com/d3/d3-scale#ordinal_domain) - set the input domain.
 * [*ordinal*.range](https://github.com/d3/d3-scale#ordinal_range) - set the output range.
 * [*ordinal*.unknown](https://github.com/d3/d3-scale#ordinal_unknown) - set the output value for unknown inputs.
 * [*ordinal*.copy](https://github.com/d3/d3-scale#ordinal_copy) - create a copy of this scale.
-* [d3.scaleImplicit](https://github.com/d3/d3-scale#implicit) - a special unknown value for implicit domains.
-* [d3.scaleBand](https://github.com/d3/d3-scale#band) - create an ordinal band scale.
+* [d3.scaleImplicit](https://github.com/d3/d3-scale#scaleImplicit) - a special unknown value for implicit domains.
+* [d3.scaleBand](https://github.com/d3/d3-scale#scaleBand) - create an ordinal band scale.
 * [*band*](https://github.com/d3/d3-scale#_band) - compute the band start corresponding to a given domain value.
 * [*band*.domain](https://github.com/d3/d3-scale#band_domain) - set the input domain.
 * [*band*.range](https://github.com/d3/d3-scale#band_range) - set the output range.
@@ -426,17 +426,17 @@ Map a discrete domain to a discrete range.
 * [*band*.bandwidth](https://github.com/d3/d3-scale#band_bandwidth) - get the width of each band.
 * [*band*.step](https://github.com/d3/d3-scale#band_step) - get the distance between the starts of adjacent bands.
 * [*band*.copy](https://github.com/d3/d3-scale#band_copy) - create a copy of this scale.
-* [d3.scalePoint](https://github.com/d3/d3-scale#point) - create an ordinal point scale.
+* [d3.scalePoint](https://github.com/d3/d3-scale#scalePoint) - create an ordinal point scale.
 * [*point*.padding](https://github.com/d3/d3-scale#point_padding) - set padding outside the first and last point.
 
 ### [Categorical](https://github.com/d3/d3-scale#categorical-color-scales)
 
 Map a discrete domain to a discrete, fixed categorical color range.
 
-* [d3.scaleCategory10](https://github.com/d3/d3-scale#category10) - a categorical scheme with 10 colors.
-* [d3.scaleCategory20](https://github.com/d3/d3-scale#category20) - a categorical scheme with 20 colors.
-* [d3.scaleCategory20b](https://github.com/d3/d3-scale#category20b) - a categorical scheme with 20 colors.
-* [d3.scaleCategory20c](https://github.com/d3/d3-scale#category20c) - a categorical scheme with 20 colors.
+* [d3.scaleCategory10](https://github.com/d3/d3-scale#scaleCategory10) - a categorical scheme with 10 colors.
+* [d3.scaleCategory20](https://github.com/d3/d3-scale#scaleCategory20) - a categorical scheme with 20 colors.
+* [d3.scaleCategory20b](https://github.com/d3/d3-scale#scaleCategory20b) - a categorical scheme with 20 colors.
+* [d3.scaleCategory20c](https://github.com/d3/d3-scale#scaleCategory20c) - a categorical scheme with 20 colors.
 
 ## [Selections](https://github.com/d3/d3-selection)
 
@@ -578,23 +578,23 @@ An area, defined by a bounding topline and baseline, as in an area chart.
 
 Interpolate between points to produce a continuous shape.
 
-* [d3.curveBasis](https://github.com/d3/d3-shape#basis) - a cubic basis spline, repeating the end points.
-* [d3.curveBasisClosed](https://github.com/d3/d3-shape#basisClosed) - a closed cubic basis spline.
-* [d3.curveBasisOpen](https://github.com/d3/d3-shape#basisOpen) - a cubic basis spline.
-* [d3.curveBundle](https://github.com/d3/d3-shape#bundle) - a straightened cubic basis spline.
-* [d3.curveCardinal](https://github.com/d3/d3-shape#cardinal) - a cubic cardinal spline, with one-sided difference at each end.
-* [d3.curveCardinalClosed](https://github.com/d3/d3-shape#cardinalClosed) - a closed cubic cardinal spline.
-* [d3.curveCardinalOpen](https://github.com/d3/d3-shape#cardinalOpen) - a cubic cardinal spline.
-* [d3.curveCatmullRom](https://github.com/d3/d3-shape#catmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
-* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#catmullRomClosed) - a closed cubic Catmull–Rom spline.
-* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#catmullRomOpen) - a cubic Catmull–Rom spline.
-* [d3.curveLinear](https://github.com/d3/d3-shape#linear) - a polyline.
-* [d3.curveLinearClosed](https://github.com/d3/d3-shape#linearClosed) - a closed polyline.
-* [d3.curveMonotone](https://github.com/d3/d3-shape#monotone) - a cubic spline that preserves monotonicity in *y*.
-* [d3.curveNatural](https://github.com/d3/d3-shape#natural) - a natural cubic spline.
-* [d3.curveStep](https://github.com/d3/d3-shape#step) - a piecewise constant function.
-* [d3.curveStepAfter](https://github.com/d3/d3-shape#stepAfter) - a piecewise constant function.
-* [d3.curveStepBefore](https://github.com/d3/d3-shape#stepBefore) - a piecewise constant function.
+* [d3.curveBasis](https://github.com/d3/d3-shape#curveBasis) - a cubic basis spline, repeating the end points.
+* [d3.curveBasisClosed](https://github.com/d3/d3-shape#curveBasisClosed) - a closed cubic basis spline.
+* [d3.curveBasisOpen](https://github.com/d3/d3-shape#curveBasisOpen) - a cubic basis spline.
+* [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle) - a straightened cubic basis spline.
+* [d3.curveCardinal](https://github.com/d3/d3-shape#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
+* [d3.curveCardinalClosed](https://github.com/d3/d3-shape#curveCardinalClosed) - a closed cubic cardinal spline.
+* [d3.curveCardinalOpen](https://github.com/d3/d3-shape#curveCardinalOpen) - a cubic cardinal spline.
+* [d3.curveCatmullRom](https://github.com/d3/d3-shape#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
+* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
+* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
+* [d3.curveLinear](https://github.com/d3/d3-shape#curveLinear) - a polyline.
+* [d3.curveLinearClosed](https://github.com/d3/d3-shape#curveLinearClosed) - a closed polyline.
+* [d3.curveMonotone](https://github.com/d3/d3-shape#curveMonotone) - a cubic spline that preserves monotonicity in *y*.
+* [d3.curveNatural](https://github.com/d3/d3-shape#curveNatural) - a natural cubic spline.
+* [d3.curveStep](https://github.com/d3/d3-shape#curveStep) - a piecewise constant function.
+* [d3.curveStepAfter](https://github.com/d3/d3-shape#curveStepAfter) - a piecewise constant function.
+* [d3.curveStepBefore](https://github.com/d3/d3-shape#curveStepBefore) - a piecewise constant function.
 * [*curve*.areaStart](https://github.com/d3/d3-shape#curve_areaStart) - start a new area segment.
 * [*curve*.areaEnd](https://github.com/d3/d3-shape#curve_areaEnd) - end the current area segment.
 * [*curve*.lineStart](https://github.com/d3/d3-shape#curve_lineStart) - start a new line segment.
@@ -611,13 +611,13 @@ A categorical shape encoding, as in a scatterplot.
 * [*symbol*.size](https://github.com/d3/d3-shape#symbol_size) - set the size of the symbol in square pixels.
 * [*symbol*.context](https://github.com/d3/d3-shape#symbol_context) - set the rendering context.
 * [d3.symbols](https://github.com/d3/d3-shape#symbols) - the array of built-in symbol types.
-* [d3.symbolCircle](https://github.com/d3/d3-shape#circle) - a circle.
-* [d3.symbolCross](https://github.com/d3/d3-shape#cross) - a Greek cross with arms of equal length.
-* [d3.symbolDiamond](https://github.com/d3/d3-shape#diamond) - a rhombus.
-* [d3.symbolSquare](https://github.com/d3/d3-shape#square) - a square.
-* [d3.symbolStar](https://github.com/d3/d3-shape#star) - a pentagonal star (pentagram).
-* [d3.symbolTriangle](https://github.com/d3/d3-shape#triangle) - an up-pointing triangle.
-* [d3.symbolWye](https://github.com/d3/d3-shape#wye) - an up-pointing triangle.
+* [d3.symbolCircle](https://github.com/d3/d3-shape#symbolCircle) - a circle.
+* [d3.symbolCross](https://github.com/d3/d3-shape#symbolCross) - a Greek cross with arms of equal length.
+* [d3.symbolDiamond](https://github.com/d3/d3-shape#symbolDiamond) - a rhombus.
+* [d3.symbolSquare](https://github.com/d3/d3-shape#symbolSquare) - a square.
+* [d3.symbolStar](https://github.com/d3/d3-shape#symbolStar) - a pentagonal star (pentagram).
+* [d3.symbolTriangle](https://github.com/d3/d3-shape#symbolTriangle) - an up-pointing triangle.
+* [d3.symbolWye](https://github.com/d3/d3-shape#symbolWye) - an up-pointing triangle.
 * [*symbolType*.draw](https://github.com/d3/d3-shape#symbolType_draw) - draw this symbol to the given context.
 
 ### [Stacks](https://github.com/d3/d3-shape#stacks)
@@ -630,57 +630,59 @@ Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 * [*stack*.value](https://github.com/d3/d3-shape#stack_value) - set the value accessor.
 * [*stack*.order](https://github.com/d3/d3-shape#stack_order) - set the order accessor.
 * [*stack*.offset](https://github.com/d3/d3-shape#stack_offset) - set the offset accessor.
-* [d3.stackOrderAscending](https://github.com/d3/d3-shape#orderAscending) - put the smallest series on bottom.
-* [d3.stackOrderDescending](https://github.com/d3/d3-shape#orderDescending) - put the largest series on bottom.
-* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape#orderInsideOut) - put larger series in the middle.
-* [d3.stackOrderNone](https://github.com/d3/d3-shape#orderNone) - use the given series order.
-* [d3.stackOrderReverse](https://github.com/d3/d3-shape#orderReverse) - use the reverse of the given series order.
-* [d3.stackOffsetExpand](https://github.com/d3/d3-shape#offsetExpand) - normalize the baseline to zero and topline to one.
-* [d3.stackOffsetNone](https://github.com/d3/d3-shape#offsetNone) - apply a zero baseline.
-* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape#offsetSilhouette) - center the streamgraph around zero.
-* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape#offsetWiggle) - minimize streamgraph wiggling.
+* [d3.stackOrderAscending](https://github.com/d3/d3-shape#stackOrderAscending) - put the smallest series on bottom.
+* [d3.stackOrderDescending](https://github.com/d3/d3-shape#stackOrderDescending) - put the largest series on bottom.
+* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape#stackOrderInsideOut) - put larger series in the middle.
+* [d3.stackOrderNone](https://github.com/d3/d3-shape#stackOrderNone) - use the given series order.
+* [d3.stackOrderReverse](https://github.com/d3/d3-shape#stackOrderReverse) - use the reverse of the given series order.
+* [d3.stackOffsetExpand](https://github.com/d3/d3-shape#stackOffsetExpand) - normalize the baseline to zero and topline to one.
+* [d3.stackOffsetNone](https://github.com/d3/d3-shape#stackOffsetNone) - apply a zero baseline.
+* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape#stackOffsetSilhouette) - center the streamgraph around zero.
+* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape#stackOffsetWiggle) - minimize streamgraph wiggling.
 
 ## [Time Formats](https://github.com/d3/d3-time-format)
 
 Parse and format times, inspired by strptime and strftime.
 
-* [d3.timeFormat](https://github.com/d3/d3-time-format#format) - alias for enUs.format.
+* [d3.timeFormat](https://github.com/d3/d3-time-format#timeFormat) - alias for enUs.format.
+* [d3.timeParse](https://github.com/d3/d3-time-format#timeParse) - alias for enUs.parse.
 * [d3.utcFormat](https://github.com/d3/d3-time-format#utcFormat) -  alias for enUs.utcFormat.
-* [d3.isoFormat](https://github.com/d3/d3-time-format#isoFormat) - the full ISO 8601 UTC format.
-* [*format*](https://github.com/d3/d3-time-format#_format) - format the given date.
-* [*format*.parse](https://github.com/d3/d3-time-format#format_parse) - parse the given string.
-* [*format*.toString](https://github.com/d3/d3-time-format#format_toString) - return the format specifier.
+* [d3.utcFormat](https://github.com/d3/d3-time-format#utcParse) -  alias for enUs.utcParse.
+* [d3.isoFormat](https://github.com/d3/d3-time-format#isoFormat) - an ISO 8601 UTC formatter.
+* [d3.isoParse](https://github.com/d3/d3-time-format#isoParse) - an ISO 8601 UTC parser.
 * [d3.timeFormatLocale](https://github.com/d3/d3-time-format#locale) - define a custom locale.
-* [*locale*.format](https://github.com/d3/d3-time-format#locale_format) - create a time format.
-* [*locale*.utcFormat](https://github.com/d3/d3-time-format#locale_utcFormat) - create a UTC format.
-* [d3.timeFormatCaEs](https://github.com/d3/d3-time-format#localeCaEs) - the Catalan (Spain) locale.
-* [d3.timeFormatDeCh](https://github.com/d3/d3-time-format#localeDeCh) - the German (Switzerland) locale.
-* [d3.timeFormatDeDe](https://github.com/d3/d3-time-format#localeDeDe) - the German (Germany) locale.
-* [d3.timeFormatEnCa](https://github.com/d3/d3-time-format#localeEnCa) - the English (Canada) locale.
-* [d3.timeFormatEnGb](https://github.com/d3/d3-time-format#localeEnGb) - the English (United Kingdom) locale.
-* [d3.timeFormatEnUs](https://github.com/d3/d3-time-format#localeEnUs) - the English (United States) locale.
-* [d3.timeFormatEsEs](https://github.com/d3/d3-time-format#localeEsEs) - the Spanish (Spain) locale.
-* [d3.timeFormatFiFi](https://github.com/d3/d3-time-format#localeFiFi) - the Finnish (Finland) locale.
-* [d3.timeFormatFrCa](https://github.com/d3/d3-time-format#localeFrCa) - the French (Canada) locale.
-* [d3.timeFormatFrFr](https://github.com/d3/d3-time-format#localeFrFr) - the French (France) locale.
-* [d3.timeFormatHeIl](https://github.com/d3/d3-time-format#localeHeIl) - the Hebrew (Israel) locale.
-* [d3.timeFormatHuHu](https://github.com/d3/d3-time-format#localeHuHu) - the Hungarian (Hungary) locale.
-* [d3.timeFormatItIt](https://github.com/d3/d3-time-format#localeItIt) - the Italian (Italy) locale.
-* [d3.timeFormatJaJp](https://github.com/d3/d3-time-format#localeJaJp) - the Japanese (Japan) locale.
-* [d3.timeFormatKoKr](https://github.com/d3/d3-time-format#localeKoKr) - the Korean (South Korea) locale.
-* [d3.timeFormatMkMk](https://github.com/d3/d3-time-format#localeMkMk) - the Macedonian (Macedonia) locale.
-* [d3.timeFormatNlNl](https://github.com/d3/d3-time-format#localeNlNl) - the Dutch (Netherlands) locale.
-* [d3.timeFormatPlPl](https://github.com/d3/d3-time-format#localePlPl) - the Polish (Poland) locale.
-* [d3.timeFormatPtBr](https://github.com/d3/d3-time-format#localePtBr) - the Portuguese (Brazil) locale.
-* [d3.timeFormatRuRu](https://github.com/d3/d3-time-format#localeRuRu) - the Russian (Russia) locale.
-* [d3.timeFormatSvSe](https://github.com/d3/d3-time-format#localeSvSe) - the Swedish (Sweden) locale.
-* [d3.timeFormatZhCn](https://github.com/d3/d3-time-format#localeZhCn) - the Chinese (China) locale.
+* [*locale*.format](https://github.com/d3/d3-time-format#locale_format) - create a time formatter.
+* [*locale*.parse](https://github.com/d3/d3-time-format#locale_parse) - create a time parser.
+* [*locale*.utcFormat](https://github.com/d3/d3-time-format#locale_utcFormat) - create a UTC formatter.
+* [*locale*.utcParse](https://github.com/d3/d3-time-format#locale_utcParse) - create a UTC parser.
+* [d3.timeFormatCaEs](https://github.com/d3/d3-time-format#timeFormatCaEs) - the Catalan (Spain) locale.
+* [d3.timeFormatDeCh](https://github.com/d3/d3-time-format#timeFormatDeCh) - the German (Switzerland) locale.
+* [d3.timeFormatDeDe](https://github.com/d3/d3-time-format#timeFormatDeDe) - the German (Germany) locale.
+* [d3.timeFormatEnCa](https://github.com/d3/d3-time-format#timeFormatEnCa) - the English (Canada) locale.
+* [d3.timeFormatEnGb](https://github.com/d3/d3-time-format#timeFormatEnGb) - the English (United Kingdom) locale.
+* [d3.timeFormatEnUs](https://github.com/d3/d3-time-format#timeFormatEnUs) - the English (United States) locale.
+* [d3.timeFormatEsEs](https://github.com/d3/d3-time-format#timeFormatEsEs) - the Spanish (Spain) locale.
+* [d3.timeFormatFiFi](https://github.com/d3/d3-time-format#timeFormatFiFi) - the Finnish (Finland) locale.
+* [d3.timeFormatFrCa](https://github.com/d3/d3-time-format#timeFormatFrCa) - the French (Canada) locale.
+* [d3.timeFormatFrFr](https://github.com/d3/d3-time-format#timeFormatFrFr) - the French (France) locale.
+* [d3.timeFormatHeIl](https://github.com/d3/d3-time-format#timeFormatHeIl) - the Hebrew (Israel) locale.
+* [d3.timeFormatHuHu](https://github.com/d3/d3-time-format#timeFormatHuHu) - the Hungarian (Hungary) locale.
+* [d3.timeFormatItIt](https://github.com/d3/d3-time-format#timeFormatItIt) - the Italian (Italy) locale.
+* [d3.timeFormatJaJp](https://github.com/d3/d3-time-format#timeFormatJaJp) - the Japanese (Japan) locale.
+* [d3.timeFormatKoKr](https://github.com/d3/d3-time-format#timeFormatKoKr) - the Korean (South Korea) locale.
+* [d3.timeFormatMkMk](https://github.com/d3/d3-time-format#timeFormatMkMk) - the Macedonian (Macedonia) locale.
+* [d3.timeFormatNlNl](https://github.com/d3/d3-time-format#timeFormatNlNl) - the Dutch (Netherlands) locale.
+* [d3.timeFormatPlPl](https://github.com/d3/d3-time-format#timeFormatPlPl) - the Polish (Poland) locale.
+* [d3.timeFormatPtBr](https://github.com/d3/d3-time-format#timeFormatPtBr) - the Portuguese (Brazil) locale.
+* [d3.timeFormatRuRu](https://github.com/d3/d3-time-format#timeFormatRuRu) - the Russian (Russia) locale.
+* [d3.timeFormatSvSe](https://github.com/d3/d3-time-format#timeFormatSvSe) - the Swedish (Sweden) locale.
+* [d3.timeFormatZhCn](https://github.com/d3/d3-time-format#timeFormatZhCn) - the Chinese (China) locale.
 
 ## [Time Intervals](https://github.com/d3/d3-time)
 
 A calculator for humanity’s peculiar conventions of time.
 
-* [d3.timeInterval](https://github.com/d3/d3-time#interval) - implement a new custom time interval.
+* [d3.timeInterval](https://github.com/d3/d3-time#timeInterval) - implement a new custom time interval.
 * [*interval*](https://github.com/d3/d3-time#_interval) - alias for *interval*.floor.
 * [*interval*.floor](https://github.com/d3/d3-time#interval_floor) - round down to the nearest boundary.
 * [*interval*.round](https://github.com/d3/d3-time#interval_round) - round to the nearest boundary.
@@ -690,36 +692,36 @@ A calculator for humanity’s peculiar conventions of time.
 * [*interval*.filter](https://github.com/d3/d3-time#interval_filter) - create a filtered subset of this interval.
 * [*interval*.every](https://github.com/d3/d3-time#interval_every) - create a filtered subset of this interval.
 * [*interval*.count](https://github.com/d3/d3-time#interval_count) - count interval boundaries between two dates.
-* [d3.timeMillisecond](https://github.com/d3/d3-time#millisecond), [d3.utcMillisecond](https://github.com/d3/d3-time#millisecond) - the millisecond interval.
-* [d3.timeMilliseconds](https://github.com/d3/d3-time#millisecond), [d3.utcMilliseconds](https://github.com/d3/d3-time#millisecond) - aliases for millisecond.range.
-* [d3.timeSecond](https://github.com/d3/d3-time#second), [d3.utcSecond](https://github.com/d3/d3-time#second) - the second interval.
-* [d3.timeSeconds](https://github.com/d3/d3-time#second), [d3.utcSeconds](https://github.com/d3/d3-time#second) - aliases for second.range.
-* [d3.timeMinute](https://github.com/d3/d3-time#minute), [d3.utcMinute](https://github.com/d3/d3-time#minute) - the minute interval.
-* [d3.timeMinutes](https://github.com/d3/d3-time#minute), [d3.utcMinutes](https://github.com/d3/d3-time#minute) - aliases for minute.range.
-* [d3.timeHour](https://github.com/d3/d3-time#hour), [d3.utcHour](https://github.com/d3/d3-time#hour) - the hour interval.
-* [d3.timeHours](https://github.com/d3/d3-time#hour), [d3.utcHours](https://github.com/d3/d3-time#hour) - aliases for hour.range.
-* [d3.timeDay](https://github.com/d3/d3-time#day), [d3.utcDay](https://github.com/d3/d3-time#day) - the day interval.
-* [d3.timeDays](https://github.com/d3/d3-time#day), [d3.utcDays](https://github.com/d3/d3-time#day) - aliases for day.range.
-* [d3.timeWeek](https://github.com/d3/d3-time#week), [d3.utcWeek](https://github.com/d3/d3-time#week) - aliases for sunday.
-* [d3.timeWeeks](https://github.com/d3/d3-time#week), [d3.utcWeeks](https://github.com/d3/d3-time#week) - aliases for week.range.
-* [d3.timeSunday](https://github.com/d3/d3-time#sunday), [d3.utcSunday](https://github.com/d3/d3-time#sunday) - the week interval, starting on Sunday.
-* [d3.timeSundays](https://github.com/d3/d3-time#sunday), [d3.utcSundays](https://github.com/d3/d3-time#sunday) - aliases for sunday.range.
-* [d3.timeMonday](https://github.com/d3/d3-time#monday), [d3.utcMonday](https://github.com/d3/d3-time#monday) - the week interval, starting on Monday.
-* [d3.timeMondays](https://github.com/d3/d3-time#monday), [d3.utcMondays](https://github.com/d3/d3-time#monday) - aliases for monday.range.
-* [d3.timeTuesday](https://github.com/d3/d3-time#tuesday), [d3.utcTuesday](https://github.com/d3/d3-time#tuesday) - the week interval, starting on Tuesday.
-* [d3.timeTuesdays](https://github.com/d3/d3-time#tuesday), [d3.utcTuesdays](https://github.com/d3/d3-time#tuesday) - aliases for tuesday.range.
-* [d3.timeWednesday](https://github.com/d3/d3-time#wednesday), [d3.utcWednesday](https://github.com/d3/d3-time#wednesday) - the week interval, starting on Wednesday.
-* [d3.timeWednesdays](https://github.com/d3/d3-time#wednesday), [d3.utcWednesdays](https://github.com/d3/d3-time#wednesday) - aliases for wednesday.range.
-* [d3.timeThursday](https://github.com/d3/d3-time#thursday), [d3.utcThursday](https://github.com/d3/d3-time#thursday) - the week interval, starting on Thursday.
-* [d3.timeThursdays](https://github.com/d3/d3-time#thursday), [d3.utcThursdays](https://github.com/d3/d3-time#thursday) - aliases for thursday.range.
-* [d3.timeFriday](https://github.com/d3/d3-time#friday), [d3.utcFriday](https://github.com/d3/d3-time#friday) - the week interval, starting on Friday.
-* [d3.timeFridays](https://github.com/d3/d3-time#friday), [d3.utcFridays](https://github.com/d3/d3-time#friday) - aliases for friday.range.
-* [d3.timeSaturday](https://github.com/d3/d3-time#saturday), [d3.utcSaturday](https://github.com/d3/d3-time#saturday) - the week interval, starting on Saturday.
-* [d3.timeSaturdays](https://github.com/d3/d3-time#saturday), [d3.utcSaturdays](https://github.com/d3/d3-time#saturday) - aliases for saturday.range.
-* [d3.timeMonth](https://github.com/d3/d3-time#month), [d3.utcMonth](https://github.com/d3/d3-time#month) - the month interval.
-* [d3.timeMonths](https://github.com/d3/d3-time#month), [d3.utcMonths](https://github.com/d3/d3-time#month) - aliases for month.range.
-* [d3.timeYear](https://github.com/d3/d3-time#year), [d3.utcYear](https://github.com/d3/d3-time#year) - the year interval.
-* [d3.timeYears](https://github.com/d3/d3-time#year), [d3.utcYears](https://github.com/d3/d3-time#year) - aliases for year.range.
+* [d3.timeMillisecond](https://github.com/d3/d3-time#timeMillisecond), [d3.utcMillisecond](https://github.com/d3/d3-time#timeMillisecond) - the millisecond interval.
+* [d3.timeMilliseconds](https://github.com/d3/d3-time#timeMillisecond), [d3.utcMilliseconds](https://github.com/d3/d3-time#timeMillisecond) - aliases for millisecond.range.
+* [d3.timeSecond](https://github.com/d3/d3-time#timeSecond), [d3.utcSecond](https://github.com/d3/d3-time#timeSecond) - the second interval.
+* [d3.timeSeconds](https://github.com/d3/d3-time#timeSecond), [d3.utcSeconds](https://github.com/d3/d3-time#timeSecond) - aliases for second.range.
+* [d3.timeMinute](https://github.com/d3/d3-time#timeMinute), [d3.utcMinute](https://github.com/d3/d3-time#timeMinute) - the minute interval.
+* [d3.timeMinutes](https://github.com/d3/d3-time#timeMinute), [d3.utcMinutes](https://github.com/d3/d3-time#timeMinute) - aliases for minute.range.
+* [d3.timeHour](https://github.com/d3/d3-time#timeHour), [d3.utcHour](https://github.com/d3/d3-time#timeHour) - the hour interval.
+* [d3.timeHours](https://github.com/d3/d3-time#timeHour), [d3.utcHours](https://github.com/d3/d3-time#timeHour) - aliases for hour.range.
+* [d3.timeDay](https://github.com/d3/d3-time#timeDay), [d3.utcDay](https://github.com/d3/d3-time#timeDay) - the day interval.
+* [d3.timeDays](https://github.com/d3/d3-time#timeDay), [d3.utcDays](https://github.com/d3/d3-time#timeDay) - aliases for day.range.
+* [d3.timeWeek](https://github.com/d3/d3-time#timeWeek), [d3.utcWeek](https://github.com/d3/d3-time#timeWeek) - aliases for sunday.
+* [d3.timeWeeks](https://github.com/d3/d3-time#timeWeek), [d3.utcWeeks](https://github.com/d3/d3-time#timeWeek) - aliases for week.range.
+* [d3.timeSunday](https://github.com/d3/d3-time#timeSunday), [d3.utcSunday](https://github.com/d3/d3-time#timeSunday) - the week interval, starting on Sunday.
+* [d3.timeSundays](https://github.com/d3/d3-time#timeSunday), [d3.utcSundays](https://github.com/d3/d3-time#timeSunday) - aliases for sunday.range.
+* [d3.timeMonday](https://github.com/d3/d3-time#timeMonday), [d3.utcMonday](https://github.com/d3/d3-time#timeMonday) - the week interval, starting on Monday.
+* [d3.timeMondays](https://github.com/d3/d3-time#timeMonday), [d3.utcMondays](https://github.com/d3/d3-time#timeMonday) - aliases for monday.range.
+* [d3.timeTuesday](https://github.com/d3/d3-time#timeTuesday), [d3.utcTuesday](https://github.com/d3/d3-time#timeTuesday) - the week interval, starting on Tuesday.
+* [d3.timeTuesdays](https://github.com/d3/d3-time#timeTuesday), [d3.utcTuesdays](https://github.com/d3/d3-time#timeTuesday) - aliases for tuesday.range.
+* [d3.timeWednesday](https://github.com/d3/d3-time#timeWednesday), [d3.utcWednesday](https://github.com/d3/d3-time#timeWednesday) - the week interval, starting on Wednesday.
+* [d3.timeWednesdays](https://github.com/d3/d3-time#timeWednesday), [d3.utcWednesdays](https://github.com/d3/d3-time#timeWednesday) - aliases for wednesday.range.
+* [d3.timeThursday](https://github.com/d3/d3-time#timeThursday), [d3.utcThursday](https://github.com/d3/d3-time#timeThursday) - the week interval, starting on Thursday.
+* [d3.timeThursdays](https://github.com/d3/d3-time#timeThursday), [d3.utcThursdays](https://github.com/d3/d3-time#timeThursday) - aliases for thursday.range.
+* [d3.timeFriday](https://github.com/d3/d3-time#timeFriday), [d3.utcFriday](https://github.com/d3/d3-time#timeFriday) - the week interval, starting on Friday.
+* [d3.timeFridays](https://github.com/d3/d3-time#timeFriday), [d3.utcFridays](https://github.com/d3/d3-time#timeFriday) - aliases for friday.range.
+* [d3.timeSaturday](https://github.com/d3/d3-time#timeSaturday), [d3.utcSaturday](https://github.com/d3/d3-time#timeSaturday) - the week interval, starting on Saturday.
+* [d3.timeSaturdays](https://github.com/d3/d3-time#timeSaturday), [d3.utcSaturdays](https://github.com/d3/d3-time#timeSaturday) - aliases for saturday.range.
+* [d3.timeMonth](https://github.com/d3/d3-time#timeMonth), [d3.utcMonth](https://github.com/d3/d3-time#timeMonth) - the month interval.
+* [d3.timeMonths](https://github.com/d3/d3-time#timeMonth), [d3.utcMonths](https://github.com/d3/d3-time#timeMonth) - aliases for month.range.
+* [d3.timeYear](https://github.com/d3/d3-time#timeYear), [d3.utcYear](https://github.com/d3/d3-time#timeYear) - the year interval.
+* [d3.timeYears](https://github.com/d3/d3-time#timeYear), [d3.utcYears](https://github.com/d3/d3-time#timeYear) - aliases for year.range.
 
 ## [Timers](https://github.com/d3/d3-timer)
 
