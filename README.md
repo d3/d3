@@ -91,61 +91,61 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
 
-## [Collections](https://github.com/d3/d3-array)
+## [Collections](https://github.com/d3/d3-collection)
 
-Useful data structures.
+Handy data structures for elements keyed by string.
 
-#### [Objects](https://github.com/d3/d3-array#objects)
+#### [Objects](https://github.com/d3/d3-collection#objects)
 
 Methods for converting associative arrays (objects) to arrays.
 
-* [d3.keys](https://github.com/d3/d3-array#keys) - list the keys of an associative array.
-* [d3.values](https://github.com/d3/d3-array#values) - list the values of an associated array.
-* [d3.entries](https://github.com/d3/d3-array#entries) - list the key-value entries of an associative array.
+* [d3.keys](https://github.com/d3/d3-collection#keys) - list the keys of an associative array.
+* [d3.values](https://github.com/d3/d3-collection#values) - list the values of an associated array.
+* [d3.entries](https://github.com/d3/d3-collection#entries) - list the key-value entries of an associative array.
 
-#### [Maps](https://github.com/d3/d3-array#maps)
+#### [Maps](https://github.com/d3/d3-collection#maps)
 
 Like ES6 Map, but with string keys and a few other differences.
 
-* [d3.map](https://github.com/d3/d3-array#map) - create a new, empty map.
-* [*map*.has](https://github.com/d3/d3-array#map_has) - returns true if the map contains the given key.
-* [*map*.get](https://github.com/d3/d3-array#map_get) - get the value for the given key.
-* [*map*.set](https://github.com/d3/d3-array#map_set) - set the value for the given key.
-* [*map*.remove](https://github.com/d3/d3-array#map_remove) - remove the entry for given key.
-* [*map*.clear](https://github.com/d3/d3-array#map_clear) - remove all entries.
-* [*map*.keys](https://github.com/d3/d3-array#map_keys) - get the array of keys.
-* [*map*.values](https://github.com/d3/d3-array#map_values) - get the array of values.
-* [*map*.entries](https://github.com/d3/d3-array#map_entries) - get the array of entries (key-values objects).
-* [*map*.each](https://github.com/d3/d3-array#map_each) - call a function for each entry.
-* [*map*.empty](https://github.com/d3/d3-array#map_empty) - returns false if the map has at least one entry.
-* [*map*.size](https://github.com/d3/d3-array#map_size) - compute the number of entries.
+* [d3.map](https://github.com/d3/d3-collection#map) - create a new, empty map.
+* [*map*.has](https://github.com/d3/d3-collection#map_has) - returns true if the map contains the given key.
+* [*map*.get](https://github.com/d3/d3-collection#map_get) - get the value for the given key.
+* [*map*.set](https://github.com/d3/d3-collection#map_set) - set the value for the given key.
+* [*map*.remove](https://github.com/d3/d3-collection#map_remove) - remove the entry for given key.
+* [*map*.clear](https://github.com/d3/d3-collection#map_clear) - remove all entries.
+* [*map*.keys](https://github.com/d3/d3-collection#map_keys) - get the array of keys.
+* [*map*.values](https://github.com/d3/d3-collection#map_values) - get the array of values.
+* [*map*.entries](https://github.com/d3/d3-collection#map_entries) - get the array of entries (key-values objects).
+* [*map*.each](https://github.com/d3/d3-collection#map_each) - call a function for each entry.
+* [*map*.empty](https://github.com/d3/d3-collection#map_empty) - returns false if the map has at least one entry.
+* [*map*.size](https://github.com/d3/d3-collection#map_size) - compute the number of entries.
 
-#### [Sets](https://github.com/d3/d3-array#sets)
+#### [Sets](https://github.com/d3/d3-collection#sets)
 
 Like ES6 Set, but with string keys and a few other differences.
 
-* [d3.set](https://github.com/d3/d3-array#set) - create a new, empty set.
-* [*set*.has](https://github.com/d3/d3-array#set_has) - returns true if the set contains the given value.
-* [*set*.add](https://github.com/d3/d3-array#set_add) - add the given value.
-* [*set*.remove](https://github.com/d3/d3-array#set_remove) - remove the given value.
-* [*set*.clear](https://github.com/d3/d3-array#set_clear) - remove all values.
-* [*set*.values](https://github.com/d3/d3-array#set_values) - get the array of values.
-* [*set*.each](https://github.com/d3/d3-array#set_each) - call a function for each value.
-* [*set*.empty](https://github.com/d3/d3-array#set_empty) - returns true if the set has at least one value.
-* [*set*.size](https://github.com/d3/d3-array#set_size) - compute the number of values.
+* [d3.set](https://github.com/d3/d3-collection#set) - create a new, empty set.
+* [*set*.has](https://github.com/d3/d3-collection#set_has) - returns true if the set contains the given value.
+* [*set*.add](https://github.com/d3/d3-collection#set_add) - add the given value.
+* [*set*.remove](https://github.com/d3/d3-collection#set_remove) - remove the given value.
+* [*set*.clear](https://github.com/d3/d3-collection#set_clear) - remove all values.
+* [*set*.values](https://github.com/d3/d3-collection#set_values) - get the array of values.
+* [*set*.each](https://github.com/d3/d3-collection#set_each) - call a function for each value.
+* [*set*.empty](https://github.com/d3/d3-collection#set_empty) - returns true if the set has at least one value.
+* [*set*.size](https://github.com/d3/d3-collection#set_size) - compute the number of values.
 
-#### [Nests](https://github.com/d3/d3-array#nests)
+#### [Nests](https://github.com/d3/d3-collection#nests)
 
 Group data into arbitrary hierarchies.
 
-* [d3.nest](https://github.com/d3/d3-array#nest) - create a new nest generator.
-* [*nest*.key](https://github.com/d3/d3-array#nest_key) - add a level to the nest hierarchy.
-* [*nest*.sortKeys](https://github.com/d3/d3-array#nest_sortKeys) - sort the current nest level by key.
-* [*nest*.sortValues](https://github.com/d3/d3-array#nest_sortValues) - sort the leaf nest level by value.
-* [*nest*.rollup](https://github.com/d3/d3-array#nest_rollup) - specify a rollup function for leaf values.
-* [*nest*.map](https://github.com/d3/d3-array#nest_map) - generate the nest, returning a map.
-* [*nest*.object](https://github.com/d3/d3-array#nest_object) - generate the nest, returning an associative array.
-* [*nest*.entries](https://github.com/d3/d3-array#nest_entries) - generate the nest, returning an array of key-values tuples.
+* [d3.nest](https://github.com/d3/d3-collection#nest) - create a new nest generator.
+* [*nest*.key](https://github.com/d3/d3-collection#nest_key) - add a level to the nest hierarchy.
+* [*nest*.sortKeys](https://github.com/d3/d3-collection#nest_sortKeys) - sort the current nest level by key.
+* [*nest*.sortValues](https://github.com/d3/d3-collection#nest_sortValues) - sort the leaf nest level by value.
+* [*nest*.rollup](https://github.com/d3/d3-collection#nest_rollup) - specify a rollup function for leaf values.
+* [*nest*.map](https://github.com/d3/d3-collection#nest_map) - generate the nest, returning a map.
+* [*nest*.object](https://github.com/d3/d3-collection#nest_object) - generate the nest, returning an associative array.
+* [*nest*.entries](https://github.com/d3/d3-collection#nest_entries) - generate the nest, returning an array of key-values tuples.
 
 ## [Colors](https://github.com/d3/d3-color)
 

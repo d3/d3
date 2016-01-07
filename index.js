@@ -8,34 +8,37 @@ export {
   bisector,
   descending,
   deviation,
-  entries,
   extent,
   histogram,
   thresholdFreedmanDiaconis,
   thresholdScott,
   thresholdSturges,
-  keys,
-  map,
   max,
   mean,
   median,
   merge,
   min,
-  nest,
   pairs,
   permute,
   quantile,
   range,
   scan,
-  set,
   shuffle,
   sum,
   ticks,
   transpose,
-  values,
   variance,
   zip
 } from "d3-array";
+
+export {
+  entries,
+  keys,
+  values,
+  map,
+  set,
+  nest
+} from "d3-collection";
 
 export {
   uniform as randomUniform,
