@@ -174,12 +174,12 @@ export {
 
 export {
   request,
-  html as requestHtml,
-  json as requestJson,
-  text as requestText,
-  xml as requestXml,
-  csv as requestCsv,
-  tsv as requestTsv
+  requestHtml,
+  requestJson,
+  requestText,
+  requestXml,
+  requestCsv,
+  requestTsv
 } from "d3-request";
 
 export {
@@ -286,8 +286,11 @@ export {
 
 export {
   timeFormat,
+  timeParse,
   utcFormat,
+  utcParse,
   isoFormat,
+  isoParse,
   timeFormatLocale,
   timeFormatCaEs,
   timeFormatDeCh,
