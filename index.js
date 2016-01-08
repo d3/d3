@@ -357,3 +357,11 @@ export {
   touches,
   event
 } from "d3-selection";
+
+export {
+  axis,
+  axisOrientTop,
+  axisOrientRight,
+  axisOrientBottom,
+  axisOrientLeft
+} from "d3-axis";

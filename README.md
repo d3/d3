@@ -13,6 +13,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.3`. Otherwise, download the [latest 
 ## API Reference
 
 * [Arrays](#arrays) ([Statistics](#statistics), [Histograms](#histograms), [Search](#search), [Transformations](#transformations))
+* [Axes](#axes)
 * [Collections](#collections) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
@@ -90,6 +91,27 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.range](https://github.com/d3/d3-array#range) - generate a range of numeric values.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
+
+## [Axes](https://github.com/d3/d3-axis)
+
+Human-readable reference marks for scales.
+
+* [d3.axis](https://github.com/d3/d3-axis#axis) - create a new axis generator.
+* [*axis*](https://github.com/d3/d3-axis#_axis) - generate an axis for the given selection.
+* [*axis*.scale](https://github.com/d3/d3-axis#axis_scale) - set the scale.
+* [*axis*.orient](https://github.com/d3/d3-axis#axis_orient) - set the axis orientation.
+* [*axis*.ticks](https://github.com/d3/d3-axis#axis_ticks) - customize how ticks are generated and formatted.
+* [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickArguments) - customize how ticks are generated and formatted.
+* [*axis*.tickValues](https://github.com/d3/d3-axis#axis_tickValues) - set the tick values explicitly.
+* [*axis*.tickFormat](https://github.com/d3/d3-axis#axis_tickFormat) - set the tick format explicitly.
+* [*axis*.tickSize](https://github.com/d3/d3-axis#axis_tickSize) - set the size of the ticks.
+* [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) - set the size of inner ticks.
+* [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) - set the size of outer (extent) ticks.
+* [*axis*.tickPadding](https://github.com/d3/d3-axis#axis_tickPadding) - set the padding between ticks and labels.
+* [d3.axisOrientTop](https://github.com/d3/d3-axis#axisOrientTop) - orient the axis along the chart top.
+* [d3.axisOrientRight](https://github.com/d3/d3-axis#axisOrientRight) - orient the axis along the chart right.
+* [d3.axisOrientBottom](https://github.com/d3/d3-axis#axisOrientBottom) - orient the axis along the chart bottom.
+* [d3.axisOrientLeft](https://github.com/d3/d3-axis#axisOrientLeft) - orient the axis along the chart left.
 
 ## [Collections](https://github.com/d3/d3-collection)
 
