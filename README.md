@@ -335,7 +335,7 @@ Encodings that map abstract data to visual representation.
 
 Map a continuous, quantitative domain to a continuous range.
 
-* [*continuous*](https://github.com/d3/d3-scale#continuous) - compute the range value corresponding to a given domain value.
+* [*continuous*](https://github.com/d3/d3-scale#_continuous) - compute the range value corresponding to a given domain value.
 * [*continuous*.invert](https://github.com/d3/d3-scale#continuous_invert) - compute the domain value corresponding to a given range value.
 * [*continuous*.domain](https://github.com/d3/d3-scale#continuous_domain) - set the input domain.
 * [*continuous*.range](https://github.com/d3/d3-scale#continuous_range) - set the output range.
@@ -348,19 +348,46 @@ Map a continuous, quantitative domain to a continuous range.
 * [*continuous*.copy](https://github.com/d3/d3-scale#continuous_copy) - create a copy of this scale.
 * [d3.scaleLinear](https://github.com/d3/d3-scale#scaleLinear) - create a quantitative linear scale.
 * [d3.scalePow](https://github.com/d3/d3-scale#scalePow) - create a quantitative power scale.
+* [*_pow*](https://github.com/d3/d3-scale#_pow) - compute the range value corresponding to a given domain value.
+* [*pow*.invert](https://github.com/d3/d3-scale#pow_invert) - compute the domain value corresponding to a given range value.
 * [*pow*.exponent](https://github.com/d3/d3-scale#pow_exponent) - set the power exponent.
+* [*pow*.domain](https://github.com/d3/d3-scale#pow_domain) - set the input domain.
+* [*pow*.range](https://github.com/d3/d3-scale#pow_range) - set the output range.
+* [*pow*.rangeRound](https://github.com/d3/d3-scale#pow_rangeRound) - set the output range and enable rounding.
+* [*pow*.clamp](https://github.com/d3/d3-scale#pow_clamp) - enable clamping to the domain or range.
+* [*pow*.interpolate](https://github.com/d3/d3-scale#pow_interpolate) - set the output interpolator.
+* [*pow*.ticks](https://github.com/d3/d3-scale#pow_ticks) - compute representative values from the domain.
+* [*pow*.tickFormat](https://github.com/d3/d3-scale#pow_tickFormat) - format ticks for human consumption.
+* [*pow*.nice](https://github.com/d3/d3-scale#pow_nice) - extend the domain to nice round numbers.
+* [*pow*.copy](https://github.com/d3/d3-scale#pow_copy) - create a copy of this scale.
 * [d3.scaleSqrt](https://github.com/d3/d3-scale#scaleSqrt) - create a quantitative power scale with exponent 0.5.
 * [d3.scaleLog](https://github.com/d3/d3-scale#scaleLog) - create a quantitative logarithmic scale.
+* [*_log*](https://github.com/d3/d3-scale#_log) - compute the range value corresponding to a given domain value.
+* [*log*.invert](https://github.com/d3/d3-scale#log_invert) - compute the domain value corresponding to a given range value.
 * [*log*.base](https://github.com/d3/d3-scale#log_base) - set the logarithm base.
-* [*log*.nice](https://github.com/d3/d3-scale#log_nice) - extend the domain to nice round numbers.
+* [*log*.domain](https://github.com/d3/d3-scale#log_domain) - set the input domain.
+* [*log*.range](https://github.com/d3/d3-scale#log_range) - set the output range.
+* [*log*.rangeRound](https://github.com/d3/d3-scale#log_rangeRound) - set the output range and enable rounding.
+* [*log*.clamp](https://github.com/d3/d3-scale#log_clamp) - enable clamping to the domain or range.
+* [*log*.interpolate](https://github.com/d3/d3-scale#log_interpolate) - set the output interpolator.
 * [*log*.ticks](https://github.com/d3/d3-scale#log_ticks) - compute representative values from the domain.
 * [*log*.tickFormat](https://github.com/d3/d3-scale#log_tickFormat) - format ticks for human consumption.
+* [*log*.nice](https://github.com/d3/d3-scale#log_nice) - extend the domain to nice round numbers.
+* [*log*.copy](https://github.com/d3/d3-scale#log_copy) - create a copy of this scale.
 * [d3.scaleIdentity](https://github.com/d3/d3-scale#identity) - create a quantitative identity scale.
 * [d3.scaleTime](https://github.com/d3/d3-scale#scaleTime) - create a linear scale for time.
-* [d3.scaleUtc](https://github.com/d3/d3-scale#scaleUtc) - create a linear scale for UTC.
+* [*_time*](https://github.com/d3/d3-scale#_time) - compute the range value corresponding to a given domain value.
+* [*time*.invert](https://github.com/d3/d3-scale#time_invert) - compute the domain value corresponding to a given range value.
+* [*time*.domain](https://github.com/d3/d3-scale#time_domain) - set the input domain.
+* [*time*.range](https://github.com/d3/d3-scale#time_range) - set the output range.
+* [*time*.rangeRound](https://github.com/d3/d3-scale#time_rangeRound) - set the output range and enable rounding.
+* [*time*.clamp](https://github.com/d3/d3-scale#time_clamp) - enable clamping to the domain or range.
+* [*time*.interpolate](https://github.com/d3/d3-scale#time_interpolate) - set the output interpolator.
 * [*time*.ticks](https://github.com/d3/d3-scale#time_ticks) - compute representative values from the domain.
 * [*time*.tickFormat](https://github.com/d3/d3-scale#time_tickFormat) - format ticks for human consumption.
 * [*time*.nice](https://github.com/d3/d3-scale#time_nice) - extend the domain to nice round times.
+* [*time*.copy](https://github.com/d3/d3-scale#time_copy) - create a copy of this scale.
+* [d3.scaleUtc](https://github.com/d3/d3-scale#scaleUtc) - create a linear scale for UTC.
 
 ### [Sequential](https://github.com/d3/d3-scale#sequential-color-scales)
 
@@ -427,7 +454,16 @@ Map a discrete domain to a discrete range.
 * [*band*.step](https://github.com/d3/d3-scale#band_step) - get the distance between the starts of adjacent bands.
 * [*band*.copy](https://github.com/d3/d3-scale#band_copy) - create a copy of this scale.
 * [d3.scalePoint](https://github.com/d3/d3-scale#scalePoint) - create an ordinal point scale.
+* [*point*](https://github.com/d3/d3-scale#_point) - compute the point corresponding to a given domain value.
+* [*point*.domain](https://github.com/d3/d3-scale#point_domain) - set the input domain.
+* [*point*.range](https://github.com/d3/d3-scale#point_range) - set the output range.
+* [*point*.rangeRound](https://github.com/d3/d3-scale#point_rangeRound) - set the output range and enable rounding.
+* [*point*.round](https://github.com/d3/d3-scale#point_round) - enable rounding.
 * [*point*.padding](https://github.com/d3/d3-scale#point_padding) - set padding outside the first and last point.
+* [*point*.align](https://github.com/d3/d3-scale#point_align) - set point alignment, if there is extra space.
+* [*point*.bandwidth](https://github.com/d3/d3-scale#point_bandwidth) - returns zero.
+* [*point*.step](https://github.com/d3/d3-scale#point_step) - get the distance between the starts of adjacent points.
+* [*point*.copy](https://github.com/d3/d3-scale#point_copy) - create a copy of this scale.
 
 ### [Categorical](https://github.com/d3/d3-scale#categorical-color-scales)
 
