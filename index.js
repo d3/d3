@@ -359,9 +359,8 @@ export {
 } from "d3-selection";
 
 export {
-  axis,
-  axisOrientTop,
-  axisOrientRight,
-  axisOrientBottom,
-  axisOrientLeft
+  axisTop,
+  axisRight,
+  axisBottom,
+  axisLeft
 } from "d3-axis";

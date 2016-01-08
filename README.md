@@ -96,7 +96,10 @@ Methods for transforming arrays and for generating new arrays.
 
 Human-readable reference marks for scales.
 
-* [d3.axis](https://github.com/d3/d3-axis#axis) - create a new axis generator.
+* [d3.axisTop](https://github.com/d3/d3-axis#axisTop) - create a new top-oriented axis generator.
+* [d3.axisRight](https://github.com/d3/d3-axis#axisTight) - create a new right-oriented axis generator.
+* [d3.axisBottom](https://github.com/d3/d3-axis#axisTottom) - create a new bottom-oriented axis generator.
+* [d3.axisLeft](https://github.com/d3/d3-axis#axisTeft) - create a new left-oriented axis generator.
 * [*axis*](https://github.com/d3/d3-axis#_axis) - generate an axis for the given selection.
 * [*axis*.scale](https://github.com/d3/d3-axis#axis_scale) - set the scale.
 * [*axis*.orient](https://github.com/d3/d3-axis#axis_orient) - set the axis orientation.
@@ -108,10 +111,6 @@ Human-readable reference marks for scales.
 * [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) - set the size of inner ticks.
 * [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) - set the size of outer (extent) ticks.
 * [*axis*.tickPadding](https://github.com/d3/d3-axis#axis_tickPadding) - set the padding between ticks and labels.
-* [d3.axisOrientTop](https://github.com/d3/d3-axis#axisOrientTop) - orient the axis along the chart top.
-* [d3.axisOrientRight](https://github.com/d3/d3-axis#axisOrientRight) - orient the axis along the chart right.
-* [d3.axisOrientBottom](https://github.com/d3/d3-axis#axisOrientBottom) - orient the axis along the chart bottom.
-* [d3.axisOrientLeft](https://github.com/d3/d3-axis#axisOrientLeft) - orient the axis along the chart left.
 
 ## [Collections](https://github.com/d3/d3-collection)
 
