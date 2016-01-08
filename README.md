@@ -348,7 +348,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*continuous*.copy](https://github.com/d3/d3-scale#continuous_copy) - create a copy of this scale.
 * [d3.scaleLinear](https://github.com/d3/d3-scale#scaleLinear) - create a quantitative linear scale.
 * [d3.scalePow](https://github.com/d3/d3-scale#scalePow) - create a quantitative power scale.
-* [*_pow*](https://github.com/d3/d3-scale#_pow) - compute the range value corresponding to a given domain value.
+* [*pow*](https://github.com/d3/d3-scale#_pow) - compute the range value corresponding to a given domain value.
 * [*pow*.invert](https://github.com/d3/d3-scale#pow_invert) - compute the domain value corresponding to a given range value.
 * [*pow*.exponent](https://github.com/d3/d3-scale#pow_exponent) - set the power exponent.
 * [*pow*.domain](https://github.com/d3/d3-scale#pow_domain) - set the input domain.
@@ -362,7 +362,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*pow*.copy](https://github.com/d3/d3-scale#pow_copy) - create a copy of this scale.
 * [d3.scaleSqrt](https://github.com/d3/d3-scale#scaleSqrt) - create a quantitative power scale with exponent 0.5.
 * [d3.scaleLog](https://github.com/d3/d3-scale#scaleLog) - create a quantitative logarithmic scale.
-* [*_log*](https://github.com/d3/d3-scale#_log) - compute the range value corresponding to a given domain value.
+* [*log*](https://github.com/d3/d3-scale#_log) - compute the range value corresponding to a given domain value.
 * [*log*.invert](https://github.com/d3/d3-scale#log_invert) - compute the domain value corresponding to a given range value.
 * [*log*.base](https://github.com/d3/d3-scale#log_base) - set the logarithm base.
 * [*log*.domain](https://github.com/d3/d3-scale#log_domain) - set the input domain.
@@ -376,7 +376,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*log*.copy](https://github.com/d3/d3-scale#log_copy) - create a copy of this scale.
 * [d3.scaleIdentity](https://github.com/d3/d3-scale#identity) - create a quantitative identity scale.
 * [d3.scaleTime](https://github.com/d3/d3-scale#scaleTime) - create a linear scale for time.
-* [*_time*](https://github.com/d3/d3-scale#_time) - compute the range value corresponding to a given domain value.
+* [*time*](https://github.com/d3/d3-scale#_time) - compute the range value corresponding to a given domain value.
 * [*time*.invert](https://github.com/d3/d3-scale#time_invert) - compute the domain value corresponding to a given range value.
 * [*time*.domain](https://github.com/d3/d3-scale#time_domain) - set the input domain.
 * [*time*.range](https://github.com/d3/d3-scale#time_range) - set the output range.
