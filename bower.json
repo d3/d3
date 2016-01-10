@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "main": "d3.js",
+  "main": ["d3.js","d3.html"],
   "scripts": [
     "d3.js"
   ],
