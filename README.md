@@ -32,6 +32,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.4`. Otherwise, download the [latest 
 * [Time Formats](#time-formats)
 * [Time Intervals](#time-intervals)
 * [Timers](#timers)
+* [Voronoi Diagrams](#voronoi-diagrams)
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
 
