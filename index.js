@@ -96,6 +96,10 @@ export {
 } from "d3-path";
 
 export {
+  quadtree
+} from "d3-quadtree";
+
+export {
   arc,
   area,
   line,

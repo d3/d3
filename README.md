@@ -23,6 +23,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.4`. Otherwise, download the [latest 
 * [Number Formats](#number-formats)
 * [Paths](#paths)
 * [Polygons](#polygons)
+* [Quadtrees](#quadtrees)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
 * [Scales](#scales) ([Continuous](#continuous), [Sequential](#sequential), [Quantize](#quantize), [Ordinal](#ordinal), [Categorical](#categorical))
@@ -325,6 +326,12 @@ Geometric operations for two-dimensional polygons.
 * [d3.polygonHull](https://github.com/d3/d3-polygon#polygonHull) - compute the convex hull of the given points.
 * [d3.polygonContains](https://github.com/d3/d3-polygon#polygonContains) - test whether a point is inside a polygon.
 * [d3.polygonLength](https://github.com/d3/d3-polygon#polygonLength) - compute the length of the given polygon’s perimeter.
+
+## [Quadtrees](https://github.com/d3/d3-quadtree)
+
+Two-dimensional recursive spatial subdivision.
+
+* [d3.quadtree](https://github.com/d3/d3-quadtree#quadtree) - create a new quadtree generator.
 
 ## [Random Numbers](https://github.com/d3/d3-random)
 
