@@ -376,3 +376,7 @@ export {
   axisBottom,
   axisLeft
 } from "d3-axis";
+
+export {
+  voronoi
+} from "d3-voronoi";

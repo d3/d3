@@ -807,3 +807,9 @@ An efficient queue for managing thousands of concurrent animations.
 * [*timer*.stop](https://github.com/d3/d3-timer#timer_stop) - stops the timer.
 * [*timer*.id](https://github.com/d3/d3-timer#timer_id) - a unique, opaque identifier.
 * [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush) - immediately executes any active timers.
+
+## [Voronoi Diagrams](https://github.com/d3/d3-voronoi)
+
+Compute the Voronoi diagram of a given set of points.
+
+* [d3.voronoi](https://github.com/d3/d3-voronoi#voronoi) - create a new Voronoi generator.
