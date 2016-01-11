@@ -84,6 +84,14 @@ export {
 } from "d3-ease";
 
 export {
+  polygonArea,
+  polygonCentroid,
+  polygonHull,
+  polygonContains,
+  polygonLength
+} from "d3-polygon";
+
+export {
   path
 } from "d3-path";
 

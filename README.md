@@ -22,6 +22,7 @@ If you use NPM, `npm install d3@4.0.0-alpha.4`. Otherwise, download the [latest 
 * [Interpolators](#interpolators)
 * [Number Formats](#number-formats)
 * [Paths](#paths)
+* [Polygons](#polygons)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
 * [Scales](#scales) ([Continuous](#continuous), [Sequential](#sequential), [Quantize](#quantize), [Ordinal](#ordinal), [Categorical](#categorical))
@@ -314,6 +315,16 @@ Serialize Canvas path commands to SVG.
 * [*path*.arc](https://github.com/d3/d3-path#path_arc) - draw a circular arc segment.
 * [*path*.rect](https://github.com/d3/d3-path#path_rect) - draw a rectangle.
 * [*path*.toString](https://github.com/d3/d3-path#path_toString) - serialize to an SVG path data string.
+
+## [Polygons](https://github.com/d3/d3-polygon)
+
+Geometric operations for two-dimensional polygons.
+
+* [d3.polygonArea](https://github.com/d3/d3-polygon#polygonArea) - compute the area of the given polygon.
+* [d3.polygonCentroid](https://github.com/d3/d3-polygon#polygonCentroid) - compute the centroid of the given polygon.
+* [d3.polygonHull](https://github.com/d3/d3-polygon#polygonHull) - compute the convex hull of the given points.
+* [d3.polygonContains](https://github.com/d3/d3-polygon#polygonContains) - test whether a point is inside a polygon.
+* [d3.polygonLength](https://github.com/d3/d3-polygon#polygonLength) - compute the length of the given polygon’s perimeter.
 
 ## [Random Numbers](https://github.com/d3/d3-random)
 
