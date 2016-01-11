@@ -26,7 +26,7 @@
     "url": "https://github.com/mbostock/d3.git"
   },
   "main": "d3.js",
-  "browserify": "d3.js",
+  "browser": "d3.js",
   "jspm": {
     "main": "d3",
     "shim": {
