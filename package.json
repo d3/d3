@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "d3-array": "0.7.0",
-    "d3-axis": "0.1.0",
+    "d3-axis": "0.2.0",
     "d3-collection": "0.1.0",
     "d3-color": "0.3.3",
     "d3-dispatch": "0.2.5",
