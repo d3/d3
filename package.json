@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.6",
+  "version": "4.0.0-alpha.7",
   "publishConfig": {
     "tag": "next"
   },
@@ -58,6 +58,6 @@
     "d3-time": "0.2.0",
     "d3-time-format": "0.3.0",
     "d3-timer": "0.1.0",
-    "d3-voronoi": "0.2.0"
+    "d3-voronoi": "0.2.1"
   }
 }
