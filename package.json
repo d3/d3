@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.4",
+  "version": "4.0.0-alpha.5",
   "publishConfig": {
     "tag": "next"
   },
@@ -39,7 +39,7 @@
   },
   "dependencies": {
     "d3-array": "0.7.0",
-    "d3-axis": "0.2.0",
+    "d3-axis": "0.2.1",
     "d3-collection": "0.1.0",
     "d3-color": "0.3.3",
     "d3-dispatch": "0.2.5",
@@ -53,7 +53,7 @@
     "d3-random": "0.2.0",
     "d3-request": "0.3.0",
     "d3-scale": "0.5.1",
-    "d3-selection": "0.5.1",
+    "d3-selection": "0.6.0",
     "d3-shape": "0.4.0",
     "d3-time": "0.2.0",
     "d3-time-format": "0.3.0",

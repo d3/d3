@@ -363,7 +363,6 @@ export {
   mouse,
   namespace,
   namespaces,
-  requote,
   select,
   selectAll,
   selection,

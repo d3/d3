@@ -7,7 +7,7 @@ This branch contains the prerelease of D3 4.0. This API is unstable and may chan
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://github.com/mbostock/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.4.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.5.min.js"></script>
 ```
 
 ## API Reference
@@ -27,7 +27,7 @@ If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
 * [Scales](#scales) ([Continuous](#continuous), [Sequential](#sequential), [Quantize](#quantize), [Ordinal](#ordinal), [Categorical](#categorical))
-* [Selections](#selections) ([Selection](#selection), [Transformation](#transformation), [Data](#data), [Events](#events), [Control](#control), [Namespaces](#namespaces))
+* [Selections](#selections) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#binding-data), [Events](#handling-events), [Control](#control-flow), [Namespaces](#namespaces))
 * [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats)
 * [Time Intervals](#time-intervals)
@@ -371,7 +371,7 @@ A convenient alternative to asynchronous XMLHttpRequest.
 
 Encodings that map abstract data to visual representation.
 
-### [Continuous](https://github.com/d3/d3-scale#continuous-scales)
+### [Continuous Scales](https://github.com/d3/d3-scale#continuous-scales)
 
 Map a continuous, quantitative domain to a continuous range.
 
@@ -429,7 +429,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*time*.copy](https://github.com/d3/d3-scale#time_copy) - create a copy of this scale.
 * [d3.scaleUtc](https://github.com/d3/d3-scale#scaleUtc) - create a linear scale for UTC.
 
-### [Sequential](https://github.com/d3/d3-scale#sequential-color-scales)
+### [Sequential Color Scales](https://github.com/d3/d3-scale#sequential-color-scales)
 
 Map a continuous, quantitative domain to a continuous, fixed color ramp.
 
@@ -442,7 +442,7 @@ Map a continuous, quantitative domain to a continuous, fixed color ramp.
 * [d3.scaleRainbow](https://github.com/d3/d3-scale#scaleRainbow) - a cyclical rotating-hue color scheme.
 * [d3.scaleCubehelix](https://github.com/d3/d3-scale#scaleCubehelix) - a dark-to-light, rotating-hue color scheme.
 
-### [Quantize](https://github.com/d3/d3-scale#quantize-scales)
+### [Quantize Scales](https://github.com/d3/d3-scale#quantize-scales)
 
 Map a continuous, quantitative domain to a discrete range.
 
@@ -469,7 +469,7 @@ Map a continuous, quantitative domain to a discrete range.
 * [*threshold*.range](https://github.com/d3/d3-scale#threshold_range) - set the output range.
 * [*threshold*.copy](https://github.com/d3/d3-scale#threshold_copy) - create a copy of this scale.
 
-### [Ordinal](https://github.com/d3/d3-scale#ordinal-scales)
+### [Ordinal Scales](https://github.com/d3/d3-scale#ordinal-scales)
 
 Map a discrete domain to a discrete range.
 
@@ -505,7 +505,7 @@ Map a discrete domain to a discrete range.
 * [*point*.step](https://github.com/d3/d3-scale#point_step) - get the distance between the starts of adjacent points.
 * [*point*.copy](https://github.com/d3/d3-scale#point_copy) - create a copy of this scale.
 
-### [Categorical](https://github.com/d3/d3-scale#categorical-color-scales)
+### [Categorical Color Scales](https://github.com/d3/d3-scale#categorical-color-scales)
 
 Map a discrete domain to a discrete, fixed categorical color range.
 
@@ -518,7 +518,7 @@ Map a discrete domain to a discrete, fixed categorical color range.
 
 Transform the DOM by selecting elements and joining to data.
 
-### [Selection](https://github.com/d3/d3-selection#selection)
+### [Selecting Elements](https://github.com/d3/d3-selection#selecting-elements)
 
 * [d3.selection](https://github.com/d3/d3-selection#selection) - select the root document element.
 * [d3.select](https://github.com/d3/d3-selection#select) - select an element from the document.
@@ -527,7 +527,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.selectAll](https://github.com/d3/d3-selection#selection_selectAll) - select multiple descendants for each selected element.
 * [*selection*.filter](https://github.com/d3/d3-selection#selection_filter) - filter elements based on data.
 
-### [Transformation](https://github.com/d3/d3-selection#transformation)
+### [Modifying Elements](https://github.com/d3/d3-selection#modifying-elements)
 
 * [*selection*.attr](https://github.com/d3/d3-selection#selection_attr) - get or set an attribute.
 * [*selection*.classed](https://github.com/d3/d3-selection#selection_classed) - get, add or remove CSS classes.
@@ -539,15 +539,17 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.remove](https://github.com/d3/d3-selection#selection_remove) - remove elements from the document.
 * [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) - sort elements in the document based on data.
 * [*selection*.order](https://github.com/d3/d3-selection#selection_order) - reorders elements in the document to match the selection.
+* [*selection*.raise](https://github.com/d3/d3-selection#selection_raise) - reorders each element as the last child of its parent.
+* [*selection*.lower](https://github.com/d3/d3-selection#selection_lower) - reorders each element as the first child of its parent.
 
-### [Data](https://github.com/d3/d3-selection#data)
+### [Binding Data](https://github.com/d3/d3-selection#binding-data)
 
 * [*selection*.data](https://github.com/d3/d3-selection#selection_data) - join elements to data.
 * [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) - get the enter selection (data missing elements).
 * [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) - get the exit selection (elements missing data).
 * [*selection*.datum](https://github.com/d3/d3-selection#selection_datum) - get or set element data (without joining).
 
-### [Events](https://github.com/d3/d3-selection#events)
+### [Handling Events](https://github.com/d3/d3-selection#handling-events)
 
 * [*selection*.on](https://github.com/d3/d3-selection#selection_on) - add or remove event listeners.
 * [*selection*.dispatch](https://github.com/d3/d3-selection#selection_dispatch) - dispatch a custom event.
@@ -556,7 +558,7 @@ Transform the DOM by selecting elements and joining to data.
 * [d3.touch](https://github.com/d3/d3-selection#touch) - get a touch position relative to a given container.
 * [d3.touches](https://github.com/d3/d3-selection#touches) - get the touch positions relative to a given container.
 
-### [Control](https://github.com/d3/d3-selection#control)
+### [Control Flow](https://github.com/d3/d3-selection#control-flow)
 
 * [*selection*.each](https://github.com/d3/d3-selection#selection_each) - call a function for each element.
 * [*selection*.call](https://github.com/d3/d3-selection#selection_call) - call a function with this selection.
@@ -569,7 +571,6 @@ Transform the DOM by selecting elements and joining to data.
 
 * [d3.namespace](https://github.com/d3/d3-selection#namespace) - qualify a prefixed XML name, such as “xlink:href”.
 * [d3.namespaces](https://github.com/d3/d3-selection#namespaces) - the built-in XML namespaces.
-* [d3.requote](https://github.com/d3/d3-selection#requote) - quote a string for use in a regular expression.
 
 ## [Shapes](https://github.com/d3/d3-shape)
 
