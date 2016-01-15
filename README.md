@@ -105,7 +105,6 @@ Human-readable reference marks for scales.
 * [d3.axisLeft](https://github.com/d3/d3-axis#axisTeft) - create a new left-oriented axis generator.
 * [*axis*](https://github.com/d3/d3-axis#_axis) - generate an axis for the given selection.
 * [*axis*.scale](https://github.com/d3/d3-axis#axis_scale) - set the scale.
-* [*axis*.orient](https://github.com/d3/d3-axis#axis_orient) - set the axis orientation.
 * [*axis*.ticks](https://github.com/d3/d3-axis#axis_ticks) - customize how ticks are generated and formatted.
 * [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickArguments) - customize how ticks are generated and formatted.
 * [*axis*.tickValues](https://github.com/d3/d3-axis#axis_tickValues) - set the tick values explicitly.
@@ -333,6 +332,14 @@ Geometric operations for two-dimensional polygons.
 Two-dimensional recursive spatial subdivision.
 
 * [d3.quadtree](https://github.com/d3/d3-quadtree#quadtree) - create a new quadtree generator.
+* [*quadtree*](https://github.com/d3/d3-quadtree#_quadtree) - generate a quadtree for the specified points.
+* [*root*.add](https://github.com/d3/d3-quadtree#root_add) - add a point to a quadtree.
+* [*root*.find](https://github.com/d3/d3-quadtree#root_find) - quickly find the closest point in a quadtree.
+* [*root*.visit](https://github.com/d3/d3-quadtree#root_visit) - recursively visit all nodes in a quadtree.
+* [*quadtree*.x](https://github.com/d3/d3-quadtree#quadtree_x) - set the *x* accessor.
+* [*quadtree*.y](https://github.com/d3/d3-quadtree#quadtree_y) - set the *y* accessor.
+* [*quadtree*.extent](https://github.com/d3/d3-quadtree#quadtree_extent) - set the observed extent of points.
+* [*quadtree*.size](https://github.com/d3/d3-quadtree#quadtree_size) - set the observed extent of points.
 
 ## [Random Numbers](https://github.com/d3/d3-random)
 
@@ -815,3 +822,11 @@ An efficient queue for managing thousands of concurrent animations.
 Compute the Voronoi diagram of a given set of points.
 
 * [d3.voronoi](https://github.com/d3/d3-voronoi#voronoi) - create a new Voronoi generator.
+* [*voronoi*](https://github.com/d3/d3-voronoi#_voronoi) - generate a new Voronoi diagram for the given points.
+* [*voronoi*.cells](https://github.com/d3/d3-voronoi#voronoi_cells) - compute the Voronoi polygons for the given points.
+* [*voronoi*.links](https://github.com/d3/d3-voronoi#voronoi_links) - compute the Delaunay links for the given points.
+* [*voronoi*.triangles](https://github.com/d3/d3-voronoi#voronoi_triangles) - compute the Delaunay triangles for the given points.
+* [*voronoi*.x](https://github.com/d3/d3-voronoi#voronoi_x) - set the *x* accessor.
+* [*voronoi*.y](https://github.com/d3/d3-voronoi#voronoi_y) - set the *y* accessor.
+* [*voronoi*.extent](https://github.com/d3/d3-voronoi#voronoi_extent) - set the observed extent of points.
+* [*voronoi*.size](https://github.com/d3/d3-voronoi#voronoi_size) - set the observed extent of points.
