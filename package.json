@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.5",
+  "version": "4.0.0-alpha.6",
   "publishConfig": {
     "tag": "next"
   },
@@ -49,7 +49,7 @@
     "d3-interpolate": "0.4.0",
     "d3-path": "0.1.3",
     "d3-polygon": "0.2.0",
-    "d3-quadtree": "0.1.1",
+    "d3-quadtree": "0.2.0",
     "d3-random": "0.2.0",
     "d3-request": "0.3.0",
     "d3-scale": "0.5.1",
@@ -58,6 +58,6 @@
     "d3-time": "0.2.0",
     "d3-time-format": "0.3.0",
     "d3-timer": "0.1.0",
-    "d3-voronoi": "0.1.0"
+    "d3-voronoi": "0.2.0"
   }
 }
