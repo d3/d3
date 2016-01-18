@@ -823,9 +823,9 @@ Compute the Voronoi diagram of a given set of points.
 
 * [d3.voronoi](https://github.com/d3/d3-voronoi#voronoi) - create a new Voronoi generator.
 * [*voronoi*](https://github.com/d3/d3-voronoi#_voronoi) - generate a new Voronoi diagram for the given points.
-* [*voronoi*.cells](https://github.com/d3/d3-voronoi#voronoi_cells) - compute the Voronoi polygons for the given points.
-* [*voronoi*.links](https://github.com/d3/d3-voronoi#voronoi_links) - compute the Delaunay links for the given points.
+* [*voronoi*.polygons](https://github.com/d3/d3-voronoi#voronoi_polygons) - compute the Voronoi polygons for the given points.
 * [*voronoi*.triangles](https://github.com/d3/d3-voronoi#voronoi_triangles) - compute the Delaunay triangles for the given points.
+* [*voronoi*.links](https://github.com/d3/d3-voronoi#voronoi_links) - compute the Delaunay links for the given points.
 * [*voronoi*.x](https://github.com/d3/d3-voronoi#voronoi_x) - set the *x* accessor.
 * [*voronoi*.y](https://github.com/d3/d3-voronoi#voronoi_y) - set the *y* accessor.
 * [*voronoi*.extent](https://github.com/d3/d3-voronoi#voronoi_extent) - set the observed extent of points.
