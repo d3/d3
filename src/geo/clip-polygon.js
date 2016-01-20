@@ -97,8 +97,8 @@ function d3_geo_clipPolygonLinkCircular(array) {
 function d3_geo_clipPolygonIntersection(point, points, other, entry) {
   this.x = point;
   this.z = points;
-  this.o = other; // another intersection
-  this.e = entry; // is an entry?
-  this.v = false; // visited
-  this.n = this.p = null; // next & previous
+  this.o = other; // Another intersection
+  this.e = entry; // Is an entry?
+  this.v = false; // Visited
+  this.n = this.p = null; // Next & previous
 }
