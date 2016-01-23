@@ -102,6 +102,10 @@ export {
 } from "d3-quadtree";
 
 export {
+  default as queue
+} from "d3-queue";
+
+export {
   arc,
   area,
   line,

@@ -7,7 +7,7 @@ This branch contains the prerelease of D3 4.0. This API is unstable and may chan
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://github.com/mbostock/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.10.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.11.min.js"></script>
 ```
 
 ## API Reference
@@ -24,6 +24,7 @@ If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](
 * [Paths](#paths)
 * [Polygons](#polygons)
 * [Quadtrees](#quadtrees)
+* [Queues](#queues)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
 * [Scales](#scales) ([Continuous](#continuous), [Sequential](#sequential), [Quantize](#quantize), [Ordinal](#ordinal), [Categorical](#categorical))
@@ -340,6 +341,16 @@ Two-dimensional recursive spatial subdivision.
 * [*quadtree*.y](https://github.com/d3/d3-quadtree#quadtree_y) - set the *y* accessor.
 * [*quadtree*.extent](https://github.com/d3/d3-quadtree#quadtree_extent) - set the observed extent of points.
 * [*quadtree*.size](https://github.com/d3/d3-quadtree#quadtree_size) - set the observed extent of points.
+
+## [Queues](https://github.com/d3/d3-queue)
+
+A minimalist approach to escaping callback hell.
+
+* [d3.queue](https://github.com/d3/d3-queue#queue) - manage the concurrent evaluation of asynchronous tasks.
+* [*queue*.defer](https://github.com/d3/d3-queue#queue_defer) - register a task for evaluation.
+* [*queue*.abort](https://github.com/d3/d3-queue#queue_abort) - abort any active tasks and cancel any pending ones.
+* [*queue*.await](https://github.com/d3/d3-queue#queue_await) - register a callback for when tasks complete.
+* [*queue*.awaitAll](https://github.com/d3/d3-queue#queue_awaitAll) - register a callback for when tasks complete.
 
 ## [Random Numbers](https://github.com/d3/d3-random)
 
