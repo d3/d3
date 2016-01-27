@@ -41,6 +41,37 @@ suite.addBatch({
       "inherits namespace from parent node": function(body) {
         var g = body.append("svg:svg").append("g");
         assert.equal(g[0][0].namespaceURI, "http://www.w3.org/2000/svg");
+      },
+      "uses createElement when the implicit namespace matches the document": function(body) {
+        var document = body.node().ownerDocument, createElement = document.createElement, pass = 0;
+        document.createElement = function() { ++pass; return createElement.apply(this, arguments); };
+        try {
+          body.append("p");
+        } finally {
+          document.createElement = createElement;
+        }
+        assert.equal(pass, 1);
+      },
+      "uses createElementNS when the implicit namespace does not match the document": function(body) {
+        var document = body.node().ownerDocument, createElementNS = document.createElementNS, pass = 0;
+        document.createElementNS = function() { ++pass; return createElementNS.apply(this, arguments); };
+        try {
+          body.append("svg").append("g");
+        } finally {
+          document.createElementNS = createElementNS;
+        }
+        assert.equal(pass, 2);
+      },
+      "uses createElementNS when given an explicit namespace": function(body) {
+        var document = body.node().ownerDocument, createElementNS = document.createElementNS, pass = 0;
+        document.createElementNS = function() { ++pass; return createElementNS.apply(this, arguments); };
+        try {
+          body.append("svg:svg");
+          body.append("xhtml:p");
+        } finally {
+          document.createElementNS = createElementNS;
+        }
+        assert.equal(pass, 2);
       }
     }
   }

@@ -13,7 +13,7 @@ function d3_selection_creator(name) {
   function create() {
     var document = this.ownerDocument,
         namespace = this.namespaceURI;
-    return namespace
+    return namespace && namespace !== document.documentElement.namespaceURI
         ? document.createElementNS(namespace, name)
         : document.createElement(name);
   }
