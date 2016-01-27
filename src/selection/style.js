@@ -70,6 +70,6 @@ function d3_selection_style(name, value, priority) {
   }
 
   return value == null
-    ? styleNull : (typeof value === "function"
+      ? styleNull : (typeof value === "function"
       ? styleFunction : styleConstant);
 }
