@@ -10,7 +10,13 @@ d3_selectionPrototype.style = function(name, value, priority) {
     // functions that are evaluated for each element. The optional string
     // specifies the priority.
     if (typeof name !== "string") {
-      if (n < 2) value = "";
+      if (n < 2) {
+        value = "";
+        if (typeof name === "function") {
+          this.each(d3_selection_function_style(name));
+          return this;
+        }
+      }
       for (priority in name) this.each(d3_selection_style(priority, name[priority], value));
       return this;
     }
@@ -29,6 +35,16 @@ d3_selectionPrototype.style = function(name, value, priority) {
   // Otherwise, a name, value and priority are specified, and handled as below.
   return this.each(d3_selection_style(name, value, priority));
 };
+
+function d3_selection_function_style(func) {
+  function styleFunction() {
+    var styleMap = func.apply(this, arguments);
+    for (styleProp in styleMap)
+      styleMap[styleProp] == null
+        ? this.style.removeProperty(styleProp) : this.style.setProperty(styleProp, styleMap[styleProp]);
+  }
+  return styleFunction;
+}
 
 function d3_selection_style(name, value, priority) {
 
@@ -54,6 +70,6 @@ function d3_selection_style(name, value, priority) {
   }
 
   return value == null
-      ? styleNull : (typeof value === "function"
+    ? styleNull : (typeof value === "function"
       ? styleFunction : styleConstant);
 }

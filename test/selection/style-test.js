@@ -34,6 +34,11 @@ suite.addBatch({
         assert.equal(body.node().style.getPropertyValue("background-color"), "orange");
         assert.equal(body.node().style.getPropertyValue("opacity"), "0");
       },
+      "sets properties as a function returning a map": function(body) {
+        body.data(["orange"]).style(function(d,i) {return {"background-color": "white", opacity: i };});
+        assert.equal(body.node().style.getPropertyValue("background-color"), "white");
+        assert.equal(body.node().style.getPropertyValue("opacity"), "0");
+      },
       "gets a property value": function(body) {
         body.node().style.setProperty("background-color", "yellow", "");
         assert.equal(body.style("background-color"), "yellow");
