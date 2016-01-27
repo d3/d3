@@ -102,7 +102,7 @@ export {
 } from "d3-quadtree";
 
 export {
-  default as queue
+  queue
 } from "d3-queue";
 
 export {
