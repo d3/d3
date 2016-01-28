@@ -685,7 +685,8 @@ Interpolate between points to produce a continuous shape.
 * [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
 * [d3.curveLinear](https://github.com/d3/d3-shape#curveLinear) - a polyline.
 * [d3.curveLinearClosed](https://github.com/d3/d3-shape#curveLinearClosed) - a closed polyline.
-* [d3.curveMonotone](https://github.com/d3/d3-shape#curveMonotone) - a cubic spline that preserves monotonicity in *y*.
+* [d3.curveMonotoneX](https://github.com/d3/d3-shape#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
+* [d3.curveMonotoneY](https://github.com/d3/d3-shape#curveMonotoneY) - a cubic spline that, given monotonicity in *y*, preserves it in *x*.
 * [d3.curveNatural](https://github.com/d3/d3-shape#curveNatural) - a natural cubic spline.
 * [d3.curveStep](https://github.com/d3/d3-shape#curveStep) - a piecewise constant function.
 * [d3.curveStepAfter](https://github.com/d3/d3-shape#curveStepAfter) - a piecewise constant function.
