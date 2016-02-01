@@ -52,7 +52,6 @@ export {
 } from "d3-random";
 
 export {
-  easeBind, // TODO share with interpolateBind
   easeLinearIn,
   easeLinearOut,
   easeLinearInOut,
@@ -161,7 +160,6 @@ export {
 } from "d3-color";
 
 export {
-  interpolateBind, // TODO share with easeBind
   interpolate,
   interpolators,
   interpolateArray,

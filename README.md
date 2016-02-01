@@ -211,13 +211,14 @@ Separate concerns using named callbacks.
 
 Easing functions for smooth animation.
 
-* [d3.easeBind](https://github.com/d3/d3-ease#easeBind) - bind optional parameters to the given easing function.
+* [*ease*.ease](https://github.com/d3/d3-ease#ease_ease) - ease the given normalized time.
 * [d3.easeLinearIn](https://github.com/d3/d3-ease#easeLinearIn) - linear easing; the identity function.
 * [d3.easeLinearOut](https://github.com/d3/d3-ease#easeLinearOut) - linear easing; the identity function.
 * [d3.easeLinearInOut](https://github.com/d3/d3-ease#easeLinearInOut) - linear easing; the identity function.
 * [d3.easePolyIn](https://github.com/d3/d3-ease#easePolyIn) - polynomial easing; raises time to the given power.
 * [d3.easePolyOut](https://github.com/d3/d3-ease#easePolyOut) - reverse polynomial easing.
 * [d3.easePolyInOut](https://github.com/d3/d3-ease#easePolyInOut) - symmetric polynomial easing.
+* [*poly*.exponent](https://github.com/d3/d3-ease#poly_exponent) - specify the polynomial exponent.
 * [d3.easeQuadIn](https://github.com/d3/d3-ease#easeQuadIn) - quadratic easing; squares time.
 * [d3.easeQuadOut](https://github.com/d3/d3-ease#easeQuadOut) - reverse quadratic easing.
 * [d3.easeQuadInOut](https://github.com/d3/d3-ease#easeQuadInOut) - symmetric quadratic easing.
@@ -236,9 +237,12 @@ Easing functions for smooth animation.
 * [d3.easeElasticIn](https://github.com/d3/d3-ease#easeElasticIn) - elastic easing, like a rubber band.
 * [d3.easeElasticOut](https://github.com/d3/d3-ease#easeElasticOut) - reverse elastic easing.
 * [d3.easeElasticInOut](https://github.com/d3/d3-ease#easeElasticInOut) - symmetric elastic easing.
+* [*elastic*.amplitude](https://github.com/d3/d3-ease#elastic_amplitude) - specify the elastic amplitude.
+* [*elastic*.period](https://github.com/d3/d3-ease#elastic_period) - specify the elastic period.
 * [d3.easeBackIn](https://github.com/d3/d3-ease#easeBackIn) - anticipatory easing, like a dancer bending his knees before jumping.
 * [d3.easeBackOut](https://github.com/d3/d3-ease#easeBackOut) - reverse anticipatory easing.
 * [d3.easeBackInOut](https://github.com/d3/d3-ease#easeBackInOut) - symmetric anticipatory easing.
+* [*back*.overshoot](https://github.com/d3/d3-ease#back_overshoot) - specify the amount of overshoot.
 * [d3.easeBounceIn](https://github.com/d3/d3-ease#easeBounceIn) - bounce easing, like a rubber ball.
 * [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut) - reverse bounce easing.
 * [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut) - symmetric bounce easing.
@@ -247,7 +251,6 @@ Easing functions for smooth animation.
 
 Interpolate numbers, colors, strings, arrays, objects, whatever!
 
-* [d3.interpolateBind](https://github.com/d3/d3-interpolate#interpolateBind) - bind optional parameters to the given interpolator.
 * [d3.interpolate](https://github.com/d3/d3-interpolate#interpolate) - interpolate arbitrary values.
 * [d3.interpolators](https://github.com/d3/d3-interpolate#interpolators) - register a custom interpolator.
 * [d3.interpolateArray](https://github.com/d3/d3-interpolate#interpolateArray) - interpolate arrays of arbitrary values.
@@ -265,6 +268,7 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateHclLong](https://github.com/d3/d3-interpolate#interpolateHclLong) - interpolate HCL colors, the long way.
 * [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#interpolateCubehelix) - interpolate Cubehelix colors.
 * [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
+* [*cubehelix*.gamma](https://github.com/d3/d3-interpolate#cubehelix_gamma) - specify the gamma.
 
 ## [Number Formats](https://github.com/d3/d3-format)
 
