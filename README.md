@@ -827,11 +827,12 @@ A calculator for humanity’s peculiar conventions of time.
 
 An efficient queue for managing thousands of concurrent animations.
 
-* [d3.timer](https://github.com/d3/d3-timer#timer) - schedules a new timer.
-* [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) - resets the timer’s start time and callback.
-* [*timer*.stop](https://github.com/d3/d3-timer#timer_stop) - stops the timer.
+* [d3.timer](https://github.com/d3/d3-timer#timer) - schedule a new timer.
+* [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) - reset the timer’s start time and callback.
+* [*timer*.stop](https://github.com/d3/d3-timer#timer_stop) - stop the timer.
 * [*timer*.id](https://github.com/d3/d3-timer#timer_id) - a unique, opaque identifier.
-* [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush) - immediately executes any active timers.
+* [d3.timerOnce](https://github.com/d3/d3-timer#timerOnce) - schedule a timer that stops on its first callback.
+* [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush) - immediately execute any eligible timers.
 
 ## [Voronoi Diagrams](https://github.com/d3/d3-voronoi)
 
