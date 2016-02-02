@@ -201,6 +201,7 @@ export {
 
 export {
   timer,
+  timerOnce,
   timerFlush
 } from "d3-timer";
 
