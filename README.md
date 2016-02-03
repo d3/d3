@@ -33,6 +33,7 @@ If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](
 * [Time Formats](#time-formats)
 * [Time Intervals](#time-intervals)
 * [Timers](#timers)
+* [Transitions](#transitions)
 * [Voronoi Diagrams](#voronoi-diagrams)
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
