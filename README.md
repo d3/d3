@@ -268,7 +268,7 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateHclLong](https://github.com/d3/d3-interpolate#interpolateHclLong) - interpolate HCL colors, the long way.
 * [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#interpolateCubehelix) - interpolate Cubehelix colors.
 * [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
-* [*cubehelix*.gamma](https://github.com/d3/d3-interpolate#cubehelix_gamma) - specify the gamma.
+* [*interpolate*.gamma](https://github.com/d3/d3-interpolate#interpolate_gamma) - apply gamma correction during interpolation.
 
 ## [Number Formats](https://github.com/d3/d3-format)
 
@@ -833,6 +833,32 @@ An efficient queue for managing thousands of concurrent animations.
 * [*timer*.id](https://github.com/d3/d3-timer#timer_id) - a unique, opaque identifier.
 * [d3.timerOnce](https://github.com/d3/d3-timer#timerOnce) - schedule a timer that stops on its first callback.
 * [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush) - immediately execute any eligible timers.
+
+## [Transitions](https://github.com/d3/d3-transition)
+
+Animated transitions for [selections](#selections).
+
+* [*selection*.transition](https://github.com/d3/d3-transition#selection_transition) -
+* [*selection*.interrupt](https://github.com/d3/d3-transition#selection_interrupt) -
+* [d3.transition](https://github.com/d3/d3-transition#transition) -
+* [*transition*.select](https://github.com/d3/d3-transition#transition_select) -
+* [*transition*.selectAll](https://github.com/d3/d3-transition#transition_selectAll) -
+* [*transition*.filter](https://github.com/d3/d3-transition#transition_filter) -
+* [*transition*.transition](https://github.com/d3/d3-transition#transition_transition) -
+* [*transition*.call](https://github.com/d3/d3-transition#transition_call) -
+* [*transition*.nodes](https://github.com/d3/d3-transition#transition_nodes) -
+* [*transition*.node](https://github.com/d3/d3-transition#transition_node) -
+* [*transition*.size](https://github.com/d3/d3-transition#transition_size) -
+* [*transition*.empty](https://github.com/d3/d3-transition#transition_empty) -
+* [*transition*.each](https://github.com/d3/d3-transition#transition_each) -
+* [*transition*.attr](https://github.com/d3/d3-transition#transition_attr) -
+* [*transition*.style](https://github.com/d3/d3-transition#transition_style) -
+* [*transition*.text](https://github.com/d3/d3-transition#transition_text) -
+* [*transition*.remove](https://github.com/d3/d3-transition#transition_remove) -
+* [*transition*.tween](https://github.com/d3/d3-transition#transition_tween) -
+* [*transition*.delay](https://github.com/d3/d3-transition#transition_delay) -
+* [*transition*.duration](https://github.com/d3/d3-transition#transition_duration) -
+* [*transition*.ease](https://github.com/d3/d3-transition#transition_ease) -
 
 ## [Voronoi Diagrams](https://github.com/d3/d3-voronoi)
 
