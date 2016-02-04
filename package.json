@@ -45,7 +45,7 @@
     "d3-color": "0.4.1",
     "d3-dispatch": "0.2.6",
     "d3-dsv": "0.1.14",
-    "d3-ease": "0.6.0",
+    "d3-ease": "0.7.0",
     "d3-format": "0.5.1",
     "d3-interpolate": "0.5.2",
     "d3-path": "0.1.4",
