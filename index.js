@@ -192,18 +192,24 @@ export {
 
 export {
   dsv,
-  csv,
-  tsv
+  csvParse,
+  csvParseRows,
+  csvFormat,
+  csvFormatRows,
+  tsvParse,
+  tsvParseRows,
+  tsvFormat,
+  tsvFormatRows
 } from "d3-dsv";
 
 export {
   request,
-  requestHtml,
-  requestJson,
-  requestText,
-  requestXml,
-  requestCsv,
-  requestTsv
+  html,
+  json,
+  text,
+  xml,
+  csv,
+  tsv
 } from "d3-request";
 
 export {
