@@ -197,8 +197,14 @@ Parse and format delimiter-separated values, most commonly CSV and TSV.
 * [*dsv*.parseRows](https://github.com/d3/d3-dsv#dsv_parseRows) - parse the given string, returning an array of rows.
 * [*dsv*.format](https://github.com/d3/d3-dsv#dsv_format) - format the given array of objects.
 * [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) - format the given array of rows.
-* [d3.csv](https://github.com/d3/d3-dsv#csv) - a parser and formatter for comma-separated values (CSV).
-* [d3.tsv](https://github.com/d3/d3-dsv#tsv) - a parser and formatter for tab-separated values (TSV).
+* [d3.csvParse](https://github.com/d3/d3-dsv#csvParse) - parse the given CSV string, returning an array of objects.
+* [d3.csvParseRows](https://github.com/d3/d3-dsv#csvParseRows) - parse the given CSV string, returning an array of rows.
+* [d3.csvFormat](https://github.com/d3/d3-dsv#csvFormat) - format the given array of objects as CSV.
+* [d3.csvFormatRows](https://github.com/d3/d3-dsv#csvFormatRows) - format the given array of rows as CSV.
+* [d3.tsvParse](https://github.com/d3/d3-dsv#tsvParse) - parse the given TSV string, returning an array of objects.
+* [d3.tsvParseRows](https://github.com/d3/d3-dsv#tsvParseRows) - parse the given TSV string, returning an array of rows.
+* [d3.tsvFormat](https://github.com/d3/d3-dsv#tsvFormat) - format the given array of objects as TSV.
+* [d3.tsvFormatRows](https://github.com/d3/d3-dsv#tsvFormatRows) - format the given array of rows as TSV.
 
 ## [Dispatches](https://github.com/d3/d3-dispatch)
 
@@ -207,43 +213,51 @@ Separate concerns using named callbacks.
 * [d3.dispatch](https://github.com/d3/d3-dispatch#dispatch) - create a custom event dispatcher.
 * [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) - register or unregister an event listener.
 * [*dispatch*.*type*](https://github.com/d3/d3-dispatch#dispatch_type) - dispatch an event to registered listeners.
+* [*type*.*call*](https://github.com/d3/d3-dispatch#type_call) - dispatch an event to registered listeners.
+* [*type*.*apply*](https://github.com/d3/d3-dispatch#type_apply) - dispatch an event to registered listeners.
 
 ## [Easings](https://github.com/d3/d3-ease)
 
 Easing functions for smooth animation.
 
-* [*ease*.ease](https://github.com/d3/d3-ease#ease_ease) - ease the given normalized time.
-* [d3.easeLinearIn](https://github.com/d3/d3-ease#easeLinearIn) - linear easing; the identity function.
-* [d3.easeLinearOut](https://github.com/d3/d3-ease#easeLinearOut) - linear easing; the identity function.
-* [d3.easeLinearInOut](https://github.com/d3/d3-ease#easeLinearInOut) - linear easing; the identity function.
+* [*ease*](https://github.com/d3/d3-ease#_ease) - ease the given normalized time.
+* [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear) - linear easing; the identity function.
 * [d3.easePolyIn](https://github.com/d3/d3-ease#easePolyIn) - polynomial easing; raises time to the given power.
 * [d3.easePolyOut](https://github.com/d3/d3-ease#easePolyOut) - reverse polynomial easing.
 * [d3.easePolyInOut](https://github.com/d3/d3-ease#easePolyInOut) - symmetric polynomial easing.
 * [*poly*.exponent](https://github.com/d3/d3-ease#poly_exponent) - specify the polynomial exponent.
+* [d3.easeQuad](https://github.com/d3/d3-ease#easeQuad) - an alias for easeQuadInOut.
 * [d3.easeQuadIn](https://github.com/d3/d3-ease#easeQuadIn) - quadratic easing; squares time.
 * [d3.easeQuadOut](https://github.com/d3/d3-ease#easeQuadOut) - reverse quadratic easing.
 * [d3.easeQuadInOut](https://github.com/d3/d3-ease#easeQuadInOut) - symmetric quadratic easing.
+* [d3.easeCubic](https://github.com/d3/d3-ease#easeCubic) - an alias for easeCubicInOut.
 * [d3.easeCubicIn](https://github.com/d3/d3-ease#easeCubicIn) - cubic easing; cubes time.
 * [d3.easeCubicOut](https://github.com/d3/d3-ease#easeCubicOut) - reverse cubic easing.
 * [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut) - symmetric cubic easing.
+* [d3.easeSin](https://github.com/d3/d3-ease#easeSin) - an alias for easeSinInOut.
 * [d3.easeSinIn](https://github.com/d3/d3-ease#easeSinIn) - sinusoidal easing.
 * [d3.easeSinOut](https://github.com/d3/d3-ease#easeSinOut) - reverse sinusoidal easing.
 * [d3.easeSinInOut](https://github.com/d3/d3-ease#easeSinInOut) - symmetric sinusoidal easing.
+* [d3.easeExp](https://github.com/d3/d3-ease#easeExp) - an alias for easeExpInOut.
 * [d3.easeExpIn](https://github.com/d3/d3-ease#easeExpIn) - exponential easing.
 * [d3.easeExpOut](https://github.com/d3/d3-ease#easeExpOut) - reverse exponential easing.
 * [d3.easeExpInOut](https://github.com/d3/d3-ease#easeExpInOut) - symmetric exponential easing.
+* [d3.easeCircle](https://github.com/d3/d3-ease#easeCircle) - an alias for easeCircleInOut.
 * [d3.easeCircleIn](https://github.com/d3/d3-ease#easeCircleIn) - circular easing.
 * [d3.easeCircleOut](https://github.com/d3/d3-ease#easeCircleOut) - reverse circular easing.
 * [d3.easeCircleInOut](https://github.com/d3/d3-ease#easeCircleInOut) - symmetric circular easing.
+* [d3.easeElastic](https://github.com/d3/d3-ease#easeElastic) - an alias for easeElasticOut.
 * [d3.easeElasticIn](https://github.com/d3/d3-ease#easeElasticIn) - elastic easing, like a rubber band.
 * [d3.easeElasticOut](https://github.com/d3/d3-ease#easeElasticOut) - reverse elastic easing.
 * [d3.easeElasticInOut](https://github.com/d3/d3-ease#easeElasticInOut) - symmetric elastic easing.
 * [*elastic*.amplitude](https://github.com/d3/d3-ease#elastic_amplitude) - specify the elastic amplitude.
 * [*elastic*.period](https://github.com/d3/d3-ease#elastic_period) - specify the elastic period.
+* [d3.easeBack](https://github.com/d3/d3-ease#easeBack) - an alias for easeBackInOut.
 * [d3.easeBackIn](https://github.com/d3/d3-ease#easeBackIn) - anticipatory easing, like a dancer bending his knees before jumping.
 * [d3.easeBackOut](https://github.com/d3/d3-ease#easeBackOut) - reverse anticipatory easing.
 * [d3.easeBackInOut](https://github.com/d3/d3-ease#easeBackInOut) - symmetric anticipatory easing.
 * [*back*.overshoot](https://github.com/d3/d3-ease#back_overshoot) - specify the amount of overshoot.
+* [d3.easeBounce](https://github.com/d3/d3-ease#easeBounce) - an alias for easeBounceOut.
 * [d3.easeBounceIn](https://github.com/d3/d3-ease#easeBounceIn) - bounce easing, like a rubber ball.
 * [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut) - reverse bounce easing.
 * [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut) - symmetric bounce easing.
@@ -383,12 +397,12 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [*request*.send](https://github.com/d3/d3-request#request_send) - set the request.
 * [*request*.abort](https://github.com/d3/d3-request#request_abort) - abort the request.
 * [*request*.on](https://github.com/d3/d3-request#request_on) - listen for a request event.
-* [d3.requestCsv](https://github.com/d3/d3-request#requestCsv) - get a comma-separated values (CSV) file.
-* [d3.requestHtml](https://github.com/d3/d3-request#requestHtml) - get an HTML file.
-* [d3.requestJson](https://github.com/d3/d3-request#requestJson) - get a JSON file.
-* [d3.requestText](https://github.com/d3/d3-request#requestText) - get a plain text file.
-* [d3.requestTsv](https://github.com/d3/d3-request#requestTsv) - get a tab-separated values (TSV) file.
-* [d3.requestXml](https://github.com/d3/d3-request#requestXml) - get an XML file.
+* [d3.csv](https://github.com/d3/d3-request#csv) - get a comma-separated values (CSV) file.
+* [d3.html](https://github.com/d3/d3-request#html) - get an HTML file.
+* [d3.json](https://github.com/d3/d3-request#json) - get a JSON file.
+* [d3.text](https://github.com/d3/d3-request#text) - get a plain text file.
+* [d3.tsv](https://github.com/d3/d3-request#tsv) - get a tab-separated values (TSV) file.
+* [d3.xml](https://github.com/d3/d3-request#xml) - get an XML file.
 
 ## [Scales](https://github.com/d3/d3-scale)
 
