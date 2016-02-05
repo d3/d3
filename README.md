@@ -563,6 +563,10 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.select](https://github.com/d3/d3-selection#selection_select) - select a descendant element for each selected element.
 * [*selection*.selectAll](https://github.com/d3/d3-selection#selection_selectAll) - select multiple descendants for each selected element.
 * [*selection*.filter](https://github.com/d3/d3-selection#selection_filter) - filter elements based on data.
+* [d3.matcher](https://github.com/d3/d3-selection#matcher) - test whether an element matches a selector.
+* [d3.selector](https://github.com/d3/d3-selection#selector) - select an element.
+* [d3.selectorAll](https://github.com/d3/d3-selection#selectorAll) - select elements.
+* [d3.window](https://github.com/d3/d3-selection#window) - get a node’s owner window.
 
 ### [Modifying Elements](https://github.com/d3/d3-selection#modifying-elements)
 
@@ -578,6 +582,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.order](https://github.com/d3/d3-selection#selection_order) - reorders elements in the document to match the selection.
 * [*selection*.raise](https://github.com/d3/d3-selection#selection_raise) - reorders each element as the last child of its parent.
 * [*selection*.lower](https://github.com/d3/d3-selection#selection_lower) - reorders each element as the first child of its parent.
+* [d3.creator](https://github.com/d3/d3-selection#creator) - create an element by name.
 
 ### [Binding Data](https://github.com/d3/d3-selection#binding-data)
 
@@ -866,6 +871,7 @@ Animated transitions for [selections](#selections).
 * [*transition*.size](https://github.com/d3/d3-transition#transition_size) -
 * [*transition*.empty](https://github.com/d3/d3-transition#transition_empty) -
 * [*transition*.each](https://github.com/d3/d3-transition#transition_each) -
+* [*transition*.on](https://github.com/d3/d3-transition#transition_on) -
 * [*transition*.attr](https://github.com/d3/d3-transition#transition_attr) -
 * [*transition*.style](https://github.com/d3/d3-transition#transition_style) -
 * [*transition*.text](https://github.com/d3/d3-transition#transition_text) -

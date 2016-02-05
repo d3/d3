@@ -55,12 +55,12 @@
     "d3-random": "0.2.1",
     "d3-request": "0.4.1",
     "d3-scale": "0.6.1",
-    "d3-selection": "0.6.7",
+    "d3-selection": "0.6.8",
     "d3-shape": "0.5.1",
     "d3-time": "0.2.1",
     "d3-time-format": "0.3.1",
     "d3-timer": "0.1.2",
-    "d3-transition": "0.0.7",
+    "d3-transition": "0.0.8",
     "d3-voronoi": "0.3.1"
   }
 }
