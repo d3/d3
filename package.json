@@ -34,7 +34,7 @@
     "faucet": "0.0",
     "rollup": "0.25",
     "rollup-plugin-json": "2",
-    "rollup-plugin-npm": "1",
+    "rollup-plugin-node-resolve": "1",
     "tape": "4",
     "uglify-js": "2"
   },

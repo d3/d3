@@ -1,8 +1,8 @@
 import json from "rollup-plugin-json";
-import npm from "rollup-plugin-npm";
+import node from "rollup-plugin-node-resolve";
 
 export default {
-  plugins: [npm({jsnext: true}), json()],
+  plugins: [node({jsnext: true}), json()],
   moduleName: "d3",
   format: "umd"
 };
