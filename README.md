@@ -363,7 +363,7 @@ Two-dimensional recursive spatial subdivision.
 
 ## [Queues](https://github.com/d3/d3-queue)
 
-A minimalist approach to escaping callback hell.
+Evaluate asynchronous tasks with configurable concurrency.
 
 * [d3.queue](https://github.com/d3/d3-queue#queue) - manage the concurrent evaluation of asynchronous tasks.
 * [*queue*.defer](https://github.com/d3/d3-queue#queue_defer) - register a task for evaluation.
