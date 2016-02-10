@@ -212,9 +212,9 @@ Separate concerns using named callbacks.
 
 * [d3.dispatch](https://github.com/d3/d3-dispatch#dispatch) - create a custom event dispatcher.
 * [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) - register or unregister an event listener.
-* [*dispatch*.*type*](https://github.com/d3/d3-dispatch#dispatch_type) - dispatch an event to registered listeners.
-* [*type*.*call*](https://github.com/d3/d3-dispatch#type_call) - dispatch an event to registered listeners.
-* [*type*.*apply*](https://github.com/d3/d3-dispatch#type_apply) - dispatch an event to registered listeners.
+* [*dispatch*.copy](https://github.com/d3/d3-dispatch#dispatch_copy) - create a copy of a dispatcher.
+* [*dispatch*.*call*](https://github.com/d3/d3-dispatch#dispatch_call) - dispatch an event to registered listeners.
+* [*dispatch*.*apply*](https://github.com/d3/d3-dispatch#dispatch_apply) - dispatch an event to registered listeners.
 
 ## [Easings](https://github.com/d3/d3-ease)
 
@@ -850,7 +850,6 @@ An efficient queue for managing thousands of concurrent animations.
 * [d3.timer](https://github.com/d3/d3-timer#timer) - schedule a new timer.
 * [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) - reset the timer’s start time and callback.
 * [*timer*.stop](https://github.com/d3/d3-timer#timer_stop) - stop the timer.
-* [*timer*.id](https://github.com/d3/d3-timer#timer_id) - a unique, opaque identifier.
 * [d3.timerOnce](https://github.com/d3/d3-timer#timerOnce) - schedule a timer that stops on its first callback.
 * [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush) - immediately execute any eligible timers.
 
