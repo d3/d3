@@ -27,7 +27,7 @@ If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](
 * [Queues](#queues)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
-* [Scales](#scales) ([Continuous](#continuous), [Sequential](#sequential), [Quantize](#quantize), [Ordinal](#ordinal), [Categorical](#categorical))
+* [Scales](#scales) ([Continuous](#continuous-scales), [Sequential](#sequential-color-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales), [Categorical](#categorical-color-scales))
 * [Selections](#selections) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#binding-data), [Events](#handling-events), [Control](#control-flow), [Namespaces](#namespaces))
 * [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats)
