@@ -847,6 +847,7 @@ A calculator for humanity’s peculiar conventions of time.
 
 An efficient queue for managing thousands of concurrent animations.
 
+* [d3.now](https://github.com/d3/d3-timer#now) - get the current high-resolution time.
 * [d3.timer](https://github.com/d3/d3-timer#timer) - schedule a new timer.
 * [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) - reset the timer’s start time and callback.
 * [*timer*.stop](https://github.com/d3/d3-timer#timer_stop) - stop the timer.

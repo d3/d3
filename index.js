@@ -213,6 +213,7 @@ export {
 } from "d3-request";
 
 export {
+  now,
   timer,
   timerOnce,
   timerFlush
