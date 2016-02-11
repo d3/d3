@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.15",
+  "version": "4.0.0-alpha.16",
   "publishConfig": {
     "tag": "next"
   },
