@@ -390,6 +390,7 @@ export {
 } from "d3-selection";
 
 export {
+  active,
   transition
 } from "d3-transition";
 
