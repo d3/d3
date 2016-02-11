@@ -15,6 +15,7 @@
     "bin",
     "component.json",
     "composer.json",
+    "d3.zip",
     "index.js",
     "lib",
     "node_modules",

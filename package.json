@@ -58,7 +58,9 @@
     "vows": "0.8"
   },
   "scripts": {
-    "test": "vows; echo"
+    "test": "vows && echo",
+    "prepublish": "npm test && rm -f component.json package.js src/start.js d3.js d3.min.js d3.zip && bin/start > src/start.js && bin/component > component.json && bin/meteor > package.js && smash src/d3.js | uglifyjs - -b indent-level=2 -o d3.js && bin/uglify d3.js > d3.min.js && chmod a-w d3.js d3.min.js component.json package.js && zip d3.zip LICENSE d3.js d3.min.js",
+    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && cp -v d3.js ../d3.github.com/d3.v3.js && cp -v d3.min.js ../d3.github.com/d3.v3.min.js && cd ../d3.github.com && git add d3.v3.js d3.v3.min.js && git commit -m \"d3 ${VERSION}\" && git push"
   },
   "license": "BSD-3-Clause"
 }
