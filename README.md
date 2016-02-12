@@ -7,7 +7,7 @@ This branch contains the prerelease of D3 4.0. This API is unstable and may chan
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://github.com/mbostock/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.17.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.18.min.js"></script>
 ```
 
 ## API Reference
@@ -851,8 +851,9 @@ An efficient queue for managing thousands of concurrent animations.
 * [d3.timer](https://github.com/d3/d3-timer#timer) - schedule a new timer.
 * [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) - reset the timer’s start time and callback.
 * [*timer*.stop](https://github.com/d3/d3-timer#timer_stop) - stop the timer.
-* [d3.timerOnce](https://github.com/d3/d3-timer#timerOnce) - schedule a timer that stops on its first callback.
 * [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush) - immediately execute any eligible timers.
+* [d3.timeout](https://github.com/d3/d3-timer#timeout) - schedule a timer that stops on its first callback.
+* [d3.interval](https://github.com/d3/d3-timer#interval) - schedule a timer that is called with a configurable period.
 
 ## [Transitions](https://github.com/d3/d3-transition)
 
@@ -880,6 +881,7 @@ Animated transitions for [selections](#selections).
 * [*transition*.delay](https://github.com/d3/d3-transition#transition_delay) -
 * [*transition*.duration](https://github.com/d3/d3-transition#transition_duration) -
 * [*transition*.ease](https://github.com/d3/d3-transition#transition_ease) -
+* [d3.active](https://github.com/d3/d3-transition#active) -
 
 ## [Voronoi Diagrams](https://github.com/d3/d3-voronoi)
 

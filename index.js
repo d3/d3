@@ -215,8 +215,9 @@ export {
 export {
   now,
   timer,
-  timerOnce,
-  timerFlush
+  timerFlush,
+  timeout,
+  interval
 } from "d3-timer";
 
 export {
