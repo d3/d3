@@ -7,16 +7,16 @@ d3_selectionPrototype.attr = function(name, value) {
     // For attr(string), return the attribute value for the first node.
     if (typeof name === "string") {
       var node = this.node();
-      name = d3.ns.qualify(name);
-      return name.local
-          ? node.getAttributeNS(name.space, name.local)
-          : node.getAttribute(name);
+      var qualifiedName = d3.ns.qualify(name);
+      return qualifiedName.local
+          ? node.getAttributeNS(qualifiedName.space, qualifiedName.local)
+          : node.getAttribute(qualifiedName);
     }
 
     // For attr(object), the object specifies the names and values of the
     // attributes to set or remove. The values may be functions that are
     // evaluated for each element.
-    for (value in name) this.each(d3_selection_attr(value, name[value]));
+    for (var val in name) this.each(d3_selection_attr(val, name[val]));
     return this;
   }
 
