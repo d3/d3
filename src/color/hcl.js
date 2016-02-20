@@ -5,12 +5,12 @@ import "rgb";
 
 d3.hcl = d3_hcl;
 
-function d3_hcl(hue, color, luminance) {
-  return this instanceof d3_hcl ? void (this.h = +hue, this.c = +color, this.l = +luminance)
+function d3_hcl(hue, chroma, luminance) {
+  return this instanceof d3_hcl ? void (this.h = +hue, this.c = +chroma, this.l = +luminance)
       : arguments.length < 2 ? (hue instanceof d3_hcl ? new d3_hcl(hue.h, hue.c, hue.l)
       : (hue instanceof d3_lab ? d3_lab_hcl(hue.l, hue.a, hue.b)
       : d3_lab_hcl((hue = d3_rgb_lab((hue = d3.rgb(hue)).r, hue.g, hue.b)).l, hue.a, hue.b)))
-      : new d3_hcl(hue, color, luminance);
+      : new d3_hcl(hue, chroma, luminance);
 }
 
 var d3_hclPrototype = d3_hcl.prototype = new d3_color;
@@ -27,8 +27,8 @@ d3_hclPrototype.rgb = function() {
   return d3_hcl_lab(this.h, this.c, this.l).rgb();
 };
 
-function d3_hcl_lab(hue, color, luminance) {
+function d3_hcl_lab(hue, chroma, luminance) {
   if (isNaN(hue)) hue = 0;
-  if (isNaN(color)) color = 0;
-  return new d3_lab(luminance, Math.cos(hue *= d3_radians) * color, Math.sin(hue) * color);
+  if (isNaN(chroma)) chroma = 0;
+  return new d3_lab(luminance, Math.cos(hue *= d3_radians) * chroma, Math.sin(hue) * chroma);
 }
