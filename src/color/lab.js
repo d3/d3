@@ -5,12 +5,12 @@ import "rgb";
 
 d3.lab = d3_lab;
 
-function d3_lab(l, a, b) {
-  return this instanceof d3_lab ? void (this.l = +l, this.a = +a, this.b = +b)
-      : arguments.length < 2 ? (l instanceof d3_lab ? new d3_lab(l.l, l.a, l.b)
-      : (l instanceof d3_hcl ? d3_hcl_lab(l.h, l.c, l.l)
-      : d3_rgb_lab((l = d3_rgb(l)).r, l.g, l.b)))
-      : new d3_lab(l, a, b);
+function d3_lab(lightness, a, b) {
+  return this instanceof d3_lab ? void (this.l = +lightness, this.a = +a, this.b = +b)
+      : arguments.length < 2 ? (lightness instanceof d3_lab ? new d3_lab(lightness.l, lightness.a, lightness.b)
+      : (lightness instanceof d3_hcl ? d3_hcl_lab(lightness.h, lightness.c, lightness.l)
+      : d3_rgb_lab((lightness = d3_rgb(lightness)).r, lightness.g, lightness.b)))
+      : new d3_lab(lightness, a, b);
 }
 
 // Corresponds roughly to RGB brighter/darker
@@ -23,20 +23,20 @@ var d3_lab_X = 0.950470,
 
 var d3_labPrototype = d3_lab.prototype = new d3_color;
 
-d3_labPrototype.brighter = function(k) {
-  return new d3_lab(Math.min(100, this.l + d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
+d3_labPrototype.brighter = function(gammaFactor) {
+  return new d3_lab(Math.min(100, this.l + d3_lab_K * (arguments.length ? gammaFactor : 1)), this.a, this.b);
 };
 
-d3_labPrototype.darker = function(k) {
-  return new d3_lab(Math.max(0, this.l - d3_lab_K * (arguments.length ? k : 1)), this.a, this.b);
+d3_labPrototype.darker = function(gammaFactor) {
+  return new d3_lab(Math.max(0, this.l - d3_lab_K * (arguments.length ? gammaFactor : 1)), this.a, this.b);
 };
 
 d3_labPrototype.rgb = function() {
   return d3_lab_rgb(this.l, this.a, this.b);
 };
 
-function d3_lab_rgb(l, a, b) {
-  var y = (l + 16) / 116,
+function d3_lab_rgb(lightness, a, b) {
+  var y = (lightness + 16) / 116,
       x = y + a / 500,
       z = y - b / 200;
   x = d3_lab_xyz(x) * d3_lab_X;
@@ -49,10 +49,10 @@ function d3_lab_rgb(l, a, b) {
   );
 }
 
-function d3_lab_hcl(l, a, b) {
-  return l > 0
-      ? new d3_hcl(Math.atan2(b, a) * d3_degrees, Math.sqrt(a * a + b * b), l)
-      : new d3_hcl(NaN, NaN, l);
+function d3_lab_hcl(lightness, a, b) {
+  return lightness > 0
+      ? new d3_hcl(Math.atan2(b, a) * d3_degrees, Math.sqrt(a * a + b * b), lightness)
+      : new d3_hcl(NaN, NaN, lightness);
 }
 
 function d3_lab_xyz(x) {

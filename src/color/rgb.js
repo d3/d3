@@ -6,11 +6,11 @@ import "xyz";
 
 d3.rgb = d3_rgb;
 
-function d3_rgb(r, g, b) {
-  return this instanceof d3_rgb ? void (this.r = ~~r, this.g = ~~g, this.b = ~~b)
-      : arguments.length < 2 ? (r instanceof d3_rgb ? new d3_rgb(r.r, r.g, r.b)
-      : d3_rgb_parse("" + r, d3_rgb, d3_hsl_rgb))
-      : new d3_rgb(r, g, b);
+function d3_rgb(red, green, blue) {
+  return this instanceof d3_rgb ? void (this.r = ~~red, this.g = ~~green, this.b = ~~blue)
+      : arguments.length < 2 ? (red instanceof d3_rgb ? new d3_rgb(red.r, red.g, red.b)
+      : d3_rgb_parse("" + red, d3_rgb, d3_hsl_rgb))
+      : new d3_rgb(red, green, blue);
 }
 
 function d3_rgbNumber(value) {
@@ -23,22 +23,22 @@ function d3_rgbString(value) {
 
 var d3_rgbPrototype = d3_rgb.prototype = new d3_color;
 
-d3_rgbPrototype.brighter = function(k) {
-  k = Math.pow(0.7, arguments.length ? k : 1);
-  var r = this.r,
-      g = this.g,
-      b = this.b,
+d3_rgbPrototype.brighter = function(gammaFactor) {
+  gammaFactor = Math.pow(0.7, arguments.length ? gammaFactor : 1);
+  var red = this.r,
+      green = this.g,
+      blue = this.b,
       i = 30;
-  if (!r && !g && !b) return new d3_rgb(i, i, i);
-  if (r && r < i) r = i;
-  if (g && g < i) g = i;
-  if (b && b < i) b = i;
-  return new d3_rgb(Math.min(255, r / k), Math.min(255, g / k), Math.min(255, b / k));
+  if (!red && !green && !blue) return new d3_rgb(i, i, i);
+  if (red && red < i) red = i;
+  if (green && green < i) green = i;
+  if (blue && blue < i) blue = i;
+  return new d3_rgb(Math.min(255, red / gammaFactor), Math.min(255, green / gammaFactor), Math.min(255, blue / gammaFactor));
 };
 
-d3_rgbPrototype.darker = function(k) {
-  k = Math.pow(0.7, arguments.length ? k : 1);
-  return new d3_rgb(k * this.r, k * this.g, k * this.b);
+d3_rgbPrototype.darker = function(gammaFactor) {
+  gammaFactor = Math.pow(0.7, arguments.length ? gammaFactor : 1);
+  return new d3_rgb(gammaFactor * this.r, gammaFactor * this.g, gammaFactor * this.b);
 };
 
 d3_rgbPrototype.hsl = function() {
@@ -49,37 +49,37 @@ d3_rgbPrototype.toString = function() {
   return "#" + d3_rgb_hex(this.r) + d3_rgb_hex(this.g) + d3_rgb_hex(this.b);
 };
 
-function d3_rgb_hex(v) {
-  return v < 0x10
-      ? "0" + Math.max(0, v).toString(16)
-      : Math.min(255, v).toString(16);
+function d3_rgb_hex(valueToConvert) {
+  return valueToConvert < 0x10
+      ? "0" + Math.max(0, valueToConvert).toString(16)
+      : Math.min(255, valueToConvert).toString(16);
 }
 
 function d3_rgb_parse(format, rgb, hsl) {
-  var r = 0, // red channel; int in [0, 255]
-      g = 0, // green channel; int in [0, 255]
-      b = 0, // blue channel; int in [0, 255]
-      m1, // CSS color specification match
-      m2, // CSS color specification type (e.g., rgb)
+  var red = 0, // red channel; int in [0, 255]
+      green = 0, // green channel; int in [0, 255]
+      blue = 0, // blue channel; int in [0, 255]
+      colorSpecMatch, // CSS color specification match
+      colorSpecType, // CSS color specification type (e.g., rgb)
       color;
 
   /* Handle hsl, rgb. */
-  m1 = /([a-z]+)\((.*)\)/.exec(format = format.toLowerCase());
-  if (m1) {
-    m2 = m1[2].split(",");
-    switch (m1[1]) {
+  colorSpecMatch = /([a-z]+)\((.*)\)/.exec(format = format.toLowerCase());
+  if (colorSpecMatch) {
+    colorSpecType = colorSpecMatch[2].split(",");
+    switch (colorSpecMatch[1]) {
       case "hsl": {
         return hsl(
-          parseFloat(m2[0]), // degrees
-          parseFloat(m2[1]) / 100, // percentage
-          parseFloat(m2[2]) / 100 // percentage
+          parseFloat(colorSpecType[0]), // degrees
+          parseFloat(colorSpecType[1]) / 100, // percentage
+          parseFloat(colorSpecType[2]) / 100 // percentage
         );
       }
       case "rgb": {
         return rgb(
-          d3_rgb_parseNumber(m2[0]),
-          d3_rgb_parseNumber(m2[1]),
-          d3_rgb_parseNumber(m2[2])
+          d3_rgb_parseNumber(colorSpecType[0]),
+          d3_rgb_parseNumber(colorSpecType[1]),
+          d3_rgb_parseNumber(colorSpecType[2])
         );
       }
     }
@@ -93,51 +93,51 @@ function d3_rgb_parse(format, rgb, hsl) {
   /* Hexadecimal colors: #rgb and #rrggbb. */
   if (format != null && format.charAt(0) === "#" && !isNaN(color = parseInt(format.slice(1), 16))) {
     if (format.length === 4) {
-      r = (color & 0xf00) >> 4; r = (r >> 4) | r;
-      g = (color & 0xf0); g = (g >> 4) | g;
-      b = (color & 0xf); b = (b << 4) | b;
+      red = (color & 0xf00) >> 4; red = (red >> 4) | red;
+      green = (color & 0xf0); green = (green >> 4) | green;
+      blue = (color & 0xf); blue = (blue << 4) | blue;
     } else if (format.length === 7) {
-      r = (color & 0xff0000) >> 16;
-      g = (color & 0xff00) >> 8;
-      b = (color & 0xff);
+      red = (color & 0xff0000) >> 16;
+      green = (color & 0xff00) >> 8;
+      blue = (color & 0xff);
     }
   }
 
-  return rgb(r, g, b);
+  return rgb(red, green, blue);
 }
 
-function d3_rgb_hsl(r, g, b) {
-  var min = Math.min(r /= 255, g /= 255, b /= 255),
-      max = Math.max(r, g, b),
+function d3_rgb_hsl(red, green, blue) {
+  var min = Math.min(red /= 255, green /= 255, blue /= 255),
+      max = Math.max(red, green, blue),
       d = max - min,
-      h,
-      s,
-      l = (max + min) / 2;
+      hue,
+      saturation,
+      lightness = (max + min) / 2;
   if (d) {
-    s = l < 0.5 ? d / (max + min) : d / (2 - max - min);
-    if (r == max) h = (g - b) / d + (g < b ? 6 : 0);
-    else if (g == max) h = (b - r) / d + 2;
-    else h = (r - g) / d + 4;
-    h *= 60;
+    saturation = lightness < 0.5 ? d / (max + min) : d / (2 - max - min);
+    if (red == max) hue = (green - blue) / d + (green < blue ? 6 : 0);
+    else if (green == max) hue = (blue - red) / d + 2;
+    else hue = (red - green) / d + 4;
+    hue *= 60;
   } else {
-    h = NaN;
-    s = l > 0 && l < 1 ? 0 : h;
+    hue = NaN;
+    saturation = lightness > 0 && lightness < 1 ? 0 : hue;
   }
-  return new d3_hsl(h, s, l);
+  return new d3_hsl(hue, saturation, lightness);
 }
 
-function d3_rgb_lab(r, g, b) {
-  r = d3_rgb_xyz(r);
-  g = d3_rgb_xyz(g);
-  b = d3_rgb_xyz(b);
-  var x = d3_xyz_lab((0.4124564 * r + 0.3575761 * g + 0.1804375 * b) / d3_lab_X),
-      y = d3_xyz_lab((0.2126729 * r + 0.7151522 * g + 0.0721750 * b) / d3_lab_Y),
-      z = d3_xyz_lab((0.0193339 * r + 0.1191920 * g + 0.9503041 * b) / d3_lab_Z);
+function d3_rgb_lab(red, green, blue) {
+  red = d3_rgb_xyz(red);
+  green = d3_rgb_xyz(green);
+  blue = d3_rgb_xyz(blue);
+  var x = d3_xyz_lab((0.4124564 * red + 0.3575761 * green + 0.1804375 * blue) / d3_lab_X),
+      y = d3_xyz_lab((0.2126729 * red + 0.7151522 * green + 0.0721750 * blue) / d3_lab_Y),
+      z = d3_xyz_lab((0.0193339 * red + 0.1191920 * green + 0.9503041 * blue) / d3_lab_Z);
   return d3_lab(116 * y - 16, 500 * (x - y), 200 * (y - z));
 }
 
-function d3_rgb_xyz(r) {
-  return (r /= 255) <= 0.04045 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+function d3_rgb_xyz(rgbValue) {
+  return (rgbValue /= 255) <= 0.04045 ? rgbValue / 12.92 : Math.pow((rgbValue + 0.055) / 1.055, 2.4);
 }
 
 function d3_rgb_parseNumber(c) { // either integer or percentage
