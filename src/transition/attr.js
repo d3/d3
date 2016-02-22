@@ -10,7 +10,8 @@ d3_transitionPrototype.attr = function(nameNS, value) {
     // For attr(object), the object specifies the names and values of the
     // attributes to transition. The values may be functions that are
     // evaluated for each element.
-    for (value in nameNS) this.attr(value, nameNS[value]);
+    var property;
+    for (property in nameNS) this.attr(property, nameNS[property]);
     return this;
   }
 
