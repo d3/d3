@@ -83,7 +83,7 @@ suite.addBatch({
         },
         "formats month": function(format) {
           var f = format("%B");
-          assert.equal(f(local(1990, 0, 1)), "січня.");
+          assert.equal(f(local(1990, 0, 1)), "січня");
           assert.equal(f(local(1990, 1, 1)), "лютого");
           assert.equal(f(local(1990, 2, 1)), "березня");
           assert.equal(f(local(1990, 3, 1)), "квітня");
