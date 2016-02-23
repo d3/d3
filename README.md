@@ -192,7 +192,7 @@ Color manipulation and color space conversion.
 
 Parse and format delimiter-separated values, most commonly CSV and TSV.
 
-* [d3.dsv](https://github.com/d3/d3-dsv#dsv) - create a new parser and formatter for the given delimiter.
+* [d3.dsvFormat](https://github.com/d3/d3-dsv#dsvFormat) - create a new parser and formatter for the given delimiter.
 * [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) - parse the given string, returning an array of objects.
 * [*dsv*.parseRows](https://github.com/d3/d3-dsv#dsv_parseRows) - parse the given string, returning an array of rows.
 * [*dsv*.format](https://github.com/d3/d3-dsv#dsv_format) - format the given array of objects.

@@ -191,7 +191,7 @@ export {
 } from "d3-dispatch";
 
 export {
-  dsv,
+  dsvFormat,
   csvParse,
   csvParseRows,
   csvFormat,
