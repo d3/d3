@@ -28,7 +28,7 @@ If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
 * [Scales](#scales) ([Continuous](#continuous-scales), [Sequential](#sequential-color-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales), [Categorical](#categorical-color-scales))
-* [Selections](#selections) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#binding-data), [Events](#handling-events), [Control](#control-flow), [Namespaces](#namespaces))
+* [Selections](#selections) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#joining-data), [Events](#handling-events), [Control](#control-flow), [Namespaces](#namespaces))
 * [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats)
 * [Time Intervals](#time-intervals)
@@ -584,7 +584,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.lower](https://github.com/d3/d3-selection#selection_lower) - reorders each element as the first child of its parent.
 * [d3.creator](https://github.com/d3/d3-selection#creator) - create an element by name.
 
-### [Binding Data](https://github.com/d3/d3-selection#binding-data)
+### [Joining Data](https://github.com/d3/d3-selection#joining-data)
 
 * [*selection*.data](https://github.com/d3/d3-selection#selection_data) - join elements to data.
 * [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) - get the enter selection (data missing elements).
