@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.21",
+  "version": "4.0.0-alpha.22",
   "publishConfig": {
     "tag": "next"
   },
@@ -47,20 +47,20 @@
     "d3-dsv": "0.3.0",
     "d3-ease": "0.7.0",
     "d3-format": "0.5.1",
-    "d3-interpolate": "0.5.2",
+    "d3-interpolate": "0.6.0",
     "d3-path": "0.1.5",
     "d3-polygon": "0.2.1",
     "d3-quadtree": "0.2.1",
     "d3-queue": "2.0.2",
     "d3-random": "0.2.1",
     "d3-request": "0.4.4",
-    "d3-scale": "0.6.2",
+    "d3-scale": "0.6.3",
     "d3-selection": "0.7.0",
     "d3-shape": "0.5.1",
     "d3-time": "0.2.4",
     "d3-time-format": "0.3.1",
     "d3-timer": "0.4.1",
-    "d3-transition": "0.2.2",
+    "d3-transition": "0.2.3",
     "d3-voronoi": "0.3.2"
   }
 }

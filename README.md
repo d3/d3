@@ -7,7 +7,7 @@ This branch contains the prerelease of D3 4.0. This API is unstable and may chan
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://github.com/mbostock/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.21.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.22.min.js"></script>
 ```
 
 ## API Reference
@@ -273,7 +273,8 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateObject](https://github.com/d3/d3-interpolate#interpolateObject) - interpolate arbitrary objects.
 * [d3.interpolateRound](https://github.com/d3/d3-interpolate#interpolateRound) - interpolate integers.
 * [d3.interpolateString](https://github.com/d3/d3-interpolate#interpolateString) - interpolate strings with embedded numbers.
-* [d3.interpolateTransform](https://github.com/d3/d3-interpolate#interpolateTransform) - interpolate 2D matrix transforms.
+* [d3.interpolateTransformCss](https://github.com/d3/d3-interpolate#interpolateTransformCss) - interpolate 2D CSS transforms.
+* [d3.interpolateTransformSvg](https://github.com/d3/d3-interpolate#interpolateTransformSvg) - interpolate 2D SVG transforms.
 * [d3.interpolateZoom](https://github.com/d3/d3-interpolate#interpolateZoom) - zoom and pan between two views.
 * [d3.interpolateRgb](https://github.com/d3/d3-interpolate#interpolateRgb) - interpolate RGB colors.
 * [d3.interpolateHsl](https://github.com/d3/d3-interpolate#interpolateHsl) - interpolate HSL colors.
