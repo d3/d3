@@ -267,7 +267,6 @@ Easing functions for smooth animation.
 Interpolate numbers, colors, strings, arrays, objects, whatever!
 
 * [d3.interpolate](https://github.com/d3/d3-interpolate#interpolate) - interpolate arbitrary values.
-* [d3.interpolators](https://github.com/d3/d3-interpolate#interpolators) - register a custom interpolator.
 * [d3.interpolateArray](https://github.com/d3/d3-interpolate#interpolateArray) - interpolate arrays of arbitrary values.
 * [d3.interpolateNumber](https://github.com/d3/d3-interpolate#interpolateNumber) - interpolate numbers.
 * [d3.interpolateObject](https://github.com/d3/d3-interpolate#interpolateObject) - interpolate arbitrary objects.
