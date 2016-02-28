@@ -168,7 +168,6 @@ export {
 
 export {
   interpolate,
-  interpolators,
   interpolateArray,
   interpolateNumber,
   interpolateObject,
