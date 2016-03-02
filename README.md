@@ -565,6 +565,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.select](https://github.com/d3/d3-selection#selection_select) - select a descendant element for each selected element.
 * [*selection*.selectAll](https://github.com/d3/d3-selection#selection_selectAll) - select multiple descendants for each selected element.
 * [*selection*.filter](https://github.com/d3/d3-selection#selection_filter) - filter elements based on data.
+* [*selection*.merge](https://github.com/d3/d3-selection#selection_merge) - merge this selection with another.
 * [d3.matcher](https://github.com/d3/d3-selection#matcher) - test whether an element matches a selector.
 * [d3.selector](https://github.com/d3/d3-selection#selector) - select an element.
 * [d3.selectorAll](https://github.com/d3/d3-selection#selectorAll) - select elements.
@@ -867,6 +868,7 @@ Animated transitions for [selections](#selections).
 * [*transition*.select](https://github.com/d3/d3-transition#transition_select) -
 * [*transition*.selectAll](https://github.com/d3/d3-transition#transition_selectAll) -
 * [*transition*.filter](https://github.com/d3/d3-transition#transition_filter) -
+* [*transition*.merge](https://github.com/d3/d3-transition#transition_merge) - merge this transition with another.
 * [*transition*.transition](https://github.com/d3/d3-transition#transition_transition) -
 * [*transition*.call](https://github.com/d3/d3-transition#transition_call) -
 * [*transition*.nodes](https://github.com/d3/d3-transition#transition_nodes) -
