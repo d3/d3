@@ -869,6 +869,7 @@ Animated transitions for [selections](#selections).
 * [*transition*.selectAll](https://github.com/d3/d3-transition#transition_selectAll) -
 * [*transition*.filter](https://github.com/d3/d3-transition#transition_filter) -
 * [*transition*.merge](https://github.com/d3/d3-transition#transition_merge) - merge this transition with another.
+* [*transition*.selection](https://github.com/d3/d3-transition#transition_selection) -
 * [*transition*.transition](https://github.com/d3/d3-transition#transition_transition) -
 * [*transition*.call](https://github.com/d3/d3-transition#transition_call) -
 * [*transition*.nodes](https://github.com/d3/d3-transition#transition_nodes) -
