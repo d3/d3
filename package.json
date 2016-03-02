@@ -53,7 +53,7 @@
     "d3-quadtree": "0.2.1",
     "d3-queue": "2.0.2",
     "d3-random": "0.2.1",
-    "d3-request": "0.4.4",
+    "d3-request": "0.4.5",
     "d3-scale": "0.6.4",
     "d3-selection": "0.7.0",
     "d3-shape": "0.5.1",

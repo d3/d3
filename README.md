@@ -388,6 +388,8 @@ A convenient alternative to asynchronous XMLHttpRequest.
 
 * [d3.request](https://github.com/d3/d3-request#request) - make an asynchronous request.
 * [*request*.header](https://github.com/d3/d3-request#request_header) - set a request header.
+* [*request*.user](https://github.com/d3/d3-request#request_user) - set the user for authentication.
+* [*request*.password](https://github.com/d3/d3-request#request_password) - set the password for authentication.
 * [*request*.mimeType](https://github.com/d3/d3-request#request_mimeType) - set the MIME type.
 * [*request*.timeout](https://github.com/d3/d3-request#request_timeout) - set the timeout in milliseconds.
 * [*request*.responseType](https://github.com/d3/d3-request#request_responseType) - set the response type.
