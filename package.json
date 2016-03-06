@@ -29,7 +29,7 @@
     "pretest": "mkdir -p build && node -e 'process.stdout.write(\"export var version = \\\"\" + require(\"./package.json\").version + \"\\\";\\n\");' > build/version.js && rollup -c -o build/d3.js -- index.js && rollup -e `node -e 'process.stdout.write(Object.keys(require(\"./package.json\").dependencies).join(\",\"));'` -f cjs -- index.js | grep -v '^exports.event =' > build/d3.node.js && echo '\\nObject.defineProperty(exports, \"event\", {get: function() { return d3Selection.event; }});' >> build/d3.node.js",
     "test": "faucet `find test -name '*-test.js'`",
     "prepublish": "npm run test && uglifyjs build/d3.js -c -m -o build/d3.min.js && rm -f build/d3.zip",
-    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && cp -v build/d3.js ../d3.github.com/d3.v${VERSION}.js && cp -v build/d3.min.js ../d3.github.com/d3.v${VERSION}.min.js && cd ../d3.github.com && git add d3.v${VERSION}.js d3.v${VERSION}.min.js && git commit -m \"d3 ${VERSION}\" && git push && zip -j build/d3.zip -- LICENSE README.md build/d3.js build/d3.min.js"
+    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && cp -v build/d3.js ../d3.github.com/d3.v${VERSION}.js && cp -v build/d3.min.js ../d3.github.com/d3.v${VERSION}.min.js && cd ../d3.github.com && git add d3.v${VERSION}.js d3.v${VERSION}.min.js && git commit -m \"d3 ${VERSION}\" && git push && cd - && zip -j build/d3.zip -- LICENSE README.md build/d3.js build/d3.min.js"
   },
   "devDependencies": {
     "faucet": "0.0",
