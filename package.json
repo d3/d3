@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.27",
+  "version": "4.0.0-alpha.28",
   "publishConfig": {
     "tag": "next"
   },
@@ -56,7 +56,7 @@
     "d3-request": "0.4.5",
     "d3-scale": "0.6.4",
     "d3-selection": "0.7.0",
-    "d3-shape": "0.5.1",
+    "d3-shape": "0.6.0",
     "d3-time": "0.2.5",
     "d3-time-format": "0.3.1",
     "d3-timer": "0.4.1",
