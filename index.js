@@ -1,6 +1,6 @@
 export {
   version
-} from "./build/version";
+} from "./build/package";
 
 export {
   bisect,
