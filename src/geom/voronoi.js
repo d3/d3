@@ -6,10 +6,8 @@ import "point";
 d3.geom.voronoi = function(points) {
   var x = d3_geom_pointX,
       y = d3_geom_pointY,
-      w = d3_geom_pointWeight,
       fx = x,
       fy = y,
-      fw = w,
       clipExtent = d3_geom_voronoiClipExtent;
 
   // @deprecated; use voronoi(data) instead.
@@ -48,7 +46,6 @@ d3.geom.voronoi = function(points) {
       return {
         x: Math.round(fx(d, i) / ε) * ε,
         y: Math.round(fy(d, i) / ε) * ε,
-        w: Math.round(fw(d, i) / ε) * ε,
         i: i
       };
     });
@@ -139,10 +136,6 @@ d3.geom.voronoi = function(points) {
     return arguments.length ? (fy = d3_functor(y = _), voronoi) : y;
   };
   
-  voronoi.weight = function (_) {
-    return arguments.length ? (fw = d3_functor(w = _), voronoi) : w;
-  };
-
   voronoi.clipExtent = function(_) {
     if (!arguments.length) return clipExtent === d3_geom_voronoiClipExtent ? null : clipExtent;
     clipExtent = _ == null ? d3_geom_voronoiClipExtent : _;
