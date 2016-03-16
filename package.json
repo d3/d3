@@ -1,65 +1,66 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.13",
-  "publishConfig": {
-    "tag": "next"
-  },
-  "description": "Data-Driven Documents",
+  "version": "3.5.16",
+  "description": "A JavaScript visualization library for HTML and SVG.",
   "keywords": [
     "dom",
+    "w3c",
     "visualization",
     "svg",
     "animation",
     "canvas"
   ],
-  "homepage": "https://github.com/mbostock/d3",
-  "license": "BSD-3-Clause",
+  "homepage": "http://d3js.org",
   "author": {
     "name": "Mike Bostock",
     "url": "http://bost.ocks.org/mike"
   },
-  "main": "build/d3.js",
-  "jsnext:main": "index",
+  "contributors": [
+    {
+      "name": "Jason Davies",
+      "url": "http://jasondavies.com"
+    }
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/mbostock/d3.git"
   },
-  "scripts": {
-    "pretest": "mkdir -p build && rollup -c -o build/d3.js -- index.js",
-    "test": "faucet `find test -name '*-test.js'`",
-    "prepublish": "npm run test && uglifyjs build/d3.js -c -m -o build/d3.min.js && rm -f build/d3.zip && zip -j build/d3.zip -- LICENSE README.md build/d3.js build/d3.min.js",
-    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && cp -v build/d3.js ../d3.github.com/d3.v${VERSION}.js && cp -v build/d3.min.js ../d3.github.com/d3.v${VERSION}.min.js && cd ../d3.github.com && git add d3.v${VERSION}.js d3.v${VERSION}.min.js && git commit -m \"Add d3 v${VERSION}.\" && git push"
+  "main": "d3.js",
+  "browser": "d3.js",
+  "jspm": {
+    "main": "d3",
+    "shim": {
+      "d3": {
+        "exports": "d3"
+      }
+    },
+    "files": [
+      "d3.js"
+    ],
+    "buildConfig": {
+      "uglify": true
+    }
+  },
+  "jam": {
+    "main": "d3.js",
+    "shim": {
+      "exports": "d3"
+    }
+  },
+  "spm": {
+    "main": "d3.js"
   },
   "devDependencies": {
-    "faucet": "0.0",
-    "rollup": "0.25",
-    "rollup-plugin-json": "2",
-    "rollup-plugin-npm": "1",
-    "tape": "4",
-    "uglify-js": "2"
+    "jsdom": "3",
+    "seedrandom": "2",
+    "smash": "0.0",
+    "uglify-js": "2.6.1",
+    "vows": "0.8"
   },
-  "dependencies": {
-    "d3-array": "0.7.1",
-    "d3-axis": "0.2.2",
-    "d3-collection": "0.1.1",
-    "d3-color": "0.3.4",
-    "d3-dispatch": "0.2.6",
-    "d3-dsv": "0.1.14",
-    "d3-ease": "0.5.2",
-    "d3-format": "0.5.1",
-    "d3-interpolate": "0.4.1",
-    "d3-path": "0.1.4",
-    "d3-polygon": "0.2.1",
-    "d3-quadtree": "0.2.1",
-    "d3-queue": "2.0.1",
-    "d3-random": "0.2.1",
-    "d3-request": "0.3.2",
-    "d3-scale": "0.5.3",
-    "d3-selection": "0.6.5",
-    "d3-shape": "0.5.1",
-    "d3-time": "0.2.1",
-    "d3-time-format": "0.3.1",
-    "d3-timer": "0.1.1",
-    "d3-voronoi": "0.3.1"
-  }
+  "scripts": {
+    "test": "vows && echo",
+    "prepublish": "npm test && rm -f package.js src/start.js d3.js d3.min.js d3.zip && bin/start > src/start.js && bin/meteor > package.js && smash src/d3.js | uglifyjs - -b indent-level=2 -o d3.js && bin/uglify d3.js > d3.min.js && chmod a-w d3.js d3.min.js package.js && zip d3.zip LICENSE d3.js d3.min.js",
+    "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git tag -am \"Release $VERSION.\" v${VERSION} && git push --tags && cp -v README.md LICENSE d3.js d3.min.js ../d3-bower && cd ../d3-bower && git add README.md LICENSE d3.js d3.min.js && git commit -m \"Release $VERSION.\" && git tag -am \"Release $VERSION.\" v${VERSION} && git push && git push --tags && cd - && cp -v d3.js ../d3.github.com/d3.v3.js && cp -v d3.min.js ../d3.github.com/d3.v3.min.js && cd ../d3.github.com && git add d3.v3.js d3.v3.min.js && git commit -m \"d3 ${VERSION}\" && git push"
+  },
+  "license": "BSD-3-Clause"
 }
