@@ -24,26 +24,27 @@ d3_geom_polygonPrototype.area = function() {
   return area * 0.5;
 };
 
-d3_geom_polygonPrototype.centroid = function(k) {
+d3_geom_polygonPrototype.centroid = function() {
   var i = -1,
       n = this.length,
       x = 0,
       y = 0,
       a,
       b = this[n - 1],
-      c;
-
-  if (!arguments.length) k = -1 / (6 * this.area());
+      c,
+      k = 0;
 
   while (++i < n) {
     a = b;
     b = this[i];
     c = a[0] * b[1] - b[0] * a[1];
+    k += c;
     x += (a[0] + b[0]) * c;
     y += (a[1] + b[1]) * c;
   }
 
-  return [x * k, y * k];
+  k *= 3;
+  return [x / k, y / k];
 };
 
 // The Sutherland-Hodgman clipping algorithm.
