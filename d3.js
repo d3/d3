@@ -5534,19 +5534,23 @@
     voronoi.centroidal = function(data, maxsteps, stepfn) {
       var err = 0, polys = null;
       if (typeof maxsteps === "function") stepfn = maxsteps, maxsteps = 100; else if (!maxsteps) maxsteps = 100;
-      data = sites(data);
+      var cells = sites(data);
       for (;maxsteps > 0; --maxsteps) {
-        var err = 0, polys = polygons(data.slice());
+        var err = 0, polys = polygons(cells.slice());
         for (var i = 0; i < polys.length; ++i) {
-          var c = d3.geom.polygon(polys[i]).centroid(), d = [ c[0] - data[i].x, c[1] - data[i].y ];
+          var c = d3.geom.polygon(polys[i]).centroid(), d = [ c[0] - cells[i].x, c[1] - cells[i].y ];
           err += d[0] * d[0] + d[1] * d[1];
-          data[i].x = c[0];
-          data[i].y = c[1];
+          cells[i].x = c[0];
+          cells[i].y = c[1];
         }
         err = Math.sqrt(err / polys.length);
         if (!!stepfn) stepfn(polys, err, maxsteps);
         if (err <= 1) break;
       }
+      polys.forEach(function(p, i) {
+        p.centroid = cells[i];
+        p.point = data[i];
+      });
       return polys;
     };
     voronoi.x = function(_) {

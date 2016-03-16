@@ -257,12 +257,38 @@ suite.addBatch({
           ]);
         }
       }
+    },
+    
+    "centroidal vornoi tessellation": {
+      topic: function (voronoi) {
+        return voronoi().clipExtent([[0, 0], [100, 100]]);
+      },
+      
+      "initially stable configuration": function (v) {
+        var cells = [[25, 25], [75, 25], [75, 75], [25, 75]];
+        assert.deepEqual(v.centroidal(cells).map(function (d) { return [d.centroid.x, d.centroid.y]; }), cells);
+      },
+      
+      "one step centroidal equals normal run": function (v) {
+        var cells = [[15, 15], [95, 85], [70, 85], [25, 75]];
+        assert.deepEqual(
+          polygons(v.centroidal(cells, 1)),
+          polygons(v(cells))
+        );
+      },
+
+      "unstable with enough steps": function (v) {
+        assert.deepEqual(
+          v.centroidal([[15, 15], [95, 85], [70, 85], [25, 75]]).map(function (d) { return [Math.round(d.centroid.x), Math.round(d.centroid.y)]; }), 
+          [[27, 24], [77, 26], [74, 76], [24, 74]]
+        );
+      }
     }
   }
 });
 
 function polygons(cells) {
-  cells.forEach(function(cell) { delete cell.point; });
+  cells.forEach(function(cell) { delete cell.point; delete cell.centroid; });
   return cells;
 }
 

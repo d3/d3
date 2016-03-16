@@ -2,6 +2,7 @@ import "../core/functor";
 import "voronoi/";
 import "geom";
 import "point";
+import "polygon";
 
 d3.geom.voronoi = function(points) {
   var x = d3_geom_pointX,
@@ -103,19 +104,19 @@ d3.geom.voronoi = function(points) {
     else if (!maxsteps)
       maxsteps = 100;
       
-    data = sites(data);
+    var cells = sites(data);
 			
 		for (;maxsteps > 0; --maxsteps) {
 			var err = 0,
-			    polys = polygons(data.slice());
+			    polys = polygons(cells.slice());
 						   
 			for (var i = 0;i < polys.length; ++i) {
 				var c = d3.geom.polygon(polys[i]).centroid(),
-				    d = [c[0] - data[i].x, c[1] - data[i].y];
+				    d = [c[0] - cells[i].x, c[1] - cells[i].y];
 				
 				err += d[0] * d[0] + d[1] * d[1];
-				data[i].x = c[0];
-				data[i].y = c[1];
+				cells[i].x = c[0];
+				cells[i].y = c[1];
 			}
 			
 			err = Math.sqrt(err / polys.length);
@@ -124,6 +125,11 @@ d3.geom.voronoi = function(points) {
 			  
 			if ( err <= 1.0) break;
 		}
+		
+    polys.forEach(function (p, i) { 
+      p.centroid = cells[i];
+      p.point = data[i];
+    });		
 
     return polys;	  
   };
