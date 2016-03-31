@@ -12,6 +12,12 @@ d3_selectionPrototype.attr = function(name, value) {
           ? node.getAttributeNS(name.space, name.local)
           : node.getAttribute(name);
     }
+    
+    if (typeof name === "function") {
+      // For attr(function), function should return object of name and values of the 
+      // attributes to set or remove.
+      name = value.apply(this, arguments);
+    }
 
     // For attr(object), the object specifies the names and values of the
     // attributes to set or remove. The values may be functions that are
