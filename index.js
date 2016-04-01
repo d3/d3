@@ -403,5 +403,22 @@ export {
 } from "d3-axis";
 
 export {
+  cluster,
+  hierarchy,
+  pack,
+  packSiblings,
+  packEnclose,
+  partition,
+  stratify,
+  tree,
+  treemap,
+  treemapBinary,
+  treemapDice,
+  treemapSlice,
+  treemapSliceDice,
+  treemapSquarify
+} from "d3-hierarchy";
+
+export {
   voronoi
 } from "d3-voronoi";

@@ -7,7 +7,7 @@ This branch contains the prerelease of D3 4.0. This API is unstable and may chan
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://github.com/mbostock/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.28.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.29.min.js"></script>
 ```
 
 ## API Reference
@@ -19,6 +19,7 @@ If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Dispatches](#dispatches)
 * [Easings](#easings)
+* [Hierarchies](#hierarchies)
 * [Interpolators](#interpolators)
 * [Number Formats](#number-formats)
 * [Paths](#paths)
@@ -261,6 +262,66 @@ Easing functions for smooth animation.
 * [d3.easeBounceIn](https://github.com/d3/d3-ease#easeBounceIn) - bounce easing, like a rubber ball.
 * [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut) - reverse bounce easing.
 * [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut) - symmetric bounce easing.
+
+## [Hierarchies](https://github.com/d3/d3-hierarchy)
+
+Layout algorithms for visualizing hierarchical data.
+
+* [d3.hierarchy](#hierarchy) - constructs a root node from hierarchical data.
+* [*node*.ancestors](#node_ancestors) - generate an array of ancestors.
+* [*node*.descendants](#node_descendants) - generate an array of descendants.
+* [*node*.leaves](#node_leaves) - generate an array of leaves.
+* [*node*.path](#node_path) - generate the shortest path to another node.
+* [*node*.sum](#node_sum) - evaluate and aggregate quantitative values.
+* [*node*.sort](#node_sort) - sort all descendant siblings.
+* [*node*.each](#node_each) - breadth-first traversal.
+* [*node*.eachAfter](#node_eachAfter) - post-order traversal.
+* [*node*.eachBefore](#node_eachBefore) - pre-order traversal.
+* [*node*.copy](#node_copy) - copy a hierarchy.
+* [d3.stratify](#stratify) - create a new stratify operator.
+* [*stratify*](#_stratify) - construct a root node from tabular data.
+* [*stratify*.id](#stratify_id) - set the node id accessor.
+* [*stratify*.parentId](#stratify_parentId) - set the parent node id accessor.
+* [d3.cluster](#cluster) - create a new cluster (dendrogram) layout.
+* [*cluster*](#_cluster) - layout the specified hierarchy in a dendrogram.
+* [*cluster*.size](#cluster_size) - set the layout size.
+* [*cluster*.nodeSize](#cluster_nodeSize) - set the node size.
+* [*cluster*.separation](#cluster_separation) - set the separation between leaves.
+* [d3.tree](#tree) - create a new tidy tree layout.
+* [*tree*](#_tree) - layout the specified hierarchy in a tidy tree.
+* [*tree*.size](#tree_size) - set the layout size.
+* [*tree*.nodeSize](#tree_nodeSize) - set the node size.
+* [*tree*.separation](#tree_separation) - set the separation between nodes.
+* [d3.treemap](#treemap) - create a new treemap layout.
+* [*treemap*](#_treemap) - layout the specified hierarchy as a treemap.
+* [*treemap*.tile](#treemap_tile) - set the tiling method.
+* [*treemap*.size](#treemap_size) - set the layout size.
+* [*treemap*.round](#treemap_round) - set whether the output coordinates are rounded.
+* [*treemap*.padding](#treemap_padding) - set the padding.
+* [*treemap*.paddingInner](#treemap_paddingInner) - set the padding between siblings.
+* [*treemap*.paddingOuter](#treemap_paddingOuter) - set the padding between parent and children.
+* [*treemap*.paddingTop](#treemap_paddingTop) - set the padding between the parent’s top edge and children.
+* [*treemap*.paddingRight](#treemap_paddingRight) - set the padding between the parent’s right edge and children.
+* [*treemap*.paddingBottom](#treemap_paddingBottom) - set the padding between the parent’s bottom edge and children.
+* [*treemap*.paddingLeft](#treemap_paddingLeft) - set the padding between the parent’s left edge and children.
+* [d3.treemapBinary](#treemapBinary) - tile using a balanced binary tree.
+* [d3.treemapDice](#treemapDice) - tile into a horizontal row.
+* [d3.treemapSlice](#treemapSlice) - tile into a vertical column.
+* [d3.treemapSliceDice](#treemapSliceDice) - alternate between slicing and dicing.
+* [d3.treemapSquarify](#treemapSquarify) - tile using squarified rows per Bruls *et. al.*
+* [*squarify*.ratio](#squarify_ratio) - set the desired rectangle aspect ratio.
+* [d3.partition](#partition) - create a new partition (icicle or sunburst) layout.
+* [*partition*](#_partition) - layout the specified hierarchy as a partition diagram.
+* [*partition*.size](#partition_size) - set the layout size.
+* [*partition*.round](#partition_round) - set whether the output coordinates are rounded.
+* [*partition*.padding](#partition_padding) - set the padding.
+* [d3.pack](#pack) - create a new circle-packing layout.
+* [*pack*](#_pack) - layout the specified hierarchy using circle-packing.
+* [*pack*.radius](#pack_radius) - set the radius accessor.
+* [*pack*.size](#pack_size) - set the layout size.
+* [*pack*.padding](#pack_padding) - set the padding.
+* [d3.packSiblings](#packSiblings) - pack the specified array of circles.
+* [d3.packEnclose](#packEnclose) - enclose the specified array of circles.
 
 ## [Interpolators](https://github.com/d3/d3-interpolate)
 
