@@ -43,9 +43,9 @@ suite.addBatch({
         var dx = 17, dy = 17,
             points = _.range(dx * dy).map(function(i) { return [i % dx, i / dx | 0]; });
         q = q(points);
-        assert.deepEqual(q.find([.1, .1]), [0, 0]);
+        assert.deepEqual(q.find([0.1, 0.1]), [0, 0]);
         assert.deepEqual(q.find([7.5, 7.5]), [7, 7]);
-        assert.deepEqual(q.find([.1, 15.9]), [0, 16]);
+        assert.deepEqual(q.find([0.1, 15.9]), [0, 16]);
         assert.deepEqual(q.find([15.9, 15.9]), [16, 16]);
       },
       "can find with accessors": function(q) {

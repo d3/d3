@@ -88,7 +88,9 @@ function d3_scale_linearRebind(scale, linear) {
 }
 
 function d3_scale_linearNice(domain, m) {
-  return d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
+  d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
+  d3_scale_nice(domain, d3_scale_niceStep(d3_scale_linearTickRange(domain, m)[2]));
+  return domain;
 }
 
 function d3_scale_linearTickRange(domain, m) {
@@ -100,13 +102,13 @@ function d3_scale_linearTickRange(domain, m) {
       err = m / span * step;
 
   // Filter ticks to get closer to the desired count.
-  if (err <= .15) step *= 10;
-  else if (err <= .35) step *= 5;
-  else if (err <= .75) step *= 2;
+  if (err <= 0.15) step *= 10;
+  else if (err <= 0.35) step *= 5;
+  else if (err <= 0.75) step *= 2;
 
   // Round start and stop values to step interval.
   extent[0] = Math.ceil(extent[0] / step) * step;
-  extent[1] = Math.floor(extent[1] / step) * step + step * .5; // inclusive
+  extent[1] = Math.floor(extent[1] / step) * step + step * 0.5; // inclusive
   extent[2] = step;
   return extent;
 }
@@ -141,7 +143,7 @@ var d3_scale_linearFormatSignificant = {s: 1, g: 1, p: 1, r: 1, e: 1};
 
 // Returns the number of significant digits after the decimal point.
 function d3_scale_linearPrecision(value) {
-  return -Math.floor(Math.log(value) / Math.LN10 + .01);
+  return -Math.floor(Math.log(value) / Math.LN10 + 0.01);
 }
 
 // For some format types, the precision specifies the number of significant

@@ -21,7 +21,7 @@ d3.behavior.drag = function() {
   function dragstart(id, position, subject, move, end) {
     return function() {
       var that = this,
-          target = d3.event.target,
+          target = d3.event.target.correspondingElement || d3.event.target,
           parent = that.parentNode,
           dispatch = event.of(that, arguments),
           dragged = 0,
@@ -62,7 +62,7 @@ d3.behavior.drag = function() {
       function ended() {
         if (!position(parent, dragId)) return; // this touch didn’t end
         dragSubject.on(move + dragName, null).on(end + dragName, null);
-        dragRestore(dragged && d3.event.target === target);
+        dragRestore(dragged);
         dispatch({type: "dragend"});
       }
     };

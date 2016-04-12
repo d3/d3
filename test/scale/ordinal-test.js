@@ -234,7 +234,7 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangeBands([0, 120]);
         assert.deepEqual(x.range(), [0, 40, 80]);
         assert.equal(x.rangeBand(), 40);
-        var x = ordinal().domain(["a", "b", "c"]).rangeBands([0, 120], .2);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([0, 120], 0.2);
         assert.deepEqual(x.range(), [7.5, 45, 82.5]);
         assert.equal(x.rangeBand(), 30);
       },
@@ -250,15 +250,15 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0]);
         assert.deepEqual(x.range(), [80, 40, 0]);
         assert.equal(x.rangeBand(), 40);
-        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], .2);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], 0.2);
         assert.deepEqual(x.range(), [82.5, 45, 7.5]);
         assert.equal(x.rangeBand(), 30);
       },
       "can specify a different outer padding": function(ordinal) {
-        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], .2, .1);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], 0.2, 0.1);
         assert.deepEqual(x.range(), [84, 44, 4]);
         assert.equal(x.rangeBand(), 32);
-        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], .2, 1);
+        var x = ordinal().domain(["a", "b", "c"]).rangeBands([120, 0], 0.2, 1);
         assert.deepEqual(x.range(), [75, 50, 25]);
         assert.equal(x.rangeBand(), 20);
       },
@@ -280,7 +280,7 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100]);
         assert.deepEqual(x.range(), [1, 34, 67]);
         assert.equal(x.rangeBand(), 33);
-        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100], .2);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([0, 100], 0.2);
         assert.deepEqual(x.range(), [7, 38, 69]);
         assert.equal(x.rangeBand(), 25);
       },
@@ -288,15 +288,15 @@ suite.addBatch({
         var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([100, 0]);
         assert.deepEqual(x.range(), [67, 34, 1]);
         assert.equal(x.rangeBand(), 33);
-        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([100, 0], .2);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([100, 0], 0.2);
         assert.deepEqual(x.range(), [69, 38, 7]);
         assert.equal(x.rangeBand(), 25);
       },
       "can specify a different outer padding": function(ordinal) {
-        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([120, 0], .2, .1);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([120, 0], 0.2, 0.1);
         assert.deepEqual(x.range(), [84, 44, 4]);
         assert.equal(x.rangeBand(), 32);
-        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([120, 0], .2, 1);
+        var x = ordinal().domain(["a", "b", "c"]).rangeRoundBands([120, 0], 0.2, 1);
         assert.deepEqual(x.range(), [75, 50, 25]);
         assert.equal(x.rangeBand(), 20);
       },
@@ -356,7 +356,7 @@ suite.addBatch({
         assert.deepEqual(y.range(), ["foo", "baz"]);
       },
       "changes to the range type are isolated": function(ordinal) {
-        var x = ordinal().domain([0, 1]).rangeBands([0, 1], .2), y = x.copy();
+        var x = ordinal().domain([0, 1]).rangeBands([0, 1], 0.2), y = x.copy();
         x.rangePoints([1, 2]);
         assert.inDelta(x(0), 1, 1e-6);
         assert.inDelta(x(1), 2, 1e-6);

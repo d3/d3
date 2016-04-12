@@ -13,9 +13,9 @@ function d3_selection_creator(name) {
   function create() {
     var document = this.ownerDocument,
         namespace = this.namespaceURI;
-    return namespace
-        ? document.createElementNS(namespace, name)
-        : document.createElement(name);
+    return namespace === d3_nsXhtml && document.documentElement.namespaceURI === d3_nsXhtml
+        ? document.createElement(name)
+        : document.createElementNS(namespace, name);
   }
 
   function createNS() {

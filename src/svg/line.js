@@ -13,7 +13,7 @@ function d3_svg_line(projection) {
       defined = d3_true,
       interpolate = d3_svg_lineLinear,
       interpolateKey = interpolate.key,
-      tension = .7;
+      tension = 0.7;
 
   function line(data) {
     var segments = [],
@@ -104,11 +104,11 @@ d3_svg_lineInterpolators.forEach(function(key, value) {
 
 // Linear interpolation; generates "L" commands.
 function d3_svg_lineLinear(points) {
-  return points.join("L");
+  return points.length > 1 ? points.join("L") : points + "Z";
 }
 
 function d3_svg_lineLinearClosed(points) {
-  return d3_svg_lineLinear(points) + "Z";
+  return points.join("L") + "Z";
 }
 
 // Step interpolation; generates "H" and "V" commands.
@@ -153,7 +153,7 @@ function d3_svg_lineCardinalOpen(points, tension) {
 // Closed cardinal spline interpolation; generates "C" commands.
 function d3_svg_lineCardinalClosed(points, tension) {
   return points.length < 3
-      ? d3_svg_lineLinear(points)
+      ? d3_svg_lineLinearClosed(points)
       : points[0] + d3_svg_lineHermite((points.push(points[0]), points),
         d3_svg_lineCardinalTangents([points[points.length - 2]]
         .concat(points, [points[1]]), tension));

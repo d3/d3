@@ -36,7 +36,7 @@ function d3_hsl_rgb(h, s, l) {
   l = l < 0 ? 0 : l > 1 ? 1 : l;
 
   /* From FvD 13.37, CSS Color Module Level 3 */
-  m2 = l <= .5 ? l * (1 + s) : l + s - l * s;
+  m2 = l <= 0.5 ? l * (1 + s) : l + s - l * s;
   m1 = 2 * l - m2;
 
   function v(h) {

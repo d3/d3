@@ -73,11 +73,11 @@ function d3_scale_log(linear, base, positive, domain) {
     if (!arguments.length) return d3_scale_logFormat;
     if (arguments.length < 2) format = d3_scale_logFormat;
     else if (typeof format !== "function") format = d3.format(format);
-    var k = Math.max(.1, n / scale.ticks().length),
-        f = positive ? (e = 1e-12, Math.ceil) : (e = -1e-12, Math.floor),
-        e;
+    var k = Math.max(1, base * n / scale.ticks().length);
     return function(d) {
-      return d / pow(f(log(d) + e)) <= k ? format(d) : "";
+      var i = d / pow(Math.round(log(d)));
+      if (i * base < base - 0.5) i *= base;
+      return i <= k ? format(d) : "";
     };
   };
 

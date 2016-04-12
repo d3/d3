@@ -67,12 +67,12 @@ suite.addBatch({
       assert.equal(line().interpolate("__proto__").interpolate(), "linear");
     },
 
-    "tension defaults to .7": function(line) {
-      assert.equal(line().tension(), .7);
+    "tension defaults to 0.7": function(line) {
+      assert.equal(line().tension(), 0.7);
     },
     "tension can be specified as a constant": function(line) {
-      var l = line().tension(.5);
-      assert.equal(l.tension(), .5);
+      var l = line().tension(0.5);
+      assert.equal(l.tension(), 0.5);
     },
 
     "returns null if input points array is empty": function(line) {
@@ -149,7 +149,7 @@ suite.addBatch({
       },
       "supports a single-element array": function(line) {
         var l = line().interpolate("bundle").tension(1);
-        assert.pathEqual(l([[0, 0]]), "M0,0");
+        assert.pathEqual(l([[0, 0]]), "M0,0Z");
       }
     },
 
@@ -183,7 +183,7 @@ suite.addBatch({
         assert.pathEqual(l([[0, 0], [1, 1]]), d([[0, 0], [1, 1]]));
       },
       "observes the specified tension": function(line) {
-        var l = line().tension(.5);
+        var l = line().tension(0.5);
         assert.pathEqual(l.interpolate("cardinal")([[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]]), "M0,0Q0.6666666666666667,1,1,1C1.5,1,1.5,0,2,0S2.5,1,3,1Q3.3333333333333335,1,4,0");
         assert.pathEqual(l.interpolate("cardinal-open")([[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]]), "M1,1C1.5,1,1.5,0,2,0S2.5,1,3,1");
         assert.pathEqual(l.interpolate("cardinal-closed")([[0, 0], [1, 1], [2, 0], [3, 1], [4, 0]]), "M0,0C-0.75,0.25,0.5,1,1,1S1.5,0,2,0S2.5,1,3,1S4.75,0.25,4,0S0.75,-0.25,0,0");

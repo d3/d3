@@ -15,7 +15,7 @@ function d3_svg_area(projection) {
       interpolateKey = interpolate.key,
       interpolateReverse = interpolate,
       L = "L",
-      tension = .7;
+      tension = 0.7;
 
   function area(data) {
     var segments = [],

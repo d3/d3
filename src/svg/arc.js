@@ -95,22 +95,27 @@ d3.svg.arc = function() {
     }
 
     // Compute the rounded corners.
-    if ((rc = Math.min(Math.abs(r1 - r0) / 2, +cornerRadius.apply(this, arguments))) > 1e-3) {
+    if (da > ε && (rc = Math.min(Math.abs(r1 - r0) / 2, +cornerRadius.apply(this, arguments))) > 1e-3) {
       cr = r0 < r1 ^ cw ? 0 : 1;
+      var rc1 = rc,
+          rc0 = rc;
 
       // Compute the angle of the sector formed by the two sides of the arc.
-      var oc = x3 == null ? [x2, y2] : x1 == null ? [x0, y0] : d3_geom_polygonIntersect([x0, y0], [x3, y3], [x1, y1], [x2, y2]),
-          ax = x0 - oc[0],
-          ay = y0 - oc[1],
-          bx = x1 - oc[0],
-          by = y1 - oc[1],
-          kc = 1 / Math.sin(Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by))) / 2),
-          lc = Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1]);
+      if (da < π) {
+        var oc = x3 == null ? [x2, y2] : x1 == null ? [x0, y0] : d3_geom_polygonIntersect([x0, y0], [x3, y3], [x1, y1], [x2, y2]),
+            ax = x0 - oc[0],
+            ay = y0 - oc[1],
+            bx = x1 - oc[0],
+            by = y1 - oc[1],
+            kc = 1 / Math.sin(Math.acos((ax * bx + ay * by) / (Math.sqrt(ax * ax + ay * ay) * Math.sqrt(bx * bx + by * by))) / 2),
+            lc = Math.sqrt(oc[0] * oc[0] + oc[1] * oc[1]);
+        rc0 = Math.min(rc, (r0 - lc) / (kc - 1));
+        rc1 = Math.min(rc, (r1 - lc) / (kc + 1));
+      }
 
       // Compute the outer corners.
       if (x1 != null) {
-        var rc1 = Math.min(rc, (r1 - lc) / (kc + 1)),
-            t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1, cw),
+        var t30 = d3_svg_arcCornerTangents(x3 == null ? [x2, y2] : [x3, y3], [x0, y0], r1, rc1, cw),
             t12 = d3_svg_arcCornerTangents([x1, y1], [x2, y2], r1, rc1, cw);
 
         // Detect whether the outer edge is fully circular.
@@ -131,8 +136,7 @@ d3.svg.arc = function() {
 
       // Compute the inner corners.
       if (x3 != null) {
-        var rc0 = Math.min(rc, (r0 - lc) / (kc - 1)),
-            t03 = d3_svg_arcCornerTangents([x0, y0], [x3, y3], r0, -rc0, cw),
+        var t03 = d3_svg_arcCornerTangents([x0, y0], [x3, y3], r0, -rc0, cw),
             t21 = d3_svg_arcCornerTangents([x2, y2], x1 == null ? [x0, y0] : [x1, y1], r0, -rc0, cw);
 
         // Detect whether the inner edge is fully circular.
@@ -267,7 +271,7 @@ function d3_svg_arcCornerTangents(p0, p1, r1, rc, cw) {
       d2 = dx * dx + dy * dy,
       r = r1 - rc,
       D = x1 * y2 - x2 * y1,
-      d = (dy < 0 ? -1 : 1) * Math.sqrt(r * r * d2 - D * D),
+      d = (dy < 0 ? -1 : 1) * Math.sqrt(Math.max(0, r * r * d2 - D * D)),
       cx0 = (D * dy - dx * d) / d2,
       cy0 = (-D * dx - dy * d) / d2,
       cx1 = (D * dy + dx * d) / d2,

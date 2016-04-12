@@ -1,6 +1,6 @@
 import "locale";
 
-d3.locale.fi_FI = d3.locale({
+var d3_locale_fiFI = d3.locale({
   decimal: ",",
   thousands: "\xa0",
   grouping: [3],

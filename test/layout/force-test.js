@@ -14,44 +14,44 @@ suite.addBatch({
       },
 
       "friction": {
-        "defaults to .9": function(f) {
-          assert.equal(f.friction(), .9);
+        "defaults to 0.9": function(f) {
+          assert.equal(f.friction(), 0.9);
         },
         "can be a number": function(f) {
-          f.friction(.5);
-          assert.equal(f.friction(), .5);
+          f.friction(0.5);
+          assert.equal(f.friction(), 0.5);
         },
         "coerces to a number": function(f) {
           f.friction(".5");
-          assert.strictEqual(f.friction(), .5);
+          assert.strictEqual(f.friction(), 0.5);
         }
       },
 
       "gravity": {
-        "defaults to .1": function(f) {
-          assert.equal(f.gravity(), .1);
+        "defaults to 0.1": function(f) {
+          assert.equal(f.gravity(), 0.1);
         },
         "can be a number": function(f) {
-          f.gravity(.5);
-          assert.equal(f.gravity(), .5);
+          f.gravity(0.5);
+          assert.equal(f.gravity(), 0.5);
         },
         "coerces to a number": function(f) {
           f.gravity(".5");
-          assert.strictEqual(f.gravity(), .5);
+          assert.strictEqual(f.gravity(), 0.5);
         }
       },
 
       "theta": {
-        "defaults to .8": function(f) {
-          assert.equal(f.theta(), .8);
+        "defaults to 0.8": function(f) {
+          assert.equal(f.theta(), 0.8);
         },
         "can be a number": function(f) {
-          f.theta(.5);
-          assert.equal(f.theta(), .5);
+          f.theta(0.5);
+          assert.equal(f.theta(), 0.5);
         },
         "coerces to a number": function(f) {
           f.theta(".5");
-          assert.strictEqual(f.theta(), .5);
+          assert.strictEqual(f.theta(), 0.5);
         }
       },
 
@@ -96,8 +96,8 @@ suite.addBatch({
           assert.equal(f.linkStrength(), 1);
         },
         "can be a number": function(f) {
-          f.linkStrength(.5);
-          assert.equal(f.linkStrength(), .5);
+          f.linkStrength(0.5);
+          assert.equal(f.linkStrength(), 0.5);
         },
         "can be a function": function(f) { // TODO expose the computed value?
           f.linkStrength(foo);
@@ -105,7 +105,7 @@ suite.addBatch({
         },
         "coerces to a number": function(f) {
           f.linkStrength(".5");
-          assert.strictEqual(f.linkStrength(), .5);
+          assert.strictEqual(f.linkStrength(), 0.5);
         }
       }
     }

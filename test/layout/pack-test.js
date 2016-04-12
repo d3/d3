@@ -25,7 +25,7 @@ suite.addBatch({
     },
     "can handle small nodes": function(pack) {
       assert.deepEqual(pack().sort(null).nodes({children: [
-        {value: .01},
+        {value: 0.01},
         {value: 2},
         {value: 2},
         {value: 1}
@@ -40,7 +40,7 @@ suite.addBatch({
         {value: 2},
         {value: 2},
         {value: 1},
-        {value: .01}
+        {value: 0.01}
       ]}).map(layout), [
         {y: 0.5, x: 0.5, value: 5.01, r: 0.5, depth: 0},
         {y: 0.6274712284943809, x: 0.26624891409386664, value: 2, r: 0.23375108590613333, depth: 1},

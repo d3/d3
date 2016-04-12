@@ -49,6 +49,9 @@ suite.addBatch({
       },
       "names that collide with built-ins are ignored": function(qualify) {
         assert.equal(qualify("hasOwnProperty:test"), "test");
+      },
+      "xmlns-prefixed names use the whole name as the local name": function(qualify) {
+        assert.deepEqual(qualify("xmlns:xlink"), {space: "http://www.w3.org/2000/xmlns/", local: "xmlns:xlink"});
       }
     }
   }

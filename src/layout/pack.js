@@ -75,7 +75,7 @@ function d3_layout_packIntersects(a, b) {
   var dx = b.x - a.x,
       dy = b.y - a.y,
       dr = a.r + b.r;
-  return .999 * dr * dr > dx * dx + dy * dy; // relative error within epsilon
+  return 0.999 * dr * dr > dx * dx + dy * dy; // relative error within epsilon
 }
 
 function d3_layout_packSiblings(node) {
@@ -200,7 +200,7 @@ function d3_layout_packPlace(a, b, c) {
         dc = dx * dx + dy * dy;
     da *= da;
     db *= db;
-    var x = .5 + (db - da) / (2 * dc),
+    var x = 0.5 + (db - da) / (2 * dc),
         y = Math.sqrt(Math.max(0, 2 * da * (db + dc) - (db -= dc) * db - da * da)) / (2 * dc);
     c.x = a.x + x * dx + y * dy;
     c.y = a.y + x * dy - y * dx;

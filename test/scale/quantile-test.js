@@ -82,7 +82,7 @@ suite.addBatch({
       "returns [NaN, NaN] when the given value is not in the range": function(quantile) {
         var x = quantile().domain([3, 6, 7, 8, 8, 10, 13, 15, 16, 20]);
         assert.ok(x.invertExtent(-1).every(isNaN));
-        assert.ok(x.invertExtent(.5).every(isNaN));
+        assert.ok(x.invertExtent(0.5).every(isNaN));
         assert.ok(x.invertExtent(2).every(isNaN));
         assert.ok(x.invertExtent('a').every(isNaN));
       },

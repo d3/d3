@@ -23,35 +23,35 @@ suite.addBatch({
         return d3;
       },
       "identity": function(d3) {
-        assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [0, 0, 0, 0, 1, 1] + "")(.4), "");
+        assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [0, 0, 0, 0, 1, 1] + "")(0.4), "");
       },
       "translate": {
         "x": function(d3) {
-          assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [10, 0, 0, 0, 1, 1] + "")(.4), "translate(4,0)");
+          assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [10, 0, 0, 0, 1, 1] + "")(0.4), "translate(4,0)");
         },
         "y": function(d3) {
-          assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [0, 10, 0, 0, 1, 1] + "")(.4), "translate(0,4)");
+          assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [0, 10, 0, 0, 1, 1] + "")(0.4), "translate(0,4)");
         },
         "x and y": function(d3) {
-          assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [1, 10, 0, 0, 1, 1] + "")(.4), "translate(0.4,4)");
+          assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [1, 10, 0, 0, 1, 1] + "")(0.4), "translate(0.4,4)");
         }
       },
       "rotate": {
         "simple": function(d3) {
-          assert.strictEqual(d3.interpolateTransform([0, 0, -10, 0, 1, 1] + "", [0, 0, 30, 0, 1, 1] + "")(.4), "rotate(6)");
+          assert.strictEqual(d3.interpolateTransform([0, 0, -10, 0, 1, 1] + "", [0, 0, 30, 0, 1, 1] + "")(0.4), "rotate(6)");
         },
         "with constant translate": function(d3) {
-          assert.strictEqual(d3.interpolateTransform([5, 6, -10, 0, 1, 1] + "", [5, 6, 30, 0, 1, 1] + "")(.4), "translate(5,6)rotate(6)");
+          assert.strictEqual(d3.interpolateTransform([5, 6, -10, 0, 1, 1] + "", [5, 6, 30, 0, 1, 1] + "")(0.4), "translate(5,6),rotate(6)");
         }
       },
       "skew": function(d3) {
-        assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [0, 0, 0, 40, 1, 1] + "")(.4), "skewX(16)");
+        assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [0, 0, 0, 40, 1, 1] + "")(0.4), "skewX(16)");
       },
       "scale": function(d3) {
-        assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [0, 0, 0, 0, 10, 1] + "")(.5), "scale(5.5,1)");
+        assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [0, 0, 0, 0, 10, 1] + "")(0.5), "scale(5.5,1)");
       },
       "translate and rotate": function(d3) {
-        assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [100, 0, 90, 0, 1, 1] + "")(.5), "translate(50,0)rotate(45)");
+        assert.strictEqual(d3.interpolateTransform([0, 0, 0, 0, 1, 1] + "", [100, 0, 90, 0, 1, 1] + "")(0.5), "translate(50,0),rotate(45)");
       }
     }
   }

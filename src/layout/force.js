@@ -11,16 +11,17 @@ import "layout";
 d3.layout.force = function() {
   var force = {},
       event = d3.dispatch("start", "tick", "end"),
+      timer,
       size = [1, 1],
       drag,
       alpha,
-      friction = .9,
+      friction = 0.9,
       linkDistance = d3_layout_forceLinkDistance,
       linkStrength = d3_layout_forceLinkStrength,
       charge = -30,
       chargeDistance2 = d3_layout_forceChargeDistance2,
-      gravity = .1,
-      theta2 = .64,
+      gravity = 0.1,
+      theta2 = 0.64,
       nodes = [],
       links = [],
       distances,
@@ -57,7 +58,8 @@ d3.layout.force = function() {
 
   force.tick = function() {
     // simulated annealing, basically
-    if ((alpha *= .99) < .005) {
+    if ((alpha *= 0.99) < 0.005) {
+      timer = null;
       event.end({type: "end", alpha: alpha = 0});
       return true;
     }
@@ -85,7 +87,7 @@ d3.layout.force = function() {
         l = alpha * strengths[i] * ((l = Math.sqrt(l)) - distances[i]) / l;
         x *= l;
         y *= l;
-        t.x -= x * (k = s.weight / (t.weight + s.weight));
+        t.x -= x * (k = (s.weight + t.weight ? s.weight / (s.weight + t.weight) : 0.5));
         t.y -= y * k;
         s.x += x * (k = 1 - k);
         s.y += y * k;
@@ -196,11 +198,15 @@ d3.layout.force = function() {
 
     x = +x;
     if (alpha) { // if we're already running
-      if (x > 0) alpha = x; // we might keep it hot
-      else alpha = 0; // or, next tick will dispatch "end"
+      if (x > 0) { // we might keep it hot
+        alpha = x;
+      } else { // or we might stop
+        timer.c = null, timer.t = NaN, timer = null;
+        event.end({type: "end", alpha: alpha = 0});
+      }
     } else if (x > 0) { // otherwise, fire it up!
       event.start({type: "start", alpha: alpha = x});
-      d3.timer(force.tick);
+      timer = d3_timer(force.tick);
     }
 
     return force;
@@ -275,7 +281,7 @@ d3.layout.force = function() {
   };
 
   force.resume = function() {
-    return force.alpha(.1);
+    return force.alpha(0.1);
   };
 
   force.stop = function() {
@@ -349,8 +355,8 @@ function d3_layout_forceAccumulate(quad, alpha, charges) {
   if (quad.point) {
     // jitter internal nodes that are coincident
     if (!quad.leaf) {
-      quad.point.x += Math.random() - .5;
-      quad.point.y += Math.random() - .5;
+      quad.point.x += Math.random() - 0.5;
+      quad.point.y += Math.random() - 0.5;
     }
     var k = alpha * charges[quad.point.index];
     quad.charge += quad.pointCharge = k;

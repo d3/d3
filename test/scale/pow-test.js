@@ -12,26 +12,26 @@ suite.addBatch({
       "defaults to [0, 1]": function(d3) {
         var x = d3.scale.pow();
         assert.deepEqual(x.domain(), [0, 1]);
-        assert.inDelta(x(.5), .5, 1e-6);
+        assert.inDelta(x(0.5), 0.5, 1e-6);
       },
       "coerces domain to numbers": function(d3) {
         var x = d3.scale.pow().domain([new Date(1990, 0, 1), new Date(1991, 0, 1)]);
         assert.equal(typeof x.domain()[0], "number");
         assert.equal(typeof x.domain()[1], "number");
-        assert.inDelta(x(new Date(1989, 09, 20)), -.2, 1e-2);
+        assert.inDelta(x(new Date(1989, 09, 20)), -0.2, 1e-2);
         assert.inDelta(x(new Date(1990, 00, 01)), 0, 1e-2);
-        assert.inDelta(x(new Date(1990, 02, 15)), .2, 1e-2);
-        assert.inDelta(x(new Date(1990, 04, 27)), .4, 1e-2);
+        assert.inDelta(x(new Date(1990, 02, 15)), 0.2, 1e-2);
+        assert.inDelta(x(new Date(1990, 04, 27)), 0.4, 1e-2);
         assert.inDelta(x(new Date(1991, 00, 01)), 1, 1e-2);
         assert.inDelta(x(new Date(1991, 02, 15)), 1.2, 1e-2);
         var x = d3.scale.pow().domain(["0", "1"]);
         assert.equal(typeof x.domain()[0], "number");
         assert.equal(typeof x.domain()[1], "number");
-        assert.inDelta(x(.5), .5, 1e-6);
+        assert.inDelta(x(0.5), 0.5, 1e-6);
         var x = d3.scale.pow().domain([new Number(0), new Number(1)]);
         assert.equal(typeof x.domain()[0], "number");
         assert.equal(typeof x.domain()[1], "number");
-        assert.inDelta(x(.5), .5, 1e-6);
+        assert.inDelta(x(0.5), 0.5, 1e-6);
       },
       "can specify a polypower domain and range": function(d3) {
         var x = d3.scale.pow().domain([-10, 0, 100]).range(["red", "white", "green"]);
@@ -45,7 +45,7 @@ suite.addBatch({
       "defaults to [0, 1]": function(d3) {
         var x = d3.scale.pow();
         assert.deepEqual(x.range(), [0, 1]);
-        assert.inDelta(x.invert(.5), .5, 1e-6);
+        assert.inDelta(x.invert(0.5), 0.5, 1e-6);
       },
       "does not coerce range values to numbers": function(d3) {
         var x = d3.scale.pow().range(["0", "2"]);
@@ -54,29 +54,29 @@ suite.addBatch({
       },
       "coerces range values to number on invert": function(d3) {
         var x = d3.scale.pow().range(["0", "2"]);
-        assert.inDelta(x.invert("1"), .5, 1e-6);
+        assert.inDelta(x.invert("1"), 0.5, 1e-6);
         var x = d3.scale.pow().range([new Date(1990, 0, 1), new Date(1991, 0, 1)]);
-        assert.inDelta(x.invert(new Date(1990, 6, 2, 13)), .5, 1e-6);
+        assert.inDelta(x.invert(new Date(1990, 6, 2, 13)), 0.5, 1e-6);
         var x = d3.scale.pow().range(["#000", "#fff"]);
         assert.isNaN(x.invert("#999"));
       },
       "can specify range values as colors": function(d3) {
         var x = d3.scale.pow().range(["red", "blue"]);
-        assert.equal(x(.5), "#800080");
+        assert.equal(x(0.5), "#800080");
         var x = d3.scale.pow().range(["#ff0000", "#0000ff"]);
-        assert.equal(x(.5), "#800080");
+        assert.equal(x(0.5), "#800080");
         var x = d3.scale.pow().range(["#f00", "#00f"]);
-        assert.equal(x(.5), "#800080");
-        var x = d3.scale.pow().range([d3.rgb(255,0,0), d3.hsl(240,1,.5)]);
-        assert.equal(x(.5), "#800080");
+        assert.equal(x(0.5), "#800080");
+        var x = d3.scale.pow().range([d3.rgb(255,0,0), d3.hsl(240,1,0.5)]);
+        assert.equal(x(0.5), "#800080");
         var x = d3.scale.pow().range(["hsl(0,100%,50%)", "hsl(240,100%,50%)"]);
-        assert.equal(x(.5), "#800080");
+        assert.equal(x(0.5), "#800080");
       },
       "can specify range values as arrays or objects": function(d3) {
         var x = d3.scale.pow().range([{color: "red"}, {color: "blue"}]);
-        assert.deepEqual(x(.5), {color: "#800080"});
+        assert.deepEqual(x(0.5), {color: "#800080"});
         var x = d3.scale.pow().range([["red"], ["blue"]]);
-        assert.deepEqual(x(.5), ["#800080"]);
+        assert.deepEqual(x(0.5), ["#800080"]);
       }
     },
 
@@ -86,25 +86,25 @@ suite.addBatch({
         assert.equal(x.exponent(), 1);
       },
       "observes the specified exponent": function(d3) {
-        var x = d3.scale.pow().exponent(.5).domain([1, 2]);
+        var x = d3.scale.pow().exponent(0.5).domain([1, 2]);
         assert.inDelta(x(1), 0, 1e-6);
         assert.inDelta(x(1.5), 0.5425821, 1e-6);
         assert.inDelta(x(2), 1, 1e-6);
-        assert.equal(x.exponent(), .5);
+        assert.equal(x.exponent(), 0.5);
         var x = d3.scale.pow().exponent(2).domain([1, 2]);
         assert.inDelta(x(1), 0, 1e-6);
-        assert.inDelta(x(1.5), .41666667, 1e-6);
+        assert.inDelta(x(1.5), 0.41666667, 1e-6);
         assert.inDelta(x(2), 1, 1e-6);
         assert.equal(x.exponent(), 2);
         var x = d3.scale.pow().exponent(-1).domain([1, 2]);
         assert.inDelta(x(1), 0, 1e-6);
-        assert.inDelta(x(1.5), .6666667, 1e-6);
+        assert.inDelta(x(1.5), 0.6666667, 1e-6);
         assert.inDelta(x(2), 1, 1e-6);
         assert.equal(x.exponent(), -1);
       },
       "changing the exponent does not change the domain or range": function(d3) {
         var x = d3.scale.pow().domain([1, 2]).range([3, 4]), f = d3.format(".6f");
-        x.exponent(.5);
+        x.exponent(0.5);
         assert.deepEqual(x.domain().map(f), [1, 2]);
         assert.deepEqual(x.range(), [3, 4]);
         x.exponent(2);
@@ -120,11 +120,11 @@ suite.addBatch({
       "defaults to d3.interpolate": function(d3) {
         var x = d3.scale.pow().range(["red", "blue"]);
         assert.equal(x.interpolate(), d3.interpolate);
-        assert.equal(x(.5), "#800080");
+        assert.equal(x(0.5), "#800080");
       },
       "can specify a custom interpolator": function(d3) {
         var x = d3.scale.pow().range(["red", "blue"]).interpolate(d3.interpolateHsl);
-        assert.equal(x(.5), "#ff00ff");
+        assert.equal(x(0.5), "#ff00ff");
       }
     },
 
@@ -132,26 +132,26 @@ suite.addBatch({
       "does not clamp by default": function(d3) {
         var x = d3.scale.pow();
         assert.isFalse(x.clamp());
-        assert.inDelta(x(-.5), -.5, 1e-6);
+        assert.inDelta(x(-0.5), -0.5, 1e-6);
         assert.inDelta(x(1.5), 1.5, 1e-6);
       },
       "can clamp to the domain": function(d3) {
         var x = d3.scale.pow().clamp(true);
-        assert.inDelta(x(-.5), 0, 1e-6);
-        assert.inDelta(x(.5), .5, 1e-6);
+        assert.inDelta(x(-0.5), 0, 1e-6);
+        assert.inDelta(x(0.5), 0.5, 1e-6);
         assert.inDelta(x(1.5), 1, 1e-6);
         var x = d3.scale.pow().domain([1, 0]).clamp(true);
-        assert.inDelta(x(-.5), 1, 1e-6);
-        assert.inDelta(x(.5), .5, 1e-6);
+        assert.inDelta(x(-0.5), 1, 1e-6);
+        assert.inDelta(x(0.5), 0.5, 1e-6);
         assert.inDelta(x(1.5), 0, 1e-6);
       }
     },
 
     "maps a number to a number": function(d3) {
       var x = d3.scale.pow().domain([1, 2]);
-      assert.inDelta(x(.5), -.5, 1e-6);
+      assert.inDelta(x(0.5), -0.5, 1e-6);
       assert.inDelta(x(1), 0, 1e-6);
-      assert.inDelta(x(1.5), .5, 1e-6);
+      assert.inDelta(x(1.5), 0.5, 1e-6);
       assert.inDelta(x(2), 1, 1e-6);
       assert.inDelta(x(2.5), 1.5, 1e-6);
     },
@@ -160,14 +160,14 @@ suite.addBatch({
       "can generate ticks of varying degree": function(d3) {
         var x = d3.scale.pow();
         assert.deepEqual(x.ticks(1).map(x.tickFormat(1)), [0, 1]);
-        assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, .5, 1]);
-        assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, .2, .4, .6, .8, 1]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]);
+        assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, 0.5, 1]);
+        assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, 0.2, 0.4, 0.6, 0.8, 1]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
         var x = d3.scale.pow().domain([1, 0]);
         assert.deepEqual(x.ticks(1).map(x.tickFormat(1)), [0, 1]);
-        assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, .5, 1]);
-        assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, .2, .4, .6, .8, 1]);
-        assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, .1, .2, .3, .4, .5, .6, .7, .8, .9, 1]);
+        assert.deepEqual(x.ticks(2).map(x.tickFormat(2)), [0, 0.5, 1]);
+        assert.deepEqual(x.ticks(5).map(x.tickFormat(5)), [0, 0.2, 0.4, 0.6, 0.8, 1]);
+        assert.deepEqual(x.ticks(10).map(x.tickFormat(10)), [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1]);
       }
     },
 
@@ -187,22 +187,22 @@ suite.addBatch({
         assert.deepEqual(x.domain(), [1, 11]);
         var x = d3.scale.pow().domain([10.9, 1.1]).nice();
         assert.deepEqual(x.domain(), [11, 1]);
-        var x = d3.scale.pow().domain([.7, 11.001]).nice();
+        var x = d3.scale.pow().domain([0.7, 11.001]).nice();
         assert.deepEqual(x.domain(), [0, 12]);
         var x = d3.scale.pow().domain([123.1, 6.7]).nice();
         assert.deepEqual(x.domain(), [130, 0]);
-        var x = d3.scale.pow().domain([0, .49]).nice();
-        assert.deepEqual(x.domain(), [0, .5]);
+        var x = d3.scale.pow().domain([0, 0.49]).nice();
+        assert.deepEqual(x.domain(), [0, 0.5]);
         var x = d3.scale.pow().domain([0, 0]).nice();
         assert.deepEqual(x.domain(), [0, 0]);
-        var x = d3.scale.pow().domain([.5, .5]).nice();
-        assert.deepEqual(x.domain(), [.5, .5]);
+        var x = d3.scale.pow().domain([0.5, 0.5]).nice();
+        assert.deepEqual(x.domain(), [0.5, 0.5]);
       },
       "nicing a polypower domain only affects the extent": function(d3) {
         var x = d3.scale.pow().domain([1.1, 1, 2, 3, 10.9]).nice();
         assert.deepEqual(x.domain(), [1, 1, 2, 3, 11]);
-        var x = d3.scale.pow().domain([123.1, 1, 2, 3, -.9]).nice();
-        assert.deepEqual(x.domain(), [130, 1, 2, 3, -10]);
+        var x = d3.scale.pow().domain([123.1, 1, 2, 3, -0.9]).nice();
+        assert.deepEqual(x.domain(), [140, 1, 2, 3, -20]);
       },
       "accepts a tick count to control nicing step": function(d3) {
         var x = d3.scale.pow().domain([12, 87]).nice(5);
@@ -241,15 +241,15 @@ suite.addBatch({
       },
       "changes to the exponent are isolated": function(d3) {
         var x = d3.scale.pow().exponent(2), y = x.copy();
-        x.exponent(.5);
-        assert.inDelta(x(.5), Math.SQRT1_2, 1e-6);
-        assert.inDelta(y(.5), 0.25, 1e-6);
-        assert.equal(x.exponent(), .5);
+        x.exponent(0.5);
+        assert.inDelta(x(0.5), Math.SQRT1_2, 1e-6);
+        assert.inDelta(y(0.5), 0.25, 1e-6);
+        assert.equal(x.exponent(), 0.5);
         assert.equal(y.exponent(), 2);
         y.exponent(3);
-        assert.inDelta(x(.5), Math.SQRT1_2, 1e-6);
-        assert.inDelta(y(.5), 0.125, 1e-6);
-        assert.equal(x.exponent(), .5);
+        assert.inDelta(x(0.5), Math.SQRT1_2, 1e-6);
+        assert.inDelta(y(0.5), 0.125, 1e-6);
+        assert.equal(x.exponent(), 0.5);
         assert.equal(y.exponent(), 3);
       },
       "changes to the interpolator are isolated": function(d3) {

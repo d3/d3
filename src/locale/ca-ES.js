@@ -1,6 +1,6 @@
 import "locale";
 
-d3.locale.ca_ES = d3.locale({
+var d3_locale_caES = d3.locale({
   decimal: ",",
   thousands: ".",
   grouping: [3],
