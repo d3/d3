@@ -262,32 +262,27 @@ function d3_time_formatLookup(names) {
 }
 
 function d3_time_parseWeekdayNumber(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 1));
+  var n = string.slice(i, i + 1).match(d3_time_numberRe);
   return n ? (date.w = +n[0], i + n[0].length) : -1;
 }
 
 function d3_time_parseWeekNumberSunday(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i));
+  var n = string.slice(i).match(d3_time_numberRe);
   return n ? (date.U = +n[0], i + n[0].length) : -1;
 }
 
 function d3_time_parseWeekNumberMonday(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i));
+  var n = string.slice(i).match(d3_time_numberRe);
   return n ? (date.W = +n[0], i + n[0].length) : -1;
 }
 
 function d3_time_parseFullYear(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 4));
+  var n = string.slice(i, i + 4).match(d3_time_numberRe);
   return n ? (date.y = +n[0], i + n[0].length) : -1;
 }
 
 function d3_time_parseYear(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 2));
+  var n = string.slice(i, i + 2).match(d3_time_numberRe);
   return n ? (date.y = d3_time_expandYear(+n[0]), i + n[0].length) : -1;
 }
 
@@ -302,45 +297,38 @@ function d3_time_expandYear(d) {
 }
 
 function d3_time_parseMonthNumber(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 2));
+  var n = string.slice(i, i + 2).match(d3_time_numberRe);
   return n ? (date.m = n[0] - 1, i + n[0].length) : -1;
 }
 
 function d3_time_parseDay(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 2));
+  var n = string.slice(i, i + 2).match(d3_time_numberRe);
   return n ? (date.d = +n[0], i + n[0].length) : -1;
 }
 
 function d3_time_parseDayOfYear(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 3));
+  var n = string.slice(i, i + 3).match(d3_time_numberRe);
   return n ? (date.j = +n[0], i + n[0].length) : -1;
 }
 
 // Note: we don't validate that the hour is in the range [0,23] or [1,12].
 function d3_time_parseHour24(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 2));
+  var n = string.slice(i, i + 2).match(d3_time_numberRe);
   return n ? (date.H = +n[0], i + n[0].length) : -1;
 }
 
 function d3_time_parseMinutes(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 2));
+  var n = string.slice(i, i + 2).match(d3_time_numberRe);
   return n ? (date.M = +n[0], i + n[0].length) : -1;
 }
 
 function d3_time_parseSeconds(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 2));
+  var n = string.slice(i, i + 2).match(d3_time_numberRe);
   return n ? (date.S = +n[0], i + n[0].length) : -1;
 }
 
 function d3_time_parseMilliseconds(date, string, i) {
-  d3_time_numberRe.lastIndex = 0;
-  var n = d3_time_numberRe.exec(string.slice(i, i + 3));
+  var n = string.slice(i, i + 3).match(d3_time_numberRe);
   return n ? (date.L = +n[0], i + n[0].length) : -1;
 }
 
@@ -354,8 +342,7 @@ function d3_time_zone(d) {
 }
 
 function d3_time_parseLiteralPercent(date, string, i) {
-  d3_time_percentRe.lastIndex = 0;
-  var n = d3_time_percentRe.exec(string.slice(i, i + 1));
+  var n = string.slice(i, i + 1).match(d3_time_percentRe);
   return n ? i + n[0].length : -1;
 }
 
