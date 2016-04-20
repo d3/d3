@@ -36,11 +36,11 @@ suite.addBatch({
       "format": {
         "formats locale date and time": function(format) {
           var f = format("%c");
-          assert.equal(f(local(1990, 0, 1)), "1990 一月  1 周一 00:00:00");
+          assert.equal(f(local(1990, 0, 1)), "1990年1月1日 星期一 00:00:00");
         },
         "formats locale date": function(format) {
           var f = format("%x");
-          assert.equal(f(local(1990, 0, 1)), "1990/1/1");
+          assert.equal(f(local(1990, 0, 1)), "1990年1月1日");
         },
         "formats locale time": function(format) {
           var f = format("%X");
@@ -106,11 +106,11 @@ suite.addBatch({
       "parse": {
         "parses locale date and time": function(format) {
           var p = format("%c").parse;
-          assert.deepEqual(p("1990 一月 1 周一 00:00:00"), local(1990, 0, 1));
+          assert.deepEqual(p("1990年1月1日 星期一 00:00:00"), local(1990, 0, 1));
         },
         "parses locale date": function(format) {
           var p = format("%x").parse;
-          assert.deepEqual(p("1990/1/1"), local(1990, 0, 1));
+          assert.deepEqual(p("1990年1月1日"), local(1990, 0, 1));
         }
       }
     }
