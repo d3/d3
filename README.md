@@ -10,4 +10,4 @@ For examples, [see the gallery](https://github.com/mbostock/d3/wiki/Gallery) and
 
 ## Good News, Everyone!
 
-The next major release of D3, 4.0, is coming! Checkout the [4.0 development branch](https://github.com/mbostock/d3/tree/4) and read the [new API reference](https://github.com/mbostock/d3/blob/4/README.md) to get ready.
+The next major release of D3, 4.0, is coming! See the [4.0 development branch](https://github.com/mbostock/d3/tree/4) and read the [new API reference](https://github.com/mbostock/d3/blob/4/README.md) to get ready.
