@@ -7,7 +7,7 @@ This branch contains the prerelease of D3 4.0. This API is unstable and may chan
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://github.com/mbostock/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.29.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.30.min.js"></script>
 ```
 
 ## API Reference
@@ -263,6 +263,45 @@ Easing functions for smooth animation.
 * [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut) - reverse bounce easing.
 * [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut) - symmetric bounce easing.
 
+## [Forces](https://github.com/d3/d3-force)
+
+Force-directed graph layout using velocity Verlet integration.
+
+* [d3.forceSimulation](https://github.com/d3/d3-force#forceSimulation) - create a new force simulation.
+* [*simulation*.restart](https://github.com/d3/d3-force#simulation_restart) - reheat and restart the simulation’s timer.
+* [*simulation*.stop](https://github.com/d3/d3-force#simulation_stop) - stop the simulation’s timer.
+* [*simulation*.tick](https://github.com/d3/d3-force#simulation_tick) - advance the simulation one step.
+* [*simulation*.nodes](https://github.com/d3/d3-force#simulation_nodes) - set the simulation’s nodes.
+* [*simulation*.alphaMin](https://github.com/d3/d3-force#simulation_alphaMin) - set the minimum alpha threshold.
+* [*simulation*.alphaDecay](https://github.com/d3/d3-force#simulation_alphaDecay) - set the alpha exponential decay rate.
+* [*simulation*.drag](https://github.com/d3/d3-force#simulation_drag) - set the drag coefficient.
+* [*simulation*.force](https://github.com/d3/d3-force#simulation_force) - add or remove a force.
+* [*simulation*.on](https://github.com/d3/d3-force#simulation_on) - add or remove an event listener.
+* [*force*](https://github.com/d3/d3-force#_force) - apply the force.
+* [*force*.initialize](https://github.com/d3/d3-force#force_initialize) - initialize the force with the given nodes.
+* [d3.forceCenter](https://github.com/d3/d3-force#forceCenter) - create a centering force.
+* [*center*.x](https://github.com/d3/d3-force#center_x) - set the center *x*-coordinate.
+* [*center*.y](https://github.com/d3/d3-force#center_y) - set the center *y*-coordinate.
+* [d3.forceCollide](https://github.com/d3/d3-force#forceCollide) - create a circle collision force.
+* [*collide*.radius](https://github.com/d3/d3-force#collide_radius) - set the circle radius.
+* [*collide*.strength](https://github.com/d3/d3-force#collide_strength) - set the collision resolution strength.
+* [*collide*.iterations](https://github.com/d3/d3-force#collide_iterations) - set the number of iterations.
+* [d3.forceLink](https://github.com/d3/d3-force#forceLink) - create a link force.
+* [*link*.links](https://github.com/d3/d3-force#link_links) - set the array of links.
+* [*link*.id](https://github.com/d3/d3-force#link_id) - link nodes by numeric index or string identifier.
+* [*link*.distance](https://github.com/d3/d3-force#link_distance) - set the link distance.
+* [*link*.strength](https://github.com/d3/d3-force#link_strength) - set the link strength.
+* [*link*.iterations](https://github.com/d3/d3-force#link_iterations) - set the number of iterations.
+* [d3.forceManyBody](https://github.com/d3/d3-force#forceManyBody) - create a many-body force.
+* [*manyBody*.strength](https://github.com/d3/d3-force#manyBody_strength) - set the force strength.
+* [*manyBody*.theta](https://github.com/d3/d3-force#manyBody_theta) - set the Barnes–Hut approximation accuracy.
+* [*manyBody*.distanceMin](https://github.com/d3/d3-force#manyBody_distanceMin) - limit the force when nodes are close.
+* [*manyBody*.distanceMax](https://github.com/d3/d3-force#manyBody_distanceMax) - limit the force when nodes are far.
+* [d3.forcePosition](https://github.com/d3/d3-force#forcePosition) - create a positioning force.
+* [*position*.strength](https://github.com/d3/d3-force#position_strength) - set the force strength.
+* [*position*.x](https://github.com/d3/d3-force#position_x) - set the target *x*-coordinate.
+* [*position*.y](https://github.com/d3/d3-force#position_y) - set the target *y*-coordinate.
+
 ## [Hierarchies](https://github.com/d3/d3-hierarchy)
 
 Layout algorithms for visualizing hierarchical data.
@@ -412,15 +451,20 @@ Geometric operations for two-dimensional polygons.
 
 Two-dimensional recursive spatial subdivision.
 
-* [d3.quadtree](https://github.com/d3/d3-quadtree#quadtree) - create a new quadtree generator.
-* [*quadtree*](https://github.com/d3/d3-quadtree#_quadtree) - generate a quadtree for the specified points.
-* [*root*.add](https://github.com/d3/d3-quadtree#root_add) - add a point to a quadtree.
-* [*root*.find](https://github.com/d3/d3-quadtree#root_find) - quickly find the closest point in a quadtree.
-* [*root*.visit](https://github.com/d3/d3-quadtree#root_visit) - recursively visit all nodes in a quadtree.
+* [d3.quadtree](https://github.com/d3/d3-quadtree#quadtree) - create a new, empty quadtree.
 * [*quadtree*.x](https://github.com/d3/d3-quadtree#quadtree_x) - set the *x* accessor.
 * [*quadtree*.y](https://github.com/d3/d3-quadtree#quadtree_y) - set the *y* accessor.
-* [*quadtree*.extent](https://github.com/d3/d3-quadtree#quadtree_extent) - set the observed extent of points.
-* [*quadtree*.size](https://github.com/d3/d3-quadtree#quadtree_size) - set the observed extent of points.
+* [*quadtree*.add](https://github.com/d3/d3-quadtree#quadtree_add) - add a datum to a quadtree.
+* [*quadtree*.remove](https://github.com/d3/d3-quadtree#quadtree_remove) - remove a datum from a quadtree.
+* [*quadtree*.copy](https://github.com/d3/d3-quadtree#quadtree_copy) - create a copy of a quadtree.
+* [*quadtree*.root](https://github.com/d3/d3-quadtree#quadtree_root) - get the quadtree’s root node.
+* [*quadtree*.data](https://github.com/d3/d3-quadtree#quadtree_data) - retrieve all data from the quadtree.
+* [*quadtree*.size](https://github.com/d3/d3-quadtree#quadtree_size) - count the number of data in the quadtree.
+* [*quadtree*.find](https://github.com/d3/d3-quadtree#quadtree_find) - quickly find the closest datum in a quadtree.
+* [*quadtree*.visit](https://github.com/d3/d3-quadtree#quadtree_visit) - selectively visit nodes in a quadtree.
+* [*quadtree*.visitAfter](https://github.com/d3/d3-quadtree#quadtree_visitAfter) - visit all nodes in a quadtree.
+* [*quadtree*.cover](https://github.com/d3/d3-quadtree#quadtree_cover) - extend the quadtree to cover a point.
+* [*quadtree*.extent](https://github.com/d3/d3-quadtree#quadtree_extent) - extend the quadtree to cover an extent.
 
 ## [Queues](https://github.com/d3/d3-queue)
 

@@ -420,5 +420,14 @@ export {
 } from "d3-hierarchy";
 
 export {
+  forceCenter,
+  forceCollide,
+  forceLink,
+  forceManyBody,
+  forcePosition,
+  forceSimulation
+} from "d3-force";
+
+export {
   voronoi
 } from "d3-voronoi";
