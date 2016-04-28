@@ -19,6 +19,7 @@ If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Dispatches](#dispatches)
 * [Easings](#easings)
+* [Forces](#forces)
 * [Hierarchies](#hierarchies)
 * [Interpolators](#interpolators)
 * [Number Formats](#number-formats)
