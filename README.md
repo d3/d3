@@ -7,3 +7,7 @@
 Want to learn more? [See the wiki.](https://github.com/mbostock/d3/wiki)
 
 For examples, [see the gallery](https://github.com/mbostock/d3/wiki/Gallery) and [mbostock’s bl.ocks](http://bl.ocks.org/mbostock).
+
+## Good News, Everyone!
+
+The next major release of D3, 4.0, is coming! See the [4.0 development branch](https://github.com/mbostock/d3/tree/4) and read the [new API reference](https://github.com/mbostock/d3/blob/4/README.md) to get ready.
