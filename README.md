@@ -7,7 +7,7 @@ This branch contains the prerelease of D3 4.0. This API is unstable and may chan
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://github.com/mbostock/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.31.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.32.min.js"></script>
 ```
 
 ## API Reference
@@ -298,10 +298,12 @@ Force-directed graph layout using velocity Verlet integration.
 * [*manyBody*.theta](https://github.com/d3/d3-force#manyBody_theta) - set the Barnes–Hut approximation accuracy.
 * [*manyBody*.distanceMin](https://github.com/d3/d3-force#manyBody_distanceMin) - limit the force when nodes are close.
 * [*manyBody*.distanceMax](https://github.com/d3/d3-force#manyBody_distanceMax) - limit the force when nodes are far.
-* [d3.forcePosition](https://github.com/d3/d3-force#forcePosition) - create a positioning force.
-* [*position*.strength](https://github.com/d3/d3-force#position_strength) - set the force strength.
-* [*position*.x](https://github.com/d3/d3-force#position_x) - set the target *x*-coordinate.
-* [*position*.y](https://github.com/d3/d3-force#position_y) - set the target *y*-coordinate.
+* [d3.forceX](https://github.com/d3/d3-force#forceX) - create an *x*-positioning force.
+* [*x*.strength](https://github.com/d3/d3-force#x_strength) - set the force strength.
+* [*x*.x](https://github.com/d3/d3-force#x_x) - set the target *x*-coordinate.
+* [d3.forceY](https://github.com/d3/d3-force#forceY) - create an *y*-positioning force.
+* [*y*.strength](https://github.com/d3/d3-force#y_strength) - set the force strength.
+* [*y*.y](https://github.com/d3/d3-force#y_y) - set the target *y*-coordinate.
 
 ## [Hierarchies](https://github.com/d3/d3-hierarchy)
 

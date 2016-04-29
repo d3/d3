@@ -424,8 +424,9 @@ export {
   forceCollide,
   forceLink,
   forceManyBody,
-  forcePosition,
-  forceSimulation
+  forceSimulation,
+  forceX,
+  forceY
 } from "d3-force";
 
 export {
