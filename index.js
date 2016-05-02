@@ -379,15 +379,20 @@ export {
 } from "d3-scale";
 
 export {
+  creator,
+  event,
+  matcher,
   mouse,
   namespace,
   namespaces,
   select,
   selectAll,
   selection,
+  selector,
+  selectorAll,
   touch,
   touches,
-  event
+  window
 } from "d3-selection";
 
 export {
