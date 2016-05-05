@@ -11,14 +11,14 @@ d3.behavior.drag = function() {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
       origin = null,
       mousedown = dragstart(d3_noop, d3.mouse, d3_window, "mousemove", "mouseup"),
-      touchstart = dragstart(d3_behavior_dragTouchId, d3.touch, d3_identity, "touchmove", "touchend");
+      touchstart = dragstart(d3_behavior_dragTouchId, d3.touch, d3_identity, "touchmove", "touchend", "touchcancel");
 
   function drag() {
     this.on("mousedown.drag", mousedown)
         .on("touchstart.drag", touchstart);
   }
 
-  function dragstart(id, position, subject, move, end) {
+  function dragstart(id, position, subject, move, end, cancel) {
     return function() {
       var that = this,
           target = d3.event.target.correspondingElement || d3.event.target,
@@ -31,6 +31,9 @@ d3.behavior.drag = function() {
           dragSubject = d3.select(subject(target)).on(move + dragName, moved).on(end + dragName, ended),
           dragRestore = d3_event_dragSuppress(target),
           position0 = position(parent, dragId);
+
+      if (cancel) dragSubject.on(cancel + dragName, ended);
+
 
       if (origin) {
         dragOffset = origin.apply(that, arguments);
@@ -62,6 +65,7 @@ d3.behavior.drag = function() {
       function ended() {
         if (!position(parent, dragId)) return; // this touch didn’t end
         dragSubject.on(move + dragName, null).on(end + dragName, null);
+        if (cancel) dragSubject.on(cancel + dragName, null);
         dragRestore(dragged);
         dispatch({type: "dragend"});
       }
