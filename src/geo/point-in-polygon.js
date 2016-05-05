@@ -67,5 +67,5 @@ function d3_geo_pointInPolygon(point, polygon) {
   // from the point to the South pole.  If it is zero, then the point is the
   // same side as the South pole.
 
-  return (polarAngle < -ε || polarAngle < ε && d3_geo_areaRingSum < 0) ^ (winding & 1);
+  return (polarAngle < -ε || polarAngle < ε && d3_geo_areaRingSum < -ε) ^ (winding & 1);
 }
