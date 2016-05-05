@@ -171,6 +171,26 @@ suite.addBatch({
         "2": 0
       });
     },
+    "values can be aggregated using multiple rollups": function(nest) {
+      var map = nest()
+          .key(function(d) { return d.foo; })
+          .rollup(function(values) { return _.sum(values, function(d) { return d.bar; }); })
+          .rollup(function(values) { return values.length })
+          .rollup(function(values) { return _.sum(values, function(d) { return d.foo; }); })
+          .map([{foo: 1, bar: 2}, {foo: 1, bar: 0}, {foo: 1, bar: 1}, {foo: 2}]);
+      assert.deepEqual(map, {
+      "1": { 
+          "0": 3,
+          "1": 3,
+          "2": 3
+        },
+      "2": {
+          "0": 0,
+          "1": 1,
+          "2": 2
+        }
+      });
+    },
     "multiple key functions can be specified": function(nest) {
       var map = nest()
           .key(function(d) { return d[0]; }).sortKeys(_.ascending)
