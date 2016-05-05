@@ -7,7 +7,7 @@ import "../event/mouse";
 import "../event/touch";
 import "behavior";
 
-d3.behavior.drag = function() {
+d3.behavior.drag = function( event_id ) {
   var event = d3_eventDispatch(drag, "drag", "dragstart", "dragend"),
       origin = null,
       mousedown = dragstart(d3_noop, d3.mouse, d3_window, "mousemove", "mouseup"),
@@ -26,7 +26,7 @@ d3.behavior.drag = function() {
           dispatch = event.of(that, arguments),
           dragged = 0,
           dragId = id(),
-          dragName = ".drag" + (dragId == null ? "" : "-" + dragId),
+          dragName = ".drag" + (event_id == null ? "" : "-" + event_id),
           dragOffset,
           dragSubject = d3.select(subject(target)).on(move + dragName, moved).on(end + dragName, ended),
           dragRestore = d3_event_dragSuppress(target),
