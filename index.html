@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>canvas example!</title>
+  <style>
+    #allmap{width:800px;height: 600px;border: 1px solid #ddd;position: absolute;top:50%;left:50%;margin:-300px 0 0 -400px;}
+  </style>
+</head>
+<body>
+<div id="allmap"></div>
+<script src="http://api.map.baidu.com/api?v=2.0&ak=WFr4B6wLi5Zv35HSFcp77zdA" type="text/javascript"></script>
+<script>
+  var map = new BMap.Map("allmap");    // 创建Map实例
+  var point = new BMap.Point(116.332548, 39.9443997);
+  map.centerAndZoom(new BMap.Point(116.332548, 39.9443997), 17);  // 初始化地图,设置中心点坐标和地图级别
+  map.addControl(new BMap.MapTypeControl());   //添加地图类型控件
+  map.setCurrentCity("北京");          // 设置地图显示的城市 此项是必须设置的
+  map.enableScrollWheelZoom(true);     //开启鼠标滚轮缩放
+  var top_left_control = new BMap.ScaleControl({anchor: BMAP_ANCHOR_TOP_LEFT});// 左上角，添加比例尺
+  var top_left_navigation = new BMap.NavigationControl();  //左上角，添加默认缩放平移控件
+  var top_right_navigation = new BMap.NavigationControl({anchor: BMAP_ANCHOR_TOP_RIGHT, type: BMAP_NAVIGATION_CONTROL_SMALL}); //右上角，仅包含平移和缩放按钮
+  var marker = new BMap.Marker(point);        // 创建标注
+  map.addOverlay(marker);
+  /*缩放控件type有四种类型:
+   BMAP_NAVIGATION_CONTROL_SMALL：仅包含平移和缩放按钮；BMAP_NAVIGATION_CONTROL_PAN:仅包含平移按钮；BMAP_NAVIGATION_CONTROL_ZOOM：仅包含缩放按钮*/
+
+  //添加控件和比例尺
+  var add = {
+    add_control:function(){
+      map.addControl(top_left_control);
+      map.addControl(top_left_navigation);
+      map.addControl(top_right_navigation);
+    }
+  };
+  add.add_control();
+
+</script>
+</body>
+</html>
