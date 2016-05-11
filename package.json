@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.37",
+  "version": "4.0.0-alpha.38",
   "publishConfig": {
     "tag": "next"
   },
@@ -44,7 +44,7 @@
     "d3-collection": "0.1.2",
     "d3-color": "0.4.2",
     "d3-dispatch": "0.4.3",
-    "d3-drag": "0.1.1",
+    "d3-drag": "0.1.2",
     "d3-dsv": "0.3.2",
     "d3-ease": "0.7.0",
     "d3-force": "0.6.0",
