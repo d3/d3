@@ -7,7 +7,7 @@ This branch contains the prerelease of D3 4.0. This API is unstable and may chan
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://github.com/mbostock/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.35.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.36.min.js"></script>
 ```
 
 ## API Reference
@@ -18,6 +18,7 @@ If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](
 * [Colors](#colors)
 * [Delimiter-Separated Values](#delimiter-separated-values)
 * [Dispatches](#dispatches)
+* [Dragging](#dragging)
 * [Easings](#easings)
 * [Forces](#forces)
 * [Hierarchies](#hierarchies)
@@ -218,6 +219,20 @@ Separate concerns using named callbacks.
 * [*dispatch*.*call*](https://github.com/d3/d3-dispatch#dispatch_call) - dispatch an event to registered listeners.
 * [*dispatch*.*apply*](https://github.com/d3/d3-dispatch#dispatch_apply) - dispatch an event to registered listeners.
 
+## [Dragging](https://github.com/d3/d3-drag)
+
+Drag and drop SVG, HTML or Canvas using mouse or touch input.
+
+* [d3.drag](https://github.com/d3/d3-drag#drag) - create a drag behavior.
+* [*drag*](https://github.com/d3/d3-drag#_drag) - apply the drag behavior to a selection.
+* [*drag*.container](https://github.com/d3/d3-drag#drag_container) - set the coordinate system.
+* [*drag*.filter](https://github.com/d3/d3-drag#drag_filter) - ignore some initiating input events.
+* [*drag*.subject](https://github.com/d3/d3-drag#drag_subject) - set the thing being dragged.
+* [*drag*.x](https://github.com/d3/d3-drag#drag_x) - set the *x*-coordinate of the subject.
+* [*drag*.y](https://github.com/d3/d3-drag#drag_y) - set the *y*-coordinate of the subject.
+* [*drag*.on](https://github.com/d3/d3-drag#drag_on) - listen for drag events.
+* [*event*.on](https://github.com/d3/d3-drag#event_on) - listen for drag events on the current gesture.
+
 ## [Easings](https://github.com/d3/d3-ease)
 
 Easing functions for smooth animation.
@@ -273,10 +288,14 @@ Force-directed graph layout using velocity Verlet integration.
 * [*simulation*.stop](https://github.com/d3/d3-force#simulation_stop) - stop the simulation’s timer.
 * [*simulation*.tick](https://github.com/d3/d3-force#simulation_tick) - advance the simulation one step.
 * [*simulation*.nodes](https://github.com/d3/d3-force#simulation_nodes) - set the simulation’s nodes.
+* [*simulation*.alpha](https://github.com/d3/d3-force#simulation_alpha) - set the current alpha.
 * [*simulation*.alphaMin](https://github.com/d3/d3-force#simulation_alphaMin) - set the minimum alpha threshold.
 * [*simulation*.alphaDecay](https://github.com/d3/d3-force#simulation_alphaDecay) - set the alpha exponential decay rate.
+* [*simulation*.alphaTarget](https://github.com/d3/d3-force#simulation_alphaTarget) - set the target alpha.
 * [*simulation*.drag](https://github.com/d3/d3-force#simulation_drag) - set the drag coefficient.
 * [*simulation*.force](https://github.com/d3/d3-force#simulation_force) - add or remove a force.
+* [*simulation*.fix](https://github.com/d3/d3-force#simulation_fix) - fix a node in a given position.
+* [*simulation*.unfix](https://github.com/d3/d3-force#simulation_unfix) - release a fixed node.
 * [*simulation*.on](https://github.com/d3/d3-force#simulation_on) - add or remove an event listener.
 * [*force*](https://github.com/d3/d3-force#_force) - apply the force.
 * [*force*.initialize](https://github.com/d3/d3-force#force_initialize) - initialize the force with the given nodes.
@@ -707,6 +726,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.on](https://github.com/d3/d3-selection#selection_on) - add or remove event listeners.
 * [*selection*.dispatch](https://github.com/d3/d3-selection#selection_dispatch) - dispatch a custom event.
 * [d3.event](https://github.com/d3/d3-selection#event) - the current user event, during interaction.
+* [d3.customEvent](https://github.com/d3/d3-selection#customEvent) - temporarily define a custom event.
 * [d3.mouse](https://github.com/d3/d3-selection#mouse) - get the mouse position relative to a given container.
 * [d3.touch](https://github.com/d3/d3-selection#touch) - get a touch position relative to a given container.
 * [d3.touches](https://github.com/d3/d3-selection#touches) - get the touch positions relative to a given container.

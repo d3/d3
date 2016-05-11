@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.35",
+  "version": "4.0.0-alpha.36",
   "publishConfig": {
     "tag": "next"
   },
@@ -44,9 +44,10 @@
     "d3-collection": "0.1.2",
     "d3-color": "0.4.2",
     "d3-dispatch": "0.4.3",
+    "d3-drag": "0.1.1",
     "d3-dsv": "0.3.2",
     "d3-ease": "0.7.0",
-    "d3-force": "0.5.0",
+    "d3-force": "0.6.0",
     "d3-format": "0.5.1",
     "d3-hierarchy": "0.2.2",
     "d3-interpolate": "0.7.0",
@@ -57,7 +58,7 @@
     "d3-random": "0.2.1",
     "d3-request": "0.4.6",
     "d3-scale": "0.7.0",
-    "d3-selection": "0.7.1",
+    "d3-selection": "0.7.2",
     "d3-shape": "0.6.0",
     "d3-time": "0.2.5",
     "d3-time-format": "0.3.2",
