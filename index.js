@@ -380,6 +380,7 @@ export {
 
 export {
   creator,
+  customEvent,
   event,
   matcher,
   mouse,
@@ -433,6 +434,10 @@ export {
   forceX,
   forceY
 } from "d3-force";
+
+export {
+  drag
+} from "d3-drag";
 
 export {
   voronoi
