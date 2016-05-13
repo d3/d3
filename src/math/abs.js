@@ -1,1 +1,0 @@
-var abs = Math.abs;

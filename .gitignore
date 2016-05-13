@@ -1,4 +1,5 @@
-_site
-node_modules
+*.sublime-workspace
 .DS_Store
-d3.zip
+build/
+node_modules
+npm-debug.log
