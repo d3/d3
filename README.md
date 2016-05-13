@@ -13,7 +13,7 @@ For examples, [see the gallery](https://github.com/d3/d3/wiki/Gallery) and [mbos
 The master branch currently contains the prerelease of D3 4.0. The 4.0 API is not yet frozen and may change prior to the release. For the latest stable release (3.5.17), follow the [installation instructions](https://github.com/d3/d3/wiki#installing) on the wiki. If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://npmcdn.com/d3@next/build/). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.39.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.40.min.js"></script>
 ```
 
 For the non-minified version, remove `.min` from the file name.
@@ -304,6 +304,7 @@ Force-directed graph layout using velocity Verlet integration.
 * [*simulation*.force](https://github.com/d3/d3-force#simulation_force) - add or remove a force.
 * [*simulation*.fix](https://github.com/d3/d3-force#simulation_fix) - fix a node in a given position.
 * [*simulation*.unfix](https://github.com/d3/d3-force#simulation_unfix) - release a fixed node.
+* [*simulation*.find](https://github.com/d3/d3-force#simulation_find) - find the closest node to the given position.
 * [*simulation*.on](https://github.com/d3/d3-force#simulation_on) - add or remove an event listener.
 * [*force*](https://github.com/d3/d3-force#_force) - apply the force.
 * [*force*.initialize](https://github.com/d3/d3-force#force_initialize) - initialize the force with the given nodes.
