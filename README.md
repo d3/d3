@@ -10,7 +10,7 @@ For examples, [see the gallery](https://github.com/d3/d3/wiki/Gallery) and [mbos
 
 ## Installing
 
-The master branch currently contains the prerelease of D3 4.0. The 4.0 API is not yet frozen and may change prior to the release. (For the latest stable release, 3.5.17, follow the [installation instructions](https://github.com/d3/d3/wiki#installing) on the wiki.) If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://npmcdn.com/d3@next/build/). The released bundle supports AMD, CommonJS, and vanilla environments. Create a custom build using [Rollup](https://github.com/rollup/rollup) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
+The master branch currently contains the prerelease of D3 4.0. The 4.0 API is not yet frozen and may change prior to the release. (For the latest stable release, 3.5.17, follow the [installation instructions](https://github.com/d3/d3/wiki#installing) on the wiki.) If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://npmcdn.com/d3@next/build/). The released bundle supports AMD, CommonJS, and vanilla environments. Create a [custom bundle using Rollup](http://bl.ocks.org/mbostock/bb09af4c39c79cffcde4) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
 <script src="https://d3js.org/d3.v4.0.0-alpha.40.min.js"></script>
