@@ -20,6 +20,8 @@ For the non-minified version, remove `.min` from the file name.
 
 ## API Reference
 
+D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to work together; you can use the modules independently, or you can use them together as part of the default build. The source and documentation for each module is available in its repository. Follow the links below to learn more.
+
 * [Arrays](#arrays) ([Statistics](#statistics), [Histograms](#histograms), [Search](#search), [Transformations](#transformations))
 * [Axes](#axes)
 * [Collections](#collections) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
@@ -49,7 +51,7 @@ For the non-minified version, remove `.min` from the file name.
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
 
-## [Arrays](https://github.com/d3/d3-array)
+## [Arrays (d3-array)](https://github.com/d3/d3-array)
 
 Array manipulation, ordering, searching, summarizing, etc.
 
@@ -108,7 +110,7 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
 
-## [Axes](https://github.com/d3/d3-axis)
+## [Axes (d3-axis)](https://github.com/d3/d3-axis)
 
 Human-readable reference marks for scales.
 
@@ -127,7 +129,7 @@ Human-readable reference marks for scales.
 * [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) - set the size of outer (extent) ticks.
 * [*axis*.tickPadding](https://github.com/d3/d3-axis#axis_tickPadding) - set the padding between ticks and labels.
 
-## [Collections](https://github.com/d3/d3-collection)
+## [Collections (d3-collection)](https://github.com/d3/d3-collection)
 
 Handy data structures for elements keyed by string.
 
@@ -183,7 +185,7 @@ Group data into arbitrary hierarchies.
 * [*nest*.object](https://github.com/d3/d3-collection#nest_object) - generate the nest, returning an associative array.
 * [*nest*.entries](https://github.com/d3/d3-collection#nest_entries) - generate the nest, returning an array of key-values tuples.
 
-## [Colors](https://github.com/d3/d3-color)
+## [Colors (d3-color)](https://github.com/d3/d3-color)
 
 Color manipulation and color space conversion.
 
@@ -199,7 +201,7 @@ Color manipulation and color space conversion.
 * [d3.hcl](https://github.com/d3/d3-color#hcl) - create a new HCL color.
 * [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) - create a new Cubehelix color.
 
-## [Delimiter-Separated Values](https://github.com/d3/d3-dsv)
+## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv)
 
 Parse and format delimiter-separated values, most commonly CSV and TSV.
 
@@ -217,7 +219,7 @@ Parse and format delimiter-separated values, most commonly CSV and TSV.
 * [d3.tsvFormat](https://github.com/d3/d3-dsv#tsvFormat) - format the given array of objects as TSV.
 * [d3.tsvFormatRows](https://github.com/d3/d3-dsv#tsvFormatRows) - format the given array of rows as TSV.
 
-## [Dispatches](https://github.com/d3/d3-dispatch)
+## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch)
 
 Separate concerns using named callbacks.
 
@@ -227,7 +229,7 @@ Separate concerns using named callbacks.
 * [*dispatch*.*call*](https://github.com/d3/d3-dispatch#dispatch_call) - dispatch an event to registered listeners.
 * [*dispatch*.*apply*](https://github.com/d3/d3-dispatch#dispatch_apply) - dispatch an event to registered listeners.
 
-## [Dragging](https://github.com/d3/d3-drag)
+## [Dragging (d3-drag)](https://github.com/d3/d3-drag)
 
 Drag and drop SVG, HTML or Canvas using mouse or touch input.
 
@@ -241,7 +243,7 @@ Drag and drop SVG, HTML or Canvas using mouse or touch input.
 * [*drag*.on](https://github.com/d3/d3-drag#drag_on) - listen for drag events.
 * [*event*.on](https://github.com/d3/d3-drag#event_on) - listen for drag events on the current gesture.
 
-## [Easings](https://github.com/d3/d3-ease)
+## [Easings (d3-ease)](https://github.com/d3/d3-ease)
 
 Easing functions for smooth animation.
 
@@ -287,7 +289,7 @@ Easing functions for smooth animation.
 * [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut) - reverse bounce easing.
 * [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut) - symmetric bounce easing.
 
-## [Forces](https://github.com/d3/d3-force)
+## [Forces (d3-force)](https://github.com/d3/d3-force)
 
 Force-directed graph layout using velocity Verlet integration.
 
@@ -333,7 +335,7 @@ Force-directed graph layout using velocity Verlet integration.
 * [*y*.strength](https://github.com/d3/d3-force#y_strength) - set the force strength.
 * [*y*.y](https://github.com/d3/d3-force#y_y) - set the target *y*-coordinate.
 
-## [Hierarchies](https://github.com/d3/d3-hierarchy)
+## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy)
 
 Layout algorithms for visualizing hierarchical data.
 
@@ -393,7 +395,7 @@ Layout algorithms for visualizing hierarchical data.
 * [d3.packSiblings](#packSiblings) - pack the specified array of circles.
 * [d3.packEnclose](#packEnclose) - enclose the specified array of circles.
 
-## [Interpolators](https://github.com/d3/d3-interpolate)
+## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate)
 
 Interpolate numbers, colors, strings, arrays, objects, whatever!
 
@@ -416,7 +418,7 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
 * [*interpolate*.gamma](https://github.com/d3/d3-interpolate#interpolate_gamma) - apply gamma correction during interpolation.
 
-## [Number Formats](https://github.com/d3/d3-format)
+## [Number Formats (d3-format)](https://github.com/d3/d3-format)
 
 Format numbers for human consumption.
 
@@ -453,7 +455,7 @@ Format numbers for human consumption.
 * [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) - compute decimal precision for SI-prefix notation.
 * [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) - compute significant digits for rounded notation.
 
-## [Paths](https://github.com/d3/d3-path)
+## [Paths (d3-path)](https://github.com/d3/d3-path)
 
 Serialize Canvas path commands to SVG.
 
@@ -468,7 +470,7 @@ Serialize Canvas path commands to SVG.
 * [*path*.rect](https://github.com/d3/d3-path#path_rect) - draw a rectangle.
 * [*path*.toString](https://github.com/d3/d3-path#path_toString) - serialize to an SVG path data string.
 
-## [Polygons](https://github.com/d3/d3-polygon)
+## [Polygons (d3-polygon)](https://github.com/d3/d3-polygon)
 
 Geometric operations for two-dimensional polygons.
 
@@ -478,7 +480,7 @@ Geometric operations for two-dimensional polygons.
 * [d3.polygonContains](https://github.com/d3/d3-polygon#polygonContains) - test whether a point is inside a polygon.
 * [d3.polygonLength](https://github.com/d3/d3-polygon#polygonLength) - compute the length of the given polygon’s perimeter.
 
-## [Quadtrees](https://github.com/d3/d3-quadtree)
+## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree)
 
 Two-dimensional recursive spatial subdivision.
 
@@ -497,7 +499,7 @@ Two-dimensional recursive spatial subdivision.
 * [*quadtree*.cover](https://github.com/d3/d3-quadtree#quadtree_cover) - extend the quadtree to cover a point.
 * [*quadtree*.extent](https://github.com/d3/d3-quadtree#quadtree_extent) - extend the quadtree to cover an extent.
 
-## [Queues](https://github.com/d3/d3-queue)
+## [Queues (d3-queue)](https://github.com/d3/d3-queue)
 
 Evaluate asynchronous tasks with configurable concurrency.
 
@@ -507,7 +509,7 @@ Evaluate asynchronous tasks with configurable concurrency.
 * [*queue*.await](https://github.com/d3/d3-queue#queue_await) - register a callback for when tasks complete.
 * [*queue*.awaitAll](https://github.com/d3/d3-queue#queue_awaitAll) - register a callback for when tasks complete.
 
-## [Random Numbers](https://github.com/d3/d3-random)
+## [Random Numbers (d3-random)](https://github.com/d3/d3-random)
 
 Generate random numbers from various distributions.
 
@@ -518,7 +520,7 @@ Generate random numbers from various distributions.
 * [d3.randomIrwinHall](https://github.com/d3/d3-random#randomIrwinHall) - from an Irwin–Hall distribution.
 * [d3.randomExponential](https://github.com/d3/d3-random#randomExponential) - from an exponential distribution.
 
-## [Requests](https://github.com/d3/d3-request)
+## [Requests (d3-request)](https://github.com/d3/d3-request)
 
 A convenient alternative to asynchronous XMLHttpRequest.
 
@@ -542,7 +544,7 @@ A convenient alternative to asynchronous XMLHttpRequest.
 * [d3.tsv](https://github.com/d3/d3-request#tsv) - get a tab-separated values (TSV) file.
 * [d3.xml](https://github.com/d3/d3-request#xml) - get an XML file.
 
-## [Scales](https://github.com/d3/d3-scale)
+## [Scales (d3-scale)](https://github.com/d3/d3-scale)
 
 Encodings that map abstract data to visual representation.
 
@@ -689,7 +691,7 @@ Map a discrete domain to a discrete, fixed categorical color range.
 * [d3.scaleCategory20b](https://github.com/d3/d3-scale#scaleCategory20b) - a categorical scheme with 20 colors.
 * [d3.scaleCategory20c](https://github.com/d3/d3-scale#scaleCategory20c) - a categorical scheme with 20 colors.
 
-## [Selections](https://github.com/d3/d3-selection)
+## [Selections (d3-selection)](https://github.com/d3/d3-selection)
 
 Transform the DOM by selecting elements and joining to data.
 
@@ -754,7 +756,7 @@ Transform the DOM by selecting elements and joining to data.
 * [d3.namespace](https://github.com/d3/d3-selection#namespace) - qualify a prefixed XML name, such as “xlink:href”.
 * [d3.namespaces](https://github.com/d3/d3-selection#namespaces) - the built-in XML namespaces.
 
-## [Shapes](https://github.com/d3/d3-shape)
+## [Shapes (d3-shape)](https://github.com/d3/d3-shape)
 
 Graphical primitives for visualization.
 
@@ -900,7 +902,7 @@ Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 * [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape#stackOffsetSilhouette) - center the streamgraph around zero.
 * [d3.stackOffsetWiggle](https://github.com/d3/d3-shape#stackOffsetWiggle) - minimize streamgraph wiggling.
 
-## [Time Formats](https://github.com/d3/d3-time-format)
+## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format)
 
 Parse and format times, inspired by strptime and strftime.
 
@@ -938,7 +940,7 @@ Parse and format times, inspired by strptime and strftime.
 * [d3.timeFormatSvSe](https://github.com/d3/d3-time-format#timeFormatSvSe) - the Swedish (Sweden) locale.
 * [d3.timeFormatZhCn](https://github.com/d3/d3-time-format#timeFormatZhCn) - the Chinese (China) locale.
 
-## [Time Intervals](https://github.com/d3/d3-time)
+## [Time Intervals (d3-time)](https://github.com/d3/d3-time)
 
 A calculator for humanity’s peculiar conventions of time.
 
@@ -983,7 +985,7 @@ A calculator for humanity’s peculiar conventions of time.
 * [d3.timeYear](https://github.com/d3/d3-time#timeYear), [d3.utcYear](https://github.com/d3/d3-time#timeYear) - the year interval.
 * [d3.timeYears](https://github.com/d3/d3-time#timeYear), [d3.utcYears](https://github.com/d3/d3-time#timeYear) - aliases for year.range.
 
-## [Timers](https://github.com/d3/d3-timer)
+## [Timers (d3-timer)](https://github.com/d3/d3-timer)
 
 An efficient queue for managing thousands of concurrent animations.
 
@@ -995,7 +997,7 @@ An efficient queue for managing thousands of concurrent animations.
 * [d3.timeout](https://github.com/d3/d3-timer#timeout) - schedule a timer that stops on its first callback.
 * [d3.interval](https://github.com/d3/d3-timer#interval) - schedule a timer that is called with a configurable period.
 
-## [Transitions](https://github.com/d3/d3-transition)
+## [Transitions (d3-transition)](https://github.com/d3/d3-transition)
 
 Animated transitions for [selections](#selections).
 
@@ -1027,7 +1029,7 @@ Animated transitions for [selections](#selections).
 * [*transition*.ease](https://github.com/d3/d3-transition#transition_ease) - specify the easing function.
 * [d3.active](https://github.com/d3/d3-transition#active) - select the active transition for a given node.
 
-## [Voronoi Diagrams](https://github.com/d3/d3-voronoi)
+## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi)
 
 Compute the Voronoi diagram of a given set of points.
 
