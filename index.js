@@ -442,3 +442,8 @@ export {
 export {
   voronoi
 } from "d3-voronoi";
+
+export {
+  zoom,
+  zoomTransform
+} from "d3-zoom";

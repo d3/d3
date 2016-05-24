@@ -13,7 +13,7 @@ For examples, [see the gallery](https://github.com/d3/d3/wiki/Gallery) and [mbos
 The master branch currently contains the prerelease of D3 4.0. The 4.0 API is not yet frozen and may change prior to the release. (For the latest stable release, 3.5.17, follow the [installation instructions](https://github.com/d3/d3/wiki#installing) on the wiki.) If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://npmcdn.com/d3@next/build/). The released bundle supports AMD, CommonJS, and vanilla environments. Create a [custom bundle using Rollup](http://bl.ocks.org/mbostock/bb09af4c39c79cffcde4) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.40.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.41.min.js"></script>
 ```
 
 For the non-minified version, remove `.min` from the file name.
@@ -40,7 +40,7 @@ D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to 
 * [Queues](#queues)
 * [Random Numbers](#random-numbers)
 * [Requests](#requests)
-* [Scales](#scales) ([Continuous](#continuous-scales), [Sequential](#sequential-color-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales), [Categorical](#categorical-color-scales))
+* [Scales](#scales) ([Continuous](#continuous-scales), [Sequential](#sequential-color-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales))
 * [Selections](#selections) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#joining-data), [Events](#handling-events), [Control](#control-flow), [Namespaces](#namespaces))
 * [Shapes](#shapes) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats)
@@ -238,10 +238,10 @@ Drag and drop SVG, HTML or Canvas using mouse or touch input.
 * [*drag*.container](https://github.com/d3/d3-drag#drag_container) - set the coordinate system.
 * [*drag*.filter](https://github.com/d3/d3-drag#drag_filter) - ignore some initiating input events.
 * [*drag*.subject](https://github.com/d3/d3-drag#drag_subject) - set the thing being dragged.
-* [*drag*.x](https://github.com/d3/d3-drag#drag_x) - set the *x*-coordinate of the subject.
-* [*drag*.y](https://github.com/d3/d3-drag#drag_y) - set the *y*-coordinate of the subject.
 * [*drag*.on](https://github.com/d3/d3-drag#drag_on) - listen for drag events.
 * [*event*.on](https://github.com/d3/d3-drag#event_on) - listen for drag events on the current gesture.
+* [d3.dragDisable](https://github.com/d3/d3-drag#dragDisable) -
+* [d3.dragEnable](https://github.com/d3/d3-drag#dragEnable) -
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease)
 
@@ -343,6 +343,7 @@ Layout algorithms for visualizing hierarchical data.
 * [*node*.ancestors](#node_ancestors) - generate an array of ancestors.
 * [*node*.descendants](#node_descendants) - generate an array of descendants.
 * [*node*.leaves](#node_leaves) - generate an array of leaves.
+* [*node*.links](#node_links) - generate an array of links.
 * [*node*.path](#node_path) - generate the shortest path to another node.
 * [*node*.sum](#node_sum) - evaluate and aggregate quantitative values.
 * [*node*.sort](#node_sort) - sort all descendant siblings.
@@ -606,10 +607,11 @@ Map a continuous, quantitative domain to a continuous range.
 * [*time*.copy](https://github.com/d3/d3-scale#time_copy) - create a copy of this scale.
 * [d3.scaleUtc](https://github.com/d3/d3-scale#scaleUtc) - create a linear scale for UTC.
 
-### [Sequential Color Scales](https://github.com/d3/d3-scale#sequential-color-scales)
+### [Sequential Scales](https://github.com/d3/d3-scale#sequential-scales)
 
-Map a continuous, quantitative domain to a continuous, fixed color ramp.
+Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
+* [d3.scaleSequential](https://github.com/d3/d3-scale#scaleSequential) - create a sequential scale.
 * [d3.scaleViridis](https://github.com/d3/d3-scale#scaleViridis) - a dark-to-light color scheme.
 * [d3.scaleInferno](https://github.com/d3/d3-scale#scaleInferno) - a dark-to-light color scheme.
 * [d3.scaleMagma](https://github.com/d3/d3-scale#scaleMagma) - a dark-to-light color scheme.
@@ -681,11 +683,6 @@ Map a discrete domain to a discrete range.
 * [*point*.bandwidth](https://github.com/d3/d3-scale#point_bandwidth) - returns zero.
 * [*point*.step](https://github.com/d3/d3-scale#point_step) - get the distance between the starts of adjacent points.
 * [*point*.copy](https://github.com/d3/d3-scale#point_copy) - create a copy of this scale.
-
-### [Categorical Color Scales](https://github.com/d3/d3-scale#categorical-color-scales)
-
-Map a discrete domain to a discrete, fixed categorical color range.
-
 * [d3.scaleCategory10](https://github.com/d3/d3-scale#scaleCategory10) - a categorical scheme with 10 colors.
 * [d3.scaleCategory20](https://github.com/d3/d3-scale#scaleCategory20) - a categorical scheme with 20 colors.
 * [d3.scaleCategory20b](https://github.com/d3/d3-scale#scaleCategory20b) - a categorical scheme with 20 colors.
@@ -1028,6 +1025,7 @@ Animated transitions for [selections](#selections).
 * [*transition*.duration](https://github.com/d3/d3-transition#transition_duration) - specify per-element duration in milliseconds.
 * [*transition*.ease](https://github.com/d3/d3-transition#transition_ease) - specify the easing function.
 * [d3.active](https://github.com/d3/d3-transition#active) - select the active transition for a given node.
+* [d3.interrupt](https://github.com/d3/d3-transition#interrupt) -
 
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi)
 
@@ -1042,3 +1040,31 @@ Compute the Voronoi diagram of a given set of points.
 * [*voronoi*.y](https://github.com/d3/d3-voronoi#voronoi_y) - set the *y* accessor.
 * [*voronoi*.extent](https://github.com/d3/d3-voronoi#voronoi_extent) - set the observed extent of points.
 * [*voronoi*.size](https://github.com/d3/d3-voronoi#voronoi_size) - set the observed extent of points.
+
+## [Zooming (d3-zoom)](https://github.com/d3/d3-zoom)
+
+Pan and zoom SVG, HTML or Canvas using mouse or touch input.
+
+* [d3.zoom](https://github.com/d3/d3-zoom#zoom) -
+* [*zoom*](https://github.com/d3/d3-zoom#_zoom) -
+* [*zoom*.transform](https://github.com/d3/d3-zoom#zoom_transform) -
+* [*zoom*.translateBy](https://github.com/d3/d3-zoom#zoom_translateBy) -
+* [*zoom*.scaleBy](https://github.com/d3/d3-zoom#zoom_scaleBy) -
+* [*zoom*.scaleTo](https://github.com/d3/d3-zoom#zoom_scaleTo) -
+* [*zoom*.filter](https://github.com/d3/d3-zoom#zoom_filter) -
+* [*zoom*.size](https://github.com/d3/d3-zoom#zoom_size) -
+* [*zoom*.scaleExtent](https://github.com/d3/d3-zoom#zoom_scaleExtent) -
+* [*zoom*.duration](https://github.com/d3/d3-zoom#zoom_duration) -
+* [*zoom*.on](https://github.com/d3/d3-zoom#zoom_on) -
+* [d3.zoomTransform](https://github.com/d3/d3-zoom#zoomTransform) -
+* [*transform*.scale](https://github.com/d3/d3-zoom#transform_scale) -
+* [*transform*.translate](https://github.com/d3/d3-zoom#transform_translate) -
+* [*transform*.apply](https://github.com/d3/d3-zoom#transform_apply) -
+* [*transform*.applyX](https://github.com/d3/d3-zoom#transform_applyX) -
+* [*transform*.applyY](https://github.com/d3/d3-zoom#transform_applyY) -
+* [*transform*.invert](https://github.com/d3/d3-zoom#transform_invert) -
+* [*transform*.invertX](https://github.com/d3/d3-zoom#transform_invertX) -
+* [*transform*.invertY](https://github.com/d3/d3-zoom#transform_invertY) -
+* [*transform*.rescaleX](https://github.com/d3/d3-zoom#transform_rescaleX) -
+* [*transform*.rescaleY](https://github.com/d3/d3-zoom#transform_rescaleY) -
+* [*transform*.toString](https://github.com/d3/d3-zoom#transform_toString) -
