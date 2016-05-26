@@ -445,5 +445,6 @@ export {
 
 export {
   zoom,
+  zoomIdentity,
   zoomTransform
 } from "d3-zoom";

@@ -13,7 +13,7 @@ For examples, [see the gallery](https://github.com/d3/d3/wiki/Gallery) and [mbos
 The master branch currently contains the prerelease of D3 4.0. The 4.0 API is not yet frozen and may change prior to the release. (For the latest stable release, 3.5.17, follow the [installation instructions](https://github.com/d3/d3/wiki#installing) on the wiki.) If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://npmcdn.com/d3@next/build/). The released bundle supports AMD, CommonJS, and vanilla environments. Create a [custom bundle using Rollup](http://bl.ocks.org/mbostock/bb09af4c39c79cffcde4) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.41.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.42.min.js"></script>
 ```
 
 For the non-minified version, remove `.min` from the file name.
@@ -1052,8 +1052,9 @@ Pan and zoom SVG, HTML or Canvas using mouse or touch input.
 * [*zoom*.scaleBy](https://github.com/d3/d3-zoom#zoom_scaleBy) -
 * [*zoom*.scaleTo](https://github.com/d3/d3-zoom#zoom_scaleTo) -
 * [*zoom*.filter](https://github.com/d3/d3-zoom#zoom_filter) -
-* [*zoom*.size](https://github.com/d3/d3-zoom#zoom_size) -
+* [*zoom*.extent](https://github.com/d3/d3-zoom#zoom_extent) -
 * [*zoom*.scaleExtent](https://github.com/d3/d3-zoom#zoom_scaleExtent) -
+* [*zoom*.translateExtent](https://github.com/d3/d3-zoom#zoom_translateExtent) -
 * [*zoom*.duration](https://github.com/d3/d3-zoom#zoom_duration) -
 * [*zoom*.on](https://github.com/d3/d3-zoom#zoom_on) -
 * [d3.zoomTransform](https://github.com/d3/d3-zoom#zoomTransform) -
@@ -1068,3 +1069,4 @@ Pan and zoom SVG, HTML or Canvas using mouse or touch input.
 * [*transform*.rescaleX](https://github.com/d3/d3-zoom#transform_rescaleX) -
 * [*transform*.rescaleY](https://github.com/d3/d3-zoom#transform_rescaleY) -
 * [*transform*.toString](https://github.com/d3/d3-zoom#transform_toString) -
+* [d3.zoomIdentity](https://github.com/d3/d3-zoom#zoomIdentity) -
