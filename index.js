@@ -28,6 +28,7 @@ export {
   shuffle,
   sum,
   ticks,
+  tickStep,
   transpose,
   variance,
   zip
@@ -368,6 +369,7 @@ export {
   scaleCategory20b,
   scaleCategory20c,
   scaleCategory20,
+  scaleSequential,
   scaleCubehelix,
   scaleRainbow,
   scaleWarm,
@@ -398,6 +400,7 @@ export {
 
 export {
   active,
+  interrupt,
   transition
 } from "d3-transition";
 
