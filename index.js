@@ -436,7 +436,9 @@ export {
 } from "d3-force";
 
 export {
-  drag
+  drag,
+  dragDisable,
+  dragEnable
 } from "d3-drag";
 
 export {
