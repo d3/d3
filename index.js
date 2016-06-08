@@ -178,13 +178,18 @@ export {
   interpolateTransformSvg,
   interpolateZoom,
   interpolateRgb,
+  interpolateRgbBasis,
+  interpolateRgbBasisClosed,
   interpolateHsl,
   interpolateHslLong,
   interpolateLab,
   interpolateHcl,
   interpolateHclLong,
   interpolateCubehelix,
-  interpolateCubehelixLong
+  interpolateCubehelixLong,
+  interpolateBasis,
+  interpolateBasisClosed,
+  quantize
 } from "d3-interpolate";
 
 export {
@@ -289,29 +294,6 @@ export {
   format,
   formatPrefix,
   formatLocale,
-  formatCaEs,
-  formatCsCz,
-  formatDeCh,
-  formatDeDe,
-  formatEnCa,
-  formatEnGb,
-  formatEnUs,
-  formatEsEs,
-  formatFiFi,
-  formatFrCa,
-  formatFrFr,
-  formatHeIl,
-  formatHuHu,
-  formatItIt,
-  formatJaJp,
-  formatKoKr,
-  formatMkMk,
-  formatNlNl,
-  formatPlPl,
-  formatPtBr,
-  formatRuRu,
-  formatSvSe,
-  formatZhCn,
   formatSpecifier,
   precisionFixed,
   precisionPrefix,
@@ -325,29 +307,7 @@ export {
   utcParse,
   isoFormat,
   isoParse,
-  timeFormatLocale,
-  timeFormatCaEs,
-  timeFormatDeCh,
-  timeFormatDeDe,
-  timeFormatEnCa,
-  timeFormatEnGb,
-  timeFormatEnUs,
-  timeFormatEsEs,
-  timeFormatFiFi,
-  timeFormatFrCa,
-  timeFormatFrFr,
-  timeFormatHeIl,
-  timeFormatHuHu,
-  timeFormatItIt,
-  timeFormatJaJp,
-  timeFormatKoKr,
-  timeFormatMkMk,
-  timeFormatNlNl,
-  timeFormatPlPl,
-  timeFormatPtBr,
-  timeFormatRuRu,
-  timeFormatSvSe,
-  timeFormatZhCn
+  timeFormatLocale
 } from "d3-time-format";
 
 export {
@@ -365,25 +325,26 @@ export {
   scaleThreshold,
   scaleTime,
   scaleUtc,
-  scaleCategory10,
-  scaleCategory20b,
-  scaleCategory20c,
-  scaleCategory20,
+  schemeCategory10,
+  schemeCategory20b,
+  schemeCategory20c,
+  schemeCategory20,
   scaleSequential,
-  scaleCubehelix,
-  scaleRainbow,
-  scaleWarm,
-  scaleCool,
-  scaleViridis,
-  scaleMagma,
-  scaleInferno,
-  scalePlasma
+  interpolateCubehelixDefault,
+  interpolateRainbow,
+  interpolateWarm,
+  interpolateCool,
+  interpolateViridis,
+  interpolateMagma,
+  interpolateInferno,
+  interpolatePlasma
 } from "d3-scale";
 
 export {
   creator,
   customEvent,
   event,
+  local,
   matcher,
   mouse,
   namespace,
@@ -425,7 +386,8 @@ export {
   treemapDice,
   treemapSlice,
   treemapSliceDice,
-  treemapSquarify
+  treemapSquarify,
+  treemapResquarify
 } from "d3-hierarchy";
 
 export {
@@ -453,3 +415,10 @@ export {
   zoomIdentity,
   zoomTransform
 } from "d3-zoom";
+
+export {
+  brush,
+  brushX,
+  brushY,
+  brushSelection
+} from "d3-brush";

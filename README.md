@@ -24,6 +24,7 @@ D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to 
 
 * [Arrays](#arrays-d3-array) ([Statistics](#statistics), [Histograms](#histograms), [Search](#search), [Transformations](#transformations))
 * [Axes](#axes-d3-axis)
+* [Brushes](#brushes-d3-brush)
 * [Collections](#collections-d3-collection) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors-d3-color)
 * [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
@@ -41,7 +42,7 @@ D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to 
 * [Random Numbers](#random-numbers-d3-random)
 * [Requests](#requests-d3-request)
 * [Scales](#scales-d3-scale) ([Continuous](#continuous-scales), [Sequential](#sequential-color-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales))
-* [Selections](#selections-d3-selection) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#joining-data), [Events](#handling-events), [Control](#control-flow), [Namespaces](#namespaces))
+* [Selections](#selections-d3-selection) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#joining-data), [Events](#handling-events), [Control](#control-flow), [Local Variables](#local-variables), [Namespaces](#namespaces))
 * [Shapes](#shapes-d3-shape) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats-d3-time-format)
 * [Time Intervals](#time-intervals-d3-time)
@@ -110,6 +111,21 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.range](https://github.com/d3/d3-array#range) - generate a range of numeric values.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
+
+## [Brushes (d3-brush)](https://github.com/d3/d3-brush)
+
+Select a one- or two-dimensional region using the mouse or touch.
+
+* [d3.brush](https://github.com/d3/d3-brush#brush) -
+* [d3.brushX](https://github.com/d3/d3-brush#brushX) -
+* [d3.brushY](https://github.com/d3/d3-brush#brushY) -
+* [*brush*](https://github.com/d3/d3-brush#_brush) -
+* [*brush*.move](https://github.com/d3/d3-brush#brush_move) -
+* [*brush*.extent](https://github.com/d3/d3-brush#brush_extent) -
+* [*brush*.filter](https://github.com/d3/d3-brush#brush_filter) -
+* [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) -
+* [*brush*.on](https://github.com/d3/d3-brush#brush_on) -
+* [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) -
 
 ## [Axes (d3-axis)](https://github.com/d3/d3-axis)
 
@@ -307,6 +323,7 @@ Force-directed graph layout using velocity Verlet integration.
 * [*simulation*.force](https://github.com/d3/d3-force#simulation_force) - add or remove a force.
 * [*simulation*.fix](https://github.com/d3/d3-force#simulation_fix) - fix a node in a given position.
 * [*simulation*.unfix](https://github.com/d3/d3-force#simulation_unfix) - release a fixed node.
+* [*simulation*.unfixAll](https://github.com/d3/d3-force#simulation_unfixAll) - release all fixed nodes.
 * [*simulation*.find](https://github.com/d3/d3-force#simulation_find) - find the closest node to the given position.
 * [*simulation*.on](https://github.com/d3/d3-force#simulation_on) - add or remove an event listener.
 * [*force*](https://github.com/d3/d3-force#_force) - apply the force.
@@ -383,6 +400,7 @@ Layout algorithms for visualizing hierarchical data.
 * [d3.treemapSlice](#treemapSlice) - tile into a vertical column.
 * [d3.treemapSliceDice](#treemapSliceDice) - alternate between slicing and dicing.
 * [d3.treemapSquarify](#treemapSquarify) - tile using squarified rows per Bruls *et. al.*
+* [d3.treemapResquarify](#treemapResquarify) -
 * [*squarify*.ratio](#squarify_ratio) - set the desired rectangle aspect ratio.
 * [d3.partition](#partition) - create a new partition (icicle or sunburst) layout.
 * [*partition*](#_partition) - layout the specified hierarchy as a partition diagram.
@@ -411,6 +429,8 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateTransformSvg](https://github.com/d3/d3-interpolate#interpolateTransformSvg) - interpolate 2D SVG transforms.
 * [d3.interpolateZoom](https://github.com/d3/d3-interpolate#interpolateZoom) - zoom and pan between two views.
 * [d3.interpolateRgb](https://github.com/d3/d3-interpolate#interpolateRgb) - interpolate RGB colors.
+* [d3.interpolateRgbBasis](https://github.com/d3/d3-interpolate#interpolateRgbBasis) -
+* [d3.interpolateRgbBasisClosed](https://github.com/d3/d3-interpolate#interpolateRgbBasisClosed) -
 * [d3.interpolateHsl](https://github.com/d3/d3-interpolate#interpolateHsl) - interpolate HSL colors.
 * [d3.interpolateHslLong](https://github.com/d3/d3-interpolate#interpolateHslLong) - interpolate HSL colors, the long way.
 * [d3.interpolateLab](https://github.com/d3/d3-interpolate#interpolateLab) - interpolate Lab colors.
@@ -419,6 +439,9 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#interpolateCubehelix) - interpolate Cubehelix colors.
 * [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
 * [*interpolate*.gamma](https://github.com/d3/d3-interpolate#interpolate_gamma) - apply gamma correction during interpolation.
+* [d3.interpolateBasis](https://github.com/d3/d3-interpolate#interpolateBasis) -
+* [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate#interpolateBasisClosed) -
+* [d3.quantize](https://github.com/d3/d3-interpolate#quantize) -
 
 ## [Number Formats (d3-format)](https://github.com/d3/d3-format)
 
@@ -430,29 +453,6 @@ Format numbers for human consumption.
 * [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) - define a custom locale.
 * [*locale*.format](https://github.com/d3/d3-format#locale_format) - create a number format.
 * [*locale*.formatPrefix](https://github.com/d3/d3-format#locale_formatPrefix) - create a SI-prefix number format.
-* [d3.formatCaEs](https://github.com/d3/d3-format#formatCaEs) - the Catalan (Spain) locale.
-* [d3.formatCsCz](https://github.com/d3/d3-format#formatCsCz) - the Czech (Czech Republic) locale.
-* [d3.formatDeCh](https://github.com/d3/d3-format#formatDeCh) - the German (Switzerland) locale.
-* [d3.formatDeDe](https://github.com/d3/d3-format#formatDeDe) - the German (Germany) locale.
-* [d3.formatEnCa](https://github.com/d3/d3-format#formatEnCa) - the English (Canada) locale.
-* [d3.formatEnGb](https://github.com/d3/d3-format#formatEnGb) - the English (United Kingdom) locale.
-* [d3.formatEnUs](https://github.com/d3/d3-format#formatEnUs) - the English (United States) locale.
-* [d3.formatEsEs](https://github.com/d3/d3-format#formatEsEs) - the Spanish (Spain) locale.
-* [d3.formatFiFi](https://github.com/d3/d3-format#formatFiFi) - the Finnish (Finland) locale.
-* [d3.formatFrCa](https://github.com/d3/d3-format#formatFrCa) - the French (Canada) locale.
-* [d3.formatFrFr](https://github.com/d3/d3-format#formatFrFr) - the French (France) locale.
-* [d3.formatHeIl](https://github.com/d3/d3-format#formatHeIl) - the Hebrew (Israel) locale.
-* [d3.formatHuHu](https://github.com/d3/d3-format#formatHuHu) - the Hungarian (Hungary) locale.
-* [d3.formatItIt](https://github.com/d3/d3-format#formatItIt) - the Italian (Italy) locale.
-* [d3.formatJaJp](https://github.com/d3/d3-format#formatJaJp) - the Japanese (Japan) locale.
-* [d3.formatKoKr](https://github.com/d3/d3-format#formatKoKr) - the Korean (South Korea) locale.
-* [d3.formatMkMk](https://github.com/d3/d3-format#formatMkMk) - the Macedonian (Macedonia) locale.
-* [d3.formatNlNl](https://github.com/d3/d3-format#formatNlNl) - the Dutch (Netherlands) locale.
-* [d3.formatPlPl](https://github.com/d3/d3-format#formatPlPl) - the Polish (Poland) locale.
-* [d3.formatPtBr](https://github.com/d3/d3-format#formatPtBr) - the Portuguese (Brazil) locale.
-* [d3.formatRuRu](https://github.com/d3/d3-format#formatRuRu) - the Russian (Russia) locale.
-* [d3.formatSvSe](https://github.com/d3/d3-format#formatSvSe) - the Swedish (Sweden) locale.
-* [d3.formatZhCn](https://github.com/d3/d3-format#formatZhCn) - the Chinese (China) locale.
 * [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) - compute decimal precision for fixed-point notation.
 * [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) - compute decimal precision for SI-prefix notation.
 * [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) - compute significant digits for rounded notation.
@@ -490,7 +490,9 @@ Two-dimensional recursive spatial subdivision.
 * [*quadtree*.x](https://github.com/d3/d3-quadtree#quadtree_x) - set the *x* accessor.
 * [*quadtree*.y](https://github.com/d3/d3-quadtree#quadtree_y) - set the *y* accessor.
 * [*quadtree*.add](https://github.com/d3/d3-quadtree#quadtree_add) - add a datum to a quadtree.
+* [*quadtree*.addAll](https://github.com/d3/d3-quadtree#quadtree_addAll) -
 * [*quadtree*.remove](https://github.com/d3/d3-quadtree#quadtree_remove) - remove a datum from a quadtree.
+* [*quadtree*.removeAll](https://github.com/d3/d3-quadtree#quadtree_removeAll) -
 * [*quadtree*.copy](https://github.com/d3/d3-quadtree#quadtree_copy) - create a copy of a quadtree.
 * [*quadtree*.root](https://github.com/d3/d3-quadtree#quadtree_root) - get the quadtree’s root node.
 * [*quadtree*.data](https://github.com/d3/d3-quadtree#quadtree_data) - retrieve all data from the quadtree.
@@ -613,14 +615,14 @@ Map a continuous, quantitative domain to a continuous range.
 Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleSequential](https://github.com/d3/d3-scale#scaleSequential) - create a sequential scale.
-* [d3.scaleViridis](https://github.com/d3/d3-scale#scaleViridis) - a dark-to-light color scheme.
-* [d3.scaleInferno](https://github.com/d3/d3-scale#scaleInferno) - a dark-to-light color scheme.
-* [d3.scaleMagma](https://github.com/d3/d3-scale#scaleMagma) - a dark-to-light color scheme.
-* [d3.scalePlasma](https://github.com/d3/d3-scale#scalePlasma) - a dark-to-light color scheme.
-* [d3.scaleWarm](https://github.com/d3/d3-scale#scaleWarm) - a rotating-hue color scheme.
-* [d3.scaleCool](https://github.com/d3/d3-scale#scaleCool) - a rotating-hue color scheme.
-* [d3.scaleRainbow](https://github.com/d3/d3-scale#scaleRainbow) - a cyclical rotating-hue color scheme.
-* [d3.scaleCubehelix](https://github.com/d3/d3-scale#scaleCubehelix) - a dark-to-light, rotating-hue color scheme.
+* [d3.interpolateViridis](https://github.com/d3/d3-scale#interpolateViridis) - a dark-to-light color scheme.
+* [d3.interpolateInferno](https://github.com/d3/d3-scale#interpolateInferno) - a dark-to-light color scheme.
+* [d3.interpolateMagma](https://github.com/d3/d3-scale#interpolateMagma) - a dark-to-light color scheme.
+* [d3.interpolatePlasma](https://github.com/d3/d3-scale#interpolatePlasma) - a dark-to-light color scheme.
+* [d3.interpolateWarm](https://github.com/d3/d3-scale#interpolateWarm) - a rotating-hue color scheme.
+* [d3.interpolateCool](https://github.com/d3/d3-scale#interpolateCool) - a rotating-hue color scheme.
+* [d3.interpolateRainbow](https://github.com/d3/d3-scale#interpolateRainbow) - a cyclical rotating-hue color scheme.
+* [d3.interpolateCubehelixDefault](https://github.com/d3/d3-scale#interpolateCubehelixDefault) - a dark-to-light, rotating-hue color scheme.
 
 ### [Quantize Scales](https://github.com/d3/d3-scale#quantize-scales)
 
@@ -655,6 +657,7 @@ Map a discrete domain to a discrete range.
 
 * [d3.scaleOrdinal](https://github.com/d3/d3-scale#scaleOrdinal) - create an ordinal scale.
 * [*ordinal*](https://github.com/d3/d3-scale#_ordinal) - compute the range value corresponding to a given domain value.
+* [*ordinal*.invert](https://github.com/d3/d3-scale#ordinal_invert) -
 * [*ordinal*.domain](https://github.com/d3/d3-scale#ordinal_domain) - set the input domain.
 * [*ordinal*.range](https://github.com/d3/d3-scale#ordinal_range) - set the output range.
 * [*ordinal*.unknown](https://github.com/d3/d3-scale#ordinal_unknown) - set the output value for unknown inputs.
@@ -684,10 +687,10 @@ Map a discrete domain to a discrete range.
 * [*point*.bandwidth](https://github.com/d3/d3-scale#point_bandwidth) - returns zero.
 * [*point*.step](https://github.com/d3/d3-scale#point_step) - get the distance between the starts of adjacent points.
 * [*point*.copy](https://github.com/d3/d3-scale#point_copy) - create a copy of this scale.
-* [d3.scaleCategory10](https://github.com/d3/d3-scale#scaleCategory10) - a categorical scheme with 10 colors.
-* [d3.scaleCategory20](https://github.com/d3/d3-scale#scaleCategory20) - a categorical scheme with 20 colors.
-* [d3.scaleCategory20b](https://github.com/d3/d3-scale#scaleCategory20b) - a categorical scheme with 20 colors.
-* [d3.scaleCategory20c](https://github.com/d3/d3-scale#scaleCategory20c) - a categorical scheme with 20 colors.
+* [d3.schemeCategory10](https://github.com/d3/d3-scale#schemeCategory10) - a categorical scheme with 10 colors.
+* [d3.schemeCategory20](https://github.com/d3/d3-scale#schemeCategory20) - a categorical scheme with 20 colors.
+* [d3.schemeCategory20b](https://github.com/d3/d3-scale#schemeCategory20b) - a categorical scheme with 20 colors.
+* [d3.schemeCategory20c](https://github.com/d3/d3-scale#schemeCategory20c) - a categorical scheme with 20 colors.
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection)
 
@@ -716,6 +719,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.text](https://github.com/d3/d3-selection#selection_text) - get or set the text content.
 * [*selection*.html](https://github.com/d3/d3-selection#selection_html) - get or set the inner HTML.
 * [*selection*.append](https://github.com/d3/d3-selection#selection_append) - create, append and select new elements.
+* [*selection*.insert](https://github.com/d3/d3-selection#selection_insert) -
 * [*selection*.remove](https://github.com/d3/d3-selection#selection_remove) - remove elements from the document.
 * [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) - sort elements in the document based on data.
 * [*selection*.order](https://github.com/d3/d3-selection#selection_order) - reorders elements in the document to match the selection.
@@ -748,6 +752,14 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.nodes](https://github.com/d3/d3-selection#selection_nodes) - returns an array of all selected elements.
 * [*selection*.node](https://github.com/d3/d3-selection#selection_node) - returns the first (non-null) element.
 * [*selection*.size](https://github.com/d3/d3-selection#selection_size) - returns the count of elements.
+
+### [Local Variables](https://github.com/d3/d3-selection#local-variables)
+
+* [d3.local](https://github.com/d3/d3-selection#local) -
+* [*local*.set](https://github.com/d3/d3-selection#local_set) -
+* [*local*.get](https://github.com/d3/d3-selection#local_get) -
+* [*local*.remove](https://github.com/d3/d3-selection#local_remove) -
+* [*local*.toString](https://github.com/d3/d3-selection#local_toString) -
 
 ### [Namespaces](https://github.com/d3/d3-selection#namespaces)
 
@@ -915,28 +927,6 @@ Parse and format times, inspired by strptime and strftime.
 * [*locale*.parse](https://github.com/d3/d3-time-format#locale_parse) - create a time parser.
 * [*locale*.utcFormat](https://github.com/d3/d3-time-format#locale_utcFormat) - create a UTC formatter.
 * [*locale*.utcParse](https://github.com/d3/d3-time-format#locale_utcParse) - create a UTC parser.
-* [d3.timeFormatCaEs](https://github.com/d3/d3-time-format#timeFormatCaEs) - the Catalan (Spain) locale.
-* [d3.timeFormatDeCh](https://github.com/d3/d3-time-format#timeFormatDeCh) - the German (Switzerland) locale.
-* [d3.timeFormatDeDe](https://github.com/d3/d3-time-format#timeFormatDeDe) - the German (Germany) locale.
-* [d3.timeFormatEnCa](https://github.com/d3/d3-time-format#timeFormatEnCa) - the English (Canada) locale.
-* [d3.timeFormatEnGb](https://github.com/d3/d3-time-format#timeFormatEnGb) - the English (United Kingdom) locale.
-* [d3.timeFormatEnUs](https://github.com/d3/d3-time-format#timeFormatEnUs) - the English (United States) locale.
-* [d3.timeFormatEsEs](https://github.com/d3/d3-time-format#timeFormatEsEs) - the Spanish (Spain) locale.
-* [d3.timeFormatFiFi](https://github.com/d3/d3-time-format#timeFormatFiFi) - the Finnish (Finland) locale.
-* [d3.timeFormatFrCa](https://github.com/d3/d3-time-format#timeFormatFrCa) - the French (Canada) locale.
-* [d3.timeFormatFrFr](https://github.com/d3/d3-time-format#timeFormatFrFr) - the French (France) locale.
-* [d3.timeFormatHeIl](https://github.com/d3/d3-time-format#timeFormatHeIl) - the Hebrew (Israel) locale.
-* [d3.timeFormatHuHu](https://github.com/d3/d3-time-format#timeFormatHuHu) - the Hungarian (Hungary) locale.
-* [d3.timeFormatItIt](https://github.com/d3/d3-time-format#timeFormatItIt) - the Italian (Italy) locale.
-* [d3.timeFormatJaJp](https://github.com/d3/d3-time-format#timeFormatJaJp) - the Japanese (Japan) locale.
-* [d3.timeFormatKoKr](https://github.com/d3/d3-time-format#timeFormatKoKr) - the Korean (South Korea) locale.
-* [d3.timeFormatMkMk](https://github.com/d3/d3-time-format#timeFormatMkMk) - the Macedonian (Macedonia) locale.
-* [d3.timeFormatNlNl](https://github.com/d3/d3-time-format#timeFormatNlNl) - the Dutch (Netherlands) locale.
-* [d3.timeFormatPlPl](https://github.com/d3/d3-time-format#timeFormatPlPl) - the Polish (Poland) locale.
-* [d3.timeFormatPtBr](https://github.com/d3/d3-time-format#timeFormatPtBr) - the Portuguese (Brazil) locale.
-* [d3.timeFormatRuRu](https://github.com/d3/d3-time-format#timeFormatRuRu) - the Russian (Russia) locale.
-* [d3.timeFormatSvSe](https://github.com/d3/d3-time-format#timeFormatSvSe) - the Swedish (Sweden) locale.
-* [d3.timeFormatZhCn](https://github.com/d3/d3-time-format#timeFormatZhCn) - the Chinese (China) locale.
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time)
 

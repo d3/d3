@@ -8,6 +8,7 @@ rollup.rollup({
   plugins: [nodeResolve({jsnext: true})]
 }).then(function(bundle) {
   return bundle.write({
+    banner: process.argv[2],
     format: "umd",
     moduleName: "d3",
     dest: "build/d3.js"
