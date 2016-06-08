@@ -1,4 +1,4 @@
-# Changes In D3 4.0
+# Changes in D3 4.0
 
 N.B.: This document is a work-in-progress. It does not yet cover all API changes.
 
