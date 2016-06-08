@@ -657,7 +657,6 @@ Map a discrete domain to a discrete range.
 
 * [d3.scaleOrdinal](https://github.com/d3/d3-scale#scaleOrdinal) - create an ordinal scale.
 * [*ordinal*](https://github.com/d3/d3-scale#_ordinal) - compute the range value corresponding to a given domain value.
-* [*ordinal*.invert](https://github.com/d3/d3-scale#ordinal_invert) -
 * [*ordinal*.domain](https://github.com/d3/d3-scale#ordinal_domain) - set the input domain.
 * [*ordinal*.range](https://github.com/d3/d3-scale#ordinal_range) - set the output range.
 * [*ordinal*.unknown](https://github.com/d3/d3-scale#ordinal_unknown) - set the output value for unknown inputs.
