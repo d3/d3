@@ -50,9 +50,25 @@ The non-minified default bundle is no longer mangled by UglifyJS, making it more
 
 ## d3-array
 
-A new [d3.scan](https://github.com/d3/d3-array#scan) method performs a linear scan of an array, returning the index of the least element according to the specified comparator. This is similar to [d3.min](https://github.com/d3/d3-array#min) and [d3.max](https://github.com/d3/d3-array#max), except you can use it to find an extreme element, rather than just calculate an extreme value.
+The new [d3.scan](https://github.com/d3/d3-array#scan) method performs a linear scan of an array, returning the index of the least element according to the specified comparator. This is similar to [d3.min](https://github.com/d3/d3-array#min) and [d3.max](https://github.com/d3/d3-array#max), except you can use it to find an extreme element, rather than just calculate an extreme value.
 
-New [d3.ticks](https://github.com/d3/d3-array#ticks) and [d3.tickStep](https://github.com/d3/d3-array#tickStep) methods are useful for generating human-readable numeric ticks. These methods are a low-level alternative to [*continuous*.ticks](https://github.com/d3/d3-scale#continuous_ticks), avoiding [d3-scale](https://github.com/d3/d3-scale)’s dependencies.
+```js
+var data = [
+  {name: "Alice", value: 2},
+  {name: "Bob", value: 3},
+  {name: "Carol", value: 1},
+  {name: "Dwayne", value: 5}
+];
+
+var i = d3.scan(data, function(a, b) { return a.value - b.value; }); // 2
+data[i]; // {name: "Carol", value: 1}
+```
+
+The new [d3.ticks](https://github.com/d3/d3-array#ticks) and [d3.tickStep](https://github.com/d3/d3-array#tickStep) methods are useful for generating human-readable numeric ticks. These methods are a low-level alternative to [*continuous*.ticks](https://github.com/d3/d3-scale#continuous_ticks), avoiding [d3-scale](https://github.com/d3/d3-scale)’s dependencies.
+
+```js
+var ticks = d3.ticks(0, 10, 5); // [0, 2, 4, 6, 8, 10]
+```
 
 The [d3.range](https://github.com/d3/d3-array#range) method no longer makes an elaborate (and brittle) attempt to avoid floating-point error when *step* is not an integer. The returned values are strictly defined as *start* + *i* \* *step*, where *i* is an integer. (Learn more about [floating point math](http://0.30000000000000004.com/).)
 
