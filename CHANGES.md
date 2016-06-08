@@ -16,15 +16,36 @@ If you don’t care about modularity, you can mostly ignore this change and keep
 
 ## d3-array
 
-* d3.layout.histogram ↦ d3.histogram
+* d3.layout.histogram ↦ d3.histogram; redesign histogram API
+* change d3.range
+* change accessor callback pattern
+* add d3.scan
+* add d3.ticks
+* add d3.tickStep
 
 ## d3-axis
 
-* d3.svg.axis ↦ d3.axisTop, d3.axisRight, d3.axisBottom, d3.axisLeft
+* d3.svg.axis, *axis*.orient ↦ d3.axisTop, d3.axisRight, d3.axisBottom, d3.axisLeft
+* add *axis*.tickArguments
+* *axis*.tickSize now only takes one argument
+* *axis*.innerTickSize ↦ *axis*.tickSizeInner
+* *axis*.outerTickSize ↦ *axis*.tickSizeOuter
+* improve the default appearance of the axis
 
 ## d3-brush
 
-* d3.svg.brush ↦ d3.brush
+* d3.svg.brush, *brush*.x, *brush*.y ↦ d3.brush, d3.brushX, d3.brushY
+* *brush*.event ↦ *brush*.move
+* *brushstart* event ↦ *start* event
+* *brushend* event ↦ *end* event
+* add *brush*.handleSize
+* add *brush*.filter; ignore right-click by default
+* improve the default appearance of the brush
+* improve brush interaction (e.g., SHIFT key)
+* brushes no longer use scales; they operate in screen coordinates
+* brushes no longer store state internally; it is stored on applied elements
+* remove *brush*.clamp; always clamps to the brushable region
+* consume handled events
 
 ## d3-chord
 
