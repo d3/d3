@@ -12,18 +12,28 @@ The [default bundle](https://d3js.org/d3.v4.0.0-alpha.45.js) of D3 4.0 convenien
 
 Small files are nice, but modularity is less about faster load times and more about making D3 *fun* again. Microlibraries are easier to understand, develop and test. They make it easier for new people to get involved and contribute. I want to reduce the distinction between a “core module” and a “plugin”, and increase the pace of development in D3 features.
 
-If you don’t care about modularity, you can mostly ignore this change and keep using the default bundle. However, there’s an unavoidable consequence: every symbol in D3 4.0 now shares a flat namespace rather than the somewhat nesting employed in D3 3.x. For example, d3.scale.linear is now d3.scaleLinear, and d3.layout.treemap is now d3.treemap. There have also been significant changes (hopefully improvements!) to D3’s functionality. Rather than list all the renamed symbols here, I’ll cover the changes in the sections below.
+If you don’t care about modularity, you can mostly ignore this change and keep using the default bundle. However, there’s an unavoidable consequence of adopting ES6 modules: every symbol in D3 4.0 now shares a flat namespace rather than the nesting employed in D3 3.x. For example, d3.scale.linear is now d3.scaleLinear, and d3.layout.treemap is now d3.treemap. There have also been significant changes (hopefully improvements) to D3’s features! Rather than list all the renamed symbols here, I’ll cover the changes in the sections below.
 
-## d3-timer
+## d3-array
 
-* d3.timer.flush ↦ d3.timerFlush
+* d3.layout.histogram ↦ d3.histogram
 
-## d3-random
+## d3-axis
 
-* d3.random.normal ↦ d3.randomNormal
-* d3.random.logNormal ↦ d3.randomLogNormal
-* d3.random.bates ↦ d3.randomBates
-* d3.random.irwinHall ↦ d3.randomIrwinHall
+* d3.svg.axis ↦ d3.axisTop, d3.axisRight, d3.axisBottom, d3.axisLeft
+
+## d3-brush
+
+* d3.svg.brush ↦ d3.brush
+
+## d3-chord
+
+* d3.svg.chord ↦ d3.ribbon (TODO)
+* d3.layout.chord ↦ d3.chord (TODO)
+
+## d3-collection
+
+## d3-color
 
 ## d3-dsv
 
@@ -35,6 +45,71 @@ If you don’t care about modularity, you can mostly ignore this change and keep
 * d3.tsv.parseRows ↦ d3.tsvParseRows
 * d3.tsv.format ↦ d3.tsvFormat
 * d3.tsv.formatRows ↦ d3.tsvFormatRows
+
+## d3-drag
+
+* d3.behavior.drag ↦ d3.drag
+
+## d3-ease
+
+## d3-force
+
+* d3.layout.force ↦ d3.forceSimulation
+
+## d3-geo
+
+* d3.geo.graticule ↦ d3.geoGraticule
+* d3.geo.circle ↦ d3.geoCircle
+* d3.geo.area ↦ d3.geoArea
+* d3.geo.bounds ↦ d3.geoBounds
+* d3.geo.centroid ↦ d3.geoCentroid
+* d3.geo.distance ↦ d3.geoDistance
+* d3.geo.interpolate ↦ d3.geoInterpolate
+* d3.geo.length ↦ d3.geoLength
+* d3.geo.rotation ↦ d3.geoRotation
+* d3.geo.stream ↦ d3.geoStream
+
+## d3-geo-projection
+
+* d3.geo.path ↦ d3.geoPath
+
+## d3-hierarchy
+
+* d3.layout.cluster ↦ d3.cluster
+* d3.layout.hierarchy ↦ d3.hierarchy
+* d3.layout.pack ↦ d3.pack
+* d3.layout.partition ↦ d3.partition
+* d3.layout.tree ↦ d3.tree
+* d3.layout.treemap ↦ d3.treemap
+
+## d3-interpolate
+
+* d3.interpolators -> REMOVED
+
+## d3-format
+
+## d3-path
+
+## d3-polygon
+
+* d3.geom.polygon.area ↦ d3.polygonArea
+* d3.geom.polygon.centroid ↦ d3.polygonCentroid
+* d3.geom.hull ↦ d3.polygonHull
+
+## d3-quadtree
+
+* d3.geom.quadtree ↦ d3.quadtree
+
+## d3-random
+
+* d3.random.normal ↦ d3.randomNormal
+* d3.random.logNormal ↦ d3.randomLogNormal
+* d3.random.bates ↦ d3.randomBates
+* d3.random.irwinHall ↦ d3.randomIrwinHall
+
+## d3-request
+
+* d3.xhr ↦ d3.request
 
 ## d3-scale
 
@@ -53,6 +128,8 @@ If you don’t care about modularity, you can mostly ignore this change and keep
 * d3.scale.category20c ↦ d3.schemeCategory20c
 * d3.time.scale ↦ d3.scaleTime
 
+## d3-selection
+
 ## d3-shape
 
 * d3.svg.line ↦ d3.line
@@ -66,14 +143,6 @@ If you don’t care about modularity, you can mostly ignore this change and keep
 * d3.svg.diagonal.radial ↦ REMOVED
 * d3.layout.bundle ↦ d3.curveBundle
 * d3.layout.stack ↦ d3.stack
-
-## d3-axis
-
-* d3.svg.axis ↦ d3.axisTop, d3.axisRight, d3.axisBottom, d3.axisLeft
-
-## d3-brush
-
-* d3.svg.brush ↦ d3.brush
 
 ## d3-time-format
 
@@ -160,63 +229,16 @@ If you don’t care about modularity, you can mostly ignore this change and keep
 * d3.time.year.utc ↦ d3.utcYear
 * d3.time.years.utc ↦ d3.utcYears
 
-## d3-chord
+## d3-timer
 
-* d3.svg.chord ↦ d3.ribbon (TODO)
-* d3.layout.chord ↦ d3.chord (TODO)
+* d3.timer.flush ↦ d3.timerFlush
 
-## d3-hierarchy
-
-* d3.layout.cluster ↦ d3.cluster
-* d3.layout.hierarchy ↦ d3.hierarchy
-* d3.layout.pack ↦ d3.pack
-* d3.layout.partition ↦ d3.partition
-* d3.layout.tree ↦ d3.tree
-* d3.layout.treemap ↦ d3.treemap
-
-## d3-force
-
-* d3.layout.force ↦ d3.forceSimulation
-
-## d3-array
-
-* d3.layout.histogram ↦ d3.histogram
-
-## d3-geo
-
-* d3.geo.graticule ↦ d3.geoGraticule
-* d3.geo.circle ↦ d3.geoCircle
-* d3.geo.area ↦ d3.geoArea
-* d3.geo.bounds ↦ d3.geoBounds
-* d3.geo.centroid ↦ d3.geoCentroid
-* d3.geo.distance ↦ d3.geoDistance
-* d3.geo.interpolate ↦ d3.geoInterpolate
-* d3.geo.length ↦ d3.geoLength
-* d3.geo.rotation ↦ d3.geoRotation
-* d3.geo.stream ↦ d3.geoStream
+## d3-transition
 
 ## d3-voronoi
 
 * d3.geom.voronoi ↦ d3.voronoi
 
-## d3-quadtree
-
-* d3.geom.quadtree ↦ d3.quadtree
-
-## d3-polygon
-
-* d3.geom.polygon.area ↦ d3.polygonArea
-* d3.geom.polygon.centroid ↦ d3.polygonCentroid
-* d3.geom.hull ↦ d3.polygonHull
-
-## d3-drag
-
-* d3.behavior.drag ↦ d3.drag
-
 ## d3-zoom
 
 * d3.behavior.zoom ↦ d3.zoom
-
-## d3-geo-projection
-
-* d3.geo.path ↦ d3.geoPath
