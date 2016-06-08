@@ -41,7 +41,7 @@ D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to 
 * [Queues](#queues-d3-queue)
 * [Random Numbers](#random-numbers-d3-random)
 * [Requests](#requests-d3-request)
-* [Scales](#scales-d3-scale) ([Continuous](#continuous-scales), [Sequential](#sequential-color-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales))
+* [Scales](#scales-d3-scale) ([Continuous](#continuous-scales), [Sequential](#sequential-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales))
 * [Selections](#selections-d3-selection) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#joining-data), [Events](#handling-events), [Control](#control-flow), [Local Variables](#local-variables), [Namespaces](#namespaces))
 * [Shapes](#shapes-d3-shape) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats-d3-time-format)
