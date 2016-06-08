@@ -46,6 +46,8 @@ No longer requires UTF-8 delivery: only ASCII is used. Native Greek readers must
 
 The non-minified library is no longer mangled by UglifyJS, making it much more readable, and preserving inline comments. The use of ES6 modules and [magic-string](https://github.com/Rich-Harris/magic-string) also improves readability. Not to mention nearly all of the code has been rewritten in a cleaner style. There is almost no code in D3 3.x that remains in D3 4.0.
 
+I’m not currently generating source maps, but I probably should.
+
 ## d3-array
 
 * d3.layout.histogram ↦ d3.histogram; redesign histogram API
