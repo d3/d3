@@ -8,7 +8,33 @@ D3 3.x was a monolithic library: the core functionality resided in a single [rep
 
 D3 4.0 is modular. Instead of one library, D3 now consists of many [small libraries](https://github.com/d3) that are designed to work together, but are not required to; you can pick and choose which parts to use as you see fit. Each library is maintained in a separate repository, allowing decentralized ownership and independent release cycles. Want to own a new repository in the [D3 organization](https://github.com/d3)? Let me know!
 
-The [default bundle](https://d3js.org/d3.v4.0.0-alpha.45.js) of D3 4.0 conveniently aggregates about thirty of these microlibraries. But you don’t have to use the default bundle. Custom bundles are useful for applications that use only a subset of D3’s features; for example, a React charting library might use D3’s scales and shapes, but use React instead of selections to manipulate the DOM. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!); you can `cat` them into a custom bundle; you can use powerful tools such as [Webpack](https://webpack.github.io/) or [Rollup](http://rollupjs.org/) to create optimized bundles. I recommend Rollup: the D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce the smallest bundles!
+The [default bundle](https://d3js.org/d3.v4.0.0-alpha.45.js) of D3 4.0 conveniently aggregates about thirty of these microlibraries.
+
+```html
+<script src="https://d3js.org/d3.v4.0.0-alpha.45.js"></script>
+<script>
+
+d3.select("body")
+  .append("p")
+    .text("Hello, world!");
+
+</script>
+```
+
+But you don’t have to use the default bundle. Custom bundles are useful for applications that use only a subset of D3’s features; for example, a React charting library might use D3’s scales and shapes, but use React instead of selections to manipulate the DOM. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!). For example, if you’re just using d3-selection, load it directly (5KB) instead of loading all of D3 (64KB):
+
+```html
+<script src="https://d3js.org/d3-selection.v0.8.min.js"></script>
+<script>
+
+d3.select("body")
+  .append("p")
+    .text("Hello, world!");
+
+</script>
+```
+
+You can also `cat` them into a custom bundle, or use powerful tools such as [Webpack](https://webpack.github.io/) or [Rollup](http://rollupjs.org/) to create [optimized bundles](https://bl.ocks.org/mbostock/bb09af4c39c79cffcde4). I recommend Rollup: the D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce the smallest bundles!
 
 Small files are nice, but modularity is less about faster load times and more about making D3 *fun* again. Microlibraries are easier to understand, develop and test. They make it easier for new people to get involved and contribute. I want to reduce the distinction between a “core module” and a “plugin”, and increase the pace of development in D3 features.
 
