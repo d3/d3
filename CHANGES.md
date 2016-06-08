@@ -6,9 +6,9 @@ N.B.: This document is a work-in-progress. It does not yet cover all API changes
 
 D3 3.x was a monolithic library: the core functionality resided in a single [repository](https://github.com/d3/d3) and was published in a [single file](https://d3js.org/d3.v3.js). It was possible to create a custom build using a [nonstandard tool](https://github.com/mbostock/smash), but not easy, and few did. (There were also plugins, but these could only add features, and had their own [monolithic repository](https://github.com/d3/d3-plugins).)
 
-D3 4.0 is modular. Instead of one library, D3 now consists of many [small libraries](https://github.com/d3) that are designed to work together, but are not required to; you can pick and choose which parts to use as you see fit. Each library is maintained in a separate repository, allowing decentralized ownership and independent release cycles. Want to own a new repository in the [D3 organization](https://github.com/d3)? Let me know!
+D3 4.0 is modular. Instead of one library, D3 now consists of many [small libraries](https://github.com/d3) that are designed to work together, but are not required to; you can pick and choose which parts to use as you see fit. Each library is maintained in a separate repository, allowing decentralized ownership and independent release cycles. Want to own a new repository in the [D3 organization](https://github.com/d3)? [Let me know!](https://twitter.com/mbostock)
 
-The [default bundle](https://d3js.org/d3.v4.0.0-alpha.45.js) of D3 4.0 conveniently aggregates about thirty of these microlibraries.
+The [default bundle](https://d3js.org/d3.v4.0.0-alpha.45.js) of D3 4.0 conveniently aggregates [about thirty](https://github.com/d3/d3/blob/master/index.js) of these microlibraries.
 
 ```html
 <script src="https://d3js.org/d3.v4.0.0-alpha.45.js"></script>
@@ -34,9 +34,9 @@ d3.select("body")
 </script>
 ```
 
-You can also `cat` them into a custom bundle, or use powerful tools such as [Webpack](https://webpack.github.io/) or [Rollup](http://rollupjs.org/) to create [optimized bundles](https://bl.ocks.org/mbostock/bb09af4c39c79cffcde4). I recommend Rollup: the D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce the smallest bundles!
+You can also `cat` D3 microlibraries into a custom bundle, or use tools such as [Webpack](https://webpack.github.io/) or [Rollup](http://rollupjs.org/) to create [optimized bundles](https://bl.ocks.org/mbostock/bb09af4c39c79cffcde4). I recommend Rollup: the D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce the smallest bundles!
 
-Small files are nice, but modularity is less about faster load times and more about making D3 *fun* again. Microlibraries are easier to understand, develop and test. They make it easier for new people to get involved and contribute. I want to reduce the distinction between a “core module” and a “plugin”, and increase the pace of development in D3 features.
+Small files are nice, but modularity is also about making D3 *fun* again. Microlibraries are easier to understand, develop and test. They make it easier for new people to get involved and contribute. I want to reduce the distinction between a “core module” and a “plugin”, and increase the pace of development in D3 features.
 
 If you don’t care about modularity, you can mostly ignore this change and keep using the default bundle. However, there’s an unavoidable consequence of adopting ES6 modules: every symbol in D3 4.0 now shares a flat namespace rather than the nesting employed in D3 3.x. For example, d3.scale.linear is now d3.scaleLinear, and d3.layout.treemap is now d3.treemap. There have also been significant changes (hopefully improvements) to D3’s features! Rather than list all the renamed symbols here, I’ll cover the changes in the sections below.
 
