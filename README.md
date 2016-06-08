@@ -112,21 +112,6 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
 
-## [Brushes (d3-brush)](https://github.com/d3/d3-brush)
-
-Select a one- or two-dimensional region using the mouse or touch.
-
-* [d3.brush](https://github.com/d3/d3-brush#brush) -
-* [d3.brushX](https://github.com/d3/d3-brush#brushX) -
-* [d3.brushY](https://github.com/d3/d3-brush#brushY) -
-* [*brush*](https://github.com/d3/d3-brush#_brush) -
-* [*brush*.move](https://github.com/d3/d3-brush#brush_move) -
-* [*brush*.extent](https://github.com/d3/d3-brush#brush_extent) -
-* [*brush*.filter](https://github.com/d3/d3-brush#brush_filter) -
-* [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) -
-* [*brush*.on](https://github.com/d3/d3-brush#brush_on) -
-* [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) -
-
 ## [Axes (d3-axis)](https://github.com/d3/d3-axis)
 
 Human-readable reference marks for scales.
@@ -145,6 +130,21 @@ Human-readable reference marks for scales.
 * [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) - set the size of inner ticks.
 * [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) - set the size of outer (extent) ticks.
 * [*axis*.tickPadding](https://github.com/d3/d3-axis#axis_tickPadding) - set the padding between ticks and labels.
+
+## [Brushes (d3-brush)](https://github.com/d3/d3-brush)
+
+Select a one- or two-dimensional region using the mouse or touch.
+
+* [d3.brush](https://github.com/d3/d3-brush#brush) -
+* [d3.brushX](https://github.com/d3/d3-brush#brushX) -
+* [d3.brushY](https://github.com/d3/d3-brush#brushY) -
+* [*brush*](https://github.com/d3/d3-brush#_brush) -
+* [*brush*.move](https://github.com/d3/d3-brush#brush_move) -
+* [*brush*.extent](https://github.com/d3/d3-brush#brush_extent) -
+* [*brush*.filter](https://github.com/d3/d3-brush#brush_filter) -
+* [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) -
+* [*brush*.on](https://github.com/d3/d3-brush#brush_on) -
+* [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) -
 
 ## [Collections (d3-collection)](https://github.com/d3/d3-collection)
 
