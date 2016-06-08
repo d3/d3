@@ -84,7 +84,7 @@ If you don’t care about modularity, you can mostly ignore this change and keep
 
 ## d3-interpolate
 
-* d3.interpolators -> REMOVED
+* d3.interpolators ↦ REMOVED
 
 ## d3-format
 
