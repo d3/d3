@@ -86,14 +86,62 @@ Rather than exposing *bin*.x and *bin*.dx on each returned bin, the histogram ex
 
 The *histogram*.range method has been renamed [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) for consistency with scales. The *histogram*.bins method has been renamed [*histogram*.thresholds](https://github.com/d3/d3-array#histogram_thresholds), and no longer accepts an upper value: *n* thresholds will produce *n* + 1 bins. If you specify a desired number of bins rather than thresholds, d3.histogram now uses [d3.ticks](https://github.com/d3/d3-array#ticks) to compute nice bin thresholds. In addition to the default Sturges’ formula, D3 now implements the [Freedman-Diaconis rule](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) and [Scott’s normal reference rule](https://github.com/d3/d3-array#thresholdScott).
 
-## d3-axis
+## Axes (d3-axis)
 
-* d3.svg.axis, *axis*.orient ↦ d3.axisTop, d3.axisRight, d3.axisBottom, d3.axisLeft
+In place of d3.svg.axis and *axis*.orient, D3 4.0 now provides four constructors for each orientation: [d3.axisTop](https://github.com/d3/d3-axis#axisTop), [d3.axisRight](https://github.com/d3/d3-axis#axisRight), [d3.axisBottom](https://github.com/d3/d3-axis#axisBottom), [d3.axisLeft](https://github.com/d3/d3-axis#axisLeft). You can now pass a scale directly to the axis constructor. 
+
+To render axes in D3 3.x, you needed to not only instantiate the axis, but also style them:
+
+```html
+<style>
+  
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.axis text {
+  font: 10px sans-serif;
+}
+
+</style>
+<script>
+
+d3.select(".axis")
+    .call(d3.svg.axis()
+        .scale(x)
+        .orient("bottom"));
+
+</script>
+```
+
+If you forgot to style the axes, you saw this:
+
+<img src="https://raw.githubusercontent.com/d3/d3/master/img/axis-v3.png" width="100%" height="105">
+
+D3 4.0 provides default styles and shorter syntax, so you can reduce all this to:
+
+```html
+<script>
+
+d3.select(".axis")
+    .call(d3.axisBottom(x));
+
+</script>
+```
+
+And you get this:
+
+<img src="https://raw.githubusercontent.com/d3/d3/master/img/axis-v4.png" width="100%" height="105">
+
+You can still override the styles either through CSS or by modifying the axis elements. The new default axis appearance also fixes a common crisp-edges rendering issue on Safari where the axis would be drawn two-pixels thick.
+
 * add *axis*.tickArguments
 * *axis*.tickSize now only takes one argument
 * *axis*.innerTickSize ↦ *axis*.tickSizeInner
 * *axis*.outerTickSize ↦ *axis*.tickSizeOuter
-* improve the default appearance of the axis
 
 ## d3-brush
 
