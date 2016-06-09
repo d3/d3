@@ -21,7 +21,7 @@ d3.select("body")
 </script>
 ```
 
-But you don’t have to use the default bundle. Custom bundles are useful for applications that use a subset of D3’s features; for example, a React charting library might use D3’s scales and shapes, but use React instead of selections to manipulate the DOM. If you’re just using [d3-selection](https://github.com/d3/d3-selection), it’s only 5KB instead of 64KB for the default bundle. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
+But you don’t have to use the default bundle. Custom bundles are useful for applications that use a subset of D3’s features; for example, a React charting library might use D3’s scales and shapes, but use React instead of selections to manipulate the DOM. Or if you’re just using [d3-selection](https://github.com/d3/d3-selection), it’s only 5KB instead of 64KB for the default bundle. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
 
 ```html
 <script src="https://d3js.org/d3-selection.v0.8.min.js"></script>
@@ -34,7 +34,7 @@ d3.select("body")
 </script>
 ```
 
-You can also `cat` D3 microlibraries into a custom bundle, or use tools such as [Webpack](https://webpack.github.io/) or [Rollup](http://rollupjs.org/) to create [optimized bundles](https://bl.ocks.org/mbostock/bb09af4c39c79cffcde4). The D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce the smallest bundles! (The adoption of ES6 modules also means D3 is now written exclusively in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).)
+You can also `cat` D3 microlibraries into a custom bundle, or use tools such as [Webpack](https://webpack.github.io/) or [Rollup](http://rollupjs.org/) to create [optimized bundles](https://bl.ocks.org/mbostock/bb09af4c39c79cffcde4). The D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce the smallest bundles!
 
 Small files are nice, but modularity is also about making D3 *fun* again. Microlibraries are easier to understand, develop and test. They make it easier for new people to get involved and contribute. They reduce the distinction between a “core module” and a “plugin”, and increase the pace of development in D3 features.
 
@@ -42,11 +42,11 @@ If you don’t care about modularity, you can mostly ignore this change and keep
 
 ## Coding Style
 
-D3 3.x used Unicode variable names, such as τ and π, for a concise representation of mathematical operations. A downside of this approach was that a SyntaxError would occur if you loaded the non-minified D3 using ISO-8859-1 instead of UTF-8. D3 4.0 no longer requires UTF-8: only ASCII is used internally.
+The adoption of ES6 modules means that D3 is now written exclusively in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
 
-The non-minified default bundle is no longer mangled by UglifyJS, making it more readable and preserving inline comments. The use of ES6 modules and [magic-string](https://github.com/Rich-Harris/magic-string) also improves readability. Furthermore, nearly all of the code from D3 3.x has been rewritten and improved.
+D3 3.x used Unicode variable names, such as τ and π, for a concise representation of mathematical operations. A downside of this approach was that a SyntaxError would occur if you loaded the non-minified D3 using ISO-8859-1 instead of UTF-8. D3 3.x also used Unicode string literals, such as the SI-prefix µ for 1e-6. D3 4.0 uses only ASCII variable names and ASCII string literals (see [rollup-plugin-ascii](https://github.com/mbostock/rollup-plugin-ascii)), avoiding these encoding problems.
 
-(I’m not currently generating source maps, but I probably should.)
+The non-minified default bundle is no longer mangled by UglifyJS, making it more readable and preserving inline comments. The use of ES6 modules and [magic-string](https://github.com/Rich-Harris/magic-string) also improves readability. Furthermore, nearly all of the code from D3 3.x has been rewritten and improved. (I’m not currently generating source maps, but I probably should.)
 
 ## d3-array
 
