@@ -68,7 +68,7 @@ var i = d3.scan(data, function(a, b) { return a.value - b.value; }); // 2
 data[i]; // {name: "Carol", value: 1}
 ```
 
-The new [d3.ticks](https://github.com/d3/d3-array#ticks) and [d3.tickStep](https://github.com/d3/d3-array#tickStep) methods are useful for generating human-readable numeric ticks. These methods are a low-level alternative to [*continuous*.ticks](https://github.com/d3/d3-scale#continuous_ticks), avoiding [d3-scale](https://github.com/d3/d3-scale)’s dependencies.
+The new [d3.ticks](https://github.com/d3/d3-array#ticks) and [d3.tickStep](https://github.com/d3/d3-array#tickStep) methods are useful for generating human-readable numeric ticks. These methods are a low-level alternative to [*continuous*.ticks](https://github.com/d3/d3-scale#continuous_ticks), avoiding [d3-scale](https://github.com/d3/d3-scale)’s dependencies. The new implementation is also more accurate, returning the optimal number of ticks as measured by relative error.
 
 ```js
 var ticks = d3.ticks(0, 10, 5); // [0, 2, 4, 6, 8, 10]
