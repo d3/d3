@@ -262,6 +262,23 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-selection
 
+* immutable; *selection*.data returns a new selection
+* only one class of selection; entering nodes are placeholders
+* *selection*.enter and *selection*.exit are empty by default (not error)
+* *selection*.filter preserves index
+* *selection*.append preserves relative order
+* no *enter*.append magic; use *selection*.merge
+* change how *selection*.data handles duplicate keys
+* d3.matcher, d3.selector, d3.creator
+* no longer extends Array using prototype injection
+* multi-value map methods extracted to d3-selection-multi
+* *selection*.raise, *selection*.lower
+* *selection*.dispatch
+* *selection*.nodes
+* d3.local for local variables
+* d3.ns.qualify ↦ d3.namespace
+* d3.ns.prefix ↦ d3.namespaces
+
 ## d3-shape
 
 * d3.svg.line ↦ d3.line
