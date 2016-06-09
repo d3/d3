@@ -138,6 +138,8 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-brush
 
+TODO
+
 * d3.svg.brush, *brush*.x, *brush*.y ↦ d3.brush, d3.brushX, d3.brushY
 * *brush*.event ↦ *brush*.move
 * *brushstart* event ↦ *start* event
@@ -153,21 +155,43 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-chord
 
-* d3.svg.chord ↦ d3.ribbon (TODO)
-* d3.layout.chord ↦ d3.chord (TODO)
+TODO
+
+* d3.svg.chord ↦ d3.ribbon
+* d3.layout.chord ↦ d3.chord
 
 ## d3-collection
 
-* *map*.forEach ↦ *map*.each
-* *set*.forEach ↦ *set*.each
-* *map*.clear
-* *set*.clear
-* *map*.set and *set*.add chaining
-* d3.map and d3.set constructors
+The [d3.set](https://github.com/d3/d3-collection#set) constructor now accepts an existing set for making a copy, just as [d3.map](https://github.com/d3/d3-collection#map) can be used to copy a map. If you pass an array to d3.set,  you can now also pass an array accessor for extracting values from the array. This accessor takes the standard arguments: the current element (*d*), the index (*i*), and the array (*data*), with *this* undefined. For example:
+
+```js
+var yields = [
+  {yield: 22.13333, variety: "Manchuria",        year: 1932, site: "Grand Rapids"},
+  {yield: 26.76667, variety: "Peatland",         year: 1932, site: "Grand Rapids"},
+  {yield: 28.10000, variety: "No. 462",          year: 1931, site: "Duluth"},
+  {yield: 38.50000, variety: "Svansota",         year: 1932, site: "Waseca"},
+  {yield: 40.46667, variety: "Svansota",         year: 1931, site: "Crookston"},
+  {yield: 29.86667, variety: "Peatland",         year: 1931, site: "Morris"},
+  {yield: 36.03333, variety: "Peatland",         year: 1932, site: "Waseca"},
+  {yield: 34.46667, variety: "Wisconsin No. 38", year: 1931, site: "Grand Rapids"}
+];
+
+var sites = d3.set(yields, function(d) { return d.site; }); // ["Grand Rapids", "Duluth", "Waseca", "Crookston", "Morris"]
+```
+
+The d3.map constructor also follows the standard array accessor argument pattern.
+
+The *map*.forEach and *set*.forEach methods have been renamed to [*map*.each](https://github.com/d3/d3-collection#map_each) and [*set*.each](https://github.com/d3/d3-collection#set_each) respectively. In addition, the order of arguments for *map*.each has been changed to *value*, *key* and *map*, while the order of arguments for *set*.each is now *value*, *value* and *set*. This is closer to ES6 [*map*.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach) and [*set*.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/forEach). Also like ES6 Map and Set, *map*.set and *set*.add now return the current collection (rather than the added value) to facilitate method chaining. New [*map*.clear](https://github.com/d3/d3-collection#map_clear) and [*set*.clear](https://github.com/d3/d3-collection#set_clear) methods can be used to empty collections.
+
+The [*nest*.map](https://github.com/d3/d3-collection#nest_map) method now always returns a d3.map instance. For a plain object, use [*nest*.object](https://github.com/d3/d3-collection#nest_object) instead. When used in conjunction with [*nest*.rollup](https://github.com/d3/d3-collection#nest_rollup), [*nest*.entries](https://github.com/d3/d3-collection#nest_entries) now returns {key, value} objects for the leaf entries, instead of {key, values}.
 
 ## d3-color
 
+TODO
+
 ## d3-dsv
+
+TODO
 
 * d3.csv.parse ↦ d3.csvParse
 * d3.csv.parseRows ↦ d3.csvParseRows
@@ -180,15 +204,23 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-drag
 
+TODO
+
 * d3.behavior.drag ↦ d3.drag
 
 ## d3-ease
 
+TODO
+
 ## d3-force
+
+TODO
 
 * d3.layout.force ↦ d3.forceSimulation
 
 ## d3-geo
+
+TODO
 
 * d3.geo.graticule ↦ d3.geoGraticule
 * d3.geo.circle ↦ d3.geoCircle
@@ -203,9 +235,13 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-geo-projection
 
+TODO
+
 * d3.geo.path ↦ d3.geoPath
 
 ## d3-hierarchy
+
+TODO
 
 * d3.layout.cluster ↦ d3.cluster
 * d3.layout.hierarchy ↦ d3.hierarchy
@@ -216,13 +252,21 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-interpolate
 
+TODO
+
 * d3.interpolators ↦ REMOVED
 
 ## d3-format
 
+TODO
+
 ## d3-path
 
+TODO
+
 ## d3-polygon
+
+TODO
 
 * d3.geom.polygon.area ↦ d3.polygonArea
 * d3.geom.polygon.centroid ↦ d3.polygonCentroid
@@ -230,9 +274,13 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-quadtree
 
+TODO
+
 * d3.geom.quadtree ↦ d3.quadtree
 
 ## d3-random
+
+TODO
 
 * d3.random.normal ↦ d3.randomNormal
 * d3.random.logNormal ↦ d3.randomLogNormal
@@ -241,9 +289,13 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-request
 
+TODO
+
 * d3.xhr ↦ d3.request
 
 ## d3-scale
+
+TODO
 
 * d3.scale.linear ↦ d3.scaleLinear
 * d3.scale.sqrt ↦ d3.scaleSqrt
@@ -261,6 +313,8 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 * d3.time.scale ↦ d3.scaleTime
 
 ## d3-selection
+
+TODO
 
 * immutable; *selection*.data returns a new selection
 * only one class of selection; entering nodes are placeholders
@@ -281,6 +335,8 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-shape
 
+TODO
+
 * d3.svg.line ↦ d3.line
 * d3.svg.line.radial ↦ d3.radialLine
 * d3.svg.area ↦ d3.area
@@ -295,12 +351,16 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-time-format
 
+TODO
+
 * d3.time.format ↦ d3.timeFormat
 * d3.time.format.multi ↦ REMOVED
 * d3.time.format.utc ↦ d3.utcFormat
 * d3.time.format.iso ↦ d3.isoFormat
 
 ## d3-time
+
+TODO
 
 * d3.time.interval ↦ d3.timeInterval
 * d3.time.day ↦ d3.timeDay
@@ -380,14 +440,22 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## d3-timer
 
+TODO
+
 * d3.timer.flush ↦ d3.timerFlush
 
 ## d3-transition
 
+TODO
+
 ## d3-voronoi
+
+TODO
 
 * d3.geom.voronoi ↦ d3.voronoi
 
 ## d3-zoom
+
+TODO
 
 * d3.behavior.zoom ↦ d3.zoom
