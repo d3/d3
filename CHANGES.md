@@ -46,11 +46,11 @@ The adoption of ES6 modules means that D3 is now written exclusively in [strict 
 
 D3 3.x used Unicode variable names, such as τ and π, for a concise representation of mathematical operations. A downside of this approach was that a SyntaxError would occur if you loaded the non-minified D3 using ISO-8859-1 instead of UTF-8. D3 3.x also used Unicode string literals, such as the SI-prefix µ for 1e-6. D3 4.0 uses only ASCII variable names and ASCII string literals (see [rollup-plugin-ascii](https://github.com/mbostock/rollup-plugin-ascii)), avoiding these encoding problems.
 
-The non-minified default bundle is no longer mangled by UglifyJS, making it more readable and preserving inline comments. The use of ES6 modules and [magic-string](https://github.com/Rich-Harris/magic-string) also improves readability. Furthermore, nearly all of the code from D3 3.x has been rewritten and improved. (I’m not currently generating source maps, but I probably should.)
+The non-minified default bundle is no longer mangled by UglifyJS, making it more readable and preserving inline comments. The use of ES6 modules also improves readability. Furthermore, nearly all of the code from D3 3.x has been rewritten and improved.
 
 ## d3-array
 
-The new [d3.scan](https://github.com/d3/d3-array#scan) method performs a linear scan of an array, returning the index of the least element according to the specified comparator. This is similar to [d3.min](https://github.com/d3/d3-array#min) and [d3.max](https://github.com/d3/d3-array#max), except you can use it to find an extreme element, rather than just calculate an extreme value.
+The new [d3.scan](https://github.com/d3/d3-array#scan) method performs a linear scan of an array, returning the index of the least element according to the specified comparator. This is similar to [d3.min](https://github.com/d3/d3-array#min) and [d3.max](https://github.com/d3/d3-array#max), except you can use it to find the position of an extreme element, rather than just calculate an extreme value.
 
 ```js
 var data = [
@@ -70,11 +70,13 @@ The new [d3.ticks](https://github.com/d3/d3-array#ticks) and [d3.tickStep](https
 var ticks = d3.ticks(0, 10, 5); // [0, 2, 4, 6, 8, 10]
 ```
 
-The [d3.range](https://github.com/d3/d3-array#range) method no longer makes an elaborate (and brittle) attempt to avoid floating-point error when *step* is not an integer. The returned values are strictly defined as *start* + *i* \* *step*, where *i* is an integer. (Learn more about [floating point math](http://0.30000000000000004.com/).)
+The [d3.range](https://github.com/d3/d3-array#range) method no longer makes an elaborate attempt to avoid floating-point error when *step* is not an integer. The returned values are strictly defined as *start* + *i* \* *step*, where *i* is an integer. (Learn more about [floating point math](http://0.30000000000000004.com/).)
 
 The method signature for optional accessors has been changed to be more consistent with array methods such as [*array*.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach): the accessor is passed the current element (*d*), the index (*i*), and the array (*array*), with *this* as undefined. This affects [d3.min](https://github.com/d3/d3-array#min), [d3.max](https://github.com/d3/d3-array#max), [d3.extent](https://github.com/d3/d3-array#extent), [d3.sum](https://github.com/d3/d3-array#sum), [d3.mean](https://github.com/d3/d3-array#mean), [d3.median](https://github.com/d3/d3-array#median), [d3.quantile](https://github.com/d3/d3-array#quantile), [d3.variance](https://github.com/d3/d3-array#variance) and [d3.deviation](https://github.com/d3/d3-array#deviation).
 
-The new [d3.histogram](https://github.com/d3/d3-array#histograms) API replaces d3.layout.histogram.
+The new [d3.histogram](https://github.com/d3/d3-array#histograms) API replaces d3.layout.histogram. Rather than exposing *bin*.x and *bin*.dx on each returned bin, the histogram exposes *bin*.x0 and *bin*.x1. This guarantees that *bin*.x0 is exactly equal to *bin*.x1 on the preceeding bin. The new histogram generator no longer supports “frequency” and “probability”; as in D3 3.x, each bin is simply an array of elements from the input data, so *bin*.length is equal to D3 3.x’s *bin*.y in frequency mode. To compute a probability distribution instead, divide the number of elements in each bin by the total number of elements.
+
+The *histogram*.range method has been renamed [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) for consistency with scales. The *histogram*.bins method has been renamed [*histogram*.thresholds](https://github.com/d3/d3-array#histogram_thresholds), and no longer requires you to specify the upper value: *n* thresholds will produce *n* + 1 bins. (You can use the new [d3.ticks](https://github.com/d3/d3-array#ticks) method to compute nice thresholds.) In addition to the default Sturges’ formula, D3 now implements the [Freedman-Diaconis rule](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) and [Scott’s normal reference rule](https://github.com/d3/d3-array#thresholdScott).
 
 ## d3-axis
 
