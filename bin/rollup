@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 
 var rollup = require("rollup"),
+    ascii = require("rollup-plugin-ascii"),
     nodeResolve = require("rollup-plugin-node-resolve");
 
 rollup.rollup({
   entry: "index.js",
-  plugins: [nodeResolve({jsnext: true})]
+  plugins: [nodeResolve({jsnext: true}), ascii()]
 }).then(function(bundle) {
   return bundle.write({
     banner: process.argv[2],

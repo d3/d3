@@ -35,6 +35,7 @@
     "json2module": "0.0",
     "package-preamble": "0.0",
     "rollup": "0.27",
+    "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "1",
     "tape": "4",
     "uglify-js": "2"
