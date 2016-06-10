@@ -184,7 +184,7 @@ TODO
 
 ## Collections (d3-collection)
 
-The [d3.set](https://github.com/d3/d3-collection#set) constructor now accepts an existing set for making a copy, just as [d3.map](https://github.com/d3/d3-collection#map) can be used to copy a map. If you pass an array to d3.set,  you can now also pass an array accessor for extracting values from the array. This accessor takes the standard arguments: the current element (*d*), the index (*i*), and the array (*data*), with *this* undefined. For example:
+The [d3.set](https://github.com/d3/d3-collection#set) constructor now accepts an existing set for making a copy. If you pass an array to d3.set, you can also pass a value accessor. This accessor takes the standard arguments: the current element (*d*), the index (*i*), and the array (*data*), with *this* undefined. For example:
 
 ```js
 var yields = [
@@ -203,13 +203,28 @@ var sites = d3.set(yields, function(d) { return d.site; }); // ["Grand Rapids", 
 
 The d3.map constructor also follows the standard array accessor argument pattern.
 
-The *map*.forEach and *set*.forEach methods have been renamed to [*map*.each](https://github.com/d3/d3-collection#map_each) and [*set*.each](https://github.com/d3/d3-collection#set_each) respectively. In addition, the order of arguments for *map*.each has been changed to *value*, *key* and *map*, while the order of arguments for *set*.each is now *value*, *value* and *set*. This is closer to ES6 [*map*.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach) and [*set*.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/forEach). Also like ES6 Map and Set, *map*.set and *set*.add now return the current collection (rather than the added value) to facilitate method chaining. New [*map*.clear](https://github.com/d3/d3-collection#map_clear) and [*set*.clear](https://github.com/d3/d3-collection#set_clear) methods can be used to empty collections.
+The *map*.forEach and *set*.forEach methods have been renamed to [*map*.each](https://github.com/d3/d3-collection#map_each) and [*set*.each](https://github.com/d3/d3-collection#set_each) respectively. The order of arguments for *map*.each has also been changed to *value*, *key* and *map*, while the order of arguments for *set*.each is now *value*, *value* and *set*. This is closer to ES6 [*map*.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/forEach) and [*set*.forEach](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Set/forEach). Also like ES6 Map and Set, *map*.set and *set*.add now return the current collection (rather than the added value) to facilitate method chaining. New [*map*.clear](https://github.com/d3/d3-collection#map_clear) and [*set*.clear](https://github.com/d3/d3-collection#set_clear) methods can be used to empty collections.
 
 The [*nest*.map](https://github.com/d3/d3-collection#nest_map) method now always returns a d3.map instance. For a plain object, use [*nest*.object](https://github.com/d3/d3-collection#nest_object) instead. When used in conjunction with [*nest*.rollup](https://github.com/d3/d3-collection#nest_rollup), [*nest*.entries](https://github.com/d3/d3-collection#nest_entries) now returns {key, value} objects for the leaf entries, instead of {key, values}.
 
 ## Colors (d3-color)
 
 TODO
+
+* all colors now have opacity
+* can now parse rgba(…) and hsla(…) CSS color strings
+* more robust parsing; for example, you can no longer mix integers and percentages in rgb(…), trims
+* d3.color(…) now returns a color instance in the appropriate color space, or null!
+* *color*.toString now returns rgb(…) or rgba(…), not hexadecimal
+* explicitly track which channels are undefined, e.g., black has undefined saturation, transparent
+* related improvements in color interpolation!
+* d3.rgb now lazily quantizes channel values, improving accuracy in color space conversion
+* *rgb*.brighter no longer special-cases black
+* the color space constructors, such as d3.rgb, now always return a copy
+* removed *rgb*.hsl
+* add *color*.displayable
+* d3.cubehelix is now built-in
+* you can define your own color spaces; see [d3-hsv](https://github.com/d3/d3-hsv) for example
 
 ## Delimiter-Separated Values (d3-dsv)
 
