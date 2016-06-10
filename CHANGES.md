@@ -465,8 +465,43 @@ TODO
 
 TODO
 
-* d3.interpolators ↦ REMOVED
+d3.interpolate’s behavior is now faster and more precisely defined. d3.interpolators ↦ REMOVED; d3.interpolate is no longer extensible.
+
+* If *b* is null, undefined or type "boolean", use the constant *b*.
+* If *b* is type "number", use d3.interpolateNumber.
+* If *b* is a d3.color instance or type "string" and can be parsed by d3.color, use d3.interpolateRgb.
+* If *b* is a string, use d3.interpolateString.
+* If *b* is an array, use d3.interpolateArray.
+* Use d3.interpolateObject.
+
+new transform interpolation methods for CSS, as well as SVG. d3-transition automatically picks the right one…
+
 * d3.transform ↦ REMOVED
+* d3.interpolateTransform ↦ d3.interpolateTransformSvg
+* new d3.interpolateTransformCss
+
+b-spline interpolation
+
+* add d3.quantize
+* add d3.interpolateBasis
+* add d3.interpolateBasisClosed
+* add d3.interpolateRgbBasis
+* add d3.interpolateRgbBasisClosed
+
+color space interpolation
+
+* color interpolation now observes opacity (see d3-color)!
+* better behavior when either *a* or *b*’s color channel is undefined
+* add “long” versions of interpolators for color spaces with hue angles
+* Cubehelix (with optional gamma parameter) is now supported by default
+* color interpolators now return rgb(…) or rgba(…) strings (matching *color*.toString)
+* use named parameters, e.g., d3.interpolateCubehelixGamma ↦ d3.interpolateCubehelix.gamma
+* new d3.interpolateRgb.gamma for gamma-corrected RGB interpolation
+
+better object and array interpolation…
+
+* when *b* has fewer properties or elements than *a*
+* when *a* or *b* is undefined or not an object or array
 
 ## [Number Formats (d3-format)](https://github.com/d3/d3-format/blob/master/README.md)
 
