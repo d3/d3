@@ -272,24 +272,24 @@ TODO
 
 symbols instead of strings:
 
-* d3.ease("linear") ↦ d3.easeLinearIn
-* d3.ease("poly") ↦ d3.easePolyIn
-* d3.ease("quad") ↦ d3.easeQuadIn
-* d3.ease("cubic") ↦ d3.easeCubicIn
-* d3.ease("sin") ↦ d3.easeSinIn
-* d3.ease("exp") ↦ d3.easeExpIn
-* d3.ease("circle") ↦ d3.easeCircleIn
-* d3.ease("elastic") ↦ d3.easeElasticIn
-* d3.ease("back") ↦ d3.easeBackIn
-* d3.ease("bounce") ↦ d3.easeBounceIn
+* d3.ease("linear-in") ↦ d3.easeLinearIn
+* d3.ease("poly-in") ↦ d3.easePolyIn
+* d3.ease("quad-in") ↦ d3.easeQuadIn
+* d3.ease("cubic-in") ↦ d3.easeCubicIn
+* d3.ease("sin-in") ↦ d3.easeSinIn
+* d3.ease("exp-in") ↦ d3.easeExpIn
+* d3.ease("circle-in") ↦ d3.easeCircleIn
+* d3.ease("elastic-in") ↦ d3.easeElasticIn
+* d3.ease("back-in") ↦ d3.easeBackIn
+* d3.ease("bounce-in") ↦ d3.easeBounceIn
 
-symbols instead of strings for -in, -out, -in-out, e.g.:
+applies to the various modes (-in, -out, -in-out), too, e.g.:
 
 * d3.ease("cubic-in") -> d3.easeCubicIn
 * d3.ease("cubic-out") -> d3.easeCubicOut
 * d3.ease("cubic-in-out") -> d3.easeCubicInOut
 
-sensible default aliases if no -in, -out, or -in-out:
+sensible defaults if no mode, instead of always -in:
 
 * d3.easeQuad ↦ d3.easeQuadInOut
 * d3.easeCubic ↦ d3.easeCubicInOut
@@ -301,12 +301,6 @@ sensible default aliases if no -in, -out, or -in-out:
 * d3.easeBack ↦ d3.easeBackInOut
 * d3.easeElastic ↦ d3.easeElasticOut
 
-named optional parameters:
-
-* d3.ease("poly", *k*) ↦ d3.easePoly.exponent(*k*)
-* d3.ease("elastic", *a*, *p*) ↦ d3.easeElastic.amplitude(*a*).period(*p*)
-* d3.ease("back", *s*) ↦ d3.easeBack.overshoot(*s*)
-
 fix confusion around elastic, bounce and back easing:
 
 * “elastic-out” ↦ d3.easeElasticIn
@@ -315,9 +309,15 @@ fix confusion around elastic, bounce and back easing:
 * “bounce-out” ↦ d3.easeBounceIn
 * “bounce-in” ↦ d3.easeBounceOut
 * “bounce-out-in” ↦ d3.easeBounceInOut
-* remove “-out-in” easing
-* fix default overshoot for backInOut
-* fix parameter interpretation for elasticInOut
+* remove “-out-in” easing mode
+* fix default overshoot parameter for backInOut
+* fix period parameter interpretation for elasticInOut
+
+named optional parameters:
+
+* d3.ease("poly", *k*) ↦ d3.easePoly.exponent(*k*)
+* d3.ease("elastic", *a*, *p*) ↦ d3.easeElastic.amplitude(*a*).period(*p*)
+* d3.ease("back", *s*) ↦ d3.easeBack.overshoot(*s*)
 
 other improvements:
 
@@ -331,7 +331,45 @@ other improvements:
 
 TODO
 
+* velocity verlet instead of position verlet
+* deterministic initialization and forces; D3 does not play dice!
 * d3.layout.force ↦ d3.forceSimulation
+* *force*.friction ↦ *force*.drag
+
+the simulation is extensible rather than hard-coding several forces:
+
+* *force*.gravity ↦ d3.forceX, d3.forceY
+* *force*.charge ↦ d3.forceManyBody
+* *force*.link ↦ d3.forceLink
+* new d3.forceCenter
+* new d3.forceCollision - more stable than prior examples, too
+* new *forceManyBody*.distanceMin
+
+the new forces are more flexible, and better:
+
+* force strengths can typically be configured per-node or per-link
+* separate positioning forces for *x* and *y*
+* better default link strength and bias heuristics to improve stability
+
+easier controls for heating and cooling the layout:
+
+* *simulation*.alpha
+* *simulation*.alphaMin - control when the internal timer stops
+* *simulation*.alphaDecay - control how quickly the simulation cools
+* *simulation*.alphaTarget - smooth reheating during interaction!
+
+better controls for starting and stopping the internal timer, independent of heat:
+
+* *simulation*.restart
+* *simulation*.stop
+* *simulation*.tick
+
+the dependency on the drag behavior is removed. instead:
+
+* *simulation*.fix
+* *simulation*.unfix
+* *simulation*.unfixAll
+* *simulation*.find
 
 ## Geographies (d3-geo)
 
