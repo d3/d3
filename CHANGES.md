@@ -1,8 +1,38 @@
 # Changes in D3 4.0
 
+* [Modules](#modules)
+* [Arrays](#arrays-d3-array)
+* [Axes](#axes-d3-axis)
+* [Brushes](#brushes-d3-brush)
+* [Collections](#collections-d3-collection)
+* [Colors](#colors-d3-color)
+* [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
+* [Dispatches](#dispatches-d3-dispatch)
+* [Dragging](#dragging-d3-drag)
+* [Easings](#easings-d3-ease)
+* [Forces](#forces-d3-force)
+* [Hierarchies](#hierarchies-d3-hierarchy)
+* [Interpolators](#interpolators-d3-interpolate)
+* [Number Formats](#number-formats-d3-format)
+* [Paths](#paths-d3-path)
+* [Polygons](#polygons-d3-polygon)
+* [Quadtrees](#quadtrees-d3-quadtree)
+* [Queues](#queues-d3-queue)
+* [Random Numbers](#random-numbers-d3-random)
+* [Requests](#requests-d3-request)
+* [Scales](#scales-d3-scale)
+* [Selections](#selections-d3-selection)
+* [Shapes](#shapes-d3-shape)
+* [Time Formats](#time-formats-d3-time-format)
+* [Time Intervals](#time-intervals-d3-time)
+* [Timers](#timers-d3-timer)
+* [Transitions](#transitions-d3-transition)
+* [Voronoi Diagrams](#voronoi-diagrams-d3-voronoi)
+* [Zooming](#zooming-d3-zoom)
+
 N.B.: This document is a work-in-progress. It does not yet cover all API changes.
 
-## Modularity
+## Modules
 
 D3 3.x was a monolithic library: the core functionality resided in a single [repository](https://github.com/d3/d3) and was published in a [single file](https://d3js.org/d3.v3.js). It was possible to create a custom build using a [nonstandard tool](https://github.com/mbostock/smash), but not easy and few did. (There were also plugins, but these could only add features and had their own [monolithic repository](https://github.com/d3/d3-plugins).)
 
@@ -38,19 +68,11 @@ You can also `cat` D3 microlibraries into a custom bundle, or use tools such as 
 
 Small files are nice, but modularity is also about making D3 *fun* again. Microlibraries are easier to understand, develop and test. They make it easier for new people to get involved and contribute. They reduce the distinction between a “core module” and a “plugin”, and increase the pace of development in D3 features.
 
-If you don’t care about modularity, you can mostly ignore this change and keep using the default bundle. However, there’s an unavoidable consequence of adopting ES6 modules: every symbol in D3 4.0 now shares a flat namespace rather than the nesting one of D3 3.x. For example, d3.scale.linear is now d3.scaleLinear, and d3.layout.treemap is now d3.treemap. And there have been many other significant improvements to D3’s features! Rather than list all the renamed symbols here, I’ll cover the changes in the sections below.
+If you don’t care about modularity, you can mostly ignore this change and keep using the default bundle. However, there’s an unavoidable consequence of adopting ES6 modules: every symbol in D3 4.0 now shares a flat namespace rather than the nesting one of D3 3.x. For example, d3.scale.linear is now d3.scaleLinear, and d3.layout.treemap is now d3.treemap. And there have been many other significant improvements to D3’s features! These changes are covered in the sections below. The adoption of ES6 modules means that D3 is now written exclusively in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
 
-## Coding Style
-
-The adoption of ES6 modules means that D3 is now written exclusively in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode).
+The default D3 [UMD bundle](https://github.com/umdjs/umd) is now anonymous, rather being named “d3”. No `d3` global is exported if AMD or CommonJS is detected. In a vanilla environment, the D3 microlibraries share the `d3` global, meaning the code you write for the default D3 bundle works identically if you load the modules separately. The generated UMD bundles are no longer stored in the Git repository. Bower has been repointed to [d3-bower](https://github.com/mbostock-bower/d3-bower); you can also find the generated files on [npmcdn](https://npmcdn.com/d3@next/) and attached to the [latest release](https://github.com/d3/d3/releases/latest). The non-minified default bundle is no longer mangled by UglifyJS, making it more readable and preserving inline comments. The use of ES6 modules also improves readability. (Nearly all of the code from D3 3.x has been rewritten and improved!)
 
 D3 3.x used Unicode variable names, such as τ and π, for a concise representation of mathematical operations. A downside of this approach was that a SyntaxError would occur if you loaded the non-minified D3 using ISO-8859-1 instead of UTF-8. D3 3.x also used Unicode string literals, such as the SI-prefix µ for 1e-6. D3 4.0 uses only ASCII variable names and ASCII string literals (see [rollup-plugin-ascii](https://github.com/mbostock/rollup-plugin-ascii)), avoiding these encoding problems.
-
-The non-minified default bundle is no longer mangled by UglifyJS, making it more readable and preserving inline comments. The use of ES6 modules also improves readability. Furthermore, nearly all of the code from D3 3.x has been rewritten and improved.
-
-The default D3 [UMD bundle](https://github.com/umdjs/umd) is now anonymous, rather being named “d3”. No `d3` global is exported if AMD or CommonJS is detected. In a vanilla environment, the D3 microlibraries share the `d3` global, meaning the code you write for the default D3 bundle works identically if you load the modules separately.
-
-The generated UMD bundles are no longer stored in the Git repository. Bower has been repointed to [d3-bower](https://github.com/mbostock-bower/d3-bower); you can also find the generated files on [npmcdn](https://npmcdn.com/d3@next/) and attached to the [latest release](https://github.com/d3/d3/releases/latest).
 
 ## Arrays (d3-array)
 
@@ -136,7 +158,7 @@ You can still override the styles either through CSS or by modifying the axis el
 
 There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickArguments) method, as an alternative to [*axis*.ticks](https://github.com/d3/d3-axis#axis_ticks) that also allows the axis tick arguments to be inspect. The [*axis*.tickSize](https://github.com/d3/d3-axis#axis_tickSize) method has been changed to only allow a single argument when setting the tick size; use [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) or [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) to set the inner and outer tick size separately.
 
-## d3-brush
+## Brushes (d3-brush)
 
 TODO
 
@@ -153,14 +175,14 @@ TODO
 * remove *brush*.clamp; always clamps to the brushable region
 * consume handled events
 
-## d3-chord
+## Chords (d3-chord)
 
 TODO
 
 * d3.svg.chord ↦ d3.ribbon
 * d3.layout.chord ↦ d3.chord
 
-## d3-collection
+## Collections (d3-collection)
 
 The [d3.set](https://github.com/d3/d3-collection#set) constructor now accepts an existing set for making a copy, just as [d3.map](https://github.com/d3/d3-collection#map) can be used to copy a map. If you pass an array to d3.set,  you can now also pass an array accessor for extracting values from the array. This accessor takes the standard arguments: the current element (*d*), the index (*i*), and the array (*data*), with *this* undefined. For example:
 
@@ -185,11 +207,11 @@ The *map*.forEach and *set*.forEach methods have been renamed to [*map*.each](ht
 
 The [*nest*.map](https://github.com/d3/d3-collection#nest_map) method now always returns a d3.map instance. For a plain object, use [*nest*.object](https://github.com/d3/d3-collection#nest_object) instead. When used in conjunction with [*nest*.rollup](https://github.com/d3/d3-collection#nest_rollup), [*nest*.entries](https://github.com/d3/d3-collection#nest_entries) now returns {key, value} objects for the leaf entries, instead of {key, values}.
 
-## d3-color
+## Colors (d3-color)
 
 TODO
 
-## d3-dsv
+## Delimiter-Separated Values (d3-dsv)
 
 TODO
 
@@ -202,23 +224,27 @@ TODO
 * d3.tsv.format ↦ d3.tsvFormat
 * d3.tsv.formatRows ↦ d3.tsvFormatRows
 
-## d3-drag
+## Dispatches (d3-dispatch)
+
+TODO
+
+## Dragging (d3-drag)
 
 TODO
 
 * d3.behavior.drag ↦ d3.drag
 
-## d3-ease
+## Easings (d3-ease)
 
 TODO
 
-## d3-force
+## Forces (d3-force)
 
 TODO
 
 * d3.layout.force ↦ d3.forceSimulation
 
-## d3-geo
+## Geographies (d3-geo)
 
 TODO
 
@@ -233,13 +259,13 @@ TODO
 * d3.geo.rotation ↦ d3.geoRotation
 * d3.geo.stream ↦ d3.geoStream
 
-## d3-geo-projection
+## Geographic Projections (d3-geo-projection)
 
 TODO
 
 * d3.geo.path ↦ d3.geoPath
 
-## d3-hierarchy
+## Hierarchies (d3-hierarchy)
 
 TODO
 
@@ -250,21 +276,21 @@ TODO
 * d3.layout.tree ↦ d3.tree
 * d3.layout.treemap ↦ d3.treemap
 
-## d3-interpolate
+## Interpolators (d3-interpolate)
 
 TODO
 
 * d3.interpolators ↦ REMOVED
 
-## d3-format
+## Number Formats (d3-format)
 
 TODO
 
-## d3-path
+## Paths (d3-path)
 
 TODO
 
-## d3-polygon
+## Polygons (d3-polygon)
 
 TODO
 
@@ -272,13 +298,13 @@ TODO
 * d3.geom.polygon.centroid ↦ d3.polygonCentroid
 * d3.geom.hull ↦ d3.polygonHull
 
-## d3-quadtree
+## Quadtrees (d3-quadtree)
 
 TODO
 
 * d3.geom.quadtree ↦ d3.quadtree
 
-## d3-random
+## Random Numbers (d3-random)
 
 TODO
 
@@ -287,13 +313,13 @@ TODO
 * d3.random.bates ↦ d3.randomBates
 * d3.random.irwinHall ↦ d3.randomIrwinHall
 
-## d3-request
+## Requests (d3-request)
 
 TODO
 
 * d3.xhr ↦ d3.request
 
-## d3-scale
+## Scales (d3-scale)
 
 TODO
 
@@ -312,7 +338,7 @@ TODO
 * d3.scale.category20c ↦ d3.schemeCategory20c
 * d3.time.scale ↦ d3.scaleTime
 
-## d3-selection
+## Selections (d3-selection)
 
 TODO
 
@@ -333,7 +359,7 @@ TODO
 * d3.ns.qualify ↦ d3.namespace
 * d3.ns.prefix ↦ d3.namespaces
 
-## d3-shape
+## Shapes (d3-shape)
 
 TODO
 
@@ -349,7 +375,7 @@ TODO
 * d3.layout.bundle ↦ d3.curveBundle
 * d3.layout.stack ↦ d3.stack
 
-## d3-time-format
+## Time Formats (d3-time-format)
 
 TODO
 
@@ -358,7 +384,7 @@ TODO
 * d3.time.format.utc ↦ d3.utcFormat
 * d3.time.format.iso ↦ d3.isoFormat
 
-## d3-time
+## Time Intervals (d3-time)
 
 TODO
 
@@ -438,23 +464,23 @@ TODO
 * d3.time.year.utc ↦ d3.utcYear
 * d3.time.years.utc ↦ d3.utcYears
 
-## d3-timer
+## Timers (d3-timer)
 
 TODO
 
 * d3.timer.flush ↦ d3.timerFlush
 
-## d3-transition
+## Transitions (d3-transition)
 
 TODO
 
-## d3-voronoi
+## Voronoi Diagrams (d3-voronoi)
 
 TODO
 
 * d3.geom.voronoi ↦ d3.voronoi
 
-## d3-zoom
+## Zooming (d3-zoom)
 
 TODO
 
