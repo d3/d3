@@ -38,10 +38,10 @@ D3 3.x was a monolithic library: the core functionality resided in a single [rep
 
 D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](https://github.com/d3) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in a separate repository, allowing decentralized ownership and independent release cycles. Want to own a new repository in the [D3 organization](https://github.com/d3)? [Let me know!](https://twitter.com/mbostock)
 
-The [default bundle](https://d3js.org/d3.v4.0.0-alpha.48.js) of D3 4.0 conveniently aggregates [about thirty](https://github.com/d3/d3/blob/master/index.js) of these microlibraries.
+The [default bundle](https://d3js.org/d3.v4.0.0-alpha.49.js) of D3 4.0 conveniently aggregates [about thirty](https://github.com/d3/d3/blob/master/index.js) of these microlibraries.
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.48.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.49.min.js"></script>
 <script>
 
 d3.select("body")

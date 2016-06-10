@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.48",
+  "version": "4.0.0-alpha.49",
   "publishConfig": {
     "tag": "next"
   },
@@ -43,7 +43,7 @@
   "dependencies": {
     "d3-array": "0.8.1",
     "d3-axis": "0.4.1",
-    "d3-brush": "0.2.1",
+    "d3-brush": "0.2.2",
     "d3-collection": "0.3.1",
     "d3-color": "0.5.0",
     "d3-dispatch": "0.5.0",
