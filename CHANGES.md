@@ -30,7 +30,7 @@
 * [Voronoi Diagrams](#voronoi-diagrams-d3-voronoi)
 * [Zooming](#zooming-d3-zoom)
 
-N.B.: This document is a work-in-progress. It does not yet cover all API changes.
+N.B.: This document is a [work-in-progress](https://github.com/d3/d3/issues/2841). It does not yet cover all API changes.
 
 ## Modules
 
