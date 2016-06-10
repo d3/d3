@@ -214,7 +214,7 @@ TODO
 * all colors now have opacity
 * can now parse rgba(…) and hsla(…) CSS color strings
 * more robust parsing; for example, you can no longer mix integers and percentages in rgb(…), trims
-* d3.color(…) now returns a color instance in the appropriate color space, or null!
+* d3.color(…) now returns a color instance in the appropriate color space, or null! (matches getComputedStyle)
 * *color*.toString now returns rgb(…) or rgba(…), not hexadecimal
 * explicitly track which channels are undefined, e.g., black has undefined saturation, transparent
 * related improvements in color interpolation!
@@ -230,6 +230,14 @@ TODO
 
 TODO
 
+* *dsv*.parse now exposes column names as *data*.columns; available to row conversion functions
+* *dsv*.format now takes an optional array of column names
+* *dsv*.format coerces input values to strings, fixing a crash in a pathological case like this:
+
+```js
+d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
+```
+
 * d3.csv.parse ↦ d3.csvParse
 * d3.csv.parseRows ↦ d3.csvParseRows
 * d3.csv.format ↦ d3.csvFormat
@@ -238,6 +246,8 @@ TODO
 * d3.tsv.parseRows ↦ d3.tsvParseRows
 * d3.tsv.format ↦ d3.tsvFormat
 * d3.tsv.formatRows ↦ d3.tsvFormatRows
+* removed deprecated support for *dsv*.format(rows); use *dsv*.formatRows instead.
+* improved performance
 
 ## Dispatches (d3-dispatch)
 
