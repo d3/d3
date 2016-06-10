@@ -231,7 +231,7 @@ TODO
 TODO
 
 * *dsv*.parse now exposes column names as *data*.columns; available to row conversion functions
-* *dsv*.format now takes an optional array of column names
+* *dsv*.format now takes an optional array of column names, useful for filtering columns and explicitly specifying the column order
 * *dsv*.format coerces input values to strings, fixing a crash in a pathological case like this:
 
 ```js
@@ -253,6 +253,13 @@ d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
 
 TODO
 
+* *dispatch*.*type*.call(…) ↦ *dispatch*.call(*type*, …)
+* *dispatch*.*type*.apply(…) ↦ *dispatch*.apply(*type*, …)
+* *dispatch*.on now accepts multiple typenames (like the new *selection*.on)
+* add *dispatch*.copy
+* fewer closures; optimize performance
+* better error detection (invalid callbacks, illegal types)
+
 ## Dragging (d3-drag)
 
 TODO
@@ -262,6 +269,63 @@ TODO
 ## Easings (d3-ease)
 
 TODO
+
+symbols instead of strings:
+
+* d3.ease("linear") ↦ d3.easeLinearIn
+* d3.ease("poly") ↦ d3.easePolyIn
+* d3.ease("quad") ↦ d3.easeQuadIn
+* d3.ease("cubic") ↦ d3.easeCubicIn
+* d3.ease("sin") ↦ d3.easeSinIn
+* d3.ease("exp") ↦ d3.easeExpIn
+* d3.ease("circle") ↦ d3.easeCircleIn
+* d3.ease("elastic") ↦ d3.easeElasticIn
+* d3.ease("back") ↦ d3.easeBackIn
+* d3.ease("bounce") ↦ d3.easeBounceIn
+
+symbols instead of strings for -in, -out, -in-out, e.g.:
+
+* d3.ease("cubic-in") -> d3.easeCubicIn
+* d3.ease("cubic-out") -> d3.easeCubicOut
+* d3.ease("cubic-in-out") -> d3.easeCubicInOut
+
+sensible default aliases if no -in, -out, or -in-out:
+
+* d3.easeQuad ↦ d3.easeQuadInOut
+* d3.easeCubic ↦ d3.easeCubicInOut
+* d3.easePoly ↦ d3.easePolyInOut
+* d3.easeSin ↦ d3.easeSinInOut
+* d3.easeExp ↦ d3.easeExpInOut
+* d3.easeCircle ↦ d3.easeCircleInOut
+* d3.easeBounce ↦ d3.easeBounceOut
+* d3.easeBack ↦ d3.easeBackInOut
+* d3.easeElastic ↦ d3.easeElasticOut
+
+named optional parameters:
+
+* d3.ease("poly", *k*) ↦ d3.easePoly.exponent(*k*)
+* d3.ease("elastic", *a*, *p*) ↦ d3.easeElastic.amplitude(*a*).period(*p*)
+* d3.ease("back", *s*) ↦ d3.easeBack.overshoot(*s*)
+
+fix confusion around elastic, bounce and back easing:
+
+* “elastic-out” ↦ d3.easeElasticIn
+* “elastic-in” ↦ d3.easeElasticOut
+* “elastic-out-in” ↦ d3.easeElasticInOut
+* “bounce-out” ↦ d3.easeBounceIn
+* “bounce-in” ↦ d3.easeBounceOut
+* “bounce-out-in” ↦ d3.easeBounceInOut
+* remove “-out-in” easing
+* fix default overshoot for backInOut
+* fix parameter interpretation for elasticInOut
+
+other improvements:
+
+* optimizations (fewer closures, more inlining)
+* better accuracy
+* remove implicit clamping
+* a [visual reference](https://github.com/d3/d3-ease/blob/master/README.md)
+* an [animated reference](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4)
 
 ## Forces (d3-force)
 
