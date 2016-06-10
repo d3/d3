@@ -408,6 +408,7 @@ TODO
 TODO
 
 * d3.interpolators ↦ REMOVED
+* d3.transform ↦ REMOVED
 
 ## [Number Formats (d3-format)](https://github.com/d3/d3-format/blob/master/README.md)
 
@@ -423,8 +424,16 @@ This is a new repository that provides an implementation of the CanvasPathMethod
 
 TODO
 
+There’s no longer a polygon constructor. Instead you just pass an array of vertices to the polygon methods.
+
 * d3.geom.polygon.area ↦ d3.polygonArea
 * d3.geom.polygon.centroid ↦ d3.polygonCentroid
+* d3.geom.polygon.clip ↦ REMOVED
+* added d3.polygonContains
+* added d3.polygonLength
+
+There’s no longer a fancy d3.geom.hull operator. There’s just a method which takes a polygon (an array of vertices):
+
 * d3.geom.hull ↦ d3.polygonHull
 
 ## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree/blob/master/README.md)
@@ -441,6 +450,9 @@ TODO
 * d3.random.logNormal ↦ d3.randomLogNormal
 * d3.random.bates ↦ d3.randomBates
 * d3.random.irwinHall ↦ d3.randomIrwinHall
+* new d3.randomExponential
+* new d3.randomUniform
+* optimize d3.randomNormal and d3.randomLogNormal
 
 ## [Requests (d3-request)](https://github.com/d3/d3-request/blob/master/README.md)
 
