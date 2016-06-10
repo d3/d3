@@ -179,6 +179,8 @@ TODO
 
 TODO
 
+This module is not yet implemented in D3 4.0, but I’m working on it.
+
 * d3.svg.chord ↦ d3.ribbon
 * d3.layout.chord ↦ d3.chord
 
@@ -231,7 +233,7 @@ TODO
 TODO
 
 * *dsv*.parse now exposes column names as *data*.columns; available to row conversion functions
-* *dsv*.format now takes an optional array of column names, useful for filtering columns and explicitly specifying the column order
+* *dsv*.format now takes an optional array of column names, useful for filtering and ordering columns
 * *dsv*.format coerces input values to strings, fixing a crash in a pathological case like this:
 
 ```js
@@ -256,7 +258,7 @@ TODO
 * *dispatch*.*type*.call(…) ↦ *dispatch*.call(*type*, …)
 * *dispatch*.*type*.apply(…) ↦ *dispatch*.apply(*type*, …)
 * *dispatch*.on now accepts multiple typenames (like the new *selection*.on)
-* add *dispatch*.copy
+* add *dispatch*.copy, useful for copy-on-rwrite semantics
 * fewer closures; optimize performance
 * better error detection (invalid callbacks, illegal types)
 
@@ -371,12 +373,20 @@ the dependency on the drag behavior is removed. instead:
 * *simulation*.unfixAll
 * *simulation*.find
 
-## [Geographies (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
+## [Geographic Projections (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
 
 TODO
 
+This module is not yet implemented in D3 4.0, but I’m working on it.
+
 * d3.geo.graticule ↦ d3.geoGraticule
+* *graticule*.majorExtent ↦ *graticule*.extentMajor
+* *graticule*.minorExtent ↦ *graticule*.extentMinor
+* *graticule*.majorStep ↦ *graticule*.stepMajor
+* *graticule*.minorStep ↦ *graticule*.stepMinor
 * d3.geo.circle ↦ d3.geoCircle
+* *circle*.origin ↦ *circle*.center
+* *circle*.angle ↦ *circle*.radius
 * d3.geo.area ↦ d3.geoArea
 * d3.geo.bounds ↦ d3.geoBounds
 * d3.geo.centroid ↦ d3.geoCentroid
@@ -385,12 +395,47 @@ TODO
 * d3.geo.length ↦ d3.geoLength
 * d3.geo.rotation ↦ d3.geoRotation
 * d3.geo.stream ↦ d3.geoStream
+* d3.geo.path ↦ d3.geoPath
+* d3.geo.projection ↦ d3.geoProjection
+* d3.geo.projectionMutator ↦ d3.geoProjectionMutator?
 
-## [Geographic Projections (d3-geo-projection)](https://github.com/d3/d3-geo-projection/blob/master/README.md)
+Projections:
+
+* d3.geo.albers ↦ d3.geoAlbers
+* d3.geo.albersUsa ↦ d3.geoAlbersUsa
+* d3.geo.azimuthalEqualArea ↦ d3.geoAzimuthalEqualArea
+* d3.geo.azimuthalEquidistant ↦ d3.geoAzimuthalEquidistant
+* d3.geo.conicConformal ↦ d3.geoConicConformal
+* d3.geo.conicEqualArea ↦ d3.geoConicEqualArea
+* d3.geo.conicEquidistant ↦ d3.geoConicEquidistant
+* d3.geo.equirectangular ↦ d3.geoEquirectangular
+* d3.geo.gnomonic ↦ d3.geoGnomonic
+* d3.geo.mercator ↦ d3.geoMercator
+* d3.geo.orthographic ↦ d3.geoOrthographic
+* d3.geo.stereographic ↦ d3.geoStereographic
+* d3.geo.transverseMercator ↦ d3.geoTransverseMercator
+
+Raw projections:
+
+* d3.geo.azimuthalEqualArea.raw ↦ d3.geoRawAzimuthalEqualArea
+* d3.geo.azimuthalEquidistant.raw ↦ d3.geoRawAzimuthalEquidistant
+* d3.geo.conicConformal.raw ↦ d3.geoRawConicConformal
+* d3.geo.conicEqualArea.raw ↦ d3.geoRawConicEqualArea
+* d3.geo.conicEquidistant.raw ↦ d3.geoRawConicEquidistant
+* d3.geo.equirectangular.raw ↦ d3.geoRawEquirectangular
+* d3.geo.gnomonic.raw ↦ d3.geoRawGnomonic
+* d3.geo.mercator.raw ↦ d3.geoRawMercator
+* d3.geo.orthographic.raw ↦ d3.geoRawOrthographic
+* d3.geo.stereographic.raw ↦ d3.geoRawStereographic
+* d3.geo.transverseMercator.raw ↦ d3.geoRawTransverseMercator
+
+A new d3.geoPipeline API is in development for D3 5.0.
+
+## [Extended Geographic Projections (d3-geo-projection)](https://github.com/d3/d3-geo-projection/blob/master/README.md)
 
 TODO
 
-* d3.geo.path ↦ d3.geoPath
+This module is not yet implemented in D3 4.0, but I’m working on it.
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/blob/master/README.md)
 
@@ -402,6 +447,19 @@ TODO
 * d3.layout.partition ↦ d3.partition
 * d3.layout.tree ↦ d3.tree
 * d3.layout.treemap ↦ d3.treemap
+* new d3.stratify API for converting tabular data to hierarchies!
+* new d3.hierarchy API for working with hierarchical data!
+* new *treemap*.tile - the treemap tiling algorithms are now extensible
+* reimplemented squarified treemaps, fixing bugs with padding and rounding
+* reimplemented circle-packing layout, fixing major bugs and improving results
+* new d3.treemapBinary for binary treemaps
+* new d3.packSiblings for circle-packing (non-hierarchical circles)
+* new d3.packEnclose uses Welzl’s algorithm to compute the exact enclosing circle
+* *treemap*.sticky ↦ d3.treemapResquarify
+* new treemap padding parameters, distinguishing parent and sibling padding
+* new partition padding parameter
+* space-filling layouts now output *x0*, *x1*, *y0*, *y1* instead of *x0*, *dx*, *y0*, *dy*; better accuracy
+* see d3.curveBundle in d3-shape for hierarchical edge bundling
 
 ## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/blob/master/README.md)
 
@@ -478,6 +536,8 @@ TODO
 * d3.scale.category20b ↦ d3.schemeCategory20b
 * d3.scale.category20c ↦ d3.schemeCategory20c
 * d3.time.scale ↦ d3.scaleTime
+
+Mention d3-scale-chromatic?
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
