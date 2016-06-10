@@ -74,7 +74,7 @@ The default D3 [UMD bundle](https://github.com/umdjs/umd) is now anonymous, rath
 
 To the consternation of some users, D3 3.x employed Unicode variable names such as τ and π for a concise representation of mathematical operations. A downside of this approach was that a SyntaxError would occur if you loaded the non-minified D3 using ISO-8859-1 instead of UTF-8. D3 3.x also used Unicode string literals, such as the SI-prefix µ for 1e-6. D3 4.0 uses only ASCII variable names and ASCII string literals (see [rollup-plugin-ascii](https://github.com/mbostock/rollup-plugin-ascii)), avoiding these encoding problems.
 
-## Arrays (d3-array)
+## [Arrays (d3-array)](https://github.com/d3/d3-array/blob/master/README.md)
 
 The new [d3.scan](https://github.com/d3/d3-array#scan) method performs a linear scan of an array, returning the index of the least element according to the specified comparator. This is similar to [d3.min](https://github.com/d3/d3-array#min) and [d3.max](https://github.com/d3/d3-array#max), except you can use it to find the position of an extreme element, rather than just calculate an extreme value.
 
@@ -106,7 +106,7 @@ The new [d3.histogram](https://github.com/d3/d3-array#histograms) API replaces d
 
 The *histogram*.range method has been renamed [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) for consistency with scales. The *histogram*.bins method has been renamed [*histogram*.thresholds](https://github.com/d3/d3-array#histogram_thresholds), and no longer accepts an upper value: *n* thresholds will produce *n* + 1 bins. If you specify a desired number of bins rather than thresholds, d3.histogram now uses [d3.ticks](https://github.com/d3/d3-array#ticks) to compute nice bin thresholds. In addition to the default Sturges’ formula, D3 now implements the [Freedman-Diaconis rule](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) and [Scott’s normal reference rule](https://github.com/d3/d3-array#thresholdScott).
 
-## Axes (d3-axis)
+## [Axes (d3-axis)](https://github.com/d3/d3-axis/blob/master/README.md)
 
 To render axes properly in D3 3.x, you needed to style them:
 
@@ -158,7 +158,7 @@ You can still override the styles either through CSS or by modifying the axis el
 
 There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickArguments) method, as an alternative to [*axis*.ticks](https://github.com/d3/d3-axis#axis_ticks) that also allows the axis tick arguments to be inspect. The [*axis*.tickSize](https://github.com/d3/d3-axis#axis_tickSize) method has been changed to only allow a single argument when setting the tick size; use [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) or [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) to set the inner and outer tick size separately.
 
-## Brushes (d3-brush)
+## [Brushes (d3-brush)](https://github.com/d3/d3-brush/blob/master/README.md)
 
 TODO
 
@@ -175,14 +175,14 @@ TODO
 * remove *brush*.clamp; always clamps to the brushable region
 * consume handled events
 
-## Chords (d3-chord)
+## [Chords (d3-chord)](https://github.com/d3/d3-chord/blob/master/README.md)
 
 TODO
 
 * d3.svg.chord ↦ d3.ribbon
 * d3.layout.chord ↦ d3.chord
 
-## Collections (d3-collection)
+## [Collections (d3-collection)](https://github.com/d3/d3-collection/blob/master/README.md)
 
 The [d3.set](https://github.com/d3/d3-collection#set) constructor now accepts an existing set for making a copy. If you pass an array to d3.set, you can also pass a value accessor. This accessor takes the standard arguments: the current element (*d*), the index (*i*), and the array (*data*), with *this* undefined. For example:
 
@@ -207,7 +207,7 @@ The *map*.forEach and *set*.forEach methods have been renamed to [*map*.each](ht
 
 The [*nest*.map](https://github.com/d3/d3-collection#nest_map) method now always returns a d3.map instance. For a plain object, use [*nest*.object](https://github.com/d3/d3-collection#nest_object) instead. When used in conjunction with [*nest*.rollup](https://github.com/d3/d3-collection#nest_rollup), [*nest*.entries](https://github.com/d3/d3-collection#nest_entries) now returns {key, value} objects for the leaf entries, instead of {key, values}.
 
-## Colors (d3-color)
+## [Colors (d3-color)](https://github.com/d3/d3-color/blob/master/README.md)
 
 TODO
 
@@ -226,7 +226,7 @@ TODO
 * d3.cubehelix is now built-in
 * you can define your own color spaces; see [d3-hsv](https://github.com/d3/d3-hsv) for example
 
-## Delimiter-Separated Values (d3-dsv)
+## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv/blob/master/README.md)
 
 TODO
 
@@ -249,7 +249,7 @@ d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
 * removed deprecated support for *dsv*.format(rows); use *dsv*.formatRows instead.
 * improved performance
 
-## Dispatches (d3-dispatch)
+## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/blob/master/README.md)
 
 TODO
 
@@ -260,13 +260,13 @@ TODO
 * fewer closures; optimize performance
 * better error detection (invalid callbacks, illegal types)
 
-## Dragging (d3-drag)
+## [Dragging (d3-drag)](https://github.com/d3/d3-drag/blob/master/README.md)
 
 TODO
 
 * d3.behavior.drag ↦ d3.drag
 
-## Easings (d3-ease)
+## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
 TODO
 
@@ -327,7 +327,7 @@ other improvements:
 * a [visual reference](https://github.com/d3/d3-ease/blob/master/README.md)
 * an [animated reference](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4)
 
-## Forces (d3-force)
+## [Forces (d3-force)](https://github.com/d3/d3-force/blob/master/README.md)
 
 TODO
 
@@ -371,7 +371,7 @@ the dependency on the drag behavior is removed. instead:
 * *simulation*.unfixAll
 * *simulation*.find
 
-## Geographies (d3-geo)
+## [Geographies (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
 
 TODO
 
@@ -386,13 +386,13 @@ TODO
 * d3.geo.rotation ↦ d3.geoRotation
 * d3.geo.stream ↦ d3.geoStream
 
-## Geographic Projections (d3-geo-projection)
+## [Geographic Projections (d3-geo-projection)](https://github.com/d3/d3-geo-projection/blob/master/README.md)
 
 TODO
 
 * d3.geo.path ↦ d3.geoPath
 
-## Hierarchies (d3-hierarchy)
+## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/blob/master/README.md)
 
 TODO
 
@@ -403,21 +403,23 @@ TODO
 * d3.layout.tree ↦ d3.tree
 * d3.layout.treemap ↦ d3.treemap
 
-## Interpolators (d3-interpolate)
+## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/blob/master/README.md)
 
 TODO
 
 * d3.interpolators ↦ REMOVED
 
-## Number Formats (d3-format)
+## [Number Formats (d3-format)](https://github.com/d3/d3-format/blob/master/README.md)
 
 TODO
 
-## Paths (d3-path)
+## [Paths (d3-path)](https://github.com/d3/d3-path/blob/master/README.md)
 
 TODO
 
-## Polygons (d3-polygon)
+This is a new repository that provides an implementation of the CanvasPathMethods API, allowing you to write code once that can render to either Canvas or SVG. It’s used by d3-shape and d3-chord.
+
+## [Polygons (d3-polygon)](https://github.com/d3/d3-polygon/blob/master/README.md)
 
 TODO
 
@@ -425,13 +427,13 @@ TODO
 * d3.geom.polygon.centroid ↦ d3.polygonCentroid
 * d3.geom.hull ↦ d3.polygonHull
 
-## Quadtrees (d3-quadtree)
+## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree/blob/master/README.md)
 
 TODO
 
 * d3.geom.quadtree ↦ d3.quadtree
 
-## Random Numbers (d3-random)
+## [Random Numbers (d3-random)](https://github.com/d3/d3-random/blob/master/README.md)
 
 TODO
 
@@ -440,13 +442,13 @@ TODO
 * d3.random.bates ↦ d3.randomBates
 * d3.random.irwinHall ↦ d3.randomIrwinHall
 
-## Requests (d3-request)
+## [Requests (d3-request)](https://github.com/d3/d3-request/blob/master/README.md)
 
 TODO
 
 * d3.xhr ↦ d3.request
 
-## Scales (d3-scale)
+## [Scales (d3-scale)](https://github.com/d3/d3-scale/blob/master/README.md)
 
 TODO
 
@@ -465,7 +467,7 @@ TODO
 * d3.scale.category20c ↦ d3.schemeCategory20c
 * d3.time.scale ↦ d3.scaleTime
 
-## Selections (d3-selection)
+## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
 TODO
 
@@ -486,7 +488,7 @@ TODO
 * d3.ns.qualify ↦ d3.namespace
 * d3.ns.prefix ↦ d3.namespaces
 
-## Shapes (d3-shape)
+## [Shapes (d3-shape)](https://github.com/d3/d3-shape/blob/master/README.md)
 
 TODO
 
@@ -502,7 +504,7 @@ TODO
 * d3.layout.bundle ↦ d3.curveBundle
 * d3.layout.stack ↦ d3.stack
 
-## Time Formats (d3-time-format)
+## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/blob/master/README.md)
 
 TODO
 
@@ -511,7 +513,7 @@ TODO
 * d3.time.format.utc ↦ d3.utcFormat
 * d3.time.format.iso ↦ d3.isoFormat
 
-## Time Intervals (d3-time)
+## [Time Intervals (d3-time)](https://github.com/d3/d3-time/blob/master/README.md)
 
 TODO
 
@@ -591,23 +593,23 @@ TODO
 * d3.time.year.utc ↦ d3.utcYear
 * d3.time.years.utc ↦ d3.utcYears
 
-## Timers (d3-timer)
+## [Timers (d3-timer)](https://github.com/d3/d3-timer/blob/master/README.md)
 
 TODO
 
 * d3.timer.flush ↦ d3.timerFlush
 
-## Transitions (d3-transition)
+## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
 TODO
 
-## Voronoi Diagrams (d3-voronoi)
+## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/blob/master/README.md)
 
 TODO
 
 * d3.geom.voronoi ↦ d3.voronoi
 
-## Zooming (d3-zoom)
+## [Zooming (d3-zoom)](https://github.com/d3/d3-zoom/blob/master/README.md)
 
 TODO
 
