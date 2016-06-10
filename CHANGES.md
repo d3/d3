@@ -198,7 +198,7 @@ var yields = [
   {yield: 34.46667, variety: "Wisconsin No. 38", year: 1931, site: "Grand Rapids"}
 ];
 
-var sites = d3.set(yields, function(d) { return d.site; }); // ["Grand Rapids", "Duluth", "Waseca", "Crookston", "Morris"]
+var sites = d3.set(yields, function(d) { return d.site; }); // Grand Rapids, Duluth, Waseca, Crookston, Morris
 ```
 
 The d3.map constructor also follows the standard array accessor argument pattern.
