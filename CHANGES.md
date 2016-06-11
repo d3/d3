@@ -68,9 +68,9 @@ You can also `cat` D3 microlibraries into a custom bundle, or use tools such as 
 
 Small files are nice, but modularity is also about making D3 *fun* again. Microlibraries are easier to understand, develop and test. They make it easier for new people to get involved and contribute. They reduce the distinction between a “core module” and a “plugin”, and increase the pace of development in D3 features.
 
-If you don’t care about modularity, you can mostly ignore this change and keep using the default bundle. However, there’s an unavoidable consequence of adopting ES6 modules: every symbol in D3 4.0 now shares a flat namespace rather than the nesting one of D3 3.x. For example, d3.scale.linear is now d3.scaleLinear, and d3.layout.treemap is now d3.treemap. And there have been many other significant improvements to D3’s features! These changes are covered in the sections below. The adoption of ES6 modules also means that D3 is now written exclusively in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode) and has better readability. (Nearly all of the code from D3 3.x has been rewritten and improved!)
+If you don’t care about modularity, you can mostly ignore this change and keep using the default bundle. However, there’s an unavoidable consequence of adopting ES6 modules: every symbol in D3 4.0 now shares a flat namespace rather than the nested one of D3 3.x. For example, d3.scale.linear is now d3.scaleLinear, and d3.layout.treemap is now d3.treemap. The adoption of ES6 modules also means that D3 is now written exclusively in [strict mode](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode) and has better readability. And there have been many other significant improvements to D3’s features! (Nearly all of the code from D3 3.x has been rewritten.) These changes are covered in the sections below.
 
-The default D3 [UMD bundle](https://github.com/umdjs/umd) is now anonymous, rather being named “d3”. No `d3` global is exported if AMD or CommonJS is detected. In a vanilla environment, the D3 microlibraries share the `d3` global, meaning the code you write for the default D3 bundle works identically if you load the modules separately. The generated UMD bundles are no longer stored in the Git repository; Bower has been repointed to [d3-bower](https://github.com/mbostock-bower/d3-bower), and you can find the generated files on [npmcdn](https://npmcdn.com/d3@next/) or attached to the [latest release](https://github.com/d3/d3/releases/latest). The non-minified default bundle is no longer mangled, making it more readable and preserving inline comments.
+The default D3 [UMD bundle](https://github.com/umdjs/umd) is now [anonymous](https://github.com/requirejs/requirejs/wiki/Updating-existing-libraries#register-as-an-anonymous-module-), rather being named “d3”. No `d3` global is exported if AMD or CommonJS is detected. In a vanilla environment, the D3 microlibraries share the `d3` global, meaning the code you write for the default D3 bundle works identically if you load the modules separately. (See [Let’s Make a (D3) Plugin](https://bost.ocks.org/mike/d3-plugin/) for more.) The generated UMD bundles are no longer stored in the Git repository; Bower has been repointed to [d3-bower](https://github.com/mbostock-bower/d3-bower), and you can find the generated files on [npmcdn](https://npmcdn.com/d3@next/) or attached to the [latest release](https://github.com/d3/d3/releases/latest). The non-minified default bundle is no longer mangled, making it more readable and preserving inline comments.
 
 To the consternation of some users, D3 3.x employed Unicode variable names such as τ and π for a concise representation of mathematical operations. A downside of this approach was that a SyntaxError would occur if you loaded the non-minified D3 using ISO-8859-1 instead of UTF-8. D3 3.x also used Unicode string literals, such as the SI-prefix µ for 1e-6. D3 4.0 uses only ASCII variable names and ASCII string literals (see [rollup-plugin-ascii](https://github.com/mbostock/rollup-plugin-ascii)), avoiding these encoding problems.
 
@@ -259,7 +259,7 @@ TODO
 * *dispatch*.*type*.apply(…) ↦ *dispatch*.apply(*type*, …)
 * *dispatch*.on now accepts multiple typenames (like the new *selection*.on)
 * add *dispatch*.copy, useful for copy-on-rwrite semantics
-* fewer closures; optimize performance
+* fewer closures; better performance
 * better error detection (invalid callbacks, illegal types)
 
 ## [Dragging (d3-drag)](https://github.com/d3/d3-drag/blob/master/README.md)
@@ -598,20 +598,20 @@ Mention d3-scale-chromatic?
 
 TODO
 
+* no longer extends Array using prototype injection
 * immutable; *selection*.data returns a new selection
 * only one class of selection; entering nodes are placeholders
 * *selection*.enter and *selection*.exit are empty by default (not error)
 * *selection*.filter preserves index
-* *selection*.append preserves relative order
-* no *enter*.append magic; use *selection*.merge
+* *selection*.append preserves relative order on entering nodes
+* *enter*.append no longer merges into *update*; use *selection*.merge
 * change how *selection*.data handles duplicate keys
-* d3.matcher, d3.selector, d3.creator
-* no longer extends Array using prototype injection
-* multi-value map methods extracted to d3-selection-multi
-* *selection*.raise, *selection*.lower
-* *selection*.dispatch
-* *selection*.nodes
-* d3.local for local variables
+* new d3.matcher, d3.selector, d3.creator
+* multi-value map methods moved to d3-selection-multi plugin
+* new *selection*.raise, *selection*.lower
+* new *selection*.dispatch
+* new *selection*.nodes
+* new d3.local for local variables
 * d3.ns.qualify ↦ d3.namespace
 * d3.ns.prefix ↦ d3.namespaces
 
@@ -724,7 +724,13 @@ TODO
 
 TODO
 
+* *callback* returning true ↦ *timer*.stop; timers are now stopped synchronously
+* new *timer*.restart
+* time now freezes in the background, preventing hangs when returning to the foreground!
+* new d3.now; timers now use high-precision timers (performance.now) where available
 * d3.timer.flush ↦ d3.timerFlush
+* new d3.timeout
+* new d3.interval
 
 ## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
