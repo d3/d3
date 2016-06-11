@@ -507,6 +507,26 @@ better object and array interpolation…
 
 TODO
 
+* treat negative zero (-0) and very small numbers that round to zero as unsigned zero
+* the `c` directive is now for character data (i.e., literals), not for character codes
+* the `b` and `d` directives now round to the nearest integer rather than returning the empty string
+* new `(` sign option uses parentheses for negative values
+* new `=` align option places any sign and symbol to the left of any padding
+* improve accuracy by relying on *number*.toExponential to extract the mantissa and exponent
+* locales are now published as JSON data; can load from npmcdn.com if desired
+
+changed the behavior for default precision. now 6 for all directives except none, which defaults to 12. *none* is a new directive type that is like `g` except it trims insignificant trailing zeros. d3.round and d3.requote are now removed.
+
+new methods for computing the suggested decimal precision for formatting values (used by d3-scale for tick formatting)
+
+* d3.precisionFixed
+* d3.precisionPrefix
+* d3.precisionRound
+
+new d3.formatSpecifier method for parsing, validating and debugging format specifiers. also good for deriving related format specifiers, such as when you want to set the precision automatically.
+
+quite a few more changes… TODO describe them
+
 ## [Paths (d3-path)](https://github.com/d3/d3-path/blob/master/README.md)
 
 TODO
