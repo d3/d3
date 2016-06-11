@@ -167,9 +167,11 @@ TODO
 * *brushstart* event ↦ *start* event
 * *brushend* event ↦ *end* event
 * add *brush*.handleSize
-* add *brush*.filter; ignore right-click by default
+* add *brush*.filter
 * improve the default appearance of the brush
-* improve brush interaction (e.g., SHIFT key)
+* simplify the internal structure of the brush slightly (still customizable?)
+* change the structure of brush events, no longer reports “mode”
+* improve brush interaction - ignore right-click, SHIFT to lock x/y, META for new brush
 * brushes no longer use scales; they operate in screen coordinates
 * brushes no longer store state internally; it is stored on applied elements
 * remove *brush*.clamp; always clamps to the brushable region
@@ -248,6 +250,8 @@ d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
 * d3.tsv.parseRows ↦ d3.tsvParseRows
 * d3.tsv.format ↦ d3.tsvFormat
 * d3.tsv.formatRows ↦ d3.tsvFormatRows
+* d3.dsv(*delimiter*) ↦ d3.dsvFormat(*delimiter*)
+
 * removed deprecated support for *dsv*.format(rows); use *dsv*.formatRows instead.
 * improved performance
 
@@ -267,6 +271,15 @@ TODO
 TODO
 
 * d3.behavior.drag ↦ d3.drag
+* add *drag*.filter
+* add *drag*.subject - for Canvas-based dragging
+* add *drag*.container - for Canvas-based dragging, or avoiding feedback loop
+* ignore emulated mouse events on iOS
+* *dragstart* event ↦ *start* event
+* *dragend* event ↦ *end* event
+* add d3.dragEnable, d3.dragDisable - dealing with browser quirks
+* new *event*.active property makes it easier to tell if any active gesture
+* new *event*.on lets you register temporary listeners for the current gesture
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
@@ -457,6 +470,8 @@ TODO
 * new d3.packEnclose uses Welzl’s algorithm to compute the exact enclosing circle
 * *treemap*.sticky ↦ d3.treemapResquarify
 * new treemap padding parameters, distinguishing parent and sibling padding
+* new nested treemap example
+* new treemap + d3.nest example
 * new partition padding parameter
 * space-filling layouts now output *x0*, *x1*, *y0*, *y1* instead of *x0*, *dx*, *y0*, *dy*; better accuracy
 * see d3.curveBundle in d3-shape for hierarchical edge bundling
@@ -537,7 +552,7 @@ This is a new repository that provides an implementation of the CanvasPathMethod
 
 TODO
 
-There’s no longer a polygon constructor. Instead you just pass an array of vertices to the polygon methods.
+There’s no longer a d3.geom.polygon constructor; instead you just pass an array of vertices to the polygon methods.
 
 * d3.geom.polygon.area ↦ d3.polygonArea
 * d3.geom.polygon.centroid ↦ d3.polygonCentroid
@@ -554,6 +569,17 @@ There’s no longer a fancy d3.geom.hull operator. There’s just a method which
 TODO
 
 * d3.geom.quadtree ↦ d3.quadtree
+* new non-recursive implementation!
+* coincident points are now stored more efficiently
+* internal nodes are now represented more efficiently
+* use *node*.length to distinguish between leaf and internal nodes
+* there’s no longer a quadtree operator and a quadtree; there’s just a mutable quadtree
+* new *quadtree*.remove - remove points from the quadtree!
+* new *quadtree*.extent, *quadtree*.cover - increase the extent of the quadtree after creation!
+* new *quadtree*.addAll, *quadtree*.removeAll - bulk methods for adding and remove points
+* new *quadtree*.copy
+* *quadtree*.find now takes a search radius
+* new *quadtree*.visitAll for post-order traversal
 
 ## [Random Numbers (d3-random)](https://github.com/d3/d3-random/blob/master/README.md)
 
@@ -572,6 +598,11 @@ TODO
 TODO
 
 * d3.xhr ↦ d3.request
+* new *request*.user and *request*.password for basic authentication
+* new *request*.timeout for changing the timeout duration
+* on error, pass the error to the listener
+* on progress, pass the progress event to the listener
+* if d3.xml loads unparseable XML, report an error rather than a null document
 
 ## [Scales (d3-scale)](https://github.com/d3/d3-scale/blob/master/README.md)
 
