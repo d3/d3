@@ -226,13 +226,13 @@ There’s a new [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) color s
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/blob/master/README.md)
 
-Rather than decorating the *dispatch* object with each event type, the dispatch object now exposes generic [*dispatch*.call](https://github.com/d3/d3-dispatch#dispatch_call) and [*dispatch*.apply](https://github.com/d3/d3-dispatch#dispatch_apply) methods which take the *type* string as the first argument. For example, to dispatch a *foo* event in D3 3.x, you might say:
+Rather than decorating the *dispatch* object with each event type, the dispatch object now exposes generic [*dispatch*.call](https://github.com/d3/d3-dispatch#dispatch_call) and [*dispatch*.apply](https://github.com/d3/d3-dispatch#dispatch_apply) methods which take the *type* string as the first argument. For example, in D3 3.x, you might say:
 
 ```js
 dispatcher.foo.call(that, "Hello, Foo!");
 ```
 
-In D3 4.0, you’d say:
+To dispatch a *foo* event in D3 4.0, you’d say:
 
 ```js
 dispatcher.call("foo", that, "Hello, Foo!");
