@@ -267,7 +267,7 @@ TODO
 
 ## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv/blob/master/README.md)
 
-Persuant to the great namespace flattening in D3 4.0, the various CSV and TSV methods have been renamed:
+Persuant to the great namespace flattening, various CSV and TSV methods have new names:
 
 * d3.csv.parse ↦ d3.csvParse
 * d3.csv.parseRows ↦ d3.csvParseRows
@@ -278,7 +278,7 @@ Persuant to the great namespace flattening in D3 4.0, the various CSV and TSV me
 * d3.tsv.format ↦ d3.tsvFormat
 * d3.tsv.formatRows ↦ d3.tsvFormatRows
 
-The [d3.csv](https://github.com/d3/d3-request#csv) and [d3.tsv](https://github.com/d3/d3-request#tsv) methods for loading files of the corresponding formats have not been renamed! Those are defined in [d3-request](#requests-d3-request).There’s no longer a d3.dsv method, which served the triple purpose of defining a DSV formatter, a DSV parser and a DSV requestor; instead, there’s just [d3.dsvFormat](https://github.com/d3/d3-dsv#dsvFormat) which you can use to define a DSV formatter and parser. You can use [*request*.response](https://github.com/d3/d3-request#request_response) to make a request and then parse the response body, or just use [d3.text](https://github.com/d3/d3-request#text).
+The [d3.csv](https://github.com/d3/d3-request#csv) and [d3.tsv](https://github.com/d3/d3-request#tsv) methods for loading files of the corresponding formats have not been renamed, however! Those are defined in [d3-request](#requests-d3-request).There’s no longer a d3.dsv method, which served the triple purpose of defining a DSV formatter, a DSV parser and a DSV requestor; instead, there’s just [d3.dsvFormat](https://github.com/d3/d3-dsv#dsvFormat) which you can use to define a DSV formatter and parser. You can use [*request*.response](https://github.com/d3/d3-request#request_response) to make a request and then parse the response body, or just use [d3.text](https://github.com/d3/d3-request#text).
 
 The [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) method now exposes the column names and their input order as *data*.columns. For example:
 
@@ -299,28 +299,56 @@ The parser is a bit faster and the formatter is a bit more robust: inputs are co
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
-TODO
+D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; these strings could be passed to d3.ease or *transition*.ease. D3 4.0 uses symbols instead, such as [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Symbols are simpler and cleaner. They work well with Rollup to produce smaller custom bundles. Here’s the full list of equivalents:
 
-symbols instead of strings:
+* “linear” ↦ d3.easeLinear¹
+* “linear-in” ↦ d3.easeLinear¹
+* “linear-out” ↦ d3.easeLinear¹
+* “linear-in-out” ↦ d3.easeLinear¹
+* “linear-out-in” ↦ d3.easeLinear¹
+* “poly-in” ↦ d3.easePolyIn
+* “poly-out” ↦ d3.easePolyOut
+* “poly-in-out” ↦ d3.easePolyInOut
+* “poly-out-in” ↦ REMOVED²
+* “quad-in” ↦ d3.easeQuadIn
+* “quad-out” ↦ d3.easeQuadOut
+* “quad-in-out” ↦ d3.easeQuadInOut
+* “quad-out-in” ↦ REMOVED²
+* “cubic-in” ↦ d3.easeCubicIn
+* “cubic-out” ↦ d3.easeCubicOut
+* “cubic-in-out” ↦ d3.easeCubicInOut
+* “cubic-out-in” ↦ REMOVED²
+* “sin-in” ↦ d3.easeSinIn
+* “sin-out” ↦ d3.easeSinOut
+* “sin-in-out” ↦ d3.easeSinInOut
+* “sin-out-in” ↦ REMOVED²
+* “exp-in” ↦ d3.easeExpIn
+* “exp-out” ↦ d3.easeExpOut
+* “exp-in-out” ↦ d3.easeExpInOut
+* “exp-out-in” ↦ REMOVED²
+* “circle-in” ↦ d3.easeCircleIn
+* “circle-out” ↦ d3.easeCircleOut
+* “circle-in-out” ↦ d3.easeCircleInOut
+* “circle-out-in” ↦ REMOVED²
+* “elastic-in” ↦ d3.easeElasticOut²
+* “elastic-out” ↦ d3.easeElasticIn²
+* “elastic-in-out” ↦ REMOVED²
+* “elastic-out-in” ↦ d3.easeElasticInOut²
+* “back-in” ↦ d3.easeBackIn
+* “back-out” ↦ d3.easeBackOut
+* “back-in-out” ↦ d3.easeBackInOut
+* “back-out-in” ↦ REMOVED²
+* “bounce-in” ↦ d3.easeBounceOut²
+* “bounce-out” ↦ d3.easeBounceIn²
+* “bounce-in-out” ↦ REMOVED²
+* “bounce-out-in” ↦ d3.easeBounceInOut²
 
-* d3.ease("linear-in") ↦ d3.easeLinearIn
-* d3.ease("poly-in") ↦ d3.easePolyIn
-* d3.ease("quad-in") ↦ d3.easeQuadIn
-* d3.ease("cubic-in") ↦ d3.easeCubicIn
-* d3.ease("sin-in") ↦ d3.easeSinIn
-* d3.ease("exp-in") ↦ d3.easeExpIn
-* d3.ease("circle-in") ↦ d3.easeCircleIn
-* d3.ease("elastic-in") ↦ d3.easeElasticIn
-* d3.ease("back-in") ↦ d3.easeBackIn
-* d3.ease("bounce-in") ↦ d3.easeBounceIn
+You can still define your own custom easing function, too.
 
-applies to the various modes (-in, -out, -in-out), too, e.g.:
+¹Instead of defining separate in, out and in-out variants of linear easing (which would all be equivalent), there’s just d3.easeLinear.
+<br>²The elastic and bounce easing functions were reversed for consistency with Penner, eliminating the need for the nonsensical “-out-in” easing variants.
 
-* d3.ease("cubic-in") -> d3.easeCubicIn
-* d3.ease("cubic-out") -> d3.easeCubicOut
-* d3.ease("cubic-in-out") -> d3.easeCubicInOut
-
-sensible defaults if no mode, instead of always -in:
+Sensible defaults if no mode, instead of always -in:
 
 * d3.easeQuad ↦ d3.easeQuadInOut
 * d3.easeCubic ↦ d3.easeCubicInOut
@@ -332,18 +360,6 @@ sensible defaults if no mode, instead of always -in:
 * d3.easeBack ↦ d3.easeBackInOut
 * d3.easeElastic ↦ d3.easeElasticOut
 
-fix confusion around elastic, bounce and back easing:
-
-* “elastic-out” ↦ d3.easeElasticIn
-* “elastic-in” ↦ d3.easeElasticOut
-* “elastic-out-in” ↦ d3.easeElasticInOut
-* “bounce-out” ↦ d3.easeBounceIn
-* “bounce-in” ↦ d3.easeBounceOut
-* “bounce-out-in” ↦ d3.easeBounceInOut
-* remove “-out-in” easing mode
-* fix default overshoot parameter for backInOut
-* fix period parameter interpretation for elasticInOut
-
 named optional parameters:
 
 * d3.ease("poly", *k*) ↦ d3.easePoly.exponent(*k*)
@@ -352,6 +368,8 @@ named optional parameters:
 
 other improvements:
 
+* fix default overshoot parameter for backInOut
+* fix period parameter interpretation for elasticInOut
 * optimizations (fewer closures, more inlining)
 * better accuracy
 * remove implicit clamping
