@@ -133,7 +133,7 @@ If you didn’t, you saw this:
 
 <img src="https://raw.githubusercontent.com/d3/d3/master/img/axis-v3.png" width="100%" height="105">
 
-D3 4.0 provides default styles and shorter syntax. In place of d3.svg.axis and *axis*.orient, D3 4.0 now provides four constructors for each orientation: [d3.axisTop](https://github.com/d3/d3-axis#axisTop), [d3.axisRight](https://github.com/d3/d3-axis#axisRight), [d3.axisBottom](https://github.com/d3/d3-axis#axisBottom), [d3.axisLeft](https://github.com/d3/d3-axis#axisLeft). You can now pass a scale directly to the axis constructor. So you can reduce all of the above to:
+D3 4.0 provides default styles and shorter syntax. In place of d3.svg.axis and *axis*.orient, D3 4.0 now provides four constructors for each orientation: [d3.axisTop](https://github.com/d3/d3-axis#axisTop), [d3.axisRight](https://github.com/d3/d3-axis#axisRight), [d3.axisBottom](https://github.com/d3/d3-axis#axisBottom), [d3.axisLeft](https://github.com/d3/d3-axis#axisLeft). These constructors accept a scale, so you can reduce all of the above to:
 
 ```html
 <script>
@@ -148,7 +148,7 @@ And get this:
 
 <img src="https://raw.githubusercontent.com/d3/d3/master/img/axis-v4.png" width="100%" height="105">
 
-You can still override the styles either through CSS or by modifying the axis elements. The new default axis appearance also offsets the axis by a half-pixel to fix a crisp-edges rendering issue on Safari where the axis would be drawn two-pixels thick.
+As before, you can customize the axis appearance either by applying stylesheets or by modifying the axis elements. The default appearance has been changed slightly to offset the axis by a half-pixel;  this fixes a crisp-edges rendering issue on Safari where the axis would be drawn two-pixels thick.
 
 There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickArguments) method, as an alternative to [*axis*.ticks](https://github.com/d3/d3-axis#axis_ticks) that also allows the axis tick arguments to be inspected. The [*axis*.tickSize](https://github.com/d3/d3-axis#axis_tickSize) method has been changed to only allow a single argument when setting the tick size; use [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) or [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) to set the inner and outer tick size separately.
 
