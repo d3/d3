@@ -6,14 +6,16 @@
 * [Brushes](#brushes-d3-brush)
 * [Collections](#collections-d3-collection)
 * [Colors](#colors-d3-color)
-* [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
 * [Dispatches](#dispatches-d3-dispatch)
 * [Dragging](#dragging-d3-drag)
+* [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
 * [Easings](#easings-d3-ease)
 * [Forces](#forces-d3-force)
+* [Number Formats](#number-formats-d3-format)
+* [Geographic Projections](#geographic-projections-d3-geo)
+* [Extended Geographic Projections](#geographic-projections-d3-geo-projection)
 * [Hierarchies](#hierarchies-d3-hierarchy)
 * [Interpolators](#interpolators-d3-interpolate)
-* [Number Formats](#number-formats-d3-format)
 * [Paths](#paths-d3-path)
 * [Polygons](#polygons-d3-polygon)
 * [Quadtrees](#quadtrees-d3-quadtree)
@@ -230,31 +232,6 @@ TODO
 * d3.cubehelix is now built-in
 * you can define your own color spaces; see [d3-hsv](https://github.com/d3/d3-hsv) for example
 
-## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv/blob/master/README.md)
-
-TODO
-
-* *dsv*.parse now exposes column names as *data*.columns; available to row conversion functions
-* *dsv*.format now takes an optional array of column names, useful for filtering and ordering columns
-* *dsv*.format coerces input values to strings, fixing a crash in a pathological case like this:
-
-```js
-d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
-```
-
-* d3.csv.parse ↦ d3.csvParse
-* d3.csv.parseRows ↦ d3.csvParseRows
-* d3.csv.format ↦ d3.csvFormat
-* d3.csv.formatRows ↦ d3.csvFormatRows
-* d3.tsv.parse ↦ d3.tsvParse
-* d3.tsv.parseRows ↦ d3.tsvParseRows
-* d3.tsv.format ↦ d3.tsvFormat
-* d3.tsv.formatRows ↦ d3.tsvFormatRows
-* d3.dsv(*delimiter*) ↦ d3.dsvFormat(*delimiter*)
-
-* removed deprecated support for *dsv*.format(rows); use *dsv*.formatRows instead.
-* improved performance
-
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/blob/master/README.md)
 
 TODO
@@ -280,6 +257,31 @@ TODO
 * add d3.dragEnable, d3.dragDisable - dealing with browser quirks
 * new *event*.active property makes it easier to tell if any active gesture
 * new *event*.on lets you register temporary listeners for the current gesture
+
+## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv/blob/master/README.md)
+
+TODO
+
+* *dsv*.parse now exposes column names as *data*.columns; available to row conversion functions
+* *dsv*.format now takes an optional array of column names, useful for filtering and ordering columns
+* *dsv*.format coerces input values to strings, fixing a crash in a pathological case like this:
+
+```js
+d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
+```
+
+* d3.csv.parse ↦ d3.csvParse
+* d3.csv.parseRows ↦ d3.csvParseRows
+* d3.csv.format ↦ d3.csvFormat
+* d3.csv.formatRows ↦ d3.csvFormatRows
+* d3.tsv.parse ↦ d3.tsvParse
+* d3.tsv.parseRows ↦ d3.tsvParseRows
+* d3.tsv.format ↦ d3.tsvFormat
+* d3.tsv.formatRows ↦ d3.tsvFormatRows
+* d3.dsv(*delimiter*) ↦ d3.dsvFormat(*delimiter*)
+
+* removed deprecated support for *dsv*.format(rows); use *dsv*.formatRows instead.
+* improved performance
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
@@ -385,6 +387,30 @@ the dependency on the drag behavior is removed. instead:
 * *simulation*.unfix
 * *simulation*.unfixAll
 * *simulation*.find
+
+## [Number Formats (d3-format)](https://github.com/d3/d3-format/blob/master/README.md)
+
+TODO
+
+* treat negative zero (-0) and very small numbers that round to zero as unsigned zero
+* the `c` directive is now for character data (i.e., literals), not for character codes
+* the `b` and `d` directives now round to the nearest integer rather than returning the empty string
+* new `(` sign option uses parentheses for negative values
+* new `=` align option places any sign and symbol to the left of any padding
+* improve accuracy by relying on *number*.toExponential to extract the mantissa and exponent
+* locales are now published as JSON data; can load from npmcdn.com if desired
+
+changed the behavior for default precision. now 6 for all directives except none, which defaults to 12. *none* is a new directive type that is like `g` except it trims insignificant trailing zeros. d3.round and d3.requote are now removed.
+
+new methods for computing the suggested decimal precision for formatting values (used by d3-scale for tick formatting)
+
+* d3.precisionFixed
+* d3.precisionPrefix
+* d3.precisionRound
+
+new d3.formatSpecifier method for parsing, validating and debugging format specifiers. also good for deriving related format specifiers, such as when you want to set the precision automatically.
+
+quite a few more changes… TODO describe them
 
 ## [Geographic Projections (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
 
@@ -518,30 +544,6 @@ better object and array interpolation…
 * when *b* has fewer properties or elements than *a*
 * when *a* or *b* is undefined or not an object or array
 
-## [Number Formats (d3-format)](https://github.com/d3/d3-format/blob/master/README.md)
-
-TODO
-
-* treat negative zero (-0) and very small numbers that round to zero as unsigned zero
-* the `c` directive is now for character data (i.e., literals), not for character codes
-* the `b` and `d` directives now round to the nearest integer rather than returning the empty string
-* new `(` sign option uses parentheses for negative values
-* new `=` align option places any sign and symbol to the left of any padding
-* improve accuracy by relying on *number*.toExponential to extract the mantissa and exponent
-* locales are now published as JSON data; can load from npmcdn.com if desired
-
-changed the behavior for default precision. now 6 for all directives except none, which defaults to 12. *none* is a new directive type that is like `g` except it trims insignificant trailing zeros. d3.round and d3.requote are now removed.
-
-new methods for computing the suggested decimal precision for formatting values (used by d3-scale for tick formatting)
-
-* d3.precisionFixed
-* d3.precisionPrefix
-* d3.precisionRound
-
-new d3.formatSpecifier method for parsing, validating and debugging format specifiers. also good for deriving related format specifiers, such as when you want to set the precision automatically.
-
-quite a few more changes… TODO describe them
-
 ## [Paths (d3-path)](https://github.com/d3/d3-path/blob/master/README.md)
 
 TODO
@@ -563,6 +565,10 @@ There’s no longer a d3.geom.polygon constructor; instead you just pass an arra
 There’s no longer a fancy d3.geom.hull operator. There’s just a method which takes a polygon (an array of vertices):
 
 * d3.geom.hull ↦ d3.polygonHull
+
+## [Queues (d3-queue)](https://github.com/d3/d3-queue/blob/master/README.md)
+
+TODO
 
 ## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree/blob/master/README.md)
 
