@@ -299,7 +299,7 @@ The parser is a bit faster and the formatter is a bit more robust: inputs are co
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
-D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; these strings could be passed to d3.ease or *transition*.ease. D3 4.0 uses symbols instead, such as [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Symbols are simpler and cleaner. They work well with Rollup to produce smaller custom bundles. You can still define your own custom easing function, too, if you want to. Here’s the full list of equivalents:
+D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; these strings could be passed to d3.ease or *transition*.ease. D3 4.0 uses symbols instead, such as [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Symbols are simpler and cleaner. They work well with Rollup to produce smaller custom bundles. You can still define your own custom easing function, too, if desired. Here’s the full list of equivalents:
 
 * “linear” ↦ d3.easeLinear¹
 * “linear-in” ↦ d3.easeLinear¹
@@ -346,23 +346,23 @@ D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; the
 ¹ The -in, -out and -in-out variants of linear easing are identical, so there’s just d3.easeLinear.
 <br>² Elastic and bounce easing were inadvertently reversed in 3.x, so 4.0 eliminates -out-in easing!
 
-For convenience, there are also default aliases for each easing method. For example, [d3.easeCubic](https://github.com/d3/d3-ease#easeCubic) is an alias for [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Most easing methods default to -in-out; the exceptions are [d3.easeBounce](https://github.com/d3/d3-ease#easeBounce) and [d3.easeElastic](https://github.com/d3/d3-ease#easeElastic), which default to -out.
+For convenience, there are also default aliases for each easing method. For example, [d3.easeCubic](https://github.com/d3/d3-ease#easeCubic) is an alias for [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Most default to -in-out; the exceptions are [d3.easeBounce](https://github.com/d3/d3-ease#easeBounce) and [d3.easeElastic](https://github.com/d3/d3-ease#easeElastic), which default to -out.
 
-named optional parameters:
+Rather than pass optional arguments to d3.ease or *transition*.ease, parameterizable easing functions now have named parameters: [*poly*.exponent](https://github.com/d3/d3-ease#poly_exponent), [*elastic*.amplitude](https://github.com/d3/d3-ease#elastic_amplitude), [*elastic*.period](https://github.com/d3/d3-ease#elastic_period) and [*back*.overshoot](https://github.com/d3/d3-ease#back_overshoot). For example, in D3 3.x you might say:
 
-* d3.ease("poly", *k*) ↦ d3.easePoly.exponent(*k*)
-* d3.ease("elastic", *a*, *p*) ↦ d3.easeElastic.amplitude(*a*).period(*p*)
-* d3.ease("back", *s*) ↦ d3.easeBack.overshoot(*s*)
+```js
+var e = d3.ease("elastic-out-in", 1.2);
+```
 
-other improvements:
+The equivalent in D3 4.0 is:
 
-* fix default overshoot parameter for backInOut
-* fix period parameter interpretation for elasticInOut
-* optimizations (fewer closures, more inlining)
-* better accuracy
-* remove implicit clamping
-* a [visual reference](https://github.com/d3/d3-ease/blob/master/README.md)
-* an [animated reference](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4)
+```js
+var e = d3.easeElastic.amplitude(1.2);
+```
+
+Many of the easing functions have been optimized for performance and accuracy. Several bugs have been fixed, as well, such as the interpretation of the overshoot parameter for back easing, and the period parameter for elastic easing. Also, [d3-transition](#transitions-d3-transition) now explicitly guarantees that the last tick of the transition happens at exactly *t* = 1, avoiding floating point errors in some easing functions.
+
+There’s now a nice [visual reference](https://github.com/d3/d3-ease/blob/master/README.md) and an [animated reference](http://bl.ocks.org/mbostock/248bac3b8e354a9103c4) to the new easing functions, too!
 
 ## [Forces (d3-force)](https://github.com/d3/d3-force/blob/master/README.md)
 
