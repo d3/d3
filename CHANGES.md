@@ -267,15 +267,7 @@ TODO
 
 ## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv/blob/master/README.md)
 
-TODO
-
-* *dsv*.parse now exposes column names as *data*.columns; available to row conversion functions
-* *dsv*.format now takes an optional array of column names, useful for filtering and ordering columns
-* *dsv*.format coerces input values to strings, fixing a crash in a pathological case like this:
-
-```js
-d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
-```
+Persuant to the great namespace flattening in D3 4.0, the various CSV and TSV methods have been renamed:
 
 * d3.csv.parse ↦ d3.csvParse
 * d3.csv.parseRows ↦ d3.csvParseRows
@@ -285,10 +277,25 @@ d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
 * d3.tsv.parseRows ↦ d3.tsvParseRows
 * d3.tsv.format ↦ d3.tsvFormat
 * d3.tsv.formatRows ↦ d3.tsvFormatRows
-* d3.dsv(*delimiter*) ↦ d3.dsvFormat(*delimiter*)
-* removed deprecated support for *dsv*.format(rows); use *dsv*.formatRows instead.
-* d3.csv and d3.tsv are provided by [d3-request](#requests-d3-request)
-* improved performance
+
+There are still [d3.csv](https://github.com/d3/d3-request#csv) and [d3.tsv](https://github.com/d3/d3-request#tsv) methods for loading files of the corresponding formats; those are defined in [d3-request](#requests-d3-request). There’s no longer a d3.dsv method, which served the triple purpose of defining a DSV formatter, a DSV parser and a DSV requestor; instead, there’s just [d3.dsvFormat](https://github.com/d3/d3-dsv#dsvFormat) which you can use to define a DSV formatter and parser. You can use [*request*.response](https://github.com/d3/d3-request#request_response) to make a request and then parse the response body, or just use [d3.text](https://github.com/d3/d3-request#text).
+
+The [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) method now exposes the column names and their input order as *data*.columns. For example:
+
+```js
+d3.csv("cars.csv", function(error, cars) {
+  if (error) throw error;
+  console.log(cars.columns); // ["Year", "Make", "Model", "Length"]
+});
+```
+
+You can likewise pass an optional array of column names to [*dsv*.format](https://github.com/d3/d3-dsv#dsv_format) to format only a subset of columns, or to specify the column order explicitly:
+
+```js
+var string = d3.csvFormat(data, ["Year", "Model", "Length"]);
+```
+
+The DSV formatter is also more robust. Inputs are coerced to strings before formatting, fixing an obscure crash, and deprecated support for falling back to [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) when the input *data* is an array of arrays has been removed.
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
