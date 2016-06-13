@@ -920,3 +920,22 @@ TODO
 TODO
 
 * d3.behavior.zoom ↦ d3.zoom
+* ignore wheel events if at limits of scale extent
+* ignores right-click by default
+* new *zoom*.translateExtent!
+* consume handled events
+* new *zoom*.transform replaces *zoom*.event; *zoom* behavior is stateless
+* new *zoom*.translateBy
+* new *zoom*.scaleBy
+* new *zoom*.scaleTo
+* new *zoom*.filter
+* removed *zoom*.center; use programmatic zooming instead
+* *zoom*.size ↦ *zoom*.extent; better default extent using the DOM
+* *zoomstart* event ↦ *start* event
+* *zoomend* event ↦ *end* event
+
+new d3.zoomTransform API
+
+* *event*.scale, *event*.translate ↦ *event*.transform
+* *zoom*.x ↦ *transform*.rescaleX
+* *zoom*.y ↦ *transform*.rescaleY
