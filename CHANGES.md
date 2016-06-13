@@ -287,6 +287,7 @@ d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
 * d3.tsv.formatRows ↦ d3.tsvFormatRows
 * d3.dsv(*delimiter*) ↦ d3.dsvFormat(*delimiter*)
 * removed deprecated support for *dsv*.format(rows); use *dsv*.formatRows instead.
+* d3.csv and d3.tsv are provided by [d3-request](#requests-d3-request)
 * improved performance
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
