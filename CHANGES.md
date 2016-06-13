@@ -754,15 +754,18 @@ removed diagonal shapes
 TODO
 
 * d3.time.format ↦ d3.timeFormat
-* d3.time.format.multi ↦ REMOVED
 * d3.time.format.utc ↦ d3.utcFormat
 * d3.time.format.iso ↦ d3.isoFormat
 * *format* ↦ d3.timeFormat
 * *format*.parse ↦ d3.timeParse
 * *format*.utc ↦ d3.utcFormat
 * *format*.utc.parse ↦ d3.utcParse
+* d3.time.format.multi ↦ REMOVED (see d3-scale)
 * type coercion of inputs
-* expanded support for `%Z` time zon offset parsing
+* expanded support for `%Z` time zone offset parsing
+* correctly parse period names that are longer than two characters (e.g., “a.m.”)
+* faster
+* cleaner UTC parsing without setting the Date global
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time/blob/master/README.md)
 
