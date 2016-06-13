@@ -248,7 +248,7 @@ dispatcher.on("foo bar", function(message) {
 
 This matches the new behavior of [*selection*.on](https://github.com/d3/d3-selection#selection_on) in [d3-selection](#selections-d3-selection). The *dispatch*.on method now validates that the specifier *listener* is a function, rather than throwing an error in the future.
 
-The new implementation d3.dispatch is faster, using fewer closures to improve performance. There’s also a new [*dispatch*.copy](https://github.com/d3/d3-dispatch#dispatch_copy) method for making a copy of a dispatcher. This is used by [d3-transition](#transitions-d3-transition) for copy-on-write semantics, improving the performance of transitions in common cases where all elements in a transition have the same set of transition event listeners.
+The new implementation d3.dispatch is faster, using fewer closures to improve performance. There’s also a new [*dispatch*.copy](https://github.com/d3/d3-dispatch#dispatch_copy) method for making a copy of a dispatcher; this is used by [d3-transition](#transitions-d3-transition) to improve the performance of transitions in the common case where all elements in a transition have the same transition event listeners.
 
 ## [Dragging (d3-drag)](https://github.com/d3/d3-drag/blob/master/README.md)
 
