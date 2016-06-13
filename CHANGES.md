@@ -629,6 +629,7 @@ TODO
 * on error, pass the error to the listener
 * on progress, pass the progress event to the listener
 * if d3.xml loads unparseable XML, report an error rather than a null document
+* d3-request is now supported on Node using node-XMLHttpRequest
 
 ## [Scales (d3-scale)](https://github.com/d3/d3-scale/blob/master/README.md)
 
