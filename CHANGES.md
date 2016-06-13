@@ -213,21 +213,21 @@ Opacity
 
 * all colors now have opacity
 * can now parse rgba(…) and hsla(…) CSS color strings, and "transparent"
+* transparent is rgba(NaN, NaN, NaN, 0), not transparent black
 * *color*.toString now returns rgb(…) or rgba(…), not hexadecimal; matches computed CSS value, improving performance
-* affects transitions: e.g., can interpolate from default transparent background color
+* affects interpolation, transitions: e.g., can interpolate from default transparent background color
 
 More robust parsing
 
 * d3.color(…) now returns a color instance in the appropriate color space, or null! (matches getComputedStyle)
-* more robust parsing; for example, you can no longer mix integers and percentages in rgb(…), trims
+* more robust parsing; for example, you can no longer mix integers and percentages in rgb(…), now handles whitespace, signs
 * the color space constructors, such as d3.rgb, now always return a copy
 * removed *rgb*.hsl; use d3.hsl(*rgb*) instead; there’s still *color*.rgb, though
 
-More information, better interpolation
+More information
 
-* explicitly track which channels are undefined, e.g., black has undefined saturation, transparent
-* d3.rgb now lazily quantizes channel values, improving accuracy in color space conversion
-* related improvements in color interpolation!
+* d3.rgb no longer greedily quantizes channel values, improving accuracy in color space conversion
+* color spaces no longer clamp channel values, except in *color*.toString
 * add *color*.displayable
 
 Other changes
