@@ -191,12 +191,11 @@ var yields = [
   {yield: 28.10000, variety: "No. 462",          year: 1931, site: "Duluth"},
   {yield: 38.50000, variety: "Svansota",         year: 1932, site: "Waseca"},
   {yield: 40.46667, variety: "Svansota",         year: 1931, site: "Crookston"},
-  {yield: 29.86667, variety: "Peatland",         year: 1931, site: "Morris"},
   {yield: 36.03333, variety: "Peatland",         year: 1932, site: "Waseca"},
   {yield: 34.46667, variety: "Wisconsin No. 38", year: 1931, site: "Grand Rapids"}
 ];
 
-var sites = d3.set(yields, function(d) { return d.site; }); // Grand Rapids, Duluth, Waseca, Crookston, Morris
+var sites = d3.set(yields, function(d) { return d.site; }); // Grand Rapids, Duluth, Waseca, Crookston
 ```
 
 The [d3.map](https://github.com/d3/d3-collection#map) constructor also follows the standard array accessor argument pattern.
@@ -227,14 +226,29 @@ There’s a new [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) color s
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/blob/master/README.md)
 
-TODO
+Rather than decorating the *dispatch* object with each event type, the dispatch object now exposes generic [*dispatch*.call](https://github.com/d3/d3-dispatch#dispatch_call) and [*dispatch*.apply](https://github.com/d3/d3-dispatch#dispatch_apply) methods which take the *type* string as the first argument. For example, to dispatch a *foo* event in D3 3.x, you might say:
 
-* *dispatch*.*type*.call(…) ↦ *dispatch*.call(*type*, …)
-* *dispatch*.*type*.apply(…) ↦ *dispatch*.apply(*type*, …)
-* *dispatch*.on now accepts multiple typenames (like the new *selection*.on)
-* add *dispatch*.copy, useful for copy-on-rwrite semantics
-* fewer closures; better performance
-* better error detection (invalid callbacks, illegal types)
+```js
+dispatcher.foo.call(that, "Hello, Foo!");
+```
+
+In D3 4.0, you’d say:
+
+```js
+dispatcher.call("foo", that, "Hello, Foo!");
+```
+
+The [*dispatch*.on](https://github.com/d3/d3-dispatch#dispatch_on) method now accepts multiple typenames, allowing you to add or remove listeners for multiple events simultaneously. For example, to send both *foo* and *bar* events to the same listener:
+
+```js
+dispatcher.on("foo bar", function(message) {
+  console.log(message);
+});
+```
+
+This matches the new behavior of [*selection*.on](https://github.com/d3/d3-selection#selection_on) in [d3-selection](#selections-d3-selection). The *dispatch*.on method now validates that the specifier *listener* is a function, rather than throwing an error in the future.
+
+The new implementation d3.dispatch is faster, using fewer closures to improve performance. There’s also a new [*dispatch*.copy](https://github.com/d3/d3-dispatch#dispatch_copy) method for making a copy of a dispatcher. This is used by [d3-transition](#transitions-d3-transition) for copy-on-write semantics, improving the performance of transitions in common cases where all elements in a transition have the same set of transition event listeners.
 
 ## [Dragging (d3-drag)](https://github.com/d3/d3-drag/blob/master/README.md)
 
