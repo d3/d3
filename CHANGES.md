@@ -897,6 +897,9 @@ TODO
 * uses optimized interpolator rather than d3.interpolate
 * fix *transition*.remove if multiple transition names are in use
 * new *transition*.selection
+* changed *transition*.ease to always take an easing function, not a name
+* see also d3-timer, d3-ease, d3-interpolate
+* in particular note that transitions are now frozen in the background! and there’s d3.timeout, d3.interval
 
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/blob/master/README.md)
 
