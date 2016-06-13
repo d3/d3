@@ -209,32 +209,15 @@ The [*nest*.map](https://github.com/d3/d3-collection#nest_map) method now always
 
 TODO
 
-Opacity
+All colors now have opacity: *color*.opacity. You can pass an optional opacity argument to the color space constructors [d3.rgb](https://github.com/d3/d3-color#rgb), [d3.hsl](https://github.com/d3/d3-color#hsl), [d3.lab](https://github.com/d3/d3-color#lab), [d3.hcl](https://github.com/d3/d3-color#hcl) or [d3.cubehelix](https://github.com/d3/d3-color#cubehelix). Or you can parse an rgba(…) and hsla(…) CSS color specification string, or the string “transparent”, to [d3.color](https://github.com/d3/d3-color#color). (The “transparent” color is defined as an RGB color with zero opacity and undefined red, green and blue channels; this differs slightly from CSS which defines it as transparent black, but is useful for simplifying color interpolation logic where either the starting or ending color has undefined channels.) The [*color*.toString](https://github.com/d3/d3-color#color_toString) method now likewise returns an rgb(…) or rgba(…) string with integer channel values, not the hexadecimal RGB format, consistent with CSS computed values. This improves performance by short-circuiting transitions when the element’s starting style matches its ending style.
 
-* all colors now have opacity
-* can now parse rgba(…) and hsla(…) CSS color strings, and "transparent"
-* transparent is rgba(NaN, NaN, NaN, 0), not transparent black
-* *color*.toString now returns rgb(…) or rgba(…), not hexadecimal; matches computed CSS value, improving performance
-* affects interpolation, transitions: e.g., can interpolate from default transparent background color
+The new [d3.color](https://github.com/d3/d3-color#color) method is the primary method for parsing colors: it returns a d3.color instance in the appropriate color space, or null if the CSS color specifier is invalid. The parsing implementation is now more robust. For example, you can no longer mix integers and percentages in rgb(…), and it correctly handles whitespace, decimal points, number signs, and other edge cases. The color space constructors d3.rgb, d3.hsl, d3.lab, d3.hcl and d3.cubehelix now always return a copy of the input color, converted to the corresponding color space. While [*color*.rgb](https://github.com/d3/d3-color#color_rgb) remains, *rgb*.hsl has been removed; use d3.hsl to convert a color to the RGB color space.
 
-More robust parsing
+The RGB color space no longer greedily quantizes and clamps channel values when creatign colors, improving accuracy in color space conversion. Quantization and clamping instead occurs in *color*.toString when formatting a color for display. You can use the new [*color*.displayable](https://github.com/d3/d3-color#color_displayable) to test whether a color is [out-of-gamut](https://en.wikipedia.org/wiki/Gamut).
 
-* d3.color(…) now returns a color instance in the appropriate color space, or null! (matches getComputedStyle)
-* more robust parsing; for example, you can no longer mix integers and percentages in rgb(…), now handles whitespace, signs
-* the color space constructors, such as d3.rgb, now always return a copy
-* removed *rgb*.hsl; use d3.hsl(*rgb*) instead; there’s still *color*.rgb, though
+The [*rgb*.brighter](https://github.com/d3/d3-color#rgb_brighter) method no longer special-cases black. This is a multiplicative operator, defining a new color *r*′, *g*′, *b*′ where *r*′ = *r* × *pow*(0.7, *k*), *g*′ = *g* × *pow*(0.7, *k*) and *b*′ = *b* × *pow*(0.7, *k*); thus, a brighter black is still black.
 
-More information
-
-* d3.rgb no longer greedily quantizes channel values, improving accuracy in color space conversion
-* color spaces no longer clamp channel values, except in *color*.toString
-* add *color*.displayable
-
-Other changes
-
-* *rgb*.brighter no longer special-cases black
-* new d3.cubehelix color space!
-* you can define your own color spaces; see [d3-hsv](https://github.com/d3/d3-hsv) for example
+There’s a new [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) color space, generalizing Dave Green’s color scheme. You can continue to define your own custom color spaces, too; see [d3-hsv](https://github.com/d3/d3-hsv) for an example.
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/blob/master/README.md)
 
@@ -530,7 +513,7 @@ b-spline interpolation
 color space interpolation
 
 * color interpolation now observes opacity (see d3-color)!
-* better behavior when either *a* or *b*’s color channel is undefined
+* better, more consistent behavior when either *a* or *b*’s color channel is undefined
 * add “long” versions of interpolators for color spaces with hue angles
 * Cubehelix (with optional gamma parameter) is now supported by default
 * color interpolators now return rgb(…) or rgba(…) strings (matching *color*.toString)
