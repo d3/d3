@@ -757,6 +757,12 @@ TODO
 * d3.time.format.multi ↦ REMOVED
 * d3.time.format.utc ↦ d3.utcFormat
 * d3.time.format.iso ↦ d3.isoFormat
+* *format* ↦ d3.timeFormat
+* *format*.parse ↦ d3.timeParse
+* *format*.utc ↦ d3.utcFormat
+* *format*.utc.parse ↦ d3.utcParse
+* type coercion of inputs
+* expanded support for `%Z` time zon offset parsing
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time/blob/master/README.md)
 
