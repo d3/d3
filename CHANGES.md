@@ -13,7 +13,6 @@
 * [Forces](#forces-d3-force)
 * [Number Formats](#number-formats-d3-format)
 * [Geographic Projections](#geographic-projections-d3-geo)
-* [Extended Geographic Projections](#geographic-projections-d3-geo-projection)
 * [Hierarchies](#hierarchies-d3-hierarchy)
 * [Interpolators](#interpolators-d3-interpolate)
 * [Paths](#paths-d3-path)
@@ -468,12 +467,6 @@ Raw projections:
 * d3.geo.transverseMercator.raw ↦ d3.geoRawTransverseMercator
 
 A new d3.geoPipeline API is in development for D3 5.0.
-
-## [Extended Geographic Projections (d3-geo-projection)](https://github.com/d3/d3-geo-projection/blob/master/README.md)
-
-TODO
-
-This module is not yet implemented in D3 4.0, but I’m working on it.
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/blob/master/README.md)
 
