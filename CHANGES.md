@@ -345,8 +345,8 @@ D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; the
 
 You can still define your own custom easing function, too.
 
-¹Instead of defining separate in, out and in-out variants of linear easing (which would all be equivalent), there’s just d3.easeLinear.
-<br>²The elastic and bounce easing functions were reversed for consistency with Penner, eliminating the need for the nonsensical “-out-in” easing variants.
+¹Instead of defining separate -in, -out and -in-out variants of linear easing (which would all be equivalent), there’s just d3.easeLinear.
+<br>²The elastic and bounce easing functions were reversed for consistency with Penner, eliminating the need for the nonsensical -out-in easing variants.
 
 Sensible defaults if no mode, instead of always -in:
 
