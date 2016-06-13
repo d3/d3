@@ -279,7 +279,6 @@ d3.tsvFormat([{foo: {toString: function() { return "\"foo\""; }}}]);
 * d3.tsv.format ↦ d3.tsvFormat
 * d3.tsv.formatRows ↦ d3.tsvFormatRows
 * d3.dsv(*delimiter*) ↦ d3.dsvFormat(*delimiter*)
-
 * removed deprecated support for *dsv*.format(rows); use *dsv*.formatRows instead.
 * improved performance
 
@@ -633,7 +632,6 @@ TODO
 * d3.scale.ordinal ↦ d3.scaleOrdinal
 * d3.time.scale ↦ d3.scaleTime
 * d3.time.scale.utc ↦ d3.scaleUtc
-
 * quantitative scales generate ticks in the same order as the domain
 * non-linear quantitative scales are more accurate
 * better *log*.ticks filtering for large domains
@@ -642,7 +640,6 @@ TODO
   * new Viridis, Inferno, Magma, Plasma interpolators
   * new Warm, Cool, Rainbow interpolators
   * new default Cubehelix interpolator
-
 * d3.scaleOrdinal constructor now takes an optional *range*
 * new *ordinal*.unknown
 * new d3.scaleBand, *band*.bandwidth, *band*.align
@@ -666,6 +663,7 @@ TODO
 * *selection*.filter preserves index
 * *selection*.append preserves relative order on entering nodes
 * *enter*.append no longer merges into *update*; use *selection*.merge
+* *selection*.call no longer sets `this` context
 * change how *selection*.data handles duplicate keys
 * new d3.matcher, d3.selector, d3.creator
 * multi-value map methods moved to d3-selection-multi plugin
@@ -881,6 +879,24 @@ TODO
 ## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
 TODO
+
+* transitions are immutable, too; *transition*.merge
+* *transition*.each ↦ *transition*.on
+* *transition*.each is now the same as *selection*.each
+* new d3.active for chaining transitions / modifying in-progress transitions
+* new *selection*.transition(*transition*); searches ancestors
+* new d3.interrupt
+* change *transition*.transition semantics in regards to *transition*.delay
+* strict state machine to enforce when transitions can be modified; more robust
+* enforces *t* = 1 on end
+* functions passed to transition methods take the same standard arguments as selections
+* optimize transitions to re-use tweens and interpolators to improve performance!
+* *transition*.attrTween gets standard arguments (not current attribute value)
+* *transition*.styleTween gets standard arguments (not current style value)
+* call *transition*.{tween,attrTween,styleTween} in getter mode
+* uses optimized interpolator rather than d3.interpolate
+* fix *transition*.remove if multiple transition names are in use
+* new *transition*.selection
 
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/blob/master/README.md)
 
