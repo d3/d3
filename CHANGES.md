@@ -283,9 +283,9 @@ The [d3.csv](https://github.com/d3/d3-request#csv) and [d3.tsv](https://github.c
 The [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) method now exposes the column names and their input order as *data*.columns. For example:
 
 ```js
-d3.csv("cars.csv", function(error, cars) {
+d3.csv("cars.csv", function(error, data) {
   if (error) throw error;
-  console.log(cars.columns); // ["Year", "Make", "Model", "Length"]
+  console.log(data.columns); // ["Year", "Make", "Model", "Length"]
 });
 ```
 
@@ -295,7 +295,7 @@ You can likewise pass an optional array of column names to [*dsv*.format](https:
 var string = d3.csvFormat(data, ["Year", "Model", "Length"]);
 ```
 
-The DSV formatter is also more robust. Inputs are coerced to strings before formatting, fixing an obscure crash, and deprecated support for falling back to [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) when the input *data* is an array of arrays has been removed.
+The DSV formatter is a bit faster and a bit more robust: inputs are coerced to strings before formatting, fixing an obscure crash, and deprecated support for falling back to [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) when the input *data* is an array of arrays has been removed.
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
