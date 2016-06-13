@@ -570,6 +570,11 @@ There’s no longer a fancy d3.geom.hull operator. There’s just a method which
 
 TODO
 
+* now part of the default bundle
+* rewritten within fewer closures to improve performance
+* supports instanceof d3.queue
+* more well-defined behavior with certain edge cases
+
 ## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree/blob/master/README.md)
 
 TODO
@@ -623,11 +628,27 @@ TODO
 * d3.scale.quantile ↦ d3.scaleQuantile
 * d3.scale.identity ↦ d3.scaleIdentity
 * d3.scale.ordinal ↦ d3.scaleOrdinal
-* d3.scale.category10 ↦ d3.schemeCategory10
-* d3.scale.category20 ↦ d3.schemeCategory20
-* d3.scale.category20b ↦ d3.schemeCategory20b
-* d3.scale.category20c ↦ d3.schemeCategory20c
 * d3.time.scale ↦ d3.scaleTime
+* d3.time.scale.utc ↦ d3.scaleUtc
+
+* quantitative scales generate ticks in the same order as the domain
+* non-linear quantitative scales are more accurate
+* better *log*.ticks filtering for large domains
+* *time*.ticks and *time*.nice now only accept time intervals
+* new d3.scaleSequential
+  * new Viridis, Inferno, Magma, Plasma interpolators
+  * new Warm, Cool, Rainbow interpolators
+  * new default Cubehelix interpolator
+
+* d3.scaleOrdinal constructor now takes an optional *range*
+* new *ordinal*.unknown
+* new d3.scaleBand, *band*.bandwidth, *band*.align
+* new d3.scalePoint
+* category scales now defined as arrays of colors:
+  * d3.scale.category10 ↦ d3.schemeCategory10
+  * d3.scale.category20 ↦ d3.schemeCategory20
+  * d3.scale.category20b ↦ d3.schemeCategory20b
+  * d3.scale.category20c ↦ d3.schemeCategory20c
 
 Mention d3-scale-chromatic?
 
