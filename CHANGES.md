@@ -678,7 +678,6 @@ TODO
 * d3.svg.area ↦ d3.area
 * d3.svg.area.radial ↦ d3.radialArea
 * d3.svg.arc ↦ d3.arc
-
 * more robust arc padding?
 
 shapes can now render to canvas!
