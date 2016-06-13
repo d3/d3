@@ -343,8 +343,8 @@ D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; the
 * “bounce-in-out” ↦ REMOVED²
 * “bounce-out-in” ↦ d3.easeBounceInOut²
 
-¹ Instead of defining separate -in, -out and -in-out variants of linear easing (which would all be equivalent), there’s just d3.easeLinear.
-<br>² The elastic and bounce easing functions were reversed for consistency with Penner, eliminating the need for the nonsensical -out-in easing variants.
+¹ The -in, -out and -in-out variants of linear easing are identical, so there’s just d3.easeLinear.
+<br>² Elastic and bounce easing were inadvertently reversed in 3.x, so 4.0 eliminates -out-in easing!
 
 Sensible defaults if no mode, instead of always -in:
 
