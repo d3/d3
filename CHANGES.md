@@ -346,17 +346,7 @@ D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; the
 ¹ The -in, -out and -in-out variants of linear easing are identical, so there’s just d3.easeLinear.
 <br>² Elastic and bounce easing were inadvertently reversed in 3.x, so 4.0 eliminates -out-in easing!
 
-Sensible defaults if no mode, instead of always -in:
-
-* d3.easeQuad ↦ d3.easeQuadInOut
-* d3.easeCubic ↦ d3.easeCubicInOut
-* d3.easePoly ↦ d3.easePolyInOut
-* d3.easeSin ↦ d3.easeSinInOut
-* d3.easeExp ↦ d3.easeExpInOut
-* d3.easeCircle ↦ d3.easeCircleInOut
-* d3.easeBounce ↦ d3.easeBounceOut
-* d3.easeBack ↦ d3.easeBackInOut
-* d3.easeElastic ↦ d3.easeElasticOut
+For convenience, there are also default aliases for each easing method. For example, [d3.easeCubic](https://github.com/d3/d3-ease#easeCubic) is an alias for [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Most easing methods default to -in-out; the exceptions are [d3.easeBounce](https://github.com/d3/d3-ease#easeBounce) and [d3.easeElastic](https://github.com/d3/d3-ease#easeElastic), which default to -out.
 
 named optional parameters:
 
