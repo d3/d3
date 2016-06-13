@@ -500,6 +500,7 @@ TODO
 * new treemap + d3.nest example
 * new partition padding parameter
 * space-filling layouts now output *x0*, *x1*, *y0*, *y1* instead of *x0*, *dx*, *y0*, *dy*; better accuracy
+* d3.layout.bundle ↦ *node*.path
 * see d3.curveBundle in d3-shape for hierarchical edge bundling
 
 ## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/blob/master/README.md)
@@ -619,6 +620,8 @@ TODO
 
 TODO
 
+[Introducing d3-scale](https://medium.com/@mbostock/introducing-d3-scale-61980c51545f#.d38uz6vuz)
+
 * d3.scale.linear ↦ d3.scaleLinear
 * d3.scale.sqrt ↦ d3.scaleSqrt
 * d3.scale.pow ↦ d3.scalePow
@@ -677,17 +680,74 @@ TODO
 
 TODO
 
+[Introducing d3-shape](https://medium.com/@mbostock/introducing-d3-shape-73f8367e6d12#.78ucz4hr2)
+
 * d3.svg.line ↦ d3.line
 * d3.svg.line.radial ↦ d3.radialLine
 * d3.svg.area ↦ d3.area
 * d3.svg.area.radial ↦ d3.radialArea
 * d3.svg.arc ↦ d3.arc
+
+* more robust arc padding?
+
+shapes can now render to canvas!
+
+* *line*.context
+* *area*.context
+* *arc*.context
+* see also d3-path
+* fast; uses streaming geometry transforms similar to d3-geo
+
+new curve API!
+
+* *line*.interpolate ↦ *line*.curve
+* *area*.interpolate ↦ *area*.curve
+* "basis" ↦ d3.curveBasis
+* "basis-closed" ↦ d3.curveBasisClosed
+* "basis-open" ↦ d3.curveBasisOpen
+* "bundle" ↦ d3.curveBundle, *bundle*.beta
+* default bundle β to 0.85
+* "cardinal" ↦ d3.curveCardinal
+* "cardinal-closed" ↦ d3.curveCardinalClosed
+* "cardinal-open" ↦ d3.curveCardinalOpen
+* fixed interpretation of cardinal spline tension
+* fixed first and last segment of basis curve
+* fixed first and last segment of cardinal curve
+* new d3.curveCatmullRom!
+* new d3.curveCatmullRomClosed!
+* new d3.curveCatmullRomOpen!
+* *catmullRom*.alpha implements Yuksel et al.’s parameterization
+* defaults to centripetal Catmull–Rom
+* "linear" ↦ d3.curveLinear
+* "linear-closed" ↦ d3.curveLinearClosed
+* fixed monotone curve implementation
+* "monotone" ↦ d3.curveMonotoneX
+* new d3.curveMonotoneY
+* new d3.curveNatural
+* "step" ↦ d3.curveStep
+* "step-after" ↦ d3.curveStepAfter
+* "step-before" ↦ d3.curveStepBefore
+* no more funky *interpolate*.reverse; curves can define different behavior for topline vs. baseline
+
+new symbol API
+
 * d3.svg.symbol ↦ d3.symbol
 * d3.svg.symbolTypes ↦ d3.symbolTypes
+* new d3.symbolStar
+* new d3.symbolWye
+* "triangle-up" ↦ d3.symbolTriangle
+* removed "triangle-down"
+
+new stack API!
+
+* d3.layout.stack ↦ d3.stack
+* no more x-accessor
+* no more weird *stack*.out
+
+removed diagonal shapes
+
 * d3.svg.diagonal ↦ REMOVED
 * d3.svg.diagonal.radial ↦ REMOVED
-* d3.layout.bundle ↦ d3.curveBundle
-* d3.layout.stack ↦ d3.stack
 
 ## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/blob/master/README.md)
 
