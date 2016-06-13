@@ -45,7 +45,7 @@ The [default bundle](https://d3js.org/d3.v4.0.0-alpha.49.js) of D3 4.0 convenien
 <script src="https://d3js.org/d3.v4.0.0-alpha.49.min.js"></script>
 ```
 
-As before, you can load optional plugins on top of the default bundle, such as ColorBrewer scales:
+As before, you can load optional plugins on top of the default bundle, such as [ColorBrewer scales](https://github.com/d3/d3-scale-chromatic):
 
 ```html
 <script src="https://d3js.org/d3.v4.0.0-alpha.49.min.js"></script>
