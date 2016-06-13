@@ -12,7 +12,7 @@
 * [Easings](#easings-d3-ease)
 * [Forces](#forces-d3-force)
 * [Number Formats](#number-formats-d3-format)
-* [Geographic Projections](#geographic-projections-d3-geo)
+* [Geographies](#geographic-projections-d3-geo)
 * [Hierarchies](#hierarchies-d3-hierarchy)
 * [Interpolators](#interpolators-d3-interpolate)
 * [Paths](#paths-d3-path)
@@ -410,7 +410,7 @@ new d3.formatSpecifier method for parsing, validating and debugging format speci
 
 quite a few more changes… TODO describe them
 
-## [Geographic Projections (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
+## [Geographies (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
 
 TODO
 
