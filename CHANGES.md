@@ -295,7 +295,7 @@ You can likewise pass an optional array of column names to [*dsv*.format](https:
 var string = d3.csvFormat(data, ["Year", "Model", "Length"]);
 ```
 
-The DSV formatter is a bit faster and a bit more robust: inputs are coerced to strings before formatting, fixing an obscure crash, and deprecated support for falling back to [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) when the input *data* is an array of arrays has been removed.
+The parser is a bit faster and the formatter is a bit more robust: inputs are coerced to strings before formatting, fixing an obscure crash, and deprecated support for falling back to [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) when the input *data* is an array of arrays has been removed.
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
