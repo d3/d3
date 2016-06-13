@@ -906,6 +906,14 @@ TODO
 TODO
 
 * d3.geom.voronoi ↦ d3.voronoi
+* *voronoi*.clipExtent ↦ *voronoi*.extent
+* *voronoi* now returns the full Voronoi diagram
+* new *voronoi*.polygons returns clipped polygons
+* *voronoi*.polygons and *diagram*.polygons require an extent
+* the diagram can be used to compute Voronoi & Delaunay simultaneously
+* the diagram also exposes topology, which is useful for TopoJSON applications
+* well-defined behavior for coincident vertices: subsequent cells are null
+* input data exposed as *polygon*.data, not *polygon*.point
 
 ## [Zooming (d3-zoom)](https://github.com/d3/d3-zoom/blob/master/README.md)
 
