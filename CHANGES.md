@@ -209,19 +209,31 @@ The [*nest*.map](https://github.com/d3/d3-collection#nest_map) method now always
 
 TODO
 
+Opacity
+
 * all colors now have opacity
-* can now parse rgba(…) and hsla(…) CSS color strings
-* more robust parsing; for example, you can no longer mix integers and percentages in rgb(…), trims
+* can now parse rgba(…) and hsla(…) CSS color strings, and "transparent"
+* *color*.toString now returns rgb(…) or rgba(…), not hexadecimal; matches computed CSS value, improving performance
+* affects transitions: e.g., can interpolate from default transparent background color
+
+More robust parsing
+
 * d3.color(…) now returns a color instance in the appropriate color space, or null! (matches getComputedStyle)
-* *color*.toString now returns rgb(…) or rgba(…), not hexadecimal
-* explicitly track which channels are undefined, e.g., black has undefined saturation, transparent
-* related improvements in color interpolation!
-* d3.rgb now lazily quantizes channel values, improving accuracy in color space conversion
-* *rgb*.brighter no longer special-cases black
+* more robust parsing; for example, you can no longer mix integers and percentages in rgb(…), trims
 * the color space constructors, such as d3.rgb, now always return a copy
-* removed *rgb*.hsl
+* removed *rgb*.hsl; use d3.hsl(*rgb*) instead; there’s still *color*.rgb, though
+
+More information, better interpolation
+
+* explicitly track which channels are undefined, e.g., black has undefined saturation, transparent
+* d3.rgb now lazily quantizes channel values, improving accuracy in color space conversion
+* related improvements in color interpolation!
 * add *color*.displayable
-* d3.cubehelix is now built-in
+
+Other changes
+
+* *rgb*.brighter no longer special-cases black
+* new d3.cubehelix color space!
 * you can define your own color spaces; see [d3-hsv](https://github.com/d3/d3-hsv) for example
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/blob/master/README.md)
