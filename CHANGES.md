@@ -219,11 +219,11 @@ var red = d3.color("hsl(0, 80%, 50%)"); // {h: 0, l: 0.5, s: 0.8, opacity: 1}
 
 The parsing implementation is now more robust. For example, you can no longer mix integers and percentages in rgb(…), and it correctly handles whitespace, decimal points, number signs, and other edge cases. The color space constructors d3.rgb, d3.hsl, d3.lab, d3.hcl and d3.cubehelix now always return a copy of the input color, converted to the corresponding color space. While [*color*.rgb](https://github.com/d3/d3-color#color_rgb) remains, *rgb*.hsl has been removed; use d3.hsl to convert a color to the RGB color space.
 
-The RGB color space no longer greedily quantizes and clamps channel values when creatign colors, improving accuracy in color space conversion. Quantization and clamping instead occurs in *color*.toString when formatting a color for display. You can use the new [*color*.displayable](https://github.com/d3/d3-color#color_displayable) to test whether a color is [out-of-gamut](https://en.wikipedia.org/wiki/Gamut).
+The RGB color space no longer greedily quantizes and clamps channel values when creating colors, improving accuracy in color space conversion. Quantization and clamping now occurs in *color*.toString when formatting a color for display. You can use the new [*color*.displayable](https://github.com/d3/d3-color#color_displayable) to test whether a color is [out-of-gamut](https://en.wikipedia.org/wiki/Gamut).
 
-The [*rgb*.brighter](https://github.com/d3/d3-color#rgb_brighter) method no longer special-cases black. This is a multiplicative operator, defining a new color *r*′, *g*′, *b*′ where *r*′ = *r* × *pow*(0.7, *k*), *g*′ = *g* × *pow*(0.7, *k*) and *b*′ = *b* × *pow*(0.7, *k*); thus, a brighter black is still black.
+The [*rgb*.brighter](https://github.com/d3/d3-color#rgb_brighter) method no longer special-cases black. This is a multiplicative operator, defining a new color *r*′, *g*′, *b*′ where *r*′ = *r* × *pow*(0.7, *k*), *g*′ = *g* × *pow*(0.7, *k*) and *b*′ = *b* × *pow*(0.7, *k*); a brighter black is still black.
 
-There’s a new [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) color space, generalizing Dave Green’s color scheme. You can continue to define your own custom color spaces, too; see [d3-hsv](https://github.com/d3/d3-hsv) for an example.
+There’s a new [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) color space, generalizing Dave Green’s color scheme! (See also [d3.interpolateCubehelixDefault](https://github.com/d3/d3-scale#interpolateCubehelixDefault) from [d3-scale](#scales-d3-scale).) You can continue to define your own custom color spaces, too; see [d3-hsv](https://github.com/d3/d3-hsv) for an example.
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/blob/master/README.md)
 
