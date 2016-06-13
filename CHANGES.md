@@ -299,7 +299,7 @@ The parser is a bit faster and the formatter is a bit more robust: inputs are co
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/blob/master/README.md)
 
-D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; these strings could be passed to d3.ease or *transition*.ease. D3 4.0 uses symbols instead, such as [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Symbols are simpler and cleaner. They work well with Rollup to produce smaller custom bundles. Here’s the full list of equivalents:
+D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; these strings could be passed to d3.ease or *transition*.ease. D3 4.0 uses symbols instead, such as [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Symbols are simpler and cleaner. They work well with Rollup to produce smaller custom bundles. You can still define your own custom easing function, too, if you want to. Here’s the full list of equivalents:
 
 * “linear” ↦ d3.easeLinear¹
 * “linear-in” ↦ d3.easeLinear¹
@@ -343,10 +343,8 @@ D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; the
 * “bounce-in-out” ↦ REMOVED²
 * “bounce-out-in” ↦ d3.easeBounceInOut²
 
-You can still define your own custom easing function, too.
-
-¹Instead of defining separate -in, -out and -in-out variants of linear easing (which would all be equivalent), there’s just d3.easeLinear.
-<br>²The elastic and bounce easing functions were reversed for consistency with Penner, eliminating the need for the nonsensical -out-in easing variants.
+¹ Instead of defining separate -in, -out and -in-out variants of linear easing (which would all be equivalent), there’s just d3.easeLinear.
+<br>² The elastic and bounce easing functions were reversed for consistency with Penner, eliminating the need for the nonsensical -out-in easing variants.
 
 Sensible defaults if no mode, instead of always -in:
 
