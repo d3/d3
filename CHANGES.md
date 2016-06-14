@@ -670,9 +670,9 @@ Mention d3-scale-chromatic?
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
-Selections no longer subclass Array using [prototype chain injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection); they are now plain objects. This avoids a [scary performance warning](https://github.com/d3/d3/issues/1805) on Firefox.
+Selections no longer subclass Array using [prototype chain injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection); they are now plain objects. This avoids a [scary warning](https://github.com/d3/d3/issues/1805) on Firefox and improves performance.
 
-Selections are now immutable: the set of elements in a given selection will never change. (The elements’ attributes and content will of course be modified!) The [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) and [*selection*.data](https://github.com/d3/d3-selection#selection_data) methods now return new selections rather than modifying the selection in-place. In addition, [*selection*.append](https://github.com/d3/d3-selection#selection_append) no longer merges entering nodes into the update selection. Use [*selection*.merge](https://github.com/d3/d3-selection#selection_merge) to combine enter and update after a data join. For example, the following code in 3.x:
+Selections are now immutable: the elements and parents in a selection will never change. (The elements’ attributes and content will of course still be modified!) The [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) and [*selection*.data](https://github.com/d3/d3-selection#selection_data) methods now return new selections rather than modifying the selection in-place. In addition, [*selection*.append](https://github.com/d3/d3-selection#selection_append) no longer merges entering nodes into the update selection; use [*selection*.merge](https://github.com/d3/d3-selection#selection_merge) to combine enter and update after a data join. For example, the following code in 3.x:
 
 ```js
 var circle = svg.selectAll("circle").data(data) // UPDATE
@@ -680,7 +680,7 @@ var circle = svg.selectAll("circle").data(data) // UPDATE
 
 circle.exit().remove(); // EXIT
 
-circle.enter().append("circle") // ENTER, and merges into UPDATE!
+circle.enter().append("circle") // ENTER, and merges into UPDATE! 🌶
     .style("fill", "green");
 
 circle // ENTER + UPDATE
@@ -700,6 +700,8 @@ circle.enter().append("circle") // ENTER
   .merge(circle) // ENTER + UPDATE
     .style("stroke", "black");
 ```
+
+This change is discussed further in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488#.4ukdnxqiz)
 
 In 3.x, the [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) and [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) methods were undefined until you called *selection*.data. In 4.0, now they simply return the empty selection if the selection has not been joined to data.
 
