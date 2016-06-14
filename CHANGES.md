@@ -955,7 +955,7 @@ Renamed range aliases…
 
 ## [Timers (d3-timer)](https://github.com/d3/d3-timer/blob/master/README.md)
 
-In D3 3.x, the only way to stop a timer was for the callback to return true. For example, this timer self-terminates after one second:
+In D3 3.x, the only way to stop a timer was for its callback to return true. For example, this timer stops after one second:
 
 ```js
 d3.timer(function(elapsed) {
@@ -975,7 +975,7 @@ var t = d3.timer(function(elapsed) {
 });
 ```
 
-The primary benefit of this new design is that timers are not required to self-terminate: they can be stopped externally, allowing for the immediate and synchronous disposal of associated resources, and the separation of concerns. For example, the above is equivalent to:
+The primary benefit of *timer*.stop is that timers are not required to self-terminate: they can be stopped externally, allowing for the immediate and synchronous disposal of associated resources, and the separation of concerns. The above is equivalent to:
 
 ```js
 var t = d3.timer(function(elapsed) {
@@ -987,7 +987,7 @@ d3.timeout(function() {
 }, 1000);
 ```
 
-This new design also improves [d3-transition](#transitions-d3-transition): now when a transition is interrupted, its resources are immediately freed rather than having to wait for transition to start!
+This improvement extends to [d3-transition](#transitions-d3-transition): now when a transition is interrupted, its resources are immediately freed rather than having to wait for transition to start!
 
 4.0 also introduces a new [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) method for restarting timers, for replacing the callback of a running timer, or for changing delay and reference time. Unlike calling *timer*.stop and then creating a new timer, calling *timer*.restart maintains the invocation priority of an existing timer, so you can guarantee that the order of invocation of active timers will remain the same.
 
