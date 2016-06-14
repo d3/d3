@@ -738,17 +738,23 @@ Thus, the entering *c*, *d* and *e* are inserted before *f*, since *f* is the fo
 
 There is now only one class of selection. 3.x implemented enter selections using a special class to change the behavior of *enter*.append and *enter*.select; a consequence of this decision was that enter selections in 3.x lacked certain methods (*e.g.*, [#2043](https://github.com/d3/d3/issues/2043)). In 4.0, enter selections are normal selections; they have the same methods and the same behavior; [enter nodes](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js) now implement [*node*.appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild), [*node*.insertBefore](https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore), [*node*.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector), and [*node*.querySelectorAll](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll).
 
-The *selection*.data behavior has been changed slightly with respect to duplicate keys. In 3.x, if multiple data had the same key, the duplicate data would be ignored and not included in either enter, update or exit; in 4.0 the duplicate data is always put in the enter selection. In both 3.x and 4.0, if multiple elements have the same key, the duplicate elements are put in the exit selection. Thus, 4.0’s behavior is now symmetric for enter and exit.
+The [*selection*.data](https://github.com/d3/d3-selection#selection_data) method has been changed slightly with respect to duplicate keys. In 3.x, if multiple data had the same key, the duplicate data would be ignored and not included in enter, update or exit; in 4.0 the duplicate data is always put in the enter selection. In both 3.x and 4.0, if multiple elements have the same key, the duplicate elements are put in the exit selection. Thus, 4.0’s behavior is now symmetric for enter and exit, and the general update pattern will now produce a DOM that matches the new data even if there are duplicate keys. When called in getter mode, [*selection*.data](https://github.com/d3/d3-selection#selection_data) now returns the data for all elements in the selection, rather than just the data for the first group of elements.
 
-* *selection*.call no longer sets `this` context
-* new *selection*.raise, *selection*.lower
-* new *selection*.dispatch
-* new *selection*.nodes
-* new d3.local for local variables
-* new d3.matcher, d3.selector, d3.creator
-* d3.ns.qualify ↦ d3.namespace
-* d3.ns.prefix ↦ d3.namespaces
-* multi-value map methods moved to d3-selection-multi plugin
+The [*selection*.call](https://github.com/d3/d3-selection#selection_call) method no longer sets the `this` context when invoking the specified function; the *selection* is passed as the first argument to the function, so use that.
+
+Selections have several new methods! Use [*selection*.raise](https://github.com/d3/d3-selection#selection_raise) to move the selected elements to the front of their siblings, so that they are drawn on top; use [*selection*.lower](https://github.com/d3/d3-selection#selection_lower) to move them to the back. Use [*selection*.dispatch](https://github.com/d3/d3-selection#selection_dispatch) to dispatch a [custom event](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) to event listeners. Use [*selection*.nodes](https://github.com/d3/d3-selection#selection_nodes) to generate an array of all nodes in a selection.
+
+*selection*.on now takes multiple typenames
+
+standardized callback arguments
+
+new d3.local for local variables
+
+d3.ns.qualify ↦ d3.namespace; d3.ns.prefix ↦ d3.namespaces
+
+new low-level methods: d3.matcher, d3.selector, d3.creator, d3.window, d3.customEvent
+
+multi-value map methods moved to d3-selection-multi plugin
 
 ## [Shapes (d3-shape)](https://github.com/d3/d3-shape/blob/master/README.md)
 
