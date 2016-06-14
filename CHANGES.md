@@ -738,9 +738,7 @@ Thus, the entering *c*, *d* and *e* are inserted before *f*, since *f* is the fo
 
 There is now only one class of selection. 3.x implemented enter selections using a special class to change the behavior of *enter*.append and *enter*.select; a consequence of this decision was that enter selections in 3.x lacked certain methods (*e.g.*, [#2043](https://github.com/d3/d3/issues/2043)). In 4.0, enter selections are normal selections; they have the same methods and the same behavior; [enter nodes](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js) now implement [*node*.appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild), [*node*.insertBefore](https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore), [*node*.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector), and [*node*.querySelectorAll](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll).
 
-* change how *selection*.data handles duplicate keys
-
-other changes
+The *selection*.data behavior has been changed slightly with respect to duplicate keys. In 3.x, if multiple data had the same key, the duplicate data would be ignored and not included in either enter, update or exit; in 4.0 the duplicate data is always put in the enter selection. In both 3.x and 4.0, if multiple elements have the same key, the duplicate elements are put in the exit selection. Thus, 4.0’s behavior is now symmetric for enter and exit.
 
 * *selection*.call no longer sets `this` context
 * new *selection*.raise, *selection*.lower
