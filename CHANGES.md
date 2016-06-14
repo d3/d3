@@ -676,7 +676,6 @@ TODO
 * immutable; *selection*.data returns a new selection
 * only one class of selection; entering nodes are placeholders
 * *selection*.enter and *selection*.exit are empty by default (not error)
-* *selection*.filter preserves index
 * *selection*.append preserves relative order on entering nodes
 * *enter*.append no longer merges into *update*; use *selection*.merge
 * *selection*.call no longer sets `this` context
