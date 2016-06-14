@@ -561,9 +561,24 @@ better object and array interpolation…
 
 ## [Paths (d3-path)](https://github.com/d3/d3-path/blob/master/README.md)
 
-TODO
+The [d3.path](https://github.com/d3/d3-path#path) serializer implements the [CanvasPathMethods API](https://www.w3.org/TR/2dcontext/#canvaspathmethods), allowing you to write code that can render to either Canvas or SVG. For example, given some code that draws to a canvas:
 
-This is a new repository that provides an implementation of the CanvasPathMethods API, allowing you to write code once that can render to either Canvas or SVG. It’s used by d3-shape and d3-chord.
+```js
+function drawCircle(context, radius) {
+  context.moveTo(radius, 0);
+  context.arc(0, 0, radius, 0, 2 * Math.PI);
+}
+```
+
+You can render to SVG as follows:
+
+```js
+var context = d3.path();
+drawCircle(context, 40);
+pathElement.setAttribute("d", context.toString());
+```
+
+The path serializer enables [d3-shape](#shapes-d3-shape) to support both Canvas and SVG; see [*line*.context](https://github.com/d3/d3-shape#line_context) and [*area*.context](https://github.com/d3/d3-shape#area_context), for example.
 
 ## [Polygons (d3-polygon)](https://github.com/d3/d3-polygon/blob/master/README.md)
 
