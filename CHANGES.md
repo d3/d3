@@ -670,9 +670,9 @@ Mention d3-scale-chromatic?
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
-Selections no longer subclass Array using [prototype chain injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection); they are now plain objects. This avoids a [scary warning](https://github.com/d3/d3/issues/1805) on Firefox and improves performance.
+Selections no longer subclass Array using [prototype chain injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection); they are now plain objects, improving performance.
 
-Selections are now immutable: the elements and parents in a selection will never change. (The elements’ attributes and content will of course still be modified!) The [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) and [*selection*.data](https://github.com/d3/d3-selection#selection_data) methods now return new selections rather than modifying the selection in-place. In addition, [*selection*.append](https://github.com/d3/d3-selection#selection_append) no longer merges entering nodes into the update selection; use [*selection*.merge](https://github.com/d3/d3-selection#selection_merge) to combine enter and update after a data join. For example, the following code in 3.x:
+Selections are now immutable: the elements and parents in a selection never change. (The elements’ attributes and content will of course still be modified!) The [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) and [*selection*.data](https://github.com/d3/d3-selection#selection_data) methods now return new selections rather than modifying the selection in-place. In addition, [*selection*.append](https://github.com/d3/d3-selection#selection_append) no longer merges entering nodes into the update selection; use [*selection*.merge](https://github.com/d3/d3-selection#selection_merge) to combine enter and update after a data join. For example, the following [general update pattern](http://bl.ocks.org/mbostock/a8a5baa4c4a470cda598) in 3.x:
 
 ```js
 var circle = svg.selectAll("circle").data(data) // UPDATE
@@ -701,58 +701,60 @@ circle.enter().append("circle") // ENTER
     .style("stroke", "black");
 ```
 
-This change is discussed further in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488#.4ukdnxqiz)
+This change is discussed further in [What Makes Software Good](https://medium.com/@mbostock/what-makes-software-good-943557f8a488#.4ukdnxqiz).
 
-In 3.x, the [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) and [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) methods were undefined until you called *selection*.data. In 4.0, now they simply return the empty selection if the selection has not been joined to data.
+In 3.x, the [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) and [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) methods were undefined until you called *selection*.data, resulting in a TypeError if you attempted to access them. In 4.0, now they simply return the empty selection if the selection has not been joined to data.
 
-In 3.x, [*selection*.append](https://github.com/d3/d3-selection#selection_append) would always append the new element as the last child of its parent. A little-known trick was to use [*selection*.insert](https://github.com/d3/d3-selection#selection_insert) without specifying a *before* selector when entering nodes, causing the entering nodes to be inserted before the following element in the update selection. In 4.0, this is now the default behavior of *selection*.append; if you do not specify a *before* selector to *selection*.insert, the inserted element is appended as the last child. This change makes the [general update pattern](http://bl.ocks.org/mbostock/a8a5baa4c4a470cda598) preserve the relative order of elements and data. For example, given the following DOM:
+In 3.x, [*selection*.append](https://github.com/d3/d3-selection#selection_append) would always append the new element as the last child of its parent. A little-known trick was to use [*selection*.insert](https://github.com/d3/d3-selection#selection_insert) without specifying a *before* selector when entering nodes, causing the entering nodes to be inserted before the following element in the update selection. In 4.0, this is now the default behavior of *selection*.append; if you do not specify a *before* selector to *selection*.insert, the inserted element is appended as the last child. This change makes the general update pattern preserve the relative order of elements and data. For example, given the following DOM:
 
 ```html
-<div id="a"></div>
-<div id="b"></div>
-<div id="f"></div>
+<div>a</div>
+<div>b</div>
+<div>f</div>
 ```
 
 And the following code:
 
 ```js
 var div = d3.select("body").selectAll("div")
-  .data(["a", "b", "c", "d", "e", "f"], function(d) { return d || this.id; });
+  .data(["a", "b", "c", "d", "e", "f"], function(d) { return d || this.textContent; });
 
 div.enter().append("div")
-    .attr("id", function(d) { return d; });
+    .text(function(d) { return d; });
 ```
 
 The resulting DOM will be:
 
 ```html
-<div id="a"></div>
-<div id="b"></div>
-<div id="c"></div>
-<div id="d"></div>
-<div id="e"></div>
-<div id="f"></div>
+<div>a</div>
+<div>b</div>
+<div>c</div>
+<div>d</div>
+<div>e</div>
+<div>f</div>
 ```
 
 Thus, the entering *c*, *d* and *e* are inserted before *f*, since *f* is the following element in the update selection. Although this behavior is sufficient to preserve order if the new data’s order is stable, if the data changes order, you must still use [*selection*.order](https://github.com/d3/d3-selection#selection_order) to reorder elements.
 
-There is now only one class of selection. 3.x implemented enter selections using a special class to change the behavior of *enter*.append and *enter*.select; a consequence of this decision was that enter selections in 3.x lacked certain methods (*e.g.*, [#2043](https://github.com/d3/d3/issues/2043)). In 4.0, enter selections are normal selections; they have the same methods and the same behavior; [enter nodes](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js) now implement [*node*.appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild), [*node*.insertBefore](https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore), [*node*.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector), and [*node*.querySelectorAll](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll).
+There is now only one class of selection. 3.x implemented enter selections using a special class with different behavior for *enter*.append and *enter*.select; a consequence of this design was that enter selections in 3.x lacked [certain methods](https://github.com/d3/d3/issues/2043). In 4.0, enter selections are simply normal selections; they have the same methods and the same behavior. [Enter nodes](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js) now implement [*node*.appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild), [*node*.insertBefore](https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore), [*node*.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector), and [*node*.querySelectorAll](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll).
 
-The [*selection*.data](https://github.com/d3/d3-selection#selection_data) method has been changed slightly with respect to duplicate keys. In 3.x, if multiple data had the same key, the duplicate data would be ignored and not included in enter, update or exit; in 4.0 the duplicate data is always put in the enter selection. In both 3.x and 4.0, if multiple elements have the same key, the duplicate elements are put in the exit selection. Thus, 4.0’s behavior is now symmetric for enter and exit, and the general update pattern will now produce a DOM that matches the new data even if there are duplicate keys. When called in getter mode, [*selection*.data](https://github.com/d3/d3-selection#selection_data) now returns the data for all elements in the selection, rather than just the data for the first group of elements.
-
-The [*selection*.call](https://github.com/d3/d3-selection#selection_call) method no longer sets the `this` context when invoking the specified function; the *selection* is passed as the first argument to the function, so use that.
+The [*selection*.data](https://github.com/d3/d3-selection#selection_data) method has been changed slightly with respect to duplicate keys. In 3.x, if multiple data had the same key, the duplicate data would be ignored and not included in enter, update or exit; in 4.0 the duplicate data is always put in the enter selection. In both 3.x and 4.0, if multiple elements have the same key, the duplicate elements are put in the exit selection. Thus, 4.0’s behavior is now symmetric for enter and exit, and the general update pattern will now produce a DOM that matches the data even if there are duplicate keys.
 
 Selections have several new methods! Use [*selection*.raise](https://github.com/d3/d3-selection#selection_raise) to move the selected elements to the front of their siblings, so that they are drawn on top; use [*selection*.lower](https://github.com/d3/d3-selection#selection_lower) to move them to the back. Use [*selection*.dispatch](https://github.com/d3/d3-selection#selection_dispatch) to dispatch a [custom event](https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent) to event listeners. Use [*selection*.nodes](https://github.com/d3/d3-selection#selection_nodes) to generate an array of all nodes in a selection.
 
-*selection*.on now takes multiple typenames
+When called in getter mode, [*selection*.data](https://github.com/d3/d3-selection#selection_data) now returns the data for all elements in the selection, rather than just the data for the first group of elements. The [*selection*.call](https://github.com/d3/d3-selection#selection_call) method no longer sets the `this` context when invoking the specified function; the *selection* is passed as the first argument to the function, so use that. The [*selection*.on](https://github.com/d3/d3-selection#selection_on) method now accepts multiple whitespace-separated typenames, so you can add or remove multiple listeners simultaneously. For example:
 
-standardized callback arguments
+```js
+selection.on("mousedown touchstart", function() {
+  console.log(d3.event.type);
+});
+```
 
-new d3.local for local variables
+The arguments passed to callback functions has changed slightly in 4.0 to be more consistent. The standard arguments are the element’s datum (*d*), the element’s index (*i*), and the element’s group (*nodes*), with *this* as the element. The slight exception to this convention is *selection*data, which is evaluated for each group rather than each element; it is passed the group’s parent datum (*d*), the group index (*i*), and the selection’s parents (*parents*), with *this* as the group’s parent.
 
-d3.ns.qualify ↦ d3.namespace; d3.ns.prefix ↦ d3.namespaces
+The new [d3.local](https://github.com/d3/d3-selection#local-variables) provides a mechanism for defining [local variables](http://bl.ocks.org/mbostock/e1192fe405703d8321a5187350910e08): state that is bound to DOM elements, and available to any descendant element. This can be a convenient alternative to using [*selection*.each](https://github.com/d3/d3-selection#selection_each) or storing local state in data.
 
-new low-level methods: d3.matcher, d3.selector, d3.creator, d3.window, d3.customEvent
+The d3.ns.prefix namespace prefix map has been renamed to [d3.namespaces](https://github.com/d3/d3-selection#namespaces), and the d3.ns.qualify method has been renamed to [d3.namespace](https://github.com/d3/d3-selection#namespace). Several new low-level methods are now available, as well. [d3.matcher](https://github.com/d3/d3-selection#matcher) is used internally by [*selection*.filter](https://github.com/d3/d3-selection#selection_filter); [d3.selector](https://github.com/d3/d3-selection#selector) is used by [*selection*.select](https://github.com/d3/d3-selection#selection_select); [d3.selectorAll](https://github.com/d3/d3-selection#selectorAll) is used by [*selection*.selectAll](https://github.com/d3/d3-selection#selection_selectAll); [d3.creator](https://github.com/d3/d3-selection#creator) is used by [*selection*.append](https://github.com/d3/d3-selection#selection_append) and [*selection*.insert](https://github.com/d3/d3-selection#selection_insert). The new [d3.window](https://github.com/d3/d3-selection#window) returns the owner window for a given element, window or document. The new [d3.customEvent](https://github.com/d3/d3-selection#customEvent) temporarily sets [d3.event](https://github.com/d3/d3-selection#event) while invoking a function, allowing you to implement controls which dispatch custom events; this is used by [d3-drag](https://github.com/d3/d3-drag), [d3-zoom](https://github.com/d3/d3-zoom) and [d3-brush](https://github.com/d3/d3-brush).
 
 multi-value map methods moved to d3-selection-multi plugin
 
