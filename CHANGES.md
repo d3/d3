@@ -987,9 +987,9 @@ d3.timeout(function() {
 }, 1000);
 ```
 
-This improvement extends to [d3-transition](#transitions-d3-transition): now when a transition is interrupted, its resources are immediately freed rather than having to wait for transition to start!
+This improvement extends to [d3-transition](#transitions-d3-transition): now when a transition is interrupted, its resources are immediately freed rather than having to wait for transition to start.
 
-4.0 also introduces a new [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) method for restarting timers, for replacing the callback of a running timer, or for changing delay and reference time. Unlike calling *timer*.stop and then creating a new timer, calling *timer*.restart maintains the invocation priority of an existing timer, so you can guarantee that the order of invocation of active timers will remain the same.
+4.0 also introduces a new [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) method for restarting timers, for replacing the callback of a running timer, or for changing its delay or reference time. Unlike *timer*.stop followed by [d3.timer](https://github.com/d3/d3-timer#timer), *timer*.restart maintains the invocation priority of an existing timer, so you can guarantee that the order of invocation of active timers will remain the same.
 
 Some usage patterns in D3 3.x could cause the browser to hang when a background page returned to the foreground. For example, the following code schedules a transition every second:
 
