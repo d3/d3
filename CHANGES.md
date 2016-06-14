@@ -624,15 +624,14 @@ TODO
 
 ## [Random Numbers (d3-random)](https://github.com/d3/d3-random/blob/master/README.md)
 
-TODO
+Pursuant to the great namespace flattening, the random number generators have new names:
 
-* d3.random.normal ↦ d3.randomNormal
-* d3.random.logNormal ↦ d3.randomLogNormal
-* d3.random.bates ↦ d3.randomBates
-* d3.random.irwinHall ↦ d3.randomIrwinHall
-* new d3.randomExponential
-* new d3.randomUniform
-* optimize d3.randomNormal and d3.randomLogNormal
+* d3.random.normal ↦ [d3.randomNormal](https://github.com/d3/d3-random#randomNormal)
+* d3.random.logNormal ↦ [d3.randomLogNormal](https://github.com/d3/d3-random#randomLogNormal)
+* d3.random.bates ↦ [d3.randomBates](https://github.com/d3/d3-random#randomBates)
+* d3.random.irwinHall ↦ [d3.randomIrwinHall](https://github.com/d3/d3-random#randomIrwinHall)
+
+There are also new random number generators for [exponential](https://github.com/d3/d3-random#randomExponential) and [uniform](https://github.com/d3/d3-random#randomUniform) distributions. The [normal](https://github.com/d3/d3-random#randomNormal) and [log-normal](https://github.com/d3/d3-random#randomLogNormal) random generators have also been optimized.
 
 ## [Requests (d3-request)](https://github.com/d3/d3-request/blob/master/README.md)
 
