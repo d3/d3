@@ -855,102 +855,126 @@ The performance of time formatting and parsing has been improved, and the UTC fo
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time/blob/master/README.md)
 
-TODO
+Pursuant to the great namespace flattening, the local time intervals have been renamed:
 
-* better handling of weird daylight savings issues
-* changed semantics of *interval*.range(*start*, *stop*, *step*)
-* new *interval*.filter
-* new *interval*.every
-* new d3.timeInterval constructor for custom time intervals
-* new d3.timeMillisecond, d3.utcMillisecond
-* performance improvements
-* fast implementation of d3.timeYear.every, d3.utcYear.every
-* fast implementation of d3.timeMillisecond.every, d3.utcMillisecond.every
+* ADDED ↦ [d3.timeMillisecond](https://github.com/d3/d3-time#timeMillisecond)
+* d3.time.second ↦ [d3.timeSecond](https://github.com/d3/d3-time#timeSecond)
+* d3.time.minute ↦ [d3.timeMinute](https://github.com/d3/d3-time#timeMinute)
+* d3.time.hour ↦ [d3.timeHour](https://github.com/d3/d3-time#timeHour)
+* d3.time.day ↦ [d3.timeDay](https://github.com/d3/d3-time#timeDay)
+* d3.time.sunday ↦ [d3.timeSunday](https://github.com/d3/d3-time#timeSunday)
+* d3.time.monday ↦ [d3.timeMonday](https://github.com/d3/d3-time#timeMonday)
+* d3.time.tuesday ↦ [d3.timeTuesday](https://github.com/d3/d3-time#timeTuesday)
+* d3.time.wednesday ↦ [d3.timeWednesday](https://github.com/d3/d3-time#timeWednesday)
+* d3.time.thursday ↦ [d3.timeThursday](https://github.com/d3/d3-time#timeThursday)
+* d3.time.friday ↦ [d3.timeFriday](https://github.com/d3/d3-time#timeFriday)
+* d3.time.saturday ↦ [d3.timeSaturday](https://github.com/d3/d3-time#timeSaturday)
+* d3.time.week ↦ [d3.timeWeek](https://github.com/d3/d3-time#timeWeek)
+* d3.time.month ↦ [d3.timeMonth](https://github.com/d3/d3-time#timeMonth)
+* d3.time.year ↦ [d3.timeYear](https://github.com/d3/d3-time#timeYear)
 
-Generalized interval counting
+The local time range aliases have likewise been renamed:
 
-* new *interval*.count
-* d3.time.dayOfYear ↦ d3.timeDay.count
-* d3.time.sundayOfYear ↦ d3.timeSunday.count
-* d3.time.mondayOfYear ↦ d3.timeMonday.count
-* d3.time.tuesdayOfYear ↦ d3.timeTuesday.count
-* d3.time.wednesdayOfYear ↦ d3.timeWednesday.count
-* d3.time.thursdayOfYear ↦ d3.timeThursday.count
-* d3.time.fridayOfYear ↦ d3.timeFriday.count
-* d3.time.saturdayOfYear ↦ d3.timeSaturday.count
-* d3.time.weekOfYear ↦ d3.timeWeek.count
-* d3.time.dayOfYear.utc ↦ d3.utcDay.count
-* d3.time.sundayOfYear.utc ↦ d3.utcSunday.count
-* d3.time.mondayOfYear.utc ↦ d3.utcMonday.count
-* d3.time.tuesdayOfYear.utc ↦ d3.utcTuesday.count
-* d3.time.wednesdayOfYear.utc ↦ d3.utcWednesday.count
-* d3.time.thursdayOfYear.utc ↦ d3.utcThursday.count
-* d3.time.fridayOfYear.utc ↦ d3.utcFriday.count
-* d3.time.saturdayOfYear.utc ↦ d3.utcSaturday.count
-* d3.time.weekOfYear.utc ↦ d3.utcWeek.count
+* d3.time.seconds ↦ [d3.timeSeconds](https://github.com/d3/d3-time#timeSeconds)
+* d3.time.minutes ↦ [d3.timeMinutes](https://github.com/d3/d3-time#timeMinutes)
+* d3.time.hours ↦ [d3.timeHours](https://github.com/d3/d3-time#timeHours)
+* d3.time.days ↦ [d3.timeDays](https://github.com/d3/d3-time#timeDays)
+* d3.time.sundays ↦ [d3.timeSundays](https://github.com/d3/d3-time#timeSundays)
+* d3.time.mondays ↦ [d3.timeMondays](https://github.com/d3/d3-time#timeMondays)
+* d3.time.tuesdays ↦ [d3.timeTuesdays](https://github.com/d3/d3-time#timeTuesdays)
+* d3.time.wednesdays ↦ [d3.timeWednesdays](https://github.com/d3/d3-time#timeWednesdays)
+* d3.time.thursdays ↦ [d3.timeThursdays](https://github.com/d3/d3-time#timeThursdays)
+* d3.time.fridays ↦ [d3.timeFridays](https://github.com/d3/d3-time#timeFridays)
+* d3.time.saturdays ↦ [d3.timeSaturdays](https://github.com/d3/d3-time#timeSaturdays)
+* d3.time.weeks ↦ [d3.timeWeeks](https://github.com/d3/d3-time#timeWeeks)
+* d3.time.months ↦ [d3.timeMonths](https://github.com/d3/d3-time#timeMonths)
+* d3.time.years ↦ [d3.timeYears](https://github.com/d3/d3-time#timeYears)
 
-Renamed intervals…
+The UTC time intervals have been renamed:
 
-* d3.time.interval ↦ d3.timeInterval
-* d3.time.day ↦ d3.timeDay
-* d3.time.hour ↦ d3.timeHour
-* d3.time.minute ↦ d3.timeMinute
-* d3.time.month ↦ d3.timeMonth
-* d3.time.second ↦ d3.timeSecond
-* d3.time.sunday ↦ d3.timeSunday
-* d3.time.monday ↦ d3.timeMonday
-* d3.time.tuesday ↦ d3.timeTuesday
-* d3.time.wednesday ↦ d3.timeWednesday
-* d3.time.thursday ↦ d3.timeThursday
-* d3.time.friday ↦ d3.timeFriday
-* d3.time.saturday ↦ d3.timeSaturday
-* d3.time.week ↦ d3.timeWeek
-* d3.time.year ↦ d3.timeYear
-* d3.time.day.utc ↦ d3.utcDay
-* d3.time.hour.utc ↦ d3.utcHour
-* d3.time.minute.utc ↦ d3.utcMinute
-* d3.time.month.utc ↦ d3.utcMonth
-* d3.time.second.utc ↦ d3.utcSecond
-* d3.time.sunday.utc ↦ d3.utcSunday
-* d3.time.monday.utc ↦ d3.utcMonday
-* d3.time.tuesday.utc ↦ d3.utcTuesday
-* d3.time.wednesday.utc ↦ d3.utcWednesday
-* d3.time.thursday.utc ↦ d3.utcThursday
-* d3.time.friday.utc ↦ d3.utcFriday
-* d3.time.saturday.utc ↦ d3.utcSaturday
-* d3.time.week.utc ↦ d3.utcWeek
-* d3.time.year.utc ↦ d3.utcYear
+* ADDED ↦ [d3.utcMillisecond](https://github.com/d3/d3-time#utcMillisecond)
+* d3.time.second.utc ↦ [d3.utcSecond](https://github.com/d3/d3-time#utcSecond)
+* d3.time.minute.utc ↦ [d3.utcMinute](https://github.com/d3/d3-time#utcMinute)
+* d3.time.hour.utc ↦ [d3.utcHour](https://github.com/d3/d3-time#utcHour)
+* d3.time.day.utc ↦ [d3.utcDay](https://github.com/d3/d3-time#utcDay)
+* d3.time.sunday.utc ↦ [d3.utcSunday](https://github.com/d3/d3-time#utcSunday)
+* d3.time.monday.utc ↦ [d3.utcMonday](https://github.com/d3/d3-time#utcMonday)
+* d3.time.tuesday.utc ↦ [d3.utcTuesday](https://github.com/d3/d3-time#utcTuesday)
+* d3.time.wednesday.utc ↦ [d3.utcWednesday](https://github.com/d3/d3-time#utcWednesday)
+* d3.time.thursday.utc ↦ [d3.utcThursday](https://github.com/d3/d3-time#utcThursday)
+* d3.time.friday.utc ↦ [d3.utcFriday](https://github.com/d3/d3-time#utcFriday)
+* d3.time.saturday.utc ↦ [d3.utcSaturday](https://github.com/d3/d3-time#utcSaturday)
+* d3.time.week.utc ↦ [d3.utcWeek](https://github.com/d3/d3-time#utcWeek)
+* d3.time.month.utc ↦ [d3.utcMonth](https://github.com/d3/d3-time#utcMonth)
+* d3.time.year.utc ↦ [d3.utcYear](https://github.com/d3/d3-time#utcYear)
 
-Renamed range aliases…
+The UTC time range aliases have been renamed:
 
-* d3.time.days ↦ d3.timeDays
-* d3.time.hours ↦ d3.timeHours
-* d3.time.minutes ↦ d3.timeMinutes
-* d3.time.months ↦ d3.timeMonths
-* d3.time.seconds ↦ d3.timeSeconds
-* d3.time.sundays ↦ d3.timeSundays
-* d3.time.mondays ↦ d3.timeMondays
-* d3.time.tuesdays ↦ d3.timeTuesdays
-* d3.time.wednesdays ↦ d3.timeWednesdays
-* d3.time.thursdays ↦ d3.timeThursdays
-* d3.time.fridays ↦ d3.timeFridays
-* d3.time.saturdays ↦ d3.timeSaturdays
-* d3.time.weeks ↦ d3.timeWeeks
-* d3.time.years ↦ d3.timeYears
-* d3.time.days.utc ↦ d3.utcDays
-* d3.time.hours.utc ↦ d3.utcHours
-* d3.time.minutes.utc ↦ d3.utcMinutes
-* d3.time.months.utc ↦ d3.utcMonths
-* d3.time.seconds.utc ↦ d3.utcSeconds
-* d3.time.sundays.utc ↦ d3.utcSundays
-* d3.time.mondays.utc ↦ d3.utcMondays
-* d3.time.tuesdays.utc ↦ d3.utcTuesdays
-* d3.time.wednesdays.utc ↦ d3.utcWednesdays
-* d3.time.thursdays.utc ↦ d3.utcThursdays
-* d3.time.fridays.utc ↦ d3.utcFridays
-* d3.time.saturdays.utc ↦ d3.utcSaturdays
-* d3.time.weeks.utc ↦ d3.utcWeeks
-* d3.time.years.utc ↦ d3.utcYears
+* d3.time.seconds.utc ↦ [d3.utcSeconds](https://github.com/d3/d3-time#utcSeconds)
+* d3.time.minutes.utc ↦ [d3.utcMinutes](https://github.com/d3/d3-time#utcMinutes)
+* d3.time.hours.utc ↦ [d3.utcHours](https://github.com/d3/d3-time#utcHours)
+* d3.time.days.utc ↦ [d3.utcDays](https://github.com/d3/d3-time#utcDays)
+* d3.time.sundays.utc ↦ [d3.utcSundays](https://github.com/d3/d3-time#utcSundays)
+* d3.time.mondays.utc ↦ [d3.utcMondays](https://github.com/d3/d3-time#utcMondays)
+* d3.time.tuesdays.utc ↦ [d3.utcTuesdays](https://github.com/d3/d3-time#utcTuesdays)
+* d3.time.wednesdays.utc ↦ [d3.utcWednesdays](https://github.com/d3/d3-time#utcWednesdays)
+* d3.time.thursdays.utc ↦ [d3.utcThursdays](https://github.com/d3/d3-time#utcThursdays)
+* d3.time.fridays.utc ↦ [d3.utcFridays](https://github.com/d3/d3-time#utcFridays)
+* d3.time.saturdays.utc ↦ [d3.utcSaturdays](https://github.com/d3/d3-time#utcSaturdays)
+* d3.time.weeks.utc ↦ [d3.utcWeeks](https://github.com/d3/d3-time#utcWeeks)
+* d3.time.months.utc ↦ [d3.utcMonths](https://github.com/d3/d3-time#utcMonths)
+* d3.time.years.utc ↦ [d3.utcYears](https://github.com/d3/d3-time#utcYears)
+
+Time intervals now expose an [*interval*.count](https://github.com/d3/d3-time#interval_count) method for counting the number of interval boundaries after an exclusive *start* date and before or equal to an inclusive *end* date. This replaces d3.time.dayOfYear and related methods in 3.x. For example, this in 3.x:
+
+```js
+var now = new Date;
+d3.time.dayOfYear(now); // 165
+```
+
+Can be rewritten in 4.0 as:
+
+```js
+var now = new Date;
+d3.timeDay.count(d3.timeYear(now), now); // 165
+```
+
+Likewise, in place of 3.x’s d3.time.weekOfYear, in 4.0 you would say:
+
+```js
+d3.timeWeek.count(d3.timeYear(now), now); // 24
+```
+
+The new *interval*.count is of course more general. For example, you can use it to compute the week-of-month:
+
+```js
+d3.timeWeek.count(d3.timeMonth(now), now); // 2
+```
+
+Here are all the equivalences from 3.x to 4.0:
+
+* d3.time.dayOfYear ↦ [d3.timeDay](https://github.com/d3/d3-time#timeDay).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.sundayOfYear ↦ [d3.timeSunday](https://github.com/d3/d3-time#timeSunday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.mondayOfYear ↦ [d3.timeMonday](https://github.com/d3/d3-time#timeMonday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.tuesdayOfYear ↦ [d3.timeTuesday](https://github.com/d3/d3-time#timeTuesday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.wednesdayOfYear ↦ [d3.timeWednesday](https://github.com/d3/d3-time#timeWednesday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.thursdayOfYear ↦ [d3.timeThursday](https://github.com/d3/d3-time#timeThursday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.fridayOfYear ↦ [d3.timeFriday](https://github.com/d3/d3-time#timeFriday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.saturdayOfYear ↦ [d3.timeSaturday](https://github.com/d3/d3-time#timeSaturday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.weekOfYear ↦ [d3.timeWeek](https://github.com/d3/d3-time#timeWeek).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.dayOfYear.utc ↦ [d3.utcDay](https://github.com/d3/d3-time#utcDay).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.sundayOfYear.utc ↦ [d3.utcSunday](https://github.com/d3/d3-time#utcSunday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.mondayOfYear.utc ↦ [d3.utcMonday](https://github.com/d3/d3-time#utcMonday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.tuesdayOfYear.utc ↦ [d3.utcTuesday](https://github.com/d3/d3-time#utcTuesday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.wednesdayOfYear.utc ↦ [d3.utcWednesday](https://github.com/d3/d3-time#utcWednesday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.thursdayOfYear.utc ↦ [d3.utcThursday](https://github.com/d3/d3-time#utcThursday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.fridayOfYear.utc ↦ [d3.utcFriday](https://github.com/d3/d3-time#utcFriday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.saturdayOfYear.utc ↦ [d3.utcSaturday](https://github.com/d3/d3-time#utcSaturday).[count](https://github.com/d3/d3-time#interval_count)
+* d3.time.weekOfYear.utc ↦ [d3.utcWeek](https://github.com/d3/d3-time#utcWeek).[count](https://github.com/d3/d3-time#interval_count)
+
+Changed semantics of *interval*.range(*start*, *stop*, *step*); new *interval*.filter, new *interval*.every
+
+Added d3.timeInterval constructor for custom time intervals. fast implementation of d3.timeYear.every, d3.utcYear.every. fast implementation of d3.timeMillisecond.every, d3.utcMillisecond.every. performance improvements. better handling of weird daylight savings issues.
 
 ## [Timers (d3-timer)](https://github.com/d3/d3-timer/blob/master/README.md)
 
