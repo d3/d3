@@ -945,7 +945,7 @@ d3.timeDays(new Date(2016, 4, 28), new Date(2016, 5, 5), 2);
 //  Fri Jun 03 2016 00:00:00 GMT-0700 (PDT)]
 ```
 
-If you want a filtered view of a time interval (say to guarantee that two overlapping ranges are consistent, such as when generating [time scale ticks](https://github.com/d3/d3-scale#time_ticks)), you can use the new [*interval*.every](https://github.com/d3/d3-time#interval_every) method or its more general cousin [*interval*.filter](https://github.com/d3/d3-time#interval_filter). For example:
+If you want a filtered view of a time interval (say to guarantee that two overlapping ranges are consistent, such as when generating [time scale ticks](https://github.com/d3/d3-scale#time_ticks)), you can use the new [*interval*.every](https://github.com/d3/d3-time#interval_every) method or its more general cousin [*interval*.filter](https://github.com/d3/d3-time#interval_filter):
 
 ```js
 d3.timeDay.every(2).range(new Date(2016, 4, 28), new Date(2016, 5, 5));
