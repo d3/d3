@@ -873,24 +873,7 @@ Pursuant to the great namespace flattening, the local time intervals have been r
 * d3.time.month ↦ [d3.timeMonth](https://github.com/d3/d3-time#timeMonth)
 * d3.time.year ↦ [d3.timeYear](https://github.com/d3/d3-time#timeYear)
 
-The local time range aliases have likewise been renamed:
-
-* d3.time.seconds ↦ [d3.timeSeconds](https://github.com/d3/d3-time#timeSeconds)
-* d3.time.minutes ↦ [d3.timeMinutes](https://github.com/d3/d3-time#timeMinutes)
-* d3.time.hours ↦ [d3.timeHours](https://github.com/d3/d3-time#timeHours)
-* d3.time.days ↦ [d3.timeDays](https://github.com/d3/d3-time#timeDays)
-* d3.time.sundays ↦ [d3.timeSundays](https://github.com/d3/d3-time#timeSundays)
-* d3.time.mondays ↦ [d3.timeMondays](https://github.com/d3/d3-time#timeMondays)
-* d3.time.tuesdays ↦ [d3.timeTuesdays](https://github.com/d3/d3-time#timeTuesdays)
-* d3.time.wednesdays ↦ [d3.timeWednesdays](https://github.com/d3/d3-time#timeWednesdays)
-* d3.time.thursdays ↦ [d3.timeThursdays](https://github.com/d3/d3-time#timeThursdays)
-* d3.time.fridays ↦ [d3.timeFridays](https://github.com/d3/d3-time#timeFridays)
-* d3.time.saturdays ↦ [d3.timeSaturdays](https://github.com/d3/d3-time#timeSaturdays)
-* d3.time.weeks ↦ [d3.timeWeeks](https://github.com/d3/d3-time#timeWeeks)
-* d3.time.months ↦ [d3.timeMonths](https://github.com/d3/d3-time#timeMonths)
-* d3.time.years ↦ [d3.timeYears](https://github.com/d3/d3-time#timeYears)
-
-The UTC time intervals have been renamed:
+The UTC time intervals have likewise been renamed:
 
 * ADDED ↦ [d3.utcMillisecond](https://github.com/d3/d3-time#utcMillisecond)
 * d3.time.second.utc ↦ [d3.utcSecond](https://github.com/d3/d3-time#utcSecond)
@@ -908,6 +891,23 @@ The UTC time intervals have been renamed:
 * d3.time.month.utc ↦ [d3.utcMonth](https://github.com/d3/d3-time#utcMonth)
 * d3.time.year.utc ↦ [d3.utcYear](https://github.com/d3/d3-time#utcYear)
 
+The local time range aliases have been renamed:
+
+* d3.time.seconds ↦ [d3.timeSeconds](https://github.com/d3/d3-time#timeSeconds)
+* d3.time.minutes ↦ [d3.timeMinutes](https://github.com/d3/d3-time#timeMinutes)
+* d3.time.hours ↦ [d3.timeHours](https://github.com/d3/d3-time#timeHours)
+* d3.time.days ↦ [d3.timeDays](https://github.com/d3/d3-time#timeDays)
+* d3.time.sundays ↦ [d3.timeSundays](https://github.com/d3/d3-time#timeSundays)
+* d3.time.mondays ↦ [d3.timeMondays](https://github.com/d3/d3-time#timeMondays)
+* d3.time.tuesdays ↦ [d3.timeTuesdays](https://github.com/d3/d3-time#timeTuesdays)
+* d3.time.wednesdays ↦ [d3.timeWednesdays](https://github.com/d3/d3-time#timeWednesdays)
+* d3.time.thursdays ↦ [d3.timeThursdays](https://github.com/d3/d3-time#timeThursdays)
+* d3.time.fridays ↦ [d3.timeFridays](https://github.com/d3/d3-time#timeFridays)
+* d3.time.saturdays ↦ [d3.timeSaturdays](https://github.com/d3/d3-time#timeSaturdays)
+* d3.time.weeks ↦ [d3.timeWeeks](https://github.com/d3/d3-time#timeWeeks)
+* d3.time.months ↦ [d3.timeMonths](https://github.com/d3/d3-time#timeMonths)
+* d3.time.years ↦ [d3.timeYears](https://github.com/d3/d3-time#timeYears)
+
 The UTC time range aliases have been renamed:
 
 * d3.time.seconds.utc ↦ [d3.utcSeconds](https://github.com/d3/d3-time#utcSeconds)
@@ -924,6 +924,36 @@ The UTC time range aliases have been renamed:
 * d3.time.weeks.utc ↦ [d3.utcWeeks](https://github.com/d3/d3-time#utcWeeks)
 * d3.time.months.utc ↦ [d3.utcMonths](https://github.com/d3/d3-time#utcMonths)
 * d3.time.years.utc ↦ [d3.utcYears](https://github.com/d3/d3-time#utcYears)
+
+The behavior of [*interval*.range](https://github.com/d3/d3-time#interval_range) (and the convenience aliases such as [d3.timeDays](https://github.com/d3/d3-time#timeDays)) has been changed when *step* is greater than one. Rather than filtering the returned dates using the field number, *interval*.range now behaves like [d3.range](https://github.com/d3/d3-array#range): it simply skips, returning every *step*th date. For example, the following code in 3.x returns only odd days of the month:
+
+```js
+d3.time.days(new Date(2016, 4, 28), new Date(2016, 5, 5), 2);
+// [Sun May 29 2016 00:00:00 GMT-0700 (PDT),
+//  Tue May 31 2016 00:00:00 GMT-0700 (PDT),
+//  Wed Jun 01 2016 00:00:00 GMT-0700 (PDT),
+//  Fri Jun 03 2016 00:00:00 GMT-0700 (PDT)]
+```
+
+The returned array of dates does not start on the *start* date because May 28 is an even day. Also note that May 31 and June 1 are one day apart, not two! The behavior of d3.timeDays in 4.0 is probably closer to what you expect:
+
+```js
+d3.timeDays(new Date(2016, 4, 28), new Date(2016, 5, 5), 2);
+// [Sat May 28 2016 00:00:00 GMT-0700 (PDT),
+//  Mon May 30 2016 00:00:00 GMT-0700 (PDT),
+//  Wed Jun 01 2016 00:00:00 GMT-0700 (PDT),
+//  Fri Jun 03 2016 00:00:00 GMT-0700 (PDT)]
+```
+
+If you really want a filtered view of a time interval based on field numbers (which is useful to guarantee that two overlapping ranges are consistent, such as when generating [time scale ticks](https://github.com/d3/d3-scale#time_ticks)), you can use the new [*interval*.every](https://github.com/d3/d3-time#interval_every) method, or its more general cousin [*interval*.filter](https://github.com/d3/d3-time#interval_filter). For example:
+
+```js
+d3.timeDay.every(2).range(new Date(2016, 4, 28), new Date(2016, 5, 5));
+// [Sun May 29 2016 00:00:00 GMT-0700 (PDT),
+//  Tue May 31 2016 00:00:00 GMT-0700 (PDT),
+//  Wed Jun 01 2016 00:00:00 GMT-0700 (PDT),
+//  Fri Jun 03 2016 00:00:00 GMT-0700 (PDT)]
+```
 
 Time intervals now expose an [*interval*.count](https://github.com/d3/d3-time#interval_count) method for counting the number of interval boundaries after a *start* date and before or equal to an *end* date. This replaces d3.time.dayOfYear and related methods in 3.x. For example, this code in 3.x:
 
@@ -972,9 +1002,7 @@ Here are all the equivalences from 3.x to 4.0:
 * d3.time.saturdayOfYear.utc ↦ [d3.utcSaturday](https://github.com/d3/d3-time#utcSaturday).[count](https://github.com/d3/d3-time#interval_count)
 * d3.time.weekOfYear.utc ↦ [d3.utcWeek](https://github.com/d3/d3-time#utcWeek).[count](https://github.com/d3/d3-time#interval_count)
 
-Changed semantics of *interval*.range(*start*, *stop*, *step*); new *interval*.filter, new *interval*.every
-
-Added d3.timeInterval constructor for custom time intervals. fast implementation of d3.timeYear.every, d3.utcYear.every. fast implementation of d3.timeMillisecond.every, d3.utcMillisecond.every. performance improvements. better handling of weird daylight savings issues.
+D3 4.0 now also lets you define custom time intervals using [d3.timeInterval](https://github.com/d3/d3-time#timeInterval). The [d3.timeYear](https://github.com/d3/d3-time#timeYear), [d3.utcYear](https://github.com/d3/d3-time#utcYear), [d3.timeMillisecond](https://github.com/d3/d3-time#timeMillisecond) and [d3.utcMillisecond](https://github.com/d3/d3-time#utcMillisecond) intervals have optimized implementations of [*interval*.every](https://github.com/d3/d3-time#interval_every), which is necessary to generate time ticks for very large or very small domains efficiently. More generally, the performance of time intervals has been improved, and time intervals now do a better job with respect to daylight savings in various locales.
 
 ## [Timers (d3-timer)](https://github.com/d3/d3-timer/blob/master/README.md)
 
