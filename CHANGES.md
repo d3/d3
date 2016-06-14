@@ -734,9 +734,10 @@ The resulting DOM will be:
 <div id="f"></div>
 ```
 
-In other words, the entering *c*, *d* and *e* are inserted before *f*, since *f* is the following element in the update selection; they are not appended as the last child. Although this behavior is sufficient to preserve order if the update selection order is stable, if the data changes order, you must still use [*selection*.order](https://github.com/d3/d3-selection#selection_order) to reorder elements.
+Thus, the entering *c*, *d* and *e* are inserted before *f*, since *f* is the following element in the update selection. Although this behavior is sufficient to preserve order if the new data’s order is stable, if the data changes order, you must still use [*selection*.order](https://github.com/d3/d3-selection#selection_order) to reorder elements.
 
-* only one class of selection; entering nodes are placeholders
+There is now only one class of selection. 3.x implemented enter selections using a special class to change the behavior of *enter*.append and *enter*.select; a consequence of this decision was that enter selections in 3.x lacked certain methods (*e.g.*, [#2043](https://github.com/d3/d3/issues/2043)). In 4.0, enter selections are normal selections; they have the same methods and the same behavior; [enter nodes](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js) now implement [*node*.appendChild](https://developer.mozilla.org/en-US/docs/Web/API/Node/appendChild), [*node*.insertBefore](https://developer.mozilla.org/en-US/docs/Web/API/Node/insertBefore), [*node*.querySelector](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelector), and [*node*.querySelectorAll](https://developer.mozilla.org/en-US/docs/Web/API/Element/querySelectorAll).
+
 * change how *selection*.data handles duplicate keys
 
 other changes
