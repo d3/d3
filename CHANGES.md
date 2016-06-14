@@ -267,16 +267,16 @@ TODO
 
 ## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv/blob/master/README.md)
 
-Persuant to the great namespace flattening, various CSV and TSV methods have new names:
+Pursuant to the great namespace flattening, various CSV and TSV methods have new names:
 
-* d3.csv.parse ↦ d3.csvParse
-* d3.csv.parseRows ↦ d3.csvParseRows
-* d3.csv.format ↦ d3.csvFormat
-* d3.csv.formatRows ↦ d3.csvFormatRows
-* d3.tsv.parse ↦ d3.tsvParse
-* d3.tsv.parseRows ↦ d3.tsvParseRows
-* d3.tsv.format ↦ d3.tsvFormat
-* d3.tsv.formatRows ↦ d3.tsvFormatRows
+* d3.csv.parse ↦ [d3.csvParse](https://github.com/d3/d3-dsv#csvParse)
+* d3.csv.parseRows ↦ [d3.csvParseRows](https://github.com/d3/d3-dsv#csvParseRows)
+* d3.csv.format ↦ [d3.csvFormat](https://github.com/d3/d3-dsv#csvFormat)
+* d3.csv.formatRows ↦ [d3.csvFormatRows](https://github.com/d3/d3-dsv#csvFormatRows)
+* d3.tsv.parse ↦ [d3.tsvParse](https://github.com/d3/d3-dsv#tsvParse)
+* d3.tsv.parseRows ↦ [d3.tsvParseRows](https://github.com/d3/d3-dsv#tsvParseRows)
+* d3.tsv.format ↦ [d3.tsvFormat](https://github.com/d3/d3-dsv#tsvFormat)
+* d3.tsv.formatRows ↦ [d3.tsvFormatRows](https://github.com/d3/d3-dsv#tsvFormatRows)
 
 The [d3.csv](https://github.com/d3/d3-request#csv) and [d3.tsv](https://github.com/d3/d3-request#tsv) methods for loading files of the corresponding formats have not been renamed, however! Those are defined in [d3-request](#requests-d3-request).There’s no longer a d3.dsv method, which served the triple purpose of defining a DSV formatter, a DSV parser and a DSV requestor; instead, there’s just [d3.dsvFormat](https://github.com/d3/d3-dsv#dsvFormat) which you can use to define a DSV formatter and parser. You can use [*request*.response](https://github.com/d3/d3-request#request_response) to make a request and then parse the response body, or just use [d3.text](https://github.com/d3/d3-request#text).
 
@@ -301,47 +301,47 @@ The parser is a bit faster and the formatter is a bit more robust: inputs are co
 
 D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; these strings could be passed to d3.ease or *transition*.ease. D3 4.0 uses symbols instead, such as [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Symbols are simpler and cleaner. They work well with Rollup to produce smaller custom bundles. You can still define your own custom easing function, too, if desired. Here’s the full list of equivalents:
 
-* “linear” ↦ d3.easeLinear¹
-* “linear-in” ↦ d3.easeLinear¹
-* “linear-out” ↦ d3.easeLinear¹
-* “linear-in-out” ↦ d3.easeLinear¹
-* “linear-out-in” ↦ d3.easeLinear¹
-* “poly-in” ↦ d3.easePolyIn
-* “poly-out” ↦ d3.easePolyOut
-* “poly-in-out” ↦ d3.easePolyInOut
+* “linear” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* “linear-in” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* “linear-out” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* “linear-in-out” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* “linear-out-in” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* “poly-in” ↦ [d3.easePolyIn](https://github.com/d3/d3-ease#easePolyIn)
+* “poly-out” ↦ [d3.easePolyOut](https://github.com/d3/d3-ease#easePolyOut)
+* “poly-in-out” ↦ [d3.easePolyInOut](https://github.com/d3/d3-ease#easePolyInOut)
 * “poly-out-in” ↦ REMOVED²
-* “quad-in” ↦ d3.easeQuadIn
-* “quad-out” ↦ d3.easeQuadOut
-* “quad-in-out” ↦ d3.easeQuadInOut
+* “quad-in” ↦ [d3.easeQuadIn](https://github.com/d3/d3-ease#easeQuadIn)
+* “quad-out” ↦ [d3.easeQuadOut](https://github.com/d3/d3-ease#easeQuadOut)
+* “quad-in-out” ↦ [d3.easeQuadInOut](https://github.com/d3/d3-ease#easeQuadInOut)
 * “quad-out-in” ↦ REMOVED²
-* “cubic-in” ↦ d3.easeCubicIn
-* “cubic-out” ↦ d3.easeCubicOut
-* “cubic-in-out” ↦ d3.easeCubicInOut
+* “cubic-in” ↦ [d3.easeCubicIn](https://github.com/d3/d3-ease#easeCubicIn)
+* “cubic-out” ↦ [d3.easeCubicOut](https://github.com/d3/d3-ease#easeCubicOut)
+* “cubic-in-out” ↦ [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut)
 * “cubic-out-in” ↦ REMOVED²
-* “sin-in” ↦ d3.easeSinIn
-* “sin-out” ↦ d3.easeSinOut
-* “sin-in-out” ↦ d3.easeSinInOut
+* “sin-in” ↦ [d3.easeSinIn](https://github.com/d3/d3-ease#easeSinIn)
+* “sin-out” ↦ [d3.easeSinOut](https://github.com/d3/d3-ease#easeSinOut)
+* “sin-in-out” ↦ [d3.easeSinInOut](https://github.com/d3/d3-ease#easeSinInOut)
 * “sin-out-in” ↦ REMOVED²
-* “exp-in” ↦ d3.easeExpIn
-* “exp-out” ↦ d3.easeExpOut
-* “exp-in-out” ↦ d3.easeExpInOut
+* “exp-in” ↦ [d3.easeExpIn](https://github.com/d3/d3-ease#easeExpIn)
+* “exp-out” ↦ [d3.easeExpOut](https://github.com/d3/d3-ease#easeExpOut)
+* “exp-in-out” ↦ [d3.easeExpInOut](https://github.com/d3/d3-ease#easeExpInOut)
 * “exp-out-in” ↦ REMOVED²
-* “circle-in” ↦ d3.easeCircleIn
-* “circle-out” ↦ d3.easeCircleOut
-* “circle-in-out” ↦ d3.easeCircleInOut
+* “circle-in” ↦ [d3.easeCircleIn](https://github.com/d3/d3-ease#easeCircleIn)
+* “circle-out” ↦ [d3.easeCircleOut](https://github.com/d3/d3-ease#easeCircleOut)
+* “circle-in-out” ↦ [d3.easeCircleInOut](https://github.com/d3/d3-ease#easeCircleInOut)
 * “circle-out-in” ↦ REMOVED²
-* “elastic-in” ↦ d3.easeElasticOut²
-* “elastic-out” ↦ d3.easeElasticIn²
+* “elastic-in” ↦ [d3.easeElasticOut](https://github.com/d3/d3-ease#easeElasticOut)²
+* “elastic-out” ↦ [d3.easeElasticIn](https://github.com/d3/d3-ease#easeElasticIn)²
 * “elastic-in-out” ↦ REMOVED²
-* “elastic-out-in” ↦ d3.easeElasticInOut²
-* “back-in” ↦ d3.easeBackIn
-* “back-out” ↦ d3.easeBackOut
-* “back-in-out” ↦ d3.easeBackInOut
+* “elastic-out-in” ↦ [d3.easeElasticInOut](https://github.com/d3/d3-ease#easeElasticInOut)²
+* “back-in” ↦ [d3.easeBackIn](https://github.com/d3/d3-ease#easeBackIn)
+* “back-out” ↦ [d3.easeBackOut](https://github.com/d3/d3-ease#easeBackOut)
+* “back-in-out” ↦ [d3.easeBackInOut](https://github.com/d3/d3-ease#easeBackInOut)
 * “back-out-in” ↦ REMOVED²
-* “bounce-in” ↦ d3.easeBounceOut²
-* “bounce-out” ↦ d3.easeBounceIn²
+* “bounce-in” ↦ [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut)²
+* “bounce-out” ↦ [d3.easeBounceIn](https://github.com/d3/d3-ease#easeBounceIn)²
 * “bounce-in-out” ↦ REMOVED²
-* “bounce-out-in” ↦ d3.easeBounceInOut²
+* “bounce-out-in” ↦ [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut)²
 
 ¹ The -in, -out and -in-out variants of linear easing are identical, so there’s just d3.easeLinear.
 <br>² Elastic and bounce easing were inadvertently reversed in 3.x, so 4.0 eliminates -out-in easing!
@@ -832,21 +832,27 @@ removed diagonal shapes
 
 ## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/blob/master/README.md)
 
-TODO
+Pursuant to the great namespace flattening, the format constructors have new names:
 
-* d3.time.format ↦ d3.timeFormat
-* d3.time.format.utc ↦ d3.utcFormat
-* d3.time.format.iso ↦ d3.isoFormat
-* *format* ↦ d3.timeFormat
-* *format*.parse ↦ d3.timeParse
-* *format*.utc ↦ d3.utcFormat
-* *format*.utc.parse ↦ d3.utcParse
-* d3.time.format.multi ↦ REMOVED (see d3-scale)
-* type coercion of inputs
-* expanded support for `%Z` time zone offset parsing
-* correctly parse period names that are longer than two characters (e.g., “a.m.”)
-* faster
-* cleaner UTC parsing without setting the Date global
+* d3.time.format ↦ [d3.timeFormat](https://github.com/d3/d3-time-format#timeFormat)
+* d3.time.format.utc ↦ [d3.utcFormat](https://github.com/d3/d3-time-format#utcFormat)
+* d3.time.format.iso ↦ [d3.isoFormat](https://github.com/d3/d3-time-format#isoFormat)
+
+In addition, the *format*.parse method has been removed in favor of separate [d3.timeParse](https://github.com/d3/d3-time-format#timeParse), [d3.utcParse](https://github.com/d3/d3-time-format#utcParse) and [d3.isoParse](https://github.com/d3/d3-time-format#isoParse) methods. Thus, this code in 3.x:
+
+```js
+var parseTime = d3.time.format("%c").parse;
+```
+
+Can be replaced with this in 4.0:
+
+```js
+var parseTime = d3.timeParse("%c");
+```
+
+The multi-scale time format d3.time.format.multi has been replaced by [d3.scaleTime](https://github.com/d3/d3-scale#scaleTime)’s [tick format](https://github.com/d3/d3-scale#time_tickFormat). Time formats now coerce inputs to dates, and time parsers coerce inputs to strings. The `%Z` directive now allows more flexible parsing of time zone offsets, such as `-0700`, `-07:00`, `-07`, and `Z`. The `%p` directive is now parsed correctly when the locale’s period name is longer than two characters (*e.g.*, “a.m.”).
+
+The performance of time formatting and parsing has been improved, and the UTC formatter and parser have a cleaner implementation (that avoids temporarily overriding the Date global). The locales are now published as [JSON](https://github.com/d3/d3-request#json) to NPM; see [npmcdn](https://npmcdn.com/d3-time-format/locale/).
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time/blob/master/README.md)
 
