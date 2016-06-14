@@ -680,7 +680,7 @@ var circle = svg.selectAll("circle").data(data) // UPDATE
 
 circle.exit().remove(); // EXIT
 
-circle.enter().append("circle") // ENTER, and merges into UPDATE! 🌶
+circle.enter().append("circle") // ENTER; modifies UPDATE! 🌶
     .style("fill", "green");
 
 circle // ENTER + UPDATE
@@ -705,33 +705,33 @@ This change is discussed further in [What Makes Software Good?](https://medium.c
 
 In 3.x, the [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) and [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) methods were undefined until you called *selection*.data. In 4.0, now they simply return the empty selection if the selection has not been joined to data.
 
-In 3.x, [*selection*.append](https://github.com/d3/d3-selection#selection_append) would always append the new element as the last child of its parent. A little-known trick was to use [*selection*.insert](https://github.com/d3/d3-selection#selection_insert) without specifying a *before* selector when entering nodes, rather than *selection*.append, so that the entering nodes would be inserted into the DOM before the corresponding following element in the update selection. In 4.0, this is now the default behavior of *selection*.append, and if you do not specify a *before* selector to *selection*.insert, the inserted element is appended as the last child. This change makes the default general update pattern preserve the relative order of elements and data. For example, given the following DOM:
+In 3.x, [*selection*.append](https://github.com/d3/d3-selection#selection_append) would always append the new element as the last child of its parent. A little-known trick was to use [*selection*.insert](https://github.com/d3/d3-selection#selection_insert) without specifying a *before* selector when entering nodes, causing the entering nodes to be inserted before the following element in the update selection. In 4.0, this is now the default behavior of *selection*.append; if you do not specify a *before* selector to *selection*.insert, the inserted element is appended as the last child. This change makes the [general update pattern](http://bl.ocks.org/mbostock/a8a5baa4c4a470cda598) preserve the relative order of elements and data. For example, given the following DOM:
 
 ```html
-<div>a</div>
-<div>b</div>
-<div>f</div>
+<div id="a"></div>
+<div id="b"></div>
+<div id="f"></div>
 ```
 
 And the following code:
 
 ```js
 var div = d3.select("body").selectAll("div")
-  .data(["a", "b", "c", "d", "e", "f"], function(d) { return d || this.textContent; });
+  .data(["a", "b", "c", "d", "e", "f"], function(d) { return d || this.id; });
 
 div.enter().append("div")
-    .text(function(d) { return d; });
+    .attr("id", function(d) { return d; });
 ```
 
 The resulting DOM will be:
 
 ```html
-<div>a</div>
-<div>b</div>
-<div>c</div>
-<div>d</div>
-<div>e</div>
-<div>f</div>
+<div id="a"></div>
+<div id="b"></div>
+<div id="c"></div>
+<div id="d"></div>
+<div id="e"></div>
+<div id="f"></div>
 ```
 
 In other words, the entering *c*, *d* and *e* are inserted before *f*, since *f* is the following element in the update selection; they are not appended as the last child. Although this behavior is sufficient to preserve order if the update selection order is stable, if the data changes order, you must still use [*selection*.order](https://github.com/d3/d3-selection#selection_order) to reorder elements.
