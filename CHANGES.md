@@ -598,12 +598,7 @@ There’s no longer a fancy d3.geom.hull operator. There’s just a method which
 
 ## [Queues (d3-queue)](https://github.com/d3/d3-queue/blob/master/README.md)
 
-TODO
-
-* now part of the default bundle
-* rewritten within fewer closures to improve performance
-* supports instanceof d3.queue
-* more well-defined behavior with certain edge cases
+Formerly known as Queue.js and queue-async, [d3.queue](https://github.com/d3/d3-queue) is now included in the default bundle, making it easier for you to load data files in parallel. The library has been rewritten with fewer closures to improve performance, and there are now stricter checks in place to guarantee well-defined behavior. You can now use instanceof d3.queue and inspect the queue’s internal private state.
 
 ## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree/blob/master/README.md)
 
@@ -631,7 +626,7 @@ Pursuant to the great namespace flattening, the random number generators have ne
 * d3.random.bates ↦ [d3.randomBates](https://github.com/d3/d3-random#randomBates)
 * d3.random.irwinHall ↦ [d3.randomIrwinHall](https://github.com/d3/d3-random#randomIrwinHall)
 
-There are also new random number generators for [exponential](https://github.com/d3/d3-random#randomExponential) and [uniform](https://github.com/d3/d3-random#randomUniform) distributions. The [normal](https://github.com/d3/d3-random#randomNormal) and [log-normal](https://github.com/d3/d3-random#randomLogNormal) random generators have also been optimized.
+There are also new random number generators for [exponential](https://github.com/d3/d3-random#randomExponential) and [uniform](https://github.com/d3/d3-random#randomUniform) distributions. The [normal](https://github.com/d3/d3-random#randomNormal) and [log-normal](https://github.com/d3/d3-random#randomLogNormal) random generators have been optimized.
 
 ## [Requests (d3-request)](https://github.com/d3/d3-request/blob/master/README.md)
 
