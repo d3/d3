@@ -955,15 +955,61 @@ Renamed range aliases…
 
 ## [Timers (d3-timer)](https://github.com/d3/d3-timer/blob/master/README.md)
 
-TODO
+In D3 3.x, the only way to stop a timer was for the callback to return true. For example, this timer self-terminates after one second:
 
-* *callback* returning true ↦ *timer*.stop; timers are now stopped synchronously
-* new *timer*.restart
-* time now freezes in the background, preventing hangs when returning to the foreground!
-* new d3.now; timers now use high-precision timers (performance.now) where available
-* d3.timer.flush ↦ d3.timerFlush
-* new d3.timeout
-* new d3.interval
+```js
+d3.timer(function(elapsed) {
+  console.log(elapsed);
+  return elapsed >= 1000;
+});
+```
+
+In 4.0, use [*timer*.stop](https://github.com/d3/d3-timer#timer_stop) instead:
+
+```js
+var t = d3.timer(function(elapsed) {
+  console.log(elapsed);
+  if (elapsed >= 1000) {
+    t.stop();
+  }
+});
+```
+
+The primary benefit of this new design is that timers are not required to self-terminate: they can be stopped externally, allowing for the immediate and synchronous disposal of associated resources, and the separation of concerns. For example, the above is equivalent to:
+
+```js
+var t = d3.timer(function(elapsed) {
+  console.log(elapsed);
+});
+
+d3.timeout(function() {
+  t.stop();
+}, 1000);
+```
+
+This new design also improves [d3-transition](#transitions-d3-transition): now when a transition is interrupted, its resources are immediately freed rather than having to wait for transition to start!
+
+4.0 also introduces a new [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) method for restarting timers, for replacing the callback of a running timer, or for changing delay and reference time. Unlike calling *timer*.stop and then creating a new timer, calling *timer*.restart maintains the invocation priority of an existing timer, so you can guarantee that the order of invocation of active timers will remain the same.
+
+Some usage patterns in D3 3.x could cause the browser to hang when a background page returned to the foreground. For example, the following code schedules a transition every second:
+
+```js
+setInterval(function() {
+  d3.selectAll("div").transition().call(someAnimation); // BAD
+}, 1000);
+```
+
+If such code runs in the background for hours, thousands of queued transitions will try to run simultaneously when the page is foregrounded. D3 4.0 avoids this hang by freezing time in the background: when a page is in the background, time does not advance, and so no queue of timers accumulates to run when the page returns to the foreground. Use [d3.timeout](https://github.com/d3/d3-timer#timeout) and [d3.interval](https://github.com/d3/d3-timer#interval) in place of setTimeout and setInterval to use this feature:
+
+```js
+d3.interval(function() {
+  d3.selectAll("div").transition().call(someAnimation); // GOOD
+}, 1000);
+```
+
+By freezing time in the background, timers are effectively “unaware” of being backgrounded. It’s like nothing happened. 4.0 also now uses high-precision time ([performance.now](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now)) where available; the current time is available as [d3.now](https://github.com/d3/d3-timer#now).
+
+The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush).
 
 ## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
