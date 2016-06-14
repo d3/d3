@@ -670,24 +670,86 @@ Mention d3-scale-chromatic?
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
-TODO
+Selections no longer subclass Array using [prototype chain injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection); they are now plain objects. This avoids the [following warning](https://github.com/d3/d3/issues/1805) on Firefox:
 
-* no longer extends Array using prototype injection
-* immutable; *selection*.data returns a new selection
+> mutating the [[Prototype]] of an object will cause your code to run very slowly; instead create the object with the correct initial [[Prototype]] value using Object.create
+
+Selections are now immutable: the set of elements in a given selection will never change. (The elements’ attributes and content will of course be modified!) The [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) and [*selection*.data](https://github.com/d3/d3-selection#selection_data) methods now return new selections rather than modifying the selection in-place. In addition, [*selection*.append](https://github.com/d3/d3-selection#selection_append) no longer merges entering nodes into the update selection. Use [*selection*.merge](https://github.com/d3/d3-selection#selection_merge) to combine enter and update after a data join. For example, the following code in 3.x:
+
+```js
+var circle = svg.selectAll("circle").data(data) // UPDATE
+    .style("fill", "blue");
+
+circle.exit().remove(); // EXIT
+
+circle.enter().append("circle") // ENTER, and merges into UPDATE!
+    .style("fill", "green");
+
+circle // ENTER + UPDATE
+    .style("stroke", "black");
+```
+
+Would be rewritten in 4.0 as:
+
+```js
+var circle = svg.selectAll("circle").data(data) // UPDATE
+    .style("fill", "blue");
+
+circle.exit().remove(); // EXIT
+
+circle.enter().append("circle") // ENTER
+    .style("fill", "green")
+  .merge(circle) // ENTER + UPDATE
+    .style("stroke", "black");
+```
+
+In 3.x, the [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) and [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) methods were undefined until you called *selection*.data. In 4.0, now they simply return the empty selection if the selection has not been joined to data.
+
+In 3.x, [*selection*.append](https://github.com/d3/d3-selection#selection_append) would always append the new element as the last child of its parent. A little-known trick was to use [*selection*.insert](https://github.com/d3/d3-selection#selection_insert) without specifying a *before* selector when entering nodes, rather than *selection*.append, so that the entering nodes would be inserted into the DOM before the corresponding following element in the update selection. In 4.0, this is now the default behavior of *selection*.append, and if you do not specify a *before* selector to *selection*.insert, the inserted element is appended as the last child. This change makes the default general update pattern preserve the relative order of elements and data. For example, given the following DOM:
+
+```html
+<div>a</div>
+<div>b</div>
+<div>f</div>
+```
+
+And the following code:
+
+```js
+var div = d3.select("body").selectAll("div")
+  .data(["a", "b", "c", "d", "e", "f"], function(d) { return d || this.textContent; });
+
+div.enter().append("div")
+    .text(function(d) { return d; });
+```
+
+The resulting DOM will be:
+
+```html
+<div>a</div>
+<div>b</div>
+<div>c</div>
+<div>d</div>
+<div>e</div>
+<div>f</div>
+```
+
+In other words, the entering *c*, *d* and *e* are inserted before *f*, since *f* is the following element in the update selection; they are not appended as the last child. Although this behavior is sufficient to preserve order if the update selection order is stable, if the data changes order, you must still use [*selection*.order](https://github.com/d3/d3-selection#selection_order) to reorder elements.
+
 * only one class of selection; entering nodes are placeholders
-* *selection*.enter and *selection*.exit are empty by default (not error)
-* *selection*.append preserves relative order on entering nodes
-* *enter*.append no longer merges into *update*; use *selection*.merge
-* *selection*.call no longer sets `this` context
 * change how *selection*.data handles duplicate keys
-* new d3.matcher, d3.selector, d3.creator
-* multi-value map methods moved to d3-selection-multi plugin
+
+other changes
+
+* *selection*.call no longer sets `this` context
 * new *selection*.raise, *selection*.lower
 * new *selection*.dispatch
 * new *selection*.nodes
 * new d3.local for local variables
+* new d3.matcher, d3.selector, d3.creator
 * d3.ns.qualify ↦ d3.namespace
 * d3.ns.prefix ↦ d3.namespaces
+* multi-value map methods moved to d3-selection-multi plugin
 
 ## [Shapes (d3-shape)](https://github.com/d3/d3-shape/blob/master/README.md)
 
