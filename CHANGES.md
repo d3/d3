@@ -670,9 +670,7 @@ Mention d3-scale-chromatic?
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
-Selections no longer subclass Array using [prototype chain injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection); they are now plain objects. This avoids the [following warning](https://github.com/d3/d3/issues/1805) on Firefox:
-
-> mutating the [[Prototype]] of an object will cause your code to run very slowly; instead create the object with the correct initial [[Prototype]] value using Object.create
+Selections no longer subclass Array using [prototype chain injection](http://perfectionkills.com/how-ecmascript-5-still-does-not-allow-to-subclass-an-array/#wrappers_prototype_chain_injection); they are now plain objects. This avoids a [scary performance warning](https://github.com/d3/d3/issues/1805) on Firefox.
 
 Selections are now immutable: the set of elements in a given selection will never change. (The elements’ attributes and content will of course be modified!) The [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) and [*selection*.data](https://github.com/d3/d3-selection#selection_data) methods now return new selections rather than modifying the selection in-place. In addition, [*selection*.append](https://github.com/d3/d3-selection#selection_append) no longer merges entering nodes into the update selection. Use [*selection*.merge](https://github.com/d3/d3-selection#selection_merge) to combine enter and update after a data join. For example, the following code in 3.x:
 
