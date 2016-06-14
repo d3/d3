@@ -999,7 +999,7 @@ setInterval(function() {
 }, 1000);
 ```
 
-If such code runs in the background for hours, thousands of queued transitions will try to run simultaneously when the page is foregrounded. D3 4.0 avoids this hang by freezing time in the background: when a page is in the background, time does not advance, and so no queue of timers accumulates to run when the page returns to the foreground. Use [d3.timeout](https://github.com/d3/d3-timer#timeout) and [d3.interval](https://github.com/d3/d3-timer#interval) in place of setTimeout and setInterval to use this feature:
+If such code runs in the background for hours, thousands of queued transitions will try to run simultaneously when the page is foregrounded. D3 4.0 avoids this hang by freezing time in the background: when a page is in the background, time does not advance, and so no queue of timers accumulates to run when the page returns to the foreground. Use d3.timer instead of transitions to schedule a long-running animation, or use [d3.timeout](https://github.com/d3/d3-timer#timeout) and [d3.interval](https://github.com/d3/d3-timer#interval) in place of setTimeout and setInterval to prevent transitions from being queued in the background:
 
 ```js
 d3.interval(function() {
@@ -1007,7 +1007,7 @@ d3.interval(function() {
 }, 1000);
 ```
 
-By freezing time in the background, timers are effectively “unaware” of being backgrounded. It’s like nothing happened. 4.0 also now uses high-precision time ([performance.now](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now)) where available; the current time is available as [d3.now](https://github.com/d3/d3-timer#now).
+By freezing time in the background, timers are effectively “unaware” of being backgrounded. It’s like nothing happened! 4.0 also now uses high-precision time ([performance.now](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now)) where available; the current time is available as [d3.now](https://github.com/d3/d3-timer#now).
 
 The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush).
 
