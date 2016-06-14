@@ -301,47 +301,47 @@ The parser is a bit faster and the formatter is a bit more robust: inputs are co
 
 D3 3.x used strings, such as “cubic-in-out”, to identify easing methods; these strings could be passed to d3.ease or *transition*.ease. D3 4.0 uses symbols instead, such as [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut). Symbols are simpler and cleaner. They work well with Rollup to produce smaller custom bundles. You can still define your own custom easing function, too, if desired. Here’s the full list of equivalents:
 
-* “linear” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
-* “linear-in” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
-* “linear-out” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
-* “linear-in-out” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
-* “linear-out-in” ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
-* “poly-in” ↦ [d3.easePolyIn](https://github.com/d3/d3-ease#easePolyIn)
-* “poly-out” ↦ [d3.easePolyOut](https://github.com/d3/d3-ease#easePolyOut)
-* “poly-in-out” ↦ [d3.easePolyInOut](https://github.com/d3/d3-ease#easePolyInOut)
-* “poly-out-in” ↦ REMOVED²
-* “quad-in” ↦ [d3.easeQuadIn](https://github.com/d3/d3-ease#easeQuadIn)
-* “quad-out” ↦ [d3.easeQuadOut](https://github.com/d3/d3-ease#easeQuadOut)
-* “quad-in-out” ↦ [d3.easeQuadInOut](https://github.com/d3/d3-ease#easeQuadInOut)
-* “quad-out-in” ↦ REMOVED²
-* “cubic-in” ↦ [d3.easeCubicIn](https://github.com/d3/d3-ease#easeCubicIn)
-* “cubic-out” ↦ [d3.easeCubicOut](https://github.com/d3/d3-ease#easeCubicOut)
-* “cubic-in-out” ↦ [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut)
-* “cubic-out-in” ↦ REMOVED²
-* “sin-in” ↦ [d3.easeSinIn](https://github.com/d3/d3-ease#easeSinIn)
-* “sin-out” ↦ [d3.easeSinOut](https://github.com/d3/d3-ease#easeSinOut)
-* “sin-in-out” ↦ [d3.easeSinInOut](https://github.com/d3/d3-ease#easeSinInOut)
-* “sin-out-in” ↦ REMOVED²
-* “exp-in” ↦ [d3.easeExpIn](https://github.com/d3/d3-ease#easeExpIn)
-* “exp-out” ↦ [d3.easeExpOut](https://github.com/d3/d3-ease#easeExpOut)
-* “exp-in-out” ↦ [d3.easeExpInOut](https://github.com/d3/d3-ease#easeExpInOut)
-* “exp-out-in” ↦ REMOVED²
-* “circle-in” ↦ [d3.easeCircleIn](https://github.com/d3/d3-ease#easeCircleIn)
-* “circle-out” ↦ [d3.easeCircleOut](https://github.com/d3/d3-ease#easeCircleOut)
-* “circle-in-out” ↦ [d3.easeCircleInOut](https://github.com/d3/d3-ease#easeCircleInOut)
-* “circle-out-in” ↦ REMOVED²
-* “elastic-in” ↦ [d3.easeElasticOut](https://github.com/d3/d3-ease#easeElasticOut)²
-* “elastic-out” ↦ [d3.easeElasticIn](https://github.com/d3/d3-ease#easeElasticIn)²
-* “elastic-in-out” ↦ REMOVED²
-* “elastic-out-in” ↦ [d3.easeElasticInOut](https://github.com/d3/d3-ease#easeElasticInOut)²
-* “back-in” ↦ [d3.easeBackIn](https://github.com/d3/d3-ease#easeBackIn)
-* “back-out” ↦ [d3.easeBackOut](https://github.com/d3/d3-ease#easeBackOut)
-* “back-in-out” ↦ [d3.easeBackInOut](https://github.com/d3/d3-ease#easeBackInOut)
-* “back-out-in” ↦ REMOVED²
-* “bounce-in” ↦ [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut)²
-* “bounce-out” ↦ [d3.easeBounceIn](https://github.com/d3/d3-ease#easeBounceIn)²
-* “bounce-in-out” ↦ REMOVED²
-* “bounce-out-in” ↦ [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut)²
+* linear ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* linear-in ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* linear-out ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* linear-in-out ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* linear-out-in ↦ [d3.easeLinear](https://github.com/d3/d3-ease#easeLinear)¹
+* poly-in ↦ [d3.easePolyIn](https://github.com/d3/d3-ease#easePolyIn)
+* poly-out ↦ [d3.easePolyOut](https://github.com/d3/d3-ease#easePolyOut)
+* poly-in-out ↦ [d3.easePolyInOut](https://github.com/d3/d3-ease#easePolyInOut)
+* poly-out-in ↦ REMOVED²
+* quad-in ↦ [d3.easeQuadIn](https://github.com/d3/d3-ease#easeQuadIn)
+* quad-out ↦ [d3.easeQuadOut](https://github.com/d3/d3-ease#easeQuadOut)
+* quad-in-out ↦ [d3.easeQuadInOut](https://github.com/d3/d3-ease#easeQuadInOut)
+* quad-out-in ↦ REMOVED²
+* cubic-in ↦ [d3.easeCubicIn](https://github.com/d3/d3-ease#easeCubicIn)
+* cubic-out ↦ [d3.easeCubicOut](https://github.com/d3/d3-ease#easeCubicOut)
+* cubic-in-out ↦ [d3.easeCubicInOut](https://github.com/d3/d3-ease#easeCubicInOut)
+* cubic-out-in ↦ REMOVED²
+* sin-in ↦ [d3.easeSinIn](https://github.com/d3/d3-ease#easeSinIn)
+* sin-out ↦ [d3.easeSinOut](https://github.com/d3/d3-ease#easeSinOut)
+* sin-in-out ↦ [d3.easeSinInOut](https://github.com/d3/d3-ease#easeSinInOut)
+* sin-out-in ↦ REMOVED²
+* exp-in ↦ [d3.easeExpIn](https://github.com/d3/d3-ease#easeExpIn)
+* exp-out ↦ [d3.easeExpOut](https://github.com/d3/d3-ease#easeExpOut)
+* exp-in-out ↦ [d3.easeExpInOut](https://github.com/d3/d3-ease#easeExpInOut)
+* exp-out-in ↦ REMOVED²
+* circle-in ↦ [d3.easeCircleIn](https://github.com/d3/d3-ease#easeCircleIn)
+* circle-out ↦ [d3.easeCircleOut](https://github.com/d3/d3-ease#easeCircleOut)
+* circle-in-out ↦ [d3.easeCircleInOut](https://github.com/d3/d3-ease#easeCircleInOut)
+* circle-out-in ↦ REMOVED²
+* elastic-in ↦ [d3.easeElasticOut](https://github.com/d3/d3-ease#easeElasticOut)²
+* elastic-out ↦ [d3.easeElasticIn](https://github.com/d3/d3-ease#easeElasticIn)²
+* elastic-in-out ↦ REMOVED²
+* elastic-out-in ↦ [d3.easeElasticInOut](https://github.com/d3/d3-ease#easeElasticInOut)²
+* back-in ↦ [d3.easeBackIn](https://github.com/d3/d3-ease#easeBackIn)
+* back-out ↦ [d3.easeBackOut](https://github.com/d3/d3-ease#easeBackOut)
+* back-in-out ↦ [d3.easeBackInOut](https://github.com/d3/d3-ease#easeBackInOut)
+* back-out-in ↦ REMOVED²
+* bounce-in ↦ [d3.easeBounceOut](https://github.com/d3/d3-ease#easeBounceOut)²
+* bounce-out ↦ [d3.easeBounceIn](https://github.com/d3/d3-ease#easeBounceIn)²
+* bounce-in-out ↦ REMOVED²
+* bounce-out-in ↦ [d3.easeBounceInOut](https://github.com/d3/d3-ease#easeBounceInOut)²
 
 ¹ The -in, -out and -in-out variants of linear easing are identical, so there’s just d3.easeLinear.
 <br>² Elastic and bounce easing were inadvertently reversed in 3.x, so 4.0 eliminates -out-in easing!
@@ -582,23 +582,9 @@ The path serializer enables [d3-shape](#shapes-d3-shape) to support both Canvas 
 
 ## [Polygons (d3-polygon)](https://github.com/d3/d3-polygon/blob/master/README.md)
 
-TODO
+There’s no longer a d3.geom.polygon constructor; instead you just pass an array of vertices to the polygon methods. So instead of *polygon*.area and *polygon*.centroid, there’s [d3.polygonArea](https://github.com/d3/d3-polygon#polygonArea) and [d3.polygonCentroid](https://github.com/d3/d3-polygon#polygonCentroid). There are also new [d3.polygonContains](https://github.com/d3/d3-polygon#polygonContains) and [d3.polygonLength](https://github.com/d3/d3-polygon#polygonLength) methods. There’s no longer an equivalent to *polygon*.clip, but it [Sutherland–Hodgman clipping](https://en.wikipedia.org/wiki/Sutherland–Hodgman_algorithm) is needed, please [file a feature request](https://github.com/d3/d3-polygon/issues).
 
-There’s no longer a d3.geom.polygon constructor; instead you just pass an array of vertices to the polygon methods.
-
-* d3.geom.polygon.area ↦ d3.polygonArea
-* d3.geom.polygon.centroid ↦ d3.polygonCentroid
-* d3.geom.polygon.clip ↦ REMOVED
-* added d3.polygonContains
-* added d3.polygonLength
-
-There’s no longer a fancy d3.geom.hull operator. There’s just a method which takes a polygon (an array of vertices):
-
-* d3.geom.hull ↦ d3.polygonHull
-
-## [Queues (d3-queue)](https://github.com/d3/d3-queue/blob/master/README.md)
-
-Formerly known as Queue.js and queue-async, [d3.queue](https://github.com/d3/d3-queue) is now included in the default bundle, making it easy to load data files in parallel. It has been rewritten with fewer closures to improve performance, and there are now stricter checks in place to guarantee well-defined behavior. You can now use instanceof d3.queue and inspect the queue’s internal private state.
+The d3.geom.hull operator has been simplified: instead of an operator with *hull*.x and *hull*.y accessors, there’s just the [d3.polygonHull](https://github.com/d3/d3-polygon#polygonHull) method which takes an array of points and returns the convex hull.
 
 ## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree/blob/master/README.md)
 
@@ -616,6 +602,10 @@ TODO
 * new *quadtree*.copy
 * *quadtree*.find now takes a search radius
 * new *quadtree*.visitAll for post-order traversal
+
+## [Queues (d3-queue)](https://github.com/d3/d3-queue/blob/master/README.md)
+
+Formerly known as Queue.js and queue-async, [d3.queue](https://github.com/d3/d3-queue) is now included in the default bundle, making it easy to load data files in parallel. It has been rewritten with fewer closures to improve performance, and there are now stricter checks in place to guarantee well-defined behavior. You can now use instanceof d3.queue and inspect the queue’s internal private state.
 
 ## [Random Numbers (d3-random)](https://github.com/d3/d3-random/blob/master/README.md)
 
