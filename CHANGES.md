@@ -925,7 +925,7 @@ The UTC time range aliases have been renamed:
 * d3.time.months.utc ↦ [d3.utcMonths](https://github.com/d3/d3-time#utcMonths)
 * d3.time.years.utc ↦ [d3.utcYears](https://github.com/d3/d3-time#utcYears)
 
-Time intervals now expose an [*interval*.count](https://github.com/d3/d3-time#interval_count) method for counting the number of interval boundaries after an exclusive *start* date and before or equal to an inclusive *end* date. This replaces d3.time.dayOfYear and related methods in 3.x. For example, this in 3.x:
+Time intervals now expose an [*interval*.count](https://github.com/d3/d3-time#interval_count) method for counting the number of interval boundaries after a *start* date and before or equal to an *end* date. This replaces d3.time.dayOfYear and related methods in 3.x. For example, this code in 3.x:
 
 ```js
 var now = new Date;
