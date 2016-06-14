@@ -935,7 +935,7 @@ d3.time.days(new Date(2016, 4, 28), new Date(2016, 5, 5), 2);
 //  Fri Jun 03 2016 00:00:00 GMT-0700 (PDT)]
 ```
 
-The returned array of dates does not start on the *start* date because May 28 is an even day. Also note that May 31 and June 1 are one day apart, not two! The behavior of d3.timeDays in 4.0 is probably closer to what you expect:
+Note the returned array of dates does not start on the *start* date because May 28 is even. Also note that May 31 and June 1 are one day apart, not two! The behavior of d3.timeDays in 4.0 is probably closer to what you expect:
 
 ```js
 d3.timeDays(new Date(2016, 4, 28), new Date(2016, 5, 5), 2);
@@ -945,7 +945,7 @@ d3.timeDays(new Date(2016, 4, 28), new Date(2016, 5, 5), 2);
 //  Fri Jun 03 2016 00:00:00 GMT-0700 (PDT)]
 ```
 
-If you really want a filtered view of a time interval based on field numbers (which is useful to guarantee that two overlapping ranges are consistent, such as when generating [time scale ticks](https://github.com/d3/d3-scale#time_ticks)), you can use the new [*interval*.every](https://github.com/d3/d3-time#interval_every) method, or its more general cousin [*interval*.filter](https://github.com/d3/d3-time#interval_filter). For example:
+If you want a filtered view of a time interval (say to guarantee that two overlapping ranges are consistent, such as when generating [time scale ticks](https://github.com/d3/d3-scale#time_ticks)), you can use the new [*interval*.every](https://github.com/d3/d3-time#interval_every) method or its more general cousin [*interval*.filter](https://github.com/d3/d3-time#interval_filter). For example:
 
 ```js
 d3.timeDay.every(2).range(new Date(2016, 4, 28), new Date(2016, 5, 5));
