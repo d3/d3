@@ -979,7 +979,7 @@ Likewise, in place of 3.x’s d3.time.weekOfYear, in 4.0 you would say:
 d3.timeWeek.count(d3.timeYear(now), now); // 24
 ```
 
-The new *interval*.count is of course more general. For example, you can use it to compute hour-of-week for a weekly heatmap:
+The new *interval*.count is of course more general. For example, you can use it to compute hour-of-week for a heatmap:
 
 ```js
 d3.timeHour.count(d3.timeWeek(now), now); // 64
