@@ -20,7 +20,7 @@ For the non-minified version, remove `.min` from the file name.
 
 ## API Reference
 
-D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to work together; you can use the modules independently, or you can use them together as part of the default build. The source and documentation for each module is available in its repository. Follow the links below to learn more.
+D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to work together; you can use the modules independently, or you can use them together as part of the default build. The source and documentation for each module is available in its repository. Follow the links below to learn more. For an overview of changes between D3 3.x and 4.0, see [CHANGES](https://github.com/d3/d3/blob/master/CHANGES.md).
 
 * [Arrays](#arrays-d3-array) ([Statistics](#statistics), [Histograms](#histograms), [Search](#search), [Transformations](#transformations))
 * [Axes](#axes-d3-axis)
