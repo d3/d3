@@ -519,49 +519,39 @@ TODO
 
 ## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/blob/master/README.md)
 
-TODO
+The [d3.interpolate](https://github.com/d3/d3-interpolate#interpolate) method no longer delegates to d3.interpolators, which has been removed; its behavior is now defined by the library. Compared to 3.x, d3.interpolate in 4.0 now returns a constant interpolator which always returns the end value *b* if *b* is null, undefined, true or false. It is slightly faster in the common case that *b* is a number. And it only uses [d3.interpolateRgb](https://github.com/d3/d3-interpolate#interpolateRgb) if *b* is a valid CSS color specifier (and not approximately one).
 
-The generic [d3.interpolate](https://github.com/d3/d3-interpolate#interpolate) method is now faster and more precisely defined, as follows:
+The behavior of [d3.interpolateObject](https://github.com/d3/d3-interpolate#interpolateObject) and [d3.interpolateArray](https://github.com/d3/d3-interpolate#interpolateArray) has changed slightly with respect to properties or elements in the start value *a* that do not exist in the end value *b*: these properties and elements are now ignored, such that the ending value of the interpolator at *t* = 1 is now precisely equal to *b*. So, in 3.x:
 
-* If *b* is null, undefined or type "boolean", use the constant *b*.
-* If *b* is type "number", use [d3.interpolateNumber](https://github.com/d3/d3-interpolate#interpolateNumber).
-* If *b* is a d3.color instance or type "string" and can be parsed by d3.color, use d3.interpolateRgb.
-* If *b* is type "string", use d3.interpolateString.
-* If *b* is [an array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), use d3.interpolateArray.
-* Use d3.interpolateObject.
+```js
+d3.interpolateObject({foo: 2, bar: 1}, {foo: 3})(0.5); // {bar: 1, foo: 2.5}
+```
 
-What is the net impact of this change, though? Faster. Better behavior if *b* is a boolean, null or undefined. Better detection of colors using d3.color.
+Whereas in 4.0, *a*.bar is ignored:
 
-d3.interpolators ↦ REMOVED; d3.interpolate is no longer extensible.
+```js
+d3.interpolateObject({foo: 2, bar: 1}, {foo: 3})(0.5); // {foo: 2.5}
+```
 
-new transform interpolation methods for CSS, as well as SVG. d3-transition automatically picks the right one…
+If *a* or *b* are undefined or not an object, they are now implicitly converted to the empty object or empty array as appropriate, rather than throwing a TypeError.
 
-* d3.transform ↦ REMOVED
-* d3.interpolateTransform ↦ d3.interpolateTransformSvg
-* new d3.interpolateTransformCss
+The d3.interpolateTransform interpolator has been renamed to [d3.interpolateTransformSvg](https://github.com/d3/d3-interpolate#interpolateTransformSvg), and there is a new [d3.interpolateTransformCss](https://github.com/d3/d3-interpolate#interpolateTransformCss) to interpolate CSS transforms! This allows [d3-transition](#transitions-d3-transition) to automatically select the right interpolator for both SVG’s [transform attribute](https://www.w3.org/TR/SVG/coords.html#TransformAttribute) and the CSS [transform style property](https://www.w3.org/TR/css-transforms-1/#transform-property). (Note, however, that only 2D CSS transforms are supported.) The d3.transform method has been removed.
 
-b-spline interpolation
+Color space interpolators now interpolate opacity; see [d3-color](#colors-d3-color). Color interpolators now return rgb(…) or rgba(…) CSS color specifier strings, matching [*color*.toString](https://github.com/d3/d3-color#color_toString), rather than using the RGB hexadecimal format. This is necessary to support opacity interpolation, but is also beneficial because it matches CSS computed values.
 
-* add d3.quantize
-* add d3.interpolateBasis
-* add d3.interpolateBasisClosed
-* add d3.interpolateRgbBasis
-* add d3.interpolateRgbBasisClosed
+When a channel in the start color *a* is undefined, color interpolators use the corresponding value from the end color *b*, or *vice versa*. This logic previously applied to some channels (such as saturation in HSL), but now applies to all channels in all color spaces, and is especially useful when interpolating to or from transparent. There are now “long” versions of cylindrical color space interpolators: [d3.interpolateHslLong](https://github.com/d3/d3-interpolate#interpolateHslLong), [d3.interpolateHclLong](https://github.com/d3/d3-interpolate#interpolateHclLong) and [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#interpolateCubehelixLong). These interpolators use linear interpolation of hue, rather than using the shortest path around the 360° hue circle. See [d3.interpolateRainbow](https://github.com/d3/d3-scale#interpolateRainbow) for an example.
 
-color space interpolation
+The Cubehelix color space is now supported by [d3-color](#colors-d3-color), and so there are now [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#interpolateCubehelix) and [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#interpolateCubehelixLong) interpolators.
 
-* color interpolation now observes opacity (see d3-color)!
-* better, more consistent behavior when either *a* or *b*’s color channel is undefined
-* add “long” versions of interpolators for color spaces with hue angles
-* Cubehelix (with optional gamma parameter) is now supported by default
-* color interpolators now return rgb(…) or rgba(…) strings (matching *color*.toString)
-* use named parameters, e.g., d3.interpolateCubehelixGamma ↦ d3.interpolateCubehelix.gamma
-* new d3.interpolateRgb.gamma for gamma-corrected RGB interpolation
+[Gamma-corrected color interpolation](https://web.archive.org/web/20160112115812/http://www.4p8.com/eric.brasseur/gamma.html) is now supported for both RGB and Cubehelix color spaces as [*interpolate*.gamma](https://github.com/d3/d3-interpolate#interpolate_gamma). For example, to interpolate from purple to orange with a gamma of 2.2 in RGB space:
 
-better object and array interpolation…
+```js
+var interpolate = d3.interpolateRgb.gamma(2.2)("purple", "orange");
+```
 
-* when *b* has fewer properties or elements than *a*
-* when *a* or *b* is undefined or not an object or array
+There are new interpolators for uniform non-rational [B-splines](https://en.wikipedia.org/wiki/B-spline)! These are useful for smoothly interpolating between an arbitrary sequence of values from *t* = 0 to *t* = 1, such as to generate a smooth color gradient from a discrete set of colors. The [d3.interpolateBasis](https://github.com/d3/d3-interpolate#interpolateBasis) and [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate#interpolateBasisClosed) interpolators generate one-dimensional B-splines, while [d3.interpolateRgbBasis](https://github.com/d3/d3-interpolate#interpolateRgbBasis) and [d3.interpolateRgbBasisClosed](https://github.com/d3/d3-interpolate#interpolateRgbBasisClosed) generate three-dimensional B-splines through RGB color space. These are used by [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic) to generate continuous color scales from ColorBrewer’s discrete color schemes, such as [PiYG](http://bl.ocks.org/mbostock/048d21cf747371b11884f75ad896e5a5).
+
+There’s also now a [d3.quantize](https://github.com/d3/d3-interpolate#quantize) method for generating uniformly-spaced discrete samples from a continuous interpolator. This is useful for taking one of the built-in color scales (such as [d3.interpolateViridis](https://github.com/d3/d3-scale#interpolateViridis)) and quantizing it for use with [d3.scaleQuantize](https://github.com/d3/d3-scale#scaleQuantize), [d3.scaleQuantile](https://github.com/d3/d3-scale#scaleQuantile) or [d3.scaleThreshold](https://github.com/d3/d3-scale#scaleThreshold).
 
 ## [Paths (d3-path)](https://github.com/d3/d3-path/blob/master/README.md)
 
