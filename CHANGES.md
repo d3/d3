@@ -1096,17 +1096,13 @@ TODO
 
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/blob/master/README.md)
 
-TODO
+The d3.geom.voronoi method has been renamed to [d3.voronoi](https://github.com/d3/d3-voronoi#voronoi), and the *voronoi*.clipExtent method has been renamed to [*voronoi*.extent](https://github.com/d3/d3-voronoi#voronoi_extent). The undocumented *polygon*.point property in 3.x, which is the *i*th element in the input *data*, has now been renamed to *polygon*.data for consistency.
 
-* d3.geom.voronoi ↦ d3.voronoi
-* *voronoi*.clipExtent ↦ *voronoi*.extent
-* *voronoi* now returns the full Voronoi diagram
-* new *voronoi*.polygons returns clipped polygons
-* *voronoi*.polygons and *diagram*.polygons require an extent
-* the diagram can be used to compute Voronoi & Delaunay simultaneously
-* the diagram also exposes topology, which is useful for TopoJSON applications
-* well-defined behavior for coincident vertices: subsequent cells are null
-* input data exposed as *polygon*.data, not *polygon*.point
+Calling [*voronoi*](https://github.com/d3/d3-voronoi#_voronoi) now returns the full [Voronoi diagram](https://github.com/d3/d3-voronoi#voronoi-diagrams), which includes topological information: each Voronoi edge exposes *edge*.left and *edge*.right specifying the sites on either side of the edge, and each Voronoi cell is an array of edges. The Voronoi diagram can be used to efficiently compute both the Voronoi and Delaunay tessellations for a site of points: [*diagram*.polygons](https://github.com/d3/d3-voronoi#diagram_polygons), [*diagram*.links](https://github.com/d3/d3-voronoi#diagram_links), and [*diagram*.triangles](https://github.com/d3/d3-voronoi#diagram_triangles). The topology is also useful in conjunction with TopoJSON; see the [Voronoi topology example](http://bl.ocks.org/mbostock/cd52a201d7694eb9d890).
+
+The [*voronoi*.polygons](https://github.com/d3/d3-voronoi#voronoi_polygons) and [*diagram*.polygons](https://github.com/d3/d3-voronoi#diagram_polygons) now require an [extent](https://github.com/d3/d3-voronoi#voronoi_extent); there is no longer an implicit extent of ±1e6. The [*voronoi*.links](https://github.com/d3/d3-voronoi#voronoi_links), [*voronoi*.triangles](https://github.com/d3/d3-voronoi#voronoi_triangles), [*diagram*.links](https://github.com/d3/d3-voronoi#diagram_links) and [*diagram*.triangles](https://github.com/d3/d3-voronoi#diagram_triangles) are now affected by the clip extent: as the Delaunay is computed as the dual of the Voronoi, two sites are only linked if the clipped cells are touching. To compute the Delaunay triangulation without respect to clipping, set the extent to null.
+
+The Voronoi generator finally has well-defined behavior for coincident vertices: the first of a set of coincident points has a defined cell, while the subsequent duplicate points have null cells. The returned array of polygons is sparse, so by using *array*.forEach or *array*.map, you can easily skip undefined cells. The Voronoi generator also now correctly handles the case where no cell edges intersect the extent.
 
 ## [Zooming (d3-zoom)](https://github.com/d3/d3-zoom/blob/master/README.md)
 
