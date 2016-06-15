@@ -610,15 +610,11 @@ There are also new random number generators for [exponential](https://github.com
 
 ## [Requests (d3-request)](https://github.com/d3/d3-request/blob/master/README.md)
 
-TODO
+The d3.xhr method has been renamed to [d3.request](https://github.com/d3/d3-request#request). Basic authentication is now supported using [*request*.user](https://github.com/d3/d3-request#request_user) and [*request*.password](https://github.com/d3/d3-request#request_password). You can now configure a timeout using [*request*.timeout](https://github.com/d3/d3-request#request_timeout).
 
-* d3.xhr ↦ d3.request
-* new *request*.user and *request*.password for basic authentication
-* new *request*.timeout for changing the timeout duration
-* on error, pass the error to the listener
-* on progress, pass the progress event to the listener
-* if d3.xml loads unparseable XML, report an error rather than a null document
-* d3-request is now supported on Node using node-XMLHttpRequest
+If an error occurs, the corresponding [ProgressEvent](https://xhr.spec.whatwg.org/#interface-progressevent) of type “error” is now passed to the error listener, rather than the [XMLHttpRequest](https://xhr.spec.whatwg.org/#interface-xmlhttprequest). Likewise, the ProgressEvent is passed to progress event listeners, rather than using [d3.event](https://github.com/d3/d3-selection#event). If [d3.xml](https://github.com/d3/d3-request#xml) encounters an error parsing XML, this error is now reported to error listeners rather than returning a null response.
+
+With the exception of [d3.html](https://github.com/d3/d3-request#html) and [d3.xml](https://github.com/d3/d3-request#xml), Node is now supported via [node-XMLHttpRequest](https://github.com/driverdan/node-XMLHttpRequest).
 
 ## [Scales (d3-scale)](https://github.com/d3/d3-scale/blob/master/README.md)
 
