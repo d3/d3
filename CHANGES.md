@@ -594,7 +594,7 @@ var quadtree = d3.quadtree()
     .addAll(data);
 ```
 
-The new quadtree implementation is vastly improved! It is now non-recursive, avoiding stack overflows when there are large numbers of coincident points. The internal storage is now more efficient, and the implementation is also faster; constructing a quadtree of 1M normally-distributed points takes about one second in 4.0, as compared to three seconds in 3.x.
+The new quadtree implementation is vastly improved! It is no longer recursive, avoiding stack overflows when there are large numbers of coincident points. The internal storage is now more efficient, and the implementation is also faster; constructing a quadtree of 1M normally-distributed points takes about one second in 4.0, as compared to three seconds in 3.x.
 
 The change in [internal *node* structure](https://github.com/d3/d3-quadtree#nodes) affects [*quadtree*.visit](https://github.com/d3/d3-quadtree#quadtree_visit): use *node*.length to distinguish leaf nodes from internal nodes. For example, to iterate over all data in a quadtree:
 
@@ -608,11 +608,11 @@ quadtree.visit(function(node) {
 });
 ```
 
-There’s a new [*quadtree*.visitAfter](https://github.com/d3/d3-quadtree#quadtree_visitAfter) method for visiting nodes in post-order traversal. This is used, for example, in [d3-force](#forces-d3-force) to implement the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation).
+There’s a new [*quadtree*.visitAfter](https://github.com/d3/d3-quadtree#quadtree_visitAfter) method for visiting nodes in post-order traversal. This feature is used in [d3-force](#forces-d3-force) to implement the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation).
 
-You can now remove data from a quadtree using [*quadtree*.remove](https://github.com/d3/d3-quadtree#quadtree_remove) and [*quadtree*.removeAll](https://github.com/d3/d3-quadtree#quadtree_removeAll). When adding data to a quadtree, the quadtree can now expand its extent by repeated doubling if the new point is outside the existing extent of the quadtree. There are also [*quadtree*.extent](https://github.com/d3/d3-quadtree#quadtree_extent) and [*quadtree*.cover](https://github.com/d3/d3-quadtree#quadtree_cover) methods for explicitly expanding the extent of the quadtree after creation.
+You can now remove data from a quadtree using [*quadtree*.remove](https://github.com/d3/d3-quadtree#quadtree_remove) and [*quadtree*.removeAll](https://github.com/d3/d3-quadtree#quadtree_removeAll). When adding data to a quadtree, the quadtree will now expand its extent by repeated doubling if the new point is outside the existing extent of the quadtree. There are also [*quadtree*.extent](https://github.com/d3/d3-quadtree#quadtree_extent) and [*quadtree*.cover](https://github.com/d3/d3-quadtree#quadtree_cover) methods for explicitly expanding the extent of the quadtree after creation.
 
-Quadtrees support several new utility methods: [*quadtree*.copy](https://github.com/d3/d3-quadtree#quadtree_copy) returns a copy of the quadtree sharing the same data; [*quadtree*.data](https://github.com/d3/d3-quadtree#quadtree_data) generates an array of all data in the quadtree; [*quadtree*.size](https://github.com/d3/d3-quadtree#quadtree_size) returns the number of data points in the quadtree; and [*quadtree*.root](https://github.com/d3/d3-quadtree#quadtree_root) returns the root node, which is useful for manual traversal of the quadtree. The [*quadtree*.find](https://github.com/d3/d3-quadtree#quadtree_find) method now takes an optional search radius, which is especially useful for pointer-based selection in [force-directed graphs](http://bl.ocks.org/mbostock/ad70335eeef6d167bc36fd3c04378048).
+Quadtrees support several new utility methods: [*quadtree*.copy](https://github.com/d3/d3-quadtree#quadtree_copy) returns a copy of the quadtree sharing the same data; [*quadtree*.data](https://github.com/d3/d3-quadtree#quadtree_data) generates an array of all data in the quadtree; [*quadtree*.size](https://github.com/d3/d3-quadtree#quadtree_size) returns the number of data points in the quadtree; and [*quadtree*.root](https://github.com/d3/d3-quadtree#quadtree_root) returns the root node, which is useful for manual traversal of the quadtree. The [*quadtree*.find](https://github.com/d3/d3-quadtree#quadtree_find) method now takes an optional search radius, which is useful for pointer-based selection in [force-directed graphs](http://bl.ocks.org/mbostock/ad70335eeef6d167bc36fd3c04378048).
 
 ## [Queues (d3-queue)](https://github.com/d3/d3-queue/blob/master/README.md)
 
