@@ -578,7 +578,7 @@ The d3.geom.hull operator has been simplified: instead of an operator with *hull
 
 ## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree/blob/master/README.md)
 
-The d3.geom.quadtree method has been replaced by [d3.quadtree](https://github.com/d3/d3-quadtree#quadtree). 4.0 removes the concept of “quadtree operators” (which builds a quadtree from an array of data); there’s now just quadtrees, which you can create via d3.quadtree, and add data to via [*quadtree*.add](https://github.com/d3/d3-quadtree#quadtree_add) and [*quadtree*.addAll](https://github.com/d3/d3-quadtree#quadtree_addAll). This code in 3.x:
+The d3.geom.quadtree method has been replaced by [d3.quadtree](https://github.com/d3/d3-quadtree#quadtree). 4.0 removes the concept of quadtree ”generators” (configurable functions that build a quadtree from an array of data); there are now just quadtrees, which you can create via d3.quadtree and add data to via [*quadtree*.add](https://github.com/d3/d3-quadtree#quadtree_add) and [*quadtree*.addAll](https://github.com/d3/d3-quadtree#quadtree_addAll). This code in 3.x:
 
 ```js
 var quadtree = d3.geom.quadtree()
