@@ -521,14 +521,18 @@ TODO
 
 TODO
 
-d3.interpolate’s behavior is now faster and more precisely defined. d3.interpolators ↦ REMOVED; d3.interpolate is no longer extensible.
+The generic [d3.interpolate](https://github.com/d3/d3-interpolate#interpolate) method is now faster and more precisely defined, as follows:
 
 * If *b* is null, undefined or type "boolean", use the constant *b*.
-* If *b* is type "number", use d3.interpolateNumber.
+* If *b* is type "number", use [d3.interpolateNumber](https://github.com/d3/d3-interpolate#interpolateNumber).
 * If *b* is a d3.color instance or type "string" and can be parsed by d3.color, use d3.interpolateRgb.
-* If *b* is a string, use d3.interpolateString.
-* If *b* is an array, use d3.interpolateArray.
+* If *b* is type "string", use d3.interpolateString.
+* If *b* is [an array](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray), use d3.interpolateArray.
 * Use d3.interpolateObject.
+
+What is the net impact of this change, though? Faster. Better behavior if *b* is a boolean, null or undefined. Better detection of colors using d3.color.
+
+d3.interpolators ↦ REMOVED; d3.interpolate is no longer extensible.
 
 new transform interpolation methods for CSS, as well as SVG. d3-transition automatically picks the right one…
 
