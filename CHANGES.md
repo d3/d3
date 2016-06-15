@@ -578,20 +578,41 @@ The d3.geom.hull operator has been simplified: instead of an operator with *hull
 
 ## [Quadtrees (d3-quadtree)](https://github.com/d3/d3-quadtree/blob/master/README.md)
 
-TODO
+The d3.geom.quadtree method has been replaced by [d3.quadtree](https://github.com/d3/d3-quadtree#quadtree). 4.0 removes the concept of “quadtree operators” (which builds a quadtree from an array of data); there’s now just quadtrees, which you can create via d3.quadtree, and add data to via [*quadtree*.add](https://github.com/d3/d3-quadtree#quadtree_add) and [*quadtree*.addAll](https://github.com/d3/d3-quadtree#quadtree_addAll). This code in 3.x:
 
-* d3.geom.quadtree ↦ d3.quadtree
-* new non-recursive implementation!
-* coincident points are now stored more efficiently
-* internal nodes are now represented more efficiently
-* use *node*.length to distinguish between leaf and internal nodes
-* there’s no longer a quadtree operator and a quadtree; there’s just a mutable quadtree
-* new *quadtree*.remove - remove points from the quadtree!
-* new *quadtree*.extent, *quadtree*.cover - increase the extent of the quadtree after creation!
-* new *quadtree*.addAll, *quadtree*.removeAll - bulk methods for adding and remove points
-* new *quadtree*.copy
-* *quadtree*.find now takes a search radius
-* new *quadtree*.visitAll for post-order traversal
+```js
+var quadtree = d3.geom.quadtree()
+    .extent([[0, 0], [width, height]])
+    (data);
+```
+
+Can be rewritten in 4.0 as:
+
+```js
+var quadtree = d3.quadtree()
+    .extent([[0, 0], [width, height]])
+    .addAll(data);
+```
+
+The new quadtree implementation is vastly improved! It is now non-recursive, avoiding stack overflows when there are large numbers of coincident points. The internal storage is now more efficient, and the implementation is also faster; constructing a quadtree of 1M normally-distributed points takes about one second in 4.0, as compared to three seconds in 3.x.
+
+The change in [internal *node* structure](https://github.com/d3/d3-quadtree#nodes) affects [*quadtree*.visit](https://github.com/d3/d3-quadtree#quadtree_visit): use *node*.length to distinguish leaf nodes from internal nodes. For example, to iterate over all data in a quadtree:
+
+```js
+quadtree.visit(function(node) {
+  if (!node.length) {
+    do {
+      console.log(node.data);
+    } while (node = node.next)
+  }
+});
+```
+
+There’s a new [*quadtree*.visitAfter](https://github.com/d3/d3-quadtree#quadtree_visitAfter) method for visiting nodes in post-order traversal. This is used, for example, in [d3-force](#forces-d3-force) to implement the [Barnes–Hut approximation](https://en.wikipedia.org/wiki/Barnes–Hut_simulation).
+
+You can now remove data from a quadtree using [*quadtree*.remove](https://github.com/d3/d3-quadtree#quadtree_remove) and [*quadtree*.removeAll](https://github.com/d3/d3-quadtree#quadtree_removeAll). When adding data to a quadtree, the quadtree can now expand its extent by repeated doubling if the new point is outside the existing extent of the quadtree. There are also [*quadtree*.extent](https://github.com/d3/d3-quadtree#quadtree_extent) and [*quadtree*.cover](https://github.com/d3/d3-quadtree#quadtree_cover) methods for explicitly expanding the extent of the quadtree after creation.
+
+Quadtrees support several new utility methods: [*quadtree*.copy](https://github.com/d3/d3-quadtree#quadtree_copy) returns a copy of the quadtree sharing the same data; [*quadtree*.data](https://github.com/d3/d3-quadtree#quadtree_data) generates an array of all data in the quadtree; [*quadtree*.size](https://github.com/d3/d3-quadtree#quadtree_size) returns the number of data points in the quadtree; and [*quadtree*.root](https://github.com/d3/d3-quadtree#quadtree_root) returns the root node, which is useful for manual traversal of the quadtree. The [*quadtree*.find](https://github.com/d3/d3-quadtree#quadtree_find) method now takes an optional search radius, which is especially useful for pointer-based selection in [force-directed graphs](http://bl.ocks.org/mbostock/ad70335eeef6d167bc36fd3c04378048).
 
 ## [Queues (d3-queue)](https://github.com/d3/d3-queue/blob/master/README.md)
 
