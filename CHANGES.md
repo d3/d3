@@ -39,23 +39,23 @@ D3 3.x was a monolithic library: the core functionality resided in a single [rep
 
 D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](https://github.com/d3) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in a separate repository, allowing decentralized ownership and independent release cycles. Want to own a new repository in the [D3 organization](https://github.com/d3)? [Let me know!](https://twitter.com/mbostock)
 
-The [default bundle](https://d3js.org/d3.v4.0.0-alpha.49.js) of D3 4.0 conveniently aggregates [about thirty](https://github.com/d3/d3/blob/master/index.js) of these microlibraries.
+The [default bundle](https://d3js.org/d3.v4.0.0-alpha.50.js) of D3 4.0 conveniently aggregates [about thirty](https://github.com/d3/d3/blob/master/index.js) of these microlibraries.
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.49.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.50.min.js"></script>
 ```
 
 As before, you can load optional plugins on top of the default bundle, such as [ColorBrewer scales](https://github.com/d3/d3-scale-chromatic):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-alpha.49.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-alpha.50.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
 ```
 
 But now in 4.0, you don’t have to use the default bundle! Custom bundles are useful for applications that use a subset of D3’s features; for example, a React charting library might use D3’s scales and shapes, but use React instead of selections to manipulate the DOM. Or if you’re just using [d3-selection](https://github.com/d3/d3-selection), it’s only 5KB instead of 64KB for the default bundle. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
 
 ```html
-<script src="https://d3js.org/d3-selection.v0.8.min.js"></script>
+<script src="https://d3js.org/d3-selection.v0.9.min.js"></script>
 ```
 
 You can `cat` D3 microlibraries into a custom bundle, or use tools such as [Webpack](https://webpack.github.io/) or [Rollup](http://rollupjs.org/) to create [optimized bundles](https://bl.ocks.org/mbostock/bb09af4c39c79cffcde4). The D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce the smallest bundles!
