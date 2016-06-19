@@ -370,9 +370,6 @@ Geographic projections, shapes and math.
 * [d3.geoRotation](https://github.com/d3/d3-geo#geoRotation) -
 * [d3.geoStream](https://github.com/d3/d3-geo#geoStream) -
 * [d3.geoTransform](https://github.com/d3/d3-geo#geoTransform) -
-
-### [Geographic Projections](https://github.com/d3/d3-geo#geographic-projections)
-
 * [d3.geoPath](https://github.com/d3/d3-geo#geoPath) -
 * [*path*](https://github.com/d3/d3-geo#_path) -
 * [*path*.area](https://github.com/d3/d3-geo#path_area) -
@@ -381,6 +378,9 @@ Geographic projections, shapes and math.
 * [*path*.projection](https://github.com/d3/d3-geo#path_projection) -
 * [*path*.context](https://github.com/d3/d3-geo#path_context) -
 * [*path*.pointRadius](https://github.com/d3/d3-geo#path_pointRadius) -
+
+### [Geographic Projections](https://github.com/d3/d3-geo#geographic-projections)
+
 * [d3.geoProjection](https://github.com/d3/d3-geo#geoProjection) -
 * [*projection*](https://github.com/d3/d3-geo#_projection) -
 * [*projection*.invert](https://github.com/d3/d3-geo#projection_invert) -
@@ -392,7 +392,6 @@ Geographic projections, shapes and math.
 * [*projection*.center](https://github.com/d3/d3-geo#projection_center) -
 * [*projection*.rotate](https://github.com/d3/d3-geo#projection_rotate) -
 * [*projection*.precision](https://github.com/d3/d3-geo#projection_precision) -
-* [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator) -
 * [d3.geoAlbers](https://github.com/d3/d3-geo#geoAlbers) -
 * [d3.geoAlbersUsa](https://github.com/d3/d3-geo#geoAlbersUsa) -
 * [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo#geoAzimuthalEqualArea) -
@@ -406,6 +405,7 @@ Geographic projections, shapes and math.
 * [d3.geoOrthographic](https://github.com/d3/d3-geo#geoOrthographic) -
 * [d3.geoStereographic](https://github.com/d3/d3-geo#geoStereographic) -
 * [d3.geoTransverseMercator](https://github.com/d3/d3-geo#geoTransverseMercator) -
+* [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator) -
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy)
 

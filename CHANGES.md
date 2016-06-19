@@ -12,7 +12,7 @@
 * [Easings](#easings-d3-ease)
 * [Forces](#forces-d3-force)
 * [Number Formats](#number-formats-d3-format)
-* [Geographies](#geographic-projections-d3-geo)
+* [Geographies](#geographies-d3-geo)
 * [Hierarchies](#hierarchies-d3-hierarchy)
 * [Interpolators](#interpolators-d3-interpolate)
 * [Paths](#paths-d3-path)
@@ -434,8 +434,6 @@ quite a few more changes… TODO describe them
 
 TODO
 
-This module is not yet implemented in D3 4.0, but I’m working on it.
-
 * d3.geo.graticule ↦ d3.geoGraticule
 * *graticule*.majorExtent ↦ *graticule*.extentMajor
 * *graticule*.minorExtent ↦ *graticule*.extentMinor
@@ -472,7 +470,7 @@ Projections:
 * d3.geo.stereographic ↦ d3.geoStereographic
 * d3.geo.transverseMercator ↦ d3.geoTransverseMercator
 
-Raw projections:
+TODO Raw projections?
 
 * d3.geo.azimuthalEqualArea.raw ↦ d3.geoRawAzimuthalEqualArea
 * d3.geo.azimuthalEquidistant.raw ↦ d3.geoRawAzimuthalEquidistant
