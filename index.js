@@ -422,3 +422,34 @@ export {
   brushY,
   brushSelection
 } from "d3-brush";
+
+export {
+  geoArea,
+  geoBounds,
+  geoCentroid,
+  geoCircle,
+  geoClipExtent,
+  geoDistance,
+  geoGraticule,
+  geoInterpolate,
+  geoLength,
+  geoPath,
+  geoAlbers,
+  geoAlbersUsa,
+  geoAzimuthalEqualArea,
+  geoAzimuthalEquidistant,
+  geoConicConformal,
+  geoConicEqualArea,
+  geoConicEquidistant,
+  geoEquirectangular,
+  geoGnomonic,
+  geoProjection,
+  geoProjectionMutator,
+  geoMercator,
+  geoOrthographic,
+  geoStereographic,
+  geoTransverseMercator,
+  geoRotation,
+  geoStream,
+  geoTransform
+} from "d3-geo";

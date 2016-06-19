@@ -32,6 +32,7 @@ D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to 
 * [Dragging](#dragging-d3-drag)
 * [Easings](#easings-d3-ease)
 * [Forces](#forces-d3-force)
+* [Geographies](#geographies-d3-geo)
 * [Hierarchies](#hierarchies-d3-hierarchy)
 * [Interpolators](#interpolators-d3-interpolate)
 * [Number Formats](#number-formats-d3-format)
@@ -352,6 +353,59 @@ Force-directed graph layout using velocity Verlet integration.
 * [d3.forceY](https://github.com/d3/d3-force#forceY) - create an *y*-positioning force.
 * [*y*.strength](https://github.com/d3/d3-force#y_strength) - set the force strength.
 * [*y*.y](https://github.com/d3/d3-force#y_y) - set the target *y*-coordinate.
+
+## [Geographies (d3-geo)](https://github.com/d3/d3-geo)
+
+Geographic projections, shapes and math.
+
+* [d3.geoArea](https://github.com/d3/d3-geo#geoArea) -
+* [d3.geoBounds](https://github.com/d3/d3-geo#geoBounds) -
+* [d3.geoCentroid](https://github.com/d3/d3-geo#geoCentroid) -
+* [d3.geoCircle](https://github.com/d3/d3-geo#geoCircle) -
+* [d3.geoClipExtent](https://github.com/d3/d3-geo#geoClipExtent) -
+* [d3.geoDistance](https://github.com/d3/d3-geo#geoDistance) -
+* [d3.geoGraticule](https://github.com/d3/d3-geo#geoGraticule) -
+* [d3.geoInterpolate](https://github.com/d3/d3-geo#geoInterpolate) -
+* [d3.geoLength](https://github.com/d3/d3-geo#geoLength) -
+* [d3.geoRotation](https://github.com/d3/d3-geo#geoRotation) -
+* [d3.geoStream](https://github.com/d3/d3-geo#geoStream) -
+* [d3.geoTransform](https://github.com/d3/d3-geo#geoTransform) -
+
+### [Geographic Projections](https://github.com/d3/d3-geo#geographic-projections)
+
+* [d3.geoPath](https://github.com/d3/d3-geo#geoPath) -
+* [*path*](https://github.com/d3/d3-geo#_path) -
+* [*path*.area](https://github.com/d3/d3-geo#path_area) -
+* [*path*.bounds](https://github.com/d3/d3-geo#path_bounds) -
+* [*path*.centroid](https://github.com/d3/d3-geo#path_centroid) -
+* [*path*.projection](https://github.com/d3/d3-geo#path_projection) -
+* [*path*.context](https://github.com/d3/d3-geo#path_context) -
+* [*path*.pointRadius](https://github.com/d3/d3-geo#path_pointRadius) -
+* [d3.geoProjection](https://github.com/d3/d3-geo#geoProjection) -
+* [*projection*](https://github.com/d3/d3-geo#_projection) -
+* [*projection*.invert](https://github.com/d3/d3-geo#projection_invert) -
+* [*projection*.stream](https://github.com/d3/d3-geo#projection_stream) -
+* [*projection*.clipAngle](https://github.com/d3/d3-geo#projection_clipAngle) -
+* [*projection*.clipExtent](https://github.com/d3/d3-geo#projection_clipExtent) -
+* [*projection*.scale](https://github.com/d3/d3-geo#projection_scale) -
+* [*projection*.translate](https://github.com/d3/d3-geo#projection_translate) -
+* [*projection*.center](https://github.com/d3/d3-geo#projection_center) -
+* [*projection*.rotate](https://github.com/d3/d3-geo#projection_rotate) -
+* [*projection*.precision](https://github.com/d3/d3-geo#projection_precision) -
+* [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator) -
+* [d3.geoAlbers](https://github.com/d3/d3-geo#geoAlbers) -
+* [d3.geoAlbersUsa](https://github.com/d3/d3-geo#geoAlbersUsa) -
+* [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo#geoAzimuthalEqualArea) -
+* [d3.geoAzimuthalEquidistant](https://github.com/d3/d3-geo#geoAzimuthalEquidistant) -
+* [d3.geoConicConformal](https://github.com/d3/d3-geo#geoConicConformal) -
+* [d3.geoConicEqualArea](https://github.com/d3/d3-geo#geoConicEqualArea) -
+* [d3.geoConicEquidistant](https://github.com/d3/d3-geo#geoConicEquidistant) -
+* [d3.geoEquirectangular](https://github.com/d3/d3-geo#geoEquirectangular) -
+* [d3.geoGnomonic](https://github.com/d3/d3-geo#geoGnomonic) -
+* [d3.geoMercator](https://github.com/d3/d3-geo#geoMercator) -
+* [d3.geoOrthographic](https://github.com/d3/d3-geo#geoOrthographic) -
+* [d3.geoStereographic](https://github.com/d3/d3-geo#geoStereographic) -
+* [d3.geoTransverseMercator](https://github.com/d3/d3-geo#geoTransverseMercator) -
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy)
 

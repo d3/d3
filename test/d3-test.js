@@ -9,6 +9,7 @@ tape("version matches package.json", function(test) {
 
 testExports("d3-array");
 testExports("d3-axis");
+testExports("d3-brush");
 testExports("d3-collection");
 testExports("d3-color");
 testExports("d3-dispatch");
@@ -17,6 +18,7 @@ testExports("d3-dsv");
 testExports("d3-ease");
 testExports("d3-force");
 testExports("d3-format");
+testExports("d3-geo");
 testExports("d3-hierarchy");
 testExports("d3-interpolate");
 testExports("d3-path");
