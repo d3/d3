@@ -152,22 +152,27 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 ## [Brushes (d3-brush)](https://github.com/d3/d3-brush/blob/master/README.md)
 
-TODO
+There are now three classes of brush, replacing d3.svg.brush, for brushing along the *x*-dimension, the *y*-dimension, or both: [d3.brushX](https://github.com/d3/d3-brush#brushX), [d3.brushY](https://github.com/d3/d3-brush#brushY), [d3.brush](https://github.com/d3/d3-brush#brush). Brushes are no longer dependent on [scales](#scales-d3-scale); instead, each brush defines a selection in screen coordinates. This selection can be [inverted](https://github.com/d3/d3-scale#continuous_invert) if you want to compute the corresponding data domain.
 
-* d3.svg.brush, *brush*.x, *brush*.y ↦ d3.brush, d3.brushX, d3.brushY
-* *brush*.event ↦ *brush*.move
-* *brushstart* event ↦ *start* event
-* *brushend* event ↦ *end* event
-* add *brush*.handleSize
-* add *brush*.filter
-* improve the default appearance of the brush
-* simplify the internal structure of the brush slightly (still customizable?)
-* change the structure of brush events, no longer reports “mode”
-* improve brush interaction - ignore right-click, SHIFT to lock x/y, META for new brush
-* brushes no longer use scales; they operate in screen coordinates
-* brushes no longer store state internally; it is stored on applied elements
-* remove *brush*.clamp; always clamps to the brushable region
-* consume handled events
+Rather than relying on the scales’ ranges to determine the brushable area, there is now a [*brush*.extent](https://github.com/d3/d3-brush#brush_extent) method for setting it. If you do not set the brush extent, the default behavior is to allow brushing over the full extent of the owner SVG element. The *brush*.clamp method has also been eliminated; brushing is always restricted to the brushable area defined by the brush extent.
+
+Brushes no longer store the active brush selection internally. The selection is now stored on any elements to which the brush has been applied. The selection is available as *event*.selection within a brush event, or by calling [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) on a given *element*. To move the brush to a new position, use [*brush*.move](https://github.com/d3/d3-brush#brush_move) with a given [selection](#selections-d3-selection) or [transition](#transitions-d3-transition); see the [brush snapping example](http://bl.ocks.org/mbostock/6232537).
+
+Brush interaction has been improved. By default, the brush now ignores right-clicks intended for the context menu; you can change this behavior using [*brush*.filter](https://github.com/d3/d3-brush#brush_filter). Holding down SHIFT (⇧) while brushing locks the *x*- or *y*-position of the brush. Holding down META (⌘) while clicking and dragging always starts a new brush selection, rather than dragging the existing brush selection.
+
+The default appearance of the brush has also been improved and slightly simplified. Previously it was necessary to apply styles to the brush to give it a reasonable appearance, such as:
+
+```css
+.brush .extent {
+  stroke: #fff;
+  fill-opacity: .125;
+  shape-rendering: crispEdges;
+}
+```
+
+These styles are now applied by default as attributes; if you want to customize the brush appearance, you can still apply external styles or modify the brush elements. (D3 4.0 features a similar improvement to [axes](#axes-d3-axis).) A new [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) method lets you override the brush handle size; it defaults to six pixels.
+
+The brush now consumes handled events, making it easier to combine the brush with other interactive behaviors such as [drag](#dragging-d3-drag) and [zoom](#zooming-d3-zoom). The *brushstart* and *brushend* events have been renamed to *start* and *end*, respectively. The brush event no longer reports a *event*.mode to distinguish between resizing and dragging the brush.
 
 ## [Chords (d3-chord)](https://github.com/d3/d3-chord/blob/master/README.md)
 
