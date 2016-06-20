@@ -370,7 +370,7 @@ The new forces and simulation have been carefully crafted to avoid nondeterminis
 
 <img alt="Phyllotaxis" src="https://raw.githubusercontent.com/d3/d3-force/master/img/phyllotaxis.png" width="420" height="219">
 
-Random jitter is still applied to resolve link, collision and many-body forces if there are coincident nodes, but at least in the common case, this means that the behavior of the force simulation (the resulting force-directed graph layout) is consistent across browsers and reloads. D3 no longer plays dice!
+Random jitter is still applied to resolve link, collision and many-body forces if there are coincident nodes, but at least in the common case, the force simulation (and the resulting force-directed graph layout) is now consistent across browsers and reloads. D3 no longer plays dice!
 
 The force simulation sports several new methods for greater control over heating and cooling, and for controlling the internal timer, such as [*simulation*.alphaMin](https://github.com/d3/d3-force#simulation_alphaMin) and [*simulation*.alphaDecay](https://github.com/d3/d3-force#simulation_alphaDecay). Calling [*simulation*.alpha](https://github.com/d3/d3-force#simulation_alpha) had no effect on the internal timer, which is now controlled independently via [*simulation*.stop](https://github.com/d3/d3-force#simulation_stop) and [*simulation*.restart](https://github.com/d3/d3-force#simulation_restart). You can still advance the simulation manually using [*simulation*.tick](https://github.com/d3/d3-force#simulation_tick). The *force*.friction parameter is replaced by *simulation*.velocityDecay.
 
