@@ -156,7 +156,7 @@ Replacing d3.svg.brush, there are now three classes of brush for brushing along 
 
 Brushes no longer store the active brush selection (*i.e.*, the highlighted region; the brush’s position) internally. The brush’s position is now stored on any elements to which the brush has been applied. The brush’s position is available as *event*.selection within a brush event or by calling [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) on a given *element*. To move the brush programatically, use [*brush*.move](https://github.com/d3/d3-brush#brush_move) with a given [selection](#selections-d3-selection) or [transition](#transitions-d3-transition); see the [brush snapping example](http://bl.ocks.org/mbostock/6232537).
 
-Brush interaction has been improved. By default, the brush now ignores right-clicks intended for the context menu; you can change this behavior using [*brush*.filter](https://github.com/d3/d3-brush#brush_filter). Holding down SHIFT (⇧) while brushing locks the *x*- or *y*-position of the brush. Holding down META (⌘) while clicking and dragging always starts a new brush selection, rather than dragging the existing brush selection.
+Brush interaction has been improved. By default, brushes now ignore right-clicks intended for the context menu; you can change this behavior using [*brush*.filter](https://github.com/d3/d3-brush#brush_filter). Brushes also ignore emulated mouse events on iOS. Holding down SHIFT (⇧) while brushing locks the *x*- or *y*-position of the brush. Holding down META (⌘) while clicking and dragging starts a new selection, rather than translating the existing selection.
 
 The default appearance of the brush has also been improved and slightly simplified. Previously it was necessary to apply styles to the brush to give it a reasonable appearance, such as:
 
@@ -253,18 +253,13 @@ The new implementation d3.dispatch is faster, using fewer closures to improve pe
 
 ## [Dragging (d3-drag)](https://github.com/d3/d3-drag/blob/master/README.md)
 
-TODO
+The drag behavior d3.behavior.drag has been renamed to d3.drag. The *drag*.origin method has been replaced by [*drag*.subject](https://github.com/d3/d3-drag#drag_subject), which allows you to define what is being dragged at the start of a drag gesture. This allows the drag behavior to be used with Canvas, where the draggable objects share the Canvas element (as opposed to SVG, where draggable objects typically have distinct DOM elements); see the [circle dragging example](http://bl.ocks.org/mbostock/444757cc9f0fde320a5f469cd36860f4).
 
-* d3.behavior.drag ↦ d3.drag
-* add *drag*.filter
-* add *drag*.subject - for Canvas-based dragging
-* add *drag*.container - for Canvas-based dragging, or avoiding feedback loop
-* ignore emulated mouse events on iOS
-* *dragstart* event ↦ *start* event
-* *dragend* event ↦ *end* event
-* add d3.dragEnable, d3.dragDisable - dealing with browser quirks
-* new *event*.active property makes it easier to tell if any active gesture
-* new *event*.on lets you register temporary listeners for the current gesture
+A new [*drag*.container](https://github.com/d3/d3-drag#drag_container) method allows you to override the container elements that defines the drag gesture coordinate system. This defaults to the parent node of the element to which the drag behavior was applied. For dragging on Canvas elements, you may want to change the container element to be the Canvas element itself.
+
+[Drag events](https://github.com/d3/d3-drag#drag-events) now expose a new [*event*.on](https://github.com/d3/d3-drag#event_on) method that allows you to register temporary listeners for the current drag gesture. This allows your temporary listeners to capture state for the current gesture, such as the object being dragged. A new *event*.active property lets you detect whether multiple (multitouch) drag gestures are active concurrently. The *dragstart* and *dragend* events have been renamed to *start* and *end*. By default, drag behaviors now ignore right-clicks intended for the context menu; use [*drag*.filter](https://github.com/d3/d3-drag#drag_filter) to control which events are ignored. The drag behavior also ignores emulated mouse events on iOS.
+
+The new [d3.dragEnable](https://github.com/d3/d3-drag#dragEnable) and [d3.dragDisable](https://github.com/d3/d3-drag#dragDisable) methods provide a low-level API for implementing drag gestures across browsers and devices. These methods are also used by other D3 components, such as the [brush](#brushes-d3-brush).
 
 ## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv/blob/master/README.md)
 
