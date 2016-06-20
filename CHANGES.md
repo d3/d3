@@ -154,7 +154,7 @@ There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickA
 
 Replacing d3.svg.brush, there are now three classes of brush for brushing along the *x*-dimension, the *y*-dimension, or both: [d3.brushX](https://github.com/d3/d3-brush#brushX), [d3.brushY](https://github.com/d3/d3-brush#brushY), [d3.brush](https://github.com/d3/d3-brush#brush). Brushes are no longer dependent on [scales](#scales-d3-scale); instead, each brush defines a selection in screen coordinates. This selection can be [inverted](https://github.com/d3/d3-scale#continuous_invert) if you want to compute the corresponding data domain. And rather than rely on the scales’ ranges to determine the brushable area, there is now a [*brush*.extent](https://github.com/d3/d3-brush#brush_extent) method for setting it. If you do not set the brush extent, it defaults to the full extent of the owner SVG element. The *brush*.clamp method has also been eliminated; brushing is always restricted to the brushable area defined by the brush extent.
 
-Brushes no longer store the active brush selection (*i.e.*, the highlighted region; the brush’s position) internally. The brush’s position is now stored on any elements to which the brush has been applied. The brush’s position is available as *event*.selection within a brush event or by calling [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) on a given *element*. To move the brush programatically, use [*brush*.move](https://github.com/d3/d3-brush#brush_move) with a given [selection](#selections-d3-selection) or [transition](#transitions-d3-transition); see the [brush snapping example](http://bl.ocks.org/mbostock/6232537).
+Brushes no longer store the active brush selection (*i.e.*, the highlighted region; the brush’s position) internally. The brush’s position is now stored on any elements to which the brush has been applied. The brush’s position is available as *event*.selection within a brush event or by calling [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) on a given *element*. To move the brush programmatically, use [*brush*.move](https://github.com/d3/d3-brush#brush_move) with a given [selection](#selections-d3-selection) or [transition](#transitions-d3-transition); see the [brush snapping example](http://bl.ocks.org/mbostock/6232537). The *brush*.event method has been removed.
 
 Brush interaction has been improved. By default, brushes now ignore right-clicks intended for the context menu; you can change this behavior using [*brush*.filter](https://github.com/d3/d3-brush#brush_filter). Brushes also ignore emulated mouse events on iOS. Holding down SHIFT (⇧) while brushing locks the *x*- or *y*-position of the brush. Holding down META (⌘) while clicking and dragging starts a new selection, rather than translating the existing selection.
 
@@ -170,7 +170,7 @@ The default appearance of the brush has also been improved and slightly simplifi
 
 These styles are now applied by default as attributes; if you want to customize the brush appearance, you can still apply external styles or modify the brush elements. (D3 4.0 features a similar improvement to [axes](#axes-d3-axis).) A new [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) method lets you override the brush handle size; it defaults to six pixels.
 
-The brush now consumes handled events, making it easier to combine the brush with other interactive behaviors such as [drag](#dragging-d3-drag) and [zoom](#zooming-d3-zoom). The *brushstart* and *brushend* events have been renamed to *start* and *end*, respectively. The brush event no longer reports a *event*.mode to distinguish between resizing and dragging the brush.
+The brush now consumes handled events, making it easier to combine with other interactive behaviors such as [dragging](#dragging-d3-drag) and [zooming](#zooming-d3-zoom). The *brushstart* and *brushend* events have been renamed to *start* and *end*, respectively. The brush event no longer reports a *event*.mode to distinguish between resizing and dragging the brush.
 
 ## [Chords (d3-chord)](https://github.com/d3/d3-chord/blob/master/README.md)
 
@@ -257,7 +257,7 @@ The drag behavior d3.behavior.drag has been renamed to d3.drag. The *drag*.origi
 
 A new [*drag*.container](https://github.com/d3/d3-drag#drag_container) method lets you override the parent element that defines the drag gesture coordinate system. This defaults to the parent node of the element to which the drag behavior was applied. For dragging on Canvas elements, you probably want to use the Canvas element as the container.
 
-[Drag events](https://github.com/d3/d3-drag#drag-events) now expose an [*event*.on](https://github.com/d3/d3-drag#event_on) method for registering temporary listeners for duration of the current drag gesture; these listeners can capture state for the current gesture, such as the thing being dragged. A new *event*.active property lets you detect whether multiple (multitouch) drag gestures are active concurrently. The *dragstart* and *dragend* events have been renamed to *start* and *end*. By default, drag behaviors now ignore right-clicks intended for the context menu; use [*drag*.filter](https://github.com/d3/d3-drag#drag_filter) to control which events are ignored. The drag behavior also ignores emulated mouse events on iOS.
+[Drag events](https://github.com/d3/d3-drag#drag-events) now expose an [*event*.on](https://github.com/d3/d3-drag#event_on) method for registering temporary listeners for duration of the current drag gesture; these listeners can capture state for the current gesture, such as the thing being dragged. A new *event*.active property lets you detect whether multiple (multitouch) drag gestures are active concurrently. The *dragstart* and *dragend* events have been renamed to *start* and *end*. By default, drag behaviors now ignore right-clicks intended for the context menu; use [*drag*.filter](https://github.com/d3/d3-drag#drag_filter) to control which events are ignored. The drag behavior also ignores emulated mouse events on iOS. The drag behavior now consumes handled events, making it easier to combine with other interactive behaviors such as [zooming](#zooming-d3-zoom).
 
 The new [d3.dragEnable](https://github.com/d3/d3-drag#dragEnable) and [d3.dragDisable](https://github.com/d3/d3-drag#dragDisable) methods provide a low-level API for implementing drag gestures across browsers and devices. These methods are also used by other D3 components, such as the [brush](#brushes-d3-brush).
 
@@ -1102,25 +1102,10 @@ The Voronoi generator finally has well-defined behavior for coincident vertices:
 
 ## [Zooming (d3-zoom)](https://github.com/d3/d3-zoom/blob/master/README.md)
 
-TODO
+The zoom behavior d3.behavior.zoom has been renamed to d3.zoom. Zoom behaviors no longer store the active zoom transform (*i.e.*, the visible region; the scale and translate) internally. The zoom transform is now stored on any elements to which the zoom behavior has been applied. The zoom transform is available as *event*.transform within a zoom event or by calling [d3.zoomTransform](https://github.com/d3/d3-zoom#zoomTransform) on a given *element*. To zoom programmatically, use [*zoom*.transform](https://github.com/d3/d3-zoom#zoom_transform) with a given [selection](#selections-d3-selection) or [transition](#transitions-d3-transition); see the [zoom transitions example](http://bl.ocks.org/mbostock/b783fbb2e673561d214e09c7fb5cedee). The *zoom*.event method has been removed.
 
-* d3.behavior.zoom ↦ d3.zoom
-* ignore wheel events if at limits of scale extent
-* ignores right-click by default
-* new *zoom*.translateExtent!
-* consume handled events
-* new *zoom*.transform replaces *zoom*.event; *zoom* behavior is stateless
-* new *zoom*.translateBy
-* new *zoom*.scaleBy
-* new *zoom*.scaleTo
-* new *zoom*.filter
-* removed *zoom*.center; use programmatic zooming instead
-* *zoom*.size ↦ *zoom*.extent; better default extent using the DOM
-* *zoomstart* event ↦ *start* event
-* *zoomend* event ↦ *end* event
+To make programmatic zooming easier, there are several new convenience methods on top of *zoom*.transform: [*zoom*.translateBy](https://github.com/d3/d3-zoom#zoom_translateBy), [*zoom*.scaleBy](https://github.com/d3/d3-zoom#zoom_scaleBy) and [*zoom*.scaleTo](https://github.com/d3/d3-zoom#zoom_scaleTo). There is also a new API for describing [zoom transforms](https://github.com/d3/d3-zoom#zoom-transforms). Zoom behaviors are no longer dependent on [scales](#scales-d3-scale), but you can use [*transform*.rescaleX](https://github.com/d3/d3-zoom#transform_rescaleX) or [*transform*.rescaleY](https://github.com/d3/d3-zoom#transform_rescaleY), [*transform*.invertX](https://github.com/d3/d3-zoom#transform_invertX) to transform a scale’s domain. 3.x’s *event*.scale is replaced with *event*.transform.k, and *event*.translate is replaced with *event*.transform.x and *event*.transform.y. The *zoom*.center method has been removed in favor of programmatic zooming.
 
-new d3.zoomTransform API
+The zoom behavior finally supports simple constraints on panning! The new [*zoom*.translateExtent](https://github.com/d3/d3-zoom#zoom_translateExtent) lets you define the viewable extent of the world: the currently-visible extent (the extent of the viewport, as defined by [*zoom*.extent](https://github.com/d3/d3-zoom#zoom_extent)) is always contained within the translate extent. The *zoom*.size method has been replaced by *zoom*.extent, and the default behavior is now smarter: it defaults to the extent of the zoom behavior’s owner element, rather than being hardcoded to 960×500. (This also improves the default path chosen during smooth zoom transitions!)
 
-* *event*.scale, *event*.translate ↦ *event*.transform
-* *zoom*.x ↦ *transform*.rescaleX
-* *zoom*.y ↦ *transform*.rescaleY
+The zoom behavior’s interaction has also improved. It now correctly handles concurrent wheeling and dragging, as well as concurrent touching and mousing. The zoom behavior now ignores wheel events at the limits of its scale extent, allowing you to scroll past a zoomable area. The *zoomstart* and *zoomend* events have been renamed *start* and *end*. By default, zoom behaviors now ignore right-clicks intended for the context menu; use [*zoom*.filter](https://github.com/d3/d3-zoom#zoom_filter) to control which events are ignored. The zoom behavior also ignores emulated mouse events on iOS. The zoom behavior now consumes handled events, making it easier to combine with other interactive behaviors such as [dragging](#dragging-d3-drag).
