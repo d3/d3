@@ -362,47 +362,21 @@ There’s now a nice [visual reference](https://github.com/d3/d3-ease/blob/maste
 
 ## [Forces (d3-force)](https://github.com/d3/d3-force/blob/master/README.md)
 
-TODO
+The force layout d3.layout.force has been renamed to d3.forceSimulation. The force simulation now uses [velocity Verlet integration](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) rather than position Verlet, tracking the nodes’ positions (*node*.x, *node*.y) and velocities (*node*.vx, *node*.vy) rather than their previous positions (*node*.px, *node*.py).
 
-* velocity verlet instead of position verlet
-* deterministic initialization and forces; D3 does not play dice!
-* d3.layout.force ↦ d3.forceSimulation
-* *force*.friction ↦ *force*.drag
+Rather than hard-coding a set of built-in forces, the force simulation is now extensible: you specify which forces you want. In addition to being more composable, each force is now more flexible in its configuration: force parameters can typically be configured per-node or per-link. There are separate positioning forces for [*x*](https://github.com/d3/d3-force#forceX) and [*y*](https://github.com/d3/d3-force#forceY) that replace *force*.gravity, and you can specify different target positions and strengths for each node. The new [link force](https://github.com/d3/d3-force#forceLink) replaces *force*.linkStrength and employs better default heuristics to improve stability. The new [many-body force](https://github.com/d3/d3-force#forceManyBody) replaces *force*.charge and supports a new [minimum-distance parameter](https://github.com/d3/d3-force#manyBody_distanceMin) and performance improvements thanks to 4.0’s [new quadtrees](#quadtrees-d3-quadtree). There are also brand-new forces for [centering nodes](https://github.com/d3/d3-force#forceCenter) and [collision resolution](https://github.com/d3/d3-force#forceCollision).
 
-the simulation is extensible rather than hard-coding several forces:
+The new forces and the initialization behavior of the simulation have been carefully crafted to avoid nondeterminism. Rather than initializing nodes randomly, if the nodes do not have preset positions, they are placed in a phyllotaxis pattern:
 
-* *force*.gravity ↦ d3.forceX, d3.forceY
-* *force*.charge ↦ d3.forceManyBody
-* *force*.link ↦ d3.forceLink
-* new d3.forceCenter
-* new d3.forceCollision - more stable than prior examples, too
-* new *forceManyBody*.distanceMin
+<img alt="Phyllotaxis" src="https://raw.githubusercontent.com/d3/d3-force/master/img/phyllotaxis.png" width="420" height="219">
 
-the new forces are more flexible, and better:
+Random jitter is still applied to resolve link, collision and many-body forces if there are coincident nodes, but at least in the common case, this means that the behavior of the force simulation (the resulting force-directed graph layout) is consistent across browsers and reloads. D3 no longer plays dice!
 
-* force strengths can typically be configured per-node or per-link
-* separate positioning forces for *x* and *y*
-* better default link strength and bias heuristics to improve stability
+The force simulation sports several new methods for greater control over heating and cooling, and for controlling the internal timer, such as [*simulation*.alphaMin](https://github.com/d3/d3-force#simulation_alphaMin) and [*simulation*.alphaDecay](https://github.com/d3/d3-force#simulation_alphaDecay). Calling [*simulation*.alpha](https://github.com/d3/d3-force#simulation_alpha) had no effect on the internal timer, which is now controlled independently via [*simulation*.stop](https://github.com/d3/d3-force#simulation_stop) and [*simulation*.restart](https://github.com/d3/d3-force#simulation_restart). You can still advance the simulation manually using [*simulation*.tick](https://github.com/d3/d3-force#simulation_tick). The *force*.friction parameter is replaced by *simulation*.velocityDecay.
 
-easier controls for heating and cooling the layout:
+A new [*simulation*.alphaTarget](https://github.com/d3/d3-force#simulation_alphaTarget) method allows you to set the desired alpha (temperature) of the simulation, such that the simulation can be smoothly reheated during interaction, and then smoothly cooled again. This improves the stability of the graph during interaction.
 
-* *simulation*.alpha
-* *simulation*.alphaMin - control when the internal timer stops
-* *simulation*.alphaDecay - control how quickly the simulation cools
-* *simulation*.alphaTarget - smooth reheating during interaction!
-
-better controls for starting and stopping the internal timer, independent of heat:
-
-* *simulation*.restart
-* *simulation*.stop
-* *simulation*.tick
-
-the dependency on the drag behavior is removed. instead:
-
-* *simulation*.fix
-* *simulation*.unfix
-* *simulation*.unfixAll
-* *simulation*.find
+The force layout no longer depends on the [drag behavior](#dragging-d3-drag), though you can certainly create [draggable force-directed graphs](http://bl.ocks.org/mbostock/ad70335eeef6d167bc36fd3c04378048)! Set *node*.fx and *node*.fy to fix a node’s position. As an alternative to a [Voronoi](#voronoi-d3-voronoi) SVG overlay, you can now use [*simulation*.find](https://github.com/d3/d3-force#simulation_find) to find the closest node to a pointer.
 
 ## [Number Formats (d3-format)](https://github.com/d3/d3-format/blob/master/README.md)
 
