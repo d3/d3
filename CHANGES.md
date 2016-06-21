@@ -388,7 +388,7 @@ TODO
 * improve accuracy by relying on *number*.toExponential to extract the mantissa and exponent
 * locales are now published as JSON data; can load from npmcdn.com if desired
 
-If a precision is not specified, the formatting behavior has changed: there is now a default precision of 6 for all directives except *none*, which defaults to 12. In 3.x, if you did not specify a precision, the number was formatted to the shortest unique representation (per [*number*.toString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString)); this could lead to unexpected digits due to [floating point math](http://0.30000000000000004.com/). The new default precision in 4.0 produces more consistent results:
+If a precision is not specified, the formatting behavior has changed: there is now a default precision of 6 for all directives except *none*, which defaults to 12. In 3.x, if you did not specify a precision, the number was formatted using its shortest unique representation (per [*number*.toString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString)); this could lead to unexpected digits due to [floating point math](http://0.30000000000000004.com/). The new default precision in 4.0 produces more consistent results:
 
 ```js
 var f = d3.format("e");
@@ -396,7 +396,7 @@ f(42); // "4.200000e+1"
 f(0.1 + 0.2); // "3.000000e-1"
 ```
 
-To trim insignificant trailing zeroes according to the specified precision, use the *none* directive, which is similar `g`. For example:
+To trim insignificant trailing zeroes, use the *none* directive, which is similar `g`. For example:
 
 ```js
 var f = d3.format(".3");
@@ -405,7 +405,7 @@ f(0.10000); // "0.1"
 f(0.1 + 0.2); // "0.3"
 ```
 
-d3.formatPrefix has been changed. Rather than returning the SI-prefix, it returns an SI-prefix format given a format *specifier* and a reference *value*. For example, to format thousands:
+The [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) method has been changed. Rather than returning an SI-prefix string, it returns an SI-prefix format function for a given *specifier* and reference *value*. For example, to format thousands:
 
 ```js
 var f = d3.formatPrefix(",.0", 1e3);
@@ -415,7 +415,7 @@ f(1e5); // "100k"
 f(1e6); // "1,000k"
 ```
 
-Compare this to `".0s"`:
+Unlike the `s` format directive, d3.formatPrefix always employs the same SI-prefix, producing more consistent results:
 
 ```js
 var f = d3.format(".0s");
