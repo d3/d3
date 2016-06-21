@@ -487,19 +487,24 @@ Pursuant to the great namespace flattening, various methods have new names:
 * d3.geo.stereographic ↦ [d3.geoStereographic](https://github.com/d3/d3-geo#geoStereographic)
 * d3.geo.transverseMercator ↦ [d3.geoTransverseMercator](https://github.com/d3/d3-geo#geoTransverseMercator)
 
+Also renamed for consistency:
+
+* *circle*.origin ↦ [*circle*.center](https://github.com/d3/d3-geo#circle_center)
+* *circle*.angle ↦ [*circle*.radius](https://github.com/d3/d3-geo#circle_radius)
+* *graticule*.majorExtent ↦ [*graticule*.extentMajor](https://github.com/d3/d3-geo#graticule_extentMajor)
+* *graticule*.minorExtent ↦ [*graticule*.extentMinor](https://github.com/d3/d3-geo#graticule_extentMinor)
+* *graticule*.majorStep ↦ [*graticule*.stepMajor](https://github.com/d3/d3-geo#graticule_stepMajor)
+* *graticule*.minorStep ↦ [*graticule*.stepMinor](https://github.com/d3/d3-geo#graticule_stepMinor)
+
 Better default settings for projections. Slightly faster, although future optimizations are planned.
 
-New d3.geo.transform API. Rather than closures, use `this.stream`. TODO `this.sink`, `this.next`? The new implementation is faster: rather than each method being implemented as a closure, it defines a factory method for creating transform instances.
+*path*.projection now defaults to null, rather than d3.geoAlbersUsa.
 
-Removed support for the fallback projection pipeline, d3.geoProjection(*function*). Simplified how projection pipelines are cached internally (an undocumented feature of 3.x).
+New d3.geo.transform API. The new implementation is faster: rather than each method being a closure, it defines a factory method for creating transform instances. Access the next geometry sink using `this.next`.
 
-Renamed *circle*.origin ↦ *circle*.center and *circle*.angle ↦ *circle*.radius.
-
-Renamed *graticule*.majorExtent ↦ *graticule*.extentMajor, *graticule*.minorExtent ↦ *graticule*.extentMinor, *graticule*.majorStep ↦ *graticule*.stepMajor, *graticule*.minorStep ↦ *graticule*.stepMinor.
+Removed support for the fallback projection pipeline, *path*.projection(*function*). Simplified how projection pipelines are cached internally (an undocumented feature of 3.x).
 
 Removed raw projections (e.g., d3.geo.equirectangular.raw).
-
-A new d3.geoPipeline API is in development for D3 5.0.
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/blob/master/README.md)
 
