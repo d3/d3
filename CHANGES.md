@@ -395,7 +395,7 @@ f(0.10000);   // "0.1"
 f(0.1 + 0.2); // "0.3"
 ```
 
-Under the hood, number formatting has improved accuracy with very large and very small numbers by using [*number*.toExponential](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toExponential) to extract the mantissa and exponent, rather than [Math.log](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/log). Negative zero (-0, an IEEE 754 construct) and very small numbers that round to zero are now formatted as unsigned zero. The inherently unsafe d3.round method has been removed, as is d3.requote.
+Under the hood, number formatting has improved accuracy with very large and very small numbers by using [*number*.toExponential](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toExponential) rather than [Math.log](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/log) to extract the mantissa and exponent. Negative zero (-0, an IEEE 754 construct) and very small numbers that round to zero are now formatted as unsigned zero. The inherently unsafe d3.round method has been removed, along with d3.requote.
 
 The [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) method has been changed. Rather than returning an SI-prefix string, it returns an SI-prefix format function for a given *specifier* and reference *value*. For example, to format thousands:
 
@@ -407,7 +407,7 @@ f(1e5); // "100k"
 f(1e6); // "1,000k"
 ```
 
-Unlike the `s` format directive, d3.formatPrefix always employs the same SI-prefix, producing more consistent results:
+Unlike the `s` format directive, d3.formatPrefix always employs the same SI-prefix, producing consistent results:
 
 ```js
 var f = d3.format(".0s");
@@ -435,7 +435,7 @@ d3.format(">(6d")(-42); // "  (42)"
 d3.format("=(6d")(-42); // "(  42)"
 ```
 
-The `b`, `o`, `d` and `x` directives now round to the nearest integer, rather than returning the empty string:
+The `b`, `o`, `d` and `x` directives now round to the nearest integer, rather than returning the empty string for non-integers:
 
 ```js
 d3.format("b")(41.9); // "101010"
@@ -444,7 +444,7 @@ d3.format("d")(41.9); // "42"
 d3.format("x")(41.9); // "2a"
 ```
 
-The `c` directive is now for character data (*i.e.*, literals), not for character codes. The is useful if you just want to apply padding and alignment and don’t care about formatting numbers. For example, the infamous [left-pad](http://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm) (as well as center- and right-pad) can be implemented as:
+The `c` directive is now for character data (*i.e.*, literal strings), not for character codes. The is useful if you just want to apply padding and alignment and don’t care about formatting numbers. For example, the infamous [left-pad](http://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm) (as well as center- and right-pad!) can be conveniently implemented as:
 
 ```js
 d3.format(">10c")("foo"); // "       foo"
