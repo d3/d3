@@ -378,21 +378,11 @@ The force layout no longer depends on the [drag behavior](#dragging-d3-drag), th
 
 ## [Number Formats (d3-format)](https://github.com/d3/d3-format/blob/master/README.md)
 
-TODO
-
-* treat negative zero (-0) and very small numbers that round to zero as unsigned zero
-* the `c` directive is now for character data (i.e., literals), not for character codes
-* the `b` and `d` directives now round to the nearest integer rather than returning the empty string
-* new `(` sign option uses parentheses for negative values
-* new `=` align option places any sign and symbol to the left of any padding
-* improve accuracy by relying on *number*.toExponential to extract the mantissa and exponent
-* locales are now published as JSON data; can load from npmcdn.com if desired
-
 If a precision is not specified, the formatting behavior has changed: there is now a default precision of 6 for all directives except *none*, which defaults to 12. In 3.x, if you did not specify a precision, the number was formatted using its shortest unique representation (per [*number*.toString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString)); this could lead to unexpected digits due to [floating point math](http://0.30000000000000004.com/). The new default precision in 4.0 produces more consistent results:
 
 ```js
 var f = d3.format("e");
-f(42); // "4.200000e+1"
+f(42);        // "4.200000e+1"
 f(0.1 + 0.2); // "3.000000e-1"
 ```
 
@@ -400,10 +390,12 @@ To trim insignificant trailing zeroes, use the *none* directive, which is simila
 
 ```js
 var f = d3.format(".3");
-f(0.12345); // "0.123"
-f(0.10000); // "0.1"
+f(0.12345);   // "0.123"
+f(0.10000);   // "0.1"
 f(0.1 + 0.2); // "0.3"
 ```
+
+Under the hood, number formatting has improved accuracy with very large and very small numbers by using [*number*.toExponential](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toExponential) to extract the mantissa and exponent, rather than [Math.log](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/log). Negative zero (-0, an IEEE 754 construct) and very small numbers that round to zero are now formatted as unsigned zero. The inherently unsafe d3.round method has been removed, as is d3.requote.
 
 The [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) method has been changed. Rather than returning an SI-prefix string, it returns an SI-prefix format function for a given *specifier* and reference *value*. For example, to format thousands:
 
@@ -425,17 +417,44 @@ f(1e5); // "100k"
 f(1e6); // "1M"
 ```
 
-d3.round and d3.requote are now removed.
+The new `(` sign option uses parentheses for negative values. This is particularly useful in conjunction with `$`. For example:
 
-new methods for computing the suggested decimal precision for formatting values (used by d3-scale for tick formatting)
+```js
+d3.format("+.0f")(-42);  // "-42"
+d3.format("(.0f")(-42);  // "(42)"
+d3.format("+$.0f")(-42); // "-$42"
+d3.format("($.0f")(-42); // "($42)"
+```
 
-* d3.precisionFixed
-* d3.precisionPrefix
-* d3.precisionRound
+The new `=` align option places any sign and symbol to the left of any padding:
 
-new d3.formatSpecifier method for parsing, validating and debugging format specifiers. also good for deriving related format specifiers, such as when you want to set the precision automatically.
+```js
+d3.format(">6d")(-42);  // "   -42"
+d3.format("=6d")(-42);  // "-   42"
+d3.format(">(6d")(-42); // "  (42)"
+d3.format("=(6d")(-42); // "(  42)"
+```
 
-quite a few more changes… TODO describe them
+The `b`, `o`, `d` and `x` directives now round to the nearest integer, rather than returning the empty string:
+
+```js
+d3.format("b")(41.9); // "101010"
+d3.format("o")(41.9); // "52"
+d3.format("d")(41.9); // "42"
+d3.format("x")(41.9); // "2a"
+```
+
+The `c` directive is now for character data (*i.e.*, literals), not for character codes. The is useful if you just want to apply padding and alignment and don’t care about formatting numbers. For example, the infamous [left-pad](http://blog.npmjs.org/post/141577284765/kik-left-pad-and-npm) (as well as center- and right-pad) can be implemented as:
+
+```js
+d3.format(">10c")("foo"); // "       foo"
+d3.format("^10c")("foo"); // "   foo    "
+d3.format("<10c")("foo"); // "foo       "
+```
+
+There are several new methods for computing suggested decimal precisions; these are used by [d3-scale](#scales-d3-scale) for tick formatting, and are helpful for implementing custom number formats: [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed), [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) and [d3.precisionRound](https://github.com/d3/d3-format#precisionRound). There’s also a new [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) method for parsing, validating and debugging format specifiers; it’s also good for deriving related format specifiers, such as when you want to substitute the precision automatically.
+
+The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-format/locale/).
 
 ## [Geographies (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
 
