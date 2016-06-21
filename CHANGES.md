@@ -388,7 +388,38 @@ TODO
 * improve accuracy by relying on *number*.toExponential to extract the mantissa and exponent
 * locales are now published as JSON data; can load from npmcdn.com if desired
 
-changed the behavior for default precision. now 6 for all directives except none, which defaults to 12. *none* is a new directive type that is like `g` except it trims insignificant trailing zeros. d3.round and d3.requote are now removed.
+If a precision is not specified, the format behavior has changed. There is now a default precision of 6 for all directives except *none*, which defaults to 12. The *none* directive is similar `g` except that it trims insignificant trailing zeros. For example:
+
+```js
+d3.format(".3f")(0.12345); // "0.123"
+d3.format(".3f")(0.10000); // "0.100"
+d3.format(".3")(0.12345); // "0.123"
+d3.format(".3")(0.10000); // "0.1"
+```
+
+As another example, the specifier `"e"` (with no precision) formats the value 42 as `4.2e+1` in 3.x but as `4.200000e+1` in 4.0. But the value 0.1 + 0.2 produces `3.0000000000000004e-1` in 3.x but `3.000000e-1` in 4.0! A default precision helps avoid unexpected decimal digits due to [floating point math](http://0.30000000000000004.com/).
+
+d3.formatPrefix has been changed. Rather than returning the SI-prefix, it returns an SI-prefix format given a format *specifier* and a reference *value*. For example, to format thousands:
+
+```js
+var f = d3.formatPrefix(",.0", 1e3);
+f(1e3); // "1k"
+f(1e4); // "10k"
+f(1e5); // "100k"
+f(1e6); // "1,000k"
+```
+
+Compare this to `".0s"`:
+
+```js
+var f = d3.format(".0s");
+f(1e3); // "1k"
+f(1e4); // "10k"
+f(1e5); // "100k"
+f(1e6); // "1M"
+```
+
+d3.round and d3.requote are now removed.
 
 new methods for computing the suggested decimal precision for formatting values (used by d3-scale for tick formatting)
 
