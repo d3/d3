@@ -388,16 +388,22 @@ TODO
 * improve accuracy by relying on *number*.toExponential to extract the mantissa and exponent
 * locales are now published as JSON data; can load from npmcdn.com if desired
 
-If a precision is not specified, the format behavior has changed. There is now a default precision of 6 for all directives except *none*, which defaults to 12. The *none* directive is similar `g` except that it trims insignificant trailing zeros. For example:
+If a precision is not specified, the formatting behavior has changed: there is now a default precision of 6 for all directives except *none*, which defaults to 12. In 3.x, if you did not specify a precision, the number was formatted to the shortest unique representation (per [*number*.toString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Number/toString)); this could lead to unexpected digits due to [floating point math](http://0.30000000000000004.com/). The new default precision in 4.0 produces more consistent results:
 
 ```js
-d3.format(".3f")(0.12345); // "0.123"
-d3.format(".3f")(0.10000); // "0.100"
-d3.format(".3")(0.12345); // "0.123"
-d3.format(".3")(0.10000); // "0.1"
+var f = d3.format("e");
+f(42); // "4.200000e+1"
+f(0.1 + 0.2); // "3.000000e-1"
 ```
 
-As another example, the specifier `"e"` (with no precision) formats the value 42 as `4.2e+1` in 3.x but as `4.200000e+1` in 4.0. But the value 0.1 + 0.2 produces `3.0000000000000004e-1` in 3.x but `3.000000e-1` in 4.0! A default precision helps avoid unexpected decimal digits due to [floating point math](http://0.30000000000000004.com/).
+To trim insignificant trailing zeroes according to the specified precision, use the *none* directive, which is similar `g`. For example:
+
+```js
+var f = d3.format(".3");
+f(0.12345); // "0.123"
+f(0.10000); // "0.1"
+f(0.1 + 0.2); // "0.3"
+```
 
 d3.formatPrefix has been changed. Rather than returning the SI-prefix, it returns an SI-prefix format given a format *specifier* and a reference *value*. For example, to format thousands:
 
