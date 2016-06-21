@@ -458,57 +458,46 @@ The locales are now published as [JSON](https://github.com/d3/d3-request#json) t
 
 ## [Geographies (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
 
-TODO
+Pursuant to the great namespace flattening, various methods have new names:
 
-* d3.geo.graticule ↦ d3.geoGraticule
-* *graticule*.majorExtent ↦ *graticule*.extentMajor
-* *graticule*.minorExtent ↦ *graticule*.extentMinor
-* *graticule*.majorStep ↦ *graticule*.stepMajor
-* *graticule*.minorStep ↦ *graticule*.stepMinor
-* d3.geo.circle ↦ d3.geoCircle
-* *circle*.origin ↦ *circle*.center
-* *circle*.angle ↦ *circle*.radius
-* d3.geo.area ↦ d3.geoArea
-* d3.geo.bounds ↦ d3.geoBounds
-* d3.geo.centroid ↦ d3.geoCentroid
-* d3.geo.distance ↦ d3.geoDistance
-* d3.geo.interpolate ↦ d3.geoInterpolate
-* d3.geo.length ↦ d3.geoLength
-* d3.geo.rotation ↦ d3.geoRotation
-* d3.geo.stream ↦ d3.geoStream
-* d3.geo.path ↦ d3.geoPath
-* d3.geo.projection ↦ d3.geoProjection
-* d3.geo.projectionMutator ↦ d3.geoProjectionMutator?
+* d3.geo.graticule ↦ [d3.geoGraticule](https://github.com/d3/d3-geo#geoGraticule)
+* d3.geo.circle ↦ [d3.geoCircle](https://github.com/d3/d3-geo#geoCircle)
+* d3.geo.area ↦ [d3.geoArea](https://github.com/d3/d3-geo#geoArea)
+* d3.geo.bounds ↦ [d3.geoBounds](https://github.com/d3/d3-geo#geoBounds)
+* d3.geo.centroid ↦ [d3.geoCentroid](https://github.com/d3/d3-geo#geoCentroid)
+* d3.geo.distance ↦ [d3.geoDistance](https://github.com/d3/d3-geo#geoDistance)
+* d3.geo.interpolate ↦ [d3.geoInterpolate](https://github.com/d3/d3-geo#geoInterpolate)
+* d3.geo.length ↦ [d3.geoLength](https://github.com/d3/d3-geo#geoLength)
+* d3.geo.rotation ↦ [d3.geoRotation](https://github.com/d3/d3-geo#geoRotation)
+* d3.geo.stream ↦ [d3.geoStream](https://github.com/d3/d3-geo#geoStream)
+* d3.geo.path ↦ [d3.geoPath](https://github.com/d3/d3-geo#geoPath)
+* d3.geo.projection ↦ [d3.geoProjection](https://github.com/d3/d3-geo#geoProjection)
+* d3.geo.projectionMutator ↦ [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator)
+* d3.geo.albers ↦ [d3.geoAlbers](https://github.com/d3/d3-geo#geoAlbers)
+* d3.geo.albersUsa ↦ [d3.geoAlbersUsa](https://github.com/d3/d3-geo#geoAlbersUsa)
+* d3.geo.azimuthalEqualArea ↦ [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo#geoAzimuthalEqualArea)
+* d3.geo.azimuthalEquidistant ↦ [d3.geoAzimuthalEquidistant](https://github.com/d3/d3-geo#geoAzimuthalEquidistant)
+* d3.geo.conicConformal ↦ [d3.geoConicConformal](https://github.com/d3/d3-geo#geoConicConformal)
+* d3.geo.conicEqualArea ↦ [d3.geoConicEqualArea](https://github.com/d3/d3-geo#geoConicEqualArea)
+* d3.geo.conicEquidistant ↦ [d3.geoConicEquidistant](https://github.com/d3/d3-geo#geoConicEquidistant)
+* d3.geo.equirectangular ↦ [d3.geoEquirectangular](https://github.com/d3/d3-geo#geoEquirectangular)
+* d3.geo.gnomonic ↦ [d3.geoGnomonic](https://github.com/d3/d3-geo#geoGnomonic)
+* d3.geo.mercator ↦ [d3.geoMercator](https://github.com/d3/d3-geo#geoMercator)
+* d3.geo.orthographic ↦ [d3.geoOrthographic](https://github.com/d3/d3-geo#geoOrthographic)
+* d3.geo.stereographic ↦ [d3.geoStereographic](https://github.com/d3/d3-geo#geoStereographic)
+* d3.geo.transverseMercator ↦ [d3.geoTransverseMercator](https://github.com/d3/d3-geo#geoTransverseMercator)
 
-Projections:
+Better default settings for projections. Slightly faster, although future optimizations are planned.
 
-* d3.geo.albers ↦ d3.geoAlbers
-* d3.geo.albersUsa ↦ d3.geoAlbersUsa
-* d3.geo.azimuthalEqualArea ↦ d3.geoAzimuthalEqualArea
-* d3.geo.azimuthalEquidistant ↦ d3.geoAzimuthalEquidistant
-* d3.geo.conicConformal ↦ d3.geoConicConformal
-* d3.geo.conicEqualArea ↦ d3.geoConicEqualArea
-* d3.geo.conicEquidistant ↦ d3.geoConicEquidistant
-* d3.geo.equirectangular ↦ d3.geoEquirectangular
-* d3.geo.gnomonic ↦ d3.geoGnomonic
-* d3.geo.mercator ↦ d3.geoMercator
-* d3.geo.orthographic ↦ d3.geoOrthographic
-* d3.geo.stereographic ↦ d3.geoStereographic
-* d3.geo.transverseMercator ↦ d3.geoTransverseMercator
+New d3.geo.transform API. Rather than closures, use `this.stream`. TODO `this.sink`, `this.next`? The new implementation is faster: rather than each method being implemented as a closure, it defines a factory method for creating transform instances.
 
-TODO Raw projections?
+Removed support for the fallback projection pipeline, d3.geoProjection(*function*). Simplified how projection pipelines are cached internally (an undocumented feature of 3.x).
 
-* d3.geo.azimuthalEqualArea.raw ↦ d3.geoRawAzimuthalEqualArea
-* d3.geo.azimuthalEquidistant.raw ↦ d3.geoRawAzimuthalEquidistant
-* d3.geo.conicConformal.raw ↦ d3.geoRawConicConformal
-* d3.geo.conicEqualArea.raw ↦ d3.geoRawConicEqualArea
-* d3.geo.conicEquidistant.raw ↦ d3.geoRawConicEquidistant
-* d3.geo.equirectangular.raw ↦ d3.geoRawEquirectangular
-* d3.geo.gnomonic.raw ↦ d3.geoRawGnomonic
-* d3.geo.mercator.raw ↦ d3.geoRawMercator
-* d3.geo.orthographic.raw ↦ d3.geoRawOrthographic
-* d3.geo.stereographic.raw ↦ d3.geoRawStereographic
-* d3.geo.transverseMercator.raw ↦ d3.geoRawTransverseMercator
+Renamed *circle*.origin ↦ *circle*.center and *circle*.angle ↦ *circle*.radius.
+
+Renamed *graticule*.majorExtent ↦ *graticule*.extentMajor, *graticule*.minorExtent ↦ *graticule*.extentMinor, *graticule*.majorStep ↦ *graticule*.stepMajor, *graticule*.minorStep ↦ *graticule*.stepMinor.
+
+Removed raw projections (e.g., d3.geo.equirectangular.raw).
 
 A new d3.geoPipeline API is in development for D3 5.0.
 
