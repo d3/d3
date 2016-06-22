@@ -538,7 +538,7 @@ var root = d3.stratify()
     (nodes);
 ```
 
-Results in:
+The resulting *root* can be passed to d3.tree to produce a tree diagram like this:
 
 <img src="https://raw.githubusercontent.com/d3/d3/master/img/stratify.png" width="298" height="137">
 
