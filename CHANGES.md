@@ -457,7 +457,7 @@ d3.format("<10c")("foo"); // "foo       "
 
 There are several new methods for computing suggested decimal precisions; these are used by [d3-scale](#scales-d3-scale) for tick formatting, and are helpful for implementing custom number formats: [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed), [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) and [d3.precisionRound](https://github.com/d3/d3-format#precisionRound). There’s also a new [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) method for parsing, validating and debugging format specifiers; it’s also good for deriving related format specifiers, such as when you want to substitute the precision automatically.
 
-The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-format/locale/).
+You can now set the default locale using [d3.formatDefaultLocale]()https://github.com/d3/d3-format#formatDefaultLocale! The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-format/locale/).
 
 ## [Geographies (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
 
@@ -684,21 +684,22 @@ With the exception of [d3.html](https://github.com/d3/d3-request#html) and [d3.x
 
 ## [Scales (d3-scale)](https://github.com/d3/d3-scale/blob/master/README.md)
 
+Pursuant to the great namespace flattening:
+
+* d3.scale.linear ↦ [d3.scaleLinear](https://github.com/d3/d3-scale#scaleLinear)
+* d3.scale.sqrt ↦ [d3.scaleSqrt](https://github.com/d3/d3-scale#scaleSqrt)
+* d3.scale.pow ↦ [d3.scalePow](https://github.com/d3/d3-scale#scalePow)
+* d3.scale.log ↦ [d3.scaleLog](https://github.com/d3/d3-scale#scaleLog)
+* d3.scale.quantize ↦ [d3.scaleQuantize](https://github.com/d3/d3-scale#scaleQuantize)
+* d3.scale.threshold ↦ [d3.scaleThreshold](https://github.com/d3/d3-scale#scaleThreshold)
+* d3.scale.quantile ↦ [d3.scaleQuantile](https://github.com/d3/d3-scale#scaleQuantile)
+* d3.scale.identity ↦ [d3.scaleIdentity](https://github.com/d3/d3-scale#scaleIdentity)
+* d3.scale.ordinal ↦ [d3.scaleOrdinal](https://github.com/d3/d3-scale#scaleOrdinal)
+* d3.time.scale ↦ [d3.scaleTime](https://github.com/d3/d3-scale#scaleTime)
+* d3.time.scale.utc ↦ [d3.scaleUtc](https://github.com/d3/d3-scale#scaleUtc)
+
 TODO
 
-[Introducing d3-scale](https://medium.com/@mbostock/introducing-d3-scale-61980c51545f#.d38uz6vuz)
-
-* d3.scale.linear ↦ d3.scaleLinear
-* d3.scale.sqrt ↦ d3.scaleSqrt
-* d3.scale.pow ↦ d3.scalePow
-* d3.scale.log ↦ d3.scaleLog
-* d3.scale.quantize ↦ d3.scaleQuantize
-* d3.scale.threshold ↦ d3.scaleThreshold
-* d3.scale.quantile ↦ d3.scaleQuantile
-* d3.scale.identity ↦ d3.scaleIdentity
-* d3.scale.ordinal ↦ d3.scaleOrdinal
-* d3.time.scale ↦ d3.scaleTime
-* d3.time.scale.utc ↦ d3.scaleUtc
 * quantitative scales generate ticks in the same order as the domain
 * non-linear quantitative scales are more accurate
 * better *log*.ticks filtering for large domains
@@ -718,6 +719,8 @@ TODO
   * d3.scale.category20c ↦ d3.schemeCategory20c
 
 Mention d3-scale-chromatic?
+
+[Introducing d3-scale](https://medium.com/@mbostock/introducing-d3-scale-61980c51545f#.d38uz6vuz)
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
@@ -903,7 +906,9 @@ var parseTime = d3.timeParse("%c");
 
 The multi-scale time format d3.time.format.multi has been replaced by [d3.scaleTime](https://github.com/d3/d3-scale#scaleTime)’s [tick format](https://github.com/d3/d3-scale#time_tickFormat). Time formats now coerce inputs to dates, and time parsers coerce inputs to strings. The `%Z` directive now allows more flexible parsing of time zone offsets, such as `-0700`, `-07:00`, `-07`, and `Z`. The `%p` directive is now parsed correctly when the locale’s period name is longer than two characters (*e.g.*, “a.m.”).
 
-The performance of time formatting and parsing has been improved, and the UTC formatter and parser have a cleaner implementation (that avoids temporarily overriding the Date global). The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-time-format/locale/).
+You can now set the default locale using [d3.timeFormatDefaultLocale]()https://github.com/d3/d3-time-format#timeFormatDefaultLocale! The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-time-format/locale/).
+
+The performance of time formatting and parsing has been improved, and the UTC formatter and parser have a cleaner implementation (that avoids temporarily overriding the Date global).
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time/blob/master/README.md)
 
