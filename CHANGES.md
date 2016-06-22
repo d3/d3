@@ -556,7 +556,7 @@ The space-filling layouts [d3.treemap](https://github.com/d3/d3-hierarchy#treema
 
 The circle-packing layout, [d3.pack](https://github.com/d3/d3-hierarchy#pack), has been completely rewritten, fixing major bugs and improving results! The 3.x circle-packing implementation is shown on the left; 4.0 is shown on the right:
 
-<img alt="Circle Packing in 3.x" src="https://raw.githubusercontent.com/d3/d3/master/img/pack-v3.png" width="420" height="420"><img alt="Circle Packing in 4.0" src="https://raw.githubusercontent.com/d3/d3/master/img/pack-v4.png" width="420" height="420">
+<img alt="Circle Packing in 3.x" src="https://raw.githubusercontent.com/d3/d3/master/img/pack-v3.png" width="420" height="420"> <img alt="Circle Packing in 4.0" src="https://raw.githubusercontent.com/d3/d3/master/img/pack-v4.png" width="420" height="420">
 
 *pack*.padding can now be a function. applies padding between parent and children, too.
 new d3.packSiblings for circle-packing (non-hierarchical circles).
