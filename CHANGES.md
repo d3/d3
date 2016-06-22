@@ -4,6 +4,7 @@
 * [Arrays](#arrays-d3-array)
 * [Axes](#axes-d3-axis)
 * [Brushes](#brushes-d3-brush)
+* [Chords](#chords-d3-chord)
 * [Collections](#collections-d3-collection)
 * [Colors](#colors-d3-color)
 * [Dispatches](#dispatches-d3-dispatch)
