@@ -174,12 +174,14 @@ The brush now consumes handled events, making it easier to combine with other in
 
 ## [Chords (d3-chord)](https://github.com/d3/d3-chord/blob/master/README.md)
 
-TODO
+Pursuant to the great namespace flattening:
 
-This module is not yet implemented in D3 4.0, but I’m working on it.
+* d3.layout.chord ↦ [d3.chord](https://github.com/d3/d3-chord#chord)
+* d3.svg.chord ↦ [d3.ribbon](https://github.com/d3/d3-chord#ribbon)
 
-* d3.svg.chord ↦ d3.ribbon
-* d3.layout.chord ↦ d3.chord
+For consistency with [*arc*.padAngle](https://github.com/d3/d3-shape#arc_padAngle), *chord*.padding has also been renamed to [*ribbon*.padAngle](https://github.com/d3/d3-chord#ribbon_padAngle).
+
+A new [*ribbon*.context](https://github.com/d3/d3-chord#ribbon_context) method lets you render chord diagrams to Canvas! See also [d3-path](#paths-d3-path).
 
 ## [Collections (d3-collection)](https://github.com/d3/d3-collection/blob/master/README.md)
 
