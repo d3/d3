@@ -496,15 +496,9 @@ Also renamed for consistency:
 * *graticule*.majorStep ↦ [*graticule*.stepMajor](https://github.com/d3/d3-geo#graticule_stepMajor)
 * *graticule*.minorStep ↦ [*graticule*.stepMinor](https://github.com/d3/d3-geo#graticule_stepMinor)
 
-Better default settings for projections. Slightly faster, although future optimizations are planned.
+Projections now have more appropriate default settings. For example, [d3.geoOrthographic](https://github.com/d3/d3-geo#geoOrthographic) defaults to a 90° clip angle, showing only the front hemisphere, and [d3.geoGnomonic](https://github.com/d3/d3-geo#geoGnomonic) defaults to a 60° clip angle. The default [projection](https://github.com/d3/d3-geo#path_projection) for [d3.geoPath](https://github.com/d3/d3-geo#geoPath) is now null rather than [d3.geoAlbersUsa](https://github.com/d3/d3-geo#geoAlbersUsa). (A null projection is used with [pre-projected geometry](http://bl.ocks.org/mbostock/5557726) and is typically faster to load and render.)
 
-*path*.projection now defaults to null, rather than d3.geoAlbersUsa.
-
-New d3.geo.transform API. The new implementation is faster: rather than each method being a closure, it defines a factory method for creating transform instances. Access the next geometry sink using `this.next`.
-
-Removed support for the fallback projection pipeline, *path*.projection(*function*). Simplified how projection pipelines are cached internally (an undocumented feature of 3.x).
-
-Removed raw projections (e.g., d3.geo.equirectangular.raw).
+“Fallback projections”—when you pass a function rather than a projection to [*path*.projection](https://github.com/d3/d3-geo#path_projection)—are no longer supported. For geographic projections, use [d3.geoProjection](https://github.com/d3/d3-geo#geoProjection) or [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator) to define a custom projection. For arbitrary geometry transformations, implement the [stream interface](https://github.com/d3/d3-geo#streams); see also [d3.geoTransform](https://github.com/d3/d3-geo#geoTransform). The “raw” projections (e.g., d3.geo.equirectangular.raw) are no longer exported.
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/blob/master/README.md)
 
