@@ -546,9 +546,9 @@ Root nodes can also be created from JSON data using [d3.hierarchy](https://githu
 
 The new d3.hierarchy API also provides a richer set of methods for manipulating hierarchical data. For example, to generate an array of all nodes in topological order, use [*node*.descendants](https://github.com/d3/d3-hierarchy#node_descendants); for just leaf nodes, use [*node*.leaves](https://github.com/d3/d3-hierarchy#node_leaves). To highlight the ancestors of a given *node* on mouseover, use [*node*.ancestors](https://github.com/d3/d3-hierarchy#node_ancestors). To generate an array of {source, target} links for a given hierarchy, use [*node*.links](https://github.com/d3/d3-hierarchy#node_links); this replaces *treemap*.links and similar methods on the other layouts. The new [*node*.path](https://github.com/d3/d3-hierarchy#node_path) method replaces d3.layout.bundle; see also [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle) for hierarchical edge bundling. There are also .
 
-All hierarchy layouts have been reimplemented using new, non-recursive traversal methods ([*node*.each](https://github.com/d3/d3-hierarchy#node_each), [*node*.eachAfter](https://github.com/d3/d3-hierarchy#node_eachAfter) and [*node*.eachBefore](https://github.com/d3/d3-hierarchy#node_eachBefore)), improving performance on large hierarchies. The d3.tree layout no longer uses a *node*.\_ field to store temporary state during layout.
+The layouts have been rewritten using new, non-recursive traversal methods ([*node*.each](https://github.com/d3/d3-hierarchy#node_each), [*node*.eachAfter](https://github.com/d3/d3-hierarchy#node_eachAfter) and [*node*.eachBefore](https://github.com/d3/d3-hierarchy#node_eachBefore)), improving performance on large hierarchies. The d3.tree layout no longer uses a *node*.\_ field to store temporary state during layout.
 
-Treemap tiling algorithms are now extensible via [*treemap*.tile](https://github.com/d3/d3-hierarchy#treemap_tile)!
+Treemap tiling is now extensible via [*treemap*.tile](https://github.com/d3/d3-hierarchy#treemap_tile)!
 new d3.treemapBinary for binary treemaps.
 reimplemented squarified treemaps, fixing bugs with padding and rounding.
 *treemap*.sticky ↦ d3.treemapResquarify.
