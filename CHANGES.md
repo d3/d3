@@ -554,13 +554,11 @@ Treemap padding has also been improved. The treemap now distinguishes between [o
 
 The space-filling layouts [d3.treemap](https://github.com/d3/d3-hierarchy#treemap) and [d3.partition](https://github.com/d3/d3-hierarchy#partition) now output *x0*, *x1*, *y0*, *y1* on each node instead of *x0*, *dx*, *y0*, *dy*. This improves accuracy by ensuring that the edges of adjacent cells are exactly equal, rather than sometimes being slightly off due to floating point math. The partition layout now supports [rounding](https://github.com/d3/d3-hierarchy#partition_round) and [padding](https://github.com/d3/d3-hierarchy#partition_padding).
 
-The circle-packing layout, [d3.pack](https://github.com/d3/d3-hierarchy#pack), has been completely rewritten, fixing major bugs and improving results! The 3.x circle-packing implementation is shown on the left; 4.0 is shown on the right:
+The circle-packing layout, [d3.pack](https://github.com/d3/d3-hierarchy#pack), has been completely rewritten to better implement Wang et al.’s algorithm, fixing major bugs and improving results! Welzl’s algorithm is now used to compute the exact [smallest enclosing circle](https://bl.ocks.org/mbostock/29c534ff0b270054a01c) for each parent, rather than the approximate answer used by Wang et al. The 3.x output is shown on the left; 4.0 is shown on the right:
 
 <img alt="Circle Packing in 3.x" src="https://raw.githubusercontent.com/d3/d3/master/img/pack-v3.png" width="420" height="420"> <img alt="Circle Packing in 4.0" src="https://raw.githubusercontent.com/d3/d3/master/img/pack-v4.png" width="420" height="420">
 
-*pack*.padding can now be a function. applies padding between parent and children, too.
-new d3.packSiblings for circle-packing (non-hierarchical circles).
-new d3.packEnclose uses Welzl’s algorithm to compute the exact enclosing circle.
+A non-hierarchical implementation is also available as [d3.packSiblings](https://github.com/d3/d3-hierarchy#packSiblings), and the smallest enclosing circle implementation is available as [d3.packEnclose](https://github.com/d3/d3-hierarchy#packEnclose). [Pack padding](https://github.com/d3/d3-hierarchy#pack_padding) now applies between a parent and its children, as well as between adjacent siblings. In addition, you can now specify padding as a function that is computed dynamically for each parent.
 
 ## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/blob/master/README.md)
 
