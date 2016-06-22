@@ -505,30 +505,66 @@ Projections now have more appropriate defaults. For example, [d3.geoOrthographic
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/blob/master/README.md)
 
-TODO
+Pursuant to the great namespace flattening:
 
-* d3.layout.cluster ↦ d3.cluster
-* d3.layout.hierarchy ↦ d3.hierarchy
-* d3.layout.pack ↦ d3.pack
-* d3.layout.partition ↦ d3.partition
-* d3.layout.tree ↦ d3.tree
-* d3.layout.treemap ↦ d3.treemap
-* new d3.stratify API for converting tabular data to hierarchies!
-* new d3.hierarchy API for working with hierarchical data!
-* new *treemap*.tile - the treemap tiling algorithms are now extensible
-* reimplemented squarified treemaps, fixing bugs with padding and rounding
-* reimplemented circle-packing layout, fixing major bugs and improving results
-* new d3.treemapBinary for binary treemaps
-* new d3.packSiblings for circle-packing (non-hierarchical circles)
-* new d3.packEnclose uses Welzl’s algorithm to compute the exact enclosing circle
-* *treemap*.sticky ↦ d3.treemapResquarify
-* new treemap padding parameters, distinguishing parent and sibling padding
-* new nested treemap example
-* new treemap + d3.nest example
-* new partition padding parameter
-* space-filling layouts now output *x0*, *x1*, *y0*, *y1* instead of *x0*, *dx*, *y0*, *dy*; better accuracy
-* d3.layout.bundle ↦ *node*.path
-* see d3.curveBundle in d3-shape for hierarchical edge bundling
+* d3.layout.cluster ↦ [d3.cluster](https://github.com/d3/d3-hierarchy#cluster)
+* d3.layout.hierarchy ↦ [d3.hierarchy](https://github.com/d3/d3-hierarchy#hierarchy)
+* d3.layout.pack ↦ [d3.pack](https://github.com/d3/d3-hierarchy#pack)
+* d3.layout.partition ↦ [d3.partition](https://github.com/d3/d3-hierarchy#partition)
+* d3.layout.tree ↦ [d3.tree](https://github.com/d3/d3-hierarchy#tree)
+* d3.layout.treemap ↦ [d3.treemap](https://github.com/d3/d3-hierarchy#treemap)
+
+new d3.stratify API for converting tabular data to hierarchies!
+
+```
+name,parent
+Eve,
+Cain,Eve
+Seth,Eve
+Enos,Seth
+Noam,Seth
+Abel,Eve
+Awan,Eve
+Enoch,Awan
+Azura,Eve
+```
+
+And:
+
+```js
+var root = d3.stratify()
+    .id(function(d) { return d.name; })
+    .parentId(function(d) { return d.parent; })
+    (nodes);
+```
+
+Results in:
+
+<img src="https://raw.githubusercontent.com/d3/d3/master/img/stratify.png" width="298" height="137">
+
+new d3.hierarchy API for working with hierarchical data!
+instead of *treemap*.value and *treemap*.sort, use *node*.sum and *node*.sort.
+instead of *treemap*.links, use *node*.links.
+new accessor methods *node*.ancestors, *node*.descendants, *node*.leaves, *node*.path (replaces d3.layout.bundle; see d3.curveBundle in d3-shape for hierarchical edge bundling).
+new iteration methods *node*.each, *node*.eachAfter, *node*.eachBefore.
+new copy method *node*.copy, useful for isolating layout changes.
+
+new *treemap*.tile - the treemap tiling algorithms are now extensible.
+reimplemented squarified treemaps, fixing bugs with padding and rounding.
+new d3.treemapBinary for binary treemaps.
+*treemap*.sticky ↦ d3.treemapResquarify.
+new treemap padding parameters, distinguishing parent and sibling padding.
+new nested, cascading treemap example.
+new treemap + d3.nest example
+
+space-filling layouts (d3.treemap, d3.partition) now output *x0*, *x1*, *y0*, *y1* instead of *x0*, *dx*, *y0*, *dy*; better accuracy
+new partition padding parameter.
+
+reimplemented circle-packing layout, fixing major bugs and improving results.
+show before & after picture.
+*pack*.padding can now be a function.
+new d3.packSiblings for circle-packing (non-hierarchical circles).
+new d3.packEnclose uses Welzl’s algorithm to compute the exact enclosing circle.
 
 ## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/blob/master/README.md)
 
