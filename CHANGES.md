@@ -544,8 +544,7 @@ The resulting *root* can be passed to d3.tree to produce a tree diagram like thi
 
 new d3.hierarchy API for working with hierarchical data!
 instead of *treemap*.value and *treemap*.sort, use *node*.sum and *node*.sort.
-instead of *treemap*.links, use *node*.links.
-new accessor methods *node*.ancestors, *node*.descendants, *node*.leaves, *node*.path (replaces d3.layout.bundle; see d3.curveBundle in d3-shape for hierarchical edge bundling).
+new accessor methods *node*.ancestors, *node*.descendants, *node*.links (replaces *treemap*.links and similar methods on other hierarchy layouts), *node*.leaves, *node*.path (replaces d3.layout.bundle; see d3.curveBundle in d3-shape for hierarchical edge bundling).
 new iteration methods *node*.each, *node*.eachAfter, *node*.eachBefore.
 new copy method *node*.copy, useful for isolating layout changes.
 
