@@ -514,7 +514,7 @@ Pursuant to the great namespace flattening:
 * d3.layout.tree ↦ [d3.tree](https://github.com/d3/d3-hierarchy#tree)
 * d3.layout.treemap ↦ [d3.treemap](https://github.com/d3/d3-hierarchy#treemap)
 
-As an alternative to using JSON to represent hierarchical data (such as the “flare.json format” used by many D3 examples), the new d3.stratify operator simplifies the conversion of tabular data to hierarchical data! This is convenient if you already have data in a tabular format, such as the result of a SQL query or a CSV file:
+As an alternative to using JSON to represent hierarchical data (such as the “flare.json format” used by many D3 examples), the new [d3.stratify](https://github.com/d3/d3-hierarchy#stratify) operator simplifies the conversion of tabular data to hierarchical data! This is convenient if you already have data in a tabular format, such as the result of a SQL query or a CSV file:
 
 ```
 name,parent
@@ -529,7 +529,7 @@ Enoch,Awan
 Azura,Eve
 ```
 
-And:
+To convert this to a root [*node*](https://github.com/d3/d3-hierarchy#hierarchy):
 
 ```js
 var root = d3.stratify()
@@ -538,15 +538,13 @@ var root = d3.stratify()
     (nodes);
 ```
 
-The resulting *root* can be passed to d3.tree to produce a tree diagram like this:
+The resulting *root* can be passed to [d3.tree](https://github.com/d3/d3-hierarchy#tree) to produce a tree diagram like this:
 
 <img src="https://raw.githubusercontent.com/d3/d3/master/img/stratify.png" width="298" height="137">
 
-new d3.hierarchy API for working with hierarchical data!
-instead of *treemap*.value and *treemap*.sort, use *node*.sum and *node*.sort.
-new accessor methods *node*.ancestors, *node*.descendants, *node*.links (replaces *treemap*.links and similar methods on other hierarchy layouts), *node*.leaves, *node*.path (replaces d3.layout.bundle; see d3.curveBundle in d3-shape for hierarchical edge bundling).
-new iteration methods *node*.each, *node*.eachAfter, *node*.eachBefore.
-new copy method *node*.copy, useful for isolating layout changes.
+Root nodes can also be created from JSON data using [d3.hierarchy](https://github.com/d3/d3-hierarchy#hierarchy). The hierarchy layouts now take these root nodes as input rather than operating directly on JSON data, which helps to provide a cleaner separation between the input data and the computed layout. (For example, use [*node*.copy](https://github.com/d3/d3-hierarchy#node_copy) to isolate layout changes.) It also simplifies the API: rather than each hierarchy layout needing to implement value and sorting accessors, there are now generic [*node*.sum](https://github.com/d3/d3-hierarchy#node_sum) and [*node*.sort](https://github.com/d3/d3-hierarchy#node_sort) methods that work with any hierarchy layout.
+
+The new d3.hierarchy API also provides a richer set of methods for manipulating hierarchical data. For example, to generate an array of all nodes in topological order, use [*node*.descendants](https://github.com/d3/d3-hierarchy#node_descendants); for just leaf nodes, use [*node*.leaves](https://github.com/d3/d3-hierarchy#node_leaves). To highlight the ancestors of a given *node* on mouseover, use [*node*.ancestors](https://github.com/d3/d3-hierarchy#node_ancestors). To generate an array of {source, target} links for a given hierarchy, use [*node*.links](https://github.com/d3/d3-hierarchy#node_links); this replaces *treemap*.links and similar methods on the other layouts. The new [*node*.path](https://github.com/d3/d3-hierarchy#node_path) method replaces d3.layout.bundle; see also [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle) for hierarchical edge bundling. There are also new flexible methods for traversing hierarchies: [*node*.each](https://github.com/d3/d3-hierarchy#node_each), [*node*.eachAfter](https://github.com/d3/d3-hierarchy#node_eachAfter) and [*node*.eachBefore](https://github.com/d3/d3-hierarchy#node_eachBefore).
 
 new *treemap*.tile - the treemap tiling algorithms are now extensible.
 reimplemented squarified treemaps, fixing bugs with padding and rounding.
