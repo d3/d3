@@ -457,7 +457,7 @@ d3.format("<10c")("foo"); // "foo       "
 
 There are several new methods for computing suggested decimal precisions; these are used by [d3-scale](#scales-d3-scale) for tick formatting, and are helpful for implementing custom number formats: [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed), [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) and [d3.precisionRound](https://github.com/d3/d3-format#precisionRound). There’s also a new [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) method for parsing, validating and debugging format specifiers; it’s also good for deriving related format specifiers, such as when you want to substitute the precision automatically.
 
-You can now set the default locale using [d3.formatDefaultLocale]()https://github.com/d3/d3-format#formatDefaultLocale! The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-format/locale/).
+You can now set the default locale using [d3.formatDefaultLocale](https://github.com/d3/d3-format#formatDefaultLocale)! The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-format/locale/).
 
 ## [Geographies (d3-geo)](https://github.com/d3/d3-geo/blob/master/README.md)
 
@@ -906,7 +906,7 @@ var parseTime = d3.timeParse("%c");
 
 The multi-scale time format d3.time.format.multi has been replaced by [d3.scaleTime](https://github.com/d3/d3-scale#scaleTime)’s [tick format](https://github.com/d3/d3-scale#time_tickFormat). Time formats now coerce inputs to dates, and time parsers coerce inputs to strings. The `%Z` directive now allows more flexible parsing of time zone offsets, such as `-0700`, `-07:00`, `-07`, and `Z`. The `%p` directive is now parsed correctly when the locale’s period name is longer than two characters (*e.g.*, “a.m.”).
 
-You can now set the default locale using [d3.timeFormatDefaultLocale]()https://github.com/d3/d3-time-format#timeFormatDefaultLocale! The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-time-format/locale/).
+You can now set the default locale using [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format#timeFormatDefaultLocale)! The locales are now published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-time-format/locale/).
 
 The performance of time formatting and parsing has been improved, and the UTC formatter and parser have a cleaner implementation (that avoids temporarily overriding the Date global).
 
