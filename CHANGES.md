@@ -514,7 +514,7 @@ Pursuant to the great namespace flattening:
 * d3.layout.tree ↦ [d3.tree](https://github.com/d3/d3-hierarchy#tree)
 * d3.layout.treemap ↦ [d3.treemap](https://github.com/d3/d3-hierarchy#treemap)
 
-While you can still use JSON to define hierarchical data (sometimes referred to as the “flare.json format” after the many D3 examples that use the Flare dataset), the new d3.stratify API simplifies the conversion of tabular data to hierarchies!
+As an alternative to using JSON to represent hierarchical data (such as the “flare.json format” used by many D3 examples), the new d3.stratify operator simplifies the conversion of tabular data to hierarchical data! This is especially convenient if you already have data in a tabular format, such as the result of a SQL query, or a CSV file:
 
 ```
 name,parent
