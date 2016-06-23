@@ -731,18 +731,62 @@ x(2); // undefined
 x.domain(); // [0, 1]
 ```
 
-This is particularly useful for choropleths where you wish to use a color (such as light gray) for missing data.
+This is particularly useful for choropleths when you want to assign a color to missing data.
 
-d3.scaleOrdinal constructor now takes an optional *range*.
-category scales now defined as arrays of colors for passing to d3.scaleOrdinal:
+The *ordinal*.rangeBands and *ordinal*.rangeRoundBands methods have been replaced with a new subclass of ordinal scale: [band scales](https://github.com/d3/d3-scale#band-scales). The following code in 3.x:
 
-* d3.scale.category10 ↦ d3.schemeCategory10
-* d3.scale.category20 ↦ d3.schemeCategory20
-* d3.scale.category20b ↦ d3.schemeCategory20b
-* d3.scale.category20c ↦ d3.schemeCategory20c
+```js
+var x = d3.scaleOrdinal()
+    .domain(["a", "b", "c"])
+    .rangeBands([0, width]);
+```
 
-new d3.scaleBand replaces *ordinal*.rangeBands, *band*.bandwidth, *band*.align.
-new d3.scalePoint replaces *ordinal*.rangePoints.
+Is equivalent to this in 4.0:
+
+```js
+var x = d3.scaleBand()
+    .domain(["a", "b", "c"])
+    .range([0, width]);
+```
+
+The new [*band*.padding](https://github.com/d3/d3-scale#band_padding), [*band*.paddingInner](https://github.com/d3/d3-scale#band_paddingInner) and [*band*.paddingOuter](https://github.com/d3/d3-scale#band_paddingOuter) methods replace the optional arguments to *ordinal*.rangeBands. The new [*band*.bandwidth](https://github.com/d3/d3-scale#band_bandwidth) and [*band*.step](https://github.com/d3/d3-scale#band_step) methods replace *ordinal*.rangeBand. There’s also a new [*band*.align](https://github.com/d3/d3-scale#band_align) method which you can use to control how the extra space outside the bands is distributed, say to shift columns closer to the *y*-axis.
+
+Similarly, the *ordinal*.rangePoints and *ordinal*.rangeRoundPoints methods have been replaced with a new subclass of ordinal scale: [point scales](https://github.com/d3/d3-scale#point-scales). The following code in 3.x:
+
+```js
+var x = d3.scaleOrdinal()
+    .domain(["a", "b", "c"])
+    .rangePoints([0, width]);
+```
+
+Is equivalent to this in 4.0:
+
+```js
+var x = d3.scalePoint()
+    .domain(["a", "b", "c"])
+    .range([0, width]);
+```
+
+The new [*point*.padding](https://github.com/d3/d3-scale#point_padding) method replaces the optional *padding* argument to *ordinal*.rangePoints. Like *ordinal*.rangeBand with *ordinal*.rangePoints, the [*point*.bandwidth](https://github.com/d3/d3-scale#point_bandwidth) method always returns zero; a new [*point*.step](https://github.com/d3/d3-scale#point_step) method returns the interval between adjacent points.
+
+The [ordinal scale constructor](https://github.com/d3/d3-scale#ordinal-scales) now takes an optional *range* for a shorter alternative to [*ordinal*.range](https://github.com/d3/d3-scale#ordinal_range). This is especially useful now that the categorical color scales have been changed to simple arrays of colors rather than specialized ordinal scale constructors:
+
+* d3.scale.category10 ↦ [d3.schemeCategory10](https://github.com/d3/d3-scale#schemeCategory10)
+* d3.scale.category20 ↦ [d3.schemeCategory20](https://github.com/d3/d3-scale#schemeCategory20)
+* d3.scale.category20b ↦ [d3.schemeCategory20b](https://github.com/d3/d3-scale#schemeCategory20b)
+* d3.scale.category20c ↦ [d3.schemeCategory20c](https://github.com/d3/d3-scale#schemeCategory20c)
+
+The following code in 3.x:
+
+```js
+var color = d3.scaleCategory10();
+```
+
+Is equivalent to this in 4.0:
+
+```js
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+```
 
 [Sequential scales](https://github.com/d3/d3-scale#scaleSequential), are a new class of scales with a fixed output [interpolator](https://github.com/d3/d3-scale#sequential_interpolator) instead of a [range](https://github.com/d3/d3-scale#continuous_range). Typically these scales are used to implement continuous sequential or diverging color schemes. Inspired by Matplotlib’s new [perceptually-motived colormaps](https://bids.github.io/colormap/), 4.0 now features [viridis](https://github.com/d3/d3-scale#interpolateViridis), [inferno](https://github.com/d3/d3-scale#interpolateInferno), [magma](https://github.com/d3/d3-scale#interpolateMagma), [plasma](https://github.com/d3/d3-scale#interpolatePlasma) interpolators for use with sequential scales. Using [d3.quantize](https://github.com/d3/d3-interpolate#quantize), these interpolators can also be applied to [quantile](https://github.com/d3/d3-scale#quantile-scales), [quantize](https://github.com/d3/d3-scale#quantize-scales) and [threshold](https://github.com/d3/d3-scale#threshold-scales) scales.
 
