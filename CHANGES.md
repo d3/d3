@@ -702,21 +702,24 @@ TODO
 
 * quantitative scales generate ticks in the same order as the domain
 * non-linear quantitative scales are more accurate
+* *log*.tickFormat now filters by default to 10 ticks
 * better *log*.ticks filtering for large domains
-* *time*.ticks and *time*.nice now only accept time intervals
-* new d3.scaleSequential
-  * new Viridis, Inferno, Magma, Plasma interpolators
-  * new Warm, Cool, Rainbow interpolators
-  * new default Cubehelix interpolator
-* d3.scaleOrdinal constructor now takes an optional *range*
-* new *ordinal*.unknown
-* new d3.scaleBand, *band*.bandwidth, *band*.align
-* new d3.scalePoint
-* category scales now defined as arrays of colors:
-  * d3.scale.category10 ↦ d3.schemeCategory10
-  * d3.scale.category20 ↦ d3.schemeCategory20
-  * d3.scale.category20b ↦ d3.schemeCategory20b
-  * d3.scale.category20c ↦ d3.schemeCategory20c
+* *time*.ticks and *time*.nice now only accept time intervals (no string alias)
+
+new d3.scaleSequential. new Viridis, Inferno, Magma, Plasma interpolators. new Warm, Cool, Rainbow interpolators. new default Cubehelix interpolator
+
+new ordinal scale API!
+new *ordinal*.unknown lets you control whether the domain is implicitly extended.
+d3.scaleOrdinal constructor now takes an optional *range*.
+new d3.scaleBand replaces *ordinal*.rangeBands, *band*.bandwidth, *band*.align.
+new d3.scalePoint replaces *ordinal*.rangePoints.
+
+category scales now defined as arrays of colors for passing to d3.scaleOrdinal:
+
+* d3.scale.category10 ↦ d3.schemeCategory10
+* d3.scale.category20 ↦ d3.schemeCategory20
+* d3.scale.category20b ↦ d3.schemeCategory20b
+* d3.scale.category20c ↦ d3.schemeCategory20c
 
 Mention d3-scale-chromatic?
 
