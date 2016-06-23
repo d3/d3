@@ -800,9 +800,9 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/warm.png" width="100%" height="40" alt="warm">](https://github.com/d3/d3-scale#interpolateWarm)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cool.png" width="100%" height="40" alt="cool">](https://github.com/d3/d3-scale#interpolateCool)
 
-Mention d3-scale-chromatic?
+For even more sequential and categorical color schemes, see [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
 
-[Introducing d3-scale](https://medium.com/@mbostock/introducing-d3-scale-61980c51545f#.d38uz6vuz)
+See also [Introducing d3-scale](https://medium.com/@mbostock/introducing-d3-scale-61980c51545f).
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
