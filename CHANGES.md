@@ -713,12 +713,12 @@ new d3.scaleSequential. new Viridis, Inferno, Magma, Plasma interpolators.
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/magma.png" width="100%" height="20" alt="magma">](https://github.com/d3/d3-scale#interpolateMagma)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/plasma.png" width="100%" height="20" alt="plasma">](https://github.com/d3/d3-scale#interpolatePlasma)
 
-new Warm, Cool, Rainbow interpolators. new default Cubehelix interpolator
+new default Cubehelix interpolator. new Rainbow, Warm, Cool interpolators.
 
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cubehelix.png" width="100%" height="20" alt="cubehelix">](https://github.com/d3/d3-scale#interpolateCubehelix)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/rainbow.png" width="100%" height="20" alt="rainbow">](https://github.com/d3/d3-scale#interpolateRainbow)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/warm.png" width="100%" height="20" alt="warm">](https://github.com/d3/d3-scale#interpolateWarm)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cool.png" width="100%" height="20" alt="cool">](https://github.com/d3/d3-scale#interpolateCool)
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/rainbow.png" width="100%" height="20" alt="rainbow">](https://github.com/d3/d3-scale#interpolateRainbow)
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cubehelix.png" width="100%" height="20" alt="cubehelix">](https://github.com/d3/d3-scale#interpolateCubehelix)
 
 new ordinal scale API!
 new *ordinal*.unknown lets you control whether the domain is implicitly extended.
