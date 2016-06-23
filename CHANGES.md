@@ -718,7 +718,7 @@ x(2); // "blue"
 x.domain(); // [0, 1, 2]
 ```
 
-By setting *ordinal*.unknown, you can instead define the returned output for unknown inputs:
+By setting *ordinal*.unknown, you instead define the output value for unknown inputs. This is particularly useful for choropleth maps where you want to assign a color to missing data.
 
 ```js
 var x = d3.scaleOrdinal()
@@ -730,8 +730,6 @@ x.domain(); // [0, 1]
 x(2); // undefined
 x.domain(); // [0, 1]
 ```
-
-This is particularly useful for choropleths when you want to assign a color to missing data.
 
 The *ordinal*.rangeBands and *ordinal*.rangeRoundBands methods have been replaced with a new subclass of ordinal scale: [band scales](https://github.com/d3/d3-scale#band-scales). The following code in 3.x:
 
