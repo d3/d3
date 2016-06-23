@@ -706,9 +706,19 @@ d3.scaleLinear().domain([10, 0]).ticks(5); // [10, 8, 6, 4, 2, 0]
 
 Non-linear quantitative scales are slightly more accurate. [Log tick formatting](https://github.com/d3/d3-scale#log_tickFormat) now assumes a default *count* of ten, not Infinity, if not specified. Log scales with  domains that span many powers (such as from 1e+3 to 1e+29) now return only one [tick](https://github.com/d3/d3-scale#log_ticks) per power rather than returning *base* ticks per power.
 
-new d3.scaleSequential. new Viridis, Inferno, Magma, Plasma interpolators. new Warm, Cool, Rainbow interpolators. new default Cubehelix interpolator
+new d3.scaleSequential. new Viridis, Inferno, Magma, Plasma interpolators.
 
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/viridis.png" width="100%" height="20" alt="viridis">](https://github.com/d3/d3-scale#interpolateViridis)[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/inferno.png" width="100%" height="20" alt="inferno">](https://github.com/d3/d3-scale#interpolateInferno)[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/magma.png" width="100%" height="20" alt="magma">](https://github.com/d3/d3-scale#interpolateMagma)[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/plasma.png" width="100%" height="20" alt="plasma">](https://github.com/d3/d3-scale#interpolatePlasma)[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/warm.png" width="100%" height="20" alt="warm">](https://github.com/d3/d3-scale#interpolateWarm)[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cool.png" width="100%" height="20" alt="cool">](https://github.com/d3/d3-scale#interpolateCool)[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/rainbow.png" width="100%" height="20" alt="rainbow">](https://github.com/d3/d3-scale#interpolateRainbow)[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cubehelix.png" width="100%" height="20" alt="cubehelix">](https://github.com/d3/d3-scale#interpolateCubehelix)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/viridis.png" width="100%" height="20" alt="viridis">](https://github.com/d3/d3-scale#interpolateViridis)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/inferno.png" width="100%" height="20" alt="inferno">](https://github.com/d3/d3-scale#interpolateInferno)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/magma.png" width="100%" height="20" alt="magma">](https://github.com/d3/d3-scale#interpolateMagma)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/plasma.png" width="100%" height="20" alt="plasma">](https://github.com/d3/d3-scale#interpolatePlasma)
+
+new Warm, Cool, Rainbow interpolators. new default Cubehelix interpolator
+
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/warm.png" width="100%" height="20" alt="warm">](https://github.com/d3/d3-scale#interpolateWarm)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cool.png" width="100%" height="20" alt="cool">](https://github.com/d3/d3-scale#interpolateCool)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/rainbow.png" width="100%" height="20" alt="rainbow">](https://github.com/d3/d3-scale#interpolateRainbow)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cubehelix.png" width="100%" height="20" alt="cubehelix">](https://github.com/d3/d3-scale#interpolateCubehelix)
 
 new ordinal scale API!
 new *ordinal*.unknown lets you control whether the domain is implicitly extended.
