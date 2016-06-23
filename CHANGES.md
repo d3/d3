@@ -909,6 +909,15 @@ var parseTime = d3.timeParse("%c");
 
 The multi-scale time format d3.time.format.multi has been replaced by [d3.scaleTime](https://github.com/d3/d3-scale#scaleTime)’s [tick format](https://github.com/d3/d3-scale#time_tickFormat). Time formats now coerce inputs to dates, and time parsers coerce inputs to strings. The `%Z` directive now allows more flexible parsing of time zone offsets, such as `-0700`, `-07:00`, `-07`, and `Z`. The `%p` directive is now parsed correctly when the locale’s period name is longer than two characters (*e.g.*, “a.m.”).
 
+The default U.S. English locale has been modified to use 12-hour time and a more concise representation of the date. This more closely aligns with local conventions, and is consistent with [*date*.toLocaleString](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/toLocaleString) in Chrome, Firefox and Node:
+
+```js
+var now = new Date;
+d3.timeFormat("%c")(new Date); // "6/23/2016, 2:01:33 PM"
+d3.timeFormat("%x")(new Date); // "6/23/2016"
+d3.timeFormat("%X")(new Date); // "2:01:38 PM"
+```
+
 You can now set the default locale using [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format#timeFormatDefaultLocale)! The locales are published as [JSON](https://github.com/d3/d3-request#json) to [NPM](https://npmcdn.com/d3-time-format/locale/).
 
 The performance of time formatting and parsing has been improved, and the UTC formatter and parser have a cleaner implementation (that avoids temporarily overriding the Date global).
