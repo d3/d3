@@ -1214,7 +1214,9 @@ The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com
 
 TODO
 
-* transitions are immutable, too; *transition*.merge
+Like [selections](#selections-d3-selection), transitions are now immutable.
+The new [*transition*.merge](https://github.com/d3/d3-transition#transition_merge) method…
+
 * *transition*.each ↦ *transition*.on
 * *transition*.each is now the same as *selection*.each
 * new d3.active for chaining transitions / modifying in-progress transitions
