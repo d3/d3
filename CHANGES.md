@@ -706,16 +706,16 @@ d3.scaleLinear().domain([10, 0]).ticks(5); // [10, 8, 6, 4, 2, 0]
 
 Non-linear quantitative scales are slightly more accurate. [Log tick formatting](https://github.com/d3/d3-scale#log_tickFormat) now assumes a default *count* of ten, not Infinity, if not specified. Log scales with  domains that span many powers (such as from 1e+3 to 1e+29) now return only one [tick](https://github.com/d3/d3-scale#log_ticks) per power rather than returning *base* ticks per power.
 
-new d3.scaleSequential. new Viridis, Inferno, Magma, Plasma interpolators.
+Sequential scales, [d3.scaleSequential](https://github.com/d3/d3-scale#scaleSequential), are a new class of scales with a fixed output [interpolator](https://github.com/d3/d3-scale#sequential_interpolator) instead of a [range](https://github.com/d3/d3-scale#continuous_range). Typically these scales are used to implement continuous sequential or diverging color schemes. Inspired by Matplotlib’s new [perceptually-motived colormaps](https://bids.github.io/colormap/), 4.0 now features [viridis](https://github.com/d3/d3-scale#interpolateViridis), [inferno](https://github.com/d3/d3-scale#interpolateInferno), [magma](https://github.com/d3/d3-scale#interpolateMagma), [plasma](https://github.com/d3/d3-scale#interpolatePlasma) interpolators for use with sequential scales. In conjunction with 4.0’s new [d3.quantize](https://github.com/d3/d3-interpolate#quantize), these interpolators can also be used with [quantile](https://github.com/d3/d3-scale#quantile-scales), [quantize](https://github.com/d3/d3-scale#quantize-scales) and [threshold](https://github.com/d3/d3-scale#threshold-scales) scales.
 
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/viridis.png" width="100%" height="20" alt="viridis">](https://github.com/d3/d3-scale#interpolateViridis)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/inferno.png" width="100%" height="20" alt="inferno">](https://github.com/d3/d3-scale#interpolateInferno)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/magma.png" width="100%" height="20" alt="magma">](https://github.com/d3/d3-scale#interpolateMagma)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/plasma.png" width="100%" height="20" alt="plasma">](https://github.com/d3/d3-scale#interpolatePlasma)
 
-new default Cubehelix interpolator. new Rainbow, Warm, Cool interpolators.
+4.0 also features several Cubehelix color schemes, including [Dave Green’s default](https://github.com/d3/d3-scale#interpolateCubehelixDefault), and a [cyclical rainbow scheme](https://github.com/d3/d3-scale#interpolateRainbow) inspired by [Matteo Niccoli](https://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/):
 
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cubehelix.png" width="100%" height="20" alt="cubehelix">](https://github.com/d3/d3-scale#interpolateCubehelix)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cubehelix.png" width="100%" height="20" alt="cubehelix">](https://github.com/d3/d3-scale#interpolateCubehelixDefault)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/rainbow.png" width="100%" height="20" alt="rainbow">](https://github.com/d3/d3-scale#interpolateRainbow)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/warm.png" width="100%" height="20" alt="warm">](https://github.com/d3/d3-scale#interpolateWarm)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cool.png" width="100%" height="20" alt="cool">](https://github.com/d3/d3-scale#interpolateCool)
