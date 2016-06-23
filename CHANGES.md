@@ -713,7 +713,7 @@ Non-linear quantitative scales are slightly more accurate. [Log tick formatting]
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/magma.png" width="100%" height="20" alt="magma">](https://github.com/d3/d3-scale#interpolateMagma)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/plasma.png" width="100%" height="20" alt="plasma">](https://github.com/d3/d3-scale#interpolatePlasma)
 
-4.0 also ships new Cubehelix color schemes, including [Dave Green’s default](https://github.com/d3/d3-scale#interpolateCubehelixDefault) and a [cyclical rainbow](https://github.com/d3/d3-scale#interpolateRainbow) inspired by [Matteo Niccoli](https://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/):
+4.0 also ships new Cubehelix schemes, including [Dave Green’s default](https://github.com/d3/d3-scale#interpolateCubehelixDefault) and a [cyclical rainbow](https://github.com/d3/d3-scale#interpolateRainbow) inspired by [Matteo Niccoli](https://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/):
 
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cubehelix.png" width="100%" height="20" alt="cubehelix">](https://github.com/d3/d3-scale#interpolateCubehelixDefault)
 [<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/rainbow.png" width="100%" height="20" alt="rainbow">](https://github.com/d3/d3-scale#interpolateRainbow)
