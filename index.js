@@ -294,6 +294,7 @@ export {
   format,
   formatPrefix,
   formatLocale,
+  formatDefaultLocale,
   formatSpecifier,
   precisionFixed,
   precisionPrefix,
@@ -307,7 +308,8 @@ export {
   utcParse,
   isoFormat,
   isoParse,
-  timeFormatLocale
+  timeFormatLocale,
+  timeFormatDefaultLocale
 } from "d3-time-format";
 
 export {

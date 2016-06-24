@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "4.0.0-alpha.50",
+  "version": "4.0.0-rc.1",
   "publishConfig": {
     "tag": "next"
   },
@@ -34,7 +34,7 @@
   "devDependencies": {
     "json2module": "0.0",
     "package-preamble": "0.0",
-    "rollup": "0.31",
+    "rollup": "0.33",
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "1",
     "tape": "4",
@@ -42,18 +42,18 @@
   },
   "dependencies": {
     "d3-array": "1.0.0",
-    "d3-axis": "0.4.1",
-    "d3-brush": "0.2.3",
+    "d3-axis": "1.0.0",
+    "d3-brush": "1.0.0",
     "d3-collection": "1.0.0",
     "d3-color": "1.0.0",
     "d3-dispatch": "1.0.0",
-    "d3-drag": "0.3.1",
+    "d3-drag": "1.0.0",
     "d3-dsv": "1.0.0",
     "d3-ease": "1.0.0",
-    "d3-force": "0.7.1",
-    "d3-format": "0.6.0",
-    "d3-geo": "0.0.3",
-    "d3-hierarchy": "0.3.0",
+    "d3-force": "1.0.0",
+    "d3-format": "1.0.0",
+    "d3-geo": "1.0.0",
+    "d3-hierarchy": "1.0.0",
     "d3-interpolate": "1.0.0",
     "d3-path": "1.0.0",
     "d3-polygon": "1.0.0",
@@ -61,14 +61,14 @@
     "d3-queue": "3.0.1",
     "d3-random": "1.0.0",
     "d3-request": "1.0.0",
-    "d3-scale": "0.9.3",
-    "d3-selection": "0.9.0",
-    "d3-shape": "0.7.1",
+    "d3-scale": "1.0.0",
+    "d3-selection": "1.0.0",
+    "d3-shape": "1.0.0",
     "d3-time": "1.0.0",
-    "d3-time-format": "1.0.0",
+    "d3-time-format": "2.0.0",
     "d3-timer": "1.0.0",
-    "d3-transition": "0.3.1",
+    "d3-transition": "1.0.0",
     "d3-voronoi": "1.0.0",
-    "d3-zoom": "0.3.1"
+    "d3-zoom": "1.0.0"
   }
 }
