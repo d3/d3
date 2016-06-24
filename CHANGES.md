@@ -1207,7 +1207,21 @@ The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com
 
 ## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
-As described in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488) the [*selection*.transition](https://github.com/d3/d3-transition#selection_transition) method now takes an optional *transition* instance which can be used to synchronize a new transition with an existing transition. This method inherits timing from the closest ancestor for each selected element, and thus works even when the referenced *transition* has variable timing such as a staggered delay. This method replaces the deeply magical behavior of *transition*.each in 3.x; in 4.0, [*transition*.each](https://github.com/d3/d3-transition#transition_each) is now identical to [*selection*.each](https://github.com/d3/d3-selection#selection_each). Use the new [*transition*.on](https://github.com/d3/d3-transition#transition_on) method to listen to transition events.
+As described in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488) the [*selection*.transition](https://github.com/d3/d3-transition#selection_transition) method now takes an optional *transition* instance which can be used to synchronize a new transition with an existing transition. For example:
+
+```js
+var t = d3.transition()
+    .duration(750)
+    .ease(d3.easeLinear);
+
+d3.selectAll(".apple").transition(t)
+    .style("fill", "red");
+
+d3.selectAll(".orange").transition(t)
+    .style("fill", "orange");
+```
+
+Transitions created this way inherit timing from the closest ancestor element, and thus are synchronized even when the referenced *transition* has variable timing such as a staggered delay. This method replaces the deeply magical behavior of *transition*.each in 3.x; in 4.0, [*transition*.each](https://github.com/d3/d3-transition#transition_each) is now identical to [*selection*.each](https://github.com/d3/d3-selection#selection_each). Use the new [*transition*.on](https://github.com/d3/d3-transition#transition_on) method to listen to transition events.
 
 change *transition*.transition semantics in regards to *transition*.delay.
 
