@@ -939,8 +939,8 @@ See [*line*.context](https://github.com/d3/d3-shape#line_context), [*area*.conte
 
 But that’s not all! 4.0 now provides parameterized Catmull–Rom splines as proposed by [Yuksel *et al.*](http://www.cemyuksel.com/research/catmullrom_param/). These are available as [d3.curveCatmullRom](https://github.com/d3/d3-shape#curveCatmullRom), [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#curveCatmullRomClosed) and [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#curveCatmullRomOpen).
 
-<img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/catmullRom.png" width="888" height="330" alt="catmullRom">
-<img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/catmullRomOpen.png" width="888" height="330" alt="catmullRomOpen">
+<img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/catmullRom.png" width="888" height="240" alt="catmullRom">
+<img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/catmullRomOpen.png" width="888" height="240" alt="catmullRomOpen">
 <img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/catmullRomClosed.png" width="888" height="330" alt="catmullRomClosed">
 
 Each curve type can define its own named parameters, replacing *line*.tension and *area*.tension. For example, Catmull–Rom splines are parameterized using [*catmullRom*.alpha](https://github.com/d3/d3-shape#curveCatmullRom_alpha) and defaults to 0.5, which corresponds to a centripetal spline that avoids self-intersections and overshoot. For a uniform Catmull–Rom spline instead:
