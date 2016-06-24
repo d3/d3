@@ -5,6 +5,7 @@ D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to 
 * [Arrays](#arrays-d3-array) ([Statistics](#statistics), [Histograms](#histograms), [Search](#search), [Transformations](#transformations))
 * [Axes](#axes-d3-axis)
 * [Brushes](#brushes-d3-brush)
+* [Chords](#chords-d3-chord)
 * [Collections](#collections-d3-collection) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors-d3-color)
 * [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
@@ -126,6 +127,10 @@ Select a one- or two-dimensional region using the mouse or touch.
 * [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) -
 * [*brush*.on](https://github.com/d3/d3-brush#brush_on) -
 * [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) -
+
+## [Chords (d3-chord)](https://github.com/d3/d3-chord)
+
+TODO
 
 ## [Collections (d3-collection)](https://github.com/d3/d3-collection)
 
