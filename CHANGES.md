@@ -797,7 +797,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 For even more sequential and categorical color schemes, see [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
 
-See also [Introducing d3-scale](https://medium.com/@mbostock/introducing-d3-scale-61980c51545f).
+For an introduction to scales, [Introducing d3-scale](https://medium.com/@mbostock/introducing-d3-scale-61980c51545f).
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/blob/master/README.md)
 
@@ -1007,7 +1007,7 @@ The resulting array has one element per *series*. Each series has one point per 
 
 Each series in then typically passed to an [area generator](https://github.com/d3/d3-shape#areas) to render an area chart, or used to construct rectangles for a bar chart. Stack generators no longer modify the input data, so *stack*.out has been removed.
 
-For more, see [Introducing d3-shape](https://medium.com/@mbostock/introducing-d3-shape-73f8367e6d12).
+For an introduction to shapes, [Introducing d3-shape](https://medium.com/@mbostock/introducing-d3-shape-73f8367e6d12).
 
 ## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/blob/master/README.md)
 
