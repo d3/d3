@@ -899,6 +899,8 @@ Pursuant to the great namespace flattening:
 * d3.svg.area.radial ↦ [d3.radialArea](https://github.com/d3/d3-shape#radialArea)
 * d3.svg.arc ↦ [d3.arc](https://github.com/d3/d3-shape#arcs)
 * d3.layout.pie ↦ [d3.pie](https://github.com/d3/d3-shape#pies)
+* d3.svg.symbol ↦ [d3.symbol](https://github.com/d3/d3-shape#symbols)
+* d3.svg.symbolTypes ↦ [d3.symbolTypes](https://github.com/d3/d3-shape#symbolTypes)
 
 Shapes are no longer limited to SVG; they can now render to Canvas! Shape generators now support an optional *context*: given a [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D), you can render a shape as a canvas path to be filled or stroked. For example, a [canvas pie chart](https://bl.ocks.org/mbostock/8878e7fd82034f1d63cf) might use an arc generator:
 
@@ -942,22 +944,28 @@ var line = d3.line()
     .curve(d3.curveCatmullRom.alpha(0.5));
 ```
 
-4.0 fixes the interpretation of the cardinal spline *tension* parameter, which is now specified as [*cardinal*.tension](https://github.com/d3/d3-shape#curveCardinal_tension) and defaults to zero for a uniform Catmull–Rom spline. A tension of one produces a linear curve. The first and last segments of basis and cardinal curves were implemented incorrectly in previous versions of D3; this has been fixed!
+4.0 fixes the interpretation of the cardinal spline *tension* parameter, which is now specified as [*cardinal*.tension](https://github.com/d3/d3-shape#curveCardinal_tension) and defaults to zero for a uniform Catmull–Rom spline; a tension of one produces a linear curve. The first and last segments of basis and cardinal curves have also been fixed!
 
 4.0 fixes numerous bugs in the monotone curve implementation, and introduces [d3.curveMonotoneY](https://github.com/d3/d3-shape#curveMonotoneY); this is like d3.curveMonotoneX, except it requires that the input points are monotone in *y* rather than *x*, such as for a vertically-oriented line chart. The new [d3.curveNatural](https://github.com/d3/d3-shape#curveNatural) produces a [natural cubic spline](http://mathworld.wolfram.com/CubicSpline.html). The default [β](https://github.com/d3/d3-shape#bundle_beta) for [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle) is now 0.85, rather than 0.7, matching the values used by [Holten](https://www.win.tue.nl/vis1/home/dholten/papers/bundles_infovis.pdf).
 
-no more funky *interpolate*.reverse; curves can define different behavior for topline vs. baseline
+The undocumented *interpolate*.reverse field has been removed. Curves can define different behavior for toplines and baselines by counting the sequence of [*curve*.lineStart](https://github.com/d3/d3-shape#curve_lineStart) within [*curve*.areaStart](https://github.com/d3/d3-shape#curve_areaStart). See the [d3.curveStep implementation](https://github.com/d3/d3-shape/blob/master/src/curve/step.js) for an example.
 
-new derived shapes: e.g., *area*.lineY0 for the baseline, *area*.lineY1 for the topline.
+You can now derive lines from areas. For example, to render the topline of an area, use [*area*.lineY1](https://github.com/d3/d3-shape#area_lineY1); for the baseline, use [*area*.lineY0](https://github.com/d3/d3-shape#area_lineY0).
 
-new symbol API
+4.0 introduces a new symbol type API. Symbol types are passed to [*symbol*.type](https://github.com/d3/d3-shape#symbol_type) in place of strings. The equivalents are:
 
-* d3.svg.symbol ↦ d3.symbol
-* d3.svg.symbolTypes ↦ d3.symbolTypes
-* new d3.symbolStar
-* new d3.symbolWye
-* "triangle-up" ↦ d3.symbolTriangle
-* removed "triangle-down"
+* circle ↦ [d3.symbolCircle](https://github.com/d3/d3-shape#symbolCircle)
+* cross ↦ [d3.symbolCross](https://github.com/d3/d3-shape#symbolCross)
+* diamond ↦ [d3.symbolDiamond](https://github.com/d3/d3-shape#symbolDiamond)
+* square ↦ [d3.symbolSquare](https://github.com/d3/d3-shape#symbolSquare)
+* triangle-down ↦ REMOVED
+* triangle-up ↦ [d3.symbolTriangle](https://github.com/d3/d3-shape#symbolTriangle)
+* ADDED ↦ [d3.symbolStar](https://github.com/d3/d3-shape#symbolStar)
+* ADDED ↦ [d3.symbolWye](https://github.com/d3/d3-shape#symbolWye)
+
+The full set of symbol types:
+
+<a href="#symbolCircle"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/circle.png" width="100" height="100"></a><a href="#symbolCross"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/cross.png" width="100" height="100"></a><a href="#symbolDiamond"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/diamond.png" width="100" height="100"></a><a href="#symbolSquare"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/square.png" width="100" height="100"></a><a href="#symbolStar"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/star.png" width="100" height="100"></a><a href="#symbolTriangle"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/triangle.png" width="100" height="100"><a href="#symbolWye"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/wye.png" width="100" height="100"></a>
 
 new stack API!
 
