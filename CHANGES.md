@@ -1,41 +1,5 @@
 # Changes in D3 4.0
 
-* [Modules](#modules)
-* [Arrays](#arrays-d3-array)
-* [Axes](#axes-d3-axis)
-* [Brushes](#brushes-d3-brush)
-* [Chords](#chords-d3-chord)
-* [Collections](#collections-d3-collection)
-* [Colors](#colors-d3-color)
-* [Dispatches](#dispatches-d3-dispatch)
-* [Dragging](#dragging-d3-drag)
-* [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
-* [Easings](#easings-d3-ease)
-* [Forces](#forces-d3-force)
-* [Number Formats](#number-formats-d3-format)
-* [Geographies](#geographies-d3-geo)
-* [Hierarchies](#hierarchies-d3-hierarchy)
-* [Interpolators](#interpolators-d3-interpolate)
-* [Paths](#paths-d3-path)
-* [Polygons](#polygons-d3-polygon)
-* [Quadtrees](#quadtrees-d3-quadtree)
-* [Queues](#queues-d3-queue)
-* [Random Numbers](#random-numbers-d3-random)
-* [Requests](#requests-d3-request)
-* [Scales](#scales-d3-scale)
-* [Selections](#selections-d3-selection)
-* [Shapes](#shapes-d3-shape)
-* [Time Formats](#time-formats-d3-time-format)
-* [Time Intervals](#time-intervals-d3-time)
-* [Timers](#timers-d3-timer)
-* [Transitions](#transitions-d3-transition)
-* [Voronoi Diagrams](#voronoi-diagrams-d3-voronoi)
-* [Zooming](#zooming-d3-zoom)
-
-N.B.: This document is a [work-in-progress](https://github.com/d3/d3/issues/2841). It does not yet cover all API changes.
-
-## Modules
-
 D3 3.x was a monolithic library: the core functionality resided in a single [repository](https://github.com/d3/d3) and was published in a [single file](https://d3js.org/d3.v3.js). It was possible to create a custom build using a [nonstandard tool](https://github.com/mbostock/smash), but not easy and few did. (There were also plugins, but these could only add features and had their own [monolithic repository](https://github.com/d3/d3-plugins).)
 
 D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](https://github.com/d3) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in a separate repository, allowing decentralized ownership and independent release cycles. Want to own a new repository in the [D3 organization](https://github.com/d3)? [Let me know!](https://twitter.com/mbostock)
@@ -68,6 +32,39 @@ If you don’t care about modularity, you can mostly ignore this change and keep
 The default D3 [UMD bundle](https://github.com/umdjs/umd) is now [anonymous](https://github.com/requirejs/requirejs/wiki/Updating-existing-libraries#register-as-an-anonymous-module-), rather being named “d3”. No `d3` global is exported if AMD or CommonJS is detected. In a vanilla environment, the D3 microlibraries share the `d3` global, meaning the code you write for the default D3 bundle works identically if you load the modules separately. (See [Let’s Make a (D3) Plugin](https://bost.ocks.org/mike/d3-plugin/) for more.) The generated UMD bundles are no longer stored in the Git repository; Bower has been repointed to [d3-bower](https://github.com/mbostock-bower/d3-bower), and you can find the generated files on [npmcdn](https://npmcdn.com/d3@next/) or attached to the [latest release](https://github.com/d3/d3/releases/latest). The non-minified default bundle is no longer mangled, making it more readable and preserving inline comments.
 
 To the consternation of some users, D3 3.x employed Unicode variable names such as τ and π for a concise representation of mathematical operations. A downside of this approach was that a SyntaxError would occur if you loaded the non-minified D3 using ISO-8859-1 instead of UTF-8. D3 3.x also used Unicode string literals, such as the SI-prefix µ for 1e-6. D3 4.0 uses only ASCII variable names and ASCII string literals (see [rollup-plugin-ascii](https://github.com/mbostock/rollup-plugin-ascii)), avoiding these encoding problems.
+
+### Table of Contents
+
+* [Arrays](#arrays-d3-array)
+* [Axes](#axes-d3-axis)
+* [Brushes](#brushes-d3-brush)
+* [Chords](#chords-d3-chord)
+* [Collections](#collections-d3-collection)
+* [Colors](#colors-d3-color)
+* [Dispatches](#dispatches-d3-dispatch)
+* [Dragging](#dragging-d3-drag)
+* [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
+* [Easings](#easings-d3-ease)
+* [Forces](#forces-d3-force)
+* [Number Formats](#number-formats-d3-format)
+* [Geographies](#geographies-d3-geo)
+* [Hierarchies](#hierarchies-d3-hierarchy)
+* [Interpolators](#interpolators-d3-interpolate)
+* [Paths](#paths-d3-path)
+* [Polygons](#polygons-d3-polygon)
+* [Quadtrees](#quadtrees-d3-quadtree)
+* [Queues](#queues-d3-queue)
+* [Random Numbers](#random-numbers-d3-random)
+* [Requests](#requests-d3-request)
+* [Scales](#scales-d3-scale)
+* [Selections](#selections-d3-selection)
+* [Shapes](#shapes-d3-shape)
+* [Time Formats](#time-formats-d3-time-format)
+* [Time Intervals](#time-intervals-d3-time)
+* [Timers](#timers-d3-timer)
+* [Transitions](#transitions-d3-transition)
+* [Voronoi Diagrams](#voronoi-diagrams-d3-voronoi)
+* [Zooming](#zooming-d3-zoom)
 
 ## [Arrays (d3-array)](https://github.com/d3/d3-array/blob/master/README.md)
 
