@@ -1207,18 +1207,13 @@ The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com
 
 ## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
-As described in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488)…
-new *selection*.transition(*transition*); searches ancestors to inherit timing parameters.
-new d3.active for chaining transitions / modifying in-progress transitions.
+As described in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488) the [*selection*.transition](https://github.com/d3/d3-transition#selection_transition) now takes an optional *transition* parameter, which can be used to inherit timing parameters from an existing transition. This method inherits timing from the closest ancestor for each element, and thus works even when the referenced *transition* has multiple elements with different timing, such as staggered delays. This replaces the deeply magical behavior of *transition*.each in 3.x. In 4.0, [*transition*.each](https://github.com/d3/d3-transition#transition_each) is now identical to [*selection*.each](https://github.com/d3/d3-selection#selection_each). A new [*transition*.on](https://github.com/d3/d3-transition#transition_on) method can be used to register transition event listeners, similar to [*selection*.on](https://github.com/d3/d3-selection#selection_on).
+
 change *transition*.transition semantics in regards to *transition*.delay.
 
+changed *transition*.ease to always take an easing function, not a name. see d3-ease.
+
 transitions are now frozen in the background! see d3-timer. note also d3.timeout, d3.interval.
-
-*transition*.each ↦ *transition*.on.
-*transition*.each is now the same as *selection*.each.
-
-strict state machine to enforce when transitions can be modified; more robust.
-enforces *t* = 1 on end, regardless of easing.
 
 functions passed to transition methods take the same standard arguments as selections.
 *transition*.attrTween gets standard arguments (not current attribute value).
@@ -1230,7 +1225,10 @@ uses optimized interpolator rather than d3.interpolate.
 
 fix *transition*.remove if multiple transition names are in use.
 
-changed *transition*.ease to always take an easing function, not a name. see d3-ease.
+new d3.active for chaining transitions / modifying in-progress transitions.
+
+strict state machine to enforce when transitions can be modified; more robust.
+enforces *t* = 1 on end, regardless of easing.
 
 for rewriting resuable components that support transitions:
 new *transition*.selection.
