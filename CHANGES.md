@@ -891,24 +891,33 @@ For the sake of parsimony, the multi-value map methods have been extracted to [d
 
 ## [Shapes (d3-shape)](https://github.com/d3/d3-shape/blob/master/README.md)
 
-TODO
+Pursuant to the great namespace flattening:
 
-[Introducing d3-shape](https://medium.com/@mbostock/introducing-d3-shape-73f8367e6d12#.78ucz4hr2)
+* d3.svg.line ↦ [d3.line](https://github.com/d3/d3-shape#lines)
+* d3.svg.line.radial ↦ [d3.radialLine](https://github.com/d3/d3-shape#radialLine)
+* d3.svg.area ↦ [d3.area](https://github.com/d3/d3-shape#areas)
+* d3.svg.area.radial ↦ [d3.radialArea](https://github.com/d3/d3-shape#radialArea)
+* d3.svg.arc ↦ [d3.arc](https://github.com/d3/d3-shape#arcs)
+* d3.layout.pie ↦ [d3.pie](https://github.com/d3/d3-shape#pies)
 
-* d3.svg.line ↦ d3.line
-* d3.svg.line.radial ↦ d3.radialLine
-* d3.svg.area ↦ d3.area
-* d3.svg.area.radial ↦ d3.radialArea
-* d3.svg.arc ↦ d3.arc
-* more robust arc padding?
+Shapes are no longer limited to SVG; they can now render to Canvas! Each shape generator supports an optional *context*: if you pass it a [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D), you can generate a canvas path to be filled or stroked. For example, a [canvas pie chart](https://bl.ocks.org/mbostock/8878e7fd82034f1d63cf) might use an arc generator:
 
-shapes can now render to canvas!
+```js
+var arc = d3.arc()
+    .outerRadius(radius - 10)
+    .innerRadius(0)
+    .context(context);
+```
 
-* *line*.context
-* *area*.context
-* *arc*.context
-* see also d3-path
-* fast; uses streaming geometry transforms similar to d3-geo
+To render an arc for a given datum *d*:
+
+```js
+context.beginPath();
+arc(d);
+context.fill();
+```
+
+See [*line*.context](https://github.com/d3/d3-shape#line_context), [*area*.context](https://github.com/d3/d3-shape#area_context) and [*arc*.context](https://github.com/d3/d3-shape#arc_context) for more. Under the hood, this uses [d3-path](#paths-d3-path) to serialize canvas path methods to an SVG path data string when the context is null. Thus, shapes are optimized for rendering to canvas.
 
 new curve API!
 
@@ -941,6 +950,8 @@ new curve API!
 * "step-before" ↦ d3.curveStepBefore
 * no more funky *interpolate*.reverse; curves can define different behavior for topline vs. baseline
 
+new derived shapes: e.g., *area*.lineY0 for the baseline, *area*.lineY1 for the topline.
+
 new symbol API
 
 * d3.svg.symbol ↦ d3.symbol
@@ -956,10 +967,14 @@ new stack API!
 * no more x-accessor
 * no more weird *stack*.out
 
+more robust arc padding?
+
 removed diagonal shapes
 
 * d3.svg.diagonal ↦ REMOVED
 * d3.svg.diagonal.radial ↦ REMOVED
+
+For more, see [Introducing d3-shape](https://medium.com/@mbostock/introducing-d3-shape-73f8367e6d12).
 
 ## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/blob/master/README.md)
 
