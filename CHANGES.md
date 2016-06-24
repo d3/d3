@@ -1221,13 +1221,25 @@ d3.selectAll(".orange").transition(t)
     .style("fill", "orange");
 ```
 
-Transitions created this way inherit timing from the closest ancestor element, and thus are synchronized even when the referenced *transition* has variable timing such as a staggered delay. This method replaces the deeply magical behavior of *transition*.each in 3.x; in 4.0, [*transition*.each](https://github.com/d3/d3-transition#transition_each) is now identical to [*selection*.each](https://github.com/d3/d3-selection#selection_each). Use the new [*transition*.on](https://github.com/d3/d3-transition#transition_on) method to listen to transition events.
+Transitions created this way inherit timing from the closest ancestor element, and thus are synchronized even when the referenced *transition* has variable timing such as a staggered delay. This method replaces the deeply magical behavior of *transition*.each in 3.x; in 4.0, [*transition*.each](https://github.com/d3/d3-transition#transition_each) is identical to [*selection*.each](https://github.com/d3/d3-selection#selection_each). Use the new [*transition*.on](https://github.com/d3/d3-transition#transition_on) method to listen to transition events.
 
-change *transition*.transition semantics in regards to *transition*.delay.
+The behavior of [*transition*.transition](https://github.com/d3/d3-transition#transition_transition), which creates a following transition, has changed in regards to [*transition*.delay](https://github.com/d3/d3-transition#transition_delay). The specified delay is now relative to the previous transition in the chain, rather than the first transition in the chain. This makes it much easier to insert interstitial pauses. For example:
 
-changed *transition*.ease to always take an easing function, not a name. see d3-ease.
+```js
+d3.selectAll(".apple")
+  .transition() // First fade to green.
+    .style("fill", "green")
+  .transition() // Then red.
+    .style("fill", "red")
+  .transition() // Wait one second. Then brown, and remove.
+    .delay(1000)
+    .style("fill", "brown")
+    .remove();
+```
 
-transitions are now frozen in the background! see d3-timer. note also d3.timeout, d3.interval.
+The [*transition*.ease](https://github.com/d3/d3-transition#transition_ease) method now always takes an [easing function](#easings-d3-ease), not a string.
+
+transitions are now frozen in the background! better behavior for *selection*.interrupt. see d3-timer. note also d3.timeout, d3.interval.
 
 functions passed to transition methods take the same standard arguments as selections.
 *transition*.attrTween gets standard arguments (not current attribute value).
