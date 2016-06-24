@@ -881,7 +881,7 @@ selection.on("mousedown touchstart", function() {
 });
 ```
 
-The arguments passed to callback functions has changed slightly in 4.0 to be more consistent. The standard arguments are the element’s datum (*d*), the element’s index (*i*), and the element’s group (*nodes*), with *this* as the element. The slight exception to this convention is *selection*data, which is evaluated for each group rather than each element; it is passed the group’s parent datum (*d*), the group index (*i*), and the selection’s parents (*parents*), with *this* as the group’s parent.
+The arguments passed to callback functions has changed slightly in 4.0 to be more consistent. The standard arguments are the element’s datum (*d*), the element’s index (*i*), and the element’s group (*nodes*), with *this* as the element. The slight exception to this convention is *selection*.data, which is evaluated for each group rather than each element; it is passed the group’s parent datum (*d*), the group index (*i*), and the selection’s parents (*parents*), with *this* as the group’s parent.
 
 The new [d3.local](https://github.com/d3/d3-selection#local-variables) provides a mechanism for defining [local variables](http://bl.ocks.org/mbostock/e1192fe405703d8321a5187350910e08): state that is bound to DOM elements, and available to any descendant element. This can be a convenient alternative to using [*selection*.each](https://github.com/d3/d3-selection#selection_each) or storing local state in data.
 
@@ -1207,7 +1207,7 @@ The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com
 
 ## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
-As described in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488) the [*selection*.transition](https://github.com/d3/d3-transition#selection_transition) method now takes an optional *transition* instance which can be used to synchronize a new transition with an existing transition. For example:
+The [*selection*.transition](https://github.com/d3/d3-transition#selection_transition) method now takes an optional *transition* instance which can be used to synchronize a new transition with an existing transition. (This change is discussed further in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488)) For example:
 
 ```js
 var t = d3.transition()
@@ -1223,7 +1223,7 @@ d3.selectAll(".orange").transition(t)
 
 Transitions created this way inherit timing from the closest ancestor element, and thus are synchronized even when the referenced *transition* has variable timing such as a staggered delay. This method replaces the deeply magical behavior of *transition*.each in 3.x; in 4.0, [*transition*.each](https://github.com/d3/d3-transition#transition_each) is identical to [*selection*.each](https://github.com/d3/d3-selection#selection_each). Use the new [*transition*.on](https://github.com/d3/d3-transition#transition_on) method to listen to transition events.
 
-The behavior of [*transition*.transition](https://github.com/d3/d3-transition#transition_transition), which creates a following transition, has changed in regards to [*transition*.delay](https://github.com/d3/d3-transition#transition_delay). The specified delay is now relative to the previous transition in the chain, rather than the first transition in the chain. This makes it much easier to insert interstitial pauses. For example:
+The meaning of [*transition*.delay](https://github.com/d3/d3-transition#transition_delay) has changed for chained transitions created by [*transition*.transition](https://github.com/d3/d3-transition#transition_transition). The specified delay is now relative to the *previous* transition in the chain, rather than the *first* transition in the chain; this makes it easier to insert interstitial pauses. For example:
 
 ```js
 d3.selectAll(".apple")
@@ -1237,29 +1237,34 @@ d3.selectAll(".apple")
     .remove();
 ```
 
-The [*transition*.ease](https://github.com/d3/d3-transition#transition_ease) method now always takes an [easing function](#easings-d3-ease), not a string.
+Time is now frozen in the background; see [d3-timer](#timers-d3-timer) for more information. While it was previously the case that transitions did not run in the background, now they pick up where they left off when the page returns to the foreground. This avoids page hangs by not scheduling an unbounded number of transitions in the background. If you want to schedule an infinitely-repeating transition, use transition events, or use [d3.timeout](https://github.com/d3/d3-timer#timeout) and [d3.interval](https://github.com/d3/d3-timer#interval) in place of [setTimeout](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setTimeout) and [setInterval](https://developer.mozilla.org/en-US/docs/Web/API/WindowTimers/setInterval).
 
-transitions are now frozen in the background! better behavior for *selection*.interrupt. see d3-timer. note also d3.timeout, d3.interval.
+The [*selection*.interrupt](https://github.com/d3/d3-transition#selection_interrupt) method now cancels all scheduled transitions on the selected elements, in addition to interrupting any active transition. When transitions are interrupted, any resources associated with the transition are now released immediately, rather than waiting until the transition starts, improving performance. (See also [*timer*.stop](https://github.com/d3/d3-timer#timer_stop).) The new [d3.interrupt](https://github.com/d3/d3-transition#interrupt) method is an alternative to [*selection*.interrupt](https://github.com/d3/d3-transition#selection_interrupt) for quickly interrupting a single node.
 
-functions passed to transition methods take the same standard arguments as selections.
-*transition*.attrTween gets standard arguments (not current attribute value).
-*transition*.styleTween gets standard arguments (not current style value).
-can call *transition*.{tween,attrTween,styleTween} in getter mode.
+The new [d3.active](https://github.com/d3/d3-transition#active) method allows you to select the currently-active transition on a given *node*, if any. This is useful for modifying in-progress transitions and for scheduling infinitely-repeating transitions. For example, this transition continuously oscillates between red and blue:
 
-optimize transitions to re-use tweens and interpolators to improve performance!
-uses optimized interpolator rather than d3.interpolate.
+```js
+d3.select("circle")
+  .transition()
+    .on("start", function repeat() {
+        d3.active(this)
+            .style("fill", "red")
+          .transition()
+            .style("fill", "blue")
+          .transition()
+            .on("start", repeat);
+      });
+```
 
-fix *transition*.remove if multiple transition names are in use.
+The [life cycle of transitions](https://github.com/d3/d3-transition#the-life-of-a-transition) is now more formally defined and enforced. For example, attempting to change the duration of a running transition now throws an error rather than silently failing. The [*transition*.remove](https://github.com/d3/d3-transition#transition_remove) method has been fixed if multiple transition names are in use: the element is only removed if it has no scheduled transitions, regardless of name.
 
-new d3.active for chaining transitions / modifying in-progress transitions.
+The [*transition*.ease](https://github.com/d3/d3-transition#transition_ease) method now always takes an [easing function](#easings-d3-ease), not a string. When a transition ends, the tweens are invoked one last time with *t* equal to exactly 1, regardless of the associated easing function.
 
-strict state machine to enforce when transitions can be modified; more robust.
-enforces *t* = 1 on end, regardless of easing.
+As with [selections](#selections-d3-selection) in 4.0, all transition callback functions now receive the standard arguments: the element’s datum (*d*), the element’s index (*i*), and the element’s group (*nodes*), with *this* as the element. This notably affects [*transition*.attrTween](https://github.com/d3/d3-transition#transition_attrTween) and [*transition*.styleTween](https://github.com/d3/d3-transition#transition_styleTween), which no longer pass the *tween* function the current attribute or style value as the third argument. The *transition*.attrTween and *transition*.styleTween methods can now be called in getter modes for debugging or to share tween definitions between transitions.
 
-for rewriting resuable components that support transitions:
-new *transition*.selection.
-new d3.interrupt.
-A new [*transition*.merge](https://github.com/d3/d3-transition#transition_merge) method.
+Homogenous transitions have been significantly optimized! If all elements in a transition share the same tween, interpolator, or event listeners, these parameters are now shared across the transition rather than separately instantiated for each element. In addition, transitions now use an optimized default interpolator in place of [d3.interpolate](https://github.com/d3/d3-interpolate#interpolate) for [*transition*.attr](https://github.com/d3/d3-transition#transition_attr) and [*transition*.style](https://github.com/d3/d3-transition#transition_style). Transitions now smartly interpolate both [CSS](https://github.com/d3/d3-interpolate#interpolateTransformCss) and [SVG](https://github.com/d3/d3-interpolate#interpolateTransformSvg) transforms.
+
+For resuable components that support transitions, such as [axes](#axes-d3-axis), a new [*transition*.selection](https://github.com/d3/d3-transition#transition_selection) method returns the [selection](#selections-d3-selection) that corresponds to a given transition. There is also a new [*transition*.merge](https://github.com/d3/d3-transition#transition_merge) method that is equivalent to [*selection*.merge](https://github.com/d3/d3-selection#selection_merge).
 
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/blob/master/README.md)
 
