@@ -1231,7 +1231,7 @@ d3.timeout(function() {
 
 This improvement extends to [d3-transition](#transitions-d3-transition): now when a transition is interrupted, its resources are immediately freed rather than having to wait for transition to start.
 
-4.0 also introduces a new [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) method for restarting timers, for replacing the callback of a running timer, or for changing its delay or reference time. Unlike *timer*.stop followed by [d3.timer](https://github.com/d3/d3-timer#timer), *timer*.restart maintains the invocation priority of an existing timer: it guarantees that the order of invocation of active timers remains the same.
+4.0 also introduces a new [*timer*.restart](https://github.com/d3/d3-timer#timer_restart) method for restarting timers, for replacing the callback of a running timer, or for changing its delay or reference time. Unlike *timer*.stop followed by [d3.timer](https://github.com/d3/d3-timer#timer), *timer*.restart maintains the invocation priority of an existing timer: it guarantees that the order of invocation of active timers remains the same. The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush).
 
 Some usage patterns in D3 3.x could cause the browser to hang when a background page returned to the foreground. For example, the following code schedules a transition every second:
 
@@ -1250,8 +1250,6 @@ d3.interval(function() {
 ```
 
 By freezing time in the background, timers are effectively “unaware” of being backgrounded. It’s like nothing happened! 4.0 also now uses high-precision time ([performance.now](https://developer.mozilla.org/en-US/docs/Web/API/Performance/now)) where available; the current time is available as [d3.now](https://github.com/d3/d3-timer#now).
-
-The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com/d3/d3-timer#timerFlush).
 
 ## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
