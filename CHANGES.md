@@ -900,7 +900,7 @@ Pursuant to the great namespace flattening:
 * d3.svg.arc ↦ [d3.arc](https://github.com/d3/d3-shape#arcs)
 * d3.layout.pie ↦ [d3.pie](https://github.com/d3/d3-shape#pies)
 
-Shapes are no longer limited to SVG; they can now render to Canvas! Each shape generator supports an optional *context*: if you pass it a [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D), you can generate a canvas path to be filled or stroked. For example, a [canvas pie chart](https://bl.ocks.org/mbostock/8878e7fd82034f1d63cf) might use an arc generator:
+Shapes are no longer limited to SVG; they can now render to Canvas! Shape generators now support an optional *context*: given a [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D), you can render a shape as a canvas path to be filled or stroked. For example, a [canvas pie chart](https://bl.ocks.org/mbostock/8878e7fd82034f1d63cf) might use an arc generator:
 
 ```js
 var arc = d3.arc()
@@ -917,9 +917,9 @@ arc(d);
 context.fill();
 ```
 
-See [*line*.context](https://github.com/d3/d3-shape#line_context), [*area*.context](https://github.com/d3/d3-shape#area_context) and [*arc*.context](https://github.com/d3/d3-shape#arc_context) for more. Under the hood, this uses [d3-path](#paths-d3-path) to serialize canvas path methods to an SVG path data string when the context is null. Thus, shapes are optimized for rendering to canvas.
+See [*line*.context](https://github.com/d3/d3-shape#line_context), [*area*.context](https://github.com/d3/d3-shape#area_context) and [*arc*.context](https://github.com/d3/d3-shape#arc_context) for more. Under the hood, shapes use [d3-path](#paths-d3-path) to serialize canvas path methods to SVG path data when the context is null; thus, shapes are optimized for rendering to canvas.
 
-4.0 introduces a new API for specifying how line and area shapes render curves between data points. The *line*.interpolate and *area*.interpolate methods have been replaced with [*line*.curve](https://github.com/d3/d3-shape#line_curve) and [*area*.curve](https://github.com/d3/d3-shape#area_curve). Curves are now implemented using the [curve interface](https://github.com/d3/d3-shape#custom-curves) rather than as a function that returns an SVG path data string; this allows curves to render to either SVG or Canvas. In addition, *line*.curve and *area*.curve now take a function which instantiates a curve for a given *context*, rather than a string. The full list of equivalents:
+4.0 introduces a new curve API for specifying how line and area shapes interpolate between data points. The *line*.interpolate and *area*.interpolate methods have been replaced with [*line*.curve](https://github.com/d3/d3-shape#line_curve) and [*area*.curve](https://github.com/d3/d3-shape#area_curve). Curves are implemented using the [curve interface](https://github.com/d3/d3-shape#custom-curves) rather than as a function that returns an SVG path data string; this allows curves to render to either SVG or Canvas. In addition, *line*.curve and *area*.curve now take a function which instantiates a curve for a given *context*, rather than a string. The full list of equivalents:
 
 * linear ↦ [d3.curveLinear](https://github.com/d3/d3-shape#curveLinear)
 * linear-closed ↦ [d3.curveLinearClosed](https://github.com/d3/d3-shape#curveLinearClosed)
@@ -929,28 +929,26 @@ See [*line*.context](https://github.com/d3/d3-shape#line_context), [*area*.conte
 * basis ↦ [d3.curveBasis](https://github.com/d3/d3-shape#curveBasis)
 * basis-open ↦ [d3.curveBasisOpen](https://github.com/d3/d3-shape#curveBasisOpen)
 * basis-closed ↦ [d3.curveBasisClosed](https://github.com/d3/d3-shape#curveBasisClosed)
-* bundle ↦ [d3.curveBundle, *bundle*.beta](https://github.com/d3/d3-shape#beta)
+* bundle ↦ [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle)
 * cardinal ↦ [d3.curveCardinal](https://github.com/d3/d3-shape#curveCardinal)
 * cardinal-open ↦ [d3.curveCardinalOpen](https://github.com/d3/d3-shape#curveCardinalOpen)
 * cardinal-closed ↦ [d3.curveCardinalClosed](https://github.com/d3/d3-shape#curveCardinalClosed)
 * monotone ↦ [d3.curveMonotoneX](https://github.com/d3/d3-shape#curveMonotoneX)
 
-But that’s not all!
+But that’s not all! 4.0 now provides parameterized Catmull–Rom splines as proposed by [Yuksel *et al.*](http://www.cemyuksel.com/research/catmullrom_param/). These are available as [d3.curveCatmullRom](https://github.com/d3/d3-shape#curveCatmullRom), [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#curveCatmullRomClosed) and [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#curveCatmullRomOpen).
 
-* ADDED ↦ [d3.curveCatmullRom](https://github.com/d3/d3-shape#curveCatmullRom)
-* ADDED ↦ [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#curveCatmullRomClosed)
-* ADDED ↦ [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#curveCatmullRomOpen)
-* ADDED ↦ [d3.curveMonotoneY](https://github.com/d3/d3-shape#curveMonotoneY)
-* ADDED ↦ [d3.curveNatural](https://github.com/d3/d3-shape#curveNatural)
+Each curve type can define its own named parameters, replacing *line*.tension and *area*.tension. For example, Catmull–Rom splines are parameterized using [*catmullRom*.alpha](https://github.com/d3/d3-shape#curveCatmullRom_alpha) and defaults to 0.5, which corresponds to a centripetal spline that avoids self-intersections and overshoot. For a uniform Catmull–Rom spline instead:
 
-* default bundle β to 0.85
-* fixed interpretation of cardinal spline tension
-* fixed first and last segment of basis curve
-* fixed first and last segment of cardinal curve
-* *catmullRom*.alpha implements Yuksel et al.’s parameterization
-* defaults to centripetal Catmull–Rom
-* fixed monotone curve implementation
-* no more funky *interpolate*.reverse; curves can define different behavior for topline vs. baseline
+```js
+var line = d3.line()
+    .curve(d3.curveCatmullRom.alpha(0.5));
+```
+
+4.0 fixes the interpretation of the cardinal spline *tension* parameter, which is now specified as [*cardinal*.tension](https://github.com/d3/d3-shape#curveCardinal_tension) and defaults to zero for a uniform Catmull–Rom spline. A tension of one produces a linear curve. The first and last segments of basis and cardinal curves were implemented incorrectly in previous versions of D3; this has been fixed!
+
+4.0 fixes numerous bugs in the monotone curve implementation, and introduces [d3.curveMonotoneY](https://github.com/d3/d3-shape#curveMonotoneY); this is like d3.curveMonotoneX, except it requires that the input points are monotone in *y* rather than *x*, such as for a vertically-oriented line chart. The new [d3.curveNatural](https://github.com/d3/d3-shape#curveNatural) produces a [natural cubic spline](http://mathworld.wolfram.com/CubicSpline.html). The default [β](https://github.com/d3/d3-shape#bundle_beta) for [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle) is now 0.85, rather than 0.7, matching the values used by [Holten](https://www.win.tue.nl/vis1/home/dholten/papers/bundles_infovis.pdf).
+
+no more funky *interpolate*.reverse; curves can define different behavior for topline vs. baseline
 
 new derived shapes: e.g., *area*.lineY0 for the baseline, *area*.lineY1 for the topline.
 
