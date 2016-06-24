@@ -898,9 +898,12 @@ Pursuant to the great namespace flattening:
 * d3.svg.area ↦ [d3.area](https://github.com/d3/d3-shape#areas)
 * d3.svg.area.radial ↦ [d3.radialArea](https://github.com/d3/d3-shape#radialArea)
 * d3.svg.arc ↦ [d3.arc](https://github.com/d3/d3-shape#arcs)
-* d3.layout.pie ↦ [d3.pie](https://github.com/d3/d3-shape#pies)
 * d3.svg.symbol ↦ [d3.symbol](https://github.com/d3/d3-shape#symbols)
 * d3.svg.symbolTypes ↦ [d3.symbolTypes](https://github.com/d3/d3-shape#symbolTypes)
+* d3.layout.pie ↦ [d3.pie](https://github.com/d3/d3-shape#pies)
+* d3.layout.stack ↦ [d3.stack](https://github.com/d3/d3-shape#stacks)
+* d3.svg.diagonal ↦ REMOVED (see [d3/d3-shape#27](https://github.com/d3/d3-shape/issues/27))
+* d3.svg.diagonal.radial ↦ REMOVED
 
 Shapes are no longer limited to SVG; they can now render to Canvas! Shape generators now support an optional *context*: given a [CanvasRenderingContext2D](https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D), you can render a shape as a canvas path to be filled or stroked. For example, a [canvas pie chart](https://bl.ocks.org/mbostock/8878e7fd82034f1d63cf) might use an arc generator:
 
@@ -952,7 +955,7 @@ var line = d3.line()
 
 4.0 fixes the interpretation of the cardinal spline *tension* parameter, which is now specified as [*cardinal*.tension](https://github.com/d3/d3-shape#curveCardinal_tension) and defaults to zero for a uniform Catmull–Rom spline; a tension of one produces a linear curve. The first and last segments of basis and cardinal curves have also been fixed! The undocumented *interpolate*.reverse field has been removed. Curves can define different behavior for toplines and baselines by counting the sequence of [*curve*.lineStart](https://github.com/d3/d3-shape#curve_lineStart) within [*curve*.areaStart](https://github.com/d3/d3-shape#curve_areaStart). See the [d3.curveStep implementation](https://github.com/d3/d3-shape/blob/master/src/curve/step.js) for an example.
 
-4.0 fixes numerous bugs in the monotone curve implementation, and introduces [d3.curveMonotoneY](https://github.com/d3/d3-shape#curveMonotoneY); this is like d3.curveMonotoneX, except it requires that the input points are monotone in *y* rather than *x*, such as for a vertically-oriented line chart. The new [d3.curveNatural](https://github.com/d3/d3-shape#curveNatural) produces a [natural cubic spline](http://mathworld.wolfram.com/CubicSpline.html). The default [β](https://github.com/d3/d3-shape#bundle_beta) for [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle) is now 0.85, rather than 0.7, matching the values used by [Holten](https://www.win.tue.nl/vis1/home/dholten/papers/bundles_infovis.pdf).
+4.0 fixes numerous bugs in the monotone curve implementation, and introduces [d3.curveMonotoneY](https://github.com/d3/d3-shape#curveMonotoneY); this is like d3.curveMonotoneX, except it requires that the input points are monotone in *y* rather than *x*, such as for a vertically-oriented line chart. The new [d3.curveNatural](https://github.com/d3/d3-shape#curveNatural) produces a [natural cubic spline](http://mathworld.wolfram.com/CubicSpline.html). The default [β](https://github.com/d3/d3-shape#bundle_beta) for [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle) is now 0.85, rather than 0.7, matching the values used by [Holten](https://www.win.tue.nl/vis1/home/dholten/papers/bundles_infovis.pdf). 4.0 also has a more robust implementation of arc padding; see [*arc*.padAngle](https://github.com/d3/d3-shape#arc_padAngle) and [*arc*.padRadius](https://github.com/d3/d3-shape#arc_padRadius).
 
 4.0 introduces a new symbol type API. Symbol types are passed to [*symbol*.type](https://github.com/d3/d3-shape#symbol_type) in place of strings. The equivalents are:
 
@@ -965,22 +968,44 @@ var line = d3.line()
 * ADDED ↦ [d3.symbolStar](https://github.com/d3/d3-shape#symbolStar)
 * ADDED ↦ [d3.symbolWye](https://github.com/d3/d3-shape#symbolWye)
 
-The full set of symbol types:
+The full set of symbol types is now:
 
 <a href="#symbolCircle"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/circle.png" width="100" height="100"></a><a href="#symbolCross"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/cross.png" width="100" height="100"></a><a href="#symbolDiamond"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/diamond.png" width="100" height="100"></a><a href="#symbolSquare"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/square.png" width="100" height="100"></a><a href="#symbolStar"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/star.png" width="100" height="100"></a><a href="#symbolTriangle"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/triangle.png" width="100" height="100"><a href="#symbolWye"><img src="https://raw.githubusercontent.com/d3/d3-shape/master/img/wye.png" width="100" height="100"></a>
 
-new stack API!
+Lastly, 4.0 overhauls the stack layout API, replacing d3.layout.stack with [d3.stack](https://github.com/d3/d3-shape#stacks). The stack generator now longer needs an *x*-accessor. In addition, the API has been simplified: the *stack* generator now accepts tabular input, such as this array of objects:
 
-* d3.layout.stack ↦ d3.stack
-* no more x-accessor
-* no more weird *stack*.out
+```js
+var data = [
+  {month: new Date(2015, 0, 1), apples: 3840, bananas: 1920, cherries: 960, dates: 400},
+  {month: new Date(2015, 1, 1), apples: 1600, bananas: 1440, cherries: 960, dates: 400},
+  {month: new Date(2015, 2, 1), apples:  640, bananas:  960, cherries: 640, dates: 400},
+  {month: new Date(2015, 3, 1), apples:  320, bananas:  480, cherries: 640, dates: 400}
+];
+```
 
-more robust arc padding?
+To generate the stack layout, first define a stack generator, and then apply it to the data:
 
-removed diagonal shapes
+```js
+var stack = d3.stack()
+    .keys(["apples", "bananas", "cherries", "dates"])
+    .order(d3.stackOrderNone)
+    .offset(d3.stackOffsetNone);
 
-* d3.svg.diagonal ↦ REMOVED
-* d3.svg.diagonal.radial ↦ REMOVED
+var series = stack(data);
+```
+
+The resulting array has one element per *series*. Each series has one point per month, and each point has a lower and upper value defining the baseline and topline:
+
+```js
+[
+  [[   0, 3840], [   0, 1600], [   0,  640], [   0,  320]], // apples
+  [[3840, 5760], [1600, 3040], [ 640, 1600], [ 320,  800]], // bananas
+  [[5760, 6720], [3040, 4000], [1600, 2240], [ 800, 1440]], // cherries
+  [[6720, 7120], [4000, 4400], [2240, 2640], [1440, 1840]], // dates
+]
+```
+
+Each series in then typically passed to an [area generator](https://github.com/d3/d3-shape#areas) to render an area chart, or used to construct rectangles for a bar chart. Stack generators no longer modify the input data, so *stack*.out has been removed.
 
 For more, see [Introducing d3-shape](https://medium.com/@mbostock/introducing-d3-shape-73f8367e6d12).
 
