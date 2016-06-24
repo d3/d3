@@ -1,8 +1,6 @@
 # Changes in D3 4.0
 
-D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles.
-
-The default bundle of D3 4.0 conveniently aggregates about thirty of these microlibraries.
+D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles. The default bundle of D3 4.0 conveniently aggregates about thirty of these microlibraries.
 
 ```html
 <script src="https://d3js.org/d3.v4.0.0-alpha.50.min.js"></script>
@@ -15,7 +13,7 @@ As before, you can load optional plugins on top of the default bundle, such as [
 <script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
 ```
 
-4.0 no longer requires you to use the default bundle! Custom bundles are great for applications that use a subset of D3’s features; for example, a React chart library might use D3 for scales and shapes, and React to manipulate the DOM. Or if you’re just using [d3-selection](https://github.com/d3/d3-selection), load it directly. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
+You are not required to use the default bundle! Custom optimized bundles are great for applications that use a subset of D3’s features; for example, a React chart library might use D3 for scales and shapes, and React to manipulate the DOM. Or if you’re just using [d3-selection](https://github.com/d3/d3-selection), load it directly. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
 
 ```html
 <script src="https://d3js.org/d3-selection.v0.9.min.js"></script>
