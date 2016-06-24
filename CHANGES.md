@@ -1,6 +1,6 @@
 # Changes in D3 4.0
 
-D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles. The default bundle of D3 4.0 conveniently aggregates about thirty of these microlibraries.
+D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles. The default bundle of D3 4.0 combines about thirty of these microlibraries.
 
 ```html
 <script src="https://d3js.org/d3.v4.0.0-alpha.50.min.js"></script>
