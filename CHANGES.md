@@ -13,7 +13,7 @@ As before, you can load optional plugins on top of the default bundle, such as [
 <script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
 ```
 
-You are not required to use the default bundle! If you’re just using [d3-selection](https://github.com/d3/d3-selection), load it directly. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
+You are not required to use the default bundle! If you’re just using [d3-selection](https://github.com/d3/d3-selection), use it as a standalone library. You can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
 
 ```html
 <script src="https://d3js.org/d3-selection.v0.9.min.js"></script>
