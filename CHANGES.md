@@ -832,7 +832,7 @@ circle.enter().append("circle") // ENTER
     .style("stroke", "black");
 ```
 
-This change is discussed further in [What Makes Software Good](https://medium.com/@mbostock/what-makes-software-good-943557f8a488#.4ukdnxqiz).
+This change is discussed further in [What Makes Software Good](https://medium.com/@mbostock/what-makes-software-good-943557f8a488).
 
 In 3.x, the [*selection*.enter](https://github.com/d3/d3-selection#selection_enter) and [*selection*.exit](https://github.com/d3/d3-selection#selection_exit) methods were undefined until you called *selection*.data, resulting in a TypeError if you attempted to access them. In 4.0, now they simply return the empty selection if the selection has not been joined to data.
 
@@ -1207,30 +1207,35 @@ The d3.timer.flush method has been renamed to [d3.timerFlush](https://github.com
 
 ## [Transitions (d3-transition)](https://github.com/d3/d3-transition/blob/master/README.md)
 
-TODO
+As described in [What Makes Software Good?](https://medium.com/@mbostock/what-makes-software-good-943557f8a488)…
+new *selection*.transition(*transition*); searches ancestors to inherit timing parameters.
+new d3.active for chaining transitions / modifying in-progress transitions.
+change *transition*.transition semantics in regards to *transition*.delay.
 
-Like [selections](#selections-d3-selection), transitions are now immutable.
-The new [*transition*.merge](https://github.com/d3/d3-transition#transition_merge) method…
+transitions are now frozen in the background! see d3-timer. note also d3.timeout, d3.interval.
 
-* *transition*.each ↦ *transition*.on
-* *transition*.each is now the same as *selection*.each
-* new d3.active for chaining transitions / modifying in-progress transitions
-* new *selection*.transition(*transition*); searches ancestors
-* new d3.interrupt
-* change *transition*.transition semantics in regards to *transition*.delay
-* strict state machine to enforce when transitions can be modified; more robust
-* enforces *t* = 1 on end
-* functions passed to transition methods take the same standard arguments as selections
-* optimize transitions to re-use tweens and interpolators to improve performance!
-* *transition*.attrTween gets standard arguments (not current attribute value)
-* *transition*.styleTween gets standard arguments (not current style value)
-* call *transition*.{tween,attrTween,styleTween} in getter mode
-* uses optimized interpolator rather than d3.interpolate
-* fix *transition*.remove if multiple transition names are in use
-* new *transition*.selection
-* changed *transition*.ease to always take an easing function, not a name
-* see also d3-timer, d3-ease, d3-interpolate
-* in particular note that transitions are now frozen in the background! and there’s d3.timeout, d3.interval
+*transition*.each ↦ *transition*.on.
+*transition*.each is now the same as *selection*.each.
+
+strict state machine to enforce when transitions can be modified; more robust.
+enforces *t* = 1 on end, regardless of easing.
+
+functions passed to transition methods take the same standard arguments as selections.
+*transition*.attrTween gets standard arguments (not current attribute value).
+*transition*.styleTween gets standard arguments (not current style value).
+can call *transition*.{tween,attrTween,styleTween} in getter mode.
+
+optimize transitions to re-use tweens and interpolators to improve performance!
+uses optimized interpolator rather than d3.interpolate.
+
+fix *transition*.remove if multiple transition names are in use.
+
+changed *transition*.ease to always take an easing function, not a name. see d3-ease.
+
+for rewriting resuable components that support transitions:
+new *transition*.selection.
+new d3.interrupt.
+A new [*transition*.merge](https://github.com/d3/d3-transition#transition_merge) method.
 
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/blob/master/README.md)
 
