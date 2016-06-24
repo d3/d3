@@ -26,7 +26,7 @@ For the minified version:
 <script src="https://d3js.org/d3.v4.0.0-alpha.50.min.js"></script>
 ```
 
-You can also load the D3 microlibraries separately. For example, [d3-color](https://github.com/d3/d3-color):
+You can also use the standalone D3 microlibraries. For example, [d3-color](https://github.com/d3/d3-color):
 
 ```html
 <script src="https://d3js.org/d3-color.v1.min.js"></script>
