@@ -368,18 +368,39 @@ Format numbers for human consumption.
 
 Geographic projections, shapes and math.
 
+### [Spherical Math](https://github.com/d3/d3-geo#spherical-math)
+
 * [d3.geoArea](https://github.com/d3/d3-geo#geoArea) -
 * [d3.geoBounds](https://github.com/d3/d3-geo#geoBounds) -
 * [d3.geoCentroid](https://github.com/d3/d3-geo#geoCentroid) -
-* [d3.geoCircle](https://github.com/d3/d3-geo#geoCircle) -
-* [d3.geoClipExtent](https://github.com/d3/d3-geo#geoClipExtent) -
 * [d3.geoDistance](https://github.com/d3/d3-geo#geoDistance) -
-* [d3.geoGraticule](https://github.com/d3/d3-geo#geoGraticule) -
-* [d3.geoInterpolate](https://github.com/d3/d3-geo#geoInterpolate) -
 * [d3.geoLength](https://github.com/d3/d3-geo#geoLength) -
+* [d3.geoInterpolate](https://github.com/d3/d3-geo#geoInterpolate) -
 * [d3.geoRotation](https://github.com/d3/d3-geo#geoRotation) -
-* [d3.geoStream](https://github.com/d3/d3-geo#geoStream) -
-* [d3.geoTransform](https://github.com/d3/d3-geo#geoTransform) -
+* [*rotation*](https://github.com/d3/d3-geo#_rotation) -
+* [*rotation*.invert](https://github.com/d3/d3-geo#rotation_invert) -
+
+### [Spherical Shapes](https://github.com/d3/d3-geo#spherical-shapes)
+
+* [d3.geoCircle](https://github.com/d3/d3-geo#geoCircle) -
+* *circle* -
+* *circle*.center -
+* *circle*.radis -
+* *circle*.precision -
+* [d3.geoGraticule](https://github.com/d3/d3-geo#geoGraticule) -
+* *graticule* -
+* *graticule*.lines -
+* *graticule*.outline -
+* *graticule*.extent -
+* *graticule*.extentMajor -
+* *graticule*.extentMinor -
+* *graticule*.step -
+* *graticule*.stepMajor -
+* *graticule*.stepMinor -
+* *graticule*.precision -
+
+### [Projections](https://github.com/d3/d3-geo#projections)
+
 * [d3.geoPath](https://github.com/d3/d3-geo#geoPath) -
 * [*path*](https://github.com/d3/d3-geo#_path) -
 * [*path*.area](https://github.com/d3/d3-geo#path_area) -
@@ -388,10 +409,8 @@ Geographic projections, shapes and math.
 * [*path*.projection](https://github.com/d3/d3-geo#path_projection) -
 * [*path*.context](https://github.com/d3/d3-geo#path_context) -
 * [*path*.pointRadius](https://github.com/d3/d3-geo#path_pointRadius) -
-
-### [Geographic Projections](https://github.com/d3/d3-geo#geographic-projections)
-
 * [d3.geoProjection](https://github.com/d3/d3-geo#geoProjection) -
+* [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator) -
 * [*projection*](https://github.com/d3/d3-geo#_projection) -
 * [*projection*.invert](https://github.com/d3/d3-geo#projection_invert) -
 * [*projection*.stream](https://github.com/d3/d3-geo#projection_stream) -
@@ -415,7 +434,12 @@ Geographic projections, shapes and math.
 * [d3.geoOrthographic](https://github.com/d3/d3-geo#geoOrthographic) -
 * [d3.geoStereographic](https://github.com/d3/d3-geo#geoStereographic) -
 * [d3.geoTransverseMercator](https://github.com/d3/d3-geo#geoTransverseMercator) -
-* [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator) -
+* [*conic*.parallels](https://github.com/d3/d3-geo#conic_parallels) -
+* [d3.geoClipExtent](https://github.com/d3/d3-geo#geoClipExtent) -
+* [*extent*.extent](https://github.com/d3/d3-geo#extent_extent) -
+* [*extent*.stream](https://github.com/d3/d3-geo#extent_stream) -
+* [d3.geoTransform](https://github.com/d3/d3-geo#geoTransform) -
+* [d3.geoStream](https://github.com/d3/d3-geo#geoStream) -
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy)
 
