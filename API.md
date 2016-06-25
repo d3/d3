@@ -517,8 +517,8 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateTransformSvg](https://github.com/d3/d3-interpolate#interpolateTransformSvg) - interpolate 2D SVG transforms.
 * [d3.interpolateZoom](https://github.com/d3/d3-interpolate#interpolateZoom) - zoom and pan between two views.
 * [d3.interpolateRgb](https://github.com/d3/d3-interpolate#interpolateRgb) - interpolate RGB colors.
-* [d3.interpolateRgbBasis](https://github.com/d3/d3-interpolate#interpolateRgbBasis) -
-* [d3.interpolateRgbBasisClosed](https://github.com/d3/d3-interpolate#interpolateRgbBasisClosed) -
+* [d3.interpolateRgbBasis](https://github.com/d3/d3-interpolate#interpolateRgbBasis) - generate a B-spline through a set of colors.
+* [d3.interpolateRgbBasisClosed](https://github.com/d3/d3-interpolate#interpolateRgbBasisClosed) - generate a closed B-spline through a set of colors.
 * [d3.interpolateHsl](https://github.com/d3/d3-interpolate#interpolateHsl) - interpolate HSL colors.
 * [d3.interpolateHslLong](https://github.com/d3/d3-interpolate#interpolateHslLong) - interpolate HSL colors, the long way.
 * [d3.interpolateLab](https://github.com/d3/d3-interpolate#interpolateLab) - interpolate Lab colors.
@@ -527,9 +527,9 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate#interpolateCubehelix) - interpolate Cubehelix colors.
 * [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
 * [*interpolate*.gamma](https://github.com/d3/d3-interpolate#interpolate_gamma) - apply gamma correction during interpolation.
-* [d3.interpolateBasis](https://github.com/d3/d3-interpolate#interpolateBasis) -
-* [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate#interpolateBasisClosed) -
-* [d3.quantize](https://github.com/d3/d3-interpolate#quantize) -
+* [d3.interpolateBasis](https://github.com/d3/d3-interpolate#interpolateBasis) - generate a B-spline through a set of values.
+* [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate#interpolateBasisClosed) - generate a closed B-spline through a set of values.
+* [d3.quantize](https://github.com/d3/d3-interpolate#quantize) - generate uniformly-spaced samples from an interpolator.
 
 ## [Paths (d3-path)](https://github.com/d3/d3-path)
 
