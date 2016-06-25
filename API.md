@@ -370,76 +370,76 @@ Geographic projections, shapes and math.
 
 ### [Spherical Math](https://github.com/d3/d3-geo#spherical-math)
 
-* [d3.geoArea](https://github.com/d3/d3-geo#geoArea) -
-* [d3.geoBounds](https://github.com/d3/d3-geo#geoBounds) -
-* [d3.geoCentroid](https://github.com/d3/d3-geo#geoCentroid) -
-* [d3.geoDistance](https://github.com/d3/d3-geo#geoDistance) -
-* [d3.geoLength](https://github.com/d3/d3-geo#geoLength) -
-* [d3.geoInterpolate](https://github.com/d3/d3-geo#geoInterpolate) -
-* [d3.geoRotation](https://github.com/d3/d3-geo#geoRotation) -
-* [*rotation*](https://github.com/d3/d3-geo#_rotation) -
-* [*rotation*.invert](https://github.com/d3/d3-geo#rotation_invert) -
+* [d3.geoArea](https://github.com/d3/d3-geo#geoArea) - compute the spherical area of a given feature.
+* [d3.geoBounds](https://github.com/d3/d3-geo#geoBounds) - compute the latitude-longitude bounding box for a given feature.
+* [d3.geoCentroid](https://github.com/d3/d3-geo#geoCentroid) - compute the spherical centroid of a given feature.
+* [d3.geoDistance](https://github.com/d3/d3-geo#geoDistance) - compute the great-arc distance between two points.
+* [d3.geoLength](https://github.com/d3/d3-geo#geoLength) - compute the length of a line string or the perimeter of a polygon.
+* [d3.geoInterpolate](https://github.com/d3/d3-geo#geoInterpolate) - interpolate between two points along a great arc.
+* [d3.geoRotation](https://github.com/d3/d3-geo#geoRotation) - create a rotation function for the specified angles.
+* [*rotation*](https://github.com/d3/d3-geo#_rotation) - rotate the given point around the sphere.
+* [*rotation*.invert](https://github.com/d3/d3-geo#rotation_invert) - unrotate the given point around the sphere.
 
 ### [Spherical Shapes](https://github.com/d3/d3-geo#spherical-shapes)
 
-* [d3.geoCircle](https://github.com/d3/d3-geo#geoCircle) -
-* [*circle*](https://github.com/d3/d3-geo#_circle) -
-* [*circle*.center](https://github.com/d3/d3-geo#circle_center) -
-* [*circle*.radius](https://github.com/d3/d3-geo#circle_radius) -
-* [*circle*.precision](https://github.com/d3/d3-geo#circle_precision) -
-* [d3.geoGraticule](https://github.com/d3/d3-geo#geoGraticule) -
-* [*graticule*](https://github.com/d3/d3-geo#_graticule) -
-* [*graticule*.lines](https://github.com/d3/d3-geo#graticule_lines) -
-* [*graticule*.outline](https://github.com/d3/d3-geo#graticule_outline) -
-* [*graticule*.extent](https://github.com/d3/d3-geo#graticule_extent) -
-* [*graticule*.extentMajor](https://github.com/d3/d3-geo#graticule_extentMajor) -
-* [*graticule*.extentMinor](https://github.com/d3/d3-geo#graticule_extentMinor) -
-* [*graticule*.step](https://github.com/d3/d3-geo#graticule_step) -
-* [*graticule*.stepMajor](https://github.com/d3/d3-geo#graticule_stepMajor) -
-* [*graticule*.stepMinor](https://github.com/d3/d3-geo#graticule_stepMinor) -
-* [*graticule*.precision](https://github.com/d3/d3-geo#graticule_precision) -
+* [d3.geoCircle](https://github.com/d3/d3-geo#geoCircle) - create a circle generator.
+* [*circle*](https://github.com/d3/d3-geo#_circle) - generate a piecewise circle as a Polygon.
+* [*circle*.center](https://github.com/d3/d3-geo#circle_center) - specify the circle center in latitude and longitude.
+* [*circle*.radius](https://github.com/d3/d3-geo#circle_radius) - specify the angular radius in degrees.
+* [*circle*.precision](https://github.com/d3/d3-geo#circle_precision) - specify the precision of the piecewise circle.
+* [d3.geoGraticule](https://github.com/d3/d3-geo#geoGraticule) - create a graticule generator.
+* [*graticule*](https://github.com/d3/d3-geo#_graticule) - generate a MultiLineString of meridians and parallels.
+* [*graticule*.lines](https://github.com/d3/d3-geo#graticule_lines) - generate an array of LineStrings of meridians and parallels.
+* [*graticule*.outline](https://github.com/d3/d3-geo#graticule_outline) - generate a Polygon of the graticule’s extent.
+* [*graticule*.extent](https://github.com/d3/d3-geo#graticule_extent) - get or set the major & minor extents.
+* [*graticule*.extentMajor](https://github.com/d3/d3-geo#graticule_extentMajor) - get or set the major extent.
+* [*graticule*.extentMinor](https://github.com/d3/d3-geo#graticule_extentMinor) - get or set the minor extent.
+* [*graticule*.step](https://github.com/d3/d3-geo#graticule_step) - get or set the major & minor step intervals.
+* [*graticule*.stepMajor](https://github.com/d3/d3-geo#graticule_stepMajor) - get or set the major step intervals.
+* [*graticule*.stepMinor](https://github.com/d3/d3-geo#graticule_stepMinor) - get or set the minor step intervals.
+* [*graticule*.precision](https://github.com/d3/d3-geo#graticule_precision) - get or set the latitudinal precision.
 
 ### [Projections](https://github.com/d3/d3-geo#projections)
 
-* [d3.geoPath](https://github.com/d3/d3-geo#geoPath) -
-* [*path*](https://github.com/d3/d3-geo#_path) -
-* [*path*.area](https://github.com/d3/d3-geo#path_area) -
-* [*path*.bounds](https://github.com/d3/d3-geo#path_bounds) -
-* [*path*.centroid](https://github.com/d3/d3-geo#path_centroid) -
-* [*path*.projection](https://github.com/d3/d3-geo#path_projection) -
-* [*path*.context](https://github.com/d3/d3-geo#path_context) -
-* [*path*.pointRadius](https://github.com/d3/d3-geo#path_pointRadius) -
-* [d3.geoProjection](https://github.com/d3/d3-geo#geoProjection) -
-* [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator) -
-* [*projection*](https://github.com/d3/d3-geo#_projection) -
-* [*projection*.invert](https://github.com/d3/d3-geo#projection_invert) -
-* [*projection*.stream](https://github.com/d3/d3-geo#projection_stream) -
-* [*projection*.clipAngle](https://github.com/d3/d3-geo#projection_clipAngle) -
-* [*projection*.clipExtent](https://github.com/d3/d3-geo#projection_clipExtent) -
-* [*projection*.scale](https://github.com/d3/d3-geo#projection_scale) -
-* [*projection*.translate](https://github.com/d3/d3-geo#projection_translate) -
-* [*projection*.center](https://github.com/d3/d3-geo#projection_center) -
-* [*projection*.rotate](https://github.com/d3/d3-geo#projection_rotate) -
-* [*projection*.precision](https://github.com/d3/d3-geo#projection_precision) -
-* [d3.geoAlbers](https://github.com/d3/d3-geo#geoAlbers) -
-* [d3.geoAlbersUsa](https://github.com/d3/d3-geo#geoAlbersUsa) -
-* [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo#geoAzimuthalEqualArea) -
-* [d3.geoAzimuthalEquidistant](https://github.com/d3/d3-geo#geoAzimuthalEquidistant) -
-* [d3.geoConicConformal](https://github.com/d3/d3-geo#geoConicConformal) -
-* [d3.geoConicEqualArea](https://github.com/d3/d3-geo#geoConicEqualArea) -
-* [d3.geoConicEquidistant](https://github.com/d3/d3-geo#geoConicEquidistant) -
-* [d3.geoEquirectangular](https://github.com/d3/d3-geo#geoEquirectangular) -
-* [d3.geoGnomonic](https://github.com/d3/d3-geo#geoGnomonic) -
-* [d3.geoMercator](https://github.com/d3/d3-geo#geoMercator) -
-* [d3.geoOrthographic](https://github.com/d3/d3-geo#geoOrthographic) -
-* [d3.geoStereographic](https://github.com/d3/d3-geo#geoStereographic) -
-* [d3.geoTransverseMercator](https://github.com/d3/d3-geo#geoTransverseMercator) -
-* [*conic*.parallels](https://github.com/d3/d3-geo#conic_parallels) -
-* [d3.geoClipExtent](https://github.com/d3/d3-geo#geoClipExtent) -
-* [*extent*.extent](https://github.com/d3/d3-geo#extent_extent) -
-* [*extent*.stream](https://github.com/d3/d3-geo#extent_stream) -
-* [d3.geoTransform](https://github.com/d3/d3-geo#geoTransform) -
-* [d3.geoStream](https://github.com/d3/d3-geo#geoStream) -
+* [d3.geoPath](https://github.com/d3/d3-geo#geoPath) - create a new geographic path generator.
+* [*path*](https://github.com/d3/d3-geo#_path) - project and render the specified feature.
+* [*path*.area](https://github.com/d3/d3-geo#path_area) - compute the projected planar area of a given feature.
+* [*path*.bounds](https://github.com/d3/d3-geo#path_bounds) - compute the projected planar bounding box of a given feature.
+* [*path*.centroid](https://github.com/d3/d3-geo#path_centroid) - compute the projected planar centroid of a given feature.
+* [*path*.projection](https://github.com/d3/d3-geo#path_projection) - set the geographic projection.
+* [*path*.context](https://github.com/d3/d3-geo#path_context) - set the render context.
+* [*path*.pointRadius](https://github.com/d3/d3-geo#path_pointRadius) - set the radius to display point features.
+* [d3.geoProjection](https://github.com/d3/d3-geo#geoProjection) - create a custom projection.
+* [d3.geoProjectionMutator](https://github.com/d3/d3-geo#geoProjectionMutator) - create a custom configurable projection.
+* [*projection*](https://github.com/d3/d3-geo#_projection) - project the specified point from the sphere to the plane.
+* [*projection*.invert](https://github.com/d3/d3-geo#projection_invert) - unproject the specified point from the plane to the sphere.
+* [*projection*.stream](https://github.com/d3/d3-geo#projection_stream) - wrap the specified stream to project geometry.
+* [*projection*.clipAngle](https://github.com/d3/d3-geo#projection_clipAngle) - set the radius of the clip circle.
+* [*projection*.clipExtent](https://github.com/d3/d3-geo#projection_clipExtent) - set the viewport clip extent, in pixels.
+* [*projection*.scale](https://github.com/d3/d3-geo#projection_scale) - set the scale factor.
+* [*projection*.translate](https://github.com/d3/d3-geo#projection_translate) - set the translation offset.
+* [*projection*.center](https://github.com/d3/d3-geo#projection_center) - set the center point.
+* [*projection*.rotate](https://github.com/d3/d3-geo#projection_rotate) - set the three-axis spherical rotation angles.
+* [*projection*.precision](https://github.com/d3/d3-geo#projection_precision) - set the precision threshold for adaptive sampling.
+* [d3.geoAlbers](https://github.com/d3/d3-geo#geoAlbers) - the Albers equal-area conic projection.
+* [d3.geoAlbersUsa](https://github.com/d3/d3-geo#geoAlbersUsa) - a composite Albers projection for the United States.
+* [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
+* [d3.geoAzimuthalEquidistant](https://github.com/d3/d3-geo#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
+* [d3.geoConicConformal](https://github.com/d3/d3-geo#geoConicConformal) - the conic conformal projection.
+* [d3.geoConicEqualArea](https://github.com/d3/d3-geo#geoConicEqualArea) - the conic equal-area (Albers) projection.
+* [d3.geoConicEquidistant](https://github.com/d3/d3-geo#geoConicEquidistant) - the conic equidistant projection.
+* [d3.geoEquirectangular](https://github.com/d3/d3-geo#geoEquirectangular) - the equirectangular (plate carreé) projection.
+* [d3.geoGnomonic](https://github.com/d3/d3-geo#geoGnomonic) - the gnomonic projection.
+* [d3.geoMercator](https://github.com/d3/d3-geo#geoMercator) - the spherical Mercator projection.
+* [d3.geoOrthographic](https://github.com/d3/d3-geo#geoOrthographic) - the azimuthal orthographic projection.
+* [d3.geoStereographic](https://github.com/d3/d3-geo#geoStereographic) - the azimuthal stereographic projection.
+* [d3.geoTransverseMercator](https://github.com/d3/d3-geo#geoTransverseMercator) - the transverse spherical Mercator projection.
+* [*conic*.parallels](https://github.com/d3/d3-geo#conic_parallels) - set the two standard parallels.
+* [d3.geoClipExtent](https://github.com/d3/d3-geo#geoClipExtent) - clips geometries to a given rectangular bounding box.
+* [*extent*.extent](https://github.com/d3/d3-geo#extent_extent) - set the clip extent.
+* [*extent*.stream](https://github.com/d3/d3-geo#extent_stream) - wrap the specified stream to project geometry.
+* [d3.geoTransform](https://github.com/d3/d3-geo#geoTransform) - define a custom geometry transform.
+* [d3.geoStream](https://github.com/d3/d3-geo#geoStream) - convert a GeoJSON object to a geometry stream.
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy)
 
