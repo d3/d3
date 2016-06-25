@@ -907,10 +907,10 @@ An area, defined by a bounding topline and baseline, as in an area chart.
 * [*area*.defined](https://github.com/d3/d3-shape#area_defined) - set the defined accessor.
 * [*area*.curve](https://github.com/d3/d3-shape#area_curve) - set the curve interpolator.
 * [*area*.context](https://github.com/d3/d3-shape#area_context) - set the rendering context.
-* [*area*.lineX0](https://github.com/d3/d3-shape#area_lineX0) -
-* [*area*.lineX1](https://github.com/d3/d3-shape#area_lineX1) -
-* [*area*.lineY0](https://github.com/d3/d3-shape#area_lineY0) -
-* [*area*.lineY1](https://github.com/d3/d3-shape#area_lineY1) -
+* [*area*.lineX0](https://github.com/d3/d3-shape#area_lineX0) - derive a line for the left edge of an area.
+* [*area*.lineX1](https://github.com/d3/d3-shape#area_lineX1) - derive a line for the right edge of an area.
+* [*area*.lineY0](https://github.com/d3/d3-shape#area_lineY0) - derive a line for the top edge of an area.
+* [*area*.lineY1](https://github.com/d3/d3-shape#area_lineY1) - derive a line for the bottom edge of an area.
 * [d3.radialArea](https://github.com/d3/d3-shape#radialArea) - create a new radial area generator.
 * [*radialArea*](https://github.com/d3/d3-shape#_radialArea) - generate an area for the given dataset.
 * [*radialArea*.angle](https://github.com/d3/d3-shape#radialArea_angle) - set the start and end angle accessors.
@@ -922,10 +922,10 @@ An area, defined by a bounding topline and baseline, as in an area chart.
 * [*radialArea*.defined](https://github.com/d3/d3-shape#radialArea_defined) - set the defined accessor.
 * [*radialArea*.curve](https://github.com/d3/d3-shape#radialArea_curve) - set the curve interpolator.
 * [*radialArea*.context](https://github.com/d3/d3-shape#radialArea_context) - set the rendering context.
-* [*radialArea*.lineStartAngle](https://github.com/d3/d3-shape#area_lineStartAngle) -
-* [*radialArea*.lineEndAngle](https://github.com/d3/d3-shape#area_lineEndAngle) -
-* [*radialArea*.lineInnerRadius](https://github.com/d3/d3-shape#area_lineInnerRadius) -
-* [*radialArea*.lineOuterRadius](https://github.com/d3/d3-shape#area_lineOuterRadius) -
+* [*radialArea*.lineStartAngle](https://github.com/d3/d3-shape#area_lineStartAngle) - derive a line for the start edge of an area.
+* [*radialArea*.lineEndAngle](https://github.com/d3/d3-shape#area_lineEndAngle) - derive a line for the end edge of an area.
+* [*radialArea*.lineInnerRadius](https://github.com/d3/d3-shape#area_lineInnerRadius) - derive a line for the inner edge of an area.
+* [*radialArea*.lineOuterRadius](https://github.com/d3/d3-shape#area_lineOuterRadius) - derive a line for the outer edge of an area.
 
 ### [Curves](https://github.com/d3/d3-shape#curves)
 
@@ -935,15 +935,15 @@ Interpolate between points to produce a continuous shape.
 * [d3.curveBasisClosed](https://github.com/d3/d3-shape#curveBasisClosed) - a closed cubic basis spline.
 * [d3.curveBasisOpen](https://github.com/d3/d3-shape#curveBasisOpen) - a cubic basis spline.
 * [d3.curveBundle](https://github.com/d3/d3-shape#curveBundle) - a straightened cubic basis spline.
-* [*bundle*.beta](https://github.com/d3/d3-shape#bundle_beta) -
+* [*bundle*.beta](https://github.com/d3/d3-shape#bundle_beta) - set the bundle tension *beta*.
 * [d3.curveCardinal](https://github.com/d3/d3-shape#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
 * [d3.curveCardinalClosed](https://github.com/d3/d3-shape#curveCardinalClosed) - a closed cubic cardinal spline.
 * [d3.curveCardinalOpen](https://github.com/d3/d3-shape#curveCardinalOpen) - a cubic cardinal spline.
-* [*cardinal*.tension](https://github.com/d3/d3-shape#cardinal_tension) -
+* [*cardinal*.tension](https://github.com/d3/d3-shape#cardinal_tension) - set the cardinal spline tension.
 * [d3.curveCatmullRom](https://github.com/d3/d3-shape#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
 * [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
 * [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
-* [*catmullRom*.alpha](https://github.com/d3/d3-shape#catmullRom_alpha) -
+* [*catmullRom*.alpha](https://github.com/d3/d3-shape#catmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
 * [d3.curveLinear](https://github.com/d3/d3-shape#curveLinear) - a polyline.
 * [d3.curveLinearClosed](https://github.com/d3/d3-shape#curveLinearClosed) - a closed polyline.
 * [d3.curveMonotoneX](https://github.com/d3/d3-shape#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
