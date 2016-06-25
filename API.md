@@ -689,6 +689,7 @@ Map a continuous, quantitative domain to a continuous range.
 Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleSequential](https://github.com/d3/d3-scale#scaleSequential) - create a sequential scale.
+* [*sequential*.interpolator](https://github.com/d3/d3-scale#sequential_interpolator) - set the scale’s output interpolator.
 * [d3.interpolateViridis](https://github.com/d3/d3-scale#interpolateViridis) - a dark-to-light color scheme.
 * [d3.interpolateInferno](https://github.com/d3/d3-scale#interpolateInferno) - a dark-to-light color scheme.
 * [d3.interpolateMagma](https://github.com/d3/d3-scale#interpolateMagma) - a dark-to-light color scheme.
