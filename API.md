@@ -449,8 +449,8 @@ Layout algorithms for visualizing hierarchical data.
 * [*node*.ancestors](#node_ancestors) - generate an array of ancestors.
 * [*node*.descendants](#node_descendants) - generate an array of descendants.
 * [*node*.leaves](#node_leaves) - generate an array of leaves.
-* [*node*.links](#node_links) - generate an array of links.
 * [*node*.path](#node_path) - generate the shortest path to another node.
+* [*node*.links](#node_links) - generate an array of links.
 * [*node*.sum](#node_sum) - evaluate and aggregate quantitative values.
 * [*node*.sort](#node_sort) - sort all descendant siblings.
 * [*node*.each](#node_each) - breadth-first traversal.
@@ -488,7 +488,7 @@ Layout algorithms for visualizing hierarchical data.
 * [d3.treemapSlice](#treemapSlice) - tile into a vertical column.
 * [d3.treemapSliceDice](#treemapSliceDice) - alternate between slicing and dicing.
 * [d3.treemapSquarify](#treemapSquarify) - tile using squarified rows per Bruls *et. al.*
-* [d3.treemapResquarify](#treemapResquarify) -
+* [d3.treemapResquarify](#treemapResquarify) - like d3.treemapSquarify, but performs stable updates.
 * [*squarify*.ratio](#squarify_ratio) - set the desired rectangle aspect ratio.
 * [d3.partition](#partition) - create a new partition (icicle or sunburst) layout.
 * [*partition*](#_partition) - layout the specified hierarchy as a partition diagram.
