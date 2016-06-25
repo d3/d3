@@ -2,7 +2,7 @@
 
 D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to work together; you can use the modules independently, or you can use them together as part of the default build. The source and documentation for each module is available in its repository. Follow the links below to learn more. For an overview of changes between D3 3.x and 4.0, see [CHANGES](https://github.com/d3/d3/blob/master/CHANGES.md).
 
-* [Arrays](#arrays-d3-array) ([Statistics](#statistics), [Histograms](#histograms), [Search](#search), [Transformations](#transformations))
+* [Arrays](#arrays-d3-array) ([Statistics](#statistics), [Search](#search), [Transformations](#transformations), [Histograms](#histograms))
 * [Axes](#axes-d3-axis)
 * [Brushes](#brushes-d3-brush)
 * [Chords](#chords-d3-chord)
@@ -53,19 +53,6 @@ Methods for computing basic summary statistics.
 * [d3.variance](https://github.com/d3/d3-array#variance) - compute the variance of an array of numbers.
 * [d3.deviation](https://github.com/d3/d3-array#deviation) - compute the standard deviation of an array of numbers.
 
-#### [Histograms](https://github.com/d3/d3-array#histograms)
-
-Bin discrete samples into continuous, non-overlapping intervals.
-
-* [d3.histogram](https://github.com/d3/d3-array#histogram) - create a new histogram generator.
-* [*histogram*](https://github.com/d3/d3-array#_histogram) - compute the histogram for the given array of samples.
-* [*histogram*.value](https://github.com/d3/d3-array#histogram_value) - specify a value accessor for each sample.
-* [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) - specify the interval of observable values.
-* [*histogram*.thresholds](https://github.com/d3/d3-array#histogram_thresholds) - specify how values are divided into bins.
-* [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
-* [d3.thresholdScott](https://github.com/d3/d3-array#thresholdScott) - Scott’s normal reference binning rule.
-* [d3.thresholdSturges](https://github.com/d3/d3-array#thresholdSturges) - Sturges’ binning formula.
-
 #### [Search](https://github.com/d3/d3-array#search)
 
 Methods for searching arrays for a specific element.
@@ -94,6 +81,19 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.transpose](https://github.com/d3/d3-array#transpose) - transpose an array of arrays.
 * [d3.zip](https://github.com/d3/d3-array#zip) - transpose a variable number of arrays.
 
+#### [Histograms](https://github.com/d3/d3-array#histograms)
+
+Bin discrete samples into continuous, non-overlapping intervals.
+
+* [d3.histogram](https://github.com/d3/d3-array#histogram) - create a new histogram generator.
+* [*histogram*](https://github.com/d3/d3-array#_histogram) - compute the histogram for the given array of samples.
+* [*histogram*.value](https://github.com/d3/d3-array#histogram_value) - specify a value accessor for each sample.
+* [*histogram*.domain](https://github.com/d3/d3-array#histogram_domain) - specify the interval of observable values.
+* [*histogram*.thresholds](https://github.com/d3/d3-array#histogram_thresholds) - specify how values are divided into bins.
+* [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
+* [d3.thresholdScott](https://github.com/d3/d3-array#thresholdScott) - Scott’s normal reference binning rule.
+* [d3.thresholdSturges](https://github.com/d3/d3-array#thresholdSturges) - Sturges’ binning formula.
+
 ## [Axes (d3-axis)](https://github.com/d3/d3-axis)
 
 Human-readable reference marks for scales.
@@ -117,20 +117,33 @@ Human-readable reference marks for scales.
 
 Select a one- or two-dimensional region using the mouse or touch.
 
-* [d3.brush](https://github.com/d3/d3-brush#brush) -
-* [d3.brushX](https://github.com/d3/d3-brush#brushX) -
-* [d3.brushY](https://github.com/d3/d3-brush#brushY) -
-* [*brush*](https://github.com/d3/d3-brush#_brush) -
-* [*brush*.move](https://github.com/d3/d3-brush#brush_move) -
-* [*brush*.extent](https://github.com/d3/d3-brush#brush_extent) -
-* [*brush*.filter](https://github.com/d3/d3-brush#brush_filter) -
-* [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) -
-* [*brush*.on](https://github.com/d3/d3-brush#brush_on) -
-* [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) -
+* [d3.brush](https://github.com/d3/d3-brush#brush) - create a new two-dimensional brush.
+* [d3.brushX](https://github.com/d3/d3-brush#brushX) - create a brush along the *x*-dimension.
+* [d3.brushY](https://github.com/d3/d3-brush#brushY) - create a brush along the *y*-dimension.
+* [*brush*](https://github.com/d3/d3-brush#_brush) - apply the brush to a selection.
+* [*brush*.move](https://github.com/d3/d3-brush#brush_move) - move the brush selection.
+* [*brush*.extent](https://github.com/d3/d3-brush#brush_extent) - define the brushable region.
+* [*brush*.filter](https://github.com/d3/d3-brush#brush_filter) - control which input events initiate brushing.
+* [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) - set the size of the brush handles.
+* [*brush*.on](https://github.com/d3/d3-brush#brush_on) - listen for brush events.
+* [d3.brushSelection](https://github.com/d3/d3-brush#brushSelection) - get the brush selection for a given node.
 
 ## [Chords (d3-chord)](https://github.com/d3/d3-chord)
 
-TODO
+* [d3.chord](https://github.com/d3/d3-chord#chord) - create a new chord layout.
+* [*chord*](https://github.com/d3/d3-chord#_chord) - compute the layout for the given matrix.
+* [*chord*.padAngle](https://github.com/d3/d3-chord#chord_padAngle) - set the padding between adjacent groups.
+* [*chord*.sortGroups](https://github.com/d3/d3-chord#chord_sortGroups) - define the group order.
+* [*chord*.sortSubgroups](https://github.com/d3/d3-chord#chord_sortSubgroups) - define the source and target order within groups.
+* [*chord*.sortChords](https://github.com/d3/d3-chord#chord_sortChords) - define the chord order across groups.
+* [d3.ribbon](https://github.com/d3/d3-chord#ribbon) - create a ribbon shape generator.
+* [*ribbon*](https://github.com/d3/d3-chord#_ribbon) - generate a ribbon shape.
+* [*ribbon*.source](https://github.com/d3/d3-chord#ribbon_source) - set the source accessor.
+* [*ribbon*.target](https://github.com/d3/d3-chord#ribbon_target) - set the target accessor.
+* [*ribbon*.radius](https://github.com/d3/d3-chord#ribbon_radius) - set the ribbon source or target radius.
+* [*ribbon*.startAngle](https://github.com/d3/d3-chord#ribbon_startAngle) - set the ribbon source or target start angle.
+* [*ribbon*.endAngle](https://github.com/d3/d3-chord#ribbon_endAngle) - set the ribbon source or target end angle.
+* [*ribbon*.context](https://github.com/d3/d3-chord#ribbon_context) - set the render context.
 
 ## [Collections (d3-collection)](https://github.com/d3/d3-collection)
 
