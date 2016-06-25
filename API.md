@@ -1001,13 +1001,14 @@ Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 
 Parse and format times, inspired by strptime and strftime.
 
-* [d3.timeFormat](https://github.com/d3/d3-time-format#timeFormat) - alias for enUs.format.
-* [d3.timeParse](https://github.com/d3/d3-time-format#timeParse) - alias for enUs.parse.
-* [d3.utcFormat](https://github.com/d3/d3-time-format#utcFormat) -  alias for enUs.utcFormat.
-* [d3.utcFormat](https://github.com/d3/d3-time-format#utcParse) -  alias for enUs.utcParse.
+* [d3.timeFormat](https://github.com/d3/d3-time-format#timeFormat) - alias for *locale*.format on the default locale.
+* [d3.timeParse](https://github.com/d3/d3-time-format#timeParse) - alias for *locale*.parse on the default locale.
+* [d3.utcFormat](https://github.com/d3/d3-time-format#utcFormat) -  alias for *locale*.utcFormat on the default locale.
+* [d3.utcFormat](https://github.com/d3/d3-time-format#utcParse) -  alias for *locale*.utcParse on the default locale.
 * [d3.isoFormat](https://github.com/d3/d3-time-format#isoFormat) - an ISO 8601 UTC formatter.
 * [d3.isoParse](https://github.com/d3/d3-time-format#isoParse) - an ISO 8601 UTC parser.
-* [d3.timeFormatLocale](https://github.com/d3/d3-time-format#locale) - define a custom locale.
+* [d3.timeFormatLocale](https://github.com/d3/d3-time-format#timeFormatLocale) - define a custom locale.
+* [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format#timeFormatDefaultLocale) - define the default locale.
 * [*locale*.format](https://github.com/d3/d3-time-format#locale_format) - create a time formatter.
 * [*locale*.parse](https://github.com/d3/d3-time-format#locale_parse) - create a time parser.
 * [*locale*.utcFormat](https://github.com/d3/d3-time-format#locale_utcFormat) - create a UTC formatter.
