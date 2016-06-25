@@ -8,9 +8,9 @@ D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to 
 * [Chords](#chords-d3-chord)
 * [Collections](#collections-d3-collection) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors-d3-color)
-* [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
 * [Dispatches](#dispatches-d3-dispatch)
 * [Dragging](#dragging-d3-drag)
+* [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
 * [Easings](#easings-d3-ease)
 * [Forces](#forces-d3-force)
 * [Geographies](#geographies-d3-geo)
@@ -217,24 +217,6 @@ Color manipulation and color space conversion.
 * [d3.hcl](https://github.com/d3/d3-color#hcl) - create a new HCL color.
 * [d3.cubehelix](https://github.com/d3/d3-color#cubehelix) - create a new Cubehelix color.
 
-## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv)
-
-Parse and format delimiter-separated values, most commonly CSV and TSV.
-
-* [d3.dsvFormat](https://github.com/d3/d3-dsv#dsvFormat) - create a new parser and formatter for the given delimiter.
-* [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) - parse the given string, returning an array of objects.
-* [*dsv*.parseRows](https://github.com/d3/d3-dsv#dsv_parseRows) - parse the given string, returning an array of rows.
-* [*dsv*.format](https://github.com/d3/d3-dsv#dsv_format) - format the given array of objects.
-* [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) - format the given array of rows.
-* [d3.csvParse](https://github.com/d3/d3-dsv#csvParse) - parse the given CSV string, returning an array of objects.
-* [d3.csvParseRows](https://github.com/d3/d3-dsv#csvParseRows) - parse the given CSV string, returning an array of rows.
-* [d3.csvFormat](https://github.com/d3/d3-dsv#csvFormat) - format the given array of objects as CSV.
-* [d3.csvFormatRows](https://github.com/d3/d3-dsv#csvFormatRows) - format the given array of rows as CSV.
-* [d3.tsvParse](https://github.com/d3/d3-dsv#tsvParse) - parse the given TSV string, returning an array of objects.
-* [d3.tsvParseRows](https://github.com/d3/d3-dsv#tsvParseRows) - parse the given TSV string, returning an array of rows.
-* [d3.tsvFormat](https://github.com/d3/d3-dsv#tsvFormat) - format the given array of objects as TSV.
-* [d3.tsvFormatRows](https://github.com/d3/d3-dsv#tsvFormatRows) - format the given array of rows as TSV.
-
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch)
 
 Separate concerns using named callbacks.
@@ -258,6 +240,24 @@ Drag and drop SVG, HTML or Canvas using mouse or touch input.
 * [*event*.on](https://github.com/d3/d3-drag#event_on) - listen for drag events on the current gesture.
 * [d3.dragDisable](https://github.com/d3/d3-drag#dragDisable) -
 * [d3.dragEnable](https://github.com/d3/d3-drag#dragEnable) -
+
+## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv)
+
+Parse and format delimiter-separated values, most commonly CSV and TSV.
+
+* [d3.dsvFormat](https://github.com/d3/d3-dsv#dsvFormat) - create a new parser and formatter for the given delimiter.
+* [*dsv*.parse](https://github.com/d3/d3-dsv#dsv_parse) - parse the given string, returning an array of objects.
+* [*dsv*.parseRows](https://github.com/d3/d3-dsv#dsv_parseRows) - parse the given string, returning an array of rows.
+* [*dsv*.format](https://github.com/d3/d3-dsv#dsv_format) - format the given array of objects.
+* [*dsv*.formatRows](https://github.com/d3/d3-dsv#dsv_formatRows) - format the given array of rows.
+* [d3.csvParse](https://github.com/d3/d3-dsv#csvParse) - parse the given CSV string, returning an array of objects.
+* [d3.csvParseRows](https://github.com/d3/d3-dsv#csvParseRows) - parse the given CSV string, returning an array of rows.
+* [d3.csvFormat](https://github.com/d3/d3-dsv#csvFormat) - format the given array of objects as CSV.
+* [d3.csvFormatRows](https://github.com/d3/d3-dsv#csvFormatRows) - format the given array of rows as CSV.
+* [d3.tsvParse](https://github.com/d3/d3-dsv#tsvParse) - parse the given TSV string, returning an array of objects.
+* [d3.tsvParseRows](https://github.com/d3/d3-dsv#tsvParseRows) - parse the given TSV string, returning an array of rows.
+* [d3.tsvFormat](https://github.com/d3/d3-dsv#tsvFormat) - format the given array of objects as TSV.
+* [d3.tsvFormatRows](https://github.com/d3/d3-dsv#tsvFormatRows) - format the given array of rows as TSV.
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease)
 
