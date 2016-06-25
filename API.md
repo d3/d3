@@ -13,10 +13,10 @@ D3 4.0 is a [collection of modules](https://github.com/d3) that are designed to 
 * [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
 * [Easings](#easings-d3-ease)
 * [Forces](#forces-d3-force)
+* [Number Formats](#number-formats-d3-format)
 * [Geographies](#geographies-d3-geo)
 * [Hierarchies](#hierarchies-d3-hierarchy)
 * [Interpolators](#interpolators-d3-interpolate)
-* [Number Formats](#number-formats-d3-format)
 * [Paths](#paths-d3-path)
 * [Polygons](#polygons-d3-polygon)
 * [Quadtrees](#quadtrees-d3-quadtree)
@@ -349,6 +349,21 @@ Force-directed graph layout using velocity Verlet integration.
 * [*y*.strength](https://github.com/d3/d3-force#y_strength) - set the force strength.
 * [*y*.y](https://github.com/d3/d3-force#y_y) - set the target *y*-coordinate.
 
+## [Number Formats (d3-format)](https://github.com/d3/d3-format)
+
+Format numbers for human consumption.
+
+* [d3.format](https://github.com/d3/d3-format#format) - alias for *locale*.format on the default locale.
+* [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) - alias for *locale*.formatPrefix on the default locale.
+* [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) - parse a number format specifier.
+* [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) - define a custom locale.
+* [d3.formatDefaultLocale](https://github.com/d3/d3-format#formatDefaultLocale) - define the default locale.
+* [*locale*.format](https://github.com/d3/d3-format#locale_format) - create a number format.
+* [*locale*.formatPrefix](https://github.com/d3/d3-format#locale_formatPrefix) - create a SI-prefix number format.
+* [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) - compute decimal precision for fixed-point notation.
+* [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) - compute decimal precision for SI-prefix notation.
+* [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) - compute significant digits for rounded notation.
+
 ## [Geographies (d3-geo)](https://github.com/d3/d3-geo)
 
 Geographic projections, shapes and math.
@@ -491,20 +506,6 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateBasis](https://github.com/d3/d3-interpolate#interpolateBasis) -
 * [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate#interpolateBasisClosed) -
 * [d3.quantize](https://github.com/d3/d3-interpolate#quantize) -
-
-## [Number Formats (d3-format)](https://github.com/d3/d3-format)
-
-Format numbers for human consumption.
-
-* [d3.format](https://github.com/d3/d3-format#format) - alias for enUs.format.
-* [d3.formatPrefix](https://github.com/d3/d3-format#formatPrefix) - alias for enUs.formatPrefix.
-* [d3.formatSpecifier](https://github.com/d3/d3-format#formatSpecifier) - parse a number format specifier.
-* [d3.formatLocale](https://github.com/d3/d3-format#formatLocale) - define a custom locale.
-* [*locale*.format](https://github.com/d3/d3-format#locale_format) - create a number format.
-* [*locale*.formatPrefix](https://github.com/d3/d3-format#locale_formatPrefix) - create a SI-prefix number format.
-* [d3.precisionFixed](https://github.com/d3/d3-format#precisionFixed) - compute decimal precision for fixed-point notation.
-* [d3.precisionPrefix](https://github.com/d3/d3-format#precisionPrefix) - compute decimal precision for SI-prefix notation.
-* [d3.precisionRound](https://github.com/d3/d3-format#precisionRound) - compute significant digits for rounded notation.
 
 ## [Paths (d3-path)](https://github.com/d3/d3-path)
 
