@@ -793,7 +793,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.text](https://github.com/d3/d3-selection#selection_text) - get or set the text content.
 * [*selection*.html](https://github.com/d3/d3-selection#selection_html) - get or set the inner HTML.
 * [*selection*.append](https://github.com/d3/d3-selection#selection_append) - create, append and select new elements.
-* [*selection*.insert](https://github.com/d3/d3-selection#selection_insert) -
+* [*selection*.insert](https://github.com/d3/d3-selection#selection_insert) - create, insert and select new elements.
 * [*selection*.remove](https://github.com/d3/d3-selection#selection_remove) - remove elements from the document.
 * [*selection*.sort](https://github.com/d3/d3-selection#selection_sort) - sort elements in the document based on data.
 * [*selection*.order](https://github.com/d3/d3-selection#selection_order) - reorders elements in the document to match the selection.
@@ -829,11 +829,11 @@ Transform the DOM by selecting elements and joining to data.
 
 ### [Local Variables](https://github.com/d3/d3-selection#local-variables)
 
-* [d3.local](https://github.com/d3/d3-selection#local) -
-* [*local*.set](https://github.com/d3/d3-selection#local_set) -
-* [*local*.get](https://github.com/d3/d3-selection#local_get) -
-* [*local*.remove](https://github.com/d3/d3-selection#local_remove) -
-* [*local*.toString](https://github.com/d3/d3-selection#local_toString) -
+* [d3.local](https://github.com/d3/d3-selection#local) - declares a new local variable.
+* [*local*.set](https://github.com/d3/d3-selection#local_set) - get a local variable’s value.
+* [*local*.get](https://github.com/d3/d3-selection#local_get) - set a local variable’s value.
+* [*local*.remove](https://github.com/d3/d3-selection#local_remove) - delete a local variable.
+* [*local*.toString](https://github.com/d3/d3-selection#local_toString) - get the property identifier of a local variable.
 
 ### [Namespaces](https://github.com/d3/d3-selection#namespaces)
 
