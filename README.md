@@ -17,13 +17,13 @@
 If you use NPM, `npm install d3@next`. Otherwise, download the [latest release](https://npmcdn.com/d3@next/build/). The released bundle supports AMD, CommonJS, and vanilla environments. Create a [custom bundle using Rollup](http://bl.ocks.org/mbostock/bb09af4c39c79cffcde4) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-rc.1.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-rc.2.js"></script>
 ```
 
 For the minified version:
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-rc.1.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-rc.2.min.js"></script>
 ```
 
 You can also use the standalone D3 microlibraries. For example, [d3-color](https://github.com/d3/d3-color):

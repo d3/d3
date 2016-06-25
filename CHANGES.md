@@ -3,13 +3,13 @@
 D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles. The default bundle combines about thirty of these microlibraries.
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-rc.1.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-rc.2.min.js"></script>
 ```
 
 As before, you can load optional plugins on top of the default bundle, such as [ColorBrewer scales](https://github.com/d3/d3-scale-chromatic):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-rc.1.min.js"></script>
+<script src="https://d3js.org/d3.v4.0.0-rc.2.min.js"></script>
 <script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
 ```
 
