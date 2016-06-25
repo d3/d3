@@ -318,11 +318,8 @@ Force-directed graph layout using velocity Verlet integration.
 * [*simulation*.alphaMin](https://github.com/d3/d3-force#simulation_alphaMin) - set the minimum alpha threshold.
 * [*simulation*.alphaDecay](https://github.com/d3/d3-force#simulation_alphaDecay) - set the alpha exponential decay rate.
 * [*simulation*.alphaTarget](https://github.com/d3/d3-force#simulation_alphaTarget) - set the target alpha.
-* [*simulation*.drag](https://github.com/d3/d3-force#simulation_drag) - set the drag coefficient.
+* [*simulation*.velocityDecay](https://github.com/d3/d3-force#simulation_velocityDecay) - set the velocity decay rate.
 * [*simulation*.force](https://github.com/d3/d3-force#simulation_force) - add or remove a force.
-* [*simulation*.fix](https://github.com/d3/d3-force#simulation_fix) - fix a node in a given position.
-* [*simulation*.unfix](https://github.com/d3/d3-force#simulation_unfix) - release a fixed node.
-* [*simulation*.unfixAll](https://github.com/d3/d3-force#simulation_unfixAll) - release all fixed nodes.
 * [*simulation*.find](https://github.com/d3/d3-force#simulation_find) - find the closest node to the given position.
 * [*simulation*.on](https://github.com/d3/d3-force#simulation_on) - add or remove an event listener.
 * [*force*](https://github.com/d3/d3-force#_force) - apply the force.
