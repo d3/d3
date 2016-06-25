@@ -383,21 +383,21 @@ Geographic projections, shapes and math.
 ### [Spherical Shapes](https://github.com/d3/d3-geo#spherical-shapes)
 
 * [d3.geoCircle](https://github.com/d3/d3-geo#geoCircle) -
-* *circle* -
-* *circle*.center -
-* *circle*.radis -
-* *circle*.precision -
+* [*circle*](https://github.com/d3/d3-geo#_circle) -
+* [*circle*.center](https://github.com/d3/d3-geo#circle_center) -
+* [*circle*.radius](https://github.com/d3/d3-geo#circle_radius) -
+* [*circle*.precision](https://github.com/d3/d3-geo#circle_precision) -
 * [d3.geoGraticule](https://github.com/d3/d3-geo#geoGraticule) -
-* *graticule* -
-* *graticule*.lines -
-* *graticule*.outline -
-* *graticule*.extent -
-* *graticule*.extentMajor -
-* *graticule*.extentMinor -
-* *graticule*.step -
-* *graticule*.stepMajor -
-* *graticule*.stepMinor -
-* *graticule*.precision -
+* [*graticule*](https://github.com/d3/d3-geo#_graticule) -
+* [*graticule*.lines](https://github.com/d3/d3-geo#graticule_lines) -
+* [*graticule*.outline](https://github.com/d3/d3-geo#graticule_outline) -
+* [*graticule*.extent](https://github.com/d3/d3-geo#graticule_extent) -
+* [*graticule*.extentMajor](https://github.com/d3/d3-geo#graticule_extentMajor) -
+* [*graticule*.extentMinor](https://github.com/d3/d3-geo#graticule_extentMinor) -
+* [*graticule*.step](https://github.com/d3/d3-geo#graticule_step) -
+* [*graticule*.stepMajor](https://github.com/d3/d3-geo#graticule_stepMajor) -
+* [*graticule*.stepMinor](https://github.com/d3/d3-geo#graticule_stepMinor) -
+* [*graticule*.precision](https://github.com/d3/d3-geo#graticule_precision) -
 
 ### [Projections](https://github.com/d3/d3-geo#projections)
 
