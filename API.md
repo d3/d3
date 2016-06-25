@@ -1122,28 +1122,28 @@ Compute the Voronoi diagram of a given set of points.
 
 Pan and zoom SVG, HTML or Canvas using mouse or touch input.
 
-* [d3.zoom](https://github.com/d3/d3-zoom#zoom) -
-* [*zoom*](https://github.com/d3/d3-zoom#_zoom) -
-* [*zoom*.transform](https://github.com/d3/d3-zoom#zoom_transform) -
-* [*zoom*.translateBy](https://github.com/d3/d3-zoom#zoom_translateBy) -
-* [*zoom*.scaleBy](https://github.com/d3/d3-zoom#zoom_scaleBy) -
-* [*zoom*.scaleTo](https://github.com/d3/d3-zoom#zoom_scaleTo) -
-* [*zoom*.filter](https://github.com/d3/d3-zoom#zoom_filter) -
-* [*zoom*.extent](https://github.com/d3/d3-zoom#zoom_extent) -
-* [*zoom*.scaleExtent](https://github.com/d3/d3-zoom#zoom_scaleExtent) -
-* [*zoom*.translateExtent](https://github.com/d3/d3-zoom#zoom_translateExtent) -
-* [*zoom*.duration](https://github.com/d3/d3-zoom#zoom_duration) -
-* [*zoom*.on](https://github.com/d3/d3-zoom#zoom_on) -
-* [d3.zoomTransform](https://github.com/d3/d3-zoom#zoomTransform) -
-* [*transform*.scale](https://github.com/d3/d3-zoom#transform_scale) -
-* [*transform*.translate](https://github.com/d3/d3-zoom#transform_translate) -
-* [*transform*.apply](https://github.com/d3/d3-zoom#transform_apply) -
-* [*transform*.applyX](https://github.com/d3/d3-zoom#transform_applyX) -
-* [*transform*.applyY](https://github.com/d3/d3-zoom#transform_applyY) -
-* [*transform*.invert](https://github.com/d3/d3-zoom#transform_invert) -
-* [*transform*.invertX](https://github.com/d3/d3-zoom#transform_invertX) -
-* [*transform*.invertY](https://github.com/d3/d3-zoom#transform_invertY) -
-* [*transform*.rescaleX](https://github.com/d3/d3-zoom#transform_rescaleX) -
-* [*transform*.rescaleY](https://github.com/d3/d3-zoom#transform_rescaleY) -
-* [*transform*.toString](https://github.com/d3/d3-zoom#transform_toString) -
-* [d3.zoomIdentity](https://github.com/d3/d3-zoom#zoomIdentity) -
+* [d3.zoom](https://github.com/d3/d3-zoom#zoom) - create a zoom behavior.
+* [*zoom*](https://github.com/d3/d3-zoom#_zoom) - apply the zoom behavior to the selected elements.
+* [*zoom*.transform](https://github.com/d3/d3-zoom#zoom_transform) - change the transform for the selected elements.
+* [*zoom*.translateBy](https://github.com/d3/d3-zoom#zoom_translateBy) - translate the transform for the selected elements.
+* [*zoom*.scaleBy](https://github.com/d3/d3-zoom#zoom_scaleBy) - scale the transform for the selected elements.
+* [*zoom*.scaleTo](https://github.com/d3/d3-zoom#zoom_scaleTo) - scale the transform for the selected elements.
+* [*zoom*.filter](https://github.com/d3/d3-zoom#zoom_filter) - control which input events initiate zooming.
+* [*zoom*.extent](https://github.com/d3/d3-zoom#zoom_extent) - set the extent of the viewport.
+* [*zoom*.scaleExtent](https://github.com/d3/d3-zoom#zoom_scaleExtent) - set the allowed scale range.
+* [*zoom*.translateExtent](https://github.com/d3/d3-zoom#zoom_translateExtent) - set the extent of the zoomable world.
+* [*zoom*.duration](https://github.com/d3/d3-zoom#zoom_duration) - set the duration of zoom transitions.
+* [*zoom*.on](https://github.com/d3/d3-zoom#zoom_on) - listen for zoom events.
+* [d3.zoomTransform](https://github.com/d3/d3-zoom#zoomTransform) - get the zoom transform for a given element.
+* [*transform*.scale](https://github.com/d3/d3-zoom#transform_scale) - scale a transform by the specified amount.
+* [*transform*.translate](https://github.com/d3/d3-zoom#transform_translate) - translate a transform by the specified amount.
+* [*transform*.apply](https://github.com/d3/d3-zoom#transform_apply) - apply the transform to the given point.
+* [*transform*.applyX](https://github.com/d3/d3-zoom#transform_applyX) - apply the transform to the given *x*-coordinate.
+* [*transform*.applyY](https://github.com/d3/d3-zoom#transform_applyY) - apply the transform to the given *y*-coordinate.
+* [*transform*.invert](https://github.com/d3/d3-zoom#transform_invert) - unapply the transform to the given point.
+* [*transform*.invertX](https://github.com/d3/d3-zoom#transform_invertX) - unapply the transform to the given *x*-coordinate.
+* [*transform*.invertY](https://github.com/d3/d3-zoom#transform_invertY) - unapply the transform to the given *y*-coordinate.
+* [*transform*.rescaleX](https://github.com/d3/d3-zoom#transform_rescaleX) - apply the transform to an *x*-scale’s domain.
+* [*transform*.rescaleY](https://github.com/d3/d3-zoom#transform_rescaleY) - apply the transform to a *y*-scale’s domain.
+* [*transform*.toString](https://github.com/d3/d3-zoom#transform_toString) - format the transform as an SVG transform string.
+* [d3.zoomIdentity](https://github.com/d3/d3-zoom#zoomIdentity) - the identity transform.
