@@ -3,20 +3,20 @@
 D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles. The default bundle combines about thirty of these microlibraries.
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-rc.2.min.js"></script>
+<script src="https://d3js.org/d3.v4.js"></script>
 ```
 
 As before, you can load optional plugins on top of the default bundle, such as [ColorBrewer scales](https://github.com/d3/d3-scale-chromatic):
 
 ```html
-<script src="https://d3js.org/d3.v4.0.0-rc.2.min.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v0.3.min.js"></script>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v0.3.js"></script>
 ```
 
 You are not required to use the default bundle! If you’re just using [d3-selection](https://github.com/d3/d3-selection), use it as a standalone library. Like the default bundle, you can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
 
 ```html
-<script src="https://d3js.org/d3-selection.v1.min.js"></script>
+<script src="https://d3js.org/d3-selection.v1.js"></script>
 ```
 
 You can also `cat` D3 microlibraries into a custom bundle, or use tools such as [Webpack](https://webpack.github.io/) and [Rollup](http://rollupjs.org/) to create [optimized bundles](https://bl.ocks.org/mbostock/bb09af4c39c79cffcde4). Custom bundles are great for applications that use a subset of D3’s features; for example, a React chart library might use D3 for scales and shapes, and React to manipulate the DOM. The D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce smaller bundles.
