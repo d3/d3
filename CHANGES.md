@@ -1308,6 +1308,8 @@ Homogenous transitions are now optimized! If all elements in a transition share 
 
 For resuable components that support transitions, such as [axes](#axes-d3-axis), a new [*transition*.selection](https://github.com/d3/d3-transition#transition_selection) method returns the [selection](#selections-d3-selection) that corresponds to a given transition. There is also a new [*transition*.merge](https://github.com/d3/d3-transition#transition_merge) method that is equivalent to [*selection*.merge](https://github.com/d3/d3-selection#selection_merge).
 
+For the sake of parsimony, the multi-value map methods have been extracted to [d3-selection-multi](https://github.com/d3/d3-selection-multi) and are no longer part of the default bundle. The multi-value map methods have also been renamed to plural form to reduce overload: [*transition*.attrs](https://github.com/d3/d3-selection-multi#transition_attrs) and [*transition*.styles](https://github.com/d3/d3-selection-multi#transition_styles).
+
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/blob/master/README.md)
 
 The d3.geom.voronoi method has been renamed to [d3.voronoi](https://github.com/d3/d3-voronoi#voronoi), and the *voronoi*.clipExtent method has been renamed to [*voronoi*.extent](https://github.com/d3/d3-voronoi#voronoi_extent). The undocumented *polygon*.point property in 3.x, which is the element in the input *data* corresponding to the polygon, has been renamed to *polygon*.data.
