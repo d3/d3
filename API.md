@@ -441,6 +441,20 @@ Geographic projections, shapes and math.
 * [d3.geoTransform](https://github.com/d3/d3-geo/blob/master/README.md#geoTransform) - define a custom geometry transform.
 * [d3.geoStream](https://github.com/d3/d3-geo/blob/master/README.md#geoStream) - convert a GeoJSON object to a geometry stream.
 
+#### Raw Projections
+
+* [d3.geoAzimuthalEqualAreaRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEqualAreaRaw) -
+* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEquidistantRaw) -
+* [d3.geoConicConformalRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicConformalRaw) -
+* [d3.geoConicEqualAreaRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEqualAreaRaw) -
+* [d3.geoConicEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEquidistantRaw) -
+* [d3.geoEquirectangularRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoEquirectangularRaw) -
+* [d3.geoGnomonicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoGnomonicRaw) -
+* [d3.geoMercatorRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoMercatorRaw) -
+* [d3.geoOrthographicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoOrthographicRaw) -
+* [d3.geoStereographicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoStereographicRaw) -
+* [d3.geoTransverseMercatorRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoTransverseMercatorRaw) -
+
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy)
 
 Layout algorithms for visualizing hierarchical data.
@@ -509,6 +523,7 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 
 * [d3.interpolate](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolate) - interpolate arbitrary values.
 * [d3.interpolateArray](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateArray) - interpolate arrays of arbitrary values.
+* [d3.interpolateDate](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateDate) - interpolate dates.
 * [d3.interpolateNumber](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateNumber) - interpolate numbers.
 * [d3.interpolateObject](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateObject) - interpolate arbitrary objects.
 * [d3.interpolateRound](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateRound) - interpolate integers.
