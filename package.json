@@ -43,6 +43,7 @@
     "d3-brush": "1.0.1",
     "d3-collection": "1.0.0",
     "d3-color": "1.0.0",
+    "d3-chord": "1.0.0",
     "d3-dispatch": "1.0.0",
     "d3-drag": "1.0.0",
     "d3-dsv": "1.0.0",

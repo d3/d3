@@ -426,6 +426,11 @@ export {
 } from "d3-brush";
 
 export {
+  chord,
+  ribbon
+} from "d3-chord";
+
+export {
   geoArea,
   geoBounds,
   geoCentroid,
