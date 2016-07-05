@@ -14,7 +14,9 @@
 
 ## Installing
 
-If you use NPM, `npm install d3`. Otherwise, download the [latest release](https://github.com/d3/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a [custom bundle using Rollup](http://bl.ocks.org/mbostock/bb09af4c39c79cffcde4) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
+If you use NPM, `npm install d3`.
+Import it in your project with this command: `import * as d3 from 'd3'` or `const d3 = require('d3')`.
+Otherwise, download the [latest release](https://github.com/d3/d3/releases/latest). The released bundle supports AMD, CommonJS, and vanilla environments. Create a [custom bundle using Rollup](http://bl.ocks.org/mbostock/bb09af4c39c79cffcde4) or your preferred bundler. You can also load directly from [d3js.org](https://d3js.org):
 
 ```html
 <script src="https://d3js.org/d3.v4.js"></script>
