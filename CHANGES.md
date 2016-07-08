@@ -673,6 +673,14 @@ The d3.xhr method has been renamed to [d3.request](https://github.com/d3/d3-requ
 
 If an error occurs, the corresponding [ProgressEvent](https://xhr.spec.whatwg.org/#interface-progressevent) of type “error” is now passed to the error listener, rather than the [XMLHttpRequest](https://xhr.spec.whatwg.org/#interface-xmlhttprequest). Likewise, the ProgressEvent is passed to progress event listeners, rather than using [d3.event](https://github.com/d3/d3-selection#event). If [d3.xml](https://github.com/d3/d3-request#xml) encounters an error parsing XML, this error is now reported to error listeners rather than returning a null response.
 
+The [d3.request](https://github.com/d3/d3-request#request), [d3.text](https://github.com/d3/d3-request#text) and [d3.xml](https://github.com/d3/d3-request#xml) methods no longer take an optional mime type as the second argument; use [*request*.mimeType](https://github.com/d3/d3-request#request_mimeType) instead. For example:
+
+```js
+d3.xml("file.svg").mimeType("image/svg+xml").get(function(error, svg) {
+  …
+});
+```
+
 With the exception of [d3.html](https://github.com/d3/d3-request#html) and [d3.xml](https://github.com/d3/d3-request#xml), Node is now supported via [node-XMLHttpRequest](https://github.com/driverdan/node-XMLHttpRequest).
 
 ## [Scales (d3-scale)](https://github.com/d3/d3-scale/blob/master/README.md)
