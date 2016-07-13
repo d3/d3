@@ -100,7 +100,7 @@ Human-readable reference marks for scales.
 
 * [d3.axisTop](https://github.com/d3/d3-axis/blob/master/README.md#axisTop) - create a new top-oriented axis generator.
 * [d3.axisRight](https://github.com/d3/d3-axis/blob/master/README.md#axisTight) - create a new right-oriented axis generator.
-* [d3.axisBottom](https://github.com/d3/d3-axis/blob/master/README.md#axisTottom) - create a new bottom-oriented axis generator.
+* [d3.axisBottom](https://github.com/d3/d3-axis/blob/master/README.md#axisBottom) - create a new bottom-oriented axis generator.
 * [d3.axisLeft](https://github.com/d3/d3-axis/blob/master/README.md#axisTeft) - create a new left-oriented axis generator.
 * [*axis*](https://github.com/d3/d3-axis/blob/master/README.md#_axis) - generate an axis for the given selection.
 * [*axis*.scale](https://github.com/d3/d3-axis/blob/master/README.md#axis_scale) - set the scale.
