@@ -845,8 +845,8 @@ Transform the DOM by selecting elements and joining to data.
 ### [Local Variables](https://github.com/d3/d3-selection/blob/master/README.md#local-variables)
 
 * [d3.local](https://github.com/d3/d3-selection/blob/master/README.md#local) - declares a new local variable.
-* [*local*.set](https://github.com/d3/d3-selection/blob/master/README.md#local_set) - get a local variable’s value.
-* [*local*.get](https://github.com/d3/d3-selection/blob/master/README.md#local_get) - set a local variable’s value.
+* [*local*.set](https://github.com/d3/d3-selection/blob/master/README.md#local_set) - set a local variable’s value.
+* [*local*.get](https://github.com/d3/d3-selection/blob/master/README.md#local_get) - get a local variable’s value.
 * [*local*.remove](https://github.com/d3/d3-selection/blob/master/README.md#local_remove) - delete a local variable.
 * [*local*.toString](https://github.com/d3/d3-selection/blob/master/README.md#local_toString) - get the property identifier of a local variable.
 
