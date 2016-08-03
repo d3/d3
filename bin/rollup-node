@@ -20,8 +20,6 @@ rollup.rollup({
       else resolve();
     });
   });
-}).then(function() {
-  console.warn("↳ build/d3.node.js");
 }).catch(abort);
 
 function abort(error) {
