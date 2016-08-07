@@ -14,7 +14,7 @@
 
 ## Installing
 
-If you use NPM, `npm install d3`. Otherwise, download the [latest release](https://github.com/d3/d3/releases/latest). The released bundle supports AMD (as an anonymous module), CommonJS, and vanilla environments. You can load directly from [d3js.org](https://d3js.org):
+If you use NPM, `npm install d3`. Otherwise, download the [latest release](https://github.com/d3/d3/releases/latest). The released bundle supports AMD (as an anonymous module), CommonJS, and vanilla environments. You can load directly from [d3js.org](https://d3js.org), [CDNJS](https://cdnjs.com/libraries/d3), or [npmcdn](https://npmcdn.com/d3/). For example:
 
 ```html
 <script src="https://d3js.org/d3.v4.js"></script>
@@ -31,8 +31,6 @@ You can also use the standalone D3 microlibraries. For example, [d3-selection](h
 ```html
 <script src="https://d3js.org/d3-selection.v1.js"></script>
 ```
-
-If you prefer to pin to a specific release, try [CDNJS](https://cdnjs.com/libraries/d3) or [npmcdn](https://npmcdn.com/d3/).
 
 D3 is written using [ES2015 modules](http://www.2ality.com/2014/09/es6-modules-final.html). Create a [custom bundle using Rollup](http://bl.ocks.org/mbostock/bb09af4c39c79cffcde4), Webpack, or your preferred bundler. To import D3 into an ES2015 application, either import the specific symbols you want to use:
 
