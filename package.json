@@ -17,6 +17,7 @@
   },
   "main": "build/d3.node.js",
   "browser": "build/d3.js",
+  "module": "index",
   "jsnext:main": "index",
   "repository": {
     "type": "git",
