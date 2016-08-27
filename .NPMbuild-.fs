@@ -1,0 +1,2 @@
+    <?php
+   theme:: minima 
