@@ -47,6 +47,7 @@ To the consternation of some users, 3.x employed Unicode variable names such as 
 * [Number Formats](#number-formats-d3-format)
 * [Geographies](#geographies-d3-geo)
 * [Hierarchies](#hierarchies-d3-hierarchy)
+* [Internals](#internals)
 * [Interpolators](#interpolators-d3-interpolate)
 * [Paths](#paths-d3-path)
 * [Polygons](#polygons-d3-polygon)
@@ -552,6 +553,33 @@ The circle-packing layout, [d3.pack](https://github.com/d3/d3-hierarchy#pack), h
 <img alt="Circle Packing in 3.x" src="https://raw.githubusercontent.com/d3/d3/master/img/pack-v3.png" width="420" height="420"> <img alt="Circle Packing in 4.0" src="https://raw.githubusercontent.com/d3/d3/master/img/pack-v4.png" width="420" height="420">
 
 A non-hierarchical implementation is also available as [d3.packSiblings](https://github.com/d3/d3-hierarchy#packSiblings), and the smallest enclosing circle implementation is available as [d3.packEnclose](https://github.com/d3/d3-hierarchy#packEnclose). [Pack padding](https://github.com/d3/d3-hierarchy#pack_padding) now applies between a parent and its children, as well as between adjacent siblings. In addition, you can now specify padding as a function that is computed dynamically for each parent.
+
+## Internals
+
+The d3.rebind method has been removed. (See the [3.x source](https://github.com/d3/d3/blob/v3.5.17/src/core/rebind.js).) If you want to wrap a getter-setter method, the recommend pattern is to implement a wrapper method and check the return value. For example, given a *component* that uses an internal [*dispatch*](#dispatches-d3-dispatch), *component*.on can rebind *dispatch*.on as follows:
+
+```js
+component.on = function() {
+  var value = dispatch.on.apply(dispatch, arguments);
+  return value === dispatch ? component : value;
+};
+```
+
+The d3.functor method has been removed. (See the [3.x source](https://github.com/d3/d3/blob/v3.5.17/src/core/functor.js).) If you want to promote a constant value to a function, the recommended pattern is to implement a closure that returns the constant value. If desired, you can use a helper method as follows:
+
+```js
+function constant(x) {
+  return function() {
+    return x;
+  };
+}
+```
+
+Given a value *x*, to promote *x* to a function if it is not already:
+
+```js
+var fx = typeof x === "function" ? x : constant(x);
+```
 
 ## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/blob/master/README.md)
 
