@@ -1021,7 +1021,7 @@ Parse and format times, inspired by strptime and strftime.
 * [d3.timeFormat](https://github.com/d3/d3-time-format/blob/master/README.md#timeFormat) - alias for *locale*.format on the default locale.
 * [d3.timeParse](https://github.com/d3/d3-time-format/blob/master/README.md#timeParse) - alias for *locale*.parse on the default locale.
 * [d3.utcFormat](https://github.com/d3/d3-time-format/blob/master/README.md#utcFormat) -  alias for *locale*.utcFormat on the default locale.
-* [d3.utcFormat](https://github.com/d3/d3-time-format/blob/master/README.md#utcParse) -  alias for *locale*.utcParse on the default locale.
+* [d3.utcParse](https://github.com/d3/d3-time-format/blob/master/README.md#utcParse) -  alias for *locale*.utcParse on the default locale.
 * [d3.isoFormat](https://github.com/d3/d3-time-format/blob/master/README.md#isoFormat) - an ISO 8601 UTC formatter.
 * [d3.isoParse](https://github.com/d3/d3-time-format/blob/master/README.md#isoParse) - an ISO 8601 UTC parser.
 * [d3.timeFormatLocale](https://github.com/d3/d3-time-format/blob/master/README.md#timeFormatLocale) - define a custom locale.
