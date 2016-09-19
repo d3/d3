@@ -33,7 +33,7 @@
     "json2module": "0.0",
     "package-preamble": "0.0",
     "rimraf": "2",
-    "rollup": "0.35",
+    "rollup": "0.36",
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "2",
     "tape": "4",
@@ -42,7 +42,7 @@
   "dependencies": {
     "d3-array": "1.0.1",
     "d3-axis": "1.0.3",
-    "d3-brush": "1.0.2",
+    "d3-brush": "1.0.3",
     "d3-chord": "1.0.2",
     "d3-collection": "1.0.1",
     "d3-color": "1.0.1",
