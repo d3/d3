@@ -24,7 +24,7 @@
     "url": "https://github.com/d3/d3.git"
   },
   "scripts": {
-    "pretest": "rm -rf build && mkdir build && json2module package.json > build/package.js && bin/rollup-node",
+    "pretest": "rimraf build && mkdir build && json2module package.json > build/package.js && node rollup.node",
     "test": "tape 'test/**/*-test.js'",
     "prepublish": "npm run test && rollup -c --banner \"$(preamble)\" -f umd -n d3 -o build/d3.js -- index.js && uglifyjs --preamble \"$(preamble)\" build/d3.js -c negate_iife=false -m -o build/d3.min.js",
     "postpublish": "VERSION=`node -e 'console.log(require(\"./package.json\").version)'`; git push && git push --tags && cd ../d3.github.com && git pull && cp ../d3/build/d3.js d3.v4.js && cp ../d3/build/d3.min.js d3.v4.min.js && git add d3.v4.js d3.v4.min.js && git commit -m \"d3 ${VERSION}\" && git push && cd - && cd ../d3-bower && git pull && cp ../d3/LICENSE ../d3/README.md ../d3/build/d3.js ../d3/build/d3.min.js . && git add -- LICENSE README.md d3.js d3.min.js && git commit -m \"${VERSION}\" && git tag -am \"${VERSION}\" v${VERSION} && git push && git push --tags && cd - && zip -j build/d3.zip -- LICENSE README.md API.md CHANGES.md build/d3.js build/d3.min.js"
@@ -32,6 +32,7 @@
   "devDependencies": {
     "json2module": "0.0",
     "package-preamble": "0.0",
+    "rimraf": "2",
     "rollup": "0.35",
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "2",
