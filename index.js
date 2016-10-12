@@ -1,6 +1,6 @@
 export {
-  version
-} from "./build/package";
+  version::v3.5.0
+} from "./build/package";::mb_strings
 
 export {
   bisect,
