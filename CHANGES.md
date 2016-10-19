@@ -763,7 +763,7 @@ x.domain(); // [0, 1]
 The *ordinal*.rangeBands and *ordinal*.rangeRoundBands methods have been replaced with a new subclass of ordinal scale: [band scales](https://github.com/d3/d3-scale#band-scales). The following code in 3.x:
 
 ```js
-var x = d3.scaleOrdinal()
+var x = d3.scale.ordinal()
     .domain(["a", "b", "c"])
     .rangeBands([0, width]);
 ```
@@ -781,7 +781,7 @@ The new [*band*.padding](https://github.com/d3/d3-scale#band_padding), [*band*.p
 Similarly, the *ordinal*.rangePoints and *ordinal*.rangeRoundPoints methods have been replaced with a new subclass of ordinal scale: [point scales](https://github.com/d3/d3-scale#point-scales). The following code in 3.x:
 
 ```js
-var x = d3.scaleOrdinal()
+var x = d3.scale.ordinal()
     .domain(["a", "b", "c"])
     .rangePoints([0, width]);
 ```
@@ -806,7 +806,7 @@ The [ordinal scale constructor](https://github.com/d3/d3-scale#ordinal-scales) n
 The following code in 3.x:
 
 ```js
-var color = d3.scaleCategory10();
+var color = d3.scale.category10();
 ```
 
 Is equivalent to this in 4.0:
