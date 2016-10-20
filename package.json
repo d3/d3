@@ -67,7 +67,7 @@
     "d3-time": "1.0.4",
     "d3-time-format": "2.0.2",
     "d3-timer": "1.0.3",
-    "d3-transition": "1.0.2",
+    "d3-transition": "1.0.3",
     "d3-voronoi": "1.0.2",
     "d3-zoom": "1.0.3"
   }
