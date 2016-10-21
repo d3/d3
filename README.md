@@ -1,4 +1,4 @@
-# D3: Data-Driven Documents
+# D3: Data-Driven Documents [![CDNJS](https://img.shields.io/cdnjs/v/d3.svg)](https://cdnjs.com/libraries/d3/)
 
 <a href="https://d3js.org"><img src="https://d3js.org/logo.svg" align="left" hspace="10" vspace="6"></a>
 
