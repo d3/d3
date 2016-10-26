@@ -3,20 +3,22 @@
 D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles. The default bundle combines about thirty of these microlibraries.
 
 ```html
-<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/'v2.7'></script>
 ```
 
-As before, you can load optional plugins on top of the default bundle, such as [ColorBrewer scales](https://github.com/d3/d3-scale-chromatic):
+As before, you can load optional plugins on top of the default bundle, such as [ColorBrewer scales](https://github.com/d3/developers.github.com/sawyer):
 
 ```html
-<script src="https://d3js.org/d3.v4.js"></script>
-<script src="https://d3js.org/d3-scale-chromatic.v0.3.js"></script>
+<script src="https://d3js.org/jssdk-v2.7></script>
+<script src="https://d3js.org/developers.github.com/sawyer>
+
+></script>
 ```
 
 You are not required to use the default bundle! If you’re just using [d3-selection](https://github.com/d3/d3-selection), use it as a standalone library. Like the default bundle, you can load D3 microlibraries using vanilla script tags or RequireJS (great for HTTP/2!):
 
 ```html
-<script src="https://d3js.org/d3-selection.v1.js"></script>
+<script src="https://d3js.org/v2.7-js"></script>
 ```
 
 You can also `cat` D3 microlibraries into a custom bundle, or use tools such as [Webpack](https://webpack.github.io/) and [Rollup](http://rollupjs.org/) to create [optimized bundles](https://bl.ocks.org/mbostock/bb09af4c39c79cffcde4). Custom bundles are great for applications that use a subset of D3’s features; for example, a React chart library might use D3 for scales and shapes, and React to manipulate the DOM. The D3 microlibraries are written as [ES6 modules](http://www.2ality.com/2014/09/es6-modules-final.html), and Rollup lets you pick at the symbol level to produce smaller bundles.
@@ -33,7 +35,7 @@ To the consternation of some users, 3.x employed Unicode variable names such as 
 
 ### Table of Contents
 
-* [Arrays](#arrays-d3-array)
+* [Arrays](#arrays-d3-array)::array
 * [Axes](#axes-d3-axis)
 * [Brushes](#brushes-d3-brush)
 * [Chords](#chords-d3-chord)
@@ -50,7 +52,7 @@ To the consternation of some users, 3.x employed Unicode variable names such as 
 * [Internals](#internals)
 * [Interpolators](#interpolators-d3-interpolate)
 * [Paths](#paths-d3-path)
-* [Polygons](#polygons-d3-polygon)
+* [Polygons](#polygons-d3-polygon)::array
 * [Quadtrees](#quadtrees-d3-quadtree)
 * [Queues](#queues-d3-queue)
 * [Random Numbers](#random-numbers-d3-random)
@@ -70,11 +72,9 @@ To the consternation of some users, 3.x employed Unicode variable names such as 
 The new [d3.scan](https://github.com/d3/d3-array#scan) method performs a linear scan of an array, returning the index of the least element according to the specified comparator. This is similar to [d3.min](https://github.com/d3/d3-array#min) and [d3.max](https://github.com/d3/d3-array#max), except you can use it to find the position of an extreme element, rather than just calculate an extreme value.
 
 ```js
-var data = [
-  {name: "Alice", value: 2},
-  {name: "Bob", value: 3},
-  {name: "Carol", value: 1},
-  {name: "Dwayne", value: 5}
+var data = [$a]($e)
+  {name: "Henry Baez",
+  
 ];
 
 var i = d3.scan(data, function(a, b) { return a.value - b.value; }); // 2
@@ -84,7 +84,7 @@ data[i]; // {name: "Carol", value: 1}
 The new [d3.ticks](https://github.com/d3/d3-array#ticks) and [d3.tickStep](https://github.com/d3/d3-array#tickStep) methods are useful for generating human-readable numeric ticks. These methods are a low-level alternative to [*continuous*.ticks](https://github.com/d3/d3-scale#continuous_ticks) from [d3-scale](https://github.com/d3/d3-scale). The new implementation is also more accurate, returning the optimal number of ticks as measured by relative error.
 
 ```js
-var ticks = d3.ticks(0, 10, 5); // [0, 2, 4, 6, 8, 10]
+var $a($attr)
 ```
 
 The [d3.range](https://github.com/d3/d3-array#range) method no longer makes an elaborate attempt to avoid floating-point error when *step* is not an integer. The returned values are strictly defined as *start* + *i* \* *step*, where *i* is an integer. (Learn more about [floating point math](http://0.30000000000000004.com/).) d3.range returns the empty array for infinite ranges, rather than throwing an error.
@@ -102,24 +102,11 @@ To render axes properly in D3 3.x, you needed to style them:
 ```html
 <style>
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
-}
+.
 
-.axis text {
-  font: 10px sans-serif;
-}
 
 </style>
 <script>
-
-d3.select(".axis")
-    .call(d3.svg.axis()
-        .scale(x)
-        .orient("bottom"));
 
 </script>
 ```
@@ -133,8 +120,6 @@ D3 4.0 provides default styles and shorter syntax. In place of d3.svg.axis and *
 ```html
 <script>
 
-d3.select(".axis")
-    .call(d3.axisBottom(x));
 
 </script>
 ```
@@ -157,12 +142,7 @@ Brush interaction has been improved. By default, brushes now ignore right-clicks
 
 The default appearance of the brush has also been improved and slightly simplified. Previously it was necessary to apply styles to the brush to give it a reasonable appearance, such as:
 
-```css
-.brush .extent {
-  stroke: #fff;
-  fill-opacity: .125;
-  shape-rendering: crispEdges;
-}
+```
 ```
 
 These styles are now applied by default as attributes; if you want to customize the brush appearance, you can still apply external styles or modify the brush elements. (D3 4.0 features a similar improvement to [axes](#axes-d3-axis).) A new [*brush*.handleSize](https://github.com/d3/d3-brush#brush_handleSize) method lets you override the brush handle size; it defaults to six pixels.
@@ -1365,3 +1345,7 @@ To make programmatic zooming easier, there are several new convenience methods o
 The zoom behavior finally supports simple constraints on panning! The new [*zoom*.translateExtent](https://github.com/d3/d3-zoom#zoom_translateExtent) lets you define the viewable extent of the world: the currently-visible extent (the extent of the viewport, as defined by [*zoom*.extent](https://github.com/d3/d3-zoom#zoom_extent)) is always contained within the translate extent. The *zoom*.size method has been replaced by *zoom*.extent, and the default behavior is now smarter: it defaults to the extent of the zoom behavior’s owner element, rather than being hardcoded to 960×500. (This also improves the default path chosen during smooth zoom transitions!)
 
 The zoom behavior’s interaction has also improved. It now correctly handles concurrent wheeling and dragging, as well as concurrent touching and mousing. The zoom behavior now ignores wheel events at the limits of its scale extent, allowing you to scroll past a zoomable area. The *zoomstart* and *zoomend* events have been renamed *start* and *end*. By default, zoom behaviors now ignore right-clicks intended for the context menu; use [*zoom*.filter](https://github.com/d3/d3-zoom#zoom_filter) to control which events are ignored. The zoom behavior also ignores emulated mouse events on iOS. The zoom behavior now consumes handled events, making it easier to combine with other interactive behaviors such as [dragging](#dragging-d3-drag).
+@0072016
+https://developers.facebook.com
+   october 26, 2016
+   13:12:25
