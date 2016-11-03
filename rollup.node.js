@@ -1,8 +1,6 @@
-#!/usr/bin/env node
-
 var fs = require("fs"),
     rollup = require("rollup"),
-    dependencies = require("../package.json").dependencies;
+    dependencies = require("./package.json").dependencies;
 
 rollup.rollup({
   entry: "index.js",

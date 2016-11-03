@@ -442,7 +442,7 @@ export {
   geoBounds,
   geoCentroid,
   geoCircle,
-  geoClipExtent,
+  geoClipExtent, // DEPRECATED! Use geoIdentity.clipExtent instead.
   geoConicConformal,
   geoConicConformalRaw,
   geoConicEqualArea,
@@ -455,6 +455,8 @@ export {
   geoGnomonic,
   geoGnomonicRaw,
   geoGraticule,
+  geoGraticule10,
+  geoIdentity,
   geoInterpolate,
   geoLength,
   geoMercator,

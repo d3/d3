@@ -47,6 +47,7 @@ To the consternation of some users, 3.x employed Unicode variable names such as 
 * [Number Formats](#number-formats-d3-format)
 * [Geographies](#geographies-d3-geo)
 * [Hierarchies](#hierarchies-d3-hierarchy)
+* [Internals](#internals)
 * [Interpolators](#interpolators-d3-interpolate)
 * [Paths](#paths-d3-path)
 * [Polygons](#polygons-d3-polygon)
@@ -360,7 +361,7 @@ There’s now a nice [visual reference](https://github.com/d3/d3-ease/blob/maste
 
 The force layout d3.layout.force has been renamed to d3.forceSimulation. The force simulation now uses [velocity Verlet integration](https://en.wikipedia.org/wiki/Verlet_integration#Velocity_Verlet) rather than position Verlet, tracking the nodes’ positions (*node*.x, *node*.y) and velocities (*node*.vx, *node*.vy) rather than their previous positions (*node*.px, *node*.py).
 
-Rather than hard-coding a set of built-in forces, the force simulation is now extensible: you specify which forces you want! The approach affords greater flexibility through composition. The new forces are more flexible, too: force parameters can typically be configured per-node or per-link. There are separate positioning forces for [*x*](https://github.com/d3/d3-force#forceX) and [*y*](https://github.com/d3/d3-force#forceY) that replace *force*.gravity. The new [link force](https://github.com/d3/d3-force#forceLink) replaces *force*.linkStrength and employs better default heuristics to improve stability. The new [many-body force](https://github.com/d3/d3-force#forceManyBody) replaces *force*.charge and supports a new [minimum-distance parameter](https://github.com/d3/d3-force#manyBody_distanceMin) and performance improvements thanks to 4.0’s [new quadtrees](#quadtrees-d3-quadtree). There are also brand-new forces for [centering nodes](https://github.com/d3/d3-force#forceCenter) and [collision resolution](https://github.com/d3/d3-force#forceCollision).
+Rather than hard-coding a set of built-in forces, the force simulation is now extensible: you specify which forces you want! The approach affords greater flexibility through composition. The new forces are more flexible, too: force parameters can typically be configured per-node or per-link. There are separate positioning forces for [*x*](https://github.com/d3/d3-force#forceX) and [*y*](https://github.com/d3/d3-force#forceY) that replace *force*.gravity; [*x*.x](https://github.com/d3/d3-force#x_x) and [*y*.y](https://github.com/d3/d3-force#y_y) replace *force*.size. The new [link force](https://github.com/d3/d3-force#forceLink) replaces *force*.linkStrength and employs better default heuristics to improve stability. The new [many-body force](https://github.com/d3/d3-force#forceManyBody) replaces *force*.charge and supports a new [minimum-distance parameter](https://github.com/d3/d3-force#manyBody_distanceMin) and performance improvements thanks to 4.0’s [new quadtrees](#quadtrees-d3-quadtree). There are also brand-new forces for [centering nodes](https://github.com/d3/d3-force#forceCenter) and [collision resolution](https://github.com/d3/d3-force#forceCollision).
 
 The new forces and simulation have been carefully crafted to avoid nondeterminism. Rather than initializing nodes randomly, if the nodes do not have preset positions, they are placed in a phyllotaxis pattern:
 
@@ -368,7 +369,7 @@ The new forces and simulation have been carefully crafted to avoid nondeterminis
 
 Random jitter is still needed to resolve link, collision and many-body forces if there are coincident nodes, but at least in the common case, the force simulation (and the resulting force-directed graph layout) is now consistent across browsers and reloads. D3 no longer plays dice!
 
-The force simulation has several new methods for greater control over heating, such as [*simulation*.alphaMin](https://github.com/d3/d3-force#simulation_alphaMin) and [*simulation*.alphaDecay](https://github.com/d3/d3-force#simulation_alphaDecay), and the internal timer. Calling [*simulation*.alpha](https://github.com/d3/d3-force#simulation_alpha) now has no effect on the internal timer, which is controlled independently via [*simulation*.stop](https://github.com/d3/d3-force#simulation_stop) and [*simulation*.restart](https://github.com/d3/d3-force#simulation_restart). As in 3.x, you can advance the simulation manually using [*simulation*.tick](https://github.com/d3/d3-force#simulation_tick). The *force*.friction parameter is replaced by *simulation*.velocityDecay. A new [*simulation*.alphaTarget](https://github.com/d3/d3-force#simulation_alphaTarget) method allows you to set the desired alpha (temperature) of the simulation, such that the simulation can be smoothly reheated during interaction, and then smoothly cooled again. This improves the stability of the graph during interaction.
+The force simulation has several new methods for greater control over heating, such as [*simulation*.alphaMin](https://github.com/d3/d3-force#simulation_alphaMin) and [*simulation*.alphaDecay](https://github.com/d3/d3-force#simulation_alphaDecay), and the internal timer. Calling [*simulation*.alpha](https://github.com/d3/d3-force#simulation_alpha) now has no effect on the internal timer, which is controlled independently via [*simulation*.stop](https://github.com/d3/d3-force#simulation_stop) and [*simulation*.restart](https://github.com/d3/d3-force#simulation_restart). The force layout’s internal timer now starts automatically on creation, removing *force*.start. As in 3.x, you can advance the simulation manually using [*simulation*.tick](https://github.com/d3/d3-force#simulation_tick). The *force*.friction parameter is replaced by *simulation*.velocityDecay. A new [*simulation*.alphaTarget](https://github.com/d3/d3-force#simulation_alphaTarget) method allows you to set the desired alpha (temperature) of the simulation, such that the simulation can be smoothly reheated during interaction, and then smoothly cooled again. This improves the stability of the graph during interaction.
 
 The force layout no longer depends on the [drag behavior](#dragging-d3-drag), though you can certainly create [draggable force-directed graphs](http://bl.ocks.org/mbostock/ad70335eeef6d167bc36fd3c04378048)! Set *node*.fx and *node*.fy to fix a node’s position. As an alternative to a [Voronoi](#voronoi-d3-voronoi) SVG overlay, you can now use [*simulation*.find](https://github.com/d3/d3-force#simulation_find) to find the closest node to a pointer.
 
@@ -553,6 +554,33 @@ The circle-packing layout, [d3.pack](https://github.com/d3/d3-hierarchy#pack), h
 
 A non-hierarchical implementation is also available as [d3.packSiblings](https://github.com/d3/d3-hierarchy#packSiblings), and the smallest enclosing circle implementation is available as [d3.packEnclose](https://github.com/d3/d3-hierarchy#packEnclose). [Pack padding](https://github.com/d3/d3-hierarchy#pack_padding) now applies between a parent and its children, as well as between adjacent siblings. In addition, you can now specify padding as a function that is computed dynamically for each parent.
 
+## Internals
+
+The d3.rebind method has been removed. (See the [3.x source](https://github.com/d3/d3/blob/v3.5.17/src/core/rebind.js).) If you want to wrap a getter-setter method, the recommend pattern is to implement a wrapper method and check the return value. For example, given a *component* that uses an internal [*dispatch*](#dispatches-d3-dispatch), *component*.on can rebind *dispatch*.on as follows:
+
+```js
+component.on = function() {
+  var value = dispatch.on.apply(dispatch, arguments);
+  return value === dispatch ? component : value;
+};
+```
+
+The d3.functor method has been removed. (See the [3.x source](https://github.com/d3/d3/blob/v3.5.17/src/core/functor.js).) If you want to promote a constant value to a function, the recommended pattern is to implement a closure that returns the constant value. If desired, you can use a helper method as follows:
+
+```js
+function constant(x) {
+  return function() {
+    return x;
+  };
+}
+```
+
+Given a value *x*, to promote *x* to a function if it is not already:
+
+```js
+var fx = typeof x === "function" ? x : constant(x);
+```
+
 ## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/blob/master/README.md)
 
 The [d3.interpolate](https://github.com/d3/d3-interpolate#interpolate) method no longer delegates to d3.interpolators, which has been removed; its behavior is now defined by the library. It is now slightly faster in the common case that *b* is a number. It only uses [d3.interpolateRgb](https://github.com/d3/d3-interpolate#interpolateRgb) if *b* is a valid CSS color specifier (and not approximately one). And if the end value *b* is null, undefined, true or false, d3.interpolate now returns a constant function which always returns *b*.
@@ -735,7 +763,7 @@ x.domain(); // [0, 1]
 The *ordinal*.rangeBands and *ordinal*.rangeRoundBands methods have been replaced with a new subclass of ordinal scale: [band scales](https://github.com/d3/d3-scale#band-scales). The following code in 3.x:
 
 ```js
-var x = d3.scaleOrdinal()
+var x = d3.scale.ordinal()
     .domain(["a", "b", "c"])
     .rangeBands([0, width]);
 ```
@@ -753,7 +781,7 @@ The new [*band*.padding](https://github.com/d3/d3-scale#band_padding), [*band*.p
 Similarly, the *ordinal*.rangePoints and *ordinal*.rangeRoundPoints methods have been replaced with a new subclass of ordinal scale: [point scales](https://github.com/d3/d3-scale#point-scales). The following code in 3.x:
 
 ```js
-var x = d3.scaleOrdinal()
+var x = d3.scale.ordinal()
     .domain(["a", "b", "c"])
     .rangePoints([0, width]);
 ```
@@ -778,7 +806,7 @@ The [ordinal scale constructor](https://github.com/d3/d3-scale#ordinal-scales) n
 The following code in 3.x:
 
 ```js
-var color = d3.scaleCategory10();
+var color = d3.scale.category10();
 ```
 
 Is equivalent to this in 4.0:
