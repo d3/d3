@@ -1004,7 +1004,7 @@ A categorical shape encoding, as in a scatterplot.
 * [d3.symbolSquare](https://github.com/d3/d3-shape/blob/master/README.md#symbolSquare) - a square.
 * [d3.symbolStar](https://github.com/d3/d3-shape/blob/master/README.md#symbolStar) - a pentagonal star (pentagram).
 * [d3.symbolTriangle](https://github.com/d3/d3-shape/blob/master/README.md#symbolTriangle) - an up-pointing triangle.
-* [d3.symbolWye](https://github.com/d3/d3-shape/blob/master/README.md#symbolWye) - an Y-shape symbol.
+* [d3.symbolWye](https://github.com/d3/d3-shape/blob/master/README.md#symbolWye) - a Y shape.
 * [*symbolType*.draw](https://github.com/d3/d3-shape/blob/master/README.md#symbolType_draw) - draw this symbol to the given context.
 
 ### [Stacks](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
