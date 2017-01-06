@@ -33,7 +33,7 @@
     "json2module": "0.0",
     "package-preamble": "0.0",
     "rimraf": "2",
-    "rollup": "0.36",
+    "rollup": "0.40",
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "2",
     "tape": "4",
@@ -68,7 +68,7 @@
     "d3-time-format": "2.0.3",
     "d3-timer": "1.0.3",
     "d3-transition": "1.0.3",
-    "d3-voronoi": "1.1.0",
-    "d3-zoom": "1.1.0"
+    "d3-voronoi": "1.1.1",
+    "d3-zoom": "1.1.1"
   }
 }
