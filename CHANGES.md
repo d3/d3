@@ -145,10 +145,7 @@ And get this:
 
 As before, you can customize the axis appearance either by applying stylesheets or by modifying the axis elements. The default appearance has been changed slightly to offset the axis by a half-pixel;  this fixes a crisp-edges rendering issue on Safari where the axis would be drawn two-pixels thick.
 
-There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickArguments) method, as an alternative to [*axis*.ticks](https://github.com/d3/d3-axis#axis_ticks) that also allows the axis tick arguments to be inspected. The [*axis*.tickSize](https://github.com/d3/d3-axis#axis_tickSize) method has been changed to only allow a single argument when setting the tick size; use [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) or [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) to set the inner and outer tick size separately.
-
-* *axis*.innerTickSize ↦ [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner)
-* *axis*.outerTickSize ↦ [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter)
+There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickArguments) method, as an alternative to [*axis*.ticks](https://github.com/d3/d3-axis#axis_ticks) that also allows the axis tick arguments to be inspected. The [*axis*.tickSize](https://github.com/d3/d3-axis#axis_tickSize) method has been changed to only allow a single argument when setting the tick size. The *axis*.innerTickSize and *axis*.outerTickSize methods have been renamed [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) and [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter), respectively.
 
 ## [Brushes (d3-brush)](https://github.com/d3/d3-brush/blob/master/README.md)
 
