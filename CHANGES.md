@@ -147,6 +147,9 @@ As before, you can customize the axis appearance either by applying stylesheets 
 
 There’s now an [*axis*.tickArguments](https://github.com/d3/d3-axis#axis_tickArguments) method, as an alternative to [*axis*.ticks](https://github.com/d3/d3-axis#axis_ticks) that also allows the axis tick arguments to be inspected. The [*axis*.tickSize](https://github.com/d3/d3-axis#axis_tickSize) method has been changed to only allow a single argument when setting the tick size; use [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner) or [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter) to set the inner and outer tick size separately.
 
+* *axis*.innerTickSize ↦ [*axis*.tickSizeInner](https://github.com/d3/d3-axis#axis_tickSizeInner)
+* *axis*.outerTickSize ↦ [*axis*.tickSizeOuter](https://github.com/d3/d3-axis#axis_tickSizeOuter)
+
 ## [Brushes (d3-brush)](https://github.com/d3/d3-brush/blob/master/README.md)
 
 Replacing d3.svg.brush, there are now three classes of brush for brushing along the *x*-dimension, the *y*-dimension, or both: [d3.brushX](https://github.com/d3/d3-brush#brushX), [d3.brushY](https://github.com/d3/d3-brush#brushY), [d3.brush](https://github.com/d3/d3-brush#brush). Brushes are no longer dependent on [scales](#scales-d3-scale); instead, each brush defines a selection in screen coordinates. This selection can be [inverted](https://github.com/d3/d3-scale#continuous_invert) if you want to compute the corresponding data domain. And rather than rely on the scales’ ranges to determine the brushable area, there is now a [*brush*.extent](https://github.com/d3/d3-brush#brush_extent) method for setting it. If you do not set the brush extent, it defaults to the full extent of the owner SVG element. The *brush*.clamp method has also been eliminated; brushing is always restricted to the brushable area defined by the brush extent.
