@@ -482,6 +482,7 @@ Layout algorithms for visualizing hierarchical data.
 * [*node*.links](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_links) - generate an array of links.
 * [*node*.sum](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_sum) - evaluate and aggregate quantitative values.
 * [*node*.sort](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_sort) - sort all descendant siblings.
+* [*node*.count](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_count) - count the number of leaves.
 * [*node*.each](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_each) - breadth-first traversal.
 * [*node*.eachAfter](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_eachAfter) - post-order traversal.
 * [*node*.eachBefore](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_eachBefore) - pre-order traversal.
