@@ -375,6 +375,7 @@ Geographic projections, shapes and math.
 * [*path*.area](https://github.com/d3/d3-geo/blob/master/README.md#path_area) - compute the projected planar area of a given feature.
 * [*path*.bounds](https://github.com/d3/d3-geo/blob/master/README.md#path_bounds) - compute the projected planar bounding box of a given feature.
 * [*path*.centroid](https://github.com/d3/d3-geo/blob/master/README.md#path_centroid) - compute the projected planar centroid of a given feature.
+* [*path*.measure](https://github.com/d3/d3-geo/blob/master/README.md#path_measure) - compute the projected planar length of a given feature.
 * [*path*.projection](https://github.com/d3/d3-geo/blob/master/README.md#path_projection) - set the geographic projection.
 * [*path*.context](https://github.com/d3/d3-geo/blob/master/README.md#path_context) - set the render context.
 * [*path*.pointRadius](https://github.com/d3/d3-geo/blob/master/README.md#path_pointRadius) - set the radius to display point features.
@@ -468,6 +469,8 @@ Geographic projections, shapes and math.
 ### [Transforms](https://github.com/d3/d3-geo/blob/master/README.md#transforms)
 
 * [d3.geoIdentity](https://github.com/d3/d3-geo/blob/master/README.md#geoIdentity) - scale, translate or clip planar geometry.
+* [*identity*.reflectX](https://github.com/d3/d3-geo/blob/master/README.md#identity_reflectX) - reflect the *x*-dimension.
+* [*identity*.reflectY](https://github.com/d3/d3-geo/blob/master/README.md#identity_reflectY) - reflect the *y*-dimension.
 * [d3.geoTransform](https://github.com/d3/d3-geo/blob/master/README.md#geoTransform) - define a custom geometry transform.
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy)
@@ -1168,6 +1171,7 @@ Pan and zoom SVG, HTML or Canvas using mouse or touch input.
 * [*zoom*.scaleExtent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_scaleExtent) - set the allowed scale range.
 * [*zoom*.translateExtent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_translateExtent) - set the extent of the zoomable world.
 * [*zoom*.duration](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_duration) - set the duration of zoom transitions.
+* [*zoom*.interpolate](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_interpolate) - control the interpolation of zoom transitions.
 * [*zoom*.on](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_on) - listen for zoom events.
 * [d3.zoomTransform](https://github.com/d3/d3-zoom/blob/master/README.md#zoomTransform) - get the zoom transform for a given element.
 * [*transform*.scale](https://github.com/d3/d3-zoom/blob/master/README.md#transform_scale) - scale a transform by the specified amount.
