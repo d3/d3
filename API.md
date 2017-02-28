@@ -71,6 +71,7 @@ Methods for searching arrays for a specific element.
 
 Methods for transforming arrays and for generating new arrays.
 
+* [d3.cross](https://github.com/d3/d3-array/blob/master/README.md#cross) - compute the Cartesian product of two arrays.
 * [d3.merge](https://github.com/d3/d3-array/blob/master/README.md#merge) - merge multiple arrays into one array.
 * [d3.pairs](https://github.com/d3/d3-array/blob/master/README.md#pairs) - create an array of adjacent pairs of elements.
 * [d3.permute](https://github.com/d3/d3-array/blob/master/README.md#permute) - reorder an array of elements according to an array of indexes.
@@ -429,6 +430,7 @@ Geographic projections, shapes and math.
 * [d3.geoArea](https://github.com/d3/d3-geo/blob/master/README.md#geoArea) - compute the spherical area of a given feature.
 * [d3.geoBounds](https://github.com/d3/d3-geo/blob/master/README.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
 * [d3.geoCentroid](https://github.com/d3/d3-geo/blob/master/README.md#geoCentroid) - compute the spherical centroid of a given feature.
+* [d3.geoContains](https://github.com/d3/d3-geo/blob/master/README.md#geoContains) - test whether a point is inside a given feature.
 * [d3.geoDistance](https://github.com/d3/d3-geo/blob/master/README.md#geoDistance) - compute the great-arc distance between two points.
 * [d3.geoLength](https://github.com/d3/d3-geo/blob/master/README.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
 * [d3.geoInterpolate](https://github.com/d3/d3-geo/blob/master/README.md#geoInterpolate) - interpolate between two points along a great arc.
