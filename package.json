@@ -35,12 +35,12 @@
     "rimraf": "2",
     "rollup": "^0.41.4",
     "rollup-plugin-ascii": "0.0",
-    "rollup-plugin-node-resolve": "2",
+    "rollup-plugin-node-resolve": "3",
     "tape": "4",
     "uglify-js": "^2.8.11"
   },
   "dependencies": {
-    "d3-array": "1.1.1",
+    "d3-array": "1.2.0",
     "d3-axis": "1.0.6",
     "d3-brush": "1.0.4",
     "d3-chord": "1.0.4",
@@ -51,7 +51,7 @@
     "d3-dsv": "1.0.5",
     "d3-ease": "1.0.3",
     "d3-force": "1.0.6",
-    "d3-format": "1.1.1",
+    "d3-format": "1.2.0",
     "d3-geo": "1.6.3",
     "d3-hierarchy": "1.1.4",
     "d3-interpolate": "1.1.4",

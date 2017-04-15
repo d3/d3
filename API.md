@@ -77,6 +77,7 @@ Methods for transforming arrays and for generating new arrays.
 * [d3.permute](https://github.com/d3/d3-array/blob/master/README.md#permute) - reorder an array of elements according to an array of indexes.
 * [d3.shuffle](https://github.com/d3/d3-array/blob/master/README.md#shuffle) - randomize the order of an array.
 * [d3.ticks](https://github.com/d3/d3-array/blob/master/README.md#ticks) - generate representative values from a numeric interval.
+* [d3.tickIncrement](https://github.com/d3/d3-array/blob/master/README.md#tickIncrement) - generate representative values from a numeric interval.
 * [d3.tickStep](https://github.com/d3/d3-array/blob/master/README.md#tickStep) - generate representative values from a numeric interval.
 * [d3.range](https://github.com/d3/d3-array/blob/master/README.md#range) - generate a range of numeric values.
 * [d3.transpose](https://github.com/d3/d3-array/blob/master/README.md#transpose) - transpose an array of arrays.
