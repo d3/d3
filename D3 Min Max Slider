@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+.axis path, line {
+  fill: none;
+  stroke: #000;
+  stroke-linecap: round;
+}
+.min-slider .handle, .max-slider .handle {
+  fill: #fff;
+  fill-opacity:0.2;
+  stroke: #000;
+  stroke-opacity: .5;
+  stroke-width: 1.25px;
+  cursor: pointer;
+}
+.line {
+  fill: steelblue;
+  fill-opacity:0.2;
+
+}
+.bar {
+  fill: steelblue;
+  fill-opacity: 0.2;
+}
+
+.bar:hover {
+  fill: brown;
+    fill-opacity:1;
+}
+body {
+  font: 10px sans-serif;
+}
+#slider {
+	width: 400px;
+	height: 80px;
+}
+</style>
+<div id="slider"></div>
+<div id="slider1"></div>
+<div id="slider2"></div>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script>
+var sliderClass = {
+	brush: "",
+	xScale: "",
+	minHandle:"",
+	maxHandle:"",
+	drawSlider: function(config) {
+		var data = config.data,
+			divID = config.divId,
+			display = config.displayType,
+			minPos = config.minPos,
+			maxPos = config.maxPos,
+			xMin = d3.min(data,function(d){return d.x}),
+			xMax = d3.max(data,function(d){return d.x}), 
+			yMin = d3.min(data,function(d){return d.y}),
+			yMax = d3.max(data,function(d){return d.y}),
+			width = d3.select("#slider").node().getBoundingClientRect().width,
+			height = d3.select("#slider").node().getBoundingClientRect().height;
+
+		var margin = {top: 0, right: 0, bottom: 0, left: 10},
+		    width = width - margin.left - margin.right,
+		    height = height - margin.bottom - margin.top;
+
+			xScale = d3.scale.linear()
+		    .domain([xMin, xMax])
+		    .range([10, width-10])
+		    .clamp(true);
+
+		var yScale = d3.scale.linear()
+		    .domain([yMin, yMax])
+		    .range([height/2, 10])
+		    .clamp(true);    
+
+		var xAxis = d3.svg.axis()
+		    .scale(xScale)
+		    .orient("bottom")
+		    .tickFormat(function(d) { return d; })
+		    .tickSize(5)
+		    .tickPadding(12);
+
+		var yAxis = d3.svg.axis()
+			.scale(yScale)
+			.orient("left");    
+
+		 	brush = d3.svg.brush()
+		    .x(xScale)
+		    .extent([0, 0])
+		    .on("brush", this.setSliderHandle);
+
+		var line = d3.svg.area() 
+			.interpolate("cardinal") //"linear","step-before","step-after","basis","basis-open","basis-closed","cardinal","cardinal-open","cardinal-closed","monotone"
+			.x(function(d) { return xScale(d.x); })
+			.y0(function(d) {return height/2})
+			.y1(function(d) { return yScale(d.y); });    
+
+		var svg = d3.select("#"+divID).append("svg")
+		    .attr("width", width + margin.left + margin.right)
+		    .attr("height", height + margin.top + margin.bottom)
+		  	.append("g")
+		    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+			svg.append("g")
+		    .attr("class", "x axis")
+		    .attr("transform", "translate(0," + height/2 + ")")
+		    .call(xAxis);
+
+		if(display == 'area') {
+			var path = svg.append("path")
+				.datum(data)
+				.attr("class", "line")
+				.attr("d", line);
+		} else if(display == 'bar') {
+			barWidth = width/data.length;
+				svg.selectAll('.bar')
+				.data(data)
+				.enter().append('rect')
+				.attr("class", "bar")
+				.attr("width", barWidth)
+				.attr("height", function(d) {
+					return height/2 - yScale(d.y);
+				})
+				.attr("x", function(d) {
+					return xScale(d.x);
+				})
+				.attr("y", function(d){
+					return yScale(d.y);
+				})
+		}   
+		var minSlider = svg.append("g")
+		    .attr("class", "min-slider")
+		    .call(brush);
+
+		var maxSlider = svg.append("g")
+		    .attr("class", "max-slider")
+		    .call(brush);    
+
+			minSlider.selectAll(".extent,.resize").remove();
+			maxSlider.selectAll(".extent,.resize").remove();
+
+		var dragEnd = d3.behavior.drag()
+			.on("dragend", function (){
+				var value = brush.extent()[0]; 
+			});
+
+
+		minHandle = this.drawCirle({slider:minSlider, radious:8, position:xScale(minPos), event:dragEnd, height:height, id:divID+"-minHandle"});
+		maxHandle = this.drawCirle({slider:maxSlider, radious:8, position:xScale(maxPos), event:dragEnd, height:height, id:divID+"-maxHandle"});
+		minLine = this.drawCrossLine({slider:minSlider, x1:xScale(minPos), y1:height/2-20, x2:xScale(minPos), y2:height/2+20, id:divID+"-minLine"})					
+		maxLine = this.drawCrossLine({slider:maxSlider, x1:xScale(maxPos), y1:height/2-20, x2:xScale(maxPos), y2:height/2+20, id:divID+"-maxLine"})
+			
+	},
+	setSliderHandle:function() {
+	  if (d3.event.sourceEvent) { 
+	    value = xScale.invert(d3.mouse(this)[0]);
+	    brush.extent([value, value]);
+	  }
+	  d3.select(this).attr('class') == 'min-slider'? d3.select(this).select('circle').attr("cx", xScale(value)) : d3.select(this).select('circle').attr("cx", xScale(value));
+	  d3.select(this).attr('class') == 'min-slider'? d3.select(this).select('line').attr("x1", xScale(value)).attr("x2",xScale(value)) : d3.select(this).select('line').attr("x1", xScale(value)).attr("x2",xScale(value));
+	},
+	drawCirle: function(config) {
+		var appendDiv =  config.slider,
+				id = config.id,
+ 			  radious = config.radious,
+			position  = config.position,
+			event 	  = config.event,
+			height	  = config.height;
+
+		return appendDiv.append("circle")
+			.attr("id", id)
+			.attr("class", "handle")
+			.attr("transform", "translate(0," + height / 2 + ")")
+			.attr("r", radious)
+			.attr("cx", position)
+			.call(event);
+	},
+	drawCrossLine: function(config) {
+		var appendDiv =  config.slider,
+			x1 = config.x1,
+			y1 = config.y1,
+			x2 = config.x2,
+			y2 = config.y2,
+			id = config.id;		
+
+		return appendDiv.append('line')
+			.attr("id", id)
+		    .attr('class', 'cross-line')
+		    .attr("x1", x1)
+		    .attr("y1", y1)
+		    .attr("x2", x2)
+		    .attr("y2", y2)
+	}
+}
+
+var data =[{"x":5,"y":5},{"x":10,"y":30},{"x":30,"y":39},{"x":40,"y":88},{"x":50,"y":15},{"x":60,"y":94},{"x":70,"y":76},{"x":80,"y":59},{"x":90,"y":47},{"x":100,"y":0}];
+sliderClass.drawSlider({
+			data:data,
+			divId:'slider',
+			displayType:'area', //bar
+			minPos:10,
+			maxPos:90
+})
+sliderClass.drawSlider({
+			data:data,
+			divId:'slider',
+			displayType:'bar', //bar
+			minPos:10,
+			maxPos:90
+})
+</script>
