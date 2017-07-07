@@ -241,8 +241,8 @@ Drag and drop SVG, HTML or Canvas using mouse or touch input.
 * [*drag*.clickDistance](https://github.com/d3/d3-drag/blob/master/README.md#drag_clickDistance) - set the click distance threshold.
 * [*drag*.on](https://github.com/d3/d3-drag/blob/master/README.md#drag_on) - listen for drag events.
 * [*event*.on](https://github.com/d3/d3-drag/blob/master/README.md#event_on) - listen for drag events on the current gesture.
-* [d3.dragDisable](https://github.com/d3/d3-drag/blob/master/README.md#dragDisable) -
-* [d3.dragEnable](https://github.com/d3/d3-drag/blob/master/README.md#dragEnable) -
+* [d3.dragDisable](https://github.com/d3/d3-drag/blob/master/README.md#dragDisable) - prevents native drag-and-drop and text selection on the specified window.
+* [d3.dragEnable](https://github.com/d3/d3-drag/blob/master/README.md#dragEnable) - enables native drag-and-drop and text selection on the specified window.
 
 ## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv)
 
@@ -415,17 +415,17 @@ Geographic projections, shapes and math.
 * [*project*.invert](https://github.com/d3/d3-geo/blob/master/README.md#project_invert) - unproject the specified point from the plane to the sphere.
 * [d3.geoProjection](https://github.com/d3/d3-geo/blob/master/README.md#geoProjection) - create a custom projection.
 * [d3.geoProjectionMutator](https://github.com/d3/d3-geo/blob/master/README.md#geoProjectionMutator) - create a custom configurable projection.
-* [d3.geoAzimuthalEqualAreaRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEqualAreaRaw) -
-* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEquidistantRaw) -
-* [d3.geoConicConformalRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicConformalRaw) -
-* [d3.geoConicEqualAreaRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEqualAreaRaw) -
-* [d3.geoConicEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEquidistantRaw) -
-* [d3.geoEquirectangularRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoEquirectangularRaw) -
-* [d3.geoGnomonicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoGnomonicRaw) -
-* [d3.geoMercatorRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoMercatorRaw) -
-* [d3.geoOrthographicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoOrthographicRaw) -
-* [d3.geoStereographicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoStereographicRaw) -
-* [d3.geoTransverseMercatorRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoTransverseMercatorRaw) -
+* [d3.geoAzimuthalEqualAreaRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
+* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEquidistantRaw) - the azimuthal equidistant projection.
+* [d3.geoConicConformalRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicConformalRaw) - the raw conic conformal projection.
+* [d3.geoConicEqualAreaRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
+* [d3.geoConicEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
+* [d3.geoEquirectangularRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoEquirectangularRaw) - the raw equirectangular (plate carreé) projection.
+* [d3.geoGnomonicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoGnomonicRaw) - the raw gnomonic projection.
+* [d3.geoMercatorRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoMercatorRaw) - the raw Mercator projection.
+* [d3.geoOrthographicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoOrthographicRaw) - the raw azimuthal orthographic projection.
+* [d3.geoStereographicRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoStereographicRaw) - the raw azimuthal stereographic projection.
+* [d3.geoTransverseMercatorRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoTransverseMercatorRaw) - the raw transverse spherical Mercator projection.
 
 ### [Spherical Math](https://github.com/d3/d3-geo/blob/master/README.md#spherical-math)
 
@@ -463,12 +463,12 @@ Geographic projections, shapes and math.
 #### [Streams](https://github.com/d3/d3-geo/blob/master/README.md#streams)
 
 * [d3.geoStream](https://github.com/d3/d3-geo/blob/master/README.md#geoStream) - convert a GeoJSON object to a geometry stream.
-* [*stream*.point](https://github.com/d3/d3-geo/blob/master/README.md#stream_point) -
-* [*stream*.lineStart](https://github.com/d3/d3-geo/blob/master/README.md#stream_lineStart) -
-* [*stream*.lineEnd](https://github.com/d3/d3-geo/blob/master/README.md#stream_lineEnd) -
-* [*stream*.polygonStart](https://github.com/d3/d3-geo/blob/master/README.md#stream_polygonStart) -
-* [*stream*.polygonEnd](https://github.com/d3/d3-geo/blob/master/README.md#stream_polygonEnd) -
-* [*stream*.sphere](https://github.com/d3/d3-geo/blob/master/README.md#stream_sphere) -
+* [*stream*.point](https://github.com/d3/d3-geo/blob/master/README.md#stream_point) - indicates a point with the specified coordinates.
+* [*stream*.lineStart](https://github.com/d3/d3-geo/blob/master/README.md#stream_lineStart) - indicates the start of a line or ring.
+* [*stream*.lineEnd](https://github.com/d3/d3-geo/blob/master/README.md#stream_lineEnd) - indicates the end of a line or ring.
+* [*stream*.polygonStart](https://github.com/d3/d3-geo/blob/master/README.md#stream_polygonStart) - indicates the start of a polygon.
+* [*stream*.polygonEnd](https://github.com/d3/d3-geo/blob/master/README.md#stream_polygonEnd) - indicates the end of a polygon.
+* [*stream*.sphere](https://github.com/d3/d3-geo/blob/master/README.md#stream_sphere) - indicates the sphere.
 
 ### [Transforms](https://github.com/d3/d3-geo/blob/master/README.md#transforms)
 
@@ -602,9 +602,9 @@ Two-dimensional recursive spatial subdivision.
 * [*quadtree*.x](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_x) - set the *x* accessor.
 * [*quadtree*.y](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_y) - set the *y* accessor.
 * [*quadtree*.add](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_add) - add a datum to a quadtree.
-* [*quadtree*.addAll](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_addAll) -
+* [*quadtree*.addAll](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_addAll) - add an array of data to a quadtree.
 * [*quadtree*.remove](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_remove) - remove a datum from a quadtree.
-* [*quadtree*.removeAll](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_removeAll) -
+* [*quadtree*.removeAll](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_removeAll) - remove an array of data from a quadtree.
 * [*quadtree*.copy](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_copy) - create a copy of a quadtree.
 * [*quadtree*.root](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_root) - get the quadtree’s root node.
 * [*quadtree*.data](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_data) - retrieve all data from the quadtree.
@@ -1158,7 +1158,7 @@ Animated transitions for [selections](#selections).
 * [*transition*.duration](https://github.com/d3/d3-transition/blob/master/README.md#transition_duration) - specify per-element duration in milliseconds.
 * [*transition*.ease](https://github.com/d3/d3-transition/blob/master/README.md#transition_ease) - specify the easing function.
 * [d3.active](https://github.com/d3/d3-transition/blob/master/README.md#active) - select the active transition for a given node.
-* [d3.interrupt](https://github.com/d3/d3-transition/blob/master/README.md#interrupt) -
+* [d3.interrupt](https://github.com/d3/d3-transition/blob/master/README.md#interrupt) - interrupt the active transition for a given node.
 
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi)
 
@@ -1189,6 +1189,7 @@ Pan and zoom SVG, HTML or Canvas using mouse or touch input.
 * [*zoom*.scaleBy](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_scaleBy) - scale the transform for the selected elements.
 * [*zoom*.scaleTo](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_scaleTo) - scale the transform for the selected elements.
 * [*zoom*.filter](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_filter) - control which input events initiate zooming.
+* [*zoom*.wheelDelta](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_wheelDelta) - set the wheel delta function.
 * [*zoom*.clickDistance](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_clickDistance) - set the click distance threshold.
 * [*zoom*.extent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_extent) - set the extent of the viewport.
 * [*zoom*.scaleExtent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_scaleExtent) - set the allowed scale range.
