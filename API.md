@@ -416,7 +416,7 @@ Geographic projections, shapes and math.
 * [d3.geoProjection](https://github.com/d3/d3-geo/blob/master/README.md#geoProjection) - create a custom projection.
 * [d3.geoProjectionMutator](https://github.com/d3/d3-geo/blob/master/README.md#geoProjectionMutator) - create a custom configurable projection.
 * [d3.geoAzimuthalEqualAreaRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
-* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEquidistantRaw) - the azimuthal equidistant projection.
+* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEquidistantRaw) - the raw azimuthal equidistant projection.
 * [d3.geoConicConformalRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicConformalRaw) - the raw conic conformal projection.
 * [d3.geoConicEqualAreaRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
 * [d3.geoConicEquidistantRaw](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
