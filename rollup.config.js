@@ -2,9 +2,12 @@ import ascii from "rollup-plugin-ascii";
 import node from "rollup-plugin-node-resolve";
 
 export default {
-  entry: "index",
+  input: "index",
   extend: true,
-  format: "umd",
-  moduleName: "d3",
-  plugins: [node(), ascii()]
+  plugins: [node(), ascii()],
+  output: {
+    file: "build/d3.js",
+    format: "umd",
+    name: "d3"
+  }
 };

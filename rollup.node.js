@@ -3,7 +3,7 @@ var fs = require("fs"),
     dependencies = require("./package.json").dependencies;
 
 rollup.rollup({
-  entry: "index.js",
+  input: "index.js",
   external: Object.keys(dependencies)
 }).then(function(bundle) {
   return bundle.generate({format: "cjs"});
