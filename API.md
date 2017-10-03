@@ -237,6 +237,7 @@ Drag and drop SVG, HTML or Canvas using mouse or touch input.
 * [*drag*](https://github.com/d3/d3-drag/blob/master/README.md#_drag) - apply the drag behavior to a selection.
 * [*drag*.container](https://github.com/d3/d3-drag/blob/master/README.md#drag_container) - set the coordinate system.
 * [*drag*.filter](https://github.com/d3/d3-drag/blob/master/README.md#drag_filter) - ignore some initiating input events.
+* [*drag*.touchable](https://github.com/d3/d3-drag/blob/master/README.md#drag_touchable) - set the touch support detector.
 * [*drag*.subject](https://github.com/d3/d3-drag/blob/master/README.md#drag_subject) - set the thing being dragged.
 * [*drag*.clickDistance](https://github.com/d3/d3-drag/blob/master/README.md#drag_clickDistance) - set the click distance threshold.
 * [*drag*.on](https://github.com/d3/d3-drag/blob/master/README.md#drag_on) - listen for drag events.
@@ -351,6 +352,11 @@ Force-directed graph layout using velocity Verlet integration.
 * [d3.forceY](https://github.com/d3/d3-force/blob/master/README.md#forceY) - create an *y*-positioning force.
 * [*y*.strength](https://github.com/d3/d3-force/blob/master/README.md#y_strength) - set the force strength.
 * [*y*.y](https://github.com/d3/d3-force/blob/master/README.md#y_y) - set the target *y*-coordinate.
+* [d3.forceRadial](https://github.com/d3/d3-force/blob/master/README.md#forceRadial) - create a radial positioning force.
+* [*radial*.strength](https://github.com/d3/d3-force/blob/master/README.md#radial_strength) - set the force strength.
+* [*radial*.radius](https://github.com/d3/d3-force/blob/master/README.md#radial_radius) - set the target radius.
+* [*radial*.x](https://github.com/d3/d3-force/blob/master/README.md#radial_x) - set the target center *x*-coordinate.
+* [*radial*.y](https://github.com/d3/d3-force/blob/master/README.md#radial_y) - set the target center *y*-coordinate.
 
 ## [Number Formats (d3-format)](https://github.com/d3/d3-format)
 
@@ -397,6 +403,11 @@ Geographic projections, shapes and math.
 * [*projection*.center](https://github.com/d3/d3-geo/blob/master/README.md#projection_center) - set the center point.
 * [*projection*.rotate](https://github.com/d3/d3-geo/blob/master/README.md#projection_rotate) - set the three-axis spherical rotation angles.
 * [*projection*.precision](https://github.com/d3/d3-geo/blob/master/README.md#projection_precision) - set the precision threshold for adaptive sampling.
+* [*projection*.preclip](https://github.com/d3/d3-geo/blob/master/README.md#projection.preclip) - set the spherical clipping stream transform.
+* [*projection*.postclip](https://github.com/d3/d3-geo/blob/master/README.md#projection.postclip) - set the planar clipping stream transform.
+* [d3.geoClipAntimeridian](https://github.com/d3/d3-geo/blob/master/README.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
+* [d3.geoClipCircle](https://github.com/d3/d3-geo/blob/master/README.md#geoClipCircle) - clips spherical geometries to a small circle.
+* [d3.geoClipRectangle](https://github.com/d3/d3-geo/blob/master/README.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
 * [d3.geoAlbers](https://github.com/d3/d3-geo/blob/master/README.md#geoAlbers) - the Albers equal-area conic projection.
 * [d3.geoAlbersUsa](https://github.com/d3/d3-geo/blob/master/README.md#geoAlbersUsa) - a composite Albers projection for the United States.
 * [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo/blob/master/README.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
@@ -1185,11 +1196,13 @@ Pan and zoom SVG, HTML or Canvas using mouse or touch input.
 * [d3.zoom](https://github.com/d3/d3-zoom/blob/master/README.md#zoom) - create a zoom behavior.
 * [*zoom*](https://github.com/d3/d3-zoom/blob/master/README.md#_zoom) - apply the zoom behavior to the selected elements.
 * [*zoom*.transform](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_transform) - change the transform for the selected elements.
+* [*zoom*.translateTo](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_translateTo) - translate the transform for the selected elements.
 * [*zoom*.translateBy](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_translateBy) - translate the transform for the selected elements.
 * [*zoom*.scaleBy](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_scaleBy) - scale the transform for the selected elements.
 * [*zoom*.scaleTo](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_scaleTo) - scale the transform for the selected elements.
 * [*zoom*.filter](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_filter) - control which input events initiate zooming.
-* [*zoom*.wheelDelta](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_wheelDelta) - set the wheel delta function.
+* [*zoom*.touchable](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_touchable) - set the touch support detector.
+* [*zoom*.wheelDelta](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_wheelDelta) - override scaling for wheel events.
 * [*zoom*.clickDistance](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_clickDistance) - set the click distance threshold.
 * [*zoom*.extent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_extent) - set the extent of the viewport.
 * [*zoom*.scaleExtent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_scaleExtent) - set the allowed scale range.

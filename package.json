@@ -34,26 +34,26 @@
     "json2module": "0.0",
     "package-preamble": "0.1",
     "rimraf": "2",
-    "rollup": "0.49",
+    "rollup": "0.50",
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "3",
     "tape": "4",
     "uglify-js": "3"
   },
   "dependencies": {
-    "d3-array": "1.2.0",
+    "d3-array": "1.2.1",
     "d3-axis": "1.0.8",
     "d3-brush": "1.0.4",
     "d3-chord": "1.0.4",
     "d3-collection": "1.0.4",
     "d3-color": "1.0.3",
     "d3-dispatch": "1.0.3",
-    "d3-drag": "1.1.1",
+    "d3-drag": "1.2.1",
     "d3-dsv": "1.0.7",
     "d3-ease": "1.0.3",
-    "d3-force": "1.0.6",
+    "d3-force": "1.1.0",
     "d3-format": "1.2.0",
-    "d3-geo": "1.6.4",
+    "d3-geo": "1.8.1",
     "d3-hierarchy": "1.1.5",
     "d3-interpolate": "1.1.5",
     "d3-path": "1.0.5",
@@ -70,6 +70,6 @@
     "d3-timer": "1.0.7",
     "d3-transition": "1.1.0",
     "d3-voronoi": "1.1.2",
-    "d3-zoom": "1.5.0"
+    "d3-zoom": "1.6.0"
   }
 }
