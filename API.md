@@ -400,6 +400,8 @@ Geographic projections, shapes and math.
 * [*projection*.translate](https://github.com/d3/d3-geo/blob/master/README.md#projection_translate) - set the translation offset.
 * [*projection*.fitExtent](https://github.com/d3/d3-geo/blob/master/README.md#projection_fitExtent) - set the scale and translate to fit a GeoJSON object.
 * [*projection*.fitSize](https://github.com/d3/d3-geo/blob/master/README.md#projection_fitSize) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitWidth](https://github.com/d3/d3-geo/blob/master/README.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitHeight](https://github.com/d3/d3-geo/blob/master/README.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
 * [*projection*.center](https://github.com/d3/d3-geo/blob/master/README.md#projection_center) - set the center point.
 * [*projection*.rotate](https://github.com/d3/d3-geo/blob/master/README.md#projection_rotate) - set the three-axis spherical rotation angles.
 * [*projection*.precision](https://github.com/d3/d3-geo/blob/master/README.md#projection_precision) - set the precision threshold for adaptive sampling.
@@ -868,6 +870,7 @@ Transform the DOM by selecting elements and joining to data.
 * [d3.mouse](https://github.com/d3/d3-selection/blob/master/README.md#mouse) - get the mouse position relative to a given container.
 * [d3.touch](https://github.com/d3/d3-selection/blob/master/README.md#touch) - get a touch position relative to a given container.
 * [d3.touches](https://github.com/d3/d3-selection/blob/master/README.md#touches) - get the touch positions relative to a given container.
+* [d3.clientPoint](https://github.com/d3/d3-selection/blob/master/README.md#clientPoint) - get a position relative to a given container.
 
 ### [Control Flow](https://github.com/d3/d3-selection/blob/master/README.md#control-flow)
 
@@ -1207,6 +1210,7 @@ Pan and zoom SVG, HTML or Canvas using mouse or touch input.
 * [*zoom*.extent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_extent) - set the extent of the viewport.
 * [*zoom*.scaleExtent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_scaleExtent) - set the allowed scale range.
 * [*zoom*.translateExtent](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_translateExtent) - set the extent of the zoomable world.
+* [*zoom*.constrain](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_constrain) - override the transform constraint logic.
 * [*zoom*.duration](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_duration) - set the duration of zoom transitions.
 * [*zoom*.interpolate](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_interpolate) - control the interpolation of zoom transitions.
 * [*zoom*.on](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_on) - listen for zoom events.
