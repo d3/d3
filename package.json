@@ -16,8 +16,8 @@
     "url": "https://bost.ocks.org/mike"
   },
   "main": "build/d3.node.js",
-  "unpkg": "build/d3.js",
-  "jsdelivr": "build/d3.js",
+  "unpkg": "build/d3.min.js",
+  "jsdelivr": "build/d3.min.js",
   "module": "index",
   "jsnext:main": "index",
   "repository": {
@@ -34,7 +34,7 @@
     "json2module": "0.0",
     "package-preamble": "0.1",
     "rimraf": "2",
-    "rollup": "0.51",
+    "rollup": "0.53",
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "3",
     "tape": "4",
@@ -53,7 +53,7 @@
     "d3-ease": "1.0.3",
     "d3-force": "1.1.0",
     "d3-format": "1.2.1",
-    "d3-geo": "1.9.0",
+    "d3-geo": "1.9.1",
     "d3-hierarchy": "1.1.5",
     "d3-interpolate": "1.1.6",
     "d3-path": "1.0.5",
