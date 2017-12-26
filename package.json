@@ -38,7 +38,7 @@
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "3",
     "tape": "4",
-    "uglify-js": "3"
+    "uglify-js": "3.2"
   },
   "dependencies": {
     "d3-array": "1.2.1",
