@@ -10,7 +10,7 @@ rollup.rollup({
 }).then(function(result) {
   var code = result.code + "Object.defineProperty(exports, \"event\", {get: function() { return d3Selection.event; }});\n";
   return new Promise(function(resolve, reject) {
-    fs.writeFile("build/d3.node.js", code, "utf8", function(error) {
+    fs.writeFile("dist/d3.node.js", code, "utf8", function(error) {
       if (error) return reject(error);
       else resolve();
     });

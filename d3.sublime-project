@@ -6,7 +6,7 @@
         "*.sublime-workspace"
       ],
       "folder_exclude_patterns": [
-        "build"
+        "dist"
       ]
     }
   ]

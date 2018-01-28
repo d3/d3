@@ -17,13 +17,13 @@
 If you use npm, `npm install d3`. Otherwise, download the [latest release](https://github.com/d3/d3/releases/latest). The released bundle supports anonymous AMD, CommonJS, and vanilla environments. You can load directly from [d3js.org](https://d3js.org), [CDNJS](https://cdnjs.com/libraries/d3), or [unpkg](https://unpkg.com/d3/). For example:
 
 ```html
-<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3.v5.js"></script>
 ```
 
 For the minified version:
 
 ```html
-<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3.v5.min.js"></script>
 ```
 
 You can also use the standalone D3 microlibraries. For example, [d3-selection](https://github.com/d3/d3-selection):

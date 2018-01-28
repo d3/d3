@@ -6,7 +6,7 @@ export default {
   plugins: [node(), ascii()],
   output: {
     extend: true,
-    file: "build/d3.js",
+    file: "dist/d3.js",
     format: "umd",
     name: "d3"
   }
