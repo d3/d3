@@ -1,6 +1,6 @@
 # D3 API Reference
 
-D3 is a [collection of modules](https://github.com/d3) that are designed to work together; you can use the modules independently, or you can use them together as part of the default build. The source and documentation for each module is available in its repository. Follow the links below to learn more. For major changes, see [CHANGES](https://github.com/d3/d3/blob/master/CHANGES.md); see also the [release notes](https://github.com/d3/d3/releases) and the [3.x reference](https://github.com/d3/d3-3.x-api-reference/blob/master/API-Reference.md).
+D3 is a [collection of modules](https://github.com/d3) that are designed to work together; you can use the modules independently, or you can use them together as part of the default build. The source and documentation for each module is available in its repository. Follow the links below to learn more. For changes between 3.x and 4.0, see [CHANGES](https://github.com/d3/d3/blob/master/CHANGES.md); see also the [release notes](https://github.com/d3/d3/releases) and the [3.x reference](https://github.com/d3/d3-3.x-api-reference/blob/master/API-Reference.md).
 
 * [Arrays](#arrays-d3-array) ([Statistics](#statistics), [Search](#search), [Transformations](#transformations), [Histograms](#histograms))
 * [Axes](#axes-d3-axis)
