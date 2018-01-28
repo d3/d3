@@ -1,6 +1,9 @@
 {
   "name": "d3",
-  "version": "4.12.2",
+  "version": "5.0.0-rc.1",
+  "publishConfig": {
+    "tag": "next"
+  },
   "description": "Data-Driven Documents",
   "keywords": [
     "dom",
