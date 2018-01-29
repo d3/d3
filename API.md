@@ -225,13 +225,13 @@ Color manipulation and color space conversion.
 
 Compute contour polygons using marching squares.
 
-* d3.contours -
-* *contours* -
+* [d3.contours](https://github.com/d3/d3-contour/blob/master/README.md#contours) - create a new contour generator.
+* *contours* - compute the contours for a given grid of values.
 * *contours*.size -
 * *contours*.smooth -
 * *contours*.thresholds -
-* d3.contourDensity -
-* *density* -
+* [d3.contourDensity](https://github.com/d3/d3-contour/blob/master/README.md#contourDensity) - create a new density estimator.
+* *density* - estimate the density of a given array of samples.
 * *density*.x -
 * *density*.y -
 * *density*.cellSize -
@@ -332,8 +332,8 @@ Easing functions for smooth animation.
 
 Convenience methods on top of the Fetch API.
 
-* d3.blob -
-* d3.buffer -
+* [d3.blob](https://github.com/d3/d3-fetch/blob/master/README.md#blob) - get a file as a blob.
+* [d3.buffer](https://github.com/d3/d3-fetch/blob/master/README.md#buffer) - get a file as an array buffer.
 * [d3.csv](https://github.com/d3/d3-fetch/blob/master/README.md#csv) - get a comma-separated values (CSV) file.
 * [d3.dsv](https://github.com/d3/d3-fetch/blob/master/README.md#dsv) - get a delimiter-separated values (CSV) file.
 * [d3.image](https://github.com/d3/d3-fetch/blob/master/README.md#image) - get an image.
@@ -932,10 +932,12 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.append](https://github.com/d3/d3-selection/blob/master/README.md#selection_append) - create, append and select new elements.
 * [*selection*.insert](https://github.com/d3/d3-selection/blob/master/README.md#selection_insert) - create, insert and select new elements.
 * [*selection*.remove](https://github.com/d3/d3-selection/blob/master/README.md#selection_remove) - remove elements from the document.
+* [*selection*.clone](https://github.com/d3/d3-selection/blob/master/README.md#selection_clone) - insert clones of selected elements.
 * [*selection*.sort](https://github.com/d3/d3-selection/blob/master/README.md#selection_sort) - sort elements in the document based on data.
 * [*selection*.order](https://github.com/d3/d3-selection/blob/master/README.md#selection_order) - reorders elements in the document to match the selection.
 * [*selection*.raise](https://github.com/d3/d3-selection/blob/master/README.md#selection_raise) - reorders each element as the last child of its parent.
 * [*selection*.lower](https://github.com/d3/d3-selection/blob/master/README.md#selection_lower) - reorders each element as the first child of its parent.
+* [d3.create](https://github.com/d3/d3-selection/blob/master/README.md#create) - create and select a detached element.
 * [d3.creator](https://github.com/d3/d3-selection/blob/master/README.md#creator) - create an element by name.
 
 ### [Joining Data](https://github.com/d3/d3-selection/blob/master/README.md#joining-data)
