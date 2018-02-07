@@ -8,6 +8,7 @@ D3 is a [collection of modules](https://github.com/d3) that are designed to work
 * [Chords](#chords-d3-chord)
 * [Collections](#collections-d3-collection) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors-d3-color)
+* [Color Schemes](#color-schemes-d3-scale-chromatic)
 * [Contours](#contours-d3-contour)
 * [Dispatches](#dispatches-d3-dispatch)
 * [Dragging](#dragging-d3-drag)
@@ -24,7 +25,6 @@ D3 is a [collection of modules](https://github.com/d3) that are designed to work
 * [Quadtrees](#quadtrees-d3-quadtree)
 * [Random Numbers](#random-numbers-d3-random)
 * [Scales](#scales-d3-scale) ([Continuous](#continuous-scales), [Sequential](#sequential-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales))
-* [Color Schemes](#color-schemes-d3-scale-chromatic)
 * [Selections](#selections-d3-selection) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#joining-data), [Events](#handling-events), [Control](#control-flow), [Local Variables](#local-variables), [Namespaces](#namespaces))
 * [Shapes](#shapes-d3-shape) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Links](#links), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats-d3-time-format)
@@ -219,6 +219,96 @@ Color manipulation and color space conversion.
 * [d3.lab](https://github.com/d3/d3-color/blob/master/README.md#lab) - create a new Lab color.
 * [d3.hcl](https://github.com/d3/d3-color/blob/master/README.md#hcl) - create a new HCL color.
 * [d3.cubehelix](https://github.com/d3/d3-color/blob/master/README.md#cubehelix) - create a new Cubehelix color.
+
+## [Color Schemes (d3-scale-chromatic)](https://github.com/d3/d3-scale-chromatic)
+
+Color ramps and palettes for quantitative, ordinal and categorical scales.
+
+### Categorical
+
+* [d3.schemeCategory10](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeCategory10) -
+* [d3.schemeAccent](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeAccent) -
+* [d3.schemeDark2](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeDark2) -
+* [d3.schemePaired](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePaired) -
+* [d3.schemePastel1](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePastel1) -
+* [d3.schemePastel2](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePastel2) -
+* [d3.schemeSet1](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeSet1) -
+* [d3.schemeSet2](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeSet2) -
+* [d3.schemeSet3](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeSet3) -
+
+### Diverging
+
+* [d3.interpolateBrBG](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolatePiYG](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolatePRGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolatePuOr](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateRdBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateRdGy](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateRdYlBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateRdYlGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateSpectral](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.schemeBrBG](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeBrBG) -
+* [d3.schemePiYG](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePiYG) -
+* [d3.schemePRGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePRGn) -
+* [d3.schemePuOr](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePuOr) -
+* [d3.schemeRdBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdBu) -
+* [d3.schemeRdGy](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdGy) -
+* [d3.schemeRdYlBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdYlBu) -
+* [d3.schemeRdYlGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdYlGn) -
+* [d3.schemeSpectral](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeSpectral) -
+
+### Sequential (Single Hue)
+
+* [d3.interpolateBlues](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateGreens](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateGreys](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateOranges](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolatePurples](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateReds](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.schemeBlues](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeBlues) -
+* [d3.schemeGreens](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeGreens) -
+* [d3.schemeGreys](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeGreys) -
+* [d3.schemeOranges](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeOranges) -
+* [d3.schemePurples](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePurples) -
+* [d3.schemeReds](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeReds) -
+
+### Sequential (Multi-Hue)
+
+* [d3.interpolateBuGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateBuPu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateCool](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateCubehelixDefault](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateGnBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateInferno](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateMagma](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateOrRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolatePlasma](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolatePuBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolatePuBuGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolatePuRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateRdPu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateViridis](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateWarm](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateYlGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateYlGnBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateYlOrBr](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateYlOrRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.schemeBuGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeBuGn) -
+* [d3.schemeBuPu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeBuPu) -
+* [d3.schemeGnBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeGnBu) -
+* [d3.schemeOrRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeOrRd) -
+* [d3.schemePuBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePuBu) -
+* [d3.schemePuBuGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePuBuGn) -
+* [d3.schemePuRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePuRd) -
+* [d3.schemeRdPu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdPu) -
+* [d3.schemeYlGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeYlGn) -
+* [d3.schemeYlGnBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeYlGnBu) -
+* [d3.schemeYlOrBr](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeYlOrBr) -
+* [d3.schemeYlOrRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeYlOrRd) -
+
+### Cyclical
+
+* [d3.interpolateRainbow](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
 
 ## [Contours (d3-contour)](https://github.com/d3/d3-contour)
 
@@ -802,94 +892,6 @@ Map a discrete domain to a discrete range.
 * [*point*.bandwidth](https://github.com/d3/d3-scale/blob/master/README.md#point_bandwidth) - returns zero.
 * [*point*.step](https://github.com/d3/d3-scale/blob/master/README.md#point_step) - get the distance between the starts of adjacent points.
 * [*point*.copy](https://github.com/d3/d3-scale/blob/master/README.md#point_copy) - create a copy of this scale.
-
-## [Color Schemes (d3-scale-chromatic)](https://github.com/d3/d3-scale-chromatic)
-
-### Categorical
-
-* [d3.schemeCategory10](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeCategory10) -
-* [d3.schemeAccent](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeAccent) -
-* [d3.schemeDark2](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeDark2) -
-* [d3.schemePaired](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePaired) -
-* [d3.schemePastel1](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePastel1) -
-* [d3.schemePastel2](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePastel2) -
-* [d3.schemeSet1](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeSet1) -
-* [d3.schemeSet2](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeSet2) -
-* [d3.schemeSet3](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeSet3) -
-
-### Diverging
-
-* [d3.interpolateBrBG](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolatePiYG](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolatePRGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolatePuOr](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateRdBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateRdGy](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateRdYlBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateRdYlGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateSpectral](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.schemeBrBG](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeBrBG) -
-* [d3.schemePiYG](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePiYG) -
-* [d3.schemePRGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePRGn) -
-* [d3.schemePuOr](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePuOr) -
-* [d3.schemeRdBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdBu) -
-* [d3.schemeRdGy](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdGy) -
-* [d3.schemeRdYlBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdYlBu) -
-* [d3.schemeRdYlGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdYlGn) -
-* [d3.schemeSpectral](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeSpectral) -
-
-### Sequential (Single Hue)
-
-* [d3.interpolateBlues](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateGreens](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateGreys](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateOranges](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolatePurples](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateReds](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.schemeBlues](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeBlues) -
-* [d3.schemeGreens](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeGreens) -
-* [d3.schemeGreys](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeGreys) -
-* [d3.schemeOranges](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeOranges) -
-* [d3.schemePurples](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePurples) -
-* [d3.schemeReds](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeReds) -
-
-### Sequential (Multi-Hue)
-
-* [d3.interpolateBuGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateBuPu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateCool](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateCubehelixDefault](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateGnBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateInferno](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateMagma](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateOrRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolatePlasma](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolatePuBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolatePuBuGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolatePuRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateRdPu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateViridis](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateWarm](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateYlGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateYlGnBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateYlOrBr](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.interpolateYlOrRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
-* [d3.schemeBuGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeBuGn) -
-* [d3.schemeBuPu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeBuPu) -
-* [d3.schemeGnBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeGnBu) -
-* [d3.schemeOrRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeOrRd) -
-* [d3.schemePuBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePuBu) -
-* [d3.schemePuBuGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePuBuGn) -
-* [d3.schemePuRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemePuRd) -
-* [d3.schemeRdPu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeRdPu) -
-* [d3.schemeYlGn](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeYlGn) -
-* [d3.schemeYlGnBu](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeYlGnBu) -
-* [d3.schemeYlOrBr](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeYlOrBr) -
-* [d3.schemeYlOrRd](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#schemeYlOrRd) -
-
-### Cyclical
-
-* [d3.interpolateRainbow](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection)
 
