@@ -19,7 +19,6 @@ export * from "d3-interpolate";
 export * from "d3-path";
 export * from "d3-polygon";
 export * from "d3-quadtree";
-export * from "d3-queue";
 export * from "d3-random";
 export * from "d3-scale";
 export * from "d3-scale-chromatic";
