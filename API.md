@@ -22,7 +22,6 @@ D3 is a [collection of modules](https://github.com/d3) that are designed to work
 * [Paths](#paths-d3-path)
 * [Polygons](#polygons-d3-polygon)
 * [Quadtrees](#quadtrees-d3-quadtree)
-* [Queues](#queues-d3-queue)
 * [Random Numbers](#random-numbers-d3-random)
 * [Scales](#scales-d3-scale) ([Continuous](#continuous-scales), [Sequential](#sequential-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales))
 * [Color Schemes](#color-schemes-d3-scale-chromatic)
@@ -659,16 +658,6 @@ Two-dimensional recursive spatial subdivision.
 * [*quadtree*.visitAfter](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_visitAfter) - visit all nodes in a quadtree.
 * [*quadtree*.cover](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_cover) - extend the quadtree to cover a point.
 * [*quadtree*.extent](https://github.com/d3/d3-quadtree/blob/master/README.md#quadtree_extent) - extend the quadtree to cover an extent.
-
-## [Queues (d3-queue)](https://github.com/d3/d3-queue)
-
-Evaluate asynchronous tasks with configurable concurrency.
-
-* [d3.queue](https://github.com/d3/d3-queue/blob/master/README.md#queue) - manage the concurrent evaluation of asynchronous tasks.
-* [*queue*.defer](https://github.com/d3/d3-queue/blob/master/README.md#queue_defer) - register a task for evaluation.
-* [*queue*.abort](https://github.com/d3/d3-queue/blob/master/README.md#queue_abort) - abort any active tasks and cancel any pending ones.
-* [*queue*.await](https://github.com/d3/d3-queue/blob/master/README.md#queue_await) - register a callback for when tasks complete.
-* [*queue*.awaitAll](https://github.com/d3/d3-queue/blob/master/README.md#queue_awaitAll) - register a callback for when tasks complete.
 
 ## [Random Numbers (d3-random)](https://github.com/d3/d3-random)
 

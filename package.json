@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "5.0.0-rc.2",
+  "version": "5.0.0-rc.3",
   "publishConfig": {
     "tag": "next"
   },
@@ -64,7 +64,6 @@
     "d3-path": "1",
     "d3-polygon": "1",
     "d3-quadtree": "1",
-    "d3-queue": "3",
     "d3-random": "1",
     "d3-scale": "2",
     "d3-scale-chromatic": "1",
