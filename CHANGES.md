@@ -1,3 +1,39 @@
+# Changes in D3 5.0
+
+D3 5.0 introduces only a few non-backwards-compatible changes.
+
+D3 now uses [Promises](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Using_promises) instead of asynchronous callbacks. Promises simplify the structure of asynchronous code, especially in modern browsers that support [async and await](https://javascript.info/async-await). For example, to load a CSV file in v4, you might say:
+
+```js
+d3.csv("file.csv", function(error, data) {
+  if (error) throw error;
+  console.log(data);
+});
+```
+
+In v5, using promises:
+
+```js
+d3.csv("file.csv").then(function(data) {
+  console.log(data);
+});
+```
+
+Note that you don’t need to check the error—the promise will reject automatically, and you can *promise*.catch if desired. Using await, the code is even simpler:
+
+```js
+const data = await d3.csv("file.csv");
+console.log(data);
+```
+
+With the adoption of promises, D3 now uses the modern [Fetch API](https://fetch.spec.whatwg.org/) instead of [XMLHttpRequest](https://developer.mozilla.org/docs/Web/API/XMLHttpRequest): the [d3-request](https://github.com/d3/d3-request) module has been deprecated add replaced by [d3-fetch](https://github.com/d3/d3-fetch). Fetch supports many powerful new features, such as [streaming responses](https://beta.observablehq.com/@mbostock/streaming-shapefiles). D3 5.0 also deprecates and removes the [d3-queue](https://github.com/d3/d3-queue) module. You can use [Promise.all](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Promise/all) to run a batch of asynchronous tasks in parallel, or a helper library such as [p-queue](https://github.com/sindresorhus/p-queue) to control concurrency. See this [interactive introduction to p-queue](https://beta.observablehq.com/@mbostock/hello-p-queue).
+
+D3 no longer provides the d3.schemeCategory20* categorical color schemes. These twenty-color schemes were flawed because their grouped design could falsely imply relationships in the data: a shared hue can imply that the encoded data are part of a group (a super-category), while relative lightness can imply order. In their stead, D3 now includes [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic), which implements excellent schemes from ColorBrewer, including [categorical](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#categorical), [diverging](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#diverging), [sequential single-hue](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#sequential-single-hue) and [sequential multi-hue](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#sequential-multi-hue) color schemes. These schemes are available in both discrete and continuous variants.
+
+D3 now provides implementations of marching squares and density estimation via [d3-contour](https://github.com/d3/d3-contour). There are two new [d3-selection](https://github.com/d3/d3-selection) methods: [*selection*.clone](https://github.com/d3/d3-selection/blob/master/README.md#selection_clone) for inserting clones of the selected nodes, and [d3.create](https://github.com/d3/d3-selection/blob/master/README.md#create) for creating detached elements. [Geographic projections](https://github.com/d3/d3-geo) now support [*projection*.angle](https://github.com/d3/d3-geo/blob/master/README.md#projection_angle), which has enabled some fantastic new [polyhedral projections](https://github.com/d3/d3-geo-polygon).
+
+Lastly, D3’s [package.json](https://github.com/d3/d3/blob/master/package.json) no longer pins exact version numbers of the dependent D3 modules. This fixes an issue with [duplicate copies](https://github.com/d3/d3/issues/3256) of D3 modules at different versions.
+
 # Changes in D3 4.0
 
 D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles. The default bundle combines about thirty of these microlibraries.
