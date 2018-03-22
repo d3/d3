@@ -1,5 +1,7 @@
 # Changes in D3 5.0
 
+[Released March 22, 2018.](https://github.com/d3/d3/releases/tag/v5.0.0)
+
 D3 5.0 introduces only a few non-backwards-compatible changes.
 
 D3 now uses [Promises](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Using_promises) instead of asynchronous callbacks. Promises simplify the structure of asynchronous code, especially in modern browsers that support [async and await](https://javascript.info/async-await). For example, to load a CSV file in v4, you might say:
@@ -35,6 +37,8 @@ D3 now provides implementations of marching squares and density estimation via [
 Lastly, D3’s [package.json](https://github.com/d3/d3/blob/master/package.json) no longer pins exact versions of the dependent D3 modules. This fixes an issue with [duplicate installs](https://github.com/d3/d3/issues/3256) of D3 modules.
 
 # Changes in D3 4.0
+
+[Released June 28, 2016.](https://github.com/d3/d3/releases/tag/v4.0.0)
 
 D3 4.0 is modular. Instead of one library, D3 is now [many small libraries](#table-of-contents) that are designed to work together. You can pick and choose which parts to use as you see fit. Each library is maintained in its own repository, allowing decentralized ownership and independent release cycles. The default bundle combines about thirty of these microlibraries.
 
