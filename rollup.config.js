@@ -8,6 +8,7 @@ export default {
     extend: true,
     file: "dist/d3.js",
     format: "umd",
+    indent: false,
     name: "d3"
   }
 };

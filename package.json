@@ -1,9 +1,6 @@
 {
   "name": "d3",
-  "version": "5.0.0-rc.4",
-  "publishConfig": {
-    "tag": "next"
-  },
+  "version": "5.0.0",
   "description": "Data-Driven Documents",
   "keywords": [
     "dom",
@@ -37,7 +34,7 @@
     "json2module": "0.0",
     "package-preamble": "0.1",
     "rimraf": "2",
-    "rollup": "0.55",
+    "rollup": "0.57",
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-node-resolve": "3",
     "tape": "4",
