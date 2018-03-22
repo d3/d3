@@ -21,7 +21,7 @@ d3.csv("file.csv").then(function(data) {
 });
 ```
 
-Note that you don’t need to check the error—the promise will reject automatically, and you can *promise*.catch if desired. Using await, the code is even simpler:
+Note that you don’t need to rethrow the error—the promise will reject automatically, and you can *promise*.catch if desired. Using await, the code is even simpler:
 
 ```js
 const data = await d3.csv("file.csv");
