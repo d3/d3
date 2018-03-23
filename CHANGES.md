@@ -16,8 +16,9 @@ d3.csv("file.csv", function(error, data) {
 In v5, using promises:
 
 ```js
-d3.csv("file.csv").then(function(data) {
-  console.log(data);
+d3.csv("file.csv")
+  .then(function(data) {
+    console.log(data);
 });
 ```
 
