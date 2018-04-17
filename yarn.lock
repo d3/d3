@@ -108,6 +108,10 @@ d3-color@1:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.3.tgz#bc7643fca8e53a8347e2fbdaffa236796b58509b"
 
+d3-color@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.0.4.tgz#a2262b6999c1b874121f1df289137c0c336caecb"
+
 d3-contour@1:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/d3-contour/-/d3-contour-1.2.0.tgz#de3ea7991bbb652155ee2a803aeafd084be03b63"
