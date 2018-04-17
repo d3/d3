@@ -218,6 +218,8 @@ Color manipulation and color space conversion.
 * [d3.hsl](https://github.com/d3/d3-color/blob/master/README.md#hsl) - create a new HSL color.
 * [d3.lab](https://github.com/d3/d3-color/blob/master/README.md#lab) - create a new Lab color.
 * [d3.hcl](https://github.com/d3/d3-color/blob/master/README.md#hcl) - create a new HCL color.
+* [d3.lch](https://github.com/d3/d3-color/blob/master/README.md#lch) - create a new HCL color.
+* [d3.gray](https://github.com/d3/d3-color/blob/master/README.md#gray) - create a new Lab gray.
 * [d3.cubehelix](https://github.com/d3/d3-color/blob/master/README.md#cubehelix) - create a new Cubehelix color.
 
 ## [Color Schemes (d3-scale-chromatic)](https://github.com/d3/d3-scale-chromatic)
