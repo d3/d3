@@ -317,17 +317,18 @@ Color ramps and palettes for quantitative, ordinal and categorical scales.
 Compute contour polygons using marching squares.
 
 * [d3.contours](https://github.com/d3/d3-contour/blob/master/README.md#contours) - create a new contour generator.
-* *contours* - compute the contours for a given grid of values.
-* *contours*.size -
-* *contours*.smooth -
-* *contours*.thresholds -
+* [contours](https://github.com/d3/d3-contour/blob/master/README.md#_contours) - compute the contours for a given grid of values.
+* [contours.contour](https://github.com/d3/d3-contour/blob/master/README.md#contours_contour) -
+* [contours.size](https://github.com/d3/d3-contour/blob/master/README.md#contours_size) -
+* [contours.smooth](https://github.com/d3/d3-contour/blob/master/README.md#contours_smooth) -
+* [contours.thresholds](https://github.com/d3/d3-contour/blob/master/README.md#contours_thresholds) -
 * [d3.contourDensity](https://github.com/d3/d3-contour/blob/master/README.md#contourDensity) - create a new density estimator.
-* *density* - estimate the density of a given array of samples.
-* *density*.x -
-* *density*.y -
-* *density*.cellSize -
-* *density*.thresholds -
-* *density*.bandwidth -
+* [density](https://github.com/d3/d3-contour/blob/master/README.md#_density) - estimate the density of a given array of samples.
+* [density.x](https://github.com/d3/d3-contour/blob/master/README.md#density_x) -
+* [density.y](https://github.com/d3/d3-contour/blob/master/README.md#density_y) -
+* [density.cellSize](https://github.com/d3/d3-contour/blob/master/README.md#density_cellSize) -
+* [density.thresholds](https://github.com/d3/d3-contour/blob/master/README.md#density_thresholds) -
+* [density.bandwidth](https://github.com/d3/d3-contour/blob/master/README.md#density_bandwidth) -
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch)
 
