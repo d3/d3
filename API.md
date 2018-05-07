@@ -213,6 +213,7 @@ Color manipulation and color space conversion.
 * [*color*.brighter](https://github.com/d3/d3-color/blob/master/README.md#color_brighter) - create a brighter copy of this color.
 * [*color*.darker](https://github.com/d3/d3-color/blob/master/README.md#color_darker) - create a darker copy of this color.
 * [*color*.displayable](https://github.com/d3/d3-color/blob/master/README.md#color_displayable) - returns true if the color is displayable on standard hardware.
+* [*color*.hex](https://github.com/d3/d3-color/blob/master/README.md#color_hex) - returns the hexadecimal RGB string representation of this color.
 * [*color*.toString](https://github.com/d3/d3-color/blob/master/README.md#color_toString) - returns the RGB string representation of this color.
 * [d3.rgb](https://github.com/d3/d3-color/blob/master/README.md#rgb) - create a new RGB color.
 * [d3.hsl](https://github.com/d3/d3-color/blob/master/README.md#hsl) - create a new HSL color.
@@ -705,6 +706,7 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [*interpolate*.gamma](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolate_gamma) - apply gamma correction during interpolation.
 * [d3.interpolateBasis](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateBasis) - generate a B-spline through a set of values.
 * [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateBasisClosed) - generate a closed B-spline through a set of values.
+* [d3.piecewise](https://github.com/d3/d3-interpolate/blob/master/README.md#piecewise) - generate a piecewise linear interpolator from a set of values.
 * [d3.quantize](https://github.com/d3/d3-interpolate/blob/master/README.md#quantize) - generate uniformly-spaced samples from an interpolator.
 
 ## [Paths (d3-path)](https://github.com/d3/d3-path)
