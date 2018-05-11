@@ -6,7 +6,7 @@ Before submitting a pull request, consider implementing a live example first, sa
 
 If your proposed feature does not involve changing core functionality, consider submitting it instead as a [D3 plugin](https://github.com/d3/d3-plugins). New core features should be for general use, whereas plugins are suitable for more specialized use cases. When in doubt, it’s easier to start with a plugin before “graduating” to core.
 
-To contribute new documentation or add examples to the gallery, just [edit the Wiki](https://github.com/mbostock/d3/wiki)!
+Due to abuse, it is no longer possible to edit the [Wiki](https://github.com/mbostock/d3/wiki).
 
 ## How to Submit a Pull Request
 
