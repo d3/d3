@@ -311,7 +311,8 @@ Color ramps and palettes for quantitative, ordinal and categorical scales.
 
 ### Cyclical
 
-* [d3.interpolateRainbow](https://github.com/d3/d3-scale-chromatic/blob/master/README.md) -
+* [d3.interpolateRainbow](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#interpolateRainbow) - the “less-angry” rainbow
+* [d3.interpolateSinebow](https://github.com/d3/d3-scale-chromatic/blob/master/README.md#interpolateSinebow) - the “sinebow” smooth rainbow
 
 ## [Contours (d3-contour)](https://github.com/d3/d3-contour)
 
