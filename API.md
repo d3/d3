@@ -328,6 +328,7 @@ Compute contour polygons using marching squares.
 * [density](https://github.com/d3/d3-contour/blob/master/README.md#_density) - estimate the density of a given array of samples.
 * [density.x](https://github.com/d3/d3-contour/blob/master/README.md#density_x) -
 * [density.y](https://github.com/d3/d3-contour/blob/master/README.md#density_y) -
+* [density.size](https://github.com/d3/d3-contour#density_size) -
 * [density.cellSize](https://github.com/d3/d3-contour/blob/master/README.md#density_cellSize) -
 * [density.thresholds](https://github.com/d3/d3-contour/blob/master/README.md#density_thresholds) -
 * [density.bandwidth](https://github.com/d3/d3-contour/blob/master/README.md#density_bandwidth) -
@@ -602,7 +603,7 @@ Geographic projections, shapes and math.
 * [*graticule*.precision](https://github.com/d3/d3-geo/blob/master/README.md#graticule_precision) - get or set the latitudinal precision.
 * [d3.geoGraticule10](https://github.com/d3/d3-geo/blob/master/README.md#geoGraticule10) - generate the default 10° global graticule.
 
-#### [Streams](https://github.com/d3/d3-geo/blob/master/README.md#streams)
+### [Streams](https://github.com/d3/d3-geo/blob/master/README.md#streams)
 
 * [d3.geoStream](https://github.com/d3/d3-geo/blob/master/README.md#geoStream) - convert a GeoJSON object to a geometry stream.
 * [*stream*.point](https://github.com/d3/d3-geo/blob/master/README.md#stream_point) - indicates a point with the specified coordinates.
@@ -1033,13 +1034,13 @@ A spline or polyline, as in a line chart.
 * [*line*.defined](https://github.com/d3/d3-shape/blob/master/README.md#line_defined) - set the defined accessor.
 * [*line*.curve](https://github.com/d3/d3-shape/blob/master/README.md#line_curve) - set the curve interpolator.
 * [*line*.context](https://github.com/d3/d3-shape/blob/master/README.md#line_context) - set the rendering context.
-* [d3.radialLine](https://github.com/d3/d3-shape/blob/master/README.md#radialLine) - create a new radial line generator.
-* [*radialLine*](https://github.com/d3/d3-shape/blob/master/README.md#_radialLine) - generate a line for the given dataset.
-* [*radialLine*.angle](https://github.com/d3/d3-shape/blob/master/README.md#radialLine_angle) - set the angle accessor.
-* [*radialLine*.radius](https://github.com/d3/d3-shape/blob/master/README.md#radialLine_radius) - set the radius accessor.
-* [*radialLine*.defined](https://github.com/d3/d3-shape/blob/master/README.md#radialLine_defined) - set the defined accessor.
-* [*radialLine*.curve](https://github.com/d3/d3-shape/blob/master/README.md#radialLine_curve) - set the curve interpolator.
-* [*radialLine*.context](https://github.com/d3/d3-shape/blob/master/README.md#radialLine_context) - set the rendering context.
+* [d3.lineRadial](https://github.com/d3/d3-shape/blob/master/README.md#lineRadial) - create a new radial line generator.
+* [*lineRadial*](https://github.com/d3/d3-shape/blob/master/README.md#_lineRadial) - generate a line for the given dataset.
+* [*lineRadial*.angle](https://github.com/d3/d3-shape/blob/master/README.md#lineRadial_angle) - set the angle accessor.
+* [*lineRadial*.radius](https://github.com/d3/d3-shape/blob/master/README.md#lineRadial_radius) - set the radius accessor.
+* [*lineRadial*.defined](https://github.com/d3/d3-shape/blob/master/README.md#lineRadial_defined) - set the defined accessor.
+* [*lineRadial*.curve](https://github.com/d3/d3-shape/blob/master/README.md#lineRadial_curve) - set the curve interpolator.
+* [*lineRadial*.context](https://github.com/d3/d3-shape/blob/master/README.md#lineRadial_context) - set the rendering context.
 
 ### [Areas](https://github.com/d3/d3-shape/blob/master/README.md#areas)
 
@@ -1118,6 +1119,7 @@ A smooth cubic Bézier curve from a source to a target.
 * [*link*.target](https://github.com/d3/d3-shape/blob/master/README.md#link_target) - set the target accessor.
 * [*link*.x](https://github.com/d3/d3-shape/blob/master/README.md#link_x) - set the point *x*-accessor.
 * [*link*.y](https://github.com/d3/d3-shape/blob/master/README.md#link_y) - set the point *y*-accessor.
+* [*link*.context](https://github.com/d3/d3-shape/blob/master/README.md#link_context) - set the rendering context.
 * [d3.linkRadial](https://github.com/d3/d3-shape/blob/master/README.md#linkRadial) - create a new radial link generator.
 * [*radialLink*.angle](https://github.com/d3/d3-shape/blob/master/README.md#radialLink_angle) - set the point *angle* accessor.
 * [*radialLink*.radius](https://github.com/d3/d3-shape/blob/master/README.md#radialLink_radius) - set the point *radius* accessor.
@@ -1139,6 +1141,7 @@ A categorical shape encoding, as in a scatterplot.
 * [d3.symbolStar](https://github.com/d3/d3-shape/blob/master/README.md#symbolStar) - a pentagonal star (pentagram).
 * [d3.symbolTriangle](https://github.com/d3/d3-shape/blob/master/README.md#symbolTriangle) - an up-pointing triangle.
 * [d3.symbolWye](https://github.com/d3/d3-shape/blob/master/README.md#symbolWye) - a Y shape.
+* [d3.pointRadial](https://github.com/d3/d3-shape/blob/master/README.md#pointRadial) - 
 * [*symbolType*.draw](https://github.com/d3/d3-shape/blob/master/README.md#symbolType_draw) - draw this symbol to the given context.
 
 ### [Stacks](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
