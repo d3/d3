@@ -24,7 +24,7 @@ D3 is a [collection of modules](https://github.com/d3) that are designed to work
 * [Polygons](#polygons-d3-polygon)
 * [Quadtrees](#quadtrees-d3-quadtree)
 * [Random Numbers](#random-numbers-d3-random)
-* [Scales](#scales-d3-scale) ([Continuous](#continuous-scales), [Sequential](#sequential-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales))
+* [Scales](#scales-d3-scale) ([Continuous](#continuous-scales), [Sequential](#sequential-scales), [Diverging](#diverging-scales), [Quantize](#quantize-scales), [Ordinal](#ordinal-scales))
 * [Selections](#selections-d3-selection) ([Selecting](#selecting-elements), [Modifying](#modifying-elements), [Data](#joining-data), [Events](#handling-events), [Control](#control-flow), [Local Variables](#local-variables), [Namespaces](#namespaces))
 * [Shapes](#shapes-d3-shape) ([Arcs](#arcs), [Pies](#pies), [Lines](#lines), [Areas](#areas), [Curves](#curves), [Links](#links), [Symbols](#symbols), [Stacks](#stacks))
 * [Time Formats](#time-formats-d3-time-format)
@@ -836,6 +836,13 @@ Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleSequential](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequential) - create a sequential scale.
 * [*sequential*.interpolator](https://github.com/d3/d3-scale/blob/master/README.md#sequential_interpolator) - set the scale’s output interpolator.
+
+### [Diverging Scales](https://github.com/d3/d3-scale/blob/master/README.md#diverging-scales)
+
+Map a continuous, quantitative domain to a continuous, fixed interpolator.
+
+* [d3.scaleDiverging](https://github.com/d3/d3-scale/blob/master/README.md#scaleDiverging) - create a diverging scale.
+* [*diverging*.interpolator](https://github.com/d3/d3-scale/blob/master/README.md#diverging_interpolator) - set the scale’s output interpolator.
 
 ### [Quantize Scales](https://github.com/d3/d3-scale/blob/master/README.md#quantize-scales)
 
