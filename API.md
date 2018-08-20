@@ -331,6 +331,7 @@ Compute contour polygons using marching squares.
 * [density.cellSize](https://github.com/d3/d3-contour/blob/master/README.md#density_cellSize) -
 * [density.thresholds](https://github.com/d3/d3-contour/blob/master/README.md#density_thresholds) -
 * [density.bandwidth](https://github.com/d3/d3-contour/blob/master/README.md#density_bandwidth) -
+* [density.weight](https://github.com/d3/d3-contour/blob/master/README.md#density_weight) -
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch)
 
