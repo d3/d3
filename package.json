@@ -18,8 +18,7 @@
   "main": "dist/d3.node.js",
   "unpkg": "dist/d3.min.js",
   "jsdelivr": "dist/d3.min.js",
-  "module": "index",
-  "jsnext:main": "index",
+  "module": "index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3.git"
