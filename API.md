@@ -546,6 +546,7 @@ Geographic projections, shapes and math.
 * [d3.geoConicEqualArea](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
 * [d3.geoConicEquidistant](https://github.com/d3/d3-geo/blob/master/README.md#geoConicEquidistant) - the conic equidistant projection.
 * [*conic*.parallels](https://github.com/d3/d3-geo/blob/master/README.md#conic_parallels) - set the two standard parallels.
+* [d3.geoEqualEarth](https://github.com/d3/d3-geo/blob/master/README.md#geoEqualEarth) - the Equal Earth projection.
 * [d3.geoEquirectangular](https://github.com/d3/d3-geo/blob/master/README.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
 * [d3.geoGnomonic](https://github.com/d3/d3-geo/blob/master/README.md#geoGnomonic) - the gnomonic projection.
 * [d3.geoMercator](https://github.com/d3/d3-geo/blob/master/README.md#geoMercator) - the spherical Mercator projection.
@@ -706,6 +707,8 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateCubehelix) - interpolate Cubehelix colors.
 * [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
 * [*interpolate*.gamma](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolate_gamma) - apply gamma correction during interpolation.
+* [d3.interpolateHue](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateHue) - interpolate a hue angle.
+* [d3.interpolateDiscrete](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateDiscrete) - generate a discrete interpolator from a set of values.
 * [d3.interpolateBasis](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateBasis) - generate a B-spline through a set of values.
 * [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateBasisClosed) - generate a closed B-spline through a set of values.
 * [d3.piecewise](https://github.com/d3/d3-interpolate/blob/master/README.md#piecewise) - generate a piecewise linear interpolator from a set of values.
