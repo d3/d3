@@ -793,7 +793,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*continuous*.copy](https://github.com/d3/d3-scale/blob/master/README.md#continuous_copy) - create a copy of this scale.
 * [d3.scaleLinear](https://github.com/d3/d3-scale/blob/master/README.md#scaleLinear) - create a quantitative linear scale.
 * [d3.scalePow](https://github.com/d3/d3-scale/blob/master/README.md#scalePow) - create a quantitative power scale.
-* [*pow*](https://github.com/d3/d3-scale/blob/master/README.md#_pow) - compute the range value corresponding to a given domain value.
+* [*pow*](https://github.com/d3/d3-scale/blob/master/README.md#pow) - compute the range value corresponding to a given domain value.
 * [*pow*.invert](https://github.com/d3/d3-scale/blob/master/README.md#pow_invert) - compute the domain value corresponding to a given range value.
 * [*pow*.exponent](https://github.com/d3/d3-scale/blob/master/README.md#pow_exponent) - set the power exponent.
 * [*pow*.domain](https://github.com/d3/d3-scale/blob/master/README.md#pow_domain) - set the input domain.
