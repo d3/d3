@@ -44,7 +44,9 @@ Or import everything into a namespace (here, `d3`):
 import * as d3 from "d3";
 ```
 
-In Node:
+**NOTE: This will bundle every module in D3 so tree shaking will not happen**
+
+CommonJS:
 
 ```js
 var d3 = require("d3");
@@ -55,3 +57,5 @@ You can also require individual modules and combine them into a `d3` object usin
 ```js
 var d3 = Object.assign({}, require("d3-format"), require("d3-geo"), require("d3-geo-projection"));
 ```
+
+It is recommended to only `import` or `require` the modules you need to improve the startup performance and reduce the bundle size.
