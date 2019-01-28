@@ -788,6 +788,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*continuous*.rangeRound](https://github.com/d3/d3-scale/blob/master/README.md#continuous_rangeRound) - set the output range and enable rounding.
 * [*continuous*.clamp](https://github.com/d3/d3-scale/blob/master/README.md#continuous_clamp) - enable clamping to the domain or range.
 * [*continuous*.interpolate](https://github.com/d3/d3-scale/blob/master/README.md#continuous_interpolate) - set the output interpolator.
+* [*continuous*.unknown](https://github.com/d3/d3-scale/blob/master/README.md#continuous_unknown) - set the output value for unknown inputs.
 * [*continuous*.ticks](https://github.com/d3/d3-scale/blob/master/README.md#continuous_ticks) - compute representative values from the domain.
 * [*continuous*.tickFormat](https://github.com/d3/d3-scale/blob/master/README.md#continuous_tickFormat) - format ticks for human consumption.
 * [*continuous*.nice](https://github.com/d3/d3-scale/blob/master/README.md#continuous_nice) - extend the domain to nice round numbers.
@@ -820,6 +821,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*log*.tickFormat](https://github.com/d3/d3-scale/blob/master/README.md#log_tickFormat) - format ticks for human consumption.
 * [*log*.nice](https://github.com/d3/d3-scale/blob/master/README.md#log_nice) - extend the domain to nice round numbers.
 * [*log*.copy](https://github.com/d3/d3-scale/blob/master/README.md#log_copy) - create a copy of this scale.
+* [d3.scaleSymlog](https://github.com/d3/d3-scale/blob/master/README.md#scaleSymlog) - create a symmetric logarithmic scale.
 * [d3.scaleIdentity](https://github.com/d3/d3-scale/blob/master/README.md#identity) - create a quantitative identity scale.
 * [d3.scaleTime](https://github.com/d3/d3-scale/blob/master/README.md#scaleTime) - create a linear scale for time.
 * [*time*](https://github.com/d3/d3-scale/blob/master/README.md#_time) - compute the range value corresponding to a given domain value.
@@ -834,6 +836,7 @@ Map a continuous, quantitative domain to a continuous range.
 * [*time*.nice](https://github.com/d3/d3-scale/blob/master/README.md#time_nice) - extend the domain to nice round times.
 * [*time*.copy](https://github.com/d3/d3-scale/blob/master/README.md#time_copy) - create a copy of this scale.
 * [d3.scaleUtc](https://github.com/d3/d3-scale/blob/master/README.md#scaleUtc) - create a linear scale for UTC.
+* [d3.tickFormat](https://github.com/d3/d3-scale/blob/master/README.md#tickFormat) - format ticks for human consumption.
 
 ### [Sequential Scales](https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales)
 
@@ -841,6 +844,11 @@ Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleSequential](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequential) - create a sequential scale.
 * [*sequential*.interpolator](https://github.com/d3/d3-scale/blob/master/README.md#sequential_interpolator) - set the scale’s output interpolator.
+* [d3.scaleSequentialLog](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequentialLog) -
+* [d3.scaleSequentialPow](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequentialPow) -
+* [d3.scaleSequentialSqrt](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequentialSqrt) -
+* [d3.scaleSequentialSymlog](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequentialSymlog) -
+* [d3.scaleSequentialQuantile](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequentialQuantile) -
 
 ### [Diverging Scales](https://github.com/d3/d3-scale/blob/master/README.md#diverging-scales)
 
@@ -848,6 +856,10 @@ Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleDiverging](https://github.com/d3/d3-scale/blob/master/README.md#scaleDiverging) - create a diverging scale.
 * [*diverging*.interpolator](https://github.com/d3/d3-scale/blob/master/README.md#diverging_interpolator) - set the scale’s output interpolator.
+* [d3.scaleDivergingLog](https://github.com/d3/d3-scale/blob/master/README.md#scaleDivergingLog) -
+* [d3.scaleDivergingPow](https://github.com/d3/d3-scale/blob/master/README.md#scaleDivergingPow) -
+* [d3.scaleDivergingSqrt](https://github.com/d3/d3-scale/blob/master/README.md#scaleDivergingSqrt) -
+* [d3.scaleDivergingSymlog](https://github.com/d3/d3-scale/blob/master/README.md#scaleDivergingSymlog) -
 
 ### [Quantize Scales](https://github.com/d3/d3-scale/blob/master/README.md#quantize-scales)
 
@@ -952,7 +964,8 @@ Transform the DOM by selecting elements and joining to data.
 
 ### [Joining Data](https://github.com/d3/d3-selection/blob/master/README.md#joining-data)
 
-* [*selection*.data](https://github.com/d3/d3-selection/blob/master/README.md#selection_data) - join elements to data.
+* [*selection*.data](https://github.com/d3/d3-selection/blob/master/README.md#selection_data) - bind elements to data.
+* [*selection*.join](https://github.com/d3/d3-selection/blob/master/README.md#selection_join) - enter, update or exit elements based on data.
 * [*selection*.enter](https://github.com/d3/d3-selection/blob/master/README.md#selection_enter) - get the enter selection (data missing elements).
 * [*selection*.exit](https://github.com/d3/d3-selection/blob/master/README.md#selection_exit) - get the exit selection (elements missing data).
 * [*selection*.datum](https://github.com/d3/d3-selection/blob/master/README.md#selection_datum) - get or set element data (without joining).
@@ -1141,7 +1154,7 @@ A categorical shape encoding, as in a scatterplot.
 * [d3.symbolStar](https://github.com/d3/d3-shape/blob/master/README.md#symbolStar) - a pentagonal star (pentagram).
 * [d3.symbolTriangle](https://github.com/d3/d3-shape/blob/master/README.md#symbolTriangle) - an up-pointing triangle.
 * [d3.symbolWye](https://github.com/d3/d3-shape/blob/master/README.md#symbolWye) - a Y shape.
-* [d3.pointRadial](https://github.com/d3/d3-shape/blob/master/README.md#pointRadial) - 
+* [d3.pointRadial](https://github.com/d3/d3-shape/blob/master/README.md#pointRadial) -
 * [*symbolType*.draw](https://github.com/d3/d3-shape/blob/master/README.md#symbolType_draw) - draw this symbol to the given context.
 
 ### [Stacks](https://github.com/d3/d3-shape/blob/master/README.md#stacks)
@@ -1154,9 +1167,10 @@ Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 * [*stack*.value](https://github.com/d3/d3-shape/blob/master/README.md#stack_value) - set the value accessor.
 * [*stack*.order](https://github.com/d3/d3-shape/blob/master/README.md#stack_order) - set the order accessor.
 * [*stack*.offset](https://github.com/d3/d3-shape/blob/master/README.md#stack_offset) - set the offset accessor.
+* [d3.stackOrderAppearance](https://github.com/d3/d3-shape/blob/master/README.md#stackOrderAppearance) - put the earliest series on bottom.
 * [d3.stackOrderAscending](https://github.com/d3/d3-shape/blob/master/README.md#stackOrderAscending) - put the smallest series on bottom.
 * [d3.stackOrderDescending](https://github.com/d3/d3-shape/blob/master/README.md#stackOrderDescending) - put the largest series on bottom.
-* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape/blob/master/README.md#stackOrderInsideOut) - put larger series in the middle.
+* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape/blob/master/README.md#stackOrderInsideOut) - put earlier series in the middle.
 * [d3.stackOrderNone](https://github.com/d3/d3-shape/blob/master/README.md#stackOrderNone) - use the given series order.
 * [d3.stackOrderReverse](https://github.com/d3/d3-shape/blob/master/README.md#stackOrderReverse) - use the reverse of the given series order.
 * [d3.stackOffsetExpand](https://github.com/d3/d3-shape/blob/master/README.md#stackOffsetExpand) - normalize the baseline to zero and topline to one.
@@ -1259,6 +1273,7 @@ Animated transitions for [selections](#selections).
 * [*transition*.empty](https://github.com/d3/d3-transition/blob/master/README.md#transition_empty) - returns true if this transition is empty.
 * [*transition*.each](https://github.com/d3/d3-transition/blob/master/README.md#transition_each) - call a function for each element.
 * [*transition*.on](https://github.com/d3/d3-transition/blob/master/README.md#transition_on) - add or remove transition event listeners.
+* [*transition*.end](https://github.com/d3/d3-transition/blob/master/README.md#transition_on) - await the end of a transition.
 * [*transition*.attr](https://github.com/d3/d3-transition/blob/master/README.md#transition_attr) - tween the given attribute using the default interpolator.
 * [*transition*.attrTween](https://github.com/d3/d3-transition/blob/master/README.md#transition_attrTween) - tween the given attribute using a custom interpolator.
 * [*transition*.style](https://github.com/d3/d3-transition/blob/master/README.md#transition_style) - tween the given style property using the default interpolator.
