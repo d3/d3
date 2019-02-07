@@ -368,14 +368,18 @@ Parse and format delimiter-separated values, most commonly CSV and TSV.
 * [*dsv*.parse](https://github.com/d3/d3-dsv/blob/master/README.md#dsv_parse) - parse the given string, returning an array of objects.
 * [*dsv*.parseRows](https://github.com/d3/d3-dsv/blob/master/README.md#dsv_parseRows) - parse the given string, returning an array of rows.
 * [*dsv*.format](https://github.com/d3/d3-dsv/blob/master/README.md#dsv_format) - format the given array of objects.
+* [*dsv*.formatBody](https://github.com/d3/d3-dsv/blob/master/README.md#dsv_formatBody) - format the given array of objects.
 * [*dsv*.formatRows](https://github.com/d3/d3-dsv/blob/master/README.md#dsv_formatRows) - format the given array of rows.
+* [d3.autoType](https://github.com/d3/d3-dsv/blob/master/README.md#autoType) - automatically infer value types for the given object.
 * [d3.csvParse](https://github.com/d3/d3-dsv/blob/master/README.md#csvParse) - parse the given CSV string, returning an array of objects.
 * [d3.csvParseRows](https://github.com/d3/d3-dsv/blob/master/README.md#csvParseRows) - parse the given CSV string, returning an array of rows.
 * [d3.csvFormat](https://github.com/d3/d3-dsv/blob/master/README.md#csvFormat) - format the given array of objects as CSV.
+* [d3.csvFormatBody](https://github.com/d3/d3-dsv/blob/master/README.md#csvFormatBody) - format the given array of objects as CSV.
 * [d3.csvFormatRows](https://github.com/d3/d3-dsv/blob/master/README.md#csvFormatRows) - format the given array of rows as CSV.
 * [d3.tsvParse](https://github.com/d3/d3-dsv/blob/master/README.md#tsvParse) - parse the given TSV string, returning an array of objects.
 * [d3.tsvParseRows](https://github.com/d3/d3-dsv/blob/master/README.md#tsvParseRows) - parse the given TSV string, returning an array of rows.
 * [d3.tsvFormat](https://github.com/d3/d3-dsv/blob/master/README.md#tsvFormat) - format the given array of objects as TSV.
+* [d3.tsvFormatBody](https://github.com/d3/d3-dsv/blob/master/README.md#tsvFormatBody) - format the given array of objects as TSV.
 * [d3.tsvFormatRows](https://github.com/d3/d3-dsv/blob/master/README.md#tsvFormatRows) - format the given array of rows as TSV.
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease)

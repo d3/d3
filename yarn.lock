@@ -134,8 +134,8 @@ d3-drag@1:
     d3-selection "1"
 
 d3-dsv@1:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/d3-dsv/-/d3-dsv-1.0.10.tgz#4371c489a2a654a297aca16fcaf605a6f31a6f51"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/d3-dsv/-/d3-dsv-1.1.0.tgz#8514357d989252c75c318b7989aab7687fa47529"
   dependencies:
     commander "2"
     iconv-lite "0.4"
