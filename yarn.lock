@@ -134,8 +134,8 @@ d3-drag@1:
     d3-selection "1"
 
 d3-dsv@1:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/d3-dsv/-/d3-dsv-1.1.0.tgz#8514357d989252c75c318b7989aab7687fa47529"
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/d3-dsv/-/d3-dsv-1.1.1.tgz#aaa830ecb76c4b5015572c647cc6441e3c7bb701"
   dependencies:
     commander "2"
     iconv-lite "0.4"
@@ -189,8 +189,8 @@ d3-polygon@1:
   resolved "https://registry.yarnpkg.com/d3-polygon/-/d3-polygon-1.0.5.tgz#9a645a0a64ff6cbf9efda96ee0b4a6909184c363"
 
 d3-quadtree@1:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/d3-quadtree/-/d3-quadtree-1.0.5.tgz#305394840b01f51a341a0da5008585e837fe7e9b"
+  version "1.0.6"
+  resolved "https://registry.yarnpkg.com/d3-quadtree/-/d3-quadtree-1.0.6.tgz#d1ab2a95a7f27bbde88582c94166f6ae35f32056"
 
 d3-random@1:
   version "1.1.2"
