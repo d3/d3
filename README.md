@@ -44,6 +44,13 @@ Or import everything into a namespace (here, `d3`):
 import * as d3 from "d3";
 ```
 
+You may also directly point to the bundled version if you are only concerned
+with supporting modern browsers:
+
+```js
+import * as d3 from "./node_modules/d3/dist/d3-esm.js";
+```
+
 In Node:
 
 ```js

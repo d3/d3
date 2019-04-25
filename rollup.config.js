@@ -5,8 +5,9 @@ import * as meta from "./package.json";
 
 const copyright = `// ${meta.homepage} v${meta.version} Copyright ${(new Date).getFullYear()} ${meta.author.name}`;
 
-export default [
-  {
+function getRollupConfigs (format = "umd") {
+  const base = "dist/d3" + (format !== "umd" ? "-" + format : "");
+  return [{
     input: "index",
     plugins: [
       node(),
@@ -15,8 +16,8 @@ export default [
     output: {
       extend: true,
       banner: copyright,
-      file: "dist/d3.js",
-      format: "umd",
+      file: base + ".js",
+      format,
       indent: false,
       name: "d3"
     }
@@ -30,10 +31,15 @@ export default [
     ],
     output: {
       extend: true,
-      file: "dist/d3.min.js",
-      format: "umd",
+      file: base + ".min.js",
+      format,
       indent: false,
       name: "d3"
     }
-  }
+  }];
+}
+
+export default [
+  ...getRollupConfigs(),
+  ...getRollupConfigs("esm")
 ];
