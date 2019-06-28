@@ -110,9 +110,9 @@ d3-collection@1:
   resolved "https://registry.yarnpkg.com/d3-collection/-/d3-collection-1.0.7.tgz#349bd2aa9977db071091c13144d5e4f16b5b310e"
 
 d3-color@1:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.2.7.tgz#367768ef66ff65669a74366bac1f856aa8201cfa"
-  integrity sha512-M0cF9hTntsgsDLpKvcGdxi1O8HYPnE2+Gr4hL1S85pxFIHdFEdryZkEVpixKk869+hnf6ks4UaBUzdYKqeQ0VQ==
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/d3-color/-/d3-color-1.2.8.tgz#4eaf9b60ef188c893fcf8b28f3546aafebfbd9f4"
+  integrity sha512-yeANXzP37PHk0DbSTMNPhnJD+Nn4G//O5E825bR6fAfHH43hobSBpgB9G9oWVl9+XgUaQ4yCnsX1H+l8DoaL9A==
 
 d3-contour@1:
   version "1.3.2"
