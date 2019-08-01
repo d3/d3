@@ -1,4 +1,4 @@
-PLEASE READ THIS BEFORE SUBMITTING A NEW ISSUE.
+PLEASE DO NOT SUBMIT ISSUES IN THIS REPOSITORY.
 
 ARE YOU ASKING FOR HELP? Please use Stack Overflow tag d3.js and include a link to a live, minimal example, preferably on bl.ocks.org. If you have a question, consider the d3-js Google Group or the d3-js Slack.
 
