@@ -1,9 +1,12 @@
-PLEASE DO NOT SUBMIT ISSUES IN THIS REPOSITORY.
+STOP. DO NOT ASK FOR HELP HERE!
 
-ARE YOU ASKING FOR HELP? Please use Stack Overflow tag d3.js and include a link to a live, minimal example, preferably on bl.ocks.org. If you have a question, consider the d3-js Google Group or the d3-js Slack.
+If you ignore this message and ask for help anyway, your issue will be closed without a response.
 
-For more: https://gist.github.com/mbostock/7f063e44c57ecb5828dd5643e61f92d3
+If you want help, please try one of the following forums instead:
 
-ARE YOU REPORTING AN ISSUE? Please file an issue on the relevant D3 module, not here; see https://github.com/d3. Please isolate the specific methods that exhibit unexpected behavior and precisely describe how your expectations were not met.
+Stack Overflow: https://stackoverflow.com/questions/tagged/d3.js
+Slack: https://d3-slackin.herokuapp.com/
+Google Groups: https://groups.google.com/d/forum/d3-js
+Observable: https://observablehq.com/@d3
 
-For more: https://gist.github.com/mbostock/370b737ce71bed0749e103b01ce1bfaf
+ARE YOU REPORTING A BUG, OR MAKING A FEATURE REQUEST? Please file an issue on the relevant D3 module, not here; see https://github.com/d3. Please isolate the specific methods that exhibit unexpected behavior and precisely describe how your expectations were not met.
