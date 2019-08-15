@@ -857,17 +857,17 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
 
 [Sequential scales](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequential), are a new class of scales with a fixed output [interpolator](https://github.com/d3/d3-scale/blob/master/README.md#sequential_interpolator) instead of a [range](https://github.com/d3/d3-scale/blob/master/README.md#continuous_range). Typically these scales are used to implement continuous sequential or diverging color schemes. Inspired by Matplotlib’s new [perceptually-motived colormaps](https://bids.github.io/colormap/), 4.0 now features [viridis](https://github.com/d3/d3-scale/blob/master/README.md#interpolateViridis), [inferno](https://github.com/d3/d3-scale/blob/master/README.md#interpolateInferno), [magma](https://github.com/d3/d3-scale/blob/master/README.md#interpolateMagma), [plasma](https://github.com/d3/d3-scale/blob/master/README.md#interpolatePlasma) interpolators for use with sequential scales. Using [d3.quantize](https://github.com/d3/d3-interpolate/blob/master/README.md#quantize), these interpolators can also be applied to [quantile](https://github.com/d3/d3-scale/blob/master/README.md#quantile-scales), [quantize](https://github.com/d3/d3-scale/blob/master/README.md#quantize-scales) and [threshold](https://github.com/d3/d3-scale/blob/master/README.md#threshold-scales) scales.
 
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/viridis.png" width="100%" height="40" alt="viridis">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateViridis)
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/inferno.png" width="100%" height="40" alt="inferno">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateInferno)
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/magma.png" width="100%" height="40" alt="magma">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateMagma)
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/plasma.png" width="100%" height="40" alt="plasma">](https://github.com/d3/d3-scale/blob/master/README.md#interpolatePlasma)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/v1.0.0/img/viridis.png" width="100%" height="40" alt="viridis">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateViridis)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/v1.0.0/img/inferno.png" width="100%" height="40" alt="inferno">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateInferno)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/v1.0.0/img/magma.png" width="100%" height="40" alt="magma">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateMagma)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/v1.0.0/img/plasma.png" width="100%" height="40" alt="plasma">](https://github.com/d3/d3-scale/blob/master/README.md#interpolatePlasma)
 
 4.0 also ships new Cubehelix schemes, including [Dave Green’s default](https://github.com/d3/d3-scale/blob/master/README.md#interpolateCubehelixDefault) and a [cyclical rainbow](https://github.com/d3/d3-scale/blob/master/README.md#interpolateRainbow) inspired by [Matteo Niccoli](https://mycarta.wordpress.com/2013/02/21/perceptual-rainbow-palette-the-method/):
 
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cubehelix.png" width="100%" height="40" alt="cubehelix">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateCubehelixDefault)
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/rainbow.png" width="100%" height="40" alt="rainbow">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateRainbow)
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/warm.png" width="100%" height="40" alt="warm">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateWarm)
-[<img src="https://raw.githubusercontent.com/d3/d3-scale/master/img/cool.png" width="100%" height="40" alt="cool">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateCool)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/v1.0.0/img/cubehelix.png" width="100%" height="40" alt="cubehelix">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateCubehelixDefault)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/v1.0.0/img/rainbow.png" width="100%" height="40" alt="rainbow">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateRainbow)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/v1.0.0/img/warm.png" width="100%" height="40" alt="warm">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateWarm)
+[<img src="https://raw.githubusercontent.com/d3/d3-scale/v1.0.0/img/cool.png" width="100%" height="40" alt="cool">](https://github.com/d3/d3-scale/blob/master/README.md#interpolateCool)
 
 For even more sequential and categorical color schemes, see [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic).
 
