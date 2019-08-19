@@ -212,7 +212,7 @@ Group data into arbitrary hierarchies.
 Color manipulation and color space conversion.
 
 * [d3.color](https://github.com/d3/d3-color/blob/v1.3.0/README.md#color) - parse the given CSS color specifier.
-* [*color*.copy]() -
+* [*color*.copy](https://github.com/d3/d3-color/blob/v1.3.0/README.md#color_copy) - return a copy of this color.
 * [*color*.rgb](https://github.com/d3/d3-color/blob/v1.3.0/README.md#color_rgb) - compute the RGB equivalent of this color.
 * [*color*.brighter](https://github.com/d3/d3-color/blob/v1.3.0/README.md#color_brighter) - create a brighter copy of this color.
 * [*color*.darker](https://github.com/d3/d3-color/blob/v1.3.0/README.md#color_darker) - create a darker copy of this color.
