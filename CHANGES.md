@@ -2,6 +2,8 @@
 
 [Released March 22, 2018.](https://github.com/d3/d3/releases/tag/v5.0.0)
 
+*This document covers only major changes. For minor and patch changes, please see the [release notes](https://github.com/d3/d3/releases).*
+
 D3 5.0 introduces only a few non-backwards-compatible changes.
 
 D3 now uses [Promises](https://developer.mozilla.org/docs/Web/JavaScript/Guide/Using_promises) instead of asynchronous callbacks to load data. Promises simplify the structure of asynchronous code, especially in modern browsers that support [async and await](https://javascript.info/async-await). (See this [introduction to promises](https://beta.observablehq.com/@mbostock/introduction-to-promises) on [Observable](https://beta.observablehq.com).) For example, to load a CSV file in v4, you might say:
