@@ -7,7 +7,15 @@ const copyright = `// ${meta.homepage} v${meta.version} Copyright ${(new Date).g
 
 export default [
   {
-    input: "index",
+    input: "index.js",
+    external: Object.keys(meta.dependencies || {}).filter(key => /^d3-/.test(key)),
+    output: {
+      file: "dist/d3.node.js",
+      format: "cjs"
+    }
+  },
+  {
+    input: "index.js",
     plugins: [
       node(),
       ascii()
@@ -22,7 +30,7 @@ export default [
     }
   },
   {
-    input: "index",
+    input: "index.js",
     plugins: [
       node(),
       ascii(),

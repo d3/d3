@@ -1,4 +1,4 @@
-export {version} from "./dist/package";
+export {version} from "./dist/package.js";
 export * from "d3-array";
 export * from "d3-axis";
 export * from "d3-brush";
