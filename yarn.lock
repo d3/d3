@@ -115,9 +115,9 @@ d3-axis@1:
   integrity sha512-ejINPfPSNdGFKEOAtnBtdkpr24c4d4jsei6Lg98mxf424ivoDP2956/5HDpIAtmHo85lqT4pruy+zEgvRUBqaQ==
 
 d3-brush@1:
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/d3-brush/-/d3-brush-1.1.2.tgz#1d45941457d6903a1924f5c56c60363fed0e7bc9"
-  integrity sha512-0cQBYrlKqLevZZaRE5Hh3W5FGp3c9gvUyJZm3B0Z3iAM3aSkEXt7F+4+vYyJoaL6vEipVM511rMqO3lD6ShyRA==
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/d3-brush/-/d3-brush-1.1.3.tgz#a04900a71fa5390f7f7afe1504b02a382709f380"
+  integrity sha512-v8bbYyCFKjyCzFk/tdWqXwDykY8YWqhXYjcYxfILIit085VZOpj4XJKOMccTsvWxgzSLMJQg5SiqHjslsipEDg==
   dependencies:
     d3-dispatch "1"
     d3-drag "1"
