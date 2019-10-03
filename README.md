@@ -12,6 +12,7 @@
 * [Examples](https://bl.ocks.org/mbostock)
 * [Wiki](https://github.com/d3/d3/wiki)
 
+
 ## Installing
 
 If you use npm, `npm install d3`. Otherwise, download the [latest release](https://github.com/d3/d3/releases/latest). The released bundle supports anonymous AMD, CommonJS, and vanilla environments. You can load directly from [d3js.org](https://d3js.org), [CDNJS](https://cdnjs.com/libraries/d3), or [unpkg](https://unpkg.com/d3/). For example:
