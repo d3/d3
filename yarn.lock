@@ -269,9 +269,9 @@ d3-selection@1, d3-selection@^1.1.0:
   integrity sha512-BTIbRjv/m5rcVTfBs4AMBLKs4x8XaaLkwm28KWu9S2vKNqXkXt2AH2Qf0sdPZHjFxcWg/YL53zcqAz+3g4/7PA==
 
 d3-shape@1:
-  version "1.3.6"
-  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.3.6.tgz#fa16af40e5c6cde8a2c8eaa977d4ed2cf273a02c"
-  integrity sha512-vv247nPmyncoCRnCT5VYvAVPrrqTGml+GT79detw5IEuBfv2cfTnOtbPBFIIkmL0eg1EYz+ltmJ6lK384ttHcg==
+  version "1.3.7"
+  resolved "https://registry.yarnpkg.com/d3-shape/-/d3-shape-1.3.7.tgz#df63801be07bc986bc54f63789b4fe502992b5d7"
+  integrity sha512-EUkvKjqPFUAZyOlhY5gzCxCeI0Aep04LwIRpsZ/mLFelJiUfnK56jo5JMDSE7yyP2kLSb6LtF+S5chMk7uqPqw==
   dependencies:
     d3-path "1"
 
@@ -293,9 +293,9 @@ d3-timer@1:
   integrity sha512-B1JDm0XDaQC+uvo4DT79H0XmBskgS3l6Ve+1SBCfxgmtIb1AVrPIoqd+nPSv+loMX8szQ0sVUhGngL7D5QPiXw==
 
 d3-transition@1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/d3-transition/-/d3-transition-1.2.1.tgz#a417cfec731a659e8df5dbad5c9a30b98c4a3ce4"
-  integrity sha512-0cnceCDDmFEAFu6VRLZ6SO5MR+15znpt/B68A5uInn7y2lcIVbCPZBiDmDw5pMtnSLZoCMvZtjgWc9l1m7/BWg==
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/d3-transition/-/d3-transition-1.3.0.tgz#b41e7ff898f988990c8a75d6f4fa283ba77f033b"
+  integrity sha512-pMwnuuxXct70H8l/nXKmh5lXSesn9kJ0APf4LqrztmWA8Ri4u4fHHZAlIgkvfotCa9FXYlQNvnZfAwF9tuvEKw==
   dependencies:
     d3-color "1"
     d3-dispatch "1"
