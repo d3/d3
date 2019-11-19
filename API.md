@@ -1272,40 +1272,40 @@ An efficient queue for managing thousands of concurrent animations.
 * [d3.timeout](https://github.com/d3/d3-timer/blob/v1.0.10/README.md#timeout) - schedule a timer that stops on its first callback.
 * [d3.interval](https://github.com/d3/d3-timer/blob/v1.0.10/README.md#interval) - schedule a timer that is called with a configurable period.
 
-## [Transitions (d3-transition)](https://github.com/d3/d3-transition/tree/v1.3.1)
+## [Transitions (d3-transition)](https://github.com/d3/d3-transition/tree/v1.3.2)
 
 Animated transitions for [selections](#selections).
 
-* [*selection*.transition](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#selection_transition) - schedule a transition for the selected elements.
-* [*selection*.interrupt](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#selection_interrupt) - interrupt and cancel transitions on the selected elements.
-* [d3.transition](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition) - schedule a transition on the root document element.
-* [*transition*.select](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_select) - schedule a transition on the selected elements.
-* [*transition*.selectAll](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_selectAll) - schedule a transition on the selected elements.
-* [*transition*.filter](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_filter) - filter elements based on data.
-* [*transition*.merge](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_merge) - merge this transition with another.
-* [*transition*.selection](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_selection) - returns a selection for this transition.
-* [*transition*.transition](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_transition) - schedule a new transition following this one.
-* [*transition*.call](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_call) - call a function with this transition.
-* [*transition*.nodes](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_nodes) - returns an array of all selected elements.
-* [*transition*.node](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_node) - returns the first (non-null) element.
-* [*transition*.size](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_size) - returns the count of elements.
-* [*transition*.empty](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_empty) - returns true if this transition is empty.
-* [*transition*.each](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_each) - call a function for each element.
-* [*transition*.on](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_on) - add or remove transition event listeners.
-* [*transition*.end](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_on) - await the end of a transition.
-* [*transition*.attr](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_attr) - tween the given attribute using the default interpolator.
-* [*transition*.attrTween](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_attrTween) - tween the given attribute using a custom interpolator.
-* [*transition*.style](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_style) - tween the given style property using the default interpolator.
-* [*transition*.styleTween](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_styleTween) - tween the given style property using a custom interpolator.
-* [*transition*.text](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_text) - set the text content when the transition starts.
-* [*transition*.textTween](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_textTween) - tween the text using a custom interpolator.
-* [*transition*.remove](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_remove) - remove the selected elements when the transition ends.
-* [*transition*.tween](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_tween) - run custom code during the transition.
-* [*transition*.delay](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_delay) - specify per-element delay in milliseconds.
-* [*transition*.duration](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_duration) - specify per-element duration in milliseconds.
-* [*transition*.ease](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#transition_ease) - specify the easing function.
-* [d3.active](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#active) - select the active transition for a given node.
-* [d3.interrupt](https://github.com/d3/d3-transition/blob/v1.3.1/README.md#interrupt) - interrupt the active transition for a given node.
+* [*selection*.transition](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#selection_transition) - schedule a transition for the selected elements.
+* [*selection*.interrupt](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#selection_interrupt) - interrupt and cancel transitions on the selected elements.
+* [d3.transition](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition) - schedule a transition on the root document element.
+* [*transition*.select](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_select) - schedule a transition on the selected elements.
+* [*transition*.selectAll](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_selectAll) - schedule a transition on the selected elements.
+* [*transition*.filter](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_filter) - filter elements based on data.
+* [*transition*.merge](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_merge) - merge this transition with another.
+* [*transition*.selection](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_selection) - returns a selection for this transition.
+* [*transition*.transition](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_transition) - schedule a new transition following this one.
+* [*transition*.call](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_call) - call a function with this transition.
+* [*transition*.nodes](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_nodes) - returns an array of all selected elements.
+* [*transition*.node](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_node) - returns the first (non-null) element.
+* [*transition*.size](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_size) - returns the count of elements.
+* [*transition*.empty](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_empty) - returns true if this transition is empty.
+* [*transition*.each](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_each) - call a function for each element.
+* [*transition*.on](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_on) - add or remove transition event listeners.
+* [*transition*.end](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_on) - await the end of a transition.
+* [*transition*.attr](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_attr) - tween the given attribute using the default interpolator.
+* [*transition*.attrTween](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_attrTween) - tween the given attribute using a custom interpolator.
+* [*transition*.style](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_style) - tween the given style property using the default interpolator.
+* [*transition*.styleTween](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_styleTween) - tween the given style property using a custom interpolator.
+* [*transition*.text](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_text) - set the text content when the transition starts.
+* [*transition*.textTween](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_textTween) - tween the text using a custom interpolator.
+* [*transition*.remove](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_remove) - remove the selected elements when the transition ends.
+* [*transition*.tween](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_tween) - run custom code during the transition.
+* [*transition*.delay](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_delay) - specify per-element delay in milliseconds.
+* [*transition*.duration](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_duration) - specify per-element duration in milliseconds.
+* [*transition*.ease](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#transition_ease) - specify the easing function.
+* [d3.active](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#active) - select the active transition for a given node.
+* [d3.interrupt](https://github.com/d3/d3-transition/blob/v1.3.2/README.md#interrupt) - interrupt the active transition for a given node.
 
 ## [Voronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/tree/v1.1.4)
 

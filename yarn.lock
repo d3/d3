@@ -293,9 +293,9 @@ d3-timer@1:
   integrity sha512-B1JDm0XDaQC+uvo4DT79H0XmBskgS3l6Ve+1SBCfxgmtIb1AVrPIoqd+nPSv+loMX8szQ0sVUhGngL7D5QPiXw==
 
 d3-transition@1:
-  version "1.3.1"
-  resolved "https://registry.yarnpkg.com/d3-transition/-/d3-transition-1.3.1.tgz#3bce9a6a85f12fac107db05e798b49731800378d"
-  integrity sha512-bZYkOFBZaX+2ixSK3jnKJvGBoDWGlSOc80i0HBKg7iVCFmUDvMQgYFrofNfjAxN72rP20sfUSfQ/qtpP3v3ajw==
+  version "1.3.2"
+  resolved "https://registry.yarnpkg.com/d3-transition/-/d3-transition-1.3.2.tgz#a98ef2151be8d8600543434c1ca80140ae23b398"
+  integrity sha512-sc0gRU4PFqZ47lPVHloMn9tlPcv8jxgOQg+0zjhfZXMQuvppjG6YuwdMBE0TuqCZjeJkLecku/l9R0JPcRhaDA==
   dependencies:
     d3-color "1"
     d3-dispatch "1"
