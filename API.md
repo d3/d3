@@ -116,23 +116,23 @@ Human-readable reference marks for scales.
 * [*axis*.tickSizeOuter](https://github.com/d3/d3-axis/blob/v1.0.12/README.md#axis_tickSizeOuter) - set the size of outer (extent) ticks.
 * [*axis*.tickPadding](https://github.com/d3/d3-axis/blob/v1.0.12/README.md#axis_tickPadding) - set the padding between ticks and labels.
 
-## [Brushes (d3-brush)](https://github.com/d3/d3-brush/tree/v1.1.4)
+## [Brushes (d3-brush)](https://github.com/d3/d3-brush/tree/v1.1.5)
 
 Select a one- or two-dimensional region using the mouse or touch.
 
-* [d3.brush](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush) - create a new two-dimensional brush.
-* [d3.brushX](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brushX) - create a brush along the *x*-dimension.
-* [d3.brushY](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brushY) - create a brush along the *y*-dimension.
-* [*brush*](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#_brush) - apply the brush to a selection.
-* [*brush*.move](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush_move) - move the brush selection.
-* [*brush*.clear](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush_clear) - clear the brush selection.
-* [*brush*.extent](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush_extent) - define the brushable region.
-* [*brush*.filter](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush_filter) - control which input events initiate brushing.
-* [*brush*.handleSize](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush_handleSize) - set the size of the brush handles.
-* [*brush*.touchable](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush_touchable) - set the touch support detector.
-* [*brush*.keyModifiers](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush_keyModifiers) - enable or disable key interaction.
-* [*brush*.on](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brush_on) - listen for brush events.
-* [d3.brushSelection](https://github.com/d3/d3-brush/blob/v1.1.4/README.md#brushSelection) - get the brush selection for a given node.
+* [d3.brush](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush) - create a new two-dimensional brush.
+* [d3.brushX](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brushX) - create a brush along the *x*-dimension.
+* [d3.brushY](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brushY) - create a brush along the *y*-dimension.
+* [*brush*](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#_brush) - apply the brush to a selection.
+* [*brush*.move](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush_move) - move the brush selection.
+* [*brush*.clear](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush_clear) - clear the brush selection.
+* [*brush*.extent](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush_extent) - define the brushable region.
+* [*brush*.filter](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush_filter) - control which input events initiate brushing.
+* [*brush*.handleSize](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush_handleSize) - set the size of the brush handles.
+* [*brush*.touchable](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush_touchable) - set the touch support detector.
+* [*brush*.keyModifiers](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush_keyModifiers) - enable or disable key interaction.
+* [*brush*.on](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brush_on) - listen for brush events.
+* [d3.brushSelection](https://github.com/d3/d3-brush/blob/v1.1.5/README.md#brushSelection) - get the brush selection for a given node.
 
 ## [Chords (d3-chord)](https://github.com/d3/d3-chord/tree/v1.0.6)
 
