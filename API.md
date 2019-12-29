@@ -505,20 +505,20 @@ Force-directed graph layout using velocity Verlet integration.
 * [*radial*.x](https://github.com/d3/d3-force/blob/v1.2.1/README.md#radial_x) - set the target center *x*-coordinate.
 * [*radial*.y](https://github.com/d3/d3-force/blob/v1.2.1/README.md#radial_y) - set the target center *y*-coordinate.
 
-## [Number Formats (d3-format)](https://github.com/d3/d3-format/tree/v1.4.2)
+## [Number Formats (d3-format)](https://github.com/d3/d3-format/tree/v1.4.3)
 
 Format numbers for human consumption.
 
-* [d3.format](https://github.com/d3/d3-format/blob/v1.4.2/README.md#format) - alias for *locale*.format on the default locale.
-* [d3.formatPrefix](https://github.com/d3/d3-format/blob/v1.4.2/README.md#formatPrefix) - alias for *locale*.formatPrefix on the default locale.
-* [d3.formatSpecifier](https://github.com/d3/d3-format/blob/v1.4.2/README.md#formatSpecifier) - parse a number format specifier.
-* [d3.formatLocale](https://github.com/d3/d3-format/blob/v1.4.2/README.md#formatLocale) - define a custom locale.
-* [d3.formatDefaultLocale](https://github.com/d3/d3-format/blob/v1.4.2/README.md#formatDefaultLocale) - define the default locale.
-* [*locale*.format](https://github.com/d3/d3-format/blob/v1.4.2/README.md#locale_format) - create a number format.
-* [*locale*.formatPrefix](https://github.com/d3/d3-format/blob/v1.4.2/README.md#locale_formatPrefix) - create a SI-prefix number format.
-* [d3.precisionFixed](https://github.com/d3/d3-format/blob/v1.4.2/README.md#precisionFixed) - compute decimal precision for fixed-point notation.
-* [d3.precisionPrefix](https://github.com/d3/d3-format/blob/v1.4.2/README.md#precisionPrefix) - compute decimal precision for SI-prefix notation.
-* [d3.precisionRound](https://github.com/d3/d3-format/blob/v1.4.2/README.md#precisionRound) - compute significant digits for rounded notation.
+* [d3.format](https://github.com/d3/d3-format/blob/v1.4.3/README.md#format) - alias for *locale*.format on the default locale.
+* [d3.formatPrefix](https://github.com/d3/d3-format/blob/v1.4.3/README.md#formatPrefix) - alias for *locale*.formatPrefix on the default locale.
+* [d3.formatSpecifier](https://github.com/d3/d3-format/blob/v1.4.3/README.md#formatSpecifier) - parse a number format specifier.
+* [d3.formatLocale](https://github.com/d3/d3-format/blob/v1.4.3/README.md#formatLocale) - define a custom locale.
+* [d3.formatDefaultLocale](https://github.com/d3/d3-format/blob/v1.4.3/README.md#formatDefaultLocale) - define the default locale.
+* [*locale*.format](https://github.com/d3/d3-format/blob/v1.4.3/README.md#locale_format) - create a number format.
+* [*locale*.formatPrefix](https://github.com/d3/d3-format/blob/v1.4.3/README.md#locale_formatPrefix) - create a SI-prefix number format.
+* [d3.precisionFixed](https://github.com/d3/d3-format/blob/v1.4.3/README.md#precisionFixed) - compute decimal precision for fixed-point notation.
+* [d3.precisionPrefix](https://github.com/d3/d3-format/blob/v1.4.3/README.md#precisionPrefix) - compute decimal precision for SI-prefix notation.
+* [d3.precisionRound](https://github.com/d3/d3-format/blob/v1.4.3/README.md#precisionRound) - compute significant digits for rounded notation.
 
 ## [Geographies (d3-geo)](https://github.com/d3/d3-geo/tree/v1.11.9)
 
@@ -702,37 +702,38 @@ Layout algorithms for visualizing hierarchical data.
 * [d3.packSiblings](https://github.com/d3/d3-hierarchy/blob/v1.1.9/README.md#packSiblings) - pack the specified array of circles.
 * [d3.packEnclose](https://github.com/d3/d3-hierarchy/blob/v1.1.9/README.md#packEnclose) - enclose the specified array of circles.
 
-## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/tree/v1.3.3)
+## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/tree/v1.4.0)
 
 Interpolate numbers, colors, strings, arrays, objects, whatever!
 
-* [d3.interpolate](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolate) - interpolate arbitrary values.
-* [d3.interpolateArray](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateArray) - interpolate arrays of arbitrary values.
-* [d3.interpolateDate](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateDate) - interpolate dates.
-* [d3.interpolateNumber](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateNumber) - interpolate numbers.
-* [d3.interpolateObject](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateObject) - interpolate arbitrary objects.
-* [d3.interpolateRound](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateRound) - interpolate integers.
-* [d3.interpolateString](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateString) - interpolate strings with embedded numbers.
-* [d3.interpolateTransformCss](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateTransformCss) - interpolate 2D CSS transforms.
-* [d3.interpolateTransformSvg](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateTransformSvg) - interpolate 2D SVG transforms.
-* [d3.interpolateZoom](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateZoom) - zoom and pan between two views.
-* [d3.interpolateRgb](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateRgb) - interpolate RGB colors.
-* [d3.interpolateRgbBasis](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateRgbBasis) - generate a B-spline through a set of colors.
-* [d3.interpolateRgbBasisClosed](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateRgbBasisClosed) - generate a closed B-spline through a set of colors.
-* [d3.interpolateHsl](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateHsl) - interpolate HSL colors.
-* [d3.interpolateHslLong](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateHslLong) - interpolate HSL colors, the long way.
-* [d3.interpolateLab](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateLab) - interpolate Lab colors.
-* [d3.interpolateHcl](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateHcl) - interpolate HCL colors.
-* [d3.interpolateHclLong](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateHclLong) - interpolate HCL colors, the long way.
-* [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateCubehelix) - interpolate Cubehelix colors.
-* [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
-* [*interpolate*.gamma](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolate_gamma) - apply gamma correction during interpolation.
-* [d3.interpolateHue](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateHue) - interpolate a hue angle.
-* [d3.interpolateDiscrete](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateDiscrete) - generate a discrete interpolator from a set of values.
-* [d3.interpolateBasis](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateBasis) - generate a B-spline through a set of values.
-* [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#interpolateBasisClosed) - generate a closed B-spline through a set of values.
-* [d3.piecewise](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#piecewise) - generate a piecewise linear interpolator from a set of values.
-* [d3.quantize](https://github.com/d3/d3-interpolate/blob/v1.3.3/README.md#quantize) - generate uniformly-spaced samples from an interpolator.
+* [d3.interpolate](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolate) - interpolate arbitrary values.
+* [d3.interpolateArray](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateArray) - interpolate arrays of arbitrary values.
+* [d3.interpolateDate](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateDate) - interpolate dates.
+* [d3.interpolateNumber](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateNumber) - interpolate numbers.
+* [d3.interpolateNumberArray](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateNumberArray) - interpolate arrays of numbers.
+* [d3.interpolateObject](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateObject) - interpolate arbitrary objects.
+* [d3.interpolateRound](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateRound) - interpolate integers.
+* [d3.interpolateString](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateString) - interpolate strings with embedded numbers.
+* [d3.interpolateTransformCss](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateTransformCss) - interpolate 2D CSS transforms.
+* [d3.interpolateTransformSvg](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateTransformSvg) - interpolate 2D SVG transforms.
+* [d3.interpolateZoom](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateZoom) - zoom and pan between two views.
+* [d3.interpolateRgb](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateRgb) - interpolate RGB colors.
+* [d3.interpolateRgbBasis](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateRgbBasis) - generate a B-spline through a set of colors.
+* [d3.interpolateRgbBasisClosed](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateRgbBasisClosed) - generate a closed B-spline through a set of colors.
+* [d3.interpolateHsl](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateHsl) - interpolate HSL colors.
+* [d3.interpolateHslLong](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateHslLong) - interpolate HSL colors, the long way.
+* [d3.interpolateLab](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateLab) - interpolate Lab colors.
+* [d3.interpolateHcl](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateHcl) - interpolate HCL colors.
+* [d3.interpolateHclLong](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateHclLong) - interpolate HCL colors, the long way.
+* [d3.interpolateCubehelix](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateCubehelix) - interpolate Cubehelix colors.
+* [d3.interpolateCubehelixLong](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateCubehelixLong) - interpolate Cubehelix colors, the long way.
+* [*interpolate*.gamma](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolate_gamma) - apply gamma correction during interpolation.
+* [d3.interpolateHue](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateHue) - interpolate a hue angle.
+* [d3.interpolateDiscrete](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateDiscrete) - generate a discrete interpolator from a set of values.
+* [d3.interpolateBasis](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateBasis) - generate a B-spline through a set of values.
+* [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#interpolateBasisClosed) - generate a closed B-spline through a set of values.
+* [d3.piecewise](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#piecewise) - generate a piecewise linear interpolator from a set of values.
+* [d3.quantize](https://github.com/d3/d3-interpolate/blob/v1.4.0/README.md#quantize) - generate uniformly-spaced samples from an interpolator.
 
 ## [Paths (d3-path)](https://github.com/d3/d3-path/tree/v1.0.9)
 
@@ -1198,22 +1199,22 @@ Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 * [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape/blob/v1.3.7/README.md#stackOffsetSilhouette) - center the streamgraph around zero.
 * [d3.stackOffsetWiggle](https://github.com/d3/d3-shape/blob/v1.3.7/README.md#stackOffsetWiggle) - minimize streamgraph wiggling.
 
-## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/tree/v2.2.2)
+## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/tree/v2.2.3)
 
 Parse and format times, inspired by strptime and strftime.
 
-* [d3.timeFormat](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#timeFormat) - alias for *locale*.format on the default locale.
-* [d3.timeParse](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#timeParse) - alias for *locale*.parse on the default locale.
-* [d3.utcFormat](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#utcFormat) -  alias for *locale*.utcFormat on the default locale.
-* [d3.utcParse](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#utcParse) -  alias for *locale*.utcParse on the default locale.
-* [d3.isoFormat](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#isoFormat) - an ISO 8601 UTC formatter.
-* [d3.isoParse](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#isoParse) - an ISO 8601 UTC parser.
-* [d3.timeFormatLocale](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#timeFormatLocale) - define a custom locale.
-* [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#timeFormatDefaultLocale) - define the default locale.
-* [*locale*.format](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#locale_format) - create a time formatter.
-* [*locale*.parse](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#locale_parse) - create a time parser.
-* [*locale*.utcFormat](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#locale_utcFormat) - create a UTC formatter.
-* [*locale*.utcParse](https://github.com/d3/d3-time-format/blob/v2.2.2/README.md#locale_utcParse) - create a UTC parser.
+* [d3.timeFormat](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#timeFormat) - alias for *locale*.format on the default locale.
+* [d3.timeParse](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#timeParse) - alias for *locale*.parse on the default locale.
+* [d3.utcFormat](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#utcFormat) -  alias for *locale*.utcFormat on the default locale.
+* [d3.utcParse](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#utcParse) -  alias for *locale*.utcParse on the default locale.
+* [d3.isoFormat](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#isoFormat) - an ISO 8601 UTC formatter.
+* [d3.isoParse](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#isoParse) - an ISO 8601 UTC parser.
+* [d3.timeFormatLocale](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#timeFormatLocale) - define a custom locale.
+* [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#timeFormatDefaultLocale) - define the default locale.
+* [*locale*.format](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#locale_format) - create a time formatter.
+* [*locale*.parse](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#locale_parse) - create a time parser.
+* [*locale*.utcFormat](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#locale_utcFormat) - create a UTC formatter.
+* [*locale*.utcParse](https://github.com/d3/d3-time-format/blob/v2.2.3/README.md#locale_utcParse) - create a UTC parser.
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time/tree/v1.1.0)
 
