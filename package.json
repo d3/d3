@@ -19,6 +19,10 @@
   "unpkg": "dist/d3.min.js",
   "jsdelivr": "dist/d3.min.js",
   "module": "index.js",
+  "exports": {
+    "require": "./dist/d3.node.js",
+    "import": "./dist/d3.node.mjs"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/d3/d3.git"

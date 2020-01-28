@@ -51,5 +51,16 @@ export default [
       name: "d3"
     },
     onwarn
+  },
+  {
+    input: "index.js",
+    plugins: [
+      node(),
+    ],
+    output: {
+      file: "dist/d3.node.mjs",
+      format: "esm",
+    },
+    onwarn
   }
 ];
