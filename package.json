@@ -20,8 +20,8 @@
   "jsdelivr": "dist/d3.min.js",
   "module": "index.js",
   "exports": {
-    "require": "./dist/d3.node.js",
-    "import": "./dist/d3.node.mjs"
+    "import": "./dist/d3.node.mjs",
+    "default": "./dist/d3.node.js"
   },
   "repository": {
     "type": "git",
