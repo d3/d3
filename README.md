@@ -6,10 +6,10 @@
 
 ## Resources
 
+* [Introduction](https://observablehq.com/@d3/learn-d3)
 * [API Reference](https://github.com/d3/d3/blob/master/API.md)
-* [Release Notes](https://github.com/d3/d3/releases)
+* [Releases](https://github.com/d3/d3/releases)
 * [Examples](https://observablehq.com/@d3/gallery)
-* [Tutorial](https://observablehq.com/@d3/learn-d3)
 * [Wiki](https://github.com/d3/d3/wiki)
 
 ## Installing
