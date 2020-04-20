@@ -207,27 +207,27 @@ Group data into arbitrary hierarchies.
 * [*nest*.object](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_object) - generate the nest, returning an associative array.
 * [*nest*.entries](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_entries) - generate the nest, returning an array of key-values tuples.
 
-## [Colors (d3-color)](https://github.com/d3/d3-color/tree/v1.4.0)
+## [Colors (d3-color)](https://github.com/d3/d3-color/tree/v1.4.1)
 
 Color manipulation and color space conversion.
 
-* [d3.color](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color) - parse the given CSS color specifier.
-* [*color*.copy](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_copy) - return a copy of this color.
-* [*color*.rgb](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_rgb) - compute the RGB equivalent of this color.
-* [*color*.brighter](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_brighter) - create a brighter copy of this color.
-* [*color*.darker](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_darker) - create a darker copy of this color.
-* [*color*.displayable](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_displayable) - returns true if the color is displayable on standard hardware.
-* [*color*.formatHex](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_formatHex) - returns the hexadecimal RGB string representation of this color.
-* [*color*.formatHsl](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_formatHsl) - returns the RGB string representation of this color.
-* [*color*.formatRgb](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_formatRgb) - returns the HSL string representation of this color.
-* [*color*.toString](https://github.com/d3/d3-color/blob/v1.4.0/README.md#color_toString) - returns the RGB string representation of this color.
-* [d3.rgb](https://github.com/d3/d3-color/blob/v1.4.0/README.md#rgb) - create a new RGB color.
-* [d3.hsl](https://github.com/d3/d3-color/blob/v1.4.0/README.md#hsl) - create a new HSL color.
-* [d3.lab](https://github.com/d3/d3-color/blob/v1.4.0/README.md#lab) - create a new Lab color.
-* [d3.hcl](https://github.com/d3/d3-color/blob/v1.4.0/README.md#hcl) - create a new HCL color.
-* [d3.lch](https://github.com/d3/d3-color/blob/v1.4.0/README.md#lch) - create a new HCL color.
-* [d3.gray](https://github.com/d3/d3-color/blob/v1.4.0/README.md#gray) - create a new Lab gray.
-* [d3.cubehelix](https://github.com/d3/d3-color/blob/v1.4.0/README.md#cubehelix) - create a new Cubehelix color.
+* [d3.color](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color) - parse the given CSS color specifier.
+* [*color*.copy](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_copy) - return a copy of this color.
+* [*color*.rgb](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_rgb) - compute the RGB equivalent of this color.
+* [*color*.brighter](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_brighter) - create a brighter copy of this color.
+* [*color*.darker](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_darker) - create a darker copy of this color.
+* [*color*.displayable](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_displayable) - returns true if the color is displayable on standard hardware.
+* [*color*.formatHex](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_formatHex) - returns the hexadecimal RGB string representation of this color.
+* [*color*.formatHsl](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_formatHsl) - returns the RGB string representation of this color.
+* [*color*.formatRgb](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_formatRgb) - returns the HSL string representation of this color.
+* [*color*.toString](https://github.com/d3/d3-color/blob/v1.4.1/README.md#color_toString) - returns the RGB string representation of this color.
+* [d3.rgb](https://github.com/d3/d3-color/blob/v1.4.1/README.md#rgb) - create a new RGB color.
+* [d3.hsl](https://github.com/d3/d3-color/blob/v1.4.1/README.md#hsl) - create a new HSL color.
+* [d3.lab](https://github.com/d3/d3-color/blob/v1.4.1/README.md#lab) - create a new Lab color.
+* [d3.hcl](https://github.com/d3/d3-color/blob/v1.4.1/README.md#hcl) - create a new HCL color.
+* [d3.lch](https://github.com/d3/d3-color/blob/v1.4.1/README.md#lch) - create a new HCL color.
+* [d3.gray](https://github.com/d3/d3-color/blob/v1.4.1/README.md#gray) - create a new Lab gray.
+* [d3.cubehelix](https://github.com/d3/d3-color/blob/v1.4.1/README.md#cubehelix) - create a new Cubehelix color.
 
 ## [Color Schemes (d3-scale-chromatic)](https://github.com/d3/d3-scale-chromatic/tree/v1.5.0)
 
@@ -520,124 +520,124 @@ Format numbers for human consumption.
 * [d3.precisionPrefix](https://github.com/d3/d3-format/blob/v1.4.4/README.md#precisionPrefix) - compute decimal precision for SI-prefix notation.
 * [d3.precisionRound](https://github.com/d3/d3-format/blob/v1.4.4/README.md#precisionRound) - compute significant digits for rounded notation.
 
-## [Geographies (d3-geo)](https://github.com/d3/d3-geo/tree/v1.11.9)
+## [Geographies (d3-geo)](https://github.com/d3/d3-geo/tree/v1.12.0)
 
 Geographic projections, shapes and math.
 
-### [Paths](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#paths)
+### [Paths](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#paths)
 
-* [d3.geoPath](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoPath) - create a new geographic path generator.
-* [*path*](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#_path) - project and render the specified feature.
-* [*path*.area](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#path_area) - compute the projected planar area of a given feature.
-* [*path*.bounds](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#path_bounds) - compute the projected planar bounding box of a given feature.
-* [*path*.centroid](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#path_centroid) - compute the projected planar centroid of a given feature.
-* [*path*.measure](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#path_measure) - compute the projected planar length of a given feature.
-* [*path*.projection](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#path_projection) - set the geographic projection.
-* [*path*.context](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#path_context) - set the render context.
-* [*path*.pointRadius](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#path_pointRadius) - set the radius to display point features.
+* [d3.geoPath](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoPath) - create a new geographic path generator.
+* [*path*](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#_path) - project and render the specified feature.
+* [*path*.area](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#path_area) - compute the projected planar area of a given feature.
+* [*path*.bounds](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#path_bounds) - compute the projected planar bounding box of a given feature.
+* [*path*.centroid](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#path_centroid) - compute the projected planar centroid of a given feature.
+* [*path*.measure](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#path_measure) - compute the projected planar length of a given feature.
+* [*path*.projection](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#path_projection) - set the geographic projection.
+* [*path*.context](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#path_context) - set the render context.
+* [*path*.pointRadius](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#path_pointRadius) - set the radius to display point features.
 
-### [Projections](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projections)
+### [Projections](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projections)
 
-* [*projection*](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#_projection) - project the specified point from the sphere to the plane.
-* [*projection*.invert](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_invert) - unproject the specified point from the plane to the sphere.
-* [*projection*.stream](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_stream) - wrap the specified stream to project geometry.
-* [*projection*.clipAngle](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_clipAngle) - set the radius of the clip circle.
-* [*projection*.clipExtent](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_clipExtent) - set the viewport clip extent, in pixels.
-* [*projection*.angle](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_angle) - set the post-projection rotation.
-* [*projection*.scale](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_scale) - set the scale factor.
-* [*projection*.translate](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_translate) - set the translation offset.
-* [*projection*.fitExtent](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_fitExtent) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitSize](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_fitSize) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitWidth](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitHeight](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.center](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_center) - set the center point.
-* [*projection*.rotate](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_rotate) - set the three-axis spherical rotation angles.
-* [*projection*.precision](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection_precision) - set the precision threshold for adaptive sampling.
-* [*projection*.preclip](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection.preclip) - set the spherical clipping stream transform.
-* [*projection*.postclip](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#projection.postclip) - set the planar clipping stream transform.
-* [d3.geoClipAntimeridian](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
-* [d3.geoClipCircle](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoClipCircle) - clips spherical geometries to a small circle.
-* [d3.geoClipRectangle](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
-* [d3.geoAlbers](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAlbers) - the Albers equal-area conic projection.
-* [d3.geoAlbersUsa](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAlbersUsa) - a composite Albers projection for the United States.
-* [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
-* [d3.geoAzimuthalEquidistant](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
-* [d3.geoConicConformal](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoConicConformal) - the conic conformal projection.
-* [d3.geoConicEqualArea](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
-* [d3.geoConicEquidistant](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoConicEquidistant) - the conic equidistant projection.
-* [*conic*.parallels](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#conic_parallels) - set the two standard parallels.
-* [d3.geoEqualEarth](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoEqualEarth) - the Equal Earth projection.
-* [d3.geoEquirectangular](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
-* [d3.geoGnomonic](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoGnomonic) - the gnomonic projection.
-* [d3.geoMercator](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoMercator) - the spherical Mercator projection.
-* [d3.geoOrthographic](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoOrthographic) - the azimuthal orthographic projection.
-* [d3.geoStereographic](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoStereographic) - the azimuthal stereographic projection.
-* [d3.geoTransverseMercator](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoTransverseMercator) - the transverse spherical Mercator projection.
-* [*project*](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#_project) - project the specified point from the sphere to the plane.
-* [*project*.invert](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#project_invert) - unproject the specified point from the plane to the sphere.
-* [d3.geoProjection](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoProjection) - create a custom projection.
-* [d3.geoProjectionMutator](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoProjectionMutator) - create a custom configurable projection.
-* [d3.geoAzimuthalEqualAreaRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
-* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoAzimuthalEquidistantRaw) - the raw azimuthal equidistant projection.
-* [d3.geoConicConformalRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoConicConformalRaw) - the raw conic conformal projection.
-* [d3.geoConicEqualAreaRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
-* [d3.geoConicEquidistantRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
-* [d3.geoEquirectangularRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoEquirectangularRaw) - the raw equirectangular (plate carreé) projection.
-* [d3.geoGnomonicRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoGnomonicRaw) - the raw gnomonic projection.
-* [d3.geoMercatorRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoMercatorRaw) - the raw Mercator projection.
-* [d3.geoOrthographicRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoOrthographicRaw) - the raw azimuthal orthographic projection.
-* [d3.geoStereographicRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoStereographicRaw) - the raw azimuthal stereographic projection.
-* [d3.geoTransverseMercatorRaw](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoTransverseMercatorRaw) - the raw transverse spherical Mercator projection.
+* [*projection*](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#_projection) - project the specified point from the sphere to the plane.
+* [*projection*.invert](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_invert) - unproject the specified point from the plane to the sphere.
+* [*projection*.stream](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_stream) - wrap the specified stream to project geometry.
+* [*projection*.clipAngle](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_clipAngle) - set the radius of the clip circle.
+* [*projection*.clipExtent](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_clipExtent) - set the viewport clip extent, in pixels.
+* [*projection*.angle](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_angle) - set the post-projection rotation.
+* [*projection*.reflectX](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_reflectX) - reflect the *x*-dimension.
+* [*projection*.reflectY](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_reflectY) - reflect the *y*-dimension.
+* [*projection*.scale](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_scale) - set the scale factor.
+* [*projection*.translate](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_translate) - set the translation offset.
+* [*projection*.fitExtent](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_fitExtent) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitSize](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_fitSize) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitWidth](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitHeight](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.center](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_center) - set the center point.
+* [*projection*.rotate](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_rotate) - set the three-axis spherical rotation angles.
+* [*projection*.precision](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection_precision) - set the precision threshold for adaptive sampling.
+* [*projection*.preclip](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection.preclip) - set the spherical clipping stream transform.
+* [*projection*.postclip](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#projection.postclip) - set the planar clipping stream transform.
+* [d3.geoClipAntimeridian](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
+* [d3.geoClipCircle](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoClipCircle) - clips spherical geometries to a small circle.
+* [d3.geoClipRectangle](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
+* [d3.geoAlbers](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoAlbers) - the Albers equal-area conic projection.
+* [d3.geoAlbersUsa](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoAlbersUsa) - a composite Albers projection for the United States.
+* [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
+* [d3.geoAzimuthalEquidistant](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
+* [d3.geoConicConformal](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoConicConformal) - the conic conformal projection.
+* [d3.geoConicEqualArea](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
+* [d3.geoConicEquidistant](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoConicEquidistant) - the conic equidistant projection.
+* [*conic*.parallels](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#conic_parallels) - set the two standard parallels.
+* [d3.geoEqualEarth](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoEqualEarth) - the Equal Earth projection.
+* [d3.geoEquirectangular](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
+* [d3.geoGnomonic](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoGnomonic) - the gnomonic projection.
+* [d3.geoMercator](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoMercator) - the spherical Mercator projection.
+* [d3.geoOrthographic](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoOrthographic) - the azimuthal orthographic projection.
+* [d3.geoStereographic](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoStereographic) - the azimuthal stereographic projection.
+* [d3.geoTransverseMercator](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoTransverseMercator) - the transverse spherical Mercator projection.
+* [*project*](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#_project) - project the specified point from the sphere to the plane.
+* [*project*.invert](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#project_invert) - unproject the specified point from the plane to the sphere.
+* [d3.geoProjection](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoProjection) - create a custom projection.
+* [d3.geoProjectionMutator](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoProjectionMutator) - create a custom configurable projection.
+* [d3.geoAzimuthalEqualAreaRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
+* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoAzimuthalEquidistantRaw) - the raw azimuthal equidistant projection.
+* [d3.geoConicConformalRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoConicConformalRaw) - the raw conic conformal projection.
+* [d3.geoConicEqualAreaRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
+* [d3.geoConicEquidistantRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
+* [d3.geoEquirectangularRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoEquirectangularRaw) - the raw equirectangular (plate carreé) projection.
+* [d3.geoGnomonicRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoGnomonicRaw) - the raw gnomonic projection.
+* [d3.geoMercatorRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoMercatorRaw) - the raw Mercator projection.
+* [d3.geoOrthographicRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoOrthographicRaw) - the raw azimuthal orthographic projection.
+* [d3.geoStereographicRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoStereographicRaw) - the raw azimuthal stereographic projection.
+* [d3.geoTransverseMercatorRaw](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoTransverseMercatorRaw) - the raw transverse spherical Mercator projection.
 
-### [Spherical Math](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#spherical-math)
+### [Spherical Math](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#spherical-math)
 
-* [d3.geoArea](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoArea) - compute the spherical area of a given feature.
-* [d3.geoBounds](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
-* [d3.geoCentroid](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoCentroid) - compute the spherical centroid of a given feature.
-* [d3.geoContains](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoContains) - test whether a point is inside a given feature.
-* [d3.geoDistance](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoDistance) - compute the great-arc distance between two points.
-* [d3.geoLength](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
-* [d3.geoInterpolate](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoInterpolate) - interpolate between two points along a great arc.
-* [d3.geoRotation](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoRotation) - create a rotation function for the specified angles.
-* [*rotation*](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#_rotation) - rotate the given point around the sphere.
-* [*rotation*.invert](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#rotation_invert) - unrotate the given point around the sphere.
+* [d3.geoArea](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoArea) - compute the spherical area of a given feature.
+* [d3.geoBounds](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
+* [d3.geoCentroid](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoCentroid) - compute the spherical centroid of a given feature.
+* [d3.geoContains](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoContains) - test whether a point is inside a given feature.
+* [d3.geoDistance](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoDistance) - compute the great-arc distance between two points.
+* [d3.geoLength](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
+* [d3.geoInterpolate](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoInterpolate) - interpolate between two points along a great arc.
+* [d3.geoRotation](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoRotation) - create a rotation function for the specified angles.
+* [*rotation*](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#_rotation) - rotate the given point around the sphere.
+* [*rotation*.invert](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#rotation_invert) - unrotate the given point around the sphere.
 
-### [Spherical Shapes](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#spherical-shapes)
+### [Spherical Shapes](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#spherical-shapes)
 
-* [d3.geoCircle](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoCircle) - create a circle generator.
-* [*circle*](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#_circle) - generate a piecewise circle as a Polygon.
-* [*circle*.center](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#circle_center) - specify the circle center in latitude and longitude.
-* [*circle*.radius](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#circle_radius) - specify the angular radius in degrees.
-* [*circle*.precision](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#circle_precision) - specify the precision of the piecewise circle.
-* [d3.geoGraticule](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoGraticule) - create a graticule generator.
-* [*graticule*](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#_graticule) - generate a MultiLineString of meridians and parallels.
-* [*graticule*.lines](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_lines) - generate an array of LineStrings of meridians and parallels.
-* [*graticule*.outline](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_outline) - generate a Polygon of the graticule’s extent.
-* [*graticule*.extent](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_extent) - get or set the major & minor extents.
-* [*graticule*.extentMajor](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_extentMajor) - get or set the major extent.
-* [*graticule*.extentMinor](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_extentMinor) - get or set the minor extent.
-* [*graticule*.step](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_step) - get or set the major & minor step intervals.
-* [*graticule*.stepMajor](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_stepMajor) - get or set the major step intervals.
-* [*graticule*.stepMinor](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_stepMinor) - get or set the minor step intervals.
-* [*graticule*.precision](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#graticule_precision) - get or set the latitudinal precision.
-* [d3.geoGraticule10](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoGraticule10) - generate the default 10° global graticule.
+* [d3.geoCircle](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoCircle) - create a circle generator.
+* [*circle*](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#_circle) - generate a piecewise circle as a Polygon.
+* [*circle*.center](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#circle_center) - specify the circle center in latitude and longitude.
+* [*circle*.radius](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#circle_radius) - specify the angular radius in degrees.
+* [*circle*.precision](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#circle_precision) - specify the precision of the piecewise circle.
+* [d3.geoGraticule](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoGraticule) - create a graticule generator.
+* [*graticule*](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#_graticule) - generate a MultiLineString of meridians and parallels.
+* [*graticule*.lines](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_lines) - generate an array of LineStrings of meridians and parallels.
+* [*graticule*.outline](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_outline) - generate a Polygon of the graticule’s extent.
+* [*graticule*.extent](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_extent) - get or set the major & minor extents.
+* [*graticule*.extentMajor](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_extentMajor) - get or set the major extent.
+* [*graticule*.extentMinor](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_extentMinor) - get or set the minor extent.
+* [*graticule*.step](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_step) - get or set the major & minor step intervals.
+* [*graticule*.stepMajor](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_stepMajor) - get or set the major step intervals.
+* [*graticule*.stepMinor](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_stepMinor) - get or set the minor step intervals.
+* [*graticule*.precision](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#graticule_precision) - get or set the latitudinal precision.
+* [d3.geoGraticule10](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoGraticule10) - generate the default 10° global graticule.
 
-### [Streams](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#streams)
+### [Streams](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#streams)
 
-* [d3.geoStream](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoStream) - convert a GeoJSON object to a geometry stream.
-* [*stream*.point](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#stream_point) - indicates a point with the specified coordinates.
-* [*stream*.lineStart](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#stream_lineStart) - indicates the start of a line or ring.
-* [*stream*.lineEnd](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#stream_lineEnd) - indicates the end of a line or ring.
-* [*stream*.polygonStart](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#stream_polygonStart) - indicates the start of a polygon.
-* [*stream*.polygonEnd](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#stream_polygonEnd) - indicates the end of a polygon.
-* [*stream*.sphere](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#stream_sphere) - indicates the sphere.
+* [d3.geoStream](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoStream) - convert a GeoJSON object to a geometry stream.
+* [*stream*.point](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#stream_point) - indicates a point with the specified coordinates.
+* [*stream*.lineStart](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#stream_lineStart) - indicates the start of a line or ring.
+* [*stream*.lineEnd](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#stream_lineEnd) - indicates the end of a line or ring.
+* [*stream*.polygonStart](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#stream_polygonStart) - indicates the start of a polygon.
+* [*stream*.polygonEnd](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#stream_polygonEnd) - indicates the end of a polygon.
+* [*stream*.sphere](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#stream_sphere) - indicates the sphere.
 
-### [Transforms](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#transforms)
+### [Transforms](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#transforms)
 
-* [d3.geoIdentity](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoIdentity) - scale, translate or clip planar geometry.
-* [*identity*.reflectX](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#identity_reflectX) - reflect the *x*-dimension.
-* [*identity*.reflectY](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#identity_reflectY) - reflect the *y*-dimension.
-* [d3.geoTransform](https://github.com/d3/d3-geo/blob/v1.11.9/README.md#geoTransform) - define a custom geometry transform.
+* [d3.geoIdentity](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoIdentity) - scale, translate or clip planar geometry.
+* [d3.geoTransform](https://github.com/d3/d3-geo/blob/v1.12.0/README.md#geoTransform) - define a custom geometry transform.
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/tree/v1.1.9)
 
