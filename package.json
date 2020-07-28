@@ -1,6 +1,6 @@
 {
   "name": "d3",
-  "version": "6.0.0-alpha.0000",
+  "version": "6.0.0-rc.1",
   "description": "Data-Driven Documents",
   "keywords": [
     "dom",
@@ -55,7 +55,7 @@
     "d3-dsv": ">=2.0.0-rc.1",
     "d3-ease": ">=2.0.0-rc.1",
     "d3-fetch": ">=2.0.0-rc.1",
-    "d3-force": ">=2.1.0-rc.1",
+    "d3-force": ">=2.1.0-rc.2",
     "d3-format": ">=2.0.0-rc.1",
     "d3-geo": ">=2.0.0-rc.1",
     "d3-hierarchy": ">=2.0.0-rc.3",

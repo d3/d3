@@ -190,10 +190,10 @@ d3-fetch@>=2.0.0-rc.1:
   dependencies:
     d3-dsv ">=2.0.0-rc.1"
 
-d3-force@>=2.1.0-rc.1:
-  version "2.1.0-rc.1"
-  resolved "https://registry.yarnpkg.com/d3-force/-/d3-force-2.1.0-rc.1.tgz#fc2c312283473c1aae4074b49ac2a575455993e5"
-  integrity sha512-wzvNGdMkTzT4Ev7jS8bWfCaUVtVJjy6xhjUWC/fduNzCvMoV3sB6VL6lDLp9w7gDSlpdysFMy63AcKvmPlTbzA==
+d3-force@>=2.1.0-rc.2:
+  version "2.1.0-rc.2"
+  resolved "https://registry.yarnpkg.com/d3-force/-/d3-force-2.1.0-rc.2.tgz#254c7892d2e9c8aa02bd8438fe105b21a4a6e6b8"
+  integrity sha512-nWtwGFj4B6YSd669pt8AeWqua2AyHfx8N0U8mlhgS3LSBKQNxYXyrbIA3RB11MVQEGydL40V7EXeOeped3Mxzw==
   dependencies:
     d3-dispatch ">=2.0.0-rc.1"
     d3-quadtree ">=2.0.0-rc.1"
