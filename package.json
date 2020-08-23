@@ -38,12 +38,13 @@
   },
   "devDependencies": {
     "json2module": "0.0",
-    "rimraf": "2",
-    "rollup": "1",
+    "rimraf": "3",
+    "rollup": "2",
     "rollup-plugin-ascii": "0.0",
-    "rollup-plugin-node-resolve": "3",
-    "rollup-plugin-terser": "5",
-    "tape": "4"
+    "rollup-plugin-node-resolve": "5",
+    "rollup-plugin-terser": "7",
+    "tape": "4",
+    "tape-await": "0.1"
   },
   "dependencies": {
     "d3-array": "2",
