@@ -46,7 +46,7 @@
     "tape": "4"
   },
   "dependencies": {
-    "d3-array": "^2.5",
+    "d3-array": "2",
     "d3-axis": "2",
     "d3-brush": "2",
     "d3-chord": "2",
