@@ -305,20 +305,20 @@ Color ramps and palettes for quantitative, ordinal and categorical scales.
 Compute contour polygons using marching squares.
 
 * [d3.contours](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours) - create a new contour generator.
-* [contours](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#_contours) - compute the contours for a given grid of values.
-* [contours.contour](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours_contour) -
-* [contours.size](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours_size) -
-* [contours.smooth](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours_smooth) -
-* [contours.thresholds](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours_thresholds) -
+* [*contours*](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#_contours) - compute the contours for a given grid of values.
+* [*contours*.contour](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours_contour) - xxxxxxxxx
+* [*contours*.size](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours_size) - xxxxxxxxx
+* [*contours*.smooth](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours_smooth) - xxxxxxxxx
+* [*contours*.thresholds](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contours_thresholds) - xxxxxxxxx
 * [d3.contourDensity](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#contourDensity) - create a new density estimator.
-* [density](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#_density) - estimate the density of a given array of samples.
-* [density.x](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_x) -
-* [density.y](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_y) -
-* [density.size](https://github.com/d3/d3-contour#density_size) -
-* [density.cellSize](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_cellSize) -
-* [density.thresholds](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_thresholds) -
-* [density.bandwidth](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_bandwidth) -
-* [density.weight](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_weight) -
+* [*density*](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#_density) - estimate the density of a given array of samples.
+* [*density*.x](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_x) - xxxxxxxxx
+* [*density*.y](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_y) - xxxxxxxxx
+* [*density*.weight](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_weight) - xxxxxxxxx
+* [*density*.size](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_size) - xxxxxxxxx
+* [*density*.cellSize](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_cellSize) - xxxxxxxxx
+* [*density*.thresholds](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_thresholds) - xxxxxxxxx
+* [*density*.bandwidth](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_bandwidth) - xxxxxxxxx
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/tree/v2.0.0)
 
