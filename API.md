@@ -342,9 +342,9 @@ Drag and drop SVG, HTML or Canvas using mouse or touch input.
 * [*drag*.subject](https://github.com/d3/d3-drag/blob/v2.0.0/README.md#drag_subject) - set the thing being dragged.
 * [*drag*.clickDistance](https://github.com/d3/d3-drag/blob/v2.0.0/README.md#drag_clickDistance) - set the click distance threshold.
 * [*drag*.on](https://github.com/d3/d3-drag/blob/v2.0.0/README.md#drag_on) - listen for drag events.
-* [*event*.on](https://github.com/d3/d3-drag/blob/v2.0.0/README.md#event_on) - listen for drag events on the current gesture.
 * [d3.dragDisable](https://github.com/d3/d3-drag/blob/v2.0.0/README.md#dragDisable) - prevent native drag-and-drop and text selection.
 * [d3.dragEnable](https://github.com/d3/d3-drag/blob/v2.0.0/README.md#dragEnable) - enable native drag-and-drop and text selection.
+* [*event*.on](https://github.com/d3/d3-drag/blob/v2.0.0/README.md#event_on) - listen for drag events on the current gesture.
 
 ## [Delimiter-Separated Values (d3-dsv)](https://github.com/d3/d3-dsv/tree/v2.0.0)
 
