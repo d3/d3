@@ -188,8 +188,9 @@ Select a one- or two-dimensional region using the mouse or touch.
 Color manipulation and color space conversion.
 
 * [d3.color](https://github.com/d3/d3-color/blob/v2.0.0/README.md#color) - parse the given CSS color specifier.
-* [*color*.copy](https://github.com/d3/d3-color/blob/v2.0.0/README.md#color_copy) - return a copy of this color.
+* [*color*.opacity](https://github.com/d3/d3-color/blob/v2.0.0/README.md#color_opacity) - xxxxxxxxx
 * [*color*.rgb](https://github.com/d3/d3-color/blob/v2.0.0/README.md#color_rgb) - compute the RGB equivalent of this color.
+* [*color*.copy](https://github.com/d3/d3-color/blob/v2.0.0/README.md#color_copy) - return a copy of this color.
 * [*color*.brighter](https://github.com/d3/d3-color/blob/v2.0.0/README.md#color_brighter) - create a brighter copy of this color.
 * [*color*.darker](https://github.com/d3/d3-color/blob/v2.0.0/README.md#color_darker) - create a darker copy of this color.
 * [*color*.displayable](https://github.com/d3/d3-color/blob/v2.0.0/README.md#color_displayable) - returns true if the color is displayable on standard hardware.
@@ -200,9 +201,9 @@ Color manipulation and color space conversion.
 * [d3.rgb](https://github.com/d3/d3-color/blob/v2.0.0/README.md#rgb) - create a new RGB color.
 * [d3.hsl](https://github.com/d3/d3-color/blob/v2.0.0/README.md#hsl) - create a new HSL color.
 * [d3.lab](https://github.com/d3/d3-color/blob/v2.0.0/README.md#lab) - create a new Lab color.
+* [d3.gray](https://github.com/d3/d3-color/blob/v2.0.0/README.md#gray) - create a new Lab gray.
 * [d3.hcl](https://github.com/d3/d3-color/blob/v2.0.0/README.md#hcl) - create a new HCL color.
 * [d3.lch](https://github.com/d3/d3-color/blob/v2.0.0/README.md#lch) - create a new HCL color.
-* [d3.gray](https://github.com/d3/d3-color/blob/v2.0.0/README.md#gray) - create a new Lab gray.
 * [d3.cubehelix](https://github.com/d3/d3-color/blob/v2.0.0/README.md#cubehelix) - create a new Cubehelix color.
 
 ## [Color Schemes (d3-scale-chromatic)](https://github.com/d3/d3-scale-chromatic/tree/v2.0.0)
