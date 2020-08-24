@@ -784,12 +784,24 @@ Two-dimensional recursive spatial subdivision.
 Generate random numbers from various distributions.
 
 * [d3.randomUniform](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomUniform) - from a uniform distribution.
+* [d3.randomInt](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomInt) - xxxxxxxxx
 * [d3.randomNormal](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomNormal) - from a normal distribution.
 * [d3.randomLogNormal](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomLogNormal) - from a log-normal distribution.
 * [d3.randomBates](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomBates) - from a Bates distribution.
 * [d3.randomIrwinHall](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomIrwinHall) - from an Irwin–Hall distribution.
 * [d3.randomExponential](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomExponential) - from an exponential distribution.
+* [d3.randomPareto](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomPareto) - xxxxxxxxx
+* [d3.randomBernoulli](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomBernoulli) - xxxxxxxxx
+* [d3.randomGeometric](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomGeometric) - xxxxxxxxx
+* [d3.randomBinomial](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomBinomial) - xxxxxxxxx
+* [d3.randomGamma](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomGamma) - xxxxxxxxx
+* [d3.randomBeta](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomBeta) - xxxxxxxxx
+* [d3.randomWeibull](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomWeibull) - xxxxxxxxx
+* [d3.randomCauchy](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomCauchy) - xxxxxxxxx
+* [d3.randomLogistic](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomLogistic) - xxxxxxxxx
+* [d3.randomPoisson](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomPoisson) - xxxxxxxxx
 * [*random*.source](https://github.com/d3/d3-random/blob/v2.2.0/README.md#random_source) - set the source of randomness.
+* [d3.randomLcg](https://github.com/d3/d3-random/blob/v2.2.0/README.md#randomLcg) - xxxxxxxxx
 
 ## [Scales (d3-scale)](https://github.com/d3/d3-scale/tree/v3.2.2)
 
