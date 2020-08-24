@@ -765,6 +765,8 @@ Two-dimensional recursive spatial subdivision.
 * [d3.quadtree](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree) - create a new, empty quadtree.
 * [*quadtree*.x](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_x) - set the *x* accessor.
 * [*quadtree*.y](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_y) - set the *y* accessor.
+* [*quadtree*.extent](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_extent) - extend the quadtree to cover an extent.
+* [*quadtree*.cover](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_cover) - extend the quadtree to cover a point.
 * [*quadtree*.add](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_add) - add a datum to a quadtree.
 * [*quadtree*.addAll](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_addAll) - add an array of data to a quadtree.
 * [*quadtree*.remove](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_remove) - remove a datum from a quadtree.
@@ -776,8 +778,6 @@ Two-dimensional recursive spatial subdivision.
 * [*quadtree*.find](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_find) - quickly find the closest datum in a quadtree.
 * [*quadtree*.visit](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_visit) - selectively visit nodes in a quadtree.
 * [*quadtree*.visitAfter](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_visitAfter) - visit all nodes in a quadtree.
-* [*quadtree*.cover](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_cover) - extend the quadtree to cover a point.
-* [*quadtree*.extent](https://github.com/d3/d3-quadtree/blob/v2.0.0/README.md#quadtree_extent) - extend the quadtree to cover an extent.
 
 ## [Random Numbers (d3-random)](https://github.com/d3/d3-random/tree/v2.2.0)
 
