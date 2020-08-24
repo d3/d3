@@ -167,14 +167,21 @@ Select a one- or two-dimensional region using the mouse or touch.
 * [*chord*.sortGroups](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#chord_sortGroups) - define the group order.
 * [*chord*.sortSubgroups](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#chord_sortSubgroups) - define the source and target order within groups.
 * [*chord*.sortChords](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#chord_sortChords) - define the chord order across groups.
+* [d3.chordDirected](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#chordDirected) - xxxxxxxxx
+* [d3.chordTranspose](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#chordTranspose) - xxxxxxxxx
 * [d3.ribbon](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon) - create a ribbon shape generator.
 * [*ribbon*](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#_ribbon) - generate a ribbon shape.
 * [*ribbon*.source](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_source) - set the source accessor.
 * [*ribbon*.target](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_target) - set the target accessor.
 * [*ribbon*.radius](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_radius) - set the ribbon source or target radius.
+* [*ribbon*.sourceRadius](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_sourceRadius) - xxxxxxxxx
+* [*ribbon*.targetRadius](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_targetRadius) - xxxxxxxxx
 * [*ribbon*.startAngle](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_startAngle) - set the ribbon source or target start angle.
 * [*ribbon*.endAngle](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_endAngle) - set the ribbon source or target end angle.
+* [*ribbon*.padAngle](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_padAngle) - xxxxxxxxx
 * [*ribbon*.context](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbon_context) - set the render context.
+* [d3.ribbonArrow](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbonArrow) - xxxxxxxxx
+* [*ribbonArrow*.headRadius](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbonArrow_headRadius) - xxxxxxxxx
 
 ## [XXXCollections (d3-collection)](https://github.com/d3/d3-collection/tree/v1.0.7)
 
