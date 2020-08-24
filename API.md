@@ -6,10 +6,10 @@ D3 is a [collection of modules](https://github.com/d3) that are designed to work
 * [Axes](#axes-d3-axis)
 * [Brushes](#brushes-d3-brush)
 * [Chords](#chords-d3-chord)
-* [XXXCollections](#collections-d3-collection) ([Objects](#objects), [Maps](#maps), [Sets](#sets), [Nests](#nests))
 * [Colors](#colors-d3-color)
 * [Color Schemes](#color-schemes-d3-scale-chromatic)
 * [Contours](#contours-d3-contour)
+* [Voronoi Diagrams](#voronoi-diagrams-d3-delaunay)
 * [Dispatches](#dispatches-d3-dispatch)
 * [Dragging](#dragging-d3-drag)
 * [Delimiter-Separated Values](#delimiter-separated-values-d3-dsv)
@@ -31,7 +31,6 @@ D3 is a [collection of modules](https://github.com/d3) that are designed to work
 * [Time Intervals](#time-intervals-d3-time)
 * [Timers](#timers-d3-timer)
 * [Transitions](#transitions-d3-transition)
-* [XXXVoronoi Diagrams](#voronoi-diagrams-d3-voronoi)
 * [Zooming](#zooming-d3-zoom)
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
@@ -319,6 +318,44 @@ Compute contour polygons using marching squares.
 * [*density*.cellSize](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_cellSize) - xxxxxxxxx
 * [*density*.thresholds](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_thresholds) - xxxxxxxxx
 * [*density*.bandwidth](https://github.com/d3/d3-contour/blob/v2.0.0/README.md#density_bandwidth) - xxxxxxxxx
+
+## [Voronoi Diagrams (d3-delaunay)](https://github.com/d3/d3-delaunay/tree/v5.3.0)
+
+Compute the Voronoi diagram of a set of two-dimensional points.
+
+* [new Delaunay](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#new_Delaunay) - xxxxxxxxx
+* [Delaunay.from](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_from) - xxxxxxxxx
+* [*delaunay*.points](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_points) - xxxxxxxxx
+* [*delaunay*.halfedges](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_halfedges) - xxxxxxxxx
+* [*delaunay*.hull](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_hull) - xxxxxxxxx
+* [*delaunay*.triangles](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_triangles) - xxxxxxxxx
+* [*delaunay*.inedges](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_inedges) - xxxxxxxxx
+* [*delaunay*.find](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_find) - xxxxxxxxx
+* [*delaunay*.neighbors](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_neighbors) - xxxxxxxxx
+* [*delaunay*.render](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_render) - xxxxxxxxx
+* [*delaunay*.renderHull](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_renderHull) - xxxxxxxxx
+* [*delaunay*.renderTriangle](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_renderTriangle) - xxxxxxxxx
+* [*delaunay*.renderPoints](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_renderPoints) - xxxxxxxxx
+* [*delaunay*.hullPolygon](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_hullPolygon) - xxxxxxxxx
+* [*delaunay*.trianglePolygons](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_trianglePolygons) - xxxxxxxxx
+* [*delaunay*.trianglePolygon](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_trianglePolygon) - xxxxxxxxx
+* [*delaunay*.update](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_update) - xxxxxxxxx
+* [*delaunay*.voronoi](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#delaunay_voronoi) - xxxxxxxxx
+* [*voronoi*.delaunay](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_delaunay) - xxxxxxxxx
+* [*voronoi*.circumcenters](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_circumcenters) - xxxxxxxxx
+* [*voronoi*.vectors](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_vectors) - xxxxxxxxx
+* [*voronoi*.xmin](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_xmin) - xxxxxxxxx
+* [*voronoi*.ymin](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_ymin) - xxxxxxxxx
+* [*voronoi*.xmax](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_xmax) - xxxxxxxxx
+* [*voronoi*.ymax](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_ymax) - xxxxxxxxx
+* [*voronoi*.contains](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_contains) - xxxxxxxxx
+* [*voronoi*.neighbors](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_neighbors) - xxxxxxxxx
+* [*voronoi*.render](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_render) - xxxxxxxxx
+* [*voronoi*.renderBounds](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_renderBounds) - xxxxxxxxx
+* [*voronoi*.renderCell](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_renderCell) - xxxxxxxxx
+* [*voronoi*.cellPolygons](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_cellPolygons) - xxxxxxxxx
+* [*voronoi*.cellPolygon](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_cellPolygon) - xxxxxxxxx
+* [*voronoi*.update](https://github.com/d3/d3-delaunay/blob/v5.3.0/README.md#voronoi_update) - xxxxxxxxx
 
 ## [Dispatches (d3-dispatch)](https://github.com/d3/d3-dispatch/tree/v2.0.0)
 
@@ -1335,24 +1372,6 @@ Animated transitions for [selections](#selections).
 * [*transition*.nodes](https://github.com/d3/d3-transition/blob/v2.0.0/README.md#transition_nodes) - returns an array of all selected elements.
 * [*transition*.node](https://github.com/d3/d3-transition/blob/v2.0.0/README.md#transition_node) - returns the first (non-null) element.
 * [*transition*.size](https://github.com/d3/d3-transition/blob/v2.0.0/README.md#transition_size) - returns the count of elements.
-
-## [XXXVoronoi Diagrams (d3-voronoi)](https://github.com/d3/d3-voronoi/tree/v1.1.4)
-
-Compute the XXXVoronoi diagram of a given set of points.
-
-* [d3.voronoi](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#voronoi) - create a new XXXVoronoi generator.
-* [*voronoi*](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#_voronoi) - generate a new XXXVoronoi diagram for the given points.
-* [*voronoi*.polygons](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#voronoi_polygons) - compute the XXXVoronoi polygons for the given points.
-* [*voronoi*.triangles](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#voronoi_triangles) - compute the Delaunay triangles for the given points.
-* [*voronoi*.links](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#voronoi_links) - compute the Delaunay links for the given points.
-* [*voronoi*.x](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#voronoi_x) - set the *x* accessor.
-* [*voronoi*.y](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#voronoi_y) - set the *y* accessor.
-* [*voronoi*.extent](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#voronoi_extent) - set the observed extent of points.
-* [*voronoi*.size](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#voronoi_size) - set the observed extent of points.
-* [*diagram*.polygons](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#diagram_polygons) - compute the polygons for this XXXVoronoi diagram.
-* [*diagram*.triangles](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#diagram_triangles) - compute the triangles for this XXXVoronoi diagram.
-* [*diagram*.links](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#diagram_links) - compute the links for this XXXVoronoi diagram.
-* [*diagram*.find](https://github.com/d3/d3-voronoi/blob/v1.1.4/README.md#diagram_find) - find the closest point in this XXXVoronoi diagram.
 
 ## [Zooming (d3-zoom)](https://github.com/d3/d3-zoom/tree/v2.0.0)
 
