@@ -817,12 +817,13 @@ Map a continuous, quantitative domain to a continuous range.
 * [*continuous*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_range) - set the output range.
 * [*continuous*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_rangeRound) - set the output range and enable rounding.
 * [*continuous*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_clamp) - enable clamping to the domain or range.
-* [*continuous*.interpolate](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_interpolate) - set the output interpolator.
 * [*continuous*.unknown](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_unknown) - set the output value for unknown inputs.
+* [*continuous*.interpolate](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_interpolate) - set the output interpolator.
 * [*continuous*.ticks](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_ticks) - compute representative values from the domain.
 * [*continuous*.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_tickFormat) - format ticks for human consumption.
 * [*continuous*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_nice) - extend the domain to nice round numbers.
 * [*continuous*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_copy) - create a copy of this scale.
+* [d3.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#tickFormat) - format ticks for human consumption.
 * [d3.scaleLinear](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleLinear) - create a quantitative linear scale.
 * [d3.scalePow](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scalePow) - create a quantitative power scale.
 * [*pow*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_pow) - compute the range value corresponding to a given domain value.
@@ -852,7 +853,9 @@ Map a continuous, quantitative domain to a continuous range.
 * [*log*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_nice) - extend the domain to nice round numbers.
 * [*log*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_copy) - create a copy of this scale.
 * [d3.scaleSymlog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSymlog) - create a symmetric logarithmic scale.
-* [d3.scaleIdentity](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#identity) - create a quantitative identity scale.
+* [*symlog*.constant](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#symlog_constant) - xxxxxxxxx
+* [d3.scaleIdentity](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleIdentity) - xxxxxxxxx
+* [d3.scaleRadial](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleRadial) - xxxxxxxxx
 * [d3.scaleTime](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleTime) - create a linear scale for time.
 * [*time*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_time) - compute the range value corresponding to a given domain value.
 * [*time*.invert](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_invert) - compute the domain value corresponding to a given range value.
@@ -866,30 +869,43 @@ Map a continuous, quantitative domain to a continuous range.
 * [*time*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_nice) - extend the domain to nice round times.
 * [*time*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_copy) - create a copy of this scale.
 * [d3.scaleUtc](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleUtc) - create a linear scale for UTC.
-* [d3.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#tickFormat) - format ticks for human consumption.
 
 ### [Sequential Scales](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential-scales)
 
 Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleSequential](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequential) - create a sequential scale.
+* [*sequential*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_sequential) - xxxxxxxxx
+* [*sequential*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_domain) - xxxxxxxxx
+* [*sequential*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_clamp) - xxxxxxxxx
 * [*sequential*.interpolator](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_interpolator) - set the scale’s output interpolator.
-* [d3.scaleSequentialLog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialLog) -
-* [d3.scaleSequentialPow](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialPow) -
-* [d3.scaleSequentialSqrt](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialSqrt) -
-* [d3.scaleSequentialSymlog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialSymlog) -
-* [d3.scaleSequentialQuantile](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialQuantile) -
+* [*sequential*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_range) - xxxxxxxxx
+* [*sequential*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_rangeRound) - xxxxxxxxx
+* [*sequential*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_copy) - xxxxxxxxx
+* [d3.scaleSequentialLog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialLog) - xxxxxxxxx
+* [d3.scaleSequentialPow](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialPow) - xxxxxxxxx
+* [d3.scaleSequentialSqrt](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialSqrt) - xxxxxxxxx
+* [d3.scaleSequentialSymlog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialSymlog) - xxxxxxxxx
+* [d3.scaleSequentialQuantile](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialQuantile) - xxxxxxxxx
+* [*sequentialQuantile*.quantiles](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequentialQuantile_quantiles) - xxxxxxxxx
 
 ### [Diverging Scales](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging-scales)
 
 Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
 * [d3.scaleDiverging](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDiverging) - create a diverging scale.
+* [*diverging*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_diverging) - xxxxxxxxx
+* [*diverging*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_domain) - xxxxxxxxx
+* [*diverging*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_clamp) - xxxxxxxxx
 * [*diverging*.interpolator](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_interpolator) - set the scale’s output interpolator.
-* [d3.scaleDivergingLog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingLog) -
-* [d3.scaleDivergingPow](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingPow) -
-* [d3.scaleDivergingSqrt](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingSqrt) -
-* [d3.scaleDivergingSymlog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingSymlog) -
+* [*diverging*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_range) - xxxxxxxxx
+* [*diverging*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_rangeRound) - xxxxxxxxx
+* [*diverging*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_copy) - xxxxxxxxx
+* [*diverging*.unknown](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_unknown) - xxxxxxxxx
+* [d3.scaleDivergingLog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingLog) - xxxxxxxxx
+* [d3.scaleDivergingPow](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingPow) - xxxxxxxxx
+* [d3.scaleDivergingSqrt](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingSqrt) - xxxxxxxxx
+* [d3.scaleDivergingSymlog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingSymlog) - xxxxxxxxx
 
 ### [Quantize Scales](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize-scales)
 
@@ -900,9 +916,10 @@ Map a continuous, quantitative domain to a discrete range.
 * [*quantize*.invertExtent](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_invertExtent) - compute the domain values corresponding to a given range value.
 * [*quantize*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_domain) - set the input domain.
 * [*quantize*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_range) - set the output range.
-* [*quantize*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_nice) - extend the domain to nice round numbers.
 * [*quantize*.ticks](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_ticks) - compute representative values from the domain.
 * [*quantize*.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_tickFormat) - format ticks for human consumption.
+* [*quantize*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_nice) - extend the domain to nice round numbers.
+* [*quantize*.thresholds](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_thresholds) - xxxxxxxxx
 * [*quantize*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_copy) - create a copy of this scale.
 * [d3.scaleQuantile](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleQuantile) - create a quantile quantizing linear scale.
 * [*quantile*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_quantile) - compute the range value corresponding to a given domain value.
