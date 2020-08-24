@@ -429,10 +429,13 @@ Convenience methods on top of the Fetch API.
 * [d3.buffer](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#buffer) - get a file as an array buffer.
 * [d3.csv](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#csv) - get a comma-separated values (CSV) file.
 * [d3.dsv](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#dsv) - get a delimiter-separated values (CSV) file.
+* [d3.html](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#html) - xxxxxxxxx
 * [d3.image](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#image) - get an image.
 * [d3.json](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#json) - get a JSON file.
+* [d3.svg](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#svg) - xxxxxxxxx
 * [d3.text](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#text) - get a plain text file.
 * [d3.tsv](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#tsv) - get a tab-separated values (TSV) file.
+* [d3.xml](https://github.com/d3/d3-fetch/blob/v2.0.0/README.md#xml) - xxxxxxxxx
 
 ## [Forces (d3-force)](https://github.com/d3/d3-force/tree/v2.1.1)
 
