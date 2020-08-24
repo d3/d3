@@ -327,8 +327,8 @@ Separate concerns using named callbacks.
 * [d3.dispatch](https://github.com/d3/d3-dispatch/blob/v2.0.0/README.md#dispatch) - create a custom event dispatcher.
 * [*dispatch*.on](https://github.com/d3/d3-dispatch/blob/v2.0.0/README.md#dispatch_on) - register or unregister an event listener.
 * [*dispatch*.copy](https://github.com/d3/d3-dispatch/blob/v2.0.0/README.md#dispatch_copy) - create a copy of a dispatcher.
-* [*dispatch*.*call*](https://github.com/d3/d3-dispatch/blob/v2.0.0/README.md#dispatch_call) - dispatch an event to registered listeners.
-* [*dispatch*.*apply*](https://github.com/d3/d3-dispatch/blob/v2.0.0/README.md#dispatch_apply) - dispatch an event to registered listeners.
+* [*dispatch*.call](https://github.com/d3/d3-dispatch/blob/v2.0.0/README.md#dispatch_call) - dispatch an event to registered listeners.
+* [*dispatch*.apply](https://github.com/d3/d3-dispatch/blob/v2.0.0/README.md#dispatch_apply) - dispatch an event to registered listeners.
 
 ## [Dragging (d3-drag)](https://github.com/d3/d3-drag/tree/v2.0.0)
 
