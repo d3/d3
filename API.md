@@ -45,26 +45,44 @@ Array manipulation, ordering, searching, summarizing, etc.
 Methods for computing basic summary statistics.
 
 * [d3.min](https://github.com/d3/d3-array/blob/v2.6.0/README.md#min) - compute the minimum value in an array.
+* [d3.minIndex](https://github.com/d3/d3-array/blob/v2.6.0/README.md#minIndex) - xxxxxxxxx
 * [d3.max](https://github.com/d3/d3-array/blob/v2.6.0/README.md#max) - compute the maximum value in an array.
+* [d3.maxIndex](https://github.com/d3/d3-array/blob/v2.6.0/README.md#maxIndex) - xxxxxxxxx
 * [d3.extent](https://github.com/d3/d3-array/blob/v2.6.0/README.md#extent) - compute the minimum and maximum value in an array.
 * [d3.sum](https://github.com/d3/d3-array/blob/v2.6.0/README.md#sum) - compute the sum of an array of numbers.
 * [d3.mean](https://github.com/d3/d3-array/blob/v2.6.0/README.md#mean) - compute the arithmetic mean of an array of numbers.
 * [d3.median](https://github.com/d3/d3-array/blob/v2.6.0/README.md#median) - compute the median of an array of numbers (the 0.5-quantile).
+* [d3.cumsum](https://github.com/d3/d3-array/blob/v2.6.0/README.md#cumsum) - xxxxxxxxx
 * [d3.quantile](https://github.com/d3/d3-array/blob/v2.6.0/README.md#quantile) - compute a quantile for a sorted array of numbers.
+* [d3.quantileSorted](https://github.com/d3/d3-array/blob/v2.6.0/README.md#quantileSorted) - xxxxxxxxx
 * [d3.variance](https://github.com/d3/d3-array/blob/v2.6.0/README.md#variance) - compute the variance of an array of numbers.
 * [d3.deviation](https://github.com/d3/d3-array/blob/v2.6.0/README.md#deviation) - compute the standard deviation of an array of numbers.
+* [d3.fsum](https://github.com/d3/d3-array/blob/v2.6.0/README.md#fsum) - xxxxxxxxx
+* [new d3.Adder](https://github.com/d3/d3-array/blob/v2.6.0/README.md#adder) - xxxxxxxxx
+* [*adder*.add](https://github.com/d3/d3-array/blob/v2.6.0/README.md#adder_add) - xxxxxxxxx
+* [*adder*.valueOf](https://github.com/d3/d3-array/blob/v2.6.0/README.md#adder_valueOf) - xxxxxxxxx
 
 ### [Search](https://github.com/d3/d3-array/blob/v2.6.0/README.md#search)
 
 Methods for searching arrays for a specific element.
 
-* [d3.scan](https://github.com/d3/d3-array/blob/v2.6.0/README.md#scan) - linear search for an element using a comparator.
+* [d3.least](https://github.com/d3/d3-array/blob/v2.6.0/README.md#least) - xxxxxxxxx
+* [d3.least](https://github.com/d3/d3-array/blob/v2.6.0/README.md#least) - xxxxxxxxx
+* [d3.leastIndex](https://github.com/d3/d3-array/blob/v2.6.0/README.md#leastIndex) - xxxxxxxxx
+* [d3.leastIndex](https://github.com/d3/d3-array/blob/v2.6.0/README.md#leastIndex) - xxxxxxxxx
+* [d3.greatest](https://github.com/d3/d3-array/blob/v2.6.0/README.md#greatest) - xxxxxxxxx
+* [d3.greatest](https://github.com/d3/d3-array/blob/v2.6.0/README.md#greatest) - xxxxxxxxx
+* [d3.greatestIndex](https://github.com/d3/d3-array/blob/v2.6.0/README.md#greatestIndex) - xxxxxxxxx
+* [d3.greatestIndex](https://github.com/d3/d3-array/blob/v2.6.0/README.md#greatestIndex) - xxxxxxxxx
+* [d3.bisectLeft](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisectLeft) - binary search for a value in a sorted array.
 * [d3.bisect](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisect) - binary search for a value in a sorted array.
 * [d3.bisectRight](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisectRight) - binary search for a value in a sorted array.
-* [d3.bisectLeft](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisectLeft) - binary search for a value in a sorted array.
+* [d3.bisector](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisector) - bisect using an accessor or comparator.
 * [d3.bisector](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisector) - bisect using an accessor or comparator.
 * [*bisector*.left](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisector_left) - bisectLeft, with the given comparator.
 * [*bisector*.right](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisector_right) - bisectRight, with the given comparator.
+* [*bisector*.center](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bisector_center) - xxxxxxxxx
+* [d3.quickselect](https://github.com/d3/d3-array/blob/v2.6.0/README.md#quickselect) - xxxxxxxxx
 * [d3.ascending](https://github.com/d3/d3-array/blob/v2.6.0/README.md#ascending) - compute the natural order of two values.
 * [d3.descending](https://github.com/d3/d3-array/blob/v2.6.0/README.md#descending) - compute the natural order of two values.
 
@@ -72,6 +90,13 @@ Methods for searching arrays for a specific element.
 
 Methods for transforming arrays and for generating new arrays.
 
+* [d3.group](https://github.com/d3/d3-array/blob/v2.6.0/README.md#group) - xxxxxxxxx
+* [d3.groups](https://github.com/d3/d3-array/blob/v2.6.0/README.md#groups) - xxxxxxxxx
+* [d3.index](https://github.com/d3/d3-array/blob/v2.6.0/README.md#index) - xxxxxxxxx
+* [d3.indexes](https://github.com/d3/d3-array/blob/v2.6.0/README.md#indexes) - xxxxxxxxx
+* [d3.rollup](https://github.com/d3/d3-array/blob/v2.6.0/README.md#rollup) - xxxxxxxxx
+* [d3.rollups](https://github.com/d3/d3-array/blob/v2.6.0/README.md#rollups) - xxxxxxxxx
+* [d3.count](https://github.com/d3/d3-array/blob/v2.6.0/README.md#count) - xxxxxxxxx
 * [d3.cross](https://github.com/d3/d3-array/blob/v2.6.0/README.md#cross) - compute the Cartesian product of two arrays.
 * [d3.merge](https://github.com/d3/d3-array/blob/v2.6.0/README.md#merge) - merge multiple arrays into one array.
 * [d3.pairs](https://github.com/d3/d3-array/blob/v2.6.0/README.md#pairs) - create an array of adjacent pairs of elements.
@@ -88,11 +113,11 @@ Methods for transforming arrays and for generating new arrays.
 
 Bin discrete samples into continuous, non-overlapping intervals.
 
-* [d3.histogram](https://github.com/d3/d3-array/blob/v2.6.0/README.md#histogram) - create a new histogram generator.
-* [*histogram*](https://github.com/d3/d3-array/blob/v2.6.0/README.md#_histogram) - compute the histogram for the given array of samples.
-* [*histogram*.value](https://github.com/d3/d3-array/blob/v2.6.0/README.md#histogram_value) - specify a value accessor for each sample.
-* [*histogram*.domain](https://github.com/d3/d3-array/blob/v2.6.0/README.md#histogram_domain) - specify the interval of observable values.
-* [*histogram*.thresholds](https://github.com/d3/d3-array/blob/v2.6.0/README.md#histogram_thresholds) - specify how values are divided into bins.
+* [d3.bin](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bin) - create a new histogram generator.
+* [*bin*](https://github.com/d3/d3-array/blob/v2.6.0/README.md#_bin) - compute the histogram for the given array of samples.
+* [*bin*.value](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bin_value)- specify a value accessor for each sample.
+* [*bin*.domain](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bin_domain) - specify the interval of observable values.
+* [*bin*.thresholds](https://github.com/d3/d3-array/blob/v2.6.0/README.md#bin_thresholds) - specify how values are divided into bins.
 * [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array/blob/v2.6.0/README.md#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
 * [d3.thresholdScott](https://github.com/d3/d3-array/blob/v2.6.0/README.md#thresholdScott) - Scott’s normal reference binning rule.
 * [d3.thresholdSturges](https://github.com/d3/d3-array/blob/v2.6.0/README.md#thresholdSturges) - Sturges’ binning formula.
