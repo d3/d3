@@ -183,62 +183,6 @@ Select a one- or two-dimensional region using the mouse or touch.
 * [d3.ribbonArrow](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbonArrow) - xxxxxxxxx
 * [*ribbonArrow*.headRadius](https://github.com/d3/d3-chord/blob/v2.0.0/README.md#ribbonArrow_headRadius) - xxxxxxxxx
 
-## [XXXCollections (d3-collection)](https://github.com/d3/d3-collection/tree/v1.0.7)
-
-Handy data structures for elements keyed by string.
-
-### [Objects](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#objects)
-
-Methods for converting associative arrays (objects) to arrays.
-
-* [d3.keys](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#keys) - list the keys of an associative array.
-* [d3.values](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#values) - list the values of an associated array.
-* [d3.entries](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#entries) - list the key-value entries of an associative array.
-
-### [Maps](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#maps)
-
-Like ES6 Map, but with string keys and a few other differences.
-
-* [d3.map](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map) - create a new, empty map.
-* [*map*.has](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_has) - returns true if the map contains the given key.
-* [*map*.get](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_get) - get the value for the given key.
-* [*map*.set](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_set) - set the value for the given key.
-* [*map*.remove](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_remove) - remove the entry for given key.
-* [*map*.clear](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_clear) - remove all entries.
-* [*map*.keys](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_keys) - get the array of keys.
-* [*map*.values](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_values) - get the array of values.
-* [*map*.entries](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_entries) - get the array of entries (key-values objects).
-* [*map*.each](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_each) - call a function for each entry.
-* [*map*.empty](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_empty) - returns false if the map has at least one entry.
-* [*map*.size](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#map_size) - compute the number of entries.
-
-### [Sets](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#sets)
-
-Like ES6 Set, but with string keys and a few other differences.
-
-* [d3.set](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set) - create a new, empty set.
-* [*set*.has](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set_has) - returns true if the set contains the given value.
-* [*set*.add](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set_add) - add the given value.
-* [*set*.remove](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set_remove) - remove the given value.
-* [*set*.clear](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set_clear) - remove all values.
-* [*set*.values](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set_values) - get the array of values.
-* [*set*.each](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set_each) - call a function for each value.
-* [*set*.empty](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set_empty) - returns true if the set has at least one value.
-* [*set*.size](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#set_size) - compute the number of values.
-
-### [Nests](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nests)
-
-Group data into arbitrary hierarchies.
-
-* [d3.nest](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest) - create a new nest generator.
-* [*nest*.key](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_key) - add a level to the nest hierarchy.
-* [*nest*.sortKeys](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_sortKeys) - sort the current nest level by key.
-* [*nest*.sortValues](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_sortValues) - sort the leaf nest level by value.
-* [*nest*.rollup](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_rollup) - specify a rollup function for leaf values.
-* [*nest*.map](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_map) - generate the nest, returning a map.
-* [*nest*.object](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_object) - generate the nest, returning an associative array.
-* [*nest*.entries](https://github.com/d3/d3-collection/blob/v1.0.7/README.md#nest_entries) - generate the nest, returning an array of key-values tuples.
-
 ## [Colors (d3-color)](https://github.com/d3/d3-color/tree/v2.0.0)
 
 Color manipulation and color space conversion.
