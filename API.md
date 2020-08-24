@@ -1118,24 +1118,24 @@ An area, defined by a bounding topline and baseline, as in an area chart.
 * [*area*.curve](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_curve) - set the curve interpolator.
 * [*area*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_context) - set the rendering context.
 * [*area*.lineX0](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineX0) - derive a line for the left edge of an area.
-* [*area*.lineX1](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineX1) - derive a line for the right edge of an area.
 * [*area*.lineY0](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineY0) - derive a line for the top edge of an area.
+* [*area*.lineX1](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineX1) - derive a line for the right edge of an area.
 * [*area*.lineY1](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineY1) - derive a line for the bottom edge of an area.
-* [d3.radialArea](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea) - create a new radial area generator.
-* [*radialArea*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_radialArea) - generate an area for the given dataset.
-* [*radialArea*.angle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_angle) - set the start and end angle accessors.
-* [*radialArea*.startAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_startAngle) - set the start angle accessor.
-* [*radialArea*.endAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_endAngle) - set the end angle accessor.
-* [*radialArea*.radius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_radius) - set the inner and outer radius accessors.
-* [*radialArea*.innerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_innerRadius) - set the inner radius accessor.
-* [*radialArea*.outerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_outerRadius) - set the outer radius accessor.
-* [*radialArea*.defined](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_defined) - set the defined accessor.
-* [*radialArea*.curve](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_curve) - set the curve interpolator.
-* [*radialArea*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialArea_context) - set the rendering context.
-* [*radialArea*.lineStartAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineStartAngle) - derive a line for the start edge of an area.
-* [*radialArea*.lineEndAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineEndAngle) - derive a line for the end edge of an area.
-* [*radialArea*.lineInnerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineInnerRadius) - derive a line for the inner edge of an area.
-* [*radialArea*.lineOuterRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineOuterRadius) - derive a line for the outer edge of an area.
+* [d3.areaRadial](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial) - create a new radial area generator.
+* [*areaRadial*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_areaRadial) - generate an area for the given dataset.
+* [*areaRadial*.angle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_angle) - set the start and end angle accessors.
+* [*areaRadial*.startAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_startAngle) - set the start angle accessor.
+* [*areaRadial*.endAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_endAngle) - set the end angle accessor.
+* [*areaRadial*.radius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_radius) - set the inner and outer radius accessors.
+* [*areaRadial*.innerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_innerRadius) - set the inner radius accessor.
+* [*areaRadial*.outerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_outerRadius) - set the outer radius accessor.
+* [*areaRadial*.defined](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_defined) - set the defined accessor.
+* [*areaRadial*.curve](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_curve) - set the curve interpolator.
+* [*areaRadial*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_context) - set the rendering context.
+* [*areaRadial*.lineStartAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
+* [*areaRadial*.lineInnerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
+* [*areaRadial*.lineEndAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
+* [*areaRadial*.lineOuterRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
 
 ### [Curves](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curves)
 
@@ -1145,15 +1145,15 @@ Interpolate between points to produce a continuous shape.
 * [d3.curveBasisClosed](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBasisClosed) - a closed cubic basis spline.
 * [d3.curveBasisOpen](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBasisOpen) - a cubic basis spline.
 * [d3.curveBundle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBundle) - a straightened cubic basis spline.
-* [*bundle*.beta](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#bundle_beta) - set the bundle tension *beta*.
+* [*bundle*.beta](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBundle_beta) - set the bundle tension *beta*.
 * [d3.curveCardinal](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
 * [d3.curveCardinalClosed](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCardinalClosed) - a closed cubic cardinal spline.
 * [d3.curveCardinalOpen](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCardinalOpen) - a cubic cardinal spline.
-* [*cardinal*.tension](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#cardinal_tension) - set the cardinal spline tension.
+* [*cardinal*.tension](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCardinal_tension) - set the cardinal spline tension.
 * [d3.curveCatmullRom](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
 * [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
 * [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
-* [*catmullRom*.alpha](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#catmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
+* [*catmullRom*.alpha](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCatmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
 * [d3.curveLinear](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveLinear) - a polyline.
 * [d3.curveLinearClosed](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveLinearClosed) - a closed polyline.
 * [d3.curveMonotoneX](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
@@ -1181,8 +1181,8 @@ A smooth cubic Bézier curve from a source to a target.
 * [*link*.y](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#link_y) - set the point *y*-accessor.
 * [*link*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#link_context) - set the rendering context.
 * [d3.linkRadial](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#linkRadial) - create a new radial link generator.
-* [*radialLink*.angle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialLink_angle) - set the point *angle* accessor.
-* [*radialLink*.radius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#radialLink_radius) - set the point *radius* accessor.
+* [*linkRadial*.angle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#linkRadial_angle) - set the point *angle* accessor.
+* [*linkRadial*.radius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#linkRadial_radius) - set the point *radius* accessor.
 
 ### [Symbols](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbols)
 
@@ -1201,7 +1201,7 @@ A categorical shape encoding, as in a scatterplot.
 * [d3.symbolStar](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolStar) - a pentagonal star (pentagram).
 * [d3.symbolTriangle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolTriangle) - an up-pointing triangle.
 * [d3.symbolWye](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolWye) - a Y shape.
-* [d3.pointRadial](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pointRadial) -
+* [d3.pointRadial](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pointRadial) - xxxxxxxxx
 * [*symbolType*.draw](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolType_draw) - draw this symbol to the given context.
 
 ### [Stacks](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stacks)
