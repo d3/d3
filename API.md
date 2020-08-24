@@ -642,11 +642,13 @@ Layout algorithms for visualizing hierarchical data.
 * [*node*.ancestors](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_ancestors) - generate an array of ancestors.
 * [*node*.descendants](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_descendants) - generate an array of descendants.
 * [*node*.leaves](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_leaves) - generate an array of leaves.
+* [*node*.find](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_find) - xxxxxxxxx
 * [*node*.path](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_path) - generate the shortest path to another node.
 * [*node*.links](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_links) - generate an array of links.
 * [*node*.sum](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_sum) - evaluate and aggregate quantitative values.
-* [*node*.sort](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_sort) - sort all descendant siblings.
 * [*node*.count](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_count) - count the number of leaves.
+* [*node*.sort](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_sort) - sort all descendant siblings.
+* [*node*[Symbol.iterator]](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_iterator) - xxxxxxxxx
 * [*node*.each](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_each) - breadth-first traversal.
 * [*node*.eachAfter](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_eachAfter) - post-order traversal.
 * [*node*.eachBefore](https://github.com/d3/d3-hierarchy/blob/v2.0.0/README.md#node_eachBefore) - pre-order traversal.
