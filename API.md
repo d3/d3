@@ -453,12 +453,14 @@ Force-directed graph layout using velocity Verlet integration.
 * [*simulation*.velocityDecay](https://github.com/d3/d3-force/blob/v2.1.1/README.md#simulation_velocityDecay) - set the velocity decay rate.
 * [*simulation*.force](https://github.com/d3/d3-force/blob/v2.1.1/README.md#simulation_force) - add or remove a force.
 * [*simulation*.find](https://github.com/d3/d3-force/blob/v2.1.1/README.md#simulation_find) - find the closest node to the given position.
+* [*simulation*.randomSource](https://github.com/d3/d3-force/blob/v2.1.1/README.md#simulation_randomSource) - xxxxxxxxx
 * [*simulation*.on](https://github.com/d3/d3-force/blob/v2.1.1/README.md#simulation_on) - add or remove an event listener.
 * [*force*](https://github.com/d3/d3-force/blob/v2.1.1/README.md#_force) - apply the force.
 * [*force*.initialize](https://github.com/d3/d3-force/blob/v2.1.1/README.md#force_initialize) - initialize the force with the given nodes.
 * [d3.forceCenter](https://github.com/d3/d3-force/blob/v2.1.1/README.md#forceCenter) - create a centering force.
 * [*center*.x](https://github.com/d3/d3-force/blob/v2.1.1/README.md#center_x) - set the center *x*-coordinate.
 * [*center*.y](https://github.com/d3/d3-force/blob/v2.1.1/README.md#center_y) - set the center *y*-coordinate.
+* [*center*.strength](https://github.com/d3/d3-force/blob/v2.1.1/README.md#center_strength) - xxxxxxxxx
 * [d3.forceCollide](https://github.com/d3/d3-force/blob/v2.1.1/README.md#forceCollide) - create a circle collision force.
 * [*collide*.radius](https://github.com/d3/d3-force/blob/v2.1.1/README.md#collide_radius) - set the circle radius.
 * [*collide*.strength](https://github.com/d3/d3-force/blob/v2.1.1/README.md#collide_strength) - set the collision resolution strength.
