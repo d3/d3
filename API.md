@@ -984,6 +984,9 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.selectAll](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_selectAll) - select multiple descendants for each selected element.
 * [*selection*.filter](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_filter) - filter elements based on data.
 * [*selection*.merge](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_merge) - merge this selection with another.
+* [*selection*.selectChild](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_selectChild) - xxxxxxxxx
+* [*selection*.selectChildren](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_selectChildren) - xxxxxxxxx
+* [*selection*.selection](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_selection) - xxxxxxxxx
 * [d3.matcher](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#matcher) - test whether an element matches a selector.
 * [d3.selector](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selector) - select an element.
 * [d3.selectorAll](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selectorAll) - select elements.
@@ -1021,12 +1024,8 @@ Transform the DOM by selecting elements and joining to data.
 
 * [*selection*.on](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_on) - add or remove event listeners.
 * [*selection*.dispatch](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_dispatch) - dispatch a custom event.
-* [d3.event](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#event) - the current user event, during interaction.
-* [d3.customEvent](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#customEvent) - temporarily define a custom event.
-* [d3.mouse](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#mouse) - get the mouse position relative to a given container.
-* [d3.touch](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#touch) - get a touch position relative to a given container.
-* [d3.touches](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#touches) - get the touch positions relative to a given container.
-* [d3.clientPoint](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#clientPoint) - get a position relative to a given container.
+* [d3.pointer](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#pointer) - xxxxxxxxx
+* [d3.pointers](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#pointers) - xxxxxxxxx
 
 ### [Control Flow](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#control-flow)
 
@@ -1036,6 +1035,7 @@ Transform the DOM by selecting elements and joining to data.
 * [*selection*.nodes](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_nodes) - returns an array of all selected elements.
 * [*selection*.node](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_node) - returns the first (non-null) element.
 * [*selection*.size](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_size) - returns the count of elements.
+* [*selection*[Symbol.iterator]](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#selection_iterator) - xxxxxxxxx
 
 ### [Local Variables](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#local-variables)
 
