@@ -153,9 +153,9 @@ Select a one- or two-dimensional region using the mouse or touch.
 * [*brush*.clear](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brush_clear) - clear the brush selection.
 * [*brush*.extent](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brush_extent) - define the brushable region.
 * [*brush*.filter](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brush_filter) - control which input events initiate brushing.
-* [*brush*.handleSize](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brush_handleSize) - set the size of the brush handles.
 * [*brush*.touchable](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brush_touchable) - set the touch support detector.
 * [*brush*.keyModifiers](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brush_keyModifiers) - enable or disable key interaction.
+* [*brush*.handleSize](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brush_handleSize) - set the size of the brush handles.
 * [*brush*.on](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brush_on) - listen for brush events.
 * [d3.brushSelection](https://github.com/d3/d3-brush/blob/v2.0.0/README.md#brushSelection) - get the brush selection for a given node.
 
