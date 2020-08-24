@@ -1236,12 +1236,12 @@ Parse and format times, inspired by strptime and strftime.
 * [d3.utcParse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#utcParse) -  alias for *locale*.utcParse on the default locale.
 * [d3.isoFormat](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#isoFormat) - an ISO 8601 UTC formatter.
 * [d3.isoParse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#isoParse) - an ISO 8601 UTC parser.
-* [d3.timeFormatLocale](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormatLocale) - define a custom locale.
-* [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormatDefaultLocale) - define the default locale.
 * [*locale*.format](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#locale_format) - create a time formatter.
 * [*locale*.parse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#locale_parse) - create a time parser.
 * [*locale*.utcFormat](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#locale_utcFormat) - create a UTC formatter.
 * [*locale*.utcParse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#locale_utcParse) - create a UTC parser.
+* [d3.timeFormatLocale](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormatLocale) - define a custom locale.
+* [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormatDefaultLocale) - define the default locale.
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time/tree/v2.0.0)
 
