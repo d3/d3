@@ -350,15 +350,6 @@ Drag and drop SVG, HTML or Canvas using mouse or touch input.
 
 Parse and format delimiter-separated values, most commonly CSV and TSV.
 
-* [d3.dsvFormat](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsvFormat) - create a new parser and formatter for the given delimiter.
-* [*dsv*.parse](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_parse) - parse the given string, returning an array of objects.
-* [*dsv*.parseRows](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_parseRows) - parse the given string, returning an array of rows.
-* [*dsv*.format](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_format) - format the given array of objects.
-* [*dsv*.formatBody](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_formatBody) - format the given array of objects.
-* [*dsv*.formatRows](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_formatRows) - format the given array of rows.
-* [*dsv*.formatRow](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_formatRow) - format the given row.
-* [*dsv*.formatValue](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_formatValue) - format the given value.
-* [d3.autoType](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#autoType) - automatically infer value types for the given object.
 * [d3.csvParse](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#csvParse) - parse the given CSV string, returning an array of objects.
 * [d3.csvParseRows](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#csvParseRows) - parse the given CSV string, returning an array of rows.
 * [d3.csvFormat](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#csvFormat) - format the given array of objects as CSV.
@@ -373,6 +364,15 @@ Parse and format delimiter-separated values, most commonly CSV and TSV.
 * [d3.tsvFormatRows](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#tsvFormatRows) - format the given array of rows as TSV.
 * [d3.tsvFormatRow](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#tsvFormatRow) - format the given row as TSV.
 * [d3.tsvFormatValue](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#tsvFormatValue) - format the given value as TSV.
+* [d3.dsvFormat](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsvFormat) - create a new parser and formatter for the given delimiter.
+* [*dsv*.parse](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_parse) - parse the given string, returning an array of objects.
+* [*dsv*.parseRows](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_parseRows) - parse the given string, returning an array of rows.
+* [*dsv*.format](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_format) - format the given array of objects.
+* [*dsv*.formatBody](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_formatBody) - format the given array of objects.
+* [*dsv*.formatRows](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_formatRows) - format the given array of rows.
+* [*dsv*.formatRow](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_formatRow) - format the given row.
+* [*dsv*.formatValue](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#dsv_formatValue) - format the given value.
+* [d3.autoType](https://github.com/d3/d3-dsv/blob/v2.0.0/README.md#autoType) - automatically infer value types for the given object.
 
 ## [Easings (d3-ease)](https://github.com/d3/d3-ease/tree/v2.0.0)
 
