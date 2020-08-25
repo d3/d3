@@ -1,4 +1,4 @@
-var tape = require("tape"),
+var tape = require("tape-await"),
     d3 = require("../");
 
 module.exports = function(moduleName) {
@@ -9,6 +9,5 @@ module.exports = function(moduleName) {
         test.equal(symbol in d3, true, moduleName + " export " + symbol);
       }
     }
-    test.end();
   });
 };

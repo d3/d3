@@ -1,13 +1,59 @@
+# Changes in D3 6.0
+
+[Released DATE TK.](https://github.com/d3/d3/releases/tag/v6.0.0)
+
+*This document covers only major changes. For minor and patch changes, please see the [release notes](https://github.com/d3/d3/releases).*
+
+D3 6.0 introduces several non-backwards-compatible changes.
+
+**Adoption of ES2015**
+
+* *All* the D3 modules have now adopted ES2015. Developers who need to maintain compatibility with older browsers will use transpilation. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#es2015)]
+
+**d3-selection** has a new event manager:
+
+* d3.event ⇨ (event) passed as the first argument to all listeners  [[details](https://observablehq.com/d/f91cccf0cad5e9cb#events)]
+* d3.mouse, d3.touch, d3.touches, d3.clientPoint ⇨ d3.pointer [[details](https://observablehq.com/d/f91cccf0cad5e9cb#pointer)]
+
+**d3-brush**, **d3-drag** and **d3-zoom** also use the new event manager:
+
+* *brush*.on listeners now receive event [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_brush)]
+* *drag*.on listeners now receive event [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_drag)]
+* *zoom*.on listeners now receive event [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_zoom)]
+
+**d3-voronoi** is deprecated, and replaced by [d3-delaunay](https://github.com/d3/d3-delaunay):
+
+* d3.voronoi ⇨ d3.Delaunay  [[details](https://observablehq.com/d/f91cccf0cad5e9cb#delaunay)]
+
+**d3-collection** is deprecated, and its methods are replaced:
+
+* d3.nest ⇨ d3.group and d3.rollup (from d3-array)  [[details](https://observablehq.com/d/f91cccf0cad5e9cb#group)]
+* d3.map ⇨ Map [[details](https://observablehq.com/d/f91cccf0cad5e9cb#collection)]
+* d3.set ⇨ Set [[details](https://observablehq.com/d/f91cccf0cad5e9cb#collection)]
+* d3.keys ⇨ Object.keys [[details](https://observablehq.com/d/f91cccf0cad5e9cb#collection)]
+* d3.values ⇨ Object.values [[details](https://observablehq.com/d/f91cccf0cad5e9cb#collection)]
+* d3.entries ⇨ Object.entries [[details](https://observablehq.com/d/f91cccf0cad5e9cb#collection)]
+
+**d3-array** has renamed two methods:
+* d3.histogram ⇨ d3.bin [[details](https://observablehq.com/d/f91cccf0cad5e9cb#bin)]
+* d3.scan ⇨ d3.leastIndex [[details](https://observablehq.com/d/f91cccf0cad5e9cb#leastIndex)]
+
+**d3-interpolate** has a breaking change in an ancillary method:
+* d3.interpolateTransformCss is now stricter in its inputs. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#interpolateTransformCss)]
+
+**d3-format** changes its minus sign:
+* the default symbol for the sign of negative values becomes unicode minus instead of hyphen-minus  [[details](https://observablehq.com/d/f91cccf0cad5e9cb#minus)]
+
 **bower**
 
 Support for the [bower](https://github.com/mbostock-bower/d3-bower) package manager has been dropped; use [unpkg](https://unpkg.com/d3) or [cdnjs](https://cdnjs.com/libraries/d3).
+
+………
 
 
 # Changes in D3 5.0
 
 [Released March 22, 2018.](https://github.com/d3/d3/releases/tag/v5.0.0)
-
-*This document covers only major changes. For minor and patch changes, please see the [release notes](https://github.com/d3/d3/releases).*
 
 D3 5.0 introduces only a few non-backwards-compatible changes.
 
