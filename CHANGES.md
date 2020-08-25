@@ -42,7 +42,7 @@ D3 6.0 introduces several non-backwards-compatible changes.
 * d3.interpolateTransformCss is now stricter in its inputs. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#interpolateTransformCss)]
 
 **d3-format** changes its minus sign:
-* the default symbol for the sign of negative values becomes unicode minus instead of hyphen-minus  [[details](https://observablehq.com/d/f91cccf0cad5e9cb#minus)]
+* The default symbol for the sign of negative values becomes unicode minus instead of hyphen-minus. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#minus)]
 
 
 ………
