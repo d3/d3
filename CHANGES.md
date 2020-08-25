@@ -1,3 +1,8 @@
+**bower**
+
+Support for the [bower](https://github.com/mbostock-bower/d3-bower) package manager has been dropped; use [unpkg](https://unpkg.com/d3) or [cdnjs](https://cdnjs.com/libraries/d3).
+
+
 # Changes in D3 5.0
 
 [Released March 22, 2018.](https://github.com/d3/d3/releases/tag/v5.0.0)
