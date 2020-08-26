@@ -1,6 +1,6 @@
 # Changes in D3 6.0
 
-[Released DATE TK.](https://github.com/d3/d3/releases/tag/v6.0.0)
+[Released August 26, 2020.](https://github.com/d3/d3/releases/tag/v6.0.0)
 
 *This document covers only major changes. For minor and patch changes, please see the [release notes](https://github.com/d3/d3/releases).*
 
