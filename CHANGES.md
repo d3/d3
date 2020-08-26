@@ -44,6 +44,9 @@ D3 6.0 introduces several non-backwards-compatible changes.
 **d3-format** changes its minus sign:
 * The default symbol for the sign of negative values becomes unicode minus instead of hyphen-minus. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#minus)]
 
+**bower**
+
+Support for the [bower](https://github.com/mbostock-bower/d3-bower) package manager has been dropped; use [unpkg](https://unpkg.com/d3) or [cdnjs](https://cdnjs.com/libraries/d3).
 
 ………
 
