@@ -4,21 +4,23 @@
 
 *This document covers only major changes. For minor and patch changes, please see the [release notes](https://github.com/d3/d3/releases).*
 
+D3 6.0 embraces modern JavaScript (ES2015) language features.
+
+D3 now **uses native collections** (Map and Set) and **accepts iterables**. [d3.group and d3.rollup](https://observablehq.com/@d3/d3-group) are powerful new aggregation functions that replace d3.nest and work great [with d3-hierarchy](https://observablehq.com/d/9a453665f405eebf) and d3-selection. There are lots of new helpers in d3-array, too, such as [d3.greatest](https://observablehq.com/@d3/d3-least), [d3.quickselect](https://observablehq.com/@d3/d3-quickselect), and [d3.fsum](https://observablehq.com/@d3/d3-fsum).
+
+D3 now **passes events directly to listeners**, replacing the d3.event global and bringing D3 inline with vanilla JavaScript and most other frameworks.
+
+**d3-delaunay** (based on Vladimir Agafonkin’s excellent [Delaunator](https://github.com/mapbox/delaunator)) replaces d3-voronoi, offering dramatic improvements to performance, robustness, and [search](https://observablehq.com/@d3/delaunay-find). And there’s a new [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi) for spherical (geographical) data!
+
+**d3-random** is [greatly expanded](https://github.com/d3/d3-random/blob/master/README.md) and includes a fast [linear congruential generator](https://observablehq.com/@d3/d3-randomlcg) for seeded randomness.
+
+**d3-chord** has new layouts for [directed](https://observablehq.com/@d3/directed-chord-diagram) and transposed chord diagrams.
+
+**d3-scale** adds a new [radial scale](https://observablehq.com/@d3/radial-stacked-bar-chart-ii) type.
+
+… and a variety of other small enhancements. [More than 450 examples](https://observablehq.com/@d3/gallery) have been updated to D3 6.0!
+
 D3 6.0 introduces several non-backwards-compatible changes.
-
-**d3-array** now uses native collections (Map and Set) instead of object dictionaries, and accepts any iterable (for-of) not just arrays. [d3.group and d3.rollup](https://observablehq.com/@d3/d3-group) are powerful new aggregation functions that replace d3.nest and work great with d3-hierarchy and d3-selection. There are lots of new array helpers, too, such as [d3.greatest](https://github.com/d3/d3-array/blob/master/README.md#greatest), [d3.quickselect](https://github.com/d3/d3-array/blob/master/README.md#quickselect), and [d3.fsum](https://github.com/d3/d3-array/blob/master/README.md#fsum).
-
-**d3-selection** now passes events directly to event listeners, replacing the d3.event global and bringing D3 inline with vanilla JavaScript and most other frameworks.
-
-**d3-delaunay** replaces d3-voronoi, offering dramatic improvements to performance and robustness. It also supports [fast search](https://observablehq.com/@d3/delaunay-find). And there’s a new [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi) for spherical (geographical) data!
-
-**d3-random** is greatly expanded and includes a fast linear congruential generator for seeded randomness.
-
-**d3-chord** has new layouts for directed and transposed chord diagrams.
-
-**d3-scale** adds a new radial scale type.
-
-… and a variety of other small enhancements and [new and improved examples](https://observablehq.com/@d3/gallery).
 
 **d3-selection** has a new event manager:
 
@@ -45,18 +47,23 @@ D3 6.0 introduces several non-backwards-compatible changes.
 * d3.entries → Object.entries [[details](https://observablehq.com/d/f91cccf0cad5e9cb#collection)]
 
 **d3-array** has renamed two methods:
+
 * d3.histogram → d3.bin [[details](https://observablehq.com/d/f91cccf0cad5e9cb#bin)]
 * d3.scan → d3.leastIndex [[details](https://observablehq.com/d/f91cccf0cad5e9cb#leastIndex)]
 
 **d3-interpolate** has a breaking change in an ancillary method:
+
 * d3.interpolateTransformCss is now stricter in its inputs. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#interpolateTransformCss)]
 
 **d3-format** changes its minus sign:
+
 * The default symbol for the sign of negative values becomes unicode minus instead of hyphen-minus. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#minus)]
+
+D3 now requires a browser that supports [ES2015](http://www.ecma-international.org/ecma-262/6.0/). For older browsers, you must bring your own transpiler.
 
 Lastly, support for [Bower](https://bower.io) has been dropped; D3 is now exclusively published to npm and GitHub.
 
-D3 now requires a browser that supports [ES2015](http://www.ecma-international.org/ecma-262/6.0/). For older browsers, you must bring your own transpiler; see our [migration guide](https://observablehq.com/d/f91cccf0cad5e9cb) for details.
+See our [migration guide](https://observablehq.com/d/f91cccf0cad5e9cb) for help upgrading.
 
 # Changes in D3 5.0
 
