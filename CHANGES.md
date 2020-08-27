@@ -40,7 +40,7 @@ D3 6.0 introduces several non-backwards-compatible changes.
 * Rename d3.histogram to [d3.bin](https://observablehq.com/d/f91cccf0cad5e9cb#bin).
 * Rename d3.scan to [d3.leastIndex](https://observablehq.com/d/f91cccf0cad5e9cb#leastIndex).
 * Change [d3.interpolateTransformCss](https://observablehq.com/d/f91cccf0cad5e9cb#interpolateTransformCss) to require absolute units.
-* Change [d3.format](https://observablehq.com/d/f91cccf0cad5e9cb#minus) to default to the minus sign for negative values instead of hyphen-minus.
+* Change [d3.format](https://observablehq.com/d/f91cccf0cad5e9cb#minus) to default to the minus sign instead of hyphen-minus for negative values.
 
 D3 now requires a browser that supports [ES2015](http://www.ecma-international.org/ecma-262/6.0/). For older browsers, you must bring your own transpiler.
 
