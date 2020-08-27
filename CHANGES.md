@@ -4,8 +4,6 @@
 
 *This document covers only major changes. For minor and patch changes, please see the [release notes](https://github.com/d3/d3/releases).*
 
-D3 6.0 embraces modern JavaScript (ES2015) language features.
-
 D3 now **uses native collections** (Map and Set) and **accepts iterables**. [d3.group and d3.rollup](https://observablehq.com/@d3/d3-group) are powerful new aggregation functions that replace d3.nest and work great [with d3-hierarchy](https://observablehq.com/d/9a453665f405eebf) and d3-selection. There are lots of new helpers in d3-array, too, such as [d3.greatest](https://observablehq.com/@d3/d3-least), [d3.quickselect](https://observablehq.com/@d3/d3-quickselect), and [d3.fsum](https://observablehq.com/@d3/d3-fsum).
 
 D3 now **passes events directly to listeners**, replacing the d3.event global and bringing D3 inline with vanilla JavaScript and most other frameworks.
