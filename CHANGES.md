@@ -20,8 +20,6 @@ D3 now **passes events directly to listeners**, replacing the d3.event global an
 
 ### d3-array
 
-See https://observablehq.com/@d3/d3-array-2-0 for details.
-
 * Accept iterables.
 * Add [d3.group](https://github.com/d3/d3-array/blob/master/README.md#group).
 * Add [d3.groups](https://github.com/d3/d3-array/blob/master/README.md#groups).
@@ -49,6 +47,8 @@ See https://observablehq.com/@d3/d3-array-2-0 for details.
 * Fix bin thresholds to ignore NaN input.
 * Fix [d3.ticks](https://github.com/d3/d3-array/blob/master/README.md#ticks) to not return ticks outside the domain.
 * Improve the performance of [d3.median](https://github.com/d3/d3-array/blob/master/README.md#median).
+
+See https://observablehq.com/@d3/d3-array-2-0 for details.
 
 ### d3-brush
 
