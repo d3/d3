@@ -36,8 +36,8 @@ See https://observablehq.com/@d3/d3-array-2-0 for details.
 * Add [d3.least](https://github.com/d3/d3-array/blob/master/README.md#least).
 * Add [d3.leastIndex](https://github.com/d3/d3-array/blob/master/README.md#leastIndex).
 * Add [d3.bin](https://github.com/d3/d3-array/blob/master/README.md#bin).
-* Add [d3.count](https://github.com/d3/d3-array/blob/master/README.md#count). Thanks, @Fil!
-* Add [d3.cumsum](https://github.com/d3/d3-array/blob/master/README.md#cumsum). Thanks, @Fil! #102
+* Add [d3.count](https://github.com/d3/d3-array/blob/master/README.md#count).
+* Add [d3.cumsum](https://github.com/d3/d3-array/blob/master/README.md#cumsum).
 * Add [d3.fsum](https://github.com/d3/d3-array/blob/master/README.md#fsum).
 * Add [d3.Adder](https://github.com/d3/d3-array/blob/master/README.md#Adder).
 * Add [d3.quantileSorted](https://github.com/d3/d3-array/blob/master/README.md#quantileSorted).
@@ -49,6 +49,164 @@ See https://observablehq.com/@d3/d3-array-2-0 for details.
 * Fix bin thresholds to ignore NaN input.
 * Fix [d3.ticks](https://github.com/d3/d3-array/blob/master/README.md#ticks) to not return ticks outside the domain.
 * Improve the performance of [d3.median](https://github.com/d3/d3-array/blob/master/README.md#median).
+
+### d3-brush
+
+* Add [*event*.mode](https://github.com/d3/d3-brush/blob/master/README.md#brush-events).
+* Change [*brush*.on](https://github.com/d3/d3-brush/blob/master/README.md#brush_on) to pass the *event* directly to listeners.
+* Improve multitouch (two-touch) interaction.
+
+### d3-chord
+
+* Add [d3.chordDirected](https://github.com/d3/d3-chord/blob/master/README.md#chordDirected).
+* Add [d3.chordTranspose](https://github.com/d3/d3-chord/blob/master/README.md#chordTranspose).
+* Add [d3.ribbonArrow](https://github.com/d3/d3-chord/blob/master/README.md#ribbonArrow).
+* Add [*ribbon*.padAngle](https://github.com/d3/d3-chord/blob/master/README.md#ribbon_padAngle).
+* Add [*ribbon*.sourceRadius](https://github.com/d3/d3-chord/blob/master/README.md#ribbon_sourceRadius).
+* Add [*ribbon*.targetRadius](https://github.com/d3/d3-chord/blob/master/README.md#ribbon_targetRadius).
+
+### d3-delaunay
+
+* Add [d3.Delaunay](https://github.com/d3/d3-delaunay/blob/master/README.md).
+
+### d3-drag
+
+* Change [*drag*.on](https://github.com/d3/d3-drag/blob/master/README.md#drag_on) to pass the *event* directly to listeners.
+
+### d3-force
+
+* Add *iterations* argument to [*simulation*.tick](https://github.com/d3/d3-force/blob/master/README.md#simulation_tick).
+* Add [*forceCenter*.strength](https://github.com/d3/d3-force/blob/master/README.md#center_strength).
+* Add [*forceSimulation*.randomSource](https://github.com/d3/d3-force/blob/master/README.md#simulation_randomSource).
+* All built-in forces are now fully deterministic (including “jiggling” coincident nodes).
+* Improve the default phyllotaxis layout slightly by offsetting by one half-radius.
+* Improve the error message when a link references an unknown node.
+* [*force*.initialize](https://github.com/d3/d3-force/blob/master/README.md#force_initialize) is now passed a random source.
+* Fix bug when initializing nodes with fixed positions.
+
+### d3-format
+
+* Change the default minus sign to the minus sign (−) instead of hyphen-minus (-).
+* Fix decimal `d` formatting of numbers greater than or equal to 1e21.
+
+### d3-geo
+
+* Fix clipping of some degenerate polygons.
+
+### d3-hierarchy
+
+* Accept iterables.
+* Add [*node*[Symbol.iterator]](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_iterator); hierarchies are now iterable.
+* Add [*node*.find](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_find).
+* Change [*node*.each](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_each) to pass the traversal index.
+* Change [*node*.eachAfter](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_eachAfter) to pass the traversal index.
+* Change [*node*.eachBefore](https://github.com/d3/d3-hierarchy/blob/master/README.md#node_eachBefore) to pass the traversal index.
+* Fix [d3.packSiblings](https://github.com/d3/d3-hierarchy/blob/master/README.md#packSiblings) for huge circles.
+* Fix divide-by-zero bug in [d3.treemapBinary](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemapBinary).
+* Fix divide-by-zero bug in [d3.treemapResquarify](https://github.com/d3/d3-hierarchy/blob/master/README.md#treemapResquarify).
+
+### d3-interpolate
+
+* Add [*interpolateZoom*.rho](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateZoom_rho). (#25)
+* Allow [d3.piecewise](https://github.com/d3/d3-interpolate/blob/master/README.md#piecewise) to default to using d3.interpolate. #90
+* Change [d3.interpolateTransformCss](https://github.com/d3/d3-interpolate/blob/master/README.md#interpolateTransformCss) to use DOMMatrix and require absolute units. #83
+
+### d3-quadtree
+
+* Fix an infinite loop when coordinates diverge to huge values.
+
+### d3-random
+
+* Add [d3.randomLcg](https://github.com/d3/d3-random/blob/master/README.md#randomLcg).
+* Add [d3.randomGamma](https://github.com/d3/d3-random/blob/master/README.md#randomGamma).
+* Add [d3.randomBeta](https://github.com/d3/d3-random/blob/master/README.md#randomBeta).
+* Add [d3.randomWeibull](https://github.com/d3/d3-random/blob/master/README.md#randomWeibull).
+* Add [d3.randomCauchy](https://github.com/d3/d3-random/blob/master/README.md#randomCauchy).
+* Add [d3.randomLogistic](https://github.com/d3/d3-random/blob/master/README.md#randomLogistic).
+* Add [d3.randomPoisson](https://github.com/d3/d3-random/blob/master/README.md#randomPoisson).
+* Add [d3.randomInt](https://github.com/d3/d3-random/blob/master/README.md#randomInt).
+* Add [d3.randomBinomial](https://github.com/d3/d3-random/blob/master/README.md#randomBinomial).
+* Add [d3.randomGeometric](https://github.com/d3/d3-random/blob/master/README.md#randomGeometric).
+* Add [d3.randomPareto](https://github.com/d3/d3-random/blob/master/README.md#randomPareto).
+* Add [d3.randomBernoulli](https://github.com/d3/d3-random/blob/master/README.md#randomBernoulli).
+* Allow [d3.randomBates](https://github.com/d3/d3-random/blob/master/README.md#randomBates) to take fractional *n*.
+* Allow [d3.randomIrwinHall](https://github.com/d3/d3-random/blob/master/README.md#randomIrwinHall) to take fractional *n*.
+* Don’t wrap Math.random in the default source.
+
+Thanks to @Lange, @p-v-d-Veeken, @svanschooten, @Parcly-Taxel and @jrus for your contributions!
+
+### d3-scale
+
+* Accept iterables.
+* Add [*diverging*.rangeRound](https://github.com/d3/d3-scale/blob/master/README.md#diverging_rangeRound).
+* Add [*sequential*.range](https://github.com/d3/d3-scale/blob/master/README.md#sequential_range) (for compatibility with d3-axis).
+* Add [*sequential*.rangeRound](https://github.com/d3/d3-scale/blob/master/README.md#sequential_rangeRound).
+* Add [*sequentialQuantile*.quantiles](https://github.com/d3/d3-scale/blob/master/README.md#sequentialQuantile_quantiles).
+* Add [d3.scaleRadial](https://github.com/d3/d3-scale/blob/master/README.md#radial-scales).
+* [*diverging*.range](https://github.com/d3/d3-scale/blob/master/README.md#diverging_range) can now be used to set the interpolator.
+* [*sequential*.range](https://github.com/d3/d3-scale/blob/master/README.md#sequential_range) can now be used to set the interpolator.
+* [d3.scaleDiverging](https://github.com/d3/d3-scale/blob/master/README.md#diverging-scales) can now accept a range array in place of an interpolator.
+* [d3.scaleSequential](https://github.com/d3/d3-scale/blob/master/README.md#sequential-scales) can now accept a range array in place of an interpolator.
+* Fix [*continuous*.nice](https://github.com/d3/d3-scale/blob/master/README.md#continuous_nice) to ensure that niced domains always span ticks.
+* Fix [*log*.ticks](https://github.com/d3/d3-scale/blob/master/README.md#log_ticks) for small domains.
+* Fix [*log*.ticks](https://github.com/d3/d3-scale/blob/master/README.md#log_ticks) for small domains. #44
+* Fix [*scale*.clamp](https://github.com/d3/d3-scale/blob/master/README.md#continuous_clamp) for [sequential quantile scales](https://github.com/d3/d3-scale/blob/master/README.md#scaleSequentialQuantile). Thanks, @Fil!
+* Fix [*scale*.clamp](https://github.com/d3/d3-scale/blob/master/README.md#continuous_clamp) for continuous scales with more domain values than range values.
+* Fix [diverging scales](https://github.com/d3/d3-scale/blob/master/README.md#diverging-scales) with descending domains.
+* Remove deprecated *step* argument from [*time*.ticks](https://github.com/d3/d3-scale/blob/master/README.md#time_ticks) and [*time*.nice](https://github.com/d3/d3-scale/blob/master/README.md#time_nice).
+
+### d3-selection
+
+* Add [*selection*.selectChild](https://github.com/d3/d3-selection/blob/master/README.md#selection_selectChild).
+* Add [*selection*.selectChildren](https://github.com/d3/d3-selection/blob/master/README.md#selection_selectChildren).
+* Add [d3.pointer](https://github.com/d3/d3-selection/blob/master/README.md#pointer).
+* Add [d3.pointers](https://github.com/d3/d3-selection/blob/master/README.md#pointers).
+* Add *selection*[Symbol.iterator]; selections are now iterable!
+* Accept iterables with [*selection*.data](https://github.com/d3/d3-selection/blob/master/README.md#selection_data).
+* Accept iterables with [d3.selectAll](https://github.com/d3/d3-selection/blob/master/README.md#selectAll).
+* Change [*selection*.on](https://github.com/d3/d3-selection/blob/master/README.md#selection_on) to pass the *event* directly to listeners.
+* Remove index and group from *selection*.on listeners!
+* Remove d3.event!
+* Remove d3.mouse.
+* Remove d3.touch.
+* Remove d3.touches.
+* Remove d3.customEvent.
+* Remove d3.clientPoint.
+* Remove d3.sourceEvent.
+* Fix *selection*.merge(*transition*) to error.
+
+For an overview of changes, see https://observablehq.com/@d3/d3-selection-2-0.
+
+### d3-shape
+
+* Accept iterables.
+* Add [d3.line](https://github.com/d3/d3-shape/blob/master/README.md#line)(*x*, *y*) shorthand.
+* Add [d3.area](https://github.com/d3/d3-shape/blob/master/README.md#area)(*x*, *y0*, *y1*) shorthand.
+* Add [d3.symbol](https://github.com/d3/d3-shape/blob/master/README.md#symbol)(*type*, *size*) shorthand.
+
+### d3-time-format
+
+* Add ISO 8601 “week year” (`%G` and `%g`).
+
+### d3-timer
+
+* Fix [*interval*.restart](https://github.com/d3/d3-timer/blob/master/README.md#timer_restart) to restart as an interval.
+
+### d3-transition
+
+* Add [*transition*.easeVarying](https://github.com/d3/d3-transition/blob/master/README.md#transition_easeVarying).
+* Add *transition*[Symbol.iterator]; transitions are now iterable.
+* Fix [*selection*.transition](https://github.com/d3/d3-transition/blob/master/README.md#selection_transition) to error if the named transition to inherit is not found.k
+* Fix [*transition*.end](https://github.com/d3/d3-transition/blob/master/README.md#transition_end) to resolve immediately if the selection is empty.
+
+### d3-zoom
+
+* Add [*zoom*.tapDistance](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_tapDistance).
+* Change [*zoom*.on](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_on) to pass the *event* directly to listeners.
+* Change the default [*zoom*.filter](https://github.com/d3/d3-zoom/blob/master/README.md#zoom_filter) to observe *wheel* events if the control key is pressed.
+* Change the default [*zoom*.wheelDelta](ttps://github.com/d3/d3-zoom/blob/master/README.md#zoom_wheelDelta) to go faster if the control key is pressed.
+* Don‘t set touch-action: none.
+* Upgrade to [d3-selection 2](https://observablehq.com/@d3/d3-selection-2-0).
 
 ### Breaking Changes
 
