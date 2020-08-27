@@ -20,10 +20,6 @@ D3 6.0 introduces several non-backwards-compatible changes.
 
 … and a variety of other small enhancements and [new and improved examples](https://observablehq.com/@d3/gallery).
 
-D3 now requires a browser that supports [ES2015](http://www.ecma-international.org/ecma-262/6.0/). For older browsers, you must bring your own transpiler; see our [migration guide](https://observablehq.com/d/f91cccf0cad5e9cb) for details.
-
-Here’s a more detailed overview of changes.
-
 **d3-selection** has a new event manager:
 
 * d3.event → (event) passed as the first argument to all listeners  [[details](https://observablehq.com/d/f91cccf0cad5e9cb#events)]
@@ -59,6 +55,8 @@ Here’s a more detailed overview of changes.
 * The default symbol for the sign of negative values becomes unicode minus instead of hyphen-minus. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#minus)]
 
 Lastly, support for [Bower](https://bower.io) has been dropped; D3 is now exclusively published to npm and GitHub.
+
+D3 now requires a browser that supports [ES2015](http://www.ecma-international.org/ecma-262/6.0/). For older browsers, you must bring your own transpiler; see our [migration guide](https://observablehq.com/d/f91cccf0cad5e9cb) for details.
 
 # Changes in D3 5.0
 
