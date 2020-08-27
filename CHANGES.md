@@ -18,6 +18,40 @@ D3 now **passes events directly to listeners**, replacing the d3.event global an
 
 … and a variety of other small enhancements. [More than 450 examples](https://observablehq.com/@d3/gallery) have been updated to D3 6.0!
 
+### d3-array
+
+See https://observablehq.com/@d3/d3-array-2-0 for details.
+
+* Accept iterables.
+* Add [d3.group](https://github.com/d3/d3-array/blob/master/README.md#group).
+* Add [d3.groups](https://github.com/d3/d3-array/blob/master/README.md#groups).
+* Add [d3.index](https://github.com/d3/d3-array/blob/master/README.md#index).
+* Add [d3.indexes](https://github.com/d3/d3-array/blob/master/README.md#indexes).
+* Add [d3.rollup](https://github.com/d3/d3-array/blob/master/README.md#rollup).
+* Add [d3.rollups](https://github.com/d3/d3-array/blob/master/README.md#rollups).
+* Add [d3.maxIndex](https://github.com/d3/d3-array/blob/master/README.md#maxIndex).
+* Add [d3.minIndex](https://github.com/d3/d3-array/blob/master/README.md#minIndex).
+* Add [d3.greatest](https://github.com/d3/d3-array/blob/master/README.md#greatest).
+* Add [d3.greatestIndex](https://github.com/d3/d3-array/blob/master/README.md#greatestIndex).
+* Add [d3.least](https://github.com/d3/d3-array/blob/master/README.md#least).
+* Add [d3.leastIndex](https://github.com/d3/d3-array/blob/master/README.md#leastIndex).
+* Add [d3.bin](https://github.com/d3/d3-array/blob/master/README.md#bin).
+* Add [d3.count](https://github.com/d3/d3-array/blob/master/README.md#count). Thanks, @Fil!
+* Add [d3.cumsum](https://github.com/d3/d3-array/blob/master/README.md#cumsum). Thanks, @Fil! #102
+* Add [d3.fsum](https://github.com/d3/d3-array/blob/master/README.md#fsum).
+* Add [d3.Adder](https://github.com/d3/d3-array/blob/master/README.md#Adder).
+* Add [d3.quantileSorted](https://github.com/d3/d3-array/blob/master/README.md#quantileSorted).
+* Add [d3.quickselect](https://github.com/d3/d3-array/blob/master/README.md#quickselect).
+* Add [*bisector*.center](https://github.com/d3/d3-array/blob/master/README.md#bisector_center).
+* Allow more than two iterables for [d3.cross](https://github.com/d3/d3-array/blob/master/README.md#cross).
+* Accept non-sorted input with [d3.quantile](https://github.com/d3/d3-array/blob/master/README.md#quantile).
+* Fix a *array*.sort bug in Safari.
+* Fix bin thresholds to ignore NaN input.
+* Fix [d3.ticks](https://github.com/d3/d3-array/blob/master/README.md#ticks) to not return ticks outside the domain.
+* Improve the performance of [d3.median](https://github.com/d3/d3-array/blob/master/README.md#median).
+
+### Breaking Changes
+
 D3 6.0 introduces several non-backwards-compatible changes.
 
 * Remove [d3.event](https://observablehq.com/d/f91cccf0cad5e9cb#events).
