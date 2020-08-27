@@ -22,14 +22,14 @@ D3 6.0 introduces several non-backwards-compatible changes.
 
 **d3-selection** has a new event manager:
 
-* d3.event → (event) passed as the first argument to all listeners  [[details](https://observablehq.com/d/f91cccf0cad5e9cb#events)]
+* d3.event → (event) passed as the first argument to all listeners. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#events)]
 * d3.mouse, d3.touch, d3.touches, d3.clientPoint → d3.pointer [[details](https://observablehq.com/d/f91cccf0cad5e9cb#pointer)]
 
 **d3-brush**, **d3-drag** and **d3-zoom** also use the new event manager:
 
-* *brush*.on listeners now receive event [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_brush)]
-* *drag*.on listeners now receive event [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_drag)]
-* *zoom*.on listeners now receive event [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_zoom)]
+* *brush*.on listeners now receive event. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_brush)]
+* *drag*.on listeners now receive event. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_drag)]
+* *zoom*.on listeners now receive event. [[details](https://observablehq.com/d/f91cccf0cad5e9cb#event_zoom)]
 
 **d3-voronoi** is deprecated, and replaced by [d3-delaunay](https://github.com/d3/d3-delaunay):
 
