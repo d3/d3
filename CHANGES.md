@@ -8,13 +8,7 @@ D3 now **uses native collections** (Map and Set) and **accepts iterables**. [d3.
 
 D3 now **passes events directly to listeners**, replacing the d3.event global and bringing D3 inline with vanilla JavaScript and most other frameworks.
 
-**d3-delaunay** (based on Vladimir Agafonkin’s excellent [Delaunator](https://github.com/mapbox/delaunator)) replaces d3-voronoi, offering dramatic improvements to performance, robustness, and [search](https://observablehq.com/@d3/delaunay-find). And there’s a new [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi) for spherical (geographical) data!
-
-**d3-random** is [greatly expanded](https://github.com/d3/d3-random/blob/master/README.md) and includes a fast [linear congruential generator](https://observablehq.com/@d3/d3-randomlcg) for seeded randomness.
-
-**d3-chord** has new layouts for [directed](https://observablehq.com/@d3/directed-chord-diagram) and transposed chord diagrams.
-
-**d3-scale** adds a new [radial scale](https://observablehq.com/@d3/radial-stacked-bar-chart-ii) type.
+**d3-delaunay** (based on Vladimir Agafonkin’s excellent [Delaunator](https://github.com/mapbox/delaunator)) replaces d3-voronoi, offering dramatic improvements to performance, robustness, and [search](https://observablehq.com/@d3/delaunay-find). And there’s a new [d3-geo-voronoi](https://github.com/Fil/d3-geo-voronoi) for spherical (geographical) data! **d3-random** is [greatly expanded](https://github.com/d3/d3-random/blob/master/README.md) and includes a fast [linear congruential generator](https://observablehq.com/@d3/d3-randomlcg) for seeded randomness. **d3-chord** has new layouts for [directed](https://observablehq.com/@d3/directed-chord-diagram) and transposed chord diagrams. **d3-scale** adds a new [radial scale](https://observablehq.com/@d3/radial-stacked-bar-chart-ii) type.
 
 … and a variety of other small enhancements. [More than 450 examples](https://observablehq.com/@d3/gallery) have been updated to D3 6.0!
 
