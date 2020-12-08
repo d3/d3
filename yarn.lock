@@ -102,9 +102,9 @@ concat-map@0.0.1:
   integrity sha1-2Klr13/Wjfd5OnMDajug1UBdR3s=
 
 d3-array@2, d3-array@>=2.5, d3-array@^2.3.0:
-  version "2.9.0"
-  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-2.9.0.tgz#a3041ab298f57ecc88b7d91610c6bc5297c03fb9"
-  integrity sha512-yOokB8GozB6GAubW9n7phLdRugC8TgEjF6V1cX/q78L80d2tLirUnc0jvDSSF622JJJTmtnJOe9+WKs+yS5GFQ==
+  version "2.9.1"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-2.9.1.tgz#f355cc72b46c8649b3f9212029e2d681cb5b9643"
+  integrity sha512-Ob7RdOtkqsjx1NWyQHMFLtCSk6/aKTxDdC4ZIolX+O+mDD2RzrsYgAyc0WGAlfYFVELLSilS7w8BtE3PKM8bHg==
 
 d3-axis@2:
   version "2.0.0"
