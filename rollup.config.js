@@ -1,5 +1,5 @@
 import ascii from "rollup-plugin-ascii";
-import node from "rollup-plugin-node-resolve";
+import node from "@rollup/plugin-node-resolve";
 import {terser} from "rollup-plugin-terser";
 import * as meta from "./package.json";
 
