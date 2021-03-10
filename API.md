@@ -35,133 +35,135 @@ D3 is a [collection of modules](https://github.com/d3) that are designed to work
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
 
-## [Arrays (d3-array)](https://github.com/d3/d3-array/tree/v2.11.0)
+## [Arrays (d3-array)](https://github.com/d3/d3-array/tree/v2.12.0)
 
 Array manipulation, ordering, searching, summarizing, etc.
 
-### [Statistics](https://github.com/d3/d3-array/blob/v2.11.0/README.md#statistics)
+### [Statistics](https://github.com/d3/d3-array/blob/v2.12.0/README.md#statistics)
 
 Methods for computing basic summary statistics.
 
-* [d3.min](https://github.com/d3/d3-array/blob/v2.11.0/README.md#min) - compute the minimum value in an iterable.
-* [d3.minIndex](https://github.com/d3/d3-array/blob/v2.11.0/README.md#minIndex) - compute the index of the minimum value in an iterable.
-* [d3.max](https://github.com/d3/d3-array/blob/v2.11.0/README.md#max) - compute the maximum value in an iterable.
-* [d3.maxIndex](https://github.com/d3/d3-array/blob/v2.11.0/README.md#maxIndex) - compute the index of the maximum value in an iterable.
-* [d3.extent](https://github.com/d3/d3-array/blob/v2.11.0/README.md#extent) - compute the minimum and maximum value in an iterable.
-* [d3.sum](https://github.com/d3/d3-array/blob/v2.11.0/README.md#sum) - compute the sum of an iterable of numbers.
-* [d3.mean](https://github.com/d3/d3-array/blob/v2.11.0/README.md#mean) - compute the arithmetic mean of an iterable of numbers.
-* [d3.median](https://github.com/d3/d3-array/blob/v2.11.0/README.md#median) - compute the median of an iterable of numbers (the 0.5-quantile).
-* [d3.cumsum](https://github.com/d3/d3-array/blob/v2.11.0/README.md#cumsum) - comute the cumulative sum of an iterable.
-* [d3.quantile](https://github.com/d3/d3-array/blob/v2.11.0/README.md#quantile) - compute a quantile for an iterable of numbers.
-* [d3.quantileSorted](https://github.com/d3/d3-array/blob/v2.11.0/README.md#quantileSorted) - compute a quantile for a sorted array of numbers.
-* [d3.variance](https://github.com/d3/d3-array/blob/v2.11.0/README.md#variance) - compute the variance of an iterable of numbers.
-* [d3.deviation](https://github.com/d3/d3-array/blob/v2.11.0/README.md#deviation) - compute the standard deviation of an iterable of numbers.
-* [d3.fsum](https://github.com/d3/d3-array/blob/v2.11.0/README.md#fsum) - compute a full precision summation of an iterable of numbers.
-* [new d3.Adder](https://github.com/d3/d3-array/blob/v2.11.0/README.md#adder) - creates a full precision adder.
-* [*adder*.add](https://github.com/d3/d3-array/blob/v2.11.0/README.md#adder_add) - add a value to an adder.
-* [*adder*.valueOf](https://github.com/d3/d3-array/blob/v2.11.0/README.md#adder_valueOf) - returns a double precision representation of an adder’s value.
+* [d3.min](https://github.com/d3/d3-array/blob/v2.12.0/README.md#min) - compute the minimum value in an iterable.
+* [d3.minIndex](https://github.com/d3/d3-array/blob/v2.12.0/README.md#minIndex) - compute the index of the minimum value in an iterable.
+* [d3.max](https://github.com/d3/d3-array/blob/v2.12.0/README.md#max) - compute the maximum value in an iterable.
+* [d3.maxIndex](https://github.com/d3/d3-array/blob/v2.12.0/README.md#maxIndex) - compute the index of the maximum value in an iterable.
+* [d3.extent](https://github.com/d3/d3-array/blob/v2.12.0/README.md#extent) - compute the minimum and maximum value in an iterable.
+* [d3.sum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#sum) - compute the sum of an iterable of numbers.
+* [d3.mean](https://github.com/d3/d3-array/blob/v2.12.0/README.md#mean) - compute the arithmetic mean of an iterable of numbers.
+* [d3.median](https://github.com/d3/d3-array/blob/v2.12.0/README.md#median) - compute the median of an iterable of numbers (the 0.5-quantile).
+* [d3.cumsum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#cumsum) - comute the cumulative sum of an iterable.
+* [d3.quantile](https://github.com/d3/d3-array/blob/v2.12.0/README.md#quantile) - compute a quantile for an iterable of numbers.
+* [d3.quantileSorted](https://github.com/d3/d3-array/blob/v2.12.0/README.md#quantileSorted) - compute a quantile for a sorted array of numbers.
+* [d3.variance](https://github.com/d3/d3-array/blob/v2.12.0/README.md#variance) - compute the variance of an iterable of numbers.
+* [d3.deviation](https://github.com/d3/d3-array/blob/v2.12.0/README.md#deviation) - compute the standard deviation of an iterable of numbers.
+* [d3.fcumsum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#fcumsum) - compute a full precision cumulative summation of numbers.
+* [d3.fsum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#fsum) - compute a full precision summation of an iterable of numbers.
+* [new d3.Adder](https://github.com/d3/d3-array/blob/v2.12.0/README.md#adder) - creates a full precision adder.
+* [*adder*.add](https://github.com/d3/d3-array/blob/v2.12.0/README.md#adder_add) - add a value to an adder.
+* [*adder*.valueOf](https://github.com/d3/d3-array/blob/v2.12.0/README.md#adder_valueOf) - returns a double precision representation of an adder’s value.
 
-### [Search](https://github.com/d3/d3-array/blob/v2.11.0/README.md#search)
+### [Search](https://github.com/d3/d3-array/blob/v2.12.0/README.md#search)
 
 Methods for searching arrays for a specific element.
 
-* [d3.least](https://github.com/d3/d3-array/blob/v2.11.0/README.md#least) - returns the least element of an iterable.
-* [d3.leastIndex](https://github.com/d3/d3-array/blob/v2.11.0/README.md#leastIndex) - returns the index of the least element of an iterable.
-* [d3.greatest](https://github.com/d3/d3-array/blob/v2.11.0/README.md#greatest) - returns the greatest element of an iterable.
-* [d3.greatestIndex](https://github.com/d3/d3-array/blob/v2.11.0/README.md#greatestIndex) - returns the index of the greatest element of an iterable.
-* [d3.bisectCenter](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bisectCenter) - binary search for a value in a sorted array.
-* [d3.bisectLeft](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bisectLeft) - binary search for a value in a sorted array.
-* [d3.bisect](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bisect) - binary search for a value in a sorted array.
-* [d3.bisectRight](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bisectRight) - binary search for a value in a sorted array.
-* [d3.bisector](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bisector) - bisect using an accessor or comparator.
-* [*bisector*.center](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bisector_center) - binary search for a value in a sorted array.
-* [*bisector*.left](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bisector_left) - bisectLeft, with the given comparator.
-* [*bisector*.right](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bisector_right) - bisectRight, with the given comparator.
-* [d3.quickselect](https://github.com/d3/d3-array/blob/v2.11.0/README.md#quickselect) - reorder an array of numbers.
-* [d3.ascending](https://github.com/d3/d3-array/blob/v2.11.0/README.md#ascending) - compute the natural order of two values.
-* [d3.descending](https://github.com/d3/d3-array/blob/v2.11.0/README.md#descending) - compute the natural order of two values.
+* [d3.least](https://github.com/d3/d3-array/blob/v2.12.0/README.md#least) - returns the least element of an iterable.
+* [d3.leastIndex](https://github.com/d3/d3-array/blob/v2.12.0/README.md#leastIndex) - returns the index of the least element of an iterable.
+* [d3.greatest](https://github.com/d3/d3-array/blob/v2.12.0/README.md#greatest) - returns the greatest element of an iterable.
+* [d3.greatestIndex](https://github.com/d3/d3-array/blob/v2.12.0/README.md#greatestIndex) - returns the index of the greatest element of an iterable.
+* [d3.bisectCenter](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisectCenter) - binary search for a value in a sorted array.
+* [d3.bisectLeft](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisectLeft) - binary search for a value in a sorted array.
+* [d3.bisect](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisect) - binary search for a value in a sorted array.
+* [d3.bisectRight](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisectRight) - binary search for a value in a sorted array.
+* [d3.bisector](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisector) - bisect using an accessor or comparator.
+* [*bisector*.center](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisector_center) - binary search for a value in a sorted array.
+* [*bisector*.left](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisector_left) - bisectLeft, with the given comparator.
+* [*bisector*.right](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisector_right) - bisectRight, with the given comparator.
+* [d3.quickselect](https://github.com/d3/d3-array/blob/v2.12.0/README.md#quickselect) - reorder an array of numbers.
+* [d3.ascending](https://github.com/d3/d3-array/blob/v2.12.0/README.md#ascending) - compute the natural order of two values.
+* [d3.descending](https://github.com/d3/d3-array/blob/v2.12.0/README.md#descending) - compute the natural order of two values.
 
-### [Transformations](https://github.com/d3/d3-array/blob/v2.11.0/README.md#transformations)
+### [Transformations](https://github.com/d3/d3-array/blob/v2.12.0/README.md#transformations)
 
 Methods for transforming arrays and for generating new arrays.
 
-* [d3.group](https://github.com/d3/d3-array/blob/v2.11.0/README.md#group) - group an iterable into a nested Map.
-* [d3.groups](https://github.com/d3/d3-array/blob/v2.11.0/README.md#groups) - group an iterable into a nested array.
-* [d3.index](https://github.com/d3/d3-array/blob/v2.11.0/README.md#index) - index an iterable into a nested Map.
-* [d3.indexes](https://github.com/d3/d3-array/blob/v2.11.0/README.md#indexes) - index an iterable into a nested array.
-* [d3.rollup](https://github.com/d3/d3-array/blob/v2.11.0/README.md#rollup) - reduce an iterable into a nested Map.
-* [d3.rollups](https://github.com/d3/d3-array/blob/v2.11.0/README.md#rollups) - reduce an iterable into a nested array.
-* [d3.groupSort](https://github.com/d3/d3-array/blob/v2.11.0/README.md#groupSort) - sort keys according to grouped values.
-* [d3.count](https://github.com/d3/d3-array/blob/v2.11.0/README.md#count) - count valid number values in an iterable.
-* [d3.cross](https://github.com/d3/d3-array/blob/v2.11.0/README.md#cross) - compute the Cartesian product of two iterables.
-* [d3.merge](https://github.com/d3/d3-array/blob/v2.11.0/README.md#merge) - merge multiple iterables into one array.
-* [d3.pairs](https://github.com/d3/d3-array/blob/v2.11.0/README.md#pairs) - create an array of adjacent pairs of elements.
-* [d3.permute](https://github.com/d3/d3-array/blob/v2.11.0/README.md#permute) - reorder an iterable of elements according to an iterable of indexes.
-* [d3.shuffle](https://github.com/d3/d3-array/blob/v2.11.0/README.md#shuffle) - randomize the order of an iterable.
-* [d3.shuffler](https://github.com/d3/d3-array/blob/v2.11.0/README.md#shuffler) - randomize the order of an iterable.
-* [d3.ticks](https://github.com/d3/d3-array/blob/v2.11.0/README.md#ticks) - generate representative values from a numeric interval.
-* [d3.tickIncrement](https://github.com/d3/d3-array/blob/v2.11.0/README.md#tickIncrement) - generate representative values from a numeric interval.
-* [d3.tickStep](https://github.com/d3/d3-array/blob/v2.11.0/README.md#tickStep) - generate representative values from a numeric interval.
-* [d3.nice](https://github.com/d3/d3-array/blob/v2.11.0/README.md#nice) - extend an interval to align with ticks.
-* [d3.range](https://github.com/d3/d3-array/blob/v2.11.0/README.md#range) - generate a range of numeric values.
-* [d3.transpose](https://github.com/d3/d3-array/blob/v2.11.0/README.md#transpose) - transpose an array of arrays.
-* [d3.zip](https://github.com/d3/d3-array/blob/v2.11.0/README.md#zip) - transpose a variable number of arrays.
+* [d3.group](https://github.com/d3/d3-array/blob/v2.12.0/README.md#group) - group an iterable into a nested Map.
+* [d3.groups](https://github.com/d3/d3-array/blob/v2.12.0/README.md#groups) - group an iterable into a nested array.
+* [d3.index](https://github.com/d3/d3-array/blob/v2.12.0/README.md#index) - index an iterable into a nested Map.
+* [d3.indexes](https://github.com/d3/d3-array/blob/v2.12.0/README.md#indexes) - index an iterable into a nested array.
+* [d3.rollup](https://github.com/d3/d3-array/blob/v2.12.0/README.md#rollup) - reduce an iterable into a nested Map.
+* [d3.rollups](https://github.com/d3/d3-array/blob/v2.12.0/README.md#rollups) - reduce an iterable into a nested array.
+* [d3.groupSort](https://github.com/d3/d3-array/blob/v2.12.0/README.md#groupSort) - sort keys according to grouped values.
+* [d3.count](https://github.com/d3/d3-array/blob/v2.12.0/README.md#count) - count valid number values in an iterable.
+* [d3.cross](https://github.com/d3/d3-array/blob/v2.12.0/README.md#cross) - compute the Cartesian product of two iterables.
+* [d3.merge](https://github.com/d3/d3-array/blob/v2.12.0/README.md#merge) - merge multiple iterables into one array.
+* [d3.pairs](https://github.com/d3/d3-array/blob/v2.12.0/README.md#pairs) - create an array of adjacent pairs of elements.
+* [d3.permute](https://github.com/d3/d3-array/blob/v2.12.0/README.md#permute) - reorder an iterable of elements according to an iterable of indexes.
+* [d3.shuffle](https://github.com/d3/d3-array/blob/v2.12.0/README.md#shuffle) - randomize the order of an iterable.
+* [d3.shuffler](https://github.com/d3/d3-array/blob/v2.12.0/README.md#shuffler) - randomize the order of an iterable.
+* [d3.ticks](https://github.com/d3/d3-array/blob/v2.12.0/README.md#ticks) - generate representative values from a numeric interval.
+* [d3.tickIncrement](https://github.com/d3/d3-array/blob/v2.12.0/README.md#tickIncrement) - generate representative values from a numeric interval.
+* [d3.tickStep](https://github.com/d3/d3-array/blob/v2.12.0/README.md#tickStep) - generate representative values from a numeric interval.
+* [d3.nice](https://github.com/d3/d3-array/blob/v2.12.0/README.md#nice) - extend an interval to align with ticks.
+* [d3.range](https://github.com/d3/d3-array/blob/v2.12.0/README.md#range) - generate a range of numeric values.
+* [d3.transpose](https://github.com/d3/d3-array/blob/v2.12.0/README.md#transpose) - transpose an array of arrays.
+* [d3.zip](https://github.com/d3/d3-array/blob/v2.12.0/README.md#zip) - transpose a variable number of arrays.
 
-### [Iterables](https://github.com/d3/d3-array/blob/v2.11.0/README.md#iterables)
+### [Iterables](https://github.com/d3/d3-array/blob/v2.12.0/README.md#iterables)
 
-* [d3.every](https://github.com/d3/d3-array/blob/v2.11.0/README.md#every) - test if all values satisfy a condition.
-* [d3.some](https://github.com/d3/d3-array/blob/v2.11.0/README.md#some) - test if any value satisfies a condition.
-* [d3.filter](https://github.com/d3/d3-array/blob/v2.11.0/README.md#filter) - filter values.
-* [d3.map](https://github.com/d3/d3-array/blob/v2.11.0/README.md#map) - map values.
-* [d3.reduce](https://github.com/d3/d3-array/blob/v2.11.0/README.md#reduce) - reduce values.
-* [d3.reverse](https://github.com/d3/d3-array/blob/v2.11.0/README.md#reverse) - reverse the order of values.
-* [d3.sort](https://github.com/d3/d3-array/blob/v2.11.0/README.md#sort) - sort values.
+* [d3.every](https://github.com/d3/d3-array/blob/v2.12.0/README.md#every) - test if all values satisfy a condition.
+* [d3.some](https://github.com/d3/d3-array/blob/v2.12.0/README.md#some) - test if any value satisfies a condition.
+* [d3.filter](https://github.com/d3/d3-array/blob/v2.12.0/README.md#filter) - filter values.
+* [d3.map](https://github.com/d3/d3-array/blob/v2.12.0/README.md#map) - map values.
+* [d3.reduce](https://github.com/d3/d3-array/blob/v2.12.0/README.md#reduce) - reduce values.
+* [d3.reverse](https://github.com/d3/d3-array/blob/v2.12.0/README.md#reverse) - reverse the order of values.
+* [d3.sort](https://github.com/d3/d3-array/blob/v2.12.0/README.md#sort) - sort values.
 
-### [Sets](https://github.com/d3/d3-array/blob/v2.11.0/README.md#sets)
+### [Sets](https://github.com/d3/d3-array/blob/v2.12.0/README.md#sets)
 
-* [d3.difference](https://github.com/d3/d3-array/blob/v2.11.0/README.md#difference) - compute a set difference.
-* [d3.disjoint](https://github.com/d3/d3-array/blob/v2.11.0/README.md#disjoint) - test whether two sets are disjoint.
-* [d3.intersection](https://github.com/d3/d3-array/blob/v2.11.0/README.md#intersection) - compute a set intersection.
-* [d3.superset](https://github.com/d3/d3-array/blob/v2.11.0/README.md#superset) - test whether a set is a superset of another.
-* [d3.subset](https://github.com/d3/d3-array/blob/v2.11.0/README.md#subset) - test whether a set is a subset of another.
-* [d3.union](https://github.com/d3/d3-array/blob/v2.11.0/README.md#union) - compute a set union.
+* [d3.difference](https://github.com/d3/d3-array/blob/v2.12.0/README.md#difference) - compute a set difference.
+* [d3.disjoint](https://github.com/d3/d3-array/blob/v2.12.0/README.md#disjoint) - test whether two sets are disjoint.
+* [d3.intersection](https://github.com/d3/d3-array/blob/v2.12.0/README.md#intersection) - compute a set intersection.
+* [d3.superset](https://github.com/d3/d3-array/blob/v2.12.0/README.md#superset) - test whether a set is a superset of another.
+* [d3.subset](https://github.com/d3/d3-array/blob/v2.12.0/README.md#subset) - test whether a set is a subset of another.
+* [d3.union](https://github.com/d3/d3-array/blob/v2.12.0/README.md#union) - compute a set union.
 
-### [Histograms](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bins)
+### [Histograms](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bins)
 
 Bin discrete samples into continuous, non-overlapping intervals.
 
-* [d3.bin](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bin) - create a new bin generator.
-* [*bin*](https://github.com/d3/d3-array/blob/v2.11.0/README.md#_bin) - bins a given array of samples.
-* [*bin*.value](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bin_value)- specify a value accessor for each sample.
-* [*bin*.domain](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bin_domain) - specify the interval of observable values.
-* [*bin*.thresholds](https://github.com/d3/d3-array/blob/v2.11.0/README.md#bin_thresholds) - specify how values are divided into bins.
-* [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array/blob/v2.11.0/README.md#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
-* [d3.thresholdScott](https://github.com/d3/d3-array/blob/v2.11.0/README.md#thresholdScott) - Scott’s normal reference binning rule.
-* [d3.thresholdSturges](https://github.com/d3/d3-array/blob/v2.11.0/README.md#thresholdSturges) - Sturges’ binning formula.
+* [d3.bin](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bin) - create a new bin generator.
+* [*bin*](https://github.com/d3/d3-array/blob/v2.12.0/README.md#_bin) - bins a given array of samples.
+* [*bin*.value](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bin_value)- specify a value accessor for each sample.
+* [*bin*.domain](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bin_domain) - specify the interval of observable values.
+* [*bin*.thresholds](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bin_thresholds) - specify how values are divided into bins.
+* [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array/blob/v2.12.0/README.md#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
+* [d3.thresholdScott](https://github.com/d3/d3-array/blob/v2.12.0/README.md#thresholdScott) - Scott’s normal reference binning rule.
+* [d3.thresholdSturges](https://github.com/d3/d3-array/blob/v2.12.0/README.md#thresholdSturges) - Sturges’ binning formula.
 
-### [Interning](https://github.com/d3/d3-array/blob/v2.11.0/README.md#interning)
+### [Interning](https://github.com/d3/d3-array/blob/v2.12.0/README.md#interning)
 
-* [d3.InternMap](https://github.com/d3/d3-array/blob/v2.11.0/README.md#InternMap) - a key-interning Map.
-* [d3.InternSet](https://github.com/d3/d3-array/blob/v2.11.0/README.md#InternSet) - a value-interning Set.
+* [d3.InternMap](https://github.com/d3/d3-array/blob/v2.12.0/README.md#InternMap) - a key-interning Map.
+* [d3.InternSet](https://github.com/d3/d3-array/blob/v2.12.0/README.md#InternSet) - a value-interning Set.
 
-## [Axes (d3-axis)](https://github.com/d3/d3-axis/tree/v2.0.0)
+## [Axes (d3-axis)](https://github.com/d3/d3-axis/tree/v2.1.0)
 
 Human-readable reference marks for scales.
 
-* [d3.axisTop](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axisTop) - create a new top-oriented axis generator.
-* [d3.axisRight](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axisRight) - create a new right-oriented axis generator.
-* [d3.axisBottom](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axisBottom) - create a new bottom-oriented axis generator.
-* [d3.axisLeft](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axisLeft) - create a new left-oriented axis generator.
-* [*axis*](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#_axis) - generate an axis for the given selection.
-* [*axis*.scale](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_scale) - set the scale.
-* [*axis*.ticks](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_ticks) - customize how ticks are generated and formatted.
-* [*axis*.tickArguments](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_tickArguments) - customize how ticks are generated and formatted.
-* [*axis*.tickValues](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_tickValues) - set the tick values explicitly.
-* [*axis*.tickFormat](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_tickFormat) - set the tick format explicitly.
-* [*axis*.tickSize](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_tickSize) - set the size of the ticks.
-* [*axis*.tickSizeInner](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_tickSizeInner) - set the size of inner ticks.
-* [*axis*.tickSizeOuter](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_tickSizeOuter) - set the size of outer (extent) ticks.
-* [*axis*.tickPadding](https://github.com/d3/d3-axis/blob/v2.0.0/README.md#axis_tickPadding) - set the padding between ticks and labels.
+* [d3.axisTop](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axisTop) - create a new top-oriented axis generator.
+* [d3.axisRight](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axisRight) - create a new right-oriented axis generator.
+* [d3.axisBottom](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axisBottom) - create a new bottom-oriented axis generator.
+* [d3.axisLeft](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axisLeft) - create a new left-oriented axis generator.
+* [*axis*](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#_axis) - generate an axis for the given selection.
+* [*axis*.scale](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_scale) - set the scale.
+* [*axis*.ticks](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_ticks) - customize how ticks are generated and formatted.
+* [*axis*.tickArguments](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickArguments) - customize how ticks are generated and formatted.
+* [*axis*.tickValues](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickValues) - set the tick values explicitly.
+* [*axis*.tickFormat](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickFormat) - set the tick format explicitly.
+* [*axis*.tickSize](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickSize) - set the size of the ticks.
+* [*axis*.tickSizeInner](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickSizeInner) - set the size of inner ticks.
+* [*axis*.tickSizeOuter](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickSizeOuter) - set the size of outer (extent) ticks.
+* [*axis*.tickPadding](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickPadding) - set the padding between ticks and labels.
+* [*axis*.offset]()https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_offset) - set the pixel offset for crisp edges.
 
 ## [Brushes (d3-brush)](https://github.com/d3/d3-brush/tree/v2.0.0)
 
@@ -1110,181 +1112,183 @@ Transform the DOM by selecting elements and joining to data.
 * [d3.namespace](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#namespace) - qualify a prefixed XML name, such as “xlink:href”.
 * [d3.namespaces](https://github.com/d3/d3-selection/blob/v2.0.0/README.md#namespaces) - the built-in XML namespaces.
 
-## [Shapes (d3-shape)](https://github.com/d3/d3-shape/tree/v2.0.0)
+## [Shapes (d3-shape)](https://github.com/d3/d3-shape/tree/v2.1.0)
 
 Graphical primitives for visualization.
 
-### [Arcs](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arcs)
+### [Arcs](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arcs)
 
 Circular or annular sectors, as in a pie or donut chart.
 
-* [d3.arc](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc) - create a new arc generator.
-* [*arc*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_arc) - generate an arc for the given datum.
-* [*arc*.centroid](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_centroid) - compute an arc’s midpoint.
-* [*arc*.innerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_innerRadius) - set the inner radius.
-* [*arc*.outerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_outerRadius) - set the outer radius.
-* [*arc*.cornerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_cornerRadius) - set the corner radius, for rounded corners.
-* [*arc*.startAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_startAngle) - set the start angle.
-* [*arc*.endAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_endAngle) - set the end angle.
-* [*arc*.padAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_padAngle) - set the angle between adjacent arcs, for padded arcs.
-* [*arc*.padRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_padRadius) - set the radius at which to linearize padding.
-* [*arc*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#arc_context) - set the rendering context.
+* [d3.arc](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc) - create a new arc generator.
+* [*arc*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_arc) - generate an arc for the given datum.
+* [*arc*.centroid](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_centroid) - compute an arc’s midpoint.
+* [*arc*.innerRadius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_innerRadius) - set the inner radius.
+* [*arc*.outerRadius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_outerRadius) - set the outer radius.
+* [*arc*.cornerRadius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_cornerRadius) - set the corner radius, for rounded corners.
+* [*arc*.startAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_startAngle) - set the start angle.
+* [*arc*.endAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_endAngle) - set the end angle.
+* [*arc*.padAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_padAngle) - set the angle between adjacent arcs, for padded arcs.
+* [*arc*.padRadius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_padRadius) - set the radius at which to linearize padding.
+* [*arc*.context](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#arc_context) - set the rendering context.
 
-### [Pies](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pies)
+### [Pies](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pies)
 
 Compute the necessary angles to represent a tabular dataset as a pie or donut chart.
 
-* [d3.pie](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pie) - create a new pie generator.
-* [*pie*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_pie) - compute the arc angles for the given dataset.
-* [*pie*.value](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pie_value) - set the value accessor.
-* [*pie*.sort](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pie_sort) - set the sort order comparator.
-* [*pie*.sortValues](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pie_sortValues) - set the sort order comparator.
-* [*pie*.startAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pie_startAngle) - set the overall start angle.
-* [*pie*.endAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pie_endAngle) - set the overall end angle.
-* [*pie*.padAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pie_padAngle) - set the pad angle between adjacent arcs.
+* [d3.pie](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pie) - create a new pie generator.
+* [*pie*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_pie) - compute the arc angles for the given dataset.
+* [*pie*.value](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pie_value) - set the value accessor.
+* [*pie*.sort](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pie_sort) - set the sort order comparator.
+* [*pie*.sortValues](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pie_sortValues) - set the sort order comparator.
+* [*pie*.startAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pie_startAngle) - set the overall start angle.
+* [*pie*.endAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pie_endAngle) - set the overall end angle.
+* [*pie*.padAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pie_padAngle) - set the pad angle between adjacent arcs.
 
-### [Lines](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#lines)
+### [Lines](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#lines)
 
 A spline or polyline, as in a line chart.
 
-* [d3.line](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#line) - create a new line generator.
-* [*line*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_line) - generate a line for the given dataset.
-* [*line*.x](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#line_x) - set the *x* accessor.
-* [*line*.y](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#line_y) - set the *y* accessor.
-* [*line*.defined](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#line_defined) - set the defined accessor.
-* [*line*.curve](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#line_curve) - set the curve interpolator.
-* [*line*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#line_context) - set the rendering context.
-* [d3.lineRadial](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#lineRadial) - create a new radial line generator.
-* [*lineRadial*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_lineRadial) - generate a line for the given dataset.
-* [*lineRadial*.angle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#lineRadial_angle) - set the angle accessor.
-* [*lineRadial*.radius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#lineRadial_radius) - set the radius accessor.
-* [*lineRadial*.defined](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#lineRadial_defined) - set the defined accessor.
-* [*lineRadial*.curve](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#lineRadial_curve) - set the curve interpolator.
-* [*lineRadial*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#lineRadial_context) - set the rendering context.
+* [d3.line](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#line) - create a new line generator.
+* [*line*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_line) - generate a line for the given dataset.
+* [*line*.x](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#line_x) - set the *x* accessor.
+* [*line*.y](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#line_y) - set the *y* accessor.
+* [*line*.defined](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#line_defined) - set the defined accessor.
+* [*line*.curve](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#line_curve) - set the curve interpolator.
+* [*line*.context](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#line_context) - set the rendering context.
+* [d3.lineRadial](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#lineRadial) - create a new radial line generator.
+* [*lineRadial*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_lineRadial) - generate a line for the given dataset.
+* [*lineRadial*.angle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#lineRadial_angle) - set the angle accessor.
+* [*lineRadial*.radius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#lineRadial_radius) - set the radius accessor.
+* [*lineRadial*.defined](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#lineRadial_defined) - set the defined accessor.
+* [*lineRadial*.curve](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#lineRadial_curve) - set the curve interpolator.
+* [*lineRadial*.context](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#lineRadial_context) - set the rendering context.
 
-### [Areas](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areas)
+### [Areas](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areas)
 
 An area, defined by a bounding topline and baseline, as in an area chart.
 
-* [d3.area](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area) - create a new area generator.
-* [*area*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_area) - generate an area for the given dataset.
-* [*area*.x](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_x) - set the *x0* and *x1* accessors.
-* [*area*.x0](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_x0) - set the baseline *x* accessor.
-* [*area*.x1](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_x1) - set the topline *x* accessor.
-* [*area*.y](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_y) - set the *y0* and *y1* accessors.
-* [*area*.y0](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_y0) - set the baseline *y* accessor.
-* [*area*.y1](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_y1) - set the topline *y* accessor.
-* [*area*.defined](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_defined) - set the defined accessor.
-* [*area*.curve](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_curve) - set the curve interpolator.
-* [*area*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_context) - set the rendering context.
-* [*area*.lineX0](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineX0) - derive a line for the left edge of an area.
-* [*area*.lineY0](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineY0) - derive a line for the top edge of an area.
-* [*area*.lineX1](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineX1) - derive a line for the right edge of an area.
-* [*area*.lineY1](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#area_lineY1) - derive a line for the bottom edge of an area.
-* [d3.areaRadial](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial) - create a new radial area generator.
-* [*areaRadial*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_areaRadial) - generate an area for the given dataset.
-* [*areaRadial*.angle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_angle) - set the start and end angle accessors.
-* [*areaRadial*.startAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_startAngle) - set the start angle accessor.
-* [*areaRadial*.endAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_endAngle) - set the end angle accessor.
-* [*areaRadial*.radius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_radius) - set the inner and outer radius accessors.
-* [*areaRadial*.innerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_innerRadius) - set the inner radius accessor.
-* [*areaRadial*.outerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_outerRadius) - set the outer radius accessor.
-* [*areaRadial*.defined](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_defined) - set the defined accessor.
-* [*areaRadial*.curve](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_curve) - set the curve interpolator.
-* [*areaRadial*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_context) - set the rendering context.
-* [*areaRadial*.lineStartAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
-* [*areaRadial*.lineInnerRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
-* [*areaRadial*.lineEndAngle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
-* [*areaRadial*.lineOuterRadius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
+* [d3.area](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area) - create a new area generator.
+* [*area*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_area) - generate an area for the given dataset.
+* [*area*.x](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_x) - set the *x0* and *x1* accessors.
+* [*area*.x0](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_x0) - set the baseline *x* accessor.
+* [*area*.x1](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_x1) - set the topline *x* accessor.
+* [*area*.y](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_y) - set the *y0* and *y1* accessors.
+* [*area*.y0](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_y0) - set the baseline *y* accessor.
+* [*area*.y1](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_y1) - set the topline *y* accessor.
+* [*area*.defined](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_defined) - set the defined accessor.
+* [*area*.curve](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_curve) - set the curve interpolator.
+* [*area*.context](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_context) - set the rendering context.
+* [*area*.lineX0](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_lineX0) - derive a line for the left edge of an area.
+* [*area*.lineY0](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_lineY0) - derive a line for the top edge of an area.
+* [*area*.lineX1](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_lineX1) - derive a line for the right edge of an area.
+* [*area*.lineY1](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#area_lineY1) - derive a line for the bottom edge of an area.
+* [d3.areaRadial](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial) - create a new radial area generator.
+* [*areaRadial*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_areaRadial) - generate an area for the given dataset.
+* [*areaRadial*.angle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_angle) - set the start and end angle accessors.
+* [*areaRadial*.startAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_startAngle) - set the start angle accessor.
+* [*areaRadial*.endAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_endAngle) - set the end angle accessor.
+* [*areaRadial*.radius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_radius) - set the inner and outer radius accessors.
+* [*areaRadial*.innerRadius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_innerRadius) - set the inner radius accessor.
+* [*areaRadial*.outerRadius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_outerRadius) - set the outer radius accessor.
+* [*areaRadial*.defined](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_defined) - set the defined accessor.
+* [*areaRadial*.curve](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_curve) - set the curve interpolator.
+* [*areaRadial*.context](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_context) - set the rendering context.
+* [*areaRadial*.lineStartAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
+* [*areaRadial*.lineInnerRadius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
+* [*areaRadial*.lineEndAngle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
+* [*areaRadial*.lineOuterRadius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
 
-### [Curves](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curves)
+### [Curves](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curves)
 
 Interpolate between points to produce a continuous shape.
 
-* [d3.curveBasis](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBasis) - a cubic basis spline, repeating the end points.
-* [d3.curveBasisClosed](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBasisClosed) - a closed cubic basis spline.
-* [d3.curveBasisOpen](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBasisOpen) - a cubic basis spline.
-* [d3.curveBundle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBundle) - a straightened cubic basis spline.
-* [*bundle*.beta](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveBundle_beta) - set the bundle tension *beta*.
-* [d3.curveCardinal](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
-* [d3.curveCardinalClosed](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCardinalClosed) - a closed cubic cardinal spline.
-* [d3.curveCardinalOpen](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCardinalOpen) - a cubic cardinal spline.
-* [*cardinal*.tension](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCardinal_tension) - set the cardinal spline tension.
-* [d3.curveCatmullRom](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
-* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
-* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
-* [*catmullRom*.alpha](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveCatmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
-* [d3.curveLinear](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveLinear) - a polyline.
-* [d3.curveLinearClosed](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveLinearClosed) - a closed polyline.
-* [d3.curveMonotoneX](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
-* [d3.curveMonotoneY](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveMonotoneY) - a cubic spline that, given monotonicity in *y*, preserves it in *x*.
-* [d3.curveNatural](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveNatural) - a natural cubic spline.
-* [d3.curveStep](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveStep) - a piecewise constant function.
-* [d3.curveStepAfter](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveStepAfter) - a piecewise constant function.
-* [d3.curveStepBefore](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curveStepBefore) - a piecewise constant function.
-* [*curve*.areaStart](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curve_areaStart) - start a new area segment.
-* [*curve*.areaEnd](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curve_areaEnd) - end the current area segment.
-* [*curve*.lineStart](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curve_lineStart) - start a new line segment.
-* [*curve*.lineEnd](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curve_lineEnd) - end the current line segment.
-* [*curve*.point](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#curve_point) - add a point to the current line segment.
+* [d3.curveBasis](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveBasis) - a cubic basis spline, repeating the end points.
+* [d3.curveBasisClosed](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveBasisClosed) - a closed cubic basis spline.
+* [d3.curveBasisOpen](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveBasisOpen) - a cubic basis spline.
+* [d3.curveBundle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveBundle) - a straightened cubic basis spline.
+* [*bundle*.beta](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveBundle_beta) - set the bundle tension *beta*.
+* [d3.curveBumpX](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveBumpX) - a cubic Bézier spline with horizontal tangents.
+* [d3.curveBumpY](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveBumpY) - a cubic Bézier spline with vertical tangents.
+* [d3.curveCardinal](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
+* [d3.curveCardinalClosed](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveCardinalClosed) - a closed cubic cardinal spline.
+* [d3.curveCardinalOpen](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveCardinalOpen) - a cubic cardinal spline.
+* [*cardinal*.tension](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveCardinal_tension) - set the cardinal spline tension.
+* [d3.curveCatmullRom](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
+* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
+* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
+* [*catmullRom*.alpha](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveCatmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
+* [d3.curveLinear](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveLinear) - a polyline.
+* [d3.curveLinearClosed](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveLinearClosed) - a closed polyline.
+* [d3.curveMonotoneX](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
+* [d3.curveMonotoneY](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveMonotoneY) - a cubic spline that, given monotonicity in *y*, preserves it in *x*.
+* [d3.curveNatural](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveNatural) - a natural cubic spline.
+* [d3.curveStep](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveStep) - a piecewise constant function.
+* [d3.curveStepAfter](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveStepAfter) - a piecewise constant function.
+* [d3.curveStepBefore](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curveStepBefore) - a piecewise constant function.
+* [*curve*.areaStart](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curve_areaStart) - start a new area segment.
+* [*curve*.areaEnd](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curve_areaEnd) - end the current area segment.
+* [*curve*.lineStart](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curve_lineStart) - start a new line segment.
+* [*curve*.lineEnd](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curve_lineEnd) - end the current line segment.
+* [*curve*.point](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#curve_point) - add a point to the current line segment.
 
-### [Links](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#links)
+### [Links](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#links)
 
 A smooth cubic Bézier curve from a source to a target.
 
-* [d3.linkVertical](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#linkVertical) - create a new vertical link generator.
-* [d3.linkHorizontal](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#linkHorizontal) - create a new horizontal link generator.
-* [*link*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_link) - generate a link.
-* [*link*.source](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#link_source) - set the source accessor.
-* [*link*.target](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#link_target) - set the target accessor.
-* [*link*.x](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#link_x) - set the point *x*-accessor.
-* [*link*.y](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#link_y) - set the point *y*-accessor.
-* [*link*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#link_context) - set the rendering context.
-* [d3.linkRadial](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#linkRadial) - create a new radial link generator.
-* [*linkRadial*.angle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#linkRadial_angle) - set the point *angle* accessor.
-* [*linkRadial*.radius](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#linkRadial_radius) - set the point *radius* accessor.
+* [d3.linkVertical](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#linkVertical) - create a new vertical link generator.
+* [d3.linkHorizontal](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#linkHorizontal) - create a new horizontal link generator.
+* [*link*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_link) - generate a link.
+* [*link*.source](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#link_source) - set the source accessor.
+* [*link*.target](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#link_target) - set the target accessor.
+* [*link*.x](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#link_x) - set the point *x*-accessor.
+* [*link*.y](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#link_y) - set the point *y*-accessor.
+* [*link*.context](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#link_context) - set the rendering context.
+* [d3.linkRadial](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#linkRadial) - create a new radial link generator.
+* [*linkRadial*.angle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#linkRadial_angle) - set the point *angle* accessor.
+* [*linkRadial*.radius](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#linkRadial_radius) - set the point *radius* accessor.
 
-### [Symbols](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbols)
+### [Symbols](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbols)
 
 A categorical shape encoding, as in a scatterplot.
 
-* [d3.symbol](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbol) - create a new symbol generator.
-* [*symbol*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_symbol) - generate a symbol for the given datum.
-* [*symbol*.type](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbol_type) - set the symbol type.
-* [*symbol*.size](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbol_size) - set the size of the symbol in square pixels.
-* [*symbol*.context](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbol_context) - set the rendering context.
-* [d3.symbols](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbols) - the array of built-in symbol types.
-* [d3.symbolCircle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolCircle) - a circle.
-* [d3.symbolCross](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolCross) - a Greek cross with arms of equal length.
-* [d3.symbolDiamond](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolDiamond) - a rhombus.
-* [d3.symbolSquare](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolSquare) - a square.
-* [d3.symbolStar](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolStar) - a pentagonal star (pentagram).
-* [d3.symbolTriangle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolTriangle) - an up-pointing triangle.
-* [d3.symbolWye](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolWye) - a Y shape.
-* [d3.pointRadial](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#pointRadial) - relative coordinates of a point given an angle and radius.
-* [*symbolType*.draw](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#symbolType_draw) - draw this symbol to the given context.
+* [d3.symbol](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbol) - create a new symbol generator.
+* [*symbol*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_symbol) - generate a symbol for the given datum.
+* [*symbol*.type](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbol_type) - set the symbol type.
+* [*symbol*.size](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbol_size) - set the size of the symbol in square pixels.
+* [*symbol*.context](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbol_context) - set the rendering context.
+* [d3.symbols](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbols) - the array of built-in symbol types.
+* [d3.symbolCircle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbolCircle) - a circle.
+* [d3.symbolCross](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbolCross) - a Greek cross with arms of equal length.
+* [d3.symbolDiamond](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbolDiamond) - a rhombus.
+* [d3.symbolSquare](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbolSquare) - a square.
+* [d3.symbolStar](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbolStar) - a pentagonal star (pentagram).
+* [d3.symbolTriangle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbolTriangle) - an up-pointing triangle.
+* [d3.symbolWye](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbolWye) - a Y shape.
+* [d3.pointRadial](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#pointRadial) - relative coordinates of a point given an angle and radius.
+* [*symbolType*.draw](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#symbolType_draw) - draw this symbol to the given context.
 
-### [Stacks](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stacks)
+### [Stacks](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stacks)
 
 Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 
-* [d3.stack](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stack) - create a new stack generator.
-* [*stack*](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#_stack) - generate a stack for the given dataset.
-* [*stack*.keys](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stack_keys) - set the keys accessor.
-* [*stack*.value](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stack_value) - set the value accessor.
-* [*stack*.order](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stack_order) - set the order accessor.
-* [*stack*.offset](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stack_offset) - set the offset accessor.
-* [d3.stackOrderAppearance](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOrderAppearance) - put the earliest series on bottom.
-* [d3.stackOrderAscending](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOrderAscending) - put the smallest series on bottom.
-* [d3.stackOrderDescending](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOrderDescending) - put the largest series on bottom.
-* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOrderInsideOut) - put earlier series in the middle.
-* [d3.stackOrderNone](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOrderNone) - use the given series order.
-* [d3.stackOrderReverse](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOrderReverse) - use the reverse of the given series order.
-* [d3.stackOffsetExpand](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOffsetExpand) - normalize the baseline to zero and topline to one.
-* [d3.stackOffsetDiverging](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOffsetDiverging) - positive above zero; negative below zero.
-* [d3.stackOffsetNone](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOffsetNone) - apply a zero baseline.
-* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOffsetSilhouette) - center the streamgraph around zero.
-* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape/blob/v2.0.0/README.md#stackOffsetWiggle) - minimize streamgraph wiggling.
+* [d3.stack](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stack) - create a new stack generator.
+* [*stack*](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#_stack) - generate a stack for the given dataset.
+* [*stack*.keys](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stack_keys) - set the keys accessor.
+* [*stack*.value](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stack_value) - set the value accessor.
+* [*stack*.order](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stack_order) - set the order accessor.
+* [*stack*.offset](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stack_offset) - set the offset accessor.
+* [d3.stackOrderAppearance](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOrderAppearance) - put the earliest series on bottom.
+* [d3.stackOrderAscending](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOrderAscending) - put the smallest series on bottom.
+* [d3.stackOrderDescending](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOrderDescending) - put the largest series on bottom.
+* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOrderInsideOut) - put earlier series in the middle.
+* [d3.stackOrderNone](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOrderNone) - use the given series order.
+* [d3.stackOrderReverse](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOrderReverse) - use the reverse of the given series order.
+* [d3.stackOffsetExpand](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOffsetExpand) - normalize the baseline to zero and topline to one.
+* [d3.stackOffsetDiverging](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOffsetDiverging) - positive above zero; negative below zero.
+* [d3.stackOffsetNone](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOffsetNone) - apply a zero baseline.
+* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOffsetSilhouette) - center the streamgraph around zero.
+* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape/blob/v2.1.0/README.md#stackOffsetWiggle) - minimize streamgraph wiggling.
 
 ## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/tree/v3.0.0)
 
