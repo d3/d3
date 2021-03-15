@@ -51,7 +51,7 @@ Methods for computing basic summary statistics.
 * [d3.sum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#sum) - compute the sum of an iterable of numbers.
 * [d3.mean](https://github.com/d3/d3-array/blob/v2.12.0/README.md#mean) - compute the arithmetic mean of an iterable of numbers.
 * [d3.median](https://github.com/d3/d3-array/blob/v2.12.0/README.md#median) - compute the median of an iterable of numbers (the 0.5-quantile).
-* [d3.cumsum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#cumsum) - comute the cumulative sum of an iterable.
+* [d3.cumsum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#cumsum) - compute the cumulative sum of an iterable.
 * [d3.quantile](https://github.com/d3/d3-array/blob/v2.12.0/README.md#quantile) - compute a quantile for an iterable of numbers.
 * [d3.quantileSorted](https://github.com/d3/d3-array/blob/v2.12.0/README.md#quantileSorted) - compute a quantile for a sorted array of numbers.
 * [d3.variance](https://github.com/d3/d3-array/blob/v2.12.0/README.md#variance) - compute the variance of an iterable of numbers.
