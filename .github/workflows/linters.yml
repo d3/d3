@@ -17,6 +17,6 @@ jobs:
       - name: Setup ESLint
         run: |
           npm install --save-dev eslint@7.22.x eslint-config-airbnb-base@14.2.x eslint-plugin-import@2.22.x
-          [ -f .eslintrc.json ] || wget https://github.com/ozovalihasan/d3/blob/add-git-action/.eslintrc.json
+          [ -f .eslintrc.json ]
       - name: ESLint Report
         run: npx eslint .
