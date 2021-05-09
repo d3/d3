@@ -35,115 +35,115 @@ D3 is a [collection of modules](https://github.com/d3) that are designed to work
 
 D3 uses [semantic versioning](http://semver.org/). The current version is exposed as d3.version.
 
-## [Arrays (d3-array)](https://github.com/d3/d3-array/tree/v2.12.0)
+## [Arrays (d3-array)](https://github.com/d3/d3-array/tree/v2.12.1)
 
 Array manipulation, ordering, searching, summarizing, etc.
 
-### [Statistics](https://github.com/d3/d3-array/blob/v2.12.0/README.md#statistics)
+### [Statistics](https://github.com/d3/d3-array/blob/v2.12.1/README.md#statistics)
 
 Methods for computing basic summary statistics.
 
-* [d3.min](https://github.com/d3/d3-array/blob/v2.12.0/README.md#min) - compute the minimum value in an iterable.
-* [d3.minIndex](https://github.com/d3/d3-array/blob/v2.12.0/README.md#minIndex) - compute the index of the minimum value in an iterable.
-* [d3.max](https://github.com/d3/d3-array/blob/v2.12.0/README.md#max) - compute the maximum value in an iterable.
-* [d3.maxIndex](https://github.com/d3/d3-array/blob/v2.12.0/README.md#maxIndex) - compute the index of the maximum value in an iterable.
-* [d3.extent](https://github.com/d3/d3-array/blob/v2.12.0/README.md#extent) - compute the minimum and maximum value in an iterable.
-* [d3.sum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#sum) - compute the sum of an iterable of numbers.
-* [d3.mean](https://github.com/d3/d3-array/blob/v2.12.0/README.md#mean) - compute the arithmetic mean of an iterable of numbers.
-* [d3.median](https://github.com/d3/d3-array/blob/v2.12.0/README.md#median) - compute the median of an iterable of numbers (the 0.5-quantile).
-* [d3.cumsum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#cumsum) - compute the cumulative sum of an iterable.
-* [d3.quantile](https://github.com/d3/d3-array/blob/v2.12.0/README.md#quantile) - compute a quantile for an iterable of numbers.
-* [d3.quantileSorted](https://github.com/d3/d3-array/blob/v2.12.0/README.md#quantileSorted) - compute a quantile for a sorted array of numbers.
-* [d3.variance](https://github.com/d3/d3-array/blob/v2.12.0/README.md#variance) - compute the variance of an iterable of numbers.
-* [d3.deviation](https://github.com/d3/d3-array/blob/v2.12.0/README.md#deviation) - compute the standard deviation of an iterable of numbers.
-* [d3.fcumsum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#fcumsum) - compute a full precision cumulative summation of numbers.
-* [d3.fsum](https://github.com/d3/d3-array/blob/v2.12.0/README.md#fsum) - compute a full precision summation of an iterable of numbers.
-* [new d3.Adder](https://github.com/d3/d3-array/blob/v2.12.0/README.md#adder) - creates a full precision adder.
-* [*adder*.add](https://github.com/d3/d3-array/blob/v2.12.0/README.md#adder_add) - add a value to an adder.
-* [*adder*.valueOf](https://github.com/d3/d3-array/blob/v2.12.0/README.md#adder_valueOf) - returns a double precision representation of an adder’s value.
+* [d3.min](https://github.com/d3/d3-array/blob/v2.12.1/README.md#min) - compute the minimum value in an iterable.
+* [d3.minIndex](https://github.com/d3/d3-array/blob/v2.12.1/README.md#minIndex) - compute the index of the minimum value in an iterable.
+* [d3.max](https://github.com/d3/d3-array/blob/v2.12.1/README.md#max) - compute the maximum value in an iterable.
+* [d3.maxIndex](https://github.com/d3/d3-array/blob/v2.12.1/README.md#maxIndex) - compute the index of the maximum value in an iterable.
+* [d3.extent](https://github.com/d3/d3-array/blob/v2.12.1/README.md#extent) - compute the minimum and maximum value in an iterable.
+* [d3.sum](https://github.com/d3/d3-array/blob/v2.12.1/README.md#sum) - compute the sum of an iterable of numbers.
+* [d3.mean](https://github.com/d3/d3-array/blob/v2.12.1/README.md#mean) - compute the arithmetic mean of an iterable of numbers.
+* [d3.median](https://github.com/d3/d3-array/blob/v2.12.1/README.md#median) - compute the median of an iterable of numbers (the 0.5-quantile).
+* [d3.cumsum](https://github.com/d3/d3-array/blob/v2.12.1/README.md#cumsum) - compute the cumulative sum of an iterable.
+* [d3.quantile](https://github.com/d3/d3-array/blob/v2.12.1/README.md#quantile) - compute a quantile for an iterable of numbers.
+* [d3.quantileSorted](https://github.com/d3/d3-array/blob/v2.12.1/README.md#quantileSorted) - compute a quantile for a sorted array of numbers.
+* [d3.variance](https://github.com/d3/d3-array/blob/v2.12.1/README.md#variance) - compute the variance of an iterable of numbers.
+* [d3.deviation](https://github.com/d3/d3-array/blob/v2.12.1/README.md#deviation) - compute the standard deviation of an iterable of numbers.
+* [d3.fcumsum](https://github.com/d3/d3-array/blob/v2.12.1/README.md#fcumsum) - compute a full precision cumulative summation of numbers.
+* [d3.fsum](https://github.com/d3/d3-array/blob/v2.12.1/README.md#fsum) - compute a full precision summation of an iterable of numbers.
+* [new d3.Adder](https://github.com/d3/d3-array/blob/v2.12.1/README.md#adder) - creates a full precision adder.
+* [*adder*.add](https://github.com/d3/d3-array/blob/v2.12.1/README.md#adder_add) - add a value to an adder.
+* [*adder*.valueOf](https://github.com/d3/d3-array/blob/v2.12.1/README.md#adder_valueOf) - returns a double precision representation of an adder’s value.
 
-### [Search](https://github.com/d3/d3-array/blob/v2.12.0/README.md#search)
+### [Search](https://github.com/d3/d3-array/blob/v2.12.1/README.md#search)
 
 Methods for searching arrays for a specific element.
 
-* [d3.least](https://github.com/d3/d3-array/blob/v2.12.0/README.md#least) - returns the least element of an iterable.
-* [d3.leastIndex](https://github.com/d3/d3-array/blob/v2.12.0/README.md#leastIndex) - returns the index of the least element of an iterable.
-* [d3.greatest](https://github.com/d3/d3-array/blob/v2.12.0/README.md#greatest) - returns the greatest element of an iterable.
-* [d3.greatestIndex](https://github.com/d3/d3-array/blob/v2.12.0/README.md#greatestIndex) - returns the index of the greatest element of an iterable.
-* [d3.bisectCenter](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisectCenter) - binary search for a value in a sorted array.
-* [d3.bisectLeft](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisectLeft) - binary search for a value in a sorted array.
-* [d3.bisect](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisect) - binary search for a value in a sorted array.
-* [d3.bisectRight](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisectRight) - binary search for a value in a sorted array.
-* [d3.bisector](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisector) - bisect using an accessor or comparator.
-* [*bisector*.center](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisector_center) - binary search for a value in a sorted array.
-* [*bisector*.left](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisector_left) - bisectLeft, with the given comparator.
-* [*bisector*.right](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bisector_right) - bisectRight, with the given comparator.
-* [d3.quickselect](https://github.com/d3/d3-array/blob/v2.12.0/README.md#quickselect) - reorder an array of numbers.
-* [d3.ascending](https://github.com/d3/d3-array/blob/v2.12.0/README.md#ascending) - compute the natural order of two values.
-* [d3.descending](https://github.com/d3/d3-array/blob/v2.12.0/README.md#descending) - compute the natural order of two values.
+* [d3.least](https://github.com/d3/d3-array/blob/v2.12.1/README.md#least) - returns the least element of an iterable.
+* [d3.leastIndex](https://github.com/d3/d3-array/blob/v2.12.1/README.md#leastIndex) - returns the index of the least element of an iterable.
+* [d3.greatest](https://github.com/d3/d3-array/blob/v2.12.1/README.md#greatest) - returns the greatest element of an iterable.
+* [d3.greatestIndex](https://github.com/d3/d3-array/blob/v2.12.1/README.md#greatestIndex) - returns the index of the greatest element of an iterable.
+* [d3.bisectCenter](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bisectCenter) - binary search for a value in a sorted array.
+* [d3.bisectLeft](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bisectLeft) - binary search for a value in a sorted array.
+* [d3.bisect](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bisect) - binary search for a value in a sorted array.
+* [d3.bisectRight](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bisectRight) - binary search for a value in a sorted array.
+* [d3.bisector](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bisector) - bisect using an accessor or comparator.
+* [*bisector*.center](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bisector_center) - binary search for a value in a sorted array.
+* [*bisector*.left](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bisector_left) - bisectLeft, with the given comparator.
+* [*bisector*.right](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bisector_right) - bisectRight, with the given comparator.
+* [d3.quickselect](https://github.com/d3/d3-array/blob/v2.12.1/README.md#quickselect) - reorder an array of numbers.
+* [d3.ascending](https://github.com/d3/d3-array/blob/v2.12.1/README.md#ascending) - compute the natural order of two values.
+* [d3.descending](https://github.com/d3/d3-array/blob/v2.12.1/README.md#descending) - compute the natural order of two values.
 
-### [Transformations](https://github.com/d3/d3-array/blob/v2.12.0/README.md#transformations)
+### [Transformations](https://github.com/d3/d3-array/blob/v2.12.1/README.md#transformations)
 
 Methods for transforming arrays and for generating new arrays.
 
-* [d3.group](https://github.com/d3/d3-array/blob/v2.12.0/README.md#group) - group an iterable into a nested Map.
-* [d3.groups](https://github.com/d3/d3-array/blob/v2.12.0/README.md#groups) - group an iterable into a nested array.
-* [d3.index](https://github.com/d3/d3-array/blob/v2.12.0/README.md#index) - index an iterable into a nested Map.
-* [d3.indexes](https://github.com/d3/d3-array/blob/v2.12.0/README.md#indexes) - index an iterable into a nested array.
-* [d3.rollup](https://github.com/d3/d3-array/blob/v2.12.0/README.md#rollup) - reduce an iterable into a nested Map.
-* [d3.rollups](https://github.com/d3/d3-array/blob/v2.12.0/README.md#rollups) - reduce an iterable into a nested array.
-* [d3.groupSort](https://github.com/d3/d3-array/blob/v2.12.0/README.md#groupSort) - sort keys according to grouped values.
-* [d3.count](https://github.com/d3/d3-array/blob/v2.12.0/README.md#count) - count valid number values in an iterable.
-* [d3.cross](https://github.com/d3/d3-array/blob/v2.12.0/README.md#cross) - compute the Cartesian product of two iterables.
-* [d3.merge](https://github.com/d3/d3-array/blob/v2.12.0/README.md#merge) - merge multiple iterables into one array.
-* [d3.pairs](https://github.com/d3/d3-array/blob/v2.12.0/README.md#pairs) - create an array of adjacent pairs of elements.
-* [d3.permute](https://github.com/d3/d3-array/blob/v2.12.0/README.md#permute) - reorder an iterable of elements according to an iterable of indexes.
-* [d3.shuffle](https://github.com/d3/d3-array/blob/v2.12.0/README.md#shuffle) - randomize the order of an iterable.
-* [d3.shuffler](https://github.com/d3/d3-array/blob/v2.12.0/README.md#shuffler) - randomize the order of an iterable.
-* [d3.ticks](https://github.com/d3/d3-array/blob/v2.12.0/README.md#ticks) - generate representative values from a numeric interval.
-* [d3.tickIncrement](https://github.com/d3/d3-array/blob/v2.12.0/README.md#tickIncrement) - generate representative values from a numeric interval.
-* [d3.tickStep](https://github.com/d3/d3-array/blob/v2.12.0/README.md#tickStep) - generate representative values from a numeric interval.
-* [d3.nice](https://github.com/d3/d3-array/blob/v2.12.0/README.md#nice) - extend an interval to align with ticks.
-* [d3.range](https://github.com/d3/d3-array/blob/v2.12.0/README.md#range) - generate a range of numeric values.
-* [d3.transpose](https://github.com/d3/d3-array/blob/v2.12.0/README.md#transpose) - transpose an array of arrays.
-* [d3.zip](https://github.com/d3/d3-array/blob/v2.12.0/README.md#zip) - transpose a variable number of arrays.
+* [d3.group](https://github.com/d3/d3-array/blob/v2.12.1/README.md#group) - group an iterable into a nested Map.
+* [d3.groups](https://github.com/d3/d3-array/blob/v2.12.1/README.md#groups) - group an iterable into a nested array.
+* [d3.index](https://github.com/d3/d3-array/blob/v2.12.1/README.md#index) - index an iterable into a nested Map.
+* [d3.indexes](https://github.com/d3/d3-array/blob/v2.12.1/README.md#indexes) - index an iterable into a nested array.
+* [d3.rollup](https://github.com/d3/d3-array/blob/v2.12.1/README.md#rollup) - reduce an iterable into a nested Map.
+* [d3.rollups](https://github.com/d3/d3-array/blob/v2.12.1/README.md#rollups) - reduce an iterable into a nested array.
+* [d3.groupSort](https://github.com/d3/d3-array/blob/v2.12.1/README.md#groupSort) - sort keys according to grouped values.
+* [d3.count](https://github.com/d3/d3-array/blob/v2.12.1/README.md#count) - count valid number values in an iterable.
+* [d3.cross](https://github.com/d3/d3-array/blob/v2.12.1/README.md#cross) - compute the Cartesian product of two iterables.
+* [d3.merge](https://github.com/d3/d3-array/blob/v2.12.1/README.md#merge) - merge multiple iterables into one array.
+* [d3.pairs](https://github.com/d3/d3-array/blob/v2.12.1/README.md#pairs) - create an array of adjacent pairs of elements.
+* [d3.permute](https://github.com/d3/d3-array/blob/v2.12.1/README.md#permute) - reorder an iterable of elements according to an iterable of indexes.
+* [d3.shuffle](https://github.com/d3/d3-array/blob/v2.12.1/README.md#shuffle) - randomize the order of an iterable.
+* [d3.shuffler](https://github.com/d3/d3-array/blob/v2.12.1/README.md#shuffler) - randomize the order of an iterable.
+* [d3.ticks](https://github.com/d3/d3-array/blob/v2.12.1/README.md#ticks) - generate representative values from a numeric interval.
+* [d3.tickIncrement](https://github.com/d3/d3-array/blob/v2.12.1/README.md#tickIncrement) - generate representative values from a numeric interval.
+* [d3.tickStep](https://github.com/d3/d3-array/blob/v2.12.1/README.md#tickStep) - generate representative values from a numeric interval.
+* [d3.nice](https://github.com/d3/d3-array/blob/v2.12.1/README.md#nice) - extend an interval to align with ticks.
+* [d3.range](https://github.com/d3/d3-array/blob/v2.12.1/README.md#range) - generate a range of numeric values.
+* [d3.transpose](https://github.com/d3/d3-array/blob/v2.12.1/README.md#transpose) - transpose an array of arrays.
+* [d3.zip](https://github.com/d3/d3-array/blob/v2.12.1/README.md#zip) - transpose a variable number of arrays.
 
-### [Iterables](https://github.com/d3/d3-array/blob/v2.12.0/README.md#iterables)
+### [Iterables](https://github.com/d3/d3-array/blob/v2.12.1/README.md#iterables)
 
-* [d3.every](https://github.com/d3/d3-array/blob/v2.12.0/README.md#every) - test if all values satisfy a condition.
-* [d3.some](https://github.com/d3/d3-array/blob/v2.12.0/README.md#some) - test if any value satisfies a condition.
-* [d3.filter](https://github.com/d3/d3-array/blob/v2.12.0/README.md#filter) - filter values.
-* [d3.map](https://github.com/d3/d3-array/blob/v2.12.0/README.md#map) - map values.
-* [d3.reduce](https://github.com/d3/d3-array/blob/v2.12.0/README.md#reduce) - reduce values.
-* [d3.reverse](https://github.com/d3/d3-array/blob/v2.12.0/README.md#reverse) - reverse the order of values.
-* [d3.sort](https://github.com/d3/d3-array/blob/v2.12.0/README.md#sort) - sort values.
+* [d3.every](https://github.com/d3/d3-array/blob/v2.12.1/README.md#every) - test if all values satisfy a condition.
+* [d3.some](https://github.com/d3/d3-array/blob/v2.12.1/README.md#some) - test if any value satisfies a condition.
+* [d3.filter](https://github.com/d3/d3-array/blob/v2.12.1/README.md#filter) - filter values.
+* [d3.map](https://github.com/d3/d3-array/blob/v2.12.1/README.md#map) - map values.
+* [d3.reduce](https://github.com/d3/d3-array/blob/v2.12.1/README.md#reduce) - reduce values.
+* [d3.reverse](https://github.com/d3/d3-array/blob/v2.12.1/README.md#reverse) - reverse the order of values.
+* [d3.sort](https://github.com/d3/d3-array/blob/v2.12.1/README.md#sort) - sort values.
 
-### [Sets](https://github.com/d3/d3-array/blob/v2.12.0/README.md#sets)
+### [Sets](https://github.com/d3/d3-array/blob/v2.12.1/README.md#sets)
 
-* [d3.difference](https://github.com/d3/d3-array/blob/v2.12.0/README.md#difference) - compute a set difference.
-* [d3.disjoint](https://github.com/d3/d3-array/blob/v2.12.0/README.md#disjoint) - test whether two sets are disjoint.
-* [d3.intersection](https://github.com/d3/d3-array/blob/v2.12.0/README.md#intersection) - compute a set intersection.
-* [d3.superset](https://github.com/d3/d3-array/blob/v2.12.0/README.md#superset) - test whether a set is a superset of another.
-* [d3.subset](https://github.com/d3/d3-array/blob/v2.12.0/README.md#subset) - test whether a set is a subset of another.
-* [d3.union](https://github.com/d3/d3-array/blob/v2.12.0/README.md#union) - compute a set union.
+* [d3.difference](https://github.com/d3/d3-array/blob/v2.12.1/README.md#difference) - compute a set difference.
+* [d3.disjoint](https://github.com/d3/d3-array/blob/v2.12.1/README.md#disjoint) - test whether two sets are disjoint.
+* [d3.intersection](https://github.com/d3/d3-array/blob/v2.12.1/README.md#intersection) - compute a set intersection.
+* [d3.superset](https://github.com/d3/d3-array/blob/v2.12.1/README.md#superset) - test whether a set is a superset of another.
+* [d3.subset](https://github.com/d3/d3-array/blob/v2.12.1/README.md#subset) - test whether a set is a subset of another.
+* [d3.union](https://github.com/d3/d3-array/blob/v2.12.1/README.md#union) - compute a set union.
 
-### [Histograms](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bins)
+### [Histograms](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bins)
 
 Bin discrete samples into continuous, non-overlapping intervals.
 
-* [d3.bin](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bin) - create a new bin generator.
-* [*bin*](https://github.com/d3/d3-array/blob/v2.12.0/README.md#_bin) - bins a given array of samples.
-* [*bin*.value](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bin_value)- specify a value accessor for each sample.
-* [*bin*.domain](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bin_domain) - specify the interval of observable values.
-* [*bin*.thresholds](https://github.com/d3/d3-array/blob/v2.12.0/README.md#bin_thresholds) - specify how values are divided into bins.
-* [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array/blob/v2.12.0/README.md#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
-* [d3.thresholdScott](https://github.com/d3/d3-array/blob/v2.12.0/README.md#thresholdScott) - Scott’s normal reference binning rule.
-* [d3.thresholdSturges](https://github.com/d3/d3-array/blob/v2.12.0/README.md#thresholdSturges) - Sturges’ binning formula.
+* [d3.bin](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bin) - create a new bin generator.
+* [*bin*](https://github.com/d3/d3-array/blob/v2.12.1/README.md#_bin) - bins a given array of samples.
+* [*bin*.value](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bin_value) - specify a value accessor for each sample.
+* [*bin*.domain](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bin_domain) - specify the interval of observable values.
+* [*bin*.thresholds](https://github.com/d3/d3-array/blob/v2.12.1/README.md#bin_thresholds) - specify how values are divided into bins.
+* [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array/blob/v2.12.1/README.md#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
+* [d3.thresholdScott](https://github.com/d3/d3-array/blob/v2.12.1/README.md#thresholdScott) - Scott’s normal reference binning rule.
+* [d3.thresholdSturges](https://github.com/d3/d3-array/blob/v2.12.1/README.md#thresholdSturges) - Sturges’ binning formula.
 
-### [Interning](https://github.com/d3/d3-array/blob/v2.12.0/README.md#interning)
+### [Interning](https://github.com/d3/d3-array/blob/v2.12.1/README.md#interning)
 
-* [d3.InternMap](https://github.com/d3/d3-array/blob/v2.12.0/README.md#InternMap) - a key-interning Map.
-* [d3.InternSet](https://github.com/d3/d3-array/blob/v2.12.0/README.md#InternSet) - a value-interning Set.
+* [d3.InternMap](https://github.com/d3/d3-array/blob/v2.12.1/README.md#InternMap) - a key-interning Map.
+* [d3.InternSet](https://github.com/d3/d3-array/blob/v2.12.1/README.md#InternSet) - a value-interning Set.
 
 ## [Axes (d3-axis)](https://github.com/d3/d3-axis/tree/v2.1.0)
 
@@ -865,173 +865,173 @@ Generate random numbers from various distributions.
 * [*random*.source](https://github.com/d3/d3-random/blob/v2.2.2/README.md#random_source) - set the source of randomness.
 * [d3.randomLcg](https://github.com/d3/d3-random/blob/v2.2.2/README.md#randomLcg) - a seeded pseudorandom number generator.
 
-## [Scales (d3-scale)](https://github.com/d3/d3-scale/tree/v3.2.2)
+## [Scales (d3-scale)](https://github.com/d3/d3-scale/tree/v3.3.0)
 
 Encodings that map abstract data to visual representation.
 
-### [Continuous Scales](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous-scales)
+### [Continuous Scales](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous-scales)
 
 Map a continuous, quantitative domain to a continuous range.
 
-* [*continuous*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_continuous) - compute the range value corresponding to a given domain value.
-* [*continuous*.invert](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_invert) - compute the domain value corresponding to a given range value.
-* [*continuous*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_domain) - set the input domain.
-* [*continuous*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_range) - set the output range.
-* [*continuous*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_rangeRound) - set the output range and enable rounding.
-* [*continuous*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_clamp) - enable clamping to the domain or range.
-* [*continuous*.unknown](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_unknown) - set the output value for unknown inputs.
-* [*continuous*.interpolate](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_interpolate) - set the output interpolator.
-* [*continuous*.ticks](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_ticks) - compute representative values from the domain.
-* [*continuous*.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_tickFormat) - format ticks for human consumption.
-* [*continuous*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_nice) - extend the domain to nice round numbers.
-* [*continuous*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#continuous_copy) - create a copy of this scale.
-* [d3.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#tickFormat) - format ticks for human consumption.
-* [d3.scaleLinear](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleLinear) - create a quantitative linear scale.
-* [d3.scalePow](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scalePow) - create a quantitative power scale.
-* [*pow*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_pow) - compute the range value corresponding to a given domain value.
-* [*pow*.invert](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_invert) - compute the domain value corresponding to a given range value.
-* [*pow*.exponent](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_exponent) - set the power exponent.
-* [*pow*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_domain) - set the input domain.
-* [*pow*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_range) - set the output range.
-* [*pow*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_rangeRound) - set the output range and enable rounding.
-* [*pow*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_clamp) - enable clamping to the domain or range.
-* [*pow*.interpolate](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_interpolate) - set the output interpolator.
-* [*pow*.ticks](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_ticks) - compute representative values from the domain.
-* [*pow*.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_tickFormat) - format ticks for human consumption.
-* [*pow*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_nice) - extend the domain to nice round numbers.
-* [*pow*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#pow_copy) - create a copy of this scale.
-* [d3.scaleSqrt](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSqrt) - create a quantitative power scale with exponent 0.5.
-* [d3.scaleLog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleLog) - create a quantitative logarithmic scale.
-* [*log*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_log) - compute the range value corresponding to a given domain value.
-* [*log*.invert](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_invert) - compute the domain value corresponding to a given range value.
-* [*log*.base](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_base) - set the logarithm base.
-* [*log*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_domain) - set the input domain.
-* [*log*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_range) - set the output range.
-* [*log*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_rangeRound) - set the output range and enable rounding.
-* [*log*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_clamp) - enable clamping to the domain or range.
-* [*log*.interpolate](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_interpolate) - set the output interpolator.
-* [*log*.ticks](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_ticks) - compute representative values from the domain.
-* [*log*.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_tickFormat) - format ticks for human consumption.
-* [*log*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_nice) - extend the domain to nice round numbers.
-* [*log*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#log_copy) - create a copy of this scale.
-* [d3.scaleSymlog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSymlog) - create a symmetric logarithmic scale.
-* [*symlog*.constant](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#symlog_constant) - set the constant of a symlog scale.
-* [d3.scaleIdentity](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleIdentity) - creates an identity scale.
-* [d3.scaleRadial](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleRadial) - creates a radial scale.
-* [d3.scaleTime](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleTime) - create a linear scale for time.
-* [*time*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_time) - compute the range value corresponding to a given domain value.
-* [*time*.invert](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_invert) - compute the domain value corresponding to a given range value.
-* [*time*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_domain) - set the input domain.
-* [*time*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_range) - set the output range.
-* [*time*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_rangeRound) - set the output range and enable rounding.
-* [*time*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_clamp) - enable clamping to the domain or range.
-* [*time*.interpolate](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_interpolate) - set the output interpolator.
-* [*time*.ticks](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_ticks) - compute representative values from the domain.
-* [*time*.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_tickFormat) - format ticks for human consumption.
-* [*time*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_nice) - extend the domain to nice round times.
-* [*time*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#time_copy) - create a copy of this scale.
-* [d3.scaleUtc](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleUtc) - create a linear scale for UTC.
+* [*continuous*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_continuous) - compute the range value corresponding to a given domain value.
+* [*continuous*.invert](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_invert) - compute the domain value corresponding to a given range value.
+* [*continuous*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_domain) - set the input domain.
+* [*continuous*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_range) - set the output range.
+* [*continuous*.rangeRound](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_rangeRound) - set the output range and enable rounding.
+* [*continuous*.clamp](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_clamp) - enable clamping to the domain or range.
+* [*continuous*.unknown](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_unknown) - set the output value for unknown inputs.
+* [*continuous*.interpolate](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_interpolate) - set the output interpolator.
+* [*continuous*.ticks](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_ticks) - compute representative values from the domain.
+* [*continuous*.tickFormat](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_tickFormat) - format ticks for human consumption.
+* [*continuous*.nice](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_nice) - extend the domain to nice round numbers.
+* [*continuous*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#continuous_copy) - create a copy of this scale.
+* [d3.tickFormat](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#tickFormat) - format ticks for human consumption.
+* [d3.scaleLinear](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleLinear) - create a quantitative linear scale.
+* [d3.scalePow](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scalePow) - create a quantitative power scale.
+* [*pow*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_pow) - compute the range value corresponding to a given domain value.
+* [*pow*.invert](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_invert) - compute the domain value corresponding to a given range value.
+* [*pow*.exponent](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_exponent) - set the power exponent.
+* [*pow*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_domain) - set the input domain.
+* [*pow*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_range) - set the output range.
+* [*pow*.rangeRound](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_rangeRound) - set the output range and enable rounding.
+* [*pow*.clamp](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_clamp) - enable clamping to the domain or range.
+* [*pow*.interpolate](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_interpolate) - set the output interpolator.
+* [*pow*.ticks](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_ticks) - compute representative values from the domain.
+* [*pow*.tickFormat](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_tickFormat) - format ticks for human consumption.
+* [*pow*.nice](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_nice) - extend the domain to nice round numbers.
+* [*pow*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#pow_copy) - create a copy of this scale.
+* [d3.scaleSqrt](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleSqrt) - create a quantitative power scale with exponent 0.5.
+* [d3.scaleLog](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleLog) - create a quantitative logarithmic scale.
+* [*log*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_log) - compute the range value corresponding to a given domain value.
+* [*log*.invert](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_invert) - compute the domain value corresponding to a given range value.
+* [*log*.base](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_base) - set the logarithm base.
+* [*log*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_domain) - set the input domain.
+* [*log*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_range) - set the output range.
+* [*log*.rangeRound](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_rangeRound) - set the output range and enable rounding.
+* [*log*.clamp](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_clamp) - enable clamping to the domain or range.
+* [*log*.interpolate](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_interpolate) - set the output interpolator.
+* [*log*.ticks](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_ticks) - compute representative values from the domain.
+* [*log*.tickFormat](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_tickFormat) - format ticks for human consumption.
+* [*log*.nice](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_nice) - extend the domain to nice round numbers.
+* [*log*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#log_copy) - create a copy of this scale.
+* [d3.scaleSymlog](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleSymlog) - create a symmetric logarithmic scale.
+* [*symlog*.constant](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#symlog_constant) - set the constant of a symlog scale.
+* [d3.scaleIdentity](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleIdentity) - creates an identity scale.
+* [d3.scaleRadial](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleRadial) - creates a radial scale.
+* [d3.scaleTime](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleTime) - create a linear scale for time.
+* [*time*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_time) - compute the range value corresponding to a given domain value.
+* [*time*.invert](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_invert) - compute the domain value corresponding to a given range value.
+* [*time*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_domain) - set the input domain.
+* [*time*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_range) - set the output range.
+* [*time*.rangeRound](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_rangeRound) - set the output range and enable rounding.
+* [*time*.clamp](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_clamp) - enable clamping to the domain or range.
+* [*time*.interpolate](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_interpolate) - set the output interpolator.
+* [*time*.ticks](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_ticks) - compute representative values from the domain.
+* [*time*.tickFormat](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_tickFormat) - format ticks for human consumption.
+* [*time*.nice](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_nice) - extend the domain to nice round times.
+* [*time*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#time_copy) - create a copy of this scale.
+* [d3.scaleUtc](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleUtc) - create a linear scale for UTC.
 
-### [Sequential Scales](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential-scales)
-
-Map a continuous, quantitative domain to a continuous, fixed interpolator.
-
-* [d3.scaleSequential](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequential) - create a sequential scale.
-* [*sequential*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_sequential) - compute the range value corresponding to an input value.
-* [*sequential*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_domain) - set the input domain.
-* [*sequential*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_clamp) - enable clamping to the domain.
-* [*sequential*.interpolator](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_interpolator) - set the scale’s output interpolator.
-* [*sequential*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_range) - set the output range.
-* [*sequential*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_rangeRound) - set the output range and enable rounding.
-* [*sequential*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequential_copy) -  create a copy of this scale.
-* [d3.scaleSequentialLog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialLog) - create a logarithmic sequential scale.
-* [d3.scaleSequentialPow](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialPow) - create a power sequential scale.
-* [d3.scaleSequentialSqrt](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialSqrt) - create a power sequential scale with exponent 0.5.
-* [d3.scaleSequentialSymlog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialSymlog) - create a symmetric logarithmic sequential scale.
-* [d3.scaleSequentialQuantile](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleSequentialQuantile) - create a sequential scale using a *p*-quantile transform.
-* [*sequentialQuantile*.quantiles](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#sequentialQuantile_quantiles) - return the scale’s quantiles.
-
-### [Diverging Scales](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging-scales)
+### [Sequential Scales](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#sequential-scales)
 
 Map a continuous, quantitative domain to a continuous, fixed interpolator.
 
-* [d3.scaleDiverging](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDiverging) - create a diverging scale.
-* [*diverging*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_diverging) - compute the range value corresponding to an input value.
-* [*diverging*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_domain) - set the input domain.
-* [*diverging*.clamp](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_clamp) - enable clamping to the domain or range.
-* [*diverging*.interpolator](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_interpolator) - set the scale’s output interpolator.
-* [*diverging*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_range) - set the output range.
-* [*diverging*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_rangeRound) - set the output range and enable rounding.
-* [*diverging*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_copy) -  create a copy of this scale.
-* [*diverging*.unknown](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#diverging_unknown) - set the output value for unknown inputs.
-* [d3.scaleDivergingLog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingLog) - create a diverging logarithmic scale.
-* [d3.scaleDivergingPow](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingPow) - create a diverging power scale.
-* [d3.scaleDivergingSqrt](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingSqrt) - create a diverging power scale with exponent 0.5.
-* [d3.scaleDivergingSymlog](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleDivergingSymlog) - create a diverging symmetric logarithmic scale.
+* [d3.scaleSequential](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleSequential) - create a sequential scale.
+* [*sequential*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_sequential) - compute the range value corresponding to an input value.
+* [*sequential*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#sequential_domain) - set the input domain.
+* [*sequential*.clamp](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#sequential_clamp) - enable clamping to the domain.
+* [*sequential*.interpolator](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#sequential_interpolator) - set the scale’s output interpolator.
+* [*sequential*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#sequential_range) - set the output range.
+* [*sequential*.rangeRound](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#sequential_rangeRound) - set the output range and enable rounding.
+* [*sequential*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#sequential_copy) -  create a copy of this scale.
+* [d3.scaleSequentialLog](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleSequentialLog) - create a logarithmic sequential scale.
+* [d3.scaleSequentialPow](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleSequentialPow) - create a power sequential scale.
+* [d3.scaleSequentialSqrt](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleSequentialSqrt) - create a power sequential scale with exponent 0.5.
+* [d3.scaleSequentialSymlog](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleSequentialSymlog) - create a symmetric logarithmic sequential scale.
+* [d3.scaleSequentialQuantile](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleSequentialQuantile) - create a sequential scale using a *p*-quantile transform.
+* [*sequentialQuantile*.quantiles](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#sequentialQuantile_quantiles) - return the scale’s quantiles.
 
-### [Quantize Scales](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize-scales)
+### [Diverging Scales](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#diverging-scales)
+
+Map a continuous, quantitative domain to a continuous, fixed interpolator.
+
+* [d3.scaleDiverging](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleDiverging) - create a diverging scale.
+* [*diverging*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_diverging) - compute the range value corresponding to an input value.
+* [*diverging*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#diverging_domain) - set the input domain.
+* [*diverging*.clamp](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#diverging_clamp) - enable clamping to the domain or range.
+* [*diverging*.interpolator](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#diverging_interpolator) - set the scale’s output interpolator.
+* [*diverging*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#diverging_range) - set the output range.
+* [*diverging*.rangeRound](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#diverging_rangeRound) - set the output range and enable rounding.
+* [*diverging*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#diverging_copy) -  create a copy of this scale.
+* [*diverging*.unknown](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#diverging_unknown) - set the output value for unknown inputs.
+* [d3.scaleDivergingLog](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleDivergingLog) - create a diverging logarithmic scale.
+* [d3.scaleDivergingPow](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleDivergingPow) - create a diverging power scale.
+* [d3.scaleDivergingSqrt](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleDivergingSqrt) - create a diverging power scale with exponent 0.5.
+* [d3.scaleDivergingSymlog](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleDivergingSymlog) - create a diverging symmetric logarithmic scale.
+
+### [Quantize Scales](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize-scales)
 
 Map a continuous, quantitative domain to a discrete range.
 
-* [d3.scaleQuantize](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleQuantize) - create a uniform quantizing linear scale.
-* [*quantize*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_quantize) - compute the range value corresponding to a given domain value.
-* [*quantize*.invertExtent](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_invertExtent) - compute the domain values corresponding to a given range value.
-* [*quantize*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_domain) - set the input domain.
-* [*quantize*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_range) - set the output range.
-* [*quantize*.ticks](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_ticks) - compute representative values from the domain.
-* [*quantize*.tickFormat](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_tickFormat) - format ticks for human consumption.
-* [*quantize*.nice](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_nice) - extend the domain to nice round numbers.
-* [*quantize*.thresholds](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_thresholds) - return the array of computed thresholds within the domain.
-* [*quantize*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantize_copy) - create a copy of this scale.
-* [d3.scaleQuantile](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleQuantile) - create a quantile quantizing linear scale.
-* [*quantile*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_quantile) - compute the range value corresponding to a given domain value.
-* [*quantile*.invertExtent](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantile_invertExtent) - compute the domain values corresponding to a given range value.
-* [*quantile*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantile_domain) - set the input domain.
-* [*quantile*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantile_range) - set the output range.
-* [*quantile*.quantiles](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantile_quantiles) - get the quantile thresholds.
-* [*quantile*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#quantile_copy) - create a copy of this scale.
-* [d3.scaleThreshold](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleThreshold) - create an arbitrary quantizing linear scale.
-* [*threshold*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_threshold) - compute the range value corresponding to a given domain value.
-* [*threshold*.invertExtent](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#threshold_invertExtent) - compute the domain values corresponding to a given range value.
-* [*threshold*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#threshold_domain) - set the input domain.
-* [*threshold*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#threshold_range) - set the output range.
-* [*threshold*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#threshold_copy) - create a copy of this scale.
+* [d3.scaleQuantize](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleQuantize) - create a uniform quantizing linear scale.
+* [*quantize*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_quantize) - compute the range value corresponding to a given domain value.
+* [*quantize*.invertExtent](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize_invertExtent) - compute the domain values corresponding to a given range value.
+* [*quantize*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize_domain) - set the input domain.
+* [*quantize*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize_range) - set the output range.
+* [*quantize*.ticks](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize_ticks) - compute representative values from the domain.
+* [*quantize*.tickFormat](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize_tickFormat) - format ticks for human consumption.
+* [*quantize*.nice](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize_nice) - extend the domain to nice round numbers.
+* [*quantize*.thresholds](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize_thresholds) - return the array of computed thresholds within the domain.
+* [*quantize*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantize_copy) - create a copy of this scale.
+* [d3.scaleQuantile](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleQuantile) - create a quantile quantizing linear scale.
+* [*quantile*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_quantile) - compute the range value corresponding to a given domain value.
+* [*quantile*.invertExtent](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantile_invertExtent) - compute the domain values corresponding to a given range value.
+* [*quantile*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantile_domain) - set the input domain.
+* [*quantile*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantile_range) - set the output range.
+* [*quantile*.quantiles](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantile_quantiles) - get the quantile thresholds.
+* [*quantile*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#quantile_copy) - create a copy of this scale.
+* [d3.scaleThreshold](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleThreshold) - create an arbitrary quantizing linear scale.
+* [*threshold*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_threshold) - compute the range value corresponding to a given domain value.
+* [*threshold*.invertExtent](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#threshold_invertExtent) - compute the domain values corresponding to a given range value.
+* [*threshold*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#threshold_domain) - set the input domain.
+* [*threshold*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#threshold_range) - set the output range.
+* [*threshold*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#threshold_copy) - create a copy of this scale.
 
-### [Ordinal Scales](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#ordinal-scales)
+### [Ordinal Scales](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#ordinal-scales)
 
 Map a discrete domain to a discrete range.
 
-* [d3.scaleOrdinal](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleOrdinal) - create an ordinal scale.
-* [*ordinal*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_ordinal) - compute the range value corresponding to a given domain value.
-* [*ordinal*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#ordinal_domain) - set the input domain.
-* [*ordinal*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#ordinal_range) - set the output range.
-* [*ordinal*.unknown](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#ordinal_unknown) - set the output value for unknown inputs.
-* [*ordinal*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#ordinal_copy) - create a copy of this scale.
-* [d3.scaleImplicit](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleImplicit) - a special unknown value for implicit domains.
-* [d3.scaleBand](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scaleBand) - create an ordinal band scale.
-* [*band*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_band) - compute the band start corresponding to a given domain value.
-* [*band*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_domain) - set the input domain.
-* [*band*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_range) - set the output range.
-* [*band*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_rangeRound) - set the output range and enable rounding.
-* [*band*.round](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_round) - enable rounding.
-* [*band*.paddingInner](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_paddingInner) - set padding between bands.
-* [*band*.paddingOuter](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_paddingOuter) - set padding outside the first and last bands.
-* [*band*.padding](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_padding) - set padding outside and between bands.
-* [*band*.align](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_align) - set band alignment, if there is extra space.
-* [*band*.bandwidth](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_bandwidth) - get the width of each band.
-* [*band*.step](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_step) - get the distance between the starts of adjacent bands.
-* [*band*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#band_copy) - create a copy of this scale.
-* [d3.scalePoint](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#scalePoint) - create an ordinal point scale.
-* [*point*](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#_point) - compute the point corresponding to a given domain value.
-* [*point*.domain](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_domain) - set the input domain.
-* [*point*.range](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_range) - set the output range.
-* [*point*.rangeRound](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_rangeRound) - set the output range and enable rounding.
-* [*point*.round](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_round) - enable rounding.
-* [*point*.padding](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_padding) - set padding outside the first and last point.
-* [*point*.align](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_align) - set point alignment, if there is extra space.
-* [*point*.bandwidth](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_bandwidth) - returns zero.
-* [*point*.step](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_step) - get the distance between the starts of adjacent points.
-* [*point*.copy](https://github.com/d3/d3-scale/blob/v3.2.2/README.md#point_copy) - create a copy of this scale.
+* [d3.scaleOrdinal](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleOrdinal) - create an ordinal scale.
+* [*ordinal*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_ordinal) - compute the range value corresponding to a given domain value.
+* [*ordinal*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#ordinal_domain) - set the input domain.
+* [*ordinal*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#ordinal_range) - set the output range.
+* [*ordinal*.unknown](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#ordinal_unknown) - set the output value for unknown inputs.
+* [*ordinal*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#ordinal_copy) - create a copy of this scale.
+* [d3.scaleImplicit](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleImplicit) - a special unknown value for implicit domains.
+* [d3.scaleBand](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scaleBand) - create an ordinal band scale.
+* [*band*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_band) - compute the band start corresponding to a given domain value.
+* [*band*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_domain) - set the input domain.
+* [*band*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_range) - set the output range.
+* [*band*.rangeRound](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_rangeRound) - set the output range and enable rounding.
+* [*band*.round](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_round) - enable rounding.
+* [*band*.paddingInner](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_paddingInner) - set padding between bands.
+* [*band*.paddingOuter](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_paddingOuter) - set padding outside the first and last bands.
+* [*band*.padding](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_padding) - set padding outside and between bands.
+* [*band*.align](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_align) - set band alignment, if there is extra space.
+* [*band*.bandwidth](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_bandwidth) - get the width of each band.
+* [*band*.step](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_step) - get the distance between the starts of adjacent bands.
+* [*band*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#band_copy) - create a copy of this scale.
+* [d3.scalePoint](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#scalePoint) - create an ordinal point scale.
+* [*point*](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#_point) - compute the point corresponding to a given domain value.
+* [*point*.domain](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_domain) - set the input domain.
+* [*point*.range](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_range) - set the output range.
+* [*point*.rangeRound](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_rangeRound) - set the output range and enable rounding.
+* [*point*.round](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_round) - enable rounding.
+* [*point*.padding](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_padding) - set padding outside the first and last point.
+* [*point*.align](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_align) - set point alignment, if there is extra space.
+* [*point*.bandwidth](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_bandwidth) - returns zero.
+* [*point*.step](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_step) - get the distance between the starts of adjacent points.
+* [*point*.copy](https://github.com/d3/d3-scale/blob/v3.3.0/README.md#point_copy) - create a copy of this scale.
 
 ## [Selections (d3-selection)](https://github.com/d3/d3-selection/tree/v2.0.0)
 
@@ -1307,50 +1307,52 @@ Parse and format times, inspired by strptime and strftime.
 * [d3.timeFormatLocale](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormatLocale) - define a custom locale.
 * [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormatDefaultLocale) - define the default locale.
 
-## [Time Intervals (d3-time)](https://github.com/d3/d3-time/tree/v2.0.0)
+## [Time Intervals (d3-time)](https://github.com/d3/d3-time/tree/v2.1.0)
 
 A calculator for humanity’s peculiar conventions of time.
 
-* [d3.timeInterval](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeInterval) - implement a new custom time interval.
-* [*interval*](https://github.com/d3/d3-time/blob/v2.0.0/README.md#_interval) - alias for *interval*.floor.
-* [*interval*.floor](https://github.com/d3/d3-time/blob/v2.0.0/README.md#interval_floor) - round down to the nearest boundary.
-* [*interval*.round](https://github.com/d3/d3-time/blob/v2.0.0/README.md#interval_round) - round to the nearest boundary.
-* [*interval*.ceil](https://github.com/d3/d3-time/blob/v2.0.0/README.md#interval_ceil) - round up to the nearest boundary.
-* [*interval*.offset](https://github.com/d3/d3-time/blob/v2.0.0/README.md#interval_offset) - offset a date by some number of intervals.
-* [*interval*.range](https://github.com/d3/d3-time/blob/v2.0.0/README.md#interval_range) - generate a range of dates at interval boundaries.
-* [*interval*.filter](https://github.com/d3/d3-time/blob/v2.0.0/README.md#interval_filter) - create a filtered subset of this interval.
-* [*interval*.every](https://github.com/d3/d3-time/blob/v2.0.0/README.md#interval_every) - create a filtered subset of this interval.
-* [*interval*.count](https://github.com/d3/d3-time/blob/v2.0.0/README.md#interval_count) - count interval boundaries between two dates.
-* [d3.timeMillisecond](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMillisecond), [d3.utcMillisecond](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMillisecond) - the millisecond interval.
-* [d3.timeMilliseconds](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMillisecond), [d3.utcMilliseconds](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMillisecond) - aliases for millisecond.range.
-* [d3.timeSecond](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSecond), [d3.utcSecond](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSecond) - the second interval.
-* [d3.timeSeconds](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSecond), [d3.utcSeconds](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSecond) - aliases for second.range.
-* [d3.timeMinute](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMinute), [d3.utcMinute](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMinute) - the minute interval.
-* [d3.timeMinutes](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMinute), [d3.utcMinutes](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMinute) - aliases for minute.range.
-* [d3.timeHour](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeHour), [d3.utcHour](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeHour) - the hour interval.
-* [d3.timeHours](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeHour), [d3.utcHours](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeHour) - aliases for hour.range.
-* [d3.timeDay](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeDay), [d3.utcDay](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeDay) - the day interval.
-* [d3.timeDays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeDay), [d3.utcDays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeDay) - aliases for day.range.
-* [d3.timeWeek](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeWeek), [d3.utcWeek](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeWeek) - aliases for sunday.
-* [d3.timeWeeks](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeWeek), [d3.utcWeeks](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeWeek) - aliases for week.range.
-* [d3.timeSunday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSunday), [d3.utcSunday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSunday) - the week interval, starting on Sunday.
-* [d3.timeSundays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSunday), [d3.utcSundays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSunday) - aliases for sunday.range.
-* [d3.timeMonday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMonday), [d3.utcMonday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMonday) - the week interval, starting on Monday.
-* [d3.timeMondays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMonday), [d3.utcMondays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMonday) - aliases for monday.range.
-* [d3.timeTuesday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeTuesday), [d3.utcTuesday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeTuesday) - the week interval, starting on Tuesday.
-* [d3.timeTuesdays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeTuesday), [d3.utcTuesdays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeTuesday) - aliases for tuesday.range.
-* [d3.timeWednesday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeWednesday), [d3.utcWednesday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeWednesday) - the week interval, starting on Wednesday.
-* [d3.timeWednesdays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeWednesday), [d3.utcWednesdays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeWednesday) - aliases for wednesday.range.
-* [d3.timeThursday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeThursday), [d3.utcThursday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeThursday) - the week interval, starting on Thursday.
-* [d3.timeThursdays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeThursday), [d3.utcThursdays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeThursday) - aliases for thursday.range.
-* [d3.timeFriday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeFriday), [d3.utcFriday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeFriday) - the week interval, starting on Friday.
-* [d3.timeFridays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeFriday), [d3.utcFridays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeFriday) - aliases for friday.range.
-* [d3.timeSaturday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSaturday), [d3.utcSaturday](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSaturday) - the week interval, starting on Saturday.
-* [d3.timeSaturdays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSaturday), [d3.utcSaturdays](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeSaturday) - aliases for saturday.range.
-* [d3.timeMonth](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMonth), [d3.utcMonth](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMonth) - the month interval.
-* [d3.timeMonths](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMonth), [d3.utcMonths](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeMonth) - aliases for month.range.
-* [d3.timeYear](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeYear), [d3.utcYear](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeYear) - the year interval.
-* [d3.timeYears](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeYear), [d3.utcYears](https://github.com/d3/d3-time/blob/v2.0.0/README.md#timeYear) - aliases for year.range.
+* [d3.timeInterval](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeInterval) - implement a new custom time interval.
+* [*interval*](https://github.com/d3/d3-time/blob/v2.1.0/README.md#_interval) - alias for *interval*.floor.
+* [*interval*.floor](https://github.com/d3/d3-time/blob/v2.1.0/README.md#interval_floor) - round down to the nearest boundary.
+* [*interval*.round](https://github.com/d3/d3-time/blob/v2.1.0/README.md#interval_round) - round to the nearest boundary.
+* [*interval*.ceil](https://github.com/d3/d3-time/blob/v2.1.0/README.md#interval_ceil) - round up to the nearest boundary.
+* [*interval*.offset](https://github.com/d3/d3-time/blob/v2.1.0/README.md#interval_offset) - offset a date by some number of intervals.
+* [*interval*.range](https://github.com/d3/d3-time/blob/v2.1.0/README.md#interval_range) - generate a range of dates at interval boundaries.
+* [*interval*.filter](https://github.com/d3/d3-time/blob/v2.1.0/README.md#interval_filter) - create a filtered subset of this interval.
+* [*interval*.every](https://github.com/d3/d3-time/blob/v2.1.0/README.md#interval_every) - create a filtered subset of this interval.
+* [*interval*.count](https://github.com/d3/d3-time/blob/v2.1.0/README.md#interval_count) - count interval boundaries between two dates.
+* [d3.timeMillisecond](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMillisecond), [d3.utcMillisecond](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMillisecond) - the millisecond interval.
+* [d3.timeMilliseconds](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMillisecond), [d3.utcMilliseconds](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMillisecond) - aliases for millisecond.range.
+* [d3.timeSecond](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSecond), [d3.utcSecond](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSecond) - the second interval.
+* [d3.timeSeconds](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSecond), [d3.utcSeconds](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSecond) - aliases for second.range.
+* [d3.timeMinute](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMinute), [d3.utcMinute](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMinute) - the minute interval.
+* [d3.timeMinutes](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMinute), [d3.utcMinutes](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMinute) - aliases for minute.range.
+* [d3.timeHour](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeHour), [d3.utcHour](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeHour) - the hour interval.
+* [d3.timeHours](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeHour), [d3.utcHours](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeHour) - aliases for hour.range.
+* [d3.timeDay](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeDay), [d3.utcDay](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeDay) - the day interval.
+* [d3.timeDays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeDay), [d3.utcDays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeDay) - aliases for day.range.
+* [d3.timeWeek](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeWeek), [d3.utcWeek](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeWeek) - aliases for sunday.
+* [d3.timeWeeks](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeWeek), [d3.utcWeeks](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeWeek) - aliases for week.range.
+* [d3.timeSunday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSunday), [d3.utcSunday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSunday) - the week interval, starting on Sunday.
+* [d3.timeSundays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSunday), [d3.utcSundays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSunday) - aliases for sunday.range.
+* [d3.timeMonday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMonday), [d3.utcMonday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMonday) - the week interval, starting on Monday.
+* [d3.timeMondays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMonday), [d3.utcMondays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMonday) - aliases for monday.range.
+* [d3.timeTuesday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeTuesday), [d3.utcTuesday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeTuesday) - the week interval, starting on Tuesday.
+* [d3.timeTuesdays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeTuesday), [d3.utcTuesdays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeTuesday) - aliases for tuesday.range.
+* [d3.timeWednesday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeWednesday), [d3.utcWednesday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeWednesday) - the week interval, starting on Wednesday.
+* [d3.timeWednesdays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeWednesday), [d3.utcWednesdays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeWednesday) - aliases for wednesday.range.
+* [d3.timeThursday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeThursday), [d3.utcThursday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeThursday) - the week interval, starting on Thursday.
+* [d3.timeThursdays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeThursday), [d3.utcThursdays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeThursday) - aliases for thursday.range.
+* [d3.timeFriday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeFriday), [d3.utcFriday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeFriday) - the week interval, starting on Friday.
+* [d3.timeFridays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeFriday), [d3.utcFridays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeFriday) - aliases for friday.range.
+* [d3.timeSaturday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSaturday), [d3.utcSaturday](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSaturday) - the week interval, starting on Saturday.
+* [d3.timeSaturdays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSaturday), [d3.utcSaturdays](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeSaturday) - aliases for saturday.range.
+* [d3.timeMonth](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMonth), [d3.utcMonth](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMonth) - the month interval.
+* [d3.timeMonths](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMonth), [d3.utcMonths](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeMonth) - aliases for month.range.
+* [d3.timeYear](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeYear), [d3.utcYear](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeYear) - the year interval.
+* [d3.timeYears](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeYear), [d3.utcYears](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeYear) - aliases for year.range.
+* [d3.timeTicks](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeTicks), [d3.utcTicks](https://github.com/d3/d3-time/blob/v2.1.0/README.md#utcTicks) -
+* [d3.timeTickInterval](https://github.com/d3/d3-time/blob/v2.1.0/README.md#timeTickInterval), [d3.utcTickInterval](https://github.com/d3/d3-time/blob/v2.1.0/README.md#utcTickInterval) -
 
 ## [Timers (d3-timer)](https://github.com/d3/d3-timer/tree/v2.0.0)
 
