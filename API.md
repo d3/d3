@@ -163,7 +163,7 @@ Human-readable reference marks for scales.
 * [*axis*.tickSizeInner](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickSizeInner) - set the size of inner ticks.
 * [*axis*.tickSizeOuter](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickSizeOuter) - set the size of outer (extent) ticks.
 * [*axis*.tickPadding](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_tickPadding) - set the padding between ticks and labels.
-* [*axis*.offset]()https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_offset) - set the pixel offset for crisp edges.
+* [*axis*.offset](https://github.com/d3/d3-axis/blob/v2.1.0/README.md#axis_offset) - set the pixel offset for crisp edges.
 
 ## [Brushes (d3-brush)](https://github.com/d3/d3-brush/tree/v2.0.0)
 
