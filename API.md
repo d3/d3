@@ -764,7 +764,7 @@ Layout algorithms for visualizing hierarchical data.
 * [d3.packSiblings](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#packSiblings) - pack the specified array of circles.
 * [d3.packEnclose](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#packEnclose) - enclose the specified array of circles.
 
-## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/tree/v2.0.1)
+## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/tree/v3.0.1)
 
 Interpolate numbers, colors, strings, arrays, objects, whatever!
 
