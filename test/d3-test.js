@@ -1,12 +1,19 @@
-var tape = require("tape-await"),
-    d3 = require("../"),
-    d3Selection = require("d3-selection"),
-    testExports = require("./test-exports");
+import assert from "assert";
+import {readFileSync} from "fs";
+import {resolve, dirname} from "path";
+import {fileURLToPath} from "url";
+import * as d3 from "../src/index.js";
 
-tape("version matches package.json", function(test) {
-  test.equal(d3.version, require("../package.json").version);
-});
+const packagePath = resolve(dirname(fileURLToPath(import.meta.url)), "../package.json");
+const packageData = JSON.parse(readFileSync(packagePath));
 
-for (var dependency in require("../package.json").dependencies) {
-  testExports(dependency);
+for (const moduleName in packageData.dependencies) {
+  it(`d3 exports everything from ${moduleName}`, async () => {
+    const module = await import(moduleName);
+    for (const propertyName in module) {
+      if (propertyName !== "version") {
+        assert(propertyName in d3, `${moduleName} exports ${propertyName}`);
+      }
+    }
+  });
 }

@@ -1,0 +1,10 @@
+{
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 11
+  },
+  "env": {
+    "mocha": true
+  }
+}
