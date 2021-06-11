@@ -4,11 +4,13 @@
 
 *This document covers only major changes. For minor and patch changes, please see the [release notes](https://github.com/d3/d3/releases).*
 
-D3 now ships as pure ES modules, requiring Node.js 12 or higher. For more, please read [Sindre Sorhus’s FAQ](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
+D3 now ships as pure ES modules and requires Node.js 12 or higher. For more, please read [Sindre Sorhus’s FAQ](https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c).
 
 [d3.bin](https://github.com/d3/d3-array/blob/main/README.md#bin) now ignores nulls. [d3.ascending](https://github.com/d3/d3-array/blob/main/README.md#ascending) and [d3.descending](https://github.com/d3/d3-array/blob/main/README.md#descending) no longer consider null comparable.
 
 [Ordinal scales](https://github.com/d3/d3-scale/blob/main/README.md#ordinal-scales) now use [InternMap](https://github.com/mbostock/internmap) for domains; domain values are now uniqued by coercing to a primitive value via *object*.valueOf instead of coercing to a string via *object*.toString.
+
+Array-likes (*e.g.*, a live NodeList such as *element*.childNodes) are converted to arrays in [d3.selectAll](https://github.com/d3/d3-selection/blob/main/README.md#selectAll) and [*selection*.selectAll](https://github.com/d3/d3-selection/blob/main/README.md#selection_selectAll).
 
 # Changes in D3 6.0
 
