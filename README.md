@@ -63,12 +63,20 @@ import * as d3 from "d3";
 
 In Node:
 
+The previous `import` works if your package is of "type": "module". An alternative is to load the d3 module or its submodules asynchronously: 
+
 ```js
-const d3 = require("d3");
+(async function() {
+  const d3 = await import("d3");
+  console.log(d3);
+})();
 ```
 
 You can also require individual modules and combine them into a `d3` object using [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign):
 
 ```js
-const d3 = Object.assign({}, require("d3-format"), require("d3-geo"), require("d3-geo-projection"));
+(async function() {
+  const d3 = Object.assign({}, await import("d3-format"), await import("d3-geo"), await import("d3-geo-projection"));
+  console.log(d3);
+})();
 ```
