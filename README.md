@@ -61,14 +61,18 @@ Or import everything into a namespace (here, `d3`):
 import * as d3 from "d3";
 ```
 
-In Node:
+Or using dynamic import:
 
 ```js
-const d3 = require("d3");
+const d3 = await import("d3");
 ```
 
-You can also require individual modules and combine them into a `d3` object using [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign):
+You can also import individual modules and combine them into a `d3` object using [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign):
 
 ```js
-const d3 = Object.assign({}, require("d3-format"), require("d3-geo"), require("d3-geo-projection"));
+const d3 = await Promise.all([
+  import("d3-format"),
+  import("d3-geo"),
+  import("d3-geo-projection")
+]).then(d3 => Object.assign({}, ...d3));
 ```
