@@ -338,9 +338,9 @@ cross-spawn@^7.0.2:
     which "^2.0.1"
 
 "d3-array@2 - 3", "d3-array@2.10.0 - 3", "d3-array@2.5.0 - 3", d3-array@3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.0.3.tgz#ab42baeeb4718591966db05bd7140ae2a36ac0c4"
-  integrity sha512-mGU5ultTdQmCg57Bsz5MacfpcgOWjoetJSCh0Q3Azr6gX9s2PE8KAA/3S8ipwH6kmGPACHr+eyTq4MG9DnGPjA==
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.0.4.tgz#60550bcc9818be9ace88d269ccd97038fc399b55"
+  integrity sha512-ShFl90cxNqDaSynDF/Bik/kTzISqePqU3qo2fv6kSJEvF7y7tDCDpcU6WiT01rPO6zngZnrvJ/0j4q6Qg+5EQg==
   dependencies:
     internmap "1 - 2"
 
@@ -916,9 +916,9 @@ inherits@2:
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
 "internmap@1 - 2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/internmap/-/internmap-2.0.2.tgz#3efa1165209cc56133df1400df9c34a73e0dad93"
-  integrity sha512-6O4dJQZN4+83kg9agi21fbasiAn7V2JRvLv29/YT1Kz8f+ngakB1hMG+AP0mYquLOtjWhNO8CvKhhXT/7Tla/g==
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/internmap/-/internmap-2.0.3.tgz#6685f23755e43c524e251d29cbc97248e3061009"
+  integrity sha512-5Hh7Y1wQbvY5ooGgPbDaL5iYLAPzMTUrjMulskHLH6wnv/A+1q5rgEaiuqEjB+oxGXIVZs1FF+R/KPN3ZSQYYg==
 
 is-binary-path@~2.1.0:
   version "2.1.0"
