@@ -333,9 +333,9 @@ cross-spawn@^7.0.2:
     which "^2.0.1"
 
 "d3-array@2 - 3", "d3-array@2.10.0 - 3", "d3-array@2.5.0 - 3", d3-array@3:
-  version "3.1.0"
-  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.1.0.tgz#7e43a906c08a43c51a6a90692a03e9894c8fd041"
-  integrity sha512-XsImOCdTgRJoP3CIdgqw69++Nau4kPeNkD73HE5GrpKxL6WlUi+QHhQAO19vlMOuJiEMgN97ZC4zyc0dcaqEhQ==
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/d3-array/-/d3-array-3.1.1.tgz#7797eb53ead6b9083c75a45a681e93fc41bc468c"
+  integrity sha512-33qQ+ZoZlli19IFiQx4QEpf2CBEayMRzhlisJHSCsSUbDXv6ZishqS1x7uFVClKG4Wr7rZVHvaAttoLow6GqdQ==
   dependencies:
     internmap "1 - 2"
 
