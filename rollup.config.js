@@ -3,7 +3,7 @@ import json from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import ascii from "rollup-plugin-ascii";
 import {terser} from "rollup-plugin-terser";
-import * as meta from "./package.json";
+import {name, homepage, version, unpkg} from "./package.json";
 
 // Extract copyrights from the LICENSE.
 const copyright = readFileSync("./LICENSE", "utf-8")
@@ -15,12 +15,12 @@ const copyright = readFileSync("./LICENSE", "utf-8")
 const config = {
   input: "bundle.js",
   output: {
-    file: `dist/${meta.name}.js`,
+    file: `dist/${name}.js`,
     name: "d3",
     format: "umd",
     indent: false,
     extend: true,
-    banner: `// ${meta.homepage} v${meta.version} Copyright ${copyright}`
+    banner: `// ${homepage} v${version} Copyright ${copyright}`
   },
   plugins: [
     nodeResolve(),
@@ -39,7 +39,7 @@ export default [
     ...config,
     output: {
       ...config.output,
-      file: `dist/${meta.name}.min.js`
+      file: unpkg
     },
     plugins: [
       ...config.plugins,
