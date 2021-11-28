@@ -135,9 +135,9 @@ Methods for transforming arrays and for generating new arrays.
 
 Bin discrete samples into continuous, non-overlapping intervals.
 
-* [d3.bin](https://github.com/d3/d3-array/blob/v3.1.1/README.md#bin) - create a new bin generator.
+* [d3.bin](https://github.com/d3/d3-array/blob/v3.1.1/README.md#bin) - create a new bin-generator.
 * [*bin*](https://github.com/d3/d3-array/blob/v3.1.1/README.md#_bin) - bins a given array of samples.
-* [*bin*.value](https://github.com/d3/d3-array/blob/v3.1.1/README.md#bin_value) - specify a value accessor for each sample.
+* [*bin*.value](https://github.com/d3/d3-array/blob/v3.1.1/README.md#bin_value) - specify a value-accessor for each sample.
 * [*bin*.domain](https://github.com/d3/d3-array/blob/v3.1.1/README.md#bin_domain) - specify the interval of observable values.
 * [*bin*.thresholds](https://github.com/d3/d3-array/blob/v3.1.1/README.md#bin_thresholds) - specify how values are divided into bins.
 * [d3.thresholdFreedmanDiaconis](https://github.com/d3/d3-array/blob/v3.1.1/README.md#thresholdFreedmanDiaconis) - the Freedman–Diaconis binning rule.
