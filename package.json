@@ -68,7 +68,7 @@
   "devDependencies": {
     "@rollup/plugin-json": "4",
     "@rollup/plugin-node-resolve": "13",
-    "eslint": "7",
+    "eslint": "8",
     "mocha": "9",
     "rollup": "2",
     "rollup-plugin-ascii": "0.0",

@@ -554,21 +554,21 @@ Force-directed graph layout using velocity Verlet integration.
 * [*radial*.x](https://github.com/d3/d3-force/blob/v3.0.0/README.md#radial_x) - set the target center *x*-coordinate.
 * [*radial*.y](https://github.com/d3/d3-force/blob/v3.0.0/README.md#radial_y) - set the target center *y*-coordinate.
 
-## [Number Formats (d3-format)](https://github.com/d3/d3-format/tree/v3.0.1)
+## [Number Formats (d3-format)](https://github.com/d3/d3-format/tree/v3.1.0)
 
 Format numbers for human consumption.
 
-* [d3.format](https://github.com/d3/d3-format/blob/v3.0.1/README.md#format) - alias for *locale*.format on the default locale.
-* [d3.formatPrefix](https://github.com/d3/d3-format/blob/v3.0.1/README.md#formatPrefix) - alias for *locale*.formatPrefix on the default locale.
-* [*locale*.format](https://github.com/d3/d3-format/blob/v3.0.1/README.md#locale_format) - create a number format.
-* [*locale*.formatPrefix](https://github.com/d3/d3-format/blob/v3.0.1/README.md#locale_formatPrefix) - create a SI-prefix number format.
-* [d3.formatSpecifier](https://github.com/d3/d3-format/blob/v3.0.1/README.md#formatSpecifier) - parse a number format specifier.
-* [new d3.FormatSpecifier](https://github.com/d3/d3-format/blob/v3.0.1/README.md#FormatSpecifier) - augments a number format specifier object.
-* [d3.precisionFixed](https://github.com/d3/d3-format/blob/v3.0.1/README.md#precisionFixed) - compute decimal precision for fixed-point notation.
-* [d3.precisionPrefix](https://github.com/d3/d3-format/blob/v3.0.1/README.md#precisionPrefix) - compute decimal precision for SI-prefix notation.
-* [d3.precisionRound](https://github.com/d3/d3-format/blob/v3.0.1/README.md#precisionRound) - compute significant digits for rounded notation.
-* [d3.formatLocale](https://github.com/d3/d3-format/blob/v3.0.1/README.md#formatLocale) - define a custom locale.
-* [d3.formatDefaultLocale](https://github.com/d3/d3-format/blob/v3.0.1/README.md#formatDefaultLocale) - define the default locale.
+* [d3.format](https://github.com/d3/d3-format/blob/v3.1.0/README.md#format) - alias for *locale*.format on the default locale.
+* [d3.formatPrefix](https://github.com/d3/d3-format/blob/v3.1.0/README.md#formatPrefix) - alias for *locale*.formatPrefix on the default locale.
+* [*locale*.format](https://github.com/d3/d3-format/blob/v3.1.0/README.md#locale_format) - create a number format.
+* [*locale*.formatPrefix](https://github.com/d3/d3-format/blob/v3.1.0/README.md#locale_formatPrefix) - create a SI-prefix number format.
+* [d3.formatSpecifier](https://github.com/d3/d3-format/blob/v3.1.0/README.md#formatSpecifier) - parse a number format specifier.
+* [new d3.FormatSpecifier](https://github.com/d3/d3-format/blob/v3.1.0/README.md#FormatSpecifier) - augments a number format specifier object.
+* [d3.precisionFixed](https://github.com/d3/d3-format/blob/v3.1.0/README.md#precisionFixed) - compute decimal precision for fixed-point notation.
+* [d3.precisionPrefix](https://github.com/d3/d3-format/blob/v3.1.0/README.md#precisionPrefix) - compute decimal precision for SI-prefix notation.
+* [d3.precisionRound](https://github.com/d3/d3-format/blob/v3.1.0/README.md#precisionRound) - compute significant digits for rounded notation.
+* [d3.formatLocale](https://github.com/d3/d3-format/blob/v3.1.0/README.md#formatLocale) - define a custom locale.
+* [d3.formatDefaultLocale](https://github.com/d3/d3-format/blob/v3.1.0/README.md#formatDefaultLocale) - define the default locale.
 
 ## [Geographies (d3-geo)](https://github.com/d3/d3-geo/tree/v3.0.1)
 
@@ -700,70 +700,71 @@ Geographic projections, shapes and math.
 * [d3.geoClipCircle](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoClipCircle) - clips spherical geometries to a small circle.
 * [d3.geoClipRectangle](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
 
-## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/tree/v3.0.1)
+## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/tree/v3.1.0)
 
 Layout algorithms for visualizing hierarchical data.
 
-* [d3.hierarchy](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#hierarchy) - constructs a root node from hierarchical data.
-* [*node*.ancestors](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_ancestors) - generate an array of ancestors.
-* [*node*.descendants](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_descendants) - generate an array of descendants.
-* [*node*.leaves](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_leaves) - generate an array of leaves.
-* [*node*.find](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_find) - find a node in the hierarchy.
-* [*node*.path](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_path) - generate the shortest path to another node.
-* [*node*.links](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_links) - generate an array of links.
-* [*node*.sum](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_sum) - evaluate and aggregate quantitative values.
-* [*node*.count](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_count) - count the number of leaves.
-* [*node*.sort](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_sort) - sort all descendant siblings.
-* [*node*[Symbol.iterator]](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_iterator) - iterate on a hierarchy.
-* [*node*.each](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_each) - breadth-first traversal.
-* [*node*.eachAfter](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_eachAfter) - post-order traversal.
-* [*node*.eachBefore](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_eachBefore) - pre-order traversal.
-* [*node*.copy](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#node_copy) - copy a hierarchy.
-* [d3.stratify](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#stratify) - create a new stratify operator.
-* [*stratify*](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#_stratify) - construct a root node from tabular data.
-* [*stratify*.id](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#stratify_id) - set the node id accessor.
-* [*stratify*.parentId](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#stratify_parentId) - set the parent node id accessor.
-* [d3.cluster](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#cluster) - create a new cluster (dendrogram) layout.
-* [*cluster*](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#_cluster) - layout the specified hierarchy in a dendrogram.
-* [*cluster*.size](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#cluster_size) - set the layout size.
-* [*cluster*.nodeSize](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#cluster_nodeSize) - set the node size.
-* [*cluster*.separation](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#cluster_separation) - set the separation between leaves.
-* [d3.tree](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#tree) - create a new tidy tree layout.
-* [*tree*](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#_tree) - layout the specified hierarchy in a tidy tree.
-* [*tree*.size](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#tree_size) - set the layout size.
-* [*tree*.nodeSize](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#tree_nodeSize) - set the node size.
-* [*tree*.separation](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#tree_separation) - set the separation between nodes.
-* [d3.treemap](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap) - create a new treemap layout.
-* [*treemap*](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#_treemap) - layout the specified hierarchy as a treemap.
-* [*treemap*.tile](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_tile) - set the tiling method.
-* [*treemap*.size](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_size) - set the layout size.
-* [*treemap*.round](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_round) - set whether the output coordinates are rounded.
-* [*treemap*.padding](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_padding) - set the padding.
-* [*treemap*.paddingInner](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_paddingInner) - set the padding between siblings.
-* [*treemap*.paddingOuter](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_paddingOuter) - set the padding between parent and children.
-* [*treemap*.paddingTop](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_paddingTop) - set the padding between the parent’s top edge and children.
-* [*treemap*.paddingRight](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_paddingRight) - set the padding between the parent’s right edge and children.
-* [*treemap*.paddingBottom](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_paddingBottom) - set the padding between the parent’s bottom edge and children.
-* [*treemap*.paddingLeft](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemap_paddingLeft) - set the padding between the parent’s left edge and children.
-* [d3.treemapBinary](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemapBinary) - tile using a balanced binary tree.
-* [d3.treemapDice](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemapDice) - tile into a horizontal row.
-* [d3.treemapSlice](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemapSlice) - tile into a vertical column.
-* [d3.treemapSliceDice](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemapSliceDice) - alternate between slicing and dicing.
-* [d3.treemapSquarify](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemapSquarify) - tile using squarified rows per Bruls *et. al.*
-* [d3.treemapResquarify](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#treemapResquarify) - like d3.treemapSquarify, but performs stable updates.
-* [*squarify*.ratio](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#squarify_ratio) - set the desired rectangle aspect ratio.
-* [d3.partition](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#partition) - create a new partition (icicle or sunburst) layout.
-* [*partition*](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#_partition) - layout the specified hierarchy as a partition diagram.
-* [*partition*.size](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#partition_size) - set the layout size.
-* [*partition*.round](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#partition_round) - set whether the output coordinates are rounded.
-* [*partition*.padding](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#partition_padding) - set the padding.
-* [d3.pack](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#pack) - create a new circle-packing layout.
-* [*pack*](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#_pack) - layout the specified hierarchy using circle-packing.
-* [*pack*.radius](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#pack_radius) - set the radius accessor.
-* [*pack*.size](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#pack_size) - set the layout size.
-* [*pack*.padding](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#pack_padding) - set the padding.
-* [d3.packSiblings](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#packSiblings) - pack the specified array of circles.
-* [d3.packEnclose](https://github.com/d3/d3-hierarchy/blob/v3.0.1/README.md#packEnclose) - enclose the specified array of circles.
+* [d3.hierarchy](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#hierarchy) - constructs a root node from hierarchical data.
+* [*node*.ancestors](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_ancestors) - generate an array of ancestors.
+* [*node*.descendants](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_descendants) - generate an array of descendants.
+* [*node*.leaves](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_leaves) - generate an array of leaves.
+* [*node*.find](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_find) - find a node in the hierarchy.
+* [*node*.path](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_path) - generate the shortest path to another node.
+* [*node*.links](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_links) - generate an array of links.
+* [*node*.sum](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_sum) - evaluate and aggregate quantitative values.
+* [*node*.count](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_count) - count the number of leaves.
+* [*node*.sort](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_sort) - sort all descendant siblings.
+* [*node*[Symbol.iterator]](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_iterator) - iterate on a hierarchy.
+* [*node*.each](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_each) - breadth-first traversal.
+* [*node*.eachAfter](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_eachAfter) - post-order traversal.
+* [*node*.eachBefore](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_eachBefore) - pre-order traversal.
+* [*node*.copy](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#node_copy) - copy a hierarchy.
+* [d3.stratify](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#stratify) - create a new stratify operator.
+* [*stratify*](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#_stratify) - construct a root node from tabular data.
+* [*stratify*.id](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#stratify_id) - set the node id accessor.
+* [*stratify*.parentId](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#stratify_parentId) - set the parent node id accessor.
+* [*stratify*.path](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#stratify_path) - set the path accessor.
+* [d3.cluster](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#cluster) - create a new cluster (dendrogram) layout.
+* [*cluster*](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#_cluster) - layout the specified hierarchy in a dendrogram.
+* [*cluster*.size](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#cluster_size) - set the layout size.
+* [*cluster*.nodeSize](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#cluster_nodeSize) - set the node size.
+* [*cluster*.separation](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#cluster_separation) - set the separation between leaves.
+* [d3.tree](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#tree) - create a new tidy tree layout.
+* [*tree*](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#_tree) - layout the specified hierarchy in a tidy tree.
+* [*tree*.size](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#tree_size) - set the layout size.
+* [*tree*.nodeSize](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#tree_nodeSize) - set the node size.
+* [*tree*.separation](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#tree_separation) - set the separation between nodes.
+* [d3.treemap](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap) - create a new treemap layout.
+* [*treemap*](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#_treemap) - layout the specified hierarchy as a treemap.
+* [*treemap*.tile](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_tile) - set the tiling method.
+* [*treemap*.size](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_size) - set the layout size.
+* [*treemap*.round](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_round) - set whether the output coordinates are rounded.
+* [*treemap*.padding](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_padding) - set the padding.
+* [*treemap*.paddingInner](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_paddingInner) - set the padding between siblings.
+* [*treemap*.paddingOuter](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_paddingOuter) - set the padding between parent and children.
+* [*treemap*.paddingTop](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_paddingTop) - set the padding between the parent’s top edge and children.
+* [*treemap*.paddingRight](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_paddingRight) - set the padding between the parent’s right edge and children.
+* [*treemap*.paddingBottom](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_paddingBottom) - set the padding between the parent’s bottom edge and children.
+* [*treemap*.paddingLeft](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemap_paddingLeft) - set the padding between the parent’s left edge and children.
+* [d3.treemapBinary](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemapBinary) - tile using a balanced binary tree.
+* [d3.treemapDice](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemapDice) - tile into a horizontal row.
+* [d3.treemapSlice](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemapSlice) - tile into a vertical column.
+* [d3.treemapSliceDice](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemapSliceDice) - alternate between slicing and dicing.
+* [d3.treemapSquarify](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemapSquarify) - tile using squarified rows per Bruls *et. al.*
+* [d3.treemapResquarify](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#treemapResquarify) - like d3.treemapSquarify, but performs stable updates.
+* [*squarify*.ratio](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#squarify_ratio) - set the desired rectangle aspect ratio.
+* [d3.partition](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#partition) - create a new partition (icicle or sunburst) layout.
+* [*partition*](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#_partition) - layout the specified hierarchy as a partition diagram.
+* [*partition*.size](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#partition_size) - set the layout size.
+* [*partition*.round](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#partition_round) - set whether the output coordinates are rounded.
+* [*partition*.padding](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#partition_padding) - set the padding.
+* [d3.pack](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#pack) - create a new circle-packing layout.
+* [*pack*](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#_pack) - layout the specified hierarchy using circle-packing.
+* [*pack*.radius](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#pack_radius) - set the radius accessor.
+* [*pack*.size](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#pack_size) - set the layout size.
+* [*pack*.padding](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#pack_padding) - set the padding.
+* [d3.packSiblings](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#packSiblings) - pack the specified array of circles.
+* [d3.packEnclose](https://github.com/d3/d3-hierarchy/blob/v3.1.0/README.md#packEnclose) - enclose the specified array of circles.
 
 ## [Interpolators (d3-interpolate)](https://github.com/d3/d3-interpolate/tree/v3.0.1)
 
@@ -1294,22 +1295,22 @@ Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 * [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape/blob/v3.0.1/README.md#stackOffsetSilhouette) - center the streamgraph around zero.
 * [d3.stackOffsetWiggle](https://github.com/d3/d3-shape/blob/v3.0.1/README.md#stackOffsetWiggle) - minimize streamgraph wiggling.
 
-## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/tree/v3.0.0)
+## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/tree/v4.0.0)
 
 Parse and format times, inspired by strptime and strftime.
 
-* [d3.timeFormat](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormat) - alias for *locale*.format on the default locale.
-* [d3.timeParse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeParse) - alias for *locale*.parse on the default locale.
-* [d3.utcFormat](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#utcFormat) -  alias for *locale*.utcFormat on the default locale.
-* [d3.utcParse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#utcParse) -  alias for *locale*.utcParse on the default locale.
-* [d3.isoFormat](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#isoFormat) - an ISO 8601 UTC formatter.
-* [d3.isoParse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#isoParse) - an ISO 8601 UTC parser.
-* [*locale*.format](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#locale_format) - create a time formatter.
-* [*locale*.parse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#locale_parse) - create a time parser.
-* [*locale*.utcFormat](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#locale_utcFormat) - create a UTC formatter.
-* [*locale*.utcParse](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#locale_utcParse) - create a UTC parser.
-* [d3.timeFormatLocale](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormatLocale) - define a custom locale.
-* [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format/blob/v3.0.0/README.md#timeFormatDefaultLocale) - define the default locale.
+* [d3.timeFormat](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#timeFormat) - alias for *locale*.format on the default locale.
+* [d3.timeParse](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#timeParse) - alias for *locale*.parse on the default locale.
+* [d3.utcFormat](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#utcFormat) -  alias for *locale*.utcFormat on the default locale.
+* [d3.utcParse](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#utcParse) -  alias for *locale*.utcParse on the default locale.
+* [d3.isoFormat](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#isoFormat) - an ISO 8601 UTC formatter.
+* [d3.isoParse](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#isoParse) - an ISO 8601 UTC parser.
+* [*locale*.format](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#locale_format) - create a time formatter.
+* [*locale*.parse](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#locale_parse) - create a time parser.
+* [*locale*.utcFormat](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#locale_utcFormat) - create a UTC formatter.
+* [*locale*.utcParse](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#locale_utcParse) - create a UTC parser.
+* [d3.timeFormatLocale](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#timeFormatLocale) - define a custom locale.
+* [d3.timeFormatDefaultLocale](https://github.com/d3/d3-time-format/blob/v4.1.0/README.md#timeFormatDefaultLocale) - define the default locale.
 
 ## [Time Intervals (d3-time)](https://github.com/d3/d3-time/tree/v3.0.0)
 
