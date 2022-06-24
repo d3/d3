@@ -69,7 +69,7 @@
     "@rollup/plugin-json": "4",
     "@rollup/plugin-node-resolve": "13",
     "eslint": "8",
-    "mocha": "9",
+    "mocha": "10",
     "rollup": "2",
     "rollup-plugin-ascii": "0.0",
     "rollup-plugin-terser": "7"
