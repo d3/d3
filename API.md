@@ -336,26 +336,26 @@ Color ramps and palettes for quantitative, ordinal and categorical scales.
 * [d3.interpolateRainbow](https://github.com/d3/d3-scale-chromatic/blob/v3.0.0/README.md#interpolateRainbow) - the “less-angry” rainbow
 * [d3.interpolateSinebow](https://github.com/d3/d3-scale-chromatic/blob/v3.0.0/README.md#interpolateSinebow) - the “sinebow” smooth rainbow
 
-## [Contours (d3-contour)](https://github.com/d3/d3-contour/tree/v3.1.0)
+## [Contours (d3-contour)](https://github.com/d3/d3-contour/tree/v4.0.0)
 
 Compute contour polygons using marching squares.
 
-* [d3.contours](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#contours) - create a new contour generator.
-* [*contours*](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#_contours) - compute the contours for a given grid of values.
-* [*contours*.contour](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#contours_contour) - compute a contour for a given value.
-* [*contours*.size](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#contours_size) - set the size of a contour generator.
-* [*contours*.smooth](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#contours_smooth) - set whether or not the generated contours are smoothed.
-* [*contours*.thresholds](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#contours_thresholds) - set the thresholds of a contour generator.
-* [d3.contourDensity](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#contourDensity) - create a new density estimator.
-* [*density*](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#_density) - estimate the density of a given array of samples.
-* [*density*.x](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#density_x) - set the *x* accessor of the density estimator.
-* [*density*.y](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#density_y) - set the *y* accessor of the density estimator.
-* [*density*.weight](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#density_weight) - set the *weight* accessor of the density estimator.
-* [*density*.size](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#density_size) - set the size of the density estimator.
-* [*density*.cellSize](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#density_cellSize) - set the cell size of the density estimator.
-* [*density*.thresholds](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#density_thresholds) - set the thresholds of the density estimator.
-* [*density*.bandwidth](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#density_bandwidth) - set the bandwidth of the density estimator.
-* [*density*.contours](https://github.com/d3/d3-contour/blob/v3.1.0/README.md#density_contours) - compute density contours.
+* [d3.contours](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#contours) - create a new contour generator.
+* [*contours*](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#_contours) - compute the contours for a given grid of values.
+* [*contours*.contour](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#contours_contour) - compute a contour for a given value.
+* [*contours*.size](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#contours_size) - set the size of a contour generator.
+* [*contours*.smooth](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#contours_smooth) - set whether or not the generated contours are smoothed.
+* [*contours*.thresholds](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#contours_thresholds) - set the thresholds of a contour generator.
+* [d3.contourDensity](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#contourDensity) - create a new density estimator.
+* [*density*](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#_density) - estimate the density of a given array of samples.
+* [*density*.x](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#density_x) - set the *x* accessor of the density estimator.
+* [*density*.y](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#density_y) - set the *y* accessor of the density estimator.
+* [*density*.weight](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#density_weight) - set the *weight* accessor of the density estimator.
+* [*density*.size](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#density_size) - set the size of the density estimator.
+* [*density*.cellSize](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#density_cellSize) - set the cell size of the density estimator.
+* [*density*.thresholds](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#density_thresholds) - set the thresholds of the density estimator.
+* [*density*.bandwidth](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#density_bandwidth) - set the bandwidth of the density estimator.
+* [*density*.contours](https://github.com/d3/d3-contour/blob/v4.0.0/README.md#density_contours) - compute density contours.
 
 ## [Voronoi Diagrams (d3-delaunay)](https://github.com/d3/d3-delaunay/tree/v6.0.2)
 

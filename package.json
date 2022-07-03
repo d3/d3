@@ -39,7 +39,7 @@
     "d3-brush": "3",
     "d3-chord": "3",
     "d3-color": "3",
-    "d3-contour": "3",
+    "d3-contour": "4",
     "d3-delaunay": "6",
     "d3-dispatch": "3",
     "d3-drag": "3",
