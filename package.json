@@ -30,8 +30,11 @@
   "jsdelivr": "dist/d3.min.js",
   "unpkg": "dist/d3.min.js",
   "exports": {
-    "umd": "./dist/d3.min.js",
-    "default": "./src/index.js"
+    "./package.json": "./package.json",
+    ".": {
+      "umd": "./dist/d3.min.js",
+      "default": "./src/index.js"
+    }
   },
   "dependencies": {
     "d3-array": "3",
