@@ -3,7 +3,7 @@ import json from "@rollup/plugin-json";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import ascii from "rollup-plugin-ascii";
 import {terser} from "rollup-plugin-terser";
-import * as meta from "./package.json";
+import meta from "./package.json" assert {type: "json"};
 
 // Extract copyrights from the LICENSE.
 const copyright = readFileSync("./LICENSE", "utf-8")
