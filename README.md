@@ -14,12 +14,12 @@
 
 ## Installing
 
-If you use npm, `npm install d3`. You can also download the [latest release on GitHub](https://github.com/d3/d3/releases/latest). For vanilla HTML in modern browsers, import D3 from Skypack:
+If you use npm, `npm install d3`. You can also download the [latest release on GitHub](https://github.com/d3/d3/releases/latest). For vanilla HTML in modern browsers, import D3 from jsDelivr:
 
 ```html
 <script type="module">
 
-import * as d3 from "https://cdn.skypack.dev/d3@7";
+import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm";
 
 const div = d3.selectAll("div");
 
@@ -42,7 +42,7 @@ You can also use the standalone D3 microlibraries. For example, [d3-selection](h
 ```html
 <script type="module">
 
-import {selectAll} from "https://cdn.skypack.dev/d3-selection@3";
+import {selectAll} from "https://cdn.jsdelivr.net/npm/d3-selection@3/+esm";
 
 const div = selectAll("div");
 
