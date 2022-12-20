@@ -579,135 +579,136 @@ Format numbers for human consumption.
 * [d3.formatLocale](https://github.com/d3/d3-format/blob/v3.1.0/README.md#formatLocale) - define a custom locale.
 * [d3.formatDefaultLocale](https://github.com/d3/d3-format/blob/v3.1.0/README.md#formatDefaultLocale) - define the default locale.
 
-## [Geographies (d3-geo)](https://github.com/d3/d3-geo/tree/v3.0.1)
+## [Geographies (d3-geo)](https://github.com/d3/d3-geo/tree/v3.1.0)
 
 Geographic projections, shapes and math.
 
-### [Paths](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#paths)
+### [Paths](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#paths)
 
-* [d3.geoPath](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoPath) - create a new geographic path generator.
-* [*path*](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#_path) - project and render the specified feature.
-* [*path*.area](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#path_area) - compute the projected planar area of a given feature.
-* [*path*.bounds](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#path_bounds) - compute the projected planar bounding box of a given feature.
-* [*path*.centroid](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#path_centroid) - compute the projected planar centroid of a given feature.
-* [*path*.measure](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#path_measure) - compute the projected planar length of a given feature.
-* [*path*.projection](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#path_projection) - set the geographic projection.
-* [*path*.context](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#path_context) - set the render context.
-* [*path*.pointRadius](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#path_pointRadius) - set the radius to display point features.
+* [d3.geoPath](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoPath) - create a new geographic path generator.
+* [*path*](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#_path) - project and render the specified feature.
+* [*path*.area](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#path_area) - compute the projected planar area of a given feature.
+* [*path*.bounds](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#path_bounds) - compute the projected planar bounding box of a given feature.
+* [*path*.centroid](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#path_centroid) - compute the projected planar centroid of a given feature.
+* [*path*.measure](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#path_measure) - compute the projected planar length of a given feature.
+* [*path*.projection](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#path_projection) - set the geographic projection.
+* [*path*.context](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#path_context) - set the render context.
+* [*path*.digits](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#path_digits) - set the output precision.
+* [*path*.pointRadius](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#path_pointRadius) - set the radius to display point features.
 
-### [Projections](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projections)
+### [Projections](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projections)
 
-* [*projection*](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#_projection) - project the specified point from the sphere to the plane.
-* [*projection*.invert](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_invert) - unproject the specified point from the plane to the sphere.
-* [*projection*.stream](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_stream) - wrap the specified stream to project geometry.
-* [*projection*.preclip](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_preclip) - set the projection’s spherical clipping function.
-* [*projection*.postclip](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_postclip) - set the projection’s cartesian clipping function.
-* [*projection*.clipAngle](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_clipAngle) - set the radius of the clip circle.
-* [*projection*.clipExtent](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_clipExtent) - set the viewport clip extent, in pixels.
-* [*projection*.scale](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_scale) - set the scale factor.
-* [*projection*.translate](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_translate) - set the translation offset.
-* [*projection*.center](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_center) - set the center point.
-* [*projection*.angle](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_angle) - set the post-projection rotation.
-* [*projection*.reflectX](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_reflectX) - reflect the *x*-dimension.
-* [*projection*.reflectY](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_reflectY) - reflect the *y*-dimension.
-* [*projection*.rotate](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_rotate) - set the three-axis spherical rotation angles.
-* [*projection*.precision](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_precision) - set the precision threshold for adaptive sampling.
-* [*projection*.fitExtent](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_fitExtent) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitSize](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_fitSize) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitWidth](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
-* [*projection*.fitHeight](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
-* [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
-* [d3.geoAzimuthalEqualAreaRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
-* [d3.geoAzimuthalEquidistant](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
-* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoAzimuthalEquidistantRaw) - the raw azimuthal equidistant projection.
-* [d3.geoGnomonic](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoGnomonic) - the gnomonic projection.
-* [d3.geoGnomonicRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoGnomonicRaw) - the raw gnomonic projection.
-* [d3.geoOrthographic](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoOrthographic) - the azimuthal orthographic projection.
-* [d3.geoOrthographicRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoOrthographicRaw) - the raw azimuthal orthographic projection.
-* [d3.geoStereographic](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoStereographic) - the azimuthal stereographic projection.
-* [d3.geoStereographicRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoStereographicRaw) - the raw azimuthal stereographic projection.
-* [d3.geoEqualEarth](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoEqualEarth) - the Equal Earth projection.
-* [d3.geoEqualEarthRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoEqualEarthRaw) - the raw Equal Earth projection.
-* [d3.geoAlbersUsa](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoAlbersUsa) - a composite Albers projection for the United States.
-* [*conic*.parallels](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#conic_parallels) - set the two standard parallels.
-* [d3.geoAlbers](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoAlbers) - the Albers equal-area conic projection.
-* [d3.geoConicConformal](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoConicConformal) - the conic conformal projection.
-* [d3.geoConicConformalRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoConicConformalRaw) - the raw conic conformal projection.
-* [d3.geoConicEqualArea](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
-* [d3.geoConicEqualAreaRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
-* [d3.geoConicEquidistant](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoConicEquidistant) - the conic equidistant projection.
-* [d3.geoConicEquidistantRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
-* [d3.geoEquirectangular](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
-* [d3.geoEquirectangularRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoEquirectangularRaw) - the raw equirectangular (plate carreé) projection.
-* [d3.geoMercator](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoMercator) - the spherical Mercator projection.
-* [d3.geoMercatorRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoMercatorRaw) - the raw Mercator projection.
-* [d3.geoTransverseMercator](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoTransverseMercator) - the transverse spherical Mercator projection.
-* [d3.geoTransverseMercatorRaw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoTransverseMercatorRaw) - the raw transverse spherical Mercator projection.
-* [d3.geoNaturalEarth1](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoNaturalEarth1) - the Equal Earth projection, version 1.
-* [d3.geoNaturalEarth1Raw](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoNaturalEarth1Raw) - the raw Equal Earth projection, version 1
+* [*projection*](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#_projection) - project the specified point from the sphere to the plane.
+* [*projection*.invert](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_invert) - unproject the specified point from the plane to the sphere.
+* [*projection*.stream](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_stream) - wrap the specified stream to project geometry.
+* [*projection*.preclip](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_preclip) - set the projection’s spherical clipping function.
+* [*projection*.postclip](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_postclip) - set the projection’s cartesian clipping function.
+* [*projection*.clipAngle](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_clipAngle) - set the radius of the clip circle.
+* [*projection*.clipExtent](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_clipExtent) - set the viewport clip extent, in pixels.
+* [*projection*.scale](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_scale) - set the scale factor.
+* [*projection*.translate](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_translate) - set the translation offset.
+* [*projection*.center](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_center) - set the center point.
+* [*projection*.angle](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_angle) - set the post-projection rotation.
+* [*projection*.reflectX](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_reflectX) - reflect the *x*-dimension.
+* [*projection*.reflectY](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_reflectY) - reflect the *y*-dimension.
+* [*projection*.rotate](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_rotate) - set the three-axis spherical rotation angles.
+* [*projection*.precision](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_precision) - set the precision threshold for adaptive sampling.
+* [*projection*.fitExtent](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_fitExtent) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitSize](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_fitSize) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitWidth](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_fitWidth) - set the scale and translate to fit a GeoJSON object.
+* [*projection*.fitHeight](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#projection_fitHeight) - set the scale and translate to fit a GeoJSON object.
+* [d3.geoAzimuthalEqualArea](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoAzimuthalEqualArea) - the azimuthal equal-area projection.
+* [d3.geoAzimuthalEqualAreaRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoAzimuthalEqualAreaRaw) - the raw azimuthal equal-area projection.
+* [d3.geoAzimuthalEquidistant](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoAzimuthalEquidistant) - the azimuthal equidistant projection.
+* [d3.geoAzimuthalEquidistantRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoAzimuthalEquidistantRaw) - the raw azimuthal equidistant projection.
+* [d3.geoGnomonic](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoGnomonic) - the gnomonic projection.
+* [d3.geoGnomonicRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoGnomonicRaw) - the raw gnomonic projection.
+* [d3.geoOrthographic](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoOrthographic) - the azimuthal orthographic projection.
+* [d3.geoOrthographicRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoOrthographicRaw) - the raw azimuthal orthographic projection.
+* [d3.geoStereographic](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoStereographic) - the azimuthal stereographic projection.
+* [d3.geoStereographicRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoStereographicRaw) - the raw azimuthal stereographic projection.
+* [d3.geoEqualEarth](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoEqualEarth) - the Equal Earth projection.
+* [d3.geoEqualEarthRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoEqualEarthRaw) - the raw Equal Earth projection.
+* [d3.geoAlbersUsa](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoAlbersUsa) - a composite Albers projection for the United States.
+* [*conic*.parallels](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#conic_parallels) - set the two standard parallels.
+* [d3.geoAlbers](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoAlbers) - the Albers equal-area conic projection.
+* [d3.geoConicConformal](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoConicConformal) - the conic conformal projection.
+* [d3.geoConicConformalRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoConicConformalRaw) - the raw conic conformal projection.
+* [d3.geoConicEqualArea](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoConicEqualArea) - the conic equal-area (Albers) projection.
+* [d3.geoConicEqualAreaRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoConicEqualAreaRaw) - the raw conic equal-area (Albers) projection.
+* [d3.geoConicEquidistant](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoConicEquidistant) - the conic equidistant projection.
+* [d3.geoConicEquidistantRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoConicEquidistantRaw) - the raw conic equidistant projection.
+* [d3.geoEquirectangular](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoEquirectangular) - the equirectangular (plate carreé) projection.
+* [d3.geoEquirectangularRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoEquirectangularRaw) - the raw equirectangular (plate carreé) projection.
+* [d3.geoMercator](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoMercator) - the spherical Mercator projection.
+* [d3.geoMercatorRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoMercatorRaw) - the raw Mercator projection.
+* [d3.geoTransverseMercator](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoTransverseMercator) - the transverse spherical Mercator projection.
+* [d3.geoTransverseMercatorRaw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoTransverseMercatorRaw) - the raw transverse spherical Mercator projection.
+* [d3.geoNaturalEarth1](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoNaturalEarth1) - the Equal Earth projection, version 1.
+* [d3.geoNaturalEarth1Raw](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoNaturalEarth1Raw) - the raw Equal Earth projection, version 1
 
-### [Raw projections](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#raw-projections)
+### [Raw projections](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#raw-projections)
 
-* [*project*](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#_project) - project the specified point from the sphere to the plane.
-* [*project*.invert](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#project_invert) - unproject the specified point from the plane to the sphere.
-* [d3.geoProjection](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoProjection) - create a custom projection.
-* [d3.geoProjectionMutator](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoProjectionMutator) - create a custom configurable projection.
+* [*project*](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#_project) - project the specified point from the sphere to the plane.
+* [*project*.invert](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#project_invert) - unproject the specified point from the plane to the sphere.
+* [d3.geoProjection](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoProjection) - create a custom projection.
+* [d3.geoProjectionMutator](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoProjectionMutator) - create a custom configurable projection.
 
-### [Spherical Math](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#spherical-math)
+### [Spherical Math](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#spherical-math)
 
-* [d3.geoArea](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoArea) - compute the spherical area of a given feature.
-* [d3.geoBounds](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
-* [d3.geoCentroid](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoCentroid) - compute the spherical centroid of a given feature.
-* [d3.geoDistance](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoDistance) - compute the great-arc distance between two points.
-* [d3.geoLength](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
-* [d3.geoInterpolate](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoInterpolate) - interpolate between two points along a great arc.
-* [d3.geoContains](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoContains) - test whether a point is inside a given feature.
-* [d3.geoRotation](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoRotation) - create a rotation function for the specified angles.
-* [*rotation*](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#_rotation) - rotate the given point around the sphere.
-* [*rotation*.invert](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#rotation_invert) - unrotate the given point around the sphere.
+* [d3.geoArea](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoArea) - compute the spherical area of a given feature.
+* [d3.geoBounds](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoBounds) - compute the latitude-longitude bounding box for a given feature.
+* [d3.geoCentroid](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoCentroid) - compute the spherical centroid of a given feature.
+* [d3.geoDistance](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoDistance) - compute the great-arc distance between two points.
+* [d3.geoLength](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoLength) - compute the length of a line string or the perimeter of a polygon.
+* [d3.geoInterpolate](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoInterpolate) - interpolate between two points along a great arc.
+* [d3.geoContains](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoContains) - test whether a point is inside a given feature.
+* [d3.geoRotation](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoRotation) - create a rotation function for the specified angles.
+* [*rotation*](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#_rotation) - rotate the given point around the sphere.
+* [*rotation*.invert](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#rotation_invert) - unrotate the given point around the sphere.
 
-### [Spherical Shapes](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#spherical-shapes)
+### [Spherical Shapes](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#spherical-shapes)
 
-* [d3.geoCircle](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoCircle) - create a circle generator.
-* [*circle*](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#_circle) - generate a piecewise circle as a Polygon.
-* [*circle*.center](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#circle_center) - specify the circle center in latitude and longitude.
-* [*circle*.radius](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#circle_radius) - specify the angular radius in degrees.
-* [*circle*.precision](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#circle_precision) - specify the precision of the piecewise circle.
-* [d3.geoGraticule](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoGraticule) - create a graticule generator.
-* [*graticule*](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#_graticule) - generate a MultiLineString of meridians and parallels.
-* [*graticule*.lines](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_lines) - generate an array of LineStrings of meridians and parallels.
-* [*graticule*.outline](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_outline) - generate a Polygon of the graticule’s extent.
-* [*graticule*.extent](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_extent) - get or set the major & minor extents.
-* [*graticule*.extentMajor](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_extentMajor) - get or set the major extent.
-* [*graticule*.extentMinor](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_extentMinor) - get or set the minor extent.
-* [*graticule*.step](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_step) - get or set the major & minor step intervals.
-* [*graticule*.stepMajor](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_stepMajor) - get or set the major step intervals.
-* [*graticule*.stepMinor](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_stepMinor) - get or set the minor step intervals.
-* [*graticule*.precision](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#graticule_precision) - get or set the latitudinal precision.
-* [d3.geoGraticule10](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoGraticule10) - generate the default 10° global graticule.
+* [d3.geoCircle](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoCircle) - create a circle generator.
+* [*circle*](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#_circle) - generate a piecewise circle as a Polygon.
+* [*circle*.center](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#circle_center) - specify the circle center in latitude and longitude.
+* [*circle*.radius](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#circle_radius) - specify the angular radius in degrees.
+* [*circle*.precision](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#circle_precision) - specify the precision of the piecewise circle.
+* [d3.geoGraticule](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoGraticule) - create a graticule generator.
+* [*graticule*](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#_graticule) - generate a MultiLineString of meridians and parallels.
+* [*graticule*.lines](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_lines) - generate an array of LineStrings of meridians and parallels.
+* [*graticule*.outline](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_outline) - generate a Polygon of the graticule’s extent.
+* [*graticule*.extent](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_extent) - get or set the major & minor extents.
+* [*graticule*.extentMajor](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_extentMajor) - get or set the major extent.
+* [*graticule*.extentMinor](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_extentMinor) - get or set the minor extent.
+* [*graticule*.step](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_step) - get or set the major & minor step intervals.
+* [*graticule*.stepMajor](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_stepMajor) - get or set the major step intervals.
+* [*graticule*.stepMinor](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_stepMinor) - get or set the minor step intervals.
+* [*graticule*.precision](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#graticule_precision) - get or set the latitudinal precision.
+* [d3.geoGraticule10](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoGraticule10) - generate the default 10° global graticule.
 
-### [Streams](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#streams)
+### [Streams](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#streams)
 
-* [d3.geoStream](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoStream) - convert a GeoJSON object to a geometry stream.
-* [*stream*.point](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#stream_point) - indicates a point with the specified coordinates.
-* [*stream*.lineStart](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#stream_lineStart) - indicates the start of a line or ring.
-* [*stream*.lineEnd](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#stream_lineEnd) - indicates the end of a line or ring.
-* [*stream*.polygonStart](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#stream_polygonStart) - indicates the start of a polygon.
-* [*stream*.polygonEnd](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#stream_polygonEnd) - indicates the end of a polygon.
-* [*stream*.sphere](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#stream_sphere) - indicates the sphere.
+* [d3.geoStream](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoStream) - convert a GeoJSON object to a geometry stream.
+* [*stream*.point](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#stream_point) - indicates a point with the specified coordinates.
+* [*stream*.lineStart](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#stream_lineStart) - indicates the start of a line or ring.
+* [*stream*.lineEnd](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#stream_lineEnd) - indicates the end of a line or ring.
+* [*stream*.polygonStart](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#stream_polygonStart) - indicates the start of a polygon.
+* [*stream*.polygonEnd](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#stream_polygonEnd) - indicates the end of a polygon.
+* [*stream*.sphere](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#stream_sphere) - indicates the sphere.
 
-### [Transforms](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#transforms)
+### [Transforms](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#transforms)
 
-* [d3.geoTransform](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoTransform) - define a custom geometry transform.
-* [d3.geoIdentity](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoIdentity) - scale, translate or clip planar geometry.
+* [d3.geoTransform](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoTransform) - define a custom geometry transform.
+* [d3.geoIdentity](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoIdentity) - scale, translate or clip planar geometry.
 
-### [Clipping](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#clipping)
+### [Clipping](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#clipping)
 
-* [*preclip*](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#preclip) - pre-clipping in geographic coordinates.
-* [*postclip*](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#postclip) - post-clipping in planar coordinates.
-* [d3.geoClipAntimeridian](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
-* [d3.geoClipCircle](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoClipCircle) - clips spherical geometries to a small circle.
-* [d3.geoClipRectangle](https://github.com/d3/d3-geo/blob/v3.0.1/README.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
+* [*preclip*](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#preclip) - pre-clipping in geographic coordinates.
+* [*postclip*](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#postclip) - post-clipping in planar coordinates.
+* [d3.geoClipAntimeridian](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoClipAntimeridian) - cuts spherical geometries that cross the antimeridian.
+* [d3.geoClipCircle](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoClipCircle) - clips spherical geometries to a small circle.
+* [d3.geoClipRectangle](https://github.com/d3/d3-geo/blob/v3.1.0/README.md#geoClipRectangle) - clips planar geometries to a rectangular viewport.
 
 ## [Hierarchies (d3-hierarchy)](https://github.com/d3/d3-hierarchy/tree/v3.1.2)
 
@@ -809,20 +810,21 @@ Interpolate numbers, colors, strings, arrays, objects, whatever!
 * [d3.interpolateBasisClosed](https://github.com/d3/d3-interpolate/blob/v3.0.1/README.md#interpolateBasisClosed) - generate a closed B-spline through a set of values.
 * [d3.piecewise](https://github.com/d3/d3-interpolate/blob/v3.0.1/README.md#piecewise) - generate a piecewise linear interpolator from a set of values.
 
-## [Paths (d3-path)](https://github.com/d3/d3-path/tree/v3.0.1)
+## [Paths (d3-path)](https://github.com/d3/d3-path/tree/v3.1.0)
 
 Serialize Canvas path commands to SVG.
 
-* [d3.path](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path) - create a new path serializer.
-* [*path*.moveTo](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_moveTo) - move to the given point.
-* [*path*.closePath](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_closePath) - close the current subpath.
-* [*path*.lineTo](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_lineTo) - draw a straight line segment.
-* [*path*.quadraticCurveTo](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_quadraticCurveTo) - draw a quadratic Bézier segment.
-* [*path*.bezierCurveTo](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_bezierCurveTo) - draw a cubic Bézier segment.
-* [*path*.arcTo](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_arcTo) - draw a circular arc segment.
-* [*path*.arc](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_arc) - draw a circular arc segment.
-* [*path*.rect](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_rect) - draw a rectangle.
-* [*path*.toString](https://github.com/d3/d3-path/blob/v3.0.1/README.md#path_toString) - serialize to an SVG path data string.
+* [d3.path](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path) - create a new path serializer.
+* [*path*.moveTo](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_moveTo) - move to the given point.
+* [*path*.closePath](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_closePath) - close the current subpath.
+* [*path*.lineTo](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_lineTo) - draw a straight line segment.
+* [*path*.quadraticCurveTo](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_quadraticCurveTo) - draw a quadratic Bézier segment.
+* [*path*.bezierCurveTo](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_bezierCurveTo) - draw a cubic Bézier segment.
+* [*path*.arcTo](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_arcTo) - draw a circular arc segment.
+* [*path*.arc](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_arc) - draw a circular arc segment.
+* [*path*.rect](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_rect) - draw a rectangle.
+* [*path*.digits](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_digits) - set the output precision.
+* [*path*.toString](https://github.com/d3/d3-path/blob/v3.1.0/README.md#path_toString) - serialize to an SVG path data string.
 
 ## [Polygons (d3-polygon)](https://github.com/d3/d3-polygon/tree/v3.0.1)
 
@@ -1126,191 +1128,198 @@ Transform the DOM by selecting elements and joining to data.
 * [d3.namespace](https://github.com/d3/d3-selection/blob/v3.0.0/README.md#namespace) - qualify a prefixed XML name, such as “xlink:href”.
 * [d3.namespaces](https://github.com/d3/d3-selection/blob/v3.0.0/README.md#namespaces) - the built-in XML namespaces.
 
-## [Shapes (d3-shape)](https://github.com/d3/d3-shape/tree/v3.1.0)
+## [Shapes (d3-shape)](https://github.com/d3/d3-shape/tree/v3.2.0)
 
 Graphical primitives for visualization.
 
-### [Arcs](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arcs)
+### [Arcs](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arcs)
 
 Circular or annular sectors, as in a pie or donut chart.
 
-* [d3.arc](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc) - create a new arc generator.
-* [*arc*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_arc) - generate an arc for the given datum.
-* [*arc*.centroid](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_centroid) - compute an arc’s midpoint.
-* [*arc*.innerRadius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_innerRadius) - set the inner radius.
-* [*arc*.outerRadius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_outerRadius) - set the outer radius.
-* [*arc*.cornerRadius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_cornerRadius) - set the corner radius, for rounded corners.
-* [*arc*.startAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_startAngle) - set the start angle.
-* [*arc*.endAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_endAngle) - set the end angle.
-* [*arc*.padAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_padAngle) - set the angle between adjacent arcs, for padded arcs.
-* [*arc*.padRadius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_padRadius) - set the radius at which to linearize padding.
-* [*arc*.context](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#arc_context) - set the rendering context.
+* [d3.arc](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc) - create a new arc generator.
+* [*arc*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_arc) - generate an arc for the given datum.
+* [*arc*.centroid](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_centroid) - compute an arc’s midpoint.
+* [*arc*.innerRadius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_innerRadius) - set the inner radius.
+* [*arc*.outerRadius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_outerRadius) - set the outer radius.
+* [*arc*.cornerRadius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_cornerRadius) - set the corner radius, for rounded corners.
+* [*arc*.startAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_startAngle) - set the start angle.
+* [*arc*.endAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_endAngle) - set the end angle.
+* [*arc*.padAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_padAngle) - set the angle between adjacent arcs, for padded arcs.
+* [*arc*.padRadius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_padRadius) - set the radius at which to linearize padding.
+* [*arc*.context](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_context) - set the rendering context.
+* [*arc*.digits](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#arc_digits) - set the output precision.
 
-### [Pies](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pies)
+### [Pies](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pies)
 
 Compute the necessary angles to represent a tabular dataset as a pie or donut chart.
 
-* [d3.pie](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pie) - create a new pie generator.
-* [*pie*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_pie) - compute the arc angles for the given dataset.
-* [*pie*.value](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pie_value) - set the value accessor.
-* [*pie*.sort](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pie_sort) - set the sort order comparator.
-* [*pie*.sortValues](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pie_sortValues) - set the sort order comparator.
-* [*pie*.startAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pie_startAngle) - set the overall start angle.
-* [*pie*.endAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pie_endAngle) - set the overall end angle.
-* [*pie*.padAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pie_padAngle) - set the pad angle between adjacent arcs.
+* [d3.pie](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pie) - create a new pie generator.
+* [*pie*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_pie) - compute the arc angles for the given dataset.
+* [*pie*.value](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pie_value) - set the value accessor.
+* [*pie*.sort](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pie_sort) - set the sort order comparator.
+* [*pie*.sortValues](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pie_sortValues) - set the sort order comparator.
+* [*pie*.startAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pie_startAngle) - set the overall start angle.
+* [*pie*.endAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pie_endAngle) - set the overall end angle.
+* [*pie*.padAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pie_padAngle) - set the pad angle between adjacent arcs.
 
-### [Lines](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#lines)
+### [Lines](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#lines)
 
 A spline or polyline, as in a line chart.
 
-* [d3.line](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#line) - create a new line generator.
-* [*line*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_line) - generate a line for the given dataset.
-* [*line*.x](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#line_x) - set the *x* accessor.
-* [*line*.y](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#line_y) - set the *y* accessor.
-* [*line*.defined](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#line_defined) - set the defined accessor.
-* [*line*.curve](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#line_curve) - set the curve interpolator.
-* [*line*.context](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#line_context) - set the rendering context.
-* [d3.lineRadial](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#lineRadial) - create a new radial line generator.
-* [*lineRadial*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_lineRadial) - generate a line for the given dataset.
-* [*lineRadial*.angle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#lineRadial_angle) - set the angle accessor.
-* [*lineRadial*.radius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#lineRadial_radius) - set the radius accessor.
-* [*lineRadial*.defined](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#lineRadial_defined) - set the defined accessor.
-* [*lineRadial*.curve](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#lineRadial_curve) - set the curve interpolator.
-* [*lineRadial*.context](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#lineRadial_context) - set the rendering context.
+* [d3.line](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#line) - create a new line generator.
+* [*line*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_line) - generate a line for the given dataset.
+* [*line*.x](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#line_x) - set the *x* accessor.
+* [*line*.y](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#line_y) - set the *y* accessor.
+* [*line*.defined](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#line_defined) - set the defined accessor.
+* [*line*.curve](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#line_curve) - set the curve interpolator.
+* [*line*.context](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#line_context) - set the rendering context.
+* [*line*.digits](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#line_digits) - set the output precision.
+* [d3.lineRadial](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#lineRadial) - create a new radial line generator.
+* [*lineRadial*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_lineRadial) - generate a line for the given dataset.
+* [*lineRadial*.angle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#lineRadial_angle) - set the angle accessor.
+* [*lineRadial*.radius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#lineRadial_radius) - set the radius accessor.
+* [*lineRadial*.defined](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#lineRadial_defined) - set the defined accessor.
+* [*lineRadial*.curve](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#lineRadial_curve) - set the curve interpolator.
+* [*lineRadial*.context](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#lineRadial_context) - set the rendering context.
+* [*lineRadial*.digits](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#lineRadial_digits) - set the output precision.
 
-### [Areas](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areas)
+### [Areas](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areas)
 
 An area, defined by a bounding topline and baseline, as in an area chart.
 
-* [d3.area](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area) - create a new area generator.
-* [*area*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_area) - generate an area for the given dataset.
-* [*area*.x](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_x) - set the *x0* and *x1* accessors.
-* [*area*.x0](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_x0) - set the baseline *x* accessor.
-* [*area*.x1](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_x1) - set the topline *x* accessor.
-* [*area*.y](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_y) - set the *y0* and *y1* accessors.
-* [*area*.y0](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_y0) - set the baseline *y* accessor.
-* [*area*.y1](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_y1) - set the topline *y* accessor.
-* [*area*.defined](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_defined) - set the defined accessor.
-* [*area*.curve](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_curve) - set the curve interpolator.
-* [*area*.context](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_context) - set the rendering context.
-* [*area*.lineX0](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_lineX0) - derive a line for the left edge of an area.
-* [*area*.lineY0](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_lineY0) - derive a line for the top edge of an area.
-* [*area*.lineX1](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_lineX1) - derive a line for the right edge of an area.
-* [*area*.lineY1](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#area_lineY1) - derive a line for the bottom edge of an area.
-* [d3.areaRadial](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial) - create a new radial area generator.
-* [*areaRadial*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_areaRadial) - generate an area for the given dataset.
-* [*areaRadial*.angle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_angle) - set the start and end angle accessors.
-* [*areaRadial*.startAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_startAngle) - set the start angle accessor.
-* [*areaRadial*.endAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_endAngle) - set the end angle accessor.
-* [*areaRadial*.radius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_radius) - set the inner and outer radius accessors.
-* [*areaRadial*.innerRadius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_innerRadius) - set the inner radius accessor.
-* [*areaRadial*.outerRadius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_outerRadius) - set the outer radius accessor.
-* [*areaRadial*.defined](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_defined) - set the defined accessor.
-* [*areaRadial*.curve](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_curve) - set the curve interpolator.
-* [*areaRadial*.context](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_context) - set the rendering context.
-* [*areaRadial*.lineStartAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
-* [*areaRadial*.lineInnerRadius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
-* [*areaRadial*.lineEndAngle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
-* [*areaRadial*.lineOuterRadius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
+* [d3.area](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area) - create a new area generator.
+* [*area*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_area) - generate an area for the given dataset.
+* [*area*.x](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_x) - set the *x0* and *x1* accessors.
+* [*area*.x0](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_x0) - set the baseline *x* accessor.
+* [*area*.x1](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_x1) - set the topline *x* accessor.
+* [*area*.y](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_y) - set the *y0* and *y1* accessors.
+* [*area*.y0](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_y0) - set the baseline *y* accessor.
+* [*area*.y1](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_y1) - set the topline *y* accessor.
+* [*area*.defined](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_defined) - set the defined accessor.
+* [*area*.curve](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_curve) - set the curve interpolator.
+* [*area*.context](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_context) - set the rendering context.
+* [*area*.digits](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_digits) - set the output precision.
+* [*area*.lineX0](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_lineX0) - derive a line for the left edge of an area.
+* [*area*.lineY0](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_lineY0) - derive a line for the top edge of an area.
+* [*area*.lineX1](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_lineX1) - derive a line for the right edge of an area.
+* [*area*.lineY1](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#area_lineY1) - derive a line for the bottom edge of an area.
+* [d3.areaRadial](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial) - create a new radial area generator.
+* [*areaRadial*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_areaRadial) - generate an area for the given dataset.
+* [*areaRadial*.angle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_angle) - set the start and end angle accessors.
+* [*areaRadial*.startAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_startAngle) - set the start angle accessor.
+* [*areaRadial*.endAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_endAngle) - set the end angle accessor.
+* [*areaRadial*.radius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_radius) - set the inner and outer radius accessors.
+* [*areaRadial*.innerRadius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_innerRadius) - set the inner radius accessor.
+* [*areaRadial*.outerRadius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_outerRadius) - set the outer radius accessor.
+* [*areaRadial*.defined](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_defined) - set the defined accessor.
+* [*areaRadial*.curve](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_curve) - set the curve interpolator.
+* [*areaRadial*.context](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_context) - set the rendering context.
+* [*areaRadial*.digits](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_digits) - set the output precision.
+* [*areaRadial*.lineStartAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_lineStartAngle) - derive a line for the start edge of an area.
+* [*areaRadial*.lineInnerRadius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_lineInnerRadius) - derive a line for the inner edge of an area.
+* [*areaRadial*.lineEndAngle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_lineEndAngle) - derive a line for the end edge of an area.
+* [*areaRadial*.lineOuterRadius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#areaRadial_lineOuterRadius) - derive a line for the outer edge of an area.
 
-### [Curves](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curves)
+### [Curves](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curves)
 
 Interpolate between points to produce a continuous shape.
 
-* [d3.curveBasis](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveBasis) - a cubic basis spline, repeating the end points.
-* [d3.curveBasisClosed](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveBasisClosed) - a closed cubic basis spline.
-* [d3.curveBasisOpen](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveBasisOpen) - a cubic basis spline.
-* [d3.curveBundle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveBundle) - a straightened cubic basis spline.
-* [*bundle*.beta](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveBundle_beta) - set the bundle tension *beta*.
-* [d3.curveBumpX](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveBumpX) - a cubic Bézier spline with horizontal tangents.
-* [d3.curveBumpY](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveBumpY) - a cubic Bézier spline with vertical tangents.
-* [d3.curveCardinal](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
-* [d3.curveCardinalClosed](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveCardinalClosed) - a closed cubic cardinal spline.
-* [d3.curveCardinalOpen](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveCardinalOpen) - a cubic cardinal spline.
-* [*cardinal*.tension](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveCardinal_tension) - set the cardinal spline tension.
-* [d3.curveCatmullRom](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
-* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
-* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
-* [*catmullRom*.alpha](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveCatmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
-* [d3.curveLinear](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveLinear) - a polyline.
-* [d3.curveLinearClosed](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveLinearClosed) - a closed polyline.
-* [d3.curveMonotoneX](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
-* [d3.curveMonotoneY](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveMonotoneY) - a cubic spline that, given monotonicity in *y*, preserves it in *x*.
-* [d3.curveNatural](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveNatural) - a natural cubic spline.
-* [d3.curveStep](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveStep) - a piecewise constant function.
-* [d3.curveStepAfter](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveStepAfter) - a piecewise constant function.
-* [d3.curveStepBefore](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curveStepBefore) - a piecewise constant function.
-* [*curve*.areaStart](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curve_areaStart) - start a new area segment.
-* [*curve*.areaEnd](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curve_areaEnd) - end the current area segment.
-* [*curve*.lineStart](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curve_lineStart) - start a new line segment.
-* [*curve*.lineEnd](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curve_lineEnd) - end the current line segment.
-* [*curve*.point](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#curve_point) - add a point to the current line segment.
+* [d3.curveBasis](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveBasis) - a cubic basis spline, repeating the end points.
+* [d3.curveBasisClosed](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveBasisClosed) - a closed cubic basis spline.
+* [d3.curveBasisOpen](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveBasisOpen) - a cubic basis spline.
+* [d3.curveBundle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveBundle) - a straightened cubic basis spline.
+* [*bundle*.beta](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveBundle_beta) - set the bundle tension *beta*.
+* [d3.curveBumpX](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveBumpX) - a cubic Bézier spline with horizontal tangents.
+* [d3.curveBumpY](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveBumpY) - a cubic Bézier spline with vertical tangents.
+* [d3.curveCardinal](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveCardinal) - a cubic cardinal spline, with one-sided difference at each end.
+* [d3.curveCardinalClosed](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveCardinalClosed) - a closed cubic cardinal spline.
+* [d3.curveCardinalOpen](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveCardinalOpen) - a cubic cardinal spline.
+* [*cardinal*.tension](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveCardinal_tension) - set the cardinal spline tension.
+* [d3.curveCatmullRom](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveCatmullRom) - a cubic Catmull–Rom spline, with one-sided difference at each end.
+* [d3.curveCatmullRomClosed](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveCatmullRomClosed) - a closed cubic Catmull–Rom spline.
+* [d3.curveCatmullRomOpen](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveCatmullRomOpen) - a cubic Catmull–Rom spline.
+* [*catmullRom*.alpha](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveCatmullRom_alpha) - set the Catmull–Rom parameter *alpha*.
+* [d3.curveLinear](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveLinear) - a polyline.
+* [d3.curveLinearClosed](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveLinearClosed) - a closed polyline.
+* [d3.curveMonotoneX](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveMonotoneX) - a cubic spline that, given monotonicity in *x*, preserves it in *y*.
+* [d3.curveMonotoneY](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveMonotoneY) - a cubic spline that, given monotonicity in *y*, preserves it in *x*.
+* [d3.curveNatural](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveNatural) - a natural cubic spline.
+* [d3.curveStep](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveStep) - a piecewise constant function.
+* [d3.curveStepAfter](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveStepAfter) - a piecewise constant function.
+* [d3.curveStepBefore](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curveStepBefore) - a piecewise constant function.
+* [*curve*.areaStart](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curve_areaStart) - start a new area segment.
+* [*curve*.areaEnd](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curve_areaEnd) - end the current area segment.
+* [*curve*.lineStart](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curve_lineStart) - start a new line segment.
+* [*curve*.lineEnd](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curve_lineEnd) - end the current line segment.
+* [*curve*.point](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#curve_point) - add a point to the current line segment.
 
-### [Links](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#links)
+### [Links](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#links)
 
 A smooth cubic Bézier curve from a source to a target.
 
-* [d3.link](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#link) - create a new link generator.
-* [d3.linkVertical](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#linkVertical) - create a new vertical link generator.
-* [d3.linkHorizontal](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#linkHorizontal) - create a new horizontal link generator.
-* [*link*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_link) - generate a link.
-* [*link*.source](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#link_source) - set the source accessor.
-* [*link*.target](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#link_target) - set the target accessor.
-* [*link*.x](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#link_x) - set the point *x*-accessor.
-* [*link*.y](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#link_y) - set the point *y*-accessor.
-* [*link*.context](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#link_context) - set the rendering context.
-* [d3.linkRadial](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#linkRadial) - create a new radial link generator.
-* [*linkRadial*.angle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#linkRadial_angle) - set the point *angle* accessor.
-* [*linkRadial*.radius](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#linkRadial_radius) - set the point *radius* accessor.
+* [d3.link](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#link) - create a new link generator.
+* [d3.linkVertical](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#linkVertical) - create a new vertical link generator.
+* [d3.linkHorizontal](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#linkHorizontal) - create a new horizontal link generator.
+* [*link*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_link) - generate a link.
+* [*link*.source](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#link_source) - set the source accessor.
+* [*link*.target](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#link_target) - set the target accessor.
+* [*link*.x](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#link_x) - set the point *x*-accessor.
+* [*link*.y](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#link_y) - set the point *y*-accessor.
+* [*link*.context](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#link_context) - set the rendering context.
+* [*link*.digits](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#link_digits) - set the output precision.
+* [d3.linkRadial](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#linkRadial) - create a new radial link generator.
+* [*linkRadial*.angle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#linkRadial_angle) - set the point *angle* accessor.
+* [*linkRadial*.radius](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#linkRadial_radius) - set the point *radius* accessor.
 
-### [Symbols](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbols)
+### [Symbols](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbols)
 
 A categorical shape encoding, as in a scatterplot.
 
-* [d3.symbol](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbol) - create a new symbol generator.
-* [*symbol*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_symbol) - generate a symbol for the given datum.
-* [*symbol*.type](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbol_type) - set the symbol type.
-* [*symbol*.size](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbol_size) - set the size of the symbol in square pixels.
-* [*symbol*.context](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbol_context) - set the rendering context.
-* [d3.symbolsFill](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolsFill) - an array of built-in symbol types for filling.
-* [d3.symbolsStroke](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolsStroke) - an array of built-in symbol types for stroking.
-* [d3.symbolAsterisk](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolAsterisk) - an asterisk; for stroke.
-* [d3.symbolCircle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolCircle) - a circle; for fill or stroke.
-* [d3.symbolCross](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolCross) - a Greek cross with arms of equal length; for fill.
-* [d3.symbolDiamond](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolDiamond) - a rhombus; for fill.
-* [d3.symbolDiamond2](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolDiamond2) - a rotated square; for stroke.
-* [d3.symbolPlus](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolPlus) - a plus sign; for stroke.
-* [d3.symbolSquare](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolSquare) - a square; for fill.
-* [d3.symbolSquare2](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolSquare2) - a square; for stroke.
-* [d3.symbolStar](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolStar) - a pentagonal star (pentagram); for fill.
-* [d3.symbolTriangle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolTriangle) - an up-pointing triangle; for fill.
-* [d3.symbolTriangle2](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolTriangle2) - an up-pointing triangle; for stroke.
-* [d3.symbolWye](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolWye) - a Y shape; for fill.
-* [d3.symbolX](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolX) - an X shape; for stroke.
-* [d3.pointRadial](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#pointRadial) - relative coordinates of a point given an angle and radius.
-* [*symbolType*.draw](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#symbolType_draw) - draw this symbol to the given context.
+* [d3.symbol](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbol) - create a new symbol generator.
+* [*symbol*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_symbol) - generate a symbol for the given datum.
+* [*symbol*.type](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbol_type) - set the symbol type.
+* [*symbol*.size](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbol_size) - set the size of the symbol in square pixels.
+* [*symbol*.context](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbol_context) - set the rendering context.
+* [*symbol*.digits](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbol_digits) - set the output precision.
+* [d3.symbolsFill](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolsFill) - an array of built-in symbol types for filling.
+* [d3.symbolsStroke](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolsStroke) - an array of built-in symbol types for stroking.
+* [d3.symbolAsterisk](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolAsterisk) - an asterisk; for stroke.
+* [d3.symbolCircle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolCircle) - a circle; for fill or stroke.
+* [d3.symbolCross](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolCross) - a Greek cross with arms of equal length; for fill.
+* [d3.symbolDiamond](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolDiamond) - a rhombus; for fill.
+* [d3.symbolDiamond2](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolDiamond2) - a rotated square; for stroke.
+* [d3.symbolPlus](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolPlus) - a plus sign; for stroke.
+* [d3.symbolSquare](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolSquare) - a square; for fill.
+* [d3.symbolSquare2](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolSquare2) - a square; for stroke.
+* [d3.symbolStar](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolStar) - a pentagonal star (pentagram); for fill.
+* [d3.symbolTriangle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolTriangle) - an up-pointing triangle; for fill.
+* [d3.symbolTriangle2](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolTriangle2) - an up-pointing triangle; for stroke.
+* [d3.symbolWye](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolWye) - a Y shape; for fill.
+* [d3.symbolX](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolX) - an X shape; for stroke.
+* [d3.pointRadial](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#pointRadial) - relative coordinates of a point given an angle and radius.
+* [*symbolType*.draw](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#symbolType_draw) - draw this symbol to the given context.
 
-### [Stacks](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stacks)
+### [Stacks](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stacks)
 
 Stack shapes, placing one adjacent to another, as in a stacked bar chart.
 
-* [d3.stack](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stack) - create a new stack generator.
-* [*stack*](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#_stack) - generate a stack for the given dataset.
-* [*stack*.keys](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stack_keys) - set the keys accessor.
-* [*stack*.value](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stack_value) - set the value accessor.
-* [*stack*.order](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stack_order) - set the order accessor.
-* [*stack*.offset](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stack_offset) - set the offset accessor.
-* [d3.stackOrderAppearance](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOrderAppearance) - put the earliest series on bottom.
-* [d3.stackOrderAscending](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOrderAscending) - put the smallest series on bottom.
-* [d3.stackOrderDescending](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOrderDescending) - put the largest series on bottom.
-* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOrderInsideOut) - put earlier series in the middle.
-* [d3.stackOrderNone](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOrderNone) - use the given series order.
-* [d3.stackOrderReverse](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOrderReverse) - use the reverse of the given series order.
-* [d3.stackOffsetExpand](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOffsetExpand) - normalize the baseline to zero and topline to one.
-* [d3.stackOffsetDiverging](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOffsetDiverging) - positive above zero; negative below zero.
-* [d3.stackOffsetNone](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOffsetNone) - apply a zero baseline.
-* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOffsetSilhouette) - center the streamgraph around zero.
-* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape/blob/v3.1.0/README.md#stackOffsetWiggle) - minimize streamgraph wiggling.
+* [d3.stack](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stack) - create a new stack generator.
+* [*stack*](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#_stack) - generate a stack for the given dataset.
+* [*stack*.keys](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stack_keys) - set the keys accessor.
+* [*stack*.value](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stack_value) - set the value accessor.
+* [*stack*.order](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stack_order) - set the order accessor.
+* [*stack*.offset](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stack_offset) - set the offset accessor.
+* [d3.stackOrderAppearance](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOrderAppearance) - put the earliest series on bottom.
+* [d3.stackOrderAscending](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOrderAscending) - put the smallest series on bottom.
+* [d3.stackOrderDescending](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOrderDescending) - put the largest series on bottom.
+* [d3.stackOrderInsideOut](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOrderInsideOut) - put earlier series in the middle.
+* [d3.stackOrderNone](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOrderNone) - use the given series order.
+* [d3.stackOrderReverse](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOrderReverse) - use the reverse of the given series order.
+* [d3.stackOffsetExpand](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOffsetExpand) - normalize the baseline to zero and topline to one.
+* [d3.stackOffsetDiverging](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOffsetDiverging) - positive above zero; negative below zero.
+* [d3.stackOffsetNone](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOffsetNone) - apply a zero baseline.
+* [d3.stackOffsetSilhouette](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOffsetSilhouette) - center the streamgraph around zero.
+* [d3.stackOffsetWiggle](https://github.com/d3/d3-shape/blob/v3.2.0/README.md#stackOffsetWiggle) - minimize streamgraph wiggling.
 
 ## [Time Formats (d3-time-format)](https://github.com/d3/d3-time-format/tree/v4.0.0)
 
