@@ -29,35 +29,9 @@ i(1.0); // {colors: ["rgb(255, 255, 255)", "rgb(0, 0, 0)"]}
 
 Note that the generic value interpolator detects not only nested objects and arrays, but also color strings and numbers embedded in strings!
 
-## Installing
+## Interpolators
 
-If you use npm, `npm install d3-interpolate`. You can also download the [latest release on GitHub](https://github.com/d3/d3-interpolate/releases/latest). For vanilla HTML in modern browsers, import d3-interpolate from Skypack:
-
-```html
-<script type="module">
-
-import {interpolateRgb} from "https://cdn.skypack.dev/d3-interpolate@3";
-
-const interpolate = interpolateRgb("steelblue", "brown");
-
-</script>
-```
-
-For legacy environments, you can load d3-interpolate’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported. (If using [color interpolation](#color-spaces), also load [d3-color](https://github.com/d3/d3-color).)
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/d3-color@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-interpolate@3"></script>
-<script>
-
-const interpolate = d3.interpolateRgb("steelblue", "brown");
-
-</script>
-```
-
-## API Reference
-
-#### d3.interpolate(a, b)
+### d3.interpolate(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/value.js), [Examples](https://observablehq.com/@d3/d3-interpolate)
 
@@ -75,7 +49,7 @@ Returns an interpolator between the two arbitrary values *a* and *b*. The interp
 
 Based on the chosen interpolator, *a* is coerced to the suitable corresponding type.
 
-#### d3.interpolateNumber(a, b)
+### d3.interpolateNumber(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/number.js), [Examples](https://observablehq.com/@d3/d3-interpolatenumber)
 
@@ -89,13 +63,13 @@ function interpolator(t) {
 
 Caution: avoid interpolating to or from the number zero when the interpolator is used to generate a string. When very small values are stringified, they may be converted to scientific notation, which is an invalid attribute or style property value in older browsers. For example, the number `0.0000001` is converted to the string `"1e-7"`. This is particularly noticeable with interpolating opacity. To avoid scientific notation, start or end the transition at 1e-6: the smallest value that is not stringified in scientific notation.
 
-#### d3.interpolateRound(a, b)
+### d3.interpolateRound(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/round.js), [Examples](https://observablehq.com/@d3/d3-interpolatenumber)
 
 Returns an interpolator between the two numbers *a* and *b*; the interpolator is similar to [interpolateNumber](#interpolateNumber), except it will round the resulting value to the nearest integer.
 
-#### d3.interpolateString(a, b)
+### d3.interpolateString(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/string.js), [Examples](https://observablehq.com/@d3/d3-interpolatestring)
 
@@ -105,7 +79,7 @@ For each number embedded in *b*, the interpolator will attempt to find a corresp
 
 For example, if *a* is `"300 12px sans-serif"`, and *b* is `"500 36px Comic-Sans"`, two embedded numbers are found. The remaining static parts (of string *b*) are a space between the two numbers (`" "`), and the suffix (`"px Comic-Sans"`). The result of the interpolator at *t* = 0.5 is `"400 24px Comic-Sans"`.
 
-#### d3.interpolateDate(a, b)
+### d3.interpolateDate(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/date.js), [Examples](https://observablehq.com/@d3/d3-interpolatedate)
 
@@ -113,7 +87,7 @@ Returns an interpolator between the two [dates](https://developer.mozilla.org/en
 
 Note: **no defensive copy** of the returned date is created; the same Date instance is returned for every evaluation of the interpolator. No copy is made for performance reasons; interpolators are often part of the inner loop of [animated transitions](https://github.com/d3/d3-transition).
 
-#### d3.interpolateArray(a, b)
+### d3.interpolateArray(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/array.js), [Examples](https://observablehq.com/@d3/d3-interpolateobject)
 
@@ -125,7 +99,7 @@ For example, if *a* is the array `[0, 1]` and *b* is the array `[1, 10, 100]`, t
 
 Note: **no defensive copy** of the template array is created; modifications of the returned array may adversely affect subsequent evaluation of the interpolator. No copy is made for performance reasons; interpolators are often part of the inner loop of [animated transitions](https://github.com/d3/d3-transition).
 
-#### d3.interpolateNumberArray(a, b)
+### d3.interpolateNumberArray(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/numberArray.js), [Examples](https://observablehq.com/@d3/d3-interpolatenumberarray)
 
@@ -133,7 +107,7 @@ Returns an interpolator between the two arrays of numbers *a* and *b*. Internall
 
 Note: For performance reasons, **no defensive copy** is made of the template array and the arguments *a* and *b*; modifications of these arrays may affect subsequent evaluation of the interpolator.
 
-#### d3.interpolateObject(a, b)
+### d3.interpolateObject(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/object.js), [Examples](https://observablehq.com/@d3/d3-interpolateobject)
 
@@ -145,19 +119,19 @@ Object interpolation is particularly useful for *dataspace interpolation*, where
 
 Note: **no defensive copy** of the template object is created; modifications of the returned object may adversely affect subsequent evaluation of the interpolator. No copy is made for performance reasons; interpolators are often part of the inner loop of [animated transitions](https://github.com/d3/d3-transition).
 
-#### d3.interpolateTransformCss(a, b)
+### d3.interpolateTransformCss(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/transform/index.js#L62), [Examples](https://observablehq.com/@d3/d3-interpolatetransformcss)
 
 Returns an interpolator between the two 2D CSS transforms represented by *a* and *b*. Each transform is decomposed to a standard representation of translate, rotate, *x*-skew and scale; these component transformations are then interpolated. This behavior is standardized by CSS: see [matrix decomposition for animation](http://www.w3.org/TR/css3-2d-transforms/#matrix-decomposition).
 
-#### d3.interpolateTransformSvg(a, b)
+### d3.interpolateTransformSvg(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/transform/index.js#L63), [Examples](https://observablehq.com/@d3/d3-interpolatetransformcss)
 
 Returns an interpolator between the two 2D SVG transforms represented by *a* and *b*. Each transform is decomposed to a standard representation of translate, rotate, *x*-skew and scale; these component transformations are then interpolated. This behavior is standardized by CSS: see [matrix decomposition for animation](http://www.w3.org/TR/css3-2d-transforms/#matrix-decomposition).
 
-#### d3.interpolateZoom(a, b)
+### d3.interpolateZoom(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/zoom.js), [Examples](https://observablehq.com/@d3/d3-interpolatezoom)
 
@@ -165,21 +139,21 @@ Returns an interpolator between the two views *a* and *b* of a two-dimensional p
 
 The returned interpolator exposes a *duration* property which encodes the recommended transition duration in milliseconds. This duration is based on the path length of the curved trajectory through *x,y* space. If you want a slower or faster transition, multiply this by an arbitrary scale factor (<i>V</i> as described in the original paper).
 
-#### interpolateZoom.rho(rho)
+### interpolateZoom.rho(rho)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/zoom.js)<!-- , [Examples](https://observablehq.com/@d3/interpolatezoom-rho) -->
 
 Given a [zoom interpolator](#interpolateZoom), returns a new zoom interpolator using the specified curvature *rho*. When *rho* is close to 0, the interpolator is almost linear. The default curvature is sqrt(2).
 
-#### d3.interpolateDiscrete(values)
+### d3.interpolateDiscrete(values)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/discrete.js), [Examples](https://observablehq.com/@d3/d3-interpolatediscrete)
 
 Returns a discrete interpolator for the given array of *values*. The returned interpolator maps *t* in [0, 1 / *n*) to *values*[0], *t* in [1 / *n*, 2 / *n*) to *values*[1], and so on, where *n* = *values*.length. In effect, this is a lightweight [quantize scale](https://github.com/d3/d3-scale/blob/master/README.md#quantize-scales) with a fixed domain of [0, 1].
 
-### Sampling
+## Sampling
 
-#### d3.quantize(interpolator, n)
+### d3.quantize(interpolator, n)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/quantize.js), [Examples](https://observablehq.com/@d3/d3-quantize)
 
@@ -187,9 +161,9 @@ Returns *n* uniformly-spaced samples from the specified *interpolator*, where *n
 
 Caution: this method will not work with interpolators that do not return defensive copies of their output, such as [d3.interpolateArray](#interpolateArray), [d3.interpolateDate](#interpolateDate) and [d3.interpolateObject](#interpolateObject). For those interpolators, you must wrap the interpolator and create a copy for each returned value.
 
-### Color Spaces
+## Color spaces
 
-#### d3.interpolateRgb(a, b)
+### d3.interpolateRgb(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/rgb.js), [Examples](https://observablehq.com/@d3/working-with-color)
 
@@ -201,19 +175,19 @@ Or, with a corrected [gamma](#interpolate_gamma) of 2.2:
 
 Returns an RGB color space interpolator between the two colors *a* and *b* with a configurable [gamma](#interpolate_gamma). If the gamma is not specified, it defaults to 1.0. The colors *a* and *b* need not be in RGB; they will be converted to RGB using [d3.rgb](https://github.com/d3/d3-color/blob/master/README.md#rgb). The return value of the interpolator is an RGB string.
 
-#### d3.interpolateRgbBasis(colors)
+### d3.interpolateRgbBasis(colors)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/rgb.js#L54), [Examples](https://observablehq.com/@d3/working-with-color)
 
 Returns a uniform nonrational B-spline interpolator through the specified array of *colors*, which are converted to [RGB color space](https://github.com/d3/d3-color/blob/master/README.md#rgb). Implicit control points are generated such that the interpolator returns *colors*[0] at *t* = 0 and *colors*[*colors*.length - 1] at *t* = 1. Opacity interpolation is not currently supported. See also [d3.interpolateBasis](#interpolateBasis), and see [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic) for examples.
 
-#### d3.interpolateRgbBasisClosed(colors)
+### d3.interpolateRgbBasisClosed(colors)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/rgb.js#L55), [Examples](https://observablehq.com/@d3/working-with-color)
 
 Returns a uniform nonrational B-spline interpolator through the specified array of *colors*, which are converted to [RGB color space](https://github.com/d3/d3-color/blob/master/README.md#rgb). The control points are implicitly repeated such that the resulting spline has cyclical C² continuity when repeated around *t* in [0,1]; this is useful, for example, to create cyclical color scales. Opacity interpolation is not currently supported. See also [d3.interpolateBasisClosed](#interpolateBasisClosed), and see [d3-scale-chromatic](https://github.com/d3/d3-scale-chromatic) for examples.
 
-#### d3.interpolateHsl(a, b)
+### d3.interpolateHsl(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/hsl.js), [Examples](https://observablehq.com/@d3/working-with-color)
 
@@ -221,7 +195,7 @@ Returns a uniform nonrational B-spline interpolator through the specified array 
 
 Returns an HSL color space interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in HSL; they will be converted to HSL using [d3.hsl](https://github.com/d3/d3-color/blob/master/README.md#hsl). If either color’s hue or saturation is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
 
-#### d3.interpolateHslLong(a, b)
+### d3.interpolateHslLong(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/hsl.js#L21), [Examples](https://observablehq.com/@d3/working-with-color)
 
@@ -229,7 +203,7 @@ Returns an HSL color space interpolator between the two colors *a* and *b*. The 
 
 Like [interpolateHsl](#interpolateHsl), but does not use the shortest path between hues.
 
-#### d3.interpolateLab(a, b)
+### d3.interpolateLab(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/lab.js), [Examples](https://observablehq.com/@d3/working-with-color)
 
@@ -237,7 +211,7 @@ Like [interpolateHsl](#interpolateHsl), but does not use the shortest path betwe
 
 Returns a [CIELAB color space](https://en.wikipedia.org/wiki/Lab_color_space#CIELAB) interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in CIELAB; they will be converted to CIELAB using [d3.lab](https://github.com/d3/d3-color/blob/master/README.md#lab). The return value of the interpolator is an RGB string.
 
-#### d3.interpolateHcl(a, b)
+### d3.interpolateHcl(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/hcl.js), [Examples](https://observablehq.com/@d3/working-with-color)
 
@@ -245,7 +219,7 @@ Returns a [CIELAB color space](https://en.wikipedia.org/wiki/Lab_color_space#CIE
 
 Returns a [CIELCh<sub>ab</sub> color space](https://en.wikipedia.org/wiki/CIELAB_color_space#Cylindrical_representation:_CIELCh_or_CIEHLC) interpolator between the two colors *a* and *b*. The colors *a* and *b* need not be in CIELCh<sub>ab</sub>; they will be converted to CIELCh<sub>ab</sub> using [d3.hcl](https://github.com/d3/d3-color/blob/master/README.md#hcl). If either color’s hue or chroma is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
 
-#### d3.interpolateHclLong(a, b)
+### d3.interpolateHclLong(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/hcl.js#L21), [Examples](https://observablehq.com/@d3/working-with-color)
 
@@ -253,7 +227,7 @@ Returns a [CIELCh<sub>ab</sub> color space](https://en.wikipedia.org/wiki/CIELAB
 
 Like [interpolateHcl](#interpolateHcl), but does not use the shortest path between hues.
 
-#### d3.interpolateCubehelix(a, b)
+### d3.interpolateCubehelix(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/cubehelix.js), [Examples](https://observablehq.com/@d3/working-with-color)
 
@@ -265,7 +239,7 @@ Or, with a [gamma](#interpolate_gamma) of 3.0 to emphasize high-intensity values
 
 Returns a Cubehelix color space interpolator between the two colors *a* and *b* using a configurable [gamma](#interpolate_gamma). If the gamma is not specified, it defaults to 1.0. The colors *a* and *b* need not be in Cubehelix; they will be converted to Cubehelix using [d3.cubehelix](https://github.com/d3/d3-color/blob/master/README.md#cubehelix). If either color’s hue or saturation is NaN, the opposing color’s channel value is used. The shortest path between hues is used. The return value of the interpolator is an RGB string.
 
-#### d3.interpolateCubehelixLong(a, b)
+### d3.interpolateCubehelixLong(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/cubehelix.js#L29), [Examples](https://observablehq.com/@d3/working-with-color)
 
@@ -277,7 +251,7 @@ Or, with a [gamma](#interpolate_gamma) of 3.0 to emphasize high-intensity values
 
 Like [interpolateCubehelix](#interpolateCubehelix), but does not use the shortest path between hues.
 
-#### interpolate.gamma(gamma)
+### interpolate.gamma(gamma)
 
 Given that *interpolate* is one of [interpolateRgb](#interpolateRgb), [interpolateCubehelix](#interpolateCubehelix) or [interpolateCubehelixLong](#interpolateCubehelixLong), returns a new interpolator factory of the same type using the specified *gamma*. For example, to interpolate from purple to orange with a gamma of 2.2 in RGB space:
 
@@ -287,31 +261,31 @@ const interpolator = d3.interpolateRgb.gamma(2.2)("purple", "orange");
 
 See Eric Brasseur’s article, [Gamma error in picture scaling](http://www.ericbrasseur.org/gamma.html), for more on gamma correction.
 
-#### d3.interpolateHue(a, b)
+### d3.interpolateHue(a, b)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/hue.js), [Examples](https://observablehq.com/@d3/working-with-color)
 
 Returns an interpolator between the two hue angles *a* and *b*. If either hue is NaN, the opposing value is used. The shortest path between hues is used. The return value of the interpolator is a number in [0, 360).
 
-### Splines
+## Splines
 
 Whereas standard interpolators blend from a starting value *a* at *t* = 0 to an ending value *b* at *t* = 1, spline interpolators smoothly blend multiple input values for *t* in [0,1] using piecewise polynomial functions. Only cubic uniform nonrational [B-splines](https://en.wikipedia.org/wiki/B-spline) are currently supported, also known as basis splines.
 
-#### d3.interpolateBasis(values)
+### d3.interpolateBasis(values)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/basis.js), [Examples](https://observablehq.com/@d3/d3-interpolatebasis)
 
 Returns a uniform nonrational B-spline interpolator through the specified array of *values*, which must be numbers. Implicit control points are generated such that the interpolator returns *values*[0] at *t* = 0 and *values*[*values*.length - 1] at *t* = 1. See also [d3.curveBasis](https://github.com/d3/d3-shape/blob/master/README.md#curveBasis).
 
-#### d3.interpolateBasisClosed(values)
+### d3.interpolateBasisClosed(values)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/basisClosed.js), [Examples](https://observablehq.com/@d3/d3-interpolatebasis)
 
 Returns a uniform nonrational B-spline interpolator through the specified array of *values*, which must be numbers. The control points are implicitly repeated such that the resulting one-dimensional spline has cyclical C² continuity when repeated around *t* in [0,1]. See also [d3.curveBasisClosed](https://github.com/d3/d3-shape/blob/master/README.md#curveBasisClosed).
 
-### Piecewise
+## Piecewise
 
-#### d3.piecewise(interpolate, values)
+### d3.piecewise(interpolate, values)
 
 [Source](https://github.com/d3/d3-interpolate/blob/master/src/piecewise.js), [Examples](https://observablehq.com/@d3/d3-piecewise)
 

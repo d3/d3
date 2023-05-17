@@ -36,48 +36,11 @@ Selections are immutable. All selection methods that affect which elements are s
 
 For more, see [the d3-selection collection on Observable](https://observablehq.com/collection/@d3/d3-selection).
 
-## Installing
-
-If you use npm, `npm install d3-selection`. You can also download the [latest release on GitHub](https://github.com/d3/d3-selection/releases/latest). For vanilla HTML in modern browsers, import d3-selection from Skypack:
-
-```html
-<script type="module">
-
-import {selectAll} from "https://cdn.skypack.dev/d3-selection@3";
-
-const div = selectAll("div");
-
-</script>
-```
-
-For legacy environments, you can load d3-selection’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/d3-selection@3"></script>
-<script>
-
-const div = d3.selectAll("div");
-
-</script>
-```
-
-[Try d3-selection in your browser.](https://observablehq.com/collection/@d3/d3-selection)
-
-## API Reference
-
-* [Selecting Elements](#selecting-elements)
-* [Modifying Elements](#modifying-elements)
-* [Joining Data](#joining-data)
-* [Handling Events](#handling-events)
-* [Control Flow](#control-flow)
-* [Local Variables](#local-variables)
-* [Namespaces](#namespaces)
-
-### Selecting Elements
+## Selecting elements
 
 Selection methods accept [W3C selector strings](http://www.w3.org/TR/selectors-api/) such as `.fancy` to select elements with the class *fancy*, or `div` to select DIV elements. Selection methods come in two forms: select and selectAll: the former selects only the first matching element, while the latter selects all matching elements in document order. The top-level selection methods, [d3.select](#select) and [d3.selectAll](#selectAll), query the entire document; the subselection methods, [*selection*.select](#selection_select) and [*selection*.selectAll](#selection_selectAll), restrict selection to descendants of the selected elements.
 
-#### d3.selection()
+### d3.selection()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/index.js)
 
@@ -97,7 +60,7 @@ And then to use:
 d3.selectAll("input[type=checkbox]").checked(true);
 ```
 
-#### d3.select(selector)
+### d3.select(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/select.js)
 
@@ -115,7 +78,7 @@ d3.selectAll("p").on("click", function(event) {
 });
 ```
 
-#### d3.selectAll(selector)
+### d3.selectAll(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selectAll.js)
 
@@ -131,7 +94,7 @@ If the *selector* is not a string, instead selects the specified array of nodes;
 d3.selectAll(document.links).style("color", "red");
 ```
 
-#### selection.select(selector)
+### selection.select(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/select.js)
 
@@ -151,7 +114,7 @@ const previous = d3.selectAll("p").select(function() {
 
 Unlike [*selection*.selectAll](#selection_selectAll), *selection*.select does not affect grouping: it preserves the existing group structure and indexes, and propagates data (if any) to selected children. Grouping plays an important role in the [data join](#joining-data). See [Nested Selections](http://bost.ocks.org/mike/nest/) and [How Selections Work](http://bost.ocks.org/mike/selection/) for more on this topic.
 
-#### selection.selectAll(selector)
+### selection.selectAll(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/selectAll.js)
 
@@ -174,7 +137,7 @@ const sibling = d3.selectAll("p").selectAll(function() {
 
 Unlike [*selection*.select](#selection_select), *selection*.selectAll does affect grouping: each selected descendant is grouped by the parent element in the originating selection. Grouping plays an important role in the [data join](#joining-data). See [Nested Selections](http://bost.ocks.org/mike/nest/) and [How Selections Work](http://bost.ocks.org/mike/selection/) for more on this topic.
 
-#### selection.filter(filter)
+### selection.filter(filter)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/filter.js)
 
@@ -208,7 +171,7 @@ Note that the `:nth-child` pseudo-class is a one-based index rather than a zero-
 
 The returned filtered selection preserves the parents of this selection, but like [*array*.filter](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter), it does not preserve indexes as some elements may be removed; use [*selection*.select](#selection_select) to preserve the index, if needed.
 
-#### selection.merge(other)
+### selection.merge(other)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/merge.js)
 
@@ -226,25 +189,25 @@ See [*selection*.data](#selection_data) for more.
 
 This method is not intended for concatenating arbitrary selections, however: if both this selection and the specified *other* selection have (non-null) elements at the same index, this selection’s element is returned in the merge and the *other* selection’s element is ignored.
 
-#### selection.selectChild(selector)
+### selection.selectChild(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/selectChild.js)
 
 Returns a new selection with the (first) child of each element of the current selection matching the *selector*. If no *selector* is specified, selects the first child (if any). If the *selector* is specified as a string, selects the first child that matches (if any). If the *selector* is a function, it is evaluated for each of the children nodes, in order, being passed the child (*child*), the child’s index (*i*), and the list of children (*children*); the method selects the first child for which the selector return truthy, if any.
 
-#### selection.selectChildren(selector)
+### selection.selectChildren(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/selectChildren.js)
 
 Returns a new selection with the children of each element of the current selection matching the *selector*. If no *selector* is specified, selects all the children. If the *selector* is specified as a string, selects the children that match (if any). If the *selector* is a function, it is evaluated for each of the children nodes, in order, being passed the child (*child*), the child’s index (*i*), and the list of children (*children*); the method selects all children for which the selector return truthy.
 
-#### selection.selection()
+### selection.selection()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/index.js)
 
 Returns the selection (for symmetry with [<i>transition</i>.selection](https://github.com/d3/d3-transition/blob/master/README.md#transition_selection)).
 
-#### d3.matcher(selector)
+### d3.matcher(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/matcher.js)
 
@@ -262,7 +225,7 @@ const div = selection.filter(d3.matcher("div"));
 
 (Although D3 is not a compatibility layer, this implementation does support vendor-prefixed implementations due to the recent standardization of *element*.matches.)
 
-#### d3.selector(selector)
+### d3.selector(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selector.js)
 
@@ -278,7 +241,7 @@ Is equivalent to:
 const div = selection.select(d3.selector("div"));
 ```
 
-#### d3.selectorAll(selector)
+### d3.selectorAll(selector)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selectAll.js)
 
@@ -294,19 +257,19 @@ Is equivalent to:
 const div = selection.selectAll(d3.selectorAll("div"));
 ```
 
-#### d3.window(node)
+### d3.window(node)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/window.js)
 
 Returns the owner window for the specified *node*. If *node* is a node, returns the owner document’s default view; if *node* is a document, returns its default view; otherwise returns the *node*.
 
-#### d3.style(node, name)
+### d3.style(node, name)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/style.js)
 
 Returns the value of the style property with the specified *name* for the specified *node*. If the *node* has an inline style with the specified *name*, its value is returned; otherwise, the [computed property value](https://developer.mozilla.org/en-US/docs/Web/CSS/computed_value) is returned. See also [*selection*.style](#selection_style).
 
-### Modifying Elements
+## Modifying elements
 
 After selecting elements, use the selection’s transformation methods to affect document content. For example, to set the name attribute and color style of an anchor element:
 
@@ -318,7 +281,7 @@ d3.select("a")
 
 To experiment with selections, visit [d3js.org](https://d3js.org) and open your browser’s developer console! (In Chrome, open the console with ⌥⌘J.) Select elements and then inspect the returned selection to see which elements are selected and how they are grouped. Call selection methods and see how the page content changes.
 
-#### selection.attr(name, value)
+### selection.attr(name, value)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/attr.js)
 
@@ -328,7 +291,7 @@ If a *value* is not specified, returns the current value of the specified attrib
 
 The specified *name* may have a namespace prefix, such as `xlink:href` to specify the `href` attribute in the XLink namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map.
 
-#### selection.classed(names, value)
+### selection.classed(names, value)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/classed.js)
 
@@ -346,7 +309,7 @@ selection.classed("foo", () => Math.random() > 0.5);
 
 If a *value* is not specified, returns true if and only if the first (non-null) selected element has the specified *classes*. This is generally useful only if you know the selection contains exactly one element.
 
-#### selection.style(name, value, priority)
+### selection.style(name, value, priority)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/style.js)
 
@@ -356,7 +319,7 @@ If a *value* is not specified, returns the current value of the specified style 
 
 Caution: unlike many SVG attributes, CSS styles typically have associated units. For example, `3px` is a valid stroke-width property value, while `3` is not. Some browsers implicitly assign the `px` (pixel) unit to numeric values, but not all browsers do: IE, for example, throws an “invalid arguments” error!
 
-#### selection.property(name, value)
+### selection.property(name, value)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/property.js)
 
@@ -366,7 +329,7 @@ If a *value* is specified, sets the property with the specified *name* to the sp
 
 If a *value* is not specified, returns the value of the specified property for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
-#### selection.text(value)
+### selection.text(value)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/text.js)
 
@@ -374,7 +337,7 @@ If a *value* is specified, sets the [text content](http://www.w3.org/TR/DOM-Leve
 
 If a *value* is not specified, returns the text content for the first (non-null) element in the selection. This is generally useful only if you know the selection contains exactly one element.
 
-#### selection.html(value)
+### selection.html(value)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/html.js)
 
@@ -384,7 +347,7 @@ If a *value* is not specified, returns the inner HTML for the first (non-null) e
 
 Use [*selection*.append](#selection_append) or [*selection*.insert](#selection_insert) instead to create data-driven content; this method is intended for when you want a little bit of HTML, say for rich formatting. Also, *selection*.html is only supported on HTML elements. SVG elements and other non-HTML elements do not support the innerHTML property, and thus are incompatible with *selection*.html. Consider using [XMLSerializer](https://developer.mozilla.org/en-US/docs/XMLSerializer) to convert a DOM subtree to text. See also the [innersvg polyfill](https://code.google.com/p/innersvg/), which provides a shim to support the innerHTML property on SVG elements.
 
-#### selection.append(type)
+### selection.append(type)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/append.js)
 
@@ -414,7 +377,7 @@ In both cases, this method returns a new selection containing the appended eleme
 
 The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
 
-#### selection.insert(type, before)
+### selection.insert(type, before)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/insert.js)
 
@@ -444,13 +407,13 @@ In both cases, this method returns a new selection containing the appended eleme
 
 The specified *name* may have a namespace prefix, such as `svg:text` to specify a `text` attribute in the SVG namespace. See [namespaces](#namespaces) for the map of supported namespaces; additional namespaces can be registered by adding to the map. If no namespace is specified, the namespace will be inherited from the parent element; or, if the name is one of the known prefixes, the corresponding namespace will be used (for example, `svg` implies `svg:svg`).
 
-#### selection.remove()
+### selection.remove()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/remove.js)
 
 Removes the selected elements from the document. Returns this selection (the removed elements) which are now detached from the DOM. There is not currently a dedicated API to add removed elements back to the document; however, you can pass a function to [*selection*.append](#selection_append) or [*selection*.insert](#selection_insert) to re-add elements.
 
-#### selection.clone(deep)
+### selection.clone(deep)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/clone.js)
 
@@ -462,7 +425,7 @@ selection.select(function() {
 });
 ```
 
-#### selection.sort(compare)
+### selection.sort(compare)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/sort.js)
 
@@ -472,13 +435,13 @@ The compare function, which defaults to [ascending](https://github.com/d3/d3-arr
 
 Note that sorting is not guaranteed to be stable; however, it is guaranteed to have the same behavior as your browser’s built-in [sort](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Array/sort) method on arrays.
 
-#### selection.order()
+### selection.order()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/order.js)
 
 Re-inserts elements into the document such that the document order of each group matches the selection order. This is equivalent to calling [*selection*.sort](#selection_sort) if the data is already sorted, but much faster.
 
-#### selection.raise()
+### selection.raise()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/raise.js)
 
@@ -490,7 +453,7 @@ selection.each(function() {
 });
 ```
 
-#### selection.lower()
+### selection.lower()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/lower.js)
 
@@ -502,7 +465,7 @@ selection.each(function() {
 });
 ```
 
-#### d3.create(name)
+### d3.create(name)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/create.js)
 
@@ -515,7 +478,7 @@ d3.create("svg:g") // an SVG G element
 d3.create("g") // an HTML G (unknown) element
 ```
 
-#### d3.creator(name)
+### d3.creator(name)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/creator.js)
 
@@ -533,11 +496,11 @@ selection.append(d3.creator("div"));
 
 See [namespace](#namespace) for details on supported namespace prefixes, such as for SVG elements.
 
-### Joining Data
+## Joining data
 
 For an introduction to D3’s data joins, see the [*selection*.join notebook](https://observablehq.com/@d3/selection-join). Also see [Thinking With Joins](http://bost.ocks.org/mike/join/).
 
-#### selection.data(data, key)
+### selection.data(data, key)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/data.js), [Examples](https://observablehq.com/@d3/brushable-scatterplot)
 
@@ -607,7 +570,7 @@ If *data* is not specified, this method returns the array of data for the select
 
 This method cannot be used to clear bound data; use [*selection*.datum](#selection_datum) instead.
 
-#### selection.join(enter, update, exit)
+### selection.join(enter, update, exit)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/join.js)
 
@@ -653,7 +616,7 @@ You can animate enter, update and exit by creating transitions inside the *enter
 
 For more, see the [*selection*.join notebook](https://observablehq.com/@d3/selection-join).
 
-#### selection.enter()
+### selection.enter()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/enter.js)
 
@@ -682,7 +645,7 @@ If the body is initially empty, the above code will create six new DIV elements,
 
 Conceptually, the enter selection’s placeholders are pointers to the parent element (in this example, the document body). The enter selection is typically only used transiently to append elements, and is often [merged](#selection_merge) with the update selection after appending, such that modifications can be applied to both entering and updating elements.
 
-#### selection.exit()
+### selection.exit()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/exit.js)
 
@@ -719,7 +682,7 @@ Now the document body looks like this:
 
 The order of the DOM elements matches the order of the data because the old data’s order and the new data’s order were consistent. If the new data’s order is different, use [*selection*.order](#selection_order) to reorder the elements in the DOM. See the [General Update Pattern](http://bl.ocks.org/mbostock/3808218) example thread for more on data joins.
 
-#### selection.datum(value)
+### selection.datum(value)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/datum.js)
 
@@ -744,11 +707,11 @@ You can expose the custom data attributes by setting each element’s data as th
 selection.datum(function() { return this.dataset; })
 ```
 
-### Handling Events
+## Handling events
 
 For interaction, selections allow listening for and dispatching of events.
 
-#### selection.on(typenames, listener, options)
+### selection.on(typenames, listener, options)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/on.js)
 
@@ -762,7 +725,7 @@ An optional *options* object may specify characteristics about the event listene
 
 If a *listener* is not specified, returns the currently-assigned listener for the specified event *typename* on the first (non-null) selected element, if any. If multiple typenames are specified, the first matching listener is returned.
 
-#### selection.dispatch(type, parameters)
+### selection.dispatch(type, parameters)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/dispatch.js)
 
@@ -774,7 +737,7 @@ Dispatches a [custom event](http://www.w3.org/TR/dom/#interface-customevent) of 
 
 If *parameters* is a function, it is evaluated for each selected element, in order, being passed the current datum (*d*), the current index (*i*), and the current group (*nodes*), with *this* as the current DOM element (*nodes*[*i*]). It must return the parameters map for the current element.
 
-#### d3.pointer(event, target)
+### d3.pointer(event, target)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/pointer.js)
 
@@ -782,7 +745,7 @@ Returns a two-element array of numbers [*x*, *y*] representing the coordinates o
 
 If *target* is not specified, it defaults to the source event’s currentTarget property, if available. If the *target* is an SVG element, the event’s coordinates are transformed using the [inverse](https://www.w3.org/TR/geometry-1/#dom-dommatrixreadonly-inverse) of the [screen coordinate transformation matrix](https://www.w3.org/TR/SVG/types.html#__svg__SVGGraphicsElement__getScreenCTM). If the *target* is an HTML element, the event’s coordinates are translated relative to the top-left corner of the *target*’s [bounding client rectangle](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect). (As such, the coordinate system can only be translated relative to the client coordinates. See also [GeometryUtils](https://www.w3.org/TR/cssom-view-1/#the-geometryutils-interface).) Otherwise, [*event*.pageX, *event*.pageY] is returned.
 
-#### d3.pointers(event, target)
+### d3.pointers(event, target)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/pointers.js)
 
@@ -790,11 +753,11 @@ Returns an array [[*x0*, *y0*], [*x1*, *y1*]…] of coordinates of the specified
 
 If *target* is not specified, it defaults to the source event’s currentTarget property, if any.
 
-### Control Flow
+## Control flow
 
 For advanced usage, selections provide methods for custom control flow.
 
-#### selection.each(function)
+### selection.each(function)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/each.js)
 
@@ -810,7 +773,7 @@ parent.each(function(p, j) {
 
 See [Sized Donut Multiples](http://bl.ocks.org/mbostock/4c5fad723c87d2fd8273) for an example.
 
-#### selection.call(function, arguments…)
+### selection.call(function, arguments…)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/call.js)
 
@@ -838,13 +801,13 @@ name(d3.selectAll("div"), "John", "Snow");
 
 The only difference is that *selection*.call always returns the *selection* and not the return value of the called *function*, `name`.
 
-#### selection.empty()
+### selection.empty()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/empty.js)
 
 Returns true if this selection contains no (non-null) elements.
 
-#### selection.nodes()
+### selection.nodes()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/nodes.js)
 
@@ -856,19 +819,19 @@ const elements = Array.from(selection);
 
 See also [*selection*[Symbol.iterator]](#selection_iterator).
 
-#### selection.node()
+### selection.node()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/node.js)
 
 Returns the first (non-null) element in this selection. If the selection is empty, returns null.
 
-#### selection.size()
+### selection.size()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/size.js)
 
 Returns the total number of (non-null) elements in this selection.
 
-#### selection\Symbol.iterator\()
+### selection[Symbol.iterator]\(\)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/selection/iterator.js)
 
@@ -886,11 +849,11 @@ To flatten the selection to an array:
 const elements = [...selection];
 ````
 
-### Local Variables
+## Local variables
 
 D3 locals allow you to define local state independent of data. For instance, when rendering [small multiples](http://bl.ocks.org/mbostock/e1192fe405703d8321a5187350910e08) of time-series data, you might want the same *x*-scale for all charts but distinct *y*-scales to compare the relative performance of each metric. D3 locals are scoped by DOM elements: on set, the value is stored on the given element; on get, the value is retrieved from given element or the nearest ancestor that defines it.
 
-#### d3.local()
+### d3.local()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/local.js)
 
@@ -902,7 +865,7 @@ const foo = d3.local();
 
 Like `var`, each local is a distinct symbolic reference; unlike `var`, the value of each local is also scoped by the DOM.
 
-#### local.set(node, value)
+### local.set(node, value)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/local.js)
 
@@ -918,29 +881,29 @@ If you are just setting a single variable, consider using [*selection*.property]
 selection.property(foo, d => d.value);
 ```
 
-#### local.get(node)
+### local.get(node)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/local.js)
 
 Returns the value of this local on the specified *node*. If the *node* does not define this local, returns the value from the nearest ancestor that defines it. Returns undefined if no ancestor defines this local.
 
-#### local.remove(node)
+### local.remove(node)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/local.js)
 
 Deletes this local’s value from the specified *node*. Returns true if the *node* defined this local prior to removal, and false otherwise. If ancestors also define this local, those definitions are unaffected, and thus [*local*.get](#local_get) will still return the inherited value.
 
-#### local.toString()
+### local.toString()
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/local.js)
 
 Returns the automatically-generated identifier for this local. This is the name of the property that is used to store the local’s value on elements, and thus you can also set or get the local’s value using *element*[*local*] or by using [*selection*.property](#selection_property).
 
-### Namespaces
+## Namespaces
 
 XML namespaces are fun! Right? Fortunately you can mostly ignore them.
 
-#### d3.namespace(name)
+### d3.namespace(name)
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/namespace.js)
 
@@ -952,7 +915,7 @@ d3.namespace("svg:text"); // {space: "http://www.w3.org/2000/svg", local: "text"
 
 If the name does not contain a colon, this function merely returns the input name.
 
-#### d3.namespaces
+### d3.namespaces
 
 [Source](https://github.com/d3/d3-selection/blob/master/src/namespaces.js)
 

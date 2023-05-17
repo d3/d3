@@ -24,48 +24,9 @@ line.context(context)(data);
 
 For more, read [Introducing d3-shape](https://medium.com/@mbostock/introducing-d3-shape-73f8367e6d12).
 
-## Installing
-
-If you use npm, `npm install d3-shape`. You can also download the [latest release on GitHub](https://github.com/d3/d3-shape/releases/latest). For vanilla HTML in modern browsers, import d3-shape from jsDelivr:
-
-```html
-<script type="module">
-
-import {line} from "https://cdn.jsdelivr.net/npm/d3-shape@3/+esm";
-
-const l = line();
-
-</script>
-```
-
-For legacy environments, you can load d3-shape’s UMD bundle; a `d3` global is exported:
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/d3-path@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-shape@3"></script>
-<script>
-
-const l = d3.line();
-
-</script>
-```
-
-## API Reference
-
-* [Arcs](#arcs)
-* [Pies](#pies)
-* [Lines](#lines)
-* [Areas](#areas)
-* [Curves](#curves)
-* [Custom Curves](#custom-curves)
-* [Links](#links)
-* [Symbols](#symbols)
-* [Custom Symbol Types](#custom-symbol-types)
-* [Stacks](#stacks)
-
 Note: all the methods that accept arrays also accept iterables and convert them to arrays internally.
 
-### Arcs
+## Arcs
 
 [<img alt="Pie Chart" src="./img/pie.png" width="295" height="295">](https://observablehq.com/@d3/pie-chart)[<img alt="Donut Chart" src="./img/donut.png" width="295" height="295">](https://observablehq.com/@d3/donut-chart)
 
@@ -73,14 +34,13 @@ The arc generator produces a [circular](https://en.wikipedia.org/wiki/Circular_s
 
 See also the [pie generator](#pies), which computes the necessary angles to represent an array of data as a pie or donut chart; these angles can then be passed to an arc generator.
 
-
-#### d3.arc()
+### d3.arc()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
 Constructs a new arc generator with the default settings.
 
-#### arc(...arguments)
+### arc(...arguments)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
@@ -111,7 +71,7 @@ arc(); // "M0,-100A100,100,0,0,1,100,0L0,0Z"
 
 If the arc generator has a [context](#arc_context), then the arc is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls and this function returns void. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string is returned.
 
-#### arc.centroid(...arguments)
+### arc.centroid(...arguments)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
@@ -121,7 +81,7 @@ Computes the midpoint [*x*, *y*] of the center line of the arc that would be [ge
 
 Note that this is **not the geometric center** of the arc, which may be outside the arc; this method is merely a convenience for positioning labels.
 
-#### arc.innerRadius(radius)
+### arc.innerRadius(radius)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
@@ -135,7 +95,7 @@ function innerRadius(d) {
 
 Specifying the inner radius as a function is useful for constructing a stacked polar bar chart, often in conjunction with a [sqrt scale](https://github.com/d3/d3-scale#sqrt). More commonly, a constant inner radius is used for a donut or pie chart. If the outer radius is smaller than the inner radius, the inner and outer radii are swapped. A negative value is treated as zero.
 
-#### arc.outerRadius(radius)
+### arc.outerRadius(radius)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
@@ -149,7 +109,7 @@ function outerRadius(d) {
 
 Specifying the outer radius as a function is useful for constructing a coxcomb or polar bar chart, often in conjunction with a [sqrt scale](https://github.com/d3/d3-scale#sqrt). More commonly, a constant outer radius is used for a pie or donut chart. If the outer radius is smaller than the inner radius, the inner and outer radii are swapped. A negative value is treated as zero.
 
-#### arc.cornerRadius(radius)
+### arc.cornerRadius(radius)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
@@ -167,7 +127,7 @@ If the corner radius is greater than zero, the corners of the arc are rounded us
 
 The corner radius may not be larger than ([outerRadius](#arc_outerRadius) - [innerRadius](#arc_innerRadius)) / 2. In addition, for arcs whose angular span is less than π, the corner radius may be reduced as two adjacent rounded corners intersect. This is occurs more often with the inner corners. See the [arc corners animation](https://observablehq.com/@d3/arc-corners) for illustration.
 
-#### arc.startAngle(angle)
+### arc.startAngle(angle)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
@@ -181,7 +141,7 @@ function startAngle(d) {
 
 The *angle* is specified in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise. If |endAngle - startAngle| ≥ τ, a complete circle or annulus is generated rather than a sector.
 
-#### arc.endAngle(angle)
+### arc.endAngle(angle)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
@@ -195,7 +155,7 @@ function endAngle(d) {
 
 The *angle* is specified in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise. If |endAngle - startAngle| ≥ τ, a complete circle or annulus is generated rather than a sector.
 
-#### arc.padAngle(angle)
+### arc.padAngle(angle)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
@@ -217,35 +177,35 @@ The recommended minimum inner radius when using padding is outerRadius \* padAng
 
 Often, the pad angle is not set directly on the arc generator, but is instead computed by the [pie generator](#pies) so as to ensure that the area of padded arcs is proportional to their value; see [*pie*.padAngle](#pie_padAngle). See the [pie padding animation](https://observablehq.com/@d3/arc-pad-angle) for illustration. If you apply a constant pad angle to the arc generator directly, it tends to subtract disproportionately from smaller arcs, introducing distortion.
 
-#### arc.padRadius(radius)
+### arc.padRadius(radius)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
 If *radius* is specified, sets the pad radius to the specified function or number and returns this arc generator. If *radius* is not specified, returns the current pad radius accessor, which defaults to null, indicating that the pad radius should be automatically computed as sqrt([innerRadius](#arc_innerRadius) * innerRadius + [outerRadius](#arc_outerRadius) * outerRadius). The pad radius determines the fixed linear distance separating adjacent arcs, defined as padRadius * [padAngle](#arc_padAngle).
 
-#### arc.context(context)
+### arc.context(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
 If *context* is specified, sets the context and returns this arc generator. If *context* is not specified, returns the current context, which defaults to null. If the context is not null, then the [generated arc](#_arc) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated arc is returned.
 
-#### arc.digits(digits)
+### arc.digits(digits)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/arc.js)
 
 If *digits* is specified, sets the maximum number of digits after the decimal separator and returns this arc generator. If *digits* is not specified, returns the current maximum fraction digits, which defaults to 3. This option only applies when the associated [*context*](#arc_context) is null, as when this arc generator is used to produce [path data](http://www.w3.org/TR/SVG/paths.html#PathData).
 
-### Pies
+## Pies
 
 The pie generator does not produce a shape directly, but instead computes the necessary angles to represent a tabular dataset as a pie or donut chart; these angles can then be passed to an [arc generator](#arcs).
 
-#### d3.pie()
+### d3.pie()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js)
 
 Constructs a new pie generator with the default settings.
 
-#### pie(data, arguments…)
+### pie(data, arguments…)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js)
 
@@ -284,7 +244,7 @@ The first pair of parens, `pie()`, [constructs](#pie) a default pie generator. T
 
 Note that the returned array is in the same order as the data, even though this pie chart is [sorted](#pie_sortValues) by descending value, starting with the arc for the last datum (value 21) at 12 o’clock.
 
-#### pie.value(value)
+### pie.value(value)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js)
 
@@ -321,7 +281,7 @@ const arcs = d3.pie()(data.map(d => d.number));
 
 The benefit of an accessor is that the input data remains associated with the returned objects, thereby making it easier to access other fields of the data, for example to set the color or to add text labels.
 
-#### pie.sort(compare)
+### pie.sort(compare)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js)
 
@@ -335,7 +295,7 @@ pie.sort((a, b) => a.name.localeCompare(b.name));
 
 Sorting does not affect the order of the [generated arc array](#_pie) which is always in the same order as the input data array; it merely affects the computed angles of each arc. The first arc starts at the [start angle](#pie_startAngle) and the last arc ends at the [end angle](#pie_endAngle).
 
-#### pie.sortValues(compare)
+### pie.sortValues(compare)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js)
 
@@ -357,7 +317,7 @@ pie.sortValues((a, b) => a - b);
 
 Sorting does not affect the order of the [generated arc array](#_pie) which is always in the same order as the input data array; it merely affects the computed angles of each arc. The first arc starts at the [start angle](#pie_startAngle) and the last arc ends at the [end angle](#pie_endAngle).
 
-#### pie.startAngle(angle)
+### pie.startAngle(angle)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js)
 
@@ -371,7 +331,7 @@ function startAngle() {
 
 The start angle here means the *overall* start angle of the pie, *i.e.*, the start angle of the first arc. The start angle accessor is invoked once, being passed the same arguments and `this` context as the [pie generator](#_pie). The units of *angle* are arbitrary, but if you plan to use the pie generator in conjunction with an [arc generator](#arcs), you should specify an angle in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise.
 
-#### pie.endAngle(angle)
+### pie.endAngle(angle)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js)
 
@@ -387,7 +347,7 @@ The end angle here means the *overall* end angle of the pie, *i.e.*, the end ang
 
 The value of the end angle is constrained to [startAngle](#pie_startAngle) ± τ, such that |endAngle - startAngle| ≤ τ.
 
-#### pie.padAngle(angle)
+### pie.padAngle(angle)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/pie.js)
 
@@ -401,25 +361,25 @@ function padAngle() {
 
 The pad angle here means the angular separation between each adjacent arc. The total amount of padding reserved is the specified *angle* times the number of elements in the input data array, and at most |endAngle - startAngle|; the remaining space is then divided proportionally by [value](#pie_value) such that the relative area of each arc is preserved. See the [pie padding animation](https://observablehq.com/@d3/arc-pad-angle) for illustration. The pad angle accessor is invoked once, being passed the same arguments and `this` context as the [pie generator](#_pie). The units of *angle* are arbitrary, but if you plan to use the pie generator in conjunction with an [arc generator](#arcs), you should specify an angle in radians.
 
-### Lines
+## Lines
 
 [<img width="295" height="154" alt="Line Chart" src="./img/line.png">](https://observablehq.com/@d3/line-chart)
 
 The line generator produces a [spline](https://en.wikipedia.org/wiki/Spline_\(mathematics\)) or [polyline](https://en.wikipedia.org/wiki/Polygonal_chain), as in a line chart. Lines also appear in many other visualization types, such as the links in [hierarchical edge bundling](https://observablehq.com/@d3/hierarchical-edge-bundling).
 
-#### d3.line(x, y)
+### d3.line(x, y)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
 
 Constructs a new line generator with the default settings. If *x* or *y* are specified, sets the corresponding accessors to the specified function or number and returns this line generator.
 
-#### line(data)
+### line(data)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
 
 Generates a line for the given array of *data*. Depending on this line generator’s associated [curve](#line_curve), the given input *data* may need to be sorted by *x*-value before being passed to the line generator. If the line generator has a [context](#line_context), then the line is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls and this function returns void. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string is returned.
 
-#### line.x(x)
+### line.x(x)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
 
@@ -449,7 +409,7 @@ const line = d3.line()
     .y(d => y(d.value));
 ```
 
-#### line.y(y)
+### line.y(y)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
 
@@ -463,7 +423,7 @@ function y(d) {
 
 When a line is [generated](#_line), the y accessor will be invoked for each [defined](#line_defined) element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments. The default y accessor assumes that the input data are two-element arrays of numbers. See [*line*.x](#line_x) for more information.
 
-#### line.defined(defined)
+### line.defined(defined)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
 
@@ -481,89 +441,49 @@ The default accessor thus assumes that the input data is always defined. When a 
 
 Note that if a line segment consists of only a single point, it may appear invisible unless rendered with rounded or square [line caps](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-linecap). In addition, some curves such as [curveCardinalOpen](#curveCardinalOpen) only render a visible segment if it contains multiple points.
 
-#### line.curve(curve)
+### line.curve(curve)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
 
 If *curve* is specified, sets the [curve factory](#curves) and returns this line generator. If *curve* is not specified, returns the current curve factory, which defaults to [curveLinear](#curveLinear).
 
-#### line.context(context)
+### line.context(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/line.js), [Examples](https://observablehq.com/@d3/d3-line)
 
 If *context* is specified, sets the context and returns this line generator. If *context* is not specified, returns the current context, which defaults to null. If the context is not null, then the [generated line](#_line) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated line is returned.
 
-#### line.digits(digits)
+### line.digits(digits)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/line.js)
 
 If *digits* is specified, sets the maximum number of digits after the decimal separator and returns this line generator. If *digits* is not specified, returns the current maximum fraction digits, which defaults to 3. This option only applies when the associated [*context*](#line_context) is null, as when this line generator is used to produce [path data](http://www.w3.org/TR/SVG/paths.html#PathData).
 
-#### d3.lineRadial()
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js), [Examples](https://observablehq.com/@d3/d3-lineradial)
-
-<img alt="Radial Line" width="250" height="250" src="./img/line-radial.png">
-
-Constructs a new radial line generator with the default settings. A radial line generator is equivalent to the standard Cartesian [line generator](#line), except the [x](#line_x) and [y](#line_y) accessors are replaced with [angle](#lineRadial_angle) and [radius](#lineRadial_radius) accessors. Radial lines are always positioned relative to ⟨0,0⟩; use a transform (see: [SVG](http://www.w3.org/TR/SVG/coords.html#TransformAttribute), [Canvas](http://www.w3.org/TR/2dcontext/#transformations)) to change the origin.
-
-#### lineRadial(data)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L4), [Examples](https://observablehq.com/@d3/d3-lineradial)
-
-Equivalent to [*line*](#_line).
-
-#### lineRadial.angle(angle)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L7), [Examples](https://observablehq.com/@d3/d3-lineradial)
-
-Equivalent to [*line*.x](#line_x), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock).
-
-#### lineRadial.radius(radius)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L8), [Examples](https://observablehq.com/@d3/d3-lineradial)
-
-Equivalent to [*line*.y](#line_y), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
-
-#### lineRadial.defined(defined)
-
-Equivalent to [*line*.defined](#line_defined).
-
-#### lineRadial.curve(curve)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js), [Examples](https://observablehq.com/@d3/d3-lineradial)
-
-Equivalent to [*line*.curve](#line_curve). Note that [curveMonotoneX](#curveMonotoneX) or [curveMonotoneY](#curveMonotoneY) are not recommended for radial lines because they assume that the data is monotonic in *x* or *y*, which is typically untrue of radial lines.
-
-#### lineRadial.context(context)
-
-Equivalent to [*line*.context](#line_context).
-
-### Areas
+## Areas
 
 [<img alt="Area Chart" width="295" height="154" src="./img/area.png">](https://observablehq.com/@d3/area-chart)[<img alt="Stacked Area Chart" width="295" height="154" src="./img/area-stacked.png">](https://observablehq.com/@d3/stacked-area-chart)[<img alt="Difference Chart" width="295" height="154" src="./img/area-difference.png">](https://observablehq.com/@d3/difference-chart)
 
 The area generator produces an area, as in an area chart. An area is defined by two bounding [lines](#lines), either splines or polylines. Typically, the two lines share the same [*x*-values](#area_x) ([x0](#area_x0) = [x1](#area_x1)), differing only in *y*-value ([y0](#area_y0) and [y1](#area_y1)); most commonly, y0 is defined as a constant representing [zero](http://www.vox.com/2015/11/19/9758062/y-axis-zero-chart). The first line (the <i>topline</i>) is defined by x1 and y1 and is rendered first; the second line (the <i>baseline</i>) is defined by x0 and y0 and is rendered second, with the points in reverse order. With a [curveLinear](#curveLinear) [curve](#area_curve), this produces a clockwise polygon.
 
-#### d3.area(x, y0, y1)
+### d3.area(x, y0, y1)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 Constructs a new area generator with the default settings. If *x*, *y0* or *y1* are specified, sets the corresponding accessors to the specified function or number and returns this area generator.
 
-#### area(data)
+### area(data)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 Generates an area for the given array of *data*. Depending on this area generator’s associated [curve](#area_curve), the given input *data* may need to be sorted by *x*-value before being passed to the area generator. If the area generator has a [context](#line_context), then the area is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls and this function returns void. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string is returned.
 
-#### area.x(x)
+### area.x(x)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 If *x* is specified, sets [x0](#area_x0) to *x* and [x1](#area_x1) to null and returns this area generator. If *x* is not specified, returns the current x0 accessor.
 
-#### area.x0(x)
+### area.x0(x)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
@@ -594,7 +514,7 @@ const area = d3.area()
     .y0(y(0));
 ```
 
-#### area.x1(x)
+### area.x1(x)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
@@ -602,13 +522,13 @@ If *x* is specified, sets the x1 accessor to the specified function or number an
 
 When an area is [generated](#_area), the x1 accessor will be invoked for each [defined](#area_defined) element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments. See [*area*.x0](#area_x0) for more information.
 
-#### area.y(y)
+### area.y(y)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 If *y* is specified, sets [y0](#area_y0) to *y* and [y1](#area_y1) to null and returns this area generator. If *y* is not specified, returns the current y0 accessor.
 
-#### area.y0(y)
+### area.y0(y)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
@@ -622,7 +542,7 @@ function y() {
 
 When an area is [generated](#_area), the y0 accessor will be invoked for each [defined](#area_defined) element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments. See [*area*.x0](#area_x0) for more information.
 
-#### area.y1(y)
+### area.y1(y)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
@@ -636,7 +556,7 @@ function y(d) {
 
 A null accessor is also allowed, indicating that the previously-computed [y0](#area_y0) value should be reused for the y1 value. When an area is [generated](#_area), the y1 accessor will be invoked for each [defined](#area_defined) element in the input data array, being passed the element `d`, the index `i`, and the array `data` as three arguments. See [*area*.x0](#area_x0) for more information.
 
-#### area.defined(defined)
+### area.defined(defined)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
@@ -654,125 +574,44 @@ The default accessor thus assumes that the input data is always defined. When an
 
 Note that if an area segment consists of only a single point, it may appear invisible unless rendered with rounded or square [line caps](https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/stroke-linecap). In addition, some curves such as [curveCardinalOpen](#curveCardinalOpen) only render a visible segment if it contains multiple points.
 
-#### area.curve(curve)
+### area.curve(curve)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 If *curve* is specified, sets the [curve factory](#curves) and returns this area generator. If *curve* is not specified, returns the current curve factory, which defaults to [curveLinear](#curveLinear).
 
-#### area.context(context)
+### area.context(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 If *context* is specified, sets the context and returns this area generator. If *context* is not specified, returns the current context, which defaults to null. If the context is not null, then the [generated area](#_area) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated area is returned.
 
-#### area.digits(digits)
+### area.digits(digits)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 If *digits* is specified, sets the maximum number of digits after the decimal separator and returns this area generator. If *digits* is not specified, returns the current maximum fraction digits, which defaults to 3. This option only applies when the associated [*context*](#area_context) is null, as when this area generator is used to produce [path data](http://www.w3.org/TR/SVG/paths.html#PathData).
 
-#### area.lineX0()
+### area.lineX0()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 <br><a name="area_lineY0" href="#area_lineY0">#</a> <i>area</i>.<b>lineY0</b>() · [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 Returns a new [line generator](#lines) that has this area generator’s current [defined accessor](#area_defined), [curve](#area_curve) and [context](#area_context). The line’s [*x*-accessor](#line_x) is this area’s [*x0*-accessor](#area_x0), and the line’s [*y*-accessor](#line_y) is this area’s [*y0*-accessor](#area_y0).
 
-#### area.lineX1()
+### area.lineX1()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 Returns a new [line generator](#lines) that has this area generator’s current [defined accessor](#area_defined), [curve](#area_curve) and [context](#area_context). The line’s [*x*-accessor](#line_x) is this area’s [*x1*-accessor](#area_x1), and the line’s [*y*-accessor](#line_y) is this area’s [*y0*-accessor](#area_y0).
 
-#### area.lineY1()
+### area.lineY1()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/area.js)
 
 Returns a new [line generator](#lines) that has this area generator’s current [defined accessor](#area_defined), [curve](#area_curve) and [context](#area_context). The line’s [*x*-accessor](#line_x) is this area’s [*x0*-accessor](#area_x0), and the line’s [*y*-accessor](#line_y) is this area’s [*y1*-accessor](#area_y1).
 
-#### d3.areaRadial()
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-<img alt="Radial Area" width="250" height="250" src="./img/area-radial.png">
-
-Constructs a new radial area generator with the default settings. A radial area generator is equivalent to the standard Cartesian [area generator](#area), except the [x](#area_x) and [y](#area_y) accessors are replaced with [angle](#areaRadial_angle) and [radius](#areaRadial_radius) accessors. Radial areas are always positioned relative to ⟨0,0⟩; use a transform (see: [SVG](http://www.w3.org/TR/SVG/coords.html#TransformAttribute), [Canvas](http://www.w3.org/TR/2dcontext/#transformations)) to change the origin.
-
-#### areaRadial(data)
-
-Equivalent to [*area*](#_area).
-
-#### areaRadial.angle(angle)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Equivalent to [*area*.x](#area_x), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock).
-
-#### areaRadial.startAngle(angle)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Equivalent to [*area*.x0](#area_x0), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock). Note: typically [angle](#areaRadial_angle) is used instead of setting separate start and end angles.
-
-#### areaRadial.endAngle(angle)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Equivalent to [*area*.x1](#area_x1), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock). Note: typically [angle](#areaRadial_angle) is used instead of setting separate start and end angles.
-
-#### areaRadial.radius(radius)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Equivalent to [*area*.y](#area_y), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
-
-#### areaRadial.innerRadius(radius)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Equivalent to [*area*.y0](#area_y0), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
-
-#### areaRadial.outerRadius(radius)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Equivalent to [*area*.y1](#area_y1), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
-
-#### areaRadial.defined(defined)
-
-Equivalent to [*area*.defined](#area_defined).
-
-#### areaRadial.curve(curve)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Equivalent to [*area*.curve](#area_curve). Note that [curveMonotoneX](#curveMonotoneX) or [curveMonotoneY](#curveMonotoneY) are not recommended for radial areas because they assume that the data is monotonic in *x* or *y*, which is typically untrue of radial areas.
-
-#### areaRadial.context(context)
-
-Equivalent to [*line*.context](#line_context).
-
-#### areaRadial.lineStartAngle()
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-<br><a name="areaRadial_lineInnerRadius" href="#areaRadial_lineInnerRadius">#</a> <i>areaRadial</i>.<b>lineInnerRadius</b>() · [Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Returns a new [radial line generator](#lineRadial) that has this radial area generator’s current [defined accessor](#areaRadial_defined), [curve](#areaRadial_curve) and [context](#areaRadial_context). The line’s [angle accessor](#lineRadial_angle) is this area’s [start angle accessor](#areaRadial_startAngle), and the line’s [radius accessor](#lineRadial_radius) is this area’s [inner radius accessor](#areaRadial_innerRadius).
-
-#### areaRadial.lineEndAngle()
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Returns a new [radial line generator](#lineRadial) that has this radial area generator’s current [defined accessor](#areaRadial_defined), [curve](#areaRadial_curve) and [context](#areaRadial_context). The line’s [angle accessor](#lineRadial_angle) is this area’s [end angle accessor](#areaRadial_endAngle), and the line’s [radius accessor](#lineRadial_radius) is this area’s [inner radius accessor](#areaRadial_innerRadius).
-
-#### areaRadial.lineOuterRadius()
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
-
-Returns a new [radial line generator](#lineRadial) that has this radial area generator’s current [defined accessor](#areaRadial_defined), [curve](#areaRadial_curve) and [context](#areaRadial_context). The line’s [angle accessor](#lineRadial_angle) is this area’s [start angle accessor](#areaRadial_startAngle), and the line’s [radius accessor](#lineRadial_radius) is this area’s [outer radius accessor](#areaRadial_outerRadius).
-
-### Curves
+## Curves
 
 While [lines](#lines) are defined as a sequence of two-dimensional [*x*, *y*] points, and [areas](#areas) are similarly defined by a topline and a baseline, there remains the task of transforming this discrete representation into a continuous shape: *i.e.*, how to interpolate between the points. A variety of curves are provided for this purpose.
 
@@ -783,7 +622,7 @@ const line = d3.line(d => d.date, d => d.value)
     .curve(d3.curveCatmullRom.alpha(0.5));
 ```
 
-#### d3.curveBasis(context)
+### d3.curveBasis(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/basis.js)
 
@@ -791,7 +630,7 @@ const line = d3.line(d => d.date, d => d.value)
 
 Produces a cubic [basis spline](https://en.wikipedia.org/wiki/B-spline) using the specified control points. The first and last points are triplicated such that the spline starts at the first point and ends at the last point, and is tangent to the line between the first and second points, and to the line between the penultimate and last points.
 
-#### d3.curveBasisClosed(context)
+### d3.curveBasisClosed(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/basisClosed.js)
 
@@ -799,7 +638,7 @@ Produces a cubic [basis spline](https://en.wikipedia.org/wiki/B-spline) using th
 
 Produces a closed cubic [basis spline](https://en.wikipedia.org/wiki/B-spline) using the specified control points. When a line segment ends, the first three control points are repeated, producing a closed loop with C2 continuity.
 
-#### d3.curveBasisOpen(context)
+### d3.curveBasisOpen(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/basisOpen.js)
 
@@ -807,7 +646,7 @@ Produces a closed cubic [basis spline](https://en.wikipedia.org/wiki/B-spline) u
 
 Produces a cubic [basis spline](https://en.wikipedia.org/wiki/B-spline) using the specified control points. Unlike [basis](#basis), the first and last points are not repeated, and thus the curve typically does not intersect these points.
 
-#### d3.curveBumpX(context)
+### d3.curveBumpX(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/bump.js)
 
@@ -815,7 +654,7 @@ Produces a cubic [basis spline](https://en.wikipedia.org/wiki/B-spline) using th
 
 Produces a Bézier curve between each pair of points, with horizontal tangents at each point.
 
-#### d3.curveBumpY(context)
+### d3.curveBumpY(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/bump.js)
 
@@ -823,7 +662,7 @@ Produces a Bézier curve between each pair of points, with horizontal tangents a
 
 Produces a Bézier curve between each pair of points, with vertical tangents at each point.
 
-#### d3.curveBundle(context)
+### d3.curveBundle(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/bundle.js)
 
@@ -831,7 +670,7 @@ Produces a Bézier curve between each pair of points, with vertical tangents at 
 
 Produces a straightened cubic [basis spline](https://en.wikipedia.org/wiki/B-spline) using the specified control points, with the spline straightened according to the curve’s [*beta*](#curveBundle_beta), which defaults to 0.85. This curve is typically used in [hierarchical edge bundling](https://observablehq.com/@d3/hierarchical-edge-bundling) to disambiguate connections, as proposed by [Danny Holten](https://www.win.tue.nl/vis1/home/dholten/) in [Hierarchical Edge Bundles: Visualization of Adjacency Relations in Hierarchical Data](https://www.win.tue.nl/vis1/home/dholten/papers/bundles_infovis.pdf). This curve does not implement [*curve*.areaStart](#curve_areaStart) and [*curve*.areaEnd](#curve_areaEnd); it is intended to work with [d3.line](#lines), not [d3.area](#areas).
 
-#### bundle.beta(beta)
+### bundle.beta(beta)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/bundle.js)
 
@@ -841,7 +680,7 @@ Returns a bundle curve with the specified *beta* in the range [0, 1], representi
 const line = d3.line().curve(d3.curveBundle.beta(0.5));
 ```
 
-#### d3.curveCardinal(context)
+### d3.curveCardinal(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/cardinal.js)
 
@@ -849,7 +688,7 @@ const line = d3.line().curve(d3.curveBundle.beta(0.5));
 
 Produces a cubic [cardinal spline](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Cardinal_spline) using the specified control points, with one-sided differences used for the first and last piece. The default [tension](#curveCardinal_tension) is 0.
 
-#### d3.curveCardinalClosed(context)
+### d3.curveCardinalClosed(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/cardinalClosed.js)
 
@@ -857,7 +696,7 @@ Produces a cubic [cardinal spline](https://en.wikipedia.org/wiki/Cubic_Hermite_s
 
 Produces a closed cubic [cardinal spline](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Cardinal_spline) using the specified control points. When a line segment ends, the first three control points are repeated, producing a closed loop. The default [tension](#curveCardinal_tension) is 0.
 
-#### d3.curveCardinalOpen(context)
+### d3.curveCardinalOpen(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/cardinalOpen.js)
 
@@ -865,7 +704,7 @@ Produces a closed cubic [cardinal spline](https://en.wikipedia.org/wiki/Cubic_He
 
 Produces a cubic [cardinal spline](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Cardinal_spline) using the specified control points. Unlike [curveCardinal](#curveCardinal), one-sided differences are not used for the first and last piece, and thus the curve starts at the second point and ends at the penultimate point. The default [tension](#curveCardinal_tension) is 0.
 
-#### cardinal.tension(tension)
+### cardinal.tension(tension)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/cardinalOpen.js)
 
@@ -875,7 +714,7 @@ Returns a cardinal curve with the specified *tension* in the range [0, 1]. The *
 const line = d3.line().curve(d3.curveCardinal.tension(0.5));
 ```
 
-#### d3.curveCatmullRom(context)
+### d3.curveCatmullRom(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/catmullRom.js)
 
@@ -883,7 +722,7 @@ const line = d3.line().curve(d3.curveCardinal.tension(0.5));
 
 Produces a cubic Catmull–Rom spline using the specified control points and the parameter [*alpha*](#curveCatmullRom_alpha), which defaults to 0.5, as proposed by Yuksel et al. in [On the Parameterization of Catmull–Rom Curves](http://www.cemyuksel.com/research/catmullrom_param/), with one-sided differences used for the first and last piece.
 
-#### d3.curveCatmullRomClosed(context)
+### d3.curveCatmullRomClosed(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/catmullRomClosed.js)
 
@@ -891,7 +730,7 @@ Produces a cubic Catmull–Rom spline using the specified control points and the
 
 Produces a closed cubic Catmull–Rom spline using the specified control points and the parameter [*alpha*](#curveCatmullRom_alpha), which defaults to 0.5, as proposed by Yuksel et al. When a line segment ends, the first three control points are repeated, producing a closed loop.
 
-#### d3.curveCatmullRomOpen(context)
+### d3.curveCatmullRomOpen(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/catmullRomOpen.js)
 
@@ -899,7 +738,7 @@ Produces a closed cubic Catmull–Rom spline using the specified control points 
 
 Produces a cubic Catmull–Rom spline using the specified control points and the parameter [*alpha*](#curveCatmullRom_alpha), which defaults to 0.5, as proposed by Yuksel et al. Unlike [curveCatmullRom](#curveCatmullRom), one-sided differences are not used for the first and last piece, and thus the curve starts at the second point and ends at the penultimate point.
 
-#### catmullRom.alpha(alpha)
+### catmullRom.alpha(alpha)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/catmullRom.js)
 
@@ -909,7 +748,7 @@ Returns a cubic Catmull–Rom curve with the specified *alpha* in the range [0, 
 const line = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
 ```
 
-#### d3.curveLinear(context)
+### d3.curveLinear(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/linear.js)
 
@@ -917,7 +756,7 @@ const line = d3.line().curve(d3.curveCatmullRom.alpha(0.5));
 
 Produces a polyline through the specified points.
 
-#### d3.curveLinearClosed(context)
+### d3.curveLinearClosed(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/linearClosed.js)
 
@@ -925,7 +764,7 @@ Produces a polyline through the specified points.
 
 Produces a closed polyline through the specified points by repeating the first point when the line segment ends.
 
-#### d3.curveMonotoneX(context)
+### d3.curveMonotoneX(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/monotone.js)
 
@@ -933,7 +772,7 @@ Produces a closed polyline through the specified points by repeating the first p
 
 Produces a cubic spline that [preserves monotonicity](https://en.wikipedia.org/wiki/Monotone_cubic_interpolation) in *y*, assuming monotonicity in *x*, as proposed by Steffen in [A simple method for monotonic interpolation in one dimension](http://adsabs.harvard.edu/full/1990A%26A...239..443S): “a smooth curve with continuous first-order derivatives that passes through any given set of data points without spurious oscillations. Local extrema can occur only at grid points where they are given by the data, but not in between two adjacent grid points.”
 
-#### d3.curveMonotoneY(context)
+### d3.curveMonotoneY(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/monotone.js)
 
@@ -941,7 +780,7 @@ Produces a cubic spline that [preserves monotonicity](https://en.wikipedia.org/w
 
 Produces a cubic spline that [preserves monotonicity](https://en.wikipedia.org/wiki/Monotone_cubic_interpolation) in *x*, assuming monotonicity in *y*, as proposed by Steffen in [A simple method for monotonic interpolation in one dimension](http://adsabs.harvard.edu/full/1990A%26A...239..443S): “a smooth curve with continuous first-order derivatives that passes through any given set of data points without spurious oscillations. Local extrema can occur only at grid points where they are given by the data, but not in between two adjacent grid points.”
 
-#### d3.curveNatural(context)
+### d3.curveNatural(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/natural.js)
 
@@ -949,7 +788,7 @@ Produces a cubic spline that [preserves monotonicity](https://en.wikipedia.org/w
 
 Produces a [natural](https://en.wikipedia.org/wiki/Spline_interpolation) [cubic spline](http://mathworld.wolfram.com/CubicSpline.html) with the second derivative of the spline set to zero at the endpoints.
 
-#### d3.curveStep(context)
+### d3.curveStep(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/step.js)
 
@@ -957,7 +796,7 @@ Produces a [natural](https://en.wikipedia.org/wiki/Spline_interpolation) [cubic 
 
 Produces a piecewise constant function (a [step function](https://en.wikipedia.org/wiki/Step_function)) consisting of alternating horizontal and vertical lines. The *y*-value changes at the midpoint of each pair of adjacent *x*-values.
 
-#### d3.curveStepAfter(context)
+### d3.curveStepAfter(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/step.js)
 
@@ -965,7 +804,7 @@ Produces a piecewise constant function (a [step function](https://en.wikipedia.o
 
 Produces a piecewise constant function (a [step function](https://en.wikipedia.org/wiki/Step_function)) consisting of alternating horizontal and vertical lines. The *y*-value changes after the *x*-value.
 
-#### d3.curveStepBefore(context)
+### d3.curveStepBefore(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/step.js)
 
@@ -973,47 +812,47 @@ Produces a piecewise constant function (a [step function](https://en.wikipedia.o
 
 Produces a piecewise constant function (a [step function](https://en.wikipedia.org/wiki/Step_function)) consisting of alternating horizontal and vertical lines. The *y*-value changes before the *x*-value.
 
-### Custom Curves
+## Custom curves
 
 Curves are typically not used directly, instead being passed to [*line*.curve](#line_curve) and [*area*.curve](#area_curve). However, you can define your own curve implementation should none of the built-in curves satisfy your needs using the following interface. You can also use this low-level interface with a built-in curve type as an alternative to the line and area generators.
 
-#### curve.areaStart()
+### curve.areaStart()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/step.js#L7)
 
 Indicates the start of a new area segment. Each area segment consists of exactly two [line segments](#curve_lineStart): the topline, followed by the baseline, with the baseline points in reverse order.
 
-#### curve.areaEnd()
+### curve.areaEnd()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/step.js)
 
 Indicates the end of the current area segment.
 
-#### curve.lineStart()
+### curve.lineStart()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/step.js)
 
 Indicates the start of a new line segment. Zero or more [points](#curve_point) will follow.
 
-#### curve.lineEnd()
+### curve.lineEnd()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/step.js)
 
 Indicates the end of the current line segment.
 
-#### curve.point(x, y)
+### curve.point(x, y)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/curve/step.js)
 
 Indicates a new point in the current line segment with the given *x*- and *y*-values.
 
-### Links
+## Links
 
 [<img alt="Tidy Tree" src="https://raw.githubusercontent.com/d3/d3-hierarchy/master/img/tree.png">](https://observablehq.com/@d3/tidy-tree)
 
 The **link** shape generates a smooth cubic Bézier curve from a source point to a target point. The tangents of the curve at the start and end are either [vertical](#linkVertical), [horizontal](#linkHorizontal) or [radial](#linkRadial).
 
-#### d3.link(curve)
+### d3.link(curve)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1025,7 +864,7 @@ const link = d3.link(d3.curveBumpY)
     .y(d => d.y);
 ```
 
-#### d3.linkVertical()
+### d3.linkVertical()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1035,7 +874,7 @@ Shorthand for [d3.link](#link) with [d3.curveBumpY](#curveBumpY); suitable for v
 const link = d3.link(d3.curveBumpY);
 ```
 
-#### d3.linkHorizontal()
+### d3.linkHorizontal()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1045,7 +884,7 @@ Shorthand for [d3.link](#link) with [d3.curveBumpX](#curveBumpX); suitable for v
 const link = d3.link(d3.curveBumpX);
 ```
 
-#### link(arguments…)
+### link(arguments…)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1058,7 +897,7 @@ link({
 });
 ```
 
-#### link.source(source)
+### link.source(source)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1070,7 +909,7 @@ function source(d) {
 }
 ```
 
-#### link.target(target)
+### link.target(target)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1082,7 +921,7 @@ function target(d) {
 }
 ```
 
-#### link.x(x)
+### link.x(x)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1094,7 +933,7 @@ function x(d) {
 }
 ```
 
-#### link.y(y)
+### link.y(y)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1106,19 +945,146 @@ function y(d) {
 }
 ```
 
-#### link.context(context)
+### link.context(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
 If *context* is specified, sets the context and returns this link generator. If *context* is not specified, returns the current context, which defaults to null. If the context is not null, then the [generated link](#_link) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated link is returned. See also [d3-path](https://github.com/d3/d3-path).
 
-#### link.digits(digits)
+### link.digits(digits)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
 If *digits* is specified, sets the maximum number of digits after the decimal separator and returns this link generator. If *digits* is not specified, returns the current maximum fraction digits, which defaults to 3. This option only applies when the associated [*context*](#link_context) is null, as when this link generator is used to produce [path data](http://www.w3.org/TR/SVG/paths.html#PathData).
 
-#### d3.linkRadial()
+## Radial lines
+
+### d3.lineRadial()
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js), [Examples](https://observablehq.com/@d3/d3-lineradial)
+
+<img alt="Radial Line" width="250" height="250" src="./img/line-radial.png">
+
+Constructs a new radial line generator with the default settings. A radial line generator is equivalent to the standard Cartesian [line generator](#line), except the [x](#line_x) and [y](#line_y) accessors are replaced with [angle](#lineRadial_angle) and [radius](#lineRadial_radius) accessors. Radial lines are always positioned relative to ⟨0,0⟩; use a transform (see: [SVG](http://www.w3.org/TR/SVG/coords.html#TransformAttribute), [Canvas](http://www.w3.org/TR/2dcontext/#transformations)) to change the origin.
+
+### lineRadial(data)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L4), [Examples](https://observablehq.com/@d3/d3-lineradial)
+
+Equivalent to [*line*](#_line).
+
+### lineRadial.angle(angle)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L7), [Examples](https://observablehq.com/@d3/d3-lineradial)
+
+Equivalent to [*line*.x](#line_x), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock).
+
+### lineRadial.radius(radius)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js#L8), [Examples](https://observablehq.com/@d3/d3-lineradial)
+
+Equivalent to [*line*.y](#line_y), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
+
+### lineRadial.defined(defined)
+
+Equivalent to [*line*.defined](#line_defined).
+
+### lineRadial.curve(curve)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/lineRadial.js), [Examples](https://observablehq.com/@d3/d3-lineradial)
+
+Equivalent to [*line*.curve](#line_curve). Note that [curveMonotoneX](#curveMonotoneX) or [curveMonotoneY](#curveMonotoneY) are not recommended for radial lines because they assume that the data is monotonic in *x* or *y*, which is typically untrue of radial lines.
+
+### lineRadial.context(context)
+
+Equivalent to [*line*.context](#line_context).
+
+## Radial areas
+
+### d3.areaRadial()
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+<img alt="Radial Area" width="250" height="250" src="./img/area-radial.png">
+
+Constructs a new radial area generator with the default settings. A radial area generator is equivalent to the standard Cartesian [area generator](#area), except the [x](#area_x) and [y](#area_y) accessors are replaced with [angle](#areaRadial_angle) and [radius](#areaRadial_radius) accessors. Radial areas are always positioned relative to ⟨0,0⟩; use a transform (see: [SVG](http://www.w3.org/TR/SVG/coords.html#TransformAttribute), [Canvas](http://www.w3.org/TR/2dcontext/#transformations)) to change the origin.
+
+### areaRadial(data)
+
+Equivalent to [*area*](#_area).
+
+### areaRadial.angle(angle)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Equivalent to [*area*.x](#area_x), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock).
+
+### areaRadial.startAngle(angle)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Equivalent to [*area*.x0](#area_x0), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock). Note: typically [angle](#areaRadial_angle) is used instead of setting separate start and end angles.
+
+### areaRadial.endAngle(angle)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Equivalent to [*area*.x1](#area_x1), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock). Note: typically [angle](#areaRadial_angle) is used instead of setting separate start and end angles.
+
+### areaRadial.radius(radius)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Equivalent to [*area*.y](#area_y), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
+
+### areaRadial.innerRadius(radius)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Equivalent to [*area*.y0](#area_y0), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
+
+### areaRadial.outerRadius(radius)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Equivalent to [*area*.y1](#area_y1), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
+
+### areaRadial.defined(defined)
+
+Equivalent to [*area*.defined](#area_defined).
+
+### areaRadial.curve(curve)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Equivalent to [*area*.curve](#area_curve). Note that [curveMonotoneX](#curveMonotoneX) or [curveMonotoneY](#curveMonotoneY) are not recommended for radial areas because they assume that the data is monotonic in *x* or *y*, which is typically untrue of radial areas.
+
+### areaRadial.context(context)
+
+Equivalent to [*line*.context](#line_context).
+
+### areaRadial.lineStartAngle()
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+<br><a name="areaRadial_lineInnerRadius" href="#areaRadial_lineInnerRadius">#</a> <i>areaRadial</i>.<b>lineInnerRadius</b>() · [Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Returns a new [radial line generator](#lineRadial) that has this radial area generator’s current [defined accessor](#areaRadial_defined), [curve](#areaRadial_curve) and [context](#areaRadial_context). The line’s [angle accessor](#lineRadial_angle) is this area’s [start angle accessor](#areaRadial_startAngle), and the line’s [radius accessor](#lineRadial_radius) is this area’s [inner radius accessor](#areaRadial_innerRadius).
+
+### areaRadial.lineEndAngle()
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Returns a new [radial line generator](#lineRadial) that has this radial area generator’s current [defined accessor](#areaRadial_defined), [curve](#areaRadial_curve) and [context](#areaRadial_context). The line’s [angle accessor](#lineRadial_angle) is this area’s [end angle accessor](#areaRadial_endAngle), and the line’s [radius accessor](#lineRadial_radius) is this area’s [inner radius accessor](#areaRadial_innerRadius).
+
+### areaRadial.lineOuterRadius()
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/areaRadial.js)
+
+Returns a new [radial line generator](#lineRadial) that has this radial area generator’s current [defined accessor](#areaRadial_defined), [curve](#areaRadial_curve) and [context](#areaRadial_context). The line’s [angle accessor](#lineRadial_angle) is this area’s [start angle accessor](#areaRadial_startAngle), and the line’s [radius accessor](#lineRadial_radius) is this area’s [outer radius accessor](#areaRadial_outerRadius).
+
+## Radial links
+
+### d3.linkRadial()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
@@ -1130,35 +1096,43 @@ const link = d3.linkRadial()
     .radius(d => d.y);
 ```
 
-#### linkRadial.angle(angle)
+### linkRadial.angle(angle)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
 Equivalent to [*link*.x](#link_x), except the accessor returns the angle in radians, with 0 at -*y* (12 o’clock).
 
-#### linkRadial.radius(radius)
+### linkRadial.radius(radius)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/link.js)
 
 Equivalent to [*link*.y](#link_y), except the accessor returns the radius: the distance from the origin ⟨0,0⟩.
 
-### Symbols
+## Radial points
+
+### d3.pointRadial(angle, radius)
+
+[Source](https://github.com/d3/d3-shape/blob/main/src/pointRadial.js), [Examples](https://observablehq.com/@d3/radial-area-chart)
+
+Returns the point [<i>x</i>, <i>y</i>] for the given *angle* in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise, and the given *radius*.
+
+## Symbols
 
 Symbols provide a categorical shape encoding as is commonly used in scatterplots. Symbols are always centered at ⟨0,0⟩; use a transform (see: [SVG](http://www.w3.org/TR/SVG/coords.html#TransformAttribute), [Canvas](http://www.w3.org/TR/2dcontext/#transformations)) to move the symbol to a different position.
 
-#### d3.symbol(type, size)
+### d3.symbol(type, size)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js), [Examples](https://observablehq.com/@d3/fitted-symbols)
 
 Constructs a new symbol generator of the specified [type](#symbol_type) and [size](#symbol_size). If not specified, *type* defaults to a circle, and *size* defaults to 64.
 
-#### symbol(arguments…)
+### symbol(arguments…)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
 Generates a symbol for the given *arguments*. The *arguments* are arbitrary; they are simply propagated to the symbol generator’s accessor functions along with the `this` object. For example, with the default settings, no arguments are needed to produce a circle with area 64 square pixels. If the symbol generator has a [context](#symbol_context), then the symbol is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls and this function returns void. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string is returned.
 
-#### symbol.type(type)
+### symbol.type(type)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
@@ -1172,7 +1146,7 @@ function type() {
 
 See [symbolsFill](#symbolsFill) and [symbolsStroke](#symbolsStroke) for built-in symbol types. To implement a custom symbol type, pass an object that implements [*symbolType*.draw](#symbolType_draw).
 
-#### symbol.size(size)
+### symbol.size(size)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
@@ -1186,19 +1160,19 @@ function size() {
 
 Specifying the size as a function is useful for constructing a scatterplot with a size encoding. If you wish to scale the symbol to fit a given bounding box, rather than by area, try [SVG’s getBBox](https://observablehq.com/d/1fac2626b9e1b65f).
 
-#### symbol.context(context)
+### symbol.context(context)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
 If *context* is specified, sets the context and returns this symbol generator. If *context* is not specified, returns the current context, which defaults to null. If the context is not null, then the [generated symbol](#_symbol) is rendered to this context as a sequence of [path method](http://www.w3.org/TR/2dcontext/#canvaspathmethods) calls. Otherwise, a [path data](http://www.w3.org/TR/SVG/paths.html#PathData) string representing the generated symbol is returned.
 
-#### symbol.digits(digits)
+### symbol.digits(digits)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
 If *digits* is specified, sets the maximum number of digits after the decimal separator and returns this symbol generator. If *digits* is not specified, returns the current maximum fraction digits, which defaults to 3. This option only applies when the associated [*context*](#symbol_context) is null, as when this symbol generator is used to produce [path data](http://www.w3.org/TR/SVG/paths.html#PathData).
 
-#### d3.symbolsFill
+### d3.symbolsFill
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
@@ -1212,105 +1186,99 @@ If *digits* is specified, sets the maximum number of digits after the decimal se
 
 An array containing a set of symbol types designed for filling: [circle](#symbolCircle), [cross](#symbolCross), [diamond](#symbolDiamond), [square](#symbolSquare), [star](#symbolStar), [triangle](#symbolTriangle), and [wye](#symbolWye). Useful for constructing the range of an [ordinal scale](https://github.com/d3/d3-scale#ordinal-scales) should you wish to use a shape encoding for categorical data.
 
-#### d3.symbolsStroke
+### d3.symbolsStroke
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol.js)
 
 An array containing a set of symbol types designed for stroking: [circle](#symbolCircle), [plus](#symbolPlus), [times](#symbolTimes), [triangle2](#symbolTriangle2), [asterisk](#symbolAsterisk), [square2](#symbolSquare2), and [diamond2](#symbolDiamond2). Useful for constructing the range of an [ordinal scale](https://github.com/d3/d3-scale#ordinal-scales) should you wish to use a shape encoding for categorical data.
 
-#### d3.symbolAsterisk
+### d3.symbolAsterisk
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/asterisk.js)
 
 The asterisk symbol type; intended for stroking.
 
-#### d3.symbolCircle
+### d3.symbolCircle
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/circle.js)
 
 The circle symbol type; intended for either filling or stroking.
 
-#### d3.symbolCross
+### d3.symbolCross
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/cross.js)
 
 The Greek cross symbol type, with arms of equal length; intended for filling.
 
-#### d3.symbolDiamond
+### d3.symbolDiamond
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/diamond.js)
 
 The rhombus symbol type; intended for filling.
 
-#### d3.symbolDiamond2
+### d3.symbolDiamond2
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/diamond.js)
 
 The rotated square symbol type; intended for stroking.
 
-#### d3.symbolPlus
+### d3.symbolPlus
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/plus.js)
 
 The plus symbol type; intended for stroking.
 
-#### d3.symbolSquare
+### d3.symbolSquare
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/square.js)
 
 The square symbol type; intended for filling.
 
-#### d3.symbolSquare2
+### d3.symbolSquare2
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/square2.js)
 
 The square2 symbol type; intended for stroking.
 
-#### d3.symbolStar
+### d3.symbolStar
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/star.js)
 
 The pentagonal star (pentagram) symbol type; intended for filling.
 
-#### d3.symbolTriangle
+### d3.symbolTriangle
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/triangle.js)
 
 The up-pointing triangle symbol type; intended for filling.
 
-#### d3.symbolTriangle2
+### d3.symbolTriangle2
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/triangle2.js)
 
 The up-pointing triangle symbol type; intended for stroking.
 
-#### d3.symbolWye
+### d3.symbolWye
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/wye.js)
 
 The Y-shape symbol type; intended for filling.
 
-#### d3.symbolTimes
+### d3.symbolTimes
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/symbol/times.js)
 
 The X-shape symbol type; intended for stroking.
 
-#### d3.pointRadial(angle, radius)
-
-[Source](https://github.com/d3/d3-shape/blob/main/src/pointRadial.js), [Examples](https://observablehq.com/@d3/radial-area-chart)
-
-Returns the point [<i>x</i>, <i>y</i>] for the given *angle* in radians, with 0 at -*y* (12 o’clock) and positive angles proceeding clockwise, and the given *radius*.
-
-### Custom Symbol Types
+## Custom symbol types
 
 Symbol types are typically not used directly, instead being passed to [*symbol*.type](#symbol_type). However, you can define your own symbol type implementation should none of the built-in types satisfy your needs using the following interface. You can also use this low-level interface with a built-in symbol type as an alternative to the symbol generator.
 
-#### symbolType.draw(context, size)
+### symbolType.draw(context, size)
 
 Renders this symbol type to the specified *context* with the specified *size* in square pixels. The *context* implements the [CanvasPathMethods](http://www.w3.org/TR/2dcontext/#canvaspathmethods) interface. (Note that this is a subset of the CanvasRenderingContext2D interface!)
 
-### Stacks
+## Stacks
 
 [<img alt="Stacked Bar Chart" src="./img/stacked-bar.png" width="295" height="154">](https://observablehq.com/@d3/stacked-bar-chart)[<img alt="Streamgraph" src="./img/stacked-stream.png" width="295" height="154">](https://observablehq.com/@mbostock/streamgraph-transitions)
 
@@ -1320,13 +1288,13 @@ Stacked charts can show overall value and per-category value simultaneously; how
 
 Like the [pie generator](#pies), the stack generator does not produce a shape directly. Instead it computes positions which you can then pass to an [area generator](#areas) or use directly, say to position bars.
 
-#### d3.stack()
+### d3.stack()
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/stack.js)
 
 Constructs a new stack generator with the default settings.
 
-#### stack(data, arguments…)
+### stack(data, arguments…)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/stack.js)
 
@@ -1378,13 +1346,13 @@ The resulting array has one element per *series*. Each series has one point per 
 
 Each series in then typically passed to an [area generator](#areas) to render an area chart, or used to construct rectangles for a bar chart.
 
-#### stack.keys(keys)
+### stack.keys(keys)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/stack.js)
 
 If *keys* is specified, sets the keys accessor to the specified function or array and returns this stack generator. If *keys* is not specified, returns the current keys accessor, which defaults to the empty array. A series (layer) is [generated](#_stack) for each key. Keys are typically strings, but they may be arbitrary values. The series’ key is passed to the [value accessor](#stack_value), along with each data point, to compute the point’s value.
 
-#### stack.value(value)
+### stack.value(value)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/stack.js)
 
@@ -1398,7 +1366,7 @@ function value(d, key) {
 
 Thus, by default the stack generator assumes that the input data is an array of objects, with each object exposing named properties with numeric values; see [*stack*](#_stack) for an example.
 
-#### stack.order(order)
+### stack.order(order)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/stack.js)
 
@@ -1417,7 +1385,7 @@ function orderNone(series) {
 
 The stack order is computed prior to the [offset](#stack_offset); thus, the lower value for all points is zero at the time the order is computed. The index attribute for each series is also not set until after the order is computed.
 
-#### stack.offset(offset)
+### stack.offset(offset)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/stack.js)
 
@@ -1437,75 +1405,75 @@ function offsetNone(series, order) {
 }
 ```
 
-### Stack Orders
+## Stack orders
 
 Stack orders are typically not used directly, but are instead passed to [*stack*.order](#stack_order).
 
-#### d3.stackOrderAppearance(series)
+### d3.stackOrderAppearance(series)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/appearance.js)
 
 Returns a series order such that the earliest series (according to the maximum value) is at the bottom.
 
-#### d3.stackOrderAscending(series)
+### d3.stackOrderAscending(series)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/ascending.js)
 
 Returns a series order such that the smallest series (according to the sum of values) is at the bottom.
 
-#### d3.stackOrderDescending(series)
+### d3.stackOrderDescending(series)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/descending.js)
 
 Returns a series order such that the largest series (according to the sum of values) is at the bottom.
 
-#### d3.stackOrderInsideOut(series)
+### d3.stackOrderInsideOut(series)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/insideOut.js)
 
 Returns a series order such that the earliest series (according to the maximum value) are on the inside and the later series are on the outside. This order is recommended for streamgraphs in conjunction with the [wiggle offset](#stackOffsetWiggle). See [Stacked Graphs—Geometry & Aesthetics](http://leebyron.com/streamgraph/) by Byron & Wattenberg for more information.
 
-#### d3.stackOrderNone(series)
+### d3.stackOrderNone(series)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/none.js)
 
 Returns the given series order [0, 1, … *n* - 1] where *n* is the number of elements in *series*. Thus, the stack order is given by the [key accessor](#stack_keys).
 
-#### d3.stackOrderReverse(series)
+### d3.stackOrderReverse(series)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/order/reverse.js)
 
 Returns the reverse of the given series order [*n* - 1, *n* - 2, … 0] where *n* is the number of elements in *series*. Thus, the stack order is given by the reverse of the [key accessor](#stack_keys).
 
-### Stack Offsets
+## Stack offsets
 
 Stack offsets are typically not used directly, but are instead passed to [*stack*.offset](#stack_offset).
 
-#### d3.stackOffsetExpand(series, order)
+### d3.stackOffsetExpand(series, order)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/offset/expand.js)
 
 Applies a zero baseline and normalizes the values for each point such that the topline is always one.
 
-#### d3.stackOffsetDiverging(series, order)
+### d3.stackOffsetDiverging(series, order)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/offset/diverging.js)
 
 Positive values are stacked above zero, negative values are [stacked below zero](https://observablehq.com/@d3/diverging-stacked-bar-chart), and zero values are stacked at zero.
 
-#### d3.stackOffsetNone(series, order)
+### d3.stackOffsetNone(series, order)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/offset/none.js)
 
 Applies a zero baseline.
 
-#### d3.stackOffsetSilhouette(series, order)
+### d3.stackOffsetSilhouette(series, order)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/offset/silhouette.js)
 
 Shifts the baseline down such that the center of the streamgraph is always at zero.
 
-#### d3.stackOffsetWiggle(series, order)
+### d3.stackOffsetWiggle(series, order)
 
 [Source](https://github.com/d3/d3-shape/blob/main/src/offset/wiggle.js)
 

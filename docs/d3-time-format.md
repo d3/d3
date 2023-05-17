@@ -39,78 +39,39 @@ function multiFormat(date) {
 
 This module is used by D3 [time scales](https://github.com/d3/d3-scale/blob/main/README.md#time-scales) to generate human-readable ticks.
 
-## Installing
+## Time formats
 
-If you use npm, `npm install d3-time-format`. You can also download the [latest release on GitHub](https://github.com/d3/d3-time-format/releases/latest). For vanilla HTML in modern browsers, import d3-time-format from Skypack:
-
-```html
-<script type="module">
-
-import {timeFormat} from "https://cdn.skypack.dev/d3-time-format@4";
-
-const format = timeFormat("%x");
-
-</script>
-```
-
-For legacy environments, you can load d3-time-format’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/d3-array@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-time@3"></script>
-<script src="https://cdn.jsdelivr.net/npm/d3-time-format@4"></script>
-<script>
-
-const format = d3.timeFormat("%x");
-
-</script>
-```
-
-Locale files are published to npm and can be loaded using [d3.json](https://github.com/d3/d3-fetch/blob/main/README.md#json). For example, to set Russian as the default locale:
-
-```js
-d3.json("https://cdn.jsdelivr.net/npm/d3-time-format@3/locale/ru-RU.json").then(locale => {
-  d3.timeFormatDefaultLocale(locale);
-
-  const format = d3.timeFormat("%c");
-
-  console.log(format(new Date)); // понедельник,  5 декабря 2016 г. 10:31:59
-});
-```
-
-## API Reference
-
-#### d3.timeFormat(specifier)
+### d3.timeFormat(specifier)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/defaultLocale.js)
 
 An alias for [*locale*.format](#locale_format) on the [default locale](#timeFormatDefaultLocale).
 
-#### d3.timeParse(specifier)
+### d3.timeParse(specifier)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/defaultLocale.js)
 
 An alias for [*locale*.parse](#locale_parse) on the [default locale](#timeFormatDefaultLocale).
 
-#### d3.utcFormat(specifier)
+### d3.utcFormat(specifier)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/defaultLocale.js)
 
 An alias for [*locale*.utcFormat](#locale_utcFormat) on the [default locale](#timeFormatDefaultLocale).
 
-#### d3.utcParse(specifier)
+### d3.utcParse(specifier)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/defaultLocale.js)
 
 An alias for [*locale*.utcParse](#locale_utcParse) on the [default locale](#timeFormatDefaultLocale).
 
-#### d3.isoFormat
+### d3.isoFormat
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/isoFormat.js)
 
 The full [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) UTC time formatter. Where available, this method will use [Date.toISOString](https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Date/toISOString) to format.
 
-#### d3.isoParse
+### d3.isoParse
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/isoParse.js)
 
@@ -120,7 +81,7 @@ The full [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) UTC time parser. Whe
 const strictIsoParse = d3.utcParse("%Y-%m-%dT%H:%M:%S.%LZ");
 ```
 
-#### locale.format(specifier)
+### locale.format(specifier)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/locale.js)
 
@@ -186,7 +147,7 @@ formatMonth(date); // "May"
 formatDay(date); // "Thursday"
 ```
 
-#### locale.parse(specifier)
+### locale.parse(specifier)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/locale.js)
 
@@ -194,21 +155,21 @@ Returns a new parser for the given string *specifier*. The specifier string may 
 
 The returned function parses a specified *string*, returning the corresponding [date](https://developer.mozilla.org/en/JavaScript/Reference/Global_Objects/Date) or null if the string could not be parsed according to this format’s specifier. Parsing is strict: if the specified <i>string</i> does not exactly match the associated specifier, this method returns null. For example, if the associated specifier is `%Y-%m-%dT%H:%M:%SZ`, then the string `"2011-07-01T19:15:28Z"` will be parsed as expected, but `"2011-07-01T19:15:28"`, `"2011-07-01 19:15:28"` and `"2011-07-01"` will return null. (Note that the literal `Z` here is different from the time zone offset directive `%Z`.) If a more flexible parser is desired, try multiple formats sequentially until one returns non-null.
 
-#### locale.utcFormat(specifier)
+### locale.utcFormat(specifier)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/locale.js)
 
 Equivalent to [*locale*.format](#locale_format), except all directives are interpreted as [Coordinated Universal Time (UTC)](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) rather than local time.
 
-#### locale.utcParse(specifier)
+### locale.utcParse(specifier)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/locale.js)
 
 Equivalent to [*locale*.parse](#locale_parse), except all directives are interpreted as [Coordinated Universal Time (UTC)](https://en.wikipedia.org/wiki/Coordinated_Universal_Time) rather than local time.
 
-### Locales
+## Locales
 
-#### d3.timeFormatLocale(definition)
+### d3.timeFormatLocale(definition)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/locale.js)
 
@@ -225,7 +186,7 @@ Returns a *locale* object for the specified *definition* with [*locale*.format](
 
 For an example, see [Localized Time Axis II](https://bl.ocks.org/mbostock/805115ebaa574e771db1875a6d828949).
 
-#### d3.timeFormatDefaultLocale(definition)
+### d3.timeFormatDefaultLocale(definition)
 
 [Source](https://github.com/d3/d3-time-format/blob/main/src/defaultLocale.js)
 

@@ -2,46 +2,21 @@
 
 This module provides a few basic geometric operations for two-dimensional polygons. Each polygon is represented as an array of two-element arrays [​[<i>x1</i>, <i>y1</i>], [<i>x2</i>, <i>y2</i>], …], and may either be closed (wherein the first and last point are the same) or open (wherein they are not). Typically polygons are in counterclockwise order, assuming a coordinate system where the origin ⟨0,0⟩ is in the top-left corner.
 
-## Installing
+## Polygons
 
-If you use npm, `npm install d3-polygon`. You can also download the [latest release on GitHub](https://github.com/d3/d3-polygon/releases/latest). For vanilla HTML in modern browsers, import d3-polygon from Skypack:
-
-```html
-<script type="module">
-
-import {polygonHull} from "https://cdn.skypack.dev/d3-polygon@3";
-
-const hull = polygonHull(points);
-
-</script>
-```
-
-For legacy environments, you can load d3-polygon’s UMD bundle from an npm-based CDN such as jsDelivr; a `d3` global is exported:
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/d3-polygon@3"></script>
-<script>
-
-const hull = d3.polygonHull(points);
-
-</script>
-```
-
-## API Reference
-
-#### d3.polygonArea(polygon)
+### d3.polygonArea(polygon)
 
 [Source](https://github.com/d3/d3-polygon/blob/master/src/area.js "Source Code")
 
 Returns the signed area of the specified *polygon*. If the vertices of the polygon are in counterclockwise order (assuming a coordinate system where the origin ⟨0,0⟩ is in the top-left corner), the returned area is positive; otherwise it is negative, or zero.
 
-#### d3.polygonCentroid(polygon)
+### d3.polygonCentroid(polygon)
 
 [Source](https://github.com/d3/d3-polygon/blob/master/src/centroid.js "Source Code")
 
 Returns the [centroid](https://en.wikipedia.org/wiki/Centroid) of the specified *polygon*.
 
-#### d3.polygonHull(points)
+### d3.polygonHull(points)
 
 [Source](https://github.com/d3/d3-polygon/blob/master/src/hull.js#L23 "Source Code")
 
@@ -49,13 +24,13 @@ Returns the [centroid](https://en.wikipedia.org/wiki/Centroid) of the specified 
 
 Returns the [convex hull](https://en.wikipedia.org/wiki/Convex_hull) of the specified *points* using [Andrew’s monotone chain algorithm](http://en.wikibooks.org/wiki/Algorithm_Implementation/Geometry/Convex_hull/Monotone_chain). The returned hull is represented as an array containing a subset of the input *points* arranged in counterclockwise order. Returns null if *points* has fewer than three elements.
 
-#### d3.polygonContains(polygon, point)
+### d3.polygonContains(polygon, point)
 
 [Source](https://github.com/d3/d3-polygon/blob/master/src/contains.js "Source Code")
 
 Returns true if and only if the specified *point* is inside the specified *polygon*.
 
-#### d3.polygonLength(polygon)
+### d3.polygonLength(polygon)
 
 [Source](https://github.com/d3/d3-polygon/blob/master/src/length.js "Source Code")
 
