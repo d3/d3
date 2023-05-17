@@ -10,6 +10,11 @@ The fastest way to get started (and get help) with D3 is on [Observable](https:/
 d3.create("div").text("Hello, world!").node()
 ```
 
+As a more complete example, try one of these starter templates:
+
+* [Bar chart](https://observablehq.com/@d3/bar-chart/2?intent=fork)
+* [Histogram](https://observablehq.com/@d3/histogram/2?intent=fork)
+
 Observable includes a few D3 snippets when you click **+** to add a cell (type “d3” when the cell menu is open to filter), as well as convenient [sample datasets](https://observablehq.com/@observablehq/sample-datasets) to try out D3 features. Or upload a CSV or JSON file to start playing with your data. You can also fork any of the [hundreds of notebooks](https://observablehq.com/@d3?tab=notebooks) we’ve published for a head start.
 
 Observable is free for public use. Sign up for a [Pro account](https://observablehq.com/pricing) to connect to private databases, collaborate on private notebooks, and more.
