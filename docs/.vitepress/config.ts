@@ -1,3 +1,4 @@
+import path from "path";
 import {defineConfig} from "vitepress";
 
 // https://vitepress.dev/reference/site-config
@@ -5,6 +6,13 @@ export default defineConfig({
   title: "D3 by Observable",
   description: "The JavaScript library for bespoke data visualization",
   cleanUrls: true,
+  vite: {
+    resolve: {
+      alias: {
+        "d3": path.resolve("./src/index.js")
+      }
+    }
+  },
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     logo: "/logo.svg",
